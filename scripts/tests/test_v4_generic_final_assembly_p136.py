@@ -508,11 +508,10 @@ def test_score_cannot_exceed_100() -> None:
     assert breakdown["score_100"] <= 100.0
 
 
-def test_botanical_no_dose_takes_the_neutral_not_excluded() -> None:
-    # Dose V4.1 section 2.3: a hidden amount takes the shared neutral even
-    # though ashwagandha has a studied range; Transparency keeps the
-    # disclosure consequence. Still a real number, never None (not excluded
-    # from the denominator).
+def test_botanical_no_dose_scores_zero_not_excluded() -> None:
+    # V4.1 Step 4: ashwagandha has a studied range, so a missing amount earns
+    # nothing (the former 5-point floor let hiding beat a graded low dose).
+    # Still a real number, never None (not excluded from the denominator).
     # The botanical_dose_deferred flag stays off.
     from scoring_v4.modules.generic import score_generic
 
@@ -527,7 +526,7 @@ def test_botanical_no_dose_takes_the_neutral_not_excluded() -> None:
     product["rda_ul_data"] = {"adequacy_results": [], "safety_flags": []}
     breakdown = score_generic(product).to_breakdown()
 
-    assert breakdown["dimensions"]["dose"]["score"] == 11.97  # 11.4/20 on the botanical 21 scale
+    assert breakdown["dimensions"]["dose"]["score"] == 0.0
     assert breakdown["dimensions"]["dose"]["metadata"]["botanical_dose_band"] == "primary_no_dose"
     assert breakdown["metadata"]["excluded_dimensions"] == []
     assert breakdown["metadata"]["botanical_dose_deferred"] is False

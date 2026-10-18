@@ -131,11 +131,14 @@ def test_dose_above_studied_range():
     assert out["band"] == "above_studied_range"
 
 
-def test_dose_primary_no_dose_takes_the_neutral_not_excluded():
-    # Dose V4.1 section 2.3: a hidden amount takes the shared neutral.
+def test_dose_primary_no_dose_scores_zero_unless_the_label_hides_it():
+    # Dose V4.1 section 2.3: a missing amount keeps 0; a blend member printed
+    # without its amount (a genuinely hidden amount) takes the shared neutral.
     out = score_collagen_dose(_product([_collagen(quantity=0, unit="")]))
-    assert out["score"] == pytest.approx(unbenchmarked_dose_credit())
+    assert out["score"] == 0.0
     assert out["band"] == "primary_no_dose"
+    hidden = score_collagen_dose(_product([_collagen(quantity=0, unit="", isNestedIngredient=True)]))
+    assert hidden["score"] == pytest.approx(unbenchmarked_dose_credit())
 
 
 def test_dose_corrected_peptide_skin_dose_2500mg_is_within_range():

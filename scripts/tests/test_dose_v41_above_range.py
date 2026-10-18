@@ -47,7 +47,7 @@ def test_immune_zinc_at_its_ul_is_not_zeroed_a_second_time():
 
 
 @pytest.mark.parametrize("ingredient,band", [
-    (_botanical_ingredient(quantity=0, unit=""), "primary_no_dose"),
+    (_botanical_ingredient(quantity=0, unit="", isNestedIngredient=True), "primary_no_dose"),
     (_botanical_ingredient(quantity=500, scoring_input_kind="product_level_evidence",
                            evidence_type="blend_anchor_mass"), "blend_total_only"),
 ])

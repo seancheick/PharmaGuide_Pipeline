@@ -356,11 +356,14 @@ def test_dose_grape_seed_matches_clinical_range_by_canonical_id():
 def test_primary_botanical_no_dose_floors_low_not_excluded():
     ing = _botanical_ingredient(quantity=0, unit="")
     out = score_botanical_dose(_botanical_product(ingredient=ing))
-    # Dose V4.1 section 2.3: a hidden amount takes the shared neutral even when
-    # a studied range exists; Transparency keeps the disclosure consequence.
-    # Still never None: it stays in the denominator.
-    assert out["score"] == pytest.approx(unbenchmarked_dose_credit())
+    # Dose V4.1 section 2.3: only a genuinely hidden amount (a blend member
+    # printed without its amount) takes the neutral; a missing amount with a
+    # studied range keeps 0. Still never None: it stays in the denominator.
+    assert out["score"] == 0.0
     assert out["band"] == "primary_no_dose"
+    hidden = score_botanical_dose(_botanical_product(
+        ingredient=_botanical_ingredient(quantity=0, unit="", isNestedIngredient=True)))
+    assert hidden["score"] == pytest.approx(unbenchmarked_dose_credit())
     assert out["metadata"]["benchmark"] == "present"
     assert out["score"] is not None
     # critical: 0, NOT None (must not be excluded from the denominator)

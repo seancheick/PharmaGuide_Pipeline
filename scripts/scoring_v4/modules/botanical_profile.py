@@ -42,6 +42,7 @@ from typing import Any, Dict, List, Optional
 
 _DATA_DIR = Path(__file__).resolve().parents[2] / "data"
 
+from scoring_input_contract import dose_disclosure_status
 from scoring_v4.modules.generic_helpers import bio_score_of
 from scoring_v4.quality_score_config import block as _cfg_block
 
@@ -800,7 +801,7 @@ def _range_mg(entry: Dict[str, Any]) -> Optional[tuple]:
 #   above   12                       maximum beyond 120% of the high end
 #   below   16 x minimum / (0.8 low) proportional below the near band
 # Without an applicable benchmark a disclosed amount earns the shared
-# unbenchmarked neutral, and so does a hidden or missing amount (Dose V4.1
+# unbenchmarked neutral, and so does an amount the label hides (Dose V4.1
 # section 2.3; Transparency keeps the disclosure consequence); an unresolved
 # benchmark identity is an unfinished assessment.
 BOTANICAL_DOSE_WITHIN = _FVM["botanical_dose_within"]
@@ -840,15 +841,17 @@ def graded_studied_range(product: Dict[str, Any], row: Dict[str, Any], low_end: 
     return {"score": round(score, 4), "band": band, "metadata": meta}
 
 
-def unassessed_amount_band(band: str, benchmark: str) -> Dict[str, Any]:
+def unassessed_amount_band(band: str, benchmark: str, label_hidden: bool = True) -> Dict[str, Any]:
     """A disclosed amount without a benchmark, or a hidden/missing one."""
     from scoring_v4.modules.generic_helpers import unbenchmarked_dose_credit
 
-    # A disclosed amount without a benchmark is neutral, as is a hidden amount
-    # whose benchmark exists or is absent (Dose V4.1 section 2.3). A hidden
-    # amount whose benchmark identity is unresolved stays unfinished (0,
-    # reported partial).
-    neutral = band == "disclosed_no_reference" or benchmark != "unresolved"
+    # A disclosed amount without a benchmark is neutral, as is a missing amount
+    # with no benchmark. With a benchmark, only an amount the label hides (a
+    # blend total, or a member printed without its amount) is neutral (Dose
+    # V4.1 section 2.3); a missing amount keeps 0. A benchmark identity that is
+    # unresolved stays unfinished (0, reported partial).
+    neutral = (band == "disclosed_no_reference" or benchmark == "absent"
+               or (benchmark == "present" and label_hidden))
     return {"score": unbenchmarked_dose_credit() if neutral else 0.0, "band": band,
             "metadata": {"benchmark": benchmark}}
 
@@ -895,7 +898,8 @@ def score_botanical_purpose_dose(
 
     mass = _mass_mg(row)
     if mass is None:
-        return unassessed_amount_band("primary_no_dose", benchmark)
+        return unassessed_amount_band("primary_no_dose", benchmark,
+                                      label_hidden=dose_disclosure_status(row) == "not_disclosed_blend")
     if benchmark != "present":
         return unassessed_amount_band("disclosed_no_reference", benchmark)
 

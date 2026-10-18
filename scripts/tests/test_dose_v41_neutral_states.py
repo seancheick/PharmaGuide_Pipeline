@@ -43,8 +43,13 @@ def _two_purposes(hidden_quantity=None):
     return p
 
 
+def _hidden_in_blend(product):
+    product["ingredient_quality_data"]["ingredients_scorable"][1]["isNestedIngredient"] = True
+    return product
+
+
 def test_a_declared_purpose_with_a_hidden_amount_is_a_neutral_vote_not_skipped():
-    artifact = build_scored_artifact(_two_purposes())
+    artifact = build_scored_artifact(_hidden_in_blend(_two_purposes()))
     dim = artifact["_v4_module_breakdown"]["dimensions"]["dose"]
     assert "ashwagandha" in dim["metadata"]["hidden_amount_purpose_ingredients"]
     # (magnesium 20 + hidden neutral 11.4) / 2 on the public scale.
@@ -59,3 +64,13 @@ def test_a_pipeline_lost_amount_keeps_its_strict_hold():
     assert artifact["quality_score_status"] == "not_scored"
     assert artifact["score_unavailable_reason"] == "blocked_by_completeness_gate"
     assert artifact["quality_pillars_v4"] is None
+
+
+def test_an_amount_missing_without_a_label_nondisclosure_is_not_the_hidden_neutral():
+    # Hidden is a positive label fact (dose_disclosure_status
+    # "not_disclosed_blend"); a row with no amount and no blend membership is a
+    # capture gap and earns no neutral vote.
+    artifact = build_scored_artifact(_two_purposes())
+    dim = artifact["_v4_module_breakdown"]["dimensions"]["dose"]
+    assert "ashwagandha" not in dim["metadata"].get("hidden_amount_purpose_ingredients", [])
+    assert artifact["quality_pillars_v4"]["dose"]["score"] == 20.0

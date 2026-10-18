@@ -89,6 +89,7 @@ from scoring_input_contract import (
     ROLE_CLAIM_PROMINENT,
     ROLE_PRIMARY,
     classify_ingredient_roles,
+    dose_disclosure_status,
     mass_primary_label_actives,
     is_lent_blend_mass,
     source_linked_rows,
@@ -456,11 +457,14 @@ def _score_declared_purpose_window(
                 fallback_values.append(credit)
                 unbenchmarked.append(key)
                 continue
-        if not quantity_is_unresolved(purpose):
+        if not quantity_is_unresolved(purpose) and (
+                is_lent_blend_mass(purpose) or dose_disclosure_status(purpose) == "not_disclosed_blend"):
             # Dose V4.1 section 2.3: a declared purpose whose amount the label
-            # hides keeps its one vote at the shared neutral; Transparency
-            # keeps the disclosure consequence. A pipeline-lost amount
-            # (unresolved quantity) keeps its strict readiness hold instead.
+            # hides (a blend member printed without its own amount) keeps its
+            # one vote at the shared neutral; Transparency keeps the
+            # disclosure consequence. A pipeline-lost amount (unresolved
+            # quantity) keeps its strict readiness hold, and a row missing an
+            # amount without a label nondisclosure earns no vote.
             vote(key, "hidden_amount_neutral", unbenchmarked_dose_credit())
             fallback_values.append(unbenchmarked_dose_credit())
             hidden.append(key)

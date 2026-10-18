@@ -40,6 +40,7 @@ from scoring_input_contract import (
     ROLE_CLAIM_PROMINENT,
     ROLE_PRIMARY,
     classify_ingredient_roles,
+    dose_disclosure_status,
 )
 from scoring_v4.modules.botanical_profile import (
     graded_studied_range,
@@ -181,7 +182,8 @@ def _score_collagen_row(row: Dict[str, Any], product: Dict[str, Any]) -> Dict[st
 
     mass = _mass_mg(row)
     if mass is None:
-        return unassessed_amount_band("primary_no_dose", benchmark)
+        return unassessed_amount_band("primary_no_dose", benchmark,
+                                      label_hidden=dose_disclosure_status(row) == "not_disclosed_blend")
     if rng is None:
         return unassessed_amount_band("disclosed_no_reference", benchmark)
 
