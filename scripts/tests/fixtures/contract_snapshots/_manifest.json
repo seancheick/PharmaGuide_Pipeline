@@ -207,6 +207,27 @@
   ],
   "changelog": [
     {
+      "date": "2026-10-18",
+      "phase": "Sean-approved Dose V4.1 reference policy",
+      "source_commit": "3e6c2da3",
+      "products_updated": [
+        12012,
+        180417,
+        223084,
+        239600,
+        241353,
+        245156,
+        270256,
+        274498,
+        278454,
+        288344,
+        293943,
+        306237,
+        306381
+      ],
+      "notes": "Selective canonical raw-label freezer refresh. Initial comparison:20unchanged,13source-justified score/tier drifts; all other frozen fields unchanged. Shared nutritional curve changes six panels12012/239600/241353/274498/278454/288344. Ginkgo180417,ashwagandha245156/KSM306237,CoQ10293943 retire unsupported general dose thresholds to completed-neutral11.4; creatineethylester223084 cannot borrow monohydrate target and becomes neutral. Beta-alanine270256 actual3400mg/approved4000mg givesDose17. Co-primary306381 averages qualified contributions including neutral preparations(Dose12.6). Raw63 baseline832/candidate3e6c:21score changes,one separately verifiedTransparency+6 at294543(exactprintedVitaminD0mcg),zero route/status changes,zero receipt failures. No canary safety field changed. Receipts: reports/dose_v41_approved_candidate_20261018/raw_final_comparison.json and canary_{before,after}_refresh.log. Refresh helper wrote all13 fixtures, then failed on the manifest constant name; this separate manifest write fixes the documentation step. Full33check required after selective refresh; no catalog qualification inferred."
+    },
+    {
       "date": "2026-10-07",
       "phase": "Source-qualified creatine research correspondence",
       "products_updated": [

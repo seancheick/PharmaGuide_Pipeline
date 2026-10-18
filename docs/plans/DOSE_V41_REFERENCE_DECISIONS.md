@@ -21,7 +21,7 @@ The six amended/replaced rows preserve the old curve only in the **current curve
 
 ### Prenatal critical membership — approved by Sean
 
-The current critical group is folate, iron, iodine, vitamin D and B12. Disclosed choline can participate in broad coverage, but is absent from that five-member critical denominator despite a contrary source comment. Missing choline currently has no dedicated critical penalty. The pregnancy AI of 450 mg is a total dietary reference; it does not prescribe a mandatory 450 mg supplement or this scoring weight. [NIH ODS choline](https://ods.od.nih.gov/factsheets/Choline-HealthProfessional/).
+The audited baseline critical group was folate, iron, iodine, vitamin D and B12. Disclosed choline participated in broad coverage but was absent from that five-member critical denominator despite a contrary source comment. The approved implementation uses all six nutrients, including missing choline in the fixed denominator. The pregnancy AI of 450 mg is a total dietary reference; it does not prescribe a mandatory 450 mg supplement or this scoring weight. [NIH ODS choline](https://ods.od.nih.gov/factsheets/Choline-HealthProfessional/).
 
 **Approved policy:** include choline as a sixth member of the existing 5-point prenatal critical budget, using the same shared nutritional curve and applicable pregnancy AI. Add no pillar weight and keep the DHA complement separate. This intentionally gives choline coverage extra weight within the critical group; it is PharmaGuide calibration, not an authority-mandated ranking.
 
@@ -43,7 +43,7 @@ Panel proposal: reuse the existing generic nutritional RDA/AI curve within exist
 
 Sports proposals: proportional contribution to source-qualified protein20g/use, creatine monohydrate3g/day, beta-alanine4g/day, HMB3g/day, caffeine200mg/use. These proposed targets adapt authority context and do not assert universal minimum-effective doses; caffeine daily safety remains separate. All other reviewed discrete-regimen extrapolations become descriptive only/general completed neutral unless a distinct already accepted exact formula policy applies.
 
-The current-curve column describes the audited baseline832c1bd7 unless a row explicitly names an implemented correction. Source-content findings describe the verified corrected facts. A proposal row does not assert that its correction has already landed.
+The current-curve column describes the audited baseline832c1bd7 unless a row explicitly names an implemented correction. Source-content findings describe the verified corrected facts. The table's proposal-column labels preserve the review format; all 43 revised policy choices are now approved and implemented. Validation and release remain separate.
 
 Impact terms: ingredient/component point examples are arithmetic forecasts **before route aggregation, rounding and the one final safety ceiling**. They are not measured final product scores. Matching product scopes come from58 manifest-owned enriched files,15426 unique inputs; overlaps cannot be summed. Those stored files are source evidence, not newly rebuilt artifacts. After approval, implement the policy batch and measure the same frozen inputs plus controls before any full pipeline. Policy approval does not establish implementation: the combined numerical changes and remaining retirements are being implemented and must be measured together.
 
