@@ -88,3 +88,10 @@ def test_contribution_targets_do_not_misname_fda_high_source_threshold(nutrient)
     rationale = CONFIG['dose_magnitudes']['generic']['contribution_policy_targets'][nutrient]['rationale']
     assert "'good source'" not in rationale
     assert 'high' in rationale and 'RACC' in rationale
+
+
+def test_rda_curve_does_not_claim_fda_prescribes_its_half_credit():
+    rationale = CONFIG['dose_magnitudes']['generic']['reference_semantics']['dri']['rationale']
+    assert 'PharmaGuide policy' in rationale
+    assert 'Daily Value' in rationale and 'RDA/AI' in rationale
+    assert 'RACC' in rationale

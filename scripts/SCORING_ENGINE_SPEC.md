@@ -498,3 +498,5 @@ scripts/test.sh fast
 scripts/test.sh release
 scripts/test.sh full
 ```
+
+- **4.7.2 → 4.7.3** (2026-10-18, `claude/dose-v41`): stop projecting discrete literature regimens into clinical minima; complete reviewed no-benchmark literature assessments with existing neutral credit and honest receipts; require source-qualified actual protein grams; restore the established soluble-nickel-salt UL with elemental/form guards. Config1.28.2 clarifies RDA/AI versus FDA Daily Value policy without changing numerical config parameters. Proposed calibrations remain unapplied pending the reference decision table.
