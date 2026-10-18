@@ -1,20 +1,143 @@
 # Dose V4.1 review packet (plan §5.1)
 
-## Current candidate — October 18 approved reference implementation
+October 18, 2026. The clinical-reference decision blocker is closed: Sean directly approved the revised 43 decisions and six-member prenatal critical group. Source fixes are committed and validated as described below. **Not merge-ready or run-ready: the remaining gates are listed explicitly.**
 
-Sean explicitly approved all 43 revised decisions and choline as the sixth fixed prenatal critical nutrient within the existing 5-point budget. The approval is recorded in [the decision table](DOSE_V41_REFERENCE_DECISIONS.md). The following current status supersedes the historical candidate sections below.
+## What is approved and implemented
 
-Implementation uses existing owners: shared nutritional contribution credit; ordinary-adult magnesium/calcium targets with no quarter-RDA fallback; completed-neutral sodium/chloride and unsupported study-dose curves; five explicitly approved sports targets; six-member prenatal critical denominator and separate DHA complement. Choline requires an actual source-qualified amount. Lecithin, phosphatidylcholine and blend mass cannot supply it without the canonical supported conversion. No pillar budget, Verification rule, safety ceiling, public top-level field or assessment status is added.
+- 37 policy rows retained; magnesium/calcium routing amended; phosphorus/ALA use the shared nutritional curve; ordinary generic sodium/chloride conclude completed-neutral 11.4/20.
+- Choline is the sixth fixed prenatal critical member inside the existing 5-point budget. Missing choline stays in the denominator. Actual source-qualified choline is assessed against the pregnancy 450 mg total-dietary AI using the shared contribution curve; the supplement is not required to supply the whole AI. Broad-panel and critical credit remain separately auditable. No inferred credit from lecithin, phosphatidylcholine or blend mass without the canonical supported conversion.
+- Minimum directed exposure supplies contribution; maximum supplies safety. One final product-level safety ceiling is applied after aggregation/normalization and never raises a lower Dose. No second excess penalty or chelation bonus is introduced.
+- Study regimens remain descriptive unless a qualified approved benchmark applies. Completed no-general-benchmark conclusions use the existing neutral; unresolved identities, preparations and lost amounts remain explicitly incomplete. No unknown active numerical curve is deferred to a later release.
+- No change to Verification policy, pillar budgets, neutral value, separate prenatal DHA complement, public top-level blob keys or status vocabulary.
 
-The exhaustive semantics gate covers all active native/config numerical owners. Descriptive study quantities and 83 strain identity records with all-null inactive thresholds are retained without fabricated scientific approvals. Native RDA semantic qualification now participates in its existing provenance fingerprint. Engine 4.8.0; quality config 1.29.0-dose-v41-approved-reference-policy; omega rubric 2.3.1-dose-v41-references.
+## Tested source and comparison scope
 
-Fresh review reproduced and fixed the following additional defects with fail-first tests: prenatal DHA ignored minimum daily directions; sports omitted a named co-primary outside its target list; fiber omitted an independently named non-fiber purpose. The latter two now reuse the existing generic purpose owner, preserve hidden-amount neutral states, and keep missing captured amounts incomplete. The sports mass floor that could override equal weighting is retired. Adult sports targets now qualify the whole DSLD label population through the existing selector, shared by enrichment and scoring; pediatric/life-stage labels cannot borrow adult targets. A named positive quantity with an unreadable unit also keeps generic/fiber assessments incomplete. Incomplete receipts no longer claim completed arithmetic or award a known peer while the assessment is held.
+Pipeline runtime: `2339ec8fb1da51e5eca77cbded5ed43f57c4e371`, feature branch `claude/dose-v41`. Engine 4.8.0, quality config 1.29.0, omega 2.3.1. App candidate: `51567daec8747b56091731b14f558ffec3c10809` (runtime `bb352dde`; subsequent docs/test-format changes).
 
-Source verifiers: RDA 74 citations and therapeutic 71 citations have no mismatched/unresolved sources; backed clinical 91 claims verified; strain 255 claims retain two documented pre-existing mismatches, zero new mismatches or unresolved sources. These are source checks, not proof of numerical policy; policy authorization is Sean’s separate approval. Raw choline converter/source probes and public-profile invariance checks pass.
+The completed comparison scores **all 15,426 unique frozen enriched inputs** from 58 checksum-verified files, with zero replay errors and matching source hashes. Baseline `832c1bd7f756fd9b9d5f1e1b1204400e899a6481` is the pre-approval Dose candidate, **not production/main**. Candidate capture took 710.44 seconds. This is a scorer replay, not a full pipeline, regenerated catalog, app bundle, deployment or phone acceptance. Separate bounded raw-label replays validate affected producer paths.
 
-Validation in progress: combined named owner/consumer checks, fresh independent review, checksum-bound scorer replay of all 15,426 frozen inputs against baseline 832c1bd7f, exact-source CI and applicable local acceptance. The earlier 119-product choline probe is membership-only and is not the final combined report. No current catalog regeneration or release is claimed. The known e1_2_2 baseline failures and missing host screenshot remain explicit; neither is waived.
+## Full frozen-input movement
 
-Do not run the full pipeline, deploy, push main or build an IPA from this packet. The final movement report and remaining merge/run requirements must be returned first.
+| Result | Count |
+|---|---:|
+| Numeric total changes | 5,048 |
+| Increases / decreases | 1,696 / 3,352 |
+| Numeric movement range / median | −20.0 to +15.2 / −1.1 |
+| Identical numeric totals | 10,050 |
+| Numeric tier crossings | 1,935 |
+| Numeric → not_scored / tier unavailable | 23 |
+| Assessment complete → partial | 28 |
+| Product-safety / Dose-safety / flag / route changes | 0 / 0 / 0 / 0 |
+| Completed-score Dose receipt reconciliation failures | 0 |
+
+Equal numeric totals do not by themselves prove all fields equal. The controls below compare the full core result. The frozen safety equality does not substitute for raw-source safety checks or regenerated-catalog acceptance.
+
+| Route | Inputs | Numeric movers | Full core results unchanged |
+|---|---:|---:|---:|
+| multi_or_prenatal | 2,073 | 1,499 | 539 |
+| probiotic | 541 | 97 | 432 |
+| generic | 10,680 | 2,542 | 7,833 |
+| sports | 923 | 622 | 274 |
+| omega | 715 | 34 | 536 |
+| fiber_digestive | 348 | 198 | 146 |
+| b_complex | 146 | 56 | 90 |
+
+Representative unchanged controls compare total, all six pillars, tier, assessment/quality status, safety, Dose-safety, flags and route. Receipt wording is outside that core-equality claim.
+
+| DSLD ID | Product | Route | Total |
+|---|---|---|---:|
+| 180213 | Airborne Citrus | multi_or_prenatal | 46.2 |
+| 180214 | Airborne Berry | multi_or_prenatal | 45.7 |
+| 242946 | BetaBoost + Vitamin C Citrus | generic | 70.9 |
+| 242284 | Vitamin B3 | generic | 56.8 |
+| 252500 | Fish Oil Softgel 1000 mg | omega | 75.6 |
+| 252585 | Creatine Monohydrate | sports | 100.0 |
+| 253729 | Betaine HCL | fiber_digestive | 68.4 |
+| 253730 | Betaine HCL | fiber_digestive | 68.4 |
+| 253731 | Creatine Monohydrate | sports | 100.0 |
+| 12078 | Natural Cod Liver Oil | omega | 41.5 |
+| 18174 | Adult 50+ Probiotic | probiotic | 49.4 |
+| 18178 | Adult Probiotic | probiotic | 49.4 |
+| 19173 | Balanced B-100 | b_complex | 65.1 |
+| 19176 | Balanced B-150 | b_complex | 66.6 |
+
+## Prenatal and choline results
+
+**119 inputs:** 117 numeric and 2 already unassessed. 114 numeric movers: 112 decreases, 2 increases, 3 unchanged; range **−1.9 to +0.6**, with 7 numeric tier crossings. This is the combined policy batch; the earlier membership-only −0.8..+0.3 simulation is not its final result.
+
+Choline classification: 80 missing/zero, 36 partial-credit, 1 full-credit, 2 unassessed products. A missing label contribution does not mean the person gets no dietary choline. No prenatal safety/status/other-pillar changes occurred.
+
+| Example | Before → after | Change |
+|---|---:|---:|
+| 233218 Garden of Life MyKind Organics — Prenatal | 81.0 → 79.1 | -1.9 |
+| 267605 MegaFood — Baby & Me 2 Prenatal Multi Red Raspberry | 81.7 → 79.9 | -1.8 |
+| 246194 vitafusion — Organic Prenatal Multi Ripe Raspberry Flavor | 76.2 → 74.6 | -1.6 |
+| 71579 Nature's Bounty — Prenatal | 81.2 → 79.7 | -1.5 |
+| 322428 Bayer One A Day — Pregnancy Planning | 78.7 → 77.2 | -1.5 |
+| 328830 Thorne — Basic Prenatal | 94.8 → 95.4 | +0.6 |
+| 271093 Doctor's Best — Prenatal Essentials | 71.8 → 72.1 | +0.3 |
+
+The complete 119-row `prenatal_choline.csv` records minimum/maximum daily amount, unit, total-dietary AI, %AI, and separate broad-panel/critical **unit credits**. Those 0..1 credits are not raw points: the critical raw share is 5/6 × unit credit before route normalization.
+
+## All assessment and other-pillar movements
+
+All 28 complete→partial changes are classified. **22 not_scored cases are stale stored protein Facts contracts** (old units, missing typed assessments or old producer projections); six additional fresh-source probes restore all six tested protein products to complete scores, and earlier representative proofs cover the other source classes. These need regeneration through the corrected producer, not a scorer compatibility patch. **One further not_scored case, EAA330806, is an honest persistent identity hold:** its10g EAA header does not own the separate nine-amino-acid list. A rerun must not force it complete.
+
+The remaining **five retain numeric 63.9 scores with assessment_status=partial** (294273,311852,312355,312356,312357): their labels declare 30 g whey ingredient, without actual protein grams. The old 20 Dose points assumed powder mass was actual protein. The current owner leaves actual-protein assessment unresolved, exposes partial status, and gives no completed Dose credit; all five other pillars/safety are unchanged. A fresh raw 294273 probe reproduces it. This is the existing partial-publication contract, not invented protein purity. All 28 changes have source explanations; no unclassified case remains.
+
+The 233 non-Dose pillar field changes comprise 115 fields cleared when 23 scores become not_scored, plus **118 completed→completed changes**, all classified:
+
+- **111 Transparency gains:** 110 × +6 and one+5.9 rounding effect (275464). Every case has an independently confirmed original printed zero, qualified unit/operator/serving and an exact zero-only Transparency-owner counterfactual. A disclosed zero stops looking like missing label data; it does not earn efficacy credit.
+- **Four frozen Transparency losses:**252510,253633,253638,253654 still carry stale lactose source roles; current bounded raw-source proofs restore12/15.
+- **One genuine Transparency loss:**176044 contains genuinely NP amounts for independent arginine/glutamine and papain/bromelain; retiring false duplicate protein previously filling its census reveals the real gap (8.9→2.9).
+- **One stale frozen enzyme-origin loss:**82893 (7.6→1.6). Current Clean correctly retains enzyme origins as descriptors and yields Transparency15; its bounded fresh before/after score70.9→84.3 preserves the other five pillars and removes the false probiotic warning. This raw-source safety correction is separate from the frozen zero-safety-change result.
+- **One Formulation correction:**2715 Soy Peptide 100 mg is not an actual-protein Facts total. Retiring its false protein projection selects the existing generic identity/form owner (8→20), without changing Formulation policy.
+
+All 58 source hashes and 118 completed movements are classified; unsupported/unexplained cases: 0. The six stored-role decreases demonstrate why the frozen scorer replay cannot stand in for the eventual full producer rerun.
+
+## Bugs corrected through existing owners
+
+- Current source identity, path and preparation membership now govern Dose. Stale mirrors cannot lend quantities, borrow children from another blend header or hide unresolved operators/units.
+- BCAA/EAA identity completeness is separate from amount completeness. Missing captured members remain incomplete; genuinely label-hidden amounts use the approved neutral. Typed whole preparations are not counted again through their components, and partial sums are not described as whole-mixture quantities.
+- Explicit printed zero is disclosure when its source quantity/unit/operator is qualified. It is not a positive efficacy amount; NP, ambiguous quantities and lost data do not receive this exception.
+- Protein-source mass and Nutrition Facts actual protein remain distinct. A Nutrition Facts macro cannot manufacture protein-product intent, and 30 g whey ingredient mass is not assumed to be30 g actual protein.
+- Explicit enzyme-origin organisms/plants remain source descriptors rather than independent live probiotic/botanical purposes. Source labels and quantities are preserved.
+- Prenatal DHA follows minimum daily directions. Sports and fiber do not silently drop independently named co-primaries. Adult sports targets qualify the full stated label population. Incomplete receipts do not claim completed arithmetic.
+
+Fail-first cases, controls, source receipts and independent review cover these classes. Source fixes are shared; no product/brand score override is used.
+
+## Validation evidence and limits
+
+- Pipeline whole-fast CI [39157311609](https://github.com/seancheick/PharmaGuide_Pipeline/actions/runs/39157311609): all 4 groups and skip guards passed on exact runtime 2339ec8f.
+- Final named owner/consumer slice: 499 passed; 33 current raw canaries pass. Raw 63 comparison on 2339 retains the prior source-qualified results with zero further total/other-pillar/status/route movements.
+- App analysis clean and full Flutter suite 3,964 passed on runtime bb352dde; app CI [39148045039](https://github.com/seancheick/Pharmaguide.ai/actions/runs/39148045039) passes on 51567dae. The app renders pipeline scores; it does not recalculate them.
+- Independent final boundary review is clear after the current-source facts correction. Source verifiers confirm references, separately from Sean’s policy approval; two old strain alerts are an explicitly excluded wrong PMID and a correction/limitations reference, not active Dose anchors.
+- Final local checkpoint with existing published artifacts linked read-only: **543 passed / 3 known failures / 24 declared opt-in service skips**, 160.09 seconds. The prior 41 missing-artifact skips are closed. The local rung remains **failed**, and its post-test skip guard is not claimed to have passed because pytest exits on those three failures. Neither historical artifacts nor a green CI run waive them. Initial sandbox lock denial was retried through the same authorized test harness; it was not a test result.
+
+## Pure magnesium: what to expect
+
+**Pure label 205309 / barcode 766298001753 stays 76.6 (display 77)** under the newer approved D1 policy: 120 mg minimum daily magnesium earns 20/20 contribution against the 84 mg target; maximum 480 mg/day is 137% of the 350 mg supplemental UL, so the single final ceiling caps Dose at 10. This is a maximum-directed-use policy consequence, not a claim that 120 mg is a high dose. A different one-capsule/day label 299065 has 120 mg minimum and maximum, no ceiling, and scores 86.6. Personal chosen use does not recalculate the catalog score. The newer D1 policy supersedes the historical serving-only77→87 expectation.
+
+## Exactly what remains before merge and pipeline
+
+1. Resolve the three known out-of-scope e1_2_2 baseline failures through their existing owner, with source-based receipts; do not refresh them blindly or waive them. They concern306237 A3 bonus and246324/176872 sugar-copy spacing.
+2. Integrate/review the feature candidate with current pipeline main. A fresh fetch found main advanced independently to 60d8ea0e2 (PR163 architecture batch); the Dose candidate still forks from 5fb2be1ca. The green2339CI and this comparison do not prove the as-yet-unintegrated combination. Resolve overlapping owners, check equivalence/affected behavior and run one exact combined checkpoint. App main remains b62b075f1; app candidate 51567dae is pushed.
+3. Confirm green applicable local acceptance/skip policy on the integrated candidate. Reused published artifacts establish existing consumer coverage; current 33 raw canaries and bounded raw proofs supply candidate evidence. They do not establish a regenerated 15,426-product export.
+4. Merge the completed paired source branches only after those gates pass and under Sean’s merge authorization. Inspect actual final stage fingerprints again. Current 2339 fingerprints show 114 stale manifests (38 each Clean/Enrich/Score), so the earliest necessary regeneration is **Clean**. Never relabel old outputs.
+
+After those gates, Sean’s compute-only command, from the main pipeline checkout, is:
+
+```bash
+cd /Users/seancheick/Downloads/dsld_clean
+source scripts/python_env.sh
+PYTHON="$PG_PYTHON" bash batch_run_all_datasets.sh --pipeline-only
+```
+
+**Do not run that command yet.** Default startup uses essential checks; `--pre-check` is optional full preparation. A successful pipeline-only run still needs new catalog/export parity, release checks, app bundle validation and any authorized publication. No pipeline, main push/merge, release or IPA build occurred in this review.
+
+## Local evidence files
+
+Under `reports/dose_v41_approved_candidate_20261018/`: baseline/candidate JSONL captures and manifests; `final_comparison.json`; every numeric/status transition in `score_changes.csv`; all 119 prenatal rows in `prenatal_choline.csv`; source-classification and raw-proof receipts; exact CI/local logs; current stage fingerprints. Preserve final captures, baselines, checksum manifests and compact source proofs. Superseded partial captures are not accepted evidence.
 
 ## Historical candidate records
 

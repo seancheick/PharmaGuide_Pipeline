@@ -1,6 +1,6 @@
 # Dose V4.1: finish the shared rules before one pipeline run
 
-Status: **Sean approved the revised 43 reference decisions and sixth prenatal choline member on October 18, 2026. Implementation is in the feature candidate; combined frozen-input measurement, independent review and final validation are in progress. Not merge/run/release-ready. See [the approved decision record](DOSE_V41_REFERENCE_DECISIONS.md) and [review packet](DOSE_V41_REVIEW_PACKET.md).** Revised October 17, 2026 after Sean's
+Status: **Sean approved the revised 43 reference decisions and sixth prenatal choline member on October 18, 2026. Implementation, independent review and all15,426 frozen-input comparisons are complete on2339ec8f; exact-source whole-fast CI passes. Local validation retains three known out-of-scope baseline failures. Current main advanced independently to60d8ea0e2 and still needs integration validation. Not merge/run/release-ready. See [the approved decision record](DOSE_V41_REFERENCE_DECISIONS.md) and [final report](DOSE_V41_REVIEW_PACKET.md).** Revised October 17, 2026 after Sean's
 design review (grill). Baseline: `main` at `b043fc513`, engine 4.6.0, config
 `1.27.0-declared-serving-dose`. This plan supersedes the serving-only Dose decision recorded in
 `reports/declared_serving_20261017/README.md` (PR #154).
