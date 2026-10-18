@@ -22,7 +22,8 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from test_profiles import CI_SKIP_ALLOWED_REASONS, LOCAL_ONLY_TEST_FILES  # noqa: E402
 
 
-def _test_file(classname: str) -> str:
+def test_file_from_classname(classname: str) -> str:
+    """`scripts.tests.test_x.TestY` -> `test_x.py` (shared with test_shard_plan.py)."""
     for part in classname.split("."):
         if part.startswith("test_"):
             return f"{part}.py"
@@ -40,7 +41,7 @@ def undeclared_skips(junit_xml: Path, profile: str = "ci") -> list[str]:
         skipped = case.find("skipped")
         if skipped is None:
             continue
-        test_file = _test_file(case.get("classname", ""))
+        test_file = test_file_from_classname(case.get("classname", ""))
         if skipped.get("type") == "pytest.xfail":
             found.append(f"{test_file}::{case.get('name')} — expected failure requires explicit review")
             continue
