@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import importlib
+from copy import deepcopy
 import sys
 from pathlib import Path
 
@@ -97,13 +98,13 @@ def test_immune_failure_retains_adequacy_before_one_final_ul_ceiling() -> None:
     dose = artifact["quality_pillars_v4"]["dose"]
     receipt = dose["explanation"]["dose_receipt"]
 
-    # D1 removes the duplicate zinc-purpose zero, preserving the existing
-    # above-band half credit. Raw (22 + 11 + 11 + 22) / 4 = 16.5; the
-    # recorded 200% UL safety flag still sets final public Dose to zero once.
+    # Approved nutritional credit plateaus at its target, before one final
+    # safety ceiling. Elderberry has no general benchmark and stays neutral.
+    # The recorded 200% UL flag still sets public Dose to zero once.
     assert {item["ingredient"]: item["points"] for item in receipt["contributions"]} == {
-        "vitamin_c": 20.0, "vitamin_d3": 10.0, "zinc": 10.0, "elderberry": 20.0,
+        "vitamin_c": 20.0, "vitamin_d3": 20.0, "zinc": 20.0, "elderberry": 11.4,
     }
-    assert receipt["adequacy_before_safety"] == 15.0
+    assert receipt["adequacy_before_safety"] == 17.9
     assert receipt["upper_reference"]["pct_ul"] == 200.0
     assert receipt["upper_reference"]["cap_public"] == 0.0
     assert receipt["final"] == dose["score"] == 0.0
@@ -176,12 +177,12 @@ def test_category_fixture_contracts() -> None:
         suite.by_id("prenatal_multi__ideal")
     ).actual
 
-    # Probiotic Dose no longer rewards strain count. V4.1 Step 4: Dose is the
-    # measured CFU adequacy alone (reference 15; per-strain disclosure is a
-    # Transparency fact), and Formulation is canonical form quality: the
+    # General CFU tiers do not establish clinical dose curves. The completed
+    # review takes neutral 11.4 (raw 8.55 at reference 15); disclosure remains
+    # a Transparency fact. Formulation is canonical form quality: the
     # unrated-strain neutral 9 plus tier-2 delayed-release delivery 2.
-    assert probiotic["raw_dimensions"]["dose"] == 10.0
-    assert probiotic["pillars"]["dose"] == 13.3
+    assert probiotic["raw_dimensions"]["dose"] == 8.55
+    assert probiotic["pillars"]["dose"] == 11.4
     assert probiotic["normalization_references"]["dose"] == 15.0
     assert probiotic["raw_dimensions"]["formulation"] == 11.0
     assert probiotic["normalization_references"]["formulation"] == 15.0
@@ -199,6 +200,53 @@ def test_category_fixture_contracts() -> None:
     assert prenatal["raw_dimensions"]["evidence"] == 20.0
     assert prenatal["normalization_references"]["evidence"] == 20.0
     assert prenatal["pillars"]["evidence"] == 20.0
+
+
+def test_protein_fixtures_require_actual_protein_facts_instead_of_powder_mass():
+    validation = _validation_module()
+    suite = validation.load_fixture_suite()
+    ideal = deepcopy(suite.by_id("sports_protein__ideal").product)
+    assert ideal["nutrition_summary"]["protein_g"] == 27
+    assert ideal["display_ingredients"][0]["exact_dose_text"] == "27 g"
+    artifact = validation.build_scored_artifact(ideal)
+    entry = artifact["_v4_module_breakdown"]["dimensions"]["dose"]["metadata"]["dose_contributions"][0]
+    assert entry["assessment"] == "protein_contribution_policy"
+    assert entry["amount_per_serving"] == 27
+    assert artifact["quality_pillars_v4"]["dose"]["score"] == 20
+
+    ideal.pop("nutrition_summary")
+    ideal.pop("display_ingredients")
+    # The 27 g whey powder row remains, but cannot stand in for protein grams.
+    missing = validation.build_scored_artifact(ideal)
+    dose = missing["_v4_module_breakdown"]["dimensions"]["dose"]
+    assert dose["score"] is None
+    assert dose["metadata"]["reason_code"] == "unresolved_source_quantity"
+    assert missing["quality_assessment_status"] == "partial"
+
+
+def test_opaque_protein_fixture_keeps_capture_hold_and_unknown_preparation_distinct():
+    validation = _validation_module()
+    product = deepcopy(validation.load_fixture_suite().by_id("sports_protein__failure").product)
+    missing = validation.build_scored_artifact(product)
+    assert missing["_v4_module_breakdown"]["dimensions"]["dose"]["score"] is None
+    assert missing["quality_assessment_status"] == "partial"
+
+    # This control authors a separate synthetic label declaration; it does not
+    # infer protein purity from the unchanged 10 g proprietary matrix mass.
+    product["nutrition_summary"] = {"protein_g": 10}
+    product["display_ingredients"] = [{
+        "display_type": "nutrition_fact", "display_name": "Protein",
+        "raw_source_text": "Protein", "raw_source_path": "ingredientRows[4]",
+        "source_section": "activeIngredients", "exact_dose_text": "10 g",
+    }]
+    declared = validation.build_scored_artifact(product)
+    dose = declared["_v4_module_breakdown"]["dimensions"]["dose"]
+    assert dose["metadata"].get("assessment_status") != "incomplete"
+    entry = dose["metadata"]["dose_contributions"][0]
+    assert entry["amount_per_serving"] == 10
+    assert entry["assessment"] == "protein_completed_no_general_benchmark"
+    assert declared["quality_pillars_v4"]["dose"]["score"] == 11.4
+    assert declared["product_safety_status"] == missing["product_safety_status"]
 
 
 def test_references_use_reviewed_engine_limits_not_observed_catalog_maxima() -> None:
@@ -223,8 +271,8 @@ def test_references_use_reviewed_engine_limits_not_observed_catalog_maxima() -> 
     assert form["sports_bcaa_eaa"] == 25.0
 
     # The single-active completion bonus is retired, so every sports subtype's
-    # primary dose tops out at 20 (BCAA/EAA composition adds an assessed 2 via
-    # assessed_component_reference).  The immune adapter's own component sum is
+    # primary dose tops out at 20; BCAA/EAA composition no longer adds Dose
+    # credit. The immune adapter's own component sum is
     # capped at 22.
     assert dose["sports_pre_workout"] == 20.0
     assert dose["immune_support"] == 22.0

@@ -57,7 +57,7 @@ def test_ksm66_reference_is_limited_to_verified_root_extract_stress_trials() -> 
 
 
 @pytest.mark.parametrize("with_powder,multiple_refs", [(False, False), (True, False), (True, True)])
-def test_subclinical_ksm66_dose_does_not_borrow_plain_ashwagandha_powder(
+def test_reviewed_ksm66_regimen_does_not_borrow_plain_ashwagandha_powder(
     with_powder: bool, multiple_refs: bool
 ) -> None:
     product = ksm_product(100, with_powder=with_powder, multiple_refs=multiple_refs)
@@ -68,14 +68,19 @@ def test_subclinical_ksm66_dose_does_not_borrow_plain_ashwagandha_powder(
     dose = score_dose(product)
     assert evidence["score"] > 0
     assert not evidence["metadata"]["flags"]
-    assert dose["metadata"]["botanical_dose_band"] == "below_studied_range"
-    # V4.1 Step 4 grades the daily exposure the shared owner measured:
-    # dose_mg is the minimum directed daily amount, plus the daily maximum.
-    assert dose["metadata"]["botanical_dose"] == {
-        "dose_mg": 100.0,
-        "range_mg": [250.0, 600.0],
-        "measurement_daily_max": 100.0,
-    }
+    assert dose["metadata"]["botanical_dose_band"] == "disclosed_no_reference"
+    # The source amount is retained, while the retired study-dose window
+    # cannot classify it as clinically insufficient or award efficacy points.
+    from scoring_v4.exposure import row_exposure
+    from scoring_v4.modules.generic_helpers import unbenchmarked_dose_credit
+    own_row=product['ingredient_quality_data']['ingredients_scorable'][0]
+    exposure=row_exposure(product, own_row, basis='daily', unit='mg')
+    assert exposure.per_serving_amount == 100.0
+    assert exposure.benchmark_amount == 100.0
+    assert exposure.frequency_defaulted is True
+    assert dose['score']==unbenchmarked_dose_credit()
+    assert dose['metadata']['botanical_dose']=={'benchmark':'absent'}
+
 
 
 @pytest.mark.parametrize("amount", [250, 600])
@@ -84,7 +89,7 @@ def test_studied_ksm66_dose_remains_eligible(amount: float) -> None:
     matches, _ = resolved_clinical_matches(product)
     assert matches[0]["applicability_assessment"]["status"] == "applicable"
     scored = score_dose(product)
-    assert scored["metadata"]["botanical_dose_band"] == "within_studied_range"
+    assert scored["metadata"]["botanical_dose_band"] == "disclosed_no_reference"
 
 
 def test_branded_study_cannot_apply_to_plain_powder_source_row() -> None:

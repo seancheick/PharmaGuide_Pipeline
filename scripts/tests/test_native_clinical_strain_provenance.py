@@ -399,7 +399,14 @@ def test_pending_strain_keeps_label_potency_without_clinical_adequacy() -> None:
 
     dose = score_dose(product)
     assert _disclosure_points(dose) == 10
-    assert dose["components"]["cfu_adequacy"] == 10
+    # Label potency remains disclosed; historical potency tiers do not create
+    # a clinical Dose curve. Retain the completed neutral on the CFU budget.
+    assert dose["components"]["cfu_adequacy"] == 8.55
+    assert dose["metadata"]["reference_basis"] == "completed_no_general_strain_benchmark"
+    contribution, = dose["metadata"]["cfu_adequacy_contributions"]
+    assert contribution["state"] == "neutral_no_strain_benchmark"
+    assert contribution["cfu_per_day"] == 10_000_000_000
+    assert contribution["source_row_ref"] == "ingredientRows[0]"
     assert "dose_applicability" not in score_evidence(product)["components"]
 
 
