@@ -49,6 +49,12 @@ def _row(
     }
 
 
+def _declared_protein_row(grams: float) -> dict:
+    return {**_row("protein", grams, "g", name="Protein"),
+            "scoring_input_kind": "product_level_evidence", "evidence_type": "sports_primary_dose",
+            "reason": "declared_nutrition_protein_mass"}
+
+
 def _product(*rows: dict, name: str = "Sports Product", primary_type: str = "amino_acid") -> dict:
     return {
         "servingSizes": [{"quantity": 1, "unit": "scoop", "minDailyServings": 1, "maxDailyServings": 1}],
@@ -285,7 +291,8 @@ def test_whey_twenty_two_grams_uses_protein_serving_not_minerals() -> None:
         _product(
             _row("calcium", 25, "mg"),
             _row("iron", 1, "mg"),
-            _row("whey_protein", 22.5, "Gram(s)", name="Whey Protein Isolate"),
+            _row("whey_protein", 30, "Gram(s)", name="Whey Protein Isolate"),
+            _declared_protein_row(22.5),
             name="Whey Protein Isolate",
             primary_type="protein_powder",
         )
@@ -299,7 +306,8 @@ def test_whey_twenty_two_grams_uses_protein_serving_not_minerals() -> None:
 def test_casein_five_grams_uses_protein_serving_band() -> None:
     payload = score_dose(
         _product(
-            _row("casein", 5, "Gram(s)", name="Micellar Casein"),
+            _row("casein", 6, "Gram(s)", name="Micellar Casein"),
+            _declared_protein_row(5),
             name="Micellar Casein Protein",
             primary_type="protein_powder",
         )
@@ -501,3 +509,48 @@ def test_opaque_preworkout_without_sports_dose_is_not_evaluable_without_a_second
     assert payload["components"]["sports_primary_active_dose"] == 0.0
     assert "opaque_primary_sports_blend" not in payload["penalties"]
     assert payload["metadata"]["not_evaluable_reason"] == "opaque_primary_sports_blend"
+
+
+@pytest.mark.parametrize("canonical", ["whey_protein", "casein", "pea_protein", "rice_protein"])
+def test_protein_ingredient_mass_without_actual_protein_is_incomplete(canonical):
+    product = _product(_row(canonical, 30, "g"), name="Protein Powder", primary_type="protein_powder")
+    payload = score_dose(product)
+    assert payload["score"] is None
+    assert payload["metadata"]["assessment_status"] == "incomplete"
+    assert payload["metadata"]["reason_code"] == "unresolved_source_quantity"
+    assert all(c.get("amount_per_serving") is None for c in payload["metadata"]["dose_contributions"])
+
+
+def test_actual_protein_projection_takes_precedence_over_ingredient_mass():
+    actual = {**_row("protein", 17, "g"), "scoring_input_kind": "product_level_evidence",
+              "evidence_type": "sports_primary_dose", "reason": "declared_nutrition_protein_mass"}
+    product = _product(_row("whey_protein", 30, "g"), actual,
+                       name="Protein Powder", primary_type="protein_powder")
+    payload = score_dose(product)
+    assert payload["score"] == 16
+    contribution = payload["metadata"]["dose_contributions"][0]
+    assert contribution["amount_per_serving"] == 17
+
+
+def test_hidden_protein_blend_remains_neutral_and_missing_protein_is_incomplete():
+    missing = {**_row("whey_protein", None, ""), "isNestedIngredient": True}
+    hidden = score_dose(_product(missing, name="Protein Powder", primary_type="protein_powder"))
+    assert hidden["score"] == 11.4
+    assert hidden["metadata"].get("assessment_status") != "incomplete"
+    missing.pop("isNestedIngredient")
+    unresolved = score_dose(_product(missing, name="Protein Powder", primary_type="protein_powder"))
+    assert unresolved["score"] is None
+    assert unresolved["metadata"]["assessment_status"] == "incomplete"
+
+
+def test_unknown_actual_protein_keeps_strict_artifact_preliminary_without_erasing_ingredients():
+    from scoring_v4.scored_artifact import build_scored_artifact, unfinished_source_assessment
+    from scoring_input_contract import get_scoring_ingredients
+    product = _product(_row("whey_protein", 30, "g"), name="Protein Powder", primary_type="protein_powder")
+    artifact = build_scored_artifact(product)
+    assert get_scoring_ingredients(product, strict=True).rows[0]["quantity"] == 30
+    assert artifact["quality_score_status"] == "scored"
+    assert artifact["quality_assessment_status"] == "partial"
+    assert unfinished_source_assessment(product, artifact["_v4_module_breakdown"]) == "dose_amount_unread"
+    assert artifact["_v4_module_breakdown"]["dimensions"]["dose"]["score"] is None
+    assert artifact["quality_pillars_v4"]["formulation"]["score"] > 0

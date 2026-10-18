@@ -2551,3 +2551,62 @@ def test_structural_product_total_does_not_require_an_ingredient_form_grade(disp
     artifact = build_scored_artifact(product)
     assert ("disclosed_form_unmapped" in artifact["strict_scoring_contract"]["findings"]) is expected_hold
     assert row["bio_score"] is None
+
+
+def test_declared_protein_grams_survive_a_separate_protein_ingredient_mass():
+    whey = _row(name="Whey Protein", canonical_id="whey_protein", quantity=30,
+                unit="g", raw_source_path="ingredientRows[0]")
+    product = _product(
+        [whey], product_name="Whey Protein", primary_type="protein_powder",
+        activeIngredients=[whey], nutrition_summary={"protein_g": 27.0},
+        display_ingredients=[{"raw_source_text": "Protein", "source_section": "activeIngredients",
+                              "display_type": "nutrition_fact", "raw_source_path": "ingredientRows[1]",
+                              "exact_dose_text": "27 g"}],
+    )
+    rows = get_scoring_ingredients(product, strict=True).rows
+    assert [(r["quantity"], r["reason"]) for r in rows
+            if r.get("evidence_type") == "sports_primary_dose"] == [(27.0, "declared_nutrition_protein_mass")]
+    assert next(r for r in rows if r.get("canonical_id") == "whey_protein")["quantity"] == 30
+
+
+def test_protein_source_ingredient_is_not_projected_as_actual_protein_mass():
+    whey = _row(name="Whey Protein", canonical_id="whey_protein", quantity=30,
+                unit="g", raw_source_path="ingredientRows[0]")
+    product = _product([], product_name="Whey Protein", primary_type="protein_powder",
+                       activeIngredients=[whey])
+    evidence = derive_product_scoring_evidence(product)
+    assert not any(r.get("evidence_type") == "sports_primary_dose" and r.get("dose_value", 0) > 0
+                   for r in evidence)
+
+
+def test_protein_macro_projection_is_not_duplicated_by_legacy_sports_branch():
+    protein = _row(name="Protein", canonical_id="protein", quantity=27, unit="g",
+                   cleaner_row_role="nutrition_fact", raw_source_path="ingredientRows[1]")
+    product = _product([], product_name="Whey Protein", primary_type="protein_powder",
+                       activeIngredients=[protein], nutrition_summary={"protein_g": 27.0},
+                       display_ingredients=[{"raw_source_text": "Protein", "source_section": "activeIngredients",
+                                             "display_type": "nutrition_fact", "raw_source_path": "ingredientRows[1]",
+                                             "exact_dose_text": "27 g"}])
+    evidence = derive_product_scoring_evidence(product)
+    assert [r["reason"] for r in evidence if r.get("canonical_id") == "protein"] == ["declared_nutrition_protein_mass"]
+
+
+@pytest.mark.parametrize("lost", ["summary", "display"])
+def test_stale_declared_protein_projection_cannot_replace_lost_source_quantity(lost):
+    from scoring_v4.scored_artifact import build_scored_artifact
+    product = _product([], product_name="Whey Protein", primary_type="protein_powder",
+                       nutrition_summary={"protein_g": 27.0},
+                       display_ingredients=[{"raw_source_text": "Protein", "source_section": "activeIngredients",
+                                             "display_type": "nutrition_fact", "raw_source_path": "ingredientRows[1]",
+                                             "exact_dose_text": "27 g"}])
+    product["product_scoring_evidence"] = derive_product_scoring_evidence(product)
+    if lost == "summary":
+        product["nutrition_summary"]["protein_g"] = None
+    else:
+        product["display_ingredients"] = []
+    rows = get_scoring_ingredients(product, strict=True)
+    assert not any(r.get("reason") == "declared_nutrition_protein_mass" for r in rows.rows)
+    assert any(r.reason == "stale_declared_nutrition_protein_evidence" for r in rows.rejected_rows)
+    artifact = build_scored_artifact(product)
+    assert artifact["quality_score_status"] == "not_scored"
+    assert artifact["quality_assessment_status"] == "partial"

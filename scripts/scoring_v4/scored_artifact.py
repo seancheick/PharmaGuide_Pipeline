@@ -144,6 +144,10 @@ def unfinished_source_assessment(enriched_product: Dict[str, Any],
     line whose amount we could not read.
     """
     dose_meta = _safe_dict(_safe_dict(_safe_dict(module_breakdown.get("dimensions")).get("dose")).get("metadata"))
+    if (module_breakdown.get("module") == "sports"
+            and dose_meta.get("assessment_status") == "incomplete"
+            and dose_meta.get("reason_code") == "unresolved_source_quantity"):
+        return "dose_amount_unread"
     assessments = [_safe_dict(dose_meta.get("botanical_dose"))] + [
         _safe_dict(_safe_dict(item).get("metadata"))
         for item in dose_meta.get("specialized_purpose_assessments") or []

@@ -3,7 +3,7 @@ total daily caffeine feeds the one product-level ceiling (400 mg/day FDA
 reference; >400 and <600 -> at most 10, >=600 -> 0); co-primaries average."""
 import pytest
 
-from test_v4_sports_dose_p171 import _product, _row
+from test_v4_sports_dose_p171 import _declared_protein_row, _product, _row
 from scoring_v4.modules.sports_dose import score_dose
 from scoring_v4.scored_artifact import build_scored_artifact
 from scoring_v4.dose_safety import evaluate_dose_safety
@@ -21,7 +21,10 @@ def _primary(product):
 ])
 def test_above_former_studied_ranges_plateau(canonical, amount, unit, name):
     primary_type = "protein_powder" if canonical == "whey_protein" else "amino_acid"
-    assert _primary(_product(_row(canonical, amount, unit), name=name, primary_type=primary_type)) == 20.0
+    rows = [_row(canonical, amount, unit)]
+    if canonical == "whey_protein":
+        rows.append(_declared_protein_row(amount))
+    assert _primary(_product(*rows, name=name, primary_type=primary_type)) == 20.0
 
 
 def test_caffeine_above_400_keeps_its_per_use_adequacy():
@@ -78,7 +81,7 @@ def test_two_co_primaries_average_instead_of_the_strongest():
 
 def test_one_co_primary_is_scored_on_its_own_benchmark_not_an_accessory():
     # 10 g protein is the primary (8); a 1 g taurine accessory (20) cannot stand in.
-    product = _product(_row("whey_protein", 10, "Gram(s)"), _row("taurine", 1, "Gram(s)"),
+    product = _product(_row("whey_protein", 12, "Gram(s)"), _declared_protein_row(10), _row("taurine", 1, "Gram(s)"),
                        name="Protein Shake", primary_type="protein_powder")
     payload = score_dose(product)
     assert payload["metadata"]["dose_aggregation"] == "single_primary"

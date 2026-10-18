@@ -113,8 +113,15 @@ def score_dose(product: Dict[str, Any]) -> Dict[str, Any]:
         not_evaluable = "opaque_primary_sports_blend"
     if not_evaluable:
         metadata["not_evaluable_reason"] = not_evaluable
+    # A protein-source ingredient mass cannot establish actual protein grams.
+    # Keep its identity available to the other pillars and expose the missing
+    # assessment rather than substituting either underdose or hidden-blend credit.
+    unresolved_protein = any(name == "protein" and label == "protein_no_dose"
+                             for name, _, label in scored)
+    if unresolved_protein:
+        metadata.update(assessment_status="incomplete", reason_code="unresolved_source_quantity")
     return {
-        "score": round(score, 4),
+        "score": None if unresolved_protein else round(score, 4),
         "max": DIMENSION_CAP,
         "components": components,
         "penalties": penalties,
@@ -185,7 +192,7 @@ def _apply_offlist_dose_floor(
 def _score_primary(product: Dict[str, Any], identity: Optional[str], *, details: Optional[dict] = None) -> Tuple[float, Optional[str]]:
     rows = sports_dosed_rows(product)
     if identity == "protein":
-        grams = _max_g(rows, SPORTS_PROTEIN_CANONICALS)
+        grams = _max_g(_protein_dose_rows(rows), frozenset({"protein"}))
         if grams is None:
             return 0.0, "protein_no_dose"
         if grams < 15:
@@ -523,6 +530,8 @@ def _dose_contribution(product: Dict[str, Any], identity: str, points: float, ba
     result = {"ingredient": identity, "assessment": basis, "credit_raw": round(points, 4)}
     canons = next(canons for name, canons in _IDENTITY_CANONICALS if name == identity)
     rows = [row for row in sports_dosed_rows(product) if canonical(row) in canons]
+    if identity == "protein":
+        rows = _protein_dose_rows(rows)
     if identity == "citrulline":
         rows = rows[:1]  # the preparation selected by _score_primary
     unit = "mg" if identity in {"alpha_gpc", "atp", "caffeine"} else "g"
@@ -597,6 +606,14 @@ def _daily_band(
     if low is None or high is None:
         return 0.0, no_dose
     return min(band(high), band(low), key=lambda scored: scored[0])
+
+
+def _protein_dose_rows(rows: list[Dict[str, Any]]) -> list[Dict[str, Any]]:
+    """Use the input contract's actual-protein projection, never powder mass."""
+    return [row for row in rows if canonical(row) == "protein"
+            and _norm_text(row.get("scoring_input_kind")) == "product_level_evidence"
+            and _norm_text(row.get("evidence_type")) == "sports_primary_dose"
+            and row.get("reason") == "declared_nutrition_protein_mass"]
 
 
 def _max_g(rows: list[Dict[str, Any]], canonicals: frozenset[str]) -> Optional[float]:

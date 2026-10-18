@@ -1094,7 +1094,6 @@ def _derive_explicit_eaa_aggregate_evidence(
 def _derive_declared_nutrition_protein_evidence(
     product: Dict[str, Any],
     active_rows: List[Dict[str, Any]],
-    scorable_paths: set[str],
 ) -> List[Dict[str, Any]]:
     """Project a declared Nutrition Facts protein mass for protein products.
 
@@ -1102,8 +1101,8 @@ def _derive_declared_nutrition_protein_evidence(
     absent from ``ingredients_scorable``.  A protein powder or mass gainer still
     needs that declared mass as typed sports-dose evidence.  The projection is
     deliberately narrow: product-name intent, a gram-validated nutrition
-    summary, an exact display-ledger Protein row, and no dose-bearing protein
-    active already owned by the scoring contract.
+    summary and an exact display-ledger Protein row. A separately declared
+    whey/casein/powder ingredient mass cannot replace actual protein grams.
     """
     if not has_protein_product_intent(_route_product_label_text(product)):
         return []
@@ -1113,17 +1112,6 @@ def _derive_declared_nutrition_protein_evidence(
         None,
     )
     if protein_g is None or protein_g <= 0:
-        return []
-
-    if any(
-        str(row.get("raw_source_path") or "") in scorable_paths
-        and _norm(row.get("canonical_id")) in _PROTEIN_CANONICALS
-        and _positive_quantity(row) is not None
-        and _unit_is_mass(
-            _row_unit(row)
-        )
-        for row in active_rows
-    ):
         return []
 
     nutrition_protein_paths = {
@@ -1954,7 +1942,6 @@ def derive_product_scoring_evidence(product: Dict[str, Any]) -> List[Dict[str, A
     for item in _derive_declared_nutrition_protein_evidence(
         product,
         active_rows,
-        scorable_paths,
     ):
         special_evidence_paths.update(
             str(path) for path in _safe_list(item.get("linked_rows")) if path
@@ -1973,31 +1960,13 @@ def derive_product_scoring_evidence(product: Dict[str, Any]) -> List[Dict[str, A
         canonical = _norm(row.get("canonical_id"))
         anchor_canonical, anchor_name = _anchor_identity(row)
         text = _row_text(row).lower()
+        # Actual protein grams are owned by the declared Nutrition Facts join
+        # above; protein-source ingredient mass proves identity, not purity.
         if (
-            ptype in _SPORTS_PRIMARY_TYPES
-            and quantity is not None
-            and _unit_is_mass(unit)
-            and (canonical in _PROTEIN_CANONICALS or "protein" in text)
-            and str(row.get("raw_source_path") or "") not in scorable_paths
-        ):
-            special_evidence_paths.add(str(row.get("raw_source_path") or ""))
-            evidence.append(_evidence_base(
-                row=row,
-                evidence_type="sports_primary_dose",
-                canonical_id="protein",
-                clean_identity_id=canonical or None,
-                scoring_parent_id="protein",
-                dose_value=quantity,
-                dose_unit=str(unit),
-                evidence_scope="row_level",
-                confidence="high",
-                reason="protein_macro_or_primary_sports_dose",
-                name=row.get("name") or "Protein",
-            ))
-        elif (
             ptype in _SPORTS_PRIMARY_TYPES
             and canonical in _SPORTS_PRIMARY_CANONICALS
             and str(row.get("raw_source_path") or "") not in scorable_paths
+            and str(row.get("raw_source_path") or "") not in special_evidence_paths
         ):
             special_evidence_paths.add(str(row.get("raw_source_path") or ""))
             evidence.append(_sports_primary_identity_without_dose(row, canonical))
@@ -2551,6 +2520,10 @@ def _product_scoring_evidence_rows(
         for item in derived_evidence_rows
         if _norm(item.get("evidence_type")) == "declared_active_fiber"
     }
+    valid_declared_protein_keys = {
+        evidence_key(item) for item in derived_evidence_rows
+        if item.get("reason") == "declared_nutrition_protein_mass"
+    }
     context_fields = (
         "raw_taxonomy",
         "forms",
@@ -2596,6 +2569,15 @@ def _product_scoring_evidence_rows(
         _backfill_product_evidence_identity(product, item)
         evidence_type = _norm(item.get("evidence_type") or item.get("dose_class"))
         dose_class = _norm(item.get("dose_class"))
+        if (
+            evidence_type == "sports_primary_dose"
+            and item.get("reason") == "declared_nutrition_protein_mass"
+            and evidence_key(item) not in valid_declared_protein_keys
+        ):
+            # A stored protein projection is a cache of the current Facts-row
+            # join, not permission to reuse grams after source quantity loss.
+            rejected.append(_reject(item, "stale_declared_nutrition_protein_evidence"))
+            continue
         if (
             evidence_type == "declared_active_fiber"
             and evidence_key(item) not in valid_declared_active_fiber_keys
