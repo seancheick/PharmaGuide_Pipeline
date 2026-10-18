@@ -1061,7 +1061,7 @@
         "archetype": "omega",
         "quality_score_status": "scored",
         "product_safety_status": "no_known_catalog_concern",
-        "quality_score_v4_100": 40.9,
+        "quality_score_v4_100": 46.5,
         "quality_tier": "Poor",
         "v4_confidence": "moderate",
         "normalization_references": {
@@ -1071,7 +1071,7 @@
         },
         "pillars": {
           "formulation": 7.6,
-          "dose": 0.0,
+          "dose": 5.6,
           "evidence": 10.4,
           "transparency": 10.9,
           "verification": 6.0,
@@ -1079,7 +1079,7 @@
         },
         "raw_dimensions": {
           "formulation": 4.57,
-          "dose": 0.0,
+          "dose": 5.6,
           "evidence": 10.4,
           "transparency": 8.0
         }
