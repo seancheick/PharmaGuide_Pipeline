@@ -4502,6 +4502,7 @@ def _route_has_material_protein_row(rows: Iterable[Dict[str, Any]]) -> bool:
     """
     return any(
         _norm(row.get("canonical_id")) in ROUTE_FEATURE_PROTEIN_CANONICALS
+        and not is_nutrition_fact_declaration(row)
         and row.get("scoring_input_kind") != "product_level_evidence"
         and row.get("score_eligible_by_cleaner") is not False
         and _norm(row.get("source_section")) != "inactive"

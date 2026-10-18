@@ -2742,3 +2742,18 @@ def test_nonmaterial_or_ineligible_source_cannot_supply_protein_product_intent(s
                                              "exact_dose_text": "19 g"}])
     assert not any(r.get("reason") == "declared_nutrition_protein_mass"
                    for r in derive_product_scoring_evidence(product))
+
+
+def test_protein_facts_total_cannot_supply_its_own_product_intent():
+    from scoring_v4.scored_artifact import build_scored_artifact
+
+    protein = _row(name="Protein", canonical_id="protein", quantity=74.0, unit="g",
+                   raw_source_path="ingredientRows[4]", score_exclusion_reason="excluded_nutrition_fact")
+    product = _product([], product_name="Opaque Meal Vanilla", primary_type="vitamin_mineral_combo",
+                       activeIngredients=[protein], nutrition_summary={"protein_g": 74.0},
+                       display_ingredients=[{"raw_source_text": "Protein", "source_section": "activeIngredients",
+                                             "display_type": "nutrition_fact", "raw_source_path": "ingredientRows[4]",
+                                             "exact_dose_text": "74 g"}])
+    assert not any(r.get("reason") == "declared_nutrition_protein_mass"
+                   for r in derive_product_scoring_evidence(product))
+    assert build_scored_artifact(product)["_v4_module"] != "sports"
