@@ -229,7 +229,7 @@ def test_config_snapshot_reloads_current_files_without_mutating_scorer_cache(
     assert quality.config() is original_config
 
 
-@pytest.mark.parametrize("failure", ["missing", "malformed", "non_object"])
+@pytest.mark.parametrize("failure", ["missing", "malformed", "non_object", "pillars_list", "pillars_null", "pillars_empty", "weight_string", "weight_null", "weight_bool", "weight_nonfinite"])
 def test_config_snapshot_reports_invalid_file_after_cached_success(
     dashboard_app, tmp_path, monkeypatch, failure
 ):
@@ -247,6 +247,14 @@ def test_config_snapshot_reports_invalid_file_after_cached_success(
     assert loader._load_scoring_config_snapshot(None, [])["pillar_weights"]
     if failure == "missing":
         path.unlink()
+    elif failure.startswith("weight_"):
+        payload = json.loads(path.read_bytes())
+        payload["pillars"]["formulation"]["weight"] = {"weight_string": "20", "weight_null": None, "weight_bool": True, "weight_nonfinite": float("nan")}[failure]
+        path.write_text(json.dumps(payload))
+    elif failure.startswith("pillars_"):
+        payload = json.loads(path.read_bytes())
+        payload["pillars"] = {"pillars_list": [], "pillars_null": None, "pillars_empty": {}}[failure]
+        path.write_text(json.dumps(payload))
     else:
         path.write_text("{" if failure == "malformed" else "[]")
     warnings = []

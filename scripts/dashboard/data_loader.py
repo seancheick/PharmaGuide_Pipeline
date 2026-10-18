@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import ast
 import json
+import math
 import re
 import sqlite3
 from collections import Counter, defaultdict
@@ -1447,7 +1448,12 @@ def _load_scoring_config_snapshot(db_conn: sqlite3.Connection | None, warnings: 
         # Process-long scorer caches must neither mask edits nor be invalidated.
         provenance = all_config_provenance(fresh=True)
         pillars = quality_score_config(fresh=True)["pillars"]
+        if not isinstance(pillars, dict) or not pillars:
+            raise ValueError("quality_score pillars must be a nonempty object")
         pillar_weights = {name: spec["weight"] for name, spec in pillars.items()}
+        if any(type(weight) not in (int, float) or not math.isfinite(weight)
+               for weight in pillar_weights.values()):
+            raise ValueError("quality_score pillar weights must be finite numbers")
     except (OSError, ValueError, KeyError, TypeError) as exc:
         warnings.append(f"v4 scoring config could not be read: {exc}")
         return {}
