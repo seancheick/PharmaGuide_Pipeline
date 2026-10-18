@@ -53,13 +53,13 @@ each. Causes are recorded per label in `contract_snapshots/_manifest.json`; 33/3
 
 ## 2. Benchmarks missing declared semantics
 
-Config-owned anchors all carry the shared schema (`schemas/dose_reference_semantics.schema.json`,
-CI `test_dose_reference_semantics.py`, 14 records). Still pending, listed exactly in
+The eleven enumerated records carry the shared schema; other config anchors, including joint/immune magnitudes, are not covered (`schemas/dose_reference_semantics.schema.json`,
+CI `test_dose_reference_semantics.py`, 11 records). Still pending, listed exactly in
 `PENDING_ANCHOR_FAMILIES`: sports band literals; multi/prenatal and B-complex coverage curves;
 collagen, sleep, joint and immune ranges; botanical therapeutic ranges (43); per-row DRI and
 clinical-anchor rows (curve records exist); probiotic strain tiers (49); positive clinical and
 formula benchmarks. Moving these into semantic records is the follow-up (needs curation, not
-code); the CI list can only shrink.
+code); the current CI only checks that the listed files/functions exist. It neither proves completeness nor enforces a shrinking exception list. This is an activation blocker, not a completed acceptance gate.
 
 ## 3. Highest-studied-dose upper-bound misuse
 
@@ -123,9 +123,7 @@ a prenatal title that mentions a baby (f3614ec7c fixed a 20 → 5 regression fou
   19–50 rows; a label stating several populations screens the lowest UL across all of them, and
   a negated tag ("Women (not pregnant or lactating)", 959 labels) is an ordinary adult (review
   fix b69d8acdf: pregnancy-only screens 1,146 → 46, plus 142 unions; the ≥90%-of-UL cohort is
-  unchanged at 12); DSLD's 18–50 adult tag (on 12,102 of 15,426 labels) does not narrow; pediatric
-  rows are absent from the reference data, so the adult limit still confirms an exceedance and
-  the row records the gap (**for Sean:** curate pediatric UL rows).
+  unchanged at 12); DSLD's 18–50 adult tag (on 12,102 of 15,426 labels) does not narrow; adolescent 14–18 rows already exist and must be used when applicable. Younger pediatric gaps cannot borrow adult limits; see the October 18 correction below.
 
 ## 10. Permanent golden-case tests and results
 
@@ -139,8 +137,8 @@ Pipeline (137 tests, all pass): `test_directed_daily_dose` 5, `test_dose_final_s
 ## App batch (D4)
 
 - `stack_ul_checker.dart`: exactly 100% is not an exceedance; no-profile screen = lowest
-  ordinary-adult UL (not children or pregnancy rows), age-only and group-only fallbacks use adult
-  rows, all flagged not personal; a catalog verdict's percentage is re-expressed against the
+  ordinary-adult UL (not children or pregnancy rows), unknown-age and group-only fallbacks use adult
+  rows; known adolescent age keeps its applicable adolescent reference. All incomplete profiles are flagged not personal; a catalog verdict's percentage is re-expressed against the
   person's limit when the row carries the catalog limit, otherwise shown with no personal limit.
 - `PipelineUlVerdict` percentage fallback `> 100` (was `>= 150`, the retired B7 band), pinned to
   the pipeline's `exceeds_above_pct`.
@@ -169,6 +167,65 @@ After the fixes: stored-input scores unchanged (0 of 15,426 vs 810af3cf0), raw c
 Locally rebuilt canaries (6 of 9; three raw labels are not in the dataset) show e1_2_2
 score-array drift on 306237/246324/176872 that reproduces identically on main 5fb2be1ca: a stale
 October 12 baseline, not this branch (follow-up).
+
+## October 18 independent audit correction status
+
+The preceding batch counts and CI runs describe the original candidate, not the fixes below.
+The independent audit was rechecked before implementation; source fixes are committed on the same
+feature branches. No pipeline, main push, release or IPA was performed.
+
+- Caffeine totals retain their authoritative source and independent sources; qualified amounts
+  preserve their bounds. Only confirmed excess sets the one final ceiling.
+- Stated 19–50 labels reach their population owner. Pediatric labels use available adolescent
+  references when applicable; missing established younger references keep the existing incomplete
+  assessment/strict hold. Nutrients with no established UL are not falsely held for absent rows.
+- BCAA/EAA vote once per preparation, on their existing normalized scales. The audit's expected
+  12 for creatine 5g + BCAA 1g was imprecise: 20 and 4/22×20 average to **11.8**. Genuine hidden
+  co-primaries take neutral; betaine uses its daily target. ATP retains its acute per-use basis.
+- Invalid/conflicting CFU producer measurements remain unresolved, including alias spellings of
+  the same source identity. Legitimately hidden strain allocations remain neutral. Missing
+  botanical quantities do not become completed no-benchmark assessments.
+- Receipts carry the actual selected assessment, quantified exposure/default/qualifier, panel
+  components and assessed references. Prenatal reference rows reflect the pregnancy rebase.
+  Receipt reconciliation checks contribution arithmetic, and magnesium copy no longer expands a
+  supplemental-only UL to food intake. Triglyceride references are labeled supported minima.
+- App percentages keep their matching reference and non-personal marker; stronger verified
+  personal excess is retained. Clearing age/sex actually clears the watched state. The original
+  audit's request to replace a known adolescent's limit with an adult limit is **retracted**;
+  the fallback explanation was corrected instead.
+- Engine 4.7.1; numerical config/rubric calibrations unchanged. Glossary now describes directed daily Dose.
+
+**Unclosed requirement:** §2.2 needs source/preparation/population/purpose/curve review for the
+pending active anchors and a complete executable acceptance gate. Eleven schema-valid records
+are not complete clinical approval. No review/approval fields were fabricated; do not activate
+or run the full pipeline until this requirement and Sean's remaining policy decisions are closed.
+
+Current verification (October 18):
+
+- Combined named 16-file pipeline owner/consumer checkpoint: **486 passed**. Final receipt
+  follow-up: **42 passed**; final UL-population file including the real abbreviated DSLD tag:
+  **46 passed**. Counts overlap. Native strain/formula provenance and assessment-readiness slice: **193 passed**.
+- App: `flutter analyze` clean; implementer 15-file slice **205 passed**, independent review
+  **39 passed**, refreshed-fixture/checker/profile/widget slice **43 passed** (overlapping).
+- Clean-source frozen raw replay, **63 labels**, baseline `4b1ea450f` versus final runtime
+  `4148a7abb`: sports249741 total **84.3→82.1**, Dose **18→15.8**, restored normalized BCAA vote;
+  pediatric218441/256961/327416/82319 become incomplete/not_scored for unavailable established
+  younger UL references. All completed products retain other five numeric pillars. Fifty-six
+  completed controls preserve total score. No unexpected completed route/status change; every
+  available final Dose receipt reconciles. The raw cohort covers five routes; archetype fixtures
+  and named tests cover the other routes. This is a bounded development comparison, not a full catalog.
+- Raw canaries: initial **32/33**, the one drift327416 was independently traced to its label's
+  `Children more than 1 but less than 4` target and missing applicable younger ULs. Only that
+  snapshot was regenerated through the canonical raw freezer, with source-based reason in its
+  manifest. Final **33/33 passed**.
+- Current fingerprints: **114 stale stage manifests**, including Clean. Do not restamp
+  existing artifacts. Once activation blockers and merge gates close, regeneration must begin
+  at Clean; no corpus command is authorized or recommended by this handoff.
+
+Evidence: `reports/dose_v41_audit_fixes_20261018/` (local, ignored), checksum-bound raw and score
+captures, final_impact_summary.json, safety_changes.json, canary logs and fingerprints.json.
+No new whole-fast CI or local/release rung is claimed; historical CI does not cover these fixes.
+Those candidate merge gates remain pending. Local commits were requested; no remote push occurred.
 
 ## Sean-only decisions remaining
 

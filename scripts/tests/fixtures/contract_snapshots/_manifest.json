@@ -1086,6 +1086,14 @@
       ],
       "source_commit": "8db71366d",
       "notes": "Dose V4.1 (docs/plans/DOSE_V41_PLAN.md, Sean D1-D4) on branch claude/dose-v41. Complete 33 raw-canary check from raw found exactly these 8 score/derived-tier drifts and no safety, identity or status drift; a raw replay (base 5fb2be1ca vs 8db71366d, ~/pg_quality/dose_v41_20261017/canary_{base,final}.jsonl) shows Dose is the only pillar that moved for all 8. Causes: B1 directed daily use reverses the PR154 serving-only movers (Ginkgo180417 9.5->20, Silymarin183275 20->11.4 since its 1-4 serving maximum is above the botanical studied range, Goli245156 11.4->20); B2 one product-level ceiling (Athletic Pure Pack182730 niacin 109% even at the lowest use -> 10; calcium/magnesium293924 magnesium 129% at maximum use -> 10); B4 ordinary omega 250 mg reference (Fish Oil74716 11.2->20); B5 probiotic strain average with the hidden-amount neutral (FloraMend298070 0->11.4) and sports co-primary average (PRE306381 18->16.7). Freezer refreshed these 8 from raw only; 25 unchanged."
+    },
+    {
+      "date": "2026-10-18",
+      "notes": "Generated selectively by freeze_contract_snapshots.py from the unchanged raw label through Clean/Enrich/Score at the audit-fix candidate. TargetGroups explicitly state Children more than 1 but less than 4. Existing reference data has no established UL rows covering those ages; adult/adolescent values cannot establish a completed pediatric screen. Source result correctly becomes not_scored/partial with a caution for unresolved UL assessment, replacing a misleading complete score56.9/no-known-catalog-concern. No clinical threshold was invented and no per-product score was assigned. Frozen raw63 replay also verifies the same shared hold for218441/256961/82319; remaining scored controls preserve nonDose numeric pillars. All33 canaries are checked after this source-reviewed refresh.",
+      "dsld_ids": [
+        327416
+      ],
+      "source_commit": "4148a7abb"
     }
   ]
 }

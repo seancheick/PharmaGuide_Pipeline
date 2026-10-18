@@ -1,10 +1,10 @@
-"""Dose V4.1 §2.2: every active config-owned Dose anchor carries complete
-reference semantics (one shared schema, one CI check).
+"""Validate the eleven existing semantic records and inventory known gaps.
 
-Anchors still written as literals in a module or as rows in a data file are
-listed in PENDING_ANCHOR_FAMILIES (review packet item 2). The list is exact:
-moving a family into semantic records must delete its entry, and a new family
-cannot be added without a record or an explicit entry here."""
+This is not the complete §2.2 acceptance gate: literal/config/data anchors in
+PENDING_ANCHOR_FAMILIES still need per-entry clinical semantics review. Existence
+checks below do not prove an exhaustive inventory or enforce a shrinking list.
+Activation remains blocked until the plan's full requirement is met.
+"""
 import json
 from pathlib import Path
 
@@ -73,7 +73,7 @@ def test_numeric_anchor_records_carry_their_number():
     assert records["dose_safety_ceiling.caffeine"]["exceeds_above_mg_day"] == 400.0
 
 
-def test_pending_anchor_families_still_exist_and_are_exact():
+def test_pending_anchor_families_still_exist():
     for owner in PENDING_ANCHOR_FAMILIES:
         path, _, symbol = owner.partition("::")
         source = (SCRIPTS.parent / path)

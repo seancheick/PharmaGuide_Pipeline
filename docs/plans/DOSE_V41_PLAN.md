@@ -140,9 +140,9 @@ Order: adequacy per ingredient → route aggregation → normalize to public 0�
 - Change **safety** selection only. Adequacy (`adequacy_basis` = higher sourced adult RDA/AI) is
   unchanged; do not simply change `_RDA_REFERENCE_PROFILE.age_range`.
 - The one selection feeds both the shared warning/status owner and the Dose ceiling.
-- Wording names scope, e.g. "Maximum labeled use exceeds the calcium limit for adults 51+." These
-  are total-intake limits; a product below a limit does not establish that food plus supplements
-  stays below it.
+- Wording names scope, e.g. "Maximum labeled use exceeds the calcium limit for adults 51+." Calcium and phosphorus
+  have total-intake limits; other nutrients may have source-restricted limits. Use each reference
+  scope. A product below a total-intake limit does not establish that food plus supplements stays below it.
 
 | Nutrient | General-adult screening UL | Source rows |
 |---|---:|---|
