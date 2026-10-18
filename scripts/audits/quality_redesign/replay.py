@@ -11,14 +11,29 @@ Two input kinds, one capture/compare format:
   replay.py snapshot --checkout <main worktree> --products-root F --manifest F/manifest.json --out base.jsonl --workers 4
   replay.py snapshot --checkout <batch worktree> ... --out cand.jsonl --workers 4
   replay.py compare --baseline base.jsonl --candidate cand.jsonl --out delta.json
+
+Full-artifact equivalence (architecture audit 2026-10-17, AUDIT.md F.3): `snapshot --full`
+also keeps, per product, a sha256 of the whole cleaned, enriched and scored record (and the
+detail blob with --blob), clock stamps removed through VOLATILE_FIELDS, plus the records
+themselves under <out>.records/ so `compare` can name which record changed and the first
+differing JSON path. Rows written without --full are unchanged. The --full worker runs with
+PYTHONHASHSEED=0 (FULL_WORKER_ENV): the enricher emits one set as a list
+(ingredient_quality_data.scorable_ingredient_names_normalized, enrich_supplements_v3.py
+`list(scorable_names_normalized)`), whose order changes with each process's hash seed, so an
+unpinned baseline and candidate differ on it for most products. The field stays in the hash
+(a content change is still reported); only the per-process ordering is made the same on both
+sides. The production ordering defect is recorded in BASELINE.md.
 """
 from __future__ import annotations
 
 import argparse
 from concurrent.futures import ProcessPoolExecutor
+import copy
+import gzip
 import hashlib
 import json
 import math
+import os
 import shutil
 import subprocess
 import sys
@@ -180,12 +195,89 @@ def captured_subroute(record):
     return project_record(dict(record))['subroute']
 
 
-def score_records(rows, scorer):
+# The only fields that differ between two runs of the same raw label. Found by running DSLD 19067
+# twice, more than a second apart, through clean -> enrich -> scored artifact -> detail blob and
+# diffing every JSON path of all four records (probe recorded in BASELINE.md): these five paths
+# were the whole difference; the detail blob carries none of them. `run_id` (named in the audit)
+# is stamped by the enricher's batch driver process_all(), never in a per-product record, so it
+# is not listed. A path joins this list only with the two-run probe that shows it is a clock
+# stamp, never to make a comparison pass. Dotted keys from the record root; absent paths are
+# left alone.
+VOLATILE_FIELDS = {
+    'cleaned': {
+        'metadata.lastCleaned': 'enhanced_normalizer stamps datetime.now when it builds the metadata block',
+    },
+    'enriched': {
+        'enriched_date': 'enrich_product stamps datetime.now on every return path',
+        'enrichment_metadata.generated_at': 'enrich_product stamps datetime.now in the enrichment_metadata block',
+        'match_ledger.generated_at': 'the match ledger builder stamps datetime.now',
+    },
+    'scored': {
+        'scoring_metadata.scored_date': 'build_scored_artifact stamps datetime.now as scored_at',
+    },
+    'blob': {},
+}
+RECORDS_SUFFIX = '.records'
+FULL_WORKER_ENV = {'PYTHONHASHSEED': '0'}  # see the module docstring; inherited by the pool's spawned workers
+VALUE_CHARS = 200
+ABSENT = '<absent>'
+
+
+def canonical_json(value):
+    return json.dumps(value, sort_keys=True, separators=(',', ':'), ensure_ascii=False)
+
+
+def without_volatile(record, stage):
+    """Deep copy of a stage record with its VOLATILE_FIELDS removed; absent paths are left alone."""
+    record = copy.deepcopy(record)
+    for dotted in VOLATILE_FIELDS[stage]:
+        *parents, leaf = dotted.split('.')
+        node = record
+        for key in parents:
+            node = node.get(key) if isinstance(node, dict) else None
+        if isinstance(node, dict):
+            node.pop(leaf, None)
+    return record
+
+
+def record_hash(record, stage):
+    """sha256 of the canonical (sorted-key) JSON of a stage record without its clock stamps."""
+    return hashlib.sha256(canonical_json(without_volatile(record, stage)).encode('utf-8')).hexdigest()
+
+
+def records_dir(snapshot_path):
+    return Path(str(snapshot_path) + RECORDS_SUFFIX)
+
+
+def keep_records(directory):
+    """Writer that stores every stage record of a product, stamps included, as <id>.json.gz."""
+    directory = Path(directory)
+    directory.mkdir(parents=True, exist_ok=True)
+
+    def keep(pid, stages):
+        with gzip.open(directory / f'{pid}.json.gz', 'wt', encoding='utf-8', compresslevel=6) as handle:
+            handle.write(canonical_json(stages))
+    return keep
+
+
+def load_records(directory, pid):
+    with gzip.open(Path(directory) / f'{pid}.json.gz', 'rt', encoding='utf-8') as handle:
+        return json.loads(handle.read())
+
+
+def score_records(rows, scorer, keep=None):
+    """Capture one row per product. With `keep`, `scorer` returns (result, stage_records): each
+    stage record is hashed without its clock stamps into row['hashes'] and handed whole to
+    keep(id, stage_records). Without `keep` the rows are exactly the score-only capture."""
     results = []
     for source, digest, product in rows:
         record = {'id': str(product['id']), 'input_path': source, 'input_sha256': digest, 'name': product.get('fullName'), 'label_source': product.get('imageUrl'), 'label_source_path': source + '#id=' + str(product['id']) + '/label_source_rows'}
         try:
             result = scorer(product)
+            if keep is not None:
+                result, stages = result
+                record['hashes'] = {stage: record_hash(value, stage) for stage, value in stages.items()}
+                keep(record['id'], stages)
             if not result or 'quality_score_status' not in result:
                 raise ValueError('Empty or invalid scorer success')
             breakdown = result.get('v4_breakdown', {})
@@ -238,7 +330,56 @@ def read_rows(path, project=None):
     return rows
 
 
-def compare_records(baseline, candidate):
+def _bounded(value):
+    text = canonical_json(value)
+    return text if len(text) <= VALUE_CHARS else text[:VALUE_CHARS] + f'... ({len(text)} chars)'
+
+
+def first_difference(left, right, path='$'):
+    """First JSON path (sorted keys, list order) where two values differ, with bounded values, or None."""
+    if isinstance(left, dict) and isinstance(right, dict):
+        for key in sorted(set(left) | set(right), key=str):
+            here = f'{path}.{key}'
+            if key not in left or key not in right:
+                return {'path': here, 'baseline': _bounded(left[key]) if key in left else ABSENT,
+                        'candidate': _bounded(right[key]) if key in right else ABSENT}
+            found = first_difference(left[key], right[key], here)
+            if found:
+                return found
+        return None
+    if isinstance(left, list) and isinstance(right, list):
+        for index, (a, b) in enumerate(zip(left, right)):
+            found = first_difference(a, b, f'{path}[{index}]')
+            if found:
+                return found
+        if len(left) != len(right):
+            return {'path': path, 'baseline': f'{len(left)} items', 'candidate': f'{len(right)} items'}
+        return None
+    if type(left) is type(right) and (left == right or (isinstance(left, float) and math.isnan(left) and math.isnan(right))):
+        return None
+    return {'path': path, 'baseline': _bounded(left), 'candidate': _bounded(right)}
+
+
+def record_differences(pid, left_row, right_row, records):
+    """Which stage records of one product changed and, per changed record, the first differing path.
+    The stored records are re-hashed against the snapshot rows before they are trusted."""
+    if left_row['hashes'].keys() != right_row['hashes'].keys():
+        raise ValueError(f'Snapshots capture different records: {pid}')
+    changed = [stage for stage in sorted(left_row['hashes']) if left_row['hashes'][stage] != right_row['hashes'][stage]]
+    first = {}
+    if changed:
+        left, right = load_records(records[0], pid), load_records(records[1], pid)
+        for side, row, stored in (('baseline', left_row, left), ('candidate', right_row, right)):
+            for stage in changed:
+                if record_hash(stored.get(stage), stage) != row['hashes'][stage]:
+                    raise ValueError(f'{side} record {pid}/{stage} does not match its snapshot hash')
+        first = {stage: first_difference(without_volatile(left[stage], stage), without_volatile(right[stage], stage)) for stage in changed}
+    return {'changed': changed, 'first_difference': first}
+
+
+def compare_records(baseline, candidate, records=None):
+    """Rows that differ; with `records` (baseline, candidate records directories) each entry also
+    names the changed stage records and their first differing JSON path."""
     require_success(baseline)
     require_success(candidate)
     left, right = {p['id']: p for p in baseline}, {p['id']: p for p in candidate}
@@ -247,7 +388,15 @@ def compare_records(baseline, candidate):
     for key in left:
         if left[key]['input_sha256'] != right[key]['input_sha256']:
             raise ValueError(f'Snapshot input hashes differ: {key}')
-    return [{'id': key, 'baseline': left[key], 'candidate': right[key]} for key in sorted(left) if left[key] != right[key]]
+    differences = []
+    for key in sorted(left):
+        if left[key] == right[key]:
+            continue
+        entry = {'id': key, 'baseline': left[key], 'candidate': right[key]}
+        if records is not None:
+            entry.update(record_differences(key, left[key], right[key], records))
+        differences.append(entry)
+    return differences
 
 
 def check_records(rows, cases):
@@ -427,15 +576,19 @@ def repository_provenance(checkout):
     return {'head': subprocess.check_output(['git', '-C', str(checkout), 'rev-parse', 'HEAD'], text=True).strip(), 'source_sha256': {str(p.relative_to(checkout)): sha(p) for p in files}}
 
 
-def snapshot(checkout, products_root, manifest, out, workers=1):
+def snapshot(checkout, products_root, manifest, out, workers=1, full=False, blob=False):
     checkout = Path(checkout).resolve()
     # The child runs in another checkout: bind caller-relative paths first.
     products_root, manifest, out = (Path(path).resolve() for path in (products_root, manifest, out))
     before = repository_provenance(checkout)
     command = [sys.executable, str(Path(__file__).resolve()), '_worker', '--checkout', str(checkout), '--products-root', str(products_root), '--manifest', str(manifest), '--out', str(out), '--workers', str(workers)]
-    result = subprocess.run(command, cwd=checkout)
+    if full:
+        command += ['--full'] + (['--blob'] if blob else [])
+    result = subprocess.run(command, cwd=checkout, **({'env': {**os.environ, **FULL_WORKER_ENV}} if full else {}))
     after = repository_provenance(checkout)
     metadata = {'created_at': datetime.now(timezone.utc).isoformat(), 'checkout': str(checkout), 'repository': before, 'inputs_manifest_sha256': sha(manifest), 'exit_code': result.returncode, 'source_unchanged': before == after, 'expected_product_count': json.loads(Path(manifest).read_text())['product_count'], 'product_count': sum(1 for line in Path(out).open() if line.strip()) if Path(out).exists() else 0, 'output_sha256': sha(out) if Path(out).exists() else None, 'workers': workers, 'capture_version': 2}
+    if full:
+        metadata['full'] = {'blob': blob, 'records_dir': str(records_dir(out)), 'volatile_fields': VOLATILE_FIELDS, 'worker_env': FULL_WORKER_ENV, 'harness_sha256': sha(__file__)}
     write_json(str(out) + '.meta.json', metadata)
     if before != after:
         raise ValueError('Scoring source mutated during snapshot')
@@ -450,7 +603,6 @@ _RAW_SCORERS = {}
 def raw_scorer(checkout):
     """clean -> enrich -> score with the checkout's own modules, built once per process."""
     if checkout not in _RAW_SCORERS:
-        import copy
         import logging
         sys.path.insert(0, str(Path(checkout).resolve() / 'scripts'))
         logging.disable(logging.CRITICAL)
@@ -468,19 +620,62 @@ def raw_scorer(checkout):
     return _RAW_SCORERS[checkout]
 
 
+def full_stages(checkout, blob=False):
+    """clean -> enrich -> scored artifact (-> detail blob) with the checkout's own modules, every
+    stage record kept: the calls reports/canary_rebuild.py::rebuild_one makes, with one normalizer
+    and enricher per process. The public scorer still supplies the score projection."""
+    key = (checkout, 'full', blob)
+    if key not in _RAW_SCORERS:
+        import logging
+        sys.path.insert(0, str(Path(checkout).resolve() / 'scripts'))
+        logging.disable(logging.CRITICAL)
+        from enhanced_normalizer import EnhancedDSLDNormalizer
+        from enrich_supplements_v3 import SupplementEnricherV3
+        from score_supplements_v4 import score_product_v4
+        from scoring_v4.scored_artifact import build_scored_artifact
+        if blob:
+            from build_final_db import build_detail_blob
+        logging.disable(logging.CRITICAL)
+        normalizer, enricher = EnhancedDSLDNormalizer(), SupplementEnricherV3()
+
+        def run(label):
+            cleaned = normalizer.normalize_product(label)
+            # enrich_product edits its input in place (ingredient safety_flags): hash Clean's own record.
+            enriched, _ = enricher.enrich_product(copy.deepcopy(cleaned))
+            scored = build_scored_artifact(copy.deepcopy(enriched))
+            stages = {'cleaned': cleaned, 'enriched': enriched, 'scored': scored}
+            if blob:
+                stages['blob'] = build_detail_blob(copy.deepcopy(enriched), copy.deepcopy(scored))
+            return score_product_v4(copy.deepcopy(enriched)), stages
+
+        _RAW_SCORERS[key] = run
+    return _RAW_SCORERS[key]
+
+
 def score_batch(task):
-    checkout, root, item = task
+    checkout, root, item, full = task
+    rows = ((item['path'], item['sha256'], p) for p in payloads(Path(root) / item['path'], raw=item['kind'] == 'raw'))
+    if full is not None:
+        if item['kind'] != 'raw':
+            raise ValueError('--full replays raw labels only (freeze-raw inputs)')
+        return score_records(rows, full_stages(checkout, full['blob']), keep_records(full['records_dir']))
     if item['kind'] == 'raw':
-        return score_records(((item['path'], item['sha256'], p) for p in payloads(Path(root) / item['path'], raw=True)), raw_scorer(checkout))
+        return score_records(rows, raw_scorer(checkout))
     sys.path.insert(0, str(Path(checkout).resolve() / 'scripts'))
     from score_supplements_v4 import score_product_v4
-    return score_records(((item['path'], item['sha256'], p) for p in payloads(Path(root) / item['path'])), score_product_v4)
+    return score_records(rows, score_product_v4)
 
 
 def worker(args):
     before = sha(args.manifest)
     files, spec = verified_files(args.products_root, args.manifest)
-    tasks = [(args.checkout, args.products_root, item) for item in files]
+    full = None
+    if getattr(args, 'full', False):  # audit_dead_code.py calls worker() with a bare Namespace
+        directory = records_dir(args.out)
+        if directory.exists():
+            raise ValueError('Records directory already exists; use a new --out')
+        full = {'blob': bool(getattr(args, 'blob', False)), 'records_dir': str(directory)}
+    tasks = [(args.checkout, args.products_root, item, full) for item in files]
     rows = []
     if args.workers == 1:
         batches = map(score_batch, tasks)
@@ -501,6 +696,10 @@ def worker(args):
         raise ValueError('Input manifest mutated during snapshot')
     if len(rows) != spec['product_count'] or len({row['id'] for row in rows}) != len(rows):
         raise ValueError('Duplicate product IDs or input product count mismatch')
+    if full is not None:
+        missing = [row['id'] for row in rows if 'error' not in row and not (Path(full['records_dir']) / f"{row['id']}.json.gz").is_file()]
+        if missing:
+            raise ValueError(f'Stage records missing for {missing[:10]}')
     require_success(rows)
 
 
@@ -516,6 +715,8 @@ def main():
     for name in ('snapshot', '_worker'):
         p = subs.add_parser(name)
         p.add_argument('--workers', type=int, choices=range(1, 5), default=1)
+        p.add_argument('--full', action='store_true', help='also hash and keep the whole cleaned, enriched and scored record of every product')
+        p.add_argument('--blob', action='store_true', help='with --full: also the detail blob (build_final_db.build_detail_blob)')
         for flag in ('checkout', 'products-root', 'manifest', 'out'):
             p.add_argument('--' + flag, required=True)
     p = subs.add_parser('compare')
@@ -530,12 +731,14 @@ def main():
     p.add_argument('--candidate', required=True)
     p.add_argument('--reference-cases', required=True)
     args = parser.parse_args()
+    if getattr(args, 'blob', False) and not args.full:
+        parser.error('--blob needs --full')
     if args.command == 'freeze':
         freeze(args.products_root, args.frozen_root, args.manifest)
     elif args.command == 'freeze-raw':
         freeze_raw(args.raw_root, json.loads(Path(args.ids).read_text()), args.frozen_root, args.manifest)
     elif args.command == 'snapshot':
-        snapshot(args.checkout, args.products_root, args.manifest, args.out, args.workers)
+        snapshot(args.checkout, args.products_root, args.manifest, args.out, args.workers, args.full, args.blob)
     elif args.command == '_worker':
         worker(args)
     elif args.command == 'compare':
@@ -543,7 +746,18 @@ def main():
         candidate_meta = json.loads(Path(args.candidate + '.meta.json').read_text())
         if baseline_meta['inputs_manifest_sha256'] != candidate_meta['inputs_manifest_sha256']:
             raise ValueError('Snapshot input manifest hashes differ')
-        write_json(args.out, compare_records(read_rows(args.baseline), read_rows(args.candidate)))
+        full = baseline_meta.get('full'), candidate_meta.get('full')
+        if (full[0] is None) != (full[1] is None) or (full[0] and full[0]['blob'] != full[1]['blob']):
+            raise ValueError('Snapshots must both be --full with the same --blob setting, or neither')
+        records = (records_dir(args.baseline), records_dir(args.candidate)) if full[0] else None
+        differences = compare_records(read_rows(args.baseline), read_rows(args.candidate), records)
+        write_json(args.out, differences)
+        if records:
+            counts = {}
+            for entry in differences:
+                for stage in entry['changed']:
+                    counts[stage] = counts.get(stage, 0) + 1
+            print(json.dumps({'products': baseline_meta['product_count'], 'changed': len(differences), 'by_record': counts}), file=sys.stderr)
     elif args.command == 'report':
         cases = json.loads(Path(args.reference_cases).read_text()) if args.reference_cases else None
         arms = [tuple(item.split('=', 1)) for item in args.candidate]
