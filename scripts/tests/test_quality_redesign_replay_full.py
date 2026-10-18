@@ -65,7 +65,7 @@ def test_full_capture_keeps_a_failed_product_with_its_error():
 @pytest.mark.parametrize('left,right,expected', [
     ({'a': {'b': [1, {'c': 'x'}]}}, {'a': {'b': [1, {'c': 'y'}]}}, {'path': '$.a.b[1].c', 'baseline': '"x"', 'candidate': '"y"'}),
     ({'a': 1}, {'a': 1, 'z': 2}, {'path': '$.z', 'baseline': '<absent>', 'candidate': '2'}),
-    ({'a': [1, 2]}, {'a': [1, 2, 3]}, {'path': '$.a', 'baseline': '2 items', 'candidate': '3 items'}),
+    ({'a': [1, 2]}, {'a': [1, 2, 3]}, {'path': '$.a[2]', 'baseline': '<absent>', 'candidate': '3'}),
     ({'a': [1, 2]}, {'a': [1, 3, 4]}, {'path': '$.a[1]', 'baseline': '2', 'candidate': '3'}),
     ({'a': 1}, {'a': 1.0}, {'path': '$.a', 'baseline': '1', 'candidate': '1.0'}),
     ({'a': True}, {'a': 1}, {'path': '$.a', 'baseline': 'true', 'candidate': '1'}),
@@ -91,13 +91,40 @@ def test_differences_yields_every_path_in_order_and_first_is_its_head():
     left = {'a': {'b': [1, {'c': 'x'}]}, 'k': 1, 'z': 2}
     right = {'a': {'b': [1, {'c': 'y'}, 3]}, 'k': 1}
     found = list(replay.differences(left, right))
-    assert [d['path'] for d in found] == ['$.a.b[1].c', '$.a.b', '$.z']
-    assert found[1] == {'path': '$.a.b', 'baseline': '2 items', 'candidate': '3 items'}
+    assert [d['path'] for d in found] == ['$.a.b[1].c', '$.a.b[2]', '$.z']
+    assert found[1] == {'path': '$.a.b[2]', 'baseline': '<absent>', 'candidate': '3'}
     assert found[2] == {'path': '$.z', 'baseline': '2', 'candidate': '<absent>'}
     assert replay.first_difference(left, right) == found[0]
     assert list(replay.differences({'a': [1]}, {'a': [1]})) == []
     assert replay.generic_path('$.rows[12].items[3].name') == '$.rows[*].items[*].name'
 
+
+
+@pytest.mark.parametrize('removed', [False, True])
+def test_all_paths_reports_each_unmatched_list_entry_with_values(tmp_path, removed):
+    short = {'warnings': [{'reason': 'same prefix'}]}
+    long = {'warnings': [{'reason': 'changed prefix'}, {'severity': 'high', 'reason': 'A'}, None, 'x' * 500]}
+    left, right = (long, short) if removed else (short, long)
+    baseline, b_dir = _store(tmp_path, 'base', {'1': {'blob': left}})
+    candidate, c_dir = _store(tmp_path, 'cand', {'1': {'blob': right}})
+    [entry] = replay.compare_records(baseline, candidate, (b_dir, c_dir), all_paths=True)
+    found = entry['differences']['blob']
+    assert [d['path'] for d in found] == [
+        '$.warnings[0].reason', '$.warnings[1]', '$.warnings[2]', '$.warnings[3]']
+    absent_side, value_side = ('candidate', 'baseline') if removed else ('baseline', 'candidate')
+    assert all(d[absent_side] == '<absent>' for d in found[1:])
+    assert found[1][value_side] == '{"reason":"A","severity":"high"}'
+    assert found[2][value_side] == 'null'  # null is distinct from a missing item
+    assert found[3][value_side].endswith('... (502 chars)')
+    assert len(found[3][value_side]) < 250
+    assert entry['first_difference']['blob'] == found[0]
+
+
+@pytest.mark.parametrize('left,right', [([], [1, 2]), ([1, 2], [])])
+def test_first_list_difference_is_an_unmatched_index(left, right):
+    found = list(replay.differences({'rows': left}, {'rows': right}))
+    assert [d['path'] for d in found] == ['$.rows[0]', '$.rows[1]']
+    assert replay.first_difference({'rows': left}, {'rows': right}) == found[0]
 
 def _full_row(pid, stages):
     return {'id': pid, 'input_sha256': 'h' + pid, 'total': 50.0, 'hashes': {stage: replay.record_hash(value, stage) for stage, value in stages.items()}}

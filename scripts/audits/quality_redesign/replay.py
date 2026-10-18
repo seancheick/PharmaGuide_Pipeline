@@ -351,8 +351,10 @@ def differences(left, right, path='$'):
     elif isinstance(left, list) and isinstance(right, list):
         for index, (a, b) in enumerate(zip(left, right)):
             yield from differences(a, b, f'{path}[{index}]')
-        if len(left) != len(right):
-            yield {'path': path, 'baseline': f'{len(left)} items', 'candidate': f'{len(right)} items'}
+        for index in range(min(len(left), len(right)), max(len(left), len(right))):
+            yield {'path': f'{path}[{index}]',
+                   'baseline': _bounded(left[index]) if index < len(left) else ABSENT,
+                   'candidate': _bounded(right[index]) if index < len(right) else ABSENT}
     elif canonical_json(left) != canonical_json(right):
         yield {'path': path, 'baseline': _bounded(left), 'candidate': _bounded(right)}
 
