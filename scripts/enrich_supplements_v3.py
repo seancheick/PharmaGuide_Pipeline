@@ -21720,9 +21720,44 @@ class SupplementEnricherV3:
             tag = str(text).strip().lower()
             population = next((population for population, needles in _UL_POPULATION_TAGS
                                if any(needle in tag for needle in needles)), None)
+            # An explicit 19-50 restriction reaches its existing UL owner. The
+            # broad DSLD 18-50 category remains general adult. Life-stage tags
+            # retain precedence; negated pregnancy/lactation is ordinary adult.
+            if population in {None, "general_adult"} and re.search(
+                r"(?<![\d-])19\s*[-–—]\s*50(?!\d)", tag
+            ):
+                population = "adults_19_50"
             if population:
                 found.add(population)
         return tuple(sorted(found or {"general_adult"}))
+
+    @staticmethod
+    def _ul_screening_pediatric_age_groups(product: Dict) -> Optional[Tuple[str, ...]]:
+        """Do not borrow adolescent rows for an explicitly younger-only label.
+
+        None retains the available pediatric rows for a broad children label;
+        an empty selection says no existing row covers the stated age range.
+        Population unions retain adolescent coverage if any tag includes it.
+        """
+        pediatric_tags = []
+        for group in product.get("targetGroups") or []:
+            text = group if isinstance(group, str) else (
+                (group.get("text") or group.get("name") or "") if isinstance(group, dict) else "")
+            tag = str(text).strip().lower()
+            if not any(word in tag for word in ("child", "infant", "boys", "girls")):
+                continue
+            age_range = re.search(r"(\d+)\s*[-–—]\s*(\d+)\s*(?:years?|yrs?)", tag)
+            under = re.search(r"(?:under|less than)\s*(\d+)\s*(?:years?|yrs?)", tag)
+            younger_only = ("infant" in tag and "child" not in tag or
+                            age_range is not None and int(age_range.group(2)) < 14 or
+                            under is not None and int(under.group(1)) <= 14)
+            adolescent_only = age_range is not None and 14 <= int(age_range.group(1)) <= int(age_range.group(2)) <= 18
+            pediatric_tags.append("younger" if younger_only else "adolescent" if adolescent_only else "broad")
+        if pediatric_tags and all(tag == "younger" for tag in pediatric_tags):
+            return ()
+        if pediatric_tags and all(tag == "adolescent" for tag in pediatric_tags):
+            return ("14-18",)
+        return None
 
     def _collect_rda_ul_data(
         self,
@@ -21742,6 +21777,7 @@ class SupplementEnricherV3:
         active_ingredients = self._dose_active_ingredients_for_enrichment(product)
         special_use_flags = self._collect_special_use_flags(active_ingredients)
         ul_population = self._ul_screening_population(product)
+        pediatric_age_groups = self._ul_screening_pediatric_age_groups(product)
         quality_identity_rows = [
             row
             for row in (
@@ -22583,6 +22619,7 @@ class SupplementEnricherV3:
                                 sex="adult_neutral",
                                 form_name=matched_form,
                                 ul_population=ul_population,
+                                pediatric_age_groups=pediatric_age_groups,
                             )
                         except Exception as calculation_error:
                             assessment_error = str(calculation_error)[:500]
@@ -22645,6 +22682,16 @@ class SupplementEnricherV3:
                             "highest_ul": _nutrient_record.get("highest_ul"),
                         }
 
+                    pediatric_reference_gap = bool(
+                        isinstance(safety_ul_population, dict)
+                        and safety_ul_population.get("reference_gap")
+                        and "pediatric" in safety_ul_population.get("members", [])
+                    )
+                    if pediatric_reference_gap:
+                        if safety_ul is None:
+                            safety_ul_status = "indeterminate"
+                            skip_ul_check = True
+                        skip_ul_reason = "pediatric_reference_gap"
                     adequacy_dict.update({
                         "canonical_id": resolved_canonical_id or None,
                         "nutrient_group_id": nutrient_group_id,
@@ -23220,6 +23267,12 @@ class SupplementEnricherV3:
                     # with a single aggregated flag if multiple forms of
                     # the same canonical combine to exceed UL.
                     _row_canonical = resolved_canonical_id or None
+                    if pediatric_reference_gap:
+                        _staged_row_flags.append((_row_canonical, {
+                            "nutrient": ing_name, "canonical_id": _row_canonical,
+                            "pct_ul": None, "ul": None, "ul_population": safety_ul_population,
+                            "ul_gate_eligible": False, "ul_gate_ineligible_reason": "pediatric_reference_gap",
+                        }))
                     if not skip_ul_check and safety_over_ul:
                         pct_ul_val = safety_pct_ul or 0
                         over_ul_amount = safety_over_ul_amount or 0
@@ -23407,6 +23460,7 @@ class SupplementEnricherV3:
                             age_group=_RDA_REFERENCE_PROFILE["age_range"],
                             sex="adult_neutral",
                             ul_population=ul_population,
+                            pediatric_age_groups=pediatric_age_groups,
                         )
                     except Exception as agg_err:
                         self.logger.debug(
@@ -23577,7 +23631,7 @@ class SupplementEnricherV3:
                 # has an aggregated flag above; adding per-row flags for the
                 # same canonical would double-count the B7 penalty.
                 for row_cid, row_flag in _staged_row_flags:
-                    if row_cid and row_cid in _aggregated_canonicals:
+                    if row_cid and row_cid in _aggregated_canonicals and row_flag.get("pct_ul") is not None:
                         continue
                     safety_flags.append(row_flag)
 

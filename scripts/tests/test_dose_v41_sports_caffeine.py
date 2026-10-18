@@ -95,3 +95,151 @@ def test_caffeine_that_is_not_a_primary_still_reaches_the_ceiling_on_the_generic
     p["product_name"] = "Magnesium Energy"
     assert evaluate_dose_safety(p).dose_ceiling()["cap_public"] == 10.0
     assert build_scored_artifact(p)["quality_pillars_v4"]["dose"]["score"] <= 10.0
+
+
+@pytest.mark.parametrize("component", [None, 100, 600])
+def test_authoritative_caffeine_total_is_retained(component):
+    total = {**_row("caffeine", 600, "mg", name="Total Caffeine"), "is_parent_total": True}
+    rows = [total]
+    if component is not None:
+        rows.append({**_row("caffeine", component, "mg", name="Caffeine from coffee"),
+                     "raw_source_path": "activeIngredients[component]"})
+    product = _product(*rows, name="Caffeine", primary_type="pre_workout")
+    result = evaluate_dose_safety(product)
+    assert result.caffeine["total_mg_day_max"] == 600
+    assert result.dose_ceiling()["cap_public"] == 0
+    assert build_scored_artifact(product)["quality_pillars_v4"]["dose"]["score"] == 0
+
+
+def test_enricher_marked_caffeine_total_retains_partial_component_exposure():
+    from enrich_supplements_v3 import SupplementEnricherV3
+    total = {**_row("caffeine", 600, "mg", name="Caffeine"), "source_section": "active"}
+    component = {**_row("caffeine", 100, "mg", name="Caffeine from coffee"),
+                 "source_section": "active", "is_nested_ingredient": True,
+                 "parent_blend": "Caffeine", "raw_source_path": "activeIngredients[component]"}
+    rows = [total, component]
+    SupplementEnricherV3()._mark_parent_total_rows(rows)
+    assert total["is_parent_total"] is True
+    assert evaluate_dose_safety(_product(*rows)).caffeine["total_mg_day_max"] == 600
+
+
+def test_quantified_caffeine_projection_is_retained_when_carrier_is_not_caffeine():
+    carrier = _row("guarana", 2000, "mg")
+    projection = {**_row("caffeine", 500, "mg"), "scoring_input_kind": "product_level_evidence",
+                  "raw_source_path": carrier["raw_source_path"], "linked_rows": [carrier["raw_source_path"]]}
+    product = _product(carrier, projection, name="Caffeine", primary_type="pre_workout")
+    assert evaluate_dose_safety(product).caffeine["total_mg_day_max"] == 500
+    assert build_scored_artifact(product)["quality_pillars_v4"]["dose"]["score"] == 10
+
+
+def test_caffeine_projection_of_counted_caffeine_is_not_a_second_exposure():
+    caffeine = _row("caffeine", 300, "mg")
+    projection = {**caffeine, "scoring_input_kind": "product_level_evidence",
+                  "linked_rows": [caffeine["raw_source_path"]]}
+    result = evaluate_dose_safety(_product(caffeine, projection))
+    assert result.caffeine["total_mg_day_max"] == 300
+    assert result.dose_ceiling() is None
+
+
+@pytest.mark.parametrize("operator,amount,cap", [
+    ("<", 600, None), ("<=", 600, None), (">", 400, 10), (">=", 400, None),
+    (">=", 600, 0), (">", 599, 10), ("~", 600, None),
+])
+def test_caffeine_qualified_amounts_only_cap_confirmed_exposure(operator, amount, cap):
+    row = {**_row("caffeine", amount, "mg"), "quantity_operator": operator}
+    result = evaluate_dose_safety(_product(row, name="Caffeine", primary_type="pre_workout"))
+    assert result.caffeine["total_mg_day_max"] is None
+    ceiling = result.dose_ceiling()
+    assert (ceiling or {}).get("cap_public") == cap
+    if ceiling:
+        assert ceiling["quantity_operator"] in {">", ">="}
+
+
+def test_upper_bound_caffeine_does_not_claim_exact_six_hundred_or_minimum_excess():
+    product = _product({**_row("caffeine", 600, "mg"), "quantity_operator": "<"},
+                       name="Caffeine", primary_type="pre_workout")
+    artifact = build_scored_artifact(product)
+    dose = artifact["quality_pillars_v4"]["dose"]
+    assert dose["score"] == 18
+    assert "label provides 600 mg" not in dose["reason"]
+    assert artifact["dose_safety_evaluation"]["state_counts"]["material_but_unresolved"] == 1
+
+
+def test_defaulted_frequency_assesses_one_serving_and_records_the_default():
+    product = _caffeine(600)
+    product.pop("servingSizes")
+    ceiling = evaluate_dose_safety(product).dose_ceiling()
+    assert ceiling["cap_public"] == 0
+    assert ceiling["amount_mg_day"] == 600 and ceiling["frequency_defaulted"] is True
+
+
+def test_scoped_caffeine_total_does_not_hide_an_independent_source():
+    total = {**_row("caffeine", 300, "mg", name="Coffee caffeine"), "is_parent_total": True}
+    child = {**_row("caffeine", 100, "mg"), "parent_blend": "Coffee caffeine",
+             "is_nested_ingredient": True, "raw_source_path": "activeIngredients[coffee_part]"}
+    separate = {**_row("caffeine_anhydrous", 200, "mg"), "raw_source_path": "activeIngredients[anhydrous]"}
+    result = evaluate_dose_safety(_product(total, child, separate))
+    assert result.caffeine["total_mg_day_max"] == 500
+    assert result.dose_ceiling()["cap_public"] == 10
+
+
+def test_known_caffeine_total_is_not_made_unknown_by_unquantified_components():
+    total = {**_row("caffeine", 600, "mg"), "is_parent_total": True}
+    child = {**_row("caffeine", None, "mg"), "raw_source_path": "activeIngredients[component]"}
+    result = evaluate_dose_safety(_product(total, child))
+    assert result.caffeine["total_mg_day_max"] == 600 and result.caffeine["unknown_rows"] == 0
+    assert result.dose_ceiling()["cap_public"] == 0
+
+
+def test_known_caffeine_partial_total_still_confirms_a_ceiling_with_unknown_source():
+    known = _row("caffeine", 450, "mg")
+    unknown = {**_row("caffeine_anhydrous", None, "mg"), "raw_source_path": "activeIngredients[unknown]"}
+    result = evaluate_dose_safety(_product(known, unknown))
+    assert result.caffeine["total_mg_day_max"] is None
+    ceiling = result.dose_ceiling()
+    assert ceiling["cap_public"] == 10 and ceiling["amount_mg_day"] == 450
+    assert ceiling["quantity_operator"] == ">="
+
+
+def test_qualified_caffeine_total_retains_the_confirmed_component_floor():
+    total = {**_row("caffeine", 600, "mg", name="Coffee caffeine"),
+             "is_parent_total": True, "quantity_operator": "<"}
+    child = {**_row("caffeine", 450, "mg"), "parent_blend": "Coffee caffeine",
+             "is_nested_ingredient": True, "raw_source_path": "activeIngredients[coffee_part]"}
+    result = evaluate_dose_safety(_product(total, child))
+    ceiling = result.dose_ceiling()
+    assert ceiling["cap_public"] == 10 and ceiling["amount_mg_day"] == 450
+    assert ceiling["quantity_operator"] == ">="
+
+
+def test_unread_caffeine_total_does_not_erase_confirmed_components_or_double_count():
+    total = {**_row("caffeine", None, "mg", name="Coffee caffeine"), "is_parent_total": True}
+    child = {**_row("caffeine", 450, "mg"), "parent_blend": "Coffee caffeine",
+             "is_nested_ingredient": True, "raw_source_path": "activeIngredients[coffee_part]"}
+    result = evaluate_dose_safety(_product(total, child))
+    assert result.caffeine["total_mg_day_max"] is None
+    assert result.dose_ceiling()["amount_mg_day"] == 450
+
+
+def test_enricher_parent_marker_for_repeated_row_keeps_an_independent_caffeine_source():
+    from enrich_supplements_v3 import SupplementEnricherV3
+    parent = {**_row("caffeine", 300, "mg", name="Caffeine"), "source_section": "active"}
+    child = {**parent, "is_nested_ingredient": True, "parent_blend": "Performance Blend",
+             "raw_source_path": "activeIngredients[repeat]"}
+    separate = {**_row("caffeine_anhydrous", 200, "mg"), "source_section": "active"}
+    rows = [parent, child, separate]
+    SupplementEnricherV3()._mark_parent_total_rows(rows)
+    assert parent["is_parent_total"] is True
+    result = evaluate_dose_safety(_product(*rows))
+    assert result.caffeine["total_mg_day_max"] == 500
+    assert result.dose_ceiling()["cap_public"] == 10
+
+
+def test_uncounted_raw_caffeine_source_cannot_erase_its_counted_projection():
+    projection = {**_row("caffeine", 600, "mg"), "scoring_input_kind": "product_level_evidence",
+                  "raw_source_path": "activeIngredients[0]", "linked_rows": ["activeIngredients[0]"]}
+    product = _product(projection)
+    product["activeIngredients"] = [{**_row("caffeine", None, "mg"), "raw_source_path": "activeIngredients[0]"}]
+    result = evaluate_dose_safety(product)
+    assert result.caffeine["total_mg_day_max"] == 600
+    assert result.dose_ceiling()["cap_public"] == 0

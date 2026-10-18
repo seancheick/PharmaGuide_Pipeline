@@ -112,11 +112,10 @@ UL_SCREENING_POPULATIONS = {
     # belong with the pediatric gap below, as for the general adult screen.
     "pregnancy_lactation": {"groups": ("Pregnancy", "Lactation"), "ages": ("19-30", "31-50"),
                             "label": "pregnancy and lactation"},
-    # The reference data has no pediatric UL rows. An exceedance of the adult
-    # limit is still an exceedance of a child's (lower) limit; amounts below
-    # the adult limit are not cleared for children. Recorded as a data gap.
-    "pediatric": {"groups": ("Male", "Female"), "ages": _ADULT_AGES, "label": "general adult",
-                  "reference_gap": "pediatric_ul_rows_not_in_reference_data"},
+    # Existing adolescent rows apply to a broad pediatric label. They do not
+    # establish a reference for younger children; preserve that coverage gap.
+    "pediatric": {"groups": ("Male", "Female"), "ages": ("14-18",), "label": "adolescents 14-18",
+                  "reference_gap": "pediatric_ul_rows_below_14_not_in_reference_data"},
 }
 _AGE_LABELS = {("51-70", "71+"): "adults 51+", ("71+",): "adults 71+", ("51-70",): "adults 51-70",
                ("19-30", "31-50"): "adults 19-50", ("19-30",): "adults 19-30", ("31-50",): "adults 31-50"}
@@ -370,6 +369,7 @@ class RDAULCalculator:
         sex: str = "both",
         form_name: Optional[str] = None,
         ul_population: Optional[Union[str, Sequence[str]]] = None,
+        pediatric_age_groups: Optional[Sequence[str]] = None,
     ) -> NutrientAdequacyResult:
         """
         Compute nutrient adequacy with full evidence.
@@ -424,7 +424,7 @@ class RDAULCalculator:
         rda_ai, ul = self._get_age_sex_values(nutrient_data, norm_age, norm_sex)
         population = None
         if ul_population is not None:
-            ul, population = self._screening_ul(nutrient_data, ul_population)
+            ul, population = self._screening_ul(nutrient_data, ul_population, pediatric_age_groups)
 
         # Determine RDA source
         nutrient_id = nutrient_data.get("id")
@@ -690,23 +690,38 @@ class RDAULCalculator:
                 fallback_ul = None
         return None, fallback_ul
 
-    def _screening_ul(self, nutrient_data: Dict, population: Union[str, Sequence[str]]) -> Tuple[Optional[float], Dict]:
+    def _screening_ul(self, nutrient_data: Dict, population: Union[str, Sequence[str]],
+                      pediatric_age_groups: Optional[Sequence[str]] = None) -> Tuple[Optional[float], Dict]:
         """Lowest established UL across every listed screening population, and its scope."""
         members = sorted({population} if isinstance(population, str) else set(population))
         rows_by_member = {member: [
             row for row in nutrient_data.get("data", [])
             if row.get("group") in UL_SCREENING_POPULATIONS[member]["groups"]
             and row.get("age_range") in UL_SCREENING_POPULATIONS[member]["ages"]
+            and (member != "pediatric" or pediatric_age_groups is None
+                 or row.get("age_range") in pediatric_age_groups)
             and isinstance(row.get("ul"), (int, float)) and not isinstance(row.get("ul"), bool)
             and row.get("ul") > 0] for member in members}
         scope = {"id": "+".join(members), "members": members,
                  "label": " and ".join(dict.fromkeys(UL_SCREENING_POPULATIONS[m]["label"] for m in members))}
         gaps = [UL_SCREENING_POPULATIONS[m]["reference_gap"] for m in members
-                if UL_SCREENING_POPULATIONS[m].get("reference_gap")]
+                if UL_SCREENING_POPULATIONS[m].get("reference_gap")
+                and not (m == "pediatric" and pediatric_age_groups)]
+        # A missing age row is a gap only for an established upper reference.
+        # Completed "no established UL" records (for example B12) retain that
+        # conclusion rather than becoming an unfinished pediatric comparison.
+        if gaps and not any(
+            isinstance(row.get("ul"), (int, float)) and not isinstance(row.get("ul"), bool)
+            and row["ul"] > 0 and self._determine_ul_status(nutrient_data, row["ul"]) == "established"
+            for row in nutrient_data.get("data", [])
+        ):
+            gaps = []
         if gaps:
             scope["reference_gap"] = gaps[0]
         all_rows = [row for rows in rows_by_member.values() for row in rows]
         if not all_rows:
+            if "pediatric" in members:
+                scope["label"] = "pediatric"
             return None, scope
         ul = min(row["ul"] for row in all_rows)
         labels, ages = [], []

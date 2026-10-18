@@ -172,10 +172,13 @@ class DoseSafetyResult:
 
     def _caffeine_ceiling(self) -> Optional[Dict[str, Any]]:
         policy = _CEILING["caffeine"]
-        total = (self.caffeine or {}).get("total_mg_day_max")
-        if not isinstance(total, (int, float)) or total <= float(policy["exceeds_above_mg_day"]):
+        caffeine = self.caffeine or {}
+        total = caffeine.get("confirmed_mg_day_max", caffeine.get("total_mg_day_max"))
+        operator = caffeine.get("quantity_operator", "=")
+        threshold = float(policy["exceeds_above_mg_day"])
+        if not isinstance(total, (int, float)) or not (total > threshold or total == threshold and operator == ">"):
             return None
-        minimum = (self.caffeine or {}).get("total_mg_day_min")
+        minimum = caffeine.get("confirmed_mg_day_min", caffeine.get("total_mg_day_min"))
         cap = (0.0 if total >= float(policy["zero_at_mg_day"])
                else float(_CEILING["partial_ceiling_public"]))
         return {
@@ -184,7 +187,8 @@ class DoseSafetyResult:
             "nutrient": "Caffeine",
             "amount_mg_day": round(float(total), 4),
             "amount_mg_day_at_minimum": minimum,
-            "minimum_exceeds": (minimum > float(policy["exceeds_above_mg_day"])) if minimum is not None else None,
+            "minimum_exceeds": (minimum > threshold or minimum == threshold and operator == ">") if minimum is not None else None,
+            "quantity_operator": operator,
             "frequency_defaulted": self.frequency_defaulted,
             "exceeds_above_mg_day": float(policy["exceeds_above_mg_day"]),
             "zero_at_mg_day": float(policy["zero_at_mg_day"]),
@@ -515,7 +519,7 @@ def _classify(flag: Dict[str, Any], minimum_share: float = 1.0) -> DoseSafetyFla
             nutrient=nutrient,
             canonical_id=canonical_id,
             pct_ul=None,
-            reason=REASON_PCT_UL_NOT_RESOLVED,
+            reason=_norm_text(flag.get("ul_gate_ineligible_reason")) or REASON_PCT_UL_NOT_RESOLVED,
         )
 
     # Same eligibility contract the safety gate applies to the UL verdict. An
@@ -617,25 +621,32 @@ def evaluate_dose_safety(product: Dict[str, Any]) -> DoseSafetyResult:
                 "reason": classified.reason,
             })
 
+    caffeine = _declared_daily_caffeine(product) if isinstance(product, dict) else None
+    if caffeine and caffeine["unknown_rows"]:
+        flags.append(DoseSafetyFlag(
+            state=MATERIAL_BUT_UNRESOLVED, nutrient="Caffeine", canonical_id="caffeine",
+            reason="caffeine_daily_total_not_exact",
+        ))
     return DoseSafetyResult(
         flags=flags,
         ignored_flags=ignored,
         conversion_failures=conversion_failures,
         frequency_defaulted=bool(defaulted),
-        caffeine=_declared_daily_caffeine(product) if isinstance(product, dict) else None,
+        caffeine=caffeine,
     )
 
 
 def _declared_daily_caffeine(product: Dict[str, Any]) -> Optional[Dict[str, Any]]:
-    """Total declared daily caffeine at minimum and maximum directed use.
+    """Caffeine's analyte total, preserving declarations and confirmed bounds.
 
-    Quantified caffeine rows are summed once each; a declared total (parent
-    total), a compound duplicate or a restatement of another row is not a
-    second exposure. A caffeine row without a usable amount stays unknown.
+    Ingredient-count deduplication is not analyte deduplication: a quantified
+    caffeine projection from guarana is the caffeine exposure even though its
+    carrier is already an ingredient. A declared total owns its components.
+    Qualified or missing amounts never become an exact daily total; only their
+    confirmed lower bound can establish a ceiling.
     """
-    from scoring_input_contract import get_scoring_ingredients, is_lent_blend_mass
+    from scoring_input_contract import get_scoring_ingredients, is_lent_blend_mass, source_linked_rows
     from scoring_v4.exposure import row_exposure
-    from scoring_v4.modules.generic_helpers import restates_label_row
     from scoring_v4.modules.sports_helpers import CAFFEINE_CANONICALS
 
     try:
@@ -645,18 +656,87 @@ def _declared_daily_caffeine(product: Dict[str, Any]) -> Optional[Dict[str, Any]
     caffeine = [row for row in rows if _norm_text(row.get("canonical_id")) in CAFFEINE_CANONICALS]
     if not caffeine:
         return None
-    counted = [row for row in caffeine
-               if not (row.get("is_parent_total") or row.get("is_compound_duplicate")
-                       or is_lent_blend_mass(row) or restates_label_row(row, rows))]
-    low = high = 0.0
+    candidates = [row for row in caffeine if not (row.get("is_compound_duplicate") or is_lent_blend_mass(row))]
+    counted = []
+    for row in candidates:
+        # Skip a projection only if its physical source already supplies counted
+        # caffeine. A non-caffeine carrier cannot stand in for its analyte.
+        if row.get("scoring_input_kind") == "product_level_evidence" and any(
+            any(other is candidate for candidate in candidates)
+            and other.get("scoring_input_kind") != "product_level_evidence"
+            and _norm_text(other.get("canonical_id")) in CAFFEINE_CANONICALS
+            and not other.get("is_compound_duplicate") and not is_lent_blend_mass(other)
+            for other in source_linked_rows(product, row, candidates)
+        ):
+            continue
+        counted.append(row)
+
+    totals = [row for row in counted if row.get("is_parent_total")]
+    excluded = set()
+    total_bounds = {}
+    for total in totals:
+        name = _norm_text(total.get("name") or total.get("standard_name"))
+        path = str(total.get("raw_source_path") or "")
+        parent_exposure = row_exposure(product, total, basis="per_use", unit="mg")
+        children = [row for row in counted if row is not total and not row.get("is_parent_total") and (
+            name and _norm_text(row.get("parent_blend")) == name
+            or path and str(row.get("raw_source_path") or "").startswith(path + ".")
+            # The enricher also marks an exact top-level/nested restatement as
+            # a parent even when its wrapper has a different name. Keep the
+            # duplicate in that source group, not every independent caffeine.
+            or row.get("is_nested_ingredient") and name == _norm_text(row.get("name") or row.get("standard_name"))
+            and parent_exposure.exact
+            and (child_exposure := row_exposure(product, row, basis="per_use", unit="mg")).exact
+            and child_exposure.per_serving_amount == parent_exposure.per_serving_amount
+        )]
+        # Older scoring rows retain the total marker without the child links.
+        # A sole unscoped total owns the analyte declaration, including a partial
+        # or unquantified breakdown. Scoped totals leave independent sources in.
+        if not children and len(totals) == 1:
+            children = [row for row in counted if row is not total]
+        if not parent_exposure.exact:
+            # An upper-qualified or unread total may still disclose a useful
+            # component floor. They describe one exposure: take the stronger
+            # bound, rather than adding total and components or losing either.
+            child_exposures = [row_exposure(product, row, basis="per_use", unit="mg") for row in children]
+            parent_floor = parent_exposure.minimum or 0.0
+            child_floor = sum(exposure.minimum or 0.0 for exposure in child_exposures)
+            floor = max(parent_floor, child_floor)
+            strict = (parent_floor == floor and parent_exposure.quantity_operator == ">"
+                      or child_floor == floor and any(exposure.quantity_operator == ">"
+                                                     and exposure.minimum is not None for exposure in child_exposures))
+            total_bounds[id(total)] = (floor, strict)
+        excluded.update(id(row) for row in children)
+    counted = [row for row in counted if id(row) not in excluded]
+
+    low, high, _defaulted = resolve_daily_serving_range(product)
+    per_serving_lower = 0.0
+    strict_lower = False
     unknown = 0
     for row in counted:
-        exposure = row_exposure(product, row, basis="daily", unit="mg")
-        if exposure.benchmark_maximum is None or exposure.benchmark_amount is None:
+        if id(row) in total_bounds:
+            floor, strict = total_bounds[id(row)]
+            per_serving_lower += floor
+            strict_lower = strict_lower or strict
             unknown += 1
             continue
-        low += exposure.benchmark_amount
-        high += exposure.benchmark_maximum
-    return {"total_mg_day_min": round(low, 4), "total_mg_day_max": round(high, 4),
-            "rows": len(counted), "unknown_rows": unknown,
-            "excluded_duplicate_rows": len(caffeine) - len(counted)}
+        exposure = row_exposure(product, row, basis="per_use", unit="mg")
+        operator = exposure.quantity_operator
+        if exposure.minimum is None:
+            unknown += 1
+            continue
+        per_serving_lower += exposure.minimum
+        if operator not in {"", "="}:
+            unknown += 1
+            strict_lower = strict_lower or operator == ">"
+    confirmed_min = per_serving_lower * low
+    confirmed_max = per_serving_lower * high
+    return {
+        "total_mg_day_min": confirmed_min if not unknown else None,
+        "total_mg_day_max": confirmed_max if not unknown else None,
+        "confirmed_mg_day_min": confirmed_min,
+        "confirmed_mg_day_max": confirmed_max,
+        "quantity_operator": ">" if strict_lower else ">=" if unknown else "=",
+        "rows": len(counted), "unknown_rows": unknown,
+        "excluded_duplicate_rows": len(caffeine) - len(counted),
+    }
