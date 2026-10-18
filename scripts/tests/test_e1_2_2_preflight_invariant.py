@@ -16,18 +16,17 @@ that points to the exact dsld_id + field.
 
 Runs against the nine reviewed canary baseline blobs + their fresh rebuilds.
 
-The active baseline is the reviewed October 12 native-owner rebuild of the same
-nine frozen raw labels. Historical October 11, September and April blobs remain untouched.
-Same-input c7→current captures classified the intended clinical warning changes
-and established that legacy full-pipeline fields were already absent from the
-native canary owner before this batch. Snapshot hashes live beside the active
-fixtures; future output changes require another source-qualified review.
-The October 12 refresh preserves eight identical blobs. In 1036, integrated
-PR111 removes an unsupported 50% EGCG form and marker estimate; the label only
-specifies 15 mg leaf extract. Formulation changes from 13.1 to 13.0, the public
-whole-number total stays unchanged, and EGCG dose assessment becomes unknown.
-Warning severity and subjects stay pinned. This mapping batch also supplies
-1036's primary maltodextrin identity without changing its amount.
+The active baseline is the October 17 rebuild of the same nine frozen raw
+labels on main 5fb2be1ca; its manifest names each raw source and the commit
+behind every reviewed difference. Historical October 12, October 11, September
+and April blobs remain untouched. Pinned changes since October 12: 306237 loses
+the A3 BioPerine delivery bonus under the approved October 14 rule that one
+quality counts once (bf12ae68d; BioPerine is an absorption enhancer, not a
+delivery system); sugar details print the label amount ("2 g"); 1036 keeps
+every declared form in its display label, names maximum daily use in its UL
+tradeoff and carries the approved niacin/statin source correction. Safety
+status, warning fingerprints and ingredient counts are unchanged. Future output
+changes require another source-qualified review.
 """
 
 from __future__ import annotations
@@ -43,8 +42,8 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 # Keep historical snapshots unchanged; this dated baseline records the reviewed
-# native canary contract after the clinical registry correction batch.
-BASELINE_DIR = ROOT / "reports" / "baseline_pre_e1_2_2" / "mapping_identity_20261012"
+# native canary contract on main after the October 13-17 batches.
+BASELINE_DIR = ROOT / "reports" / "baseline_pre_e1_2_2" / "canary_refresh_20261017"
 REBUILD_DIR = ROOT / "reports" / "canary_rebuild"
 
 # Fields E1.2.2 is explicitly permitted to ADD (not mutate). Any other
