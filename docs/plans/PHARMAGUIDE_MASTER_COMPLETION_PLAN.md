@@ -1267,3 +1267,10 @@ October 15 Step4 integration update: PR148 contains finished Claude scoring plus
 
 
 October15 preparation follow-up: the reported pre-corpus failure was an incomplete isolated entrypoint fixture outside fastCI. PR149 fixes/moves it into fastCI and removes the broad developer suite from routine preparation, retaining explicit --include-source-tests developer mode and all real input/canary/source/live/post-artifact safeguards. Actual normal preparation on1ab6421d passed all17 checks in about6minutes, no source_tests step; citation-owner false mismatches fixed through full abstracts and bounded short compound identities without data/baseline/scoring changes. Final CI38809841645/all four groups passed; PR149 merged851d93e8b. Receipts are in the current LEDGER. User still owns the single Clean→Enrich→Score --pipeline-only run; no stage, catalog, publication or phone acceptance completed here.
+
+
+## October 18 — architecture batch integration qualification
+
+PR163 combines PRs155–162 and closes the independent premerge findings at their existing owners: exhaustive list differences, current config snapshots, and truthful Flutter asset availability/schema reporting. Two fresh independent reviews also found malformed config/stamp ingestion cases; those were reproduced, repaired and re-audited. Local corpus validation passed 546 tests with 24 declared optional live-service skips; the previously skipped safety corpus slice passed all 32 cases. Frozen 174-product comparison has only the intended enriched-list ordering changes and no Clean/scored/blob changes. Final runtime source is `0364decb80679130872e328f343367155119777b`; final CI/integration receipt is in the existing LEDGER and current handoff.
+
+This closes architecture-batch implementation/review/merge qualification only. It does not close a launch phase or establish fresh catalog, release or phone acceptance. Omega policy and the user-owned next corpus run remain held; no existing outputs were restamped or published.
