@@ -1,6 +1,20 @@
 # PharmaGuide master completion plan
 
-## Current checkpoint — adult score and child information, October 19
+## Current checkpoint — Evidence, blend identity and golden tests, October 19
+
+Sean approved integrating the previously held 53-case golden branch. Candidate `a66141363` includes the Evidence and blend-identity work, audit corrections and latest dashboard main `2bf017ccd` (PR171). PR170 is merged at `7fcc065be`. Exact-source CI39307795403 passed all four groups: 22,191 tests and 192 declared skips, with every skip guard passing. Source is qualified; the catalog is not released. Sean owns the next operator run.
+
+- [x] Preserve real Evidence subjects independently of Safety and report product-level/empty-panel review honestly; preserve same-identity single-constituent ingredients filed by DSLD as blends.
+- [x] Correct the three existing form mappings and remove unsupported nutritional-panel credit from completed-neutral study-dose references. Official RDA/AI and independent UL handling remain unchanged; no new curve or threshold.
+- [x] Fix golden evaluator missing-field, artifact ownership/duplicate-ID and invariant-declaration checks; retain all53cases and two source-backed reanchors.
+- [x] Independent review of all589retained raw stage/blob records and46completed-neutral references:93total-score,19tier and111assessment changes, with0route/quality-score-status/safety changes. Fourteen accepted manual controls unchanged;33rawcanaries and53golden/520checks pass. This is bounded evidence, not a new full catalog.
+- [x] Final local546passed/24declared optional-service skips and skip guard;85dashboard integration checks. The local artifact prerequisite is the explicitly diagnostic child-UL fixture, not a newly built catalog. Failed attempts remain recorded; no assertion or skip policy was waived.
+- [x] Whole-fast CI39307795403 on `a66141363` and authorized merge PR170 at `7fcc065be`; original Evidence, identity and golden heads retained in main.
+- [ ] Sean's one necessary Clean→Enrich→Score pipeline-only run, then complete new-catalog parity/release/app checks. All38Clean/38Enrich/38Score manifests are stale; earliestClean. No agent operator pipeline, upload, Flutter import or IPA.
+
+Owner: existing Evidence resolver/generic state, normalizer/identity, RDA eligibility, IQM/reference/canary and stage-manifest owners — evidence: matrix/glossary/callers, fail-first tests, source receipts and four-layer records. Will NOT create another scorer, registry, public field/status or clinical policy. Full evidence: `reports/evidence_blend_takeover_20261019/README.md`; execution register: LEDGER. Prior checkpoints below retain their original provenance.
+
+### Previous checkpoint — adult score and child information, October 19
 
 Sean approved `rda_ul_data.child_ul_screen` and its app reader. Pipeline PR169 is merged at22d7b8ffd and app PR129 at ef8d5566; both primary checkouts contain the qualified heads; no operator pipeline, catalog publication, Flutter import or IPA.
 
@@ -11,7 +25,7 @@ Sean approved `rda_ul_data.child_ul_screen` and its app reader. Pipeline PR169 i
 - [x] Final local546passed/24declared optional-service skips; skip guard passed. Current replay blobs exercise the changed reference invariant; accepted marker/canary controls are reused read-only with explicit diagnostic provenance, not presented as a newly built catalog.
 - [x]33raw canaries;195final reference/UL tests;54benchmark/lookup tests; app analyze,183health/stack tests,31checksum/widget tests and6actual-blob checks pass. Independent source and movement review find no remaining bounded defect.
 - [x] Merge PR169/129 and verify containment: pipeline22d7b8ffd / app ef8d5566. Primary documentation drafts and private submissions remain preserved and uncommitted.
-- [ ] Finish the separately owned F1 Evidence and F2 blend-identity lanes before Sean's one final pipeline run. Current fingerprints:38staleClean/38Enrich/38Score; earliestClean. Full new-catalog parity and release gates remain post-run.
+- [x] Complete F1 Evidence and F2 blend-identity source fixes and review in the current integration checkpoint above; merge qualification is recorded there. Current fingerprints:38staleClean/38Enrich/38Score; earliestClean. Full new-catalog parity and release gates remain post-run.
 
 Local evidence and exact limitations: `reports/child_ul_takeover_20261019/README.md`. Source/native UL policy is unchanged; the new field is explicitly approved. Historical checkpoints below do not qualify this new output as released.
 
