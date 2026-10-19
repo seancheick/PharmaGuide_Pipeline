@@ -1323,3 +1323,47 @@ def test_la5_negative_review_requires_exact_label_row_owner(owned):
     }]}
     target = row if owned else {**row, "name": "Lactobacillus acidophilus", "raw_source_path": "ingredientRows[99]", "source_row_ref": "ingredientRows[99]"}
     assert _probiotic_native_evidence_state(product, target) == ("evaluated_limited_or_negative" if owned else None)
+
+
+@pytest.mark.parametrize("module", ["generic", "multi_or_prenatal", "probiotic"])
+@pytest.mark.parametrize("measurement", ["cfu", "afu"])
+def test_microorganism_measurement_holds_apply_across_routes(module, measurement) -> None:
+    from assessment_readiness import evaluate_assessment_readiness
+    from probiotic_measurements import AFU_REVIEW_REASON
+    from scoring_v4.scored_artifact import build_scored_artifact
+
+    product = _product(_row("Calcium", "calcium", quantity=500))
+    if measurement == "cfu":
+        product["probiotic_data"] = {"probiotic_blends": [{
+            "strains": ["Lactobacillus acidophilus"],
+            "cfu_data": {"has_cfu": True, "cfu_count": -1},
+        }]}
+        expected_reason = "unresolved_source_quantity"
+    else:
+        product["probiotic_data"] = {"afu_measurements": [{
+            "source_row_ref": "ingredientRows[1]", "afu_count": 1_000_000_000,
+            "assessment_status": "unresolved_reference",
+        }]}
+        expected_reason = AFU_REVIEW_REASON
+    readiness = evaluate_assessment_readiness(product, module=module)
+    assert readiness["dose"]["readiness"] == "incomplete"
+    assert readiness["dose"]["reason_code"] == expected_reason
+    assert readiness["is_live_ready"] is False
+    assert "dose_assessment_readiness" in readiness["unavailable_reasons"]
+    artifact = build_scored_artifact(product)
+    assert artifact["quality_score_status"] == "not_scored"
+    assert artifact["quality_score_v4_100"] is None
+    assert artifact["assessment_readiness"]["dose"]["reason_code"] == expected_reason
+
+
+@pytest.mark.parametrize("module", ["generic", "multi_or_prenatal"])
+@pytest.mark.parametrize("probiotic_data", [{}, {"afu_measurements": []}, {
+    "probiotic_blends": [{"strains": ["Lactobacillus acidophilus"],
+                          "cfu_data": {"has_cfu": True, "cfu_count": 1_000_000_000}}],
+}])
+def test_resolved_or_absent_microorganism_measurements_preserve_dose_readiness(module, probiotic_data) -> None:
+    from assessment_readiness import evaluate_assessment_readiness
+
+    product = _product(_row("Calcium", "calcium", quantity=500))
+    product["probiotic_data"] = probiotic_data
+    assert evaluate_assessment_readiness(product, module=module)["dose"]["readiness"] == "complete"

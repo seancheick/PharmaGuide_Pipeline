@@ -7249,7 +7249,8 @@ class SupplementEnricherV3:
         # Only match against ing_name — std_name is excluded for the same reason as above.
         # Use word-boundary matching to prevent false positives like
         # "citric acid" matching inside "hydroxycitric acid".
-        for excipient in EXCIPIENT_NEVER_PROMOTE:
+        # Prefer the most specific label match; sets cannot define provenance order.
+        for excipient in sorted(EXCIPIENT_NEVER_PROMOTE, key=lambda term: (-len(term), term)):
             if excipient in name_lower and re.search(r'\b' + re.escape(excipient) + r'\b', name_lower):
                 return {
                     "recognition_source": "excipient_list",
