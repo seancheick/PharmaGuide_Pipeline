@@ -12,9 +12,8 @@ to score against.
 
 The fix uses the curated nutrition-facts NAME list as the
 disambiguator: when the row's preprocessed name is NOT in
-``EXCLUDED_NUTRITION_FACTS`` (and the ingredientGroup is not a known
-fat-class active either), trust DSLD's row and let downstream mapping
-resolve. This:
+``EXCLUDED_NUTRITION_FACTS``, trust DSLD's row and let downstream
+mapping resolve. This:
 
 * Recovers sugar-class supplements (D-Mannose, D-Ribose, GOS) without a
   separate ``_SUGAR_CATEGORY_REAL_ACTIVES`` allowlist.

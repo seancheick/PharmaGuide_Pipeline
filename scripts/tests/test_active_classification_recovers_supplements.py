@@ -26,12 +26,10 @@ cleaner classifier bug``):
 Fixes pinned by this file:
 
 * `_is_nutrition_fact` gram-unit branch only excludes when the row's
-  name preprocess-matches `EXCLUDED_NUTRITION_FACTS` OR ingredientGroup
-  is in `_FAT_CATEGORY_REAL_ACTIVES`. Anything else falls through to
-  the downstream mapper (the right disambiguator).
-* `_FAT_CATEGORY_REAL_ACTIVES` covers DSLD ingredientGroup variants:
-  ``phytosterol (mixed)``, ``phytosterol esters``, ``medium chain
-  triglycerides (mct)``, ``medium chain triglyceride oil``.
+  name preprocess-matches `EXCLUDED_NUTRITION_FACTS`. Anything else falls
+  through to the downstream mapper (the right disambiguator). The former
+  `_FAT_CATEGORY_REAL_ACTIVES` allowlist never changed an outcome and was
+  removed (cleaner audit RC2, 2026-10-19): these rows survive on their names.
 * `_process_single_ingredient_enhanced` emits
   ``_queue_display_ingredient(display_type='nutrition_fact')`` whenever
   `_is_nutrition_fact` returns True, so the build can derive a
@@ -229,9 +227,8 @@ def test_16040_red_yeast_rice_kept_as_active(normalizer):
 
 def test_20529_phytosterol_esters_kept_as_active(normalizer):
     """Phytosterol esters (DSLD category='fat', ingredientGroup
-    'Phytosterol (mixed)') is a real plant-sterol supplement. The
-    `_FAT_CATEGORY_REAL_ACTIVES` allowlist must include this DSLD
-    ingredientGroup variant."""
+    'Phytosterol (mixed)') is a real plant-sterol supplement and must
+    stay an active."""
     out = normalizer.normalize_product(RAW_FIXTURES[20529])
     assert "Phytosterol esters" in _active_names(out), (
         f"Phytosterol esters must survive cleaning; got actives "
@@ -242,8 +239,8 @@ def test_20529_phytosterol_esters_kept_as_active(normalizer):
 def test_326282_mct_kept_as_active(normalizer):
     """Medium Chain Triglycerides 14g (cat='fat', group='Medium Chain
     Triglycerides') is a real MCT supplement. Both the gram-unit branch
-    and the D1.3 category branch must let this through via the
-    `_FAT_CATEGORY_REAL_ACTIVES` allowlist."""
+    and the D1.3 category branch must let it through: its name is not
+    Nutrition Facts vocabulary."""
     out = normalizer.normalize_product(RAW_FIXTURES[326282])
     assert "Medium Chain Triglycerides" in _active_names(out)
 

@@ -27,6 +27,7 @@ from constants import (
     TOP_MANUFACTURERS,
     PROPRIETARY_BLENDS,
     EXCLUDED_NUTRITION_FACTS,
+    LABEL_ROLLUP_NAMES,
     EXCLUDED_LABEL_PHRASES,
     STANDARDIZED_BOTANICALS,
     BANNED_RECALLED,
@@ -962,6 +963,9 @@ class EnhancedDSLDNormalizer:
         }
         self._preprocessed_excluded_nutrition = {
             self.matcher.preprocess_text(fact) for fact in EXCLUDED_NUTRITION_FACTS
+        }
+        self._preprocessed_label_rollups = {
+            self.matcher.preprocess_text(name) for name in LABEL_ROLLUP_NAMES
         }
         self._preprocessed_blend_header_exact = {
             self.matcher.preprocess_text(name) for name in BLEND_HEADER_EXACT_NAMES
@@ -5048,7 +5052,9 @@ class EnhancedDSLDNormalizer:
                     raw_source_text=name,
                     source_section="activeIngredients",
                     display_type=(
-                        "nutrition_fact" if is_nutrition_fact else "summary_wrapper"
+                        self._excluded_row_display_type(name)
+                        if is_nutrition_fact
+                        else "summary_wrapper"
                     ),
                     score_included=False,
                     source_row=ing,
@@ -5153,7 +5159,7 @@ class EnhancedDSLDNormalizer:
                             raw_source_text=nested_name,
                             source_section="activeIngredients",
                             display_type=(
-                                "nutrition_fact"
+                                self._excluded_row_display_type(nested_name)
                                 if is_nutrition_fact
                                 else "summary_wrapper"
                             ),
@@ -7152,7 +7158,7 @@ class EnhancedDSLDNormalizer:
             self._queue_display_ingredient(
                 raw_source_text=raw_name,
                 source_section="activeIngredients" if is_active else "inactiveIngredients",
-                display_type="nutrition_fact",
+                display_type=self._excluded_row_display_type(name),
                 score_included=False,
                 source_row=ing,
                 children=_form_names_for_display,
@@ -10035,8 +10041,9 @@ class EnhancedDSLDNormalizer:
             for row in active_rows
         ):
             return "elemental_mineral_source_compound"
+        # A summary wrapper (a label total or "less than 2%" qualifier) is not a blend.
         if any(
-            row.get("display_type") in {"structural_container", "summary_wrapper"}
+            row.get("display_type") == "structural_container"
             or "blend" in str(row.get("ingredient_group") or "").casefold()
             for row in active_rows
         ):
@@ -11215,6 +11222,13 @@ class EnhancedDSLDNormalizer:
             ),
         }
     
+    def _excluded_row_display_type(self, name: str) -> str:
+        """Ledger type of a row excluded as a nutrition fact: a label total or aggregate is a
+        summary wrapper (constants.LABEL_ROLLUP_NAMES); everything else is a nutrition fact."""
+        if self.matcher.preprocess_text(name or "") in self._preprocessed_label_rollups:
+            return "summary_wrapper"
+        return "nutrition_fact"
+
     def _is_nutrition_fact(
         self,
         name: str,
@@ -11285,18 +11299,10 @@ class EnhancedDSLDNormalizer:
         # is a real mineral, not a sodium-chloride nutrition-panel entry.
         # The unit-based {Calories}/{Gram(s)} check below still runs because
         # those units are unambiguous label-panel indicators.
+        # A vitamin or mineral printed only as %DV (calcium/iron on legacy protein-food
+        # panels) is still that nutrient: it goes to the RDA/UL owner like a %DV-only vitamin,
+        # which converts it through the Daily Value equation or records it unresolved.
         _cat_lower = (dsld_category or "").lower().strip()
-        _unit_lower = str(unit or "").strip().lower().strip("{}")
-        if (
-            _cat_lower == "mineral"
-            and _unit_lower in {"%", "percent", "percent dv", "%dv"}
-            and not has_forms
-        ):
-            # Legacy protein-food labels sometimes expose calcium/iron only
-            # as percent Daily Value. That is a Nutrition Facts disclosure,
-            # not a measured supplement dose. Preserve it in the label ledger
-            # while keeping it out of active-ingredient dose math.
-            return True
         _SUPPLEMENT_INGREDIENT_CATEGORIES = {
             "vitamin",
             "mineral",
@@ -11436,47 +11442,6 @@ class EnhancedDSLDNormalizer:
             "fiber", "total fiber", "dietary fiber", "soluble fiber", "insoluble fiber",
             "protein",  # handled carefully — see below
         }
-        # E1.6: Curated allowlist of supplements DSLD tags under category=fat
-        # but which are REAL active ingredients (phospholipids, marine oils,
-        # plant oils, sterols, MCTs). Without this list, the legacy D1.3
-        # rule treated every fat-category row as a Nutrition-Facts-panel
-        # exclusion and silently dropped ~186 single-active products like
-        # Phosphatidyl Serine 300 mg, Neptune Krill Oil, Phytosterols,
-        # Evening Primrose Oil, Flaxseed Oil. Match is case-insensitive
-        # against the row's ingredientGroup.
-        _FAT_CATEGORY_REAL_ACTIVES = {
-            # Phospholipids
-            "phosphatidylserine", "phosphatidylcholine", "phosphatidylinositol",
-            "phosphatidylethanolamine", "phosphatidic acid",
-            # Marine / animal oils
-            "krill oil", "fish oil", "cod liver oil", "salmon oil",
-            "sardine oil", "anchovy oil", "calamari oil", "menhaden oil",
-            # Plant / seed oils with active claims
-            "flaxseed oil", "evening primrose oil", "borage oil",
-            "black currant seed oil", "perilla seed oil",
-            "hemp seed oil", "chia seed oil", "sea buckthorn oil",
-            # Sterols / stanols
-            "phytosterols (unspecified)", "phytosterols",
-            # DSLD ingredientGroup variant for mixed phytosterol esters
-            # (e.g. Thorne Sterolipin) — added Sprint E1.2.5 follow-up.
-            "phytosterol (mixed)", "phytosterol esters",
-            "beta-sitosterol", "stigmasterol", "campesterol",
-            "plant sterols", "plant stanols",
-            # MCT / fractionated coconut. DSLD's ingredientGroup for MCT
-            # products varies — capture the common variants observed in
-            # the Nutricost / SR Sports Research / GNC catalogs.
-            "mct", "mct oil", "medium chain triglycerides",
-            "medium chain triglycerides (mct)", "medium chain triglyceride oil",
-            # Lecithin family
-            "lecithin", "soy lecithin", "sunflower lecithin",
-            # Fat-soluble actives DSLD occasionally tags category=fat
-            # instead of category=fatty acid (the latter triggers
-            # _bypass_name_match correctly; the former leaks).
-            "monolaurin", "lauric acid", "caprylic acid", "capric acid",
-            "caproic acid", "palmitic acid",
-            # Conjugated linoleic acid — supplement-grade, not panel
-            "conjugated linoleic acid", "cla",
-        }
         if unit:
             unit_lower = unit.lower().strip()
             # Strip braces if present so we accept both forms.
@@ -11587,14 +11552,12 @@ class EnhancedDSLDNormalizer:
                 # nutrition-fact signal at this layer. The replacement:
                 # only exclude here when the NAME is in the curated
                 # nutrition-facts list, OR the ingredientGroup is a
-                # known panel-disclosure group. Real-fat-class
-                # ingredientGroups (MCT, phospholipid, krill oil,
-                # phytosterol) explicitly survive. Anything else falls
-                # through to the downstream mapper, which is the right
-                # disambiguator for unfamiliar gram-unit rows.
+                # known panel-disclosure group. Real fat-class rows (MCT,
+                # phospholipid, krill oil, phytosterol) survive on their names.
+                # Anything else falls through to the downstream mapper, which
+                # is the right disambiguator for unfamiliar gram-unit rows.
                 elif not _bypass_name_match:
                     _processed_name_check = self.matcher.preprocess_text(name)
-                    _group_lower = (ingredient_group or "").lower().strip()
                     if _processed_name_check in self._preprocessed_excluded_nutrition:
                         logger.debug(
                             "Excluding via gram unit + known nutrition-fact name: "
@@ -11602,25 +11565,12 @@ class EnhancedDSLDNormalizer:
                             name, unit, dsld_category,
                         )
                         return True
-                    if _group_lower in _FAT_CATEGORY_REAL_ACTIVES:
-                        logger.debug(
-                            "E1.6: gram-unit row %r kept — ingredientGroup %r is a "
-                            "known fat-class active",
-                            name, ingredient_group,
-                        )
-                        # Fall through; downstream mapper handles it.
-                    # Otherwise: trust DSLD's row even with non-supplement
-                    # category. Do NOT exclude here.
-            # D1.3 + E1.6: Sugar/Fat/Carb rows are Nutrition Facts panel
-            # disclosures by default — UNLESS one of:
-            #   - the ingredientGroup matches a known fat-class active
-            #     (Phosphatidyl Serine, Krill Oil, Phytosterols, MCT, …)
-            #   - the row's NAME is not in the curated nutrition-facts list
-            #     (preserves real sugar-class supplements such as D-Mannose,
-            #     D-Ribose, Galactooligosaccharides, and complex-carb
-            #     supplements that DSLD tags ``category='sugar'`` or
-            #     ``category='complex carbohydrate'`` — Sprint E1.2.5
-            #     follow-up, 2026-05-13)
+            # D1.3: Sugar/Fat/Carb rows are Nutrition Facts panel disclosures
+            # by default — UNLESS the row's NAME is not in the curated
+            # nutrition-facts list. That keeps Phosphatidyl Serine, Krill Oil,
+            # Phytosterols and MCT (category=fat) and D-Mannose, D-Ribose,
+            # Galactooligosaccharides (category=sugar / complex carbohydrate)
+            # as actives (Sprint E1.2.5 follow-up, 2026-05-13).
             # This preserves the original D1.3 behavior for genuine panel
             # rows (Total Carbohydrates, Total Sugars, Total Fat, Cholesterol,
             # bare "Sugar"/"Sodium") while exempting real label-disclosed
@@ -11655,14 +11605,7 @@ class EnhancedDSLDNormalizer:
                     "soybean oil", "canola oil", "rapeseed oil",
                     "cottonseed oil", "vegetable oil",
                 }
-                if ingredient_group_lower in _FAT_CATEGORY_REAL_ACTIVES:
-                    logger.debug(
-                        "E1.6: ingredientGroup %r is a known fat-class active — "
-                        "routing %s to actives despite category=%s",
-                        ingredient_group, name, _cat_lower,
-                    )
-                    # Fall through to subsequent checks; do NOT exclude here.
-                elif ingredient_group_lower in _PANEL_CARRIER_GROUPS:
+                if ingredient_group_lower in _PANEL_CARRIER_GROUPS:
                     # A typed, exact registered fiber preparation is not a
                     # carrier merely because DSLD supplies a generic sugar
                     # group. Preserve its own declared mass; never assign it

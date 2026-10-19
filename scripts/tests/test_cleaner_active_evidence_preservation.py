@@ -295,8 +295,9 @@ def test_explicitly_dosed_epa_dha_children_survive():
 
     active_names = _active_names(cleaned)
     assert "other fatty acids" not in active_names
+    # A label aggregate is recorded in the ledger as a summary wrapper (cleaner audit RC2).
     assert any(
-        row.get("display_type") == "nutrition_fact"
+        row.get("display_type") == "summary_wrapper"
         and str(row.get("raw_source_text") or row.get("name") or "").lower()
         == "other fatty acids"
         for row in cleaned.get("display_ingredients", [])
@@ -322,7 +323,8 @@ def test_total_carotenoids_is_a_rollup_not_a_second_active():
 
     assert "total carotenoids" not in _active_names(cleaned)
     assert any(
-        row.get("display_type") == "nutrition_fact"
+        row.get("display_type") == "summary_wrapper"
+        and row.get("raw_source_text") == "Total Carotenoids"
         for row in cleaned.get("display_ingredients", [])
     )
 
