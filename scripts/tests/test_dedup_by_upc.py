@@ -37,10 +37,7 @@ def _make_db(rows):
             (row[0], row[1], row[2], row[3], row[4], score, score, "scored"),
         )
     conn.commit()
-    detail_index = {
-        str(row[0]): {"blob_sha256": f"sha_{row[0]}"} for row in rows
-    }
-    return conn, detail_index
+    return conn
 
 
 def _remaining_ids(conn):
@@ -53,18 +50,15 @@ def _remaining_ids(conn):
 
 
 def test_shared_upc_retains_every_candidate_regardless_of_score_or_status():
-    conn, detail_index = _make_db([
+    conn = _make_db([
         ("scored", "Formula A", "Brand", "012 345", "active", 95.0),
         ("blocked", "Formula B", "Brand", "012345", "active", None),
         ("historic", "Formula C", "Brand", "012345", "discontinued", 40.0),
     ])
 
-    result = dedup_by_upc(conn, detail_index)
+    result = dedup_by_upc(conn)
 
     assert _remaining_ids(conn) == ["blocked", "historic", "scored"]
-    assert set(detail_index) == {"blocked", "historic", "scored"}
-    assert result["duplicates_removed"] == 0
-    assert result["upc_groups_deduped"] == 0
     assert result["ambiguous_upc_groups"] == 1
     assert result["ambiguous_product_count"] == 3
     assert result["ambiguous_groups_sample"] == [
@@ -73,12 +67,12 @@ def test_shared_upc_retains_every_candidate_regardless_of_score_or_status():
 
 
 def test_no_shared_upcs_reports_no_ambiguity():
-    conn, detail_index = _make_db([
+    conn = _make_db([
         ("100", "A", "Brand", "111", "active", 50.0),
         ("200", "B", "Brand", "222", "active", 45.0),
     ])
 
-    result = dedup_by_upc(conn, detail_index)
+    result = dedup_by_upc(conn)
 
     assert _remaining_ids(conn) == ["100", "200"]
     assert result["ambiguous_upc_groups"] == 0
@@ -86,13 +80,13 @@ def test_no_shared_upcs_reports_no_ambiguity():
 
 
 def test_missing_and_blank_upcs_are_not_grouped():
-    conn, detail_index = _make_db([
+    conn = _make_db([
         ("100", "A", "Brand", None, "active", 50.0),
         ("200", "B", "Brand", "", "active", 45.0),
         ("300", "C", "Brand", "   ", "active", 40.0),
     ])
 
-    result = dedup_by_upc(conn, detail_index)
+    result = dedup_by_upc(conn)
 
     assert _remaining_ids(conn) == ["100", "200", "300"]
     assert result["ambiguous_upc_groups"] == 0
@@ -108,9 +102,8 @@ def test_shared_upc_audit_never_reads_quality_columns():
         "INSERT INTO products_core VALUES (?, ?)",
         [("100", "999"), ("200", "999")],
     )
-    detail_index = {"100": {}, "200": {}}
 
-    result = dedup_by_upc(conn, detail_index)
+    result = dedup_by_upc(conn)
 
     assert result["ambiguous_upc_groups"] == 1
     assert _remaining_ids(conn) == ["100", "200"]

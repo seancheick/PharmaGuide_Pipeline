@@ -527,9 +527,7 @@ def run_preflight(verbose: bool = False, quick: bool = False) -> Dict:
 
     # Validate database schemas (v5.x compliance)
     schema_results = validate_database_schema()
-    # Keep both keys for backward compatibility with existing consumers.
     results["schema_v5"] = schema_results
-    results["schema_v4"] = schema_results
 
     # Safety cross-DB check: IQM ↔ Banned/Recalled collision guard
     collision_results = validate_iqm_br_collision()
@@ -563,7 +561,6 @@ def run_preflight(verbose: bool = False, quick: bool = False) -> Dict:
         "configs_ok": configs_ok,
         "scripts_ok": scripts_ok,
         "schema_v5_ok": schema_ok,
-        "schema_v4_ok": schema_ok,
         "iqm_br_collision_ok": collision_ok,
         "all_ok": all_ok,
         "exit_code": exit_code,
@@ -640,7 +637,7 @@ def print_results(results: Dict, verbose: bool = False):
         print()
 
     # Schema v5 validation
-    schema = results.get("schema_v5", results.get("schema_v4", {}))
+    schema = results.get("schema_v5", {})
     if schema.get("failed") or verbose:
         print("SCHEMA v5 VALIDATION:")
         if verbose:
