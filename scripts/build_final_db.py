@@ -5094,9 +5094,11 @@ def _infer_final_label_source_structure(
         for row in active_rows
     ):
         return "elemental_mineral_source_compound"
-    # A summary wrapper (a label total or "less than 2%" qualifier) is not a blend.
     if any(
-        safe_str(row.get("display_type")) == "structural_container"
+        safe_str(row.get("display_type")) in {
+            "structural_container",
+            "summary_wrapper",
+        }
         or "blend" in safe_str(row.get("ingredient_group")).casefold()
         for row in active_rows
     ):

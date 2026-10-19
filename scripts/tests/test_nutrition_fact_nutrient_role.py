@@ -135,3 +135,19 @@ def test_rollups_are_a_subset_of_the_exclusions_and_exclude_panel_totals():
     for panel_total in ("total fat", "total carbohydrates", "total sugars", "total protein", "total calories"):
         assert panel_total in EXCLUDED_NUTRITION_FACTS and panel_total not in LABEL_ROLLUP_NAMES
     assert {"total omega-3 fatty acids", "total lacto cultures", "total curcuminoids", "epa + dha"} <= LABEL_ROLLUP_NAMES
+
+
+def test_a_real_blend_wrapper_still_marks_a_proprietary_blend(normalizer):
+    # DSLD 232129 "Pomegranate Complete": the blend parent is a summary wrapper too, but it
+    # is a proprietary blend; only label totals stop counting as one.
+    cleaned = normalizer.normalize_product(_label("232129", "Pomegranate Complete", [
+        _row(1, "Pomella Pomegranate extract", "botanical", "Pomegranate", 400, "mg",
+             forms=[{"order": 1, "name": "Punicalagins"}]),
+        _row(2, "Proprietary Pomegranate Blend", "botanical", "Pomegranate", 137.5, "mg",
+             forms=[{"order": 1, "name": "Punicic Acid"}], nested=[
+                 _row(1, "Pomegranate flower extract", "botanical", "Pomegranate", 0, "NP"),
+                 _row(2, "Pomegranate seed Oil", "fat", "Pomegranate Oil", 0, "NP"),
+             ]),
+    ]))
+    assert _display(cleaned)["Proprietary Pomegranate Blend"]["display_type"] == "summary_wrapper"
+    assert cleaned["label_ledger_audit"]["source_structure"] == "proprietary_blend"

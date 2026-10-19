@@ -10000,8 +10000,8 @@ class EnhancedDSLDNormalizer:
                 add(omission)
         return inventory
 
-    @staticmethod
     def _classify_label_source_structure(
+        self,
         display_rows: List[Dict[str, Any]],
         meaningful_source_rows: int,
         unsupported: bool,
@@ -10041,9 +10041,13 @@ class EnhancedDSLDNormalizer:
             for row in active_rows
         ):
             return "elemental_mineral_source_compound"
-        # A summary wrapper (a label total or "less than 2%" qualifier) is not a blend.
+        # A label total recorded as a summary wrapper is not a blend.
         if any(
             row.get("display_type") == "structural_container"
+            or (
+                row.get("display_type") == "summary_wrapper"
+                and not self._is_label_rollup(row.get("raw_source_text"))
+            )
             or "blend" in str(row.get("ingredient_group") or "").casefold()
             for row in active_rows
         ):
@@ -11222,12 +11226,14 @@ class EnhancedDSLDNormalizer:
             ),
         }
     
+    def _is_label_rollup(self, name: str) -> bool:
+        """A label total or aggregate (constants.LABEL_ROLLUP_NAMES), e.g. "Total Omega-3 Fatty Acids"."""
+        return self.matcher.preprocess_text(name or "") in self._preprocessed_label_rollups
+
     def _excluded_row_display_type(self, name: str) -> str:
         """Ledger type of a row excluded as a nutrition fact: a label total or aggregate is a
-        summary wrapper (constants.LABEL_ROLLUP_NAMES); everything else is a nutrition fact."""
-        if self.matcher.preprocess_text(name or "") in self._preprocessed_label_rollups:
-            return "summary_wrapper"
-        return "nutrition_fact"
+        summary wrapper; everything else is a nutrition fact."""
+        return "summary_wrapper" if self._is_label_rollup(name) else "nutrition_fact"
 
     def _is_nutrition_fact(
         self,
