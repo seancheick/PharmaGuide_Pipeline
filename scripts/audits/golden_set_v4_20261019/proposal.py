@@ -460,7 +460,7 @@ def build(doc: dict, products: dict, tiers: list) -> dict:
     md["golden_set"] = {
         "purpose": "v4 golden set: each canary states expected route, statuses, a tier band and pillar invariants. The Coverage & Calibration dashboard raises a finding when a canary breaks one; a break is fixed at its owner or explained by an allowed movement reason, never by editing the expectation to the current score.",
         "reviewed_against": "Score stage run 20261019T070203540018Z (quality_score.json 1.29.1-dose-v41-omega-integration), main e6f2dd103.",
-        "approval": "PENDING Sean",
+        "approval": "Approved by Sean 2026-10-19: D1 schema, D2 +/-5 tier band, D3 the 18 additions, D4 211448 class unchanged, D5 F1/F2 kept as failing expectations (scripts/audits/golden_set_v4_20261019/REVIEW.md).",
         "expectation_owners": EXPECTATION_OWNERS,
         "global_scored_invariants": GLOBAL_SCORED_INVARIANTS,
         "pillar_invariants": INVARIANTS,

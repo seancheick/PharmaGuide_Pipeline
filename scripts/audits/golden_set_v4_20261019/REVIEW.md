@@ -1,7 +1,18 @@
 # v4 golden set proposal — canary_products.json (October 19, 2026)
 
-**Status: PROPOSAL, waiting for Sean's approval. Nothing has been applied to
-`scripts/data/canary_products.json`.**
+**Status: APPROVED by Sean on 2026-10-19 (D1 schema, D2 ±5 tier band, D3 the 18 additions,
+D4 211448 class unchanged, D5 F1/F2 kept as failing expectations) and APPLIED to
+`scripts/data/canary_products.json` (schema 2.0.0, 53 canaries).**
+
+Apply evidence:
+- `proposal.py --apply`: 517 checks, 2 failures (F1 and F2, as approved).
+- `data_batch.py check --since origin/main --expect canaries[0..52]`: 53 entries changed (35 modified,
+  18 added), 0 problems. No pre-existing curated field value changed; the original order is kept.
+- `scripts/test.sh fast test_v4_canary_coverage.py test_iqm_vinpocetine_entry.py test_ci_skip_guard.py`:
+  65 passed, 1 skipped (the catalog-presence test skips without a local build).
+- With `PG_RELEASE_CANDIDATE_ROOT=reports/dose_v41_release_audit_20261019/catalog_candidate`,
+  `test_v4_canary_coverage.py` ran 13 tests and all passed, including that test (all 53 are in the
+  candidate catalog).
 
 Lane: branch `claude/epic-mayer-1cf186`. The Dashboard v4 Coverage & Calibration page
 (branch `claude/dashboard-v4`) reads the result and raises a finding whenever a canary breaks
@@ -174,7 +185,7 @@ branded extract name. 269589 is the same product.
 - **306381 vs 308247:** two DSLD versions of the same pre-workout (300 vs 600 mg caffeine/day
   at maximum use). Only the 600 mg version reaches the caffeine ceiling.
 
-## After approval (not done yet)
+## Apply procedure (done 2026-10-19)
 
 1. Set `_metadata.golden_set.approval` to Sean's recorded decision and apply D2/D4/D5 choices
    in `proposal.py`.
