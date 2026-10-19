@@ -1,0 +1,5 @@
+{
+  "maximum_resident_set_bytes": 721305600,
+  "peak_memory_footprint_bytes": 976996080,
+  "measurement": "macOS /usr/bin/time -l around the actual server while browsing all 30 page-plane combinations; process stopped normally with SIGTERM after capture"
+}

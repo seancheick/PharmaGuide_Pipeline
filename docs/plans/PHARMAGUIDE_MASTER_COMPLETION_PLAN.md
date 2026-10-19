@@ -1326,5 +1326,6 @@ This qualifies the bounded source batch for authorized integration; it does not 
 - [x] Verify all 20 dashboard capability checks against the actual index, browser, downloads and owner/consumer tests; fix confirmed tooling defects. Report: `scripts/audits/dashboard_v4_acceptance_20261019/README.md`.
 - [x] Ten pages × Candidate/Release/Historical render without application exceptions; final console clean. Original four warm performance targets met.
 - [x] Approved 53-case golden set displays 520 passing checks on accepted raw source-qualified outputs, separately labelled from the older full index.
-- [ ] Exact-source whole-fast CI and integration of `codex/dashboard-acceptance` (requires Sean for main).
+- [x] Exact-source whole-fast CI39314201536:22,204passed/192declared skips/all4groups/every skipguard; runtimea6129daf, testedde31ce0c. Independent review clear; later closeout is documentation/receipts only.
+- [ ] Integrate PR172 (`codex/dashboard-acceptance`); requires Sean for main.
 - [ ] Refresh/inspect the full dashboard index after Sean's active corpus rebuild. Older full-index golden/parity results are not claimed newly green or released.

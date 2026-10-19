@@ -180,5 +180,104 @@
     "release_changed": true,
     "projection_changed": false,
     "stale": true
+  },
+  "browser": {
+    "page_plane_combinations": 30,
+    "application_exceptions": 0,
+    "console_errors": 0,
+    "console_warnings": 0,
+    "http_4xx_5xx": 0,
+    "warm_measurements": [
+      {
+        "n": 0,
+        "title": "Overview",
+        "ms": 335,
+        "errors": []
+      },
+      {
+        "n": 0,
+        "title": "Product Explorer",
+        "ms": 575,
+        "errors": []
+      },
+      {
+        "n": 0,
+        "title": "Product Trace",
+        "ms": 563,
+        "errors": []
+      },
+      {
+        "n": 0,
+        "title": "Run Compare & Trends",
+        "ms": 1117,
+        "errors": []
+      },
+      {
+        "n": 1,
+        "title": "Overview",
+        "ms": 262,
+        "errors": []
+      },
+      {
+        "n": 1,
+        "title": "Product Explorer",
+        "ms": 568,
+        "errors": []
+      },
+      {
+        "n": 1,
+        "title": "Product Trace",
+        "ms": 410,
+        "errors": []
+      },
+      {
+        "n": 1,
+        "title": "Run Compare & Trends",
+        "ms": 596,
+        "errors": []
+      },
+      {
+        "n": 2,
+        "title": "Overview",
+        "ms": 273,
+        "errors": []
+      },
+      {
+        "n": 2,
+        "title": "Product Explorer",
+        "ms": 784,
+        "errors": []
+      },
+      {
+        "n": 2,
+        "title": "Product Trace",
+        "ms": 442,
+        "errors": []
+      },
+      {
+        "n": 2,
+        "title": "Run Compare & Trends",
+        "ms": 607,
+        "errors": []
+      }
+    ],
+    "drill_through": {
+      "url": "http://127.0.0.1:8502/product-trace?plane=candidate&run=candidate-76d66f0761dd53ad&dsld_id=183513",
+      "search": "183513",
+      "errors": []
+    }
+  },
+  "checks": {
+    "focused_and_guards": 98,
+    "local_smoke": 24
+  },
+  "tested_source_sha": "a6129dafa677cdd9bd0355f3782b70cf809348a2",
+  "whole_fast": {
+    "run_id": 39314201536,
+    "head_sha": "de31ce0c4b5b2036855bb551c6aa83a5d375ecbd",
+    "passed": 22204,
+    "declared_skips": 192,
+    "groups": 4,
+    "conclusion": "success"
   }
 }

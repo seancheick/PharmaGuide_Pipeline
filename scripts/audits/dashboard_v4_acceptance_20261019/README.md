@@ -47,9 +47,12 @@ The dashboard capabilities pass all 20 checks. Data qualification is explicitly 
 
 ## Verification and limits
 
-- 98 focused dashboard/guard checks passed, including four dead-code ratchet checks. Fail-first nodes cover history collisions, missing Operations banner, mixed-config peers, stale navigation, scope reopening, unassessed composition, saved-filter overrides and identical Release comparison defaults.
+- 98 focused dashboard/guard checks plus 24 local smoke/degradation checks passed, including four dead-code ratchet checks. Fail-first nodes cover history collisions, missing Operations banner, mixed-config peers, stale navigation, scope reopening, unassessed composition, saved-filter overrides and identical Release comparison defaults.
+- Browser drill-through replaced an existing 177145 search with selected product183513 and opened its correct Trace without exceptions.
 - Browser: all ten pages on Candidate, Release and Historical (30 combinations), zero application exceptions; final browser console reports zero errors/warnings.
 - Warm browser timings, three repetitions under an active operator corpus job: Overview 262–335 ms; Explorer 568–784 ms; Trace 410–563 ms; Compare 596–1,117 ms. Each meets the original warm target. First entry can be slower; Market's separate ingredient index is outside those four targets.
+- Actual server peak memory during the 30-page browser run: 687.9 MiB maximum resident set; 931.7 MiB peak memory footprint (OS measurement, not an estimate).
+- Independent review found no remaining important blockers in the final source diff.
 - Original full-index source provenance and raw golden qualification are in `acceptance.json`. Local browser logs, 30 screenshots, exact downloads and timing receipts live in this worktree's `output/playwright/`.
-- Completed-source whole-fast CI: pending. No local broad suite was run beside the corpus job.
+- Completed-source whole-fast [CI39314201536](https://github.com/seancheick/PharmaGuide_Pipeline/actions/runs/39314201536) passed all four groups: 22,204 tests, 192 declared skips, every skip guard green. Tested head `de31ce0c4b5b2036855bb551c6aa83a5d375ecbd` contains runtime `a6129dafa677cdd9bd0355f3782b70cf809348a2`; subsequent closeout changes are documentation/receipts only. No local broad suite was run beside the corpus job.
 - This batch does not qualify the running corpus, publish a catalog, import app assets, merge/push main, or build an IPA. After the operator rebuild, refresh the full index and inspect its new golden/parity results using the existing owners. No expectations or approvals were fabricated.

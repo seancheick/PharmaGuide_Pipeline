@@ -1,0 +1,14 @@
+{
+  "clean": {
+    "primary": "76a287e772eb5b3ad22de365e895ce2eabab5ac6828325eae0e86a1d4f784b8d",
+    "dashboard_candidate": "76a287e772eb5b3ad22de365e895ce2eabab5ac6828325eae0e86a1d4f784b8d"
+  },
+  "enrich": {
+    "primary": "614d7ba4480c6c9b7fc62a342f04f41b77f3bad69486c9b1ea4f9c6a764d0e53",
+    "dashboard_candidate": "614d7ba4480c6c9b7fc62a342f04f41b77f3bad69486c9b1ea4f9c6a764d0e53"
+  },
+  "score": {
+    "primary": "1e7382e8621d1730e1485d9b89f0ff432d100b4d067645d6f712b712cd475579",
+    "dashboard_candidate": "1e7382e8621d1730e1485d9b89f0ff432d100b4d067645d6f712b712cd475579"
+  }
+}
