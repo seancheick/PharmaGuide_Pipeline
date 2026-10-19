@@ -63,6 +63,15 @@ What remains is mostly work outside this owner: probiotic strain identity in
 `studied_formulas.py` (`probiotic_label_identity_summary`, ~29% of the candidate profile) and the
 defensive result copies (~11%).
 
+## Review follow-up
+
+A fresh-context review found no reachable defect. It noted one unreachable gap: a product arriving
+with the route-rows key already attached (nothing in production persists it; 0 of the 1,865
+enriched records carry it) would have read stale rows in scope. The scope now steps aside for such a
+product (fail-first `test_scoring_input_scope_steps_aside_for_a_product_carrying_route_rows`). After
+that commit, re-scoring the 1,865 enriched products gave artifacts byte-identical to the base output
+(44.6 ms/product).
+
 ## Tests
 
 Fail-first: `test_one_scoring_pass_derives_each_product_view_once` (base: 19 builds in one pass),

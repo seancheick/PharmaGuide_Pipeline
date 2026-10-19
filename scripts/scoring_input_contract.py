@@ -2375,7 +2375,11 @@ _ACTIVE_SCORING_INPUT_SCOPE: ContextVar[Optional[_ScoringInputScope]] = ContextV
 
 def _scope_holding(product: Any) -> Optional[_ScoringInputScope]:
     scope = _ACTIVE_SCORING_INPUT_SCOPE.get()
-    return scope if scope is not None and scope.holds(product) else None
+    if scope is None or _ROUTE_SCORING_ROWS_CACHE_KEY in scope.product:
+        # A product that arrives carrying route rows keeps the uncached path,
+        # where classification swaps in its own rows for each call.
+        return None
+    return scope if scope.holds(product) else None
 
 
 def _scoped_view(product: Any, key: tuple, derive, copy_out):

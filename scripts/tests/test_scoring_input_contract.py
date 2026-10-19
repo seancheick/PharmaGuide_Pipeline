@@ -1923,6 +1923,19 @@ def test_scoring_input_scope_derives_classification_and_roles_once(
     assert _ROUTE_SCORING_ROWS_CACHE_KEY not in product
 
 
+def test_scoring_input_scope_steps_aside_for_a_product_carrying_route_rows():
+    """A product arriving with route rows attached keeps the uncached path, where
+    classification replaces them with its own rows for the duration of the call."""
+    product = _product([_row()])
+    product[_ROUTE_SCORING_ROWS_CACHE_KEY] = [_row(name="Zinc", canonical_id="zinc")]
+    uncached = build_scoring_classification(product)
+
+    with scoring_input_scope(product):
+        first = get_scoring_ingredients(product, strict=True)
+        assert get_scoring_ingredients(product, strict=True) is not first
+        assert build_scoring_classification(product) == uncached
+
+
 def test_fresh_contract_does_not_recover_explicitly_skipped_identity_row():
     scorable = _row(
         name="Curcumin",
