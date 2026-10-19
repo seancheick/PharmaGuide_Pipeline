@@ -43,6 +43,20 @@ checked with `cmp` on the two `git diff`s).
 `compare --all-paths` → `{"products": 2562, "changed": 0}`; independent hash check: 0 differences in
 cleaned, enriched, scored and blob, every hash present. The snapshot files are byte-identical.
 
+## Revalidation on current main
+
+Main gained the #176/#177 cleaner changes after `6aaa9e874`, so the same 2,562 labels were replayed
+again: base main `fd51b5828` vs this branch head `1aa8c060e`, `--full --blob --workers 4`, unpinned.
+
+| Receipt | exit | products | source_unchanged | output sha256 |
+|---|---|---|---|---|
+| `main_fd51b5828.jsonl.meta.json` | 0 | 2,562/2,562 | true | `5f81df28…` |
+| `cand_1aa8c060e.jsonl.meta.json` | 0 | 2,562/2,562 | true | `5f81df28…` |
+
+`compare --all-paths` (`compare_main_all_paths.json`) → `{"products": 2562, "changed": 0}`;
+independent hash check: 0 differences in cleaned, enriched, scored and blob. (On this cohort the
+main snapshot also equals the `6aaa9e874` snapshot.)
+
 ## Score time, probiotic-route labels (107 in the control cohort, one process each, concurrent)
 
 Base PR #175 head `1b5b3bf10`: 523.7 ms/product; candidate: 151.1 ms/product (3.5×), scored
