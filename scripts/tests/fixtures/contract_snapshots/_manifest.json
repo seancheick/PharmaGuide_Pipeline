@@ -207,6 +207,15 @@
   ],
   "changelog": [
     {
+      "date": "2026-10-19",
+      "phase": "Sean-approved adult catalog score and informational child UL notes",
+      "source_commit": "f0841a7b31c654db402b4454909a1d3b460e32e6",
+      "products_updated": [
+        327416
+      ],
+      "notes": "Raw label327416 Multivitamin Liquid, child1-3 tag. Previously not_scored solely because pediatric reference rows were absent; approved adult-only catalog screening completes with score57.1 and no adult exceedance. Actual full Clean/Enrich/Score/blob probe confirms child exposures remain within their limits, no child over-limit note. Removed only obsolete DOSE_SAFETY_UNRESOLVED_REVIEW; no ingredient/amount/form or non-Dose arithmetic change. The other32raw canaries are unchanged. Source receipt: reports/child_ul_takeover_20261019/real_product_probes.json. No threshold or score assertion waived."
+    },
+    {
       "date": "2026-10-18",
       "phase": "Sean-approved Dose V4.1 reference policy",
       "source_commit": "3e6c2da3",

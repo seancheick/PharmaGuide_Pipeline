@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import copy
 import json
+import re
 import sys
 from pathlib import Path
 
@@ -15,8 +16,13 @@ from scoring_input_contract import get_scoring_ingredients  # noqa: E402
 
 
 def _load_product(dsld_id: str) -> dict:
+    needle = re.escape(dsld_id.encode())
+    id_pattern = re.compile(rb'"(?:dsld_id|id)"\s*:\s*(?:"' + needle + rb'"|' + needle + rb'(?=\s*[,}]))')
     for path in (SCRIPTS_ROOT / "products").glob("output_*_enriched/enriched/*.json"):
-        payload = json.loads(path.read_text())
+        raw = path.read_bytes()
+        if not id_pattern.search(raw):
+            continue
+        payload = json.loads(raw)
         products = payload if isinstance(payload, list) else payload.get("products", [])
         for product in products:
             if str(product.get("dsld_id") or product.get("id")) == dsld_id:

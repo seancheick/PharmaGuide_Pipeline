@@ -75,7 +75,8 @@ def test_no_ordinary_target_requires_more_than_its_supplemental_ul():
             continue
         entry = next(e for e in data if e['id'] == canonical)
         adult_uls = [r['ul'] for r in entry['data'] if r['group'] in ('Male', 'Female')
-                     and r['age_range'] != '14-18' and isinstance(r['ul'], (int, float))]
+                     and r['age_range'] in ('19-30', '31-50', '51-70', '71+')
+                     and isinstance(r['ul'], (int, float))]
         assert record['target_mg'] < min(adult_uls), canonical
 
 

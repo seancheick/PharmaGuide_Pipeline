@@ -156,3 +156,39 @@ def test_list_says_what_is_already_prepared() -> None:
         {"extractions": [{"provider": "agent", "model": "m1", "version": 3}]},
         {"draft": {"payload": {"brandName": "Acme"}}, "verifications": [{"live": True}]})
     assert done == "draft agent/m1 v3 · saved review · 1 tick"
+
+
+def test_verify_compares_the_saved_review_with_the_recorded_extraction() -> None:
+    from submission_review.extraction.agent_reader import recorded_label_disagreements
+    from submission_review.extraction.to_manual_label import to_manual_label
+
+    draft, _, _ = _saveable()
+    recorded = {"draft_payload": draft}
+    skeleton = to_manual_label(draft).payload
+    # Additions the reading cannot carry are allowed.
+    assert recorded_label_disagreements({**skeleton, "physicalState": {"name": "Capsule"}}, recorded) == []
+    # A saved value that departs from the recorded reading is a disagreement,
+    # even when a local label.json says the same thing.
+    assert recorded_label_disagreements({**skeleton, "brandName": "Acme Labs"}, recorded) == ["$.brandName"]
+    # Nothing recorded, nothing to agree with.
+    assert recorded_label_disagreements(skeleton, {}) == ["no recorded extraction"]
+
+
+def test_adopting_the_legacy_workdir_moves_work_and_never_overwrites(tmp_path) -> None:
+    from submission_review.extraction.agent_reader import adopt_legacy_workdir
+
+    legacy, new = tmp_path / "tmp" / "pg", tmp_path / "home" / "pg"
+    for root, alias, text in ((legacy, "S01", "old"), (legacy, "S02", "legacy"), (new, "S02", "mine")):
+        (root / alias).mkdir(parents=True)
+        (root / alias / "reading.json").write_text(text)
+
+    moved, kept = adopt_legacy_workdir(new, legacy)
+
+    assert (moved, kept) == (["S01"], ["S02"])
+    assert (new / "S01" / "reading.json").read_text() == "old"
+    assert not (legacy / "S01").exists()
+    assert (new / "S02" / "reading.json").read_text() == "mine"
+    assert (legacy / "S02" / "reading.json").read_text() == "legacy"
+    assert (new.stat().st_mode & 0o777) == 0o700
+    # Nothing left to adopt is not an error.
+    assert adopt_legacy_workdir(new, tmp_path / "absent") == ([], [])
