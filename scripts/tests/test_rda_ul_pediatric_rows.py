@@ -310,3 +310,26 @@ def test_child_exposure_is_summed_across_forms_of_one_nutrient(enricher):
     [note] = rda["child_ul_screen"]
     assert note["status"] == "over_limit" and note["amount"] == 16 and note["ul"] == 12
     assert note["aggregation"] == "canonical_sum" and len(note["contributing_rows"]) == 2
+
+
+def test_child_nickel_sum_preserves_qualified_soluble_form(enricher):
+    # Each known soluble-salt row exceeds the1-3 UL. Adding another real exposure
+    # must not erase the concern when the aggregated comparison loses its form.
+    rows = [{**_row('Nickel', 'nickel', 0.3), 'matched_form': 'nickel sulfate',
+             'raw_source_path': f'ingredientRows[{i}]'} for i in range(2)]
+    product = {'id':'child-nickel-sum','fullName':'Kids Nickel',
+               'targetGroups':['Children 1-3 Years'], 'activeIngredients':rows,
+               'inactiveIngredients':[], 'servingSizes':[{'minDailyServings':1,'maxDailyServings':1}]}
+    enriched, errors = enricher.enrich_product(product)
+    assert not errors
+    [note] = enriched['rda_ul_data']['child_ul_screen']
+    assert note['status'] == 'over_limit'
+    assert note['amount'] == pytest.approx(0.6)
+    assert note['ul'] == pytest.approx(0.2)
+    assert note['pct_ul'] == pytest.approx(300)
+
+
+def test_child_note_unresolved_comparison_remains_explicit(enricher):
+    note = enricher._child_ul_note('Nickel', 'Nickel', 'nickel', ('1-3',), amount=0.3, unit='mg')
+    assert note is not None
+    assert note['status'] == 'not_assessable'

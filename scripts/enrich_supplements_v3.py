@@ -21784,6 +21784,8 @@ class SupplementEnricherV3:
             }
         if result.ul_population.get("reference_gap"):
             return {**note, "status": "not_assessable", "reason": result.ul_population["reference_gap"]}
+        if result.ul_status != "established" or result.pct_ul is None:
+            return {**note, "status": "not_assessable", "reason": "ul_exposure_unresolved"}
         return None
 
     def _collect_rda_ul_data(
@@ -23387,6 +23389,7 @@ class SupplementEnricherV3:
                             _row_canonical,
                             {
                                 "std_name": std_name,
+                                "form_name": matched_form,
                                 "unit": ul_unit,
                                 "total_amount": 0.0,
                                 "rows": [],
@@ -23721,7 +23724,6 @@ class SupplementEnricherV3:
                     for cid, group in _per_canonical_totals.items():
                         if group.get("incompatible_units") or len(group["rows"]) < 2:
                             continue
-                        _child_summed.add(cid)
                         unresolved = next((
                             row.get("ul_gate_ineligible_reason") or "ul_exposure_unresolved"
                             for row in group["rows"] if row.get("ul_gate_eligible") is not True
@@ -23729,8 +23731,11 @@ class SupplementEnricherV3:
                         summed = self._child_ul_note(
                             group["std_name"], group["std_name"], cid, pediatric_age_groups,
                             amount=None if unresolved else group["total_amount"], unit=group["unit"],
-                            unresolved_reason=unresolved,
+                            form_name=group["form_name"], unresolved_reason=unresolved,
                         )
+                        # An unresolved sum cannot erase a known row exceedance.
+                        if summed is None or summed.get("status") == "over_limit":
+                            _child_summed.add(cid)
                         if summed:
                             if summed.get("warning"):
                                 summed["warning"] = f"Across {len(group['rows'])} forms, " + summed["warning"]
