@@ -73,6 +73,7 @@ def test_row_naming_an_allergen_source_is_flagged(enricher, name, forms, expecte
     ("Xylitol", ("Wheat",)),
     ("Mustard Greens", ()),
     ("Rye Flower Pollen Extract", ()),
+    ("Rye flower (Secale cereale) extract", ()),  # 187515: the Latin synonym is the same phrase
     ("Graminex Flower Pollen Extract", ("Rye",)),
     ("Highly Refined Fish Oil", ()),
     ("Eggplant", ()),
@@ -104,3 +105,59 @@ def test_negative_terms_never_veto_an_entry_alias():
             assert not negative_match_terms_veto([alias], terms), (entry["id"], alias)
         # The fish-oil note used to promise a cross-reference that never existed.
         assert "allergen cross-reference" not in entry.get("notes", "")
+
+
+def _hits(enricher, name, forms=()):
+    product = {"id": "99990", "fullName": "Test", "statements": [],
+               "activeIngredients": [{"name": name, "forms": [{"name": f} for f in forms]}],
+               "inactiveIngredients": []}
+    return enricher._collect_contaminant_data(product)["allergens"]["allergens"]
+
+
+# Audit of PR #182 (2026-10-19): a veto on any text of the row dropped a real
+# allergen named by a sibling text, or by another span of the same text.
+@pytest.mark.parametrize("name,forms,expected", [
+    ("Protein Blend", ("Whey Protein Concentrate", "Coconut Milk Powder"), "ALLERGEN_MILK"),
+    ("Herbal Blend", ("Milk Thistle", "Nonfat Dry Milk"), "ALLERGEN_MILK"),
+    ("Oil Blend", ("Wheat Germ", "Highly Refined Soybean Oil"), "ALLERGEN_WHEAT"),
+    ("Excipients", ("Mannitol", "Wheat Flour"), "ALLERGEN_WHEAT"),
+    ("Enzyme Blend", ("Dairy Digestive Enzymes", "Casein"), "ALLERGEN_MILK"),
+    ("Coconut Milk & Whey Protein", (), "ALLERGEN_MILK"),
+])
+def test_a_veto_never_drops_a_sibling_allergen(enricher, name, forms, expected):
+    assert expected in _allergen_ids(enricher, name, forms)
+
+
+def test_highly_refined_veto_stays_on_its_own_text(enricher):
+    assert "ALLERGEN_SOY" not in _allergen_ids(enricher, "Oil Blend", ("Wheat Germ", "Highly Refined Soybean Oil"))
+
+
+@pytest.mark.parametrize("name,forms,absent", [
+    ("Non-Dairy Creamer", (), "ALLERGEN_MILK"),
+    ("Soy-Free Lecithin Blend", (), "ALLERGEN_SOY"),
+    ("Dairy Free Chocolate", (), "ALLERGEN_MILK"),
+    ("Wheat-Free Fiber", (), "ALLERGEN_WHEAT"),
+    ("Gluten-Free Oat Fiber", (), "ALLERGEN_WHEAT"),
+    ("Flavor (contains no milk)", (), "ALLERGEN_MILK"),
+    ("Fish-free Omega Blend", (), "ALLERGEN_FISH"),
+    ("Egg-free Binder", (), "ALLERGEN_EGGS"),
+])
+def test_negated_allergen_wording_is_not_flagged(enricher, name, forms, absent):
+    assert absent not in _allergen_ids(enricher, name, forms)
+
+
+@pytest.mark.parametrize("name,expected", [
+    ("Non-Fat Dry Milk", "ALLERGEN_MILK"),
+    ("rBST Free Whey Protein", "ALLERGEN_MILK"),
+    ("Mercury-Free Tuna Fish Oil", "ALLERGEN_FISH"),
+    ("Gluten-Free Oat Fiber", "ALLERGEN_OATS"),
+])
+def test_unrelated_free_or_non_wording_still_flags(enricher, name, expected):
+    assert expected in _allergen_ids(enricher, name)
+
+
+def test_form_only_match_names_the_form_in_its_evidence(enricher):
+    hit = next(h for h in _hits(enricher, "Eicosapentaenoic Acid", ("Fish Oil",))
+               if h["allergen_id"] == "ALLERGEN_FISH")
+    assert hit["evidence"] == "Ingredient: Eicosapentaenoic Acid (from Fish Oil)"
+    assert hit["matched_text"] == "Eicosapentaenoic Acid"
