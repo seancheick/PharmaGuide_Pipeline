@@ -3192,3 +3192,38 @@ def test_excluded_nutrition_row_cannot_remain_scored_in_display_ledger(enricher)
     assert row["display_disposition"] == "label_context"
     assert row["is_label_context"] is True
     assert row["form_display_state"] == "not_applicable"
+
+
+def test_excipient_partial_recognition_is_specific_and_seed_independent():
+    import os
+    import subprocess
+
+    script = """
+import json, logging, sys
+logging.disable(logging.CRITICAL)
+sys.path.insert(0, 'scripts')
+from enrich_supplements_v3 import SupplementEnricherV3
+reader = SupplementEnricherV3()
+names = ['Melon Fruit Juice Concentrate',
+         'organic Holimel French Cantaloupe Melon fruit juice concentrate']
+print(json.dumps([reader._is_recognized_non_scorable(name, '') for name in names]))
+"""
+    outputs = []
+    for seed in ("0", "2", "42"):
+        result = subprocess.run(
+            [sys.executable, "-c", script], cwd=Path(__file__).resolve().parents[2],
+            env={**os.environ, "PYTHONHASHSEED": seed}, capture_output=True, text=True,
+            check=True, timeout=60,
+        )
+        outputs.append(json.loads(result.stdout))
+    assert outputs[0] == outputs[1] == outputs[2]
+    for result in outputs[0]:
+        assert result["matched_entry_name"] == "fruit juice concentrate"
+        assert result["recognition_reason"] == "known_excipient_partial"
+        assert result["recognition_type"] == "non_scorable"
+
+
+def test_excipient_partial_recognition_breaks_equal_length_ties_lexically(enricher, monkeypatch):
+    monkeypatch.setattr("enrich_supplements_v3.EXCIPIENT_NEVER_PROMOTE", ["gamma gum", "alpha gum"])
+    result = enricher._is_recognized_non_scorable("alpha gum and gamma gum", "")
+    assert result["matched_entry_name"] == "alpha gum"
