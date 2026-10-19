@@ -56,6 +56,18 @@ def _child_uls(record: dict) -> dict:
     ("magnesium", (65, 110, 350)),
     ("fluoride", (1.3, 2.2, 10)),
     ("chloride", (2300, 2900, 3400)),
+    ("vitamin_e", (200, 300, 600)),
+    ("niacin", (10, 15, 20)),
+    ("vitamin_b6", (30, 40, 60)),
+    ("boron", (3, 6, 11)),
+    ("copper", (1000, 3000, 5000)),
+    ("iodine", (200, 300, 600)),
+    ("iron", (40, 40, 40)),
+    ("manganese", (2, 3, 6)),
+    ("molybdenum", (300, 600, 1100)),
+    ("nickel", (0.2, 0.3, 0.6)),
+    ("phosphorus", (3000, 3000, 4000)),
+    ("selenium", (90, 150, 280)),
 ])
 def test_child_ul_rows_match_the_nasem_tables(records, nutrient, expected):
     uls = _child_uls(records[nutrient])
@@ -95,6 +107,12 @@ def test_every_established_ul_has_child_rows_except_vanadium(records):
     (["Children 14-18 Years"], ("14-18",)),
     (["Children under 14 years"], ("0-1", "1-3", "4-8", "9-13")),
     (["Adult (18 - 50 Years)", "Gluten Free"], None),
+    # Ages stated in months keep the infant age (review finding, 2026-10-19).
+    (["Children 6 months to 3 years"], ("0-1", "1-3")),
+    (["Children 6-36 months"], ("0-1", "1-3")),
+    ([{"text": "Children more than 1 but less than 4"}], ("1-3",)),
+    # A child tag whose ages match no NASEM band cannot be placed: it is unresolved, never "no ages".
+    (["Children 20-30 years"], ("unresolved",)),
 ])
 def test_label_pediatric_age_ranges_cover_every_dsld_child_tag(enricher, groups, expected):
     product = {"targetGroups": groups}
@@ -119,6 +137,24 @@ def test_infant_coverage_keeps_the_reference_gap(calculator):
     assert result.ul == 2500
     assert result.ul_population["reference_gap"] == GAP
     assert result.ul_population["missing_age_ranges"] == ["0-1"]
+
+
+@pytest.mark.parametrize("ages", [(), ("unresolved",)])
+def test_unplaceable_child_ages_are_a_gap_not_no_limit(calculator, ages):
+    # An established-UL nutrient on a child label must never read as "no UL applies".
+    result = calculator.compute_nutrient_adequacy(
+        "Vitamin A", 5000.0, "mcg RAE", sex="adult_neutral", ul_population=("pediatric",),
+        pediatric_age_groups=ages)
+    assert result.ul is None
+    assert result.ul_population["reference_gap"] == GAP
+
+
+def test_non_contiguous_child_ages_are_named_exactly(calculator):
+    result = calculator.compute_nutrient_adequacy(
+        "Iron", 50.0, "mg", sex="adult_neutral", ul_population="pediatric",
+        pediatric_age_groups=("1-3", "9-13"))
+    assert result.ul == 40
+    assert result.ul_population["label"] == "children 1-3 and 9-13"
 
 
 def test_vanadium_child_label_keeps_the_reference_gap(calculator, records):

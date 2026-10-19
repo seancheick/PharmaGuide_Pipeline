@@ -176,6 +176,15 @@ def _pediatric_years(tag: str) -> Tuple[int, int]:
     """The [lower, upper) years of age one pediatric DSLD target group states."""
     if "infant" in tag or "baby" in tag:
         return 0, 1
+    if "month" in tag:
+        # Ages stated in months ("6-36 months", "6 months to 3 years"): the lowest stated month
+        # places the start, so an age under 12 months keeps the infant band.
+        months = [int(value) for pair in re.findall(r"(\d+)\s*(?:[-–—]\s*(\d+)\s*)?months?", tag)
+                  for value in pair if value]
+        years = re.search(r"(\d+)\s*(?:years?|yrs?)", tag)
+        if months:
+            high = int(years.group(1)) + 1 if years else max(months) // 12 + 1
+            return min(months) // 12, high
     between = re.search(r"more than\s*(\d+)\s*but less than\s*(\d+)", tag)
     if between:
         return int(between.group(1)), int(between.group(2))
@@ -205,19 +214,30 @@ def label_pediatric_age_ranges(product: Dict) -> Optional[Tuple[str, ...]]:
             continue
         pediatric = True
         low, high = _pediatric_years(tag)
+        # A child tag whose ages match no NASEM band cannot be placed: it stays unresolved, so
+        # the screen keeps a reference gap instead of reading "no ages" as "no limit".
         covered |= {age for age, band_low, band_high in PEDIATRIC_AGE_BANDS
-                    if band_low < high and low < band_high}
+                    if band_low < high and low < band_high} or {"unresolved"}
     if not pediatric:
         return None
-    return tuple(age for age, _, _ in PEDIATRIC_AGE_BANDS if age in covered)
+    ordered = tuple(age for age, _, _ in PEDIATRIC_AGE_BANDS if age in covered)
+    return ordered + (("unresolved",) if "unresolved" in covered else ())
 
 
 def _pediatric_age_label(ages: Sequence[str]) -> str:
-    bands = [band for band in PEDIATRIC_AGE_BANDS if band[0] in ages]
-    low, high = bands[0][1], bands[-1][2] - 1
-    if low >= 14:
+    """Name the child ages whose limit applies; separate runs are named separately."""
+    indexes = [index for index, band in enumerate(PEDIATRIC_AGE_BANDS) if band[0] in ages]
+    runs: List[List[int]] = []
+    for index in indexes:
+        if runs and index == runs[-1][-1] + 1:
+            runs[-1].append(index)
+        else:
+            runs.append([index])
+    if PEDIATRIC_AGE_BANDS[indexes[0]][1] >= 14:
         return "adolescents 14-18"
-    return f"{'children' if high <= 13 else 'children and adolescents'} {low}-{high}"
+    who = "children" if PEDIATRIC_AGE_BANDS[indexes[-1]][2] - 1 <= 13 else "children and adolescents"
+    spans = [f"{PEDIATRIC_AGE_BANDS[run[0]][1]}-{PEDIATRIC_AGE_BANDS[run[-1]][2] - 1}" for run in runs]
+    return f"{who} {' and '.join(spans)}"
 
 
 def ul_exceedance_sentence(amount: float, ul: float, unit: str, scope_label: str = "general adult") -> str:
@@ -805,7 +825,7 @@ class RDAULCalculator:
         """Lowest established UL across every listed screening population, and its scope."""
         members = sorted({population} if isinstance(population, str) else set(population))
         pediatric_ages = (tuple(pediatric_age_groups) if pediatric_age_groups is not None
-                          else _BROAD_PEDIATRIC_AGES)
+                          else _BROAD_PEDIATRIC_AGES) or ("unresolved",)
         rows_by_member = {member: [
             row for row in nutrient_data.get("data", [])
             if row.get("group") in UL_SCREENING_POPULATIONS[member]["groups"]
