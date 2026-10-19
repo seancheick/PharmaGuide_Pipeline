@@ -228,14 +228,14 @@ def render(ctx: shell.PageContext) -> None:
     kpis([
         ("Score", "—" if pd.isna(row.get("total")) else f"{row['total']:.1f} / 100",
          "Sum of the six pillars as recorded by the scorer"),
-        ("Tier", row.get("tier") or "—", "Quality tier — never a safety verdict"),
+        ("Tier", _clean(row.get("tier")) or "—", "Quality tier — never a safety verdict"),
         ("Safety", human(safety), "product_safety_status: consumer safety, separate from quality"),
         ("Assessment", human(row.get("quality_assessment_status")), "Partial means PharmaGuide's own review is unfinished"),
         ("Confidence", human(row.get("confidence")), "Score confidence band"),
     ])
     if row.get("quality_score_status") != "scored":
-        reasons = [row.get(k) for k in ("blocking_reason", "suppressed_reason", "score_unavailable_reason",
-                                        "not_scorable_reason", "safety_signal_reason") if row.get(k)]
+        reasons = [_clean(row.get(k)) for k in ("blocking_reason", "suppressed_reason", "score_unavailable_reason",
+                                               "not_scorable_reason", "safety_signal_reason") if _clean(row.get(k))]
         st.warning(f"{human(row.get('quality_score_status'))}: {' · '.join(map(str, dict.fromkeys(reasons))) or 'no reason recorded'}",
                    icon=":material/block:")
 
