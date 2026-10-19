@@ -115,6 +115,7 @@ from scoring_input_contract import (
     is_nutrition_fact_declaration,
     get_scoring_ingredients,
     normalize_product_evidence_scope,
+    scoring_input_scope,
     source_linked_rows,
     _positive_quantity,
 )
@@ -1217,8 +1218,12 @@ class SupplementEnricherV3:
 
         # A provider failure fails the product (enrich_product records it);
         # falling back to raw actives would silently change Evidence.
-        subject_rows = get_evidence_subject_rows(contract_product)
-        owners = evidence_owner_canonicals(contract_product)
+        # Both providers (and the route classification inside them) read
+        # this one local copy, which nothing mutates in between, so the
+        # scoring contract is built once here instead of ~16 times.
+        with scoring_input_scope(contract_product):
+            subject_rows = get_evidence_subject_rows(contract_product)
+            owners = evidence_owner_canonicals(contract_product)
         covered = {
             str(row.get("canonical_id") or "").strip().lower()
             for row in ingredients
