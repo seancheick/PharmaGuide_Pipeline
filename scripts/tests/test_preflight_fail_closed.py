@@ -1011,7 +1011,13 @@ def test_scoring_evidence_checks_follow_source_and_artifact_owners():
     artifact_tests = [n.name for n in ast.parse(artifact.read_text()).body
                       if isinstance(n, ast.FunctionDef) and n.name.startswith('test_')]
     assert artifact_tests
-    assert all(preparation_phase(artifact.name, name)[0] == 'artifact' for name in artifact_tests)
+    lookup_test = 'test_product_lookup_does_not_decode_unrelated_corpus_batches'
+    assert lookup_test in artifact_tests
+    # This new helper regression builds its own tiny inputs. The seven real-
+    # product checks still require generated artifacts; none is reclassified.
+    assert preparation_phase(artifact.name, lookup_test)[0] == 'source'
+    assert all(preparation_phase(artifact.name, name)[0] == 'artifact'
+               for name in artifact_tests if name != lookup_test)
     assert preparation_phase(source.name, 'test_galu_enzyme_activity_reaches_v4_as_non_mass_dose_evidence')[0] == 'source'
 
 

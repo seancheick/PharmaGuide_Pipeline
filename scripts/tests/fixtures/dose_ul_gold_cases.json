@@ -1288,7 +1288,7 @@
      "unit": "mg"
     }
    },
-   "basis": "800 IU per 1 softgel; label range 1–2 softgels daily gives a maximum of 1,600 IU. Form unstated: the conservative all-stereoisomer bound 0.90 mg/IU = 1,440 mg exceeds the adult 1,000 mg UL, so it cannot establish a within-limit screen. Exact form-dependent exposure and UL verdict remain indeterminate; over_ul=false is not a within-limit finding."
+   "basis": "800 IU per 1 softgel; label range 1\u20132 softgels daily gives a maximum of 1,600 IU. Form unstated: the conservative all-stereoisomer bound 0.90 mg/IU = 1,440 mg exceeds the adult 1,000 mg UL, so it cannot establish a within-limit screen. Exact form-dependent exposure and UL verdict remain indeterminate; over_ul=false is not a within-limit finding."
   },
   {
    "id": "e-d-alpha-671mg",
@@ -2395,7 +2395,7 @@
     "safety_per_day": 1667,
     "over_ul": false
    },
-   "basis": "1,667 mcg DFE = 1,000 mcg folic acid = UL"
+   "basis": "The source quantity is printed1667mcgDFE, below the canonical1700labelDFE UL. This fixture has no separate native quantity row; do not infer a second1000mcg amount from the product title. Exact native1000mcg boundary is independently pinned in test_rda_ul_pediatric_rows.py."
   },
   {
    "id": "folate-folic-acid-800mcg",
@@ -2587,10 +2587,10 @@
    },
    "expect": {
     "canonical_id": "vitamin_b9_folate",
-    "safety_per_day": 1333,
+    "safety_per_day": 1360,
     "over_ul": false
    },
-   "basis": "1,333 mcg DFE = 800 mcg folic acid < 1,000"
+   "basis": "Printed1333mcgDFE owns adequacy; linked native800mcg folic acid owns safety:800x1.7=1360mcgDFE, below the unchanged native1000mcg UL (1700labelDFE). NIH ODS Folate Sources and UL table; no printed input quantity changed."
   },
   {
    "id": "niacin-1000mg-over",
