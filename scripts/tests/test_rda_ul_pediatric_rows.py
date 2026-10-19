@@ -380,16 +380,27 @@ def test_linked_folic_acid_component_is_not_added_to_child_label_total(enricher)
 
 @pytest.mark.parametrize('name',['Folate','Folic Acid'])
 @pytest.mark.parametrize('native,dfe,cap',[(1000,1667,None),(1001,1668,10),(1500,2500,0)])
-def test_printed_native_folic_acid_controls_ul_without_changing_adequacy(enricher,native,dfe,cap,name):
+@pytest.mark.parametrize('native_text', ['{native} mcg folic acid', 'folic acid {native} mcg',
+                                         'folic acid ({native} mcg)'])
+def test_printed_native_folic_acid_controls_ul_without_changing_adequacy(enricher,native,dfe,cap,name,native_text):
     from scoring_v4.dose_safety import evaluate_dose_safety
     parent={**_row(name,'vitamin_b9_folate',dfe,'mcg DFE'),
-            'raw_source_text':f'Folate {dfe} mcg DFE ({native} mcg folic acid)'}
+            'raw_source_text':f'Folate {dfe} mcg DFE ({native_text.format(native=native)})'}
     rda=_collect(enricher,['Adult (18 - 50 Years)'],parent)
     row=_adequacy(rda,'vitamin_b9_folate')
     assert row['adequacy_exposure']['per_day'] == dfe
     assert row['safety_exposure']['per_day'] == pytest.approx(native * 1.7)
     ceiling=evaluate_dose_safety({'rda_ul_data':rda}).dose_ceiling()
     assert (ceiling['cap_public'] if ceiling else None) == cap
+
+
+def test_folic_acid_name_before_dfe_amount_does_not_make_it_native(enricher):
+    parent={**_row('Folate','vitamin_b9_folate',1668,'mcg DFE'),
+            'raw_source_text':'Folate (folic acid 1668 mcg DFE)'}
+    rda=_collect(enricher,['Adult (18 - 50 Years)'],parent)
+    row=_adequacy(rda,'vitamin_b9_folate')
+    assert row['safety_exposure']['per_day'] == 1668
+    assert row['over_ul'] is False
 
 
 def test_folate_native_child_retains_real_adult_ceiling(enricher):

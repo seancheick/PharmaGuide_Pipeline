@@ -21032,6 +21032,7 @@ class SupplementEnricherV3:
                 totals.append(
                     {
                         "source_label_key": self._rda_source_label_key(ingredient),
+                        "source_path": str(ingredient.get("raw_source_path") or ""),
                         "quantity": (
                             quantity * 1000.0
                             if mass_unit == "mg"
@@ -21066,6 +21067,10 @@ class SupplementEnricherV3:
             # never a food/blend mass or a DFE amount inferred as folic acid.
             text = str(parent.get("raw_source_text") or parent.get("name") or "")
             native = re.findall(r"(?<![\w.])([\d,]+(?:\.\d+)?)\s*(mcg|ug|[µμ]g|mg)\s+(?:of\s+)?folic\s+acid\b", text, re.IGNORECASE)
+            native += re.findall(
+                r"\bfolic\s+acid\s*[:=]?\s*\(?\s*([\d,]+(?:\.\d+)?)\s*(mcg|ug|[µμ]g|mg)\b(?!\s*DFE\b)",
+                text, re.IGNORECASE,
+            )
             masses = {float(value.replace(",", "")) * (1000 if unit.lower() == "mg" else 1)
                       for value, unit in native}
             if len(masses) == 1 and next(iter(masses)) > 0:
@@ -21674,6 +21679,14 @@ class SupplementEnricherV3:
             return lineage
 
         for declared in declared_folate_totals:
+            source_path = str(ingredient.get("raw_source_path") or "")
+            parent_path = declared.get("source_path") or ""
+            if (source_path and parent_path and source_path != parent_path
+                    and not source_path.startswith(parent_path + ".nestedRows[")):
+                # Equal converted amounts cannot override distinct label rows.
+                # Keep the compatibility fallback only for unqualified legacy
+                # rows or two views of this exact source declaration.
+                continue
             declared_amount = float(declared["quantity"])
             tolerance = max(0.5, declared_amount * 0.025)
             if abs(converted_amount - declared_amount) <= tolerance:

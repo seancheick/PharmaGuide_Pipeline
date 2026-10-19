@@ -66,3 +66,36 @@ def test_declared_folate_dfe_total_marks_matching_mthf_conversion_as_component(
     assert component["skip_ul_reason"] == "form_component_of_declared_total"
     assert result["reference_data_version"] == "5.1.6-2026-10-19-folate-ul-label-units"
     assert result["reference_data_fingerprint"].startswith("sha256:")
+
+
+@pytest.mark.parametrize("parent_name", ["Folate", "Folic Acid"])
+def test_independent_top_level_folate_sources_are_not_numeric_components(enricher, parent_name):
+    result = enricher._collect_rda_ul_data(
+        {"activeIngredients": [
+            {"name": parent_name, "standardName": "Folate", "canonical_id": "vitamin_b9_folate", "quantity": 1020,
+             "unit": "mcg DFE", "raw_source_path": "ingredientRows[0]"},
+            {"name": "L-5-MTHF", "standardName": "Folate", "canonical_id": "vitamin_b9_folate", "quantity": 600,
+             "unit": "mcg", "raw_source_path": "ingredientRows[1]"},
+        ], "inactiveIngredients": []}, min_servings_per_day=1, max_servings_per_day=1,
+    )
+    assert len(result["analyzed_ingredients"]) == 2
+    for row in result["analyzed_ingredients"]:
+        assert row["dose_role"] == "declared_total"
+        assert row["parent_label_key"] is None
+        assert row["per_day_max"] == pytest.approx(1020)
+
+
+def test_linked_folate_form_with_source_paths_still_is_a_component(enricher):
+    result = enricher._collect_rda_ul_data(
+        {"activeIngredients": [
+            {"name": "Folate", "standardName": "Folate", "canonical_id": "vitamin_b9_folate", "quantity": 1020,
+             "unit": "mcg DFE", "raw_source_path": "ingredientRows[0]"},
+            {"name": "L-5-MTHF", "standardName": "Folate", "canonical_id": "vitamin_b9_folate", "quantity": 600,
+             "unit": "mcg", "raw_source_path": "ingredientRows[0].nestedRows[0]",
+             "isNestedIngredient": True, "parentBlend": "Folate"},
+        ], "inactiveIngredients": []}, min_servings_per_day=1, max_servings_per_day=1,
+    )
+    parent, component = result["analyzed_ingredients"]
+    assert parent["dose_role"] == "declared_total"
+    assert component["dose_role"] == "form_component"
+    assert component["parent_label_key"] == parent["source_label_key"]
