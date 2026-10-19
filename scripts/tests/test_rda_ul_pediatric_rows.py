@@ -333,3 +333,18 @@ def test_child_note_unresolved_comparison_remains_explicit(enricher):
     note = enricher._child_ul_note('Nickel', 'Nickel', 'nickel', ('1-3',), amount=0.3, unit='mg')
     assert note is not None
     assert note['status'] == 'not_assessable'
+
+
+@pytest.mark.parametrize('tag', ['Kids 4-8 Years', 'Children 4-8 Years'])
+def test_child_note_ages_honor_every_recognized_child_tag(enricher, tag):
+    rda = enricher._collect_rda_ul_data({'fullName':'Kids Multivitamin','targetGroups':[tag],
+        'activeIngredients':[_row('Zinc','zinc',8)],'inactiveIngredients':[]}, min_servings_per_day=1,max_servings_per_day=1)
+    assert rda['child_ul_screen'] == []
+
+
+def test_baby_tag_without_infant_word_keeps_infant_gap(enricher):
+    rda = enricher._collect_rda_ul_data({'fullName':'Kids Minerals','targetGroups':['Baby (0-1 Year)'],
+        'activeIngredients':[_row('Zinc','zinc',8)],'inactiveIngredients':[]}, min_servings_per_day=1,max_servings_per_day=1)
+    [note] = rda['child_ul_screen']
+    assert note['status'] == 'not_assessable'
+    assert note['ul_population']['missing_age_ranges'] == ['0-1']

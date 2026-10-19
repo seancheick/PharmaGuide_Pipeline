@@ -219,7 +219,8 @@ def label_pediatric_age_ranges(product: Dict) -> Optional[Tuple[str, ...]]:
     pediatric = False
     for group in product.get("targetGroups") or []:
         tag = _target_group_text(group)
-        if not any(word in tag for word in _PEDIATRIC_WORDS):
+        if not (any(word in tag for word in _PEDIATRIC_WORDS)
+                or _CHILD_PRODUCT_WORDS.search(_canonical_label_text(tag))):
             continue
         pediatric = True
         low, high = _pediatric_years(tag)
