@@ -146,7 +146,7 @@ def test_caers_page_states_v4_applies_no_caers_penalty(dashboard_app, monkeypatc
         caers_metadata={"total_supplement_reports_analyzed": 100},
     )
 
-    dashboard_app.views.render_audit_caers(data)
+    dashboard_app.view("audit_caers").render_audit_caers(data)
 
     assert "Scoring Status" in tab_labels and "B8 Scoring Impact" not in tab_labels
     texts = _texts(st)
@@ -165,7 +165,7 @@ def test_page_meta_names_the_v4_config_files(dashboard_app, tmp_path):
     registry_files = {str(p.resolve()) for p in config_registry._PROVENANCE_CONFIGS.values()}
     assert registry_files <= set(sources)
 
-    caers = dashboard_app.get_page_meta("caers-audit", data)
+    caers = dashboard_app.get_page_meta("safety-regulatory", data)
     claims = " ".join([caers["page_summary"], *caers["usage_notes"]])
     assert "scoring impact" not in claims.lower()
     assert "penalties affect" not in claims

@@ -1,100 +1,105 @@
-# PharmaGuide Pipeline Dashboard
+# PharmaGuide Quality Control Dashboard
 
-Internal read-only Streamlit dashboard for inspecting the PharmaGuide export, pipeline health, data quality, release diffs, observability, and intelligence views.
-
-The refreshed UI is organized as an executive analytics workspace with:
-
-- a `Command Center` landing page
-- grouped navigation by workflow
-- human-readable timestamps
-- clear page-level source and freshness context
+An internal, read-only Streamlit app for tracing every v4 score point by point,
+filtering the catalog by any pillar, state or receipt line, catching anomalies, and
+reviewing a candidate run against the release. The dashboard **never computes a
+score**. It projects what the scorer already recorded:
+- the per-pillar receipts in `quality_pillars_v4.<pillar>.receipt`;
+- the gates;
+- the dose-safety evaluation.
 
 ## Run
 
-Run commands from the repository root:
+From the repository root (the theme lives in `.streamlit/config.toml`):
 
 ```bash
-cd /Users/seancheick/Downloads/dsld_clean
+python -m scripts.dashboard.score_index refresh
 streamlit run scripts/dashboard/app.py
 ```
 
-Optional explicit paths:
+Optional explicit paths (the same flags work for both commands):
 
 ```bash
-streamlit run scripts/dashboard/app.py -- \
-  --scan-dir scripts/products \
-  --build-root scripts/dist
+streamlit run scripts/dashboard/app.py -- --scan-dir scripts/products --build-root scripts/dist
 ```
 
-The `Clinical Copy` view compares pipeline data files with the app's
-`assets/reference_data` copies. Point it at the Flutter checkout the same way the
-release scripts are pointed: `FLUTTER_REPO=/path/to/app` in the environment, or
-`-- --flutter-repo /path/to/app`. Without either, the view reports the Flutter asset
-schema check as not configured instead of comparing. The comparison requires the
-banned/recalled, medication depletion and synergy assets used by the app's
-`ReferenceDataRepository`; missing or unreadable copies are reported as unavailable.
-Other displayed sources are not bundled unless an optional copy exists. A matching
-schema version does not establish content parity or release readiness.
+The Clinical Copy tab (Safety & Regulatory) compares pipeline data files with the
+Flutter app's `assets/reference_data`. Pass `FLUTTER_REPO=/path/to/app` or
+`-- --flutter-repo /path/to/app`.
 
-Open a specific view directly after launch with `?view=`:
+## The index (`score_index.py`)
 
-- `command-center`
-- `product-inspector`
-- `pipeline-health`
-- `data-quality`
-- `pillar-audit`
-- `observability`
-- `release-diff`
-- `batch-diff`
-- `intelligence`
+Pages read a small Parquet index under the gitignored `scripts/.cache/dashboard/`, never
+the source JSON. Nothing in the pipeline or the release runs it.
 
-## Inputs
+| Command | What it does |
+|---|---|
+| `refresh` | Re-reads only what changed: scored batches whose stage-manifest hashes moved, and release blobs whose `detail_blob_sha256` moved. Cold build ~1–2 min, incremental seconds. |
+| `backfill DB…` | Adds older `pharmaguide_core.db` catalogs as pillar-totals-only history. |
+| `status` | Prints the current build, freshness and runs. |
+| `gc` | Removes old builds; the current build and its predecessor are kept. |
 
-The dashboard reads existing pipeline artifacts only.
+How refresh behaves:
+- Each refresh writes a new immutable build, validates it, then atomically swaps
+  `current.json`. A failed refresh keeps the last good build and records the error in
+  `status.json`.
+- Pages show a stale banner and a **Refresh index** button when sources change.
 
-- Release artifacts from `scripts/dist/`
-  - `pharmaguide_core.db`
-  - `export_manifest.json`
-  - `export_audit_report.json` (optional)
-  - `detail_index.json` (optional)
-  - `detail_blobs/*.json` (optional)
-- Dataset and batch artifacts from `scripts/products/` (if present)
-  - `output_*/`
-  - `logs/processing_state.json`
-  - `logs/batch_*_log.txt`
+Planes:
 
-Important: the dashboard intentionally blends different data planes.
+| Plane | Source | Notes |
+|---|---|---|
+| **candidate** | Scored JSON in `scripts/products/output_*_scored/scored/` | Readable right after scoring; not yet published. |
+| **release** | `scripts/dist/pharmaguide_core.db` plus blobs | What ships. The total is whole-number by contract. |
+| **backfill** | Older catalogs | Pillar totals only; movements show deltas, never invented causes. |
 
-- `Release Snapshot` comes from `scripts/dist/`
-- `Pipeline Logs` come from `scripts/products/logs/`
-- `Dataset Outputs` come from `scripts/products/output_*`
+Each run records its plane, fidelity, config versions and the artifacts' stage-code and
+reference-data fingerprints. The dashboard's own git SHA is labelled as the indexer's,
+never the scorer's.
 
-Those timelines may not match. The UI now labels that explicitly per page.
+## Pages
 
-## Scoring config and CAERS
+| Group | Page | Answers |
+|---|---|---|
+| Monitor | Overview | Run health, KPIs, candidate vs release, top findings, drift |
+| Monitor | Audit Queue | Versioned findings grouped by root cause, with local triage |
+| Monitor | Run Compare & Trends | Baseline vs candidate movers and causes (`replay.reason_codes`), history |
+| Audit | Product Explorer | Every product, six pillar bars, any filter, saved audit views |
+| Audit | Product Trace | 100-point composition, per-pillar ledgers (nominal / realized / absorbed), gates, dose references, timeline, explain JSON |
+| Audit | Score Lab | Distributions, rule impact, neutral usage, deductions and floors, caps, threshold cliffs, peer percentile (context only) |
+| Audit | Coverage & Calibration | The config's calibration records, assessment coverage, golden set |
+| Intelligence | Market Intelligence | Brand leaderboard (complete products, minimum counts), categories, verification, additives |
+| Intelligence | Safety & Regulatory | Blocked/suppressed with reasons, caution signals, upper-limit findings, CAERS, safety copy |
+| Operations | Data Quality, Release & Ops | Pipeline health, data quality, batch diff, index status |
 
-- The `Config Snapshot` tab of `Data Quality` shows the production v4 config: the
-  version and fingerprint of `scripts/scoring_v4/config/quality_score.json` and
-  `scripts/data/omega_rubric.json` from `scoring_v4/config_registry.py`, the
-  pillar maxima, and whether the released catalog was scored with the same
-  config (`products_core.v4_config_fingerprint`).
-- `CAERS Audit` is analytics only. The v4 score applies no CAERS penalty; the
-  v3 B8 penalty was disabled on 2026-04-30 and removed on 2026-06-24, and the
-  `Scoring Status` tab records why.
-- No view reads the retired v3 file `scripts/config/scoring_config.json`.
+Old `?view=` links redirect to the page that replaced them (`navigation.py`).
 
-## Verification
+## Findings vs audit states
 
-Primary dashboard verification:
+- **Audit states** are Product Explorer saved views (`saved_views.py`) and are not
+  findings. Examples: Evidence 0, a neutral Dose, Verification neutral 6, Formula
+  checks below 10, unrated forms.
+- **Findings** are rules in `findings_rules.py`. Each has an id, a version, a severity
+  and a policy citation. They cover:
+  - receipt or pillar reconciliation;
+  - penalties outside their registered pillar;
+  - repeated Dose ceilings;
+  - evidence gaps shown as assessed;
+  - structured copy contradictions;
+  - calibration records that are incomplete or stale;
+  - unexplained score or safety changes.
+- **Triage** (`triage.py`) lives in `scripts/.cache/dashboard_review/triage.sqlite`.
+  - An accepted exception is scoped to the rule version and config version, so it
+    reopens when either changes.
+
+## Tests
 
 ```bash
-scripts/test.sh fast -k "dashboard or graceful_degradation or batch_run_all_datasets"
+scripts/test.sh fast scripts/tests/test_dashboard_score_index.py scripts/tests/test_dashboard_findings.py scripts/tests/test_dashboard_pages.py
 ```
 
-## Notes
-
-- The dashboard is read-only. It does not mutate the export DB or pipeline outputs.
-- Current build-history and drift features are strongest when multiple build roots are available.
-- Current dataset discovery supports both idealized report layouts and the workspace's real `output_*` / batch-log structure.
-- Manual screenshot instructions live in `scripts/dashboard/INSTRUCTIONS.md`.
-- Existing deep links still work through `?view=` and Product Inspector still supports `?dsld_id=`.
+`test_dashboard_smoke.py` and parts of `test_graceful_degradation.py` read real local
+artifacts (local rung). The guard tests in `test_dashboard_pages.py` fail if the dashboard:
+- imports a scorer executor;
+- writes outside its cache;
+- reintroduces retired v3 concepts.

@@ -5,9 +5,8 @@ Reads the current final DB plus detail blobs and writes:
   - a 100-product markdown/csv sample
   - a grouped zero-evidence audit by canonical identity
 
-The anomaly classification intentionally mirrors
-scripts.dashboard.views.scoring_integrity so the report and dashboard do not
-drift.
+Zero-pillar classification lives here (classify_zero_pillar); the dashboard's
+integrity checks are versioned findings rules in scripts/dashboard/findings_rules.py.
 """
 
 from __future__ import annotations
@@ -25,7 +24,34 @@ REPO_ROOT = Path(__file__).resolve().parents[2]
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
-from scripts.dashboard.views.scoring_integrity import classify_zero_pillar  # noqa: E402
+
+def classify_zero_pillar(pillar: str, row: dict | None = None) -> str:
+    """Stable reason bucket for a V4 pillar score of exactly 0.
+
+    Verification is the one pillar that fails open (neutral baseline), so its zero is
+    the anomaly; the other pillars can legitimately reach 0. Moved here from the retired
+    dashboard scoring-integrity view (2026-10-19); the dashboard's findings rules own the
+    integrity checks now.
+    """
+    p = str(pillar or "").strip().lower().replace("_", " ")
+    verdict = str((row or {}).get("verdict") or (row or {}).get("safety_verdict") or "").strip().upper()
+    status = str((row or {}).get("quality_score_status") or "").strip().lower()
+
+    if p == "verification":
+        return "verification_zero_anomaly"
+    if p == "evidence":
+        return "evidence_no_entry_or_unmatched"
+    if p == "dose":
+        return "dose_missing_or_below_studied_range"
+    if p == "transparency":
+        return "proprietary_blend_opacity"
+    if p in {"safety/hygiene", "safety hygiene", "safety & hygiene"}:
+        if status == "suppressed_safety" or verdict in {"BLOCKED", "UNSAFE"}:
+            return "suppressed_safety_signal"
+        return "scored_safety_signal"
+    if p == "formulation":
+        return "formulation_low_or_mapping_gap"
+    return "zero_pillar_unclassified"
 
 PILLARS = (
     ("formulation", "Formulation", 20),
