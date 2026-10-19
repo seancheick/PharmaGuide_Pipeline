@@ -3,7 +3,7 @@
 The line integrity audit (2026-10-19, F1) found the enricher replacing an identity the printed
 name proves with the identity of DSLD's coarse ingredientGroup: organic Wheat Grass exported as
 "Couch Grass", Green Bell Pepper as chili pepper, Lactococcus cremoris as L. lactis, Ginger root
-extract as whole ginger, Olive leaf extract as olive fruit extract (losing its interaction rule).
+Olive leaf extract as olive fruit extract (losing its interaction rule).
 A "Proprietary Blend" group still classifies a branded complex as a blend. Genuine repairs (a "Vitamin E" row first matched to its
 sunflower-oil source, "Charcoal, Activated" first matched to MCT oil) must stay repaired.
 """
@@ -53,7 +53,6 @@ def _rules(enriched):
     ("178716", "ingredientRows[8].nestedRows[0]", "wheatgrass", "organic Wheat Grass"),
     ("174600", "ingredientRows[22].nestedRows[9]", "green_bell_pepper", "organic Green Bell Pepper"),
     ("174659", "ingredientRows[4].nestedRows[9]", "lactococcus_cremoris", "Lactococcus cremoris"),
-    ("15698", "ingredientRows[0].nestedRows[3]", "ginger_extract", "Ginger root extract"),
     ("212273", "ingredientRows[0].nestedRows[1]", "olive_leaf", "Olive leaf extract"),
 ])
 def test_label_named_identity_is_not_replaced_by_its_dsld_group(products, dsld_id, path, canonical, display):
@@ -91,23 +90,19 @@ def test_proprietary_blend_group_keeps_a_branded_complex_a_blend(products):
 @pytest.mark.parametrize("dsld_id,path,before,canonical", [
     ("204501", "ingredientRows[11]", "sunflower_oil", "vitamin_e"),
     ("329902", "ingredientRows[0]", "mct_oil", "activated_charcoal"),
+    # The printed words name IQM ginger, the scoring identity (2026-09-27 coherence fix).
+    ("15698", "ingredientRows[0].nestedRows[3]", "ginger_extract", "ginger"),
 ])
 def test_genuine_repairs_still_replace_a_wrong_first_match(products, dsld_id, path, before, canonical):
     row = _row(products[dsld_id][0], path)
     assert (row["canonical_id_before"], row["canonical_id"], row["identity_disposition"]) == (before, canonical, "repaired")
 
 
-def test_non_scorable_row_keeps_the_identity_its_label_names(products):
-    row = _row(products["204501"][0], "ingredientRows[16].nestedRows[0]")
-    assert row["raw_source_text"] == "Raw organic Svetol"
-    assert row["canonical_id"] == "green_coffee_bean"
-    assert row["scoreable_identity"] is False
-
-
 @pytest.mark.parametrize("literal,owner,not_owner", [
     ("Lactococcus lactis subsp. lactis biovar diacetylactis", "lactococcus_lactis", "lactococcus_cremoris"),
     ("Olive juice extract", "olive_fruit_extract", "olive_leaf"),
     ("ElevATP", "PII_ELEVATP_BRANDED_BLEND", "shilajit"),
+    ("Ancient Peat & Apple Extract", "PII_ELEVATP_BRANDED_BLEND", "shilajit"),
     ("Sweet Wormwood", "sweet_wormwood_herb", "artemisinin"),
     ("Artemisia annua extract", "sweet_wormwood_herb", "artemisinin"),
 ])

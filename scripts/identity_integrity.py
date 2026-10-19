@@ -143,6 +143,14 @@ class CanonicalIdentityRegistry:
         return any(canonical_id in self.candidates_index.get(self._key(label), ())
                    for label in (value, strip_label_identity_qualifiers(str(value or ""))))
 
+    def standard_names_of(self, canonical_id: str) -> tuple[str, ...]:
+        return tuple(name for (_, cid), name in self.standard_names.items() if cid == canonical_id)
+
+    def is_role_record(self, canonical_id: str) -> bool:
+        """Held only by a role/catch-all registry (other ingredients, proprietary blends)."""
+        registries = {db for db, cid in self.standard_names if cid == canonical_id}
+        return bool(registries) and registries <= {"other_ingredients", "proprietary_blends"}
+
     def canonicalize(
         self,
         canonical_id: str,
@@ -830,6 +838,17 @@ def _source_name(
     return structured[0].value if structured else None
 
 
+def _identity_tokens(text: Any) -> set[str]:
+    tokens = re.findall(r"[a-z0-9]+", normalize_label_display(text).casefold())
+    return {t[:-1] if len(t) > 3 and t.endswith("s") else t for t in tokens}
+
+
+def _label_spells_identity(label: Any, names: Iterable[str]) -> bool:
+    """The printed name contains every word of one of the identity's names."""
+    words = _identity_tokens(label)
+    return any((tokens := _identity_tokens(name)) and tokens <= words for name in names)
+
+
 def resolve_identity(
     row: Mapping[str, Any],
     supplied_canonical_id: str | None,
@@ -839,6 +858,7 @@ def resolve_identity(
     allow_unscoreable_taxonomy_only: bool = False,
     canonical_parent_of: CanonicalParentPredicate | None = None,
     canonical_registry: CanonicalIdentityRegistry | None = None,
+    interaction_rules_of: Callable[[str], frozenset] | None = None,
 ) -> IdentityDecision:
     """Resolve label identity without reproducing the external taxonomy matcher.
 
@@ -927,17 +947,28 @@ def resolve_identity(
     # replace an identity the label names with a different plant, species, part or
     # preparation (Wheat Grass grouped as "Couch Grass", Green Bell Pepper as
     # "Capsicum", Ginger root extract as "Ginger"). It still repairs when the label
-    # names the group's identity, and may refine to a registered child. The general
-    # blend owner is a row role, not a substance: it is no specific identity to
+    # names the group's identity (as an alias or in so many words: "Neutral Protease"
+    # under "Protease"), and may refine to a registered child. A role or catch-all
+    # record (natural colors, a proprietary blend) is no specific identity to
     # protect, and a "Proprietary Blend" group keeps a branded complex named after
-    # one member (TamaFlex) a blend (ADR-0005).
+    # one member (TamaFlex) a blend. Keeping the label identity may never drop an
+    # interaction rule the group's identity answers to; that stays a reviewed
+    # identity-link decision (ADR-0005).
     label_names_supplied_over_structured_group = bool(
         label_names_supplied
         and _GENERAL_BLEND_ID not in {canonical_before, structured_canonical}
         and structured_canonical
         and structured_canonical != canonical_before
+        and not canonical_registry.is_role_record(canonical_before)
         and not canonical_registry.literal_identity_matches(raw_evidence[0].value, structured_canonical)
+        and not _label_spells_identity(
+            raw_evidence[0].value, canonical_registry.standard_names_of(structured_canonical)
+        )
         and not (canonical_parent_of and canonical_parent_of(canonical_before, structured_canonical))
+        and (
+            interaction_rules_of is None
+            or interaction_rules_of(structured_canonical) <= interaction_rules_of(canonical_before)
+        )
     )
     form_validates_specific_over_structured_parent = bool(
         canonical_before
@@ -1067,7 +1098,6 @@ def resolve_identity(
         and (
             structured_canonical == canonical_before
             or raw_canonical == canonical_before
-            or label_names_supplied
             or taxonomy_coherent
         )
         else None

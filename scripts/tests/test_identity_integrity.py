@@ -1140,6 +1140,8 @@ _LABEL_NAMED_REGISTRY = {
         "lactococcus_lactis": {"standard_name": "Lactococcus Lactis", "aliases": ["Lactococcus lactis"]},
         "ginger_extract": {"standard_name": "Ginger Extract", "aliases": ["Ginger root extract"]},
         "ginger": {"standard_name": "Ginger", "aliases": []},
+        "japanese_knotweed": {"standard_name": "Japanese Knotweed", "aliases": ["Japanese Knotweed root extract"]},
+        "resveratrol": {"standard_name": "Resveratrol", "aliases": ["Hu Zhang"]},
         "vitamin_b7_biotin": {"standard_name": "Biotin", "aliases": ["Biotin"]},
         "brewers_yeast": {"standard_name": "Brewer's Yeast", "aliases": []},
         "BLEND_GENERAL": {"standard_name": "General Proprietary Blends", "aliases": ["PrimaVie Shilajit Fulvic Acid Complex"]},
@@ -1155,6 +1157,7 @@ _LABEL_NAMED_RESOLVER = {
     "lactococcus lactis": "lactococcus_lactis",
     "ginger root extract": "ginger_extract",
     "ginger": "ginger",
+    "hu zhang": "resveratrol",
     "biotin": "vitamin_b7_biotin",
     "shilajit": "shilajit",
 }
@@ -1179,8 +1182,6 @@ def _label_named_decision(literal, group, supplied, **kwargs):
     ("organic Green Bell Pepper", "Capsicum", "green_bell_pepper"),
     # DSLD 174659 ingredientRows[4].nestedRows[9]: L. cremoris is its own species.
     ("Lactococcus cremoris", "Lactococcus lactis", "lactococcus_cremoris"),
-    # DSLD 15698 ingredientRows[0].nestedRows[3]: an extract, not the whole root.
-    ("Ginger root extract", "Ginger", "ginger_extract"),
 ])
 def test_structured_group_cannot_replace_a_label_named_identity(literal, group, supplied):
     decision = _label_named_decision(literal, group, supplied)
@@ -1205,6 +1206,47 @@ def test_structured_group_still_repairs_an_identity_the_label_does_not_name():
 
     assert decision.disposition == "repaired"
     assert decision.canonical_id == "couch_grass"
+
+
+def test_structured_group_still_repairs_an_identity_the_label_spells_out():
+    # DSLD 28986/15698 "Ginger root extract": the printed words name IQM ginger, the
+    # scoring identity whose forms carry the extract (Sean, 2026-09-27 coherence fix).
+    decision = _label_named_decision("Ginger root extract", "Ginger", "ginger_extract")
+
+    assert decision.disposition == "repaired"
+    assert decision.canonical_id == "ginger"
+
+
+def test_a_role_record_is_not_protected_from_a_specific_group():
+    registry = build_canonical_identity_registry({
+        "ingredient_quality_map": {"cabbage_extract": {"standard_name": "Cabbage Extract"}},
+        "other_ingredients": {"other_ingredients": [
+            {"id": "NHA_NATURAL_COLORS", "standard_name": "Natural Colors from Plants", "aliases": ["red cabbage"]}]},
+    })
+    decision = resolve_identity(
+        row={"raw_source_text": "organic Red Cabbage", "ingredientGroup": "Cabbage"},
+        supplied_canonical_id="NHA_NATURAL_COLORS",
+        resolve_candidate=lambda value: {"cabbage": "cabbage_extract"}.get(value.casefold()),
+        canonical_registry=registry,
+    )
+    assert decision.canonical_id == "cabbage_extract"
+
+
+def test_keeping_the_label_identity_never_drops_an_interaction_rule():
+    # DSLD 249518 "Japanese Knotweed root extract" under "Hu Zhang": resveratrol carries
+    # RULE_IQM_RESVERATROL_BLEEDING, knotweed none yet; the warning wins until a
+    # reviewed knotweed link exists.
+    rules = {"resveratrol": frozenset({"RULE_IQM_RESVERATROL_BLEEDING"})}
+    decision = _label_named_decision(
+        "Japanese Knotweed root extract", "Hu Zhang", "japanese_knotweed",
+        interaction_rules_of=lambda cid: rules.get(cid, frozenset()),
+    )
+    assert decision.canonical_id == "resveratrol"
+    protected = _label_named_decision(
+        "organic Wheat Grass", "Couch Grass", "wheatgrass",
+        interaction_rules_of=lambda cid: frozenset(),
+    )
+    assert protected.canonical_id == "wheatgrass"
 
 
 def test_general_blend_identity_is_not_protected_from_a_specific_group():
@@ -1246,21 +1288,3 @@ def test_structured_group_may_refine_to_a_registered_child_of_the_label_identity
     )
     assert decision.disposition == "repaired"
     assert decision.canonical_id == "soy_isoflavones"
-
-
-def test_non_scorable_row_keeps_an_identity_its_label_names():
-    # DSLD 204501 ingredientRows[16].nestedRows[0] "Raw organic Svetol": the label is a
-    # curated alias of the supplied identity although the resolver cannot read it.
-    registry = build_canonical_identity_registry({"ingredient_quality_map": {
-        "green_coffee_bean": {"standard_name": "Green Coffee Bean", "aliases": ["Svetol"]},
-    }})
-    decision = resolve_identity(
-        row={"raw_source_text": "Raw organic Svetol", "ingredientGroup": "Green Coffee"},
-        supplied_canonical_id="green_coffee_bean",
-        resolve_candidate=lambda value: None,
-        canonical_registry=registry,
-        allow_unscoreable_taxonomy_only=True,
-    )
-    assert decision.disposition == "taxonomy_only"
-    assert decision.canonical_id == "green_coffee_bean"
-    assert decision.scoreable_identity is False

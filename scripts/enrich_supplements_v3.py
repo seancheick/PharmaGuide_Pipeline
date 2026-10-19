@@ -177,6 +177,7 @@ from match_ledger import (
     METHOD_ALTERNATE_NAME,
 )
 from identity.interaction import (
+    interaction_subject_ids,
     interaction_subject_refs,
     interaction_twin_form,
     label_row_establishes_presence,
@@ -4394,6 +4395,7 @@ class SupplementEnricherV3:
             allow_unscoreable_taxonomy_only=allow_unscoreable_taxonomy_only,
             canonical_parent_of=canonical_parent_of,
             canonical_registry=self._current_canonical_identity_registry(),
+            interaction_rules_of=self._interaction_rule_ids_of,
         )
 
         if decision.disposition == "repaired" and decision.canonical_id:
@@ -19040,6 +19042,28 @@ class SupplementEnricherV3:
             "daily_value_no_amount",  # the cleaner role, passed through by _cleaner_skip_reason
             SKIP_REASON_NUTRITION_FACT,
         ) and label_row_establishes_presence(row)
+
+    def _interaction_rule_ids_of(self, canonical_id: str) -> frozenset:
+        """Interaction rules an identity answers to (itself, family, IQM twin), any registry.
+
+        The identity decision uses it so keeping a label-named identity never
+        drops a warning the DSLD group's identity carries (ADR-0005).
+        """
+        cached = getattr(self, "_interaction_rule_id_cache", None)
+        if cached is None or cached[0] is not self.databases:
+            by_subject: Dict[str, set] = {}
+            rules = (self.databases.get("ingredient_interaction_rules") or {}).get("interaction_rules") or []
+            for rule in rules:
+                subject = str((rule.get("subject_ref") or {}).get("canonical_id") or "").strip()
+                if subject and rule.get("id"):
+                    by_subject.setdefault(subject, set()).add(rule["id"])
+            cached = (self.databases, by_subject)
+            self._interaction_rule_id_cache = cached
+        return frozenset(
+            rule_id
+            for subject in interaction_subject_ids(canonical_id)
+            for rule_id in cached[1].get(subject, ())
+        )
 
     def _interaction_registry_ids(self) -> Dict[str, set]:
         """Ids held by each registry a row can be an interaction subject of,
