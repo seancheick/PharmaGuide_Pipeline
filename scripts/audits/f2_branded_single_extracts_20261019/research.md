@@ -20,7 +20,7 @@ applying (DSLD label API v9, NCBI esummary/efetch, Indena PDF).
 | Item | Finding |
 |---|---|
 | Siliphos → `silymarin phytosome` | Correct. `siliphos` and `silybin phytosome` are curated aliases of that form (PMID 16164374, Siliphos = silybin–phosphatidylcholine). |
-| Saw palmetto 320 mg: "no applicable dose benchmark" | Approved policy. `rda_therapeutic_dosing.json::saw_palmetto_extract` holds `completed_no_benchmark_neutral`, `approved_existing_neutral_2026_10_18`, and rejects 320 mg as a general benchmark. Changing that is a Sean decision. |
+| Saw palmetto 320 mg: "no applicable dose benchmark" | Neutral Dose kept: no source supports a general dose. Record cleaned up on Sean's request (see below). |
 | Carrier-complex mass (phytosome, cyclodextrin) used as the dose | Latent only. Every affected canonical (coq10, quercetin, milk_thistle, curcumin joint route) takes `no_benchmark_neutral`; Dose is identical before and after. Existing policy (`botanical_profile._is_named_standardized_botanical_complex`) treats a named phytosome mass as the studied dose form. Reference fractions: Meriva 18–22% curcuminoids (Indena); Siliphos about 29.7% silybin and Quercefit about 40% quercetin (label arithmetic); MicroActive about 25% CoQ10 (unofficial; supplier specification not found). |
 | Duplicate blend-header predicate | `identity_integrity` now imports `probiotic_measurements.is_probiotic_source_header` (4535e09bb). |
 | Blend-filed single form (AuroraBlue, Celadrin) | The exclusion from 0b7967268 was removed. With the AuroraBlue form mapped, identity agreement is the guard. Celadrin's form "esterified fatty acid carbons" was already a celadrin alias (cetylated fatty acid blend: cetyl myristoleate, myristate, palmitoleate, laurate, palmitate, oleate). |
@@ -34,3 +34,17 @@ applying (DSLD label API v9, NCBI esummary/efetch, Indena PDF).
 - Prosterol 302650: 65.2 → 66.0 (CO₂ form).
 - The six AuroraBlue nested-blend headers and the seven other Meriva labels are unchanged.
 - Golden set: only 269286 moves. Raw contract canaries: 33/33 unchanged.
+
+## Saw palmetto dose record cleanup (`rda_therapeutic_dosing.json::saw_palmetto_extract`, Sean 2026-10-19)
+
+The Dose result does not change: the curve stays `completed_no_benchmark_neutral`; 0 of 61 replayed saw palmetto labels changed. Only the record's classification, sources and text are corrected.
+
+| Field | Before → after | Source |
+|---|---|---|
+| `reference_type` | `no_benchmark` → `discrete_studied_regimen` (same convention as ginkgo and ashwagandha) | EMA HMPC monograph EMA/HMPC/280079/2013 (read): well-established use, hexane soft extract DER 7-11:1, "320 mg once daily or 160 mg 2 times daily"; traditional use, ethanol 90-96% extract, 320 mg once daily. |
+| `references` / `source_ids` | + 37345871, + 21954478, + EMA PDF | 37345871 Cochrane 2023 (abstract read): "Serenoa repens alone provides little to no benefits"; no hexanic vs non-hexanic difference. 21954478 CAMUS (abstract read): "Increasing doses … did not reduce lower urinary tract symptoms more than placebo" (320/640/960 mg/day). `verify_all_citations_content.py --changed-since HEAD`: 3/3 MATCH. |
+| `upper_limit` | `"640"` → `null`; note now says a limit is "not established" | No established upper limit: CAMUS reached 960 mg/day without clearly attributable adverse effects; EMA reports no overdose cases. Same convention as the 2026-10-11 trial-exposure corrections. |
+| `upper_limit_notes` | "Doses above 320mg show no additional benefit in studies" removed | Misleading: no studied dose beat placebo (Cochrane, CAMUS). |
+| `review_date` / `approval_status` | 2026-10-19 / `approved_existing_neutral_2026_10_19` | Sean asked for this cleanup; existing neutral policy unchanged. |
+
+Not covered: the CO2 extract and whole-berry powder have no monograph dose. The AUA guideline text is behind a login and was not read.
