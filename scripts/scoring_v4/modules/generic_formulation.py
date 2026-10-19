@@ -491,8 +491,6 @@ def score_formulation(product: Dict[str, Any]) -> Dict[str, Any]:
         "metadata": {
             "phase": PHASE_MARKER_COMPLETE,
             "delivery_data": delivery_data,
-            "deferred_components": [],
-            "deferred_penalties": [],
             "formulation_profile": formulation_profile,
             "iqm_form_quality_assessed_count": form_assessed_count,
             "botanical_profile_applied": bool(botanical_formulation),
