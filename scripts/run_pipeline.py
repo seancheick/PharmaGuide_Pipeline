@@ -172,8 +172,7 @@ class PipelineRunner:
                 "raw_directory": "raw_data",
                 "output_prefix": "output_Lozenges",
                 "cleaned_suffix": "cleaned",
-                "enriched_suffix": "enriched",
-                "scored_suffix": "scored"
+                "enriched_suffix": "enriched"
             },
             **_stage_scripts_and_configs(),
         }
