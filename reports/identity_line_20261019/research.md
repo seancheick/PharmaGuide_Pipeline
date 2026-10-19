@@ -35,10 +35,20 @@ wrongly gained), "Cassia Seed Extract" is not cinnamon, DGL is not glycyrrhizin 
 
 ## Fix (owner `scripts/identity_integrity.py::resolve_identity`)
 
-1. A DSLD group cannot replace an identity whose exact curated alias is the printed name (resolver
-   reads it as nothing else) unless the label also names the group's identity, the group's id is a
-   registered child (refinement), or either side is the general blend owner (a row role).
-2. A non-scorable row keeps a supplied identity its printed name is an exact curated alias of.
+A DSLD group cannot replace an identity whose exact curated alias is the printed name (the
+resolver reads it as nothing else) unless: the label also names the group's identity (alias, or
+every word of its standard name); the group's id is a registered child; the supplied id is a role
+or catch-all record (other_ingredients, proprietary_blends) or either side is BLEND_GENERAL; or
+keeping the label identity would drop an interaction rule the group's identity answers to (the
+enricher passes `_interaction_rule_ids_of`).
+
+Narrowed after CI run 39333525445 (6 failures) and the independent review: the first version also
+let generic/role records beat a correct specific group (NHA_NATURAL_COLORS over cabbage,
+digestive_enzymes over protease, isoflavones over soy isoflavones), undid the pinned IQM ginger
+projection, and dropped rules the group carried (knotweed → resveratrol bleeding, cod liver oil
+→ fish oil). A second rule (non-scorable rows keep a label-named identity) was dropped: it
+retained blend-registry ids on headers and moved unrelated clinical matches (204521 lost
+INGR_WHEY_PROTEIN, INGR_CHLORELLA through the blend-evidence path). Follow-up, not in this batch.
 
 Prior policy reversed: commit 9f0daf180 (July 13, "rank declared taxonomy above aliases", no
 rationale recorded). `test_structured_epa_label_repairs_conflicting_dha_taxonomy` still passes (it
@@ -55,4 +65,6 @@ an EPA group now stays DHA — the printed name wins.
 | `artemisinin` (compound, qinghaosu) | plant names "sweet wormwood", "artemisia annua", "… extract", "sweet annie extract", "qinghao" moved to botanical `sweet_wormwood_herb` | Artemisinin is a sesquiterpene lactone from Artemisia annua; qinghao is the plant, qinghaosu the compound | fixed |
 | "Polyphen-Oil olive extract" on `olive_leaf` | unchanged | DSLD PlantPart "fruit and leaf" (Life Extension 63665, 232620): mixed, no single owner | confirmed, not changed |
 | "red cabbage" on `NHA_NATURAL_COLORS` | unchanged | In inactive lists it is a colorant; inside veggie blends a food. Section-dependent role, not a wrong substance | queued (follow-up) |
+| "ancient peat & apple extract" on `shilajit` fulvic acid | moved to `PII_ELEVATP_BRANDED_BLEND` (review finding; same product as "ancient peat and apple extract") | ElevATP receipt above | fixed (`review_fix_batch.py`) |
+| `green_bell_pepper` evidence record (new) | `identity_classification_no_literature_claim`, not_efficacy_relevant | bounded PubMed screen 2026-10-19, 13 records: only bell-pepper human study is juice added to yoga therapy (PMID 28917374); others capsaicin/capsinoid/paprika-oleoresin Capsicum extracts, child vegetable-acceptance trials, agronomy | added (`review_fix_batch.py`); needed because 282638 now carries the printed bell pepper identity |
 | "hu zhang" aliases on `resveratrol` | unchanged | Hu Zhang is Polygonum cuspidatum (the plant). Moving it removes RESVERATROL_BLEEDING from knotweed rows; needs a sourced knotweed interaction decision first | queued (clinical) |

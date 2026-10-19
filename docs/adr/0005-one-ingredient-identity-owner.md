@@ -15,10 +15,20 @@ through `scripts/identity_integrity.py::resolve_identity`)
    is an exact curated alias of the supplied identity (and the resolver reads it as nothing else),
    the group may not replace it with a different plant, species, plant part or preparation:
    organic Wheat Grass stays wheatgrass under "Couch Grass", Green Bell Pepper stays bell pepper
-   under "Capsicum". The group still repairs when the printed name names the group's identity
-   ("Vitamin E" first matched to its sunflower-oil source), when the label proves neither identity,
-   and when it refines to a registered child. "Proprietary Blend" is a row role, not a substance:
-   the general blend owner is neither protected nor overridden by this rule (TamaFlex stays a blend).
+   under "Capsicum", Lactococcus cremoris stays L. cremoris, Olive leaf extract stays olive leaf.
+   The group still decides when:
+   - the printed name names the group's identity, as an alias or in so many words ("Vitamin E"
+     first matched to its sunflower-oil source; "Neutral Protease" under "Protease"; "Ginger root
+     extract" under "Ginger", whose IQM entry is the scoring identity);
+   - the label proves neither identity;
+   - the group's identity is a registered child (a refinement);
+   - the supplied identity is a role or catch-all record (other ingredients, proprietary blends:
+     natural colors, a fruit-and-vegetable powder record, an enzyme blend), or either side is the
+     general blend owner ("Proprietary Blend" is a row role, so TamaFlex stays a blend);
+   - keeping the label identity would drop an interaction rule the group's identity answers to
+     (printed "Japanese Knotweed root extract" under "Hu Zhang" keeps resveratrol and its bleeding
+     rule; cod liver oil keeps fish oil). Those identities need a reviewed interaction link before
+     they can be corrected.
 3. **A curated alias is evidence, so a wrong alias is a data defect**, fixed through `/data-fix`
    (first batch: diacetylactis, ElevATP, olive juice extract, sweet wormwood).
 4. **Export carries the owner's decision.** Detail-blob `ingredients[].canonical_id` is the
