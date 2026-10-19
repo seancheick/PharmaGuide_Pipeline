@@ -241,6 +241,23 @@ def test_label_reference_unit_is_recorded_not_borrowed_from_amount(units, expect
     assert row["amount"] == "2 mg"
 
 
+@pytest.mark.parametrize("basis, expected", [
+    ({"basis_count": 1, "basis_unit": "capsule", "min_servings_per_day": 1,
+      "max_servings_per_day": 4}, "1 capsule, 1–4× per day"),
+    ({"basis_count": 2, "basis_unit": "tablet", "min_servings_per_day": 1,
+      "max_servings_per_day": 1}, "2 tablet, 1× per day"),
+    ({"basis_count": None, "basis_unit": None}, None),
+])
+def test_label_serving_uses_canonical_facts_basis_not_raw_directions_range(basis, expected):
+    product = {"dsld_id": "205309", "serving_basis": basis, "servingSizes": [
+        {"minQuantity": 1, "maxQuantity": 4, "unit": "Capsule(s)",
+         "minDailyServings": 1, "maxDailyServings": 1}],
+        "statements": [{"type": "Directions", "notes": "Take 1–4 capsules daily."}]}
+    meta = si.project_enriched(product, source_part="Pure")["product_meta"][0]
+    assert meta["serving"] == expected
+    assert meta["directions"] == "Take 1–4 capsules daily."
+
+
 def test_ingredient_index_builds_reuses_and_survives_core_refresh(roots, monkeypatch):
     from dashboard_index_fixtures import enriched_product, write_enriched
 

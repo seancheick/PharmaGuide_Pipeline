@@ -524,7 +524,22 @@ def _serving_facts(product: dict[str, Any]) -> dict[str, Any]:
     """Serving size, daily servings and directions exactly as the label records them."""
     serving = None
     sizes = [s for s in product.get("servingSizes") or [] if isinstance(s, dict)]
-    if sizes:
+    basis = product.get("serving_basis")
+    if isinstance(basis, dict):
+        # This owner resolves the selected Facts column. Raw servingSizes can
+        # describe a directed intake range instead (Pure205309: 1–4 capsules,
+        # but the Facts amount is per one capsule). Never replace a recorded
+        # unknown basis with that range or a child serving row.
+        amount = _num(basis.get("basis_count"))
+        unit = _text(basis.get("basis_unit"))
+        daily_low = _num(basis.get("min_servings_per_day"))
+        daily_high = _num(basis.get("max_servings_per_day"))
+        if amount is not None and amount > 0 and unit:
+            serving = f"{amount:g} {unit}"
+            if daily_low is not None:
+                daily = f"{daily_low:g}" if daily_high in (None, daily_low) else f"{daily_low:g}–{daily_high:g}"
+                serving += f", {daily}× per day"
+    elif sizes:  # Historical records without the canonical owner.
         size = sizes[0]
         low, high = _num(size.get("minQuantity")), _num(size.get("maxQuantity"))
         amount = None if low is None else (f"{low:g}" if high in (None, low) else f"{low:g}–{high:g}")
