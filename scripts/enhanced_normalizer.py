@@ -12386,6 +12386,8 @@ class EnhancedDSLDNormalizer:
         # children, not the marketing header, own the scoreable doses.
         if strong_blend_signal and ing.get("_nested_rows_flattened"):
             return True
+        if self._is_single_constituent_iqm_ingredient(ing):
+            return False
         if quantity is None or str(unit or "").strip().upper() == "NP":
             # A blend TOTAL is a flat header carrying the aggregate mass. Rows with
             # a more-specific structural identity are NOT totals and own their own
@@ -12435,6 +12437,36 @@ class EnhancedDSLDNormalizer:
             ):
                 return False
         return True
+
+    def _is_single_constituent_iqm_ingredient(self, ing: Dict[str, Any]) -> bool:
+        """A dosed DSLD blend row whose only constituent is the row's own IQM identity.
+
+        DSLD files some branded single extracts as ``category=blend`` with one
+        form: "Prosterol 320 mg" / Saw Palmetto Berry Extract (269286). When the
+        printed name and that one form both resolve to the same IQM ingredient,
+        the row is that ingredient at the printed dose, not a blend total. A
+        descriptor form, a different identity or a proprietary-blend owner
+        (Velositol) does not qualify.
+        """
+        if ing.get("nestedRows") or ing.get("isNestedIngredient") or not self._has_declared_mass(ing):
+            return False
+        forms = [f for f in ing.get("forms") or []
+                 if isinstance(f, dict) and str(f.get("name") or "").strip()]
+        if len(forms) != 1:
+            return False
+
+        def identity(name, group=None):
+            standard_name, mapped, _ = self._enhanced_ingredient_mapping(
+                name, [], ingredient_group=group)
+            return self._resolve_canonical_identity(standard_name, raw_name=name) if mapped else None
+
+        row_identity = identity(str(ing.get("name") or "").strip())
+        return (
+            row_identity is not None
+            and row_identity[0] is not None
+            and row_identity[1] == "ingredient_quality_map"
+            and identity(str(forms[0]["name"]).strip(), forms[0].get("ingredientGroup")) == row_identity
+        )
 
     def _is_dosed_explicit_amino_aggregate_owner(self, ing: Dict[str, Any]) -> bool:
         """Retain an explicitly named EAA or BCAA total as a structural dose owner.
