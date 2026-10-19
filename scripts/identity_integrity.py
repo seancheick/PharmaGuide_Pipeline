@@ -10,6 +10,7 @@ from dataclasses import dataclass
 from typing import Any, Literal
 
 from normalization import strip_label_identity_qualifiers
+from probiotic_measurements import is_probiotic_source_header as _is_structural_blend_header
 
 
 IdentityDisposition = Literal[
@@ -529,14 +530,6 @@ def _form_values(value: Any) -> Iterable[str]:
                 yield combined
         else:
             yield from _text_values(item)
-
-
-def _is_structural_blend_header(row: Mapping[str, Any]) -> bool:
-    return (
-        row.get("cleaner_row_role") == "blend_header_total"
-        or row.get("hierarchyType") == "blend_header"
-        or row.get("dose_class") == "blend_total_weight"
-    )
 
 
 def _structured_group_values(row: Mapping[str, Any], value: Any) -> Iterable[str]:
