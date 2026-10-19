@@ -1,5 +1,11 @@
 # PharmaGuide master completion plan
 
+## Dashboard integration update — October 19
+
+PR172 is merged at `0e21f595f`; its exact head `ea3510b97` passes all four CI groups (39315838815). PR173 is merged at `8fb455e72` after exact-head `dcffb8cab` passed all four groups (39317164127). The rebased Trace retains the ingredient-match table, config-scoped peer context and unavailable-pillar guard. Independent focused dashboard validation: 114 passed. No actionable review comment or unresolved merge conflict remains.
+
+All Clean, Enrich and Score code/reference fingerprints equal Sean's active source `afa3f7bbd`. These dashboard changes do not require repeating his current pipeline. The primary checkout remains pinned during that run; its drafts/private submissions are unchanged. Completed feature branches are removed; active preview worktrees and screenshots are retained. After the current run exits, preserve drafts, synchronize the primary checkout, refresh the existing dashboard index including ingredients, then check freshness, reconciliation, golden results and real Product Trace. Full-catalog/release/app qualification remains separate; no new pipeline, release or IPA was started by this integration.
+
 ## Current checkpoint — Evidence, blend identity and golden tests, October 19
 
 Sean approved integrating the previously held 53-case golden branch. Candidate `a66141363` includes the Evidence and blend-identity work, audit corrections and latest dashboard main `2bf017ccd` (PR171). PR170 is merged at `7fcc065be`. Exact-source CI39307795403 passed all four groups: 22,191 tests and 192 declared skips, with every skip guard passing. Source is qualified; the catalog is not released. Sean owns the next operator run.
@@ -10,7 +16,7 @@ Sean approved integrating the previously held 53-case golden branch. Candidate `
 - [x] Independent review of all589retained raw stage/blob records and46completed-neutral references:93total-score,19tier and111assessment changes, with0route/quality-score-status/safety changes. Fourteen accepted manual controls unchanged;33rawcanaries and53golden/520checks pass. This is bounded evidence, not a new full catalog.
 - [x] Final local546passed/24declared optional-service skips and skip guard;85dashboard integration checks. The local artifact prerequisite is the explicitly diagnostic child-UL fixture, not a newly built catalog. Failed attempts remain recorded; no assertion or skip policy was waived.
 - [x] Whole-fast CI39307795403 on `a66141363` and authorized merge PR170 at `7fcc065be`; original Evidence, identity and golden heads retained in main.
-- [ ] Sean's one necessary Clean→Enrich→Score pipeline-only run, then complete new-catalog parity/release/app checks. All38Clean/38Enrich/38Score manifests are stale; earliestClean. No agent operator pipeline, upload, Flutter import or IPA.
+- [ ] Sean's authorized Clean→Enrich→Score pipeline-only run is in progress from afa3f7bbd; complete new-catalog parity/release/app checks after it finishes. The original38-per-stage stale census described the start state, not current progress. Do not launch another corpus job. No integration-agent pipeline, upload, Flutter import or IPA.
 
 Owner: existing Evidence resolver/generic state, normalizer/identity, RDA eligibility, IQM/reference/canary and stage-manifest owners — evidence: matrix/glossary/callers, fail-first tests, source receipts and four-layer records. Will NOT create another scorer, registry, public field/status or clinical policy. Full evidence: `reports/evidence_blend_takeover_20261019/README.md`; execution register: LEDGER. Prior checkpoints below retain their original provenance.
 
