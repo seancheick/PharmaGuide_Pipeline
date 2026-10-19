@@ -163,6 +163,21 @@ def _config_missing(ctx):
     return _rows(p[p["config_fingerprint"].isna()], "quality_score_status") if not p.empty else pd.DataFrame()
 
 
+def _verification_zero(ctx):
+    # Verification fails open to a neutral baseline, so 0 needs a recorded deduction or cap to explain it.
+    p = _scored(ctx.p())
+    rec = ctx.frame("receipts")
+    if p.empty:
+        return pd.DataFrame()
+    zero = p[p["pillar_verification"].fillna(-1).abs() < TOL]
+    if zero.empty:
+        return pd.DataFrame()
+    explained = set()
+    if not rec.empty:
+        explained = set(rec[(rec["pillar"] == "verification") & rec["kind"].isin(["deduction", "cap"])]["dsld_id"])
+    return _rows(zero[~zero["dsld_id"].isin(explained)], "pillar_verification", pillar="verification")
+
+
 def _penalty_wrong_pillar(ctx):
     rec = ctx.frame("receipts")
     if rec.empty:
@@ -387,6 +402,10 @@ RULES: list[Rule] = [
          "reviewed and accepted", "scoring.md", "compare", _safety_explained("candidate_vs_previous")),
     Rule("safety_change_review_vs_release", 1, "high", "safety", "Safety status differs from release (cause recorded)",
          "reviewed before publication", "scoring.md", "compare", _safety_explained("release_vs_candidate")),
+    Rule("verification_zero_unexplained", 1, "high", "accounting",
+         "Verification is 0 with no recorded deduction or cap", "fail-open neutral baseline unless a penalty applies",
+         "scoring.md (Verification fails open to verification_subscale.neutral_baseline)", "product",
+         _verification_zero, pillar="verification"),
     Rule("penalty_wrong_pillar", 1, "high", "ownership", "Penalty charged outside its registered pillar",
          "penalty pillar = PENALTY_REGISTRY.primary_dimension", "penalty_registry.py::PENALTY_REGISTRY",
          "product", _penalty_wrong_pillar),

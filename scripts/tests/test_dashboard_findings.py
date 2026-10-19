@@ -76,10 +76,14 @@ def test_product_rules_fire_on_defects_and_not_on_audit_states(paths):
     two_caps = scored_product("twocaps", extra_receipt=[
         ("dose", {"id": "dose_safety_ceiling", "kind": "cap", "source": "x", "points": 0.0}),
         ("dose", {"id": "dose_safety_ceiling", "kind": "cap", "source": "x", "points": 0.0})])
+    vzero = scored_product("vzero")
+    vzero["quality_pillars_v4"]["verification"].update(score=0.0, receipt={"entries": [], "nominal_deductions": 0,
+                                                                         "realized_deductions": 0, "unawarded": 15.0})
+    vzero["quality_score_v4_100"] = round(vzero["quality_score_v4_100"] - 10.0, 1)
     gap = scored_product("gap", evidence_state="applicability_unestablished")
     gap["quality_pillars_v4"]["evidence"]["display_state"] = "assessed"
     write_batch(paths.scan_dir, "A", [clean, *audit_states, mismatch, no_receipt, negative, realized, range_,
-                                      visible, no_reason, no_config, wrong_pillar, two_caps, gap])
+                                      visible, no_reason, no_config, wrong_pillar, two_caps, gap, vzero])
     si.refresh(paths)
     findings = _findings(paths)
     expected = {
@@ -94,6 +98,7 @@ def test_product_rules_fire_on_defects_and_not_on_audit_states(paths):
         "wrongpillar": {"penalty_wrong_pillar"},
         "twocaps": {"dose_ceiling_repeated"},
         "gap": {"evidence_gap_shown_assessed"},
+        "vzero": {"verification_zero_unexplained"},
     }
     for pid, rules in expected.items():
         assert rules <= _rules_for(findings, pid), (pid, _rules_for(findings, pid))
@@ -144,8 +149,9 @@ def test_compare_rules_explained_vs_unexplained(paths):
     assert _rules_for(findings, "same") == set()
 
     reader = si.IndexReader(paths)
+    previous = next(r for r in reader.runs() if r["plane"] == "candidate" and r["run_key"] != meta["latest"]["candidate"])
     deltas = run_compare.compare(lambda key, table, columns=None: reader.frame(key, table, columns),
-                                 reader.run(reader.previous_candidate()), reader.run(meta["latest"]["candidate"]))
+                                 previous, reader.run(meta["latest"]["candidate"]))
     rows = deltas.set_index("dsld_id")
     assert rows.loc["added", "presence"] == "added"
     assert rows.loc["moved", "delta"] == pytest.approx(-6.0)

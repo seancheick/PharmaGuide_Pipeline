@@ -122,7 +122,7 @@ def write_release(build_root: Path, products: list[dict], *, db_version: str = "
                "primary_category TEXT, quality_score_v4_100 INTEGER, quality_tier TEXT, quality_score_status TEXT, "
                "quality_assessment_status TEXT, product_safety_status TEXT, quality_score_version TEXT, "
                "v4_config_fingerprint TEXT, has_third_party_testing INTEGER, percentile_rank REAL, "
-               "detail_blob_sha256 TEXT, exported_at TEXT, blocking_reason TEXT, "
+               "detail_blob_sha256 TEXT, exported_at TEXT, blocking_reason TEXT, mapped_coverage REAL, "
                + ", ".join(f"{c} REAL" for c in pillar_cols) + ")")
     for product in products:
         pillars = product.get("quality_pillars_v4") or {}
@@ -133,12 +133,12 @@ def write_release(build_root: Path, products: list[dict], *, db_version: str = "
         (blobs / f"{product['dsld_id']}.json").write_text(text)
         total = product.get("quality_score_v4_100")
         db.execute(
-            "INSERT INTO products_core VALUES (" + ",".join("?" * (17 + len(pillar_cols))) + ")",
+            "INSERT INTO products_core VALUES (" + ",".join("?" * (18 + len(pillar_cols))) + ")",
             (product["dsld_id"], product["product_name"], product["brand_name"], product.get("_v4_module"),
              product.get("percentile_category"), shipped_whole_score(total) if total is not None else None,
              product.get("quality_tier"), product["quality_score_status"], product["quality_assessment_status"],
              product["product_safety_status"], "1.26.0-test", "fp-release", 0, None, sha, "2026-10-15T00:00:00Z",
-             product.get("blocking_reason"),
+             product.get("blocking_reason"), 1.0,
              *[(pillars.get(name) or {}).get("score") for name in PILLAR_MAX]),
         )
     db.commit()

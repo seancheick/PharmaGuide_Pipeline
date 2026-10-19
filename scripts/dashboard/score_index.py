@@ -131,6 +131,8 @@ DOSE_FLAG_SCHEMA = _schema(
 )
 EXPLANATION_SCHEMA = _schema(("dsld_id", _S), ("pillar", _S), ("role", _S), ("text", _S))
 SLIM_SCHEMA = _schema(("dsld_id", _S), ("slim_json", _S))
+LABEL_SCHEMA = _schema(("dsld_id", _S), ("record_json", _S))
+ADDITIVE_SCHEMA = _schema(("dsld_id", _S), ("rule_id", _S), ("tier", _S), ("penalty", _F), ("labels", _LS))
 
 TABLES: dict[str, pa.Schema] = {
     "products": PRODUCTS_SCHEMA,
@@ -140,6 +142,8 @@ TABLES: dict[str, pa.Schema] = {
     "dose_flags": DOSE_FLAG_SCHEMA,
     "explanations": EXPLANATION_SCHEMA,
     "slim": SLIM_SCHEMA,
+    "label_records": LABEL_SCHEMA,
+    "additives": ADDITIVE_SCHEMA,
 }
 
 
@@ -196,6 +200,28 @@ def _git_sha() -> str | None:
 
 
 # --------------------------------------------------------------------------- extraction
+
+def label_trust_record(blob: dict[str, Any], core: dict[str, Any] | None = None) -> dict[str, Any]:
+    """The blob subset ``data_loader.compute_label_trust`` reads (release plane only)."""
+    core = core or {}
+    rows = blob.get("display_ingredients")
+    label_record = blob.get("label_record")
+    return {
+        "dsld_id": str(blob.get("dsld_id") or core.get("dsld_id")),
+        "brand_name": blob.get("brand_name") or core.get("brand_name"),
+        "primary_type": blob.get("primary_type") or core.get("primary_category"),
+        "label_ledger_audit": blob.get("label_ledger_audit"),
+        "display_ingredients": [
+            {key: row.get(key) for key in ("display_disposition", "form_display_state", "identity_integrity_state")}
+            if isinstance(row, dict) else row
+            for row in rows
+        ] if isinstance(rows, list) else rows,
+        "label_record": {
+            "history_status": label_record.get("history_status"),
+            "formula_history": label_record.get("formula_history"),
+        } if isinstance(label_record, dict) else label_record,
+    }
+
 
 def project_product(product: dict[str, Any], *, source_part: str, blob_sha256: str | None = None,
                     core: dict[str, Any] | None = None) -> dict[str, list[dict[str, Any]]]:
@@ -398,10 +424,18 @@ def project_product(product: dict[str, Any], *, source_part: str, blob_sha256: s
         "dims": {k: {"components": dict(v.get("components") or {}), "penalties": dict(v.get("penalties") or {})}
                  for k, v in dims.items() if isinstance(v, dict)},
     }
+    additives = [
+        {"dsld_id": pid, "rule_id": _text(hit.get("matched_rule_id")), "tier": _text(hit.get("penalty_tier")),
+         "penalty": _num(hit.get("penalty_applied")),
+         "labels": [str(label) for label in (hit.get("matched_labels") or [])]}
+        for hit in product.get("_v4_inactive_penalty_details") or [] if isinstance(hit, dict)
+    ]
     return {
         "products": [row], "ledgers": ledgers, "receipts": receipts, "dose_refs": dose_refs,
         "dose_flags": dose_flags, "explanations": explanations,
         "slim": [{"dsld_id": pid, "slim_json": _canonical(slim)}],
+        "label_records": [{"dsld_id": pid, "record_json": _canonical(label_trust_record(product, core))}] if core else [],
+        "additives": additives,
     }
 
 
@@ -865,11 +899,6 @@ class IndexReader:
     def latest(self, plane: str) -> str | None:
         return (self.meta.get("latest") or {}).get(plane)
 
-    def previous_candidate(self) -> str | None:
-        latest = self.latest("candidate")
-        older = [run for run in self.runs() if run["plane"] == "candidate" and run["run_key"] != latest]
-        return older[-1]["run_key"] if older else None
-
     def table(self, run_key: str, table: str, columns: list[str] | None = None, filter=None) -> pa.Table:
         if self.build is None or run_key is None:
             return pa.Table.from_pylist([], schema=TABLES[table]).select(columns or TABLES[table].names)
@@ -889,6 +918,13 @@ class IndexReader:
         slim = self.table(run_key, "slim", filter=match).column("slim_json").to_pylist()
         out["slim"] = json.loads(slim[0]) if slim else None
         return out
+
+    def label_records(self) -> list[dict[str, Any]]:
+        """Release label-trust inputs for ``data_loader.compute_label_trust``."""
+        run_key = self.latest("release")
+        if run_key is None:
+            return []
+        return [json.loads(text) for text in self.table(run_key, "label_records").column("record_json").to_pylist()]
 
     def findings(self):
         import pandas as pd

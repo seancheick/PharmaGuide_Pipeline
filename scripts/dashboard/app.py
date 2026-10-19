@@ -9,180 +9,50 @@ PROJECT_ROOT = Path(__file__).resolve().parents[2]
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
-from scripts.dashboard.config import get_config
-from scripts.dashboard.data_loader import filter_product_catalog, load_dashboard_data
-from scripts.dashboard.app_shell import build_initial_shell_state
-from scripts.dashboard.components import inject_dashboard_theme, render_command_center, render_page_frame
-from scripts.dashboard.navigation import DEFAULT_VIEW, VIEW_SLUGS
-from scripts.dashboard.page_meta import get_page_meta
-from scripts.dashboard.time_format import format_dashboard_datetime
-from scripts.dashboard.views import (
-    render_inspector,
-    render_health,
-    render_quality,
-    render_observability,
-    render_diff,
-    render_batch_diff,
-    render_intelligence,
-    render_pillar_audit,
-    render_suppression_audit,
-    render_scoring_integrity,
-    render_module_health,
-    render_audit_caers,
-    render_safety_copy,
+from scripts.dashboard import shell  # noqa: E402
+from scripts.dashboard.components.page_frame import render_page_frame  # noqa: E402
+from scripts.dashboard.components.theme import inject_theme  # noqa: E402
+from scripts.dashboard.config import get_config  # noqa: E402
+from scripts.dashboard.data_loader import load_dashboard_data  # noqa: E402
+from scripts.dashboard.navigation import DEFAULT_SLUG, PAGES, resolve_legacy_view  # noqa: E402
+from scripts.dashboard.page_meta import get_page_meta  # noqa: E402
+from scripts.dashboard.views import (  # noqa: E402
+    audit_queue, coverage, explorer, market, ops, overview, run_compare_view, safety, score_lab, trace,
 )
 
-# --- Page Setup ---
-st.set_page_config(
-    page_title="PharmaGuide Pipeline Dashboard",
-    layout="wide",
-    initial_sidebar_state="expanded"
-)
-inject_dashboard_theme()
+VIEWS = {module.__name__.rsplit(".", 1)[-1]: module for module in
+         (overview, audit_queue, run_compare_view, explorer, trace, score_lab, coverage, market, safety, ops)}
 
-# --- Config & Data Loading ---
+st.set_page_config(page_title="PharmaGuide Quality Control", page_icon=":material/verified:",
+                   layout="wide", initial_sidebar_state="expanded")
+inject_theme()
+
 config = get_config()
-
-def refresh_data():
-    st.cache_data.clear()
-    st.cache_resource.clear()
-
 data = load_dashboard_data(config)
-
-shell_state = build_initial_shell_state(st.query_params, st.session_state)
-st.session_state.current_view = shell_state["current_view"]
-st.session_state.selected_dsld_id = shell_state["selected_dsld_id"]
-
-# --- Sidebar ---
-st.sidebar.title("PharmaGuide")
-st.sidebar.caption("Executive analytics workspace")
-
-all_views = list(VIEW_SLUGS.keys())
-view = st.sidebar.radio(
-    "Page",
-    all_views,
-    index=all_views.index(st.session_state.current_view)
-    if st.session_state.current_view in all_views
-    else 0,
-)
-st.session_state.current_view = view
-st.query_params["view"] = VIEW_SLUGS[view]
-
-# Dataset Filter
-dataset_options = ["All Datasets"] + data.discovered_datasets
-st.sidebar.selectbox(
-    "Active Dataset Scope",
-    dataset_options,
-    key="dataset_filter"
-)
-
-catalog = data.product_catalog
-score_cap = float(catalog["score"].max()) if not catalog.empty else 100.0
-
-st.sidebar.divider()
-st.sidebar.caption("Audit filters")
-
-brand_options = sorted([value for value in catalog.get("brand_name", []).dropna().unique().tolist()]) if not catalog.empty else []
-supplement_type_options = sorted([value for value in catalog.get("supplement_type", []).dropna().unique().tolist()]) if not catalog.empty else []
-primary_category_options = sorted([value for value in catalog.get("primary_category", []).dropna().unique().tolist()]) if not catalog.empty else []
-verdict_options = [value for value in ["SAFE", "CAUTION", "POOR", "UNSAFE", "BLOCKED", "NOT_SCORED"] if not catalog.empty and value in set(catalog["verdict"].dropna().tolist())]
-module_options = sorted(catalog.get("v4_module", []).dropna().unique().tolist()) if not catalog.empty else []
-confidence_options = sorted(catalog.get("v4_confidence", []).dropna().unique().tolist()) if not catalog.empty else []
-
-st.sidebar.multiselect("Brand", brand_options, key="brand_filter")
-st.sidebar.multiselect("Supplement Type", supplement_type_options, key="supplement_type_filter")
-st.sidebar.multiselect("Primary Category", primary_category_options, key="primary_category_filter")
-st.sidebar.multiselect("Verdict", verdict_options, key="verdict_filter")
-st.sidebar.multiselect("V4 Module", module_options, key="v4_module_filter")
-st.sidebar.multiselect("V4 Confidence", confidence_options, key="v4_confidence_filter")
-st.sidebar.slider("Minimum Score", 0.0, max(score_cap, 100.0), 0.0, 1.0, key="min_score_filter")
-st.sidebar.checkbox("Include safety-suppressed", key="include_suppressed")
-st.sidebar.checkbox("Only harmful findings", key="only_harmful_flags")
-st.sidebar.checkbox("Only omega-3 products", key="only_omega_bonus_candidates")
-st.sidebar.checkbox("Only verified Non-GMO", key="only_non_gmo_verified")
-filtered_catalog = filter_product_catalog(data)
-st.sidebar.caption(f"Filtered products: {len(filtered_catalog)} / {len(catalog)}")
-
-# Refresh Button
-if st.sidebar.button("🔄 Force Data Refresh"):
-    refresh_data()
-    st.rerun()
-
-st.sidebar.divider()
-st.sidebar.caption("Data planes: Release Snapshot · Pipeline Logs · Dataset Outputs")
-st.sidebar.divider()
-st.sidebar.caption(f"Last export: {format_dashboard_datetime(data.latest_export_at, style='compact')}")
-st.sidebar.caption(f"Last batch: {format_dashboard_datetime(data.latest_batch_at, style='compact')}")
-st.sidebar.caption(f"Latest dataset: {format_dashboard_datetime(max([item for item in [data.latest_enriched_at, data.latest_scored_at] if item is not None], default=None), style='compact')}")
-
-# Warnings
-with st.sidebar.expander(f"Warnings ({len(data.warnings)})"):
-    st.caption(f"Showing latest discovered reports from {config.scan_dir}")
-    st.caption(f"Release data from {config.build_root}")
-    if data.warnings:
-        for warning in data.warnings:
-            st.warning(warning)
-    else:
-        st.caption("No loader warnings.")
-
-dataset_activity = max([item for item in [data.latest_enriched_at, data.latest_scored_at] if item is not None], default=None)
-st.markdown(
-    f"""
-    <div class="pg-shell-hero">
-      <div class="pg-shell-kicker">Executive Analytics UI</div>
-      <h1 class="pg-shell-title">PharmaGuide Pipeline Dashboard</h1>
-      <div class="pg-shell-summary">
-        Release snapshot: {format_dashboard_datetime(data.latest_export_at, include_timezone=True)}
-        &nbsp;&nbsp;|&nbsp;&nbsp;
-        Pipeline activity: {format_dashboard_datetime(data.latest_batch_at, include_timezone=True)}
-        &nbsp;&nbsp;|&nbsp;&nbsp;
-        Dataset activity: {format_dashboard_datetime(dataset_activity, include_timezone=True)}
-      </div>
-    </div>
-    """,
-    unsafe_allow_html=True,
-)
-if data.latest_export_at and data.latest_batch_at and data.latest_batch_at > data.latest_export_at:
-    st.warning(
-        "Release snapshot data is older than current pipeline activity. Some pages blend shipped release data with newer pipeline or dataset signals."
-    )
+ctx = shell.init(data)
 
 
-def _render_current_view() -> None:
-    if view == "Command Center":
-        render_command_center(data)
-    elif view == "Product Inspector":
-        render_inspector(data)
-    elif view == "Pipeline Health":
-        render_health(data)
-    elif view == "Data Quality":
-        render_quality(data)
-    elif view == "Scoring Integrity":
-        render_scoring_integrity(data)
-    elif view == "Pillar Audit":
-        render_pillar_audit(data)
-    elif view == "Module Health":
-        render_module_health(data)
-    elif view == "Suppression Audit":
-        render_suppression_audit(data)
-    elif view == "CAERS Audit":
-        render_audit_caers(data)
-    elif view == "Clinical Copy":
-        render_safety_copy(data)
-    elif view == "Observability":
-        render_observability(data)
-    elif view == "Release Diff":
-        render_diff(data)
-    elif view == "Batch Diff":
-        render_batch_diff(data)
-    elif view == "Intelligence":
-        render_intelligence(data)
+def _page(spec):
+    def render() -> None:
+        module = VIEWS[spec.module]
+        render_page_frame(get_page_meta(spec.slug, data), lambda: module.render(ctx))
+    render.__name__ = f"page_{spec.module}"
+    return st.Page(render, title=spec.title, icon=spec.icon, url_path=spec.slug, default=spec.slug == DEFAULT_SLUG)
 
 
-page_meta = get_page_meta(VIEW_SLUGS.get(view, VIEW_SLUGS[DEFAULT_VIEW]), data)
-render_page_frame(page_meta, _render_current_view)
+pages = {spec.slug: _page(spec) for spec in PAGES}
+shell.PAGE_OBJECTS.update(pages)
+sections: dict[str, list] = {}
+for spec in PAGES:
+    sections.setdefault(spec.section, []).append(pages[spec.slug])
+navigation = st.navigation(sections)
 
-# --- Footer ---
-st.divider()
-st.caption(f"Build Root: {config.build_root}")
-st.caption(f"Scan Dir: {config.scan_dir}")
+legacy = resolve_legacy_view(st.query_params.get("view"))
+if legacy:
+    dsld_id = st.query_params.get("dsld_id")
+    del st.query_params["view"]
+    if dsld_id:
+        st.session_state["trace_dsld_id"] = dsld_id
+    st.switch_page(pages[legacy])
+
+navigation.run()

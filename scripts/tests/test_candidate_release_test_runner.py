@@ -57,9 +57,9 @@ def test_interaction_parity_uses_the_shared_release_artifact_resolver() -> None:
 
 
 @pytest.mark.parametrize("module_name,test_name", [
-    ("test_dashboard_smoke", "test_all_dashboard_views_smoke_render"),
-    ("test_dashboard_smoke", "test_inspector_drilldown_renders_v4_for_real_product"),
-    ("test_graceful_degradation", "test_inspector_drill_down_real_product"),
+    ("test_dashboard_smoke", "test_all_dashboard_pages_smoke_render"),
+    ("test_dashboard_smoke", "test_product_trace_renders_a_real_product"),
+    ("test_graceful_degradation", "test_trace_on_real_product"),
 ])
 def test_real_dashboard_probes_read_candidate_build(
     monkeypatch, tmp_path, dashboard_app, module_name, test_name

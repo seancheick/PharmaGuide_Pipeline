@@ -1,0 +1,45 @@
+# PharmaGuide internal dashboard theme. Run from the repo root:
+#   streamlit run scripts/dashboard/app.py
+# Colours mirror PharmaGuide Website/src/app/globals.css (light only, like the site);
+# chart colours are the dashboard palette validated with the dataviz checker
+# (scripts/dashboard/components/theme.py holds the same values for Plotly).
+
+[theme]
+base = "light"
+primaryColor = "#183B3F"
+backgroundColor = "#FAF9F6"
+secondaryBackgroundColor = "#F2EFE9"
+textColor = "#181A1B"
+linkColor = "#246066"
+borderColor = "#E5E2DB"
+dataframeBorderColor = "#E5E2DB"
+dataframeHeaderBackgroundColor = "#F2EFE9"
+showWidgetBorder = true
+showSidebarBorder = true
+baseRadius = "8px"
+buttonRadius = "8px"
+font = "Geist:https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&display=swap"
+headingFont = "Newsreader:https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,500&display=swap"
+codeFont = "Geist Mono:https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500&display=swap"
+headingFontWeights = 500
+baseFontSize = 15
+metricValueFontSize = "1.55rem"
+metricValueFontWeight = 500
+redColor = "#9F2929"
+orangeColor = "#AA4E26"
+yellowColor = "#8A611D"
+greenColor = "#3F6250"
+blueColor = "#246066"
+violetColor = "#5B4B8A"
+chartCategoricalColors = ["#009C9E", "#E06A2C", "#3D6FD1", "#B88200", "#C8578B", "#3C8A3C"]
+chartSequentialColors = ["#EEF3F3", "#D6E4E5", "#BCD3D4", "#9FC1C3", "#80ADB0", "#62989C", "#468387", "#2E6E72", "#1F565A", "#183B3F"]
+
+[theme.sidebar]
+backgroundColor = "#F2EFE9"
+secondaryBackgroundColor = "#FFFFFF"
+
+[client]
+toolbarMode = "minimal"
+
+[browser]
+gatherUsageStats = false

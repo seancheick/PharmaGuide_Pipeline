@@ -36,7 +36,7 @@ def data_table(
 ):
     """
     Styled DataFrame wrapper with row limit and conditional formatting.
-    color_columns example: {"verdict": {"SAFE": "green", "BLOCKED": "red"}}
+    color_columns example: {"product_safety_status": {"blocked": "red"}}
     """
     if df.empty:
         st.info("No records to display")

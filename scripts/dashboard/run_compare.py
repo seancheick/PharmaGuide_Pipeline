@@ -111,7 +111,12 @@ def compare(read: TableReader, base: dict[str, Any], cand: dict[str, Any]) -> pd
         row["explained"] = (not moved) or bool(run_causes) or (fidelity_ok and bool(codes) and not pillar_unattributed)
         row["cause_fidelity"] = "pillar_causes" if fidelity_ok and codes else ("run_only" if run_causes else "pillar_deltas_only")
         rows.append(row)
-    return pd.DataFrame(rows)
+    frame = pd.DataFrame(rows)
+    numeric = ["total_before", "total_after", "delta", *[f"delta_{name}" for name in PILLARS]]
+    for column in numeric:  # an all-None column would otherwise be object dtype
+        if column in frame:
+            frame[column] = pd.to_numeric(frame[column], errors="coerce")
+    return frame
 
 
 def _slim_map(read: TableReader, run: dict[str, Any]) -> dict[str, dict]:
