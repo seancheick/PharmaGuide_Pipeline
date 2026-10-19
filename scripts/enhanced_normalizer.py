@@ -117,20 +117,23 @@ _UNII_IDENTITY_DESCRIPTOR_TOKENS = frozenset({
 
 
 @functools.lru_cache(maxsize=1)
-def _load_unii_exoneration_label_tokens() -> Dict[str, List[Set[str]]]:
+def _load_unii_exoneration_label_tokens(
+    path: Path = Path(__file__).parent / "data" / "unii_exoneration_allowlist.json",
+) -> Dict[str, List[Set[str]]]:
     """Load reviewed same-UNII exonerations as label-token sets.
 
     The allowlist is maintained as reference-data policy. Runtime uses it only
     to downgrade known same-substance collisions from warning to debug; lookup
-    precedence and resolved payloads remain unchanged.
+    precedence and resolved payloads remain unchanged. The file is checked in,
+    so a missing or unreadable one stops the run rather than silently turning
+    every reviewed collision back into a warning.
     """
-    path = Path(__file__).parent / "data" / "unii_exoneration_allowlist.json"
-    if not path.exists():
-        return {}
     try:
         payload = json.loads(path.read_text(encoding="utf-8"))
-    except (OSError, json.JSONDecodeError):
-        return {}
+    except (OSError, json.JSONDecodeError) as e:
+        raise RuntimeError(f"FATAL: Failed to load {path}: {e}") from e
+    if not isinstance(payload, dict) or not payload.get("exonerations"):
+        raise RuntimeError(f"FATAL: {path} has no exonerations")
 
     out: Dict[str, List[Set[str]]] = {}
     for exoneration in payload.get("exonerations", []) or []:
@@ -862,6 +865,10 @@ class EnhancedDSLDNormalizer:
         self.enhanced_delivery = self._load_json(ENHANCED_DELIVERY)
         self.daily_values = self._load_json(DAILY_VALUES_PATH)
         self._daily_value_lookup = self._build_daily_value_lookup()
+        # The folate DFE parent/child check converts through the shared unit
+        # converter. Load it now so a missing or corrupt unit_conversions.json
+        # stops worker init instead of erroring only the products that need it.
+        get_converter()
         self.clinical_strains_db = self._load_json(
             CLINICALLY_RELEVANT_STRAINS
         )

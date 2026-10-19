@@ -32,6 +32,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
 
+from constants import UNIT_CONVERSIONS_DB
 from normalization import (
     FOLATE_FORM_FOLIC_ACID,
     FOLATE_FORM_FOOD,
@@ -110,10 +111,7 @@ class UnitConverter:
         Args:
             db_path: Path to unit_conversions.json. If None, uses default.
         """
-        if db_path is None:
-            db_path = Path(__file__).parent / "data" / "unit_conversions.json"
-
-        self.db_path = db_path
+        self.db_path = UNIT_CONVERSIONS_DB if db_path is None else db_path
         self.db = None
         self.vitamin_conversions = {}
         self.mass_rules = {}
@@ -122,27 +120,33 @@ class UnitConverter:
 
         self._load_database()
 
-    def _load_database(self) -> bool:
-        """Load the unit conversions database."""
+    def _load_database(self) -> None:
+        """Load the unit conversions database.
+
+        Clean and Enrich both convert through this table, so a missing,
+        unreadable or rule-less file stops the run instead of leaving every
+        conversion to report "no rule".
+        """
         try:
             with open(self.db_path, 'r', encoding='utf-8') as f:
                 self.db = json.load(f)
+        except (OSError, json.JSONDecodeError) as e:
+            raise RuntimeError(
+                f"FATAL: Failed to load unit conversions database {self.db_path}: {e}"
+            ) from e
 
-            self.version = self.db.get('_metadata', {}).get('version', 'unknown')
-            self.vitamin_conversions = self.db.get('vitamin_conversions', {})
-            self.mass_rules = self.db.get('mass_conversions', {}).get('rules', {})
-            self.form_patterns = self.db.get('form_detection_patterns', {})
+        self.version = self.db.get('_metadata', {}).get('version', 'unknown')
+        self.vitamin_conversions = self.db.get('vitamin_conversions', {})
+        self.mass_rules = self.db.get('mass_conversions', {}).get('rules', {})
+        self.form_patterns = self.db.get('form_detection_patterns', {})
+        if not self.vitamin_conversions or not self.mass_rules:
+            raise RuntimeError(
+                f"FATAL: unit conversions database {self.db_path} has no "
+                "vitamin_conversions or mass_conversions.rules"
+            )
 
-            logger.info("Loaded unit_conversions.json v%s with %d vitamin rules",
-                       self.version, len(self.vitamin_conversions))
-            return True
-
-        except FileNotFoundError:
-            logger.error("Unit conversions database not found: %s", self.db_path)
-            return False
-        except json.JSONDecodeError as e:
-            logger.error("Failed to parse unit conversions database: %s", e)
-            return False
+        logger.info("Loaded unit_conversions.json v%s with %d vitamin rules",
+                   self.version, len(self.vitamin_conversions))
 
     def get_version(self) -> str:
         """Get database version."""
