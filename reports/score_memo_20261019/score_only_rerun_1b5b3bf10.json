@@ -1,0 +1,14 @@
+{
+  "purpose": "Score-only re-run of the PR head after review fix 1b5b3bf10 (receipt for the README 'Review follow-up' claim)",
+  "runtime_commit": "1b5b3bf10",
+  "runtime_diff_vs_commit": "none (only scripts/tests differ)",
+  "inputs": "enriched records of ~/pg_quality/score_memo_20261019/base_6aaa9e874.jsonl.records for the 1,865 ids in ids.json",
+  "inputs_manifest_sha256": "0b5d9f64c3dbe45de37604d06bdfcc7da2f7a6d92b4dad13404d41e83f2e3884",
+  "method": "scoring_v4.scored_artifact.build_scored_artifact per product in one process, scoring_metadata.scored_date removed, json.dumps(sort_keys=True)",
+  "products": 1865,
+  "base_6aaa9e874_output_sha256": "91af93de62c455d5343d0b0ddeaefc55da34ca55f1415f30f0536c27197c9d5e",
+  "candidate_1b5b3bf10_output_sha256": "91af93de62c455d5343d0b0ddeaefc55da34ca55f1415f30f0536c27197c9d5e",
+  "identical": true,
+  "candidate_timing": "1865 products 137.71s 73.8 ms/product",
+  "records_carrying_route_rows_key": 0
+}

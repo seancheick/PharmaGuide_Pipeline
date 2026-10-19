@@ -70,7 +70,11 @@ with the route-rows key already attached (nothing in production persists it; 0 o
 enriched records carry it) would have read stale rows in scope. The scope now steps aside for such a
 product (fail-first `test_scoring_input_scope_steps_aside_for_a_product_carrying_route_rows`). After
 that commit, re-scoring the 1,865 enriched products gave artifacts byte-identical to the base output
-(44.6 ms/product).
+(receipt `score_only_rerun_1b5b3bf10.json`: base and candidate output sha256 `91af93de…`).
+
+The build-count test counts every derivation (scoring input, route decision, classification per
+argument set, roles per argument set) and fails on `origin/main` with the count itself
+(`_build_scoring_ingredients`: 19 builds in one pass).
 
 ## Tests
 
