@@ -34,6 +34,7 @@ for allergen_id, terms in NEGATIVE_TERMS.items():
     entry = by_id[allergen_id]
     assert "match_rules" not in entry, allergen_id
     entry["match_rules"] = {"negative_match_terms": terms}
+    entry["last_updated"] = "2026-10-19"
 fish = by_id["ALLERGEN_FISH"]
 assert fish["notes"].count(OLD_FISH_NOTE) == 1
 fish["notes"] = fish["notes"].replace(OLD_FISH_NOTE, NEW_FISH_NOTE)

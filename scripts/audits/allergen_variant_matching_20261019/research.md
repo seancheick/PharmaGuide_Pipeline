@@ -64,9 +64,27 @@ Not vetoed (flagged, existing policy): molluscs and mustard/celery are EU Annex 
 not apply; "refined soybean oil" (3 rows) is not labelled highly refined; dextrin labelled "from wheat"
 follows the wheat dextrin alias.
 
-Rows vetoed by the batch in the corpus: milk 214 (milk thistle family, coconut milk, enzyme
-blends), tree nuts 28, rye 2 + 5 Graminex pollen rows, mustard 2, wheat 1 + 4 polyol rows, fish 2 ("highly refined fish
-oil"). The simulation ran before the rye pollen veto; the replay below is the measured result.
+Corpus rows whose name or a form matches an alias as a phrase but that are not flagged, at the
+final code (row level, every row counted): milk 243 (milk thistle 201, coconut milk 31, BioCore
+Dairy 5, dairy digestive 4, coconut cream 2), fish 33 (highly refined), tree nuts 28, wheat 11
+(mannitol 7, xylitol 3, gluten enzyme 1), rye 7 (pollen 5, rye flower 2), mustard 2. No corpus row is
+negated ("Non-Dairy", "-Free") today; the guard is for future labels.
+
+## Independent audit follow-up (0713d5eda)
+
+- Vetoes apply only to the text they describe. A term containing one of the entry's aliases ("milk
+  thistle", "coconut milk") cancels only the alias span it overlaps, plus a parenthetical botanical
+  synonym right after it ("Rye flower (Secale cereale) extract", 187515). Any other term ("pollen",
+  "mannitol", "highly refined") covers its own text and, from the row name, the row's forms, which
+  keeps the Graminex rye pollen and wheat-polyol rows vetoed. Before, any text's veto dropped a real
+  sibling allergen (forms Whey Protein Concentrate + Coconut Milk Powder lost milk).
+- Negated row wording is not a source, through `normalization.is_negated_match_phrase` with an
+  opt-in `spaced_free` ("Dairy Free"); substance matching keeps it off ("free base").
+- A form-only match names the form in its evidence ("Ingredient: Eicosapentaenoic Acid (from Fish
+  Oil)").
+- Corpus re-check (`_check_allergens` over 15,426 enriched products, before vs after): 0 allergen ids
+  gained or lost; 119 hits in 116 products gain only the evidence suffix.
+- The 9 edited entries carry last_updated 2026-10-19.
 
 ## Replay (measured) — `~/pg_quality/allergen_variants_20261019/`
 
