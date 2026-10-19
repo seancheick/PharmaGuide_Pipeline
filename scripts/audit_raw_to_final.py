@@ -1101,27 +1101,7 @@ def _check_line_integrity(
                 rec.add("LEDGER_NAME_DIFFERS_FROM_RAW",
                         f"{ref}: ledger {entry.get('source_label')!r} vs raw {raws[ref].get('name')!r}", stage="blob")
 
-    # Identity: the enricher's decision for a path is what ships (ADR-0005).
-    decided: dict[str, set[str]] = collections.defaultdict(set)
-    iqd = (enriched or {}).get("ingredient_quality_data") or {}
-    for bucket in ("ingredients", "ingredients_skipped"):
-        for row in iqd.get(bucket) or []:
-            if isinstance(row, dict) and row.get("raw_source_path"):
-                decided[row["raw_source_path"]].add(str(row.get("canonical_id") or ""))
-    # The display ledger row keeps the printed label's identity for the app's
-    # ingredient-id union; the enricher's identity is its namespaced analysis.
-    exported = [("ingredients", row, row) for row in blob.get("ingredients") or [] if isinstance(row, dict)]
-    exported += [
-        ("display_ingredients.analysis", row, row["analysis"])
-        for row in blob.get("display_ingredients") or []
-        if isinstance(row, dict) and isinstance(row.get("analysis"), dict)
-    ]
-    for key, row, identity in exported:
-        path = row.get("raw_source_path")
-        if path in decided and str(identity.get("canonical_id") or "") not in decided[path]:
-            rec.add("EXPORT_IDENTITY_NOT_FROM_ENRICHER",
-                    f"{key} {path}: exported {identity.get('canonical_id')!r}, enricher decided "
-                    f"{sorted(decided[path])!r}", ingredient=row.get("name"), stage="blob")
+    _check_export_identity(rec, enriched, blob)
 
     # Amounts: a changed printed amount or unit carries the cleaner's recorded reason.
     cleaned_rows = {
@@ -1147,6 +1127,30 @@ def _check_line_integrity(
                     f"{path}: printed {first.get('quantity')} {first.get('unit')}, exported {amount} "
                     f"{row.get('unit')} with no recorded serving column, correction or %DV evidence",
                     ingredient=row.get("name"), stage="blob")
+
+
+def _check_export_identity(rec: ProductRecord, enriched: Mapping[str, Any] | None, blob: Mapping[str, Any]) -> None:
+    """The enricher's decision for a path is what ships (ADR-0005); needs no raw label."""
+    decided: dict[str, set[str]] = collections.defaultdict(set)
+    iqd = (enriched or {}).get("ingredient_quality_data") or {}
+    for rows in iqd.values():
+        for row in rows if isinstance(rows, list) else []:
+            if isinstance(row, dict) and row.get("raw_source_path"):
+                decided[row["raw_source_path"]].add(str(row.get("canonical_id") or ""))
+    # The display ledger row keeps the printed label's identity for the app's
+    # ingredient-id union; the enricher's identity is its namespaced analysis.
+    exported = [("ingredients", row, row) for row in blob.get("ingredients") or [] if isinstance(row, dict)]
+    exported += [
+        ("display_ingredients.analysis", row, row["analysis"])
+        for row in blob.get("display_ingredients") or []
+        if isinstance(row, dict) and isinstance(row.get("analysis"), dict)
+    ]
+    for key, row, identity in exported:
+        path = row.get("raw_source_path")
+        if path in decided and str(identity.get("canonical_id") or "") not in decided[path]:
+            rec.add("EXPORT_IDENTITY_NOT_FROM_ENRICHER",
+                    f"{key} {path}: exported {identity.get('canonical_id')!r}, enricher decided "
+                    f"{sorted(decided[path])!r}", ingredient=row.get("name"), stage="blob")
 
 
 def audit_product(
@@ -1300,7 +1304,8 @@ def audit_all_products(
             blob = _read_blob(blob_dir, dsld_id)
             if blob is not None:
                 if from_submission or enriched.get("manual_product_provenance"):
-                    rec.notes.append("approved submission: no DSLD raw label; line checks not applicable")
+                    rec.notes.append("approved submission: no DSLD raw label; raw-row checks not applicable")
+                    _check_export_identity(rec, enriched, blob)
                 elif dsld_id not in raw_index:
                     rec.add("RAW_LABEL_NOT_FOUND", f"no raw DSLD label {dsld_id}.json under {raw_root}", stage="raw")
                 else:

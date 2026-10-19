@@ -295,7 +295,7 @@ def test_full_blend_requires_every_child_amount() -> None:
 
 # --- Line integrity: raw DSLD row -> exported row (ADR-0005) -----------------
 
-from audit_raw_to_final import _check_line_integrity  # noqa: E402
+from audit_raw_to_final import _check_export_identity, _check_line_integrity  # noqa: E402
 
 
 def _line_fixture():
@@ -400,3 +400,17 @@ def test_line_integrity_accepts_a_daily_value_dose_correction():
         "status": "corrected", "corrected_amount": 110.0, "corrected_unit": "mg"}}
     blob["ingredients"][0].update(quantity=110.0, unit="mg")
     assert _line_codes(raw, cleaned, enriched, blob) == []
+
+
+def test_export_identity_reads_every_enricher_bucket_without_a_raw_label():
+    # Approved submissions have no DSLD raw label; their identity is still checked.
+    enriched = {"ingredient_quality_data": {"ingredients_recognized_non_scorable": [
+        {"raw_source_path": "ingredientRows[2]", "canonical_id": "NHA_NATURAL_COLORS"}]}}
+    blob = {"ingredients": [{"raw_source_path": "ingredientRows[2]", "canonical_id": "cabbage_extract"}]}
+    record = _record()
+    _check_export_identity(record, enriched, blob)
+    assert [finding.code for finding in record.findings] == ["EXPORT_IDENTITY_NOT_FROM_ENRICHER"]
+    blob["ingredients"][0]["canonical_id"] = "NHA_NATURAL_COLORS"
+    record = _record()
+    _check_export_identity(record, enriched, blob)
+    assert record.findings == []
