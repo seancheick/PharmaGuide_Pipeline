@@ -189,6 +189,7 @@ from identity.safety import (
     hold_unapproved_policy_payload,
     safety_flag_from_banned_match,
     safety_jurisdiction_projection,
+    safety_normalize_text,
     safety_policy_status_for_role,
 )
 
@@ -13052,6 +13053,64 @@ class SupplementEnricherV3:
                     "prevalence": allergen.get('prevalence', ''),
                 })
 
+    def _allergen_phrase_patterns(self, allergen_list: List[Dict]) -> List[Optional[re.Pattern]]:
+        """One whole-word alias pattern per allergen entry, built once per list."""
+        cached = getattr(self, "_allergen_phrase_pattern_cache", None)
+        if cached is not None and cached[0] is allergen_list:
+            return cached[1]
+        patterns: List[Optional[re.Pattern]] = []
+        for allergen in allergen_list:
+            terms = {
+                safety_normalize_text(term)
+                for term in [allergen.get('standard_name', ''), *(allergen.get('aliases') or [])]
+            }
+            terms.discard("")
+            patterns.append(re.compile(
+                r"(?<![a-z0-9])(?:"
+                + "|".join(re.escape(term) for term in sorted(terms, key=len, reverse=True))
+                + r")(?![a-z0-9])"
+            ) if terms else None)
+        self._allergen_phrase_pattern_cache = (allergen_list, patterns)
+        return patterns
+
+    @staticmethod
+    def _allergen_label_text_match(
+        phrase_pattern: re.Pattern, negative_terms: List[Any], name: str, forms: List[str],
+    ) -> Optional[str]:
+        """The row name or form that names this allergen, or None.
+
+        A negative term that itself contains an alias ("milk thistle",
+        "coconut milk") cancels only the alias span it overlaps, so "Coconut
+        Milk & Whey Protein" still names milk. Any other term ("pollen",
+        "mannitol", "highly refined") describes the text it is in; in the row
+        name it also covers the forms ("Mannitol" from "Wheat"). Explicit
+        negation in the same text ("Non-Dairy", "Soy-Free") is not a source.
+        """
+        phrase_terms, context_terms = [], []
+        for item in negative_terms or []:
+            term = safety_normalize_text(item.get("term") if isinstance(item, dict) else item)
+            if term:
+                (phrase_terms if phrase_pattern.search(term) else context_terms).append(term)
+        name_is_context = any(term in safety_normalize_text(name) for term in context_terms)
+        for index, raw in enumerate([name, *forms]):
+            text = safety_normalize_text(raw)
+            if any(term in text for term in context_terms) or (index and name_is_context):
+                continue
+            # A phrase also covers the botanical synonym that follows it:
+            # "Rye flower (Secale cereale) extract".
+            covered = [
+                (m.start(), m.end())
+                for term in phrase_terms
+                for m in re.finditer(re.escape(term) + r"(?:\s*\([^)]*\))?", text)
+            ]
+            for match in phrase_pattern.finditer(text):
+                if any(start < match.end() and match.start() < end for start, end in covered):
+                    continue
+                if norm_module.is_negated_match_phrase(text, match.group(0), spaced_free=True):
+                    continue
+                return raw
+        return None
+
     def _check_allergens(self, ingredients: List[Dict], product: Dict) -> Dict:
         """
         P0.1: Check for allergens with presence_type and precedence.
@@ -13075,22 +13134,41 @@ class SupplementEnricherV3:
         label_allergens = self._extract_allergen_presence_from_text(product)
         all_found.extend(label_allergens)
 
-        # Source 2: Ingredient list
+        # Source 2: Ingredient list. Besides an exact name, an alias counts as a
+        # whole-word phrase in the row's own label text: its name or forms
+        # ("Whey Protein Isolate", "Omega-3" with form "Fish Oil"). standardName
+        # is the canonical identity, not label evidence (algal omega-3 rows
+        # carry fish_oil), so it matches only exactly. An entry's
+        # match_rules.negative_match_terms vetoes reviewed non-allergen phrases
+        # ("milk thistle") and FDA-exempt highly refined oils.
+        phrase_patterns = self._allergen_phrase_patterns(allergen_list)
         for ingredient in ingredients:
             ing_name = ingredient.get('name', '')
             std_name = ingredient.get('standardName', '') or ing_name
+            form_names = [
+                (form.get('name') if isinstance(form, dict) else form) or ''
+                for form in ingredient.get('forms') or []
+            ]
 
-            for allergen in allergen_list:
+            for allergen, phrase_pattern in zip(allergen_list, phrase_patterns):
                 allergen_name = allergen.get('standard_name', '')
                 allergen_aliases = allergen.get('aliases', [])
 
-                if self._exact_match(ing_name, allergen_name, allergen_aliases) or \
-                   self._exact_match(std_name, allergen_name, allergen_aliases):
+                source_text = ing_name if (
+                    self._exact_match(ing_name, allergen_name, allergen_aliases)
+                    or self._exact_match(std_name, allergen_name, allergen_aliases)
+                ) else phrase_pattern and self._allergen_label_text_match(
+                    phrase_pattern,
+                    (allergen.get('match_rules') or {}).get('negative_match_terms', []),
+                    ing_name,
+                    form_names,
+                )
+                if source_text:
 
-                    # NEVER apply negation to structured ingredient-list matches.
-                    # If "Milk Protein" is in the ingredient list, it IS an allergen
-                    # regardless of any "dairy-free" claim in marketing text.
-                    # Negation applies only to label statements (_parse_allergen_statement).
+                    # NEVER let a label claim negate a structured ingredient
+                    # row: if "Milk Protein" is in the ingredient list, it IS an
+                    # allergen regardless of any "dairy-free" marketing text.
+                    # Only the row's own wording ("Non-Dairy Creamer") is read.
 
                     all_found.append({
                         "allergen_id": allergen.get('id', ''),
@@ -13098,7 +13176,9 @@ class SupplementEnricherV3:
                         "ingredient": ing_name,
                         "presence_type": "ingredient_list",
                         "source": "ingredient_list",
-                        "evidence": f"Ingredient: {ing_name}",
+                        "evidence": f"Ingredient: {ing_name}" + (
+                            "" if source_text == ing_name else f" (from {source_text})"
+                        ),
                         "matched_text": ing_name,
                         "severity_level": allergen.get('severity_level', 'low'),
                         "regulatory_status": allergen.get('regulatory_status', ''),

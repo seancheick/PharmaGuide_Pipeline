@@ -862,8 +862,12 @@ def strip_label_identity_qualifiers(name: str) -> str:
     return result
 
 
-def is_negated_match_phrase(text: str, matched_term: str) -> bool:
-    """Recognize explicit negation around a term; shared label-text predicate."""
+def is_negated_match_phrase(text: str, matched_term: str, *, spaced_free: bool = False) -> bool:
+    """Recognize explicit negation around a term; shared label-text predicate.
+
+    ``spaced_free`` also reads "Dairy Free" as negation. Callers matching
+    substance names leave it off: "free base" is chemistry, not absence.
+    """
     term = (matched_term or "").strip().lower()
     if not text or not term:
         return False
@@ -871,7 +875,7 @@ def is_negated_match_phrase(text: str, matched_term: str) -> bool:
     text_lower = text.lower()
     escaped_term = re.escape(term)
     negation_patterns = (
-        rf"\b{escaped_term}\s*-\s*free\b",
+        rf"\b{escaped_term}\s*{'-?' if spaced_free else '-'}\s*free\b",
         rf"\bfree\s+from\s+{escaped_term}\b",
         rf"\bcontains?\s+no\s+{escaped_term}\b",
         rf"\bno\s+{escaped_term}\b",
