@@ -546,12 +546,56 @@ def render_tables(proposed: dict, products: dict, rows: list) -> str:
     return "\n".join(out) + "\n"
 
 
+# Run only after branch claude/hungry-bell-fa1b07 (F2) is on main. 269286's approved expectations
+# described the defect state (partial, unresolved identity, Poor). After F2 the label resolves to
+# saw_palmetto. A raw -> scored replay on F2 code 0a70d9ce7 gives 57.4, Needs improvement, complete,
+# Evidence evaluated_applicable 0.3, Dose 11.4 neutral, Verification unknown 6. The movement reason is
+# identity_resolution, which is already allowed for this canary.
+REANCHOR_AFTER_F2 = {
+    "269286": {
+        "expected_quality_assessment_status": CO,
+        "expected_quality_tier_band": ["Poor", "Needs improvement"],  # +/-5 rule on 57.4
+        "expected_pillar_invariants": ["evidence_single_active_not_nothing_to_assess", EA, DN, VU],
+        "edge_cases": ["branded_extract_read_as_blend_header", "single_constituent_blend_row_resolved_f2"],
+        "notes": "Prosterol (saw palmetto CO2 extract) 320 mg is filed by DSLD as a one-constituent blend. Before F2 the cleaner read it as a blend header (BLEND_GENERAL, partial, 31.0). F2 (claude/hungry-bell-fa1b07) resolves it to saw_palmetto, and these expectations pin the resolved behaviour.",
+    },
+}
+
+
+def reanchor_after_f2() -> None:
+    import data_batch
+    doc = data_batch.load(CANARY_FILE)
+    for c in doc["canaries"]:
+        c.update(copy.deepcopy(REANCHOR_AFTER_F2.get(c["dsld_id"], {})))
+    data_batch.save(CANARY_FILE, doc)
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--products", type=Path, default=DEFAULT_PRODUCTS)
     ap.add_argument("--core-db", type=Path, default=DEFAULT_CORE_DB)
     ap.add_argument("--apply", action="store_true", help="write canary_products.json (only after Sean approves)")
+    ap.add_argument("--reanchor-after-f2", action="store_true",
+                    help="re-anchor 269286 once F2 (claude/hungry-bell-fa1b07) is merged; see REANCHOR_AFTER_F2")
+    ap.add_argument("--evaluate-applied", action="store_true",
+                    help="evaluate canary_products.json as it is, without rebuilding the proposal")
     args = ap.parse_args()
+    if args.evaluate_applied:
+        import data_batch
+        doc = data_batch.load(CANARY_FILE)
+        tiers = json.loads((REPO / CFG).read_text())["tiers"]
+        products = load_products(args.products, {c["dsld_id"] for c in doc["canaries"]})
+        core_ids = {str(r[0]) for r in sqlite3.connect(args.core_db).execute("select dsld_id from products_core")}
+        rows = evaluate(doc, products, tiers, core_ids)
+        failed = [(r["dsld_id"], n, g) for r in rows for n, ok, g in r["checks"] if not ok]
+        print(f"applied canaries={len(rows)} checks={sum(len(r['checks']) for r in rows)} failed={len(failed)}")
+        for f in failed:
+            print("FAIL", *f)
+        return 1 if failed else 0
+    if args.reanchor_after_f2:
+        reanchor_after_f2()
+        print("re-anchored:", ", ".join(REANCHOR_AFTER_F2))
+        return 0
 
     import data_batch
     doc = data_batch.load(CANARY_FILE)

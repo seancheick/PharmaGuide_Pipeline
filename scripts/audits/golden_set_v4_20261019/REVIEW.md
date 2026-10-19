@@ -329,3 +329,26 @@ Status columns are expected values (a list means policy allows either). Current 
 | 51 | 209389 (new) | Doctor's Best Noni Fruit Powder 650 mg | generic | scored | complete | no_known | Poor–Needs improvement | Poor 54.4 | `evidence_reviewed_zero_is_assessed`, `verification_unknown_neutral`, `dose_unbenchmarked_neutral` | evidence_review_completed | PASS |
 | 52 | 269286 (new) | Doctor's Best Saw Palmetto 320 mg | generic | scored | partial | no_known | Poor | Poor 31.0 | `unfinished_identity_marks_partial`, `evidence_single_active_not_nothing_to_assess`, `verification_unknown_neutral` | identity_resolution | FAIL: evidence_single_active_not_nothing_to_assess (F2) |
 | 53 | 256962 (new) | Centrum Centrum Men's Multi | multi_or_prenatal | not_scored | partial | no_known | none | NOT_SCORED | `not_scored_has_no_number` | identity_resolution | PASS |
+
+## Follow-up status: F1 and F2 (2026-10-19)
+
+Each fix was rechecked here by scoring the real raw label (staging/brands) with that branch's code and
+then running `proposal.py::evaluate`. As a control, the base code reproduces the stored artifacts
+exactly (269286 scores 31.0).
+
+| Finding | Fix branch (pushed, not merged) | Canary on fix code | Golden-set action |
+|---|---|---|---|
+| F1 | `claude/brave-lamport-11d6c0` (bd3470416, 5ab3ec1e6, 1df4d9800) | 294063: 44.4 Poor, `partial`, Evidence `clinical_review_not_covered`. **12/12 checks pass.** | None. The approved status list `[complete, partial]` already covers it. F1's full replay moved no other canary. |
+| F2 | `claude/hungry-bell-fa1b07` (e91e6b90f..0a70d9ce7) | 269286: 57.4 Needs improvement, `complete`, Evidence `evaluated_applicable`. The single-active check passes. Three expectations taken from the defect state fail (partial, `unfinished_identity_marks_partial`, band Poor). | Re-anchor after F2 merges: run `proposal.py --reanchor-after-f2` (`REANCHOR_AFTER_F2`). In a dry run the re-anchored entry passes 11/11 on F2 code and still fails on pre-F2 code. Movement reason: `identity_resolution`, which is already allowed. |
+
+F2 reports that the other 52 golden canaries are unchanged by its raw replay. Its sibling movers (Mervia,
+Siliphos, Celadrin and others) are not canaries.
+
+**Integrator order:**
+1. Release.
+2. Merge F1 and F2, after green CI and `local` on each.
+3. Merge this branch.
+4. Run `proposal.py --reanchor-after-f2`.
+5. Run `data_batch.py check scripts/data/canary_products.json --since HEAD --expect canaries[51]`.
+6. Run the focused canary tests and commit.
+7. After the next corpus run, `proposal.py --evaluate-applied` should report 0 failures (it reads the applied file as it is; today it reports exactly F1 and F2).
