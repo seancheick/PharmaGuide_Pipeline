@@ -2,7 +2,7 @@
 
 ## Current checkpoint — adult score and child information, October 19
 
-Sean approved `rda_ul_data.child_ul_screen` and its app reader. Pipeline PR169 and app PR129 are qualified for the authorized merge; no operator pipeline, catalog publication, Flutter import or IPA.
+Sean approved `rda_ul_data.child_ul_screen` and its app reader. Pipeline PR169 is merged at22d7b8ffd and app PR129 at ef8d5566; both primary checkouts contain the qualified heads; no operator pipeline, catalog publication, Flutter import or IPA.
 
 - [x] Adult catalog UL screening and separate population-labeled child information; existing shared child-product classifier preserved.
 - [x] Fail-first corrections for age tags, nickel concern aggregation, native-folate/DFE units, exact component ownership, independent source paths and native amount word order. All132child values/scopes and final corrections independently reviewed.
@@ -10,7 +10,7 @@ Sean approved `rda_ul_data.child_ul_screen` and its app reader. Pipeline PR169 a
 - [x] Pipeline whole-fast CI39294429877(all4groups) on output-changing runtime71a5ddc7; app CI39292857961 onf87622cb. Later3773e8d90 only moves a self-contained test into source CI; two affected checks pass, production unchanged.
 - [x] Final local546passed/24declared optional-service skips; skip guard passed. Current replay blobs exercise the changed reference invariant; accepted marker/canary controls are reused read-only with explicit diagnostic provenance, not presented as a newly built catalog.
 - [x]33raw canaries;195final reference/UL tests;54benchmark/lookup tests; app analyze,183health/stack tests,31checksum/widget tests and6actual-blob checks pass. Independent source and movement review find no remaining bounded defect.
-- [ ] Merge PR169/129 and verify containment (integration in progress).
+- [x] Merge PR169/129 and verify containment: pipeline22d7b8ffd / app ef8d5566. Primary documentation drafts and private submissions remain preserved and uncommitted.
 - [ ] Finish the separately owned F1 Evidence and F2 blend-identity lanes before Sean's one final pipeline run. Current fingerprints:38staleClean/38Enrich/38Score; earliestClean. Full new-catalog parity and release gates remain post-run.
 
 Local evidence and exact limitations: `reports/child_ul_takeover_20261019/README.md`. Source/native UL policy is unchanged; the new field is explicitly approved. Historical checkpoints below do not qualify this new output as released.
