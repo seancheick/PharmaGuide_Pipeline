@@ -142,8 +142,15 @@ INGREDIENT_SCHEMA = _schema(
 PRODUCT_META_SCHEMA = _schema(
     ("dsld_id", _S), ("brand_name", _S), ("product_name", _S), ("entry_date", _S), ("off_market", _B),
     ("discontinued_date", _S), ("form_factor", _S), ("supplement_type", _S), ("primary_type", _S), ("source_part", _S),
+    ("serving", _S), ("servings_per_container", _F), ("directions", _S),
 )
-INGREDIENT_TABLES = {"ingredients": INGREDIENT_SCHEMA, "product_meta": PRODUCT_META_SCHEMA}
+# The printed label, one row per display_ingredients row (the canonical label ledger the app renders).
+LABEL_FACT_SCHEMA = _schema(
+    ("dsld_id", _S), ("seq", _I), ("section", _S), ("name", _S), ("amount", _S), ("daily_value", _F),
+    ("form", _S), ("depth", _I), ("parent", _S), ("scored", _B), ("disposition", _S), ("canonical_id", _S),
+)
+INGREDIENT_TABLES = {"ingredients": INGREDIENT_SCHEMA, "product_meta": PRODUCT_META_SCHEMA,
+                     "label_facts": LABEL_FACT_SCHEMA}
 
 TABLES: dict[str, pa.Schema] = {
     "products": PRODUCTS_SCHEMA,
@@ -483,15 +490,48 @@ def project_enriched(product: dict[str, Any], *, source_part: str) -> dict[str, 
         "discontinued_date": _text(product.get("discontinuedDate")),
         "form_factor": _text(product.get("form_factor_canonical") or product.get("form_factor")),
         "supplement_type": _text(product.get("supplement_type")), "primary_type": _text(product.get("primary_type")),
-        "source_part": source_part,
+        "source_part": source_part, **_serving_facts(product),
     }
-    return {"ingredients": rows, "product_meta": [meta]}
+    label = []
+    for seq, item in enumerate(product.get("display_ingredients") or []):
+        if not isinstance(item, dict):
+            continue
+        section = str(item.get("source_section") or "")
+        label.append({
+            "dsld_id": pid, "seq": seq, "section": "inactive" if "inactive" in section.lower() else "active",
+            "name": _text(item.get("label_display_name") or item.get("display_name") or item.get("raw_source_text")),
+            "amount": _text(item.get("exact_dose_text")), "daily_value": _num(item.get("dailyValue")),
+            "form": _text(item.get("label_display_form")), "depth": int(item.get("nested_depth") or 0),
+            "parent": _text(item.get("parent_label")), "scored": bool(item.get("score_included")),
+            "disposition": _text(item.get("display_disposition")), "canonical_id": _text(item.get("canonical_id")),
+        })
+    return {"ingredients": rows, "product_meta": [meta], "label_facts": label}
+
+
+def _serving_facts(product: dict[str, Any]) -> dict[str, Any]:
+    """Serving size, daily servings and directions exactly as the label records them."""
+    serving = None
+    sizes = [s for s in product.get("servingSizes") or [] if isinstance(s, dict)]
+    if sizes:
+        size = sizes[0]
+        low, high = _num(size.get("minQuantity")), _num(size.get("maxQuantity"))
+        amount = None if low is None else (f"{low:g}" if high in (None, low) else f"{low:g}–{high:g}")
+        daily_low, daily_high = size.get("minDailyServings"), size.get("maxDailyServings")
+        daily = None if daily_low is None else (f"{daily_low}" if daily_high in (None, daily_low) else f"{daily_low}–{daily_high}")
+        serving = " ".join(part for part in (amount, size.get("unit")) if part) or None
+        if serving and daily:
+            serving += f", {daily}× per day"
+    directions = [str(s.get("notes")).strip() for s in product.get("statements") or []
+                  if isinstance(s, dict) and "direction" in str(s.get("type") or "").lower() and s.get("notes")]
+    return {"serving": serving, "servings_per_container": _num(product.get("servingsPerContainer")),
+            "directions": "\n".join(directions) or None}
 
 
 def _projection_fingerprint() -> str:
     """Reused partitions are valid only for the projection code and schemas that wrote them."""
     import inspect
-    parts = [inspect.getsource(fn) for fn in (project_product, project_enriched, label_trust_record, _config_identity)]
+    parts = [inspect.getsource(fn) for fn in (project_product, project_enriched, _serving_facts, label_trust_record,
+                                              _config_identity)]
     parts += [str(schema) for schema in (*TABLES.values(), *INGREDIENT_TABLES.values())]
     return hashlib.sha256("\n".join([str(INDEX_SCHEMA_VERSION), *parts]).encode()).hexdigest()[:16]
 

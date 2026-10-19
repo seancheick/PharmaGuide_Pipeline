@@ -52,12 +52,12 @@ KIND_COLORS = {
     "not_earned": "#E5E2DB",
 }
 KIND_LABELS = {
-    "earned": "Points earned",
-    "neutral": "Neutral",
+    "earned": "Earned",
+    "neutral": "Baseline credit",
     "disclosure": "Disclosure credit",
-    "deduction": "Points deducted",
+    "deduction": "Deducted",
     "cap": "Capped",
-    "floor": "Floor (restores points)",
+    "floor": "Raised to minimum",
     "rounding": "Rounding",
     "not_earned": "Not earned",
 }
@@ -106,6 +106,37 @@ h1, h2, h3 {{ letter-spacing: -0.012em; }}
 .pg-track {{ height: 0.62rem; background: {TOKENS["border"]}; border-radius: 4px; overflow: hidden; }}
 .pg-fill {{ height: 100%; border-radius: 4px; }}
 .pg-state {{ color: {TOKENS["muted"]}; font-size: 0.78rem; grid-column: 2 / 4; margin-top: -0.2rem; }}
+.pg-sum {{ font-size: 0.85rem; color: {TOKENS["muted"]}; margin: 0.4rem 0 0.2rem; }}
+.pg-sum b {{ color: {TOKENS["ink"]}; font-weight: 500; }}
+.pg-card {{ border: 1px solid {TOKENS["border"]}; background: {TOKENS["surface"]}; border-radius: 8px; padding: 0.9rem 1rem; }}
+.pg-why {{ background: {TOKENS["subtle"]}; border-radius: 6px; padding: 0.55rem 0.75rem; font-size: 0.88rem; margin-bottom: 0.7rem; }}
+.pg-line {{ display: grid; grid-template-columns: 4.6rem 1fr auto; gap: 0.7rem; align-items: baseline;
+    padding: 0.42rem 0; border-bottom: 1px solid {TOKENS["border"]}; font-size: 0.9rem; }}
+.pg-line > span, .pg-total > span {{ min-width: 0; }}
+.pg-pts {{ font-family: "Geist Mono", ui-monospace, monospace; text-align: right; font-weight: 500; }}
+.pg-id {{ display: block; font-family: "Geist Mono", ui-monospace, monospace; font-size: 0.72rem; color: {TOKENS["muted"]};
+    overflow-wrap: anywhere; }}
+.pg-detail {{ display: block; font-size: 0.8rem; color: {TOKENS["muted"]}; }}
+.pg-total {{ display: grid; grid-template-columns: 4.6rem 1fr auto; gap: 0.7rem; padding: 0.55rem 0 0.1rem;
+    font-weight: 500; font-size: 0.95rem; }}
+.pg-label {{ width: 100%; border-collapse: collapse; font-size: 0.82rem; }}
+.pg-label-wrap {{ overflow-x: auto; }}
+.pg-label th {{ white-space: nowrap; text-align: left; font-weight: 500; color: {TOKENS["muted"]}; font-size: 0.75rem; text-transform: uppercase;
+    letter-spacing: 0.04em; border-bottom: 2px solid {TOKENS["ink"]}; padding: 0.3rem 0.3rem; font-size: 0.68rem; }}
+.pg-label td {{ border-bottom: 1px solid {TOKENS["border"]}; padding: 0.3rem 0.3rem; vertical-align: top; }}
+.pg-label th.r {{ text-align: right; }}
+.pg-card-head {{ display: flex; align-items: center; gap: 0.5rem; font-weight: 500; font-size: 1rem; margin-bottom: 0.5rem; }}
+.pg-card-score {{ margin-left: auto; font-family: "Geist Mono", ui-monospace, monospace; }}
+.pg-dot {{ width: 0.62rem; height: 0.62rem; border-radius: 3px; display: inline-block; }}
+.pg-label td.num {{ text-align: right; font-family: "Geist Mono", ui-monospace, monospace; }}
+.pg-label td.over {{ color: {SEVERITY["critical"][0]}; font-weight: 600; }}
+.pg-label .form {{ display: block; color: {TOKENS["muted"]}; font-size: 0.76rem; }}
+.pg-facts-head {{ font-family: Newsreader, Georgia, serif; font-size: 1.35rem; font-weight: 600; margin-bottom: 0.2rem; }}
+@media (max-width: 1280px) {{
+  [data-testid="stHorizontalBlock"]:has(.pg-card-head) {{ flex-wrap: wrap; }}
+  [data-testid="stHorizontalBlock"]:has(.pg-card-head) > [data-testid="stColumn"] {{ min-width: 100%; }}
+}}
+.pg-facts-meta {{ font-size: 0.84rem; color: {TOKENS["muted"]}; margin-bottom: 0.5rem; }}
 </style>
 """
 

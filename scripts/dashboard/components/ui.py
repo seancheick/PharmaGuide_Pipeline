@@ -206,6 +206,115 @@ def kind_label(kind: str) -> str:
     return KIND_LABELS.get(kind, human(kind))
 
 
+# Plain names for receipt entry ids (the scorer's component keys). Display only; the id is always shown beside it.
+RECEIPT_LABELS = {
+    "A1_bio_score": "Ingredient form quality (absorption)",
+    "A1_unrated_neutral": "Baseline for forms with no quality rating",
+    "A3_delivery_system": "Delivery system",
+    "A4_absorption_enhancer": "Absorption enhancer",
+    "A5b_standardized_botanical": "Standardized botanical extract",
+    "panel_form_quality": "Form quality across the nutrient panel",
+    "b_form_quality": "B-vitamin form quality",
+    "form_tier": "Ingredient form quality",
+    "epa_dha_concentration": "EPA/DHA concentration",
+    "sports_protein_source_quality": "Protein source quality",
+    "fiber_source_quality": "Fiber source quality",
+    "recognized_botanical_identity": "Recognized botanical identity",
+    "extract_not_whole_herb": "Extract rather than whole herb",
+    "marker_standardization_declared": "Standardization marker declared",
+    "weak_or_unidentified_botanical": "Weak or unidentified botanical",
+    "recognized_collagen_identity": "Recognized collagen identity",
+    "hydrolyzed_peptides": "Hydrolyzed collagen peptides",
+    "supplemental_window_proxy": "Doses within the supplemental range",
+    "botanical_clinical_dose": "Botanical at a studied dose",
+    "collagen_clinical_dose": "Collagen at a studied dose",
+    "joint_support_dose": "Joint actives at studied doses",
+    "sleep_support_dose": "Sleep actives at studied doses",
+    "rda_ai_coverage": "Nutrients meeting the RDA/AI",
+    "critical_nutrient_coverage": "Critical nutrients covered",
+    "prenatal_complement_support": "Prenatal nutrients covered",
+    "b_rda_ai_coverage": "B vitamins meeting the RDA/AI",
+    "epa_dha_band": "EPA/DHA daily amount",
+    "cfu_adequacy": "Probiotic count (CFU) adequate",
+    "studied_formula_dose_adequacy": "Studied formula at its studied dose",
+    "sports_primary_active_dose": "Main sports active at an effective dose",
+    "sports_ratio_or_completeness": "Sports formula ratio or completeness",
+    "fiber_effective_dose": "Fiber at an effective dose",
+    "vitamin_c_daily_range": "Vitamin C daily amount",
+    "vitamin_d_daily_range": "Vitamin D daily amount",
+    "zinc_daily_range": "Zinc daily amount",
+    "copper_balance": "Copper balanced against zinc",
+    "selenium_daily_range": "Selenium daily amount",
+    "beta_glucan_disclosed": "Beta-glucan amount disclosed",
+    "quercetin_disclosed": "Quercetin amount disclosed",
+    "elderberry_disclosed": "Elderberry amount disclosed",
+    "daily_use_discipline": "Daily-use dosing baseline",
+    "dose_safety_ceiling": "Dose safety cap (over the upper limit)",
+    "clinical_evidence_pipeline": "Clinical evidence for the actives",
+    "depth_bonus": "Depth of the evidence",
+    "evidence_family_certainty": "Certainty of the evidence",
+    "product_applicability": "Evidence matches this product's dose and form",
+    "independent_replication_consistency": "Independent, consistent replication",
+    "clinical_evidence": "Clinical evidence",
+    "essential_panel_authority": "Essential nutrients backed by an authority reference",
+    "b_nutrient_authority_panel": "B vitamins backed by an authority reference",
+    "primary_evidence_floor": "Minimum for the primary evidence",
+    "immune_support_evidence_cap": "Immune-support evidence cap",
+    "joint_support_evidence_cap": "Joint-support evidence cap",
+    "clear_disclosure_base": "Starting points for a clear label",
+    "complete_active_identity_dose_disclosure": "Every active named with its amount",
+    "B3_claim_compliance": "Claims stay within allowed wording",
+    "hypoallergenic_bonus": "Allergen-free claim supported",
+    "panel_identity_disclosure": "Panel ingredients identified",
+    "panel_individual_dose_disclosure": "Panel amounts listed individually",
+    "strain_identities_named": "Probiotic strains named",
+    "per_strain_cfu_on_label": "CFU listed per strain",
+    "aggregate_cfu_disclosure_proxy": "Total CFU disclosed",
+    "aggregate_native_afu_disclosure": "Total AFU disclosed",
+    "epa_or_dha_disclosed": "EPA or DHA amount disclosed",
+    "form_disclosed": "Ingredient form disclosed",
+    "source_disclosed": "Source disclosed",
+    "B2_false_allergen_free_claim": "Unsupported allergen-free claim",
+    "B5_proprietary_blend_opacity": "Amounts hidden in a proprietary blend",
+    "B6_marketing_claims": "Marketing claims",
+    "immune_high_variability_botanical_stack": "Highly variable botanical stack",
+    "sports_amino_spiking_risk": "Amino-spiking risk",
+    "sports_collagen_not_complete_protein": "Collagen counted as complete protein",
+    "neutral_baseline": "Starting points",
+    "cert": "Third-party certification",
+    "coa_batch": "Batch certificate of analysis",
+    "gmp": "GMP manufacturing",
+    "brand_testing": "Brand-reported testing",
+    "brand_only_cert": "Brand-only certification",
+    "reputation": "Manufacturer reputation",
+    "product_level_floor": "Minimum for product-level certification",
+    "manufacturing_ceiling": "Cap for manufacturing-level evidence only",
+    "claim_or_brand_ceiling": "Cap for claim- or brand-level evidence only",
+    "verification_cap": "Verification maximum",
+    "quality_system_violation_penalty": "Manufacturer quality-system violation",
+    "verification_floor": "Verification minimum",
+    "catalog_screen": "Starting points (catalog screen)",
+    "class_i_recall_penalty": "Class I recall",
+    "clean_label_penalty": "Clean-label issues",
+    "additive_or_sweetener_penalty": "Additives or sweeteners",
+    "safety_hygiene_floor": "Formula-checks minimum",
+    "rounding": "Rounded to one decimal",
+}
+
+
+def receipt_label(entry_id: Any) -> str:
+    """Plain name of one receipt line; unknown ids fall back to a readable form of the id."""
+    text = str(entry_id)
+    if text in RECEIPT_LABELS:
+        return RECEIPT_LABELS[text]
+    for suffix, template in (("_unrated_neutral", "{} — baseline for unrated forms"), ("_pillar_bounds", "{} pillar limit"),
+                             ("_bounds", "{} limit"), ("_not_evaluable", "{} not evaluable")):
+        if text.endswith(suffix):
+            stem = text[: -len(suffix)]
+            return template.format(RECEIPT_LABELS.get(stem, stem.replace("_", " ").capitalize()))
+    return text.replace("_", " ").capitalize()
+
+
 def empty_index_notice(command: str) -> None:
     st.warning("The dashboard index has not been built yet.", icon=":material/database:")
     st.code(command, language="bash")

@@ -10,6 +10,7 @@ import os
 import sqlite3
 
 import pandas as pd
+import pyarrow.dataset as pds
 import pytest
 
 from dashboard_index_fixtures import scored_product, write_batch, write_release
@@ -237,6 +238,14 @@ def test_ingredient_index_builds_reuses_and_survives_core_refresh(roots, monkeyp
     reader = _reader(roots)
     assert set(reader.ingredient_frame()["matched_form"]) == {"magnesium glycinate", "magnesium oxide"}
     assert set(reader.ingredient_frame("product_meta")["entry_date"]) == {"2021-05-01"}
+    meta = reader.ingredient_frame("product_meta", filter=pds.field("dsld_id") == "1").iloc[0]
+    assert (meta["serving"], meta["servings_per_container"], meta["directions"]) == (
+        "2 Capsule(s), 1–2× per day", 30.0, "Take two capsules daily.")   # storage note is not a direction
+    label = reader.ingredient_frame("label_facts", filter=pds.field("dsld_id") == "1").sort_values("seq")
+    label = label[["section", "name", "amount", "daily_value", "form"]].astype(object)
+    assert label.where(label.notna(), None).values.tolist() == [
+        ["active", "Magnesium", "100 mg", 24.0, "Magnesium Glycinate"],
+        ["inactive", "Vegetable Cellulose", None, None, None]]
     assert reader.ingredient_staleness()["stale"] is False
     parsed = []
     real = si._parse_candidate_part

@@ -11,7 +11,7 @@ import streamlit as st
 
 from scripts.dashboard import shell
 from scripts.dashboard.components.theme import KIND_COLORS, PILLAR_COLORS, TOKENS
-from scripts.dashboard.components.ui import kind_label, kpis, table
+from scripts.dashboard.components.ui import kind_label, kpis, receipt_label, table
 from scripts.dashboard.saved_views import ABSORB_MIN
 from scripts.dashboard.score_index import PILLAR_LABELS, PILLARS, QUALITY_CONFIG
 
@@ -29,6 +29,7 @@ def rule_impact(receipts: pd.DataFrame, products: pd.DataFrame) -> pd.DataFrame:
                       max_abs=("points", lambda s: s.abs().max()), catalog_total=("points", "sum"),
                       routes=("module", "nunique")).reset_index()
     out["pillar"] = out["pillar"].map(PILLAR_LABELS)
+    out.insert(1, "line", out["entry_id"].map(receipt_label))
     out["type"] = out["kind"].map(kind_label)
     return out.sort_values("catalog_total", key=lambda s: s.abs(), ascending=False)
 
@@ -128,6 +129,7 @@ def render(ctx: shell.PageContext) -> None:
         summary = caps.groupby(["pillar", "entry_id", "kind"]).agg(products=("dsld_id", "nunique"),
                                                                    points=("points", "sum")).reset_index()
         summary["pillar"] = summary["pillar"].map(PILLAR_LABELS)
+        summary.insert(1, "line", summary["entry_id"].map(receipt_label))
         summary["type"] = summary["kind"].map(kind_label)
         table(summary.sort_values("products", ascending=False), key="sl_caps", name="caps_floors", run_key=ctx.run_key,
               height=360, caption="Negative points = withheld by a cap; positive = restored by a floor.")
