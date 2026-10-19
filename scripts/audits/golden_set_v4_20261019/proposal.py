@@ -13,7 +13,6 @@ from __future__ import annotations
 
 import argparse
 import copy
-import glob
 import json
 import math
 import sqlite3
@@ -182,7 +181,7 @@ INVARIANTS = {
                    [P, "is_null", None], ["quality_assessment_status", "eq", "partial"]],
     },
     "unresolved_dose_safety_hold": {
-        "rule": "Material but unresolved dose safety (e.g. no reference for the label's age band) holds the product from scoring instead of guessing.",
+        "rule": "Material but unresolved applicable dose safety holds a product from scoring rather than guessing. Child-only information does not change the adult catalog assessment.",
         "owner": "scripts/dose_assessment.py (pediatric_reference_gap); scripts/scoring_v4/dose_safety.py state material_but_unresolved",
         "checks": [["dose_safety_evaluation.state_counts.material_but_unresolved", "ge", 1], ["flags", "contains", "DOSE_SAFETY_UNRESOLVED_REVIEW"]],
     },
@@ -246,7 +245,7 @@ EXPECT = {
     "241894": (G, SC, CO, NK, [VC, DN, EA], []),
     "173888": (M, SC, CO, NK, [VC, EU], []),
     "173918": (M, SC, CO, NK, [VC, EU], []),
-    "178520": (M, NS, PA, CA, ["not_scored_has_no_number", "unresolved_dose_safety_hold"], ["safety_policy_change", "reference_data_correction"]),
+    "178520": (M, SC, CO, NK, [EU, VU], ["safety_policy_change", "reference_data_correction"]),
     "328830": (M, SC, CO, NK, [VP, EU], ["verification_registry_change"]),
     "274081": (PB, SC, CO, NK, [VP, DN, EA], ["evidence_review_completed"]),
     "74124":  (O, SC, CO, NK, [VM, EU], []),
@@ -290,7 +289,7 @@ EXPECT = {
     "250851": (PB, SC, CO, NK, [EA, VP, DN], ["evidence_review_completed", "verification_registry_change"]),
     "202811": (G, SC, CO, NK, [EG, VU, DN], ["evidence_review_completed"]),
     "209389": (G, SC, CO, NK, ["evidence_reviewed_zero_is_assessed", VU, DN], ["evidence_review_completed"]),
-    "269286": (G, SC, PA, NK, ["unfinished_identity_marks_partial", "evidence_single_active_not_nothing_to_assess", VU], ["identity_resolution"]),
+    "269286": (G, SC, CO, NK, ["evidence_single_active_not_nothing_to_assess", EA, DN, VU], ["identity_resolution"]),
     "256962": (M, NS, PA, NK, ["not_scored_has_no_number"], ["identity_resolution"]),
 }
 
@@ -380,17 +379,20 @@ def tier_band(score, tiers):
     return [lo, hi] if names.index(lo) != names.index(hi) else [lo, lo]
 
 
-def get(obj, path):
+def get(obj, path, default=None):
     cur = obj
     for key in path.split("."):
         if not isinstance(cur, dict) or key not in cur:
-            return None
+            return default
         cur = cur[key]
     return cur
 
 
 def check(prod, path, op, value):
-    got = get(prod, path)
+    missing = object()
+    got = get(prod, path, missing)
+    if got is missing:
+        return False, None
     if op == "eq":
         ok = got == value
     elif op == "ne":
@@ -422,11 +424,15 @@ def check(prod, path, op, value):
 
 
 def load_products(root: Path, ids: set) -> dict:
+    from stage_manifest import select_stage_files
+
     found = {}
-    for fn in sorted(glob.glob(str(root / "output_*_scored" / "scored" / "scored_cleaned_batch_*.json"))):
-        for prod in json.loads(Path(fn).read_text()):
+    for fn in select_stage_files(root.glob("output_*_scored/scored"), "score", require_manifest=True):
+        for prod in json.loads(fn.read_text()):
             pid = str(prod.get("dsld_id"))
             if pid in ids:
+                if pid in found:
+                    raise ValueError(f"Duplicate scored product ID: {pid}")
                 found[pid] = prod
     return found
 
@@ -504,7 +510,7 @@ def evaluate(proposed: dict, products: dict, tiers: list, core_ids: set) -> list
             res["checks"].append(("pillars_sum_to_score", abs(total - score) <= 0.15, f"{round(total, 2)} vs {score}"))
         for inv in c["expected_pillar_invariants"]:
             fails = []
-            for path, op, value in INVARIANTS[inv]["checks"]:
+            for path, op, value in proposed["_metadata"]["golden_set"]["pillar_invariants"][inv]["checks"]:
                 ok, got = check(prod, path, op, value)
                 if not ok:
                     fails.append(f"{path} {op} {value!r}: got {str(got)[:80]!r}")

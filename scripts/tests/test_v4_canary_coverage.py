@@ -238,3 +238,64 @@ def test_canary_distribution_is_balanced(canary_doc: dict) -> None:
         f"canary set is class-skewed: largest class has {biggest}/{total} "
         f"({biggest/total:.0%}). Distribution: {dict(cls_counts)}"
     )
+
+
+@pytest.mark.parametrize('op,value', [('ne', 'no_assessable_actives'), ('is_null', None)])
+def test_golden_required_path_cannot_pass_when_missing(op, value):
+    from audits.golden_set_v4_20261019.proposal import check
+
+    assert check({}, 'quality_score_v4_100', op, value)[0] is False
+    assert check({'quality_score_v4_100': None}, 'quality_score_v4_100', 'is_null', None)[0] is True
+
+
+def _golden_stage(tmp_path, rows):
+    from stage_manifest import write_stage_manifest
+
+    stage = tmp_path / 'output_Test_scored' / 'scored'
+    stage.mkdir(parents=True)
+    path = stage / 'scored_cleaned_batch_1.json'
+    path.write_text(json.dumps(rows))
+    write_stage_manifest(stage, 'score', [path])
+    return stage
+
+
+def test_golden_loader_rejects_unowned_files(tmp_path):
+    from audits.golden_set_v4_20261019.proposal import load_products
+    from stage_manifest import StageManifestError
+
+    stage = _golden_stage(tmp_path, [{'dsld_id': '1'}])
+    (stage / 'scored_cleaned_batch_stale.json').write_text('[{"dsld_id":"1"}]')
+    with pytest.raises(StageManifestError, match='unowned'):
+        load_products(tmp_path, {'1'})
+
+
+def test_golden_loader_rejects_duplicate_ids(tmp_path):
+    from audits.golden_set_v4_20261019.proposal import load_products
+
+    _golden_stage(tmp_path, [{'dsld_id': '1'}, {'dsld_id': '1'}])
+    with pytest.raises(ValueError, match='Duplicate'):
+        load_products(tmp_path, {'1'})
+
+
+def test_golden_evaluator_reads_the_document_invariant():
+    from audits.golden_set_v4_20261019.proposal import evaluate
+
+    name = 'verification_unknown_neutral'  # existing generator default is different
+    doc = {'_metadata': {'golden_set': {'pillar_invariants': {
+        name: {'checks': [['custom_receipt', 'eq', 'source-qualified']]}
+    }}}, 'canaries': [{
+        'dsld_id': '1', 'expected_v4_module': 'generic',
+        'expected_quality_score_status': 'not_scored',
+        'expected_quality_assessment_status': 'partial',
+        'expected_product_safety_status': 'no_known_catalog_concern',
+        'expected_quality_tier_band': None, 'expected_pillar_invariants': [name],
+    }]}
+    product = {'_v4_module': 'generic', 'quality_score_status': 'not_scored',
+               'quality_assessment_status': 'partial', 'quality_tier': None,
+               'product_safety_status': 'no_known_catalog_concern',
+               'custom_receipt': 'source-qualified'}
+    checks = evaluate(doc, {'1': product}, [], {'1'})[0]['checks']
+    assert next(ok for key, ok, _ in checks if key == name) is True
+    doc['_metadata']['golden_set']['pillar_invariants'][name]['checks'][0][2] = 'wrong'
+    checks = evaluate(doc, {'1': product}, [], {'1'})[0]['checks']
+    assert next(ok for key, ok, _ in checks if key == name) is False
