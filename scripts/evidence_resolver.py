@@ -292,26 +292,10 @@ def resolve_omega_evidence_standard(product: Mapping[str, Any]) -> Dict[str, Any
     prenatal_score = float(policy["prenatal_dha_intake_authority"]["pillar_score"])
 
     normalized_title = _canonical_text(title)
-    child_population = re.compile(
-        r"\b(?:baby|babies|infant|infants|child|children|kids?|toddler|toddlers|pediatric|junior|jr)\b"
-    )
-    # targetGroups describes the intended users. userGroups instead describes
-    # the label's nutrient Daily Value population and must not select purpose.
-    target_groups = prod.get("targetGroups") or []
-    if isinstance(target_groups, str):
-        target_groups = [target_groups]
-    target_text = _canonical_text(" ".join(
-        str(group.get("text") or group.get("name") or "")
-        if isinstance(group, Mapping) else str(group)
-        for group in target_groups
-    ))
-    adult_target = bool(re.search(
-        r"\b(?:adults?|seniors?|mature|men|women|pregnant|lactating|menopause|menopausal)\b",
-        target_text,
-    ))
-    child_or_baby = bool(child_population.search(normalized_title)) or (
-        bool(child_population.search(target_text)) and not adult_target
-    )
+    # One shared children's-product rule (also selects child upper-limit notes).
+    from rda_ul_calculator import label_is_for_children
+
+    child_or_baby = label_is_for_children(prod)
     specialized = bool(re.search(
         r"\b(?:spm|specialized pro resolving|pro resolving|resolvin|protectin|maresin|pro resolve)\b",
         normalized_title,

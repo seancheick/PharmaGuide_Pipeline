@@ -338,6 +338,11 @@ def is_folate_parent_total_duplicate_flag(flag: Dict[str, Any]) -> bool:
         return False
 
     rows = [row for row in _safe_list(flag.get("contributing_rows")) if isinstance(row, dict)]
+    # Current enrichment has already resolved parent/component ownership.
+    # Numeric/name similarity may only reconcile legacy unqualified artifacts;
+    # it cannot discard distinct source-owned exposures in a current sum.
+    if rows and all(row.get("source_label_key") and row.get("dose_role") for row in rows):
+        return False
     if len(rows) < 2:
         return False
 

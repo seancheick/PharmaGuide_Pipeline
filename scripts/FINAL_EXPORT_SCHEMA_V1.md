@@ -862,11 +862,22 @@ ambiguity.
 - `rda_ul_data` is included when enrichment emitted an RDA/UL analysis block. It may still
   contain `collection_enabled: false` with a reason. When absent entirely, the app treats it
   as unavailable.
+- `rda_ul_data.child_ul_screen[]` (Sean, 2026-10-19): the score is for adults, so `safety_flags[]`
+  and the Dose ceiling use adult upper limits only. On a children's product
+  (`rda_ul_calculator.label_is_for_children`: the title names children, or the target groups name
+  children and no adult group) each entry states a NASEM child limit the product exceeds:
+  `nutrient`, `canonical_id`, `status: "over_limit"`, `amount`, `unit`, `ul`, `pct_ul`,
+  `ul_population` (`label` such as "children 4-8", `age_ranges`, and `missing_age_ranges` when a
+  stated age has no reference row), `warning` (the sentence to show) and `severity`. Summed forms of
+  one nutrient add `aggregation: "canonical_sum"` and `contributing_rows`. The enriched record also
+  keeps `not_assessable` entries (unresolved form or a missing child row); the blob exports only
+  `over_limit`. Flutter consumer: `product_health_facts.dart` (`childUlNotes`) →
+  `tradeoffs_section.dart`, which names the children and never renders it as an adult exceedance.
 - `rda_ul_data.ul_review_flags[]` is separate from `safety_flags[]`. It records a clinically
   material but indeterminate UL assessment (currently unknown-form folate at or above the
   possible synthetic-folic-acid threshold). It routes the catalog verdict to `CAUTION` and
   review without asserting `over_ul=true` or applying an over-UL score penalty.
-- `v4_dose_safety` is the scorer-owned typed maximum-labeled-daily-use safety summary. Its potential B7 evaluation is not the declared-serving Dose deduction; the published Dose pillar owns its actual deductions. Its states distinguish confirmed
+- `v4_dose_safety` is the scorer-owned typed maximum-labeled-daily-use safety summary. Its single product-level ceiling is applied once to Dose after normalization; no separate B7 or per-nutrient excess deduction applies. Its states distinguish confirmed
   over-threshold exposure from material-but-unresolved comparison, non-applicable duplicate
   lineage, and conversion defects. Unresolved rows route to partial review without an
   exceedance deduction or exceedance language.
