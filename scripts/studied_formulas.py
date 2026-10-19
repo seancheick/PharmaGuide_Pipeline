@@ -376,13 +376,32 @@ def probiotic_source_scope(product: Mapping, ref=None) -> list[Mapping]:
     return _probiotic_source_scope(list(_clinical_label_rows(product.get("activeIngredients"))), ref)
 
 
-def _source_live_eligible(owners, row):
-    representations = _source_row_representations(owners, row.get("raw_source_path")) or [row]
-    if any(has_nonlive_microbial_derivative_evidence(owner) for owner in representations):
+def _label_owners(product: Mapping):
+    """The label's source rows, nested members included, and the ids of those
+    with nonlive-derivative evidence. Derived once per scoring pass."""
+    from scoring_input_contract import scoped_product_view
+
+    def derive():
+        owners = list(_clinical_label_rows(product.get("activeIngredients")))
+        return owners, frozenset(
+            id(owner) for owner in owners if has_nonlive_microbial_derivative_evidence(owner)
+        )
+
+    return scoped_product_view(
+        product, ("probiotic_label_owners",), derive, lambda view: (list(view[0]), view[1]),
+        fields=("activeIngredients",),
+    )
+
+
+def _source_live_eligible(owners, nonlive, row):
+    """``nonlive`` holds the ids of ``owners`` with nonlive-derivative evidence."""
+    representations = _source_row_representations(owners, row.get("raw_source_path"))
+    if (any(id(owner) in nonlive for owner in representations) if representations
+            else has_nonlive_microbial_derivative_evidence(row)):
         return False
-    identities = {id(owner) for owner in representations}
+    identities = {id(owner) for owner in representations or [row]}
     for owner in owners:
-        if not has_nonlive_microbial_derivative_evidence(owner):
+        if id(owner) not in nonlive:
             continue
         ref = owner.get("raw_source_path")
         # An actual nonlive parent governs its nested/flattened descendants.
@@ -400,24 +419,25 @@ def probiotic_source_live_eligible(product: Mapping, row: Mapping) -> bool:
     Keep nonlive representations in the source set: a live-looking duplicate
     must not rescue their identity, denominator membership, or CFU disclosure.
     """
-    return _source_live_eligible(list(_clinical_label_rows(product.get("activeIngredients"))), row)
+    owners, nonlive = _label_owners(product)
+    return _source_live_eligible(owners, nonlive, row)
 
 
-def _source_rows_all_match(owners, ref, predicate):
+def _source_rows_all_match(owners, nonlive, ref, predicate):
     """Every actual representation must remain live-eligible and agree."""
     matched = _source_row_representations(owners, ref)
     return bool(matched) and all(
-        _source_live_eligible(owners, owner) and predicate(owner)
+        _source_live_eligible(owners, nonlive, owner) and predicate(owner)
         for owner in matched
     )
 
 
-def _legacy_label_owner_unique(owners, identity):
+def _legacy_label_owner_unique(owners, nonlive, identity):
     owner_refs = set()
     for owner in owners:
         if clinical_strain_identity_key(str(owner.get("name") or "")) != identity:
             continue
-        if not _source_live_eligible(owners, owner):
+        if not _source_live_eligible(owners, nonlive, owner):
             return False
         ref = owner.get("raw_source_path")
         if ref is not None and (not isinstance(ref, str) or not ref):
@@ -503,9 +523,21 @@ def label_owned_strain_identities(product: Mapping) -> list[tuple[Mapping, list[
     A registry ID is returned only when every representation of that source
     proves the same biological member set. Unknown names retain their keys.
     """
+    from scoring_input_contract import scoped_product_view
+
+    return scoped_product_view(
+        product,
+        ("label_owned_strain_identities",),
+        lambda: _label_owned_strain_identities(product),
+        lambda result: [(owner, list(identities)) for owner, identities in result],
+        fields=("activeIngredients",),
+    )
+
+
+def _label_owned_strain_identities(product: Mapping) -> list[tuple[Mapping, list[tuple[str, str, str | None]]]]:
     from constants import BLOCKED_PROBIOTIC_STRAINS, HOLD_PROBIOTIC_STRAINS
 
-    owners = list(_clinical_label_rows(product.get("activeIngredients")))
+    owners, nonlive = _label_owners(product)
     blocked = BLOCKED_PROBIOTIC_STRAINS | HOLD_PROBIOTIC_STRAINS
     registry = _clinical_strain_registry()
 
@@ -520,14 +552,14 @@ def label_owned_strain_identities(product: Mapping) -> list[tuple[Mapping, list[
         identities = candidates[id(owner)]
         expected = {key for key, _, _ in identities}
         source_proved = _source_rows_all_match(
-            owners, owner.get("raw_source_path"),
+            owners, nonlive, owner.get("raw_source_path"),
             lambda other: {key for key, _, _ in candidates[id(other)]} == expected,
         )
         if owner.get("raw_source_path") is None:
             # Preserve the existing unambiguous exact-name legacy owner path.
             # Forms cannot complete a species without their required source ref.
             source_proved = _legacy_label_owner_unique(
-                owners, clinical_strain_identity_key(str(owner.get("name") or "")))
+                owners, nonlive, clinical_strain_identity_key(str(owner.get("name") or "")))
         result.append((owner, [
             (key, label, cid if source_proved and permitted(label, cid) else None)
             for key, label, cid in identities
@@ -537,15 +569,15 @@ def label_owned_strain_identities(product: Mapping) -> list[tuple[Mapping, list[
 
 def clinical_strain_matches_source_row(product: Mapping, clinical: Mapping, row: Mapping) -> bool:
     """Use an actual source owner, or one unambiguous exact legacy label name."""
-    owners = list(_clinical_label_rows(product.get("activeIngredients")))
     if "source_row_ref" in clinical:
         ref = clinical["source_row_ref"]
         if not isinstance(ref, str) or not ref or ref != row.get("raw_source_path"):
             return False
         reference = _clinical_strain_registry().get(clinical.get("clinical_id"))
-        return bool(reference) and clinical_strain_identity_matches(
-            clinical.get("strain"), reference
-        ) and _source_rows_all_match(owners, ref, lambda owner:
+        if not reference or not clinical_strain_identity_matches(clinical.get("strain"), reference):
+            return False
+        owners, nonlive = _label_owners(product)
+        return _source_rows_all_match(owners, nonlive, ref, lambda owner:
             clinical_strain_identity_from_label(owner, reference)
             and (not clinical.get("label_name")
                  or _key(clinical["label_name"]) == _key(owner.get("name")))
@@ -553,7 +585,8 @@ def clinical_strain_matches_source_row(product: Mapping, clinical: Mapping, row:
     identity = _key(normalize_text(str(clinical.get("strain") or "")))
     if not identity or identity != _key(normalize_text(str(row.get("name") or ""))):
         return False
-    return _legacy_label_owner_unique(owners, identity)
+    owners, nonlive = _label_owners(product)
+    return _legacy_label_owner_unique(owners, nonlive, identity)
 
 
 def consolidated_native_strains(product: Mapping) -> list[dict]:

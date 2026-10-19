@@ -600,3 +600,68 @@ def test_is2_scoring_provenance_uses_the_actual_digestive_family(quantity):
     rows = result['metadata']['evidence_assessment']['strain_assessments']
     assert rows[0]['scoring_source_pmids'] == ['31434935']
     assert '35249118' in rows[0]['source_pmids']  # Inventory keeps the other research.
+
+
+def test_one_scoring_pass_reads_each_label_strain_row_once(monkeypatch):
+    """Strain identity and the live-use check are per-row facts of one label:
+    within a scoring pass every caller reuses them instead of rescanning the
+    whole label for each clinical record (Score-stage cost)."""
+    from scoring_input_contract import scoring_input_scope
+
+    strains = [
+        "Lactobacillus rhamnosus GG",
+        "Bifidobacterium breve SD-BR3-IT",
+        "Bifidobacterium longum subsp. infantis M-63",
+    ]
+    product = _owned_product(owner_name=strains[0], include_source_ref=True)
+    product["activeIngredients"] = [
+        {**product["activeIngredients"][0], "name": name, "raw_source_path": f"ingredientRows[{i}]"}
+        for i, name in enumerate(strains)
+    ]
+    clinical = [
+        _clinical_row(strain=name, source_row_ref=f"ingredientRows[{i}]", label_name=name,
+                      clinical_id=cid)
+        for i, (name, cid) in enumerate(zip(strains, (
+            "STRAIN_LGG", "STRAIN_BREVE_SD_BR3_IT", "STRAIN_INFANTIS_M63")))
+    ]
+
+    def read_everything(item):
+        # Evidence assessment reads the label through probiotic_data variants.
+        variant = {**item, "probiotic_data": {"clinical_strains": clinical}}
+        return (
+            studied_formulas.label_owned_strain_identities(item),
+            studied_formulas.label_owned_strain_identities(dict(item)),
+            studied_formulas.label_owned_strain_identities(variant),
+            [studied_formulas.clinical_strain_matches_source_row(source, strain, row)
+             for source in (item, variant)
+             for strain in clinical for row in item["activeIngredients"]],
+        )
+
+    uncached = read_everything(product)
+    nonlive_calls = candidate_calls = 0
+    original_nonlive = studied_formulas.has_nonlive_microbial_derivative_evidence
+    original_candidates = studied_formulas._label_strain_identity_candidates
+
+    def counted_nonlive(row):
+        nonlocal nonlive_calls
+        nonlive_calls += 1
+        return original_nonlive(row)
+
+    def counted_candidates(row):
+        nonlocal candidate_calls
+        candidate_calls += 1
+        return original_candidates(row)
+
+    monkeypatch.setattr(studied_formulas, "has_nonlive_microbial_derivative_evidence", counted_nonlive)
+    monkeypatch.setattr(studied_formulas, "_label_strain_identity_candidates", counted_candidates)
+    with scoring_input_scope(product):
+        scoped = read_everything(product)
+
+        # A different label row list is a different input.
+        relabelled = {**product, "activeIngredients": list(product["activeIngredients"])}
+        studied_formulas.label_owned_strain_identities(relabelled)
+
+    assert scoped == uncached
+    assert any(scoped[3])
+    assert nonlive_calls == 2 * len(strains)
+    assert candidate_calls == 2 * len(strains)
