@@ -877,7 +877,7 @@ ambiguity.
   material but indeterminate UL assessment (currently unknown-form folate at or above the
   possible synthetic-folic-acid threshold). It routes the catalog verdict to `CAUTION` and
   review without asserting `over_ul=true` or applying an over-UL score penalty.
-- `v4_dose_safety` is the scorer-owned typed maximum-labeled-daily-use safety summary. Its potential B7 evaluation is not the declared-serving Dose deduction; the published Dose pillar owns its actual deductions. Its states distinguish confirmed
+- `v4_dose_safety` is the scorer-owned typed maximum-labeled-daily-use safety summary. Its single product-level ceiling is applied once to Dose after normalization; no separate B7 or per-nutrient excess deduction applies. Its states distinguish confirmed
   over-threshold exposure from material-but-unresolved comparison, non-applicable duplicate
   lineage, and conversion defects. Unresolved rows route to partial review without an
   exceedance deduction or exceedance language.
