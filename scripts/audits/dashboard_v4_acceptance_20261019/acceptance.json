@@ -1,0 +1,283 @@
+{
+  "baseline_sha": "afa3f7bbd",
+  "scope": "Dashboard tooling acceptance; frozen full index plus separately identified accepted raw golden qualification. Not a corpus/release qualification.",
+  "index_build": "20261019T194134888960Z",
+  "candidate": "candidate-76d66f0761dd53ad",
+  "release": "release-2f99d10a144b97f8",
+  "product_count": 15426,
+  "saved_views": {
+    "Evidence = 0 (all states)": 5054,
+    "Evidence applicability gaps": 3577,
+    "Evidence review incomplete": 150,
+    "Evidence reviewed \u2014 no qualifying evidence / null": 743,
+    "Dose = 11.4 (all reasons)": 9125,
+    "Verification = 6 (all states)": 5412,
+    "Dose neutral": 5489,
+    "Dose capped by safety ceiling": 1010,
+    "Dose ceiling evaluated (over a limit)": 1092,
+    "Verification unknown (neutral 6)": 5420,
+    "No product-level certification": 13319,
+    "Formula checks below 10": 7934,
+    "Unrated forms": 917,
+    "High score, low confidence": 204,
+    "Partial products in rankings": 290,
+    "Floors absorbing deductions": 636,
+    "Has a cap": 9134,
+    "Tier changed vs baseline": 3427,
+    "Candidate \u2260 release": 6602,
+    "Unexplained score movers": 0,
+    "Suppressed or not scored": 781,
+    "Unmapped actives": 25,
+    "Low route confidence": 132
+  },
+  "dose_11_4": 9125,
+  "verification_6": 5412,
+  "controls": {
+    "suppressed": [
+      "252358"
+    ],
+    "not_scored": [
+      "180213"
+    ],
+    "dose_cap": [
+      "18102"
+    ],
+    "zero_evidence": [
+      "180210"
+    ]
+  },
+  "receipt_mismatch_max": 0.0,
+  "pillar_sum_mismatch_max": 0.0,
+  "comparison": {
+    "products": 15426,
+    "added": 0,
+    "removed": 0,
+    "moved": 6744,
+    "tier_crossed": 3427,
+    "status_changed": 478,
+    "safety_changed": 527,
+    "unexplained": 0
+  },
+  "config_changes": 721,
+  "missing_config_snapshots": [],
+  "full_index_golden_failures": [
+    {
+      "dsld_id": "178520",
+      "checks": [
+        "expected_quality_score_status",
+        "expected_quality_assessment_status",
+        "expected_product_safety_status",
+        "expected_quality_tier_band",
+        "evidence_authority_assessed",
+        "verification_unknown_neutral"
+      ]
+    },
+    {
+      "dsld_id": "294063",
+      "checks": [
+        "evidence_single_active_not_nothing_to_assess"
+      ]
+    },
+    {
+      "dsld_id": "269286",
+      "checks": [
+        "expected_quality_assessment_status",
+        "evidence_single_active_not_nothing_to_assess",
+        "evidence_applicable_assessed",
+        "dose_unbenchmarked_neutral"
+      ]
+    }
+  ],
+  "accepted_golden": {
+    "scope": "Dashboard qualification on accepted source-qualified raw golden outputs; NOT a rebuilt full corpus or released catalog",
+    "source": "/Users/seancheick/Downloads/dsld_clean/reports/evidence_blend_takeover_20261019/final_candidate.jsonl.records",
+    "build": "20261019T194334692605Z",
+    "canaries": 53,
+    "checks": 520,
+    "failures": []
+  },
+  "backfill": [
+    {
+      "run_key": "backfill-bfaa9c2073dd5e6c",
+      "plane": "backfill",
+      "fidelity": "pillar_totals_only",
+      "run_time": "2026-09-22T20:10:37.407911+00:00",
+      "products": 15310,
+      "config_versions": [
+        "1.13.0-dose-applicability-gate"
+      ],
+      "config_fingerprints": [],
+      "source": "/Users/seancheick/pg_quality/post_pipeline_20261008/catalog_visibility_review/oct9_native_assets_preserved/pharmaguide_core.db"
+    },
+    {
+      "run_key": "backfill-d165641e7ed94889",
+      "plane": "backfill",
+      "fidelity": "pillar_totals_only",
+      "run_time": "2026-10-09T08:44:23.664501+00:00",
+      "products": 15414,
+      "config_versions": [
+        "1.23.0-dose-evidence-ownership"
+      ],
+      "config_fingerprints": [],
+      "source": "/Users/seancheick/pg_quality/post_pipeline_20261008/catalog_visibility_review/oct9_prepublication_validated_bundle/pharmaguide_core.db"
+    },
+    {
+      "run_key": "backfill-e110dfd1aa215ad0",
+      "plane": "backfill",
+      "fidelity": "pillar_totals_only",
+      "run_time": "2026-10-15T23:46:27.565504+00:00",
+      "products": 15426,
+      "config_versions": [
+        "1.26.0-v41-step4-ownership"
+      ],
+      "config_fingerprints": [],
+      "source": "/Users/seancheick/Downloads/dsld_clean/scripts/final_db_output/pharmaguide_core.db"
+    }
+  ],
+  "staleness": {
+    "indexed": true,
+    "candidate_changed": [],
+    "candidate_removed": [
+      "Airborne",
+      "BulkSupplements",
+      "CVS",
+      "Centrum",
+      "Culturelle",
+      "Doctors_Best",
+      "Double_Wood_Supplements",
+      "Emergen_C",
+      "Equate",
+      "GNC",
+      "Garden_of_life",
+      "Goli",
+      "Hum",
+      "Jarrow_Formulas",
+      "Kirkland_Signature",
+      "Legion",
+      "Life_Extension",
+      "MegaFood",
+      "Members_Mark",
+      "Nature_Made",
+      "Natures_Bounty",
+      "Natures_Way",
+      "Nutricost",
+      "Olly",
+      "One_A_Day",
+      "Ora",
+      "Product_Submissions",
+      "Pure_Encapsulations",
+      "Ritual",
+      "Solgar",
+      "Sports_Research",
+      "Spring_Valley",
+      "Thorne",
+      "Transparent_Labs",
+      "Up_and_Up",
+      "Vitafusion",
+      "nordic-naturals",
+      "paradise-earth-blend"
+    ],
+    "release_changed": true,
+    "projection_changed": false,
+    "stale": true
+  },
+  "browser": {
+    "page_plane_combinations": 30,
+    "application_exceptions": 0,
+    "console_errors": 0,
+    "console_warnings": 0,
+    "http_4xx_5xx": 0,
+    "warm_measurements": [
+      {
+        "n": 0,
+        "title": "Overview",
+        "ms": 335,
+        "errors": []
+      },
+      {
+        "n": 0,
+        "title": "Product Explorer",
+        "ms": 575,
+        "errors": []
+      },
+      {
+        "n": 0,
+        "title": "Product Trace",
+        "ms": 563,
+        "errors": []
+      },
+      {
+        "n": 0,
+        "title": "Run Compare & Trends",
+        "ms": 1117,
+        "errors": []
+      },
+      {
+        "n": 1,
+        "title": "Overview",
+        "ms": 262,
+        "errors": []
+      },
+      {
+        "n": 1,
+        "title": "Product Explorer",
+        "ms": 568,
+        "errors": []
+      },
+      {
+        "n": 1,
+        "title": "Product Trace",
+        "ms": 410,
+        "errors": []
+      },
+      {
+        "n": 1,
+        "title": "Run Compare & Trends",
+        "ms": 596,
+        "errors": []
+      },
+      {
+        "n": 2,
+        "title": "Overview",
+        "ms": 273,
+        "errors": []
+      },
+      {
+        "n": 2,
+        "title": "Product Explorer",
+        "ms": 784,
+        "errors": []
+      },
+      {
+        "n": 2,
+        "title": "Product Trace",
+        "ms": 442,
+        "errors": []
+      },
+      {
+        "n": 2,
+        "title": "Run Compare & Trends",
+        "ms": 607,
+        "errors": []
+      }
+    ],
+    "drill_through": {
+      "url": "http://127.0.0.1:8502/product-trace?plane=candidate&run=candidate-76d66f0761dd53ad&dsld_id=183513",
+      "search": "183513",
+      "errors": []
+    }
+  },
+  "checks": {
+    "focused_and_guards": 98,
+    "local_smoke": 24
+  },
+  "tested_source_sha": "a6129dafa677cdd9bd0355f3782b70cf809348a2",
+  "whole_fast": {
+    "run_id": 39314201536,
+    "head_sha": "de31ce0c4b5b2036855bb551c6aa83a5d375ecbd",
+    "passed": 22204,
+    "declared_skips": 192,
+    "groups": 4,
+    "conclusion": "success"
+  }
+}

@@ -105,6 +105,23 @@ def render(ctx: shell.PageContext) -> None:
                                                ("unmapped", "Unmapped active")]):
             if col.checkbox(label, key=f"f_t_{key}"):
                 spec[key] = True
+        row = st.columns(3)
+        at_max = row[0].multiselect("Pillars at maximum", PILLARS, format_func=PILLAR_LABELS.get, key="f_at_max")
+        neutral = row[1].multiselect("Neutral-only pillars", PILLARS, format_func=PILLAR_LABELS.get, key="f_neutral")
+        spec["evidence_display_state"] = row[2].multiselect(
+            "Evidence display state", _options(frame, "evidence_display_state"), key="f_display")
+        if at_max:
+            spec["pillar_at_max"] = {p: ctx.maxima[p] for p in at_max}
+        if neutral:
+            spec["pillar_neutral"] = neutral
+        row = st.columns(3)
+        spec["confidence"] = spec.get("confidence") or row[0].multiselect("Score confidence", _options(frame, "confidence"), key="f_confidence")
+        spec["route_confidence"] = spec.get("route_confidence") or row[1].multiselect("Route confidence", _options(frame, "route_confidence"), key="f_route_confidence")
+        spec["config_version"] = row[2].multiselect("Config version", _options(frame, "config_version"), key="f_config")
+        if st.checkbox("High total with a low pillar", key="f_high_low"):
+            spec["high_total_low_pillar"] = ctx.maxima
+        if st.checkbox("Missing provenance", key="f_missing_provenance"):
+            spec["missing_provenance"] = True
         if st.checkbox("Deduction fully absorbed by a floor", key="f_absorbed"):
             spec["fully_absorbed"] = True
 

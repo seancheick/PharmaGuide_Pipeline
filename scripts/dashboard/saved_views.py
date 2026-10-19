@@ -26,6 +26,8 @@ SAVED_VIEWS: dict[str, dict[str, Any]] = {
                                                       "identity_material_unresolved", "literature_resolution_required"]},
     "Evidence reviewed — no qualifying evidence / null": {"evidence_state": ["no_qualifying_human_evidence",
                                                                             "evaluated_null", "evaluated_unfavorable"]},
+    "Dose = 11.4 (all reasons)": {"pillar_range": {"dose": (11.4, 11.4)}},
+    "Verification = 6 (all states)": {"pillar_range": {"verification": (6.0, 6.0)}},
     "Dose neutral": {"pillar_neutral": ["dose"]},
     "Dose capped by safety ceiling": {"dose_cap": True},
     "Dose ceiling evaluated (over a limit)": {"dose_ceiling_present": True},

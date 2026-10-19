@@ -1320,3 +1320,12 @@ Sean approved the bounded policy and owner fixes, and explicitly withheld the co
 Runtime1521486e4: all1712frozen raw records captured with unchanged source,418score movers(403Dose/11Evidence/8Formulation/6Transparency, overlapping);715storedomega records independently measured. No compared safety/daily-exposure/route/scoring-status changes. Four aggregate-child assessment labels change partial→complete under the existing completed-applicability rule, with zeroEvidence and aggregate limitations retained.33rawcanaries unchanged; local546passed/24declared optional skips; exact-sourceCI39159536620 passes21,108tests/192declared skips and all skipguards. Independent final path review and shadow checks pass. [Receipt](../../reports/omega_policy_20261018/README.md).
 
 This qualifies the bounded source batch for authorized integration; it does not regenerate the catalog or close release/app acceptance. No corpus, snapshot, release, baseline recapture, hash-seed-pin removal or wave2work performed. The next corpus run remains explicitly held by Sean; recheck stage fingerprints when he authorizes it.
+
+### October 19 — Dashboard v4 independent acceptance
+
+- [x] Verify all 20 dashboard capability checks against the actual index, browser, downloads and owner/consumer tests; fix confirmed tooling defects. Report: `scripts/audits/dashboard_v4_acceptance_20261019/README.md`.
+- [x] Ten pages × Candidate/Release/Historical render without application exceptions; final console clean. Original four warm performance targets met.
+- [x] Approved 53-case golden set displays 520 passing checks on accepted raw source-qualified outputs, separately labelled from the older full index.
+- [x] Exact-source whole-fast CI39314201536:22,204passed/192declared skips/all4groups/every skipguard; runtimea6129daf, testedde31ce0c. Independent review clear; later closeout is documentation/receipts only.
+- [ ] Integrate PR172 (`codex/dashboard-acceptance`); requires Sean for main.
+- [ ] Refresh/inspect the full dashboard index after Sean's active corpus rebuild. Older full-index golden/parity results are not claimed newly green or released.

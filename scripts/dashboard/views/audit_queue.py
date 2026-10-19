@@ -61,7 +61,7 @@ def render(ctx: shell.PageContext) -> None:
     st.markdown("#### Findings")
     columns = ["severity", "rule_id", "plane", "dsld_id", "product_name", "brand_name", "pillar", "subject",
                "current_value", "expected", "triage_status", "owner", "notes", "first_seen", "last_seen", "policy",
-               "finding_id", "rule_version"]
+               "finding_id", "rule_version", "run_key", "config_fingerprint"]
     columns = [c for c in columns if c in view.columns]
     ordered = view.assign(order=view["severity"].map({s: i for i, s in enumerate(SEVERITY_ORDER)})) \
         .sort_values(["order", "rule_id"]).drop(columns="order")[columns].reset_index(drop=True)
@@ -78,27 +78,34 @@ def _triage_panel(ctx: shell.PageContext, finding: pd.Series, visible: pd.DataFr
         st.caption(f"Value {finding.get('current_value')} · expected {finding.get('expected')} · policy {finding.get('policy')}")
         cols = st.columns(4)
         current = finding.get("triage_status") if finding.get("triage_status") in triage.STATUSES else "Open"
-        status = cols[0].selectbox("Status", triage.STATUSES, index=triage.STATUSES.index(current), key="aq_t_status")
-        owner = cols[1].text_input("Owner", value=str(finding.get("owner") or ""), key="aq_t_owner")
-        scope = cols[2].text_input("Config scope (accepted exceptions)", key="aq_t_scope",
-                                   value=", ".join((ctx.index.run(ctx.index.latest("candidate")) or {}).get("config_versions") or []),
-                                   help="An accepted exception reopens under any other config version")
-        review_by = cols[3].date_input("Review by", value=None, key="aq_t_review", min_value=date.today())
-        notes = st.text_area("Notes", value=str(finding.get("notes") or ""), key="aq_t_notes")
+        status = cols[0].selectbox("Status", triage.STATUSES, index=triage.STATUSES.index(current), key=f"aq_t_status_{finding['finding_id']}")
+        owner = cols[1].text_input("Owner", value=str(finding.get("owner") or ""), key=f"aq_t_owner_{finding['finding_id']}")
+        stamp = finding.get("config_fingerprint")
+        scope_options = ([stamp] if isinstance(stamp, str) and stamp else [] if pd.notna(finding.get("dsld_id"))
+                         else (ctx.index.run(finding.get("run_key")) or {}).get("config_fingerprints") or [])
+        scope = cols[2].selectbox("Config fingerprint scope (accepted exceptions)",
+                                   scope_options or [""], key=f"aq_t_scope_{finding['finding_id']}",
+                                   help="An accepted exception reopens under any other config fingerprint")
+        review_by = cols[3].date_input("Review by", value=None, key=f"aq_t_review_{finding['finding_id']}", min_value=date.today())
+        notes = st.text_area("Notes", value=str(finding.get("notes") or ""), key=f"aq_t_notes_{finding['finding_id']}")
         same = visible[(visible["rule_id"] == finding["rule_id"]) & (visible["rule_version"] == finding["rule_version"])]
-        apply_all = st.checkbox(f"Apply to all {len(same)} visible findings of this rule", key="aq_t_bulk")
+        apply_all = st.checkbox(f"Apply to all {len(same)} visible findings of this rule", key=f"aq_t_bulk_{finding['finding_id']}")
         b1, b2 = st.columns([1, 1])
         if b1.button("Save triage", type="primary", icon=":material/save:"):
+            if status == "Accepted exception" and not scope:
+                st.error("A recorded config fingerprint is required for an accepted exception.")
+                return
             targets = same if apply_all else visible[visible["finding_id"] == finding["finding_id"]]
             for item in targets.itertuples():
                 triage.set_status(item.finding_id, item.rule_id, int(item.rule_version), status, owner=owner or None,
-                                  notes=notes or None, config_scope=scope.split(",")[0].strip() if scope and status == "Accepted exception" else None,
+                                  notes=notes or None, config_scope=scope if scope and status == "Accepted exception" else None,
                                   review_by=review_by.isoformat() if review_by else None)
             st.toast(f"Saved {len(targets)} finding(s) as {status}")
             st.rerun()
         if finding.get("dsld_id") and not pd.isna(finding.get("dsld_id")):
             if b2.button("Open product trace", icon=":material/receipt_long:"):
-                shell.go("product-trace", trace_dsld_id=str(finding["dsld_id"]))
+                shell.go("product-trace", trace_dsld_id=str(finding["dsld_id"]),
+                         plane=finding["plane"], run=finding["run_key"])
 
 
 def _rules_reference() -> None:

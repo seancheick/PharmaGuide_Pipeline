@@ -6,6 +6,7 @@ import json
 
 import pandas as pd
 import plotly.graph_objects as go
+import pyarrow.dataset as pds
 import streamlit as st
 
 from scripts.dashboard import shell
@@ -48,10 +49,17 @@ def _pick_product(ctx: shell.PageContext) -> str | None:
 def _composition(row: dict, maxima: dict[str, float]) -> go.Figure:
     """One 100-point capacity bar: each pillar's points, then what it did not earn."""
     fig = go.Figure()
+    unavailable = False
     for pillar in PILLARS:
         score = row.get(f"pillar_{pillar}")
-        score = 0.0 if score is None or pd.isna(score) else float(score)
         mx = maxima[pillar]
+        if score is None or pd.isna(score):
+            unavailable = True
+            fig.add_bar(y=["Score"], x=[mx], orientation="h", name="Not assessed", showlegend=False,
+                        marker={"color": KIND_COLORS["not_earned"], "pattern": {"shape": "/"}},
+                        hovertemplate=f"{PILLAR_LABELS[pillar]}: not assessed<extra></extra>")
+            continue
+        score = float(score)
         fig.add_bar(y=["Score"], x=[score], orientation="h", name=PILLAR_LABELS[pillar],
                     marker={"color": PILLAR_COLORS[pillar], "line": {"color": TOKENS["surface"], "width": 2}},
                     hovertemplate=f"{PILLAR_LABELS[pillar]}: {score:.1f} / {mx:g}<extra></extra>",
@@ -62,7 +70,7 @@ def _composition(row: dict, maxima: dict[str, float]) -> go.Figure:
                         hovertemplate=f"{PILLAR_LABELS[pillar]} not earned: {mx - score:.1f}<extra></extra>")
     fig.update_layout(barmode="stack", height=130, showlegend=False, xaxis={"range": [0, 100], "dtick": 10, "title": None},
                       yaxis={"visible": False}, margin={"l": 4, "r": 4, "t": 30, "b": 4},
-                      title={"text": "100-point capacity — grey is not earned", "font": {"size": 14}})
+                      title={"text": "100-point capacity — hatched is not assessed; grey is not earned" if unavailable else "100-point capacity — grey is not earned", "font": {"size": 14}})
     return fig
 
 
@@ -214,6 +222,29 @@ def render(ctx: shell.PageContext) -> None:
     st.caption("Dose references (% of RDA/AI and of the upper limit, per ingredient)")
     table(product["dose_refs"].drop(columns=["dsld_id"]), key="trace_refs", name=f"dose_refs_{dsld_id}",
           run_key=ctx.run_key, height=260)
+
+    st.markdown("#### Ingredients and peer context")
+    ingredient_status = ctx.index.ingredient_staleness()
+    if ingredient_status["built"]:
+        if ingredient_status["stale"]:
+            st.warning("Ingredient index is stale; ingredient details may predate this run.")
+        st.caption(f"Ingredient details come from the separate enriched index built at {ingredient_status.get('built_at')}; "
+                   "they are not a snapshot of this selected scoring run.")
+        ingredients = ctx.index.ingredient_frame(filter=pds.field("dsld_id") == dsld_id)
+        table(ingredients[ingredients["dsld_id"] == dsld_id], key="trace_ingredients",
+              name=f"ingredients_{dsld_id}",
+              run_key=f"ingredient-index-{ingredient_status.get('built_at')}", height=280)
+    else:
+        st.info("Ingredient index unavailable. Build it with `python -m scripts.dashboard.score_index refresh --ingredients`.")
+    from scripts.dashboard.views.score_lab import peer_percentiles
+    peers = peer_percentiles(ctx.products())
+    peer = peers[peers["dsld_id"] == dsld_id]
+    if peer.empty:
+        st.caption("Peer percentile unavailable: requires a complete scored product and at least 30 category peers under the same config.")
+    else:
+        value = peer.iloc[0]
+        st.caption(f"Category peer percentile: {value['peer_percentile']:.1f} among {int(value['peer_n']):,} complete scored products "
+                   "in this run and config. Context only; never a quality score.")
 
     findings = ctx.index.findings()
     mine = findings[(findings["dsld_id"] == dsld_id) & (findings["run_key"] == ctx.run_key)] if not findings.empty else findings

@@ -12,7 +12,7 @@ import streamlit as st
 from scripts.dashboard import shell
 from scripts.dashboard.components.theme import PILLAR_COLORS, TOKENS
 from scripts.dashboard.components.ui import kpis, table
-from scripts.dashboard.run_compare import MOVE_EPS, run_level_causes, summarize
+from scripts.dashboard.run_compare import MOVE_EPS, config_diff, run_level_causes, summarize
 from scripts.dashboard.score_index import PILLAR_LABELS, PILLARS
 from scripts.dashboard.time_format import format_dashboard_datetime
 
@@ -38,12 +38,12 @@ def render(ctx: shell.PageContext) -> None:
         return
     keys = [run["run_key"] for run in runs]
     labels = {run["run_key"]: _label(run) for run in runs}
-    base_default = ctx.baseline_key() or keys[-1]
+    base_default = ctx.baseline_key() or next(key for key in keys if key != ctx.run_key)
     cols = st.columns(2)
     base = cols[0].selectbox("Baseline", keys, index=keys.index(base_default) if base_default in keys else 0,
-                             format_func=labels.get, key="rc_base")
+                             format_func=labels.get, key=f"rc_base_{ctx.run_key}")
     cand = cols[1].selectbox("Candidate", keys, index=keys.index(ctx.run_key) if ctx.run_key in keys else 0,
-                             format_func=labels.get, key="rc_cand")
+                             format_func=labels.get, key=f"rc_cand_{ctx.run_key}")
     if base == cand:
         st.warning("Pick two different runs.")
         return
@@ -54,6 +54,15 @@ def render(ctx: shell.PageContext) -> None:
         st.dataframe(prov, hide_index=True, width="stretch")
         st.caption("Stage-code fingerprints come from the artifacts' stage manifests — they identify the code that "
                    "produced each run. The dashboard's own git SHA is only the indexer's.")
+    with st.expander("Config and calibration changes", icon=":material/tune:"):
+        changes, unavailable = config_diff(base_run, cand_run)
+        for message in unavailable:
+            st.info(message)
+        if not changes.empty:
+            table(changes, key="rc_config_diff", name="config_calibration_diff", run_key=cand, height=320)
+        elif not unavailable:
+            st.caption("No config or calibration values changed.")
+        st.caption("Values are read from config bytes verified against each artifact fingerprint; this is not proof of a per-product cause.")
     causes = run_level_causes(base_run, cand_run)
     if causes:
         st.caption("Run-level causes: " + ", ".join(causes))
@@ -99,7 +108,10 @@ def render(ctx: shell.PageContext) -> None:
                        caption="Select a row to open the product trace.",
                        column_config={"delta": st.column_config.NumberColumn("Δ", format="%+.1f")})
         if picked:
-            shell.go("product-trace", trace_dsld_id=str(ordered.iloc[picked[0]]["dsld_id"]))
+            selected = ordered.iloc[picked[0]]
+            target = base if deltas.set_index("dsld_id").loc[selected["dsld_id"], "presence"] == "removed" else cand
+            shell.go("product-trace", trace_dsld_id=str(selected["dsld_id"]),
+                     plane=ctx.index.run(target)["plane"], run=target)
     with tab_causes:
         counter: Counter = Counter()
         sums: Counter = Counter()

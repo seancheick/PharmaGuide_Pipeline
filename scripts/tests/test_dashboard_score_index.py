@@ -247,3 +247,16 @@ def test_ingredient_index_builds_reuses_and_survives_core_refresh(roots, monkeyp
     assert len(_reader(roots).ingredient_frame()) == 2
     write_enriched(roots.scan_dir, "Acme", [enriched_product("1")])
     assert _reader(roots).ingredient_staleness()["changed"] == ["Acme"]
+
+
+def test_backfill_identity_includes_catalog_contents(roots, tmp_path):
+    si.refresh(roots)
+    old = tmp_path / "old"
+    write_release(old, [scored_product("1")])
+    db = old / "pharmaguide_core.db"
+    first = si.backfill(roots, [db])
+    with sqlite3.connect(db) as conn:
+        conn.execute("UPDATE products_core SET quality_score_v4_100 = quality_score_v4_100 - 1")
+    second = si.backfill(roots, [db])
+    assert len(second["added"]) == 1
+    assert first["added"][0]["run_key"] != second["added"][0]["run_key"]

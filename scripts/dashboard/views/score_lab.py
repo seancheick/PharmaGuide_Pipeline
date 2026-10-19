@@ -52,11 +52,13 @@ def peer_percentiles(products: pd.DataFrame) -> pd.DataFrame:
     """Within-category position for complete scored products (n ≥ 30). Context, never a score."""
     pool = products[(products["quality_score_status"] == "scored") & (products["quality_assessment_status"] == "complete")
                     & products["total"].notna() & products["category"].notna()].copy()
-    sizes = pool.groupby("category")["dsld_id"].transform("count")
+    config_column = "config_fingerprint" if "config_fingerprint" in pool else "config_version"
+    groups = ["category", config_column] if config_column in pool else ["category"]
+    sizes = pool.groupby(groups, dropna=False)["dsld_id"].transform("count")
     pool = pool[sizes >= PEER_MIN_N]
-    pool["peer_n"] = pool.groupby("category")["dsld_id"].transform("count")
-    pool["peer_percentile"] = pool.groupby("category")["total"].rank(pct=True, method="average").mul(100).round(1)
-    median = pool.groupby("category")["total"].transform("median")
+    pool["peer_n"] = pool.groupby(groups, dropna=False)["dsld_id"].transform("count")
+    pool["peer_percentile"] = pool.groupby(groups, dropna=False)["total"].rank(pct=True, method="average").mul(100).round(1)
+    median = pool.groupby(groups, dropna=False)["total"].transform("median")
     pool["vs_peer_median"] = (pool["total"] - median).round(1)
     return pool[["dsld_id", "product_name", "brand_name", "category", "total", "peer_percentile", "peer_n", "vs_peer_median"]]
 

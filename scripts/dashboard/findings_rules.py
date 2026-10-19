@@ -250,7 +250,8 @@ def _peer_outlier(ctx):
         return pd.DataFrame()
     pool = p[(p["quality_score_status"] == "scored") & (p["quality_assessment_status"] == "complete") & p["total"].notna()]
     out = []
-    for category, group in pool.groupby("category"):
+    groups = ["category", "config_fingerprint"] if "config_fingerprint" in pool else ["category"]
+    for category, group in pool.groupby(groups, dropna=False):
         if len(group) < PEER_MIN_N:
             continue
         median = group["total"].median()

@@ -9,6 +9,9 @@ inputs nor the run inputs changed.
 from __future__ import annotations
 
 import json
+import hashlib
+import subprocess
+from functools import lru_cache
 from typing import Any, Callable
 
 import pandas as pd
@@ -153,3 +156,69 @@ def summarize(deltas: pd.DataFrame) -> dict[str, int]:
         "safety_changed": int(both["safety_changed"].sum()),
         "unexplained": int((~both["explained"]).sum()),
     }
+
+
+@lru_cache(maxsize=64)
+def config_snapshot(name: str, version: str, fingerprint: str) -> dict | None:
+    """Recover only hash-verified config bytes, from the current file or local Git history."""
+    from scoring_v4.config_registry import _PROVENANCE_CONFIGS
+    path = _PROVENANCE_CONFIGS.get(name)
+    if path is None or not version or not fingerprint:
+        return None
+    try:
+        relative = str(path.relative_to(REPO_ROOT))
+        raw = path.read_bytes()
+        if hashlib.sha256(raw).hexdigest()[:16] == fingerprint:
+            return json.loads(raw)
+        commits = subprocess.run(["git", "log", "--format=%H", "-S", version, "--", relative],
+                                 cwd=REPO_ROOT, capture_output=True, text=True, check=True, timeout=10).stdout.splitlines()
+        history = subprocess.run(["git", "log", "--format=%H", "--", relative], cwd=REPO_ROOT,
+                                 capture_output=True, text=True, check=True, timeout=10).stdout.splitlines()
+        for commit in dict.fromkeys([*commits, *history]):
+            result = subprocess.run(["git", "show", f"{commit}:{relative}"], cwd=REPO_ROOT,
+                                    capture_output=True, check=False, timeout=10)
+            if result.returncode == 0 and hashlib.sha256(result.stdout).hexdigest()[:16] == fingerprint:
+                return json.loads(result.stdout)
+    except (OSError, ValueError, subprocess.SubprocessError):
+        pass
+    return None
+
+
+def config_diff(base: dict, cand: dict) -> tuple[pd.DataFrame, list[str]]:
+    """Exact config/calibration values behind recorded stamps; missing history stays explicit."""
+    def stamps(run):
+        result = {}
+        for stamp in run.get("config_fingerprints") or []:
+            try:
+                for name, identity in json.loads(stamp).items():
+                    if isinstance(identity, dict):
+                        result[(name, identity.get("version"), identity.get("fingerprint"))] = identity
+            except (ValueError, TypeError, AttributeError):
+                continue
+        return result
+
+    def flatten(value, prefix=""):
+        if isinstance(value, dict):
+            return {path: leaf for key, item in value.items() for path, leaf in flatten(item, f"{prefix}.{key}".strip(".")).items()}
+        return {prefix: json.dumps(value, sort_keys=True, ensure_ascii=False)}
+
+    left, right = stamps(base), stamps(cand)
+    rows, missing = [], []
+    names = sorted({key[0] for key in left} | {key[0] for key in right})
+    for name in names:
+        sides = []
+        for label, identities in (("baseline", left), ("candidate", right)):
+            matches = [key for key in identities if key[0] == name]
+            snapshot = config_snapshot(*matches[0]) if len(matches) == 1 else None
+            if snapshot is None:
+                missing.append(f"{label} {name}: verified config snapshot unavailable")
+            sides.append(flatten(snapshot) if snapshot is not None else None)
+        a, b = sides
+        if a is None or b is None:
+            continue
+        for path in sorted(set(a) | set(b)):
+            if a.get(path) != b.get(path):
+                rows.append({"config": name, "setting": path, "baseline": a.get(path), "candidate": b.get(path)})
+    if not names:
+        missing.append("No config fingerprints recorded for these runs.")
+    return pd.DataFrame(rows, columns=["config", "setting", "baseline", "candidate"]), missing
