@@ -41,6 +41,24 @@ def test_score_file_atomically_writes_v4_artifacts(tmp_path: Path) -> None:
     assert list((tmp_path / "scored").glob("*.tmp")) == []
 
 
+def test_score_file_reports_progress_so_a_long_batch_never_looks_stalled(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, caplog: pytest.LogCaptureFixture,
+) -> None:
+    source = tmp_path / "enriched_batch_1.json"
+    source.write_text(json.dumps([_product(str(i)) for i in range(5)]), encoding="utf-8")
+    monkeypatch.setattr(score_products_v4, "PROGRESS_EVERY", 2)
+
+    with caplog.at_level("INFO", logger=score_products_v4.LOGGER.name):
+        score_products_v4.score_file(source, tmp_path / "scored")
+
+    messages = [record.getMessage() for record in caplog.records]
+    assert [m.split(",")[0] for m in messages[:-1]] == [
+        "scoring enriched_batch_1.json: 2/5 products",
+        "scoring enriched_batch_1.json: 4/5 products",
+    ]
+    assert messages[-1].startswith("scored enriched_batch_1.json: 5 products in ")
+
+
 @pytest.mark.parametrize(
     "payload",
     ["{broken", json.dumps({"dsld_id": "1"}), json.dumps([1]), json.dumps([])],
