@@ -27,6 +27,29 @@ def _resolved_id(calculator: RDAULCalculator, name: str):
     return hit.get("id") if hit else None
 
 
+@pytest.mark.parametrize("name", ["Coenzyme Q10", "Inositol", "Lutein", "Glycine", "Creatine"])
+def test_reviewed_non_nutritional_anchor_cannot_supply_panel_coverage(calculator, name):
+    result = calculator.compute_nutrient_adequacy(name, 50, "mg")
+    assert result.rda_ai_source == "unknown"
+    assert result.scoring_eligible is False
+    # Historical numbers remain descriptive; they do not become nutritional credit.
+    assert result.pct_rda is not None
+
+
+@pytest.mark.parametrize("name", ["Magnesium", "Calcium", "Potassium", "Sodium", "Choline"])
+def test_official_nutritional_references_remain_panel_eligible(calculator, name):
+    result = calculator.compute_nutrient_adequacy(name, 50, "mg")
+    assert result.rda_ai_source in {"rda", "ai"}
+    assert result.scoring_eligible is True
+
+
+def test_reference_eligibility_never_clears_an_independent_upper_limit(calculator):
+    result = calculator.compute_nutrient_adequacy("Boron", 40, "mg")
+    assert result.scoring_eligible is False
+    assert result.over_ul is True
+    assert result.pct_ul == 200
+
+
 @pytest.mark.parametrize(
     "name, expected",
     [

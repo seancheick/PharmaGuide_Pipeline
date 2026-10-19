@@ -723,6 +723,16 @@ class RDAULCalculator:
         if pct_rda is None:
             scoring_eligible = False
             notes.append("No RDA/AI found - not scored")
+        elif (
+            rda_source == "unknown"
+            and (nutrient_data.get("reference_semantics") or {}).get("curve")
+            == "completed_no_benchmark_neutral"
+        ):
+            # Retained study amounts are descriptive, not nutritional targets.
+            # All panel consumers read this eligibility result; official RDA/AI
+            # rows (including dietary sodium/potassium) keep their own policy.
+            scoring_eligible = False
+            notes.append("Completed review: no general nutritional benchmark; excluded from nutritional Dose coverage.")
         elif adequacy_band == "excessive" or over_ul:
             # Still eligible but points may be 0 or negative
             pass

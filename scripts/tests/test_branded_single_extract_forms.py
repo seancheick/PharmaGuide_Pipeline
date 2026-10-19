@@ -80,3 +80,16 @@ def test_prosterol_reaches_the_supercritical_co2_form(pipeline):
     row = _iqd(enriched, "Prosterol")
     assert (row["canonical_id"], row.get("matched_form")) == (
         "saw_palmetto", "supercritical CO₂ saw palmetto extract")
+
+
+def test_recovered_coq10_does_not_revive_a_rejected_nutritional_anchor(pipeline):
+    """294034: the real MicroActive row is assessable, but 30mg is not an RDA."""
+    from scoring_v4.modules.multi_prenatal_dose import score_dose
+
+    enriched, scored = _run(pipeline, "one_multivitamin_294034_raw.json")
+    dose = score_dose(enriched)
+    coverage = dose["metadata"]["coverage_nutrient_scores"]
+    assert "vitamin_d" in coverage  # real nutritional contributions survive
+    for key in ("coenzyme_q10", "inositol", "alpha_lipoic_acid", "lutein", "zeaxanthin", "lycopene"):
+        assert key not in coverage
+    assert scored["quality_score_status"] == "scored"
