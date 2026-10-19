@@ -14,6 +14,14 @@ Apply evidence:
   `test_v4_canary_coverage.py` ran 13 tests and all passed, including that test (all 53 are in the
   candidate catalog).
 
+**Merge consequence (open decision):** `scripts/pipeline_freshness.py::_reference_data_files`
+hashes every `scripts/data/*.json` file except `fda_unii_cache.json`. Landing this on main changes
+`reference_data_sha256_v1`, so the qualified 2026-10-19 candidate's stage manifests would read as
+stale, even though no stage reads canary data. There are two options:
+- (a) Merge after the pending release.
+- (b) A separate infrastructure change that excludes `canary_products.json` from the fingerprint,
+  as is already done for the identifier cache. That change needs its own test and CI.
+
 Lane: branch `claude/epic-mayer-1cf186`. The Dashboard v4 Coverage & Calibration page
 (branch `claude/dashboard-v4`) reads the result and raises a finding whenever a canary breaks
 an expectation.
