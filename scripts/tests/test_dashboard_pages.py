@@ -100,6 +100,62 @@ def test_receipt_labels_are_plain_and_keep_unknown_ids_readable():
     assert receipt_label("brand_new_component") == "Brand new component"
 
 
+@pytest.mark.parametrize("plane, stale, recorded_ceiling, expected_limit", [
+    ("candidate", False, False, "1e+04 mcg"),
+    ("candidate", True, False, None),
+    ("candidate", "mixed", False, None),
+    ("release", False, False, None),
+    ("release", False, True, "1e+04 mcg"),
+])
+def test_trace_never_labels_a_reference_with_the_amount_unit(dashboard_app, indexed, plane, stale,
+                                                           recorded_ceiling, expected_limit):
+    from dashboard_index_fixtures import enriched_product, write_enriched
+
+    scan, dist = indexed
+    scored = scored_product("1")
+    scored["quality_pillars_v4"]["dose"]["explanation"] = {"dose_receipt": {"reference_assessments": [
+        {"nutrient": "Copper", "canonical_id": "copper", "unit": "mg", "per_day_max": 20.0, "ul": 10000.0}]}}
+    if recorded_ceiling:
+        scored["dose_safety_evaluation"] = {"dose_ceiling": {
+            "nutrient": "Copper", "label_nutrient": "Copper", "ul": 10000.0, "ul_unit": "mcg", "pct_ul": 200.0}}
+    write_batch(scan, "Acme", [scored])
+    dist = dist.parent / "unit_release"
+    write_release(dist, [scored])
+    enriched = enriched_product("1")
+    enriched["display_ingredients"][0].update(
+        canonical_id="copper", label_display_name="Copper", exact_dose_text="2 mg")
+    enriched["rda_ul_data"] = {"ingredients_with_rda": [
+        {"canonical_id": "copper", "nutrient_unit": "mcg", "ul_gate_eligible": True}]}
+    enriched_dir = write_enriched(scan, "Acme", [enriched])
+    if stale == "mixed":
+        import json
+        manifest_path = enriched_dir / ".stage_manifest.json"
+        manifest = json.loads(manifest_path.read_text())
+        manifest["input_fingerprints"]["reference_data_sha256_v1"] = "different-reference"
+        manifest_path.write_text(json.dumps(manifest))
+    paths = si.default_paths(scan, dist)
+    si.refresh(paths)
+    si.refresh_ingredients(paths)
+    if stale is True:
+        enriched["product_name"] = "Changed label"
+        write_enriched(scan, "Acme", [enriched])
+    data = dashboard_app.load_dashboard_data(dashboard_app.DashboardConfig(scan_dir=scan, build_root=dist))
+    reader = si.IndexReader(paths)
+    ctx = dashboard_app.shell.PageContext(data=data, index=reader, plane=plane, run_key=reader.latest(plane))
+    product = reader.product(ctx.run_key, "1")
+    dashboard_app.st.markdown.reset_mock()
+    dashboard_app.view("trace")._label_facts(ctx, "1", product["dose_refs"], product["dose_flags"])
+    html = _markdown(dashboard_app.st)
+    assert "2 mg" in html
+    assert "1e+04 mg" not in html
+    if expected_limit:
+        assert expected_limit in html
+    else:
+        assert "1e+04 mcg" not in html  # a different/stale run cannot borrow the current label's reference unit
+    if recorded_ceiling:
+        assert "200%" in html
+
+
 def _frame(indexed, plane="candidate"):
     scan, dist = indexed
     reader = si.IndexReader(si.default_paths(scan, dist))

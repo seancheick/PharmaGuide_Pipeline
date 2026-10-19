@@ -137,10 +137,20 @@ def _label_facts(ctx: shell.PageContext, dsld_id: str, dose_refs: pd.DataFrame, 
                              info.get("servings_per_container") and f"{float(info['servings_per_container']):g} servings per container",
                              info.get("form_factor")) if b]
     refs = {str(ref.canonical_id): ref for ref in dose_refs.itertuples()}
+    part = info.get("source_part")
+    scored_part = ((ctx.run or {}).get("parts") or {}).get(part) or {}
+    enriched_part = (ctx.index.meta.get("ingredient_parts") or {}).get(part) or {}
+    same_source = all(scored_part.get(key) and scored_part[key] == enriched_part.get(key)
+                      for key in ("run_id", "reference_data"))
+    current_units_match = (ctx.plane == "candidate" and ctx.run_key == ctx.index.latest("candidate")
+                           and same_source and not status["stale"] and not ctx.index.staleness()["stale"])
     over = {}  # the scorer records % of UL only for nutrients its dose-safety check flagged
+    recorded_limits = {}
     for flag in dose_flags.itertuples():
         if pd.notna(flag.pct_ul) and flag.nutrient:
             over[str(flag.nutrient).lower()] = max(float(flag.pct_ul), over.get(str(flag.nutrient).lower(), 0.0))
+            if pd.notna(flag.ul) and _clean(flag.ul_unit):
+                recorded_limits[str(flag.nutrient).lower()] = flag
     rows = ['<div class="pg-card"><div class="pg-facts-head">Supplement Facts</div>',
             f'<div class="pg-facts-meta">{escape(" · ".join(map(str, meta_bits)))}</div>',
             '<div class="pg-label-wrap"><table class="pg-label"><tr><th>Ingredient</th><th class="r">Per serving</th><th class="r">% DV</th>'
@@ -154,7 +164,14 @@ def _label_facts(ctx: shell.PageContext, dsld_id: str, dose_refs: pd.DataFrame, 
         if pct is None and ref is not None:
             pct = over.get(str(ref.nutrient).lower())
         per_day = _amount(ref.per_day_max, ref.unit) if ref is not None else ""
-        limit = _amount(ref.ul, ref.unit) if ref is not None else ""
+        bound = recorded_limits.get(str(ref.nutrient if ref is not None else f.name).lower())
+        reference_unit = _clean(getattr(f, "nutrient_unit", None)) if current_units_match else ""
+        if bound is not None:
+            limit, pct = _amount(bound.ul, bound.ul_unit), float(bound.pct_ul)
+        elif ref is not None and reference_unit:
+            limit = _amount(ref.ul, reference_unit)
+        else:
+            limit, pct = "", None
         indent = f'padding-left:{0.4 + 1.1 * int(f.depth or 0):.1f}rem'
         rows.append(
             f'<tr><td style="{indent}">{escape(_clean(f.name) or "—")}'
@@ -175,7 +192,8 @@ def _label_facts(ctx: shell.PageContext, dsld_id: str, dose_refs: pd.DataFrame, 
     stale = " — stale, may predate this run" if status["stale"] else ""
     muted(f"Label as recorded in the enriched data (ingredient index built {status.get('built_at') or '—'}{stale}). "
           "Per day and upper limit come from the scorer's dose references. A red upper limit with a percentage is a "
-          "nutrient the dose-safety check found over its limit.")
+          "nutrient the dose-safety check found over its limit. Reference units come from the matching current "
+          "enriched record or a recorded ceiling; a limit without a bound unit is left unavailable, not inferred from the dose unit.")
 
 
 def _timeline(ctx: shell.PageContext, dsld_id: str) -> pd.DataFrame:

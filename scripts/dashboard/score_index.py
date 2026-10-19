@@ -148,6 +148,7 @@ PRODUCT_META_SCHEMA = _schema(
 LABEL_FACT_SCHEMA = _schema(
     ("dsld_id", _S), ("seq", _I), ("section", _S), ("name", _S), ("amount", _S), ("daily_value", _F),
     ("form", _S), ("depth", _I), ("parent", _S), ("scored", _B), ("disposition", _S), ("canonical_id", _S),
+    ("nutrient_unit", _S),
 )
 INGREDIENT_TABLES = {"ingredients": INGREDIENT_SCHEMA, "product_meta": PRODUCT_META_SCHEMA,
                      "label_facts": LABEL_FACT_SCHEMA}
@@ -492,11 +493,21 @@ def project_enriched(product: dict[str, Any], *, source_part: str) -> dict[str, 
         "supplement_type": _text(product.get("supplement_type")), "primary_type": _text(product.get("primary_type")),
         "source_part": source_part, **_serving_facts(product),
     }
+    # Amount units and RDA/UL reference units can differ (e.g. copper mg vs mcg).
+    # Carry the unit already recorded by the RDA owner; never infer it from the dose.
+    reference_units: dict[str, set[str]] = {}
+    for item in (product.get("rda_ul_data") or {}).get("ingredients_with_rda") or []:
+        if not isinstance(item, dict) or item.get("ul_gate_eligible") is not True:
+            continue
+        canonical, unit = _text(item.get("canonical_id")), _text(item.get("nutrient_unit"))
+        if canonical and unit:
+            reference_units.setdefault(canonical, set()).add(unit)
     label = []
     for seq, item in enumerate(product.get("display_ingredients") or []):
         if not isinstance(item, dict):
             continue
         section = str(item.get("source_section") or "")
+        units = reference_units.get(_text(item.get("canonical_id")), set())
         label.append({
             "dsld_id": pid, "seq": seq, "section": "inactive" if "inactive" in section.lower() else "active",
             "name": _text(item.get("label_display_name") or item.get("display_name") or item.get("raw_source_text")),
@@ -504,6 +515,7 @@ def project_enriched(product: dict[str, Any], *, source_part: str) -> dict[str, 
             "form": _text(item.get("label_display_form")), "depth": int(item.get("nested_depth") or 0),
             "parent": _text(item.get("parent_label")), "scored": bool(item.get("score_included")),
             "disposition": _text(item.get("display_disposition")), "canonical_id": _text(item.get("canonical_id")),
+            "nutrient_unit": next(iter(units)) if len(units) == 1 else None,
         })
     return {"ingredients": rows, "product_meta": [meta], "label_facts": label}
 

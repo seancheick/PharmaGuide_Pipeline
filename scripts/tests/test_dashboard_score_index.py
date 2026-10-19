@@ -227,6 +227,20 @@ def test_failed_backfill_cleans_staging_and_records_status(roots, tmp_path):
     assert json.loads(roots.status_file.read_text())["ok"] is False
 
 
+@pytest.mark.parametrize("units, expected", [(["mcg"], "mcg"), (["mcg", "mg"], None), ([], None)])
+def test_label_reference_unit_is_recorded_not_borrowed_from_amount(units, expected):
+    product = {
+        "dsld_id": "copper", "display_ingredients": [
+            {"canonical_id": "copper", "label_display_name": "Copper", "exact_dose_text": "2 mg"}],
+        "rda_ul_data": {"ingredients_with_rda": [
+            {"canonical_id": "copper", "nutrient_unit": unit, "converted_unit": "mg", "ul_gate_eligible": True}
+            for unit in units]},
+    }
+    row = si.project_enriched(product, source_part="test")["label_facts"][0]
+    assert row.get("nutrient_unit") == expected
+    assert row["amount"] == "2 mg"
+
+
 def test_ingredient_index_builds_reuses_and_survives_core_refresh(roots, monkeypatch):
     from dashboard_index_fixtures import enriched_product, write_enriched
 
