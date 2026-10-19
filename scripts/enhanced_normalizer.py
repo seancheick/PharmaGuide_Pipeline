@@ -132,11 +132,14 @@ def _load_unii_exoneration_label_tokens(
         payload = json.loads(path.read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError) as e:
         raise RuntimeError(f"FATAL: Failed to load {path}: {e}") from e
-    if not isinstance(payload, dict) or not payload.get("exonerations"):
-        raise RuntimeError(f"FATAL: {path} has no exonerations")
+    exonerations = payload.get("exonerations") if isinstance(payload, dict) else None
+    if not isinstance(exonerations, list) or not exonerations or not all(
+        isinstance(item, dict) for item in exonerations
+    ):
+        raise RuntimeError(f"FATAL: {path} has no list of exoneration objects")
 
     out: Dict[str, List[Set[str]]] = {}
-    for exoneration in payload.get("exonerations", []) or []:
+    for exoneration in exonerations:
         unii = norm_module.normalize_unii(exoneration.get("unii"))
         if not unii:
             continue
@@ -148,6 +151,8 @@ def _load_unii_exoneration_label_tokens(
             if entry_id:
                 labels.append(_unii_identity_tokens(entry_id))
         out[unii] = [label for label in labels if label]
+    if not any(out.values()):
+        raise RuntimeError(f"FATAL: {path} yields no UNII exoneration labels")
     return out
 
 

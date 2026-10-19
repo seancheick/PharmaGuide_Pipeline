@@ -208,3 +208,14 @@ def test_pool_run_with_unusable_unit_database_stops_without_cleaned_output(
     for batch in cleaned.glob("cleaned_batch_*.json"):
         assert json.loads(batch.read_text(encoding="utf-8")) in ([], None)
     assert not (cleaned / ".stage_manifest.json").exists()
+
+
+@pytest.mark.parametrize("exonerations", [
+    "not-a-list",
+    [1],
+    [{"unii": None, "entries": [{"entry_id": "x"}]}],
+])
+def test_unii_exoneration_allowlist_malformed_raises(unii_allowlist_path, exonerations):
+    unii_allowlist_path.write_text(json.dumps({"exonerations": exonerations}), encoding="utf-8")
+    with pytest.raises(RuntimeError, match="unii_exoneration_allowlist"):
+        enhanced_normalizer._load_unii_exoneration_label_tokens(unii_allowlist_path)

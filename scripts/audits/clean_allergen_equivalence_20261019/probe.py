@@ -47,8 +47,12 @@ def _typos(term):
 
 
 def build_names(raw_dir, allergens_path):
+    labels = sorted(Path(raw_dir).rglob("*.json"))
+    if not labels:
+        # Allergen variants alone would compare clean without auditing any label.
+        raise SystemExit(f"no raw label JSON under {raw_dir}")
     names = set()
-    for path in sorted(Path(raw_dir).rglob("*.json")):
+    for path in labels:
         label = json.loads(path.read_text(encoding="utf-8"))
         for section in ("ingredientRows", "otheringredients"):
             _row_names(label.get(section), names)
@@ -80,7 +84,8 @@ def run(args):
         "harmful": sum(1 for r in results.values() if r["harmful_info"]["category"] != "none"),
         "allergen": sum(1 for r in results.values() if r["allergen_info"]["is_allergen"]),
     }
-    print(json.dumps({"names": len(results), "flagged": flagged}, sort_keys=True))
+    raw_labels = len(list(Path(args.raw_dir).rglob("*.json")))
+    print(json.dumps({"names": len(results), "raw_labels": raw_labels, "flagged": flagged}, sort_keys=True))
 
 
 def compare(args):
