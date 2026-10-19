@@ -319,6 +319,8 @@
       "match_rules": {
         "negative_match_terms": [
           "gluten enzyme",
+          "mannitol",
+          "xylitol",
           "highly refined"
         ]
       }

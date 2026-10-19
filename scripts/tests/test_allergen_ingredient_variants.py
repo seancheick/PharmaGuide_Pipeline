@@ -69,6 +69,8 @@ def test_row_naming_an_allergen_source_is_flagged(enricher, name, forms, expecte
     ("Tropical Almond (Terminalia chebula)", ()),
     ("Almond Mushroom", ()),
     ("Gluten Enzyme Blend", ()),
+    ("Mannitol", ("Wheat",)),
+    ("Xylitol", ("Wheat",)),
     ("Mustard Greens", ()),
     ("Rye Flower Pollen Extract", ()),
     ("Graminex Flower Pollen Extract", ("Rye",)),
