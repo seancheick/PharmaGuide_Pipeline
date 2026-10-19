@@ -70,5 +70,12 @@ would cover.
 
 ## Score neutrality
 
-See the PR: `replay.py snapshot --full --blob` base `fd51b5828` vs candidate on the 2,221-label
-frozen cohort `~/pg_quality/clean_fuzzy_20261019/`. Receipts: `~/pg_quality/dead_code_sweep_20261019/`.
+`replay.py snapshot --full --blob --workers 2` (unpinned hash seed), base `fd51b5828` vs candidate
+`8644d753a` (runtime equal to `0430ffacb`) on the 2,221-label frozen cohort
+`~/pg_quality/clean_fuzzy_20261019/`, then `compare --all-paths`: 2,145 products changed, all in the
+scored record and only at the removed paths: `_v4_module_breakdown.metadata.production_score_clamped`
+2,145; `dimensions.formulation.metadata.deferred_components` and `deferred_penalties` 1,704 each;
+`dimensions.evidence.metadata.disclosed_epa_dha_clinical_floor_score`,
+`disclosed_epa_dha_clinical_floor_threshold_mg_day` and `indication_threshold_mg_day` 104 each.
+Cleaned, enriched and detail-blob records: 0 changed. Receipts: `~/pg_quality/dead_code_sweep_20261019/`.
+Whole-fast CI `pipeline-tests` 39334007387 passed on `8644d753a`; this note is documentation only.
