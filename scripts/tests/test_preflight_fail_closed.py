@@ -1011,13 +1011,7 @@ def test_scoring_evidence_checks_follow_source_and_artifact_owners():
     artifact_tests = [n.name for n in ast.parse(artifact.read_text()).body
                       if isinstance(n, ast.FunctionDef) and n.name.startswith('test_')]
     assert artifact_tests
-    lookup_test = 'test_product_lookup_does_not_decode_unrelated_corpus_batches'
-    assert lookup_test in artifact_tests
-    # This new helper regression builds its own tiny inputs. The seven real-
-    # product checks still require generated artifacts; none is reclassified.
-    assert preparation_phase(artifact.name, lookup_test)[0] == 'source'
-    assert all(preparation_phase(artifact.name, name)[0] == 'artifact'
-               for name in artifact_tests if name != lookup_test)
+    assert all(preparation_phase(artifact.name, name)[0] == 'artifact' for name in artifact_tests)
     assert preparation_phase(source.name, 'test_galu_enzyme_activity_reaches_v4_as_non_mass_dose_evidence')[0] == 'source'
 
 
@@ -1078,3 +1072,26 @@ def test_preparation_cli_forwards_explicit_developer_suite_choice(tmp_path, monk
         preflight.main()
     assert exited.value.code == 0
     assert received == [full]
+
+def test_product_lookup_does_not_decode_unrelated_corpus_batches(tmp_path, monkeypatch):
+    # Regression: seven real-product checks each decoded gigabytes of unrelated
+    # brands until pytest-timeout killed them. Keep the exact ID lookup/assertions;
+    # reject batches without the requested ID before allocating their JSON trees.
+    import test_scoring_evidence_contract_v1 as owner
+    other = tmp_path / 'products/output_other_enriched/enriched'
+    other.mkdir(parents=True)
+    (other / 'batch.json').write_text('[{"id":"not-the-requested-label"}]')
+    target = tmp_path / 'products/output_target_enriched/enriched'
+    target.mkdir(parents=True)
+    (target / 'batch.json').write_text('[{"dsld_id" :\n 12345, "name":"wanted"}]')
+    monkeypatch.setattr(owner, 'SCRIPTS_ROOT', tmp_path)
+    glob = Path.glob
+    monkeypatch.setattr(Path, 'glob', lambda root, pattern: iter(sorted(glob(root, pattern))))
+    loads = json.loads
+    decoded = []
+    def record_decode(value, *args, **kwargs):
+        decoded.append(value)
+        return loads(value, *args, **kwargs)
+    monkeypatch.setattr(json, 'loads', record_decode)
+    assert owner._load_product('12345')['name'] == 'wanted'
+    assert len(decoded) == 1

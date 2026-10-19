@@ -204,28 +204,3 @@ def test_enzyme_evidence_carries_new_identity_fields() -> None:
         assert "clean_identity_id" in row
         assert "scoring_parent_id" in row
         assert "evidence_canonical_id" in row
-
-
-def test_product_lookup_does_not_decode_unrelated_corpus_batches(tmp_path, monkeypatch):
-    # Regression: seven real-product checks each decoded gigabytes of unrelated
-    # brands until pytest-timeout killed them. Keep the exact ID lookup/assertions;
-    # reject batches without the requested ID before allocating their JSON trees.
-    import sys
-    owner = sys.modules[__name__]
-    other = tmp_path / 'products/output_other_enriched/enriched'
-    other.mkdir(parents=True)
-    (other / 'batch.json').write_text('[{"id":"not-the-requested-label"}]')
-    target = tmp_path / 'products/output_target_enriched/enriched'
-    target.mkdir(parents=True)
-    (target / 'batch.json').write_text('[{"dsld_id" :\n 12345, "name":"wanted"}]')
-    monkeypatch.setattr(owner, 'SCRIPTS_ROOT', tmp_path)
-    glob = Path.glob
-    monkeypatch.setattr(Path, 'glob', lambda root, pattern: iter(sorted(glob(root, pattern))))
-    loads = json.loads
-    decoded = []
-    def record_decode(value, *args, **kwargs):
-        decoded.append(value)
-        return loads(value, *args, **kwargs)
-    monkeypatch.setattr(json, 'loads', record_decode)
-    assert _load_product('12345')['name'] == 'wanted'
-    assert len(decoded) == 1
