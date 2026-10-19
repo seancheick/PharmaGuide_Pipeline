@@ -725,14 +725,10 @@ class EnhancedIngredientMatcher:
             logger.debug(f"NULL {field_name} converted to empty string")
             return ""
 
-        # Handle non-string types
+        # Handle non-string types. A value that cannot become text raises, so
+        # the per-file handler records a product error instead of a blank name.
         if not isinstance(text, str):
-            try:
-                text = str(text)
-                logger.debug(f"Non-string {field_name} converted: {type(text)} -> str")
-            except Exception:
-                logger.warning(f"Failed to convert {field_name} to string, using empty")
-                return ""
+            text = str(text)
 
         # Handle whitespace-only strings
         stripped = text.strip()
@@ -875,41 +871,26 @@ class EnhancedDSLDNormalizer:
         # str(dsld_id) → {raw_ingredient_text, corrected_ingredient_text, ...};
         # one verified product defect may include additional_row_corrections.
         # Applied in normalize_product() before flattening so the cleaner's
-        # ingredient resolution sees corrected text. Missing-file is allowed
-        # (cleanly empty dict) so dev environments without the override file
-        # still run; the integration tests cover the populated path.
+        # ingredient resolution sees corrected text. The file is checked in;
+        # _load_json stops the run if it is missing or unreadable.
         self._label_corrections_by_dsld_id: Dict[str, Dict[str, Any]] = {}
-        try:
-            overrides_doc = self._load_json(PRODUCT_LABEL_CORRECTIONS)
-            if isinstance(overrides_doc, dict):
-                self._label_corrections_by_dsld_id = (
-                    overrides_doc.get("corrections") or {}
-                )
-        except Exception as _e:  # pragma: no cover - defensive
-            logger.warning(
-                "RC-5: failed to load product_label_corrections.json (%s). "
-                "Continuing without label corrections.",
-                _e,
+        overrides_doc = self._load_json(PRODUCT_LABEL_CORRECTIONS)
+        if isinstance(overrides_doc, dict):
+            self._label_corrections_by_dsld_id = (
+                overrides_doc.get("corrections") or {}
             )
 
         # 2026-05-24: reviewer-signed per-product canonical_id + IQM form
         # overrides. Keyed by str(dsld_id) → override entry. Loaded once,
         # consumed by enrich_supplements_v3.py BEFORE _match_multi_form so
-        # the matcher cannot fall back to an unspecified form. Missing-file
-        # is allowed (cleanly empty dict). Spec: reports/not_scored_triage/
+        # the matcher cannot fall back to an unspecified form. A missing or
+        # unreadable file stops the run. Spec: reports/not_scored_triage/
         # cleaner_side_context_routing_spec.md
         self._context_canonical_overrides_by_dsld_id: Dict[str, Dict[str, Any]] = {}
-        try:
-            ctx_doc = self._load_json(PRODUCT_CONTEXT_CANONICAL_OVERRIDES)
-            if isinstance(ctx_doc, dict):
-                self._context_canonical_overrides_by_dsld_id = (
-                    ctx_doc.get("overrides") or {}
-                )
-        except Exception as _e:  # pragma: no cover - defensive
-            logger.warning(
-                "Failed to load product_context_canonical_overrides.json (%s). "
-                "Continuing without context routing overrides.",
-                _e,
+        ctx_doc = self._load_json(PRODUCT_CONTEXT_CANONICAL_OVERRIDES)
+        if isinstance(ctx_doc, dict):
+            self._context_canonical_overrides_by_dsld_id = (
+                ctx_doc.get("overrides") or {}
             )
 
         # Load color indicators for context-aware mapping (REQUIRED)
@@ -1829,22 +1810,20 @@ class EnhancedDSLDNormalizer:
     }
 
     def _load_json(self, filepath: Path) -> Dict:
-        """Load JSON reference file. Raises on critical DB failures."""
-        is_critical = filepath.name in self.CRITICAL_DATABASES
+        """Load a JSON reference file. Every file is checked in, so a missing or
+        unreadable one stops the run instead of cleaning with an empty table;
+        a critical database must also be non-empty."""
         try:
             with open(filepath, 'r', encoding='utf-8') as f:
                 data = json.load(f)
-            if is_critical and not data:
+            if filepath.name in self.CRITICAL_DATABASES and not data:
                 raise ValueError(f"Critical database {filepath.name} loaded but is empty")
             return data
         except Exception as e:
-            if is_critical:
-                raise RuntimeError(
-                    f"FATAL: Failed to load critical reference database {filepath}: {e}. "
-                    f"Pipeline cannot produce safe results without this file."
-                ) from e
-            logger.error(f"Failed to load {filepath}: {str(e)}")
-            return {}
+            raise RuntimeError(
+                f"FATAL: Failed to load reference file {filepath}: {e}. "
+                f"Pipeline cannot produce safe results without this file."
+            ) from e
 
     def _normalize_dv_lookup_key(self, value: Any) -> str:
         """Normalize nutrient aliases for FDA Daily Value lookup."""
