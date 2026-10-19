@@ -472,7 +472,7 @@ def test_partially_disclosed_blend_total_still_competes():
     hidden.update(
         name="Bacopa", standardName="Bacopa", raw_source_text="Bacopa",
         raw_source_path="ingredientRows[1].nestedRows[1]", quantity=0.0, unit="NP",
-        quantityProvided=False, canonical_id="bacopa",
+        canonical_id="bacopa",
         cleaner_row_role="nested_display_only", score_eligible_by_cleaner=False,
         score_exclusion_reason="nested_display_only", dose_class="zero_or_np",
     )

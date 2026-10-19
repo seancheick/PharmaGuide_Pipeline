@@ -3859,7 +3859,7 @@ class TestEnricherDropsDeadPassthroughFields:
     userGroups, physicalState, nutritionalInfo, form_factor, status,
     discontinuedDate, imageUrl, upcSku, display_ingredients (enricher
     overwrites this, but does NOT pop it), productVersionCode, entryDate,
-    updatedDate, and labelRelationships.
+    and updatedDate. The cleaner no longer emits labelRelationships (no reader).
 
     Dropped fields: src, nhanesId, brandIpSymbol, pdf,
     thumbnail, percentDvFootnote, hasOuterCarton, upcValid, productType,
@@ -3897,7 +3897,6 @@ class TestEnricherDropsDeadPassthroughFields:
         "productVersionCode",
         "entryDate",
         "updatedDate",
-        "labelRelationships",
     ]
 
     @pytest.fixture

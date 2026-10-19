@@ -6408,6 +6408,10 @@ class EnhancedDSLDNormalizer:
                 active_ingredients,
                 inactive_ingredients,
             )
+            # Header-expanded rows carry their depth as working state until the
+            # display ledger is built; raw_taxonomy.nested_depth is the emitted copy.
+            for ing in inactive_ingredients:
+                ing.pop("_raw_nested_depth", None)
             label_source_rows = self._build_label_source_rows(display_ingredients)
             label_ledger_audit = self._build_label_ledger_audit(
                 display_ingredients,
@@ -6484,9 +6488,6 @@ class EnhancedDSLDNormalizer:
 
                 # Serving info
                 "servingSizes": serving_sizes,
-
-                # Label relationships
-                "labelRelationships": raw_data.get("labelRelationships", []) or [],
 
                 # ========== LABEL TEXT (STRUCTURED) ==========
                 "labelText": {
@@ -6796,8 +6797,6 @@ class EnhancedDSLDNormalizer:
                                 "name": form_name,
                                 "ingredientId": form.get("ingredientId"),
                                 "order": form.get("order", ing.get("order", 0)),
-                                # Mark as coming from a label header (for transparency)
-                                "_fromLabelHeader": name
                             }
                             # Process as inactive since "Less than 2%" items are minor ingredients
                             processed_form = self._process_single_ingredient_enhanced(synthetic_ing, is_active=False)
@@ -6995,10 +6994,6 @@ class EnhancedDSLDNormalizer:
                         else:
                             nested_processed["parentBlend"] = name
                             nested_processed["isNestedIngredient"] = True
-                            nested_processed["quantityProvided"] = (
-                                nested_processed.get("quantity", 0) > 0 and
-                                nested_processed.get("unit", "") != "NP"
-                            )
                             nested_results.append(nested_processed)
                 if nested_results:
                     return nested_results
@@ -7496,9 +7491,6 @@ class EnhancedDSLDNormalizer:
                         for item in nested_processed:
                             item["parentBlend"] = name
                             item["isNestedIngredient"] = True
-                            item["quantityProvided"] = (
-                                item.get("quantity", 0) > 0 and item.get("unit", "") != "NP"
-                            )
                             if _parent_blend_mass is not None:
                                 item.setdefault("parentBlendMass", _parent_blend_mass)
                                 item.setdefault("parentBlendUnit", _parent_blend_unit)
@@ -7506,10 +7498,6 @@ class EnhancedDSLDNormalizer:
                     else:
                         nested_processed["parentBlend"] = name
                         nested_processed["isNestedIngredient"] = True
-                        # Add quantityProvided flag for nested ingredients
-                        nested_qty = nested_processed.get("quantity", 0)
-                        nested_unit = nested_processed.get("unit", "")
-                        nested_processed["quantityProvided"] = nested_qty > 0 and nested_unit != "NP"
                         if _parent_blend_mass is not None:
                             nested_processed.setdefault("parentBlendMass", _parent_blend_mass)
                             nested_processed.setdefault("parentBlendUnit", _parent_blend_unit)
@@ -7603,13 +7591,10 @@ class EnhancedDSLDNormalizer:
                 f.get("name") for f in forms_structured
                 if isinstance(f, dict) and f.get("source") != "name_extraction"
             ]
-            for source, text in [("name_inference", raw_name or name)] + [
-                ("form_inference", form_name) for form_name in label_forms
-            ]:
+            for text in [raw_name or name] + label_forms:
                 inferred_part = self._infer_plant_part_from_name(text or "")
                 if inferred_part:
                     botanical_details["plantPart"] = inferred_part
-                    botanical_details["plantPart_source"] = source
                     break
 
         # Attribute additive function only from declared names/aliases. Identity
@@ -8209,8 +8194,6 @@ class EnhancedDSLDNormalizer:
         # Add botanical details if present
         if botanical_details.get("plantPart"):
             result["plantPart"] = botanical_details["plantPart"]
-            if botanical_details.get("plantPart_source"):
-                result["plantPart_source"] = botanical_details["plantPart_source"]
         if botanical_details.get("genus"):
             result["genus"] = botanical_details["genus"]
         if botanical_details.get("species"):
@@ -8698,8 +8681,6 @@ class EnhancedDSLDNormalizer:
                             "percent": form.get("percent"),
                             "forms": [],
                             "alternateNames": [],
-                            "_fromLabelHeader": name,
-                            "_transparency": "standard",
                         }
                         carry_form_dose_and_correction(
                             row,
@@ -8733,8 +8714,6 @@ class EnhancedDSLDNormalizer:
                         "percent": form.get("percent"),
                         "forms": [],
                         "alternateNames": [],
-                        "_fromLabelHeader": name,
-                        "_transparency": "standard",
                     }
                     carry_form_dose_and_correction(
                         row,
@@ -8755,8 +8734,6 @@ class EnhancedDSLDNormalizer:
                             "ingredientGroup": ingredient.get("ingredientGroup"),
                             "forms": [],
                             "alternateNames": [],
-                            "_fromLabelHeader": name,
-                            "_transparency": "standard",
                         })
                     continue
                 if self._is_label_header(form) or self._is_structural_form_container(
@@ -8779,8 +8756,6 @@ class EnhancedDSLDNormalizer:
                         "ingredientGroup": ingredient.get("ingredientGroup"),
                         "forms": [],
                         "alternateNames": [],
-                        "_fromLabelHeader": name,
-                        "_transparency": "standard",
                     })
 
         for row in expanded:
@@ -9858,6 +9833,12 @@ class EnhancedDSLDNormalizer:
         return None
 
     @staticmethod
+    def _nested_amount_disclosed(row: Dict[str, Any]) -> bool:
+        """A blend member's own amount is printed: positive quantity, unit not NP."""
+        quantity = row.get("quantity", 0)
+        return isinstance(quantity, (int, float)) and quantity > 0 and row.get("unit", "") != "NP"
+
+    @staticmethod
     def _build_proprietary_blend_disclosure(
         proprietary_blends: List[Dict[str, Any]],
     ) -> Optional[Dict[str, Any]]:
@@ -9881,7 +9862,7 @@ class EnhancedDSLDNormalizer:
                 has_total = False
 
             individual_disclosed = bool(nested) and all(
-                row.get("quantityProvided") is True
+                EnhancedDSLDNormalizer._nested_amount_disclosed(row)
                 and str(row.get("unit") or "").strip().upper() not in {"", "NP"}
                 for row in nested
             )
@@ -9920,7 +9901,7 @@ class EnhancedDSLDNormalizer:
         disclosed_quantities = sum(
             1 for b in proprietary_blends
             for n in b.get("nestedIngredients", [])
-            if n.get("quantityProvided", False)
+            if self._nested_amount_disclosed(n)
         )
         undisclosed_quantities = total_nested - disclosed_quantities
 
