@@ -12446,16 +12446,17 @@ class EnhancedDSLDNormalizer:
         holds for a name-only blend signal ("Clarinol CLA Complex" / Conjugated
         Linoleic Acid). When the printed name and that one form both resolve to
         the same IQM ingredient, the row is that ingredient at the printed dose,
-        not a blend total. A descriptor form, a different identity, a
-        proprietary-blend owner (Velositol) or a form DSLD itself files as a
-        blend (AuroraBlue / "Wildcrafted Blueberry Complex", 328293) does not
-        qualify.
+        not a blend total. A descriptor form, a different identity or a
+        proprietary-blend owner (Velositol) does not qualify. DSLD's own
+        ``blend`` filing of that one form is not counter-evidence: Celadrin's
+        "Esterified Fatty Acid Carbons" is the cetylated fatty acid material
+        itself (302646).
         """
         if ing.get("nestedRows") or ing.get("isNestedIngredient") or not self._has_declared_mass(ing):
             return False
         forms = [f for f in ing.get("forms") or []
                  if isinstance(f, dict) and str(f.get("name") or "").strip()]
-        if len(forms) != 1 or self._has_dsld_blend_group_signal(forms[0]):
+        if len(forms) != 1:
             return False
 
         def identity(name, group=None):

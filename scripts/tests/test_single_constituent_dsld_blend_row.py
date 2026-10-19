@@ -68,9 +68,6 @@ def test_velositol_single_form_stays_a_blend_total(pipeline):
     {"name": "Organic Detoxifier Blend", "forms": [{"name": "organic", "category": "other"}]},
     # Constituent names a different identity than the row (31062).
     {"name": "Ultra Probiotics", "forms": [{"name": "Bacillus coagulans", "category": "bacteria"}]},
-    # The one form is itself filed as a blend (AuroraBlue 328293).
-    {"name": "AuroraBlue", "forms": [{"name": "Wildcrafted Blueberry Complex", "category": "blend",
-                                      "ingredientGroup": "Blend"}]},
     # Two botanicals in the name, one generic form (2502).
     {"name": "Whole grape extract (Vitis vinifera) and Polygonum cuspidatum (root) extract",
      "forms": [{"name": "extract", "category": "other"}]},
