@@ -109,16 +109,12 @@ def test_release_export_counts_and_index_parity():
         conn.close()
 
     integrity = manifest["integrity"]
-    dedup_removed = audit["counts"].get("upc_dedup", {}).get(
-        "duplicates_removed", 0
-    )
     expected_rows = (
         len(enriched_lookup)
         - integrity["enriched_only_count"]
         - integrity["error_count"]
         - integrity["excluded_by_gate_count"]
         - integrity["warning_count"]
-        - dedup_removed
     )
 
     assert len(enriched_lookup) == len(scored_lookup)

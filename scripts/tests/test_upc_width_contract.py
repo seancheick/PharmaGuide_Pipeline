@@ -77,7 +77,7 @@ def test_padding_equivalence_collisions_are_reported_not_merged():
     ]
     conn.executemany("insert into products_core values (?, ?)", rows)
 
-    report = dedup_by_upc(conn, detail_index={})
+    report = dedup_by_upc(conn)
 
     # Same-width duplicates stay in the existing ambiguous report...
     assert report["ambiguous_upc_groups"] == 1
