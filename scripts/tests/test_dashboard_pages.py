@@ -156,6 +156,23 @@ def test_trace_never_labels_a_reference_with_the_amount_unit(dashboard_app, inde
         assert "200%" in html
 
 
+def test_release_input_count_uses_its_release_timestamp(dashboard_app, indexed):
+    from types import SimpleNamespace
+    from scripts.dashboard.time_format import format_dashboard_datetime
+
+    scan, dist = indexed
+    reader = si.IndexReader(si.default_paths(scan, dist))
+    ctx = SimpleNamespace(index=reader, data=SimpleNamespace(
+        export_manifest={"integrity": {"enriched_input_count": 123}},
+        latest_enriched_at="2026-12-01T12:00:00Z"))
+    dashboard_app.st.caption.reset_mock()
+    dashboard_app.view("overview")._health_strip(ctx)
+    captions = [str(call.args[0]) for call in dashboard_app.st.caption.call_args_list if call.args]
+    release_time = format_dashboard_datetime(reader.run(reader.latest("release"))["run_time"], style="compact")
+    assert f"{release_time} · enriched products in the last release" in captions
+    assert "Release inputs" in captions
+
+
 def _frame(indexed, plane="candidate"):
     scan, dist = indexed
     reader = si.IndexReader(si.default_paths(scan, dist))

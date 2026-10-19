@@ -39,7 +39,7 @@ def _health_strip(ctx: shell.PageContext) -> None:
     candidate = ctx.index.run(ctx.index.latest("candidate")) or {}
     release = ctx.index.run(ctx.index.latest("release")) or {}
     stages = [
-        ("Clean / enrich", format_dashboard_datetime(data.latest_enriched_at, style="compact"),
+        ("Release inputs", format_dashboard_datetime(release.get("run_time"), style="compact"),
          f"{integrity.get('enriched_input_count', '—'):,}" if isinstance(integrity.get("enriched_input_count"), int) else "—",
          "enriched products in the last release"),
         ("Score (candidate)", format_dashboard_datetime(candidate.get("run_time"), style="compact"),
