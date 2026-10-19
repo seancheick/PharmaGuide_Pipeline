@@ -394,7 +394,9 @@ def _label_owners(product: Mapping):
 
 
 def _source_live_eligible(owners, nonlive, row):
-    """``nonlive`` holds the ids of ``owners`` with nonlive-derivative evidence."""
+    """``owners`` and ``nonlive`` come from one ``_label_owners`` view, so the ids
+    in ``nonlive`` name objects held by ``owners``. Representations are members
+    of ``owners``; a row outside it is checked directly."""
     representations = _source_row_representations(owners, row.get("raw_source_path"))
     if (any(id(owner) in nonlive for owner in representations) if representations
             else has_nonlive_microbial_derivative_evidence(row)):
