@@ -629,7 +629,8 @@ def authority_panel_result_state(product: Dict[str, Any], authority: Dict[str, A
     if authority.get("covered_keys"):
         return "evaluated_authority"
     if panel is None or not panel.resolutions:
-        if not _assessable_active_ingredients(product):
+        from evidence_resolver import resolve_product_evidence
+        if not resolve_product_evidence(product, owner_scoped=True).resolutions:
             return "no_assessable_actives"
         return "clinical_review_not_covered"
     return result_state_for_disposition(panel.overall_disposition)
