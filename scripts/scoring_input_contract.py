@@ -2351,13 +2351,49 @@ class _ScoringInputScope:
     """Per-product memoization owned by one scored-artifact assembly."""
 
     product: Dict[str, Any]
-    cache: Dict[tuple[bool, bool], ScoringInputResult] = field(default_factory=dict)
+    cache: Dict[tuple, Any] = field(default_factory=dict)
 
+    def holds(self, product: Any) -> bool:
+        """Whether ``product`` is this pass's input: the product itself, or a
+        shallow ``dict(product)`` copy holding the very same value objects."""
+        if product is self.product:
+            return True
+        return (
+            type(product) is dict
+            and len(product) == len(self.product)
+            and all(self.product.get(key, _NOT_IN_SCOPE) is value for key, value in product.items())
+        )
+
+
+_NOT_IN_SCOPE = object()
 
 _ACTIVE_SCORING_INPUT_SCOPE: ContextVar[Optional[_ScoringInputScope]] = ContextVar(
     "active_scoring_input_scope",
     default=None,
 )
+
+
+def _scope_holding(product: Any) -> Optional[_ScoringInputScope]:
+    scope = _ACTIVE_SCORING_INPUT_SCOPE.get()
+    return scope if scope is not None and scope.holds(product) else None
+
+
+def _scoped_view(product: Any, key: tuple, derive, copy_out):
+    """Derive one view of the scoped product once per pass.
+
+    Callers receive their own copy (``copy_out``) and the scope keeps a
+    pristine one, so a caller editing its result cannot change what the next
+    reader sees.
+    """
+    scope = _scope_holding(product)
+    if scope is None:
+        return derive()
+    cached = scope.cache.get(key, _NOT_IN_SCOPE)
+    if cached is _NOT_IN_SCOPE:
+        value = derive()
+        scope.cache[key] = copy_out(value)
+        return value
+    return copy_out(cached)
 
 
 @contextmanager
@@ -3059,9 +3095,9 @@ def get_scoring_ingredients(
     allow_legacy_fallback: bool = False,
 ) -> ScoringInputResult:
     """Return the shared scoring contract, reusing it within an active scope."""
-    scope = _ACTIVE_SCORING_INPUT_SCOPE.get()
-    cache_key = (strict, allow_legacy_fallback)
-    if scope is not None and product is scope.product:
+    scope = _scope_holding(product)
+    cache_key = ("scoring_ingredients", strict, allow_legacy_fallback)
+    if scope is not None:
         cached = scope.cache.get(cache_key)
         if cached is None:
             cached = _build_scoring_ingredients(
@@ -4645,6 +4681,10 @@ def _route_is_sports_class(
 
 def _classify_route_module(product: Dict[str, Any]) -> tuple[str, str, List[str]]:
     """Canonical ScoringClassification v1 route decision."""
+    return _scoped_view(product, ("route_module",), lambda: _route_module_decision(product), deepcopy)
+
+
+def _route_module_decision(product: Dict[str, Any]) -> tuple[str, str, List[str]]:
     primary_type = _primary_type(product)
     name_text = _route_name_text(product)
     features = _route_feature_vector(product)
@@ -5905,6 +5945,24 @@ def build_scoring_classification(
     compatibility mode the route is derived from the current enriched blob by
     this contract unless a valid native-enrichment stamp can be reused.
     """
+    return _scoped_view(
+        product,
+        ("scoring_classification", route_module, classification_origin),
+        lambda: _build_scoring_classification(
+            product,
+            route_module=route_module,
+            classification_origin=classification_origin,
+        ),
+        deepcopy,
+    )
+
+
+def _build_scoring_classification(
+    product: Dict[str, Any],
+    *,
+    route_module: Optional[str],
+    classification_origin: str,
+) -> Dict[str, Any]:
     product = product if isinstance(product, dict) else {}
     if route_module is None and classification_origin == "compatibility_derived":
         embedded = _embedded_native_scoring_classification(product)
@@ -5925,9 +5983,12 @@ def build_scoring_classification(
     try:
         input_result = get_scoring_ingredients(product, strict=True)
         rows = list(input_result.rows)
-        previous_route_rows_cache = product.get(_ROUTE_SCORING_ROWS_CACHE_KEY, route_rows_cache_sentinel)
-        product[_ROUTE_SCORING_ROWS_CACHE_KEY] = rows
-        route_rows_cache_installed = True
+        # A scoring pass already reuses these rows; installing them would only
+        # make this product stop matching its scope.
+        if _scope_holding(product) is None:
+            previous_route_rows_cache = product.get(_ROUTE_SCORING_ROWS_CACHE_KEY, route_rows_cache_sentinel)
+            product[_ROUTE_SCORING_ROWS_CACHE_KEY] = rows
+            route_rows_cache_installed = True
     except Exception as exc:  # pragma: no cover - defensive totality path
         failed = True
         failure_reason = f"scoring_input_failed:{exc.__class__.__name__}"
@@ -6464,6 +6525,24 @@ def classify_ingredient_roles(
     active a route recognizes primary, so claim prominence and mass ratio
     separate a route's co-primaries from its accessories (Dose V4.1 §3.2).
     """
+    if rows is None:
+        # Caller-built ``rows`` are not part of the scoped input, so only the
+        # product's own scoring rows are reused within a pass.
+        return _scoped_view(
+            product,
+            ("ingredient_roles", module, materiality_only),
+            lambda: _classify_rows(product, module, None, materiality_only),
+            lambda roles: [dict(role) for role in roles],
+        )
+    return _classify_rows(product, module, rows, materiality_only)
+
+
+def _classify_rows(
+    product: Dict[str, Any],
+    module: Optional[str],
+    rows: Optional[List[Dict[str, Any]]],
+    materiality_only: bool,
+) -> List[Dict[str, Any]]:
     product = product or {}
     if rows is None:
         rows = get_scoring_ingredients(product, strict=True).rows

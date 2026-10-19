@@ -16,6 +16,7 @@ from scoring_v4.router import class_for_product  # noqa: E402
 from scoring_input_contract import (  # noqa: E402
     LEGACY_IQD_SOURCE,
     SCORING_SOURCE,
+    _ROUTE_SCORING_ROWS_CACHE_KEY,
     build_scoring_classification,
     derive_product_scoring_evidence,
     get_scoring_ingredients,
@@ -1850,6 +1851,76 @@ def test_scoring_input_scope_builds_each_contract_variant_once(
     # rows or a mutated result from an earlier scored artifact.
     assert get_scoring_ingredients(product, strict=True) is not first
     assert calls == 3
+
+
+def test_scoring_input_scope_reuses_views_for_a_shallow_copy_of_the_product(
+    monkeypatch: pytest.MonkeyPatch,
+):
+    product = _product([_row()])
+    builds = 0
+    original_build = scoring_contract._build_scoring_ingredients
+
+    def counted_build(*args, **kwargs):
+        nonlocal builds
+        builds += 1
+        return original_build(*args, **kwargs)
+
+    monkeypatch.setattr(scoring_contract, "_build_scoring_ingredients", counted_build)
+
+    with scoring_input_scope(product):
+        first = get_scoring_ingredients(product, strict=True)
+        copied = get_scoring_ingredients(dict(product), strict=True)
+        assert copied is first
+        assert builds == 1
+
+        # A copy holding a different value object is a different input.
+        changed = dict(product)
+        changed["ingredient_quality_data"] = dict(product["ingredient_quality_data"])
+        assert get_scoring_ingredients(changed, strict=True) is not first
+        extra = dict(product, extra_field=True)
+        assert get_scoring_ingredients(extra, strict=True) is not first
+        assert builds == 3
+
+
+def test_scoring_input_scope_derives_classification_and_roles_once(
+    monkeypatch: pytest.MonkeyPatch,
+):
+    product = _product([_row()])
+    route_calls = 0
+    original_route = scoring_contract._route_module_decision
+
+    def counted_route(item):
+        nonlocal route_calls
+        route_calls += 1
+        return original_route(item)
+
+    monkeypatch.setattr(scoring_contract, "_route_module_decision", counted_route)
+    uncached_classification = build_scoring_classification(product)
+    uncached_roles = scoring_contract.classify_ingredient_roles(product)
+    uncached_recompute = build_scoring_classification(
+        product, classification_origin="scoring_readiness_recompute"
+    )
+    route_calls = 0
+
+    with scoring_input_scope(product):
+        first = build_scoring_classification(product)
+        first["route_module"] = "mutated_by_caller"
+        second = build_scoring_classification(dict(product))
+        roles = scoring_contract.classify_ingredient_roles(dict(product))
+        roles[0]["role"] = "mutated_by_caller"
+        roles_again = scoring_contract.classify_ingredient_roles(product)
+        recompute = build_scoring_classification(
+            dict(product), classification_origin="scoring_readiness_recompute"
+        )
+
+    # One route derivation per pass, whichever classification asked first;
+    # callers get their own objects, so an edit cannot leak to the next reader.
+    assert route_calls == 1
+    assert second == uncached_classification
+    assert second is not first
+    assert roles_again == uncached_roles
+    assert recompute == uncached_recompute
+    assert _ROUTE_SCORING_ROWS_CACHE_KEY not in product
 
 
 def test_fresh_contract_does_not_recover_explicitly_skipped_identity_row():

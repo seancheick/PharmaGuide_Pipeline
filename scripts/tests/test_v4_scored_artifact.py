@@ -494,6 +494,52 @@ def test_scoped_contract_reuse_is_output_equivalent_to_uncached_assembly() -> No
     assert scoped == uncached
 
 
+def test_one_scoring_pass_derives_each_product_view_once(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """Readiness, the evidence resolver and the gates read the product through
+    ``dict(product)`` copies; within one pass those are the same input and must
+    reuse the scope's views instead of rebuilding them (Score-stage cost)."""
+    import scoring_input_contract as contract
+
+    builds: dict[tuple, int] = {}
+    original_build = contract._build_scoring_ingredients
+
+    def counted_build(product, *, strict=True, allow_legacy_fallback=False):
+        key = (strict, allow_legacy_fallback)
+        builds[key] = builds.get(key, 0) + 1
+        return original_build(product, strict=strict, allow_legacy_fallback=allow_legacy_fallback)
+
+    route_calls = 0
+    original_route = contract._route_module_decision
+
+    def counted_route(product):
+        nonlocal route_calls
+        route_calls += 1
+        return original_route(product)
+
+    classification_keys: set[tuple] = set()
+    original_classification = contract.build_scoring_classification
+
+    def recorded_classification(product, *, route_module=None, classification_origin="compatibility_derived"):
+        classification_keys.add((route_module, classification_origin))
+        return original_classification(
+            product, route_module=route_module, classification_origin=classification_origin
+        )
+
+    monkeypatch.setattr(contract, "_build_scoring_ingredients", counted_build)
+    monkeypatch.setattr(contract, "_route_module_decision", counted_route)
+    for module in list(sys.modules.values()):
+        if getattr(module, "build_scoring_classification", None) is original_classification:
+            monkeypatch.setattr(module, "build_scoring_classification", recorded_classification)
+
+    scored_artifact.build_scored_artifact(_product())
+
+    assert builds and all(count == 1 for count in builds.values()), builds
+    assert classification_keys
+    assert route_calls == 1, (route_calls, classification_keys)
+
+
 def test_artifact_states_each_fact_once():
     """Locked 2026-09-21: no internal mirror duplicates a canonical field.
 
