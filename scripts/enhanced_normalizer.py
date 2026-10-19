@@ -11087,9 +11087,11 @@ class EnhancedDSLDNormalizer:
         Returns:
             Dict with newly unmapped ingredients and their details
         """
+        # Sorted, so a label's list does not follow the order in which this
+        # worker first met each name on earlier labels.
         occurrence_deltas = {
             name: count - previous_snapshot.get(name, 0)
-            for name, count in self.unmapped_ingredients.items()
+            for name, count in sorted(self.unmapped_ingredients.items())
             if count > previous_snapshot.get(name, 0)
         }
 
