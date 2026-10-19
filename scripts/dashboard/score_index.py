@@ -58,6 +58,7 @@ from scoring_v4.quality_score import shipped_whole_score  # noqa: E402  (the exp
 INDEX_SCHEMA_VERSION = 1
 INDEX_BUILD_VERSION = "1.0.0"
 QUALITY_CONFIG = SCRIPTS_ROOT / "scoring_v4" / "config" / "quality_score.json"
+CANARY_FILE = SCRIPTS_ROOT / "data" / "canary_products.json"
 PILLARS = ("formulation", "dose", "evidence", "transparency", "verification", "safety_hygiene")
 PILLAR_LABELS = {
     "formulation": "Formulation",
@@ -130,6 +131,7 @@ DOSE_FLAG_SCHEMA = _schema(
 EXPLANATION_SCHEMA = _schema(("dsld_id", _S), ("pillar", _S), ("role", _S), ("text", _S))
 SLIM_SCHEMA = _schema(("dsld_id", _S), ("slim_json", _S))
 LABEL_SCHEMA = _schema(("dsld_id", _S), ("record_json", _S))
+CANARY_SCHEMA = _schema(("dsld_id", _S), ("record_json", _S))  # full scored record, golden-set canaries only
 ADDITIVE_SCHEMA = _schema(("dsld_id", _S), ("rule_id", _S), ("tier", _S), ("penalty", _F), ("labels", _LS))
 
 INGREDIENT_SCHEMA = _schema(
@@ -152,6 +154,7 @@ TABLES: dict[str, pa.Schema] = {
     "explanations": EXPLANATION_SCHEMA,
     "slim": SLIM_SCHEMA,
     "label_records": LABEL_SCHEMA,
+    "canary_records": CANARY_SCHEMA,
     "additives": ADDITIVE_SCHEMA,
 }
 
@@ -539,6 +542,14 @@ def default_paths(scan_dir: str | Path | None = None, build_root: str | Path | N
     )
 
 
+def canary_ids() -> set[str]:
+    """Golden-set membership; the golden-set evaluator needs these products' full scored records."""
+    try:
+        return {str(c.get("dsld_id")) for c in json.loads(CANARY_FILE.read_text(encoding="utf-8")).get("canaries") or []}
+    except (OSError, json.JSONDecodeError):
+        return set()
+
+
 _STAGE_GLOBS = {"score": ("output_*_scored/scored", "_scored"), "enrich": ("output_*_enriched/enriched", "_enriched")}
 
 
@@ -556,6 +567,8 @@ def candidate_sources(scan_dir: Path, stage: str = "score") -> list[dict[str, An
                 manifest = {"_unreadable": True}
         if manifest.get("content_sha256"):
             identity = _canonical(manifest.get("content_sha256"))
+            if stage == "score":  # canary records are kept per part, so golden-set membership is part of it
+                identity += _canonical(sorted(canary_ids()))
         else:  # no manifest: fall back to (size, mtime_ns) of the files themselves
             identity = _canonical(sorted((p.name, p.stat().st_size, p.stat().st_mtime_ns)
                                          for p in stage_dir.glob("*.json")))
@@ -684,12 +697,16 @@ def _parse_candidate_part(source: dict[str, Any]) -> tuple[dict[str, list], int]
         files = sorted(p for p in stage_dir.glob("*.json") if not p.name.startswith("."))
     rows: dict[str, list] = {}
     count = 0
+    canaries = canary_ids() if stage == "score" else set()
     for path in files:
         products = json.loads(path.read_text(encoding="utf-8"))
         if isinstance(products, dict):
             products = products.get("products") or []
         for product in products:
             _merge(rows, project(product, source_part=source["part"]))
+            if str(product.get("dsld_id")) in canaries:
+                rows.setdefault("canary_records", []).append(
+                    {"dsld_id": str(product.get("dsld_id")), "record_json": _canonical(product)})
             count += 1
     return rows, count
 
@@ -1074,6 +1091,15 @@ class IndexReader:
                 "removed": sorted(set(built) - set(now)),
                 "stale": not built or bool(changed) or bool(set(built) - set(now))
                 or self.meta.get("ingredient_projection_fingerprint") != PROJECTION_FINGERPRINT}
+
+    def canary_records(self, run_key: str | None = None) -> dict[str, dict[str, Any]]:
+        """Full scored records of golden-set canaries (candidate runs only)."""
+        key = run_key or self.latest("candidate")
+        if key is None:
+            return {}
+        table = self.table(key, "canary_records")
+        return {pid: json.loads(text) for pid, text in zip(table.column("dsld_id").to_pylist(),
+                                                           table.column("record_json").to_pylist())}
 
     def label_records(self) -> list[dict[str, Any]]:
         """Release label-trust inputs for ``data_loader.compute_label_trust``."""

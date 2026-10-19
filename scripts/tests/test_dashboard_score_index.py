@@ -191,6 +191,17 @@ def test_new_candidate_run_keeps_history(roots):
     assert si.gc(roots, keep=1) and si.current_build(roots) is not None
 
 
+def test_canary_records_keep_full_scored_records_and_follow_membership(roots, monkeypatch):
+    monkeypatch.setattr(si, "canary_ids", lambda: {"2"})
+    si.refresh(roots)
+    records = _reader(roots).canary_records()
+    assert set(records) == {"2"} and "quality_pillars_v4" in records["2"]
+    monkeypatch.setattr(si, "canary_ids", lambda: {"1", "2"})
+    assert _reader(roots).staleness()["stale"] is True    # membership change re-reads the parts
+    si.refresh(roots)
+    assert set(_reader(roots).canary_records()) == {"1", "2"}
+
+
 def test_backfill_and_ingredient_refresh_leave_the_previous_build_intact(roots, tmp_path):
     """New builds hard-link old partitions; writing their metadata must never touch the old build."""
     from dashboard_index_fixtures import enriched_product, write_enriched

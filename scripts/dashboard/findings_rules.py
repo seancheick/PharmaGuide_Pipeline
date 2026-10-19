@@ -22,7 +22,7 @@ from typing import Any, Callable
 import pandas as pd
 import pyarrow.dataset as pds
 
-from scripts.dashboard.score_index import PILLARS, QUALITY_CONFIG, REPO_ROOT, TABLES, pillar_maxima
+from scripts.dashboard.score_index import CANARY_FILE, PILLARS, QUALITY_CONFIG, REPO_ROOT, TABLES, pillar_maxima
 from scripts.dashboard import run_compare
 from scoring_v4.penalty_registry import PENALTY_ALIASES, PENALTY_REGISTRY
 from scoring_v4.quality_score import (
@@ -31,7 +31,6 @@ from scoring_v4.quality_score import (
     EVIDENCE_COVERAGE_GAP_STATES,
 )
 
-CANARY_FILE = REPO_ROOT / "scripts" / "data" / "canary_products.json"
 TOL = _ROUNDING_BOUND  # the scorer's own reconciliation bound
 # realized = score − score-without-deductions; both sit on the 0.1 grid, so two residues can stack.
 REALIZED_TOL = 2 * _ROUNDING_BOUND
@@ -72,9 +71,9 @@ class Context:
     deltas: dict[str, pd.DataFrame]         # "candidate_vs_previous", "release_vs_candidate"
     pillar_drift: list[dict]
     calibration: list[dict]
-    canaries: list[dict]
     pillar_max: dict[str, float]
     plane: str = "candidate"
+    golden: list[dict] | None = None  # golden_set_results rows for the latest candidate
 
     def p(self) -> pd.DataFrame:
         return self.products.get(self.plane, pd.DataFrame())
@@ -274,15 +273,20 @@ def _low_route_ranked(ctx):
     return _rows(bad, "module")
 
 
-def _canary_missing(ctx):
-    # expected_dose_route_v4 predates today's module/archetype vocabulary, so it is shown,
-    # not compared; behavioural v4 expectations come from the golden-set data batch.
-    p = ctx.p()
-    if p.empty or not ctx.canaries:
+def golden_set_results(doc: dict, records: dict[str, dict], release_ids: set[str]) -> list[dict]:
+    """The golden set's own evaluator over full scored records (owner: the golden-set packet)."""
+    from audits.golden_set_v4_20261019.proposal import evaluate
+    if not doc.get("canaries"):
+        return []
+    tiers = json.loads(QUALITY_CONFIG.read_text(encoding="utf-8"))["tiers"]
+    return evaluate(doc, records, tiers, release_ids)
+
+
+def _canary_expectations(ctx):
+    if ctx.plane != "candidate" or not ctx.golden:
         return pd.DataFrame()
-    present = set(p["dsld_id"].astype(str))
-    out = [{"dsld_id": str(c.get("dsld_id")), "current_value": "missing from run", "expected": "present"}
-           for c in ctx.canaries if str(c.get("dsld_id")) not in present]
+    out = [{"dsld_id": row["dsld_id"], "subject": name, "current_value": str(got)[:200]}
+           for row in ctx.golden for name, ok, got in row["checks"] if not ok]
     return pd.DataFrame(out)
 
 
@@ -451,8 +455,9 @@ RULES: list[Rule] = [
          "product", _peer_outlier),
     Rule("low_route_confidence_ranked", 1, "medium", "routing", "Complete scored product with low route confidence",
          "route confidence ≥ moderate for ranked products", "route_decision.confidence", "product", _low_route_ranked),
-    Rule("canary_missing", 1, "medium", "golden_set", "Golden-set canary missing from the run",
-         "every canary is present", "scripts/data/canary_products.json", "product", _canary_missing),
+    Rule("canary_expectation_broken", 1, "medium", "golden_set", "Golden-set canary breaks an approved expectation",
+         "fix at the owner or record an allowed movement reason; never edit the expectation to the score",
+         "scripts/data/canary_products.json _metadata.golden_set", "product", _canary_expectations),
 ]
 
 
@@ -478,11 +483,12 @@ def calibration_records() -> list[dict[str, Any]]:
     return out
 
 
-def canaries() -> list[dict[str, Any]]:
+def golden_doc() -> dict[str, Any]:
     try:
-        return json.loads(CANARY_FILE.read_text(encoding="utf-8")).get("canaries") or []
+        return json.loads(CANARY_FILE.read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError):
-        return []
+        return {}
+
 
 
 def psi(before: pd.Series, after: pd.Series, bins: int = 10, cap: float = 20.0) -> float:
@@ -569,10 +575,16 @@ def evaluate_build(build: Path, meta: dict[str, Any], previous: Path | None) -> 
             drift.append({"pillar": name, "base": base["plane"], "cand": cand["plane"],
                           "psi": psi(left[f"pillar_{name}"], right[f"pillar_{name}"], cap=maxima[name])})
 
+    golden = None
+    if latest.get("candidate"):
+        records = read(latest["candidate"]["run_key"], "canary_records")
+        release_ids = set(frames["products"].get("release", pd.DataFrame(columns=["dsld_id"]))["dsld_id"].astype(str))
+        golden = golden_set_results(golden_doc(), {pid: json.loads(text) for pid, text in
+                                                   zip(records["dsld_id"], records["record_json"])}, release_ids)
     ctx = Context(products=frames["products"], ledgers=frames["ledgers"], receipts=frames["receipts"],
                   explanations=frames["explanations"], dose_flags=frames["dose_flags"], runs=latest,
-                  deltas=deltas, pillar_drift=drift, calibration=calibration_records(), canaries=canaries(),
-                  pillar_max=pillar_maxima())
+                  deltas=deltas, pillar_drift=drift, calibration=calibration_records(),
+                  pillar_max=pillar_maxima(), golden=golden)
     findings = evaluate(ctx, run_keys={plane: run["run_key"] for plane, run in latest.items()})
     findings.to_parquet(build / "findings.parquet", index=False)
 

@@ -11,7 +11,9 @@ import streamlit as st
 from scripts.dashboard import shell
 from scripts.dashboard.components.theme import TOKENS
 from scripts.dashboard.components.ui import DOSE_BASIS_LABELS, EVIDENCE_STATE_LABELS, human, kpis, table
-from scripts.dashboard.findings_rules import CALIBRATION_STALE_DAYS, calibration_records, canaries, owner_symbol_exists
+from scripts.dashboard.findings_rules import (
+    CALIBRATION_STALE_DAYS, calibration_records, golden_doc, golden_set_results, owner_symbol_exists,
+)
 
 UNRATED = {"A1_unrated_neutral", "panel_form_quality_unrated_neutral"}
 
@@ -84,36 +86,49 @@ def render(ctx: shell.PageContext) -> None:
               run_key=ctx.run_key, height=300, caption="Unmapped actives by brand (details in Data Quality → Unmapped).")
 
     with tab_gold:
-        golden = pd.DataFrame(canaries())
-        if golden.empty:
-            st.info("No golden set found at scripts/data/canary_products.json.")
-            return
-        golden["dsld_id"] = golden["dsld_id"].astype(str)
-        current = products.set_index("dsld_id")
-        deltas = ctx.deltas(ctx.baseline_key(), ctx.run_key)
-        moved = deltas.set_index("dsld_id")["delta"] if not deltas.empty else pd.Series(dtype=float)
-        findings = ctx.index.findings()
-        flagged = set(findings[findings["run_key"] == ctx.run_key]["dsld_id"].dropna()) if not findings.empty else set()
-        rows = []
-        for canary in golden.to_dict("records"):
-            pid = canary["dsld_id"]
-            hit = current.loc[pid] if pid in current.index else None
-            rows.append({
-                "dsld_id": pid, "product": canary.get("product_name"), "brand": canary.get("brand_name"),
-                "class": canary.get("primary_class"), "present": hit is not None,
-                "score": None if hit is None else hit["total"], "tier": None if hit is None else hit["tier"],
-                "route": None if hit is None else hit["module"], "status": None if hit is None else hit["quality_score_status"],
-                "safety": None if hit is None else hit["product_safety_status"],
-                "Δ vs baseline": moved.get(pid), "findings": pid in flagged,
-                "expected_dose_route_v4 (historical label)": canary.get("expected_dose_route_v4"),
-            })
-        frame = pd.DataFrame(rows)
-        kpis([("Canaries", f"{len(frame):,}", None), ("Missing", f"{int((~frame['present']).sum()):,}", None),
-              ("Moved vs baseline", f"{int(pd.to_numeric(frame['Δ vs baseline'], errors='coerce').abs().fillna(0).ge(0.05).sum()):,}", None),
-              ("With findings", f"{int(frame['findings'].sum()):,}", None)])
-        st.caption("Behavioural v4 expectations (tier band, route, assessment and safety status, pillar invariants) are "
-                   "added by the golden-set data batch and checked here once present. expected_dose_route_v4 predates "
-                   "today's route vocabulary, so it is shown, not compared.")
-        picked = table(frame, key="cov_gold", name="golden_set", run_key=ctx.run_key, select=True, height=480)
-        if picked:
-            shell.go("product-trace", trace_dsld_id=str(frame.iloc[picked[0]]["dsld_id"]))
+        _golden(ctx, products)
+
+
+def _golden(ctx: shell.PageContext, products: pd.DataFrame) -> None:
+    doc = golden_doc()
+    if not doc.get("canaries"):
+        st.info("No golden set found at scripts/data/canary_products.json.")
+        return
+    if ctx.plane != "candidate":
+        st.info("Golden-set expectations are checked against full scored records, so they run on candidate runs. "
+                "Switch the plane to Candidate.")
+        return
+    release_key = ctx.index.latest("release")
+    release_ids = set(ctx.products(release_key)["dsld_id"].astype(str)) if release_key else set()
+    results = golden_set_results(doc, ctx.index.canary_records(ctx.run_key), release_ids)
+    by_id = {c["dsld_id"]: c for c in doc["canaries"]}
+    current = products.set_index("dsld_id")
+    rows, failures = [], []
+    for result in results:
+        pid = result["dsld_id"]
+        canary, hit = by_id.get(pid, {}), current.loc[pid] if pid in current.index else None
+        failed = [(name, got) for name, ok, got in result["checks"] if not ok]
+        failures += [{"dsld_id": pid, "product": canary.get("product_name"), "check": name, "got": str(got)[:200]}
+                     for name, got in failed]
+        rows.append({
+            "dsld_id": pid, "product": canary.get("product_name"), "brand": canary.get("brand_name"),
+            "class": canary.get("primary_class"), "checks": len(result["checks"]), "failed": len(failed),
+            "score": None if hit is None else hit["total"], "tier": None if hit is None else hit["tier"],
+            "expected tier band": " – ".join(canary.get("expected_quality_tier_band") or []) or "—",
+            "route": None if hit is None else hit["module"], "expected route": canary.get("expected_v4_module"),
+            "in release": result.get("in_core_catalog"),
+        })
+    frame = pd.DataFrame(rows)
+    total_checks = int(frame["checks"].sum()) if not frame.empty else 0
+    kpis([("Canaries", f"{len(frame):,}", None), ("Checks", f"{total_checks:,}", None),
+          ("Failed checks", f"{len(failures):,}", "Each is a finding in the Audit Queue"),
+          ("Canaries failing", f"{int((frame['failed'] > 0).sum()):,}", None)])
+    st.caption("Expectations approved by Sean (golden_set.approval in the data file). A break is fixed at its owner "
+               "or explained by an allowed movement reason, never by editing the expectation to the current score.")
+    if failures:
+        table(pd.DataFrame(failures), key="cov_gold_fail", name="golden_set_failures", run_key=ctx.run_key, height=260)
+    picked = table(frame.sort_values(["failed", "dsld_id"], ascending=[False, True]).reset_index(drop=True),
+                   key="cov_gold", name="golden_set", run_key=ctx.run_key, select=True, height=480)
+    if picked:
+        ordered = frame.sort_values(["failed", "dsld_id"], ascending=[False, True]).reset_index(drop=True)
+        shell.go("product-trace", trace_dsld_id=str(ordered.iloc[picked[0]]["dsld_id"]))

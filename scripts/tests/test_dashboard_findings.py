@@ -231,7 +231,7 @@ def test_release_side_and_distribution_rules(paths):
 def test_pillar_drift_rule_fires_only_above_the_limit():
     ctx = fr.Context({}, {}, {}, {}, {}, {}, {}, [{"pillar": "dose", "base": "release", "cand": "candidate", "psi": 0.3},
                                                {"pillar": "evidence", "base": "release", "cand": "candidate", "psi": 0.1}],
-                     [], [], {})
+                     [], {})
     hits = fr._pillar_drift(ctx)
     assert list(hits["pillar"]) == ["dose"]
 
@@ -249,7 +249,7 @@ def test_calibration_rules():
          "rationale": "r", "review_date": date.today().isoformat()},
         {"path": "prov", "approval_status": "provisional", "source_ids": [], "owner": "scripts/nope.py::x",
          "rationale": "", "review_date": "2020-01-01"},
-    ], canaries=[], pillar_max={})
+    ], pillar_max={})
     incomplete = fr._calibration_incomplete(ctx).set_index("subject")
     assert list(incomplete.index) == ["prov"]
     assert "provisional" in incomplete.loc["prov", "current_value"] and "days old" in incomplete.loc["prov", "current_value"]
@@ -257,11 +257,29 @@ def test_calibration_rules():
     assert fr.calibration_records(), "the production config carries calibration records"
 
 
-def test_canary_missing_and_psi():
-    products = pd.DataFrame({"dsld_id": ["1"]})
-    ctx = fr.Context({"candidate": products}, {}, {}, {}, {}, {}, {}, [], [], canaries=[{"dsld_id": "1"}, {"dsld_id": "2"}],
-                     pillar_max={})
-    assert list(fr._canary_missing(ctx)["dsld_id"]) == ["2"]
+def _golden_doc(**overrides):
+    canary = {"dsld_id": "g1", "product_name": "Product g1", "expected_v4_module": "generic",
+              "expected_quality_score_status": "scored", "expected_quality_assessment_status": "complete",
+              "expected_product_safety_status": "no_known_catalog_concern",
+              "expected_quality_tier_band": ["Needs improvement", "Needs improvement"],
+              "expected_pillar_invariants": [], **overrides}
+    return {"canaries": [canary, {**canary, "dsld_id": "absent"}]}
+
+
+def test_golden_set_uses_its_own_evaluator_and_flags_each_broken_check():
+    record = scored_product("g1")                       # 69.0 -> Needs improvement
+    rows = {r["dsld_id"]: r for r in fr.golden_set_results(_golden_doc(), {"g1": record}, {"g1"})}
+    assert all(ok for _, ok, _ in rows["g1"]["checks"]) and rows["g1"]["in_core_catalog"]
+    assert rows["absent"]["checks"] == [("present", False, "missing from scored output")]
+    broken = fr.golden_set_results(_golden_doc(expected_product_safety_status="caution"), {"g1": record}, set())
+    ctx = fr.Context({}, {}, {}, {}, {}, {}, {}, [], [], {}, golden=broken)
+    hits = fr._canary_expectations(ctx)
+    assert set(zip(hits["dsld_id"], hits["subject"])) == {("g1", "expected_product_safety_status"), ("absent", "present")}
+    ctx.plane = "release"
+    assert fr._canary_expectations(ctx).empty         # full scored records exist on candidate runs only
+
+
+def test_psi():
     same = pd.Series([1.0, 5.0, 10.0, 15.0] * 10)
     assert fr.psi(same, same) == pytest.approx(0.0, abs=1e-6)
     assert fr.psi(same, same + 8) > fr.PSI_LIMIT
@@ -273,7 +291,7 @@ def test_peer_outlier_needs_complete_cohort():
     rows.append({"dsld_id": "hi", "total": 100.0, "category": "c", "quality_score_status": "scored",
                  "quality_assessment_status": "complete"})
     small = [{**row, "category": "tiny"} for row in rows[:10]] + [{**rows[-1], "dsld_id": "hi2", "category": "tiny"}]
-    ctx = fr.Context({"candidate": pd.DataFrame(rows + small)}, {}, {}, {}, {}, {}, {}, [], [], [], {})
+    ctx = fr.Context({"candidate": pd.DataFrame(rows + small)}, {}, {}, {}, {}, {}, {}, [], [], {})
     assert set(fr._peer_outlier(ctx)["dsld_id"]) == {"hi"}
 
 
