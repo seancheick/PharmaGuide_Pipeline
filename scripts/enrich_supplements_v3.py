@@ -14090,8 +14090,6 @@ class SupplementEnricherV3:
             self._cert_registry_cache = CertRegistry.load()
 
         registry = self._cert_registry_cache
-        if registry is None:
-            return []
 
         from cert_resolver import discover_verified_programs, resolve  # local import (kept colocated with usage)
 
