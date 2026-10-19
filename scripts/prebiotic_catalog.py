@@ -66,13 +66,19 @@ def prebiotic_catalog() -> tuple[tuple[str, tuple[str, ...]], ...]:
 
 
 @lru_cache(maxsize=1)
-def _term_index() -> dict[str, tuple[str, ...]]:
-    """normalized term -> standard names that declare it (len > 1 == ambiguous alias)."""
+def _term_index() -> dict[str, tuple[tuple[str, ...], re.Pattern]]:
+    """normalized term -> (standard names that declare it, its bounded pattern).
+
+    More than one name == ambiguous alias. Patterns compile once, not per call.
+    """
     index: dict[str, list[str]] = {}
     for name, terms in prebiotic_catalog():
         for term in terms:
             index.setdefault(term, []).append(name)
-    return {term: tuple(names) for term, names in index.items()}
+    return {
+        term: (tuple(names), re.compile(rf"(?<![a-z0-9]){re.escape(term)}(?![a-z0-9])"))
+        for term, names in index.items()
+    }
 
 
 def match_prebiotic(text: object) -> PrebioticMatch:
@@ -80,10 +86,10 @@ def match_prebiotic(text: object) -> PrebioticMatch:
     if not norm:
         return NO_MATCH
     hits: list[tuple[int, int, str, tuple[str, ...]]] = []  # (exact, len, term, names)
-    for term, names in _term_index().items():
+    for term, (names, pattern) in _term_index().items():
         if norm == term:
             hits.append((1, len(term), term, names))
-        elif re.search(rf"(?<![a-z0-9]){re.escape(term)}(?![a-z0-9])", norm):
+        elif pattern.search(norm):
             hits.append((0, len(term), term, names))
     if hits:
         hits.sort(reverse=True)

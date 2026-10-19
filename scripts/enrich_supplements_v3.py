@@ -115,6 +115,7 @@ from scoring_input_contract import (
     is_nutrition_fact_declaration,
     get_scoring_ingredients,
     normalize_product_evidence_scope,
+    scoring_input_scope,
     source_linked_rows,
     _positive_quantity,
 )
@@ -1215,12 +1216,14 @@ class SupplementEnricherV3:
             return ingredients
         from evidence_resolver import evidence_owner_canonicals
 
-        try:
+        # A provider failure fails the product (enrich_product records it);
+        # falling back to raw actives would silently change Evidence.
+        # Both providers (and the route classification inside them) read
+        # this one local copy, which nothing mutates in between, so the
+        # scoring contract is built once here instead of ~16 times.
+        with scoring_input_scope(contract_product):
             subject_rows = get_evidence_subject_rows(contract_product)
             owners = evidence_owner_canonicals(contract_product)
-        except Exception as exc:  # pragma: no cover - defensive old artifacts.
-            self.logger.warning("evidence subject provider unavailable: %s", exc)
-            return ingredients
         covered = {
             str(row.get("canonical_id") or "").strip().lower()
             for row in ingredients
@@ -1267,17 +1270,13 @@ class SupplementEnricherV3:
         ):
             return flattened if include_ancestors else active_tree
 
-        try:
-            result = get_scoring_ingredients(
-                product,
-                strict=True,
-                allow_legacy_fallback=False,
-            )
-        except Exception as exc:  # pragma: no cover - defensive old artifacts.
-            self.logger.debug(
-                "strict source-owner projection unavailable for enrichment: %s", exc
-            )
-            return flattened if include_ancestors else active_tree
+        # A projection failure fails the product (enrich_product records it);
+        # the unjoined active tree would silently change every consumer.
+        result = get_scoring_ingredients(
+            product,
+            strict=True,
+            allow_legacy_fallback=False,
+        )
 
         scoring_rows = [
             row
@@ -1684,6 +1683,29 @@ class SupplementEnricherV3:
                 "CLAIMS HARDENING INCOMPLETE: cert_claim_rules missing third_party_programs. "
                 "Certification evidence will not be collected."
             )
+        self._compile_cert_claim_patterns(cert_rules)
+
+    def _compile_cert_claim_patterns(self, cert_rules: Dict) -> None:
+        """Compile every claim-rule pattern once; an invalid one stops the run.
+
+        A pattern that fails to compile would otherwise never match, silently
+        dropping that claim from every product.
+        """
+        for category, rules in (cert_rules.get('rules') or {}).items():
+            if not isinstance(rules, dict):
+                continue
+            for rule_key, rule in rules.items():
+                if rule_key.startswith('_') or not isinstance(rule, dict):
+                    continue
+                for kind in ('positive_patterns', 'negative_patterns'):
+                    for pattern in rule.get(kind, []):
+                        try:
+                            self._cached_compile_regex(pattern, re.I)
+                        except re.error as exc:
+                            raise ValueError(
+                                f"cert_claim_rules {category}.{rule.get('id', rule_key)} "
+                                f"{kind} has an invalid regex {pattern!r}: {exc}"
+                            ) from exc
 
     def _log_reference_versions(self):
         """Log versions of reference databases for auditability."""
@@ -3109,15 +3131,23 @@ class SupplementEnricherV3:
 
     _REGEX_CACHE_LIMIT = 50000
 
-    def _cached_compile_regex(self, pattern: str) -> re.Pattern:
-        """Compile a regex once per enricher instance."""
-        cached = self._regex_pattern_cache.get(pattern)
+    def _cached_compile_regex(self, pattern: str, flags: int = 0) -> re.Pattern:
+        """Compile a regex once per enricher instance.
+
+        Python's own ``re`` cache holds a few hundred patterns; enrichment
+        builds thousands per product, so that cache thrashes and recompiles.
+        """
+        cache = getattr(self, "_regex_pattern_cache", None)
+        if cache is None:
+            cache = self._regex_pattern_cache = {}
+        key = (pattern, flags)
+        cached = cache.get(key)
         if cached is not None:
             return cached
-        if len(self._regex_pattern_cache) >= self._REGEX_CACHE_LIMIT:
-            self._regex_pattern_cache.clear()
-        compiled = re.compile(pattern)
-        self._regex_pattern_cache[pattern] = compiled
+        if len(cache) >= self._REGEX_CACHE_LIMIT:
+            cache.clear()
+        compiled = re.compile(pattern, flags)
+        cache[key] = compiled
         return compiled
 
     def _cached_token_bounded_pattern(self, normalized_text: str) -> Optional[re.Pattern]:
@@ -3148,21 +3178,49 @@ class SupplementEnricherV3:
         if not ing_norm:
             return False, None
 
-        candidates = [target_name] + aliases
-        for candidate in candidates:
-            cand_norm = self._normalize_text(candidate)
-            if not cand_norm:
-                continue
+        for candidate, cand_norm, is_acronym, pattern in self._token_bounded_candidates(
+            target_name, aliases
+        ):
             if ing_norm == cand_norm:
                 return True, candidate
-            if self._is_short_acronym_alias(candidate):
+            if is_acronym:
                 if not self._literal_short_acronym_match(ingredient_name, candidate):
                     continue
-            pattern = self._cached_token_bounded_pattern(cand_norm)
             if pattern and pattern.search(ing_norm):
                 return True, candidate
 
         return False, None
+
+    def _token_bounded_candidates(
+        self, target_name: str, aliases: List[str]
+    ) -> Tuple[Tuple[str, str, bool, Optional[re.Pattern]], ...]:
+        """Per-entry candidate prep for _token_bounded_match, in match order.
+
+        Depends only on the curated target/aliases, never on the label, so
+        the banned check reuses it across every ingredient row.
+        """
+        cache = getattr(self, "_token_bounded_candidates_cache", None)
+        if cache is None:
+            cache = self._token_bounded_candidates_cache = {}
+        key = (target_name, tuple(aliases))
+        cached = cache.get(key)
+        if cached is not None:
+            return cached
+        prepared = []
+        for candidate in (target_name, *key[1]):
+            cand_norm = self._normalize_text(candidate)
+            if not cand_norm:
+                continue
+            prepared.append((
+                candidate,
+                cand_norm,
+                self._is_short_acronym_alias(candidate),
+                self._cached_token_bounded_pattern(cand_norm),
+            ))
+        if len(cache) >= self._REGEX_CACHE_LIMIT:
+            cache.clear()
+        cache[key] = tuple(prepared)
+        return cache[key]
 
     def _is_short_acronym_alias(self, alias: str) -> bool:
         """Return true for short acronym aliases that need literal bounds."""
@@ -3192,7 +3250,7 @@ class SupplementEnricherV3:
         """
         if not ingredient_name or not alias:
             return False
-        pattern = re.compile(
+        pattern = self._cached_compile_regex(
             r"(?<![A-Za-z0-9-])" + re.escape(str(alias)) + r"(?![A-Za-z0-9-])",
             re.IGNORECASE,
         )
@@ -5506,15 +5564,7 @@ class SupplementEnricherV3:
             for ing in ing_list or []:
                 if not isinstance(ing, dict):
                     continue
-                try:
-                    markers = self._compute_delivers_markers(ing)
-                except Exception as exc:
-                    self.logger.warning(
-                        "delivers_markers computation failed for canonical_id=%s: %s",
-                        ing.get("canonical_id"), exc,
-                    )
-                    markers = []
-                ing["delivers_markers"] = markers
+                ing["delivers_markers"] = self._compute_delivers_markers(ing)
 
         return {
             # Schema version for forward compatibility
@@ -10888,9 +10938,9 @@ class SupplementEnricherV3:
                 for term in terms
                 if str(term).strip()
             ]
-            pattern = re.compile(
+            pattern = self._cached_compile_regex(
                 r"(?<![a-z0-9])(?:" + "|".join(alternatives) + r")(?![a-z0-9])",
-                flags=re.IGNORECASE,
+                re.IGNORECASE,
             )
 
             # Keep every source location: a product-title match cannot erase
@@ -13325,20 +13375,17 @@ class SupplementEnricherV3:
         """
         # 1. Check positive patterns
         positive_match = None
+        # Patterns are validated when the rules load; an invalid one raises.
         for i, pattern in enumerate(rule.get('positive_patterns', [])):
-            try:
-                match = re.search(pattern, text, re.I)
-                if match:
-                    positive_match = {
-                        'text': match.group(),
-                        'start': match.start(),
-                        'end': match.end(),
-                        'pattern_id': f"{rule.get('id', 'UNKNOWN')}_positive_{i}"
-                    }
-                    break
-            except re.error as e:
-                self.logger.warning(f"Invalid regex pattern in rule {rule.get('id')}: {e}")
-                continue
+            match = self._cached_compile_regex(pattern, re.I).search(text)
+            if match:
+                positive_match = {
+                    'text': match.group(),
+                    'start': match.start(),
+                    'end': match.end(),
+                    'pattern_id': f"{rule.get('id', 'UNKNOWN')}_positive_{i}"
+                }
+                break
 
         if not positive_match:
             return None  # No claim found
@@ -13371,18 +13418,15 @@ class SupplementEnricherV3:
             'negation_pattern_id': None
         }
         for j, pattern in enumerate(rule.get('negative_patterns', [])):
-            try:
-                neg_match = re.search(pattern, text, re.I)
-                if neg_match:
-                    negation = {
-                        'negated': True,
-                        'negation_match_text': neg_match.group(),
-                        'negation_source_field': source_field,
-                        'negation_pattern_id': f"{rule.get('id', 'UNKNOWN')}_negative_{j}"
-                    }
-                    break
-            except re.error:
-                continue
+            neg_match = self._cached_compile_regex(pattern, re.I).search(text)
+            if neg_match:
+                negation = {
+                    'negated': True,
+                    'negation_match_text': neg_match.group(),
+                    'negation_source_field': source_field,
+                    'negation_pattern_id': f"{rule.get('id', 'UNKNOWN')}_negative_{j}"
+                }
+                break
 
         # 4. Check required tokens if specified
         required_tokens = rule.get('required_tokens', [])
@@ -14039,17 +14083,13 @@ class SupplementEnricherV3:
         AND no scoring_blocked_reason will earn B4a points in the scorer.
         """
         # Lazy-load the resolver registry once per enricher instance.
+        # A malformed registry raises: an empty verified-program list would
+        # silently under-credit Verification on every product.
         if not hasattr(self, "_cert_registry_cache"):
-            try:
-                from cert_resolver import CertRegistry  # local import to avoid hard dep at module load
-                self._cert_registry_cache = CertRegistry.load()
-            except Exception as exc:  # registry missing or malformed → empty
-                self.logger.warning("cert_resolver unavailable: %s (verified_cert_programs will be empty)", exc)
-                self._cert_registry_cache = None
+            from cert_resolver import CertRegistry  # local import to avoid hard dep at module load
+            self._cert_registry_cache = CertRegistry.load()
 
         registry = self._cert_registry_cache
-        if registry is None:
-            return []
 
         from cert_resolver import discover_verified_programs, resolve  # local import (kept colocated with usage)
 
@@ -14414,59 +14454,54 @@ class SupplementEnricherV3:
         # Step 1: Collect detector blends (pattern-based)
         detector_blends = []
         if self.blend_detector:
-            try:
-                result = self.blend_detector.analyze_product(product)
-                for blend in result.blends_detected:
-                    if label_source_refs.get(blend.source_field) in source_only_preparations:
-                        continue
-                    detector_with_amounts = blend.ingredients_with_amounts or []
-                    detector_without_amounts = blend.ingredients_without_amounts or []
-                    detector_children = [
-                        {
-                            "name": item.get("name", ""),
-                            "amount": item.get("amount"),
-                            "unit": item.get("unit", "") or "",
-                        }
-                        for item in detector_with_amounts
-                    ] + [
-                        {
-                            "name": name,
-                            "amount": None,
-                            "unit": "",
-                        }
-                        for name in detector_without_amounts
-                    ]
-                    detector_blends.append({
-                        "name": blend.blend_name,
-                        "disclosure_level": blend.disclosure_level,
-                        "nested_count": blend.blend_ingredient_count,
-                        "total_weight": blend.blend_total_amount,
-                        "unit": blend.blend_total_unit or "",
-                        "hidden_count": len(detector_without_amounts),
+            # A detector failure fails the product (enrich_product records it);
+            # dropping its blends would silently skip the B5 penalty.
+            result = self.blend_detector.analyze_product(product)
+            for blend in result.blends_detected:
+                if label_source_refs.get(blend.source_field) in source_only_preparations:
+                    continue
+                detector_with_amounts = blend.ingredients_with_amounts or []
+                detector_without_amounts = blend.ingredients_without_amounts or []
+                detector_children = [
+                    {
+                        "name": item.get("name", ""),
+                        "amount": item.get("amount"),
+                        "unit": item.get("unit", "") or "",
+                    }
+                    for item in detector_with_amounts
+                ] + [
+                    {
+                        "name": name,
+                        "amount": None,
+                        "unit": "",
+                    }
+                    for name in detector_without_amounts
+                ]
+                detector_blends.append({
+                    "name": blend.blend_name,
+                    "disclosure_level": blend.disclosure_level,
+                    "nested_count": blend.blend_ingredient_count,
+                    "total_weight": blend.blend_total_amount,
+                    "unit": blend.blend_total_unit or "",
+                    "hidden_count": len(detector_without_amounts),
+                    "source_field": blend.source_field,
+                    "source_path": blend.source_field,
+                    "source_row_ref": label_source_refs.get(blend.source_field),
+                    "child_ingredients": detector_children,
+                    "sources": ["detector"],
+                    "evidence": {
+                        "blend_id": blend.blend_id,
+                        "matched_text": blend.matched_text,
                         "source_field": blend.source_field,
-                        "source_path": blend.source_field,
-                        "source_row_ref": label_source_refs.get(blend.source_field),
-                        "child_ingredients": detector_children,
-                        "sources": ["detector"],
-                        "evidence": {
-                            "blend_id": blend.blend_id,
-                            "matched_text": blend.matched_text,
-                            "source_field": blend.source_field,
-                            "risk_category": blend.risk_category,
-                            "severity_level": blend.severity_level,
-                            "amounts_present": blend.blend_amounts_present,
-                            "ingredients_with_amounts": blend.ingredients_with_amounts,
-                            "ingredients_without_amounts": blend.ingredients_without_amounts,
-                            "penalty_applicable": blend.penalty_applicable,
-                            "penalty_reason": blend.penalty_reason
-                        }
-                    })
-            except Exception as e:
-                self.logger.warning(
-                    f"ProprietaryBlendDetector failed for product "
-                    f"{product.get('dsld_id', 'unknown')}: {e} — "
-                    f"B5 blend penalty will NOT be applied"
-                )
+                        "risk_category": blend.risk_category,
+                        "severity_level": blend.severity_level,
+                        "amounts_present": blend.blend_amounts_present,
+                        "ingredients_with_amounts": blend.ingredients_with_amounts,
+                        "ingredients_without_amounts": blend.ingredients_without_amounts,
+                        "penalty_applicable": blend.penalty_applicable,
+                        "penalty_reason": blend.penalty_reason
+                    }
+                })
 
         # Step 2: Collect cleaning blends (indicator-based from proprietaryBlend flags)
         # Nested proprietary children should roll up to their parent blend to avoid

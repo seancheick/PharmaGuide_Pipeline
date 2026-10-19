@@ -56,8 +56,9 @@ logger = logging.getLogger(__name__)
 # - 1.0.0: Initial hardened pipeline with match_ledger, provenance fields,
 #          coverage gates, and invariant validation
 # - 1.1.0: Label-ledger form, identity, omission, and completeness release gates
+# - 1.2.0: K.1 a product whose enrichment failed is a gate error
 # =============================================================================
-PIPELINE_CONTRACT_VERSION = "1.1.0"
+PIPELINE_CONTRACT_VERSION = "1.2.0"
 
 
 @dataclass
@@ -324,6 +325,21 @@ class EnrichmentContractValidator:
         """
         violations = []
         product_id = product.get("dsld_id", product.get("id", product.get("productId", "unknown")))
+
+        # K.1: a caught enrichment exception leaves only the empty schema.
+        # The product must stop here, not continue to scoring as if clean.
+        status = product.get("enrichment_status")
+        if status in ("failed", "validation_failed"):
+            return [ContractViolation(
+                rule="K.1",
+                rule_name="Enrichment completed",
+                severity="error",
+                message=f"Enrichment {status}: {product.get('enrichment_error')}",
+                product_id=product_id,
+                field_path="enrichment_status",
+                expected=None,
+                actual=status,
+            )]
 
         # Run all contract validations
         violations.extend(self._validate_sugar_consistency(product, product_id))
