@@ -186,6 +186,10 @@ class BatchProcessor:
         self.global_unmapped_details: Dict[str, Dict[str, Any]] = {}
         self.global_mapped = Counter()
 
+        # Quarantine and unmapped-report paths that could not be written. Any
+        # entry marks the stage incomplete, like a cleaned-output write failure.
+        self.report_write_failures: List[str] = []
+
         # Track seen dsld_ids to detect duplicates across input files
         self.seen_dsld_ids: Dict[str, str] = {}  # dsld_id -> first file_path
 
@@ -283,7 +287,8 @@ class BatchProcessor:
                 json.dump(error_record, f, indent=2, ensure_ascii=False)
             logger.debug("Wrote quarantine record: %s", quarantine_file)
         except Exception as e:
-            logger.warning("Failed to write quarantine file: %s", e)
+            logger.error("Failed to write quarantine file %s: %s", quarantine_file, e)
+            self.report_write_failures.append(str(quarantine_file))
 
     def _write_validation_quarantine(self, result: ProcessingResult):
         """
@@ -318,7 +323,8 @@ class BatchProcessor:
                 json.dump(quarantine_record, f, indent=2, ensure_ascii=False)
             logger.info("Wrote validation quarantine: %s", quarantine_file)
         except Exception as e:
-            logger.warning("Failed to write validation quarantine: %s", e)
+            logger.error("Failed to write validation quarantine %s: %s", quarantine_file, e)
+            self.report_write_failures.append(str(quarantine_file))
 
     @staticmethod
     def _sort_counter_deterministic(counter: Counter, limit: int = None) -> List[Tuple[str, int]]:
@@ -833,6 +839,9 @@ class BatchProcessor:
         
         # Save unmapped ingredients
         self._save_unmapped_ingredients(processed_count_override=state.processed_files)
+        if self.report_write_failures:
+            summary["processing_complete"] = False
+            summary["report_write_failures"] = len(self.report_write_failures)
         
         # Generate processing report
         self._generate_processing_report(summary, batch_results)
@@ -1342,34 +1351,9 @@ class BatchProcessor:
                 result["non_scoreable_count"],
             )
         except Exception as e:
-            logger.error(f"Failed to save enhanced unmapped ingredients: {str(e)}")
-            
-            # Fallback to original method
-            # D3: Use deterministic ordering
-            unmapped_data = {
-                "unmapped": [
-                    {
-                        "name": name,
-                        "occurrences": count,
-                        "firstSeen": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
-                    }
-                    for name, count in self._sort_counter_deterministic(self.global_unmapped)
-                ],
-                "stats": {
-                    "totalUnmapped": len(self.global_unmapped),
-                    "totalOccurrences": sum(self.global_unmapped.values()),
-                    "generatedAt": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
-                }
-            }
-            
-            output_file = self.output_dir / "unmapped" / "unmapped_ingredients.json"
-            try:
-                with open(output_file, 'w', encoding='utf-8') as f:
-                    json.dump(unmapped_data, f, indent=2, ensure_ascii=False)
-                logger.info(f"Saved fallback unmapped ingredients: {len(self.global_unmapped)}")
-            except Exception as fallback_error:
-                logger.error(f"Failed to save fallback unmapped ingredients: {str(fallback_error)}")
-    
+            logger.error("Failed to save the unmapped-ingredient report: %s", e)
+            self.report_write_failures.append(str(self.output_dir / "unmapped"))
+
     def _true_unmapped_counter(self) -> Counter:
         """Return only unresolved identity gaps, excluding audit-only rows."""
         return Counter({

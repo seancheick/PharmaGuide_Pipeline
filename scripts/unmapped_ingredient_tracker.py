@@ -128,17 +128,13 @@ class UnmappedIngredientTracker:
     def save_tracking_files(self):
         """Save tracking data to JSON files"""
         try:
-            # Sort ingredients by count (descending) for easier review
+            # Count descending, then name: equal counts must not keep arrival order
             sorted_active = dict(sorted(
-                self.unmapped_active.items(), 
-                key=lambda x: x[1], 
-                reverse=True
+                self.unmapped_active.items(), key=lambda x: (-x[1], x[0])
             ))
-            
+
             sorted_inactive = dict(sorted(
-                self.unmapped_inactive.items(), 
-                key=lambda x: x[1], 
-                reverse=True
+                self.unmapped_inactive.items(), key=lambda x: (-x[1], x[0])
             ))
             
             if self.processed_count == 0:
@@ -178,8 +174,7 @@ class UnmappedIngredientTracker:
             # are NOT identity gaps and must not be added to IQM.
             recognized_sorted = dict(sorted(
                 self.recognized_non_identity.items(),
-                key=lambda x: x[1]["occurrences"],
-                reverse=True,
+                key=lambda x: (-x[1]["occurrences"], x[0]),
             ))
             recognized_file = self.output_path / "recognized_non_identity_ingredients.json"
             with open(recognized_file, 'w', encoding='utf-8') as f:
@@ -200,8 +195,7 @@ class UnmappedIngredientTracker:
 
             non_scoreable_sorted = dict(sorted(
                 self.non_scoreable_unmapped.items(),
-                key=lambda x: x[1]["occurrences"],
-                reverse=True,
+                key=lambda x: (-x[1]["occurrences"], x[0]),
             ))
             non_scoreable_file = self.output_path / "non_scoreable_unmapped_ingredients.json"
             with open(non_scoreable_file, 'w', encoding='utf-8') as f:

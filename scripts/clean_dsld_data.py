@@ -417,11 +417,17 @@ class DSLDCleaningPipeline:
 
             if not summary.get("processing_complete", True):
                 output_write_failures = summary.get("output_write_failures", 0)
+                report_write_failures = summary.get("report_write_failures", 0)
                 self.logger.error(
                     "PIPELINE FAILED: processing summary is incomplete"
                     + (
                         f" ({output_write_failures} file(s) had output write failures)"
                         if output_write_failures
+                        else ""
+                    )
+                    + (
+                        f" ({report_write_failures} quarantine/unmapped report write(s) failed)"
+                        if report_write_failures
                         else ""
                     )
                 )
