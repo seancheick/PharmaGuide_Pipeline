@@ -10,6 +10,7 @@ from __future__ import annotations
 import argparse
 import json
 import logging
+import time
 from collections import Counter
 from datetime import datetime, timezone
 from pathlib import Path
@@ -25,6 +26,8 @@ from stage_manifest import select_stage_input_files
 
 
 LOGGER = logging.getLogger("pharmaguide.score_products_v4")
+#: Products between progress lines, so a long batch never looks stalled.
+PROGRESS_EVERY = 250
 
 
 def _load_batch(path: Path) -> List[Dict[str, Any]]:
@@ -63,7 +66,15 @@ def _output_name(input_path: Path) -> str:
 def score_file(input_path: Path, scored_dir: Path) -> Dict[str, Any]:
     """Score one complete batch and atomically publish exactly one output."""
     products = _load_batch(input_path)
-    artifacts = [build_scored_artifact(product) for product in products]
+    started = time.monotonic()
+    artifacts = []
+    for count, product in enumerate(products, 1):
+        artifacts.append(build_scored_artifact(product))
+        if count % PROGRESS_EVERY == 0 and count < len(products):
+            LOGGER.info("scoring %s: %d/%d products, %.0fs",
+                        input_path.name, count, len(products), time.monotonic() - started)
+    LOGGER.info("scored %s: %d products in %.1fs",
+                input_path.name, len(artifacts), time.monotonic() - started)
 
     scored_dir.mkdir(parents=True, exist_ok=True)
     output_path = scored_dir / _output_name(input_path)
@@ -108,6 +119,7 @@ def score_all(input_path: Path, output_dir: Path, *, run_id: str | None = None) 
             f"{cross_batch_duplicates[:5]}"
         )
 
+    LOGGER.info("v4 scoring %d products from %d files", sum(all_ids.values()), len(input_files))
     effective_run_id = ensure_run_id(run_id)
     scored_dir = output_dir.resolve() / "scored"
     started_at = datetime.now(timezone.utc)

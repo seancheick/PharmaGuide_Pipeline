@@ -494,6 +494,74 @@ def test_scoped_contract_reuse_is_output_equivalent_to_uncached_assembly() -> No
     assert scoped == uncached
 
 
+def test_one_scoring_pass_derives_each_product_view_once(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """Readiness, the evidence resolver and the gates read the product through
+    ``dict(product)`` copies; within one pass those are the same input and must
+    reuse the scope's views instead of rebuilding them (Score-stage cost).
+
+    Each derivation function is counted per argument set. Before the scope
+    reused these views the private derivation functions did not exist, so their
+    counts stay empty there and the comparison fails on the counts themselves.
+    """
+    import scoring_input_contract as contract
+
+    derived: dict[tuple, int] = {}
+    requested: set[tuple] = set()
+
+    def count(name, key_of):
+        original = getattr(contract, name, None)
+
+        def counted(*args, **kwargs):
+            key = (name, *key_of(*args, **kwargs))
+            derived[key] = derived.get(key, 0) + 1
+            return original(*args, **kwargs)
+
+        monkeypatch.setattr(contract, name, counted, raising=False)
+
+    count("_build_scoring_ingredients",
+          lambda product, *, strict=True, allow_legacy_fallback=False: (strict, allow_legacy_fallback))
+    count("_route_module_decision", lambda product: ())
+    count("_build_scoring_classification",
+          lambda product, *, route_module, classification_origin: (route_module, classification_origin))
+    count("_classify_rows",
+          lambda product, module, rows, materiality_only: (module, materiality_only) if rows is None else ("rows",))
+
+    def record(name, key_of):
+        original = getattr(contract, name)
+
+        def recorded(*args, **kwargs):
+            key = key_of(*args, **kwargs)
+            if key is not None:
+                requested.add((name, *key))
+            return original(*args, **kwargs)
+
+        for module in list(sys.modules.values()):
+            if getattr(module, name, None) is original:
+                monkeypatch.setattr(module, name, recorded)
+
+    record("build_scoring_classification",
+           lambda product, *, route_module=None, classification_origin="compatibility_derived":
+           (route_module, classification_origin))
+    record("classify_ingredient_roles",
+           lambda product, *, module=None, rows=None, materiality_only=False:
+           (module, materiality_only) if rows is None else None)
+
+    scored_artifact.build_scored_artifact(_product())
+
+    builds = {key: n for key, n in derived.items() if key[0] == "_build_scoring_ingredients"}
+    assert builds and set(builds.values()) == {1}, builds
+    assert derived.get(("_route_module_decision",)) == 1, derived
+    classifications = {("_build_scoring_classification", *key[1:])
+                       for key in requested if key[0] == "build_scoring_classification"}
+    assert classifications
+    assert {key: derived.get(key) for key in classifications} == dict.fromkeys(classifications, 1)
+    roles = {("_classify_rows", *key[1:]) for key in requested if key[0] == "classify_ingredient_roles"}
+    assert roles
+    assert {key: derived.get(key) for key in roles} == dict.fromkeys(roles, 1)
+
+
 def test_artifact_states_each_fact_once():
     """Locked 2026-09-21: no internal mirror duplicates a canonical field.
 
