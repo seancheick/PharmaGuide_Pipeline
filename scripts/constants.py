@@ -847,15 +847,6 @@ DEFAULT_MAX_WORKERS = 4
 VALID_INPUT_EXTENSIONS = [".json"]
 OUTPUT_EXTENSION = ".jsonl"
 
-# Processing thresholds and performance tuning
-FUZZY_MATCHING_THRESHOLDS = {
-    "fuzzy_threshold": 92,      # Primary fuzzy matching threshold (increased for safety)
-    "partial_threshold": 95,    # Partial matching threshold (increased for safety)
-    "minimum_fuzzy_length": 6,  # Minimum length for fuzzy matching (prevents short false matches)
-    "context_window_size": 20,  # Characters around match for context validation
-    "parallel_threshold": 10    # Minimum ingredients to use parallel processing
-}
-
 # NOTE: SCORING_CONSTANTS and EVIDENCE_SCORING were removed (dead code).
 # The production scorer (score_supplements_v4.py -> scoring_v4/) reads only
 # scoring_v4/config/quality_score.json; config/scoring_config.json is the retired v3 config

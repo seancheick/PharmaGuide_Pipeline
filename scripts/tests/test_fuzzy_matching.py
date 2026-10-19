@@ -60,3 +60,40 @@ class TestBannedSubstancesNoFuzzy:
         found = result.get("found", False)
         # The match depends on exact aliases in the database
         # This test verifies the mechanism works, not specific aliases
+
+
+class TestCleanerAdditiveMatchingIsExact:
+    """The cleaner's other-ingredient (non-harmful additive) check is exact-only.
+
+    Until 2026-10-19 a partial-ratio fallback paired different substances and
+    logged them as "SAFE": every pair below was in the 2026-10-19 corpus log.
+    """
+
+    @pytest.fixture(scope="class")
+    def normalizer(self):
+        from enhanced_normalizer import EnhancedDSLDNormalizer
+        return EnhancedDSLDNormalizer()
+
+    @pytest.mark.parametrize("name", [
+        "vitamin a",          # was -> vitamin and mineral blend
+        "linoleic acid",      # was -> oleic acid
+        "pectinase",          # was -> pectin
+        "potassium",          # was -> polacrillin potassium
+        "citrulline malate",  # was -> malate
+        "chloride",           # was -> ammonium chloride
+        "quercetin",          # was -> dhqvital dihydroquercetin
+        "guarana",            # was -> guaran
+    ])
+    def test_different_substance_is_not_an_additive_match(self, normalizer, name):
+        assert normalizer._enhanced_non_harmful_check(name)["category"] == "none"
+
+    @pytest.mark.parametrize("name,category", [
+        ("cellulose", "filler"),
+        ("magnesium stearate", "lubricant"),
+    ])
+    def test_declared_name_still_matches(self, normalizer, name, category):
+        assert normalizer._enhanced_non_harmful_check(name)["category"] == category
+
+    def test_matcher_has_no_fuzzy_fallback(self):
+        from enhanced_normalizer import EnhancedIngredientMatcher
+        assert not hasattr(EnhancedIngredientMatcher, "fuzzy_match")

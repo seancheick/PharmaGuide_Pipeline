@@ -24,12 +24,8 @@ def test_functional_group_split_respects_parenthesized_commas() -> None:
     ]
 
 
-@pytest.mark.parametrize("parallel_threshold", [1, 100])
-def test_cleaner_uses_same_functional_group_path_for_every_list_size(
-    parallel_threshold: int,
-) -> None:
+def test_cleaner_uses_same_functional_group_path_for_every_list_size() -> None:
     normalizer = EnhancedDSLDNormalizer()
-    normalizer._parallel_threshold = parallel_threshold
     raw = {
         "ingredients": [
             {"name": "Natural Colors: Citrus Oils (Orange, Lemon), Beet Root", "order": 1},

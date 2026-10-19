@@ -1,7 +1,7 @@
 from __future__ import annotations
 """
 Enhanced DSLD Data Normalizer Module
-Improved ingredient mapping with fuzzy matching, better preprocessing, and expanded aliases
+Exact ingredient mapping with text preprocessing and expanded aliases
 """
 import re
 import json
@@ -14,26 +14,9 @@ from datetime import date, datetime, timezone
 from pathlib import Path
 from collections import Counter
 
-# Import fuzzy matching with a 3-tier fallback chain.
-# rapidfuzz is preferred: C++ accelerated, MIT-licensed, ~50-100x faster than
-# pure-Python difflib, and already declared in requirements-dev.txt. fuzzywuzzy
-# is the historical second choice (needs python-levenshtein for speed). difflib
-# is the last-resort pure-Python fallback — it works everywhere but is the
-# reason cleaning regressed ~64x when neither rapidfuzz nor fuzzywuzzy was
-# importable. Both rapidfuzz.process.extractOne and fuzzywuzzy.process.extractOne
-# return (choice, score[, index]); only [0] and [1] are read at the call sites,
-# so the libraries are drop-in compatible.
-try:
-    from rapidfuzz import fuzz, process
-    FUZZY_AVAILABLE = True
-except ImportError:
-    try:
-        from fuzzywuzzy import fuzz, process
-        FUZZY_AVAILABLE = True
-    except ImportError:
-        from difflib import SequenceMatcher
-        FUZZY_AVAILABLE = False
-        print("⚠️ No accelerated fuzzy matcher found. Install: pip install rapidfuzz")
+# Ingredient identity is exact-only. rapidfuzz (requirements-dev.txt) is used
+# solely to align the same label row across DSLD serving columns.
+from rapidfuzz import fuzz
 
 from constants import (
     INGREDIENT_QUALITY_MAP,
@@ -52,7 +35,6 @@ from constants import (
     ENHANCED_DELIVERY,
     INGREDIENT_CLASSIFICATION,
     COLOR_INDICATORS,
-    FUZZY_MATCHING_THRESHOLDS,
     ENHANCED_EXCLUSION_PATTERNS,
     DSLD_IMAGE_URL_TEMPLATE,
     CERTIFICATION_PATTERNS,
@@ -680,162 +662,8 @@ def _install_instance_caches(owner: Any, sizes: Dict[str, int]) -> None:
 
 
 class EnhancedIngredientMatcher:
-    """Enhanced ingredient matching with fuzzy logic and comprehensive preprocessing"""
+    """Exact ingredient matching helpers and comprehensive preprocessing"""
 
-    def __init__(self):
-        _install_instance_caches(self, {"_safe_fuzzy_match_cached": 5000})
-        # SAFETY FIRST: Increased thresholds for critical ingredient matching
-        self.fuzzy_threshold = FUZZY_MATCHING_THRESHOLDS["fuzzy_threshold"]
-        self.partial_threshold = FUZZY_MATCHING_THRESHOLDS["partial_threshold"]
-        self.minimum_fuzzy_length = FUZZY_MATCHING_THRESHOLDS["minimum_fuzzy_length"]
-
-        # SAFETY: Whitelist of categories where fuzzy matching is safe
-        self.safe_fuzzy_categories = {
-            "botanical",  # Herb names often have spelling variations
-            "flavor",     # Natural flavors, artificial flavors
-            "color",      # Natural colors, artificial colors
-            "inactive",   # Non-critical inactive ingredients
-            "excipient"   # Manufacturing aids, generally safe to fuzzy match
-        }
-
-        # CRITICAL SAFETY: Comprehensive blacklist - pairs that should NEVER be matched
-        self.fuzzy_blacklist = {
-            # (query_pattern, target_pattern) - if query matches first and target matches second, reject
-            
-            # === CRITICAL SAFETY: Natural vs Synthetic ===
-            ("natural", "artificial"),  # Natural vs Artificial anything
-            ("organic", "synthetic"),   # Organic vs Synthetic
-            ("whole", "isolated"),       # Whole food vs Isolated
-            ("extract", "synthetic"),    # Natural extract vs Synthetic
-            
-            # === CRITICAL SAFETY: Different Food Sources ===
-            ("corn starch", "corn syrup"),  # Different corn products
-            ("corn flour", "corn syrup"),   # Different corn products
-            ("wheat flour", "wheat protein"),  # Different wheat products
-            ("soy oil", "soy protein"),     # Different soy products
-            ("milk powder", "milk protein"), # Different milk products
-            ("rice bran", "rice protein"),  # Different rice products
-            ("pea fiber", "pea protein"),   # Different pea products
-            
-            # === CRITICAL SAFETY: Sugars vs Sugar Alcohols ===
-            ("sugar", "sugar alcohol"),     # Sugar vs Sugar alcohols
-            ("glucose", "mannitol"),        # Sugar vs Sugar alcohol
-            ("glucose", "sorbitol"),        # Sugar vs Sugar alcohol
-            ("fructose", "erythritol"),     # Sugar vs Sugar alcohol
-            ("sucrose", "xylitol"),         # Sugar vs Sugar alcohol
-            
-            # === CRITICAL SAFETY: Vitamin Forms (Different Bioavailability) ===
-            ("vitamin d", "vitamin d2"),    # D vs D2 (different forms)
-            ("vitamin d", "vitamin d3"),    # D vs D3 (different forms)
-            ("vitamin b12", "methylcobalamin"), # Different B12 forms
-            ("vitamin b12", "cyanocobalamin"), # Different B12 forms
-            ("vitamin k", "vitamin k2"),    # Different K forms
-            ("vitamin e", "alpha tocopherol"), # Different E forms
-            ("folate", "folic acid"),       # Natural vs synthetic
-            ("beta carotene", "vitamin a"), # Precursor vs vitamin
-            
-            # === CRITICAL SAFETY: Fatty Acids (Different Benefits) ===
-            ("omega 3", "omega 6"),         # Different omega fatty acids
-            ("omega 3", "omega 9"),         # Different omega fatty acids
-            ("epa", "dha"),                 # Different omega-3s
-            ("linoleic acid", "linolenic acid"), # Omega-6 vs Omega-3
-            
-            # === CRITICAL SAFETY: Gut Health (Often Confused) ===
-            ("probiotic", "prebiotic"),     # Different but often confused
-            ("lactose", "lactase"),         # Sugar vs Enzyme
-            ("digestive enzyme", "probiotic"), # Enzyme vs Bacteria
-            ("fiber", "probiotic"),         # Prebiotic vs Probiotic
-            
-            # === CRITICAL SAFETY: Amino Acids vs Similar Compounds ===
-            ("glucose", "glucosamine"),     # Sugar vs Amino sugar
-            ("glycine", "glycerol"),        # Amino acid vs Alcohol
-            ("taurine", "l-tyrosine"),      # Different amino acids
-            ("arginine", "ornithine"),      # Related but different amino acids
-            ("lysine", "glycine"),          # Different amino acids
-            ("methionine", "metformin"),    # Amino acid vs Drug
-            
-            # === CRITICAL SAFETY: Minerals vs Compounds ===
-            ("calcium", "calcium carbonate"), # Element vs Specific form
-            ("magnesium", "magnesium oxide"), # Element vs Specific form
-            ("magnesium", "magnesium stearate"), # Element vs Flow agent/lubricant
-            ("magnesium stearate", "magnesium"), # Flow agent vs Element (reverse)
-            ("iron", "iron sulfate"),       # Element vs Specific form
-            ("zinc", "zinc oxide"),         # Element vs Specific form
-            ("chromium", "chromium picolinate"), # Element vs Specific form
-            
-            # === CRITICAL SAFETY: Acids vs Salts (Different Absorption) ===
-            ("folic acid", "folinic acid"), # Different folate forms
-            ("citric acid", "citrate"),     # Acid vs Salt form
-            ("lactic acid", "lactate"),     # Acid vs Salt form
-            ("ascorbic acid", "ascorbate"), # Vitamin C acid vs salt
-            ("malic acid", "malate"),       # Acid vs Salt form
-            
-            # === CRITICAL SAFETY: Herbs vs Extracts (Different Potency) ===
-            ("ginkgo", "ginkgo extract"),   # Whole herb vs concentrated extract
-            ("ginseng", "ginseng extract"), # Whole herb vs concentrated extract
-            ("turmeric", "curcumin"),       # Whole herb vs active compound
-            ("milk thistle", "silymarin"),  # Whole herb vs active compound
-            ("green tea", "egcg"),          # Whole herb vs active compound
-            ("grape seed", "resveratrol"),  # Different grape compounds
-            
-            # === CRITICAL SAFETY: Stimulants vs Non-Stimulants ===
-            ("caffeine", "l-theanine"),     # Stimulant vs Calming amino acid
-            ("guarana", "gaba"),            # Stimulant vs Calming neurotransmitter
-            ("ephedra", "echinacea"),       # Banned stimulant vs Immune herb
-            
-            # === CRITICAL SAFETY: Hormones vs Precursors ===
-            ("melatonin", "tryptophan"),    # Hormone vs Precursor amino acid
-            ("testosterone", "tribulus"),   # Hormone vs Herb
-            ("dhea", "dha"),                # Hormone vs Fatty acid
-            ("growth hormone", "arginine"), # Hormone vs Amino acid
-            
-            # === CRITICAL SAFETY: Antioxidants (Different Mechanisms) ===
-            ("vitamin c", "vitamin e"),     # Different antioxidants
-            ("coq10", "alpha lipoic acid"), # Different antioxidants
-            ("glutathione", "n-acetyl cysteine"), # Antioxidant vs precursor
-            ("selenium", "sulfur"),         # Different minerals
-            
-            # === CRITICAL SAFETY: Joint Support (Different Mechanisms) ===
-            ("glucosamine", "chondroitin"), # Different joint compounds
-            ("msm", "dmso"),                # Different sulfur compounds
-            ("collagen", "gelatin"),        # Different protein forms
-            ("hyaluronic acid", "chondroitin"), # Different joint compounds
-            
-            # === CRITICAL SAFETY: Brain/Cognitive (Different Effects) ===
-            ("ginkgo", "gaba"),             # Circulation vs Neurotransmitter
-            ("phosphatidylserine", "phosphatidylcholine"), # Different phospholipids
-            ("acetyl l-carnitine", "l-carnitine"), # Different carnitine forms
-            ("dmae", "choline"),            # Different brain compounds
-            
-            # === CRITICAL SAFETY: Energy/Metabolism ===
-            ("creatine", "carnitine"),      # Different energy compounds
-            ("pyruvate", "citrate"),        # Different metabolic compounds
-            ("ribose", "glucose"),          # Different sugars
-
-            # === ULTRA CRITICAL: Vitamin/Mineral Number Protection ===
-            # Prevent ANY cross-matching between numbered vitamins/minerals
-            ("b1", "b2"), ("b1", "b3"), ("b1", "b5"), ("b1", "b6"), ("b1", "b7"), ("b1", "b8"), ("b1", "b9"), ("b1", "b12"),
-            ("b2", "b1"), ("b2", "b3"), ("b2", "b5"), ("b2", "b6"), ("b2", "b7"), ("b2", "b8"), ("b2", "b9"), ("b2", "b12"),
-            ("b3", "b1"), ("b3", "b2"), ("b3", "b5"), ("b3", "b6"), ("b3", "b7"), ("b3", "b8"), ("b3", "b9"), ("b3", "b12"),
-            ("b5", "b1"), ("b5", "b2"), ("b5", "b3"), ("b5", "b6"), ("b5", "b7"), ("b5", "b8"), ("b5", "b9"), ("b5", "b12"),
-            ("b6", "b1"), ("b6", "b2"), ("b6", "b3"), ("b6", "b5"), ("b6", "b7"), ("b6", "b8"), ("b6", "b9"), ("b6", "b12"),
-            ("b7", "b1"), ("b7", "b2"), ("b7", "b3"), ("b7", "b5"), ("b7", "b6"), ("b7", "b8"), ("b7", "b9"), ("b7", "b12"),
-            ("b8", "b1"), ("b8", "b2"), ("b8", "b3"), ("b8", "b5"), ("b8", "b6"), ("b8", "b7"), ("b8", "b9"), ("b8", "b12"),
-            ("b9", "b1"), ("b9", "b2"), ("b9", "b3"), ("b9", "b5"), ("b9", "b6"), ("b9", "b7"), ("b9", "b8"), ("b9", "b12"),
-            ("b12", "b1"), ("b12", "b2"), ("b12", "b3"), ("b12", "b5"), ("b12", "b6"), ("b12", "b7"), ("b12", "b8"), ("b12", "b9"),
-
-            # Vitamin D protection (D2 vs D3 are VERY different)
-            ("d2", "d3"), ("d3", "d2"),
-            ("vitamin d2", "vitamin d3"), ("vitamin d3", "vitamin d2"),
-
-            # Vitamin K protection (K1 vs K2 have different functions)
-            ("k1", "k2"), ("k2", "k1"),
-            ("vitamin k1", "vitamin k2"), ("vitamin k2", "vitamin k1"),
-
-            # Additional mineral protection
-            ("chromium", "vanadium"),       # Different trace minerals
-        }
-        
     def preprocess_text(self, text: str) -> str:
         """
         Comprehensive text preprocessing with enhanced validation.
@@ -857,36 +685,6 @@ class EnhancedIngredientMatcher:
         """Generate common variations of ingredient names."""
         # Delegate to module-level cached function (shared across all instances)
         return list(_generate_variations_module_cached(text))
-
-    def is_safe_for_fuzzy_matching(self, query: str, category: str = None) -> bool:
-        """
-        Determine if an ingredient is safe for fuzzy matching based on category and content
-        """
-        # Always allow exact matches
-        if not query:
-            return False
-
-        query_lower = query.lower()
-
-        # SAFETY: Block fuzzy matching for critical vitamins/minerals by content analysis
-        critical_patterns = [
-            r'\bb[1-9][\d]*\b',      # B1, B2, B3, etc.
-            r'\bvitamin\s*[a-z]\d+\b',  # vitamin D3, vitamin K2, etc.
-            r'\bd[23]\b',            # D2, D3
-            r'\bk[12]\b',            # K1, K2
-            r'\bomega\s*[369]\b',    # omega-3, omega-6, omega-9
-        ]
-
-        for pattern in critical_patterns:
-            if re.search(pattern, query_lower):
-                return False  # Never fuzzy match critical vitamins/minerals
-
-        # SAFETY: Check if category is in safe list
-        if category and category.lower() in self.safe_fuzzy_categories:
-            return True
-
-        # SAFETY: Default to EXACT MATCH ONLY for safety
-        return False
 
     def exact_match_critical_aliases(self, query: str, targets: List[str]) -> Optional[str]:
         """
@@ -954,177 +752,6 @@ class EnhancedIngredientMatcher:
             return ""
 
         return stripped
-
-    def fuzzy_match(self, query: str, targets: List[str], category: str = None) -> Tuple[Optional[str], int]:
-        """
-        SAFETY-FIRST fuzzy matching with whitelist approach and thread-safe caching
-        """
-        if not targets or not query:
-            return None, 0
-
-        # SAFETY FIRST: Check if fuzzy matching is safe for this ingredient
-        if not self.is_safe_for_fuzzy_matching(query, category):
-            return None, 0  # Block fuzzy matching for critical ingredients
-
-        # Use thread-safe @lru_cache - convert list to tuple for hashability
-        targets_tuple = tuple(targets)
-        return self._safe_fuzzy_match_cached(query, targets_tuple, category)
-
-    def _safe_fuzzy_match_cached(self, query: str, targets_tuple: tuple, category: str = None) -> Tuple[Optional[str], int]:
-        """Thread-safe cached version of fuzzy matching"""
-        # Convert tuple back to list for processing
-        targets = list(targets_tuple)
-        return self._perform_safe_fuzzy_match(query, targets, category)
-
-    def _perform_safe_fuzzy_match(self, query: str, targets: List[str], category: str = None) -> Tuple[Optional[str], int]:
-        """
-        SAFETY-ENHANCED fuzzy matching with comprehensive protection
-        """
-        # SAFETY: Enhanced minimum length check to prevent false positives
-        if len(query) < self.minimum_fuzzy_length:
-            return None, 0
-
-        if FUZZY_AVAILABLE:
-            # SAFETY: More aggressive filtering - prevent short critical aliases from matching
-            # Restore critical vitamins (B1, D3, K2) but only for EXACT matching in other methods
-            filtered_targets = [t for t in targets if len(t) >= self.minimum_fuzzy_length]
-
-            # SAFETY: First try exact ratio matching with higher threshold
-            match = process.extractOne(query, filtered_targets, scorer=fuzz.ratio)
-            if match and match[1] >= self.fuzzy_threshold:
-                # SAFETY: Enhanced blacklist checking
-                if not self._is_blacklisted_match(query, match[0]):
-                    logger.info(f"SAFE fuzzy match: '{query}' -> '{match[0]}' (score: {match[1]}, category: {category})")
-                    return match[0], match[1]
-                else:
-                    logger.warning(f"BLOCKED dangerous fuzzy match: '{query}' -> '{match[0]}' (score: {match[1]})")
-                    return None, 0
-
-            # SAFETY: Conservative partial matching only for longer queries and safe categories
-            if len(query) >= 8 and category in self.safe_fuzzy_categories:
-                match = process.extractOne(query, filtered_targets, scorer=fuzz.partial_ratio)
-                if match and match[1] >= self.partial_threshold:
-                    if not self._is_blacklisted_match(query, match[0]):
-                        logger.info(f"SAFE partial match: '{query}' -> '{match[0]}' (score: {match[1]}, category: {category})")
-                        return match[0], match[1]
-        else:
-            # Fallback to difflib with same safety checks
-            best_match = None
-            best_score = 0
-
-            filtered_targets = [t for t in targets if len(t) >= self.minimum_fuzzy_length]
-
-            for target in filtered_targets:
-                ratio = SequenceMatcher(None, query, target).ratio() * 100
-                if ratio > best_score and ratio >= self.fuzzy_threshold:
-                    if not self._is_blacklisted_match(query, target):
-                        best_score = ratio
-                        best_match = target
-
-            if best_match:
-                logger.info(f"SAFE difflib match: '{query}' -> '{best_match}' (score: {int(best_score)}, category: {category})")
-                return best_match, int(best_score)
-
-        return None, 0
-    
-    def _is_blacklisted_match(self, query: str, target: str) -> bool:
-        """Check if a fuzzy match should be rejected based on blacklist"""
-        query_lower = query.lower()
-        target_lower = target.lower()
-        
-        # CRITICAL SAFETY: Check dosage confusion
-        if self._has_dosage_confusion(query_lower, target_lower):
-            return True
-        
-        # CRITICAL SAFETY: Check unit confusion  
-        if self._has_unit_confusion(query_lower, target_lower):
-            return True
-        
-        # Check standard blacklist
-        for blacklisted_query, blacklisted_target in self.fuzzy_blacklist:
-            # Check if query contains blacklisted pattern and target contains its counterpart
-            if blacklisted_query in query_lower and blacklisted_target in target_lower:
-                return True
-            # Check reverse direction too
-            if blacklisted_target in query_lower and blacklisted_query in target_lower:
-                return True
-        
-        return False
-    
-    def _has_dosage_confusion(self, query: str, target: str) -> bool:
-        """Check if two ingredients have different dosages - CRITICAL for scoring accuracy"""
-        # Extract dosages from both strings
-        dosage_pattern = r'(\d+(?:\.\d+)?)\s*(mg|mcg|iu|g|units?|billion|million)'
-        
-        query_dosages = re.findall(dosage_pattern, query, re.IGNORECASE)
-        target_dosages = re.findall(dosage_pattern, target, re.IGNORECASE)
-        
-        # If both have dosages, check if they're different
-        if query_dosages and target_dosages:
-            # Normalize units for comparison
-            query_normalized = self._normalize_dosage(query_dosages[0])
-            target_normalized = self._normalize_dosage(target_dosages[0])
-            
-            # If dosages are significantly different (>20% difference), block the match
-            if query_normalized and target_normalized:
-                difference_ratio = abs(query_normalized - target_normalized) / max(query_normalized, target_normalized)
-                if difference_ratio > 0.2:  # More than 20% difference
-                    return True
-        
-        return False
-    
-    def _normalize_dosage(self, dosage_tuple) -> float:
-        """Normalize dosage to mg for comparison"""
-        amount, unit = dosage_tuple
-        amount = float(amount)
-        unit_lower = unit.lower()
-        
-        # Convert to mg
-        if unit_lower in ['mcg', 'μg']:
-            return amount / 1000  # mcg to mg
-        elif unit_lower == 'g':
-            return amount * 1000  # g to mg
-        elif unit_lower == 'iu':
-            # IU conversion is complex and vitamin-specific, so we'll be conservative
-            # For vitamin D: 1 IU ≈ 0.025 mcg
-            # For vitamin E: 1 IU ≈ 0.67 mg
-            # Since we can't know the vitamin, we'll treat IU as a special case
-            return amount  # Keep as-is for IU
-        elif unit_lower in ['mg']:
-            return amount
-        elif unit_lower in ['billion', 'million']:
-            # For probiotics - keep as-is since these are counts, not weights
-            return amount
-        else:
-            return amount  # Default case
-    
-    def _has_unit_confusion(self, query: str, target: str) -> bool:
-        """Check for dangerous unit confusions (IU vs mcg, etc.)"""
-        # Dangerous unit pairs that should never be matched
-        dangerous_unit_pairs = [
-            ('iu', 'mcg'),    # International Units vs micrograms
-            ('iu', 'mg'),     # International Units vs milligrams  
-            ('mg', 'g'),      # Different magnitudes
-            ('mcg', 'mg'),    # 1000x difference
-            ('billion', 'million'),  # For probiotics
-        ]
-        
-        unit_pattern = r'\d+\s*(mg|mcg|iu|g|units?|billion|million)'
-        
-        query_units = re.findall(unit_pattern, query, re.IGNORECASE)
-        target_units = re.findall(unit_pattern, target, re.IGNORECASE)
-        
-        if query_units and target_units:
-            query_unit = query_units[0].lower()
-            target_unit = target_units[0].lower()
-            
-            # Check if this is a dangerous unit pairing
-            for unit1, unit2 in dangerous_unit_pairs:
-                if (query_unit == unit1 and target_unit == unit2) or \
-                   (query_unit == unit2 and target_unit == unit1):
-                    return True
-        
-        return False
 
     def disambiguate_ingredient_match(self, context_text: str, ingredient_data: Dict[str, Any]) -> bool:
         """
@@ -1365,14 +992,6 @@ class EnhancedDSLDNormalizer:
         self._probiotic_strain_lookup = self._build_strain_lookup()
         self._probiotic_strain_names = set(self._probiotic_strain_lookup.values())
 
-        # PERFORMANCE OPTIMIZATION: Cache variation lists to avoid recreating them
-        # These lists are created once and reused for all fuzzy matching operations
-        self._ingredient_variations_cache = None
-        self._form_variations_cache = None
-        self._harmful_variations_cache = None
-        self._non_harmful_variations_cache = None
-        self._allergen_variations_cache = None
-
         # Track unmapped ingredients with more detail
         self.unmapped_ingredients = Counter()
         self.unmapped_details = {}  # Store more context about unmapped ingredients
@@ -1391,7 +1010,6 @@ class EnhancedDSLDNormalizer:
 
         # OPTIMIZATION: Parallel processing configuration
         self._max_workers = min(8, (os.cpu_count() or 4))  # Adaptive worker count
-        self._parallel_threshold = FUZZY_MATCHING_THRESHOLDS["parallel_threshold"]
 
         # OPTIMIZATION: Fast lookup indices are already built inside
         # _build_enhanced_indices(); do not rebuild them here.
@@ -2199,43 +1817,6 @@ class EnhancedDSLDNormalizer:
             return clinical_risk
 
         return "critical"
-
-    @property
-    def ingredient_variations(self) -> List[str]:
-        """Cached ingredient variations list for fuzzy matching"""
-        if self._ingredient_variations_cache is None:
-            self._ingredient_variations_cache = list(self.ingredient_alias_lookup.keys())
-        return self._ingredient_variations_cache
-
-    @property
-    def form_variations(self) -> List[str]:
-        """Cached form variations list for fuzzy matching"""
-        if self._form_variations_cache is None:
-            self._form_variations_cache = list(self.ingredient_forms_lookup.keys())
-        return self._form_variations_cache
-
-    @property
-    def harmful_variations(self) -> List[str]:
-        """Cached harmful variations list for fuzzy matching"""
-        if self._harmful_variations_cache is None:
-            self._harmful_variations_cache = list(self.harmful_lookup.keys())
-        return self._harmful_variations_cache
-
-    @property
-    def non_harmful_variations(self) -> List[str]:
-        """Cached non-harmful additive variations list for fuzzy matching"""
-        if self._non_harmful_variations_cache is None:
-            self._non_harmful_variations_cache = list(self.other_ingredients_lookup.keys())
-        return self._non_harmful_variations_cache
-
-    @property
-    def allergen_variations(self) -> List[str]:
-        """Cached allergen variations list for fuzzy matching"""
-        if not hasattr(self, '_allergen_variations_cache'):
-            self._allergen_variations_cache = None
-        if self._allergen_variations_cache is None:
-            self._allergen_variations_cache = list(self.allergen_lookup.keys())
-        return self._allergen_variations_cache
 
     # Reference databases whose absence means the pipeline CANNOT produce safe results.
     # If any of these fail to load, the pipeline must abort rather than silently degrade.
@@ -3269,12 +2850,12 @@ class EnhancedDSLDNormalizer:
                 for variation in alias_variations:
                     self.other_ingredients_lookup[variation] = other_ing
 
-                # Add to main ingredient lookup to prevent fuzzy conflicts
+                # Add to main ingredient lookup so the exact alias wins
                 processed_alias = self.matcher.preprocess_text(alias)
                 if processed_alias not in self.ingredient_alias_lookup:
                     self.ingredient_alias_lookup[processed_alias] = standard_name
 
-        # CRITICAL FIX: Add other ingredients to main lookup to prevent fuzzy conflicts
+        # CRITICAL FIX: Add other ingredients to main lookup so their exact aliases win
         for ingredient in self.other_ingredients.get("other_ingredients", []) or []:
             standard_name = ingredient.get("standard_name", "")
             if standard_name:
@@ -3401,7 +2982,7 @@ class EnhancedDSLDNormalizer:
           4. standard_name with qualifier suffix stripped
 
         raw_name is tried first because the raw label text is more specific
-        than the fuzzy-resolved ``standard_name`` in cases where the matcher
+        than the alias-resolved ``standard_name`` in cases where the matcher
         maps a sharply-defined source to a broader umbrella parent (fish_oil
         vs omega_3). Existing label qualifiers are resolved before accepting
         a generated standard name; preparation-bearing words remain intact.
@@ -4035,7 +3616,7 @@ class EnhancedDSLDNormalizer:
                     # Use the original full text as context for disambiguation
                     context_text = name.lower()
                     if not self.matcher.disambiguate_ingredient_match(context_text, form_data):
-                        # Disambiguation failed, try fuzzy matching instead
+                        # Disambiguation failed; fall through to the exact lookups below
                         pass
                     else:
                         mapped_forms = []
@@ -4106,84 +3687,6 @@ class EnhancedDSLDNormalizer:
             if child_strain:
                 return child_strain, True, forms
         
-        # NOTE: Fuzzy matching for active ingredients is INTENTIONALLY DISABLED for safety.
-        # The "active" category is NOT in safe_fuzzy_categories, so this returns (None, 0).
-        # Active ingredient mapping relies on EXACT matching only.
-        # This prevents dangerous mismatches (e.g., B1 vs B12, Vitamin D vs Vitamin D3).
-        fuzzy_match, score = self.matcher.fuzzy_match(processed_name, self.ingredient_variations, "active")
-        
-        if fuzzy_match:
-            mapped_name = self.ingredient_alias_lookup[fuzzy_match]
-
-            # Check for disambiguation on fuzzy matches too
-            if fuzzy_match in self.ingredient_context_lookup:
-                context_data = self.ingredient_context_lookup[fuzzy_match]
-                form_data = context_data.get('form_data', {})
-                
-                # If this ingredient has context rules, use disambiguation
-                if form_data.get('context_include') or form_data.get('context_exclude'):
-                    # Use the original full text as context for disambiguation
-                    context_text = name.lower()
-                    if not self.matcher.disambiguate_ingredient_match(context_text, form_data):
-                        # Disambiguation failed, continue searching
-                        pass
-                    else:
-                        logger.debug(f"Fuzzy matched '{name}' -> '{mapped_name}' (score: {score}) with disambiguation")
-                        
-                        # Try to find specific forms
-                        mapped_forms = []
-                        for form in forms:
-                            processed_form = self.matcher.preprocess_text(form)
-                            if processed_form in self.ingredient_forms_lookup:
-                                mapped_forms.append(self.ingredient_forms_lookup[processed_form])
-                            else:
-                                # Try fuzzy matching for forms (using cached list)
-                                # SAFETY: Forms are generally safe for fuzzy matching
-                                fuzzy_form, form_score = self.matcher.fuzzy_match(processed_form, self.form_variations, "inactive")
-                                if fuzzy_form:
-                                    mapped_forms.append(self.ingredient_forms_lookup[fuzzy_form])
-                                    logger.debug(f"Fuzzy matched form '{form}' -> '{fuzzy_form}' (score: {form_score})")
-                        
-                        return mapped_name, True, mapped_forms or forms
-                else:
-                    # No disambiguation needed
-                    logger.debug(f"Fuzzy matched '{name}' -> '{mapped_name}' (score: {score})")
-                    
-                    # Try to find specific forms
-                    mapped_forms = []
-                    for form in forms:
-                        processed_form = self.matcher.preprocess_text(form)
-                        if processed_form in self.ingredient_forms_lookup:
-                            mapped_forms.append(self.ingredient_forms_lookup[processed_form])
-                        else:
-                            # Try fuzzy matching for forms (using cached list)
-                            # SAFETY: Forms are generally safe for fuzzy matching
-                            fuzzy_form, form_score = self.matcher.fuzzy_match(processed_form, self.form_variations, "inactive")
-                            if fuzzy_form:
-                                mapped_forms.append(self.ingredient_forms_lookup[fuzzy_form])
-                                logger.debug(f"Fuzzy matched form '{form}' -> '{fuzzy_form}' (score: {form_score})")
-                    
-                    return mapped_name, True, mapped_forms or forms
-            else:
-                # No context data available, proceed normally
-                logger.debug(f"Fuzzy matched '{name}' -> '{mapped_name}' (score: {score})")
-                
-                # Try to find specific forms
-                mapped_forms = []
-                for form in forms:
-                    processed_form = self.matcher.preprocess_text(form)
-                    if processed_form in self.ingredient_forms_lookup:
-                        mapped_forms.append(self.ingredient_forms_lookup[processed_form])
-                    else:
-                        # Try fuzzy matching for forms (using cached list)
-                        # SAFETY: Forms are generally safe for fuzzy matching
-                        fuzzy_form, form_score = self.matcher.fuzzy_match(processed_form, self.form_variations, "inactive")
-                        if fuzzy_form:
-                            mapped_forms.append(self.ingredient_forms_lookup[fuzzy_form])
-                            logger.debug(f"Fuzzy matched form '{form}' -> '{fuzzy_form}' (score: {form_score})")
-                
-                return mapped_name, True, mapped_forms or forms
-
         # Identity vs bioactivity split: standardized source-botanical labels
         # often arrive as one raw ingredient string, e.g.
         # "Turmeric Extract standardized to 95% curcuminoids". If the full
@@ -4224,11 +3727,7 @@ class EnhancedDSLDNormalizer:
         harmful_info = self._enhanced_harmful_check(name)
         if harmful_info["category"] != "none":
             processed_name = safety_normalize_text(name)
-            if processed_name in self.harmful_lookup:
-                canonical_name = self.harmful_lookup[processed_name].get("standard_name", name)
-            else:
-                fuzzy_match, _ = self.matcher.fuzzy_match(processed_name, self.harmful_variations, "harmful")
-                canonical_name = self.harmful_lookup.get(fuzzy_match, {}).get("standard_name", name) if fuzzy_match else name
+            canonical_name = self.harmful_lookup.get(processed_name, {}).get("standard_name", name)
 
             logger.debug(f"Found '{name}' in harmful additives database -> '{canonical_name}' (category: {harmful_info['category']})")
             return canonical_name, True, forms
@@ -4236,11 +3735,7 @@ class EnhancedDSLDNormalizer:
         allergen_info = self._enhanced_allergen_check(name, forms)
         if allergen_info["is_allergen"]:
             processed_name = self.matcher.preprocess_text(name)
-            if processed_name in self.allergen_lookup:
-                canonical_name = self.allergen_lookup[processed_name].get("standard_name", name)
-            else:
-                fuzzy_match, _ = self.matcher.fuzzy_match(processed_name, self.allergen_variations, "allergen")
-                canonical_name = self.allergen_lookup.get(fuzzy_match, {}).get("standard_name", name) if fuzzy_match else name
+            canonical_name = self.allergen_lookup.get(processed_name, {}).get("standard_name", name)
 
             logger.debug(f"Found '{name}' in allergens database -> '{canonical_name}' (type: {allergen_info['type']})")
             return canonical_name, True, forms
@@ -4404,20 +3899,6 @@ class EnhancedDSLDNormalizer:
                     result["severity"] = allergen.get("severity_level", "low")
                     break
 
-            # NOTE: Fuzzy matching for allergens is INTENTIONALLY DISABLED for safety.
-            # "allergen" is NOT in safe_fuzzy_categories, so matcher.fuzzy_match returns (None, 0).
-            # The code below is preserved but commented out to prevent unintended execution.
-            # fuzzy_match, score = self.matcher.fuzzy_match(processed_term, self.allergen_variations, "allergen")
-            # if fuzzy_match:
-            #     allergen = self.allergen_lookup[fuzzy_match]
-            #     standard_name = allergen.get("standard_name", "")
-            #     if standard_name:
-            #         result["is_allergen"] = True
-            #         result["type"] = standard_name.lower()
-            #         result["severity"] = allergen.get("severity_level", "low")
-            #         logger.debug(f"Fuzzy allergen match '{term}' -> '{fuzzy_match}' (score: {score})")
-            #         break
-
         return result
     
     def _enhanced_harmful_check(self, name: str) -> Dict[str, Any]:
@@ -4439,17 +3920,6 @@ class EnhancedDSLDNormalizer:
             harmful = self.harmful_lookup[processed_name]
             result["category"] = harmful.get("category", "other")
             result["severity_level"] = harmful.get("severity_level", "low")
-        else:
-            # NOTE: Fuzzy matching for harmful additives is INTENTIONALLY DISABLED for safety.
-            # "harmful" is NOT in safe_fuzzy_categories, so matcher.fuzzy_match returns (None, 0).
-            # The code below is preserved but commented out.
-            # fuzzy_match, score = self.matcher.fuzzy_match(processed_name, self.harmful_variations, "harmful")
-            # if fuzzy_match:
-            #     harmful = self.harmful_lookup[fuzzy_match]
-            #     result["category"] = harmful.get("category", "other")
-            #     result["severity_level"] = harmful.get("severity_level", "low")
-            #     logger.debug(f"Fuzzy harmful match '{name}' -> '{fuzzy_match}' (score: {score})")
-            pass
 
         return result
 
@@ -4474,15 +3944,6 @@ class EnhancedDSLDNormalizer:
             result["category"] = other_ing.get("category", "other")
             result["additive_type"] = other_ing.get("additive_type", "unknown")
             result["is_additive"] = other_ing.get("is_additive", False)
-        else:
-            # Try fuzzy match (using cached list) - SAFETY: Other ingredients are safe for fuzzy matching
-            fuzzy_match, score = self.matcher.fuzzy_match(processed_name, self.non_harmful_variations, "inactive")
-            if fuzzy_match:
-                other_ing = self.other_ingredients_lookup[fuzzy_match]
-                result["category"] = other_ing.get("category", "other")
-                result["additive_type"] = other_ing.get("additive_type", "unknown")
-                result["is_additive"] = other_ing.get("is_additive", False)
-                logger.debug(f"Fuzzy other ingredient match '{name}' -> '{fuzzy_match}' (score: {score})")
 
         return result
     
@@ -4562,9 +4023,9 @@ class EnhancedDSLDNormalizer:
 
         else:
             # No classification found in any database
-            harmful_info = is_harmful  # Might still have fuzzy matches
-            non_harmful_info = is_non_harmful  # Might still have fuzzy matches
-            allergen_info = is_allergen  # Might still have fuzzy matches
+            harmful_info = is_harmful
+            non_harmful_info = is_non_harmful
+            allergen_info = is_allergen
 
         return {
             "banned_info": banned_info,
@@ -7857,7 +7318,7 @@ class EnhancedDSLDNormalizer:
                 name, ing.get("uniiCode"), standard_name, unii_method,
             )
         else:
-            # Enhanced mapping with fuzzy matching (existing path)
+            # Enhanced exact alias mapping (existing path)
             standard_name, mapped, mapped_forms = self._enhanced_ingredient_mapping(
                 name,
                 forms,
@@ -8182,7 +7643,7 @@ class EnhancedDSLDNormalizer:
         # source DB so the enricher can trust this decision directly instead
         # of re-deriving parent from ingredient text / forms[0].
         #
-        # raw_name goes first because the fuzzy matcher sometimes collapses a
+        # raw_name goes first because the alias matcher sometimes collapses a
         # sharply-defined source ("Fish Oil concentrate") into a broader
         # umbrella parent ("Omega-3 Fatty Acids") as its standard_name, and
         # the reverse index can still recover the specific parent from the
@@ -9006,7 +8467,7 @@ class EnhancedDSLDNormalizer:
 
             # CANONICAL IDENTITY + NUTRIENT CONTEXT (Phase 1b/1c, inactive-fallback path).
             # raw_name first so the reverse index recovers specific parents
-            # that the fuzzy matcher collapsed (fish_oil vs omega_3 etc.).
+            # that the alias matcher collapsed (fish_oil vs omega_3 etc.).
             canonical_id_f, canonical_source_db_f = (
                 self._resolve_inactive_canonical_identity(name, standard_name)
             )
@@ -11676,7 +11137,6 @@ class EnhancedDSLDNormalizer:
                 "totalUnmapped": len(occurrence_deltas),
                 "totalOccurrences": sum(occurrence_deltas.values()),
                 "enhancedProcessing": True,
-                "fuzzyMatchingEnabled": FUZZY_AVAILABLE
             }
         }
 
