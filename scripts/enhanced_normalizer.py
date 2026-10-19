@@ -12439,20 +12439,23 @@ class EnhancedDSLDNormalizer:
         return True
 
     def _is_single_constituent_iqm_ingredient(self, ing: Dict[str, Any]) -> bool:
-        """A dosed DSLD blend row whose only constituent is the row's own IQM identity.
+        """A dosed blend-signalled row whose only constituent is the row's own IQM identity.
 
         DSLD files some branded single extracts as ``category=blend`` with one
-        form: "Prosterol 320 mg" / Saw Palmetto Berry Extract (269286). When the
-        printed name and that one form both resolve to the same IQM ingredient,
-        the row is that ingredient at the printed dose, not a blend total. A
-        descriptor form, a different identity or a proprietary-blend owner
-        (Velositol) does not qualify.
+        form: "Prosterol 320 mg" / Saw Palmetto Berry Extract (269286). The same
+        holds for a name-only blend signal ("Clarinol CLA Complex" / Conjugated
+        Linoleic Acid). When the printed name and that one form both resolve to
+        the same IQM ingredient, the row is that ingredient at the printed dose,
+        not a blend total. A descriptor form, a different identity, a
+        proprietary-blend owner (Velositol) or a form DSLD itself files as a
+        blend (AuroraBlue / "Wildcrafted Blueberry Complex", 328293) does not
+        qualify.
         """
         if ing.get("nestedRows") or ing.get("isNestedIngredient") or not self._has_declared_mass(ing):
             return False
         forms = [f for f in ing.get("forms") or []
                  if isinstance(f, dict) and str(f.get("name") or "").strip()]
-        if len(forms) != 1:
+        if len(forms) != 1 or self._has_dsld_blend_group_signal(forms[0]):
             return False
 
         def identity(name, group=None):
