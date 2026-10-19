@@ -146,3 +146,33 @@ def write_release(build_root: Path, products: list[dict], *, db_version: str = "
     (build_root / "export_manifest.json").write_text(json.dumps({
         "schema_version": "2.5.0", "db_version": db_version, "generated_at": "2026-10-15T00:00:00Z",
         "quality_score_config_checksum": "sha256:cfg", "scoring_version": "4.5.0"}))
+
+
+def enriched_product(pid: str, *, brand: str = "Acme", forms: list[tuple[str, str]] | None = None,
+                     entry: str = "2021-05-01", off_market: int = 0) -> dict:
+    """Minimal enriched product: ingredient rows (canonical id, form) plus DSLD metadata."""
+    return {
+        "dsld_id": pid, "brand_name": brand, "product_name": f"Product {pid}", "entryDate": entry,
+        "offMarket": off_market, "form_factor_canonical": "capsule", "supplement_type": "single", "primary_type": "mineral",
+        "ingredient_quality_data": {"ingredients": [
+            {"canonical_id": cid, "standard_name": cid.title(), "name": cid, "matched_form": form, "form_id": form,
+             "bio_score": 10.0, "quantity": 100.0, "unit_normalized": "mg", "category": "mineral", "mapped": True,
+             "role_classification": "primary", "is_blend_header": False}
+            for cid, form in (forms or [("magnesium", "magnesium glycinate")])
+        ]},
+    }
+
+
+def write_enriched(scan_dir: Path, brand: str, products: list[dict]) -> Path:
+    stage_dir = scan_dir / f"output_{brand}_enriched" / "enriched"
+    stage_dir.mkdir(parents=True, exist_ok=True)
+    path = stage_dir / "enriched_batch_1.json"
+    data = json.dumps(products).encode()
+    path.write_bytes(data)
+    (stage_dir / ".stage_manifest.json").write_text(json.dumps({
+        "schema_version": "1.0.0", "stage": "enrich", "generated_at": "2026-10-19T00:00:00Z",
+        "processing_complete": True, "owned_files": [path.name],
+        "content_sha256": {path.name: hashlib.sha256(data).hexdigest()}, "run_id": f"run-{brand}",
+        "input_fingerprints": {"stage_code_sha256_v1": "code1", "reference_data_sha256_v1": "ref1"},
+    }))
+    return stage_dir

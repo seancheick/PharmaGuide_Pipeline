@@ -189,3 +189,26 @@ def test_new_candidate_run_keeps_history(roots):
     assert len(candidates) == 2
     assert first["latest"]["candidate"] in {run["run_key"] for run in candidates}
     assert si.gc(roots, keep=1) and si.current_build(roots) is not None
+
+
+def test_ingredient_index_builds_reuses_and_survives_core_refresh(roots, monkeypatch):
+    from dashboard_index_fixtures import enriched_product, write_enriched
+
+    write_enriched(roots.scan_dir, "Acme", [enriched_product("1"),
+                                            enriched_product("2", forms=[("magnesium", "magnesium oxide")])])
+    si.refresh(roots)
+    assert _reader(roots).ingredient_staleness()["built"] is False
+    si.refresh_ingredients(roots)
+    reader = _reader(roots)
+    assert set(reader.ingredient_frame()["matched_form"]) == {"magnesium glycinate", "magnesium oxide"}
+    assert set(reader.ingredient_frame("product_meta")["entry_date"]) == {"2021-05-01"}
+    assert reader.ingredient_staleness()["stale"] is False
+    parsed = []
+    real = si._parse_candidate_part
+    monkeypatch.setattr(si, "_parse_candidate_part", lambda source: parsed.append(source["part"]) or real(source))
+    si.refresh_ingredients(roots)
+    assert parsed == []                      # unchanged enriched batch reused
+    si.refresh(roots)                        # a core refresh keeps the ingredient index
+    assert len(_reader(roots).ingredient_frame()) == 2
+    write_enriched(roots.scan_dir, "Acme", [enriched_product("1")])
+    assert _reader(roots).ingredient_staleness()["changed"] == ["Acme"]

@@ -75,7 +75,7 @@ pio.templates["pharmaguide"] = go.layout.Template(
                "tickfont": {"color": TOKENS["muted"]}, "title": {"font": {"color": TOKENS["muted"]}}},
         hoverlabel={"bgcolor": TOKENS["surface"], "bordercolor": TOKENS["border_strong"],
                     "font": {"family": "Geist, system-ui, sans-serif", "color": TOKENS["ink"]}},
-        legend={"orientation": "h", "yanchor": "bottom", "y": 1.02, "x": 0, "font": {"color": TOKENS["muted"]}},
+        legend={"orientation": "h", "yanchor": "top", "y": -0.18, "x": 0, "font": {"color": TOKENS["muted"]}},
         bargap=0.25,
         title={"font": {"family": "Newsreader, Georgia, serif", "size": 17, "color": TOKENS["ink"]}, "x": 0},
     )

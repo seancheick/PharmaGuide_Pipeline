@@ -73,7 +73,7 @@ def render(ctx: shell.PageContext) -> None:
         ("Suppressed", f"{counts['suppressed']:,}", "Blocked for safety; ships with its reason"),
         ("Median score", f"{scored['total'].median():.1f}" if not scored.empty else "—", "Scored products"),
         ("Critical findings", f"{open_counts.get('critical', 0):,}", "Integrity defects and unexplained changes"),
-    ], per_row=7)
+    ], per_row=4)
 
     _health_strip(ctx)
 

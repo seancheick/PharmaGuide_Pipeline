@@ -182,6 +182,7 @@ def table(frame: pd.DataFrame, *, key: str, name: str, run_key: str | None = Non
     if caption:
         st.caption(caption)
     display = frame.copy()
+    display.columns = [str(column) for column in display.columns]  # a NaN label breaks Arrow in the browser
     for column in display.columns:  # list columns render as text, numbers stay numeric
         if display[column].map(lambda v: isinstance(v, (list, tuple)) or hasattr(v, "tolist")).any():
             display[column] = display[column].map(lambda v: ", ".join(map(str, list(v))) if v is not None and not isinstance(v, (str, float)) else v)

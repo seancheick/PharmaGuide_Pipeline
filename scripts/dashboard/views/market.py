@@ -75,7 +75,10 @@ def render(ctx: shell.PageContext) -> None:
         st.plotly_chart(fig, width="stretch", key="mk_cat")
         table(by_cat, key="mk_cat_table", name="category_composition", run_key=ctx.run_key, height=300)
     with tabs[2]:
-        tiers = products.groupby(["category", "verification_tier"], dropna=False).size().unstack(fill_value=0)
+        labelled = products.assign(category=products["category"].fillna("none"),
+                                   verification_tier=products["verification_tier"].fillna("none"))
+        tiers = labelled.groupby(["category", "verification_tier"]).size().unstack(fill_value=0)
+        tiers.columns = [str(column) for column in tiers.columns]  # NaN labels break Arrow serialization
         table(tiers.reset_index(), key="mk_ver", name="verification_by_category", run_key=ctx.run_key, height=420,
               caption="Verification tier by category; 'unknown' is the fail-open neutral, not a failure.")
     with tabs[3]:
@@ -87,12 +90,89 @@ def render(ctx: shell.PageContext) -> None:
             table(prevalence.sort_values("products", ascending=False), key="mk_add", name="additive_prevalence",
                   run_key=ctx.run_key, height=420)
     with tabs[4]:
-        st.info("Ingredient and form intelligence (form share by brand, dose vs RDA/UL by ingredient) uses the separate "
-                "ingredient index, which is not built in this version yet.", icon=":material/construction:")
-        refs = ctx.frame("dose_refs")
-        if not refs.empty:
-            st.caption("Available now from the core index: per-ingredient dose references recorded by the scorer.")
-            summary = refs.groupby("nutrient").agg(products=("dsld_id", "nunique"), median_pct_rda=("pct_rda", "median"),
-                                                   over_ul=("pct_ul", lambda s: int((s > 100).sum()))).reset_index()
-            table(summary.sort_values("products", ascending=False), key="mk_refs", name="dose_reference_summary",
-                  run_key=ctx.run_key, height=380)
+        _ingredients(ctx, products)
+
+
+def form_share(ingredients: pd.DataFrame, products: pd.DataFrame, canonical_id: str,
+               min_products: int = BRAND_MIN) -> pd.DataFrame:
+    """Share of each recorded form among a brand's products containing one ingredient."""
+    rows = ingredients[ingredients["canonical_id"] == canonical_id].drop_duplicates(["dsld_id", "matched_form"])
+    rows = rows.merge(products[["dsld_id", "brand_name"]], on="dsld_id", how="inner")
+    rows["form"] = rows["matched_form"].fillna("form not identified")
+    counts = rows.groupby(["brand_name", "form"])["dsld_id"].nunique().rename("products").reset_index()
+    brand_products = rows.groupby("brand_name")["dsld_id"].nunique()
+    counts["share_pct"] = (counts["products"] / counts["brand_name"].map(brand_products) * 100).round(1)
+    return counts[counts["brand_name"].map(brand_products) >= min_products]
+
+
+def _ingredients(ctx: shell.PageContext, products: pd.DataFrame) -> None:
+    status = ctx.index.ingredient_staleness()
+    if not status["built"]:
+        st.info("The ingredient index is not built yet. It is separate from the core index because it reads the "
+                "large enriched set.", icon=":material/construction:")
+        st.code("python -m scripts.dashboard.score_index refresh --ingredients", language="bash")
+        return
+    if status["stale"]:
+        st.warning(f"Ingredient index is stale ({len(status['changed'])} batch(es) changed since "
+                   f"{status['built_at']}). Run `refresh --ingredients`.", icon=":material/update:")
+    ingredients = ctx.index.ingredient_frame()
+    meta = ctx.index.ingredient_frame("product_meta")
+    named = ingredients.dropna(subset=["canonical_id"])
+    usage = named.groupby("canonical_id").agg(products=("dsld_id", "nunique"), name=("standard_name", "first")) \
+        .reset_index().sort_values("products", ascending=False)
+    labels = {r.canonical_id: f"{r.name or r.canonical_id} · {r.products:,} products" for r in usage.head(400).itertuples()}
+    if not labels:
+        st.info("No mapped ingredients in the ingredient index.")
+        return
+    picked = st.selectbox("Ingredient", list(labels), format_func=labels.get, key="mk_ing")
+    rows = ingredients[ingredients["canonical_id"] == picked]
+    with_scores = rows.drop_duplicates("dsld_id").merge(
+        products[["dsld_id", "total", "quality_score_status", "brand_name"]], on="dsld_id", how="left")
+    forms = rows.assign(form=rows["matched_form"].fillna("form not identified")).groupby("form").agg(
+        products=("dsld_id", "nunique"), mean_bio_score=("bio_score", "mean")).reset_index()
+    scored = with_scores[with_scores["quality_score_status"] == "scored"]
+    kpis([("Products", f"{rows['dsld_id'].nunique():,}", None),
+          ("Brands", f"{with_scores['brand_name'].nunique():,}", None),
+          ("Forms recorded", f"{rows['matched_form'].nunique():,}", None),
+          ("Median score", f"{scored['total'].median():.1f}" if not scored.empty else "—", "Scored products containing it")])
+    left, right = st.columns([3, 2])
+    with left:
+        share = form_share(ingredients, products, picked)
+        if share.empty:
+            st.caption(f"No brand has {BRAND_MIN}+ products with this ingredient.")
+        else:
+            top = share.groupby("brand_name")["products"].sum().sort_values(ascending=False).head(20).index
+            share = share[share["brand_name"].isin(top)]
+            fig = go.Figure()
+            for form, group in share.groupby("form"):
+                fig.add_bar(y=group["brand_name"], x=group["share_pct"], orientation="h", name=str(form)[:40],
+                            customdata=group["products"], marker={"line": {"color": TOKENS["surface"], "width": 2}},
+                            hovertemplate=f"{form}<br>%{{y}}: %{{x:.0f}}% (%{{customdata}} products)<extra></extra>")
+            fig.update_layout(barmode="stack", height=max(320, 24 * len(top) + 140),
+                              xaxis={"title": "% of the brand's products", "range": [0, 100]},
+                              title={"text": f"Form share by brand (brands with ≥ {BRAND_MIN} products)", "font": {"size": 14}})
+            st.plotly_chart(fig, width="stretch", key="mk_form_share")
+    with right:
+        table(forms.sort_values("products", ascending=False), key="mk_forms", name=f"forms_{picked}", run_key=ctx.run_key,
+              height=320, column_config={"mean_bio_score": st.column_config.NumberColumn(format="%.1f")})
+    refs = ctx.frame("dose_refs")
+    refs = refs[refs["canonical_id"] == picked] if not refs.empty else refs
+    if not refs.empty:
+        over = int((refs["pct_ul"] > 100).sum())
+        fig = go.Figure(go.Histogram(x=refs["pct_rda"].dropna().clip(upper=1000), nbinsx=50,
+                                     marker={"color": TOKENS["accent"]},
+                                     hovertemplate="%{x:.0f}% of RDA/AI: %{y:,} products<extra></extra>"))
+        fig.update_layout(height=260, xaxis={"title": "% of RDA/AI per day (capped at 1000%)"},
+                          title={"text": f"Dose vs reference — {over:,} rows above the upper limit", "font": {"size": 14}})
+        st.plotly_chart(fig, width="stretch", key="mk_dose_hist")
+    if not meta.empty:
+        years = meta.merge(rows[["dsld_id"]].drop_duplicates(), on="dsld_id", how="inner")
+        years["year"] = pd.to_datetime(years["entry_date"], errors="coerce").dt.year
+        years["market"] = years["off_market"].map({True: "off market", False: "on market"}).fillna("unknown")
+        trend = years.dropna(subset=["year"]).groupby(["year", "market"]).size().rename("products").reset_index()
+        fig = go.Figure()
+        for market_state, group in trend.groupby("market"):
+            fig.add_bar(x=group["year"], y=group["products"], name=market_state)
+        fig.update_layout(barmode="stack", height=260, xaxis={"title": "DSLD entry year"}, yaxis={"title": "products"},
+                          title={"text": "New labels by DSLD entry year", "font": {"size": 14}})
+        st.plotly_chart(fig, width="stretch", key="mk_years")

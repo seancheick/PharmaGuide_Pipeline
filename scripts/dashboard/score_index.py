@@ -134,6 +134,17 @@ SLIM_SCHEMA = _schema(("dsld_id", _S), ("slim_json", _S))
 LABEL_SCHEMA = _schema(("dsld_id", _S), ("record_json", _S))
 ADDITIVE_SCHEMA = _schema(("dsld_id", _S), ("rule_id", _S), ("tier", _S), ("penalty", _F), ("labels", _LS))
 
+INGREDIENT_SCHEMA = _schema(
+    ("dsld_id", _S), ("canonical_id", _S), ("standard_name", _S), ("label_name", _S), ("matched_form", _S),
+    ("form_id", _S), ("bio_score", _F), ("quantity", _F), ("unit", _S), ("category", _S), ("mapped", _B),
+    ("role", _S), ("is_blend", _B), ("match_tier", _S),
+)
+PRODUCT_META_SCHEMA = _schema(
+    ("dsld_id", _S), ("brand_name", _S), ("product_name", _S), ("entry_date", _S), ("off_market", _B),
+    ("discontinued_date", _S), ("form_factor", _S), ("supplement_type", _S), ("primary_type", _S), ("source_part", _S),
+)
+INGREDIENT_TABLES = {"ingredients": INGREDIENT_SCHEMA, "product_meta": PRODUCT_META_SCHEMA}
+
 TABLES: dict[str, pa.Schema] = {
     "products": PRODUCTS_SCHEMA,
     "ledgers": LEDGER_SCHEMA,
@@ -439,13 +450,45 @@ def project_product(product: dict[str, Any], *, source_part: str, blob_sha256: s
     }
 
 
+def project_enriched(product: dict[str, Any], *, source_part: str) -> dict[str, list[dict[str, Any]]]:
+    """Ingredient and DSLD metadata rows from one enriched product (recorded values only)."""
+    pid = str(product.get("dsld_id") or product.get("id"))
+    quality = product.get("ingredient_quality_data") or {}
+    rows = []
+    for item in quality.get("ingredients") or []:
+        if not isinstance(item, dict) or item.get("is_blend_header"):
+            continue
+        rows.append({
+            "dsld_id": pid, "canonical_id": _text(item.get("canonical_id")), "standard_name": _text(item.get("standard_name")),
+            "label_name": _text(item.get("name")), "matched_form": _text(item.get("matched_form")),
+            "form_id": _text(item.get("form_id")), "bio_score": _num(item.get("bio_score")),
+            "quantity": _num(item.get("quantity")), "unit": _text(item.get("unit_normalized") or item.get("unit")),
+            "category": _text(item.get("category")), "mapped": bool(item.get("mapped")),
+            "role": _text(item.get("role_classification")), "is_blend": bool(item.get("is_proprietary_blend")),
+            "match_tier": _text(item.get("match_tier")),
+        })
+    off_market = product.get("offMarket")
+    meta = {
+        "dsld_id": pid, "brand_name": _text(product.get("brand_name") or product.get("brandName")),
+        "product_name": _text(product.get("product_name") or product.get("fullName")),
+        "entry_date": _text(product.get("entryDate")),
+        "off_market": bool(off_market) if off_market is not None else None,
+        "discontinued_date": _text(product.get("discontinuedDate")),
+        "form_factor": _text(product.get("form_factor_canonical") or product.get("form_factor")),
+        "supplement_type": _text(product.get("supplement_type")), "primary_type": _text(product.get("primary_type")),
+        "source_part": source_part,
+    }
+    return {"ingredients": rows, "product_meta": [meta]}
+
+
 def _merge(into: dict[str, list[dict[str, Any]]], rows: dict[str, list[dict[str, Any]]]) -> None:
     for table, items in rows.items():
         into.setdefault(table, []).extend(items)
 
 
-def _write_tables(run_dir: Path, part: str, rows: dict[str, list[dict[str, Any]]]) -> None:
-    for table, schema in TABLES.items():
+def _write_tables(run_dir: Path, part: str, rows: dict[str, list[dict[str, Any]]],
+                  tables: dict[str, pa.Schema] | None = None) -> None:
+    for table, schema in (tables or TABLES).items():
         target = run_dir / table / f"{part}.parquet"
         target.parent.mkdir(parents=True, exist_ok=True)
         pq.write_table(pa.Table.from_pylist(rows.get(table, []), schema=schema), target)
@@ -481,14 +524,14 @@ def default_paths(scan_dir: str | Path | None = None, build_root: str | Path | N
     )
 
 
-def _scored_dirs(scan_dir: Path) -> list[Path]:
-    return sorted(path for path in scan_dir.glob("output_*_scored/scored") if path.is_dir())
+_STAGE_GLOBS = {"score": ("output_*_scored/scored", "_scored"), "enrich": ("output_*_enriched/enriched", "_enriched")}
 
 
-def candidate_sources(scan_dir: Path) -> list[dict[str, Any]]:
-    """One record per scored batch directory; reads manifests only (cheap)."""
+def candidate_sources(scan_dir: Path, stage: str = "score") -> list[dict[str, Any]]:
+    """One record per stage batch directory; reads manifests only (cheap)."""
+    pattern, suffix = _STAGE_GLOBS[stage]
     sources = []
-    for stage_dir in _scored_dirs(scan_dir):
+    for stage_dir in sorted(path for path in scan_dir.glob(pattern) if path.is_dir()):
         manifest_path = stage_dir / MANIFEST_NAME
         manifest: dict[str, Any] = {}
         if manifest_path.exists():
@@ -501,10 +544,10 @@ def candidate_sources(scan_dir: Path) -> list[dict[str, Any]]:
         else:  # no manifest: fall back to (size, mtime_ns) of the files themselves
             identity = _canonical(sorted((p.name, p.stat().st_size, p.stat().st_mtime_ns)
                                          for p in stage_dir.glob("*.json")))
-        part = stage_dir.parent.name.removeprefix("output_").removesuffix("_scored")
+        part = stage_dir.parent.name.removeprefix("output_").removesuffix(suffix)
         fingerprints = manifest.get("input_fingerprints") or {}
         sources.append({
-            "part": part, "stage_dir": str(stage_dir), "has_manifest": bool(manifest.get("content_sha256")),
+            "part": part, "stage": stage, "stage_dir": str(stage_dir), "has_manifest": bool(manifest.get("content_sha256")),
             "cache_key": _sha(identity)[:16], "run_id": manifest.get("run_id"),
             "generated_at": manifest.get("generated_at"),
             "stage_code": fingerprints.get("stage_code_sha256_v1"),
@@ -609,8 +652,10 @@ def _run_key(plane: str, *parts: Any) -> str:
 
 def _parse_candidate_part(source: dict[str, Any]) -> tuple[dict[str, list], int]:
     stage_dir = Path(source["stage_dir"])
+    stage = source.get("stage", "score")
+    project = project_product if stage == "score" else project_enriched
     if source["has_manifest"]:
-        files = select_stage_input_files(stage_dir, "score", require_manifest=True)
+        files = select_stage_input_files(stage_dir, stage, require_manifest=True)
     else:
         files = sorted(p for p in stage_dir.glob("*.json") if not p.name.startswith("."))
     rows: dict[str, list] = {}
@@ -620,7 +665,7 @@ def _parse_candidate_part(source: dict[str, Any]) -> tuple[dict[str, list], int]
         if isinstance(products, dict):
             products = products.get("products") or []
         for product in products:
-            _merge(rows, project_product(product, source_part=source["part"]))
+            _merge(rows, project(product, source_part=source["part"]))
             count += 1
     return rows, count
 
@@ -649,7 +694,6 @@ def refresh(paths: IndexPaths, *, progress: Callable[[str, float], None] | None 
         reuse_previous = previous if prev_meta.get("projection_fingerprint") == PROJECTION_FINGERPRINT else None
         build_id = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S%fZ")
         staging = paths.builds / f".staging-{build_id}"
-        final = paths.builds / build_id
         staging.mkdir(parents=True, exist_ok=False)
         try:
             # Carry every historical run forward (immutable, hard-linked).
@@ -657,6 +701,8 @@ def refresh(paths: IndexPaths, *, progress: Callable[[str, float], None] | None 
             for run in runs:
                 _link_tree(previous / "runs" / run["run_key"], staging / "runs" / run["run_key"])
             known = {run["run_key"] for run in runs}
+            if previous is not None and (previous / "ingredients").exists():
+                _link_tree(previous / "ingredients", staging / "ingredients")
 
             if reuse_previous is None:
                 # Re-project the latest runs with the current code; older runs keep their rows.
@@ -686,17 +732,14 @@ def refresh(paths: IndexPaths, *, progress: Callable[[str, float], None] | None 
                 "latest": {"candidate": (candidate or {}).get("run_key"), "release": (release or {}).get("run_key")},
                 "runs": runs,
                 "pillar_max": pillar_maxima(),
+                **{key: prev_meta[key] for key in ("ingredient_parts", "ingredients_built_at",
+                                                    "ingredient_projection_fingerprint") if key in prev_meta},
             }
             say("Evaluating findings", 0.9)
             from scripts.dashboard import findings_rules  # local import: rules read the staged tables
             meta["findings"] = findings_rules.evaluate_build(staging, meta, previous)
-            _validate(staging, meta)
             meta["refresh_seconds"] = round(time.time() - started, 1)
-            (staging / "index_meta.json").write_text(json.dumps(meta, indent=2, sort_keys=True), encoding="utf-8")
-            staging.rename(final)
-            tmp = paths.current_pointer.with_suffix(".json.tmp")
-            tmp.write_text(json.dumps({"build_id": build_id}), encoding="utf-8")
-            os.replace(tmp, paths.current_pointer)
+            _publish(paths, staging, meta)
             _write_status(paths, {"ok": True, "build_id": build_id, "at": _now(),
                                   "seconds": meta["refresh_seconds"]})
             say("Done", 1.0)
@@ -817,6 +860,58 @@ def _write_status(paths: IndexPaths, status: dict[str, Any]) -> None:
     os.replace(tmp, paths.status_file)
 
 
+def _publish(paths: IndexPaths, staging: Path, meta: dict[str, Any]) -> None:
+    """Validate, write metadata, move the staged build into place and swap the pointer."""
+    _validate(staging, meta)
+    (staging / "index_meta.json").write_text(json.dumps(meta, indent=2, sort_keys=True), encoding="utf-8")
+    staging.rename(paths.builds / meta["build_id"])
+    tmp = paths.current_pointer.with_suffix(".json.tmp")
+    tmp.write_text(json.dumps({"build_id": meta["build_id"]}), encoding="utf-8")
+    os.replace(tmp, paths.current_pointer)
+
+
+def refresh_ingredients(paths: IndexPaths, *, progress: Callable[[str, float], None] | None = None) -> dict[str, Any]:
+    """Rebuild the separate ingredient index (enriched JSON) for changed batches only."""
+    say = progress or (lambda message, fraction: None)
+    started = time.time()
+    with _refresh_lock(paths.cache_root):
+        previous = current_build(paths)
+        if previous is None:
+            raise RuntimeError("run `refresh` before `refresh --ingredients`")
+        meta = _load_meta(previous)
+        build_id = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S%fZ")
+        staging = paths.builds / f".staging-{build_id}"
+        try:
+            _link_tree(previous, staging)
+            shutil.rmtree(staging / "ingredients", ignore_errors=True)
+            reuse = meta.get("ingredient_projection_fingerprint") == PROJECTION_FINGERPRINT
+            prev_parts = meta.get("ingredient_parts") or {}
+            parts: dict[str, dict] = {}
+            sources = candidate_sources(paths.scan_dir, "enrich")
+            for index, source in enumerate(sources):
+                say(f"Ingredients: {source['part']}", index / max(len(sources), 1))
+                cached = prev_parts.get(source["part"])
+                if reuse and cached and cached["cache_key"] == source["cache_key"]:
+                    for table in INGREDIENT_TABLES:
+                        dest = staging / "ingredients" / table / f"{source['part']}.parquet"
+                        dest.parent.mkdir(parents=True, exist_ok=True)
+                        os.link(previous / "ingredients" / table / f"{source['part']}.parquet", dest)
+                    parts[source["part"]] = cached
+                    continue
+                rows, count = _parse_candidate_part(source)
+                _write_tables(staging / "ingredients", source["part"], rows, INGREDIENT_TABLES)
+                parts[source["part"]] = {**source, "products": count}
+            meta.update({"build_id": build_id, "built_at": _now(), "ingredient_parts": parts,
+                         "ingredients_built_at": _now(), "ingredient_projection_fingerprint": PROJECTION_FINGERPRINT,
+                         "ingredient_refresh_seconds": round(time.time() - started, 1)})
+            _publish(paths, staging, meta)
+            say("Done", 1.0)
+            return meta
+        except Exception:
+            shutil.rmtree(staging, ignore_errors=True)
+            raise
+
+
 def backfill(paths: IndexPaths, db_paths: Iterable[Path]) -> dict[str, Any]:
     """Add older catalogs as pillar-totals-only runs (deduplicated), as a new build."""
     with _refresh_lock(paths.cache_root):
@@ -853,12 +948,7 @@ def backfill(paths: IndexPaths, db_paths: Iterable[Path]) -> dict[str, Any]:
             known.add(run_key)
             added.append(run)
         meta.update({"build_id": build_id, "built_at": _now()})
-        _validate(staging, meta)
-        (staging / "index_meta.json").write_text(json.dumps(meta, indent=2, sort_keys=True), encoding="utf-8")
-        staging.rename(paths.builds / build_id)
-        tmp = paths.current_pointer.with_suffix(".json.tmp")
-        tmp.write_text(json.dumps({"build_id": build_id}), encoding="utf-8")
-        os.replace(tmp, paths.current_pointer)
+        _publish(paths, staging, meta)
         return {"added": added, "build_id": build_id}
 
 
@@ -919,6 +1009,24 @@ class IndexReader:
         out["slim"] = json.loads(slim[0]) if slim else None
         return out
 
+    def ingredient_frame(self, table: str = "ingredients", columns: list[str] | None = None):
+        """Ingredient index tables (separate from runs); empty when not built."""
+        import pandas as pd
+        directory = self.build / "ingredients" / table if self.build else None
+        if directory is None or not directory.exists():
+            return pd.DataFrame(columns=columns or INGREDIENT_TABLES[table].names)
+        return pds.dataset(str(directory), format="parquet", schema=INGREDIENT_TABLES[table]).to_table(
+            columns=columns).to_pandas()
+
+    def ingredient_staleness(self) -> dict[str, Any]:
+        built = self.meta.get("ingredient_parts") or {}
+        now = {s["part"]: s["cache_key"] for s in candidate_sources(self.paths.scan_dir, "enrich")}
+        changed = sorted(part for part, key in now.items() if (built.get(part) or {}).get("cache_key") != key)
+        return {"built": bool(built), "built_at": self.meta.get("ingredients_built_at"), "changed": changed,
+                "removed": sorted(set(built) - set(now)),
+                "stale": not built or bool(changed) or bool(set(built) - set(now))
+                or self.meta.get("ingredient_projection_fingerprint") != PROJECTION_FINGERPRINT}
+
     def label_records(self) -> list[dict[str, Any]]:
         """Release label-trust inputs for ``data_loader.compute_label_trust``."""
         run_key = self.latest("release")
@@ -956,12 +1064,18 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--build-root", help="release dist dir (default scripts/dist)")
     parser.add_argument("--cache-root", help="index cache dir (default scripts/.cache/dashboard)")
     parser.add_argument("--keep", type=int, default=2, help="builds kept by gc")
+    parser.add_argument("--ingredients", action="store_true",
+                        help="with refresh: also rebuild the separate ingredient index (enriched JSON)")
     args = parser.parse_args(argv)
     paths = default_paths(args.scan_dir, args.build_root, args.cache_root)
     if args.command == "refresh":
         meta = refresh(paths, progress=lambda message, fraction: print(f"[{fraction:4.0%}] {message}", flush=True))
         print(json.dumps({"build_id": meta["build_id"], "latest": meta["latest"],
                           "seconds": meta["refresh_seconds"], "findings": meta.get("findings")}, indent=2))
+        if args.ingredients:
+            meta = refresh_ingredients(paths, progress=lambda message, fraction: print(f"[{fraction:4.0%}] {message}", flush=True))
+            print(json.dumps({"build_id": meta["build_id"], "ingredient_seconds": meta["ingredient_refresh_seconds"],
+                              "ingredient_parts": len(meta["ingredient_parts"])}, indent=2))
     elif args.command == "backfill":
         print(json.dumps(backfill(paths, [Path(p) for p in args.databases]), indent=2, default=str))
     elif args.command == "status":

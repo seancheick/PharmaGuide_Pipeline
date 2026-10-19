@@ -163,3 +163,14 @@ def test_no_retired_v3_concepts_in_dashboard():
                          r'score_100_equivalent|blob_analytics|product_catalog|filter_product_catalog|score_quality_80')
     for path, text in _sources().items():
         assert not retired.search(text), f"{path.name}: {retired.search(text).group(0)}"
+
+
+def test_form_share_counts_each_brand_product_once():
+    ingredients = pd.DataFrame(
+        [{"dsld_id": str(i), "canonical_id": "magnesium",
+          "matched_form": "magnesium oxide" if i < 3 else "magnesium glycinate"} for i in range(6)]
+        + [{"dsld_id": "0", "canonical_id": "zinc", "matched_form": "zinc gluconate"}])
+    products = pd.DataFrame({"dsld_id": [str(i) for i in range(6)], "brand_name": ["A"] * 6})
+    share = market.form_share(ingredients, products, "magnesium", min_products=5).set_index("form")
+    assert share.loc["magnesium oxide", "share_pct"] == 50.0 and share.loc["magnesium glycinate", "products"] == 3
+    assert market.form_share(ingredients, products, "magnesium", min_products=7).empty
