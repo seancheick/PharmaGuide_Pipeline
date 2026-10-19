@@ -59,10 +59,9 @@ def _render_release_gate(data):
         )
     if metrics.get("enriched_only_count", 0) > 0:
         reasons.append(f"{metrics['enriched_only_count']} enriched-only products detected")
-    if metrics.get("blocked_count", 0) > 0:
-        warnings.append(f"{metrics['blocked_count']} BLOCKED products in current export")
-    if metrics["safety_counts"].get("has_banned_substance", 0) > 0:
-        warnings.append(f"{metrics['safety_counts']['has_banned_substance']} products contain banned substances")
+    # Banned/recalled products always ship with their reason (AGENTS.md), so they are
+    # context here, never a review trigger.
+    shipped_blocked = metrics.get("blocked_count", 0)
 
     build_age_days = None
     if data.latest_export_at:
@@ -81,6 +80,8 @@ def _render_release_gate(data):
     else:
         status_badge("GO", "pass")
         st.success("All current gate checks are within configured thresholds.")
+    if shipped_blocked:
+        st.caption(f"{shipped_blocked} blocked products ship with their safety reason, as required.")
 
 
 def _render_latest_batch(data):

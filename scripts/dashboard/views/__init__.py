@@ -1,12 +1,1 @@
-from .inspector import render_inspector
-from .health import render_health
-from .quality import render_quality
-from .observability import render_observability
-from .diff import render_diff
-from .batch_diff import render_batch_diff
-from .intelligence import render_intelligence
-from .audit_caers import render_audit_caers
-from .safety_copy import render_safety_copy
-from .audit_pillars import render_pillar_audit, render_suppression_audit
-from .scoring_integrity import render_scoring_integrity
-from .module_health import render_module_health
+"""Dashboard pages; each new page module exposes render(ctx). Older helpers keep render_<name>(data)."""

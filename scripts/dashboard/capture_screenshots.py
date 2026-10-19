@@ -9,15 +9,10 @@ from pathlib import Path
 
 DEFAULT_CHROME = Path("/Applications/Google Chrome.app/Contents/MacOS/Google Chrome")
 DEFAULT_OUTPUT = Path("docs/plans/dashboard-screenshots")
-VIEW_SLUGS = [
-    "product-inspector",
-    "pipeline-health",
-    "data-quality",
-    "observability",
-    "release-diff",
-    "batch-diff",
-    "intelligence",
-]
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+from scripts.dashboard.navigation import PAGES  # noqa: E402
+
+VIEW_SLUGS = [page.slug for page in PAGES]
 
 
 def parse_args() -> argparse.Namespace:
@@ -52,7 +47,7 @@ def parse_args() -> argparse.Namespace:
 def capture_view(chrome_binary: Path, base_url: str, output_dir: Path, window_size: str, view: str) -> None:
     screenshot_path = output_dir / f"{view}.png"
     user_data_dir = output_dir / f".chrome-profile-{view}"
-    view_url = f"{base_url}/?view={urllib.parse.quote(view)}"
+    view_url = f"{base_url}/{urllib.parse.quote(view)}"
     cmd = [
         str(chrome_binary),
         "--headless",

@@ -16,6 +16,7 @@ import streamlit as st
 
 from scripts.scoring_v4.config_registry import all_config_provenance
 from scripts.scoring_v4.quality_score_config import config as quality_score_config
+from scripts.dashboard.score_index import IndexReader, default_paths
 
 
 DEFAULT_ALERT_THRESHOLDS = {
@@ -31,7 +32,6 @@ DEFAULT_ALERT_THRESHOLDS = {
     "max_zero_pillar_pct": 5.0,   # % of scored products carrying any 0-valued pillar
 }
 
-VERDICT_ORDER = ["SAFE", "CAUTION", "POOR", "UNSAFE", "BLOCKED", "NOT_SCORED"]
 SAFETY_COUNT_KEYS = [
     "has_banned_substance",
     "has_recalled_ingredient",
@@ -87,8 +87,8 @@ class DashboardData:
     build_history: list[dict[str, Any]] = field(default_factory=list)
     alert_thresholds: dict[str, Any] = field(default_factory=dict)
     shared_metrics: dict[str, Any] = field(default_factory=dict)
-    blob_analytics: dict[str, Any] = field(default_factory=dict)
-    product_catalog: pd.DataFrame = field(default_factory=pd.DataFrame)
+    label_trust: dict[str, Any] = field(default_factory=dict)
+    index: Any = None  # score_index.IndexReader over the current dashboard index build
 
     caers_signals: dict[str, Any] = field(default_factory=dict)
     caers_metadata: dict[str, Any] = field(default_factory=dict)
@@ -346,8 +346,20 @@ def _extract_dataset_from_path(text: str) -> str | None:
     return None
 
 
+BATCH_HISTORY_LIMIT = 40  # newest logs only; 399 full logs took ~14 s to parse on every load
+
+
 def _parse_batch_summary_text(path: Path) -> dict[str, Any]:
-    lines = path.read_text(errors="replace").splitlines()
+    stat = path.stat()
+    return _parse_batch_summary_cached(str(path), stat.st_size, stat.st_mtime_ns)
+
+
+@st.cache_data(show_spinner=False, max_entries=256)
+def _parse_batch_summary_cached(path_text: str, size: int, mtime_ns: int) -> dict[str, Any]:
+    """Parse one batch log; cached per (path, size, mtime) so unchanged logs are read once."""
+    path = Path(path_text)
+    text = path.read_text(errors="replace")
+    lines = text.splitlines()
     info: dict[str, Any] = {
         "path": path,
         "name": path.name,
@@ -380,7 +392,7 @@ def _parse_batch_summary_text(path: Path) -> dict[str, Any]:
             dataset_state["errors"].append(message)
 
     if not info["datasets"]:
-        dataset = _extract_dataset_from_path(path.read_text(errors="replace")) or "Unknown"
+        dataset = _extract_dataset_from_path(text) or "Unknown"
         errors = info["summary"].get("errors", 0)
         info["datasets"][dataset] = {
             "status": "FAILED" if errors else "SUCCESS",
@@ -410,216 +422,13 @@ def _discover_batch_history(scan_dir: Path) -> tuple[list[Path], list[dict[str, 
     if parent_logs_dir.exists() and parent_logs_dir != scan_dir / "logs":
         legacy_logs = sorted(parent_logs_dir.glob("batch_*_log.txt"))
     all_files = batch_files + report_files + batch_logs + legacy_logs
-    history = [_parse_batch_summary_text(path) for path in all_files]
+    newest = sorted(all_files, key=lambda path: path.stat().st_mtime_ns, reverse=True)[:BATCH_HISTORY_LIMIT]
+    history = [_parse_batch_summary_text(path) for path in newest]
     history.sort(key=lambda item: item.get("timestamp") or datetime.min.replace(tzinfo=timezone.utc), reverse=True)
     sorted_files = [item["path"] for item in history]
     return sorted_files, history
 
 
-
-
-def _db_lookup(db_conn: sqlite3.Connection | None) -> dict[str, dict[str, Any]]:
-    if db_conn is None:
-        return {}
-    columns = {
-        row["name"]
-        for row in db_conn.execute("PRAGMA table_info(products_core)").fetchall()
-    }
-
-    def select_expr(column: str, alias: str | None = None) -> str:
-        target = alias or column
-        return f"{column} AS {target}" if column in columns else f"NULL AS {target}"
-
-    query = f"""
-        SELECT
-            {select_expr('dsld_id')},
-            {select_expr('product_name')},
-            {select_expr('brand_name')},
-            {select_expr('score_100_equivalent')},
-            {select_expr('grade')},
-            {select_expr('verdict')},
-            {select_expr('supplement_type')},
-            {select_expr('mapped_coverage')},
-            {select_expr('has_banned_substance')},
-            {select_expr('has_recalled_ingredient')},
-            {select_expr('has_harmful_additives')},
-            {select_expr('has_allergen_risks')}
-        FROM products_core
-    """
-    rows = db_conn.execute(query).fetchall()
-    return {
-        str(row["dsld_id"]): {
-            "dsld_id": str(row["dsld_id"]),
-            "product_name": row["product_name"],
-            "brand_name": row["brand_name"],
-            "score": row["score_100_equivalent"],
-            "grade": row["grade"],
-            "verdict": row["verdict"],
-            "supplement_type": row["supplement_type"],
-            "mapped_coverage": row["mapped_coverage"],
-            "has_banned_substance": bool(row["has_banned_substance"]),
-            "has_recalled_ingredient": bool(row["has_recalled_ingredient"]),
-            "has_harmful_additives": bool(row["has_harmful_additives"]),
-            "has_allergen_risks": bool(row["has_allergen_risks"]),
-        }
-        for row in rows
-    }
-
-
-def _load_product_catalog(db_conn: sqlite3.Connection | None) -> pd.DataFrame:
-    if db_conn is None:
-        return pd.DataFrame()
-
-    columns = {
-        row["name"]
-        for row in db_conn.execute("PRAGMA table_info(products_core)").fetchall()
-    }
-
-    def select_expr(column: str, alias: str | None = None) -> str:
-        target = alias or column
-        return f"{column} AS {target}" if column in columns else f"NULL AS {target}"
-
-    query = """
-        SELECT
-            {dsld_id},
-            {product_name},
-            {brand_name},
-            {supplement_type},
-            {primary_category},
-            {verdict},
-            {score_100_equivalent},
-            {score_ingredient_quality},
-            {score_ingredient_quality_max},
-            {mapped_coverage},
-            {is_non_gmo},
-            {contains_omega3},
-            {contains_probiotics},
-            {has_banned_substance},
-            {has_recalled_ingredient},
-            {has_harmful_additives},
-            {has_allergen_risks},
-            {score_safety_purity},
-            {score_safety_purity_max},
-            {score_evidence_research},
-            {score_evidence_research_max},
-            {score_brand_trust},
-            {score_brand_trust_max},
-            {is_trusted_manufacturer},
-            {has_third_party_testing},
-            {has_full_disclosure},
-            {blocking_reason},
-            {quality_score_v4_100},
-            {quality_score_status},
-            {v4_module},
-            {v4_confidence},
-            {pillar_formulation_v4},
-            {pillar_dose_v4},
-            {pillar_evidence_v4},
-            {pillar_transparency_v4},
-            {pillar_verification_v4},
-            {pillar_safety_hygiene_v4}
-        FROM products_core
-    """.format(
-        dsld_id=select_expr("dsld_id"),
-        product_name=select_expr("product_name"),
-        brand_name=select_expr("brand_name"),
-        supplement_type=select_expr("supplement_type"),
-        primary_category=select_expr("primary_category"),
-        verdict=select_expr("verdict"),
-        score_100_equivalent=select_expr("score_100_equivalent", "score"),
-        score_ingredient_quality=select_expr("score_ingredient_quality", "section_a_score"),
-        score_ingredient_quality_max=select_expr("score_ingredient_quality_max", "section_a_max"),
-        mapped_coverage=select_expr("mapped_coverage"),
-        is_non_gmo=select_expr("is_non_gmo"),
-        contains_omega3=select_expr("contains_omega3"),
-        contains_probiotics=select_expr("contains_probiotics"),
-        has_banned_substance=select_expr("has_banned_substance"),
-        has_recalled_ingredient=select_expr("has_recalled_ingredient"),
-        has_harmful_additives=select_expr("has_harmful_additives"),
-        has_allergen_risks=select_expr("has_allergen_risks"),
-        score_safety_purity=select_expr("score_safety_purity", "section_b_score"),
-        score_safety_purity_max=select_expr("score_safety_purity_max", "section_b_max"),
-        score_evidence_research=select_expr("score_evidence_research", "section_c_score"),
-        score_evidence_research_max=select_expr("score_evidence_research_max", "section_c_max"),
-        score_brand_trust=select_expr("score_brand_trust", "section_d_score"),
-        score_brand_trust_max=select_expr("score_brand_trust_max", "section_d_max"),
-        is_trusted_manufacturer=select_expr("is_trusted_manufacturer"),
-        has_third_party_testing=select_expr("has_third_party_testing"),
-        has_full_disclosure=select_expr("has_full_disclosure"),
-        blocking_reason=select_expr("blocking_reason"),
-        # V4 canonical score, status, routing + six pillar component scores.
-        quality_score_v4_100=select_expr("quality_score_v4_100", "score_v4"),
-        quality_score_status=select_expr("quality_score_status"),
-        v4_module=select_expr("v4_module"),
-        v4_confidence=select_expr("v4_confidence"),
-        pillar_formulation_v4=select_expr("pillar_formulation_v4"),
-        pillar_dose_v4=select_expr("pillar_dose_v4"),
-        pillar_evidence_v4=select_expr("pillar_evidence_v4"),
-        pillar_transparency_v4=select_expr("pillar_transparency_v4"),
-        pillar_verification_v4=select_expr("pillar_verification_v4"),
-        pillar_safety_hygiene_v4=select_expr("pillar_safety_hygiene_v4"),
-    )
-    frame = pd.read_sql_query(query, db_conn)
-    if frame.empty:
-        return frame
-    frame["dsld_id"] = frame["dsld_id"].astype(str)
-    return frame
-
-
-def filter_product_catalog(data: DashboardData) -> pd.DataFrame:
-    frame = data.product_catalog.copy()
-    if frame.empty:
-        return frame
-
-    dataset_scope = st.session_state.get("dataset_filter", "All Datasets")
-    if dataset_scope != "All Datasets":
-        frame = frame[
-            frame["brand_name"].fillna("").str.contains(str(dataset_scope), case=False, na=False)
-        ]
-
-    brand_filter = st.session_state.get("brand_filter") or []
-    if brand_filter:
-        frame = frame[frame["brand_name"].isin(brand_filter)]
-
-    supp_type_filter = st.session_state.get("supplement_type_filter") or []
-    if supp_type_filter:
-        frame = frame[frame["supplement_type"].isin(supp_type_filter)]
-
-    primary_category_filter = st.session_state.get("primary_category_filter") or []
-    if primary_category_filter:
-        frame = frame[frame["primary_category"].isin(primary_category_filter)]
-
-    verdict_filter = st.session_state.get("verdict_filter") or []
-    if verdict_filter:
-        frame = frame[frame["verdict"].isin(verdict_filter)]
-
-    min_score = float(st.session_state.get("min_score_filter", 0.0) or 0.0)
-    frame = frame[frame["score"].fillna(0.0) >= min_score]
-
-    if st.session_state.get("only_harmful_flags", False):
-        frame = frame[frame["has_harmful_additives"] == 1]
-
-    if st.session_state.get("only_omega_bonus_candidates", False):
-        frame = frame[frame["contains_omega3"] == 1]
-
-    if st.session_state.get("only_non_gmo_verified", False):
-        frame = frame[frame["is_non_gmo"] == 1]
-
-    # Mirror production: safety-suppressed products are hidden from users, so
-    # exclude them from scored views by default. The Suppression Audit view
-    # reads the unfiltered catalog (data.product_catalog) to inspect them.
-    if not st.session_state.get("include_suppressed", False) and "quality_score_status" in frame.columns:
-        frame = frame[frame["quality_score_status"].fillna("scored") != "suppressed_safety"]
-
-    module_filter = st.session_state.get("v4_module_filter") or []
-    if module_filter and "v4_module" in frame.columns:
-        frame = frame[frame["v4_module"].isin(module_filter)]
-
-    confidence_filter = st.session_state.get("v4_confidence_filter") or []
-    if confidence_filter and "v4_confidence" in frame.columns:
-        frame = frame[frame["v4_confidence"].isin(confidence_filter)]
-
-    return frame.reset_index(drop=True)
 
 
 _LABEL_TRUST_FORM_STATES = frozenset({
@@ -775,11 +584,14 @@ def _label_trust_breakdown_rows(
     return rows
 
 
-def _compute_blob_analytics(
-    detail_blobs_dir: Path | None,
-    db_conn: sqlite3.Connection | None,
+def compute_label_trust(
+    records: Any,
     mismatch_summary_path: Path | None = None,
 ) -> dict[str, Any]:
+    """Release label-trust metrics from per-product records (``score_index.label_trust_record``).
+
+    Records come from the dashboard index, so a page load never scans detail blobs.
+    """
     (
         mismatch_outcomes,
         mismatch_categories,
@@ -787,91 +599,32 @@ def _compute_blob_analytics(
         rejected_mismatch_categories,
         invalid_mismatch_summary,
     ) = _load_label_mismatch_summary(mismatch_summary_path)
-    if detail_blobs_dir is None or not detail_blobs_dir.exists():
-        label_trust = _empty_label_trust_metrics()
-        label_trust["mismatch_outcomes"] = mismatch_outcomes
-        label_trust["mismatch_categories"] = mismatch_categories
-        label_trust["rejected_mismatch_outcomes"] = rejected_mismatch_outcomes
-        label_trust["rejected_mismatch_categories"] = rejected_mismatch_categories
-        label_trust["invalid_mismatch_summary"] = invalid_mismatch_summary
-        return {
-            "ingredient_forms": [],
-            "ingredient_usage": [],
-            "low_quality_ingredients": [],
-            "bonus_frequency": [],
-            "penalty_frequency": [],
-            "driver_impacts": [],
-            "ingredient_products": {},
-            "completeness_records": [],
-            "label_trust": label_trust,
-        }
-
-    lookup = _db_lookup(db_conn)
-    form_stats: dict[tuple[str, str], dict[str, Any]] = {}
-    ingredient_usage: Counter[str] = Counter()
-    quality_scores: defaultdict[str, list[float]] = defaultdict(list)
-    bonus_frequency: Counter[str] = Counter()
-    penalty_frequency: Counter[str] = Counter()
-    driver_impacts: defaultdict[str, list[float]] = defaultdict(list)
-    ingredient_products: defaultdict[str, list[dict[str, Any]]] = defaultdict(list)
-    risk_stats: defaultdict[str, dict[str, Any]] = defaultdict(
-        lambda: {
-            "occurrences": 0,
-            "risk_product_count": 0,
-            "unsafe_product_count": 0,
-            "banned_hits": 0,
-            "recalled_hits": 0,
-            "harmful_hits": 0,
-            "allergen_hits": 0,
-        }
-    )
-    product_explainers: list[dict[str, Any]] = []
-    completeness_records: list[dict[str, Any]] = []
     label_trust = _empty_label_trust_metrics()
     label_trust_percentages: list[float] = []
     label_trust_dispositions: Counter[str] = Counter()
     label_trust_form_states: Counter[str] = Counter()
     label_trust_identity_states: Counter[str] = Counter()
     label_trust_identity_failure_products: set[str] = set()
-    label_trust_by_brand: defaultdict[str, dict[str, Any]] = defaultdict(
-        lambda: {
-            "total_products": 0,
-            "supported_products": 0,
-            "unsupported_products": 0,
-            "complete_products": 0,
-            "incomplete_products": 0,
-            "unavailable_products": 0,
-            "invalid_audit_products": 0,
-            "percentages": [],
-        }
-    )
-    label_trust_by_category: defaultdict[str, dict[str, Any]] = defaultdict(
-        lambda: {
-            "total_products": 0,
-            "supported_products": 0,
-            "unsupported_products": 0,
-            "complete_products": 0,
-            "incomplete_products": 0,
-            "unavailable_products": 0,
-            "invalid_audit_products": 0,
-            "percentages": [],
-        }
-    )
 
-    for blob_path in sorted(detail_blobs_dir.glob("*.json")):
-        blob = safe_load_json(blob_path)
-        if not blob:
+    def _dimension() -> dict[str, Any]:
+        return {
+            "total_products": 0,
+            "supported_products": 0,
+            "unsupported_products": 0,
+            "complete_products": 0,
+            "incomplete_products": 0,
+            "unavailable_products": 0,
+            "invalid_audit_products": 0,
+            "percentages": [],
+        }
+
+    label_trust_by_brand: defaultdict[str, dict[str, Any]] = defaultdict(_dimension)
+    label_trust_by_category: defaultdict[str, dict[str, Any]] = defaultdict(_dimension)
+
+    for blob in records or []:
+        if not isinstance(blob, dict) or not blob:
             continue
-        dsld_id = str(blob.get("dsld_id") or blob_path.stem)
-        product_meta = lookup.get(dsld_id, {"dsld_id": dsld_id})
-        ingredients = blob.get("ingredients") or []
-        warnings = blob.get("warnings") or []
-        manufacturer_detail = blob.get("manufacturer_detail") or {}
-        evidence_data = blob.get("evidence_data") or {}
-        interaction_summary = blob.get("interaction_summary") or {}
-        bonuses = blob.get("score_bonuses") or []
-        penalties = blob.get("score_penalties") or []
-
+        dsld_id = str(blob.get("dsld_id"))
         label_trust["total_products"] += 1
         audit = blob.get("label_ledger_audit")
         audit = audit if isinstance(audit, dict) else {}
@@ -915,16 +668,8 @@ def _compute_blob_analytics(
         if audit_tuple_is_valid and percentage_is_valid_number:
             label_trust_percentages.append(float(completeness_percentage))
 
-        brand_name = str(
-            blob.get("brand_name")
-            or product_meta.get("brand_name")
-            or "Unspecified"
-        ).strip() or "Unspecified"
-        primary_type = str(
-            blob.get("primary_type")
-            or product_meta.get("primary_category")
-            or "Unspecified"
-        ).strip() or "Unspecified"
+        brand_name = str(blob.get("brand_name") or "Unspecified").strip() or "Unspecified"
+        primary_type = str(blob.get("primary_type") or "Unspecified").strip() or "Unspecified"
         for dimension_stats, name in (
             (label_trust_by_brand, brand_name),
             (label_trust_by_category, primary_type),
@@ -987,173 +732,6 @@ def _compute_blob_analytics(
             ):
                 label_trust["formula_history_products"] += 1
 
-        completeness_checks = {
-            "ingredients_mapped": bool(ingredients) and all(bool(ing.get("is_mapped", True)) for ing in ingredients),
-            "manufacturer_present": bool(manufacturer_detail),
-            "evidence_present": bool(evidence_data),
-            "interaction_screened": bool(interaction_summary),
-            "dosage_present": bool(ingredients) and all(bool(ing.get("quantity") or ing.get("normalized_amount")) for ing in ingredients),
-            "warnings_present": warnings is not None,
-        }
-        completeness_pct = round(sum(completeness_checks.values()) / len(completeness_checks) * 100, 1)
-        completeness_records.append(
-            {
-                **product_meta,
-                "completeness_pct": completeness_pct,
-                "missing_fields": [key for key, value in completeness_checks.items() if not value],
-            }
-        )
-
-        for ingredient in ingredients:
-            ingredient_name = (
-                ingredient.get("standard_name")
-                or ingredient.get("name")
-                or "Unknown"
-            )
-            form_name = ingredient.get("form") or ingredient.get("matched_form") or "Unknown"
-            form_key = (ingredient_name, form_name)
-            stat = form_stats.setdefault(form_key, {"count": 0, "total_product_score": 0.0, "bio_scores": []})
-            stat["count"] += 1
-            stat["total_product_score"] += float(product_meta.get("score") or 0.0)
-            if ingredient.get("bio_score") is not None:
-                stat["bio_scores"].append(float(ingredient["bio_score"]))
-                quality_scores[ingredient_name].append(float(ingredient["bio_score"]))
-            ingredient_usage[ingredient_name] += 1
-            ingredient_risk = risk_stats[ingredient_name]
-            ingredient_risk["occurrences"] += 1
-            ingredient_risk["banned_hits"] += int(bool(product_meta.get("has_banned_substance")))
-            ingredient_risk["recalled_hits"] += int(bool(product_meta.get("has_recalled_ingredient")))
-            ingredient_risk["harmful_hits"] += int(bool(product_meta.get("has_harmful_additives")))
-            ingredient_risk["allergen_hits"] += int(bool(product_meta.get("has_allergen_risks")))
-            if any(
-                bool(product_meta.get(flag))
-                for flag in (
-                    "has_banned_substance",
-                    "has_recalled_ingredient",
-                    "has_harmful_additives",
-                    "has_allergen_risks",
-                )
-            ):
-                ingredient_risk["risk_product_count"] += 1
-            if product_meta.get("verdict") == "UNSAFE":
-                ingredient_risk["unsafe_product_count"] += 1
-            ingredient_products[ingredient_name.lower()].append(
-                {
-                    **product_meta,
-                    "ingredient_name": ingredient_name,
-                    "form": form_name,
-                    "bio_score": ingredient.get("bio_score"),
-                }
-            )
-
-        for bonus in bonuses:
-            label = bonus.get("label") or bonus.get("id") or "Unknown bonus"
-            score = float(bonus.get("score") or 0.0)
-            bonus_frequency[label] += 1
-            driver_impacts[label].append(score)
-
-        for penalty in penalties:
-            label = penalty.get("label") or penalty.get("id") or "Unknown penalty"
-            score = float(penalty.get("score") or 0.0)
-            penalty_frequency[label] += 1
-            driver_impacts[label].append(-score if score else 0.0)
-
-        top_bonuses = sorted(
-            [
-                f"{item.get('label') or item.get('id') or 'Bonus'} (+{float(item.get('score') or 0.0):.1f})"
-                for item in bonuses
-            ],
-            key=lambda text: float(text.rsplit("(", 1)[1].rstrip(")").replace("+", "")),
-            reverse=True,
-        )[:3]
-        top_penalties = sorted(
-            [
-                f"{item.get('label') or item.get('id') or 'Penalty'} (-{abs(float(item.get('score') or 0.0)):.1f})"
-                for item in penalties
-            ],
-            key=lambda text: abs(float(text.rsplit("(", 1)[1].rstrip(")").replace("-", ""))),
-            reverse=True,
-        )[:3]
-        product_explainers.append(
-            {
-                **product_meta,
-                "ingredient_count": len(ingredients),
-                "top_bonuses": top_bonuses,
-                "top_penalties": top_penalties,
-                "explanation": "; ".join(
-                    [
-                        f"Strengths: {', '.join(top_bonuses)}" if top_bonuses else "",
-                        f"Trade-offs: {', '.join(top_penalties)}" if top_penalties else "",
-                    ]
-                ).strip("; "),
-            }
-        )
-
-    ingredient_forms = [
-        {
-            "ingredient_name": ingredient_name,
-            "form": form_name,
-            "occurrences": stats["count"],
-            "avg_product_score": round(stats["total_product_score"] / stats["count"], 2),
-            "avg_bio_score": round(sum(stats["bio_scores"]) / len(stats["bio_scores"]), 2) if stats["bio_scores"] else None,
-        }
-        for (ingredient_name, form_name), stats in form_stats.items()
-    ]
-    ingredient_forms.sort(key=lambda row: (row["avg_product_score"], row["occurrences"]), reverse=True)
-
-    low_quality_ingredients = [
-        {
-            "ingredient_name": ingredient_name,
-            "occurrences": len(scores),
-            "avg_bio_score": round(sum(scores) / len(scores), 2),
-        }
-        for ingredient_name, scores in quality_scores.items()
-        if scores
-    ]
-    low_quality_ingredients.sort(key=lambda row: (row["avg_bio_score"], -row["occurrences"]))
-
-    bonus_rows = [{"label": label, "count": count} for label, count in bonus_frequency.most_common(25)]
-    penalty_rows = [{"label": label, "count": count} for label, count in penalty_frequency.most_common(25)]
-    driver_rows = []
-    for label, scores in driver_impacts.items():
-        if not scores:
-            continue
-        driver_rows.append(
-            {
-                "driver": label,
-                "count": len(scores),
-                "avg_impact": round(sum(scores) / len(scores), 2) if scores else 0.0,
-            }
-        )
-    driver_rows.sort(key=lambda row: abs(row["avg_impact"]), reverse=True)
-
-    ingredient_usage_rows = [{"ingredient_name": label, "occurrences": count} for label, count in ingredient_usage.most_common(50)]
-    high_risk_rows = []
-    for ingredient_name, stats in risk_stats.items():
-        high_risk_rows.append(
-            {
-                "ingredient_name": ingredient_name,
-                "occurrences": stats["occurrences"],
-                "risk_product_count": stats["risk_product_count"],
-                "unsafe_product_count": stats["unsafe_product_count"],
-                "banned_hits": stats["banned_hits"],
-                "recalled_hits": stats["recalled_hits"],
-                "harmful_hits": stats["harmful_hits"],
-                "allergen_hits": stats["allergen_hits"],
-            }
-        )
-    high_risk_rows.sort(
-        key=lambda row: (
-            row["risk_product_count"],
-            row["unsafe_product_count"],
-            row["banned_hits"],
-            row["occurrences"],
-        ),
-        reverse=True,
-    )
-    completeness_records.sort(key=lambda row: row["completeness_pct"])
-    product_explainers.sort(key=lambda row: (float(row.get("score") or 0.0), row.get("ingredient_count", 0)), reverse=True)
-
     label_trust["average_completeness_pct"] = (
         round(sum(label_trust_percentages) / len(label_trust_percentages), 2)
         if label_trust_percentages
@@ -1193,155 +771,7 @@ def _compute_blob_analytics(
         dimension="primary_type",
     )
 
-    return {
-        "ingredient_forms": ingredient_forms,
-        "ingredient_usage": ingredient_usage_rows,
-        "high_risk_ingredients": high_risk_rows[:50],
-        "low_quality_ingredients": low_quality_ingredients[:50],
-        "bonus_frequency": bonus_rows,
-        "penalty_frequency": penalty_rows,
-        "driver_impacts": driver_rows[:50],
-        "ingredient_products": dict(ingredient_products),
-        "product_explainers": product_explainers,
-        "completeness_records": completeness_records,
-        "label_trust": label_trust,
-    }
-
-
-def _compute_blob_analytics_from_db(db_conn: sqlite3.Connection | None) -> dict[str, Any]:
-    """Fallback analytics computed from the SQLite DB when detail blobs are unavailable."""
-    if db_conn is None:
-        return {}
-
-    import json as _json
-
-    # Bonus/penalty frequency from badges and safety flags
-    bonus_counts: Counter[str] = Counter()
-    penalty_counts: Counter[str] = Counter()
-    driver_impacts: defaultdict[str, list[float]] = defaultdict(list)
-
-    rows = db_conn.execute(
-        """SELECT has_banned_substance, has_recalled_ingredient,
-                  has_harmful_additives, has_allergen_risks, has_third_party_testing,
-                  has_full_disclosure, is_organic, is_non_gmo, is_trusted_manufacturer,
-                  score_ingredient_quality, score_safety_purity,
-                  score_evidence_research, score_brand_trust
-           FROM products_core"""
-    ).fetchall()
-
-    for (banned, recalled, harmful, allergens, tpt, fd, organic, nongmo,
-         trusted, s_iq, s_sp, s_er, s_bt) in rows:
-        # Bonuses
-        if tpt:
-            bonus_counts["Third-party tested"] += 1
-        if fd:
-            bonus_counts["Full disclosure"] += 1
-        if organic:
-            bonus_counts["Organic"] += 1
-        if nongmo:
-            bonus_counts["Non-GMO"] += 1
-        if trusted:
-            bonus_counts["Trusted manufacturer"] += 1
-        # Penalties
-        if banned:
-            penalty_counts["Banned substance"] += 1
-        if recalled:
-            penalty_counts["Recalled ingredient"] += 1
-        if harmful:
-            penalty_counts["Harmful additives"] += 1
-        if allergens:
-            penalty_counts["Allergen risks"] += 1
-        # Section drivers
-        if s_iq is not None:
-            driver_impacts["Ingredient Quality (A)"].append(float(s_iq))
-        if s_sp is not None:
-            driver_impacts["Safety & Purity (B)"].append(float(s_sp))
-        if s_er is not None:
-            driver_impacts["Evidence & Research (C)"].append(float(s_er))
-        if s_bt is not None:
-            driver_impacts["Brand Trust (D)"].append(float(s_bt))
-
-    bonus_rows = [{"label": label, "count": count}
-                  for label, count in bonus_counts.most_common(25)]
-    penalty_rows = [{"label": label, "count": count}
-                    for label, count in penalty_counts.most_common(25)]
-    driver_rows = []
-    for label, scores in driver_impacts.items():
-        if scores:
-            driver_rows.append({
-                "driver": label,
-                "count": len(scores),
-                "avg_impact": round(sum(scores) / len(scores), 2) if scores else 0.0,
-            })
-    driver_rows.sort(key=lambda r: abs(r["avg_impact"]), reverse=True)
-
-    # High-risk ingredients from safety flags — one row per flag type
-    flag_map = {
-        "Banned substances": "has_banned_substance",
-        "Recalled ingredients": "has_recalled_ingredient",
-        "Harmful additives": "has_harmful_additives",
-        "Allergen risks": "has_allergen_risks",
-    }
-    high_risk_rows = []
-    for label, col in flag_map.items():
-        row = db_conn.execute(
-            f"SELECT COUNT(*) FROM products_core WHERE {col} = 1"
-        ).fetchone()
-        count = row[0] if row else 0
-        if count > 0:
-            high_risk_rows.append({
-                "ingredient_name": label,
-                "occurrences": count,
-                "risk_product_count": count,
-                "unsafe_product_count": 0,
-                "banned_hits": count if "banned" in col else 0,
-                "recalled_hits": count if "recalled" in col else 0,
-                "harmful_hits": count if "harmful" in col else 0,
-                "allergen_hits": count if "allergen" in col else 0,
-            })
-    high_risk_rows.sort(key=lambda r: r["risk_product_count"], reverse=True)
-
-    # Product explainers from decision_highlights
-    explainer_rows = []
-    dh_rows = db_conn.execute(
-        """SELECT dsld_id, product_name, brand_name, decision_highlights,
-                  score_100_equivalent, supplement_type
-           FROM products_core
-           WHERE decision_highlights IS NOT NULL AND decision_highlights != ''
-           ORDER BY score_100_equivalent DESC
-           LIMIT 200"""
-    ).fetchall()
-    for dsld_id, name, brand, dh_raw, score, stype in dh_rows:
-        try:
-            dh = _json.loads(dh_raw)
-            explanation = dh.get("positive", "")
-            if dh.get("caution"):
-                explanation += f" {dh['caution']}"
-        except (ValueError, TypeError):
-            explanation = ""
-        explainer_rows.append({
-            "dsld_id": dsld_id,
-            "product_name": name,
-            "brand_name": brand,
-            "score": score,
-            "supplement_type": stype,
-            "explanation": explanation or "No explainer available.",
-            "top_bonuses": [],
-            "top_penalties": [],
-        })
-
-    return {
-        "ingredient_forms": [],
-        "ingredient_usage": [],
-        "high_risk_ingredients": high_risk_rows[:50],
-        "low_quality_ingredients": [],
-        "bonus_frequency": bonus_rows,
-        "penalty_frequency": penalty_rows,
-        "driver_impacts": driver_rows[:50],
-        "ingredient_products": {},
-        "product_explainers": explainer_rows,
-        "completeness_records": [],
-    }
+    return label_trust
 
 
 def _compute_shared_metrics(
@@ -1351,7 +781,8 @@ def _compute_shared_metrics(
     integrity_data: dict[str, Any] | None,
 ) -> dict[str, Any]:
     counts = (export_audit or {}).get("counts", {})
-    verdict_counts = {verdict: 0 for verdict in VERDICT_ORDER}
+    status_counts: dict[str, int] = {}
+    safety_status_counts: dict[str, int] = {}
     safety_counts = {key: int(counts.get(key, 0)) for key in SAFETY_COUNT_KEYS}
     product_count = int((export_manifest or {}).get("product_count") or counts.get("total_exported", 0))
     average_score = None
@@ -1359,17 +790,21 @@ def _compute_shared_metrics(
     blocked_count = 0
 
     if db_conn is not None:
-        rows = db_conn.execute("SELECT verdict, COUNT(*) AS count FROM products_core GROUP BY verdict").fetchall()
-        for row in rows:
-            verdict_counts[row["verdict"]] = int(row["count"])
+        for row in db_conn.execute(
+            "SELECT quality_score_status AS status, COUNT(*) AS count FROM products_core GROUP BY quality_score_status"
+        ).fetchall():
+            status_counts[str(row["status"])] = int(row["count"])
+        for row in db_conn.execute(
+            "SELECT product_safety_status AS status, COUNT(*) AS count FROM products_core GROUP BY product_safety_status"
+        ).fetchall():
+            safety_status_counts[str(row["status"])] = int(row["count"])
         avg_row = db_conn.execute(
-            "SELECT AVG(score_100_equivalent) AS avg_score, AVG(mapped_coverage) AS avg_coverage FROM products_core"
+            "SELECT AVG(CASE WHEN quality_score_status = 'scored' THEN quality_score_v4_100 END) AS avg_score, "
+            "AVG(mapped_coverage) AS avg_coverage FROM products_core"
         ).fetchone()
         average_score = round(float(avg_row["avg_score"] or 0.0), 1)
         average_coverage_pct = round(float(avg_row["avg_coverage"] or 0.0) * 100, 1)
-        blocked_count = int(
-            db_conn.execute("SELECT COUNT(*) AS count FROM products_core WHERE verdict = 'BLOCKED'").fetchone()["count"]
-        )
+        blocked_count = safety_status_counts.get("blocked", 0)
         product_count = int(
             db_conn.execute("SELECT COUNT(*) AS count FROM products_core").fetchone()["count"]
         )
@@ -1397,7 +832,8 @@ def _compute_shared_metrics(
 
     return {
         "product_count": product_count,
-        "verdict_counts": verdict_counts,
+        "status_counts": status_counts,
+        "safety_status_counts": safety_status_counts,
         "safety_counts": safety_counts,
         "average_score": average_score,
         "average_coverage_pct": average_coverage_pct,
@@ -1561,19 +997,11 @@ def load_dashboard_data(config: Any) -> DashboardData:
         data.latest_batch_at = max(live_pipeline_candidates)
 
     data.shared_metrics = _compute_shared_metrics(data.db_conn, data.export_manifest, data.export_audit, data.integrity_data)
-    data.blob_analytics = _compute_blob_analytics(
-        data.detail_blobs_dir,
-        data.db_conn,
+    data.index = IndexReader(default_paths(config.scan_dir, config.build_root))
+    data.label_trust = compute_label_trust(
+        data.index.label_records(),
         config.build_root / "label_mismatch_summary.json",
     )
-    # Fallback: if detail blobs are missing, compute analytics from the DB
-    if not data.blob_analytics.get("bonus_frequency") and data.db_conn is not None:
-        label_trust = data.blob_analytics.get("label_trust")
-        data.blob_analytics = _compute_blob_analytics_from_db(data.db_conn)
-        data.blob_analytics["label_trust"] = (
-            label_trust if isinstance(label_trust, dict) else _empty_label_trust_metrics()
-        )
-    data.product_catalog = _load_product_catalog(data.db_conn)
 
     # Load CAERS adverse event signals
     caers_path = Path("scripts/data/caers_adverse_event_signals.json")

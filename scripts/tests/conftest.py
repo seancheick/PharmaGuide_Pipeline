@@ -144,6 +144,27 @@ class _DashboardStreamlitMock(MagicMock):
     def checkbox(self, *args, **kwargs):
         return False
 
+    def slider(self, label, min_value=None, max_value=None, value=None, *args, **kwargs):
+        return kwargs.get("value", value)
+
+    def multiselect(self, *args, **kwargs):
+        return list(kwargs.get("default") or [])
+
+    def pills(self, *args, **kwargs):
+        return kwargs.get("default")
+
+    def segmented_control(self, *args, **kwargs):
+        return kwargs.get("default")
+
+    def number_input(self, label, min_value=None, max_value=None, value=None, *args, **kwargs):
+        return kwargs.get("value", value)
+
+    def date_input(self, *args, **kwargs):
+        return kwargs.get("value")
+
+    def text_area(self, *args, **kwargs):
+        return kwargs.get("value", "") or ""
+
     def __enter__(self):
         return self
 
@@ -204,7 +225,6 @@ def dashboard_app():
     mock_st = _build_dashboard_streamlit_mock()
     sys.modules["streamlit"] = mock_st
     try:
-        views = importlib.import_module("scripts.dashboard.views")
         yield types.SimpleNamespace(
             st=mock_st,
             DashboardConfig=importlib.import_module(
@@ -219,13 +239,9 @@ def dashboard_app():
             render_page_frame=importlib.import_module(
                 "scripts.dashboard.components.page_frame"
             ).render_page_frame,
-            render_command_center=importlib.import_module(
-                "scripts.dashboard.components.command_center"
-            ).render_command_center,
-            render_drill_down=importlib.import_module(
-                "scripts.dashboard.views.inspector"
-            ).render_drill_down,
-            views=views,
+            shell=importlib.import_module("scripts.dashboard.shell"),
+            navigation=importlib.import_module("scripts.dashboard.navigation"),
+            view=lambda name: importlib.import_module(f"scripts.dashboard.views.{name}"),
         )
     finally:
         for name in list(sys.modules):

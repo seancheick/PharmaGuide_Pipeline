@@ -8,187 +8,85 @@ from typing import Any
 from scripts.dashboard.time_format import format_dashboard_datetime
 
 
+def _meta(title, summary, planes, sources, freshness, notes=(), warning=""):
+    return {
+        "page_title": title,
+        "page_summary": summary,
+        "data_planes": list(planes),
+        "source_paths": list(sources),
+        "freshness_fields": list(freshness),
+        "mixed_plane_warning": warning,
+        "usage_notes": list(notes),
+    }
+
+
+_INDEX_PLANES = ("Candidate (scored outputs)", "Release (catalog)", "History")
 PAGE_META: dict[str, dict[str, Any]] = {
-    "command-center": {
-        "page_title": "Command Center",
-        "page_summary": "See release readiness, current pipeline activity, freshness gaps, and the fastest paths to action.",
-        "data_planes": ["Release Snapshot", "Pipeline Logs", "Dataset Outputs"],
-        "source_paths": ["release_db", "export_manifest", "export_audit", "processing_state", "batch_logs", "dataset_outputs"],
-        "freshness_fields": ["latest_export_at", "latest_batch_at", "latest_dataset_activity"],
-        "mixed_plane_warning": "This page blends released export data with newer pipeline and dataset activity.",
-        "related_views": ["Pipeline Health", "Observability", "Data Quality", "Intelligence"],
-        "usage_notes": [
-            "Start here for the overall story before drilling into a specific page.",
-            "Compare release freshness against pipeline freshness before trusting mixed metrics.",
-        ],
-    },
-    "product-inspector": {
-        "page_title": "Product Inspector",
-        "page_summary": "Inspect one product, why it scored that way, and where supporting detail data came from.",
-        "data_planes": ["Release Snapshot", "Dataset Outputs"],
-        "source_paths": ["release_db", "detail_blobs", "detail_index", "dataset_outputs"],
-        "freshness_fields": ["latest_export_at", "latest_dataset_activity"],
-        "mixed_plane_warning": "Inspector scoring comes from the release snapshot, while source lookup paths may point to newer dataset outputs.",
-        "related_views": ["Data Quality", "Intelligence", "Release Diff"],
-        "usage_notes": [
-            "Search by DSLD ID, product name, brand, or UPC.",
-            "Use the detailed score trace to explain bonuses and penalties.",
-        ],
-    },
-    "pipeline-health": {
-        "page_title": "Pipeline Health",
-        "page_summary": "Answer whether the current release and the latest run are healthy enough to trust and ship.",
-        "data_planes": ["Release Snapshot", "Pipeline Logs", "Dataset Outputs"],
-        "source_paths": ["export_manifest", "export_audit", "processing_state", "batch_logs", "dataset_outputs"],
-        "freshness_fields": ["latest_export_at", "latest_batch_at", "latest_dataset_activity"],
-        "mixed_plane_warning": "Release gate status uses the export snapshot, while run status and dataset coverage come from newer pipeline artifacts.",
-        "related_views": ["Command Center", "Observability", "Data Quality"],
-        "usage_notes": [
-            "Read the release gate first, then confirm the latest batch and artifact coverage agree.",
-            "Treat stale export dates as a caution, even if the latest batch is fresh.",
-        ],
-    },
-    "data-quality": {
-        "page_title": "Data Quality",
-        "page_summary": "Find not-scored products, unmapped hotspots, fallback queues, and coverage issues by dataset.",
-        "data_planes": ["Release Snapshot", "Dataset Outputs"],
-        "source_paths": ["release_db", "dataset_outputs", "scoring_config"],
-        "freshness_fields": ["latest_export_at", "latest_dataset_activity"],
-        "mixed_plane_warning": "Quality combines release snapshot scoring outcomes with newer dataset-output diagnostics.",
-        "related_views": ["Product Inspector", "Pipeline Health", "Observability"],
-        "usage_notes": [
-            "Use dataset scope to isolate a brand or run family.",
-            "Quality diagnostics may be fresher than the currently exported DB.",
-        ],
-    },
-    "observability": {
-        "page_title": "Observability",
-        "page_summary": "Track integrity, failures, drift, bottlenecks, and operational signals across builds and batch logs.",
-        "data_planes": ["Release Snapshot", "Pipeline Logs", "Dataset Outputs"],
-        "source_paths": ["export_manifest", "export_audit", "release_db", "batch_logs", "dataset_outputs", "build_history"],
-        "freshness_fields": ["latest_export_at", "latest_batch_at", "latest_dataset_activity"],
-        "mixed_plane_warning": "Observability intentionally compares older release data with newer pipeline and dataset activity to surface drift and failures.",
-        "related_views": ["Pipeline Health", "Batch Diff", "Command Center"],
-        "usage_notes": [
-            "Use this page to explain losses between enrichment, scoring, and export.",
-            "If timelines disagree, trust the source chips and freshness panel before interpreting trends.",
-        ],
-    },
-    "release-diff": {
-        "page_title": "Release Diff",
-        "page_summary": "Compare two release snapshots to understand score changes, verdict shifts, and build deltas.",
-        "data_planes": ["Release Snapshot"],
-        "source_paths": ["build_history", "release_db", "export_manifest"],
-        "freshness_fields": ["latest_export_at"],
-        "mixed_plane_warning": "",
-        "related_views": ["Product Inspector", "Intelligence", "Command Center"],
-        "usage_notes": [
-            "Use this for release-to-release comparison, not live pipeline debugging.",
-        ],
-    },
-    "batch-diff": {
-        "page_title": "Batch Diff",
-        "page_summary": "Compare recent pipeline runs to see dataset-level status changes and failure movement.",
-        "data_planes": ["Pipeline Logs"],
-        "source_paths": ["batch_logs", "processing_state"],
-        "freshness_fields": ["latest_batch_at"],
-        "mixed_plane_warning": "",
-        "related_views": ["Observability", "Pipeline Health", "Command Center"],
-        "usage_notes": [
-            "Use this for run-to-run comparison within the current pipeline activity timeline.",
-        ],
-    },
-    "clinical-copy": {
-        "page_title": "Clinical Copy Coverage",
-        "page_summary": "Dr. Pham-authored safety / bonus copy across six data files. Shows per-file field coverage, Flutter asset sync, and staleness alerts. Spot missing authored fields the moment they appear.",
-        "data_planes": ["Data Source (scripts/data/)", "Flutter Asset (reference_data/)"],
-        "source_paths": ["data/banned_recalled_ingredients.json", "data/medication_depletions.json", "data/ingredient_interaction_rules.json", "data/harmful_additives.json", "data/synergy_cluster.json", "data/manufacturer_violations.json"],
-        "freshness_fields": [],
-        "mixed_plane_warning": "",
-        "related_views": ["Product Inspector", "Data Quality"],
-        "usage_notes": [
-            "Run the validator command shown at the bottom after every authoring change.",
-            "Flutter sync stale means the app's offline cache won't see the latest authored copy — do a sync before release.",
-            "Use the spot-check picker for random sanity review before shipping a pipeline build.",
-        ],
-    },
-    "intelligence": {
-        "page_title": "Intelligence",
-        "page_summary": "Explore product, ingredient, and brand intelligence derived from the current release snapshot and detail blobs.",
-        "data_planes": ["Release Snapshot"],
-        "source_paths": ["release_db", "detail_blobs", "detail_index"],
-        "freshness_fields": ["latest_export_at"],
-        "mixed_plane_warning": "",
-        "related_views": ["Product Inspector", "Release Diff", "Command Center"],
-        "usage_notes": [
-            "Use this page for cross-product insights, not pipeline run diagnosis.",
-        ],
-    },
-    "scoring-integrity": {
-        "page_title": "Scoring Integrity",
-        "page_summary": "Automated V4 anomaly detection: pillar↔total reconciliation, pillars scoring exactly 0, and out-of-range / impossible values. Green = no anomalies; any row here is a scorer/data bug to investigate.",
-        "data_planes": ["Release Snapshot"],
-        "source_paths": ["release_db"],
-        "freshness_fields": ["latest_export_at"],
-        "mixed_plane_warning": "",
-        "related_views": ["Pillar Audit", "Module Health", "Product Inspector"],
-        "usage_notes": [
-            "Reconciliation is the strongest signal — the six pillars must sum to quality_score_v4_100.",
-            "A spike in zero-pillar hits usually means a data gap or scorer bug (most pillars fail-open neutral, not 0).",
-        ],
-    },
-    "module-health": {
-        "page_title": "Module Health",
-        "page_summary": "Per-module (generic / omega / probiotic / sports / multi_or_prenatal) pillar means side by side. A systematic scorer bug shows up as one module's pillar collapsing vs the others.",
-        "data_planes": ["Release Snapshot"],
-        "source_paths": ["release_db"],
-        "freshness_fields": ["latest_export_at"],
-        "mixed_plane_warning": "",
-        "related_views": ["Scoring Integrity", "Pillar Audit", "Product Inspector"],
-        "usage_notes": [
-            "Compare a module's column against the others — an outlier mean is a routing/scoring regression signal.",
-        ],
-    },
-    "pillar-audit": {
-        "page_title": "V4 Six-Pillar Audit",
-        "page_summary": "Audit each V4 quality pillar (formulation, dose, evidence, transparency, verification, safety & hygiene): score distribution, ceiling hits, and the lowest scorers. Replaces the legacy V3 Section A/B/C/D audits.",
-        "data_planes": ["Release Snapshot"],
-        "source_paths": ["release_db"],
-        "freshness_fields": ["latest_export_at"],
-        "mixed_plane_warning": "",
-        "related_views": ["Data Quality", "Suppression Audit", "Product Inspector"],
-        "usage_notes": [
-            "Pillar columns (pillar_*_v4) are populated by build_final_db — rebuild the catalog if a pillar shows no data.",
-            "Safety-suppressed products are excluded here; see the Suppression Audit.",
-        ],
-    },
-    "suppression-audit": {
-        "page_title": "Suppression Audit",
-        "page_summary": "Products safety-suppressed by the V4 gate (quality_score_status='suppressed_safety'). Hidden from users in the app and excluded from every scored view — surfaced here for review only.",
-        "data_planes": ["Release Snapshot"],
-        "source_paths": ["release_db"],
-        "freshness_fields": ["latest_export_at"],
-        "mixed_plane_warning": "",
-        "related_views": ["Pillar Audit", "Data Quality", "Product Inspector"],
-        "usage_notes": [
-            "These products render NOWHERE for end users — the dashboard must match that, so they appear only on this page.",
-            "Cross-check blocking_reason to confirm the safety gate fired for the right reason.",
-        ],
-    },
-    "caers-audit": {
-        "page_title": "CAERS Audit",
-        "page_summary": "FDA CAERS pharmacovigilance audit: adverse event signals, outcome breakdowns and cross-reference with banned/recalled. Audit analytics only; the v4 score applies no CAERS penalty.",
-        "data_planes": ["Pipeline Data"],
-        "source_paths": ["caers_signals"],
-        "freshness_fields": [],
-        "mixed_plane_warning": "",
-        "related_views": ["Suppression Audit", "Intelligence"],
-        "usage_notes": [
-            "Cross-Reference tab shows ingredients with CAERS signals NOT in banned/recalled — review candidates.",
-            "Scoring Status records that v4 applies no CAERS penalty and why the v3 B8 penalty was retired.",
-            "Reaction Analysis surfaces the most commonly reported adverse reactions.",
-        ],
-    },
+    "overview": _meta(
+        "Overview",
+        "Is the newest scoring run healthy, how does it differ from what ships, and what needs attention first.",
+        _INDEX_PLANES, ["dashboard_index", "scored_outputs", "release_db", "export_manifest", "processing_state"],
+        ["latest_export_at", "latest_batch_at", "latest_dataset_activity"],
+        ["Readiness here is informational; it is never a release gate."],
+        "Candidate results are pipeline outputs that are not yet published; release figures are what ships.",
+    ),
+    "audit-queue": _meta(
+        "Audit Queue",
+        "Contradictions, integrity defects and unexplained changes found by versioned rules — with triage.",
+        _INDEX_PLANES, ["dashboard_index", "scoring_config"], ["latest_dataset_activity"],
+        ["Audit states such as Evidence 0 or a neutral Dose are not findings; find them in Product Explorer."],
+    ),
+    "run-compare": _meta(
+        "Run Compare & Trends",
+        "Review a candidate against a baseline run: score and tier movement, status changes and their causes.",
+        _INDEX_PLANES, ["dashboard_index", "scored_outputs", "release_db"], ["latest_export_at", "latest_dataset_activity"],
+        ["Older catalogs are pillar totals only: their movements show deltas, never invented causes."],
+    ),
+    "product-explorer": _meta(
+        "Product Explorer",
+        "Every product with its six pillars. Filter by any score, state or receipt line and open the trace.",
+        _INDEX_PLANES, ["dashboard_index", "scored_outputs", "release_db"], ["latest_dataset_activity"],
+        ["Saved views list audit states, not defects."],
+    ),
+    "product-trace": _meta(
+        "Product Trace",
+        "Where every point of one product's score came from, and every point it did not earn.",
+        _INDEX_PLANES, ["dashboard_index", "scored_outputs", "detail_blobs"], ["latest_dataset_activity"],
+        ["Values are the scorer's own receipts; the dashboard never recomputes a score."],
+    ),
+    "score-lab": _meta(
+        "Score Lab",
+        "How the scoring behaves across the catalog: distributions, rule impact, neutral usage, caps and floors.",
+        _INDEX_PLANES, ["dashboard_index", "scoring_config"], ["latest_dataset_activity"],
+        ["Peer percentiles are context for one run and config, never a second score."],
+    ),
+    "coverage-calibration": _meta(
+        "Coverage & Calibration",
+        "Calibration records behind the numbers, what the scorer could and could not assess, and the golden set.",
+        _INDEX_PLANES, ["scoring_config", "dashboard_index", "canaries"], ["latest_dataset_activity"],
+    ),
+    "market-intelligence": _meta(
+        "Market Intelligence",
+        "Brands, categories, ingredients and forms across the catalog.",
+        _INDEX_PLANES, ["dashboard_index", "release_db"], ["latest_dataset_activity"],
+        ["Rankings include complete, scored products only, with minimum sample sizes."],
+    ),
+    "safety-regulatory": _meta(
+        "Safety & Regulatory",
+        "Blocked and suppressed products with their reasons, upper-limit findings, CAERS signals and safety copy. "
+        "v4 applies no CAERS penalty.",
+        _INDEX_PLANES, ["dashboard_index", "release_db", "caers"], ["latest_export_at"],
+        ["v4 applies no CAERS penalty; CAERS signals are context for review, not points."],
+    ),
+    "data-quality": _meta(
+        "Data Quality, Release & Ops",
+        "Pipeline and batch health, coverage and fallbacks, config snapshot, release diff and index status.",
+        ("Release Snapshot", "Pipeline Logs", "Dataset Outputs"),
+        ["release_db", "export_manifest", "export_audit", "processing_state", "batch_logs", "dataset_outputs",
+         "scoring_config", "dashboard_index"],
+        ["latest_export_at", "latest_batch_at", "latest_dataset_activity"],
+        warning="Release figures come from the export snapshot; batch and coverage figures from newer pipeline artifacts.",
+    ),
 }
 
 
@@ -205,6 +103,10 @@ def _resolve_source_key(key: str, data: Any) -> list[str]:
         "batch_logs": [str(scan_dir / "logs")],
         "dataset_outputs": [str(scan_dir / "output_*")],
         "build_history": [str(build_root.parent)],
+        "dashboard_index": [str(Path("scripts/.cache/dashboard").resolve())],
+        "scored_outputs": [str(scan_dir / "output_*_scored" / "scored")],
+        "canaries": [str(Path("scripts/data/canary_products.json").resolve())],
+        "caers": [str(Path("scripts/data/caers_adverse_event_signals.json").resolve())],
         # The production v4 configs that config_registry fingerprints.
         "scoring_config": [
             str(Path("scripts/scoring_v4/config/quality_score.json").resolve()),

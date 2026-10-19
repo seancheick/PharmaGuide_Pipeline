@@ -14,48 +14,47 @@ import pytest
 from scripts.release_artifact_paths import final_build_dir
 
 
-def test_all_dashboard_views_smoke_render(dashboard_app):
+def test_all_dashboard_pages_smoke_render(dashboard_app):
+    """Every page renders against the real local artifacts and index (or its absence)."""
     config = dashboard_app.DashboardConfig(
         scan_dir=Path("scripts/products").resolve(),
         build_root=final_build_dir(),
     )
     data = dashboard_app.load_dashboard_data(config)
-
-    views = dashboard_app.views
-    view_renderers = [
-        ("command-center", lambda: dashboard_app.render_command_center(data)),
-        ("product-inspector", lambda: views.render_inspector(data)),
-        ("pipeline-health", lambda: views.render_health(data)),
-        ("data-quality", lambda: views.render_quality(data)),
-        ("observability", lambda: views.render_observability(data)),
-        ("release-diff", lambda: views.render_diff(data)),
-        ("batch-diff", lambda: views.render_batch_diff(data)),
-        ("intelligence", lambda: views.render_intelligence(data)),
-        ("pillar-audit", lambda: views.render_pillar_audit(data)),
-        ("suppression-audit", lambda: views.render_suppression_audit(data)),
-        ("caers-audit", lambda: views.render_audit_caers(data)),
-        ("scoring-integrity", lambda: views.render_scoring_integrity(data)),
-        ("module-health", lambda: views.render_module_health(data)),
-        ("clinical-copy", lambda: views.render_safety_copy(data)),
-    ]
-
-    for slug, renderer in view_renderers:
-        dashboard_app.render_page_frame(dashboard_app.get_page_meta(slug, data), renderer)
+    ctx = dashboard_app.shell.init(data)
+    for spec in dashboard_app.navigation.PAGES:
+        module = dashboard_app.view(spec.module)
+        dashboard_app.render_page_frame(dashboard_app.get_page_meta(spec.slug, data), lambda: module.render(ctx))
 
 
-def test_inspector_drilldown_renders_v4_for_real_product(dashboard_app):
-    """The smoke test above can't reach the Inspector drill-down (empty search
-    short-circuits), so exercise it directly against a real product to cover the
-    V4 six-pillar rendering path."""
+def test_product_trace_renders_a_real_product(dashboard_app):
+    """Exercise the trace path (ledgers, waterfall, gates) on a real indexed product."""
     config = dashboard_app.DashboardConfig(
         scan_dir=Path("scripts/products").resolve(),
         build_root=final_build_dir(),
     )
     data = dashboard_app.load_dashboard_data(config)
-    if data.product_catalog.empty:
+    ctx = dashboard_app.shell.init(data)
+    if not ctx.ready:
         return
-    dsld_id = str(data.product_catalog.iloc[0]["dsld_id"])
-    dashboard_app.render_drill_down(dsld_id, data)  # must not raise
+    dsld_id = str(ctx.products().iloc[0]["dsld_id"])
+    dashboard_app.st.session_state["trace_dsld_id"] = dsld_id
+    dashboard_app.view("trace").render(ctx)  # must not raise
+
+
+def _label_trust(dashboard_app, build_root):
+    """Release label-trust metrics from blobs, through the index projection the dashboard uses."""
+    import importlib
+
+    loader = importlib.import_module("scripts.dashboard.data_loader")
+    score_index = importlib.import_module("scripts.dashboard.score_index")
+    blob_dir = build_root / "detail_blobs"
+    records = []
+    for path in sorted(blob_dir.glob("*.json")) if blob_dir.exists() else []:
+        blob = loader.safe_load_json(path)
+        if blob:
+            records.append(score_index.label_trust_record(blob, {"dsld_id": path.stem}))
+    return loader.compute_label_trust(records, build_root / "label_mismatch_summary.json")
 
 
 def test_label_trust_dashboard_aggregates_only_release_safe_metrics(
@@ -145,7 +144,7 @@ def test_label_trust_dashboard_aggregates_only_release_safe_metrics(
     data = dashboard_app.load_dashboard_data(
         dashboard_app.DashboardConfig(scan_dir=scan_dir, build_root=build_root)
     )
-    metrics = data.blob_analytics["label_trust"]
+    metrics = data.label_trust = _label_trust(dashboard_app, build_root)
 
     assert metrics["total_products"] == 2
     assert metrics["supported_products"] == 2
@@ -204,7 +203,7 @@ def test_label_trust_dashboard_zero_rows_are_explicit_and_renderable(
     data = dashboard_app.load_dashboard_data(
         dashboard_app.DashboardConfig(scan_dir=scan_dir, build_root=build_root)
     )
-    metrics = data.blob_analytics["label_trust"]
+    metrics = data.label_trust = _label_trust(dashboard_app, build_root)
 
     assert metrics == {
         "total_products": 0,
@@ -235,7 +234,7 @@ def test_label_trust_dashboard_zero_rows_are_explicit_and_renderable(
         "by_category": [],
     }
 
-    dashboard_app.views.render_quality(data)  # must not raise
+    dashboard_app.view("quality").render_quality(data)  # must not raise
 
 
 def test_label_trust_dashboard_surfaces_invalid_contracts_without_raw_values(
@@ -313,7 +312,7 @@ def test_label_trust_dashboard_surfaces_invalid_contracts_without_raw_values(
     data = dashboard_app.load_dashboard_data(
         dashboard_app.DashboardConfig(scan_dir=scan_dir, build_root=build_root)
     )
-    metrics = data.blob_analytics["label_trust"]
+    metrics = data.label_trust = _label_trust(dashboard_app, build_root)
 
     assert metrics["invalid_audit_products"] == 1
     assert metrics["supported_products"] == 0
@@ -389,7 +388,7 @@ def test_label_trust_dashboard_rejects_invalid_mismatch_summary_schema(
                 build_root=build_root,
             )
         )
-        metrics = data.blob_analytics["label_trust"]
+        metrics = data.label_trust = _label_trust(dashboard_app, build_root)
         assert metrics["invalid_mismatch_summary"] == 1
         assert metrics["mismatch_outcomes"] == {}
         assert metrics["mismatch_categories"] == {}
@@ -418,7 +417,7 @@ def test_label_trust_dashboard_rejects_unhashable_mismatch_values(
     data = dashboard_app.load_dashboard_data(
         dashboard_app.DashboardConfig(scan_dir=scan_dir, build_root=build_root)
     )
-    metrics = data.blob_analytics["label_trust"]
+    metrics = data.label_trust = _label_trust(dashboard_app, build_root)
 
     assert metrics["invalid_mismatch_summary"] == 0
     assert metrics["mismatch_outcomes"] == {}
@@ -472,7 +471,7 @@ def test_label_trust_dashboard_counts_every_closed_state(dashboard_app, tmp_path
     data = dashboard_app.load_dashboard_data(
         dashboard_app.DashboardConfig(scan_dir=scan_dir, build_root=build_root)
     )
-    metrics = data.blob_analytics["label_trust"]
+    metrics = data.label_trust = _label_trust(dashboard_app, build_root)
 
     assert set(metrics["display_dispositions"]) == set(dispositions)
     assert set(metrics["form_states"]) == set(form_states)
@@ -552,7 +551,7 @@ def test_safety_copy_without_flutter_repo_reports_assets_not_configured(
     assert data.flutter_repo is None
     st = dashboard_app.st
 
-    dashboard_app.views.render_safety_copy(data)
+    dashboard_app.view("safety_copy").render_safety_copy(data)
 
     assert any("Flutter assets not configured" in m for m in _messages(st.info))
     assert _flutter_sync_tables(st) == []
@@ -571,7 +570,7 @@ def test_safety_copy_with_missing_flutter_assets_reports_unavailable(
     )
     st = dashboard_app.st
 
-    dashboard_app.views.render_safety_copy(data)
+    dashboard_app.view("safety_copy").render_safety_copy(data)
 
     unavailable = [m for m in _messages(st.warning) if "Flutter assets unavailable" in m]
     assert unavailable and str(absent / "assets" / "reference_data") in unavailable[0]
@@ -600,7 +599,7 @@ def test_safety_copy_with_flutter_repo_compares_asset_schema_versions(
     assert data.flutter_repo == flutter
     st = dashboard_app.st
 
-    dashboard_app.views.render_safety_copy(data)
+    dashboard_app.view("safety_copy").render_safety_copy(data)
 
     (table,) = _flutter_sync_tables(st)
     rows = table.set_index("file")
@@ -649,7 +648,7 @@ def test_safety_copy_expected_flutter_assets_cannot_report_success(
     data = dashboard_app.load_dashboard_data(dashboard_app.DashboardConfig(
         scan_dir=scan_dir, build_root=build_root, flutter_repo=flutter
     ))
-    dashboard_app.views.render_safety_copy(data)
+    dashboard_app.view("safety_copy").render_safety_copy(data)
     (table,) = _flutter_sync_tables(dashboard_app.st)
     rows = table.set_index("file")
     assert rows.loc["synergy_cluster.json", "status"] == "⚠️ unavailable"
@@ -669,7 +668,7 @@ def test_safety_copy_checks_expected_assets_and_excludes_unbundled_sources(dashb
     data = dashboard_app.load_dashboard_data(dashboard_app.DashboardConfig(
         scan_dir=scan_dir, build_root=build_root, flutter_repo=flutter
     ))
-    dashboard_app.views.render_safety_copy(data)
+    dashboard_app.view("safety_copy").render_safety_copy(data)
     (table,) = _flutter_sync_tables(dashboard_app.st)
     rows = table.set_index("file")
     for name in ("medication_depletions.json", "banned_recalled_ingredients.json", "synergy_cluster.json"):

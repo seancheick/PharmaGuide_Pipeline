@@ -1,52 +1,57 @@
+"""Page registry: grouped navigation, URL slugs, and redirects for retired ``?view=`` links."""
+
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Mapping
-
-
-PAGE_DEFINITIONS = [
-    ("Command Center", "Command Center", "command-center"),
-    ("Release", "Product Inspector", "product-inspector"),
-    ("Release", "Release Diff", "release-diff"),
-    ("Pipeline", "Pipeline Health", "pipeline-health"),
-    ("Pipeline", "Observability", "observability"),
-    ("Pipeline", "Batch Diff", "batch-diff"),
-    ("Quality", "Data Quality", "data-quality"),
-    ("Quality", "Scoring Integrity", "scoring-integrity"),
-    ("Quality", "Pillar Audit", "pillar-audit"),
-    ("Quality", "Module Health", "module-health"),
-    ("Quality", "Suppression Audit", "suppression-audit"),
-    ("Quality", "CAERS Audit", "caers-audit"),
-    ("Quality", "Clinical Copy", "clinical-copy"),
-    ("Intelligence", "Intelligence", "intelligence"),
-]
-
-DEFAULT_VIEW = "Command Center"
-SUPPORTED_QUERY_PARAMS = ("view", "dsld_id")
-
-VIEW_SLUGS = {label: slug for _, label, slug in PAGE_DEFINITIONS}
-VIEW_BY_SLUG = {slug: label for _, label, slug in PAGE_DEFINITIONS}
-SECTION_BY_VIEW = {label: section for section, label, _ in PAGE_DEFINITIONS}
-VIEWS_BY_SECTION: dict[str, list[str]] = {}
-for section, label, _ in PAGE_DEFINITIONS:
-    VIEWS_BY_SECTION.setdefault(section, []).append(label)
 
 
 @dataclass(frozen=True)
-class DashboardRouteState:
-    current_view: str
-    selected_dsld_id: str | None = None
+class PageSpec:
+    section: str
+    title: str
+    slug: str
+    icon: str
+    module: str  # scripts.dashboard.views.<module>.render(ctx)
 
 
-def parse_dashboard_query_params(params: Mapping[str, str]) -> DashboardRouteState:
-    raw_view = str(params.get("view", "")).strip().lower()
-    dsld_id = str(params.get("dsld_id", "")).strip() or None
+PAGES: list[PageSpec] = [
+    PageSpec("Monitor", "Overview", "overview", ":material/space_dashboard:", "overview"),
+    PageSpec("Monitor", "Audit Queue", "audit-queue", ":material/flag:", "audit_queue"),
+    PageSpec("Monitor", "Run Compare & Trends", "run-compare", ":material/compare_arrows:", "run_compare_view"),
+    PageSpec("Audit", "Product Explorer", "product-explorer", ":material/table_view:", "explorer"),
+    PageSpec("Audit", "Product Trace", "product-trace", ":material/receipt_long:", "trace"),
+    PageSpec("Audit", "Score Lab", "score-lab", ":material/science:", "score_lab"),
+    PageSpec("Audit", "Coverage & Calibration", "coverage-calibration", ":material/tune:", "coverage"),
+    PageSpec("Intelligence", "Market Intelligence", "market-intelligence", ":material/storefront:", "market"),
+    PageSpec("Intelligence", "Safety & Regulatory", "safety-regulatory", ":material/health_and_safety:", "safety"),
+    PageSpec("Operations", "Data Quality, Release & Ops", "data-quality", ":material/monitor_heart:", "ops"),
+]
+DEFAULT_SLUG = "overview"
+PAGE_BY_SLUG = {page.slug: page for page in PAGES}
 
-    if raw_view in VIEW_BY_SLUG:
-        current_view = VIEW_BY_SLUG[raw_view]
-    elif dsld_id:
-        current_view = "Product Inspector"
-    else:
-        current_view = DEFAULT_VIEW
+# Links shared before the v4 revamp keep working.
+LEGACY_VIEW_SLUGS = {
+    "command-center": "overview",
+    "product-inspector": "product-trace",
+    "pipeline-health": "data-quality",
+    "observability": "audit-queue",
+    "release-diff": "run-compare",
+    "batch-diff": "data-quality",
+    "scoring-integrity": "audit-queue",
+    "pillar-audit": "score-lab",
+    "module-health": "score-lab",
+    "suppression-audit": "safety-regulatory",
+    "caers-audit": "safety-regulatory",
+    "clinical-copy": "safety-regulatory",
+    "intelligence": "market-intelligence",
+}
 
-    return DashboardRouteState(current_view=current_view, selected_dsld_id=dsld_id)
+
+def resolve_legacy_view(view: str | None) -> str | None:
+    """Slug of the page that replaced a retired ``?view=`` value (or a current slug)."""
+    if not view:
+        return None
+    view = str(view).strip().lower()
+    if view in PAGE_BY_SLUG:
+        return view
+    return LEGACY_VIEW_SLUGS.get(view)

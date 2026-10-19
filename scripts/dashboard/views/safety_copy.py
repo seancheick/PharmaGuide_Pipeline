@@ -209,7 +209,7 @@ def _flutter_sync_row(name: str, pipeline_schema, assets: Path, *, expected: boo
 def render_safety_copy(data):
     st.subheader("Clinical Copy Coverage (Path C)")
     st.caption(
-        "Dr. Pham-authored safety / bonus copy across six data files. "
+        "Dr. Pham-authored safety copy across six data files. "
         "Every field here should be populated before shipping — this page exists "
         "to spot staleness the moment it happens."
     )
