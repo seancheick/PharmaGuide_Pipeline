@@ -31,7 +31,11 @@ plausible wrong value costs a patient.
 - **Never touch another agent's work.** Work in your own branch/worktree,
   stage only your own paths, commit nothing you did not create.
 - **Never put a photo, crop or viewer inside the repository folder**, not even
-  a gitignored one. Scratch lives in `/tmp/pg_submissions/<alias>/`.
+  a gitignored one. Work lives in `~/pg_submissions/<alias>/`.
+- **Never launch a local vision model, download one, or run extraction
+  batches in parallel.** The reading is yours, from the photos, with the
+  existing OCR only as a lead and a check. If OCR stalls or the Mac slows,
+  stop and report it; do not retry in a loop or start another engine.
 
 Photographs may be opened by hosted models (owner's decision, 2026-09-27):
 looking at the photo yourself is the most accurate reader available.
@@ -62,8 +66,10 @@ that is Xcode's interpreter, without the repo's packages).
 `.env` must hold `SUPABASE_URL`, the anon/publishable key and the service-role
 key. It is gitignored, so a fresh worktree has none: symlink the main
 checkout's (`ln -s <main checkout>/.env .env`). Requests run as `PG_REVIEWER_EMAIL` until a machine reviewer account
-exists. Work files go to `/tmp/pg_submissions/<alias>/`
-(`PG_SUBMISSION_WORKDIR` overrides).
+exists. Work files go to `~/pg_submissions/<alias>/`, a private folder outside the
+repository that survives a reboot (`PG_SUBMISSION_WORKDIR` overrides). The first run
+moves work an older version left in `/tmp/pg_submissions` there and never overwrites
+anything already present; it says what it moved and what it left.
 
 ## Transcribing new submissions
 
@@ -103,6 +109,10 @@ Open every photo yourself at full resolution and read every panel: front
 (brand, product name), Supplement Facts (serving size, servings per
 container, every row with amount, unit and %DV), Other Ingredients,
 directions, warnings, storage, distributor, certifications.
+
+If the panel says "Nutrition Facts" rather than "Supplement Facts", it is a food
+(a shake, a bar, a drink), not a catalog product. Do not record it; report it as
+a likely rejection and leave the decision to the reviewer.
 
 For anything small, ambiguous or dense, look closer before you write it:
 
@@ -202,8 +212,10 @@ Then read back what the server holds:
 $R verify S18 --model <your model id>   # must end "READY for the reviewer"
 ```
 
-A submission is done only when `verify` says READY. Paste its output in your
-report.
+`verify` reads the server, not your files: it checks that the saved review
+agrees with the extraction the server recorded (additions only, as `save`
+enforces), is current, has no ticks and has no diagnostics. A submission is done
+only when `verify` says READY. Paste its output in your report.
 
 ### 8. Hand over
 
@@ -230,13 +242,16 @@ The machine worker drafts submissions on its own, under its own account, when
 the owner has enabled it. You only run it within caps and report.
 
 ```bash
-python3 scripts/prepare_product_submissions.py preflight   # stop if it refuses
-python3 scripts/prepare_product_submissions.py status
-python3 scripts/prepare_product_submissions.py --mode fake run --max-jobs 2
-python3 scripts/prepare_product_submissions.py --mode local run \
+$PG_PYTHON scripts/prepare_product_submissions.py preflight   # stop if it refuses
+$PG_PYTHON scripts/prepare_product_submissions.py status
+$PG_PYTHON scripts/prepare_product_submissions.py --mode fake run --max-jobs 2
+$PG_PYTHON scripts/prepare_product_submissions.py --mode local run \
     --max-jobs 10 --max-seconds 900 --max-microcents 100000
-python3 scripts/prepare_product_submissions.py reconcile --job-id <id> --fencing-token <token>
+$PG_PYTHON scripts/prepare_product_submissions.py reconcile --job-id <id> --fencing-token <token>
 ```
+
+`--mode local` loads a local vision model, which the "never launch a local vision
+model" rule above forbids unless the owner asks for that run in this session.
 
 Never enable extraction to make a run happen: the switch names a qualified
 provider, model digest, prompt version, retention policy and spending cap,
