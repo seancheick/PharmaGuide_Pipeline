@@ -7144,9 +7144,9 @@ class EnhancedDSLDNormalizer:
         ):
             logger.debug(f"Skipping nutrition fact: {name} (group: {ingredient_group}, unit: {unit_raw})")
             # Sprint E1.2.5 follow-up (2026-05-13): emit a display
-            # trail entry tagged 'nutrition_fact' so the build's
-            # ingredients_dropped_reasons surfaces DROPPED_NUTRITION_FACT
-            # for these rows. Without this, the E1.6 defense gate
+            # trail entry ('nutrition_fact', or 'summary_wrapper' for a label
+            # total) so the build's ingredients_dropped_reasons surfaces
+            # DROPPED_NUTRITION_FACT / DROPPED_SUMMARY_WRAPPER for these rows. Without this, the E1.6 defense gate
             # ("all raw actives reclassified as inactive") mis-fires on
             # legitimate-nutrition-facts products whose otheringredients
             # later land as inactives — the gate could not distinguish

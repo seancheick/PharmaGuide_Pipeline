@@ -3231,10 +3231,10 @@ def _compute_display_label(ingredient: Dict[str, Any], match: Optional[Dict[str,
 # "PARSE_ERROR" sentinel reason must not reach release.
 #
 # Reason-code enum (keep tight — anything else is a bug signal):
-_DROP_REASON_STRUCTURAL_HEADER = "DROPPED_STRUCTURAL_HEADER"   # "Total Omega-3", prop-blend parent
+_DROP_REASON_STRUCTURAL_HEADER = "DROPPED_STRUCTURAL_HEADER"   # prop-blend / container parent
 _DROP_REASON_NUTRITION_FACT = "DROPPED_NUTRITION_FACT"         # "Calories", macro rows
 _DROP_REASON_CLASSIFIED_INACTIVE = "DROPPED_AS_INACTIVE"        # routed to inactive_ingredients
-_DROP_REASON_SUMMARY_WRAPPER = "DROPPED_SUMMARY_WRAPPER"       # "Less than 2% of:" headers
+_DROP_REASON_SUMMARY_WRAPPER = "DROPPED_SUMMARY_WRAPPER"       # "Less than 2% of:", label totals ("Total Omega-3")
 _DROP_REASON_UNMAPPED = "DROPPED_UNMAPPED_ACTIVE"               # real active, scorer has no rule
 _DROP_REASON_PARSE_ERROR = "DROPPED_PARSE_ERROR"                # bug sentinel (must be 0)
 
