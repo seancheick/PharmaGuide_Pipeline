@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+from html import escape
 
 import pandas as pd
 import plotly.graph_objects as go
@@ -10,9 +11,9 @@ import pyarrow.dataset as pds
 import streamlit as st
 
 from scripts.dashboard import shell
-from scripts.dashboard.components.theme import KIND_COLORS, PILLAR_COLORS, TOKENS
+from scripts.dashboard.components.theme import PILLAR_COLORS, SEVERITY, TOKENS
 from scripts.dashboard.components.ui import (
-    chips, human, kind_label, kpis, muted, pillar_bars, pillar_state, severity_tone, table,
+    chip, chips, human, kind_label, kpis, muted, pillar_bars, pillar_state, receipt_label, severity_tone, table,
 )
 from scripts.dashboard.score_index import PILLAR_LABELS, PILLARS
 
@@ -46,108 +47,135 @@ def _pick_product(ctx: shell.PageContext) -> str | None:
     return picked
 
 
-def _composition(row: dict, maxima: dict[str, float]) -> go.Figure:
-    """One 100-point capacity bar: each pillar's points, then what it did not earn."""
-    fig = go.Figure()
-    unavailable = False
-    for pillar in PILLARS:
-        score = row.get(f"pillar_{pillar}")
-        mx = maxima[pillar]
-        if score is None or pd.isna(score):
-            unavailable = True
-            fig.add_bar(y=["Score"], x=[mx], orientation="h", name="Not assessed", showlegend=False,
-                        marker={"color": KIND_COLORS["not_earned"], "pattern": {"shape": "/"}},
-                        hovertemplate=f"{PILLAR_LABELS[pillar]}: not assessed<extra></extra>")
-            continue
-        score = float(score)
-        fig.add_bar(y=["Score"], x=[score], orientation="h", name=PILLAR_LABELS[pillar],
-                    marker={"color": PILLAR_COLORS[pillar], "line": {"color": TOKENS["surface"], "width": 2}},
-                    hovertemplate=f"{PILLAR_LABELS[pillar]}: {score:.1f} / {mx:g}<extra></extra>",
-                    text=f"{score:.1f}" if score >= 3 else "", textposition="inside", insidetextanchor="middle")
-        if mx - score > 0.05:
-            fig.add_bar(y=["Score"], x=[mx - score], orientation="h", showlegend=False, name="Not earned",
-                        marker={"color": KIND_COLORS["not_earned"], "line": {"color": TOKENS["surface"], "width": 2}},
-                        hovertemplate=f"{PILLAR_LABELS[pillar]} not earned: {mx - score:.1f}<extra></extra>")
-    fig.update_layout(barmode="stack", height=130, showlegend=False, xaxis={"range": [0, 100], "dtick": 10, "title": None},
-                      yaxis={"visible": False}, margin={"l": 4, "r": 4, "t": 30, "b": 4},
-                      title={"text": "100-point capacity — hatched is not assessed; grey is not earned" if unavailable else "100-point capacity — grey is not earned", "font": {"size": 14}})
-    return fig
+def _pts(value: float) -> str:
+    return f"{value:+.2f}".replace("-", "−")
 
 
-def _waterfall(pillar: str, receipts: pd.DataFrame, ledger: dict) -> go.Figure:
-    """Each receipt line steps from the running total, coloured by its kind; the last bar is the pillar."""
-    rows = receipts.sort_values("seq")
-    running = 0.0
-    fig = go.Figure()
-    seen: set[str] = set()
-    for r in rows.itertuples():
-        value = float(r.points or 0)
-        kind = str(r.kind)
-        start, running = running, running + value
-        fig.add_bar(x=[str(r.entry_id)], y=[abs(value)], base=[min(start, running)], name=kind_label(kind),
-                    legendgroup=kind, showlegend=kind not in seen,
-                    marker={"color": KIND_COLORS.get(kind, TOKENS["muted"]), "cornerradius": 4,
-                            "line": {"color": TOKENS["surface"], "width": 2}},
-                    text=[f"{value:+.2f}"], textposition="outside",
-                    hovertemplate=f"{kind_label(kind)} · {r.entry_id}<br>{value:+.4f} → running {running:.2f}<extra></extra>")
-        seen.add(kind)
-    score = float(ledger.get("score") or 0)
-    fig.add_bar(x=["Pillar score"], y=[score], base=[0], name="Pillar score", showlegend=False,
-                marker={"color": PILLAR_COLORS[pillar], "cornerradius": 4}, text=[f"{score:.1f}"], textposition="outside",
-                hovertemplate=f"Final {PILLAR_LABELS[pillar]}: {score:.1f}<extra></extra>")
-    mx = float(ledger.get("max") or 0)
-    low = min([0.0] + [float(v or 0) for v in rows["points"]]) if not rows.empty else 0.0
-    fig.add_hline(y=mx, line={"color": TOKENS["muted"], "dash": "dot", "width": 1},
-                  annotation_text=f"max {mx:g}", annotation_position="top left")
-    fig.update_layout(height=360, barmode="overlay", bargap=0.35, margin={"t": 40},
-                      legend={"orientation": "h", "y": 1.08, "x": 0},
-                      yaxis={"range": [min(0.0, low), max(mx, running) * 1.18 + 0.5], "title": "points"})
-    return fig
+def _receipt_detail(entry_id: str, row: dict, additives: pd.DataFrame) -> str | None:
+    """Which label fact a line came from, when the index recorded it."""
+    if entry_id == "dose_safety_ceiling" and row.get("dose_cap_nutrient"):
+        pct = row.get("dose_cap_pct_ul")
+        return f"{row['dose_cap_nutrient']} is at {pct:.0f}% of its daily upper limit" if pd.notna(pct) else str(row["dose_cap_nutrient"])
+    if entry_id == "additive_or_sweetener_penalty" and not additives.empty:
+        return " · ".join(f"{', '.join(map(str, list(a.labels)[:3])) if a.labels is not None and len(a.labels) else a.rule_id} "
+                          f"−{float(a.penalty or 0):g} ({a.tier} concern)" for a in additives.itertuples())
+    return None
 
 
-def _ledger(product: dict, pillar: str) -> None:
+def _receipt(product: dict, pillar: str, row: dict) -> None:
+    """One pillar as a plain receipt: every line that moved points, then the pillar total."""
     ledgers = product["ledgers"]
-    row = ledgers[ledgers["pillar"] == pillar]
-    if row.empty:
-        st.info(f"No {PILLAR_LABELS[pillar]} ledger: the product has no scored pillars "
-                "(suppressed or not scored).")
+    found = ledgers[ledgers["pillar"] == pillar]
+    if found.empty:
+        st.info(f"No {PILLAR_LABELS[pillar]} receipt: the product has no scored pillars (suppressed or not scored).")
         return
-    ledger = row.iloc[0].to_dict()
-    receipts = product["receipts"][product["receipts"]["pillar"] == pillar]
-    state = pillar_state(pillar, product["products"].iloc[0].to_dict())
-    if state:
-        chips([(state, "accent")])
-    left, right = st.columns([3, 2])
-    with left:
-        if receipts.empty:
-            st.info("No receipt recorded for this pillar.")
-        else:
-            st.plotly_chart(_waterfall(pillar, receipts, ledger), width="stretch", key=f"wf_{pillar}")
-    with right:
-        nominal = float(ledger.get("nominal_deductions") or 0)
-        realized = float(ledger.get("realized_deductions") or 0)
-        rows = [
-            ("Capacity", f"{float(ledger.get('max') or 0):g}"),
-            ("Points earned before deductions", f"{float(ledger.get('max') or 0) - float(ledger.get('unawarded') or 0):.2f}"),
-            ("Not earned", f"{float(ledger.get('unawarded') or 0):.2f}"),
-            ("Nominal deductions", f"{nominal:.2f}"),
-            ("Realized deductions", f"{realized:.2f}"),
-            ("Absorbed by floors", f"{realized - nominal:.2f}"),
-            ("Final pillar score", f"{float(ledger.get('score') or 0):.1f}"),
-        ]
-        st.dataframe(pd.DataFrame(rows, columns=["Ledger line", "Points"]), hide_index=True, width="stretch")
-        if ledger.get("reason"):
-            muted(str(ledger["reason"]))
-        if ledger.get("entry_sum") is not None and abs(float(ledger["entry_sum"]) - float(ledger["score"] or 0)) > 0.0505:
-            st.error(f"Receipt sums to {ledger['entry_sum']} but the pillar is {ledger['score']} — see the Audit Queue.")
-    if not receipts.empty:
-        display = receipts.sort_values("seq").assign(type=lambda d: d["kind"].map(kind_label))[
-            ["entry_id", "type", "points", "raw", "source", "basis", "withheld_by"]]
-        for column in ("source", "basis", "withheld_by"):
-            display[column] = display[column].astype(object).where(display[column].notna(), "")
-        st.dataframe(display, hide_index=True, width="stretch",
-                     column_config={"points": st.column_config.NumberColumn(format="%+.4f"),
-                                    "raw": st.column_config.NumberColumn(format="%.4f")})
+    ledger = found.iloc[0].to_dict()
+    receipts = product["receipts"][product["receipts"]["pillar"] == pillar].sort_values("seq")
+    score, mx = float(ledger.get("score") or 0), float(ledger.get("max") or 0)
+    html = [f'<div class="pg-card" style="margin-bottom:0.8rem"><div class="pg-card-head">'
+            f'<span class="pg-dot" style="background:{PILLAR_COLORS[pillar]}"></span>{escape(PILLAR_LABELS[pillar])}'
+            f'<span class="pg-card-score">{score:.1f} / {mx:g}</span></div>']
+    why = _clean(ledger.get("reason")) or pillar_state(pillar, row)
+    if why:
+        html.append(f'<div class="pg-why">{escape(str(why))}</div>')
+    shown = 0
+    for r in receipts.itertuples():
+        value = float(r.points or 0)
+        if r.kind == "rounding" and abs(value) < 0.005:
+            continue  # sub-hundredth residue of rounding to one decimal; kept in the technical table
+        detail = _receipt_detail(str(r.entry_id), row, product["additives"])
+        tone = {"deduction": "critical", "cap": "high", "floor": "ok"}.get(str(r.kind), "")
+        html.append(
+            f'<div class="pg-line"><span class="pg-pts">{_pts(value)}</span>'
+            f'<span>{escape(receipt_label(r.entry_id))}'
+            + (f'<span class="pg-detail">{escape(detail)}</span>' if detail else "")
+            + f'<span class="pg-id">{escape(str(r.source or r.entry_id))}</span></span>'
+            f'{chip(kind_label(str(r.kind)), tone)}</div>')
+        shown += 1
+    if not shown:
+        html.append('<div class="pg-line"><span></span><span>No receipt lines recorded for this pillar.</span><span></span></div>')
+    left = mx - score
+    html.append(f'<div class="pg-total"><span class="pg-pts">= {score:.1f}</span><span>out of {mx:g}</span>'
+                f'<span style="color:{TOKENS["muted"]};font-weight:400">'
+                f'{"full marks" if left < 0.05 else f"{left:.1f} below max"}</span></div>')
+    nominal, realized = float(ledger.get("nominal_deductions") or 0), float(ledger.get("realized_deductions") or 0)
+    if realized - nominal > 0.005:
+        html.append(f'<div class="pg-detail" style="margin-top:0.4rem">Deductions listed {_pts(nominal)}, actually taken '
+                    f'{_pts(realized)}: the rest would have pushed the pillar below its minimum.</div>')
+    elif nominal - realized > 0.005:
+        html.append(f'<div class="pg-detail" style="margin-top:0.4rem;color:{SEVERITY["critical"][0]}">Deductions listed '
+                    f'{_pts(nominal)} but {_pts(realized)} taken — more than listed; see the Audit Queue.</div>')
+    html.append("</div>")
+    st.markdown("".join(html), unsafe_allow_html=True)
+    if ledger.get("entry_sum") is not None and abs(float(ledger["entry_sum"]) - score) > 0.0505:
+        st.error(f"Receipt sums to {ledger['entry_sum']} but the pillar is {score} — see the Audit Queue.")
+
+
+def _clean(value) -> str:
+    return "" if value is None or (isinstance(value, float) and pd.isna(value)) else str(value)
+
+
+def _amount(value, unit) -> str:
+    return "" if value is None or pd.isna(value) else f"{float(value):,.4g} {_clean(unit)}".strip()
+
+
+def _label_facts(ctx: shell.PageContext, dsld_id: str, dose_refs: pd.DataFrame, dose_flags: pd.DataFrame) -> None:
+    """The printed label next to the score, with each nutrient's share of its daily upper limit."""
+    status = ctx.index.ingredient_staleness()
+    if not status["built"]:
+        st.info("Supplement Facts come from the ingredient index, which is not built yet.")
+        st.code("python -m scripts.dashboard.score_index refresh --ingredients", language="bash")
+        return
+    match = pds.field("dsld_id") == dsld_id
+    facts = ctx.index.ingredient_frame("label_facts", filter=match)
+    meta = ctx.index.ingredient_frame("product_meta", filter=match)
+    if facts.empty and meta.empty:
+        st.info("This product has no label rows in the ingredient index (rebuild it with `refresh --ingredients`).")
+        return
+    info = {key: _clean(value) for key, value in (meta.iloc[0].to_dict() if not meta.empty else {}).items()}
+    meta_bits = [b for b in (info.get("serving") and f"Serving: {info['serving']}",
+                             info.get("servings_per_container") and f"{float(info['servings_per_container']):g} servings per container",
+                             info.get("form_factor")) if b]
+    refs = {str(ref.canonical_id): ref for ref in dose_refs.itertuples()}
+    over = {}  # the scorer records % of UL only for nutrients its dose-safety check flagged
+    for flag in dose_flags.itertuples():
+        if pd.notna(flag.pct_ul) and flag.nutrient:
+            over[str(flag.nutrient).lower()] = max(float(flag.pct_ul), over.get(str(flag.nutrient).lower(), 0.0))
+    rows = ['<div class="pg-card"><div class="pg-facts-head">Supplement Facts</div>',
+            f'<div class="pg-facts-meta">{escape(" · ".join(map(str, meta_bits)))}</div>',
+            '<div class="pg-label-wrap"><table class="pg-label"><tr><th>Ingredient</th><th class="r">Per serving</th><th class="r">% DV</th>'
+            '<th class="r" title="Highest directed daily amount, as the scorer computed it">Per day</th>'
+            '<th class="r" title="Tolerable upper intake level used by the scorer; the percentage is recorded by the '
+            'dose-safety check when a nutrient crosses it">Upper limit</th></tr>']
+    actives = facts[facts["section"] == "active"].sort_values("seq")
+    for f in actives.itertuples():
+        ref = refs.get(str(f.canonical_id)) if int(f.depth or 0) == 0 else None
+        pct = over.get(str(f.name or "").lower())
+        if pct is None and ref is not None:
+            pct = over.get(str(ref.nutrient).lower())
+        per_day = _amount(ref.per_day_max, ref.unit) if ref is not None else ""
+        limit = _amount(ref.ul, ref.unit) if ref is not None else ""
+        indent = f'padding-left:{0.4 + 1.1 * int(f.depth or 0):.1f}rem'
+        rows.append(
+            f'<tr><td style="{indent}">{escape(_clean(f.name) or "—")}'
+            + (f'<span class="form">{escape(_clean(f.form))}</span>' if _clean(f.form) else "")
+            + f'</td><td class="num">{escape(_clean(f.amount) or "—")}</td>'
+            f'<td class="num">{"" if pd.isna(f.daily_value) else f"{f.daily_value:g}%"}</td>'
+            f'<td class="num">{escape(per_day)}</td>'
+            f'<td class="num{" over" if pct is not None and pct > 100 else ""}">{escape(limit)}'
+            f'{"" if pct is None else f" · {pct:.0f}%"}</td></tr>')
+    rows.append("</table></div>")
+    inactive = facts[facts["section"] == "inactive"].sort_values("seq")["name"].dropna().tolist()
+    if inactive:
+        rows.append(f'<div class="pg-facts-meta" style="margin-top:0.6rem"><b>Other ingredients:</b> {escape(", ".join(inactive))}</div>')
+    if info.get("directions"):
+        rows.append(f'<div class="pg-facts-meta"><b>Directions:</b> {escape(str(info["directions"]))}</div>')
+    rows.append("</div>")
+    st.markdown("".join(rows), unsafe_allow_html=True)
+    stale = " — stale, may predate this run" if status["stale"] else ""
+    muted(f"Label as recorded in the enriched data (ingredient index built {status.get('built_at') or '—'}{stale}). "
+          "Per day and upper limit come from the scorer's dose references. A red upper limit with a percentage is a "
+          "nutrient the dose-safety check found over its limit.")
 
 
 def _timeline(ctx: shell.PageContext, dsld_id: str) -> pd.DataFrame:
@@ -193,43 +221,58 @@ def render(ctx: shell.PageContext) -> None:
         st.warning(f"{human(row.get('quality_score_status'))}: {' · '.join(map(str, dict.fromkeys(reasons))) or 'no reason recorded'}",
                    icon=":material/block:")
 
-    st.plotly_chart(_composition(row, ctx.maxima), width="stretch", key="composition")
+    st.markdown("#### How the score adds up")
     pillar_bars(row, ctx.maxima)
+    parts = [(PILLAR_LABELS[p], row.get(f"pillar_{p}")) for p in PILLARS]
+    if pd.notna(row.get("total")) and all(v is not None and pd.notna(v) for _, v in parts):
+        equation = " + ".join(f"<b>{float(v):.1f}</b> {escape(name)}" for name, v in parts)
+        st.markdown(f'<div class="pg-sum">{equation} = <b>{row["total"]:.1f} / 100</b></div>', unsafe_allow_html=True)
 
-    st.markdown("#### Pillar ledgers")
-    tabs = st.tabs([PILLAR_LABELS[p] for p in PILLARS])
-    for tab, pillar in zip(tabs, PILLARS):
-        with tab:
-            _ledger(product, pillar)
-    muted(NO_LINK)
+    left, right = st.columns([5, 6])
+    with left:
+        st.markdown("#### Why each pillar scored what it did")
+        for pillar in PILLARS:
+            _receipt(product, pillar, row)
+        muted("Each line is a receipt entry recorded by the scorer; the grey text is its source in the scoring config. "
+              + NO_LINK)
+    with right:
+        st.markdown("#### Label as printed")
+        _label_facts(ctx, dsld_id, product["dose_refs"], product["dose_flags"])
 
-    st.markdown("#### Gates, dose safety and additives")
-    g1, g2 = st.columns(2)
-    with g1:
-        flags = product["dose_flags"]
-        st.caption("Dose safety evaluation (exposure that triggered a ceiling is marked)")
-        table(flags[["state", "nutrient", "pct_ul", "pct_ul_at_minimum", "is_ceiling", "ceiling_kind", "ul", "ul_unit",
-                     "reason"]] if not flags.empty else flags, key="trace_flags", name=f"dose_flags_{dsld_id}",
-              run_key=ctx.run_key, height=220)
-        missing = list(row.get("completeness_missing") if row.get("completeness_missing") is not None else [])
+    missing = list(row.get("completeness_missing") if row.get("completeness_missing") is not None else [])
+    signals = list(row.get("safety_signals") if row.get("safety_signals") is not None else [])
+    if missing or signals or pd.notna(row.get("completeness_score_cap")):
         st.caption(f"Completeness gate — missing: {', '.join(missing) or 'none'} · score cap: "
                    f"{row.get('completeness_score_cap') if pd.notna(row.get('completeness_score_cap')) else 'none'} · "
-                   f"safety signals: {', '.join(list(row.get('safety_signals') if row.get('safety_signals') is not None else [])) or 'none'}")
-    with g2:
-        additives = product["additives"]
-        st.caption("Additive and sweetener penalty lines (Formula checks)")
-        table(additives, key="trace_additives", name=f"additives_{dsld_id}", run_key=ctx.run_key, height=220)
-    st.caption("Dose references (% of RDA/AI and of the upper limit, per ingredient)")
-    table(product["dose_refs"].drop(columns=["dsld_id"]), key="trace_refs", name=f"dose_refs_{dsld_id}",
-          run_key=ctx.run_key, height=260)
+                   f"safety signals: {', '.join(signals) or 'none'}")
 
-    st.markdown("#### Ingredients and peer context")
+    with st.expander("Technical details — raw receipt, dose checks and additive rules", icon=":material/table:"):
+        receipts = product["receipts"].sort_values(["pillar", "seq"]).assign(
+            pillar=lambda d: d["pillar"].map(PILLAR_LABELS), line=lambda d: d["entry_id"].map(receipt_label),
+            type=lambda d: d["kind"].map(kind_label))
+        table(receipts[["pillar", "line", "entry_id", "type", "points", "raw", "source", "basis", "withheld_by"]],
+              key="trace_receipts", name=f"receipt_{dsld_id}", run_key=ctx.run_key, height=320,
+              caption="Every receipt entry, unrounded. Points sum to each pillar.")
+        ledgers = product["ledgers"].assign(pillar=lambda d: d["pillar"].map(PILLAR_LABELS))
+        table(ledgers[["pillar", "score", "max", "nominal_deductions", "realized_deductions", "unawarded", "state"]],
+              key="trace_ledgers", name=f"ledgers_{dsld_id}", run_key=ctx.run_key, height=260,
+              caption="unawarded = capacity minus the score the pillar would have without deductions (caps included).")
+        flags = product["dose_flags"]
+        table(flags[["state", "nutrient", "pct_ul", "pct_ul_at_minimum", "is_ceiling", "ceiling_kind", "ul", "ul_unit",
+                     "reason"]] if not flags.empty else flags, key="trace_flags", name=f"dose_flags_{dsld_id}",
+              run_key=ctx.run_key, height=220, caption="Dose safety checks: % of the upper limit at the highest and lowest directed use.")
+        table(product["dose_refs"].drop(columns=["dsld_id"]), key="trace_refs", name=f"dose_refs_{dsld_id}",
+              run_key=ctx.run_key, height=260, caption="Dose references per nutrient (% of RDA/AI and of the upper limit).")
+        table(product["additives"].drop(columns=["dsld_id"]), key="trace_additives", name=f"additives_{dsld_id}",
+              run_key=ctx.run_key, height=220, caption="Additive and sweetener rules that deducted Formula checks points.")
+
+    st.markdown("#### Ingredient matches and peer context")
     ingredient_status = ctx.index.ingredient_staleness()
     if ingredient_status["built"]:
         if ingredient_status["stale"]:
             st.warning("Ingredient index is stale; ingredient details may predate this run.")
-        st.caption(f"Ingredient details come from the separate enriched index built at {ingredient_status.get('built_at')}; "
-                   "they are not a snapshot of this selected scoring run.")
+        st.caption(f"How each label row matched the ingredient database (enriched index built at "
+                   f"{ingredient_status.get('built_at')}; not a snapshot of this selected scoring run).")
         ingredients = ctx.index.ingredient_frame(filter=pds.field("dsld_id") == dsld_id)
         table(ingredients[ingredients["dsld_id"] == dsld_id], key="trace_ingredients",
               name=f"ingredients_{dsld_id}",

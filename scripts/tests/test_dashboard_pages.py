@@ -53,6 +53,53 @@ def test_every_page_renders_against_a_real_index(dashboard_app, indexed):
     dashboard_app.view("trace").render(ctx)
 
 
+def _markdown(st) -> str:
+    return "\n".join(str(call.args[0]) for call in st.markdown.call_args_list if call.args)
+
+
+def test_trace_shows_a_plain_receipt_and_the_printed_label(dashboard_app, indexed):
+    from dashboard_index_fixtures import enriched_product, write_enriched
+
+    scan, dist = indexed
+    bare = {k: v for k, v in enriched_product("1").items() if k not in ("statements", "servingSizes", "servingsPerContainer")}
+    write_enriched(scan, "Acme", [enriched_product("4"), bare])
+    si.refresh_ingredients(si.default_paths(scan, dist))
+    data = dashboard_app.load_dashboard_data(dashboard_app.DashboardConfig(scan_dir=scan, build_root=dist))
+    ctx = dashboard_app.shell.init(data)
+    dashboard_app.st.session_state["trace_dsld_id"] = "4"
+    dashboard_app.st.markdown.reset_mock()
+    dashboard_app.view("trace").render(ctx)
+    html = _markdown(dashboard_app.st)
+    assert "Supplement Facts" in html and "Magnesium Glycinate" in html and "100 mg" in html
+    assert "Other ingredients:</b> Vegetable Cellulose" in html and "Take two capsules daily." in html
+    assert "2 Capsule(s), 1–2× per day" in html
+    # every pillar closes with its own total, and the six totals are written out as one sum
+    assert html.count('class="pg-total"') == 6
+    assert "/ 100</b>" in html
+    # a deduction absorbed by the floor is explained in words, not as a bare number pair
+    assert "actually taken" in html
+    # a label without directions or serving data shows nothing for them, never "nan"
+    dashboard_app.st.session_state["trace_dsld_id"] = "1"
+    dashboard_app.st.markdown.reset_mock()
+    dashboard_app.view("trace").render(ctx)
+    html = _markdown(dashboard_app.st)
+    assert "Supplement Facts" in html
+    assert "Directions" not in html
+    assert "Serving:" not in html
+    assert not re.search(r"\bnan\b", html), re.findall(r".{60}\bnan\b.{20}", html)
+
+
+def test_receipt_labels_are_plain_and_keep_unknown_ids_readable():
+    from scripts.dashboard.components.ui import receipt_label
+    from scripts.scoring_v4.penalty_registry import COMPONENT_KINDS, PENALTY_REGISTRY
+
+    for key in [*COMPONENT_KINDS, *PENALTY_REGISTRY]:
+        assert receipt_label(key.split(".")[-1]) != key.split(".")[-1]   # every registered line has a plain name
+    assert receipt_label("dose_pillar_bounds") == "Dose pillar limit"
+    assert receipt_label("A1_bio_score_unrated_neutral").startswith("Ingredient form quality")
+    assert receipt_label("brand_new_component") == "Brand new component"
+
+
 def _frame(indexed, plane="candidate"):
     scan, dist = indexed
     reader = si.IndexReader(si.default_paths(scan, dist))
@@ -209,12 +256,16 @@ def test_trace_navigation_replaces_stale_search_and_run(dashboard_app):
     assert st.query_params["run"] == "release-example"
 
 
-def test_unavailable_composition_is_not_labelled_zero_or_unearned():
-    from scripts.dashboard.views.trace import _composition
-    from scripts.dashboard.score_index import pillar_maxima
-    fig = _composition({"quality_score_status": "suppressed_safety"}, pillar_maxima())
-    assert "not assessed" in fig.layout.title.text.lower()
-    assert all("not assessed" in trace.hovertemplate.lower() for trace in fig.data)
+def test_unavailable_pillars_are_not_labelled_zero_or_unearned(dashboard_app, indexed):
+    scan, dist = indexed
+    data = dashboard_app.load_dashboard_data(dashboard_app.DashboardConfig(scan_dir=scan, build_root=dist))
+    ctx = dashboard_app.shell.init(data)
+    dashboard_app.st.session_state["trace_dsld_id"] = "3"          # suppressed_safety: no pillar scores
+    dashboard_app.st.markdown.reset_mock()
+    dashboard_app.view("trace").render(ctx)
+    html = _markdown(dashboard_app.st)
+    assert html.count('<span style="text-align:right">—</span>') == 6   # every pillar shown as unavailable
+    assert "0.0 /" not in html and "below max" not in html and "/ 100</b>" not in html
 
 
 def test_explorer_preserves_saved_confidence_predicates(dashboard_app, indexed, monkeypatch):

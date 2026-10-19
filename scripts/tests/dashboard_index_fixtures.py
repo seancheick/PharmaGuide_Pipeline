@@ -161,6 +161,18 @@ def enriched_product(pid: str, *, brand: str = "Acme", forms: list[tuple[str, st
              "role_classification": "primary", "is_blend_header": False}
             for cid, form in (forms or [("magnesium", "magnesium glycinate")])
         ]},
+        "display_ingredients": [
+            {"source_section": "activeIngredients", "label_display_name": "Magnesium", "exact_dose_text": "100 mg",
+             "dailyValue": 24.0, "label_display_form": "Magnesium Glycinate", "nested_depth": 0, "parent_label": None,
+             "score_included": True, "display_disposition": "scored", "canonical_id": "magnesium"},
+            {"source_section": "inactiveIngredients", "display_name": "Vegetable Cellulose", "nested_depth": 0,
+             "score_included": False, "display_disposition": "inactive"},
+        ],
+        "servingSizes": [{"minQuantity": 2.0, "maxQuantity": 2.0, "unit": "Capsule(s)", "minDailyServings": 1,
+                          "maxDailyServings": 2}],
+        "servingsPerContainer": 30,
+        "statements": [{"type": "Suggested/Recommended/Usage/Directions", "notes": "Take two capsules daily."},
+                       {"type": "Storage", "notes": "Store cool."}],
     }
 
 
