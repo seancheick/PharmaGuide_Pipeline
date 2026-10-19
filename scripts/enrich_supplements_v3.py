@@ -151,7 +151,7 @@ from proprietary_blend_detector import ProprietaryBlendDetector, disclosure_tier
 
 # One direct child row of a raw label row: "<parent>.nestedRows[3]".
 _RAW_CHILD_ROW = re.compile(r"\.nestedRows\[\d+\]")
-from rda_ul_calculator import RDAULCalculator, label_population_members, ul_display_severity, ul_exceedance_sentence
+from rda_ul_calculator import RDAULCalculator, label_pediatric_age_ranges, label_population_members, ul_display_severity, ul_exceedance_sentence
 from reference_data_contract import reference_stamp
 from collagen_taxonomy import classify_collagen_subtype_strict, UNSPECIFIED as _COLLAGEN_UNSPECIFIED
 import normalization as norm_module  # Single-source normalization
@@ -21713,31 +21713,12 @@ class SupplementEnricherV3:
 
     @staticmethod
     def _ul_screening_pediatric_age_groups(product: Dict) -> Optional[Tuple[str, ...]]:
-        """Do not borrow adolescent rows for an explicitly younger-only label.
+        """NASEM child age bands the label states (rda_ul_calculator owns the reading).
 
-        None retains the available pediatric rows for a broad children label;
-        an empty selection says no existing row covers the stated age range.
-        Population unions retain adolescent coverage if any tag includes it.
+        None: no pediatric target group. "0-1" (infants) has no reference rows,
+        so it keeps the screen's explicit reference gap.
         """
-        pediatric_tags = []
-        for group in product.get("targetGroups") or []:
-            text = group if isinstance(group, str) else (
-                (group.get("text") or group.get("name") or "") if isinstance(group, dict) else "")
-            tag = str(text).strip().lower()
-            if not any(word in tag for word in ("child", "infant", "boys", "girls")):
-                continue
-            age_range = re.search(r"(\d+)\s*[-–—]\s*(\d+)\s*(?:years?|yrs?)", tag)
-            under = re.search(r"(?:under|less than)\s*(\d+)\b", tag)
-            younger_only = ("infant" in tag and "child" not in tag or
-                            age_range is not None and int(age_range.group(2)) < 14 or
-                            under is not None and int(under.group(1)) <= 14)
-            adolescent_only = age_range is not None and 14 <= int(age_range.group(1)) <= int(age_range.group(2)) <= 18
-            pediatric_tags.append("younger" if younger_only else "adolescent" if adolescent_only else "broad")
-        if pediatric_tags and all(tag == "younger" for tag in pediatric_tags):
-            return ()
-        if pediatric_tags and all(tag == "adolescent" for tag in pediatric_tags):
-            return ("14-18",)
-        return None
+        return label_pediatric_age_ranges(product)
 
     def _collect_rda_ul_data(
         self,

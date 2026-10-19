@@ -109,14 +109,22 @@ UL_SCREENING_POPULATIONS = {
     "adults_19_50": {"groups": ("Male", "Female"), "ages": ("19-30", "31-50"), "label": "adults 19-50"},
     "adults_51_plus": {"groups": ("Male", "Female"), "ages": ("51-70", "71+"), "label": "adults 51+"},
     # Ordinary adult pregnancy and lactation (19-50); adolescent life stages
-    # belong with the pediatric gap below, as for the general adult screen.
+    # belong with the pediatric screen below, as for the general adult screen.
     "pregnancy_lactation": {"groups": ("Pregnancy", "Lactation"), "ages": ("19-30", "31-50"),
                             "label": "pregnancy and lactation"},
-    # Existing adolescent rows apply to a broad pediatric label. They do not
-    # establish a reference for younger children; preserve that coverage gap.
-    "pediatric": {"groups": ("Male", "Female"), "ages": ("14-18",), "label": "adolescents 14-18",
-                  "reference_gap": "pediatric_ul_rows_below_14_not_in_reference_data"},
+    # Children screen the NASEM rows for the ages the label states (Sean,
+    # 2026-10-19). A stated age without a UL row for this nutrient (infants;
+    # vanadium for every child age) never borrows an older limit: it stays an
+    # explicit reference gap and the assessment stays incomplete.
+    "pediatric": {"groups": ("Male", "Female"), "ages": ("0-1", "1-3", "4-8", "9-13", "14-18"),
+                  "label": "children and adolescents",
+                  "reference_gap": "pediatric_ul_row_missing_for_stated_age"},
 }
+# NASEM DRI life-stage bands for children, as [lower, upper) years of age.
+PEDIATRIC_AGE_BANDS = (("0-1", 0, 1), ("1-3", 1, 4), ("4-8", 4, 9), ("9-13", 9, 14), ("14-18", 14, 19))
+# A pediatric label that states no age covers children 1-18; DSLD files infants separately.
+_BROAD_PEDIATRIC_AGES = ("1-3", "4-8", "9-13", "14-18")
+_PEDIATRIC_WORDS = ("child", "infant", "boys", "girls")
 _AGE_LABELS = {("51-70", "71+"): "adults 51+", ("71+",): "adults 71+", ("51-70",): "adults 51-70",
                ("19-30", "31-50"): "adults 19-50", ("19-30",): "adults 19-30", ("31-50",): "adults 31-50"}
 
@@ -130,7 +138,7 @@ _UL_POPULATION_TAGS = (
     ("general_adult", ("not pregnant", "not lactating")),
     ("pregnancy_lactation", ("pregnant", "lactating")),
     ("adults_51_plus", ("seniors/mature (>50",)),
-    ("pediatric", ("child", "infant", "boys", "girls")),
+    ("pediatric", _PEDIATRIC_WORDS),
     ("general_adult", ("adult (18 - 50", "adult male (18", "adult female (18", "menopause")),
 )
 
@@ -143,9 +151,7 @@ def label_population_members(product: Dict) -> Tuple[str, ...]:
     """
     found = set()
     for group in product.get("targetGroups") or []:
-        text = group if isinstance(group, str) else (
-            (group.get("text") or group.get("name") or "") if isinstance(group, dict) else "")
-        tag = str(text).strip().lower()
+        tag = _target_group_text(group)
         population = next((population for population, needles in _UL_POPULATION_TAGS
                            if any(needle in tag for needle in needles)), None)
         # An explicit 19-50 restriction reaches its existing UL owner. The
@@ -158,6 +164,60 @@ def label_population_members(product: Dict) -> Tuple[str, ...]:
         if population:
             found.add(population)
     return tuple(sorted(found or {"general_adult"}))
+
+
+def _target_group_text(group: Any) -> str:
+    text = group if isinstance(group, str) else (
+        (group.get("text") or group.get("name") or "") if isinstance(group, dict) else "")
+    return str(text).strip().lower()
+
+
+def _pediatric_years(tag: str) -> Tuple[int, int]:
+    """The [lower, upper) years of age one pediatric DSLD target group states."""
+    if "infant" in tag or "baby" in tag:
+        return 0, 1
+    between = re.search(r"more than\s*(\d+)\s*but less than\s*(\d+)", tag)
+    if between:
+        return int(between.group(1)), int(between.group(2))
+    span = re.search(r"(\d+)\s*[-–—]\s*(\d+)\s*(?:years?|yrs?)", tag)
+    if span:
+        return int(span.group(1)), int(span.group(2)) + 1
+    at_least = re.search(r"(\d+)\s*(?:or more|\+|and (?:up|older|over))", tag)
+    if at_least:
+        return int(at_least.group(1)), 19
+    under = re.search(r"(?:under|less than)\s*(\d+)", tag)
+    if under:
+        return 0, int(under.group(1))
+    return 1, 19
+
+
+def label_pediatric_age_ranges(product: Dict) -> Optional[Tuple[str, ...]]:
+    """The NASEM child age bands the label's pediatric target groups cover.
+
+    None when no target group names children. Several pediatric tags cover the
+    union of their ages, so the screen takes the lowest limit across all of them.
+    """
+    covered: set = set()
+    pediatric = False
+    for group in product.get("targetGroups") or []:
+        tag = _target_group_text(group)
+        if not any(word in tag for word in _PEDIATRIC_WORDS):
+            continue
+        pediatric = True
+        low, high = _pediatric_years(tag)
+        covered |= {age for age, band_low, band_high in PEDIATRIC_AGE_BANDS
+                    if band_low < high and low < band_high}
+    if not pediatric:
+        return None
+    return tuple(age for age, _, _ in PEDIATRIC_AGE_BANDS if age in covered)
+
+
+def _pediatric_age_label(ages: Sequence[str]) -> str:
+    bands = [band for band in PEDIATRIC_AGE_BANDS if band[0] in ages]
+    low, high = bands[0][1], bands[-1][2] - 1
+    if low >= 14:
+        return "adolescents 14-18"
+    return f"{'children' if high <= 13 else 'children and adolescents'} {low}-{high}"
 
 
 def ul_exceedance_sentence(amount: float, ul: float, unit: str, scope_label: str = "general adult") -> str:
@@ -744,30 +804,29 @@ class RDAULCalculator:
                       pediatric_age_groups: Optional[Sequence[str]] = None) -> Tuple[Optional[float], Dict]:
         """Lowest established UL across every listed screening population, and its scope."""
         members = sorted({population} if isinstance(population, str) else set(population))
+        pediatric_ages = (tuple(pediatric_age_groups) if pediatric_age_groups is not None
+                          else _BROAD_PEDIATRIC_AGES)
         rows_by_member = {member: [
             row for row in nutrient_data.get("data", [])
             if row.get("group") in UL_SCREENING_POPULATIONS[member]["groups"]
             and row.get("age_range") in UL_SCREENING_POPULATIONS[member]["ages"]
-            and (member != "pediatric" or pediatric_age_groups is None
-                 or row.get("age_range") in pediatric_age_groups)
+            and (member != "pediatric" or row.get("age_range") in pediatric_ages)
             and isinstance(row.get("ul"), (int, float)) and not isinstance(row.get("ul"), bool)
             and row.get("ul") > 0] for member in members}
         scope = {"id": "+".join(members), "members": members,
                  "label": " and ".join(dict.fromkeys(UL_SCREENING_POPULATIONS[m]["label"] for m in members))}
-        gaps = [UL_SCREENING_POPULATIONS[m]["reference_gap"] for m in members
-                if UL_SCREENING_POPULATIONS[m].get("reference_gap")
-                and not (m == "pediatric" and pediatric_age_groups)]
-        # A missing age row is a gap only for an established upper reference.
-        # Completed "no established UL" records (for example B12) retain that
-        # conclusion rather than becoming an unfinished pediatric comparison.
-        if gaps and not any(
+        # Every stated child age needs its own row. A missing age row is a gap
+        # only for an established upper reference: completed "no established
+        # UL" records (for example B12) retain that conclusion.
+        missing_ages = [age for age in pediatric_ages if "pediatric" in members
+                        and not any(row["age_range"] == age for row in rows_by_member["pediatric"])]
+        if missing_ages and any(
             isinstance(row.get("ul"), (int, float)) and not isinstance(row.get("ul"), bool)
             and row["ul"] > 0 and self._determine_ul_status(nutrient_data, row["ul"]) == "established"
             for row in nutrient_data.get("data", [])
         ):
-            gaps = []
-        if gaps:
-            scope["reference_gap"] = gaps[0]
+            scope["reference_gap"] = UL_SCREENING_POPULATIONS["pediatric"]["reference_gap"]
+            scope["missing_age_ranges"] = missing_ages
         all_rows = [row for rows in rows_by_member.values() for row in rows]
         if not all_rows:
             if "pediatric" in members:
@@ -784,6 +843,8 @@ class RDAULCalculator:
             label = spec["label"]
             if member == "general_adult" and len({row["ul"] for row in rows}) > 1:
                 label = _AGE_LABELS.get(member_ages, label)
+            elif member == "pediatric":
+                label = _pediatric_age_label(member_ages)
             labels.append(label)
             ages.extend(age for age in member_ages if age not in ages)
         scope["label"] = " and ".join(dict.fromkeys(labels))
