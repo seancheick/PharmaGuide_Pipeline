@@ -1,9 +1,9 @@
 {
   "_metadata": {
-    "schema_version": "1.0.0",
+    "schema_version": "1.1.0",
     "description": "Curated 35-product v4 canary set spanning 14 primary classes (single_nutrient, multivitamin, prenatal_multi, probiotic, fish_oil, herbal_branded_extract / unstandardized / marker_pct, sports_opaque / transparent, specialty, greens_superfood, blocked_verdict, manufacturer_signal_only) and all 4 B5 router class routes (probiotic / multi_or_prenatal / sports_active / generic). Each entry encodes expected_b5_class, expected_dose_route_v4, edge_cases, and v3 shipped score/verdict for regression baselining.",
     "purpose": "v4 dose + B5 class-aware + cert coverage canary set. Used by test_v4_canary_coverage.py to guarantee every product class + edge case the v4 design depends on is exercised on real shipped data. Add a new entry before adding a new class to the scorer; remove an entry only with a decision log note. Source of truth for canary-based regression review and the score-delta report.",
-    "last_updated": "2026-09-11",
+    "last_updated": "2026-10-19",
     "retired_canaries": [
       {
         "dsld_id": "294063",
@@ -33,7 +33,8 @@
       "specialty",
       "greens_superfood",
       "blocked_verdict",
-      "manufacturer_signal_only"
+      "manufacturer_signal_only",
+      "b_complex"
     ],
     "b5_class_routes": [
       "probiotic",
@@ -41,7 +42,548 @@
       "sports_active",
       "generic"
     ],
-    "notes": "expected_b5_class is the v4-correct routing decision. Where the current scorer disagrees, the discrepancy is captured in edge_cases as 'router_disagreement_*' so test_v4_canary_coverage flags (not fails) until the router fix lands."
+    "notes": "expected_b5_class is the v4-correct routing decision. Where the current scorer disagrees, the discrepancy is captured in edge_cases as 'router_disagreement_*' so test_v4_canary_coverage flags (not fails) until the router fix lands.",
+    "golden_set": {
+      "purpose": "v4 golden set: each canary states expected route, statuses, a tier band and pillar invariants. The Coverage & Calibration dashboard raises a finding when a canary breaks one; a break is fixed at its owner or explained by an allowed movement reason, never by editing the expectation to the current score.",
+      "reviewed_against": "Score stage run 20261019T070203540018Z (quality_score.json 1.29.1-dose-v41-omega-integration), main e6f2dd103.",
+      "approval": "Approved by Sean 2026-10-19: D1 schema, D2 +/-5 tier band, D3 the 18 additions, D4 211448 class unchanged, D5 F1/F2 kept as failing expectations (scripts/audits/golden_set_v4_20261019/REVIEW.md).",
+      "expectation_owners": {
+        "expected_v4_module": "scripts/scoring_input_contract.py::build_scoring_classification (route_decision.module, ROUTE_CLASSIFIER_VERSION 1.3.2) -> artifact _v4_module",
+        "expected_quality_score_status": "scripts/scoring_v4/quality_score.py::assemble_quality_score; scripts/scoring_v4/config/quality_score.json suppression",
+        "expected_quality_assessment_status": "scripts/scoring_v4/scored_artifact.py::_quality_assessment_status, scripts/scoring_v4/scored_artifact.py::unfinished_source_assessment, scripts/scoring_v4/scored_artifact.py::UNASSESSED_EVIDENCE_DISPLAY_STATES",
+        "expected_product_safety_status": "scripts/scoring_v4/scored_artifact.py::_product_safety_status (catalog safety gate only; never legacy verdict)",
+        "expected_quality_tier_band": "scripts/scoring_v4/quality_score.py::_tier over scripts/scoring_v4/config/quality_score.json tiers, read from the public display score; band = tiers reachable within +/-5 points of the reviewed score (drift tolerance, not a ranking)"
+      },
+      "global_scored_invariants": {
+        "tier_matches_display_score": {
+          "rule": "quality_tier is the configured tier of the public display score.",
+          "owner": "scripts/scoring_v4/quality_score.py::_tier, scripts/scoring_v4/quality_score.py display rounding (floor(x+0.5)); scripts/scoring_v4/config/quality_score.json tiers"
+        },
+        "pillars_sum_to_score": {
+          "rule": "The six public pillars add up to quality_score_v4_100 (within rounding).",
+          "owner": "scripts/scoring_v4/quality_score.py::assemble_quality_score; scripts/scoring_v4/config/quality_score.json pillars"
+        }
+      },
+      "pillar_invariants": {
+        "verification_unknown_neutral": {
+          "rule": "Verification stays at the neutral 6/15 when no verification evidence is on file (unknown is not a penalty).",
+          "owner": "scripts/scoring_v4/quality_score.py::_pillar_verification; scripts/scoring_v4/config/quality_score.json verification_subscale.neutral_baseline",
+          "checks": [
+            [
+              "quality_pillars_v4.verification.components.tier",
+              "eq",
+              "unknown"
+            ],
+            [
+              "quality_pillars_v4.verification.components.fail_open_neutral",
+              "eq",
+              true
+            ],
+            [
+              "quality_pillars_v4.verification.score",
+              "eq",
+              6.0
+            ]
+          ]
+        },
+        "verification_claim_or_brand_ceiling": {
+          "rule": "Label claims, own testing and reputation without independent verification stay at or below 8/15.",
+          "owner": "scripts/scoring_v4/quality_score.py::_pillar_verification; scripts/scoring_v4/config/quality_score.json verification_subscale.tier_ceilings.claim_or_brand",
+          "checks": [
+            [
+              "quality_pillars_v4.verification.components.tier",
+              "eq",
+              "claim_or_brand"
+            ],
+            [
+              "quality_pillars_v4.verification.score",
+              "le",
+              8.0
+            ]
+          ]
+        },
+        "verification_manufacturing_ceiling": {
+          "rule": "Verified facility or brand-scoped evidence without product-level certification stays at or below 10/15.",
+          "owner": "scripts/scoring_v4/quality_score.py::_pillar_verification; scripts/scoring_v4/config/quality_score.json verification_subscale.tier_ceilings.manufacturing",
+          "checks": [
+            [
+              "quality_pillars_v4.verification.components.tier",
+              "eq",
+              "manufacturing"
+            ],
+            [
+              "quality_pillars_v4.verification.score",
+              "le",
+              10.0
+            ]
+          ]
+        },
+        "verification_product_floor": {
+          "rule": "Registry-backed product-level certification earns at least 11/15.",
+          "owner": "scripts/scoring_v4/quality_score.py::_pillar_verification; scripts/scoring_v4/config/quality_score.json verification_subscale.product_level_floor",
+          "checks": [
+            [
+              "quality_pillars_v4.verification.components.tier",
+              "eq",
+              "product"
+            ],
+            [
+              "quality_pillars_v4.verification.score",
+              "ge",
+              11.0
+            ]
+          ]
+        },
+        "dose_unbenchmarked_neutral": {
+          "rule": "A disclosed amount with no applicable benchmark takes the shared Dose neutral 11.4, never a studied-range claim.",
+          "owner": "scripts/scoring_v4/config/quality_score.json dose_subscale.unbenchmarked_neutral_public",
+          "checks": [
+            [
+              "quality_pillars_v4.dose.score",
+              "eq",
+              11.4
+            ]
+          ]
+        },
+        "dose_ul_partial_ceiling": {
+          "rule": "A confirmed UL exceedance above 100% and below 150% at maximum directed daily use caps public Dose at 10.",
+          "owner": "scripts/scoring_v4/dose_safety.py::DoseSafetyResult.dose_ceiling; scripts/scoring_v4/config/quality_score.json dose_safety_ceiling.exceeds_above_pct/zero_at_pct/partial_ceiling_public",
+          "checks": [
+            [
+              "dose_safety_evaluation.dose_ceiling.kind",
+              "eq",
+              "established_upper_limit"
+            ],
+            [
+              "dose_safety_evaluation.dose_ceiling.pct_ul",
+              "gt",
+              100.0
+            ],
+            [
+              "dose_safety_evaluation.dose_ceiling.pct_ul",
+              "lt",
+              150.0
+            ],
+            [
+              "dose_safety_evaluation.dose_ceiling.cap_public",
+              "eq",
+              10.0
+            ],
+            [
+              "quality_pillars_v4.dose.score",
+              "le",
+              10.0
+            ]
+          ]
+        },
+        "dose_ul_zero_ceiling": {
+          "rule": "A confirmed UL exceedance at or above 150% at maximum directed daily use sets public Dose to 0.",
+          "owner": "scripts/scoring_v4/dose_safety.py::DoseSafetyResult.dose_ceiling; scripts/scoring_v4/config/quality_score.json dose_safety_ceiling.zero_at_pct",
+          "checks": [
+            [
+              "dose_safety_evaluation.dose_ceiling.kind",
+              "eq",
+              "established_upper_limit"
+            ],
+            [
+              "dose_safety_evaluation.dose_ceiling.pct_ul",
+              "ge",
+              150.0
+            ],
+            [
+              "dose_safety_evaluation.dose_ceiling.cap_public",
+              "eq",
+              0.0
+            ],
+            [
+              "quality_pillars_v4.dose.score",
+              "eq",
+              0.0
+            ]
+          ]
+        },
+        "dose_caffeine_zero_ceiling": {
+          "rule": "Declared caffeine of 600 mg/day or more at maximum directed daily use sets public Dose to 0 through the same ceiling.",
+          "owner": "scripts/scoring_v4/dose_safety.py::DoseSafetyResult.dose_ceiling; scripts/scoring_v4/config/quality_score.json dose_safety_ceiling.caffeine",
+          "checks": [
+            [
+              "dose_safety_evaluation.dose_ceiling.kind",
+              "eq",
+              "caffeine_daily_total"
+            ],
+            [
+              "dose_safety_evaluation.dose_ceiling.amount_mg_day",
+              "ge",
+              600.0
+            ],
+            [
+              "quality_pillars_v4.dose.score",
+              "eq",
+              0.0
+            ]
+          ]
+        },
+        "dose_caffeine_below_ceiling": {
+          "rule": "Declared caffeine at or below 400 mg/day at maximum directed daily use sets no Dose ceiling.",
+          "owner": "scripts/scoring_v4/config/quality_score.json dose_safety_ceiling.caffeine.exceeds_above_mg_day",
+          "checks": [
+            [
+              "dose_safety_evaluation.caffeine.total_mg_day_max",
+              "le",
+              400.0
+            ],
+            [
+              "dose_safety_evaluation.dose_ceiling",
+              "is_null",
+              null
+            ]
+          ]
+        },
+        "dose_ceiling_applied_once": {
+          "rule": "One product-level Dose ceiling, applied once after route aggregation (at most one ceiling receipt entry).",
+          "owner": "scripts/scoring_v4/config/quality_score.json dose_safety_ceiling (_doc: applied once after route aggregation and normalization)",
+          "checks": [
+            [
+              "quality_pillars_v4.dose.receipt.entries",
+              "count_id_le",
+              [
+                "dose_safety_ceiling",
+                1
+              ]
+            ]
+          ]
+        },
+        "ul_exceedance_not_double_counted": {
+          "rule": "A UL exceedance is charged once in Dose; Safety/Hygiene says so instead of deducting again.",
+          "owner": "scripts/scoring_v4/quality_score.py::_pillar_safety_hygiene ('Not deducted here')",
+          "checks": [
+            [
+              "quality_pillars_v4.safety_hygiene.reason",
+              "contains_text",
+              "Not deducted here"
+            ]
+          ]
+        },
+        "evidence_applicable_assessed": {
+          "rule": "Reviewed applicable research is shown as an assessed Evidence result.",
+          "owner": "scripts/scoring_v4/quality_score.py::evidence_display_state (EVIDENCE_ASSESSED_STATES)",
+          "checks": [
+            [
+              "quality_pillars_v4.evidence.evidence_result_state",
+              "eq",
+              "evaluated_applicable"
+            ],
+            [
+              "quality_pillars_v4.evidence.display_state",
+              "eq",
+              "assessed"
+            ],
+            [
+              "quality_pillars_v4.evidence.score",
+              "gt",
+              0.0
+            ]
+          ]
+        },
+        "evidence_authority_assessed": {
+          "rule": "Essential nutrients are assessed through established nutritional authority.",
+          "owner": "scripts/scoring_v4/quality_score.py::evidence_display_state; scripts/scoring_v4/modules/generic_evidence.py::authority_panel_result_state",
+          "checks": [
+            [
+              "quality_pillars_v4.evidence.evidence_result_state",
+              "eq",
+              "evaluated_authority"
+            ],
+            [
+              "quality_pillars_v4.evidence.display_state",
+              "eq",
+              "assessed"
+            ]
+          ]
+        },
+        "evidence_applicability_gap_not_no_research": {
+          "rule": "An Evidence applicability gap is shown as research that does not apply to this label, never as no research, and it is a completed conclusion.",
+          "owner": "scripts/scoring_v4/quality_score.py::evidence_display_state, scripts/scoring_v4/quality_score.py::_EVIDENCE_ZERO_REASON; scripts/scoring_v4/scored_artifact.py::UNASSESSED_EVIDENCE_DISPLAY_STATES",
+          "checks": [
+            [
+              "quality_pillars_v4.evidence.evidence_result_state",
+              "in",
+              [
+                "applicability_unestablished",
+                "research_present_applicability_unestablished"
+              ]
+            ],
+            [
+              "quality_pillars_v4.evidence.display_state",
+              "eq",
+              "applicability_unestablished"
+            ],
+            [
+              "quality_pillars_v4.evidence.reason",
+              "not_contains_text",
+              "no qualifying"
+            ],
+            [
+              "quality_assessment_status",
+              "eq",
+              "complete"
+            ]
+          ]
+        },
+        "evidence_reviewed_zero_is_assessed": {
+          "rule": "A reviewed null or no-qualifying-evidence result is an assessed conclusion, distinct from a pending review.",
+          "owner": "scripts/scoring_v4/quality_score.py::evidence_display_state (EVIDENCE_ASSESSED_STATES)",
+          "checks": [
+            [
+              "quality_pillars_v4.evidence.evidence_result_state",
+              "in",
+              [
+                "evaluated_null",
+                "no_qualifying_human_evidence",
+                "evaluated_unfavorable"
+              ]
+            ],
+            [
+              "quality_pillars_v4.evidence.display_state",
+              "eq",
+              "assessed"
+            ],
+            [
+              "quality_assessment_status",
+              "eq",
+              "complete"
+            ]
+          ]
+        },
+        "evidence_pending_marks_partial": {
+          "rule": "An Evidence review PharmaGuide has not finished is shown as pending (not 0/20 research) and marks the assessment partial.",
+          "owner": "scripts/scoring_v4/quality_score.py::evidence_display_state (EVIDENCE_COVERAGE_GAP_STATES); scripts/scoring_v4/scored_artifact.py::_quality_assessment_status",
+          "checks": [
+            [
+              "quality_pillars_v4.evidence.display_state",
+              "eq",
+              "not_yet_reviewed"
+            ],
+            [
+              "quality_assessment_status",
+              "eq",
+              "partial"
+            ]
+          ]
+        },
+        "evidence_single_active_not_nothing_to_assess": {
+          "rule": "A label whose only active has a resolved evidence owner is never reported as having nothing to assess; it is reviewed or pending.",
+          "owner": "scripts/scoring_v4/quality_score.py::evidence_display_state ('not_applicable - nothing on this label to assess'); scripts/scoring_v4/modules/generic_evidence.py (evidence_owner_canonicals)",
+          "checks": [
+            [
+              "quality_pillars_v4.evidence.evidence_result_state",
+              "ne",
+              "no_assessable_actives"
+            ]
+          ]
+        },
+        "omega_carrier_mass_not_epa_dha": {
+          "rule": "Fish-oil carrier mass never becomes EPA+DHA dose: undisclosed EPA/DHA earns no Dose credit.",
+          "owner": "scripts/scoring_v4/config/quality_score.json _metadata.description (1.10.1 omega label ownership); scripts/scoring_v4/modules/omega*.py",
+          "checks": [
+            [
+              "quality_pillars_v4.dose.score",
+              "eq",
+              0.0
+            ],
+            [
+              "quality_pillars_v4.transparency.reason",
+              "contains_text",
+              "EPA/DHA amounts"
+            ]
+          ]
+        },
+        "suppressed_hides_score_keeps_reason": {
+          "rule": "A BLOCKED product ships with its reason and no public quality number or tier.",
+          "owner": "scripts/scoring_v4/quality_score.py::assemble_quality_score (hard safety failure first); scripts/scoring_v4/scored_artifact.py::_public_verdict; AGENTS.md 'Banned/recalled products always ship'",
+          "checks": [
+            [
+              "quality_score_status",
+              "eq",
+              "suppressed_safety"
+            ],
+            [
+              "quality_score_v4_100",
+              "is_null",
+              null
+            ],
+            [
+              "quality_tier",
+              "is_null",
+              null
+            ],
+            [
+              "product_safety_status",
+              "eq",
+              "blocked"
+            ],
+            [
+              "verdict",
+              "eq",
+              "BLOCKED"
+            ],
+            [
+              "blocking_reason",
+              "not_null",
+              null
+            ],
+            [
+              "quality_score_suppressed_reason",
+              "eq_path",
+              "blocking_reason"
+            ]
+          ]
+        },
+        "safety_block_precedes_completeness": {
+          "rule": "A safety block wins over an incomplete-data gate: the product is BLOCKED, not NOT_SCORED.",
+          "owner": "scripts/scoring_v4/quality_score.py::assemble_quality_score (suppressed_safety before not_scored); scripts/scoring_v4/scored_artifact.py::_public_verdict",
+          "checks": [
+            [
+              "_v4_completeness_gate.verdict",
+              "eq",
+              "NOT_SCORED"
+            ],
+            [
+              "quality_score_status",
+              "eq",
+              "suppressed_safety"
+            ]
+          ]
+        },
+        "not_scored_has_no_number": {
+          "rule": "A not-scored product carries no number, tier or pillars and an honest partial assessment.",
+          "owner": "scripts/scoring_v4/quality_score.py::assemble_quality_score; scripts/scoring_v4/scored_artifact.py::_quality_assessment_status",
+          "checks": [
+            [
+              "quality_score_status",
+              "eq",
+              "not_scored"
+            ],
+            [
+              "quality_score_v4_100",
+              "is_null",
+              null
+            ],
+            [
+              "quality_tier",
+              "is_null",
+              null
+            ],
+            [
+              "quality_pillars_v4",
+              "is_null",
+              null
+            ],
+            [
+              "quality_assessment_status",
+              "eq",
+              "partial"
+            ]
+          ]
+        },
+        "unresolved_dose_safety_hold": {
+          "rule": "Material but unresolved dose safety (e.g. no reference for the label's age band) holds the product from scoring instead of guessing.",
+          "owner": "scripts/dose_assessment.py (pediatric_reference_gap); scripts/scoring_v4/dose_safety.py state material_but_unresolved",
+          "checks": [
+            [
+              "dose_safety_evaluation.state_counts.material_but_unresolved",
+              "ge",
+              1
+            ],
+            [
+              "flags",
+              "contains",
+              "DOSE_SAFETY_UNRESOLVED_REVIEW"
+            ]
+          ]
+        },
+        "caution_keeps_quality_score": {
+          "rule": "Quality and safety are separate outputs: a CAUTION product keeps its quality score.",
+          "owner": "scripts/scoring_v4/config/quality_score.json _metadata.description ('Quality tiers are independent of safety'); scripts/scoring_v4/scored_artifact.py::_product_safety_status",
+          "checks": [
+            [
+              "product_safety_status",
+              "eq",
+              "caution"
+            ],
+            [
+              "quality_score_status",
+              "eq",
+              "scored"
+            ],
+            [
+              "quality_score_v4_100",
+              "not_null",
+              null
+            ]
+          ]
+        },
+        "high_risk_active_zeroes_safety_hygiene": {
+          "rule": "A confirmed high-risk active zeroes the Safety/Hygiene base while the product stays scored with CAUTION.",
+          "owner": "scripts/scoring_v4/quality_score.py::_pillar_safety_hygiene",
+          "checks": [
+            [
+              "quality_pillars_v4.safety_hygiene.score",
+              "eq",
+              0.0
+            ],
+            [
+              "product_safety_status",
+              "eq",
+              "caution"
+            ]
+          ]
+        },
+        "watchlist_excipient_not_blocking": {
+          "rule": "A watchlist excipient (titanium dioxide) informs and takes a small Safety/Hygiene deduction; it never blocks or forces CAUTION.",
+          "owner": "scripts/scoring_v4/config/quality_score.json clean_label_subscale; scripts/scoring_v4/quality_score.py::_clean_label_penalty",
+          "checks": [
+            [
+              "product_safety_status",
+              "eq",
+              "no_known_catalog_concern"
+            ],
+            [
+              "_v4_safety_gate.clean_label_hits",
+              "nonempty",
+              null
+            ],
+            [
+              "quality_pillars_v4.safety_hygiene.score",
+              "lt",
+              10.0
+            ]
+          ]
+        },
+        "unfinished_identity_marks_partial": {
+          "rule": "PharmaGuide's own unresolved identity marks the assessment partial instead of presenting a finished verdict.",
+          "owner": "scripts/scoring_v4/scored_artifact.py::unfinished_source_assessment; scripts/scoring_v4/scored_artifact.py::_quality_assessment_status",
+          "checks": [
+            [
+              "quality_assessment_status",
+              "eq",
+              "partial"
+            ]
+          ]
+        }
+      },
+      "check_ops": "eq, ne, in, le, ge, lt, gt, is_null, not_null, nonempty, contains (list), contains_text, not_contains_text (case-insensitive), eq_path (equals another path), count_id_le ([receipt entry id, max count]); paths are dotted keys into one scored product.",
+      "movement_reasons": {
+        "scoring_policy_version_change": "An approved change to scripts/scoring_v4/config/quality_score.json (_metadata.version bump) or a scorer owner, measured with /pg-scoring-change.",
+        "reference_data_correction": "A verified curated-data batch on an owner the pillar reads (IQM, clinical studies, RDA/UL references, dose anchors).",
+        "label_source_change": "A DSLD label revision, reformulation or a verified transcription correction of this product.",
+        "verification_registry_change": "Certification or audited-GMP registry evidence for this product or facility was added, expired or corrected.",
+        "evidence_review_completed": "A not-yet-reviewed or unresolved Evidence state became a recorded review conclusion.",
+        "identity_resolution": "PharmaGuide's own unresolved identity, role or amount reading was fixed at its owner (cleaner, enricher or resolver).",
+        "safety_policy_change": "An approved banned/recalled/high-risk policy or dose-safety reference change."
+      },
+      "status_lists": "A status given as a list means policy allows any listed value (see the canary's review row)."
+    }
   },
   "canaries": [
     {
@@ -58,7 +600,26 @@
       ],
       "v3_shipped_score": 65.2,
       "v3_shipped_verdict": "SAFE",
-      "notes": "P0.1d provisional +2 (USP label) → 0 once Codex's USP scraper landed (USP is in covered_programs; this SKU not in USP public list). Retained catalog ID 202992 replaces duplicate DSLD ID 253169 for the same UPC 753950001831."
+      "notes": "P0.1d provisional +2 (USP label) → 0 once Codex's USP scraper landed (USP is in covered_programs; this SKU not in USP public list). Retained catalog ID 202992 replaces duplicate DSLD ID 253169 for the same UPC 753950001831.",
+      "expected_v4_module": "generic",
+      "expected_quality_score_status": "scored",
+      "expected_quality_assessment_status": "complete",
+      "expected_product_safety_status": "no_known_catalog_concern",
+      "expected_quality_tier_band": [
+        "Good",
+        "Very good"
+      ],
+      "expected_pillar_invariants": [
+        "verification_claim_or_brand_ceiling",
+        "dose_unbenchmarked_neutral",
+        "evidence_applicable_assessed"
+      ],
+      "allowed_movement_reasons": [
+        "scoring_policy_version_change",
+        "reference_data_correction",
+        "label_source_change",
+        "verification_registry_change"
+      ]
     },
     {
       "dsld_id": "298074",
@@ -74,7 +635,25 @@
       ],
       "v3_shipped_score": 72.6,
       "v3_shipped_verdict": "SAFE",
-      "notes": "P0.1b anchor — NSF Sport + NSF/ANSI 173 both SKU-verified → B4a 8+4=12 (was buggy 15 in v3). USP also claimed via manufacturer signal but stays claimed_only (mfg-only never bridges)."
+      "notes": "P0.1b anchor — NSF Sport + NSF/ANSI 173 both SKU-verified → B4a 8+4=12 (was buggy 15 in v3). USP also claimed via manufacturer signal but stays claimed_only (mfg-only never bridges).",
+      "expected_v4_module": "generic",
+      "expected_quality_score_status": "scored",
+      "expected_quality_assessment_status": "complete",
+      "expected_product_safety_status": "no_known_catalog_concern",
+      "expected_quality_tier_band": [
+        "Very good",
+        "Exceptional"
+      ],
+      "expected_pillar_invariants": [
+        "verification_product_floor",
+        "evidence_applicable_assessed"
+      ],
+      "allowed_movement_reasons": [
+        "scoring_policy_version_change",
+        "reference_data_correction",
+        "label_source_change",
+        "verification_registry_change"
+      ]
     },
     {
       "dsld_id": "184058",
@@ -90,7 +669,29 @@
       ],
       "v3_shipped_score": 60.9,
       "v3_shipped_verdict": "SAFE",
-      "notes": "5000 IU = 125% RDA, 50% UL. Tests B7 over-UL gate at moderate-risk threshold (should not penalize until 150%)."
+      "notes": "5000 IU = 125% RDA, 50% UL. Tests B7 over-UL gate at moderate-risk threshold (should not penalize until 150%).",
+      "expected_v4_module": "generic",
+      "expected_quality_score_status": "scored",
+      "expected_quality_assessment_status": "complete",
+      "expected_product_safety_status": "caution",
+      "expected_quality_tier_band": [
+        "Good",
+        "Very good"
+      ],
+      "expected_pillar_invariants": [
+        "dose_ul_partial_ceiling",
+        "dose_ceiling_applied_once",
+        "ul_exceedance_not_double_counted",
+        "caution_keeps_quality_score",
+        "verification_unknown_neutral",
+        "evidence_applicable_assessed"
+      ],
+      "allowed_movement_reasons": [
+        "scoring_policy_version_change",
+        "reference_data_correction",
+        "label_source_change",
+        "safety_policy_change"
+      ]
     },
     {
       "dsld_id": "298053",
@@ -106,7 +707,25 @@
       ],
       "v3_shipped_score": 51.5,
       "v3_shipped_verdict": "SAFE",
-      "notes": "MK-4 (Thorne's) and MK-7 have different bioavailability profiles. Tests form-aware A1 mapping. Low v3 score worth investigating (Thorne brand-trust should help)."
+      "notes": "MK-4 (Thorne's) and MK-7 have different bioavailability profiles. Tests form-aware A1 mapping. Low v3 score worth investigating (Thorne brand-trust should help).",
+      "expected_v4_module": "generic",
+      "expected_quality_score_status": "scored",
+      "expected_quality_assessment_status": "complete",
+      "expected_product_safety_status": "no_known_catalog_concern",
+      "expected_quality_tier_band": [
+        "Good",
+        "Very good"
+      ],
+      "expected_pillar_invariants": [
+        "verification_product_floor",
+        "evidence_authority_assessed"
+      ],
+      "allowed_movement_reasons": [
+        "scoring_policy_version_change",
+        "reference_data_correction",
+        "label_source_change",
+        "verification_registry_change"
+      ]
     },
     {
       "dsld_id": "219203",
@@ -121,7 +740,25 @@
       ],
       "v3_shipped_score": 47.1,
       "v3_shipped_verdict": "SAFE",
-      "notes": "NAC had FDA enforcement uncertainty; current rules permit. Tests B0/B1 regulatory neutrality. Tracks the NAC single-active archetype, not product continuity for any single brand. Historical anchor (rotated out as catalog evolved): 1437 GNC NAC 600."
+      "notes": "NAC had FDA enforcement uncertainty; current rules permit. Tests B0/B1 regulatory neutrality. Tracks the NAC single-active archetype, not product continuity for any single brand. Historical anchor (rotated out as catalog evolved): 1437 GNC NAC 600.",
+      "expected_v4_module": "generic",
+      "expected_quality_score_status": "scored",
+      "expected_quality_assessment_status": "complete",
+      "expected_product_safety_status": "no_known_catalog_concern",
+      "expected_quality_tier_band": [
+        "Needs improvement",
+        "Good"
+      ],
+      "expected_pillar_invariants": [
+        "verification_claim_or_brand_ceiling",
+        "dose_unbenchmarked_neutral",
+        "evidence_applicable_assessed"
+      ],
+      "allowed_movement_reasons": [
+        "scoring_policy_version_change",
+        "reference_data_correction",
+        "label_source_change"
+      ]
     },
     {
       "dsld_id": "294020",
@@ -137,7 +774,25 @@
       ],
       "v3_shipped_score": 55.9,
       "v3_shipped_verdict": "SAFE",
-      "notes": "Most melatonin is 3-10mg; clinical evidence supports 0.3-0.5mg. Tests v4 dose-curve that rewards trial-aligned micro-dosing rather than penalizing low-mg."
+      "notes": "Most melatonin is 3-10mg; clinical evidence supports 0.3-0.5mg. Tests v4 dose-curve that rewards trial-aligned micro-dosing rather than penalizing low-mg.",
+      "expected_v4_module": "generic",
+      "expected_quality_score_status": "scored",
+      "expected_quality_assessment_status": "complete",
+      "expected_product_safety_status": "no_known_catalog_concern",
+      "expected_quality_tier_band": [
+        "Needs improvement",
+        "Good"
+      ],
+      "expected_pillar_invariants": [
+        "verification_manufacturing_ceiling",
+        "dose_unbenchmarked_neutral",
+        "evidence_applicable_assessed"
+      ],
+      "allowed_movement_reasons": [
+        "scoring_policy_version_change",
+        "reference_data_correction",
+        "label_source_change"
+      ]
     },
     {
       "dsld_id": "241894",
@@ -153,7 +808,25 @@
       ],
       "v3_shipped_score": 62.9,
       "v3_shipped_verdict": "SAFE",
-      "notes": "NMN has no RDA/UL. Tests v4 Evidence dimension behavior on emerging compounds (rule: no clinical-trial PMID = capped Evidence credit)."
+      "notes": "NMN has no RDA/UL. Tests v4 Evidence dimension behavior on emerging compounds (rule: no clinical-trial PMID = capped Evidence credit).",
+      "expected_v4_module": "generic",
+      "expected_quality_score_status": "scored",
+      "expected_quality_assessment_status": "complete",
+      "expected_product_safety_status": "no_known_catalog_concern",
+      "expected_quality_tier_band": [
+        "Needs improvement",
+        "Good"
+      ],
+      "expected_pillar_invariants": [
+        "verification_claim_or_brand_ceiling",
+        "dose_unbenchmarked_neutral",
+        "evidence_applicable_assessed"
+      ],
+      "allowed_movement_reasons": [
+        "scoring_policy_version_change",
+        "reference_data_correction",
+        "label_source_change"
+      ]
     },
     {
       "dsld_id": "173888",
@@ -169,7 +842,24 @@
       ],
       "v3_shipped_score": 68.7,
       "v3_shipped_verdict": "CAUTION",
-      "notes": "Primary category is multivitamin even if older supplemental type signals drift. B5 must route to multi_or_prenatal so vitamin/mineral panel opacity uses the stricter multiplier."
+      "notes": "Primary category is multivitamin even if older supplemental type signals drift. B5 must route to multi_or_prenatal so vitamin/mineral panel opacity uses the stricter multiplier.",
+      "expected_v4_module": "multi_or_prenatal",
+      "expected_quality_score_status": "scored",
+      "expected_quality_assessment_status": "complete",
+      "expected_product_safety_status": "no_known_catalog_concern",
+      "expected_quality_tier_band": [
+        "Good",
+        "Very good"
+      ],
+      "expected_pillar_invariants": [
+        "verification_claim_or_brand_ceiling",
+        "evidence_authority_assessed"
+      ],
+      "allowed_movement_reasons": [
+        "scoring_policy_version_change",
+        "reference_data_correction",
+        "label_source_change"
+      ]
     },
     {
       "dsld_id": "173918",
@@ -185,7 +875,24 @@
       ],
       "v3_shipped_score": 67.5,
       "v3_shipped_verdict": "CAUTION",
-      "notes": "Same classifier gap as 173888."
+      "notes": "Same classifier gap as 173888.",
+      "expected_v4_module": "multi_or_prenatal",
+      "expected_quality_score_status": "scored",
+      "expected_quality_assessment_status": "complete",
+      "expected_product_safety_status": "no_known_catalog_concern",
+      "expected_quality_tier_band": [
+        "Good",
+        "Very good"
+      ],
+      "expected_pillar_invariants": [
+        "verification_claim_or_brand_ceiling",
+        "evidence_authority_assessed"
+      ],
+      "allowed_movement_reasons": [
+        "scoring_policy_version_change",
+        "reference_data_correction",
+        "label_source_change"
+      ]
     },
     {
       "dsld_id": "178520",
@@ -201,7 +908,22 @@
       ],
       "v3_shipped_score": 55.1,
       "v3_shipped_verdict": "SAFE",
-      "notes": "Gummies → sugar content drives B1_dietary_sugar penalty; kids-specific RDAs differ from adults. Tests v4 age-stratified dose curves. Tracks the children’s multivitamin gummy archetype, not product continuity for any single brand. Historical anchor (rotated out as catalog evolved): 178559 Spring Valley Children’s Multivitamin Gummies."
+      "notes": "Gummies → sugar content drives B1_dietary_sugar penalty; kids-specific RDAs differ from adults. Tests v4 age-stratified dose curves. Tracks the children’s multivitamin gummy archetype, not product continuity for any single brand. Historical anchor (rotated out as catalog evolved): 178559 Spring Valley Children’s Multivitamin Gummies.",
+      "expected_v4_module": "multi_or_prenatal",
+      "expected_quality_score_status": "not_scored",
+      "expected_quality_assessment_status": "partial",
+      "expected_product_safety_status": "caution",
+      "expected_quality_tier_band": null,
+      "expected_pillar_invariants": [
+        "not_scored_has_no_number",
+        "unresolved_dose_safety_hold"
+      ],
+      "allowed_movement_reasons": [
+        "scoring_policy_version_change",
+        "reference_data_correction",
+        "label_source_change",
+        "safety_policy_change"
+      ]
     },
     {
       "dsld_id": "328830",
@@ -217,7 +939,25 @@
       ],
       "v3_shipped_score": 70.1,
       "v3_shipped_verdict": "CAUTION",
-      "notes": "Codex's P0.1b anchor — Thorne claims NSF Sport but this product not in NSF registry → brand_only → B4a=0. Verifies manufacturer-injection guard."
+      "notes": "Codex's P0.1b anchor — Thorne claims NSF Sport but this product not in NSF registry → brand_only → B4a=0. Verifies manufacturer-injection guard.",
+      "expected_v4_module": "multi_or_prenatal",
+      "expected_quality_score_status": "scored",
+      "expected_quality_assessment_status": "complete",
+      "expected_product_safety_status": "no_known_catalog_concern",
+      "expected_quality_tier_band": [
+        "Excellent",
+        "Exceptional"
+      ],
+      "expected_pillar_invariants": [
+        "verification_product_floor",
+        "evidence_authority_assessed"
+      ],
+      "allowed_movement_reasons": [
+        "scoring_policy_version_change",
+        "reference_data_correction",
+        "label_source_change",
+        "verification_registry_change"
+      ]
     },
     {
       "dsld_id": "274081",
@@ -233,7 +973,26 @@
       ],
       "v3_shipped_score": 45.6,
       "v3_shipped_verdict": "SAFE",
-      "notes": "Functionally a probiotic (supp_type=probiotic) marketed for prenatal use. Tests v4 dual-class routing — Dose should use probiotic per-strain CFU, not prenatal panel."
+      "notes": "Functionally a probiotic (supp_type=probiotic) marketed for prenatal use. Tests v4 dual-class routing — Dose should use probiotic per-strain CFU, not prenatal panel.",
+      "expected_v4_module": "probiotic",
+      "expected_quality_score_status": "scored",
+      "expected_quality_assessment_status": "complete",
+      "expected_product_safety_status": "no_known_catalog_concern",
+      "expected_quality_tier_band": [
+        "Needs improvement",
+        "Good"
+      ],
+      "expected_pillar_invariants": [
+        "verification_product_floor",
+        "dose_unbenchmarked_neutral",
+        "evidence_applicable_assessed"
+      ],
+      "allowed_movement_reasons": [
+        "scoring_policy_version_change",
+        "reference_data_correction",
+        "label_source_change",
+        "evidence_review_completed"
+      ]
     },
     {
       "dsld_id": "74124",
@@ -250,7 +1009,24 @@
       ],
       "v3_shipped_score": 69.7,
       "v3_shipped_verdict": "SAFE",
-      "notes": "Friend of the Sea / GOED / IFOS all claimed via Nordic brand injection — none of them reach B4a (manufacturer-only). Router routes to multi_or_prenatal via 'Prenatal' keyword (consumer-targeting); no blends so B5 itself is 0 either way. Future P0.3 marine-source dimension may credit FoS/GOED/IFOS there."
+      "notes": "Friend of the Sea / GOED / IFOS all claimed via Nordic brand injection — none of them reach B4a (manufacturer-only). Router routes to multi_or_prenatal via 'Prenatal' keyword (consumer-targeting); no blends so B5 itself is 0 either way. Future P0.3 marine-source dimension may credit FoS/GOED/IFOS there.",
+      "expected_v4_module": "omega",
+      "expected_quality_score_status": "scored",
+      "expected_quality_assessment_status": "complete",
+      "expected_product_safety_status": "no_known_catalog_concern",
+      "expected_quality_tier_band": [
+        "Good",
+        "Very good"
+      ],
+      "expected_pillar_invariants": [
+        "verification_manufacturing_ceiling",
+        "evidence_authority_assessed"
+      ],
+      "allowed_movement_reasons": [
+        "scoring_policy_version_change",
+        "reference_data_correction",
+        "label_source_change"
+      ]
     },
     {
       "dsld_id": "1650",
@@ -265,7 +1041,26 @@
       ],
       "v3_shipped_score": 62.0,
       "v3_shipped_verdict": "SAFE",
-      "notes": "50B CFU is a strong number, but whether strain identities + per-strain CFU are disclosed drives v4 Dose dim from 0/25 to ~15/25. Worth blob inspection."
+      "notes": "50B CFU is a strong number, but whether strain identities + per-strain CFU are disclosed drives v4 Dose dim from 0/25 to ~15/25. Worth blob inspection.",
+      "expected_v4_module": "probiotic",
+      "expected_quality_score_status": "scored",
+      "expected_quality_assessment_status": "complete",
+      "expected_product_safety_status": "no_known_catalog_concern",
+      "expected_quality_tier_band": [
+        "Poor",
+        "Needs improvement"
+      ],
+      "expected_pillar_invariants": [
+        "evidence_applicability_gap_not_no_research",
+        "verification_claim_or_brand_ceiling",
+        "dose_unbenchmarked_neutral"
+      ],
+      "allowed_movement_reasons": [
+        "scoring_policy_version_change",
+        "reference_data_correction",
+        "label_source_change",
+        "evidence_review_completed"
+      ]
     },
     {
       "dsld_id": "178346",
@@ -281,7 +1076,26 @@
       ],
       "v3_shipped_score": 39.3,
       "v3_shipped_verdict": "POOR",
-      "notes": "POOR verdict at 39.3 is the floor of the probiotic range. Useful for v4 calibration — does the new Dose dim recover this when strain disclosure is OK?"
+      "notes": "POOR verdict at 39.3 is the floor of the probiotic range. Useful for v4 calibration — does the new Dose dim recover this when strain disclosure is OK?",
+      "expected_v4_module": "probiotic",
+      "expected_quality_score_status": "scored",
+      "expected_quality_assessment_status": "complete",
+      "expected_product_safety_status": "no_known_catalog_concern",
+      "expected_quality_tier_band": [
+        "Poor",
+        "Needs improvement"
+      ],
+      "expected_pillar_invariants": [
+        "evidence_applicability_gap_not_no_research",
+        "verification_unknown_neutral",
+        "dose_unbenchmarked_neutral"
+      ],
+      "allowed_movement_reasons": [
+        "scoring_policy_version_change",
+        "reference_data_correction",
+        "label_source_change",
+        "evidence_review_completed"
+      ]
     },
     {
       "dsld_id": "327776",
@@ -297,7 +1111,25 @@
       ],
       "v3_shipped_score": 63.7,
       "v3_shipped_verdict": "SAFE",
-      "notes": "P0.1d omega-only IFOS label test. Combined EPA+DHA 1055mg crosses general-health threshold (~250mg) and approaches cardio (1g)."
+      "notes": "P0.1d omega-only IFOS label test. Combined EPA+DHA 1055mg crosses general-health threshold (~250mg) and approaches cardio (1g).",
+      "expected_v4_module": "omega",
+      "expected_quality_score_status": "scored",
+      "expected_quality_assessment_status": "complete",
+      "expected_product_safety_status": "no_known_catalog_concern",
+      "expected_quality_tier_band": [
+        "Very good",
+        "Exceptional"
+      ],
+      "expected_pillar_invariants": [
+        "verification_product_floor",
+        "evidence_applicable_assessed"
+      ],
+      "allowed_movement_reasons": [
+        "scoring_policy_version_change",
+        "reference_data_correction",
+        "label_source_change",
+        "verification_registry_change"
+      ]
     },
     {
       "dsld_id": "288740",
@@ -313,7 +1145,25 @@
       ],
       "v3_shipped_score": 68.6,
       "v3_shipped_verdict": "SAFE",
-      "notes": "Nordic Ultimate Omega is ~1280mg EPA+DHA per serving. Tests v4 dose curve at the cardio threshold."
+      "notes": "Nordic Ultimate Omega is ~1280mg EPA+DHA per serving. Tests v4 dose curve at the cardio threshold.",
+      "expected_v4_module": "omega",
+      "expected_quality_score_status": "scored",
+      "expected_quality_assessment_status": "complete",
+      "expected_product_safety_status": "no_known_catalog_concern",
+      "expected_quality_tier_band": [
+        "Needs improvement",
+        "Needs improvement"
+      ],
+      "expected_pillar_invariants": [
+        "evidence_applicability_gap_not_no_research",
+        "verification_manufacturing_ceiling"
+      ],
+      "allowed_movement_reasons": [
+        "scoring_policy_version_change",
+        "reference_data_correction",
+        "label_source_change",
+        "evidence_review_completed"
+      ]
     },
     {
       "dsld_id": "305203",
@@ -329,7 +1179,25 @@
       ],
       "v3_shipped_score": 61.5,
       "v3_shipped_verdict": "SAFE",
-      "notes": "KSM-66 has clinical trials at 300-600mg. Tests v4 form-aware herbal dose."
+      "notes": "KSM-66 has clinical trials at 300-600mg. Tests v4 form-aware herbal dose.",
+      "expected_v4_module": "generic",
+      "expected_quality_score_status": "scored",
+      "expected_quality_assessment_status": "complete",
+      "expected_product_safety_status": "no_known_catalog_concern",
+      "expected_quality_tier_band": [
+        "Good",
+        "Very good"
+      ],
+      "expected_pillar_invariants": [
+        "verification_claim_or_brand_ceiling",
+        "dose_unbenchmarked_neutral",
+        "evidence_applicable_assessed"
+      ],
+      "allowed_movement_reasons": [
+        "scoring_policy_version_change",
+        "reference_data_correction",
+        "label_source_change"
+      ]
     },
     {
       "dsld_id": "82300",
@@ -345,7 +1213,25 @@
       ],
       "v3_shipped_score": 49.7,
       "v3_shipped_verdict": "SAFE",
-      "notes": "Sensoril clinical trials at 125-250mg (LOWER mg per trial than KSM-66 → 125mg is appropriate). Tests v4 branded-extract-specific dose math; current 49.7 may under-credit Sensoril vs KSM-66 due to mg-based comparison."
+      "notes": "Sensoril clinical trials at 125-250mg (LOWER mg per trial than KSM-66 → 125mg is appropriate). Tests v4 branded-extract-specific dose math; current 49.7 may under-credit Sensoril vs KSM-66 due to mg-based comparison.",
+      "expected_v4_module": "generic",
+      "expected_quality_score_status": "scored",
+      "expected_quality_assessment_status": "complete",
+      "expected_product_safety_status": "no_known_catalog_concern",
+      "expected_quality_tier_band": [
+        "Good",
+        "Very good"
+      ],
+      "expected_pillar_invariants": [
+        "verification_unknown_neutral",
+        "dose_unbenchmarked_neutral",
+        "evidence_applicable_assessed"
+      ],
+      "allowed_movement_reasons": [
+        "scoring_policy_version_change",
+        "reference_data_correction",
+        "label_source_change"
+      ]
     },
     {
       "dsld_id": "302651",
@@ -361,7 +1247,25 @@
       ],
       "v3_shipped_score": 67.3,
       "v3_shipped_verdict": "SAFE",
-      "notes": "Meriva = phytosome form, ~29x more bioavailable than unformulated curcumin. Tests v4 form-aware bioavailability multiplier. Tracks the Meriva curcumin phytosome bioavailability archetype, not product continuity for any single brand. Historical anchor (rotated out as catalog evolved): 16095 Thorne Meriva-SR Curcumin Phytosome."
+      "notes": "Meriva = phytosome form, ~29x more bioavailable than unformulated curcumin. Tests v4 form-aware bioavailability multiplier. Tracks the Meriva curcumin phytosome bioavailability archetype, not product continuity for any single brand. Historical anchor (rotated out as catalog evolved): 16095 Thorne Meriva-SR Curcumin Phytosome.",
+      "expected_v4_module": "generic",
+      "expected_quality_score_status": "scored",
+      "expected_quality_assessment_status": "complete",
+      "expected_product_safety_status": "no_known_catalog_concern",
+      "expected_quality_tier_band": [
+        "Needs improvement",
+        "Needs improvement"
+      ],
+      "expected_pillar_invariants": [
+        "verification_unknown_neutral",
+        "dose_unbenchmarked_neutral",
+        "evidence_applicable_assessed"
+      ],
+      "allowed_movement_reasons": [
+        "scoring_policy_version_change",
+        "reference_data_correction",
+        "label_source_change"
+      ]
     },
     {
       "dsld_id": "255449",
@@ -378,7 +1282,25 @@
       ],
       "v3_shipped_score": 62.5,
       "v3_shipped_verdict": "SAFE",
-      "notes": "P0.1d BSCG label_asserted anchor. Unstandardized ashwagandha root → Dose should drop sharply (no marker content). Sugar in gummies should incur B1 penalty."
+      "notes": "P0.1d BSCG label_asserted anchor. Unstandardized ashwagandha root → Dose should drop sharply (no marker content). Sugar in gummies should incur B1 penalty.",
+      "expected_v4_module": "generic",
+      "expected_quality_score_status": "scored",
+      "expected_quality_assessment_status": "complete",
+      "expected_product_safety_status": "no_known_catalog_concern",
+      "expected_quality_tier_band": [
+        "Good",
+        "Very good"
+      ],
+      "expected_pillar_invariants": [
+        "verification_unknown_neutral",
+        "dose_unbenchmarked_neutral",
+        "evidence_applicable_assessed"
+      ],
+      "allowed_movement_reasons": [
+        "scoring_policy_version_change",
+        "reference_data_correction",
+        "label_source_change"
+      ]
     },
     {
       "dsld_id": "183275",
@@ -394,7 +1316,25 @@
       ],
       "v3_shipped_score": 63.2,
       "v3_shipped_verdict": "SAFE",
-      "notes": "Standardized to silymarin content (typically 80%). Tests v4 marker-pct multiplier on extract."
+      "notes": "Standardized to silymarin content (typically 80%). Tests v4 marker-pct multiplier on extract.",
+      "expected_v4_module": "generic",
+      "expected_quality_score_status": "scored",
+      "expected_quality_assessment_status": "complete",
+      "expected_product_safety_status": "no_known_catalog_concern",
+      "expected_quality_tier_band": [
+        "Good",
+        "Very good"
+      ],
+      "expected_pillar_invariants": [
+        "verification_manufacturing_ceiling",
+        "dose_unbenchmarked_neutral",
+        "evidence_applicable_assessed"
+      ],
+      "allowed_movement_reasons": [
+        "scoring_policy_version_change",
+        "reference_data_correction",
+        "label_source_change"
+      ]
     },
     {
       "dsld_id": "306381",
@@ -410,7 +1350,25 @@
       ],
       "v3_shipped_score": 74.2,
       "v3_shipped_verdict": "SAFE",
-      "notes": "Enricher classifies as multivitamin (because vitamins are mixed into the matrix), but the product is functionally a pre-workout stack. Current B5 router uses supp_type → wrong (multi_or_prenatal 1.3x) instead of sports_active 1.5x. Follow-up: router fix to check sports keywords even when supp_type=multivitamin."
+      "notes": "Enricher classifies as multivitamin (because vitamins are mixed into the matrix), but the product is functionally a pre-workout stack. Current B5 router uses supp_type → wrong (multi_or_prenatal 1.3x) instead of sports_active 1.5x. Follow-up: router fix to check sports keywords even when supp_type=multivitamin.",
+      "expected_v4_module": "sports",
+      "expected_quality_score_status": "scored",
+      "expected_quality_assessment_status": "complete",
+      "expected_product_safety_status": "no_known_catalog_concern",
+      "expected_quality_tier_band": [
+        "Good",
+        "Very good"
+      ],
+      "expected_pillar_invariants": [
+        "dose_caffeine_below_ceiling",
+        "verification_claim_or_brand_ceiling",
+        "evidence_applicable_assessed"
+      ],
+      "allowed_movement_reasons": [
+        "scoring_policy_version_change",
+        "reference_data_correction",
+        "label_source_change"
+      ]
     },
     {
       "dsld_id": "2722",
@@ -425,7 +1383,24 @@
       ],
       "v3_shipped_score": 69.0,
       "v3_shipped_verdict": "SAFE",
-      "notes": "supp_type=specialty + name has 'Pre-Workout' → router correctly routes to sports_active 1.5x."
+      "notes": "supp_type=specialty + name has 'Pre-Workout' → router correctly routes to sports_active 1.5x.",
+      "expected_v4_module": "sports",
+      "expected_quality_score_status": "scored",
+      "expected_quality_assessment_status": "complete",
+      "expected_product_safety_status": "no_known_catalog_concern",
+      "expected_quality_tier_band": [
+        "Good",
+        "Very good"
+      ],
+      "expected_pillar_invariants": [
+        "verification_claim_or_brand_ceiling",
+        "evidence_applicable_assessed"
+      ],
+      "allowed_movement_reasons": [
+        "scoring_policy_version_change",
+        "reference_data_correction",
+        "label_source_change"
+      ]
     },
     {
       "dsld_id": "268690",
@@ -442,7 +1417,24 @@
       ],
       "v3_shipped_score": 70.3,
       "v3_shipped_verdict": "SAFE",
-      "notes": "P0.1d label_asserted stacking anchor (Informed Sport + Informed Choice → B4a 2+1=3). Enricher classifies as multivitamin because of added vitamin profile; product is functionally protein."
+      "notes": "P0.1d label_asserted stacking anchor (Informed Sport + Informed Choice → B4a 2+1=3). Enricher classifies as multivitamin because of added vitamin profile; product is functionally protein.",
+      "expected_v4_module": "sports",
+      "expected_quality_score_status": "scored",
+      "expected_quality_assessment_status": "complete",
+      "expected_product_safety_status": "no_known_catalog_concern",
+      "expected_quality_tier_band": [
+        "Very good",
+        "Excellent"
+      ],
+      "expected_pillar_invariants": [
+        "verification_manufacturing_ceiling",
+        "evidence_applicable_assessed"
+      ],
+      "allowed_movement_reasons": [
+        "scoring_policy_version_change",
+        "reference_data_correction",
+        "label_source_change"
+      ]
     },
     {
       "dsld_id": "325587",
@@ -458,7 +1450,25 @@
       ],
       "v3_shipped_score": 85.2,
       "v3_shipped_verdict": "SAFE",
-      "notes": "TL = brand pattern of full transparency. v3 score 85.2 is the high end of our band — useful for v4 ceiling calibration."
+      "notes": "TL = brand pattern of full transparency. v3 score 85.2 is the high end of our band — useful for v4 ceiling calibration.",
+      "expected_v4_module": "sports",
+      "expected_quality_score_status": "scored",
+      "expected_quality_assessment_status": "complete",
+      "expected_product_safety_status": "no_known_catalog_concern",
+      "expected_quality_tier_band": [
+        "Very good",
+        "Exceptional"
+      ],
+      "expected_pillar_invariants": [
+        "verification_product_floor",
+        "evidence_applicable_assessed"
+      ],
+      "allowed_movement_reasons": [
+        "scoring_policy_version_change",
+        "reference_data_correction",
+        "label_source_change",
+        "verification_registry_change"
+      ]
     },
     {
       "dsld_id": "269425",
@@ -473,7 +1483,24 @@
       ],
       "v3_shipped_score": 68.9,
       "v3_shipped_verdict": "SAFE",
-      "notes": "Creatine monohydrate at 3g is sub-optimal (clinical dose 5g). Tests v4 dose curve on under-dosed actives."
+      "notes": "Creatine monohydrate at 3g is sub-optimal (clinical dose 5g). Tests v4 dose curve on under-dosed actives.",
+      "expected_v4_module": "sports",
+      "expected_quality_score_status": "scored",
+      "expected_quality_assessment_status": "complete",
+      "expected_product_safety_status": "no_known_catalog_concern",
+      "expected_quality_tier_band": [
+        "Very good",
+        "Exceptional"
+      ],
+      "expected_pillar_invariants": [
+        "verification_claim_or_brand_ceiling",
+        "evidence_applicable_assessed"
+      ],
+      "allowed_movement_reasons": [
+        "scoring_policy_version_change",
+        "reference_data_correction",
+        "label_source_change"
+      ]
     },
     {
       "dsld_id": "229913",
@@ -489,7 +1516,25 @@
       ],
       "v3_shipped_score": 64.4,
       "v3_shipped_verdict": "SAFE",
-      "notes": "BCAA delivered as gummies is unusual. supp_type=multivitamin (because of vitamin co-pack); name has 'BCAA' → router correctly catches sports_active via keyword."
+      "notes": "BCAA delivered as gummies is unusual. supp_type=multivitamin (because of vitamin co-pack); name has 'BCAA' → router correctly catches sports_active via keyword.",
+      "expected_v4_module": "sports",
+      "expected_quality_score_status": "scored",
+      "expected_quality_assessment_status": "complete",
+      "expected_product_safety_status": "no_known_catalog_concern",
+      "expected_quality_tier_band": [
+        "Needs improvement",
+        "Needs improvement"
+      ],
+      "expected_pillar_invariants": [
+        "verification_claim_or_brand_ceiling",
+        "dose_unbenchmarked_neutral",
+        "evidence_applicable_assessed"
+      ],
+      "allowed_movement_reasons": [
+        "scoring_policy_version_change",
+        "reference_data_correction",
+        "label_source_change"
+      ]
     },
     {
       "dsld_id": "184421",
@@ -506,7 +1551,25 @@
       ],
       "v3_shipped_score": 37.6,
       "v3_shipped_verdict": "POOR",
-      "notes": "Enzymes are dosed in activity units (DU, FCC, USP) not mg — v3 mg-based dose math under-scores them. POOR at 37.6 reveals the gap. Top v4 candidate for class-specific dose rubric. Note: enricher mis-tags primary_category=multivitamin on this enzyme product, so router routes to multi_or_prenatal. The B5 multiplier isn't critical here (likely no blend penalty); flagged for enricher primary_category audit."
+      "notes": "Enzymes are dosed in activity units (DU, FCC, USP) not mg — v3 mg-based dose math under-scores them. POOR at 37.6 reveals the gap. Top v4 candidate for class-specific dose rubric. Note: enricher mis-tags primary_category=multivitamin on this enzyme product, so router routes to multi_or_prenatal. The B5 multiplier isn't critical here (likely no blend penalty); flagged for enricher primary_category audit.",
+      "expected_v4_module": "fiber_digestive",
+      "expected_quality_score_status": "scored",
+      "expected_quality_assessment_status": "complete",
+      "expected_product_safety_status": "no_known_catalog_concern",
+      "expected_quality_tier_band": [
+        "Needs improvement",
+        "Needs improvement"
+      ],
+      "expected_pillar_invariants": [
+        "verification_manufacturing_ceiling",
+        "dose_unbenchmarked_neutral",
+        "evidence_applicable_assessed"
+      ],
+      "allowed_movement_reasons": [
+        "scoring_policy_version_change",
+        "reference_data_correction",
+        "label_source_change"
+      ]
     },
     {
       "dsld_id": "278343",
@@ -522,7 +1585,25 @@
       ],
       "v3_shipped_score": 57.9,
       "v3_shipped_verdict": "SAFE",
-      "notes": "Quercetin trial doses 500-1000mg. Tests v4 single-active dose curve for compounds without RDA."
+      "notes": "Quercetin trial doses 500-1000mg. Tests v4 single-active dose curve for compounds without RDA.",
+      "expected_v4_module": "generic",
+      "expected_quality_score_status": "scored",
+      "expected_quality_assessment_status": "complete",
+      "expected_product_safety_status": "no_known_catalog_concern",
+      "expected_quality_tier_band": [
+        "Needs improvement",
+        "Good"
+      ],
+      "expected_pillar_invariants": [
+        "verification_manufacturing_ceiling",
+        "dose_unbenchmarked_neutral",
+        "evidence_applicable_assessed"
+      ],
+      "allowed_movement_reasons": [
+        "scoring_policy_version_change",
+        "reference_data_correction",
+        "label_source_change"
+      ]
     },
     {
       "dsld_id": "204739",
@@ -538,7 +1619,26 @@
       ],
       "v3_shipped_score": 69.6,
       "v3_shipped_verdict": "SAFE",
-      "notes": "After the greens taxonomy refresh this product routes as greens_powder, not multivitamin and not probiotic. It contains probiotic rows, but those must not trigger the lighter probiotic B5 multiplier; use generic opacity unless a dedicated greens B5 class is introduced."
+      "notes": "After the greens taxonomy refresh this product routes as greens_powder, not multivitamin and not probiotic. It contains probiotic rows, but those must not trigger the lighter probiotic B5 multiplier; use generic opacity unless a dedicated greens B5 class is introduced.",
+      "expected_v4_module": "generic",
+      "expected_quality_score_status": "scored",
+      "expected_quality_assessment_status": "complete",
+      "expected_product_safety_status": "no_known_catalog_concern",
+      "expected_quality_tier_band": [
+        "Poor",
+        "Poor"
+      ],
+      "expected_pillar_invariants": [
+        "evidence_applicability_gap_not_no_research",
+        "verification_claim_or_brand_ceiling",
+        "dose_unbenchmarked_neutral"
+      ],
+      "allowed_movement_reasons": [
+        "scoring_policy_version_change",
+        "reference_data_correction",
+        "label_source_change",
+        "evidence_review_completed"
+      ]
     },
     {
       "dsld_id": "232923",
@@ -554,7 +1654,28 @@
       ],
       "v3_shipped_score": null,
       "v3_shipped_verdict": "BLOCKED",
-      "notes": "Tracks the 'high-risk active that is scored and carries CAUTION' archetype, NOT product continuity for any single brand. Vinpocetine 20 mg is dosed individually beside a partially disclosed blueberry blend. The 2026-08-24 policy review moved vinpocetine (NOOTROPIC_VINPOCETINE) from BLOCKED to CAUTION: FDA's dietary-ingredient conclusion is still tentative, while its reproductive-risk advisory stands. The 2026-09-11 IQM entry gave vinpocetine a verified scoring identity, so this product is now scored (47.2 on 2026-09-11) with CAUTION kept; quality and risk are separate outputs. v3_shipped_* are the historical v3 values. Historical anchors: 16072 Thorne Memoractiv (pre-2026-05 BLOCKED, since reformulated without vinpocetine)."
+      "notes": "Tracks the 'high-risk active that is scored and carries CAUTION' archetype, NOT product continuity for any single brand. Vinpocetine 20 mg is dosed individually beside a partially disclosed blueberry blend. The 2026-08-24 policy review moved vinpocetine (NOOTROPIC_VINPOCETINE) from BLOCKED to CAUTION: FDA's dietary-ingredient conclusion is still tentative, while its reproductive-risk advisory stands. The 2026-09-11 IQM entry gave vinpocetine a verified scoring identity, so this product is now scored (47.2 on 2026-09-11) with CAUTION kept; quality and risk are separate outputs. v3_shipped_* are the historical v3 values. Historical anchors: 16072 Thorne Memoractiv (pre-2026-05 BLOCKED, since reformulated without vinpocetine).",
+      "expected_v4_module": "generic",
+      "expected_quality_score_status": "scored",
+      "expected_quality_assessment_status": "complete",
+      "expected_product_safety_status": "caution",
+      "expected_quality_tier_band": [
+        "Poor",
+        "Poor"
+      ],
+      "expected_pillar_invariants": [
+        "high_risk_active_zeroes_safety_hygiene",
+        "caution_keeps_quality_score",
+        "evidence_reviewed_zero_is_assessed",
+        "verification_manufacturing_ceiling",
+        "dose_unbenchmarked_neutral"
+      ],
+      "allowed_movement_reasons": [
+        "scoring_policy_version_change",
+        "reference_data_correction",
+        "label_source_change",
+        "safety_policy_change"
+      ]
     },
     {
       "dsld_id": "211448",
@@ -570,7 +1691,27 @@
       ],
       "v3_shipped_score": null,
       "v3_shipped_verdict": "BLOCKED",
-      "notes": "Joint-support product flagged BLOCKED for a banned ingredient — surprising; the banned hit is likely in an inactive or excipient. Worth auditing why. supp_type=multivitamin (joint stack with vitamins) → router routes to multi_or_prenatal. BLOCKED verdict short-circuits scoring anyway so B5 routing is moot."
+      "notes": "Joint-support product flagged BLOCKED for a banned ingredient — surprising; the banned hit is likely in an inactive or excipient. Worth auditing why. supp_type=multivitamin (joint stack with vitamins) → router routes to multi_or_prenatal. BLOCKED verdict short-circuits scoring anyway so B5 routing is moot.",
+      "expected_v4_module": "generic",
+      "expected_quality_score_status": "scored",
+      "expected_quality_assessment_status": "complete",
+      "expected_product_safety_status": "no_known_catalog_concern",
+      "expected_quality_tier_band": [
+        "Poor",
+        "Needs improvement"
+      ],
+      "expected_pillar_invariants": [
+        "watchlist_excipient_not_blocking",
+        "verification_unknown_neutral",
+        "dose_unbenchmarked_neutral",
+        "evidence_applicable_assessed"
+      ],
+      "allowed_movement_reasons": [
+        "scoring_policy_version_change",
+        "reference_data_correction",
+        "label_source_change",
+        "safety_policy_change"
+      ]
     },
     {
       "dsld_id": "274376",
@@ -586,7 +1727,24 @@
       ],
       "v3_shipped_score": 68.1,
       "v3_shipped_verdict": "SAFE",
-      "notes": "Legion claims Labdoor (manual-review-only per P0.1c routing). Tests that non-B4a cert programs don't accidentally credit B4a. Pure Encapsulations + ConsumerLab follow the same rule."
+      "notes": "Legion claims Labdoor (manual-review-only per P0.1c routing). Tests that non-B4a cert programs don't accidentally credit B4a. Pure Encapsulations + ConsumerLab follow the same rule.",
+      "expected_v4_module": "sports",
+      "expected_quality_score_status": "scored",
+      "expected_quality_assessment_status": "complete",
+      "expected_product_safety_status": "no_known_catalog_concern",
+      "expected_quality_tier_band": [
+        "Very good",
+        "Excellent"
+      ],
+      "expected_pillar_invariants": [
+        "verification_claim_or_brand_ceiling",
+        "evidence_applicable_assessed"
+      ],
+      "allowed_movement_reasons": [
+        "scoring_policy_version_change",
+        "reference_data_correction",
+        "label_source_change"
+      ]
     },
     {
       "dsld_id": "294063",
@@ -604,7 +1762,651 @@
       "v3_shipped_verdict": "BLOCKED",
       "expected_safety_verdict": "CAUTION",
       "expected_quality_score_status": "scored",
-      "notes": "Real single-active label: verified vinpocetine quality identity with separate CAUTION policy. Dose credit is partial because no dose benchmark is available; do not describe this as a studied dose range. v3 fields retain historical policy."
+      "notes": "Real single-active label: verified vinpocetine quality identity with separate CAUTION policy. Dose credit is partial because no dose benchmark is available; do not describe this as a studied dose range. v3 fields retain historical policy.",
+      "expected_v4_module": "generic",
+      "expected_quality_assessment_status": [
+        "complete",
+        "partial"
+      ],
+      "expected_product_safety_status": "caution",
+      "expected_quality_tier_band": [
+        "Poor",
+        "Poor"
+      ],
+      "expected_pillar_invariants": [
+        "high_risk_active_zeroes_safety_hygiene",
+        "caution_keeps_quality_score",
+        "evidence_single_active_not_nothing_to_assess",
+        "verification_manufacturing_ceiling",
+        "dose_unbenchmarked_neutral"
+      ],
+      "allowed_movement_reasons": [
+        "scoring_policy_version_change",
+        "reference_data_correction",
+        "label_source_change",
+        "safety_policy_change",
+        "evidence_review_completed",
+        "identity_resolution"
+      ]
+    },
+    {
+      "dsld_id": "18924",
+      "brand_name": "Centrum",
+      "product_name": "Centrum Silver Chewables Citrus Berry",
+      "primary_class": "blocked_verdict",
+      "subclass": "banned_excipient_pho_multi",
+      "expected_b5_class": "multi_or_prenatal",
+      "expected_dose_route_v4": "blocked_short_circuit",
+      "edge_cases": [
+        "banned_inactive_blocks",
+        "multi_route_blocked"
+      ],
+      "notes": "Partially hydrogenated oils (FDA revoked GRAS) in an inactive row block the product. Pairs with 211448, where a watchlist excipient only informs and deducts.",
+      "v3_shipped_score": null,
+      "v3_shipped_verdict": null,
+      "expected_v4_module": "multi_or_prenatal",
+      "expected_quality_score_status": "suppressed_safety",
+      "expected_quality_assessment_status": "complete",
+      "expected_product_safety_status": "blocked",
+      "expected_quality_tier_band": null,
+      "expected_pillar_invariants": [
+        "suppressed_hides_score_keeps_reason"
+      ],
+      "allowed_movement_reasons": [
+        "scoring_policy_version_change",
+        "reference_data_correction",
+        "label_source_change",
+        "safety_policy_change"
+      ]
+    },
+    {
+      "dsld_id": "220094",
+      "brand_name": "GNC Beyond Raw",
+      "product_name": "LIT Beyond Dew",
+      "primary_class": "blocked_verdict",
+      "subclass": "banned_bvo_caffeinated_drink_mix",
+      "expected_b5_class": "sports_active",
+      "expected_dose_route_v4": "blocked_short_circuit",
+      "edge_cases": [
+        "banned_inactive_blocks",
+        "caffeine_present_on_blocked_product"
+      ],
+      "notes": "Brominated vegetable oil (FDA revoked authorization in 2024) blocks a caffeinated sports drink mix; the block replaces any Dose or caffeine scoring.",
+      "v3_shipped_score": null,
+      "v3_shipped_verdict": null,
+      "expected_v4_module": "sports",
+      "expected_quality_score_status": "suppressed_safety",
+      "expected_quality_assessment_status": "complete",
+      "expected_product_safety_status": "blocked",
+      "expected_quality_tier_band": null,
+      "expected_pillar_invariants": [
+        "suppressed_hides_score_keeps_reason"
+      ],
+      "allowed_movement_reasons": [
+        "scoring_policy_version_change",
+        "reference_data_correction",
+        "label_source_change",
+        "safety_policy_change"
+      ]
+    },
+    {
+      "dsld_id": "252358",
+      "brand_name": "BulkSupplements.com",
+      "product_name": "EDTA Disodium",
+      "primary_class": "blocked_verdict",
+      "subclass": "non_routine_chelator_single",
+      "expected_b5_class": "generic",
+      "expected_dose_route_v4": "blocked_short_circuit",
+      "edge_cases": [
+        "non_banned_blocking_reason",
+        "block_precedes_completeness_gate"
+      ],
+      "notes": "Edetate disodium is blocked under NON_ROUTINE_CHELATOR, a blocking reason other than banned_ingredient; the block wins over the incomplete-data gate.",
+      "v3_shipped_score": null,
+      "v3_shipped_verdict": null,
+      "expected_v4_module": "generic",
+      "expected_quality_score_status": "suppressed_safety",
+      "expected_quality_assessment_status": "complete",
+      "expected_product_safety_status": "blocked",
+      "expected_quality_tier_band": null,
+      "expected_pillar_invariants": [
+        "suppressed_hides_score_keeps_reason",
+        "safety_block_precedes_completeness"
+      ],
+      "allowed_movement_reasons": [
+        "scoring_policy_version_change",
+        "reference_data_correction",
+        "label_source_change",
+        "safety_policy_change",
+        "identity_resolution"
+      ]
+    },
+    {
+      "dsld_id": "239458",
+      "brand_name": "CVS Health",
+      "product_name": "Super B Complex with Vitamin C",
+      "primary_class": "b_complex",
+      "subclass": "b_complex_within_ul",
+      "expected_b5_class": "generic",
+      "expected_dose_route_v4": "b_complex_panel",
+      "edge_cases": [
+        "b_complex_route",
+        "authority_evidence_panel"
+      ],
+      "notes": "B-complex with vitamin C inside every UL: the b_complex route with authority Evidence and no Dose ceiling.",
+      "v3_shipped_score": null,
+      "v3_shipped_verdict": null,
+      "expected_v4_module": "b_complex",
+      "expected_quality_score_status": "scored",
+      "expected_quality_assessment_status": "complete",
+      "expected_product_safety_status": "no_known_catalog_concern",
+      "expected_quality_tier_band": [
+        "Good",
+        "Very good"
+      ],
+      "expected_pillar_invariants": [
+        "evidence_authority_assessed",
+        "verification_unknown_neutral"
+      ],
+      "allowed_movement_reasons": [
+        "scoring_policy_version_change",
+        "reference_data_correction",
+        "label_source_change"
+      ]
+    },
+    {
+      "dsld_id": "278523",
+      "brand_name": "CVS Health",
+      "product_name": "B-100 Complex",
+      "primary_class": "b_complex",
+      "subclass": "b_complex_niacin_over_ul",
+      "expected_b5_class": "generic",
+      "expected_dose_route_v4": "b_complex_panel",
+      "edge_cases": [
+        "b_complex_route",
+        "niacin_ul_zero_ceiling"
+      ],
+      "notes": "B-100 complex whose niacin is about 286% of the 35 mg UL even at minimum directed use: Dose is set to 0 once and Safety/Hygiene does not deduct again.",
+      "v3_shipped_score": null,
+      "v3_shipped_verdict": null,
+      "expected_v4_module": "b_complex",
+      "expected_quality_score_status": "scored",
+      "expected_quality_assessment_status": "complete",
+      "expected_product_safety_status": "caution",
+      "expected_quality_tier_band": [
+        "Needs improvement",
+        "Needs improvement"
+      ],
+      "expected_pillar_invariants": [
+        "dose_ul_zero_ceiling",
+        "dose_ceiling_applied_once",
+        "ul_exceedance_not_double_counted",
+        "caution_keeps_quality_score",
+        "evidence_authority_assessed",
+        "verification_unknown_neutral"
+      ],
+      "allowed_movement_reasons": [
+        "scoring_policy_version_change",
+        "reference_data_correction",
+        "label_source_change",
+        "safety_policy_change"
+      ]
+    },
+    {
+      "dsld_id": "24809",
+      "brand_name": "Doctor's Best",
+      "product_name": "Vitamin D3 5000 IU",
+      "primary_class": "single_nutrient",
+      "subclass": "vitamin_d3_over_ul_zero",
+      "expected_b5_class": "generic",
+      "expected_dose_route_v4": "single_nutrient",
+      "edge_cases": [
+        "near_ul_dose",
+        "ul_zero_ceiling_from_directed_maximum"
+      ],
+      "notes": "Same 125 mcg D3 per softgel as 184058, but the directed maximum (2/day, 250% of UL) reaches the zero band; 184058's directed use stays at 125% (cap 10).",
+      "v3_shipped_score": null,
+      "v3_shipped_verdict": null,
+      "expected_v4_module": "generic",
+      "expected_quality_score_status": "scored",
+      "expected_quality_assessment_status": "complete",
+      "expected_product_safety_status": "caution",
+      "expected_quality_tier_band": [
+        "Needs improvement",
+        "Good"
+      ],
+      "expected_pillar_invariants": [
+        "dose_ul_zero_ceiling",
+        "dose_ceiling_applied_once",
+        "ul_exceedance_not_double_counted",
+        "caution_keeps_quality_score",
+        "evidence_applicable_assessed",
+        "verification_claim_or_brand_ceiling"
+      ],
+      "allowed_movement_reasons": [
+        "scoring_policy_version_change",
+        "reference_data_correction",
+        "label_source_change",
+        "safety_policy_change"
+      ]
+    },
+    {
+      "dsld_id": "25539",
+      "brand_name": "Doctor's Best",
+      "product_name": "Real Niacin (As Nicotinic Acid) 500 mg",
+      "primary_class": "single_nutrient",
+      "subclass": "niacin_nicotinic_acid_over_ul",
+      "expected_b5_class": "generic",
+      "expected_dose_route_v4": "single_nutrient",
+      "edge_cases": [
+        "ul_zero_ceiling_from_directed_maximum"
+      ],
+      "notes": "Nicotinic acid 500 mg against the 35 mg supplemental niacin UL: Dose 0 with CAUTION while the quality score stays visible.",
+      "v3_shipped_score": null,
+      "v3_shipped_verdict": null,
+      "expected_v4_module": "generic",
+      "expected_quality_score_status": "scored",
+      "expected_quality_assessment_status": "complete",
+      "expected_product_safety_status": "caution",
+      "expected_quality_tier_band": [
+        "Needs improvement",
+        "Needs improvement"
+      ],
+      "expected_pillar_invariants": [
+        "dose_ul_zero_ceiling",
+        "dose_ceiling_applied_once",
+        "ul_exceedance_not_double_counted",
+        "caution_keeps_quality_score",
+        "evidence_applicable_assessed",
+        "verification_unknown_neutral"
+      ],
+      "allowed_movement_reasons": [
+        "scoring_policy_version_change",
+        "reference_data_correction",
+        "label_source_change",
+        "safety_policy_change"
+      ]
+    },
+    {
+      "dsld_id": "256977",
+      "brand_name": "Centrum",
+      "product_name": "Centrum Specialist Energy Multivitamin",
+      "primary_class": "multivitamin",
+      "subclass": "multi_niacin_partial_ceiling",
+      "expected_b5_class": "multi_or_prenatal",
+      "expected_dose_route_v4": "multi_panel",
+      "edge_cases": [
+        "ul_partial_ceiling_on_multi_route",
+        "watchlist_excipient_present"
+      ],
+      "notes": "Energy multivitamin at 114% of the niacin UL: the multi route caps Dose at 10 through the product-level ceiling.",
+      "v3_shipped_score": null,
+      "v3_shipped_verdict": null,
+      "expected_v4_module": "multi_or_prenatal",
+      "expected_quality_score_status": "scored",
+      "expected_quality_assessment_status": "complete",
+      "expected_product_safety_status": "caution",
+      "expected_quality_tier_band": [
+        "Needs improvement",
+        "Good"
+      ],
+      "expected_pillar_invariants": [
+        "dose_ul_partial_ceiling",
+        "dose_ceiling_applied_once",
+        "ul_exceedance_not_double_counted",
+        "caution_keeps_quality_score",
+        "evidence_authority_assessed",
+        "verification_claim_or_brand_ceiling"
+      ],
+      "allowed_movement_reasons": [
+        "scoring_policy_version_change",
+        "reference_data_correction",
+        "label_source_change",
+        "safety_policy_change"
+      ]
+    },
+    {
+      "dsld_id": "308247",
+      "brand_name": "Nutricost Performance",
+      "product_name": "PRE Pre-Workout Complex Blue Raspberry",
+      "primary_class": "sports_transparent",
+      "subclass": "preworkout_caffeine_daily_ceiling",
+      "expected_b5_class": "sports_active",
+      "expected_dose_route_v4": "blend_per_component_or_not_scored",
+      "edge_cases": [
+        "caffeine_daily_ceiling",
+        "same_name_label_version_of_306381"
+      ],
+      "notes": "A second DSLD version of the 306381 pre-workout: 600 mg caffeine/day at maximum directed use sets Dose to 0, while 306381 (300 mg/day) has no ceiling.",
+      "v3_shipped_score": null,
+      "v3_shipped_verdict": null,
+      "expected_v4_module": "sports",
+      "expected_quality_score_status": "scored",
+      "expected_quality_assessment_status": "complete",
+      "expected_product_safety_status": "caution",
+      "expected_quality_tier_band": [
+        "Needs improvement",
+        "Needs improvement"
+      ],
+      "expected_pillar_invariants": [
+        "dose_caffeine_zero_ceiling",
+        "dose_ceiling_applied_once",
+        "caution_keeps_quality_score",
+        "verification_claim_or_brand_ceiling",
+        "evidence_applicable_assessed"
+      ],
+      "allowed_movement_reasons": [
+        "scoring_policy_version_change",
+        "reference_data_correction",
+        "label_source_change",
+        "safety_policy_change"
+      ]
+    },
+    {
+      "dsld_id": "239467",
+      "brand_name": "CVS Health",
+      "product_name": "Fish Oil 1000 mg",
+      "primary_class": "fish_oil",
+      "subclass": "omega_epa_dha_undisclosed_evidence_pending",
+      "expected_b5_class": "generic",
+      "expected_dose_route_v4": "omega_dose",
+      "edge_cases": [
+        "epa_dha_not_printed",
+        "evidence_identity_material_unresolved"
+      ],
+      "notes": "Fish oil 1000 mg with no EPA/DHA printed: carrier mass earns no Dose credit and Evidence is pending, so the assessment is partial.",
+      "v3_shipped_score": null,
+      "v3_shipped_verdict": null,
+      "expected_v4_module": "omega",
+      "expected_quality_score_status": "scored",
+      "expected_quality_assessment_status": "partial",
+      "expected_product_safety_status": "no_known_catalog_concern",
+      "expected_quality_tier_band": [
+        "Poor",
+        "Poor"
+      ],
+      "expected_pillar_invariants": [
+        "evidence_pending_marks_partial",
+        "omega_carrier_mass_not_epa_dha",
+        "verification_unknown_neutral"
+      ],
+      "allowed_movement_reasons": [
+        "scoring_policy_version_change",
+        "reference_data_correction",
+        "label_source_change",
+        "evidence_review_completed",
+        "identity_resolution"
+      ]
+    },
+    {
+      "dsld_id": "212388",
+      "brand_name": "GNC",
+      "product_name": "Triple Strength DHA 1000",
+      "primary_class": "fish_oil",
+      "subclass": "omega_dha_printed_evidence_pending",
+      "expected_b5_class": "generic",
+      "expected_dose_route_v4": "omega_dose",
+      "edge_cases": [
+        "evidence_identity_material_unresolved"
+      ],
+      "notes": "DHA is printed, so Dose credit stands, while the Evidence review is pending and marks the assessment partial (contrast with 239467).",
+      "v3_shipped_score": null,
+      "v3_shipped_verdict": null,
+      "expected_v4_module": "omega",
+      "expected_quality_score_status": "scored",
+      "expected_quality_assessment_status": "partial",
+      "expected_product_safety_status": "no_known_catalog_concern",
+      "expected_quality_tier_band": [
+        "Needs improvement",
+        "Needs improvement"
+      ],
+      "expected_pillar_invariants": [
+        "evidence_pending_marks_partial",
+        "verification_claim_or_brand_ceiling"
+      ],
+      "allowed_movement_reasons": [
+        "scoring_policy_version_change",
+        "reference_data_correction",
+        "label_source_change",
+        "evidence_review_completed",
+        "identity_resolution"
+      ]
+    },
+    {
+      "dsld_id": "203390",
+      "brand_name": "Doctor's Best",
+      "product_name": "Purified & Clear Omega 3 Fish Oil 1000 mg",
+      "primary_class": "fish_oil",
+      "subclass": "ordinary_omega_unverified",
+      "expected_b5_class": "generic",
+      "expected_dose_route_v4": "omega_dose",
+      "edge_cases": [
+        "ordinary_omega",
+        "store_or_mid_brand_unverified"
+      ],
+      "notes": "Ordinary triglyceride-unspecified fish oil with EPA/DHA printed and no verification on file: neutral Verification, assessed Evidence.",
+      "v3_shipped_score": null,
+      "v3_shipped_verdict": null,
+      "expected_v4_module": "omega",
+      "expected_quality_score_status": "scored",
+      "expected_quality_assessment_status": "complete",
+      "expected_product_safety_status": "no_known_catalog_concern",
+      "expected_quality_tier_band": [
+        "Needs improvement",
+        "Good"
+      ],
+      "expected_pillar_invariants": [
+        "evidence_applicable_assessed",
+        "verification_unknown_neutral"
+      ],
+      "allowed_movement_reasons": [
+        "scoring_policy_version_change",
+        "reference_data_correction",
+        "label_source_change",
+        "verification_registry_change"
+      ]
+    },
+    {
+      "dsld_id": "178711",
+      "brand_name": "Equate",
+      "product_name": "One Daily Prenatal",
+      "primary_class": "prenatal_multi",
+      "subclass": "store_brand_prenatal_unverified",
+      "expected_b5_class": "multi_or_prenatal",
+      "expected_dose_route_v4": "multi_panel_prenatal",
+      "edge_cases": [
+        "prenatal_route",
+        "store_brand_no_certs"
+      ],
+      "notes": "Store-brand once-daily prenatal: the prenatal panel with authority Evidence and neutral Verification.",
+      "v3_shipped_score": null,
+      "v3_shipped_verdict": null,
+      "expected_v4_module": "multi_or_prenatal",
+      "expected_quality_score_status": "scored",
+      "expected_quality_assessment_status": "complete",
+      "expected_product_safety_status": "no_known_catalog_concern",
+      "expected_quality_tier_band": [
+        "Good",
+        "Very good"
+      ],
+      "expected_pillar_invariants": [
+        "evidence_authority_assessed",
+        "verification_unknown_neutral"
+      ],
+      "allowed_movement_reasons": [
+        "scoring_policy_version_change",
+        "reference_data_correction",
+        "label_source_change",
+        "verification_registry_change"
+      ]
+    },
+    {
+      "dsld_id": "250851",
+      "brand_name": "Culturelle",
+      "product_name": "Digestive Daily Probiotic",
+      "primary_class": "probiotic",
+      "subclass": "single_strain_lgg_verified",
+      "expected_b5_class": "probiotic",
+      "expected_dose_route_v4": "probiotic_cfu_adequacy",
+      "edge_cases": [
+        "probiotic_evidence_components",
+        "product_level_certification"
+      ],
+      "notes": "Single-strain LGG probiotic with assessed strain-family Evidence and product-level certification.",
+      "v3_shipped_score": null,
+      "v3_shipped_verdict": null,
+      "expected_v4_module": "probiotic",
+      "expected_quality_score_status": "scored",
+      "expected_quality_assessment_status": "complete",
+      "expected_product_safety_status": "no_known_catalog_concern",
+      "expected_quality_tier_band": [
+        "Good",
+        "Very good"
+      ],
+      "expected_pillar_invariants": [
+        "evidence_applicable_assessed",
+        "verification_product_floor",
+        "dose_unbenchmarked_neutral"
+      ],
+      "allowed_movement_reasons": [
+        "scoring_policy_version_change",
+        "reference_data_correction",
+        "label_source_change",
+        "evidence_review_completed",
+        "verification_registry_change"
+      ]
+    },
+    {
+      "dsld_id": "202811",
+      "brand_name": "Doctor's Best",
+      "product_name": "Extra Strength Ginkgo 120 mg",
+      "primary_class": "herbal_unstandardized",
+      "subclass": "ginkgo_applicability_gap",
+      "expected_b5_class": "generic",
+      "expected_dose_route_v4": "herbal_marker_dose",
+      "edge_cases": [
+        "evidence_applicability_gap_botanical"
+      ],
+      "notes": "Ginkgo extract whose reviewed research does not match this label's preparation or dose: shown as an applicability gap, never as no research.",
+      "v3_shipped_score": null,
+      "v3_shipped_verdict": null,
+      "expected_v4_module": "generic",
+      "expected_quality_score_status": "scored",
+      "expected_quality_assessment_status": "complete",
+      "expected_product_safety_status": "no_known_catalog_concern",
+      "expected_quality_tier_band": [
+        "Poor",
+        "Needs improvement"
+      ],
+      "expected_pillar_invariants": [
+        "evidence_applicability_gap_not_no_research",
+        "verification_unknown_neutral",
+        "dose_unbenchmarked_neutral"
+      ],
+      "allowed_movement_reasons": [
+        "scoring_policy_version_change",
+        "reference_data_correction",
+        "label_source_change",
+        "evidence_review_completed"
+      ]
+    },
+    {
+      "dsld_id": "209389",
+      "brand_name": "Doctor's Best",
+      "product_name": "Noni Fruit Powder 650 mg",
+      "primary_class": "herbal_unstandardized",
+      "subclass": "noni_no_qualifying_evidence",
+      "expected_b5_class": "generic",
+      "expected_dose_route_v4": "herbal_marker_dose",
+      "edge_cases": [
+        "evidence_reviewed_zero"
+      ],
+      "notes": "Noni fruit powder: research was reviewed and none qualifies, a completed zero that differs from a pending review.",
+      "v3_shipped_score": null,
+      "v3_shipped_verdict": null,
+      "expected_v4_module": "generic",
+      "expected_quality_score_status": "scored",
+      "expected_quality_assessment_status": "complete",
+      "expected_product_safety_status": "no_known_catalog_concern",
+      "expected_quality_tier_band": [
+        "Poor",
+        "Needs improvement"
+      ],
+      "expected_pillar_invariants": [
+        "evidence_reviewed_zero_is_assessed",
+        "verification_unknown_neutral",
+        "dose_unbenchmarked_neutral"
+      ],
+      "allowed_movement_reasons": [
+        "scoring_policy_version_change",
+        "reference_data_correction",
+        "label_source_change",
+        "evidence_review_completed"
+      ]
+    },
+    {
+      "dsld_id": "269286",
+      "brand_name": "Doctor's Best",
+      "product_name": "Saw Palmetto 320 mg",
+      "primary_class": "herbal_branded_extract",
+      "subclass": "saw_palmetto_prosterol_identity_unresolved",
+      "expected_b5_class": "generic",
+      "expected_dose_route_v4": "herbal_marker_dose",
+      "edge_cases": [
+        "branded_extract_read_as_blend_header",
+        "unfinished_identity_partial"
+      ],
+      "notes": "Prosterol (saw palmetto extract) 320 mg is read as a blend header (BLEND_GENERAL); the assessment is honestly partial, but see finding F2.",
+      "v3_shipped_score": null,
+      "v3_shipped_verdict": null,
+      "expected_v4_module": "generic",
+      "expected_quality_score_status": "scored",
+      "expected_quality_assessment_status": "partial",
+      "expected_product_safety_status": "no_known_catalog_concern",
+      "expected_quality_tier_band": [
+        "Poor",
+        "Poor"
+      ],
+      "expected_pillar_invariants": [
+        "unfinished_identity_marks_partial",
+        "evidence_single_active_not_nothing_to_assess",
+        "verification_unknown_neutral"
+      ],
+      "allowed_movement_reasons": [
+        "scoring_policy_version_change",
+        "reference_data_correction",
+        "label_source_change",
+        "identity_resolution"
+      ]
+    },
+    {
+      "dsld_id": "256962",
+      "brand_name": "Centrum",
+      "product_name": "Centrum Men's Multi",
+      "primary_class": "multivitamin",
+      "subclass": "adult_multi_completeness_gate",
+      "expected_b5_class": "multi_or_prenatal",
+      "expected_dose_route_v4": "multi_panel",
+      "edge_cases": [
+        "completeness_gate_not_scored"
+      ],
+      "notes": "Adult men's multivitamin held by the completeness gate (strict scoring contract, identity readiness): no number until identity is ready.",
+      "v3_shipped_score": null,
+      "v3_shipped_verdict": null,
+      "expected_v4_module": "multi_or_prenatal",
+      "expected_quality_score_status": "not_scored",
+      "expected_quality_assessment_status": "partial",
+      "expected_product_safety_status": "no_known_catalog_concern",
+      "expected_quality_tier_band": null,
+      "expected_pillar_invariants": [
+        "not_scored_has_no_number"
+      ],
+      "allowed_movement_reasons": [
+        "scoring_policy_version_change",
+        "reference_data_correction",
+        "label_source_change",
+        "identity_resolution"
+      ]
     }
   ]
 }
