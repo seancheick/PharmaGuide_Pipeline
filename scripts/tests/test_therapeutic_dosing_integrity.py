@@ -186,11 +186,11 @@ def test_batch3_present_in_optimal_uls_with_references(optimal_uls):
         e = by_name.get(std.lower())
         assert e is not None, f"{std} missing from rda_optimal_uls.json after migration"
         assert e.get("references"), f"{std} must carry content-verified references[]"
-        assert e.get("data"), f"{std} must carry a data[] age/sex grid so it scores"
+        assert e.get("data"), f"{std} must retain its source-context grid"
 
 
-def test_batch3_scores_via_calculator():
-    """Migrated bioactives must be found + scoring-eligible in the RDA calculator."""
+def test_batch3_studied_records_are_found_without_nutritional_credit():
+    """Finding a source record does not turn its study amount into an RDA."""
     import sys
 
     sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
@@ -200,7 +200,10 @@ def test_batch3_scores_via_calculator():
     for name, amt, unit in [("beta-alanine", 3.2, "g"), ("citrulline malate", 8000, "mg"),
                             ("l-citrulline", 4000, "mg"), ("hmb", 3, "g")]:
         r = c.compute_nutrient_adequacy(name, amt, unit)
-        assert r.rda_ai is not None and r.scoring_eligible, f"{name} not scoring-eligible in optimal-uls"
+        assert r.rda_ai is not None, f"{name} source context was lost"
+        assert r.rda_ai_source == "unknown"
+        assert r.scoring_eligible is False
+        assert c._find_nutrient(name)["reference_semantics"]["curve"] == "completed_no_benchmark_neutral"
 
 
 # ── Batch 4: migrate remaining non-botanical bioactives → optimal-uls ───
@@ -285,7 +288,8 @@ def test_batch7_new_bioactives_present_with_refs(optimal_uls):
 def test_inositol_range_corrected(optimal_uls):
     inos = [e for e in optimal_uls["nutrient_recommendations"] if (e.get("standard_name") or "").lower() == "inositol"]
     assert len(inos) == 1
-    assert inos[0]["optimal_range"] == "2000-4000", "Inositol range must be corrected to the PCOS-guideline 2000-4000 mg"
+    assert inos[0]["optimal_range"] == "2000-4000", "Retain the reviewed regimen context without creating a scoring range"
+    assert inos[0]["reference_semantics"]["curve"] == "completed_no_benchmark_neutral"
     assert "38163998" in (inos[0].get("references") or []), "Inositol must cite the 2023 PCOS guideline meta-analysis"
 
 
@@ -307,7 +311,7 @@ def test_batch8_new_dose_anchors_present_with_refs(optimal_uls):
         assert len(e.get("data") or []) == 16, f"{std} must have a 16-row data[] grid"
 
 
-def test_batch8_new_dose_anchors_score_via_calculator():
+def test_batch8_studied_records_are_found_without_nutritional_credit():
     import sys
 
     sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
@@ -320,7 +324,10 @@ def test_batch8_new_dose_anchors_score_via_calculator():
         ("sodium copper chlorophyllin", 300, "mg"),
     ]:
         r = c.compute_nutrient_adequacy(name, amt, unit)
-        assert r.rda_ai is not None and r.scoring_eligible, f"{name} not scoring-eligible in optimal-uls"
+        assert r.rda_ai is not None, f"{name} source context was lost"
+        assert r.rda_ai_source == "unknown"
+        assert r.scoring_eligible is False
+        assert c._find_nutrient(name)["reference_semantics"]["curve"] == "completed_no_benchmark_neutral"
 
 
 def test_chlorophyllin_anchor_does_not_alias_generic_chlorophyll(optimal_uls):
@@ -345,7 +352,9 @@ def test_generic_chlorophyll_does_not_partially_match_chlorophyllin_anchor():
     assert natural.rda_ai is None
     assert natural.scoring_eligible is False
     assert chlorophyllin.rda_ai == 300.0
-    assert chlorophyllin.scoring_eligible is True
+    assert chlorophyllin.rda_ai_source == "unknown"
+    assert chlorophyllin.scoring_eligible is False
+    assert c._find_nutrient("chlorophyllin")["reference_semantics"]["reference_type"] == "discrete_studied_regimen"
 
 
 # ── citation verifier wiring ────────────────────────────────────────────
