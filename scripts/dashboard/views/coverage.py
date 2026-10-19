@@ -3,6 +3,8 @@
 from __future__ import annotations
 
 from datetime import date
+import hashlib
+from scripts.dashboard.score_index import QUALITY_CONFIG
 
 import pandas as pd
 import plotly.graph_objects as go
@@ -57,12 +59,14 @@ def render(ctx: shell.PageContext) -> None:
 
     with tab_cal:
         frame = calibration_frame()
+        calibration_stamp = hashlib.sha256(QUALITY_CONFIG.read_bytes()).hexdigest()[:16]
+        st.caption(f"Current source config calibration records ({calibration_stamp}); these are not a snapshot of the selected historical run.")
         kpis([("Records", f"{len(frame):,}", "Config-owned numeric anchors in quality_score.json"),
               ("Not approved", f"{int((~frame['approved']).sum()):,}", None),
               ("Without sources", f"{int((frame['sources'] == 0).sum()):,}", None),
               ("Owner not found", f"{int((~frame['owner_found']).sum()):,}", "owner path::symbol missing from code"),
               ("Stale (> 1 year)", f"{int(frame['stale'].sum()):,}", None)])
-        table(frame, key="cov_cal", name="calibration_records", run_key=ctx.run_key, height=460,
+        table(frame, key="cov_cal", name="calibration_records", run_key=f"current-config-{calibration_stamp}", height=460,
               caption="Product artifacts do not name these records, so the dashboard never links a product to one by "
                       "inference: calibration reference linkage is unavailable in this artifact.")
 
@@ -129,6 +133,21 @@ def _golden(ctx: shell.PageContext, products: pd.DataFrame) -> None:
         table(pd.DataFrame(failures), key="cov_gold_fail", name="golden_set_failures", run_key=ctx.run_key, height=260)
     picked = table(frame.sort_values(["failed", "dsld_id"], ascending=[False, True]).reset_index(drop=True),
                    key="cov_gold", name="golden_set", run_key=ctx.run_key, select=True, height=480)
+    st.markdown("#### Recorded canary history")
+    history = []
+    for run in ctx.index.runs():
+        recorded = ctx.frame("products", run["run_key"], ["dsld_id", "total", "tier", "quality_score_status", "product_safety_status"])
+        recorded = recorded[recorded["dsld_id"].isin(by_id)].copy()
+        if not recorded.empty:
+            recorded["run_time"] = run.get("run_time")
+            recorded["plane"] = run["plane"]
+            recorded["fidelity"] = run["fidelity"]
+            recorded["run_key"] = run["run_key"]
+            history.append(recorded)
+    if history:
+        table(pd.concat(history, ignore_index=True), key="cov_gold_history", name="canary_recorded_history",
+              run_key=ctx.run_key, height=300,
+              caption="Recorded values across indexed runs, labelled by fidelity; current expectations are evaluated above for the selected candidate only.")
     if picked:
         ordered = frame.sort_values(["failed", "dsld_id"], ascending=[False, True]).reset_index(drop=True)
         shell.go("product-trace", trace_dsld_id=str(ordered.iloc[picked[0]]["dsld_id"]))

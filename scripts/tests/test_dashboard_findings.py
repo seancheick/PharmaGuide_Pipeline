@@ -339,3 +339,63 @@ def test_first_and_last_seen_follow_run_chronology(paths):
     seen = fr.with_seen(reader.findings(), reader.build, reader.runs())
     row = seen[(seen["rule_id"] == "receipt_reconcile")].iloc[0]
     assert row["first_seen"] == "2026-10-19T00:00:00Z" and row["last_seen"] == "2026-10-20T00:00:00Z"
+
+
+def test_exception_scope_uses_each_findings_run_fingerprint(tmp_path):
+    db = tmp_path / "triage.sqlite"
+    triage.set_status("a", "r", 1, "Accepted exception", config_scope="fp-old", path=db)
+    triage.set_status("b", "r", 1, "Accepted exception", config_scope="fp-release", path=db)
+    findings = pd.DataFrame([{"finding_id": "a", "rule_id": "r", "rule_version": 1, "run_key": "candidate"},
+                             {"finding_id": "b", "rule_id": "r", "rule_version": 1, "run_key": "release"}])
+    result = triage.merge(findings, config_versions=[], path=db,
+                         run_configs={"candidate": ["fp-new"], "release": ["fp-release"]}).set_index("finding_id")
+    assert result.loc["a", "triage_status"] == "Open"
+    assert result.loc["b", "triage_status"] == "Accepted exception"
+
+
+def test_config_diff_compares_verified_values_and_keeps_missing_history_explicit(monkeypatch):
+    snapshots = {"old": {"calibration": {"limit": 1}}, "new": {"calibration": {"limit": 2}}}
+    monkeypatch.setattr(run_compare, "config_snapshot", lambda name, version, fp: snapshots.get(fp))
+    run = lambda fp: {"config_fingerprints": [json.dumps({"quality_score": {"version": "v", "fingerprint": fp}})]}
+    diff, missing = run_compare.config_diff(run("old"), run("new"))
+    assert not missing
+    assert diff.to_dict("records") == [{"config": "quality_score", "setting": "calibration.limit", "baseline": "1", "candidate": "2"}]
+    diff, missing = run_compare.config_diff(run("absent"), run("new"))
+    assert diff.empty and missing == ["baseline quality_score: verified config snapshot unavailable"]
+
+
+def test_peer_outliers_do_not_mix_config_fingerprints():
+    rows = [{"dsld_id": str(i), "total": 60.0 + (i % 3), "category": "c", "quality_score_status": "scored",
+             "quality_assessment_status": "complete", "config_fingerprint": "a" if i < 20 else "b"} for i in range(40)]
+    rows.append({**rows[-1], "dsld_id": "hi", "total": 100.0})
+    ctx = fr.Context({"candidate": pd.DataFrame(rows)}, {}, {}, {}, {}, {}, {}, [], [], {})
+    assert fr._peer_outlier(ctx).empty
+
+
+def test_legacy_unscoped_exception_cannot_remain_closed():
+    assert triage.effective_status({"status": "Accepted exception", "rule_version": 1,
+                                    "finding_rule_version": 1, "config_scope": None},
+                                   config_versions=["fp-current"]) == "Open"
+
+
+def test_config_snapshot_requires_matching_content_hash(tmp_path, monkeypatch):
+    import hashlib
+    from scoring_v4 import config_registry
+    raw = b'{"version": "same", "calibration": 2}'
+    config = tmp_path / "config.json"
+    config.write_bytes(raw)
+    monkeypatch.setattr(run_compare, "REPO_ROOT", tmp_path)
+    monkeypatch.setitem(config_registry._PROVENANCE_CONFIGS, "test_snapshot", config)
+    run_compare.config_snapshot.cache_clear()
+    assert run_compare.config_snapshot("test_snapshot", "same", hashlib.sha256(raw).hexdigest()[:16]) == json.loads(raw)
+    assert run_compare.config_snapshot("test_snapshot", "same", "wrong-fingerprint") is None
+    run_compare.config_snapshot.cache_clear()
+
+
+def test_product_exception_reopens_when_its_config_changes_inside_mixed_run(tmp_path):
+    db = tmp_path / "triage.sqlite"
+    triage.set_status("f", "r", 1, "Accepted exception", config_scope="A", path=db)
+    finding = pd.DataFrame([{"finding_id": "f", "rule_id": "r", "rule_version": 1,
+                             "run_key": "mixed", "dsld_id": "P", "config_fingerprint": "B"}])
+    result = triage.merge(finding, config_versions=[], run_configs={"mixed": ["A", "B"]}, path=db)
+    assert result.iloc[0]["triage_status"] == "Open"

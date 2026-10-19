@@ -18,14 +18,23 @@ from scripts.dashboard import findings_rules, run_compare, score_index, triage
 from scripts.dashboard.components.ui import chip, empty_index_notice
 from scripts.dashboard.time_format import format_dashboard_datetime
 
-PLANES = {"candidate": "Candidate", "release": "Release"}
+PLANES = {"candidate": "Candidate", "release": "Release", "backfill": "Historical"}
 PAGE_OBJECTS: dict[str, Any] = {}  # slug -> st.Page, filled by app.py
 
 
 def go(slug: str, **state: Any) -> None:
     """Navigate to another page, carrying session state (e.g. the product to trace)."""
+    if "trace_dsld_id" in state:
+        for key in ("trace_query", "trace_pick"):
+            st.session_state.pop(key, None)
     for key, value in state.items():
-        st.session_state[key] = value
+        if key in ("plane", "run"):
+            pending = dict(st.session_state.get("navigation_run") or {})
+            pending[key] = value
+            st.session_state["navigation_run"] = pending
+            st.query_params[key] = value
+        else:
+            st.session_state[key] = value
     if slug in PAGE_OBJECTS:
         st.switch_page(PAGE_OBJECTS[slug])
 
@@ -103,13 +112,22 @@ class PageContext:
         if found.empty or not self.build:
             return found
         found = findings_rules.with_seen(found, self.index.build, self.index.runs())
-        versions = (self.index.run(self.index.latest("candidate")) or {}).get("config_versions") or []
-        return triage.merge(found, config_versions=versions)
+        found["config_fingerprint"] = None
+        for run in self.index.runs():
+            mask = found["run_key"] == run["run_key"]
+            if mask.any():
+                products = self.frame("products", run["run_key"], ["dsld_id", "config_fingerprint"])
+                stamps = products.set_index("dsld_id")["config_fingerprint"]
+                found.loc[mask, "config_fingerprint"] = found.loc[mask, "dsld_id"].map(stamps)
+        scopes = {run["run_key"]: run.get("config_fingerprints") or [] for run in self.index.runs()}
+        return triage.merge(found, config_versions=[], run_configs=scopes)
 
 
 def init(data: Any) -> PageContext:
     """Sidebar controls shared by every page; returns the page context."""
     index: score_index.IndexReader = data.index
+    for key, value in st.session_state.pop("navigation_run", {}).items():
+        st.session_state[key] = value
     params = st.query_params
     with st.sidebar:
         st.markdown("**PharmaGuide** · Quality control")
@@ -156,7 +174,12 @@ def _index_status(index: score_index.IndexReader) -> None:
         built = format_dashboard_datetime(index.meta.get("built_at"), style="compact")
         if stale["stale"]:
             changed = len(stale["candidate_changed"]) + len(stale["candidate_removed"])
-            detail = f"{changed} batch(es) changed" if changed else "release changed"
+            reasons = ([f"{changed} batch(es) changed"] if changed else [])
+            if stale["release_changed"]:
+                reasons.append("release changed")
+            if stale.get("projection_changed"):
+                reasons.append("dashboard projection changed")
+            detail = "; ".join(reasons) or "source changed"
             st.warning(f"Index is stale — {detail}. Built {built}.", icon=":material/update:")
         else:
             st.caption(f":material/check_circle: Index fresh · built {built}")

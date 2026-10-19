@@ -177,3 +177,69 @@ def test_form_share_counts_each_brand_product_once():
     share = market.form_share(ingredients, products, "magnesium", min_products=5).set_index("form")
     assert share.loc["magnesium oxide", "share_pct"] == 50.0 and share.loc["magnesium glycinate", "products"] == 3
     assert market.form_share(ingredients, products, "magnesium", min_products=7).empty
+
+
+def test_ops_shows_provenance_and_handles_missing_index(dashboard_app, indexed, monkeypatch):
+    scan, dist = indexed
+    data = dashboard_app.load_dashboard_data(dashboard_app.DashboardConfig(scan_dir=scan, build_root=dist))
+    ctx = dashboard_app.shell.init(data)
+    calls = []
+    monkeypatch.setattr(dashboard_app.shell, "banner", lambda context: calls.append(context) or False)
+    monkeypatch.setattr(dashboard_app.view("ops"), "render_health", lambda data: pytest.fail("rendered without index"))
+    dashboard_app.view("ops").render(ctx)
+    assert calls == [ctx]
+
+
+def test_peer_percentiles_do_not_mix_configs():
+    rows = [{"dsld_id": str(i), "product_name": "P", "brand_name": "B", "category": "C",
+             "quality_score_status": "scored", "quality_assessment_status": "complete",
+             "total": float(i), "config_version": "same-version",
+             "config_fingerprint": "a" if i < 20 else "b"} for i in range(40)]
+    assert score_lab.peer_percentiles(pd.DataFrame(rows)).empty
+
+
+def test_trace_navigation_replaces_stale_search_and_run(dashboard_app):
+    st = dashboard_app.st
+    st.session_state.update(trace_query="old search", trace_pick="1", trace_dsld_id="1")
+    dashboard_app.shell.go("product-trace", trace_dsld_id="6", plane="release", run="release-example")
+    assert "trace_query" not in st.session_state
+    assert "trace_pick" not in st.session_state
+    assert st.session_state["trace_dsld_id"] == "6"
+    assert st.query_params["plane"] == "release"
+    assert st.query_params["run"] == "release-example"
+
+
+def test_unavailable_composition_is_not_labelled_zero_or_unearned():
+    from scripts.dashboard.views.trace import _composition
+    from scripts.dashboard.score_index import pillar_maxima
+    fig = _composition({"quality_score_status": "suppressed_safety"}, pillar_maxima())
+    assert "not assessed" in fig.layout.title.text.lower()
+    assert all("not assessed" in trace.hovertemplate.lower() for trace in fig.data)
+
+
+def test_explorer_preserves_saved_confidence_predicates(dashboard_app, indexed, monkeypatch):
+    scan, dist = indexed
+    data = dashboard_app.load_dashboard_data(dashboard_app.DashboardConfig(scan_dir=scan, build_root=dist))
+    ctx = dashboard_app.shell.init(data)
+    module = dashboard_app.view("explorer")
+    for name, expected in [("High score, low confidence", "confidence"), ("Low route confidence", "route_confidence")]:
+        monkeypatch.setattr(dashboard_app.st, "columns", lambda spec: [dashboard_app.st] * (spec if isinstance(spec, int) else len(spec)))
+        monkeypatch.setattr(dashboard_app.st, "pills", lambda *a, **kw: name)
+        calls = []
+        real = sv.apply_filters
+        monkeypatch.setattr(module, "apply_filters", lambda frame, spec: calls.append(spec) or real(frame, spec))
+        module.render(ctx)
+        assert calls[0][expected] == ["low"]
+
+
+def test_release_compare_defaults_to_two_distinct_runs(dashboard_app, indexed, monkeypatch):
+    scan, dist = indexed
+    data = dashboard_app.load_dashboard_data(dashboard_app.DashboardConfig(scan_dir=scan, build_root=dist))
+    index = data.index
+    ctx = dashboard_app.shell.PageContext(data, index, "release", index.latest("release"))
+    st = dashboard_app.st
+    monkeypatch.setattr(st, "columns", lambda spec: [st] * (spec if isinstance(spec, int) else len(spec)))
+    monkeypatch.setattr(st, "selectbox", lambda label, options, index=0, **kw: options[index])
+    st.warning.reset_mock()
+    dashboard_app.view("run_compare_view").render(ctx)
+    assert not any("Pick two different" in str(call) for call in st.warning.call_args_list)

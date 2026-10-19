@@ -986,7 +986,8 @@ def backfill(paths: IndexPaths, db_paths: Iterable[Path]) -> dict[str, Any]:
                     core_rows = [dict(row) for row in conn.execute("SELECT * FROM products_core")]
                 exported = max((row.get("exported_at") or "" for row in core_rows), default="")
                 versions = sorted({row.get("quality_score_version") or "" for row in core_rows})
-                run_key = _run_key("backfill", versions, exported, len(core_rows))
+                run_key = _run_key("backfill", versions, exported,
+                                   sorted(core_rows, key=lambda row: str(row.get("dsld_id"))))
                 if run_key in known:
                     continue
                 rows: dict[str, list] = {}
@@ -1074,14 +1075,14 @@ class IndexReader:
         out["slim"] = json.loads(slim[0]) if slim else None
         return out
 
-    def ingredient_frame(self, table: str = "ingredients", columns: list[str] | None = None):
+    def ingredient_frame(self, table: str = "ingredients", columns: list[str] | None = None, filter=None):
         """Ingredient index tables (separate from runs); empty when not built."""
         import pandas as pd
         directory = self.build / "ingredients" / table if self.build else None
         if directory is None or not directory.exists():
             return pd.DataFrame(columns=columns or INGREDIENT_TABLES[table].names)
         return pds.dataset(str(directory), format="parquet", schema=INGREDIENT_TABLES[table]).to_table(
-            columns=columns).to_pandas()
+            columns=columns, filter=filter).to_pandas()
 
     def ingredient_staleness(self) -> dict[str, Any]:
         built = self.meta.get("ingredient_parts") or {}

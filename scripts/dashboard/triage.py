@@ -76,7 +76,7 @@ def effective_status(row: dict, *, config_versions: list[str], today: date | Non
         if int(row.get("rule_version") or -1) != int(row.get("finding_rule_version") or -2):
             return "Open"
         scope = row.get("config_scope")
-        if isinstance(scope, str) and scope and scope not in config_versions:
+        if not isinstance(scope, str) or not scope or scope not in config_versions:
             return "Open"
         review_by = row.get("review_by")
         if isinstance(review_by, str) and review_by:
@@ -88,7 +88,8 @@ def effective_status(row: dict, *, config_versions: list[str], today: date | Non
     return status
 
 
-def merge(findings: pd.DataFrame, *, config_versions: list[str], path: Path | None = None) -> pd.DataFrame:
+def merge(findings: pd.DataFrame, *, config_versions: list[str], path: Path | None = None,
+          run_configs: dict[str, list[str]] | None = None) -> pd.DataFrame:
     """Current findings plus triage, plus triaged findings absent from the newest run."""
     triage = load(path)
     if findings.empty and triage.empty:
@@ -98,7 +99,9 @@ def merge(findings: pd.DataFrame, *, config_versions: list[str], path: Path | No
     if not out.empty:
         out["triage_status"] = [
             effective_status({**row, "rule_version": row.get("triage_rule_version"),
-                              "finding_rule_version": row.get("rule_version")}, config_versions=config_versions)
+                              "finding_rule_version": row.get("rule_version")}, config_versions=([row["config_fingerprint"]] if row.get("config_fingerprint")
+                                               else [] if pd.notna(row.get("dsld_id"))
+                                               else (run_configs or {}).get(row.get("run_key"), config_versions)))
             for row in out.to_dict("records")
         ]
     gone = triage[~triage["finding_id"].isin(findings["finding_id"] if not findings.empty else [])]

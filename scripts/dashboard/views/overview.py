@@ -60,7 +60,8 @@ def _health_strip(ctx: shell.PageContext) -> None:
 def render(ctx: shell.PageContext) -> None:
     if not shell.banner(ctx):
         return
-    products = ctx.products()
+    products = ctx.frame("products", columns=["quality_score_status", "quality_assessment_status",
+                                               "product_safety_status", "total", *[f"pillar_{p}" for p in PILLARS]])
     counts = status_counts(products)
     findings = ctx.index.findings()
     open_counts = findings["severity"].value_counts().to_dict() if not findings.empty else {}
@@ -82,13 +83,14 @@ def render(ctx: shell.PageContext) -> None:
         st.markdown("#### Tier mix")
         fig = go.Figure()
         planes = [("Candidate", ctx.index.latest("candidate")), ("Release", ctx.index.latest("release"))]
+        tier_counts = {label: ctx.frame("products", key, ["tier"])["tier"].value_counts()
+                       for label, key in planes if key}
         for tier, color in zip(TIER_ORDER, TIER_COLORS):
             xs, ys = [], []
             for label, key in planes:
                 if not key:
                     continue
-                frame = ctx.products(key)
-                n = int((frame["tier"] == tier).sum())
+                n = int(tier_counts[label].get(tier, 0))
                 xs.append(n)
                 ys.append(label)
             fig.add_bar(x=xs, y=ys, orientation="h", name=tier, marker={"color": color, "line": {"color": TOKENS["surface"], "width": 2}},
@@ -127,7 +129,8 @@ def render(ctx: shell.PageContext) -> None:
     st.markdown("#### Pillar drift")
     base = ctx.baseline_key()
     if base:
-        before, after = ctx.products(base), products
+        before = ctx.frame("products", base, [f"pillar_{p}" for p in PILLARS])
+        after = products
         rows = [{"pillar": PILLAR_LABELS[p], "PSI": round(psi(before[f"pillar_{p}"], after[f"pillar_{p}"], cap=ctx.maxima[p]), 3),
                  "baseline mean": round(before[f"pillar_{p}"].mean(), 2), "current mean": round(after[f"pillar_{p}"].mean(), 2)}
                 for p in PILLARS]

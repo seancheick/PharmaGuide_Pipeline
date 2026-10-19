@@ -14,6 +14,8 @@ from scripts.dashboard.views.quality import render_quality
 
 
 def render(ctx: shell.PageContext) -> None:
+    if not shell.banner(ctx):
+        return
     tabs = st.tabs(["Pipeline health", "Data quality", "Batch diff", "Dashboard index"])
     with tabs[0]:
         render_health(ctx.data)
@@ -63,5 +65,7 @@ def _index_status(ctx: shell.PageContext) -> None:
             result = score_index.backfill(index.paths, [line.strip() for line in paths.splitlines() if line.strip()])
             st.success(f"Added {len(result['added'])} run(s).")
             st.cache_data.clear()
+            st.cache_resource.clear()
+            st.rerun()
     if cols[1].button("Remove old builds (keep 2)", icon=":material/delete_sweep:"):
         st.success(f"Removed {len(score_index.gc(index.paths))} build(s).")
