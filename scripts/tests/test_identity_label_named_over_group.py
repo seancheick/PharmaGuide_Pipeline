@@ -115,3 +115,20 @@ def test_curated_alias_names_the_printed_substance(pipeline, literal, owner, not
     registry = pipeline[1]._current_canonical_identity_registry()
     assert registry.literal_identity_matches(literal, owner)
     assert not registry.literal_identity_matches(literal, not_owner)
+
+
+def test_export_carries_the_enricher_identity_even_when_unresolved(products):
+    # F2: 1646 "Probiotic Complex Blend" (a weight-only blend header) is left without an
+    # identity by the enricher; the exported analysis row must not fill in the cleaner's
+    # "probiotics" (one row, two identities).
+    enriched, blob = products["1646"]
+    path = "ingredientRows[0]"
+    assert _row(enriched, path)["canonical_id"] is None
+    [exported] = [r for r in blob["ingredients"] if r.get("raw_source_path") == path]
+    assert not exported.get("canonical_id")
+    assert exported.get("is_mapped") is not True
+    # The display ledger row keeps the printed identity for the app's ingredient-id
+    # union; its analysis namespace carries the enricher's decision.
+    ledger = [r for r in blob["display_ingredients"] if r.get("raw_source_path") == path]
+    assert ledger and all(not (r.get("analysis") or {}).get("canonical_id") for r in ledger)
+    assert any(r.get("canonical_id") == "probiotics" for r in ledger)
