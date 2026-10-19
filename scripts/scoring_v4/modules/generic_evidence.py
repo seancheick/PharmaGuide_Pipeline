@@ -24,7 +24,6 @@ from collagen_taxonomy import PEPTIDES_I_III, classify_collagen_subtype_strict
 from clinical_applicability import filter_clinical_matches
 from scoring_input_contract import (
     primary_mass_competitor_rows,
-    get_assessable_evidence_ingredients,
     get_evidence_subject_rows,
     is_lent_blend_mass,
     is_nutrition_fact_declaration as _contract_is_nutrition_fact,
@@ -466,16 +465,6 @@ def score_evidence(product: Dict[str, Any], *, apply_primary_floor: bool = False
 def _is_nutrition_fact_declaration(row: Dict[str, Any]) -> bool:
     """Return whether a row is classified by canonical label/row-role owner as a Nutrition Facts declaration."""
     return _contract_is_nutrition_fact(row)
-
-
-def _assessable_active_ingredients(product: Dict[str, Any]) -> List[Dict[str, Any]]:
-    """Return ingredients eligible to be assessed for clinical evidence.
-
-    Consumes the canonical contract from scoring_input_contract.get_assessable_evidence_ingredients.
-    """
-    if not isinstance(product, dict):
-        return []
-    return get_assessable_evidence_ingredients(product)
 
 
 def evidence_completeness_gap(

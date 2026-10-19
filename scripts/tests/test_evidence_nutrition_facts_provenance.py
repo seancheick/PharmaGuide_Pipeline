@@ -20,8 +20,8 @@ from __future__ import annotations
 
 import pytest
 
+from scoring_input_contract import get_assessable_evidence_ingredients
 from scoring_v4.modules.generic_evidence import (
-    _assessable_active_ingredients,
     _competing_active_rows,
     _is_nutrition_fact_declaration,
     score_evidence,
@@ -93,7 +93,7 @@ def test_nutrition_facts_dietary_fiber_only_excluded_as_evidence_identity():
     product = _product(ingredients=[fiber_row], matches=[])
 
     assert _is_nutrition_fact_declaration(fiber_row) is True
-    assert _assessable_active_ingredients(product) == []
+    assert get_assessable_evidence_ingredients(product) == []
 
     result = score_evidence(product)
     assert result["metadata"]["evidence_result_state"] == "no_assessable_actives"
@@ -113,7 +113,7 @@ def test_dietary_fiber_plus_psyllium_husk_retains_psyllium():
     )
     product = _product(ingredients=[fiber_row, psyllium_row], matches=[])
 
-    assessable = _assessable_active_ingredients(product)
+    assessable = get_assessable_evidence_ingredients(product)
     assert len(assessable) == 1
     assert assessable[0]["canonical_id"] == "psyllium"
 
@@ -135,7 +135,7 @@ def test_dietary_fiber_plus_inulin_retains_inulin():
     }
     product = _product(ingredients=[fiber_row, inulin_row], matches=[])
 
-    assessable = _assessable_active_ingredients(product)
+    assessable = get_assessable_evidence_ingredients(product)
     assert len(assessable) == 1
     assert assessable[0]["canonical_id"] == "inulin"
 
@@ -156,7 +156,7 @@ def test_nutrition_facts_protein_plus_whey_retains_whey_excludes_protein():
     assert _is_nutrition_fact_declaration(protein_row) is True
     assert _is_nutrition_fact_declaration(whey_row) is False
 
-    assessable = _assessable_active_ingredients(product)
+    assessable = get_assessable_evidence_ingredients(product)
     assert len(assessable) == 1
     assert assessable[0]["canonical_id"] == "whey_protein"
 
@@ -169,7 +169,7 @@ def test_total_carbohydrate_and_calories_only_creates_no_evidence_identities():
     carbs_row = _nutrition_fact_row("Total Carbohydrate", canonical_id=None, quantity=10.0, unit="g")
     product = _product(ingredients=[calories_row, carbs_row], matches=[])
 
-    assert _assessable_active_ingredients(product) == []
+    assert get_assessable_evidence_ingredients(product) == []
     result = score_evidence(product)
     assert result["metadata"]["evidence_result_state"] == "no_assessable_actives"
     assert result["score"] == 0.0
@@ -196,7 +196,7 @@ def test_same_words_as_genuine_supplement_row_not_excluded_by_name():
     assert _is_nutrition_fact_declaration(genuine_fiber) is False
 
     product = _product(ingredients=[genuine_fiber], matches=[])
-    assessable = _assessable_active_ingredients(product)
+    assessable = get_assessable_evidence_ingredients(product)
     assert len(assessable) == 1
     assert assessable[0]["name"] == "Dietary Fiber"
 
@@ -230,7 +230,7 @@ def test_multiple_source_ingredients_assesses_disclosed_sources_no_invented_allo
     }
     product = _product(ingredients=[fiber_decl, psyllium, inulin], matches=[])
 
-    assessable = _assessable_active_ingredients(product)
+    assessable = get_assessable_evidence_ingredients(product)
     assert len(assessable) == 2
     canonical_ids = {r["canonical_id"] for r in assessable}
     assert canonical_ids == {"psyllium", "inulin"}

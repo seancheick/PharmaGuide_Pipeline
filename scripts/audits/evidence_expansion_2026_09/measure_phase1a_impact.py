@@ -22,8 +22,8 @@ ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT))
 
 from scoring_input_contract import primary_mass_competitor_rows
+from scoring_input_contract import get_assessable_evidence_ingredients
 from scoring_v4.modules.generic_evidence import (
-    _assessable_active_ingredients,
     _competing_active_rows,
     score_evidence,
 )
@@ -72,7 +72,7 @@ def run_measurement(products_root: Path, limit: int | None = None) -> dict:
 
             # 2. Evaluate baseline (pre-Phase 1a) Evidence result
             raw_actives = get_active_ingredients(prod)
-            assessable = _assessable_active_ingredients(prod)
+            assessable = get_assessable_evidence_ingredients(prod)
 
             had_raw_actives = bool(raw_actives)
             has_assessable = bool(assessable)

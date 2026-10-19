@@ -168,7 +168,7 @@ def test_proprietary_blend_ashwagandha_rhodiola_canary():
       ('applicability_unestablished') rather than inventing an equal-share or child dose
     - No child dose is invented in dose_map
     """
-    from scoring_v4.modules.generic_evidence import _assessable_active_ingredients
+    from scoring_input_contract import get_assessable_evidence_ingredients
 
     blend_header = {
         "name": "Proprietary Blend",
@@ -201,7 +201,7 @@ def test_proprietary_blend_ashwagandha_rhodiola_canary():
 
     # 1. Check assessable active identities: parent is excluded, children are retained
     product_bare = _product(ingredients=[blend_header, ashwagandha, rhodiola], matches=[])
-    assessable = _assessable_active_ingredients(product_bare)
+    assessable = get_assessable_evidence_ingredients(product_bare)
     assessable_cids = {r.get("canonical_id") for r in assessable}
     assert "blend_general" not in assessable_cids
     assert "ashwagandha" in assessable_cids
