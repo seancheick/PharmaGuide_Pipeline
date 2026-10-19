@@ -1215,12 +1215,10 @@ class SupplementEnricherV3:
             return ingredients
         from evidence_resolver import evidence_owner_canonicals
 
-        try:
-            subject_rows = get_evidence_subject_rows(contract_product)
-            owners = evidence_owner_canonicals(contract_product)
-        except Exception as exc:  # pragma: no cover - defensive old artifacts.
-            self.logger.warning("evidence subject provider unavailable: %s", exc)
-            return ingredients
+        # A provider failure fails the product (enrich_product records it);
+        # falling back to raw actives would silently change Evidence.
+        subject_rows = get_evidence_subject_rows(contract_product)
+        owners = evidence_owner_canonicals(contract_product)
         covered = {
             str(row.get("canonical_id") or "").strip().lower()
             for row in ingredients
@@ -1267,17 +1265,13 @@ class SupplementEnricherV3:
         ):
             return flattened if include_ancestors else active_tree
 
-        try:
-            result = get_scoring_ingredients(
-                product,
-                strict=True,
-                allow_legacy_fallback=False,
-            )
-        except Exception as exc:  # pragma: no cover - defensive old artifacts.
-            self.logger.debug(
-                "strict source-owner projection unavailable for enrichment: %s", exc
-            )
-            return flattened if include_ancestors else active_tree
+        # A projection failure fails the product (enrich_product records it);
+        # the unjoined active tree would silently change every consumer.
+        result = get_scoring_ingredients(
+            product,
+            strict=True,
+            allow_legacy_fallback=False,
+        )
 
         scoring_rows = [
             row
@@ -5506,15 +5500,7 @@ class SupplementEnricherV3:
             for ing in ing_list or []:
                 if not isinstance(ing, dict):
                     continue
-                try:
-                    markers = self._compute_delivers_markers(ing)
-                except Exception as exc:
-                    self.logger.warning(
-                        "delivers_markers computation failed for canonical_id=%s: %s",
-                        ing.get("canonical_id"), exc,
-                    )
-                    markers = []
-                ing["delivers_markers"] = markers
+                ing["delivers_markers"] = self._compute_delivers_markers(ing)
 
         return {
             # Schema version for forward compatibility
@@ -14039,13 +14025,11 @@ class SupplementEnricherV3:
         AND no scoring_blocked_reason will earn B4a points in the scorer.
         """
         # Lazy-load the resolver registry once per enricher instance.
+        # A malformed registry raises: an empty verified-program list would
+        # silently under-credit Verification on every product.
         if not hasattr(self, "_cert_registry_cache"):
-            try:
-                from cert_resolver import CertRegistry  # local import to avoid hard dep at module load
-                self._cert_registry_cache = CertRegistry.load()
-            except Exception as exc:  # registry missing or malformed → empty
-                self.logger.warning("cert_resolver unavailable: %s (verified_cert_programs will be empty)", exc)
-                self._cert_registry_cache = None
+            from cert_resolver import CertRegistry  # local import to avoid hard dep at module load
+            self._cert_registry_cache = CertRegistry.load()
 
         registry = self._cert_registry_cache
         if registry is None:
@@ -14414,59 +14398,54 @@ class SupplementEnricherV3:
         # Step 1: Collect detector blends (pattern-based)
         detector_blends = []
         if self.blend_detector:
-            try:
-                result = self.blend_detector.analyze_product(product)
-                for blend in result.blends_detected:
-                    if label_source_refs.get(blend.source_field) in source_only_preparations:
-                        continue
-                    detector_with_amounts = blend.ingredients_with_amounts or []
-                    detector_without_amounts = blend.ingredients_without_amounts or []
-                    detector_children = [
-                        {
-                            "name": item.get("name", ""),
-                            "amount": item.get("amount"),
-                            "unit": item.get("unit", "") or "",
-                        }
-                        for item in detector_with_amounts
-                    ] + [
-                        {
-                            "name": name,
-                            "amount": None,
-                            "unit": "",
-                        }
-                        for name in detector_without_amounts
-                    ]
-                    detector_blends.append({
-                        "name": blend.blend_name,
-                        "disclosure_level": blend.disclosure_level,
-                        "nested_count": blend.blend_ingredient_count,
-                        "total_weight": blend.blend_total_amount,
-                        "unit": blend.blend_total_unit or "",
-                        "hidden_count": len(detector_without_amounts),
+            # A detector failure fails the product (enrich_product records it);
+            # dropping its blends would silently skip the B5 penalty.
+            result = self.blend_detector.analyze_product(product)
+            for blend in result.blends_detected:
+                if label_source_refs.get(blend.source_field) in source_only_preparations:
+                    continue
+                detector_with_amounts = blend.ingredients_with_amounts or []
+                detector_without_amounts = blend.ingredients_without_amounts or []
+                detector_children = [
+                    {
+                        "name": item.get("name", ""),
+                        "amount": item.get("amount"),
+                        "unit": item.get("unit", "") or "",
+                    }
+                    for item in detector_with_amounts
+                ] + [
+                    {
+                        "name": name,
+                        "amount": None,
+                        "unit": "",
+                    }
+                    for name in detector_without_amounts
+                ]
+                detector_blends.append({
+                    "name": blend.blend_name,
+                    "disclosure_level": blend.disclosure_level,
+                    "nested_count": blend.blend_ingredient_count,
+                    "total_weight": blend.blend_total_amount,
+                    "unit": blend.blend_total_unit or "",
+                    "hidden_count": len(detector_without_amounts),
+                    "source_field": blend.source_field,
+                    "source_path": blend.source_field,
+                    "source_row_ref": label_source_refs.get(blend.source_field),
+                    "child_ingredients": detector_children,
+                    "sources": ["detector"],
+                    "evidence": {
+                        "blend_id": blend.blend_id,
+                        "matched_text": blend.matched_text,
                         "source_field": blend.source_field,
-                        "source_path": blend.source_field,
-                        "source_row_ref": label_source_refs.get(blend.source_field),
-                        "child_ingredients": detector_children,
-                        "sources": ["detector"],
-                        "evidence": {
-                            "blend_id": blend.blend_id,
-                            "matched_text": blend.matched_text,
-                            "source_field": blend.source_field,
-                            "risk_category": blend.risk_category,
-                            "severity_level": blend.severity_level,
-                            "amounts_present": blend.blend_amounts_present,
-                            "ingredients_with_amounts": blend.ingredients_with_amounts,
-                            "ingredients_without_amounts": blend.ingredients_without_amounts,
-                            "penalty_applicable": blend.penalty_applicable,
-                            "penalty_reason": blend.penalty_reason
-                        }
-                    })
-            except Exception as e:
-                self.logger.warning(
-                    f"ProprietaryBlendDetector failed for product "
-                    f"{product.get('dsld_id', 'unknown')}: {e} — "
-                    f"B5 blend penalty will NOT be applied"
-                )
+                        "risk_category": blend.risk_category,
+                        "severity_level": blend.severity_level,
+                        "amounts_present": blend.blend_amounts_present,
+                        "ingredients_with_amounts": blend.ingredients_with_amounts,
+                        "ingredients_without_amounts": blend.ingredients_without_amounts,
+                        "penalty_applicable": blend.penalty_applicable,
+                        "penalty_reason": blend.penalty_reason
+                    }
+                })
 
         # Step 2: Collect cleaning blends (indicator-based from proprietaryBlend flags)
         # Nested proprietary children should roll up to their parent blend to avoid
