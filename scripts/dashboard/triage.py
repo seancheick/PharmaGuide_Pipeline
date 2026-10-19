@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import os
 import sqlite3
+from contextlib import closing
 from datetime import date, datetime, timezone
 from pathlib import Path
 
@@ -50,7 +51,7 @@ def set_status(finding_id: str, rule_id: str, rule_version: int, status: str, *,
                path: Path | None = None) -> None:
     if status not in STATUSES:
         raise ValueError(f"unknown triage status {status!r}")
-    with _connect(path or default_path()) as conn:
+    with closing(_connect(path or default_path())) as conn, conn:
         conn.execute(
             "INSERT INTO triage VALUES (?,?,?,?,?,?,?,?,?) ON CONFLICT(finding_id) DO UPDATE SET "
             "rule_id=excluded.rule_id, rule_version=excluded.rule_version, status=excluded.status, "
@@ -62,7 +63,7 @@ def set_status(finding_id: str, rule_id: str, rule_version: int, status: str, *,
 
 
 def load(path: Path | None = None) -> pd.DataFrame:
-    with _connect(path or default_path()) as conn:
+    with closing(_connect(path or default_path())) as conn:
         return pd.read_sql_query("SELECT * FROM triage", conn)
 
 
@@ -78,8 +79,12 @@ def effective_status(row: dict, *, config_versions: list[str], today: date | Non
         if isinstance(scope, str) and scope and scope not in config_versions:
             return "Open"
         review_by = row.get("review_by")
-        if isinstance(review_by, str) and review_by and (today or date.today()) > date.fromisoformat(review_by[:10]):
-            return "Open"
+        if isinstance(review_by, str) and review_by:
+            try:
+                if (today or date.today()) > date.fromisoformat(review_by[:10]):
+                    return "Open"
+            except ValueError:
+                return "Open"  # an unreadable review date cannot keep an exception closed
     return status
 
 

@@ -216,7 +216,7 @@ def render(ctx: shell.PageContext) -> None:
           run_key=ctx.run_key, height=260)
 
     findings = ctx.index.findings()
-    mine = findings[(findings["dsld_id"] == dsld_id) & (findings["plane"] == ctx.plane)] if not findings.empty else findings
+    mine = findings[(findings["dsld_id"] == dsld_id) & (findings["run_key"] == ctx.run_key)] if not findings.empty else findings
     st.markdown("#### Findings for this product")
     if mine.empty:
         st.caption("No findings.")

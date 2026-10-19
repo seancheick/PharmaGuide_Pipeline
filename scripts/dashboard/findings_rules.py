@@ -299,8 +299,15 @@ def _compare_rows(ctx, key: str, mask: Callable[[pd.DataFrame], pd.Series], valu
 
 
 def _unexplained_mover(key):
-    return lambda ctx: _compare_rows(ctx, key, lambda d: ~d["explained"].astype(bool),
+    no_run_change = lambda d: d["run_causes"].map(len) == 0  # noqa: E731
+    return lambda ctx: _compare_rows(ctx, key, lambda d: ~d["explained"].astype(bool) & no_run_change(d),
                                      lambda r: f"{r['total_before']} → {r['total_after']}")
+
+
+def _unattributed_under_run_change(key):
+    return lambda ctx: _compare_rows(
+        ctx, key, lambda d: ~d["explained"].astype(bool) & (d["run_causes"].map(len) > 0),
+        lambda r: f"{r['total_before']} → {r['total_after']} (run change: {', '.join(r['run_causes'])})")
 
 
 def _safety_unexplained(key):
@@ -389,9 +396,13 @@ RULES: list[Rule] = [
          "product", _blocked_without_reason),
     Rule("config_fingerprint_missing", 1, "critical", "provenance", "Scored product has no config fingerprint",
          "every score names its config", "config_registry.all_config_provenance", "product", _config_missing),
-    Rule("unexplained_mover", 1, "critical", "drift", "Score moved with no pillar or run-level cause",
+    Rule("unexplained_mover", 2, "critical", "drift", "Score moved with no pillar or run-level cause",
          "every movement has a reason code or run cause", "replay.reason_codes", "compare",
          _unexplained_mover("candidate_vs_previous")),
+    Rule("unattributed_mover_under_run_change", 1, "high", "drift",
+         "Pillar moved with no pillar-level cause while code, config or reference data changed",
+         "a component, penalty, reference or formula cause", "replay.reason_codes", "compare",
+         _unattributed_under_run_change("candidate_vs_previous")),
     Rule("safety_change_unexplained", 1, "critical", "safety", "Safety status changed with no recorded cause",
          "a safety change follows a signal, reason or reference-data change", "scoring.md (never hide a safety finding)",
          "compare", _safety_unexplained("candidate_vs_previous")),
@@ -487,7 +498,8 @@ def psi(before: pd.Series, after: pd.Series, bins: int = 10, cap: float = 20.0) 
 
 
 def evaluate(ctx: Context, *, run_keys: dict[str, str | None]) -> pd.DataFrame:
-    products = {plane: frame.set_index("dsld_id") if not frame.empty else frame for plane, frame in ctx.products.items()}
+    products = {plane: frame.drop_duplicates("dsld_id").set_index("dsld_id") if not frame.empty else frame
+                for plane, frame in ctx.products.items()}
     rows = []
     for rule in RULES:
         planes = ["candidate", "release"] if rule.scope == "product" else ["candidate"]
@@ -507,7 +519,7 @@ def evaluate(ctx: Context, *, run_keys: dict[str, str | None]) -> pd.DataFrame:
                 if pid is not None and lookup is not None and not lookup.empty and pid in lookup.index:
                     name, brand = lookup.loc[pid, "product_name"], lookup.loc[pid, "brand_name"]
                 rows.append({
-                    "finding_id": finding_id(rule, plane, pid, pillar, subject),
+                    "finding_id": finding_id(rule, plane, pid, pillar, (subject, hit.get("receipt_entry_id"))),
                     "rule_id": rule.rule_id, "rule_version": rule.version, "severity": rule.severity,
                     "category": rule.category, "pillar": pillar, "plane": plane, "run_key": run_keys.get(plane),
                     "dsld_id": pid, "product_name": name, "brand_name": brand, "subject": subject,
@@ -549,7 +561,7 @@ def evaluate_build(build: Path, meta: dict[str, Any], previous: Path | None) -> 
             continue
         frame = run_compare.compare(read, base, cand)
         deltas[key] = frame
-        frame.to_parquet(delta_dir / f"{base['run_key']}__{cand['run_key']}.parquet", index=False)
+        frame.to_parquet(delta_dir / f"{base['run_key']}__{cand['run_key']}__v{run_compare.DELTA_VERSION}.parquet", index=False)
         left = read(base["run_key"], "products")
         right = read(cand["run_key"], "products")
         maxima = pillar_maxima()

@@ -15,6 +15,9 @@ import pandas as pd
 
 from scripts.dashboard.score_index import PILLARS, REPO_ROOT  # noqa: F401  (sys.path set by score_index)
 from audits.quality_redesign.replay import reason_codes  # noqa: E402
+from scoring_v4.quality_score import shipped_whole_score  # noqa: E402
+
+WHOLE_NUMBER_PLANES = {"release", "backfill"}  # catalogs ship shipped_whole_score totals
 
 TableReader = Callable[..., pd.DataFrame]
 _PRODUCT_COLUMNS = [
@@ -25,6 +28,7 @@ _PRODUCT_COLUMNS = [
 ]
 _SAFETY_CAUSE_FIELDS = ("safety_signals", "blocking_reason", "safety_signal_reason", "suppressed_reason")
 MOVE_EPS = 0.05
+DELTA_VERSION = 2  # bump when compare() columns or semantics change; old delta files are then ignored
 
 
 def run_level_causes(base: dict[str, Any], cand: dict[str, Any]) -> list[str]:
@@ -36,9 +40,7 @@ def run_level_causes(base: dict[str, Any], cand: dict[str, Any]) -> list[str]:
                        ("artifact_reference_data_fingerprints", "reference_data")):
         if base.get(key) is not None and cand.get(key) is not None and sorted(base[key]) != sorted(cand[key]):
             causes.append(label)
-    if base.get("plane") != cand.get("plane"):
-        causes.append(f"plane:{base.get('plane')}→{cand.get('plane')}")
-    return causes
+    return causes  # a plane difference is provenance, never a cause
 
 
 def _listish(value: Any) -> list:
@@ -64,6 +66,10 @@ def compare(read: TableReader, base: dict[str, Any], cand: dict[str, Any]) -> pd
     slim_left = _slim_map(read, base)
     slim_right = _slim_map(read, cand)
     run_causes = run_level_causes(base, cand)
+    both_full = base.get("fidelity") == "full_receipts" and cand.get("fidelity") == "full_receipts"
+    # Compare totals like with like: a catalog total is shipped_whole_score of the decimal total.
+    whole = {side: run.get("plane") in WHOLE_NUMBER_PLANES for side, run in (("before", base), ("after", cand))}
+    cross = whole["before"] != whole["after"]
     rows = []
     for pid in sorted(set(left) | set(right)):
         b = left.get(pid)
@@ -77,7 +83,11 @@ def compare(read: TableReader, base: dict[str, Any], cand: dict[str, Any]) -> pd
             for field in ("total", "tier", "quality_score_status", "quality_assessment_status", "product_safety_status"):
                 row[f"{field}_{side}"] = None if record is None else record[field]
         tb, ta = row["total_before"], row["total_after"]
+        if cross and pd.notna(tb) and pd.notna(ta):
+            tb = tb if whole["before"] else shipped_whole_score(tb)
+            ta = ta if whole["after"] else shipped_whole_score(ta)
         row["delta"] = round(ta - tb, 2) if pd.notna(tb) and pd.notna(ta) else None
+        row["delta_basis"] = "shipped whole score" if cross else "recorded total"
         changed = []
         for name in PILLARS:
             pb = None if b is None else b[f"pillar_{name}"]
@@ -105,11 +115,14 @@ def compare(read: TableReader, base: dict[str, Any], cand: dict[str, Any]) -> pd
             codes = reason_codes(slim_left[pid], slim_right[pid], eps=MOVE_EPS)
         row["reason_codes"] = json.dumps(codes)
         pillar_unattributed = any(code.get("causes") == ["unattributed"] for code in codes)
-        moved = bool(changed) or (row["delta"] is not None and abs(row["delta"]) >= MOVE_EPS)
-        fidelity_ok = base.get("fidelity") != "pillar_totals_only" and cand.get("fidelity") != "pillar_totals_only"
+        moved = bool(changed) or (row["delta"] is not None and pd.notna(row["delta"]) and abs(row["delta"]) >= MOVE_EPS)
+        row["moved"] = moved
         row["run_causes"] = run_causes
-        row["explained"] = (not moved) or bool(run_causes) or (fidelity_ok and bool(codes) and not pillar_unattributed)
-        row["cause_fidelity"] = "pillar_causes" if fidelity_ok and codes else ("run_only" if run_causes else "pillar_deltas_only")
+        row["pillar_attributed"] = (not moved) or (bool(codes) and not pillar_unattributed)
+        # Two full-receipt runs can attribute every pillar mover; a run-level change never silences an
+        # unattributed one there. Coarser history can only fall back to the run-level causes.
+        row["explained"] = row["pillar_attributed"] if both_full else (row["pillar_attributed"] or bool(run_causes))
+        row["cause_fidelity"] = "pillar_causes" if codes else ("run_only" if run_causes else "pillar_deltas_only")
         rows.append(row)
     frame = pd.DataFrame(rows)
     numeric = ["total_before", "total_after", "delta", *[f"delta_{name}" for name in PILLARS]]
@@ -134,7 +147,7 @@ def summarize(deltas: pd.DataFrame) -> dict[str, int]:
         "products": int(len(deltas)),
         "added": int((deltas["presence"] == "added").sum()),
         "removed": int((deltas["presence"] == "removed").sum()),
-        "moved": int((both["delta"].abs() >= MOVE_EPS).sum()),
+        "moved": int(both["moved"].sum()),
         "tier_crossed": int(both["tier_crossed"].sum()),
         "status_changed": int(both["status_changed"].sum()),
         "safety_changed": int(both["safety_changed"].sum()),

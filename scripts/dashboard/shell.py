@@ -43,7 +43,7 @@ def _read(build: str, run_key: str, table: str, columns: tuple[str, ...] | None 
 
 @st.cache_data(show_spinner=False, max_entries=16)
 def _deltas(build: str, base: str, cand: str, runs_json: str) -> pd.DataFrame:
-    path = f"{build}/deltas/{base}__{cand}.parquet"
+    path = f"{build}/deltas/{base}__{cand}__v{run_compare.DELTA_VERSION}.parquet"
     try:
         return pd.read_parquet(path)
     except (FileNotFoundError, OSError):
@@ -88,8 +88,10 @@ class PageContext:
         """Default comparison: release for a candidate run, else the previous run of the same plane."""
         if self.plane == "candidate" and self.index.latest("release") and self.run_key != self.index.latest("release"):
             return self.index.latest("release")
-        same = [run["run_key"] for run in self.runs(self.plane) if run["run_key"] != self.run_key]
-        return same[-1] if same else None
+        selected = (self.run or {}).get("run_time") or ""
+        earlier = [run["run_key"] for run in self.runs(self.plane)
+                   if run["run_key"] != self.run_key and (run.get("run_time") or "") <= selected]
+        return earlier[-1] if earlier else None
 
     def deltas(self, base: str | None, cand: str | None) -> pd.DataFrame:
         if not base or not cand or not self.build:
@@ -166,6 +168,9 @@ def _index_status(index: score_index.IndexReader) -> None:
                 score_index.refresh(index.paths, progress=lambda message, fraction: bar.progress(min(fraction, 1.0), text=message))
             except score_index.IndexBusy:
                 status.update(label="Another refresh is running", state="error")
+                return
+            except Exception as exc:  # the last good build stays current; show why
+                status.update(label=f"Refresh failed — kept the previous build: {exc}", state="error")
                 return
             status.update(label="Index refreshed", state="complete")
         st.cache_data.clear()

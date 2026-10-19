@@ -11,9 +11,10 @@ from typing import Any
 import pandas as pd
 
 from scripts.dashboard.score_index import PILLARS
-from scoring_v4.quality_score import shipped_whole_score
 
 EPS = 0.05
+# realized and nominal deductions each carry a 0.1-grid rounding residue (findings_rules.REALIZED_TOL)
+ABSORB_MIN = 0.11
 UNRATED_FORM_ENTRIES = ("A1_unrated_neutral", "panel_form_quality_unrated_neutral")
 
 SAVED_VIEWS: dict[str, dict[str, Any]] = {
@@ -27,13 +28,14 @@ SAVED_VIEWS: dict[str, dict[str, Any]] = {
                                                                             "evaluated_null", "evaluated_unfavorable"]},
     "Dose neutral": {"pillar_neutral": ["dose"]},
     "Dose capped by safety ceiling": {"dose_cap": True},
+    "Dose ceiling evaluated (over a limit)": {"dose_ceiling_present": True},
     "Verification unknown (neutral 6)": {"verification_fail_open": True},
     "No product-level certification": {"product_cert": False, "quality_score_status": ["scored"]},
     "Formula checks below 10": {"pillar_range": {"safety_hygiene": (None, 10 - EPS)}},
     "Unrated forms": {"entry_ids": list(UNRATED_FORM_ENTRIES)},
-    "High score, low confidence": {"score_min": 70, "confidence": ["low"]},
+    "High score, low confidence": {"score_min": 70, "confidence": ["low"]},  # whole-number shipped score
     "Partial products in rankings": {"quality_score_status": ["scored"], "quality_assessment_status": ["partial"]},
-    "Floors absorbing deductions": {"absorbed_min": EPS},
+    "Floors absorbing deductions": {"absorbed_min": ABSORB_MIN, "has_floor": True},
     "Has a cap": {"has_cap": True},
     "Tier changed vs baseline": {"flag": "tier_changed"},
     "Candidate ≠ release": {"flag": "differs_from_release"},
@@ -62,10 +64,10 @@ def apply_filters(frame: pd.DataFrame, spec: dict[str, Any]) -> pd.DataFrame:
             continue
         if key in _LIST_COLUMNS:
             mask &= frame[key].isin(list(value))
-        elif key == "score_min":
-            mask &= frame["total"] >= value
+        elif key == "score_min":  # thresholds compare the shipped whole number, like the tiers
+            mask &= frame["shipped_total"] >= value
         elif key == "score_max":
-            mask &= frame["total"] <= value
+            mask &= frame["shipped_total"] <= value
         elif key == "pillar_range":
             for pillar, (lo, hi) in value.items():
                 column = frame[f"pillar_{pillar}"]
@@ -87,9 +89,11 @@ def apply_filters(frame: pd.DataFrame, spec: dict[str, Any]) -> pd.DataFrame:
             low = pd.Series(False, index=frame.index)
             for pillar in PILLARS:
                 low |= frame[f"pillar_{pillar}"] <= 0.25 * maxima[pillar]
-            mask &= (frame["total"] >= 70) & low
+            mask &= (frame["shipped_total"] >= 70) & low
         elif key == "dose_cap":
             mask &= frame["dose_cap_applied"].fillna(False).astype(bool) == bool(value)
+        elif key == "dose_ceiling_present":
+            mask &= frame["dose_ceiling_present"].fillna(False).astype(bool) == bool(value)
         elif key == "verification_fail_open":
             mask &= frame["verification_fail_open"].fillna(False).astype(bool) == bool(value)
         elif key == "product_cert":
@@ -103,7 +107,7 @@ def apply_filters(frame: pd.DataFrame, spec: dict[str, Any]) -> pd.DataFrame:
             mask &= frame["absorbed_points"] >= value
         elif key == "fully_absorbed":
             mask &= frame["has_deduction"].fillna(False).astype(bool) & (frame["realized_deductions"].abs() < EPS) \
-                & (frame["nominal_deductions"] < -EPS)
+                & (frame["nominal_deductions"] < -ABSORB_MIN)
         elif key == "entry_ids":
             hit = pd.Series(False, index=frame.index)
             for entry in value:
@@ -136,7 +140,7 @@ def attach_comparison(frame: pd.DataFrame, deltas: pd.DataFrame | None, *, relea
         out = out.drop(columns=["release_total"]).join(rel, on="dsld_id")
         out["differs_from_release"] = (
             # release ships a whole number via the scorer's rounding rule; compare like with like
-            (out["total"].map(lambda t: shipped_whole_score(t) if pd.notna(t) else -1) != out["release_total"].fillna(-1))
+            (out["shipped_total"].fillna(-1) != out["release_total"].fillna(-1))
             | (out["product_safety_status"].fillna("") != out["release_safety"].fillna(""))
         ) & out["release_safety"].notna()
     out["tier_changed"] = False

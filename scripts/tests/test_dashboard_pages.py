@@ -84,6 +84,7 @@ def test_filters_select_the_expected_products(indexed):
     assert ids({"has_cap": True}) == {"7"}
     assert ids({"pillar_range": {"dose": (11.0, 12.0)}}) == {"2"}
     assert ids({"search": "product 4"}) == {"4"}
+    assert ids(sv.SAVED_VIEWS["Dose ceiling evaluated (over a limit)"]) == set()   # fixtures carry no dose_ceiling
     with pytest.raises(KeyError):
         sv.apply_filters(frame, {"no_such_filter": True})
 
@@ -97,14 +98,16 @@ def test_candidate_release_flags_use_the_shipped_rounding(indexed):
 
 def test_leaderboard_needs_complete_products_and_a_minimum_count():
     rows = [{"dsld_id": str(i), "brand_name": "Big", "quality_score_status": "scored", "quality_assessment_status": "complete",
-             "total": 70.0 + i, "verification_cert": 0.0} for i in range(6)]
+             "total": 69.6 + i, "shipped_total": 70.0 + i, "verification_cert": 0.0} for i in range(6)]
     rows += [{"dsld_id": "s1", "brand_name": "Small", "quality_score_status": "scored", "quality_assessment_status": "complete",
-              "total": 99.0, "verification_cert": 4.0}]
+              "total": 99.0, "shipped_total": 99.0, "verification_cert": 4.0}]
     rows += [{"dsld_id": f"p{i}", "brand_name": "Partial", "quality_score_status": "scored",
-              "quality_assessment_status": "partial", "total": 95.0, "verification_cert": 0.0} for i in range(6)]
+              "quality_assessment_status": "partial", "total": 95.0, "shipped_total": 95.0, "verification_cert": 0.0}
+             for i in range(6)]
     board = market.brand_leaderboard(pd.DataFrame(rows), pd.DataFrame(columns=["dsld_id"]), min_products=5)
     assert list(board["brand_name"]) == ["Big"]
     assert board.iloc[0]["ranked_products"] == 6 and board.iloc[0]["completeness_pct"] == 100.0
+    assert board.iloc[0]["pct_70_plus"] == 100.0   # 69.6 ships as 70, like its tier
 
 
 def test_peer_percentile_is_context_with_a_denominator():

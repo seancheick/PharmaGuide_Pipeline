@@ -57,8 +57,6 @@ from scoring_v4.quality_score import shipped_whole_score  # noqa: E402  (the exp
 
 INDEX_SCHEMA_VERSION = 1
 INDEX_BUILD_VERSION = "1.0.0"
-# Reused partitions are valid only for the projection code that wrote them.
-PROJECTION_FINGERPRINT = hashlib.sha256(Path(__file__).read_bytes()).hexdigest()[:16]
 QUALITY_CONFIG = SCRIPTS_ROOT / "scoring_v4" / "config" / "quality_score.json"
 PILLARS = ("formulation", "dose", "evidence", "transparency", "verification", "safety_hygiene")
 PILLAR_LABELS = {
@@ -93,13 +91,13 @@ _LS = pa.list_(pa.string())
 PRODUCTS_SCHEMA = _schema(
     ("dsld_id", _S), ("product_name", _S), ("brand_name", _S), ("module", _S),
     ("primary_type", _S), ("category", _S), ("source_part", _S), ("blob_sha256", _S),
-    ("total", _F), ("tier", _S), ("quality_score_status", _S), ("quality_assessment_status", _S),
+    ("total", _F), ("shipped_total", _F), ("tier", _S), ("quality_score_status", _S), ("quality_assessment_status", _S),
     ("product_safety_status", _S), ("safety_verdict", _S), ("not_scorable_reason", _S),
     ("score_unavailable_reason", _S), ("suppressed_reason", _S), ("blocking_reason", _S),
     ("safety_signal_reason", _S), ("safety_signals", _LS), ("confidence", _S), ("route_confidence", _S),
     *[(f"pillar_{name}", _F) for name in PILLARS],
     ("evidence_state", _S), ("evidence_display_state", _S), ("dose_basis", _S),
-    ("dose_cap_applied", _B), ("dose_cap_nutrient", _S), ("dose_cap_pct_ul", _F),
+    ("dose_cap_applied", _B), ("dose_ceiling_present", _B), ("dose_cap_nutrient", _S), ("dose_cap_pct_ul", _F),
     ("verification_tier", _S), ("verification_fail_open", _B), ("verification_cert", _F),
     ("has_deduction", _B), ("has_neutral", _B), ("has_cap", _B), ("has_floor", _B),
     ("neutral_only_pillars", _LS), ("receipt_entry_ids", _LS),
@@ -108,7 +106,7 @@ PRODUCTS_SCHEMA = _schema(
     ("pillar_sum_mismatch", _F), ("unmapped_actives_total", _I), ("fallbacks_used", _I),
     ("completeness_score_cap", _F), ("completeness_verdict_ceiling", _S), ("completeness_missing", _LS),
     ("config_version", _S), ("config_fingerprint", _S), ("has_third_party_testing", _B),
-    ("percentile_rank", _F),
+    ("release_row_sha", _S),
 )
 LEDGER_SCHEMA = _schema(
     ("dsld_id", _S), ("pillar", _S), ("score", _F), ("max", _F), ("unawarded", _F),
@@ -311,7 +309,8 @@ def project_product(product: dict[str, Any], *, source_part: str, blob_sha256: s
     if total is not None and len(present) == len(PILLARS):
         # Release ships a whole-number total by contract (build_final_db uses the scorer's
         # shipped_whole_score); the candidate total is the exact pillar sum.
-        expected_total = shipped_whole_score(sum(present)) if core else sum(present)
+        exact = round(sum(present), 1)  # the scorer rounds the pillar sum to 0.1 before shipping
+        expected_total = shipped_whole_score(exact) if core else exact
         sum_mismatch = abs(expected_total - total)
 
     evidence = pillars.get("evidence") or {}
@@ -339,6 +338,8 @@ def project_product(product: dict[str, Any], *, source_part: str, blob_sha256: s
         "source_part": source_part,
         "blob_sha256": blob_sha256,
         "total": total,
+        # Tiers and the catalog use the whole number; thresholds compare against this.
+        "shipped_total": float(shipped_whole_score(total)) if total is not None and not core else total,
         "tier": _text(pick("quality_tier")),
         "quality_score_status": _text(pick("quality_score_status")),
         "quality_assessment_status": _text(pick("quality_assessment_status")),
@@ -356,7 +357,9 @@ def project_product(product: dict[str, Any], *, source_part: str, blob_sha256: s
         "evidence_state": _text(evidence.get("evidence_result_state")),
         "evidence_display_state": _text(evidence.get("display_state")),
         "dose_basis": next((e.get("basis") for e in dose_entries if e.get("basis")), None),
+        # applied = the ceiling bound the Dose pillar (a receipt cap); present = a ceiling was evaluated
         "dose_cap_applied": any(e.get("id") == "dose_safety_ceiling" for e in dose_entries),
+        "dose_ceiling_present": isinstance(ceiling, dict),
         "dose_cap_nutrient": _text((ceiling or {}).get("label_nutrient") or (ceiling or {}).get("nutrient")),
         "dose_cap_pct_ul": _num((ceiling or {}).get("pct_ul")),
         "verification_tier": _text(verification.get("tier")),
@@ -383,7 +386,8 @@ def project_product(product: dict[str, Any], *, source_part: str, blob_sha256: s
         "config_version": version,
         "config_fingerprint": fingerprint,
         "has_third_party_testing": bool(third_party) if third_party is not None else None,
-        "percentile_rank": _num(core.get("percentile_rank")),
+        # Release reuse key: the blob AND the core row (core-only columns can change with the same blob).
+        "release_row_sha": _sha(_canonical([blob_sha256, core]))[:24] if core else None,
     }
 
     dose_explanation = ((pillars.get("dose") or {}).get("explanation") or {}).get("dose_receipt") or {}
@@ -479,6 +483,17 @@ def project_enriched(product: dict[str, Any], *, source_part: str) -> dict[str, 
         "source_part": source_part,
     }
     return {"ingredients": rows, "product_meta": [meta]}
+
+
+def _projection_fingerprint() -> str:
+    """Reused partitions are valid only for the projection code and schemas that wrote them."""
+    import inspect
+    parts = [inspect.getsource(fn) for fn in (project_product, project_enriched, label_trust_record, _config_identity)]
+    parts += [str(schema) for schema in (*TABLES.values(), *INGREDIENT_TABLES.values())]
+    return hashlib.sha256("\n".join([str(INDEX_SCHEMA_VERSION), *parts]).encode()).hexdigest()[:16]
+
+
+PROJECTION_FINGERPRINT = _projection_fingerprint()  # of the projection code as imported
 
 
 def _merge(into: dict[str, list[dict[str, Any]]], rows: dict[str, list[dict[str, Any]]]) -> None:
@@ -632,9 +647,18 @@ def _load_meta(build: Path | None) -> dict[str, Any]:
     return json.loads((build / "index_meta.json").read_text(encoding="utf-8"))
 
 
+META_NAME = "index_meta.json"
+
+
 def _link_tree(source: Path, target: Path) -> None:
-    """Hard-link an immutable directory tree (copy when links are unavailable)."""
+    """Hard-link an immutable directory tree (copy when links are unavailable).
+
+    The build metadata is never linked: each build writes its own, so a new build can
+    never rewrite the previous (last-known-good) build through a shared inode.
+    """
     for path in source.rglob("*"):
+        if path.name == META_NAME and path.parent == source:
+            continue
         dest = target / path.relative_to(source)
         if path.is_dir():
             dest.mkdir(parents=True, exist_ok=True)
@@ -691,7 +715,8 @@ def refresh(paths: IndexPaths, *, progress: Callable[[str, float], None] | None 
         previous = current_build(paths)
         prev_meta = _load_meta(previous)
         # Partitions written by other projection code are never reused (runs still carry forward).
-        reuse_previous = previous if prev_meta.get("projection_fingerprint") == PROJECTION_FINGERPRINT else None
+        projection = PROJECTION_FINGERPRINT
+        reuse_previous = previous if prev_meta.get("projection_fingerprint") == projection else None
         build_id = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S%fZ")
         staging = paths.builds / f".staging-{build_id}"
         staging.mkdir(parents=True, exist_ok=False)
@@ -721,7 +746,7 @@ def refresh(paths: IndexPaths, *, progress: Callable[[str, float], None] | None 
             meta = {
                 "index_schema_version": INDEX_SCHEMA_VERSION,
                 "index_build_version": INDEX_BUILD_VERSION,
-                "projection_fingerprint": PROJECTION_FINGERPRINT,
+                "projection_fingerprint": projection,
                 "build_id": build_id,
                 "built_at": _now(),
                 "dashboard_indexer_git_sha": _git_sha(),
@@ -744,10 +769,8 @@ def refresh(paths: IndexPaths, *, progress: Callable[[str, float], None] | None 
                                   "seconds": meta["refresh_seconds"]})
             say("Done", 1.0)
             return meta
-        except Exception as exc:
-            shutil.rmtree(staging, ignore_errors=True)
-            _write_status(paths, {"ok": False, "error": f"{type(exc).__name__}: {exc}", "at": _now(),
-                                  "kept_build": previous.name if previous else None})
+        except BaseException as exc:  # includes Streamlit's script-interrupt: never leak a staging dir
+            _fail(paths, staging, previous, exc)
             raise
 
 
@@ -768,7 +791,9 @@ def _refresh_candidate(paths, previous, prev_meta, staging, known, say) -> dict[
                 dest = work / table / f"{source['part']}.parquet"
                 dest.parent.mkdir(parents=True, exist_ok=True)
                 os.link(src, dest)
-            parts[source["part"]] = {**cached}
+            # same rows, current provenance: a re-run under new code with identical output still registers
+            parts[source["part"]] = {**cached, **{key: source[key] for key in
+                                                  ("run_id", "generated_at", "stage_code", "reference_data")}}
             continue
         rows, count = _parse_candidate_part(source)
         _write_tables(work, source["part"], rows)
@@ -810,10 +835,10 @@ def _refresh_release(paths, previous, prev_meta, staging, known, say) -> dict[st
     reuse: dict[str, str] = {}
     prev_release = (prev_meta.get("latest") or {}).get("release")
     if previous and prev_release:
-        prev_products = _read_run_table(previous / "runs" / prev_release, "products").select(["dsld_id", "blob_sha256"])
-        for pid, sha in zip(prev_products.column("dsld_id").to_pylist(), prev_products.column("blob_sha256").to_pylist()):
-            if sha and source["blob_hashes"].get(pid) == sha:
-                reuse[pid] = sha
+        prev_products = _read_run_table(previous / "runs" / prev_release, "products").select(["dsld_id", "release_row_sha"])
+        for pid, key in zip(prev_products.column("dsld_id").to_pylist(), prev_products.column("release_row_sha").to_pylist()):
+            if key and pid in core and _sha(_canonical([source["blob_hashes"].get(pid), core[pid]]))[:24] == key:
+                reuse[pid] = key
     rows: dict[str, list] = {}
     blob_dir = paths.build_root / "detail_blobs"
     todo = [pid for pid in core if pid not in reuse]
@@ -832,7 +857,8 @@ def _refresh_release(paths, previous, prev_meta, staging, known, say) -> dict[st
             old = _read_run_table(previous / "runs" / prev_release, table)
             kept = old.filter(pds.field("dsld_id").isin(keep)) if old.num_rows else old
             pq.write_table(kept, run_dir / table / "reused.parquet")
-    configs = sorted({r["config_fingerprint"] for r in rows.get("products", []) if r["config_fingerprint"]})
+    written = _read_run_table(run_dir, "products").column("config_fingerprint").to_pylist()
+    configs = sorted({value for value in written if value})  # every row, reused or new
     return {
         "run_key": run_key, "plane": "release", "fidelity": FIDELITY_RELEASE,
         "run_time": source["generated_at"], "products": len(core),
@@ -853,6 +879,12 @@ def _validate(staging: Path, meta: dict[str, Any]) -> None:
             raise RuntimeError(f"run {run['run_key']}: {count} product rows, expected {run['products']}")
 
 
+def _fail(paths: IndexPaths, staging: Path, previous: Path | None, exc: BaseException) -> None:
+    shutil.rmtree(staging, ignore_errors=True)
+    _write_status(paths, {"ok": False, "error": f"{type(exc).__name__}: {exc}", "at": _now(),
+                          "kept_build": previous.name if previous else None})
+
+
 def _write_status(paths: IndexPaths, status: dict[str, Any]) -> None:
     paths.cache_root.mkdir(parents=True, exist_ok=True)
     tmp = paths.status_file.with_suffix(".json.tmp")
@@ -863,7 +895,9 @@ def _write_status(paths: IndexPaths, status: dict[str, Any]) -> None:
 def _publish(paths: IndexPaths, staging: Path, meta: dict[str, Any]) -> None:
     """Validate, write metadata, move the staged build into place and swap the pointer."""
     _validate(staging, meta)
-    (staging / "index_meta.json").write_text(json.dumps(meta, indent=2, sort_keys=True), encoding="utf-8")
+    tmp_meta = staging / f"{META_NAME}.tmp"
+    tmp_meta.write_text(json.dumps(meta, indent=2, sort_keys=True), encoding="utf-8")
+    os.replace(tmp_meta, staging / META_NAME)  # a fresh inode, never a linked one
     staging.rename(paths.builds / meta["build_id"])
     tmp = paths.current_pointer.with_suffix(".json.tmp")
     tmp.write_text(json.dumps({"build_id": meta["build_id"]}), encoding="utf-8")
@@ -884,7 +918,8 @@ def refresh_ingredients(paths: IndexPaths, *, progress: Callable[[str, float], N
         try:
             _link_tree(previous, staging)
             shutil.rmtree(staging / "ingredients", ignore_errors=True)
-            reuse = meta.get("ingredient_projection_fingerprint") == PROJECTION_FINGERPRINT
+            projection = PROJECTION_FINGERPRINT
+            reuse = meta.get("ingredient_projection_fingerprint") == projection
             prev_parts = meta.get("ingredient_parts") or {}
             parts: dict[str, dict] = {}
             sources = candidate_sources(paths.scan_dir, "enrich")
@@ -902,13 +937,13 @@ def refresh_ingredients(paths: IndexPaths, *, progress: Callable[[str, float], N
                 _write_tables(staging / "ingredients", source["part"], rows, INGREDIENT_TABLES)
                 parts[source["part"]] = {**source, "products": count}
             meta.update({"build_id": build_id, "built_at": _now(), "ingredient_parts": parts,
-                         "ingredients_built_at": _now(), "ingredient_projection_fingerprint": PROJECTION_FINGERPRINT,
+                         "ingredients_built_at": _now(), "ingredient_projection_fingerprint": projection,
                          "ingredient_refresh_seconds": round(time.time() - started, 1)})
             _publish(paths, staging, meta)
             say("Done", 1.0)
             return meta
-        except Exception:
-            shutil.rmtree(staging, ignore_errors=True)
+        except BaseException as exc:
+            _fail(paths, staging, previous, exc)
             raise
 
 
@@ -921,43 +956,56 @@ def backfill(paths: IndexPaths, db_paths: Iterable[Path]) -> dict[str, Any]:
         meta = _load_meta(previous)
         build_id = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S%fZ")
         staging = paths.builds / f".staging-{build_id}"
-        _link_tree(previous, staging)
-        known = {run["run_key"] for run in meta["runs"]}
-        added = []
-        for db_path in db_paths:
-            with sqlite3.connect(f"file:{db_path}?mode=ro", uri=True) as conn:
-                conn.row_factory = sqlite3.Row
-                columns = {row[1] for row in conn.execute("PRAGMA table_info(products_core)")}
-                if "quality_score_v4_100" not in columns:
+        try:
+            _link_tree(previous, staging)
+            known = {run["run_key"] for run in meta["runs"]}
+            added = []
+            for db_path in db_paths:
+                with sqlite3.connect(f"file:{db_path}?mode=ro", uri=True) as conn:
+                    conn.row_factory = sqlite3.Row
+                    columns = {row[1] for row in conn.execute("PRAGMA table_info(products_core)")}
+                    if "quality_score_v4_100" not in columns:
+                        continue
+                    core_rows = [dict(row) for row in conn.execute("SELECT * FROM products_core")]
+                exported = max((row.get("exported_at") or "" for row in core_rows), default="")
+                versions = sorted({row.get("quality_score_version") or "" for row in core_rows})
+                run_key = _run_key("backfill", versions, exported, len(core_rows))
+                if run_key in known:
                     continue
-                core_rows = [dict(row) for row in conn.execute("SELECT * FROM products_core")]
-            exported = max((row.get("exported_at") or "" for row in core_rows), default="")
-            versions = sorted({row.get("quality_score_version") or "" for row in core_rows})
-            run_key = _run_key("backfill", versions, exported, len(core_rows))
-            if run_key in known:
-                continue
-            rows: dict[str, list] = {}
-            for row in core_rows:
-                projected = project_product({}, source_part="backfill", core=row)
-                rows.setdefault("products", []).extend(projected["products"])
-            _write_tables(staging / "runs" / run_key, "backfill", {"products": rows.get("products", [])})
-            run = {"run_key": run_key, "plane": "backfill", "fidelity": FIDELITY_PILLARS,
-                   "run_time": exported, "products": len(core_rows), "config_versions": versions,
-                   "config_fingerprints": [], "source": str(db_path)}
-            meta["runs"].append(run)
-            known.add(run_key)
-            added.append(run)
-        meta.update({"build_id": build_id, "built_at": _now()})
-        _publish(paths, staging, meta)
+                rows: dict[str, list] = {}
+                for row in core_rows:
+                    projected = project_product({}, source_part="backfill", core=row)
+                    rows.setdefault("products", []).extend(projected["products"])
+                _write_tables(staging / "runs" / run_key, "backfill", {"products": rows.get("products", [])})
+                run = {"run_key": run_key, "plane": "backfill", "fidelity": FIDELITY_PILLARS,
+                       "run_time": exported, "products": len(core_rows), "config_versions": versions,
+                       "config_fingerprints": [], "source": str(db_path)}
+                meta["runs"].append(run)
+                known.add(run_key)
+                added.append(run)
+            meta.update({"build_id": build_id, "built_at": _now()})
+            _publish(paths, staging, meta)
+        except BaseException as exc:
+            _fail(paths, staging, previous, exc)
+            raise
+        _write_status(paths, {"ok": True, "build_id": build_id, "at": _now(), "backfilled": len(added)})
         return {"added": added, "build_id": build_id}
 
 
 def gc(paths: IndexPaths, keep: int = 2) -> list[str]:
-    """Remove builds older than the newest ``keep``; never the current build."""
+    """Remove builds older than the newest ``keep`` and abandoned staging dirs; never the current build."""
+    with _refresh_lock(paths.cache_root):  # no refresh can be writing a staging dir meanwhile
+        return _gc_locked(paths, keep)
+
+
+def _gc_locked(paths: IndexPaths, keep: int) -> list[str]:
     current = current_build(paths)
+    removed = []
+    for staging in list(paths.builds.glob(".staging-*")) if paths.builds.exists() else []:
+        shutil.rmtree(staging, ignore_errors=True)
+        removed.append(staging.name)
     builds = sorted((p for p in paths.builds.iterdir() if p.is_dir() and not p.name.startswith(".")),
                     key=lambda p: p.name) if paths.builds.exists() else []
-    removed = []
     for build in builds[:-keep]:
         if current is not None and build == current:
             continue
@@ -1045,12 +1093,15 @@ class IndexReader:
         indexed = self.meta.get("source_state") or {}
         changed = sorted(part for part, key in now["candidate"].items() if indexed.get("candidate", {}).get(part) != key)
         removed = sorted(set(indexed.get("candidate", {})) - set(now["candidate"]))
+        projection_changed = self.available and self.meta.get("projection_fingerprint") != PROJECTION_FINGERPRINT
         return {
             "indexed": self.available,
             "candidate_changed": changed,
             "candidate_removed": removed,
             "release_changed": now["release"] != indexed.get("release"),
-            "stale": (not self.available) or bool(changed or removed) or now["release"] != indexed.get("release"),
+            "projection_changed": bool(projection_changed),
+            "stale": (not self.available) or bool(changed or removed) or now["release"] != indexed.get("release")
+            or bool(projection_changed),
         }
 
 

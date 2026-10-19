@@ -128,6 +128,7 @@ def write_release(build_root: Path, products: list[dict], *, db_version: str = "
         pillars = product.get("quality_pillars_v4") or {}
         blob = {k: v for k, v in product.items() if not k.startswith("_")}
         blob["v4_score_provenance"] = {"quality_score_version": "1.26.0-test"}
+        blob["v4_safety_gate"] = product.get("_v4_safety_gate")  # real blobs carry the gate
         text = json.dumps(blob)
         sha = hashlib.sha256(text.encode()).hexdigest()
         (blobs / f"{product['dsld_id']}.json").write_text(text)
@@ -137,7 +138,7 @@ def write_release(build_root: Path, products: list[dict], *, db_version: str = "
             (product["dsld_id"], product["product_name"], product["brand_name"], product.get("_v4_module"),
              product.get("percentile_category"), shipped_whole_score(total) if total is not None else None,
              product.get("quality_tier"), product["quality_score_status"], product["quality_assessment_status"],
-             product["product_safety_status"], "1.26.0-test", "fp-release", 0, None, sha, "2026-10-15T00:00:00Z",
+             product["product_safety_status"], "1.26.0-test", CONFIG, 0, None, sha, "2026-10-15T00:00:00Z",
              product.get("blocking_reason"), 1.0,
              *[(pillars.get(name) or {}).get("score") for name in PILLAR_MAX]),
         )

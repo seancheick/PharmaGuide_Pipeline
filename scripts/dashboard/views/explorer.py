@@ -23,7 +23,7 @@ def explorer_frame(ctx: shell.PageContext) -> pd.DataFrame:
         return products
     findings = ctx.index.findings()
     if not findings.empty:
-        counts = findings[findings["plane"] == ctx.plane].groupby("dsld_id").size().rename("alerts")
+        counts = findings[findings["run_key"] == ctx.run_key].groupby("dsld_id").size().rename("alerts")
         products = products.join(counts, on="dsld_id")
     products["alerts"] = products.get("alerts", pd.Series(0, index=products.index)).fillna(0).astype(int)
     release = ctx.products(ctx.index.latest("release")) if ctx.plane == "candidate" and ctx.index.latest("release") else None

@@ -29,7 +29,7 @@ def brand_leaderboard(products: pd.DataFrame, additives: pd.DataFrame, min_produ
     grouped = pool.groupby("brand_name")
     out = grouped.agg(ranked_products=("dsld_id", "count"), median=("total", "median"),
                       q1=("total", lambda s: s.quantile(0.25)), q3=("total", lambda s: s.quantile(0.75)),
-                      pct_70_plus=("total", lambda s: round((s >= 70).mean() * 100, 1)),
+                      pct_70_plus=("shipped_total", lambda s: round((s >= 70).mean() * 100, 1)),
                       pct_certified=("verification_cert", lambda s: round((s.fillna(0) > 0).mean() * 100, 1)),
                       pct_additive_deduction=("dsld_id", lambda s: round(s.isin(additive_ids).mean() * 100, 1)))
     out = out.join(all_counts, how="left")

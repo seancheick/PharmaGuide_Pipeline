@@ -93,7 +93,7 @@ def render(ctx: shell.PageContext) -> None:
         deltas = ctx.deltas(ctx.baseline_key(), ctx.run_key)
         moved = deltas.set_index("dsld_id")["delta"] if not deltas.empty else pd.Series(dtype=float)
         findings = ctx.index.findings()
-        flagged = set(findings[findings["plane"] == ctx.plane]["dsld_id"].dropna()) if not findings.empty else set()
+        flagged = set(findings[findings["run_key"] == ctx.run_key]["dsld_id"].dropna()) if not findings.empty else set()
         rows = []
         for canary in golden.to_dict("records"):
             pid = canary["dsld_id"]

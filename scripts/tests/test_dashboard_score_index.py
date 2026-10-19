@@ -191,6 +191,30 @@ def test_new_candidate_run_keeps_history(roots):
     assert si.gc(roots, keep=1) and si.current_build(roots) is not None
 
 
+def test_backfill_and_ingredient_refresh_leave_the_previous_build_intact(roots, tmp_path):
+    """New builds hard-link old partitions; writing their metadata must never touch the old build."""
+    from dashboard_index_fixtures import enriched_product, write_enriched
+
+    first = si.refresh(roots)
+    old = roots.builds / first["build_id"]
+    old_meta = (old / "index_meta.json").read_text()
+    write_release(tmp_path / "older", [scored_product("1")], db_version="2026.09.01")
+    si.backfill(roots, [tmp_path / "older" / "pharmaguide_core.db"])
+    write_enriched(roots.scan_dir, "Acme", [enriched_product("1")])
+    si.refresh_ingredients(roots)
+    assert (old / "index_meta.json").read_text() == old_meta
+    si._validate(old, si._load_meta(old))   # last-known-good still validates
+    assert si._load_meta(old)["build_id"] == first["build_id"]
+
+
+def test_failed_backfill_cleans_staging_and_records_status(roots, tmp_path):
+    si.refresh(roots)
+    with pytest.raises(Exception):
+        si.backfill(roots, [tmp_path / "missing.db"])
+    assert not any(p.name.startswith(".staging") for p in roots.builds.iterdir())
+    assert json.loads(roots.status_file.read_text())["ok"] is False
+
+
 def test_ingredient_index_builds_reuses_and_survives_core_refresh(roots, monkeypatch):
     from dashboard_index_fixtures import enriched_product, write_enriched
 

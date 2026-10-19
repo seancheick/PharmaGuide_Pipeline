@@ -57,6 +57,8 @@ def render(ctx: shell.PageContext) -> None:
     causes = run_level_causes(base_run, cand_run)
     if causes:
         st.caption("Run-level causes: " + ", ".join(causes))
+    if base_run.get("plane") != cand_run.get("plane"):
+        st.caption("Totals compare on the shipped whole-number basis because one side is a catalog.")
     if "pillar_totals_only" in (base_run.get("fidelity"), cand_run.get("fidelity")):
         st.info("One side is a pillar-totals-only catalog: movements show deltas, not causes.", icon=":material/info:")
 
@@ -77,7 +79,7 @@ def render(ctx: shell.PageContext) -> None:
         pillar = row[2].selectbox("Changed pillar", ["any", *PILLARS], format_func=lambda p: PILLAR_LABELS.get(p, p), key="rc_pillar")
         view = deltas.copy()
         mask = pd.Series(False, index=view.index)
-        flags = {"moved": view["delta"].abs() >= MOVE_EPS, "tier crossed": view["tier_crossed"].astype(bool),
+        flags = {"moved": view["moved"].astype(bool), "tier crossed": view["tier_crossed"].astype(bool),
                  "status changed": view["status_changed"].astype(bool), "safety changed": view["safety_changed"].astype(bool),
                  "unexplained": ~view["explained"].astype(bool), "added": view["presence"] == "added",
                  "removed": view["presence"] == "removed"}
@@ -90,7 +92,8 @@ def render(ctx: shell.PageContext) -> None:
             view = view[view["changed_pillars"].map(lambda c: pillar in list(c))]
         columns = ["dsld_id", "product_name", "brand_name", "total_before", "total_after", "delta", "tier_before",
                    "tier_after", "product_safety_status_before", "product_safety_status_after", "changed_pillars",
-                   "reason_codes", "run_causes", "safety_causes", "entries_added", "entries_removed", "explained"]
+                   "reason_codes", "run_causes", "safety_causes", "entries_added", "entries_removed", "pillar_attributed",
+                   "explained", "delta_basis"]
         ordered = view.reindex(view["delta"].abs().sort_values(ascending=False).index)[columns].reset_index(drop=True)
         picked = table(ordered, key="rc_movers", name="movers", run_key=cand, select=True, height=460,
                        caption="Select a row to open the product trace.",

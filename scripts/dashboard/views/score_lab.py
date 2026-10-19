@@ -12,6 +12,7 @@ import streamlit as st
 from scripts.dashboard import shell
 from scripts.dashboard.components.theme import KIND_COLORS, PILLAR_COLORS, TOKENS
 from scripts.dashboard.components.ui import kind_label, kpis, table
+from scripts.dashboard.saved_views import ABSORB_MIN
 from scripts.dashboard.score_index import PILLAR_LABELS, PILLARS, QUALITY_CONFIG
 
 PEER_MIN_N = 30
@@ -37,9 +38,9 @@ def absorption(ledgers: pd.DataFrame) -> pd.DataFrame:
     if charged.empty:
         return pd.DataFrame()
     absorbed = charged["realized_deductions"] - charged["nominal_deductions"]
-    charged["outcome"] = np.select(
-        [absorbed.abs() <= EPS * 2, charged["realized_deductions"].abs() <= EPS],
-        ["fully realized", "fully absorbed by a floor"], default="partly absorbed")
+    charged["outcome"] = np.select(  # fully absorbed first: a small deduction can be both
+        [charged["realized_deductions"].abs() <= EPS, absorbed.abs() <= ABSORB_MIN],
+        ["fully absorbed by a floor", "fully realized"], default="partly absorbed")
     out = charged.groupby(["pillar", "outcome"]).agg(products=("dsld_id", "nunique"),
                                                      nominal=("nominal_deductions", "sum"),
                                                      realized=("realized_deductions", "sum")).reset_index()
@@ -137,7 +138,7 @@ def render(ctx: shell.PageContext) -> None:
                 continue
             near = scored[(scored["total"] - tier["min"]).abs() <= band]
             rows.append({"cutoff": tier["min"], "tier at/above": tier["name"], "products within band": len(near),
-                         "just below": int((near["total"] < tier["min"]).sum())})
+                         "ships below the cutoff": int((near["shipped_total"] < tier["min"]).sum())})
         st.dataframe(pd.DataFrame(rows), hide_index=True, width="stretch")
         refs = ctx.frame("dose_refs")
         if not refs.empty:

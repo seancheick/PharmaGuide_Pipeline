@@ -145,6 +145,10 @@ def test_compare_rules_explained_vs_unexplained(paths):
     assert "unexplained_mover" in _rules_for(findings, "moved")
     assert "safety_change_unexplained" in _rules_for(findings, "safe_quiet")
     assert "safety_change_review" in _rules_for(findings, "safe_signal")
+    severity = {(r.dsld_id, r.rule_id): r.severity for r in findings.itertuples()}
+    assert severity[("safe_quiet", "safety_change_unexplained")] == "critical"
+    assert severity[("safe_signal", "safety_change_review")] == "high"
+    assert severity[("moved", "unexplained_mover")] == "critical"
     assert "safety_change_unexplained" not in _rules_for(findings, "safe_signal")
     assert _rules_for(findings, "same") == set()
 
@@ -161,7 +165,8 @@ def test_compare_rules_explained_vs_unexplained(paths):
     assert run_compare.summarize(deltas)["unexplained"] == 1
 
 
-def test_run_level_cause_explains_movement(paths):
+def test_run_change_never_silences_an_unattributed_mover(paths):
+    """Between two full-receipt runs a code change is shown, but the mover stays flagged (high, not critical)."""
     write_batch(paths.scan_dir, "A", [scored_product("p")], stage_code="c1")
     si.refresh(paths)
     write_batch(paths.scan_dir, "A", [_set_pillar(scored_product("p"), "dose", 8.0)], stage_code="c2")
@@ -169,7 +174,26 @@ def test_run_level_cause_explains_movement(paths):
     findings = _findings(paths)
     rules = _rules_for(findings, "p")
     assert "unexplained_mover" not in rules
-    assert "tier_or_large_move" in rules  # explained, but ≥5 points: review by cause
+    assert "unattributed_mover_under_run_change" in rules
+    row = findings[findings["rule_id"] == "unattributed_mover_under_run_change"].iloc[0]
+    assert row["severity"] == "high" and "stage_code" in row["current_value"]
+
+
+def test_cross_plane_totals_compare_on_the_shipped_basis(paths):
+    """A candidate 69.6 ships as 70: identical pillars against the release are not a movement."""
+    product = _set_pillar(scored_product("r"), "transparency", 12.6)
+    assert product["quality_score_v4_100"] == 69.6
+    write_batch(paths.scan_dir, "A", [product])
+    write_release(paths.build_root, [product])
+    meta = si.refresh(paths)
+    reader = si.IndexReader(paths)
+    release = reader.frame(meta["latest"]["release"], "products").set_index("dsld_id")
+    assert release.loc["r", "total"] == 70.0 and release.loc["r", "pillar_sum_mismatch"] == 0.0
+    deltas = run_compare.compare(lambda key, table, columns=None: reader.frame(key, table, columns),
+                                 reader.run(meta["latest"]["release"]), reader.run(meta["latest"]["candidate"]))
+    row = deltas.set_index("dsld_id").loc["r"]
+    assert row["delta"] == 0 and not row["moved"] and row["delta_basis"] == "shipped whole score"
+    assert "plane" not in " ".join(row["run_causes"])
 
 
 def test_pillar_only_history_never_invents_causes():
@@ -186,6 +210,37 @@ def test_pillar_only_history_never_invents_causes():
     row = deltas.iloc[0]
     assert row["reason_codes"] == "[]"
     assert row["cause_fidelity"] == "run_only" and "config" in row["run_causes"]
+
+
+def test_release_side_and_distribution_rules(paths):
+    low_route = scored_product("lowroute")
+    low_route["route_confidence"] = "low"
+    quiet = scored_product("relquiet", safety="caution")              # differs from release, nothing recorded
+    signal = scored_product("relsignal", safety="caution", signals=["DOSE_OVER_UL_CAUTION"])
+    write_batch(paths.scan_dir, "A", [low_route, quiet, signal])
+    write_release(paths.build_root, [scored_product("lowroute"), scored_product("relquiet"), scored_product("relsignal")])
+    si.refresh(paths)
+    findings = _findings(paths)
+    severity = {(r.dsld_id, r.rule_id): r.severity for r in findings.itertuples()}
+    assert severity[("lowroute", "low_route_confidence_ranked")] == "medium"
+    assert severity[("relquiet", "safety_change_unexplained_vs_release")] == "critical"
+    assert severity[("relsignal", "safety_change_review_vs_release")] == "high"
+    assert ("relsignal", "safety_change_unexplained_vs_release") not in severity
+
+
+def test_pillar_drift_rule_fires_only_above_the_limit():
+    ctx = fr.Context({}, {}, {}, {}, {}, {}, {}, [{"pillar": "dose", "base": "release", "cand": "candidate", "psi": 0.3},
+                                               {"pillar": "evidence", "base": "release", "cand": "candidate", "psi": 0.1}],
+                     [], [], {})
+    hits = fr._pillar_drift(ctx)
+    assert list(hits["pillar"]) == ["dose"]
+
+
+def test_absorption_view_ignores_rounding_residue():
+    from scripts.dashboard import saved_views as sv
+
+    frame = pd.DataFrame({"dsld_id": ["noise", "floor"], "absorbed_points": [0.05, 3.0], "has_floor": [False, True]})
+    assert list(sv.apply_filters(frame, sv.SAVED_VIEWS["Floors absorbing deductions"])["dsld_id"]) == ["floor"]
 
 
 def test_calibration_rules():
