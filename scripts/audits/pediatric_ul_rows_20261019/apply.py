@@ -28,7 +28,7 @@ import data_batch  # noqa: E402
 from reference_data_contract import semantic_rda_ul_fingerprint  # noqa: E402
 
 DATA = REPO / "scripts" / "data" / "rda_optimal_uls.json"
-REFERENCE_VERSION = "5.1.5-2026-10-19-pediatric-ul-rows"
+REFERENCE_VERSION = "5.1.6-2026-10-19-folate-ul-label-units"
 AGES = ("1-3", "4-8", "9-13")
 
 # id: (UL 1-3 y, UL 4-8 y, UL 9-13 y) in the record's own unit.
@@ -40,7 +40,7 @@ CHILD_ULS = {
     "vitamin_e": (200, 300, 600),       # mg alpha-tocopherol; any supplemental form
     "niacin": (10, 15, 20),             # record unit mg NE; table mg/d synthetic forms
     "vitamin_b6": (30, 40, 60),         # mg
-    "folate": (500, 667, 1000),         # mcg DFE; table 300/400/600 ug folic acid x 1.667 (file convention)
+    "folate": (510, 680, 1020),         # mcg DFE; table 300/400/600 ug folic acid x 1.7 (canonical FDA label units)
     "choline": (1000, 1000, 2000),      # mg; table 1.0/1.0/2.0 g/d
     # Elements table (appJ_tab9)
     "boron": (3, 6, 11),                # mg
@@ -80,6 +80,17 @@ def main() -> int:
         out += [row for row in rows if row.get("group") not in {"Male", "Female"}]
         assert len(out) == len(rows) + 6, nutrient_id
         record["data"] = out
+    # Keep the initial batch recipe consistent with the follow-up unit correction.
+    # Native folic-acid limits do not change; both sides use FDA label DFE x1.7.
+    folate = by_id["folate"]
+    for row in folate["data"]:
+        row["ul"] = {1334: 1360, 1667: 1700}.get(row.get("ul"), row.get("ul"))
+    folate["highest_ul"] = 1700
+    folate["ul_note"] = ("UL is 1000 mcg/day of synthetic folic acid. Stored as 1700 mcg DFE using the same FDA label conversion (1.7) as unit_conversions.json, so exposure and limit share a unit convention. The physiological with-food DFE relation is separate; no underlying folic-acid UL changes. UL applies to synthetic folic acid from supplements and fortified foods only.")
+    for key in ("preparation", "rationale"):
+        folate["reference_semantics"][key] = folate["reference_semantics"][key].replace(
+            "Existing1667DFE represents1000mcg synthetic folic acid with food conversion, not a new FNB UL.",
+            "The stored1700 labelDFE represents1000mcg synthetic folic acid using the canonical FDA labeling factor1.7; this unit reconciliation does not change the FNB folic-acid UL.")
     contract = blob["_metadata"]["reference_data_contract"]
     contract["reference_version"] = REFERENCE_VERSION
     contract["semantic_fingerprint"] = semantic_rda_ul_fingerprint(blob)

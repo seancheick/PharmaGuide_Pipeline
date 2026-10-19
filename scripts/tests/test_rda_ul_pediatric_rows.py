@@ -44,13 +44,13 @@ def _child_uls(record: dict) -> dict:
             if row["age_range"] in CHILD_AGES}
 
 
-# Values read from the NASEM tables; folate is stored in mcg DFE (folic acid x 1.667, the file's
-# existing convention: 14-18 = 800 x 1.667 = 1334), choline/phosphorus/chloride in mg (table g/d).
+# Values read from the NASEM tables; folate is stored in mcg DFE (folic acid x 1.7, matching the canonical FDA label converter;
+# 14-18 = 800 x 1.7 = 1360), choline/phosphorus/chloride in mg (table g/d).
 @pytest.mark.parametrize("nutrient,expected", [
     ("vitamin_a", (600, 900, 1700)),
     ("vitamin_c", (400, 650, 1200)),
     ("vitamin_d", (63, 75, 100)),
-    ("folate", (500, 667, 1000)),
+    ("folate", (510, 680, 1020)),
     ("choline", (1000, 1000, 2000)),
     ("zinc", (7, 12, 23)),
     ("calcium", (2500, 2500, 3000)),
@@ -311,6 +311,25 @@ def test_child_exposure_is_summed_across_forms_of_one_nutrient(enricher):
     assert note["status"] == "over_limit" and note["amount"] == 16 and note["ul"] == 12
     assert note["aggregation"] == "canonical_sum" and len(note["contributing_rows"]) == 2
 
+@pytest.mark.parametrize('amount,over', [(300, False), (301, True)])
+def test_child_folic_acid_native_ul_uses_the_same_label_conversion(enricher, amount, over):
+    # NASEM1-3 UL is300mcg folic acid. The production converter uses FDA label DFE x1.7;
+    # mixing its510DFE exposure with a500DFE limit invents an exceedance at exactly the UL.
+    rda = _collect(enricher, ['Children 1-3 Years'], _row('Folic Acid', 'vitamin_b9_folate', amount, 'mcg'))
+    notes = [n for n in rda['child_ul_screen'] if n['status'] == 'over_limit']
+    assert bool(notes) is over
+    if over:
+        assert notes[0]['ul'] == 510
+        assert notes[0]['pct_ul'] == pytest.approx(amount / 300 * 100)
+
+@pytest.mark.parametrize('amount,over', [(1000, False), (1001, True)])
+def test_adult_folic_acid_native_ul_uses_the_same_label_conversion(enricher, amount, over):
+    rda = _collect(enricher, ['Adult (18 - 50 Years)'], _row('Folic Acid', 'vitamin_b9_folate', amount, 'mcg'))
+    row = _adequacy(rda, 'vitamin_b9_folate')
+    assert row['ul'] == 1700
+    assert row['over_ul'] is over
+    assert row['pct_ul'] == pytest.approx(amount / 1000 * 100)
+
 
 def test_child_nickel_sum_preserves_qualified_soluble_form(enricher):
     # Each known soluble-salt row exceeds the1-3 UL. Adding another real exposure
@@ -334,7 +353,6 @@ def test_child_note_unresolved_comparison_remains_explicit(enricher):
     assert note is not None
     assert note['status'] == 'not_assessable'
 
-
 @pytest.mark.parametrize('tag', ['Kids 4-8 Years', 'Children 4-8 Years'])
 def test_child_note_ages_honor_every_recognized_child_tag(enricher, tag):
     rda = enricher._collect_rda_ul_data({'fullName':'Kids Multivitamin','targetGroups':[tag],
@@ -348,3 +366,57 @@ def test_baby_tag_without_infant_word_keeps_infant_gap(enricher):
     [note] = rda['child_ul_screen']
     assert note['status'] == 'not_assessable'
     assert note['ul_population']['missing_age_ranges'] == ['0-1']
+
+
+def test_linked_folic_acid_component_is_not_added_to_child_label_total(enricher):
+    parent={**_row('Folate','vitamin_b9_folate',500,'mcg DFE'),
+            'raw_source_text':'Folate 500 mcg DFE (300 mcg folic acid)'}
+    child={**_row('Folic Acid','vitamin_b9_folate',300,'mcg'),
+           'raw_source_path':'ingredientRows[0].nestedRows[0]', 'isNestedIngredient':True, 'parentBlend':'Folate'}
+    rda=_collect(enricher,['Children 1-3 Years'],parent,child)
+    assert rda['child_ul_screen'] == []
+    assert not rda['safety_flags']
+
+
+@pytest.mark.parametrize('name',['Folate','Folic Acid'])
+@pytest.mark.parametrize('native,dfe,cap',[(1000,1667,None),(1001,1668,10),(1500,2500,0)])
+def test_printed_native_folic_acid_controls_ul_without_changing_adequacy(enricher,native,dfe,cap,name):
+    from scoring_v4.dose_safety import evaluate_dose_safety
+    parent={**_row(name,'vitamin_b9_folate',dfe,'mcg DFE'),
+            'raw_source_text':f'Folate {dfe} mcg DFE ({native} mcg folic acid)'}
+    rda=_collect(enricher,['Adult (18 - 50 Years)'],parent)
+    row=_adequacy(rda,'vitamin_b9_folate')
+    assert row['adequacy_exposure']['per_day'] == dfe
+    assert row['safety_exposure']['per_day'] == pytest.approx(native * 1.7)
+    ceiling=evaluate_dose_safety({'rda_ul_data':rda}).dose_ceiling()
+    assert (ceiling['cap_public'] if ceiling else None) == cap
+
+
+def test_folate_native_child_retains_real_adult_ceiling(enricher):
+    from scoring_v4.dose_safety import evaluate_dose_safety
+    parent={**_row('Folate','vitamin_b9_folate',2500,'mcg DFE'),
+            'raw_source_text':'Folate 2500 mcg DFE (1500 mcg folic acid)'}
+    child={**_row('Folic Acid','vitamin_b9_folate',1500,'mcg'),
+           'raw_source_path':'ingredientRows[0].nestedRows[0]', 'isNestedIngredient':True,'parentBlend':'Folate'}
+    rda=_collect(enricher,['Adult (18 - 50 Years)'],parent,child)
+    assert len(rda['safety_flags']) == 1
+    assert evaluate_dose_safety({'rda_ul_data':rda}).dose_ceiling()['cap_public'] == 0
+
+
+def test_explicit_native_folic_acid_is_assessed_in_a_mixed_folate_declaration(enricher):
+    parent={**_row('Folate','vitamin_b9_folate',2000,'mcg DFE'),
+            'raw_source_text':'Folate 2000 mcg DFE (1001 mcg folic acid and L-5-MTHF)'}
+    rda=_collect(enricher,['Adult (18 - 50 Years)'],parent)
+    assert rda['has_over_ul'] is True
+
+
+def test_independent_equal_folic_acid_rows_are_not_a_total_and_component(enricher):
+    from scoring_v4.dose_safety import evaluate_dose_safety
+    rows=[{**_row('Folic Acid','vitamin_b9_folate',600,'mcg'),
+           'raw_source_path':f'ingredientRows[{i}]'} for i in range(2)]
+    rda=_collect(enricher,['Adult (18 - 50 Years)'],*rows)
+    assert len(rda['safety_flags']) == 1
+    ceiling=evaluate_dose_safety({'rda_ul_data':rda}).dose_ceiling()
+    assert ceiling is not None
+    assert ceiling['cap_public'] == 10
+    assert ceiling['pct_ul'] == pytest.approx(120)

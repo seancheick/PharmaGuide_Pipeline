@@ -30,7 +30,7 @@ def enricher() -> SupplementEnricherV3:
     ("Magnesium", "general_adult", 350),
     ("Vitamin A", "pregnancy_lactation", 3000),
     ("Phosphorus", "pregnancy_lactation", 3500),
-    ("Folate", "pregnancy_lactation", 1667),  # mcg DFE table unit
+    ("Folate", "pregnancy_lactation", 1700),  # mcg DFE table unit
 ])
 def test_screening_ul_is_the_lowest_across_the_population(calculator, nutrient, population, expected):
     result = calculator.compute_nutrient_adequacy(nutrient, 1.0, "mg" if nutrient != "Vitamin A" else "mcg",

@@ -30,7 +30,7 @@ Cross-check: every child UL is positive and at or below the record's existing Ma
 | vitamin_e | mg alpha-tocopherol | 200 / 300 / 600 | 200 / 300 / 600 | V | added |
 | niacin | mg NE | 10 / 15 / 20 mg (synthetic) | 10 / 15 / 20 | V | added; same number convention as the existing 14–18 row (30) |
 | vitamin_b6 | mg | 30 / 40 / 60 | 30 / 40 / 60 | V | added |
-| folate | mcg DFE | 300 / 400 / 600 µg folic acid | 500 / 667 / 1000 | V | added; × 1.667 rounded, the file's convention (14–18: 800 → 1334) |
+| folate | mcg DFE | 300 / 400 / 600 µg folic acid | 510 / 680 / 1020 | V | added; × 1.7, matching canonical FDA label conversion (14–18: 800 → 1360) |
 | choline | mg | 1.0 / 1.0 / 2.0 g | 1000 / 1000 / 2000 | V | added |
 | boron | mg | 3 / 6 / 11 | 3 / 6 / 11 | E | added |
 | calcium | mg | 2,500 / 2,500 / 3,000 | 2500 / 2500 / 3000 | E | added |
@@ -64,3 +64,9 @@ Free text checked: the only text in the file about younger ages is nickel's `ref
 already states the same values. No phrase asserting "no rows below 14" exists in the data; the code string
 `pediatric_ul_rows_below_14_not_in_reference_data` is replaced by `pediatric_ul_row_missing_for_stated_age`
 and appears nowhere else (`grep -rn` over `scripts/`, excluding dated audits).
+
+## Folate unit reconciliation — Codex, October 19
+
+Entry `folate`: underlying NASEM synthetic folic-acid ULs remain 300/400/600/800/1000 mcg by age. The old stored DFE limits used 1.667 while `unit_conversions.json::folate_folic_acid` uses the FDA labeling factor1.7. This caused false exceedance at exactly300mcg (510DFE vs500DFE), and1000mcg (1700DFE vs1667DFE). All folate UL rows and highest_ul now use the same label-DFE convention as exposure; adequacy/RDA/AI and the converter are unchanged. NIH ODS Folate HealthProfessional, sources/labels section explicitly gives DFE=foodfolate+1.7*folicacid; UL table remains native folicacid. Source read live: https://ods.od.nih.gov/factsheets/Folate-HealthProfessional/ . Four fail-first boundary cases. No new clinical threshold or approval invented. Reference version5.1.6-2026-10-19-folate-ul-label-units.
+
+The same review reproduced printed-native and linked-component cases. `_declared_folate_dfe_totals` now retains an explicit native folic-acid amount from the exact row and exact nested component links; `_rda_dose_lineage` leaves one UL owner. Adequacy keeps printed DFE; safety converts the explicit native mass through the existing converter. No form amount is guessed from a blend. Summed flags carry the existing source keys/roles; the legacy numeric duplicate heuristic cannot erase current independently owned equal doses. Source cases:300mcg child boundary,1000/1001mcg adult boundary,1500mcg adult150% boundary,500DFE+linked300mcg, and two independent600mcg rows. These are implementation/unit/ownership corrections under the approved single-owner/ceiling rules, not new numerical policy.

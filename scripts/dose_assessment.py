@@ -42,6 +42,7 @@ _NOT_DISTINCT_REASONS = {
     "form_component_of_declared_total",
     "compound_duplicate_row",
     "vitamin_a_components_own_ul",
+    "folate_components_own_ul",
 }
 _NO_UL_REASONS = {
     "not_ul_applicable",

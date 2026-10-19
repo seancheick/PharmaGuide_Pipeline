@@ -6,8 +6,8 @@
     "last_updated": "2026-10-19",
     "reference_data_contract": {
       "contract_version": "1",
-      "reference_version": "5.1.5-2026-10-19-pediatric-ul-rows",
-      "semantic_fingerprint": "sha256:0abe982032239352dfec4e192e9ecc822a467c03d34e02aca89c6e616b04e233"
+      "reference_version": "5.1.6-2026-10-19-folate-ul-label-units",
+      "semantic_fingerprint": "sha256:b7d5e173c07fe769aaba54318bdd3f9c05b352460a8074ada8806eebfa58294a"
     },
     "total_entries": 77,
     "data_source": "Institute of Medicine (IOM) Dietary Reference Intakes, National Academies 2019 Sodium/Potassium Update, FDA, USDA, Clinical Research",
@@ -2136,9 +2136,9 @@
     {
       "standard_name": "Folate",
       "unit": "mcg DFE",
-      "ul_note": "UL is 1000 mcg/day of synthetic folic acid = 1667 mcg DFE. Stored as DFE because the scoring pipeline converts folic acid to DFE before UL comparison. UL applies to synthetic folic acid from supplements and fortified foods only.",
+      "ul_note": "UL is 1000 mcg/day of synthetic folic acid. Stored as 1700 mcg DFE using the same FDA label conversion (1.7) as unit_conversions.json, so exposure and limit share a unit convention. The physiological with-food DFE relation is separate; no underlying folic-acid UL changes. UL applies to synthetic folic acid from supplements and fortified foods only.",
       "optimal_range": "400-1000",
-      "highest_ul": 1667,
+      "highest_ul": 1700,
       "warnings": [
         "High doses may mask B12 deficiency",
         "May interfere with certain medications"
@@ -2165,7 +2165,7 @@
           "group": "Male",
           "age_range": "1-3",
           "rda_ai": null,
-          "ul": 500,
+          "ul": 510,
           "rda_ai_status": null,
           "ul_status": null
         },
@@ -2173,7 +2173,7 @@
           "group": "Male",
           "age_range": "4-8",
           "rda_ai": null,
-          "ul": 667,
+          "ul": 680,
           "rda_ai_status": null,
           "ul_status": null
         },
@@ -2181,7 +2181,7 @@
           "group": "Male",
           "age_range": "9-13",
           "rda_ai": null,
-          "ul": 1000,
+          "ul": 1020,
           "rda_ai_status": null,
           "ul_status": null
         },
@@ -2189,7 +2189,7 @@
           "group": "Male",
           "age_range": "14-18",
           "rda_ai": 400,
-          "ul": 1334,
+          "ul": 1360,
           "rda_ai_status": null,
           "ul_status": null
         },
@@ -2197,7 +2197,7 @@
           "group": "Male",
           "age_range": "19-30",
           "rda_ai": 400,
-          "ul": 1667,
+          "ul": 1700,
           "rda_ai_status": null,
           "ul_status": null
         },
@@ -2205,7 +2205,7 @@
           "group": "Male",
           "age_range": "31-50",
           "rda_ai": 400,
-          "ul": 1667,
+          "ul": 1700,
           "rda_ai_status": null,
           "ul_status": null
         },
@@ -2213,7 +2213,7 @@
           "group": "Male",
           "age_range": "51-70",
           "rda_ai": 400,
-          "ul": 1667,
+          "ul": 1700,
           "rda_ai_status": null,
           "ul_status": null
         },
@@ -2221,7 +2221,7 @@
           "group": "Male",
           "age_range": "71+",
           "rda_ai": 400,
-          "ul": 1667,
+          "ul": 1700,
           "rda_ai_status": null,
           "ul_status": null
         },
@@ -2229,7 +2229,7 @@
           "group": "Female",
           "age_range": "1-3",
           "rda_ai": null,
-          "ul": 500,
+          "ul": 510,
           "rda_ai_status": null,
           "ul_status": null
         },
@@ -2237,7 +2237,7 @@
           "group": "Female",
           "age_range": "4-8",
           "rda_ai": null,
-          "ul": 667,
+          "ul": 680,
           "rda_ai_status": null,
           "ul_status": null
         },
@@ -2245,7 +2245,7 @@
           "group": "Female",
           "age_range": "9-13",
           "rda_ai": null,
-          "ul": 1000,
+          "ul": 1020,
           "rda_ai_status": null,
           "ul_status": null
         },
@@ -2253,7 +2253,7 @@
           "group": "Female",
           "age_range": "14-18",
           "rda_ai": 400,
-          "ul": 1334,
+          "ul": 1360,
           "rda_ai_status": null,
           "ul_status": null
         },
@@ -2261,7 +2261,7 @@
           "group": "Female",
           "age_range": "19-30",
           "rda_ai": 400,
-          "ul": 1667,
+          "ul": 1700,
           "rda_ai_status": null,
           "ul_status": null
         },
@@ -2269,7 +2269,7 @@
           "group": "Female",
           "age_range": "31-50",
           "rda_ai": 400,
-          "ul": 1667,
+          "ul": 1700,
           "rda_ai_status": null,
           "ul_status": null
         },
@@ -2277,7 +2277,7 @@
           "group": "Female",
           "age_range": "51-70",
           "rda_ai": 400,
-          "ul": 1667,
+          "ul": 1700,
           "rda_ai_status": null,
           "ul_status": null
         },
@@ -2285,7 +2285,7 @@
           "group": "Female",
           "age_range": "71+",
           "rda_ai": 400,
-          "ul": 1667,
+          "ul": 1700,
           "rda_ai_status": null,
           "ul_status": null
         },
@@ -2293,7 +2293,7 @@
           "group": "Pregnancy",
           "age_range": "14-18",
           "rda_ai": 600,
-          "ul": 1334,
+          "ul": 1360,
           "rda_ai_status": null,
           "ul_status": null
         },
@@ -2301,7 +2301,7 @@
           "group": "Pregnancy",
           "age_range": "19-30",
           "rda_ai": 600,
-          "ul": 1667,
+          "ul": 1700,
           "rda_ai_status": null,
           "ul_status": null
         },
@@ -2309,7 +2309,7 @@
           "group": "Pregnancy",
           "age_range": "31-50",
           "rda_ai": 600,
-          "ul": 1667,
+          "ul": 1700,
           "rda_ai_status": null,
           "ul_status": null
         },
@@ -2317,7 +2317,7 @@
           "group": "Lactation",
           "age_range": "14-18",
           "rda_ai": 500,
-          "ul": 1334,
+          "ul": 1360,
           "rda_ai_status": null,
           "ul_status": null
         },
@@ -2325,7 +2325,7 @@
           "group": "Lactation",
           "age_range": "19-30",
           "rda_ai": 500,
-          "ul": 1667,
+          "ul": 1700,
           "rda_ai_status": null,
           "ul_status": null
         },
@@ -2333,7 +2333,7 @@
           "group": "Lactation",
           "age_range": "31-50",
           "rda_ai": 500,
-          "ul": 1667,
+          "ul": 1700,
           "rda_ai_status": null,
           "ul_status": null
         }
@@ -2364,7 +2364,7 @@
       "reference_semantics": {
         "reference_type": "nutritional_reference",
         "scope": "General catalog Dose for this exact source identity; source-specific study facts and established safety references remain separate.",
-        "preparation": "Nutrient amount in mcg DFE; preserve chemical form and analyte qualifications. RDA in DFE; UL synthetic folic acid amount cannot be compared as unconverted DFE. Existing1667DFE represents1000mcg synthetic folic acid with food conversion, not a new FNB UL.",
+        "preparation": "Nutrient amount in mcg DFE; preserve chemical form and analyte qualifications. RDA in DFE; UL synthetic folic acid amount cannot be compared as unconverted DFE. The stored1700 labelDFE represents1000mcg synthetic folic acid using the canonical FDA labeling factor1.7; this unit reconciliation does not change the FNB folic-acid UL.",
         "purpose": "Source-qualified nutritional contribution",
         "population": "Applicable age, sex and life-stage group selected from this record's data rows; total dietary reference, not a mandatory supplemental intake.",
         "exposure_basis": "minimum_directed_daily_use",
@@ -2373,7 +2373,7 @@
         "source_ids": [
           "https://ods.od.nih.gov/factsheets/Folate-HealthProfessional/"
         ],
-        "rationale": "RDA in DFE; UL synthetic folic acid amount cannot be compared as unconverted DFE. Existing1667DFE represents1000mcg synthetic folic acid with food conversion, not a new FNB UL. The point curve is PharmaGuide policy; reference amounts are not percentages of clinical efficacy.",
+        "rationale": "RDA in DFE; UL synthetic folic acid amount cannot be compared as unconverted DFE. The stored1700 labelDFE represents1000mcg synthetic folic acid using the canonical FDA labeling factor1.7; this unit reconciliation does not change the FNB folic-acid UL. The point curve is PharmaGuide policy; reference amounts are not percentages of clinical efficacy.",
         "owner": "scripts/data/rda_optimal_uls.json::folate",
         "review_date": "2026-10-18",
         "approval_status": "approved_sean_policy_2026_10_18"

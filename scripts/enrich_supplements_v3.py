@@ -21011,7 +21011,6 @@ class SupplementEnricherV3:
                 or ingredient.get("name")
                 or ""
             )
-            label_name = self._normalize_text(ingredient.get("name") or "")
             unit = self._normalize_text(ingredient.get("unit") or "")
             mass_unit = _rda_mass_unit_key(
                 re.sub(
@@ -21027,7 +21026,6 @@ class SupplementEnricherV3:
                 continue
             if (
                 canonical in {"folate", "vitamin_b9_folate"}
-                and label_name == "folate"
                 and "dfe" in unit
                 and quantity > 0
             ):
@@ -21041,6 +21039,37 @@ class SupplementEnricherV3:
                         ),
                     }
                 )
+        # The label total owns adequacy; an explicitly linked folic-acid mass
+        # owns its synthetic-only UL. Keep these views from becoming two intakes.
+        for declared in totals:
+            parent = next(row for row in active_ingredients
+                          if self._rda_source_label_key(row) == declared["source_label_key"])
+            parent_path = str(parent.get("raw_source_path") or "")
+            components = set()
+            for row in active_ingredients:
+                child_path = str(row.get("raw_source_path") or "")
+                linked = bool(parent_path and child_path.startswith(parent_path + ".nestedRows[")) or (
+                    len(totals) == 1 and row.get("isNestedIngredient") is True
+                    and self._normalize_text(row.get("parentBlend") or "")
+                    == self._normalize_text(parent.get("name") or ""))
+                identity = " ".join(str(row.get(key) or "") for key in ("name", "matched_form", "raw_source_text"))
+                if linked and norm_module.classify_folate_form(identity) == norm_module.FOLATE_FORM_FOLIC_ACID:
+                    unit = _rda_mass_unit_key(row.get("unit"))
+                    if unit in {"mg", "mcg"} and "dfe" not in str(row.get("unit") or "").lower():
+                        try:
+                            if float(row.get("quantity") or 0) > 0:
+                                components.add(self._rda_source_label_key(row))
+                        except (TypeError, ValueError):
+                            pass
+            declared["component_source_label_keys"] = components
+            # Parse only an explicit native amount in this exact label row,
+            # never a food/blend mass or a DFE amount inferred as folic acid.
+            text = str(parent.get("raw_source_text") or parent.get("name") or "")
+            native = re.findall(r"(?<![\w.])([\d,]+(?:\.\d+)?)\s*(mcg|ug|[µμ]g|mg)\s+(?:of\s+)?folic\s+acid\b", text, re.IGNORECASE)
+            masses = {float(value.replace(",", "")) * (1000 if unit.lower() == "mg" else 1)
+                      for value, unit in native}
+            if len(masses) == 1 and next(iter(masses)) > 0:
+                declared["native_folic_acid_mcg"] = next(iter(masses))
         return totals
 
     def _declared_same_identity_totals(
@@ -21592,6 +21621,13 @@ class SupplementEnricherV3:
                         lineage["parent_label_key"] = declared["source_label_key"]
                         return lineage
 
+        for declared in declared_folate_totals:
+            if source_label_key == declared["source_label_key"] and declared.get("component_source_label_keys"):
+                lineage["ul_owned_by_components"] = True
+                return lineage
+            if source_label_key in declared.get("component_source_label_keys", set()):
+                lineage.update(dose_role="ul_scoped_component", parent_label_key=declared["source_label_key"])
+                return lineage
         if not declared_folate_totals:
             return lineage
         if converted_amount is None or not converted_unit:
@@ -22379,6 +22415,10 @@ class SupplementEnricherV3:
                         # dose; checking/summing this row double-counts.
                         skip_ul_check = True
                         skip_ul_reason = "compound_duplicate_row"
+                    elif _is_folate and dose_lineage.get("ul_owned_by_components"):
+                        skip_ul_check = True
+                        ul_only_skip = True
+                        skip_ul_reason = "folate_components_own_ul"
                     elif _is_folate and not _explicit_folic_acid:
                         # This pipeline applies the folic-acid UL only to an
                         # identified folic-acid contribution. Preserve adequacy
@@ -22573,6 +22613,17 @@ class SupplementEnricherV3:
                         if per_day_min is not None
                         else converted_amount
                     )
+                    # Printed DFE and printed native folic acid can use different
+                    # rounding conventions. The explicit native mass owns safety;
+                    # the unchanged DFE declaration continues to own adequacy.
+                    if _is_folate and not dose_lineage.get("ul_owned_by_components"):
+                        declared = next((row for row in declared_folate_totals
+                                         if row["source_label_key"] == dose_lineage["source_label_key"]), {})
+                        if declared.get("native_folic_acid_mcg") is not None:
+                            native = self.unit_converter.convert_nutrient(
+                                "Folate", declared["native_folic_acid_mcg"], "mcg", ingredient_name="Folic Acid")
+                            if native.success:
+                                amount_for_ul = native.converted_value * servings_max
                     if (
                         explicit_preformed_vitamin_a_fraction is not None
                         and amount_for_ul is not None
@@ -23407,6 +23458,7 @@ class SupplementEnricherV3:
                         else:
                             group["total_amount"] += ul_amount
                             group["rows"].append({
+                                **dose_lineage,
                                 "ingredient": ing_name,
                                 "amount": ul_amount,
                                 "unit": ul_unit,
