@@ -1132,6 +1132,15 @@
         270831
       ],
       "source_commit": "bd3470416"
+    },
+    {
+      "date": "2026-10-19",
+      "notes": "Reference-eligibility root correction74f905b79: completed-neutral non-nutritional study amounts no longer earn RDA/AI panel coverage. Raw288344 removes unsupported lycopene reference10mg;239600 removes unsupported inositol reference2000mg. Only total-score mirrors change (79.5\u219280.2 and76.2\u219277.3); routes, tier, status, safety, other pillars, quantities and identities remain source-grounded. Final589raw replay measures this class with officialRDA/AI and independentUL controls. Refreshed these two from raw only; other31fixtures unchanged by this correction.",
+      "dsld_ids": [
+        288344,
+        239600
+      ],
+      "source_commit": "74f905b79"
     }
   ]
 }
