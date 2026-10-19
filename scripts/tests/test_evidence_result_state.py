@@ -292,7 +292,9 @@ def test_product_level_owner_is_not_nothing_to_assess():
     }
     product = _product(product_name="Natural Soya Lecithin 1360 mg", ingredients=[mirror], matches=[])
     product["ingredient_quality_data"]["ingredients_scorable"] = [projection]
-    assert _owner_state(product) not in {"no_assessable_actives", "clinical_review_not_covered"}
+    # Lecithin has reviewed literature, but no clinical match applies to this
+    # label (zero points): a finished review that does not apply here.
+    assert _owner_state(product) == "applicability_unestablished"
 
 
 def test_no_rows_at_all_stays_nothing_to_assess_when_owner_scoped():
