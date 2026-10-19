@@ -1678,6 +1678,29 @@ class SupplementEnricherV3:
                 "CLAIMS HARDENING INCOMPLETE: cert_claim_rules missing third_party_programs. "
                 "Certification evidence will not be collected."
             )
+        self._compile_cert_claim_patterns(cert_rules)
+
+    def _compile_cert_claim_patterns(self, cert_rules: Dict) -> None:
+        """Compile every claim-rule pattern once; an invalid one stops the run.
+
+        A pattern that fails to compile would otherwise never match, silently
+        dropping that claim from every product.
+        """
+        for category, rules in (cert_rules.get('rules') or {}).items():
+            if not isinstance(rules, dict):
+                continue
+            for rule_key, rule in rules.items():
+                if rule_key.startswith('_') or not isinstance(rule, dict):
+                    continue
+                for kind in ('positive_patterns', 'negative_patterns'):
+                    for pattern in rule.get(kind, []):
+                        try:
+                            self._cached_compile_regex(pattern, re.I)
+                        except re.error as exc:
+                            raise ValueError(
+                                f"cert_claim_rules {category}.{rule.get('id', rule_key)} "
+                                f"{kind} has an invalid regex {pattern!r}: {exc}"
+                            ) from exc
 
     def _log_reference_versions(self):
         """Log versions of reference databases for auditability."""
@@ -3103,15 +3126,23 @@ class SupplementEnricherV3:
 
     _REGEX_CACHE_LIMIT = 50000
 
-    def _cached_compile_regex(self, pattern: str) -> re.Pattern:
-        """Compile a regex once per enricher instance."""
-        cached = self._regex_pattern_cache.get(pattern)
+    def _cached_compile_regex(self, pattern: str, flags: int = 0) -> re.Pattern:
+        """Compile a regex once per enricher instance.
+
+        Python's own ``re`` cache holds a few hundred patterns; enrichment
+        builds thousands per product, so that cache thrashes and recompiles.
+        """
+        cache = getattr(self, "_regex_pattern_cache", None)
+        if cache is None:
+            cache = self._regex_pattern_cache = {}
+        key = (pattern, flags)
+        cached = cache.get(key)
         if cached is not None:
             return cached
-        if len(self._regex_pattern_cache) >= self._REGEX_CACHE_LIMIT:
-            self._regex_pattern_cache.clear()
-        compiled = re.compile(pattern)
-        self._regex_pattern_cache[pattern] = compiled
+        if len(cache) >= self._REGEX_CACHE_LIMIT:
+            cache.clear()
+        compiled = re.compile(pattern, flags)
+        cache[key] = compiled
         return compiled
 
     def _cached_token_bounded_pattern(self, normalized_text: str) -> Optional[re.Pattern]:
@@ -3142,21 +3173,49 @@ class SupplementEnricherV3:
         if not ing_norm:
             return False, None
 
-        candidates = [target_name] + aliases
-        for candidate in candidates:
-            cand_norm = self._normalize_text(candidate)
-            if not cand_norm:
-                continue
+        for candidate, cand_norm, is_acronym, pattern in self._token_bounded_candidates(
+            target_name, aliases
+        ):
             if ing_norm == cand_norm:
                 return True, candidate
-            if self._is_short_acronym_alias(candidate):
+            if is_acronym:
                 if not self._literal_short_acronym_match(ingredient_name, candidate):
                     continue
-            pattern = self._cached_token_bounded_pattern(cand_norm)
             if pattern and pattern.search(ing_norm):
                 return True, candidate
 
         return False, None
+
+    def _token_bounded_candidates(
+        self, target_name: str, aliases: List[str]
+    ) -> Tuple[Tuple[str, str, bool, Optional[re.Pattern]], ...]:
+        """Per-entry candidate prep for _token_bounded_match, in match order.
+
+        Depends only on the curated target/aliases, never on the label, so
+        the banned check reuses it across every ingredient row.
+        """
+        cache = getattr(self, "_token_bounded_candidates_cache", None)
+        if cache is None:
+            cache = self._token_bounded_candidates_cache = {}
+        key = (target_name, tuple(aliases))
+        cached = cache.get(key)
+        if cached is not None:
+            return cached
+        prepared = []
+        for candidate in (target_name, *key[1]):
+            cand_norm = self._normalize_text(candidate)
+            if not cand_norm:
+                continue
+            prepared.append((
+                candidate,
+                cand_norm,
+                self._is_short_acronym_alias(candidate),
+                self._cached_token_bounded_pattern(cand_norm),
+            ))
+        if len(cache) >= self._REGEX_CACHE_LIMIT:
+            cache.clear()
+        cache[key] = tuple(prepared)
+        return cache[key]
 
     def _is_short_acronym_alias(self, alias: str) -> bool:
         """Return true for short acronym aliases that need literal bounds."""
@@ -3186,7 +3245,7 @@ class SupplementEnricherV3:
         """
         if not ingredient_name or not alias:
             return False
-        pattern = re.compile(
+        pattern = self._cached_compile_regex(
             r"(?<![A-Za-z0-9-])" + re.escape(str(alias)) + r"(?![A-Za-z0-9-])",
             re.IGNORECASE,
         )
@@ -10874,9 +10933,9 @@ class SupplementEnricherV3:
                 for term in terms
                 if str(term).strip()
             ]
-            pattern = re.compile(
+            pattern = self._cached_compile_regex(
                 r"(?<![a-z0-9])(?:" + "|".join(alternatives) + r")(?![a-z0-9])",
-                flags=re.IGNORECASE,
+                re.IGNORECASE,
             )
 
             # Keep every source location: a product-title match cannot erase
@@ -13311,20 +13370,17 @@ class SupplementEnricherV3:
         """
         # 1. Check positive patterns
         positive_match = None
+        # Patterns are validated when the rules load; an invalid one raises.
         for i, pattern in enumerate(rule.get('positive_patterns', [])):
-            try:
-                match = re.search(pattern, text, re.I)
-                if match:
-                    positive_match = {
-                        'text': match.group(),
-                        'start': match.start(),
-                        'end': match.end(),
-                        'pattern_id': f"{rule.get('id', 'UNKNOWN')}_positive_{i}"
-                    }
-                    break
-            except re.error as e:
-                self.logger.warning(f"Invalid regex pattern in rule {rule.get('id')}: {e}")
-                continue
+            match = self._cached_compile_regex(pattern, re.I).search(text)
+            if match:
+                positive_match = {
+                    'text': match.group(),
+                    'start': match.start(),
+                    'end': match.end(),
+                    'pattern_id': f"{rule.get('id', 'UNKNOWN')}_positive_{i}"
+                }
+                break
 
         if not positive_match:
             return None  # No claim found
@@ -13357,18 +13413,15 @@ class SupplementEnricherV3:
             'negation_pattern_id': None
         }
         for j, pattern in enumerate(rule.get('negative_patterns', [])):
-            try:
-                neg_match = re.search(pattern, text, re.I)
-                if neg_match:
-                    negation = {
-                        'negated': True,
-                        'negation_match_text': neg_match.group(),
-                        'negation_source_field': source_field,
-                        'negation_pattern_id': f"{rule.get('id', 'UNKNOWN')}_negative_{j}"
-                    }
-                    break
-            except re.error:
-                continue
+            neg_match = self._cached_compile_regex(pattern, re.I).search(text)
+            if neg_match:
+                negation = {
+                    'negated': True,
+                    'negation_match_text': neg_match.group(),
+                    'negation_source_field': source_field,
+                    'negation_pattern_id': f"{rule.get('id', 'UNKNOWN')}_negative_{j}"
+                }
+                break
 
         # 4. Check required tokens if specified
         required_tokens = rule.get('required_tokens', [])

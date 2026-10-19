@@ -143,3 +143,32 @@ def test_threshold_conversion_exception_is_recorded_and_blocks_release(pipeline,
     assert result["evaluation_status"] == "conversion_error"
     assert result["conversion_error"] == "conversion_exception"
     assert result["release_blocking"] is True
+
+
+def _bad_claim_rules(enricher):
+    import copy
+
+    rules = copy.deepcopy(enricher.databases["cert_claim_rules"])
+    category = rules["rules"]["third_party_programs"]
+    rule = next(v for k, v in category.items() if not k.startswith("_") and isinstance(v, dict))
+    rule["positive_patterns"] = ["(unclosed"]
+    return rules, rule
+
+
+def test_invalid_claim_rule_pattern_stops_enrichment_at_load(pipeline, monkeypatch):
+    _normalizer, enricher = pipeline
+    rules, _rule = _bad_claim_rules(enricher)
+    monkeypatch.setitem(enricher.databases, "cert_claim_rules", rules)
+    with pytest.raises(ValueError, match="invalid regex"):
+        enricher._validate_loaded_databases()
+
+
+def test_invalid_claim_rule_pattern_never_silently_misses(pipeline):
+    import re
+
+    _normalizer, enricher = pipeline
+    _rules, rule = _bad_claim_rules(enricher)
+    with pytest.raises(re.error):
+        enricher._check_claim_with_validation(
+            "NSF Certified for Sport", "statements[0].notes", rule, enricher._get_field_groups()
+        )
