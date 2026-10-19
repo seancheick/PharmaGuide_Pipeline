@@ -62,7 +62,7 @@ KIND_LABELS = {
     "not_earned": "Not earned",
 }
 
-pio.templates["pharmaguide"] = go.layout.Template(
+pio.templates["pg_dashboard"] = go.layout.Template(
     layout=go.Layout(
         font={"family": "Geist, system-ui, sans-serif", "color": TOKENS["ink"], "size": 13},
         paper_bgcolor=TOKENS["surface"],
@@ -80,7 +80,7 @@ pio.templates["pharmaguide"] = go.layout.Template(
         title={"font": {"family": "Newsreader, Georgia, serif", "size": 17, "color": TOKENS["ink"]}, "x": 0},
     )
 )
-pio.templates.default = "pharmaguide"
+pio.templates.default = "pg_dashboard"
 
 _CSS = f"""
 <style>
