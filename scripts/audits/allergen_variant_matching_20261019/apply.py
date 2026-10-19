@@ -10,7 +10,7 @@ import data_batch
 PATH = SCRIPTS / "data" / "allergens.json"
 HIGHLY_REFINED = "highly refined"  # FDA allergen Q&A Ed. 5, D.9: RBD oils exempt
 NEGATIVE_TERMS = {
-    "ALLERGEN_MILK": ["milk thistle", "coconut milk", "dairy digestive", "biocore dairy"],
+    "ALLERGEN_MILK": ["milk thistle", "coconut milk", "coconut cream", "dairy digestive", "biocore dairy"],
     "ALLERGEN_TREE_NUTS": ["horse chestnut", "tropical almond", "almond mushroom", HIGHLY_REFINED],
     "ALLERGEN_WHEAT": ["gluten enzyme", HIGHLY_REFINED],
     "ALLERGEN_RYE": ["rye flower", "pollen"],

@@ -62,6 +62,7 @@ def test_row_naming_an_allergen_source_is_flagged(enricher, name, forms, expecte
     ("Milk Thistle Seed Extract", ()),
     ("Silymarin", ("Milk Thistle",)),
     ("Organic Coconut Milk", ()),
+    ("Coconut Cream", ()),
     ("Dairy Digestive Enzymes", ()),
     ("BioCore Dairy", ()),
     ("Horse Chestnut Seed Extract", ()),
