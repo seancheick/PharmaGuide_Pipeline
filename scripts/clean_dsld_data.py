@@ -426,7 +426,7 @@ class DSLDCleaningPipeline:
                         else ""
                     )
                     + (
-                        f" ({report_write_failures} quarantine/unmapped report write(s) failed)"
+                        f" ({report_write_failures} quarantine, unmapped, resume-state or report write(s) failed)"
                         if report_write_failures
                         else ""
                     )
