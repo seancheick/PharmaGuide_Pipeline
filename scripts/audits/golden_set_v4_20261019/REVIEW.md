@@ -2,14 +2,14 @@
 
 **Status: APPROVED by Sean on 2026-10-19 (D1 schema, D2 ±5 tier band, D3 the 18 additions,
 D4 211448 class unchanged, D5 F1/F2 kept as failing expectations) and APPLIED to
-`scripts/data/canary_products.json` (schema 2.0.0, 53 canaries).**
+`scripts/data/canary_products.json` (schema 1.1.0, 53 canaries).**
 
 Apply evidence:
 - `proposal.py --apply`: 517 checks, 2 failures (F1 and F2, as approved).
 - `data_batch.py check --since origin/main --expect canaries[0..52]`: 53 entries changed (35 modified,
   18 added), 0 problems. No pre-existing curated field value changed; the original order is kept.
-- `scripts/test.sh fast test_v4_canary_coverage.py test_iqm_vinpocetine_entry.py test_ci_skip_guard.py`:
-  65 passed, 1 skipped (the catalog-presence test skips without a local build).
+- `scripts/test.sh fast test_pipeline_integrity.py test_v4_canary_coverage.py test_iqm_vinpocetine_entry.py test_ci_skip_guard.py`:
+  85 passed, 1 skipped (the catalog-presence test skips without a local build).
 - With `PG_RELEASE_CANDIDATE_ROOT=reports/dose_v41_release_audit_20261019/catalog_candidate`,
   `test_v4_canary_coverage.py` ran 13 tests and all passed, including that test (all 53 are in the
   candidate catalog).
@@ -38,7 +38,7 @@ an expectation.
      so the dashboard can evaluate them without its own copy of the logic);
    - the movement-reason vocabulary.
 
-   It also bumps `schema_version` 1.0.0 → 2.0.0, adds the primary class `b_complex` and sets
+   It also bumps `schema_version` 1.0.0 → 1.1.0 (namespace 1 is fixed by `reference_data_schema.py::_SCHEMA_V1_FILES`; the fields are additive), adds the primary class `b_complex` and sets
    `last_updated` to 2026-10-19.
 4. **Preserved:** every curated field, including `v3_shipped_*`, the legacy B5/dose-route
    fields, and `expected_safety_verdict` on 294063. New entries carry

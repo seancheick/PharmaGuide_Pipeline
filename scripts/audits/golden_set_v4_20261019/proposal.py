@@ -453,7 +453,7 @@ def build(doc: dict, products: dict, tiers: list) -> dict:
         c["expected_pillar_invariants"] = inv
         c["allowed_movement_reasons"] = DEFAULT_REASONS + [r for r in extra if r not in DEFAULT_REASONS]
     md = out["_metadata"]
-    md["schema_version"] = "2.0.0"
+    md["schema_version"] = "1.1.0"
     md["last_updated"] = "2026-10-19"
     if "b_complex" not in md["primary_classes"]:
         md["primary_classes"].append("b_complex")
