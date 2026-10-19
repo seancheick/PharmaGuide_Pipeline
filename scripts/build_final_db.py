@@ -7914,6 +7914,12 @@ def build_detail_blob(
             "conversion_evidence": safe_list(rda_ul_data.get("conversion_evidence")),
             "safety_flags": exported_safety_flags,
             "ul_review_flags": safe_list(rda_ul_data.get("ul_review_flags")),
+            # Children are not the scored population; a child limit the label's
+            # stated children exceed is shown as its own labelled note.
+            "child_ul_screen": [
+                note for note in safe_list(rda_ul_data.get("child_ul_screen"))
+                if isinstance(note, dict) and note.get("status") == "over_limit"
+            ],
             "special_use_flags": safe_list(rda_ul_data.get("special_use_flags")),
             "has_over_ul": bool(exported_safety_flags),
         }

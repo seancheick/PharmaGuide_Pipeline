@@ -12,7 +12,9 @@ field confirmations and the approval stay the reviewer's clicks in the console.
     save   S01             save label.json as the review, after checks
     verify S01             read back what the server holds; READY or NOT ready
 
-Work lives in ``$PG_SUBMISSION_WORKDIR`` (default /tmp/pg_submissions/<alias>).
+Work lives in ``$PG_SUBMISSION_WORKDIR`` (default ~/pg_submissions/<alias>, a
+private folder that survives a reboot; work an older version left in
+/tmp/pg_submissions is moved there on the first run, never over existing work).
 Output names aliases only; submission ids, user ids and URLs are never printed.
 
 Account: until a machine reviewer exists, requests run as the reviewer named
@@ -26,6 +28,7 @@ import argparse
 import hashlib
 import json
 import os
+import shutil
 import stat
 import sys
 from pathlib import Path
@@ -55,7 +58,8 @@ PROVIDER = "agent"
 #: Bump when the product-submissions-prep skill's reading rules change.
 PROMPT_VERSION = "product-submissions-prep/1"
 RETENTION = "hosted-ok-sean-2026-09-27"
-WORK = Path(os.environ.get("PG_SUBMISSION_WORKDIR", "/tmp/pg_submissions"))
+LEGACY_WORK = Path("/tmp/pg_submissions")  # where work lived before 2026-10-19; a reboot wipes it
+WORK = Path(os.environ.get("PG_SUBMISSION_WORKDIR") or Path.home() / "pg_submissions")
 EDGE_PATH = "/functions/v1/review-product-submissions"
 MAX_JSON = 16 * 1024 * 1024
 MAX_PHOTO = 15 * 1024 * 1024
@@ -158,6 +162,32 @@ def _private_dir(path: Path) -> Path:
     path.mkdir(mode=0o700, parents=True, exist_ok=True)
     path.chmod(0o700)
     return path
+
+
+def adopt_legacy_workdir(new: Path, legacy: Path) -> tuple[list[str], list[str]]:
+    """Move work an earlier version left in ``legacy`` into ``new``.
+
+    Returns (moved, kept). Never overwrites: a name already in ``new`` stays in
+    ``legacy`` and is reported as kept. Skips a symlinked or foreign-owned
+    ``legacy`` (it is a shared, world-writable place) and symlinked entries.
+    """
+    if legacy.is_symlink() or not legacy.is_dir() or legacy.stat().st_uid != os.getuid():
+        return [], []
+    _private_dir(new)
+    moved, kept = [], []
+    for entry in sorted(legacy.iterdir()):
+        if entry.is_symlink():
+            continue
+        if (new / entry.name).exists() or (new / entry.name).is_symlink():
+            kept.append(entry.name)
+        else:
+            shutil.move(str(entry), str(new / entry.name))
+            moved.append(entry.name)
+    try:
+        legacy.rmdir()  # only succeeds when nothing was kept
+    except OSError:
+        pass
+    return moved, kept
 
 
 class Reviewer:
@@ -464,6 +494,19 @@ def is_blank_label(payload: Any) -> bool:
     return payload in (None, 0, False)
 
 
+def recorded_label_disagreements(saved: Any, extraction: Mapping[str, Any]) -> list[str]:
+    """Where the saved review departs from the extraction the server recorded.
+
+    The same rule `save` applies to label.json, applied to what the server
+    holds: additions the reading cannot carry are fine, a changed or missing
+    reading value is not.
+    """
+    draft = extraction.get("draft_payload")
+    if not draft:
+        return ["no recorded extraction"]
+    return reading_changes(to_manual_label(draft).payload, saved)
+
+
 def save_refusal(draft: dict, label: dict, submission: dict, review: dict) -> str | None:
     """Why `save` must not write this label as the review, or None."""
     if draft.get("evidence_revision") != submission.get("evidence_revision"):
@@ -545,10 +588,10 @@ def cmd_verify(api: Reviewer, alias: str, model: str | None) -> int:
     saved = review.get("draft") or {}
     submission = api.submission(submission_id)
     latest = (submission.get("extractions") or [{}])[0]
-    local_path = WORK / alias / "label.json"
+    disagreements = (recorded_label_disagreements(saved["payload"], latest)
+                     if saved.get("payload") else ["no saved review"])
     checks = {
-        "saved review matches label.json": bool(saved.get("payload")) and local_path.exists()
-            and saved["payload"] == json.loads(local_path.read_text()),
+        "saved review agrees with the recorded extraction": not disagreements,
         "saved review is current (not superseded)": saved.get("superseded") is False,
         "server diagnostics: 0": bool(saved.get("payload")) and not (
             api.call("validate_label", payload=saved["payload"]).get("diagnostics") or []),
@@ -560,6 +603,8 @@ def cmd_verify(api: Reviewer, alias: str, model: str | None) -> int:
     }
     for label, passed in checks.items():
         print(f"  {'ok  ' if passed else 'FAIL'} {label}")
+    for path in disagreements[:10]:
+        print(f"       differs from the recorded reading: {path}")
     findings = (latest.get("draft_payload") or {}).get("discrepancies") or []
     for finding in findings:
         print(f"  note finding {finding['severity']}: {finding['code']}")
@@ -591,6 +636,12 @@ def main(argv: list[str] | None = None) -> int:
     verify.add_argument("alias")
     verify.add_argument("--model", help="also require the latest draft to be this model's")
     args = parser.parse_args(argv)
+    if not os.environ.get("PG_SUBMISSION_WORKDIR"):
+        moved, kept = adopt_legacy_workdir(WORK, LEGACY_WORK)
+        if moved:
+            print(f"moved earlier work from {LEGACY_WORK} to {WORK}: {', '.join(moved)}")
+        if kept:
+            print(f"left in {LEGACY_WORK} (already present in {WORK}): {', '.join(kept)}")
     if args.command == "sheet":
         cmd_sheet(args.alias)  # local only: no account needed
         return 0

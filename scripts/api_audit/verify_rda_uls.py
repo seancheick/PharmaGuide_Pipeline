@@ -248,25 +248,25 @@ DRI_REFERENCE = {
     "Folate": {
         "unit": "mcg DFE",
         # UL stored as DFE equivalents because the pipeline converts folic acid → DFE
-        # before UL comparison. Authoritative UL: 1000 mcg folic acid × 1.667 = 1667 DFE
-        # (14-18: 800 mcg folic acid × 1.667 = 1334 DFE)
+        # before UL comparison. Authoritative UL: 1000 mcg folic acid × 1.7 = 1700 DFE
+        # (14-18: 800 mcg folic acid × 1.7 = 1360 DFE)
         "groups": {
-            ("Male", "14-18"): (400, 1334),
-            ("Male", "19-30"): (400, 1667),
-            ("Male", "31-50"): (400, 1667),
-            ("Male", "51-70"): (400, 1667),
-            ("Male", "71+"): (400, 1667),
-            ("Female", "14-18"): (400, 1334),
-            ("Female", "19-30"): (400, 1667),
-            ("Female", "31-50"): (400, 1667),
-            ("Female", "51-70"): (400, 1667),
-            ("Female", "71+"): (400, 1667),
-            ("Pregnancy", "14-18"): (600, 1334),
-            ("Pregnancy", "19-30"): (600, 1667),
-            ("Pregnancy", "31-50"): (600, 1667),
-            ("Lactation", "14-18"): (500, 1334),
-            ("Lactation", "19-30"): (500, 1667),
-            ("Lactation", "31-50"): (500, 1667),
+            ("Male", "14-18"): (400, 1360),
+            ("Male", "19-30"): (400, 1700),
+            ("Male", "31-50"): (400, 1700),
+            ("Male", "51-70"): (400, 1700),
+            ("Male", "71+"): (400, 1700),
+            ("Female", "14-18"): (400, 1360),
+            ("Female", "19-30"): (400, 1700),
+            ("Female", "31-50"): (400, 1700),
+            ("Female", "51-70"): (400, 1700),
+            ("Female", "71+"): (400, 1700),
+            ("Pregnancy", "14-18"): (600, 1360),
+            ("Pregnancy", "19-30"): (600, 1700),
+            ("Pregnancy", "31-50"): (600, 1700),
+            ("Lactation", "14-18"): (500, 1360),
+            ("Lactation", "19-30"): (500, 1700),
+            ("Lactation", "31-50"): (500, 1700),
         },
     },
     "Vitamin B12": {

@@ -82,7 +82,7 @@ def test_highest_ul_populated_for_ul_defined_nutrients() -> None:
         "Magnesium": 350,                   # mg (supplemental only)
         "Zinc": 40,                         # mg
         "Vitamin B6 (Pyridoxine)": 100,     # mg
-        "Vitamin B9 (Folate)": 1667,        # mcg DFE (1,000 mcg DFE ÷ 0.6 bioequivalence)
+        "Vitamin B9 (Folate)": 1700,        # FDA label DFE (1,000 mcg folic acid x 1.7)
         "Vitamin B3 (Niacin)": 35,          # mg (supplemental)
     }
 

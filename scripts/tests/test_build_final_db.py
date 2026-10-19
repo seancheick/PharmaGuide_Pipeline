@@ -1746,6 +1746,25 @@ def test_detail_blob_preserves_rda_special_use_flags():
     assert blob["rda_ul_data"]["has_over_ul"] is False
 
 
+def test_detail_blob_exports_child_limit_notes_apart_from_adult_flags():
+    """Child limits reach the app on their own labelled list, never as adult UL flags."""
+    enriched = make_enriched()
+    over = {"nutrient": "Zinc", "canonical_id": "zinc", "status": "over_limit", "amount": 15.0,
+            "unit": "mg", "ul": 7, "pct_ul": 214.29,
+            "ul_population": {"id": "pediatric", "label": "children 1-3"},
+            "warning": "Provides 15 mg per day on its own, 214% of the upper limit for children 1-3 of 7 mg, "
+                       "before other sources are counted."}
+    unknown = {"nutrient": "Calcium", "canonical_id": "calcium", "status": "not_assessable",
+               "reason": "pediatric_ul_row_missing_for_stated_age"}
+    enriched["rda_ul_data"]["child_ul_screen"] = [over, unknown]
+
+    blob = build_detail_blob(enriched, make_scored())
+
+    assert blob["rda_ul_data"]["child_ul_screen"] == [over]
+    assert blob["rda_ul_data"]["safety_flags"] == []
+    assert blob["rda_ul_data"]["has_over_ul"] is False
+
+
 def test_detail_blob_excludes_gate_ineligible_exposure_rows_from_consumer_rda_surface():
     enriched = make_enriched()
     unsupported = {

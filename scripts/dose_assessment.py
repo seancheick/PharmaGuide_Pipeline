@@ -42,6 +42,7 @@ _NOT_DISTINCT_REASONS = {
     "form_component_of_declared_total",
     "compound_duplicate_row",
     "vitamin_a_components_own_ul",
+    "folate_components_own_ul",
 }
 _NO_UL_REASONS = {
     "not_ul_applicable",
@@ -502,10 +503,7 @@ def build_dose_assessment(
             conversion_status = CONVERSION_FAILED
 
         normalized_ul_status = str(ul_status or "").strip().lower()
-        if reason == "pediatric_reference_gap":
-            assessment_status = ASSESSMENT_ERROR
-            readiness = READINESS_INCOMPLETE
-        elif reason in _NOT_DISTINCT_REASONS or role == "form_component":
+        if reason in _NOT_DISTINCT_REASONS or role == "form_component":
             assessment_status = NOT_DISTINCT_EXPOSURE
             readiness = READINESS_NOT_APPLICABLE
         elif (

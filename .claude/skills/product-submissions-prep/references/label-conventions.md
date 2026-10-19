@@ -62,8 +62,12 @@ sources + region), not bare objects/strings: `record` refuses a bare one. Only
   value that is not a whole GTIN is refused.
 - **serving.size**: the phrase as printed (`1 Tablet`). **serving.amount**:
   the same as a number plus unit (`{"value": 1, "unit_text": "Tablet"}`) when
-  it is printed that plainly. **serving.servings_per_container**: as printed
-  (`250`, `about 60`). **serving.basis_text**: the serving line verbatim.
+  it is printed that plainly. Only the amount crosses into `servingSizes`
+  (`to_manual_label.py`): a size with no amount is listed in `unresolved.json`
+  as free text and the parsing is yours to add in `label.json`.
+  **serving.servings_per_container**: as printed (`250`, `about 60`).
+  **serving.basis_text**: the serving line verbatim. It is context for the
+  reviewer's crop and the grounding check; it never reaches `label.json`.
 - **ingredient_rows**: one row per printed line, in printed order.
   - `display_name`: the whole printed name, verbatim, including its
     parenthetical: `Vitamin C (as ascorbic acid)`,
@@ -129,7 +133,9 @@ names, never change a reading value (fix the reading and record again).
   enricher's delivery path reads `langualCodeDescription` only.
 - **productType**: leave it out. It is a DSLD taxonomy call the pipeline only
   cross-checks.
-- **servingSizes**: if the reading only had the phrase, add
+- **servingSizes**: when the reading had a `serving.amount` the entry is
+  already there, unit as printed (`Capsules`); leave it. Only if the reading
+  had just the phrase, add
   `{"minQuantity": 1, "maxQuantity": 1, "unit": "Tablet(s)", "order": 1}` from
   what is printed. Add `minDailyServings`/`maxDailyServings` **only when the
   directions print a daily amount** ("Take one tablet daily" → 1/1; "1 to 2
