@@ -56,7 +56,6 @@ _BOTANICAL_PATH = _DATA_DIR / "botanical_ingredients.json"
 _STANDARDIZED_BOTANICALS_PATH = _DATA_DIR / "standardized_botanicals.json"
 _THERAPEUTIC_DOSING_PATH = _DATA_DIR / "rda_therapeutic_dosing.json"
 _FORM_VOCAB_PATH = _DATA_DIR / "form_keywords_vocab.json"
-_BANNED_PATH = _DATA_DIR / "banned_recalled_ingredients.json"
 _HARMFUL_ADDITIVES_PATH = _DATA_DIR / "harmful_additives.json"
 _LITERATURE_EVIDENCE_PATH = _DATA_DIR / "literature_evidence_records.json"
 
@@ -204,9 +203,12 @@ OWNER_CAPABILITY_MAP: Dict[str, OwnerCapability] = {
     ),
     "safety_boundaries": OwnerCapability(
         owner_id="safety_boundaries",
-        data_source="data/banned_recalled_ingredients.json; data/harmful_additives.json",
-        facts_owned=("is_banned", "is_recalled", "is_high_risk", "safety_severity", "disqualifies_evidence"),
-        capability_description="Regulatory safety disqualification and toxicological boundaries",
+        data_source="Cleaner row roles (is_excipient, source_section, cleaner_row_role)",
+        facts_owned=("is_excipient", "cleaner_row_role"),
+        capability_description=(
+            "Excipient and inactive-row boundaries. A banned_recalled listing is charged by "
+            "Safety and never removes an active from Evidence review"
+        ),
     ),
 }
 
@@ -576,30 +578,6 @@ def _load_literature_evidence() -> Dict[str, Dict[str, Any]]:
     return idx
 
 
-@lru_cache(maxsize=1)
-def _load_safety_disqualifications() -> Set[str]:
-    """Load banned or recalled ingredient IDs."""
-    banned: Set[str] = set()
-    raw = json.loads(_BANNED_PATH.read_text(encoding="utf-8"))
-    for entry in raw.get("ingredients", []):
-        status = _norm(entry.get("status"))
-        if status in {"banned", "recalled", "high_risk"}:
-            cid = _norm(entry.get("canonical_id") or entry.get("id"))
-            if cid == "risk_garcinia_cambogia":
-                # Evaluated via literature evidence (reviewed null/unfavorable on weight loss)
-                continue
-            if cid:
-                banned.add(cid)
-                if cid.upper().startswith("BANNED_") or cid.upper().startswith("ADULTERANT_") or cid.upper().startswith("ADD_"):
-                    banned.add(_norm(cid.split("_", 1)[1]))
-            sname = _norm(entry.get("standard_name"))
-            if sname:
-                banned.add(sname)
-            for a in entry.get("aliases", []):
-                banned.add(_norm(a))
-    return banned
-
-
 # ============================================================================
 # Universal Evidence Resolver Core
 # ============================================================================
@@ -761,22 +739,9 @@ def resolve_evidence_for_row(
             blocking_reasons=["blend_header_lacks_constituent_disclosure"],
         )
 
-    # 2. Check safety boundaries
-    banned_set = _load_safety_disqualifications()
-    if canonical in banned_set or norm_name in banned_set:
-        matched_owners.append("safety_boundaries")
-        owner_facts["safety_boundaries"] = {"disqualified": True, "reason": "regulatory_ban_or_recall"}
-        return EvidenceResolution(
-            canonical_id=canonical,
-            ingredient_name=name,
-            matched_owners=matched_owners,
-            disposition=EvidenceDisposition.NOT_EFFICACY_RELEVANT.value,
-            points_eligible=False,
-            applicability_status="safety_disqualified",
-            reason_code="banned_or_recalled_ingredient",
-            owner_facts=owner_facts,
-            blocking_reasons=["regulatory_safety_disqualification"],
-        )
+    # A banned_recalled listing is not an Evidence decision: Safety charges the
+    # hazard and the product status carries it. The active is still this
+    # label's Evidence subject and is resolved like any other.
 
     # 3. Check Identity & IQM recognition
     iqm = _load_iqm()

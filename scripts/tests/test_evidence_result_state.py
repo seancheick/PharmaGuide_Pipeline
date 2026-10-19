@@ -240,3 +240,62 @@ def test_a_coverage_gap_zero_never_reads_as_a_reviewed_weakness():
         reason = _zero_reason(state).lower()
         assert "limited" not in reason, state
         assert "did not show" not in reason, state
+
+
+def _owner_state(product):
+    """The state the generic module records (owner-scoped, primary floor on)."""
+    return score_evidence(product, apply_primary_floor=True, owner_scoped=True)["metadata"]["evidence_result_state"]
+
+
+def test_safety_listed_single_active_is_not_nothing_to_assess():
+    """F1 (canary 294063): a safety-listed active is still the label's Evidence
+    subject. Safety charges the hazard; Evidence reports the review it has,
+    here none, so the result is a coverage gap rather than "nothing to assess"."""
+    vinpocetine = {
+        "name": "Vinpocetine",
+        "standard_name": "Vinpocetine",
+        "canonical_id": "vinpocetine",
+        "mapped": True,
+        "quantity": 20.0,
+        "unit": "mg",
+        "cleaner_row_role": "active_scorable",
+        "source_section": "active",
+    }
+    product = _product(product_name="Vinpocetine 20 mg", ingredients=[vinpocetine], matches=[])
+    evidence = score_evidence(product, apply_primary_floor=True, owner_scoped=True)
+    assert evidence["metadata"]["evidence_owner_canonicals"] == ["vinpocetine"]
+    assert evidence["metadata"]["evidence_result_state"] == "clinical_review_not_covered"
+    assert evidence["score"] == 0.0
+
+
+def test_product_level_owner_is_not_nothing_to_assess():
+    """The resolver reviews the owner's subject row (a label-level projection);
+    the "nothing to assess" decision reads that same row set, never the
+    narrower label-row fallback that drops the excipient-flagged mirror row."""
+    mirror = {
+        "name": "Soya Lecithin",
+        "cleaner_row_role": "active_scorable",
+        "source_section": "active",
+        "is_excipient": True,
+        "quantity": 1360.0,
+        "unit": "mg",
+    }
+    projection = {
+        "name": "lecithin",
+        "standard_name": "Lecithin",
+        "canonical_id": "lecithin",
+        "mapped": True,
+        "cleaner_row_role": "active_scorable",
+        "source_section": "product",
+        "quantity": 1360.0,
+        "unit": "mg",
+    }
+    product = _product(product_name="Natural Soya Lecithin 1360 mg", ingredients=[mirror], matches=[])
+    product["ingredient_quality_data"]["ingredients_scorable"] = [projection]
+    # Lecithin has reviewed literature, but no clinical match applies to this
+    # label (zero points): a finished review that does not apply here.
+    assert _owner_state(product) == "applicability_unestablished"
+
+
+def test_no_rows_at_all_stays_nothing_to_assess_when_owner_scoped():
+    assert _owner_state(_product(ingredients=[], matches=[])) == "no_assessable_actives"

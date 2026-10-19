@@ -1,7 +1,7 @@
 {
   "_metadata": {
     "schema_version": "1.1.0",
-    "description": "Curated 35-product v4 canary set spanning 14 primary classes (single_nutrient, multivitamin, prenatal_multi, probiotic, fish_oil, herbal_branded_extract / unstandardized / marker_pct, sports_opaque / transparent, specialty, greens_superfood, blocked_verdict, manufacturer_signal_only) and all 4 B5 router class routes (probiotic / multi_or_prenatal / sports_active / generic). Each entry encodes expected_b5_class, expected_dose_route_v4, edge_cases, and v3 shipped score/verdict for regression baselining.",
+    "description": "Curated v4 canary set spanning the declared primary classes and router routes. Each entry records source-owned route, assessment/safety expectations, quality tier bands and pillar invariants; v3 shipped fields retain historical context only.",
     "purpose": "v4 dose + B5 class-aware + cert coverage canary set. Used by test_v4_canary_coverage.py to guarantee every product class + edge case the v4 design depends on is exercised on real shipped data. Add a new entry before adding a new class to the scorer; remove an entry only with a decision log note. Source of truth for canary-based regression review and the score-delta report.",
     "last_updated": "2026-10-19",
     "retired_canaries": [
@@ -45,8 +45,8 @@
     "notes": "expected_b5_class is the v4-correct routing decision. Where the current scorer disagrees, the discrepancy is captured in edge_cases as 'router_disagreement_*' so test_v4_canary_coverage flags (not fails) until the router fix lands.",
     "golden_set": {
       "purpose": "v4 golden set: each canary states expected route, statuses, a tier band and pillar invariants. The Coverage & Calibration dashboard raises a finding when a canary breaks one; a break is fixed at its owner or explained by an allowed movement reason, never by editing the expectation to the current score.",
-      "reviewed_against": "Score stage run 20261019T070203540018Z (quality_score.json 1.29.1-dose-v41-omega-integration), main e6f2dd103.",
-      "approval": "Approved by Sean 2026-10-19: D1 schema, D2 +/-5 tier band, D3 the 18 additions, D4 211448 class unchanged, D5 F1/F2 kept as failing expectations (scripts/audits/golden_set_v4_20261019/REVIEW.md).",
+      "reviewed_against": "53 golden cases independently evaluated from bounded589 raw Clean/Enrich/Score/blob capture on runtime74f905b79 (October19); source-grounded F1/F2 and PR169 child-UL expectation corrections. This is not a rebuilt full catalog.",
+      "approval": "Approved by Sean 2026-10-19: D1 schema, D2 +/-5 tier band, D3 the 18 additions, D4 211448 class unchanged, D5 F1/F2 kept as failing expectations (scripts/audits/golden_set_v4_20261019/REVIEW.md). Sean authorized integrating this branch before his pipeline run on October19; corrected expectations follow the already-approved identity/reference/adult-scope owners, without new scoring calibration.",
       "expectation_owners": {
         "expected_v4_module": "scripts/scoring_input_contract.py::build_scoring_classification (route_decision.module, ROUTE_CLASSIFIER_VERSION 1.3.2) -> artifact _v4_module",
         "expected_quality_score_status": "scripts/scoring_v4/quality_score.py::assemble_quality_score; scripts/scoring_v4/config/quality_score.json suppression",
@@ -487,7 +487,7 @@
           ]
         },
         "unresolved_dose_safety_hold": {
-          "rule": "Material but unresolved dose safety (e.g. no reference for the label's age band) holds the product from scoring instead of guessing.",
+          "rule": "Material but unresolved applicable dose safety holds a product from scoring rather than guessing. Child-only information does not change the adult catalog assessment.",
           "owner": "scripts/dose_assessment.py (pediatric_reference_gap); scripts/scoring_v4/dose_safety.py state material_but_unresolved",
           "checks": [
             [
@@ -904,19 +904,22 @@
       "expected_dose_route_v4": "multi_panel",
       "edge_cases": [
         "sugar_penalty_gummy",
-        "kids_appropriate_dosing"
+        "adult_catalog_child_information_separate"
       ],
       "v3_shipped_score": 55.1,
       "v3_shipped_verdict": "SAFE",
-      "notes": "Gummies → sugar content drives B1_dietary_sugar penalty; kids-specific RDAs differ from adults. Tests v4 age-stratified dose curves. Tracks the children’s multivitamin gummy archetype, not product continuity for any single brand. Historical anchor (rotated out as catalog evolved): 178559 Spring Valley Children’s Multivitamin Gummies.",
+      "notes": "Children's gummy archetype. The general catalog assessment uses ordinary-adult references for every scanner; child-limit information is separate and never changes the adult quality score or safety status. The prior pediatric-reference score hold was removed by the approved child-UL correction (PR169). The original label directions/amounts and sugar assessment are unchanged; this score is not an assessment of suitability for a child.",
       "expected_v4_module": "multi_or_prenatal",
-      "expected_quality_score_status": "not_scored",
-      "expected_quality_assessment_status": "partial",
-      "expected_product_safety_status": "caution",
-      "expected_quality_tier_band": null,
+      "expected_quality_score_status": "scored",
+      "expected_quality_assessment_status": "complete",
+      "expected_product_safety_status": "no_known_catalog_concern",
+      "expected_quality_tier_band": [
+        "Good",
+        "Very good"
+      ],
       "expected_pillar_invariants": [
-        "not_scored_has_no_number",
-        "unresolved_dose_safety_hold"
+        "evidence_authority_assessed",
+        "verification_unknown_neutral"
       ],
       "allowed_movement_reasons": [
         "scoring_policy_version_change",
@@ -2354,22 +2357,23 @@
       "expected_dose_route_v4": "herbal_marker_dose",
       "edge_cases": [
         "branded_extract_read_as_blend_header",
-        "unfinished_identity_partial"
+        "single_constituent_blend_row_resolved_f2"
       ],
-      "notes": "Prosterol (saw palmetto extract) 320 mg is read as a blend header (BLEND_GENERAL); the assessment is honestly partial, but see finding F2.",
+      "notes": "Prosterol (saw palmetto CO2 extract) 320 mg is filed by DSLD as a one-constituent blend. Before F2 the cleaner read it as a blend header (BLEND_GENERAL, partial, 31.0). F2 (claude/hungry-bell-fa1b07) resolves it to saw_palmetto, and these expectations pin the resolved behaviour.",
       "v3_shipped_score": null,
       "v3_shipped_verdict": null,
       "expected_v4_module": "generic",
       "expected_quality_score_status": "scored",
-      "expected_quality_assessment_status": "partial",
+      "expected_quality_assessment_status": "complete",
       "expected_product_safety_status": "no_known_catalog_concern",
       "expected_quality_tier_band": [
         "Poor",
-        "Poor"
+        "Needs improvement"
       ],
       "expected_pillar_invariants": [
-        "unfinished_identity_marks_partial",
         "evidence_single_active_not_nothing_to_assess",
+        "evidence_applicable_assessed",
+        "dose_unbenchmarked_neutral",
         "verification_unknown_neutral"
       ],
       "allowed_movement_reasons": [

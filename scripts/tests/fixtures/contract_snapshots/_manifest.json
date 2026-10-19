@@ -1124,6 +1124,23 @@
         327416
       ],
       "source_commit": "4148a7abb"
+    },
+    {
+      "date": "2026-10-19",
+      "notes": "F1 (golden-set canary 294063): a banned_recalled listing no longer makes an active 'not efficacy relevant' in evidence_resolver. Nutricost Yohimbe Bark Extract's only Evidence owner is yohimbe, which has no reviewed evidence record, so Evidence moves from no_assessable_actives (nothing to assess) to clinical_review_not_covered and quality_assessment_status from complete to partial. Score 49.1, tier, pillars, CAUTION safety status and its reason are unchanged. Complete 33 raw-canary check: this was the only drift. Refreshed from raw only.",
+      "dsld_ids": [
+        270831
+      ],
+      "source_commit": "bd3470416"
+    },
+    {
+      "date": "2026-10-19",
+      "notes": "Reference-eligibility root correction74f905b79: completed-neutral non-nutritional study amounts no longer earn RDA/AI panel coverage. Raw288344 removes unsupported lycopene reference10mg;239600 removes unsupported inositol reference2000mg. Only total-score mirrors change (79.5\u219280.2 and76.2\u219277.3); routes, tier, status, safety, other pillars, quantities and identities remain source-grounded. Final589raw replay measures this class with officialRDA/AI and independentUL controls. Refreshed these two from raw only; other31fixtures unchanged by this correction.",
+      "dsld_ids": [
+        288344,
+        239600
+      ],
+      "source_commit": "74f905b79"
     }
   ]
 }

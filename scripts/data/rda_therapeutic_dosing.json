@@ -3,7 +3,7 @@
     "description": "Therapeutic dosing ranges for clinical efficacy validation",
     "purpose": "Provide therapeutic dosing ranges for dietary supplement ingredients not covered by traditional RDA/UL standards.",
     "schema_version": "5.0.1",
-    "last_updated": "2026-10-18",
+    "last_updated": "2026-10-19",
     "total_entries": 43,
     "data_source": "Clinical research, meta-analyses, standard therapeutic guidelines"
   },
@@ -315,29 +315,34 @@
       "common_use": "Prostate health (BPH), hair loss support",
       "typical_dosing_range": "320",
       "common_serving_size": "320",
-      "upper_limit": "640",
-      "upper_limit_notes": "Standardized to 85-95% fatty acids. Doses above 320mg show no additional benefit in studies.",
+      "upper_limit": null,
+      "upper_limit_notes": "Safety upper limit not established. 960 mg/day was the highest dose studied (CAMUS, 72 weeks) without clearly attributable adverse effects; the EMA monograph reports no overdose cases. 320 mg/day is the studied regimen, not an efficacy threshold.",
       "evidence_tier": 1,
       "id": "saw_palmetto_extract",
       "references": [
-        "42157952"
+        "42157952",
+        "37345871",
+        "21954478"
       ],
       "reference_semantics": {
-        "reference_type": "no_benchmark",
+        "reference_type": "discrete_studied_regimen",
         "scope": "General catalog Dose for this exact source identity; source-specific study facts and established safety references remain separate.",
-        "preparation": "Only the exact preparations described in the reviewed source facts: 42157952 review reports heterogeneous formulations/doses; signals more consistent for hexanic lipidosterolic and beta-sitosterol-enriched preparations in benign prostate disorders. General benchmark conclusion:the cited source(s) do not establish one universal dose minimum, bounded optimum or safety upper limit for every preparation represented by this broad entry. This general-no-benchmark assessment is completed; retain known study regimens separately.",
+        "preparation": "Only the exact preparations described in the reviewed source facts: EMA well-established use is the hexane soft extract (DER 7-11:1) at 320 mg once daily or 160 mg twice daily; EMA traditional use is the ethanol 90-96% soft extract at 320 mg once daily; CAMUS used an ethanolic extract at 320, 640 and 960 mg/day; the usual trial dose is 320 mg/day (37345871). No monograph covers CO2 extracts or whole-berry powder. General benchmark conclusion: the cited sources do not establish one universal dose minimum, bounded optimum or safety upper limit for every preparation represented by this broad entry. This general-no-benchmark assessment is completed; retain known study regimens separately.",
         "purpose": "Prostate health (BPH), hair loss support",
         "population": "Only source-specific cohorts described in rationale; no general efficacy dose for unstudied populations, pregnancy or lactation is inferred.",
         "exposure_basis": "minimum_directed_daily_use",
         "units": "mg",
         "curve": "completed_no_benchmark_neutral",
         "source_ids": [
-          "https://pubmed.ncbi.nlm.nih.gov/42157952/"
+          "https://pubmed.ncbi.nlm.nih.gov/42157952/",
+          "https://pubmed.ncbi.nlm.nih.gov/37345871/",
+          "https://pubmed.ncbi.nlm.nih.gov/21954478/",
+          "https://www.ema.europa.eu/en/documents/herbal-monograph/final-european-union-herbal-monograph-serenoa-repens-w-bartram-small-fructus_en.pdf"
         ],
-        "rationale": "42157952 review reports heterogeneous formulations/doses; signals more consistent for hexanic lipidosterolic and beta-sitosterol-enriched preparations in benign prostate disorders. General benchmark conclusion:the cited source(s) do not establish one universal dose minimum, bounded optimum or safety upper limit for every preparation represented by this broad entry. This general-no-benchmark assessment is completed; retain known study regimens separately. Unsupported numerical inference rejected: 320mg exact regimen and upper bound need underlying trial/form-specific receipt; review explicitly seeks optimal dosing clarification. The completed general Dose conclusion uses existing PharmaGuide neutral policy, not clinical approval of a numerical benchmark.",
+        "rationale": "320 mg/day (160 mg twice daily) is a discrete studied regimen and the EMA hexane-extract posology, not an efficacy threshold. 37345871 (Cochrane 2023, 27 trials, 4,656 men): Serenoa repens alone provides little to no benefit for BPE-related LUTS, with no hexanic vs non-hexanic difference. 21954478 (CAMUS): increasing doses did not reduce LUTS more than placebo at any dose up to 960 mg/day, without clearly attributable adverse effects. 42157952 (2026 review): ideal dosage not established. General benchmark conclusion: the cited sources do not establish one universal dose minimum, bounded optimum or safety upper limit for every preparation represented by this broad entry. Unsupported numerical inference rejected: 320 mg/day as a minimum effective dose, and 640 mg/day as an upper limit. The completed general Dose conclusion uses existing PharmaGuide neutral policy, not clinical approval of a numerical benchmark.",
         "owner": "scripts/data/rda_therapeutic_dosing.json::saw_palmetto_extract",
-        "review_date": "2026-10-18",
-        "approval_status": "approved_existing_neutral_2026_10_18"
+        "review_date": "2026-10-19",
+        "approval_status": "approved_existing_neutral_2026_10_19"
       }
     },
     {

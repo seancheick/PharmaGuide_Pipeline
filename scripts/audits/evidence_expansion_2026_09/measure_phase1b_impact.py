@@ -27,8 +27,8 @@ ROOT = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / "scripts"))
 
+from scoring_input_contract import get_assessable_evidence_ingredients
 from scoring_v4.modules.generic_evidence import (
-    _assessable_active_ingredients,
     _is_nutrition_fact_declaration,
     score_evidence,
 )
@@ -193,7 +193,7 @@ def run_measurement(products_root: Path) -> dict:
                     })
 
             # Check if real source ingredients remain
-            remaining_assessable = _assessable_active_ingredients(prod)
+            remaining_assessable = get_assessable_evidence_ingredients(prod)
             if remaining_assessable:
                 products_retaining_source_actives.append({
                     "dsld_id": dsld_id,

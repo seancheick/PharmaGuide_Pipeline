@@ -352,3 +352,13 @@ Siliphos, Celadrin and others) are not canaries.
 5. Run `data_batch.py check scripts/data/canary_products.json --since HEAD --expect canaries[51]`.
 6. Run the focused canary tests and commit.
 7. After the next corpus run, `proposal.py --evaluate-applied` should report 0 failures (it reads the applied file as it is; today it reports exactly F1 and F2).
+
+## Integrated follow-up qualification — October19
+
+Sean explicitly authorized integrating this branch before his next pipeline run. The earlier hold-until-release instruction is superseded. Tables/evaluation files above are the historical proposal on e6f2dd103, not current operator instructions or new-catalog qualification.
+
+F1 and F2 were independently audited together with main. The activated unsupported CoQ10 panel anchor was corrected at RDAULCalculator.compute_nutrient_adequacy through existing scoring_eligible; reviewed non-nutritional study amounts cannot earn RDA/AI panel credit. Official references and upper-limit handling remain unchanged. The bounded final589raw capture on74f905b79 covers all known F1 movers, F2 cohort, all distinct affected panel-reference combinations, golden cases and controls.93numeric movers/19tier crossings/111assessment-completeness changes are explained;0route,quality-score-status or safety changes. The stored fullF1 scorer-only receipt15426products has0numeric/safety-gate changes; no new full catalog is claimed.
+
+Re-anchored exactly two golden records:269286 resolves its real saw-palmetto identity (prepared F2 correction);178520 uses the approved ordinary-adult catalog scope rather than a pediatric-reference score hold (PR169). All53cases/520checks pass on current raw outputs. No benchmark, scoring weight or new calibration was approved here. Existing catalog-presence/live-or-explicit-quarantine checks remain separate from raw behavioral evaluation.
+
+Three evaluator defects were reproduced test-first and fixed: missing required paths fail instead of satisfying negation/null tests; artifact input uses stage_manifest and rejects duplicate selected IDs; evaluation reads the document's declared invariant checks.5red→5green;91coverage/integrity/consumer checks pass. Required finalCI/local/raw-canary receipts and integration state live in the shared handoff and LEDGER; no operator run, release or build was performed by this audit.

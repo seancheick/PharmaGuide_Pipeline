@@ -32,7 +32,7 @@
     "statistics": {
       "total_parents": 655,
       "total_forms": 1474,
-      "total_form_aliases": 12302,
+      "total_form_aliases": 12303,
       "parents_with_parent_aliases": 149,
       "parents_with_contains_aliases": 0,
       "parents_with_pattern_aliases": 0
@@ -53,7 +53,7 @@
       "vitamins": 25
     },
     "schema_version": "5.6.1",
-    "last_updated": "2026-10-18",
+    "last_updated": "2026-10-19",
     "pipeline_integration": "Used by enrichment to assign form quality (bio_score) to matched ingredient forms. Match ingredient name against forms aliases (case-insensitive).",
     "matching_notes": [
       "Match ingredient name + forms text against aliases array (case-insensitive)",
@@ -14013,7 +14013,9 @@
           "saw palmetto serenoa repens supercritical extract",
           "saw palmetto berry supercritical extract",
           "saw palmetto serenoa repens fruit extract 12:1",
-          "Saw Palmetto (Serenoa repens) berry supercritical CO2 extract"
+          "Saw Palmetto (Serenoa repens) berry supercritical CO2 extract",
+          "prosterol",
+          "prosterol standardized extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -14148,8 +14150,6 @@
           "saw palmetto 4:1 extract",
           "saw palmetto berry extract 12:1",
           "saw palm 5:1 extract",
-          "prosterol",
-          "prosterol standardized extract",
           "standaridized saw palmetto extract",
           "saw palmetto berries extract",
           "saw palmetto berries",
@@ -17731,7 +17731,10 @@
           "curcuminoid phytosome",
           "phytosomes curcumin",
           "soy lecithin curcumin complex",
-          "Meriva Turmeric Phytosome"
+          "Meriva Turmeric Phytosome",
+          "turmeric phytosome",
+          "Mervia",
+          "mervia curcumin"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -17885,7 +17888,6 @@
           "advanced delivery curcumin",
           "lipid-bound curcumin",
           "high-absorption curcumin",
-          "turmeric phytosome",
           "microactive turmeric (curcuma longa) extract",
           "microactive turmeric curcuma longa extract",
           "curcuminoids microactive turmeric (curcuma longa) extract"
@@ -17912,8 +17914,6 @@
           "Optimized Curcumin extract",
           "Curcuma xanthorrhiza",
           "Curcu-Gel",
-          "Mervia",
-          "mervia curcumin",
           "bisdemethoxycurcumin",
           "BDMC",
           "curcuminoid III",
@@ -51604,7 +51604,8 @@
           "blueberry whole fruit extract wild",
           "blueactiv blueberry extract",
           "Wild Blueberry Complex",
-          "vaccinium angustifolium extract"
+          "vaccinium angustifolium extract",
+          "Wildcrafted Blueberry Complex"
         ],
         "absorption_structured": {
           "value": null,

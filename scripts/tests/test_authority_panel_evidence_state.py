@@ -57,15 +57,17 @@ def _panel_state(monkeypatch, dispositions, covered=(), assessable=True):
     from evidence_resolver import ProductEvidenceResolution, compose_product_resolution_state
     from scoring_v4.modules import generic_evidence
 
-    monkeypatch.setattr(generic_evidence, "_assessable_active_ingredients",
-                        lambda product: [{"name": "X"}] if assessable else [])
+    product = {"ingredient_quality_data": {"ingredients": [
+        {"name": "Unreviewed Herb", "canonical_id": "unreviewed_herb",
+         "cleaner_row_role": "active_scorable"}
+    ] if assessable else []}}
     overall, complete = compose_product_resolution_state(list(dispositions))
     panel = ProductEvidenceResolution(
         dsld_id="T", product_name="T", assessable_ingredients_count=len(dispositions),
         resolutions=[object()] * len(dispositions), overall_disposition=overall,
         is_assessment_complete=complete, unresolved_blockers=[], owner_contributions={})
     return generic_evidence.authority_panel_result_state(
-        {}, {"covered_keys": list(covered), "panel_resolution": panel})
+        product, {"covered_keys": list(covered), "panel_resolution": panel})
 
 
 def test_zero_coverage_is_never_a_reviewed_null(monkeypatch):
@@ -80,3 +82,23 @@ def test_zero_coverage_is_never_a_reviewed_null(monkeypatch):
     assert _panel_state(monkeypatch, ["resolved_by_authority"], covered=["b1"]) == (
         "evaluated_authority")
     assert _panel_state(monkeypatch, ["reviewed_null_unfavorable"]) == "evaluated_null"
+
+
+@pytest.mark.parametrize("empty_panel", [None, "resolved"])
+def test_empty_panel_does_not_hide_a_product_level_evidence_subject(empty_panel):
+    """A projected active remains something to assess on a panel route too."""
+    from evidence_resolver import _compose_panel_resolution
+    from scoring_v4.modules.generic_evidence import authority_panel_result_state
+
+    product = {"product_name": "Lecithin B Complex", "ingredient_quality_data": {
+        "ingredients": [{"name": "Soya Lecithin", "is_excipient": True,
+                         "source_section": "active", "cleaner_row_role": "active_scorable"}],
+        "ingredients_scorable": [{"canonical_id": "lecithin", "name": "Lecithin",
+                                  "standard_name": "Lecithin", "mapped": True,
+                                  "source_section": "product", "cleaner_row_role": "active_scorable",
+                                  "quantity": 1360, "unit": "mg"}],
+    }}
+    authority = {"covered_keys": []}
+    if empty_panel:
+        authority["panel_resolution"] = _compose_panel_resolution(product, [])
+    assert authority_panel_result_state(product, authority) == "clinical_review_not_covered"

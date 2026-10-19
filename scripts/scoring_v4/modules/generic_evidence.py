@@ -468,16 +468,6 @@ def _is_nutrition_fact_declaration(row: Dict[str, Any]) -> bool:
     return _contract_is_nutrition_fact(row)
 
 
-def _assessable_active_ingredients(product: Dict[str, Any]) -> List[Dict[str, Any]]:
-    """Return ingredients eligible to be assessed for clinical evidence.
-
-    Consumes the canonical contract from scoring_input_contract.get_assessable_evidence_ingredients.
-    """
-    if not isinstance(product, dict):
-        return []
-    return get_assessable_evidence_ingredients(product)
-
-
 def evidence_completeness_gap(
     product: Dict[str, Any],
     prod_res: Any = None,
@@ -535,7 +525,10 @@ def _evidence_result_state(
         if authority_floor_decisive:
             return "evaluated_authority"
         return "evaluated_applicable"
-    if not _assessable_active_ingredients(product):
+    # "Nothing to assess" is read from the rows the resolver actually reviewed
+    # (owner-scoped subjects include label-level projections), never from the
+    # narrower label-row fallback.
+    if not prod_res.resolutions:
         return "no_assessable_actives"
 
     # Incomplete assessment: an assessable active is still open. Checked before
@@ -626,7 +619,8 @@ def authority_panel_result_state(product: Dict[str, Any], authority: Dict[str, A
     if authority.get("covered_keys"):
         return "evaluated_authority"
     if panel is None or not panel.resolutions:
-        if not _assessable_active_ingredients(product):
+        from evidence_resolver import resolve_product_evidence
+        if not resolve_product_evidence(product, owner_scoped=True).resolutions:
             return "no_assessable_actives"
         return "clinical_review_not_covered"
     return result_state_for_disposition(panel.overall_disposition)

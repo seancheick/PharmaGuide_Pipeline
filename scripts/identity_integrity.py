@@ -10,6 +10,7 @@ from dataclasses import dataclass
 from typing import Any, Literal
 
 from normalization import strip_label_identity_qualifiers
+from probiotic_measurements import is_probiotic_source_header as _is_structural_blend_header
 
 
 IdentityDisposition = Literal[
@@ -531,6 +532,20 @@ def _form_values(value: Any) -> Iterable[str]:
             yield from _text_values(item)
 
 
+def _structured_group_values(row: Mapping[str, Any], value: Any) -> Iterable[str]:
+    """DSLD group text that can name this line's identity.
+
+    A blend group ("Proprietary Blend") classifies a container. On a row the
+    cleaner did not keep as a structural blend header it names no substance,
+    so it cannot replace the row's identity (269286 "Prosterol" saw palmetto
+    filed under Proprietary Blend).
+    """
+    for text in _text_values(value):
+        if "blend" in text.casefold() and not _is_structural_blend_header(row):
+            continue
+        yield text
+
+
 def extract_label_evidence(row: Mapping[str, Any]) -> tuple[LabelEvidence, ...]:
     """Extract auditable evidence from ingredient-line fields only."""
     evidence: list[LabelEvidence] = []
@@ -545,14 +560,14 @@ def extract_label_evidence(row: Mapping[str, Any]) -> tuple[LabelEvidence, ...]:
         for value in _text_values(row.get(field)):
             evidence.append(LabelEvidence(field, value, "source_name"))
 
-    for value in _text_values(row.get("ingredientGroup")):
+    for value in _structured_group_values(row, row.get("ingredientGroup")):
         evidence.append(
             LabelEvidence("ingredientGroup", value, "structured_identity")
         )
 
     raw_taxonomy = row.get("raw_taxonomy")
     if isinstance(raw_taxonomy, Mapping):
-        for value in _text_values(raw_taxonomy.get("ingredientGroup")):
+        for value in _structured_group_values(row, raw_taxonomy.get("ingredientGroup")):
             evidence.append(
                 LabelEvidence(
                     "raw_taxonomy.ingredientGroup",
@@ -630,11 +645,7 @@ def has_nonlive_microbial_derivative_evidence(row: Mapping[str, Any]) -> bool:
 
     # On structural headers, forms describe sibling blend members rather than
     # the preparation of the header itself. Consumers evaluate those rows.
-    if (
-        row.get("cleaner_row_role") == "blend_header_total"
-        or row.get("hierarchyType") == "blend_header"
-        or row.get("dose_class") == "blend_total_weight"
-    ):
+    if _is_structural_blend_header(row):
         return False
     microbial_owner = any(_MICROBIAL_SOURCE_RE.search(text) for text in names)
     component_owner = any(_MICROBIAL_COMPONENT_RE.search(text) for text in names)
