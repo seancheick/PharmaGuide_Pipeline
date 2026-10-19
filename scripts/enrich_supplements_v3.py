@@ -89,7 +89,7 @@ from constants import (
 )
 from stage_manifest import select_stage_input_files
 from run_artifacts import ensure_run_id, report_run_directory
-from dose_assessment import build_dose_assessment
+from dose_assessment import _NO_UL_REASONS, _NOT_DISTINCT_REASONS, build_dose_assessment
 from assessment_readiness import ASSESSMENT_READINESS_SCHEMA_VERSION
 from supplement_type_utils import mark_compound_duplicate_rows
 from supplement_taxonomy import classify_supplement
@@ -151,7 +151,7 @@ from proprietary_blend_detector import ProprietaryBlendDetector, disclosure_tier
 
 # One direct child row of a raw label row: "<parent>.nestedRows[3]".
 _RAW_CHILD_ROW = re.compile(r"\.nestedRows\[\d+\]")
-from rda_ul_calculator import RDAULCalculator, label_pediatric_age_ranges, label_population_members, ul_display_severity, ul_exceedance_sentence
+from rda_ul_calculator import RDAULCalculator, label_child_ul_ages, label_population_members, ul_display_severity, ul_exceedance_sentence
 from reference_data_contract import reference_stamp
 from collagen_taxonomy import classify_collagen_subtype_strict, UNSPECIFIED as _COLLAGEN_UNSPECIFIED
 import normalization as norm_module  # Single-source normalization
@@ -20639,6 +20639,7 @@ class SupplementEnricherV3:
             "collection_status": "failed",
             "safety_flags": [],
             "ul_review_flags": [],
+            "child_ul_screen": [],
             "has_over_ul": None,
             "reference_profile": dict(_RDA_REFERENCE_PROFILE),
             "collection_enabled": False,
@@ -21704,21 +21705,86 @@ class SupplementEnricherV3:
 
     @staticmethod
     def _ul_screening_population(product: Dict) -> Tuple[str, ...]:
-        """Every label population whose lowest UL screens this product (D2).
+        """Every adult label population whose lowest UL screens this product (D2).
 
         Plan section 2.5: the lowest UL across the whole stated population, so
-        a label naming two populations screens against the rows of both.
+        a label naming two populations screens against the rows of both. The
+        score is for adults (Sean, 2026-10-19): a pediatric tag never selects the
+        scored limit; it feeds the child notes of ``_child_ul_note`` instead.
         """
-        return label_population_members(product)
+        adults = tuple(member for member in label_population_members(product) if member != "pediatric")
+        return adults or ("general_adult",)
 
     @staticmethod
     def _ul_screening_pediatric_age_groups(product: Dict) -> Optional[Tuple[str, ...]]:
-        """NASEM child age bands the label states (rda_ul_calculator owns the reading).
+        """Child ages for a children's product's upper-limit notes (rda_ul_calculator owns it).
 
-        None: no pediatric target group. "0-1" (infants) has no reference rows,
-        so it keeps the screen's explicit reference gap.
+        None: not a children's product, so no child notes. "0-1" (infants) has
+        no reference rows, so its notes stay "not_assessable".
         """
-        return label_pediatric_age_ranges(product)
+        return label_child_ul_ages(product)
+
+    def _child_ul_note(
+        self,
+        nutrient: str,
+        label_name: str,
+        canonical_id: Optional[str],
+        ages: Tuple[str, ...],
+        *,
+        amount: Optional[float] = None,
+        unit: Optional[str] = None,
+        form_name: Optional[str] = None,
+        shown_amount: Optional[float] = None,
+        shown_unit: Optional[str] = None,
+        unresolved_reason: Optional[str] = None,
+    ) -> Optional[Dict[str, Any]]:
+        """One child upper-limit note for a label that names children, or None.
+
+        Children are not the scored population (Sean, 2026-10-19). When a label
+        names them, this states the applicable NASEM child limit accurately for
+        an adult scanning a child's product; it never moves the score. Only an
+        exposure the assessment resolved is compared. Any other exposure, or a
+        stated age without a reference row, is "not_assessable" and never reads
+        as within the limit. None: within the child limits, or no established
+        child limit for this nutrient.
+        """
+        try:
+            record = self.rda_calculator._find_nutrient(nutrient, form_name=form_name) or {}
+            child_ul, scope = self.rda_calculator._screening_ul(record, "pediatric", ages)
+        except Exception:
+            return {"nutrient": label_name, "reference_nutrient": nutrient, "canonical_id": canonical_id,
+                    "status": "not_assessable", "reason": "child_assessment_error"}
+        if child_ul is None and not scope.get("reference_gap"):
+            return None
+        note = {"nutrient": label_name, "reference_nutrient": nutrient,
+                "canonical_id": canonical_id, "ul_population": scope}
+        if unresolved_reason is not None or amount is None or not unit:
+            return {**note, "status": "not_assessable",
+                    "reason": unresolved_reason or "ul_exposure_unresolved"}
+        try:
+            result = self.rda_calculator.compute_nutrient_adequacy(
+                nutrient=nutrient, amount=amount, unit=unit,
+                age_group=_RDA_REFERENCE_PROFILE["age_range"], sex="adult_neutral",
+                form_name=form_name, ul_population="pediatric", pediatric_age_groups=ages,
+            )
+        except Exception:
+            return {**note, "status": "not_assessable", "reason": "child_assessment_error"}
+        note["ul_population"] = result.ul_population
+        if result.over_ul and result.ul:
+            shown = shown_amount if shown_amount is not None else amount
+            shown_in = shown_unit or unit
+            return {
+                **note, "status": "over_limit", "amount": shown, "unit": shown_in,
+                "ul": result.ul, "pct_ul": result.pct_ul,
+                "warning": ul_exceedance_sentence(
+                    float(shown), float(result.ul), str(shown_in or ""),
+                    result.ul_population.get("label") or "children",
+                ),
+                "severity": ul_display_severity(result.pct_ul),
+            }
+        if result.ul_population.get("reference_gap"):
+            return {**note, "status": "not_assessable", "reason": result.ul_population["reference_gap"]}
+        return None
 
     def _collect_rda_ul_data(
         self,
@@ -21846,6 +21912,7 @@ class SupplementEnricherV3:
         adequacy_results = []
         safety_flags = []
         ul_review_flags = []
+        child_ul_screen: List[Dict[str, Any]] = []
         conversion_evidence = []
         dose_assessments = []
         dose_row_errors = []
@@ -21875,6 +21942,8 @@ class SupplementEnricherV3:
         # total per canonical_id and emit an aggregated safety_flag,
         # suppressing the per-row flags that would otherwise double-count.
         _staged_row_flags: List[Tuple[Optional[str], Dict[str, Any]]] = []
+        # Child notes per row, keyed by canonical when the exposure was summable.
+        _staged_child_notes: List[Tuple[Optional[str], Dict[str, Any]]] = []
         _per_canonical_totals: Dict[str, Dict[str, Any]] = {}
         positive_canonical_row_counts: Dict[str, int] = {}
         positive_vitamin_e_family_rows = 0
@@ -22580,7 +22649,6 @@ class SupplementEnricherV3:
                                 sex="adult_neutral",
                                 form_name=matched_form,
                                 ul_population=ul_population,
-                                pediatric_age_groups=pediatric_age_groups,
                             )
                         except Exception as calculation_error:
                             assessment_error = str(calculation_error)[:500]
@@ -22650,7 +22718,7 @@ class SupplementEnricherV3:
                         # Reuse the existing sole-row active-moiety bound; no
                         # salt identity or nutritional adequacy is inferred.
                         nickel_ul, nickel_population = self.rda_calculator._screening_ul(
-                            _nutrient_record, ul_population or "general_adult", pediatric_age_groups
+                            _nutrient_record, ul_population or "general_adult"
                         )
                         nickel_bound, nickel_unit_evaluable = self.rda_calculator._reconcile_amount_to_reference(
                             amount_for_ul, converted_unit, _nutrient_record.get("unit")
@@ -22673,16 +22741,6 @@ class SupplementEnricherV3:
                             ul_exposure.update(ul_gate_eligible=False,
                                                ul_gate_ineligible_reason="unresolved_form")
 
-                    pediatric_reference_gap = bool(
-                        isinstance(safety_ul_population, dict)
-                        and safety_ul_population.get("reference_gap")
-                        and "pediatric" in safety_ul_population.get("members", [])
-                    )
-                    if pediatric_reference_gap:
-                        if safety_ul is None:
-                            safety_ul_status = "indeterminate"
-                            skip_ul_check = True
-                        skip_ul_reason = "pediatric_reference_gap"
                     adequacy_dict.update({
                         "canonical_id": resolved_canonical_id or None,
                         "nutrient_group_id": nutrient_group_id,
@@ -23258,12 +23316,6 @@ class SupplementEnricherV3:
                     # with a single aggregated flag if multiple forms of
                     # the same canonical combine to exceed UL.
                     _row_canonical = resolved_canonical_id or None
-                    if pediatric_reference_gap:
-                        _staged_row_flags.append((_row_canonical, {
-                            "nutrient": ing_name, "canonical_id": _row_canonical,
-                            "pct_ul": None, "ul": None, "ul_population": safety_ul_population,
-                            "ul_gate_eligible": False, "ul_gate_ineligible_reason": "pediatric_reference_gap",
-                        }))
                     if not skip_ul_check and safety_over_ul:
                         pct_ul_val = safety_pct_ul or 0
                         over_ul_amount = safety_over_ul_amount or 0
@@ -23289,6 +23341,42 @@ class SupplementEnricherV3:
                                 **ul_exposure,
                             }
                         ))
+
+                    # Child notes (labels naming children only). A row that is
+                    # not a distinct exposure, or has no established UL, has no
+                    # child limit to state either.
+                    try:
+                        _child_material = float(quantity or 0) > 0
+                    except (TypeError, ValueError):
+                        _child_material = False
+                    if (
+                        pediatric_age_groups is not None
+                        and _child_material
+                        and not (skip_ul_check and skip_ul_reason in (_NOT_DISTINCT_REASONS | _NO_UL_REASONS))
+                    ):
+                        _child_resolved = bool(
+                            not skip_ul_check
+                            and adequacy is not None
+                            and safety is not None
+                            and ul_exposure.get("ul_gate_eligible") is True
+                            and amount_for_ul is not None
+                            and converted_unit
+                        )
+                        _child_note = self._child_ul_note(
+                            reference_nutrient_name, ing_name, _row_canonical, pediatric_age_groups,
+                            amount=amount_for_ul if _child_resolved else None,
+                            unit=converted_unit, form_name=matched_form,
+                            shown_amount=ul_amount, shown_unit=ul_unit,
+                            unresolved_reason=None if _child_resolved else (
+                                skip_ul_reason
+                                or ul_exposure.get("ul_gate_ineligible_reason")
+                                or "ul_exposure_unresolved"
+                            ),
+                        )
+                        if _child_note:
+                            _staged_child_notes.append(
+                                (_row_canonical if _child_resolved else None, _child_note)
+                            )
 
                     # D4.3: Track per-canonical totals for aggregation pass.
                     # Only track rows that were actually UL-checked (skip
@@ -23451,7 +23539,6 @@ class SupplementEnricherV3:
                             age_group=_RDA_REFERENCE_PROFILE["age_range"],
                             sex="adult_neutral",
                             ul_population=ul_population,
-                            pediatric_age_groups=pediatric_age_groups,
                         )
                     except Exception as agg_err:
                         self.logger.debug(
@@ -23625,6 +23712,33 @@ class SupplementEnricherV3:
                     if row_cid and row_cid in _aggregated_canonicals and row_flag.get("pct_ul") is not None:
                         continue
                     safety_flags.append(row_flag)
+
+                # Child notes: the summed exposure of several forms of one
+                # nutrient supersedes their per-row notes, as for adult flags.
+                _child_summed: set = set()
+                _summed_notes: List[Dict[str, Any]] = []
+                if pediatric_age_groups is not None:
+                    for cid, group in _per_canonical_totals.items():
+                        if group.get("incompatible_units") or len(group["rows"]) < 2:
+                            continue
+                        _child_summed.add(cid)
+                        unresolved = next((
+                            row.get("ul_gate_ineligible_reason") or "ul_exposure_unresolved"
+                            for row in group["rows"] if row.get("ul_gate_eligible") is not True
+                        ), None)
+                        summed = self._child_ul_note(
+                            group["std_name"], group["std_name"], cid, pediatric_age_groups,
+                            amount=None if unresolved else group["total_amount"], unit=group["unit"],
+                            unresolved_reason=unresolved,
+                        )
+                        if summed:
+                            if summed.get("warning"):
+                                summed["warning"] = f"Across {len(group['rows'])} forms, " + summed["warning"]
+                            _summed_notes.append({**summed, "aggregation": "canonical_sum",
+                                                  "contributing_rows": group["rows"]})
+                child_ul_screen = [
+                    note for cid, note in _staged_child_notes if not (cid and cid in _child_summed)
+                ] + _summed_notes
 
                 vitamin_e_family_rows = []
                 vitamin_e_family_invalid = False
@@ -23988,6 +24102,7 @@ class SupplementEnricherV3:
                     ),
                     "safety_flags": safety_flags,
                     "ul_review_flags": ul_review_flags,
+                    "child_ul_screen": child_ul_screen,
                     "special_use_flags": special_use_flags,
                     "has_over_ul": any(
                         flag.get("ul_gate_eligible") is True
@@ -24031,6 +24146,7 @@ class SupplementEnricherV3:
                     "collection_error": str(e)[:500],
                     "safety_flags": safety_flags,
                     "ul_review_flags": ul_review_flags,
+                    "child_ul_screen": child_ul_screen,
                     "special_use_flags": special_use_flags,
                     "has_over_ul": None,
                     "is_servings_estimated": servings_estimated,
@@ -24055,6 +24171,7 @@ class SupplementEnricherV3:
             "collection_error": "dose_dependencies_unavailable",
             "safety_flags": [],
             "ul_review_flags": [],
+            "child_ul_screen": [],
             "special_use_flags": special_use_flags,
             "has_over_ul": None,
             "is_servings_estimated": servings_estimated,

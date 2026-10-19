@@ -705,7 +705,7 @@ Primary key: `nutrient_recommendations` (array)
 | `unit` | string | YES | Canonical dosing unit |
 | `optimal_range` | string | YES | `"min-max"` or single value |
 | `ul` / `highest_ul` | float/null | YES | Upper tolerable limit (null when none established) |
-| `data` | object[] | YES | Age/sex-specific `rda_ai` / `ul` grid (drives `pct_rda` and the label-population UL screen). Child rows `1-3`, `4-8`, `9-13` carry the NASEM UL only (`rda_ai` null: adequacy uses the adult profile); infants have no rows and vanadium has no child UL, so those stay an explicit `pediatric_ul_row_missing_for_stated_age` gap |
+| `data` | object[] | YES | Age/sex-specific `rda_ai` / `ul` grid (drives `pct_rda` and the label-population UL screen). Child rows `1-3`, `4-8`, `9-13` carry the NASEM UL only (`rda_ai` null: adequacy uses the adult profile) and feed only the child notes (`rda_ul_data.child_ul_screen`), never the adult score; infants have no rows and vanadium has no child UL, so their child notes stay `not_assessable` (`pediatric_ul_row_missing_for_stated_age`) |
 | `warnings` | string[] | NO | Dosing warnings |
 | `references` | string[] | NO | Bare PMID strings for non-DRI bioactives (content-verified; DRI nutrients are checked by `verify_rda_uls.py`) |
 

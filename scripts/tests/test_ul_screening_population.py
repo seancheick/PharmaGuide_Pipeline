@@ -77,7 +77,9 @@ def test_warning_names_the_population_whose_limit_applies(calculator):
 ])
 def test_label_population_from_dsld_target_groups(enricher, groups, expected):
     assert label_population_members({"targetGroups": groups}) == tuple(sorted(expected))
-    assert enricher._ul_screening_population({"targetGroups": groups}) == tuple(sorted(expected))
+    # The score screens adults only (Sean, 2026-10-19); child limits feed child notes instead.
+    adults = tuple(sorted(member for member in expected if member != "pediatric"))
+    assert enricher._ul_screening_population({"targetGroups": groups}) == (adults or ("general_adult",))
 
 
 def test_not_pregnant_women_calcium_above_the_general_adult_limit_is_flagged(enricher):
@@ -146,19 +148,6 @@ def test_explicit_19_50_calcium_uses_the_restricted_limit(enricher):
     assert not result["safety_flags"]
 
 
-def test_pediatric_screen_uses_the_stated_child_age_limit(enricher):
-    product = {"targetGroups": ["Children 4 or More Years of Age"], "activeIngredients": [{
-        "name": "Zinc", "standardName": "Zinc", "canonical_id": "zinc",
-        "canonical_source_db": "ingredient_quality_map", "quantity": 36,
-        "unit": "mg", "dailyValue": 327.27}], "inactiveIngredients": []}
-    result = enricher._collect_rda_ul_data(product, min_servings_per_day=1, max_servings_per_day=1)
-    row = next(r for r in result["adequacy_results"] if r.get("canonical_id") == "zinc")
-    assert row["ul"] == 12 and row["pct_ul"] == pytest.approx(100 * 36 / 12)
-    assert row["ul_population"]["label"] == "children 4-8"
-    assert "reference_gap" not in row["ul_population"]
-    assert any(flag.get("ul") == 12 and flag["ul_gate_eligible"] is True for flag in result["safety_flags"])
-
-
 def test_missing_pediatric_ul_does_not_borrow_adult_rows(calculator):
     ul, scope = calculator._screening_ul({"data": [
         {"group": "Male", "age_range": "19-30", "ul": 40},
@@ -168,88 +157,7 @@ def test_missing_pediatric_ul_does_not_borrow_adult_rows(calculator):
     assert scope["missing_age_ranges"] == ["1-3", "4-8", "9-13", "14-18"]
 
 
-# A younger-only label screens its own child rows; an age with no row (infants) never borrows an
-# older limit and keeps the reference gap.
-@pytest.mark.parametrize("target,ul,label,missing", [
-    ("Infants", None, "pediatric", ["0-1"]),
-    ("Infants/Baby (0 - 1 Year)", None, "pediatric", ["0-1"]),
-    ("Children 4-8 Years", 2500, "children 4-8", None),
-    ("Children under 14 years", 2500, "children 1-8", ["0-1"]),
-    ("Children more than 1 but less than 4", 2500, "children 1-3", None),
-])
-def test_explicit_younger_children_screen_their_own_rows(enricher, target, ul, label, missing):
-    product = {**_calcium(2200), "targetGroups": [target]}
-    result = enricher._collect_rda_ul_data(product, min_servings_per_day=1, max_servings_per_day=1)
-    row = next(r for r in result["adequacy_results"] if r.get("canonical_id") == "calcium")
-    assert row["ul"] == ul
-    assert row["ul_population"]["label"] == label
-    assert row["ul_population"].get("missing_age_ranges") == missing
-    gap = row["ul_population"].get("reference_gap") == "pediatric_ul_row_missing_for_stated_age"
-    assert gap == bool(missing)
-
-
-def test_broad_pediatric_label_in_union_keeps_the_infant_gap(enricher):
-    product = {**_calcium(2200), "targetGroups": ["Infants", "Children 4 or More Years of Age"]}
-    result = enricher._collect_rda_ul_data(product, min_servings_per_day=1, max_servings_per_day=1)
-    row = next(r for r in result["adequacy_results"] if r.get("canonical_id") == "calcium")
-    assert row["ul"] == 2500 and row["ul_population"]["label"] == "children 4-8"
-    assert row["ul_population"]["missing_age_ranges"] == ["0-1"]
-
-
-@pytest.mark.parametrize("target", ["Infants", "Infants/Baby (0 - 1 Year)"])
-def test_pediatric_reference_gap_is_incomplete_through_enrich_and_score(enricher, target):
-    from scoring_v4.scored_artifact import build_scored_artifact
-    product = {**_calcium(2200), "id": "pediatric-reference-gap", "product_name": "Calcium",
-               "targetGroups": [target], "servingSizes": [{"minDailyServings": 1, "maxDailyServings": 1}]}
-    product["activeIngredients"][0]["raw_source_path"] = "ingredientRows[0]"
-    enriched, errors = enricher.enrich_product(product)
-    assert not errors
-    [assessment] = enriched["rda_ul_data"]["dose_assessments"]
-    assert assessment["readiness"] == "incomplete"
-    assert assessment["reason_code"] == "pediatric_reference_gap"
-    artifact = build_scored_artifact(enriched)
-    assert artifact["assessment_readiness"]["dose"]["readiness"] == "incomplete"
-    assert artifact["quality_score_status"] == "not_scored"
-    assert artifact["dose_safety_evaluation"]["state_counts"]["material_but_unresolved"] >= 1
-
-
-def test_broad_pediatric_exceedance_retains_known_concern_and_unknown_coverage(enricher):
-    from scoring_v4.dose_safety import evaluate_dose_safety
-    product = {"targetGroups": ["Infants/Baby (0 - 1 Year)", "Children 4 or More Years of Age"],
-               "activeIngredients": [{
-                   "name": "Zinc", "standardName": "Zinc", "canonical_id": "zinc",
-                   "canonical_source_db": "ingredient_quality_map", "quantity": 15,
-                   "unit": "mg", "dailyValue": 136.4}], "inactiveIngredients": []}
-    rda = enricher._collect_rda_ul_data(product, min_servings_per_day=1, max_servings_per_day=1)
-    result = evaluate_dose_safety({"rda_ul_data": rda})
-    states = result.audit_metadata()["state_counts"]
-    # 15 mg is 125% of the 4-8 y limit (12 mg): a confirmed exceedance in the partial band, while
-    # the infant age, which has no row, stays unresolved coverage.
-    assert states["confirmed_over_threshold"] == 1
-    assert states["material_but_unresolved"] == 1
-    assert result.dose_ceiling()["cap_public"] == 10
-
-
-def test_explicit_adolescent_population_has_no_younger_child_gap(enricher):
-    result = enricher._collect_rda_ul_data({**_calcium(2200), "targetGroups": ["Children 14-18 Years"]},
-                                         min_servings_per_day=1, max_servings_per_day=1)
-    row = next(r for r in result["adequacy_results"] if r.get("canonical_id") == "calcium")
-    assert row["ul"] == 3000
-    assert not row["ul_population"].get("reference_gap")
-    assert not result["safety_flags"]
-
-
-def test_pediatric_aggregate_excess_does_not_discard_unresolved_younger_coverage(enricher):
-    from scoring_v4.dose_safety import evaluate_dose_safety
-    rows = [{"name": "Zinc", "standardName": "Zinc", "canonical_id": "zinc",
-             "canonical_source_db": "ingredient_quality_map", "quantity": 20, "unit": "mg",
-             "dailyValue": 181.8, "raw_source_path": f"ingredientRows[{index}]"} for index in range(2)]
-    rda = enricher._collect_rda_ul_data({"targetGroups": ["Infants", "Children 4 or More Years of Age"],
-                                      "activeIngredients": rows, "inactiveIngredients": []},
-                                      min_servings_per_day=1, max_servings_per_day=1)
-    states = evaluate_dose_safety({"rda_ul_data": rda}).audit_metadata()["state_counts"]
-    assert states["confirmed_over_threshold"] == 1
-    assert states["material_but_unresolved"] >= 1
+# Child labels: the enricher-level child notes are pinned in test_rda_ul_pediatric_rows.py.
 
 
 def test_no_established_ul_is_not_a_missing_pediatric_reference(enricher):
@@ -264,3 +172,4 @@ def test_no_established_ul_is_not_a_missing_pediatric_reference(enricher):
     assert assessment["readiness"] == "not_applicable"
     assert assessment["ul_assessment_status"] == "no_ul_applicable"
     assert not enriched["rda_ul_data"]["safety_flags"]
+    assert enriched["rda_ul_data"]["child_ul_screen"] == []

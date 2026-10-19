@@ -29,7 +29,7 @@ import logging
 import math
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Dict, List, Optional, Sequence, Tuple, Any, Union
+from typing import Dict, List, Mapping, Optional, Sequence, Tuple, Any, Union
 
 from normalization import canonicalize_mass_unit
 
@@ -172,31 +172,40 @@ def _target_group_text(group: Any) -> str:
     return str(text).strip().lower()
 
 
-def _pediatric_years(tag: str) -> Tuple[int, int]:
-    """The [lower, upper) years of age one pediatric DSLD target group states."""
+_AGE = r"(\d+(?:\.\d+)?)\s*(months?|years?|yrs?)?"
+
+
+def _in_years(value: str, unit: Optional[str], default_unit: str) -> float:
+    return float(value) / 12 if (unit or default_unit).startswith("month") else float(value)
+
+
+def _pediatric_years(tag: str) -> Tuple[float, float]:
+    """The [lower, upper) years of age one pediatric DSLD target group states.
+
+    Every number keeps its own unit ("6 months to 3 years"); a bare number takes
+    the tag's only stated unit. An upper bound stays an upper bound whether it is
+    stated in months or years, so "under 12 months" is infants only.
+    """
     if "infant" in tag or "baby" in tag:
         return 0, 1
-    if "month" in tag:
-        # Ages stated in months ("6-36 months", "6 months to 3 years"): the lowest stated month
-        # places the start, so an age under 12 months keeps the infant band.
-        months = [int(value) for pair in re.findall(r"(\d+)\s*(?:[-–—]\s*(\d+)\s*)?months?", tag)
-                  for value in pair if value]
-        years = re.search(r"(\d+)\s*(?:years?|yrs?)", tag)
-        if months:
-            high = int(years.group(1)) + 1 if years else max(months) // 12 + 1
-            return min(months) // 12, high
-    between = re.search(r"more than\s*(\d+)\s*but less than\s*(\d+)", tag)
+    default = "months" if "month" in tag and not re.search(r"\byears?\b|\byrs?\b", tag) else "years"
+    between = re.search(r"more than\s*" + _AGE + r"\s*but less than\s*" + _AGE, tag)
     if between:
-        return int(between.group(1)), int(between.group(2))
-    span = re.search(r"(\d+)\s*[-–—]\s*(\d+)\s*(?:years?|yrs?)", tag)
+        low, low_unit, high, high_unit = between.groups()
+        return _in_years(low, low_unit or high_unit, default), _in_years(high, high_unit, default)
+    span = re.search(_AGE + r"\s*(?:[-–—]|to)\s*" + _AGE, tag)
     if span:
-        return int(span.group(1)), int(span.group(2)) + 1
-    at_least = re.search(r"(\d+)\s*(?:or more|\+|and (?:up|older|over))", tag)
+        low, low_unit, high, high_unit = span.groups()
+        unit = high_unit or low_unit or default
+        # An inclusive end: "6-36 months" includes month 36, "4-8 years" includes age 8.
+        step = 1 / 12 if unit.startswith("month") else 1
+        return _in_years(low, low_unit or high_unit, default), _in_years(high, high_unit, default) + step
+    at_least = re.search(_AGE + r"\s*(?:or more|\+|and (?:up|older|over))", tag)
     if at_least:
-        return int(at_least.group(1)), 19
-    under = re.search(r"(?:under|less than)\s*(\d+)", tag)
+        return _in_years(at_least.group(1), at_least.group(2), default), 19
+    under = re.search(r"(?:under|less than|younger than)\s*" + _AGE, tag)
     if under:
-        return 0, int(under.group(1))
+        return 0, _in_years(under.group(1), under.group(2), default)
     return 1, 19
 
 
@@ -222,6 +231,66 @@ def label_pediatric_age_ranges(product: Dict) -> Optional[Tuple[str, ...]]:
         return None
     ordered = tuple(age for age, _, _ in PEDIATRIC_AGE_BANDS if age in covered)
     return ordered + (("unresolved",) if "unresolved" in covered else ())
+
+
+# A children's product: its title names children, or its target groups name
+# children and no adult group. Moved unchanged from the omega Evidence check
+# (evidence_resolver), which now calls it, so both consumers share one rule.
+_CHILD_PRODUCT_WORDS = re.compile(
+    r"\b(?:baby|babies|infant|infants|child|children|kids?|toddler|toddlers|pediatric|junior|jr)\b"
+)
+_ADULT_TARGET_WORDS = re.compile(
+    r"\b(?:adults?|seniors?|mature|men|women|pregnant|lactating|menopause|menopausal)\b"
+)
+
+
+def _canonical_label_text(value: Any) -> str:
+    return re.sub(r"[^a-z0-9]+", " ", str(value or "").strip().lower()).strip()
+
+
+def _label_title(product: Mapping, canonical: bool = True) -> str:
+    title = " ".join(
+        str(product.get(key) or "") for key in ("product_name", "fullName", "brand_name", "brandName")
+    )
+    # Ages are read from the lowercased title, which keeps "4+" and "1-3".
+    return _canonical_label_text(title) if canonical else title.strip().lower()
+
+
+def label_is_for_children(product: Mapping) -> bool:
+    """Whether the label is a children's product.
+
+    ``targetGroups`` describes the intended users (``userGroups`` describes the
+    Daily Value population and must not select it). A DSLD child tag beside an
+    adult tag does not make an adult product a children's product.
+    """
+    groups = product.get("targetGroups") or []
+    if isinstance(groups, str):
+        groups = [groups]
+    target = _canonical_label_text(" ".join(
+        str(group.get("text") or group.get("name") or "") if isinstance(group, Mapping) else str(group)
+        for group in groups
+    ))
+    return bool(_CHILD_PRODUCT_WORDS.search(_label_title(product))) or (
+        bool(_CHILD_PRODUCT_WORDS.search(target)) and not _ADULT_TARGET_WORDS.search(target)
+    )
+
+
+def label_child_ul_ages(product: Mapping) -> Optional[Tuple[str, ...]]:
+    """The child ages a children's product's upper-limit notes cover; None otherwise.
+
+    Children are not the scored population (Sean, 2026-10-19): these ages only
+    select the child limits shown, accurately, on a children's product. The DSLD
+    target groups state the ages; a title-only children's product is read from
+    its title, and a title naming no age covers children 1-18.
+    """
+    if not label_is_for_children(product):
+        return None
+    ages = label_pediatric_age_ranges(product)
+    if ages is None:
+        low, high = _pediatric_years(_label_title(product, canonical=False))
+        ages = tuple(age for age, band_low, band_high in PEDIATRIC_AGE_BANDS
+                     if band_low < high and low < band_high) or ("unresolved",)
+    return ages
 
 
 def _pediatric_age_label(ages: Sequence[str]) -> str:
