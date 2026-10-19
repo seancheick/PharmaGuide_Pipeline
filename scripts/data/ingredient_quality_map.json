@@ -32,7 +32,7 @@
     "statistics": {
       "total_parents": 655,
       "total_forms": 1474,
-      "total_form_aliases": 12303,
+      "total_form_aliases": 12296,
       "parents_with_parent_aliases": 149,
       "parents_with_contains_aliases": 0,
       "parents_with_pattern_aliases": 0
@@ -46865,10 +46865,7 @@
           "fulvic minerals",
           "humic fulvic acid",
           "fulvic trace minerals",
-          "ancient peat & apple extract",
-          "ancient peat and apple extract",
-          "elevATP",
-          "elevatp ancient peat"
+          "ancient peat & apple extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -50648,7 +50645,6 @@
           "hydroxytyrosol/tyrosol",
           "polyphen-oil olive extract",
           "benolea olive extract",
-          "olive juice extract",
           "verbascoside/oleuropein",
           "moroccan olive extract",
           "olcenic",
@@ -66402,7 +66398,9 @@
           "hytolive",
           "hytolive olive (olea europaea l.) extract",
           "proliva olive fruit extract",
-          "olive"
+          "olive",
+          "olive juice extract",
+          "olive water extract"
         ],
         "absorption_structured": {
           "value": 0.45,
@@ -68308,8 +68306,6 @@
     "category": "herbs",
     "cui": "C0052430",
     "aliases": [
-      "sweet wormwood",
-      "artemisia annua",
       "qinghaosu"
     ],
     "forms": {
@@ -68325,12 +68321,7 @@
         "aliases": [
           "artemisinin",
           "artecin",
-          "sweet wormwood extract",
-          "artemisia annua extract",
-          "artemisia annua leaf extract",
-          "qinghao",
-          "qinghaosu extract",
-          "sweet annie extract"
+          "qinghaosu extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -70505,11 +70496,7 @@
           "Lactococcus cremoris",
           "L. cremoris",
           "Lactococcus lactis subsp. cremoris",
-          "L. lactis cremoris",
-          "Lactococcus lactis subsp. lactis biovar diacetylactis",
-          "L. lactis diacetylactis",
-          "Lactococcus diacetylactis",
-          "Lactococcus lactis biovar diacetylactis"
+          "L. lactis cremoris"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -71456,7 +71443,11 @@
           "Lactococcus lactis strain Plasma",
           "LC-Plasma",
           "IMMUSE Lactococcus lactis strain Plasma",
-          "Lactococcus lactis subsp. lactis JCM 5805"
+          "Lactococcus lactis subsp. lactis JCM 5805",
+          "Lactococcus lactis subsp. lactis biovar diacetylactis",
+          "L. lactis diacetylactis",
+          "Lactococcus diacetylactis",
+          "Lactococcus lactis biovar diacetylactis"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {

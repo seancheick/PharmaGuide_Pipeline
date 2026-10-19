@@ -3,7 +3,7 @@
     "description": "Other/inactive ingredients database for supplement excipients and additives",
     "purpose": "inactive_ingredient_classification",
     "schema_version": "5.4.3",
-    "last_updated": "2026-10-13",
+    "last_updated": "2026-10-19",
     "total_entries": 736,
     "functional_roles_field": {
       "added_in": "5.1.0",
@@ -6160,7 +6160,9 @@
       "aliases": [
         "elevatp",
         "elevatp blend",
-        "elevatp proprietary blend"
+        "elevatp proprietary blend",
+        "elevatp ancient peat",
+        "ancient peat and apple extract"
       ],
       "category": "active_pending_relocation",
       "is_additive": false,

@@ -32,6 +32,8 @@ IDENTITY_DISPOSITIONS: tuple[IdentityDisposition, ...] = (
     "missing_display_label",
 )
 _SCOREABLE_DISPOSITIONS = frozenset({"clean", "repaired", "taxonomy_only"})
+# The catch-all proprietary-blend owner names no specific identity of its own.
+_GENERAL_BLEND_ID = "BLEND_GENERAL"
 
 
 def safety_only_conflict_paths(rows: Iterable[Mapping[str, Any]]) -> set[str]:
@@ -912,6 +914,31 @@ def resolve_identity(
         and canonical_parent_of
         and canonical_parent_of(structured_canonical, canonical_before)
     )
+    # The printed name is an exact curated alias of the supplied identity and the
+    # resolver reads it as nothing else.
+    label_names_supplied = bool(
+        canonical_before
+        and canonical_registry is not None
+        and raw_evidence
+        and raw_canonical in {None, canonical_before}
+        and canonical_registry.literal_identity_matches(raw_evidence[0].value, canonical_before)
+    )
+    # A DSLD ingredientGroup is a group, never more specific than its row. It cannot
+    # replace an identity the label names with a different plant, species, part or
+    # preparation (Wheat Grass grouped as "Couch Grass", Green Bell Pepper as
+    # "Capsicum", Ginger root extract as "Ginger"). It still repairs when the label
+    # names the group's identity, and may refine to a registered child. The general
+    # blend owner is a row role, not a substance: it is no specific identity to
+    # protect, and a "Proprietary Blend" group keeps a branded complex named after
+    # one member (TamaFlex) a blend (ADR-0005).
+    label_names_supplied_over_structured_group = bool(
+        label_names_supplied
+        and _GENERAL_BLEND_ID not in {canonical_before, structured_canonical}
+        and structured_canonical
+        and structured_canonical != canonical_before
+        and not canonical_registry.literal_identity_matches(raw_evidence[0].value, structured_canonical)
+        and not (canonical_parent_of and canonical_parent_of(canonical_before, structured_canonical))
+    )
     form_validates_specific_over_structured_parent = bool(
         canonical_before
         and structured_canonical
@@ -1007,7 +1034,7 @@ def resolve_identity(
     )
     display_canonical = (
         canonical_before
-        if declared_material_validates_identity
+        if declared_material_validates_identity or label_names_supplied_over_structured_group
         else raw_canonical
         if literal_specific_over_structured_parent
         else structured_canonical or raw_canonical
@@ -1040,6 +1067,7 @@ def resolve_identity(
         and (
             structured_canonical == canonical_before
             or raw_canonical == canonical_before
+            or label_names_supplied
             or taxonomy_coherent
         )
         else None
@@ -1091,6 +1119,7 @@ def resolve_identity(
             canonical_before == structured_canonical
             or literal_specific_over_structured_parent
             or form_validates_specific_over_structured_parent
+            or label_names_supplied_over_structured_group
         ):
             disposition = "clean"
             canonical_after = canonical_before
@@ -1098,6 +1127,14 @@ def resolve_identity(
                 "The unambiguous literal label selected the matching identity "
                 "from conflicting structured fields."
                 if structured_disambiguated_by_literal
+                else (
+                    "The literal label names the supplied identity; the structured line "
+                    f"group {structured_canonical!r} names a different identity and stays "
+                    "evidence only."
+                )
+                if label_names_supplied_over_structured_group
+                and not literal_specific_over_structured_parent
+                and not form_validates_specific_over_structured_parent
                 else (
                     "The literal label validates the supplied specific identity; "
                     "the structured line identity is its registered parent."

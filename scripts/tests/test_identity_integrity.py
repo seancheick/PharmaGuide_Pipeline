@@ -4,6 +4,7 @@ from dataclasses import FrozenInstanceError
 
 import pytest
 
+from normalization import strip_label_identity_qualifiers
 from identity_integrity import (
     build_canonical_identity_registry,
     IdentityDecision,
@@ -1123,3 +1124,143 @@ def test_unresolved_identity_keeps_literal_preparation_display(literal, group):
     assert decision.scoreable_identity is False
     assert decision.source_label_name == literal
     assert decision.label_display_name == normalize_label_display(literal)
+
+
+# A DSLD ingredientGroup is a coarse group, never more specific than the printed row.
+# When the printed name is an exact curated alias of the supplied identity and does not
+# name the group's identity, the group may not replace it with a different plant,
+# species or preparation (line integrity audit 2026-10-19, F1; ADR-0005).
+_LABEL_NAMED_REGISTRY = {
+    "ingredient_quality_map": {
+        "wheatgrass": {"standard_name": "Wheatgrass", "aliases": ["Wheat Grass", "Triticum aestivum"]},
+        "couch_grass": {"standard_name": "Couch Grass", "aliases": ["Elymus repens"]},
+        "green_bell_pepper": {"standard_name": "Green Bell Pepper", "aliases": ["Green Bell Pepper"]},
+        "chili_pepper": {"standard_name": "Chili Pepper", "aliases": ["Capsicum"]},
+        "lactococcus_cremoris": {"standard_name": "Lactococcus Cremoris", "aliases": ["Lactococcus cremoris"]},
+        "lactococcus_lactis": {"standard_name": "Lactococcus Lactis", "aliases": ["Lactococcus lactis"]},
+        "ginger_extract": {"standard_name": "Ginger Extract", "aliases": ["Ginger root extract"]},
+        "ginger": {"standard_name": "Ginger", "aliases": []},
+        "vitamin_b7_biotin": {"standard_name": "Biotin", "aliases": ["Biotin"]},
+        "brewers_yeast": {"standard_name": "Brewer's Yeast", "aliases": []},
+        "BLEND_GENERAL": {"standard_name": "General Proprietary Blends", "aliases": ["PrimaVie Shilajit Fulvic Acid Complex"]},
+        "shilajit": {"standard_name": "Shilajit", "aliases": []},
+    }
+}
+_LABEL_NAMED_RESOLVER = {
+    "wheat grass": "wheatgrass",
+    "couch grass": "couch_grass",
+    "capsicum": "chili_pepper",
+    "green bell pepper": "green_bell_pepper",
+    "lactococcus cremoris": "lactococcus_cremoris",
+    "lactococcus lactis": "lactococcus_lactis",
+    "ginger root extract": "ginger_extract",
+    "ginger": "ginger",
+    "biotin": "vitamin_b7_biotin",
+    "shilajit": "shilajit",
+}
+
+
+def _label_named_decision(literal, group, supplied, **kwargs):
+    return resolve_identity(
+        row={"raw_source_text": literal, "name": literal, "ingredientGroup": group},
+        supplied_canonical_id=supplied,
+        resolve_candidate=lambda value: _LABEL_NAMED_RESOLVER.get(
+            strip_label_identity_qualifiers(normalize_label_display(value)).casefold()
+        ),
+        canonical_registry=build_canonical_identity_registry(_LABEL_NAMED_REGISTRY),
+        **kwargs,
+    )
+
+
+@pytest.mark.parametrize("literal,group,supplied", [
+    # DSLD 178716 ingredientRows[8].nestedRows[0]: Triticum, not Elymus repens.
+    ("organic Wheat Grass", "Couch Grass", "wheatgrass"),
+    # DSLD 174600 ingredientRows[22].nestedRows[9]: a bell pepper, not a chili.
+    ("organic Green Bell Pepper", "Capsicum", "green_bell_pepper"),
+    # DSLD 174659 ingredientRows[4].nestedRows[9]: L. cremoris is its own species.
+    ("Lactococcus cremoris", "Lactococcus lactis", "lactococcus_cremoris"),
+    # DSLD 15698 ingredientRows[0].nestedRows[3]: an extract, not the whole root.
+    ("Ginger root extract", "Ginger", "ginger_extract"),
+])
+def test_structured_group_cannot_replace_a_label_named_identity(literal, group, supplied):
+    decision = _label_named_decision(literal, group, supplied)
+
+    assert decision.disposition == "clean"
+    assert decision.canonical_id == supplied
+    assert decision.label_display_name == normalize_label_display(literal)
+    assert decision.rationale
+
+
+def test_structured_group_still_repairs_when_the_label_names_the_group_identity():
+    # DSLD 204501-style "Biotin" row the first pass matched to its yeast source.
+    decision = _label_named_decision("Biotin", "Biotin", "brewers_yeast")
+
+    assert decision.disposition == "repaired"
+    assert decision.canonical_id == "vitamin_b7_biotin"
+
+
+def test_structured_group_still_repairs_an_identity_the_label_does_not_name():
+    # No curated alias proves the supplied identity: the group stays the evidence.
+    decision = _label_named_decision("Wheat Grass juice powder", "Couch Grass", "wheatgrass")
+
+    assert decision.disposition == "repaired"
+    assert decision.canonical_id == "couch_grass"
+
+
+def test_general_blend_identity_is_not_protected_from_a_specific_group():
+    decision = _label_named_decision("PrimaVie Shilajit Fulvic Acid Complex", "Shilajit", "BLEND_GENERAL")
+
+    assert decision.disposition == "repaired"
+    assert decision.canonical_id == "shilajit"
+
+
+def test_proprietary_blend_group_keeps_a_branded_complex_named_after_one_member():
+    # DSLD 219819 "TamaFlex" (tamarind seed + acacia): a curated member alias must not
+    # turn the blend's total weight into tamarind mass.
+    registry = build_canonical_identity_registry({"ingredient_quality_map": {
+        "tamarind_extract": {"standard_name": "Tamarind Extract", "aliases": ["TamaFlex"]},
+        "BLEND_GENERAL": {"standard_name": "General Proprietary Blends", "aliases": ["Proprietary Blend"]},
+    }})
+    decision = resolve_identity(
+        row={"raw_source_text": "TamaFlex", "ingredientGroup": "Proprietary Blend",
+             "cleaner_row_role": "blend_header_total"},
+        supplied_canonical_id="tamarind_extract",
+        resolve_candidate=lambda value: {"proprietary blend": "BLEND_GENERAL"}.get(value.casefold()),
+        canonical_registry=registry,
+    )
+    assert decision.disposition == "repaired"
+    assert decision.canonical_id == "BLEND_GENERAL"
+
+
+def test_structured_group_may_refine_to_a_registered_child_of_the_label_identity():
+    registry = build_canonical_identity_registry({"ingredient_quality_map": {
+        "isoflavones": {"standard_name": "Isoflavones", "aliases": ["Soy Isoflavone Concentrate"]},
+        "soy_isoflavones": {"standard_name": "Soy Isoflavones", "aliases": []},
+    }})
+    decision = resolve_identity(
+        row={"raw_source_text": "Soy Isoflavone Concentrate", "ingredientGroup": "Soy Isoflavones"},
+        supplied_canonical_id="isoflavones",
+        resolve_candidate=lambda value: {"soy isoflavones": "soy_isoflavones"}.get(value.casefold()),
+        canonical_parent_of=lambda parent, child: (parent, child) == ("isoflavones", "soy_isoflavones"),
+        canonical_registry=registry,
+    )
+    assert decision.disposition == "repaired"
+    assert decision.canonical_id == "soy_isoflavones"
+
+
+def test_non_scorable_row_keeps_an_identity_its_label_names():
+    # DSLD 204501 ingredientRows[16].nestedRows[0] "Raw organic Svetol": the label is a
+    # curated alias of the supplied identity although the resolver cannot read it.
+    registry = build_canonical_identity_registry({"ingredient_quality_map": {
+        "green_coffee_bean": {"standard_name": "Green Coffee Bean", "aliases": ["Svetol"]},
+    }})
+    decision = resolve_identity(
+        row={"raw_source_text": "Raw organic Svetol", "ingredientGroup": "Green Coffee"},
+        supplied_canonical_id="green_coffee_bean",
+        resolve_candidate=lambda value: None,
+        canonical_registry=registry,
+        allow_unscoreable_taxonomy_only=True,
+    )
+    assert decision.disposition == "taxonomy_only"
+    assert decision.canonical_id == "green_coffee_bean"
+    assert decision.scoreable_identity is False
