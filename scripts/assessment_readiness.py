@@ -903,13 +903,14 @@ def _dose_readiness(
     *,
     module: str,
 ) -> Dict[str, Any]:
-    unresolved = unresolved_cfu_measurements(product) if module == "probiotic" else []
+    # Measurement holds follow their source rows, regardless of product route.
+    unresolved = unresolved_cfu_measurements(product)
     if unresolved:
         return {"readiness": READINESS_INCOMPLETE, "collection_status": "incomplete",
                 "assessment_source": "probiotic_measurements", "reason_code": "unresolved_source_quantity",
                 "incomplete_source_row_refs": sorted({r["source_row_ref"] for r in unresolved if r["source_row_ref"]}),
                 "measurements": unresolved}
-    afu_rows = pending_afu_measurements(product) if module == "probiotic" else []
+    afu_rows = pending_afu_measurements(product)
     if afu_rows:
         return {
             "readiness": READINESS_INCOMPLETE,
