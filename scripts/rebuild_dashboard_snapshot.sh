@@ -165,6 +165,8 @@ run_strict_gate "RDA/UL emitted-reference stamp parity" \
   "$PG_PYTHON" scripts/audit_rda_ul_reference_stamps.py --products-dir "$REPO_ROOT/scripts/products"
 run_strict_gate "scoring snapshot contract" \
   bash scripts/test.sh fast scripts/tests/test_scoring_snapshot_v1.py
+run_strict_gate "strict scoring static reads" \
+  "$PG_PYTHON" "$SOURCE_OF_TRUTH_AUDIT" scoring-static --strict-release
 
 # 1. Collect enriched + scored dirs.
 shopt -s nullglob
@@ -212,6 +214,13 @@ echo "◦ Building from ${#ENR[@]} enriched dirs + ${#SCR[@]} scored dirs..."
 run_strict_gate "active identity integrity" \
   "$PG_PYTHON" scripts/audit_identity_integrity.py \
     --products-dir scripts/products --export-dir "$FINAL_CANDIDATE"
+# Every raw DSLD row reaches the candidate with its printed name, the enricher's
+# identity and a recorded reason for any changed amount (ADR-0005). Raw labels
+# come from the corpus run's root ($PHARMAGUIDE_DATASET_ROOT or its default).
+run_strict_gate "raw-to-final line integrity" \
+  "$PG_PYTHON" scripts/audit_raw_to_final.py \
+    --build-dir "$FINAL_CANDIDATE" --products-root scripts/products --all \
+    --out "$FINAL_CANDIDATE/raw_to_final_audit.json"
 run_strict_gate "scoring assessment readiness" \
   "$PG_PYTHON" "$SOURCE_OF_TRUTH_AUDIT" scoring \
     --products-dir scripts/products --dist-dir "$FINAL_CANDIDATE" --strict-release

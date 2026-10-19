@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 import sys
+
+import pytest
 from pathlib import Path
 
 
@@ -289,3 +291,112 @@ def test_full_blend_requires_every_child_amount() -> None:
     assert [finding.code for finding in record.findings] == [
         "BLEND_CHILD_WITHOUT_DOSE_DISCLOSURE"
     ]
+
+
+# --- Line integrity: raw DSLD row -> exported row (ADR-0005) -----------------
+
+from audit_raw_to_final import _check_line_integrity  # noqa: E402
+
+
+def _line_fixture():
+    raw = {
+        "ingredientRows": [
+            {"name": "Vitamin C", "quantity": [{"quantity": 250, "unit": "mg"}, {"quantity": 500, "unit": "mg"}]},
+            {"name": "Herbal Blend", "quantity": [{"quantity": 0, "unit": "NP"}],
+             "nestedRows": [{"name": "organic Wheat Grass", "quantity": [{"quantity": 0, "unit": "NP"}]}]},
+        ],
+        "otheringredients": {"ingredients": [{"name": "Cellulose"}]},
+    }
+    cleaned = {"activeIngredients": [
+        {"raw_source_path": "ingredientRows[0]", "quantityVariants": [
+            {"quantity": 250, "unit": "mg"}, {"quantity": 500, "unit": "mg", "selected_for_analysis": True}]},
+    ]}
+    enriched = {"ingredient_quality_data": {"ingredients": [
+        {"raw_source_path": "ingredientRows[0]", "canonical_id": "vitamin_c"},
+        {"raw_source_path": "ingredientRows[1].nestedRows[0]", "canonical_id": "wheatgrass"},
+    ]}}
+    blob = {
+        "row_ledger": [
+            {"row_ref": "ingredientRows[0]", "source_label": "Vitamin C"},
+            {"row_ref": "ingredientRows[1]", "source_label": "Herbal Blend"},
+            {"row_ref": "ingredientRows[1].nestedRows[0]", "source_label": "organic  Wheat Grass"},
+            {"row_ref": "otheringredients.ingredients[0]", "source_label": "Cellulose"},
+        ],
+        "ingredients": [
+            {"raw_source_path": "ingredientRows[0]", "canonical_id": "vitamin_c", "quantity": 500.0, "unit": "mg"},
+        ],
+        "display_ingredients": [
+            {"raw_source_path": "ingredientRows[1].nestedRows[0]", "canonical_id": "wheatgrass",
+             "analysis": {"canonical_id": "wheatgrass"}},
+        ],
+    }
+    return raw, cleaned, enriched, blob
+
+
+def _line_codes(raw, cleaned, enriched, blob):
+    record = _record()
+    _check_line_integrity(record, raw, cleaned, enriched, blob)
+    return sorted(finding.code for finding in record.findings)
+
+
+def test_line_integrity_passes_a_straight_line_with_a_recorded_serving_column():
+    assert _line_codes(*_line_fixture()) == []
+
+
+def test_line_integrity_blocks_a_raw_row_lost_from_the_ledger():
+    raw, cleaned, enriched, blob = _line_fixture()
+    blob["row_ledger"] = [e for e in blob["row_ledger"] if e["row_ref"] != "otheringredients.ingredients[0]"]
+    assert _line_codes(raw, cleaned, enriched, blob) == ["RAW_ROW_MISSING_FROM_LEDGER"]
+
+
+def test_line_integrity_blocks_an_invented_row():
+    raw, cleaned, enriched, blob = _line_fixture()
+    blob["row_ledger"].append({"row_ref": "ingredientRows[7]", "source_label": "Ghost"})
+    blob["ingredients"].append({"raw_source_path": "ingredientRows[8]", "canonical_id": "x"})
+    assert _line_codes(raw, cleaned, enriched, blob) == ["LEDGER_ROW_NOT_IN_RAW", "LEDGER_ROW_NOT_IN_RAW"]
+
+
+def test_line_integrity_blocks_a_renamed_source_row():
+    raw, cleaned, enriched, blob = _line_fixture()
+    blob["row_ledger"][2]["source_label"] = "Couch Grass"
+    assert _line_codes(raw, cleaned, enriched, blob) == ["LEDGER_NAME_DIFFERS_FROM_RAW"]
+
+
+def test_line_integrity_blocks_an_export_identity_the_enricher_never_decided():
+    raw, cleaned, enriched, blob = _line_fixture()
+    blob["display_ingredients"][0]["analysis"]["canonical_id"] = "couch_grass"
+    blob["ingredients"][0]["canonical_id"] = "ascorbic_acid"
+    assert _line_codes(raw, cleaned, enriched, blob) == [
+        "EXPORT_IDENTITY_NOT_FROM_ENRICHER", "EXPORT_IDENTITY_NOT_FROM_ENRICHER"]
+
+
+def test_line_integrity_treats_unresolved_as_one_state():
+    raw, cleaned, enriched, blob = _line_fixture()
+    enriched["ingredient_quality_data"]["ingredients"][1]["canonical_id"] = None
+    blob["display_ingredients"][0]["analysis"]["canonical_id"] = ""
+    assert _line_codes(raw, cleaned, enriched, blob) == []
+
+
+@pytest.mark.parametrize("amount,unit", [(750.0, "mg"), (500.0, "mcg")])
+def test_line_integrity_blocks_an_amount_or_unit_change_without_evidence(amount, unit):
+    raw, cleaned, enriched, blob = _line_fixture()
+    blob["ingredients"][0].update(quantity=amount, unit=unit)
+    assert _line_codes(raw, cleaned, enriched, blob) == ["AMOUNT_CHANGE_WITHOUT_EVIDENCE"]
+
+
+def test_line_integrity_accepts_a_reviewer_signed_unit_correction():
+    raw, cleaned, enriched, blob = _line_fixture()
+    raw["ingredientRows"][0]["quantity"] = [{"quantity": 1, "unit": "g"}]
+    cleaned["activeIngredients"][0] = {"raw_source_path": "ingredientRows[0]", "quantity": 1.0,
+        "source_correction": {"corrected_quantity_unit": "mg", "original_quantity_unit": "g"}}
+    blob["ingredients"][0].update(quantity=1.0, unit="mg")
+    assert _line_codes(raw, cleaned, enriched, blob) == []
+
+
+def test_line_integrity_accepts_a_daily_value_dose_correction():
+    raw, cleaned, enriched, blob = _line_fixture()
+    raw["ingredientRows"][0]["quantity"] = [{"quantity": 110, "unit": "NP"}]
+    cleaned["activeIngredients"][0] = {"raw_source_path": "ingredientRows[0]", "dose_data_quality": {
+        "status": "corrected", "corrected_amount": 110.0, "corrected_unit": "mg"}}
+    blob["ingredients"][0].update(quantity=110.0, unit="mg")
+    assert _line_codes(raw, cleaned, enriched, blob) == []

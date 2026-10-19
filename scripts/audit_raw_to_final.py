@@ -27,6 +27,11 @@ Run:
       --out reports/raw_to_final_audit.json \
       --canary
 
+Every exported product, with the raw-row line checks (the snapshot/release gate):
+  python3 scripts/audit_raw_to_final.py \
+      --build-dir <final_db_output candidate> --products-root scripts/products \
+      --out <candidate>/raw_to_final_audit.json --all [--raw-root <raw DSLD labels>]
+
 For details on severity codes, see plan file:
   ~/.claude/plans/you-are-a-reactive-zephyr.md  §"Severity assignment"
 """
@@ -43,6 +48,8 @@ import sys
 from dataclasses import dataclass, field, asdict
 from pathlib import Path
 from typing import Any, Mapping
+
+from dataset_paths import brand_dataset_root
 
 
 # ---------------------------------------------------------------------------
@@ -129,6 +136,14 @@ FINDING_CATALOG: dict[str, str] = {
     "FLUTTER_DISPLAY_FALLBACK_MISMATCH":      SEVERITY_BLOCKER,
     "UNEXPLAINED_DROP_REASON":                SEVERITY_BLOCKER,
     "UNKNOWN_DROP_REASON_CODE":               SEVERITY_BLOCKER,
+    # BLOCKER — the straight line raw DSLD row → exported row (--raw-root)
+    "RAW_LABEL_NOT_FOUND":                    SEVERITY_BLOCKER,
+    "RAW_ROW_MISSING_FROM_LEDGER":            SEVERITY_BLOCKER,
+    "LEDGER_ROW_NOT_IN_RAW":                  SEVERITY_BLOCKER,
+    "LEDGER_NAME_DIFFERS_FROM_RAW":           SEVERITY_BLOCKER,
+    "EXPORT_IDENTITY_NOT_FROM_ENRICHER":      SEVERITY_BLOCKER,
+    "AMOUNT_CHANGE_WITHOUT_EVIDENCE":         SEVERITY_BLOCKER,
+    "BLOB_WITHOUT_ENRICHED_RECORD":           SEVERITY_BLOCKER,
     # HIGH — contract violation that breaks routing / interaction matching
     "CANONICAL_ID_MISSING_ON_MAPPED":         SEVERITY_HIGH,
     "DISPLAY_LABEL_COLLAPSES_TO_CANONICAL":   SEVERITY_HIGH,
@@ -1000,6 +1015,140 @@ def _check_unmapped_consistency(rec: ProductRecord, blob: dict) -> None:
 # Top-level audit driver
 # ---------------------------------------------------------------------------
 
+# ---------------------------------------------------------------------------
+# Line integrity — every raw DSLD row reaches the export unchanged or with a
+# recorded reason (line integrity audit 2026-10-19; ADR-0005)
+# ---------------------------------------------------------------------------
+
+def _raw_paths(raw: Mapping[str, Any]) -> dict[str, dict]:
+    """Every raw row path, enumerated from the label itself (not from the ledger)."""
+    paths: dict[str, dict] = {}
+
+    def walk(rows: Any, prefix: str) -> None:
+        for index, row in enumerate(rows if isinstance(rows, list) else []):
+            if not isinstance(row, dict):
+                continue
+            path = f"{prefix}[{index}]"
+            paths[path] = row
+            walk(row.get("nestedRows"), f"{path}.nestedRows")
+            for form_index, form in enumerate(row.get("forms") or []):
+                if isinstance(form, dict):
+                    paths[f"{path}.forms[{form_index}]"] = form
+
+    walk(raw.get("ingredientRows"), "ingredientRows")
+    other = raw.get("otheringredients")
+    walk(other.get("ingredients") if isinstance(other, dict) else None, "otheringredients.ingredients")
+    return paths
+
+
+def _line_text(value: Any) -> str:
+    return re.sub(r"\s+", " ", str(value or "")).strip().casefold()
+
+
+def _same_amount(a: Any, b: Any) -> bool:
+    return (
+        isinstance(a, (int, float)) and isinstance(b, (int, float))
+        and abs(float(a) - float(b)) <= 1e-9 * max(1.0, abs(float(a)))
+    )
+
+
+def _recorded_amounts(cleaned_row: Mapping[str, Any]) -> list[tuple[Any, str]]:
+    """(amount, unit) values the cleaner recorded a reason to export.
+
+    A selected printed serving column (quantityVariants), a reviewer-signed
+    source correction, or a %DV-equation dose correction (dose_data_quality).
+    """
+    out: list[tuple[Any, str]] = []
+    for variant in cleaned_row.get("quantityVariants") or []:
+        if isinstance(variant, dict) and variant.get("selected_for_analysis"):
+            out.append((variant.get("quantity"), _line_text(variant.get("unit"))))
+    correction = cleaned_row.get("source_correction")
+    if isinstance(correction, dict):
+        unit = correction.get("corrected_quantity_unit") or cleaned_row.get("unit")
+        amount = correction.get("corrected_quantity", cleaned_row.get("quantity"))
+        out.append((amount, _line_text(unit)))
+    quality = cleaned_row.get("dose_data_quality")
+    if isinstance(quality, dict) and quality.get("corrected_unit"):
+        out.append((quality.get("corrected_amount"), _line_text(quality.get("corrected_unit"))))
+    return out
+
+
+def _check_line_integrity(
+    rec: ProductRecord,
+    raw: Mapping[str, Any],
+    cleaned: Mapping[str, Any] | None,
+    enriched: Mapping[str, Any] | None,
+    blob: Mapping[str, Any],
+) -> None:
+    raws = _raw_paths(raw)
+    rows = {path for path in raws if ".forms[" not in path}
+    ledger = [entry for entry in blob.get("row_ledger") or [] if isinstance(entry, dict)]
+    refs = {entry.get("row_ref") for entry in ledger}
+    for path in sorted(rows - refs):
+        rec.add("RAW_ROW_MISSING_FROM_LEDGER", f"raw row {path} has no row_ledger entry",
+                ingredient=raws[path].get("name"), stage="blob")
+    for ref in sorted(str(r) for r in refs if r and r not in raws):
+        rec.add("LEDGER_ROW_NOT_IN_RAW", f"row_ledger names {ref}, which the raw label does not have", stage="blob")
+    for row in blob.get("ingredients") or []:
+        path = row.get("raw_source_path") if isinstance(row, dict) else None
+        if path and path not in raws:
+            rec.add("LEDGER_ROW_NOT_IN_RAW", f"exported row points at {path}, which the raw label does not have",
+                    ingredient=row.get("name"), stage="blob")
+    for entry in ledger:
+        ref = entry.get("row_ref")
+        if ref in raws and entry.get("source_label") is not None:
+            if _line_text(entry.get("source_label")) != _line_text(raws[ref].get("name")):
+                rec.add("LEDGER_NAME_DIFFERS_FROM_RAW",
+                        f"{ref}: ledger {entry.get('source_label')!r} vs raw {raws[ref].get('name')!r}", stage="blob")
+
+    # Identity: the enricher's decision for a path is what ships (ADR-0005).
+    decided: dict[str, set[str]] = collections.defaultdict(set)
+    iqd = (enriched or {}).get("ingredient_quality_data") or {}
+    for bucket in ("ingredients", "ingredients_skipped"):
+        for row in iqd.get(bucket) or []:
+            if isinstance(row, dict) and row.get("raw_source_path"):
+                decided[row["raw_source_path"]].add(str(row.get("canonical_id") or ""))
+    # The display ledger row keeps the printed label's identity for the app's
+    # ingredient-id union; the enricher's identity is its namespaced analysis.
+    exported = [("ingredients", row, row) for row in blob.get("ingredients") or [] if isinstance(row, dict)]
+    exported += [
+        ("display_ingredients.analysis", row, row["analysis"])
+        for row in blob.get("display_ingredients") or []
+        if isinstance(row, dict) and isinstance(row.get("analysis"), dict)
+    ]
+    for key, row, identity in exported:
+        path = row.get("raw_source_path")
+        if path in decided and str(identity.get("canonical_id") or "") not in decided[path]:
+            rec.add("EXPORT_IDENTITY_NOT_FROM_ENRICHER",
+                    f"{key} {path}: exported {identity.get('canonical_id')!r}, enricher decided "
+                    f"{sorted(decided[path])!r}", ingredient=row.get("name"), stage="blob")
+
+    # Amounts: a changed printed amount or unit carries the cleaner's recorded reason.
+    cleaned_rows = {
+        row.get("raw_source_path"): row
+        for row in (cleaned or {}).get("activeIngredients") or []
+        if isinstance(row, dict) and row.get("raw_source_path")
+    }
+    for row in blob.get("ingredients") or []:
+        path = row.get("raw_source_path") if isinstance(row, dict) else None
+        if path not in raws:
+            continue
+        printed = [q for q in raws[path].get("quantity") or [] if isinstance(q, dict)]
+        first = printed[0] if printed else {}
+        amount, unit = row.get("quantity"), _line_text(row.get("unit"))
+        if not (isinstance(first.get("quantity"), (int, float)) and first["quantity"] > 0
+                and isinstance(amount, (int, float))):
+            continue
+        if _same_amount(first["quantity"], amount) and _line_text(first.get("unit")) == unit:
+            continue
+        recorded = _recorded_amounts(cleaned_rows.get(path) or {})
+        if not any(_same_amount(a, amount) and u == unit for a, u in recorded):
+            rec.add("AMOUNT_CHANGE_WITHOUT_EVIDENCE",
+                    f"{path}: printed {first.get('quantity')} {first.get('unit')}, exported {amount} "
+                    f"{row.get('unit')} with no recorded serving column, correction or %DV evidence",
+                    ingredient=row.get("name"), stage="blob")
+
+
 def audit_product(
     dsld_id: str,
     archetype: str | None,
@@ -1008,6 +1157,8 @@ def audit_product(
     db_path: Path | None,
     stage_index: StageIndex | None,
     excluded_by_gate: Mapping[str, list[str]] | None = None,
+    *,
+    cleaned_record: dict | None = None,
 ) -> ProductRecord:
     blob = _read_blob(blob_dir, dsld_id)
     if blob is None:
@@ -1038,7 +1189,9 @@ def audit_product(
             )],
         )
 
-    cleaned = stage_index.read(dsld_id) if stage_index else None
+    cleaned = cleaned_record if cleaned_record is not None else (
+        stage_index.read(dsld_id) if stage_index else None
+    )
     core_row = _read_core_row(db_path, dsld_id) if db_path else None
 
     rec = ProductRecord(
@@ -1098,6 +1251,72 @@ def audit_product(
     return rec
 
 
+def _stage_batches(products_root: Path) -> list[tuple[Path, Path]]:
+    """(enriched batch, cleaned batch) pairs; approved submissions last, as the build joins them."""
+    pairs = []
+    for enriched_dir in sorted(products_root.glob("output_*_enriched/enriched")):
+        brand_dir = products_root / enriched_dir.parent.name.removesuffix("_enriched")
+        for enriched_path in sorted(enriched_dir.glob("enriched_*.json")):
+            pairs.append((enriched_path, brand_dir / "cleaned" / enriched_path.name.removeprefix("enriched_")))
+    return sorted(pairs, key=lambda pair: "Product_Submissions" in str(pair[0]))
+
+
+def audit_all_products(
+    blob_dir: Path,
+    products_root: Path,
+    raw_root: Path,
+    db_path: Path | None,
+    excluded_by_gate: Mapping[str, list[str]],
+) -> list[ProductRecord]:
+    """Every product with a detail blob, raw label → cleaned → enriched → blob → core row.
+
+    Streams one enriched batch (and its cleaned twin) at a time. A product built
+    from an approved submission is audited from that submission, as the build
+    joins it last; a submission has no DSLD raw label, so its line checks are
+    recorded as not applicable instead of passing silently.
+    """
+    raw_index = {path.stem: path for path in raw_root.rglob("*.json")}
+    batches = _stage_batches(products_root)
+    submitted: set[str] = set()
+    for enriched_path, _ in batches:
+        if "Product_Submissions" in str(enriched_path):
+            submitted.update(str(p.get("id") or p.get("dsld_id")) for p in json.loads(enriched_path.read_text()))
+    records: list[ProductRecord] = []
+    for enriched_path, cleaned_path in batches:
+        from_submission = "Product_Submissions" in str(enriched_path)
+        enriched_batch = json.loads(enriched_path.read_text())
+        cleaned_batch = json.loads(cleaned_path.read_text()) if cleaned_path.exists() else []
+        cleaned_by_id = {str(p.get("id") or p.get("dsld_id")): p for p in cleaned_batch if isinstance(p, dict)}
+        for enriched in enriched_batch:
+            if not isinstance(enriched, dict):
+                continue
+            dsld_id = str(enriched.get("id") or enriched.get("dsld_id") or "")
+            if not dsld_id or (dsld_id in submitted and not from_submission):
+                continue
+            if not (blob_dir / f"{dsld_id}.json").exists() and dsld_id not in excluded_by_gate:
+                continue  # never exported (e.g. the active-count gate); not a row-line question
+            rec = audit_product(dsld_id, None, blob_dir, products_root, db_path, None,
+                                excluded_by_gate, cleaned_record=cleaned_by_id.get(dsld_id))
+            blob = _read_blob(blob_dir, dsld_id)
+            if blob is not None:
+                if from_submission or enriched.get("manual_product_provenance"):
+                    rec.notes.append("approved submission: no DSLD raw label; line checks not applicable")
+                elif dsld_id not in raw_index:
+                    rec.add("RAW_LABEL_NOT_FOUND", f"no raw DSLD label {dsld_id}.json under {raw_root}", stage="raw")
+                else:
+                    _check_line_integrity(rec, json.loads(raw_index[dsld_id].read_text()),
+                                          cleaned_by_id.get(dsld_id), enriched, blob)
+            records.append(rec)
+        del enriched_batch, cleaned_batch, cleaned_by_id
+    audited = {rec.dsld_id for rec in records}
+    for blob_path in sorted(blob_dir.glob("*.json")):
+        if blob_path.stem not in audited:
+            rec = ProductRecord(blob_path.stem, None, None, None)
+            rec.add("BLOB_WITHOUT_ENRICHED_RECORD", "exported blob has no enriched record under products-root", stage="blob")
+            records.append(rec)
+    return records
+
+
 def _summarize(records: list[ProductRecord]) -> dict[str, Any]:
     by_severity: collections.Counter[str] = collections.Counter()
     by_code: collections.Counter[str] = collections.Counter()
@@ -1131,6 +1350,10 @@ def main() -> int:
                         help="audit only the canary archetype set (default if no --ids)")
     parser.add_argument("--ids", nargs="*", default=[],
                         help="explicit DSLD IDs to audit")
+    parser.add_argument("--all", action="store_true",
+                        help="audit every exported product, with the raw-row line checks")
+    parser.add_argument("--raw-root", type=Path, default=None,
+                        help="raw DSLD label root for --all (default: dataset_paths.brand_dataset_root)")
     parser.add_argument("--severity-min", default="BLOCKER",
                         choices=["BLOCKER", "HIGH", "MEDIUM", "LOW"],
                         help="exit non-zero if any finding at this severity or higher")
@@ -1145,6 +1368,19 @@ def main() -> int:
         print(f"ERROR: {args.products_root} missing", file=sys.stderr)
         return 2
 
+    excluded_by_gate = _load_excluded_by_gate(args.build_dir)
+    if args.all:
+        raw_root = args.raw_root or brand_dataset_root()
+        if not raw_root.is_dir():
+            print(f"ERROR: raw DSLD root {raw_root} missing; the line checks cannot run", file=sys.stderr)
+            return 2
+        print(f"[raw_to_final] auditing every exported product against {raw_root}", file=sys.stderr)
+        records = audit_all_products(blob_dir, args.products_root, raw_root, db_path, excluded_by_gate)
+        if not records:
+            print("ERROR: no exported products found to audit", file=sys.stderr)
+            return 2
+        return _report(args, records, products=[r for r in records if _at_or_above(r, args.severity_min)])
+
     # Pick targets
     if args.ids:
         targets = [(None, did) for did in args.ids]
@@ -1157,7 +1393,6 @@ def main() -> int:
     # Index the products_root so we can find cleaned batches quickly
     stage_index = StageIndex(args.products_root)
     stage_index.build(only_ids={did for _, did in targets})
-    excluded_by_gate = _load_excluded_by_gate(args.build_dir)
 
     records: list[ProductRecord] = []
     for archetype, did in targets:
@@ -1173,14 +1408,25 @@ def main() -> int:
         records.append(rec)
         marker = "X" if rec.has_blocker() else ("!" if any(f.severity == SEVERITY_HIGH for f in rec.findings) else ".")
         print(f"  [{marker}] {did} ({archetype}) — {len(rec.findings)} findings", file=sys.stderr)
+    return _report(args, records, products=records)
 
+
+_THRESHOLD_ORDER = ["LOW", "MEDIUM", "HIGH", "BLOCKER"]
+
+
+def _at_or_above(rec: ProductRecord, severity_min: str) -> bool:
+    floor = _THRESHOLD_ORDER.index(severity_min)
+    return any(_THRESHOLD_ORDER.index(f.severity) >= floor for f in rec.findings)
+
+
+def _report(args: argparse.Namespace, records: list[ProductRecord], products: list[ProductRecord]) -> int:
     report = {
         "schema": "raw_to_final_audit_v1",
         "build_dir": str(args.build_dir),
         "products_root": str(args.products_root),
         "finding_catalog": FINDING_CATALOG,
         "summary": _summarize(records),
-        "products": [r.as_dict() for r in records],
+        "products": [r.as_dict() for r in products],
     }
     args.out.parent.mkdir(parents=True, exist_ok=True)
     args.out.write_text(json.dumps(report, indent=2))
@@ -1192,15 +1438,13 @@ def main() -> int:
     print(f"products audited:           {s['products_audited']}")
     print(f"raw source available for:   {s['products_with_raw_source']}/{s['products_audited']}")
     print(f"findings by severity:       {s['by_severity']}")
-    print(f"products with BLOCKER:      {s['products_with_blocker']}")
-    print(f"products with HIGH:         {s['products_with_high']}")
+    print(f"products with BLOCKER:      {s['products_with_blocker'][:50]}")
+    print(f"products with HIGH:         {len(s['products_with_high'])}")
     print(f"top finding codes:")
     for code, n in sorted(s["by_code"].items(), key=lambda x: -x[1])[:10]:
         print(f"  {n:5d}  {code}")
 
-    threshold_order = ["LOW", "MEDIUM", "HIGH", "BLOCKER"]
-    threshold_idx = threshold_order.index(args.severity_min)
-    fail_if_any_at_or_above = set(threshold_order[threshold_idx:])
+    fail_if_any_at_or_above = set(_THRESHOLD_ORDER[_THRESHOLD_ORDER.index(args.severity_min):])
     triggered = sum(s["by_severity"].get(k, 0) for k in fail_if_any_at_or_above)
     return 1 if triggered > 0 else 0
 

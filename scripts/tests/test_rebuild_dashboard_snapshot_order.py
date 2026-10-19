@@ -113,3 +113,22 @@ def test_snapshot_lock_reentry_works_when_started_from_scripts_directory(tmp_pat
     )
     result = subprocess.run(['bash', script_name], cwd=scripts, capture_output=True, text=True)
     assert result.returncode == 0, result.stderr
+
+
+def test_raw_to_final_line_gate_runs_on_every_candidate_before_promotion() -> None:
+    source = SCRIPT.read_text()
+    build = source.index('"$PG_PYTHON" scripts/build_final_db.py')
+    line = source.index('run_strict_gate "raw-to-final line integrity"')
+    promotion = source.index('"$PG_PYTHON" scripts/promote_release_artifacts.py')
+    assert build < line < promotion
+    gate = source[line:source.index("run_strict_gate", line + 1)]
+    assert "scripts/audit_raw_to_final.py" in gate
+    assert '--build-dir "$FINAL_CANDIDATE"' in gate
+    assert "--all" in gate and "--canary" not in gate
+
+
+def test_scoring_static_gate_runs_before_catalog_build() -> None:
+    source = SCRIPT.read_text()
+    static = source.index('run_strict_gate "strict scoring static reads"')
+    assert static < source.index('"$PG_PYTHON" scripts/build_final_db.py')
+    assert "scoring-static --strict-release" in source[static:static + 200]
