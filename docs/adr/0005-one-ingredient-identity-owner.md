@@ -62,12 +62,17 @@ Measurements and receipts: `reports/identity_line_20261019/research.md`.
 
 ## Open decision (Sean)
 
-The app builds its stack-interaction and safety-alert id set from the union of blob `ingredients`,
-active `display_ingredients` rows and IQD ids (`product_canonical_ids.dart`). The ledger row's
-printed identity therefore reaches the app even where the enricher left a row unresolved
-(e.g. a "Caffeine Blend" header). Making the ledger row carry only the enricher's identity would
-remove interaction-rule subjects from that app set (951 capture: St John's wort in 2 products,
-caffeine 3, L-arginine 27, among others), so it was not changed here.
+The display ledger keeps two identities per row: `canonical_id` is the printed (cleaner) identity
+and `analysis.canonical_id` is the enricher's. Collapsing the row onto the enricher's identity was
+not done here. The app's id set (`product_canonical_ids.dart::canonicalIdsForProduct`) unions the
+core columns `key_ingredient_tags` and `ingredient_fingerprint` with the blob's ingredients, active
+ledger rows and IQD ids, and the core columns already carry the spellings that matter (18219:
+`["st_john_s_wort","st_johns_wort"]`; 12800's fingerprint includes caffeine). So collapsing the
+ledger would not by itself drop those subjects from the app; an earlier blob-only count in this
+branch overstated that. The real safety gap is on the pipeline side: profile warnings come only
+from rule ids, and rows the enricher leaves unresolved for scoring reasons (blend headers such as
+Ravage 1179 "Caffeine Blend", nested rows under non-therapeutic parents) fire no rule. That fix is
+owned by the separate lost-safety-subjects lane and builds on this branch.
 
 ## Follow-up: which row object each consumer reads
 
