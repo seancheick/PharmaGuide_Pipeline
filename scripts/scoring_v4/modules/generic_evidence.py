@@ -535,7 +535,10 @@ def _evidence_result_state(
         if authority_floor_decisive:
             return "evaluated_authority"
         return "evaluated_applicable"
-    if not _assessable_active_ingredients(product):
+    # "Nothing to assess" is read from the rows the resolver actually reviewed
+    # (owner-scoped subjects include label-level projections), never from the
+    # narrower label-row fallback.
+    if not prod_res.resolutions:
         return "no_assessable_actives"
 
     # Incomplete assessment: an assessable active is still open. Checked before

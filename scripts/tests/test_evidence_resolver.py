@@ -243,13 +243,17 @@ def test_literature_resolution_required_phase4():
     assert "literature_search_required_phase4" in res.blocking_reasons
 
 
-def test_safety_boundary_disqualification():
-    """Banned or recalled ingredients are disqualified from positive efficacy evidence."""
-    # Ephedra / Ephedrine is banned
-    res = er.resolve_evidence_for_canonical("ephedra", name="Ephedra sinica")
-    assert "safety_boundaries" in res.matched_owners
-    assert res.disposition == EvidenceDisposition.NOT_EFFICACY_RELEVANT.value
-    assert res.applicability_status == "safety_disqualified"
+def test_safety_listing_does_not_remove_an_active_from_evidence_review():
+    """A banned_recalled listing is charged by Safety, not by Evidence (F1).
+
+    Ephedra (banned) and vinpocetine (high_risk) are real actives: the resolver
+    reports their actual evidence review, here none on record, instead of
+    calling them not efficacy relevant ("nothing to assess")."""
+    for cid, name in (("ephedra", "Ephedra sinica"), ("vinpocetine", "Vinpocetine")):
+        res = er.resolve_evidence_for_canonical(cid, name=name)
+        assert "safety_boundaries" not in res.matched_owners
+        assert res.disposition == EvidenceDisposition.LITERATURE_RESOLUTION_REQUIRED.value
+        assert res.points_eligible is False
 
 
 def test_product_evidence_composition():
@@ -769,12 +773,12 @@ def test_phase4_final_sweep_reviewed_null_unfavorable():
         assert res.applicability_status == "reviewed_null_evidence"
         assert res.points_eligible is False
 
-    # Cape aloe latex is a high_risk banned_recalled entry (RISK_ALOE_LATEX,
-    # 7dc19997), so aloe_ferox now stops at the safety boundary like cascara,
-    # yohimbe and red yeast rice. It still earns no Evidence points.
+    # Cape aloe latex is a high_risk banned_recalled entry (RISK_ALOE_LATEX);
+    # Safety charges that. Evidence reports its reviewed null literature and
+    # it still earns no Evidence points.
     res = er.resolve_evidence_for_canonical("aloe_ferox")
-    assert res.disposition == EvidenceDisposition.NOT_EFFICACY_RELEVANT.value
-    assert res.applicability_status == "safety_disqualified"
+    assert res.disposition == EvidenceDisposition.REVIEWED_NULL_UNFAVORABLE.value
+    assert res.applicability_status == "reviewed_null_evidence"
     assert res.points_eligible is False
 
 
