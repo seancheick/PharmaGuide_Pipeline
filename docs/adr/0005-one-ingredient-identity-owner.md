@@ -59,6 +59,17 @@ printed identity therefore reaches the app even where the enricher left a row un
 remove interaction-rule subjects from that app set (951 capture: St John's wort in 2 products,
 caffeine 3, L-arginine 27, among others), so it was not changed here.
 
+## Follow-up: which row object each consumer reads
+
+The single field every consumer must read is the enricher's `ingredient_quality_data` row
+`canonical_id` (projected to blob `ingredients[].canonical_id`). A key-name census (architecture
+audit, 2026-10-19: `canonical_id` appears in 45 files outside the cleaner, `standardName` in 18)
+does not show which of those read the cleaner's `activeIngredients` row rather than IQD rows, UL
+flags or scoring-input rows (e.g. `scoring_v4/dose_safety.py` reads flag and scoring-row ids).
+A row-object census, then routing any cleaner-row reader onto the IQD identity, is a separate
+measured batch; this ADR's rule makes the two agree on the 2,311 rows where they diverged
+wrongly.
+
 ## Rejected
 
 - Moving identity ownership to the cleaner (the matrix and every consumer already follow the
