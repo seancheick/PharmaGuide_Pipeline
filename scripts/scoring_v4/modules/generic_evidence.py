@@ -24,6 +24,7 @@ from collagen_taxonomy import PEPTIDES_I_III, classify_collagen_subtype_strict
 from clinical_applicability import filter_clinical_matches
 from scoring_input_contract import (
     primary_mass_competitor_rows,
+    get_assessable_evidence_ingredients,
     get_evidence_subject_rows,
     is_lent_blend_mass,
     is_nutrition_fact_declaration as _contract_is_nutrition_fact,
