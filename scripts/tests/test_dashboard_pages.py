@@ -341,6 +341,30 @@ def test_unavailable_pillars_are_not_labelled_zero_or_unearned(dashboard_app, in
     assert "0.0 /" not in html and "below max" not in html and "/ 100</b>" not in html
 
 
+@pytest.mark.parametrize("missing", [None, float("nan")])
+def test_trace_missing_tier_and_reason_do_not_print_nan(dashboard_app, indexed, monkeypatch, missing):
+    scan, dist = indexed
+    data = dashboard_app.load_dashboard_data(dashboard_app.DashboardConfig(scan_dir=scan, build_root=dist))
+    ctx = dashboard_app.shell.init(data)
+    module = dashboard_app.view("trace")
+    original = ctx.index.product
+    def product(run, pid):
+        result = original(run, pid)
+        result["products"].loc[:, "tier"] = missing
+        result["products"].loc[:, "not_scorable_reason"] = missing
+        return result
+    monkeypatch.setattr(ctx.index, "product", product)
+    metrics = []
+    monkeypatch.setattr(module, "kpis", lambda items: metrics.extend(items))
+    dashboard_app.st.session_state["trace_dsld_id"] = "3"
+    dashboard_app.st.warning.reset_mock()
+    module.render(ctx)
+    assert next(value for label, value, _ in metrics if label == "Tier") == "—"
+    warnings = " ".join(str(call.args[0]) for call in dashboard_app.st.warning.call_args_list if call.args)
+    assert "BANNED_X" in warnings
+    assert "nan" not in warnings and "None" not in warnings
+
+
 def test_explorer_preserves_saved_confidence_predicates(dashboard_app, indexed, monkeypatch):
     scan, dist = indexed
     data = dashboard_app.load_dashboard_data(dashboard_app.DashboardConfig(scan_dir=scan, build_root=dist))
