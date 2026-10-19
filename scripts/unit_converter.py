@@ -43,6 +43,36 @@ from normalization import (
 
 logger = logging.getLogger(__name__)
 
+# Rules this module selects by name; a database without one would silently
+# leave that form unconverted. test_reference_loaders_fail_closed keeps the
+# set in step with every rule id written below.
+REQUIRED_VITAMIN_RULES = frozenset({
+    'choline_bitartrate_to_choline',
+    'folate_folic_acid',
+    'folate_food',
+    'folate_methylfolate',
+    'folate_unknown',
+    'inositol_hexanicotinate_to_niacin_equivalents',
+    'magnesium_hydroxide_to_magnesium',
+    'niacin',
+    'vitamin_a_beta_carotene_supplement',
+    'vitamin_a_other_provitamin_a_carotenoid',
+    'vitamin_a_retinol',
+    'vitamin_a_unknown',
+    'vitamin_d2',
+    'vitamin_d3',
+    'vitamin_e_d_alpha_tocopherol',
+    'vitamin_e_dl_alpha_tocopherol',
+    'vitamin_e_label_mg_alpha_tocopherol',
+    'vitamin_e_unknown',
+})
+# Form-detection pattern lists read by _detect_vitamin_a_form / _detect_vitamin_e_form.
+REQUIRED_FORM_PATTERNS = {
+    'vitamin_a': ('retinol_patterns', 'beta_carotene_patterns',
+                  'other_provitamin_a_carotenoid_patterns'),
+    'vitamin_e': ('natural_patterns', 'synthetic_patterns'),
+}
+
 
 @dataclass
 class ConversionResult:
@@ -135,18 +165,55 @@ class UnitConverter:
                 f"FATAL: Failed to load unit conversions database {self.db_path}: {e}"
             ) from e
 
-        self.version = self.db.get('_metadata', {}).get('version', 'unknown')
-        self.vitamin_conversions = self.db.get('vitamin_conversions', {})
-        self.mass_rules = self.db.get('mass_conversions', {}).get('rules', {})
-        self.form_patterns = self.db.get('form_detection_patterns', {})
-        if not self.vitamin_conversions or not self.mass_rules:
+        problems = self._structure_problems(self.db)
+        if problems:
             raise RuntimeError(
-                f"FATAL: unit conversions database {self.db_path} has no "
-                "vitamin_conversions or mass_conversions.rules"
+                f"FATAL: unit conversions database {self.db_path} is incomplete: "
+                + "; ".join(problems)
             )
+
+        self.version = self.db.get('_metadata', {}).get('version', 'unknown')
+        self.vitamin_conversions = self.db['vitamin_conversions']
+        self.mass_rules = self.db['mass_conversions']['rules']
+        self.form_patterns = self.db['form_detection_patterns']
 
         logger.info("Loaded unit_conversions.json v%s with %d vitamin rules",
                    self.version, len(self.vitamin_conversions))
+
+    @staticmethod
+    def _structure_problems(db) -> List[str]:
+        """What a loaded database lacks for the conversions this module makes."""
+        if not isinstance(db, dict):
+            return ["top level is not an object"]
+        problems = []
+        rules = db.get('vitamin_conversions')
+        if not isinstance(rules, dict) or not rules:
+            problems.append("vitamin_conversions is not a non-empty object")
+        else:
+            missing = sorted(REQUIRED_VITAMIN_RULES - set(rules))
+            if missing:
+                problems.append(f"missing vitamin rules {missing}")
+            # "conversions": null is authored ("no IU conversion", unknown form).
+            malformed = sorted(
+                rule_id for rule_id, rule in rules.items()
+                if not isinstance(rule, dict) or 'conversions' not in rule
+                or not isinstance(rule['conversions'], (dict, type(None)))
+            )
+            if malformed:
+                problems.append(f"rules without a conversions object or null {malformed}")
+        mass = db.get('mass_conversions')
+        if not isinstance(mass, dict) or not isinstance(mass.get('rules'), dict) or not mass['rules']:
+            problems.append("mass_conversions.rules is not a non-empty object")
+        patterns = db.get('form_detection_patterns')
+        if not isinstance(patterns, dict):
+            problems.append("form_detection_patterns is not an object")
+        else:
+            for nutrient, keys in REQUIRED_FORM_PATTERNS.items():
+                block = patterns.get(nutrient)
+                bad = [k for k in keys if not isinstance(block, dict) or not isinstance(block.get(k), list)]
+                if bad:
+                    problems.append(f"form_detection_patterns.{nutrient} lacks {bad}")
+        return problems
 
     def get_version(self) -> str:
         """Get database version."""
