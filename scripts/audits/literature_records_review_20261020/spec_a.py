@@ -11,6 +11,11 @@ article does not report are removed.
 D = "__DELETE__"
 PENDING = "verification_failure_unresolved"
 
+REPLACEMENTS = {
+    "24913818": {"title": "Rapid and sustainable detoxication of airborne pollutants by broccoli sprout beverage: results of a randomized clinical trial in China.",
+                 "quote": "Thus, intervention with broccoli sprouts enhances the detoxication of some airborne pollutants and may provide a frugal means to attenuate their associated long-term health risks."},
+}
+
 SPEC = {
     # ---- A1: combination / mixture -------------------------------------------------------
     "l_isoleucine": {
@@ -343,9 +348,13 @@ SPEC = {
                    "applicability_decision": "No verified human Schisandra trial with a dose or outcome is recorded. The cited PMID 18515024 is a narrative overview of Russian research; it reports no sample size, dose, duration or pooled effect. Evidence review pending."},
         "studies": {"18515024": {"study_type": "narrative_review", "sample_size": D, "dose": D, "duration": D, "outcome": "narrative overview of Russian pharmacological and clinical research; no pooled human dose or effect estimate", "effect_direction": D, "scoring_eligible": False}},
     },
+    # broccoli keeps its determination (crude powder blocked); its only citation was a narrative review, so it
+    # now cites the verified sprout-beverage trial whose evidence it cannot inherit (also in broccoli_sprout).
     "broccoli": {
-        "record": {"_pending": True, "studied_dose_exposure": {}, "population_context": "Not established: the only cited source is a narrative review",
-                   "applicability_decision": "Blocked: the only cited source (PMID 30372361) is a short narrative review of sulforaphane, not a human trial; it establishes no dose or efficacy, and crude whole broccoli powder cannot inherit sprout or sulforaphane research. Evidence review pending."},
-        "studies": {"30372361": {"study_type": "narrative_review", "sample_size": D, "dose": D, "duration": D, "outcome": "short narrative review of sulforaphane properties; no pooled human dose or effect estimate", "effect_direction": D, "scoring_eligible": False}},
+        "record": {"studied_dose_exposure": {}, "population_context": "Adults in Qidong, China, exposed to airborne pollutants (broccoli sprout beverage trial)",
+                   "applicability_decision": "Blocked from material form transfer. The only verified human trial concerns a broccoli sprout beverage providing 600 umol glucoraphanin and 40 umol sulforaphane daily (PMID 24913818); crude whole broccoli vegetable powder cannot inherit sprout or sulforaphane research. The previously cited PMID 30372361 is a narrative review with no human dose or outcome."},
+        "studies": {"30372361": {"_replace_pmid": "24913818", "study_type": "randomized_controlled_trial", "sample_size": 291,
+                                 "dose": "broccoli sprout beverage providing 600 umol glucoraphanin and 40 umol sulforaphane daily", "duration": "12 weeks",
+                                 "outcome": "urinary excretion of glutathione-derived conjugates of benzene (+61%) and acrolein (+23%) rose versus placebo", "effect_direction": "positive_moderate"}},
     },
 }

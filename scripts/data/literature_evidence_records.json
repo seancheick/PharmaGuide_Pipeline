@@ -1683,32 +1683,35 @@
       "records_screened": 41,
       "qualifying_human_studies": [
         {
-          "pmid": "30372361",
-          "title": "Isothiocyanate from Broccoli, Sulforaphane, and Its Properties.",
-          "study_type": "narrative_review",
-          "outcome": "short narrative review of sulforaphane properties; no pooled human dose or effect estimate",
+          "pmid": "24913818",
+          "title": "Rapid and sustainable detoxication of airborne pollutants by broccoli sprout beverage: results of a randomized clinical trial in China.",
+          "study_type": "randomized_controlled_trial",
+          "sample_size": 291,
+          "dose": "broccoli sprout beverage providing 600 umol glucoraphanin and 40 umol sulforaphane daily",
+          "duration": "12 weeks",
+          "outcome": "urinary excretion of glutathione-derived conjugates of benzene (+61%) and acrolein (+23%) rose versus placebo",
+          "effect_direction": "positive_moderate",
           "verification_provenance": {
             "pmid_verified": true,
-            "authoritative_live_title": "Isothiocyanate from Broccoli, Sulforaphane, and Its Properties.",
+            "authoritative_live_title": "Rapid and sustainable detoxication of airborne pollutants by broccoli sprout beverage: results of a randomized clinical trial in China.",
             "human_subjects_verified": true,
             "topic_match_verified": true,
             "retracted": false,
-            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/30372361/",
-            "verified_at": "2026-09-21T07:39:42.986936+00:00",
-            "abstract_evidence_quote": "It has been shown that sulforaphane may protect against various types of cancer, may also decrease the risk of cardiovascular disease, and help in autism and osteoporosis."
-          },
-          "scoring_eligible": false
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/24913818/",
+            "verified_at": "2026-10-20T15:58:37.598790+00:00",
+            "abstract_evidence_quote": "Thus, intervention with broccoli sprouts enhances the detoxication of some airborne pollutants and may provide a frugal means to attenuate their associated long-term health risks."
+          }
         }
       ],
       "effect_direction": "applicability_unestablished",
-      "population_context": "Not established: the only cited source is a narrative review",
+      "population_context": "Adults in Qidong, China, exposed to airborne pollutants (broccoli sprout beverage trial)",
       "studied_dose_exposure": {},
-      "applicability_decision": "Blocked: the only cited source (PMID 30372361) is a short narrative review of sulforaphane, not a human trial; it establishes no dose or efficacy, and crude whole broccoli powder cannot inherit sprout or sulforaphane research. Evidence review pending.",
-      "verification_result": "verification_failure_unresolved",
+      "applicability_decision": "Blocked from material form transfer. The only verified human trial concerns a broccoli sprout beverage providing 600 umol glucoraphanin and 40 umol sulforaphane daily (PMID 24913818); crude whole broccoli vegetable powder cannot inherit sprout or sulforaphane research. The previously cited PMID 30372361 is a narrative review with no human dose or outcome.",
+      "verification_result": "authoritative_pubmed_verified",
       "verification_provenance": {
         "verified_by": "scripts/api_audit/verify_literature_records.py",
         "verified_at": "2026-09-21T07:39:42.986936+00:00",
-        "all_pmids_verified": false,
+        "all_pmids_verified": true,
         "retractions_found": false
       }
     },

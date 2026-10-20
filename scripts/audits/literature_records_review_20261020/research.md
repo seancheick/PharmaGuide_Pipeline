@@ -10,7 +10,7 @@ lacks a figure and a PMC copy exists (PMCID cited in the row). Follow-up of PR #
 | Records | Count |
 |---|---|
 | Consistent with the article (incl. the curated October block and tart cherry, fixed in #212) | 82 |
-| Batch A: Evidence determination changes (this PR) | 39 |
+| Batch A: Evidence determination changes (38) plus broccoli's citation re-pointed (this PR) | 39 |
 | Batch B: study facts corrected, determination unchanged (stacked PR) | 116 |
 
 Defect classes found: rows citing a different paper than the trial they describe (review, in-vitro or animal
@@ -34,7 +34,7 @@ another. The 10-item hand sample in the scan README (3 format-only, 5 unverifiab
   Exception kept: negative safety signals from non-trial sources (graviola, artemisinin, kava, aloe ferox) stay
   negative, matching the curated precedent.
 - A wrong-PMID row whose described trial exists was re-pointed only after a PubMed search and a content read
-  of the new abstract (batch B: goldenseal 17495878, dong quai 9418683, chitosan 18646097, ipriflavone 11255425).
+  of the new abstract (batch A: broccoli 24913818, already verified in broccoli_sprout; batch B: goldenseal 17495878, dong quai 9418683, chitosan 18646097, ipriflavone 11255425).
   PMIDs recalled from memory were all wrong when checked and were not used.
 - Applied by `apply.py` from the explicit per-record patches in `spec_a.py` / `spec_b.py`; nothing fetched or
   generated during the apply. `data_batch.py check --expect` proves the diff equals the spec.
@@ -45,11 +45,33 @@ another. The 10-item hand sample in the scan README (3 format-only, 5 unverifiab
   `literature_evidence_records.json` ("no config for file"), so these citations were never content-verified;
   `verify_literature_records.py` checks existence/topic only. This is how the wrong-paper rows passed.
 - `evidence_resolver.py` pumpkin gate treats "oil" in a label as a material match to "purified oil trials", but
-  the only cited trial (GRANU, PMID 25196580) had no oil arm and its extract arm was null. The broccoli gate's
-  premise ("purified extract trials") rests on a record that cites only a narrative review.
+  the only cited trial (GRANU, PMID 25196580) had no oil arm and its extract arm was null.
+- `verify_literature_records.py` has no `--help` or dry-run: invoking it rewrites the data file in place.
 - `myricetin`: `effect_direction: negative` with no studies (pre-existing `verify_semantic_applicability` violation).
 - graviola neurotoxicity has no safety-owner rule (harmful_additives / banned_recalled); its only signal is this
   Evidence record.
+
+## backed_clinical_studies dose-bearing entries — checked, no change
+
+The 15 entries that carry `min_clinical_dose`, `max_studied_clinical_dose`, `dose_range` or `studied_regimens`
+were checked against their cited abstracts (PMC full text for BCAA). All stated amounts match:
+
+| Entry | Stated | Article |
+|---|---|---|
+| BRAND_KSM66 | 250-600 mg | 125 or 300 mg twice daily (32021735); 300 mg twice daily (23439798) |
+| INGR_LACTOFERRIN | 200 mg | 100 mg twice daily (19639462) |
+| BRAND_CARNIPURE | 2,000 mg | 2 g/day L-carnitine as LCLT (11788381, 20045157) |
+| INGR_L_CARNITINE | 1,000-4,000 mg; peak ~2,000 | 1-4 g/day (32958033); 2,000 mg/day maximal effect (32359762) |
+| BRAND_OPTIMSM / INGR_MSM | 2,000-6,000 mg | 3 g twice daily (16309928); 10 x 200 mg/day (37447322) |
+| INGR_ZINC_PICOLINATE regimens | 80-92, 192-207 mg | same ranges in 28515951 (acetate/gluconate lozenges, as the notes say) |
+| INGR_ACETYL_L_CARNITINE | 1,000-3,000; 1,500-3,000 mg | 1.5-3.0 g/day (12598816); 1,500-3,000 mg/day neuropathy trials (31201734) |
+| INGR_BRANCHED_CHAIN_AMINO_ACIDS | 5,000-29,300 mg | 3.15-29.3 g/day; > 5 g/day more favourable for soreness (38625669, PMC11021390) |
+| INGR_L_ARGININE | 1,500-12,000; >= 4,000 mg | 1.5-2 and 10-12 g/day (32370176); >= 4 g/day for SBP (34967840) |
+| INGR_WHITE_KIDNEY_BEAN | 1,500 or 3,000 mg (notes) | Phaseolean 1,500 or 3,000 mg/day, 45 days (39170208) |
+| INGR_D_MANNOSE regimen | 2,000 mg | 2 g daily for 6 months, null (38587819) |
+| INGR_D_ASPARTIC_ACID regimens | 3,000; 6,000 mg | 3 g/day climbers (29893592); 6 g/day (28841667, 38201906); 3 and 6 g (25844073) |
+| BRAND_TESNOR | 200-400 mg | 200 or 400 mg LN18178 (35129040, 35928723) |
+| BRAND_SYTRINOL | 300 mg | 270 mg citrus flavonoids + 30 mg tocotrienols (17985810) |
 
 ### Batch A — 39 records
 
@@ -86,11 +108,11 @@ another. The 10-item hand sample in the scan README (3 format-only, 5 unverifiab
 | `l_threonine` | 37004875 | CONTRA n 7 -> 11; dose -> six intakes 5-35 mg/kg/d IAAO requirement study, not efficacy; dir positive_moderate unsupported -> applicability_unestablished (methionine pattern) | reviewed_clinical → applicability_unestablished | A1 preparation mismatch |
 | `l_carnosine` | 20091069 → none | GHOST 20091069 = narrative review of beta-alanine (Derave/Artioli 2010), not a 1000 mg/day L-carnosine RCT; n/dose/duration invented -> remove row; record has no study left | reviewed_clinical → verification_pending | A3 no verified trial |
 | `l_phenylalanine` | 37629744 → none | GHOST 37629744 narrative review of depression in Parkinson's; open-label n40 100-500 mg 15 d invented -> remove row | reviewed_clinical → verification_pending | A3 no verified trial |
-| `docosapentaenoic_acid_dpa` | 30716358 | GHOST 30716358 = narrative review; RCT n24/1000 mg DPA/4 wk/platelet invented -> remove row | reviewed_clinical → verification_pending | A3 no verified trial |
-| `dimethyl_glycine` | 34823458 | GHOST 34823458 = DMG-in-autism review; RCT n16/1500 mg/14 d/VO2max null invented -> remove row | reviewed_null → verification_pending | A3 no verified trial |
-| `boswellia_serrata_resin` | 32565872 | GHOST 32565872 = rat MIA + in vitro (LI13019F1); RCT n75/100 mg/90 d invented -> remove row | reviewed_clinical → verification_pending | A3 no verified trial |
-| `perilla_oil` | 21909287 | GHOST 21909287 = narrative review of perilla fatty acids; RCT n60/3-5 g/12 wk/EPA-DHA invented -> remove row | reviewed_clinical → verification_pending | A3 no verified trial |
-| `superoxide_dismutase` | 15742357 | GHOST 15742357 = animal study ("animals supplemented with Glisodin"); human RCT n40/500 mg/4 wk invented -> remove row | reviewed_clinical → verification_pending | A3 no verified trial |
+| `docosapentaenoic_acid_dpa` | 30716358 | GHOST 30716358 = narrative review; RCT n24/1000 mg DPA/4 wk/platelet invented -> citation kept, labelled by its real design, scoring_eligible false | reviewed_clinical → verification_pending | A3 no verified trial |
+| `dimethyl_glycine` | 34823458 | GHOST 34823458 = DMG-in-autism review; RCT n16/1500 mg/14 d/VO2max null invented -> citation kept, labelled by its real design, scoring_eligible false | reviewed_null → verification_pending | A3 no verified trial |
+| `boswellia_serrata_resin` | 32565872 | GHOST 32565872 = rat MIA + in vitro (LI13019F1); RCT n75/100 mg/90 d invented -> citation kept, labelled by its real design, scoring_eligible false | reviewed_clinical → verification_pending | A3 no verified trial |
+| `perilla_oil` | 21909287 | GHOST 21909287 = narrative review of perilla fatty acids; RCT n60/3-5 g/12 wk/EPA-DHA invented -> citation kept, labelled by its real design, scoring_eligible false | reviewed_clinical → verification_pending | A3 no verified trial |
+| `superoxide_dismutase` | 15742357 | GHOST 15742357 = animal study ("animals supplemented with Glisodin"); human RCT n40/500 mg/4 wk invented -> citation kept, labelled by its real design, scoring_eligible false | reviewed_clinical → verification_pending | A3 no verified trial |
 | `schisandra_berry` | 18515024 | CONTRA 18515024 narrative overview of Russian research: n500, 500-1500 mg/day, multi-week invented; appl ">=500 mg/day" + sde invented | reviewed_clinical → verification_pending | A3 no verified trial |
 | `schisandra` | 18515024 | CONTRA 18515024 narrative review; n250, 500-1500 mg, 2-12 wk invented (same as R38) | reviewed_clinical → verification_pending | A3 no verified trial |
-| `broccoli` | 30372361 | CONTRA 30372361 short narrative review: n 250, 100 umol, multi-week, systematic_review all invented; sde 500 invented | applicability_unestablished → verification_pending | A3 no verified trial |
+| `broccoli` | 30372361 → 24913818 | 30372361 is a short narrative review of sulforaphane: its n250 / 100 umol / multi-week / systematic-review facts are invented. Citation re-pointed to the verified broccoli sprout beverage RCT 24913818 (291 adults, 600 umol glucoraphanin + 40 umol sulforaphane daily, 12 weeks; same row as broccoli_sprout), which crude powder cannot inherit; determination unchanged. | applicability_unestablished | citation re-pointed, determination unchanged |

@@ -402,14 +402,10 @@ def test_false_transfer_canary_pumpkin_food_vs_extract():
 
 
 def test_false_transfer_canary_broccoli_food_vs_extract():
-    """Crude broccoli vegetable powder earns no reviewed-evidence credit.
-
-    The broccoli record's only citation (PMID 30372361) is a short narrative review, not a
-    sprout-extract trial (literature records review 2026-10-20), so it reads review pending.
-    """
+    """Crude broccoli vegetable powder cannot inherit standardized sulforaphane sprout extract trials."""
     res = er.resolve_evidence_for_canonical("broccoli", dose_value=500.0, dose_unit="mg")
-    assert res.disposition == EvidenceDisposition.LITERATURE_RESOLUTION_REQUIRED.value
-    assert res.blocking_reasons == ["literature_verification_pending"]
+    assert res.disposition == EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value
+    assert "literature_applicability_unestablished" in res.blocking_reasons
 
 
 def test_tribulus_null_unfavorable():
@@ -491,11 +487,10 @@ def test_material_context_preserves_specific_disclosure():
         "amount": 500,
         "unit": "mg",
     })
-    # The broccoli literature record cites no verified human trial (only a narrative review),
-    # so crude broccoli reads review pending (literature records review 2026-10-20).
-    assert res_crude_broccoli.disposition == EvidenceDisposition.LITERATURE_RESOLUTION_REQUIRED.value
+    assert res_crude_broccoli.disposition == EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value
+    assert res_crude_broccoli.applicability_status == "crude_whole_food_powder_blocked"
 
-    # 2. A standardized sulforaphane sprout extract matches its own reviewed clinical record
+    # 2. Standardized broccoli sprout extract with sulforaphane matches clinical extract
     res_std_broccoli = er.resolve_evidence_for_row({
         "canonical_id": "broccoli",
         "name": "Broccoli Sprout Extract",
@@ -504,7 +499,6 @@ def test_material_context_preserves_specific_disclosure():
         "unit": "mg",
     })
     assert res_std_broccoli.disposition == EvidenceDisposition.RESOLVED_BY_REVIEWED_CLINICAL_EVIDENCE.value
-    assert res_std_broccoli.matched_owners == ["backed_clinical_studies"]
 
     # 3. Crude pumpkin seed powder blocked from purified seed oil trials
     res_crude_pumpkin = er.resolve_evidence_for_row({

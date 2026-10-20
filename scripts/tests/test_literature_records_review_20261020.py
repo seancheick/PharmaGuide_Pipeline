@@ -34,7 +34,6 @@ NO_VERIFIED_TRIAL = {
     "superoxide_dismutase": "15742357",     # animal study
     "schisandra_berry": "18515024",         # narrative overview
     "schisandra": "18515024",
-    "broccoli": "30372361",                 # short narrative review
 }
 
 
@@ -53,6 +52,14 @@ def test_a_record_without_a_verified_trial_reads_review_pending(records, cid, pm
     logging.disable(logging.WARNING)
     resolution = resolve_evidence_for_canonical(cid)
     assert resolution.blocking_reasons == ["literature_verification_pending"]
+
+
+def test_broccoli_cites_the_sprout_trial_it_cannot_inherit(records):
+    record = records["broccoli"]
+    study, = record["qualifying_human_studies"]
+    assert study["pmid"] == "24913818" and study["sample_size"] == 291
+    assert record["effect_direction"] == "applicability_unestablished"
+    assert "30372361" in record["applicability_decision"] and "cannot inherit" in record["applicability_decision"]
 
 
 @pytest.mark.parametrize("cid", ["l_carnosine", "l_phenylalanine"])
