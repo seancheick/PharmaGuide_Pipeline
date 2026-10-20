@@ -2219,3 +2219,16 @@ systematic review and meta-analysis) added to references; PMID 40964149 graded s
 `standard_name` to "Tart Cherry" (option A) — measured +0.7 to +2.9 Evidence on 12 products whose tart cherry rows are
 non-material, undosed blend members, because direct clinical matches earn ingredient_points without a materiality check.
 Re-apply "Tart Cherry" after that Evidence defect (its own task) lands.
+
+## October 20 — only material rows enter a multi's panel form quality (claude/panel-form-quality-materiality)
+
+Class: behavioral scoring (Formulation, plus role readiness). Owners: `scoring_input_contract.py::classify_ingredient_roles`
+(L4, and the shared `MATERIAL_ROLES` set, formerly `assessment_readiness._MATERIAL_ROLES`) and
+`multi_prenatal_formulation.py::_scorable_ingredients`. Found by the #213 audit: an 85 mg CherryPure row moved 23 Life
+Extension Mix scores because the panel average read every dose-bearing row. Fix 1: L4 counted a panel nutrient as
+material only in mass units, so vitamins A/D/E in IU and folate in mcg DFE were adjuncts; it now reads
+`generic_helpers.has_usable_individual_dose`. Fix 2: the panel reads only material-role rows. Measured on the stored
+15,426-product corpus (`~/pg_quality/panel_materiality_pr_20261020/summary.md`): fix 1 moves 11 multis scored ->
+not_scored, each now holding a material panel nutrient with an unresolved dose (8 vitamin A of unknown form, 3 "NP"
+units) under the existing readiness policy; fix 2 moves 1,161 Formulation scores (877 within 0.5, range -8.1..+2.8),
+no status or safety change. Open: DSLD "NP" units on 269538/331688 zinc and 60740 niacin are capture gaps.
