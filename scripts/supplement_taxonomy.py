@@ -300,7 +300,7 @@ def _specialized_panel_identity(
 
 _ACCESSORY_PROTEIN_RE = re.compile(r"\bwith\b.*\b(?:protein|whey|casein)\b")
 _COMPETING_PROTEIN_TITLE_TOKENS = (
-    "collagen", "gelatin", "prenatal", "fish oil", "krill", "omega",
+    "collagen", "gelatin", "prenatal", "fish oil", "krill", "omega", "fiber",
 )
 
 
@@ -315,7 +315,7 @@ def _declared_protein_identity(
     identity is absent from ``canonical_ids``. The router's own pair identifies it
     (``route_features.has_protein_product_intent`` + ``nutrition_summary.protein_g``);
     neither alone suffices and the macro row never becomes an active. A title naming
-    another identity (collagen, greens, omega, prenatal, pre-workout) or a dominant
+    another identity (collagen, greens, omega, fiber, prenatal, pre-workout) or a dominant
     collagen/omega row keeps that identity, and "X with protein" marks protein as an
     accessory.
     """

@@ -118,6 +118,8 @@ def test_panel_protein_without_protein_title_intent_does_not_retype(pipeline):
      [_row(1, "Folate", "vitamin", "Folate", 400, "mcg", 100),
       _row(2, "Iron", "mineral", "Iron", 27, "mg", 150),
       _row(3, "Iodine", "mineral", "Iodine", 150, "mcg", 100)], None),
+    ("259374", "Organic Hemp Powder Protein & Fiber", 11,
+     [_row(1, "Hemp Seed Powder", "botanical", "Hemp", 30, "g")], None),
     ("327398", "Grass Fed Collagen Protein", 9,
      [_row(1, "Bovine Collagen Peptides", "protein", "Collagen", 10, "g")], "collagen"),
 ])
