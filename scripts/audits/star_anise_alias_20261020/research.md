@@ -14,8 +14,9 @@ star anise as botanical_ingredients `star_anise` (note: "distinguish from toxic 
 are removed and star anise rows resolve there.
 
 Caution for future curation: GSRS's STAR ANISE record also lists the homeopathic synonym
-"ILLICIUM ANISATUM [HPUS]" (Japanese star anise, the neurotoxic species). That synonym list must not be used to map
-identity.
+"ILLICIUM ANISATUM [HPUS]", which is Japanese star anise, a different species that contains the neurotoxin anisatin
+(PMID 12014242: a 2001 Dutch outbreak of seizures after herbal tea contaminated with Illicium anisatum; anisatin
+confirmed by NMR). That synonym list must not be used to map identity.
 
 Not changed (follow-up): the pipeline has no star anise or Illicium anisatum interaction or warning rule. Adding
 one needs its own sourced safety entry.
