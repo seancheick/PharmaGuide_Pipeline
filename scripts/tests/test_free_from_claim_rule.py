@@ -10,8 +10,10 @@ gluten_free -> core is_gluten_free) used the same global signal. One rule,
 scoring_input_contract.free_from_claim_contradiction, now decides per claim
 group: a source or cross-contact hit of that group, or a may-contain sentence
 no parser read. Gluten cross-contact counts wheat, rye and barley (21 CFR
-101.91(a)(1)); a barley or rye ingredient is left as on main (open 101.91
-question for Sean).
+101.91(a)(1)). Whether a wheat, rye or barley ingredient contradicts a
+gluten-free claim is the one switch
+GLUTEN_GRAIN_INGREDIENT_CONTRADICTS_GLUTEN_FREE (True, main's B2 result; open
+101.91 question for Sean).
 """
 
 import json
