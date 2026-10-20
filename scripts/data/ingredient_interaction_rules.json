@@ -9787,15 +9787,16 @@
           "condition_id": "bleeding_disorders",
           "severity": "caution",
           "evidence_level": "established",
-          "mechanism": "EPA and DHA competitively inhibit arachidonic acid metabolism, suppressing thromboxane A2 (TXA2) synthesis and reducing platelet aggregation. At doses >3 g/day of combined EPA+DHA, clinically measurable prolongation of bleeding time has been observed. Fish oil may also reduce factor VII levels, a vitamin K-dependent coagulation factor.",
-          "action": "If you have a bleeding disorder, discuss fish oil supplements with your clinician. Clinically significant bleeding is not consistently demonstrated in trials; your other medicines and condition matter.",
+          "mechanism": "EPA and DHA competitively inhibit arachidonic acid metabolism, suppressing thromboxane A2 (TXA2) synthesis and reducing platelet aggregation. At doses >3 g/day of combined EPA+DHA, clinically measurable prolongation of bleeding time has been observed. A fish-oil case report notes that omega-3 fatty acids may decrease factor VII levels (a vitamin K-dependent coagulation factor); algal DHA at 1.62 g/day did not alter the thrombogenic factors measured (PMID 9001371).",
+          "action": "If you have a bleeding disorder, discuss omega-3 (EPA/DHA) supplements with your clinician. Clinically significant bleeding is not consistently demonstrated in trials; your other medicines and condition matter.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/17192169/",
-            "https://pubmed.ncbi.nlm.nih.gov/14742793/"
+            "https://pubmed.ncbi.nlm.nih.gov/14742793/",
+            "https://pubmed.ncbi.nlm.nih.gov/9001371/"
           ],
           "alert_headline": "High-dose omega-3 may affect bleeding",
           "alert_body": "High-dose EPA/DHA (3g+/day) can modestly affect platelet function. If you have a bleeding disorder or use blood thinners, review your omega-3 dose with your clinician.",
-          "informational_note": "Fish oil can affect platelet function — relevant to people with a bleeding disorder.",
+          "informational_note": "Omega-3 (EPA/DHA) can affect platelet function — relevant to people with a bleeding disorder.",
           "profile_gate": {
             "gate_type": "condition",
             "requires": {
@@ -9822,15 +9823,15 @@
           "condition_id": "surgery_scheduled",
           "severity": "monitor",
           "evidence_level": "probable",
-          "mechanism": "Antiplatelet effects via TXA2 suppression may theoretically increase perioperative bleeding risk. A large RCT (OPERA, n=1516) found no significant increase in surgical bleeding at standard doses; however, high-dose use (6 g/day) combined with anticoagulants has produced serious hemorrhagic events.",
-          "action": "Inform your surgical team about fish oil and any blood thinners, and follow their product-specific instructions.",
+          "mechanism": "Antiplatelet effects via TXA2 suppression may theoretically increase perioperative bleeding risk. In a large fish-oil trial (OPERA, n=1516; 8-10 g before surgery, then 2 g/day), perioperative bleeding was not increased. In one reported case, 6 g/day of omega-3 taken with warfarin and aspirin was followed by a subdural hematoma after a fall.",
+          "action": "Inform your surgical team about omega-3 (EPA/DHA) supplements and any blood thinners, and follow their product-specific instructions.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/30571332/",
             "https://pubmed.ncbi.nlm.nih.gov/17192169/"
           ],
           "alert_headline": "Review high-dose omega-3 before surgery",
           "alert_body": "High-dose EPA/DHA may affect platelet function, but large trials have not shown a clear increase in bleeding. Tell your surgical team about omega-3 use before a procedure.",
-          "informational_note": "Fish oil can affect perioperative bleeding — relevant to anyone preparing for surgery.",
+          "informational_note": "Omega-3 (EPA/DHA) can affect perioperative bleeding — relevant to anyone preparing for surgery.",
           "profile_gate": {
             "gate_type": "profile_flag",
             "requires": {
@@ -9860,13 +9861,13 @@
           "severity": "caution",
           "evidence_level": "established",
           "mechanism": "Antiplatelet/antithrombotic at high dose. Most dietary doses (1-2 g/day EPA+DHA) clinically insignificant; ≥3 g/day raises bleeding risk in patients on warfarin or antiplatelets.",
-          "action": "Tell your warfarin prescriber about fish oil supplements and ask about INR monitoring when starting, stopping or changing them.",
+          "action": "Tell your warfarin prescriber about omega-3 (EPA/DHA) supplements and ask about INR monitoring when starting, stopping or changing them.",
           "sources": [
             "https://ods.od.nih.gov/factsheets/Omega3FattyAcids-HealthProfessional/",
             "https://www.nccih.nih.gov/health/omega3-supplements-in-depth"
           ],
           "alert_headline": "Bleeding risk at high doses",
-          "alert_body": "Fish oil at 3 g/day or higher can thin the blood. Combined with warfarin or antiplatelet medication, this raises bleeding risk.",
+          "alert_body": "EPA/DHA at 3 g/day or higher can thin the blood. Combined with warfarin or antiplatelet medication, this raises bleeding risk.",
           "informational_note": "Omega-3 has dose-dependent antiplatelet activity — most relevant at total EPA+DHA ≥3 g/day.",
           "profile_gate": {
             "gate_type": "drug_class",
@@ -9894,16 +9895,16 @@
           "drug_class_id": "antiplatelets",
           "severity": "caution",
           "evidence_level": "established",
-          "mechanism": "Additive inhibition of platelet aggregation through independent TXA2 suppression. Combined use of high-dose fish oil with aspirin and warfarin has been associated with subdural hematoma after minor trauma.",
-          "action": "Discuss fish oil supplements with your antiplatelet prescriber and report unusual bruising or bleeding.",
+          "mechanism": "Additive inhibition of platelet aggregation through independent TXA2 suppression. In one reported case, high-dose fish oil taken with aspirin and warfarin was followed by a subdural hematoma after minor trauma.",
+          "action": "Discuss omega-3 (EPA/DHA) supplements with your antiplatelet prescriber and report unusual bruising or bleeding.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/17192169/",
             "https://ods.od.nih.gov/factsheets/Omega3FattyAcids-HealthProfessional/",
             "https://www.nccih.nih.gov/health/omega3-supplements-in-depth"
           ],
           "alert_headline": "May add to antiplatelet effects",
-          "alert_body": "Fish oil has mild antiplatelet activity. If you take an antiplatelet medication like aspirin or clopidogrel, talk to your prescriber before adding fish oil.",
-          "informational_note": "Fish oil can affect platelet function — relevant to people on antiplatelets.",
+          "alert_body": "Omega-3 (EPA/DHA) has mild antiplatelet activity. If you take an antiplatelet medication like aspirin or clopidogrel, talk to your prescriber before adding it.",
+          "informational_note": "Omega-3 (EPA/DHA) can affect platelet function — relevant to people on antiplatelets.",
           "profile_gate": {
             "gate_type": "drug_class",
             "requires": {
@@ -9930,15 +9931,15 @@
           "drug_class_id": "nsaids",
           "severity": "monitor",
           "evidence_level": "theoretical",
-          "mechanism": "The retained sources do not establish a direct clinical NSAID interaction or a universal combined gastrointestinal-bleeding risk from fish oil. A possible interaction remains a precaution.",
-          "action": "Monitor for GI symptoms when combining fish oil with NSAIDs. Take NSAIDs with food.",
+          "mechanism": "The retained sources do not establish a direct clinical NSAID interaction or a universal combined gastrointestinal-bleeding risk from omega-3 (EPA/DHA) supplements. A possible interaction remains a precaution.",
+          "action": "Monitor for GI symptoms when combining omega-3 (EPA/DHA) with NSAIDs. Take NSAIDs with food.",
           "sources": [
             "https://ods.od.nih.gov/factsheets/Omega3FattyAcids-HealthProfessional/",
             "https://www.nccih.nih.gov/health/omega3-supplements-in-depth"
           ],
           "alert_headline": "May add to NSAID bleeding risk",
-          "alert_body": "A clinically important fish-oil interaction with NSAIDs is uncertain. Discuss use with your prescriber, especially if you also take blood thinners or have bleeding risks.",
-          "informational_note": "Fish oil can affect platelet function — relevant to people on NSAIDs.",
+          "alert_body": "A clinically important omega-3 (EPA/DHA) interaction with NSAIDs is uncertain. Discuss use with your prescriber, especially if you also take blood thinners or have bleeding risks.",
+          "informational_note": "Omega-3 (EPA/DHA) can affect platelet function — relevant to people on NSAIDs.",
           "profile_gate": {
             "gate_type": "drug_class",
             "requires": {
@@ -9968,7 +9969,7 @@
         "evidence_level": "established",
         "notes": "ODS reports FDA considers up to 5 g/day EPA+DHA from supplements safe when used as directed, with no established UL. This is not a pregnancy-specific dose recommendation or individual safety clearance.",
         "alert_headline": "Continue omega-3 under prenatal care",
-        "alert_body": "Discuss fish oil use and the specific EPA+DHA dose with your prenatal or breastfeeding clinician. General adult supplement guidance does not establish an individual pregnancy or breastfeeding dose.",
+        "alert_body": "Discuss omega-3 (EPA/DHA) use and the specific dose with your prenatal or breastfeeding clinician. General adult supplement guidance does not establish an individual pregnancy or breastfeeding dose.",
         "informational_note": "Omega-3 is part of standard prenatal support — relevant to anyone pregnant or breastfeeding.",
         "profile_gate": {
           "gate_type": "profile_flag",
