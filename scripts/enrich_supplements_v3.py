@@ -112,6 +112,7 @@ from scoring_input_contract import (
     UNRESOLVED_IDENTITY_NO_QUALITY_MAP_MATCH,
     derive_product_scoring_evidence,
     get_evidence_subject_rows,
+    gluten_free_claim_contradicted,
     is_nutrition_fact_declaration,
     get_scoring_ingredients,
     normalize_product_evidence_scope,
@@ -15483,9 +15484,7 @@ class SupplementEnricherV3:
             any(term in c for term in ["allergen", "dairy", "soy", "egg", "gluten", "wheat", "shellfish", "nut"])
             for c in conflicts
         )
-        gluten_contradiction = has_may_contain or any(
-            ("gluten" in c) or ("wheat" in c) for c in conflicts
-        )
+        gluten_contradiction = gluten_free_claim_contradicted(allergen_hits, has_may_contain, conflicts)
         vegan_contradiction = any(
             any(term in c for term in ["gelatin", "bovine", "porcine", "vegan", "vegetarian"])
             for c in conflicts

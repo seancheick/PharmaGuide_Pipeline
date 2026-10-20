@@ -92,6 +92,34 @@ SCORING_ROUTE_CONFIDENCE = {"high", "medium", "low", "failed"}
 _ROUTE_SCORING_ROWS_CACHE_KEY = "__scoring_input_contract_route_rows_cache"
 
 
+# 21 CFR 101.91(a)(1): wheat, rye and barley (with crossbreeds such as
+# triticale, a wheat alias) are the gluten-containing grains; oats are not.
+GLUTEN_GRAIN_ALLERGEN_IDS = frozenset({"ALLERGEN_WHEAT", "ALLERGEN_RYE", "ALLERGEN_BARLEY"})
+_CROSS_CONTACT_PRESENCE = frozenset({"may_contain", "facility_warning"})
+
+
+def gluten_free_claim_contradicted(
+    allergen_hits: Any, has_may_contain_warning: Any, conflicts: Any,
+) -> bool:
+    """Whether label evidence contradicts a gluten-free claim.
+
+    A detected gluten/wheat conflict, or cross-contact with a gluten grain,
+    does. A may-contain or facility warning that names only other allergens
+    ("a facility that also produces products that contain milk") does not.
+    A may-contain signal that no parsed warning explains still does, since
+    the unparsed text may name a gluten grain.
+    """
+    if any("gluten" in str(c).lower() or "wheat" in str(c).lower() for c in conflicts or []):
+        return True
+    cross = [
+        hit for hit in allergen_hits or []
+        if isinstance(hit, dict) and hit.get("presence_type") in _CROSS_CONTACT_PRESENCE
+    ]
+    if any(hit.get("allergen_id") in GLUTEN_GRAIN_ALLERGEN_IDS for hit in cross):
+        return True
+    return bool(has_may_contain_warning) and not cross
+
+
 def normalize_product_evidence_scope(value: Any) -> str:
     """Project source-specific scope labels into the scoring vocabulary."""
     scope = _norm(value)

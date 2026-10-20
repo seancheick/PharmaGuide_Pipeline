@@ -28,6 +28,7 @@ from scoring_input_contract import (
     _positive_quantity,
     dose_disclosure_status,
     get_scoring_ingredients,
+    gluten_free_claim_contradicted,
     has_source_printed_amount,
     is_nutrition_fact_declaration,
 )
@@ -269,10 +270,14 @@ def _derive_claim_validations(
 
     if explicit_gluten is None:
         gluten_claim = bool(compliance.get("gluten_free", False))
-        contradiction = has_may_contain or any(
-            ("gluten" in conflict) or ("wheat" in conflict) for conflict in conflicts
+        allergen_hits = _safe_list(
+            _safe_dict(_safe_dict(product.get("contaminant_data")).get("allergens")).get(
+                "allergens", product.get("allergen_hits", [])
+            )
         )
-        gluten_valid = gluten_claim and not contradiction
+        gluten_valid = gluten_claim and not gluten_free_claim_contradicted(
+            allergen_hits, has_may_contain, conflicts
+        )
     else:
         gluten_valid = bool(explicit_gluten)
 
