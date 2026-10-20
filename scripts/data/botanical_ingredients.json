@@ -3,7 +3,7 @@
     "description": "Non-standardized whole herb powders and simple botanical extracts without guaranteed marker compounds. Used for basic ingredient mapping. For premium standardized extracts with marker compounds, see standardized_botanicals.json.",
     "purpose": "ingredient_mapping",
     "schema_version": "5.2.0",
-    "last_updated": "2026-10-19",
+    "last_updated": "2026-10-20",
     "total_entries": 558,
     "functional_roles_field": {
       "added_in": "5.1.0",
@@ -4652,7 +4652,6 @@
         "prunus avium",
         "sweet cherry",
         "cherry crystals",
-        "cherry puree powder",
         "sweet cherry powder"
       ],
       "category": "fruit",
@@ -4675,7 +4674,8 @@
       },
       "cui": "C0946748",
       "audit_trail": [
-        "Sprint D2.5 (2026-04-20): added 2 aliases to close silently-mapped rows surfaced by deep accuracy audit: ['cherry puree powder', 'sweet cherry powder']"
+        "Sprint D2.5 (2026-04-20): added 2 aliases to close silently-mapped rows surfaced by deep accuracy audit: ['cherry puree powder', 'sweet cherry powder']",
+        "2026-10-20: removed species-ambiguous ['cherry puree powder'] (the label names no cherry species); with tart_cherry_fruit deferring to IQM tart_cherry, a shared ambiguous alias would otherwise resolve to one cherry."
       ],
       "functional_roles": [],
       "attributes": {
@@ -13495,8 +13495,6 @@
         "CherryPure Sour Cherry extract",
         "CherryPure tart cherry proanthocyanidin",
         "Prunus cerasus",
-        "cherry puree powder",
-        "cherry puree",
         "tart cherry puree powder",
         "CherryPURE Whole Montmorency Tart Cherry Fruit Powder",
         "cherrypure whole montmorency tart cherry fruit powder",
@@ -13508,7 +13506,6 @@
       "external_ids": {
         "unii": "1L29G6428X"
       },
-      "rxcui": "1012134",
       "gsrs": {
         "substance_name": "SOUR CHERRY",
         "substance_class": "structurallyDiverse",
@@ -13522,7 +13519,8 @@
       },
       "cui": "C0330657",
       "audit_trail": [
-        "Sprint D2.5 (2026-04-20): added 3 aliases to close silently-mapped rows surfaced by deep accuracy audit: ['cherry puree powder', 'cherry puree', 'tart cherry puree powder']"
+        "Sprint D2.5 (2026-04-20): added 3 aliases to close silently-mapped rows surfaced by deep accuracy audit: ['cherry puree powder', 'cherry puree', 'tart cherry puree powder']",
+        "2026-10-20: removed species-ambiguous ['cherry puree powder', 'cherry puree'] (the label names no cherry species); with tart_cherry_fruit deferring to IQM tart_cherry, a shared ambiguous alias would otherwise resolve to one cherry."
       ],
       "functional_roles": [],
       "attributes": {

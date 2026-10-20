@@ -16,7 +16,7 @@ DATA = Path(__file__).resolve().parents[1] / "data" / "literature_evidence_recor
 
 def _record():
     return next(r for r in json.loads(DATA.read_text())["literature_evidence_records"]
-                if r.get("canonical_id") == "tart_cherry_fruit")
+                if r.get("canonical_id") in ("tart_cherry", "tart_cherry_fruit"))
 
 
 def test_the_record_describes_the_juice_trial_it_cites():

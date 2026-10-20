@@ -32,7 +32,7 @@
     "statistics": {
       "total_parents": 655,
       "total_forms": 1474,
-      "total_form_aliases": 12290,
+      "total_form_aliases": 12295,
       "parents_with_parent_aliases": 150,
       "parents_with_contains_aliases": 0,
       "parents_with_pattern_aliases": 0
@@ -64238,7 +64238,10 @@
           "tart cherry fruit extract",
           "tart cherry juice concentrate",
           "montmorency tart cherry juice concentrate",
-          "cherrypure tart cherry"
+          "cherrypure tart cherry",
+          "cherrypure tart cherry (prunus cerasus) proanthocyanidin extract",
+          "cherrypure sour cherry (tart cherry) proanthocyanidin extract",
+          "cherrypure tart cherry (prunus cerasus) extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -64278,7 +64281,9 @@
           "sour cherry, powder",
           "tart cherry powder",
           "tart cherry fruit powder",
-          "cherrypure tart cherry fruit & skin powder"
+          "cherrypure tart cherry fruit & skin powder",
+          "cherrypure sour cherry (tart cherry) proanthocyanidin powder",
+          "cherrypure whole montmorency tart cherry fruit powder"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -64306,7 +64311,9 @@
       "last_reviewed_at": "2026-02-25",
       "research_status": "unverified"
     },
-    "external_ids": {},
+    "external_ids": {
+      "unii": "1L29G6428X"
+    },
     "aliases": []
   },
   "spearmint": {

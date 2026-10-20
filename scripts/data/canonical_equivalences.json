@@ -3,11 +3,11 @@
     "description": "Reviewed identity equivalences and specificity relationships across pipeline registries.",
     "schema_version": "1.0.0",
     "version": "2026-07-13",
-    "total_entries": 7,
+    "total_entries": 8,
     "total_relationships": 9,
     "purpose": "Prevent cleaner/enricher identity drift using reviewed exact-identity and broad-to-specific contracts.",
     "policy": "Only exact same-substance records may be redirected. Parent, form, preparation, and context relationships require separate handling.",
-    "last_updated": "2026-10-05"
+    "last_updated": "2026-10-20"
   },
   "equivalences": [
     {
@@ -71,6 +71,15 @@
       "target_id": "blueberry",
       "relation": "exact_equivalent",
       "basis": "Both records describe Vaccinium corymbosum fruit/whole-fruit powder and share CUI C1027331; the blueberry record also carries the verified FDA UNII 253RUG1X1A.",
+      "scope": "all_identity_contexts"
+    },
+    {
+      "source_db": "botanical_ingredients",
+      "source_id": "tart_cherry_fruit",
+      "target_db": "ingredient_quality_map",
+      "target_id": "tart_cherry",
+      "relation": "exact_equivalent",
+      "basis": "Shared FDA UNII 1L29G6428X (GSRS SOUR CHERRY, parent substance PRUNUS CERASUS WHOLE); both records are Prunus cerasus fruit, so one identity.",
       "scope": "all_identity_contexts"
     }
   ],
