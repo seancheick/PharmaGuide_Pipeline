@@ -1504,6 +1504,10 @@ def build_allergen_patterns(enriched: Dict) -> List[Dict]:
     return patterns
 
 
+def _contains_phrase(text: str, phrase: str) -> bool:
+    return bool(phrase) and re.search(rf"(?<![a-z0-9]){re.escape(phrase)}(?![a-z0-9])", text) is not None
+
+
 def matching_allergen_hits(patterns: List[Dict], *ingredient_terms: Any) -> List[Dict]:
     matches = []
     seen = set()
@@ -1512,7 +1516,8 @@ def matching_allergen_hits(patterns: List[Dict], *ingredient_terms: Any) -> List
         pattern = item.get("pattern", "")
         if not pattern:
             continue
-        if any(pattern in term or term in pattern for term in normalized_terms):
+        # Whole words only: "wheat" is not in "buckwheat", "pea" not in "peanut flavor".
+        if any(_contains_phrase(term, pattern) or _contains_phrase(pattern, term) for term in normalized_terms):
             hit = item["hit"]
             key = id(hit)
             if key not in seen:
@@ -2749,13 +2754,19 @@ def derive_v4_tradeoffs(
     # B2 declared allergen source — gate on enriched allergen presence (the v3
     # user-facing meaning, neutral label). v4's narrower B2 (false allergen-free
     # claim) is a different signal; allergen *presence* is what users consider.
+    allergen_label_prefix = {
+        "contains": "Declared allergen source",
+        "may_contain": "May contain",
+        "manufactured_in_facility": "Made in a facility that also handles",
+    }
     for a in safe_list(enriched.get("allergen_hits")):
         if isinstance(a, dict):
+            presence = export_allergen_presence(a.get("presence_type"))
             penalties.append({
                 "id": "B2",
-                "label": f"Declared allergen source: {safe_str(a.get('allergen_name'))}",
+                "label": f"{allergen_label_prefix[presence]}: {safe_str(a.get('allergen_name'))}",
                 "severity": safe_str(a.get("severity_level")),
-                "presence": safe_str(a.get("presence_type")),
+                "presence": presence,
             })
     # B1 dietary sugar — already enriched-gated in v3; carried over verbatim.
     sugar_penalty = _dietary_sugar_penalty_detail(enriched)
@@ -10107,6 +10118,23 @@ def annotate_probiotic_blend_totals(
     return out
 
 
+# Enrichment presence -> the export/app vocabulary (contains, may_contain,
+# manufactured_in_facility; FINAL_EXPORT_SCHEMA_V1.md). An allergen named in
+# the ingredient list is present, so it exports as "contains".
+EXPORT_ALLERGEN_PRESENCE = {
+    "contains": "contains",
+    "ingredient_list": "contains",
+    "may_contain": "may_contain",
+    "facility_warning": "manufactured_in_facility",
+    "manufactured_in_facility": "manufactured_in_facility",
+}
+
+
+def export_allergen_presence(presence_type: Any) -> str:
+    """The exported presence type of one allergen hit."""
+    return EXPORT_ALLERGEN_PRESENCE.get(safe_str(presence_type), "contains")
+
+
 def build_structured_allergens(enriched: Dict) -> List[Dict]:
     """Phase 8: structured per-allergen array for client-side personalization.
 
@@ -10138,7 +10166,7 @@ def build_structured_allergens(enriched: Dict) -> List[Dict]:
             "display_name": safe_str(
                 hit.get("allergen_name") or hit.get("standard_name")
             ),
-            "presence_type": safe_str(hit.get("presence_type"), "contains"),
+            "presence_type": export_allergen_presence(hit.get("presence_type")),
             "severity_level": safe_str(hit.get("severity_level"), "moderate"),
             "evidence": safe_str(hit.get("evidence")),
         })
@@ -10167,8 +10195,7 @@ def generate_allergen_summary(enriched: Dict) -> Optional[str]:
     for hit in allergen_hits:
         if isinstance(hit, dict):
             name = safe_str(hit.get("allergen_name") or hit.get("standard_name"))
-            presence = safe_str(hit.get("presence_type"), "contains")
-            names = grouped_names.get(presence, grouped_names["contains"])
+            names = grouped_names[export_allergen_presence(hit.get("presence_type"))]
             if name and name not in names:
                 names.append(name)
 

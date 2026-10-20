@@ -12898,13 +12898,24 @@ class SupplementEnricherV3:
         }
 
     # P0.1: Allergen presence type precedence (higher = wins in conflicts)
+    # An ingredient-list or "contains" hit is the allergen itself; it never
+    # yields to a cross-contact statement for the same allergen.
     ALLERGEN_PRESENCE_PRIORITY = {
         "contains": 5,
-        "may_contain": 4,
-        "facility_warning": 3,
-        "ingredient_list": 2,
+        "ingredient_list": 4,
+        "may_contain": 3,
+        "facility_warning": 2,
         "unknown": 1
     }
+
+    # A statement line that opens a new clause rather than continuing a list.
+    _STATEMENT_LINE_CUE = re.compile(
+        r"^\W*(?:contains?\b|may\s+contain|allerg(?:en|y)|warning|caution|"
+        r"(?:manufactured|produced|processed|made|packaged|bottled)\b|"
+        r"(?:this|the|our)\s+(?:product|formula|supplement|facility)\b|"
+        r"free\s+(?:of|from)\b|no\b|non\b|without\b|does\s+not|do\s+not|not\s+(?:manufactured|made)\b|"
+        r"[a-z]+[- ]free\b)"
+    )
 
     def _extract_allergen_presence_from_text(self, product: Dict) -> List[Dict]:
         """
@@ -13032,11 +13043,21 @@ class SupplementEnricherV3:
         # Scope negation to its own clause. A product can legitimately say
         # "Made without gluten. Contains milk"; the first clause must not erase
         # the independent positive declaration in the second.
-        # Lines of one statement are separate clauses too ("No added sugar"
-        # on one line must not swallow "This product contains whey" below it).
+        # A line of one statement starts a new clause only when it opens with a
+        # new cue ("No added sugar" / "This product contains whey"); any other
+        # line continues the list above it ("Contains:\nMilk, Soy").
+        lines = [line.strip() for line in re.split(r'[\r\n\t]+', text_lower) if line.strip()]
+        merged_lines: List[str] = []
+        for line in lines:
+            if merged_lines and not self._STATEMENT_LINE_CUE.match(line):
+                joiner = ' ' if re.search(r'[:,]$', merged_lines[-1]) else ', '
+                merged_lines[-1] = merged_lines[-1] + joiner + line
+            else:
+                merged_lines.append(line)
         clauses = [
             clause.strip()
-            for clause in re.split(r'(?<=[.!?])\s+|;\s*|\s+\bbut\b\s+|[\r\n\t]+', text_lower)
+            for line in merged_lines
+            for clause in re.split(r'(?<=[.!?])\s+|;\s*|\s+\bbut\b\s+', line)
             if clause.strip()
         ]
         if len(clauses) > 1:
@@ -13069,8 +13090,9 @@ class SupplementEnricherV3:
             first = min(negator_starts)
             # A declaration after the negator is its own clause: "Contains no
             # artificial colors, contains soy" still declares soy.
+            # "Free of dairy, which contains lactose" is one negated phrase.
             later = re.search(
-                r"(?<!\bnot\s)(?<!n't\s)\b(?:contains|may\s+contain)\b",
+                r"(?<!\bnot\s)(?<!n't\s)(?<!\bwhich\s)(?<!\bthat\s)\b(?:contains|may\s+contain)\b",
                 text_lower[first + 1:],
             )
             if later:
@@ -13093,8 +13115,16 @@ class SupplementEnricherV3:
 
         # "Allergen information: Fish, Soy" / "Allergens: milk." list what the
         # product contains.
+        # A cue inside the line decides otherwise: "Allergen information: No
+        # milk" negates, "Allergens: Produced on equipment that ..." is a
+        # facility warning (read below), "Allergens: May contain ..." may-contain.
         listed = re.match(r'^\W*allerg(?:en|y)s?(?:\s+information)?\s*:\s*([^.]+)', text_lower)
-        if listed and not re.match(r'\s*(?:contains|may\s+contain)\b', listed.group(1)):
+        if listed and not re.match(
+            r'\s*(?:contains|may\s+contain|no|none|free)\b', listed.group(1)
+        ) and not re.search(
+            r'\b(?:facility|facilities|equipment|production\s+lines?|manufactured|produced|processed)\b',
+            listed.group(1),
+        ):
             self._extract_allergens_from_text(listed.group(1), allergen_lookup, found,
                                                "contains", source, text, by_phrase=True)
 
@@ -13140,9 +13170,17 @@ class SupplementEnricherV3:
         # facility with products that contain egg, fish ...", "manufactured
         # on equipment which processes dairy") names cross-contact sources
         # after the cue word.
+        # It must also say the line processes something ("facility tests every
+        # lot for gluten" names no source).
         cue = None if matched_facility else re.search(
             r'\b(?:facility|facilities|equipment|production\s+lines?)\b', text_lower
         )
+        if cue and not re.search(
+            r'\b(?:process(?:es|ed|ing)?|handl(?:es|ed|ing|e)|produc(?:es|ed|ing|e)|uses?|used|'
+            r'manufactur(?:es|ed|ing|e)|packag(?:es|ed|ing|e)|contain(?:s|ing)?|shared?)\b',
+            text_lower[cue.end():],
+        ):
+            cue = None
         if cue:
             self._extract_allergens_from_text(text_lower[cue.end():], allergen_lookup, found,
                                                "facility_warning", source, text, by_phrase=True)
