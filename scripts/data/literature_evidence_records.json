@@ -3,11 +3,11 @@
     "description": "Phase 4 shadow literature resolution registry for high-impact canonical actives",
     "purpose": "literature_evidence_resolution",
     "schema_version": "5.0.0",
-    "last_updated": "2026-10-18",
-    "total_entries": 807,
+    "last_updated": "2026-10-19",
+    "total_entries": 808,
     "verification_pipeline": "scripts/api_audit/verify_literature_records.py",
     "verified_studies_count": 279,
-    "verified_records_count": 807
+    "verified_records_count": 808
   },
   "literature_evidence_records": [
     {
@@ -25945,6 +25945,29 @@
       "verification_provenance": {
         "verified_by": "Codex primary-content review of retained live PubMed API receipts",
         "verified_at": "2026-10-08T04:35:08.624987+00:00",
+        "all_pmids_verified": true,
+        "retractions_found": false
+      }
+    },
+    {
+      "canonical_id": "green_bell_pepper",
+      "material_form": "Green bell pepper (Capsicum annuum, sweet cultivar) fruit powder or juice in a whole-food blend",
+      "search_query": "(\"bell pepper\"[tiab] OR \"sweet pepper\"[tiab] OR \"green pepper\"[tiab]) AND (randomized controlled trial[pt] OR clinical trial[pt]); \"Capsicum annuum\"[tiab] AND (randomized controlled trial[pt] OR clinical trial[pt])",
+      "search_date": "2026-10-19",
+      "databases_searched": [
+        "PubMed"
+      ],
+      "records_screened": 13,
+      "qualifying_human_studies": [],
+      "effect_direction": "not_efficacy_relevant",
+      "population_context": "not applicable (food matrix)",
+      "studied_dose_exposure": {},
+      "applicability_decision": "Identity classification, not a literature claim: green bell pepper in these labels is a vegetable powder inside a fruit-and-vegetable blend. A bounded, not exhaustive PubMed screen (13 records) found no single-ingredient supplement trial; the hits were bell pepper juice added to yoga therapy (PMID 28917374), capsaicin, capsinoid or paprika-oleoresin studies of hot or sweet Capsicum extracts, child vegetable-acceptance trials and agronomy.",
+      "applicability_status": "whole_food_matrix_not_efficacy_relevant",
+      "verification_result": "identity_classification_no_literature_claim",
+      "verification_provenance": {
+        "verified_by": "identity straight line 2026-10-19: live PubMed esearch/esummary screen of all 13 records",
+        "verified_at": "2026-10-19",
         "all_pmids_verified": true,
         "retractions_found": false
       }

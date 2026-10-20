@@ -1,0 +1,5945 @@
+{
+ "products": 3596,
+ "changed_products": 796,
+ "causes": {
+  "identity_changed": 618,
+  "app_id_lost": 306,
+  "score_moved": 108,
+  "display_name_changed": 93,
+  "app_id_gained": 72,
+  "interaction_rule_gained": 16,
+  "interaction_rule_lost": 19
+ },
+ "unexplained_products": [
+  "1646",
+  "176181",
+  "182869",
+  "208587",
+  "208593",
+  "218600",
+  "219819",
+  "219827",
+  "219832",
+  "219842",
+  "219914",
+  "219916",
+  "219919",
+  "219921",
+  "219923",
+  "222850",
+  "222887",
+  "222908",
+  "229119",
+  "232243",
+  "232295",
+  "232635",
+  "232659",
+  "232921",
+  "232926",
+  "232928",
+  "232931",
+  "232933",
+  "232942",
+  "232945",
+  "232952",
+  "233013",
+  "233016",
+  "233029",
+  "233043",
+  "233050",
+  "233085",
+  "233091",
+  "233110",
+  "239178",
+  "240136",
+  "241684",
+  "242659",
+  "243091",
+  "243094",
+  "243976",
+  "250719",
+  "255590",
+  "25593",
+  "256077",
+  "259600",
+  "259886",
+  "26361",
+  "26370",
+  "267300",
+  "267301",
+  "269428",
+  "270511",
+  "274020",
+  "274061",
+  "274081",
+  "274135",
+  "274320",
+  "274620",
+  "275467",
+  "275474",
+  "277367",
+  "291259",
+  "29262",
+  "304633",
+  "30565",
+  "306383",
+  "312956",
+  "318106",
+  "318254",
+  "319907",
+  "319908",
+  "321357",
+  "321358",
+  "326243",
+  "326285",
+  "326693",
+  "326694",
+  "330833",
+  "330834",
+  "330899",
+  "330901",
+  "335662",
+  "5816",
+  "5873",
+  "64816",
+  "64842",
+  "66349",
+  "66957",
+  "74364",
+  "74586",
+  "77175",
+  "77201",
+  "78446",
+  "78564",
+  "79881",
+  "801",
+  "83155"
+ ],
+ "candidate_line_gate_findings": {},
+ "identity_pairs": [
+  [
+   [
+    "NHA_CHILI_PEPPER",
+    "green_bell_pepper",
+    "clean"
+   ],
+   376,
+   [
+    [
+     "174600",
+     "ingredientRows[22].nestedRows[9]",
+     "organic Green Bell Pepper"
+    ],
+    [
+     "174600",
+     "ingredientRows[22].nestedRows[9]",
+     "organic Green Bell Pepper"
+    ],
+    [
+     "174605",
+     "ingredientRows[22].nestedRows[9]",
+     "organic Green Bell Pepper"
+    ]
+   ]
+  ],
+  [
+   [
+    "barley_unspecified",
+    "barley_grass",
+    "clean"
+   ],
+   136,
+   [
+    [
+     "178716",
+     "ingredientRows[8].nestedRows[4]",
+     "organic Barley Grass"
+    ],
+    [
+     "178716",
+     "ingredientRows[8].nestedRows[4]",
+     "organic Barley Grass"
+    ],
+    [
+     "178733",
+     "ingredientRows[8].nestedRows[5]",
+     "organic Barley Grass"
+    ]
+   ]
+  ],
+  [
+   [
+    "NHA_CHILI_PEPPER",
+    "cayenne_pepper",
+    "clean"
+   ],
+   126,
+   [
+    [
+     "12300",
+     "ingredientRows[1].forms[1]",
+     "Cayenne Pepper"
+    ],
+    [
+     "12300",
+     "ingredientRows[1].forms[1]",
+     "Cayenne Pepper"
+    ],
+    [
+     "17226",
+     "ingredientRows[13].forms[0]",
+     "Cayenne Pepper"
+    ]
+   ]
+  ],
+  [
+   [
+    "couch_grass",
+    "wheatgrass",
+    "clean"
+   ],
+   116,
+   [
+    [
+     "178716",
+     "ingredientRows[8].nestedRows[0]",
+     "organic Wheat Grass"
+    ],
+    [
+     "178716",
+     "ingredientRows[8].nestedRows[0]",
+     "organic Wheat Grass"
+    ],
+    [
+     "178728",
+     "ingredientRows[8].nestedRows[0]",
+     "organic Wheat Grass"
+    ]
+   ]
+  ],
+  [
+   [
+    "kelp_powder",
+    "brown_kelp",
+    "clean"
+   ],
+   104,
+   [
+    [
+     "202705",
+     "ingredientRows[10].nestedRows[13]",
+     "organic Sea Kelp"
+    ],
+    [
+     "202705",
+     "ingredientRows[10].nestedRows[13]",
+     "organic Sea Kelp"
+    ],
+    [
+     "233152",
+     "ingredientRows[18].nestedRows[2]",
+     "organic Sea Kelp"
+    ]
+   ]
+  ],
+  [
+   [
+    "lion_s_mane",
+    "lions_mane",
+    "clean"
+   ],
+   78,
+   [
+    [
+     "213066",
+     "ingredientRows[2].nestedRows[5]",
+     "organic Yamabushitake"
+    ],
+    [
+     "213066",
+     "ingredientRows[2].nestedRows[5]",
+     "organic Yamabushitake"
+    ],
+    [
+     "233695",
+     "ingredientRows[2].nestedRows[6]",
+     "organic Hericium erinaceus"
+    ]
+   ]
+  ],
+  [
+   [
+    "cabbage_extract",
+    "cabbage",
+    "clean"
+   ],
+   64,
+   [
+    [
+     "202705",
+     "ingredientRows[10].nestedRows[3]",
+     "organic Cabbage"
+    ],
+    [
+     "202705",
+     "ingredientRows[10].nestedRows[3]",
+     "organic Cabbage"
+    ],
+    [
+     "213648",
+     "ingredientRows[10].nestedRows[2]",
+     "Cabbage powder"
+    ]
+   ]
+  ],
+  [
+   [
+    "plum",
+    "prune",
+    "clean"
+   ],
+   50,
+   [
+    [
+     "201812",
+     "ingredientRows[20].nestedRows[11]",
+     "Prune"
+    ],
+    [
+     "201812",
+     "ingredientRows[20].nestedRows[11]",
+     "Prune"
+    ],
+    [
+     "28531",
+     "ingredientRows[2].nestedRows[0]",
+     "Prune"
+    ]
+   ]
+  ],
+  [
+   [
+    "coriander",
+    "cilantro",
+    "clean"
+   ],
+   50,
+   [
+    [
+     "202705",
+     "ingredientRows[10].nestedRows[8]",
+     "organic Cilantro"
+    ],
+    [
+     "202705",
+     "ingredientRows[10].nestedRows[8]",
+     "organic Cilantro"
+    ],
+    [
+     "242529",
+     "ingredientRows[27].nestedRows[7]",
+     "Cilantro"
+    ]
+   ]
+  ],
+  [
+   [
+    "olive_leaf_powder",
+    null,
+    null
+   ],
+   47,
+   [
+    [
+     "182716",
+     "ingredientRows[4]",
+     null
+    ],
+    [
+     "209382",
+     "ingredientRows[0]",
+     null
+    ],
+    [
+     "211227",
+     "ingredientRows[4]",
+     null
+    ]
+   ]
+  ],
+  [
+   [
+    "cabbage_extract",
+    "green_cabbage",
+    "clean"
+   ],
+   36,
+   [
+    [
+     "178716",
+     "ingredientRows[9].nestedRows[6]",
+     "organic Green Cabbage"
+    ],
+    [
+     "178716",
+     "ingredientRows[9].nestedRows[6]",
+     "organic Green Cabbage"
+    ],
+    [
+     "178728",
+     "ingredientRows[8].nestedRows[5]",
+     "organic Green Cabbage"
+    ]
+   ]
+  ],
+  [
+   [
+    "lactococcus_lactis",
+    "lactococcus_cremoris",
+    "clean"
+   ],
+   34,
+   [
+    [
+     "174659",
+     "ingredientRows[4].nestedRows[9]",
+     "Lactococcus cremoris"
+    ],
+    [
+     "174659",
+     "ingredientRows[4].nestedRows[9]",
+     "Lactococcus cremoris"
+    ],
+    [
+     "233674",
+     "ingredientRows[17].nestedRows[12].nestedRows[4]",
+     "Lactococcus cremoris"
+    ]
+   ]
+  ],
+  [
+   [
+    "soybean",
+    "protein",
+    "clean"
+   ],
+   31,
+   [
+    [
+     "17131",
+     "ingredientRows[13]",
+     "isolated Soy Protein"
+    ],
+    [
+     "218631",
+     "ingredientRows[27]",
+     "Soy Protein isolate"
+    ],
+    [
+     "2221",
+     "ingredientRows[9].nestedRows[3]",
+     "Soy Protein isolate"
+    ]
+   ]
+  ],
+  [
+   [
+    "lactobacillus_kefiranofaciens",
+    "lactobacillus_kefirgranum",
+    "clean"
+   ],
+   28,
+   [
+    [
+     "174659",
+     "ingredientRows[4].nestedRows[14].nestedRows[5]",
+     "Lactobacillus kefirgranum"
+    ],
+    [
+     "174659",
+     "ingredientRows[4].nestedRows[14].nestedRows[5]",
+     "Lactobacillus kefirgranum"
+    ],
+    [
+     "233674",
+     "ingredientRows[17].nestedRows[12].nestedRows[2]",
+     "Lactobacillus kefirgranum"
+    ]
+   ]
+  ],
+  [
+   [
+    "olive_leaf_powder",
+    "olive_leaf",
+    "clean"
+   ],
+   28,
+   [
+    [
+     "182716",
+     "ingredientRows[4]",
+     "Polyphen-Oil Olive extract"
+    ],
+    [
+     "209382",
+     "ingredientRows[0]",
+     "Bonolive"
+    ],
+    [
+     "211227",
+     "ingredientRows[4]",
+     "Polyphen-Oil Olive extract"
+    ]
+   ]
+  ],
+  [
+   [
+    "olive_fruit_extract",
+    "olive_leaf",
+    "clean"
+   ],
+   26,
+   [
+    [
+     "212273",
+     "ingredientRows[0].nestedRows[1]",
+     "Olive leaf extract"
+    ],
+    [
+     "212273",
+     "ingredientRows[0].nestedRows[1]",
+     "Olive leaf extract"
+    ],
+    [
+     "256392",
+     "ingredientRows[1].nestedRows[5]",
+     "organic Olive leaf extract"
+    ]
+   ]
+  ],
+  [
+   [
+    "cayenne_pepper",
+    null,
+    null
+   ],
+   25,
+   [
+    [
+     "182149",
+     "ingredientRows[30].nestedRows[1]",
+     null
+    ],
+    [
+     "228903",
+     "ingredientRows[2]",
+     null
+    ],
+    [
+     "241318",
+     "ingredientRows[7]",
+     null
+    ]
+   ]
+  ],
+  [
+   [
+    "levagen",
+    "palmitoylethanolamide",
+    "clean"
+   ],
+   22,
+   [
+    [
+     "211337",
+     "ingredientRows[8].nestedRows[1]",
+     "Levagen"
+    ],
+    [
+     "212516",
+     "ingredientRows[4]",
+     "Levagen"
+    ],
+    [
+     "219833",
+     "ingredientRows[8].nestedRows[1]",
+     "Levagen"
+    ]
+   ]
+  ],
+  [
+   [
+    "levagen",
+    null,
+    null
+   ],
+   22,
+   [
+    [
+     "211337",
+     "ingredientRows[8].nestedRows[1]",
+     null
+    ],
+    [
+     "212516",
+     "ingredientRows[4]",
+     null
+    ],
+    [
+     "219833",
+     "ingredientRows[8].nestedRows[1]",
+     null
+    ]
+   ]
+  ],
+  [
+   [
+    "sweet_orange",
+    "orange",
+    "clean"
+   ],
+   22,
+   [
+    [
+     "43659",
+     "ingredientRows[1].nestedRows[0]",
+     "Uncle Matt's Organic(R) whole Oranges"
+    ],
+    [
+     "43659",
+     "ingredientRows[1].nestedRows[0]",
+     "Uncle Matt's Organic(R) whole Oranges"
+    ],
+    [
+     "43662",
+     "ingredientRows[3].nestedRows[0]",
+     "Uncle Matt's Organic(R) whole Oranges"
+    ]
+   ]
+  ],
+  [
+   [
+    "olive_leaf_powder",
+    "olive_fruit_extract",
+    "clean"
+   ],
+   19,
+   [
+    [
+     "47815",
+     "ingredientRows[46]",
+     "Olive juice extract"
+    ],
+    [
+     "60463",
+     "ingredientRows[46]",
+     "Olive juice extract"
+    ],
+    [
+     "60544",
+     "ingredientRows[46]",
+     "Olive juice extract"
+    ]
+   ]
+  ],
+  [
+   [
+    "NHA_CHILI_PEPPER",
+    null,
+    null
+   ],
+   18,
+   [
+    [
+     "199503",
+     "ingredientRows[0]",
+     null
+    ],
+    [
+     "199504",
+     "ingredientRows[0]",
+     null
+    ],
+    [
+     "251529",
+     "ingredientRows[0]",
+     null
+    ]
+   ]
+  ],
+  [
+   [
+    "soy_isoflavones",
+    "isoflavones",
+    "clean"
+   ],
+   17,
+   [
+    [
+     "1055",
+     "ingredientRows[9]",
+     "Soy Isoflavone Extract"
+    ],
+    [
+     "13295",
+     "ingredientRows[4]",
+     "Soy Isoflavone Extract"
+    ],
+    [
+     "17795",
+     "ingredientRows[1]",
+     "Soy Isoflavone Concentrate"
+    ]
+   ]
+  ],
+  [
+   [
+    "soy_isoflavones",
+    null,
+    null
+   ],
+   17,
+   [
+    [
+     "1055",
+     "ingredientRows[9]",
+     null
+    ],
+    [
+     "13295",
+     "ingredientRows[4]",
+     null
+    ],
+    [
+     "17795",
+     "ingredientRows[1]",
+     null
+    ]
+   ]
+  ],
+  [
+   [
+    "mct_oil",
+    "coconut_water",
+    "clean"
+   ],
+   17,
+   [
+    [
+     "183349",
+     "ingredientRows[7]",
+     "Coconut water powder"
+    ],
+    [
+     "202690",
+     "ingredientRows[7].nestedRows[1]",
+     "organic Coconut Water"
+    ],
+    [
+     "202690",
+     "ingredientRows[7].nestedRows[1]",
+     "organic Coconut Water"
+    ]
+   ]
+  ],
+  [
+   [
+    "coffee_fruit",
+    "coffeeberry",
+    "clean"
+   ],
+   17,
+   [
+    [
+     "219957",
+     "ingredientRows[4].nestedRows[4]",
+     "NeuroFactor"
+    ],
+    [
+     "219972",
+     "ingredientRows[4].nestedRows[4]",
+     "NeuroFactor"
+    ],
+    [
+     "220004",
+     "ingredientRows[4].nestedRows[4]",
+     "NeuroFactor"
+    ]
+   ]
+  ],
+  [
+   [
+    null,
+    "coffeeberry",
+    "clean"
+   ],
+   17,
+   [
+    [
+     "219957",
+     "ingredientRows[4].nestedRows[4]",
+     "NeuroFactor"
+    ],
+    [
+     "219972",
+     "ingredientRows[4].nestedRows[4]",
+     "NeuroFactor"
+    ],
+    [
+     "220004",
+     "ingredientRows[4].nestedRows[4]",
+     "NeuroFactor"
+    ]
+   ]
+  ],
+  [
+   [
+    "bifidobacterium_breve",
+    "bifidobacterium_longum",
+    "clean"
+   ],
+   12,
+   [
+    [
+     "267340",
+     "ingredientRows[0].nestedRows[3]",
+     "Bifidobacterium longum infantis BI-26"
+    ],
+    [
+     "267340",
+     "ingredientRows[0].nestedRows[3]",
+     "Bifidobacterium longum infantis BI-26"
+    ],
+    [
+     "297668",
+     "ingredientRows[1].nestedRows[2]",
+     "Bifidobacterium infantis BI-26"
+    ]
+   ]
+  ],
+  [
+   [
+    "NHA_YOUNG_BARLEY",
+    "barley_grass",
+    "clean"
+   ],
+   11,
+   [
+    [
+     "259626",
+     "ingredientRows[5]",
+     "green Barley grass powder"
+    ],
+    [
+     "312988",
+     "ingredientRows[0]",
+     "Barley Grass"
+    ],
+    [
+     "312995",
+     "ingredientRows[0]",
+     "Barley Grass"
+    ]
+   ]
+  ],
+  [
+   [
+    "NHA_YOUNG_BARLEY",
+    null,
+    null
+   ],
+   11,
+   [
+    [
+     "259626",
+     "ingredientRows[5]",
+     null
+    ],
+    [
+     "312988",
+     "ingredientRows[0]",
+     null
+    ],
+    [
+     "312995",
+     "ingredientRows[0]",
+     null
+    ]
+   ]
+  ],
+  [
+   [
+    "wild_yam_root",
+    "wild_yam",
+    "clean"
+   ],
+   11,
+   [
+    [
+     "294301",
+     "ingredientRows[0]",
+     "Wild Yam Root Extract"
+    ],
+    [
+     "294303",
+     "ingredientRows[0]",
+     "Wild Yam Root Extract"
+    ],
+    [
+     "294304",
+     "ingredientRows[0]",
+     "Wild Yam Root Extract"
+    ]
+   ]
+  ],
+  [
+   [
+    "wild_yam_root",
+    null,
+    null
+   ],
+   11,
+   [
+    [
+     "294301",
+     "ingredientRows[0]",
+     null
+    ],
+    [
+     "294303",
+     "ingredientRows[0]",
+     null
+    ],
+    [
+     "294304",
+     "ingredientRows[0]",
+     null
+    ]
+   ]
+  ],
+  [
+   [
+    "soybean",
+    null,
+    null
+   ],
+   9,
+   [
+    [
+     "17131",
+     "ingredientRows[13]",
+     null
+    ],
+    [
+     "218631",
+     "ingredientRows[27]",
+     null
+    ],
+    [
+     "228317",
+     "ingredientRows[33]",
+     null
+    ]
+   ]
+  ],
+  [
+   [
+    "kombu",
+    "brown_kelp",
+    "clean"
+   ],
+   9,
+   [
+    [
+     "19483",
+     "ingredientRows[16]",
+     "Brown Seaweed"
+    ],
+    [
+     "19494",
+     "ingredientRows[16]",
+     "Brown Seaweed"
+    ],
+    [
+     "19504",
+     "ingredientRows[16]",
+     "Brown Seaweed"
+    ]
+   ]
+  ],
+  [
+   [
+    "kombu",
+    null,
+    null
+   ],
+   9,
+   [
+    [
+     "19483",
+     "ingredientRows[16]",
+     null
+    ],
+    [
+     "19494",
+     "ingredientRows[16]",
+     null
+    ],
+    [
+     "19504",
+     "ingredientRows[16]",
+     null
+    ]
+   ]
+  ],
+  [
+   [
+    "NHA_ACACIA_GUM",
+    "prebiotics",
+    "clean"
+   ],
+   8,
+   [
+    [
+     "27203",
+     "ingredientRows[35].nestedRows[2]",
+     "Gum Arabic"
+    ],
+    [
+     "27203",
+     "ingredientRows[35].nestedRows[2]",
+     "Gum Arabic"
+    ],
+    [
+     "31148",
+     "ingredientRows[53].nestedRows[3]",
+     "Gum Arabic"
+    ]
+   ]
+  ],
+  [
+   [
+    "PII_ARTEMISININ",
+    "sweet_wormwood_herb",
+    "clean"
+   ],
+   6,
+   [
+    [
+     "184659",
+     "ingredientRows[2]",
+     "Sweet Wormwood (Artemisia annua) extract"
+    ],
+    [
+     "184659",
+     "ingredientRows[2]",
+     "Sweet Wormwood (Artemisia annua) extract"
+    ],
+    [
+     "185088",
+     "ingredientRows[2]",
+     "Sweet Wormwood (Artemisia annua) extract"
+    ]
+   ]
+  ],
+  [
+   [
+    "silicon",
+    "silica",
+    "clean"
+   ],
+   6,
+   [
+    [
+     "252704",
+     "ingredientRows[1]",
+     "organic Silica"
+    ],
+    [
+     "254795",
+     "ingredientRows[1]",
+     "organic Silica"
+    ],
+    [
+     "254796",
+     "ingredientRows[1]",
+     "organic Silica"
+    ]
+   ]
+  ],
+  [
+   [
+    "PII_PHOSPHOLIPID_DESCRIPTOR",
+    "lecithin",
+    "clean"
+   ],
+   4,
+   [
+    [
+     "184661",
+     "ingredientRows[0].nestedRows[1]",
+     "essential Phospholipids"
+    ],
+    [
+     "184661",
+     "ingredientRows[0].nestedRows[1]",
+     "essential Phospholipids"
+    ],
+    [
+     "184663",
+     "ingredientRows[0].nestedRows[1]",
+     "essential Phospholipids"
+    ]
+   ]
+  ],
+  [
+   [
+    "hiratake",
+    "king_trumpet",
+    "clean"
+   ],
+   4,
+   [
+    [
+     "229778",
+     "ingredientRows[2].nestedRows[2]",
+     "King Trumpet"
+    ],
+    [
+     "229778",
+     "ingredientRows[2].nestedRows[2]",
+     "King Trumpet"
+    ],
+    [
+     "323126",
+     "ingredientRows[2].nestedRows[2]",
+     "King Trumpet"
+    ]
+   ]
+  ],
+  [
+   [
+    "lactobacillus_casei",
+    "lactobacillus_paracasei",
+    "clean"
+   ],
+   4,
+   [
+    [
+     "264115",
+     "ingredientRows[0].nestedRows[2]",
+     "L. casei 431"
+    ],
+    [
+     "264115",
+     "ingredientRows[0].nestedRows[2]",
+     "L. casei 431"
+    ],
+    [
+     "264116",
+     "ingredientRows[0].nestedRows[2]",
+     "L. casei 431"
+    ]
+   ]
+  ],
+  [
+   [
+    "echinacea",
+    "echinacea_purpurea_root_extract",
+    "clean"
+   ],
+   4,
+   [
+    [
+     "293272",
+     "ingredientRows[2].nestedRows[1]",
+     "Purple Coneflower Root Extract"
+    ],
+    [
+     "293272",
+     "ingredientRows[2].nestedRows[1]",
+     "Purple Coneflower Root Extract"
+    ],
+    [
+     "293273",
+     "ingredientRows[2].nestedRows[1]",
+     "Purple Coneflower Root Extract"
+    ]
+   ]
+  ],
+  [
+   [
+    "burdock_root_powder",
+    "burdock_root",
+    "clean"
+   ],
+   4,
+   [
+    [
+     "293398",
+     "ingredientRows[6].nestedRows[0]",
+     "Burdock Root Extract"
+    ],
+    [
+     "293398",
+     "ingredientRows[6].nestedRows[0]",
+     "Burdock Root Extract"
+    ],
+    [
+     "317118",
+     "ingredientRows[6].nestedRows[0]",
+     "Burdock Root Extract"
+    ]
+   ]
+  ],
+  [
+   [
+    "chinese_rhubarb",
+    "turkey_rhubarb_root",
+    "clean"
+   ],
+   4,
+   [
+    [
+     "331027",
+     "ingredientRows[0]",
+     "Turkey Rhubarb Root Extract"
+    ],
+    [
+     "331027",
+     "ingredientRows[0]",
+     "Turkey Rhubarb Root Extract"
+    ],
+    [
+     "80302",
+     "ingredientRows[1].nestedRows[6]",
+     "Turkey Rhubarb"
+    ]
+   ]
+  ],
+  [
+   [
+    "schisandra",
+    "schisandra_berry",
+    "clean"
+   ],
+   4,
+   [
+    [
+     "43481",
+     "ingredientRows[2].nestedRows[3]",
+     "organic Schizandra"
+    ],
+    [
+     "43481",
+     "ingredientRows[2].nestedRows[3]",
+     "organic Schizandra"
+    ],
+    [
+     "63009",
+     "ingredientRows[5].nestedRows[3]",
+     "Schizandra"
+    ]
+   ]
+  ],
+  [
+   [
+    "proanthocyanidins",
+    "opc",
+    "clean"
+   ],
+   4,
+   [
+    [
+     "61935",
+     "ingredientRows[1].nestedRows[1].nestedRows[2]",
+     "OPCs"
+    ],
+    [
+     "61935",
+     "ingredientRows[1].nestedRows[1].nestedRows[2]",
+     "OPCs"
+    ],
+    [
+     "62801",
+     "ingredientRows[3].nestedRows[2]",
+     "OPCs"
+    ]
+   ]
+  ],
+  [
+   [
+    "wheatgrass_powder",
+    "wheatgrass",
+    "clean"
+   ],
+   2,
+   [
+    [
+     "205152",
+     "ingredientRows[7]",
+     "Wheat Grass"
+    ],
+    [
+     "29017",
+     "ingredientRows[9]",
+     "RAW Organic U.S.A. Farmed Wheat Grass Juice"
+    ]
+   ]
+  ],
+  [
+   [
+    "wheatgrass_powder",
+    null,
+    null
+   ],
+   2,
+   [
+    [
+     "205152",
+     "ingredientRows[7]",
+     null
+    ],
+    [
+     "29017",
+     "ingredientRows[9]",
+     null
+    ]
+   ]
+  ],
+  [
+   [
+    "olive_leaf",
+    null,
+    null
+   ],
+   2,
+   [
+    [
+     "248755",
+     "ingredientRows[26]",
+     null
+    ],
+    [
+     "59829",
+     "ingredientRows[0]",
+     null
+    ]
+   ]
+  ],
+  [
+   [
+    "dark_sweet_cherry",
+    "tart_cherry",
+    "clean"
+   ],
+   2,
+   [
+    [
+     "259473",
+     "ingredientRows[15].nestedRows[0]",
+     "Cherry Extract"
+    ],
+    [
+     "259473",
+     "ingredientRows[15].nestedRows[0]",
+     "Cherry Extract"
+    ]
+   ]
+  ],
+  [
+   [
+    "barley_grass",
+    null,
+    null
+   ],
+   2,
+   [
+    [
+     "263856",
+     "ingredientRows[32]",
+     null
+    ],
+    [
+     "330314",
+     "ingredientRows[0]",
+     null
+    ]
+   ]
+  ],
+  [
+   [
+    "oat_generic",
+    "oat_bran",
+    "clean"
+   ],
+   2,
+   [
+    [
+     "28491",
+     "ingredientRows[8].nestedRows[0]",
+     "organic Oat Bran Fiber"
+    ],
+    [
+     "28491",
+     "ingredientRows[8].nestedRows[0]",
+     "organic Oat Bran Fiber"
+    ]
+   ]
+  ],
+  [
+   [
+    "artichoke",
+    "globe_artichoke",
+    "clean"
+   ],
+   2,
+   [
+    [
+     "285635",
+     "ingredientRows[0].nestedRows[0]",
+     "organic Cynara scolymus"
+    ],
+    [
+     "285635",
+     "ingredientRows[0].nestedRows[0]",
+     "organic Cynara scolymus"
+    ]
+   ]
+  ],
+  [
+   [
+    "protease",
+    "digestive_enzymes",
+    "clean"
+   ],
+   2,
+   [
+    [
+     "297590",
+     "ingredientRows[1]",
+     "Protein-Digesting Enzyme Blend"
+    ],
+    [
+     "297590",
+     "ingredientRows[1]",
+     "Protein-Digesting Enzyme Blend"
+    ]
+   ]
+  ],
+  [
+   [
+    "PII_KIDNEY_TISSUE",
+    "organ_extracts",
+    "clean"
+   ],
+   2,
+   [
+    [
+     "337226",
+     "ingredientRows[5].nestedRows[2]",
+     "Bovine Kidney"
+    ],
+    [
+     "337226",
+     "ingredientRows[5].nestedRows[2]",
+     "Bovine Kidney"
+    ]
+   ]
+  ],
+  [
+   [
+    "brown_kelp",
+    "fucoxanthin",
+    "clean"
+   ],
+   2,
+   [
+    [
+     "63044",
+     "ingredientRows[0].nestedRows[0]",
+     "Brown Seaweed Fucoxanthin Concentrate"
+    ],
+    [
+     "63044",
+     "ingredientRows[0].nestedRows[0]",
+     "Brown Seaweed Fucoxanthin Concentrate"
+    ]
+   ]
+  ],
+  [
+   [
+    "beta_glucan",
+    "wellmune",
+    "clean"
+   ],
+   2,
+   [
+    [
+     "63293",
+     "ingredientRows[2].nestedRows[2]",
+     "Wellmune"
+    ],
+    [
+     "63293",
+     "ingredientRows[2].nestedRows[2]",
+     "Wellmune"
+    ]
+   ]
+  ],
+  [
+   [
+    "lemon_bioflavonoids",
+    "citrus_bioflavonoids",
+    "clean"
+   ],
+   2,
+   [
+    [
+     "69579",
+     "ingredientRows[7].nestedRows[1]",
+     "PeakForce WATTS'UP"
+    ],
+    [
+     "78133",
+     "ingredientRows[7].nestedRows[1]",
+     "PeakForce WATTS'UP"
+    ]
+   ]
+  ],
+  [
+   [
+    "lemon_bioflavonoids",
+    null,
+    null
+   ],
+   2,
+   [
+    [
+     "69579",
+     "ingredientRows[7].nestedRows[1]",
+     null
+    ],
+    [
+     "78133",
+     "ingredientRows[7].nestedRows[1]",
+     null
+    ]
+   ]
+  ],
+  [
+   [
+    "citrus_bioflavonoids",
+    "hesperidin",
+    "clean"
+   ],
+   2,
+   [
+    [
+     "73206",
+     "ingredientRows[2].nestedRows[0].nestedRows[6]",
+     "Hesperidin Complex"
+    ],
+    [
+     "73206",
+     "ingredientRows[2].nestedRows[0].nestedRows[6]",
+     "Hesperidin Complex"
+    ]
+   ]
+  ],
+  [
+   [
+    "mct_oil",
+    null,
+    null
+   ],
+   1,
+   [
+    [
+     "183349",
+     "ingredientRows[7]",
+     null
+    ]
+   ]
+  ],
+  [
+   [
+    "tart_cherry_fruit",
+    "tart_cherry",
+    "clean"
+   ],
+   1,
+   [
+    [
+     "278376",
+     "ingredientRows[3]",
+     "Cherry Fruit Extract"
+    ]
+   ]
+  ],
+  [
+   [
+    "tart_cherry_fruit",
+    null,
+    null
+   ],
+   1,
+   [
+    [
+     "278376",
+     "ingredientRows[3]",
+     null
+    ]
+   ]
+  ],
+  [
+   [
+    "keratin",
+    "keraglo",
+    "clean"
+   ],
+   1,
+   [
+    [
+     "302683",
+     "ingredientRows[1]",
+     "KeraGLO"
+    ]
+   ]
+  ],
+  [
+   [
+    null,
+    "keraglo",
+    "clean"
+   ],
+   1,
+   [
+    [
+     "302683",
+     "ingredientRows[1]",
+     "KeraGLO"
+    ]
+   ]
+  ],
+  [
+   [
+    "floraglo",
+    "lutein",
+    "clean"
+   ],
+   1,
+   [
+    [
+     "302687",
+     "ingredientRows[1]",
+     "FloraGLO"
+    ]
+   ]
+  ],
+  [
+   [
+    "floraglo",
+    null,
+    null
+   ],
+   1,
+   [
+    [
+     "302687",
+     "ingredientRows[1]",
+     null
+    ]
+   ]
+  ],
+  [
+   [
+    "PII_PURIFIED_FISH_OIL",
+    "fish_oil",
+    "clean"
+   ],
+   1,
+   [
+    [
+     "314032",
+     "ingredientRows[7].nestedRows[0]",
+     "EPA/DHA"
+    ]
+   ]
+  ],
+  [
+   [
+    "PII_PURIFIED_FISH_OIL",
+    null,
+    null
+   ],
+   1,
+   [
+    [
+     "314032",
+     "ingredientRows[7].nestedRows[0]",
+     null
+    ]
+   ]
+  ]
+ ],
+ "score_moves": [
+  [
+   "1055",
+   72.4,
+   72.0,
+   "scored",
+   "scored",
+   {
+    "formulation": 13.4,
+    "dose": 11.4,
+    "evidence": 15.6
+   }
+  ],
+  [
+   "1179",
+   32.4,
+   32.0,
+   "scored",
+   "scored",
+   {
+    "formulation": 16.3,
+    "dose": 0.0,
+    "evidence": 3.6
+   }
+  ],
+  [
+   "12800",
+   31.6,
+   30.8,
+   "scored",
+   "scored",
+   {
+    "formulation": 17.5,
+    "dose": 0.0,
+    "evidence": 3.6
+   }
+  ],
+  [
+   "17131",
+   73.2,
+   72.5,
+   "scored",
+   "scored",
+   {
+    "formulation": 15.5,
+    "dose": 16.2,
+    "evidence": 10.0
+   }
+  ],
+  [
+   "17226",
+   61.9,
+   61.5,
+   "scored",
+   "scored",
+   {
+    "formulation": 18.3,
+    "dose": 11.4,
+    "evidence": 16.7
+   }
+  ],
+  [
+   "183349",
+   50.9,
+   53.5,
+   "scored",
+   "scored",
+   {
+    "formulation": 7.0,
+    "dose": 11.4,
+    "evidence": 0.0
+   }
+  ],
+  [
+   "19483",
+   57.6,
+   58.4,
+   "scored",
+   "scored",
+   {
+    "formulation": 13.5,
+    "dose": 11.4,
+    "evidence": 15.6
+   }
+  ],
+  [
+   "19494",
+   59.6,
+   60.4,
+   "scored",
+   "scored",
+   {
+    "formulation": 13.5,
+    "dose": 11.4,
+    "evidence": 15.6
+   }
+  ],
+  [
+   "19504",
+   59.6,
+   60.4,
+   "scored",
+   "scored",
+   {
+    "formulation": 13.5,
+    "dose": 11.4,
+    "evidence": 15.6
+   }
+  ],
+  [
+   "199408",
+   72.4,
+   72.0,
+   "scored",
+   "scored",
+   {
+    "formulation": 13.4,
+    "dose": 11.4,
+    "evidence": 15.6
+   }
+  ],
+  [
+   "204040",
+   60.4,
+   null,
+   "scored",
+   "not_scored",
+   {
+    "formulation": 14.7,
+    "dose": 11.4,
+    "evidence": 0.3
+   }
+  ],
+  [
+   "209382",
+   53.9,
+   56.6,
+   "scored",
+   "scored",
+   {
+    "formulation": 12.0,
+    "dose": 11.4,
+    "evidence": 0.0
+   }
+  ],
+  [
+   "211337",
+   62.3,
+   61.0,
+   "scored",
+   "scored",
+   {
+    "formulation": 19.5,
+    "dose": 11.4,
+    "evidence": 10.4
+   }
+  ],
+  [
+   "212516",
+   69.5,
+   66.8,
+   "scored",
+   "scored",
+   {
+    "formulation": 18.7,
+    "dose": 11.4,
+    "evidence": 10.4
+   }
+  ],
+  [
+   "218631",
+   72.0,
+   71.7,
+   "scored",
+   "scored",
+   {
+    "formulation": 16.3,
+    "dose": 10.0,
+    "evidence": 20.0
+   }
+  ],
+  [
+   "219833",
+   64.3,
+   63.0,
+   "scored",
+   "scored",
+   {
+    "formulation": 19.5,
+    "dose": 11.4,
+    "evidence": 10.4
+   }
+  ],
+  [
+   "219927",
+   62.3,
+   61.0,
+   "scored",
+   "scored",
+   {
+    "formulation": 19.5,
+    "dose": 11.4,
+    "evidence": 10.4
+   }
+  ],
+  [
+   "219933",
+   64.3,
+   63.0,
+   "scored",
+   "scored",
+   {
+    "formulation": 19.5,
+    "dose": 11.4,
+    "evidence": 10.4
+   }
+  ],
+  [
+   "219945",
+   66.3,
+   65.0,
+   "scored",
+   "scored",
+   {
+    "formulation": 19.5,
+    "dose": 11.4,
+    "evidence": 10.4
+   }
+  ],
+  [
+   "219947",
+   64.3,
+   63.0,
+   "scored",
+   "scored",
+   {
+    "formulation": 19.5,
+    "dose": 11.4,
+    "evidence": 10.4
+   }
+  ],
+  [
+   "219950",
+   66.3,
+   65.0,
+   "scored",
+   "scored",
+   {
+    "formulation": 19.5,
+    "dose": 11.4,
+    "evidence": 10.4
+   }
+  ],
+  [
+   "219952",
+   63.8,
+   62.5,
+   "scored",
+   "scored",
+   {
+    "formulation": 19.5,
+    "dose": 11.4,
+    "evidence": 10.4
+   }
+  ],
+  [
+   "219957",
+   72.3,
+   73.9,
+   "scored",
+   "scored",
+   {
+    "formulation": 16.3,
+    "dose": 12.5,
+    "evidence": 20.0
+   }
+  ],
+  [
+   "219972",
+   72.3,
+   73.9,
+   "scored",
+   "scored",
+   {
+    "formulation": 16.3,
+    "dose": 12.5,
+    "evidence": 20.0
+   }
+  ],
+  [
+   "220004",
+   74.3,
+   75.9,
+   "scored",
+   "scored",
+   {
+    "formulation": 16.3,
+    "dose": 12.5,
+    "evidence": 20.0
+   }
+  ],
+  [
+   "220047",
+   73.8,
+   75.4,
+   "scored",
+   "scored",
+   {
+    "formulation": 16.3,
+    "dose": 12.5,
+    "evidence": 20.0
+   }
+  ],
+  [
+   "220050",
+   72.8,
+   74.4,
+   "scored",
+   "scored",
+   {
+    "formulation": 16.3,
+    "dose": 12.5,
+    "evidence": 20.0
+   }
+  ],
+  [
+   "220089",
+   72.7,
+   74.5,
+   "scored",
+   "scored",
+   {
+    "formulation": 15.4,
+    "dose": 13.7,
+    "evidence": 15.6
+   }
+  ],
+  [
+   "2221",
+   50.9,
+   51.8,
+   "scored",
+   "scored",
+   {
+    "formulation": 12.6,
+    "dose": 11.4,
+    "evidence": 15.6
+   }
+  ],
+  [
+   "222789",
+   73.3,
+   72.4,
+   "scored",
+   "scored",
+   {
+    "formulation": 13.3,
+    "dose": 11.4,
+    "evidence": 15.6
+   }
+  ],
+  [
+   "227869",
+   63.8,
+   62.5,
+   "scored",
+   "scored",
+   {
+    "formulation": 19.5,
+    "dose": 11.4,
+    "evidence": 10.4
+   }
+  ],
+  [
+   "228317",
+   58.8,
+   58.5,
+   "scored",
+   "scored",
+   {
+    "formulation": 16.1,
+    "dose": 0.0,
+    "evidence": 20.0
+   }
+  ],
+  [
+   "229913",
+   64.3,
+   63.0,
+   "scored",
+   "scored",
+   {
+    "formulation": 19.5,
+    "dose": 11.4,
+    "evidence": 10.4
+   }
+  ],
+  [
+   "229917",
+   73.2,
+   75.0,
+   "scored",
+   "scored",
+   {
+    "formulation": 15.4,
+    "dose": 13.7,
+    "evidence": 15.6
+   }
+  ],
+  [
+   "243022",
+   71.8,
+   73.4,
+   "scored",
+   "scored",
+   {
+    "formulation": 16.3,
+    "dose": 12.5,
+    "evidence": 20.0
+   }
+  ],
+  [
+   "243028",
+   71.8,
+   73.4,
+   "scored",
+   "scored",
+   {
+    "formulation": 16.3,
+    "dose": 12.5,
+    "evidence": 20.0
+   }
+  ],
+  [
+   "243029",
+   72.3,
+   73.9,
+   "scored",
+   "scored",
+   {
+    "formulation": 16.3,
+    "dose": 12.5,
+    "evidence": 20.0
+   }
+  ],
+  [
+   "243032",
+   72.0,
+   73.6,
+   "scored",
+   "scored",
+   {
+    "formulation": 16.3,
+    "dose": 12.2,
+    "evidence": 20.0
+   }
+  ],
+  [
+   "243035",
+   71.8,
+   73.4,
+   "scored",
+   "scored",
+   {
+    "formulation": 16.3,
+    "dose": 12.5,
+    "evidence": 20.0
+   }
+  ],
+  [
+   "243037",
+   79.8,
+   81.4,
+   "scored",
+   "scored",
+   {
+    "formulation": 16.3,
+    "dose": 12.5,
+    "evidence": 20.0
+   }
+  ],
+  [
+   "243041",
+   72.3,
+   73.9,
+   "scored",
+   "scored",
+   {
+    "formulation": 16.3,
+    "dose": 12.5,
+    "evidence": 20.0
+   }
+  ],
+  [
+   "243045",
+   72.3,
+   73.9,
+   "scored",
+   "scored",
+   {
+    "formulation": 16.3,
+    "dose": 12.5,
+    "evidence": 20.0
+   }
+  ],
+  [
+   "243749",
+   71.9,
+   71.5,
+   "scored",
+   "scored",
+   {
+    "formulation": 13.4,
+    "dose": 11.4,
+    "evidence": 15.6
+   }
+  ],
+  [
+   "244210",
+   64.8,
+   63.5,
+   "scored",
+   "scored",
+   {
+    "formulation": 19.5,
+    "dose": 11.4,
+    "evidence": 10.4
+   }
+  ],
+  [
+   "244220",
+   64.3,
+   63.0,
+   "scored",
+   "scored",
+   {
+    "formulation": 19.5,
+    "dose": 11.4,
+    "evidence": 10.4
+   }
+  ],
+  [
+   "244222",
+   66.3,
+   65.0,
+   "scored",
+   "scored",
+   {
+    "formulation": 19.5,
+    "dose": 11.4,
+    "evidence": 10.4
+   }
+  ],
+  [
+   "244227",
+   65.8,
+   64.5,
+   "scored",
+   "scored",
+   {
+    "formulation": 19.5,
+    "dose": 11.4,
+    "evidence": 10.4
+   }
+  ],
+  [
+   "244232",
+   64.8,
+   63.5,
+   "scored",
+   "scored",
+   {
+    "formulation": 19.5,
+    "dose": 11.4,
+    "evidence": 10.4
+   }
+  ],
+  [
+   "244238",
+   66.8,
+   65.5,
+   "scored",
+   "scored",
+   {
+    "formulation": 19.5,
+    "dose": 11.4,
+    "evidence": 10.4
+   }
+  ],
+  [
+   "244243",
+   64.8,
+   63.5,
+   "scored",
+   "scored",
+   {
+    "formulation": 19.5,
+    "dose": 11.4,
+    "evidence": 10.4
+   }
+  ],
+  [
+   "244248",
+   64.3,
+   63.0,
+   "scored",
+   "scored",
+   {
+    "formulation": 19.5,
+    "dose": 11.4,
+    "evidence": 10.4
+   }
+  ],
+  [
+   "244265",
+   64.8,
+   63.5,
+   "scored",
+   "scored",
+   {
+    "formulation": 19.5,
+    "dose": 11.4,
+    "evidence": 10.4
+   }
+  ],
+  [
+   "244272",
+   62.8,
+   61.5,
+   "scored",
+   "scored",
+   {
+    "formulation": 19.5,
+    "dose": 11.4,
+    "evidence": 10.4
+   }
+  ],
+  [
+   "25491",
+   89.3,
+   88.2,
+   "scored",
+   "scored",
+   {
+    "formulation": 19.3,
+    "dose": 20.0,
+    "evidence": 20.0
+   }
+  ],
+  [
+   "259626",
+   76.6,
+   75.9,
+   "scored",
+   "scored",
+   {
+    "formulation": 14.2,
+    "dose": 11.4,
+    "evidence": 20.0
+   }
+  ],
+  [
+   "259629",
+   74.4,
+   74.2,
+   "scored",
+   "scored",
+   {
+    "formulation": 17.2,
+    "dose": 16.0,
+    "evidence": 6.7
+   }
+  ],
+  [
+   "267829",
+   57.8,
+   51.8,
+   "scored",
+   "scored",
+   {
+    "formulation": 20.0,
+    "dose": 11.4,
+    "evidence": 0.0
+   }
+  ],
+  [
+   "2715",
+   73.8,
+   71.1,
+   "scored",
+   "scored",
+   {
+    "formulation": 20.0,
+    "dose": 11.4,
+    "evidence": 10.4
+   }
+  ],
+  [
+   "278376",
+   76.2,
+   78.3,
+   "scored",
+   "scored",
+   {
+    "formulation": 14.7,
+    "dose": 11.4,
+    "evidence": 15.6
+   }
+  ],
+  [
+   "28491",
+   41.3,
+   41.9,
+   "scored",
+   "scored",
+   {
+    "formulation": 6.7,
+    "dose": 15.8,
+    "evidence": 0.0
+   }
+  ],
+  [
+   "28973",
+   57.8,
+   58.6,
+   "scored",
+   "scored",
+   {
+    "formulation": 13.8,
+    "dose": 11.4,
+    "evidence": 15.6
+   }
+  ],
+  [
+   "29017",
+   46.9,
+   47.9,
+   "scored",
+   "scored",
+   {
+    "formulation": 6.9,
+    "dose": 5.7,
+    "evidence": 3.3
+   }
+  ],
+  [
+   "297676",
+   44.6,
+   50.1,
+   "scored",
+   "scored",
+   {
+    "formulation": 12.0,
+    "dose": 11.4,
+    "evidence": 2.4
+   }
+  ],
+  [
+   "302683",
+   51.6,
+   58.2,
+   "scored",
+   "scored",
+   {
+    "formulation": 10.7,
+    "dose": 11.4,
+    "evidence": 0.0
+   }
+  ],
+  [
+   "312638",
+   63.6,
+   61.8,
+   "scored",
+   "scored",
+   {
+    "formulation": 13.6,
+    "dose": 11.4,
+    "evidence": 15.6
+   }
+  ],
+  [
+   "312995",
+   54.4,
+   null,
+   "scored",
+   "not_scored",
+   {
+    "formulation": 12.0,
+    "dose": 11.4,
+    "evidence": 0.0
+   }
+  ],
+  [
+   "313496",
+   54.4,
+   null,
+   "scored",
+   "not_scored",
+   {
+    "formulation": 12.0,
+    "dose": 11.4,
+    "evidence": 0.0
+   }
+  ],
+  [
+   "313497",
+   54.4,
+   null,
+   "scored",
+   "not_scored",
+   {
+    "formulation": 12.0,
+    "dose": 11.4,
+    "evidence": 0.0
+   }
+  ],
+  [
+   "313498",
+   54.4,
+   null,
+   "scored",
+   "not_scored",
+   {
+    "formulation": 12.0,
+    "dose": 11.4,
+    "evidence": 0.0
+   }
+  ],
+  [
+   "313522",
+   54.4,
+   null,
+   "scored",
+   "not_scored",
+   {
+    "formulation": 12.0,
+    "dose": 11.4,
+    "evidence": 0.0
+   }
+  ],
+  [
+   "313523",
+   54.4,
+   null,
+   "scored",
+   "not_scored",
+   {
+    "formulation": 12.0,
+    "dose": 11.4,
+    "evidence": 0.0
+   }
+  ],
+  [
+   "313524",
+   54.4,
+   null,
+   "scored",
+   "not_scored",
+   {
+    "formulation": 12.0,
+    "dose": 11.4,
+    "evidence": 0.0
+   }
+  ],
+  [
+   "314032",
+   37.8,
+   52.1,
+   "scored",
+   "scored",
+   {
+    "formulation": 0.0,
+    "dose": 11.4,
+    "evidence": 0.0
+   }
+  ],
+  [
+   "321384",
+   55.4,
+   55.0,
+   "scored",
+   "scored",
+   {
+    "formulation": 11.6,
+    "dose": 10.0,
+    "evidence": 6.7
+   }
+  ],
+  [
+   "321392",
+   57.3,
+   56.8,
+   "scored",
+   "scored",
+   {
+    "formulation": 11.3,
+    "dose": 10.0,
+    "evidence": 6.7
+   }
+  ],
+  [
+   "47815",
+   57.3,
+   57.5,
+   "scored",
+   "scored",
+   {
+    "formulation": 15.7,
+    "dose": 0.0,
+    "evidence": 20.0
+   }
+  ],
+  [
+   "59829",
+   46.4,
+   47.5,
+   "scored",
+   "scored",
+   {
+    "formulation": 9.4,
+    "dose": 11.4,
+    "evidence": 0.0
+   }
+  ],
+  [
+   "60463",
+   57.5,
+   57.7,
+   "scored",
+   "scored",
+   {
+    "formulation": 15.9,
+    "dose": 0.0,
+    "evidence": 20.0
+   }
+  ],
+  [
+   "60544",
+   56.4,
+   56.6,
+   "scored",
+   "scored",
+   {
+    "formulation": 15.9,
+    "dose": 0.0,
+    "evidence": 20.0
+   }
+  ],
+  [
+   "60603",
+   56.4,
+   56.6,
+   "scored",
+   "scored",
+   {
+    "formulation": 15.9,
+    "dose": 0.0,
+    "evidence": 20.0
+   }
+  ],
+  [
+   "60713",
+   57.5,
+   57.7,
+   "scored",
+   "scored",
+   {
+    "formulation": 15.9,
+    "dose": 0.0,
+    "evidence": 20.0
+   }
+  ],
+  [
+   "60716",
+   57.5,
+   57.7,
+   "scored",
+   "scored",
+   {
+    "formulation": 15.9,
+    "dose": 0.0,
+    "evidence": 20.0
+   }
+  ],
+  [
+   "60740",
+   67.6,
+   67.8,
+   "scored",
+   "scored",
+   {
+    "formulation": 16.0,
+    "dose": 10.0,
+    "evidence": 20.0
+   }
+  ],
+  [
+   "60901",
+   57.5,
+   57.7,
+   "scored",
+   "scored",
+   {
+    "formulation": 15.9,
+    "dose": 0.0,
+    "evidence": 20.0
+   }
+  ],
+  [
+   "60911",
+   57.4,
+   57.5,
+   "scored",
+   "scored",
+   {
+    "formulation": 15.8,
+    "dose": 0.0,
+    "evidence": 20.0
+   }
+  ],
+  [
+   "61982",
+   56.0,
+   56.2,
+   "scored",
+   "scored",
+   {
+    "formulation": 15.9,
+    "dose": 0.0,
+    "evidence": 20.0
+   }
+  ],
+  [
+   "61983",
+   56.0,
+   56.2,
+   "scored",
+   "scored",
+   {
+    "formulation": 15.9,
+    "dose": 0.0,
+    "evidence": 20.0
+   }
+  ],
+  [
+   "62097",
+   58.9,
+   59.1,
+   "scored",
+   "scored",
+   {
+    "formulation": 15.9,
+    "dose": 0.0,
+    "evidence": 20.0
+   }
+  ],
+  [
+   "62265",
+   57.5,
+   57.7,
+   "scored",
+   "scored",
+   {
+    "formulation": 15.9,
+    "dose": 0.0,
+    "evidence": 20.0
+   }
+  ],
+  [
+   "62279",
+   57.5,
+   57.7,
+   "scored",
+   "scored",
+   {
+    "formulation": 15.9,
+    "dose": 0.0,
+    "evidence": 20.0
+   }
+  ],
+  [
+   "63044",
+   20.5,
+   43.9,
+   "scored",
+   "scored",
+   {
+    "formulation": 0.0,
+    "dose": 0.0,
+    "evidence": 0.0
+   }
+  ],
+  [
+   "64333",
+   55.9,
+   56.0,
+   "scored",
+   "scored",
+   {
+    "formulation": 15.8,
+    "dose": 0.0,
+    "evidence": 20.0
+   }
+  ],
+  [
+   "64382",
+   46.2,
+   45.9,
+   "scored",
+   "scored",
+   {
+    "formulation": 12.0,
+    "dose": 11.4,
+    "evidence": 0.3
+   }
+  ],
+  [
+   "64494",
+   57.9,
+   58.0,
+   "scored",
+   "scored",
+   {
+    "formulation": 16.3,
+    "dose": 0.0,
+    "evidence": 20.0
+   }
+  ],
+  [
+   "64572",
+   57.9,
+   58.0,
+   "scored",
+   "scored",
+   {
+    "formulation": 16.3,
+    "dose": 0.0,
+    "evidence": 20.0
+   }
+  ],
+  [
+   "64625",
+   57.8,
+   58.0,
+   "scored",
+   "scored",
+   {
+    "formulation": 16.2,
+    "dose": 0.0,
+    "evidence": 20.0
+   }
+  ],
+  [
+   "64631",
+   57.8,
+   58.0,
+   "scored",
+   "scored",
+   {
+    "formulation": 16.2,
+    "dose": 0.0,
+    "evidence": 20.0
+   }
+  ],
+  [
+   "69579",
+   67.2,
+   67.5,
+   "scored",
+   "scored",
+   {
+    "formulation": 17.4,
+    "dose": 11.4,
+    "evidence": 10.4
+   }
+  ],
+  [
+   "74755",
+   72.4,
+   72.0,
+   "scored",
+   "scored",
+   {
+    "formulation": 13.4,
+    "dose": 11.4,
+    "evidence": 15.6
+   }
+  ],
+  [
+   "74840",
+   75.9,
+   75.3,
+   "scored",
+   "scored",
+   {
+    "formulation": 14.5,
+    "dose": 11.4,
+    "evidence": 20.0
+   }
+  ],
+  [
+   "74844",
+   75.4,
+   74.8,
+   "scored",
+   "scored",
+   {
+    "formulation": 14.5,
+    "dose": 11.4,
+    "evidence": 20.0
+   }
+  ],
+  [
+   "76009",
+   73.0,
+   72.8,
+   "scored",
+   "scored",
+   {
+    "formulation": 16.5,
+    "dose": 15.3,
+    "evidence": 16.7
+   }
+  ],
+  [
+   "77052",
+   69.6,
+   69.4,
+   "scored",
+   "scored",
+   {
+    "formulation": 15.8,
+    "dose": 15.1,
+    "evidence": 6.7
+   }
+  ],
+  [
+   "78133",
+   68.7,
+   69.0,
+   "scored",
+   "scored",
+   {
+    "formulation": 17.4,
+    "dose": 11.4,
+    "evidence": 10.4
+   }
+  ],
+  [
+   "79397",
+   57.9,
+   57.7,
+   "scored",
+   "scored",
+   {
+    "formulation": 16.4,
+    "dose": 0.0,
+    "evidence": 20.0
+   }
+  ],
+  [
+   "79411",
+   57.9,
+   57.7,
+   "scored",
+   "scored",
+   {
+    "formulation": 16.4,
+    "dose": 0.0,
+    "evidence": 20.0
+   }
+  ],
+  [
+   "79635",
+   65.3,
+   65.2,
+   "scored",
+   "scored",
+   {
+    "formulation": 14.1,
+    "dose": 13.8,
+    "evidence": 13.3
+   }
+  ],
+  [
+   "9171",
+   55.9,
+   54.6,
+   "scored",
+   "scored",
+   {
+    "formulation": 12.0,
+    "dose": 11.4,
+    "evidence": 0.0
+   }
+  ]
+ ],
+ "safety_moves": [],
+ "interaction_rules_lost": [
+  [
+   "47815",
+   [
+    "RULE_IQM_OLIVE_LEAF_DIABETES"
+   ]
+  ],
+  [
+   "60463",
+   [
+    "RULE_IQM_OLIVE_LEAF_DIABETES"
+   ]
+  ],
+  [
+   "60544",
+   [
+    "RULE_IQM_OLIVE_LEAF_DIABETES"
+   ]
+  ],
+  [
+   "60603",
+   [
+    "RULE_IQM_OLIVE_LEAF_DIABETES"
+   ]
+  ],
+  [
+   "60713",
+   [
+    "RULE_IQM_OLIVE_LEAF_DIABETES"
+   ]
+  ],
+  [
+   "60716",
+   [
+    "RULE_IQM_OLIVE_LEAF_DIABETES"
+   ]
+  ],
+  [
+   "60740",
+   [
+    "RULE_IQM_OLIVE_LEAF_DIABETES"
+   ]
+  ],
+  [
+   "60901",
+   [
+    "RULE_IQM_OLIVE_LEAF_DIABETES"
+   ]
+  ],
+  [
+   "60911",
+   [
+    "RULE_IQM_OLIVE_LEAF_DIABETES"
+   ]
+  ],
+  [
+   "61982",
+   [
+    "RULE_IQM_OLIVE_LEAF_DIABETES"
+   ]
+  ],
+  [
+   "61983",
+   [
+    "RULE_IQM_OLIVE_LEAF_DIABETES"
+   ]
+  ],
+  [
+   "62097",
+   [
+    "RULE_IQM_OLIVE_LEAF_DIABETES"
+   ]
+  ],
+  [
+   "62265",
+   [
+    "RULE_IQM_OLIVE_LEAF_DIABETES"
+   ]
+  ],
+  [
+   "62279",
+   [
+    "RULE_IQM_OLIVE_LEAF_DIABETES"
+   ]
+  ],
+  [
+   "64333",
+   [
+    "RULE_IQM_OLIVE_LEAF_DIABETES"
+   ]
+  ],
+  [
+   "64494",
+   [
+    "RULE_IQM_OLIVE_LEAF_DIABETES"
+   ]
+  ],
+  [
+   "64572",
+   [
+    "RULE_IQM_OLIVE_LEAF_DIABETES"
+   ]
+  ],
+  [
+   "64625",
+   [
+    "RULE_IQM_OLIVE_LEAF_DIABETES"
+   ]
+  ],
+  [
+   "64631",
+   [
+    "RULE_IQM_OLIVE_LEAF_DIABETES"
+   ]
+  ]
+ ],
+ "interaction_rules_gained": [
+  [
+   "212273",
+   [
+    "RULE_IQM_OLIVE_LEAF_DIABETES"
+   ]
+  ],
+  [
+   "256392",
+   [
+    "RULE_IQM_OLIVE_LEAF_DIABETES"
+   ]
+  ],
+  [
+   "256924",
+   [
+    "RULE_IQM_OLIVE_LEAF_DIABETES"
+   ]
+  ],
+  [
+   "275343",
+   [
+    "RULE_IQM_OLIVE_LEAF_DIABETES"
+   ]
+  ],
+  [
+   "275355",
+   [
+    "RULE_IQM_OLIVE_LEAF_DIABETES"
+   ]
+  ],
+  [
+   "28554",
+   [
+    "RULE_IQM_OLIVE_LEAF_DIABETES"
+   ]
+  ],
+  [
+   "28559",
+   [
+    "RULE_IQM_OLIVE_LEAF_DIABETES"
+   ]
+  ],
+  [
+   "28561",
+   [
+    "RULE_IQM_OLIVE_LEAF_DIABETES"
+   ]
+  ],
+  [
+   "28568",
+   [
+    "RULE_IQM_OLIVE_LEAF_DIABETES"
+   ]
+  ],
+  [
+   "314032",
+   [
+    "RULE_INGREDIENT_FISH_OIL"
+   ]
+  ],
+  [
+   "321338",
+   [
+    "RULE_IQM_OLIVE_LEAF_DIABETES"
+   ]
+  ],
+  [
+   "321340",
+   [
+    "RULE_IQM_OLIVE_LEAF_DIABETES"
+   ]
+  ],
+  [
+   "328412",
+   [
+    "RULE_IQM_OLIVE_LEAF_DIABETES"
+   ]
+  ],
+  [
+   "43481",
+   [
+    "RULE_BOTAN_SCHISANDRA_BERRY_CYP3A4"
+   ]
+  ],
+  [
+   "63009",
+   [
+    "RULE_BOTAN_SCHISANDRA_BERRY_CYP3A4"
+   ]
+  ],
+  [
+   "78485",
+   [
+    "RULE_IQM_OLIVE_LEAF_DIABETES"
+   ]
+  ]
+ ],
+ "app_ids_lost": [
+  [
+   "1055",
+   [
+    "soy_isoflavones"
+   ]
+  ],
+  [
+   "12300",
+   [
+    "nha_chili_pepper"
+   ]
+  ],
+  [
+   "13295",
+   [
+    "soy_isoflavones"
+   ]
+  ],
+  [
+   "17131",
+   [
+    "soybean"
+   ]
+  ],
+  [
+   "175409",
+   [
+    "shilajit"
+   ]
+  ],
+  [
+   "17795",
+   [
+    "soy_isoflavones"
+   ]
+  ],
+  [
+   "178716",
+   [
+    "barley_unspecified",
+    "couch_grass"
+   ]
+  ],
+  [
+   "178728",
+   [
+    "couch_grass"
+   ]
+  ],
+  [
+   "178733",
+   [
+    "barley_unspecified",
+    "couch_grass"
+   ]
+  ],
+  [
+   "180692",
+   [
+    "couch_grass"
+   ]
+  ],
+  [
+   "18193",
+   [
+    "soy_isoflavones"
+   ]
+  ],
+  [
+   "182716",
+   [
+    "olive_leaf_powder"
+   ]
+  ],
+  [
+   "183349",
+   [
+    "mct_oil"
+   ]
+  ],
+  [
+   "184659",
+   [
+    "artemisinin",
+    "pii_artemisinin"
+   ]
+  ],
+  [
+   "185088",
+   [
+    "artemisinin",
+    "pii_artemisinin"
+   ]
+  ],
+  [
+   "19483",
+   [
+    "kombu"
+   ]
+  ],
+  [
+   "19494",
+   [
+    "kombu"
+   ]
+  ],
+  [
+   "19504",
+   [
+    "kombu"
+   ]
+  ],
+  [
+   "199408",
+   [
+    "soy_isoflavones"
+   ]
+  ],
+  [
+   "199503",
+   [
+    "nha_chili_pepper"
+   ]
+  ],
+  [
+   "199504",
+   [
+    "nha_chili_pepper"
+   ]
+  ],
+  [
+   "202705",
+   [
+    "barley_unspecified"
+   ]
+  ],
+  [
+   "204040",
+   [
+    "soy_isoflavones"
+   ]
+  ],
+  [
+   "204732",
+   [
+    "barley_unspecified",
+    "couch_grass"
+   ]
+  ],
+  [
+   "204739",
+   [
+    "barley_unspecified",
+    "couch_grass"
+   ]
+  ],
+  [
+   "204748",
+   [
+    "barley_unspecified",
+    "couch_grass"
+   ]
+  ],
+  [
+   "205152",
+   [
+    "wheatgrass_powder"
+   ]
+  ],
+  [
+   "209382",
+   [
+    "olive_leaf_powder"
+   ]
+  ],
+  [
+   "211227",
+   [
+    "olive_leaf_powder"
+   ]
+  ],
+  [
+   "211337",
+   [
+    "levagen"
+   ]
+  ],
+  [
+   "212516",
+   [
+    "levagen"
+   ]
+  ],
+  [
+   "216796",
+   [
+    "soy_isoflavones"
+   ]
+  ],
+  [
+   "218631",
+   [
+    "soybean"
+   ]
+  ],
+  [
+   "219813",
+   [
+    "shilajit"
+   ]
+  ],
+  [
+   "219833",
+   [
+    "levagen"
+   ]
+  ],
+  [
+   "219927",
+   [
+    "levagen"
+   ]
+  ],
+  [
+   "219933",
+   [
+    "levagen"
+   ]
+  ],
+  [
+   "219945",
+   [
+    "levagen"
+   ]
+  ],
+  [
+   "219947",
+   [
+    "levagen"
+   ]
+  ],
+  [
+   "219950",
+   [
+    "levagen"
+   ]
+  ],
+  [
+   "219952",
+   [
+    "levagen"
+   ]
+  ],
+  [
+   "219957",
+   [
+    "coffee_fruit",
+    "shilajit"
+   ]
+  ],
+  [
+   "219970",
+   [
+    "shilajit"
+   ]
+  ],
+  [
+   "219972",
+   [
+    "coffee_fruit",
+    "shilajit"
+   ]
+  ],
+  [
+   "220004",
+   [
+    "coffee_fruit",
+    "shilajit"
+   ]
+  ],
+  [
+   "220047",
+   [
+    "coffee_fruit",
+    "shilajit"
+   ]
+  ],
+  [
+   "220050",
+   [
+    "coffee_fruit",
+    "shilajit"
+   ]
+  ],
+  [
+   "220054",
+   [
+    "shilajit"
+   ]
+  ],
+  [
+   "220085",
+   [
+    "shilajit"
+   ]
+  ],
+  [
+   "220089",
+   [
+    "coffee_fruit",
+    "shilajit"
+   ]
+  ],
+  [
+   "220094",
+   [
+    "coffee_fruit",
+    "shilajit"
+   ]
+  ],
+  [
+   "220098",
+   [
+    "coffee_fruit",
+    "shilajit"
+   ]
+  ],
+  [
+   "220101",
+   [
+    "shilajit"
+   ]
+  ],
+  [
+   "221439",
+   [
+    "artemisinin",
+    "pii_artemisinin"
+   ]
+  ],
+  [
+   "2221",
+   [
+    "kombu"
+   ]
+  ],
+  [
+   "222789",
+   [
+    "levagen"
+   ]
+  ],
+  [
+   "2254",
+   [
+    "soy_isoflavones"
+   ]
+  ],
+  [
+   "227869",
+   [
+    "levagen"
+   ]
+  ],
+  [
+   "228317",
+   [
+    "soybean"
+   ]
+  ],
+  [
+   "229913",
+   [
+    "levagen"
+   ]
+  ],
+  [
+   "229917",
+   [
+    "coffee_fruit",
+    "shilajit"
+   ]
+  ],
+  [
+   "231334",
+   [
+    "soybean"
+   ]
+  ],
+  [
+   "231335",
+   [
+    "soybean"
+   ]
+  ],
+  [
+   "232168",
+   [
+    "olive_leaf_powder"
+   ]
+  ],
+  [
+   "232402",
+   [
+    "olive_leaf_powder"
+   ]
+  ],
+  [
+   "232619",
+   [
+    "olive_leaf_powder"
+   ]
+  ],
+  [
+   "232620",
+   [
+    "olive_leaf_powder"
+   ]
+  ],
+  [
+   "232621",
+   [
+    "olive_leaf_powder"
+   ]
+  ],
+  [
+   "232622",
+   [
+    "olive_leaf_powder"
+   ]
+  ],
+  [
+   "232623",
+   [
+    "olive_leaf_powder"
+   ]
+  ],
+  [
+   "232624",
+   [
+    "olive_leaf_powder"
+   ]
+  ],
+  [
+   "232783",
+   [
+    "olive_leaf_powder"
+   ]
+  ],
+  [
+   "233668",
+   [
+    "barley_unspecified",
+    "couch_grass"
+   ]
+  ],
+  [
+   "241322",
+   [
+    "shilajit"
+   ]
+  ],
+  [
+   "241325",
+   [
+    "shilajit"
+   ]
+  ],
+  [
+   "241328",
+   [
+    "shilajit"
+   ]
+  ],
+  [
+   "241331",
+   [
+    "shilajit"
+   ]
+  ],
+  [
+   "241347",
+   [
+    "barley_unspecified",
+    "couch_grass"
+   ]
+  ],
+  [
+   "241349",
+   [
+    "barley_unspecified",
+    "couch_grass"
+   ]
+  ],
+  [
+   "241350",
+   [
+    "barley_unspecified",
+    "couch_grass"
+   ]
+  ],
+  [
+   "241351",
+   [
+    "barley_unspecified",
+    "couch_grass"
+   ]
+  ],
+  [
+   "241353",
+   [
+    "barley_unspecified",
+    "couch_grass"
+   ]
+  ],
+  [
+   "241354",
+   [
+    "barley_unspecified",
+    "couch_grass"
+   ]
+  ],
+  [
+   "241355",
+   [
+    "barley_unspecified",
+    "couch_grass"
+   ]
+  ],
+  [
+   "241704",
+   [
+    "barley_unspecified",
+    "couch_grass"
+   ]
+  ],
+  [
+   "241705",
+   [
+    "barley_unspecified",
+    "couch_grass"
+   ]
+  ],
+  [
+   "242529",
+   [
+    "barley_unspecified",
+    "couch_grass"
+   ]
+  ],
+  [
+   "242637",
+   [
+    "barley_unspecified"
+   ]
+  ],
+  [
+   "242654",
+   [
+    "barley_unspecified"
+   ]
+  ],
+  [
+   "242655",
+   [
+    "barley_unspecified"
+   ]
+  ],
+  [
+   "242656",
+   [
+    "barley_unspecified"
+   ]
+  ],
+  [
+   "243022",
+   [
+    "coffee_fruit",
+    "shilajit"
+   ]
+  ],
+  [
+   "243028",
+   [
+    "coffee_fruit",
+    "shilajit"
+   ]
+  ],
+  [
+   "243029",
+   [
+    "coffee_fruit",
+    "shilajit"
+   ]
+  ],
+  [
+   "243032",
+   [
+    "coffee_fruit",
+    "shilajit"
+   ]
+  ],
+  [
+   "243035",
+   [
+    "coffee_fruit",
+    "shilajit"
+   ]
+  ],
+  [
+   "243037",
+   [
+    "coffee_fruit",
+    "shilajit"
+   ]
+  ],
+  [
+   "243041",
+   [
+    "coffee_fruit",
+    "shilajit"
+   ]
+  ],
+  [
+   "243045",
+   [
+    "coffee_fruit",
+    "shilajit"
+   ]
+  ],
+  [
+   "243701",
+   [
+    "soy_isoflavones"
+   ]
+  ],
+  [
+   "243749",
+   [
+    "soy_isoflavones"
+   ]
+  ],
+  [
+   "243975",
+   [
+    "kombu"
+   ]
+  ],
+  [
+   "244210",
+   [
+    "levagen"
+   ]
+  ],
+  [
+   "244220",
+   [
+    "levagen"
+   ]
+  ],
+  [
+   "244222",
+   [
+    "levagen"
+   ]
+  ],
+  [
+   "244227",
+   [
+    "levagen"
+   ]
+  ],
+  [
+   "244232",
+   [
+    "levagen"
+   ]
+  ],
+  [
+   "244238",
+   [
+    "levagen"
+   ]
+  ],
+  [
+   "244243",
+   [
+    "levagen"
+   ]
+  ],
+  [
+   "244248",
+   [
+    "levagen"
+   ]
+  ],
+  [
+   "244265",
+   [
+    "levagen"
+   ]
+  ],
+  [
+   "244272",
+   [
+    "levagen"
+   ]
+  ],
+  [
+   "247106",
+   [
+    "barley_unspecified"
+   ]
+  ],
+  [
+   "251529",
+   [
+    "nha_chili_pepper"
+   ]
+  ],
+  [
+   "252704",
+   [
+    "silicon"
+   ]
+  ],
+  [
+   "254795",
+   [
+    "silicon"
+   ]
+  ],
+  [
+   "254796",
+   [
+    "silicon"
+   ]
+  ],
+  [
+   "254797",
+   [
+    "silicon"
+   ]
+  ],
+  [
+   "25491",
+   [
+    "olive_leaf_powder"
+   ]
+  ],
+  [
+   "256120",
+   [
+    "nha_chili_pepper"
+   ]
+  ],
+  [
+   "259473",
+   [
+    "couch_grass"
+   ]
+  ],
+  [
+   "259595",
+   [
+    "shilajit"
+   ]
+  ],
+  [
+   "259626",
+   [
+    "nha_young_barley"
+   ]
+  ],
+  [
+   "259629",
+   [
+    "nha_chili_pepper"
+   ]
+  ],
+  [
+   "259853",
+   [
+    "barley_unspecified"
+   ]
+  ],
+  [
+   "263865",
+   [
+    "soybean"
+   ]
+  ],
+  [
+   "267303",
+   [
+    "couch_grass"
+   ]
+  ],
+  [
+   "267326",
+   [
+    "barley_unspecified",
+    "couch_grass"
+   ]
+  ],
+  [
+   "267327",
+   [
+    "couch_grass"
+   ]
+  ],
+  [
+   "267829",
+   [
+    "nha_chili_pepper"
+   ]
+  ],
+  [
+   "268185",
+   [
+    "nha_chili_pepper"
+   ]
+  ],
+  [
+   "268686",
+   [
+    "barley_unspecified"
+   ]
+  ],
+  [
+   "269265",
+   [
+    "resveratrol"
+   ]
+  ],
+  [
+   "2715",
+   [
+    "soybean"
+   ]
+  ],
+  [
+   "27203",
+   [
+    "barley_unspecified"
+   ]
+  ],
+  [
+   "27291",
+   [
+    "soy_isoflavones"
+   ]
+  ],
+  [
+   "273816",
+   [
+    "barley_unspecified"
+   ]
+  ],
+  [
+   "274662",
+   [
+    "couch_grass"
+   ]
+  ],
+  [
+   "274671",
+   [
+    "barley_unspecified"
+   ]
+  ],
+  [
+   "274708",
+   [
+    "barley_unspecified",
+    "couch_grass"
+   ]
+  ],
+  [
+   "274728",
+   [
+    "barley_unspecified",
+    "couch_grass"
+   ]
+  ],
+  [
+   "275119",
+   [
+    "barley_unspecified",
+    "couch_grass"
+   ]
+  ],
+  [
+   "275997",
+   [
+    "barley_unspecified"
+   ]
+  ],
+  [
+   "27810",
+   [
+    "kombu"
+   ]
+  ],
+  [
+   "278376",
+   [
+    "tart_cherry_fruit"
+   ]
+  ],
+  [
+   "278416",
+   [
+    "barley_unspecified",
+    "couch_grass"
+   ]
+  ],
+  [
+   "282638",
+   [
+    "barley_unspecified",
+    "couch_grass"
+   ]
+  ],
+  [
+   "28491",
+   [
+    "oat_generic"
+   ]
+  ],
+  [
+   "289077",
+   [
+    "barley_unspecified"
+   ]
+  ],
+  [
+   "28961",
+   [
+    "barley_unspecified"
+   ]
+  ],
+  [
+   "28973",
+   [
+    "kombu"
+   ]
+  ],
+  [
+   "29017",
+   [
+    "wheatgrass_powder"
+   ]
+  ],
+  [
+   "293243",
+   [
+    "barley_unspecified"
+   ]
+  ],
+  [
+   "293316",
+   [
+    "nha_chili_pepper"
+   ]
+  ],
+  [
+   "294025",
+   [
+    "artemisinin"
+   ]
+  ],
+  [
+   "294301",
+   [
+    "wild_yam_root"
+   ]
+  ],
+  [
+   "294303",
+   [
+    "wild_yam_root"
+   ]
+  ],
+  [
+   "294304",
+   [
+    "wild_yam_root"
+   ]
+  ],
+  [
+   "295531",
+   [
+    "artemisinin"
+   ]
+  ],
+  [
+   "297590",
+   [
+    "protease"
+   ]
+  ],
+  [
+   "300082",
+   [
+    "shilajit"
+   ]
+  ],
+  [
+   "302683",
+   [
+    "keratin"
+   ]
+  ],
+  [
+   "302687",
+   [
+    "floraglo"
+   ]
+  ],
+  [
+   "302705",
+   [
+    "resveratrol"
+   ]
+  ],
+  [
+   "306368",
+   [
+    "barley_unspecified",
+    "couch_grass"
+   ]
+  ],
+  [
+   "309960",
+   [
+    "shilajit"
+   ]
+  ],
+  [
+   "31062",
+   [
+    "soybean"
+   ]
+  ],
+  [
+   "31064",
+   [
+    "kombu"
+   ]
+  ],
+  [
+   "31148",
+   [
+    "barley_unspecified"
+   ]
+  ],
+  [
+   "311680",
+   [
+    "barley_unspecified",
+    "couch_grass"
+   ]
+  ],
+  [
+   "311889",
+   [
+    "wild_yam_root"
+   ]
+  ],
+  [
+   "311890",
+   [
+    "wild_yam_root"
+   ]
+  ],
+  [
+   "311891",
+   [
+    "wild_yam_root"
+   ]
+  ],
+  [
+   "311892",
+   [
+    "wild_yam_root"
+   ]
+  ],
+  [
+   "312988",
+   [
+    "nha_young_barley"
+   ]
+  ],
+  [
+   "312995",
+   [
+    "nha_young_barley"
+   ]
+  ],
+  [
+   "313496",
+   [
+    "nha_young_barley"
+   ]
+  ],
+  [
+   "313497",
+   [
+    "nha_young_barley"
+   ]
+  ],
+  [
+   "313498",
+   [
+    "nha_young_barley"
+   ]
+  ],
+  [
+   "313522",
+   [
+    "nha_young_barley"
+   ]
+  ],
+  [
+   "313523",
+   [
+    "nha_young_barley"
+   ]
+  ],
+  [
+   "313524",
+   [
+    "nha_young_barley"
+   ]
+  ],
+  [
+   "314032",
+   [
+    "pii_purified_fish_oil"
+   ]
+  ],
+  [
+   "318105",
+   [
+    "shilajit"
+   ]
+  ],
+  [
+   "318108",
+   [
+    "shilajit"
+   ]
+  ],
+  [
+   "319899",
+   [
+    "shilajit"
+   ]
+  ],
+  [
+   "319900",
+   [
+    "shilajit"
+   ]
+  ],
+  [
+   "319921",
+   [
+    "shilajit"
+   ]
+  ],
+  [
+   "319922",
+   [
+    "shilajit"
+   ]
+  ],
+  [
+   "321353",
+   [
+    "kombu"
+   ]
+  ],
+  [
+   "321360",
+   [
+    "couch_grass"
+   ]
+  ],
+  [
+   "321379",
+   [
+    "barley_unspecified"
+   ]
+  ],
+  [
+   "321384",
+   [
+    "silicon"
+   ]
+  ],
+  [
+   "321392",
+   [
+    "silicon"
+   ]
+  ],
+  [
+   "321826",
+   [
+    "shilajit"
+   ]
+  ],
+  [
+   "322603",
+   [
+    "barley_unspecified"
+   ]
+  ],
+  [
+   "322604",
+   [
+    "barley_unspecified"
+   ]
+  ],
+  [
+   "325581",
+   [
+    "shilajit"
+   ]
+  ],
+  [
+   "326235",
+   [
+    "nha_chili_pepper"
+   ]
+  ],
+  [
+   "326696",
+   [
+    "couch_grass"
+   ]
+  ],
+  [
+   "327405",
+   [
+    "couch_grass"
+   ]
+  ],
+  [
+   "327406",
+   [
+    "barley_unspecified",
+    "couch_grass"
+   ]
+  ],
+  [
+   "327407",
+   [
+    "couch_grass"
+   ]
+  ],
+  [
+   "327411",
+   [
+    "couch_grass"
+   ]
+  ],
+  [
+   "327910",
+   [
+    "nha_chili_pepper"
+   ]
+  ],
+  [
+   "328119",
+   [
+    "barley_unspecified"
+   ]
+  ],
+  [
+   "328514",
+   [
+    "resveratrol"
+   ]
+  ],
+  [
+   "328516",
+   [
+    "resveratrol"
+   ]
+  ],
+  [
+   "328517",
+   [
+    "resveratrol"
+   ]
+  ],
+  [
+   "328518",
+   [
+    "resveratrol"
+   ]
+  ],
+  [
+   "328519",
+   [
+    "resveratrol"
+   ]
+  ],
+  [
+   "329215",
+   [
+    "shilajit"
+   ]
+  ],
+  [
+   "330686",
+   [
+    "couch_grass"
+   ]
+  ],
+  [
+   "330835",
+   [
+    "shilajit"
+   ]
+  ],
+  [
+   "330836",
+   [
+    "shilajit"
+   ]
+  ],
+  [
+   "330837",
+   [
+    "shilajit"
+   ]
+  ],
+  [
+   "330838",
+   [
+    "shilajit"
+   ]
+  ],
+  [
+   "330840",
+   [
+    "shilajit"
+   ]
+  ],
+  [
+   "330841",
+   [
+    "shilajit"
+   ]
+  ],
+  [
+   "330843",
+   [
+    "shilajit"
+   ]
+  ],
+  [
+   "331027",
+   [
+    "chinese_rhubarb"
+   ]
+  ],
+  [
+   "331247",
+   [
+    "wild_yam_root"
+   ]
+  ],
+  [
+   "331248",
+   [
+    "wild_yam_root"
+   ]
+  ],
+  [
+   "331249",
+   [
+    "wild_yam_root"
+   ]
+  ],
+  [
+   "331250",
+   [
+    "wild_yam_root"
+   ]
+  ],
+  [
+   "332910",
+   [
+    "nha_chili_pepper"
+   ]
+  ],
+  [
+   "333872",
+   [
+    "barley_unspecified",
+    "couch_grass"
+   ]
+  ],
+  [
+   "336846",
+   [
+    "couch_grass"
+   ]
+  ],
+  [
+   "336852",
+   [
+    "couch_grass"
+   ]
+  ],
+  [
+   "336854",
+   [
+    "couch_grass"
+   ]
+  ],
+  [
+   "336877",
+   [
+    "couch_grass"
+   ]
+  ],
+  [
+   "336878",
+   [
+    "couch_grass"
+   ]
+  ],
+  [
+   "336897",
+   [
+    "barley_unspecified",
+    "couch_grass"
+   ]
+  ],
+  [
+   "337232",
+   [
+    "barley_unspecified"
+   ]
+  ],
+  [
+   "337238",
+   [
+    "barley_unspecified",
+    "couch_grass"
+   ]
+  ],
+  [
+   "337717",
+   [
+    "couch_grass"
+   ]
+  ],
+  [
+   "46729",
+   [
+    "barley_unspecified",
+    "couch_grass"
+   ]
+  ],
+  [
+   "47815",
+   [
+    "olive_leaf",
+    "olive_leaf_powder"
+   ]
+  ],
+  [
+   "59472",
+   [
+    "olive_leaf_powder"
+   ]
+  ],
+  [
+   "60408",
+   [
+    "olive_leaf_powder"
+   ]
+  ],
+  [
+   "60463",
+   [
+    "olive_leaf",
+    "olive_leaf_powder"
+   ]
+  ],
+  [
+   "60544",
+   [
+    "olive_leaf",
+    "olive_leaf_powder"
+   ]
+  ],
+  [
+   "60603",
+   [
+    "olive_leaf",
+    "olive_leaf_powder"
+   ]
+  ],
+  [
+   "60670",
+   [
+    "olive_leaf_powder"
+   ]
+  ],
+  [
+   "60673",
+   [
+    "olive_leaf_powder"
+   ]
+  ],
+  [
+   "60676",
+   [
+    "olive_leaf_powder"
+   ]
+  ],
+  [
+   "60701",
+   [
+    "olive_leaf_powder"
+   ]
+  ],
+  [
+   "60713",
+   [
+    "olive_leaf",
+    "olive_leaf_powder"
+   ]
+  ],
+  [
+   "60716",
+   [
+    "olive_leaf",
+    "olive_leaf_powder"
+   ]
+  ],
+  [
+   "60740",
+   [
+    "olive_leaf",
+    "olive_leaf_powder"
+   ]
+  ],
+  [
+   "60848",
+   [
+    "olive_leaf_powder"
+   ]
+  ],
+  [
+   "60849",
+   [
+    "olive_leaf_powder"
+   ]
+  ],
+  [
+   "60850",
+   [
+    "olive_leaf_powder"
+   ]
+  ],
+  [
+   "60901",
+   [
+    "olive_leaf",
+    "olive_leaf_powder"
+   ]
+  ],
+  [
+   "60911",
+   [
+    "olive_leaf",
+    "olive_leaf_powder"
+   ]
+  ],
+  [
+   "61982",
+   [
+    "olive_leaf",
+    "olive_leaf_powder"
+   ]
+  ],
+  [
+   "61983",
+   [
+    "olive_leaf",
+    "olive_leaf_powder"
+   ]
+  ],
+  [
+   "62079",
+   [
+    "olive_leaf_powder"
+   ]
+  ],
+  [
+   "62097",
+   [
+    "olive_leaf",
+    "olive_leaf_powder"
+   ]
+  ],
+  [
+   "62265",
+   [
+    "olive_leaf",
+    "olive_leaf_powder"
+   ]
+  ],
+  [
+   "62279",
+   [
+    "olive_leaf",
+    "olive_leaf_powder"
+   ]
+  ],
+  [
+   "62666",
+   [
+    "sweet_orange"
+   ]
+  ],
+  [
+   "62697",
+   [
+    "sweet_orange"
+   ]
+  ],
+  [
+   "62701",
+   [
+    "sweet_orange"
+   ]
+  ],
+  [
+   "62707",
+   [
+    "sweet_orange"
+   ]
+  ],
+  [
+   "63665",
+   [
+    "olive_leaf_powder"
+   ]
+  ],
+  [
+   "63710",
+   [
+    "olive_leaf_powder"
+   ]
+  ],
+  [
+   "63854",
+   [
+    "nha_chili_pepper"
+   ]
+  ],
+  [
+   "64333",
+   [
+    "olive_leaf",
+    "olive_leaf_powder"
+   ]
+  ],
+  [
+   "64382",
+   [
+    "saw_palmetto"
+   ]
+  ],
+  [
+   "64387",
+   [
+    "saw_palmetto"
+   ]
+  ],
+  [
+   "64494",
+   [
+    "olive_leaf",
+    "olive_leaf_powder"
+   ]
+  ],
+  [
+   "64572",
+   [
+    "olive_leaf",
+    "olive_leaf_powder"
+   ]
+  ],
+  [
+   "64625",
+   [
+    "olive_leaf",
+    "olive_leaf_powder"
+   ]
+  ],
+  [
+   "64631",
+   [
+    "olive_leaf",
+    "olive_leaf_powder"
+   ]
+  ],
+  [
+   "64671",
+   [
+    "barley_unspecified"
+   ]
+  ],
+  [
+   "64935",
+   [
+    "olive_leaf_powder"
+   ]
+  ],
+  [
+   "69320",
+   [
+    "shilajit"
+   ]
+  ],
+  [
+   "69579",
+   [
+    "lemon_bioflavonoids"
+   ]
+  ],
+  [
+   "70066",
+   [
+    "barley_unspecified",
+    "couch_grass"
+   ]
+  ],
+  [
+   "74644",
+   [
+    "nha_chili_pepper"
+   ]
+  ],
+  [
+   "74655",
+   [
+    "soy_isoflavones"
+   ]
+  ],
+  [
+   "74709",
+   [
+    "olive_leaf_powder"
+   ]
+  ],
+  [
+   "74738",
+   [
+    "soy_isoflavones"
+   ]
+  ],
+  [
+   "74755",
+   [
+    "soy_isoflavones"
+   ]
+  ],
+  [
+   "74840",
+   [
+    "nha_young_barley"
+   ]
+  ],
+  [
+   "74844",
+   [
+    "nha_young_barley"
+   ]
+  ],
+  [
+   "75187",
+   [
+    "soy_isoflavones"
+   ]
+  ],
+  [
+   "76009",
+   [
+    "nha_chili_pepper"
+   ]
+  ],
+  [
+   "77052",
+   [
+    "nha_chili_pepper"
+   ]
+  ],
+  [
+   "77164",
+   [
+    "shilajit"
+   ]
+  ],
+  [
+   "77801",
+   [
+    "barley_unspecified",
+    "couch_grass"
+   ]
+  ],
+  [
+   "78133",
+   [
+    "lemon_bioflavonoids"
+   ]
+  ],
+  [
+   "78148",
+   [
+    "shilajit"
+   ]
+  ],
+  [
+   "78306",
+   [
+    "barley_unspecified"
+   ]
+  ],
+  [
+   "79397",
+   [
+    "barley_unspecified",
+    "couch_grass",
+    "soybean"
+   ]
+  ],
+  [
+   "79411",
+   [
+    "barley_unspecified",
+    "couch_grass",
+    "soybean"
+   ]
+  ],
+  [
+   "79476",
+   [
+    "barley_unspecified",
+    "couch_grass"
+   ]
+  ],
+  [
+   "79482",
+   [
+    "barley_unspecified",
+    "couch_grass"
+   ]
+  ],
+  [
+   "79635",
+   [
+    "nha_chili_pepper"
+   ]
+  ],
+  [
+   "80302",
+   [
+    "chinese_rhubarb"
+   ]
+  ],
+  [
+   "80495",
+   [
+    "barley_unspecified"
+   ]
+  ],
+  [
+   "82605",
+   [
+    "nha_chili_pepper"
+   ]
+  ],
+  [
+   "861",
+   [
+    "nha_chili_pepper"
+   ]
+  ],
+  [
+   "9171",
+   [
+    "soy_isoflavones"
+   ]
+  ],
+  [
+   "992",
+   [
+    "soy_isoflavones"
+   ]
+  ]
+ ],
+ "app_ids_gained": [
+  [
+   "175409",
+   [
+    "pii_elevatp_branded_blend"
+   ]
+  ],
+  [
+   "184659",
+   [
+    "sweet_wormwood_herb"
+   ]
+  ],
+  [
+   "185088",
+   [
+    "sweet_wormwood_herb"
+   ]
+  ],
+  [
+   "219813",
+   [
+    "pii_elevatp_branded_blend"
+   ]
+  ],
+  [
+   "219957",
+   [
+    "coffeeberry",
+    "pii_elevatp_branded_blend"
+   ]
+  ],
+  [
+   "219970",
+   [
+    "pii_elevatp_branded_blend"
+   ]
+  ],
+  [
+   "219972",
+   [
+    "coffeeberry",
+    "pii_elevatp_branded_blend"
+   ]
+  ],
+  [
+   "220004",
+   [
+    "coffeeberry",
+    "pii_elevatp_branded_blend"
+   ]
+  ],
+  [
+   "220047",
+   [
+    "coffeeberry",
+    "pii_elevatp_branded_blend"
+   ]
+  ],
+  [
+   "220050",
+   [
+    "coffeeberry",
+    "pii_elevatp_branded_blend"
+   ]
+  ],
+  [
+   "220054",
+   [
+    "pii_elevatp_branded_blend"
+   ]
+  ],
+  [
+   "220085",
+   [
+    "pii_elevatp_branded_blend"
+   ]
+  ],
+  [
+   "220089",
+   [
+    "coffeeberry",
+    "pii_elevatp_branded_blend"
+   ]
+  ],
+  [
+   "220094",
+   [
+    "coffeeberry",
+    "pii_elevatp_branded_blend"
+   ]
+  ],
+  [
+   "220098",
+   [
+    "coffeeberry",
+    "pii_elevatp_branded_blend"
+   ]
+  ],
+  [
+   "220101",
+   [
+    "pii_elevatp_branded_blend"
+   ]
+  ],
+  [
+   "221439",
+   [
+    "sweet_wormwood_herb"
+   ]
+  ],
+  [
+   "229917",
+   [
+    "coffeeberry",
+    "pii_elevatp_branded_blend"
+   ]
+  ],
+  [
+   "241322",
+   [
+    "pii_elevatp_branded_blend"
+   ]
+  ],
+  [
+   "241325",
+   [
+    "pii_elevatp_branded_blend"
+   ]
+  ],
+  [
+   "241328",
+   [
+    "pii_elevatp_branded_blend"
+   ]
+  ],
+  [
+   "241331",
+   [
+    "pii_elevatp_branded_blend"
+   ]
+  ],
+  [
+   "243022",
+   [
+    "coffeeberry",
+    "pii_elevatp_branded_blend"
+   ]
+  ],
+  [
+   "243028",
+   [
+    "coffeeberry",
+    "pii_elevatp_branded_blend"
+   ]
+  ],
+  [
+   "243029",
+   [
+    "coffeeberry",
+    "pii_elevatp_branded_blend"
+   ]
+  ],
+  [
+   "243032",
+   [
+    "coffeeberry",
+    "pii_elevatp_branded_blend"
+   ]
+  ],
+  [
+   "243035",
+   [
+    "coffeeberry",
+    "pii_elevatp_branded_blend"
+   ]
+  ],
+  [
+   "243037",
+   [
+    "coffeeberry",
+    "pii_elevatp_branded_blend"
+   ]
+  ],
+  [
+   "243041",
+   [
+    "coffeeberry",
+    "pii_elevatp_branded_blend"
+   ]
+  ],
+  [
+   "243045",
+   [
+    "coffeeberry",
+    "pii_elevatp_branded_blend"
+   ]
+  ],
+  [
+   "259595",
+   [
+    "pii_elevatp_branded_blend"
+   ]
+  ],
+  [
+   "300082",
+   [
+    "pii_elevatp_branded_blend"
+   ]
+  ],
+  [
+   "309960",
+   [
+    "pii_elevatp_branded_blend"
+   ]
+  ],
+  [
+   "318105",
+   [
+    "pii_elevatp_branded_blend"
+   ]
+  ],
+  [
+   "318108",
+   [
+    "pii_elevatp_branded_blend"
+   ]
+  ],
+  [
+   "319899",
+   [
+    "pii_elevatp_branded_blend"
+   ]
+  ],
+  [
+   "319900",
+   [
+    "pii_elevatp_branded_blend"
+   ]
+  ],
+  [
+   "319921",
+   [
+    "pii_elevatp_branded_blend"
+   ]
+  ],
+  [
+   "319922",
+   [
+    "pii_elevatp_branded_blend"
+   ]
+  ],
+  [
+   "321826",
+   [
+    "pii_elevatp_branded_blend"
+   ]
+  ],
+  [
+   "325581",
+   [
+    "pii_elevatp_branded_blend"
+   ]
+  ],
+  [
+   "329215",
+   [
+    "pii_elevatp_branded_blend"
+   ]
+  ],
+  [
+   "330835",
+   [
+    "pii_elevatp_branded_blend"
+   ]
+  ],
+  [
+   "330836",
+   [
+    "pii_elevatp_branded_blend"
+   ]
+  ],
+  [
+   "330837",
+   [
+    "pii_elevatp_branded_blend"
+   ]
+  ],
+  [
+   "330838",
+   [
+    "pii_elevatp_branded_blend"
+   ]
+  ],
+  [
+   "330840",
+   [
+    "pii_elevatp_branded_blend"
+   ]
+  ],
+  [
+   "330841",
+   [
+    "pii_elevatp_branded_blend"
+   ]
+  ],
+  [
+   "330843",
+   [
+    "pii_elevatp_branded_blend"
+   ]
+  ],
+  [
+   "47815",
+   [
+    "olive_fruit_extract"
+   ]
+  ],
+  [
+   "60463",
+   [
+    "olive_fruit_extract"
+   ]
+  ],
+  [
+   "60544",
+   [
+    "olive_fruit_extract"
+   ]
+  ],
+  [
+   "60603",
+   [
+    "olive_fruit_extract"
+   ]
+  ],
+  [
+   "60713",
+   [
+    "olive_fruit_extract"
+   ]
+  ],
+  [
+   "60716",
+   [
+    "olive_fruit_extract"
+   ]
+  ],
+  [
+   "60740",
+   [
+    "olive_fruit_extract"
+   ]
+  ],
+  [
+   "60901",
+   [
+    "olive_fruit_extract"
+   ]
+  ],
+  [
+   "60911",
+   [
+    "olive_fruit_extract"
+   ]
+  ],
+  [
+   "61982",
+   [
+    "olive_fruit_extract"
+   ]
+  ],
+  [
+   "61983",
+   [
+    "olive_fruit_extract"
+   ]
+  ],
+  [
+   "62097",
+   [
+    "olive_fruit_extract"
+   ]
+  ],
+  [
+   "62265",
+   [
+    "olive_fruit_extract"
+   ]
+  ],
+  [
+   "62279",
+   [
+    "olive_fruit_extract"
+   ]
+  ],
+  [
+   "64333",
+   [
+    "olive_fruit_extract"
+   ]
+  ],
+  [
+   "64382",
+   [
+    "acai_berry"
+   ]
+  ],
+  [
+   "64494",
+   [
+    "olive_fruit_extract"
+   ]
+  ],
+  [
+   "64572",
+   [
+    "olive_fruit_extract"
+   ]
+  ],
+  [
+   "64625",
+   [
+    "olive_fruit_extract"
+   ]
+  ],
+  [
+   "64631",
+   [
+    "olive_fruit_extract"
+   ]
+  ],
+  [
+   "69320",
+   [
+    "pii_elevatp_branded_blend"
+   ]
+  ],
+  [
+   "77164",
+   [
+    "pii_elevatp_branded_blend"
+   ]
+  ],
+  [
+   "78148",
+   [
+    "pii_elevatp_branded_blend"
+   ]
+  ]
+ ],
+ "contaminant_moves": [],
+ "per_id_carrier_counts": {
+  "acai_berry": {
+   "display_ingredients_active_gained": 2
+  },
+  "artemisinin": {
+   "display_ingredients_active_lost": 5
+  },
+  "artichoke": {
+   "iqd_lost": 1
+  },
+  "barley_grass": {
+   "blob_ingredients_gained": 77,
+   "iqd_gained": 77
+  },
+  "barley_unspecified": {
+   "blob_ingredients_lost": 61,
+   "iqd_lost": 59
+  },
+  "beta_glucan": {
+   "iqd_lost": 1
+  },
+  "bifidobacterium_breve": {
+   "iqd_lost": 1
+  },
+  "blend_protein": {
+   "blob_ingredients_lost": 1
+  },
+  "blend_pump": {
+   "blob_ingredients_lost": 1
+  },
+  "blend_superfood": {
+   "blob_ingredients_lost": 1
+  },
+  "blueberry": {
+   "blob_ingredients_lost": 1
+  },
+  "brown_kelp": {
+   "blob_ingredients_gained": 9,
+   "iqd_gained": 61,
+   "iqd_lost": 1
+  },
+  "burdock_root": {
+   "iqd_gained": 2
+  },
+  "burdock_root_powder": {
+   "iqd_lost": 2
+  },
+  "cabbage": {
+   "iqd_gained": 32
+  },
+  "cabbage_extract": {
+   "iqd_lost": 50
+  },
+  "cayenne_pepper": {
+   "blob_ingredients_gained": 19,
+   "iqd_gained": 72
+  },
+  "chinese_rhubarb": {
+   "blob_ingredients_lost": 2,
+   "iqd_lost": 2
+  },
+  "cilantro": {
+   "iqd_gained": 25
+  },
+  "cinnamon": {
+   "blob_ingredients_lost": 1
+  },
+  "citrus_bioflavonoids": {
+   "blob_ingredients_gained": 2,
+   "iqd_gained": 2
+  },
+  "coconut_water": {
+   "blob_ingredients_gained": 1,
+   "iqd_gained": 9
+  },
+  "coffee_fruit": {
+   "blob_ingredients_lost": 17,
+   "iqd_lost": 17
+  },
+  "coffeeberry": {
+   "blob_ingredients_gained": 17,
+   "iqd_gained": 17
+  },
+  "coriander": {
+   "iqd_lost": 25
+  },
+  "couch_grass": {
+   "blob_ingredients_lost": 53,
+   "iqd_lost": 54
+  },
+  "cranberry": {
+   "blob_ingredients_lost": 1
+  },
+  "creatine_monohydrate": {
+   "blob_ingredients_lost": 1
+  },
+  "dark_sweet_cherry": {
+   "iqd_lost": 1
+  },
+  "digestive_enzymes": {
+   "blob_ingredients_lost": 16,
+   "blob_ingredients_gained": 1,
+   "iqd_gained": 1
+  },
+  "echinacea": {
+   "blob_ingredients_lost": 1
+  },
+  "echinacea_purpurea_root_extract": {
+   "iqd_gained": 2
+  },
+  "eyebright": {
+   "blob_ingredients_lost": 2
+  },
+  "fish_oil": {
+   "blob_ingredients_gained": 1,
+   "iqd_gained": 1
+  },
+  "floraglo": {
+   "blob_ingredients_lost": 1,
+   "iqd_lost": 1
+  },
+  "fucoxanthin": {
+   "iqd_gained": 1
+  },
+  "globe_artichoke": {
+   "iqd_gained": 1
+  },
+  "grape": {
+   "display_ingredients_active_gained": 7
+  },
+  "green_bell_pepper": {
+   "iqd_gained": 188
+  },
+  "green_cabbage": {
+   "iqd_gained": 18
+  },
+  "hesperidin": {
+   "iqd_gained": 1
+  },
+  "hiratake": {
+   "iqd_lost": 2
+  },
+  "isoflavones": {
+   "blob_ingredients_gained": 17,
+   "iqd_gained": 17,
+   "blob_ingredients_lost": 1
+  },
+  "kelp_powder": {
+   "iqd_lost": 52
+  },
+  "keraglo": {
+   "blob_ingredients_gained": 1,
+   "iqd_gained": 1
+  },
+  "keratin": {
+   "blob_ingredients_lost": 1,
+   "iqd_lost": 1
+  },
+  "king_trumpet": {
+   "iqd_gained": 2
+  },
+  "kombu": {
+   "blob_ingredients_lost": 9,
+   "iqd_lost": 9
+  },
+  "lactase": {
+   "blob_ingredients_lost": 1
+  },
+  "lactobacillus_casei": {
+   "iqd_lost": 2
+  },
+  "lactobacillus_kefirgranum": {
+   "iqd_gained": 14
+  },
+  "lactobacillus_paracasei": {
+   "iqd_gained": 2
+  },
+  "lactococcus_cremoris": {
+   "iqd_gained": 17
+  },
+  "lecithin": {
+   "iqd_gained": 2
+  },
+  "lemon_bioflavonoids": {
+   "blob_ingredients_lost": 2,
+   "iqd_lost": 2
+  },
+  "levagen": {
+   "blob_ingredients_lost": 22,
+   "iqd_lost": 22
+  },
+  "lion_s_mane": {
+   "iqd_lost": 39
+  },
+  "lions_mane": {
+   "iqd_gained": 39
+  },
+  "mct_oil": {
+   "blob_ingredients_lost": 1,
+   "iqd_lost": 8
+  },
+  "nha_acacia_gum": {
+   "iqd_lost": 4
+  },
+  "nha_chili_pepper": {
+   "blob_ingredients_lost": 19,
+   "iqd_lost": 260
+  },
+  "nha_microcrystalline_cellulose": {
+   "blob_ingredients_lost": 5
+  },
+  "nha_natural_colors": {
+   "blob_ingredients_lost": 3
+  },
+  "nha_young_barley": {
+   "blob_ingredients_lost": 11,
+   "iqd_lost": 11
+  },
+  "oat_bran": {
+   "blob_ingredients_gained": 1,
+   "iqd_gained": 1
+  },
+  "oat_generic": {
+   "blob_ingredients_lost": 1,
+   "iqd_lost": 1
+  },
+  "olive_fruit_extract": {
+   "iqd_lost": 13,
+   "blob_ingredients_gained": 19,
+   "display_ingredients_active_gained": 19,
+   "iqd_gained": 19
+  },
+  "olive_leaf": {
+   "blob_ingredients_gained": 28,
+   "iqd_gained": 16,
+   "display_ingredients_active_lost": 19
+  },
+  "olive_leaf_powder": {
+   "blob_ingredients_lost": 46,
+   "iqd_lost": 46
+  },
+  "opc": {
+   "iqd_gained": 2
+  },
+  "orange": {
+   "iqd_gained": 7
+  },
+  "organ_extracts": {
+   "iqd_gained": 1
+  },
+  "palmitoylethanolamide": {
+   "blob_ingredients_gained": 22,
+   "iqd_gained": 22
+  },
+  "pii_artemisinin": {
+   "blob_ingredients_lost": 3,
+   "iqd_lost": 3
+  },
+  "pii_elevatp_branded_blend": {
+   "display_ingredients_active_gained": 49
+  },
+  "pii_kidney_tissue": {
+   "iqd_lost": 1
+  },
+  "pii_phospholipid_descriptor": {
+   "iqd_lost": 2
+  },
+  "pii_polyethylene_glycol": {
+   "blob_ingredients_lost": 4
+  },
+  "pii_purified_fish_oil": {
+   "blob_ingredients_lost": 1,
+   "iqd_lost": 1
+  },
+  "pii_trace_mineral_complex": {
+   "blob_ingredients_lost": 1
+  },
+  "plum": {
+   "iqd_lost": 25
+  },
+  "prebiotics": {
+   "blob_ingredients_lost": 21,
+   "iqd_gained": 1
+  },
+  "proanthocyanidins": {
+   "iqd_lost": 2
+  },
+  "probiotics": {
+   "blob_ingredients_lost": 8
+  },
+  "protease": {
+   "blob_ingredients_lost": 1
+  },
+  "protein": {
+   "blob_ingredients_gained": 8,
+   "iqd_gained": 7
+  },
+  "prune": {
+   "iqd_gained": 25
+  },
+  "resveratrol": {
+   "display_ingredients_active_lost": 7
+  },
+  "saw_palmetto": {
+   "display_ingredients_active_lost": 2
+  },
+  "schisandra": {
+   "iqd_lost": 2
+  },
+  "schisandra_berry": {
+   "iqd_gained": 2
+  },
+  "shilajit": {
+   "display_ingredients_active_lost": 49
+  },
+  "silica": {
+   "blob_ingredients_gained": 6,
+   "iqd_gained": 6
+  },
+  "silicon": {
+   "blob_ingredients_lost": 7,
+   "iqd_lost": 6
+  },
+  "soy_isoflavones": {
+   "blob_ingredients_lost": 17,
+   "iqd_lost": 17
+  },
+  "soybean": {
+   "blob_ingredients_lost": 10,
+   "iqd_lost": 14
+  },
+  "sweet_orange": {
+   "iqd_lost": 11,
+   "blob_ingredients_lost": 4
+  },
+  "sweet_wormwood_herb": {
+   "blob_ingredients_gained": 3,
+   "display_ingredients_active_gained": 5,
+   "iqd_gained": 3
+  },
+  "tart_cherry": {
+   "iqd_gained": 2,
+   "blob_ingredients_gained": 1,
+   "blob_ingredients_lost": 2
+  },
+  "tart_cherry_fruit": {
+   "blob_ingredients_lost": 1,
+   "iqd_lost": 1
+  },
+  "triphala_powder": {
+   "blob_ingredients_lost": 3
+  },
+  "turkey_rhubarb_root": {
+   "blob_ingredients_gained": 2,
+   "iqd_gained": 2
+  },
+  "vitamin_a": {
+   "blob_ingredients_lost": 2
+  },
+  "wellmune": {
+   "iqd_gained": 1
+  },
+  "wheatgrass": {
+   "blob_ingredients_gained": 55,
+   "iqd_gained": 56,
+   "blob_ingredients_lost": 2
+  },
+  "wheatgrass_powder": {
+   "blob_ingredients_lost": 2,
+   "iqd_lost": 2
+  },
+  "wild_yam": {
+   "blob_ingredients_gained": 11,
+   "iqd_gained": 11
+  },
+  "wild_yam_root": {
+   "blob_ingredients_lost": 11,
+   "iqd_lost": 11
+  }
+ }
+}

@@ -2,7 +2,7 @@
   "_metadata": {
     "schema_version": "1.0.0",
     "contract_name": "Cleaner-First Source Of Truth Matrix",
-    "last_updated": "2026-05-22",
+    "last_updated": "2026-10-19",
     "owner": "scripts/audit_source_of_truth_contract.py",
     "summary": "Defines the single owner for clinical/data concepts so downstream pipeline stages consume contracts instead of re-deriving meaning."
   },
@@ -183,10 +183,10 @@
       "field_kind": "enriched",
       "source_data_files": ["scripts/data/ingredient_quality_map.json"],
       "consumers": ["scripts/supplement_taxonomy.py", "scripts/scoring_v4", "scripts/build_final_db.py"],
-      "forbidden_recomputation": ["search, taxonomy, scoring, export, and Flutter consume canonical IDs; they do not infer identity from display label"],
+      "forbidden_recomputation": ["search, taxonomy, scoring, export, and Flutter consume canonical IDs; they do not infer identity from display label", "the cleaner's canonical_id is an input: the enricher keeps it, refines it to a registered child, or repairs it only on recorded label evidence through identity_integrity.resolve_identity; a DSLD ingredientGroup never replaces an identity the printed label names with a different substance, species, part or preparation (docs/adr/0005-one-ingredient-identity-owner.md)", "build_final_db exports the enricher's identity on detail-blob ingredients, unresolved included; the cleaner's id never refills it. The display ledger row keeps the printed identity and nests the enricher's under analysis"],
       "fallback_class": "clinical_fail_safe",
-      "release_gate": "scripts/audit_source_of_truth_contract.py export",
-      "tests": ["scripts/tests/test_canonical_id_delivers_markers_emit.py"],
+      "release_gate": "scripts/audit_raw_to_final.py",
+      "tests": ["scripts/tests/test_canonical_id_delivers_markers_emit.py", "scripts/tests/test_identity_integrity.py", "scripts/tests/test_identity_label_named_over_group.py", "scripts/tests/test_audit_raw_to_final_reconciliation.py"],
       "retirement_status": "active"
     },
     {

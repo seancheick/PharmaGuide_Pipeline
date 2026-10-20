@@ -182,6 +182,9 @@ if [ ! -d "$DATASET_ROOT" ]; then
     exit 1
 fi
 
+# The snapshot's raw-to-final line gate reads the same raw labels this run cleans.
+export PHARMAGUIDE_DATASET_ROOT="$DATASET_ROOT"
+
 if [ ! -d "$SCRIPTS_DIR" ]; then
     echo -e "${RED}ERROR: Scripts directory not found: $SCRIPTS_DIR${NC}"
     echo -e "${RED}Run this script from the dsld_clean project root.${NC}"

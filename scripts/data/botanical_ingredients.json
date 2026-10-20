@@ -3,7 +3,7 @@
     "description": "Non-standardized whole herb powders and simple botanical extracts without guaranteed marker compounds. Used for basic ingredient mapping. For premium standardized extracts with marker compounds, see standardized_botanicals.json.",
     "purpose": "ingredient_mapping",
     "schema_version": "5.2.0",
-    "last_updated": "2026-10-12",
+    "last_updated": "2026-10-19",
     "total_entries": 558,
     "functional_roles_field": {
       "added_in": "5.1.0",
@@ -6293,7 +6293,9 @@
         "grape 95% extract",
         "Vitis vinifera",
         "grape skin extract",
-        "red wine extract"
+        "red wine extract",
+        "biovin advanced",
+        "biovin advanced red wine extract"
       ],
       "category": "fruit",
       "notes": "Vitis vinifera (Vitaceae) fruit. Contains resveratrol, quercetin, and anthocyanins (in red varieties). Botanical whole-grape powder form covering generic grape labels. Not standardized.",
@@ -10159,8 +10161,6 @@
         "olea europaea leaf powder",
         "olive leaf",
         "benolea olive extract",
-        "olive juice extract",
-        "Olive Water extract",
         "Olea europaea"
       ],
       "category": "leaf",
@@ -13378,7 +13378,12 @@
         "sweet wormwood extract",
         "artemisia annua",
         "sweet wormwood (artemisia annua) aerial parts extract",
-        "sweet annie"
+        "sweet annie",
+        "sweet wormwood",
+        "artemisia annua extract",
+        "artemisia annua leaf extract",
+        "sweet annie extract",
+        "qinghao"
       ],
       "category": "herb",
       "notes": "Artemisia annua (Asteraceae) aerial parts. Source of artemisinin antimalarial compound (Nobel Prize 2015). Contains artemisinin, artemisinic acid, and flavonoids. Traditional Qing Hao in TCM.",

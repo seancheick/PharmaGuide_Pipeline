@@ -669,7 +669,7 @@ other_ingredients (excipient match)     → severity_status="n/a",       is_safe
 
 **Audit gate**: `scripts/audit_inactive_safety.py` runs four CI-grade checks (banned-signal violations, notes-only false positives, unknown-role count, source distribution). Exits non-zero on any banned-in-inactive shipping without proper safety signal.
 
-**Active ingredient canonical_id + delivers_markers (also v1.6.1)**: every active ingredient blob entry now also carries `canonical_id` (stable string id — `"vitamin_a"`, `"turmeric"`, `"camu_camu"`) used by interaction rules / stack matching / evidence routing / biomarker scoring / dedup / analytics, plus `delivers_markers` (the marker-via-ingredient evidence routing payload: turmeric → curcumin + PubMed citation). Both fields are derived from the IQM match record in the enriched product; build_final_db reads them at line 2497–2511.
+**Active ingredient canonical_id + delivers_markers (also v1.6.1)**: every active ingredient blob entry now also carries `canonical_id` (stable string id — `"vitamin_a"`, `"turmeric"`, `"camu_camu"`) used by interaction rules / stack matching / evidence routing / biomarker scoring / dedup / analytics, plus `delivers_markers` (the marker-via-ingredient evidence routing payload: turmeric → curcumin + PubMed citation). Both fields are derived from the IQM match record in the enriched product. `canonical_id` is the enricher's decision for that row, including an unresolved row (empty, `is_mapped: false`); the cleaner's id never refills it (ADR-0005). The display ledger row (`display_ingredients[]`) keeps the printed identity in `canonical_id` and the enricher's in `analysis.canonical_id`.
 
 ### Warning entry
 

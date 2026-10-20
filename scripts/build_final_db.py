@@ -6795,7 +6795,10 @@ def build_detail_blob(
         # Canonical form + dose contract for Flutter. Single source of
         # truth: pipeline emits explicit states, Flutter renders them.
         form_contract = _compute_form_contract(ing, m)
-        canonical_id = safe_str(m.get("canonical_id") or ing.get("canonical_id"))
+        # The enricher owns identity (ADR-0005): once it decided a row, its
+        # decision ships, including "unresolved"; the cleaner's id is only a
+        # fallback for a row the enricher never decided.
+        canonical_id = safe_str(m.get("canonical_id") if m else ing.get("canonical_id"))
         # Blob flag → real JSON bool (both the mapped-with-canonical and the
         # no-canonical branch must be the same type, or the field ships mixed
         # int/bool across products).
