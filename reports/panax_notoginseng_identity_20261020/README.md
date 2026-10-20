@@ -42,3 +42,15 @@ different species, and Senactiv is a branded complex that already has an owner
 - GNC Re-Built Mass 42235/42236/42237/36992 print "Panax notoginseng root extract" inside a blend
   inside a blend. The cleaner emits no active row for any member at that depth (a separate defect
   class: 291 members in 66 products), so the new identity reaches them only after that fix.
+
+## Replay
+
+Every raw label naming notoginseng, Senactiv/Seneactiv, Tienchi, San Qi/Sanqi/Sanchi, Tian Qi,
+pseudoginseng or Rosa roxburghii (10), every label naming ginseng (176), and 150 seeded controls
+(336). Base: main ec5dd058c; candidate: this branch. `replay.py snapshot --full --blob`.
+
+- **Rules removed (1):** RULE_INGREDIENT_GINSENG on 295773 Bulk Strawberry Kiwi. The Seneactiv row
+  (ginseng → NHA_SENACTIV) was its only Panax ginseng subject.
+- **0 rules added, 0 score changes, 0 product_safety_status changes.** All 176 ginseng labels are
+  unchanged.
+- Raw canary check (`freeze_contract_snapshots.py --check`): 33 checked, 0 failed.
