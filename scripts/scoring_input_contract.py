@@ -97,21 +97,37 @@ _ROUTE_SCORING_ROWS_CACHE_KEY = "__scoring_input_contract_route_rows_cache"
 GLUTEN_GRAIN_ALLERGEN_IDS = frozenset({"ALLERGEN_WHEAT", "ALLERGEN_RYE", "ALLERGEN_BARLEY"})
 _CROSS_CONTACT_PRESENCE = frozenset({"may_contain", "facility_warning"})
 
+# Sean's open 21 CFR 101.91 question: does a barley or rye *ingredient*
+# (barley grass, malt) contradict a gluten-free claim? True keeps today's
+# Transparency B2 result; the claim validation and the gluten-free badge follow
+# the same answer. Flip it here only.
+GLUTEN_GRAIN_INGREDIENT_CONTRADICTS_GLUTEN_FREE = True
+_GLUTEN_SOURCE_IDS = (
+    GLUTEN_GRAIN_ALLERGEN_IDS if GLUTEN_GRAIN_INGREDIENT_CONTRADICTS_GLUTEN_FREE
+    else frozenset({"ALLERGEN_WHEAT"})
+)
+
 # Free-from claim group (cert_claim_rules "allergen_free:<group>") -> the
 # allergens whose source (ingredient, "contains") or cross-contact (may contain,
-# facility) contradicts it. A barley or rye *ingredient* does not contradict a
-# gluten-free claim, as before: that is the open 21 CFR 101.91 question on
-# processed grasses and malt.
+# facility) contradicts it. "Shellfish-free" covers crustaceans and molluscs: a
+# claim must not reassure a mollusc-allergic reader (allergen flags themselves
+# stay FDA crustacean-only).
 FREE_FROM_CLAIM_ALLERGENS: Dict[str, Tuple[frozenset, frozenset]] = {
-    "gluten": (frozenset({"ALLERGEN_WHEAT"}), GLUTEN_GRAIN_ALLERGEN_IDS),
-    "gluten_certified": (frozenset({"ALLERGEN_WHEAT"}), GLUTEN_GRAIN_ALLERGEN_IDS),
+    "gluten": (_GLUTEN_SOURCE_IDS, GLUTEN_GRAIN_ALLERGEN_IDS),
+    "gluten_certified": (_GLUTEN_SOURCE_IDS, GLUTEN_GRAIN_ALLERGEN_IDS),
     "dairy": (frozenset({"ALLERGEN_MILK"}),) * 2,
     "soy": (frozenset({"ALLERGEN_SOY"}),) * 2,
     "nut": (frozenset({"ALLERGEN_TREE_NUTS", "ALLERGEN_PEANUTS"}),) * 2,
     "peanut": (frozenset({"ALLERGEN_PEANUTS"}),) * 2,
     "egg": (frozenset({"ALLERGEN_EGGS"}),) * 2,
-    "shellfish": (frozenset({"ALLERGEN_CRUSTACEANS"}),) * 2,
+    "shellfish": (frozenset({"ALLERGEN_CRUSTACEANS", "ALLERGEN_MOLLUSCS"}),) * 2,
+    "sesame": (frozenset({"ALLERGEN_SESAME"}),) * 2,
     "yeast": (frozenset(), frozenset()),
+}
+# Transparency B2's claim-group names -> the group above.
+B2_CLAIM_GROUP_RULE = {
+    "gluten": "gluten", "dairy": "dairy", "soy": "soy", "egg": "egg", "shellfish": "shellfish",
+    "peanut": "peanut", "tree_nut": "nut", "sesame": "sesame", "yeast": "yeast",
 }
 
 # Recorded in compliance_data.conflicts when a free-from claim meets a
@@ -144,6 +160,26 @@ def free_from_claim_contradiction(
     if may_contain or unparsed_may_contain:
         return "may_contain_warning"
     return None
+
+
+def free_from_claims_all_hold(
+    claim_keys: Any, allergen_hits: Any, unparsed_may_contain: bool = False,
+) -> bool:
+    """Whether every free-from claim holds under ``free_from_claim_contradiction``.
+
+    An unknown claim key is read as a generic allergen-free claim, which any
+    allergen hit or unread may-contain contradicts.
+    """
+    keys = [str(k).strip().lower() for k in claim_keys or [] if str(k).strip()]
+    if not keys:
+        return False
+    for key in keys:
+        if key in FREE_FROM_CLAIM_ALLERGENS:
+            if free_from_claim_contradiction(key, allergen_hits, unparsed_may_contain) is not None:
+                return False
+        elif unparsed_may_contain or any(isinstance(h, dict) for h in allergen_hits or []):
+            return False
+    return True
 
 
 def gluten_free_claim_contradicted(

@@ -108,7 +108,8 @@ def test_generic_allergen_free_claim_is_contradicted_by_any_warning():
     ("dairy", [("ALLERGEN_MILK", "facility_warning")], False, "may_contain_warning"),
     ("dairy", [("ALLERGEN_MILK", "contains")], False, "allergen_conflict"),
     ("gluten", [("ALLERGEN_BARLEY", "may_contain")], False, "may_contain_warning"),
-    ("gluten", [("ALLERGEN_BARLEY", "ingredient_list")], False, None),  # 101.91 question, unchanged
+    # GLUTEN_GRAIN_INGREDIENT_CONTRADICTS_GLUTEN_FREE (Sean's 101.91 question) keeps today's B2.
+    ("gluten", [("ALLERGEN_BARLEY", "ingredient_list")], False, "allergen_conflict"),
     ("gluten", [("ALLERGEN_WHEAT", "ingredient_list")], False, "allergen_conflict"),
     ("gluten", [("ALLERGEN_OATS", "may_contain")], False, None),
     ("nut", [("ALLERGEN_PEANUTS", "facility_warning")], False, "may_contain_warning"),
@@ -124,7 +125,7 @@ def test_free_from_claim_rule(group, hits, unread, expected):
 
 @pytest.mark.parametrize("statement,unread", [
     ("May contain traces of grain products.", True),
-    ("(May contain trace amounts less than 20 ppm).", True),
+    ("(May contain trace amounts less than 20 ppm).", False),  # 273865: a gluten-free qualifier
     ("Manufactured on shared equipment.", True),
     ("If taking other supplements, read label, since supplements may contain the same ingredient.", False),
     ("May contain vegetable glycerin.", False),
@@ -137,3 +138,46 @@ def test_only_allergen_wording_the_parser_cannot_resolve_is_unread(statement, un
     from enrich_supplements_v3 import SupplementEnricherV3
     product = {"statements": [{"notes": statement}]}
     assert SupplementEnricherV3()._has_unparsed_may_contain(product) is unread
+
+
+# Re-audit of #187 (2026-10-20).
+def test_h1_unread_may_contain_clears_the_gluten_free_badge(run):
+    # 293779 OLLY Extra Strength Sleep: "may contain, soy, egg, ... wheat" (stray comma, unread on
+    # main's parser). Badge, validation and B2 must give one answer.
+    enriched, transparency = run("293779")
+    assert enriched["compliance_data"]["gluten_free"] is False
+    assert enriched["claim_gluten_free_validated"] is False
+    assert _b2(transparency) == -2.0
+
+
+def test_h1_a_gluten_ppm_qualifier_is_not_an_unread_warning(run):
+    # 273865 Daily Fiber: "Gluten-free. (may contain trace amounts less than 20 ppm)."
+    enriched, _ = run("273865")
+    assert enriched["compliance_data"]["gluten_free"] is True
+    assert enriched["claim_gluten_free_validated"] is True
+
+
+@pytest.mark.parametrize("pid", ["297644", "274671"])
+def test_m1_gluten_grain_ingredient_answers_once(run, pid):
+    # Barley/rye as an ingredient: B2 already takes -2 on main; validation and badge now agree
+    # through GLUTEN_GRAIN_INGREDIENT_CONTRADICTS_GLUTEN_FREE (Sean's open 21 CFR 101.91 question).
+    from scoring_input_contract import GLUTEN_GRAIN_INGREDIENT_CONTRADICTS_GLUTEN_FREE
+    assert GLUTEN_GRAIN_INGREDIENT_CONTRADICTS_GLUTEN_FREE is True
+    enriched, transparency = run(pid)
+    assert _b2(transparency) == -2.0
+    assert enriched["claim_gluten_free_validated"] is False
+    assert enriched["compliance_data"]["gluten_free"] is False
+
+
+def test_l4_a_shellfish_free_claim_covers_molluscs():
+    from scoring_input_contract import free_from_claim_contradiction
+    hits = [{"allergen_id": "ALLERGEN_MOLLUSCS", "presence_type": "facility_warning"}]
+    assert free_from_claim_contradiction("shellfish", hits) == "may_contain_warning"
+
+
+def test_l1_allergen_free_validation_uses_the_same_rule(run):
+    # 326701: dairy/gluten/soy-free claims, fish facility only: all claims hold.
+    enriched, _ = run("326701")
+    assert enriched["claim_allergen_free_validated"] is True
+    enriched, _ = run("326701", replace=("processes fish", "processes milk"))
+    assert enriched["claim_allergen_free_validated"] is False

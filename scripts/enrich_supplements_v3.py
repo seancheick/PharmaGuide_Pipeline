@@ -113,6 +113,7 @@ from scoring_input_contract import (
     derive_product_scoring_evidence,
     get_evidence_subject_rows,
     FREE_FROM_CLAIM_ALLERGENS,
+    free_from_claims_all_hold,
     UNREAD_MAY_CONTAIN_CONFLICT,
     free_from_claim_contradiction,
     gluten_free_claim_contradicted,
@@ -13001,8 +13002,11 @@ class SupplementEnricherV3:
             texts.extend(str(w) for w in (label_text.get('parsed') or {}).get('warnings', []) or [])
         for text in texts:
             for sentence in re.split(r'(?<=[.!?;])\s+|[\r\n\t]+', text):
+                # "(may contain trace amounts less than 20 ppm)" qualifies a
+                # gluten-free claim (21 CFR 101.91); it names no allergen.
                 if (re.search(r'may\s+contain|shared\s+equipment', sentence, re.I)
-                        and self._UNRESOLVED_ALLERGEN_WORDING.search(sentence)):
+                        and self._UNRESOLVED_ALLERGEN_WORDING.search(sentence)
+                        and not re.search(r'\bppm\b|parts\s+per\s+million', sentence, re.I)):
                     parsed: List[Dict] = []
                     self._parse_allergen_statement(sentence, allergen_lookup, parsed, "probe")
                     if not parsed:
@@ -13383,14 +13387,27 @@ class SupplementEnricherV3:
         def _allergen_in_detected(*tokens: str) -> bool:
             return any(any(t in n for t in tokens) for n in detected_lower_names)
 
-        # One rule (scoring_input_contract.free_from_claim_contradiction)
-        # decides which detected allergens contradict which free-from claim.
-        def _contradicts(group: str) -> bool:
-            return free_from_claim_contradiction(group, detected_allergens) is not None
+        # P0.1: Use structured allergen data for may_contain detection
+        # Fall back to text search if not available
+        may_contain_from_allergens = contaminant_data['allergens'].get('has_may_contain_warning', False)
+        may_contain_from_text = 'may contain' in all_text or 'shared equipment' in all_text
+        may_contain = may_contain_from_allergens or may_contain_from_text
+        # A may-contain sentence with allergen wording the parser reads no
+        # allergen from. The scorer learns it from the conflict.
+        unread_may_contain = bool(may_contain) and self._has_unparsed_may_contain(product)
 
-        def _gluten_conflict_message() -> str:
-            if _allergen_in_detected('wheat', 'gluten'):
-                return "gluten-free claim conflicts with detected gluten/wheat"
+        # One rule (scoring_input_contract.free_from_claim_contradiction)
+        # decides which label evidence contradicts which free-from claim; the
+        # claim flags (core is_gluten_free / is_dairy_free / is_soy_free) use it
+        # with the same unread arm as validation and B2.
+        def _contradicts(group: str) -> bool:
+            return free_from_claim_contradiction(group, detected_allergens, unread_may_contain) is not None
+
+        def _conflict_message(group: str, detected: str) -> str:
+            if free_from_claim_contradiction(group, detected_allergens) is None:
+                return UNREAD_MAY_CONTAIN_CONFLICT
+            if group != 'gluten' or _allergen_in_detected('wheat', 'gluten'):
+                return detected
             return "gluten-free claim conflicts with gluten-grain cross-contact"
 
         # Initial conflict pass (Stage-1-only). Stays here so the
@@ -13398,17 +13415,11 @@ class SupplementEnricherV3:
         # match fires, even if Stage-2 promotion later toggles a flag.
         conflicts = []
         if dairy_free and _contradicts('dairy'):
-            conflicts.append("dairy-free claim conflicts with detected dairy")
+            conflicts.append(_conflict_message('dairy', "dairy-free claim conflicts with detected dairy"))
         if soy_free and _contradicts('soy'):
-            conflicts.append("soy-free claim conflicts with detected soy")
+            conflicts.append(_conflict_message('soy', "soy-free claim conflicts with detected soy"))
         if gluten_free and _contradicts('gluten'):
-            conflicts.append(_gluten_conflict_message())
-
-        # P0.1: Use structured allergen data for may_contain detection
-        # Fall back to text search if not available
-        may_contain_from_allergens = contaminant_data['allergens'].get('has_may_contain_warning', False)
-        may_contain_from_text = 'may contain' in all_text or 'shared equipment' in all_text
-        may_contain = may_contain_from_allergens or may_contain_from_text
+            conflicts.append(_conflict_message('gluten', "gluten-free claim conflicts with detected gluten/wheat"))
 
         # ENHANCED (v1.0.0): Evidence-based allergen claims with validation
         allergen_evidence = self._collect_claims_from_rules_db(product, 'allergen_free_claims')
@@ -13477,17 +13488,14 @@ class SupplementEnricherV3:
 
         if dairy_free and _contradicts('dairy'):
             dairy_free = False
-            _record_conflict("dairy-free claim conflicts with detected dairy")
+            _record_conflict(_conflict_message('dairy', "dairy-free claim conflicts with detected dairy"))
         if soy_free and _contradicts('soy'):
             soy_free = False
-            _record_conflict("soy-free claim conflicts with detected soy")
+            _record_conflict(_conflict_message('soy', "soy-free claim conflicts with detected soy"))
         if gluten_free and _contradicts('gluten'):
             gluten_free = False
-            _record_conflict(_gluten_conflict_message())
+            _record_conflict(_conflict_message('gluten', "gluten-free claim conflicts with detected gluten/wheat"))
 
-        # A may-contain sentence with allergen wording the parser reads no
-        # allergen from. The scorer learns it from the conflict.
-        unread_may_contain = bool(may_contain) and self._has_unparsed_may_contain(product)
         if unread_may_contain and (allergen_free_claims or gluten_free or dairy_free or soy_free):
             _record_conflict(UNREAD_MAY_CONTAIN_CONFLICT)
 
@@ -15519,23 +15527,20 @@ class SupplementEnricherV3:
             str(x).lower()
             for x in (compliance_data.get("conflicts", []) or [])
         ]
-        has_may_contain = bool(compliance_data.get("has_may_contain_warning", False))
         allergen_claims = compliance_data.get("allergen_free_claims", []) or []
 
-        allergen_contradiction = has_may_contain or any(
-            any(term in c for term in ["allergen", "dairy", "soy", "egg", "gluten", "wheat", "shellfish", "nut"])
-            for c in conflicts
-        )
+        unread_may_contain = UNREAD_MAY_CONTAIN_CONFLICT.lower() in conflicts
         gluten_contradiction = gluten_free_claim_contradicted(
-            allergen_hits, conflicts,
-            unparsed_may_contain=UNREAD_MAY_CONTAIN_CONFLICT.lower() in conflicts,
+            allergen_hits, conflicts, unparsed_may_contain=unread_may_contain,
         )
         vegan_contradiction = any(
             any(term in c for term in ["gelatin", "bovine", "porcine", "vegan", "vegetarian"])
             for c in conflicts
         )
 
-        enriched["claim_allergen_free_validated"] = bool(allergen_claims) and not allergen_contradiction and len(allergen_hits) == 0
+        enriched["claim_allergen_free_validated"] = free_from_claims_all_hold(
+            allergen_claims, allergen_hits, unread_may_contain,
+        )
         enriched["claim_gluten_free_validated"] = bool(compliance_data.get("gluten_free", False)) and not gluten_contradiction
         enriched["claim_vegan_validated"] = bool(
             compliance_data.get("vegan", False) or compliance_data.get("vegetarian", False)

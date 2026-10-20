@@ -28,7 +28,10 @@ from scoring_input_contract import (
     _positive_quantity,
     dose_disclosure_status,
     get_scoring_ingredients,
+    B2_CLAIM_GROUP_RULE,
     UNREAD_MAY_CONTAIN_CONFLICT,
+    free_from_claim_contradiction,
+    free_from_claims_all_hold,
     gluten_free_claim_contradicted,
     has_source_printed_amount,
     is_nutrition_fact_declaration,
@@ -190,12 +193,16 @@ def _active_identity_complete(product: Dict[str, Any]) -> bool:
     )
 
 
-def _score_b2_false_allergen_claim_penalty(product: Dict[str, Any]) -> Tuple[float, Dict[str, Any]]:
-    allergens = _safe_list(
+def _product_allergen_hits(product: Dict[str, Any]) -> List[Any]:
+    return _safe_list(
         _safe_dict(_safe_dict(product.get("contaminant_data")).get("allergens")).get(
             "allergens", product.get("allergen_hits", [])
         )
     )
+
+
+def _score_b2_false_allergen_claim_penalty(product: Dict[str, Any]) -> Tuple[float, Dict[str, Any]]:
+    allergens = _product_allergen_hits(product)
     seen: Dict[str, float] = {}
     for item in allergens:
         if not isinstance(item, dict):
@@ -214,7 +221,13 @@ def _score_b2_false_allergen_claim_penalty(product: Dict[str, Any]) -> Tuple[flo
     compliance = _safe_dict(product.get("compliance_data"))
     conflicts = [_norm_text(x) for x in _safe_list(compliance.get("conflicts"))]
     claim_groups = _claimed_allergen_groups(compliance)
-    present_groups = _present_allergen_groups(seen)
+    # A claim group is contradicted only under the shared free-from rule
+    # (scoring_input_contract.free_from_claim_contradiction), the same answer the
+    # claim validation and the claim flags give.
+    present_groups = {
+        group for group, rule_group in B2_CLAIM_GROUP_RULE.items()
+        if free_from_claim_contradiction(rule_group, allergens) is not None
+    }
     conflict_groups = _conflict_allergen_groups(conflicts)
 
     matched_groups = sorted(
@@ -260,28 +273,20 @@ def _derive_claim_validations(
 
     compliance = _safe_dict(product.get("compliance_data"))
     conflicts = [_norm_text(x) for x in _safe_list(compliance.get("conflicts"))]
-    has_may_contain = bool(compliance.get("has_may_contain_warning", False))
+    allergen_hits = _product_allergen_hits(product)
+    unread_may_contain = _norm_text(UNREAD_MAY_CONTAIN_CONFLICT) in conflicts
 
     if explicit_allergen is None:
-        allergen_claims = _safe_list(compliance.get("allergen_free_claims"))
-        contradiction = has_may_contain or any(
-            any(term in conflict for term in ("allergen", "dairy", "soy", "egg", "gluten", "wheat", "shellfish", "nut"))
-            for conflict in conflicts
+        allergen_valid = free_from_claims_all_hold(
+            _safe_list(compliance.get("allergen_free_claims")), allergen_hits, unread_may_contain,
         )
-        allergen_valid = bool(allergen_claims) and not contradiction and b2_penalty == 0.0
     else:
         allergen_valid = bool(explicit_allergen)
 
     if explicit_gluten is None:
         gluten_claim = bool(compliance.get("gluten_free", False))
-        allergen_hits = _safe_list(
-            _safe_dict(_safe_dict(product.get("contaminant_data")).get("allergens")).get(
-                "allergens", product.get("allergen_hits", [])
-            )
-        )
         gluten_valid = gluten_claim and not gluten_free_claim_contradicted(
-            allergen_hits, conflicts,
-            unparsed_may_contain=_norm_text(UNREAD_MAY_CONTAIN_CONFLICT) in conflicts,
+            allergen_hits, conflicts, unparsed_may_contain=unread_may_contain,
         )
     else:
         gluten_valid = bool(explicit_gluten)
@@ -323,13 +328,6 @@ def _claimed_allergen_groups(compliance: Dict[str, Any]) -> set[str]:
             groups.update(_allergen_groups_from_text(text))
     if bool(compliance.get("gluten_free", False)):
         groups.add("gluten")
-    return groups
-
-
-def _present_allergen_groups(seen: Dict[str, float]) -> set[str]:
-    groups: set[str] = set()
-    for text in seen:
-        groups.update(_allergen_groups_from_text(text))
     return groups
 
 
