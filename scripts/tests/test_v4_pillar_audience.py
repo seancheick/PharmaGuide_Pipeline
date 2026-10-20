@@ -1,0 +1,199 @@
+"""Pillar dropdowns show one sentence of reason and at most one key fact.
+
+Sean, 2026-10-20: users see the one-sentence reason and one key fact (amount
+vs reference, the upper-limit result, or the honest disclosure gap). Every
+other fact stays in the data as ``audience: "audit"`` for the dashboard and
+audits. Consumer text names ingredients by display name and carries no point
+numbers, policy paragraphs or arithmetic.
+"""
+
+from __future__ import annotations
+
+import re
+import sys
+from pathlib import Path
+
+REPO_ROOT = Path(__file__).resolve().parents[2]
+SCRIPTS_ROOT = REPO_ROOT / "scripts"
+if str(SCRIPTS_ROOT) not in sys.path:
+    sys.path.insert(0, str(SCRIPTS_ROOT))
+
+from scoring_v4 import quality_score as qs  # noqa: E402
+from scoring_v4.pillar_explanations import (  # noqa: E402
+    PILLAR_EXPLANATION_SCHEMA_VERSION,
+    attach_pillar_explanations,
+)
+
+_SENTENCE_BREAK = re.compile(r"[.!?]\s+[A-Z]")
+_CANONICAL_ID = re.compile(r"\b[a-z0-9]+_[a-z0-9_]+\b")
+_POINTS = re.compile(r"\(\s*[\d.]+\s*points?\s*\)|\d+(\.\d+)?/\d+|\bpoints?\b")
+
+
+def _one_sentence(text: str) -> bool:
+    return bool(text) and not _SENTENCE_BREAK.search(text.strip())
+
+
+def _consumer(pillar):
+    return [f for f in (pillar.get("explanation") or {}).get("facts") or [] if f.get("audience") == "consumer"]
+
+
+def _assert_consumer_contract(pillar):
+    facts = (pillar.get("explanation") or {}).get("facts") or []
+    assert all(f.get("audience") in {"consumer", "audit"} for f in facts), facts
+    consumer = _consumer(pillar)
+    assert len(consumer) <= 1, consumer
+    for fact in consumer:
+        text = f"{fact['label']} {fact['value_display']}"
+        assert not _CANONICAL_ID.search(text), text
+        assert not _POINTS.search(text), text
+        assert "policy" not in text.lower(), text
+
+
+def _dose_cfg():
+    return {"pillars": {"dose": {"weight": 20, "assembler": "dose"}}}
+
+
+def _ul_capped_vitamin_c():
+    row = {"nutrient": "Vitamin C", "canonical_id": "vitamin_c", "unit": "mg", "rda_ai": 90, "ul": 2000,
+           "pct_rda": 1111.1, "pct_ul": 150.0, "per_day_min": 1000.0, "per_day_max": 3000.0}
+    metadata = {
+        "method": "source_qualified_contribution_and_completed_neutral",
+        "assessment_basis": "directed_daily_use",
+        "daily_use": {"minimum_servings": 1.0, "maximum_servings": 3.0, "defaulted": False},
+        "dose_participation_basis": "declared_purpose_equal_weight",
+        "reference_assessments": [row],
+        "dose_contributions": [{"ingredient": "vitamin_c", "assessment": "dri_reference", "credit_raw": 22.0,
+                                "amount_at_minimum": 1000.0, "amount_at_maximum": 3000.0, "amount_unit": "mg",
+                                "amount_per_serving": 1000.0, "reference_value": 90.0, "pct_of_reference": 1111.1}],
+        "B7_safety_evaluation": {"dose_ceiling": {
+            "kind": "established_upper_limit", "nutrient": "Vitamin C", "ul": 2000.0, "ul_unit": "mg",
+            "ul_population": "general adult", "pct_ul": 150.0, "pct_ul_at_minimum": 50.0,
+            "minimum_exceeds": False, "cap_public": 0.0, "partial_ceiling_public": 10.0, "zero_at_pct": 150.0}},
+    }
+    dim = {"score": 22.0, "metadata": metadata}
+    return dim, {"dimensions": {"dose": dim}}
+
+
+def _assembled_dose(dim, module_bd, module="generic"):
+    pillar = qs._pillar_dose(dim, 20, "generic_single_molecule", qs._config())
+    pillars = attach_pillar_explanations({"dose": pillar}, module_bd, _dose_cfg(), module)
+    return pillars["dose"]
+
+
+def test_ul_cap_reason_is_one_sentence_and_policy_moves_to_audit():
+    dim, module_bd = _ul_capped_vitamin_c()
+    pillar = _assembled_dose(dim, module_bd)
+    assert pillar["score"] == 0.0
+    assert pillar["reason"] == ("The higher directed daily amounts of Vitamin C exceed its established upper "
+                                "limit (150% of the limit at the highest directed use), so Dose is set to 0.")
+    assert _one_sentence(pillar["reason"])
+    facts = {f["id"]: f for f in pillar["explanation"]["facts"]}
+    assert "not a medical toxicity grade" in facts["dose_safety_ceiling"]["value_display"]
+    assert facts["dose_safety_ceiling"]["audience"] == "audit"
+    assert pillar["explanation"]["schema_version"] == PILLAR_EXPLANATION_SCHEMA_VERSION == 2
+
+
+def test_ul_cap_consumer_fact_is_the_upper_limit_result():
+    dim, module_bd = _ul_capped_vitamin_c()
+    pillar = _assembled_dose(dim, module_bd)
+    _assert_consumer_contract(pillar)
+    assert _consumer(pillar) == [{
+        "id": "dose_upper_limit_result", "label": "Upper limit", "audience": "consumer",
+        "value_display": "Up to 3,000 mg a day: 150% of the 2,000 mg Vitamin C upper limit (general adult)"}]
+
+
+def test_audit_contributions_use_display_name_not_canonical_id():
+    dim, module_bd = _ul_capped_vitamin_c()
+    facts = {f["id"]: f for f in _assembled_dose(dim, module_bd)["explanation"]["facts"]}
+    text = facts["dose_contributions"]["value_display"]
+    assert text.startswith("Vitamin C: RDA/AI 90 mg"), text
+    assert "vitamin_c" not in text
+    # The receipt keeps the identity key for parity and reconciliation.
+    receipt = _assembled_dose(dim, module_bd)["explanation"]["dose_receipt"]
+    assert receipt["contributions"][0]["ingredient"] == "vitamin_c"
+    assert receipt["reconciles"] is True
+
+
+def test_single_assessed_amount_is_shown_against_its_reference():
+    dim, module_bd = _ul_capped_vitamin_c()
+    dim["metadata"].pop("B7_safety_evaluation")
+    dim["metadata"]["reference_assessments"][0]["per_day_max"] = 1000.0
+    dim["metadata"]["daily_use"]["maximum_servings"] = 1.0
+    dim["metadata"]["dose_contributions"][0]["amount_at_maximum"] = 1000.0
+    pillar = _assembled_dose(dim, module_bd)
+    _assert_consumer_contract(pillar)
+    assert [f["value_display"] for f in _consumer(pillar)] == ["1,000 mg Vitamin C a day; RDA/AI 90 mg"]
+
+
+def test_hidden_per_strain_amounts_are_the_honest_gap_and_guarantee_moves_to_audit():
+    metadata = {
+        "cfu_adequacy_basis": "aggregate_cfu_disclosed_only",
+        "cfu_guarantee": {"type": "unknown"},
+        "daily_use": {"minimum_servings": 1.0, "maximum_servings": 1.0, "defaulted": False},
+        "cfu_adequacy_contributions": [
+            {"strain": "Lacticaseibacillus rhamnosus GR-1", "state": "neutral_amount_not_disclosed",
+             "points": 3.8, "cfu_per_day": None},
+            {"strain": "Limosilactobacillus reuteri RC-14", "state": "neutral_amount_not_disclosed",
+             "points": 3.8, "cfu_per_day": None},
+        ],
+    }
+    dim = {"score": 11.4, "metadata": metadata}
+    pillar = qs._pillar_dose(dim, 20, "probiotic", qs._config())
+    assert _one_sentence(pillar["reason"]), pillar["reason"]
+    assert "guaranteed through expiration" not in pillar["reason"]
+    pillars = attach_pillar_explanations({"dose": pillar}, {"dimensions": {"dose": dim}}, _dose_cfg(), "probiotic")
+    _assert_consumer_contract(pillars["dose"])
+    facts = {f["id"]: f for f in pillars["dose"]["explanation"]["facts"]}
+    assert facts["cfu_guarantee"] == {
+        "id": "cfu_guarantee", "label": "Potency guarantee", "audience": "audit",
+        "value_display": "Whether the count is guaranteed through expiration is not stated."}
+    assert [f["value_display"] for f in _consumer(pillars["dose"])] == ["Per-strain amounts are not listed"]
+
+
+def test_every_fact_is_audit_unless_chosen():
+    pillars = {"evidence": {"score": 0.0, "max": 20, "reason": "r.", "display_state": "assessed"},
+               "transparency": {"score": 12.0, "max": 15, "reason": "r."}}
+    module_bd = {"dimensions": {"evidence": {"metadata": {"matched_entries": 0}},
+                                "transparency": {"metadata": {"B5_blend_evidence": [
+                                    {"children_without_amount_count": 0}]}}}}
+    cfg = {"pillars": {"evidence": {"assembler": "evidence"}, "transparency": {"source_dim": "transparency"}}}
+    out = attach_pillar_explanations(pillars, module_bd, cfg, "generic")
+    assert [f["id"] for f in _consumer(out["evidence"])] == ["matched_evidence_records"]
+    # Zero hidden amounts is no disclosure gap, so nothing is shown.
+    assert _consumer(out["transparency"]) == []
+    assert {f["audience"] for f in out["transparency"]["explanation"]["facts"]} == {"audit"}
+
+
+def test_reattaching_does_not_repeat_facts():
+    dim, module_bd = _ul_capped_vitamin_c()
+    pillar = _assembled_dose(dim, module_bd)
+    count = len(pillar["explanation"]["facts"])
+    again = attach_pillar_explanations({"dose": pillar}, module_bd, _dose_cfg(), "generic")["dose"]
+    assert len(again["explanation"]["facts"]) == count
+
+
+def test_botanical_formulation_reason_is_one_sentence_with_same_credits():
+    metadata = {"botanical_profile_applied": True, "botanical_formulation": {}}
+    profile = qs._PROFILE_COPY["botanical_formulation"]
+    (identity_key, _), credited, missing = profile
+    detail = {identity_key: 1.0, credited[0][0]: 1.0}
+    for key, _ in missing[:1]:
+        detail[key] = 0.0
+    metadata["botanical_formulation"] = detail
+    reason = qs._profile_formulation_reason(metadata)
+    assert _one_sentence(reason), reason
+    assert reason.startswith("The recognized botanical identity receives neutral credit; credited: ")
+
+
+def test_verification_fail_open_reason_has_no_point_numbers():
+    reason = qs._pillar_verification({}, 15, qs._config())
+    assert reason["reason"].startswith("Unknown: no independent verification on file")
+    assert not _POINTS.search(reason["reason"]), reason["reason"]
+    facts = {f["id"]: f for f in reason["explanation"]["facts"]}
+    assert facts["verification_neutral_baseline"]["audience"] == "audit"
+    assert "points need verified evidence" in facts["verification_neutral_baseline"]["value_display"]
+
+
+def test_zero_evidence_copy_is_one_sentence():
+    for text in qs._EVIDENCE_ZERO_REASON.values():
+        assert _one_sentence(text), text

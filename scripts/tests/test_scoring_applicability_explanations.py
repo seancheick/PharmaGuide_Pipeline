@@ -163,7 +163,7 @@ def test_omega_transparency_blend_opacity_is_named():
            "penalties": {"B5_proprietary_blend_opacity": -2.0}}
     assert _omega_transparency_reason(dim, "fallback") == (
         "The marine or algal source is disclosed; EPA/DHA amounts and the molecular form "
-        "are not. A proprietary blend hides individual amounts."
+        "are not, and a proprietary blend hides individual amounts."
     )
 
 

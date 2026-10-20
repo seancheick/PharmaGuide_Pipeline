@@ -124,10 +124,11 @@ def test_evidence_copy_renders_scope_supplied_by_the_evidence_owner():
         "product_applicability": 0, "independent_replication_consistency": 0},
         "metadata": {"evidence_result_state": "research_present_applicability_unestablished",
         "notes": "Reviewed species-level research does not establish this exact studied strain."}}
-    reason = _pillar_evidence(dim, 20, "probiotic", config())["reason"]
-    assert "species-level" in reason
-    assert "exact studied strain" in reason
-    assert "dose" not in reason.lower()
+    pillar = _pillar_evidence(dim, 20, "probiotic", config())
+    # The owner's scope is kept verbatim as audit detail; the reason stays one sentence.
+    notes = {f["id"]: f for f in pillar["explanation"]["facts"]}["evidence_strongest_family"]
+    assert notes["value_display"] == dim["metadata"]["notes"] and notes["audience"] == "audit"
+    assert "dose" not in pillar["reason"].lower()
 
 
 @pytest.mark.parametrize("field,value", [
@@ -387,7 +388,9 @@ def test_evidence_explanation_never_reintroduces_amount_ownership(amount):
     p = strain_product(dose=amount)
     p["evidence_data"] = {"clinical_matches": [_match(id="STRAIN_LGG")]}
     evidence = score_evidence(p)
-    reason = _pillar_evidence(evidence, 20, "probiotic", config())["reason"]
-    assert "dose" not in reason.lower()
-    assert "CFU" not in reason
-    assert "confirmation" in reason.lower()
+    pillar = _pillar_evidence(evidence, 20, "probiotic", config())
+    breakdown = {f["id"]: f for f in pillar["explanation"]["facts"]}["evidence_research_breakdown"]
+    for text in (pillar["reason"], breakdown["value_display"]):
+        assert "dose" not in text.lower()
+        assert "CFU" not in text
+    assert "confirmation" in breakdown["value_display"].lower()

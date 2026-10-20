@@ -31,7 +31,7 @@ from scoring_v4.penalty_registry import (
     component_kind,
     penalty_spec,
 )
-from scoring_v4.pillar_explanations import attach_pillar_explanations, _proprietary_blend_facts
+from scoring_v4.pillar_explanations import CONSUMER, attach_pillar_explanations, audit_fact, _proprietary_blend_facts
 
 _CONFIG_PATH = Path(__file__).resolve().parent / "config" / "quality_score.json"
 _CONFIG_CACHE: Optional[Dict[str, Any]] = None
@@ -139,12 +139,12 @@ def _profile_formulation_reason(metadata: Dict[str, Any]) -> Optional[str]:
     missing = [label for key, label in missing_map if _num(detail.get(key)) <= 0]
     parts = []
     if _num(detail.get(identity_key)) > 0:
-        parts.append(f"The {identity_label} receives neutral credit.")
+        parts.append(f"The {identity_label} receives neutral credit")
     if credited:
-        parts.append("Credited: " + ", ".join(credited) + ".")
+        parts.append(("credited: " if parts else "Credited: ") + ", ".join(credited))
     if missing:
-        parts.append("Not credited: " + ", ".join(missing) + ".")
-    return " ".join(parts) or "No formulation credit."
+        parts.append(("not credited: " if parts else "Not credited: ") + ", ".join(missing))
+    return ("; ".join(parts) + ".") if parts else "No formulation credit."
 
 
 def _route_formulation_reason(dim: Dict[str, Any], band: str) -> Optional[str]:
@@ -217,21 +217,11 @@ def _probiotic_dose_reason(dim: Dict[str, Any], fallback: str) -> str:
     # Dose V4.1 section 2.3: a hidden per-strain amount or a missing benchmark
     # takes the shared neutral; neither means the product is underdosed, and
     # Transparency keeps the disclosure consequence.
-    # The Dose owner records the same limitation in window_proxy_reason; read
-    # it when a payload carries only that field, never the underdose fallback.
-    basis = metadata.get("cfu_adequacy_basis") or {
-        "aggregate_cfu_not_per_strain": "aggregate_cfu_disclosed_only",
-        "per_strain_cfu_missing": "no_cfu_adequacy_credit",
-    }.get(str(metadata.get("window_proxy_reason") or ""))
+    basis = _probiotic_cfu_basis(metadata)
     if basis == "aggregate_cfu_disclosed_only":
-        guarantee = str((metadata.get("cfu_guarantee") or {}).get("type") or "")
-        note = (
-            " Whether the count is guaranteed through expiration is not stated."
-            if guarantee == "unknown" else ""
-        )
         return (
             "Total potency is disclosed, but per-strain amounts are not, so they cannot "
-            "be checked against strain dose benchmarks; Dose takes the neutral assessment value." + note
+            "be checked against strain dose benchmarks; Dose takes the neutral assessment value."
         )
     if basis == "direct_strain_mass_no_cfu_floor":
         return ("Strain amounts are given by weight, not live count, so they cannot be "
@@ -253,10 +243,32 @@ def _probiotic_dose_reason(dim: Dict[str, Any], fallback: str) -> str:
     if metadata.get("reference_basis") == "industry_potency_not_trial_efficacy":
         if _num(metadata.get("strain_neutral_count")) > 0:
             return ("Strains with a disclosed CFU are assessed against potency benchmarks; strains without "
-                    "an assessable amount or benchmark take the neutral value, and Dose averages them. "
-                    "Potency benchmarks are not proof of clinical benefit.")
+                    "an assessable amount or benchmark take the neutral value, and Dose averages them; "
+                    "potency benchmarks are not proof of clinical benefit.")
         return "Disclosed CFU is assessed against potency benchmarks, not proof of clinical benefit."
     return fallback
+
+
+def _probiotic_cfu_basis(metadata: Dict[str, Any]) -> Optional[str]:
+    # The Dose owner records the same limitation in window_proxy_reason; read
+    # it when a payload carries only that field, never the underdose fallback.
+    return metadata.get("cfu_adequacy_basis") or {
+        "aggregate_cfu_not_per_strain": "aggregate_cfu_disclosed_only",
+        "per_strain_cfu_missing": "no_cfu_adequacy_credit",
+    }.get(str(metadata.get("window_proxy_reason") or ""))
+
+
+def _probiotic_dose_facts(dim: Dict[str, Any]) -> List[Dict[str, Any]]:
+    """Detail that once trailed the probiotic Dose reason, kept for audits."""
+    metadata = dim.get("metadata") if isinstance(dim, dict) else None
+    if (not isinstance(metadata, dict) or metadata.get("reason_code") == "probiotic_afu_reference_unavailable"
+            or metadata.get("dose_adequacy_basis") == "studied_formula_native_afu"):
+        return []
+    if (_probiotic_cfu_basis(metadata) == "aggregate_cfu_disclosed_only"
+            and str((metadata.get("cfu_guarantee") or {}).get("type") or "") == "unknown"):
+        return [audit_fact("cfu_guarantee", "Potency guarantee",
+                           "Whether the count is guaranteed through expiration is not stated.")]
+    return []
 
 
 def _undisclosed_component_dose_reason(dim: Dict[str, Any]) -> Optional[str]:
@@ -324,8 +336,7 @@ def _over_limit_dose_reason(dim: Dict[str, Any]) -> Optional[str]:
             qualifier = {">=": "at least ", ">": "more than "}.get(ceiling.get("quantity_operator"), "")
             return (f"The label provides {qualifier}{_num(ceiling.get('amount_mg_day')):g} mg of caffeine a day {use}, "
                     f"above the {_num(ceiling.get('exceeds_above_mg_day')):.0f} mg/day that FDA describes as generally "
-                    f"not associated with negative effects for most adults, {outcome}. This cap is PharmaGuide "
-                    "scoring policy, not a medical toxicity grade.")
+                    f"not associated with negative effects for most adults, {outcome}.")
         if ceiling.get("frequency_defaulted"):
             exposure = (f"The label gives no daily directions; at one serving a day {nutrient} exceeds its "
                         f"established upper limit ({_num(ceiling.get('pct_ul')):.0f}% of the limit)")
@@ -335,8 +346,7 @@ def _over_limit_dose_reason(dim: Dict[str, Any]) -> Optional[str]:
         else:
             exposure = (f"The higher directed daily amounts of {nutrient} exceed its established "
                         f"upper limit ({_num(ceiling.get('pct_ul')):.0f}% of the limit at the highest directed use)")
-        return (f"{exposure}, {outcome}. This cap is PharmaGuide scoring policy, "
-                "not a medical toxicity grade.")
+        return f"{exposure}, {outcome}."
     flags = evaluation.get("flags")
     if isinstance(flags, list) and flags:
         is_actionable = any(
@@ -435,7 +445,7 @@ def _omega_transparency_reason(dim: Dict[str, Any], fallback: str) -> str:
         reason = (f"{head[0].upper()}{head[1:]} {'is' if len(shown) == 1 else 'are'} disclosed; "
                   f"{_join_items(missing)} {'is' if len(missing) == 1 else 'are'} not.")
     if _num((dim.get("penalties") or {}).get("B5_proprietary_blend_opacity")) < 0:
-        reason += " A proprietary blend hides individual amounts."
+        reason = reason[:-1] + ", and a proprietary blend hides individual amounts."
     return reason
 
 
@@ -765,20 +775,26 @@ def _pillar_safety_hygiene(module_bd: Dict[str, Any], weight: float,
         deductions.append("it contains additive or sweetener/form-factor concerns")
     # Dose owns the B7 deduction, so a recorded dose-safety finding is always
     # worded as not deducted here, whether or not this pillar deducts.
+    # The reason is one sentence; a second finding becomes a fact. A dose-safety
+    # finding not deducted here stays the consumer fact, so it remains visible.
+    facts: List[Dict[str, Any]] = []
+    not_deducted = ({"id": "dose_safety_not_deducted", "label": "Not deducted here",
+                     "value_display": dose_safety_explanation[0].upper() + dose_safety_explanation[1:],
+                     "audience": CONSUMER} if dose_safety_explanation else None)
     if deductions:
         # Plain-English join: "A and B" rather than a comma list.
         reason = "Safety concern: " + " and ".join(deductions) + "."
         if additive_pen > 0 and not additive_concern:
-            reason += (" Formula check: it also contains low-concern additives or "
-                       "sweeteners that lower formula quality.")
-        if dose_safety_explanation:
-            reason += " Not deducted here: " + dose_safety_explanation + "."
+            facts.append(audit_fact("formula_check", "Formula check",
+                                    "It also contains low-concern additives or sweeteners that lower formula quality."))
+        if not_deducted:
+            facts.append(not_deducted)
     elif additive_pen > 0:
         # Low-concern excipients are a formula-quality signal, never a safety claim.
         reason = ("Formula check: it contains low-concern additives or sweeteners that "
                   "lower formula quality.")
-        if dose_safety_explanation:
-            reason += " Not deducted here: " + dose_safety_explanation + "."
+        if not_deducted:
+            facts.append(not_deducted)
     elif dose_safety_explanation:
         # A recorded dose-safety finding stays visible here, worded so a full
         # score does not read as "no concern" or as this pillar's deduction.
@@ -789,8 +805,8 @@ def _pillar_safety_hygiene(module_bd: Dict[str, Any], weight: float,
         reason = ("These formula checks did not confirm a concern, but this product carries a "
                   "separate safety caution.")
     else:
-        reason = ("No catalog-level formula concerns found in the checks performed. "
-                  "Personal suitability was not assessed.")
+        reason = ("No catalog-level formula concerns were found in the checks performed; "
+                  "personal suitability was not assessed.")
     components = {"clean_base": clean, "class_i_recall_penalty": safety_pen}
     if cl_pen > 0:
         components["clean_label_penalty"] = cl_pen
@@ -798,12 +814,15 @@ def _pillar_safety_hygiene(module_bd: Dict[str, Any], weight: float,
         components["additive_or_sweetener_penalty"] = additive_pen
     if dose_safety_state_counts:
         components["dose_safety_state_counts"] = dose_safety_state_counts
-    return {
+    pillar = {
         "score": val,
         "max": weight,
         "reason": reason,
         "components": components,
     }
+    if facts:
+        pillar["explanation"] = {"facts": facts}
+    return pillar
 
 
 def _archetype(module: Optional[str], module_bd: Dict[str, Any]) -> str:
@@ -952,15 +971,15 @@ def evidence_display_state(state: Optional[str]) -> str:
 _EVIDENCE_ZERO_REASON = {
     "human_clinical_evidence_unestablished": (
         "Our review of human clinical evidence is incomplete; the recorded nonclinical or "
-        "unresolved sources do not establish benefit. This is not a product-quality finding."
+        "unresolved sources do not establish benefit; this is not a product-quality finding."
     ),
     "native_research_review_incomplete": (
         "Our strain-specific human clinical review is incomplete; no conclusion about benefit "
         "or product quality follows from this review gap."
     ),
     "clinical_review_not_covered": (
-        "Clinical evidence review pending. We haven't completed our evidence review for the "
-        "ingredients on this label yet. This does not mean they lack clinical evidence."
+        "Clinical evidence review pending: we haven't finished reviewing the ingredients on this "
+        "label yet, which does not mean they lack clinical evidence."
     ),
     "identity_material_unresolved": (
         "Active ingredient identity or material form requires further scientific clarification before evidence can be assessed."
@@ -1023,16 +1042,18 @@ def _pillar_evidence(dim: Dict[str, Any], weight: float, archetype: str,
     # recompute it.
     if metadata.get("primary_evidence_floor_decisive"):
         reason = "Evidence credit is driven by the primary ingredient, not a trial of the whole formula."
+    facts: List[Dict[str, Any]] = []
     if "evidence_family_certainty" in (dim.get("components") or {}):
         parts = dim["components"]
-        reason = (
+        reason = "Evidence credit reflects reviewed research for the assessed purpose and population only."
+        facts.append(audit_fact(
+            "evidence_research_breakdown", "Research assessment",
             f"Research certainty {parts.get('evidence_family_certainty', 0):g}/10; "
             f"product applicability {parts.get('product_applicability', 0):g}/6; "
             f"independent confirmation {parts.get('independent_replication_consistency', parts.get('independent_replication', 0)):g}/4. "
-            "Findings are specific to the assessed purpose and population."
-        )
+            "Findings are specific to the assessed purpose and population."))
         if metadata.get("notes"):
-            reason += " " + metadata["notes"]
+            facts.append(audit_fact("evidence_strongest_family", "Strongest research family", metadata["notes"]))
     if val == 0:
         state = metadata.get("evidence_result_state") or (
             metadata.get("generic_evidence_metadata") or {}).get("evidence_result_state")
@@ -1049,7 +1070,7 @@ def _pillar_evidence(dim: Dict[str, Any], weight: float, archetype: str,
         if archetype == "probiotic" and state == "research_present_applicability_unestablished":
             zero_copy = ("Research on these probiotic strains exists, but our review did not "
                          "establish that it applies to this product's strains, purpose and "
-                         "population, so it earns no Evidence points. This is not a "
+                         "population, so it earns no Evidence points; this is not a "
                          "product-quality finding.")
         if zero_copy is None:
             zero_copy = _EVIDENCE_ZERO_REASON.get(
@@ -1074,7 +1095,7 @@ def _pillar_evidence(dim: Dict[str, Any], weight: float, archetype: str,
         # research on the label is still under review.
         reason = ("Some research on this label earned credit, but our review of the rest "
                   "is still open, so this assessment is not finished.")
-    return {
+    pillar = {
         "score": val,
         "max": weight,
         "reason": reason,
@@ -1082,6 +1103,9 @@ def _pillar_evidence(dim: Dict[str, Any], weight: float, archetype: str,
         "display_state": evidence_display_state(result_state),
         "components": {"raw_evidence": score, "archetype": archetype, "reference": ref},
     }
+    if facts:
+        pillar["explanation"] = {"facts": facts}
+    return pillar
 
 
 def _dose_reference(dim: Dict[str, Any], archetype: str, sub: Dict[str, Any]) -> float:
@@ -1137,11 +1161,13 @@ def _pillar_dose(dim: Dict[str, Any], weight: float, archetype: str,
     if ceiling is not None:
         components["adequacy_before_safety"] = adequacy
         components["safety_ceiling"] = _num(ceiling.get("cap_public"))
+    facts = _probiotic_dose_facts(dim) if archetype == "probiotic" and over_limit_reason is None else []
     return {
         "score": val,
         "max": weight,
         "reason": reason,
         "components": components,
+        **({"explanation": {"facts": facts}} if facts else {}),
     }
 
 
@@ -1252,6 +1278,7 @@ def _pillar_verification(module_bd: Dict[str, Any], weight: float,
         )
     if testing > 0:
         signals.append("does its own purity testing")
+    verification_facts: List[Dict[str, Any]] = []
     if tier == "product":
         reason = "Independently verified — " + ", ".join(signals) + "."
     elif tier == "manufacturing":
@@ -1262,10 +1289,11 @@ def _pillar_verification(module_bd: Dict[str, Any], weight: float,
     else:
         # Fail-open: no verification data on file. Say it's unknown, not that the
         # product failed — and make clear it isn't penalized for the gap.
-        reason = (
-            f"Unknown: no independent verification on file; neutral {_g(sub['neutral_baseline'])} "
-            f"of {_g(cap)}, {_g(cap - sub['neutral_baseline'])} points need verified evidence."
-        )
+        reason = "Unknown: no independent verification on file; it gets neutral credit, not a penalty."
+        verification_facts.append(audit_fact(
+            "verification_neutral_baseline", "Neutral value",
+            f"Neutral {_g(sub['neutral_baseline'])} of {_g(cap)}; "
+            f"{_g(cap - sub['neutral_baseline'])} points need verified evidence."))
 
     # PR3: a quality-system (non-critical) manufacturer violation lowers verification.
     # Applied AFTER the positive cert logic + clamp so it composes with future baseline
@@ -1274,7 +1302,7 @@ def _pillar_verification(module_bd: Dict[str, Any], weight: float,
     positive = min(cap, total)
     val = round(max(0.0, positive - qs_pen), 1)
     if qs_pen > 0:
-        reason += " Maker has an open quality-system violation."
+        reason = reason[:-1] + "; the maker has an open quality-system violation."
     return {
         "score": val,
         "max": weight,
@@ -1283,6 +1311,7 @@ def _pillar_verification(module_bd: Dict[str, Any], weight: float,
                        "gmp_basis": gmp_basis, "brand_testing": testing, "brand_only_cert": brand_only_cert,
                        "reputation": reputation, "tier": tier, "fail_open_neutral": fail_open,
                        "quality_system_violation_penalty": qs_pen},
+        **({"explanation": {"facts": verification_facts}} if verification_facts else {}),
     }
 
 

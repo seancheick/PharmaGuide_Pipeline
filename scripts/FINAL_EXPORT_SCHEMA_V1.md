@@ -38,6 +38,15 @@ Assumptions:
   - `unawarded` is capacity not earned; it is not an entry and never adds into the sum.
   - Flutter renders receipts; it never recomputes them. The receipt is absent only for an
     unitemized legacy breakdown, and suppressed or not-scored products carry none.
+- A scored pillar's `reason` is one sentence. Its optional `explanation` block
+  (`scripts/scoring_v4/pillar_explanations.py`; schema 2 since October 20, 2026) carries
+  `facts: [{id, label, value_display, audience, ...}]` with `audience` one of
+  `consumer | audit`. At most one fact per pillar is `consumer`: the upper-limit result, else
+  one amount against its reference, else the honest disclosure gap. Consumer text uses display
+  names and carries no points, policy or arithmetic. Audit facts, `dose_receipt` and the pillar
+  `receipt` stay in the blob for the dashboard, parity tests and audits. Flutter consumer:
+  `lib/core/scoring/v4_pillars.dart` (`_parseFacts`) renders only the consumer fact; a schema-1
+  block (older blobs, no `audience`) renders no facts, so the pillar shows its reason only.
 - `key_ingredient_tags` is safe for Flutter product-row parsing: mapped actives use
   canonical IDs, and unmapped active rows fall back to cleaner `normalized_key` so
   product cards/search/stack intelligence are not empty while waiting for detail blobs.

@@ -128,8 +128,8 @@ def test_zero_without_review_coverage_never_says_limited_evidence():
     reason = _zero_reason("clinical_review_not_covered")
     assert "limited" not in reason.lower()
     assert reason == (
-        "Clinical evidence review pending. We haven't completed our evidence review for the "
-        "ingredients on this label yet. This does not mean they lack clinical evidence."
+        "Clinical evidence review pending: we haven't finished reviewing the ingredients on this "
+        "label yet, which does not mean they lack clinical evidence."
     )
 
 
@@ -150,7 +150,7 @@ def test_nested_multi_state_is_read_through_generic_metadata():
     dim = {"score": 0.0, "metadata": {"generic_evidence_metadata": {
         "evidence_result_state": "clinical_review_not_covered"}}}
     reason = _pillar_evidence(dim, 20, "prenatal_multi", _config())["reason"]
-    assert reason.startswith("Clinical evidence review pending.")
+    assert reason.startswith("Clinical evidence review pending:")
 
 
 _UNDISCLOSED = ("Individual strain amounts are also not disclosed, so no strain can be "
