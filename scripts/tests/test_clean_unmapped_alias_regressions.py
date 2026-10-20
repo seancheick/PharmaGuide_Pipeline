@@ -1169,7 +1169,7 @@ def test_nordic_softgels_inactive_unmapped_labels_map(
         ("OpiTAC Glutathione", "Glutathione"),
         ("Lactium", "Casein Hydrolysate"),
         ("Cycloastragenol", "Cycloastragenol"),
-        ("Senactiv", "Ginseng"),
+        ("Senactiv", "Senactiv"),
         ("Dymethazine", "Dymethazine"),
         ("Laxosterone", "5a-Hydroxy Laxogenin"),
         ("Scullcap", "Skullcap"),
@@ -2685,7 +2685,7 @@ def test_batch46_garden_of_life_fallback_form_aliases_map(normalizer, name, expe
         ("Avena sativa 10:1 extract", "Oat"),
         ("Oats Straw", "Oat"),
         # Ginseng — Transparent Labs
-        ("Seneactiv", "Ginseng"),
+        ("Seneactiv", "Senactiv"),
         # GOS prebiotic — Pure Encapsulations
         ("BiMuno B-Galactooligosaccharides", "Prebiotics"),
     ],

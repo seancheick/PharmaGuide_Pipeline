@@ -3,7 +3,7 @@
     "description": "Ingredients backed by clinical research and studies - Enhanced for Section C v3.4.0",
     "purpose": "evidence_scoring",
     "schema_version": "5.6.4",
-    "last_updated": "2026-10-18",
+    "last_updated": "2026-10-20",
     "total_entries": 210,
     "changelog": [
       "2026-10-05: Sean-approved four amount transfers. Descriptive research exposure is owned by Dose, with no new positive adequacy benchmark. Zinc uses discrete clusters, WKB retains preparation/reference uncertainty, D-mannose and DAA retain no affirmative credit; added content-verified PMID 25844073 and distinguished its negative 6 g/day result. Supersedes the four historical applicability amount floors.",
@@ -9407,9 +9407,43 @@
       ],
       "notes": "Human evidence for tart cherry is stronger for exercise recovery and inflammation than for sleep. Sleep-related benefits are possible, but the trial base is small and results are mixed.",
       "study_type": "systematic_review_meta",
-      "last_updated": "2026-03-07",
-      "notable_studies": "Recovery and soreness evidence includes systematic reviews such as PMID 35790450 and the earlier sleep-focused pilot trial PMID 22038497. More recent sleep-review literature, including PMID 40964149, suggests potential benefit but emphasizes limited sample sizes and mixed study quality.",
+      "last_updated": "2026-10-20",
+      "notable_studies": "Recovery evidence: a systematic review and meta-analysis of 14 studies (PMID 33440334) found small to moderate benefits of tart cherry for muscle soreness and recovery of strength and power. Sleep evidence is mixed: the pilot RCT PMID 22038497 (tart cherry juice) reported higher melatonin and longer total sleep time, while the 30-day RCT PMID 35790450 (Montmorency tart cherry juice or powdered capsules, 44 healthy adults) found no effect on sleep time or quality, body composition, cellular health or blood pressure. The sleep review PMID 40964149 suggests potential benefit but emphasizes limited sample sizes and mixed study quality.",
       "references_structured": [
+        {
+          "type": "pubmed",
+          "authority": "NCBI PubMed",
+          "pmid": "33440334",
+          "doi": "10.1123/ijsnem.2020-0145",
+          "title": "Tart Cherry Supplementation and Recovery From Strenuous Exercise: A Systematic Review and Meta-Analysis.",
+          "citation": "International journal of sport nutrition and exercise metabolism (2021-03-01)",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/33440334/",
+          "published_date": "2021-03-01",
+          "publication_types": [
+            "Journal Article",
+            "Meta-Analysis",
+            "Systematic Review"
+          ],
+          "mesh_terms": [
+            "Biomarkers",
+            "C-Reactive Protein",
+            "Creatine Kinase",
+            "Dietary Supplements",
+            "Exercise",
+            "Humans",
+            "Interleukin-6",
+            "Muscle Strength",
+            "Myalgia",
+            "Prunus avium",
+            "Research Design",
+            "Tumor Necrosis Factor-alpha"
+          ],
+          "supplementary_concepts": [],
+          "evidence_grade": "systematic_review",
+          "retracted": false,
+          "supports_claims": [],
+          "verification_source": "pubmed_eutils"
+        },
         {
           "type": "pubmed",
           "authority": "NCBI PubMed",
@@ -9498,14 +9532,14 @@
           ],
           "mesh_terms": [],
           "supplementary_concepts": [],
-          "evidence_grade": "journal_article",
+          "evidence_grade": "systematic_review",
           "retracted": false,
           "supports_claims": [],
           "verification_source": "pubmed_eutils"
         }
       ],
       "external_ids": {
-        "unii": "BUC5I9595W"
+        "unii": "1L29G6428X"
       },
       "effect_direction": "mixed",
       "primary_outcome": "Sleep Quality",

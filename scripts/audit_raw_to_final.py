@@ -836,6 +836,7 @@ def _check_standardization(rec: ProductRecord, blob: dict, cleaned: dict | None 
         expected = _compute_standardization_note({
             "notes": label.get("notes"),
             "raw_source_text": ing.get("raw_source_text"),
+            **{key: label.get(key) for key in ("quantity", "unit", "parentBlendMass", "parentBlendUnit")},
         })
         if not expected:
             continue

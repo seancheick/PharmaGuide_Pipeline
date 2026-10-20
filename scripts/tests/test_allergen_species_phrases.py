@@ -128,3 +128,37 @@ def test_negation_drops_only_what_follows_it(enricher, statement, expected, abse
 ])
 def test_species_words_in_non_fish_phrases_are_not_flagged(enricher, name):
     assert "ALLERGEN_FISH" not in _hits(enricher, name)
+
+
+# One-word compounds (2026-10-20, #189 audit): "Wheatgrass" rows with no
+# Triticum form (293243, 294319, 294321, 294322) shipped no ALLERGEN_WHEAT,
+# because only "wheat grass" was listed and matching is whole-word. Wheat is
+# any species of genus Triticum (FDA allergen Q&A Ed. 5 C.9); wheatgrass is
+# young Triticum aestivum (botanical_ingredients wheatgrass_powder). Buckwheat
+# (Fagopyrum) is not wheat and perennial ryegrass (Lolium) is not rye.
+COMPOUND_FIXTURES = os.path.join(os.path.dirname(__file__), "fixtures")
+
+
+def _label_hits(enricher, pid, drop_allergen_statements=False):
+    import json
+    with open(os.path.join(COMPOUND_FIXTURES, f"allergen_compound_{pid}_raw.json"), encoding="utf-8") as f:
+        raw = json.load(f)
+    if drop_allergen_statements:
+        raw["statements"] = [s for s in raw.get("statements") or [] if "llergen" not in (s.get("notes") or "")]
+    enriched, _ = enricher.enrich_product(EnhancedDSLDNormalizer().normalize_product(raw))
+    return enriched["contaminant_data"]["allergens"]["allergens"]
+
+
+@pytest.mark.parametrize("pid", ["293243", "294319", "294321", "294322"])
+def test_one_word_wheatgrass_row_names_wheat(enricher, pid):
+    # 294319/294321/294322 also print "Allergen Information: Wheat", which wins
+    # the per-allergen precedence (#188); the row alone must still name wheat.
+    assert "ALLERGEN_WHEAT" in {h["allergen_id"] for h in _label_hits(enricher, pid)}
+    rows = [h for h in _label_hits(enricher, pid, drop_allergen_statements=True)
+            if h["allergen_id"] == "ALLERGEN_WHEAT" and h.get("source") == "ingredient_list"]
+    assert rows and "wheatgrass" in rows[0]["matched_text"].lower()
+
+
+@pytest.mark.parametrize("pid,not_expected", [("29105", "ALLERGEN_WHEAT"), ("232473", "ALLERGEN_RYE")])
+def test_buckwheat_and_ryegrass_are_not_gluten_grains(enricher, pid, not_expected):
+    assert not_expected not in {h["allergen_id"] for h in _label_hits(enricher, pid)}
