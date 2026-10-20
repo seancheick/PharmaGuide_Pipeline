@@ -23977,8 +23977,8 @@
             "https://pubmed.ncbi.nlm.nih.gov/34307625/"
           ],
           "alert_headline": "Senactiv — bleeding disorders",
-          "alert_body": "Senactiv contains notoginseng extract. Other notoginseng preparations have affected platelet activity; whether this applies to Senactiv is unknown. A bleeding risk is not established; if you have a bleeding disorder, talk to your clinician before using it.",
-          "informational_note": "Evidence concerns other notoginseng preparations, not Senactiv. Applicability to Senactiv and clinical bleeding significance are unknown.",
+          "alert_body": "Other notoginseng preparations have affected platelets; applicability to Senactiv is unknown. Bleeding risk is not established. With a bleeding disorder, ask your clinician before use.",
+          "informational_note": "Evidence is from other notoginseng preparations; applicability to Senactiv and bleeding risk are unknown.",
           "profile_gate": {
             "gate_type": "condition",
             "requires": {
@@ -24013,8 +24013,8 @@
             "https://pubmed.ncbi.nlm.nih.gov/34307625/"
           ],
           "alert_headline": "Senactiv — before surgery",
-          "alert_body": "Senactiv contains notoginseng extract. Other notoginseng preparations have affected platelet activity; whether this applies to Senactiv is unknown. A bleeding risk is not established; tell your surgical team you use it before a scheduled procedure.",
-          "informational_note": "Evidence concerns other notoginseng preparations, not Senactiv. Applicability to Senactiv and clinical bleeding significance are unknown.",
+          "alert_body": "Other notoginseng preparations have affected platelets; applicability to Senactiv is unknown. Bleeding risk is not established. Tell your surgical team you use it before a procedure.",
+          "informational_note": "Evidence is from other notoginseng preparations; applicability to Senactiv and bleeding risk are unknown.",
           "profile_gate": {
             "gate_type": "profile_flag",
             "requires": {
@@ -24051,8 +24051,8 @@
             "https://pubmed.ncbi.nlm.nih.gov/34307625/"
           ],
           "alert_headline": "Senactiv — antiplatelet medicines",
-          "alert_body": "Senactiv contains notoginseng extract. Other notoginseng preparations have affected platelet activity; whether this applies to Senactiv is unknown. A bleeding risk is not established; if you take an antiplatelet medicine such as aspirin or clopidogrel, tell your clinician you use it.",
-          "informational_note": "Evidence concerns other notoginseng preparations, not Senactiv. Applicability to Senactiv and clinical bleeding significance are unknown.",
+          "alert_body": "Other notoginseng preparations have affected platelets; applicability to Senactiv is unknown. Bleeding risk is not established. If you take antiplatelet medicine, tell your clinician you use it.",
+          "informational_note": "Evidence is from other notoginseng preparations; applicability to Senactiv and bleeding risk are unknown.",
           "profile_gate": {
             "gate_type": "drug_class",
             "requires": {

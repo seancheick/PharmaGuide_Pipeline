@@ -154,7 +154,10 @@ def test_senactiv_advisory_discloses_preparation_extrapolation():
     rule = next(r for r in rules["interaction_rules"] if r["id"] == SENACTIV_RULE_ID)
     for sub in rule["condition_rules"] + rule["drug_class_rules"]:
         assert "other notoginseng preparations" in sub["alert_body"].lower()
-        assert "whether this applies to Senactiv is unknown" in sub["alert_body"]
+        assert "applicability to Senactiv is unknown" in sub["alert_body"]
+        assert "Bleeding risk is not established" in sub["alert_body"]
+        assert 60 <= len(sub["alert_body"]) <= 200
+        assert 40 <= len(sub["informational_note"]) <= 120
         assert "not Senactiv" in sub["mechanism"]
         assert "Senactiv (notoginseng)" not in json.dumps(sub)
 
