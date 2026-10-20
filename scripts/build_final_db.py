@@ -3891,7 +3891,15 @@ _STANDARDIZATION_COMPOUNDS = (
     "boswellic acid", "curcuminoids", "ginsenosides", "rosavins",
     "bacosides", "saponins", "piperine", "EGCG", "silymarin",
     "epigallocatechin gallate",
+    # Verified label wordings (2026-10-20): Sensoril's ">=10% withanolide
+    # glycoside conjugates", "95% Curcumin" on turmeric labels (shown as
+    # written), and Rhodiola's salidroside marker.
+    "withanolide glycoside conjugates", "glycoside conjugates", "curcumin",
+    "salidrosides", "salidroside",
 )
+# A row whose notes are only a percentage ("80%", "min. 95%") and whose label
+# name is itself a recognized compound ("Silymarin") states that compound's %.
+_BARE_PERCENT_RE = re.compile(r"^(?:min\.?|minimum|at least)?\s*(\d{1,3})%\+?$", re.IGNORECASE)
 # The same compound under its full name ("50% Epigallocatechin Gallate").
 _STANDARDIZATION_SYNONYMS = {"epigallocatechin gallate": "EGCG"}
 _STANDARDIZATION_RE = re.compile(
@@ -3945,6 +3953,10 @@ def _compute_standardization_note(ingredient: Dict[str, Any]) -> Optional[str]:
             compound_raw = m.group(2)
             compound_canonical = compound_by_lower.get(compound_raw.lower(), compound_raw)
             return f"{pct}% {compound_canonical}"
+    bare = _BARE_PERCENT_RE.match(notes.strip()) if isinstance(notes, str) else None
+    name = raw.strip().lower() if isinstance(raw, str) else ""
+    if bare and name in compound_by_lower:
+        return f"{bare.group(1)}% {compound_by_lower[name]}"
     return None
 
 
