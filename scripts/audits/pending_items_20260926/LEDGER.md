@@ -1,3 +1,15 @@
+## Canary refresh after PR #209 — October 20 (Claude, claude/canary-refreeze-b2)
+
+`freeze_contract_snapshots.py --check --raw-root` on main ffc58287f: 4 of 33 canaries drift, all
+from #209 (B2 costs the contradicting allergen's severity, not always the 2.0 cap). Each claims
+dairy-, gluten- and soy-free and its highest contradicting hit is moderate, so B2 −2.0 → −1.5:
+204571 milk + soy facility 60.4 → 61.2; 241353 milk facility, barley/wheat ingredient, soy 41.6 →
+42.1; 274498 milk + soy facility 54.2 → 54.7 (Poor → Needs improvement); 327416 milk, wheat, soy
+facility 57.1 → 57.6. Proof: raw replay at 4d5ef0747 (pre-#209) equals the old fixtures; 92881c049
+and ffc58287f equal the new values (`~/pg_quality/lucidbanach_canary_b2_20261020/`). Refreshed
+those four from raw with the owner tool (`freeze_contract_snapshots.py <id> --raw-root`), cause in
+the manifest changelog; the complete check is then 33/33.
+
 ## Current execution — post-run catalog qualification, October 19 (Codex)
 
 Goal: synchronize main without losing drafts; refresh the dashboard index with ingredients and verify the completed run before release. Sean prohibits another pipeline run. Owner: existing stage_manifest/pipeline_freshness; score_index reader/projection and Trace/Overview; serving_basis and RDA nutrient_unit; candidate snapshot/export, catalog_diff approvals and existing Flutter consumers. Evidence: matrix/glossary/callers, real Pure205309/copper259789/blocked18924, fail-first tests, exact-source CI, stage fingerprints, all-row parity and exact-hash safety comparison. Will NOT create a scorer, clinical policy, public field/status, hash exemption, restamp or pipeline job.
