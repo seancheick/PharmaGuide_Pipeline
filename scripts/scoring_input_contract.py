@@ -5394,7 +5394,6 @@ _PROFILE_MATERIAL_NONBOTANICAL_DOMAINS = frozenset({
     "omega_parent", "sports_active", "probiotic_strain", "enzyme", "collagen",
     "fiber",
 })
-_PROFILE_DELIVERABLE_ROLES = frozenset({"primary", "claim_prominent", "major"})
 _PROFILE_MICRONUTRIENT_DOMAINS = frozenset({"vitamin", "mineral"})
 _PROFILE_STANDARDIZED_EVIDENCE = frozenset({
     "standardized_botanical_source_db", "product_standardized_botanical",
@@ -5885,13 +5884,13 @@ def _classify_botanical_owner_type(
     # Material non-botanical deliverables — comparable mass units only (advisor #4).
     material_blockers = [
         c for r, c in non_botanical_pairs
-        if c.get("role") in _PROFILE_DELIVERABLE_ROLES
+        if c.get("role") in MATERIAL_ROLES
         and c.get("ingredient_domain") in _PROFILE_MATERIAL_NONBOTANICAL_DOMAINS
         and _profile_material_blocking_mass(r, botanical_mass)
     ]
     micronutrient_deliverables = [
         c for _r, c in non_botanical_pairs
-        if c.get("role") in _PROFILE_DELIVERABLE_ROLES
+        if c.get("role") in MATERIAL_ROLES
         and c.get("ingredient_domain") in _PROFILE_MICRONUTRIENT_DOMAINS
     ]
     botanical_standardized = any(
