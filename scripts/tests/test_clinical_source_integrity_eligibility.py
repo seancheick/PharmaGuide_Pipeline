@@ -119,14 +119,20 @@ def test_backed_records_do_not_transfer_generic_or_combination_or_protocol_resul
     assert "uncontrolled" in fisetin["notable_studies"]
 
 
-@pytest.mark.parametrize("key,expected", [
-    ("BRAND_ZYLOFRESH", ["Rabbit lipid outcomes with generic Medicago sativa seed extract"]),
-    ("PRECLIN_AKG", ["Protocol and recruitment feasibility; efficacy outcomes not reported"]),
-    ("PRECLIN_APIGENIN", ["Generalized anxiety symptoms with chamomile extract"]),
-    ("PRECLIN_LUTEOLIN", ["Olfactory function with PEA-luteolin plus olfactory training"]),
+@pytest.mark.parametrize("key,source,topic", [
+    ("BRAND_ZYLOFRESH", "22556508", "rabbits"),
+    ("PRECLIN_AKG", "37217632", "protocol"),
+    ("PRECLIN_APIGENIN", "19593179", "chamomile"),
+    ("PRECLIN_LUTEOLIN", "35450527", "olfactory training"),
+    ("ING_UNDECYLENIC_ACID", "10991877", "Candida"),
 ])
-def test_reference_endpoints_describe_the_cited_intervention(key, expected):
+def test_reference_hold_withholds_benefit_chips_and_preserves_source_context(key, source, topic):
     import json
     data = json.loads((Path(__file__).resolve().parents[1] / "data" / "backed_clinical_studies.json").read_text())
     entry = next(r for r in data["backed_clinical_studies"] if r["id"] == key)
-    assert entry["key_endpoints"] == expected
+    assert entry["key_endpoints"] == []
+    assert entry["health_goals_supported"] == []
+    assert entry["primary_outcome"] == ""
+    assert entry["scoring_eligible"] is False
+    assert source in entry["effect_direction_rationale"]
+    assert topic in entry["effect_direction_rationale"]

@@ -1768,9 +1768,7 @@
         "22556508"
       ],
       "score_contribution": "tier_3",
-      "key_endpoints": [
-        "Rabbit lipid outcomes with generic Medicago sativa seed extract"
-      ],
+      "key_endpoints": [],
       "health_goals_supported": [],
       "notes": "No verified human ZyloFresh product trial is recorded. The cited generic alfalfa seed-extract rabbit study is reference context; it does not establish branded human efficacy.",
       "study_type": "reference",
@@ -1801,11 +1799,12 @@
         "unii": "DJO934BRBD"
       },
       "effect_direction": "positive_weak",
-      "primary_outcome": "Rabbit lipid outcomes with generic Medicago sativa seed extract",
+      "primary_outcome": "",
       "total_enrollment": null,
       "effect_direction_confidence": "low",
       "effect_direction_rationale": "Descriptive nonhuman activity retained as reference context. PMID 22556508 concerns generic alfalfa seed extract in rabbits, not a ZyloFresh human product trial. Human branded efficacy and enrollment are not established by this source.",
-      "endpoint_relevance_tags": []
+      "endpoint_relevance_tags": [],
+      "scoring_eligible": false
     },
     {
       "id": "BRAND_CREAPURE",
@@ -11380,7 +11379,7 @@
         "unii": "OO2ABO9578"
       },
       "effect_direction": "mixed",
-      "primary_outcome": "Biological age and telomere length in an uncontrolled pilot",
+      "primary_outcome": "Healthy Aging/Longevity",
       "total_enrollment": 10,
       "registry_completed_trials_count": null,
       "effect_direction_confidence": "medium",
@@ -11512,9 +11511,7 @@
       "category": "metabolic_blood_sugar",
       "evidence_level": "reference",
       "score_contribution": "tier_3",
-      "key_endpoints": [
-        "Protocol and recruitment feasibility; efficacy outcomes not reported"
-      ],
+      "key_endpoints": [],
       "health_goals_supported": [],
       "notes": "AKG remains predominantly preclinical for longevity claims. Published translational literature is limited to study-protocol and feasibility papers, while peer-reviewed standalone efficacy outcomes are still unavailable.",
       "study_type": "reference",
@@ -11594,12 +11591,13 @@
         "unii": "8ID597Z82X"
       },
       "effect_direction": "positive_weak",
-      "primary_outcome": "ABLE study protocol and recruitment feasibility, not efficacy outcomes",
+      "primary_outcome": "",
       "total_enrollment": null,
       "registry_completed_trials_count": null,
       "effect_direction_confidence": "low",
       "effect_direction_rationale": "Reference context only: PMID 37217632 is a protocol and PMID 40819772 reports recruitment feasibility. The cited records do not report Ca-AKG efficacy outcomes; planned or recruited participants are not completed efficacy evidence.",
-      "endpoint_relevance_tags": []
+      "endpoint_relevance_tags": [],
+      "scoring_eligible": false
     },
     {
       "id": "PRECLIN_APIGENIN",
@@ -11611,9 +11609,7 @@
       "category": "anti_inflammatory",
       "evidence_level": "reference",
       "score_contribution": "tier_3",
-      "key_endpoints": [
-        "Generalized anxiety symptoms with chamomile extract"
-      ],
+      "key_endpoints": [],
       "health_goals_supported": [],
       "notes": "Apigenin remains predominantly preclinical for sleep and healthy-aging claims. Registry records show early human intervention studies, but peer-reviewed standalone efficacy outcomes are still limited and mostly not attributable to apigenin alone.",
       "study_type": "reference",
@@ -11667,12 +11663,13 @@
         "unii": "7V515PI7F6"
       },
       "effect_direction": "positive_weak",
-      "primary_outcome": "Generalized anxiety symptoms with chamomile extract, not isolated apigenin",
+      "primary_outcome": "",
       "total_enrollment": null,
       "registry_completed_trials_count": null,
       "effect_direction_confidence": "low",
       "effect_direction_rationale": "Descriptive source result retained as reference context. PMID 19593179 tested chamomile extract for generalized anxiety disorder, not isolated apigenin for sleep or aging. No isolated-apigenin efficacy or enrollment is established by this source.",
-      "endpoint_relevance_tags": []
+      "endpoint_relevance_tags": [],
+      "scoring_eligible": false
     },
     {
       "id": "PRECLIN_LUTEOLIN",
@@ -11684,9 +11681,7 @@
       "category": "anti_inflammatory",
       "evidence_level": "reference",
       "score_contribution": "tier_3",
-      "key_endpoints": [
-        "Olfactory function with PEA-luteolin plus olfactory training"
-      ],
+      "key_endpoints": [],
       "health_goals_supported": [],
       "notes": "Luteolin remains predominantly preclinical for immune and healthy-aging claims. Published human evidence is currently formula-level or adjunctive, so benefit cannot be attributed confidently to standalone luteolin.",
       "study_type": "reference",
@@ -11732,12 +11727,13 @@
         "unii": "KUX1ZNC9J2"
       },
       "effect_direction": "positive_weak",
-      "primary_outcome": "Post-COVID olfactory function with PEA-LUT plus olfactory training",
+      "primary_outcome": "",
       "total_enrollment": null,
       "registry_completed_trials_count": null,
       "effect_direction_confidence": "low",
       "effect_direction_rationale": "Descriptive source result retained as reference context. PMID 35450527 tested a PEA-luteolin combination with olfactory training, not isolated luteolin. This source does not establish standalone luteolin efficacy or enrollment.",
-      "endpoint_relevance_tags": []
+      "endpoint_relevance_tags": [],
+      "scoring_eligible": false
     },
     {
       "id": "INGR_TAURINE",
@@ -21058,9 +21054,7 @@
         "10991877"
       ],
       "score_contribution": "tier_3",
-      "key_endpoints": [
-        "Inhibition of Candida albicans yeast-to-hypha transition in vitro"
-      ],
+      "key_endpoints": [],
       "health_goals_supported": [],
       "notes": "The clinically relevant use case for undecylenic acid is topical antifungal therapy and mechanism-informed OTC monograph support, not a robust modern randomized oral-trial literature.",
       "last_updated": "2026-03-23",
@@ -21090,12 +21084,13 @@
         "unii": "K3D86KJ24N"
       },
       "effect_direction": "positive_strong",
-      "primary_outcome": "Candida albicans morphogenesis (in vitro)",
+      "primary_outcome": "",
       "total_enrollment": null,
       "registry_completed_trials_count": null,
       "effect_direction_confidence": "low",
       "effect_direction_rationale": "Descriptive in-vitro activity retained; PMID 10991877 tested denture liners and Candida morphogenesis, not human oral efficacy. Human enrollment and completed efficacy-trial count are unverified. Existing reference eligibility withholds numerical clinical credit.",
-      "endpoint_relevance_tags": []
+      "endpoint_relevance_tags": [],
+      "scoring_eligible": false
     },
     {
       "id": "INGR_BENFOTIAMINE",
