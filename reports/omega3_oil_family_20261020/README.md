@@ -78,3 +78,7 @@ Every raw label naming algal/algae/krill/life's/Schizochytrium (399), 300 sample
   VII levels". Its only source, PMID 14742793, is one warfarin/INR case report.
 - **Test:** the mechanism test also rejects "has produced" and "standard doses".
 - All three PMIDs were re-read by content; citation strict check passes.
+- **Replay after the delta fixes** (842 labels, base main 8f9c22e09; records
+  `~/pg_quality/lostsubj_pr200_20261020/base2.jsonl`, `cand2.jsonl`, `fulldiff2.out`): +29 rules,
+  0 removed, 0 safety changes. Only 305211 (69.7→75.5) and 302654 (71.8→76.6) move, from the
+  corrected identity.
