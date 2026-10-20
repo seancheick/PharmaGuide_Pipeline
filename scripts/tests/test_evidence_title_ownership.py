@@ -157,6 +157,16 @@ def test_an_undosed_member_named_only_by_the_flavor_is_not_title_named(title):
     assert roles["orange"] != "named_in_product_title"
 
 
+def test_natural_opens_the_flavor_phrase():
+    rows = [
+        _row("hair_skin_nails_blend", "Hair, Skin & Nails Blend", 50.0, is_proprietary_blend=True),
+        _row("strawberry", "Strawberry", path="ingredientRows[0].nestedRows[0]"),
+    ]
+    roles = _roles("Hair, Skin & Nails Natural Strawberry Flavor", rows)
+    assert roles["hair_skin_nails_blend"] == "named_in_product_title"
+    assert roles["strawberry"] != "named_in_product_title"
+
+
 def test_unflavored_is_not_a_flavor_phrase():
     rows = [_row("creatine_monohydrate", "Creatine Monohydrate", 5000.0)]
     assert _roles("Creatine Monohydrate Unflavored", rows)["creatine_monohydrate"] == "named_in_product_title"

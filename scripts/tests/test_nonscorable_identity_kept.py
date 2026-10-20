@@ -217,11 +217,14 @@ def test_wasabi_label_keeps_its_plant(enrich):
     # Gamma-Carotene -> vitamin_a is a cleaner identity, not vitamin A evidence.
     (297685, "evidence", 16.7),
     # Restored Apple/coffeeberry flavor rows do not become title Evidence owners.
-    (40089, "evidence", 10.3),
+    # 10.3 on main; 13.8 since "Fruit" no longer names Apple, so vitamin C (major) owns too.
+    (40089, "evidence", 13.8),
     # "Raw organic Svetol" (green coffee) does not own Evidence through "Fit Coffee".
     (204521, "evidence", 10.0),
     # A 0.4 mg iron row kept for interactions feeds no Dose.
-    (178728, "dose", 11.4),
+    # 11.4 on main, where "Natural Berry Flavor" made acai the declared purpose; 1.1 is
+    # what main gives the same label titled "Raw Superfoods".
+    (178728, "dose", 1.1),
     # "organic Beet" re-identified later as Beetroot Powder (as on main) still scores.
     # 10.8 on main; 12.4 since PR214, whose multi panel no longer averages adjunct rows.
     (62890, "formulation", 12.4),
@@ -274,10 +277,12 @@ def _scoring_inputs(artifact):
     (315814, {"score": 50.6, "status": "partial", "evidence_owners": ["gaba", "maca", "oat_straw", "yohimbe"],
               "dose_credits": [12.54]}),
     # A kept coffeeberry row is invisible to scoring, never re-matched as coffee.
-    (40089, {"score": 60.7, "status": "complete",
+    # Since "Fruit" no longer names Apple (title owner), vitamin C is a major owner and
+    # the vitamins are the Dose panel (60.7 and [12.54] on main).
+    (40089, {"score": 66.6, "status": "complete",
              "evidence_owners": ["bilberry", "blackberry", "blueberry", "carrot", "cranberry", "grape", "plum",
-                                 "pomegranate", "spinach", "strawberry", "tart_cherry", "tomato"],
-             "dose_credits": [12.54]}),
+                                 "pomegranate", "spinach", "strawberry", "tart_cherry", "tomato", "vitamin_c"],
+             "dose_credits": [12.83, 15.12, 17.46]}),
     (327402, {"score": 72.8, "status": "complete", "evidence_owners": None, "dose_credits": [1.28, 6.19]}),
     # 83.8 on main; 83.9 since PR214 (multi panel form quality reads material rows only).
     (328104, {"score": 83.9, "status": "complete", "evidence_owners": None, "dose_credits": [4.65, 13.17]}),

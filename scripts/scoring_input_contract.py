@@ -6321,8 +6321,8 @@ _ROLE_TITLE_STOPWORDS = {
 # Flavor") names how the product tastes, not an active it delivers (293904,
 # 297665). The phrase is read back from the flavor word: up to two words, then
 # one more word after each "+", "&", "and", "," or "/". "Natural"/"artificial"
-# are free; a number, other punctuation, a dosage form, a stop word or the
-# name of an active the label doses on its own ends it.
+# are free and open the phrase; a number, other punctuation, a dosage form, a
+# stop word or the name of an active the label doses on its own ends it.
 _ROLE_TITLE_FLAVOR_RE = re.compile(r"^flavou?r(?:s|ed|ing)?$")
 _ROLE_TITLE_FLAVOR_FREE = frozenset({"natural", "naturally", "artificial", "artificially"})
 _ROLE_TITLE_FLAVOR_JOINERS = frozenset({"+", "&", "and", ",", "/"})
@@ -6560,6 +6560,11 @@ def _role_title_text(title_norm: str, rows: List[Dict[str, Any]]) -> str:
             parts = word.split("-")
             if word in _ROLE_TITLE_FLAVOR_FREE:
                 dropped.add(back)
+                if words:
+                    # "Hair, Skin & Nails Natural Strawberry Flavor": the
+                    # descriptor opens the phrase ("Orange Natural Flavor"
+                    # keeps reading back).
+                    break
             elif word in _ROLE_TITLE_FLAVOR_JOINERS and words:
                 dropped.add(back)
                 budget, words = 1, 0
