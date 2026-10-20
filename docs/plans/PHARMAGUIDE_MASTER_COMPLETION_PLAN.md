@@ -4,7 +4,8 @@
 
 - [x] PR219 closed unmerged at Sean’s request after source-applicability review; research and unique commits preserved in a verified Git bundle. The separate toxic Japanese-star-anise guard in PR220 remains integrated.
 - [x] Six remaining stale worktrees removed with normal Git removal after explicit authorization; no force, no hidden unfinished fix, preserved evidence hashes reverified, private inputs unchanged. Final cleanup receipt registers only primary.
-- [ ] D31: integrator recommends A for source-applicable ingredient research while retaining unknown individual exposure and no inferred Dose credit. This is a recommendation for Sean, not an approved scoring-policy change. Historical A/B/C measurements remain in the existing LEDGER.
+- [x] D31 decision: Sean approved A for applicable ingredient research; unknown individual blend amounts stay unknown and establish neither Dose credit nor an effective dose. Historical alternatives remain in the LEDGER.
+- [x] D31 source implementation: existing Evidence owner/readiness aligned; physical roles, source amounts and Dose preserved; neutral-receipt attribution corrected. 437 owner checks, 33 raw canaries and 245-label paired replay reviewed; exact-runtime CI 39495989014 green. Four stale consumer expectations corrected with raw fixtures (20 passed). Local: 545 passed, one pre-existing stale-export folate failure, 24 optional skips. Artifact/release acceptance remains open; see integration FOLLOWUP.
 
 Owner: existing LEDGER decision register, Git histories and integration audit reports — evidence: closed PR219, verified bundle, source-owner read and final_six_cleanup/git_removal_final_verification.json. Will NOT change clinical/scoring policy or close generated-artifact/release gates. No pipeline run.
 
