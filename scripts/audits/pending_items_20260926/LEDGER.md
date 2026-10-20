@@ -2210,6 +2210,32 @@ the only changed path is `blob:$.ingredients[*].standardization_note`; the updat
 main. Flutter lib/ has no reader of this field. Open: DSLD row text on 1627 guarana says "3% ginsenosides" (likely a DSLD
 transcription error, shown as recorded).
 
+## October 20 — blend members inside blends become active rows (PR206, claude/nested-blend-members)
+
+Class: behavioral (Clean rows → interaction subjects, Evidence/Transparency inputs). Owner:
+`enhanced_normalizer.py::_flatten_nested_ingredients` (+ `_rescue_skipped_nested_row`,
+`_is_chemical_decomposition_leaf`, `_mark_enzyme_source_descriptors`). Defects: (1) a skip-listed blend
+("Proprietary Blend") inside a DSLD group/structural container was dropped with its members (42235 astragalus,
+notoginseng, skullcap; 30565/5816 yohimbe); (2) the counter-ion leaf rule dropped salt-named blend members
+(KCl, NaCl, glucosamine/chondroitin sulfate, betaine HCl, creatine HCl/citrate; 99 rows at all depths);
+(3) found while classifying: protease source organisms rescued as probiotic subjects, and the same false
+warning already on 77164 ("proprietary blend of proteases" without "from"); (4) audit F1: the rescue stamped
+the OUTER blend's mass on members of an inner blend printing 0 NP, so the blob gained totals the label never
+prints (30565/5816 grape blend 380 mg, 328844 Astarte/Urex 221 mg each); (5) review: a top-level or
+_process_single skipped protease blend's forms/members are marked as sources too (0 corpus rows). Fail-first
+tests at each step: 18 collected cases in `test_nested_blend_member_rows.py`. Corpus Clean diff vs main 9630a0f3a: 161/15,414 products, rows only added.
+Replay v3 from committed trees (main 9630a0f3a vs 290751a57; `~/pg_quality/nested_blend_members_20261020/v3`,
+PROVENANCE.txt): 161 + 150 controls, 0 controls changed; +54 rules, 0 removed; 30565/5816 → caution (yohimbe
+printed on label, RISK_YOHIMBE high_risk); every blob blend total is printed by that blend's own raw row;
+41 score moves, all classified by cause in the PR table. (The earlier v2 cand capture ran from an uncommitted
+tree between 05e71ac25 and 424d6a857; v3 supersedes it.) Focused tests: 4,235 passed, 2 declared artifact
+skips, 1 known stale pin (BioVin→grape, fixed elsewhere). Open: comma-joined sub-blends ("Valerian…, Lemon
+Balm…", "DHA, EPA") still drop 22 undosed members; "Total Probiotic Cultures" CFU in notes is not captured;
+display ledger marks every `nested_display_only` active row `score_included`/"scored"
+(`_build_display_ingredients` excludes only CLEANER_NON_EFFICACY_ROLES), so excipient-identity members
+(OI_GENERIC_FLAVOR in 211331/220125/220132/220137) project as scored; latent depth-3 parent fields and the
+top-level skip branch's second rescue copy (0 corpus cases).
+
 ## October 20 — INGR_TART_CHERRY record corrections (PR205, claude/ingr-tart-cherry-evidence)
 
 Class: curated clinical data (description, identifier, references); no intended score change. Owner:
