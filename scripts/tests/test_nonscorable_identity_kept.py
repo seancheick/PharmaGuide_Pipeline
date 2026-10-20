@@ -13,7 +13,7 @@ The cleaner's standardName is the id it mapped, so it proves nothing a
 declared form contradicts: a genus listing several species ("Bifidobacterium"),
 a plant read through its marker form ("Sawasabi Wasabi powder" as
 isothiocyanates) or an amino acid declared as a protein source ("Arginine" as
-whey protein isolate) is not kept. Blend headers are left out for now.
+whey protein isolate) is not kept. A blend header keeps its identity on the same terms.
 """
 
 from __future__ import annotations
@@ -71,11 +71,36 @@ def test_non_scorable_row_keeps_its_identity_and_meets_its_rules(enrich, dsld_id
     assert label in {a["ingredient_name"] for a in alerts}
 
 
-def test_blend_header_is_not_restored_yet(enrich):
-    """1179 "Caffeine Blend" is a weight-only blend header: out of this batch."""
-    iqd = enrich(1179)["ingredient_quality_data"]
-    rows = [r for r in iqd["ingredients"] if r.get("raw_source_text") == "Caffeine Blend"]
-    assert rows and {r["canonical_id"] for r in rows} == {None}
+@pytest.mark.parametrize("dsld_id,label,canonical_id,rule_id", [
+    # Ravage: the weight-only "Caffeine Blend" header is caffeine.
+    (1179, "Caffeine Blend", "caffeine", "RULE_INGREDIENT_CAFFEINE"),
+    # Its members (Anhydrous Caffeine, Piperine Beadlets) do not contradict the name.
+    (28981, "Caffeine Blend", "caffeine", "RULE_INGREDIENT_CAFFEINE"),
+    # Flex-A-Min: "Chondroitin Sulfate Complex" lists chondroitin among seven others.
+    (17471, "Chondroitin Sulfate Complex", "chondroitin", "RULE_IQM_CHONDROITIN"),
+])
+def test_blend_header_keeps_its_identity_and_meets_its_rules(enrich, dsld_id, label, canonical_id, rule_id):
+    enriched = enrich(dsld_id)
+    rows = [r for r in enriched["ingredient_quality_data"]["ingredients"] if r.get("raw_source_text") == label]
+    assert rows and {r["canonical_id"] for r in rows} == {canonical_id}
+    assert any(a["rule_id"] == rule_id for a in enriched["interaction_profile"]["ingredient_alerts"])
+
+
+@pytest.mark.parametrize("dsld_id,pillar,expected", [
+    # LIT AF: a 300 mg "Caffeine Blend" header over 250 mg + 50 mg caffeine rows. The
+    # header's identity must not add a second 300 mg to the caffeine ceiling.
+    (219842, "dose", 13.0),
+    # Echinacea Complex: the header identity must not replace the blend's lent
+    # echinacea anchor that routes and doses the product.
+    (73300, "dose", 11.4),
+    # Joint Health: a header whose printed name is itself an alias (Univestin)
+    # already scored on main; keeping header identities must not take it away.
+    (243676, "dose", 11.4),
+])
+def test_header_identity_does_not_enter_scoring(enrich, dsld_id, pillar, expected):
+    from scoring_v4.scored_artifact import build_scored_artifact
+
+    assert build_scored_artifact(enrich(dsld_id))["quality_pillars_v4"][pillar]["score"] == expected
 
 
 def test_identified_food_blend_member_does_not_route_a_vitamin_product(enrich):
@@ -128,8 +153,30 @@ def test_stale_id_the_row_never_named_is_not_kept():
     assert _decide("Antimony", "caffeine", "Antimony").canonical_id is None
 
 
-def test_blend_header_row_is_not_kept():
-    assert _decide("Caffeine Blend", "caffeine", "Caffeine", cleaner_row_role="blend_header_total").canonical_id is None
+def test_blend_header_row_is_kept_unscored():
+    decision = _decide("Caffeine Blend", "caffeine", "Caffeine", cleaner_row_role="blend_header_total")
+    assert (decision.canonical_id, decision.scoreable_identity) == ("caffeine", False)
+
+
+def test_blend_header_its_printed_name_does_not_name_is_not_kept():
+    """The cleaner's standardName alone never names a header: "Adrenal Blend" is not caffeine."""
+    assert _decide("Adrenal Blend", "caffeine", "Caffeine", cleaner_row_role="blend_header_total").canonical_id is None
+
+
+@pytest.mark.parametrize("dsld_id,label", [
+    # Schisandra, rhodiola, ashwagandha, eleuthero: an adrenal-support formula, not adrenal tissue.
+    (204571, "Organic Adrenal Blend"),
+    (274389, "Organic Adrenal Blend"),
+    # Saw palmetto, beta-sitosterol, pumpkin seed, lycopene: not prostate tissue.
+    (33607, "Prostate Formula"),
+    # Members caseinate, whey, egg albumin, milk protein: those proteins' amino profile.
+    (228823, "Glutamic Acid"),
+])
+def test_blend_header_whose_members_name_other_substances_is_not_kept(enrich, dsld_id, label):
+    iqd = enrich(dsld_id)["ingredient_quality_data"]
+    rows = [r for r in iqd["ingredients"] + iqd["ingredients_skipped"]
+            if r.get("raw_source_text") == label and r.get("cleaner_row_role") == "blend_header_total"]
+    assert rows and {r["canonical_id"] for r in rows} == {None}
 
 
 def test_role_record_is_not_kept_as_a_substance():

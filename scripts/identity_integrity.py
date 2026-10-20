@@ -1122,8 +1122,8 @@ def resolve_identity(
 
     # Non-scorability is a row role, not evidence against the substance: a row
     # the caller will not score keeps a supplied identity its own text proves.
-    # A blend header is left out: its identity would carry the blend's total
-    # into scoring routes, a separate decision.
+    # A blend header keeps it too ("Caffeine Blend" -> caffeine): its total is
+    # the blend's, so the identity is interaction-only like any kept identity.
     # The cleaner records that proof as the row's standardName ("Caffeine
     # Blend" -> Caffeine, "Lactobacillus" -> Probiotics, "Arginine" ->
     # L-Arginine); a stale id the row's text never named is not kept, nor is
@@ -1155,19 +1155,40 @@ def resolve_identity(
         or row.get("cleaner_match_method") == "single_declared_marker_form"
     )
     if canonical_before and canonical_registry is not None and not forms_contradict:
-        for item in form_evidence:
-            if not item.field.startswith("forms["):
-                continue
-            named = canonical_registry.resolve_preferred(item.value)
-            form_canonical = _canonical(named[0]) if named else None
-            if (
-                form_canonical
-                and form_canonical != canonical_before
-                and INTERACTION_SUBJECT_FAMILY.get(form_canonical) != canonical_before
-                and not (canonical_parent_of and canonical_parent_of(canonical_before, form_canonical))
-            ):
-                forms_contradict = True
-                break
+        def names_the_identity(form_canonical: str) -> bool:
+            return (
+                form_canonical == canonical_before
+                or INTERACTION_SUBJECT_FAMILY.get(form_canonical) == canonical_before
+                or bool(canonical_parent_of and canonical_parent_of(canonical_before, form_canonical))
+            )
+
+        form_canonicals = [
+            _canonical(named[0])
+            for item in form_evidence
+            if item.field.startswith("forms[")
+            for named in [canonical_registry.resolve_preferred(item.value)]
+            if named
+        ]
+        if _is_blend_header_row(row):
+            # A blend header's forms are its members ("Caffeine Blend":
+            # Anhydrous Caffeine, Piperine). It keeps an identity only when its
+            # printed name or a member names it, and, when members resolve, one
+            # of them must ("Organic Adrenal Blend" of schisandra and rhodiola is
+            # no adrenal tissue; a "Glutamic Acid" header of caseinate and whey
+            # is those proteins' amino profile).
+            identity_names = canonical_registry.standard_names_of(canonical_before)
+            member_names_identity = any(map(names_the_identity, form_canonicals)) or any(
+                _label_spells_identity(item.value, identity_names)
+                for item in form_evidence
+                if item.field.startswith("forms[")
+            )
+            printed_name = raw_evidence[0].value if raw_evidence else ""
+            forms_contradict = not (
+                (_label_spells_identity(printed_name, identity_names) or member_names_identity)
+                and (member_names_identity or not form_canonicals)
+            )
+        else:
+            forms_contradict = not all(map(names_the_identity, form_canonicals))
     # A row listed under a parent (or any enclosing row) that names another
     # material is that material's constituent ("Arginine" in "Solae Soy
     # Protein isolate"; in Amino Acids in Cilantro), not the substance added
@@ -1190,7 +1211,6 @@ def resolve_identity(
     standard_name_proves_canonical = bool(canonical_before) and (
         not raw_canonicals
         and canonical_registry is not None
-        and not _is_blend_header_row(row)
         and not forms_contradict
         and not canonical_registry.is_role_record(canonical_before)
         and canonical_registry.literal_identity_matches(
