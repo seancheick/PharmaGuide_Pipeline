@@ -3,7 +3,7 @@
     "description": "Deterministic ingredient-level interaction rules keyed by canonical database identity",
     "purpose": "interaction_alert_rules",
     "schema_version": "6.3.0",
-    "last_updated": "2026-10-19",
+    "last_updated": "2026-10-20",
     "total_entries": 152,
     "structure_note": "One entry per ingredient (or per form-scoped variant). All conditions, drug classes, and dose thresholds for that ingredient are in one object. As of v6.0.0, every sub-rule (condition_rules[], drug_class_rules[], dose_thresholds[], pregnancy_lactation block) carries an explicit profile_gate predicate that consumers MUST evaluate against the user profile before firing the alert.",
     "total_rules": 152,
@@ -5336,15 +5336,16 @@
           "condition_id": "liver_disease",
           "severity": "caution",
           "evidence_level": "limited",
-          "mechanism": "Iron loading is important in specific conditions such as hereditary hemochromatosis. The cited sources do not establish one hepcidin mechanism or a universal supplement restriction for all chronic liver disease.",
-          "action": "Avoid routine iron supplementation in liver disease patients unless iron deficiency anemia is confirmed by labs (serum iron, ferritin, TIBC). Use the lowest effective dose for the shortest duration. Monitor ferritin and transferrin saturation regularly.",
+          "mechanism": "People with hereditary hemochromatosis absorb excess dietary iron and are at risk of iron overload and liver damage; the AASLD recommends that treatment of hemochromatosis include avoiding iron and vitamin C supplements (NIH ODS Iron fact sheet; AASLD 2011 guideline). The sources do not establish a supplement restriction for every chronic liver disease.",
+          "action": "If you have hemochromatosis or another iron-overload condition, avoid iron supplements unless your specialist advises them. With other liver conditions, ask your clinician whether extra iron suits you.",
           "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/12957292/",
-            "https://pubmed.ncbi.nlm.nih.gov/33676282/"
+            "https://ods.od.nih.gov/factsheets/Iron-HealthProfessional/",
+            "https://pubmed.ncbi.nlm.nih.gov/21452290/",
+            "https://pubmed.ncbi.nlm.nih.gov/12957292/"
           ],
-          "alert_headline": "Extra iron may worsen liver overload",
-          "alert_body": "Extra iron can worsen iron overload in some liver conditions. If you have liver disease, use iron supplements only with clinician guidance and lab monitoring.",
-          "informational_note": "Iron depends on liver clearance — relevant to people with liver conditions.",
+          "alert_headline": "Iron overload conditions: check before adding iron",
+          "alert_body": "If you have hemochromatosis or another iron-overload condition, specialists advise avoiding iron supplements. With other liver conditions, ask your clinician if extra iron suits you.",
+          "informational_note": "Relevant to people with iron-overload conditions such as hemochromatosis.",
           "profile_gate": {
             "gate_type": "condition",
             "requires": {
@@ -5372,14 +5373,16 @@
           "drug_class_id": "antihypertensives",
           "severity": "caution",
           "evidence_level": "limited",
-          "mechanism": "Iron interactions are drug-specific: reports concern medicines such as methyldopa or captopril. A captopril study found reduced unconjugated exposure without a measured blood-pressure change; this does not establish a class-wide interaction.",
-          "action": "Separate iron supplement from methyldopa or captopril by at least 2 hours.",
+          "mechanism": "The evidence is drug-specific. Methyldopa label (DailyMed): ferrous sulfate or gluconate lowers methyldopa bioavailability, may adversely affect blood pressure control, and coadministration is not recommended; blood pressure rose in 4 of 5 hypertensive patients on concurrent iron (PMID 3356082). Ferrous sulphate lowered unconjugated captopril exposure by 37% without a measured blood-pressure change (PMID 9803987). Other antihypertensives were not studied.",
+          "action": "If you take methyldopa, taking iron with it is not recommended: talk to your prescriber before taking iron. If you take captopril, ask your prescriber, because iron can lower captopril levels. Other blood-pressure medicines weren't studied.",
           "sources": [
+            "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=9e22e1d8-04ec-4b67-92ea-b09c706f2703",
+            "https://pubmed.ncbi.nlm.nih.gov/3356082/",
             "https://pubmed.ncbi.nlm.nih.gov/9803987/"
           ],
-          "alert_headline": "May affect blood-pressure control",
-          "alert_body": "If you take blood-pressure medicine, ask your prescriber about iron and timing. Methyldopa or captopril findings do not establish the same interaction with every antihypertensive.",
-          "informational_note": "Iron can affect blood pressure — relevant to people on antihypertensive medications.",
+          "alert_headline": "Methyldopa or captopril: talk to your prescriber about iron",
+          "alert_body": "Iron with methyldopa is not recommended; it can weaken blood-pressure control. Iron can also lower captopril levels. Other blood-pressure drugs weren't studied.",
+          "informational_note": "Iron can affect methyldopa and captopril — relevant only if you take one of them.",
           "profile_gate": {
             "gate_type": "drug_class",
             "requires": {
@@ -12306,11 +12309,11 @@
       "pregnancy_lactation": {
         "pregnancy_category": "monitor",
         "lactation_category": "monitor",
-        "evidence_level": "limited",
-        "notes": "No severe pregnancy-specific evidence at RDA-range doses; talk to your clinician before use, especially at higher doses.",
-        "alert_headline": "Standard nutrient — clinician guidance suggested",
-        "alert_body": "At RDA-range doses, this nutrient has no specific pregnancy or lactation concerns. Higher therapeutic doses may have a different safety profile — talk to your clinician.",
-        "informational_note": "RDA-range standard nutrient — generally compatible with pregnancy and lactation; high-dose forms have separate evidence bases.",
+        "evidence_level": "established",
+        "notes": "Required nutrient; needs do not rise in pregnancy or lactation; keep total intake below the UL.",
+        "alert_headline": "Calcium in pregnancy or breastfeeding — needs stay the same",
+        "alert_body": "Calcium needs during pregnancy and breastfeeding are the same as for other adults: 1,000 mg a day for most adults. Count calcium from food and all supplements, and talk to your clinician if your total may go above 2,500 mg a day.",
+        "informational_note": "Calcium needs do not change in pregnancy or breastfeeding; 2,500 mg/day is the adult upper limit.",
         "profile_gate": {
           "gate_type": "profile_flag",
           "requires": {
@@ -12331,7 +12334,11 @@
           "dose": null
         },
         "direction": "neutral",
-        "materiality": "presence"
+        "materiality": "presence",
+        "mechanism": "Calcium needs in pregnancy and lactation are the same as for other adults: RDA 1,000 mg/day at 19-50 years (1,300 mg/day at 14-18). The UL is 2,500 mg/day at 19-50 years (3,000 mg/day at 14-18), also during pregnancy and lactation.",
+        "sources": [
+          "https://ods.od.nih.gov/factsheets/Calcium-HealthProfessional/"
+        ]
       },
       "last_reviewed": "2026-04-09",
       "review_owner": "pharmaguide_clinical_team",

@@ -307,7 +307,7 @@ def test_b2_allergen_presence_alone_has_no_penalty() -> None:
     from scoring_v4.modules.omega_transparency import score_transparency
 
     product = _omega_product(contaminant_data={
-        "allergens": {"allergens": [{"allergen_id": "shellfish", "severity_level": "high"}]}
+        "allergens": {"allergens": [{"allergen_id": "ALLERGEN_CRUSTACEANS", "severity_level": "high"}]}
     })
     payload = score_transparency(product)
     assert payload["penalties"].get("b2_false_allergen_free_claim", 0) == 0
@@ -318,7 +318,7 @@ def test_b2_false_allergen_claim_penalty_applied() -> None:
 
     product = _omega_product(
         contaminant_data={
-            "allergens": {"allergens": [{"allergen_id": "shellfish", "severity_level": "high"}]}
+            "allergens": {"allergens": [{"allergen_id": "ALLERGEN_CRUSTACEANS", "severity_level": "high"}]}
         },
         compliance_data={
             "allergen_free_claims": ["shellfish-free"],

@@ -2,7 +2,8 @@
 Sprint E1.2.2.c — standardization_note regression tests.
 
 Extract standardization strings ("5% withanolides", "95% curcuminoids")
-from ingredient notes / matched_form. Tight regex only — dev rule:
+from the label row's notes / label name (never the matched IQM form
+name or IQM notes). Tight regex only — dev rule:
 "If I'm not 100% sure the % belongs to this compound, return null."
 
 Allowed compounds (conservative starter list; expand case-by-case):
@@ -71,10 +72,11 @@ def test_bioperine_canary_piperine_extracts() -> None:
     assert _compute_standardization_note(ing) == "95% piperine"
 
 
-def test_green_tea_egcg_extracts_from_matched_form() -> None:
-    """Canary 1036 Green Tea leaf extract: matched_form="green tea extract (50% EGCG)"."""
+def test_a_matched_iqm_form_name_is_not_a_label_claim() -> None:
+    """Canary 1036 Green Tea leaf extract: matched_form="green tea extract (50% EGCG)"
+    is the IQM form name, not label text, so it yields no note on its own."""
     ing = {"matched_form": "green tea extract (50% EGCG)"}
-    assert _compute_standardization_note(ing) == "50% EGCG"
+    assert _compute_standardization_note(ing) is None
 
 
 # ---------------------------------------------------------------------------
@@ -181,15 +183,14 @@ def test_standardization_extraction_does_not_mutate_ingredient() -> None:
 # Source priority — prefer matched_form, then notes, then raw_source_text
 # ---------------------------------------------------------------------------
 
-def test_matched_form_checked_first() -> None:
-    """DSLD-authored matched_form is most structured; prefer it when
-    present."""
+def test_the_label_notes_win_over_a_matched_form_name() -> None:
+    """matched_form is the IQM form name; only the label row's notes and
+    name are label text."""
     ing = {
         "matched_form": "green tea extract (50% EGCG)",
         "notes": "Some other text with 5% withanolides",
     }
-    # matched_form wins
-    assert _compute_standardization_note(ing) == "50% EGCG"
+    assert _compute_standardization_note(ing) == "5% withanolides"
 
 
 def test_notes_fallback_when_matched_form_lacks_match() -> None:
