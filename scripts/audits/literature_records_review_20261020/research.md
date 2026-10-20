@@ -39,6 +39,29 @@ another. The 10-item hand sample in the scan README (3 format-only, 5 unverifiab
 - Applied by `apply.py` from the explicit per-record patches in `spec_a.py` / `spec_b.py`; nothing fetched or
   generated during the apply. `data_batch.py check --expect` proves the diff equals the spec.
 
+## Measurement (replay.py freeze-raw → snapshot --full --blob → compare --all-paths; ~/pg_quality/literature_records_review_20261020)
+
+Batch A: 474 frozen raw labels = 414 that carry a batch-A record's ingredient (up to 12 per record, evenly spaced over
+the 1,648 corpus products those records reach) + 60 random controls touching neither batch. Base origin/main
+e55b6ccef, candidate 09362edbc. 226 changed; **no score, pillar score, tier, status, safety, warning, interaction,
+allergen or identity path changed; all 60 controls identical.** Every change is Evidence state or copy:
+
+| Cause | Products | Change |
+|---|---|---|
+| A1 preparation mismatch | 125 | ingredient reason_code only (e.g. `literature_reviewed_human_clinical_evidence` → `literature_applicability_unestablished`) |
+| A1 (chrysin, wild yam) | 14 | evidence state `evaluated_null` → `applicability_unestablished` (food-matrix / topical null does not transfer) |
+| A2 barberry null | 6 + 4 | `applicability_unestablished` → `evaluated_null` (single-ingredient barberry); reason code only in blends |
+| A3 review pending | 31 + 17 + 11 | `quality_assessment_status` complete → partial; evidence state → `clinical_review_not_covered` ("review pending") from `applicability_unestablished`, `evaluated_applicable` or `evaluated_null` |
+| A3 review pending | 18 | readiness reason code only |
+
+Corpus reach of the A3 "review pending" move: 366 products carry one of its 9 ingredients (l_phenylalanine and the
+schisandra pair most often). These products' Evidence now reads review pending instead of a conclusion the
+citations never supported; points do not move because literature records are shadow-only.
+
+Batch B: 484 frozen labels = 424 carrying a batch-B record's ingredient (up to 4 per record) + the same 60 controls.
+Base 31fc2b653, candidate 86d5aa789 (rebased unchanged to the branch tip). **0 of 484 changed in any stage**
+(cleaned, enriched, scored, blob): the corrected study facts are not projected into artifacts.
+
 ## Owner findings (not changed here)
 
 - `scripts/api_audit/verify_all_citations_content.py` has no `FILE_CONFIGS` entry for
