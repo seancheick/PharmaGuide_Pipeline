@@ -5,14 +5,15 @@ PR #181 restored the identity of these rows and they were then held as
 
 - BulkSupplements 312995 (and 313496-313524) "Barley Grass", form "Hordeum vulgare"
   (DSLD botanical, group Barley). The binomial is the species of the row's own
-  identity, recorded for barley_grass in the shared identity registry
-  (botanical_ingredients aliases). The label prints no preparation, so the row
+  identity: a botanical_ingredients latin_name that the shared identity
+  registry also records as a name of barley_grass. The label prints no preparation, so the row
   reads barley_grass's authored unspecified form.
 - Nature's Way 204040 "Soy Isoflavones extract", forms "Isoflavones" and
   "Soybean". Soybean is the plant the isoflavones come from: the curated source
   terms already name "soy", "soybeans" and "glycine max" (form curation batch 9).
 
-A binomial of another species still stays unmapped.
+A binomial of another species, and any other curated name that states a
+preparation, brand or different substance, still stays unmapped.
 """
 import json
 import logging
@@ -58,8 +59,14 @@ def test_a_species_or_source_name_in_forms_is_not_a_held_form(enricher, pid, nam
     ("wheatgrass", "Wheatgrass", "Hordeum vulgare"),
     ("black_cherry", "Black Cherry", "Cerasus avium"),
     ("barley_grass", "Barley Grass", "Triticum aestivum"),
+    # A curated name of the parent that is not its species name states a
+    # preparation, brand or other substance; IQM lacks it, so it stays held.
+    ("turmeric", "Turmeric", "Curcumin Powder"),
+    ("cayenne_pepper", "Cayenne Pepper", "Capsimax Capsicum Extract"),
+    ("elderberry", "Elderberry", "Elderberry 10:1 Concentrate"),
+    ("tart_cherry", "CherryPURE", "Sour Cherry, Powder"),
 ])
-def test_a_binomial_of_another_species_stays_unmapped(enricher, parent, label, token):
+def test_only_the_parents_species_name_restates_it(enricher, parent, label, token):
     match = enricher._match_quality_map(
         label, label, enricher.databases["ingredient_quality_map"],
         cleaned_forms=[{"name": token, "category": "botanical"}], cleaner_canonical_id=parent)
