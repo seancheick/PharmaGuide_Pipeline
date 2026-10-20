@@ -9,6 +9,8 @@ equal form quality, and dosage form alone neither earns nor loses points.
 from __future__ import annotations
 
 import json
+
+import pytest
 import sys
 from pathlib import Path
 
@@ -388,3 +390,23 @@ def test_vitamin_a_as_beta_carotene_stays_in_the_panel() -> None:
     panel = formulation._scorable_ingredients(enriched)
     assert any(r.get("canonical_id") == "beta_carotene" and str(r.get("name")).lower().startswith("vitamin a")
                for r in panel)
+    # The gate itself: the label's non-panel extras (boron, lutein) are not averaged.
+    assert not {"boron", "lutein"} & {r.get("canonical_id") for r in panel}
+
+
+@pytest.mark.parametrize("pid, canonical", [
+    ("176166", "cryptoxanthin"),  # GNC: Beta-Cryptoxanthin 10 mcg in "Super Antioxidant Blend"
+    ("181511", "beta_carotene"),  # Solgar: standalone "Mixed Carotenoids" 29 mcg
+])
+def test_an_undeclared_carotenoid_is_not_the_panels_vitamin_a(pid, canonical) -> None:
+    import logging
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    from enrich_supplements_v3 import SupplementEnricherV3
+    import scoring_v4.modules.multi_prenatal_formulation as formulation
+
+    logging.disable(logging.INFO)
+    raw = json.loads((Path(__file__).parent / "fixtures" / f"panel_materiality_{pid}_raw.json").read_text())
+    enriched, _ = SupplementEnricherV3().enrich_product(EnhancedDSLDNormalizer().normalize_product(raw))
+    rows = [r for r in formulation._active_ingredients(enriched) if r.get("canonical_id") == canonical]
+    assert rows
+    assert not any(r in formulation._scorable_ingredients(enriched) for r in rows)
