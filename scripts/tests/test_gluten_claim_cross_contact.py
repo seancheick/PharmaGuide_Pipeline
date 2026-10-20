@@ -57,18 +57,18 @@ def _hit(allergen_id, presence):
     return {"allergen_id": allergen_id, "presence_type": presence}
 
 
-@pytest.mark.parametrize("hits,has_may_contain,conflicts,expected", [
-    ([_hit("ALLERGEN_MILK", "facility_warning")], True, [], False),
-    ([_hit("ALLERGEN_BARLEY", "may_contain")], True, [], True),
-    ([_hit("ALLERGEN_RYE", "facility_warning"), _hit("ALLERGEN_MILK", "facility_warning")], True, [], True),
-    ([_hit("ALLERGEN_OATS", "may_contain")], True, [], False),  # oats are not a 101.91 gluten grain
+@pytest.mark.parametrize("hits,unread,conflicts,expected", [
+    ([_hit("ALLERGEN_MILK", "facility_warning")], False, [], False),
+    ([_hit("ALLERGEN_BARLEY", "may_contain")], False, [], True),
+    ([_hit("ALLERGEN_RYE", "facility_warning"), _hit("ALLERGEN_MILK", "facility_warning")], False, [], True),
+    ([_hit("ALLERGEN_OATS", "may_contain")], False, [], False),  # oats are not a 101.91 gluten grain
     ([], True, [], True),  # "may contain" text no parsed statement explains
     ([_hit("ALLERGEN_WHEAT", "contains")], False, ["gluten-free claim conflicts with detected gluten/wheat"], True),
     ([], False, [], False),
 ])
-def test_gluten_cross_contact_rule(hits, has_may_contain, conflicts, expected):
+def test_gluten_cross_contact_rule(hits, unread, conflicts, expected):
     from scoring_input_contract import gluten_free_claim_contradicted
-    assert gluten_free_claim_contradicted(hits, has_may_contain, conflicts) is expected
+    assert gluten_free_claim_contradicted(hits, conflicts, unparsed_may_contain=unread) is expected
 
 
 def test_a_parsed_warning_does_not_explain_a_separate_unparsed_one(pipeline):
@@ -87,8 +87,8 @@ def test_a_parsed_warning_does_not_explain_a_separate_unparsed_one(pipeline):
 def test_unparsed_may_contain_flag_keeps_the_contradiction():
     from scoring_input_contract import gluten_free_claim_contradicted
     milk = [{"allergen_id": "ALLERGEN_MILK", "presence_type": "facility_warning"}]
-    assert gluten_free_claim_contradicted(milk, True, [], unparsed_may_contain=True) is True
-    assert gluten_free_claim_contradicted(milk, True, [], unparsed_may_contain=False) is False
+    assert gluten_free_claim_contradicted(milk, [], unparsed_may_contain=True) is True
+    assert gluten_free_claim_contradicted(milk, [], unparsed_may_contain=False) is False
 
 
 def test_a_parsed_sentence_merged_into_another_hit_is_not_unparsed():

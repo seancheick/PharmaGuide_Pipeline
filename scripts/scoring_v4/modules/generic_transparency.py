@@ -28,6 +28,7 @@ from scoring_input_contract import (
     _positive_quantity,
     dose_disclosure_status,
     get_scoring_ingredients,
+    UNREAD_MAY_CONTAIN_CONFLICT,
     gluten_free_claim_contradicted,
     has_source_printed_amount,
     is_nutrition_fact_declaration,
@@ -230,7 +231,10 @@ def _score_b2_false_allergen_claim_penalty(product: Dict[str, Any]) -> Tuple[flo
         raw = max((seen.get(group, 0.0) for group in matched_groups), default=0.0)
         if raw == 0.0:
             raw = B2_CAP
-    elif claim_groups and bool(compliance.get("has_may_contain_warning", False)):
+    elif "allergen" in claim_groups and bool(compliance.get("has_may_contain_warning", False)):
+        # A generic allergen-free claim is contradicted by any warning; a
+        # specific free-from claim only by its own group (matched above) or an
+        # unread may-contain statement (UNREAD_MAY_CONTAIN_CONFLICT, a conflict).
         raw = B2_CAP
 
     return _clamp(0.0, B2_CAP, raw), {
@@ -276,7 +280,8 @@ def _derive_claim_validations(
             )
         )
         gluten_valid = gluten_claim and not gluten_free_claim_contradicted(
-            allergen_hits, has_may_contain, conflicts
+            allergen_hits, conflicts,
+            unparsed_may_contain=_norm_text(UNREAD_MAY_CONTAIN_CONFLICT) in conflicts,
         )
     else:
         gluten_valid = bool(explicit_gluten)

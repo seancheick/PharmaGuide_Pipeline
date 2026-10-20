@@ -97,32 +97,63 @@ _ROUTE_SCORING_ROWS_CACHE_KEY = "__scoring_input_contract_route_rows_cache"
 GLUTEN_GRAIN_ALLERGEN_IDS = frozenset({"ALLERGEN_WHEAT", "ALLERGEN_RYE", "ALLERGEN_BARLEY"})
 _CROSS_CONTACT_PRESENCE = frozenset({"may_contain", "facility_warning"})
 
+# Free-from claim group (cert_claim_rules "allergen_free:<group>") -> the
+# allergens whose source (ingredient, "contains") or cross-contact (may contain,
+# facility) contradicts it. A barley or rye *ingredient* does not contradict a
+# gluten-free claim, as before: that is the open 21 CFR 101.91 question on
+# processed grasses and malt.
+FREE_FROM_CLAIM_ALLERGENS: Dict[str, Tuple[frozenset, frozenset]] = {
+    "gluten": (frozenset({"ALLERGEN_WHEAT"}), GLUTEN_GRAIN_ALLERGEN_IDS),
+    "gluten_certified": (frozenset({"ALLERGEN_WHEAT"}), GLUTEN_GRAIN_ALLERGEN_IDS),
+    "dairy": (frozenset({"ALLERGEN_MILK"}),) * 2,
+    "soy": (frozenset({"ALLERGEN_SOY"}),) * 2,
+    "nut": (frozenset({"ALLERGEN_TREE_NUTS", "ALLERGEN_PEANUTS"}),) * 2,
+    "peanut": (frozenset({"ALLERGEN_PEANUTS"}),) * 2,
+    "egg": (frozenset({"ALLERGEN_EGGS"}),) * 2,
+    "shellfish": (frozenset({"ALLERGEN_CRUSTACEANS"}),) * 2,
+    "yeast": (frozenset(), frozenset()),
+}
+
+# Recorded in compliance_data.conflicts when a free-from claim meets a
+# "may contain"/"shared equipment" statement the allergen parser reads no
+# allergen from: the scorer cannot run the parser, so this is how it learns.
+UNREAD_MAY_CONTAIN_CONFLICT = "allergen-free claim conflicts with an unread may-contain warning"
+
+
+def free_from_claim_contradiction(
+    group: str, allergen_hits: Any, unparsed_may_contain: bool = False,
+) -> Optional[str]:
+    """How label evidence contradicts a free-from claim of ``group``, if it does.
+
+    ``"allergen_conflict"``: a source of the group's own allergen.
+    ``"may_contain_warning"``: cross-contact with it, or a may-contain
+    statement no parser read (which may name it). A warning that names only
+    other allergens ("a facility that also processes fish") is no
+    contradiction of a dairy- or gluten-free claim.
+    """
+    sources, cross_contact = FREE_FROM_CLAIM_ALLERGENS.get(group, (frozenset(), frozenset()))
+    may_contain = False
+    for hit in allergen_hits or []:
+        if not isinstance(hit, dict):
+            continue
+        allergen_id = hit.get("allergen_id")
+        if hit.get("presence_type") in _CROSS_CONTACT_PRESENCE:
+            may_contain = may_contain or allergen_id in cross_contact
+        elif allergen_id in sources:
+            return "allergen_conflict"
+    if may_contain or unparsed_may_contain:
+        return "may_contain_warning"
+    return None
+
 
 def gluten_free_claim_contradicted(
-    allergen_hits: Any, has_may_contain_warning: Any, conflicts: Any,
-    unparsed_may_contain: bool = False,
+    allergen_hits: Any, conflicts: Any, unparsed_may_contain: bool = False,
 ) -> bool:
-    """Whether label evidence contradicts a gluten-free claim.
-
-    A detected gluten/wheat conflict, or cross-contact with a gluten grain,
-    does. A may-contain or facility warning that names only other allergens
-    ("a facility that also produces products that contain milk") does not.
-    A may-contain signal that no parsed warning explains still does, since
-    the unparsed text may name a gluten grain: with no parsed cross-contact
-    hit at all, or when the caller found a "may contain"/"shared equipment"
-    sentence the allergen parser reads no allergen from.
-    """
-    if unparsed_may_contain:
-        return True
+    """Whether label evidence contradicts a gluten-free claim: a recorded
+    gluten/wheat conflict or ``free_from_claim_contradiction("gluten", ...)``."""
     if any("gluten" in str(c).lower() or "wheat" in str(c).lower() for c in conflicts or []):
         return True
-    cross = [
-        hit for hit in allergen_hits or []
-        if isinstance(hit, dict) and hit.get("presence_type") in _CROSS_CONTACT_PRESENCE
-    ]
-    if any(hit.get("allergen_id") in GLUTEN_GRAIN_ALLERGEN_IDS for hit in cross):
-        return True
-    return bool(has_may_contain_warning) and not cross
+    return free_from_claim_contradiction("gluten", allergen_hits, unparsed_may_contain) is not None
 
 
 def normalize_product_evidence_scope(value: Any) -> str:

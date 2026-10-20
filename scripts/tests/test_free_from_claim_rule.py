@@ -1,0 +1,122 @@
+"""A free-from claim is contradicted only by its own allergen group.
+
+Audit of #187 (2026-10-20): Transparency B2
+(generic_transparency._score_b2_false_allergen_claim_penalty, shared by the
+probiotic, omega and multi/prenatal modules) took 2 points for any free-from
+claim plus any may-contain warning, so 328751 (gluten-free, may contain fish
+and crustaceans) and 326701 (dairy/gluten/soy-free, fish facility) were
+penalized; claim evidence and the app's gluten-free flag (compliance
+gluten_free -> core is_gluten_free) used the same global signal. One rule,
+scoring_input_contract.free_from_claim_contradiction, now decides per claim
+group: a source or cross-contact hit of that group, or a may-contain sentence
+no parser read. Gluten cross-contact counts wheat, rye and barley (21 CFR
+101.91(a)(1)); a barley or rye ingredient is left as on main (open 101.91
+question for Sean).
+"""
+
+import json
+from pathlib import Path
+
+import pytest
+
+FIXTURES = Path(__file__).parent / "fixtures"
+
+
+@pytest.fixture(scope="module")
+def run():
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    from enrich_supplements_v3 import SupplementEnricherV3
+    from scoring_v4.scored_artifact import build_scored_artifact
+    normalizer, enricher = EnhancedDSLDNormalizer(), SupplementEnricherV3()
+
+    def _run(pid, extra_statements=(), replace=None):
+        raw = json.loads((FIXTURES / f"gluten_claim_{pid}_raw.json").read_text(encoding="utf-8"))
+        statements = list(raw.get("statements") or [])
+        if replace:
+            old, new = replace
+            statements = [dict(s, notes=(s.get("notes") or "").replace(old, new)) for s in statements]
+        raw["statements"] = statements + [{"type": "Precautions", "notes": t} for t in extra_statements]
+        enriched, _ = enricher.enrich_product(normalizer.normalize_product(raw))
+        transparency = build_scored_artifact(enriched)["_v4_module_breakdown"]["dimensions"]["transparency"]
+        return enriched, transparency
+
+    return _run
+
+
+def _b2(transparency):
+    return transparency["penalties"].get("B2_false_allergen_free_claim") or 0.0
+
+
+def _evidence(enriched, group):
+    return [ev for ev in enriched["compliance_data"]["evidence_based"]["allergen_free_claims"]
+            if ev.get("dedupe_key") == f"allergen_free:{group}"]
+
+
+def test_other_allergen_cross_contact_does_not_cost_b2(run):
+    # 328751: gluten-free claim; "may contain" fish and crustaceans only.
+    enriched, transparency = run("328751")
+    assert _b2(transparency) == 0.0
+    assert transparency["score"] == pytest.approx(10.0)
+
+
+def test_fish_facility_keeps_a_dairy_free_claim(run):
+    # 326701: dairy-, gluten- and soy-free claims; "facility that also processes fish".
+    enriched, transparency = run("326701")
+    assert _b2(transparency) == 0.0
+    assert enriched["compliance_data"]["dairy_free"] is True
+    assert all(ev["score_eligible"] for ev in _evidence(enriched, "dairy"))
+
+
+def test_milk_facility_still_voids_a_dairy_free_claim(run):
+    # 326701 with its fish facility statement changed to milk.
+    enriched, transparency = run("326701", replace=("processes fish", "processes milk"))
+    assert _b2(transparency) == -2.0
+    assert enriched["compliance_data"]["dairy_free"] is False
+    assert {ev.get("ineligibility_reason") for ev in _evidence(enriched, "dairy")} == {"may_contain_warning"}
+
+
+def test_real_milk_facility_and_dairy_free_claim_keeps_its_penalty(run):
+    # 218190: "produced in a facility that also handles dairy ingredients", claims Dairy Free.
+    enriched, transparency = run("218190")
+    assert _b2(transparency) == -2.0
+    assert enriched["claim_gluten_free_validated"] is True
+
+
+def test_may_contain_barley_clears_the_gluten_free_flag(run):
+    enriched, _ = run("304605", extra_statements=("May contain barley.",))
+    assert enriched["compliance_data"]["gluten_free"] is False
+    assert enriched["claim_gluten_free_validated"] is False
+
+
+def test_unread_may_contain_still_costs_b2(run):
+    enriched, transparency = run("328751", extra_statements=("May contain traces of grain products.",))
+    assert _b2(transparency) == -2.0
+    assert enriched["claim_gluten_free_validated"] is False
+
+
+def test_generic_allergen_free_claim_is_contradicted_by_any_warning():
+    from scoring_v4.modules.generic_transparency import _score_b2_false_allergen_claim_penalty
+    product = {
+        "compliance_data": {"allergen_free_claims": ["allergen-free"], "has_may_contain_warning": True, "conflicts": []},
+        "allergen_hits": [{"allergen_id": "ALLERGEN_FISH", "presence_type": "facility_warning", "severity_level": "moderate"}],
+    }
+    assert _score_b2_false_allergen_claim_penalty(product)[0] > 0
+
+
+@pytest.mark.parametrize("group,hits,unread,expected", [
+    ("dairy", [("ALLERGEN_FISH", "facility_warning")], False, None),
+    ("dairy", [("ALLERGEN_MILK", "facility_warning")], False, "may_contain_warning"),
+    ("dairy", [("ALLERGEN_MILK", "contains")], False, "allergen_conflict"),
+    ("gluten", [("ALLERGEN_BARLEY", "may_contain")], False, "may_contain_warning"),
+    ("gluten", [("ALLERGEN_BARLEY", "ingredient_list")], False, None),  # 101.91 question, unchanged
+    ("gluten", [("ALLERGEN_WHEAT", "ingredient_list")], False, "allergen_conflict"),
+    ("gluten", [("ALLERGEN_OATS", "may_contain")], False, None),
+    ("nut", [("ALLERGEN_PEANUTS", "facility_warning")], False, "may_contain_warning"),
+    ("egg", [("ALLERGEN_EGGS", "contains")], False, "allergen_conflict"),
+    ("soy", [], True, "may_contain_warning"),
+    ("yeast", [("ALLERGEN_MILK", "may_contain")], False, None),
+])
+def test_free_from_claim_rule(group, hits, unread, expected):
+    from scoring_input_contract import free_from_claim_contradiction
+    hit_dicts = [{"allergen_id": a, "presence_type": p} for a, p in hits]
+    assert free_from_claim_contradiction(group, hit_dicts, unparsed_may_contain=unread) == expected
