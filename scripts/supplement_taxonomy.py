@@ -34,7 +34,7 @@ from supplement_type_utils import (
     _ingredient_name,
 )
 from constants import CLEANER_NON_SCORABLE_ROLES
-from scoring_v4.route_features import B_COMPLEX_DISQUALIFY_CANONICALS
+from scoring_v4.route_features import B_COMPLEX_DISQUALIFY_CANONICALS, has_protein_product_intent
 from scoring_input_contract import (
     CLASSIFICATION_INPUT_CONTRACT,
     CLASSIFICATION_INPUT_SOURCE,
@@ -821,6 +821,20 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
         " ".join(str(product.get(k) or "") for k in ("product_name", "fullName", "bundleName"))
     )
 
+    # A protein powder's protein total is a Nutrition Facts row, never a scoring row, so
+    # it is absent from the rows above. The router's pair identifies the product: protein
+    # title intent plus declared Nutrition Facts protein grams. Neither alone suffices,
+    # and the macro row never becomes an active.
+    try:
+        declared_protein_g = float(
+            (product.get("nutrition_summary") or {}).get("protein_g") or 0
+        )
+    except (TypeError, ValueError):
+        declared_protein_g = 0.0
+    declared_protein_product = declared_protein_g > 0 and has_protein_product_intent(
+        " ".join(str(product.get(k) or "") for k in ("product_name", "fullName"))
+    )
+
     # Canonical ID sets
     cid_set = frozenset(canonical_ids)
     vitamin_ids = cid_set & _VITAMIN_CANONICAL_IDS
@@ -1117,6 +1131,13 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
         decision_code = "protein_name_and_identity"
         confidence = 0.9
         reasons.append(f"protein name+id signal: ids={sorted(cid_set & _PROTEIN_IDS)}")
+    elif declared_protein_product:
+        primary_type = "protein_powder"
+        decision_code = "declared_nutrition_protein_product"
+        confidence = 0.85
+        reasons.append(
+            f"protein title intent + declared Nutrition Facts protein {declared_protein_g:g} g"
+        )
 
     # --- Greens powder (name-driven, before multivitamin) ---
     # Fortified greens can carry vitamin/mineral/probiotic panels, but the
