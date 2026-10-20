@@ -2361,3 +2361,9 @@ Replay of 6 + 71 controls (all 10 forms-listing/dosed comma totals, 29262, 60 se
 skullcap liver, probiotics ×3), 0 removed; safety status unchanged; no new scorable row; 5 Transparency-only moves
 (B5 now sees the undisclosed sub-blend: 266599 50.4→41.0, 27804 59.9→52.0, 275039 81.0→78.2, 27312 71.0→68.6,
 275085 56.6→55.8); BHB salts resolve to BHB (Evidence unchanged at 0). Focused slice 2,510 passed.
+Fresh-context review: no corpus defect; latent fixes (fail-first): a no-forms comma row whose members all print
+amounts keeps the 259484 lift, and EPA/DHA-named comma totals stay with the omega rules (never a second fish oil).
+A first attempt narrowed the disclosed-EPA/DHA-child carve-out instead; the corpus hash showed it moved 4 real
+labels (179661, 180107, 315329, 82715: "Omega-3 EPA & DHA" 500–600 mg with undosed members, scored on main as a
+fish_oil row beside Fish Oil), so it was reverted. Whether that total should be a scorable fish_oil row is an
+omega-owner question, open. Final head's Clean output is identical to the replayed candidate (0/15,414).
