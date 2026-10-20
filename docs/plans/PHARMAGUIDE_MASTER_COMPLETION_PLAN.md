@@ -1,12 +1,24 @@
 # PharmaGuide master completion plan
 
-## Dashboard integration update — October 19
+## Post-run catalog qualification — October 19 (Codex)
+
+Sean's completed 37-brand plus submission run is preserved: 15,426 products, including 14 manual inputs; all 114 manifests and 174 payload hashes verified. No Clean, Enrich or Score rerun. Dashboard index refreshed with ingredients (38 partitions, 219,925 label rows); 53 golden products / 520 checks pass, with zero receipt or pillar-total mismatches.
+
+PR174 and PR177 are merged. They correct bound reference units, the canonical Facts serving display, paired release count/date, and missing-value rendering. Exact-source CI passed: 22,218 and 22,220 tests respectively, each with 192 declared skips and passing skip guards. Focused dashboard checks passed; no pipeline score or reference changed. App analysis and all 3,967 tests passed; seven actual final-candidate reader/widget cases passed.
+
+The isolated catalog `2026.10.19.220556` was assembled from frozen source `a469c5ee8`: all source/export/freshness gates and the final input-stability check passed, 15,426 core rows and blobs, no errors/skips/quarantines. Before/after binding diagnostics are identical. Sean explicitly approved the three exact folate-warning removals for 259789/75159/75293; the live/bundle comparison passes with those hash-bound approvals. No other safety transition is waived. Approval commit1586b4f0b is on main after exact-CI39334018250 passed22,248tests/192declared skips and all skip guards. The catalog is preserved locally, not published or imported into Flutter.
+
+**Source boundary:** other sessions subsequently merged Clean/Score changes through `fd51b5828` (PR175/176). All three stage code fingerprints differ from the completed run; reference fingerprints do not. The qualified candidate does not contain those changes. Do not restamp outputs, claim latest-main release readiness, or launch another run under Sean's no-rerun instruction. Publication also still needs image completion and its final checksum-bound safety comparison, live gates, and Flutter import/bundle commit. The release profile was deliberately stopped (exit143) after this source block was established; it is not a pass. Remaining full detail-record/live release checks must target the final source/image candidate. No full release clearance. Exact approvals, preservation and closeout evidence are recorded in the current LEDGER and `reports/postrun_20261019_final/README.md`.
+
+Owner: existing stage manifests/fingerprints, score_index projection/reader, canonical serving/reference data, candidate snapshot/export, catalog_diff approvals and app consumers — evidence: actual source fingerprints, fail-first tests, all-row parity, exact-hash catalog comparison and preserved reports. Will NOT create another scorer, clinical policy, public field/status, provenance exemption, fabricated approval or pipeline job.
+
+## Previous dashboard integration checkpoint — October 19
 
 PR172 is merged at `0e21f595f`; its exact head `ea3510b97` passes all four CI groups (39315838815). PR173 is merged at `8fb455e72` after exact-head `dcffb8cab` passed all four groups (39317164127). The rebased Trace retains the ingredient-match table, config-scoped peer context and unavailable-pillar guard. Independent focused dashboard validation: 114 passed. No actionable review comment or unresolved merge conflict remains.
 
 All Clean, Enrich and Score code/reference fingerprints equal Sean's active source `afa3f7bbd`. These dashboard changes do not require repeating his current pipeline. The primary checkout remains pinned during that run; its drafts/private submissions are unchanged. Completed feature branches are removed; active preview worktrees and screenshots are retained. After the current run exits, preserve drafts, synchronize the primary checkout, refresh the existing dashboard index including ingredients, then check freshness, reconciliation, golden results and real Product Trace. Full-catalog/release/app qualification remains separate; no new pipeline, release or IPA was started by this integration.
 
-## Current checkpoint — Evidence, blend identity and golden tests, October 19
+## Previous source checkpoint — Evidence, blend identity and golden tests, October 19
 
 Sean approved integrating the previously held 53-case golden branch. Candidate `a66141363` includes the Evidence and blend-identity work, audit corrections and latest dashboard main `2bf017ccd` (PR171). PR170 is merged at `7fcc065be`. Exact-source CI39307795403 passed all four groups: 22,191 tests and 192 declared skips, with every skip guard passing. Source is qualified; the catalog is not released. Sean owns the next operator run.
 
@@ -16,7 +28,7 @@ Sean approved integrating the previously held 53-case golden branch. Candidate `
 - [x] Independent review of all589retained raw stage/blob records and46completed-neutral references:93total-score,19tier and111assessment changes, with0route/quality-score-status/safety changes. Fourteen accepted manual controls unchanged;33rawcanaries and53golden/520checks pass. This is bounded evidence, not a new full catalog.
 - [x] Final local546passed/24declared optional-service skips and skip guard;85dashboard integration checks. The local artifact prerequisite is the explicitly diagnostic child-UL fixture, not a newly built catalog. Failed attempts remain recorded; no assertion or skip policy was waived.
 - [x] Whole-fast CI39307795403 on `a66141363` and authorized merge PR170 at `7fcc065be`; original Evidence, identity and golden heads retained in main.
-- [ ] Sean's authorized Clean→Enrich→Score pipeline-only run is in progress from afa3f7bbd; complete new-catalog parity/release/app checks after it finishes. The original38-per-stage stale census described the start state, not current progress. Do not launch another corpus job. No integration-agent pipeline, upload, Flutter import or IPA.
+- [x] Sean's Clean→Enrich→Score run from afa3f7bbd finished; its stage provenance, indexed receipts, isolated final-catalog parity and actual app consumer checks are verified. Publication is not complete; see the post-run checkpoint above for the subsequent-main source boundary and remaining release work. No integration-agent pipeline, upload, Flutter import or IPA.
 
 Owner: existing Evidence resolver/generic state, normalizer/identity, RDA eligibility, IQM/reference/canary and stage-manifest owners — evidence: matrix/glossary/callers, fail-first tests, source receipts and four-layer records. Will NOT create another scorer, registry, public field/status or clinical policy. Full evidence: `reports/evidence_blend_takeover_20261019/README.md`; execution register: LEDGER. Prior checkpoints below retain their original provenance.
 

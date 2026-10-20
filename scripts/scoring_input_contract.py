@@ -2373,23 +2373,34 @@ _ACTIVE_SCORING_INPUT_SCOPE: ContextVar[Optional[_ScoringInputScope]] = ContextV
 )
 
 
-def _scope_holding(product: Any) -> Optional[_ScoringInputScope]:
+def _scope_holding(product: Any, fields: Optional[tuple] = None) -> Optional[_ScoringInputScope]:
     scope = _ACTIVE_SCORING_INPUT_SCOPE.get()
     if scope is None or _ROUTE_SCORING_ROWS_CACHE_KEY in scope.product:
         # A product that arrives carrying route rows keeps the uncached path,
         # where classification swaps in its own rows for each call.
         return None
+    if fields is not None:
+        return scope if isinstance(product, Mapping) and all(
+            product.get(name, _NOT_IN_SCOPE) is scope.product.get(name, _NOT_IN_SCOPE)
+            for name in fields
+        ) else None
     return scope if scope.holds(product) else None
 
 
-def _scoped_view(product: Any, key: tuple, derive, copy_out):
+def scoped_product_view(product: Any, key: tuple, derive, copy_out, *, fields: Optional[tuple] = None):
     """Derive one view of the scoped product once per pass.
+
+    ``key`` names the view and every argument it depends on. Outside a scope,
+    or for any other input, ``derive`` simply runs. A view that reads only
+    some top-level ``fields`` names them: any input holding those very same
+    objects (for example ``{**product, "probiotic_data": ...}``) is then the
+    same input.
 
     Callers receive their own copy (``copy_out``) and the scope keeps a
     pristine one, so a caller editing its result cannot change what the next
     reader sees.
     """
-    scope = _scope_holding(product)
+    scope = _scope_holding(product, fields)
     if scope is None:
         return derive()
     cached = scope.cache.get(key, _NOT_IN_SCOPE)
@@ -4685,7 +4696,7 @@ def _route_is_sports_class(
 
 def _classify_route_module(product: Dict[str, Any]) -> tuple[str, str, List[str]]:
     """Canonical ScoringClassification v1 route decision."""
-    return _scoped_view(product, ("route_module",), lambda: _route_module_decision(product), deepcopy)
+    return scoped_product_view(product, ("route_module",), lambda: _route_module_decision(product), deepcopy)
 
 
 def _route_module_decision(product: Dict[str, Any]) -> tuple[str, str, List[str]]:
@@ -5949,7 +5960,7 @@ def build_scoring_classification(
     compatibility mode the route is derived from the current enriched blob by
     this contract unless a valid native-enrichment stamp can be reused.
     """
-    return _scoped_view(
+    return scoped_product_view(
         product,
         ("scoring_classification", route_module, classification_origin),
         lambda: _build_scoring_classification(
@@ -6532,7 +6543,7 @@ def classify_ingredient_roles(
     if rows is None:
         # Caller-built ``rows`` are not part of the scoped input, so only the
         # product's own scoring rows are reused within a pass.
-        return _scoped_view(
+        return scoped_product_view(
             product,
             ("ingredient_roles", module, materiality_only),
             lambda: _classify_rows(product, module, None, materiality_only),

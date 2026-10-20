@@ -1,0 +1,73 @@
+subject rows covered by a fired rule: 52884
+subject rows with NO warning from their rule: 2169 in 1371 products
+  1128 rows  974 products  fiber
+   180 rows  172 products  omega_3
+   179 rows  178 products  vitamin_d
+   170 rows  170 products  iron
+    88 rows   88 products  vitamin_a
+    80 rows   80 products  calcium
+    73 rows   73 products  vitamin_c
+    57 rows   57 products  potassium
+    48 rows   48 products  probiotics
+    35 rows   35 products  turmeric
+    27 rows   27 products  l_arginine
+    19 rows   19 products  green_tea_extract
+    13 rows   13 products  olive_leaf
+     8 rows    8 products  schisandra_berry
+     7 rows    7 products  resveratrol
+     6 rows    6 products  coq10
+     5 rows    5 products  chondroitin
+     5 rows    4 products  saw_palmetto
+     5 rows    5 products  fish_oil
+     4 rows    4 products  lions_mane
+     4 rows    4 products  curcumin
+     3 rows    3 products  caffeine
+     3 rows    3 products  aloe_vera
+     3 rows    3 products  quercetin
+     3 rows    3 products  ginseng
+     3 rows    3 products  creatine_monohydrate
+     2 rows    2 products  yerba_mate
+     2 rows    2 products  andrographis
+     2 rows    2 products  cinnamon
+     1 rows    1 products  sodium
+by (subject, enricher reason, disposition):
+   906 ('fiber', 'excluded_nutrition_fact', 'label_context')
+   179 ('omega_3', 'quality_map_match', 'scored')
+   179 ('vitamin_d', 'no_dose_evidence', 'scored')
+   170 ('iron', 'no_dose_evidence', 'scored')
+   159 ('fiber', 'nested_under_non_therapeutic_parent', 'scored')
+    77 ('calcium', 'no_dose_evidence', 'scored')
+    72 ('vitamin_c', 'no_dose_evidence', 'scored')
+    70 ('vitamin_a', 'no_dose_evidence', 'scored')
+    56 ('potassium', 'no_dose_evidence', 'scored')
+    45 ('probiotics', 'nested_under_non_therapeutic_parent', 'scored')
+    33 ('fiber', 'quality_map_match', 'scored')
+    30 ('fiber', 'blend_header_total_weight_only', 'label_context')
+    27 ('l_arginine', 'nested_under_non_therapeutic_parent', 'scored')
+    15 ('turmeric', 'quality_map_match', 'scored')
+    13 ('vitamin_a', 'daily_value_no_amount', 'label_context')
+    13 ('olive_leaf', 'nested_under_non_therapeutic_parent', 'scored')
+    12 ('turmeric', 'botanical_identity', 'scored')
+    10 ('green_tea_extract', 'botanical_identity', 'scored')
+     8 ('schisandra_berry', 'nested_under_non_therapeutic_parent', 'scored')
+     7 ('turmeric', 'blend_header_total_weight_only', 'label_context')
+     7 ('resveratrol', 'fruit', 'scored')
+     6 ('green_tea_extract', 'nested_under_non_therapeutic_parent', 'scored')
+     6 ('coq10', 'blend_header_total_weight_only', 'label_context')
+     5 ('chondroitin', 'blend_header_total_weight_only', 'label_context')
+     4 ('vitamin_a', 'nested_under_non_therapeutic_parent', 'scored')
+     3 ('caffeine', 'blend_header_total_weight_only', 'label_context')
+     3 ('probiotics', 'blend_header_total_weight_only', 'label_context')
+     3 ('aloe_vera', 'nested_under_non_therapeutic_parent', 'scored')
+     3 ('fish_oil', 'carrier_oil', 'scored')
+     3 ('quercetin', 'blend_header_total_weight_only', 'label_context')
+     3 ('calcium', 'quality_map_match', 'scored')
+     3 ('ginseng', 'blend_header_total_weight_only', 'label_context')
+     3 ('creatine_monohydrate', 'blend_header_total_weight_only', 'label_context')
+     3 ('lions_mane', 'active_pending_relocation', 'scored')
+     2 ('yerba_mate', 'nested_under_non_therapeutic_parent', 'scored')
+     2 ('andrographis', 'blend_header_total_weight_only', 'label_context')
+     2 ('saw_palmetto', 'blend_header_total_weight_only', 'label_context')
+     2 ('curcumin', 'blend_header_total_weight_only', 'scored')
+     2 ('fish_oil', 'blend_header_total_weight_only', 'label_context')
+     2 ('curcumin', 'blend_header_total_weight_only', 'label_context')

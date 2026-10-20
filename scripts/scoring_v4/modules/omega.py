@@ -14,9 +14,9 @@ Per `docs/plans/SCORING_V4_PROPOSAL.md` §4 (dimension weights) and §9
     Dose                25     P1.6.2 — EPA+DHA per-day bands (rescaled to /20
                                from scoring_config omega3_dose_bonus.bands);
                                no EPA:DHA ratio bonus since quality_score 1.2.0
-    Evidence            20     P1.6.3 — generic evidence pipeline with
-                               omega-specific canonicals (EPA/DHA/EPA+DHA)
-                               + indication_relevance (+5 at AHA CVD dose)
+    Evidence            20     P1.6.3 — reviewed INGR_OMEGA3 purpose records
+                               (evidence_resolver); EPA/DHA exposure gates
+                               applicability and adds no bonus
     Transparency        11     P1.6.5 — EPA/DHA disclosed 5 + form disclosed 3
                                + source disclosed 3, minus B2/B5/B6
     Core subtotal       81

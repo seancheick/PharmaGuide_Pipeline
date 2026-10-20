@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import asdict, dataclass, field
+from functools import lru_cache
 import re
 from typing import Any, Dict, Iterable, List, Optional
 
@@ -56,8 +57,14 @@ def _normalize_negative_match_text(text: Any) -> str:
     text makes ``orange (peel)`` comparable with ``orange peel`` without using
     fuzzy matching or erasing form qualifiers such as ``6+``.
     """
-    normalized = "" if text is None else str(text).lower()
-    normalized = normalized.translate(_SAFETY_PUNCT_TRANSLATION)
+    return "" if text is None else _normalize_negative_match_str(str(text))
+
+
+@lru_cache(maxsize=65_536)
+def _normalize_negative_match_str(text: str) -> str:
+    # Pure function of an immutable string: the banned check re-normalizes
+    # the same label texts and curated terms thousands of times per product.
+    normalized = text.lower().translate(_SAFETY_PUNCT_TRANSLATION)
     normalized = re.sub(r"[()\[\]{}]", " ", normalized)
     normalized = re.sub(r"[\u00ae\u2122\u00a9]", " ", normalized)
     return re.sub(r"\s+", " ", normalized).strip()

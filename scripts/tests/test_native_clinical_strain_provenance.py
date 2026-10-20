@@ -600,3 +600,144 @@ def test_is2_scoring_provenance_uses_the_actual_digestive_family(quantity):
     rows = result['metadata']['evidence_assessment']['strain_assessments']
     assert rows[0]['scoring_source_pmids'] == ['31434935']
     assert '35249118' in rows[0]['source_pmids']  # Inventory keeps the other research.
+
+
+def _three_strain_label_with_a_postbiotic_parent():
+    strains = [
+        "Lactobacillus rhamnosus GG",
+        "Bifidobacterium breve SD-BR3-IT",
+        "Bifidobacterium longum subsp. infantis M-63",
+    ]
+    product = _owned_product(owner_name=strains[0], include_source_ref=True)
+    template = product["activeIngredients"][0]
+    product["activeIngredients"] = [
+        {**template, "name": name, "raw_source_path": f"ingredientRows[{i}]"}
+        for i, name in enumerate(strains)
+    ] + [{
+        # A nonlive parent governs its nested member: the same LGG name under
+        # it is not a live source row.
+        **template, "name": "EpiCor Postbiotic", "raw_source_path": "ingredientRows[3]",
+        "nestedIngredients": [{
+            **template, "name": strains[0], "raw_source_path": "ingredientRows[3].nestedRows[0]",
+        }],
+    }]
+    refs = [f"ingredientRows[{i}]" for i in range(3)] + ["ingredientRows[3].nestedRows[0]"]
+    ids = ["STRAIN_LGG", "STRAIN_BREVE_SD_BR3_IT", "STRAIN_INFANTIS_M63", "STRAIN_LGG"]
+    clinical = [
+        _clinical_row(strain=name, source_row_ref=ref, label_name=name, clinical_id=cid)
+        for name, ref, cid in zip(strains + strains[:1], refs, ids)
+    ]
+    return product, clinical
+
+
+def test_one_scoring_pass_reads_each_label_strain_row_once(monkeypatch):
+    """Strain identity and the live-use check are per-row facts of one label:
+    within a scoring pass every caller reuses them instead of rescanning the
+    whole label for each clinical record (Score-stage cost)."""
+    from scoring_input_contract import scoring_input_scope
+
+    product, clinical = _three_strain_label_with_a_postbiotic_parent()
+    owners, nonlive = studied_formulas._label_owners(product)
+    rows = list(studied_formulas._clinical_label_rows(product["activeIngredients"]))
+    assert len(owners) == len(rows) == 5
+    # The nonlive set names objects of the very list it is paired with.
+    assert nonlive and nonlive <= {id(owner) for owner in owners}
+
+    def read_everything(item):
+        # Evidence assessment reads the label through probiotic_data variants;
+        # this one's probiotic_data differs from the scoped product's.
+        variant = {**item, "probiotic_data": {"clinical_strains": clinical}}
+        assert variant["probiotic_data"] != item["probiotic_data"]
+        return (
+            studied_formulas.label_owned_strain_identities(item),
+            studied_formulas.label_owned_strain_identities(dict(item)),
+            studied_formulas.label_owned_strain_identities(variant),
+            [studied_formulas.clinical_strain_matches_source_row(source, strain, row)
+             for source in (item, variant)
+             for strain in clinical for row in rows],
+            [studied_formulas.probiotic_source_live_eligible(source, row)
+             for source in (item, variant) for row in rows],
+        )
+
+    uncached = read_everything(product)
+    matched = dict(zip(
+        [(strain["source_row_ref"], row["raw_source_path"]) for strain in clinical for row in rows],
+        uncached[3],
+    ))
+    assert matched[("ingredientRows[0]", "ingredientRows[0]")] is True
+    assert matched[("ingredientRows[3].nestedRows[0]", "ingredientRows[3].nestedRows[0]")] is False
+    assert uncached[4][:len(rows)] == [True, True, True, False, False]
+
+    nonlive_calls = candidate_calls = 0
+    original_nonlive = studied_formulas.has_nonlive_microbial_derivative_evidence
+    original_candidates = studied_formulas._label_strain_identity_candidates
+
+    def counted_nonlive(row):
+        nonlocal nonlive_calls
+        nonlive_calls += 1
+        return original_nonlive(row)
+
+    def counted_candidates(row):
+        nonlocal candidate_calls
+        candidate_calls += 1
+        return original_candidates(row)
+
+    monkeypatch.setattr(studied_formulas, "has_nonlive_microbial_derivative_evidence", counted_nonlive)
+    monkeypatch.setattr(studied_formulas, "_label_strain_identity_candidates", counted_candidates)
+    with scoring_input_scope(product):
+        scoped = read_everything(product)
+        # A different label row list is a different input.
+        relabelled = {**product, "activeIngredients": list(product["activeIngredients"])}
+        studied_formulas.label_owned_strain_identities(relabelled)
+
+    assert scoped == uncached
+    assert nonlive_calls == 2 * len(rows)
+    assert candidate_calls == 2 * len(rows)
+
+
+class _ReadRecordingProduct(dict):
+    """A product that records which top-level fields a reader touched."""
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.read: set = set()
+
+    def get(self, key, default=None):
+        self.read.add(key)
+        return super().get(key, default)
+
+    def __getitem__(self, key):
+        self.read.add(key)
+        return super().__getitem__(key)
+
+    def __contains__(self, key):
+        self.read.add(key)
+        return super().__contains__(key)
+
+    def __iter__(self):
+        self.read.add("<every field>")
+        return super().__iter__()
+
+    def keys(self):
+        self.read.add("<every field>")
+        return super().keys()
+
+    def items(self):
+        self.read.add("<every field>")
+        return super().items()
+
+    def values(self):
+        self.read.add("<every field>")
+        return super().values()
+
+
+def test_label_strain_views_read_only_active_ingredients():
+    """The per-pass strain views declare fields=("activeIngredients",), so a
+    probiotic_data variant reuses them. That holds only if nothing else on the
+    product feeds them."""
+    product, _ = _three_strain_label_with_a_postbiotic_parent()
+
+    for derive in (studied_formulas._label_owners, studied_formulas._label_owned_strain_identities):
+        recording = _ReadRecordingProduct(product)
+        derive(recording)
+        assert recording.read == {"activeIngredients"}, (derive.__name__, recording.read)

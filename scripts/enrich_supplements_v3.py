@@ -115,6 +115,7 @@ from scoring_input_contract import (
     is_nutrition_fact_declaration,
     get_scoring_ingredients,
     normalize_product_evidence_scope,
+    scoring_input_scope,
     source_linked_rows,
     _positive_quantity,
 )
@@ -189,6 +190,7 @@ from identity.safety import (
     hold_unapproved_policy_payload,
     safety_flag_from_banned_match,
     safety_jurisdiction_projection,
+    safety_normalize_text,
     safety_policy_status_for_role,
 )
 
@@ -1216,12 +1218,14 @@ class SupplementEnricherV3:
             return ingredients
         from evidence_resolver import evidence_owner_canonicals
 
-        try:
+        # A provider failure fails the product (enrich_product records it);
+        # falling back to raw actives would silently change Evidence.
+        # Both providers (and the route classification inside them) read
+        # this one local copy, which nothing mutates in between, so the
+        # scoring contract is built once here instead of ~16 times.
+        with scoring_input_scope(contract_product):
             subject_rows = get_evidence_subject_rows(contract_product)
             owners = evidence_owner_canonicals(contract_product)
-        except Exception as exc:  # pragma: no cover - defensive old artifacts.
-            self.logger.warning("evidence subject provider unavailable: %s", exc)
-            return ingredients
         covered = {
             str(row.get("canonical_id") or "").strip().lower()
             for row in ingredients
@@ -1268,17 +1272,13 @@ class SupplementEnricherV3:
         ):
             return flattened if include_ancestors else active_tree
 
-        try:
-            result = get_scoring_ingredients(
-                product,
-                strict=True,
-                allow_legacy_fallback=False,
-            )
-        except Exception as exc:  # pragma: no cover - defensive old artifacts.
-            self.logger.debug(
-                "strict source-owner projection unavailable for enrichment: %s", exc
-            )
-            return flattened if include_ancestors else active_tree
+        # A projection failure fails the product (enrich_product records it);
+        # the unjoined active tree would silently change every consumer.
+        result = get_scoring_ingredients(
+            product,
+            strict=True,
+            allow_legacy_fallback=False,
+        )
 
         scoring_rows = [
             row
@@ -1685,6 +1685,29 @@ class SupplementEnricherV3:
                 "CLAIMS HARDENING INCOMPLETE: cert_claim_rules missing third_party_programs. "
                 "Certification evidence will not be collected."
             )
+        self._compile_cert_claim_patterns(cert_rules)
+
+    def _compile_cert_claim_patterns(self, cert_rules: Dict) -> None:
+        """Compile every claim-rule pattern once; an invalid one stops the run.
+
+        A pattern that fails to compile would otherwise never match, silently
+        dropping that claim from every product.
+        """
+        for category, rules in (cert_rules.get('rules') or {}).items():
+            if not isinstance(rules, dict):
+                continue
+            for rule_key, rule in rules.items():
+                if rule_key.startswith('_') or not isinstance(rule, dict):
+                    continue
+                for kind in ('positive_patterns', 'negative_patterns'):
+                    for pattern in rule.get(kind, []):
+                        try:
+                            self._cached_compile_regex(pattern, re.I)
+                        except re.error as exc:
+                            raise ValueError(
+                                f"cert_claim_rules {category}.{rule.get('id', rule_key)} "
+                                f"{kind} has an invalid regex {pattern!r}: {exc}"
+                            ) from exc
 
     def _log_reference_versions(self):
         """Log versions of reference databases for auditability."""
@@ -3110,15 +3133,23 @@ class SupplementEnricherV3:
 
     _REGEX_CACHE_LIMIT = 50000
 
-    def _cached_compile_regex(self, pattern: str) -> re.Pattern:
-        """Compile a regex once per enricher instance."""
-        cached = self._regex_pattern_cache.get(pattern)
+    def _cached_compile_regex(self, pattern: str, flags: int = 0) -> re.Pattern:
+        """Compile a regex once per enricher instance.
+
+        Python's own ``re`` cache holds a few hundred patterns; enrichment
+        builds thousands per product, so that cache thrashes and recompiles.
+        """
+        cache = getattr(self, "_regex_pattern_cache", None)
+        if cache is None:
+            cache = self._regex_pattern_cache = {}
+        key = (pattern, flags)
+        cached = cache.get(key)
         if cached is not None:
             return cached
-        if len(self._regex_pattern_cache) >= self._REGEX_CACHE_LIMIT:
-            self._regex_pattern_cache.clear()
-        compiled = re.compile(pattern)
-        self._regex_pattern_cache[pattern] = compiled
+        if len(cache) >= self._REGEX_CACHE_LIMIT:
+            cache.clear()
+        compiled = re.compile(pattern, flags)
+        cache[key] = compiled
         return compiled
 
     def _cached_token_bounded_pattern(self, normalized_text: str) -> Optional[re.Pattern]:
@@ -3149,21 +3180,49 @@ class SupplementEnricherV3:
         if not ing_norm:
             return False, None
 
-        candidates = [target_name] + aliases
-        for candidate in candidates:
-            cand_norm = self._normalize_text(candidate)
-            if not cand_norm:
-                continue
+        for candidate, cand_norm, is_acronym, pattern in self._token_bounded_candidates(
+            target_name, aliases
+        ):
             if ing_norm == cand_norm:
                 return True, candidate
-            if self._is_short_acronym_alias(candidate):
+            if is_acronym:
                 if not self._literal_short_acronym_match(ingredient_name, candidate):
                     continue
-            pattern = self._cached_token_bounded_pattern(cand_norm)
             if pattern and pattern.search(ing_norm):
                 return True, candidate
 
         return False, None
+
+    def _token_bounded_candidates(
+        self, target_name: str, aliases: List[str]
+    ) -> Tuple[Tuple[str, str, bool, Optional[re.Pattern]], ...]:
+        """Per-entry candidate prep for _token_bounded_match, in match order.
+
+        Depends only on the curated target/aliases, never on the label, so
+        the banned check reuses it across every ingredient row.
+        """
+        cache = getattr(self, "_token_bounded_candidates_cache", None)
+        if cache is None:
+            cache = self._token_bounded_candidates_cache = {}
+        key = (target_name, tuple(aliases))
+        cached = cache.get(key)
+        if cached is not None:
+            return cached
+        prepared = []
+        for candidate in (target_name, *key[1]):
+            cand_norm = self._normalize_text(candidate)
+            if not cand_norm:
+                continue
+            prepared.append((
+                candidate,
+                cand_norm,
+                self._is_short_acronym_alias(candidate),
+                self._cached_token_bounded_pattern(cand_norm),
+            ))
+        if len(cache) >= self._REGEX_CACHE_LIMIT:
+            cache.clear()
+        cache[key] = tuple(prepared)
+        return cache[key]
 
     def _is_short_acronym_alias(self, alias: str) -> bool:
         """Return true for short acronym aliases that need literal bounds."""
@@ -3193,7 +3252,7 @@ class SupplementEnricherV3:
         """
         if not ingredient_name or not alias:
             return False
-        pattern = re.compile(
+        pattern = self._cached_compile_regex(
             r"(?<![A-Za-z0-9-])" + re.escape(str(alias)) + r"(?![A-Za-z0-9-])",
             re.IGNORECASE,
         )
@@ -5508,15 +5567,7 @@ class SupplementEnricherV3:
             for ing in ing_list or []:
                 if not isinstance(ing, dict):
                     continue
-                try:
-                    markers = self._compute_delivers_markers(ing)
-                except Exception as exc:
-                    self.logger.warning(
-                        "delivers_markers computation failed for canonical_id=%s: %s",
-                        ing.get("canonical_id"), exc,
-                    )
-                    markers = []
-                ing["delivers_markers"] = markers
+                ing["delivers_markers"] = self._compute_delivers_markers(ing)
 
         return {
             # Schema version for forward compatibility
@@ -10890,9 +10941,9 @@ class SupplementEnricherV3:
                 for term in terms
                 if str(term).strip()
             ]
-            pattern = re.compile(
+            pattern = self._cached_compile_regex(
                 r"(?<![a-z0-9])(?:" + "|".join(alternatives) + r")(?![a-z0-9])",
-                flags=re.IGNORECASE,
+                re.IGNORECASE,
             )
 
             # Keep every source location: a product-title match cannot erase
@@ -13004,6 +13055,64 @@ class SupplementEnricherV3:
                     "prevalence": allergen.get('prevalence', ''),
                 })
 
+    def _allergen_phrase_patterns(self, allergen_list: List[Dict]) -> List[Optional[re.Pattern]]:
+        """One whole-word alias pattern per allergen entry, built once per list."""
+        cached = getattr(self, "_allergen_phrase_pattern_cache", None)
+        if cached is not None and cached[0] is allergen_list:
+            return cached[1]
+        patterns: List[Optional[re.Pattern]] = []
+        for allergen in allergen_list:
+            terms = {
+                safety_normalize_text(term)
+                for term in [allergen.get('standard_name', ''), *(allergen.get('aliases') or [])]
+            }
+            terms.discard("")
+            patterns.append(re.compile(
+                r"(?<![a-z0-9])(?:"
+                + "|".join(re.escape(term) for term in sorted(terms, key=len, reverse=True))
+                + r")(?![a-z0-9])"
+            ) if terms else None)
+        self._allergen_phrase_pattern_cache = (allergen_list, patterns)
+        return patterns
+
+    @staticmethod
+    def _allergen_label_text_match(
+        phrase_pattern: re.Pattern, negative_terms: List[Any], name: str, forms: List[str],
+    ) -> Optional[str]:
+        """The row name or form that names this allergen, or None.
+
+        A negative term that itself contains an alias ("milk thistle",
+        "coconut milk") cancels only the alias span it overlaps, so "Coconut
+        Milk & Whey Protein" still names milk. Any other term ("pollen",
+        "mannitol", "highly refined") describes the text it is in; in the row
+        name it also covers the forms ("Mannitol" from "Wheat"). Explicit
+        negation in the same text ("Non-Dairy", "Soy-Free") is not a source.
+        """
+        phrase_terms, context_terms = [], []
+        for item in negative_terms or []:
+            term = safety_normalize_text(item.get("term") if isinstance(item, dict) else item)
+            if term:
+                (phrase_terms if phrase_pattern.search(term) else context_terms).append(term)
+        name_is_context = any(term in safety_normalize_text(name) for term in context_terms)
+        for index, raw in enumerate([name, *forms]):
+            text = safety_normalize_text(raw)
+            if any(term in text for term in context_terms) or (index and name_is_context):
+                continue
+            # A phrase also covers the botanical synonym that follows it:
+            # "Rye flower (Secale cereale) extract".
+            covered = [
+                (m.start(), m.end())
+                for term in phrase_terms
+                for m in re.finditer(re.escape(term) + r"(?:\s*\([^)]*\))?", text)
+            ]
+            for match in phrase_pattern.finditer(text):
+                if any(start < match.end() and match.start() < end for start, end in covered):
+                    continue
+                if norm_module.is_negated_match_phrase(text, match.group(0), spaced_free=True):
+                    continue
+                return raw
+        return None
+
     def _check_allergens(self, ingredients: List[Dict], product: Dict) -> Dict:
         """
         P0.1: Check for allergens with presence_type and precedence.
@@ -13027,22 +13136,41 @@ class SupplementEnricherV3:
         label_allergens = self._extract_allergen_presence_from_text(product)
         all_found.extend(label_allergens)
 
-        # Source 2: Ingredient list
+        # Source 2: Ingredient list. Besides an exact name, an alias counts as a
+        # whole-word phrase in the row's own label text: its name or forms
+        # ("Whey Protein Isolate", "Omega-3" with form "Fish Oil"). standardName
+        # is the canonical identity, not label evidence (algal omega-3 rows
+        # carry fish_oil), so it matches only exactly. An entry's
+        # match_rules.negative_match_terms vetoes reviewed non-allergen phrases
+        # ("milk thistle") and FDA-exempt highly refined oils.
+        phrase_patterns = self._allergen_phrase_patterns(allergen_list)
         for ingredient in ingredients:
             ing_name = ingredient.get('name', '')
             std_name = ingredient.get('standardName', '') or ing_name
+            form_names = [
+                (form.get('name') if isinstance(form, dict) else form) or ''
+                for form in ingredient.get('forms') or []
+            ]
 
-            for allergen in allergen_list:
+            for allergen, phrase_pattern in zip(allergen_list, phrase_patterns):
                 allergen_name = allergen.get('standard_name', '')
                 allergen_aliases = allergen.get('aliases', [])
 
-                if self._exact_match(ing_name, allergen_name, allergen_aliases) or \
-                   self._exact_match(std_name, allergen_name, allergen_aliases):
+                source_text = ing_name if (
+                    self._exact_match(ing_name, allergen_name, allergen_aliases)
+                    or self._exact_match(std_name, allergen_name, allergen_aliases)
+                ) else phrase_pattern and self._allergen_label_text_match(
+                    phrase_pattern,
+                    (allergen.get('match_rules') or {}).get('negative_match_terms', []),
+                    ing_name,
+                    form_names,
+                )
+                if source_text:
 
-                    # NEVER apply negation to structured ingredient-list matches.
-                    # If "Milk Protein" is in the ingredient list, it IS an allergen
-                    # regardless of any "dairy-free" claim in marketing text.
-                    # Negation applies only to label statements (_parse_allergen_statement).
+                    # NEVER let a label claim negate a structured ingredient
+                    # row: if "Milk Protein" is in the ingredient list, it IS an
+                    # allergen regardless of any "dairy-free" marketing text.
+                    # Only the row's own wording ("Non-Dairy Creamer") is read.
 
                     all_found.append({
                         "allergen_id": allergen.get('id', ''),
@@ -13050,7 +13178,9 @@ class SupplementEnricherV3:
                         "ingredient": ing_name,
                         "presence_type": "ingredient_list",
                         "source": "ingredient_list",
-                        "evidence": f"Ingredient: {ing_name}",
+                        "evidence": f"Ingredient: {ing_name}" + (
+                            "" if source_text == ing_name else f" (from {source_text})"
+                        ),
                         "matched_text": ing_name,
                         "severity_level": allergen.get('severity_level', 'low'),
                         "regulatory_status": allergen.get('regulatory_status', ''),
@@ -13327,20 +13457,17 @@ class SupplementEnricherV3:
         """
         # 1. Check positive patterns
         positive_match = None
+        # Patterns are validated when the rules load; an invalid one raises.
         for i, pattern in enumerate(rule.get('positive_patterns', [])):
-            try:
-                match = re.search(pattern, text, re.I)
-                if match:
-                    positive_match = {
-                        'text': match.group(),
-                        'start': match.start(),
-                        'end': match.end(),
-                        'pattern_id': f"{rule.get('id', 'UNKNOWN')}_positive_{i}"
-                    }
-                    break
-            except re.error as e:
-                self.logger.warning(f"Invalid regex pattern in rule {rule.get('id')}: {e}")
-                continue
+            match = self._cached_compile_regex(pattern, re.I).search(text)
+            if match:
+                positive_match = {
+                    'text': match.group(),
+                    'start': match.start(),
+                    'end': match.end(),
+                    'pattern_id': f"{rule.get('id', 'UNKNOWN')}_positive_{i}"
+                }
+                break
 
         if not positive_match:
             return None  # No claim found
@@ -13373,18 +13500,15 @@ class SupplementEnricherV3:
             'negation_pattern_id': None
         }
         for j, pattern in enumerate(rule.get('negative_patterns', [])):
-            try:
-                neg_match = re.search(pattern, text, re.I)
-                if neg_match:
-                    negation = {
-                        'negated': True,
-                        'negation_match_text': neg_match.group(),
-                        'negation_source_field': source_field,
-                        'negation_pattern_id': f"{rule.get('id', 'UNKNOWN')}_negative_{j}"
-                    }
-                    break
-            except re.error:
-                continue
+            neg_match = self._cached_compile_regex(pattern, re.I).search(text)
+            if neg_match:
+                negation = {
+                    'negated': True,
+                    'negation_match_text': neg_match.group(),
+                    'negation_source_field': source_field,
+                    'negation_pattern_id': f"{rule.get('id', 'UNKNOWN')}_negative_{j}"
+                }
+                break
 
         # 4. Check required tokens if specified
         required_tokens = rule.get('required_tokens', [])
@@ -14041,17 +14165,13 @@ class SupplementEnricherV3:
         AND no scoring_blocked_reason will earn B4a points in the scorer.
         """
         # Lazy-load the resolver registry once per enricher instance.
+        # A malformed registry raises: an empty verified-program list would
+        # silently under-credit Verification on every product.
         if not hasattr(self, "_cert_registry_cache"):
-            try:
-                from cert_resolver import CertRegistry  # local import to avoid hard dep at module load
-                self._cert_registry_cache = CertRegistry.load()
-            except Exception as exc:  # registry missing or malformed → empty
-                self.logger.warning("cert_resolver unavailable: %s (verified_cert_programs will be empty)", exc)
-                self._cert_registry_cache = None
+            from cert_resolver import CertRegistry  # local import to avoid hard dep at module load
+            self._cert_registry_cache = CertRegistry.load()
 
         registry = self._cert_registry_cache
-        if registry is None:
-            return []
 
         from cert_resolver import discover_verified_programs, resolve  # local import (kept colocated with usage)
 
@@ -14416,59 +14536,54 @@ class SupplementEnricherV3:
         # Step 1: Collect detector blends (pattern-based)
         detector_blends = []
         if self.blend_detector:
-            try:
-                result = self.blend_detector.analyze_product(product)
-                for blend in result.blends_detected:
-                    if label_source_refs.get(blend.source_field) in source_only_preparations:
-                        continue
-                    detector_with_amounts = blend.ingredients_with_amounts or []
-                    detector_without_amounts = blend.ingredients_without_amounts or []
-                    detector_children = [
-                        {
-                            "name": item.get("name", ""),
-                            "amount": item.get("amount"),
-                            "unit": item.get("unit", "") or "",
-                        }
-                        for item in detector_with_amounts
-                    ] + [
-                        {
-                            "name": name,
-                            "amount": None,
-                            "unit": "",
-                        }
-                        for name in detector_without_amounts
-                    ]
-                    detector_blends.append({
-                        "name": blend.blend_name,
-                        "disclosure_level": blend.disclosure_level,
-                        "nested_count": blend.blend_ingredient_count,
-                        "total_weight": blend.blend_total_amount,
-                        "unit": blend.blend_total_unit or "",
-                        "hidden_count": len(detector_without_amounts),
+            # A detector failure fails the product (enrich_product records it);
+            # dropping its blends would silently skip the B5 penalty.
+            result = self.blend_detector.analyze_product(product)
+            for blend in result.blends_detected:
+                if label_source_refs.get(blend.source_field) in source_only_preparations:
+                    continue
+                detector_with_amounts = blend.ingredients_with_amounts or []
+                detector_without_amounts = blend.ingredients_without_amounts or []
+                detector_children = [
+                    {
+                        "name": item.get("name", ""),
+                        "amount": item.get("amount"),
+                        "unit": item.get("unit", "") or "",
+                    }
+                    for item in detector_with_amounts
+                ] + [
+                    {
+                        "name": name,
+                        "amount": None,
+                        "unit": "",
+                    }
+                    for name in detector_without_amounts
+                ]
+                detector_blends.append({
+                    "name": blend.blend_name,
+                    "disclosure_level": blend.disclosure_level,
+                    "nested_count": blend.blend_ingredient_count,
+                    "total_weight": blend.blend_total_amount,
+                    "unit": blend.blend_total_unit or "",
+                    "hidden_count": len(detector_without_amounts),
+                    "source_field": blend.source_field,
+                    "source_path": blend.source_field,
+                    "source_row_ref": label_source_refs.get(blend.source_field),
+                    "child_ingredients": detector_children,
+                    "sources": ["detector"],
+                    "evidence": {
+                        "blend_id": blend.blend_id,
+                        "matched_text": blend.matched_text,
                         "source_field": blend.source_field,
-                        "source_path": blend.source_field,
-                        "source_row_ref": label_source_refs.get(blend.source_field),
-                        "child_ingredients": detector_children,
-                        "sources": ["detector"],
-                        "evidence": {
-                            "blend_id": blend.blend_id,
-                            "matched_text": blend.matched_text,
-                            "source_field": blend.source_field,
-                            "risk_category": blend.risk_category,
-                            "severity_level": blend.severity_level,
-                            "amounts_present": blend.blend_amounts_present,
-                            "ingredients_with_amounts": blend.ingredients_with_amounts,
-                            "ingredients_without_amounts": blend.ingredients_without_amounts,
-                            "penalty_applicable": blend.penalty_applicable,
-                            "penalty_reason": blend.penalty_reason
-                        }
-                    })
-            except Exception as e:
-                self.logger.warning(
-                    f"ProprietaryBlendDetector failed for product "
-                    f"{product.get('dsld_id', 'unknown')}: {e} — "
-                    f"B5 blend penalty will NOT be applied"
-                )
+                        "risk_category": blend.risk_category,
+                        "severity_level": blend.severity_level,
+                        "amounts_present": blend.blend_amounts_present,
+                        "ingredients_with_amounts": blend.ingredients_with_amounts,
+                        "ingredients_without_amounts": blend.ingredients_without_amounts,
+                        "penalty_applicable": blend.penalty_applicable,
+                        "penalty_reason": blend.penalty_reason
+                    }
+                })
 
         # Step 2: Collect cleaning blends (indicator-based from proprietaryBlend flags)
         # Nested proprietary children should roll up to their parent blend to avoid
@@ -19031,10 +19146,13 @@ class SupplementEnricherV3:
     def _is_interaction_label_row(row: Dict) -> bool:
         """A recognized row the scorer skipped that still shows the ingredient
         is in the product: a blend child, or a top-level row with a positive
-        amount, a printed %DV or no amount stated (D1, D1c). Blend headers,
-        additives, markers, sources, specification limits and measured zeros
+        amount, a printed %DV or no amount stated (D1, D1c), or a blend header
+        that keeps a specific identity ("Coenzyme Q10 complex", "Seneactiv").
+        Additives, markers, sources, specification limits and measured zeros
         keep their own owners."""
         skip = row.get("skip_reason")
+        if skip == SKIP_REASON_BLEND_HEADER_WITH_WEIGHT:
+            return label_row_establishes_presence(row)
         if label_row_is_blend_child(row):
             return skip in (SKIP_REASON_NESTED_NON_THERAPEUTIC, SKIP_REASON_RECOGNIZED_NON_SCORABLE)
         return skip in (
@@ -19064,6 +19182,53 @@ class SupplementEnricherV3:
             for subject in interaction_subject_ids(canonical_id)
             for rule_id in cached[1].get(subject, ())
         )
+
+    @staticmethod
+    def _blend_headers_restated_inside(rows: List[Dict]) -> set:
+        """Paths of blend headers whose interaction subject (itself, family or
+        twin: "LAB4 Probiotics" over its strains) a row inside them, present on
+        the label, also answers to."""
+        headers = {
+            str(row["raw_source_path"]): set(interaction_subject_ids(row["canonical_id"]))
+            for row in rows
+            if row.get("skip_reason") == SKIP_REASON_BLEND_HEADER_WITH_WEIGHT
+            and row.get("canonical_id") and row.get("raw_source_path")
+        }
+        return {
+            path
+            for row in rows
+            for path, subjects in headers.items()
+            if str(row.get("raw_source_path") or "").startswith(path + ".")
+            and subjects & set(interaction_subject_ids(row.get("canonical_id")))
+            and label_row_establishes_presence(row)
+        }
+
+    def _blend_header_scope_row(self, header: Dict, label_row: Optional[Dict]) -> Dict:
+        """A blend header is never form-matched for scoring, but the forms its
+        label row declares still confirm a plant part for part-scoped rules:
+        "Stinging Nettle Root Extract" is not the leaf the glucose rule is about."""
+        label_row = label_row or {}
+        forms = label_row.get("forms") or (header.get("raw_taxonomy") or {}).get("forms") or []
+        match = self._match_quality_map(
+            header.get("raw_source_text") or header.get("name") or "",
+            header.get("standard_name"),
+            self.databases.get("ingredient_quality_map", {}),
+            cleaned_forms=forms,
+            cleaner_canonical_id=header.get("canonical_id"),
+            row_notes=label_row.get("notes"),
+        ) if forms else None
+        if (
+            not isinstance(match, dict)
+            or match.get("canonical_id") != header.get("canonical_id")
+            or not (match.get("form_id") or match.get("matched_forms"))
+        ):
+            return header
+        return {
+            **header,
+            "form_id": match.get("form_id"),
+            "matched_forms": match.get("matched_forms") or [],
+            "form_match_status": "mapped",
+        }
 
     def _interaction_registry_ids(self) -> Dict[str, set]:
         """Ids held by each registry a row can be an interaction subject of,
@@ -20148,7 +20313,13 @@ class SupplementEnricherV3:
             # sit in both lists; it is scanned once.
             scanned = {id(row) for row in ingredients}
             scanned_keys = {self._interaction_row_key(row) for row in ingredients}
-            skipped = []
+            # A header whose identity a row inside it restates leaves that row,
+            # with its own amount, the subject; any other header is scanned
+            # last, so it only adds what no other row already warns about.
+            restated_headers = self._blend_headers_restated_inside(
+                ingredients + [row for row in raw_ingredients + raw_skipped if isinstance(row, dict)]
+            )
+            skipped, deferred_headers = [], []
             for row in raw_ingredients + raw_skipped:
                 if not isinstance(row, dict) or id(row) in scanned:
                     continue
@@ -20158,11 +20329,18 @@ class SupplementEnricherV3:
                     continue
                 if subject_db != "ingredient_quality_map":
                     skipped.append(row)
-                elif self._is_interaction_label_row(row):
+                elif self._is_interaction_label_row(row) and (
+                    str(row.get("raw_source_path") or "") not in restated_headers
+                ):
                     key = self._interaction_row_key(row)
                     if key not in scanned_keys:
                         scanned_keys.add(key)
-                        skipped.append(row)
+                        (
+                            deferred_headers
+                            if row.get("skip_reason") == SKIP_REASON_BLEND_HEADER_WITH_WEIGHT
+                            else skipped
+                        ).append(row)
+            skipped += deferred_headers
             label_rows = {
                 id(row) for row in skipped
                 if (self._derive_interaction_subject_ref(row) or {}).get("db") == "ingredient_quality_map"
@@ -20231,10 +20409,12 @@ class SupplementEnricherV3:
         # with an IQM identity (7-keto DHEA, bitter orange citrus bioflavonoids)
         # still meets the rules authored on its safety record.
         safety_subjects_by_path: Dict[str, List[Tuple[str, str]]] = {}
+        label_rows_by_path: Dict[str, Dict] = {}
         for section_key in ("activeIngredients", "inactiveIngredients"):
             for label_row in enriched.get(section_key) or []:
                 if not isinstance(label_row, dict) or not label_row.get("raw_source_path"):
                     continue
+                label_rows_by_path.setdefault(label_row["raw_source_path"], label_row)
                 for flag in label_row.get("safety_flags") or []:
                     if isinstance(flag, dict) and flag.get("entry_id") and flag.get("source_db"):
                         safety_subjects_by_path.setdefault(label_row["raw_source_path"], []).append(
@@ -20257,6 +20437,8 @@ class SupplementEnricherV3:
                 all_ingredient_rows.append(("ingredients_skipped", row))
                 if id(row) in label_rows:
                     repeat_checked_rows.add(id(row))
+                if row.get("skip_reason") == SKIP_REASON_BLEND_HEADER_WITH_WEIGHT:
+                    continue
                 for marker_row in self._derived_marker_interaction_rows(row):
                     all_ingredient_rows.append(("derived_marker", marker_row))
                     if id(row) in label_rows:
@@ -20266,6 +20448,14 @@ class SupplementEnricherV3:
             subject = self._derive_interaction_subject_ref(ingredient)
             if not subject:
                 continue
+            # A blend header's amount is the blend's, never its named
+            # substance's dose (D1c): its dose rules read "amount unknown", and
+            # no marker is derived from it.
+            dose_row = (
+                {**ingredient, "quantity": None}
+                if ingredient.get("skip_reason") == SKIP_REASON_BLEND_HEADER_WITH_WEIGHT
+                else ingredient
+            )
 
             # A vitamer also answers to rules authored on its family (vitamin
             # K1/K2 -> vitamin K) and a botanical to its IQM twin (garlic bulb
@@ -20292,7 +20482,12 @@ class SupplementEnricherV3:
             )
             scope_row = (
                 {**ingredient, "form_id": twin_form, "matched_forms": [], "form_match_status": "mapped"}
-                if twin_form else ingredient
+                if twin_form
+                else self._blend_header_scope_row(
+                    ingredient, label_rows_by_path.get(ingredient.get("raw_source_path"))
+                )
+                if ingredient.get("skip_reason") == SKIP_REASON_BLEND_HEADER_WITH_WEIGHT
+                else ingredient
             )
 
             for rule in matched_rules:
@@ -20318,7 +20513,7 @@ class SupplementEnricherV3:
                         thresholds=thresholds,
                         target_type="condition",
                         target_id=condition_id,
-                        ingredient=ingredient,
+                        ingredient=dose_row,
                         servings_per_day_max=servings_per_day_max,
                         base_severity=severity,
                         materiality=cond_rule.get("materiality"),
@@ -20328,13 +20523,13 @@ class SupplementEnricherV3:
                     min_effective_dose = cond_rule.get("min_effective_dose")
                     dose_floor_status = self._floor_status_for_emission(
                         self._evaluate_min_effective_dose(
-                            min_effective_dose, ingredient, servings_per_day_max
+                            min_effective_dose, dose_row, servings_per_day_max
                         ),
                         severity,
                     )
                     dose_decision = threshold_eval or self._evaluate_min_effective_dose_decision(
                         min_effective_dose,
-                        ingredient,
+                        dose_row,
                         servings_per_day_max,
                         severity,
                     )
@@ -20399,7 +20594,7 @@ class SupplementEnricherV3:
                         thresholds=thresholds,
                         target_type="drug_class",
                         target_id=drug_class_id,
-                        ingredient=ingredient,
+                        ingredient=dose_row,
                         servings_per_day_max=servings_per_day_max,
                         base_severity=severity,
                         materiality=drug_rule.get("materiality"),
@@ -20409,13 +20604,13 @@ class SupplementEnricherV3:
                     min_effective_dose = drug_rule.get("min_effective_dose")
                     dose_floor_status = self._floor_status_for_emission(
                         self._evaluate_min_effective_dose(
-                            min_effective_dose, ingredient, servings_per_day_max
+                            min_effective_dose, dose_row, servings_per_day_max
                         ),
                         severity,
                     )
                     dose_decision = threshold_eval or self._evaluate_min_effective_dose_decision(
                         min_effective_dose,
-                        ingredient,
+                        dose_row,
                         servings_per_day_max,
                         severity,
                     )
@@ -20452,7 +20647,7 @@ class SupplementEnricherV3:
                         thresholds=[threshold],
                         target_type="",
                         target_id="",
-                        ingredient=ingredient,
+                        ingredient=dose_row,
                         servings_per_day_max=servings_per_day_max,
                         base_severity=str(threshold.get("severity_if_not_met") or "informational").strip().lower(),
                     )

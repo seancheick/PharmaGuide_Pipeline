@@ -494,6 +494,60 @@
           "why": "left the catalog while showing BLOCKED"
         }
       ]
+    },
+    {
+      "reason": "Sean explicitly approved these three false folate-warning removals on October 19, 2026 after reviewing the actual catalog comparison: GNC 259789 and prenatals 75159/75293 each provide 1,700 mcg DFE against the same 1,700 mcg DFE limit, exactly 100%, not an exceedance. Correct native-folate/DFE reconciliation removes only the erroneous catalog UL warning; other nutrient warnings and personal-profile cautions remain governed by their existing owners. Approval is limited to these exact transitions and baseline/candidate hashes; no safety threshold or scoring policy changes.",
+      "approved_by": "Sean",
+      "date": "2026-10-19",
+      "baseline_sha256": "aa00384d450ac268b8921d5889f4a4e388183d4dcf2ed30b3146568a9ae1d850",
+      "candidate_sha256": "a1c8d6339406468ee1a9d5408f612b281ed5128aeb98608bfeb0e0c942a82328",
+      "changes": [
+        {
+          "dsld_id": "259789",
+          "from": {
+            "verdict": "CAUTION",
+            "tier": "Very good",
+            "score": 80.0
+          },
+          "to": {
+            "verdict": "NO_KNOWN_CATALOG_CONCERN",
+            "tier": "Very good",
+            "score": 82.0
+          },
+          "product_name": "Multivitamin Active",
+          "why": "safety: CAUTION \u2192 no safety warning"
+        },
+        {
+          "dsld_id": "75159",
+          "from": {
+            "verdict": "CAUTION",
+            "tier": "Very good",
+            "score": 86.0
+          },
+          "to": {
+            "verdict": "NO_KNOWN_CATALOG_CONCERN",
+            "tier": "Very good",
+            "score": 85.0
+          },
+          "product_name": "Prenatal Formula With DHA",
+          "why": "safety: CAUTION \u2192 no safety warning"
+        },
+        {
+          "dsld_id": "75293",
+          "from": {
+            "verdict": "CAUTION",
+            "tier": "Very good",
+            "score": 85.0
+          },
+          "to": {
+            "verdict": "NO_KNOWN_CATALOG_CONCERN",
+            "tier": "Very good",
+            "score": 84.0
+          },
+          "product_name": "Prenatal Formula With Iron",
+          "why": "safety: CAUTION \u2192 no safety warning"
+        }
+      ]
     }
   ]
 }

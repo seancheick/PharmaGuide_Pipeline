@@ -294,7 +294,6 @@ def test_metadata_names_the_engine_and_contract_is_complete() -> None:
     result = score_formulation(_product())
     assert result["phase"] == "P1.3.1b_formulation_complete"
     assert result["metadata"]["formulation_profile"] == "generic_iqm"
-    assert result["metadata"]["deferred_components"] == []
     assert result["max"] == 30.0
 
 

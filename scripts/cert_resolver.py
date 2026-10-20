@@ -255,7 +255,8 @@ def normalize_brand(text: str) -> str:
     return text
 
 
-def _brand_tokens(brand_norm: str) -> set[str]:
+@lru_cache(maxsize=65_536)
+def _brand_tokens(brand_norm: str) -> frozenset[str]:
     """Meaningful normalized brand tokens for registry matching.
 
     Short substring matches are unsafe for cert registries: e.g. ``LTH`` can
@@ -263,9 +264,12 @@ def _brand_tokens(brand_norm: str) -> set[str]:
     Token-set subset matching keeps accepted aliases like ``Thorne`` →
     ``Thorne Research`` without letting unrelated brands inherit SKU certs.
     """
-    return {token for token in (brand_norm or "").split() if len(token) >= 2}
+    return frozenset(token for token in (brand_norm or "").split() if len(token) >= 2)
 
 
+# Pure function of two normalized strings, asked once per registry record for
+# every claimed program of every product.
+@lru_cache(maxsize=262_144)
 def _brands_likely_same(product_brand_norm: str, registry_brand_norm: str) -> bool:
     if not product_brand_norm or not registry_brand_norm:
         return False
@@ -908,17 +912,22 @@ def _check_override(
     return None, frozenset(rejected_record_ids)
 
 
+@lru_cache(maxsize=65_536)
+def _split_tokens(text: str) -> tuple[str, ...]:
+    return tuple(text.split())
+
+
 def _trade_designation_brand_match(brand_norm: str, record: dict[str, Any]) -> bool:
     """Recognize a consumer brand printed in an authoritative trade designation.
 
     This is not a manufacturer alias. Product matching must additionally be
     exact and pass the existing material-identity guards before any credit.
     """
-    brand_tokens = brand_norm.split()
+    brand_tokens = _split_tokens(brand_norm)
     if not brand_tokens or record.get("scope") not in {"sku", "product_line"}:
         return False
     product = record.get("product", "")
-    if normalize_product(product).split()[:len(brand_tokens)] != brand_tokens:
+    if _split_tokens(normalize_product(product))[:len(brand_tokens)] != brand_tokens:
         return False
     for row in record.get("source_listing_rows", []) or []:
         designation = row.get("trade_designation", "")

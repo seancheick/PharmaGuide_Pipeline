@@ -458,7 +458,6 @@ def _assemble_score(result: ModuleResult) -> None:
             },
         },
         "production_score_before_clamp": round(raw_score_100, 4),
-        "production_score_clamped": False,
     }
     if penalty_relocations:
         result.metadata["penalty_relocations"] = penalty_relocations

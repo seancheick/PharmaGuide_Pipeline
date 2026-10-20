@@ -2501,11 +2501,7 @@ CREATE VIRTUAL TABLE IF NOT EXISTS products_fts USING fts5(
 """
 
 
-def dedup_by_upc(
-    conn,
-    detail_index: Dict[str, Any],
-    detail_blobs_dir: Optional[Path] = None,
-) -> Dict[str, Any]:
+def dedup_by_upc(conn) -> Dict[str, Any]:
     """Audit shared UPCs without guessing which physical bottle was scanned.
 
     A score, verdict, safety status, or DSLD id is not product identity. Two
@@ -2515,7 +2511,6 @@ def dedup_by_upc(
     name is retained for report compatibility; this operation is deliberately
     non-destructive.
     """
-    del detail_index, detail_blobs_dir
     c = conn.cursor()
 
     # Find all UPC groups with more than one product.
@@ -2569,10 +2564,6 @@ def dedup_by_upc(
             })
 
     return {
-        "upc_groups_deduped": 0,
-        "duplicates_removed": 0,
-        "orphan_blob_files_removed": 0,
-        "removed_ids_sample": [],
         "ambiguous_upc_groups": len(rows),
         "ambiguous_product_count": ambiguous_product_count,
         "ambiguous_groups_sample": ambiguous_groups,
@@ -10963,7 +10954,7 @@ def build_final_db(
     # ── UPC identity audit ──
     # Shared barcodes are retained for bottle confirmation. A score, verdict,
     # or safety status must never select which physical product the user has.
-    dedup_result = dedup_by_upc(conn, detail_index, Path(detail_dir))
+    dedup_result = dedup_by_upc(conn)
     if dedup_result["ambiguous_upc_groups"]:
         logger.info(
             "UPC identity audit: retained %d products across %d shared-barcode groups",
