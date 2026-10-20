@@ -246,6 +246,21 @@ def interaction_twin_form(source_db: Any, canonical_id: Any) -> str | None:
         return None
     return BOTANICAL_INTERACTION_TWIN_FORM.get(str(canonical_id or "").strip())
 
+# Constituent source: a botanical that is a principal source of an IQM
+# constituent answers to that constituent's interactions without taking its
+# identity (Sean, ADR-0005 amendment, 2026-10-19: Japanese knotweed keeps its
+# plant identity; a source-qualified relationship connects it to applicable
+# resveratrol warnings). Interaction lookup only: scoring credits the
+# constituent through botanical_marker_contributions only when a percentage is
+# declared. Japanese knotweed (Reynoutria japonica / Polygonum cuspidatum) root
+# and rhizome: one of the richest natural sources of resveratrol (PMID
+# 30901974), with resveratrol among its five major quantified constituents
+# (PMID 33388645) and highest in root and rhizome (PMID 16830819).
+BOTANICAL_CONSTITUENT_SOURCE: dict[str, str] = {
+    "japanese_knotweed": "resveratrol",
+}
+
+
 def _family_ids(canonical: str) -> list[str]:
     family = INTERACTION_SUBJECT_FAMILY.get(canonical)
     return [canonical, family] if family and family != canonical else [canonical]
@@ -270,6 +285,13 @@ def interaction_subject_refs(db: Any, canonical_id: Any) -> list[tuple[str, str]
     )
     if twin:
         refs += [("ingredient_quality_map", subject_id) for subject_id in _family_ids(twin)]
+    constituent = (
+        BOTANICAL_CONSTITUENT_SOURCE.get(canonical)
+        if source_db in ("botanical_ingredients", "standardized_botanicals")
+        else None
+    )
+    if constituent:
+        refs += [("ingredient_quality_map", subject_id) for subject_id in _family_ids(constituent)]
     return list(dict.fromkeys(refs))
 
 
@@ -282,7 +304,12 @@ def interaction_subject_ids(canonical_id: Any) -> list[str]:
     if not canonical:
         return []
     twin = BOTANICAL_INTERACTION_TWIN.get(canonical)
-    ids = _family_ids(canonical) + (_family_ids(twin) if twin else [])
+    constituent = BOTANICAL_CONSTITUENT_SOURCE.get(canonical)
+    ids = (
+        _family_ids(canonical)
+        + (_family_ids(twin) if twin else [])
+        + (_family_ids(constituent) if constituent else [])
+    )
     return list(dict.fromkeys(ids))
 
 

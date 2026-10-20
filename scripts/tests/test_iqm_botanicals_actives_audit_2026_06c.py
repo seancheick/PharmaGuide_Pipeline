@@ -68,10 +68,18 @@ def test_generic_atp_to_unspecified(iqm):
 
 
 def test_huzhang_source_off_trans_resveratrol(iqm):
-    trans = _al(iqm, "resveratrol", "trans-resveratrol")
-    uns = _al(iqm, "resveratrol", "resveratrol (unspecified)")
-    for a in ["hu zhang", "reynoutria japonica root extract"]:
-        assert a not in trans and a in uns
+    """Hu Zhang is the Polygonum cuspidatum root (PMID 33388645): a plant name, kept on the
+    japanese_knotweed entry, never on a resveratrol form (ADR-0005 amendment, 2026-10-19)."""
+    import json
+    from pathlib import Path
+
+    for form in ("trans-resveratrol", "resveratrol (unspecified)"):
+        aliases = _al(iqm, "resveratrol", form)
+        assert "hu zhang" not in aliases and "reynoutria japonica root extract" not in aliases
+    botanicals = json.loads((Path(__file__).resolve().parents[1] / "data" / "botanical_ingredients.json").read_text())
+    [knotweed] = [e for e in botanicals["botanical_ingredients"] if e["id"] == "japanese_knotweed"]
+    names = {a.lower() for a in knotweed["aliases"]}
+    assert {"hu zhang", "reynoutria japonica root extract"} <= names
 
 
 def test_generic_pc_to_unspecified(iqm):
