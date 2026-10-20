@@ -4,9 +4,9 @@
     "purpose": "interaction_alert_rules",
     "schema_version": "6.3.0",
     "last_updated": "2026-10-20",
-    "total_entries": 152,
+    "total_entries": 154,
     "structure_note": "One entry per ingredient (or per form-scoped variant). All conditions, drug classes, and dose thresholds for that ingredient are in one object. As of v6.0.0, every sub-rule (condition_rules[], drug_class_rules[], dose_thresholds[], pregnancy_lactation block) carries an explicit profile_gate predicate that consumers MUST evaluate against the user profile before firing the alert.",
-    "total_rules": 152,
+    "total_rules": 154,
     "flutter_top_level_key": "interaction_rules",
     "flutter_schema_version": "6.1.2",
     "v60_added_fields": {
@@ -23822,6 +23822,272 @@
       },
       "last_reviewed": "2026-10-07",
       "review_owner": "Source-content review; species-specific clinical interaction evidence remains unestablished"
+    },
+    {
+      "id": "RULE_BOTAN_PANAX_NOTOGINSENG_ANTIPLATELET",
+      "subject_ref": {
+        "db": "botanical_ingredients",
+        "canonical_id": "panax_notoginseng"
+      },
+      "condition_rules": [
+        {
+          "condition_id": "bleeding_disorders",
+          "severity": "monitor",
+          "evidence_level": "limited",
+          "mechanism": "Panax notoginseng saponins added to aspirin further inhibited platelet aggregation in a randomized trial of 42 people with coronary heart disease (bleeding was not measured), and a review of clopidogrel-herb interactions reports increased antiplatelet activity with notoginseng. Two case reports describe esophageal submucosal hematoma after notoginseng capsules; one involved a homemade mixture with hirudin, a known anticoagulant, so it cannot be attributed to notoginseng alone. The clinical significance for bleeding is not established.",
+          "action": "If you have a bleeding disorder, talk to your clinician before using Panax notoginseng.",
+          "sources": [
+            "https://pubmed.ncbi.nlm.nih.gov/33370633/",
+            "https://pubmed.ncbi.nlm.nih.gov/31471773/",
+            "https://pubmed.ncbi.nlm.nih.gov/39364700/",
+            "https://pubmed.ncbi.nlm.nih.gov/34307625/"
+          ],
+          "alert_headline": "Notoginseng — bleeding disorders",
+          "alert_body": "Notoginseng may affect platelet function. A bleeding risk is not established; if you have a bleeding disorder, talk to your clinician before using it.",
+          "informational_note": "Platelet effects come from small studies and case reports; clinical bleeding significance is not established.",
+          "profile_gate": {
+            "gate_type": "condition",
+            "requires": {
+              "conditions_any": [
+                "bleeding_disorders"
+              ],
+              "drug_classes_any": [],
+              "profile_flags_any": []
+            },
+            "excludes": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [],
+              "product_forms_any": [],
+              "nutrient_forms_any": []
+            },
+            "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "presence"
+        },
+        {
+          "condition_id": "surgery_scheduled",
+          "severity": "monitor",
+          "evidence_level": "limited",
+          "mechanism": "Panax notoginseng saponins added to aspirin further inhibited platelet aggregation in a randomized trial of 42 people with coronary heart disease (bleeding was not measured), and a review of clopidogrel-herb interactions reports increased antiplatelet activity with notoginseng. Two case reports describe esophageal submucosal hematoma after notoginseng capsules; one involved a homemade mixture with hirudin, a known anticoagulant, so it cannot be attributed to notoginseng alone. The clinical significance for bleeding is not established.",
+          "action": "Tell your surgeon you use Panax notoginseng before a scheduled procedure.",
+          "sources": [
+            "https://pubmed.ncbi.nlm.nih.gov/33370633/",
+            "https://pubmed.ncbi.nlm.nih.gov/31471773/",
+            "https://pubmed.ncbi.nlm.nih.gov/39364700/",
+            "https://pubmed.ncbi.nlm.nih.gov/34307625/"
+          ],
+          "alert_headline": "Notoginseng — before surgery",
+          "alert_body": "Notoginseng may affect platelet function. A bleeding risk is not established; tell your surgeon you use it before a scheduled procedure.",
+          "informational_note": "Platelet effects come from small studies and case reports; clinical bleeding significance is not established.",
+          "profile_gate": {
+            "gate_type": "profile_flag",
+            "requires": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [
+                "surgery_scheduled"
+              ]
+            },
+            "excludes": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [],
+              "product_forms_any": [],
+              "nutrient_forms_any": []
+            },
+            "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "presence"
+        }
+      ],
+      "drug_class_rules": [
+        {
+          "drug_class_id": "antiplatelets",
+          "severity": "monitor",
+          "evidence_level": "limited",
+          "mechanism": "Panax notoginseng saponins added to aspirin further inhibited platelet aggregation in a randomized trial of 42 people with coronary heart disease (bleeding was not measured), and a review of clopidogrel-herb interactions reports increased antiplatelet activity with notoginseng. Two case reports describe esophageal submucosal hematoma after notoginseng capsules; one involved a homemade mixture with hirudin, a known anticoagulant, so it cannot be attributed to notoginseng alone. The clinical significance for bleeding is not established.",
+          "action": "If you take an antiplatelet medicine such as aspirin or clopidogrel, tell your clinician you use Panax notoginseng.",
+          "sources": [
+            "https://pubmed.ncbi.nlm.nih.gov/33370633/",
+            "https://pubmed.ncbi.nlm.nih.gov/31471773/",
+            "https://pubmed.ncbi.nlm.nih.gov/39364700/",
+            "https://pubmed.ncbi.nlm.nih.gov/34307625/"
+          ],
+          "alert_headline": "Notoginseng — antiplatelet medicines",
+          "alert_body": "In a small trial, notoginseng saponins added to aspirin increased platelet inhibition. A bleeding risk is not established; tell your clinician you use it.",
+          "informational_note": "Evidence is one small trial of notoginseng saponins with aspirin; clinical bleeding significance is not established.",
+          "profile_gate": {
+            "gate_type": "drug_class",
+            "requires": {
+              "conditions_any": [],
+              "drug_classes_any": [
+                "antiplatelets"
+              ],
+              "profile_flags_any": []
+            },
+            "excludes": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [],
+              "product_forms_any": [],
+              "nutrient_forms_any": []
+            },
+            "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "presence"
+        }
+      ],
+      "dose_thresholds": [],
+      "pregnancy_lactation": {
+        "pregnancy_category": "no_data",
+        "lactation_category": "no_data",
+        "evidence_level": "no_data",
+        "notes": "Pregnancy and breastfeeding safety data for Panax notoginseng supplements are limited; discuss use with your clinician.",
+        "alert_headline": "Limited safety data",
+        "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
+        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended.",
+        "direction": "unknown",
+        "materiality": "presence"
+      },
+      "last_reviewed": "2026-10-20",
+      "review_owner": "Source-content review (agent); clinical bleeding significance unestablished"
+    },
+    {
+      "id": "RULE_OTHER_SENACTIV_ANTIPLATELET",
+      "subject_ref": {
+        "db": "other_ingredients",
+        "canonical_id": "NHA_SENACTIV"
+      },
+      "condition_rules": [
+        {
+          "condition_id": "bleeding_disorders",
+          "severity": "monitor",
+          "evidence_level": "limited",
+          "mechanism": "Panax notoginseng saponins added to aspirin further inhibited platelet aggregation in a randomized trial of 42 people with coronary heart disease (bleeding was not measured), and a review of clopidogrel-herb interactions reports increased antiplatelet activity with notoginseng. Two case reports describe esophageal submucosal hematoma after notoginseng capsules; one involved a homemade mixture with hirudin, a known anticoagulant, so it cannot be attributed to notoginseng alone. The clinical significance for bleeding is not established.",
+          "action": "If you have a bleeding disorder, talk to your clinician before using Senactiv (Panax notoginseng).",
+          "sources": [
+            "https://pubmed.ncbi.nlm.nih.gov/33370633/",
+            "https://pubmed.ncbi.nlm.nih.gov/31471773/",
+            "https://pubmed.ncbi.nlm.nih.gov/39364700/",
+            "https://pubmed.ncbi.nlm.nih.gov/34307625/"
+          ],
+          "alert_headline": "Senactiv (notoginseng) — bleeding disorders",
+          "alert_body": "Senactiv (notoginseng) may affect platelet function. A bleeding risk is not established; if you have a bleeding disorder, talk to your clinician before using it.",
+          "informational_note": "Platelet effects come from small studies and case reports; clinical bleeding significance is not established.",
+          "profile_gate": {
+            "gate_type": "condition",
+            "requires": {
+              "conditions_any": [
+                "bleeding_disorders"
+              ],
+              "drug_classes_any": [],
+              "profile_flags_any": []
+            },
+            "excludes": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [],
+              "product_forms_any": [],
+              "nutrient_forms_any": []
+            },
+            "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "presence"
+        },
+        {
+          "condition_id": "surgery_scheduled",
+          "severity": "monitor",
+          "evidence_level": "limited",
+          "mechanism": "Panax notoginseng saponins added to aspirin further inhibited platelet aggregation in a randomized trial of 42 people with coronary heart disease (bleeding was not measured), and a review of clopidogrel-herb interactions reports increased antiplatelet activity with notoginseng. Two case reports describe esophageal submucosal hematoma after notoginseng capsules; one involved a homemade mixture with hirudin, a known anticoagulant, so it cannot be attributed to notoginseng alone. The clinical significance for bleeding is not established.",
+          "action": "Tell your surgeon you use Senactiv (Panax notoginseng) before a scheduled procedure.",
+          "sources": [
+            "https://pubmed.ncbi.nlm.nih.gov/33370633/",
+            "https://pubmed.ncbi.nlm.nih.gov/31471773/",
+            "https://pubmed.ncbi.nlm.nih.gov/39364700/",
+            "https://pubmed.ncbi.nlm.nih.gov/34307625/"
+          ],
+          "alert_headline": "Senactiv (notoginseng) — before surgery",
+          "alert_body": "Senactiv (notoginseng) may affect platelet function. A bleeding risk is not established; tell your surgeon you use it before a scheduled procedure.",
+          "informational_note": "Platelet effects come from small studies and case reports; clinical bleeding significance is not established.",
+          "profile_gate": {
+            "gate_type": "profile_flag",
+            "requires": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [
+                "surgery_scheduled"
+              ]
+            },
+            "excludes": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [],
+              "product_forms_any": [],
+              "nutrient_forms_any": []
+            },
+            "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "presence"
+        }
+      ],
+      "drug_class_rules": [
+        {
+          "drug_class_id": "antiplatelets",
+          "severity": "monitor",
+          "evidence_level": "limited",
+          "mechanism": "Panax notoginseng saponins added to aspirin further inhibited platelet aggregation in a randomized trial of 42 people with coronary heart disease (bleeding was not measured), and a review of clopidogrel-herb interactions reports increased antiplatelet activity with notoginseng. Two case reports describe esophageal submucosal hematoma after notoginseng capsules; one involved a homemade mixture with hirudin, a known anticoagulant, so it cannot be attributed to notoginseng alone. The clinical significance for bleeding is not established.",
+          "action": "If you take an antiplatelet medicine such as aspirin or clopidogrel, tell your clinician you use Senactiv (Panax notoginseng).",
+          "sources": [
+            "https://pubmed.ncbi.nlm.nih.gov/33370633/",
+            "https://pubmed.ncbi.nlm.nih.gov/31471773/",
+            "https://pubmed.ncbi.nlm.nih.gov/39364700/",
+            "https://pubmed.ncbi.nlm.nih.gov/34307625/"
+          ],
+          "alert_headline": "Senactiv (notoginseng) — antiplatelet medicines",
+          "alert_body": "In a small trial, notoginseng saponins added to aspirin increased platelet inhibition. A bleeding risk is not established; tell your clinician you use it.",
+          "informational_note": "Evidence is one small trial of notoginseng saponins with aspirin; clinical bleeding significance is not established.",
+          "profile_gate": {
+            "gate_type": "drug_class",
+            "requires": {
+              "conditions_any": [],
+              "drug_classes_any": [
+                "antiplatelets"
+              ],
+              "profile_flags_any": []
+            },
+            "excludes": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [],
+              "product_forms_any": [],
+              "nutrient_forms_any": []
+            },
+            "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "presence"
+        }
+      ],
+      "dose_thresholds": [],
+      "pregnancy_lactation": {
+        "pregnancy_category": "no_data",
+        "lactation_category": "no_data",
+        "evidence_level": "no_data",
+        "notes": "Pregnancy and breastfeeding safety data for Senactiv (Panax notoginseng and Rosa roxburghii) are limited; discuss use with your clinician.",
+        "alert_headline": "Limited safety data",
+        "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
+        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended.",
+        "direction": "unknown",
+        "materiality": "presence"
+      },
+      "last_reviewed": "2026-10-20",
+      "review_owner": "Source-content review (agent); Senactiv is Panax notoginseng + Rosa roxburghii fractions (NHA_SENACTIV)"
     }
   ]
 }

@@ -147,19 +147,24 @@ def free_from_claim_contradiction(
     other allergens ("a facility that also processes fish") is no
     contradiction of a dairy- or gluten-free claim.
     """
-    sources, cross_contact = FREE_FROM_CLAIM_ALLERGENS.get(group, (frozenset(), frozenset()))
-    may_contain = False
-    for hit in allergen_hits or []:
-        if not isinstance(hit, dict):
-            continue
-        allergen_id = hit.get("allergen_id")
-        if hit.get("presence_type") in _CROSS_CONTACT_PRESENCE:
-            may_contain = may_contain or allergen_id in cross_contact
-        elif allergen_id in sources:
-            return "allergen_conflict"
-    if may_contain or unparsed_may_contain:
+    hits = free_from_claim_contradicting_hits(group, allergen_hits)
+    if any(hit.get("presence_type") not in _CROSS_CONTACT_PRESENCE for hit in hits):
+        return "allergen_conflict"
+    if hits or unparsed_may_contain:
         return "may_contain_warning"
     return None
+
+
+def free_from_claim_contradicting_hits(group: str, allergen_hits: Any) -> list:
+    """The allergen hits that contradict a free-from claim of ``group``: a
+    source of its own allergen, or cross-contact with it."""
+    sources, cross_contact = FREE_FROM_CLAIM_ALLERGENS.get(group, (frozenset(), frozenset()))
+    return [
+        hit for hit in allergen_hits or []
+        if isinstance(hit, dict) and hit.get("allergen_id") in (
+            cross_contact if hit.get("presence_type") in _CROSS_CONTACT_PRESENCE else sources
+        )
+    ]
 
 
 def free_from_claims_all_hold(
