@@ -6600,11 +6600,14 @@ def _classify_one(row: Dict[str, Any], ctx: Dict[str, Any]) -> Dict[str, Any]:
     mass_mg = _role_mass_mg(row)
 
     # L4 — required for subtype: micronutrient panel members of a multi/prenatal.
-    # Panel members are mass-dosed; a CFU probiotic add-on is NOT mass-dosed and
-    # so stays adjunct, so Phase 3 won't cap a multi for an adjunct's data gap.
+    # A panel member needs a usable disclosed dose in a recognized unit:
+    # vitamins A, D and E are printed in IU and folate in mcg DFE, while an
+    # "NP" amount is no dose. A CFU probiotic add-on is not a panel identity
+    # and so stays adjunct, so Phase 3 won't cap a multi for an adjunct's data gap.
+    from scoring_v4.modules.generic_helpers import has_usable_individual_dose  # lazy: it imports this module
     if (
         module == "multi_or_prenatal"
-        and mass_mg is not None
+        and has_usable_individual_dose(row)
         and not is_blend
         and _role_is_required_multi_panel_member(canonical)
     ):

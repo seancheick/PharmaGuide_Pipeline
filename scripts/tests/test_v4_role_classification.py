@@ -206,6 +206,31 @@ def test_multi_panel_micronutrients_major_tiny_blend_adjunct():
     assert roles["green_tea_extract"]["role"] == "adjunct"
 
 
+def test_multi_panel_members_dosed_in_activity_units_are_major():
+    """Life Extension Mix 47815 prints vitamins A, D and E in IU; labels print
+    folate in mcg DFE and vitamin A in mcg RAE. These are the panel's own
+    nutrients, not add-ons, whatever unit the label uses."""
+    product = _product("Daily Multivitamin", "multivitamin", [
+        _row("vitamin_c", "Vitamin C", 2000, "mg"),
+        _row("vitamin_a", "Vitamin A", 5000, "IU"),
+        _row("vitamin_d", "Vitamin D3", 2000, "IU"),
+        _row("vitamin_e", "Vitamin E", 100, "IU"),
+        _row("vitamin_b9_folate", "Folate", 400, "mcg DFE"),
+        _row("vitamin_k", "Vitamin K", 0, "mcg"),
+        # 60740 Life Extension Mix: "Niacin" 190 with unit NP is no dose.
+        _row("vitamin_b3_niacin", "Niacin", 190, "NP"),
+        _row("tart_cherry", "Tart Cherry", 85, "mg"),
+    ])
+
+    roles = _by_canonical(product, module="multi_or_prenatal")
+
+    for canonical in ("vitamin_a", "vitamin_d", "vitamin_e", "vitamin_b9_folate"):
+        assert (roles[canonical]["role"], roles[canonical]["role_reason"]) == ("major", "multi_panel_member"), canonical
+    assert roles["vitamin_k"]["role"] == "adjunct"  # no disclosed amount
+    assert roles["vitamin_b3_niacin"]["role"] == "adjunct"  # NP is not a unit
+    assert roles["tart_cherry"]["role"] == "adjunct"
+
+
 def test_multi_nonessential_trace_addons_are_not_material_panel_members():
     product = _product("Daily Multivitamin", "multivitamin", [
         _row("vitamin_c", "Vitamin C", 90, "mg"),
