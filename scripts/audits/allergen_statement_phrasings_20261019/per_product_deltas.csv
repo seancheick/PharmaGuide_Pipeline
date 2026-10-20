@@ -1,0 +1,60 @@
+id,name,score_base,score_cand,delta,tier_base,tier_cand,b2_base,b2_cand,claimed_groups,matched_groups,conflict_groups
+316791,Tri-Phase Lemonade,64.5,61.4,-3.1,Needs improvement,Needs improvement,0.0,-2.0,gluten,gluten,gluten
+317610,Tri-Phase Cherry Limeade,66.2,63.1,-3.1,Needs improvement,Needs improvement,0.0,-2.0,gluten,gluten,gluten
+319385,Tri-Phase Lemonade,66.5,63.4,-3.1,Needs improvement,Needs improvement,0.0,-2.0,gluten,gluten,gluten
+319386,Tri-Phase Lemon Lime,66.5,63.4,-3.1,Needs improvement,Needs improvement,0.0,-2.0,gluten,gluten,gluten
+19832,Children's Vitamin C Gummy Vitamins,77.8,74.8,-3.0,Good,Good,0.0,-2.0,dairy;egg;gluten;peanut;soy;tree_nut,soy,
+241286,FucoThin,44.4,41.4,-3.0,Poor,Poor,0.0,-2.0,dairy;gluten,gluten,gluten
+243356,Apple Cider Vinegar Diet Gummies,41.4,38.4,-3.0,Poor,Poor,0.0,-2.0,dairy;gluten;soy,gluten;soy,gluten;soy
+263871,Whey To Go Protein Powder Unflavored,85.9,82.9,-3.0,Very good,Very good,0.0,-2.0,gluten;soy,gluten;soy,gluten;soy
+264069,Whey To Go Chocolate Flavor,82.4,79.4,-3.0,Very good,Good,0.0,-2.0,gluten;soy,gluten;soy,gluten;soy
+264070,Whey To Go Chocolate Flavor,82.4,79.4,-3.0,Very good,Good,0.0,-2.0,gluten;soy,gluten;soy,gluten;soy
+264072,Whey To Go Protein Powder Vanilla Flavor,83.9,80.9,-3.0,Very good,Very good,0.0,-2.0,gluten;soy,gluten;soy,gluten;soy
+264073,Whey To Go Protein Powder Vanilla Flavor,83.9,80.9,-3.0,Very good,Very good,0.0,-2.0,gluten;soy,gluten;soy,gluten;soy
+264168,Whey To Go Protein Powder Unflavored,85.9,82.9,-3.0,Very good,Very good,0.0,-2.0,gluten;soy,gluten;soy,gluten;soy
+273822,Perfect Cleanse Purify,51.4,48.4,-3.0,Poor,Poor,0.0,-2.0,dairy;gluten;soy,dairy;gluten;soy,dairy;gluten;soy
+274270,fucoTHIN,44.4,41.4,-3.0,Poor,Poor,0.0,-2.0,dairy;gluten,gluten,gluten
+294321,Wheatgrass Powder,54.4,51.4,-3.0,Poor,Poor,0.0,-2.0,dairy;gluten,gluten,gluten
+294322,Wheatgrass Powder,54.4,51.4,-3.0,Poor,Poor,0.0,-2.0,dairy;gluten,gluten,gluten
+298940,Fiber Well Gummies,50.1,47.1,-3.0,Poor,Poor,0.0,-2.0,dairy;egg;gluten;peanut;soy;tree_nut,soy,
+321826,LIT Spiced Cider,70.0,67.0,-3.0,Good,Needs improvement,0.0,-2.0,gluten,gluten,gluten
+63044,FucoThin,43.9,40.9,-3.0,Poor,Poor,0.0,-2.0,dairy;gluten,gluten,gluten
+75073,Kids Gummy Calcium For Kids 2-12,76.1,73.1,-3.0,Good,Good,0.0,-2.0,dairy;gluten;peanut;tree_nut,tree_nut,
+206267,Kids Gummy DHA for Kids 2-12 Raspberry Lemon Natural Flavors,51.6,48.9,-2.7,Poor,Poor,,-2.0,dairy;gluten;peanut;tree_nut,tree_nut,
+69313,Kids Gummy DHA,40.7,38.0,-2.7,Poor,Poor,,-2.0,dairy;gluten;peanut;tree_nut,tree_nut,
+13241,Whole Foods Blend Berry Flavor,62.3,60.3,-2.0,Needs improvement,Needs improvement,0.0,-2.0,dairy;gluten,dairy;gluten,dairy;gluten
+19911,Adult's Gummy Multivitamin,76.8,74.8,-2.0,Good,Good,0.0,-2.0,dairy;egg;gluten;peanut;soy;tree_nut,soy,
+19914,Adult's Gummy Multivitamin/Multimineral,76.2,74.2,-2.0,Good,Good,0.0,-2.0,dairy;egg;gluten;peanut;soy;tree_nut,soy,
+19920,Adult's Gummy Multivitamins,76.8,74.8,-2.0,Good,Good,0.0,-2.0,dairy;egg;gluten;peanut;soy;tree_nut,soy,
+19923,Children's Gummy Multivitamin with Choline,74.9,72.9,-2.0,Good,Good,0.0,-2.0,dairy;egg;gluten;peanut;soy;tree_nut,soy,
+19926,Children's Gummy Multivitamin,74.9,72.9,-2.0,Good,Good,0.0,-2.0,dairy;egg;gluten;peanut;soy;tree_nut,soy,
+206793,Children's Gummy Multivitamins,79.5,77.5,-2.0,Very good,Good,0.0,-2.0,dairy;gluten;soy,soy,soy
+206889,Probiotics + Orange,66.6,64.6,-2.0,Needs improvement,Needs improvement,0.0,-2.0,dairy;gluten,dairy,dairy
+206896,Probiotics + Raspberry,66.6,64.6,-2.0,Needs improvement,Needs improvement,0.0,-2.0,dairy;gluten,dairy,dairy
+206904,Probiotics + Orange,66.6,64.6,-2.0,Needs improvement,Needs improvement,0.0,-2.0,dairy;gluten,dairy,dairy
+207214,Probiotics + Orange,66.6,64.6,-2.0,Needs improvement,Needs improvement,0.0,-2.0,dairy;gluten,dairy,dairy
+207218,Probiotics+ Raspberry,66.6,64.6,-2.0,Needs improvement,Needs improvement,0.0,-2.0,dairy;gluten,dairy,dairy
+218955,Mega Men Gummy Multivitamin Mixed Berry,83.5,81.5,-2.0,Very good,Very good,0.0,-2.0,dairy;egg;gluten;soy;tree_nut,egg;soy;tree_nut,soy
+221111,Prenatal Gummy Raspberry Lemonade,77.2,75.2,-2.0,Good,Good,0.0,-2.0,dairy;egg;gluten;soy;tree_nut,egg;soy;tree_nut,soy
+228823,Bulk 1340 Double Chocolate,58.8,56.8,-2.0,Needs improvement,Needs improvement,0.0,-2.0,gluten,gluten,gluten
+243324,Apple Cider Vinegar Probiotic Gummies,61.4,59.4,-2.0,Needs improvement,Needs improvement,0.0,-2.0,dairy;gluten;soy,gluten;soy,gluten;soy
+243799,Bulk 1340 Vanilla Ice Cream,65.8,63.8,-2.0,Needs improvement,Needs improvement,0.0,-2.0,gluten,gluten,gluten
+243808,Bulk 1340 Strawberries & Cream,48.6,46.6,-2.0,Poor,Poor,0.0,-2.0,gluten,gluten,gluten
+250224,Probiotics + Orange,66.6,64.6,-2.0,Needs improvement,Needs improvement,0.0,-2.0,dairy;gluten,dairy,dairy
+25945,Gummy Swirls,78.6,76.6,-2.0,Good,Good,0.0,-2.0,dairy;egg;gluten;peanut;soy;tree_nut,soy,
+26583,Women's Daily Multivitamin Formula,76.3,74.3,-2.0,Good,Good,0.0,-2.0,dairy;egg;gluten;peanut;soy;tree_nut,soy,
+267299,Gluten-Free Support,66.9,64.9,-2.0,Needs improvement,Needs improvement,0.0,-2.0,dairy;gluten;soy,dairy;soy,dairy;soy
+271617,Kid's Multivitamin Gummies,80.8,78.8,-2.0,Very good,Good,0.0,-2.0,dairy;gluten;soy,soy,soy
+275474,Once Daily Ultra,64.5,62.5,-2.0,Needs improvement,Needs improvement,0.0,-2.0,dairy;gluten;soy,dairy;soy,dairy;soy
+308692,Bulk 1340 Cookies & Cream,47.7,45.7,-2.0,Poor,Poor,0.0,-2.0,gluten,gluten,gluten
+315322,Bulk 1340 Cookies & Cream,47.7,45.7,-2.0,Poor,Poor,0.0,-2.0,gluten,gluten,gluten
+66984,Bulk 1340 Vanilla,66.1,64.1,-2.0,Needs improvement,Needs improvement,0.0,-2.0,gluten,gluten,gluten
+69492,Women's Ultra Mega Mixed Berry,77.6,75.6,-2.0,Good,Good,0.0,-2.0,dairy;egg;gluten;soy,egg;soy,soy
+69584,Bulk 1340 Strawberries & Cream,51.3,49.3,-2.0,Poor,Poor,0.0,-2.0,gluten,gluten,gluten
+69613,Bulk 1340 Double Chocolate,51.3,49.3,-2.0,Poor,Poor,0.0,-2.0,gluten,gluten,gluten
+69759,Energy & Metabolism Vanilla,60.0,58.0,-2.0,Needs improvement,Needs improvement,0.0,-2.0,gluten,gluten,gluten
+69770,Energy & Metabolism Chocolate,58.6,56.6,-2.0,Needs improvement,Needs improvement,0.0,-2.0,gluten,gluten,gluten
+75039,Mega Men Gummy Multivitamin Mixed Berry,81.9,79.9,-2.0,Very good,Very good,0.0,-2.0,dairy;egg;gluten;soy;tree_nut,egg;soy;tree_nut,soy
+78327,Ultra Mega Green Active Berry,50.8,48.8,-2.0,Poor,Poor,0.0,-2.0,gluten;soy,gluten;soy,gluten;soy
+243303,Apple Cider Vinegar Energy Gummies,61.4,60.0,-1.4,Needs improvement,Needs improvement,0.0,-2.0,dairy;gluten;soy,gluten;soy,gluten;soy
+66957,Amino Energy Advanced Fruit Punch,53.5,52.3,-1.2,Poor,Poor,0.0,-2.0,gluten,gluten,gluten
