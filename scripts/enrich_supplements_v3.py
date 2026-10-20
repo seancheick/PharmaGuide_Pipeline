@@ -13461,14 +13461,25 @@ class SupplementEnricherV3:
             gluten_free = False
             _record_conflict("gluten-free claim conflicts with detected gluten/wheat")
 
+        # A gluten-free claim follows the shared cross-contact rule: wheat or
+        # gluten as an ingredient or "contains" is a conflict, a gluten-grain
+        # facility or may-contain statement is cross-contact, and a warning that
+        # names only other allergens (a fish facility) leaves it eligible.
+        gluten_cross_contact = gluten_free_claim_contradicted(
+            detected_allergens, may_contain, [],
+            unparsed_may_contain=bool(may_contain) and self._has_unparsed_may_contain(product),
+        )
+
         # Apply conflict checking to evidence objects
         for evidence in allergen_evidence:
             conflict_allergens = []
             dedupe_key = evidence.get('dedupe_key', '')
+            gluten_claim = 'gluten' in dedupe_key
 
             # Check for actual allergen conflicts
-            if 'gluten' in dedupe_key and any(
-                'wheat' in a['allergen_name'].lower() or 'gluten' in a['allergen_name'].lower()
+            if gluten_claim and any(
+                ('wheat' in a['allergen_name'].lower() or 'gluten' in a['allergen_name'].lower())
+                and a.get('presence_type') not in ('may_contain', 'facility_warning')
                 for a in detected_allergens
             ):
                 conflict_allergens.append('gluten/wheat detected')
@@ -13493,7 +13504,7 @@ class SupplementEnricherV3:
                 evidence['proximity_conflicts'].extend(conflict_allergens)
 
             # Also check for may_contain warning
-            if may_contain and evidence.get('score_eligible', False):
+            if (gluten_cross_contact if gluten_claim else may_contain) and evidence.get('score_eligible', False):
                 evidence['score_eligible'] = False
                 evidence['ineligibility_reason'] = 'may_contain_warning'
 

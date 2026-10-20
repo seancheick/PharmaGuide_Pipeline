@@ -100,3 +100,26 @@ def test_a_parsed_sentence_merged_into_another_hit_is_not_unparsed():
         {"notes": "CONTAINS: MILK, PEANUTS AND TREE NUTS (COCONUT AND MAY CONTAIN TRACE AMOUNTS OF ALMOND AND CASHEW)."},
     ]}
     assert SupplementEnricherV3()._has_unparsed_may_contain(product) is False
+
+
+def _gluten_evidence(enriched):
+    claims = enriched["compliance_data"]["evidence_based"]["allergen_free_claims"]
+    return [ev for ev in claims if "gluten" in str(ev.get("dedupe_key"))]
+
+
+def test_fish_facility_warning_keeps_gluten_free_claim_and_evidence(pipeline):
+    # Sean's review of #187: 326701 (Gummies Calcium & Magnesium) has a fish-only
+    # facility warning; both the validated claim and its evidence stay eligible.
+    enriched, validations = pipeline("326701")
+    assert enriched["claim_gluten_free_validated"] is True
+    assert validations["gluten_free"] is True
+    evidence = _gluten_evidence(enriched)
+    assert evidence and all(ev["score_eligible"] for ev in evidence)
+
+
+def test_wheat_facility_warning_marks_gluten_evidence_as_cross_contact(pipeline):
+    # A gluten-grain facility statement is cross-contact, not a gluten ingredient.
+    enriched, _ = pipeline("204624")
+    evidence = _gluten_evidence(enriched)
+    assert evidence
+    assert {ev.get("ineligibility_reason") for ev in evidence} == {"may_contain_warning"}

@@ -33,3 +33,16 @@ first; control 204624; rule cases incl. barley, rye, oats, unparsed text).
 "may contain"/"shared equipment" sentence: the enricher runs each such sentence through the
 statement parser, and one that yields no allergen keeps the claim void. Re-count over the 259:
 all 259 still regain validation (no unparsed sentence among them), so the replay above stands.
+
+**Claim evidence (Sean's review, follow-up commit).** The gluten-free claim's evidence objects
+(`compliance_data.evidence_based.allergen_free_claims`, shipped in the blob as `compliance_detail`;
+no app or scorer reader) were made ineligible (`may_contain_warning`) by any may-contain signal,
+and a wheat facility statement was labelled `allergen_conflict` as if wheat were an ingredient.
+They now follow the same rule: wheat/gluten as an ingredient or "contains" is
+`allergen_conflict`; gluten-grain cross-contact or an unparsed may-contain sentence is
+`may_contain_warning`; a warning naming only other allergens leaves the evidence eligible.
+Corpus census (stored artifacts, old vs new code): 257 gluten evidence objects become eligible,
+230 change reason allergen_conflict → may_contain_warning, 0 non-gluten evidence objects change.
+The compliance `gluten_free` flag (core DB `is_gluten_free`) is unchanged. Test: 326701 (fish-only
+facility warning) keeps the validated claim and eligible evidence; 204624 (wheat facility) is
+`may_contain_warning`.
