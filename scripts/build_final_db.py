@@ -1504,6 +1504,10 @@ def build_allergen_patterns(enriched: Dict) -> List[Dict]:
     return patterns
 
 
+def _contains_phrase(text: str, phrase: str) -> bool:
+    return bool(phrase) and re.search(rf"(?<![a-z0-9]){re.escape(phrase)}(?![a-z0-9])", text) is not None
+
+
 def matching_allergen_hits(patterns: List[Dict], *ingredient_terms: Any) -> List[Dict]:
     matches = []
     seen = set()
@@ -1512,7 +1516,8 @@ def matching_allergen_hits(patterns: List[Dict], *ingredient_terms: Any) -> List
         pattern = item.get("pattern", "")
         if not pattern:
             continue
-        if any(pattern in term or term in pattern for term in normalized_terms):
+        # Whole words only: "wheat" is not in "buckwheat", "pea" not in "peanut flavor".
+        if any(_contains_phrase(term, pattern) or _contains_phrase(pattern, term) for term in normalized_terms):
             hit = item["hit"]
             key = id(hit)
             if key not in seen:
@@ -2749,13 +2754,37 @@ def derive_v4_tradeoffs(
     # B2 declared allergen source — gate on enriched allergen presence (the v3
     # user-facing meaning, neutral label). v4's narrower B2 (false allergen-free
     # claim) is a different signal; allergen *presence* is what users consider.
+    allergen_label_prefix = {
+        "contains": "Declared allergen source",
+        "may_contain": "May contain",
+        "manufactured_in_facility": "Made in a facility that also handles",
+    }
+    # A declared source is one row per allergen (the app's
+    # _collapseAllergenSources joins them); each cross-contact presence is ONE
+    # row listing its allergens, because the app collapses only declared rows.
+    allergen_severity_rank = {"low": 0, "moderate": 1, "high": 2}
+    allergen_rows: Dict[Tuple[str, str], Dict[str, Any]] = {}
     for a in safe_list(enriched.get("allergen_hits")):
-        if isinstance(a, dict):
+        if not isinstance(a, dict):
+            continue
+        presence = export_allergen_presence(a.get("presence_type"))
+        name = safe_str(a.get("allergen_name"))
+        key = (presence, name if presence == "contains" else "")
+        row = allergen_rows.setdefault(key, {"names": set(), "severity": ""})
+        row["names"].add(name)
+        severity = safe_str(a.get("severity_level"))
+        if allergen_severity_rank.get(severity, -1) > allergen_severity_rank.get(row["severity"], -1):
+            row["severity"] = severity
+    for presence in allergen_label_prefix:
+        for (row_presence, _), row in allergen_rows.items():
+            if row_presence != presence:
+                continue
+            names = ", ".join(sorted(n for n in row["names"] if n))
             penalties.append({
                 "id": "B2",
-                "label": f"Declared allergen source: {safe_str(a.get('allergen_name'))}",
-                "severity": safe_str(a.get("severity_level")),
-                "presence": safe_str(a.get("presence_type")),
+                "label": f"{allergen_label_prefix[presence]}: {names}",
+                "severity": row["severity"],
+                "presence": presence,
             })
     # B1 dietary sugar — already enriched-gated in v3; carried over verbatim.
     sugar_penalty = _dietary_sugar_penalty_detail(enriched)
@@ -3861,16 +3890,19 @@ _STANDARDIZATION_COMPOUNDS = (
     "withanolide glycosides", "withanolides", "boswellic acids",
     "boswellic acid", "curcuminoids", "ginsenosides", "rosavins",
     "bacosides", "saponins", "piperine", "EGCG", "silymarin",
+    "epigallocatechin gallate",
 )
+# The same compound under its full name ("50% Epigallocatechin Gallate").
+_STANDARDIZATION_SYNONYMS = {"epigallocatechin gallate": "EGCG"}
 _STANDARDIZATION_RE = re.compile(
     # \b — word boundary
     # (\d{1,3}) — integer 1-3 digits  (fractional rejected by design)
     # %\+? — mandatory % with optional "+" suffix
-    # [\s]+ — whitespace separator (1+)
-    # NOT preceded by a hyphen (ranges like "5-10% withanolides" rejected)
-    # Negative lookbehind rejects leading digit / hyphen / dot so the
-    # "5" in "5.5%" or "10-20%" never matches alone.
-    r"(?<![\d\-\.])(\d{1,3})%\+?\s+("
+    # [\s]+ — whitespace separator (1+), then an optional "total" ("3% total rosavins")
+    # NOT preceded by a hyphen or dash (ranges like "5-10%" or "4–7%" rejected)
+    # Negative lookbehind rejects leading digit / hyphen / en or em dash / dot
+    # so the "5" in "5.5%" or "10-20%" never matches alone.
+    r"(?<![\d\-\.\u2013\u2014])(\d{1,3})%\+?\s+(?:total\s+)?("
     + "|".join(re.escape(c) for c in sorted(_STANDARDIZATION_COMPOUNDS, key=len, reverse=True))
     + r")\b",
     re.IGNORECASE,
@@ -3878,9 +3910,13 @@ _STANDARDIZATION_RE = re.compile(
 
 
 def _compute_standardization_note(ingredient: Dict[str, Any]) -> Optional[str]:
-    """Extract a standardization claim ("5% withanolides") from the
-    ingredient's matched_form / notes / raw_source_text, in priority
-    order. Returns ``None`` when no tight-regex match exists.
+    """Extract the label's standardization claim ("5% withanolides") from the
+    label row's own ``notes``, then its ``raw_source_text``. Returns ``None``
+    when no tight-regex match exists.
+
+    Only label text counts: the matched IQM form name and the IQM form notes
+    are curation data, and showing them here would present an IQM standard as
+    if the label had declared it ("organic Turmeric" showing "3% curcuminoids").
 
     Compound name is normalized to the canonical casing from the
     allowlist so downstream consumers aren't forced to case-fold.
@@ -3888,10 +3924,6 @@ def _compute_standardization_note(ingredient: Dict[str, Any]) -> Optional[str]:
     """
     # Preferred source order — most structured first.
     candidates: List[str] = []
-    mf = ingredient.get("matched_form")
-    if isinstance(mf, str) and mf.strip():
-        candidates.append(mf)
-
     notes = ingredient.get("notes")
     if isinstance(notes, str) and notes.strip():
         candidates.append(notes)
@@ -3905,6 +3937,7 @@ def _compute_standardization_note(ingredient: Dict[str, Any]) -> Optional[str]:
         candidates.append(raw)
 
     compound_by_lower = {c.lower(): c for c in _STANDARDIZATION_COMPOUNDS}
+    compound_by_lower.update(_STANDARDIZATION_SYNONYMS)
     for text in candidates:
         m = _STANDARDIZATION_RE.search(text)
         if m:
@@ -6938,8 +6971,8 @@ def build_detail_blob(
             "dose_status": _compute_dose_status(ing),
             # Sprint E1.2.2.c — standardization claim (None when not known)
             "standardization_note": _compute_standardization_note({
-                "matched_form": m.get("matched_form") or ing.get("matched_form"),
-                "notes": m.get("notes") or ing.get("notes"),
+                # The label row's own notes, never the match's IQM notes.
+                "notes": ing.get("notes"),
                 "raw_source_text": ing.get("raw_source_text"),
             }),
             # Sprint E1.3.2 — per-strain clinical support (None when not a
@@ -10107,6 +10140,23 @@ def annotate_probiotic_blend_totals(
     return out
 
 
+# Enrichment presence -> the export/app vocabulary (contains, may_contain,
+# manufactured_in_facility; FINAL_EXPORT_SCHEMA_V1.md). An allergen named in
+# the ingredient list is present, so it exports as "contains".
+EXPORT_ALLERGEN_PRESENCE = {
+    "contains": "contains",
+    "ingredient_list": "contains",
+    "may_contain": "may_contain",
+    "facility_warning": "manufactured_in_facility",
+    "manufactured_in_facility": "manufactured_in_facility",
+}
+
+
+def export_allergen_presence(presence_type: Any) -> str:
+    """The exported presence type of one allergen hit."""
+    return EXPORT_ALLERGEN_PRESENCE.get(safe_str(presence_type), "contains")
+
+
 def build_structured_allergens(enriched: Dict) -> List[Dict]:
     """Phase 8: structured per-allergen array for client-side personalization.
 
@@ -10138,7 +10188,7 @@ def build_structured_allergens(enriched: Dict) -> List[Dict]:
             "display_name": safe_str(
                 hit.get("allergen_name") or hit.get("standard_name")
             ),
-            "presence_type": safe_str(hit.get("presence_type"), "contains"),
+            "presence_type": export_allergen_presence(hit.get("presence_type")),
             "severity_level": safe_str(hit.get("severity_level"), "moderate"),
             "evidence": safe_str(hit.get("evidence")),
         })
@@ -10167,8 +10217,7 @@ def generate_allergen_summary(enriched: Dict) -> Optional[str]:
     for hit in allergen_hits:
         if isinstance(hit, dict):
             name = safe_str(hit.get("allergen_name") or hit.get("standard_name"))
-            presence = safe_str(hit.get("presence_type"), "contains")
-            names = grouped_names.get(presence, grouped_names["contains"])
+            names = grouped_names[export_allergen_presence(hit.get("presence_type"))]
             if name and name not in names:
                 names.append(name)
 

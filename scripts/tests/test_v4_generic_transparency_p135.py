@@ -378,9 +378,9 @@ def test_false_allergen_free_claim_penalty_deduplicates_and_blocks_bonus() -> No
         _product(
             compliance_data=compliance,
             allergens=[
-                {"allergen_name": "Milk", "severity_level": "high"},
-                {"allergen_name": "Milk", "severity_level": "high"},
-                {"allergen_name": "Soy", "severity_level": "moderate"},
+                {"allergen_id": "ALLERGEN_MILK", "allergen_name": "Milk", "severity_level": "high"},
+                {"allergen_id": "ALLERGEN_MILK", "allergen_name": "Milk", "severity_level": "high"},
+                {"allergen_id": "ALLERGEN_SOY", "allergen_name": "Soy", "severity_level": "moderate"},
             ],
         )
     )
