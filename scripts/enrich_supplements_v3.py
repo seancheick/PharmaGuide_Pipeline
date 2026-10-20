@@ -120,6 +120,7 @@ from scoring_input_contract import (
     is_nutrition_fact_declaration,
     get_scoring_ingredients,
     normalize_product_evidence_scope,
+    score_eligible_identity_view,
     scoring_input_scope,
     source_linked_rows,
     _positive_quantity,
@@ -136,6 +137,8 @@ from scoring_reference_resolver import (
 from identity_integrity import (
     has_nonlive_microbial_derivative_evidence,
     IdentityDecision,
+    NON_SCORABLE_NO_IDENTITY_RATIONALE,
+    NON_SCORING_IDENTITY_RATIONALE,
     build_canonical_identity_registry,
     canonical_registry_collections,
     is_identity_scoreable,
@@ -4731,14 +4734,30 @@ class SupplementEnricherV3:
         # PASS 1: Classify activeIngredients as scorable or skipped
         # =================================================================
         product_activity_text = self._get_all_product_text(product)
+        label_names_by_path = {
+            str(row.get("raw_source_path")): row.get("name")
+            for row in active_ingredients
+            if isinstance(row, dict) and row.get("raw_source_path") and row.get("name")
+        }
         for source_ingredient in active_ingredients:
             ingredient = source_ingredient
             is_structural_parent_total = (
                 id(source_ingredient) in structural_parent_total_row_ids
             )
             sole_active_row = len(active_ingredients) == 1
-            if product_activity_text or is_structural_parent_total or sole_active_row or not ingredient.get("source_section"):
+            # Every enclosing label row's name, nearest first: identity checks
+            # read whose constituent a row is ("Arginine" in Amino Acids in
+            # Cilantro).
+            ancestor_blends = []
+            path = str(ingredient.get("raw_source_path") or "")
+            while re.search(r"\.(?:nestedRows|forms)\[\d+\]$", path):
+                path = re.sub(r"\.(?:nestedRows|forms)\[\d+\]$", "", path)
+                if label_names_by_path.get(path):
+                    ancestor_blends.append(label_names_by_path[path])
+            if product_activity_text or is_structural_parent_total or sole_active_row or not ingredient.get("source_section") or ancestor_blends:
                 ingredient = dict(ingredient)
+            if ancestor_blends:
+                ingredient["_ancestor_blends"] = ancestor_blends
             # This collection owns active membership for legacy inputs. Keep
             # explicit source facts authoritative and do not mutate label rows.
             if not ingredient.get("source_section"):
@@ -6262,6 +6281,10 @@ class SupplementEnricherV3:
             })
             if matched_entry_name:
                 row["standard_name"] = matched_entry_name
+            if row.get("identity_resolution_rationale") == NON_SCORING_IDENTITY_RATIONALE:
+                # Recognition identifies the row on its own (as before the keep
+                # existed), so the identity is no longer interaction-only.
+                row["identity_resolution_rationale"] = NON_SCORABLE_NO_IDENTITY_RATIONALE
 
     def _is_low_severity_additive(self, additive_id: Any) -> bool:
         for additive in (self.databases.get("harmful_additives") or {}).get("harmful_additives") or []:
@@ -17913,8 +17936,9 @@ class SupplementEnricherV3:
         No fallback: classifying an empty product on failure silently routed the
         real one as generic. A failure now surfaces as a failed enrichment.
         """
+        # Routes and roles read score-eligible identities only.
         return build_scoring_classification(
-            enriched,
+            score_eligible_identity_view(enriched),
             classification_origin="native_enrichment",
         )
 
@@ -24902,8 +24926,12 @@ class SupplementEnricherV3:
             # nutrition, taxonomy, and native scoring-classification
             # projections. Running earlier stamps a different decision from a
             # replay on the completed enriched artifact.
+            # Evidence reads score-eligible identities only: a row kept for
+            # interactions owns no Evidence.
+            evidence_product = score_eligible_identity_view(enriched)
             enriched["evidence_data"] = self._collect_evidence_data(
-                enriched, ingredient_quality_data=enriched.get("ingredient_quality_data")
+                evidence_product,
+                ingredient_quality_data=evidence_product.get("ingredient_quality_data"),
             )
             if formula_match:
                 enriched["evidence_data"]["clinical_matches"].append(formula_match)
