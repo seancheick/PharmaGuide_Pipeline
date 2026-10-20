@@ -55,13 +55,20 @@ def test_declared_trans_resveratrol_reaches_the_resveratrol_rule(enrich, dsld_id
     assert alerts and alerts[0]["subject_ref"]["canonical_id"] == "resveratrol"
 
 
-@pytest.mark.parametrize("label", ["Grape Skin Extract", "BioVin Grape Proanthocyanidin extract"])
-def test_grape_without_a_declared_standardization_carries_no_resveratrol_marker(enricher, label):
+@pytest.mark.parametrize("label,notes", [
+    ("Grape Skin Extract", None),
+    ("BioVin Grape Proanthocyanidin extract", None),
+    # Names resveratrol with no percentage, or one below the 1% floor.
+    ("Grape extract (resveratrol)", None),
+    ("Grape Skin Extract", "0.5% trans-resveratrol"),
+])
+def test_grape_without_a_declared_standardization_carries_no_resveratrol_marker(enricher, label, notes):
     """A whole grape or grape-PAC extract carries trivial resveratrol unless a
     percentage is declared; the app reads every marker as a research link, so
     none is emitted (not even a provenance-only one)."""
     markers = enricher._compute_delivers_markers(
-        {"canonical_id": "grape", "raw_source_text": label, "quantity": 200, "unit_normalized": "mg"}
+        {"canonical_id": "grape", "raw_source_text": label, "quantity": 200, "unit_normalized": "mg"},
+        row_notes=notes,
     )
     assert not [m for m in markers if m["marker_canonical_id"] == "resveratrol"]
 

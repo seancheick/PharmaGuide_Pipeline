@@ -2245,3 +2245,18 @@ systematic review and meta-analysis) added to references; PMID 40964149 graded s
 `standard_name` to "Tart Cherry" (option A) — measured +0.7 to +2.9 Evidence on 12 products whose tart cherry rows are
 non-material, undosed blend members, because direct clinical matches earn ingredient_points without a materiality check.
 Re-apply "Tart Cherry" after that Evidence defect (its own task) lands.
+
+## October 20 — grape/knotweed resveratrol route (PR199, claude/grape-resveratrol-marker)
+
+Class: behavioral (identity, interaction subjects, marker export, rule copy). Owners:
+`identity/interaction.py::BOTANICAL_CONSTITUENT_SOURCE` (knotweed → resveratrol, interaction-only),
+`enrich_supplements_v3.py::_compute_delivers_markers` + `botanical_marker_contributions.json` (grape →
+resveratrol only from a declared percentage ≥1%; `provenance_without_declaration: false` emits no marker
+for a bare keyword or a sub-floor percentage), `build_final_db._exported_markers`. Hu Zhang/Reynoutria
+aliases moved from the resveratrol compound to `japanese_knotweed`; RULE_IQM_RESVERATROL_BLEEDING copy
+qualified (Sean, 2026-10-19); ADR-0005 accepted with amendment. Replay (1,478 labels, main 8f9c22e09,
+`~/pg_quality/lostsubj_pr199_20261020/` base2_rv/cand2_rv): +11 rules, 0 removed, 229 reworded, 0 score/
+safety changes; receipt `reports/grape_resveratrol_marker_20261019`. Open: `verify_botanical_composition.py
+--build-baseline` regenerates `botanical_marker_contributions.json` without the grape
+`provenance_without_declaration` flag (pre-existing generator scope; re-apply
+`grape_marker_flag_batch.py` after any rebuild until the generator carries authored fields).
