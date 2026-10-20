@@ -32,7 +32,7 @@
     "statistics": {
       "total_parents": 655,
       "total_forms": 1474,
-      "total_form_aliases": 12287,
+      "total_form_aliases": 12285,
       "parents_with_parent_aliases": 150,
       "parents_with_contains_aliases": 0,
       "parents_with_pattern_aliases": 0
@@ -19513,7 +19513,15 @@
           "range_low": 0.7,
           "range_high": 0.9,
           "quality": "very_good"
-        }
+        },
+        "source_form_aliases": [
+          "soy lecithin",
+          "soybean lecithin",
+          "soy",
+          "soybean",
+          "soybeans",
+          "glycine max"
+        ]
       },
       "bovine phosphatidylserine": {
         "bio_score": 11,
@@ -26313,7 +26321,14 @@
       "research_status": "validated"
     },
     "external_ids": {},
-    "aliases": []
+    "aliases": [],
+    "relationships": [
+      {
+        "type": "contains",
+        "target_id": "egcg",
+        "notes": "EGCG is a catechin of green tea extract, not its form"
+      }
+    ]
   },
   "grape_seed_extract": {
     "standard_name": "Grape Seed Extract",
@@ -57518,8 +57533,6 @@
           "anise powder",
           "anise seed extract",
           "anise seed powder",
-          "star anise",
-          "illicium verum",
           "Anise 4:1 extract",
           "Anise seed 4:1 extract",
           "organic anise"
@@ -64211,7 +64224,6 @@
         },
         "notes": "Tart-cherry extract is distinct from raspberry. PMID20218618 studied a 300 g raspberry intervention and urinary anthocyanin recovery below 0.1%, not Prunus extract absolute bioavailability of 0.8%. Exact tart-cherry preparation exposure remains unresolved.",
         "aliases": [
-          "sour cherry, powder",
           "montmorency tart cherry extract",
           "montmorency cherry extract",
           "sour cherry extract",
@@ -64221,9 +64233,6 @@
           "tart cherry fruit extract",
           "tart cherry juice concentrate",
           "montmorency tart cherry juice concentrate",
-          "tart cherry powder",
-          "tart cherry fruit powder",
-          "cherrypure tart cherry fruit & skin powder",
           "cherrypure tart cherry"
         ],
         "dosage_importance": 1.0,
@@ -64260,7 +64269,11 @@
           "dwarf sour cherry",
           "Cherry Fruit Extract",
           "cherry extract",
-          "prunus cerasus fruit extract"
+          "prunus cerasus fruit extract",
+          "sour cherry, powder",
+          "tart cherry powder",
+          "tart cherry fruit powder",
+          "cherrypure tart cherry fruit & skin powder"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
