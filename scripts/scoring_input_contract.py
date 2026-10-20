@@ -1556,12 +1556,16 @@ def _is_nested_under(parent_path: str, row: Dict[str, Any]) -> bool:
     return _path_is_nested_under(parent_path, str(row.get("raw_source_path") or ""))
 
 
-def _identity_named_in_product_title(product: Dict[str, Any], row: Dict[str, Any]) -> bool:
+def _identity_named_in_product_title(
+    product: Dict[str, Any], row: Dict[str, Any], rows: List[Dict[str, Any]],
+) -> bool:
+    """Whether the title names this blend child; a flavor phrase names none
+    (the same title reading as the role owner, _role_title_text)."""
     title_tokens = {
         token
         for token in re.split(
             r"[^a-z0-9]+",
-            _norm(product.get("product_name") or product.get("fullName")),
+            _role_title_text(_norm(product.get("product_name") or product.get("fullName")), rows),
         )
         if len(token) >= 4
     }
@@ -1706,7 +1710,7 @@ def _best_nested_anchor_child(
     ]
     if not children:
         return None
-    title_matches = [row for row in children if _identity_named_in_product_title(product, row)]
+    title_matches = [row for row in children if _identity_named_in_product_title(product, row, candidate_rows)]
     if title_matches:
         return title_matches[0]
     return children[0]
@@ -1733,7 +1737,7 @@ def _derive_blend_header_anchor_from_nested_child(
     if not anchor_canonical:
         return None
 
-    title_match = _identity_named_in_product_title(product, child)
+    title_match = _identity_named_in_product_title(product, child, candidate_rows)
     item = _evidence_base(
         row=parent,
         evidence_type="blend_anchor_mass",
@@ -6307,7 +6311,28 @@ _ROLE_TITLE_STOPWORDS = {
     "capsule", "tablet", "softgel", "organic", "pure", "strength", "daily",
     "formula", "support", "vitamin", "mineral", "multivitamin", "women",
     "womens", "men", "mens", "with", "plus", "high", "ultra",
+    # Plant parts and preparations name no species: "Fruit Punch" and
+    # "Fruit & Veggie" are not about apple_fruit (40089).
+    "fruit", "fruits", "berry", "berries", "seed", "bark", "flower", "herb",
+    "juice", "whole",
 }
+
+# A flavor descriptor ("Natural Raspberry-Tea Flavor", "Blackberry Melon
+# Flavor") names how the product tastes, not an active it delivers (293904,
+# 297665). The phrase is read back from the flavor word: up to two words, then
+# one more word after each "+", "&", "and", "," or "/". "Natural"/"artificial"
+# are free; a number, other punctuation, a dosage form, a stop word or the
+# name of an active the label doses on its own ends it.
+_ROLE_TITLE_FLAVOR_RE = re.compile(r"^flavou?r(?:s|ed|ing)?$")
+_ROLE_TITLE_FLAVOR_FREE = frozenset({"natural", "naturally", "artificial", "artificially"})
+_ROLE_TITLE_FLAVOR_JOINERS = frozenset({"+", "&", "and", ",", "/"})
+_ROLE_TITLE_FORM_WORDS = frozenset({
+    "gummy", "gummies", "chewable", "chewables", "chew", "chews", "drink",
+    "mix", "spray", "liquid", "lozenge", "lozenges", "drops", "syrup",
+})
+# "B-12", "D-3", "K-2": the hyphen splits the vitamin's own name; "D-1,000"
+# (an amount) stays split.
+_ROLE_TITLE_HYPHEN_VITAMIN_RE = re.compile(r"\b([bdk])-(\d{1,2})\b(?![.,]?\d)")
 
 # Title surfaces that imply a canonical ingredient even when the row's current
 # display name is broader. Example: labels often say "tocotrienols" while the
@@ -6317,6 +6342,14 @@ _ROLE_TITLE_ALIASES_BY_CANONICAL = {
     "essential_amino_acids": ("eaa", "eaas"),
     "branched_chain_amino_acids": ("bcaa", "bcaas"),
     "vitamin_a": ("beta carotene", "beta-carotene", "retinol"),
+    "vitamin_b1_thiamine": ("b1",),
+    "vitamin_b2_riboflavin": ("b2",),
+    "vitamin_b3_niacin": ("b3",),
+    "vitamin_b5_pantothenic": ("b5",),
+    "vitamin_b6_pyridoxine": ("b6",),
+    "vitamin_b7_biotin": ("b7",),
+    "vitamin_b9_folate": ("b9",),
+    "vitamin_b12_cobalamin": ("b12",),
     "vitamin_d": ("d2", "d3", "cholecalciferol", "ergocalciferol"),
     "vitamin_e": (
         "e",
@@ -6499,6 +6532,52 @@ def _named_in_title(row: Dict[str, Any], title_norm: str) -> bool:
     return False
 
 
+def _role_title_text(title_norm: str, rows: List[Dict[str, Any]]) -> str:
+    """The title as evidence of what the product is: hyphenated vitamin names
+    joined ("b-12" -> "b12") and flavor descriptors removed."""
+    title = _ROLE_TITLE_HYPHEN_VITAMIN_RE.sub(r"\1\2", title_norm)
+    tokens = re.findall(r"[a-z0-9]+(?:-[a-z0-9]+)*|[^\sa-z0-9-]", title)
+    if not any(_ROLE_TITLE_FLAVOR_RE.match(token) for token in tokens):
+        return title
+    dosed_name_tokens = {
+        token
+        for row in rows
+        if _positive_quantity(row) is not None
+        and not _role_is_blend_member(row)
+        and not is_lent_blend_mass(row)
+        for key in ("name", "standard_name", "standardName")
+        for token in re.split(r"[^a-z0-9]+", _norm(row.get(key)))
+        if token
+    }
+    dropped: Set[int] = set()
+    for index, token in enumerate(tokens):
+        if not _ROLE_TITLE_FLAVOR_RE.match(token):
+            continue
+        dropped.add(index)
+        budget, words = 2, 0
+        for back in range(index - 1, -1, -1):
+            word = tokens[back]
+            parts = word.split("-")
+            if word in _ROLE_TITLE_FLAVOR_FREE:
+                dropped.add(back)
+            elif word in _ROLE_TITLE_FLAVOR_JOINERS and words:
+                dropped.add(back)
+                budget, words = 1, 0
+            elif (
+                words >= budget
+                or word in _ROLE_TITLE_FLAVOR_JOINERS
+                or not word[0].isalnum()
+                or any(ch.isdigit() for ch in word)
+                or any(part in _ROLE_TITLE_STOPWORDS or part in _ROLE_TITLE_FORM_WORDS
+                       or part in dosed_name_tokens for part in parts)
+            ):
+                break
+            else:
+                dropped.add(back)
+                words += 1
+    return " ".join(token for index, token in enumerate(tokens) if index not in dropped)
+
+
 def _role_function_claim_source(row: Dict[str, Any], ctx: Dict[str, Any]) -> Optional[Tuple[str, str]]:
     """Recognize an explicit label function claim about a substantial active.
 
@@ -6585,7 +6664,7 @@ def _role_context(
             # The existing subtype owner defines this panel; microgram nutrients
             # must not lose their purpose merely because another row is heavier.
             drivers.update(_norm(row.get("canonical_id")) for row in rows if _active_id(row))
-    title_norm = _norm(product.get("product_name") or product.get("fullName"))
+    title_norm = _role_title_text(_norm(product.get("product_name") or product.get("fullName")), rows)
     named_amino_mixture = False
     if module == "sports":
         from scoring_v4.modules.sports_helpers import (
