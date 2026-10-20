@@ -1,0 +1,552 @@
+{
+ "old": "/Users/seancheick/pg_quality/full_artifact_baseline_20261018/baseline_5fb2be1ca.jsonl",
+ "new": "/Users/seancheick/pg_quality/corpus_20261019_post167/baseline_951a05415_unpinned.jsonl",
+ "products": 15414,
+ "status_old": {
+  "scored": 15109,
+  "not_scored": 236,
+  "suppressed_safety": 69
+ },
+ "status_new": {
+  "scored": 14631,
+  "not_scored": 714,
+  "suppressed_safety": 69
+ },
+ "transitions": {
+  "scored->not_scored": 478
+ },
+ "flipped": 478,
+ "buckets": {
+  "pediatric_reference_gap": {
+   "count": 475,
+   "ids": [
+    "12081",
+    "15830",
+    "15854",
+    "15866",
+    "15868",
+    "15876",
+    "15877",
+    "15880",
+    "15883",
+    "15888",
+    "..."
+   ]
+  },
+  "unresolved_source_quantity": {
+   "count": 2,
+   "ids": [
+    "251169",
+    "31062"
+   ]
+  },
+  "identity_assessment_readiness": {
+   "count": 1,
+   "ids": [
+    "330806"
+   ]
+  }
+ },
+ "gap": {
+  "rows": 3366,
+  "rows_by_nutrient": [
+   [
+    "vitamin_c",
+    391
+   ],
+   [
+    "vitamin_b9_folate",
+    364
+   ],
+   [
+    "zinc",
+    337
+   ],
+   [
+    "vitamin_d",
+    272
+   ],
+   [
+    "vitamin_b6_pyridoxine",
+    263
+   ],
+   [
+    "vitamin_e",
+    249
+   ],
+   [
+    "vitamin_a",
+    222
+   ],
+   [
+    "magnesium",
+    192
+   ],
+   [
+    "vitamin_b3_niacin",
+    183
+   ],
+   [
+    "calcium",
+    168
+   ],
+   [
+    "manganese",
+    165
+   ],
+   [
+    "iodine",
+    132
+   ],
+   [
+    "selenium",
+    109
+   ],
+   [
+    "phosphorus",
+    102
+   ],
+   [
+    "choline",
+    72
+   ],
+   [
+    "iron",
+    45
+   ],
+   [
+    "copper",
+    37
+   ],
+   [
+    "molybdenum",
+    35
+   ],
+   [
+    "boron",
+    13
+   ],
+   [
+    "vanadium",
+    8
+   ],
+   [
+    "beta_carotene",
+    7
+   ]
+  ],
+  "rows_by_unit": [
+   [
+    "mg",
+    2071
+   ],
+   [
+    "mcg",
+    821
+   ],
+   [
+    "IU",
+    299
+   ],
+   [
+    "mcg DFE",
+    137
+   ],
+   [
+    "mcg RAE",
+    24
+   ],
+   [
+    "mg NE",
+    12
+   ],
+   [
+    "mgc",
+    1
+   ],
+   [
+    "Gram(s)",
+    1
+   ]
+  ],
+  "ul_population_members": [
+   [
+    [
+     "general_adult",
+     "pediatric"
+    ],
+    2066
+   ],
+   [
+    [
+     "pediatric"
+    ],
+    1248
+   ],
+   [
+    [
+     "adults_51_plus",
+     "general_adult",
+     "pediatric"
+    ],
+    51
+   ],
+   [
+    [
+     "adults_51_plus",
+     "general_adult",
+     "pediatric",
+     "pregnancy_lactation"
+    ],
+    1
+   ]
+  ],
+  "reference_gap_payload": [
+   [
+    "pediatric_ul_rows_below_14_not_in_reference_data",
+    3366
+   ]
+  ],
+  "target_groups": [
+   [
+    "Children 4 or More Years of Age",
+    457
+   ],
+   [
+    "Gluten Free",
+    332
+   ],
+   [
+    "Adult (18 - 50 Years)",
+    279
+   ],
+   [
+    "Dairy Free",
+    187
+   ],
+   [
+    "Vegetarian",
+    151
+   ],
+   [
+    "Children more than 1 but less than 4",
+    126
+   ],
+   [
+    "Vegan",
+    49
+   ],
+   [
+    "Kosher",
+    43
+   ],
+   [
+    "Organic",
+    37
+   ],
+   [
+    "Sugar Free",
+    22
+   ],
+   [
+    "Women (not pregnant or lactating)",
+    22
+   ],
+   [
+    "Adult Female (18 - 50 Years)",
+    13
+   ]
+  ],
+  "old_total_median": 72.2,
+  "old_total_range": [
+   37.0,
+   92.1
+  ],
+  "old_tier": {
+   "70-84": 228,
+   "55-69": 173,
+   "85+": 37,
+   "<55": 37
+  },
+  "route": {
+   "multi_or_prenatal": 306,
+   "generic": 158,
+   "omega": 5,
+   "probiotic": 6
+  },
+  "brands": [
+   [
+    "Emergen-C",
+    75
+   ],
+   [
+    "Nature's Way",
+    66
+   ],
+   [
+    "Airborne",
+    45
+   ],
+   [
+    "GNC Milestones",
+    25
+   ],
+   [
+    "Equate",
+    22
+   ],
+   [
+    "Pure Encapsulations",
+    20
+   ],
+   [
+    "Bayer One A Day",
+    19
+   ],
+   [
+    "up&up",
+    17
+   ],
+   [
+    "Garden of Life MyKind Organics",
+    16
+   ],
+   [
+    "MegaFood",
+    14
+   ]
+  ],
+  "drivers": {
+   "12081": {
+    "name": "Teen for Her Advanced",
+    "targetGroups": [
+     "Girls: (All)",
+     "Gluten Free"
+    ],
+    "driver_row": {
+     "source_path": "ingredientRows[0]",
+     "ingredient": "Vitamin A",
+     "source_value": 2500.0,
+     "source_unit": "IU",
+     "ul_value": null,
+     "ul_assessment_status": "assessment_error",
+     "readiness": "incomplete",
+     "reason_code": "pediatric_reference_gap"
+    },
+    "ul_population": {
+     "age_ranges": [
+      "14-18"
+     ],
+     "id": "pediatric",
+     "label": "adolescents 14-18",
+     "members": [
+      "pediatric"
+     ],
+     "reference_gap": "pediatric_ul_rows_below_14_not_in_reference_data"
+    },
+    "old_total": 73.2,
+    "old_dose_readiness": "complete"
+   },
+   "15830": {
+    "name": "1,000 MG Vitamin C Mangosteen",
+    "targetGroups": [
+     "Children 4 or More Years of Age",
+     "Adult (18 - 50 Years)"
+    ],
+    "driver_row": {
+     "source_path": "ingredientRows[2]",
+     "ingredient": "Vitamin C",
+     "source_value": 1000.0,
+     "source_unit": "mg",
+     "ul_value": 1800.0,
+     "ul_assessment_status": "assessment_error",
+     "readiness": "incomplete",
+     "reason_code": "pediatric_reference_gap"
+    },
+    "ul_population": {
+     "age_ranges": [
+      "14-18"
+     ],
+     "id": "general_adult+pediatric",
+     "label": "adolescents 14-18",
+     "members": [
+      "general_adult",
+      "pediatric"
+     ],
+     "reference_gap": "pediatric_ul_rows_below_14_not_in_reference_data"
+    },
+    "old_total": 62.0,
+    "old_dose_readiness": "complete"
+   },
+   "15854": {
+    "name": "Five Calories 1000 mg Vitamin C Mandarin Orange",
+    "targetGroups": [
+     "Children 4 or More Years of Age",
+     "Adult (18 - 50 Years)"
+    ],
+    "driver_row": {
+     "source_path": "ingredientRows[2]",
+     "ingredient": "Vitamin C",
+     "source_value": 1000.0,
+     "source_unit": "mg",
+     "ul_value": 1800.0,
+     "ul_assessment_status": "assessment_error",
+     "readiness": "incomplete",
+     "reason_code": "pediatric_reference_gap"
+    },
+    "ul_population": {
+     "age_ranges": [
+      "14-18"
+     ],
+     "id": "general_adult+pediatric",
+     "label": "adolescents 14-18",
+     "members": [
+      "general_adult",
+      "pediatric"
+     ],
+     "reference_gap": "pediatric_ul_rows_below_14_not_in_reference_data"
+    },
+    "old_total": 61.5,
+    "old_dose_readiness": "complete"
+   }
+  }
+ },
+ "context": {
+  "child_tag_products_by_status": {
+   "scored": 288,
+   "not_scored": 483
+  },
+  "scored_with_gap_rows": [
+   [
+    [
+     "omega",
+     "gap row not evidence-material"
+    ],
+    26
+   ],
+   [
+    [
+     "generic",
+     "gap row not evidence-material"
+    ],
+    24
+   ],
+   [
+    [
+     "fiber_digestive",
+     "gap row not evidence-material"
+    ],
+    21
+   ],
+   [
+    [
+     "probiotic",
+     "gap row not evidence-material"
+    ],
+    10
+   ],
+   [
+    [
+     "b_complex",
+     "gap row not evidence-material"
+    ],
+    1
+   ]
+  ],
+  "scored_with_gap_examples": [
+   [
+    "178597",
+    "Daily Fiber",
+    [
+     [
+      "Iron",
+      1.4,
+      "mg"
+     ]
+    ]
+   ],
+   [
+    "178600",
+    "Daily Fiber",
+    [
+     [
+      "Iron",
+      0.4,
+      "mg"
+     ]
+    ]
+   ],
+   [
+    "178603",
+    "Daily Fiber",
+    [
+     [
+      "Iron",
+      0.4,
+      "mg"
+     ]
+    ]
+   ],
+   [
+    "178604",
+    "Daily Fiber",
+    [
+     [
+      "Iron",
+      1.0,
+      "mg"
+     ]
+    ]
+   ]
+  ],
+  "scored_with_incomplete_dose_receipt": [
+   [
+    [
+     "sports",
+     0.0,
+     [
+      "protein_no_dose"
+     ]
+    ],
+    5
+   ]
+  ],
+  "scored_with_incomplete_dose_receipt_examples": [
+   [
+    "294273",
+    "Whey Protein (Grass-Fed)",
+    83.9,
+    63.9,
+    "complete"
+   ],
+   [
+    "311852",
+    "Whey Protein (Grass-Fed)",
+    83.9,
+    63.9,
+    "complete"
+   ],
+   [
+    "312355",
+    "Whey Protein (Grass-Fed)",
+    83.9,
+    63.9,
+    "complete"
+   ],
+   [
+    "312356",
+    "Whey Protein (Grass-Fed)",
+    83.9,
+    63.9,
+    "complete"
+   ],
+   [
+    "312357",
+    "Whey Protein (Grass-Fed)",
+    83.9,
+    63.9,
+    "complete"
+   ]
+  ]
+ }
+}
