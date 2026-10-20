@@ -59,7 +59,15 @@ INTERACTION_TEXT_TAG_PATTERNS: tuple[tuple[re.Pattern[str], str], ...] = (
 # identity with category `probiotics` is a member except `bacteriophages`
 # (viruses that infect bacteria, not a live bacterium or yeast). Both families
 # are pinned against the IQM by tests/test_interaction_subject_family.py.
+#
+# EPA/DHA oils: the bleeding and antiplatelet rule is authored on IQM
+# `fish_oil` and rests on EPA and DHA, not on the fish. An oil whose IQM
+# `relationships` say it contains DHA or EPA (algal oil, krill oil) keeps its
+# own identity and answers to that rule (Sean, ADR-0005 amendment, 2026-10-19:
+# preserving a warning must not force an incorrect identity).
 INTERACTION_SUBJECT_FAMILY: dict[str, str] = {
+    "algae_oil": "fish_oil",
+    "krill_oil": "fish_oil",
     "vitamin_k1": "vitamin_k",
     "vitamin_k2": "vitamin_k",
     "bacillus_clausii": "probiotics",
