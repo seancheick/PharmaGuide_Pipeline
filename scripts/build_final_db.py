@@ -6692,6 +6692,29 @@ def _product_context_warnings(enriched: Dict) -> List[Dict]:
     return result
 
 
+def _normalized_dose_entry(norm_raw: Any, index: int, raw: str, name: str) -> Dict:
+    """The dosage-normalization entry for activeIngredients[index].
+
+    The normalizer records each entry's own row as ``source_field``. A label can
+    list one name twice (a dosed panel form and an undosed blend member), so a
+    name alone may pick the other row's conversion; names are the fallback only.
+    """
+    if isinstance(norm_raw, dict):
+        entry = norm_raw.get(raw, norm_raw.get(name, {}))
+        return entry if isinstance(entry, dict) else {}
+    items = [item for item in safe_list(norm_raw) if isinstance(item, dict)]
+    position = f"activeIngredients[{index}]"
+    for item in items:
+        if item.get("source_field") == position:
+            return item
+    by_name: Dict[str, Dict] = {}
+    for item in items:
+        key = safe_str(item.get("original_name"))
+        if key:
+            by_name[key] = item
+    return by_name.get(raw, by_name.get(name, {}))
+
+
 def build_detail_blob(
     enriched: Dict,
     scored: Dict,
@@ -6779,15 +6802,6 @@ def build_detail_blob(
 
     # Dosage normalization
     norm_raw = safe_dict(enriched.get("dosage_normalization")).get("normalized_ingredients", {})
-    norm_data = {}
-    if isinstance(norm_raw, list):
-        for item in norm_raw:
-            if isinstance(item, dict):
-                key = safe_str(item.get("original_name"))
-                if key:
-                    norm_data[key] = item
-    elif isinstance(norm_raw, dict):
-        norm_data = norm_raw
 
     # Probiotic context for active-row dose-label override. When a
     # probiotic strain is a blend member without an individual dose,
@@ -6836,7 +6850,7 @@ def build_detail_blob(
 
     # Build ingredients
     ingredients = []
-    for ing in safe_list(enriched.get("activeIngredients")):
+    for active_index, ing in enumerate(safe_list(enriched.get("activeIngredients"))):
         if not isinstance(ing, dict):
             continue
         if not _active_row_allowed_for_primary_export(
@@ -6850,9 +6864,7 @@ def build_detail_blob(
         raw = safe_str(ing.get("raw_source_text"))
         name = safe_str(ing.get("name"), raw)
         m = take_iqd_match(ing)
-        ne = norm_data.get(raw, norm_data.get(name, {}))
-        if not isinstance(ne, dict):
-            ne = {}
+        ne = _normalized_dose_entry(norm_raw, active_index, raw, name)
         canonical_standard_name = safe_str(
             m.get("standard_name")
             or ing.get("standard_name")
