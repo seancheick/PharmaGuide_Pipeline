@@ -29,3 +29,17 @@ guggul, bile_extract, coffee_fruit, soybean. Each needs its own preparation judg
 Display follow-up for Sean (text unchanged): the unspecified consumer note says the listing does not say
 "whether it is whole fruit, juice concentrate, powder, or a standardized extract". On a label that prints
 "powder", that is imprecise. "Prunus cerasus, Powder" already shows it.
+
+## Second entry: `phosphatidylserine` soy source aliases (folded in from the #192 audit)
+
+The 'soy-derived phosphatidylserine' form (bio 12) gains `source_form_aliases`: "soy lecithin", "soy", "soybean",
+"soybeans" and "glycine max". This is the parent-scoped mechanism the 'sunflower phosphatidylserine' form (bio 12)
+already uses ("sunflower lecithin", "sunflower", "sunflower seed", "helianthus annuus seed"). Before, a soy source
+token under a PS row was classified as a source (`_SOURCE_MATERIAL_TERMS`) and read 'phosphatidylserine
+(unspecified)' (bio 9), while "Sunflower" selected its own form.
+
+Receipt: industrial phosphatidylserine is made by phospholipase D transphosphatidylation of soybean (or egg)
+lecithin with L-serine (USPTO 5700668; USPTO RE43764, worked example from soybean lecithin; PMC5972935). The form's
+own aliases already include "soy lecithin phosphatidylserine" and "lecithin-derived PS". A label that names soy as
+the PS source therefore names this form. Aliases are scoped to the PS parent only: they are absent from the global
+identity indexes, so "Soy" under lecithin, vitamin E or isoflavones is unaffected.
