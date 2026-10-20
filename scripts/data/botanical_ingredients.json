@@ -13501,8 +13501,8 @@
         "Montmorency Tart Cherry"
       ],
       "category": "fruit",
-      "notes": "Prunus cerasus (Rosaceae) fruit. Montmorency tart cherry rich in anthocyanins and melatonin. Source review: PMID 23075559 does not support the attributed botanical clinical claim; replacement source and preparation applicability remain unresolved.",
-      "last_updated": "2026-04-20",
+      "notes": "Prunus cerasus (Rosaceae) fruit. Montmorency tart cherry rich in anthocyanins and melatonin.",
+      "last_updated": "2026-10-20",
       "external_ids": {
         "unii": "1L29G6428X"
       },
@@ -13520,7 +13520,8 @@
       "cui": "C0330657",
       "audit_trail": [
         "Sprint D2.5 (2026-04-20): added 3 aliases to close silently-mapped rows surfaced by deep accuracy audit: ['cherry puree powder', 'cherry puree', 'tart cherry puree powder']",
-        "2026-10-20: removed species-ambiguous ['cherry puree powder', 'cherry puree'] (the label names no cherry species); with tart_cherry_fruit deferring to IQM tart_cherry, a shared ambiguous alias would otherwise resolve to one cherry."
+        "2026-10-20: removed species-ambiguous ['cherry puree powder', 'cherry puree'] (the label names no cherry species); with tart_cherry_fruit deferring to IQM tart_cherry, a shared ambiguous alias would otherwise resolve to one cherry.",
+        "2026-10-20: removed a notes sentence that named an unrelated paper (milk consumption and resistance training in female athletes) as this record's source. Tart cherry clinical evidence is owned by backed_clinical_studies INGR_TART_CHERRY and the tart_cherry literature record."
       ],
       "functional_roles": [],
       "attributes": {

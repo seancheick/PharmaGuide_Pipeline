@@ -9554,7 +9554,30 @@
         "cardiovascular",
         "glycemic_control",
         "muscle_recovery"
-      ]
+      ],
+      "applicability": {
+        "scope": "ingredient",
+        "require_source_label_form": true,
+        "required_form_terms": [
+          "juice"
+        ],
+        "excluded_form_terms": [
+          "powder",
+          "extract",
+          "dried",
+          "capsule",
+          "capsules"
+        ],
+        "studied_population": "Healthy adults given Montmorency tart cherry juice or juice concentrate (sleep pilot RCT, 20 adults, 7 days); the one trial in this record with a powdered capsule arm (44 healthy adults, 30 days) found no sleep effect.",
+        "source_pmids": [
+          "22038497",
+          "35790450",
+          "40964149",
+          "33440334"
+        ],
+        "reviewed_at": "2026-10-20",
+        "reason": "The positive trial in this record used tart cherry juice concentrate (PMID 22038497). The one trial with a powdered capsule arm (PMID 35790450) found no effect on sleep, and the reviews (PMIDs 33440334, 40964149) pool preparations without establishing that dry powder or extract is bioequivalent to juice. As in the tart cherry literature record (PMID 20459662) and the goji precedent, juice evidence does not transfer to dry powder or extract."
+      }
     },
     {
       "id": "INGR_ELDERBERRY",

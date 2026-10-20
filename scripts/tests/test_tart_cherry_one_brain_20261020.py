@@ -57,3 +57,51 @@ def test_identifiers_sit_on_the_right_records():
     assert botanical.get("rxcui") != "1012134"
     records = json.loads((DATA / "literature_evidence_records.json").read_text())["literature_evidence_records"]
     assert {r["canonical_id"] for r in records} & {"tart_cherry", "tart_cherry_fruit"} == {"tart_cherry"}
+
+
+def _scored(pipeline, pid):
+    import copy
+    from scoring_v4.scored_artifact import build_scored_artifact
+    normalizer, enricher = pipeline
+    raw = json.loads((FIXTURES / f"tart_cherry_one_brain_{pid}_raw.json").read_text())
+    enriched, _ = enricher.enrich_product(normalizer.normalize_product(raw))
+    return enriched, build_scored_artifact(copy.deepcopy(enriched))
+
+
+@pytest.mark.parametrize("pid", ["58997", "330869", "63892"])
+def test_juice_trials_do_not_credit_a_dry_extract(pipeline, pid):
+    """One evidence policy for tart cherry: INGR_TART_CHERRY's positive trial
+    is juice concentrate (PMID 22038497), like the literature record's juice
+    RCT (PMID 20459662). An extract label earns no Evidence from them."""
+    _, artifact = _scored(pipeline, pid)
+    (row,) = [x for x in artifact["assessment_readiness"]["evidence"]["ingredient_assessments"]
+              if x.get("canonical_id") == "tart_cherry"]
+    assert row["reason_code"] == "clinical_form_mismatch"
+    assert artifact["quality_pillars_v4"]["evidence"]["score"] == 0.0
+
+
+@pytest.mark.parametrize("text, status", [
+    ("Tart Cherry Juice Concentrate", "applicable"),
+    ("Montmorency Tart Cherry Juice", "applicable"),
+    ("Tart Cherry Juice Powder", "not_applicable"),
+    ("Tart Cherry Extract", "not_applicable"),
+    ("Tart Cherry", "not_applicable"),
+])
+def test_ingr_tart_cherry_applies_to_juice_only(text, status):
+    from clinical_applicability import assess_clinical_applicability
+    row = {"name": text, "raw_source_text": text, "canonical_id": "tart_cherry",
+           "raw_source_path": "ingredientRows[0]", "quantity": 30, "unit": "mL", "mapped": True}
+    product = {"activeIngredients": [row],
+               "ingredient_quality_data": {"ingredients": [row], "ingredients_scorable": [row]}}
+    entry = {"id": "INGR_TART_CHERRY", "ingredient": "Tart Cherry", "matched_canonical_ids": ["tart_cherry"],
+             "matched_source_row_refs": ["ingredientRows[0]"]}
+    assert assess_clinical_applicability(product, entry, assess_amount=False)["status"] == status
+
+
+def test_gnc_cherry_puree_powder_is_no_longer_called_sweet_cherry(pipeline):
+    """27203 GNC Ultra Mega Green Berry: "Cherry Puree Powder" names no species.
+    It resolved to dark_sweet_cherry through an alias both cherry records
+    carried; it is now honestly unresolved."""
+    enriched, _ = _scored(pipeline, "27203")
+    (row,) = [r for r in enriched["ingredient_quality_data"]["ingredients"] if r["name"] == "Cherry Puree Powder"]
+    assert row.get("canonical_id") is None
