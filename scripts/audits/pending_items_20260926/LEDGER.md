@@ -2261,18 +2261,22 @@ safety changes; receipt `reports/grape_resveratrol_marker_20261019`. Open: `veri
 `provenance_without_declaration` flag (pre-existing generator scope; re-apply
 `grape_marker_flag_batch.py` after any rebuild until the generator carries authored fields).
 
-## October 20 — only material rows enter a multi's panel form quality (claude/panel-form-quality-materiality)
+## October 20 — only material rows enter a multi's panel form quality (PR214, claude/panel-form-quality-materiality)
 
 Class: behavioral scoring (Formulation, plus role readiness). Owners: `scoring_input_contract.py::classify_ingredient_roles`
-(L4, and the shared `MATERIAL_ROLES` set, formerly `assessment_readiness._MATERIAL_ROLES`) and
+(L4; `MATERIAL_ROLES` has one copy in `scoring_v4/route_features.py`, re-exported by the contract) and
 `multi_prenatal_formulation.py::_scorable_ingredients`. Found by the #213 audit: an 85 mg CherryPure row moved 23 Life
 Extension Mix scores because the panel average read every dose-bearing row. Fix 1: L4 counted a panel nutrient as
-material only in mass units, so vitamins A/D/E in IU and folate in mcg DFE were adjuncts; it now reads
-`generic_helpers.has_usable_individual_dose`. Fix 2: the panel reads only material-role rows. Measured on the stored
-15,426-product corpus (`~/pg_quality/panel_materiality_pr_20261020/summary.md`): fix 1 moves 11 multis scored ->
-not_scored, each now holding a material panel nutrient with an unresolved dose (8 vitamin A of unknown form, 3 "NP"
-units) under the existing readiness policy; fix 2 moves 1,161 Formulation scores (877 within 0.5, range -8.1..+2.8),
-no status or safety change. Open: DSLD "NP" units on 269538/331688 zinc and 60740 niacin are capture gaps.
+material only in mass units (vitamins A/D/E in IU and folate in mcg DFE were adjuncts); it now reads
+`generic_helpers.has_usable_individual_dose`, and a provitamin judged against a vitamin's DRI
+(`generic_dose.judged_against_vitamin_dri`: beta-carotene, alpha-carotene, cryptoxanthin) is a panel member, so
+"Vitamin A (as beta-carotene)" stays in (independent audit). Fix 2: the panel reads only material-role rows. Measured on
+the stored 15,426-product corpus against main 96fe6b353 (`~/pg_quality/panel_materiality_pr_20261020/v2/`): 1,140
+Formulation moves (858 within 0.5, range -8.1..+2.8), 0 safety changes, and 11 multis scored -> not_scored. Each of the
+11 now holds a material panel nutrient whose typed dose assessment was already unresolved (8 vitamin A of unknown form,
+3 "NP" units with has_dose); readiness now refuses to publish past that gap. Open: the "NP" units on 269538/331688 zinc
+and 60740 niacin are DSLD capture gaps; MegaFood S. cerevisiae carrier rows enter or leave the panel by L5 mass ratio
+(note for Sean).
 
 ## October 20 — tart cherry one identity and one evidence policy (PR213, claude/tart-cherry-one-brain)
 
