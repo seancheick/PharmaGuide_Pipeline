@@ -1,7 +1,7 @@
 """A blend header that keeps a specific identity is an interaction subject.
 
 The label names the header after its substance ("Coenzyme Q10 complex 50 mg",
-"Chondroitin Complex 290 mg", "Seneactiv"), the enricher keeps that identity,
+"Chondroitin Complex 290 mg", "Paractin ... Andrographis extract"), the enricher keeps that identity,
 yet the interaction scan skipped every blend header, so the substance's rules
 never fired (951a05415 capture: 30 such headers whose rule did not fire, coq10,
 creatine, chondroitin, turmeric, quercetin among them). Identity is not
@@ -58,8 +58,9 @@ def _alerts(enriched: dict, rule_id: str) -> list:
         ("interaction_header_coq10_247322_raw.json", "RULE_IQM_COQ10_HEART_DISEASE_STATINS", "Coenzyme Q10 complex"),
         # 290 mg "Chondroitin Complex" (chondroitin sulfate, white willow bark), no children.
         ("interaction_header_chondroitin_12144_raw.json", "RULE_IQM_CHONDROITIN", "Chondroitin Complex"),
-        # 50 mg "Seneactiv", a curated alias of IQM ginseng.
-        ("interaction_header_ginseng_295773_raw.json", "RULE_INGREDIENT_GINSENG", "Seneactiv"),
+        # 25 mg Paractin andrographis extract header over its andrographolide constituents.
+        ("interaction_header_andrographis_231708_raw.json", "RULE_IQM_ANDROGRAPHIS",
+         "Paractin (Bioactive 14-Neo-Andro Compound) Andrographis extract"),
     ],
 )
 def test_named_blend_header_meets_its_identitys_rules(enrich, fixture, rule_id, header):
@@ -69,10 +70,10 @@ def test_named_blend_header_meets_its_identitys_rules(enrich, fixture, rule_id, 
 
 
 def test_blend_header_amount_is_not_its_substances_dose(enrich):
-    """RULE_INGREDIENT_GINSENG's anticoagulant threshold (1000 mg) is not evaluated
-    against the 50 mg Seneactiv blend total."""
-    (alert,) = _alerts(enrich("interaction_header_ginseng_295773_raw.json"), "RULE_INGREDIENT_GINSENG")
-    (hit,) = [h for h in alert["drug_class_hits"] if h["drug_class_id"] == "anticoagulants"]
+    """RULE_IQM_ANDROGRAPHIS's antiplatelet threshold (100 mg andrographolide) is not
+    evaluated against the 25 mg Paractin header total."""
+    (alert,) = _alerts(enrich("interaction_header_andrographis_231708_raw.json"), "RULE_IQM_ANDROGRAPHIS")
+    (hit,) = [h for h in alert["drug_class_hits"] if h["drug_class_id"] == "antiplatelets"]
     evaluation = hit["dose_threshold_evaluation"]
     assert evaluation["evaluation_status"] == "amount_unknown"
     assert evaluation["evaluated"] is False
