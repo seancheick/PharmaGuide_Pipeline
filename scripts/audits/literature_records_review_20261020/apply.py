@@ -132,7 +132,7 @@ def expect_keys(batches):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("batch", choices=["a", "b", "expect-a", "expect-b", "expect-ab"])
+    ap.add_argument("batch", choices=["a", "b", "c", "expect-a", "expect-b", "expect-c", "expect-ab"])
     ap.add_argument("--dry-run", action="store_true")
     args = ap.parse_args()
     if args.batch.startswith("expect-"):
@@ -146,8 +146,8 @@ def main():
     for c, b, a in report:
         print(f"{c}: {b} -> {a}" if b != a else f"{c}: {b} (unchanged)")
     print(f"{len(report)} records patched; {len(moved)} change determination")
-    if args.batch == "b" and moved:
-        raise SystemExit("batch b must not change a determination")
+    if args.batch in ("b", "c") and moved:
+        raise SystemExit("batches b and c must not change a determination")
     if not args.dry_run and blob != original:
         data_batch.save(DATA, blob)
 

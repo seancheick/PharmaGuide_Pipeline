@@ -662,7 +662,7 @@
         "unit": "mg",
         "basis": "active_capsaicinoids_per_meal"
       },
-      "applicability_decision": "Dose applicable for standardized capsaicinoids at >= 2 mg/day; crude ground pepper without capsaicinoid marker requires potency declaration",
+      "applicability_decision": "A meta-analysis of capsaicinoid trials reports that at least 2 mg capsaicinoids taken before a meal was needed to reduce ad libitum energy intake; a respiration-chamber study gave 2.56 mg capsaicin per meal. Crude ground pepper without a capsaicinoid declaration does not establish that exposure.",
       "verification_result": "authoritative_pubmed_verified",
       "verification_provenance": {
         "verified_by": "scripts/api_audit/verify_literature_records.py",
@@ -4879,9 +4879,10 @@
         "values": [
           400
         ],
-        "unit": "mg"
+        "unit": "mg",
+        "basis": "daily_intake"
       },
-      "applicability_decision": "Muscular power and post-exercise recovery support established at >= 400 mg disodium ATP.",
+      "applicability_decision": "400 mg/day disodium ATP for 2 weeks prevented post-exercise falls in ATP and muscle excitability and raised later-bout Wingate peak power in 42 healthy men.",
       "verification_result": "authoritative_pubmed_verified",
       "verification_provenance": {
         "verified_by": "scripts/api_audit/verify_literature_records.py",
@@ -5634,14 +5635,8 @@
       ],
       "effect_direction": "positive_moderate",
       "population_context": "adults with excessive intestinal gas or abdominal bloating",
-      "studied_dose_exposure": {
-        "values": [
-          500,
-          1000
-        ],
-        "unit": "mg"
-      },
-      "applicability_decision": "Digestive gas reduction and intestinal adsorbent support established at >= 500 mg per meal.",
+      "studied_dose_exposure": {},
+      "applicability_decision": "In a double-blind trial in 99 adults (US and India), activated charcoal lowered breath hydrogen and bloating and cramp symptoms after lactulose versus placebo; the abstract gives no dose.",
       "verification_result": "authoritative_pubmed_verified",
       "verification_provenance": {
         "verified_by": "scripts/api_audit/verify_literature_records.py",
@@ -7376,9 +7371,10 @@
         "values": [
           40
         ],
-        "unit": "mg"
+        "unit": "mg",
+        "basis": "daily_intake"
       },
-      "applicability_decision": "Bone mineral density maintenance and osteoblast activation support established for MBP at >= 40 mg/day.",
+      "applicability_decision": "40 mg/day milk basic protein for 6 months raised lumbar (L2-L4) BMD versus placebo in 35 healthy young women.",
       "verification_result": "authoritative_pubmed_verified",
       "verification_provenance": {
         "verified_by": "scripts/api_audit/verify_literature_records.py",
@@ -9142,12 +9138,12 @@
       "population_context": "Overweight and obese men",
       "studied_dose_exposure": {
         "values": [
-          250,
           500
         ],
-        "unit": "mg"
+        "unit": "mg",
+        "basis": "daily_intake"
       },
-      "applicability_decision": "Standardized 10% forskolin root extract supported at >= 250-500 mg/day for body composition management.",
+      "applicability_decision": "250 mg of a 10% forskolin root extract twice daily (500 mg/day) for 12 weeks decreased body fat percentage and fat mass versus placebo in 30 overweight and obese men; lean body mass only trended up.",
       "applicability_status": "applicable_reviewed_trials",
       "verification_provenance": {
         "verified_by": "scripts/api_audit/verify_literature_records.py",
@@ -9214,13 +9210,7 @@
       ],
       "effect_direction": "null",
       "population_context": "Overweight or obese adults",
-      "studied_dose_exposure": {
-        "values": [
-          1200,
-          4500
-        ],
-        "unit": "mg"
-      },
+      "studied_dose_exposure": {},
       "applicability_decision": "Cochrane Systematic Review demonstrated lack of clinically significant weight loss efficacy.",
       "applicability_status": "reviewed_null_evidence",
       "verification_provenance": {
@@ -9436,7 +9426,7 @@
       "population_context": "Overweight middle-aged men",
       "studied_dose_exposure": {},
       "applicability_decision": "The cited 12-week crossover RCT (46 men) used olive leaf polyphenols and improved insulin sensitivity and beta-cell responsiveness, with no effect on lipids, blood pressure or body composition. Leaf-extract evidence does not establish olive fruit extract efficacy or a dose.",
-      "applicability_status": "applicable_reviewed_trials",
+      "applicability_status": "applicability_unestablished",
       "verification_provenance": {
         "verified_by": "scripts/api_audit/verify_literature_records.py",
         "verified_at": "2026-09-21T07:39:42.986936+00:00",
@@ -9722,7 +9712,7 @@
       "population_context": "Adults with uncontrolled hypertension",
       "studied_dose_exposure": {},
       "applicability_decision": "The cited 12-week RCT (88 adults with uncontrolled hypertension) tested aged garlic extract, which lowered systolic pressure 5.0 mmHg versus placebo (11.5 mmHg in responders). Aged garlic extract is a different preparation from black garlic, so the trial does not establish black garlic efficacy or a dose.",
-      "applicability_status": "applicable_reviewed_trials",
+      "applicability_status": "applicability_unestablished",
       "verification_provenance": {
         "verified_by": "scripts/api_audit/verify_literature_records.py",
         "verified_at": "2026-09-21T07:39:42.986936+00:00",
@@ -9971,7 +9961,7 @@
       "population_context": "Not established: the only cited source is an animal study",
       "studied_dose_exposure": {},
       "applicability_decision": "No verified human GliSODin trial is recorded. The cited PMID 15742357 reports supplementation in animals; the recorded human RCT (40 adults, 500 mg/day, 4 weeks) is not in it. Evidence review pending.",
-      "applicability_status": "applicable_reviewed_trials",
+      "applicability_status": "applicability_unestablished",
       "verification_provenance": {
         "verified_by": "scripts/api_audit/verify_literature_records.py",
         "verified_at": "2026-09-21T07:39:42.986936+00:00",
@@ -10851,7 +10841,7 @@
         "unit": "mg",
         "basis": "daily_intake"
       },
-      "applicability_decision": "Chios mastic gum resin supported at >= 700-1050 mg/day for gastric digestive comfort and mucosal integrity.",
+      "applicability_decision": "Chios mastic gum 350 mg three times daily (1,050 mg/day) for 3 weeks improved functional dyspepsia symptoms versus placebo in 148 patients (77% vs 40% marked improvement).",
       "applicability_status": "applicable_reviewed_trials",
       "verification_provenance": {
         "verified_by": "scripts/api_audit/verify_literature_records.py",
@@ -11148,7 +11138,7 @@
       "population_context": "Not established: the only cited source is a narrative overview",
       "studied_dose_exposure": {},
       "applicability_decision": "No verified human Schisandra trial with a dose or outcome is recorded. The cited PMID 18515024 is a narrative overview of Russian research; it reports no sample size, dose, duration or pooled effect. Evidence review pending.",
-      "applicability_status": "applicable_reviewed_trials",
+      "applicability_status": "applicability_unestablished",
       "verification_provenance": {
         "verified_by": "scripts/api_audit/verify_literature_records.py",
         "verified_at": "2026-09-21T07:39:42.986936+00:00",
@@ -11766,7 +11756,7 @@
       "population_context": "Healthy adults aged 21-41",
       "studied_dose_exposure": {},
       "applicability_decision": "The cited 4-week study fed 52 healthy adults 5 or 10 g of whole dried shiitake daily (two dose groups, no placebo). Whole-mushroom food evidence does not establish mycelial or fruiting-body extract (AHCC or beta-glucan) efficacy or a dose.",
-      "applicability_status": "applicable_reviewed_trials",
+      "applicability_status": "applicability_unestablished",
       "verification_provenance": {
         "verified_by": "scripts/api_audit/verify_literature_records.py",
         "verified_at": "2026-09-21T07:39:42.986936+00:00",
@@ -12238,7 +12228,7 @@
       "population_context": "Obese premenopausal women with or without NAFLD",
       "studied_dose_exposure": {},
       "applicability_decision": "The cited 16-week RCT (151 women) tested Xanthigen, brown seaweed fucoxanthin combined with pomegranate seed oil (Xanthigen-600: 300 mg oil + 300 mg seaweed extract with 2.4 mg fucoxanthin). A combination result does not establish standalone fucoxanthin efficacy or a dose.",
-      "applicability_status": "applicable_reviewed_trials",
+      "applicability_status": "applicability_unestablished",
       "verification_provenance": {
         "verified_by": "scripts/api_audit/verify_literature_records.py",
         "verified_at": "2026-09-21T07:39:42.986936+00:00",
@@ -12678,7 +12668,7 @@
       "population_context": "Not established: the only cited source is a narrative review",
       "studied_dose_exposure": {},
       "applicability_decision": "No verified human perilla oil trial is recorded. The cited PMID 21909287 is a narrative review of perilla fatty-acid composition; the recorded RCT (60 adults, 3-5 g/day, 12 weeks) is not in it. Evidence review pending.",
-      "applicability_status": "applicable_reviewed_trials",
+      "applicability_status": "applicability_unestablished",
       "verification_provenance": {
         "verified_by": "scripts/api_audit/verify_literature_records.py",
         "verified_at": "2026-09-21T07:39:42.986936+00:00",
@@ -12746,7 +12736,7 @@
       "population_context": "Patients with tinea pedis",
       "studied_dose_exposure": {},
       "applicability_decision": "The only cited trial applied an undecylenic acid / zinc undecylenate powder to the feet twice daily for 4 weeks in tinea pedis. Topical antifungal evidence does not establish oral undecylenic acid efficacy or a dose.",
-      "applicability_status": "applicable_reviewed_trials",
+      "applicability_status": "applicability_unestablished",
       "verification_provenance": {
         "verified_by": "scripts/api_audit/verify_literature_records.py",
         "verified_at": "2026-09-21T07:39:42.986936+00:00",
@@ -13656,12 +13646,12 @@
       "population_context": "Healthy middle-aged and older adults",
       "studied_dose_exposure": {
         "values": [
-          500,
           1000
         ],
-        "unit": "mg"
+        "unit": "mg",
+        "basis": "daily_intake"
       },
-      "applicability_decision": "Standardized oral NAD+ precursor (NR) supported at >= 250-1000 mg/day for cellular NAD+ metabolome elevation.",
+      "applicability_decision": "500 mg nicotinamide riboside twice daily (1,000 mg/day) for 6 weeks raised PBMC NAD+ about 60% versus placebo in a crossover trial of 30 healthy middle-aged and older adults.",
       "applicability_status": "applicable_reviewed_trials",
       "verification_provenance": {
         "verified_by": "scripts/api_audit/verify_literature_records.py",
@@ -15468,7 +15458,7 @@
         "unit": "mg",
         "basis": "capsaicin_per_meal"
       },
-      "applicability_decision": "Standardized Capsicum capsaicinoids supported at >= 2-10 mg/day for thermogenic energy expenditure support.",
+      "applicability_decision": "In a 36-hour respiration-chamber study in negative energy balance, 2.56 mg capsaicin with every meal counteracted the fall in diet-induced thermogenesis and resting energy expenditure and raised fat oxidation; no daily dose threshold is established.",
       "applicability_status": "applicable_reviewed_trials",
       "verification_provenance": {
         "verified_by": "scripts/api_audit/verify_literature_records.py",
