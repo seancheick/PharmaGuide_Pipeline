@@ -89,9 +89,10 @@ def test_a_range_is_never_a_standardization_claim(text):
     ("standardized to contain 3% total rosavins and 1% salidroside", "3% rosavins"),
     ("min. 5% total withanolides", "5% withanolides"),
     ("standardized to (50 mg) 50% Epigallocatechin Gallate", "50% EGCG"),
-    # Not the same compound: stays unrecognized.
-    ("95% Curcumin = 150 mg", None),
-    ("3% Salidrosides", None),
+    # Another compound keeps its own name, never the neighbouring marker
+    # (curcumin is not curcuminoids; salidrosides are not rosavins).
+    ("95% Curcumin = 150 mg", "95% curcumin"),
+    ("3% Salidrosides", "3% salidrosides"),
 ])
 def test_label_wordings_of_a_recognized_claim(text, note):
     from build_final_db import _compute_standardization_note

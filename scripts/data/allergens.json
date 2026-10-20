@@ -3,7 +3,7 @@
     "description": "Regulatory allergen identification database for supplement ingredients. Covers FDA major allergens (9) and EU Annex II allergens (8). Used for consumer warnings and on-device personalization — not for general score penalties.",
     "purpose": "allergen_flagging",
     "schema_version": "5.0.0",
-    "last_updated": "2026-10-19",
+    "last_updated": "2026-10-20",
     "total_entries": 17,
     "scoring_system": {
       "allergen_free_bonus": 2,
@@ -348,13 +348,16 @@
       "notes": "FDA major allergen (FALCPA). Wheat allergy (IgE-mediated) is distinct from celiac disease (autoimmune) but both require flagging. Gluten proteins (gliadin/glutenin) are the primary triggers. Spelt, kamut, einkorn, emmer, and farro are wheat species that contain gluten. Triticale is a wheat-rye hybrid. Wheat germ oil is typically low in protein but not guaranteed gluten-free.",
       "category": "allergen",
       "general_handling": "flag_only",
-      "last_updated": "2026-10-19",
+      "last_updated": "2026-10-20",
       "match_rules": {
         "negative_match_terms": [
           "gluten enzyme",
           "mannitol",
           "xylitol",
           "highly refined"
+        ],
+        "phrase_match_terms": [
+          "wheatgrass"
         ]
       }
     },

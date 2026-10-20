@@ -3,7 +3,7 @@
     "description": "Phase 4 shadow literature resolution registry for high-impact canonical actives",
     "purpose": "literature_evidence_resolution",
     "schema_version": "5.0.0",
-    "last_updated": "2026-10-19",
+    "last_updated": "2026-10-20",
     "total_entries": 808,
     "verification_pipeline": "scripts/api_audit/verify_literature_records.py",
     "verified_studies_count": 279,
@@ -5580,7 +5580,7 @@
     },
     {
       "canonical_id": "tart_cherry_fruit",
-      "material_form": "Prunus cerasus (Montmorency tart cherry) standardized extract",
+      "material_form": "Montmorency tart cherry juice",
       "search_query": "tart cherry Montmorency muscle soreness recovery randomized controlled trial",
       "search_date": "2026-09-20",
       "databases_searched": [
@@ -5593,9 +5593,9 @@
           "title": "Efficacy of tart cherry juice in reducing muscle pain during running: a randomized controlled trial.",
           "study_type": "randomized_controlled_trial",
           "sample_size": 54,
-          "dose": "480 mg tart cherry anthocyanins equivalent",
-          "duration": "7 days",
-          "outcome": "statistically significant reduction in post-race muscle pain and exercise-induced inflammation",
+          "dose": "355 mL tart cherry juice twice daily",
+          "duration": "7 days before and on race day",
+          "outcome": "smaller increase in post-run muscle pain (visual analog scale) than placebo",
           "effect_direction": "positive_moderate",
           "verification_provenance": {
             "pmid_verified": true,
@@ -5609,15 +5609,9 @@
           }
         }
       ],
-      "effect_direction": "positive_moderate",
-      "population_context": "athletes and active adults experiencing post-exercise muscle soreness",
-      "studied_dose_exposure": {
-        "values": [
-          480
-        ],
-        "unit": "mg"
-      },
-      "applicability_decision": "Exercise muscle soreness and recovery support supported at >= 480 mg standardized anthocyanin extract.",
+      "effect_direction": "applicability_unestablished",
+      "population_context": "healthy runners in a long-distance relay race",
+      "applicability_decision": "Tart cherry juice trial evidence (355 mL twice daily for 7 days; one RCT, 54 runners, post-run muscle pain) does not transfer to dry tart cherry powder or extract without bioequivalence.",
       "verification_result": "authoritative_pubmed_verified",
       "verification_provenance": {
         "verified_by": "scripts/api_audit/verify_literature_records.py",
