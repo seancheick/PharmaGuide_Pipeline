@@ -1,0 +1,40 @@
+132 header identity groups; 624 rows; 155 rows whose identity has a rule
+ 29 fiber                  taxonomy_only 'Fiber Blend'                                 forms=['Cellulose', 'FOS-Fructoligosaccharides', 'Gum Arabic', 'Inulin'] kids=[] 1060
+ 24 olive_leaf             taxonomy_only 'Verbascoside/Oleuropein'                     forms=[] kids=['olive_leaf', 'verbascoside'] 182716
+ 23 olive_leaf             taxonomy_only 'Hydroxytyrosol/Tyrosol'                      forms=[] kids=['olive_fruit_extract', 'olive_leaf'] 182716
+ 10 probiotics             taxonomy_only 'Probiotics'                                  forms=[] kids=['OI_BEET_FIBER', 'beta_glucan', 'bifidobacterium_longum', 'lactobacillus_acidophilus', 'lactobacillus_plantarum'] 247106
+  8 probiotics             taxonomy_only 'LAB4 Probiotics'                             forms=[] kids=['bifidobacterium_bifidum', 'bifidobacterium_lactis', 'lactobacillus_acidophilus'] 206362
+  7 turmeric               taxonomy_only 'Organic Turmeric Blend'                      forms=['organic'] kids=['turmeric'] 243236
+  5 turmeric               clean         'organic Turmeric Blend'                      forms=['organic fermented Turmeric', 'organic Turmeric root extract'] kids=['curcumin'] 204669
+  4 creatine_monohydrate   clean         'Con-Cret'                                    forms=['Creatine Hydrochloride'] kids=[] 306204
+  3 turmeric               clean         'Turmeric (Curcuma longa) Blend'              forms=[] kids=['turmeric'] 180094
+  3 coq10                  clean         'Coenzyme Q10 complex'                        forms=['CoQ10', 'Microactive Q10-Cyclodextrin'] kids=[] 247322
+  3 probiotics             taxonomy_only 'Probiotic'                                   forms=[] kids=['bacillus_coagulans'] 273631
+  2 turmeric               clean         'Certified Organic Turmeric Blend'            forms=['organic'] kids=['black_pepper', 'turmeric'] 204676
+  2 turmeric               taxonomy_only 'Turmeric Curcumin Complex'                   forms=[] kids=['turmeric'] 210474
+  2 turmeric               clean         'Turmeric Phospholipid Blend'                 forms=['phospholipid'] kids=['None', 'PII_PHOSPHOLIPID_DESCRIPTOR', 'turmeric'] 210718
+  2 andrographis           clean         'Paractin (Bioactive 14-Neo-Andro Compound) Andrographis extract' forms=['14-Deoxyandrographolides', 'Andrographolides', 'Neoandrographolides'] kids=[] 231708
+  2 turmeric               clean         'Meriva Turmeric Phytosome Complex'           forms=['Curcuminoids', 'Sunflower Phospholipid', 'Turmeric (Curcuma longa) extract'] kids=[] 246533
+  2 echinacea              clean         'Echinacea Root Complex'                      forms=[] kids=['echinacea'] 251557
+  2 coq10                  clean         'MicroActive CoQ10-cyclodextrin Complex'      forms=['Coenzyme Q10'] kids=[] 278360
+  2 quercetin              taxonomy_only 'Quercetin Phytosome Complex'                 forms=['Phospholipid', 'Sophora japonica extract'] kids=[] 284255
+  1 chondroitin            clean         'Chondroitin Complex'                         forms=['Chondroitin Sulfate', 'White Willow Bark Extract'] kids=[] 12144
+  1 caffeine               clean         'Infinergy'                                   forms=[] kids=[] 249741
+  1 turmeric               taxonomy_only 'Turmeric Complex'                            forms=['Curcuma longa rhizome extract', 'Quillaja Wood Extract'] kids=[] 278388
+  1 boswellia              clean         'Indian Frankincense Phytosome Complex'       forms=[] kids=['PII_PHOSPHOLIPID_DESCRIPTOR', 'boswellia'] 284197
+  1 curcumin               clean         'Curcumin Phytosome Complex'                  forms=[] kids=['PII_PHOSPHOLIPID_DESCRIPTOR', 'turmeric'] 284229
+  1 curcumin               taxonomy_only 'Mervia'                                      forms=['Turmeric Phytosome'] kids=[] 293989
+  1 ginseng                taxonomy_only 'Seneactiv'                                   forms=['Panax notoginseng', 'Rosa roxburghii'] kids=[] 295773
+  1 fish_oil               repaired      'Krill Oil'                                   forms=['Euphausia superba', 'Superba2', 'Fish Oil Omega-3 Complex'] kids=['PII_PHOSPHOLIPID_DESCRIPTOR', 'astaxanthin', 'dha', 'epa'] 302654
+  1 curcumin               clean         'Curcumin C3 Complex'                         forms=[] kids=['turmeric'] 302672
+  1 valerian               clean         'Valerian root Complex'                       forms=[] kids=[] 307735
+  1 quercetin              clean         'Quercefit'                                   forms=['Quercetin Phytosome'] kids=[] 309492
+  1 probiotics             taxonomy_only 'Ultra Probiotics'                            forms=['Bacillus coagulans'] kids=[] 31062
+  1 quercetin              clean         'Quercetin Biolipid Complex'                  forms=[] kids=['lecithin', 'mct_oil', 'quercetin'] 326284
+  1 stinging_nettle        taxonomy_only 'Stinging & Dwarf Nettle Extracts'            forms=['Dwarf Nettle Root Extract', 'Stinging Nettle Root Extract'] kids=[] 328719
+  1 milk_thistle           clean         'Siliphos'                                    forms=['Silybin Phytosome'] kids=[] 336352
+  1 green_tea_extract      taxonomy_only 'Organic Green & White Tea Extract'           forms=['extract', 'organic'] kids=['green_tea_extract', 'white_tea'] 336897
+  1 chondroitin            clean         'Chondroitin Sulfate Complex'                 forms=['sulfate'] kids=['boswellia', 'citrus_bioflavonoids', 'collagen', 'hyaluronic_acid', 'msm'] 65963
+  1 resveratrol            clean         'Circulation Optimizing Blend'                forms=[] kids=['resveratrol'] 70152
+  1 turmeric               clean         'Turmeric root extract (Curcuma longa) Blend' forms=['Curcuminoids', 'Curcuminoids'] kids=[] 74547
+  1 vitamin_e              clean         'Tocotrienol Complex'                         forms=[] kids=[] 74932
