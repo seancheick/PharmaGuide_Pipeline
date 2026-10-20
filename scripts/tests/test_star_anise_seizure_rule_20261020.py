@@ -9,8 +9,9 @@ infants with neurologic reactions and evidence of contamination; Shen 2012
 (PMID 22484123) names anisatin as the cause. Before this rule the 10 corpus
 star anise products (all BulkSupplements extract powders) had no warning.
 
-Japanese star anise is a different species: a row naming it must never take
-the GRAS star_anise identity.
+Japanese star anise is a different species. Under its own DSLD group, a row
+naming it stays unmapped (pinned here). Under the group "Star Anise" it took
+star_anise until HIGH_RISK_JAPANESE_STAR_ANISE (PR #220) claimed it.
 """
 import copy
 import json

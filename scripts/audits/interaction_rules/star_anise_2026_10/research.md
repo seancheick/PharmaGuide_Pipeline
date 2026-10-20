@@ -65,10 +65,12 @@ in `interaction_rules_ghost_review.json`.
   BulkSupplements single-ingredient extract powders, 500 mg taken 1-3 times daily (252910,
   254540-254542, 311657, 311658, 311660, 311662, 330859, 330861). No label names Illicium anisatum,
   Japanese star anise or shikimi.
-- Probe: rows named "Japanese Star Anise", "Illicium anisatum" or "Shikimi" stay unmapped and never
-  take the GRAS `star_anise` identity. This is pinned in `test_star_anise_seizure_rule_20261020.py`.
-  The GSRS synonym "ILLICIUM ANISATUM [HPUS]" on the star anise record is not used. A separate entry
-  for Japanese star anise would be a dormant guard (0 labels today), so it is left as a follow-up.
+- Probe: rows named "Japanese Star Anise", "Illicium anisatum" or "Shikimi" stay unmapped when their
+  DSLD ingredient group is their own name; `test_star_anise_seizure_rule_20261020.py` pins that case.
+  **Correction (same day):** when DSLD files such a row under the group "Star Anise", the row does
+  take the GRAS `star_anise` identity. The first probe missed this because it set the group to the
+  row name. The fix is a dedicated entry, `HIGH_RISK_JAPANESE_STAR_ANISE`, in PR #220, which tests
+  both groupings. The GSRS synonym "ILLICIUM ANISATUM [HPUS]" on the star anise record is not used.
 
 ## Measurement
 
