@@ -28,3 +28,8 @@ or allergen-hit changes; 0 controls change; 204624 stays void.
 
 Tests: `scripts/tests/test_gluten_claim_cross_contact.py` (real labels 229974, 304605, 218190 fail
 first; control 204624; rule cases incl. barley, rye, oats, unparsed text).
+
+**Review follow-up (00ff06594).** A parsed non-gluten warning no longer explains a separate
+"may contain"/"shared equipment" sentence: the enricher runs each such sentence through the
+statement parser, and one that yields no allergen keeps the claim void. Re-count over the 259:
+all 259 still regain validation (no unparsed sentence among them), so the replay above stands.
