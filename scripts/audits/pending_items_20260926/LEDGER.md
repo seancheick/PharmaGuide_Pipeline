@@ -472,6 +472,7 @@ Receipts: `/Users/seancheick/pg_quality/clinical_registry_accuracy_20261011/REPO
 | D28 | Should a declared EGCG percentage count as a lower bound toward the green-tea total-polyphenol standardization threshold? Since 85d4e8402 (Oct 11) `standardized_botanicals.json` green_tea measures polyphenols only, so "50% EGCG" labels (e.g. HUM Ripped Rooster 241706) lose the 4-point marker credit even though EGCG is a polyphenol. Raw corpus: 35 rows with 45%/50% "Epigallocatechin Gallate", 22 with 45%/50% "EGCG". | Packet: `scripts/audits/canary_drift_20261015/research.md`. Historical canary pin superseded by the independently verified allergen correction; polyphenol policy remains open. |
 | D29 | Detail-blob fields nothing reads (dead-code batch 2): `synergy_detail.bonus_awarded` ships 1.0/0.75/0.5/0.25 for a synergy premium v4 retired, so the blob states a bonus the score does not contain; `supplement_type_audit.compatibility_mirror_type` duplicates `enriched_type`; prenatal `role_evidence` anchor counts, `claim_non_gmo_present` and `row_ledger_summary.legacy_raw_actives_count` are accurate but unread. Remove them from the blob (shipped-output change, one release), or keep? | `scripts/audits/dead_code_20261019/REMOVALS_AND_RETENTIONS.md`; key census `audit_dead_code.py keys` plus Flutter `lib/` rg on 2026-10-19 (the app reads `synergy_detail`, not `bonus_awarded`). |
 | D30 | Does a wheat, rye or barley **ingredient** (processed wheatgrass/barley grass, wheat dextrin, malt) contradict a gluten-free claim (21 CFR 101.91)? PR #187 (merged 53e186ced) puts this in one switch, `scoring_input_contract.GLUTEN_GRAIN_INGREDIENT_CONTRADICTS_GLUTEN_FREE`; flip it there only. | Set to True, which reproduces main's Transparency B2 −2. Since #187 the Gluten-Free badge (compliance `gluten_free` → core `is_gluten_free`), `claim_gluten_free_validated` and the claim evidence follow the same switch. So the badge is now **OFF** on 297644 and 274671 (barley-grass ingredient; 297644 states "NSF Certified Gluten-free", 274671 "Gluten free."), where main showed it ON. That is the conservative state pending this decision. Receipt: `scripts/audits/gluten_claim_cross_contact_20261019/README.md`. Wheatgrass /data-fix #207 (merged 4d5ef0747, ALLERGEN_WHEAT phrase term "wheatgrass"): measured on post-#188 main it moves no badge. 293243 gains its row-level ALLERGEN_WHEAT hit (matched text "Wheatgrass") and, as expected, now also exports that row and a B2 "Declared allergen source: Wheat" display entry; its badge was already off through its barley-grass ingredient (this switch). 294319/294321/294322 already flag wheat through "Allergen Information: Wheat" since #188. Receipt: `scripts/audits/allergen_compound_words_20261020/research.md`. |
+| D31 | Should an undosed blend member (no amount of its own) earn Evidence ingredient points through its blend's owner tier? Today it does (evidence_resolver.evidence_owner_canonicals tier inheritance; assessment_readiness calls the same rows non_material_active / not applicable). Measured on top of the title fix (2,313 frozen raw labels): A keep = status quo; C no points unless the route, title or label claim names the member itself = 157 products drop (median -5.6, max -14.0), 103 Evidence -> 0, 37 tier drops, 0 status/safety changes, reverses the Oct 4 Spirulina restoration; B 21 CFR 101.36(c) bound (member k <= blend total / k) vs a reviewed minimum studied dose = needs that dose on ~48 records (3 of 51 credited identities have one), so it equals A today. Bounds of the 296 credits C removes: median 179 mg, 67 under 50 mg, 116 at or above 250 mg. | `~/pg_quality/evidence_ownership_20261020/` (option_c_movers.json, option_c_member_bounds.json); branch claude/evidence-title-ownership. |
 
 ## Queued work with an owner (agent work, not started)
 
@@ -2344,6 +2345,24 @@ Sean's next necessary refresh startsClean. He intends to rerun after sourceinteg
 Report and compact measurements: scripts/audits/integration_audit_20261020/README.md, REVIEW.md, measurement.json,
 SENACTIV_RESEARCH.md. Durable fullcaptures/checksums: ~/pg_quality/integration_audit_20261020.
 Finalsourceab50c2c3c is qualified for authorized PR218 integration. Only audit/master/LEDGER documentation follows this tested source; no duplicate source checkpoint required. Actual merge SHA, primary-draft preservation and cleanup receipts are recorded in the current handoff and ~/pg_quality/integration_audit_20261020/integration_closeout.json. No release/artifact gate is newly closed.
+
+
+## October 20 — a flavor phrase, plant-part word or split "B-12" never decides title ownership (claude/evidence-title-ownership)
+
+Class: behavioral scoring (role owner feeding Evidence owners, Dose purpose and lent blend anchors). Owner:
+`scoring_input_contract.py::classify_ingredient_roles` (`_role_title_text` read by `_named_in_title` and by the lent-anchor
+child choice `_identity_named_in_product_title`). Found by the PR205/PR196 audits: "Natural Raspberry-Tea Flavor" made a 5 mg
+berry blend own Evidence on 293904, "Fruit" named apple_fruit on 40089, "Raw B-12" never named vitamin B12 on 321388 (garlic,
+ginger and bromelain earned the points). Measured on 2,090 frozen raw labels (1,789 title-cohort superset + 300 random
+controls + 278416) against origin/main e55b6ccef (`~/pg_quality/evidence_ownership_20261020/`): 212 records change, 57 scores
+(38 up, 19 down, -6.4..+24.2), 15 tier moves, 0 status/safety changes, 0 controls changed; 33/33 contract canaries unchanged.
+Causes: 26 vitamin-named titles (B12/B1 singles lose incidental calcium points; Vegan B12, Methyl B12 gain the authority
+floor), 14 flavor phrases, 17 plant-part words. Main scores 178728 identically when its title drops "Natural Berry Flavor".
+Undosed-member credit: 9 products lose it, 5 gain it (178728, 18540, 317050, 64382, 64387), pending D31.
+INGR_TART_CHERRY standard_name "Tart Cherry" re-applied: on all 552 cherry labels only rejected matches change
+(PR213 juice-only applicability); 0 score changes, the 12 earlier movers included. Open: L5 mass materiality excludes
+potent micro-dose actives (melatonin 1 mg on 293904) although `.claude/rules/scoring.md` says materiality comes from
+semantic roles, not raw mass; flavor words without "Flavor" ("Juiced Greens Powder Apple", "Berry Lime Burst") still name rows.
 
 ## October 20 — comma-joined sub-blends keep their members (claude/comma-subblend-members; follow-up of PR206)
 
