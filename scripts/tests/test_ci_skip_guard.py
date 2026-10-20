@@ -294,3 +294,15 @@ def test_metadata_skip_policy_preserves_strict_other_reasons_without_duplicates(
     }
     assert set(patterns) == authored | other
     assert len(patterns) == len(set(patterns))
+
+
+def test_fast_workflow_pins_runner_compatible_with_project_python():
+    # actions/python-versions' manifest has 3.13.3 Linux x64 builds for 24.04,
+    # but none for 26.04. A moving ubuntu-latest failed before tests in run
+    # 39431996588. Keep the runner explicit when the interpreter is exact.
+    import re
+    root = Path(__file__).resolve().parents[2]
+    workflow = (root / '.github/workflows/pipeline-tests.yml').read_text()
+    assert re.findall(r'^\s+runs-on:\s*(\S+)\s*$', workflow, re.M) == ['ubuntu-24.04']
+    assert 'python-version-file: .python-version' in workflow
+    assert (root / '.python-version').read_text().strip()
