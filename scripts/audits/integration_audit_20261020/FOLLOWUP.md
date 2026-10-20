@@ -1,6 +1,6 @@
 # Remaining source integration — October 20, 2026
 
-Candidate `11ec9e05009d86a93f9ed6d9b94619079e4ca053`, PR227. This report covers the corrections discovered while independently reviewing the literature, title, comma-blend and worktree follow-ups. No pipeline, release, upload or app import was run.
+Validated runtime `11ec9e05009d86a93f9ed6d9b94619079e4ca053`, PR227 merged at `db7f474d79c151d835f9ec173ea5067cacdef7d5`. This report covers the corrections discovered while independently reviewing the literature, title, comma-blend and worktree follow-ups. No pipeline, release, upload or app import was run.
 
 Owner: existing literature/backed registries, evidence_resolver and clinical_applicability; identity/omega_labels and omega_formulation::_is_parent_oil_row. Evidence: matrix, callers, source diffs, live per-entry primary receipts and raw-label regressions. Will NOT create a scorer, normalizer, registry, status or clinical/scoring policy.
 
@@ -24,7 +24,7 @@ PR224's historical 77-label replay predates the final decomposition guard, so it
 
 Completed October 20 enrichment of 230194 contains Fish and retains the seven facility risks as may_contain. The exported blob on disk remains the October 15 version and is stale. No export or manifest was rebuilt/restamped. Final stage fingerprints are inspected separately; Sean will run the necessary pipeline after integration.
 
-PR219's epilepsy-specific Chinese-star-anise rule remains held by Sean. Undosed/trace/microdose policy is not changed. Six historical managed-worktree archives remain queued by Codex despite owner requests and verified evidence preservation; they have not been force-deleted.
+PR219 was closed unmerged on October20 at Sean’s request: the cited tea/contamination sources do not establish the proposed adult-extract epilepsy scope. Its research and commits are preserved in a verified Git bundle. Undosed/trace/microdose policy is unchanged; D31 recommendation A remains for Sean to decide. After explicit authorization to use Git, the six queued historical worktrees were removed without force;322 current and275 historical evidence-file hashes were reverified after removal. No unfinished source fix was found. See WORKTREE_CLOSEOUT.md.
 
 CI on the first candidate found three contract gaps: outcome-category vocabulary, a downstream raw-label read, and a test requiring all allowed study types to be populated. Existing explicit reference holds and the input-contract projection resolve the production issues; supported dormant vocabulary categories remain retained. The 56 affected contract/regression checks pass. The incomplete first candidate capture was rejected; only the corrected, source-stable complete capture qualifies. The two reviewed raw canary drifts were refreshed selectively:204571 complete→partial for unresolved Schisandra trial applicability, score61.2 unchanged;74716 carrier2600→2000mg, concentration0.2308→0.30, Formulation9.3→10.9, score56.2→57.8. Full pairs preserve safety, identities, declared amounts and roles. Final raw check:33/33 pass.
 

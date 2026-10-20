@@ -1,5 +1,13 @@
 # PharmaGuide master completion plan
 
+### Decision and cleanup closeout — October 20
+
+- [x] PR219 closed unmerged at Sean’s request after source-applicability review; research and unique commits preserved in a verified Git bundle. The separate toxic Japanese-star-anise guard in PR220 remains integrated.
+- [x] Six remaining stale worktrees removed with normal Git removal after explicit authorization; no force, no hidden unfinished fix, preserved evidence hashes reverified, private inputs unchanged. Final cleanup receipt registers only primary.
+- [ ] D31: integrator recommends A for source-applicable ingredient research while retaining unknown individual exposure and no inferred Dose credit. This is a recommendation for Sean, not an approved scoring-policy change. Historical A/B/C measurements remain in the existing LEDGER.
+
+Owner: existing LEDGER decision register, Git histories and integration audit reports — evidence: closed PR219, verified bundle, source-owner read and final_six_cleanup/git_removal_final_verification.json. Will NOT change clinical/scoring policy or close generated-artifact/release gates. No pipeline run.
+
 ### Title ownership checkpoint — October 20
 
 - [x] Source-qualified title/role correction: flavor phrases and generic plant-part words no longer select unrelated Evidence/Dose owners; B-12 names resolve through the existing title owner. No undosed/trace scoring policy change.
@@ -1371,4 +1379,4 @@ This qualifies the bounded source batch for authorized integration; it does not 
 The source audit closes only its evidenced deliverables. Existing clinical holds and generated-artifact/app/publication gates remain explicit; earlier phase totals are not advanced by a code review.
 
 
-October20 follow-up register: PR220/224/225/226 and author literature223 are integrated. PR227 corrects source attribution/applicability and omega carrier mass through existing owners; exact11ec whole-fast CI39465302377 is green. Both1691 full/blob captures qualify, final33raw canaries pass after two source-reviewed selective refreshes. Independent movement review explains all100numeric movers with100/100unchanged controls and no sensitive safety/identity/amount/role changes; local completed545pass/one previously recorded stale-catalog folate failure/24optional skips; source is qualified for authorized227integration, while catalog/release/app acceptance remains open in the existing LEDGER/FOLLOWUP; no broader phase or release completion implied. Original22 plus six later scratch/Claude checkouts audited; unique evidence preserved, six managed archives remain queued by owning chats. Sean’s exploratory pipeline is untouched; the final integrated source still needs his Clean→Enrich→Score and Export/artifact acceptance.
+October20 follow-up register: PR220/224/225/226 and author literature223 are integrated. PR227 corrects source attribution/applicability and omega carrier mass through existing owners; exact11ec whole-fast CI39465302377 is green. Both1691 full/blob captures qualify, final33raw canaries pass after two source-reviewed selective refreshes. Independent movement review explains all100numeric movers with100/100unchanged controls and no sensitive safety/identity/amount/role changes; local completed545pass/one previously recorded stale-catalog folate failure/24optional skips; source is qualified for authorized227integration, while catalog/release/app acceptance remains open in the existing LEDGER/FOLLOWUP; no broader phase or release completion implied. Original22 plus six later scratch/Claude checkouts audited; unique evidence preserved, all six remaining managed worktrees were subsequently removed with normal Git after Sean’s explicit authorization and evidence verification. Sean’s exploratory pipeline is untouched; the final integrated source still needs his Clean→Enrich→Score and Export/artifact acceptance.
