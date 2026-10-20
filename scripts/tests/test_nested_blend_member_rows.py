@@ -214,6 +214,69 @@ def test_flavonoid_class_label_in_a_blend_is_still_composition():
     assert EnhancedDSLDNormalizer._is_chemical_decomposition_leaf(leaf) is True
 
 
+def _protease_product(protease_row: Dict[str, Any]) -> Dict[str, Any]:
+    """DSLD 63367 / 221095 shape: a skip-listed protease blend in a group blend."""
+    return {
+        "id": 63367,
+        "fullName": "Active Chocolate",
+        "brandName": "Test",
+        "servingSizes": [{"order": 1, "minQuantity": 34, "maxQuantity": 34,
+                          "minDailyServings": 1, "maxDailyServings": 1, "unit": "Gram(s)"}],
+        "ingredientRows": [
+            _row("Digestion Complex", "blend", "Blend", 0, "NP", 60, [
+                _row("Ginger extract", "botanical", "Ginger ", 5, "mg", 61, size=34),
+                protease_row,
+            ], size=34),
+        ],
+        "otheringredients": {"text": None, "ingredients": []},
+    }
+
+
+PROTEASE_NESTED = _row(
+    "Proprietary Blend of Proteases", "blend", "Proprietary Blend (non-nutrient/non-botanical)",
+    0, "NP", 62, [
+        _row("Bacillus subtilis", "bacteria", "Bacillus Subtilis", 0, "NP", 63, size=34),
+        _row("Ananas comosus", "botanical", "Pineapple", 0, "NP", 64, size=34),
+    ], size=34)
+PROTEASE_NESTED["notes"] = "Proprietary Blend of Proteases Note: 3,500 HUT "
+
+PROTEASE_FORMS = _row(
+    "Proprietary Blend of Proteases", "blend", "Proprietary Blend (non-nutrient/non-botanical)",
+    0, "NP", 62, size=34)
+PROTEASE_FORMS["notes"] = ("Proprietary Blend of Proteases (Form: from Bacillus subtilis Genus: Bacillus "
+                           "Species: subtilis, and Ananas comosus Genus: Ananas Species: comosus) Note: 3500 HUT ")
+PROTEASE_FORMS["forms"] = [
+    {"order": 1, "ingredientId": 102360, "prefix": "and", "name": "Ananas comosus",
+     "category": "botanical", "ingredientGroup": "Pineapple"},
+    {"order": 2, "ingredientId": 109415, "prefix": "from", "name": "Bacillus subtilis",
+     "category": "bacteria", "ingredientGroup": "Bacillus Subtilis"},
+]
+
+
+@pytest.mark.parametrize("protease_row", [PROTEASE_NESTED, PROTEASE_FORMS], ids=["nested", "forms"])
+def test_protease_source_organisms_are_provenance_not_probiotics(normalizer, enricher, protease_row):
+    """The protease is derived from B. subtilis and pineapple: no live culture, no probiotic warning."""
+    cleaned = normalizer.normalize_product(copy.deepcopy(_protease_product(protease_row)))
+    sources = {row["name"]: row for row in cleaned["activeIngredients"]
+               if row["name"] in {"Bacillus subtilis", "Ananas comosus"}}
+    assert set(sources) == {"Bacillus subtilis", "Ananas comosus"}
+    assert {row["cleaner_row_role"] for row in sources.values()} == {"source_descriptor"}
+    enriched, _ = enricher.enrich_product(cleaned)
+    assert "RULE_IQM_PROBIOTICS_IMMUNOCOMPROMISED" not in _rule_ids(enriched)
+
+
+def test_probiotic_and_enzyme_blend_keeps_its_live_cultures(normalizer, enricher):
+    """Control: an "Enzyme" name alone never turns a culture into provenance (288344 shape)."""
+    raw = _protease_product(_row("Raw Probiotic & Enzyme Blend", "blend", "Proprietary Blend", 0, "NP", 62, [
+        _row("Lactobacillus plantarum", "bacteria", "Lactobacillus Plantarum", 0, "NP", 63, size=34),
+    ], size=34))
+    cleaned = normalizer.normalize_product(raw)
+    [culture] = [row for row in cleaned["activeIngredients"] if row["name"] == "Lactobacillus plantarum"]
+    assert culture["cleaner_row_role"] == "nested_display_only"
+    enriched, _ = enricher.enrich_product(cleaned)
+    assert "RULE_IQM_PROBIOTICS_IMMUNOCOMPROMISED" in _rule_ids(enriched)
+
+
 def test_parent_category_working_state_never_reaches_output(normalizer):
     import json
 

@@ -4838,29 +4838,7 @@ class EnhancedDSLDNormalizer:
             name = ing.get("name", "")
             nested = ing.get("nestedRows", [])
 
-            # DSLD can place an enzyme's source organisms in nestedRows,
-            # rather than forms[]. An explicit parent-owned "proteases from"
-            # clause identifies provenance, not live cultures or fruit doses.
-            # Keep the source rows and their NP amounts without borrowing the
-            # enzyme preparation's mass. Separately quantified children and
-            # enzyme members retain their ordinary handling.
-            source_notes = str(ing.get("notes") or "")
-            if (str(ing.get("category") or "").casefold() in {"enzyme", "blend"}
-                    and re.search(r"\b(?:enzymes?|proteases?)\s+(?:derived\s+)?from\b", source_notes, re.I)):
-                for child in nested:
-                    if not isinstance(child, dict):
-                        continue
-                    _, _, _, variants = self._process_quantity(child.get("quantity"))
-                    if (str(child.get("category") or "").casefold() in {"botanical", "bacteria", "animal part or source", "plant part", "source material"}
-                            and not child.get("nestedRows") and not child.get("forms")
-                            and all(variant.get("quantity") == 0
-                                    and str(variant.get("unit") or "").casefold() == "np"
-                                    and variant.get("quantity_parsed") is not False
-                                    for variant in variants)
-                            and not re.search(r"\b(?:cfu|live|viable)\b|colony[- ]forming", " ".join(
-                                str(child.get(key) or "") for key in ("name", "notes", "description")
-                            ), re.I)):
-                        child["_enzyme_source_descriptor"] = True
+            self._mark_enzyme_source_descriptors(ing, nested)
 
             # DSLD explicitly marks structural section headings with
             # ingredientGroup="Header". The heading is label context, not an
@@ -5197,6 +5175,42 @@ class EnhancedDSLDNormalizer:
 
         return flattened
 
+    _ENZYME_SOURCE_PARENT_RE = re.compile(
+        r"\b(?:enzymes?|proteases?)\s+(?:derived\s+)?from\b|\bblend\s+of\s+proteases\b",
+        re.I,
+    )
+
+    def _mark_enzyme_source_descriptors(self, ing: Dict[str, Any], children: List[Any]) -> None:
+        """Mark an enzyme preparation's source organisms as provenance.
+
+        DSLD can place an enzyme's source organisms in nestedRows (or forms)
+        rather than in a "from" clause. A parent that names itself a protease
+        preparation ("proteases from", "Proprietary Blend of Proteases")
+        identifies provenance, not live cultures or fruit doses. Keep the
+        source rows and their NP amounts without borrowing the enzyme
+        preparation's mass. Separately quantified children, children with
+        their own members and anything labelled CFU/live keep their ordinary
+        handling, so a probiotic & enzyme blend is never read this way.
+        """
+        source_text = " ".join(str(ing.get(key) or "") for key in ("name", "notes"))
+        if not (str(ing.get("category") or "").casefold() in {"enzyme", "blend"}
+                and self._ENZYME_SOURCE_PARENT_RE.search(source_text)):
+            return
+        for child in children:
+            if not isinstance(child, dict):
+                continue
+            _, _, _, variants = self._process_quantity(child.get("quantity"))
+            if (str(child.get("category") or "").casefold() in {"botanical", "bacteria", "animal part or source", "plant part", "source material"}
+                    and not child.get("nestedRows") and not child.get("forms")
+                    and all(variant.get("quantity") == 0
+                            and str(variant.get("unit") or "").casefold() == "np"
+                            and variant.get("quantity_parsed") is not False
+                            for variant in variants)
+                    and not re.search(r"\b(?:cfu|live|viable)\b|colony[- ]forming", " ".join(
+                        str(child.get(key) or "") for key in ("name", "notes", "description")
+                    ), re.I)):
+                child["_enzyme_source_descriptor"] = True
+
     def _rescue_skipped_nested_row(
         self,
         nested_ing: Dict[str, Any],
@@ -5234,14 +5248,15 @@ class EnhancedDSLDNormalizer:
         )
         rescued: List[Dict[str, Any]] = []
         if nested_ing.get("forms"):
-            rescued.extend(
-                self._expand_header_forms_for_processing(
-                    nested_ing,
-                    source_path=nested_ing.get("raw_source_path") or "activeIngredients",
-                )
+            form_rows = self._expand_header_forms_for_processing(
+                nested_ing,
+                source_path=nested_ing.get("raw_source_path") or "activeIngredients",
             )
+            self._mark_enzyme_source_descriptors(nested_ing, form_rows)
+            rescued.extend(form_rows)
         if not grand_nested:
             return rescued
+        self._mark_enzyme_source_descriptors(nested_ing, grand_nested)
         logger.debug(
             "Extracting %d nestedRows from skipped nested parent: %s",
             len(grand_nested), nested_name,
