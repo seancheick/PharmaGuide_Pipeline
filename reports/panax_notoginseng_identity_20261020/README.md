@@ -54,3 +54,38 @@ pseudoginseng or Rosa roxburghii (10), every label naming ginseng (176), and 150
 - **0 rules added, 0 score changes, 0 product_safety_status changes.** All 176 ginseng labels are
   unchanged.
 - Raw canary check (`freeze_contract_snapshots.py --check`): 33 checked, 0 failed.
+
+## Independent audit follow-up (October 20, 2026; `audit_batch.py`)
+
+- **F1, under-warning:** 295773 "Seneactiv" now resolves to other_ingredients NHA_SENACTIV and
+  met no rule. It now gets `RULE_OTHER_SENACTIV_ANTIPLATELET`. This follows the existing
+  other_ingredients-subject precedent (RULE_OTHER_GINGER_EXTRACT_BLEEDING → NHA_GINGER_EXTRACT),
+  and the copy is the notoginseng advisory naming Senactiv. 309960/329215 "Senactiv" sit in the
+  DSLD group "Proprietary Blend" and stay BLEND_GENERAL by ADR-0005's branded-complex rule, so
+  they don't resolve to NHA_SENACTIV. **For Sean.**
+- **F2:** bleeding_disorders and surgery_scheduled lines at monitor, with qualified copy ("a
+  bleeding risk is not established"), on both rules.
+  - Added PMIDs, read by content:
+    - 31471773: clopidogrel–TCM review; Panax notoginseng increased antiplatelet activity.
+    - 39364700: esophageal submucosal hematoma after five notoginseng capsules.
+    - 34307625: the same lesion after a homemade hirudin + notoginseng mixture. Hirudin is an
+      anticoagulant, so this case cannot be attributed to notoginseng alone; the mechanism text
+      says so.
+  - Still no anticoagulant line. Correction to the earlier receipt: the two human warfarin studies
+    tested **Danshen combinations**, not notoginseng alone (24142885: T89, Danshen + Sanqi;
+    31053296: compound Danshen dripping pills).
+  - 36754189 (review) calls notoginseng's CYP/P-gp effects "a red flag for drugs with a narrow
+    therapeutic window". That rests on in vitro and animal pharmacokinetic data, so no
+    drug-class line was written from it.
+- **F3:** a Chinese Pharmacopoeia pregnancy caution for San Qi was **not verified** at its
+  primary source. The HK PolyU herbal database lists "Use with caution in pregnancy" with no
+  citation. The pregnancy block stays the standard no_data text.
+- **F4:** `test_blend_header_amount_is_not_its_substances_dose` also asserts
+  `reason == "missing_or_invalid_dose"`.
+- **Ghost review:** 12 reviewed entries for the Senactiv rule's citations. They concern Panax
+  notoginseng; "Senactiv" does not appear in them. `verify_interaction_rules_citations.py
+  --strict`: PASS.
+- **Replay after the audit** (336 labels; base main 3d7fe8adf, candidate this branch; records in
+  `~/pg_quality/lostsubj_pr202_20261020/`, `fulldiff.out`): 295773 gains
+  RULE_OTHER_SENACTIV_ANTIPLATELET and loses RULE_INGREDIENT_GINSENG (the wrong identity); 0
+  score or safety changes.
