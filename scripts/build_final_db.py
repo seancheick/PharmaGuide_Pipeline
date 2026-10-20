@@ -6713,7 +6713,7 @@ def _normalized_dose_entry(norm_raw: Any, index: int, raw: str, name: str) -> Di
         if not candidate:
             continue
         matches = [item for item in items if item.get("original_name") == candidate
-                   and not safe_str(item.get("source_field")).startswith("activeIngredients[")]
+                   and not safe_str(item.get("source_field"))]
         if len(matches) == 1:
             return matches[0]
         if matches:

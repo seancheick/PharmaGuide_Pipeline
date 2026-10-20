@@ -270,3 +270,10 @@ def test_tiny_upper_limit_exceedance_is_still_visible():
     value = _dose_consumer_fact(receipt)["value_display"]
     assert "100.0%" not in value
     assert ">100%" in value
+
+
+def test_upper_limit_rounding_boundaries_never_hide_exceedance():
+    from scoring_v4.pillar_explanations import _percent
+    for value in (100.00001, 100.01, 100.05, 100.049999, 100.49, 100.5):
+        text = _percent(value)
+        assert text == ">100" or float(text) > 100, (value, text)

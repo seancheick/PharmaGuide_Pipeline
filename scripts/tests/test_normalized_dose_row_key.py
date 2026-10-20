@@ -50,7 +50,7 @@ def test_supplement_facts_positions_never_match_active_rows():
     other = [_entry("supplementFacts[2]", 0.0, "NP", None),
              _entry("activeIngredients[5]", 2500.0, "IU", 750.0)]
     # Position 2 in supplementFacts is a different list; it must not decide
-    # active row 2. The name fallback is used instead.
+    # active row 2. Only its own active position may supply the amount.
     assert _normalized_dose_entry(other, 5, "Beta-Carotene", "Beta-Carotene")["normalized_amount"] == 750.0
 
 
@@ -73,3 +73,8 @@ def test_a_siblings_positional_conversion_is_never_a_name_fallback():
 def test_ambiguous_legacy_same_name_conversions_stay_unknown():
     legacy = [dict(row, source_field="") for row in NORMALIZED]
     assert _normalized_dose_entry(legacy, 2, "Beta-Carotene", "Beta-Carotene") == {}
+
+
+def test_a_different_source_list_is_not_a_legacy_name_match():
+    foreign = [_entry("supplementFacts[2]", 2500.0, "IU", 750.0)]
+    assert _normalized_dose_entry(foreign, 2, "Beta-Carotene", "Beta-Carotene") == {}
