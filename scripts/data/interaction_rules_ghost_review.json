@@ -753,6 +753,114 @@
       "rationale": "The abstract evaluates simvastatin and pravastatin after 21 days of garlic extract and reports unchanged AUCs. Corrected copy describes this null exposure result for one preparation; it establishes neither increased statin exposure nor universal absence of interactions. This is citation-content adjudication only, not whole-record clinical clearance.",
       "reviewed_by": "agent source-content review (not clinician-reviewed)",
       "reviewed_at": "2026-10-12"
+    },
+    {
+      "pmid": "33370633",
+      "rule_id": "RULE_OTHER_SENACTIV_ANTIPLATELET",
+      "sub_rule": "condition:bleeding_disorders",
+      "live_title": "Combination of Panax notoginseng saponins and aspirin potentiates platelet inhibition with alleviated gastric injury via modulating arachidonic acid metabolism.",
+      "rationale": "Branded-material citation: Senactiv (NHA_SENACTIV) is Panax notoginseng and Rosa roxburghii fractions; the record concerns Panax notoginseng (saponins or capsules), the material the sub-rule names. The same PMID is cited on RULE_BOTAN_PANAX_NOTOGINSENG_ANTIPLATELET, where the strict gate finds the subject.",
+      "reviewed_by": "agent source-content review (not clinician-reviewed)",
+      "reviewed_at": "2026-10-20"
+    },
+    {
+      "pmid": "31471773",
+      "rule_id": "RULE_OTHER_SENACTIV_ANTIPLATELET",
+      "sub_rule": "condition:bleeding_disorders",
+      "live_title": "Interactions between clopidogrel and traditional Chinese medicine.",
+      "rationale": "Branded-material citation: Senactiv (NHA_SENACTIV) is Panax notoginseng and Rosa roxburghii fractions; the record concerns Panax notoginseng (saponins or capsules), the material the sub-rule names. The same PMID is cited on RULE_BOTAN_PANAX_NOTOGINSENG_ANTIPLATELET, where the strict gate finds the subject.",
+      "reviewed_by": "agent source-content review (not clinician-reviewed)",
+      "reviewed_at": "2026-10-20"
+    },
+    {
+      "pmid": "39364700",
+      "rule_id": "RULE_OTHER_SENACTIV_ANTIPLATELET",
+      "sub_rule": "condition:bleeding_disorders",
+      "live_title": "Spontaneous esophageal submucosal hematoma.",
+      "rationale": "Branded-material citation: Senactiv (NHA_SENACTIV) is Panax notoginseng and Rosa roxburghii fractions; the record concerns Panax notoginseng (saponins or capsules), the material the sub-rule names. The same PMID is cited on RULE_BOTAN_PANAX_NOTOGINSENG_ANTIPLATELET, where the strict gate finds the subject.",
+      "reviewed_by": "agent source-content review (not clinician-reviewed)",
+      "reviewed_at": "2026-10-20"
+    },
+    {
+      "pmid": "34307625",
+      "rule_id": "RULE_OTHER_SENACTIV_ANTIPLATELET",
+      "sub_rule": "condition:bleeding_disorders",
+      "live_title": "Submucosal hematoma with a wide range of lesions, severe condition and atypical clinical symptoms: A case report.",
+      "rationale": "Branded-material citation: Senactiv (NHA_SENACTIV) is Panax notoginseng and Rosa roxburghii fractions; the record concerns Panax notoginseng (saponins or capsules), the material the sub-rule names. The same PMID is cited on RULE_BOTAN_PANAX_NOTOGINSENG_ANTIPLATELET, where the strict gate finds the subject.",
+      "reviewed_by": "agent source-content review (not clinician-reviewed)",
+      "reviewed_at": "2026-10-20"
+    },
+    {
+      "pmid": "33370633",
+      "rule_id": "RULE_OTHER_SENACTIV_ANTIPLATELET",
+      "sub_rule": "condition:surgery_scheduled",
+      "live_title": "Combination of Panax notoginseng saponins and aspirin potentiates platelet inhibition with alleviated gastric injury via modulating arachidonic acid metabolism.",
+      "rationale": "Branded-material citation: Senactiv (NHA_SENACTIV) is Panax notoginseng and Rosa roxburghii fractions; the record concerns Panax notoginseng (saponins or capsules), the material the sub-rule names. The same PMID is cited on RULE_BOTAN_PANAX_NOTOGINSENG_ANTIPLATELET, where the strict gate finds the subject.",
+      "reviewed_by": "agent source-content review (not clinician-reviewed)",
+      "reviewed_at": "2026-10-20"
+    },
+    {
+      "pmid": "31471773",
+      "rule_id": "RULE_OTHER_SENACTIV_ANTIPLATELET",
+      "sub_rule": "condition:surgery_scheduled",
+      "live_title": "Interactions between clopidogrel and traditional Chinese medicine.",
+      "rationale": "Branded-material citation: Senactiv (NHA_SENACTIV) is Panax notoginseng and Rosa roxburghii fractions; the record concerns Panax notoginseng (saponins or capsules), the material the sub-rule names. The same PMID is cited on RULE_BOTAN_PANAX_NOTOGINSENG_ANTIPLATELET, where the strict gate finds the subject.",
+      "reviewed_by": "agent source-content review (not clinician-reviewed)",
+      "reviewed_at": "2026-10-20"
+    },
+    {
+      "pmid": "39364700",
+      "rule_id": "RULE_OTHER_SENACTIV_ANTIPLATELET",
+      "sub_rule": "condition:surgery_scheduled",
+      "live_title": "Spontaneous esophageal submucosal hematoma.",
+      "rationale": "Branded-material citation: Senactiv (NHA_SENACTIV) is Panax notoginseng and Rosa roxburghii fractions; the record concerns Panax notoginseng (saponins or capsules), the material the sub-rule names. The same PMID is cited on RULE_BOTAN_PANAX_NOTOGINSENG_ANTIPLATELET, where the strict gate finds the subject.",
+      "reviewed_by": "agent source-content review (not clinician-reviewed)",
+      "reviewed_at": "2026-10-20"
+    },
+    {
+      "pmid": "34307625",
+      "rule_id": "RULE_OTHER_SENACTIV_ANTIPLATELET",
+      "sub_rule": "condition:surgery_scheduled",
+      "live_title": "Submucosal hematoma with a wide range of lesions, severe condition and atypical clinical symptoms: A case report.",
+      "rationale": "Branded-material citation: Senactiv (NHA_SENACTIV) is Panax notoginseng and Rosa roxburghii fractions; the record concerns Panax notoginseng (saponins or capsules), the material the sub-rule names. The same PMID is cited on RULE_BOTAN_PANAX_NOTOGINSENG_ANTIPLATELET, where the strict gate finds the subject.",
+      "reviewed_by": "agent source-content review (not clinician-reviewed)",
+      "reviewed_at": "2026-10-20"
+    },
+    {
+      "pmid": "33370633",
+      "rule_id": "RULE_OTHER_SENACTIV_ANTIPLATELET",
+      "sub_rule": "drug:antiplatelets",
+      "live_title": "Combination of Panax notoginseng saponins and aspirin potentiates platelet inhibition with alleviated gastric injury via modulating arachidonic acid metabolism.",
+      "rationale": "Branded-material citation: Senactiv (NHA_SENACTIV) is Panax notoginseng and Rosa roxburghii fractions; the record concerns Panax notoginseng (saponins or capsules), the material the sub-rule names. The same PMID is cited on RULE_BOTAN_PANAX_NOTOGINSENG_ANTIPLATELET, where the strict gate finds the subject.",
+      "reviewed_by": "agent source-content review (not clinician-reviewed)",
+      "reviewed_at": "2026-10-20"
+    },
+    {
+      "pmid": "31471773",
+      "rule_id": "RULE_OTHER_SENACTIV_ANTIPLATELET",
+      "sub_rule": "drug:antiplatelets",
+      "live_title": "Interactions between clopidogrel and traditional Chinese medicine.",
+      "rationale": "Branded-material citation: Senactiv (NHA_SENACTIV) is Panax notoginseng and Rosa roxburghii fractions; the record concerns Panax notoginseng (saponins or capsules), the material the sub-rule names. The same PMID is cited on RULE_BOTAN_PANAX_NOTOGINSENG_ANTIPLATELET, where the strict gate finds the subject.",
+      "reviewed_by": "agent source-content review (not clinician-reviewed)",
+      "reviewed_at": "2026-10-20"
+    },
+    {
+      "pmid": "39364700",
+      "rule_id": "RULE_OTHER_SENACTIV_ANTIPLATELET",
+      "sub_rule": "drug:antiplatelets",
+      "live_title": "Spontaneous esophageal submucosal hematoma.",
+      "rationale": "Branded-material citation: Senactiv (NHA_SENACTIV) is Panax notoginseng and Rosa roxburghii fractions; the record concerns Panax notoginseng (saponins or capsules), the material the sub-rule names. The same PMID is cited on RULE_BOTAN_PANAX_NOTOGINSENG_ANTIPLATELET, where the strict gate finds the subject.",
+      "reviewed_by": "agent source-content review (not clinician-reviewed)",
+      "reviewed_at": "2026-10-20"
+    },
+    {
+      "pmid": "34307625",
+      "rule_id": "RULE_OTHER_SENACTIV_ANTIPLATELET",
+      "sub_rule": "drug:antiplatelets",
+      "live_title": "Submucosal hematoma with a wide range of lesions, severe condition and atypical clinical symptoms: A case report.",
+      "rationale": "Branded-material citation: Senactiv (NHA_SENACTIV) is Panax notoginseng and Rosa roxburghii fractions; the record concerns Panax notoginseng (saponins or capsules), the material the sub-rule names. The same PMID is cited on RULE_BOTAN_PANAX_NOTOGINSENG_ANTIPLATELET, where the strict gate finds the subject.",
+      "reviewed_by": "agent source-content review (not clinician-reviewed)",
+      "reviewed_at": "2026-10-20"
     }
   ]
 }

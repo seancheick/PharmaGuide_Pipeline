@@ -77,6 +77,7 @@ def test_blend_header_amount_is_not_its_substances_dose(enrich):
     evaluation = hit["dose_threshold_evaluation"]
     assert evaluation["evaluation_status"] == "amount_unknown"
     assert evaluation["evaluated"] is False
+    assert evaluation["reason"] == "missing_or_invalid_dose"
 
 
 def test_header_restated_by_a_row_inside_it_leaves_that_row_the_subject(enrich):

@@ -85,19 +85,36 @@ def test_printed_notoginseng_row_meets_its_own_advisory(enrich):
     assert "RULE_INGREDIENT_GINSENG" not in rule_ids
 
 
-def test_notoginseng_advisory_is_qualified_and_antiplatelet_only():
+SENACTIV_RULE_ID = "RULE_OTHER_SENACTIV_ANTIPLATELET"
+
+
+@pytest.mark.parametrize("rule_id,subject", [
+    (RULE_ID, {"db": "botanical_ingredients", "canonical_id": "panax_notoginseng"}),
+    (SENACTIV_RULE_ID, {"db": "other_ingredients", "canonical_id": "NHA_SENACTIV"}),
+])
+def test_notoginseng_advisory_is_qualified(rule_id, subject):
     rules = json.loads((SCRIPTS / "data" / "ingredient_interaction_rules.json").read_text())
-    rule = {r["id"]: r for r in rules["interaction_rules"]}[RULE_ID]
-    assert rule["subject_ref"] == {"db": "botanical_ingredients", "canonical_id": "panax_notoginseng"}
+    rule = {r["id"]: r for r in rules["interaction_rules"]}[rule_id]
+    assert rule["subject_ref"] == subject
     assert [r["drug_class_id"] for r in rule["drug_class_rules"]] == ["antiplatelets"]
-    assert rule["condition_rules"] == [] and rule["dose_thresholds"] == []
-    sub = rule["drug_class_rules"][0]
-    assert sub["severity"] == "monitor" and sub["materiality"] == "presence"
-    assert "https://pubmed.ncbi.nlm.nih.gov/33370633/" in sub["sources"]
-    text = " ".join(str(sub[k]) for k in ("mechanism", "action", "alert_body", "informational_note"))
-    assert "not established" in text
-    for claim in ("stop", "dose reduction", "INR", "warfarin"):
-        assert claim.lower() not in sub["alert_body"].lower()
+    assert sorted(r["condition_id"] for r in rule["condition_rules"]) == ["bleeding_disorders", "surgery_scheduled"]
+    assert rule["dose_thresholds"] == []
+    for sub in rule["drug_class_rules"] + rule["condition_rules"]:
+        assert sub["severity"] == "monitor" and sub["materiality"] == "presence"
+        assert "https://pubmed.ncbi.nlm.nih.gov/33370633/" in sub["sources"]
+        text = " ".join(str(sub[k]) for k in ("mechanism", "action", "alert_body", "informational_note"))
+        assert "not established" in text
+        for claim in ("stop", "dose reduction", "INR", "warfarin"):
+            assert claim.lower() not in sub["alert_body"].lower()
+
+
+def test_seneactiv_row_meets_the_notoginseng_advisory(enrich):
+    """295773: Senactiv is Panax notoginseng (+ Rosa roxburghii) saponins, the
+    material of PMID 33370633."""
+    enriched = enrich(_fixture(295773))
+    rows = _rows(enriched, "Seneactiv")
+    assert rows and {r["canonical_id"] for r in rows} == {"NHA_SENACTIV"}
+    assert SENACTIV_RULE_ID in _rule_ids(enriched)
 
 
 @pytest.mark.parametrize("drug_classes,fires", [
