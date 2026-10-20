@@ -816,19 +816,27 @@ def _check_plant_part(rec: ProductRecord, blob: dict) -> None:
                 break  # one finding per ingredient
 
 
-def _check_standardization(rec: ProductRecord, blob: dict) -> None:
+def _check_standardization(rec: ProductRecord, blob: dict, cleaned: dict | None = None) -> None:
     """Invariant #6: exporter-recognized standardization claims survive.
 
     The producer deliberately recognizes only reviewed compounds and rejects
     ranges, generic editorial prose, and unsupported marker names. The audit
     must recompute that exact contract; a broad ``%``/``standardized`` cue
     creates false release failures for claims the exporter correctly refused
-    to turn into consumer copy.
+    to turn into consumer copy. The claim source is the label row (the cleaned
+    row's notes, matched by raw_source_path), never the blob's IQM notes.
     """
     from build_final_db import _compute_standardization_note  # type: ignore
 
+    label_rows = {row.get("raw_source_path"): row
+                  for row in ((cleaned or {}).get("activeIngredients") or [])
+                  if isinstance(row, dict) and row.get("raw_source_path")}
     for ing in blob.get("ingredients") or []:
-        expected = _compute_standardization_note(ing)
+        label = label_rows.get(ing.get("raw_source_path")) or {}
+        expected = _compute_standardization_note({
+            "notes": label.get("notes"),
+            "raw_source_text": ing.get("raw_source_text"),
+        })
         if not expected:
             continue
         actual = ing.get("standardization_note")
@@ -1286,7 +1294,7 @@ def audit_product(
     _check_display_label_collapse(rec, blob)
     _check_branded_tokens(rec, blob)
     _check_plant_part(rec, blob)
-    _check_standardization(rec, blob)
+    _check_standardization(rec, blob, cleaned)
     _check_np_leak(rec, blob)
     _check_well_dosed_on_undisclosed(rec, blob)
     _check_unsafe_unit_conversion(rec, blob)

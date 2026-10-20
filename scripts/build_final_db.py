@@ -3861,16 +3861,19 @@ _STANDARDIZATION_COMPOUNDS = (
     "withanolide glycosides", "withanolides", "boswellic acids",
     "boswellic acid", "curcuminoids", "ginsenosides", "rosavins",
     "bacosides", "saponins", "piperine", "EGCG", "silymarin",
+    "epigallocatechin gallate",
 )
+# The same compound under its full name ("50% Epigallocatechin Gallate").
+_STANDARDIZATION_SYNONYMS = {"epigallocatechin gallate": "EGCG"}
 _STANDARDIZATION_RE = re.compile(
     # \b — word boundary
     # (\d{1,3}) — integer 1-3 digits  (fractional rejected by design)
     # %\+? — mandatory % with optional "+" suffix
-    # [\s]+ — whitespace separator (1+)
-    # NOT preceded by a hyphen (ranges like "5-10% withanolides" rejected)
-    # Negative lookbehind rejects leading digit / hyphen / dot so the
-    # "5" in "5.5%" or "10-20%" never matches alone.
-    r"(?<![\d\-\.])(\d{1,3})%\+?\s+("
+    # [\s]+ — whitespace separator (1+), then an optional "total" ("3% total rosavins")
+    # NOT preceded by a hyphen or dash (ranges like "5-10%" or "4–7%" rejected)
+    # Negative lookbehind rejects leading digit / hyphen / en or em dash / dot
+    # so the "5" in "5.5%" or "10-20%" never matches alone.
+    r"(?<![\d\-\.\u2013\u2014])(\d{1,3})%\+?\s+(?:total\s+)?("
     + "|".join(re.escape(c) for c in sorted(_STANDARDIZATION_COMPOUNDS, key=len, reverse=True))
     + r")\b",
     re.IGNORECASE,
@@ -3878,9 +3881,13 @@ _STANDARDIZATION_RE = re.compile(
 
 
 def _compute_standardization_note(ingredient: Dict[str, Any]) -> Optional[str]:
-    """Extract a standardization claim ("5% withanolides") from the
-    ingredient's matched_form / notes / raw_source_text, in priority
-    order. Returns ``None`` when no tight-regex match exists.
+    """Extract the label's standardization claim ("5% withanolides") from the
+    label row's own ``notes``, then its ``raw_source_text``. Returns ``None``
+    when no tight-regex match exists.
+
+    Only label text counts: the matched IQM form name and the IQM form notes
+    are curation data, and showing them here would present an IQM standard as
+    if the label had declared it ("organic Turmeric" showing "3% curcuminoids").
 
     Compound name is normalized to the canonical casing from the
     allowlist so downstream consumers aren't forced to case-fold.
@@ -3888,10 +3895,6 @@ def _compute_standardization_note(ingredient: Dict[str, Any]) -> Optional[str]:
     """
     # Preferred source order — most structured first.
     candidates: List[str] = []
-    mf = ingredient.get("matched_form")
-    if isinstance(mf, str) and mf.strip():
-        candidates.append(mf)
-
     notes = ingredient.get("notes")
     if isinstance(notes, str) and notes.strip():
         candidates.append(notes)
@@ -3905,6 +3908,7 @@ def _compute_standardization_note(ingredient: Dict[str, Any]) -> Optional[str]:
         candidates.append(raw)
 
     compound_by_lower = {c.lower(): c for c in _STANDARDIZATION_COMPOUNDS}
+    compound_by_lower.update(_STANDARDIZATION_SYNONYMS)
     for text in candidates:
         m = _STANDARDIZATION_RE.search(text)
         if m:
@@ -6938,8 +6942,8 @@ def build_detail_blob(
             "dose_status": _compute_dose_status(ing),
             # Sprint E1.2.2.c — standardization claim (None when not known)
             "standardization_note": _compute_standardization_note({
-                "matched_form": m.get("matched_form") or ing.get("matched_form"),
-                "notes": m.get("notes") or ing.get("notes"),
+                # The label row's own notes, never the match's IQM notes.
+                "notes": ing.get("notes"),
                 "raw_source_text": ing.get("raw_source_text"),
             }),
             # Sprint E1.3.2 — per-strain clinical support (None when not a
