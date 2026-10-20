@@ -1134,7 +1134,9 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
     elif declared_protein_product:
         primary_type = "protein_powder"
         decision_code = "declared_nutrition_protein_product"
-        confidence = 0.85
+        # Title intent plus declared grams is at least the evidence of the
+        # name-only protein branch below (0.9).
+        confidence = 0.9
         reasons.append(
             f"protein title intent + declared Nutrition Facts protein {declared_protein_g:g} g"
         )
