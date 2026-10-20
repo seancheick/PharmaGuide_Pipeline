@@ -120,3 +120,20 @@ def test_free_from_claim_rule(group, hits, unread, expected):
     from scoring_input_contract import free_from_claim_contradiction
     hit_dicts = [{"allergen_id": a, "presence_type": p} for a, p in hits]
     assert free_from_claim_contradiction(group, hit_dicts, unparsed_may_contain=unread) == expected
+
+
+@pytest.mark.parametrize("statement,unread", [
+    ("May contain traces of grain products.", True),
+    ("(May contain trace amounts less than 20 ppm).", True),
+    ("Manufactured on shared equipment.", True),
+    ("If taking other supplements, read label, since supplements may contain the same ingredient.", False),
+    ("May contain vegetable glycerin.", False),
+    ("May contain: silicon dioxide.", False),
+    ("Contains: fish (anchovy and may contain sardine and mackerel).", False),
+])
+def test_only_allergen_wording_the_parser_cannot_resolve_is_unread(statement, unread):
+    # Replay of #187: "may contain" also lists excipients or warns about doubling up;
+    # those name no allergen and must not void a free-from claim.
+    from enrich_supplements_v3 import SupplementEnricherV3
+    product = {"statements": [{"notes": statement}]}
+    assert SupplementEnricherV3()._has_unparsed_may_contain(product) is unread

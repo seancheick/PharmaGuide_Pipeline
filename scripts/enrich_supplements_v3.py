@@ -12978,8 +12978,18 @@ class SupplementEnricherV3:
                 allergen_lookup[alias.lower()] = allergen
         return allergen_lookup
 
+    # Wording that signals allergen cross-contact the parser may not resolve to
+    # one allergen. "May contain vegetable glycerin" (an excipient list) or
+    # "supplements may contain the same ingredient" carries none of it.
+    _UNRESOLVED_ALLERGEN_WORDING = re.compile(
+        r"\b(?:allerg\w*|traces?|grains?|gluten|nuts?|shellfish|dairy|eggs?|soy\w*|wheat|fish|milk|"
+        r"peanuts?|crustaceans?|sesame|cross[- ]contact|shared\s+equipment)\b",
+        re.I,
+    )
+
     def _has_unparsed_may_contain(self, product: Dict) -> bool:
-        """A "may contain"/"shared equipment" sentence the parser reads no allergen from."""
+        """A "may contain"/"shared equipment" sentence with allergen wording that
+        the parser reads no allergen from."""
         allergen_list = self.databases.get('allergens', {}).get('allergens', [])
         allergen_lookup = self._allergen_alias_lookup(allergen_list)
         texts = [
@@ -12991,7 +13001,8 @@ class SupplementEnricherV3:
             texts.extend(str(w) for w in (label_text.get('parsed') or {}).get('warnings', []) or [])
         for text in texts:
             for sentence in re.split(r'(?<=[.!?;])\s+|[\r\n\t]+', text):
-                if re.search(r'may\s+contain|shared\s+equipment', sentence, re.I):
+                if (re.search(r'may\s+contain|shared\s+equipment', sentence, re.I)
+                        and self._UNRESOLVED_ALLERGEN_WORDING.search(sentence)):
                     parsed: List[Dict] = []
                     self._parse_allergen_statement(sentence, allergen_lookup, parsed, "probe")
                     if not parsed:
@@ -13474,15 +13485,9 @@ class SupplementEnricherV3:
             gluten_free = False
             _record_conflict(_gluten_conflict_message())
 
-        # A may-contain signal no parsed warning explains: text-only (no
-        # structured cross-contact hit) or a may-contain sentence the parser
-        # reads no allergen from. The scorer learns it from the conflict.
-        has_cross_contact_hit = any(
-            a.get('presence_type') in ('may_contain', 'facility_warning') for a in detected_allergens
-        )
-        unread_may_contain = bool(may_contain) and (
-            not has_cross_contact_hit or self._has_unparsed_may_contain(product)
-        )
+        # A may-contain sentence with allergen wording the parser reads no
+        # allergen from. The scorer learns it from the conflict.
+        unread_may_contain = bool(may_contain) and self._has_unparsed_may_contain(product)
         if unread_may_contain and (allergen_free_claims or gluten_free or dairy_free or soy_free):
             _record_conflict(UNREAD_MAY_CONTAIN_CONFLICT)
 
