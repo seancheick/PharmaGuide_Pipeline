@@ -27,7 +27,7 @@ carry one (`~/pg_quality/lucidbanach_compound_allergens_20261020/base.jsonl`) to
   boundary.
 - **Names, not ingredients:** Wheybolic, ioWHEY, WheyBasics, EstroSoy (product or trademark names;
   their whey/soy rows flag), Megmilk Snow Brand (company), buttermilk (lactase directions).
-- **Must not match, and don't:** buckwheat (*Fagopyrum*, 44 rows with no wheat hit), perennial
+- **Must not match, and don't:** buckwheat (*Fagopyrum*; no wheat hit comes from a buckwheat row: 44 buckwheat products carry no wheat hit, the other 58 get it from other rows or statements), perennial
   ryegrass (*Lolium*, not rye *Secale*; 232473's "Rye" form is vetoed by `pollen`).
 - **Not in the corpus:** barleygrass, wheatgerm (one word). Not added.
 
