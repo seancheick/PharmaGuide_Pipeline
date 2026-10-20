@@ -33,7 +33,7 @@
       "total_parents": 655,
       "total_forms": 1474,
       "total_form_aliases": 12292,
-      "parents_with_parent_aliases": 149,
+      "parents_with_parent_aliases": 150,
       "parents_with_contains_aliases": 0,
       "parents_with_pattern_aliases": 0
     },
@@ -45055,7 +45055,10 @@
       "research_status": "validated"
     },
     "aliases": [
-      "Triticum aestivum"
+      "Triticum aestivum",
+      "wheat grass juice powder",
+      "organic wheat grass juice powder",
+      "wheatgrass juice"
     ],
     "external_ids": {
       "unii": null,
@@ -68213,7 +68216,9 @@
       "last_reviewed_at": "2026-04-03",
       "research_status": "validated"
     },
-    "aliases": [],
+    "aliases": [
+      "barley grass juice"
+    ],
     "external_ids": {
       "unii": null,
       "pubchem_cid": null,
