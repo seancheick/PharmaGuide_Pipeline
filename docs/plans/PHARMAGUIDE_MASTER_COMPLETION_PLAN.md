@@ -1,5 +1,13 @@
 # PharmaGuide master completion plan
 
+### Title ownership checkpoint — October 20
+
+- [x] Source-qualified title/role correction: flavor phrases and generic plant-part words no longer select unrelated Evidence/Dose owners; B-12 names resolve through the existing title owner. No undosed/trace scoring policy change.
+- [x] Independent2,090-pair full-record review: 57 explained score changes, unchanged clinical/safety/identity/amount facts; one explained complete→partial assessment. Combined82 focused checks and76 fresh raw controls pass; exact-runtime28762 CI39454297455 is green. Local544 passes with the existing stale-catalog folate failure/25skips; no artifact/release gate closed.
+- [ ] Complete literature223, comma224 and demonstrated omega concentration owner correction before the final operator run. PR219 epilepsy rule remains held by Sean. No integration-agent pipeline run.
+
+Details: [title qualification](../../scripts/audits/integration_audit_20261020/TITLE_OWNERSHIP.md); execution register remains LEDGER.
+
 ### Worktree preservation checkpoint — October 20
 
 All 18 historical checkouts from the 22-checkout inventory have no hidden unfinished source fixes; 2,245 unique files are checksum-preserved outside the public repository. Six historical Claude checkouts were removed. Six old Codex checkouts are archived; six owning-chat archive requests remain queued. Active follow-ups are preserved. PR219's epilepsy rule is held by Sean. PR220 is integrated at 1a1bc81ed after exact-head CI39450146123 passed all four groups; 10 named tests and 18 unchanged replay controls are verified. Local has 544 passes, one existing stale-catalog folate failure and 25 declared skips; artifact/release readiness remains open. Evidence title, literature and new comma-subblend lanes are still active. No pipeline, release, app import or artifact gate closed. Details and limits: [worktree closeout](../../scripts/audits/integration_audit_20261020/WORKTREE_CLOSEOUT.md); the execution register remains LEDGER.
