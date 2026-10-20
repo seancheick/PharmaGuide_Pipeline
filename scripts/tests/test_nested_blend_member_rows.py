@@ -389,3 +389,80 @@ def test_top_level_protease_blend_sources_are_provenance(normalizer, protease_ro
                if row["name"] in {"Bacillus subtilis", "Ananas comosus"}]
     assert {row["name"] for row in sources} == {"Bacillus subtilis", "Ananas comosus"}
     assert {row["cleaner_row_role"] for row in sources} == {"source_descriptor"}
+
+
+# DSLD 27312 ingredientRows[5]: a comma-joined row that is a sub-blend listing. It
+# prints its own total and its members as rows, and declares no forms.
+CALMING_COMPLEX_RAW: Dict[str, Any] = {
+    "id": 27312,
+    "fullName": "Calming Formula",
+    "brandName": "Test",
+    "servingSizes": [{"order": 1, "minQuantity": 1, "maxQuantity": 1,
+                      "minDailyServings": 1, "maxDailyServings": 1, "unit": "Capsule(s)"}],
+    "ingredientRows": [
+        _row("Calming & Relaxation Complex", "blend", "Blend (Combination)", 0, "NP", 20, [
+            _row("L-Theanine", "amino acid", "Theanine", 200, "mg", 21),
+            _row("Valerian root powder, Lemon Balm extract and Passion Flower herb powder", "blend",
+                 "Blend (Herb/Botanical)", 200, "mg", 22, [
+                     _row("Valerian root powder", "botanical", "Valerian", 0, "NP", 23),
+                     _row("Lemon Balm Extract", "botanical", "Lemon Balm", 0, "NP", 24),
+                     _row("Passion Flower herb powder", "botanical", "Passionflower", 0, "NP", 25),
+                 ]),
+        ]),
+    ],
+    "otheringredients": {"text": None, "ingredients": []},
+}
+
+
+def test_comma_joined_sub_blend_without_forms_keeps_its_members(normalizer):
+    actives = _actives_by_path(normalizer.normalize_product(copy.deepcopy(CALMING_COMPLEX_RAW)))
+    sub_blend = "Valerian root powder, Lemon Balm extract and Passion Flower herb powder"
+    for index, name in enumerate(["Valerian root powder", "Lemon Balm Extract", "Passion Flower herb powder"]):
+        row = actives.get(f"ingredientRows[0].nestedRows[1].nestedRows[{index}]")
+        assert row is not None, f"{name} is a member of a printed 200 mg sub-blend"
+        assert row["name"] == name
+        assert row["parentBlend"] == sub_blend
+        assert row["parent_source_path"] == "ingredientRows[0].nestedRows[1]"
+        # The sub-blend's own printed total bounds its members; no member amount is invented.
+        assert row["parentBlendMass"] == 200.0
+        assert row["quantity"] in (0, 0.0, None)
+    assert actives["ingredientRows[0].nestedRows[0]"]["quantity"] == 200.0
+
+
+def test_comma_joined_sub_blend_members_reach_their_interaction_rules(normalizer, enricher):
+    cleaned = normalizer.normalize_product(copy.deepcopy(CALMING_COMPLEX_RAW))
+    enriched, _ = enricher.enrich_product(cleaned)
+    rules = _rule_ids(enriched)
+    assert "RULE_IQM_VALERIAN_LIVER" in rules
+    assert "RULE_INGREDIENT_PASSIONFLOWER__SEDATIVES" in rules
+
+
+def test_comma_joined_probiotic_pair_keeps_its_cultures(normalizer, enricher):
+    """DSLD 275039: "Lactobacillus bulgaricus, Lactobacillus plantarum" inside an enzyme blend."""
+    raw = _protease_product(_row("Raw Probiotic & Enzyme Blend", "blend", "Blend (non-nutrient/non-botanical)",
+                                 0, "NP", 62, [
+        _row("Lipase", "enzyme", "Lipase", 0, "NP", 63, size=34),
+        _row("Lactobacillus bulgaricus, Lactobacillus plantarum", "blend",
+             "Blend (non-nutrient/non-botanical)", 0, "NP", 64, [
+                 _row("Lactobacillus bulgaricus", "bacteria", "Lactobacillus Bulgaricus", 0, "NP", 65, size=34),
+                 _row("Lactobacillus plantarum", "bacteria", "Lactobacillus Plantarum", 0, "NP", 66, size=34),
+             ], size=34),
+    ], size=34))
+    cleaned = normalizer.normalize_product(raw)
+    cultures = {row["name"] for row in cleaned["activeIngredients"]
+                if row.get("parentBlend") == "Lactobacillus bulgaricus, Lactobacillus plantarum"}
+    assert cultures == {"Lactobacillus bulgaricus", "Lactobacillus plantarum"}
+    enriched, _ = enricher.enrich_product(cleaned)
+    assert "RULE_IQM_PROBIOTICS_IMMUNOCOMPROMISED" in _rule_ids(enriched)
+
+
+def test_comma_joined_name_token_rules_are_unchanged():
+    """Only a comma row with member rows and no forms is a sub-blend listing."""
+    token = {"name": "DHA, EPA", "category": "blend", "quantity": [{"quantity": 285, "unit": "mg"}]}
+    assert EnhancedDSLDNormalizer._is_chemical_decomposition_leaf(token) is True
+    members = [{"name": "Eicosapentaenoic Acid", "category": "fatty acid",
+                "quantity": [{"quantity": 0, "unit": "NP"}]}]
+    with_forms = {**token, "nestedRows": members, "forms": [{"name": "Eicosapentaenoic Acid"}]}
+    assert EnhancedDSLDNormalizer._is_chemical_decomposition_leaf(with_forms) is True
+    listing = {**token, "nestedRows": members}
+    assert EnhancedDSLDNormalizer._is_chemical_decomposition_leaf(listing) is False
