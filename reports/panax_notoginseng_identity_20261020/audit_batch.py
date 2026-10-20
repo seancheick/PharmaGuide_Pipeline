@@ -109,6 +109,7 @@ for sub_rule in ("condition:bleeding_disorders", "condition:surgery_scheduled", 
             "reviewed_by": "agent source-content review (not clinician-reviewed)",
             "reviewed_at": "2026-10-20",
         })
+ghost["_metadata"]["total_entries"] = len(ghost["reviewed"])
 with open(GHOST, "w") as handle:
     json.dump(ghost, handle, indent=2, ensure_ascii=False)
     handle.write("\n")

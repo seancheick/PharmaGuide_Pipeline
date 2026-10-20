@@ -4,7 +4,7 @@
     "description": "Reviewed GHOST-SUSPECT findings from verify_interaction_rules_citations.py --strict, keyed by PMID, rule_id and sub_rule. A suspect blocks the strict gate until it is reviewed here with a rationale that states why the live PubMed record does support the sub-rule (class-level, constituent, full-text or heuristic-miss citations). Wrong-topic citations are fixed in the rules file, never listed here. Removing an entry re-arms the gate for that citation. Receipts: scripts/audits/interaction_rules/citation_triage_2026_09/research.md.",
     "schema_version": "5.0.0",
     "last_updated": "2026-10-19",
-    "total_entries": 84
+    "total_entries": 96
   },
   "reviewed": [
     {
