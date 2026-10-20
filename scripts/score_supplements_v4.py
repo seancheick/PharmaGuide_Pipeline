@@ -432,6 +432,8 @@ def score_product_v4(enriched_product: Dict[str, Any]) -> Dict[str, Any]:
         projected from the module breakdown. raw is never modified;
         BLOCKED/UNSAFE suppress the public number; NOT_SCORED yields not_scored.
     """
-    result = _score_v4_core(enriched_product)
+    from scoring_input_contract import score_eligible_identity_view
+
+    result = _score_v4_core(score_eligible_identity_view(enriched_product))
     result = assemble_quality_score(result)
     return result

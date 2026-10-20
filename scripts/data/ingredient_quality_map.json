@@ -32,7 +32,7 @@
     "statistics": {
       "total_parents": 655,
       "total_forms": 1474,
-      "total_form_aliases": 12292,
+      "total_form_aliases": 12287,
       "parents_with_parent_aliases": 150,
       "parents_with_contains_aliases": 0,
       "parents_with_pattern_aliases": 0
@@ -13774,12 +13774,7 @@
           "Total Resveratrol",
           "resveratrol supplement",
           "grape resveratrol",
-          "MicroActive Resveratrol",
-          "hu zhang",
-          "hu zhang extract",
-          "hu zhang root extract",
-          "hu zhang hydroethanolic extract",
-          "Reynoutria japonica root extract"
+          "MicroActive Resveratrol"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {

@@ -187,6 +187,17 @@ def safe_bool(value: Any) -> int:
     return 1 if value else 0
 
 
+def _exported_markers(markers: Any) -> list:
+    """delivers_markers as the export contract defines them: the enricher's
+    internal declared-percentage marker (declared_standardization_pct, read by
+    its interaction scan) is not an export field."""
+    return [
+        {k: v for k, v in marker.items() if k != "declared_standardization_pct"}
+        if isinstance(marker, dict) else marker
+        for marker in safe_list(markers)
+    ]
+
+
 def json_bool(value: Any) -> bool:
     """Coerce to a real JSON boolean for detail-blob flag fields.
 
@@ -4699,7 +4710,7 @@ def _build_canonical_label_ledger(
             # Marker provenance belongs to the complete label ledger, not only
             # the quality-scored analysis projection. A recognized botanical
             # can deliver an evidence marker even when it has no IQM score.
-            "delivers_markers": safe_list(
+            "delivers_markers": _exported_markers(
                 source.get("delivers_markers")
                 or (identity or {}).get("delivers_markers")
                 or (analysis or {}).get("delivers_markers")
@@ -6959,7 +6970,7 @@ def build_detail_blob(
             # Computed by the enricher (botanical_marker_contributions.json) and
             # attached to the IQM match record. Always emit as a list (possibly
             # empty) so Flutter consumers can iterate without null-checks.
-            "delivers_markers": safe_list(m.get("delivers_markers")),
+            "delivers_markers": _exported_markers(m.get("delivers_markers")),
             # `is_safety_concern` is the semantic safety flag. Computed by
             # the unified safety contract resolver which consults BOTH
             # banned_recalled (ingredient_hits) AND harmful_additives

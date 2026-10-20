@@ -217,8 +217,12 @@ def test_multi_panel_members_dosed_in_activity_units_are_major():
         _row("vitamin_e", "Vitamin E", 100, "IU"),
         _row("vitamin_b9_folate", "Folate", 400, "mcg DFE"),
         _row("vitamin_k", "Vitamin K", 0, "mcg"),
-        # 60740 Life Extension Mix: "Niacin" 190 with unit NP is no dose.
-        _row("vitamin_b3_niacin", "Niacin", 190, "NP"),
+        # 60740 Life Extension Mix as enriched: "Niacin" 190 with unit NP and
+        # has_dose=True counts; Dose readiness then holds its undeclared unit.
+        _row("vitamin_b3_niacin", "Niacin", 190, "NP", has_dose=True),
+        _row("zinc", "Zinc", 6, "NP"),  # NP without has_dose: no dose
+        # 294074 Pure Encapsulations: "Vitamin A (as beta-carotene)" resolves to beta_carotene.
+        _row("beta_carotene", "Vitamin A", 3000, "mcg RAE"),
         _row("tart_cherry", "Tart Cherry", 85, "mg"),
     ])
 
@@ -227,7 +231,9 @@ def test_multi_panel_members_dosed_in_activity_units_are_major():
     for canonical in ("vitamin_a", "vitamin_d", "vitamin_e", "vitamin_b9_folate"):
         assert (roles[canonical]["role"], roles[canonical]["role_reason"]) == ("major", "multi_panel_member"), canonical
     assert roles["vitamin_k"]["role"] == "adjunct"  # no disclosed amount
-    assert roles["vitamin_b3_niacin"]["role"] == "adjunct"  # NP is not a unit
+    assert roles["vitamin_b3_niacin"]["role"] == "major"
+    assert roles["zinc"]["role"] == "adjunct"
+    assert (roles["beta_carotene"]["role"], roles["beta_carotene"]["role_reason"]) == ("major", "multi_panel_member")
     assert roles["tart_cherry"]["role"] == "adjunct"
 
 

@@ -41,6 +41,8 @@ from scoring_reference_resolver import (
 from identity.omega_labels import states_only_epa_and_dha
 from identity_integrity import (
     IDENTITY_DISPOSITIONS,
+    NON_SCORABLE_NO_IDENTITY_RATIONALE,
+    NON_SCORING_IDENTITY_RATIONALE,
     is_identity_scoreable,
 )
 # One probiotic row-identity owner for enrichment, taxonomy, routing and scoring.
@@ -51,6 +53,7 @@ from scoring_v4.route_features import (
     BCAA_CANONICALS,
     EAA_CANONICALS,
     MATERIAL_FIBER_CANONICALS,
+    MATERIAL_ROLES,
     PROTEIN_CANONICALS as ROUTE_FEATURE_PROTEIN_CANONICALS,
     extract_route_features,
     has_protein_product_intent,
@@ -805,9 +808,55 @@ def _is_verified_canonical(value: Any) -> bool:
     return bool(canonical) and canonical not in _GENERIC_BLEND_IDENTITIES and not canonical.startswith("blend_")
 
 
+def _is_interaction_only_identity(row: Dict[str, Any]) -> bool:
+    """A non-scorable row's identity kept for interactions only: identity is
+    not scorability, so it owns no Evidence and feeds no Dose or route. Only
+    resolve_identity's keep sets the marker; an owner that identifies the row
+    on its own (non-scorable recognition) clears it."""
+    return row.get("identity_resolution_rationale") == NON_SCORING_IDENTITY_RATIONALE
+
+
+def _as_scored(row: Dict[str, Any]) -> Dict[str, Any]:
+    """The row exactly as scoring read it before its identity was kept: no
+    identity, every other field untouched (the printed and standard names are
+    not substituted, so nothing re-matches the row into a new participant)."""
+    if not _is_interaction_only_identity(row):
+        return row
+    return dict(
+        row,
+        canonical_id=None,
+        canonical_id_after=None,
+        identity_resolution_rationale=NON_SCORABLE_NO_IDENTITY_RATIONALE,
+    )
+
+
+def score_eligible_identity_view(product: Dict[str, Any]) -> Dict[str, Any]:
+    """The product as the scorer reads it: a row whose identity is kept for
+    interactions only carries no canonical, as before that identity was kept.
+    Returns the product itself when there is nothing to hide."""
+    iqd = product.get("ingredient_quality_data") if isinstance(product, dict) else None
+    if not isinstance(iqd, dict):
+        return product
+    view, changed = dict(iqd), False
+    for key in ("ingredients", "ingredients_skipped", "ingredients_scorable"):
+        rows = iqd.get(key)
+        if not isinstance(rows, list):
+            continue
+        out = []
+        for row in rows:
+            if isinstance(row, dict) and _is_interaction_only_identity(row):
+                row = _as_scored(row)
+                changed = True
+            out.append(row)
+        view[key] = out
+    return {**product, "ingredient_quality_data": view} if changed else product
+
+
 def _verified_anchor_canonical(row: Dict[str, Any]) -> str:
     """The row's cleaner-verified ingredient identity, or "" when the cleaner
     left it unmapped or only a generic blend identity is present."""
+    if _is_interaction_only_identity(row):
+        return ""
     canonical = _slug(row.get("canonical_id"))
     return canonical if _is_verified_canonical(canonical) else ""
 
@@ -1968,6 +2017,7 @@ def derive_product_scoring_evidence(product: Dict[str, Any]) -> List[Dict[str, A
         active_row = dict(raw_active)
         identity_row = identity_row_for(raw_active)
         if identity_row is not None:
+            identity_row = _as_scored(identity_row)
             if _identity_projection_rejection_reason(raw_active, identity_row):
                 # The shared required-conflict ledger retains this exposure
                 # for coverage/readiness; it cannot become scoring evidence.
@@ -2014,7 +2064,7 @@ def derive_product_scoring_evidence(product: Dict[str, Any]) -> List[Dict[str, A
         active_rows.append(active_row)
 
     skipped_rows = [
-        row
+        _as_scored(row)
         for row in _safe_list(iqd.get("ingredients_skipped"))
         if isinstance(row, dict)
         and (
@@ -6250,8 +6300,6 @@ ROLE_PRIMARY = "primary"
 ROLE_CLAIM_PROMINENT = "claim_prominent"
 ROLE_MAJOR = "major"
 ROLE_ADJUNCT = "adjunct"
-# The roles that make a row a material active of its product.
-MATERIAL_ROLES = frozenset({ROLE_PRIMARY, ROLE_CLAIM_PROMINENT, ROLE_MAJOR})
 
 # Tokens too generic to prove a product is "about" an ingredient when found in
 # the title. Without these, "Vitamin C" would match "Daily Multivitamin".
@@ -6303,11 +6351,18 @@ _ROLE_MULTI_ESSENTIAL_MINERALS = frozenset({
 
 
 def _role_is_required_multi_panel_member(canonical: str) -> bool:
-    """Return whether an identity is part of the defining nutrient panel."""
+    """Return whether an identity is part of the defining nutrient panel.
+
+    A provitamin judged against a vitamin's DRI (beta-carotene, alpha-carotene
+    and cryptoxanthin for vitamin A) is that vitamin: "Vitamin A (as
+    beta-carotene)" resolves to beta_carotene.
+    """
+    from scoring_v4.modules.generic_dose import judged_against_vitamin_dri  # lazy: it imports this module
     return (
         canonical.startswith("vitamin_")
         or canonical in _ROLE_MULTI_ESSENTIAL_MINERALS
         or canonical == "choline"
+        or judged_against_vitamin_dri(canonical)
     )
 
 def _role_mass_mg(row: Dict[str, Any]) -> Optional[float]:
@@ -6602,10 +6657,12 @@ def _classify_one(row: Dict[str, Any], ctx: Dict[str, Any]) -> Dict[str, Any]:
     mass_mg = _role_mass_mg(row)
 
     # L4 — required for subtype: micronutrient panel members of a multi/prenatal.
-    # A panel member needs a usable disclosed dose in a recognized unit:
-    # vitamins A, D and E are printed in IU and folate in mcg DFE, while an
-    # "NP" amount is no dose. A CFU probiotic add-on is not a panel identity
-    # and so stays adjunct, so Phase 3 won't cap a multi for an adjunct's data gap.
+    # A panel member needs a usable disclosed dose (the dose owner): vitamins
+    # A, D and E are printed in IU and folate in mcg DFE. A printed amount whose
+    # unit is "NP" counts when the enricher marks it has_dose (60740 "Niacin"
+    # 190 NP); Dose readiness then holds the product on its undeclared unit.
+    # A CFU probiotic add-on is not a panel identity and so stays adjunct, so
+    # Phase 3 won't cap a multi for an adjunct's data gap.
     from scoring_v4.modules.generic_helpers import has_usable_individual_dose  # lazy: it imports this module
     if (
         module == "multi_or_prenatal"
