@@ -2,8 +2,9 @@
 
 Formulation for multis and prenatals is panel-aware:
 
-  - Score average form quality across dose-bearing micronutrients. The IQM
-    bio_score is the one form-quality owner.
+  - Score average form quality across dose-bearing material rows (the shared
+    role owner: panel micronutrients and the label's prominent actives). The
+    IQM bio_score is the one form-quality owner.
   - Apply the neutral value as a true floor without reducing panels whose
     sourced form quality is already higher.
   - Credit panel-wide individual dose disclosure.
@@ -32,6 +33,7 @@ from scoring_v4.modules.generic_formulation import (
     shared_formulation_penalty_detail,
 )
 from scoring_reference_resolver import parent_relative_form_quality
+from scoring_input_contract import MATERIAL_ROLES, classify_ingredient_roles
 
 
 from scoring_v4.quality_score_config import block as _cfg_block
@@ -61,8 +63,14 @@ def _active_ingredients(product: Dict[str, Any]) -> List[Dict[str, Any]]:
 
 
 def _scorable_ingredients(product: Dict[str, Any]) -> List[Dict[str, Any]]:
+    """Dose-bearing material rows. An adjunct (an 85 mg fruit extract in a
+    panel of grams) does not move the panel's form quality either way."""
     rows = _active_ingredients(product)
-    return [ing for ing in rows if is_scorable(ing) and not restates_label_row(ing, rows)]
+    roles = classify_ingredient_roles(product, module="multi_or_prenatal", rows=rows)
+    return [
+        ing for ing, role in zip(rows, roles)
+        if role.get("role") in MATERIAL_ROLES and is_scorable(ing) and not restates_label_row(ing, rows)
+    ]
 
 
 def _score_panel_form_quality(
