@@ -151,6 +151,11 @@ run_strict_gate() {
     --cwd "$REPO_ROOT" --release-check -- "$@"
 }
 
+# Raw DSLD labels feed the final raw-to-final comparison below. Refuse a missing
+# root or brand folder now, naming the expected path, instead of after assembly.
+RAW_ROOT="$("$PG_PYTHON" -c 'import sys; sys.path.insert(0, "scripts"); from dataset_paths import brand_dataset_root; print(brand_dataset_root())')"
+run_strict_gate "raw DSLD label availability" \
+  "$PG_PYTHON" scripts/preflight.py --quick --raw-root "$RAW_ROOT" --products-dir scripts/products
 run_strict_gate "source-of-truth matrix" \
   "$PG_PYTHON" "$SOURCE_OF_TRUTH_AUDIT" matrix --strict-release
 run_strict_gate "IQM form-evidence contract" \
@@ -216,10 +221,11 @@ run_strict_gate "active identity integrity" \
     --products-dir scripts/products --export-dir "$FINAL_CANDIDATE"
 # Every raw DSLD row reaches the candidate with its printed name, the enricher's
 # identity and a recorded reason for any changed amount (ADR-0005). Raw labels
-# come from the corpus run's root ($PHARMAGUIDE_DATASET_ROOT or its default).
+# come from the corpus run's root ($PHARMAGUIDE_DATASET_ROOT or its default),
+# the same $RAW_ROOT checked before assembly.
 run_strict_gate "raw-to-final line integrity" \
   "$PG_PYTHON" scripts/audit_raw_to_final.py \
-    --build-dir "$FINAL_CANDIDATE" --products-root scripts/products --all \
+    --build-dir "$FINAL_CANDIDATE" --products-root scripts/products --all --raw-root "$RAW_ROOT" \
     --out "$FINAL_CANDIDATE/raw_to_final_audit.json"
 run_strict_gate "scoring assessment readiness" \
   "$PG_PYTHON" "$SOURCE_OF_TRUTH_AUDIT" scoring \

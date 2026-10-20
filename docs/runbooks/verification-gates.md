@@ -92,7 +92,8 @@ Run against `scripts/final_db_output` or a fresh `/tmp/pharmaguide_release_build
 |---|---|
 | `scripts/audit_source_of_truth_contract.py matrix\|cleaner\|clinical` | One owner per concept (`scripts/contracts/source_of_truth_matrix.json`), cleaner-first row contract, clinical drift |
 | `scripts/audit_contract_sync.py` | Blob-contract emit rates (GREEN/YELLOW/RED) and undeclared blob keys (top level and ingredient rows) |
-| `scripts/audit_raw_to_final.py` | Raw → blob reconciliation with a canary set |
+| `scripts/audit_raw_to_final.py` | Raw → blob reconciliation with a canary set; `--all --raw-root` is the snapshot's raw-to-final line gate (product, row, field, source and exported value per BLOCKER) |
+| `scripts/preflight.py --quick --raw-root` | Raw DSLD root and every needed brand folder exist and hold labels, before Clean or snapshot assembly |
 | `scripts/audit_inactive_safety.py` | Banned-in-inactives carry a safety signal; unknown-role counter |
 | `scripts/db_integrity_sanity_check.py` | SQLite schema + data validation |
 | `scripts/coverage_gate.py`, `scripts/coverage_gate_functional_roles.py` | Quality/coverage thresholds; functional-role coverage |

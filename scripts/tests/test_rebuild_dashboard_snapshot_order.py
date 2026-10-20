@@ -132,3 +132,41 @@ def test_scoring_static_gate_runs_before_catalog_build() -> None:
     static = source.index('run_strict_gate "strict scoring static reads"')
     assert static < source.index('"$PG_PYTHON" scripts/build_final_db.py')
     assert "scoring-static --strict-release" in source[static:static + 200]
+
+
+def _gate_block(source: str, label: str) -> str:
+    start = source.index(f'run_strict_gate "{label}"')
+    return source[start:source.index("run_strict_gate", start + 1)]
+
+
+def test_raw_label_availability_is_checked_before_any_expensive_snapshot_work() -> None:
+    source = SCRIPT.read_text()
+    availability = source.index('run_strict_gate "raw DSLD label availability"')
+    first_other_gate = source.index('run_strict_gate "source-of-truth matrix"')
+    assert availability < first_other_gate < source.index('"$PG_PYTHON" scripts/build_final_db.py')
+    block = _gate_block(source, "raw DSLD label availability")
+    assert "scripts/preflight.py" in block
+    assert '--raw-root "$RAW_ROOT"' in block and "--products-dir scripts/products" in block
+    # The final comparison reads the exact root that was checked up front.
+    assert '--raw-root "$RAW_ROOT"' in _gate_block(source, "raw-to-final line integrity")
+    assert "brand_dataset_root()" in source[:availability]
+
+
+def test_raw_to_final_gate_has_no_skip_path_and_nothing_is_stamped_before_it() -> None:
+    source = SCRIPT.read_text()
+    assert "set -euo pipefail" in source
+    line = source.index('run_strict_gate "raw-to-final line integrity"')
+    for later in ("stamp-manifest", "--record-catalog", '"$PG_PYTHON" scripts/promote_release_artifacts.py',
+                  "release_catalog_artifact.py"):
+        assert line < source.index(later), later
+    for label in ("raw DSLD label availability", "raw-to-final line integrity"):
+        block = _gate_block(source, label)
+        assert "||" not in block and "SKIP" not in block and "if " not in block, block
+
+
+def test_raw_label_gates_are_never_satisfied_by_a_reused_receipt() -> None:
+    import sys
+    sys.path.insert(0, str(SCRIPT.parent))
+    from audits.run_verification_gate import REUSABLE_RELEASE_GATES
+    assert "raw-to-final line integrity" not in REUSABLE_RELEASE_GATES
+    assert "raw DSLD label availability" not in REUSABLE_RELEASE_GATES

@@ -58,7 +58,11 @@ Measurements and receipts: `reports/identity_line_20261019/research.md`.
 - A curated alias now decides more rows; alias errors surface as identity errors and go to
   `/data-fix`, not to a new matcher exception.
 - The snapshot needs the raw DSLD root (`dataset_paths.brand_dataset_root`, exported by
-  `batch_run_all_datasets.sh`); without it the line gate fails closed.
+  `batch_run_all_datasets.sh`); without it the line gate fails closed. `preflight.py --raw-root`
+  (`raw_label_errors`) refuses a missing root or brand folder before Clean (batch runner,
+  `run_pipeline.py`) and before snapshot assembly, naming the expected path. Every gate BLOCKER
+  names its product, raw row path (`label` for a whole-label finding), field, source value and
+  exported value, and the gate log lists each one; the gate has no skip flag or receipt reuse.
 
 ## Open decision (Sean)
 

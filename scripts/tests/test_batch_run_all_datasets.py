@@ -50,7 +50,8 @@ def _install_batch_dependencies(tmp_path):
     (scripts_dir / "tests").mkdir(exist_ok=True)
     (scripts_dir / "preflight.py").write_text(
         "import sys\n"
-        "if sys.argv[1:] == ['--quick']:\n"
+        "if sys.argv[1] == '--quick':\n"
+        "    assert sys.argv[2] == '--raw-root' and len(sys.argv) >= 4\n"
         "    print('essential-preflight-reached')\n"
         "else:\n"
         "    assert sys.argv[1:3] == ['--prepare', '--raw-root']\n"
@@ -415,3 +416,73 @@ printf 'supabase\\nflutter-import\\nflutter-commit\\n' >> '{events}'
         assert result.returncode == 0, result.stdout + result.stderr
         assert actual == ['prerequisites', 'intake', 'preparation', 'brand',
                           'submissions', 'snapshot', 'supabase', 'flutter-import', 'flutter-commit']
+
+
+# --- Raw DSLD labels are checked before Clean (ADR-0005 raw-to-final gate) ---
+
+def _raw_label_batch(tmp_path, *, real_preflight, brands=("ExampleBrand",), with_json=True):
+    dataset_root = tmp_path / "datasets"
+    for brand in brands:
+        (dataset_root / brand).mkdir(parents=True)
+        if with_json:
+            (dataset_root / brand / "1.json").write_text("{}", encoding="utf-8")
+    scripts_dir = tmp_path / "scripts"
+    (scripts_dir / "products" / "reports").mkdir(parents=True)
+    (scripts_dir / "run_pipeline.py").write_text(
+        "print('clean-reached')\n", encoding="utf-8")
+    _install_batch_dependencies(tmp_path)
+    if real_preflight:
+        # The production preflight owner, run as itself (its own data dir).
+        (scripts_dir / "preflight.py").write_text(
+            "import runpy, sys\n"
+            f"sys.argv[0] = {str(REPO_ROOT / 'scripts/preflight.py')!r}\n"
+            f"sys.path.insert(0, {str(REPO_ROOT / 'scripts')!r})\n"
+            "runpy.run_path(sys.argv[0], run_name='__main__')\n",
+            encoding="utf-8")
+    copied = tmp_path / "batch_run_all_datasets.sh"
+    copied.write_text(SCRIPT_PATH.read_text(encoding="utf-8"), encoding="utf-8")
+    return dataset_root, copied
+
+
+def test_batch_runner_refuses_a_dataset_without_raw_labels_before_clean(tmp_path):
+    dataset_root, script = _raw_label_batch(tmp_path, real_preflight=True, with_json=False)
+    result = subprocess.run(["bash", str(script), "--root", str(dataset_root), "--pipeline-only",
+                             "--skip-flutter"], capture_output=True, text=True, timeout=300)
+    combined = result.stdout + result.stderr
+    assert result.returncode != 0, combined
+    assert f"raw DSLD dataset has no label JSON: {dataset_root / 'ExampleBrand'}" in combined
+    assert "clean-reached" not in combined
+
+
+def test_batch_runner_passes_raw_root_and_selected_datasets_to_preflight(tmp_path):
+    dataset_root, script = _raw_label_batch(tmp_path, real_preflight=True, brands=("Olly", "Thorne"))
+    result = subprocess.run(["bash", str(script), "--root", str(dataset_root), "--targets", "Olly"],
+                            capture_output=True, text=True, timeout=300)
+    combined = result.stdout + result.stderr
+    assert result.returncode == 0, combined
+    assert f"[OK] {dataset_root}" in combined
+    assert combined.index(f"[OK] {dataset_root}") < combined.index("clean-reached")
+
+
+def test_batch_runner_refuses_a_target_with_no_dataset_folder(tmp_path):
+    dataset_root, script = _raw_label_batch(tmp_path, real_preflight=False, brands=("Olly",))
+    result = subprocess.run(["bash", str(script), "--root", str(dataset_root), "--targets", "Olly,Thorne"],
+                            capture_output=True, text=True, timeout=60)
+    combined = result.stdout + result.stderr
+    assert result.returncode != 0, combined
+    assert f"no dataset folder under {dataset_root} matches target 'Thorne'" in combined
+    assert "clean-reached" not in combined and "essential-preflight-reached" not in combined
+
+
+def test_batch_runner_checks_catalog_raw_labels_when_a_snapshot_will_run(tmp_path):
+    # A release run audits every assembled brand against this root; a delta or
+    # forms root without them would fail only after the whole corpus run.
+    dataset_root, script = _raw_label_batch(tmp_path, real_preflight=True, brands=("Olly",))
+    (tmp_path / "scripts/products/output_Thorne_enriched/enriched").mkdir(parents=True)
+    result = subprocess.run(["bash", str(script), "--root", str(dataset_root), "--targets", "Olly",
+                             "--release", "--skip-supabase", "--skip-flutter"],
+                            capture_output=True, text=True, timeout=300)
+    combined = result.stdout + result.stderr
+    assert result.returncode != 0, combined
+    assert f"raw DSLD dataset missing: {dataset_root / 'Thorne'}" in combined
+    assert "clean-reached" not in combined

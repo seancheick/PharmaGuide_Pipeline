@@ -414,3 +414,141 @@ def test_export_identity_reads_every_enricher_bucket_without_a_raw_label():
     record = _record()
     _check_export_identity(record, enriched, blob)
     assert record.findings == []
+
+
+# --- Every gate finding names the product, raw row, field and both values ----
+
+def _line_findings(raw, cleaned, enriched, blob):
+    record = _record()
+    _check_line_integrity(record, raw, cleaned, enriched, blob)
+    return [finding.as_dict() for finding in record.findings]
+
+
+def _broken_line_fixture():
+    raw, cleaned, enriched, blob = _line_fixture()
+    blob["row_ledger"] = [e for e in blob["row_ledger"] if e["row_ref"] != "otheringredients.ingredients[0]"]
+    blob["row_ledger"].append({"row_ref": "ingredientRows[7]", "source_label": "Ghost"})
+    blob["row_ledger"][2]["source_label"] = "Couch Grass"
+    blob["display_ingredients"][0]["analysis"]["canonical_id"] = "couch_grass"
+    blob["ingredients"][0].update(quantity=750.0)
+    blob["ingredients"].append({"raw_source_path": "ingredientRows[8]", "name": "Phantom", "canonical_id": "x"})
+    return raw, cleaned, enriched, blob
+
+
+def test_every_line_finding_names_row_field_and_both_values():
+    findings = _line_findings(*_broken_line_fixture())
+    by_code = {}
+    for finding in findings:
+        by_code.setdefault(finding["code"], []).append(finding)
+    assert set(by_code) == {
+        "RAW_ROW_MISSING_FROM_LEDGER", "LEDGER_ROW_NOT_IN_RAW", "LEDGER_NAME_DIFFERS_FROM_RAW",
+        "EXPORT_IDENTITY_NOT_FROM_ENRICHER", "AMOUNT_CHANGE_WITHOUT_EVIDENCE"}
+    for finding in findings:
+        assert finding["row_path"] and finding["field"], finding
+        assert "source_value" in finding and "exported_value" in finding, finding
+    assert by_code["RAW_ROW_MISSING_FROM_LEDGER"] == [{
+        "severity": "BLOCKER", "code": "RAW_ROW_MISSING_FROM_LEDGER",
+        "note": "raw row otheringredients.ingredients[0] has no row_ledger entry",
+        "ingredient": "Cellulose", "stage": "blob", "row_path": "otheringredients.ingredients[0]",
+        "field": "row_ledger.row_ref", "source_value": "Cellulose", "exported_value": None}]
+    assert [(f["row_path"], f["field"], f["source_value"], f["exported_value"])
+            for f in by_code["LEDGER_ROW_NOT_IN_RAW"]] == [
+        ("ingredientRows[7]", "row_ledger.row_ref", None, "Ghost"),
+        ("ingredientRows[8]", "ingredients.raw_source_path", None, "Phantom")]
+    assert [(f["row_path"], f["field"], f["source_value"], f["exported_value"])
+            for f in by_code["LEDGER_NAME_DIFFERS_FROM_RAW"]] == [
+        ("ingredientRows[1].nestedRows[0]", "row_ledger.source_label", "organic Wheat Grass", "Couch Grass")]
+    assert [(f["row_path"], f["field"], f["source_value"], f["exported_value"])
+            for f in by_code["EXPORT_IDENTITY_NOT_FROM_ENRICHER"]] == [
+        ("ingredientRows[1].nestedRows[0]", "display_ingredients.analysis.canonical_id",
+         ["wheatgrass"], "couch_grass")]
+    assert [(f["row_path"], f["field"], f["source_value"], f["exported_value"])
+            for f in by_code["AMOUNT_CHANGE_WITHOUT_EVIDENCE"]] == [
+        ("ingredientRows[0]", "quantity", "250 mg", "750.0 mg")]
+
+
+def test_unit_only_change_names_the_unit_field():
+    raw, cleaned, enriched, blob = _line_fixture()
+    blob["ingredients"][0].update(quantity=250.0, unit="mcg")
+    (finding,) = _line_findings(raw, cleaned, enriched, blob)
+    assert (finding["field"], finding["source_value"], finding["exported_value"]) == (
+        "unit", "250 mg", "250.0 mcg")
+    blob["ingredients"][0].update(quantity=750.0)
+    (finding,) = _line_findings(raw, cleaned, enriched, blob)
+    assert finding["field"] == "quantity,unit"
+
+
+def test_a_blocker_without_row_or_field_cannot_be_recorded():
+    record = _record()
+    with pytest.raises(ValueError, match="row_path and field"):
+        record.add("RAW_ROW_MISSING_FROM_LEDGER", "no location")
+    record.add("PLANT_PART_DROPPED", "advisory findings keep their free-text form")
+
+
+def _audit_tree(tmp_path, blob, enriched, raw=None, cleaned=None):
+    import json
+    build = tmp_path / "build"
+    (build / "detail_blobs").mkdir(parents=True)
+    (build / "detail_blobs" / "100.json").write_text(json.dumps(blob))
+    products = tmp_path / "products"
+    (products / "output_Brand_enriched/enriched").mkdir(parents=True)
+    (products / "output_Brand/cleaned").mkdir(parents=True)
+    (products / "output_Brand_enriched/enriched/enriched_batch_1.json").write_text(
+        json.dumps([{"id": 100, **enriched}]))
+    (products / "output_Brand/cleaned/batch_1.json").write_text(json.dumps([{"id": 100, **(cleaned or {})}]))
+    raw_root = tmp_path / "raw"
+    (raw_root / "Brand").mkdir(parents=True)
+    if raw is not None:
+        (raw_root / "Brand" / "100.json").write_text(raw if isinstance(raw, str) else json.dumps(raw))
+    return build, products, raw_root
+
+
+def _run_audit(build, products, raw_root, out):
+    import subprocess
+    return subprocess.run(
+        [sys.executable, str(SCRIPTS / "audit_raw_to_final.py"), "--build-dir", str(build),
+         "--products-root", str(products), "--all", "--raw-root", str(raw_root), "--out", str(out)],
+        capture_output=True, text=True, timeout=120)
+
+
+@pytest.mark.parametrize("raw,code", [(None, "RAW_LABEL_NOT_FOUND"), ("{not json", "RAW_LABEL_UNREADABLE")])
+def test_missing_or_unreadable_raw_label_blocks_with_its_path(tmp_path, raw, code):
+    import json
+    raw_fixture, cleaned, enriched, blob = _line_fixture()
+    build, products, raw_root = _audit_tree(tmp_path, blob, enriched, raw=raw, cleaned=cleaned)
+    result = _run_audit(build, products, raw_root, tmp_path / "out.json")
+    assert result.returncode == 1, result.stdout + result.stderr
+    (finding,) = [f for p in json.loads((tmp_path / "out.json").read_text())["products"]
+                  for f in p["findings"] if f["code"] == code]
+    assert finding["row_path"] == "label" and finding["field"] == "raw_label"
+    assert str(raw_root) in finding["note"] and finding["exported_value"] == "detail_blobs/100.json"
+    assert f"product=100 row=label field=raw_label" in result.stdout
+
+
+def test_gate_verdict_prints_every_blocker_with_product_row_field_and_values(tmp_path):
+    raw, cleaned, enriched, blob = _broken_line_fixture()
+    build, products, raw_root = _audit_tree(tmp_path, blob, enriched, raw=raw, cleaned=cleaned)
+    result = _run_audit(build, products, raw_root, tmp_path / "out.json")
+    assert result.returncode == 1, result.stdout + result.stderr
+    assert ("BLOCKER LEDGER_NAME_DIFFERS_FROM_RAW product=100 row=ingredientRows[1].nestedRows[0] "
+            "field=row_ledger.source_label source='organic Wheat Grass' exported='Couch Grass'") in result.stdout
+    assert ("BLOCKER AMOUNT_CHANGE_WITHOUT_EVIDENCE product=100 row=ingredientRows[0] "
+            "field=quantity source='250 mg' exported='750.0 mg'") in result.stdout
+
+
+def test_gate_refuses_a_missing_raw_root_instead_of_skipping(tmp_path):
+    raw, cleaned, enriched, blob = _line_fixture()
+    build, products, raw_root = _audit_tree(tmp_path, blob, enriched, raw=raw, cleaned=cleaned)
+    result = _run_audit(build, products, tmp_path / "absent", tmp_path / "out.json")
+    assert result.returncode == 2
+    assert f"raw DSLD root {tmp_path / 'absent'} missing" in result.stderr
+
+
+def test_gate_has_no_environment_or_flag_bypass():
+    import ast
+    source = (SCRIPTS / "audit_raw_to_final.py").read_text()
+    tree = ast.parse(source)
+    names = {node.attr for node in ast.walk(tree) if isinstance(node, ast.Attribute)}
+    assert "environ" not in names and "getenv" not in names
+    # The only threshold flag can tighten the gate, never loosen it below BLOCKER.
+    assert '"--severity-min", default="BLOCKER"' in source
