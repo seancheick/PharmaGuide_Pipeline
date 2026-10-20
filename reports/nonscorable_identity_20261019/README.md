@@ -1,62 +1,93 @@
-# Non-scorable rows keep their identity (F2, option a) — October 20, 2026
+# Non-scorable rows keep their identity, for interactions only (F2, option a) — October 20, 2026
 
-Decision (coordinator, option a): restore identity on non-scorable **rows** only; blend headers
-wait for a separate scoring follow-up; fix the botanical-routing leak in the same PR; only
-score-eligible rows may route.
+Coordinator decision (option a): restore identity on non-scorable **rows** only. Blend headers wait
+for a separate follow-up. Fix the botanical-routing leak in the same PR: only score-eligible rows
+may route. Independent audit (B1, H1, M1, L-arginine, L1) addressed below.
 
 ## Change
 
-1. `identity_integrity.resolve_identity` (`retained_unscoreable_canonical`): a non-scorable row
-   keeps its supplied identity when the cleaner's own `standardName` for the row is an exact
-   registry name or alias of it, the label names no other identity, it is not a blend header
-   (`cleaner_row_role == "blend_header_total"` / `hierarchyType == "blend_header"`), and it is not
-   a role or catch-all record. A stale id the row never named stays out (Antimony guard).
-2. `scoring_input_contract._classify_botanical_owner_type`: a blend total lent to a member
+1. **Kept identity** (`identity_integrity.resolve_identity`, `retained_unscoreable_canonical`). A
+   non-scorable row keeps its supplied identity when the cleaner's `standardName` for the row is
+   an exact registry name or alias of it. Other conditions:
+   - the label names no other identity;
+   - it is not a blend header;
+   - it is not a role or catch-all record.
+
+   It carries `NON_SCORING_IDENTITY_RATIONALE`.
+2. **B1, contradictions refuse the keep.** The cleaner stamps the standardName of the id it
+   mapped, so that check proves nothing a declared form contradicts. The keep is refused when:
+   - the cleaner took the identity from one declared form and the row lists several (288699,
+     327963, 334431 "Bifidobacterium", forms B. bifidum + B. animalis lactis);
+   - the identity came from a plant's marker form (59766 "Sawasabi Wasabi powder", "Total
+     Isothiocyanate");
+   - a declared form names another substance (176044 "Arginine", form "Whey Protein Isolate");
+   - the parent row names another material (79397 "Arginine" in "Solae Soy Protein isolate").
+
+   A member of the identity's family still keeps it ("Lactobacillus": L. acidophilus …, via
+   `INTERACTION_SUBJECT_FAMILY` or the IQM parent predicate). Data (`b1_data_batch.py`):
+   - century_plant (Agave americana) loses the genus-only alias "agave extract", so 31062
+     "Agave powder" (DSLD group "Agave") is no longer A. americana; the species stays unknown.
+   - wasabi_root gains the printed "sawasabi wasabi powder". The label prints "Wasabi powder" in
+     group "Japanese Horseradish"; the Sawasabi brand itself was not independently verified.
+3. **M1, identity is not scorability.** `scoring_input_contract.score_eligible_identity_view`
+   hides a kept identity from:
+   - the scorer (`score_product_v4`, `build_scored_artifact`);
+   - the enrich-time evidence matcher (`evidence_data`) and route classification
+     (`product_scoring_classification`);
+   - `derive_product_scoring_evidence`.
+
+   Such a row meets interaction rules but owns no Evidence and feeds no Dose or route. A later
+   owner that re-identifies the row (62890 "organic Beet" → Beetroot Powder, as on main) ends the
+   interaction-only status.
+4. **Routing** (`_classify_botanical_owner_type`): a blend total lent to a member
    (`is_lent_blend_mass`) cannot outrank non-botanical actives that carry their own label amounts
-   (327570 Methyl B12: "Beet" borrowing a 242 mg Food Blend beside B12, B6, folate). With no such
-   active, the lent member remains the route (Tart Cherry Fruit Complex unchanged).
-3. `scoring_input_contract._named_in_title`: one word of a derived identity name (standard name,
-   canonical id) is no title evidence; derived names match whole, the printed name (and a forms[]
-   member's printed parent blend) by any word. 204521 "Raw Organic Fit Coffee": "Raw organic
-   Svetol" (green_coffee_bean) no longer becomes the sole Evidence owner through "coffee".
+   (327570 Methyl B12: "Beet" borrowing a 242 mg Food Blend beside B12, B6, folate).
+5. **H1:** `_named_in_title` is main's rule again. The derived-word restriction existed only
+   because restored identities reached scoring (204521 "Fit Coffee"); M1 removes that path. A
+   static census over all 122,516 enriched rows of the 15,414-label baseline found 250
+   legitimate title matches it lost (Folate 400 / L-5-MTHF, Biotin / Vitamin B7):
+   `h1_title_flips_rejected_rule.tsv`, `title_flip_census.py`.
 
 ## Measurement
 
-Cohort: 940 labels whose identity was erased on the 951a05415 capture, 600 seeded controls and
-204521 (1,540). `replay.py snapshot --full --blob`, main 625e90425 vs the final candidate.
-Census: `retention_census.py` → `f2a_census.out`; every score move with its cause in
-`f2a_score_moves.tsv`; every rule added per product in `f2a_rules_added.tsv`.
+1,540 labels (940 with identity erased on the 951a05415 capture, 600 seeded controls, plus the
+audit's products). `replay.py snapshot --full --blob`, base main 2e80642ca vs this branch.
+Records: `~/pg_quality/lostsubj_pr196_20261020/` (`base.jsonl`, `cand2.jsonl`). Per product:
+`f2a_fulldiff.out` (`fulldiff.py`).
 
-- 522 products gain row identities; **0 header identities**.
-- **+85 interaction rules, 0 removed, 0 product_safety_status changes**: probiotics
-  immunocompromised 45, L-arginine 27, yerba mate 8, aloe vera 3, lion's mane 1, ginseng 1.
-- **30 score moves** (was 59 before the header exclusion and routing fix), all classified:
-  - identity restored (probiotic strains, food powders, Pycnogenol, glutamic acid): 15;
-  - routing (lent blend vs own-amount actives → generic): 8;
-  - title (derived-name word no longer title evidence): 7.
-- Raw canary check (`freeze_contract_snapshots.py --check`): 0 drifts. The earlier 204571 drift
-  (Adrenal Daily Balance 60.4 → 44.8) came from the header "Organic Adrenal Blend" taking
-  organ_extracts and owning Evidence through the title; headers are now excluded.
+- **+57 interaction rules, 0 removed, 0 product_safety_status changes:**
+  - probiotics immunocompromised 45;
+  - yerba mate 6;
+  - aloe vera 3;
+  - L-arginine 2;
+  - lion's mane 1.
+- **9 score moves, all routing class.** Each one returns to main's score when only main's
+  `_classify_botanical_owner_type` is swapped in:
+  - 18540 Muscle Igniter;
+  - 2222/28978 Re-Forge;
+  - 259883-5 Aloe Gorgeous;
+  - 28554/28559 Daily;
+  - 326692 Beets Gummies (debatable, **for Sean**).
 
-## Exposed alias defects
+  No move from identity or title.
+- The audit's leak products match main: 274777, 334429, 317030 (probiotic Evidence), 297685/6
+  (gamma-carotene), 40089/278416 (flavor title), 178728 (iron Dose), 204521 (Fit Coffee).
 
-| Alias | Rows in this output | Verdict |
-|---|---|---|
-| "adrenal" → organ_extracts ("Organic Adrenal Blend") | none (header) | cleaner lane |
-| "prostate" → organ_extracts ("Prostate Formula") | none (header) | cleaner lane |
-| "Resveratrol analogs" → pterostilbene | 2 | correct: the raw row's form is Pterostilbene |
-| "Glycosides" → resveratrol | 2 | form is Polydatin (resveratrol glucoside); a Trans-Resveratrol row sits beside it, no outcome change; noted |
-| "oat grass" → oat_straw | 41 | within the entry's curated scope (Avena sativa aerial parts; EMA oat herb = aerial parts before flowering); not changed |
+## L-arginine
+
+The 27 additions on the first candidate were not-printed constituents of whey/casein amino
+profiles. B1 removes them, because their forms or parent name the protein. Two remain:
+- 315814 Staminol declares L-Arginine itself inside a proprietary blend: a real supplemental
+  source. It keeps the rule.
+- 80495 Alive! Multi-Vitamin lists Arginine under "Amino Acids" inside Cilantro, a whole-food
+  composition two levels up. The identity owner does not see that ancestor. **For Sean.**
+
+The rule's sources (PMID 15133406 review; 16391217 VINTAGE MI at 3 g three times a day) set no dose
+threshold, so a cutoff would be a new policy. The ~90 main products already carrying it are
+unchanged.
 
 ## For Sean
 
-- Caffeine Blend headers (Ravage 1179/12800/28981) stay as on main: no caffeine warning. Not a
-  regression; open until the header follow-up.
-- L-arginine hypertension rule (no dose threshold) now fires for "Arginine" rows in whey amino
-  profiles (27 products). Real concern or a threshold decision?
-- Evidence title owners from flavor names: 278416 "…Juiced Greens Powder Apple" (Apple restored,
-  Evidence 10.3 → 0) and 40089 Kids Gummy (coffeeberry/apple, 10.3 → 0).
-- 259714 Essential Amino Complete: BCAA no longer owns Evidence through the derived word "amino";
-  the remaining essential-amino owners have no evidence records (Evidence 10.4 → 0).
-- Gamma-Carotene → vitamin_a (cleaner identity) now credits vitamin A evidence (297685/6, +3.3);
-  gamma-carotene is a provitamin, not a vitamer.
+- 326692 Beets Gummies route change (above).
+- 80495 cilantro-composition arginine (above).
+- Evidence for 259714 Essential Amino Complete is unchanged from main.
