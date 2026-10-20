@@ -1186,7 +1186,9 @@ def test_nordic_softgels_inactive_unmapped_labels_map(
         ("Bacopa monnieri Whole Herb Extract", "Bacopa"),
         ("Acai Berry Whole Fruit Extract", "Acai"),
         ("Cissus quadrangularis Stem Extract", "Winged Treebine"),
-        ("BioVin", "Resveratrol"),
+        # BioVin is a red-wine grape extract (Sean, 2026-10-19): the identity is grape and
+        # its declared trans-resveratrol is a marker (test_grape_resveratrol_marker.py).
+        ("BioVin", "Grape"),
         ("Phase 2", "Common Bean Extract"),
         ("Vitashine", "Vitamin D"),
         ("California Poppy extract", "California Poppy"),

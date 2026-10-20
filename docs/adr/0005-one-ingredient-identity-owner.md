@@ -1,6 +1,6 @@
 # ADR-0005 — One ingredient-identity owner; the printed label beats a DSLD group
 
-**Status:** PROPOSED (needs Sean's merge; branch `claude/upbeat-montalcini-ef2f53`)
+**Status:** Accepted with amendment (Sean, 2026-10-19)
 **Date:** 2026-10-19
 **Matrix concept:** `canonical_ingredient_id` (owner `scripts/enrich_supplements_v3.py`, deciding
 through `scripts/identity_integrity.py::resolve_identity`)
@@ -26,9 +26,9 @@ through `scripts/identity_integrity.py::resolve_identity`)
      natural colors, a fruit-and-vegetable powder record, an enzyme blend), or either side is the
      general blend owner ("Proprietary Blend" is a row role, so TamaFlex stays a blend);
    - keeping the label identity would drop an interaction rule the group's identity answers to
-     (printed "Japanese Knotweed root extract" under "Hu Zhang" keeps resveratrol and its bleeding
-     rule; cod liver oil keeps fish oil). Those identities need a reviewed interaction link before
-     they can be corrected.
+     (cod liver oil keeps fish oil). This warning guard stays until a validated, source-qualified
+     replacement exists for the pair (see Amendment); Japanese knotweed is the first pair it no
+     longer governs.
 3. **A curated alias is evidence, so a wrong alias is a data defect**, fixed through `/data-fix`
    (first batch: diacetylactis, ElevATP, olive juice extract, sweet wormwood).
 4. **Export carries the owner's decision.** Detail-blob `ingredients[].canonical_id` is the
@@ -40,6 +40,31 @@ through `scripts/identity_integrity.py::resolve_identity`)
    ledger or exported row points at a row the label lacks, ledger names equal the raw text, exported
    identity equals the enricher's, and a changed amount or unit carries the cleaner's recorded
    reason (selected serving column, reviewer-signed correction, or %DV dose correction).
+
+## Amendment (Sean, 2026-10-19)
+
+"Accept one canonical ingredient-identity owner and faithful downstream export. However, preserving
+a warning must not force an incorrect identity. Japanese knotweed should retain its verified plant
+identity; a source-qualified relationship should connect it to applicable resveratrol warnings.
+Preserve the existing warning guard until its replacement is validated, then update the ADR's
+status and implementation notes accurately."
+
+Implementation (branch `claude/grape-resveratrol-marker`):
+- The Hu Zhang / Reynoutria plant names were curated aliases of the resveratrol compound, which is
+  why the "Hu Zhang" group resolved knotweed rows to resveratrol. They moved to the botanical
+  `japanese_knotweed` entry (Hu Zhang is the root and rhizome of Polygonum cuspidatum, PMID
+  33388645), so a printed knotweed row keeps its plant identity; no guard decides it.
+- The source-qualified relationship is the existing marker owner
+  (`botanical_marker_contributions.json`, `_compute_delivers_markers`): a knotweed or grape row
+  whose label declares a resveratrol percentage carries an analysis-only resveratrol row, with its
+  amount when the row has one and "amount unknown" otherwise, and meets the resveratrol rules
+  through it. Grape and knotweed use the same standard (a declared percentage of at least 1%), and
+  the marker scan now reads the row's printed note, where DSLD keeps "standardized to 5%
+  trans-resveratrol" (BioVin Advanced 269265, 302705, identity grape).
+- A knotweed row that declares no resveratrol no longer carries the resveratrol rules; the replay
+  lists those products for review.
+- The generic guard (keep the label identity only if no group-carried rule is dropped) is
+  unchanged for every other pair (cod liver oil → fish oil).
 
 ## Context
 

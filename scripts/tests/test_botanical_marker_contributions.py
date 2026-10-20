@@ -31,6 +31,7 @@ REQUIRED_BOTANICALS = {
     "japanese_knotweed",
     "marigold",  # Phase 8 — Tagetes erecta source of lutein
     "green_tea_extract",
+    "grape",  # red-wine grape extracts standardized to trans-resveratrol
 }
 
 EXPECTED_MARKER_MAP = {
@@ -45,6 +46,7 @@ EXPECTED_MARKER_MAP = {
     "japanese_knotweed": "resveratrol",
     "marigold": "lutein",
     "green_tea_extract": "egcg",
+    "grape": "resveratrol",
 }
 
 USDA_FDC_PATTERN = re.compile(r"^USDA_FDC:\d+$")

@@ -3,7 +3,7 @@
     "description": "Deterministic ingredient-level interaction rules keyed by canonical database identity",
     "purpose": "interaction_alert_rules",
     "schema_version": "6.3.0",
-    "last_updated": "2026-10-19",
+    "last_updated": "2026-10-20",
     "total_entries": 152,
     "structure_note": "One entry per ingredient (or per form-scoped variant). All conditions, drug classes, and dose thresholds for that ingredient are in one object. As of v6.0.0, every sub-rule (condition_rules[], drug_class_rules[], dose_thresholds[], pregnancy_lactation block) carries an explicit profile_gate predicate that consumers MUST evaluate against the user profile before firing the alert.",
     "total_rules": 152,
@@ -21003,13 +21003,13 @@
           "condition_id": "bleeding_disorders",
           "severity": "caution",
           "evidence_level": "theoretical",
-          "mechanism": "Laboratory and animal studies describe platelet or drug-metabolism effects of resveratrol. They do not establish a human oral 150 mg bleeding-interaction cutoff or a uniform clinical increase in anticoagulant exposure.",
-          "action": "Use with caution in bleeding disorders. Limit dose and inform haematologist or treating physician of use, particularly before invasive procedures.",
+          "mechanism": "In laboratory (in vitro) studies resveratrol inhibits platelet aggregation; its clinical relevance is not established (MSKCC). No human study cited here sets a bleeding risk or an amount.",
+          "action": "If you have a bleeding disorder, tell your clinician you use resveratrol, especially before a procedure.",
           "sources": [
             "https://www.mskcc.org/cancer-care/integrative-medicine/herbs/resveratrol"
           ],
           "alert_headline": "May affect platelet activity",
-          "alert_body": "Resveratrol has laboratory platelet findings, but the human interaction risk and dose boundary are uncertain. Discuss use with your prescriber if you have bleeding risks or take blood thinners.",
+          "alert_body": "Lab studies show resveratrol can slow platelet clumping; whether supplement amounts affect bleeding in people is uncertain. Mention it to your clinician if you have a bleeding disorder.",
           "informational_note": "Resveratrol can affect platelet function — relevant to people with a bleeding disorder.",
           "profile_gate": {
             "gate_type": "condition",
@@ -21070,14 +21070,14 @@
           "drug_class_id": "anticoagulants",
           "severity": "caution",
           "evidence_level": "theoretical",
-          "mechanism": "In a mouse study, 0.5% dietary trans-resveratrol enhanced warfarin’s effect while 0.05% did not (PMID 26947597). This model does not establish a human oral milligram interaction boundary or a uniform effect for other anticoagulants.",
-          "action": "Monitor INR closely when starting, adjusting, or stopping resveratrol in patients on warfarin. Alert prescriber; warfarin dose may need reduction.",
+          "mechanism": "In a mouse study, 0.5% dietary trans-resveratrol enhanced warfarin’s effect while 0.05% did not (PMID 26947597). This model does not establish a human interaction, an amount, or an effect on other anticoagulants; resveratrol's platelet effect is an in vitro finding (MSKCC).",
+          "action": "Tell the prescriber who manages your blood thinner that you use resveratrol.",
           "sources": [
             "https://www.mskcc.org/cancer-care/integrative-medicine/herbs/resveratrol",
             "https://pubmed.ncbi.nlm.nih.gov/26947597/"
           ],
           "alert_headline": "May add to blood-thinner effects",
-          "alert_body": "Resveratrol has laboratory platelet findings, but the human interaction risk and dose boundary are uncertain. Discuss use with your prescriber if you have bleeding risks or take blood thinners.",
+          "alert_body": "Lab and mouse studies suggest resveratrol may add to blood-thinner effects; whether supplement amounts matter in people is uncertain. Tell your blood-thinner prescriber you use it.",
           "informational_note": "Resveratrol can affect clotting — relevant to people on anticoagulants.",
           "profile_gate": {
             "gate_type": "drug_class",
@@ -21104,13 +21104,13 @@
           "drug_class_id": "antiplatelets",
           "severity": "caution",
           "evidence_level": "theoretical",
-          "mechanism": "Laboratory and animal studies describe platelet or drug-metabolism effects of resveratrol. They do not establish a human oral 150 mg bleeding-interaction cutoff or a uniform clinical increase in anticoagulant exposure.",
-          "action": "Tell your antiplatelet prescriber about resveratrol use. A universal 250 mg clinical interaction cutoff is not established by the cited experimental evidence.",
+          "mechanism": "Resveratrol inhibits platelet aggregation in vitro, so an additive effect with antiplatelet medicines is possible; its clinical relevance is not established (MSKCC).",
+          "action": "Tell the prescriber of your antiplatelet medicine that you use resveratrol.",
           "sources": [
             "https://www.mskcc.org/cancer-care/integrative-medicine/herbs/resveratrol"
           ],
           "alert_headline": "May add to antiplatelet effects",
-          "alert_body": "Resveratrol has laboratory platelet findings, but the human interaction risk and dose boundary are uncertain. Discuss use with your prescriber if you have bleeding risks or take blood thinners.",
+          "alert_body": "Lab studies show resveratrol can slow platelet clumping; whether supplement amounts add to antiplatelet medicines in people is uncertain. Tell your prescriber you use it.",
           "informational_note": "Resveratrol can affect platelet function — relevant to people on antiplatelets.",
           "profile_gate": {
             "gate_type": "drug_class",

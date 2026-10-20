@@ -3588,7 +3588,7 @@ class SupplementEnricherV3:
         return marker_present, None
 
     def _compute_delivers_markers(
-        self, ingredient_record: Dict[str, Any]
+        self, ingredient_record: Dict[str, Any], row_notes: Optional[str] = None
     ) -> List[Dict[str, Any]]:
         """Compute the marker contributions an ingredient delivers based on
         its primary canonical_id and scripts/data/botanical_marker_contributions.json.
@@ -3622,10 +3622,13 @@ class SupplementEnricherV3:
         if not contributions:
             return []
 
-        # Label text for standardization scan: combine raw_source_text + matched_form + original_label
+        # Label text for standardization scan: the row's names plus its
+        # printed panel note, where DSLD keeps "standardized to 5%
+        # trans-resveratrol" (BioVin Advanced).
         label_text = " ".join(
-            str(ingredient_record.get(k, "") or "")
-            for k in ("raw_source_text", "matched_form", "original_label", "name")
+            [str(ingredient_record.get(k, "") or "")
+             for k in ("raw_source_text", "matched_form", "original_label", "name")]
+            + [str(row_notes or "")]
         )
 
         # Ingredient mass in grams (for default-contribution dose math)
@@ -3671,6 +3674,7 @@ class SupplementEnricherV3:
                     )
                 elif pct is not None and (min_pct is None or pct >= min_pct):
                     # Explicit standardization with pct meeting min
+                    entry["declared_standardization_pct"] = pct
                     if mass_g is not None:
                         entry["estimated_dose_mg"] = round(mass_g * 1000.0 * (pct / 100.0), 3)
                         entry["estimation_method"] = "standardization_pct"
@@ -5563,11 +5567,15 @@ class SupplementEnricherV3:
         # marker contributions declared in botanical_marker_contributions.json,
         # compute and attach the marker contribution list. Empty for marker-
         # canonical ingredients or botanicals without contribution mappings.
+        notes_by_path = {row.get("raw_source_path"): row.get("notes")
+                         for row in product.get("activeIngredients") or [] if isinstance(row, dict)}
         for ing_list in (all_quality_data, ingredients_scorable, ingredients_recognized_non_scorable, ingredients_skipped):
             for ing in ing_list or []:
                 if not isinstance(ing, dict):
                     continue
-                ing["delivers_markers"] = self._compute_delivers_markers(ing)
+                ing["delivers_markers"] = self._compute_delivers_markers(
+                    ing, notes_by_path.get(ing.get("raw_source_path"))
+                )
 
         return {
             # Schema version for forward compatibility
@@ -19343,16 +19351,19 @@ class SupplementEnricherV3:
         return None
 
     def _derived_marker_interaction_rows(
-        self, ingredient: Dict[str, Any]
+        self, ingredient: Dict[str, Any], *, amount_known: bool = True
     ) -> List[Dict[str, Any]]:
         """Create analysis-only rows for deterministically quantified markers.
 
         These rows never enter the label ingredient ledger.  They exist only
         so a marker-specific clinical rule can evaluate a label-declared
         standardization (for example, 500 mg turmeric standardized to 95%
-        curcuminoids -> 475 mg curcumin).  Total extract mass, provenance-only
-        markers, keyword-only standardizations, and default-content estimates
-        are deliberately excluded.
+        curcuminoids -> 475 mg curcumin).  A declared percentage on a row with
+        no amount of its own ("standardized to 50% Resveratrol" inside a blend)
+        still declares the marker: its row carries no amount, so dose rules read
+        it as unknown.  Total extract mass, provenance-only markers,
+        keyword-only mentions, and default-content estimates are deliberately
+        excluded.
         """
         source_name = str(
             ingredient.get("raw_source_text")
@@ -19365,11 +19376,15 @@ class SupplementEnricherV3:
         for marker in ingredient.get("delivers_markers") or []:
             if not isinstance(marker, dict):
                 continue
-            if str(marker.get("estimation_method") or "").strip().lower() != "standardization_pct":
-                continue
             marker_id = str(marker.get("marker_canonical_id") or "").strip()
             marker_amount = self._to_float_safe(marker.get("estimated_dose_mg"))
-            if not marker_id or marker_amount is None or marker_amount <= 0:
+            quantified = (
+                amount_known
+                and str(marker.get("estimation_method") or "").strip().lower() == "standardization_pct"
+                and marker_amount is not None
+                and marker_amount > 0
+            )
+            if not marker_id or not (quantified or marker.get("declared_standardization_pct")):
                 continue
             marker_name = marker_id.replace("_", " ").title()
             rows.append({
@@ -19378,13 +19393,13 @@ class SupplementEnricherV3:
                 "raw_source_text": f"{marker_name} (from {source_name})",
                 "name": marker_name,
                 "standard_name": marker_name,
-                "quantity": marker_amount,
-                "unit": "mg",
-                "unit_normalized": "mg",
+                "quantity": marker_amount if quantified else None,
+                "unit": "mg" if quantified else "unspecified",
+                "unit_normalized": "mg" if quantified else "unspecified",
                 "dose_source": "label_standardization",
                 "marker_derivation": {
                     "source_canonical_id": source_canonical_id,
-                    "estimation_method": "standardization_pct",
+                    "estimation_method": marker.get("estimation_method"),
                     "basis": marker.get("basis"),
                 },
                 "analysis_only": True,
@@ -20534,9 +20549,10 @@ class SupplementEnricherV3:
                 all_ingredient_rows.append(("ingredients_skipped", row))
                 if id(row) in label_rows:
                     repeat_checked_rows.add(id(row))
-                if row.get("skip_reason") == SKIP_REASON_BLEND_HEADER_WITH_WEIGHT:
-                    continue
-                for marker_row in self._derived_marker_interaction_rows(row):
+                # A header's declared marker stays a declaration, never a dose
+                # computed from the blend total.
+                header = row.get("skip_reason") == SKIP_REASON_BLEND_HEADER_WITH_WEIGHT
+                for marker_row in self._derived_marker_interaction_rows(row, amount_known=not header):
                     all_ingredient_rows.append(("derived_marker", marker_row))
                     if id(row) in label_rows:
                         repeat_checked_rows.add(id(marker_row))
@@ -20547,7 +20563,7 @@ class SupplementEnricherV3:
                 continue
             # A blend header's amount is the blend's, never its named
             # substance's dose (D1c): its dose rules read "amount unknown", and
-            # no marker is derived from it.
+            # a marker it declares carries no amount.
             dose_row = (
                 {**ingredient, "quantity": None}
                 if ingredient.get("skip_reason") == SKIP_REASON_BLEND_HEADER_WITH_WEIGHT
