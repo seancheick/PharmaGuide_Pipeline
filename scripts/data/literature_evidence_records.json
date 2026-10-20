@@ -193,7 +193,6 @@
           "pmid": "32483625",
           "title": "Nutritional interventions to improve muscle mass, muscle strength, and physical performance in older people: an umbrella review of systematic reviews and meta-analyses.",
           "design": "systematic_review_meta",
-          "sample_size": 699,
           "primary_endpoint": "lean muscle mass and grip strength",
           "effect": "mixed",
           "verification_provenance": {
@@ -209,7 +208,7 @@
         }
       ],
       "effect_direction": "positive_weak",
-      "population_context": "Young men and older/young adults in acute EAA or protein-beverage studies; broader nutritional umbrella review includes older adults.",
+      "population_context": "Young men and older/young adults in acute EAA or protein-beverage studies; the broader nutritional umbrella review includes older adults with and without sarcopenia.",
       "studied_dose_exposure": {
         "values": [
           1742,
@@ -220,7 +219,7 @@
         "unit": "mg",
         "basis": "per_serving_threshold"
       },
-      "applicability_decision": "Acute muscle-protein-synthesis surrogate studies used leucine within EAA mixtures (6.7 g with 26% or 41% leucine) or whey-protein beverages (3 or 5 g total leucine). These sources do not establish a universal standalone 2–3 g clinical threshold, muscle-mass benefit, or efficacy without the studied co-intervention.",
+      "applicability_decision": "Acute muscle-protein-synthesis surrogate studies used leucine within EAA mixtures (6.7 g with 26% or 41% leucine) or whey-protein beverages (3 or 5 g total leucine). The cited umbrella review found muscle-mass benefit in sarcopenic older adults, but not healthy older adults, and no clear benefit for muscle strength or physical performance. These sources do not establish a universal standalone 2-3 g clinical threshold or general-population efficacy without the studied preparation and population context.",
       "verification_result": "authoritative_pubmed_verified",
       "verification_provenance": {
         "verified_by": "scripts/api_audit/verify_literature_records.py",
@@ -662,7 +661,7 @@
         "unit": "mg",
         "basis": "active_capsaicinoids_per_meal"
       },
-      "applicability_decision": "Dose applicable for standardized capsaicinoids at >= 2 mg/day; crude ground pepper without capsaicinoid marker requires potency declaration",
+      "applicability_decision": "A meta-analysis of capsaicinoid trials reports that at least 2 mg capsaicinoids taken before a meal was needed to reduce ad libitum energy intake; a respiration-chamber study gave 2.56 mg capsaicin per meal. Crude ground pepper without a capsaicinoid declaration does not establish that exposure.",
       "verification_result": "authoritative_pubmed_verified",
       "verification_provenance": {
         "verified_by": "scripts/api_audit/verify_literature_records.py",
@@ -673,7 +672,7 @@
     },
     {
       "canonical_id": "pomegranate",
-      "material_form": "Pomegranate in different forms across 22 RCTs (the abstract singles out juice)",
+      "material_form": "Pomegranate juice and varied extract preparations",
       "search_query": "(\"Pomegranate\"[tiab] OR \"Punica granatum\"[tiab]) AND (blood pressure[tiab] OR cardiovascular[tiab]) AND (randomized controlled trial[pt] OR systematic review[pt]) NOT (animals[mh] NOT humans[mh])",
       "search_date": "2026-09-17",
       "databases_searched": [
@@ -699,10 +698,10 @@
           }
         }
       ],
-      "effect_direction": "applicability_unestablished",
+      "effect_direction": "positive_weak",
       "population_context": "Adults in 22 RCTs; larger systolic reductions when baseline SBP > 130 mmHg",
       "studied_dose_exposure": {},
-      "applicability_decision": "The cited meta-analysis pooled 22 RCTs of pomegranate in different forms and found lower SBP and DBP with high heterogeneity; the authors attribute the pooled effect mainly to juice. Mixed-form and juice evidence does not establish a standardized extract or punicalagin dose without bioequivalence.",
+      "applicability_decision": "The meta-analysis includes human extract trials with heterogeneous systolic-pressure benefit; extract diastolic results were not statistically significant. Evidence does not establish a universal standardized-extract or punicalagin regimen.",
       "verification_result": "authoritative_pubmed_verified",
       "verification_provenance": {
         "verified_by": "scripts/api_audit/verify_literature_records.py",
@@ -2425,7 +2424,7 @@
     },
     {
       "canonical_id": "lecithin",
-      "material_form": "soy/sunflower lecithin phospholipids",
+      "material_form": "Soy lecithin (the studied material; sunflower lecithin was not tested in this source)",
       "search_query": "soy lecithin lipids randomized clinical trial",
       "search_date": "2026-09-20",
       "databases_searched": [
@@ -2437,11 +2436,11 @@
         {
           "pmid": "21490917",
           "title": "Influence of soy lecithin administration on hypercholesterolemia.",
-          "study_type": "uncontrolled_clinical_study",
+          "study_type": "clinical_trial",
           "sample_size": 30,
           "dose": "500 mg/day soy lecithin",
           "duration": "2 months",
-          "outcome": "total cholesterol fell 40.7-42.0% and LDL cholesterol 42.1-56.2% from baseline after 1-2 months (no control group)",
+          "outcome": "total cholesterol fell 40.7-42.0% and LDL cholesterol 42.1-56.2% from baseline after 1-2 months in the lecithin group; the paper included a soy-oil placebo group, but these percentages are not between-group treatment effects",
           "effect_direction": "positive_weak",
           "verification_provenance": {
             "pmid_verified": true,
@@ -2463,7 +2462,7 @@
         ],
         "unit": "mg"
       },
-      "applicability_decision": "One uncontrolled study in 30 hypercholesterolemic adults aged 58-70 (full text, PMC3065734) took one 500 mg soy lecithin capsule daily for 2 months; total and LDL cholesterol fell from baseline.",
+      "applicability_decision": "A double-blind, placebo-controlled clinical study enrolled 30 hypercholesterolemic adults aged 58-70, with 20 receiving 500 mg/day soy lecithin for 2 months. Random allocation was not established in the full text (PMC3065734). Total and LDL cholesterol fell from the lecithin group baseline; the reported percentages do not establish a between-group treatment effect.",
       "verification_result": "authoritative_pubmed_verified",
       "verification_provenance": {
         "verified_by": "scripts/api_audit/verify_literature_records.py",
@@ -4361,8 +4360,8 @@
           "sample_size": 80,
           "dose": "300 mg/day standardized seed extract",
           "duration": "16 weeks",
-          "outcome": "significant reduction in systolic and diastolic blood pressure compared to placebo",
-          "effect_direction": "positive_moderate",
+          "outcome": "no superiority over placebo on the overall primary systolic blood-pressure endpoint (p = 0.7197); diastolic comparison also null (p = 0.2001); exploratory male-subgroup analyses favored extract, while women showed no superiority",
+          "effect_direction": "mixed",
           "verification_provenance": {
             "pmid_verified": true,
             "authoritative_live_title": "Grape Seed Extract Positively Modulates Blood Pressure and Perceived Stress: A Randomized, Double-Blind, Placebo-Controlled Study in Healthy Volunteers.",
@@ -4375,7 +4374,7 @@
           }
         }
       ],
-      "effect_direction": "positive_moderate",
+      "effect_direction": "mixed",
       "population_context": "Healthy adults with mildly elevated blood pressure",
       "studied_dose_exposure": {
         "values": [
@@ -4384,7 +4383,7 @@
         "unit": "mg",
         "basis": "daily_intake"
       },
-      "applicability_decision": "300 mg/day Enovita grape seed extract for 16 weeks modulated blood pressure versus placebo in 80 healthy adults with mildly elevated blood pressure.",
+      "applicability_decision": "Enovita grape seed extract 300 mg/day for 16 weeks was tested in 80 healthy adults with mildly elevated blood pressure. The overall primary blood-pressure endpoint was not superior to placebo. Exploratory male-subgroup analyses suggested benefit, but women showed no superiority; this does not establish an overall placebo-superior blood-pressure effect (PMC7922661).",
       "verification_result": "authoritative_pubmed_verified",
       "verification_provenance": {
         "verified_by": "scripts/api_audit/verify_literature_records.py",
@@ -4514,10 +4513,10 @@
       "population_context": "Healthy women with moderate psychological stress",
       "studied_dose_exposure": {
         "values": [
-          250,
-          500
+          250
         ],
-        "unit": "mg"
+        "unit": "mg",
+        "basis": "daily_intake"
       },
       "applicability_decision": "Baker's yeast beta-1,3/1,6-glucan evidence requires specific yeast insoluble glucan material disclosure; does not transfer to generic or oat/cereal beta-glucan.",
       "verification_result": "authoritative_pubmed_verified",
@@ -4879,9 +4878,10 @@
         "values": [
           400
         ],
-        "unit": "mg"
+        "unit": "mg",
+        "basis": "daily_intake"
       },
-      "applicability_decision": "Muscular power and post-exercise recovery support established at >= 400 mg disodium ATP.",
+      "applicability_decision": "400 mg/day disodium ATP for 2 weeks prevented post-exercise falls in ATP and muscle excitability and raised later-bout Wingate peak power in 42 healthy men.",
       "verification_result": "authoritative_pubmed_verified",
       "verification_provenance": {
         "verified_by": "scripts/api_audit/verify_literature_records.py",
@@ -5098,12 +5098,7 @@
       ],
       "effect_direction": "null",
       "population_context": "Adults with schizophrenia (adjunctive treatment)",
-      "studied_dose_exposure": {
-        "values": [
-          500
-        ],
-        "unit": "mg"
-      },
+      "studied_dose_exposure": {},
       "applicability_decision": "Reviewed null for cognition: in an 8-week adjunctive RCT in 120 people with schizophrenia, pregnenolone did not improve cognition (MCCB) but improved functional capacity (UPSA-B). This disease-specific result does not establish cognitive benefit in general adults.",
       "verification_result": "authoritative_pubmed_verified",
       "verification_provenance": {
@@ -5634,14 +5629,8 @@
       ],
       "effect_direction": "positive_moderate",
       "population_context": "adults with excessive intestinal gas or abdominal bloating",
-      "studied_dose_exposure": {
-        "values": [
-          500,
-          1000
-        ],
-        "unit": "mg"
-      },
-      "applicability_decision": "Digestive gas reduction and intestinal adsorbent support established at >= 500 mg per meal.",
+      "studied_dose_exposure": {},
+      "applicability_decision": "In a double-blind trial in 99 adults (US and India), activated charcoal lowered breath hydrogen and bloating and cramp symptoms after lactulose versus placebo; the abstract gives no dose.",
       "verification_result": "authoritative_pubmed_verified",
       "verification_provenance": {
         "verified_by": "scripts/api_audit/verify_literature_records.py",
@@ -6076,7 +6065,7 @@
     },
     {
       "canonical_id": "OI_SHARK_CARTILAGE",
-      "material_form": "Shark cartilage powder / extract",
+      "material_form": "Benefin shark cartilage powder",
       "search_query": "shark cartilage advanced cancer randomized controlled trial",
       "search_date": "2026-09-20",
       "databases_searched": [
@@ -6090,7 +6079,7 @@
           "title": "Evaluation of shark cartilage in patients with advanced cancer: a North Central Cancer Treatment Group trial.",
           "study_type": "randomized_controlled_trial",
           "sample_size": 83,
-          "outcome": "failed to demonstrate any suggestion of efficacy or survival advantage in advanced cancer (null on all endpoints)",
+          "outcome": "no overall survival or overall quality-of-life benefit; some well-being measures were worse with shark cartilage; trial underpowered for survival",
           "effect_direction": "null",
           "verification_provenance": {
             "pmid_verified": true,
@@ -6101,18 +6090,15 @@
             "verified_source": "https://pubmed.ncbi.nlm.nih.gov/15912493/",
             "verified_at": "2026-09-21T07:39:42.986936+00:00",
             "abstract_evidence_quote": "Patients with incurable"
-          }
+          },
+          "dose": "Benefin powder titrated from 24 g/day toward 96 g/day as tolerated, increasing every 3 days, divided into 3 or 4 daily servings",
+          "duration": "variable, continued as tolerated"
         }
       ],
       "effect_direction": "null",
       "population_context": "patients with advanced colorectal and breast carcinoma",
-      "studied_dose_exposure": {
-        "values": [
-          1000
-        ],
-        "unit": "mg"
-      },
-      "applicability_decision": "Definitive cooperative oncology randomized trials demonstrated null efficacy on survival, tumor response, and quality of life; reviewed null/unfavorable.",
+      "studied_dose_exposure": {},
+      "applicability_decision": "The randomized advanced-cancer trial found no survival benefit. Benefin powder was titrated from 24 g/day toward a 96 g/day target as tolerated, not an established effective-dose range. The trial was underpowered; some quality-of-life measures were worse with treatment.",
       "verification_result": "authoritative_pubmed_verified",
       "verification_provenance": {
         "verified_by": "scripts/api_audit/verify_literature_records.py",
@@ -7376,9 +7362,10 @@
         "values": [
           40
         ],
-        "unit": "mg"
+        "unit": "mg",
+        "basis": "daily_intake"
       },
-      "applicability_decision": "Bone mineral density maintenance and osteoblast activation support established for MBP at >= 40 mg/day.",
+      "applicability_decision": "40 mg/day milk basic protein for 6 months raised lumbar (L2-L4) BMD versus placebo in 35 healthy young women.",
       "verification_result": "authoritative_pubmed_verified",
       "verification_provenance": {
         "verified_by": "scripts/api_audit/verify_literature_records.py",
@@ -8083,7 +8070,7 @@
           "study_type": "randomized_controlled_trial",
           "sample_size": 45,
           "dose": "4.5 g/day larch arabinogalactan",
-          "duration": "10 weeks",
+          "duration": "72 days",
           "outcome": "greater IgG response than placebo for 2 of 7 pneumococcal subtypes (18C, 23F); no effect on salivary IgA, white cells, cytokines or complement",
           "effect_direction": "positive_weak",
           "verification_provenance": {
@@ -9142,12 +9129,12 @@
       "population_context": "Overweight and obese men",
       "studied_dose_exposure": {
         "values": [
-          250,
           500
         ],
-        "unit": "mg"
+        "unit": "mg",
+        "basis": "daily_intake"
       },
-      "applicability_decision": "Standardized 10% forskolin root extract supported at >= 250-500 mg/day for body composition management.",
+      "applicability_decision": "250 mg of a 10% forskolin root extract twice daily (500 mg/day) for 12 weeks decreased body fat percentage and fat mass versus placebo in 30 overweight and obese men; lean body mass only trended up.",
       "applicability_status": "applicable_reviewed_trials",
       "verification_provenance": {
         "verified_by": "scripts/api_audit/verify_literature_records.py",
@@ -9214,14 +9201,8 @@
       ],
       "effect_direction": "null",
       "population_context": "Overweight or obese adults",
-      "studied_dose_exposure": {
-        "values": [
-          1200,
-          4500
-        ],
-        "unit": "mg"
-      },
-      "applicability_decision": "Cochrane Systematic Review demonstrated lack of clinically significant weight loss efficacy.",
+      "studied_dose_exposure": {},
+      "applicability_decision": "The Cochrane review found minimal weight effects in higher-quality trials, unlikely to be clinically significant. A source-bound dose for this record remains unverified; no effective-dose threshold is established.",
       "applicability_status": "reviewed_null_evidence",
       "verification_provenance": {
         "verified_by": "scripts/api_audit/verify_literature_records.py",
@@ -9436,7 +9417,7 @@
       "population_context": "Overweight middle-aged men",
       "studied_dose_exposure": {},
       "applicability_decision": "The cited 12-week crossover RCT (46 men) used olive leaf polyphenols and improved insulin sensitivity and beta-cell responsiveness, with no effect on lipids, blood pressure or body composition. Leaf-extract evidence does not establish olive fruit extract efficacy or a dose.",
-      "applicability_status": "applicable_reviewed_trials",
+      "applicability_status": "applicability_unestablished",
       "verification_provenance": {
         "verified_by": "scripts/api_audit/verify_literature_records.py",
         "verified_at": "2026-09-21T07:39:42.986936+00:00",
@@ -9722,7 +9703,7 @@
       "population_context": "Adults with uncontrolled hypertension",
       "studied_dose_exposure": {},
       "applicability_decision": "The cited 12-week RCT (88 adults with uncontrolled hypertension) tested aged garlic extract, which lowered systolic pressure 5.0 mmHg versus placebo (11.5 mmHg in responders). Aged garlic extract is a different preparation from black garlic, so the trial does not establish black garlic efficacy or a dose.",
-      "applicability_status": "applicable_reviewed_trials",
+      "applicability_status": "applicability_unestablished",
       "verification_provenance": {
         "verified_by": "scripts/api_audit/verify_literature_records.py",
         "verified_at": "2026-09-21T07:39:42.986936+00:00",
@@ -9971,7 +9952,7 @@
       "population_context": "Not established: the only cited source is an animal study",
       "studied_dose_exposure": {},
       "applicability_decision": "No verified human GliSODin trial is recorded. The cited PMID 15742357 reports supplementation in animals; the recorded human RCT (40 adults, 500 mg/day, 4 weeks) is not in it. Evidence review pending.",
-      "applicability_status": "applicable_reviewed_trials",
+      "applicability_status": "applicability_unestablished",
       "verification_provenance": {
         "verified_by": "scripts/api_audit/verify_literature_records.py",
         "verified_at": "2026-09-21T07:39:42.986936+00:00",
@@ -10851,7 +10832,7 @@
         "unit": "mg",
         "basis": "daily_intake"
       },
-      "applicability_decision": "Chios mastic gum resin supported at >= 700-1050 mg/day for gastric digestive comfort and mucosal integrity.",
+      "applicability_decision": "Chios mastic gum 350 mg three times daily (1,050 mg/day) for 3 weeks improved functional dyspepsia symptoms versus placebo in 148 patients (77% vs 40% marked improvement).",
       "applicability_status": "applicable_reviewed_trials",
       "verification_provenance": {
         "verified_by": "scripts/api_audit/verify_literature_records.py",
@@ -11148,7 +11129,7 @@
       "population_context": "Not established: the only cited source is a narrative overview",
       "studied_dose_exposure": {},
       "applicability_decision": "No verified human Schisandra trial with a dose or outcome is recorded. The cited PMID 18515024 is a narrative overview of Russian research; it reports no sample size, dose, duration or pooled effect. Evidence review pending.",
-      "applicability_status": "applicable_reviewed_trials",
+      "applicability_status": "applicability_unestablished",
       "verification_provenance": {
         "verified_by": "scripts/api_audit/verify_literature_records.py",
         "verified_at": "2026-09-21T07:39:42.986936+00:00",
@@ -11386,7 +11367,7 @@
         "unit": "mg",
         "basis": "daily_intake"
       },
-      "applicability_decision": "In a non-randomized study, 12 patients with post-MI angina or ischaemic cardiomyopathy took 500 mg arjuna bark powder every 8 hours for 3 months with conventional treatment; LVEF and LV mass improved versus 12 matched controls, while angina frequency fell in both groups.",
+      "applicability_decision": "In a non-randomized study, 12 patients with post-MI angina or ischaemic cardiomyopathy took 500 mg arjuna bark powder every 8 hours for 3 months alongside conventional treatment. LVEF rose and LV mass fell within the treated group; 12 matched controls did not show those changes. This does not establish a statistically significant between-group effect. Angina frequency fell in both groups.",
       "applicability_status": "applicable_reviewed_trials",
       "verification_provenance": {
         "verified_by": "scripts/api_audit/verify_literature_records.py",
@@ -11766,7 +11747,7 @@
       "population_context": "Healthy adults aged 21-41",
       "studied_dose_exposure": {},
       "applicability_decision": "The cited 4-week study fed 52 healthy adults 5 or 10 g of whole dried shiitake daily (two dose groups, no placebo). Whole-mushroom food evidence does not establish mycelial or fruiting-body extract (AHCC or beta-glucan) efficacy or a dose.",
-      "applicability_status": "applicable_reviewed_trials",
+      "applicability_status": "applicability_unestablished",
       "verification_provenance": {
         "verified_by": "scripts/api_audit/verify_literature_records.py",
         "verified_at": "2026-09-21T07:39:42.986936+00:00",
@@ -12204,7 +12185,7 @@
     },
     {
       "canonical_id": "fucoxanthin",
-      "material_form": "Xanthigen: brown seaweed extract (fucoxanthin) combined with pomegranate seed oil",
+      "material_form": "Xanthigen (brown seaweed extract with fucoxanthin plus pomegranate seed oil) for weight-loss outcomes; fucoxanthin component also tested for resting energy expenditure",
       "search_query": "fucoxanthin xanthigen weight management liver fat randomized trial",
       "search_date": "2026-09-20",
       "databases_searched": [
@@ -12218,9 +12199,9 @@
           "title": "The effects of Xanthigen in the weight management of obese premenopausal women with non-alcoholic fatty liver disease and normal liver fat.",
           "study_type": "randomized_controlled_trial",
           "sample_size": 151,
-          "dose": "Xanthigen-600/2.4 mg (300 mg pomegranate seed oil + 300 mg seaweed extract with 2.4 mg fucoxanthin)",
+          "dose": "Xanthigen-600/2.4 mg (300 mg pomegranate seed oil + 300 mg seaweed extract with 2.4 mg fucoxanthin); exact standalone fucoxanthin regimen unresolved from the abstract",
           "duration": "16 weeks",
-          "outcome": "body weight, body and liver fat, triglycerides and CRP fell versus placebo with the combination product",
+          "outcome": "Combination reduced weight and body/liver fat; standalone fucoxanthin increased resting energy expenditure versus placebo in NAFLD participants",
           "effect_direction": "positive_moderate",
           "verification_provenance": {
             "pmid_verified": true,
@@ -12235,10 +12216,10 @@
         }
       ],
       "effect_direction": "applicability_unestablished",
-      "population_context": "Obese premenopausal women with or without NAFLD",
+      "population_context": "Obese premenopausal women with or without NAFLD; resting energy expenditure assessed in 41 women with NAFLD",
       "studied_dose_exposure": {},
-      "applicability_decision": "The cited 16-week RCT (151 women) tested Xanthigen, brown seaweed fucoxanthin combined with pomegranate seed oil (Xanthigen-600: 300 mg oil + 300 mg seaweed extract with 2.4 mg fucoxanthin). A combination result does not establish standalone fucoxanthin efficacy or a dose.",
-      "applicability_status": "applicable_reviewed_trials",
+      "applicability_decision": "The Xanthigen combination (brown seaweed extract with fucoxanthin plus pomegranate seed oil) weight-loss result cannot establish standalone fucoxanthin weight loss. The study also reports a standalone resting-energy-expenditure effect, a surrogate that does not establish that clinical outcome or a general daily regimen.",
+      "applicability_status": "applicability_unestablished",
       "verification_provenance": {
         "verified_by": "scripts/api_audit/verify_literature_records.py",
         "verified_at": "2026-09-21T07:39:42.986936+00:00",
@@ -12678,7 +12659,7 @@
       "population_context": "Not established: the only cited source is a narrative review",
       "studied_dose_exposure": {},
       "applicability_decision": "No verified human perilla oil trial is recorded. The cited PMID 21909287 is a narrative review of perilla fatty-acid composition; the recorded RCT (60 adults, 3-5 g/day, 12 weeks) is not in it. Evidence review pending.",
-      "applicability_status": "applicable_reviewed_trials",
+      "applicability_status": "applicability_unestablished",
       "verification_provenance": {
         "verified_by": "scripts/api_audit/verify_literature_records.py",
         "verified_at": "2026-09-21T07:39:42.986936+00:00",
@@ -12746,7 +12727,7 @@
       "population_context": "Patients with tinea pedis",
       "studied_dose_exposure": {},
       "applicability_decision": "The only cited trial applied an undecylenic acid / zinc undecylenate powder to the feet twice daily for 4 weeks in tinea pedis. Topical antifungal evidence does not establish oral undecylenic acid efficacy or a dose.",
-      "applicability_status": "applicable_reviewed_trials",
+      "applicability_status": "applicability_unestablished",
       "verification_provenance": {
         "verified_by": "scripts/api_audit/verify_literature_records.py",
         "verified_at": "2026-09-21T07:39:42.986936+00:00",
@@ -13622,7 +13603,7 @@
     },
     {
       "canonical_id": "nad",
-      "material_form": "Nicotinamide riboside / NAD+ precursor",
+      "material_form": "Nicotinamide riboside (NR), the studied NAD+ precursor; direct oral NAD+ was not tested",
       "search_query": "nicotinamide riboside elevates NAD healthy middle-aged Martens",
       "search_date": "2026-09-20",
       "databases_searched": [
@@ -13652,17 +13633,11 @@
           }
         }
       ],
-      "effect_direction": "positive_strong",
+      "effect_direction": "applicability_unestablished",
       "population_context": "Healthy middle-aged and older adults",
-      "studied_dose_exposure": {
-        "values": [
-          500,
-          1000
-        ],
-        "unit": "mg"
-      },
-      "applicability_decision": "Standardized oral NAD+ precursor (NR) supported at >= 250-1000 mg/day for cellular NAD+ metabolome elevation.",
-      "applicability_status": "applicable_reviewed_trials",
+      "studied_dose_exposure": {},
+      "applicability_decision": "The cited trial tested nicotinamide riboside (NR) 500 mg twice daily (1,000 mg/day), not direct oral NAD+, for 6 weeks per crossover period. PBMC NAD+ rose about 60% versus placebo; 30 adults were randomized and 24 completed. Transfer of this NR biomarker result to the distinct NAD+ ingredient is prohibited without direct applicable evidence. No 250-1,000 mg/day direct-NAD+ efficacy threshold is established.",
+      "applicability_status": "applicability_unestablished",
       "verification_provenance": {
         "verified_by": "scripts/api_audit/verify_literature_records.py",
         "verified_at": "2026-09-21T07:39:42.986936+00:00",
@@ -15468,7 +15443,7 @@
         "unit": "mg",
         "basis": "capsaicin_per_meal"
       },
-      "applicability_decision": "Standardized Capsicum capsaicinoids supported at >= 2-10 mg/day for thermogenic energy expenditure support.",
+      "applicability_decision": "In a 36-hour respiration-chamber study in negative energy balance, 2.56 mg capsaicin with every meal counteracted the fall in diet-induced thermogenesis and resting energy expenditure and raised fat oxidation; no daily dose threshold is established.",
       "applicability_status": "applicable_reviewed_trials",
       "verification_provenance": {
         "verified_by": "scripts/api_audit/verify_literature_records.py",

@@ -18,7 +18,11 @@ import pytest
 FIXTURES = Path(__file__).parent / "fixtures"
 PRODUCTS = ["1179", "14168", "315089", "243271", "282638", "299755", "54775", "275464"]
 
-_REVIEW_PRODUCTS = PRODUCTS
+# 1179 (Ravage) also carries L-phenylalanine as a primary active. Its literature record's only
+# citation, PMID 37629744, is a review of depression treatment in Parkinson's disease, not a
+# phenylalanine trial (literature records review 2026-10-20), so that review is genuinely open
+# again. Its blend owners stay finished; test_ravage_is_open_only_for_l_phenylalanine pins that.
+_REVIEW_PRODUCTS = [pid for pid in PRODUCTS if pid != "1179"]
 
 
 @pytest.fixture(scope="module")
@@ -51,6 +55,20 @@ def test_the_evidence_pillar_no_longer_says_not_yet_reviewed(enriched, pid):
 
     evidence = build_scored_artifact(enriched[pid])["quality_pillars_v4"]["evidence"]
     assert evidence["display_state"] != "not_yet_reviewed"
+
+
+def test_ravage_is_open_only_for_l_phenylalanine(enriched):
+    from evidence_resolver import resolve_product_evidence
+    from scoring_v4.scored_artifact import build_scored_artifact
+
+    resolution = resolve_product_evidence(enriched["1179"], owner_scoped=True)
+    open_owners = [
+        (r.canonical_id, r.blocking_reasons) for r in resolution.resolutions
+        if r.disposition == "literature_resolution_required"
+    ]
+    assert open_owners == [("l_phenylalanine", ["literature_verification_pending"])]
+    evidence = build_scored_artifact(enriched["1179"])["quality_pillars_v4"]["evidence"]
+    assert evidence["display_state"] == "not_yet_reviewed"
 
 
 def test_tesnor_and_sytrinol_resolve_to_their_reviewed_trials(enriched):
