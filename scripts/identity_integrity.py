@@ -125,6 +125,12 @@ class CanonicalIdentityRegistry:
             literal = self.resolve_preferred(strip_label_identity_qualifiers(str(value or "")))
         return literal is not None and literal[0] == canonical_id
 
+    def names_identity(self, value: Any, canonical_id: str) -> bool:
+        """A curated name of this identity in any owned registry, even one it
+        shares with related records ("Hordeum vulgare" is barley grass, its
+        powder and its juice)."""
+        return canonical_id in self.candidates_index.get(self._key(value), ())
+
     def preparation_identity_matches(
         self, value: Any, canonical_id: str, source_db: str,
     ) -> bool:

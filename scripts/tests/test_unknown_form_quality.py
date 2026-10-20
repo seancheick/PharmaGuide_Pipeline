@@ -492,6 +492,7 @@ def test_a_source_plant_or_standardization_marker_names_no_form(enricher, parent
     ('inulin', 'Inulin', {'name': 'Chicory', 'category': _B, 'ingredientGroup': 'chicory'}),
     ('inulin', 'Inulin', {'name': 'Jerusalem Artichoke', 'category': _B, 'ingredientGroup': 'Jerusalem Artichoke'}),
     ('isoflavones', 'Isoflavones', {'name': 'Soybeans', 'category': _B, 'prefix': 'and', 'ingredientGroup': 'Soy'}),
+    ('isoflavones', 'Soy Isoflavones extract', {'name': 'Soybean', 'category': _B, 'ingredientGroup': 'Soy'}),
     ('lecithin', 'Sunflower Lecithin', {'name': 'Helianthus annuus', 'category': _B, 'ingredientGroup': 'sunflower'}),
     ('lemon_balm', 'Lemon Balm Aerial Parts Extract', {'name': 'Hydroxycinnamic Acid', 'category': _M, 'ingredientGroup': 'Hydroxycinammic acid'}),
     ('lignans', 'HMRLignan', {'name': 'Soy Isoflavones Concentrate', 'category': _B, 'ingredientGroup': 'Soy'}),

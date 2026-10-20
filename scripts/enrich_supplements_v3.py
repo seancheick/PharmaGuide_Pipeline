@@ -7820,7 +7820,7 @@ class SupplementEnricherV3:
         "strawberry extract", "strawberry fruit extract", "pomegranate hull extract",
         "holy basil leaf extract", "ampelopsis grossedentata", "laminaria japonica extract",
         "undaria pinnatifida extract", "ajuga l. whole herb extract",
-        "sceletium tortuosum aerial parts extract", "helianthus annuus", "soy", "soybeans",
+        "sceletium tortuosum aerial parts extract", "helianthus annuus", "soy", "soybean", "soybeans",
         "soy isoflavones concentrate", "pine", "wheat oil extract", "wheat seed oil",
         "norway spruce knotwood extract", "picea abies", "secale cereale", "morus alba powder",
         "european black currant fruit extract", "hawthorn extract", "hawthorn fruit flower stem extract",
@@ -9448,8 +9448,10 @@ class SupplementEnricherV3:
         stays unmapped for curation):
 
         - ``restatement``: the row's own identity again: by name, by name plus
-          plant-part words, or a botanical token in the row's DSLD ingredient
-          group ("Matricaria chamomilla Flower Extract" under Chamomile).
+          plant-part words, a botanical token in the row's DSLD ingredient
+          group ("Matricaria chamomilla Flower Extract" under Chamomile), or
+          one the identity registries record for the parent ("Hordeum vulgare"
+          under Barley Grass).
         - ``marker``: a standardization marker ("Polyphenols", "Total Rosavins",
           "Salidrosides"), or any token DSLD prefixes "standardized ..." or "std. ...".
         - ``source``: the material the nutrient comes from ("Cantaloupe"
@@ -9471,7 +9473,12 @@ class SupplementEnricherV3:
         # DSLD files a salt under the nutrient it supplies (every calcium salt
         # has group "Calcium"), so an equal group only restates the identity
         # for a botanical token ("Matricaria chamomilla" under Chamomile).
-        botanical_restatement = category == 'botanical' and group and group in parent_names
+        # A scientific name names the plant, never a preparation: a botanical
+        # token the identity registries record for this parent ("Hordeum
+        # vulgare" under Barley Grass) restates it too.
+        botanical_restatement = category == 'botanical' and (
+            (group and group in parent_names)
+            or (parent_key and self._current_canonical_identity_registry().names_identity(raw, parent_key)))
         singular = lambda words: {w[:-1] if len(w) > 3 and w.endswith('s') else w for w in words}
         label_words = singular(self._norm_form_name(row_label).split())
         repeats_label = bool(token) and singular(token.split()) <= label_words
