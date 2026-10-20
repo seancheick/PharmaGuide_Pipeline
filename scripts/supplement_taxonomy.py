@@ -314,9 +314,10 @@ def _declared_protein_identity(
     A protein total is a Nutrition Facts row, never a scoring row, so a protein powder's
     identity is absent from ``canonical_ids``. The router's own pair identifies it
     (``route_features.has_protein_product_intent`` + ``nutrition_summary.protein_g``);
-    neither alone suffices and the macro row never becomes an active. A title or row
-    naming another identity (collagen, greens, omega, prenatal, pre-workout) keeps that
-    identity, and "X with protein" marks protein as an accessory.
+    neither alone suffices and the macro row never becomes an active. A title naming
+    another identity (collagen, greens, omega, prenatal, pre-workout) or a dominant
+    collagen/omega row keeps that identity, and "X with protein" marks protein as an
+    accessory.
     """
     try:
         protein_g = float((product.get("nutrition_summary") or {}).get("protein_g") or 0)
@@ -331,7 +332,10 @@ def _declared_protein_identity(
         or any(token in product_name for token in _PRE_WORKOUT_NAME_TOKENS)
         or _PRE_WORKOUT_PANEL_INTENT_RE.search(product_name)
         or _ACCESSORY_PROTEIN_RE.search(product_name)
-        or canonical_ids & (_COLLAGEN_IDS | _OMEGA_CANONICAL_IDS)
+        # A collagen or omega row that dominates the label is its identity; one
+        # ingredient of a gainer's protein or fat blend is not.
+        or len(canonical_ids & _COLLAGEN_IDS) * 2 > len(canonical_ids)
+        or len(canonical_ids & _OMEGA_CANONICAL_IDS) * 2 > len(canonical_ids)
     ):
         return None
     return (

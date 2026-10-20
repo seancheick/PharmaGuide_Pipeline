@@ -144,6 +144,8 @@ def test_gainer_with_a_vitamin_panel_is_typed_like_other_gainers(pipeline):
             ("Vitamin C", "Vitamin C", 60, "mg"),
         ])
     ]
+    # The real label's protein blend also lists collagen; one blend ingredient is not the identity.
+    collagen = [_row(20, "Collagen", "protein", "Collagen", 1, "g")]
     taxonomy = pipeline(_label("318103", "Dynamic Gainer Chocolate",
-                               [_row(0, "Protein", "protein", "Protein (unspecified)", 50, "g")] + vitamins))
+                               [_row(0, "Protein", "protein", "Protein (unspecified)", 50, "g")] + vitamins + collagen))
     assert taxonomy["primary_type"] == "protein_powder"
