@@ -26325,7 +26325,14 @@
       "research_status": "validated"
     },
     "external_ids": {},
-    "aliases": []
+    "aliases": [],
+    "relationships": [
+      {
+        "type": "contains",
+        "target_id": "egcg",
+        "notes": "EGCG is a catechin of green tea extract, not its form"
+      }
+    ]
   },
   "grape_seed_extract": {
     "standard_name": "Grape Seed Extract",
