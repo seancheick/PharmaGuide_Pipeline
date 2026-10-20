@@ -100,6 +100,18 @@ _DRI_REFERENCE_BY_CANONICAL = {
     "magnesium": "magnesium", "calcium": "calcium",
 }
 
+_VITAMIN_DRI_REFERENCES = frozenset(
+    reference for canonical, reference in _DRI_REFERENCE_BY_CANONICAL.items()
+    if canonical.startswith("vitamin_")
+)
+
+
+def judged_against_vitamin_dri(canonical: object) -> bool:
+    """A vitamin or provitamin whose adequacy is read against a vitamin's DRI."""
+    reference = _DRI_REFERENCE_BY_CANONICAL.get(_norm_text(canonical))
+    return reference is not None and reference in _VITAMIN_DRI_REFERENCES
+
+
 def _adequacy_reference_kind(canonical: object) -> str:
     key = _norm_text(canonical)
     return "dri" if key in _DRI_REFERENCE_BY_CANONICAL else "no_benchmark"

@@ -51,6 +51,7 @@ from scoring_v4.route_features import (
     BCAA_CANONICALS,
     EAA_CANONICALS,
     MATERIAL_FIBER_CANONICALS,
+    MATERIAL_ROLES,
     PROTEIN_CANONICALS as ROUTE_FEATURE_PROTEIN_CANONICALS,
     extract_route_features,
     has_protein_product_intent,
@@ -6250,8 +6251,6 @@ ROLE_PRIMARY = "primary"
 ROLE_CLAIM_PROMINENT = "claim_prominent"
 ROLE_MAJOR = "major"
 ROLE_ADJUNCT = "adjunct"
-# The roles that make a row a material active of its product.
-MATERIAL_ROLES = frozenset({ROLE_PRIMARY, ROLE_CLAIM_PROMINENT, ROLE_MAJOR})
 
 # Tokens too generic to prove a product is "about" an ingredient when found in
 # the title. Without these, "Vitamin C" would match "Daily Multivitamin".
@@ -6303,11 +6302,18 @@ _ROLE_MULTI_ESSENTIAL_MINERALS = frozenset({
 
 
 def _role_is_required_multi_panel_member(canonical: str) -> bool:
-    """Return whether an identity is part of the defining nutrient panel."""
+    """Return whether an identity is part of the defining nutrient panel.
+
+    A provitamin judged against a vitamin's DRI (beta-carotene, alpha-carotene
+    and cryptoxanthin for vitamin A) is that vitamin: "Vitamin A (as
+    beta-carotene)" resolves to beta_carotene.
+    """
+    from scoring_v4.modules.generic_dose import judged_against_vitamin_dri  # lazy: it imports this module
     return (
         canonical.startswith("vitamin_")
         or canonical in _ROLE_MULTI_ESSENTIAL_MINERALS
         or canonical == "choline"
+        or judged_against_vitamin_dri(canonical)
     )
 
 def _role_mass_mg(row: Dict[str, Any]) -> Optional[float]:
@@ -6602,10 +6608,12 @@ def _classify_one(row: Dict[str, Any], ctx: Dict[str, Any]) -> Dict[str, Any]:
     mass_mg = _role_mass_mg(row)
 
     # L4 — required for subtype: micronutrient panel members of a multi/prenatal.
-    # A panel member needs a usable disclosed dose in a recognized unit:
-    # vitamins A, D and E are printed in IU and folate in mcg DFE, while an
-    # "NP" amount is no dose. A CFU probiotic add-on is not a panel identity
-    # and so stays adjunct, so Phase 3 won't cap a multi for an adjunct's data gap.
+    # A panel member needs a usable disclosed dose (the dose owner): vitamins
+    # A, D and E are printed in IU and folate in mcg DFE. A printed amount whose
+    # unit is "NP" counts when the enricher marks it has_dose (60740 "Niacin"
+    # 190 NP); Dose readiness then holds the product on its undeclared unit.
+    # A CFU probiotic add-on is not a panel identity and so stays adjunct, so
+    # Phase 3 won't cap a multi for an adjunct's data gap.
     from scoring_v4.modules.generic_helpers import has_usable_individual_dose  # lazy: it imports this module
     if (
         module == "multi_or_prenatal"

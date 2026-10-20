@@ -372,3 +372,19 @@ def test_life_extension_mix_panel_form_quality_ignores_its_cherry_row() -> None:
     panel_ids = {r.get("canonical_id") for r in formulation._scorable_ingredients(copy.deepcopy(enriched))}
     assert {"vitamin_a", "vitamin_d", "vitamin_c"} <= panel_ids
     assert not any("cherry" in str(c) for c in panel_ids)
+
+
+def test_vitamin_a_as_beta_carotene_stays_in_the_panel() -> None:
+    """Real label 294074 Pure Encapsulations Women's Nutrients: "Vitamin A
+    (as beta-carotene)" resolves to beta_carotene; it is the panel's vitamin A."""
+    import logging
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    from enrich_supplements_v3 import SupplementEnricherV3
+    import scoring_v4.modules.multi_prenatal_formulation as formulation
+
+    logging.disable(logging.INFO)
+    raw = json.loads((Path(__file__).parent / "fixtures" / "panel_materiality_294074_raw.json").read_text())
+    enriched, _ = SupplementEnricherV3().enrich_product(EnhancedDSLDNormalizer().normalize_product(raw))
+    panel = formulation._scorable_ingredients(enriched)
+    assert any(r.get("canonical_id") == "beta_carotene" and str(r.get("name")).lower().startswith("vitamin a")
+               for r in panel)
