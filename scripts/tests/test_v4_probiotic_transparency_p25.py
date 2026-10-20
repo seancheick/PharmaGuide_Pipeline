@@ -253,7 +253,7 @@ def test_transparency_b2_allergen_presence_alone_has_no_penalty() -> None:
     from scoring_v4.modules.probiotic_transparency import score_transparency
 
     product = _probiotic(
-        allergens=[{"allergen_id": "milk", "severity_level": "high"}],
+        allergens=[{"allergen_id": "ALLERGEN_MILK", "severity_level": "high"}],
     )
     payload = score_transparency(product)
     assert payload["penalties"]["B2_false_allergen_free_claim"] == 0.0
@@ -263,7 +263,7 @@ def test_transparency_b2_false_allergen_claim_reuses_generic() -> None:
     from scoring_v4.modules.probiotic_transparency import score_transparency
 
     product = _probiotic(
-        allergens=[{"allergen_id": "milk", "severity_level": "high"}],
+        allergens=[{"allergen_id": "ALLERGEN_MILK", "severity_level": "high"}],
         compliance={
             "allergen_free_claims": ["dairy-free"],
             "conflicts": [],
@@ -357,7 +357,7 @@ def test_transparency_floors_at_zero() -> None:
     product = _probiotic(
         strain_count=0, blends=[],
         has_disease_claims=True,
-        allergens=[{"allergen_id": "milk", "severity_level": "high"}],
+        allergens=[{"allergen_id": "ALLERGEN_MILK", "severity_level": "high"}],
     )
     product["probiotic_data"]["total_strain_count"] = 0
     payload = score_transparency(product)

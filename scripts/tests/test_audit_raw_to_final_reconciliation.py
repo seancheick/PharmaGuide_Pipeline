@@ -210,32 +210,27 @@ def test_display_collapse_allows_an_explicit_reciprocal_source_correction() -> N
 
 
 def test_standardization_audit_uses_the_exporters_exact_claim_contract() -> None:
+    # The claim source is the label row (cleaned notes), matched by
+    # raw_source_path; the blob row's IQM curation notes never count.
     record = _record()
+    cleaned = {"activeIngredients": [
+        {"raw_source_path": "ingredientRows[0]", "notes": (
+            "Saw Palmetto (Form: could be standardized to 85-95% fatty acids)")},
+        {"raw_source_path": "ingredientRows[1]", "notes": "Standardized to 25% A-type proanthocyanidins."},
+        {"raw_source_path": "ingredientRows[2]", "notes": "Root extract standardized to 5% withanolides."},
+        {"raw_source_path": "ingredientRows[3]", "notes": "Turmeric"},
+    ]}
     blob = {
         "ingredients": [
-            {
-                "name": "Saw Palmetto",
-                "notes": (
-                    "Generic listing without specifying the extraction method "
-                    "or standardization level. Could be standardized to "
-                    "85-95% fatty acids depending on the source."
-                ),
-                "standardization_note": None,
-            },
-            {
-                "name": "Cranberry",
-                "notes": "Standardized to 25% A-type proanthocyanidins.",
-                "standardization_note": None,
-            },
-            {
-                "name": "Ashwagandha",
-                "notes": "Root extract standardized to 5% withanolides.",
-                "standardization_note": None,
-            },
+            {"name": "Saw Palmetto", "raw_source_path": "ingredientRows[0]", "standardization_note": None},
+            {"name": "Cranberry", "raw_source_path": "ingredientRows[1]", "standardization_note": None},
+            {"name": "Ashwagandha", "raw_source_path": "ingredientRows[2]", "standardization_note": None},
+            {"name": "Turmeric", "raw_source_path": "ingredientRows[3]",
+             "notes": "IQM curation: commonly standardized to 95% curcuminoids.", "standardization_note": None},
         ]
     }
 
-    _check_standardization(record, blob)
+    _check_standardization(record, blob, cleaned)
 
     assert [(finding.code, finding.ingredient) for finding in record.findings] == [
         ("STANDARDIZATION_NOTE_DROPPED", "Ashwagandha")

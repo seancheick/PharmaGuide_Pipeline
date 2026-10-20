@@ -64,7 +64,7 @@ def test_a_species_or_source_name_in_forms_is_not_a_held_form(enricher, pid, nam
     ("turmeric", "Turmeric", "Curcumin Powder"),
     ("cayenne_pepper", "Cayenne Pepper", "Capsimax Capsicum Extract"),
     ("elderberry", "Elderberry", "Elderberry 10:1 Concentrate"),
-    ("tart_cherry", "CherryPURE", "Sour Cherry, Powder"),
+    ("acai_berry", "Acai Berry", "Acai 4:1 Extract"),
 ])
 def test_only_the_parents_species_name_restates_it(enricher, parent, label, token):
     match = enricher._match_quality_map(
@@ -72,3 +72,27 @@ def test_only_the_parents_species_name_restates_it(enricher, parent, label, toke
         cleaned_forms=[{"name": token, "category": "botanical"}], cleaner_canonical_id=parent)
     assert match["match_status"] == "FORM_DISCLOSED_UNMAPPED"
     assert match["unmapped_forms"] == [token]
+
+
+def test_only_the_parents_own_botanical_record_supplies_its_species(enricher):
+    # The parent's own record (same id or a reviewed equivalence) and the
+    # synonyms in its latin_name; not another species the registry happens to
+    # list for the parent (American ginseng is not Panax ginseng's record).
+    assert "hordeum vulgare" in enricher._parent_latin_names("barley_grass")
+    assert "panax quinquefolius" not in enricher._parent_latin_names("ginseng")
+    assert {"actaea racemosa", "cimicifuga racemosa"} <= enricher._parent_latin_names("black_cohosh")
+
+
+def test_a_foreign_species_named_for_the_parent_still_stays_unmapped(enricher, monkeypatch):
+    # Triticum aestivum is wheat, a botanical_ingredients latin_name but not
+    # barley grass's own. Even if a registry listed it as a name of barley
+    # grass, it is not barley grass's species.
+    registry = enricher._current_canonical_identity_registry()
+    monkeypatch.setattr(type(registry), "names_identity", lambda self, value, canonical_id: True)
+    enricher._match_quality_cache.clear()
+    match = enricher._match_quality_map(
+        "Barley Grass", "Barley Grass", enricher.databases["ingredient_quality_map"],
+        cleaned_forms=[{"name": "Triticum aestivum", "category": "botanical"}], cleaner_canonical_id="barley_grass")
+    enricher._match_quality_cache.clear()
+    assert match["match_status"] == "FORM_DISCLOSED_UNMAPPED"
+    assert match["unmapped_forms"] == ["Triticum aestivum"]
