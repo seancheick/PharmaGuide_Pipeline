@@ -19656,6 +19656,24 @@ class SupplementEnricherV3:
             )
         return "suppress"
 
+    @staticmethod
+    def _amount_unknown_copy(thresholds: List[Dict[str, Any]]) -> Dict[str, str]:
+        """Authored copy for a dose-dependent rule the label's amount cannot evaluate.
+
+        Mirrors the ``*_if_met`` tier copy: a threshold may carry
+        ``alert_headline_if_amount_unknown`` (and body/action) so an unknown amount
+        reads as "can't assess", never as the above-threshold concern.
+        """
+        for threshold in thresholds:
+            copy = {
+                field: threshold[f"{field}_if_amount_unknown"]
+                for field in ("alert_headline", "alert_body", "action")
+                if isinstance(threshold, dict) and threshold.get(f"{field}_if_amount_unknown")
+            }
+            if copy:
+                return copy
+        return {}
+
     def _dose_decision_rule(
         self,
         threshold: Dict[str, Any],
@@ -19710,7 +19728,7 @@ class SupplementEnricherV3:
         standard_name = str(ingredient.get("standard_name") or "")
         if quantity is None or quantity <= 0 or not unit:
             policy = relevant[0]
-            return base_severity, {
+            result = {
                 "evaluated": False,
                 "reason": "missing_or_invalid_dose",
                 "evaluation_status": "amount_unknown",
@@ -19722,6 +19740,10 @@ class SupplementEnricherV3:
                 "dose_evaluation": None,
                 "decision_rule": self._dose_decision_rule(policy, materiality, base_severity),
             }
+            amount_unknown_copy = self._amount_unknown_copy(relevant)
+            if amount_unknown_copy:
+                result["matched_copy"] = amount_unknown_copy
+            return base_severity, result
 
         severity_candidate = base_severity
         evaluated_any = False
@@ -19927,6 +19949,9 @@ class SupplementEnricherV3:
                 details["release_blocking"] = False
             elif marker_amount_unknown:
                 details["reason"] = "dose_amount_not_disclosed"
+                amount_unknown_copy = self._amount_unknown_copy(relevant)
+                if amount_unknown_copy:
+                    details["matched_copy"] = amount_unknown_copy
                 # The authored amount-missing policy owns the consumer outcome
                 # here exactly as it does for a blank quantity; the contract
                 # audit compares the two.

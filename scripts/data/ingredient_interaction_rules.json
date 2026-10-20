@@ -3,7 +3,7 @@
     "description": "Deterministic ingredient-level interaction rules keyed by canonical database identity",
     "purpose": "interaction_alert_rules",
     "schema_version": "6.3.0",
-    "last_updated": "2026-10-13",
+    "last_updated": "2026-10-19",
     "total_entries": 152,
     "structure_note": "One entry per ingredient (or per form-scoped variant). All conditions, drug classes, and dose thresholds for that ingredient are in one object. As of v6.0.0, every sub-rule (condition_rules[], drug_class_rules[], dose_thresholds[], pregnancy_lactation block) carries an explicit profile_gate predicate that consumers MUST evaluate against the user profile before firing the alert.",
     "total_rules": 152,
@@ -5472,14 +5472,37 @@
         }
       ],
       "pregnancy_lactation": {
-        "pregnancy_category": "no_data",
-        "lactation_category": "no_data",
-        "evidence_level": "no_data",
-        "notes": "Limited data — discuss with your healthcare provider before use during pregnancy or breastfeeding.",
-        "alert_headline": "Limited safety data",
-        "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended.",
-        "direction": "unknown",
+        "pregnancy_category": "monitor",
+        "lactation_category": "monitor",
+        "evidence_level": "established",
+        "mechanism": "Iron needs rise in pregnancy (RDA 27 mg/day; 9-10 mg/day during lactation). The Tolerable Upper Intake Level for adults, including during pregnancy and lactation, is 45 mg/day; high-dose iron supplements can cause gastrointestinal effects.",
+        "notes": "Required nutrient in pregnancy and lactation; dose-sensitive above the UL.",
+        "sources": [
+          "https://ods.od.nih.gov/factsheets/Iron-HealthProfessional/"
+        ],
+        "alert_headline": "Iron needs rise in pregnancy — keep within your prenatal plan",
+        "alert_body": "Iron needs are higher during pregnancy, and many prenatal plans include iron. High doses can upset the stomach. If you are pregnant or nursing, keep your total iron within your clinician's plan.",
+        "informational_note": "Iron is a required pregnancy nutrient; 45 mg/day is the adult upper limit.",
+        "profile_gate": {
+          "gate_type": "profile_flag",
+          "requires": {
+            "conditions_any": [],
+            "drug_classes_any": [],
+            "profile_flags_any": [
+              "pregnant",
+              "breastfeeding"
+            ]
+          },
+          "excludes": {
+            "conditions_any": [],
+            "drug_classes_any": [],
+            "profile_flags_any": [],
+            "product_forms_any": [],
+            "nutrient_forms_any": []
+          },
+          "dose": null
+        },
+        "direction": "neutral",
         "materiality": "presence"
       },
       "last_reviewed": "2026-03-18",
@@ -12274,7 +12297,10 @@
               "severity_if_met": "avoid",
               "severity_if_not_met": "caution"
             }
-          }
+          },
+          "alert_headline_if_amount_unknown": "Calcium amount unclear — check with your clinician",
+          "alert_body_if_amount_unknown": "This label doesn't give a calcium amount we can check, so we can't tell whether it reaches the higher calcium intakes that some studies link to heart concerns. If you have a heart condition, review your total calcium intake with your clinician.",
+          "action_if_amount_unknown": "Check the total daily calcium from this product and your diet with your cardiologist or clinician."
         }
       ],
       "pregnancy_lactation": {

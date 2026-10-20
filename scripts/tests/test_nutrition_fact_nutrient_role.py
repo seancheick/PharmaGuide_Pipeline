@@ -169,3 +169,55 @@ def test_percent_only_mineral_does_not_type_a_protein_powder_as_a_mineral(normal
     enriched, _ = enricher.enrich_product(cleaned)
     assert "Calcium" in {row["name"] for row in enriched["activeIngredients"]}
     assert enriched["supplement_taxonomy"]["primary_type"] != "single_mineral"
+
+
+def _alert_hits(enriched, canonical_id):
+    for alert in enriched["interaction_profile"]["ingredient_alerts"]:
+        if (alert.get("subject_ref") or {}).get("canonical_id") == canonical_id:
+            return alert
+    raise AssertionError(f"no interaction alert for {canonical_id}")
+
+
+def _calcium_label(amount, unit):
+    return _label("rc2_calcium", "Calcium Test Powder", [
+        _row(1, "Protein", "protein", "Protein (unspecified)", 25, "g", 50),
+        _row(2, "Calcium", "mineral", "Calcium", amount, unit),
+    ])
+
+
+def test_unknown_calcium_amount_reads_as_cannot_assess_not_the_heart_risk(normalizer, enricher):
+    # Sean, 2026-10-19: an unknown amount means "review / can't assess", never an asserted
+    # risk. The heart-disease caution is dose-dependent (> 1,000 mg/day).
+    enriched, _ = enricher.enrich_product(normalizer.normalize_product(_calcium_label(6, "%")))
+    heart = next(hit for hit in _alert_hits(enriched, "calcium")["condition_hits"]
+                 if hit["condition_id"] == "heart_disease")
+    assert heart["dose_decision"]["evaluation_status"] == "amount_unknown"
+    assert heart["dose_decision"]["consumer_disposition"] == "review"
+    assert heart["alert_headline"] == "Calcium amount unclear — check with your clinician"
+    assert "can't tell whether" in heart["alert_body"]
+    assert "modest increase in cardiovascular events" not in heart["alert_body"]
+
+
+def test_known_calcium_amounts_keep_their_threshold_outcome(normalizer, enricher):
+    high, _ = enricher.enrich_product(normalizer.normalize_product(_calcium_label(1200, "mg")))
+    heart = next(hit for hit in _alert_hits(high, "calcium")["condition_hits"]
+                 if hit["condition_id"] == "heart_disease")
+    assert heart["alert_headline"] == "Supplemental calcium — review with clinician"
+    low, _ = enricher.enrich_product(normalizer.normalize_product(_calcium_label(200, "mg")))
+    heart = next(hit for hit in _alert_hits(low, "calcium")["condition_hits"]
+                 if hit["condition_id"] == "heart_disease")
+    assert heart["dose_decision"]["consumer_disposition"] == "suppress"
+
+
+def test_iron_pregnancy_entry_is_sourced_not_limited_data():
+    # NIH ODS Iron fact sheet (updated 2025-09-04): pregnancy RDA 27 mg, lactation 9-10 mg,
+    # adult UL 45 mg including pregnancy and lactation. "Limited safety data" was wrong.
+    import json
+    rules = json.loads((Path(__file__).parent.parent / "data" / "ingredient_interaction_rules.json").read_text())
+    block = next(rule for rule in rules["interaction_rules"]
+                 if rule["id"] == "RULE_IQM_IRON_HYPERTENSION")["pregnancy_lactation"]
+    assert (block["pregnancy_category"], block["lactation_category"], block["evidence_level"]) == (
+        "monitor", "monitor", "established")
+    assert block["sources"] == ["https://ods.od.nih.gov/factsheets/Iron-HealthProfessional/"]
+    assert "Limited safety data" not in json.dumps(block)
+    assert block["profile_gate"]["requires"]["profile_flags_any"] == ["pregnant", "breastfeeding"]
