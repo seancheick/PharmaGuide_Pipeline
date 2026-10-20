@@ -6250,6 +6250,8 @@ ROLE_PRIMARY = "primary"
 ROLE_CLAIM_PROMINENT = "claim_prominent"
 ROLE_MAJOR = "major"
 ROLE_ADJUNCT = "adjunct"
+# The roles that make a row a material active of its product.
+MATERIAL_ROLES = frozenset({ROLE_PRIMARY, ROLE_CLAIM_PROMINENT, ROLE_MAJOR})
 
 # Tokens too generic to prove a product is "about" an ingredient when found in
 # the title. Without these, "Vitamin C" would match "Daily Multivitamin".
