@@ -100,9 +100,11 @@ V4_CANARIES = {
         "module": "sports",
         "verdict": "SAFE",
         "confidence": "moderate",
-        # Distinct BioPerine A4 credit only; reviewed HMB reference. Dose V4.1:
-        # creatine and HMB co-primaries average (20, 16 -> 18).
-        "score_range": (76.2, 76.2),
+        # Printed creatine5g and HMB1.5g: current shared contribution targets
+        # award20 and10 raw Dose points; their co-primary average is15.
+        "score_range": (73.2, 73.2),
+        "raw_fixture": "evidence_readiness_325587_raw.json",
+        "dose_raw": 15.0,
     },
     # Assessment coverage is separate from quality. This disclosed fiber total
     # remains module-owned; completed limited/negative evidence stays explicit.
@@ -112,7 +114,9 @@ V4_CANARIES = {
         "verdict": "SAFE",
         "confidence": "moderate",
         "score_unavailable_reason": None,
-        "score": 41.0,
+        "score": 35.5,
+        "raw_fixture": "evidence_readiness_12932_raw.json",
+        "evidence_raw": 0.0,
         "evidence_driver": "evidence_review_complete_limited_or_negative",
         "unevaluated_canonicals": set(),
     },
@@ -148,8 +152,12 @@ V4_CANARIES = {
         "module": "probiotic",
         "verdict": "SAFE",
         "confidence": "high",
-        # Contextual MTCC5856 evidence; no unestablished DE111 human credit.
-        "score_range": (63.7, 63.7),
+        # Freeze the actual label instead of a changing stored enriched batch.
+        # Its native strain assessment and hidden-amount Dose remain separate.
+        "score_range": (68.5, 68.5),
+        "raw_fixture": "evidence_readiness_230149_raw.json",
+        "dose_raw": 8.55,
+        "evidence_raw": 16.0,
         "no_independent_delivery": True,
     },
     # Fully ready verdict-diversity anchors. These replace products that are now
@@ -252,6 +260,9 @@ def test_v4_real_catalog_gate_and_confidence_canary(dsld_id: str, expected: dict
         assert lo <= out["raw_score_v4_100"] <= hi
 
     breakdown = out["v4_breakdown"]
+    for pillar in ("dose", "evidence"):
+        if pillar + "_raw" in expected:
+            assert breakdown["module"]["dimensions"][pillar]["score"] == expected[pillar + "_raw"]
     if expected.get("source_allergen_form_checks"):
         assert product["allergen_hits"] == []
         assert breakdown["module"]["dimensions"]["transparency"]["penalties"]["B2_false_allergen_free_claim"] == 0.0

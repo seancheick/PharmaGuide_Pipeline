@@ -50,9 +50,8 @@ def _assert_module_aggregate_evidence(out: dict, canonical_id: str) -> None:
     assert out["raw_score_v4_100"] is not None
 
     evidence = out["v4_breakdown"]["assessment_readiness"]["evidence"]
-    # Non-material rows short-circuit before the aggregate branch and are
-    # `not_applicable/non_material_active`, which is correct: a row nothing
-    # scores raises no evidence question whatever its identity.
+    # Material product projections belong to their module assessment rather
+    # than an individual-ingredient clinical question.
     rows = [
         row for row in evidence["ingredient_assessments"]
         if row.get("canonical_id") == canonical_id
@@ -115,35 +114,36 @@ def test_enzyme_activity_reaches_v4_as_non_mass_dose_evidence() -> None:
         _assert_module_aggregate_evidence(out, canonical_id)
 
 
-def test_identity_bearing_blend_total_reaches_v4_as_anchor_mass_evidence() -> None:
-    product = _load_product("309492")
+def test_identity_bearing_preparation_keeps_its_printed_mass_without_a_blend_projection() -> None:
+    # The label declares one Quercefit preparation with a Quercetin Phytosome
+    # form, not a blend with independently listed constituent ingredients.
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    from enrich_supplements_v3 import SupplementEnricherV3
 
-    rows = _evidence_rows(product, "blend_anchor_mass")
-    assert rows, "Identity-bearing blend totals must not disappear from scoring"
-    assert rows[0]["canonical_id"] == "quercetin"
-    assert rows[0]["matched_form"] == "quercetin phytosome"
-    assert rows[0]["raw_source_path"] == "ingredientRows[0]"
-    assert rows[0]["evidence_scope"] == "blend_level"
-    assert float(rows[0]["quantity"]) >= 300.0
+    raw = json.loads((Path(__file__).parent / "fixtures" / "evidence_readiness_309492_raw.json").read_text())
+    product, _ = SupplementEnricherV3().enrich_product(
+        EnhancedDSLDNormalizer().normalize_product(raw))
+    rows = get_scoring_ingredients(product, strict=True).rows
+    assert len(rows) == 1
+    [row] = rows
+    assert row["canonical_id"] == "quercetin"
+    assert row["matched_form"] == "quercetin phytosome"
+    assert row["raw_source_path"] == "ingredientRows[0]"
+    assert row["quantity"] == 300.0
+    assert row["unit"] == "mg"
+    assert row.get("scoring_input_kind") != "product_level_evidence"
+    assert not _evidence_rows(product, "blend_anchor_mass")
 
     out = score_product_v4(product)
-    # The verified preparation retains its literal blend mass and canonical
-    # ingredient identity. Coverage is module-scoped, not an individual dose
-    # or proof of a whole-formula clinical trial.
-    assessments = out["v4_breakdown"]["assessment_readiness"]["evidence"]["ingredient_assessments"]
-    anchors = [row for row in assessments if row.get("canonical_id") == "quercetin"]
-    assert anchors
-    assert all(
-        row["state"] == "not_applicable"
-        and row["evidence_applicability"] == "module_aggregate"
-        and row["reason_code"] == "module_scoped_product_projection"
-        and set(row["evidence_ids"]) == {"INGR_QUERCETIN", "PRECLIN_QUERCETIN_PHYTOSOME"}
-        for row in anchors
-    )
+    [assessment] = out["v4_breakdown"]["assessment_readiness"]["evidence"]["ingredient_assessments"]
+    assert assessment["evidence_applicability"] == "individual_ingredient"
+    assert assessment["state"] == "evaluated_supported"
+    assert assessment["source_value"] == 300.0
+    assert set(assessment["evidence_ids"]) == {"INGR_QUERCETIN", "PRECLIN_QUERCETIN_PHYTOSOME"}
     assert out["v4_verdict"] != "NOT_SCORED"
     assert out["raw_score_v4_100"] is not None
     completeness = out["v4_breakdown"]["completeness_gate"]
-    assert "conservative_blend_anchor_mass" in completeness["soft_missing"]
+    assert "conservative_blend_anchor_mass" not in completeness["soft_missing"]
     assert completeness["score_cap"] is None
     assert completeness["verdict_ceiling"] is None
 
