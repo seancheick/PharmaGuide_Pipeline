@@ -39,6 +39,10 @@ _GENERAL_BLEND_ID = "BLEND_GENERAL"
 _FORM_DERIVED_MATCH_METHODS = frozenset({
     "unii_form_exact_match", "single_declared_marker_form", "single_declared_nutrient_form",
 })
+NON_SCORABLE_NO_IDENTITY_RATIONALE = (
+    "The row was intentionally classified as non-scorable; no canonical "
+    "identity was inferred from raw label or form text."
+)
 NON_SCORING_IDENTITY_RATIONALE = (
     "The row was intentionally classified as non-scorable; the cleaner's standard "
     "name proves its identity, which is retained for interactions only and never "
@@ -1127,8 +1131,9 @@ def resolve_identity(
     # proprietary blend, an other-ingredient role), which is no substance.
     # Nor is an identity the cleaner took from one declared form when the row
     # lists several ("Bifidobacterium": B. bifidum, B. animalis lactis is not
-    # B. lactis alone), or from a marker form of a plant ("Sawasabi Wasabi
-    # powder": Total Isothiocyanate is not the plant), or one a declared form
+    # B. lactis alone), or from a declared marker form ("Sawasabi Wasabi
+    # powder": Total Isothiocyanate is not the plant; "Glycosides": Polydatin,
+    # resveratrol's glucoside, is not resveratrol), or one a declared form
     # names as another substance ("Arginine" as whey protein isolate) unless
     # that form is a member of it ("Lactobacillus": L. acidophilus ...), or a
     # constituent its parent row names ("Arginine" in soy protein isolate).
@@ -1147,10 +1152,7 @@ def resolve_identity(
     form_derived_identity = row.get("cleaner_match_method") in _FORM_DERIVED_MATCH_METHODS
     forms_contradict = form_derived_identity and (
         len(declared_forms) > 1
-        or (
-            row.get("cleaner_match_method") == "single_declared_marker_form"
-            and str(row.get("raw_category") or row.get("category") or "").casefold() == "botanical"
-        )
+        or row.get("cleaner_match_method") == "single_declared_marker_form"
     )
     if canonical_before and canonical_registry is not None and not forms_contradict:
         def names_the_identity(form_canonical: str) -> bool:
@@ -1172,23 +1174,25 @@ def resolve_identity(
         forms_contradict = not _is_blend_header_row(row) and not all(
             map(names_the_identity, form_canonicals)
         )
-    # A row listed under a parent that names another material is that
-    # material's constituent ("Arginine" in "Solae Soy Protein isolate"), not
-    # the substance added on its own; a family or category parent keeps it.
-    parent_named = (
-        canonical_registry.resolve_preferred(row.get("parentBlend"))
-        if canonical_before and canonical_registry is not None and row.get("parentBlend")
-        else None
-    )
-    parent_canonical = _canonical(parent_named[0]) if parent_named else None
-    if (
-        parent_canonical
-        and parent_canonical != canonical_before
-        and not canonical_registry.is_role_record(parent_canonical)
-        and INTERACTION_SUBJECT_FAMILY.get(canonical_before) != parent_canonical
-        and not (canonical_parent_of and canonical_parent_of(parent_canonical, canonical_before))
-    ):
-        forms_contradict = True
+    # A row listed under a parent (or any enclosing row) that names another
+    # material is that material's constituent ("Arginine" in "Solae Soy
+    # Protein isolate"; in Amino Acids in Cilantro), not the substance added
+    # on its own; a family or category parent keeps it.
+    enclosing = [row.get("parentBlend"), *(row.get("_ancestor_blends") or [])]
+    for enclosing_name in (name for name in enclosing if name):
+        if not canonical_before or canonical_registry is None:
+            break
+        parent_named = canonical_registry.resolve_preferred(enclosing_name)
+        parent_canonical = _canonical(parent_named[0]) if parent_named else None
+        if (
+            parent_canonical
+            and parent_canonical != canonical_before
+            and not canonical_registry.is_role_record(parent_canonical)
+            and INTERACTION_SUBJECT_FAMILY.get(canonical_before) != parent_canonical
+            and not (canonical_parent_of and canonical_parent_of(parent_canonical, canonical_before))
+        ):
+            forms_contradict = True
+            break
     standard_name_proves_canonical = bool(canonical_before) and (
         not raw_canonicals
         and canonical_registry is not None
@@ -1302,10 +1306,7 @@ def resolve_identity(
                 "validated source identity was retained for non-scoring lineage."
             )
         else:
-            rationale = (
-                "The row was intentionally classified as non-scorable; no canonical "
-                "identity was inferred from raw label or form text."
-            )
+            rationale = NON_SCORABLE_NO_IDENTITY_RATIONALE
     elif canonical_before is None:
         disposition = "identity_conflict"
         canonical_after = None

@@ -137,6 +137,8 @@ from scoring_reference_resolver import (
 from identity_integrity import (
     has_nonlive_microbial_derivative_evidence,
     IdentityDecision,
+    NON_SCORABLE_NO_IDENTITY_RATIONALE,
+    NON_SCORING_IDENTITY_RATIONALE,
     build_canonical_identity_registry,
     canonical_registry_collections,
     is_identity_scoreable,
@@ -4732,14 +4734,30 @@ class SupplementEnricherV3:
         # PASS 1: Classify activeIngredients as scorable or skipped
         # =================================================================
         product_activity_text = self._get_all_product_text(product)
+        label_names_by_path = {
+            str(row.get("raw_source_path")): row.get("name")
+            for row in active_ingredients
+            if isinstance(row, dict) and row.get("raw_source_path") and row.get("name")
+        }
         for source_ingredient in active_ingredients:
             ingredient = source_ingredient
             is_structural_parent_total = (
                 id(source_ingredient) in structural_parent_total_row_ids
             )
             sole_active_row = len(active_ingredients) == 1
-            if product_activity_text or is_structural_parent_total or sole_active_row or not ingredient.get("source_section"):
+            # Every enclosing label row's name, nearest first: identity checks
+            # read whose constituent a row is ("Arginine" in Amino Acids in
+            # Cilantro).
+            ancestor_blends = []
+            path = str(ingredient.get("raw_source_path") or "")
+            while re.search(r"\.(?:nestedRows|forms)\[\d+\]$", path):
+                path = re.sub(r"\.(?:nestedRows|forms)\[\d+\]$", "", path)
+                if label_names_by_path.get(path):
+                    ancestor_blends.append(label_names_by_path[path])
+            if product_activity_text or is_structural_parent_total or sole_active_row or not ingredient.get("source_section") or ancestor_blends:
                 ingredient = dict(ingredient)
+            if ancestor_blends:
+                ingredient["_ancestor_blends"] = ancestor_blends
             # This collection owns active membership for legacy inputs. Keep
             # explicit source facts authoritative and do not mutate label rows.
             if not ingredient.get("source_section"):
@@ -6263,6 +6281,10 @@ class SupplementEnricherV3:
             })
             if matched_entry_name:
                 row["standard_name"] = matched_entry_name
+            if row.get("identity_resolution_rationale") == NON_SCORING_IDENTITY_RATIONALE:
+                # Recognition identifies the row on its own (as before the keep
+                # existed), so the identity is no longer interaction-only.
+                row["identity_resolution_rationale"] = NON_SCORABLE_NO_IDENTITY_RATIONALE
 
     def _is_low_severity_additive(self, additive_id: Any) -> bool:
         for additive in (self.databases.get("harmful_additives") or {}).get("harmful_additives") or []:
