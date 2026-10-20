@@ -327,6 +327,8 @@ def _ingredient_display(item: Dict[str, Any], receipt: Dict[str, Any]) -> str:
 
 def _percent(value: float) -> str:
     """A triggered upper-limit percentage never rounds down to the limit itself."""
+    if 100 < value < 100.05:
+        return ">100"
     return f"{value:.1f}" if 100 < value < 100.5 else f"{value:.0f}"
 
 
