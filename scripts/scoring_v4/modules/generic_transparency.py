@@ -367,7 +367,7 @@ def _allergen_groups_from_text(text: str) -> set[str]:
         groups.add("peanut")
     if any(term in norm for term in ("tree nut", "treenut", "almond", "cashew", "walnut", "pecan", "hazelnut", "pistachio")):
         groups.add("tree_nut")
-    elif "nut" in norm:
+    elif re.search(r"\bnuts?\b", norm):  # whole word: "peanut" is not a tree nut
         groups.add("tree_nut")
     if "yeast" in norm:
         groups.add("yeast")

@@ -459,7 +459,7 @@ Receipts: `/Users/seancheick/pg_quality/clinical_registry_accuracy_20261011/REPO
 | D27 | One severity per supplement–levothyroxine pair across owners. Calcium and iron + levothyroxine are caution/probable in `ingredient_interaction_rules.json` but Major (= avoid, "Not recommended") in `curated_interactions_v1.json`, so one user sees both. The SYNTHROID label manages both by separating by 4 hours. Option A caution everywhere (recommended), B avoid everywhere. Same batch, factual fixes without a severity change: curated calcium "up to 40%" (source says 20-25%); magnesium + levothyroxine cites an ODS page that never mentions levothyroxine, curated says 2-4 h vs 4 h elsewhere, timing grade "established" over-grades; grapefruit + statins text says avoid with atorvastatin (label: only > 1.2 L/day) and its PMID argues against contraindicating. | Packet: `scripts/audits/levo_grapefruit_severity_20261001/research.md`. **Resolved (Sean, 2026-10-01): caution everywhere; all factual corrections applied** on branch `claude/levo-grapefruit-severity` (8 entries; strict citation gate PASS). The magnesium timing card stays unpublished (no source sets a magnesium-specific interval). Ships with the next interaction DB release (version bump needed). |
 | D28 | Should a declared EGCG percentage count as a lower bound toward the green-tea total-polyphenol standardization threshold? Since 85d4e8402 (Oct 11) `standardized_botanicals.json` green_tea measures polyphenols only, so "50% EGCG" labels (e.g. HUM Ripped Rooster 241706) lose the 4-point marker credit even though EGCG is a polyphenol. Raw corpus: 35 rows with 45%/50% "Epigallocatechin Gallate", 22 with 45%/50% "EGCG". | Packet: `scripts/audits/canary_drift_20261015/research.md`. Historical canary pin superseded by the independently verified allergen correction; polyphenol policy remains open. |
 | D29 | Detail-blob fields nothing reads (dead-code batch 2): `synergy_detail.bonus_awarded` ships 1.0/0.75/0.5/0.25 for a synergy premium v4 retired, so the blob states a bonus the score does not contain; `supplement_type_audit.compatibility_mirror_type` duplicates `enriched_type`; prenatal `role_evidence` anchor counts, `claim_non_gmo_present` and `row_ledger_summary.legacy_raw_actives_count` are accurate but unread. Remove them from the blob (shipped-output change, one release), or keep? | `scripts/audits/dead_code_20261019/REMOVALS_AND_RETENTIONS.md`; key census `audit_dead_code.py keys` plus Flutter `lib/` rg on 2026-10-19 (the app reads `synergy_detail`, not `bonus_awarded`). |
-| D30 | Does a wheat, rye or barley **ingredient** (processed wheatgrass/barley grass, wheat dextrin, malt) contradict a gluten-free claim (21 CFR 101.91)? PR #187 (merged 53e186ced) puts this in one switch, `scoring_input_contract.GLUTEN_GRAIN_INGREDIENT_CONTRADICTS_GLUTEN_FREE`; flip it there only. | Set to True, which reproduces main's Transparency B2 −2. Since #187 the Gluten-Free badge (compliance `gluten_free` → core `is_gluten_free`), `claim_gluten_free_validated` and the claim evidence follow the same switch. So the badge is now **OFF** on 297644 and 274671 (barley-grass ingredient; 297644 states "NSF Certified Gluten-free", 274671 "Gluten free."), where main showed it ON. That is the conservative state pending this decision. Receipt: `scripts/audits/gluten_claim_cross_contact_20261019/README.md`. The queued wheatgrass /data-fix (ALLERGEN_WHEAT phrase term) turns the badge off the same way on 293243, 294321, 294322. |
+| D30 | Does a wheat, rye or barley **ingredient** (processed wheatgrass/barley grass, wheat dextrin, malt) contradict a gluten-free claim (21 CFR 101.91)? PR #187 (merged 53e186ced) puts this in one switch, `scoring_input_contract.GLUTEN_GRAIN_INGREDIENT_CONTRADICTS_GLUTEN_FREE`; flip it there only. | Set to True, which reproduces main's Transparency B2 −2. Since #187 the Gluten-Free badge (compliance `gluten_free` → core `is_gluten_free`), `claim_gluten_free_validated` and the claim evidence follow the same switch. So the badge is now **OFF** on 297644 and 274671 (barley-grass ingredient; 297644 states "NSF Certified Gluten-free", 274671 "Gluten free."), where main showed it ON. That is the conservative state pending this decision. Receipt: `scripts/audits/gluten_claim_cross_contact_20261019/README.md`. Wheatgrass /data-fix #207 (merged 4d5ef0747, ALLERGEN_WHEAT phrase term "wheatgrass"): measured on post-#188 main it moves no badge. 293243 gains its row-level ALLERGEN_WHEAT hit (matched text "Wheatgrass") and, as expected, now also exports that row and a B2 "Declared allergen source: Wheat" display entry; its badge was already off through its barley-grass ingredient (this switch). 294319/294321/294322 already flag wheat through "Allergen Information: Wheat" since #188. Receipt: `scripts/audits/allergen_compound_words_20261020/research.md`. |
 
 ## Queued work with an owner (agent work, not started)
 
@@ -2210,6 +2210,32 @@ the only changed path is `blob:$.ingredients[*].standardization_note`; the updat
 main. Flutter lib/ has no reader of this field. Open: DSLD row text on 1627 guarana says "3% ginsenosides" (likely a DSLD
 transcription error, shown as recorded).
 
+## October 20 — blend members inside blends become active rows (PR206, claude/nested-blend-members)
+
+Class: behavioral (Clean rows → interaction subjects, Evidence/Transparency inputs). Owner:
+`enhanced_normalizer.py::_flatten_nested_ingredients` (+ `_rescue_skipped_nested_row`,
+`_is_chemical_decomposition_leaf`, `_mark_enzyme_source_descriptors`). Defects: (1) a skip-listed blend
+("Proprietary Blend") inside a DSLD group/structural container was dropped with its members (42235 astragalus,
+notoginseng, skullcap; 30565/5816 yohimbe); (2) the counter-ion leaf rule dropped salt-named blend members
+(KCl, NaCl, glucosamine/chondroitin sulfate, betaine HCl, creatine HCl/citrate; 99 rows at all depths);
+(3) found while classifying: protease source organisms rescued as probiotic subjects, and the same false
+warning already on 77164 ("proprietary blend of proteases" without "from"); (4) audit F1: the rescue stamped
+the OUTER blend's mass on members of an inner blend printing 0 NP, so the blob gained totals the label never
+prints (30565/5816 grape blend 380 mg, 328844 Astarte/Urex 221 mg each); (5) review: a top-level or
+_process_single skipped protease blend's forms/members are marked as sources too (0 corpus rows). Fail-first
+tests at each step: 18 collected cases in `test_nested_blend_member_rows.py`. Corpus Clean diff vs main 9630a0f3a: 161/15,414 products, rows only added.
+Replay v3 from committed trees (main 9630a0f3a vs 290751a57; `~/pg_quality/nested_blend_members_20261020/v3`,
+PROVENANCE.txt): 161 + 150 controls, 0 controls changed; +54 rules, 0 removed; 30565/5816 → caution (yohimbe
+printed on label, RISK_YOHIMBE high_risk); every blob blend total is printed by that blend's own raw row;
+41 score moves, all classified by cause in the PR table. (The earlier v2 cand capture ran from an uncommitted
+tree between 05e71ac25 and 424d6a857; v3 supersedes it.) Focused tests: 4,235 passed, 2 declared artifact
+skips, 1 known stale pin (BioVin→grape, fixed elsewhere). Open: comma-joined sub-blends ("Valerian…, Lemon
+Balm…", "DHA, EPA") still drop 22 undosed members; "Total Probiotic Cultures" CFU in notes is not captured;
+display ledger marks every `nested_display_only` active row `score_included`/"scored"
+(`_build_display_ingredients` excludes only CLEANER_NON_EFFICACY_ROLES), so excipient-identity members
+(OI_GENERIC_FLAVOR in 211331/220125/220132/220137) project as scored; latent depth-3 parent fields and the
+top-level skip branch's second rescue copy (0 corpus cases).
+
 ## October 20 — INGR_TART_CHERRY record corrections (PR205, claude/ingr-tart-cherry-evidence)
 
 Class: curated clinical data (description, identifier, references); no intended score change. Owner:
@@ -2219,6 +2245,21 @@ systematic review and meta-analysis) added to references; PMID 40964149 graded s
 `standard_name` to "Tart Cherry" (option A) — measured +0.7 to +2.9 Evidence on 12 products whose tart cherry rows are
 non-material, undosed blend members, because direct clinical matches earn ingredient_points without a materiality check.
 Re-apply "Tart Cherry" after that Evidence defect (its own task) lands.
+
+## October 20 — grape/knotweed resveratrol route (PR199, claude/grape-resveratrol-marker)
+
+Class: behavioral (identity, interaction subjects, marker export, rule copy). Owners:
+`identity/interaction.py::BOTANICAL_CONSTITUENT_SOURCE` (knotweed → resveratrol, interaction-only),
+`enrich_supplements_v3.py::_compute_delivers_markers` + `botanical_marker_contributions.json` (grape →
+resveratrol only from a declared percentage ≥1%; `provenance_without_declaration: false` emits no marker
+for a bare keyword or a sub-floor percentage), `build_final_db._exported_markers`. Hu Zhang/Reynoutria
+aliases moved from the resveratrol compound to `japanese_knotweed`; RULE_IQM_RESVERATROL_BLEEDING copy
+qualified (Sean, 2026-10-19); ADR-0005 accepted with amendment. Replay (1,478 labels, main 8f9c22e09,
+`~/pg_quality/lostsubj_pr199_20261020/` base2_rv/cand2_rv): +11 rules, 0 removed, 229 reworded, 0 score/
+safety changes; receipt `reports/grape_resveratrol_marker_20261019`. Open: `verify_botanical_composition.py
+--build-baseline` regenerates `botanical_marker_contributions.json` without the grape
+`provenance_without_declaration` flag (pre-existing generator scope; re-apply
+`grape_marker_flag_batch.py` after any rebuild until the generator carries authored fields).
 
 ## October 20 — only material rows enter a multi's panel form quality (claude/panel-form-quality-materiality)
 

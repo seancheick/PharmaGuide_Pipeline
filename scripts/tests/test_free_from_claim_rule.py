@@ -185,6 +185,32 @@ def test_l1_allergen_free_validation_uses_the_same_rule(run):
     assert enriched["claim_allergen_free_validated"] is False
 
 
+# The 21 CFR 101.91 "< 20 ppm" exemption covers the qualifier clause only, not
+# the whole sentence around it.
+@pytest.mark.parametrize("statement,badge", [
+    # the qualifier alone (273865's shape) is not an unread warning
+    ("(may contain trace amounts less than 20 ppm)", True),
+    # an unread may-contain warning next to a ppm note still voids the claim
+    ("May contain traces of grains processed on shared lines (tested below 20 ppm).", False),
+    # a read may-contain list next to a ppm note still names wheat
+    ("May contain soy, egg, milk and wheat (less than 20 ppm gluten).", False),
+])
+def test_ppm_exemption_is_scoped_to_its_clause(run, statement, badge):
+    enriched, _ = run("328751", extra_statements=(statement,))
+    assert enriched["compliance_data"]["gluten_free"] is badge
+    assert enriched["claim_gluten_free_validated"] is badge
+
+
+@pytest.mark.parametrize("pid", ["297644", "274671"])
+def test_a_barley_ingredient_is_named_a_gluten_grain_source(run, pid):
+    enriched, _ = run(pid)
+    conflicts = enriched["compliance_data"]["conflicts"]
+    assert "gluten-free claim conflicts with a gluten-grain source" in conflicts
+    assert not any("cross-contact" in c for c in conflicts)
+    assert {ev.get("ineligibility_reason") for ev in _evidence(enriched, "gluten")} == {
+        "allergen_conflict:gluten grain detected"}
+
+
 # B2 magnitude follows the contradicting allergen's severity
 # (quality_score.json b2_severity_points: high 2.0, moderate 1.5, low 1.0).
 # Since hits carry canonical ids (ALLERGEN_MILK), seen.get(group) never
@@ -216,3 +242,65 @@ def test_b2_high_severity_and_conflict_only_fallback_keep_the_cap():
     conflict_only = {"compliance_data": {"allergen_free_claims": ["gluten"],
                                          "conflicts": ["gluten-free claim conflicts with detected gluten/wheat"]}}
     assert _score_b2_false_allergen_claim_penalty(conflict_only)[0] == 2.0
+
+
+# "nut" is a whole word in a claim: "peanut-free" / "no peanuts" is not a
+# tree-nut-free claim, so a tree-nut facility does not contradict it.
+@pytest.mark.parametrize("text,matches", [
+    ("peanut-free", False), ("contains no peanuts", False),
+    ("contains no artificial colors. rich in nutrients", False),
+    ("nut-free", True), ("tree nut free", True), ("contains no tree nuts", True),
+])
+def test_nut_free_claim_pattern_is_whole_word(text, matches):
+    import re
+    from constants import ALLERGEN_FREE_PATTERNS
+    assert bool(re.search(ALLERGEN_FREE_PATTERNS["nut"], text, re.I)) is matches
+
+
+@pytest.mark.parametrize("claim,groups", [
+    ("peanut", {"peanut"}), ("Peanut-Free", {"peanut"}),
+    ("nut", {"tree_nut"}), ("Nut-Free", {"tree_nut"}),
+])
+def test_b2_claim_group_reads_nut_as_a_whole_word(claim, groups):
+    from scoring_v4.modules.generic_transparency import _allergen_groups_from_text
+    assert _allergen_groups_from_text(claim) == groups
+
+
+def test_tree_nut_facility_does_not_contradict_a_peanut_free_claim(run):
+    # 75073: "No dairy, no peanuts, gluten-free."; "Processed in a facility with
+    # products that contain egg, fish, shellfish, soy and tree nuts."
+    enriched, transparency = run("75073")
+    assert _b2(transparency) == 0.0
+
+
+# Gluten qualified by a ppm limit is a 21 CFR 101.91 qualifier, not an
+# allergen warning, in both the parsed and the unread may-contain paths.
+@pytest.mark.parametrize("statement", [
+    "Gluten-free: may contain trace amounts of gluten below 20 ppm.",   # unread path
+    "May contain less than 20 ppm gluten.",                             # parsed path
+    "May contain traces of gluten (less than 20 parts per million).",   # parsed path
+])
+def test_gluten_qualified_by_a_ppm_limit_keeps_the_gluten_free_claim(run, statement):
+    enriched, transparency = run("328751", extra_statements=(statement,))
+    assert enriched["compliance_data"]["gluten_free"] is True
+    assert enriched["claim_gluten_free_validated"] is True
+    assert "ALLERGEN_WHEAT" not in {h["allergen_id"] for h in enriched["contaminant_data"]["allergens"]["allergens"]}
+    assert _b2(transparency) == 0.0
+
+
+def test_a_ppm_note_does_not_hide_other_allergens_in_its_sentence(run):
+    enriched, _ = run("328751", extra_statements=("May contain milk and soy (gluten below 20 ppm).",))
+    ids = {h["allergen_id"] for h in enriched["contaminant_data"]["allergens"]["allergens"]}
+    assert {"ALLERGEN_MILK", "ALLERGEN_SOY"} <= ids and "ALLERGEN_WHEAT" not in ids
+
+
+def test_a_measured_gluten_level_is_not_a_ppm_limit(run):
+    enriched, _ = run("328751", extra_statements=("Contains gluten (40 ppm).",))
+    assert "ALLERGEN_WHEAT" in {h["allergen_id"] for h in enriched["contaminant_data"]["allergens"]["allergens"]}
+    assert enriched["compliance_data"]["gluten_free"] is False
+
+
+def test_a_ppm_limit_inside_a_parenthesis_hides_nothing_else(run):
+    enriched, _ = run("328751", extra_statements=("May contain (milk and gluten below 20 ppm).",))
+    ids = {h["allergen_id"] for h in enriched["contaminant_data"]["allergens"]["allergens"]}
+    assert "ALLERGEN_MILK" in ids and "ALLERGEN_WHEAT" not in ids

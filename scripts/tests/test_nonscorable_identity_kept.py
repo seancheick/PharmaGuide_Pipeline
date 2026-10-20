@@ -1,0 +1,250 @@
+"""A row the enricher will not score keeps the identity the label names, for interactions only.
+
+Non-scorability is a row role, not evidence against the substance. The
+enricher re-validated the cleaner's identity on non-scorable rows only by an
+exact literal, structured or taxonomy match, so a row the cleaner identified
+through its descriptor preprocessing ("Lactobacillus", "Yerba Mate leaf
+extract") lost its identity, and with it every interaction rule (951a05415
+capture: 90 rows).
+
+Identity is not scorability: such a row meets its interaction rules but owns
+no Evidence, feeds no Dose and routes nothing; scoring reads it as before.
+The cleaner's standardName is the id it mapped, so it proves nothing a
+declared form contradicts: a genus listing several species ("Bifidobacterium"),
+a plant read through its marker form ("Sawasabi Wasabi powder" as
+isothiocyanates) or an amino acid declared as a protein source ("Arginine" as
+whey protein isolate) is not kept. Blend headers are left out for now.
+"""
+
+from __future__ import annotations
+
+import json
+import sys
+from pathlib import Path
+
+import pytest
+
+SCRIPTS = Path(__file__).resolve().parents[1]
+if str(SCRIPTS) not in sys.path:
+    sys.path.insert(0, str(SCRIPTS))
+
+from identity_integrity import build_canonical_identity_registry, resolve_identity  # noqa: E402
+
+FIXTURES = Path(__file__).parent / "fixtures"
+
+
+@pytest.fixture(scope="module")
+def enrich():
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    from enrich_supplements_v3 import SupplementEnricherV3
+
+    normalizer, enricher = EnhancedDSLDNormalizer(), SupplementEnricherV3()
+    cache = {}
+
+    def run(dsld_id: int) -> dict:
+        if dsld_id not in cache:
+            raw = json.loads((FIXTURES / f"nonscorable_identity_{dsld_id}_raw.json").read_text())
+            cache[dsld_id], _ = enricher.enrich_product(normalizer.normalize_product(raw))
+        return cache[dsld_id]
+
+    return run
+
+
+@pytest.mark.parametrize(
+    "dsld_id,label,canonical_id,rule_id",
+    [
+        # Perfect Food Green Superfood: "Lactobacillus" in a probiotic blend.
+        (233668, "Lactobacillus", "probiotics", "RULE_IQM_PROBIOTICS_IMMUNOCOMPROMISED"),
+        # Amplified Muscle Igniter 4X: "Yerba Mate leaf extract" in an energy blend.
+        (18473, "Yerba Mate leaf extract", "yerba_mate_leaf", "RULE_IQM_YERBA_MATE_CARDIOVASCULAR"),
+        # Staminol: the row declares L-Arginine itself inside a proprietary blend.
+        (315814, "Arginine", "l_arginine", "RULE_IQM_L_ARGININE_HYPERTENSION"),
+    ],
+)
+def test_non_scorable_row_keeps_its_identity_and_meets_its_rules(enrich, dsld_id, label, canonical_id, rule_id):
+    enriched = enrich(dsld_id)
+    iqd = enriched["ingredient_quality_data"]
+    rows = [r for r in iqd["ingredients"] + iqd["ingredients_skipped"] if r.get("raw_source_text") == label]
+    assert rows and {r["canonical_id"] for r in rows} == {canonical_id}
+    assert all(r["identity_disposition"] == "taxonomy_only" and r["scoreable_identity"] is False for r in rows)
+    alerts = [a for a in enriched["interaction_profile"]["ingredient_alerts"] if a["rule_id"] == rule_id]
+    assert label in {a["ingredient_name"] for a in alerts}
+
+
+def test_blend_header_is_not_restored_yet(enrich):
+    """1179 "Caffeine Blend" is a weight-only blend header: out of this batch."""
+    iqd = enrich(1179)["ingredient_quality_data"]
+    rows = [r for r in iqd["ingredients"] if r.get("raw_source_text") == "Caffeine Blend"]
+    assert rows and {r["canonical_id"] for r in rows} == {None}
+
+
+def test_identified_food_blend_member_does_not_route_a_vitamin_product(enrich):
+    """327570 Methyl B12: the restored "Beet" inside a 242 mg Food Blend borrows the
+    blend's mass; it cannot make the B12/B6/folate product botanical-owned."""
+    from scoring_v4.scored_artifact import build_scored_artifact
+
+    enriched = enrich(327570)
+    iqd = enriched["ingredient_quality_data"]
+    assert {r["canonical_id"] for r in iqd["ingredients"] if r.get("raw_source_text") == "Beet"} == {"beetroot"}
+    dims = build_scored_artifact(enriched)["_v4_module_breakdown"]["dimensions"]
+    assert dims["formulation"]["metadata"]["formulation_profile"] == "generic_iqm"
+    assert dims["dose"]["metadata"]["method"] != "botanical_clinical_dose_v1"
+
+
+_REGISTRY = {
+    "ingredient_quality_map": {
+        "caffeine": {"standard_name": "Caffeine", "aliases": []},
+        "guarana": {"standard_name": "Guarana", "aliases": []},
+    },
+    "proprietary_blends": {"proprietary_blend_concerns": [
+        {"id": "BLEND_SUPERFOOD", "standard_name": "Superfood Blend", "blend_terms": []},
+    ]},
+}
+
+
+def _decide(label: str, supplied: str, standard_name: str, **row):
+    return resolve_identity(
+        row={"raw_source_text": label, "standardName": standard_name, **row},
+        supplied_canonical_id=supplied,
+        resolve_candidate=lambda value: "guarana" if "guarana" in value.casefold() else None,
+        allow_unscoreable_taxonomy_only=True,
+        canonical_registry=build_canonical_identity_registry(_REGISTRY),
+    )
+
+
+def test_uncontradicted_supplied_identity_is_kept_unscored():
+    decision = _decide("Caffeine Blend", "caffeine", "Caffeine")
+    assert (decision.disposition, decision.canonical_id, decision.scoreable_identity) == (
+        "taxonomy_only", "caffeine", False,
+    )
+
+
+def test_label_naming_another_substance_still_wins():
+    assert _decide("Guarana seed extract", "caffeine", "Caffeine").canonical_id is None
+
+
+def test_stale_id_the_row_never_named_is_not_kept():
+    """The cleaner's standardName for "Antimony" is not caffeine."""
+    assert _decide("Antimony", "caffeine", "Antimony").canonical_id is None
+
+
+def test_blend_header_row_is_not_kept():
+    assert _decide("Caffeine Blend", "caffeine", "Caffeine", cleaner_row_role="blend_header_total").canonical_id is None
+
+
+def test_role_record_is_not_kept_as_a_substance():
+    assert _decide("Raw Certified Organic Superfood Blend", "BLEND_SUPERFOOD", "Superfood Blend").canonical_id is None
+
+
+@pytest.mark.parametrize("dsld_id,label,wrong_id", [
+    # Forms B. bifidum BB-2 and B. animalis lactis: a genus, not B. lactis alone.
+    (288699, "Bifidobacterium", "bifidobacterium_lactis"),
+    # Forms name whey protein isolate: an amino-profile constituent, not supplemental arginine.
+    (176044, "Arginine", "l_arginine"),
+    # Listed inside "Solae Soy Protein isolate": the protein's amino profile.
+    (79397, "Arginine", "l_arginine"),
+    # DSLD group "Agave" names the genus only; century_plant is Agave americana.
+    (31062, "Agave powder", "century_plant"),
+    # The marker form "Total Isothiocyanate" is not the plant.
+    (59766, "Sawasabi Wasabi powder", "isothiocyanates"),
+    # Arginine in Amino Acids in Cilantro: a food's composition, three levels deep.
+    (80495, "Arginine", "l_arginine"),
+    # Form Polydatin, resveratrol's glucoside: a marker form is not the row's identity.
+    (277367, "Glycosides", "resveratrol"),
+])
+def test_contradicted_identity_is_not_kept(enrich, dsld_id, label, wrong_id):
+    iqd = enrich(dsld_id)["ingredient_quality_data"]
+    rows = [r for r in iqd["ingredients"] + iqd["ingredients_skipped"] if r.get("raw_source_text") == label]
+    assert rows and wrong_id not in {r["canonical_id"] for r in rows}
+
+
+def test_wasabi_label_keeps_its_plant(enrich):
+    iqd = enrich(59766)["ingredient_quality_data"]
+    rows = [r for r in iqd["ingredients"] if r.get("raw_source_text") == "Sawasabi Wasabi powder"]
+    assert rows and {r["canonical_id"] for r in rows} == {"wasabi_root"}
+
+
+@pytest.mark.parametrize("dsld_id,pillar,expected", [
+    # Lactobacillus row kept for interactions; probiotic Evidence as on main.
+    (274777, "evidence", 0.0),
+    # Gamma-Carotene -> vitamin_a is a cleaner identity, not vitamin A evidence.
+    (297685, "evidence", 16.7),
+    # Restored Apple/coffeeberry flavor rows do not become title Evidence owners.
+    (40089, "evidence", 10.3),
+    # "Raw organic Svetol" (green coffee) does not own Evidence through "Fit Coffee".
+    (204521, "evidence", 10.0),
+    # A 0.4 mg iron row kept for interactions feeds no Dose.
+    (178728, "dose", 11.4),
+    # "organic Beet" re-identified later as Beetroot Powder (as on main) still scores.
+    (62890, "formulation", 10.8),
+])
+def test_interaction_only_identity_owns_no_evidence_or_dose(enrich, dsld_id, pillar, expected):
+    from scoring_v4.scored_artifact import build_scored_artifact
+
+    assert build_scored_artifact(enrich(dsld_id))["quality_pillars_v4"][pillar]["score"] == expected
+
+
+def test_member_forms_keep_the_family_identity():
+    registry = build_canonical_identity_registry({"ingredient_quality_map": {
+        "probiotics": {"standard_name": "Probiotics", "aliases": []},
+        "lactobacillus_acidophilus": {"standard_name": "Lactobacillus Acidophilus", "aliases": []},
+        "whey_protein": {"standard_name": "Whey Protein", "aliases": ["whey protein isolate"]},
+        "l_arginine": {"standard_name": "L-Arginine", "aliases": []},
+    }})
+
+    def decide(label, supplied, standard_name, forms):
+        return resolve_identity(
+            row={"raw_source_text": label, "standardName": standard_name,
+                 "forms": [{"name": form} for form in forms]},
+            supplied_canonical_id=supplied,
+            resolve_candidate=lambda value: None,
+            allow_unscoreable_taxonomy_only=True,
+            canonical_registry=registry,
+            canonical_parent_of=lambda parent, child: (parent, child) == ("probiotics", "lactobacillus_acidophilus"),
+        )
+
+    assert decide("Lactobacillus", "probiotics", "Probiotics", ["Lactobacillus Acidophilus"]).canonical_id == "probiotics"
+    assert decide("Arginine", "l_arginine", "L-Arginine", ["Whey Protein Isolate"]).canonical_id is None
+
+
+def _scoring_inputs(artifact):
+    breakdown = artifact["_v4_module_breakdown"]
+    dims = breakdown["dimensions"]
+    return {
+        "score": artifact["quality_score_v4_100"],
+        "status": artifact["quality_assessment_status"],
+        "evidence_owners": dims["evidence"]["metadata"].get("evidence_owner_canonicals"),
+        "dose_credits": sorted(
+            round(c.get("credit_raw") or 0, 2) for c in dims["dose"]["metadata"].get("dose_contributions") or []
+        ),
+    }
+
+
+@pytest.mark.parametrize("dsld_id,expected", [
+    # Recognition re-identifies the row itself, as on main: the coptis owner stays.
+    (252567, {"score": 57.1, "status": "complete", "evidence_owners": ["coptis_rhizome"], "dose_credits": [11.97]}),
+    (315814, {"score": 50.6, "status": "partial", "evidence_owners": ["gaba", "maca", "oat_straw", "yohimbe"],
+              "dose_credits": [12.54]}),
+    # A kept coffeeberry row is invisible to scoring, never re-matched as coffee.
+    (40089, {"score": 60.7, "status": "complete",
+             "evidence_owners": ["bilberry", "blackberry", "blueberry", "carrot", "cranberry", "grape", "plum",
+                                 "pomegranate", "spinach", "strawberry", "tart_cherry", "tomato"],
+             "dose_credits": [12.54]}),
+    (327402, {"score": 72.8, "status": "complete", "evidence_owners": None, "dose_credits": [1.28, 6.19]}),
+    (328104, {"score": 83.8, "status": "complete", "evidence_owners": None, "dose_credits": [4.65, 13.17]}),
+])
+def test_scoring_inputs_equal_main_when_a_row_keeps_an_identity(enrich, dsld_id, expected):
+    """Values captured from main 92881c049 for the same raw labels."""
+    from scoring_v4.scored_artifact import build_scored_artifact
+
+    assert _scoring_inputs(build_scored_artifact(enrich(dsld_id))) == expected
+
+
+def test_recognition_clears_the_interaction_only_marker(enrich):
+    from identity_integrity import NON_SCORING_IDENTITY_RATIONALE
+
+    rows = [r for r in enrich(252567)["ingredient_quality_data"]["ingredients"]
+            if r.get("raw_source_text") == "Coptis chinensis extract"]
+    assert rows and {r["canonical_id"] for r in rows} == {"coptis_rhizome"}
+    assert all(r["identity_resolution_rationale"] != NON_SCORING_IDENTITY_RATIONALE for r in rows)
+

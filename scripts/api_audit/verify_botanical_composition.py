@@ -206,14 +206,33 @@ BASELINE_SPECS: list[dict[str, Any]] = [
         "botanical_source_db": "botanical_ingredients",
         "marker": "resveratrol",
         "model": "standardization_required",
-        "min_standardization_pct_required": 50.0,
+        "min_standardization_pct_required": 1.0,
         "standardization_keywords": ["resveratrol", "trans-resveratrol", "% resveratrol", "standardized to"],
         "pubmed_query": "Polygonum cuspidatum Japanese knotweed resveratrol content extraction",
         "expected_keywords": ["polygonum", "knotweed", "resveratrol"],
         "notes": (
             "Polygonum cuspidatum (Japanese knotweed) is the commercial source of "
             "resveratrol. Raw root contains 0.1-1.5% resveratrol; standardized extracts "
-            "are 50-98% pure. Credit only when label declares standardization."
+            "are 50-98% pure. Credit only when the label declares a resveratrol "
+            "percentage of at least 1% (the same standard as grape); the identity stays "
+            "japanese_knotweed."
+        ),
+    },
+    {
+        "botanical_id": "grape",
+        "botanical_source_db": "botanical_ingredients",
+        "marker": "resveratrol",
+        "model": "standardization_required",
+        "min_standardization_pct_required": 1.0,
+        "standardization_keywords": ["trans-resveratrol", "resveratrol"],
+        "pubmed_query": "trans-resveratrol content grape skin red wine Vitis vinifera quantification",
+        "expected_keywords": ["grape", "resveratrol", "wine"],
+        "notes": (
+            "Trans-resveratrol is measured by HPLC in red wine, grape (Vitis vinifera) "
+            "skins and winemaking byproducts (PMID:12926863). Red-wine grape extracts sold "
+            "as supplements declare a standardized percentage (BioVin Advanced: 5%). Credit "
+            "only when the label declares a trans-resveratrol percentage of at least 1%; "
+            "the identity stays grape."
         ),
     },
 ]

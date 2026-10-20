@@ -120,6 +120,7 @@ from scoring_input_contract import (
     is_nutrition_fact_declaration,
     get_scoring_ingredients,
     normalize_product_evidence_scope,
+    score_eligible_identity_view,
     scoring_input_scope,
     source_linked_rows,
     _positive_quantity,
@@ -136,6 +137,8 @@ from scoring_reference_resolver import (
 from identity_integrity import (
     has_nonlive_microbial_derivative_evidence,
     IdentityDecision,
+    NON_SCORABLE_NO_IDENTITY_RATIONALE,
+    NON_SCORING_IDENTITY_RATIONALE,
     build_canonical_identity_registry,
     canonical_registry_collections,
     is_identity_scoreable,
@@ -3593,7 +3596,7 @@ class SupplementEnricherV3:
         return marker_present, None
 
     def _compute_delivers_markers(
-        self, ingredient_record: Dict[str, Any]
+        self, ingredient_record: Dict[str, Any], row_notes: Optional[str] = None
     ) -> List[Dict[str, Any]]:
         """Compute the marker contributions an ingredient delivers based on
         its primary canonical_id and scripts/data/botanical_marker_contributions.json.
@@ -3627,10 +3630,13 @@ class SupplementEnricherV3:
         if not contributions:
             return []
 
-        # Label text for standardization scan: combine raw_source_text + matched_form + original_label
+        # Label text for standardization scan: the row's names plus its
+        # printed panel note, where DSLD keeps "standardized to 5%
+        # trans-resveratrol" (BioVin Advanced).
         label_text = " ".join(
-            str(ingredient_record.get(k, "") or "")
-            for k in ("raw_source_text", "matched_form", "original_label", "name")
+            [str(ingredient_record.get(k, "") or "")
+             for k in ("raw_source_text", "matched_form", "original_label", "name")]
+            + [str(row_notes or "")]
         )
 
         # Ingredient mass in grams (for default-contribution dose math)
@@ -3668,6 +3674,13 @@ class SupplementEnricherV3:
             has_std, pct = self._scan_label_for_standardization(label_text, keywords)
             if model == "standardization_required":
                 min_pct = contrib.get("min_standardization_pct_required")
+                declared = has_std and pct is not None and (min_pct is None or pct >= min_pct)
+                if not declared and contrib.get("provenance_without_declaration") is False:
+                    # A source that delivers only trivial amounts unless the
+                    # label declares the marker's percentage (grape ->
+                    # resveratrol) records no marker at all: not for a bare
+                    # keyword, nor for a percentage below the floor.
+                    continue
                 if not has_std:
                     entry["basis"] = (
                         f"No standardization keyword found in label "
@@ -3676,6 +3689,7 @@ class SupplementEnricherV3:
                     )
                 elif pct is not None and (min_pct is None or pct >= min_pct):
                     # Explicit standardization with pct meeting min
+                    entry["declared_standardization_pct"] = pct
                     if mass_g is not None:
                         entry["estimated_dose_mg"] = round(mass_g * 1000.0 * (pct / 100.0), 3)
                         entry["estimation_method"] = "standardization_pct"
@@ -4731,14 +4745,30 @@ class SupplementEnricherV3:
         # PASS 1: Classify activeIngredients as scorable or skipped
         # =================================================================
         product_activity_text = self._get_all_product_text(product)
+        label_names_by_path = {
+            str(row.get("raw_source_path")): row.get("name")
+            for row in active_ingredients
+            if isinstance(row, dict) and row.get("raw_source_path") and row.get("name")
+        }
         for source_ingredient in active_ingredients:
             ingredient = source_ingredient
             is_structural_parent_total = (
                 id(source_ingredient) in structural_parent_total_row_ids
             )
             sole_active_row = len(active_ingredients) == 1
-            if product_activity_text or is_structural_parent_total or sole_active_row or not ingredient.get("source_section"):
+            # Every enclosing label row's name, nearest first: identity checks
+            # read whose constituent a row is ("Arginine" in Amino Acids in
+            # Cilantro).
+            ancestor_blends = []
+            path = str(ingredient.get("raw_source_path") or "")
+            while re.search(r"\.(?:nestedRows|forms)\[\d+\]$", path):
+                path = re.sub(r"\.(?:nestedRows|forms)\[\d+\]$", "", path)
+                if label_names_by_path.get(path):
+                    ancestor_blends.append(label_names_by_path[path])
+            if product_activity_text or is_structural_parent_total or sole_active_row or not ingredient.get("source_section") or ancestor_blends:
                 ingredient = dict(ingredient)
+            if ancestor_blends:
+                ingredient["_ancestor_blends"] = ancestor_blends
             # This collection owns active membership for legacy inputs. Keep
             # explicit source facts authoritative and do not mutate label rows.
             if not ingredient.get("source_section"):
@@ -5568,11 +5598,15 @@ class SupplementEnricherV3:
         # marker contributions declared in botanical_marker_contributions.json,
         # compute and attach the marker contribution list. Empty for marker-
         # canonical ingredients or botanicals without contribution mappings.
+        notes_by_path = {row.get("raw_source_path"): row.get("notes")
+                         for row in product.get("activeIngredients") or [] if isinstance(row, dict)}
         for ing_list in (all_quality_data, ingredients_scorable, ingredients_recognized_non_scorable, ingredients_skipped):
             for ing in ing_list or []:
                 if not isinstance(ing, dict):
                     continue
-                ing["delivers_markers"] = self._compute_delivers_markers(ing)
+                ing["delivers_markers"] = self._compute_delivers_markers(
+                    ing, notes_by_path.get(ing.get("raw_source_path"))
+                )
 
         return {
             # Schema version for forward compatibility
@@ -6262,6 +6296,10 @@ class SupplementEnricherV3:
             })
             if matched_entry_name:
                 row["standard_name"] = matched_entry_name
+            if row.get("identity_resolution_rationale") == NON_SCORING_IDENTITY_RATIONALE:
+                # Recognition identifies the row on its own (as before the keep
+                # existed), so the identity is no longer interaction-only.
+                row["identity_resolution_rationale"] = NON_SCORABLE_NO_IDENTITY_RATIONALE
 
     def _is_low_severity_additive(self, additive_id: Any) -> bool:
         for additive in (self.databases.get("harmful_additives") or {}).get("harmful_additives") or []:
@@ -13004,6 +13042,30 @@ class SupplementEnricherV3:
         re.I,
     )
 
+    # 21 CFR 101.91: a gluten-free food may hold < 20 ppm gluten. A ppm limit
+    # and the gluten wording attached to it ("trace amounts of gluten below
+    # 20 ppm", "traces of gluten (less than 20 parts per million)", "less than
+    # 20 ppm gluten") are that qualifier, not an allergen warning; so is a
+    # gluten-free claim in the same sentence. Everything else still reads.
+    _PPM_LIMIT_TEXT = (
+        r"(?:\b(?:less\s+than|below|under|fewer\s+than)\s+|<\s*)\d+(?:\.\d+)?\s*(?:ppm|parts\s+per\s+million)\b"
+    )
+    _PPM_LIMIT_TOKEN = rf"(?:\(\s*{_PPM_LIMIT_TEXT}\s*\)|{_PPM_LIMIT_TEXT})"
+    _PPM_LIMIT = re.compile(
+        rf"\b(?:traces?|trace\s+amounts?)\s+(?:of\s+)?(?:gluten\s+)?{_PPM_LIMIT_TOKEN}"
+        rf"|\bgluten\s+{_PPM_LIMIT_TOKEN}"
+        rf"|{_PPM_LIMIT_TOKEN}(?:\s+(?:of\s+)?gluten\b)?",
+        re.I,
+    )
+
+    @classmethod
+    def _without_gluten_ppm_qualifier(cls, text: str) -> str:
+        def strip(sentence: str) -> str:
+            if not cls._PPM_LIMIT.search(sentence):  # a limit, not a measured level
+                return sentence
+            return re.sub(r"\bgluten[\s-]*free\b", " ", cls._PPM_LIMIT.sub(" ", sentence), flags=re.I)
+        return "".join(strip(part) for part in re.split(r"((?<=[.!?;])\s+|[\r\n\t]+)", text))
+
     def _has_unparsed_may_contain(self, product: Dict) -> bool:
         """A "may contain"/"shared equipment" sentence with allergen wording that
         the parser reads no allergen from."""
@@ -13019,10 +13081,10 @@ class SupplementEnricherV3:
         for text in texts:
             for sentence in re.split(r'(?<=[.!?;])\s+|[\r\n\t]+', text):
                 # "(may contain trace amounts less than 20 ppm)" qualifies a
-                # gluten-free claim (21 CFR 101.91); it names no allergen.
+                # gluten-free claim; only that qualifier is set aside.
+                sentence = self._without_gluten_ppm_qualifier(sentence)
                 if (re.search(r'may\s+contain|shared\s+equipment', sentence, re.I)
-                        and self._UNRESOLVED_ALLERGEN_WORDING.search(sentence)
-                        and not re.search(r'\bppm\b|parts\s+per\s+million', sentence, re.I)):
+                        and self._UNRESOLVED_ALLERGEN_WORDING.search(sentence)):
                     parsed: List[Dict] = []
                     self._parse_allergen_statement(sentence, allergen_lookup, parsed, "probe")
                     if not parsed:
@@ -13043,7 +13105,7 @@ class SupplementEnricherV3:
         - "Free from milk and soy" -> NOT added
         - "Does not contain milk" -> NOT added
         """
-        text_lower = text.lower().strip()
+        text_lower = self._without_gluten_ppm_qualifier(text.lower().strip())
 
         # Scope negation to its own clause. A product can legitimately say
         # "Made without gluten. Contains milk"; the first clause must not erase
@@ -13501,10 +13563,14 @@ class SupplementEnricherV3:
             return free_from_claim_contradiction(group, detected_allergens, unread_may_contain) is not None
 
         def _conflict_message(group: str, detected: str) -> str:
-            if free_from_claim_contradiction(group, detected_allergens) is None:
+            contradiction = free_from_claim_contradiction(group, detected_allergens)
+            if contradiction is None:
                 return UNREAD_MAY_CONTAIN_CONFLICT
             if group != 'gluten' or _allergen_in_detected('wheat', 'gluten'):
                 return detected
+            # Barley or rye: an ingredient is a source, a warning is cross-contact.
+            if contradiction == 'allergen_conflict':
+                return "gluten-free claim conflicts with a gluten-grain source"
             return "gluten-free claim conflicts with gluten-grain cross-contact"
 
         # Initial conflict pass (Stage-1-only). Stays here so the
@@ -13615,6 +13681,8 @@ class SupplementEnricherV3:
             evidence['score_eligible'] = False
             if contradiction == 'allergen_conflict':
                 label = evidence_conflict_labels.get(group, f'{group} detected')
+                if group in ('gluten', 'gluten_certified') and not _allergen_in_detected('wheat', 'gluten'):
+                    label = 'gluten grain detected'  # barley or rye, not wheat
                 evidence['ineligibility_reason'] = f'allergen_conflict:{label}'
                 evidence['proximity_conflicts'].append(label)
             else:
@@ -17899,8 +17967,9 @@ class SupplementEnricherV3:
         No fallback: classifying an empty product on failure silently routed the
         real one as generic. A failure now surfaces as a failed enrichment.
         """
+        # Routes and roles read score-eligible identities only.
         return build_scoring_classification(
-            enriched,
+            score_eligible_identity_view(enriched),
             classification_origin="native_enrichment",
         )
 
@@ -19489,16 +19558,19 @@ class SupplementEnricherV3:
         return None
 
     def _derived_marker_interaction_rows(
-        self, ingredient: Dict[str, Any]
+        self, ingredient: Dict[str, Any], *, amount_known: bool = True
     ) -> List[Dict[str, Any]]:
         """Create analysis-only rows for deterministically quantified markers.
 
         These rows never enter the label ingredient ledger.  They exist only
         so a marker-specific clinical rule can evaluate a label-declared
         standardization (for example, 500 mg turmeric standardized to 95%
-        curcuminoids -> 475 mg curcumin).  Total extract mass, provenance-only
-        markers, keyword-only standardizations, and default-content estimates
-        are deliberately excluded.
+        curcuminoids -> 475 mg curcumin).  A declared percentage on a row with
+        no amount of its own ("standardized to 50% Resveratrol" inside a blend)
+        still declares the marker: its row carries no amount, so dose rules read
+        it as unknown.  Total extract mass, provenance-only markers,
+        keyword-only mentions, and default-content estimates are deliberately
+        excluded.
         """
         source_name = str(
             ingredient.get("raw_source_text")
@@ -19511,11 +19583,15 @@ class SupplementEnricherV3:
         for marker in ingredient.get("delivers_markers") or []:
             if not isinstance(marker, dict):
                 continue
-            if str(marker.get("estimation_method") or "").strip().lower() != "standardization_pct":
-                continue
             marker_id = str(marker.get("marker_canonical_id") or "").strip()
             marker_amount = self._to_float_safe(marker.get("estimated_dose_mg"))
-            if not marker_id or marker_amount is None or marker_amount <= 0:
+            quantified = (
+                amount_known
+                and str(marker.get("estimation_method") or "").strip().lower() == "standardization_pct"
+                and marker_amount is not None
+                and marker_amount > 0
+            )
+            if not marker_id or not (quantified or marker.get("declared_standardization_pct")):
                 continue
             marker_name = marker_id.replace("_", " ").title()
             rows.append({
@@ -19524,13 +19600,13 @@ class SupplementEnricherV3:
                 "raw_source_text": f"{marker_name} (from {source_name})",
                 "name": marker_name,
                 "standard_name": marker_name,
-                "quantity": marker_amount,
-                "unit": "mg",
-                "unit_normalized": "mg",
+                "quantity": marker_amount if quantified else None,
+                "unit": "mg" if quantified else "unspecified",
+                "unit_normalized": "mg" if quantified else "unspecified",
                 "dose_source": "label_standardization",
                 "marker_derivation": {
                     "source_canonical_id": source_canonical_id,
-                    "estimation_method": "standardization_pct",
+                    "estimation_method": marker.get("estimation_method"),
                     "basis": marker.get("basis"),
                 },
                 "analysis_only": True,
@@ -20680,9 +20756,10 @@ class SupplementEnricherV3:
                 all_ingredient_rows.append(("ingredients_skipped", row))
                 if id(row) in label_rows:
                     repeat_checked_rows.add(id(row))
-                if row.get("skip_reason") == SKIP_REASON_BLEND_HEADER_WITH_WEIGHT:
-                    continue
-                for marker_row in self._derived_marker_interaction_rows(row):
+                # A header's declared marker stays a declaration, never a dose
+                # computed from the blend total.
+                header = row.get("skip_reason") == SKIP_REASON_BLEND_HEADER_WITH_WEIGHT
+                for marker_row in self._derived_marker_interaction_rows(row, amount_known=not header):
                     all_ingredient_rows.append(("derived_marker", marker_row))
                     if id(row) in label_rows:
                         repeat_checked_rows.add(id(marker_row))
@@ -20693,7 +20770,7 @@ class SupplementEnricherV3:
                 continue
             # A blend header's amount is the blend's, never its named
             # substance's dose (D1c): its dose rules read "amount unknown", and
-            # no marker is derived from it.
+            # a marker it declares carries no amount.
             dose_row = (
                 {**ingredient, "quantity": None}
                 if ingredient.get("skip_reason") == SKIP_REASON_BLEND_HEADER_WITH_WEIGHT
@@ -24888,8 +24965,12 @@ class SupplementEnricherV3:
             # nutrition, taxonomy, and native scoring-classification
             # projections. Running earlier stamps a different decision from a
             # replay on the completed enriched artifact.
+            # Evidence reads score-eligible identities only: a row kept for
+            # interactions owns no Evidence.
+            evidence_product = score_eligible_identity_view(enriched)
             enriched["evidence_data"] = self._collect_evidence_data(
-                enriched, ingredient_quality_data=enriched.get("ingredient_quality_data")
+                evidence_product,
+                ingredient_quality_data=evidence_product.get("ingredient_quality_data"),
             )
             if formula_match:
                 enriched["evidence_data"]["clinical_matches"].append(formula_match)

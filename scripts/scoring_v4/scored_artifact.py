@@ -15,7 +15,12 @@ from datetime import datetime, timezone
 from typing import Any, Dict, Optional
 
 from score_supplements_v4 import score_product_v4
-from scoring_input_contract import build_scoring_classification, get_scoring_ingredients, scoring_input_scope
+from scoring_input_contract import (
+    build_scoring_classification,
+    get_scoring_ingredients,
+    score_eligible_identity_view,
+    scoring_input_scope,
+)
 from scoring_v4.gate_safety import safety_resolvers_failed, stated_safety_signal
 from supplement_taxonomy import percentile_label_for
 
@@ -434,10 +439,11 @@ def build_scored_artifact(enriched_product: Dict[str, Any]) -> Dict[str, Any]:
     # Router, modules, gates, confidence, and assembly all consume the same
     # contract. Build it once per strictness variant for this product instead
     # of repeatedly deriving and regex-scanning identical evidence rows.
-    with scoring_input_scope(enriched_product):
+    scoring_product = score_eligible_identity_view(enriched_product)
+    with scoring_input_scope(scoring_product):
         return assemble_scored_artifact(
             enriched_product,
-            score_product_v4(enriched_product),
+            score_product_v4(scoring_product),
         )
 
 
