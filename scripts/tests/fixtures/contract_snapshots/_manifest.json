@@ -1164,6 +1164,15 @@
         239600
       ],
       "source_commit": "cf1ed244e"
+    },
+    {
+      "date": "2026-10-20",
+      "dsld_ids": [
+        204571,
+        74716
+      ],
+      "source_commit": "11ec9e05009d86a93f9ed6d9b94619079e4ca053",
+      "notes": "Source-reviewed selective raw refresh after the complete33-canary check found exactly two drifts.204571 remains61.2 with unchanged safety/amounts/roles; Schisandra narrative PMID18515024 has no source-bound applicable trial assessment, so honest evidence coverage changes complete to partial.74716 genuine Fish Oil2g remains the carrier denominator; nested Omega-3 Fatty Acids600mg remains constituent numerator, not additional oil. Denominator2600->2000mg, ratio0.2308->0.30, Formulation9.3->10.9, total score mirrors56.2->57.8; other pillars/safety/status/identity/amounts unchanged. Independent paired full records support both causes. Only these selected fixtures refreshed from unchanged frozen raw; final complete33-check recorded separately."
     }
   ]
 }

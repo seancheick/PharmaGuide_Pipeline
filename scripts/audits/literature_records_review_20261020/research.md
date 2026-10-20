@@ -10,8 +10,8 @@ lacks a figure and a PMC copy exists (PMCID cited in the row). Follow-up of PR #
 | Records | Count |
 |---|---|
 | Consistent with the article (incl. the curated October block and tart cherry, fixed in #212) | 82 |
-| Batch A: Evidence determination changes (38) plus broccoli's citation re-pointed (this PR) | 39 |
-| Batch B: study facts corrected, determination unchanged (stacked PR; also re-touches 5 batch-A records' untouched fields) | 116 + 5 |
+| Batch A: determination corrections plus broccoli citation repair, including the NAD material hold found during integration | 40 |
+| Batch B: study facts corrected without changing the determination after A; overlaps six A records | 115 + 6 |
 
 Defect classes found: rows citing a different paper than the trial they describe (review, in-vitro or animal
 study under a trial's figures); sample sizes, doses, durations and outcomes the paper does not report;
@@ -110,9 +110,9 @@ were checked against their cited abstracts (PMC full text for BCAA). All stated 
 | `keratin` | 25386609 | CONTRA material: Cynatine HNS = keratin 500 mg plus vitamins and minerals (combination) -> DMAE precedent applicability_unestablished | reviewed_clinical → applicability_unestablished | A1 preparation mismatch |
 | `winged_treebine` | 16948861 | CONTRA PMC1570348: the 'Cissus quadrangularis formulation' also contains green tea, soy, chromium, selenium and B vitamins; 514 mg twice daily; 123 participants (92 obese in 3 arms + 31 overweight). Combination. | reviewed_clinical → applicability_unestablished | A1 preparation mismatch |
 | `magnolia_bark` | 18426577 | CONTRA Relora = Magnolia + Phellodendron blend, 250 mg tid x 6 wk, ITT 40/26 completed; cortisol NOT changed; only STATE anxiety -> combination | reviewed_clinical → applicability_unestablished | A1 preparation mismatch |
-| `fucoxanthin` | 19840063 | CONTRA material Xanthigen = brown seaweed extract (fucoxanthin) + pomegranate seed oil combination; 8.0 mg FT; -> combination | reviewed_clinical → applicability_unestablished | A1 preparation mismatch |
+| `fucoxanthin` | 19840063 | Combination weight-loss findings concern brown-seaweed extract with fucoxanthin plus pomegranate seed oil; standalone fucoxanthin also increased resting energy expenditure, a surrogate. | applicability_unestablished for transferable standalone efficacy | Preserve both source findings; no standalone weight-loss transfer |
 | `fennel` | 12566188 | CONTRA 12566188 not RCT (self-controlled cycles), n 60 -> 30 analysed; dose "120 mg/day seed extract" -> 2% fennel fruit essence 25 drops q4h; "comparable" -> mefenamic more potent days 2-3; sde/appl 120 invented | reviewed_clinical → applicability_unestablished | A1 preparation mismatch |
-| `pomegranate` | 38410857 | FT/CONTRA? MA 38410857 pooled "pomegranate in different forms", conclusion names juice; record material "extract/standardized punicalagins", appl ">=500 mg extract (or ~200 mL juice)", sde [500,1000], n=619: none in abstract | reviewed_clinical → applicability_unestablished | A1 preparation mismatch |
+| `pomegranate` | 38410857 | Primary full-text tables include seven extract trials; heterogeneous extract subgroup SBP benefit, nonsignificant DBP. No universal extract/punicalagin threshold established. | reviewed_clinical retained; positive_weak | Integrator corrected the initial juice-only inference; SDE cleared |
 | `acai_berry` | 21569436 | CONTRA dose -> 100 g acai pulp twice daily, open-label uncontrolled pilot n10; sde 1000 wrong; goji precedent -> applicability_unestablished for powder/extract | reviewed_clinical → applicability_unestablished | A1 preparation mismatch |
 | `chrysin` | 14977449 | CONTRA 14977449 = propolis + honey containing chrysin, urinary testosterone; 3000 mg/day chrysin, n7, aromatase/bioavailability claims FT/not in abstract; food matrix -> null does not transfer to chrysin supplement | reviewed_null → applicability_unestablished | A1 preparation mismatch |
 | `cat_s_claw` | 11603848 | CONTRA material 11603848 = freeze-dried Uncaria GUIANENSIS (30 vs 15 placebo), not U. tomentosa pentacyclic-alkaloid extract; species equivalence only in vitro; dose 100 mg FT | reviewed_clinical → applicability_unestablished | A1 preparation mismatch |
@@ -267,12 +267,12 @@ changes a resolver determination.
 | `mastic_gum` | 19961914 | OK | reviewed_clinical | UNVERIFIABLE FIGURE REMOVED |
 | `d_ribose` | 17109576 | OK (open-label uncontrolled) | reviewed_clinical | UNVERIFIABLE FIGURE REMOVED |
 
-### Batch C — integrator-audit leftovers (17 records, determination unchanged; `spec_c.py`)
+### Integrated follow-up — existing A/B specifications
 
 | Finding | Records | Fix |
 |---|---|---|
 | F1 | chitosan | `studied_dose_exposure` [1200, 4500] removed: Cochrane 18646097 gives no dose |
-| F2 | coleus_forskohlii_root, nad, atp, milk_basic_protein, mastic_gum, capsaicin, activated_charcoal, cayenne_pepper | "≥ N" thresholds no cited study sets replaced by the studied regimen (250 mg twice daily = 500 mg/day; 500 mg twice daily = 1,000 mg/day; 400 mg/day; 40 mg/day; 350 mg three times daily; 2.56 mg per meal; no dose for charcoal). Cayenne keeps the meta-analysis's own "at least 2 mg capsaicinoids before a meal". SDE in one daily basis or `{}`. red_clover, cla, OI_BEETROOT_POWDER checked: their "≥ / at least" wording is stated by the source |
+| F2 | coleus_forskohlii_root, atp, milk_basic_protein, mastic_gum, capsaicin, activated_charcoal, cayenne_pepper | "≥ N" thresholds no cited study sets replaced by the studied regimen (250 mg twice daily = 500 mg/day; 400 mg/day; 40 mg/day; 350 mg three times daily; 2.56 mg per meal; no dose for charcoal). Cayenne keeps the meta-analysis's own "at least 2 mg capsaicinoids before a meal". SDE in one daily basis or `{}`. red_clover, cla, OI_BEETROOT_POWDER checked: their "≥ / at least" wording is stated by the source |
 | F3 | olive_fruit_extract, black_garlic, superoxide_dismutase, schisandra, shiitake_mushroom, fucoxanthin, perilla_oil, undecylenic_acid | stale `applicability_status: applicable_reviewed_trials` → `applicability_unestablished` (existing value; the resolver does not read this field) |
 | F5 | research.md | PMID 20091069 is Sale, Saunders & Harris 2010 (beta-alanine review) |
 | F4 | — | `verify_literature_records.py` owns `verification_result` and, if rerun, would reset the nine review-pending records to verified; `test_a_record_without_a_verified_trial_reads_review_pending` fails if that happens |
@@ -280,3 +280,11 @@ changes a resolver determination.
 ## Integrator correction to the follow-up
 
 The seven source-confirmed regimen/copy corrections from the follow-up are folded into the existing A/B specifications. NAD+ does not inherit the nicotinamide-riboside trial: its applicability hold belongs in A, while B retains source facts. The redundant C overlay is removed; the B determination-change guard remains intact. Reference schema and source-specific endpoint checks remain enforced.
+
+## Independent integration review and limits
+
+All 155 changed literature records were checked individually against current primary PubMed content, with available PMC/publisher full text for claims beyond the abstract. Broccoli uses PMID24913818: 291 participants, 12 weeks, a beverage supplying 600 µmol glucoraphanin plus 40 µmol sulforaphane; urinary benzene/acrolein conjugates are surrogate outcomes. Study exposure is descriptive, not a universal effective-dose floor.
+
+Additional corrections retain beta-glucan's 250 mg regimen; distinguish titrated 24–96 g/day shark-cartilage exposure from an efficacy threshold; retain unknown chitosan/pregnenolone doses; distinguish within-group arjuna findings; and report 72-day larch exposure. Lecithin retains the placebo group without inventing random allocation. Grape-seed primary blood-pressure outcomes were null, with exploratory subgroup findings. Leucine umbrella enrollment is not assigned an unsupported 699 participants. Rhubarb had 42 randomized/39 analyzed and derivative content expressed as rhein; red-clover review totals are separated from its hot-flush subset. Vinegar reports AUC, and blueberry is a systematic review rather than a meta-analysis. Lion’s-mane tablet mass does not establish an exact powder dose or plant part; Schisandra preparation remains unknown and review pending. Capsaicin research does not establish capsiate equivalence.
+
+The existing A/B application reproduces every current record exactly except clock-only replacement verification timestamps. B retains its no-determination-change guard. No new clinical policy, registry, status or efficacy threshold is introduced. Primary receipts and complete per-entry dispositions remain in the durable integration audit; CI and representative replay do not establish unreviewed clinical facts.
