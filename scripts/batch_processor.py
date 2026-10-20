@@ -186,7 +186,8 @@ class BatchProcessor:
         self.global_unmapped_details: Dict[str, Dict[str, Any]] = {}
         self.global_mapped = Counter()
 
-        # Quarantine and unmapped-report paths that could not be written. Any
+        # Side outputs that could not be written: quarantine records, the
+        # unmapped report, the resume state and the two reviewer reports. Any
         # entry marks the stage incomplete, like a cleaned-output write failure.
         self.report_write_failures: List[str] = []
 
@@ -558,7 +559,10 @@ class BatchProcessor:
                 os.fsync(f.fileno())
             os.replace(tmp_path, self.state_file)
         except Exception as e:
-            logger.error(f"Failed to save state: {str(e)}")
+            # The older state on disk would make --resume reprocess written
+            # files into a new batch (duplicate products).
+            logger.error("Failed to save resume state %s: %s", self.state_file, e)
+            self.report_write_failures.append(str(self.state_file))
     
     def create_initial_state(self, files: List[Path]) -> BatchState:
         """Create initial processing state with file manifest for robust resume"""
@@ -839,9 +843,6 @@ class BatchProcessor:
         
         # Save unmapped ingredients
         self._save_unmapped_ingredients(processed_count_override=state.processed_files)
-        if self.report_write_failures:
-            summary["processing_complete"] = False
-            summary["report_write_failures"] = len(self.report_write_failures)
         
         # Generate processing report
         self._generate_processing_report(summary, batch_results)
@@ -849,6 +850,9 @@ class BatchProcessor:
         # Generate detailed review report
         self._generate_detailed_review_report()
 
+        if self.report_write_failures:
+            summary["processing_complete"] = False
+            summary["report_write_failures"] = len(self.report_write_failures)
         self._write_stage_manifest(summary)
         
         logger.info(f"Processing complete! Total time: {total_time:.2f}s")
@@ -1491,7 +1495,10 @@ class BatchProcessor:
                 
             logger.info(f"Processing report saved to {report_file}")
         except Exception as e:
-            logger.error(f"Failed to generate report: {str(e)}")
+            # Reports survive a fresh run, so the dashboard would show the
+            # previous run's summary as current.
+            logger.error("Failed to write processing report %s: %s", report_file, e)
+            self.report_write_failures.append(str(report_file))
     
     def _generate_detailed_review_report(self):
         """Generate detailed review report for products needing manual attention"""
@@ -1527,7 +1534,9 @@ class BatchProcessor:
                                     product = json.loads(line.strip())
                                     review_products.append(product)
                 except Exception as e:
-                    logger.warning(f"Could not read review file {file_path}: {str(e)}")
+                    # The report would silently omit these products.
+                    logger.error("Could not read review file %s: %s", file_path, e)
+                    self.report_write_failures.append(str(file_path))
             
             if not review_products:
                 logger.info("No products found in review files")
@@ -1538,7 +1547,8 @@ class BatchProcessor:
             logger.info(f"Detailed review report saved to {report_file}")
             
         except Exception as e:
-            logger.error(f"Failed to generate detailed review report: {str(e)}")
+            logger.error("Failed to write detailed review report %s: %s", report_file, e)
+            self.report_write_failures.append(str(report_file))
     
     def _write_detailed_review_report(self, report_file: Path, review_products: List[Dict]):
         """Write the detailed review report in markdown format"""

@@ -170,3 +170,125 @@ def test_unconvertible_field_raises_instead_of_blanking():
 
     with pytest.raises(ValueError, match="no text form"):
         EnhancedIngredientMatcher().validate_input(Unprintable(), "ingredient_name")
+
+
+def test_unconvertible_field_becomes_a_quarantined_product_error(tmp_path, monkeypatch):
+    """An unconvertible label value is a product error plus a quarantine record.
+
+    The value raises where it is first read (today _stamp_raw_source_paths, before
+    validate_input, whose own raise test_unconvertible_field_raises_instead_of_blanking
+    pins); the per-file handler must turn any such raise into an error, never a
+    cleaned product.
+    """
+    import batch_processor
+
+    class Unprintable:
+        def __str__(self):
+            raise ValueError("no text form")
+
+    fixture = os.path.join(os.path.dirname(__file__), "fixtures", "bcaa_1063_raw.json")
+    label = json.load(open(fixture, encoding="utf-8"))
+    raw = tmp_path / f"{label['id']}.json"
+    raw.write_text(json.dumps(label), encoding="utf-8")
+    label["ingredientRows"][0]["name"] = Unprintable()
+
+    class JsonWithUnprintableLabel:
+        def __getattr__(self, name):
+            return getattr(json, name)
+
+        @staticmethod
+        def load(handle, *args, **kwargs):
+            if getattr(handle, "name", None) == str(raw):
+                return label
+            return json.load(handle, *args, **kwargs)
+
+    monkeypatch.setattr(batch_processor, "json", JsonWithUnprintableLabel())
+    processor = BatchProcessor(_make_config(tmp_path))
+    result = processor.process_batch(0, [raw])
+
+    assert result["summary"]["errors"] == 1
+    assert result["summary"]["cleaned"] == 0
+    record = json.loads(
+        (processor.output_dir / "errors" / f"{label['id']}_error.json").read_text(encoding="utf-8")
+    )
+    assert "no text form" in json.dumps(record)
+
+
+def test_resume_state_write_failure_is_recorded(tmp_path, monkeypatch):
+    processor = BatchProcessor(_make_config(tmp_path))
+    real_open = open
+
+    def failing_open(path, *args, **kwargs):
+        if str(path).endswith("processing_state.tmp"):
+            raise OSError("disk full")
+        return real_open(path, *args, **kwargs)
+
+    monkeypatch.setattr("builtins.open", failing_open)
+    processor.save_state(processor.create_initial_state([]))
+
+    assert processor.report_write_failures == [str(processor.state_file)]
+
+
+def test_processing_report_write_failure_is_recorded(tmp_path):
+    processor = BatchProcessor(_make_config(tmp_path))
+    reports = processor.output_dir / "reports"
+    reports.mkdir(parents=True, exist_ok=True)
+    _block_directory(reports)
+
+    processor._generate_processing_report(
+        {
+            "total_files": 0, "processing_time": {"total_minutes": 0.0},
+            "results": {"cleaned": 0, "needs_review": 0, "incomplete": 0, "errors": 0},
+            "success_rate": 100.0, "mapped_ingredients": 0, "unmapped_ingredients": 0,
+        },
+        [],
+    )
+
+    assert processor.report_write_failures == [str(reports / "processing_summary.txt")]
+
+
+def test_review_report_failures_are_recorded(tmp_path):
+    processor = BatchProcessor(_make_config(tmp_path))
+    needs_review = processor.output_dir / "needs_review"
+    needs_review.mkdir(parents=True, exist_ok=True)
+    (needs_review / "needs_review_batch_1.json").write_text("[{not json", encoding="utf-8")
+    reports = processor.output_dir / "reports"
+    reports.mkdir(parents=True, exist_ok=True)
+
+    processor._generate_detailed_review_report()
+    assert processor.report_write_failures == [str(needs_review / "needs_review_batch_1.json")]
+
+    processor.report_write_failures.clear()
+    (needs_review / "needs_review_batch_1.json").write_text(
+        json.dumps([{"id": 1, "fullName": "X"}]), encoding="utf-8"
+    )
+    _block_directory(reports)
+    processor._generate_detailed_review_report()
+    assert processor.report_write_failures == [str(reports / "detailed_review_report.md")]
+
+
+def test_failure_in_the_final_reports_marks_the_stage_incomplete(tmp_path, monkeypatch):
+    processor = BatchProcessor(_make_config(tmp_path))
+    raw = tmp_path / "001.json"
+    raw.write_text(json.dumps({"id": 1}), encoding="utf-8")
+    monkeypatch.setattr(processor, "process_batch", lambda batch_num, batch_files, output_batch_num=None: {
+        "summary": {
+            "processed": 1, "cleaned": 1, "needs_review": 0,
+            "incomplete": 0, "errors": 0, "output_write_failures": 0,
+        },
+        "errors": [], "unmapped_count": 0,
+        "processed_files": [str(raw)], "write_success": True,
+    })
+    manifests = []
+    monkeypatch.setattr(processor, "_save_unmapped_ingredients", lambda *a, **kw: None)
+    monkeypatch.setattr(processor, "_generate_processing_report", lambda summary, results: None)
+    monkeypatch.setattr(
+        processor, "_generate_detailed_review_report",
+        lambda: processor.report_write_failures.append("reports/detailed_review_report.md"),
+    )
+    monkeypatch.setattr(processor, "_write_stage_manifest", lambda summary: manifests.append(summary))
+
+    summary = processor.process_all_files([raw], resume=False)
+
+    assert summary["processing_complete"] is False
+    assert manifests[0]["processing_complete"] is False
