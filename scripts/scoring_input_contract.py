@@ -5394,7 +5394,6 @@ _PROFILE_MATERIAL_NONBOTANICAL_DOMAINS = frozenset({
     "omega_parent", "sports_active", "probiotic_strain", "enzyme", "collagen",
     "fiber",
 })
-_PROFILE_DELIVERABLE_ROLES = frozenset({"primary", "claim_prominent", "major"})
 _PROFILE_MICRONUTRIENT_DOMAINS = frozenset({"vitamin", "mineral"})
 _PROFILE_STANDARDIZED_EVIDENCE = frozenset({
     "standardized_botanical_source_db", "product_standardized_botanical",
@@ -5885,13 +5884,13 @@ def _classify_botanical_owner_type(
     # Material non-botanical deliverables — comparable mass units only (advisor #4).
     material_blockers = [
         c for r, c in non_botanical_pairs
-        if c.get("role") in _PROFILE_DELIVERABLE_ROLES
+        if c.get("role") in MATERIAL_ROLES
         and c.get("ingredient_domain") in _PROFILE_MATERIAL_NONBOTANICAL_DOMAINS
         and _profile_material_blocking_mass(r, botanical_mass)
     ]
     micronutrient_deliverables = [
         c for _r, c in non_botanical_pairs
-        if c.get("role") in _PROFILE_DELIVERABLE_ROLES
+        if c.get("role") in MATERIAL_ROLES
         and c.get("ingredient_domain") in _PROFILE_MICRONUTRIENT_DOMAINS
     ]
     botanical_standardized = any(
@@ -6350,19 +6349,28 @@ _ROLE_MULTI_ESSENTIAL_MINERALS = frozenset({
 })
 
 
-def _role_is_required_multi_panel_member(canonical: str) -> bool:
+_ROLE_DECLARED_VITAMIN_A_RE = re.compile(r"^\s*vitamin\s+a\b", re.IGNORECASE)
+
+
+def _role_is_required_multi_panel_member(canonical: str, row: Dict[str, Any]) -> bool:
     """Return whether an identity is part of the defining nutrient panel.
 
-    A provitamin judged against a vitamin's DRI (beta-carotene, alpha-carotene
-    and cryptoxanthin for vitamin A) is that vitamin: "Vitamin A (as
-    beta-carotene)" resolves to beta_carotene.
+    A provitamin judged against a vitamin's DRI (beta-carotene, alpha-carotene,
+    cryptoxanthin) is the panel's vitamin A only where the label declares it so:
+    the row is named "Vitamin A" ("Vitamin A (as beta-carotene)" resolves to
+    beta_carotene) or sits under a "Vitamin A" parent row. A carotenoid inside
+    an antioxidant blend or a standalone "Mixed Carotenoids" stays an add-on.
     """
-    from scoring_v4.modules.generic_dose import judged_against_vitamin_dri  # lazy: it imports this module
-    return (
+    if (
         canonical.startswith("vitamin_")
         or canonical in _ROLE_MULTI_ESSENTIAL_MINERALS
         or canonical == "choline"
-        or judged_against_vitamin_dri(canonical)
+    ):
+        return True
+    from scoring_v4.modules.generic_dose import judged_against_vitamin_dri  # lazy: it imports this module
+    return judged_against_vitamin_dri(canonical) and any(
+        _ROLE_DECLARED_VITAMIN_A_RE.match(str(row.get(field) or ""))
+        for field in ("name", "raw_source_text", "parent_blend")
     )
 
 def _role_mass_mg(row: Dict[str, Any]) -> Optional[float]:
@@ -6668,7 +6676,7 @@ def _classify_one(row: Dict[str, Any], ctx: Dict[str, Any]) -> Dict[str, Any]:
         module == "multi_or_prenatal"
         and has_usable_individual_dose(row)
         and not is_blend
-        and _role_is_required_multi_panel_member(canonical)
+        and _role_is_required_multi_panel_member(canonical, row)
     ):
         return out(ROLE_MAJOR, "multi_panel_member", "module_subtype", "medium")
 

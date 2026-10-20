@@ -1,3 +1,15 @@
+## Canary refresh after PR #209 — October 20 (Claude, claude/canary-refreeze-b2)
+
+`freeze_contract_snapshots.py --check --raw-root` on main ffc58287f: 4 of 33 canaries drift, all
+from #209 (B2 costs the contradicting allergen's severity, not always the 2.0 cap). Each claims
+dairy-, gluten- and soy-free and its highest contradicting hit is moderate, so B2 −2.0 → −1.5:
+204571 milk + soy facility 60.4 → 61.2; 241353 milk facility, barley/wheat ingredient, soy 41.6 →
+42.1; 274498 milk + soy facility 54.2 → 54.7 (Poor → Needs improvement); 327416 milk, wheat, soy
+facility 57.1 → 57.6. Proof: raw replay at 4d5ef0747 (pre-#209) equals the old fixtures; 92881c049
+and ffc58287f equal the new values (`~/pg_quality/lucidbanach_canary_b2_20261020/`). Refreshed
+those four from raw with the owner tool (`freeze_contract_snapshots.py <id> --raw-root`), cause in
+the manifest changelog; the complete check is then 33/33.
+
 ## Current execution — post-run catalog qualification, October 19 (Codex)
 
 Goal: synchronize main without losing drafts; refresh the dashboard index with ingredients and verify the completed run before release. Sean prohibits another pipeline run. Owner: existing stage_manifest/pipeline_freshness; score_index reader/projection and Trace/Overview; serving_basis and RDA nutrient_unit; candidate snapshot/export, catalog_diff approvals and existing Flutter consumers. Evidence: matrix/glossary/callers, real Pure205309/copper259789/blocked18924, fail-first tests, exact-source CI, stage fingerprints, all-row parity and exact-hash safety comparison. Will NOT create a scorer, clinical policy, public field/status, hash exemption, restamp or pipeline job.
@@ -2269,10 +2281,11 @@ Class: behavioral scoring (Formulation, plus role readiness). Owners: `scoring_i
 Extension Mix scores because the panel average read every dose-bearing row. Fix 1: L4 counted a panel nutrient as
 material only in mass units (vitamins A/D/E in IU and folate in mcg DFE were adjuncts); it now reads
 `generic_helpers.has_usable_individual_dose`, and a provitamin judged against a vitamin's DRI
-(`generic_dose.judged_against_vitamin_dri`: beta-carotene, alpha-carotene, cryptoxanthin) is a panel member, so
-"Vitamin A (as beta-carotene)" stays in (independent audit). Fix 2: the panel reads only material-role rows. Measured on
-the stored 15,426-product corpus against main 96fe6b353 (`~/pg_quality/panel_materiality_pr_20261020/v2/`): 1,140
-Formulation moves (858 within 0.5, range -8.1..+2.8), 0 safety changes, and 11 multis scored -> not_scored. Each of the
+(`generic_dose.judged_against_vitamin_dri`: beta-carotene, alpha-carotene, cryptoxanthin) is a panel member only
+where the label declares it vitamin A (row or parent row named "Vitamin A"; independent audits: 120 declared rows in,
+85 undeclared antioxidant-blend/"Mixed Carotenoids" rows out). Fix 2: the panel reads only material-role rows. Measured on
+the stored 15,426-product corpus against main 96fe6b353 (`~/pg_quality/panel_materiality_pr_20261020/v3/`): 1,137
+Formulation moves (854 within 0.5, range -8.1..+2.8), 5 contract canaries refreshed (33/33 check clean), 0 safety changes, and 11 multis scored -> not_scored. Each of the
 11 now holds a material panel nutrient whose typed dose assessment was already unresolved (8 vitamin A of unknown form,
 3 "NP" units with has_dose); readiness now refuses to publish past that gap. Open: the "NP" units on 269538/331688 zinc
 and 60740 niacin are DSLD capture gaps; MegaFood S. cerevisiae carrier rows enter or leave the panel by L5 mass ratio

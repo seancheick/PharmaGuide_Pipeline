@@ -273,7 +273,7 @@ def _delta(old_score: float | None, new_score: float | None) -> float | None:
 # class: the consumer's real deliverable is the nutrient, not a therapeutic herb.
 # The contract's own sets, so this audit cannot drift from the classifier.
 from scoring_input_contract import (  # noqa: E402
-    _PROFILE_DELIVERABLE_ROLES as _MATERIAL_DELIVERABLE_ROLES,
+    MATERIAL_ROLES as _MATERIAL_DELIVERABLE_ROLES,
     _PROFILE_MATERIAL_NONBOTANICAL_DOMAINS as _MATERIAL_NONBOTANICAL_DOMAINS,
 )
 

@@ -1141,6 +1141,29 @@
         239600
       ],
       "source_commit": "74f905b79"
+    },
+    {
+      "date": "2026-10-20",
+      "notes": "PR #209 (merged 92881c049): Transparency B2 now costs the contradicting allergen's severity (b2_severity_points) instead of always b2_cap; before, seen.get(group) looked up claim groups in a dict keyed by allergen id and always missed. Each canary claims dairy-, gluten- and soy-free; B2 -2.0 -> -1.5 because its highest contradicting hit is moderate: 204571 milk facility (+ soy facility), 60.4 -> 61.2; 241353 milk facility + barley/wheat ingredient (+ soy), 41.6 -> 42.1; 274498 milk facility (+ soy), 54.2 -> 54.7 (Poor -> Needs improvement); 327416 milk + wheat facility (+ soy), 57.1 -> 57.6. Replayed from raw at 4d5ef0747 (pre-#209, equals the old fixtures), 92881c049 and ffc58287f (equal): #209 alone moves them. Complete 33 raw-canary check: these were the only drifts. Refreshed from raw only.",
+      "dsld_ids": [
+        204571,
+        241353,
+        274498,
+        327416
+      ],
+      "source_commit": "92881c049"
+    },
+    {
+      "date": "2026-10-20",
+      "notes": "PR #214 (claude/panel-form-quality-materiality): a multi's panel form quality averages only material-role rows (panel micronutrients and mass-major actives), so non-panel add-ons no longer move Formulation; the role owner also counts IU/DFE-dosed vitamins and vitamin A declared as beta-carotene as panel members. Formulation only: 182730 Pure Encapsulations Athletic Pure Pack 16.7 -> 17.1 (80.0 -> 80.4); 12012 CVS Spectravite 16.0 -> 15.8 (77.6 -> 77.4); 288344 Garden of Life Men 14.9 -> 14.8 (80.2 -> 80.1); 278454 Ritual Essential for Women 16.8 -> 16.6 (86.6 -> 86.4); 239600 CVS Men's Daily Gummies 12.4 -> 11.8 (77.3 -> 76.7). Each is a gate mover in the 15,426-product corpus measurement (~/pg_quality/panel_materiality_pr_20261020/v2). Complete 33 raw-canary check: these were the only drifts. Refreshed from raw only.",
+      "dsld_ids": [
+        182730,
+        12012,
+        288344,
+        278454,
+        239600
+      ],
+      "source_commit": "cf1ed244e"
     }
   ]
 }
