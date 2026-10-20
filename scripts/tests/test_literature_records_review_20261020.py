@@ -331,3 +331,33 @@ def test_b_part2_nr_identity_own_trials_remain_separate_and_resolved(records, mo
     r = er.resolve_evidence_for_canonical('nicotinamide_riboside')
     assert r.disposition == 'resolved_by_reviewed_clinical_evidence'
     assert records['nicotinamide_riboside']['studied_dose_exposure']['values'] == [100, 300, 1000]
+
+
+# ---- integrator-audit leftovers (batch C) ------------------------------------------------------
+
+def test_no_unsourced_threshold_in_applicability(records):
+    """A '>= N' in applicability text must be a threshold the cited study sets (or be gone)."""
+    for cid in ("coleus_forskohlii_root", "nad", "atp", "activated_charcoal", "milk_basic_protein",
+                "mastic_gum", "capsaicin", "cayenne_pepper"):
+        text = records[cid]["applicability_decision"]
+        assert ">=" not in text and "≥" not in text, cid
+    # the one source-set minimum is stated as the article states it
+    assert "at least 2 mg capsaicinoids taken before a meal" in records["cayenne_pepper"]["applicability_decision"]
+
+
+@pytest.mark.parametrize("cid, values", [
+    ("chitosan", None), ("activated_charcoal", None), ("coleus_forskohlii_root", [500]),
+    ("nad", None), ("atp", [400]), ("milk_basic_protein", [40]),
+])
+def test_studied_dose_exposure_is_one_daily_basis_or_empty(records, cid, values):
+    sde = records[cid]["studied_dose_exposure"]
+    if values is None:
+        assert sde == {}
+    else:
+        assert sde == {"values": values, "unit": "mg", "basis": "daily_intake"}
+
+
+@pytest.mark.parametrize("cid", ["olive_fruit_extract", "black_garlic", "superoxide_dismutase", "schisandra",
+                                 "shiitake_mushroom", "fucoxanthin", "perilla_oil", "undecylenic_acid"])
+def test_no_record_keeps_a_stale_applicable_status(records, cid):
+    assert records[cid]["applicability_status"] == "applicability_unestablished"

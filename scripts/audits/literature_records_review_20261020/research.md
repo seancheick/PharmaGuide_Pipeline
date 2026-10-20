@@ -129,7 +129,7 @@ were checked against their cited abstracts (PMC full text for BCAA). All stated 
 | `undecylenic_acid` | 6987185 | CONTRA 6987185 = TOPICAL powder (2% undecylenic acid + 20% zinc undecylenate) for tinea pedis; oral 250-500 mg/day "fungal microbiome" invented -> applicability_unestablished | reviewed_clinical → applicability_unestablished | A1 preparation mismatch |
 | `barberry_root` | 37575603 | CONTRA 37575603 schizophrenia on antipsychotics, n 88 (41/47), 3x500 mg/d x3 months; NOT effective, weight/waist higher than placebo; effect positive_moderate -> null; record dir -> null | reviewed_clinical → reviewed_null | A2 direction contradicted |
 | `l_threonine` | 37004875 | CONTRA n 7 -> 11; dose -> six intakes 5-35 mg/kg/d IAAO requirement study, not efficacy; dir positive_moderate unsupported -> applicability_unestablished (methionine pattern) | reviewed_clinical → applicability_unestablished | A1 preparation mismatch |
-| `l_carnosine` | 20091069 → none | GHOST 20091069 = narrative review of beta-alanine (Derave/Artioli 2010), not a 1000 mg/day L-carnosine RCT; n/dose/duration invented -> remove row; record has no study left | reviewed_clinical → verification_pending | A3 no verified trial |
+| `l_carnosine` | 20091069 → none | GHOST 20091069 = narrative review of beta-alanine (Sale, Saunders & Harris 2010), not a 1000 mg/day L-carnosine RCT; n/dose/duration invented -> remove row; record has no study left | reviewed_clinical → verification_pending | A3 no verified trial |
 | `l_phenylalanine` | 37629744 → none | GHOST 37629744 narrative review of depression in Parkinson's; open-label n40 100-500 mg 15 d invented -> remove row | reviewed_clinical → verification_pending | A3 no verified trial |
 | `docosapentaenoic_acid_dpa` | 30716358 | GHOST 30716358 = narrative review; RCT n24/1000 mg DPA/4 wk/platelet invented -> citation kept, labelled by its real design, scoring_eligible false | reviewed_clinical → verification_pending | A3 no verified trial |
 | `dimethyl_glycine` | 34823458 | GHOST 34823458 = DMG-in-autism review; RCT n16/1500 mg/14 d/VO2max null invented -> citation kept, labelled by its real design, scoring_eligible false | reviewed_null → verification_pending | A3 no verified trial |
@@ -266,3 +266,17 @@ changes a resolver determination.
 | `strontium` | 14749454 | OK | applicability_unestablished | UNVERIFIABLE FIGURE REMOVED |
 | `mastic_gum` | 19961914 | OK | reviewed_clinical | UNVERIFIABLE FIGURE REMOVED |
 | `d_ribose` | 17109576 | OK (open-label uncontrolled) | reviewed_clinical | UNVERIFIABLE FIGURE REMOVED |
+
+### Batch C — integrator-audit leftovers (17 records, determination unchanged; `spec_c.py`)
+
+| Finding | Records | Fix |
+|---|---|---|
+| F1 | chitosan | `studied_dose_exposure` [1200, 4500] removed: Cochrane 18646097 gives no dose |
+| F2 | coleus_forskohlii_root, nad, atp, milk_basic_protein, mastic_gum, capsaicin, activated_charcoal, cayenne_pepper | "≥ N" thresholds no cited study sets replaced by the studied regimen (250 mg twice daily = 500 mg/day; 500 mg twice daily = 1,000 mg/day; 400 mg/day; 40 mg/day; 350 mg three times daily; 2.56 mg per meal; no dose for charcoal). Cayenne keeps the meta-analysis's own "at least 2 mg capsaicinoids before a meal". SDE in one daily basis or `{}`. red_clover, cla, OI_BEETROOT_POWDER checked: their "≥ / at least" wording is stated by the source |
+| F3 | olive_fruit_extract, black_garlic, superoxide_dismutase, schisandra, shiitake_mushroom, fucoxanthin, perilla_oil, undecylenic_acid | stale `applicability_status: applicable_reviewed_trials` → `applicability_unestablished` (existing value; the resolver does not read this field) |
+| F5 | research.md | PMID 20091069 is Sale, Saunders & Harris 2010 (beta-alanine review) |
+| F4 | — | `verify_literature_records.py` owns `verification_result` and, if rerun, would reset the nine review-pending records to verified; `test_a_record_without_a_verified_trial_reads_review_pending` fails if that happens |
+
+## Integrator correction to the follow-up
+
+The seven source-confirmed regimen/copy corrections from the follow-up are folded into the existing A/B specifications. NAD+ does not inherit the nicotinamide-riboside trial: its applicability hold belongs in A, while B retains source facts. The redundant C overlay is removed; the B determination-change guard remains intact. Reference schema and source-specific endpoint checks remain enforced.
