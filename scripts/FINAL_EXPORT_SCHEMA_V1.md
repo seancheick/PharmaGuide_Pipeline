@@ -896,7 +896,10 @@ ambiguity.
   are present beyond the common `{id, label}`:
   - `B0` (banned/recalled): `{id, label, status, reason}`
   - `B1` (harmful additive): `{id, label, severity, reason}`
-  - `B2` (allergen): `{id, label, severity, presence}`
+  - `B2` (allergen): `{id, label, severity, presence}` — one `contains` row per allergen
+    ("Declared allergen source: Milk"; the app joins these), and at most one row each for
+    `may_contain` ("May contain: Milk, Soy") and `manufactured_in_facility` ("Made in a facility
+    that also handles: Eggs, Fish, …"), names alphabetical, `severity` the highest listed.
   - `B3` (compliance claim): `{id, label, score}`
   - `B5` (proprietary blend): `{id, label, score, blend_count}`
   - `B6` (disease claims): `{id, label, score}`
