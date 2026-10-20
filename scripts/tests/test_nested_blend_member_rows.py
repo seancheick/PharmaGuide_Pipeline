@@ -311,3 +311,69 @@ def test_parent_category_working_state_never_reaches_output(normalizer):
     for raw in (RE_BUILT_MASS_RAW, GLUCOSAMINE_COMPLEX_RAW, WATER_BALANCE_RAW):
         cleaned = normalizer.normalize_product(copy.deepcopy(raw))
         assert "_raw_parent_category" not in json.dumps(cleaned, default=str)
+
+
+def _inner_np_blend_product(pid, outer, outer_group, outer_mg, inner_blends, direct=()):
+    """An outer blend with a printed total around inner blends that print 0 NP."""
+    return {
+        "id": pid, "fullName": "Test", "brandName": "Test",
+        "servingSizes": [{"order": 1, "minQuantity": 1, "maxQuantity": 1,
+                          "minDailyServings": 1, "maxDailyServings": 1, "unit": "Capsule(s)"}],
+        "ingredientRows": [
+            _row(outer, "blend", outer_group, outer_mg, "mg", 10, [
+                _row(inner, category, group, 0, "NP", 11 + i * 5, [
+                    _row(member, member_cat, member_group, 0, "NP", 12 + i * 5 + j)
+                    for j, (member, member_cat, member_group) in enumerate(members)
+                ])
+                for i, (inner, category, group, members) in enumerate(inner_blends)
+            ] + [
+                _row(member, member_cat, member_group, 0, "NP", 40 + k)
+                for k, (member, member_cat, member_group) in enumerate(direct)
+            ]),
+        ],
+        "otheringredients": {"text": None, "ingredients": []},
+    }
+
+
+# DSLD 30565: "MegaNatural-BP Proprietary Grape Blend" prints no amount inside the
+# 380 mg "Circulatory Pump Blend". DSLD 328844: "Astarte" and "Urex" print no amount
+# inside a 221 mg "Proprietary Blend".
+INNER_NP_BLENDS = {
+    "30565": _inner_np_blend_product(30565, "Circulatory Pump Blend", "Blend (Combination)", 380, [
+        ("MegaNatural-BP Proprietary Grape Blend", "botanical", "Grape ", [
+            ("Yohimbe bark extract", "botanical", "Yohimbe"),
+            ("resVida Trans-Resveratrol", "non-nutrient/non-botanical", "Resveratrol"),
+        ]),
+    ]),
+    "328844": _inner_np_blend_product(328844, "Proprietary Blend", "Proprietary Blend", 221, [
+        ("Astarte Proprietary Blend", "blend", "Proprietary Blend", [
+            ("Lactobacillus crispatus LBV-88", "bacteria", "Lactobacillus crispatus"),
+            ("Lactobacillus gasseri LBV-150N", "bacteria", "Lactobacillus gasseri"),
+        ]),
+        ("Urex Proprietary Blend", "blend", "Proprietary Blend", [
+            ("Lactobacillus reuteri RC-14", "bacteria", "Lactobacillus reuteri"),
+            ("Lactobacillus rhamnosus GR-1", "bacteria", "Lactobacillus rhamnosus"),
+        ]),
+    ], direct=[
+        ("Lactobacillus plantarum UALp-05", "bacteria", "Lactobacillus plantarum"),
+        ("Lactobacillus acidophilus UALa-01", "bacteria", "Lactobacillus acidophilus"),
+    ]),
+}
+
+
+@pytest.mark.parametrize("pid", sorted(INNER_NP_BLENDS))
+def test_inner_blend_without_a_printed_total_never_borrows_the_outer_total(normalizer, enricher, pid):
+    raw = INNER_NP_BLENDS[pid]
+    outer = raw["ingredientRows"][0]
+    inner_names = {row["name"] for row in outer["nestedRows"] if row.get("nestedRows")}
+    cleaned = normalizer.normalize_product(copy.deepcopy(raw))
+    members = [row for row in cleaned["activeIngredients"] if row.get("parentBlend") in inner_names]
+    assert members, "the inner blends' members must be rows"
+    assert all(row.get("parentBlendMass") is None for row in members)
+    enriched, _ = enricher.enrich_product(cleaned)
+    blends = {blend["name"]: blend for blend in enriched["proprietary_data"]["blends"]}
+    for name in inner_names:
+        assert not blends[name].get("total_weight"), f"{name} prints no total"
+        assert not blends[name].get("blend_total_mg"), f"{name} prints no total"
+    # The outer blend keeps the total it prints.
+    assert blends[outer["name"]]["blend_total_mg"] == float(outer["quantity"][0]["quantity"])

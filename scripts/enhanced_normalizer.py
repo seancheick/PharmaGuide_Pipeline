@@ -4927,9 +4927,7 @@ class EnhancedDSLDNormalizer:
                 for nested_ing in self._lift_decomposition_members(nested):
                     nested_name = nested_ing.get("name", "")
                     if self._should_skip_ingredient(nested_name) and not self._is_probiotic_cfu_total_row(nested_ing):
-                        flattened.extend(self._rescue_skipped_nested_row(
-                            nested_ing, parent_mass, parent_unit, _depth,
-                        ))
+                        flattened.extend(self._rescue_skipped_nested_row(nested_ing, _depth))
                         continue
                     if self._is_chemical_decomposition_leaf(nested_ing):
                         logger.debug(
@@ -4972,9 +4970,7 @@ class EnhancedDSLDNormalizer:
                 for nested_ing in self._lift_decomposition_members(nested):
                     nested_name = nested_ing.get("name", "")
                     if self._should_skip_ingredient(nested_name) and not self._is_probiotic_cfu_total_row(nested_ing):
-                        flattened.extend(self._rescue_skipped_nested_row(
-                            nested_ing, parent_mass, parent_unit, _depth,
-                        ))
+                        flattened.extend(self._rescue_skipped_nested_row(nested_ing, _depth))
                         continue
                     if self._is_chemical_decomposition_leaf(nested_ing):
                         logger.debug(
@@ -5139,9 +5135,7 @@ class EnhancedDSLDNormalizer:
                     # (which is skip-listed) are silently dropped — affecting
                     # ~40 omega-3/tocopherol products.
                     if self._should_skip_ingredient(nested_name) and not self._is_probiotic_cfu_total_row(nested_ing):
-                        flattened.extend(self._rescue_skipped_nested_row(
-                            nested_ing, parent_mass, parent_unit, _depth,
-                        ))
+                        flattened.extend(self._rescue_skipped_nested_row(nested_ing, _depth))
                         continue
 
                     if self._is_chemical_decomposition_leaf(nested_ing):
@@ -5217,8 +5211,6 @@ class EnhancedDSLDNormalizer:
     def _rescue_skipped_nested_row(
         self,
         nested_ing: Dict[str, Any],
-        parent_mass: Optional[float],
-        parent_unit: Optional[str],
         _depth: int,
     ) -> List[Dict[str, Any]]:
         """Keep the members of a skip-listed row nested inside a blend.
@@ -5227,7 +5219,9 @@ class EnhancedDSLDNormalizer:
         context, but its forms and members are label rows: EPA/DHA under a
         skipped total, Astragalus under a "Proprietary Blend" inside a DSLD
         group blend (42235). Every blend branch of the flattener uses this,
-        so no branch drops them with the skipped row.
+        so no branch drops them with the skipped row. Members carry only the
+        skipped row's own printed total: an inner blend that prints no amount
+        never borrows an ancestor's (30565, 328844).
         """
         nested_name = nested_ing.get("name", "")
         logger.debug(f"Skipping nested ingredient: {nested_name}")
@@ -5287,9 +5281,6 @@ class EnhancedDSLDNormalizer:
             if skipped_mass is not None:
                 grand_ing["parentBlendMass"] = skipped_mass
                 grand_ing["parentBlendUnit"] = skipped_unit
-            elif parent_mass is not None:
-                grand_ing["parentBlendMass"] = parent_mass
-                grand_ing["parentBlendUnit"] = parent_unit
             if grand_ing.get("nestedRows"):
                 rescued.extend(self._flatten_nested_ingredients(
                     [grand_ing], _depth=_depth + 1,
