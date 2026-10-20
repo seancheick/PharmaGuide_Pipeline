@@ -71,7 +71,30 @@ PG_SUB_C29FA… has none) plus 400 seeded controls from PR #176's route cohort; 
   milk or soy facility/may-contain statement meets the existing Transparency B2 rule that an
   allergen-free claim conflicts with any detected allergen or may-contain warning
   (`generic_transparency._score_b2_false_allergen_claim_penalty`). Expected development movement.
-- The same 14 lose `gluten_free_validated`: `enrich_supplements_v3` sets
-  `gluten_contradiction = has_may_contain or …`, so a milk facility warning voids a gluten-free
-  claim. That coarse rule predates this batch; reported for a separate fix, not changed here.
+- `gluten_free_validated` is lost on 18 products: the 14 above, plus Culturelle 218190, 218195,
+  218199 and 250917, whose milk hit keeps its id but moves from the false "Contains none of the
+  following: … dairy" to the label's real "produced in a facility that also handles dairy"
+  statement (a presence-only change, measured in a separate 64-product replay,
+  `presence/`: 0 score or tier moves, 0 status changes). Cause: `enrich_supplements_v3` sets
+  `gluten_contradiction = has_may_contain or …`, so any facility or may-contain warning, milk
+  included, voids a gluten-free claim. That coarse rule predates this batch; it is the next PR in
+  this lane.
+- Export: the allergen-bearing row now ships where the builder keeps rows that match an allergen
+  hit (`build_final_db._active_row_allowed_for_primary_export`). 28705, 28707 and 4283 add
+  "highly purified Norwegian Cod Liver oil" to `ingredients` with canonical `fish_oil`, and
+  `row_ledger` follows (`cod_liver_oil` → `fish_oil`, because `row_ledger._canonical_id` prefers the
+  exported row). The `fish_oil` identity is not new: the enricher's `ingredient_quality_data`
+  already resolves that row to `fish_oil` (`canonical_id_after`) on main, while the cleaner's row
+  canonical is `cod_liver_oil`; that split is for the identity lane. 25537 goes from 0 shipped
+  ingredients to its "Antarctic Krill Oil Complex" row (`krill_oil`).
+
+## Audit follow-up (f7e90bc99)
+
+- A statement negator drops only the text from the first negator on: "Contains milk and doesn't
+  contain gluten" declares milk (main and the first head dropped the whole clause); "none of" is a
+  negator, so "Contains: fish (anchovy) and none of the following: wheat" does not flag wheat.
+- FISH negative_match_terms: trout lily (Erythronium americanum, a plant), sole source, sole
+  ingredient, salmon-colored/salmon colored. No corpus row uses them. No guard for an all-caps
+  "COD" abbreviation: no sourced label use, and matching is case-insensitive.
+- Corpus re-check against the previous head: 0 products change.
 
