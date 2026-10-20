@@ -91,3 +91,24 @@ own group.
 - Gluten-Free badge (compliance `gluten_free` → core `is_gluten_free`) cleared on 37, all real: 35
   whose new facility statement names wheat, plus 294321 and 294322 ("Allergen Information: Wheat").
   The 143 non-gluten losses measured before #187 no longer occur.
+
+## Delta-audit follow-up (N1–N3, 0ac1c088d)
+
+- N1: B2 `score_penalties` carried one "May contain: X" / "Made in a facility that also handles: X"
+  row per allergen, and the app collapses only "Declared allergen source" rows
+  (`tradeoffs_section.dart::_collapseAllergenSources`), so 260 captured products showed 1–9
+  separate rows (239602: 8). Each cross-contact presence is now one row, names deduped and
+  alphabetical, severity the highest listed; declared sources stay one row per allergen for the
+  app's own collapse. Blob `allergens[]` (the review-before-use card's per-user match,
+  `allergen_match.dart`) is unchanged.
+- N2: an "Allergen information:" item that is a gluten-test, ppm, zero, below or free qualifier
+  ("Gluten tested", "Gluten < 20 ppm", "Wheat (gluten) free") is not a contains declaration; the
+  other items of the line still read.
+- N3: facility catch-all items with never, avoid, test, verify or "processes/handles/uses no"
+  ("never handles peanuts", "to avoid gluten cross contamination", "tests every batch for gluten")
+  name no source; "fish (no shellfish)" still names fish.
+
+Replay `~/pg_quality/lucidbanach_pr188_20261020/r2/` (same 596 labels, 0ac1c088d) against the
+previous head: 236 records change, only in blob `score_penalties`; 0 allergen-hit and 0 score
+changes (N2/N3 have no trigger in this cohort). Max cross-contact rows per presence: before up to
+9, now 1 on every product. Against main 53e186ced the numbers above stand.
