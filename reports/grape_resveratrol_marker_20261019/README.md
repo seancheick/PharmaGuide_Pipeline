@@ -20,7 +20,7 @@ Sean, 2026-10-19:
 2. **Constituent route (existing marker owner).**
    - `botanical_marker_contributions.json`: new `grape` → resveratrol entry (standardization_required,
      PMID 12926863: trans-resveratrol measured in red wine, grape skins and byproducts); knotweed's
-     gate lowered from 50% to the same 1% (any declared percentage).
+     scoring gate lowered from 50% to 1%; grape accepts any positive declared percentage for its qualified presence advisory.
    - `_compute_delivers_markers` reads the row's printed note ("5% Trans-Resveratrol"), and records
      `declared_standardization_pct`.
    - `_derived_marker_interaction_rows`: a declared percentage on a row with no amount of its own,

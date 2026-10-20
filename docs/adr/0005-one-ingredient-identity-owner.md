@@ -62,7 +62,7 @@ Implementation (branch `claude/grape-resveratrol-marker`):
 - Grape reaches resveratrol only through a declared percentage, via the marker owner
   (`botanical_marker_contributions.json`, `_compute_delivers_markers`). A whole grape or grape-PAC
   extract carries trivial resveratrol, so the grape entry emits no marker at all without a
-  declared percentage of at least 1%. With one, the row carries an analysis-only resveratrol row:
+  positive declared percentage. With one, the row carries an analysis-only resveratrol row:
   its amount when the row has one, "amount unknown" otherwise. The marker scan reads the row's
   printed note, where DSLD keeps "standardized to 5% trans-resveratrol" (BioVin Advanced 269265,
   302705, identity grape). A declared knotweed percentage feeds the same marker route for amount

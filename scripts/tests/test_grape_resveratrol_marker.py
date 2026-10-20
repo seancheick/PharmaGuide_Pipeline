@@ -58,9 +58,8 @@ def test_declared_trans_resveratrol_reaches_the_resveratrol_rule(enrich, dsld_id
 @pytest.mark.parametrize("label,notes", [
     ("Grape Skin Extract", None),
     ("BioVin Grape Proanthocyanidin extract", None),
-    # Names resveratrol with no percentage, or one below the 1% floor.
+    # Naming resveratrol without a percentage does not quantify its presence.
     ("Grape extract (resveratrol)", None),
-    ("Grape Skin Extract", "0.5% trans-resveratrol"),
 ])
 def test_grape_without_a_declared_standardization_carries_no_resveratrol_marker(enricher, label, notes):
     """A whole grape or grape-PAC extract carries trivial resveratrol unless a
@@ -186,3 +185,41 @@ def test_declared_percentage_marker_field_stays_out_of_the_export():
     marker = {"marker_canonical_id": "resveratrol", "estimated_dose_mg": None, "declared_standardization_pct": 35.0}
     assert _exported_markers([marker]) == [{"marker_canonical_id": "resveratrol", "estimated_dose_mg": None}]
     assert _exported_markers(None) == []
+
+
+@pytest.mark.parametrize("quantity", [1000, None])
+def test_any_positive_declared_resveratrol_percentage_reaches_the_presence_advisory(enricher, quantity):
+    """A concentration is not a clinical threshold: 0.5% of 1000 mg is 5 mg,
+    more than BioVin's 3 mg. Unknown parent mass still declares presence."""
+    row = {"canonical_id": "grape", "canonical_source_db": "botanical_ingredients",
+           "raw_source_text": "Grape Skin Extract", "quantity": quantity, "unit_normalized": "mg"}
+    row["delivers_markers"] = enricher._compute_delivers_markers(row, row_notes="0.5% trans-resveratrol")
+    [marker] = row["delivers_markers"]
+    assert marker["declared_standardization_pct"] == 0.5
+    [subject] = enricher._derived_marker_interaction_rows(row, amount_known=quantity is not None)
+    assert subject["canonical_id"] == "resveratrol"
+    assert subject["quantity"] == (5.0 if quantity is not None else None)
+
+
+def test_zero_percent_declares_no_resveratrol_presence(enricher):
+    row = {"canonical_id": "grape", "raw_source_text": "Grape Skin Extract",
+           "quantity": 1000, "unit_normalized": "mg"}
+    row["delivers_markers"] = enricher._compute_delivers_markers(row, row_notes="0% trans-resveratrol")
+    assert enricher._derived_marker_interaction_rows(row) == []
+
+
+def test_low_percentage_grape_declaration_carries_the_qualified_rule_through_enrichment(enricher):
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+
+    raw = json.loads((FIXTURES / "grape_resveratrol_269265_raw.json").read_text())
+    raw["ingredientRows"][0]["notes"] = "0.5% Trans-Resveratrol, 40% Total Polyphenols"
+    raw["ingredientRows"][0]["quantity"][0]["quantity"] = 1000
+    enriched, _ = enricher.enrich_product(EnhancedDSLDNormalizer().normalize_product(raw))
+    alerts = _alerts(enriched)
+    assert alerts
+    assert any(h["drug_class_id"] == "antiplatelets" for a in alerts for h in a["drug_class_hits"])
+    [row] = [r for r in enriched["ingredient_quality_data"]["ingredients"]
+             if r.get("raw_source_text") == "BioVin Advanced"]
+    assert row["canonical_id"] == "grape"
+    [marker] = row["delivers_markers"]
+    assert marker["estimated_dose_mg"] == 5.0
