@@ -223,5 +223,5 @@ def test_dose_finding_is_not_worded_as_this_pillars_deduction_when_it_deducts_fo
     assert safety["reason"] == "Safety concern: it contains a restricted additive."
     # The dose-safety finding stays visible as this pillar's one consumer fact.
     assert safety["explanation"]["facts"] == [{
-        "id": "dose_safety_not_deducted", "label": "Not deducted here", "audience": "consumer",
+        "id": "dose_safety_not_deducted", "label": "Dose-safety finding", "audience": "consumer",
         "value_display": "One or more supplemental amounts exceed an established upper limit"}]

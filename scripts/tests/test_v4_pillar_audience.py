@@ -197,3 +197,56 @@ def test_verification_fail_open_reason_has_no_point_numbers():
 def test_zero_evidence_copy_is_one_sentence():
     for text in qs._EVIDENCE_ZERO_REASON.values():
         assert _one_sentence(text), text
+
+
+def _receipt_with(**changes):
+    dim, module_bd = _ul_capped_vitamin_c()
+    return _assembled_dose(dim, module_bd)["explanation"]["dose_receipt"] | changes
+
+
+def test_policy_target_is_never_shown_as_a_consumer_reference():
+    # 20% of the Daily Value is scoring policy, not an intake recommendation.
+    from scoring_v4.pillar_explanations import _dose_consumer_fact
+    receipt = _receipt_with(upper_reference=None, contributions=[{
+        "ingredient": "magnesium", "assessment": "contribution_policy_target",
+        "reference": "PharmaGuide contribution target (20% of the FDA Daily Value)",
+        "reference_kind": "pharmaguide_policy", "amount_at_minimum": 120.0, "amount_at_maximum": 120.0,
+        "amount_unit": "mg", "reference_value": 84.0}])
+    assert _dose_consumer_fact(receipt) is None
+
+
+def test_at_least_exposure_is_never_shown_as_up_to():
+    from scoring_v4.pillar_explanations import _dose_consumer_fact
+    receipt = _receipt_with(upper_reference={
+        "kind": "caffeine_daily_total", "nutrient": "Caffeine", "amount_mg_day": 450.0,
+        "exceeds_above_mg_day": 400.0, "quantity_operator": ">=", "cap_public": 0.0})
+    assert _dose_consumer_fact(receipt)["value_display"] == (
+        "At least 450 mg of caffeine a day; reference 400 mg a day for most adults")
+    fixed = receipt | {"daily_use": {"minimum_servings": 2.0, "maximum_servings": 2.0, "defaulted": False},
+                       "upper_reference": receipt["upper_reference"] | {"quantity_operator": "="}}
+    assert _dose_consumer_fact(fixed)["value_display"].startswith("450 mg of caffeine a day")
+
+
+def test_defaulted_frequency_is_named_on_the_amount_fact():
+    from scoring_v4.pillar_explanations import _dose_consumer_fact
+    receipt = _receipt_with(upper_reference=None,
+                            daily_use={"minimum_servings": 1.0, "maximum_servings": 1.0, "defaulted": True},
+                            contributions=[{"ingredient": "vitamin_c", "assessment": "dri_reference",
+                                            "reference": "RDA/AI", "amount_at_minimum": 500.0,
+                                            "amount_at_maximum": 500.0, "amount_unit": "mg",
+                                            "reference_value": 90.0}])
+    assert _dose_consumer_fact(receipt)["value_display"] == "500 mg Vitamin C at one serving a day; RDA/AI 90 mg"
+
+
+def test_a_triggered_limit_never_reads_as_exactly_the_limit():
+    from scoring_v4.pillar_explanations import _dose_consumer_fact
+    receipt = _receipt_with()
+    receipt["upper_reference"] = receipt["upper_reference"] | {"pct_ul": 100.49}
+    assert "100.5% of the 2,000 mg Vitamin C upper limit" in _dose_consumer_fact(receipt)["value_display"]
+
+
+def test_builder_fact_blocks_are_versioned_without_an_attach():
+    # Suppressed-safety pillars are built but never attached.
+    block = qs._pillar_verification({}, 15, qs._config())["explanation"]
+    assert block["schema_version"] == PILLAR_EXPLANATION_SCHEMA_VERSION
+    assert {f["audience"] for f in block["facts"]} == {"audit"}

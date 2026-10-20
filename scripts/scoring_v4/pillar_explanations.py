@@ -53,6 +53,11 @@ def _amount(value: float) -> str:
     return f"{rounded:,.2f}".rstrip("0").rstrip(".")
 
 
+def facts_block(facts: List[Dict[str, Any]]) -> Dict[str, Any]:
+    """A pillar builder's explanation block, versioned even where no attach runs."""
+    return {"schema_version": PILLAR_EXPLANATION_SCHEMA_VERSION, "facts": facts}
+
+
 def audit_fact(fact_id: str, label: str, value_display: str) -> Dict[str, Any]:
     """A detail fact kept for the dashboard and audits, never shown to users."""
     return {"id": fact_id, "label": label, "value_display": value_display, "audience": AUDIT}
@@ -320,19 +325,31 @@ def _ingredient_display(item: Dict[str, Any], receipt: Dict[str, Any]) -> str:
     return ingredient.replace("_", " ")
 
 
+def _percent(value: float) -> str:
+    """A triggered upper-limit percentage never rounds down to the limit itself."""
+    return f"{value:.1f}" if 100 < value < 100.5 else f"{value:.0f}"
+
+
 def _dose_consumer_fact(receipt: Dict[str, Any]) -> Optional[Dict[str, Any]]:
     """The one Dose fact users see: the upper-limit result when a cap applies,
-    otherwise one assessed amount against its reference, otherwise the honest
-    disclosure gap. Built only from the receipt; nothing is recomputed."""
+    otherwise one assessed amount against its nutritional reference, otherwise
+    the honest disclosure gap. Built only from the receipt; nothing is
+    recomputed. A PharmaGuide policy target is never shown as a reference."""
     daily_use = receipt.get("daily_use") or {}
+    fixed = _num(daily_use.get("minimum_servings")) == _num(daily_use.get("maximum_servings"))
     upper = receipt.get("upper_reference")
     if upper:
+        qualifier = {">=": "At least ", ">": "More than "}.get(upper.get("quantity_operator"))
+        if daily_use.get("defaulted"):
+            lead = "At one serving a day, "
+        else:
+            lead = qualifier or ("" if fixed else "Up to ")
         if upper.get("kind") == "caffeine_daily_total":
             amount, reference = _num(upper.get("amount_mg_day")), _num(upper.get("exceeds_above_mg_day"))
             if amount is None or reference is None:
                 return None
-            value = (f"{'At one serving a day' if daily_use.get('defaulted') else 'Up to'} {_amount(amount)} mg "
-                     f"of caffeine a day; reference {_amount(reference)} mg a day for most adults")
+            value = (f"{lead}{_amount(amount)} mg of caffeine a day; "
+                     f"reference {_amount(reference)} mg a day for most adults")
         else:
             pct, limit = _num(upper.get("pct_ul")), _num(upper.get("ul"))
             if pct is None or limit is None:
@@ -346,28 +363,32 @@ def _dose_consumer_fact(receipt: Dict[str, Any]) -> Optional[Dict[str, Any]]:
             if daily_use.get("defaulted"):
                 exposure = "At one serving a day"
             elif highest is not None:
-                same = _num(daily_use.get("minimum_servings")) == _num(daily_use.get("maximum_servings"))
-                exposure = f"{'' if same else 'Up to '}{_amount(highest)} {unit} a day".strip()
-                exposure = exposure[0].upper() + exposure[1:]
+                exposure = f"{lead}{_amount(highest)} {unit} a day".strip()
             else:
                 exposure = "At the highest directed use"
-            value = (f"{exposure}: {pct:.0f}% of the {_amount(limit)} {unit} {upper.get('nutrient')} "
+            exposure = exposure[0].upper() + exposure[1:]
+            value = (f"{exposure}: {_percent(pct)}% of the {_amount(limit)} {unit} {upper.get('nutrient')} "
                      f"upper limit ({upper.get('ul_population') or 'general adult'})")
+        value = value[0].upper() + value[1:]
         return {"id": "dose_upper_limit_result", "label": "Upper limit", "value_display": value, "audience": CONSUMER}
     contributions = receipt.get("contributions") or []
     if len(contributions) == 1:
         item = contributions[0]
         low, high = _num(item.get("amount_at_minimum")), _num(item.get("amount_at_maximum"))
         reference, unit = _num(item.get("reference_value")), item.get("amount_unit")
+        label = str(item.get("reference") or "")
+        if label.startswith("RDA/AI"):
+            reference_name = "RDA/AI"
+        elif item.get("reference_kind") == "nutritional_reference" and label.endswith("mg/day reference"):
+            reference_name = "reference"  # the omega EPA + DHA nutritional reference
+        else:
+            reference = None  # policy targets and benchmarks are not consumer references
         if (low is not None and reference is not None and unit
                 and item.get("quantity_operator") in (None, "=")):
-            label = str(item.get("reference") or "")
-            reference_name = ("RDA/AI" if label.startswith("RDA/AI")
-                              else "PharmaGuide target" if label.startswith("PharmaGuide contribution target")
-                              else "reference")
             span = _amount(low) if high in (None, low) else f"{_amount(low)}-{_amount(high)}"
+            use = " at one serving a day" if daily_use.get("defaulted") else " a day"
             return {"id": "dose_amount_vs_reference", "label": "Amount vs reference",
-                    "value_display": (f"{span} {unit} {_ingredient_display(item, receipt)} a day; "
+                    "value_display": (f"{span} {unit} {_ingredient_display(item, receipt)}{use}; "
                                       f"{reference_name} {_amount(reference)} {unit}"),
                     "audience": CONSUMER}
     states = {str(item.get("assessment")) for item in contributions}

@@ -31,7 +31,9 @@ from scoring_v4.penalty_registry import (
     component_kind,
     penalty_spec,
 )
-from scoring_v4.pillar_explanations import CONSUMER, attach_pillar_explanations, audit_fact, _proprietary_blend_facts
+from scoring_v4.pillar_explanations import (
+    CONSUMER, attach_pillar_explanations, audit_fact, facts_block, _proprietary_blend_facts,
+)
 
 _CONFIG_PATH = Path(__file__).resolve().parent / "config" / "quality_score.json"
 _CONFIG_CACHE: Optional[Dict[str, Any]] = None
@@ -778,7 +780,7 @@ def _pillar_safety_hygiene(module_bd: Dict[str, Any], weight: float,
     # The reason is one sentence; a second finding becomes a fact. A dose-safety
     # finding not deducted here stays the consumer fact, so it remains visible.
     facts: List[Dict[str, Any]] = []
-    not_deducted = ({"id": "dose_safety_not_deducted", "label": "Not deducted here",
+    not_deducted = ({"id": "dose_safety_not_deducted", "label": "Dose-safety finding",
                      "value_display": dose_safety_explanation[0].upper() + dose_safety_explanation[1:],
                      "audience": CONSUMER} if dose_safety_explanation else None)
     if deductions:
@@ -821,7 +823,7 @@ def _pillar_safety_hygiene(module_bd: Dict[str, Any], weight: float,
         "components": components,
     }
     if facts:
-        pillar["explanation"] = {"facts": facts}
+        pillar["explanation"] = facts_block(facts)
     return pillar
 
 
@@ -1104,7 +1106,7 @@ def _pillar_evidence(dim: Dict[str, Any], weight: float, archetype: str,
         "components": {"raw_evidence": score, "archetype": archetype, "reference": ref},
     }
     if facts:
-        pillar["explanation"] = {"facts": facts}
+        pillar["explanation"] = facts_block(facts)
     return pillar
 
 
@@ -1167,7 +1169,7 @@ def _pillar_dose(dim: Dict[str, Any], weight: float, archetype: str,
         "max": weight,
         "reason": reason,
         "components": components,
-        **({"explanation": {"facts": facts}} if facts else {}),
+        **({"explanation": facts_block(facts)} if facts else {}),
     }
 
 
@@ -1311,7 +1313,7 @@ def _pillar_verification(module_bd: Dict[str, Any], weight: float,
                        "gmp_basis": gmp_basis, "brand_testing": testing, "brand_only_cert": brand_only_cert,
                        "reputation": reputation, "tier": tier, "fail_open_neutral": fail_open,
                        "quality_system_violation_penalty": qs_pen},
-        **({"explanation": {"facts": verification_facts}} if verification_facts else {}),
+        **({"explanation": facts_block(verification_facts)} if verification_facts else {}),
     }
 
 
