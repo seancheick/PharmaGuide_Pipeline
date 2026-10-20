@@ -41,6 +41,7 @@ from scoring_reference_resolver import (
 from identity.omega_labels import states_only_epa_and_dha
 from identity_integrity import (
     IDENTITY_DISPOSITIONS,
+    NON_SCORABLE_NO_IDENTITY_RATIONALE,
     NON_SCORING_IDENTITY_RATIONALE,
     is_identity_scoreable,
 )
@@ -803,12 +804,23 @@ def _is_verified_canonical(value: Any) -> bool:
 
 def _is_interaction_only_identity(row: Dict[str, Any]) -> bool:
     """A non-scorable row's identity kept for interactions only: identity is
-    not scorability, so it owns no Evidence and feeds no Dose or route. A
-    later owner that re-identifies the row (a recognized non-scorable record)
-    ends that."""
-    return (
-        row.get("identity_resolution_rationale") == NON_SCORING_IDENTITY_RATIONALE
-        and _norm(row.get("canonical_id")) == _norm(row.get("canonical_id_before"))
+    not scorability, so it owns no Evidence and feeds no Dose or route. Only
+    resolve_identity's keep sets the marker; an owner that identifies the row
+    on its own (non-scorable recognition) clears it."""
+    return row.get("identity_resolution_rationale") == NON_SCORING_IDENTITY_RATIONALE
+
+
+def _as_scored(row: Dict[str, Any]) -> Dict[str, Any]:
+    """The row exactly as scoring read it before its identity was kept: no
+    identity, every other field untouched (the printed and standard names are
+    not substituted, so nothing re-matches the row into a new participant)."""
+    if not _is_interaction_only_identity(row):
+        return row
+    return dict(
+        row,
+        canonical_id=None,
+        canonical_id_after=None,
+        identity_resolution_rationale=NON_SCORABLE_NO_IDENTITY_RATIONALE,
     )
 
 
@@ -826,9 +838,8 @@ def score_eligible_identity_view(product: Dict[str, Any]) -> Dict[str, Any]:
             continue
         out = []
         for row in rows:
-            if isinstance(row, dict) and _is_interaction_only_identity(row) and row.get("canonical_id") is not None:
-                printed = row.get("raw_source_text")
-                row = dict(row, canonical_id=None, canonical_id_after=None, standard_name=printed, standardName=printed)
+            if isinstance(row, dict) and _is_interaction_only_identity(row):
+                row = _as_scored(row)
                 changed = True
             out.append(row)
         view[key] = out
@@ -2000,6 +2011,7 @@ def derive_product_scoring_evidence(product: Dict[str, Any]) -> List[Dict[str, A
         active_row = dict(raw_active)
         identity_row = identity_row_for(raw_active)
         if identity_row is not None:
+            identity_row = _as_scored(identity_row)
             if _identity_projection_rejection_reason(raw_active, identity_row):
                 # The shared required-conflict ledger retains this exposure
                 # for coverage/readiness; it cannot become scoring evidence.
@@ -2040,23 +2052,13 @@ def derive_product_scoring_evidence(product: Dict[str, Any]) -> List[Dict[str, A
                     active_row["standardName"] = standard_name
             if identity_row.get("source_label_key"):
                 active_row["source_label_key"] = identity_row["source_label_key"]
-            if _is_interaction_only_identity(identity_row):
-                # Scoring reads the row exactly as before its identity was kept:
-                # no canonical, the printed name as a structural anchor only.
-                active_row["canonical_id"] = None
-                active_row["standardName"] = (
-                    identity_row.get("raw_source_text") or raw_active.get("name")
-                )
         disposition = active_row.get("identity_disposition")
         if disposition is not None and not is_identity_scoreable(disposition):
             continue
         active_rows.append(active_row)
 
     skipped_rows = [
-        (
-            dict(row, canonical_id=None, canonical_id_after=None, standardName=row.get("raw_source_text"))
-            if _is_interaction_only_identity(row) else row
-        )
+        _as_scored(row)
         for row in _safe_list(iqd.get("ingredients_skipped"))
         if isinstance(row, dict)
         and (
@@ -5856,25 +5858,11 @@ def _classify_botanical_owner_type(
     primary_candidates = [
         pair for pair in botanical_pairs if id(pair[0]) in owner_candidate_ids
     ] or botanical_pairs
-    # A blend total lent to a member is not the member's amount (D1c): it
-    # cannot outrank non-botanical actives that carry their own label amounts
-    # (327570: a beet row borrowing a 242 mg food blend beside B12, B6 and
-    # folate). When none does, the lent member remains the best route.
-    own_amount_actives = any(
-        not _row_profile_eligible(contract, "botanical")
-        and not is_lent_blend_mass(row)
-        and _norm(row.get("scoring_input_kind")) != "product_level_evidence"
-        and (_role_mass_mg(row) or _positive_quantity(row))
-        for row, contract in pairs
+    primary_row, primary_contract = max(
+        primary_candidates,
+        key=lambda p: (_role_mass_mg(p[0]) or 0.0),
     )
-
-    def own_mass(row: Dict[str, Any]) -> float:
-        if own_amount_actives and is_lent_blend_mass(row):
-            return 0.0
-        return _role_mass_mg(row) or 0.0
-
-    primary_row, primary_contract = max(primary_candidates, key=lambda p: own_mass(p[0]))
-    botanical_mass = own_mass(primary_row)
+    botanical_mass = _role_mass_mg(primary_row) or 0.0
     non_botanical_pairs = [(r, c) for r, c in pairs if not _row_profile_eligible(c, "botanical")]
     botanical_is_material = _profile_is_material(botanical_mass, non_botanical_pairs)
     botanical_is_title_head = _profile_botanical_is_title_head(
