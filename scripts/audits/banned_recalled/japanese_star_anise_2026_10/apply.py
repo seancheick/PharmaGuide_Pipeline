@@ -140,7 +140,7 @@ ENTRY = {
         "status": "validated",
         "last_reviewed_at": "2026-10-20",
         "next_review_due": "2027-04-20",
-        "reviewed_by": "manual_entry",
+        "reviewed_by": "claude-audit (not clinician-reviewed)",
         "change_log": [{
             "date": "2026-10-20",
             "by": "claude-audit",

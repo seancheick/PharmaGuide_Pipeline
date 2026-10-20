@@ -59,6 +59,8 @@ def test_entry_identity_and_status():
     assert entry["gsrs"]["substance_name"] == "ILLICIUM ANISATUM WHOLE"
     names = {a.lower() for a in entry["aliases"]}
     assert "illicium anisatum" in names and "japanese star anise" in names
+    # Agent source-content review; no clinician reviewed this entry.
+    assert entry["review"]["reviewed_by"] == "claude-audit (not clinician-reviewed)"
     # The edible species and its bare name never name this entry.
     assert not names & {"star anise", "chinese star anise", "illicium verum", "badian"}
 
