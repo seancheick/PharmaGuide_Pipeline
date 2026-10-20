@@ -978,7 +978,7 @@
         {
           "pmid": "30999017",
           "title": "The effect of blueberry interventions on cognitive performance and mood: A systematic review of randomized controlled trials.",
-          "design": "systematic_review_meta",
+          "design": "systematic_review",
           "primary_endpoint": "cognitive performance (memory) and mood",
           "effect": "positive_weak",
           "verification_provenance": {
@@ -2070,7 +2070,7 @@
           "title": "Vinegar consumption can attenuate postprandial glucose and insulin responses; a systematic review and meta-analysis of clinical trials.",
           "study_type": "systematic_review",
           "duration": "acute postprandial",
-          "outcome": "significant reduction in postprandial glucose and insulin peaks",
+          "outcome": "significant reduction in postprandial glucose and insulin area under the curve (AUC)",
           "effect_direction": "positive_weak",
           "verification_provenance": {
             "pmid_verified": true,
@@ -4060,7 +4060,7 @@
     },
     {
       "canonical_id": "lion_s_mane",
-      "material_form": "Hericium erinaceus dry fruiting-body powder tablets (96% powder)",
+      "material_form": "Hericium erinaceus dry-powder tablets (96% powder; plant part not specified in the abstract)",
       "search_query": "Hericium erinaceus lion mane mild cognitive impairment double-blind clinical trial",
       "search_date": "2026-09-20",
       "databases_searched": [
@@ -4073,7 +4073,7 @@
           "title": "Improving effects of the mushroom Yamabushitake (Hericium erinaceus) on mild cognitive impairment: a double-blind placebo-controlled clinical trial.",
           "study_type": "randomized_controlled_trial",
           "sample_size": 30,
-          "dose": "3000 mg/day dried fruiting body powder",
+          "dose": "four 250 mg tablets containing 96% Hericium erinaceus dry powder three times daily (3 g/day tablet mass)",
           "duration": "16 weeks",
           "outcome": "significantly increased cognitive function scores on the Hasegawa Dementia Scale compared to placebo",
           "effect_direction": "positive_moderate",
@@ -4091,14 +4091,8 @@
       ],
       "effect_direction": "positive_moderate",
       "population_context": "adults with mild cognitive decline",
-      "studied_dose_exposure": {
-        "values": [
-          3000
-        ],
-        "unit": "mg",
-        "basis": "daily_intake"
-      },
-      "applicability_decision": "Four 250 mg tablets (96% dry fruiting-body powder) three times daily (3 g/day) for 16 weeks improved HDS-R cognitive scores versus placebo in 30 adults aged 50-80 with MCI; scores fell after stopping.",
+      "studied_dose_exposure": {},
+      "applicability_decision": "Four 250 mg tablets containing 96% Hericium erinaceus dry powder three times daily (3 g/day tablet mass) for 16 weeks improved HDS-R cognitive scores versus placebo in 30 adults aged 50-80 with MCI; scores fell after stopping. The abstract does not identify the mushroom part; tablet mass is not an exact dry-powder dose.",
       "verification_result": "authoritative_pubmed_verified",
       "verification_provenance": {
         "verified_by": "scripts/api_audit/verify_literature_records.py",
@@ -4220,7 +4214,7 @@
       "effect_direction": "positive_moderate",
       "population_context": "peri- and post-menopausal women with vasomotor symptoms",
       "studied_dose_exposure": {},
-      "applicability_decision": "A meta-analysis of 8 trials (1,179 women; full text PMC8069620) found red clover isoflavone extracts reduced daily hot flushes by 1.73 versus placebo with high heterogeneity; isoflavone doses ranged 37.1-160 mg/day and the >= 80 mg/day subgroup was not significant.",
+      "applicability_decision": "The review included 12 trials with 1,179 women overall (1,043 in the final analysis; full text PMC8069620). Its hot-flush analysis of 8 trials (10 comparisons) found 1.73 fewer daily hot flushes versus placebo with high heterogeneity. Isoflavone doses ranged 37.1-160 mg/day; the >= 80 mg/day subgroup was not significant.",
       "verification_result": "authoritative_pubmed_verified",
       "verification_provenance": {
         "verified_by": "scripts/api_audit/verify_literature_records.py",
@@ -8341,7 +8335,7 @@
     },
     {
       "canonical_id": "turkey_rhubarb_root",
-      "material_form": "Rhubarb extract dosed by rhein content",
+      "material_form": "Rhubarb extract standardized by anthraquinone derivatives expressed as rhein",
       "search_query": "Rheum palmatum rhubarb acute constipation randomized trial",
       "search_date": "2026-09-20",
       "databases_searched": [
@@ -8355,7 +8349,7 @@
           "title": "Constipation Mitigation by Rhubarb Extract in Middle-Aged Adults Is Linked to Gut Microbiome Modulation: A Double-Blind Randomized Placebo-Controlled Trial.",
           "study_type": "randomized_controlled_trial",
           "sample_size": 42,
-          "dose": "rhubarb extract providing 12.5 or 25 mg rhein per day",
+          "dose": "rhubarb extract providing 12.5 or 25 mg/day anthraquinone derivatives expressed as rhein",
           "duration": "30 days",
           "outcome": "stool frequency, consistency and transit questionnaires improved in both doses versus placebo",
           "effect_direction": "positive_weak",
@@ -8373,15 +8367,8 @@
       ],
       "effect_direction": "positive_weak",
       "population_context": "Middle-aged adults (95% women) with constipation",
-      "studied_dose_exposure": {
-        "values": [
-          12.5,
-          25
-        ],
-        "unit": "mg",
-        "basis": "rhein_daily"
-      },
-      "applicability_decision": "Rhubarb extract dosed at 12.5 or 25 mg rhein per day for 30 days improved stool frequency, consistency and transit questionnaires versus placebo in middle-aged adults (42 completed; full text PMC9738964).",
+      "studied_dose_exposure": {},
+      "applicability_decision": "Rhubarb extract providing 12.5 or 25 mg/day anthraquinone derivatives expressed as rhein for 30 days improved stool frequency, consistency and transit questionnaires versus placebo in middle-aged adults (42 randomized, 39 analyzed; full text PMC9738964). These values describe the standardized derivative content, not isolated rhein or total extract mass.",
       "verification_result": "authoritative_pubmed_verified",
       "verification_provenance": {
         "verified_by": "scripts/api_audit/verify_literature_records.py",
@@ -11098,7 +11085,7 @@
     },
     {
       "canonical_id": "schisandra",
-      "material_form": "Schisandra chinensis fruit extract",
+      "material_form": "Schisandra chinensis preparations (plant part and extraction unspecified in the abstract)",
       "search_query": "schisandra chinensis adaptogen endurance overview russian research",
       "search_date": "2026-09-20",
       "databases_searched": [
@@ -15405,7 +15392,7 @@
     },
     {
       "canonical_id": "capsaicin",
-      "material_form": "Capsicum annuum standardized capsaicinoids (capsaicin / capsiate)",
+      "material_form": "Red chili pepper providing quantified capsaicin (2.56 mg per meal)",
       "search_query": "acute effects capsaicin energy expenditure fat oxidation negative energy balance",
       "search_date": "2026-09-20",
       "databases_searched": [
@@ -15443,7 +15430,7 @@
         "unit": "mg",
         "basis": "capsaicin_per_meal"
       },
-      "applicability_decision": "In a 36-hour respiration-chamber study in negative energy balance, 2.56 mg capsaicin with every meal counteracted the fall in diet-induced thermogenesis and resting energy expenditure and raised fat oxidation; no daily dose threshold is established.",
+      "applicability_decision": "In a 36-hour respiration-chamber study in negative energy balance, red chili pepper providing 2.56 mg capsaicin with every meal counteracted the fall in diet-induced thermogenesis and resting energy expenditure and raised fat oxidation. This source does not establish capsiate preparation equivalence or a daily dose threshold.",
       "applicability_status": "applicable_reviewed_trials",
       "verification_provenance": {
         "verified_by": "scripts/api_audit/verify_literature_records.py",

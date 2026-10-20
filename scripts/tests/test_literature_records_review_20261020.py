@@ -361,3 +361,53 @@ def test_studied_dose_exposure_is_one_daily_basis_or_empty(records, cid, values)
                                  "shiitake_mushroom", "fucoxanthin", "perilla_oil", "undecylenic_acid"])
 def test_no_record_keeps_a_stale_applicable_status(records, cid):
     assert records[cid]["applicability_status"] == "applicability_unestablished"
+
+
+# B0 primary-content corrections: portable literals, no local corpus required.
+def test_b0_rhubarb_randomized_is_not_completed_or_isolated_rhein(records):
+    record = records["turkey_rhubarb_root"]
+    study = _study(record, "36499011")
+    assert study["sample_size"] == 42
+    assert "42 randomized, 39 analyzed" in record["applicability_decision"]
+    assert "42 completed" not in record["applicability_decision"]
+    assert "anthraquinone derivatives expressed as rhein" in study["dose"]
+    assert record["studied_dose_exposure"] == {}
+
+
+def test_b0_red_clover_review_population_is_distinct_from_hot_flush_subset(records):
+    record = records["red_clover"]
+    assert _study(record, "33920485")["sample_size"] == 1179
+    assert "12 trials with 1,179 women overall" in record["applicability_decision"]
+    assert "1,043 in the final analysis" in record["applicability_decision"]
+    assert "8 trials (10 comparisons)" in record["applicability_decision"]
+    assert ">= 80 mg/day subgroup was not significant" in record["applicability_decision"]
+
+
+def test_b0_vinegar_reports_auc_and_blueberry_is_not_a_meta_analysis(records):
+    outcome = _study(records["apple_cider_vinegar"], "28292654")["outcome"]
+    assert "area under the curve (AUC)" in outcome
+    assert "peaks" not in outcome
+    assert _study(records["blueberry"], "30999017")["design"] == "systematic_review"
+
+
+def test_b0_capsaicin_source_does_not_assert_capsiate_equivalence(records):
+    record = records["capsaicin"]
+    assert record["material_form"] == "Red chili pepper providing quantified capsaicin (2.56 mg per meal)"
+    assert "does not establish capsiate preparation equivalence" in record["applicability_decision"]
+    assert record["studied_dose_exposure"] == {"values": [2.56], "unit": "mg", "basis": "capsaicin_per_meal"}
+
+
+def test_b0_lions_mane_tablet_mass_is_not_an_exact_powder_or_part_claim(records):
+    record = records["lion_s_mane"]
+    assert "plant part not specified in the abstract" in record["material_form"]
+    assert "fruiting" not in record["material_form"]
+    assert "96%" in _study(record, "18844328")["dose"]
+    assert "3 g/day tablet mass" in _study(record, "18844328")["dose"]
+    assert record["studied_dose_exposure"] == {}
+
+
+def test_b0_schisandra_preparation_stays_unknown_and_review_pending(records):
+    record = records["schisandra"]
+    assert "plant part and extraction unspecified" in record["material_form"]
+    assert record["verification_result"] == "verification_failure_unresolved"
+    assert _study(record, "18515024")["scoring_eligible"] is False
