@@ -5,10 +5,11 @@
   blood pressure; it is not recovery/soreness systematic-review evidence.
 - UNII BUC5I9595W is GSRS "CHERRY", an unspecified mixture; sour (tart) cherry
   is 1L29G6428X (parent PRUNUS CERASUS WHOLE).
-- The record keeps its name "Tart Cherry Extract" for now: renaming it to
-  "Tart Cherry" (the evidence is juice and powder) would let undosed blend rows
-  match by name and earn credit. It is re-applied after the Evidence
-  materiality fix lands.
+- The record is named "Tart Cherry" (the evidence is juice and powder), with
+  "tart cherry extract" kept as an alias. The rename was deferred from PR205
+  because undosed blend rows matched by name earned credit; since the record's
+  juice-only applicability (PR213) a non-juice row it reaches by name is
+  rejected, and on all 552 cherry-mentioning labels the rename moved no score.
 - PMID 33440334 (the recovery meta-analysis the notes rely on) is a listed
   reference, and PMID 40964149 is graded as the systematic review it is.
 """
@@ -26,10 +27,10 @@ def test_the_record_names_sour_cherry_not_a_cherry_mixture():
     assert _record()["external_ids"]["unii"] == "1L29G6428X"
 
 
-def test_the_record_keeps_its_name_until_the_evidence_fix():
+def test_the_record_is_named_tart_cherry_and_still_knows_the_extract_name():
     record = _record()
-    assert record["standard_name"] == "Tart Cherry Extract"
-    assert "tart cherry" not in [a.lower() for a in record["aliases"]]
+    assert record["standard_name"] == "Tart Cherry"
+    assert "tart cherry extract" in [a.lower() for a in record["aliases"]]
 
 
 def test_the_recovery_and_sleep_reviews_are_listed_and_graded():
