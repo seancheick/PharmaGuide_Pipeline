@@ -1,241 +1,241 @@
-id	product	change	rules_added	rules_removed	responsible_rows
-1071	Fish Oil +Resveratrol	reworded			Resveratrol=resveratrol
-1179	Ravage Fruit Punch	reworded			resVida Trans-Resveratrol=resveratrol
-12800	Ravage Orange	reworded			resVida Trans-Resveratrol=resveratrol
-14168	Rampant	reworded			Resveratrol=resveratrol; resVida Trans-Resveratrol=resveratrol
-16374	Total Cleanser	added	RULE_INGREDIENT_CURCUMIN		Turmeric Root Extract=turmeric[('curcumin', 150.005, 95.0)]
-1640	Staminol Rapid Surge	reworded			ReVida(R) trans-Resveratrol=resveratrol
-176055	Amplified Creatine XXX Pink Lemonade	reworded			resVida Trans-Resveratrol=resveratrol
-181895	7-Keto DHEA Metabolite 100 mg	reworded			BCM-95 Bio-Curcumin Turmeric 25:1 extrac=curcumin; Japanese Knotweed (root) and whole Red G=japanese_knotweed[('resveratrol', 1.05, 35.0)]; Japanese Knotweed (root) extract=japanese_knotweed; whole Red Grape extract=grape
-182477	Optimized NAD+ Cell Regenerator with Res	reworded			Trans-Resveratrol=resveratrol; Red Grape and Wild Blueberry blend=None; Red Grape=grape
-182479	Optimized NAD+ Cell Regenerator with Res	reworded			Trans-Resveratrol=resveratrol; Red Grape and Wild Blueberry blend=None; Red Grape=grape
-18473	Amplified Muscle Igniter 4X	reworded			Grape seed extract=grape_seed_extract; resVida Trans-Resveratrol=resveratrol
-18477	Amplified Maxertion N.O.	reworded			resVida Trans-Resveratrol=resveratrol
-1851	Liver Formula	added	RULE_INGREDIENT_CURCUMIN		Turmeric Root Extract=turmeric[('curcumin', 47.5, 95.0)]
-185118	Mitochondria-ATP	reworded			Trans-Resveratrol=resveratrol; Grape (Vitis vinifera) extract=grape_seed_extract
-185288	EndoLOX	reworded			resVida Resveratrol=resveratrol
-18538	Amplified Creatine XXX Blue Raspberry	reworded			resVida Trans-Resveratrol=resveratrol
-187546	ResCu-SR	reworded			Trans-Resveratrol=resveratrol; Curcuminoids=curcumin
-187549	Resveratrol Extra	reworded			Trans-Resveratrol=resveratrol; Red Wine Grape (Vitis vinifera) concentr=grape_seed; Grape (Vitis vinifera) extract=grape_seed_extract
-187551	Resveratrol Extra	reworded			Trans-Resveratrol=resveratrol; Red Wine Grape (Vitis vinifera) concentr=grape_seed; Grape (Vitis vinifera) extract=grape_seed_extract
-19471	Ravage Orange	reworded			resVida Trans-Resveratrol=resveratrol
-201611	Resveratrol 100 mg	reworded			Resveratrol=resveratrol; Polygonum cuspidatum=japanese_knotweed
-213305	Lean Essentials Multivitamin	reworded			Resveratrol=resveratrol; Turmeric root extract=turmeric
-218658	Resveratrol 250 mg with Red Wine Extract	reworded			Trans-Resveratrol=resveratrol; Polygonum cuspidatum=japanese_knotweed
-218664	Resveratrol 250 mg with Red Wine Extract	reworded			Trans-Resveratrol=resveratrol; Polygonum cuspidatum=japanese_knotweed
-219039	Energy & Metabolism Vanilla	reworded			Turmeric root extract=turmeric
-219690	Mitochondria-ATP	reworded			Trans-Resveratrol=resveratrol; Grape (Vitis vinifera) extract=grape_seed_extract
-219977	Brain Health Formula	reworded			Turmeric root extract=turmeric; resVida Trans-Resveratrol=resveratrol
-219992	Eye Health Formula	reworded			resVida Trans-Resveratrol=resveratrol
-221095	Energy & Metabolism Chocolate	reworded			Turmeric root extract=turmeric; resVida Trans-Resveratrol=resveratrol
-221112	Infinite Test	reworded			resVida Trans-Resveratrol=resveratrol
-221158	Antioxidant & Circulation	reworded			Turmeric root extract=turmeric
-2219	Ravage Grape	reworded			resVida Trans-Resveratrol=resveratrol
-2222	Re-Forge	reworded			resVida Trans-Resveratrol=resveratrol
-2223	Refine	reworded			Grape Seed Extract=grape_seed_extract; Grape skin extract=grape_seed_extract; resVida Trans-Resveratrol=resveratrol
-228798	50 Plus	reworded			Resveratrol=resveratrol; CurcuWIN Turmeric root extract=curcumin; Grape seed extract=grape_seed_extract
-228799	50 Plus	reworded			Resveratrol=resveratrol; CurcuWIN Turmeric root extract=curcumin; Grape seed extract=grape_seed_extract
-228820	Healthy Blood Pressure Formula	reworded			MegaNatural-BP Grape seed extract=grape_seed_extract; resVida Trans-Resveratrol=resveratrol
-228978	Total Cleanser	added	RULE_INGREDIENT_CURCUMIN		Turmeric root extract=turmeric[('curcumin', 150.005, 95.0)]
-232731	Stem Cell	added	RULE_IQM_RESVERATROL_BLEEDING		Presveratrol Proprietary Blend=None; Japanese Knotweed extract=japanese_knotweed[('resveratrol', None, 98.0)]
-232760	Anti-Alcohol HepatoProtection Complex	reworded			Leucoselect Grape extract=grape_seed_extract; Trans-Resveratrol=resveratrol
-240149	Healthy Hair	reworded			Resveratrol=resveratrol; Grape extract=grape_seed_extract
-241284	Flora Cleanse	reworded			Resveratrol=resveratrol
-242529	Alive! Max3 Potency Multivitamin	reworded			Grape=grape; Japanese Knotweed extract=japanese_knotweed[('resveratrol', None, 50.0)]
-242552	Alive! Max3 Daily Potency Multivitamin	reworded			Grape powder=grape; Japanese Knotweed extract=japanese_knotweed[('resveratrol', None, 50.0)]
-243680	Eye Health Formula	reworded			resVida Trans-Resveratrol=resveratrol
-243683	Antioxidant & Circulation	reworded			Turmeric root extract=turmeric; resVida Trans-Resveratrol=resveratrol
-243737	Multivitamin 50 Plus	reworded			CurcuWIN Turmeric root extract=curcumin; Resveratrol=resveratrol; Grape seed extract=grape_seed_extract
-246350	Metabolic Xtra	reworded			resVida Resveratrol=resveratrol
-247017	Ultra Pure Pack	reworded			Turmeric (Curcuma longa) extract=turmeric; Trans-Resveratrol=resveratrol; Red Wine Grape (Vitis vinifera) concentr=grape_seed; Grape extract=grape_seed_extract
-247312	RevitalAge Ultra	reworded			resVida Resveratrol=resveratrol
-247379	VisionPro Nutrients without Zinc	reworded			resVida Resveratrol=resveratrol
-249518	Doctor's Choice Multivitamin 45+ Women	reworded			Grape seed extract=grape_seed_extract; Japanese Knotweed root extract=japanese_knotweed[('resveratrol', None, 50.0)]
-2502	7-Keto DHEA Metabolite 100 mg	added	RULE_IQM_RESVERATROL_BLEEDING		Turmeric extract=turmeric; Whole grape extract (Vitis vinifera) and=japanese_knotweed[('resveratrol', 1.05, 35.0)]
-251553	Doctor's Choice Multivitamin 50+ Men	reworded			Grape seed extract=grape_seed_extract; Japanese Knotweed root extract=japanese_knotweed[('resveratrol', None, 50.0)]
-251683	Resveratrol	added	RULE_IQM_RESVERATROL_BLEEDING		Japanese Knotweed extract=japanese_knotweed[('resveratrol', 75.0, 50.0)]; Grape Seed extract=grape_seed_extract
-255631	Resveratrol	reworded			Resveratrol=resveratrol; Trans-Resveratrol=resveratrol
-259789	Multivitamin Active	reworded			Grape seed extract=grape_seed_extract; Resveratrol=resveratrol
-259818	Circulatory Health	reworded			resVida Trans-Resveratrol=resveratrol
-259831	Mega Men 50 Plus Multivitamin	reworded			Grape Seed Extract=grape_seed_extract; Resveratrol=resveratrol; Turmeric rhizome extract=turmeric; Curcuminoids=curcumin
-261870	Daily Pure Pack Longevity	reworded			Trans-Resveratrol=resveratrol
-261872	Daily Pure Pack Menopause Support	reworded			Grape Seed Extract=grape_seed_extract; Resveratrol=resveratrol
-26370	Red Wine Complex 200 mg	reworded			Grapeseed extract=grape; Resveratrol=resveratrol; Grape extract=grape_seed_extract
-267674	Alive! Energy 50+ Complete Multivitamin	reworded			Grape powder=grape; Resveratrol=resveratrol
-267694	Alive! Max3 Potency Multivitamin	removed		RULE_IQM_RESVERATROL_BLEEDING	Grape powder=grape; Japanese Knotweed Root Extract=japanese_knotweed; Grapefruit=None
-267699	Alive! Max3 Potency Multivitamin	removed		RULE_IQM_RESVERATROL_BLEEDING	Grape powder=grape; Japanese Knotweed Root Extract=japanese_knotweed
-269265	French Red Wine Grape Extract	added	RULE_IQM_RESVERATROL_BLEEDING		BioVin Advanced=grape[('resveratrol', 3.0, 5.0)]
-269797	Resveratrol 500 mg	reworded			Resveratrol=resveratrol
-27160	50 Plus	reworded			Resveratrol=resveratrol
-27312	Enhanced Sleep Formula	reworded			resVida Trans-Resveratrol=resveratrol
-27343	Amplified N.O. Loaded V2 Watermelon	reworded			resVida Trans-Resveratrol=resveratrol
-27346	Amplified N.O. Loaded V2 Fruit Punch	reworded			resVida Trans-Resveratrol=resveratrol
-27350	Amplified Heat Extreme 180	reworded			MegaNatural Gold Grape seed extract=grape_seed_extract; Turmeric Root Extract=turmeric; resVida Resveratrol=resveratrol
-27473	Circulation & Metabolism Support	reworded			resVida Trans-Resveratrol=resveratrol
-277367	Resveratrol Plus+	reworded			Resveratrol Complex=None; Trans-Resveratrol=resveratrol
-277771	Memory Pro	reworded			Turmeric (Curcuma longa) extract=turmeric; Trans-Resveratrol=resveratrol
-277772	Memory Pro	reworded			Turmeric (Curcuma longa) extract=turmeric; Trans-Resveratrol=resveratrol
-277775	MenoVive	reworded			Grape (Vitis vinifera) extract=grape_seed_extract; resVida Resveratrol=resveratrol
-277961	Nrf2 Detox	reworded			resVida Resveratrol=resveratrol
-27808	Amplified Stamina Lemon Tea	reworded			MegaNatural Gold Grape seed extract=grape_seed_extract; resVida(TM) Trans-Resveratrol=resveratrol
-278350	RENUAL	reworded			Trans-Resveratrol=resveratrol
-278351	Resveratrol	reworded			Trans-Resveratrol=resveratrol
-278352	Resveratrol	reworded			Trans-Resveratrol=resveratrol
-278377	VisionPro Nutrients	reworded			resVida Resveratrol=resveratrol
-284255	PolyResveratrol-SR	reworded			Curcumin Phytosome=curcumin; Trans-Resveratrol=resveratrol
-287431	Metabolic Xtra	reworded			resVida Resveratrol=resveratrol
-287467	RevitalAge Ultra	reworded			resVida Resveratrol=resveratrol
-28978	Re-Forge	reworded			resVida Trans-Resveratrol=resveratrol
-28981	Ravage Fruit Punch	reworded			resVida Trans-Resveratrol=resveratrol
-28986	Refine	reworded			Grape seed extract=grape_seed_extract; Grape skin extract=grape_seed_extract; resVida Trans-Resveratrol=resveratrol
-28993	Amplified Stamina Fruit Blast	reworded			MegaNatural Gold Grape seed extract=grape_seed_extract; resVida(TM) Trans-Resveratrol=resveratrol
-29032	Raw Candida Cleanse	reworded			Grapefruit Bioflavonoids=citrus_bioflavonoids; Resveratrol 95%=resveratrol
-29066	Amplified Ripped Watermelon	reworded			resVida(TM) Trans-Resveratrol=resveratrol
-29141	Men's Multi Pack Ultra Man	reworded			Grape seed extract=grape_seed_extract; Resveratrol=resveratrol
-293243	Alive! Men's Ultra Potency Complete Mult	removed		RULE_IQM_RESVERATROL_BLEEDING	Grape, Powder=grape; Japanese Knotweed Root Extract=japanese_knotweed
-293418	Resveratrol-Forte	reworded			Grape fruit extract=grape_seed_extract; Japanese Knotweed Root Extract=japanese_knotweed; Resveratrol=resveratrol
-294024	Metabolic Xtra	reworded			resVida Resveratrol=resveratrol
-294028	Mitochondria-ATP	reworded			Trans-Resveratrol=resveratrol
-294053	Resveratrol VESIsorb	reworded			Resveratrol=resveratrol
-294054	RevitalAge Ultra	reworded			Trans-Resveratrol=resveratrol
-294551	Resveratrol (500 mg)	reworded			Resveratrol=resveratrol
-294552	Resveratrol (500 mg)	reworded			Resveratrol=resveratrol
-294553	Resveratrol (500 mg)	reworded			Resveratrol=resveratrol
-294554	Resveratrol (500 mg)	reworded			Resveratrol=resveratrol
-299032	Balanced Immune	reworded			Meriva Turmeric Phytosome=curcumin; Trans-Resveratrol=resveratrol
-299077	Nrf2 Detox	reworded			
-299751	Mitochondria-ATP	reworded			Trans-Resveratrol=resveratrol
-299752	RevitalAge Ultra	reworded			Trans-Resveratrol=resveratrol
-302512	Alive! Men's Ultra Potency Complete Mult	removed		RULE_IQM_RESVERATROL_BLEEDING	Grape, Powder=grape; Japanese Knotweed root extract=japanese_knotweed; Grapefruit=None
-302515	Alive! Women's Ultra Potency Complete Mu	removed		RULE_IQM_RESVERATROL_BLEEDING	Grape, Powder=grape; Japanese Knotweed root extract=japanese_knotweed; Grape seed extract=grape_seed_extract
-302680	High Potency Trans-Resveratrol 600 mg	reworded			Trans-Resveratrol=resveratrol
-302705	Resveratrol French Red Wine Grape Extrac	added	RULE_IQM_RESVERATROL_BLEEDING		BioVin Advanced=grape[('resveratrol', 3.0, 5.0)]
-304333	Healthy Testosterone	reworded			Trans-Resveratrol=resveratrol
-304446	Eye Health Formula	reworded			Trans-Resveratrol=resveratrol
-304603	50 Plus	reworded			Grape Seed Extract=grape_seed_extract; Resveratrol=resveratrol; Turmeric Rhizome Extract=turmeric
-304604	50 Plus	reworded			Grape seed extract=grape_seed_extract; Resveratrol=resveratrol; Turmeric Rhizome Extract=turmeric; Curcuminoids=curcumin
-304640	Circulatory Health	reworded			Trans-Resveratrol=resveratrol
-307595	Glucose Optimizer	reworded			Resveratrol=resveratrol
-307724	Resveratrol	reworded			Resveratrol=resveratrol; Trans-Resveratrol=resveratrol
-307725	Resveratrol	reworded			Resveratrol=resveratrol; Trans-Resveratrol=resveratrol
-307726	Resveratrol Synergy	reworded			Resveratrol=resveratrol; Trans-Resveratrol=resveratrol; Grape skin extract=grape_seed_extract; Grape Seed Extract=grape_seed_extract
-308324	Ultra Testosterone	reworded			Trans-Resveratrol=resveratrol
-312704	N.O. Charger & Circulatory Pump	reworded			Trans-Resveratrol=resveratrol
-312951	Resveratrol 1000 mg Capsules	reworded			Resveratrol=resveratrol
-313541	NR Longevity	reworded			Trans-Resveratrol=resveratrol
-315092	Circulatory Health	reworded			Trans-Resveratrol=resveratrol
-315307	Healthy Blood Pressure Formula	reworded			Grape Seed Extract=grape_seed_extract; Trans-Resveratrol=resveratrol
-315819	Circulatory Health	reworded			Trans-Resveratrol=resveratrol
-315841	Circulatory Health	reworded			Trans-Resveratrol=resveratrol
-315853	Ultra Testosterone	reworded			Trans-Resveratrol=resveratrol
-316118	Mighty Mojo	reworded			Resveratrol=resveratrol
-317649	N.O. Charger & Circulatory Pump	reworded			Trans-Resveratrol=resveratrol
-31998	Antioxidant & Circulation	reworded			Turmeric Root Extract=turmeric; resVida Trans-Resveratrol=resveratrol
-321367	Raw Resveratrol 350 mg	reworded			Raw Resveratrol Blend=None; RAW Organic Cabernet Sauvignon Grape=grape; Japanese Knotweed, Fermented, Raw=japanese_knotweed; active Trans-Resveratrol=resveratrol
-326161	Daily Greens Plus	reworded			Trans-Resveratrol=resveratrol
-327855	Alive! Daily Energy Complete Multivitami	reworded			Grape, Powder=grape; Resveratrol=resveratrol
-328038	Resveratrol-Forte 175 mg	reworded			Resveratrol=resveratrol; Grape fruit extract=grape_seed_extract
-328108	Alive! Men's Ultra Multivitamin	removed		RULE_IQM_RESVERATROL_BLEEDING	Grape, Powder=grape; Japanese Knotweed Root Extract=japanese_knotweed
-328111	Alive! Men's 50+ Ultra Multivitamin	removed		RULE_IQM_RESVERATROL_BLEEDING	Grape, Powder=grape; Japanese Knotweed root extract=japanese_knotweed; Grapefruit=None
-328119	Alive! Women's 50+ Ultra Multivitamin	removed		RULE_IQM_RESVERATROL_BLEEDING	Grape, Powder=grape; Japanese Knotweed Root Extract=japanese_knotweed
-328272	7-Keto DHEA Metabolite 100 mg	reworded			Curcumin Elite Proprietary CGM Blend=None; Curcuminoids=curcumin; Trans-Resveratrol=resveratrol
-328280	Anti-Alcohol Complex	reworded			Leucoselect Grape Seed Extract=grape_seed_extract; Trans-Resveratrol=resveratrol
-328414	DHEA Complete	reworded			Curcumin Elite Proprietary CGM Blend=None; Curcuminoids=curcumin; Trans-Resveratrol=resveratrol
-328471	Grapeseed Extract 100 mg	reworded			Trans-Resveratrol=resveratrol
-328599	NAD+ Cell Regenerator and Resveratrol El	reworded			Resveratrol Elite Proprietary Blend=None; Trans-Resveratrol=resveratrol
-328616	Optimized Resveratrol	reworded			Resveratrol Elite Proprietary Blend=None; Trans-Resveratrol=resveratrol
-328651	Resveratrol Elite	reworded			Resveratrol Elite Proprietary Blend=None; Trans-Resveratrol=resveratrol
-328750	Triple Action Cruciferous Vegetable Extr	reworded			Trans-Resveratrol=resveratrol
-330070	Resveratrol Capsules 500 mg	reworded			Resveratrol=resveratrol
-330071	Resveratrol 1000 mg Capsules	reworded			Resveratrol=resveratrol
-330515	Resveratrol Powder 1000 mg	reworded			Resveratrol=resveratrol
-330549	Resveratrol Powder 1000 mg	reworded			Resveratrol=resveratrol
-330550	Resveratrol Powder 1000 mg	reworded			Resveratrol=resveratrol
-330551	Resveratrol Powder 1000 mg	reworded			Resveratrol=resveratrol
-330553	Resveratrol Powder 1000 mg	reworded			Resveratrol=resveratrol
-330569	Resveratrol Powder 1000 mg	reworded			Resveratrol=resveratrol
-330570	Resveratrol Powder 1000 mg	reworded			Resveratrol=resveratrol
-331488	Women's Multivitamin 50 Plus	reworded			Turmeric Root Extract=turmeric; Curcuminoids=curcumin; Resveratrol=resveratrol; Grape Seed Extract=grape_seed_extract
-331491	Healthy Aging Antioxidant Formula	reworded			Turmeric Root Extract=turmeric; Curcuminoid=turmeric
-33167	Re-Shred	reworded			MegaNatural(R)-BP(TM) Grape Seed Extract=grape_seed_extract; resVida Trans-Resveratrol=resveratrol
-33233	Re-Feed Chocolate Peanut Butter	reworded			Turmeric=turmeric; resVida Trans-Resveratrol=resveratrol
-33246	Re-Feed Extreme Chocolate	reworded			Turmeric=turmeric; resVida Trans-Resveratrol=resveratrol
-33327	Re-Pump Fruit Punch	reworded			resVida Trans-Resveratrol=resveratrol
-33341	Re-Pump Watermelon	reworded			resVida Trans-Resveratrol=resveratrol
-333872	Alive! Max3 Potency Adult Complete Multi	removed		RULE_IQM_RESVERATROL_BLEEDING	Grape, Powder=grape; Japanese Knotweed Root Extract=japanese_knotweed; Grapefruit=None
-333892	Alive! Men's Ultra Multivitamin	removed		RULE_IQM_RESVERATROL_BLEEDING	Grape, Powder=grape; Japanese Knotweed root extract=japanese_knotweed; Grapefruit=None
-33501	Women's Ultra Mega 50 Plus	reworded			Resveratrol=resveratrol
-33543	Circulation & Metabolism Support	reworded			resVida Trans-Resveratrol=resveratrol
-33605	Blood Flow & Circulation	reworded			resVida Trans-Resveratrol=resveratrol
-33620	Mega Men 50 Plus	reworded			Resveratrol=resveratrol
-336336	PolyResveratrol-SR	reworded			Curcumin Phytosome=curcumin; Trans-Resveratrol=resveratrol
-336346	L-Arginine Plus	reworded			Trans-Resveratrol=resveratrol
-337232	Alive! Men's 50+ Ultra Potency Complete 	removed		RULE_IQM_RESVERATROL_BLEEDING	Grape, Powder=grape; Japanese Knotweed root extract=japanese_knotweed; Grapefruit=None
-337233	Alive! Men's 50+ Ultra Potency Complete 	removed		RULE_IQM_RESVERATROL_BLEEDING	Grape, Powder=grape; Japanese Knotweed root extract=japanese_knotweed; Grapefruit=None
-337238	Alive! Women's Ultra Multivitamin	removed		RULE_IQM_RESVERATROL_BLEEDING	Grape, Powder=grape; Japanese Knotweed Root Extract=japanese_knotweed; Grape Seed Extract=grape_seed_extract
-337875	SynaQuell	reworded			Trans-Resveratrol=resveratrol
-3514	Liver Cleanser	added	RULE_INGREDIENT_CURCUMIN		Turmeric root extract=turmeric[('curcumin', 100.035, 95.0)]
-36103	Krill Oil 1000 +Heart Support	reworded			resVida Trans-Resveratrol=resveratrol
-37146	Men's Multi Ultra Man	reworded			Grape seed extract=grape_seed_extract; Resveratrol=resveratrol
-37250	Re-Feed Vanilla Cake Batter	reworded			Turmeric=turmeric; resVida Trans-Resveratrol=resveratrol
-44483	Resveratrol 500 mg	reworded			Trans-Resveratrol=resveratrol; Polygonum cuspidatum=japanese_knotweed
-46729	Alive! Once Daily Men's 50+	reworded			Grape=grape; Japanese Knotweed=japanese_knotweed[('resveratrol', None, 50.0)]
-47590	Amplified Ripped Fruit Punch	reworded			resVida(TM) Trans-Resveratrol=resveratrol
-49568	Keratin Formula	reworded			Resveratrol=resveratrol; Grapeseed extract=grape
-57498	Women's Ultra Mega 50 Plus Multivitamin	reworded			Turmeric root extract=turmeric; Resveratrol=resveratrol; Grape seed extract=grape_seed_extract
-57501	Healthy Aging Antioxidant Formula	reworded			resVida Trans-Resveratrol=resveratrol; Turmeric root extract=turmeric
-5817	Amplified Muscle Igniter 4X	reworded			Grape seed extract=grape_seed_extract; resVida Trans-Resveratrol=resveratrol
-58854	DHEA Complete	removed		RULE_IQM_RESVERATROL_BLEEDING	BCM-95 Bio-Curcumin Turmeric 25:1 extrac=curcumin; Japanese Knotweed extract and whole Red =None; Japanese Knotweed=japanese_knotweed; whole Red Grape=grape
-60154	High Potency Ultra Man	reworded			Grape Seed Extract=grape_seed_extract; Resveratrol=resveratrol
-60225	High Potency Ultra Woman	reworded			Grape Seed Extract=grape_seed_extract; Resveratrol=resveratrol
-60689	Optimized Resveratrol	reworded			Trans-Resveratrol=resveratrol; Red Grape (fruit) and Wild Blueberry (fr=None
-60754	Optimized Resveratrol with Nicotinamide 	reworded			Trans-Resveratrol=resveratrol; Red Grape (fruit) and Wild Blueberry (fr=None
-60874	Resveratrol With Pterostilbene 100 mg	reworded			Trans-Resveratrol=resveratrol
-60875	Grapeseed Extract With Resveratrol & Pte	reworded			Leucoselect Grape seed extract=grape_seed_extract; Trans-Resveratrol=resveratrol
-60882	Resveratrol With Pterostilbene 20 mg	reworded			Trans-Resveratrol=resveratrol
-61935	Optimized Resveratrol 250 mg With Synerg	reworded			Trans-Resveratrol=resveratrol; Red Grape/Wild Blueberry Blend (Herb/Bot=None; Red Grape=grape; Free Resveratrol=resveratrol
-61991	CR Mimetic Longevity Formula	reworded			Trans-Resveratrol=resveratrol
-62074	Anti-Alcohol Antioxidants With HepatoPro	reworded			Leucoselect Grape seed extract=grape_seed_extract; Trans-Resveratrol=resveratrol
-62632	Trans-Resveratrol 100 With ResVinol	reworded			Trans-Resveratrol=resveratrol; Japanese Knotweed=japanese_knotweed
-62634	Trans-Resveratrol 200 With ResVinol	reworded			Trans-Resveratrol=resveratrol; Japanese Knotweed=japanese_knotweed
-62796	Booster Softgels	reworded			BioVin Full Spectrum Grape Extract=grape; Trans-Resveratrol=resveratrol
-62801	Optimized Resveratrol With NAD + Cell Re	reworded			Trans-Resveratrol=resveratrol; Red Grape=grape; Free Resveratrol=resveratrol; Resveratrol conjugates=None
-63763	Re-Test	reworded			reVida Trans-Resveratrol=resveratrol
-63919	Ravage Fruit Punch	reworded			resVida Trans-Resveratrol=resveratrol
-63920	Ravage Grape	reworded			resVida Trans-Resveratrol=resveratrol
-63921	Ravage Cherry Limeade	reworded			resVida Trans-Resveratrol=resveratrol
-63922	Ravage Fruit Punch	reworded			resVida Trans-Resveratrol=resveratrol
-63973	Ravage Lemon Lime	reworded			resVida Trans-Resveratrol=resveratrol
-63974	Ravage Raspberry Twist	reworded			resVida Trans-Resveratrol=resveratrol
-64473	Whole Grape Extract	reworded			Trans-Resveratrol=resveratrol
-64491	Chromium Ultra	reworded			BCM-95 Bio-Curcumin Turmeric 25:1 extrac=turmeric; Japanese Knotweed extract=japanese_knotweed; Whole Red Grape extract=grape; Trans-Resveratrol=resveratrol
-65048	Resveratrol 250 mg Plus Red Wine Extract	reworded			Resveratrol=resveratrol
-66349	Resveratrol Plus+	reworded			Resveratrol Complex=None; Trans-Resveratrol=resveratrol
-66429	Blood Flow & Circulation	reworded			resVida Trans-Resveratrol=resveratrol
-67290	Amplified N.O. Charger & Circulatory Pum	reworded			resVida Trans-Resveratrol=resveratrol
-69275	Blood Flow & Circulation	reworded			resVida Trans-Resveratrol=resveratrol
-69503	Antioxidant & Circulation	reworded			Turmeric root extract=turmeric; resVida Trans-Resveratrol=resveratrol
-69625	Comfort, Function & Flexibility	added	RULE_INGREDIENT_CURCUMIN		Turmeric root extract=turmeric[('curcumin', 95.0, 95.0)]
-69647	50 Plus	reworded			Turmeric root extract=turmeric; Resveratrol=resveratrol; Grape seed extract=grape_seed_extract
-69658	50 Plus	reworded			Turmeric root extract=turmeric; Resveratrol=resveratrol; Grape seed extract=grape_seed_extract
-69694	Mega Men 50 Plus Multivitamin	reworded			Grape seed extract=grape_seed_extract; resVida Trans-Resveratrol=resveratrol; Turmeric root extract=turmeric
-69698	Healthy Aging Antioxidant Support	reworded			resVida Trans-Resveratrol=resveratrol; Turmeric root extract=turmeric
-69759	Energy & Metabolism Vanilla	reworded			Turmeric root extract=turmeric; resVida Trans-Resveratrol=resveratrol
-69770	Energy & Metabolism Chocolate	reworded			Turmeric root extract=turmeric; resVida Trans-Resveratrol=resveratrol
-70017	Energy & Metabolism Chocolate	reworded			Turmeric root extract=turmeric; resVida Trans-Resveratrol=resveratrol
-70018	Energy & Metabolism Vanilla	reworded			Turmeric root extract=turmeric; resVida Trans-Resveratrol=resveratrol
-70152	Enhanced Sleep Formula	reworded			resVida Trans-Resveratrol=resveratrol
-7088	resVida 30 mg	reworded			resVida Resveratrol=resveratrol
-74526	Anti-Alcohol With HepatoProtection Compl	reworded			Leucoselect Grape extract=grape_seed_extract; Trans-Resveratrol=resveratrol
-74583	AMP Pump XXX Fruit Punch	reworded			Trans-Resveratrol=resveratrol
-74603	Amplified N.O. Loaded V2 Blue Raspberry	reworded			resVida Trans-Resveratrol=resveratrol
-74747	Healthy Blood Sugar Formula	reworded			resVida Trans-Resveratrol=resveratrol
-74753	Amplified Creatine XXX Fruit Punch	reworded			resVida Trans-Resveratrol=resveratrol
-74777	Energy & Metabolism Vanilla	reworded			Turmeric root extract=turmeric; resVida Trans-Resveratrol=resveratrol
-74832	Eye Health Formula	reworded			resVida Trans-Resveratrol=resveratrol
-75571	Energy & Metabolism Chocolate	reworded			Turmeric root extract=turmeric; resVida Trans-Resveratrol=resveratrol
-77114	Cognitive Complex	reworded			Resveratrol=resveratrol
-77801	Alive! Max3 Daily	reworded			Grape=grape; Japanese Knotweed=japanese_knotweed[('resveratrol', None, 50.0)]
-79573	Beyond Raw Infinite Test	reworded			resVida Trans-Resveratrol=resveratrol
-82403	Cellular Antioxidant Formula	reworded			resVida Trans-Resveratrol=resveratrol; Turmeric root extract=turmeric; Turmeric rhizome extract=turmeric
-82607	Liver Cleanser - PM Packet	added	RULE_INGREDIENT_CURCUMIN		Turmeric root extract=turmeric[('curcumin', 95.0, 95.0)]
+id	product	change	rules_added	rules_removed	rules_reworded
+1071	Fish Oil +Resveratrol	reworded			RULE_IQM_RESVERATROL_BLEEDING
+1179	Ravage Fruit Punch	reworded			RULE_IQM_RESVERATROL_BLEEDING
+12800	Ravage Orange	reworded			RULE_IQM_RESVERATROL_BLEEDING
+14168	Rampant	reworded			RULE_IQM_RESVERATROL_BLEEDING
+16374	Total Cleanser	added	RULE_INGREDIENT_CURCUMIN		
+1640	Staminol Rapid Surge	reworded			RULE_IQM_RESVERATROL_BLEEDING
+176055	Amplified Creatine XXX Pink Lemonade	reworded			RULE_IQM_RESVERATROL_BLEEDING
+181895	7-Keto DHEA Metabolite 100 mg	reworded			RULE_IQM_RESVERATROL_BLEEDING
+182477	Optimized NAD+ Cell Regenerator with Resveratrol	reworded			RULE_IQM_RESVERATROL_BLEEDING
+182479	Optimized NAD+ Cell Regenerator with Resveratrol	reworded			RULE_IQM_RESVERATROL_BLEEDING
+18473	Amplified Muscle Igniter 4X	reworded			RULE_IQM_RESVERATROL_BLEEDING
+18477	Amplified Maxertion N.O.	reworded			RULE_IQM_RESVERATROL_BLEEDING
+1851	Liver Formula	added	RULE_INGREDIENT_CURCUMIN		
+185118	Mitochondria-ATP	reworded			RULE_IQM_RESVERATROL_BLEEDING
+185288	EndoLOX	reworded			RULE_IQM_RESVERATROL_BLEEDING
+18538	Amplified Creatine XXX Blue Raspberry	reworded			RULE_IQM_RESVERATROL_BLEEDING
+187546	ResCu-SR	reworded			RULE_IQM_RESVERATROL_BLEEDING
+187549	Resveratrol Extra	reworded			RULE_IQM_RESVERATROL_BLEEDING
+187551	Resveratrol Extra	reworded			RULE_IQM_RESVERATROL_BLEEDING
+19471	Ravage Orange	reworded			RULE_IQM_RESVERATROL_BLEEDING
+201611	Resveratrol 100 mg	reworded			RULE_IQM_RESVERATROL_BLEEDING
+213305	Lean Essentials Multivitamin	reworded			RULE_IQM_RESVERATROL_BLEEDING
+218658	Resveratrol 250 mg with Red Wine Extract	reworded			RULE_IQM_RESVERATROL_BLEEDING
+218664	Resveratrol 250 mg with Red Wine Extract	reworded			RULE_IQM_RESVERATROL_BLEEDING
+219039	Energy & Metabolism Vanilla	reworded			RULE_IQM_RESVERATROL_BLEEDING
+219690	Mitochondria-ATP	reworded			RULE_IQM_RESVERATROL_BLEEDING
+219977	Brain Health Formula	reworded			RULE_IQM_RESVERATROL_BLEEDING
+219992	Eye Health Formula	reworded			RULE_IQM_RESVERATROL_BLEEDING
+221095	Energy & Metabolism Chocolate	reworded			RULE_IQM_RESVERATROL_BLEEDING
+221112	Infinite Test	reworded			RULE_IQM_RESVERATROL_BLEEDING
+221158	Antioxidant & Circulation	reworded			RULE_IQM_RESVERATROL_BLEEDING
+2219	Ravage Grape	reworded			RULE_IQM_RESVERATROL_BLEEDING
+2222	Re-Forge	reworded			RULE_IQM_RESVERATROL_BLEEDING
+2223	Refine	reworded			RULE_IQM_RESVERATROL_BLEEDING
+228798	50 Plus	reworded			RULE_IQM_RESVERATROL_BLEEDING
+228799	50 Plus	reworded			RULE_IQM_RESVERATROL_BLEEDING
+228820	Healthy Blood Pressure Formula	reworded			RULE_IQM_RESVERATROL_BLEEDING
+228978	Total Cleanser	added	RULE_INGREDIENT_CURCUMIN		
+232731	Stem Cell	added	RULE_IQM_RESVERATROL_BLEEDING		
+232760	Anti-Alcohol HepatoProtection Complex	reworded			RULE_IQM_RESVERATROL_BLEEDING
+240149	Healthy Hair	reworded			RULE_IQM_RESVERATROL_BLEEDING
+241284	Flora Cleanse	reworded			RULE_IQM_RESVERATROL_BLEEDING
+242529	Alive! Max3 Potency Multivitamin	reworded			RULE_IQM_RESVERATROL_BLEEDING
+242552	Alive! Max3 Daily Potency Multivitamin	reworded			RULE_IQM_RESVERATROL_BLEEDING
+243680	Eye Health Formula	reworded			RULE_IQM_RESVERATROL_BLEEDING
+243683	Antioxidant & Circulation	reworded			RULE_IQM_RESVERATROL_BLEEDING
+243737	Multivitamin 50 Plus	reworded			RULE_IQM_RESVERATROL_BLEEDING
+246350	Metabolic Xtra	reworded			RULE_IQM_RESVERATROL_BLEEDING
+247017	Ultra Pure Pack	reworded			RULE_IQM_RESVERATROL_BLEEDING
+247312	RevitalAge Ultra	reworded			RULE_IQM_RESVERATROL_BLEEDING
+247379	VisionPro Nutrients without Zinc	reworded			RULE_IQM_RESVERATROL_BLEEDING
+249518	Doctor's Choice Multivitamin 45+ Women	reworded			RULE_IQM_RESVERATROL_BLEEDING
+2502	7-Keto DHEA Metabolite 100 mg	added	RULE_IQM_RESVERATROL_BLEEDING		
+251553	Doctor's Choice Multivitamin 50+ Men	reworded			RULE_IQM_RESVERATROL_BLEEDING
+251683	Resveratrol	added	RULE_IQM_RESVERATROL_BLEEDING		
+255631	Resveratrol	reworded			RULE_IQM_RESVERATROL_BLEEDING
+259789	Multivitamin Active	reworded			RULE_IQM_RESVERATROL_BLEEDING
+259818	Circulatory Health	reworded			RULE_IQM_RESVERATROL_BLEEDING
+259831	Mega Men 50 Plus Multivitamin	reworded			RULE_IQM_RESVERATROL_BLEEDING
+261870	Daily Pure Pack Longevity	reworded			RULE_IQM_RESVERATROL_BLEEDING
+261872	Daily Pure Pack Menopause Support	reworded			RULE_IQM_RESVERATROL_BLEEDING
+26370	Red Wine Complex 200 mg	reworded			RULE_IQM_RESVERATROL_BLEEDING
+267674	Alive! Energy 50+ Complete Multivitamin	reworded			RULE_IQM_RESVERATROL_BLEEDING
+267694	Alive! Max3 Potency Multivitamin	reworded			RULE_IQM_RESVERATROL_BLEEDING
+267699	Alive! Max3 Potency Multivitamin	reworded			RULE_IQM_RESVERATROL_BLEEDING
+269265	French Red Wine Grape Extract	added	RULE_IQM_RESVERATROL_BLEEDING		
+269797	Resveratrol 500 mg	reworded			RULE_IQM_RESVERATROL_BLEEDING
+27160	50 Plus	reworded			RULE_IQM_RESVERATROL_BLEEDING
+27312	Enhanced Sleep Formula	reworded			RULE_IQM_RESVERATROL_BLEEDING
+27343	Amplified N.O. Loaded V2 Watermelon	reworded			RULE_IQM_RESVERATROL_BLEEDING
+27346	Amplified N.O. Loaded V2 Fruit Punch	reworded			RULE_IQM_RESVERATROL_BLEEDING
+27350	Amplified Heat Extreme 180	reworded			RULE_IQM_RESVERATROL_BLEEDING
+27473	Circulation & Metabolism Support	reworded			RULE_IQM_RESVERATROL_BLEEDING
+277367	Resveratrol Plus+	reworded			RULE_IQM_RESVERATROL_BLEEDING
+277771	Memory Pro	reworded			RULE_IQM_RESVERATROL_BLEEDING
+277772	Memory Pro	reworded			RULE_IQM_RESVERATROL_BLEEDING
+277775	MenoVive	reworded			RULE_IQM_RESVERATROL_BLEEDING
+277961	Nrf2 Detox	reworded			RULE_IQM_RESVERATROL_BLEEDING
+27808	Amplified Stamina Lemon Tea	reworded			RULE_IQM_RESVERATROL_BLEEDING
+278350	RENUAL	reworded			RULE_IQM_RESVERATROL_BLEEDING
+278351	Resveratrol	reworded			RULE_IQM_RESVERATROL_BLEEDING
+278352	Resveratrol	reworded			RULE_IQM_RESVERATROL_BLEEDING
+278377	VisionPro Nutrients	reworded			RULE_IQM_RESVERATROL_BLEEDING
+284255	PolyResveratrol-SR	reworded			RULE_IQM_RESVERATROL_BLEEDING
+287431	Metabolic Xtra	reworded			RULE_IQM_RESVERATROL_BLEEDING
+287467	RevitalAge Ultra	reworded			RULE_IQM_RESVERATROL_BLEEDING
+28978	Re-Forge	reworded			RULE_IQM_RESVERATROL_BLEEDING
+28981	Ravage Fruit Punch	reworded			RULE_IQM_RESVERATROL_BLEEDING
+28986	Refine	reworded			RULE_IQM_RESVERATROL_BLEEDING
+28993	Amplified Stamina Fruit Blast	reworded			RULE_IQM_RESVERATROL_BLEEDING
+29032	Raw Candida Cleanse	reworded			RULE_IQM_RESVERATROL_BLEEDING
+29066	Amplified Ripped Watermelon	reworded			RULE_IQM_RESVERATROL_BLEEDING
+29141	Men's Multi Pack Ultra Man	reworded			RULE_IQM_RESVERATROL_BLEEDING
+293243	Alive! Men's Ultra Potency Complete Multivitamin	reworded			RULE_IQM_RESVERATROL_BLEEDING
+293418	Resveratrol-Forte	reworded			RULE_IQM_RESVERATROL_BLEEDING
+294024	Metabolic Xtra	reworded			RULE_IQM_RESVERATROL_BLEEDING
+294028	Mitochondria-ATP	reworded			RULE_IQM_RESVERATROL_BLEEDING
+294053	Resveratrol VESIsorb	reworded			RULE_IQM_RESVERATROL_BLEEDING
+294054	RevitalAge Ultra	reworded			RULE_IQM_RESVERATROL_BLEEDING
+294551	Resveratrol (500 mg)	reworded			RULE_IQM_RESVERATROL_BLEEDING
+294552	Resveratrol (500 mg)	reworded			RULE_IQM_RESVERATROL_BLEEDING
+294553	Resveratrol (500 mg)	reworded			RULE_IQM_RESVERATROL_BLEEDING
+294554	Resveratrol (500 mg)	reworded			RULE_IQM_RESVERATROL_BLEEDING
+299032	Balanced Immune	reworded			RULE_IQM_RESVERATROL_BLEEDING
+299077	Nrf2 Detox	reworded			RULE_IQM_RESVERATROL_BLEEDING
+299751	Mitochondria-ATP	reworded			RULE_IQM_RESVERATROL_BLEEDING
+299752	RevitalAge Ultra	reworded			RULE_IQM_RESVERATROL_BLEEDING
+302512	Alive! Men's Ultra Potency Complete Multivitamin	reworded			RULE_IQM_RESVERATROL_BLEEDING
+302515	Alive! Women's Ultra Potency Complete Multivitamin	reworded			RULE_IQM_RESVERATROL_BLEEDING
+302680	High Potency Trans-Resveratrol 600 mg	reworded			RULE_IQM_RESVERATROL_BLEEDING
+302705	Resveratrol French Red Wine Grape Extract	added	RULE_IQM_RESVERATROL_BLEEDING		
+304333	Healthy Testosterone	reworded			RULE_IQM_RESVERATROL_BLEEDING
+304446	Eye Health Formula	reworded			RULE_IQM_RESVERATROL_BLEEDING
+304603	50 Plus	reworded			RULE_IQM_RESVERATROL_BLEEDING
+304604	50 Plus	reworded			RULE_IQM_RESVERATROL_BLEEDING
+304640	Circulatory Health	reworded			RULE_IQM_RESVERATROL_BLEEDING
+307595	Glucose Optimizer	reworded			RULE_IQM_RESVERATROL_BLEEDING
+307724	Resveratrol	reworded			RULE_IQM_RESVERATROL_BLEEDING
+307725	Resveratrol	reworded			RULE_IQM_RESVERATROL_BLEEDING
+307726	Resveratrol Synergy	reworded			RULE_IQM_RESVERATROL_BLEEDING
+308324	Ultra Testosterone	reworded			RULE_IQM_RESVERATROL_BLEEDING
+312704	N.O. Charger & Circulatory Pump	reworded			RULE_IQM_RESVERATROL_BLEEDING
+312951	Resveratrol 1000 mg Capsules	reworded			RULE_IQM_RESVERATROL_BLEEDING
+313541	NR Longevity	reworded			RULE_IQM_RESVERATROL_BLEEDING
+315092	Circulatory Health	reworded			RULE_IQM_RESVERATROL_BLEEDING
+315307	Healthy Blood Pressure Formula	reworded			RULE_IQM_RESVERATROL_BLEEDING
+315819	Circulatory Health	reworded			RULE_IQM_RESVERATROL_BLEEDING
+315841	Circulatory Health	reworded			RULE_IQM_RESVERATROL_BLEEDING
+315853	Ultra Testosterone	reworded			RULE_IQM_RESVERATROL_BLEEDING
+316118	Mighty Mojo	reworded			RULE_IQM_RESVERATROL_BLEEDING
+317649	N.O. Charger & Circulatory Pump	reworded			RULE_IQM_RESVERATROL_BLEEDING
+31998	Antioxidant & Circulation	reworded			RULE_IQM_RESVERATROL_BLEEDING
+321367	Raw Resveratrol 350 mg	reworded			RULE_IQM_RESVERATROL_BLEEDING
+326161	Daily Greens Plus	reworded			RULE_IQM_RESVERATROL_BLEEDING
+327855	Alive! Daily Energy Complete Multivitamin	reworded			RULE_IQM_RESVERATROL_BLEEDING
+328038	Resveratrol-Forte 175 mg	reworded			RULE_IQM_RESVERATROL_BLEEDING
+328108	Alive! Men's Ultra Multivitamin	reworded			RULE_IQM_RESVERATROL_BLEEDING
+328111	Alive! Men's 50+ Ultra Multivitamin	reworded			RULE_IQM_RESVERATROL_BLEEDING
+328119	Alive! Women's 50+ Ultra Multivitamin	reworded			RULE_IQM_RESVERATROL_BLEEDING
+328272	7-Keto DHEA Metabolite 100 mg	reworded			RULE_IQM_RESVERATROL_BLEEDING
+328280	Anti-Alcohol Complex	reworded			RULE_IQM_RESVERATROL_BLEEDING
+328414	DHEA Complete	reworded			RULE_IQM_RESVERATROL_BLEEDING
+328471	Grapeseed Extract 100 mg	reworded			RULE_IQM_RESVERATROL_BLEEDING
+328599	NAD+ Cell Regenerator and Resveratrol Elite	reworded			RULE_IQM_RESVERATROL_BLEEDING
+328616	Optimized Resveratrol	reworded			RULE_IQM_RESVERATROL_BLEEDING
+328651	Resveratrol Elite	reworded			RULE_IQM_RESVERATROL_BLEEDING
+328750	Triple Action Cruciferous Vegetable Extract and Resveratrol	reworded			RULE_IQM_RESVERATROL_BLEEDING
+330070	Resveratrol Capsules 500 mg	reworded			RULE_IQM_RESVERATROL_BLEEDING
+330071	Resveratrol 1000 mg Capsules	reworded			RULE_IQM_RESVERATROL_BLEEDING
+330515	Resveratrol Powder 1000 mg	reworded			RULE_IQM_RESVERATROL_BLEEDING
+330549	Resveratrol Powder 1000 mg	reworded			RULE_IQM_RESVERATROL_BLEEDING
+330550	Resveratrol Powder 1000 mg	reworded			RULE_IQM_RESVERATROL_BLEEDING
+330551	Resveratrol Powder 1000 mg	reworded			RULE_IQM_RESVERATROL_BLEEDING
+330553	Resveratrol Powder 1000 mg	reworded			RULE_IQM_RESVERATROL_BLEEDING
+330569	Resveratrol Powder 1000 mg	reworded			RULE_IQM_RESVERATROL_BLEEDING
+330570	Resveratrol Powder 1000 mg	reworded			RULE_IQM_RESVERATROL_BLEEDING
+331488	Women's Multivitamin 50 Plus	reworded			RULE_IQM_RESVERATROL_BLEEDING
+331491	Healthy Aging Antioxidant Formula	reworded			RULE_IQM_RESVERATROL_BLEEDING
+33167	Re-Shred	reworded			RULE_IQM_RESVERATROL_BLEEDING
+33233	Re-Feed Chocolate Peanut Butter	reworded			RULE_IQM_RESVERATROL_BLEEDING
+33246	Re-Feed Extreme Chocolate	reworded			RULE_IQM_RESVERATROL_BLEEDING
+33327	Re-Pump Fruit Punch	reworded			RULE_IQM_RESVERATROL_BLEEDING
+33341	Re-Pump Watermelon	reworded			RULE_IQM_RESVERATROL_BLEEDING
+333872	Alive! Max3 Potency Adult Complete Multivitamin Tablets with Iron	reworded			RULE_IQM_RESVERATROL_BLEEDING
+333892	Alive! Men's Ultra Multivitamin	reworded			RULE_IQM_RESVERATROL_BLEEDING
+33501	Women's Ultra Mega 50 Plus	reworded			RULE_IQM_RESVERATROL_BLEEDING
+33543	Circulation & Metabolism Support	reworded			RULE_IQM_RESVERATROL_BLEEDING
+33605	Blood Flow & Circulation	reworded			RULE_IQM_RESVERATROL_BLEEDING
+33620	Mega Men 50 Plus	reworded			RULE_IQM_RESVERATROL_BLEEDING
+336336	PolyResveratrol-SR	reworded			RULE_IQM_RESVERATROL_BLEEDING
+336346	L-Arginine Plus	reworded			RULE_IQM_RESVERATROL_BLEEDING
+337232	Alive! Men's 50+ Ultra Potency Complete Multivitamin	reworded			RULE_IQM_RESVERATROL_BLEEDING
+337233	Alive! Men's 50+ Ultra Potency Complete Multivitamin	reworded			RULE_IQM_RESVERATROL_BLEEDING
+337238	Alive! Women's Ultra Multivitamin	reworded			RULE_IQM_RESVERATROL_BLEEDING
+337875	SynaQuell	reworded			RULE_IQM_RESVERATROL_BLEEDING
+3514	Liver Cleanser	added	RULE_INGREDIENT_CURCUMIN		
+36103	Krill Oil 1000 +Heart Support	reworded			RULE_IQM_RESVERATROL_BLEEDING
+37146	Men's Multi Ultra Man	reworded			RULE_IQM_RESVERATROL_BLEEDING
+37250	Re-Feed Vanilla Cake Batter	reworded			RULE_IQM_RESVERATROL_BLEEDING
+44483	Resveratrol 500 mg	reworded			RULE_IQM_RESVERATROL_BLEEDING
+46729	Alive! Once Daily Men's 50+	reworded			RULE_IQM_RESVERATROL_BLEEDING
+47590	Amplified Ripped Fruit Punch	reworded			RULE_IQM_RESVERATROL_BLEEDING
+49568	Keratin Formula	reworded			RULE_IQM_RESVERATROL_BLEEDING
+57498	Women's Ultra Mega 50 Plus Multivitamin	reworded			RULE_IQM_RESVERATROL_BLEEDING
+57501	Healthy Aging Antioxidant Formula	reworded			RULE_IQM_RESVERATROL_BLEEDING
+5817	Amplified Muscle Igniter 4X	reworded			RULE_IQM_RESVERATROL_BLEEDING
+58854	DHEA Complete	reworded			RULE_IQM_RESVERATROL_BLEEDING
+60154	High Potency Ultra Man	reworded			RULE_IQM_RESVERATROL_BLEEDING
+60225	High Potency Ultra Woman	reworded			RULE_IQM_RESVERATROL_BLEEDING
+60689	Optimized Resveratrol	reworded			RULE_IQM_RESVERATROL_BLEEDING
+60754	Optimized Resveratrol with Nicotinamide Riboside	reworded			RULE_IQM_RESVERATROL_BLEEDING
+60874	Resveratrol With Pterostilbene 100 mg	reworded			RULE_IQM_RESVERATROL_BLEEDING
+60875	Grapeseed Extract With Resveratrol & Pterostilbene	reworded			RULE_IQM_RESVERATROL_BLEEDING
+60882	Resveratrol With Pterostilbene 20 mg	reworded			RULE_IQM_RESVERATROL_BLEEDING
+61935	Optimized Resveratrol 250 mg With Synergistic Grape-Berry Actives	reworded			RULE_IQM_RESVERATROL_BLEEDING
+61991	CR Mimetic Longevity Formula	reworded			RULE_IQM_RESVERATROL_BLEEDING
+62074	Anti-Alcohol Antioxidants With HepatoProtection Complex	reworded			RULE_IQM_RESVERATROL_BLEEDING
+62632	Trans-Resveratrol 100 With ResVinol	reworded			RULE_IQM_RESVERATROL_BLEEDING
+62634	Trans-Resveratrol 200 With ResVinol	reworded			RULE_IQM_RESVERATROL_BLEEDING
+62796	Booster Softgels	reworded			RULE_IQM_RESVERATROL_BLEEDING
+62801	Optimized Resveratrol With NAD + Cell Regenerator	reworded			RULE_IQM_RESVERATROL_BLEEDING
+63763	Re-Test	reworded			RULE_IQM_RESVERATROL_BLEEDING
+63919	Ravage Fruit Punch	reworded			RULE_IQM_RESVERATROL_BLEEDING
+63920	Ravage Grape	reworded			RULE_IQM_RESVERATROL_BLEEDING
+63921	Ravage Cherry Limeade	reworded			RULE_IQM_RESVERATROL_BLEEDING
+63922	Ravage Fruit Punch	reworded			RULE_IQM_RESVERATROL_BLEEDING
+63973	Ravage Lemon Lime	reworded			RULE_IQM_RESVERATROL_BLEEDING
+63974	Ravage Raspberry Twist	reworded			RULE_IQM_RESVERATROL_BLEEDING
+64473	Whole Grape Extract	reworded			RULE_IQM_RESVERATROL_BLEEDING
+64491	Chromium Ultra	reworded			RULE_IQM_RESVERATROL_BLEEDING
+65048	Resveratrol 250 mg Plus Red Wine Extract	reworded			RULE_IQM_RESVERATROL_BLEEDING
+66349	Resveratrol Plus+	reworded			RULE_IQM_RESVERATROL_BLEEDING
+66429	Blood Flow & Circulation	reworded			RULE_IQM_RESVERATROL_BLEEDING
+67290	Amplified N.O. Charger & Circulatory Pump	reworded			RULE_IQM_RESVERATROL_BLEEDING
+69275	Blood Flow & Circulation	reworded			RULE_IQM_RESVERATROL_BLEEDING
+69503	Antioxidant & Circulation	reworded			RULE_IQM_RESVERATROL_BLEEDING
+69625	Comfort, Function & Flexibility	added	RULE_INGREDIENT_CURCUMIN		
+69647	50 Plus	reworded			RULE_IQM_RESVERATROL_BLEEDING
+69658	50 Plus	reworded			RULE_IQM_RESVERATROL_BLEEDING
+69694	Mega Men 50 Plus Multivitamin	reworded			RULE_IQM_RESVERATROL_BLEEDING
+69698	Healthy Aging Antioxidant Support	reworded			RULE_IQM_RESVERATROL_BLEEDING
+69759	Energy & Metabolism Vanilla	reworded			RULE_IQM_RESVERATROL_BLEEDING
+69770	Energy & Metabolism Chocolate	reworded			RULE_IQM_RESVERATROL_BLEEDING
+70017	Energy & Metabolism Chocolate	reworded			RULE_IQM_RESVERATROL_BLEEDING
+70018	Energy & Metabolism Vanilla	reworded			RULE_IQM_RESVERATROL_BLEEDING
+70152	Enhanced Sleep Formula	reworded			RULE_IQM_RESVERATROL_BLEEDING
+7088	resVida 30 mg	reworded			RULE_IQM_RESVERATROL_BLEEDING
+74526	Anti-Alcohol With HepatoProtection Complex	reworded			RULE_IQM_RESVERATROL_BLEEDING
+74583	AMP Pump XXX Fruit Punch	reworded			RULE_IQM_RESVERATROL_BLEEDING
+74603	Amplified N.O. Loaded V2 Blue Raspberry	reworded			RULE_IQM_RESVERATROL_BLEEDING
+74747	Healthy Blood Sugar Formula	reworded			RULE_IQM_RESVERATROL_BLEEDING
+74753	Amplified Creatine XXX Fruit Punch	reworded			RULE_IQM_RESVERATROL_BLEEDING
+74777	Energy & Metabolism Vanilla	reworded			RULE_IQM_RESVERATROL_BLEEDING
+74832	Eye Health Formula	reworded			RULE_IQM_RESVERATROL_BLEEDING
+75571	Energy & Metabolism Chocolate	reworded			RULE_IQM_RESVERATROL_BLEEDING
+77114	Cognitive Complex	reworded			RULE_IQM_RESVERATROL_BLEEDING
+77801	Alive! Max3 Daily	reworded			RULE_IQM_RESVERATROL_BLEEDING
+79573	Beyond Raw Infinite Test	reworded			RULE_IQM_RESVERATROL_BLEEDING
+82403	Cellular Antioxidant Formula	reworded			RULE_IQM_RESVERATROL_BLEEDING
+82607	Liver Cleanser - PM Packet	added	RULE_INGREDIENT_CURCUMIN		

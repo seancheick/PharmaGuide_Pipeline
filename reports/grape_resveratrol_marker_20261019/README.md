@@ -53,20 +53,30 @@ Grape stays linked only by a declared percentage, the standard its evidence supp
 ## Replay
 
 Every raw label mentioning resveratrol, knotweed, Hu Zhang, Polygonum cuspidatum or BioVin, every
-label whose row notes name a marker keyword, and 200 controls (1,478 labels). Base main 3d7fe8adf
+label whose row notes name a marker keyword, and 200 controls (1,478 labels). Base main 8f9c22e09
 vs this branch, `--full --blob`. Records: `~/pg_quality/lostsubj_pr199_20261020/`
-(`base_rv.jsonl`, `cand_rv.jsonl`, `fulldiff_rv.out`).
+(`base2_rv.jsonl`, `cand2_rv.jsonl`, `fulldiff2_rv.out`). Per product: `replay_changes.tsv`,
+regenerated from those captures by `replay_changes.py`.
 
 - **Rules added (11):**
   - RULE_INGREDIENT_CURCUMIN ×6, on turmeric rows whose notes declare 95% curcuminoids: 1851,
-    3514, 16374, 69625, 82607, 228978.
+    3514, 16374, 69625, 82607, 228978. Correct, but outside Sean's stated scope; **for Sean**.
   - RULE_IQM_RESVERATROL_BLEEDING ×5: BioVin 269265, 302705; knotweed declaring 50% (251683) and
     98% (232731); knotweed + grape header declaring 35% (2502).
-- **Rules removed: 0.** The 13 Alive! multivitamins with undeclared "Japanese Knotweed Root
-  Extract", and 58854 DHEA Complete, keep the qualified advisory through the knotweed
-  relationship.
-- **Reworded:** the qualified advisory text on every product carrying the resveratrol rule.
+- **Rules removed: 0.** The 13 Alive! multivitamins with undeclared knotweed, and 58854, keep the
+  qualified advisory through the knotweed relationship.
+- **Reworded: 229**, the qualified advisory text on every product carrying the resveratrol rule.
 - **0 score changes, 0 product_safety_status changes.**
-- Merged main 3d7fe8adf; the IQM conflict was re-applied with `data_batch.py check`.
-- Slow file `test_clean_unmapped_alias_regressions.py` (BioVin → Grape pin), run by name: pass.
-  No other SLOW_TEST_FILES entry pins BioVin, cabbage palm, wheatgrass or green bell pepper.
+- **Markers in the blob:**
+  - 4 grape → resveratrol markers, all from a declared percentage (BioVin Advanced). No grape-seed
+    or grape-PAC row carries one.
+  - `declared_standardization_pct` appears in no exported row.
+- Merged main 8f9c22e09; the IQM conflict was re-applied and checked with `data_batch.py check`.
+- The slow file `test_clean_unmapped_alias_regressions.py` (BioVin → Grape pin) passes when run by
+  name. No other SLOW_TEST_FILES entry pins BioVin, cabbage palm, wheatgrass or green bell pepper.
+
+## For Sean
+
+- The pregnancy section of RULE_IQM_RESVERATROL_BLEEDING ("avoid routine high-dose
+  self-supplementation") now also reaches BioVin and knotweed products.
+- +6 RULE_INGREDIENT_CURCUMIN from turmeric "95%" notes (above).
