@@ -3891,7 +3891,15 @@ _STANDARDIZATION_COMPOUNDS = (
     "boswellic acid", "curcuminoids", "ginsenosides", "rosavins",
     "bacosides", "saponins", "piperine", "EGCG", "silymarin",
     "epigallocatechin gallate",
+    # Verified label wordings (2026-10-20): Sensoril's ">=10% withanolide
+    # glycoside conjugates", "95% Curcumin" on turmeric labels (shown as
+    # written), and Rhodiola's salidroside marker.
+    "withanolide glycoside conjugates", "glycoside conjugates", "curcumin",
+    "salidrosides", "salidroside",
 )
+# A row whose notes are only a percentage ("80%", "min. 95%") and whose label
+# name is itself a recognized compound ("Silymarin") states that compound's %.
+_BARE_PERCENT_RE = re.compile(r"^(?:min\.?|minimum|at least)?\s*(\d{1,3})%\+?$", re.IGNORECASE)
 # The same compound under its full name ("50% Epigallocatechin Gallate").
 _STANDARDIZATION_SYNONYMS = {"epigallocatechin gallate": "EGCG"}
 _STANDARDIZATION_RE = re.compile(
@@ -3904,9 +3912,25 @@ _STANDARDIZATION_RE = re.compile(
     # so the "5" in "5.5%" or "10-20%" never matches alone.
     r"(?<![\d\-\.\u2013\u2014])(\d{1,3})%\+?\s+(?:total\s+)?("
     + "|".join(re.escape(c) for c in sorted(_STANDARDIZATION_COMPOUNDS, key=len, reverse=True))
-    + r")\b",
+    # Never an absorption or bioavailability figure ("50% curcumin absorption").
+    + r")\b(?!\s+(?:absorption|absorbed|bioavailab\w*|uptake|retention|survival))",
     re.IGNORECASE,
 )
+_MASS_TO_MG = {"mcg": 0.001, "mg": 1.0, "g": 1000.0, "kg": 1_000_000.0}
+
+
+def _share_of_parent_pct(ingredient: Dict[str, Any]) -> Optional[float]:
+    """The row's quantity as a percent of its parent's, when both are masses."""
+    from normalization import canonicalize_mass_unit
+    try:
+        qty, parent = float(ingredient.get("quantity")), float(ingredient.get("parentBlendMass"))
+    except (TypeError, ValueError):
+        return None
+    qty_f = _MASS_TO_MG.get(canonicalize_mass_unit(str(ingredient.get("unit") or "")))
+    parent_f = _MASS_TO_MG.get(canonicalize_mass_unit(str(ingredient.get("parentBlendUnit") or "")))
+    if not (qty > 0 and parent > 0 and qty_f and parent_f):
+        return None
+    return 100.0 * qty * qty_f / (parent * parent_f)
 
 
 def _compute_standardization_note(ingredient: Dict[str, Any]) -> Optional[str]:
@@ -3939,12 +3963,25 @@ def _compute_standardization_note(ingredient: Dict[str, Any]) -> Optional[str]:
     compound_by_lower = {c.lower(): c for c in _STANDARDIZATION_COMPOUNDS}
     compound_by_lower.update(_STANDARDIZATION_SYNONYMS)
     for text in candidates:
-        m = _STANDARDIZATION_RE.search(text)
-        if m:
+        for m in _STANDARDIZATION_RE.finditer(text):
+            if not 1 <= int(m.group(1)) <= 100:
+                continue
             pct = m.group(1)
             compound_raw = m.group(2)
             compound_canonical = compound_by_lower.get(compound_raw.lower(), compound_raw)
             return f"{pct}% {compound_canonical}"
+    bare = _BARE_PERCENT_RE.match(notes.strip()) if isinstance(notes, str) else None
+    name = raw.strip().lower() if isinstance(raw, str) else ""
+    if bare and name in compound_by_lower and 1 <= int(bare.group(1)) <= 100:
+        pct = int(bare.group(1))
+        # A nested marker row's % must be its share of the parent it sits
+        # under: Jarrow's "15%" EGCG is 15 mg of a 500 mg extract (3%; the
+        # 15% is of the catechins), while 950 mg curcuminoids of a 1 g
+        # extract is 95%.
+        share = _share_of_parent_pct(ingredient)
+        if share is not None and abs(share - pct) > max(1.0, 0.05 * pct):
+            return None
+        return f"{pct}% {compound_by_lower[name]}"
     return None
 
 
@@ -6974,6 +7011,7 @@ def build_detail_blob(
                 # The label row's own notes, never the match's IQM notes.
                 "notes": ing.get("notes"),
                 "raw_source_text": ing.get("raw_source_text"),
+                **{key: ing.get(key) for key in ("quantity", "unit", "parentBlendMass", "parentBlendUnit")},
             }),
             # Sprint E1.3.2 — per-strain clinical support (None when not a
             # matched clinical strain OR when per-strain CFU isn't
