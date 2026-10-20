@@ -2526,13 +2526,12 @@ class TestParentTotalFlagging:
     def test_collect_marks_algal_dha_source_total_when_dha_constituent_disclosed(self, enricher, monkeypatch):
         """Branded algal-oil source rows can canonicalize to DHA while the
         nested child discloses the actual DHA amount under Total Omega-3.
-        The source row should be excluded from A1 double-counting.
+        The source row should be excluded from A1 double-counting. The row name is
+        synthetic: the real "life'sOmega" is now a curated algae_oil alias (305211).
         """
 
         def fake_match_quality_map(ing_name, std_name, quality_map, cleaned_forms=None, branded_token=None, **kwargs):
             canonical_id = "dha" if "docosahexaenoic" in ing_name.lower() or "omega" in ing_name.lower() else "epa"
-            if "life" in ing_name.lower():
-                canonical_id = "dha"
             return {
                 "standard_name": ing_name,
                 "canonical_id": canonical_id,
@@ -2551,8 +2550,8 @@ class TestParentTotalFlagging:
             "fullName": "Vegan Omega-3 Algae Oil",
             "activeIngredients": [
                 {
-                    "name": "life'sOmega",
-                    "standardName": "life'sOmega",
+                    "name": "Omega Algal Source",
+                    "standardName": "Omega Algal Source",
                     "quantity": 1400,
                     "unit": "mg",
                     "isNestedIngredient": False,
@@ -2571,7 +2570,7 @@ class TestParentTotalFlagging:
 
         result = enricher._collect_ingredient_quality_data(product)
         by_name = {ing["name"]: ing for ing in result["ingredients_scorable"]}
-        assert by_name["life'sOmega"]["is_parent_total"] is True
+        assert by_name["Omega Algal Source"]["is_parent_total"] is True
         assert by_name["Docosahexaenoic Acid"]["is_parent_total"] is False
 
     def test_collect_does_not_flag_when_no_nested_children(self, enricher, monkeypatch):

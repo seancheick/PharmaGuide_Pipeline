@@ -4178,6 +4178,7 @@ class EnhancedDSLDNormalizer:
         depth: int = 0,
         parent_label: Optional[str] = None,
         parent_source_path: Optional[str] = None,
+        parent_category: Optional[str] = None,
     ) -> None:
         if not isinstance(rows, list):
             return
@@ -4187,6 +4188,11 @@ class EnhancedDSLDNormalizer:
             path = f"{base_path}[{idx}]"
             row.setdefault("raw_source_path", path)
             row.setdefault("_raw_nested_depth", depth)
+            if parent_category is not None:
+                # Working state for _is_chemical_decomposition_leaf: a member
+                # of a DSLD blend is an ingredient, not a decomposition of a
+                # parent compound. Output rows are rebuilt and never copy it.
+                row.setdefault("_raw_parent_category", parent_category)
             original_raw_source_text = (
                 "" if row.get("name") is None else str(row.get("name"))
             )
@@ -4237,6 +4243,7 @@ class EnhancedDSLDNormalizer:
                     depth + 1,
                     parent_label=str(row.get("name") or "").strip() or parent_label,
                     parent_source_path=path,
+                    parent_category=str(row.get("category") or "").strip().casefold(),
                 )
             forms = row.get("forms")
             if isinstance(forms, list):
@@ -4831,29 +4838,7 @@ class EnhancedDSLDNormalizer:
             name = ing.get("name", "")
             nested = ing.get("nestedRows", [])
 
-            # DSLD can place an enzyme's source organisms in nestedRows,
-            # rather than forms[]. An explicit parent-owned "proteases from"
-            # clause identifies provenance, not live cultures or fruit doses.
-            # Keep the source rows and their NP amounts without borrowing the
-            # enzyme preparation's mass. Separately quantified children and
-            # enzyme members retain their ordinary handling.
-            source_notes = str(ing.get("notes") or "")
-            if (str(ing.get("category") or "").casefold() in {"enzyme", "blend"}
-                    and re.search(r"\b(?:enzymes?|proteases?)\s+(?:derived\s+)?from\b", source_notes, re.I)):
-                for child in nested:
-                    if not isinstance(child, dict):
-                        continue
-                    _, _, _, variants = self._process_quantity(child.get("quantity"))
-                    if (str(child.get("category") or "").casefold() in {"botanical", "bacteria", "animal part or source", "plant part", "source material"}
-                            and not child.get("nestedRows") and not child.get("forms")
-                            and all(variant.get("quantity") == 0
-                                    and str(variant.get("unit") or "").casefold() == "np"
-                                    and variant.get("quantity_parsed") is not False
-                                    for variant in variants)
-                            and not re.search(r"\b(?:cfu|live|viable)\b|colony[- ]forming", " ".join(
-                                str(child.get(key) or "") for key in ("name", "notes", "description")
-                            ), re.I)):
-                        child["_enzyme_source_descriptor"] = True
+            self._mark_enzyme_source_descriptors(ing, nested)
 
             # DSLD explicitly marks structural section headings with
             # ingredientGroup="Header". The heading is label context, not an
@@ -4942,6 +4927,7 @@ class EnhancedDSLDNormalizer:
                 for nested_ing in self._lift_decomposition_members(nested):
                     nested_name = nested_ing.get("name", "")
                     if self._should_skip_ingredient(nested_name) and not self._is_probiotic_cfu_total_row(nested_ing):
+                        flattened.extend(self._rescue_skipped_nested_row(nested_ing, _depth))
                         continue
                     if self._is_chemical_decomposition_leaf(nested_ing):
                         logger.debug(
@@ -4984,6 +4970,7 @@ class EnhancedDSLDNormalizer:
                 for nested_ing in self._lift_decomposition_members(nested):
                     nested_name = nested_ing.get("name", "")
                     if self._should_skip_ingredient(nested_name) and not self._is_probiotic_cfu_total_row(nested_ing):
+                        flattened.extend(self._rescue_skipped_nested_row(nested_ing, _depth))
                         continue
                     if self._is_chemical_decomposition_leaf(nested_ing):
                         logger.debug(
@@ -5066,12 +5053,12 @@ class EnhancedDSLDNormalizer:
                         len(ing.get("forms") or []),
                         name,
                     )
-                    flattened.extend(
-                        self._expand_header_forms_for_processing(
-                            ing,
-                            source_path=ing.get("raw_source_path") or "activeIngredients",
-                        )
+                    form_rows = self._expand_header_forms_for_processing(
+                        ing,
+                        source_path=ing.get("raw_source_path") or "activeIngredients",
                     )
+                    self._mark_enzyme_source_descriptors(ing, form_rows)
+                    flattened.extend(form_rows)
                 # BUT: Still extract nestedRows from skipped parents (e.g., "Total Omega Oil")
                 if nested:
                     logger.debug(f"Extracting {len(nested)} nestedRows from skipped parent: {name}")
@@ -5148,72 +5135,7 @@ class EnhancedDSLDNormalizer:
                     # (which is skip-listed) are silently dropped — affecting
                     # ~40 omega-3/tocopherol products.
                     if self._should_skip_ingredient(nested_name) and not self._is_probiotic_cfu_total_row(nested_ing):
-                        logger.debug(f"Skipping nested ingredient: {nested_name}")
-                        grand_nested = nested_ing.get("nestedRows") or []
-                        is_nutrition_fact = self._is_nutrition_fact(
-                            nested_name,
-                            nested_ing.get("ingredientGroup"),
-                            (nested_ing.get("amount") or {}).get("unit"),
-                        )
-                        self._queue_display_ingredient(
-                            raw_source_text=nested_name,
-                            source_section="activeIngredients",
-                            display_type=(
-                                self._excluded_row_display_type(nested_name)
-                                if is_nutrition_fact
-                                else "summary_wrapper"
-                            ),
-                            score_included=False,
-                            source_row=nested_ing,
-                            children=[child.get("name", "") for child in grand_nested if child.get("name")],
-                        )
-                        # Rescue grandchildren from skipped nested items
-                        if nested_ing.get("forms"):
-                            flattened.extend(
-                                self._expand_header_forms_for_processing(
-                                    nested_ing,
-                                    source_path=nested_ing.get("raw_source_path") or "activeIngredients",
-                                )
-                            )
-                        if grand_nested:
-                            logger.debug(
-                                "Extracting %d nestedRows from skipped nested parent: %s",
-                                len(grand_nested), nested_name,
-                            )
-                            skipped_mass, skipped_unit = self._extract_primary_mass_unit(nested_ing)
-                            for grand_ing in self._lift_decomposition_members(grand_nested):
-                                grand_name = grand_ing.get("name", "")
-                                if self._should_skip_ingredient(grand_name) and not self._is_probiotic_cfu_total_row(grand_ing):
-                                    # Recursively flatten skip-listed
-                                    # grandchildren that themselves have
-                                    # children (handles arbitrary depth).
-                                    if grand_ing.get("nestedRows"):
-                                        sub = self._flatten_nested_ingredients(
-                                            [grand_ing], _depth=_depth + 1,
-                                        )
-                                        flattened.extend(sub)
-                                    continue
-                                if self._is_chemical_decomposition_leaf(grand_ing):
-                                    logger.debug(
-                                        "Skipping chemical-decomposition grandchild '%s' (cat=%s) under skipped nested '%s'",
-                                        grand_name, grand_ing.get("category"), nested_name,
-                                    )
-                                    continue
-                                grand_ing["parentBlend"] = nested_name
-                                grand_ing["isNestedIngredient"] = True
-                                if skipped_mass is not None:
-                                    grand_ing["parentBlendMass"] = skipped_mass
-                                    grand_ing["parentBlendUnit"] = skipped_unit
-                                elif parent_mass is not None:
-                                    grand_ing["parentBlendMass"] = parent_mass
-                                    grand_ing["parentBlendUnit"] = parent_unit
-                                if grand_ing.get("nestedRows"):
-                                    sub = self._flatten_nested_ingredients(
-                                        [grand_ing], _depth=_depth + 1,
-                                    )
-                                    flattened.extend(sub)
-                                else:
-                                    flattened.append(grand_ing)
+                        flattened.extend(self._rescue_skipped_nested_row(nested_ing, _depth))
                         continue
 
                     if self._is_chemical_decomposition_leaf(nested_ing):
@@ -5244,9 +5166,129 @@ class EnhancedDSLDNormalizer:
                         flattened.extend(sub_flattened)
                     else:
                         flattened.append(nested_ing)
-        
+
         return flattened
-    
+
+    _ENZYME_SOURCE_PARENT_RE = re.compile(
+        r"\b(?:enzymes?|proteases?)\s+(?:derived\s+)?from\b|\bblend\s+of\s+proteases\b",
+        re.I,
+    )
+    # A parent that also declares live cultures keeps its organisms as cultures.
+    _LIVE_CULTURE_PARENT_RE = re.compile(r"\bprobiotics?\b|\bcultures?\b|\bcfu\b", re.I)
+
+    def _mark_enzyme_source_descriptors(self, ing: Dict[str, Any], children: List[Any]) -> None:
+        """Mark an enzyme preparation's source organisms as provenance.
+
+        DSLD can place an enzyme's source organisms in nestedRows (or forms)
+        rather than in a "from" clause. A parent that names itself a protease
+        preparation ("proteases from", "Proprietary Blend of Proteases")
+        identifies provenance, not live cultures or fruit doses. Keep the
+        source rows and their NP amounts without borrowing the enzyme
+        preparation's mass. Separately quantified children, children with
+        their own members and anything labelled CFU/live keep their ordinary
+        handling, so a probiotic & enzyme blend is never read this way.
+        """
+        source_text = " ".join(str(ing.get(key) or "") for key in ("name", "notes"))
+        if not (str(ing.get("category") or "").casefold() in {"enzyme", "blend"}
+                and self._ENZYME_SOURCE_PARENT_RE.search(source_text)
+                and not self._LIVE_CULTURE_PARENT_RE.search(source_text)):
+            return
+        for child in children:
+            if not isinstance(child, dict):
+                continue
+            _, _, _, variants = self._process_quantity(child.get("quantity"))
+            if (str(child.get("category") or "").casefold() in {"botanical", "bacteria", "animal part or source", "plant part", "source material"}
+                    and not child.get("nestedRows") and not child.get("forms")
+                    and all(variant.get("quantity") == 0
+                            and str(variant.get("unit") or "").casefold() == "np"
+                            and variant.get("quantity_parsed") is not False
+                            for variant in variants)
+                    and not re.search(r"\b(?:cfu|live|viable)\b|colony[- ]forming", " ".join(
+                        str(child.get(key) or "") for key in ("name", "notes", "description")
+                    ), re.I)):
+                child["_enzyme_source_descriptor"] = True
+
+    def _rescue_skipped_nested_row(
+        self,
+        nested_ing: Dict[str, Any],
+        _depth: int,
+    ) -> List[Dict[str, Any]]:
+        """Keep the members of a skip-listed row nested inside a blend.
+
+        A skip-listed name ("Proprietary Blend", "Total EPA and DHA") is label
+        context, but its forms and members are label rows: EPA/DHA under a
+        skipped total, Astragalus under a "Proprietary Blend" inside a DSLD
+        group blend (42235). Every blend branch of the flattener uses this,
+        so no branch drops them with the skipped row. Members carry only the
+        skipped row's own printed total: an inner blend that prints no amount
+        never borrows an ancestor's (30565, 328844).
+        """
+        nested_name = nested_ing.get("name", "")
+        logger.debug(f"Skipping nested ingredient: {nested_name}")
+        grand_nested = nested_ing.get("nestedRows") or []
+        is_nutrition_fact = self._is_nutrition_fact(
+            nested_name,
+            nested_ing.get("ingredientGroup"),
+            (nested_ing.get("amount") or {}).get("unit"),
+        )
+        self._queue_display_ingredient(
+            raw_source_text=nested_name,
+            source_section="activeIngredients",
+            display_type=(
+                self._excluded_row_display_type(nested_name)
+                if is_nutrition_fact
+                else "summary_wrapper"
+            ),
+            score_included=False,
+            source_row=nested_ing,
+            children=[child.get("name", "") for child in grand_nested if child.get("name")],
+        )
+        rescued: List[Dict[str, Any]] = []
+        if nested_ing.get("forms"):
+            form_rows = self._expand_header_forms_for_processing(
+                nested_ing,
+                source_path=nested_ing.get("raw_source_path") or "activeIngredients",
+            )
+            self._mark_enzyme_source_descriptors(nested_ing, form_rows)
+            rescued.extend(form_rows)
+        if not grand_nested:
+            return rescued
+        self._mark_enzyme_source_descriptors(nested_ing, grand_nested)
+        logger.debug(
+            "Extracting %d nestedRows from skipped nested parent: %s",
+            len(grand_nested), nested_name,
+        )
+        skipped_mass, skipped_unit = self._extract_primary_mass_unit(nested_ing)
+        for grand_ing in self._lift_decomposition_members(grand_nested):
+            grand_name = grand_ing.get("name", "")
+            if self._should_skip_ingredient(grand_name) and not self._is_probiotic_cfu_total_row(grand_ing):
+                # Recursively flatten skip-listed grandchildren that
+                # themselves have children (handles arbitrary depth).
+                if grand_ing.get("nestedRows"):
+                    rescued.extend(self._flatten_nested_ingredients(
+                        [grand_ing], _depth=_depth + 1,
+                    ))
+                continue
+            if self._is_chemical_decomposition_leaf(grand_ing):
+                logger.debug(
+                    "Skipping chemical-decomposition grandchild '%s' (cat=%s) under skipped nested '%s'",
+                    grand_name, grand_ing.get("category"), nested_name,
+                )
+                continue
+            grand_ing["parentBlend"] = nested_name
+            grand_ing["parent_source_path"] = nested_ing.get("raw_source_path")
+            grand_ing["isNestedIngredient"] = True
+            if skipped_mass is not None:
+                grand_ing["parentBlendMass"] = skipped_mass
+                grand_ing["parentBlendUnit"] = skipped_unit
+            if grand_ing.get("nestedRows"):
+                rescued.extend(self._flatten_nested_ingredients(
+                    [grand_ing], _depth=_depth + 1,
+                ))
+            else:
+                rescued.append(grand_ing)
+        return rescued
+
     def _apply_label_corrections(self, ingredient_rows: List[Dict[str, Any]], product_id: str) -> List[Dict[str, Any]]:
         """RC-5: correct a source row where (dsld_id, raw_text) matches.
 
@@ -6875,7 +6917,10 @@ class EnhancedDSLDNormalizer:
         if cat == "blend" and "," in name:
             return True
 
-        # Pattern 1: counter-ion descriptor leaf with no own dose
+        # Pattern 1: counter-ion descriptor leaf with no own dose. A member of
+        # a DSLD blend is its own ingredient ("Potassium Chloride" in a Water
+        # Balance Blend, "Glucosamine Sulfate" in a joint complex), not a
+        # salt descriptor of a parent compound; class labels stay composition.
         if cat == "non-nutrient/non-botanical":
             qty_data = nested_ing.get("quantity")
             if isinstance(qty_data, list) and qty_data:
@@ -6892,7 +6937,8 @@ class EnhancedDSLDNormalizer:
             )
             if has_own_dose:
                 return False
-            if cls._COUNTER_ION_LEAF_RE.match(name):
+            if (cls._COUNTER_ION_LEAF_RE.match(name)
+                    and nested_ing.get("_raw_parent_category") != "blend"):
                 return True
             if cls._COMPOSITION_CLASS_LEAF_RE.match(name):
                 return True
@@ -6961,10 +7007,12 @@ class EnhancedDSLDNormalizer:
                 )
             if is_active and ing.get("forms"):
                 extracted = []
-                for form_ing in self._expand_header_forms_for_processing(
+                form_rows = self._expand_header_forms_for_processing(
                     ing,
                     source_path=ing.get("raw_source_path") or "activeIngredients",
-                ):
+                )
+                self._mark_enzyme_source_descriptors(ing, form_rows)
+                for form_ing in form_rows:
                     processed_form = self._process_single_ingredient_enhanced(
                         form_ing,
                         is_active=True,
@@ -6985,6 +7033,7 @@ class EnhancedDSLDNormalizer:
             # (e.g., "Total Omega Oil" is skipped, but Omega-3/6/9 nested rows are real data)
             if nested_rows:
                 logger.debug(f"Processing {len(nested_rows)} nestedRows from skipped parent: {name}")
+                self._mark_enzyme_source_descriptors(ing, nested_rows)
                 nested_results = []
                 for nested_ing in self._lift_decomposition_members(nested_rows):
                     if self._is_chemical_decomposition_leaf(nested_ing):

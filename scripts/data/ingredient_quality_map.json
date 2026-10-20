@@ -32,7 +32,7 @@
     "statistics": {
       "total_parents": 655,
       "total_forms": 1474,
-      "total_form_aliases": 12291,
+      "total_form_aliases": 12292,
       "parents_with_parent_aliases": 150,
       "parents_with_contains_aliases": 0,
       "parents_with_pattern_aliases": 0
@@ -56279,7 +56279,8 @@
           "nannochloropsis oil",
           "nannochloropsis gaditana",
           "nannochloropsis microalgae",
-          "schizochytrium sp."
+          "schizochytrium sp.",
+          "life'sOmega"
         ],
         "form_evidence": {
           "schema_version": "1.0.0",
@@ -56362,7 +56363,14 @@
     "cui_note": "Product class spanning multiple microalgae-derived oils. No single UMLS concept is accurate.",
     "cui_status": "no_single_umls_concept",
     "external_ids": {},
-    "aliases": []
+    "aliases": [],
+    "relationships": [
+      {
+        "type": "contains",
+        "target_id": "dha",
+        "notes": "Algal oil is a DHA source; algal DHA oils are bioequivalent DHA sources (PMID 17713804)."
+      }
+    ]
   },
   "apple_cider_vinegar": {
     "standard_name": "Apple Cider Vinegar",
@@ -67190,7 +67198,19 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "relationships": [
+      {
+        "type": "contains",
+        "target_id": "epa",
+        "notes": "Krill oil delivers EPA and DHA at plasma levels comparable to fish oil (PMID 26328782)."
+      },
+      {
+        "type": "contains",
+        "target_id": "dha",
+        "notes": "Krill oil delivers EPA and DHA at plasma levels comparable to fish oil (PMID 26328782)."
+      }
+    ]
   },
   "optiberry": {
     "standard_name": "OptiBerry",
