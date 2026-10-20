@@ -30,3 +30,44 @@ import pytest
 def test_a_verified_label_wording_is_recognized(notes, raw, note):
     from build_final_db import _compute_standardization_note
     assert _compute_standardization_note({"notes": notes, "raw_source_text": raw}) == note
+
+
+def _blob_note(pid, name):
+    import copy, json, logging
+    from pathlib import Path
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    from enrich_supplements_v3 import SupplementEnricherV3
+    from build_final_db import build_detail_blob
+    from scoring_v4.scored_artifact import build_scored_artifact
+    logging.disable(logging.INFO)
+    raw = json.loads((Path(__file__).parent / "fixtures" / f"std_note_{pid}_raw.json").read_text())
+    enriched, _ = SupplementEnricherV3().enrich_product(EnhancedDSLDNormalizer().normalize_product(raw))
+    blob = build_detail_blob(copy.deepcopy(enriched), build_scored_artifact(copy.deepcopy(enriched)))
+    return next(r for r in blob["ingredients"] if r["name"] == name)["standardization_note"]
+
+
+def test_a_bare_percent_must_match_the_rows_share_of_its_parent():
+    # 307598 Jarrow: EGCG 15 mg under Green Tea Leaf Extract 500 mg is 3% of
+    # the extract; its "15%" is EGCG's share of the catechins, not the extract.
+    assert _blob_note("307598", "Epigallocatechin Gallate") is None
+    # 328035: Curcuminoids 950 mg under Turmeric Rhizome Extract 1 g is 95%.
+    assert _blob_note("328035", "Curcuminoids") == "95% curcuminoids"
+
+
+@pytest.mark.parametrize("ingredient, note", [
+    ({"notes": "80%", "raw_source_text": "Silymarin", "quantity": 140, "unit": "mg",
+      "parentBlendMass": 175, "parentBlendUnit": "mg"}, "80% silymarin"),
+    ({"notes": "20%", "raw_source_text": "Curcuminoids", "quantity": 100, "unit": "mcg",
+      "parentBlendMass": 500, "parentBlendUnit": "mcg"}, "20% curcuminoids"),
+    ({"notes": "15%", "raw_source_text": "Epigallocatechin Gallate", "quantity": 15, "unit": "mg",
+      "parentBlendMass": 500, "parentBlendUnit": "mg"}, None),
+    # Not a standardization percentage.
+    ({"notes": "0%", "raw_source_text": "Silymarin"}, None),
+    ({"notes": "150%", "raw_source_text": "Silymarin"}, None),
+    ({"notes": "0% curcuminoids"}, None),
+    ({"notes": "provides 50% curcumin absorption"}, None),
+    ({"notes": "up to 45% curcumin bioavailability"}, None),
+])
+def test_the_bare_percent_and_range_guards(ingredient, note):
+    from build_final_db import _compute_standardization_note
+    assert _compute_standardization_note(ingredient) == note
