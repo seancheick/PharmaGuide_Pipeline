@@ -114,3 +114,13 @@ def test_blend_disclosure_reads_amounts_not_a_stored_flag(normalizer, cleaned):
     blend = next(row for row in cleaned["activeIngredients"] if row.get("nestedIngredients"))
     disclosure = normalizer._build_proprietary_blend_disclosure([blend])
     assert disclosure["blends"][0]["individualAmounts"] == "Not disclosed"  # strains are NP
+
+
+@pytest.mark.parametrize("unit", ["", "NP", "np", " unspecified ", None])
+def test_an_amount_without_a_real_unit_is_not_disclosed(unit):
+    assert not EnhancedDSLDNormalizer._nested_amount_disclosed({"quantity": 50, "unit": unit})
+
+
+def test_a_positive_amount_with_a_unit_is_disclosed():
+    assert EnhancedDSLDNormalizer._nested_amount_disclosed({"quantity": 50, "unit": "mg"})
+    assert not EnhancedDSLDNormalizer._nested_amount_disclosed({"quantity": 0, "unit": "mg"})

@@ -9840,9 +9840,15 @@ class EnhancedDSLDNormalizer:
 
     @staticmethod
     def _nested_amount_disclosed(row: Dict[str, Any]) -> bool:
-        """A blend member's own amount is printed: positive quantity, unit not NP."""
+        """A blend member's own amount is printed: a positive quantity with a real unit."""
         quantity = row.get("quantity", 0)
-        return isinstance(quantity, (int, float)) and quantity > 0 and row.get("unit", "") != "NP"
+        unit = str(row.get("unit") or "").strip().upper()
+        return (
+            isinstance(quantity, (int, float))
+            and not isinstance(quantity, bool)
+            and quantity > 0
+            and unit not in {"", "NP", "UNSPECIFIED", "NOT PROVIDED", "UNKNOWN", "N/A"}
+        )
 
     @staticmethod
     def _build_proprietary_blend_disclosure(
@@ -9868,9 +9874,7 @@ class EnhancedDSLDNormalizer:
                 has_total = False
 
             individual_disclosed = bool(nested) and all(
-                EnhancedDSLDNormalizer._nested_amount_disclosed(row)
-                and str(row.get("unit") or "").strip().upper() not in {"", "NP"}
-                for row in nested
+                EnhancedDSLDNormalizer._nested_amount_disclosed(row) for row in nested
             )
             disclosures.append({
                 "name": blend.get("name") or blend.get("standardName") or "Proprietary blend",
