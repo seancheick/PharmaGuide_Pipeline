@@ -6923,9 +6923,22 @@ class EnhancedDSLDNormalizer:
             return False
         cat = (nested_ing.get("category") or "").strip().lower()
 
-        # Pattern 2: DSLD-tagged blend leaf with comma-joined marker names
+        # Pattern 2: DSLD-tagged blend leaf with comma-joined marker names.
+        # A comma row that lists its members as rows, declares no forms and
+        # prints no amount for some member is a sub-blend listing ("Valerian
+        # root powder, Lemon Balm extract and Passion Flower herb powder"
+        # 200 mg, DSLD 27312), not a name token: nothing else would describe
+        # those members, so it stays a blend. Members that all print amounts
+        # are lifted in its place (_lift_decomposition_members, 259484), and
+        # an EPA/DHA total stays with the omega rules (2d7d4ea8e, 231416).
         if cat == "blend" and "," in name:
-            return True
+            members = [m for m in nested_ing.get("nestedRows") or [] if isinstance(m, dict)]
+            return not (
+                members
+                and not nested_ing.get("forms")
+                and not all(cls._extract_primary_mass_unit(m)[0] for m in members)
+                and not _states_only_epa_and_dha(nested_ing.get("name"))
+            )
 
         # Pattern 1: counter-ion descriptor leaf with no own dose. A member of
         # a DSLD blend is its own ingredient ("Potassium Chloride" in a Water
@@ -6962,8 +6975,10 @@ class EnhancedDSLDNormalizer:
         can carry its members as nestedRows with their own amounts (EPA 1.5 g,
         DHA 500 mg). The members are the dosed rows and the total summarizes
         them; skipping the total must not drop them. Only members that each
-        print their own amount are lifted: members without amounts (a 4-in-1
-        ketone-salt list) stay described by the total, as before. A
+        print their own amount are lifted: members without amounts stay
+        described by the total's forms, as before (lifting them too counted
+        EPA/DHA twice, 231416). A comma row with an undosed member and no forms
+        is not a decomposition row at all (see _is_chemical_decomposition_leaf). A
         decomposition row with no members is left to the caller's leaf handling.
         """
         lifted: List[Any] = []

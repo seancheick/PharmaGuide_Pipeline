@@ -2345,6 +2345,29 @@ Report and compact measurements: scripts/audits/integration_audit_20261020/READM
 SENACTIV_RESEARCH.md. Durable fullcaptures/checksums: ~/pg_quality/integration_audit_20261020.
 Finalsourceab50c2c3c is qualified for authorized PR218 integration. Only audit/master/LEDGER documentation follows this tested source; no duplicate source checkpoint required. Actual merge SHA, primary-draft preservation and cleanup receipts are recorded in the current handoff and ~/pg_quality/integration_audit_20261020/integration_closeout.json. No release/artifact gate is newly closed.
 
+## October 20 — comma-joined sub-blends keep their members (claude/comma-subblend-members; follow-up of PR206)
+
+Class: behavioral (Clean rows → interaction subjects, Transparency input). Owner:
+`enhanced_normalizer.py::_is_chemical_decomposition_leaf` (Pattern 2). Defect: every DSLD "blend" row with a comma
+in its name was read as a name token and skipped. Right for a comma total that lists its members as forms ("DHA,
+EPA" → forms expanded; undosed member rows would count EPA/DHA twice, 231416, kept per 2d7d4ea8e), wrong for a
+comma row that lists members as rows and declares no forms: the row and every member vanished (27312 valerian,
+lemon balm, passionflower 200 mg; 27804 catechu, skullcap 250 mg; 275039/275085/282948 L. bulgaricus,
+L. plantarum; 266599 four BHB salts 11.7 g). Such a row is now an ordinary nested blend (header with its own printed
+total; members bounded by it). Fail-first: 4 cases in `test_nested_blend_member_rows.py`; the 2d7d4ea8e pinned
+tests pass. Corpus Clean diff vs main e55b6ccef: 6/15,414 products, 21 rows added, 0 removed or changed.
+Replay of 6 + 71 controls (all 10 forms-listing/dosed comma totals, 29262, 60 seeded;
+`~/pg_quality/comma_subblend_20261020`): 0 controls changed; rules +5 (valerian liver, passionflower sedatives,
+skullcap liver, probiotics ×3), 0 removed; safety status unchanged; no new scorable row; 5 Transparency-only moves
+(B5 now sees the undisclosed sub-blend: 266599 50.4→41.0, 27804 59.9→52.0, 275039 81.0→78.2, 27312 71.0→68.6,
+275085 56.6→55.8); BHB salts resolve to BHB (Evidence unchanged at 0). Focused slice 2,510 passed.
+Fresh-context review: no corpus defect; latent fixes (fail-first): a no-forms comma row whose members all print
+amounts keeps the 259484 lift, and EPA/DHA-named comma totals stay with the omega rules (never a second fish oil).
+A first attempt narrowed the disclosed-EPA/DHA-child carve-out instead; the corpus hash showed it moved 4 real
+labels (179661, 180107, 315329, 82715: "Omega-3 EPA & DHA" 500–600 mg with undosed members, scored on main as a
+fish_oil row beside Fish Oil), so it was reverted. Whether that total should be a scorable fish_oil row is an
+omega-owner question, open. Final head's Clean output is identical to the replayed candidate (0/15,414).
+
 ## October 20 — remaining-worktree and active follow-up audit
 
 Audited the original 22 registered checkouts: primary, 18 historical and three active. No hidden unfinished source fix in the historical 18: seventeen histories are integrated by ancestry; wt_p188's two nonancestor commits are patch-equivalent to integrated PR188, with their verified Git bundle retained. Before cleanup, 2,245 unique files (1,160,618,052 bytes) were copied and SHA-256 verified outside the public repository. Six historical Claude checkouts were removed. Sean authorized owning-chat archive messages for 12 old managed checkouts: six removed, six queued and not confirmed. Active and newly created Claude source/measurement trees are preserved.
