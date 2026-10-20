@@ -9411,21 +9411,25 @@ class SupplementEnricherV3:
             self._marker_names_cache = cached
         return cached
 
-    def _curated_latin_names(self) -> frozenset:
-        """Normalized species names from botanical_ingredients.json latin_name
-        ("Actaea racemosa (Cimicifuga racemosa)" gives both binomials)."""
-        cached = getattr(self, "_latin_names_cache", None)
+    def _parent_latin_names(self, parent_key: Optional[str]) -> frozenset:
+        """Normalized species names of the parent's own botanical_ingredients
+        record (same id, or a reviewed equivalence onto the parent), synonyms
+        in its latin_name included ("Actaea racemosa (Cimicifuga racemosa)")."""
+        cached = getattr(self, "_parent_latin_names_cache", None)
         if cached is None:
+            registry = self._current_canonical_identity_registry()
             db = (self.databases or {}).get("botanical_ingredients") or {}
-            cached = frozenset(
-                self._norm_form_name(name)
-                for entry in db.get("botanical_ingredients") or []
-                if isinstance(entry, dict)
-                for name in re.findall(r"[A-Z][a-z]+(?:\s+(?:x\s+|×\s*)?[a-z][a-z-]+){1,2}",
-                                       str(entry.get("latin_name") or ""))
-            )
-            self._latin_names_cache = cached
-        return cached
+            names_by_id: Dict[str, set] = {}
+            for entry in db.get("botanical_ingredients") or []:
+                if not isinstance(entry, dict) or not entry.get("id"):
+                    continue
+                names = {self._norm_form_name(name) for name in re.findall(
+                    r"[A-Z][a-z]+(?:\s+(?:x\s+|×\s*)?[a-z][a-z-]+){1,2}", str(entry.get("latin_name") or ""))}
+                for owner in {entry["id"], registry.canonicalize(entry["id"], "botanical_ingredients")[0]}:
+                    names_by_id.setdefault(owner, set()).update(names)
+            cached = {owner: frozenset(names) for owner, names in names_by_id.items()}
+            self._parent_latin_names_cache = cached
+        return cached.get(parent_key or "", frozenset())
 
     def _is_recorded_source(self, token: str, group: str, parent_key: Optional[str]) -> bool:
         """The token names a botanical that botanical_marker_contributions.json
@@ -9489,14 +9493,15 @@ class SupplementEnricherV3:
         # DSLD files a salt under the nutrient it supplies (every calcium salt
         # has group "Calcium"), so an equal group only restates the identity
         # for a botanical token ("Matricaria chamomilla" under Chamomile).
-        # A scientific name names the plant, never a preparation: a curated
-        # species name the identity registries record for this parent
-        # ("Hordeum vulgare" under Barley Grass) restates it too. Only the
-        # species field qualifies; other curated names can state a
-        # preparation or brand ("Curcumin Powder", "Capsimax").
+        # A scientific name names the plant, never a preparation: the
+        # parent's own species name, which the identity registries also record
+        # for it ("Hordeum vulgare" under Barley Grass), restates it too. Only
+        # that species field qualifies; other curated names can state a
+        # preparation or brand ("Curcumin Powder", "Capsimax") or another
+        # species ("Illicium verum" is star anise, not anise).
         botanical_restatement = category == 'botanical' and (
             (group and group in parent_names)
-            or (parent_key and token in self._curated_latin_names()
+            or (token in self._parent_latin_names(parent_key)
                 and self._current_canonical_identity_registry().names_identity(raw, parent_key)))
         singular = lambda words: {w[:-1] if len(w) > 3 and w.endswith('s') else w for w in words}
         label_words = singular(self._norm_form_name(row_label).split())
