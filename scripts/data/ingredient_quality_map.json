@@ -32,7 +32,7 @@
     "statistics": {
       "total_parents": 655,
       "total_forms": 1474,
-      "total_form_aliases": 12292,
+      "total_form_aliases": 12290,
       "parents_with_parent_aliases": 149,
       "parents_with_contains_aliases": 0,
       "parents_with_pattern_aliases": 0
@@ -53,7 +53,7 @@
       "vitamins": 25
     },
     "schema_version": "5.6.1",
-    "last_updated": "2026-10-19",
+    "last_updated": "2026-10-20",
     "pipeline_integration": "Used by enrichment to assign form quality (bio_score) to matched ingredient forms. Match ingredient name against forms aliases (case-insensitive).",
     "matching_notes": [
       "Match ingredient name + forms text against aliases array (case-insensitive)",
@@ -57520,8 +57520,6 @@
           "anise powder",
           "anise seed extract",
           "anise seed powder",
-          "star anise",
-          "illicium verum",
           "Anise 4:1 extract",
           "Anise seed 4:1 extract",
           "organic anise"
