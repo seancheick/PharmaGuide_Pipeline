@@ -354,6 +354,7 @@ _NP_UNITS = frozenset({
     "np", "", "not provided", "unknown", "n/a", "na", "none",
     "not applicable", "proprietary",
 })
+_PERCENT_DV_UNITS = frozenset({"%", "percent", "percent dv", "%dv", "% dv"})
 
 _ENZYME_ACTIVITY_UNITS = frozenset({
     "spu", "hut", "fcc", "su", "du", "alu", "fip", "sapu", "cu", "fu"
@@ -411,6 +412,11 @@ def _is_non_quantified(row: dict[str, Any]) -> bool:
 
     # NP / empty / unknown units
     if unit in _NP_UNITS:
+        return True
+
+    # A %Daily Value with no mass amount (legacy panels: "Calcium 50 %") is not a
+    # quantified dose; it cannot make a protein powder a single mineral.
+    if unit in _PERCENT_DV_UNITS:
         return True
 
     # No quantity AND no unit

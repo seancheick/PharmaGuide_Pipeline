@@ -151,3 +151,21 @@ def test_a_real_blend_wrapper_still_marks_a_proprietary_blend(normalizer):
     ]))
     assert _display(cleaned)["Proprietary Pomegranate Blend"]["display_type"] == "summary_wrapper"
     assert cleaned["label_ledger_audit"]["source_structure"] == "proprietary_blend"
+
+
+def test_percent_only_mineral_does_not_type_a_protein_powder_as_a_mineral(normalizer, enricher):
+    # DSLD 16872 "100% Casein Protein Vanilla": Calcium "50 %" is its only %DV mineral; with no
+    # mass amount it is not a quantified dose, so it cannot make the product a single mineral.
+    cleaned = normalizer.normalize_product(_label("16872", "100% Casein Protein Vanilla", [
+        _row(1, "Calories", "other", "Calories", 150, "{Calories}"),
+        _row(2, "Total Fat", "fat", "Fat (unspecified)", 1, "g", 2),
+        _row(3, "Sodium", "mineral", "Sodium", 200, "mg", 8),
+        _row(4, "Total Carbohydrates", "sugar", "Carbohydrate", 10, "g", 3),
+        _row(5, "Protein", "protein", "Protein (unspecified)", 25, "g", 50),
+        _row(6, "Vitamin A", "vitamin", "Vitamin A", 0, "%"),
+        _row(7, "Calcium", "mineral", "Calcium", 50, "%"),
+        _row(8, "Iron", "mineral", "Iron", 0, "%"),
+    ]))
+    enriched, _ = enricher.enrich_product(cleaned)
+    assert "Calcium" in {row["name"] for row in enriched["activeIngredients"]}
+    assert enriched["supplement_taxonomy"]["primary_type"] != "single_mineral"
