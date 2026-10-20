@@ -298,3 +298,9 @@ def test_a_measured_gluten_level_is_not_a_ppm_limit(run):
     enriched, _ = run("328751", extra_statements=("Contains gluten (40 ppm).",))
     assert "ALLERGEN_WHEAT" in {h["allergen_id"] for h in enriched["contaminant_data"]["allergens"]["allergens"]}
     assert enriched["compliance_data"]["gluten_free"] is False
+
+
+def test_a_ppm_limit_inside_a_parenthesis_hides_nothing_else(run):
+    enriched, _ = run("328751", extra_statements=("May contain (milk and gluten below 20 ppm).",))
+    ids = {h["allergen_id"] for h in enriched["contaminant_data"]["allergens"]["allergens"]}
+    assert "ALLERGEN_MILK" in ids and "ALLERGEN_WHEAT" not in ids

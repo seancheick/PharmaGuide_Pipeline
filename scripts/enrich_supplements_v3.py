@@ -13004,22 +13004,28 @@ class SupplementEnricherV3:
         re.I,
     )
 
-    # 21 CFR 101.91: a gluten-free food may hold < 20 ppm gluten. In a sentence
-    # that states a ppm limit, the limit and every gluten mention ("trace
-    # amounts of gluten below 20 ppm", "(less than 20 parts per million)") are
-    # that qualifier, not an allergen warning; other allergens there still read.
+    # 21 CFR 101.91: a gluten-free food may hold < 20 ppm gluten. A ppm limit
+    # and the gluten wording attached to it ("trace amounts of gluten below
+    # 20 ppm", "traces of gluten (less than 20 parts per million)", "less than
+    # 20 ppm gluten") are that qualifier, not an allergen warning; so is a
+    # gluten-free claim in the same sentence. Everything else still reads.
     _PPM_LIMIT_TEXT = (
         r"(?:\b(?:less\s+than|below|under|fewer\s+than)\s+|<\s*)\d+(?:\.\d+)?\s*(?:ppm|parts\s+per\s+million)\b"
     )
-    _PPM_LIMIT = re.compile(rf"\([^()]*{_PPM_LIMIT_TEXT}[^()]*\)|{_PPM_LIMIT_TEXT}", re.I)
-    _QUALIFIED_GLUTEN = re.compile(r"\b(?:(?:traces?|trace\s+amounts?)\s+of\s+)?gluten\b", re.I)
+    _PPM_LIMIT_TOKEN = rf"(?:\(\s*{_PPM_LIMIT_TEXT}\s*\)|{_PPM_LIMIT_TEXT})"
+    _PPM_LIMIT = re.compile(
+        rf"\b(?:traces?|trace\s+amounts?)\s+(?:of\s+)?(?:gluten\s+)?{_PPM_LIMIT_TOKEN}"
+        rf"|\bgluten\s+{_PPM_LIMIT_TOKEN}"
+        rf"|{_PPM_LIMIT_TOKEN}(?:\s+(?:of\s+)?gluten\b)?",
+        re.I,
+    )
 
     @classmethod
     def _without_gluten_ppm_qualifier(cls, text: str) -> str:
         def strip(sentence: str) -> str:
             if not cls._PPM_LIMIT.search(sentence):  # a limit, not a measured level
                 return sentence
-            return cls._QUALIFIED_GLUTEN.sub(" ", cls._PPM_LIMIT.sub(" ", sentence))
+            return re.sub(r"\bgluten[\s-]*free\b", " ", cls._PPM_LIMIT.sub(" ", sentence), flags=re.I)
         return "".join(strip(part) for part in re.split(r"((?<=[.!?;])\s+|[\r\n\t]+)", text))
 
     def _has_unparsed_may_contain(self, product: Dict) -> bool:
