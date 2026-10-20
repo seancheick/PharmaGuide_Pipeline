@@ -2290,3 +2290,15 @@ Formulation moves (854 within 0.5, range -8.1..+2.8), 5 contract canaries refres
 3 "NP" units with has_dose); readiness now refuses to publish past that gap. Open: the "NP" units on 269538/331688 zinc
 and 60740 niacin are DSLD capture gaps; MegaFood S. cerevisiae carrier rows enter or leave the panel by L5 mass ratio
 (note for Sean).
+
+## October 20 — tart cherry one identity and one evidence policy (PR213, claude/tart-cherry-one-brain)
+
+Class: behavioral curated data (identity, clinical applicability). Owners: `canonical_equivalences.json`
+(tart_cherry_fruit -> IQM tart_cherry, shared UNII 1L29G6428X), IQM `tart_cherry` forms, and
+`backed_clinical_studies.json::INGR_TART_CHERRY.applicability` (source label must name juice; powder, extract, dried
+and capsule rows excluded), matching the literature record's juice-only decision (PR212). Stacked on the panel gate
+(claude/panel-form-quality-materiality), which removed the 23 Life Extension Mix +0.1–0.2 moves the audit found.
+Measured on all 552 cherry-mentioning labels against main + gate (`~/pg_quality/tart_cherry_one_brain_pr213_v2_20261020/`):
+25 scores move, no status, warning or safety change; 23 tart cherry powder/extract/gummy products lose 7.3 (or 2.9)
+Evidence earned only from juice trials; 58997 +5.3 Formulation from its label's "std. to 6.5% Anthocyanins".
+Open: no corpus label prints tart cherry juice; 212521 "Sour Cherry fruit concentrate" earns nothing (no "juice" printed).
