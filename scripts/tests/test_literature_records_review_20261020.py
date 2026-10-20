@@ -134,3 +134,95 @@ def test_no_invented_dose_threshold_survives_in_corrected_records(records):
            "undecylenic_acid": "250", "black_garlic": "600"}
     for cid, phrase in old.items():
         assert phrase not in records[cid]["applicability_decision"], cid
+
+
+# ---- batch B: study facts restated from the article; determinations unchanged -----------------
+
+# A row that pointed at the wrong paper now cites the trial it describes (PubMed-searched,
+# abstract read): old PMID -> new PMID.
+REPOINTED = {
+    "goldenseal": ("32591416", "17495878"),
+    "dong_quai": ("34090852", "9418683"),
+    "chitosan": ("32437302", "18646097"),
+    "ipriflavone": ("10479216", "11255425"),
+}
+
+
+@pytest.mark.parametrize("cid, pmids", sorted(REPOINTED.items()))
+def test_a_wrong_paper_citation_is_repointed_to_the_trial(records, cid, pmids):
+    old, new = pmids
+    study, = records[cid]["qualifying_human_studies"]
+    assert study["pmid"] == new != old
+    prov = study["verification_provenance"]
+    assert prov["verified_source"].endswith(f"/{new}/") and prov["authoritative_live_title"] == study["title"]
+
+
+def test_ipriflavone_keeps_its_safety_finding_on_the_real_trial(records):
+    record = records["ipriflavone"]
+    study = _study(record, "11255425")
+    assert record["effect_direction"] == "negative" and study["sample_size"] == 474
+    assert "lymphocytopenia" in study["outcome"]
+
+
+FIGURES_B = [
+    ("l_glutamine", "32992440", "sample_size", 14, 8),
+    ("lignans", "32575611", "dose", "50 mg/day SDG", "600 mg/day"),
+    ("cryptoxanthin", "37242207", "sample_size", 90, 32),
+    ("green_coffee_bean", "16820341", "sample_size", 28, 117),
+    ("pumpkin", "25196580", "sample_size", 1431, 47),
+    ("rose_hips", "16195164", "sample_size", 94, 112),
+    ("globe_artichoke", "14653829", "dose", "three times daily", "640 mg/day"),
+    ("uva_ursi_leaf", "34111592", "sample_size", 398, 57),
+    ("nicotinamide_riboside", "27721479", "dose", "single doses", "1000 mg/day"),
+    ("beta_glucan", "23378458", "sample_size", 77, 162),
+    ("borage_seed_oil", "8214997", "sample_size", 37, 56),
+    ("atp", "28080323", "sample_size", 42, 16),
+    ("milk_basic_protein", "17048062", "sample_size", 35, 30),
+    ("algae_oil", "18589030", "sample_size", 32, 11),
+    ("tudca", "8674405", "sample_size", 24, 80),
+    ("nopal", "22805855", "sample_size", 6, 10),
+    ("lychee_polyphenol", "40887285", "dose", "200 mg/day", "100 mg/day"),
+    ("jujube", "33385511", "sample_size", 12, 40),
+    ("cranberry_fruit", "37068952", "sample_size", 8857, 8611),
+    ("ginkgo_biloba_leaf", "25114079", "sample_size", 2561, 2372),
+    ("green_tea_leaf", "21715508", "sample_size", 1136, 1415),
+    ("fucoidan", "36307493", "sample_size", 20, 75),
+    ("diamine_oxidase", "31807350", "sample_size", 28, 39),
+    ("lactase", "20391953", "sample_size", 60, 40),
+    ("african_geranium", "17184981", "sample_size", 2099, 468),
+    ("l_cysteine", "33105552", "dose", "N-acetylcysteine", "1000 mg/day L-cysteine"),
+    ("guggul", "12915429", "dose", "three times daily", "1000 - 2000 mg/day"),
+    ("red_clover", "33920485", "sample_size", 1179, 894),
+]
+
+
+@pytest.mark.parametrize("cid, pmid, field, reported, recorded", FIGURES_B)
+def test_batch_b_study_figures_match_the_article(records, cid, pmid, field, reported, recorded):
+    test_study_figures_match_the_article(records, cid, pmid, field, reported, recorded)
+
+
+# Figures no cited source reports are removed rather than kept.
+REMOVED = [
+    ("chlorophyll", "7350215", "dose"), ("pygeum", "11869585", "dose"), ("hawthorn", "12798455", "dose"),
+    ("aloe_vera", "27009750", "dose"), ("horse_chestnut_seed", "15106197", "dose"),
+    ("butchers_broom_root", "12040966", "dose"), ("evening_primrose_oil", "23633319", "dose"),
+    ("activated_charcoal", "3521259", "dose"), ("colostrum", "21148400", "dose"),
+    ("glutathione", "24791752", "scoring_eligible"), ("capsaicin", "23844093", "sample_size"),
+]
+
+
+@pytest.mark.parametrize("cid, pmid, field", REMOVED)
+def test_an_unreported_figure_is_removed(records, cid, pmid, field):
+    assert field not in _study(records[cid], pmid)
+
+
+def test_glutathione_cites_its_trial_once(records):
+    assert [s["pmid"] for s in records["glutathione"]["qualifying_human_studies"]] == ["24791752"]
+
+
+def test_safety_signal_records_keep_their_direction_and_state_their_source(records):
+    for cid in ("graviola", "artemisinin", "PII_ARTEMISININ"):
+        assert records[cid]["effect_direction"] == "negative"
+    assert "not established" in _study(records["artemisinin"], "19680221")["outcome"]
+    assert "neurotoxicity" not in records["artemisinin"]["applicability_decision"]
+    assert _study(records["graviola"], "14521988")["study_type"] == "in_vitro"

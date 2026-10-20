@@ -132,7 +132,7 @@ def expect_keys(batches):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("batch", choices=["a", "b", "expect-a", "expect-ab"])
+    ap.add_argument("batch", choices=["a", "b", "expect-a", "expect-b", "expect-ab"])
     ap.add_argument("--dry-run", action="store_true")
     args = ap.parse_args()
     if args.batch.startswith("expect-"):
