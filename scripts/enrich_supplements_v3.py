@@ -3671,6 +3671,11 @@ class SupplementEnricherV3:
             has_std, pct = self._scan_label_for_standardization(label_text, keywords)
             if model == "standardization_required":
                 min_pct = contrib.get("min_standardization_pct_required")
+                if not has_std and contrib.get("provenance_without_declaration") is False:
+                    # A source that delivers only trivial amounts unless the
+                    # label declares the marker (grape -> resveratrol) records
+                    # no provenance marker at all.
+                    continue
                 if not has_std:
                     entry["basis"] = (
                         f"No standardization keyword found in label "

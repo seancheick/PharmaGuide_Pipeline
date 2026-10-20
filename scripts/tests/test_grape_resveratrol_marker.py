@@ -55,22 +55,24 @@ def test_declared_trans_resveratrol_reaches_the_resveratrol_rule(enrich, dsld_id
     assert alerts and alerts[0]["subject_ref"]["canonical_id"] == "resveratrol"
 
 
-def test_grape_without_a_declared_standardization_carries_no_resveratrol_mass(enricher):
+@pytest.mark.parametrize("label", ["Grape Skin Extract", "BioVin Grape Proanthocyanidin extract"])
+def test_grape_without_a_declared_standardization_carries_no_resveratrol_marker(enricher, label):
+    """A whole grape or grape-PAC extract carries trivial resveratrol unless a
+    percentage is declared; the app reads every marker as a research link, so
+    none is emitted (not even a provenance-only one)."""
     markers = enricher._compute_delivers_markers(
-        {"canonical_id": "grape", "raw_source_text": "Grape Skin Extract", "quantity": 200, "unit_normalized": "mg"}
+        {"canonical_id": "grape", "raw_source_text": label, "quantity": 200, "unit_normalized": "mg"}
     )
-    [marker] = [m for m in markers if m["marker_canonical_id"] == "resveratrol"]
-    assert marker["estimated_dose_mg"] is None and marker["estimation_method"] == "none"
+    assert not [m for m in markers if m["marker_canonical_id"] == "resveratrol"]
 
 
 def test_another_constituents_percentage_is_not_resveratrol(enricher):
-    """"40% Total Polyphenols" alone never becomes a resveratrol mass."""
+    """"40% Total Polyphenols" alone never becomes a resveratrol marker."""
     markers = enricher._compute_delivers_markers(
         {"canonical_id": "grape", "raw_source_text": "Grape Extract", "quantity": 100, "unit_normalized": "mg"},
         row_notes="40% Total Polyphenols",
     )
-    [marker] = [m for m in markers if m["marker_canonical_id"] == "resveratrol"]
-    assert marker["estimated_dose_mg"] is None
+    assert not [m for m in markers if m["marker_canonical_id"] == "resveratrol"]
 
 
 def _resveratrol_rule():
@@ -169,3 +171,11 @@ def test_blend_header_declared_resveratrol_is_a_declaration_without_a_dose(enric
         for hit in alert["condition_hits"] + alert["drug_class_hits"]:
             evaluation = hit.get("dose_threshold_evaluation") or {}
             assert evaluation.get("evaluated") is not True
+
+
+def test_declared_percentage_marker_field_stays_out_of_the_export():
+    from build_final_db import _exported_markers
+
+    marker = {"marker_canonical_id": "resveratrol", "estimated_dose_mg": None, "declared_standardization_pct": 35.0}
+    assert _exported_markers([marker]) == [{"marker_canonical_id": "resveratrol", "estimated_dose_mg": None}]
+    assert _exported_markers(None) == []

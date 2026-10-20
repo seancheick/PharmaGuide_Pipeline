@@ -279,7 +279,8 @@
             "trans-resveratrol",
             "resveratrol"
           ],
-          "notes": "Trans-resveratrol is measured by HPLC in red wine, grape (Vitis vinifera) skins and winemaking byproducts (PMID:12926863). Red-wine grape extracts sold as supplements declare a standardized percentage (BioVin Advanced: 5%). Credit only when the label declares a trans-resveratrol percentage of at least 1%; the identity stays grape."
+          "notes": "Trans-resveratrol is measured by HPLC in red wine, grape (Vitis vinifera) skins and winemaking byproducts (PMID:12926863). Red-wine grape extracts sold as supplements declare a standardized percentage (BioVin Advanced: 5%). Credit only when the label declares a trans-resveratrol percentage of at least 1%; the identity stays grape.",
+          "provenance_without_declaration": false
         }
       ],
       "source_db": "botanical_ingredients"

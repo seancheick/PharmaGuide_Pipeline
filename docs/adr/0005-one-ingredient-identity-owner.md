@@ -54,15 +54,21 @@ Implementation (branch `claude/grape-resveratrol-marker`):
   why the "Hu Zhang" group resolved knotweed rows to resveratrol. They moved to the botanical
   `japanese_knotweed` entry (Hu Zhang is the root and rhizome of Polygonum cuspidatum, PMID
   33388645), so a printed knotweed row keeps its plant identity; no guard decides it.
-- The source-qualified relationship is the existing marker owner
-  (`botanical_marker_contributions.json`, `_compute_delivers_markers`): a knotweed or grape row
-  whose label declares a resveratrol percentage carries an analysis-only resveratrol row, with its
-  amount when the row has one and "amount unknown" otherwise, and meets the resveratrol rules
-  through it. Grape and knotweed use the same standard (a declared percentage of at least 1%), and
-  the marker scan now reads the row's printed note, where DSLD keeps "standardized to 5%
-  trans-resveratrol" (BioVin Advanced 269265, 302705, identity grape).
-- A knotweed row that declares no resveratrol no longer carries the resveratrol rules; the replay
-  lists those products for review.
+- The source-qualified relationship for knotweed is an interaction link:
+  `identity/interaction.py::BOTANICAL_CONSTITUENT_SOURCE` maps `japanese_knotweed` to the IQM
+  `resveratrol` subject for interaction lookup only. Knotweed root and rhizome is a principal
+  resveratrol source (PMIDs 30901974, 33388645, 16830819), so a knotweed row meets the qualified
+  resveratrol advisory whether or not the label prints a percentage. Scoring is unchanged.
+- Grape reaches resveratrol only through a declared percentage, via the marker owner
+  (`botanical_marker_contributions.json`, `_compute_delivers_markers`). A whole grape or grape-PAC
+  extract carries trivial resveratrol, so the grape entry emits no marker at all without a
+  declared percentage of at least 1%. With one, the row carries an analysis-only resveratrol row:
+  its amount when the row has one, "amount unknown" otherwise. The marker scan reads the row's
+  printed note, where DSLD keeps "standardized to 5% trans-resveratrol" (BioVin Advanced 269265,
+  302705, identity grape). A declared knotweed percentage feeds the same marker route for amount
+  context.
+- Each source is linked by what its evidence supports. No knotweed product loses the resveratrol
+  advisory: the 13 Alive! multivitamins with undeclared knotweed, and 58854, keep it.
 - The generic guard (keep the label identity only if no group-carried rule is dropped) is
   unchanged for every other pair (cod liver oil → fish oil).
 
