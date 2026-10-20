@@ -178,3 +178,38 @@ def test_n3_never_avoid_and_testing_wording_name_no_facility_source(enricher, st
 ])
 def test_n3_a_real_facility_source_still_reads(enricher, statement, expected):
     assert _hits(enricher, statement) == expected
+
+
+@pytest.mark.parametrize("statement,expected", [
+    ("Contains milk and may contain soy", {"ALLERGEN_MILK": "contains", "ALLERGEN_SOY": "may_contain"}),
+    ("Contains milk, may contain soy", {"ALLERGEN_MILK": "contains", "ALLERGEN_SOY": "may_contain"}),
+    ("Manufactured in a facility that contains milk and soy", {"ALLERGEN_MILK": "facility_warning", "ALLERGEN_SOY": "facility_warning"}),
+    ("Contains Fish Processed in a facility that also processes milk and soy", {
+        "ALLERGEN_FISH": "contains", "ALLERGEN_MILK": "facility_warning", "ALLERGEN_SOY": "facility_warning"}),
+    ("Contains Fish. Processed in a facility that also processes milk and soy", {
+        "ALLERGEN_FISH": "contains", "ALLERGEN_MILK": "facility_warning", "ALLERGEN_SOY": "facility_warning"}),
+])
+def test_presence_cues_keep_their_own_inline_lists(enricher, statement, expected):
+    assert _hits(enricher, statement) == expected
+
+
+@pytest.mark.parametrize("statement,expected", [
+    ("Made in a dedicated facility, contains milk", {"ALLERGEN_MILK": "contains"}),
+    ("Contains milk and not  manufactured in a facility that processes soy", {"ALLERGEN_MILK": "contains"}),
+    ("Contains milk, packaged in a facility that processes soy", {"ALLERGEN_MILK": "contains", "ALLERGEN_SOY": "facility_warning"}),
+    ("Processed in a facility with products that may contain, soy and wheat", {"ALLERGEN_SOY": "facility_warning", "ALLERGEN_WHEAT": "facility_warning"}),
+])
+def test_inline_cues_respect_relative_and_negated_facility_clauses(enricher, statement, expected):
+    assert _hits(enricher, statement) == expected
+
+
+@pytest.mark.parametrize("verb", ["manufactured", "made", "processed", "produced", "packaged", "bottled"])
+@pytest.mark.parametrize("negator", ["not", "never"])
+def test_negated_production_cues_do_not_declare_cross_contact(enricher, verb, negator):
+    assert _hits(enricher, f"Contains milk and {negator}  {verb} in a facility that processes soy") == {
+        "ALLERGEN_MILK": "contains"}
+
+
+def test_bottled_facility_cue_still_names_cross_contact(enricher):
+    assert _hits(enricher, "Contains milk and bottled in a facility that processes soy") == {
+        "ALLERGEN_MILK": "contains", "ALLERGEN_SOY": "facility_warning"}

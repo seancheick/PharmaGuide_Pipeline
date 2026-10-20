@@ -6253,9 +6253,13 @@ class EnhancedDSLDNormalizer:
                 # without X") is an allergen-FREE claim (handled above); running the
                 # positive extractor on it laundered the negation into a false
                 # "Contains: Milk" that also contradicted the allergenFree list.
-                contains_match = re.search(r"contains:?\s+([^.]+)", notes, re.I)
+                contains_match = re.search(r"\bcontains:?\s+([^.]+)", notes, re.I)
                 contains_is_negated = bool(
                     stmt.get("type") == "Formulation re: Does NOT Contain"
+                    or (contains_match and re.search(
+                        r"\b(?:facility|facilities|equipment|production\s+line)\b[^.,\r\n]*$",
+                        notes[:contains_match.start()], re.I,
+                    ))
                     or (contains_match and re.match(
                         r"\s*(?:no|none|not|non|free|without|zero|0)\b",
                         contains_match.group(1), re.I,
@@ -6266,7 +6270,13 @@ class EnhancedDSLDNormalizer:
                     )
                 )
                 if contains_match and not contains_is_negated:
-                    contains_text = contains_match.group(1).strip()
+                    # The declaration may continue over list line breaks, but a
+                    # new facility or may-contain clause is cross-contact only.
+                    contains_text = re.split(
+                        r"\b(?:processed|manufactured|produced|packaged|made|bottled)\s+(?:in|on|at)\b"
+                        r"|\bmay\s+contain\b",
+                        contains_match.group(1), maxsplit=1, flags=re.I,
+                    )[0].strip()
 
                     # Only add "Contains:" warnings for actual allergens, not marketing fluff
 
@@ -6280,7 +6290,7 @@ class EnhancedDSLDNormalizer:
                         else:
                             all_warnings.append("Contains: Milk")
 
-                    if re.search(r"\b(soy|soybean)\b", contains_text, re.I):
+                    if re.search(r"\b(soy|soybeans?)\b", contains_text, re.I):
                         if "soy" not in all_allergens:
                             all_allergens.append("soy")
                         all_warnings.append("Contains: Soy")
