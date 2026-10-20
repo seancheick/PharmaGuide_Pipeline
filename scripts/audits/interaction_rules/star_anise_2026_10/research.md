@@ -1,3 +1,9 @@
+# Held after independent review — Sean, October20
+
+Sean directed: hold the epilepsy rule pending applicable evidence. PR219 is draft and must not merge on CI alone. The sources below establish contamination-related seizures, not the proposed special applicability to epilepsy across adult extract supplements. No new condition-policy extrapolation was approved. Reviewer attribution is corrected to agent source-content review, not clinician review; no clinical fields were changed by that correction. Preserve this research for a supported future scope.
+
+---
+
 # Star anise safety rule: evidence receipts (2026-10-20)
 
 Entry: `RULE_BOTAN_STAR_ANISE_SEIZURE` (subject `botanical_ingredients/star_anise`, Illicium verum,

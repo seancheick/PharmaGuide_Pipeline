@@ -79,7 +79,7 @@ RULE = {
         "materiality": "presence",
     },
     "last_reviewed": "2026-10-20",
-    "review_owner": "pharmaguide_clinical_team",
+    "review_owner": "Source-content review (agent), 2026-10-20; not clinician-reviewed",
 }
 
 

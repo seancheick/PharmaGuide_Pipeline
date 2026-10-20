@@ -89,3 +89,11 @@ def test_japanese_star_anise_never_takes_the_star_anise_identity(enricher, name)
     rows = enriched["ingredient_quality_data"]["ingredients"]
     assert all(r.get("canonical_id") != "star_anise" for r in rows)
     assert all(a["rule_id"] != RULE_ID for a in enriched["interaction_profile"]["ingredient_alerts"])
+
+
+def test_star_anise_agent_review_does_not_imply_clinician_review():
+    owner = _rule()["review_owner"].lower()
+    assert "agent" in owner
+    assert "not clinician-reviewed" in owner
+    author = Path(__file__).resolve().parents[1] / "audits/interaction_rules/star_anise_2026_10/apply.py"
+    assert "pharmaguide_clinical_team" not in author.read_text()
