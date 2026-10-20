@@ -1,5 +1,7 @@
 # Identity and interaction audit — 2026-10-20
 
+Historical baseline review: Sean subsequently approved the bounded Senactiv correction, integrated in PR218. The reproduction below records the earlier finding; current disposition and verification are in README.md and SENACTIV_RESEARCH.md.
+
 Scope: read-only review of merged source diff `3c45aa69c..30a1e2f73`, focusing on identity, normalization, interactions, botanical aliases, retained nonscorable identities, nested-member preservation and standardization form context. Reviewed relevant production seams and named regression tests, plus raw-label end-to-end probes. No pipeline, release, broad suite, source edit or commit.
 
 Owner: `scripts/identity_integrity.py::resolve_identity` for the enricher's identity decision; `scripts/identity/interaction.py::interaction_subject_refs` for authored family/twin/constituent linkage; `scripts/enrich_supplements_v3.py::_collect_interaction_profile` for rule emission. Evidence: source diff, callers, source-of-truth matrix, accepted ADR-0005, tests and probes below. Will NOT create another identity matcher or change the accepted branded-blend policy.

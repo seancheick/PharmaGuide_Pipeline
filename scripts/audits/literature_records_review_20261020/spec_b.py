@@ -20,7 +20,18 @@ REPLACEMENTS = {
 }
 
 SPEC = {
-    "l_leucine": {"studies": {"16507602": {"sample_size": D}}},
+    "l_leucine": {'studies': {'16507602': {'sample_size': D}, '32483625': {'sample_size': D}},
+     'record': {'population_context': 'Young men and older/young adults in acute EAA or protein-beverage studies; the '
+                                      'broader nutritional umbrella review includes older adults with and without '
+                                      'sarcopenia.',
+                'applicability_decision': 'Acute muscle-protein-synthesis surrogate studies used leucine within EAA '
+                                          'mixtures (6.7 g with 26% or 41% leucine) or whey-protein beverages (3 or 5 '
+                                          'g total leucine). The cited umbrella review found muscle-mass benefit in '
+                                          'sarcopenic older adults, but not healthy older adults, and no clear '
+                                          'benefit for muscle strength or physical performance. These sources do not '
+                                          'establish a universal standalone 2-3 g clinical threshold or '
+                                          'general-population efficacy without the studied preparation and population '
+                                          'context.'}},
     "citrus_bioflavonoids": {
         "record": {"studied_dose_exposure": {},
                    "applicability_decision": "The cited Cochrane review pools drug-grade phlebotonics (rutosides, hidrosmine and diosmine, calcium dobesilate and others) for chronic venous insufficiency: oedema probably falls slightly, with little or no effect on quality of life or ulcer healing and slightly more adverse events. It does not establish efficacy of crude citrus bioflavonoid powders; transfer is prohibited."},
@@ -38,7 +49,12 @@ SPEC = {
         "studies": {"26424423": {"sample_size": D, "design": "narrative_review"},
                     "10230711": {"sample_size": 21}},
     },
-    "cayenne_pepper": {"record": {"studied_dose_exposure": {"values": [2, 2.56], "unit": "mg", "basis": "active_capsaicinoids_per_meal"}}},
+    "cayenne_pepper": {'record': {'studied_dose_exposure': {'values': [2, 2.56], 'unit': 'mg', 'basis': 'active_capsaicinoids_per_meal'},
+                'applicability_decision': 'A meta-analysis of capsaicinoid trials reports that at least 2 mg '
+                                          'capsaicinoids taken before a meal was needed to reduce ad libitum energy '
+                                          'intake; a respiration-chamber study gave 2.56 mg capsaicin per meal. Crude '
+                                          'ground pepper without a capsaicinoid declaration does not establish that '
+                                          'exposure.'}},
     "gamma_linolenic_acid": {
         "record": {"studied_dose_exposure": {},
                    "applicability_decision": "Seven RCTs in the Cochrane herbal-therapy review suggest GLA from evening primrose, borage or blackcurrant seed oil reduces rheumatoid-arthritis pain and disability (moderate evidence); the eczema Cochrane review found no benefit. The cited abstracts state no GLA dose threshold."},
@@ -131,10 +147,19 @@ SPEC = {
                    "applicability_decision": "Olive leaf extract (EFLA 943) 500 mg twice daily for 8 weeks lowered SBP and DBP from baseline in stage-1 hypertension, similarly to captopril (active-controlled; no placebo arm)."},
         "studies": {"21036583": {"sample_size": D, "outcome": "SBP and DBP fell from baseline, not significantly different from captopril; triglycerides fell with olive leaf extract"}},
     },
-    "lecithin": {
-        "record": {"applicability_decision": "One uncontrolled study in 30 hypercholesterolemic adults aged 58-70 (full text, PMC3065734) took one 500 mg soy lecithin capsule daily for 2 months; total and LDL cholesterol fell from baseline."},
-        "studies": {"21490917": {"study_type": "uncontrolled_clinical_study", "outcome": "total cholesterol fell 40.7-42.0% and LDL cholesterol 42.1-56.2% from baseline after 1-2 months (no control group)"}},
-    },
+    "lecithin": {'record': {'applicability_decision': 'A double-blind, placebo-controlled clinical study enrolled 30 '
+                                          'hypercholesterolemic adults aged 58-70, with 20 receiving 500 mg/day soy '
+                                          'lecithin for 2 months. Random allocation was not established in the full '
+                                          'text (PMC3065734). Total and LDL cholesterol fell from the lecithin group '
+                                          'baseline; the reported percentages do not establish a between-group '
+                                          'treatment effect.',
+                'material_form': 'Soy lecithin (the studied material; sunflower lecithin was not tested in this '
+                                 'source)'},
+     'studies': {'21490917': {'study_type': 'clinical_trial',
+                              'outcome': 'total cholesterol fell 40.7-42.0% and LDL cholesterol 42.1-56.2% from '
+                                         'baseline after 1-2 months in the lecithin group; the paper included a '
+                                         'soy-oil placebo group, but these percentages are not between-group '
+                                         'treatment effects'}}},
     "OI_BEETROOT_POWDER": {
         "record": {"studied_dose_exposure": {"values": [372], "unit": "mg", "basis": "inorganic_nitrate_daily"},
                    "applicability_decision": "Requires a quantified inorganic nitrate exposure: the umbrella review's time-to-exhaustion benefit was more pronounced with at least 6 mmol/day (372 mg/day) for more than 3 days. Whole dehydrated beetroot powder lacking standardized nitrate disclosure cannot establish applicability."},
@@ -221,32 +246,33 @@ SPEC = {
                    "applicability_decision": "Single 800 mg and 1,600 mg doses of a green oat extract (Neuravena) were tested; benefits appeared with 800 mg, and the authors suggest the optimal dose lies at or below 800 mg."},
         "studies": {"26618715": {"sample_size": D, "dose": "single doses of 800 or 1,600 mg green oat extract (Neuravena)", "outcome": "800 mg improved global task speed, delayed word recall and an executive-function task (Peg and Ball)"}},
     },
-    "lion_s_mane": {
-        "record": {"material_form": "Hericium erinaceus dry fruiting-body powder tablets (96% powder)",
-                   "studied_dose_exposure": {"values": [3000], "unit": "mg", "basis": "daily_intake"},
-                   "applicability_decision": "Four 250 mg tablets (96% dry fruiting-body powder) three times daily (3 g/day) for 16 weeks improved HDS-R cognitive scores versus placebo in 30 adults aged 50-80 with MCI; scores fell after stopping."},
-    },
+    "lion_s_mane": {'record': {'material_form': 'Hericium erinaceus dry-powder tablets (96% powder; plant part not specified in the abstract)', 'studied_dose_exposure': {}, 'applicability_decision': 'Four 250 mg tablets containing 96% Hericium erinaceus dry powder three times daily (3 g/day tablet mass) for 16 weeks improved HDS-R cognitive scores versus placebo in 30 adults aged 50-80 with MCI; scores fell after stopping. The abstract does not identify the mushroom part; tablet mass is not an exact dry-powder dose.'}, 'studies': {'18844328': {'dose': 'four 250 mg tablets containing 96% Hericium erinaceus dry powder three times daily (3 g/day tablet mass)'}}},
     "butterbur": {
         "record": {"material_form": "Petasites hybridus standardized special root extract (pyrrolizidine-alkaloid content not stated in the cited abstract)",
                    "studied_dose_exposure": {"values": [100, 150], "unit": "mg", "basis": "daily_intake"},
                    "applicability_decision": "In 245 migraine patients, 75 mg twice daily (150 mg/day) of a standardized Petasites root extract reduced attack frequency versus placebo over 4 months; 50 mg twice daily did not reach significance."},
         "studies": {"15623680": {"dose": "75 mg twice daily standardized root extract (50 mg twice daily arm not significant)"}},
     },
-    "red_clover": {
-        "record": {"studied_dose_exposure": {},
-                   "applicability_decision": "A meta-analysis of 8 trials (1,179 women; full text PMC8069620) found red clover isoflavone extracts reduced daily hot flushes by 1.73 versus placebo with high heterogeneity; isoflavone doses ranged 37.1-160 mg/day and the >= 80 mg/day subgroup was not significant."},
-        "studies": {"33920485": {"sample_size": 1179, "dose": "37.1-160 mg/day isoflavones (mean 65.1 mg)", "duration": D, "outcome": "daily hot flushes -1.73 versus placebo; larger but non-significant difference at >= 80 mg/day"}},
-    },
-    "grape_seed": {
-        "record": {"studied_dose_exposure": {"values": [300], "unit": "mg", "basis": "daily_intake"},
-                   "applicability_decision": "300 mg/day Enovita grape seed extract for 16 weeks modulated blood pressure versus placebo in 80 healthy adults with mildly elevated blood pressure."},
-    },
+    "red_clover": {'record': {'studied_dose_exposure': {}, 'applicability_decision': 'The review included 12 trials with 1,179 women overall (1,043 in the final analysis; full text PMC8069620). Its hot-flush analysis of 8 trials (10 comparisons) found 1.73 fewer daily hot flushes versus placebo with high heterogeneity. Isoflavone doses ranged 37.1-160 mg/day; the >= 80 mg/day subgroup was not significant.'}, 'studies': {'33920485': {'sample_size': 1179, 'dose': '37.1-160 mg/day isoflavones (mean 65.1 mg)', 'duration': '__DELETE__', 'outcome': 'daily hot flushes -1.73 versus placebo; larger but non-significant difference at >= 80 mg/day'}}},
+    "grape_seed": {'record': {'studied_dose_exposure': {'values': [300], 'unit': 'mg', 'basis': 'daily_intake'},
+                'applicability_decision': 'Enovita grape seed extract 300 mg/day for 16 weeks was tested in 80 '
+                                          'healthy adults with mildly elevated blood pressure. The overall primary '
+                                          'blood-pressure endpoint was not superior to placebo. Exploratory '
+                                          'male-subgroup analyses suggested benefit, but women showed no superiority; '
+                                          'this does not establish an overall placebo-superior blood-pressure effect '
+                                          '(PMC7922661).',
+                'effect_direction': 'mixed'},
+     'studies': {'33671310': {'effect_direction': 'mixed',
+                              'outcome': 'no superiority over placebo on the overall primary systolic blood-pressure '
+                                         'endpoint (p = 0.7197); diastolic comparison also null (p = 0.2001); '
+                                         'exploratory male-subgroup analyses favored extract, while women showed no '
+                                         'superiority'}}},
     "l_serine": {
         "record": {"population_context": "Adults with hereditary sensory and autonomic neuropathy type 1 (HSAN1)", "studied_dose_exposure": {},
                    "applicability_decision": "One RCT in 18 patients with HSAN1, a rare genetic neuropathy, found 400 mg/kg/day L-serine slowed progression and lowered deoxysphingolipids. This disease-specific, very-high-dose evidence does not establish general neurological benefit or a supplement dose."},
         "studies": {"30626650": {"sample_size": 18, "outcome": "CMTNS neuropathy score improved versus placebo after 1 year; deoxysphinganine fell 59%"}},
     },
-    "beta_glucan": {"studies": {"23378458": {"sample_size": 77}}},
+    "beta_glucan": {'record': {'material_form': "Baker's yeast beta-1,3/1,6-glucan (Wellmune)", 'population_context': 'Healthy women with moderate psychological stress', 'studied_dose_exposure': {'values': [250], 'unit': 'mg', 'basis': 'daily_intake'}}, 'studies': {'23378458': {'sample_size': 77, 'outcome': 'fewer reported upper respiratory symptoms than placebo (10% vs 29%); better global mood and vigor'}}},
     "blood_orange_extract": {
         "record": {"applicability_decision": "400 mg/day Moro juice extract (Morosil) for 12 weeks reduced BMI, weight and waist and hip circumference versus placebo in overweight healthy adults."},
         "studies": {"25588369": {"sample_size": D}},
@@ -261,7 +287,14 @@ SPEC = {
         "studies": {"8214997": {"sample_size": 37}},
     },
     "goji_berry": {"record": {"studied_dose_exposure": {}}},
-    "atp": {"studies": {"28080323": {"sample_size": 42, "duration": "2 weeks", "outcome": "prevented post-exercise falls in ATP and muscle excitability and increased later-bout Wingate peak power versus baseline"}}},
+    "atp": {'studies': {'28080323': {'sample_size': 42,
+                              'duration': '2 weeks',
+                              'outcome': 'prevented post-exercise falls in ATP and muscle excitability and increased '
+                                         'later-bout Wingate peak power versus baseline'}},
+     'record': {'studied_dose_exposure': {'values': [400], 'unit': 'mg', 'basis': 'daily_intake'},
+                'applicability_decision': '400 mg/day disodium ATP for 2 weeks prevented post-exercise falls in ATP '
+                                          'and muscle excitability and raised later-bout Wingate peak power in 42 '
+                                          'healthy men.'}},
     "neurofactor": {
         "record": {"applicability_decision": "A single 100 mg dose of whole coffee fruit concentrate raised plasma BDNF 143% from baseline in 10 fasted adults; no daily-use or neurological outcome was measured."},
         "studies": {"23312069": {"study_type": "randomized_single_dose_parallel_groups", "sample_size": 10, "duration": "single dose; 120 min sampling", "outcome": "plasma BDNF rose 143% from baseline with whole coffee fruit concentrate (n=10)"}},
@@ -274,11 +307,18 @@ SPEC = {
         "record": {"applicability_decision": "A single 100 mg dose of whole coffee fruit concentrate raised plasma BDNF 143% from baseline in 10 fasted adults; cognition or alertness was not measured."},
         "studies": {"23312069": {"study_type": "randomized_single_dose_parallel_groups", "sample_size": 10, "duration": "single dose; 120 min sampling", "outcome": "plasma BDNF rose 143% from baseline with whole coffee fruit concentrate (n=10)"}},
     },
-    "pregnenolone": {
-        "record": {"population_context": "Adults with schizophrenia (adjunctive treatment)",
-                   "applicability_decision": "Reviewed null for cognition: in an 8-week adjunctive RCT in 120 people with schizophrenia, pregnenolone did not improve cognition (MCCB) but improved functional capacity (UPSA-B). This disease-specific result does not establish cognitive benefit in general adults."},
-        "studies": {"25030803": {"sample_size": 120, "dose": D, "duration": "8 weeks", "outcome": "no improvement in MCCB cognition versus placebo; UPSA-B functional capacity improved (p = 0.03)", "effect_direction": "mixed"}},
-    },
+    "pregnenolone": {'record': {'population_context': 'Adults with schizophrenia (adjunctive treatment)',
+                'applicability_decision': 'Reviewed null for cognition: in an 8-week adjunctive RCT in 120 people '
+                                          'with schizophrenia, pregnenolone did not improve cognition (MCCB) but '
+                                          'improved functional capacity (UPSA-B). This disease-specific result does '
+                                          'not establish cognitive benefit in general adults.',
+                'studied_dose_exposure': {}},
+     'studies': {'25030803': {'sample_size': 120,
+                              'dose': D,
+                              'duration': '8 weeks',
+                              'outcome': 'no improvement in MCCB cognition versus placebo; UPSA-B functional capacity '
+                                         'improved (p = 0.03)',
+                              'effect_direction': 'mixed'}}},
     "d_beta_hydroxybutyrate_bhb": {
         "record": {"effect_direction": "mixed", "studied_dose_exposure": {},
                    "applicability_decision": "Two acute 0.38 g/kg doses of BHB salts before exercise raised plasma BHB to about 0.3-0.4 mM in 19 trained cyclists, with no effect on lactate, perceived exertion or efficiency; GI symptoms occurred in 13 of 19."},
@@ -299,13 +339,17 @@ SPEC = {
                    "applicability_decision": "600 mg/day emulsified oregano oil for 6 weeks cleared or reduced enteric parasites in an uncontrolled study of 14 adults."},
         "studies": {"10815019": {"study_type": "uncontrolled_clinical_study"}},
     },
-    "activated_charcoal": {"studies": {"3521259": {"sample_size": 99, "dose": D}}},
+    "activated_charcoal": {'studies': {'3521259': {'sample_size': 99, 'dose': D}},
+     'record': {'studied_dose_exposure': {},
+                'applicability_decision': 'In a double-blind trial in 99 adults (US and India), activated charcoal '
+                                          'lowered breath hydrogen and bloating and cramp symptoms after lactulose '
+                                          'versus placebo; the abstract gives no dose.'}},
     "maitake": {
         "record": {"effect_direction": "mixed", "studied_dose_exposure": {},
                    "applicability_decision": "A phase I/II dose-escalation study in 34 postmenopausal breast cancer survivors found an oral Maitake polysaccharide extract both enhanced and depressed immune measures, with non-monotonic dose-responses; no beneficial dose is established."},
         "studies": {"19253021": {"dose": "0.1, 0.5, 1.5, 3 or 5 mg/kg twice daily Maitake liquid extract", "outcome": "both immune-stimulatory and immune-inhibitory effects in peripheral blood; non-monotonic dose-response", "effect_direction": "mixed"}},
     },
-    "OI_SHARK_CARTILAGE": {"studies": {"15912493": {"dose": D, "duration": D}}},
+    "OI_SHARK_CARTILAGE": {'record': {'material_form': 'Benefin shark cartilage powder', 'studied_dose_exposure': {}, 'applicability_decision': 'The randomized advanced-cancer trial found no survival benefit. Benefin powder was titrated from 24 g/day toward a 96 g/day target as tolerated, not an established effective-dose range. The trial was underpowered; some quality-of-life measures were worse with treatment.'}, 'studies': {'15912493': {'dose': 'Benefin powder titrated from 24 g/day toward 96 g/day as tolerated, increasing every 3 days, divided into 3 or 4 daily servings', 'duration': 'variable, continued as tolerated', 'outcome': 'no overall survival or overall quality-of-life benefit; some well-being measures were worse with shark cartilage; trial underpowered for survival'}}},
     "butchers_broom_root": {
         "record": {"studied_dose_exposure": {},
                    "applicability_decision": "A 12-week RCT in 148 women with chronic venous insufficiency found a Ruscus extract (Fagorutin Ruscus) reduced leg volume and symptoms versus placebo at the German-monograph dose; the abstract does not give the amount."},
@@ -356,7 +400,12 @@ SPEC = {
                    "applicability_decision": "3 g/day Yerba Mate (three capsules with each meal) for 12 weeks reduced body fat mass, percent body fat and waist-hip ratio versus placebo in 30 obese Korean adults."},
         "studies": {"26408319": {"dose": "3 g/day Yerba Mate (three capsules with each meal)"}},
     },
-    "milk_basic_protein": {"studies": {"17048062": {"sample_size": 35, "outcome": "lumbar (L2-L4) BMD rose 1.57% versus 0.13% with placebo; urinary NTx fell and osteocalcin rose"}}},
+    "milk_basic_protein": {'studies': {'17048062': {'sample_size': 35,
+                              'outcome': 'lumbar (L2-L4) BMD rose 1.57% versus 0.13% with placebo; urinary NTx fell '
+                                         'and osteocalcin rose'}},
+     'record': {'studied_dose_exposure': {'values': [40], 'unit': 'mg', 'basis': 'daily_intake'},
+                'applicability_decision': '40 mg/day milk basic protein for 6 months raised lumbar (L2-L4) BMD versus '
+                                          'placebo in 35 healthy young women.'}},
     "picrorhiza": {
         "record": {"material_form": "Picrorhiza kurroa root powder capsules (picroside-standardized)",
                    "studied_dose_exposure": {"values": [1125], "unit": "mg", "basis": "daily_intake"},
@@ -369,11 +418,7 @@ SPEC = {
         "studies": {"18589030": {"study_type": "randomized_open_label_parallel_vs_salmon", "sample_size": 32}},
     },
     "alpha_amylase": {"record": {"studied_dose_exposure": {}}, "studies": {"30156436": {"dose": "50 mg multienzyme complex (DigeZyme) three times daily"}}},
-    "larch_arabinogalactan": {
-        "record": {"studied_dose_exposure": {"values": [4500], "unit": "mg", "basis": "daily_intake"},
-                   "applicability_decision": "4.5 g/day of a larch arabinogalactan extract (ResistAid) for 72 days gave larger pneumococcal-vaccine IgG responses than placebo for 2 of 7 antibody subtypes (18C, 23F) in 45 healthy adults."},
-        "studies": {"20796315": {"outcome": "greater IgG response than placebo for 2 of 7 pneumococcal subtypes (18C, 23F); no effect on salivary IgA, white cells, cytokines or complement"}},
-    },
+    "larch_arabinogalactan": {'record': {'studied_dose_exposure': {'values': [4500], 'unit': 'mg', 'basis': 'daily_intake'}, 'applicability_decision': '4.5 g/day of a larch arabinogalactan extract (ResistAid) for 72 days gave larger pneumococcal-vaccine IgG responses than placebo for 2 of 7 antibody subtypes (18C, 23F) in 45 healthy adults.', 'material_form': 'Larch (Larix spp.) arabinogalactan extract (ResistAid)'}, 'studies': {'20796315': {'outcome': 'greater IgG response than placebo for 2 of 7 pneumococcal subtypes (18C, 23F); no effect on salivary IgA, white cells, cytokines or complement', 'duration': '72 days'}}},
     "olive_fruit": {
         "record": {"material_form": "Oleuropein, hydroxytyrosol and tyrosol supplements (sources not specified in the abstract)", "studied_dose_exposure": {},
                    "applicability_decision": "A meta-analysis of 14 studies (594 participants) found oleuropein, hydroxytyrosol and tyrosol supplementation modestly reduced total cholesterol, triglycerides and insulin; the abstract gives no hydroxytyrosol dose threshold."},
@@ -386,7 +431,7 @@ SPEC = {
         "studies": {"33385511": {"study_type": "randomized_crossover_feasibility", "sample_size": 12, "dose": "2 g/day encapsulated Ziziphus spinosa seed granules", "outcome": "PSQI improved versus placebo (p = 0.046); diary sleep improved after ZS; other outcomes did not differ"}},
     },
     "turkey_rhubarb_root": {
-        "record": {"studied_dose_exposure": {"values": [12.5, 25], "unit": "mg", "basis": "rhein_daily"},
+        "record": {"studied_dose_exposure": {},
                    "applicability_decision": "Rhubarb extract dosed at 12.5 or 25 mg rhein per day for 30 days improved stool frequency, consistency and transit questionnaires versus placebo in middle-aged adults (42 completed; full text PMC9738964)."},
         "studies": {"36499011": {"sample_size": 42, "dose": "rhubarb extract providing 12.5 or 25 mg rhein per day", "duration": "30 days", "outcome": "stool frequency, consistency and transit questionnaires improved in both doses versus placebo"}},
     },
@@ -413,11 +458,13 @@ SPEC = {
                    "applicability_decision": "In a placebo-controlled trial in 60 patients with type 2 diabetes and mixed hyperlipidemia, standard and phytosomal bergamot polyphenolic fraction both lowered fasting glucose, LDL-C and triglycerides and raised HDL-C; the abstract gives no dose or duration."},
         "studies": {"30501605": {"sample_size": 60, "dose": D, "duration": D, "outcome": "fasting glucose, LDL-C and triglycerides fell and HDL-C rose with both BPF formulations versus placebo"}},
     },
-    "coleus_forskohlii_root": {"studies": {"16129715": {"outcome": "body fat percentage and fat mass fell and bone mass rose versus placebo; lean body mass only trended up (p = 0.097); free testosterone rose"}}},
-    "chitosan": {
-        "studies": {"32437302": {"_replace_pmid": "18646097", "study_type": "systematic_review_meta_cochrane", "sample_size": 1219, "dose": D, "duration": "at least 4 weeks",
-                                 "outcome": "pooled weight loss -1.7 kg versus placebo, but high-quality trials showed a minimal effect unlikely to be clinically significant", "effect_direction": "null"}},
-    },
+    "coleus_forskohlii_root": {'studies': {'16129715': {'outcome': 'body fat percentage and fat mass fell and bone mass rose versus placebo; '
+                                         'lean body mass only trended up (p = 0.097); free testosterone rose'}},
+     'record': {'studied_dose_exposure': {'values': [500], 'unit': 'mg', 'basis': 'daily_intake'},
+                'applicability_decision': '250 mg of a 10% forskolin root extract twice daily (500 mg/day) for 12 '
+                                          'weeks decreased body fat percentage and fat mass versus placebo in 30 '
+                                          'overweight and obese men; lean body mass only trended up.'}},
+    "chitosan": {'record': {'population_context': 'Overweight or obese adults', 'studied_dose_exposure': {}, 'applicability_decision': 'The Cochrane review found minimal weight effects in higher-quality trials, unlikely to be clinically significant. A source-bound dose for this record remains unverified; no effective-dose threshold is established.'}, 'studies': {'32437302': {'_replace_pmid': '18646097', 'study_type': 'systematic_review_meta_cochrane', 'sample_size': 1219, 'dose': '__DELETE__', 'duration': 'at least 4 weeks', 'outcome': 'pooled weight loss -1.7 kg versus placebo, but high-quality trials showed a minimal effect unlikely to be clinically significant', 'effect_direction': 'null'}}},
     "english_ivy": {
         "record": {"effect_direction": "positive_weak", "studied_dose_exposure": {},
                    "applicability_decision": "A systematic review (6 RCTs, 1 CCT, 4 observational studies of ivy leaf mono- or combination preparations) found effects on cough are minimal at best and of uncertain clinical importance, with high risk of bias; no EA 575 dose is established by the abstract."},
@@ -452,11 +499,7 @@ SPEC = {
                    "applicability_decision": "A meta-analysis of 13 trials found Yun Zhi (Coriolus versicolor) added to conventional anticancer treatment gave a 9% absolute reduction in 5-year mortality, mainly in breast, gastric and colorectal cancer. This oncology-adjunct survival evidence does not establish general immune support or a dose."},
         "studies": {"22185453": {"study_type": "systematic_review_meta", "sample_size": D, "dose": D, "duration": D, "outcome": "9% absolute reduction in 5-year mortality with Yun Zhi plus conventional treatment (13 trials)"}},
     },
-    "arjuna": {
-        "record": {"effect_direction": "positive_weak", "material_form": "Terminalia arjuna bark stem powder", "studied_dose_exposure": {"values": [1500], "unit": "mg", "basis": "daily_intake"},
-                   "applicability_decision": "In a non-randomized study, 12 patients with post-MI angina or ischaemic cardiomyopathy took 500 mg arjuna bark powder every 8 hours for 3 months with conventional treatment; LVEF and LV mass improved versus 12 matched controls, while angina frequency fell in both groups."},
-        "studies": {"9505018": {"study_type": "controlled_open_study_matched_controls", "sample_size": 24, "dose": "500 mg arjuna bark stem powder every 8 hours", "outcome": "LVEF rose and LV mass fell in the treated group only; angina frequency fell in both groups", "effect_direction": "positive_weak"}},
-    },
+    "arjuna": {'record': {'effect_direction': 'positive_weak', 'material_form': 'Terminalia arjuna bark stem powder', 'studied_dose_exposure': {'values': [1500], 'unit': 'mg', 'basis': 'daily_intake'}, 'applicability_decision': 'In a non-randomized study, 12 patients with post-MI angina or ischaemic cardiomyopathy took 500 mg arjuna bark powder every 8 hours for 3 months alongside conventional treatment. LVEF rose and LV mass fell within the treated group; 12 matched controls did not show those changes. This does not establish a statistically significant between-group effect. Angina frequency fell in both groups.', 'population_context': 'Patients with post-MI angina or ischaemic cardiomyopathy'}, 'studies': {'9505018': {'study_type': 'controlled_open_study_matched_controls', 'sample_size': 24, 'dose': '500 mg arjuna bark stem powder every 8 hours', 'outcome': 'LVEF rose and LV mass fell in the treated group only; angina frequency fell in both groups', 'effect_direction': 'positive_weak'}}},
     "diosmin": {
         "record": {"effect_direction": "positive_weak", "material_form": "Oral phlebotonics (the review's 11 hidrosmine and diosmine trials among others)", "studied_dose_exposure": {},
                    "applicability_decision": "The cited Cochrane review (56 RCTs, 7,690 participants) pooled phlebotonics as a class: oedema probably falls slightly, with little or no effect on quality of life or ulcer healing and slightly more adverse events. The abstract does not report a diosmin- or MPFF-specific dose or result."},
@@ -466,7 +509,8 @@ SPEC = {
         "studies": {"10479216": {"_replace_pmid": "11255425", "sample_size": 474, "dose": "200 mg three times daily (600 mg/day) with 500 mg/day calcium", "duration": "36 months of treatment (4-year study)",
                                  "outcome": "no effect on BMD, bone resorption markers or vertebral fractures versus placebo; subclinical lymphocytopenia in 13.2%", "effect_direction": "negative"}},
     },
-    "nad": {"studies": {"29599478": {"outcome": "NAD+ in peripheral blood mononuclear cells rose about 60% versus placebo (crossover, 30 adults); well tolerated"}}},
+    "nad": {'studies': {'29599478': {'outcome': 'NAD+ in peripheral blood mononuclear cells rose about 60% versus placebo '
+                                         '(crossover, 30 adults); well tolerated'}}},
     "PII_ARTEMISININ": {
         "record": {"applicability_decision": "A CDC report describes hepatitis temporally associated with a 1-week course of a supplement containing 100 mg artemisinin; causality was not established. WHO recommends artemisinins only within combination therapy for malaria."},
         "studies": {"19680221": {"study_type": "case_report", "outcome": "hepatitis (ALT 898 IU/L) after a 1-week course of a 100 mg artemisinin supplement; the supplement contained no other pharmaceutical actives; causal link not established"}},
@@ -501,7 +545,11 @@ SPEC = {
                    "applicability_decision": "Delphinol maqui extract (162 mg anthocyanins) three times daily for 4 weeks lowered Ox-LDL and urinary F2-isoprostanes from baseline in 42 healthy, overweight or smoking adults; no difference remained 40 days after stopping."},
         "studies": {"26400431": {"dose": "Delphinol extract providing 162 mg anthocyanins, three times daily", "outcome": "Ox-LDL and urinary 8-iso-PGF2a fell from baseline at 4 weeks; no blood pressure, lipid or anthropometric change"}},
     },
-    "capsaicin": {"record": {"studied_dose_exposure": {"values": [2.56], "unit": "mg", "basis": "capsaicin_per_meal"}}},
+    "capsaicin": {'record': {'studied_dose_exposure': {'values': [2.56], 'unit': 'mg', 'basis': 'capsaicin_per_meal'},
+                'applicability_decision': 'In a 36-hour respiration-chamber study in negative energy balance, 2.56 mg '
+                                          'capsaicin with every meal counteracted the fall in diet-induced '
+                                          'thermogenesis and resting energy expenditure and raised fat oxidation; no '
+                                          'daily dose threshold is established.'}},
     "diamine_oxidase": {
         "record": {"studied_dose_exposure": {"values": [0.3], "unit": "mg", "basis": "per_capsule_before_meals"},
                    "applicability_decision": "An open-label pilot in 28 patients with histamine intolerance (DAOSIN capsules, 0.3 mg DAO each, before meals up to three times daily for 4 weeks; full text PMC6859183) reported fewer and milder symptoms, which rose again after stopping; there was no placebo arm."},
@@ -519,7 +567,10 @@ SPEC = {
     },
     "mucuna_pruriens": {"record": {"studied_dose_exposure": {}}},
     "strontium": {"record": {"studied_dose_exposure": {}}},
-    "mastic_gum": {"record": {"studied_dose_exposure": {"values": [1050], "unit": "mg", "basis": "daily_intake"}}},
+    "mastic_gum": {'record': {'studied_dose_exposure': {'values': [1050], 'unit': 'mg', 'basis': 'daily_intake'},
+                'applicability_decision': 'Chios mastic gum 350 mg three times daily (1,050 mg/day) for 3 weeks '
+                                          'improved functional dyspepsia symptoms versus placebo in 148 patients (77% '
+                                          'vs 40% marked improvement).'}},
     "d_ribose": {
         "record": {"studied_dose_exposure": {"values": [15000], "unit": "mg", "basis": "daily_intake"},
                    "applicability_decision": "An open-label, uncontrolled pilot gave 5 g D-ribose three times daily (280 g in total) to 41 patients with fibromyalgia or chronic fatigue syndrome; symptom scores improved. No placebo-controlled efficacy or dose threshold is established."},
@@ -533,19 +584,18 @@ RESIDUAL = {
     "l_threonine": {"record": {"population_context": "Healthy adult men (requirement study)"}},
     "boswellia_serrata_resin": {"record": {"material_form": "Boswellia serrata gum resin extract"}},
     "perilla_oil": {"record": {"material_form": "Perilla frutescens seed oil"}},
-    "schisandra": {"record": {"material_form": "Schisandra chinensis fruit extract"}},
+    "schisandra": {'record': {'material_form': 'Schisandra chinensis preparations (plant part and extraction unspecified in the abstract)'}},
     "l_tyrosine": {"record": {"population_context": "Healthy adults under acute stress or cognitive demand (a military combat training course in the trial)"},
                    "studies": {"10230711": {"primary_endpoint": "memory and tracking task performance and blood pressure during a combat training course"}}},
     "cayenne_pepper": {"studies": {"23844093": {"sample_size": D, "outcome": "in 25% negative energy balance, 2.56 mg capsaicin per meal counteracted the fall in diet-induced thermogenesis and resting energy expenditure and raised fat oxidation"}}},
-    "capsaicin": {"record": {"population_context": "Adults in a 36-hour respiration-chamber study in negative energy balance"},
-                  "studies": {"23844093": {"sample_size": D, "outcome": "in 25% negative energy balance, 2.56 mg capsaicin per meal counteracted the fall in diet-induced thermogenesis and resting energy expenditure and raised fat oxidation; blood pressure unchanged"}}},
+    "capsaicin": {'record': {'population_context': 'Adults in a 36-hour respiration-chamber study in negative energy balance', 'material_form': 'Red chili pepper providing quantified capsaicin (2.56 mg per meal)', 'applicability_decision': 'In a 36-hour respiration-chamber study in negative energy balance, red chili pepper providing 2.56 mg capsaicin with every meal counteracted the fall in diet-induced thermogenesis and resting energy expenditure and raised fat oxidation. This source does not establish capsiate preparation equivalence or a daily dose threshold.'}, 'studies': {'23844093': {'sample_size': '__DELETE__', 'outcome': 'in 25% negative energy balance, 2.56 mg capsaicin per meal counteracted the fall in diet-induced thermogenesis and resting energy expenditure and raised fat oxidation; blood pressure unchanged'}}},
     "cla": {"record": {"material_form": "Conjugated linoleic acid (isomer mixtures or purified trans-10,cis-12)",
                        "population_context": "Adults in CLA trials; overweight and obese adults in the long-term meta-analysis"}},
-    "blueberry": {"studies": {"30999017": {"primary_endpoint": "cognitive performance (memory) and mood"}}},
+    "blueberry": {'studies': {'30999017': {'primary_endpoint': 'cognitive performance (memory) and mood', 'design': 'systematic_review'}}},
     "flaxseed": {"record": {"population_context": "Patients with peripheral artery disease (trial) and pooled flaxseed trial populations"}},
     "garcinia_cambogia": {"record": {"material_form": "Garcinia cambogia extract (hydroxycitric acid)"}},
     "green_coffee_bean": {"record": {"material_form": "Green coffee bean extract (chlorogenic acids)"}},
-    "apple_cider_vinegar": {"studies": {"14694010": {"study_type": "clinical_study_abstract_unavailable"}}},
+    "apple_cider_vinegar": {'studies': {'14694010': {'study_type': 'clinical_study_abstract_unavailable'}, '28292654': {'outcome': 'significant reduction in postprandial glucose and insulin area under the curve (AUC)'}}},
     "goldenseal": {"record": {"material_form": "Hydrastis canadensis supplement (preparation not stated in the abstract)"}},
     "hops": {"record": {"population_context": "Patients with non-organic insomnia"}},
     "dgl_deglycyrrhizinated_licorice": {"record": {"population_context": "Adults with functional dyspepsia"}},
@@ -577,7 +627,7 @@ RESIDUAL = {
     "algae_oil": {"record": {"population_context": "Healthy adults aged 20-65"}},
     "larch_arabinogalactan": {"record": {"material_form": "Larch (Larix spp.) arabinogalactan extract (ResistAid)"}},
     "jujube": {"record": {"material_form": "Ziziphus spinosa seed granules"}},
-    "turkey_rhubarb_root": {"record": {"material_form": "Rhubarb extract dosed by rhein content", "population_context": "Middle-aged adults (95% women) with constipation"}},
+    "turkey_rhubarb_root": {'record': {'material_form': 'Rhubarb extract standardized by anthraquinone derivatives expressed as rhein', 'population_context': 'Middle-aged adults (95% women) with constipation', 'studied_dose_exposure': {}, 'applicability_decision': 'Rhubarb extract providing 12.5 or 25 mg/day anthraquinone derivatives expressed as rhein for 30 days improved stool frequency, consistency and transit questionnaires versus placebo in middle-aged adults (42 randomized, 39 analyzed; full text PMC9738964). These values describe the standardized derivative content, not isolated rhein or total extract mass.'}, 'studies': {'36499011': {'sample_size': 42, 'dose': 'rhubarb extract providing 12.5 or 25 mg/day anthraquinone derivatives expressed as rhein'}}},
     "broccoli_sprout": {"record": {"material_form": "Broccoli sprout beverage (glucoraphanin + sulforaphane)"},
                         "studies": {"24913818": {"dose": "broccoli sprout beverage providing 600 umol glucoraphanin and 40 umol sulforaphane daily"}}},
     "graviola": {"record": {"material_form": "Annona muricata (annonacin, its main acetogenin)", "population_context": "Not a human study: cultured mesencephalic neurons"}},

@@ -43,3 +43,13 @@ def states_only_epa_and_dha(name: Any) -> bool:
     residue = _DHA_TOKEN_RE.sub(" ", residue)
     residue = _FILLER_TOKEN_RE.sub(" ", residue)
     return not residue.strip()
+
+
+def states_only_omega_fatty_acids(name: Any) -> bool:
+    """Whether the row measures only total omega fatty acids, not source oil."""
+    normalized = re.sub(r"[^a-z0-9]+", " ", str(name or "").lower()).strip()
+    return bool(
+        normalized and any(match.group(0).startswith("omega")
+                           for match in _FILLER_TOKEN_RE.finditer(normalized))
+        and not _FILLER_TOKEN_RE.sub(" ", normalized).strip()
+    )

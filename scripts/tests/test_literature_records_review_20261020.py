@@ -74,7 +74,7 @@ PREPARATION_MISMATCH = {
     "l_tryptophan": "alpha-lactalbumin", "cyanidin_3_glucoside": "anthocyanin mixture",
     "phosphatidylcholine": "30% phosphatidylcholine", "marshmallow_root": "ivy leaf",
     "keratin": "vitamins and minerals", "winged_treebine": "green tea", "magnolia_bark": "Phellodendron",
-    "fucoxanthin": "pomegranate seed oil", "fennel": "essence", "pomegranate": "juice",
+    "fucoxanthin": "pomegranate seed oil", "fennel": "essence",
     "acai_berry": "pulp", "chrysin": "honey", "cat_s_claw": "guianensis", "wild_yam_root": "cream",
     "pumpkin_seed_oil": "No seed-oil arm", "spearmint": "tea", "moringa": "leaves",
     "shiitake": "Whole-mushroom", "shiitake_mushroom": "Whole-mushroom", "oolong_tea_leaf": "tea",
@@ -228,6 +228,111 @@ def test_safety_signal_records_keep_their_direction_and_state_their_source(recor
     assert _study(records["graviola"], "14521988")["study_type"] == "in_vitro"
 
 
+def test_pomegranate_preserves_verified_extract_research(records):
+    from evidence_resolver import resolve_evidence_for_canonical
+    record = records["pomegranate"]
+    assert record["effect_direction"] == "positive_weak"
+    assert record["studied_dose_exposure"] == {}
+    assert _study(record, "38410857")["effect"] == "positive_weak"
+    assert "extract diastolic results were not statistically significant" in record["applicability_decision"]
+    assert "mainly to juice" not in record["applicability_decision"]
+    resolution = resolve_evidence_for_canonical("pomegranate")
+    assert "literature_applicability_unestablished" not in resolution.blocking_reasons
+
+
+def test_fucoxanthin_preserves_component_surrogate_without_weight_loss_transfer(records):
+    record = records["fucoxanthin"]
+    study = _study(record, "19840063")
+    assert record["effect_direction"] == "applicability_unestablished"
+    assert record["studied_dose_exposure"] == {}
+    assert "standalone fucoxanthin increased resting energy expenditure" in study["outcome"]
+    assert "Combination reduced weight" in study["outcome"]
+    assert "surrogate" in record["applicability_decision"]
+    assert "standalone fucoxanthin weight loss" in record["applicability_decision"]
+
+
+@pytest.mark.parametrize("cid", ['olive_fruit_extract', 'black_garlic', 'superoxide_dismutase', 'schisandra', 'shiitake_mushroom', 'fucoxanthin', 'perilla_oil', 'undecylenic_acid'])
+def test_corrected_applicability_metadata_is_coherent(records, cid):
+    from evidence_resolver import resolve_evidence_for_canonical
+    record = records[cid]
+    assert record["applicability_status"] == "applicability_unestablished"
+    resolution = resolve_evidence_for_canonical(cid)
+    if cid in {"superoxide_dismutase", "schisandra", "perilla_oil"}:
+        assert resolution.applicability_status == "unverified_literature_record"
+        assert resolution.blocking_reasons == ["literature_verification_pending"]
+    else:
+        assert resolution.applicability_status == "applicability_unestablished"
+
+
+
+def test_b_part1_doses_remain_bound_to_the_cited_regimen(records):
+    assert records["beta_glucan"]["studied_dose_exposure"] == {"values": [250], "unit": "mg", "basis": "daily_intake"}
+    assert records["chitosan"]["studied_dose_exposure"] == {}
+    shark = records["OI_SHARK_CARTILAGE"]
+    assert shark["studied_dose_exposure"] == {}
+    study = _study(shark, "15912493")
+    assert "titrated" in study["dose"] and "as tolerated" in study["dose"]
+    assert "underpowered" in shark["applicability_decision"]
+    assert "worse" in study["outcome"]
+    assert "not an established effective-dose range" in shark["applicability_decision"]
+
+
+def test_b_part1_arjuna_does_not_convert_within_group_significance(records):
+    text = records["arjuna"]["applicability_decision"]
+    assert "within the treated group" in text
+    assert "does not establish a statistically significant between-group effect" in text
+    assert "Angina frequency fell in both groups" in text
+
+
+def test_b_part1_larch_uses_the_source_intervention_period(records):
+    assert _study(records["larch_arabinogalactan"], "20796315")["duration"] == "72 days"
+    assert "72 days" in records["larch_arabinogalactan"]["applicability_decision"]
+
+
+def test_b_part2_lecithin_does_not_erase_placebo_group(records):
+    r = records['lecithin']
+    s = _study(records['lecithin'], '21490917')
+    assert s['study_type'] != 'uncontrolled_clinical_study'
+    assert 'no control group' not in s['outcome'].lower()
+    assert 'placebo' in r['applicability_decision'].lower()
+    assert 'uncontrolled' not in r['applicability_decision'].lower()
+
+def test_b_part2_grape_seed_primary_null_not_overridden_by_exploratory_subgroup(records):
+    r = records['grape_seed']
+    s = _study(records['grape_seed'], '33671310')
+    assert r['effect_direction'] == s['effect_direction'] == 'mixed'
+    assert '0.7197' in s['outcome']
+    assert 'primary' in r['applicability_decision'].lower()
+    assert 'not superior' in r['applicability_decision'].lower()
+    assert r['studied_dose_exposure']['values'] == [300]
+
+def test_b_part2_nad_cannot_inherit_nr_trial_applicability(records, monkeypatch):
+    import evidence_resolver as er
+    monkeypatch.setattr(er, '_load_literature_evidence', lambda: records)
+    r = er.resolve_evidence_for_canonical('nad', name='NAD+ (Nicotinamide Adenine Dinucleotide)')
+    assert r.disposition == 'research_present_applicability_unestablished'
+    assert records['nad']['studied_dose_exposure'] == {}
+    assert '250' not in records['nad']['applicability_decision'] or 'No 250' in records['nad']['applicability_decision']
+
+def test_b_part2_leucine_umbrella_not_assigned_unverified_699_enrollment(records):
+    assert 'sample_size' not in _study(records['l_leucine'], '32483625')
+
+def test_b_part2_pregnenolone_no_unverified_derived_dose_after_source_dose_abstention(records):
+    assert 'dose' not in _study(records['pregnenolone'], '25030803')
+    assert records['pregnenolone']['studied_dose_exposure'] == {}
+
+def test_b_part2_epo_actual_tested_exposure_retained_with_null_conclusion(records):
+    assert records['evening_primrose_oil']['studied_dose_exposure']['values'] == [1000]
+    assert records['evening_primrose_oil']['effect_direction'] == 'null'
+
+def test_b_part2_nr_identity_own_trials_remain_separate_and_resolved(records, monkeypatch):
+    import evidence_resolver as er
+    monkeypatch.setattr(er, '_load_literature_evidence', lambda: records)
+    r = er.resolve_evidence_for_canonical('nicotinamide_riboside')
+    assert r.disposition == 'resolved_by_reviewed_clinical_evidence'
+    assert records['nicotinamide_riboside']['studied_dose_exposure']['values'] == [100, 300, 1000]
+
+
 # ---- integrator-audit leftovers (batch C) ------------------------------------------------------
 
 def test_no_unsourced_threshold_in_applicability(records):
@@ -242,7 +347,7 @@ def test_no_unsourced_threshold_in_applicability(records):
 
 @pytest.mark.parametrize("cid, values", [
     ("chitosan", None), ("activated_charcoal", None), ("coleus_forskohlii_root", [500]),
-    ("nad", [1000]), ("atp", [400]), ("milk_basic_protein", [40]),
+    ("nad", None), ("atp", [400]), ("milk_basic_protein", [40]),
 ])
 def test_studied_dose_exposure_is_one_daily_basis_or_empty(records, cid, values):
     sde = records[cid]["studied_dose_exposure"]
@@ -256,3 +361,53 @@ def test_studied_dose_exposure_is_one_daily_basis_or_empty(records, cid, values)
                                  "shiitake_mushroom", "fucoxanthin", "perilla_oil", "undecylenic_acid"])
 def test_no_record_keeps_a_stale_applicable_status(records, cid):
     assert records[cid]["applicability_status"] == "applicability_unestablished"
+
+
+# B0 primary-content corrections: portable literals, no local corpus required.
+def test_b0_rhubarb_randomized_is_not_completed_or_isolated_rhein(records):
+    record = records["turkey_rhubarb_root"]
+    study = _study(record, "36499011")
+    assert study["sample_size"] == 42
+    assert "42 randomized, 39 analyzed" in record["applicability_decision"]
+    assert "42 completed" not in record["applicability_decision"]
+    assert "anthraquinone derivatives expressed as rhein" in study["dose"]
+    assert record["studied_dose_exposure"] == {}
+
+
+def test_b0_red_clover_review_population_is_distinct_from_hot_flush_subset(records):
+    record = records["red_clover"]
+    assert _study(record, "33920485")["sample_size"] == 1179
+    assert "12 trials with 1,179 women overall" in record["applicability_decision"]
+    assert "1,043 in the final analysis" in record["applicability_decision"]
+    assert "8 trials (10 comparisons)" in record["applicability_decision"]
+    assert ">= 80 mg/day subgroup was not significant" in record["applicability_decision"]
+
+
+def test_b0_vinegar_reports_auc_and_blueberry_is_not_a_meta_analysis(records):
+    outcome = _study(records["apple_cider_vinegar"], "28292654")["outcome"]
+    assert "area under the curve (AUC)" in outcome
+    assert "peaks" not in outcome
+    assert _study(records["blueberry"], "30999017")["design"] == "systematic_review"
+
+
+def test_b0_capsaicin_source_does_not_assert_capsiate_equivalence(records):
+    record = records["capsaicin"]
+    assert record["material_form"] == "Red chili pepper providing quantified capsaicin (2.56 mg per meal)"
+    assert "does not establish capsiate preparation equivalence" in record["applicability_decision"]
+    assert record["studied_dose_exposure"] == {"values": [2.56], "unit": "mg", "basis": "capsaicin_per_meal"}
+
+
+def test_b0_lions_mane_tablet_mass_is_not_an_exact_powder_or_part_claim(records):
+    record = records["lion_s_mane"]
+    assert "plant part not specified in the abstract" in record["material_form"]
+    assert "fruiting" not in record["material_form"]
+    assert "96%" in _study(record, "18844328")["dose"]
+    assert "3 g/day tablet mass" in _study(record, "18844328")["dose"]
+    assert record["studied_dose_exposure"] == {}
+
+
+def test_b0_schisandra_preparation_stays_unknown_and_review_pending(records):
+    record = records["schisandra"]
+    assert "plant part and extraction unspecified" in record["material_form"]
+    assert record["verification_result"] == "verification_failure_unresolved"
+    assert _study(record, "18515024")["scoring_eligible"] is False

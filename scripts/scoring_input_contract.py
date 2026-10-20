@@ -38,7 +38,7 @@ from scoring_reference_resolver import (
 # Single source of truth for identity disposition vocabulary and scoreability.
 # Never copy the disposition list here; the contract must consume the same policy
 # the enricher stamps rows with.
-from identity.omega_labels import states_only_epa_and_dha
+from identity.omega_labels import states_only_epa_and_dha, states_only_omega_fatty_acids
 from identity_integrity import (
     IDENTITY_DISPOSITIONS,
     NON_SCORABLE_NO_IDENTITY_RATIONALE,
@@ -569,6 +569,12 @@ def _source_is_marine_omega_parent(row: Dict[str, Any]) -> bool:
 
 def _source_is_non_epa_dha_oil(row: Dict[str, Any]) -> bool:
     return bool(_NON_EPA_DHA_SOURCE_RE.search(_row_source_text(row)))
+
+
+def omega_row_names_only_constituents(row: Mapping[str, Any]) -> bool:
+    """Whether the printed row measures fatty acids rather than carrier oil."""
+    source = row.get("raw_source_text") or row.get("name")
+    return states_only_epa_and_dha(source) or states_only_omega_fatty_acids(source)
 
 
 def epa_dha_row_is_trustworthy(row: Dict[str, Any], *, allow_zero: bool = False) -> bool:

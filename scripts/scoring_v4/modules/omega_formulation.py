@@ -44,7 +44,7 @@ from typing import Any, Dict, List, Optional
 from normalization import omega_molecular_form_disclosures
 from scoring_v4.modules.generic_formulation import shared_formulation_penalty_detail
 from scoring_v4.modules.generic_helpers import bio_score_of, get_active_ingredients
-from scoring_input_contract import epa_dha_amounts_per_serving, role_driver_canonicals
+from scoring_input_contract import epa_dha_amounts_per_serving, omega_row_names_only_constituents, role_driver_canonicals
 from scoring_reference_resolver import parent_relative_form_quality
 
 
@@ -286,6 +286,8 @@ def _row_mg(row: Dict[str, Any]) -> Optional[float]:
 
 
 def _is_parent_oil_row(row: Dict[str, Any]) -> bool:
+    if omega_row_names_only_constituents(row):
+        return False
     canon = str(row.get("canonical_id") or "").strip().lower()
     if canon in _OIL_MASS_CANONICALS:
         return True

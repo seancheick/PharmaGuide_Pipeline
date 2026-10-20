@@ -2346,24 +2346,6 @@ Report and compact measurements: scripts/audits/integration_audit_20261020/READM
 SENACTIV_RESEARCH.md. Durable fullcaptures/checksums: ~/pg_quality/integration_audit_20261020.
 Finalsourceab50c2c3c is qualified for authorized PR218 integration. Only audit/master/LEDGER documentation follows this tested source; no duplicate source checkpoint required. Actual merge SHA, primary-draft preservation and cleanup receipts are recorded in the current handoff and ~/pg_quality/integration_audit_20261020/integration_closeout.json. No release/artifact gate is newly closed.
 
-
-## October 20 — a flavor phrase, plant-part word or split "B-12" never decides title ownership (claude/evidence-title-ownership)
-
-Class: behavioral scoring (role owner feeding Evidence owners, Dose purpose and lent blend anchors). Owner:
-`scoring_input_contract.py::classify_ingredient_roles` (`_role_title_text` read by `_named_in_title` and by the lent-anchor
-child choice `_identity_named_in_product_title`). Found by the PR205/PR196 audits: "Natural Raspberry-Tea Flavor" made a 5 mg
-berry blend own Evidence on 293904, "Fruit" named apple_fruit on 40089, "Raw B-12" never named vitamin B12 on 321388 (garlic,
-ginger and bromelain earned the points). Measured on 2,090 frozen raw labels (1,789 title-cohort superset + 300 random
-controls + 278416) against origin/main e55b6ccef (`~/pg_quality/evidence_ownership_20261020/`): 212 records change, 57 scores
-(38 up, 19 down, -6.4..+24.2), 15 tier moves, 0 status/safety changes, 0 controls changed; 33/33 contract canaries unchanged.
-Causes: 26 vitamin-named titles (B12/B1 singles lose incidental calcium points; Vegan B12, Methyl B12 gain the authority
-floor), 14 flavor phrases, 17 plant-part words. Main scores 178728 identically when its title drops "Natural Berry Flavor".
-Undosed-member credit: 9 products lose it, 5 gain it (178728, 18540, 317050, 64382, 64387), pending D31.
-INGR_TART_CHERRY standard_name "Tart Cherry" re-applied: on all 552 cherry labels only rejected matches change
-(PR213 juice-only applicability); 0 score changes, the 12 earlier movers included. Open: L5 mass materiality excludes
-potent micro-dose actives (melatonin 1 mg on 293904) although `.claude/rules/scoring.md` says materiality comes from
-semantic roles, not raw mass; flavor words without "Flavor" ("Juiced Greens Powder Apple", "Berry Lime Burst") still name rows.
-
 ## October 20 — comma-joined sub-blends keep their members (claude/comma-subblend-members; follow-up of PR206)
 
 Class: behavioral (Clean rows → interaction subjects, Transparency input). Owner:
@@ -2387,6 +2369,24 @@ labels (179661, 180107, 315329, 82715: "Omega-3 EPA & DHA" 500–600 mg with und
 fish_oil row beside Fish Oil), so it was reverted. Whether that total should be a scorable fish_oil row is an
 omega-owner question, open. Final head's Clean output is identical to the replayed candidate (0/15,414).
 
+
+## October 20 — a flavor phrase, plant-part word or split "B-12" never decides title ownership (claude/evidence-title-ownership)
+
+Class: behavioral scoring (role owner feeding Evidence owners, Dose purpose and lent blend anchors). Owner:
+`scoring_input_contract.py::classify_ingredient_roles` (`_role_title_text` read by `_named_in_title` and by the lent-anchor
+child choice `_identity_named_in_product_title`). Found by the PR205/PR196 audits: "Natural Raspberry-Tea Flavor" made a 5 mg
+berry blend own Evidence on 293904, "Fruit" named apple_fruit on 40089, "Raw B-12" never named vitamin B12 on 321388 (garlic,
+ginger and bromelain earned the points). Measured on 2,090 frozen raw labels (1,789 title-cohort superset + 300 random
+controls + 278416) against origin/main e55b6ccef (`~/pg_quality/evidence_ownership_20261020/`): 212 records change, 57 scores
+(38 up, 19 down, -6.4..+24.2), 15 tier moves, 0 status/safety changes, 0 controls changed; 33/33 contract canaries unchanged.
+Causes: 26 vitamin-named titles (B12/B1 singles lose incidental calcium points; Vegan B12, Methyl B12 gain the authority
+floor), 14 flavor phrases, 17 plant-part words. Main scores 178728 identically when its title drops "Natural Berry Flavor".
+Undosed-member credit: 9 products lose it, 5 gain it (178728, 18540, 317050, 64382, 64387), pending D31.
+INGR_TART_CHERRY standard_name "Tart Cherry" re-applied: on all 552 cherry labels only rejected matches change
+(PR213 juice-only applicability); 0 score changes, the 12 earlier movers included. Open: L5 mass materiality excludes
+potent micro-dose actives (melatonin 1 mg on 293904) although `.claude/rules/scoring.md` says materiality comes from
+semantic roles, not raw mass; flavor words without "Flavor" ("Juiced Greens Powder Apple", "Berry Lime Burst") still name rows.
+
 ## October 20 — remaining-worktree and active follow-up audit
 
 Audited the original 22 registered checkouts: primary, 18 historical and three active. No hidden unfinished source fix in the historical 18: seventeen histories are integrated by ancestry; wt_p188's two nonancestor commits are patch-equivalent to integrated PR188, with their verified Git bundle retained. Before cleanup, 2,245 unique files (1,160,618,052 bytes) were copied and SHA-256 verified outside the public repository. Six historical Claude checkouts were removed. Sean authorized owning-chat archive messages for 12 old managed checkouts: six removed, six queued and not confirmed. Active and newly created Claude source/measurement trees are preserved.
@@ -2402,3 +2402,16 @@ Evidence title ownership at 7c56d2027: independent 26 tests pass; author measure
 Owner: scoring_input_contract.py title/role helpers and existing nested title reader — evidence: matrix, callers, fail-first raw labels and independent reviews. Will NOT create a matcher, Evidence tier, dose threshold, public status or undosed/trace policy. Author7c56d2027/c653c16d7 histories preserved in runtime28762ef3340901341f22bc6a0a0ddeb81742d555 atopmain0f2e75161. Flavor phrases, generic plant-part words and hyphenated vitamin names now identify the appropriate existing Evidence/Dose subjects. True named ingredients and Hair/Skin/Nails title remain retained.
 
 Independent72 owner/consumer checks; combined82 focused checks pass. Qualified2,090 raw pairs:57 score movers (26vitamin/17generic-part/14flavor),15tiers,0quality-score-status changes. Independent scan of every full record finds no changed safety, warnings, interactions, allergens, identities or amounts.232011 assessment complete→partial exposes existing unassessed alginic acid. Fresh combined76raw controls match qualified expected records at all four layers with stable source and raw hashes. Exact-runtime CI39454297455 passed all4groups/skipguards. Final local544passed/1previously recorded stale-catalog folate failure/25skips; no false green local or release claim. Source-qualified integration; actual merge containment recorded in Git/current handoff. Full report TITLE_OWNERSHIP.md; private receipts~/pg_quality/worktree_closeout_20261020. Literature223 (now combinedA+B), comma224 and demonstrated omega concentration owner correction remain pending; PR219 stays held. No pipeline/release/upload/app import/IPA.
+
+
+## October20 — final follow-up source qualification (PR227)
+
+Owner: existing literature/backed registries and evidence applicability/resolver; identity/omega_labels plus scoring_input_contract and omega_formulation source-material projection. Evidence: matrix/callers, per-entry primary-content receipts, fail-first owner tests and paired raw records. Will NOT create a scorer, registry, status, semantic owner or clinical/scoring policy.
+
+PR223/224/225/226 are integrated;227 preserves author history and corrects19 literature records against main96246630d (combined155-record batch independently audited), six backed-source attributions and omega constituent/carrier mass. Exact A→B reproduction matches155records with zero B determinations changed; exact root19/six-backed data batches have0problems. No held PR219 or D31 policy merged. Final production-source11ec9e050 passed whole-fast CI39465302377/allfourgroups; fixture/history candidatec644cee0b also passes CI39469029658/allfourgroups and56 affected contract/regression checks;336 final literature/resolver/blend-owner checks pass.
+
+Paired1691 full/blob captures:exit0/source_unchanged/count1691 with identical manifest/harness;509products changed,137enriched/501scored/341blob/0Clean;100numeric score movers. All six comma labels retain21 restored rows. Original552Tartcaptures were blob-disabled:87rejectionchanges/0score changes; separate unchanged-export-owner reconstruction proves0blobchanges. Independent final recursive delta review:100/100 controls unchanged, zero sensitive safety/warning/allergen/interaction changes, zero unexpected identity/amount/role changes.72omega numeric movers(30up/42down),28Evidence movers(25generic/3sports, alldown:24 contextual-held credit removals/fourfisetin unsupported floor removals); all explained.122omega denominator metadata corrections preserve every EPA/DHA numerator. After userpipeline80268 exited, local ran once:545passed/one known pre-existing stale-catalog folate failure/24declared optional skips.127stored entries1667vs1700 match prior220/226failures; raw paired1060/1061blobs emit1700in bothbaseline/candidate. No assertion weakened/restamp. Source-qualified for authorized227integration; local/artifact/release is not green. Final fingerprints38Clean/38Enrich/38Score stale:Sean final rebuild startsClean thenExport.
+
+Selective source-reviewed raw canaries204571/74716 refreshed with independent paired-record review and manifest cause receipts; final33/33 raw check passes. The first exposes incomplete Schisandra evidence coverage with61.2 unchanged; the second removes600mg omega constituent from genuine2000mg carrier denominator, total56.2→57.8 solely from Formulation. No safety/identity/amount/role drift.
+
+Original22worktrees fully audited; five later scratch trees and lucid-banach also verified integrated/stale and removed after preserving two unique patch receipts (one D31 policy experiment remains held).2245unique evidence files/1160618052bytes preserved with SHA256. Six managed-owner archive requests remain queued in Codex; no force deletion. Current registered trees:primary, two root audit trees, six queued historical managed trees. Final user rebuild/artifact parity/release/app gates remain open. Full source/measurement report:scripts/audits/integration_audit_20261020/FOLLOWUP.md; private receipts:~/pg_quality/worktree_closeout_20261020.

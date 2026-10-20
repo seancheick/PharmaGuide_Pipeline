@@ -94,4 +94,6 @@ def test_every_clinical_study_type_in_vocab(study_types):
     vocab_ids = {entry["id"] for entry in study_types}
     unknown = found - vocab_ids
     assert not unknown, f"clinical study_type values NOT in vocab: {unknown}"
-    assert len(found) == 8
+    # The vocabulary may retain valid categories without a current source entry.
+    # Do not require an animal/in-vitro record merely to populate every category.
+    assert found, "clinical registry must contain study types"

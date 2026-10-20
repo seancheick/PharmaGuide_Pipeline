@@ -755,7 +755,7 @@ def test_phase4_batch5_standardized_clinical_botanicals():
         "citrus_bergamot", "coleus_forskohlii_root", "african_mango",
         "eps_7630", "english_ivy", "turkey_tail", "diosmin",
         "puerarin", "ashwagandha_root", "green_tea_leaf", "arjuna",
-        "dgl_deglycyrrhizinated_licorice", "mastic_gum", "undecylenic_acid", "cocoa",
+        "dgl_deglycyrrhizinated_licorice", "mastic_gum", "cocoa",
     ]
     for cid in botanicals:
         res = er.resolve_evidence_for_canonical(cid)
@@ -877,7 +877,7 @@ def test_phase4_final_sweep_culinary_food_matrices():
 def test_phase4_final_sweep_standardized_clinical_botanicals():
     """Final sweep standardized clinical bioactives with live NCBI-verified studies."""
     clinical_cids = [
-        "nad", "siberian_rhubarb", "african_geranium", "lumbrokinase",
+        "siberian_rhubarb", "african_geranium", "lumbrokinase",
         "fucoidan", "maqui_berry", "diamine_oxidase", "capsaicin"
     ]
     for cid in clinical_cids:
@@ -1350,3 +1350,11 @@ def test_generic_nettle_review_cannot_invent_root_preparation_threshold(name, fo
 ])
 def test_explicit_purpose_categories_preserve_endpoints_and_reject_context(text, expected):
     assert er.evidence_indication_categories(text) == expected
+
+
+@pytest.mark.parametrize("cid", ["undecylenic_acid", "nad"])
+def test_oral_clinical_credit_cannot_transfer_from_other_route_or_material(cid):
+    # Source-specific regressions also cover topical undecylenic acid and NR vs NAD+.
+    res = er.resolve_evidence_for_canonical(cid)
+    assert res.disposition == EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value
+    assert res.points_eligible is False

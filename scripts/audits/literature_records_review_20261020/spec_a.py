@@ -119,14 +119,14 @@ SPEC = {
         "studies": {"18426577": {"sample_size": 40, "dose": "250 mg Relora (Magnolia + Phellodendron) three times daily", "duration": "6 weeks", "outcome": "state anxiety fell versus placebo; trait anxiety, salivary cortisol, sleep and appetite did not change"}},
     },
     "fucoxanthin": {
-        "record": {
+        "record": {"applicability_status": "applicability_unestablished",
             "effect_direction": "applicability_unestablished",
-            "material_form": "Xanthigen: brown seaweed extract (fucoxanthin) combined with pomegranate seed oil",
-            "population_context": "Obese premenopausal women with or without NAFLD",
+            "material_form": "Xanthigen (brown seaweed extract with fucoxanthin plus pomegranate seed oil) for weight-loss outcomes; fucoxanthin component also tested for resting energy expenditure",
+            "population_context": "Obese premenopausal women with or without NAFLD; resting energy expenditure assessed in 41 women with NAFLD",
             "studied_dose_exposure": {},
-            "applicability_decision": "The cited 16-week RCT (151 women) tested Xanthigen, brown seaweed fucoxanthin combined with pomegranate seed oil (Xanthigen-600: 300 mg oil + 300 mg seaweed extract with 2.4 mg fucoxanthin). A combination result does not establish standalone fucoxanthin efficacy or a dose.",
+            "applicability_decision": "The Xanthigen combination (brown seaweed extract with fucoxanthin plus pomegranate seed oil) weight-loss result cannot establish standalone fucoxanthin weight loss. The study also reports a standalone resting-energy-expenditure effect, a surrogate that does not establish that clinical outcome or a general daily regimen.",
         },
-        "studies": {"19840063": {"dose": "Xanthigen-600/2.4 mg (300 mg pomegranate seed oil + 300 mg seaweed extract with 2.4 mg fucoxanthin)", "outcome": "body weight, body and liver fat, triglycerides and CRP fell versus placebo with the combination product"}},
+        "studies": {"19840063": {"dose": "Xanthigen-600/2.4 mg (300 mg pomegranate seed oil + 300 mg seaweed extract with 2.4 mg fucoxanthin); exact standalone fucoxanthin regimen unresolved from the abstract", "outcome": "Combination reduced weight and body/liver fat; standalone fucoxanthin increased resting energy expenditure versus placebo in NAFLD participants"}},
     },
     "fennel": {
         "record": {
@@ -141,11 +141,11 @@ SPEC = {
     # ---- A1: food / beverage / fruit / topical / species / plant part -----------------------
     "pomegranate": {
         "record": {
-            "effect_direction": "applicability_unestablished",
-            "material_form": "Pomegranate in different forms across 22 RCTs (the abstract singles out juice)",
+            "effect_direction": "positive_weak",
+            "material_form": "Pomegranate juice and varied extract preparations",
             "population_context": "Adults in 22 RCTs; larger systolic reductions when baseline SBP > 130 mmHg",
             "studied_dose_exposure": {},
-            "applicability_decision": "The cited meta-analysis pooled 22 RCTs of pomegranate in different forms and found lower SBP and DBP with high heterogeneity; the authors attribute the pooled effect mainly to juice. Mixed-form and juice evidence does not establish a standardized extract or punicalagin dose without bioequivalence.",
+            "applicability_decision": "The meta-analysis includes human extract trials with heterogeneous systolic-pressure benefit; extract diastolic results were not statistically significant. Evidence does not establish a universal standardized-extract or punicalagin regimen.",
         },
         "studies": {"38410857": {"sample_size": D}},
     },
@@ -225,7 +225,7 @@ SPEC = {
         "studies": {"25866155": {"study_type": "randomized_parallel_dose_groups_no_placebo", "outcome": "gamma-delta T and NK-T cell proliferation and salivary sIgA rose, CRP fell after 4 weeks of eating shiitake"}},
     },
     "shiitake_mushroom": {
-        "record": {
+        "record": {"applicability_status": "applicability_unestablished",
             "effect_direction": "applicability_unestablished",
             "material_form": "Whole dried shiitake mushrooms eaten daily (5 or 10 g)",
             "population_context": "Healthy adults aged 21-41",
@@ -254,7 +254,7 @@ SPEC = {
         "studies": {"12771324": {"study_type": "uncontrolled_single_dose", "sample_size": 10, "dose": "280 g fresh Bing sweet cherries, single dose", "duration": "5 hours", "outcome": "plasma urate fell 14% at 5 h and urinary urate excretion rose; CRP and NO fell marginally (P < 0.1)"}},
     },
     "olive_fruit_extract": {
-        "record": {
+        "record": {"applicability_status": "applicability_unestablished",
             "effect_direction": "applicability_unestablished",
             "material_form": "Olive LEAF polyphenol extract (51.1 mg oleuropein, 9.7 mg hydroxytyrosol per day)",
             "population_context": "Overweight middle-aged men",
@@ -264,7 +264,7 @@ SPEC = {
         "studies": {"23516412": {"outcome": "insulin sensitivity improved 15% and beta-cell responsiveness 28% versus placebo with olive leaf extract; lipids, blood pressure and body composition unchanged"}},
     },
     "black_garlic": {
-        "record": {
+        "record": {"applicability_status": "applicability_unestablished",
             "effect_direction": "applicability_unestablished",
             "material_form": "Aged garlic extract (1.2 g/day, 1.2 mg S-allylcysteine), not black (heat-fermented) garlic",
             "population_context": "Adults with uncontrolled hypertension",
@@ -274,7 +274,7 @@ SPEC = {
         "studies": {"26869811": {"dose": "1.2 g/day aged garlic extract (1.2 mg S-allylcysteine)", "outcome": "systolic BP fell 5.0 mmHg versus placebo overall and 11.5 mmHg in responders; central hemodynamic measures tended to improve"}},
     },
     "undecylenic_acid": {
-        "record": {
+        "record": {"applicability_status": "applicability_unestablished",
             "effect_direction": "applicability_unestablished",
             "material_form": "Topical powder: 2% undecylenic acid + 20% zinc undecylenate",
             "population_context": "Patients with tinea pedis",
@@ -329,12 +329,12 @@ SPEC = {
         "studies": {"32565872": {"study_type": "animal_and_in_vitro", "sample_size": D, "dose": D, "duration": D, "outcome": "LI13019F1 inhibited 5-LOX and inflammatory mediators in vitro and reduced pain and cartilage damage in MIA-induced osteoarthritic rats", "effect_direction": D, "scoring_eligible": False}},
     },
     "perilla_oil": {
-        "record": {"_pending": True, "effect_direction": "applicability_unestablished", "population_context": "Not established: the only cited source is a narrative review", "studied_dose_exposure": {},
+        "record": {"applicability_status": "applicability_unestablished","_pending": True, "effect_direction": "applicability_unestablished", "population_context": "Not established: the only cited source is a narrative review", "studied_dose_exposure": {},
                    "applicability_decision": "No verified human perilla oil trial is recorded. The cited PMID 21909287 is a narrative review of perilla fatty-acid composition; the recorded RCT (60 adults, 3-5 g/day, 12 weeks) is not in it. Evidence review pending."},
         "studies": {"21909287": {"study_type": "narrative_review", "sample_size": D, "dose": D, "duration": D, "outcome": "narrative review of perilla seed oil fatty-acid composition (ALA 54-64%); no intervention estimate", "effect_direction": D, "scoring_eligible": False}},
     },
     "superoxide_dismutase": {
-        "record": {"_pending": True, "effect_direction": "applicability_unestablished", "population_context": "Not established: the only cited source is an animal study", "studied_dose_exposure": {},
+        "record": {"applicability_status": "applicability_unestablished","_pending": True, "effect_direction": "applicability_unestablished", "population_context": "Not established: the only cited source is an animal study", "studied_dose_exposure": {},
                    "applicability_decision": "No verified human GliSODin trial is recorded. The cited PMID 15742357 reports supplementation in animals; the recorded human RCT (40 adults, 500 mg/day, 4 weeks) is not in it. Evidence review pending."},
         "studies": {"15742357": {"study_type": "animal_study", "sample_size": D, "dose": D, "duration": D, "outcome": "in animals, gliadin-combined melon SOD (but not unprotected SOD) raised circulating antioxidant enzymes and resistance to oxidative stress", "effect_direction": D, "scoring_eligible": False}},
     },
@@ -344,7 +344,7 @@ SPEC = {
         "studies": {"18515024": {"study_type": "narrative_review", "sample_size": D, "dose": D, "duration": D, "outcome": "narrative overview of Russian pharmacological and clinical research; no pooled human dose or effect estimate", "effect_direction": D, "scoring_eligible": False}},
     },
     "schisandra": {
-        "record": {"_pending": True, "effect_direction": "applicability_unestablished", "population_context": "Not established: the only cited source is a narrative overview", "studied_dose_exposure": {},
+        "record": {"applicability_status": "applicability_unestablished","_pending": True, "effect_direction": "applicability_unestablished", "population_context": "Not established: the only cited source is a narrative overview", "studied_dose_exposure": {},
                    "applicability_decision": "No verified human Schisandra trial with a dose or outcome is recorded. The cited PMID 18515024 is a narrative overview of Russian research; it reports no sample size, dose, duration or pooled effect. Evidence review pending."},
         "studies": {"18515024": {"study_type": "narrative_review", "sample_size": D, "dose": D, "duration": D, "outcome": "narrative overview of Russian pharmacological and clinical research; no pooled human dose or effect estimate", "effect_direction": D, "scoring_eligible": False}},
     },
@@ -357,4 +357,15 @@ SPEC = {
                                  "dose": "broccoli sprout beverage providing 600 umol glucoraphanin and 40 umol sulforaphane daily", "duration": "12 weeks",
                                  "outcome": "urinary excretion of glutathione-derived conjugates of benzene (+61%) and acrolein (+23%) rose versus placebo", "effect_direction": "positive_moderate"}},
     },
+    "nad": {'record': {'effect_direction': 'applicability_unestablished',
+                'studied_dose_exposure': {},
+                'material_form': 'Nicotinamide riboside (NR), the studied NAD+ precursor; direct oral NAD+ was not '
+                                 'tested',
+                'applicability_status': 'applicability_unestablished',
+                'applicability_decision': 'The cited trial tested nicotinamide riboside (NR) 500 mg twice daily '
+                                          '(1,000 mg/day), not direct oral NAD+, for 6 weeks per crossover period. '
+                                          'PBMC NAD+ rose about 60% versus placebo; 30 adults were randomized and 24 '
+                                          'completed. Transfer of this NR biomarker result to the distinct NAD+ '
+                                          'ingredient is prohibited without direct applicable evidence. No 250-1,000 '
+                                          'mg/day direct-NAD+ efficacy threshold is established.'}},
 }

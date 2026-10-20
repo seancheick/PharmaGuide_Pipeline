@@ -968,5 +968,63 @@
     ],
     "note": "933 raw/reexport and138rawrecapture measure the six-root candidate; final Senactiv addition is the separate senactiv object and8rawcapture bound to final_runtime_sha."
   },
-  "final_ci_all_four_groups_and_skip_guards": "success"
+  "final_ci_all_four_groups_and_skip_guards": "success",
+  "followup_227": {
+    "baseline": "ac5370774e5c7e8bbc693b5db6cdebb5662fd5b9",
+    "runtime": "11ec9e05009d86a93f9ed6d9b94619079e4ca053",
+    "products": 1691,
+    "source_unchanged": true,
+    "capture_exit_codes": [
+      0,
+      0
+    ],
+    "input_manifest_sha256": "ce3018e0a0ff26ccb342129db37e978b6a0293044cc1f98418af02b7e41eefb9",
+    "changed_products": 509,
+    "changed_layers": {
+      "cleaned": 0,
+      "enriched": 137,
+      "scored": 501,
+      "blob": 341
+    },
+    "unchanged_controls": 100,
+    "numeric_movers": {
+      "omega_up": 30,
+      "omega_down": 42,
+      "evidence_down": 28
+    },
+    "quality_tier_changes": 20,
+    "quality_score_status_changes": 0,
+    "product_safety_status_changes": 0,
+    "assessment_complete_to_partial": 68,
+    "safety_warning_allergen_interaction_changes": 0,
+    "unexpected_identity_amount_role_changes": 0,
+    "raw_canaries": {
+      "checked": 33,
+      "failed": 0,
+      "selectively_refreshed": [
+        204571,
+        74716
+      ]
+    },
+    "whole_fast_ci": {
+      "run_id": 39465302377,
+      "runtime_result": "success",
+      "candidate_sha": "c644cee0ba10439dee69687dd5d6feee91b7d0f5",
+      "candidate_run_id": 39469029658,
+      "candidate_result": "success"
+    },
+    "independent_review": "approved; all numeric movements explained",
+    "local_result": {
+      "passed": 545,
+      "failed": 1,
+      "skipped": 24,
+      "disposition": "known pre-existing stale-catalog folate1667vs1700 on127entries; raw paired1060/1061blobs1700bothbaseline/candidate; artifact gate remains open"
+    },
+    "release_qualified": false,
+    "post_user_run_stale_counts": {
+      "clean": 38,
+      "enrich": 38,
+      "score": 38
+    }
+  }
 }
