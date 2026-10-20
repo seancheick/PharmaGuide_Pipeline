@@ -142,13 +142,15 @@ in this cohort.
 ## Gluten qualified by a ppm limit (2026-10-20, #211 audit dormant MEDIUM)
 
 One helper, `enrich_supplements_v3._without_gluten_ppm_qualifier`, runs in the statement parser and
-the unread may-contain check: in a sentence stating a ppm **limit** (less than / below / under / <),
-the limit and every gluten mention are the 21 CFR 101.91 qualifier. Other allergens there still
+the unread may-contain check: a ppm **limit** (less than / below / under / <) and the gluten wording
+attached to it, plus a gluten-free claim phrase in the same sentence, are the 21 CFR 101.91
+qualifier; "May contain (milk and gluten below 20 ppm)." still names milk. Other allergens there still
 read ("May contain milk and soy (gluten below 20 ppm)"), and a measured level ("Contains gluten
 (40 ppm)") is not a limit. Before: "Gluten-free: may contain trace amounts of gluten below 20 ppm."
 was an unread conflict, and "May contain less than 20 ppm gluten." / "May contain traces of gluten
 (less than 20 parts per million)." parsed as wheat may-contain; each cleared the badge.
 
 Replay `~/pg_quality/lucidbanach_ppmgluten_20261020/`: all 75 raw labels whose statements state a
-ppm limit (273865 among them) + 150 controls, `--full --blob`, #211 head 879121a20 vs this fix:
-0 records change (a dormant guard in today's corpus); 273865 keeps its badge.
+ppm limit (273865 among them) + 150 controls, `--full --blob`: #211 head 879121a20 vs the first
+fix, and (`r2/`) main ffc58287f vs the review-fixed head ef6e3f47f: 0 records change in both (a
+dormant guard in today's corpus); 273865 keeps its badge.
