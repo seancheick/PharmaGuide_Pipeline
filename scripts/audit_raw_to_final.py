@@ -138,6 +138,7 @@ FINDING_CATALOG: dict[str, str] = {
     "UNKNOWN_DROP_REASON_CODE":               SEVERITY_BLOCKER,
     # BLOCKER — the straight line raw DSLD row → exported row (--raw-root)
     "RAW_LABEL_NOT_FOUND":                    SEVERITY_BLOCKER,
+    "RAW_LABEL_UNREADABLE":                   SEVERITY_BLOCKER,
     "RAW_ROW_MISSING_FROM_LEDGER":            SEVERITY_BLOCKER,
     "LEDGER_ROW_NOT_IN_RAW":                  SEVERITY_BLOCKER,
     "LEDGER_NAME_DIFFERS_FROM_RAW":           SEVERITY_BLOCKER,
@@ -168,14 +169,25 @@ FINDING_CATALOG: dict[str, str] = {
 
 @dataclass
 class Finding:
+    """One discrepancy. A BLOCKER names where and what: the raw row path ("label"
+    for a whole-label finding), the field, the source-of-truth value (raw label,
+    or the enricher's identity decision) and the exported value."""
     severity: str
     code: str
     note: str
     ingredient: str | None = None
     stage: str | None = None
+    row_path: str | None = None
+    field: str | None = None
+    source_value: Any = None
+    exported_value: Any = None
 
     def as_dict(self) -> dict[str, Any]:
-        return {k: v for k, v in asdict(self).items() if v is not None}
+        out = {k: v for k, v in asdict(self).items() if v is not None}
+        if self.field is not None:  # an absent value is evidence, not noise
+            out.setdefault("source_value", None)
+            out.setdefault("exported_value", None)
+        return out
 
 
 @dataclass
@@ -189,11 +201,17 @@ class ProductRecord:
     raw_source_found: bool = False
     notes: list[str] = field(default_factory=list)
 
-    def add(self, code: str, note: str, ingredient: str | None = None, stage: str | None = None) -> None:
+    def add(self, code: str, note: str, ingredient: str | None = None, stage: str | None = None, *,
+            row_path: str | None = None, field: str | None = None,
+            source: Any = None, exported: Any = None) -> None:
         sev = FINDING_CATALOG.get(code)
         if sev is None:
             raise ValueError(f"unknown finding code {code!r} — add to FINDING_CATALOG first")
-        self.findings.append(Finding(severity=sev, code=code, note=note, ingredient=ingredient, stage=stage))
+        if sev == SEVERITY_BLOCKER and not (row_path and field):
+            raise ValueError(f"BLOCKER {code} must name its row_path and field")
+        self.findings.append(Finding(severity=sev, code=code, note=note, ingredient=ingredient, stage=stage,
+                                     row_path=row_path, field=field,
+                                     source_value=source, exported_value=exported))
 
     def has_blocker(self) -> bool:
         return any(f.severity == SEVERITY_BLOCKER for f in self.findings)
@@ -353,42 +371,39 @@ def _count_raw_inactives_from_cleaned(cleaned: dict) -> int:
     return 0
 
 
-def _collect_raw_active_names(cleaned: dict) -> list[str]:
-    out: list[str] = []
-    def walk(rows: list) -> None:
+def _collect_raw_active_names(cleaned: dict) -> list[tuple[str, str]]:
+    """(name, row path) per cleaned active: its raw_source_path, else its cleaned location."""
+    out: list[tuple[str, str]] = []
+    def walk(rows: list, prefix: str) -> None:
         if not isinstance(rows, list):
             return
-        for r in rows:
+        for index, r in enumerate(rows):
             if isinstance(r, dict):
+                path = r.get("raw_source_path") or f"{prefix}[{index}]"
                 n = r.get("name") or r.get("ingredientName") or ""
                 if n:
-                    out.append(str(n))
-                walk(r.get("nestedRows") or [])
-    walk(cleaned.get("activeIngredients") or [])
+                    out.append((str(n), str(path)))
+                walk(r.get("nestedRows") or [], f"{prefix}[{index}].nestedRows")
+    walk(cleaned.get("activeIngredients") or [], "cleaned.activeIngredients")
     return out
 
 
-def _collect_raw_inactive_names(cleaned: dict) -> list[str]:
-    out: list[str] = []
-    inacts = cleaned.get("inactiveIngredients")
-    if isinstance(inacts, list):
-        for r in inacts:
-            if isinstance(r, dict):
-                n = r.get("name") or r.get("ingredientName") or ""
-                if n:
-                    out.append(str(n))
-            elif isinstance(r, str):
-                out.append(r)
+def _collect_raw_inactive_names(cleaned: dict) -> list[tuple[str, str]]:
+    """(name, row path) per cleaned inactive: its raw_source_path, else its cleaned location."""
+    out: list[tuple[str, str]] = []
     other = cleaned.get("otheringredients") or {}
-    ing_list = other.get("ingredients") if isinstance(other, dict) else None
-    if isinstance(ing_list, list):
-        for r in ing_list:
+    for prefix, rows in (
+        ("cleaned.inactiveIngredients", cleaned.get("inactiveIngredients")),
+        ("cleaned.otheringredients.ingredients", other.get("ingredients") if isinstance(other, dict) else None),
+    ):
+        for index, r in enumerate(rows if isinstance(rows, list) else []):
+            path = f"{prefix}[{index}]"
             if isinstance(r, dict):
                 n = r.get("name") or r.get("ingredientName") or ""
                 if n:
-                    out.append(str(n))
+                    out.append((str(n), str(r.get("raw_source_path") or path)))
             elif isinstance(r, str):
-                out.append(r)
+                out.append((r, path))
     return out
 
 
@@ -441,7 +456,8 @@ def _check_drop_reason_enum(rec: ProductRecord, blob: dict) -> None:
     reasons = blob.get("ingredients_dropped_reasons") or []
     for r in reasons:
         if r not in allowed:
-            rec.add("UNKNOWN_DROP_REASON_CODE", f"reason {r!r} not in enum")
+            rec.add("UNKNOWN_DROP_REASON_CODE", f"reason {r!r} not in enum",
+                    row_path="label", field="ingredients_dropped_reasons", exported=r)
 
 
 def _check_active_count_reconciliation(rec: ProductRecord, blob: dict) -> None:
@@ -450,7 +466,8 @@ def _check_active_count_reconciliation(rec: ProductRecord, blob: dict) -> None:
     reasons = blob.get("ingredients_dropped_reasons") or []
     if raw > 0 and blob_n == 0 and not reasons:
         rec.add("UNEXPLAINED_DROP_REASON",
-                f"raw_actives_count={raw}, ingredients=0, no drop reasons emitted")
+                f"raw_actives_count={raw}, ingredients=0, no drop reasons emitted",
+                row_path="label", field="ingredients", source=raw, exported=blob_n)
 
 
 def _check_inactive_recovery(rec: ProductRecord, blob: dict) -> None:
@@ -460,7 +477,8 @@ def _check_inactive_recovery(rec: ProductRecord, blob: dict) -> None:
     blob_n = len(blob.get("inactive_ingredients") or [])
     if raw > 0 and blob_n == 0:
         rec.add("INACTIVE_LIST_EMPTY_BUT_RAW_NONZERO",
-                f"raw_inactives_count={raw}, blob inactive_ingredients=0")
+                f"raw_inactives_count={raw}, blob inactive_ingredients=0",
+                row_path="label", field="inactive_ingredients", source=raw, exported=blob_n)
 
 
 def _check_raw_actives_present_in_blob(
@@ -519,7 +537,7 @@ def _check_raw_actives_present_in_blob(
     for n in (blob.get("unmapped_actives") or {}).get("names") or []:
         blob_names.add(_normalize_name(n))
 
-    for raw_name in raw_names:
+    for raw_name, raw_path in raw_names:
         nk = _normalize_name(raw_name)
         if not nk:
             continue
@@ -530,7 +548,7 @@ def _check_raw_actives_present_in_blob(
             continue
         rec.add("RAW_ACTIVE_MISSING_FROM_BLOB",
                 f"raw label name {raw_name!r} appears nowhere in blob or row ledger",
-                ingredient=raw_name)
+                ingredient=raw_name, row_path=raw_path, field="name", source=raw_name)
 
 
 def _check_raw_inactives_present_in_blob(
@@ -552,7 +570,7 @@ def _check_raw_inactives_present_in_blob(
             v = ing.get(k)
             if v:
                 blob_names.add(_normalize_name(str(v)))
-    for n in raw_names:
+    for n, raw_path in raw_names:
         nk = _normalize_name(n)
         if not nk:
             continue
@@ -560,7 +578,7 @@ def _check_raw_inactives_present_in_blob(
             continue
         rec.add("RAW_INACTIVE_MISSING_FROM_BLOB",
                 f"raw label inactive {n!r} not in blob",
-                ingredient=n)
+                ingredient=n, row_path=raw_path, field="name", source=n)
 
 
 def _check_v1_5_0_contract(rec: ProductRecord, blob: dict) -> None:
@@ -864,7 +882,11 @@ def _check_unsafe_unit_conversion(rec: ProductRecord, blob: dict) -> None:
             )
         )
 
-    for ing in blob.get("ingredients") or []:
+    for index, ing in enumerate(blob.get("ingredients") or []):
+        location = dict(row_path=ing.get("raw_source_path") or f"ingredients[{index}]", field="normalized_amount",
+                        source=f"{ing.get('quantity')} {ing.get('unit')}",
+                        exported=None if ing.get("normalized_amount") is None
+                        else f"{ing.get('normalized_amount')} {ing.get('normalized_unit')}")
         n = (ing.get("name") or "").lower()
         unit = (ing.get("unit") or "").upper()
         normalized_unit = (ing.get("normalized_unit") or "").upper()
@@ -876,12 +898,12 @@ def _check_unsafe_unit_conversion(rec: ProductRecord, blob: dict) -> None:
                     continue
                 rec.add("UNSAFE_UNIT_CONVERSION",
                         f"Vitamin A in IU ({ing.get('quantity')}) without form-aware normalization to mcg RAE",
-                        ingredient=ing.get("name"))
+                        ingredient=ing.get("name"), **location)
         if unit == "IU" and "vitamin e" in n:
             if normalized_value is None:
                 rec.add("UNSAFE_UNIT_CONVERSION",
                         f"Vitamin E in IU without form-aware normalization (alpha vs mixed tocopherols differ)",
-                        ingredient=ing.get("name"))
+                        ingredient=ing.get("name"), **location)
 
 
 def _check_blend_children(rec: ProductRecord, blob: dict) -> None:
@@ -905,12 +927,13 @@ def _check_blend_children(rec: ProductRecord, blob: dict) -> None:
     """
     pbd = blob.get("proprietary_blend_detail") or {}
     blends = pbd.get("blends") or []
-    for blnd in blends:
+    for blend_index, blnd in enumerate(blends):
         if not isinstance(blnd, dict):
             continue
         disclosure_level = (blnd.get("disclosure_level") or "").lower()
+        kids_key = "child_ingredients" if blnd.get("child_ingredients") else "children"
         kids = blnd.get("child_ingredients") or blnd.get("children") or []
-        for child in kids:
+        for child_index, child in enumerate(kids):
             if not isinstance(child, dict):
                 continue
             has_name = bool(
@@ -922,7 +945,10 @@ def _check_blend_children(rec: ProductRecord, blob: dict) -> None:
                 # A child without ANY name is a silent loss.
                 rec.add("BLEND_CHILD_FLATTENED_NO_PARENT",
                         f"blend {blnd.get('name')!r} has a child entry with no name",
-                        ingredient=blnd.get("name"))
+                        ingredient=blnd.get("name"),
+                        row_path=child.get("raw_source_path")
+                        or f"proprietary_blend_detail.blends[{blend_index}].{kids_key}[{child_index}]",
+                        field="name", exported=child)
                 continue
 
             # Per-state checks
@@ -1008,7 +1034,8 @@ def _check_unmapped_consistency(rec: ProductRecord, blob: dict) -> None:
     dupes = unmapped_names & in_actives
     if dupes:
         rec.add("RAW_ACTIVE_MISSING_FROM_BLOB",  # closest catalog match
-                f"ingredients in BOTH ingredients[] and unmapped_actives.names: {sorted(dupes)}")
+                f"ingredients in BOTH ingredients[] and unmapped_actives.names: {sorted(dupes)}",
+                row_path="label", field="unmapped_actives.names", exported=sorted(dupes))
 
 
 # ---------------------------------------------------------------------------
@@ -1086,20 +1113,26 @@ def _check_line_integrity(
     refs = {entry.get("row_ref") for entry in ledger}
     for path in sorted(rows - refs):
         rec.add("RAW_ROW_MISSING_FROM_LEDGER", f"raw row {path} has no row_ledger entry",
-                ingredient=raws[path].get("name"), stage="blob")
+                ingredient=raws[path].get("name"), stage="blob",
+                row_path=path, field="row_ledger.row_ref", source=raws[path].get("name"))
+    labels = {str(entry.get("row_ref")): entry.get("source_label") for entry in ledger}
     for ref in sorted(str(r) for r in refs if r and r not in raws):
-        rec.add("LEDGER_ROW_NOT_IN_RAW", f"row_ledger names {ref}, which the raw label does not have", stage="blob")
+        rec.add("LEDGER_ROW_NOT_IN_RAW", f"row_ledger names {ref}, which the raw label does not have", stage="blob",
+                row_path=ref, field="row_ledger.row_ref", exported=labels.get(ref))
     for row in blob.get("ingredients") or []:
         path = row.get("raw_source_path") if isinstance(row, dict) else None
         if path and path not in raws:
             rec.add("LEDGER_ROW_NOT_IN_RAW", f"exported row points at {path}, which the raw label does not have",
-                    ingredient=row.get("name"), stage="blob")
+                    ingredient=row.get("name"), stage="blob",
+                    row_path=path, field="ingredients.raw_source_path", exported=row.get("name"))
     for entry in ledger:
         ref = entry.get("row_ref")
         if ref in raws and entry.get("source_label") is not None:
             if _line_text(entry.get("source_label")) != _line_text(raws[ref].get("name")):
                 rec.add("LEDGER_NAME_DIFFERS_FROM_RAW",
-                        f"{ref}: ledger {entry.get('source_label')!r} vs raw {raws[ref].get('name')!r}", stage="blob")
+                        f"{ref}: ledger {entry.get('source_label')!r} vs raw {raws[ref].get('name')!r}", stage="blob",
+                        row_path=ref, field="row_ledger.source_label",
+                        source=raws[ref].get("name"), exported=entry.get("source_label"))
 
     _check_export_identity(rec, enriched, blob)
 
@@ -1123,10 +1156,14 @@ def _check_line_integrity(
             continue
         recorded = _recorded_amounts(cleaned_rows.get(path) or {})
         if not any(_same_amount(a, amount) and u == unit for a, u in recorded):
+            changed = [name for name, same in (
+                ("quantity", _same_amount(first["quantity"], amount)),
+                ("unit", _line_text(first.get("unit")) == unit)) if not same]
             rec.add("AMOUNT_CHANGE_WITHOUT_EVIDENCE",
                     f"{path}: printed {first.get('quantity')} {first.get('unit')}, exported {amount} "
                     f"{row.get('unit')} with no recorded serving column, correction or %DV evidence",
-                    ingredient=row.get("name"), stage="blob")
+                    ingredient=row.get("name"), stage="blob", row_path=path, field=",".join(changed),
+                    source=f"{first.get('quantity')} {first.get('unit')}", exported=f"{amount} {row.get('unit')}")
 
 
 def _check_export_identity(rec: ProductRecord, enriched: Mapping[str, Any] | None, blob: Mapping[str, Any]) -> None:
@@ -1150,7 +1187,9 @@ def _check_export_identity(rec: ProductRecord, enriched: Mapping[str, Any] | Non
         if path in decided and str(identity.get("canonical_id") or "") not in decided[path]:
             rec.add("EXPORT_IDENTITY_NOT_FROM_ENRICHER",
                     f"{key} {path}: exported {identity.get('canonical_id')!r}, enricher decided "
-                    f"{sorted(decided[path])!r}", ingredient=row.get("name"), stage="blob")
+                    f"{sorted(decided[path])!r}", ingredient=row.get("name"), stage="blob",
+                    row_path=path, field=f"{key}.canonical_id",
+                    source=sorted(decided[path]), exported=identity.get("canonical_id"))
 
 
 def audit_product(
@@ -1190,6 +1229,7 @@ def audit_product(
                 severity=SEVERITY_BLOCKER,
                 code="RAW_ACTIVE_MISSING_FROM_BLOB",
                 note=f"blob not found at {blob_dir / f'{dsld_id}.json'}",
+                row_path="label", field="detail_blob",
             )],
         )
 
@@ -1307,17 +1347,26 @@ def audit_all_products(
                     rec.notes.append("approved submission: no DSLD raw label; raw-row checks not applicable")
                     _check_export_identity(rec, enriched, blob)
                 elif dsld_id not in raw_index:
-                    rec.add("RAW_LABEL_NOT_FOUND", f"no raw DSLD label {dsld_id}.json under {raw_root}", stage="raw")
+                    rec.add("RAW_LABEL_NOT_FOUND", f"no raw DSLD label {dsld_id}.json under {raw_root}", stage="raw",
+                            row_path="label", field="raw_label", exported=f"detail_blobs/{dsld_id}.json")
                 else:
-                    _check_line_integrity(rec, json.loads(raw_index[dsld_id].read_text()),
-                                          cleaned_by_id.get(dsld_id), enriched, blob)
+                    try:
+                        raw = json.loads(raw_index[dsld_id].read_text())
+                    except (OSError, UnicodeDecodeError, json.JSONDecodeError) as exc:
+                        rec.add("RAW_LABEL_UNREADABLE", f"raw DSLD label {raw_index[dsld_id]} under {raw_root} "
+                                f"cannot be read: {exc}", stage="raw", row_path="label", field="raw_label",
+                                source=str(raw_index[dsld_id]), exported=f"detail_blobs/{dsld_id}.json")
+                    else:
+                        _check_line_integrity(rec, raw, cleaned_by_id.get(dsld_id), enriched, blob)
             records.append(rec)
         del enriched_batch, cleaned_batch, cleaned_by_id
     audited = {rec.dsld_id for rec in records}
     for blob_path in sorted(blob_dir.glob("*.json")):
         if blob_path.stem not in audited:
             rec = ProductRecord(blob_path.stem, None, None, None)
-            rec.add("BLOB_WITHOUT_ENRICHED_RECORD", "exported blob has no enriched record under products-root", stage="blob")
+            rec.add("BLOB_WITHOUT_ENRICHED_RECORD", "exported blob has no enriched record under products-root",
+                    stage="blob", row_path="label", field="enriched_record",
+                    exported=f"detail_blobs/{blob_path.name}")
             records.append(rec)
     return records
 
@@ -1448,6 +1497,13 @@ def _report(args: argparse.Namespace, records: list[ProductRecord], products: li
     print(f"top finding codes:")
     for code, n in sorted(s["by_code"].items(), key=lambda x: -x[1])[:10]:
         print(f"  {n:5d}  {code}")
+    # The candidate holding the JSON report is removed when this gate fails, so
+    # the gate log carries every blocking product, row, field and both values.
+    for rec in records:
+        for f in rec.findings:
+            if f.severity == SEVERITY_BLOCKER:
+                print(f"BLOCKER {f.code} product={rec.dsld_id} row={f.row_path} field={f.field} "
+                      f"source={f.source_value!r} exported={f.exported_value!r}")
 
     fail_if_any_at_or_above = set(_THRESHOLD_ORDER[_THRESHOLD_ORDER.index(args.severity_min):])
     triggered = sum(s["by_severity"].get(k, 0) for k in fail_if_any_at_or_above)

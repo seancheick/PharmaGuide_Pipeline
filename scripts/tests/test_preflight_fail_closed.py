@@ -1095,3 +1095,93 @@ def test_product_lookup_does_not_decode_unrelated_corpus_batches(tmp_path, monke
     monkeypatch.setattr(json, 'loads', record_decode)
     assert owner._load_product('12345')['name'] == 'wanted'
     assert len(decoded) == 1
+
+
+# --- Raw DSLD label availability (ADR-0005 raw-to-final gate) ---------------
+# The snapshot's raw-to-final line gate needs every exported product's raw
+# label. Its absence must stop a run before Clean or catalog assembly, naming
+# the exact path that was expected, never after hours of processing.
+
+def _raw_root(tmp_path: Path, *brands: str) -> Path:
+    root = tmp_path / "raw"
+    root.mkdir()
+    for brand in brands:
+        (root / brand).mkdir()
+        (root / brand / "1.json").write_text("{}", encoding="utf-8")
+    return root
+
+
+def test_raw_labels_missing_root_names_the_expected_path(tmp_path) -> None:
+    missing = tmp_path / "nowhere"
+    assert preflight.raw_label_errors(missing) == [f"raw DSLD root missing: {missing}"]
+
+
+def test_raw_labels_unreadable_root_is_refused(tmp_path) -> None:
+    root = _raw_root(tmp_path, "Olly")
+    root.chmod(0)
+    try:
+        assert preflight.raw_label_errors(root) == [f"raw DSLD root unreadable: {root}"]
+    finally:
+        root.chmod(0o755)
+
+
+def test_raw_labels_empty_root_or_dataset_is_refused(tmp_path) -> None:
+    root = tmp_path / "raw"
+    (root / "Olly").mkdir(parents=True)
+    assert preflight.raw_label_errors(root) == [f"raw DSLD root has no label JSON: {root}"]
+    assert preflight.raw_label_errors(root, datasets=["Olly"]) == [
+        f"raw DSLD dataset has no label JSON: {root / 'Olly'}"]
+
+
+def test_raw_labels_every_needed_dataset_must_exist(tmp_path) -> None:
+    root = _raw_root(tmp_path, "Olly")
+    assert preflight.raw_label_errors(root, datasets=["Olly"]) == []
+    assert preflight.raw_label_errors(root, datasets=["Olly", "Thorne"]) == [
+        f"raw DSLD dataset missing: {root / 'Thorne'}"]
+
+
+def test_raw_labels_cover_every_brand_the_catalog_will_assemble(tmp_path) -> None:
+    root = _raw_root(tmp_path, "Olly")
+    products = tmp_path / "products"
+    for brand in ("Olly", "Thorne", "Product_Submissions"):
+        (products / f"output_{brand}_enriched" / "enriched").mkdir(parents=True)
+    # Approved submissions have no DSLD raw label; every DSLD brand does.
+    assert preflight.raw_label_errors(root, products_dir=products) == [
+        f"raw DSLD dataset missing: {root / 'Thorne'}"]
+
+
+@pytest.mark.parametrize("quick", [True, False])
+def test_preflight_cli_fails_on_missing_raw_root(tmp_path, quick) -> None:
+    import subprocess
+    missing = tmp_path / "nowhere"
+    command = [sys.executable, str(Path(preflight.__file__)), "--raw-root", str(missing)]
+    if quick:
+        command.append("--quick")
+    result = subprocess.run(command, capture_output=True, text=True, timeout=120)
+    assert result.returncode == 1, result.stdout + result.stderr
+    assert f"raw DSLD root missing: {missing}" in result.stdout
+
+
+def test_preflight_cli_passes_with_raw_labels_present(tmp_path) -> None:
+    import subprocess
+    root = _raw_root(tmp_path, "Olly")
+    result = subprocess.run([sys.executable, str(Path(preflight.__file__)), "--quick",
+                             "--raw-root", str(root), "--dataset", "Olly"],
+                            capture_output=True, text=True, timeout=120)
+    assert result.returncode == 0, result.stdout + result.stderr
+    assert f"[OK] {root}" in result.stdout
+
+
+@pytest.mark.parametrize("make_raw", ["missing", "empty"])
+def test_run_pipeline_refuses_missing_raw_labels_before_clean(tmp_path, monkeypatch, make_raw) -> None:
+    import run_pipeline
+    raw_dir = tmp_path / "raw" / "Olly"
+    if make_raw == "empty":
+        raw_dir.mkdir(parents=True)
+    calls = []
+    monkeypatch.setattr(run_pipeline.PipelineRunner, "_run_script",
+                        lambda self, script, args, dry_run=False: calls.append(script) or True)
+    results = run_pipeline.PipelineRunner().run_pipeline(
+        stages=["clean"], raw_dir=str(raw_dir), output_prefix=str(tmp_path / "out"))
+    assert results["stages_failed"] == ["raw_labels"]
+    assert calls == []

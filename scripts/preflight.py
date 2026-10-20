@@ -9,6 +9,8 @@ Usage:
     python preflight.py --quick      # Quick check (critical files only)
     python preflight.py --verbose    # Verbose output with file sizes
     python preflight.py --json       # Output as JSON for CI integration
+    python preflight.py --quick --raw-root ROOT [--dataset NAME ...] [--products-dir DIR]
+                                     # Also require the raw DSLD labels the run reads
 
 Exit codes:
     0 - All checks passed
@@ -20,6 +22,7 @@ Version: 1.0.0
 """
 
 import json
+import os
 import sys
 import argparse
 from pathlib import Path
@@ -371,6 +374,40 @@ def validate_database_schema(data_dir: Path = DATA_DIR) -> Dict:
     return results
 
 
+def raw_label_errors(raw_root: Path, datasets=(), products_dir: Path = None) -> list:
+    """Missing raw DSLD label evidence, each naming the path that was expected.
+
+    Clean reads these labels and the snapshot's raw-to-final line gate compares
+    every exported row with them (ADR-0005), so their absence must stop a run
+    before Clean or catalog assembly. ``datasets`` are brand folders the run
+    cleans; ``products_dir`` adds every DSLD brand the catalog will assemble
+    (approved submissions have no DSLD raw label).
+    """
+    root = Path(raw_root)
+    if not root.is_dir():
+        return [f"raw DSLD root missing: {root}"]
+    if not os.access(root, os.R_OK | os.X_OK):
+        return [f"raw DSLD root unreadable: {root}"]
+    needed = set(datasets)
+    if products_dir is not None:
+        needed |= {
+            enriched.parent.name.removeprefix("output_").removesuffix("_enriched")
+            for enriched in Path(products_dir).glob("output_*_enriched/enriched")
+        } - {"Product_Submissions"}
+    if not needed:
+        return [] if next(root.rglob("*.json"), None) else [f"raw DSLD root has no label JSON: {root}"]
+    errors = []
+    for name in sorted(needed):
+        folder = root / name
+        if not folder.is_dir():
+            errors.append(f"raw DSLD dataset missing: {folder}")
+        elif not os.access(folder, os.R_OK | os.X_OK):
+            errors.append(f"raw DSLD dataset unreadable: {folder}")
+        elif next(folder.rglob("*.json"), None) is None:
+            errors.append(f"raw DSLD dataset has no label JSON: {folder}")
+    return errors
+
+
 def run_preflight(verbose: bool = False, quick: bool = False) -> Dict:
     """
     Run preflight validation checks.
@@ -669,6 +706,15 @@ def print_results(results: Dict, verbose: bool = False):
             print(f"  [MISSING] {entry['file']} - {entry['description']}")
         print()
 
+    raw_labels = results.get("raw_labels")
+    if raw_labels:
+        print("RAW DSLD LABELS:")
+        for error in raw_labels["errors"]:
+            print(f"  [MISSING] {error}")
+        if not raw_labels["errors"]:
+            print(f"  [OK] {raw_labels['root']}")
+        print()
+
     # Summary
     summary = results["summary"]
     print("=" * 60)
@@ -682,6 +728,8 @@ def print_results(results: Dict, verbose: bool = False):
 
     if summary["all_ok"]:
         print("STATUS: ALL CHECKS PASSED")
+    elif raw_labels and raw_labels["errors"]:
+        print("STATUS: RAW DSLD LABELS MISSING - no stage may start")
     elif summary["critical_ok"]:
         print("STATUS: CRITICAL CHECKS PASSED (some non-critical issues)")
     else:
@@ -1250,7 +1298,12 @@ Exit codes:
     parser.add_argument('--prepare', action='store_true', help='Aggregate read-only source readiness before regeneration')
     parser.add_argument('--include-source-tests', action='store_true',
                         help='With --prepare, explicitly repeat the full developer source-test suite')
-    parser.add_argument('--raw-root', type=Path)
+    parser.add_argument('--raw-root', type=Path,
+                        help='Raw DSLD label root; without --prepare, require its labels before any stage runs')
+    parser.add_argument('--dataset', action='append', default=[],
+                        help='With --raw-root, a brand folder this run cleans (repeatable)')
+    parser.add_argument('--products-dir', type=Path,
+                        help='With --raw-root, also require raw labels for every DSLD brand assembled from here')
     parser.add_argument('--report', type=Path, default=SCRIPTS_DIR / 'reports/pipeline_preparation.json')
     args = parser.parse_args()
     if args.include_source_tests and not args.prepare:
@@ -1278,7 +1331,14 @@ Exit codes:
               '\n'.join(f"{check['status'].upper()}: {check['name']}" for check in results['checks']))
         sys.exit(0 if results['ready'] else 1)
 
+    if (args.dataset or args.products_dir) and args.raw_root is None:
+        parser.error('--dataset/--products-dir require --raw-root')
     results = run_preflight(verbose=args.verbose, quick=args.quick)
+    if args.raw_root is not None:
+        errors = raw_label_errors(args.raw_root, args.dataset, args.products_dir)
+        results["raw_labels"] = {"root": str(args.raw_root), "errors": errors}
+        if errors:
+            results["summary"].update(all_ok=False, exit_code=1)
 
     if args.json:
         print(json.dumps(results, indent=2))

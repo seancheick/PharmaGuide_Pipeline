@@ -259,30 +259,6 @@ if [ "$PIPELINE_ONLY" = "1" ] && [ -z "$TARGET_DATASETS" ] && [ "$RELEASE_SKIP_F
     fi
 fi
 
-# Reuse the critical-file/JSON owner for inexpensive offline startup checks.
-# This does not claim the future generated catalog is ready to publish.
-echo "Checking essential pipeline inputs..."
-if ! "$PYTHON" preflight.py --quick 2>&1 | tee -a "$SUMMARY_FILE"; then
-    echo "STOP: essential pipeline input checks failed before corpus work."
-    exit 1
-fi
-
-# Aggregate source/live/canary preparation is optional. Publication still runs
-# its own mandatory output-dependent gates, regardless of this flag.
-if [ "$PRE_CHECK" = "1" ]; then
-    echo "Collecting aggregate pipeline preparation (--pre-check)..."
-    if ! "$PYTHON" preflight.py --prepare --raw-root "$DATASET_ROOT" 2>&1 | tee -a "$SUMMARY_FILE"; then
-        echo "STOP: aggregate preparation failed. Review scripts/reports/pipeline_preparation.json before any corpus or publication work."
-        exit 1
-    fi
-else
-    echo "Aggregate preparation skipped; add --pre-check to request it. Release gates remain required."
-fi
-
-# Track results
-PASSED=()
-FAILED=()
-
 # Process each dataset folder, sorted by size (smallest first)
 # build list sorted by directory size
 # macOS ships with bash 3.2 which lacks mapfile/readarray, so use a loop
@@ -318,8 +294,54 @@ if [ -n "$TARGET_DATASETS" ]; then
             fi
         done
     done
+    # A requested brand that is absent would otherwise be skipped silently.
+    for target in "${targets_array[@]}"; do
+        target=$(echo "$target" | xargs)
+        matched=0
+        for folder in "${filtered_folders[@]}"; do
+            [[ "$(basename "$folder")" == *"$target"* ]] && matched=1 && break
+        done
+        if [ "$matched" = "0" ]; then
+            echo -e "${RED}ERROR: no dataset folder under $DATASET_ROOT matches target '$target'${NC}" | tee -a "$SUMMARY_FILE"
+            exit 1
+        fi
+    done
     sorted_folders=("${filtered_folders[@]}")
 fi
+
+# Reuse the critical-file/JSON owner for inexpensive offline startup checks,
+# including the raw DSLD labels Clean reads and the snapshot's raw-to-final
+# gate compares (ADR-0005). This does not claim the future generated catalog
+# is ready to publish.
+RAW_LABEL_ARGS=(--raw-root "$DATASET_ROOT")
+for folder in "${sorted_folders[@]}"; do
+    RAW_LABEL_ARGS+=(--dataset "$(basename "$folder")")
+done
+# A snapshot after this run audits every assembled brand against this root.
+if [ "$PIPELINE_ONLY" != "1" ] && [ "${SKIP_SNAPSHOT:-0}" != "1" ]; then
+    RAW_LABEL_ARGS+=(--products-dir products)
+fi
+echo "Checking essential pipeline inputs..."
+if ! "$PYTHON" preflight.py --quick "${RAW_LABEL_ARGS[@]}" 2>&1 | tee -a "$SUMMARY_FILE"; then
+    echo "STOP: essential pipeline input checks failed before corpus work."
+    exit 1
+fi
+
+# Aggregate source/live/canary preparation is optional. Publication still runs
+# its own mandatory output-dependent gates, regardless of this flag.
+if [ "$PRE_CHECK" = "1" ]; then
+    echo "Collecting aggregate pipeline preparation (--pre-check)..."
+    if ! "$PYTHON" preflight.py --prepare --raw-root "$DATASET_ROOT" 2>&1 | tee -a "$SUMMARY_FILE"; then
+        echo "STOP: aggregate preparation failed. Review scripts/reports/pipeline_preparation.json before any corpus or publication work."
+        exit 1
+    fi
+else
+    echo "Aggregate preparation skipped; add --pre-check to request it. Release gates remain required."
+fi
+
+# Track results
+PASSED=()
+FAILED=()
 
 CURRENT=0
 

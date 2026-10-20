@@ -33,6 +33,7 @@ def _capture_runner(monkeypatch):
 
     monkeypatch.setattr(PipelineRunner, "_run_script", fake_run_script)
     monkeypatch.setattr(PipelineRunner, "_validate_data_dir", lambda self: True)
+    monkeypatch.setattr(PipelineRunner, "_validate_raw_dir", lambda self, raw_dir: True)
     monkeypatch.setattr(
         PipelineRunner, "_validate_input_dir", lambda self, d, s: True
     )

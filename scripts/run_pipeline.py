@@ -142,6 +142,16 @@ class PipelineRunner:
         logger.info(f"[{stage}] Validated input: {resolved} ({len(json_files)} JSON files)")
         return True
 
+    def _validate_raw_dir(self, raw_dir: str) -> bool:
+        """Require this brand's raw DSLD labels before Clean (preflight owner)."""
+        from preflight import raw_label_errors
+
+        raw = Path(raw_dir)
+        errors = raw_label_errors(raw.parent, [raw.name])
+        for error in errors:
+            logger.error(f"Preflight failed: {error}")
+        return not errors
+
     def _validate_data_dir(self) -> bool:
         """Validate that required reference data files exist"""
         data_dir = self.script_dir / "data"
@@ -704,6 +714,9 @@ class PipelineRunner:
             if not self._validate_data_dir():
                 logger.error("Preflight failed: Missing critical data files")
                 results["stages_failed"].append("preflight")
+                return results
+            if "clean" in stages and not self._validate_raw_dir(raw_dir):
+                results["stages_failed"].append("raw_labels")
                 return results
 
         # Stage 1: Clean
