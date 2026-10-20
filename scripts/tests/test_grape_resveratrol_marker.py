@@ -138,6 +138,26 @@ def test_undeclared_knotweed_keeps_its_identity_without_a_resveratrol_mass(enric
                for m in row["delivers_markers"])
 
 
+@pytest.mark.parametrize("dsld_id,label", [
+    # Alive! Men's Ultra Potency: undeclared "Japanese Knotweed root extract".
+    (302512, "Japanese Knotweed root extract"),
+    # DHEA Complete: knotweed listed inside its knotweed + grape header blend.
+    (58854, "Japanese Knotweed"),
+])
+def test_knotweed_meets_the_qualified_resveratrol_advisory_without_a_declaration(enrich, dsld_id, label):
+    """Knotweed root is a principal resveratrol source (Sean, ADR-0005 amendment):
+    the plant keeps its identity and answers to the resveratrol advisory."""
+    assert label in {alert["ingredient_name"] for alert in _alerts(enrich(dsld_id))}
+
+
+def test_knotweed_answers_to_resveratrol_for_interactions_only():
+    from identity.interaction import interaction_subject_refs
+
+    refs = interaction_subject_refs("botanical_ingredients", "japanese_knotweed")
+    assert refs == [("botanical_ingredients", "japanese_knotweed"), ("ingredient_quality_map", "resveratrol")]
+    assert interaction_subject_refs("botanical_ingredients", "grape") == [("botanical_ingredients", "grape")]
+
+
 def test_blend_header_declared_resveratrol_is_a_declaration_without_a_dose(enrich):
     """181895: the 3 mg "Japanese Knotweed (root) and whole Red Grape extracts" header
     declares "std. to 35% Trans-Resveratrol": resveratrol meets its rule, but the blend
