@@ -839,6 +839,15 @@ def test_a_held_source_or_marker_token_leaves_the_row_unheld(enricher, parent, l
     ('dha', 'Docosahexaenoic Acid', {'name': 'Omega-3', 'category': 'fatty acid', 'ingredientGroup': 'Omega-3'}, 'dha (unspecified)'),
     ('chlorella', 'Chlorella powder', {'name': 'Green Micro-Algae', 'category': 'other', 'prefix': 'from dried and milled', 'ingredientGroup': 'green algae (unspecified)'}, 'chlorella powder'),
     ('dimethyl_glycine', 'N,N-Dimethylglycine HCl', {'name': 'hydrochloride'}, 'dimethyl glycine (unspecified)'),
+    # A soy source names the soy-derived form, as a sunflower source names the
+    # sunflower form: PS is made from soybean lecithin and L-serine with
+    # phospholipase D (USPTO 5700668, RE43764).
+    ('phosphatidylserine', 'Phosphatidylserine', {'name': 'Sunflower', 'category': _B, 'ingredientGroup': 'sunflower'}, 'sunflower phosphatidylserine'),
+    ('phosphatidylserine', 'Phosphatidylserine', {'name': 'Soy', 'category': _B, 'ingredientGroup': 'Soy'}, 'soy-derived phosphatidylserine'),
+    ('phosphatidylserine', 'Phosphatidylserine', {'name': 'Soybeans', 'category': _B, 'ingredientGroup': 'Soy'}, 'soy-derived phosphatidylserine'),
+    ('phosphatidylserine', 'Phosphatidylserine', {'name': 'Soybean', 'category': _B, 'ingredientGroup': 'Soy'}, 'soy-derived phosphatidylserine'),
+    ('phosphatidylserine', 'Phosphatidylserine', {'name': 'Soy Lecithin', 'category': _B, 'ingredientGroup': 'Soy'}, 'soy-derived phosphatidylserine'),
+    ('phosphatidylserine', 'Phosphatidylserine', {'name': 'Glycine max', 'category': _B, 'ingredientGroup': 'Soy'}, 'soy-derived phosphatidylserine'),
 ])
 def test_a_held_label_spelling_reaches_the_form_it_names(enricher, parent, label, form, expected):
     match = enricher._match_quality_map(label, label, enricher.databases['ingredient_quality_map'],

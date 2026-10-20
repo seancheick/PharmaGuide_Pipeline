@@ -19518,7 +19518,14 @@
           "range_low": 0.7,
           "range_high": 0.9,
           "quality": "very_good"
-        }
+        },
+        "source_form_aliases": [
+          "soy lecithin",
+          "soy",
+          "soybean",
+          "soybeans",
+          "glycine max"
+        ]
       },
       "bovine phosphatidylserine": {
         "bio_score": 11,
@@ -64214,7 +64221,6 @@
         },
         "notes": "Tart-cherry extract is distinct from raspberry. PMID20218618 studied a 300 g raspberry intervention and urinary anthocyanin recovery below 0.1%, not Prunus extract absolute bioavailability of 0.8%. Exact tart-cherry preparation exposure remains unresolved.",
         "aliases": [
-          "sour cherry, powder",
           "montmorency tart cherry extract",
           "montmorency cherry extract",
           "sour cherry extract",
@@ -64224,9 +64230,6 @@
           "tart cherry fruit extract",
           "tart cherry juice concentrate",
           "montmorency tart cherry juice concentrate",
-          "tart cherry powder",
-          "tart cherry fruit powder",
-          "cherrypure tart cherry fruit & skin powder",
           "cherrypure tart cherry"
         ],
         "dosage_importance": 1.0,
@@ -64263,7 +64266,11 @@
           "dwarf sour cherry",
           "Cherry Fruit Extract",
           "cherry extract",
-          "prunus cerasus fruit extract"
+          "prunus cerasus fruit extract",
+          "sour cherry, powder",
+          "tart cherry powder",
+          "tart cherry fruit powder",
+          "cherrypure tart cherry fruit & skin powder"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
