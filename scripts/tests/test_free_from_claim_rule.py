@@ -216,3 +216,32 @@ def test_b2_high_severity_and_conflict_only_fallback_keep_the_cap():
     conflict_only = {"compliance_data": {"allergen_free_claims": ["gluten"],
                                          "conflicts": ["gluten-free claim conflicts with detected gluten/wheat"]}}
     assert _score_b2_false_allergen_claim_penalty(conflict_only)[0] == 2.0
+
+
+# "nut" is a whole word in a claim: "peanut-free" / "no peanuts" is not a
+# tree-nut-free claim, so a tree-nut facility does not contradict it.
+@pytest.mark.parametrize("text,matches", [
+    ("peanut-free", False), ("contains no peanuts", False),
+    ("contains no artificial colors. rich in nutrients", False),
+    ("nut-free", True), ("tree nut free", True), ("contains no tree nuts", True),
+])
+def test_nut_free_claim_pattern_is_whole_word(text, matches):
+    import re
+    from constants import ALLERGEN_FREE_PATTERNS
+    assert bool(re.search(ALLERGEN_FREE_PATTERNS["nut"], text, re.I)) is matches
+
+
+@pytest.mark.parametrize("claim,groups", [
+    ("peanut", {"peanut"}), ("Peanut-Free", {"peanut"}),
+    ("nut", {"tree_nut"}), ("Nut-Free", {"tree_nut"}),
+])
+def test_b2_claim_group_reads_nut_as_a_whole_word(claim, groups):
+    from scoring_v4.modules.generic_transparency import _allergen_groups_from_text
+    assert _allergen_groups_from_text(claim) == groups
+
+
+def test_tree_nut_facility_does_not_contradict_a_peanut_free_claim(run):
+    # 75073: "No dairy, no peanuts, gluten-free."; "Processed in a facility with
+    # products that contain egg, fish, shellfish, soy and tree nuts."
+    enriched, transparency = run("75073")
+    assert _b2(transparency) == 0.0

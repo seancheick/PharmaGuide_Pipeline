@@ -729,7 +729,9 @@ ALLERGEN_FREE_PATTERNS = {
     "dairy": r"(dairy[\s-]*free|contains?\s+no\s+.*?(dairy|milk)|does\s+not\s+contain\s+.*?(dairy|milk))",
     "soy": r"(soy[\s-]*free|contains?\s+no\s+.*?soy|does\s+not\s+contain\s+.*?soy)",
     "nut": (
-        r"((nut|tree[\s-]*nut)[\s-]*free|contains?\s+no\s+.*?nut|does\s+not\s+contain\s+.*?nut)"
+        # Whole words: "peanut-free" and "nutrients" are not tree-nut claims.
+        r"(\b(?:tree[\s-]*)?nuts?[\s-]*free\b|contains?\s+no\s+.*?\b(?:tree[\s-]*)?nuts?\b"
+        r"|does\s+not\s+contain\s+.*?\b(?:tree[\s-]*)?nuts?\b)"
     ),
     "egg": (
         r"(egg[\s-]*free|contains?\s+no\s+.*?egg|does\s+not\s+contain\s+.*?egg)"
