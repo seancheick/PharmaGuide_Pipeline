@@ -147,6 +147,10 @@ def test_role_record_is_not_kept_as_a_substance():
     (31062, "Agave powder", "century_plant"),
     # The marker form "Total Isothiocyanate" is not the plant.
     (59766, "Sawasabi Wasabi powder", "isothiocyanates"),
+    # Arginine in Amino Acids in Cilantro: a food's composition, three levels deep.
+    (80495, "Arginine", "l_arginine"),
+    # Form Polydatin, resveratrol's glucoside: a marker form is not the row's identity.
+    (277367, "Glycosides", "resveratrol"),
 ])
 def test_contradicted_identity_is_not_kept(enrich, dsld_id, label, wrong_id):
     iqd = enrich(dsld_id)["ingredient_quality_data"]
@@ -201,3 +205,46 @@ def test_member_forms_keep_the_family_identity():
 
     assert decide("Lactobacillus", "probiotics", "Probiotics", ["Lactobacillus Acidophilus"]).canonical_id == "probiotics"
     assert decide("Arginine", "l_arginine", "L-Arginine", ["Whey Protein Isolate"]).canonical_id is None
+
+
+def _scoring_inputs(artifact):
+    breakdown = artifact["_v4_module_breakdown"]
+    dims = breakdown["dimensions"]
+    return {
+        "score": artifact["quality_score_v4_100"],
+        "status": artifact["quality_assessment_status"],
+        "evidence_owners": dims["evidence"]["metadata"].get("evidence_owner_canonicals"),
+        "dose_credits": sorted(
+            round(c.get("credit_raw") or 0, 2) for c in dims["dose"]["metadata"].get("dose_contributions") or []
+        ),
+    }
+
+
+@pytest.mark.parametrize("dsld_id,expected", [
+    # Recognition re-identifies the row itself, as on main: the coptis owner stays.
+    (252567, {"score": 57.1, "status": "complete", "evidence_owners": ["coptis_rhizome"], "dose_credits": [11.97]}),
+    (315814, {"score": 50.6, "status": "partial", "evidence_owners": ["gaba", "maca", "oat_straw", "yohimbe"],
+              "dose_credits": [12.54]}),
+    # A kept coffeeberry row is invisible to scoring, never re-matched as coffee.
+    (40089, {"score": 60.7, "status": "complete",
+             "evidence_owners": ["bilberry", "blackberry", "blueberry", "carrot", "cranberry", "grape", "plum",
+                                 "pomegranate", "spinach", "strawberry", "tart_cherry", "tomato"],
+             "dose_credits": [12.54]}),
+    (327402, {"score": 72.8, "status": "complete", "evidence_owners": None, "dose_credits": [1.28, 6.19]}),
+    (328104, {"score": 83.8, "status": "complete", "evidence_owners": None, "dose_credits": [4.65, 13.17]}),
+])
+def test_scoring_inputs_equal_main_when_a_row_keeps_an_identity(enrich, dsld_id, expected):
+    """Values captured from main 92881c049 for the same raw labels."""
+    from scoring_v4.scored_artifact import build_scored_artifact
+
+    assert _scoring_inputs(build_scored_artifact(enrich(dsld_id))) == expected
+
+
+def test_recognition_clears_the_interaction_only_marker(enrich):
+    from identity_integrity import NON_SCORING_IDENTITY_RATIONALE
+
+    rows = [r for r in enrich(252567)["ingredient_quality_data"]["ingredients"]
+            if r.get("raw_source_text") == "Coptis chinensis extract"]
+    assert rows and {r["canonical_id"] for r in rows} == {"coptis_rhizome"}
+    assert all(r["identity_resolution_rationale"] != NON_SCORING_IDENTITY_RATIONALE for r in rows)
+
