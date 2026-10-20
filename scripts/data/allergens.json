@@ -241,13 +241,35 @@
       "severity_level": "moderate",
       "regulatory_status": "fda_major",
       "supplement_context": "Very common in omega-3 supplements and some vitamin A/D sources.",
-      "notes": "FDA major allergen (FALCPA). Parvalbumin is the major fish allergen; it is heat-stable and present across most bony fish species. Fish collagen/gelatin retains allergenic potential. IQM-scored fish derivatives (fish oil, cod liver oil, salmon oil, marine collagen) are excluded from aliases to preserve IQM identity — the enricher flags them by matching an alias as a whole word in the row name or its forms (\"Purified Fish Oil\", form \"Fish Oil\"), never from the canonical identity alone. FDA guidance D.9 exempts highly refined (refined, bleached, deodorized) oils, so a row labelled \"highly refined\" is not flagged.",
+      "notes": "FDA major allergen (FALCPA). Parvalbumin is the major fish allergen; it is heat-stable and present across most bony fish species. Fish collagen/gelatin retains allergenic potential. IQM-scored fish derivatives (fish oil, cod liver oil, salmon oil, marine collagen) are excluded from aliases to preserve IQM identity — the enricher flags them by matching an alias, or a species in match_rules.phrase_match_terms (FDA requires the species on labels, e.g. \"Cod Liver Oil\", gelatin \"(cod, haddock, pollock)\"), as a whole word in the row name, its forms or a Contains statement, never from the canonical identity alone. FDA guidance D.9 exempts highly refined (refined, bleached, deodorized) oils, so a row labelled \"highly refined\" is not flagged.",
       "category": "allergen",
       "general_handling": "flag_only",
       "last_updated": "2026-10-19",
       "match_rules": {
         "negative_match_terms": [
           "highly refined"
+        ],
+        "phrase_match_terms": [
+          "anchovies",
+          "anchovy",
+          "cod",
+          "cusk",
+          "dogfish",
+          "flounder",
+          "grouper",
+          "haddock",
+          "hake",
+          "herring",
+          "mackerel",
+          "pollock",
+          "salmon",
+          "sardine",
+          "sardines",
+          "shark",
+          "sole",
+          "tilapia",
+          "trout",
+          "tuna"
         ]
       }
     },
@@ -279,7 +301,13 @@
       "notes": "FDA major allergen (FALCPA). Tropomyosin is the major crustacean allergen; it cross-reacts with dust mite and cockroach tropomyosin. Chitosan (deacetylated chitin from shells) retains allergenic risk. Krill oil is excluded from aliases (IQM-scored) but is crustacean-derived. Glucosamine from shellfish shells may contain trace tropomyosin. Shellfish allergy affects ~2% of adults and can cause severe anaphylaxis.",
       "category": "allergen",
       "general_handling": "flag_only",
-      "last_updated": "2026-03-01"
+      "last_updated": "2026-10-19",
+      "match_rules": {
+        "phrase_match_terms": [
+          "crustaceans",
+          "krill"
+        ]
+      }
     },
     {
       "id": "ALLERGEN_WHEAT",
