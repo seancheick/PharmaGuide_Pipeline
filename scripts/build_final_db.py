@@ -6707,12 +6707,18 @@ def _normalized_dose_entry(norm_raw: Any, index: int, raw: str, name: str) -> Di
     for item in items:
         if item.get("source_field") == position:
             return item
-    by_name: Dict[str, Dict] = {}
-    for item in items:
-        key = safe_str(item.get("original_name"))
-        if key:
-            by_name[key] = item
-    return by_name.get(raw, by_name.get(name, {}))
+    # A known different active position is never a legacy name match. When
+    # positions are absent, accept only a unique name; ambiguity stays unknown.
+    for candidate in dict.fromkeys((raw, name)):
+        if not candidate:
+            continue
+        matches = [item for item in items if item.get("original_name") == candidate
+                   and not safe_str(item.get("source_field")).startswith("activeIngredients[")]
+        if len(matches) == 1:
+            return matches[0]
+        if matches:
+            return {}
+    return {}
 
 
 def build_detail_blob(

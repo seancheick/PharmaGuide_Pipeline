@@ -62,3 +62,14 @@ def test_dict_shaped_normalization_is_still_read_by_name():
 def test_missing_entry_is_empty():
     assert _normalized_dose_entry([], 0, "Zinc", "Zinc") == {}
     assert _normalized_dose_entry(None, 0, "Zinc", "Zinc") == {}
+
+
+def test_a_siblings_positional_conversion_is_never_a_name_fallback():
+    # A missing/omitted normalization must stay unknown rather than borrowing
+    # the amount of a same-name row whose different source is explicitly known.
+    assert _normalized_dose_entry(NORMALIZED[:1], 18, "Beta-Carotene", "Beta-Carotene") == {}
+
+
+def test_ambiguous_legacy_same_name_conversions_stay_unknown():
+    legacy = [dict(row, source_field="") for row in NORMALIZED]
+    assert _normalized_dose_entry(legacy, 2, "Beta-Carotene", "Beta-Carotene") == {}
