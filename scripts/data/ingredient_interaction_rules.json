@@ -23968,17 +23968,17 @@
           "condition_id": "bleeding_disorders",
           "severity": "monitor",
           "evidence_level": "limited",
-          "mechanism": "Panax notoginseng saponins added to aspirin further inhibited platelet aggregation in a randomized trial of 42 people with coronary heart disease (bleeding was not measured), and a review of clopidogrel-herb interactions reports increased antiplatelet activity with notoginseng. Two case reports describe esophageal submucosal hematoma after notoginseng capsules; one involved a homemade mixture with hirudin, a known anticoagulant, so it cannot be attributed to notoginseng alone. The clinical significance for bleeding is not established.",
-          "action": "If you have a bleeding disorder, talk to your clinician before using Senactiv (Panax notoginseng).",
+          "mechanism": "Senactiv contains Panax notoginseng and Rosa roxburghii extracts. A randomized trial of 42 people with coronary heart disease found increased platelet inhibition when other notoginseng saponin preparations were added to aspirin, not Senactiv. Reviews and case reports also concern other notoginseng preparations; one hematoma case involved hirudin, a known anticoagulant. Whether these findings apply to Senactiv is unknown; a clinical bleeding risk from Senactiv is not established.",
+          "action": "If you have a bleeding disorder, talk to your clinician before using Senactiv.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/33370633/",
             "https://pubmed.ncbi.nlm.nih.gov/31471773/",
             "https://pubmed.ncbi.nlm.nih.gov/39364700/",
             "https://pubmed.ncbi.nlm.nih.gov/34307625/"
           ],
-          "alert_headline": "Senactiv (notoginseng) — bleeding disorders",
-          "alert_body": "Senactiv (notoginseng) may affect platelet function. A bleeding risk is not established; if you have a bleeding disorder, talk to your clinician before using it.",
-          "informational_note": "Platelet effects come from small studies and case reports; clinical bleeding significance is not established.",
+          "alert_headline": "Senactiv — bleeding disorders",
+          "alert_body": "Other notoginseng preparations have affected platelets; applicability to Senactiv is unknown. Bleeding risk is not established. With a bleeding disorder, ask your clinician before use.",
+          "informational_note": "Evidence is from other notoginseng preparations; applicability to Senactiv and bleeding risk are unknown.",
           "profile_gate": {
             "gate_type": "condition",
             "requires": {
@@ -24004,17 +24004,17 @@
           "condition_id": "surgery_scheduled",
           "severity": "monitor",
           "evidence_level": "limited",
-          "mechanism": "Panax notoginseng saponins added to aspirin further inhibited platelet aggregation in a randomized trial of 42 people with coronary heart disease (bleeding was not measured), and a review of clopidogrel-herb interactions reports increased antiplatelet activity with notoginseng. Two case reports describe esophageal submucosal hematoma after notoginseng capsules; one involved a homemade mixture with hirudin, a known anticoagulant, so it cannot be attributed to notoginseng alone. The clinical significance for bleeding is not established.",
-          "action": "Tell your surgeon you use Senactiv (Panax notoginseng) before a scheduled procedure.",
+          "mechanism": "Senactiv contains Panax notoginseng and Rosa roxburghii extracts. A randomized trial of 42 people with coronary heart disease found increased platelet inhibition when other notoginseng saponin preparations were added to aspirin, not Senactiv. Reviews and case reports also concern other notoginseng preparations; one hematoma case involved hirudin, a known anticoagulant. Whether these findings apply to Senactiv is unknown; a clinical bleeding risk from Senactiv is not established.",
+          "action": "Tell your surgeon you use Senactiv before a scheduled procedure.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/33370633/",
             "https://pubmed.ncbi.nlm.nih.gov/31471773/",
             "https://pubmed.ncbi.nlm.nih.gov/39364700/",
             "https://pubmed.ncbi.nlm.nih.gov/34307625/"
           ],
-          "alert_headline": "Senactiv (notoginseng) — before surgery",
-          "alert_body": "Senactiv (notoginseng) may affect platelet function. A bleeding risk is not established; tell your surgeon you use it before a scheduled procedure.",
-          "informational_note": "Platelet effects come from small studies and case reports; clinical bleeding significance is not established.",
+          "alert_headline": "Senactiv — before surgery",
+          "alert_body": "Other notoginseng preparations have affected platelets; applicability to Senactiv is unknown. Bleeding risk is not established. Tell your surgical team you use it before a procedure.",
+          "informational_note": "Evidence is from other notoginseng preparations; applicability to Senactiv and bleeding risk are unknown.",
           "profile_gate": {
             "gate_type": "profile_flag",
             "requires": {
@@ -24042,17 +24042,17 @@
           "drug_class_id": "antiplatelets",
           "severity": "monitor",
           "evidence_level": "limited",
-          "mechanism": "Panax notoginseng saponins added to aspirin further inhibited platelet aggregation in a randomized trial of 42 people with coronary heart disease (bleeding was not measured), and a review of clopidogrel-herb interactions reports increased antiplatelet activity with notoginseng. Two case reports describe esophageal submucosal hematoma after notoginseng capsules; one involved a homemade mixture with hirudin, a known anticoagulant, so it cannot be attributed to notoginseng alone. The clinical significance for bleeding is not established.",
-          "action": "If you take an antiplatelet medicine such as aspirin or clopidogrel, tell your clinician you use Senactiv (Panax notoginseng).",
+          "mechanism": "Senactiv contains Panax notoginseng and Rosa roxburghii extracts. A randomized trial of 42 people with coronary heart disease found increased platelet inhibition when other notoginseng saponin preparations were added to aspirin, not Senactiv. Reviews and case reports also concern other notoginseng preparations; one hematoma case involved hirudin, a known anticoagulant. Whether these findings apply to Senactiv is unknown; a clinical bleeding risk from Senactiv is not established.",
+          "action": "If you take an antiplatelet medicine such as aspirin or clopidogrel, tell your clinician you use Senactiv.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/33370633/",
             "https://pubmed.ncbi.nlm.nih.gov/31471773/",
             "https://pubmed.ncbi.nlm.nih.gov/39364700/",
             "https://pubmed.ncbi.nlm.nih.gov/34307625/"
           ],
-          "alert_headline": "Senactiv (notoginseng) — antiplatelet medicines",
-          "alert_body": "In a small trial, notoginseng saponins added to aspirin increased platelet inhibition. A bleeding risk is not established; tell your clinician you use it.",
-          "informational_note": "Evidence is one small trial of notoginseng saponins with aspirin; clinical bleeding significance is not established.",
+          "alert_headline": "Senactiv — antiplatelet medicines",
+          "alert_body": "Other notoginseng preparations have affected platelets; applicability to Senactiv is unknown. Bleeding risk is not established. If you take antiplatelet medicine, tell your clinician you use it.",
+          "informational_note": "Evidence is from other notoginseng preparations; applicability to Senactiv and bleeding risk are unknown.",
           "profile_gate": {
             "gate_type": "drug_class",
             "requires": {
@@ -24088,7 +24088,7 @@
         "materiality": "presence"
       },
       "last_reviewed": "2026-10-20",
-      "review_owner": "Source-content review (agent); Senactiv is Panax notoginseng + Rosa roxburghii fractions (NHA_SENACTIV)"
+      "review_owner": "Source-content review (agent), 2026-10-20; explicit Senactiv applicability uncertainty approved by Sean"
     }
   ]
 }

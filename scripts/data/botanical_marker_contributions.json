@@ -268,7 +268,7 @@
         {
           "marker_canonical_id": "resveratrol",
           "model": "standardization_required",
-          "min_standardization_pct_required": 1.0,
+          "min_standardization_pct_required": 0.0,
           "default_contribution_mg_per_g": null,
           "evidence_source": "PubMed PMID:12926863 — Direct HPLC analysis of quercetin and trans-resveratrol in red wine, grape, and winemaking byproducts.",
           "evidence_url": "https://pubmed.ncbi.nlm.nih.gov/12926863/",
@@ -279,7 +279,7 @@
             "trans-resveratrol",
             "resveratrol"
           ],
-          "notes": "Trans-resveratrol is measured by HPLC in red wine, grape (Vitis vinifera) skins and winemaking byproducts (PMID:12926863). Red-wine grape extracts sold as supplements declare a standardized percentage (BioVin Advanced: 5%). Credit only when the label declares a trans-resveratrol percentage of at least 1%; the identity stays grape.",
+          "notes": "Trans-resveratrol is measured by HPLC in red wine, grape (Vitis vinifera) skins and winemaking byproducts (PMID:12926863). Red-wine grape extracts sold as supplements declare a standardized percentage (BioVin Advanced: 5%). Credit only when the label declares a positive trans-resveratrol percentage; no concentration threshold is established for the qualified presence advisory. The identity stays grape.",
           "provenance_without_declaration": false
         }
       ],

@@ -94,3 +94,38 @@ def test_nonempty_contract_still_filters_offlabel_row():
     assert (
         _active_row_allowed_for_primary_export(off_label, contract) is False
     ), "a non-empty contract must still drop an off-label product-level row"
+
+
+@pytest.mark.parametrize("presence", ["contains", "may_contain", "facility_warning"])
+@pytest.mark.parametrize("declaration", ["soy", "soybeans"])
+def test_product_allergen_declaration_never_promotes_a_nested_analysis_row(presence, declaration):
+    from build_final_db import build_allergen_patterns
+    child = {"name": "Soy Protein isolate", "raw_source_text": "Soy Protein isolate",
+             "raw_source_path": "ingredientRows[0].nestedRows[0]", "canonical_id": "protein"}
+    contract = {"available": True, "source_paths": {"ingredientRows[0]"},
+                "terms": {"blend"}, "canonical_ids": set()}
+    patterns = build_allergen_patterns({"allergen_hits": [{
+        "allergen_id": "ALLERGEN_SOY", "matched_text": declaration,
+        "source": "label_parsed", "presence_type": presence}]})
+    assert not _active_row_allowed_for_primary_export(child, contract, allergen_patterns=patterns)
+
+
+@pytest.mark.parametrize("signal", ["ingredient_hit", "row_ref", "banned", "recalled", "harmful"])
+def test_row_specific_safety_still_preserves_nested_analysis_visibility(signal):
+    from build_final_db import build_allergen_patterns
+    child = {"name": "Soy Protein isolate", "raw_source_text": "Soy Protein isolate",
+             "raw_source_path": "ingredientRows[0].nestedRows[0]", "canonical_id": "protein"}
+    contract = {"available": True, "source_paths": {"ingredientRows[0]"},
+                "terms": {"blend"}, "canonical_ids": set()}
+    kwargs = {}
+    if signal in {"ingredient_hit", "row_ref"}:
+        hit = {"allergen_id": "ALLERGEN_SOY", "matched_text": "Soy Protein isolate",
+               "source": "active_ingredients", "presence_type": "ingredient_list"}
+        if signal == "row_ref":
+            hit.update(matched_text="soy", raw_source_path=child["raw_source_path"])
+        kwargs["allergen_patterns"] = build_allergen_patterns({"allergen_hits": [hit]})
+    elif signal == "harmful":
+        kwargs["harmful_lookup"] = {"soy protein isolate": {"ingredient": "Soy Protein isolate"}}
+    else:
+        child["canonical_id"] = "BANNED_TEST" if signal == "banned" else "RECALLED_TEST"
+    assert _active_row_allowed_for_primary_export(child, contract, **kwargs)

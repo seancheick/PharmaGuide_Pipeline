@@ -1629,8 +1629,16 @@ def _active_row_has_explicit_safety_export_signal(
     standard_name = safe_str(ing.get("standardName") or ing.get("standard_name"))
     if contaminant_lookup and matching_contaminant_hits(contaminant_lookup, raw, name, standard_name):
         return True
-    if allergen_patterns and matching_allergen_hits(allergen_patterns, raw, name, standard_name):
-        return True
+    # Product-wide declarations describe exposure, not which nested label
+    # member belongs in the primary analysis. Only an existing row-specific
+    # ingredient finding can supply this exception to the strict contract.
+    for hit in matching_allergen_hits(allergen_patterns or [], raw, name, standard_name):
+        hit_path = safe_str(hit.get("raw_source_path"))
+        if hit_path and hit_path == safe_str(ing.get("raw_source_path")):
+            return True
+        if (hit.get("presence_type") == "ingredient_list"
+                and normalize_text(hit.get("matched_text")) in iter_match_terms(raw, name, standard_name)):
+            return True
     if harmful_lookup:
         for term in collect_match_terms(raw, name, standard_name, canonical_id):
             if harmful_lookup.get(term):
@@ -6024,7 +6032,11 @@ def _build_v4_score_explanation(pillars: Any) -> Optional[Dict[str, Any]]:
         ranked.append((delta, name, p.get("reason"), concern))
     if not ranked:
         return None
-    ranked.sort(key=lambda r: r[0])  # ascending: biggest drags first
+    # JSON object key order is not meaning: a saved/sorted scored artifact
+    # must select the same tied reasons as fresh runtime assembly.
+    from scoring_v4.quality_score import _config
+    pillar_order = {name: index for index, name in enumerate(_config()["pillars"])}
+    ranked.sort(key=lambda r: (r[0], pillar_order.get(r[1], len(pillar_order)), r[1]))
     drags = [{"pillar": n, "reason": rs} for d, n, rs, _ in ranked if d < -1e-9][:3]
     # The sixth pillar at full points is a screen that found nothing, not an
     # affirmative quality finding, so it is never presented as a strength.

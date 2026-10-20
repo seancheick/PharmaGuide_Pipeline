@@ -62,7 +62,7 @@ Implementation (branch `claude/grape-resveratrol-marker`):
 - Grape reaches resveratrol only through a declared percentage, via the marker owner
   (`botanical_marker_contributions.json`, `_compute_delivers_markers`). A whole grape or grape-PAC
   extract carries trivial resveratrol, so the grape entry emits no marker at all without a
-  declared percentage of at least 1%. With one, the row carries an analysis-only resveratrol row:
+  positive declared percentage. With one, the row carries an analysis-only resveratrol row:
   its amount when the row has one, "amount unknown" otherwise. The marker scan reads the row's
   printed note, where DSLD keeps "standardized to 5% trans-resveratrol" (BioVin Advanced 269265,
   302705, identity grape). A declared knotweed percentage feeds the same marker route for amount
@@ -73,6 +73,23 @@ Implementation (branch `claude/grape-resveratrol-marker`):
   unchanged for every other pair (cod liver oil → fish oil).
 
 ## Context
+
+### Bounded Senactiv amendment (Sean, 2026-10-20)
+
+An unscored blend-total row that exactly names the curated Senactiv brand
+(including the curated Seneactiv spelling) and prints both Panax notoginseng
+and Rosa roxburghii, with no other constituent, retains `NHA_SENACTIV` when DSLD
+groups it as Proprietary Blend. The existing `blend_header_total` role and
+scoring exclusion remain; the total is never treated as a notoginseng or Rg1
+dose. Anonymous, near-name, incomplete or contradictory blends do not receive
+this exception. No other branded complex is covered by this amendment.
+
+`identity_integrity.resolve_identity` owns this decision; interaction lookup
+consumes it without a second raw-name matcher. The existing Senactiv advisory
+explicitly identifies its evidence as extrapolation from other notoginseng
+preparations: applicability to Senactiv is unknown and clinical bleeding risk
+is not established. Clinician/surgical-team communication remains qualified
+and profile-targeted; no stop-use period or medication-dose advice is inferred.
 
 Line integrity audit, October 19, 2026 (`reports/line_integrity_audit_20261019/`, measured on the
 951a05415 full capture): row accounting was perfect, but identity was decided twice and 2,311

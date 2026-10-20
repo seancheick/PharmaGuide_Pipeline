@@ -2302,3 +2302,45 @@ Measured on all 552 cherry-mentioning labels against main + gate (`~/pg_quality/
 25 scores move, no status, warning or safety change; 23 tart cherry powder/extract/gummy products lose 7.3 (or 2.9)
 Evidence earned only from juice trials; 58997 +5.3 Formulation from its label's "std. to 6.5% Anthocyanins".
 Open: no corpus label prints tart cherry juice; 212521 "Sour Cherry fruit concentrate" earns nothing (no "juice" printed).
+
+
+## October 20 — independent merged-PR integration audit (PR218)
+
+Class: behavioral pipeline/data/safety applicability, export contract validation and CI infrastructure.
+Owner: enhanced_normalizer::normalize_product + enricher::_parse_allergen_statement (declaration scope);
+audit_raw_to_final::_check_line_integrity reuses canonical exporter ledger/folds; existing grape marker
+reference; build_final_db row-specific safety promotion and explanation ordering; identity_integrity::resolve_identity
+and existing Senactiv rule under Sean's explicitly approved bounded ADR0005 amendment. Evidence: matrix/glossary,
+full40merged-PR inventory, raw-source fail-first fixtures, owner/consumer checks and independent identity,
+clinical/scoring, infrastructure and fresh Senactiv review. Will NOT create another scorer, normalizer,
+identity matcher, registry, persisted/public field/status or dose policy.
+
+Seven root causes fixed atomically: cross-contact Contains laundering; missing/nonnumeric quantities and app
+ledger dose validation holes; unsupported1% grape advisory floor; Ubuntu26.04/Python3.13.3 runner drift;
+product-wide allergen declarations selecting primary analysis rows; map-order-dependent explanation ties;
+Senactiv's verified named complex lost to blend precedence. The approved Senactiv guard requires the exact
+curated name and both agreeing constituents, including contradiction checks over flattened nested printed rows;
+the blend total remains unscored and platelet evidence is explicitly extrapolated from other preparations.
+
+Six-fix runtime5d15a3f2:15,414raw census;933unique full raw replays plus final138recapture;68falseContains on16products
+corrected, another6May on3products correctly scoped tofacility. No lost allergens, scored/identity/warning-rule/safety
+or interaction changes.933canonical reexports:36fully explained projection changes,97unsupported primary rows removed,
+one existing zero-dose header unmasked, all printed source paths/allergens retained, every retained primary row unchanged;
+0raw integrity findings. All720pillar-order permutations equivalent. Final Senactiv runtimeab50c2c3c adds8rawreplay:
+only3expected products change;309960/329215 regain curatedidentity+existing qualifiedrule,295773copyonly;0numerical,
+pillar,quality-status or product-safety-status changes;0integrity findings.168owner/consumer and20independent focused
+checks pass; exactoneentry data_batch and dedicated strictcitation checks pass. Capture source hashes match finalcommit.
+
+CIe117f7768 failed only two strict production-copy tests (six body/note length violations).
+Shortened the same Senactiv fields while preserving clinical meaning and all existing limits;
+79named copy/identity checks, fresh independent review and repeated8raw capture pass.
+Whole-fast final-source CI39440889610 SUCCESS onab50c2c3c:allfour groups and every skipguard pass; no pending/cancelled/failed run counted aspass. Six-fix CI39435832646/39436298392 bothsuccess.
+Earlier local545pass/24declared serviceoptins/1stale catalog folatefailure(127rows1667 vs runtime1700DFE) remains explicit;
+current raw1060→1700 and26folate checks pass. A broadlocal rerun afterSenactiv is deferred because Sean explicitly
+left his own exploratory primary pipeline running; no broad suite alongside corpus job. No test weakened or catalog
+restamped. Sourcequalification does not claim release/artifactacceptance.The stable pre-exploratory-run census found114stage manifests stale; outputs now mutate under Sean’s run;
+Sean's next necessary refresh startsClean. He intends to rerun after sourceintegration. No agent pipeline/release/upload.
+
+Report and compact measurements: scripts/audits/integration_audit_20261020/README.md, REVIEW.md, measurement.json,
+SENACTIV_RESEARCH.md. Durable fullcaptures/checksums: ~/pg_quality/integration_audit_20261020.
+Finalsourceab50c2c3c is qualified for authorized PR218 integration. Only audit/master/LEDGER documentation follows this tested source; no duplicate source checkpoint required. Actual merge SHA, primary-draft preservation and cleanup receipts are recorded in the current handoff and ~/pg_quality/integration_audit_20261020/integration_closeout.json. No release/artifact gate is newly closed.

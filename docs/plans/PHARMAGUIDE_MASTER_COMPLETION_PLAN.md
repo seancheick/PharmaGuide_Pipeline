@@ -1345,5 +1345,15 @@ This qualifies the bounded source batch for authorized integration; it does not 
 - [x] Ten pages × Candidate/Release/Historical render without application exceptions; final console clean. Original four warm performance targets met.
 - [x] Approved 53-case golden set displays 520 passing checks on accepted raw source-qualified outputs, separately labelled from the older full index.
 - [x] Exact-source whole-fast CI39314201536:22,204passed/192declared skips/all4groups/every skipguard; runtimea6129daf, testedde31ce0c. Independent review clear; later closeout is documentation/receipts only.
-- [ ] Integrate PR172 (`codex/dashboard-acceptance`); requires Sean for main.
+- [x] PR172 (`codex/dashboard-acceptance`) integrated October19 at0e21f595f; fetched ancestry verified October20. Dashboard artifact refresh below remains open.
 - [ ] Refresh/inspect the full dashboard index after Sean's active corpus rebuild. Older full-index golden/parity results are not claimed newly green or released.
+
+
+### October 20 — merged-PR source integration audit
+
+- [x] Independently audit all40merged PRs from3c45aa69c through30a1e2f73, verify tart-cherry sources and fix seven confirmed root causes through canonical owners. [Report](../../scripts/audits/integration_audit_20261020/README.md).
+- [x] Measure six-fix runtime5d15a3f2 on933unique frozen raw labels and138final raw checks; zero lost allergens or unexpected score/safety/interaction changes. Explain all36export projections; no retained primary-row identity/amount changes, all canonical printed rows retained. Separate approved Senactiv eight-label replay restores two qualified advisories with no score/pillar/status changes;20independent/168owner checks pass.
+- [x] Complete PR218 source qualification:ab50c2c3c whole-fast CI39440889610 succeeds/allfour groups/every skipguard; fresh independent reviews and bounded measurements pass. Authorized integration is tracked by PR218 and the current handoff/closeout receipt. Subsequent commit is documentation only; no release gate closed.
+- [ ] After Sean's final-source rebuild, recheck catalog/runtime parity, the retained stale-catalog folate assertion, dashboard index, final release and app acceptance. His concurrent exploratory pipeline is not the final-source capture. No agent pipeline or release performed.
+
+The source audit closes only its evidenced deliverables. Existing clinical holds and generated-artifact/app/publication gates remain explicit; earlier phase totals are not advanced by a code review.

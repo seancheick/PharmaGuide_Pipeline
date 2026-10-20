@@ -568,3 +568,90 @@ def test_a_location_that_is_not_a_raw_row_path_says_which_layer_it_is():
         "blob:ingredients[0]",
         "blob:proprietary_blend_detail.blends[0].child_ingredients[0]",
     ]
+
+
+@pytest.mark.parametrize("amount", [None, "999", float("nan"), float("inf")])
+def test_line_integrity_blocks_lost_or_invalid_numeric_amount(amount):
+    raw, cleaned, enriched, blob = _line_fixture()
+    blob["ingredients"][0]["quantity"] = amount
+    assert _line_codes(raw, cleaned, enriched, blob) == ["AMOUNT_CHANGE_WITHOUT_EVIDENCE"]
+
+
+def test_line_integrity_checks_the_app_exact_dose_surface():
+    raw, cleaned, enriched, blob = _line_fixture()
+    cleaned["display_ingredients"] = [{
+        "raw_source_path": "ingredientRows[1].nestedRows[0]", "exact_dose_text": "50 mg"}]
+    blob["display_ingredients"][0]["exact_dose_text"] = "500 mg"
+    findings = _line_findings(raw, cleaned, enriched, blob)
+    assert [(f["code"], f["field"], f["source_value"], f["exported_value"]) for f in findings] == [
+        ("AMOUNT_CHANGE_WITHOUT_EVIDENCE", "display_ingredients.exact_dose_text", "50 mg", "500 mg")]
+    blob["display_ingredients"][0]["exact_dose_text"] = "50 mg"
+    assert _line_codes(raw, cleaned, enriched, blob) == []
+
+
+@pytest.mark.parametrize("exported", [[], [{"exact_dose_text": "999 mg", "is_canonical": True}]])
+def test_line_integrity_checks_app_serving_variant_doses(exported):
+    raw, cleaned, enriched, blob = _line_fixture()
+    expected = [{"exact_dose_text": "50 mg", "is_canonical": True}]
+    cleaned["display_ingredients"] = [{
+        "raw_source_path": "ingredientRows[1].nestedRows[0]", "serving_variants": expected}]
+    blob["display_ingredients"][0]["serving_variants"] = exported
+    (finding,) = _line_findings(raw, cleaned, enriched, blob)
+    assert finding["code"] == "AMOUNT_CHANGE_WITHOUT_EVIDENCE"
+    assert finding["field"] == "display_ingredients.serving_variants"
+    assert finding["source_value"] == expected
+    blob["display_ingredients"][0]["serving_variants"] = expected
+    assert _line_codes(raw, cleaned, enriched, blob) == []
+
+
+def test_line_integrity_blocks_deleting_a_required_app_label_row():
+    raw, cleaned, enriched, blob = _line_fixture()
+    cleaned["display_ingredients"] = [{
+        "raw_source_path": "ingredientRows[1].nestedRows[0]", "exact_dose_text": "50 mg"}]
+    blob["display_ingredients"] = []
+    (finding,) = _line_findings(raw, cleaned, enriched, blob)
+    assert finding["code"] == "RAW_ACTIVE_MISSING_FROM_BLOB"
+    assert finding["field"] == "display_ingredients.raw_source_path"
+
+
+def test_app_dose_checks_keep_the_exporters_legitimate_folate_fold():
+    from build_final_db import _build_canonical_label_ledger
+    raw, cleaned, enriched, blob = _line_fixture()
+    cleaned["display_ingredients"] = [
+        {"raw_source_path": "ingredientRows[0]", "label_display_name": "Folate", "exact_dose_text": "680 mcg DFE"},
+        {"raw_source_path": "ingredientRows[1].nestedRows[0]", "label_display_name": "Folic Acid",
+         "parent_label": "Folate", "exact_dose_text": "400 mcg"},
+    ]
+    blob["display_ingredients"] = _build_canonical_label_ledger(cleaned["display_ingredients"], [], [])
+    assert len(blob["display_ingredients"]) == 1
+    assert blob["display_ingredients"][0]["folded_label_components"][0]["exact_dose_text"] == "400 mcg"
+    assert _line_codes(raw, cleaned, enriched, blob) == []
+
+
+@pytest.mark.parametrize("field", ["parenthetical_dose_text", "folded_label_components"])
+def test_app_dose_checks_block_corrupted_folate_fold_amounts(field):
+    from build_final_db import _build_canonical_label_ledger
+    raw, cleaned, enriched, blob = _line_fixture()
+    cleaned["display_ingredients"] = [
+        {"raw_source_path": "ingredientRows[0]", "label_display_name": "Folate", "exact_dose_text": "680 mcg DFE"},
+        {"raw_source_path": "ingredientRows[1].nestedRows[0]", "label_display_name": "Folic Acid",
+         "parent_label": "Folate", "exact_dose_text": "400 mcg"},
+    ]
+    blob["display_ingredients"] = _build_canonical_label_ledger(cleaned["display_ingredients"], [], [])
+    if field == "parenthetical_dose_text":
+        blob["display_ingredients"][0][field] = "4000 mcg folic acid"
+    else:
+        blob["display_ingredients"][0][field][0]["exact_dose_text"] = "4000 mcg"
+    (finding,) = _line_findings(raw, cleaned, enriched, blob)
+    assert finding["code"] == "AMOUNT_CHANGE_WITHOUT_EVIDENCE"
+    assert finding["field"] == f"display_ingredients.{field}"
+
+
+@pytest.mark.parametrize("field,value", [("display_dose_label", "999 mg"), ("quantity", 999), ("unit", "mcg")])
+def test_app_dose_checks_block_injected_fallback_amounts(field, value):
+    raw, cleaned, enriched, blob = _line_fixture()
+    cleaned["display_ingredients"] = [{"raw_source_path": "ingredientRows[1].nestedRows[0]"}]
+    blob["display_ingredients"][0][field] = value
+    (finding,) = _line_findings(raw, cleaned, enriched, blob)
+    assert finding["code"] == "AMOUNT_CHANGE_WITHOUT_EVIDENCE"
+    assert finding["field"] == f"display_ingredients.{field}"

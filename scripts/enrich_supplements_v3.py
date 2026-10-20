@@ -4311,6 +4311,7 @@ class SupplementEnricherV3:
         *,
         allow_unscoreable_taxonomy_only: bool = False,
         authoritative_context_override: bool = False,
+        nested_member_names: tuple[str, ...] = (),
     ) -> Tuple[IdentityDecision, Optional[Dict], bool]:
         supplied_canonical_id = (
             self._quality_match_scoring_canonical(match_result, quality_map)
@@ -4474,6 +4475,7 @@ class SupplementEnricherV3:
             canonical_parent_of=canonical_parent_of,
             canonical_registry=self._current_canonical_identity_registry(),
             interaction_rules_of=self._interaction_rule_ids_of,
+            nested_member_names=nested_member_names,
         )
 
         if decision.disposition == "repaired" and decision.canonical_id:
@@ -4931,6 +4933,14 @@ class SupplementEnricherV3:
                         None,
                         quality_map,
                         allow_unscoreable_taxonomy_only=True,
+                        nested_member_names=tuple(
+                            str(source.get("raw_source_text") or source.get("name") or "")
+                            for source in product.get("label_source_rows") or []
+                            if isinstance(source, dict)
+                            and str(source.get("raw_source_path") or "").startswith(
+                                str(ingredient.get("raw_source_path") or "") + ".nestedRows["
+                            )
+                        ),
                     )
                 )
                 self._stamp_iqd_identity(
@@ -12951,12 +12961,15 @@ class SupplementEnricherV3:
         "unknown": 1
     }
 
+    # Production wording shares one vocabulary across line, inline and negated cues.
+    _STATEMENT_PRODUCTION_VERBS = r"(?:manufactured|produced|processed|made|packaged|bottled)"
+
     # A statement line that opens a new clause rather than continuing a list.
     _STATEMENT_LINE_CUE = re.compile(
         r"^\W*(?:contains?\b|may\s+contain|allerg(?:en|y)|warning|caution|"
-        r"(?:manufactured|produced|processed|made|packaged|bottled)\b|"
+        rf"{_STATEMENT_PRODUCTION_VERBS}\b|"
         r"(?:this|the|our)\s+(?:product|formula|supplement|facility)\b|"
-        r"free\s+(?:of|from)\b|no\b|non\b|without\b|does\s+not|do\s+not|not\s+(?:manufactured|made)\b|"
+        rf"free\s+(?:of|from)\b|no\b|non\b|without\b|does\s+not|do\s+not|(?:not|never)\s+{_STATEMENT_PRODUCTION_VERBS}\b|"
         r"[a-z]+[- ]free\b)"
     )
 
@@ -13121,12 +13134,27 @@ class SupplementEnricherV3:
                 merged_lines[-1] = merged_lines[-1] + joiner + line
             else:
                 merged_lines.append(line)
-        clauses = [
-            clause.strip()
-            for line in merged_lines
-            for clause in re.split(r'(?<=[.!?])\s+|;\s*|\s+\bbut\b\s+', line)
-            if clause.strip()
-        ]
+        clauses = []
+        for line in merged_lines:
+            for sentence in re.split(r'(?<=[.!?])\s+|;\s*|\s+\bbut\b\s+', line):
+                # A new independent cue owns its list. Relative clauses
+                # ("facility with products that may contain") keep the
+                # facility owner; negated cues stay with their negator.
+                starts = [0]
+                for cue in re.finditer(
+                    r'\b(?:may\s+contain|contains|'
+                    rf'{self._STATEMENT_PRODUCTION_VERBS}\s+(?:in|on)\s+'
+                    r'(?:a\s+)?(?:facility|facilities|equipment|production\s+line))\b', sentence,
+                ):
+                    prefix = sentence[:cue.start()].rstrip()
+                    if not prefix or re.search(r"\b(?:not|never|that|which)\s*$", prefix):
+                        continue
+                    if cue.group() == "contains" and not re.search(r',\s*$|\band\s*$', prefix):
+                        continue
+                    starts.append(cue.start())
+                starts.append(len(sentence))
+                clauses.extend(sentence[a:b].strip(' ,') for a, b in zip(starts, starts[1:])
+                               if sentence[a:b].strip(' ,'))
         if len(clauses) > 1:
             for clause in clauses:
                 self._parse_allergen_statement(
@@ -13144,7 +13172,7 @@ class SupplementEnricherV3:
             r'free\s+(?:from|of)\s+',       # "Free from milk"
             r'without\s+',                  # "Without milk"
             r'no\s+added\s+',               # "No added milk"
-            r'\bnot\s+(?:manufactured|made|processed|produced)\b',  # "Not manufactured with: milk"
+            rf'\b(?:not|never)\s+{self._STATEMENT_PRODUCTION_VERBS}\b',  # "Not manufactured with: milk"
             r"\b(?:does|do)(?:\s+not|n'?t)\s+(?:process|handle|use)",  # "This facility does not process peanuts"
         ]
         negator_starts = [
@@ -13205,7 +13233,12 @@ class SupplementEnricherV3:
         ]
         for pattern in contains_patterns:
             match = re.search(pattern, text_lower)
-            if match:
+            if match and not re.search(
+                r'\b(?:facility|facilities|equipment|production\s+lines?)\b',
+                text_lower[:match.start()],
+            ):
+                # "facility that contains milk" describes cross-contact,
+                # never a declaration that this product contains milk.
                 allergen_text = match.group(1)
                 self._extract_allergens_from_text(allergen_text, allergen_lookup, found,
                                                    "contains", source, text, by_phrase=declares)
