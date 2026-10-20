@@ -4191,7 +4191,7 @@ class EnhancedDSLDNormalizer:
             if parent_category is not None:
                 # Working state for _is_chemical_decomposition_leaf: a member
                 # of a DSLD blend is an ingredient, not a decomposition of a
-                # parent compound. Popped before output.
+                # parent compound. Output rows are rebuilt and never copy it.
                 row.setdefault("_raw_parent_category", parent_category)
             original_raw_source_text = (
                 "" if row.get("name") is None else str(row.get("name"))
@@ -5179,6 +5179,8 @@ class EnhancedDSLDNormalizer:
         r"\b(?:enzymes?|proteases?)\s+(?:derived\s+)?from\b|\bblend\s+of\s+proteases\b",
         re.I,
     )
+    # A parent that also declares live cultures keeps its organisms as cultures.
+    _LIVE_CULTURE_PARENT_RE = re.compile(r"\bprobiotics?\b|\bcultures?\b|\bcfu\b", re.I)
 
     def _mark_enzyme_source_descriptors(self, ing: Dict[str, Any], children: List[Any]) -> None:
         """Mark an enzyme preparation's source organisms as provenance.
@@ -5194,7 +5196,8 @@ class EnhancedDSLDNormalizer:
         """
         source_text = " ".join(str(ing.get(key) or "") for key in ("name", "notes"))
         if not (str(ing.get("category") or "").casefold() in {"enzyme", "blend"}
-                and self._ENZYME_SOURCE_PARENT_RE.search(source_text)):
+                and self._ENZYME_SOURCE_PARENT_RE.search(source_text)
+                and not self._LIVE_CULTURE_PARENT_RE.search(source_text)):
             return
         for child in children:
             if not isinstance(child, dict):

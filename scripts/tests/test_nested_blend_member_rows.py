@@ -125,6 +125,9 @@ def enricher():
 
 
 def _actives_by_path(cleaned: Dict[str, Any]) -> Dict[str, Dict[str, Any]]:
+    paths = [row.get("raw_source_path") for row in cleaned.get("activeIngredients") or []]
+    # A member emitted twice would double its alerts and Evidence credit.
+    assert len(paths) == len(set(paths)), "a label row became two active rows"
     return {row.get("raw_source_path"): row for row in cleaned.get("activeIngredients") or []}
 
 
@@ -176,6 +179,9 @@ def test_salt_named_blend_members_are_rows(normalizer, path, name):
     assert row is not None, f"{name} is a blend member, not a counter-ion of a parent compound"
     assert row["name"] == name
     assert row["parentBlend"] == "Glucosamine Chondroitin Complex"
+    assert row["isNestedIngredient"] is True
+    assert row["parent_source_path"] == "ingredientRows[0]"
+    assert row["parentBlendMass"] == 3000.0
     # An undosed named blend member stays reviewable by Evidence.
     assert row["cleaner_row_role"] == "nested_display_only"
 
@@ -193,6 +199,9 @@ def test_salt_member_of_blend_inside_blend_is_a_row(normalizer):
     row = actives.get("ingredientRows[0].nestedRows[1].nestedRows[1]")
     assert row is not None and row["name"] == "Potassium Chloride"
     assert row["parentBlend"] == "Water Balance Blend"
+    assert row["isNestedIngredient"] is True
+    assert row["parent_source_path"] == "ingredientRows[0].nestedRows[1]"
+    assert row["parentBlendMass"] == 160.0
     assert actives["ingredientRows[0].nestedRows[0]"]["name"] == "Caffeine Anhydrous"
 
 
@@ -263,6 +272,25 @@ def test_protease_source_organisms_are_provenance_not_probiotics(normalizer, enr
     assert {row["cleaner_row_role"] for row in sources.values()} == {"source_descriptor"}
     enriched, _ = enricher.enrich_product(cleaned)
     assert "RULE_IQM_PROBIOTICS_IMMUNOCOMPROMISED" not in _rule_ids(enriched)
+
+
+def test_dosed_member_of_skipped_nested_blend_keeps_its_own_amount(normalizer):
+    raw = copy.deepcopy(RE_BUILT_MASS_RAW)
+    raw["ingredientRows"][0]["nestedRows"][3]["nestedRows"][0]["quantity"] = _q(20, "mg")
+    row = _actives_by_path(normalizer.normalize_product(raw))["ingredientRows[0].nestedRows[3].nestedRows[0]"]
+    assert (row["quantity"], row["unit"]) == (20.0, "mg")
+    assert row["parentBlendMass"] == 50.0
+
+
+def test_protease_blend_that_declares_cultures_keeps_them_as_cultures(normalizer):
+    """Latent shape (0 corpus rows): protease wording never hides a declared probiotic."""
+    raw = _protease_product(_row("Proprietary Blend of Proteases and Probiotics", "blend",
+                                 "Proprietary Blend", 0, "NP", 62, [
+        _row("Lactobacillus acidophilus", "bacteria", "Lactobacillus Acidophilus", 0, "NP", 63, size=34),
+    ], size=34))
+    cleaned = normalizer.normalize_product(raw)
+    [culture] = [row for row in cleaned["activeIngredients"] if row["name"] == "Lactobacillus acidophilus"]
+    assert culture["cleaner_row_role"] == "nested_display_only"
 
 
 def test_probiotic_and_enzyme_blend_keeps_its_live_cultures(normalizer, enricher):
