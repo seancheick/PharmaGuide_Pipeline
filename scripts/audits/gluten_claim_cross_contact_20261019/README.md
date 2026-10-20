@@ -80,8 +80,9 @@ free-from claim and a cross-contact signal, plus the named products and 300 seed
 - 364 products regain `claim_gluten_free_validated`. Claim evidence: 359 gluten, 12 yeast and
   smaller dairy/soy/egg counts become eligible; 92 gluten evidence objects relabel
   allergen_conflict → may_contain_warning (a wheat facility is cross-contact).
-- 2 products keep an unread-may-contain conflict, both genuine: "(may contain trace amounts less
-  than 20 ppm)" and a "may contain, soy, egg, …" list main's parser does not read (#188 reads it).
+- 2 products kept an unread-may-contain conflict at f6d876855: "(may contain trace amounts less
+  than 20 ppm)" (273865, a gluten-free qualifier; no longer unread since the re-audit below) and a
+  "may contain, soy, egg, …" list main's parser does not read (293779; #188 reads it).
 
 **Disclosed, not changed.**
 - 218190 keeps its B2 −2: a dairy-free claim and "produced in a facility that also handles dairy
