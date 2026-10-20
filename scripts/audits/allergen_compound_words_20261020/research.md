@@ -31,23 +31,23 @@ carry one (`~/pg_quality/lucidbanach_compound_allergens_20261020/base.jsonl`) to
   ryegrass (*Lolium*, not rye *Secale*; 232473's "Rye" form is vetoed by `pollen`).
 - **Not in the corpus:** barleygrass, wheatgerm (one word). Not added.
 
-## Replay — `~/pg_quality/lucidbanach_compound_allergens_20261020/`
+## Replay — `~/pg_quality/lucidbanach_compound_allergens_20261020/r2/`
 
 `freeze-raw` 533 labels (383 above + 150 seeded controls from the #187 cohort), `--full --blob`,
-main 0826118d5 vs 52ed30ac7. 17 records change; 0 product_status or product_safety_status changes;
-0 controls change.
-- 4 gain a row-level ALLERGEN_WHEAT (`ingredient_list`, matched "Wheatgrass"/"Wheatgrass, Powder").
-- 3 of them claim gluten-free ("Free from gluten…", "Free of: … gluten") and lose the gluten-free
-  badge (compliance `gluten_free` → core `is_gluten_free`, blob `gluten_free_validated`): 293243,
-  294321, 294322. 294321 and 294322 drop 54.4 → 51.4 (Transparency B2 −2, gluten-free claim with a
-  wheat ingredient; tier stays Poor). This is the same result main already gives two-word
-  "Wheat Grass" rows (311846 et al.). Whether a wheatgrass product may carry a gluten-free claim
-  is the open 21 CFR 101.91 question for Sean (see PR #187's
-  `GLUTEN_GRAIN_INGREDIENT_CONTRADICTS_GLUTEN_FREE`).
-- 3 ("Contains: Wheatgrass, sesame.") keep ALLERGEN_WHEAT; `matched_text` becomes "wheatgrass".
-- 10 keep ALLERGEN_WHEAT; the evidence drops the form suffix ("Ingredient: Wheatgrass, Powder
-  (from Triticum aestivum L., Powder)" → "Ingredient: Wheatgrass, Powder") because the row name now
-  matches before the form.
+main 3d7fe8adf (after #187 and #188) vs 6b3720ab7. 5 records change; 0 score, tier, status,
+Gluten-Free badge or control changes.
+- 293243 gains a row-level ALLERGEN_WHEAT (`ingredient_list`, "Wheatgrass"). Its badge is already
+  off on main (barley grass ingredient, D30 switch).
+- 327405, 327407, 330686 ("Contains: Wheatgrass, sesame."): ALLERGEN_WHEAT now comes from the label's
+  own Contains statement (precedence contains > ingredient_list, #188) instead of the "Wheat Grass
+  Juice" row.
+- 275997: evidence text only ("(from Triticum aestivum)" dropped; the row name now matches first).
+- 294319, 294321, 294322 do not change: since #188 their "Allergen Information: Wheat" line already
+  flags wheat and wins the per-allergen precedence. The tests run them with that line removed, so the
+  row itself must name wheat.
+
+An earlier run against main 0826118d5 (before #188) showed 17 changes, including the badge turning
+off on 293243, 294321 and 294322 and B2 −2 on 294321/294322; #187 and #188 now produce those on main.
 
 Tests: `scripts/tests/test_allergen_species_phrases.py` — the four products fail first (no
 row-level wheat hit), buckwheat 29105 and ryegrass 232473 controls; allergen slice 2,286 passed.
