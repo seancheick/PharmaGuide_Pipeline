@@ -3,7 +3,7 @@
     "description": "Other/inactive ingredients database for supplement excipients and additives",
     "purpose": "inactive_ingredient_classification",
     "schema_version": "5.4.3",
-    "last_updated": "2026-10-19",
+    "last_updated": "2026-10-20",
     "total_entries": 736,
     "functional_roles_field": {
       "added_in": "5.1.0",
@@ -17070,7 +17070,10 @@
         "senactiv",
         "senactiv®",
         "senactiv branded blend",
-        "panax notoginseng and rosa roxburghii blend"
+        "panax notoginseng and rosa roxburghii blend",
+        "seneactiv",
+        "senactiv panax notoginseng",
+        "panax notoginseng, rosa roxburghii"
       ],
       "category": "active_pending_relocation",
       "is_additive": false,
@@ -17081,7 +17084,7 @@
         "exercise recovery support",
         "performance support"
       ],
-      "last_updated": "2026-02-24",
+      "last_updated": "2026-10-20",
       "external_ids": {},
       "functional_roles": [],
       "is_active_only": true

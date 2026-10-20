@@ -72,7 +72,7 @@ def test_fish_facility_keeps_a_dairy_free_claim(run):
 def test_milk_facility_still_voids_a_dairy_free_claim(run):
     # 326701 with its fish facility statement changed to milk.
     enriched, transparency = run("326701", replace=("processes fish", "processes milk"))
-    assert _b2(transparency) == -2.0
+    assert _b2(transparency) == -1.5  # milk, moderate
     assert enriched["compliance_data"]["dairy_free"] is False
     assert {ev.get("ineligibility_reason") for ev in _evidence(enriched, "dairy")} == {"may_contain_warning"}
 
@@ -80,7 +80,7 @@ def test_milk_facility_still_voids_a_dairy_free_claim(run):
 def test_real_milk_facility_and_dairy_free_claim_keeps_its_penalty(run):
     # 218190: "produced in a facility that also handles dairy ingredients", claims Dairy Free.
     enriched, transparency = run("218190")
-    assert _b2(transparency) == -2.0
+    assert _b2(transparency) == -1.5  # milk, moderate
     assert enriched["claim_gluten_free_validated"] is True
 
 
@@ -149,7 +149,7 @@ def test_h1_unread_may_contain_clears_the_gluten_free_badge(run):
     enriched, transparency = run("293779")
     assert enriched["compliance_data"]["gluten_free"] is False
     assert enriched["claim_gluten_free_validated"] is False
-    assert _b2(transparency) == -2.0
+    assert _b2(transparency) == -1.5  # wheat facility warning, moderate (read since #188)
 
 
 def test_h1_a_gluten_ppm_qualifier_is_not_an_unread_warning(run):
@@ -161,12 +161,12 @@ def test_h1_a_gluten_ppm_qualifier_is_not_an_unread_warning(run):
 
 @pytest.mark.parametrize("pid", ["297644", "274671"])
 def test_m1_gluten_grain_ingredient_answers_once(run, pid):
-    # Barley/rye as an ingredient: B2 already takes -2 on main; validation and badge now agree
+    # Barley/rye as an ingredient: B2 already penalizes it on main; validation and badge agree
     # through GLUTEN_GRAIN_INGREDIENT_CONTRADICTS_GLUTEN_FREE (Sean's open 21 CFR 101.91 question).
     from scoring_input_contract import GLUTEN_GRAIN_INGREDIENT_CONTRADICTS_GLUTEN_FREE
     assert GLUTEN_GRAIN_INGREDIENT_CONTRADICTS_GLUTEN_FREE is True
     enriched, transparency = run(pid)
-    assert _b2(transparency) == -2.0
+    assert _b2(transparency) == -1.5  # moderate: barley (297644 also milk facility)
     assert enriched["claim_gluten_free_validated"] is False
     assert enriched["compliance_data"]["gluten_free"] is False
 
@@ -209,3 +209,36 @@ def test_a_barley_ingredient_is_named_a_gluten_grain_source(run, pid):
     assert not any("cross-contact" in c for c in conflicts)
     assert {ev.get("ineligibility_reason") for ev in _evidence(enriched, "gluten")} == {
         "allergen_conflict:gluten grain detected"}
+
+
+# B2 magnitude follows the contradicting allergen's severity
+# (quality_score.json b2_severity_points: high 2.0, moderate 1.5, low 1.0).
+# Since hits carry canonical ids (ALLERGEN_MILK), seen.get(group) never
+# matched a group name and every contradiction took the 2.0 cap.
+def test_b2_dairy_contradiction_costs_milk_severity(run):
+    # 218190: dairy-free claim; "produced in a facility that also handles dairy" (milk, moderate).
+    enriched, transparency = run("218190")
+    assert _b2(transparency) == -1.5
+
+
+def test_b2_soy_contradiction_costs_soy_severity(run):
+    # 326701 (soy-free claim) with its fish facility statement changed to soy (low).
+    enriched, transparency = run("326701", replace=("processes fish", "processes soy"))
+    assert _b2(transparency) == -1.0
+
+
+def test_b2_takes_the_highest_severity_across_contradicted_groups(run):
+    # 326701 claims dairy- and soy-free: milk (1.5) and soy (1.0) both contradicted.
+    enriched, transparency = run("326701", replace=("processes fish", "processes milk and soy"))
+    assert _b2(transparency) == -1.5
+
+
+def test_b2_high_severity_and_conflict_only_fallback_keep_the_cap():
+    from scoring_v4.modules.generic_transparency import _score_b2_false_allergen_claim_penalty
+    shellfish = {"compliance_data": {"allergen_free_claims": ["shellfish"]},
+                 "contaminant_data": {"allergens": {"allergens": [
+                     {"allergen_id": "ALLERGEN_CRUSTACEANS", "presence_type": "facility_warning", "severity_level": "high"}]}}}
+    assert _score_b2_false_allergen_claim_penalty(shellfish)[0] == 2.0
+    conflict_only = {"compliance_data": {"allergen_free_claims": ["gluten"],
+                                         "conflicts": ["gluten-free claim conflicts with detected gluten/wheat"]}}
+    assert _score_b2_false_allergen_claim_penalty(conflict_only)[0] == 2.0
