@@ -887,6 +887,7 @@ def resolve_identity(
     canonical_parent_of: CanonicalParentPredicate | None = None,
     canonical_registry: CanonicalIdentityRegistry | None = None,
     interaction_rules_of: Callable[[str], frozenset] | None = None,
+    nested_member_names: tuple[str, ...] = (),
 ) -> IdentityDecision:
     """Resolve label identity without reproducing the external taxonomy matcher.
 
@@ -1250,6 +1251,26 @@ def resolve_identity(
     interaction_only_identity = (
         standard_name_proves_canonical and not label_proves_canonical
     )
+    # Sean, 2026-10-20: this verified branded complex keeps its identity,
+    # separately from the unscored blend-total role. Only the exact curated
+    # brand and both printed constituents establish this narrow exception;
+    # another brand, an anonymous blend or incomplete forms do not qualify.
+    senactiv_names = canonical_registry.standard_names_of("NHA_SENACTIV") if canonical_registry else ()
+    reviewed_senactiv_header = bool(
+        canonical_before == "NHA_SENACTIV"
+        and structured_canonical == _GENERAL_BLEND_ID
+        and _is_blend_header_row(row)
+        and allow_unscoreable_taxonomy_only
+        and raw_evidence
+        and canonical_registry is not None
+        and canonical_registry.names_identity(raw_evidence[0].value, "NHA_SENACTIV")
+        and normalize_label_display(raw_evidence[0].value).casefold()
+        in {normalize_label_display(name).casefold() for name in (*senactiv_names, "Seneactiv")}
+        and {normalize_label_display(item.value).casefold() for item in form_evidence}
+        == {"panax notoginseng", "rosa roxburghii"}
+        and {normalize_label_display(name).casefold() for name in nested_member_names}
+        <= {"panax notoginseng", "rosa roxburghii"}
+    )
 
     if display_name is None:
         disposition: IdentityDisposition = "missing_display_label"
@@ -1279,6 +1300,13 @@ def resolve_identity(
             "Structured line evidence resolved to conflicting canonical identities: "
             + ", ".join(sorted(structured_canonicals))
             + "."
+        )
+    elif reviewed_senactiv_header:
+        disposition = "taxonomy_only"
+        canonical_after = canonical_before
+        rationale = (
+            "The exact curated Senactiv brand and both printed constituents establish "
+            "the branded complex; its blend total remains excluded from scoring."
         )
     elif structured_canonical is not None:
         if canonical_before is None and allow_unscoreable_taxonomy_only:

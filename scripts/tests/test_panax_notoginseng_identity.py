@@ -108,13 +108,68 @@ def test_notoginseng_advisory_is_qualified(rule_id, subject):
             assert claim.lower() not in sub["alert_body"].lower()
 
 
-def test_seneactiv_row_meets_the_notoginseng_advisory(enrich):
-    """295773: Senactiv is Panax notoginseng (+ Rosa roxburghii) saponins, the
-    material of PMID 33370633."""
-    enriched = enrich(_fixture(295773))
-    rows = _rows(enriched, "Seneactiv")
+@pytest.mark.parametrize("dsld_id,label", [(295773, "Seneactiv"), (309960, "Senactiv"), (329215, "Senactiv")])
+def test_seneactiv_row_meets_the_notoginseng_advisory(enrich, dsld_id, label):
+    """The branded complex keeps its qualified advisory, whose clinical
+    evidence concerns other notoginseng preparations, not Senactiv itself."""
+    enriched = enrich(_fixture(dsld_id))
+    rows = _rows(enriched, label)
     assert rows and {r["canonical_id"] for r in rows} == {"NHA_SENACTIV"}
+    assert all(r.get("skip_reason") == "blend_header_total_weight_only" for r in rows)
+    assert all(r.get("scoreable_identity") is False for r in rows)
+    assert not any(r.get("raw_source_text") == label for r in
+                   enriched["ingredient_quality_data"].get("ingredients_scorable", []))
     assert SENACTIV_RULE_ID in _rule_ids(enriched)
+
+
+@pytest.mark.parametrize("mutation", ["anonymous", "near_name", "missing", "one_member", "mismatched", "extra", "nested_extra"])
+def test_senactiv_exception_requires_exact_brand_and_complete_matching_members(enrich, mutation):
+    raw = _fixture(309960)
+    row = raw["ingredientRows"][8]
+    if mutation == "anonymous":
+        row["name"] = "Proprietary Blend"
+    elif mutation == "near_name":
+        row["name"] = "Senactiv-like Blend"
+    elif mutation == "missing":
+        row["forms"] = []
+    elif mutation == "one_member":
+        row["forms"] = row["forms"][:1]
+    elif mutation == "mismatched":
+        row["forms"][0]["name"] = "Panax ginseng"
+    elif mutation == "extra":
+        row["forms"].append({"name": "Caffeine", "category": "chemical", "ingredientGroup": "Caffeine"})
+    else:
+        row["nestedRows"] = [{"name": "Caffeine", "category": "chemical", "ingredientGroup": "Caffeine",
+                              "quantity": [{"quantity": 10, "unit": "mg"}], "forms": [], "nestedRows": []}]
+    product = enrich(raw)
+    rows = _rows(product, row["name"])
+    assert not any(r.get("canonical_id") == "NHA_SENACTIV" for r in rows)
+    if mutation not in {"anonymous", "near_name"}:
+        assert rows and {r.get("canonical_id") for r in rows} == {"BLEND_GENERAL"}
+    assert SENACTIV_RULE_ID not in _rule_ids(product)
+
+
+def test_senactiv_advisory_discloses_preparation_extrapolation():
+    rules = json.loads((SCRIPTS / "data" / "ingredient_interaction_rules.json").read_text())
+    rule = next(r for r in rules["interaction_rules"] if r["id"] == SENACTIV_RULE_ID)
+    for sub in rule["condition_rules"] + rule["drug_class_rules"]:
+        assert "other notoginseng preparations" in sub["alert_body"].lower()
+        assert "whether this applies to Senactiv is unknown" in sub["alert_body"]
+        assert "not Senactiv" in sub["mechanism"]
+        assert "Senactiv (notoginseng)" not in json.dumps(sub)
+
+
+def test_agreeing_nested_members_do_not_contradict_senactiv(enrich):
+    raw = _fixture(309960)
+    row = raw["ingredientRows"][8]
+    row["nestedRows"] = [
+        {"name": name, "category": "botanical", "ingredientGroup": name,
+         "quantity": [{"quantity": 0, "unit": "NP"}], "forms": [], "nestedRows": []}
+        for name in ("Panax notoginseng", "Rosa roxburghii")
+    ]
+    product = enrich(raw)
+    assert {r.get("canonical_id") for r in _rows(product, "Senactiv")} == {"NHA_SENACTIV"}
+    assert SENACTIV_RULE_ID in _rule_ids(product)
 
 
 @pytest.mark.parametrize("drug_classes,fires", [

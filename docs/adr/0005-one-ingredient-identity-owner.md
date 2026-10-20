@@ -74,6 +74,23 @@ Implementation (branch `claude/grape-resveratrol-marker`):
 
 ## Context
 
+### Bounded Senactiv amendment (Sean, 2026-10-20)
+
+An unscored blend-total row that exactly names the curated Senactiv brand
+(including the curated Seneactiv spelling) and prints both Panax notoginseng
+and Rosa roxburghii, with no other constituent, retains `NHA_SENACTIV` when DSLD
+groups it as Proprietary Blend. The existing `blend_header_total` role and
+scoring exclusion remain; the total is never treated as a notoginseng or Rg1
+dose. Anonymous, near-name, incomplete or contradictory blends do not receive
+this exception. No other branded complex is covered by this amendment.
+
+`identity_integrity.resolve_identity` owns this decision; interaction lookup
+consumes it without a second raw-name matcher. The existing Senactiv advisory
+explicitly identifies its evidence as extrapolation from other notoginseng
+preparations: applicability to Senactiv is unknown and clinical bleeding risk
+is not established. Clinician/surgical-team communication remains qualified
+and profile-targeted; no stop-use period or medication-dose advice is inferred.
+
 Line integrity audit, October 19, 2026 (`reports/line_integrity_audit_20261019/`, measured on the
 951a05415 full capture): row accounting was perfect, but identity was decided twice and 2,311
 rows were rewritten from an identity the printed label names to the DSLD group's (189 green bell

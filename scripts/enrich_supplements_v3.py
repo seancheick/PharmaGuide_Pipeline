@@ -4311,6 +4311,7 @@ class SupplementEnricherV3:
         *,
         allow_unscoreable_taxonomy_only: bool = False,
         authoritative_context_override: bool = False,
+        nested_member_names: tuple[str, ...] = (),
     ) -> Tuple[IdentityDecision, Optional[Dict], bool]:
         supplied_canonical_id = (
             self._quality_match_scoring_canonical(match_result, quality_map)
@@ -4474,6 +4475,7 @@ class SupplementEnricherV3:
             canonical_parent_of=canonical_parent_of,
             canonical_registry=self._current_canonical_identity_registry(),
             interaction_rules_of=self._interaction_rule_ids_of,
+            nested_member_names=nested_member_names,
         )
 
         if decision.disposition == "repaired" and decision.canonical_id:
@@ -4931,6 +4933,14 @@ class SupplementEnricherV3:
                         None,
                         quality_map,
                         allow_unscoreable_taxonomy_only=True,
+                        nested_member_names=tuple(
+                            str(source.get("raw_source_text") or source.get("name") or "")
+                            for source in product.get("label_source_rows") or []
+                            if isinstance(source, dict)
+                            and str(source.get("raw_source_path") or "").startswith(
+                                str(ingredient.get("raw_source_path") or "") + ".nestedRows["
+                            )
+                        ),
                     )
                 )
                 self._stamp_iqd_identity(
