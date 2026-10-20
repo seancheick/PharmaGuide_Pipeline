@@ -377,3 +377,15 @@ def test_inner_blend_without_a_printed_total_never_borrows_the_outer_total(norma
         assert not blends[name].get("blend_total_mg"), f"{name} prints no total"
     # The outer blend keeps the total it prints.
     assert blends[outer["name"]]["blend_total_mg"] == float(outer["quantity"][0]["quantity"])
+
+
+@pytest.mark.parametrize("protease_row", [PROTEASE_NESTED, PROTEASE_FORMS], ids=["nested", "forms"])
+def test_top_level_protease_blend_sources_are_provenance(normalizer, protease_row):
+    """Latent shape (0 corpus rows): the skipped protease blend is a top-level row."""
+    raw = _protease_product(protease_row)
+    raw["ingredientRows"] = [copy.deepcopy(protease_row)]
+    cleaned = normalizer.normalize_product(raw)
+    sources = [row for row in cleaned["activeIngredients"]
+               if row["name"] in {"Bacillus subtilis", "Ananas comosus"}]
+    assert {row["name"] for row in sources} == {"Bacillus subtilis", "Ananas comosus"}
+    assert {row["cleaner_row_role"] for row in sources} == {"source_descriptor"}

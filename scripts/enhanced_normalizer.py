@@ -5053,12 +5053,12 @@ class EnhancedDSLDNormalizer:
                         len(ing.get("forms") or []),
                         name,
                     )
-                    flattened.extend(
-                        self._expand_header_forms_for_processing(
-                            ing,
-                            source_path=ing.get("raw_source_path") or "activeIngredients",
-                        )
+                    form_rows = self._expand_header_forms_for_processing(
+                        ing,
+                        source_path=ing.get("raw_source_path") or "activeIngredients",
                     )
+                    self._mark_enzyme_source_descriptors(ing, form_rows)
+                    flattened.extend(form_rows)
                 # BUT: Still extract nestedRows from skipped parents (e.g., "Total Omega Oil")
                 if nested:
                     logger.debug(f"Extracting {len(nested)} nestedRows from skipped parent: {name}")
@@ -7007,10 +7007,12 @@ class EnhancedDSLDNormalizer:
                 )
             if is_active and ing.get("forms"):
                 extracted = []
-                for form_ing in self._expand_header_forms_for_processing(
+                form_rows = self._expand_header_forms_for_processing(
                     ing,
                     source_path=ing.get("raw_source_path") or "activeIngredients",
-                ):
+                )
+                self._mark_enzyme_source_descriptors(ing, form_rows)
+                for form_ing in form_rows:
                     processed_form = self._process_single_ingredient_enhanced(
                         form_ing,
                         is_active=True,
@@ -7031,6 +7033,7 @@ class EnhancedDSLDNormalizer:
             # (e.g., "Total Omega Oil" is skipped, but Omega-3/6/9 nested rows are real data)
             if nested_rows:
                 logger.debug(f"Processing {len(nested_rows)} nestedRows from skipped parent: {name}")
+                self._mark_enzyme_source_descriptors(ing, nested_rows)
                 nested_results = []
                 for nested_ing in self._lift_decomposition_members(nested_rows):
                     if self._is_chemical_decomposition_leaf(nested_ing):

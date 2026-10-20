@@ -2221,8 +2221,9 @@ notoginseng, skullcap; 30565/5816 yohimbe); (2) the counter-ion leaf rule droppe
 (3) found while classifying: protease source organisms rescued as probiotic subjects, and the same false
 warning already on 77164 ("proprietary blend of proteases" without "from"); (4) audit F1: the rescue stamped
 the OUTER blend's mass on members of an inner blend printing 0 NP, so the blob gained totals the label never
-prints (30565/5816 grape blend 380 mg, 328844 Astarte/Urex 221 mg each). Fail-first tests at each step (18 in
-`test_nested_blend_member_rows.py`). Corpus Clean diff vs main 9630a0f3a: 161/15,414 products, rows only added.
+prints (30565/5816 grape blend 380 mg, 328844 Astarte/Urex 221 mg each); (5) review: a top-level or
+_process_single skipped protease blend's forms/members are marked as sources too (0 corpus rows). Fail-first
+tests at each step: 18 collected cases in `test_nested_blend_member_rows.py`. Corpus Clean diff vs main 9630a0f3a: 161/15,414 products, rows only added.
 Replay v3 from committed trees (main 9630a0f3a vs 290751a57; `~/pg_quality/nested_blend_members_20261020/v3`,
 PROVENANCE.txt): 161 + 150 controls, 0 controls changed; +54 rules, 0 removed; 30565/5816 → caution (yohimbe
 printed on label, RISK_YOHIMBE high_risk); every blob blend total is printed by that blend's own raw row;
