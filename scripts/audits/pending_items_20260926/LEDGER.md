@@ -2208,3 +2208,23 @@ gained 218 and changed 111, all label text). Replay of 567 + 30 controls (`~/pg_
 the only changed path is `blob:$.ingredients[*].standardization_note`; the updated audit finds 0 dropped claims vs 329 on
 main. Flutter lib/ has no reader of this field. Open: DSLD row text on 1627 guarana says "3% ginsenosides" (likely a DSLD
 transcription error, shown as recorded).
+
+## October 20 — blend members inside blends become active rows (PR206, claude/nested-blend-members)
+
+Class: behavioral (Clean rows → interaction subjects, Evidence/Transparency inputs). Owner:
+`enhanced_normalizer.py::_flatten_nested_ingredients` (+ `_rescue_skipped_nested_row`,
+`_is_chemical_decomposition_leaf`, `_mark_enzyme_source_descriptors`). Defects: (1) a skip-listed blend
+("Proprietary Blend") inside a DSLD group/structural container was dropped with its members (42235 astragalus,
+notoginseng, skullcap; 30565/5816 yohimbe); (2) the counter-ion leaf rule dropped salt-named blend members
+(KCl, NaCl, glucosamine/chondroitin sulfate, betaine HCl, creatine HCl/citrate; 99 rows at all depths);
+(3) found in review of (1): protease source organisms rescued as probiotic subjects, and the same false
+warning already on 77164 ("proprietary blend of proteases" without "from"). Fail-first tests (9+2) in
+`test_nested_blend_member_rows.py`. Corpus Clean diff (15,414, base 1c3524bc8): 161 products, rows only added.
+Replay 161 + 150 controls (`~/pg_quality/nested_blend_members_20261020/v2`): 0 controls changed; +54 rules,
+0 removed; 30565/5816 → caution (yohimbe printed on label, RISK_YOHIMBE high_risk); 41 score moves, all by
+cause in the PR table (T opacity now sees undisclosed nested members; E+ chondroitin/glucosamine/betaine HCl
+are Evidence subjects per `get_assessable_evidence_ingredients`; R hidden strains route 3 products to probiotic;
+S yohimbe). Rescued Flavors / Fat Blend / Protein Blend rows: not scorable, not Evidence, no rule, no score move.
+Focused tests: 2,649 passed, 1 known stale pin (BioVin→grape, fixed elsewhere). Open: comma-joined sub-blends
+("Valerian…, Lemon Balm…", "DHA, EPA") still drop 22 undosed members; "Total Probiotic Cultures" CFU in notes
+is not captured as a quantity (327409/330687 show per-strain CFU undisclosed).
