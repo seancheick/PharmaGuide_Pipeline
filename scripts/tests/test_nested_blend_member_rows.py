@@ -462,19 +462,16 @@ def test_comma_total_whose_members_all_print_amounts_is_still_lifted(normalizer)
     assert "DHA, EPA" not in {row["name"] for row in actives.values()}
 
 
-def test_comma_epa_dha_total_with_undosed_members_is_a_header_not_a_second_fish_oil(normalizer):
+def test_comma_epa_dha_total_with_undosed_members_stays_with_the_omega_rules(normalizer):
+    """Latent shape: an EPA/DHA comma total keeps the 2d7d4ea8e behavior, never a second fish oil."""
     cleaned = normalizer.normalize_product(_fish_oil_comma_total_without_forms([
         _row("Eicosapentaenoic Acid", "fatty acid", "EPA (Eicosapentaenoic Acid)", 0, "NP", 9),
         _row("Docosahexaenoic Acid", "fatty acid", "DHA (Docosahexaenoic Acid)", 0, "NP", 10),
     ]))
     actives = _actives_by_path(cleaned)
-    header = actives["ingredientRows[0].nestedRows[0]"]
-    assert header["cleaner_row_role"] == "blend_header_total"
+    assert "DHA, EPA" not in {row["name"] for row in actives.values()}
     scored = [row for row in actives.values() if row.get("cleaner_row_role") == "active_scorable"]
     assert [row["name"] for row in scored] == ["Fish Oil"], "the 2 g total is not a second fish oil"
-    for path in ("ingredientRows[0].nestedRows[0].nestedRows[0]", "ingredientRows[0].nestedRows[0].nestedRows[1]"):
-        assert actives[path]["cleaner_row_role"] == "nested_display_only"
-        assert actives[path]["parentBlendMass"] == 2.0
 
 
 def test_comma_joined_sub_blend_members_reach_their_interaction_rules(normalizer, enricher):
@@ -512,5 +509,12 @@ def test_comma_joined_name_token_rules_are_unchanged():
                 "quantity": [{"quantity": 0, "unit": "NP"}]}]
     with_forms = {**token, "nestedRows": members, "forms": [{"name": "Eicosapentaenoic Acid"}]}
     assert EnhancedDSLDNormalizer._is_chemical_decomposition_leaf(with_forms) is True
-    listing = {**token, "nestedRows": members}
+    # An EPA/DHA total stays with the omega rules even without forms.
+    assert EnhancedDSLDNormalizer._is_chemical_decomposition_leaf({**token, "nestedRows": members}) is True
+    listing = {"name": "Valerian root powder, Lemon Balm extract", "category": "blend",
+               "quantity": [{"quantity": 200, "unit": "mg"}],
+               "nestedRows": [{"name": "Valerian root powder", "category": "botanical",
+                               "quantity": [{"quantity": 0, "unit": "NP"}]}]}
     assert EnhancedDSLDNormalizer._is_chemical_decomposition_leaf(listing) is False
+    dosed = {**listing, "nestedRows": [{**listing["nestedRows"][0], "quantity": [{"quantity": 150, "unit": "mg"}]}]}
+    assert EnhancedDSLDNormalizer._is_chemical_decomposition_leaf(dosed) is True, "dosed members are lifted"

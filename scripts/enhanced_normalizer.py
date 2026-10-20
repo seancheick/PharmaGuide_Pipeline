@@ -6929,13 +6929,15 @@ class EnhancedDSLDNormalizer:
         # root powder, Lemon Balm extract and Passion Flower herb powder"
         # 200 mg, DSLD 27312), not a name token: nothing else would describe
         # those members, so it stays a blend. Members that all print amounts
-        # are lifted in its place (_lift_decomposition_members, 259484).
+        # are lifted in its place (_lift_decomposition_members, 259484), and
+        # an EPA/DHA total stays with the omega rules (2d7d4ea8e, 231416).
         if cat == "blend" and "," in name:
             members = [m for m in nested_ing.get("nestedRows") or [] if isinstance(m, dict)]
             return not (
                 members
                 and not nested_ing.get("forms")
                 and not all(cls._extract_primary_mass_unit(m)[0] for m in members)
+                and not _states_only_epa_and_dha(nested_ing.get("name"))
             )
 
         # Pattern 1: counter-ion descriptor leaf with no own dose. A member of
@@ -11833,13 +11835,11 @@ class EnhancedDSLDNormalizer:
             and quantity is not None
             and str(unit or "").strip().upper() != "NP"
             and _states_only_epa_and_dha(ing.get("name"))
-            and not ing.get("nestedRows")
         )
         if is_disclosed_epa_dha_child:
             # DSLD sometimes copies the parent's ``category=blend`` onto a
             # quantified EPA/DHA child (Up & Up 74302).  The child is a real
             # disclosed marker dose; only the parent owns the blend total.
-            # A row that lists its own members is their total, not a dose.
             return False
         # The flatten pass preserves a DSLD blend parent for label fidelity and
         # marks it after extracting its children. At that point the parent is a
