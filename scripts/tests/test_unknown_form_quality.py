@@ -848,6 +848,7 @@ def test_a_held_source_or_marker_token_leaves_the_row_unheld(enricher, parent, l
     ('phosphatidylserine', 'Phosphatidylserine', {'name': 'Soybean', 'category': _B, 'ingredientGroup': 'Soy'}, 'soy-derived phosphatidylserine'),
     ('phosphatidylserine', 'Phosphatidylserine', {'name': 'Soy Lecithin', 'category': _B, 'ingredientGroup': 'Soy'}, 'soy-derived phosphatidylserine'),
     ('phosphatidylserine', 'Phosphatidylserine', {'name': 'Glycine max', 'category': _B, 'ingredientGroup': 'Soy'}, 'soy-derived phosphatidylserine'),
+    ('phosphatidylserine', 'Phosphatidylserine', {'name': 'Soybean Lecithin', 'category': 'fat', 'ingredientGroup': 'Lecithin'}, 'soy-derived phosphatidylserine'),  # 328062
 ])
 def test_a_held_label_spelling_reaches_the_form_it_names(enricher, parent, label, form, expected):
     match = enricher._match_quality_map(label, label, enricher.databases['ingredient_quality_map'],
