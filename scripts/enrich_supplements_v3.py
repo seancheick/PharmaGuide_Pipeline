@@ -19180,17 +19180,19 @@ class SupplementEnricherV3:
             and label_row_establishes_presence(row)
         }
 
-    def _blend_header_scope_row(self, header: Dict) -> Dict:
-        """A blend header is never form-matched for scoring, but the forms it
-        declares still confirm a plant part for part-scoped rules: "Stinging
-        Nettle Root Extract" is not the leaf the glucose rule is about."""
-        forms = (header.get("raw_taxonomy") or {}).get("forms") or []
+    def _blend_header_scope_row(self, header: Dict, label_row: Optional[Dict]) -> Dict:
+        """A blend header is never form-matched for scoring, but the forms its
+        label row declares still confirm a plant part for part-scoped rules:
+        "Stinging Nettle Root Extract" is not the leaf the glucose rule is about."""
+        label_row = label_row or {}
+        forms = label_row.get("forms") or (header.get("raw_taxonomy") or {}).get("forms") or []
         match = self._match_quality_map(
             header.get("raw_source_text") or header.get("name") or "",
             header.get("standard_name"),
             self.databases.get("ingredient_quality_map", {}),
             cleaned_forms=forms,
             cleaner_canonical_id=header.get("canonical_id"),
+            row_notes=label_row.get("notes"),
         ) if forms else None
         if (
             not isinstance(match, dict)
@@ -20384,10 +20386,12 @@ class SupplementEnricherV3:
         # with an IQM identity (7-keto DHEA, bitter orange citrus bioflavonoids)
         # still meets the rules authored on its safety record.
         safety_subjects_by_path: Dict[str, List[Tuple[str, str]]] = {}
+        label_rows_by_path: Dict[str, Dict] = {}
         for section_key in ("activeIngredients", "inactiveIngredients"):
             for label_row in enriched.get(section_key) or []:
                 if not isinstance(label_row, dict) or not label_row.get("raw_source_path"):
                     continue
+                label_rows_by_path.setdefault(label_row["raw_source_path"], label_row)
                 for flag in label_row.get("safety_flags") or []:
                     if isinstance(flag, dict) and flag.get("entry_id") and flag.get("source_db"):
                         safety_subjects_by_path.setdefault(label_row["raw_source_path"], []).append(
@@ -20456,7 +20460,9 @@ class SupplementEnricherV3:
             scope_row = (
                 {**ingredient, "form_id": twin_form, "matched_forms": [], "form_match_status": "mapped"}
                 if twin_form
-                else self._blend_header_scope_row(ingredient)
+                else self._blend_header_scope_row(
+                    ingredient, label_rows_by_path.get(ingredient.get("raw_source_path"))
+                )
                 if ingredient.get("skip_reason") == SKIP_REASON_BLEND_HEADER_WITH_WEIGHT
                 else ingredient
             )
