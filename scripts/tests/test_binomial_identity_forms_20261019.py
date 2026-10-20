@@ -64,7 +64,7 @@ def test_a_species_or_source_name_in_forms_is_not_a_held_form(enricher, pid, nam
     ("turmeric", "Turmeric", "Curcumin Powder"),
     ("cayenne_pepper", "Cayenne Pepper", "Capsimax Capsicum Extract"),
     ("elderberry", "Elderberry", "Elderberry 10:1 Concentrate"),
-    ("tart_cherry", "CherryPURE", "Sour Cherry, Powder"),
+    ("acai_berry", "Acai Berry", "Acai 4:1 Extract"),
 ])
 def test_only_the_parents_species_name_restates_it(enricher, parent, label, token):
     match = enricher._match_quality_map(
