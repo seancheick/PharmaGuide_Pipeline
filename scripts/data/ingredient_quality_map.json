@@ -53,7 +53,7 @@
       "vitamins": 25
     },
     "schema_version": "5.6.1",
-    "last_updated": "2026-10-19",
+    "last_updated": "2026-10-20",
     "pipeline_integration": "Used by enrichment to assign form quality (bio_score) to matched ingredient forms. Match ingredient name against forms aliases (case-insensitive).",
     "matching_notes": [
       "Match ingredient name + forms text against aliases array (case-insensitive)",
@@ -26318,7 +26318,14 @@
       "research_status": "validated"
     },
     "external_ids": {},
-    "aliases": []
+    "aliases": [],
+    "relationships": [
+      {
+        "type": "contains",
+        "target_id": "egcg",
+        "notes": "EGCG is a catechin of green tea extract, not its form"
+      }
+    ]
   },
   "grape_seed_extract": {
     "standard_name": "Grape Seed Extract",
