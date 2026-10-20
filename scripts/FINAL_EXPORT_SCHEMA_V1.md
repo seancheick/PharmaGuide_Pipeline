@@ -298,6 +298,7 @@ CREATE INDEX idx_products_core_contains_nootropics ON products_core(contains_noo
 | `net_contents_quantity`        | `enriched.netContents[0].quantity`                        | v1.3.1: REAL, NULL when missing. Powers refill-reminder `days_until_empty` calc.        |
 | `net_contents_unit`            | `enriched.netContents[0].unit`                            | v1.3.1: TEXT verbatim (e.g. "Capsule(s)", "mL", "Gram(s)")                              |
 | `allergen_summary`             | Generated from `allergen_hits`                            | "Contains: Soy, Tree Nuts" or NULL                                                      |
+| (allergen presence)            | `build_final_db.export_allergen_presence`                 | Enrichment presence maps to the app vocabulary: `contains` and `ingredient_list` → `contains`, `may_contain` → `may_contain`, `facility_warning` → `manufactured_in_facility`. Blob `allergens[].presence_type`, `score_penalties[].presence` and `allergen_summary` ("Contains: …. May contain: …. Made in a facility that also handles: …") all use it. |
 | `calories_per_serving`         | `enriched.nutrition_summary.calories_per_serving`         | v1.3.2: REAL kcal per serving; NULL when not declared. Primary nutrition filter column.  |
 
 ### What Is NOT Stored
@@ -895,7 +896,10 @@ ambiguity.
   are present beyond the common `{id, label}`:
   - `B0` (banned/recalled): `{id, label, status, reason}`
   - `B1` (harmful additive): `{id, label, severity, reason}`
-  - `B2` (allergen): `{id, label, severity, presence}`
+  - `B2` (allergen): `{id, label, severity, presence}` — one `contains` row per allergen
+    ("Declared allergen source: Milk"; the app joins these), and at most one row each for
+    `may_contain` ("May contain: Milk, Soy") and `manufactured_in_facility` ("Made in a facility
+    that also handles: Eggs, Fish, …"), names alphabetical, `severity` the highest listed.
   - `B3` (compliance claim): `{id, label, score}`
   - `B5` (proprietary blend): `{id, label, score, blend_count}`
   - `B6` (disease claims): `{id, label, score}`
