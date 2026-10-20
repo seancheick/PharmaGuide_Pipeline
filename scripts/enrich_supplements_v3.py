@@ -13032,9 +13032,11 @@ class SupplementEnricherV3:
         # Scope negation to its own clause. A product can legitimately say
         # "Made without gluten. Contains milk"; the first clause must not erase
         # the independent positive declaration in the second.
+        # Lines of one statement are separate clauses too ("No added sugar"
+        # on one line must not swallow "This product contains whey" below it).
         clauses = [
             clause.strip()
-            for clause in re.split(r'(?<=[.!?])\s+|;\s*|\s+\bbut\b\s+', text_lower)
+            for clause in re.split(r'(?<=[.!?])\s+|;\s*|\s+\bbut\b\s+|[\r\n\t]+', text_lower)
             if clause.strip()
         ]
         if len(clauses) > 1:
@@ -13054,6 +13056,8 @@ class SupplementEnricherV3:
             r'free\s+(?:from|of)\s+',       # "Free from milk"
             r'without\s+',                  # "Without milk"
             r'no\s+added\s+',               # "No added milk"
+            r'\bnot\s+(?:manufactured|made|processed|produced)\b',  # "Not manufactured with: milk"
+            r"\b(?:does|do)(?:\s+not|n'?t)\s+(?:process|handle|use)",  # "This facility does not process peanuts"
         ]
         negator_starts = [
             match.start()
@@ -13062,8 +13066,19 @@ class SupplementEnricherV3:
             if match
         ]
         if negator_starts:
+            first = min(negator_starts)
+            # A declaration after the negator is its own clause: "Contains no
+            # artificial colors, contains soy" still declares soy.
+            later = re.search(
+                r"(?<!\bnot\s)(?<!n't\s)\b(?:contains|may\s+contain)\b",
+                text_lower[first + 1:],
+            )
+            if later:
+                self._parse_allergen_statement(
+                    text_lower[first + 1 + later.start():], allergen_lookup, found, source
+                )
             self.logger.debug(f"Dropping negated allergen text: {text[:80]}...")
-            text_lower = text_lower[:min(negator_starts)].strip()
+            text_lower = text_lower[:first].strip()
             if not text_lower:
                 return
 
@@ -13071,9 +13086,17 @@ class SupplementEnricherV3:
         # "Allergens: May contain ...") may name a source by phrase; prose such
         # as "krill oil contains astaxanthin ..." matches only exact aliases.
         declares = bool(re.match(
-            r'^\W*(?:allerg(?:en|y)s?(?:\s+information)?\s*:\s*)?(?:contains|may\s+contain)\b',
+            r'^\W*(?:allerg(?:en|y)s?(?:\s+information)?\s*:\s*)?'
+            r'(?:(?:this|the)\s+(?:product|formula|supplement)\s+)?(?:contains|may\s+contain)\b',
             text_lower,
         ))
+
+        # "Allergen information: Fish, Soy" / "Allergens: milk." list what the
+        # product contains.
+        listed = re.match(r'^\W*allerg(?:en|y)s?(?:\s+information)?\s*:\s*([^.]+)', text_lower)
+        if listed and not re.match(r'\s*(?:contains|may\s+contain)\b', listed.group(1)):
+            self._extract_allergens_from_text(listed.group(1), allergen_lookup, found,
+                                               "contains", source, text, by_phrase=True)
 
         # Pattern 1: "Contains X" / "Contains: X, Y"
         contains_patterns = [
@@ -13105,12 +13128,24 @@ class SupplementEnricherV3:
             r'produced\s+in\s+a\s+facility\s+(?:that\s+)?(?:also\s+)?(?:processes|handles)[:\s]+([^.]+)',
             r'made\s+in\s+a\s+facility\s+that\s+(?:also\s+)?(?:processes|handles)[:\s]+([^.]+)',
         ]
+        matched_facility = False
         for pattern in facility_patterns:
             match = re.search(pattern, text_lower)
             if match:
+                matched_facility = True
                 allergen_text = match.group(1)
                 self._extract_allergens_from_text(allergen_text, allergen_lookup, found,
                                                    "facility_warning", source, text, by_phrase=True)
+        # Any other facility or shared-equipment wording ("Processed in a
+        # facility with products that contain egg, fish ...", "manufactured
+        # on equipment which processes dairy") names cross-contact sources
+        # after the cue word.
+        cue = None if matched_facility else re.search(
+            r'\b(?:facility|facilities|equipment|production\s+lines?)\b', text_lower
+        )
+        if cue:
+            self._extract_allergens_from_text(text_lower[cue.end():], allergen_lookup, found,
+                                               "facility_warning", source, text, by_phrase=True)
 
     def _extract_allergens_from_text(self, text: str, allergen_lookup: Dict, found: List[Dict],
                                       presence_type: str, source: str, evidence: str,
