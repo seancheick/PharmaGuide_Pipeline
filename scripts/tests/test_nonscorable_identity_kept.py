@@ -295,3 +295,39 @@ def test_recognition_clears_the_interaction_only_marker(enrich):
     assert rows and {r["canonical_id"] for r in rows} == {"coptis_rhizome"}
     assert all(r["identity_resolution_rationale"] != NON_SCORING_IDENTITY_RATIONALE for r in rows)
 
+
+
+@pytest.mark.parametrize("dsld_id,label,canonical_id", [
+    # BCM-95 "Total Curcuminoids complex (with Essential Oils)" inside "BCM-95 Bio-Curcumin
+    # Turmeric 25:1 extract": BCM-95 is curcumin with turmeric essential oils (PMID 25994138).
+    (210718, "Total Curcuminoids complex", "curcumin"),
+    # Control: a turmeric header whose members include turmeric keeps turmeric.
+    (222850, "Turmeric Blend", "turmeric"),
+])
+def test_curcuminoid_header_with_its_turmeric_oil_keeps_its_identity(enrich, dsld_id, label, canonical_id):
+    iqd = enrich(dsld_id)["ingredient_quality_data"]
+    rows = [r for r in iqd["ingredients"] + iqd["ingredients_skipped"] if r.get("raw_source_text") == label]
+    assert rows and {r["canonical_id"] for r in rows} == {canonical_id}
+
+
+@pytest.mark.parametrize("forms,parent", [
+    (["Essential Oils"], "Ginger root extract"),  # an essential oil not tied to turmeric
+    (["Ginger"], "BCM-95 Bio-Curcumin Turmeric 25:1 extract"),  # an unrelated member
+])
+def test_curcuminoid_header_with_another_member_is_not_kept(forms, parent):
+    registry = build_canonical_identity_registry({"ingredient_quality_map": {
+        "curcumin": {"standard_name": "Curcumin", "aliases": [],
+                     "forms": {"curcumin (unspecified)": {"aliases": ["total curcuminoids"]}}},
+        "volatile_oils": {"standard_name": "Volatile Oils", "aliases": ["essential oils"]},
+        "ginger": {"standard_name": "Ginger", "aliases": []},
+    }})
+    decision = resolve_identity(
+        row={"raw_source_text": "Total Curcuminoids complex", "standardName": "Curcumin",
+             "cleaner_row_role": "blend_header_total", "parentBlend": parent,
+             "forms": [{"name": form} for form in forms]},
+        supplied_canonical_id="curcumin",
+        resolve_candidate=lambda value: None,
+        allow_unscoreable_taxonomy_only=True,
+        canonical_registry=registry,
+    )
+    assert decision.canonical_id is None
