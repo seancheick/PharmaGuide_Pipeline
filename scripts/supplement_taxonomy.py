@@ -298,6 +298,49 @@ def _specialized_panel_identity(
 
     return None
 
+_ACCESSORY_PROTEIN_RE = re.compile(r"\bwith\b.*\b(?:protein|whey|casein)\b")
+_COMPETING_PROTEIN_TITLE_TOKENS = (
+    "collagen", "gelatin", "prenatal", "fish oil", "krill", "omega",
+)
+
+
+def _declared_protein_identity(
+    product: dict[str, Any],
+    product_name: str,
+    canonical_ids: frozenset[str],
+) -> tuple[str, str, list[str]] | None:
+    """R5 protein panel: protein title intent plus declared Nutrition Facts grams.
+
+    A protein total is a Nutrition Facts row, never a scoring row, so a protein powder's
+    identity is absent from ``canonical_ids``. The router's own pair identifies it
+    (``route_features.has_protein_product_intent`` + ``nutrition_summary.protein_g``);
+    neither alone suffices and the macro row never becomes an active. A title or row
+    naming another identity (collagen, greens, omega, prenatal, pre-workout) keeps that
+    identity, and "X with protein" marks protein as an accessory.
+    """
+    try:
+        protein_g = float((product.get("nutrition_summary") or {}).get("protein_g") or 0)
+    except (TypeError, ValueError):
+        protein_g = 0.0
+    title = " ".join(str(product.get(k) or "") for k in ("product_name", "fullName"))
+    if protein_g <= 0 or not has_protein_product_intent(title):
+        return None
+    if (
+        any(token in product_name for token in _COMPETING_PROTEIN_TITLE_TOKENS)
+        or any(token in product_name for token in _GREENS_NAME_TOKENS)
+        or any(token in product_name for token in _PRE_WORKOUT_NAME_TOKENS)
+        or _PRE_WORKOUT_PANEL_INTENT_RE.search(product_name)
+        or _ACCESSORY_PROTEIN_RE.search(product_name)
+        or canonical_ids & (_COLLAGEN_IDS | _OMEGA_CANONICAL_IDS)
+    ):
+        return None
+    return (
+        "protein_powder",
+        "declared_nutrition_protein_product",
+        [f"nutrition_facts_protein_{protein_g:g}g"],
+    )
+
+
 # Secondary type detection: compound → secondary_type
 _SECONDARY_TYPE_MAP = {
     "zinc": "zinc",
@@ -821,20 +864,6 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
         " ".join(str(product.get(k) or "") for k in ("product_name", "fullName", "bundleName"))
     )
 
-    # A protein powder's protein total is a Nutrition Facts row, never a scoring row, so
-    # it is absent from the rows above. The router's pair identifies the product: protein
-    # title intent plus declared Nutrition Facts protein grams. Neither alone suffices,
-    # and the macro row never becomes an active.
-    try:
-        declared_protein_g = float(
-            (product.get("nutrition_summary") or {}).get("protein_g") or 0
-        )
-    except (TypeError, ValueError):
-        declared_protein_g = 0.0
-    declared_protein_product = declared_protein_g > 0 and has_protein_product_intent(
-        " ".join(str(product.get(k) or "") for k in ("product_name", "fullName"))
-    )
-
     # Canonical ID sets
     cid_set = frozenset(canonical_ids)
     vitamin_ids = cid_set & _VITAMIN_CANONICAL_IDS
@@ -914,7 +943,9 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
             or any(t in product_name for t in ("multi", "daily vitamin", "one daily", "complete", "prenatal"))
         )
     )
-    specialized_panel_identity = _specialized_panel_identity(product_name, cid_set)
+    specialized_panel_identity = _specialized_panel_identity(
+        product_name, cid_set
+    ) or _declared_protein_identity(product, product_name, cid_set)
     ala_only_signal = bool(cid_set & _ALA_CANONICAL_IDS) and not bool(cid_set & _OMEGA_CANONICAL_IDS)
     iqd = product.get("ingredient_quality_data") or {}
     botanical_blend_total = any(
@@ -1131,15 +1162,6 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
         decision_code = "protein_name_and_identity"
         confidence = 0.9
         reasons.append(f"protein name+id signal: ids={sorted(cid_set & _PROTEIN_IDS)}")
-    elif declared_protein_product:
-        primary_type = "protein_powder"
-        decision_code = "declared_nutrition_protein_product"
-        # Title intent plus declared grams is at least the evidence of the
-        # name-only protein branch below (0.9).
-        confidence = 0.9
-        reasons.append(
-            f"protein title intent + declared Nutrition Facts protein {declared_protein_g:g} g"
-        )
 
     # --- Greens powder (name-driven, before multivitamin) ---
     # Fortified greens can carry vitamin/mineral/probiotic panels, but the
