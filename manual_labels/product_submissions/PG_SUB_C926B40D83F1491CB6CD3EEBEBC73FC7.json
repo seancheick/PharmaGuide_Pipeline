@@ -1,0 +1,186 @@
+{
+  "id": "PG_SUB_C926B40D83F1491CB6CD3EEBEBC73FC7",
+  "brandName": "Force Factor",
+  "fullName": "NAD+ Longevity & Anti-Aging Formula",
+  "ingredientRows": [
+    {
+      "forms": [
+        {
+          "name": "Niacinamide"
+        }
+      ],
+      "ingredientGroup": "Niacin",
+      "name": "Niacin (as Niacinamide)",
+      "nestedRows": [],
+      "order": 1,
+      "quantity": [
+        {
+          "quantity": 40,
+          "unit": "mg"
+        }
+      ]
+    },
+    {
+      "forms": [
+        {
+          "name": "Nicotinamide Adenine Dinucleotide"
+        }
+      ],
+      "ingredientGroup": "NAD+",
+      "name": "NAD+ (Nicotinamide Adenine Dinucleotide)",
+      "nestedRows": [],
+      "order": 2,
+      "quantity": [
+        {
+          "quantity": 200,
+          "unit": "mg"
+        }
+      ]
+    },
+    {
+      "forms": [],
+      "ingredientGroup": "Resveratrol",
+      "name": "Trans-Resveratrol (from Japanese Knotweed (Polygonum cuspidatum) Extract (root))",
+      "nestedRows": [],
+      "order": 3,
+      "quantity": [
+        {
+          "quantity": 100,
+          "unit": "mg"
+        }
+      ]
+    },
+    {
+      "forms": [],
+      "ingredientGroup": "Luteolin",
+      "name": "Luteolin (from Sophora japonica Extract (flower))",
+      "nestedRows": [],
+      "order": 4,
+      "quantity": [
+        {
+          "quantity": 50,
+          "unit": "mg"
+        }
+      ]
+    },
+    {
+      "forms": [],
+      "ingredientGroup": "Broccoli",
+      "name": "Broccoli (Brassica oleracea) Extract (seed) (std. to contain sulforaphane)",
+      "nestedRows": [],
+      "order": 5,
+      "quantity": [
+        {
+          "quantity": 10,
+          "unit": "mg"
+        }
+      ]
+    },
+    {
+      "forms": [],
+      "ingredientGroup": "Spermidine",
+      "name": "Spermidine Trihydrochloride (3HCl)",
+      "nestedRows": [],
+      "order": 6,
+      "quantity": [
+        {
+          "quantity": 5,
+          "unit": "mg"
+        }
+      ]
+    },
+    {
+      "forms": [],
+      "ingredientGroup": "Astaxanthin",
+      "name": "Astaxanthin (Haematococcus pluvialis) (whole plant)",
+      "nestedRows": [],
+      "order": 7,
+      "quantity": [
+        {
+          "quantity": 2,
+          "unit": "mg"
+        }
+      ]
+    }
+  ],
+  "otherIngredients": {
+    "ingredients": [
+      {
+        "name": "Microcrystalline Cellulose"
+      },
+      {
+        "name": "Hypromellose Capsule"
+      },
+      {
+        "name": "Silicon Dioxide"
+      },
+      {
+        "name": "Vegetable Magnesium Stearate"
+      }
+    ]
+  },
+  "otherIngredientsDisclosure": "present",
+  "physicalState": {
+    "langualCodeDescription": "Capsule",
+    "name": "Capsule"
+  },
+  "servingSizes": [
+    {
+      "maxQuantity": 2,
+      "minQuantity": 2,
+      "order": 1,
+      "unit": "Vegetable Capsules"
+    }
+  ],
+  "servingsPerContainer": "30",
+  "statements": [
+    {
+      "notes": "DIETARY SUPPLEMENT",
+      "type": "FDA Statement of Identity"
+    },
+    {
+      "notes": "Keep out of reach of children. For adult use only.",
+      "type": "Precautions re: Children"
+    },
+    {
+      "notes": "Allergen Warning: Manufactured by equipment which may process products containing milk, eggs, soy, wheat, shellfish, fish, tree nuts, peanuts, and sesame.",
+      "type": "Formula re: Contains"
+    },
+    {
+      "notes": "Precautions: Use only as directed. Consult a healthcare professional before use if you are pregnant or nursing, have a medical condition, or use prescription medications.",
+      "type": "Precautions re: Pregnant or Nursing or Prescription Medications"
+    },
+    {
+      "notes": "Store in a cool, dry place. Protect from heat, light, and moisture.",
+      "type": "Storage"
+    },
+    {
+      "notes": "† These statements have not been evaluated by the Food and Drug Administration. This product is not intended to diagnose, treat, cure, or prevent any disease.",
+      "type": "FDA Disclaimer Statement"
+    },
+    {
+      "notes": "Distributed by Force Factor, LLC Boston, MA 02210 1-866-44-FORCE",
+      "type": "General Statements: All Other Content"
+    }
+  ],
+  "offMarket": 0,
+  "upcSku": "0810126662804",
+  "src": "local/manual_labels/product_submissions/PG_SUB_C926B40D83F1491CB6CD3EEBEBC73FC7",
+  "source_type": "external_manual",
+  "manual_product_provenance": {
+    "source_kind": "private_product_submission",
+    "source_record_id": "c926b40d-83f1-491c-b6cd-3eebebc73fc7",
+    "label_verified_at": "2026-10-09",
+    "review_status": "verified",
+    "reviewer": "PharmaGuide Clinical Team"
+  },
+  "label_record_metadata": {
+    "source_name": "PharmaGuide verified product submission",
+    "source_record_id": "c926b40d-83f1-491c-b6cd-3eebebc73fc7",
+    "source_date": "2026-10-09",
+    "source_updated_date": "2026-10-09",
+    "product_status": "active",
+    "lineage_key": "pharmaguide_submission:c926b40d-83f1-491c-b6cd-3eebebc73fc7",
+    "reviewed_at": "2026-10-09T18:04:26.297885+00:00"
+  }
+}

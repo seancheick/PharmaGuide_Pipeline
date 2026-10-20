@@ -1,0 +1,103 @@
+{
+  "id": "PG_SUB_5EB9F9D6F38C4648A6560B489E0E4916",
+  "brandName": "Trader Joe's",
+  "fullName": "Vitamin D3 125 mcg (5000 IU)",
+  "ingredientRows": [
+    {
+      "forms": [
+        {
+          "name": "Cholecalciferol"
+        }
+      ],
+      "ingredientGroup": "Vitamin D",
+      "name": "Vitamin D3",
+      "nestedRows": [],
+      "notes": "5,000 IU; 625% Daily Value",
+      "order": 1,
+      "quantity": [
+        {
+          "quantity": 125,
+          "unit": "mcg"
+        }
+      ]
+    },
+    {
+      "forms": [],
+      "ingredientGroup": "Flaxseed Oil",
+      "name": "Organic Flaxseed Oil",
+      "nestedRows": [],
+      "notes": "Daily Value not established",
+      "order": 2,
+      "quantity": [
+        {
+          "quantity": 200,
+          "unit": "mg"
+        }
+      ]
+    }
+  ],
+  "offMarket": 0,
+  "otherIngredients": {
+    "ingredients": [
+      {
+        "name": "Softgel Capsule (Gelatin [Bovine], Vegetable Glycerin, Water)"
+      }
+    ]
+  },
+  "otherIngredientsDisclosure": "present",
+  "physicalState": {
+    "name": "Softgel(s)"
+  },
+  "productType": {
+    "name": "Dietary Supplement"
+  },
+  "servingSizes": [
+    {
+      "inSFB": true,
+      "maxDailyServings": 1,
+      "maxQuantity": 1,
+      "minDailyServings": 1,
+      "minQuantity": 1,
+      "order": 1,
+      "unit": "Softgel(s)"
+    }
+  ],
+  "servingsPerContainer": "90",
+  "statements": [
+    {
+      "notes": "Dietary Supplement",
+      "type": "FDA Statement of Identity"
+    },
+    {
+      "notes": "1 softgel daily, preferably with a meal.",
+      "type": "Suggested/Recommended/Usage/Directions"
+    },
+    {
+      "notes": "Do not exceed recommended dose. People with medical concerns should check with their physician before using this or any dietary supplement. Store in a cool, dry place. Keep out of reach of children.",
+      "type": "Precautions re: All Other"
+    },
+    {
+      "notes": "Dist. & Sold Exclusively By: Trader Joe's, 800 S. Shamrock Ave., Monrovia, CA 91016. SKU# 56802.",
+      "type": "Other"
+    }
+  ],
+  "upcSku": "00568029",
+  "src": "local/manual_labels/product_submissions/PG_SUB_5EB9F9D6F38C4648A6560B489E0E4916",
+  "source_type": "external_manual",
+  "manual_product_provenance": {
+    "source_kind": "private_product_submission",
+    "source_record_id": "5eb9f9d6-f38c-4648-a656-0b489e0e4916",
+    "label_verified_at": "2026-10-09",
+    "review_status": "verified",
+    "reviewer": "PharmaGuide Clinical Team"
+  },
+  "label_record_metadata": {
+    "source_name": "PharmaGuide verified product submission",
+    "source_record_id": "5eb9f9d6-f38c-4648-a656-0b489e0e4916",
+    "source_date": "2026-10-09",
+    "source_updated_date": "2026-10-09",
+    "product_status": "active",
+    "lineage_key": "pharmaguide_submission:5eb9f9d6-f38c-4648-a656-0b489e0e4916",
+    "reviewed_at": "2026-10-09T17:44:31.518019+00:00"
+  }
+}
