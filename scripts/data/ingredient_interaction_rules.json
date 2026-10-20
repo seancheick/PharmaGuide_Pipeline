@@ -4,9 +4,9 @@
     "purpose": "interaction_alert_rules",
     "schema_version": "6.3.0",
     "last_updated": "2026-10-20",
-    "total_entries": 154,
+    "total_entries": 155,
     "structure_note": "One entry per ingredient (or per form-scoped variant). All conditions, drug classes, and dose thresholds for that ingredient are in one object. As of v6.0.0, every sub-rule (condition_rules[], drug_class_rules[], dose_thresholds[], pregnancy_lactation block) carries an explicit profile_gate predicate that consumers MUST evaluate against the user profile before firing the alert.",
-    "total_rules": 154,
+    "total_rules": 155,
     "flutter_top_level_key": "interaction_rules",
     "flutter_schema_version": "6.1.2",
     "v60_added_fields": {
@@ -24089,6 +24089,66 @@
       },
       "last_reviewed": "2026-10-20",
       "review_owner": "Source-content review (agent), 2026-10-20; explicit Senactiv applicability uncertainty approved by Sean"
+    },
+    {
+      "id": "RULE_BOTAN_STAR_ANISE_SEIZURE",
+      "subject_ref": {
+        "db": "botanical_ingredients",
+        "canonical_id": "star_anise"
+      },
+      "condition_rules": [
+        {
+          "condition_id": "seizure_disorder",
+          "severity": "caution",
+          "evidence_level": "limited",
+          "mechanism": "Chinese star anise (Illicium verum) can be contaminated with or mistaken for Japanese star anise (Illicium anisatum), whose neurotoxin anisatin can cause seizures; dried, the two cannot be told apart by eye. In 2003 FDA linked star anise teas to about 40 illnesses, including seizures, and advised against drinking them. A 2004 case series described 7 infants with neurologic reactions after star anise tea and found evidence that Chinese star anise had been contaminated with Japanese star anise.",
+          "action": "If you have epilepsy or another seizure disorder, talk to your doctor before using star anise. Stop using it and get medical care if you notice seizures, jitteriness, rapid eye movements or vomiting.",
+          "sources": [
+            "https://web.archive.org/web/20050115085515/http://www.fda.gov/bbs/topics/NEWS/2003/NEW00941.html",
+            "https://pubmed.ncbi.nlm.nih.gov/15492355/",
+            "https://pubmed.ncbi.nlm.nih.gov/22484123/"
+          ],
+          "alert_headline": "Possible contamination linked to seizures",
+          "alert_body": "Star anise can be mixed with toxic Japanese star anise, which has caused seizures. If you have epilepsy or a seizure disorder, talk to your doctor before using it.",
+          "informational_note": "Star anise can be contaminated with Japanese star anise, a neurotoxic species linked to seizures.",
+          "profile_gate": {
+            "gate_type": "condition",
+            "requires": {
+              "conditions_any": [
+                "seizure_disorder"
+              ],
+              "drug_classes_any": [],
+              "profile_flags_any": []
+            },
+            "excludes": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [],
+              "product_forms_any": [],
+              "nutrient_forms_any": []
+            },
+            "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "presence",
+          "last_reviewed": "2026-10-20"
+        }
+      ],
+      "drug_class_rules": [],
+      "dose_thresholds": [],
+      "pregnancy_lactation": {
+        "pregnancy_category": "no_data",
+        "lactation_category": "no_data",
+        "evidence_level": "no_data",
+        "notes": "Pregnancy and breastfeeding safety data for star anise supplements are limited; discuss use with your clinician.",
+        "alert_headline": "Limited safety data",
+        "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
+        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended.",
+        "direction": "unknown",
+        "materiality": "presence"
+      },
+      "last_reviewed": "2026-10-20",
+      "review_owner": "pharmaguide_clinical_team"
     }
   ]
 }

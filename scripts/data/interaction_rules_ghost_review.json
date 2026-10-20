@@ -3,8 +3,8 @@
     "purpose": "Reviewed GHOST-SUSPECT findings from verify_interaction_rules_citations.py --strict",
     "description": "Reviewed GHOST-SUSPECT findings from verify_interaction_rules_citations.py --strict, keyed by PMID, rule_id and sub_rule. A suspect blocks the strict gate until it is reviewed here with a rationale that states why the live PubMed record does support the sub-rule (class-level, constituent, full-text or heuristic-miss citations). Wrong-topic citations are fixed in the rules file, never listed here. Removing an entry re-arms the gate for that citation. Receipts: scripts/audits/interaction_rules/citation_triage_2026_09/research.md.",
     "schema_version": "5.0.0",
-    "last_updated": "2026-10-19",
-    "total_entries": 96
+    "last_updated": "2026-10-20",
+    "total_entries": 97
   },
   "reviewed": [
     {
@@ -868,6 +868,15 @@
       "sub_rule": "drug:antiplatelets",
       "live_title": "Submucosal hematoma with a wide range of lesions, severe condition and atypical clinical symptoms: A case report.",
       "rationale": "Branded-material citation: Senactiv (NHA_SENACTIV) is Panax notoginseng and Rosa roxburghii fractions; the record concerns Panax notoginseng (saponins or capsules), the material the sub-rule names. The same PMID is cited on RULE_BOTAN_PANAX_NOTOGINSENG_ANTIPLATELET, where the strict gate finds the subject.",
+      "reviewed_by": "agent source-content review (not clinician-reviewed)",
+      "reviewed_at": "2026-10-20"
+    },
+    {
+      "pmid": "15492355",
+      "rule_id": "RULE_BOTAN_STAR_ANISE_SEIZURE",
+      "sub_rule": "condition:seizure_disorder",
+      "live_title": "Neurotoxicities in infants seen with the consumption of star anise tea.",
+      "rationale": "Heuristic miss: cited only for what the abstract states, 7 infants with adverse neurologic reactions after star anise tea and evidence that Chinese star anise was contaminated with Japanese star anise (MeSH Neurotoxicity Syndromes, Food Contamination). The seizure claim rests on the FDA advisory and PMID 22484123 (anisatin causes epilepsy), which the gate finds.",
       "reviewed_by": "agent source-content review (not clinician-reviewed)",
       "reviewed_at": "2026-10-20"
     }
