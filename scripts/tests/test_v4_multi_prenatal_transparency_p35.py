@@ -165,7 +165,7 @@ def test_transparency_b2_allergen_presence_alone_has_no_penalty() -> None:
     from scoring_v4.modules.multi_prenatal_transparency import score_transparency
 
     payload = score_transparency(_product(
-        allergens=[{"allergen_id": "soy", "severity_level": "high"}]
+        allergens=[{"allergen_id": "ALLERGEN_SOY", "severity_level": "high"}]
     ))
 
     assert payload["penalties"]["B2_false_allergen_free_claim"] == 0.0
@@ -176,7 +176,7 @@ def test_transparency_b2_false_allergen_claim_reuses_generic() -> None:
     from scoring_v4.modules.multi_prenatal_transparency import score_transparency
 
     payload = score_transparency(_product(
-        allergens=[{"allergen_id": "soy", "severity_level": "high"}],
+        allergens=[{"allergen_id": "ALLERGEN_SOY", "severity_level": "high"}],
         compliance={
             "allergen_free_claims": ["soy-free"],
             "gluten_free": False,
@@ -326,7 +326,7 @@ def test_transparency_floors_at_zero_under_heavy_penalties() -> None:
     payload = score_transparency(_product(
         ingredients=[],
         has_disease_claims=True,
-        allergens=[{"allergen_id": "milk", "severity_level": "high"}],
+        allergens=[{"allergen_id": "ALLERGEN_MILK", "severity_level": "high"}],
         proprietary_blends=[{
             "name": "Hidden Prenatal Matrix",
             "disclosure_level": "none",
