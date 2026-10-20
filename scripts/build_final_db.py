@@ -3698,8 +3698,16 @@ def _warning_dedup_key(w: Dict[str, Any]) -> tuple:
         if w.get("source") == "interaction_rules" and not w.get("matched_rule_id")
         else None
     )
+    # Context events have no ingredient/risk-rule identity. Preserve distinct
+    # event scope and claim categories rather than losing their authored copy.
+    if w.get("type") in {"manufacturer_violation", "marketing_claim"}:
+        return (_norm(w.get("type")), _norm(w.get("source")), _norm(w.get("detail")), _norm(w.get("source_urls")))
+
+    # A card with no rule, subject or ingredient (harmful additive, dietary) is
+    # identified by its title; otherwise distinct additives of one severity merge.
     subject = safe_str(
         w.get("matched_rule_id") or interaction_subject or w.get("ingredient_name")
+        or w.get("title")
     ).casefold()
     # Rows of one plant can sit on either side of a dose floor. The app hides
     # a below-floor card of a non-hard severity, so only cards that share a
@@ -3723,11 +3731,6 @@ def _warning_dedup_key(w: Dict[str, Any]) -> tuple:
             dose_state,
         )
 
-    # Context events have no ingredient/risk-rule identity. Preserve distinct
-    # event scope and claim categories rather than losing their authored copy.
-    if w.get("type") in {"manufacturer_violation", "marketing_claim"}:
-        return (_norm(w.get("type")), _norm(w.get("source")), _norm(w.get("detail")), _norm(w.get("source_urls")))
-
     # Per-ingredient identity: include matched_rule_id (when present) or
     # ingredient_name so two resolver-synthesized warnings for DIFFERENT
     # banned actives (e.g. 7-Keto-DHEA + Garcinia on the same product)
@@ -3740,7 +3743,10 @@ def _warning_dedup_key(w: Dict[str, Any]) -> tuple:
         _norm(w.get("condition_id") or w.get("condition_ids")),
         _norm(w.get("drug_class_id") or w.get("drug_class_ids")),
         _norm(w.get("source")),
-        _norm(w.get("matched_rule_id") or interaction_subject or w.get("ingredient_name")),
+        _norm(
+            w.get("matched_rule_id") or interaction_subject or w.get("ingredient_name")
+            or w.get("title")
+        ),
         dose_state,
     )
 
