@@ -49,6 +49,7 @@ def states_only_omega_fatty_acids(name: Any) -> bool:
     """Whether the row measures only total omega fatty acids, not source oil."""
     normalized = re.sub(r"[^a-z0-9]+", " ", str(name or "").lower()).strip()
     return bool(
-        normalized and "omega" in normalized.split()
+        normalized and any(match.group(0).startswith("omega")
+                           for match in _FILLER_TOKEN_RE.finditer(normalized))
         and not _FILLER_TOKEN_RE.sub(" ", normalized).strip()
     )

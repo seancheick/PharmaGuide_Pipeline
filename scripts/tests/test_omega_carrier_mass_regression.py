@@ -52,7 +52,7 @@ def test_aggregate_only_label_cannot_earn_concentration_credit(carrier_products)
 
 @pytest.mark.parametrize("source,is_carrier", [
     ("EPA/DHA", False), ("Omega-3 EPA & DHA", False),
-    ("Total Omega-3 Fatty Acids", False),
+    ("Total Omega-3 Fatty Acids", False), ("Omega3 Fatty Acids", False),
     ("Fish Oil (EPA/DHA)", True), ("Fish Oil concentrate", True),
     ("Omega-3 Fatty Acid Ethyl Ester", True),
 ])
