@@ -41,6 +41,7 @@ from __future__ import annotations
 import re
 from typing import Any, Dict, List, Optional
 
+from identity.omega_labels import states_only_epa_and_dha, states_only_omega_fatty_acids
 from normalization import omega_molecular_form_disclosures
 from scoring_v4.modules.generic_formulation import shared_formulation_penalty_detail
 from scoring_v4.modules.generic_helpers import bio_score_of, get_active_ingredients
@@ -286,6 +287,9 @@ def _row_mg(row: Dict[str, Any]) -> Optional[float]:
 
 
 def _is_parent_oil_row(row: Dict[str, Any]) -> bool:
+    source = row.get("raw_source_text") or row.get("name")
+    if states_only_epa_and_dha(source) or states_only_omega_fatty_acids(source):
+        return False
     canon = str(row.get("canonical_id") or "").strip().lower()
     if canon in _OIL_MASS_CANONICALS:
         return True
