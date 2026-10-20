@@ -2364,6 +2364,29 @@ INGR_TART_CHERRY standard_name "Tart Cherry" re-applied: on all 552 cherry label
 potent micro-dose actives (melatonin 1 mg on 293904) although `.claude/rules/scoring.md` says materiality comes from
 semantic roles, not raw mass; flavor words without "Flavor" ("Juiced Greens Powder Apple", "Berry Lime Burst") still name rows.
 
+## October 20 — comma-joined sub-blends keep their members (claude/comma-subblend-members; follow-up of PR206)
+
+Class: behavioral (Clean rows → interaction subjects, Transparency input). Owner:
+`enhanced_normalizer.py::_is_chemical_decomposition_leaf` (Pattern 2). Defect: every DSLD "blend" row with a comma
+in its name was read as a name token and skipped. Right for a comma total that lists its members as forms ("DHA,
+EPA" → forms expanded; undosed member rows would count EPA/DHA twice, 231416, kept per 2d7d4ea8e), wrong for a
+comma row that lists members as rows and declares no forms: the row and every member vanished (27312 valerian,
+lemon balm, passionflower 200 mg; 27804 catechu, skullcap 250 mg; 275039/275085/282948 L. bulgaricus,
+L. plantarum; 266599 four BHB salts 11.7 g). Such a row is now an ordinary nested blend (header with its own printed
+total; members bounded by it). Fail-first: 4 cases in `test_nested_blend_member_rows.py`; the 2d7d4ea8e pinned
+tests pass. Corpus Clean diff vs main e55b6ccef: 6/15,414 products, 21 rows added, 0 removed or changed.
+Replay of 6 + 71 controls (all 10 forms-listing/dosed comma totals, 29262, 60 seeded;
+`~/pg_quality/comma_subblend_20261020`): 0 controls changed; rules +5 (valerian liver, passionflower sedatives,
+skullcap liver, probiotics ×3), 0 removed; safety status unchanged; no new scorable row; 5 Transparency-only moves
+(B5 now sees the undisclosed sub-blend: 266599 50.4→41.0, 27804 59.9→52.0, 275039 81.0→78.2, 27312 71.0→68.6,
+275085 56.6→55.8); BHB salts resolve to BHB (Evidence unchanged at 0). Focused slice 2,510 passed.
+Fresh-context review: no corpus defect; latent fixes (fail-first): a no-forms comma row whose members all print
+amounts keeps the 259484 lift, and EPA/DHA-named comma totals stay with the omega rules (never a second fish oil).
+A first attempt narrowed the disclosed-EPA/DHA-child carve-out instead; the corpus hash showed it moved 4 real
+labels (179661, 180107, 315329, 82715: "Omega-3 EPA & DHA" 500–600 mg with undosed members, scored on main as a
+fish_oil row beside Fish Oil), so it was reverted. Whether that total should be a scorable fish_oil row is an
+omega-owner question, open. Final head's Clean output is identical to the replayed candidate (0/15,414).
+
 ## October 20 — remaining-worktree and active follow-up audit
 
 Audited the original 22 registered checkouts: primary, 18 historical and three active. No hidden unfinished source fix in the historical 18: seventeen histories are integrated by ancestry; wt_p188's two nonancestor commits are patch-equivalent to integrated PR188, with their verified Git bundle retained. Before cleanup, 2,245 unique files (1,160,618,052 bytes) were copied and SHA-256 verified outside the public repository. Six historical Claude checkouts were removed. Sean authorized owning-chat archive messages for 12 old managed checkouts: six removed, six queued and not confirmed. Active and newly created Claude source/measurement trees are preserved.
@@ -2373,3 +2396,9 @@ Owner: Git histories/attachments and existing production source-of-truth owners 
 PR219 remains DRAFT/HELD by Sean pending evidence applicable to epilepsy-specific risk from edible-star-anise extracts. Agent provenance correction has fail-first coverage and 279 named checks; no held clinical policy merged. Independent PR220's toxic Japanese species guard uses existing high_risk/legal under_review semantics, excludes Chinese species, and states agent source review. Exact head ee306d304: independent 10 tests pass; 18-label full/blob replay has zero changes. Initial local: 474 passed, one existing stale-folate failure, 95 skipped. Missing retained-canary links were repaired; 54 and 65 affected named checks pass. Final local: 544 passed, one existing stale-folate failure, 25 declared skips (24 optional services and one absent manifest-owned direct-strain control). Local is not green: 127 old catalog folate UL values remain 1667 versus current 1700, the same operator rebuild limitation observed on main. Exact-head whole-fast CI39450146123 passed all four groups and skip guards. PR220 merged at 1a1bc81ed1e10a7716579d2fbd689c746df995aa, with head ee306d304 contained in origin/main. No release/artifact gate is marked complete.
 
 Evidence title ownership at 7c56d2027: independent 26 tests pass; author measurements incomplete. Literature review is actively correcting per-entry source facts and is not qualified for integration yet. New comma-subblend follow-up b65cabb6 passed independent source/measurement review: 22 named tests, six intended changes and 71 unchanged controls; exact-candidate CI and local validation remain required. Preserve all active work. Public summary: scripts/audits/integration_audit_20261020/WORKTREE_CLOSEOUT.md. Private full receipts: ~/pg_quality/worktree_closeout_20261020. No pipeline, release, upload, app import or IPA run.
+
+## October 20 — title ownership source qualification
+
+Owner: scoring_input_contract.py title/role helpers and existing nested title reader — evidence: matrix, callers, fail-first raw labels and independent reviews. Will NOT create a matcher, Evidence tier, dose threshold, public status or undosed/trace policy. Author7c56d2027/c653c16d7 histories preserved in runtime28762ef3340901341f22bc6a0a0ddeb81742d555 atopmain0f2e75161. Flavor phrases, generic plant-part words and hyphenated vitamin names now identify the appropriate existing Evidence/Dose subjects. True named ingredients and Hair/Skin/Nails title remain retained.
+
+Independent72 owner/consumer checks; combined82 focused checks pass. Qualified2,090 raw pairs:57 score movers (26vitamin/17generic-part/14flavor),15tiers,0quality-score-status changes. Independent scan of every full record finds no changed safety, warnings, interactions, allergens, identities or amounts.232011 assessment complete→partial exposes existing unassessed alginic acid. Fresh combined76raw controls match qualified expected records at all four layers with stable source and raw hashes. Exact-runtime CI39454297455 passed all4groups/skipguards. Final local544passed/1previously recorded stale-catalog folate failure/25skips; no false green local or release claim. Source-qualified integration; actual merge containment recorded in Git/current handoff. Full report TITLE_OWNERSHIP.md; private receipts~/pg_quality/worktree_closeout_20261020. Literature223 (now combinedA+B), comma224 and demonstrated omega concentration owner correction remain pending; PR219 stays held. No pipeline/release/upload/app import/IPA.

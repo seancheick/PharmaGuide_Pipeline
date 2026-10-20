@@ -389,3 +389,132 @@ def test_top_level_protease_blend_sources_are_provenance(normalizer, protease_ro
                if row["name"] in {"Bacillus subtilis", "Ananas comosus"}]
     assert {row["name"] for row in sources} == {"Bacillus subtilis", "Ananas comosus"}
     assert {row["cleaner_row_role"] for row in sources} == {"source_descriptor"}
+
+
+# DSLD 27312 ingredientRows[5]: a comma-joined row that is a sub-blend listing. It
+# prints its own total and its members as rows, and declares no forms.
+CALMING_COMPLEX_RAW: Dict[str, Any] = {
+    "id": 27312,
+    "fullName": "Calming Formula",
+    "brandName": "Test",
+    "servingSizes": [{"order": 1, "minQuantity": 1, "maxQuantity": 1,
+                      "minDailyServings": 1, "maxDailyServings": 1, "unit": "Capsule(s)"}],
+    "ingredientRows": [
+        _row("Calming & Relaxation Complex", "blend", "Blend (Combination)", 0, "NP", 20, [
+            _row("L-Theanine", "amino acid", "Theanine", 200, "mg", 21),
+            _row("Valerian root powder, Lemon Balm extract and Passion Flower herb powder", "blend",
+                 "Blend (Herb/Botanical)", 200, "mg", 22, [
+                     _row("Valerian root powder", "botanical", "Valerian", 0, "NP", 23),
+                     _row("Lemon Balm Extract", "botanical", "Lemon Balm", 0, "NP", 24),
+                     _row("Passion Flower herb powder", "botanical", "Passionflower", 0, "NP", 25),
+                 ]),
+        ]),
+    ],
+    "otheringredients": {"text": None, "ingredients": []},
+}
+
+
+def test_comma_joined_sub_blend_without_forms_keeps_its_members(normalizer):
+    actives = _actives_by_path(normalizer.normalize_product(copy.deepcopy(CALMING_COMPLEX_RAW)))
+    sub_blend = "Valerian root powder, Lemon Balm extract and Passion Flower herb powder"
+    for index, name in enumerate(["Valerian root powder", "Lemon Balm Extract", "Passion Flower herb powder"]):
+        row = actives.get(f"ingredientRows[0].nestedRows[1].nestedRows[{index}]")
+        assert row is not None, f"{name} is a member of a printed 200 mg sub-blend"
+        assert row["name"] == name
+        assert row["parentBlend"] == sub_blend
+        assert row["parent_source_path"] == "ingredientRows[0].nestedRows[1]"
+        # The sub-blend's own printed total bounds its members; no member amount is invented.
+        assert row["parentBlendMass"] == 200.0
+        assert row["quantity"] in (0, 0.0, None)
+        assert row["cleaner_row_role"] == "nested_display_only"
+    # The sub-blend itself is a header carrying its printed total, never a scored active.
+    header = actives["ingredientRows[0].nestedRows[1]"]
+    assert header["name"] == sub_blend
+    assert header["cleaner_row_role"] == "blend_header_total"
+    assert (header["quantity"], header["unit"]) == (200.0, "mg")
+    assert actives["ingredientRows[0].nestedRows[0]"]["quantity"] == 200.0
+
+
+def _fish_oil_comma_total_without_forms(members):
+    """A "DHA, EPA" total that lists members as rows and declares no forms (latent shape)."""
+    return {
+        "id": 259484, "fullName": "Omega-3", "brandName": "Test",
+        "servingSizes": [{"order": 1, "minQuantity": 1, "maxQuantity": 1,
+                          "minDailyServings": 1, "maxDailyServings": 1, "unit": "Softgel(s)"}],
+        "ingredientRows": [
+            _row("Fish Oil", "fat", "Fish Oil", 4.5, "Gram(s)", 7, [
+                _row("DHA, EPA", "blend", "Blend", 2, "Gram(s)", 8, members),
+            ]),
+        ],
+        "otheringredients": {"text": None, "ingredients": []},
+    }
+
+
+def test_comma_total_whose_members_all_print_amounts_is_still_lifted(normalizer):
+    """Without forms, dosed members still replace the total (259484 lift); no second active."""
+    cleaned = normalizer.normalize_product(_fish_oil_comma_total_without_forms([
+        _row("Eicosapentaenoic Acid", "fatty acid", "EPA (Eicosapentaenoic Acid)", 1.5, "Gram(s)", 9),
+        _row("Docosahexaenoic Acid", "fatty acid", "DHA (Docosahexaenoic Acid)", 500, "mg", 10),
+    ]))
+    actives = _actives_by_path(cleaned)
+    doses = {row.get("canonical_id"): (row.get("quantity"), row.get("unit")) for row in actives.values()}
+    assert doses.get("epa") == (1.5, "Gram(s)") and doses.get("dha") == (500.0, "mg")
+    assert "DHA, EPA" not in {row["name"] for row in actives.values()}
+
+
+def test_comma_epa_dha_total_with_undosed_members_stays_with_the_omega_rules(normalizer):
+    """Latent shape: an EPA/DHA comma total keeps the 2d7d4ea8e behavior, never a second fish oil."""
+    cleaned = normalizer.normalize_product(_fish_oil_comma_total_without_forms([
+        _row("Eicosapentaenoic Acid", "fatty acid", "EPA (Eicosapentaenoic Acid)", 0, "NP", 9),
+        _row("Docosahexaenoic Acid", "fatty acid", "DHA (Docosahexaenoic Acid)", 0, "NP", 10),
+    ]))
+    actives = _actives_by_path(cleaned)
+    assert "DHA, EPA" not in {row["name"] for row in actives.values()}
+    scored = [row for row in actives.values() if row.get("cleaner_row_role") == "active_scorable"]
+    assert [row["name"] for row in scored] == ["Fish Oil"], "the 2 g total is not a second fish oil"
+
+
+def test_comma_joined_sub_blend_members_reach_their_interaction_rules(normalizer, enricher):
+    cleaned = normalizer.normalize_product(copy.deepcopy(CALMING_COMPLEX_RAW))
+    enriched, _ = enricher.enrich_product(cleaned)
+    rules = _rule_ids(enriched)
+    assert "RULE_IQM_VALERIAN_LIVER" in rules
+    assert "RULE_INGREDIENT_PASSIONFLOWER__SEDATIVES" in rules
+
+
+def test_comma_joined_probiotic_pair_keeps_its_cultures(normalizer, enricher):
+    """DSLD 275039: "Lactobacillus bulgaricus, Lactobacillus plantarum" inside an enzyme blend."""
+    raw = _protease_product(_row("Raw Probiotic & Enzyme Blend", "blend", "Blend (non-nutrient/non-botanical)",
+                                 0, "NP", 62, [
+        _row("Lipase", "enzyme", "Lipase", 0, "NP", 63, size=34),
+        _row("Lactobacillus bulgaricus, Lactobacillus plantarum", "blend",
+             "Blend (non-nutrient/non-botanical)", 0, "NP", 64, [
+                 _row("Lactobacillus bulgaricus", "bacteria", "Lactobacillus Bulgaricus", 0, "NP", 65, size=34),
+                 _row("Lactobacillus plantarum", "bacteria", "Lactobacillus Plantarum", 0, "NP", 66, size=34),
+             ], size=34),
+    ], size=34))
+    cleaned = normalizer.normalize_product(raw)
+    cultures = {row["name"] for row in cleaned["activeIngredients"]
+                if row.get("parentBlend") == "Lactobacillus bulgaricus, Lactobacillus plantarum"}
+    assert cultures == {"Lactobacillus bulgaricus", "Lactobacillus plantarum"}
+    enriched, _ = enricher.enrich_product(cleaned)
+    assert "RULE_IQM_PROBIOTICS_IMMUNOCOMPROMISED" in _rule_ids(enriched)
+
+
+def test_comma_joined_name_token_rules_are_unchanged():
+    """Only a comma row with member rows and no forms is a sub-blend listing."""
+    token = {"name": "DHA, EPA", "category": "blend", "quantity": [{"quantity": 285, "unit": "mg"}]}
+    assert EnhancedDSLDNormalizer._is_chemical_decomposition_leaf(token) is True
+    members = [{"name": "Eicosapentaenoic Acid", "category": "fatty acid",
+                "quantity": [{"quantity": 0, "unit": "NP"}]}]
+    with_forms = {**token, "nestedRows": members, "forms": [{"name": "Eicosapentaenoic Acid"}]}
+    assert EnhancedDSLDNormalizer._is_chemical_decomposition_leaf(with_forms) is True
+    # An EPA/DHA total stays with the omega rules even without forms.
+    assert EnhancedDSLDNormalizer._is_chemical_decomposition_leaf({**token, "nestedRows": members}) is True
+    listing = {"name": "Valerian root powder, Lemon Balm extract", "category": "blend",
+               "quantity": [{"quantity": 200, "unit": "mg"}],
+               "nestedRows": [{"name": "Valerian root powder", "category": "botanical",
+                               "quantity": [{"quantity": 0, "unit": "NP"}]}]}
+    assert EnhancedDSLDNormalizer._is_chemical_decomposition_leaf(listing) is False
+    dosed = {**listing, "nestedRows": [{**listing["nestedRows"][0], "quantity": [{"quantity": 150, "unit": "mg"}]}]}
+    assert EnhancedDSLDNormalizer._is_chemical_decomposition_leaf(dosed) is True, "dosed members are lifted"
