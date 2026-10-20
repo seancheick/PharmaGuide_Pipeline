@@ -71,13 +71,19 @@ def test_non_scorable_row_keeps_its_identity_and_meets_its_rules(enrich, dsld_id
     assert label in {a["ingredient_name"] for a in alerts}
 
 
-def test_blend_header_keeps_its_identity_and_meets_its_rules(enrich):
-    """1179 Ravage: the weight-only "Caffeine Blend" header is caffeine."""
-    enriched = enrich(1179)
-    rows = [r for r in enriched["ingredient_quality_data"]["ingredients"] if r.get("raw_source_text") == "Caffeine Blend"]
-    assert rows and {r["canonical_id"] for r in rows} == {"caffeine"}
-    assert any(a["rule_id"] == "RULE_INGREDIENT_CAFFEINE"
-               for a in enriched["interaction_profile"]["ingredient_alerts"])
+@pytest.mark.parametrize("dsld_id,label,canonical_id,rule_id", [
+    # Ravage: the weight-only "Caffeine Blend" header is caffeine.
+    (1179, "Caffeine Blend", "caffeine", "RULE_INGREDIENT_CAFFEINE"),
+    # Its members (Anhydrous Caffeine, Piperine Beadlets) do not contradict the name.
+    (28981, "Caffeine Blend", "caffeine", "RULE_INGREDIENT_CAFFEINE"),
+    # Flex-A-Min: "Chondroitin Sulfate Complex" lists chondroitin among seven others.
+    (17471, "Chondroitin Sulfate Complex", "chondroitin", "RULE_IQM_CHONDROITIN"),
+])
+def test_blend_header_keeps_its_identity_and_meets_its_rules(enrich, dsld_id, label, canonical_id, rule_id):
+    enriched = enrich(dsld_id)
+    rows = [r for r in enriched["ingredient_quality_data"]["ingredients"] if r.get("raw_source_text") == label]
+    assert rows and {r["canonical_id"] for r in rows} == {canonical_id}
+    assert any(a["rule_id"] == rule_id for a in enriched["interaction_profile"]["ingredient_alerts"])
 
 
 @pytest.mark.parametrize("dsld_id,pillar,expected", [

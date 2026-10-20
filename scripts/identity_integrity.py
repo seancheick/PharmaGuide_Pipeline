@@ -709,6 +709,14 @@ def _has_whole_microbial_identity(value: str) -> bool:
     )
 
 
+def _is_blend_header_row(row: Mapping[str, Any]) -> bool:
+    """The cleaner's blend-total header row."""
+    return (
+        row.get("cleaner_row_role") == "blend_header_total"
+        or row.get("hierarchyType") == "blend_header"
+    )
+
+
 def is_identity_scoreable(disposition: str | None) -> bool:
     return disposition in _SCOREABLE_DISPOSITIONS
 
@@ -1145,19 +1153,25 @@ def resolve_identity(
         )
     )
     if canonical_before and canonical_registry is not None and not forms_contradict:
-        for item in form_evidence:
-            if not item.field.startswith("forms["):
-                continue
-            named = canonical_registry.resolve_preferred(item.value)
-            form_canonical = _canonical(named[0]) if named else None
-            if (
-                form_canonical
-                and form_canonical != canonical_before
-                and INTERACTION_SUBJECT_FAMILY.get(form_canonical) != canonical_before
-                and not (canonical_parent_of and canonical_parent_of(canonical_before, form_canonical))
-            ):
-                forms_contradict = True
-                break
+        def names_the_identity(form_canonical: str) -> bool:
+            return (
+                form_canonical == canonical_before
+                or INTERACTION_SUBJECT_FAMILY.get(form_canonical) == canonical_before
+                or bool(canonical_parent_of and canonical_parent_of(canonical_before, form_canonical))
+            )
+
+        form_canonicals = [
+            _canonical(named[0])
+            for item in form_evidence
+            if item.field.startswith("forms[")
+            for named in [canonical_registry.resolve_preferred(item.value)]
+            if named
+        ]
+        # A blend header's forms are its other members ("Caffeine Blend":
+        # Anhydrous Caffeine, Piperine), never a contradiction of its name.
+        forms_contradict = not _is_blend_header_row(row) and not all(
+            map(names_the_identity, form_canonicals)
+        )
     # A row listed under a parent that names another material is that
     # material's constituent ("Arginine" in "Solae Soy Protein isolate"), not
     # the substance added on its own; a family or category parent keeps it.
