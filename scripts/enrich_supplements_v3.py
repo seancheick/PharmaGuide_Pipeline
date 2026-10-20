@@ -12974,19 +12974,28 @@ class SupplementEnricherV3:
                 )
             return
 
-        # CRITICAL: Check for negation patterns FIRST - skip entire statement if negated
-        # These statements list allergens the product is FREE FROM, not containing
+        # CRITICAL: a negator declares what the product is FREE FROM. Everything
+        # from the first negator on is dropped, and only what precedes it is
+        # read: "Contains milk and doesn't contain gluten" still declares milk.
         negation_patterns = [
             r'\bcontains?(?:\s*:\s*|\s+)(?:no|none)\b\s*:?\s*',  # Contains No: / Contains none of
             r"\b(?:does|do)(?:\s+not|n'?t)\s+contains?",  # "Does not contain milk", "doesn't contains"
+            r'\bnone\s+of\b',               # "... and none of the following: wheat"
             r'free\s+(?:from|of)\s+',       # "Free from milk"
             r'without\s+',                  # "Without milk"
             r'no\s+added\s+',               # "No added milk"
         ]
-        for neg_pattern in negation_patterns:
-            if re.search(neg_pattern, text_lower):
-                self.logger.debug(f"Skipping negated allergen statement: {text[:80]}...")
-                return  # Skip this entire statement - it's declaring what product is FREE FROM
+        negator_starts = [
+            match.start()
+            for neg_pattern in negation_patterns
+            for match in [re.search(neg_pattern, text_lower)]
+            if match
+        ]
+        if negator_starts:
+            self.logger.debug(f"Dropping negated allergen text: {text[:80]}...")
+            text_lower = text_lower[:min(negator_starts)].strip()
+            if not text_lower:
+                return
 
         # Only a clause that opens with the declaration ("Contains: ...",
         # "Allergens: May contain ...") may name a source by phrase; prose such

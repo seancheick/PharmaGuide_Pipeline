@@ -247,7 +247,12 @@
       "last_updated": "2026-10-19",
       "match_rules": {
         "negative_match_terms": [
-          "highly refined"
+          "highly refined",
+          "trout lily",
+          "sole source",
+          "sole ingredient",
+          "salmon-colored",
+          "salmon colored"
         ],
         "phrase_match_terms": [
           "anchovies",

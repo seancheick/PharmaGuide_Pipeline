@@ -20,6 +20,10 @@ PHRASE_TERMS = {
     # FDA Seafood List: Krill (Euphausia spp.) Type I(C), crustacean.
     "ALLERGEN_CRUSTACEANS": ["crustaceans", "krill"],
 }
+# Non-fish phrases that contain a species word (none occurs in the corpus yet):
+# Erythronium americanum is a plant; "sole source/ingredient" and
+# "salmon-colored" are wording, not fish.
+FISH_NEGATIVE_TERMS = ["trout lily", "sole source", "sole ingredient", "salmon-colored", "salmon colored"]
 OLD_FISH_NOTE = ("the enricher flags them by matching an alias as a whole word in the "
                  "row name or its forms (\"Purified Fish Oil\", form \"Fish Oil\"), never "
                  "from the canonical identity alone.")
@@ -37,6 +41,9 @@ for allergen_id, terms in PHRASE_TERMS.items():
     rules["phrase_match_terms"] = terms
     by_id[allergen_id]["last_updated"] = "2026-10-19"
 fish = by_id["ALLERGEN_FISH"]
+fish["match_rules"]["negative_match_terms"] = [
+    *fish["match_rules"]["negative_match_terms"], *FISH_NEGATIVE_TERMS,
+]
 assert fish["notes"].count(OLD_FISH_NOTE) == 1
 fish["notes"] = fish["notes"].replace(OLD_FISH_NOTE, NEW_FISH_NOTE)
 print(data_batch.save(PATH, blob))

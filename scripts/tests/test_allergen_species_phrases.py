@@ -91,7 +91,8 @@ def test_species_terms_are_not_identity_aliases_in_the_cleaner():
     # Negated declarations (corpus 218073, 220125).
     ("Contains none of the following: artificial dyes, preservatives, dairy, lactose, milk, soy.", "ALLERGEN_MILK"),
     ("Contains none of the following: artificial dyes, preservatives, dairy, lactose, milk, soy.", "ALLERGEN_SOY"),
-    ("What's more, Macros doesn't contains soy, dairy or whey protein ingredients.", "ALLERGEN_MILK"),
+    # The corpus false hit (220125) was soy.
+    ("What's more, Macros doesn't contains soy, dairy or whey protein ingredients.", "ALLERGEN_SOY"),
 ])
 def test_prose_and_negated_statements_are_not_declarations(enricher, statement, absent):
     assert absent not in _hits(enricher, statements=(statement,))
@@ -103,3 +104,27 @@ def test_prose_and_negated_statements_are_not_declarations(enricher, statement, 
 ])
 def test_declaration_shaped_statements_name_species(enricher, statement, expected):
     assert expected in _hits(enricher, statements=(statement,))
+
+
+# Audit of #186: a negator in a clause dropped the positive declaration before it.
+@pytest.mark.parametrize("statement,expected,absent", [
+    ("Contains milk and doesn't contain gluten", "ALLERGEN_MILK", "ALLERGEN_WHEAT"),
+    ("Contains milk, does not contain soy", "ALLERGEN_MILK", "ALLERGEN_SOY"),
+    ("Contains: fish (anchovy) and none of the following: wheat", "ALLERGEN_FISH", "ALLERGEN_WHEAT"),
+    ("Contains milk. Does not contain soy.", "ALLERGEN_MILK", "ALLERGEN_SOY"),
+    ("Contains fish (cod), but no milk", "ALLERGEN_FISH", "ALLERGEN_MILK"),
+])
+def test_negation_drops_only_what_follows_it(enricher, statement, expected, absent):
+    hits = _hits(enricher, statements=(statement,))
+    assert expected in hits
+    assert absent not in hits
+
+
+@pytest.mark.parametrize("name", [
+    "Trout Lily (Erythronium americanum) Leaf",
+    "Sole Source Protein Blend",
+    "Sole ingredient: Ascorbic Acid",
+    "Salmon-colored Coating",
+])
+def test_species_words_in_non_fish_phrases_are_not_flagged(enricher, name):
+    assert "ALLERGEN_FISH" not in _hits(enricher, name)
