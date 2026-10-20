@@ -169,9 +169,12 @@ FINDING_CATALOG: dict[str, str] = {
 
 @dataclass
 class Finding:
-    """One discrepancy. A BLOCKER names where and what: the raw row path ("label"
-    for a whole-label finding), the field, the source-of-truth value (raw label,
-    or the enricher's identity decision) and the exported value."""
+    """One discrepancy. A BLOCKER names where and what: the location, the field,
+    the source-of-truth value (raw label, or the enricher's identity decision)
+    and the exported value. The location is the raw row path (``ingredientRows[..]``
+    / ``otheringredients.ingredients[..]``); ``label`` for a whole-label finding;
+    or, when the row carries no raw_source_path, a ``cleaned:`` or ``blob:``
+    location in that layer, never presented as a raw row."""
     severity: str
     code: str
     note: str
@@ -372,7 +375,7 @@ def _count_raw_inactives_from_cleaned(cleaned: dict) -> int:
 
 
 def _collect_raw_active_names(cleaned: dict) -> list[tuple[str, str]]:
-    """(name, row path) per cleaned active: its raw_source_path, else its cleaned location."""
+    """(name, location) per cleaned active: its raw_source_path, else a ``cleaned:`` location."""
     out: list[tuple[str, str]] = []
     def walk(rows: list, prefix: str) -> None:
         if not isinstance(rows, list):
@@ -384,17 +387,17 @@ def _collect_raw_active_names(cleaned: dict) -> list[tuple[str, str]]:
                 if n:
                     out.append((str(n), str(path)))
                 walk(r.get("nestedRows") or [], f"{prefix}[{index}].nestedRows")
-    walk(cleaned.get("activeIngredients") or [], "cleaned.activeIngredients")
+    walk(cleaned.get("activeIngredients") or [], "cleaned:activeIngredients")
     return out
 
 
 def _collect_raw_inactive_names(cleaned: dict) -> list[tuple[str, str]]:
-    """(name, row path) per cleaned inactive: its raw_source_path, else its cleaned location."""
+    """(name, location) per cleaned inactive: its raw_source_path, else a ``cleaned:`` location."""
     out: list[tuple[str, str]] = []
     other = cleaned.get("otheringredients") or {}
     for prefix, rows in (
-        ("cleaned.inactiveIngredients", cleaned.get("inactiveIngredients")),
-        ("cleaned.otheringredients.ingredients", other.get("ingredients") if isinstance(other, dict) else None),
+        ("cleaned:inactiveIngredients", cleaned.get("inactiveIngredients")),
+        ("cleaned:otheringredients.ingredients", other.get("ingredients") if isinstance(other, dict) else None),
     ):
         for index, r in enumerate(rows if isinstance(rows, list) else []):
             path = f"{prefix}[{index}]"
@@ -883,7 +886,7 @@ def _check_unsafe_unit_conversion(rec: ProductRecord, blob: dict) -> None:
         )
 
     for index, ing in enumerate(blob.get("ingredients") or []):
-        location = dict(row_path=ing.get("raw_source_path") or f"ingredients[{index}]", field="normalized_amount",
+        location = dict(row_path=ing.get("raw_source_path") or f"blob:ingredients[{index}]", field="normalized_amount",
                         source=f"{ing.get('quantity')} {ing.get('unit')}",
                         exported=None if ing.get("normalized_amount") is None
                         else f"{ing.get('normalized_amount')} {ing.get('normalized_unit')}")
@@ -947,7 +950,7 @@ def _check_blend_children(rec: ProductRecord, blob: dict) -> None:
                         f"blend {blnd.get('name')!r} has a child entry with no name",
                         ingredient=blnd.get("name"),
                         row_path=child.get("raw_source_path")
-                        or f"proprietary_blend_detail.blends[{blend_index}].{kids_key}[{child_index}]",
+                        or f"blob:proprietary_blend_detail.blends[{blend_index}].{kids_key}[{child_index}]",
                         field="name", exported=child)
                 continue
 
@@ -1117,14 +1120,14 @@ def _check_line_integrity(
                 row_path=path, field="row_ledger.row_ref", source=raws[path].get("name"))
     labels = {str(entry.get("row_ref")): entry.get("source_label") for entry in ledger}
     for ref in sorted(str(r) for r in refs if r and r not in raws):
-        rec.add("LEDGER_ROW_NOT_IN_RAW", f"row_ledger names {ref}, which the raw label does not have", stage="blob",
-                row_path=ref, field="row_ledger.row_ref", exported=labels.get(ref))
+        rec.add("LEDGER_ROW_NOT_IN_RAW", f"row_ledger names {ref}, which the raw label does not have",
+                ingredient=labels.get(ref), stage="blob", row_path=ref, field="row_ledger.row_ref", exported=ref)
     for row in blob.get("ingredients") or []:
         path = row.get("raw_source_path") if isinstance(row, dict) else None
         if path and path not in raws:
             rec.add("LEDGER_ROW_NOT_IN_RAW", f"exported row points at {path}, which the raw label does not have",
                     ingredient=row.get("name"), stage="blob",
-                    row_path=path, field="ingredients.raw_source_path", exported=row.get("name"))
+                    row_path=path, field="ingredients.raw_source_path", exported=path)
     for entry in ledger:
         ref = entry.get("row_ref")
         if ref in raws and entry.get("source_label") is not None:

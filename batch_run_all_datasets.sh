@@ -153,6 +153,17 @@ if [ "$PIPELINE_ONLY" = "1" ] && [ "$RELEASE_EXPLICIT" = "1" ]; then
     exit 2
 fi
 
+# An empty --targets entry is a substring of every folder name and would
+# silently select every brand. Read the raw string: `read -a` drops a trailing one.
+if [ -n "$TARGET_DATASETS" ]; then
+    case ",$(printf '%s' "$TARGET_DATASETS" | tr -d '[:space:]')," in
+        *,,*)
+            echo "ERROR: --targets '$TARGET_DATASETS' contains an empty entry; name each dataset." >&2
+            exit 2
+            ;;
+    esac
+fi
+
 # A targeted rerun is normally an iteration step, not authorization to rebuild
 # and ship the entire catalog. Require --release to opt into downstream work.
 if [ -n "$TARGET_DATASETS" ] && [ "$RELEASE_EXPLICIT" != "1" ]; then

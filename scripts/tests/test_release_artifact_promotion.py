@@ -11,6 +11,12 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 import promote_release_artifacts as promotion  # noqa: E402
 
 
+@pytest.fixture(autouse=True)
+def _hermetic_raw_root(tmp_path, monkeypatch):
+    # The catalog binding hashes raw DSLD labels; never read the operator's corpus.
+    monkeypatch.setenv('PHARMAGUIDE_DATASET_ROOT', str(tmp_path / 'no-raw-root'))
+
+
 def _dir(path: Path, marker: str) -> Path:
     path.mkdir()
     (path / "marker.txt").write_text(marker)
@@ -146,3 +152,29 @@ def test_catalog_receipt_invalidates_on_safety_formulation_and_exporter_changes(
     assert not promotion.catalog_build_is_current(tmp_path)
     with pytest.raises(ValueError, match='inputs changed'):
         promotion.require_catalog_inputs(tmp_path, binding)
+
+
+def test_catalog_receipt_binds_the_raw_labels_the_line_gate_compared(tmp_path, monkeypatch):
+    # A catalog gated against one set of raw DSLD labels is not current for
+    # another: the raw-to-final comparison must rerun (ADR-0005).
+    raw = tmp_path / 'raw'
+    (raw / 'Olly').mkdir(parents=True)
+    label = raw / 'Olly' / '1.json'
+    label.write_text('{"fullName": "A"}')
+    monkeypatch.setenv('PHARMAGUIDE_DATASET_ROOT', str(raw))
+    repo = tmp_path / 'repo'
+    binding = _assembly(repo)
+    promotion.record_catalog_build(repo, binding)
+    assert promotion.catalog_build_is_current(repo)
+    os.utime(label, None)
+    assert promotion.catalog_build_is_current(repo)
+    label.write_text('{"fullName": "B"}')
+    assert not promotion.catalog_build_is_current(repo)
+    label.write_text('{"fullName": "A"}')
+    assert promotion.catalog_build_is_current(repo)
+    (raw / 'Olly' / '2.json').write_text('{}')
+    assert not promotion.catalog_build_is_current(repo)
+    (raw / 'Olly' / '2.json').unlink()
+    assert promotion.catalog_build_is_current(repo)
+    monkeypatch.setenv('PHARMAGUIDE_DATASET_ROOT', str(tmp_path / 'absent'))
+    assert not promotion.catalog_build_is_current(repo)
