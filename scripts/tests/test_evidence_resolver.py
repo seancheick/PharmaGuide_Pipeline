@@ -663,7 +663,9 @@ def test_phase4_batch4_standardized_clinical_canaries():
     assert peppermint.disposition == EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value
     assert peppermint.points_eligible is False
     assert "24100754" in peppermint.owner_facts["literature_evidence"]["pmids"]
-    clinical_cids = ["cranberry_fruit", "butchers_broom_root", "horse_chestnut_seed", "boswellia_serrata_resin"]
+    # boswellia_serrata_resin cites only a rat/in-vitro study: review pending
+    # (test_literature_records_review_20261020.py).
+    clinical_cids = ["cranberry_fruit", "butchers_broom_root", "horse_chestnut_seed"]
     for cid in clinical_cids:
         res = er.resolve_evidence_for_canonical(cid)
         assert res.disposition == EvidenceDisposition.RESOLVED_BY_REVIEWED_CLINICAL_EVIDENCE.value, (
@@ -744,12 +746,16 @@ def test_phase4_batch5_food_matrix_and_crude_materials():
 
 def test_phase4_batch5_standardized_clinical_botanicals():
     """Batch 5 standardized clinical botanicals and bioactives."""
+    # Removed by the literature records review (2026-10-20,
+    # test_literature_records_review_20261020.py): superoxide_dismutase, schisandra and
+    # perilla_oil cite no human trial (review pending); shiitake_mushroom (whole food),
+    # black_garlic (aged garlic extract), olive_fruit_extract (leaf extract) and fucoxanthin
+    # (combination) were studied as a different preparation.
     botanicals = [
-        "citrus_bergamot", "coleus_forskohlii_root", "african_mango", "superoxide_dismutase",
-        "eps_7630", "english_ivy", "turkey_tail", "shiitake_mushroom", "diosmin",
-        "puerarin", "ashwagandha_root", "green_tea_leaf", "schisandra", "arjuna",
-        "dgl_deglycyrrhizinated_licorice", "mastic_gum", "perilla_oil", "undecylenic_acid",
-        "black_garlic", "cocoa", "olive_fruit_extract", "fucoxanthin"
+        "citrus_bergamot", "coleus_forskohlii_root", "african_mango",
+        "eps_7630", "english_ivy", "turkey_tail", "diosmin",
+        "puerarin", "ashwagandha_root", "green_tea_leaf", "arjuna",
+        "dgl_deglycyrrhizinated_licorice", "mastic_gum", "undecylenic_acid", "cocoa",
     ]
     for cid in botanicals:
         res = er.resolve_evidence_for_canonical(cid)
