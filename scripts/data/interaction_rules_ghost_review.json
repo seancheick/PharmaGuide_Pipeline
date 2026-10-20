@@ -3,8 +3,8 @@
     "purpose": "Reviewed GHOST-SUSPECT findings from verify_interaction_rules_citations.py --strict",
     "description": "Reviewed GHOST-SUSPECT findings from verify_interaction_rules_citations.py --strict, keyed by PMID, rule_id and sub_rule. A suspect blocks the strict gate until it is reviewed here with a rationale that states why the live PubMed record does support the sub-rule (class-level, constituent, full-text or heuristic-miss citations). Wrong-topic citations are fixed in the rules file, never listed here. Removing an entry re-arms the gate for that citation. Receipts: scripts/audits/interaction_rules/citation_triage_2026_09/research.md.",
     "schema_version": "5.0.0",
-    "last_updated": "2026-10-12",
-    "total_entries": 83
+    "last_updated": "2026-10-19",
+    "total_entries": 84
   },
   "reviewed": [
     {
@@ -753,6 +753,15 @@
       "rationale": "The abstract evaluates simvastatin and pravastatin after 21 days of garlic extract and reports unchanged AUCs. Corrected copy describes this null exposure result for one preparation; it establishes neither increased statin exposure nor universal absence of interactions. This is citation-content adjudication only, not whole-record clinical clearance.",
       "reviewed_by": "agent source-content review (not clinician-reviewed)",
       "reviewed_at": "2026-10-12"
+    },
+    {
+      "pmid": "21452290",
+      "rule_id": "RULE_IQM_IRON_HYPERTENSION",
+      "sub_rule": "condition:liver_disease",
+      "live_title": "Diagnosis and management of hemochromatosis: 2011 practice guideline by the American Association for the Study of Liver Diseases.",
+      "rationale": "Hemochromatosis is the iron-overload disease the sub-rule is scoped to; PubMed has no abstract, so 'iron' is absent from the indexed text. The NIH ODS Iron fact sheet (cited in the same sub-rule) attributes to this guideline the recommendation that hemochromatosis treatment include avoiding iron and vitamin C supplements.",
+      "reviewed_by": "agent citation triage 2026-10-20 (not clinician-reviewed)",
+      "reviewed_at": "2026-10-20"
     }
   ]
 }

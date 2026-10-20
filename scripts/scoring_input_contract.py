@@ -40,8 +40,8 @@ from scoring_reference_resolver import (
 # the enricher stamps rows with.
 from identity.omega_labels import states_only_epa_and_dha
 from identity_integrity import (
-    HEADER_INTERACTION_ONLY_RATIONALE,
     IDENTITY_DISPOSITIONS,
+    NON_SCORING_IDENTITY_RATIONALE,
     is_identity_scoreable,
 )
 # One probiotic row-identity owner for enrichment, taxonomy, routing and scoring.
@@ -91,6 +91,106 @@ SCORING_CLASSIFICATION_ORIGINS = {"compatibility_derived", "native_enrichment"}
 SCORING_ROUTE_MODULES = {"generic", "probiotic", "multi_or_prenatal", "b_complex", "omega", "sports", "fiber_digestive"}
 SCORING_ROUTE_CONFIDENCE = {"high", "medium", "low", "failed"}
 _ROUTE_SCORING_ROWS_CACHE_KEY = "__scoring_input_contract_route_rows_cache"
+
+
+# 21 CFR 101.91(a)(1): wheat, rye and barley (with crossbreeds such as
+# triticale, a wheat alias) are the gluten-containing grains; oats are not.
+GLUTEN_GRAIN_ALLERGEN_IDS = frozenset({"ALLERGEN_WHEAT", "ALLERGEN_RYE", "ALLERGEN_BARLEY"})
+_CROSS_CONTACT_PRESENCE = frozenset({"may_contain", "facility_warning"})
+
+# Sean's open 21 CFR 101.91 question: does a barley or rye *ingredient*
+# (barley grass, malt) contradict a gluten-free claim? True keeps today's
+# Transparency B2 result; the claim validation and the gluten-free badge follow
+# the same answer. Flip it here only.
+GLUTEN_GRAIN_INGREDIENT_CONTRADICTS_GLUTEN_FREE = True
+_GLUTEN_SOURCE_IDS = (
+    GLUTEN_GRAIN_ALLERGEN_IDS if GLUTEN_GRAIN_INGREDIENT_CONTRADICTS_GLUTEN_FREE
+    else frozenset({"ALLERGEN_WHEAT"})
+)
+
+# Free-from claim group (cert_claim_rules "allergen_free:<group>") -> the
+# allergens whose source (ingredient, "contains") or cross-contact (may contain,
+# facility) contradicts it. "Shellfish-free" covers crustaceans and molluscs: a
+# claim must not reassure a mollusc-allergic reader (allergen flags themselves
+# stay FDA crustacean-only).
+FREE_FROM_CLAIM_ALLERGENS: Dict[str, Tuple[frozenset, frozenset]] = {
+    "gluten": (_GLUTEN_SOURCE_IDS, GLUTEN_GRAIN_ALLERGEN_IDS),
+    "gluten_certified": (_GLUTEN_SOURCE_IDS, GLUTEN_GRAIN_ALLERGEN_IDS),
+    "dairy": (frozenset({"ALLERGEN_MILK"}),) * 2,
+    "soy": (frozenset({"ALLERGEN_SOY"}),) * 2,
+    "nut": (frozenset({"ALLERGEN_TREE_NUTS", "ALLERGEN_PEANUTS"}),) * 2,
+    "peanut": (frozenset({"ALLERGEN_PEANUTS"}),) * 2,
+    "egg": (frozenset({"ALLERGEN_EGGS"}),) * 2,
+    "shellfish": (frozenset({"ALLERGEN_CRUSTACEANS", "ALLERGEN_MOLLUSCS"}),) * 2,
+    "sesame": (frozenset({"ALLERGEN_SESAME"}),) * 2,
+    "yeast": (frozenset(), frozenset()),
+}
+# Transparency B2's claim-group names -> the group above.
+B2_CLAIM_GROUP_RULE = {
+    "gluten": "gluten", "dairy": "dairy", "soy": "soy", "egg": "egg", "shellfish": "shellfish",
+    "peanut": "peanut", "tree_nut": "nut", "sesame": "sesame", "yeast": "yeast",
+}
+
+# Recorded in compliance_data.conflicts when a free-from claim meets a
+# "may contain"/"shared equipment" statement the allergen parser reads no
+# allergen from: the scorer cannot run the parser, so this is how it learns.
+UNREAD_MAY_CONTAIN_CONFLICT = "allergen-free claim conflicts with an unread may-contain warning"
+
+
+def free_from_claim_contradiction(
+    group: str, allergen_hits: Any, unparsed_may_contain: bool = False,
+) -> Optional[str]:
+    """How label evidence contradicts a free-from claim of ``group``, if it does.
+
+    ``"allergen_conflict"``: a source of the group's own allergen.
+    ``"may_contain_warning"``: cross-contact with it, or a may-contain
+    statement no parser read (which may name it). A warning that names only
+    other allergens ("a facility that also processes fish") is no
+    contradiction of a dairy- or gluten-free claim.
+    """
+    sources, cross_contact = FREE_FROM_CLAIM_ALLERGENS.get(group, (frozenset(), frozenset()))
+    may_contain = False
+    for hit in allergen_hits or []:
+        if not isinstance(hit, dict):
+            continue
+        allergen_id = hit.get("allergen_id")
+        if hit.get("presence_type") in _CROSS_CONTACT_PRESENCE:
+            may_contain = may_contain or allergen_id in cross_contact
+        elif allergen_id in sources:
+            return "allergen_conflict"
+    if may_contain or unparsed_may_contain:
+        return "may_contain_warning"
+    return None
+
+
+def free_from_claims_all_hold(
+    claim_keys: Any, allergen_hits: Any, unparsed_may_contain: bool = False,
+) -> bool:
+    """Whether every free-from claim holds under ``free_from_claim_contradiction``.
+
+    An unknown claim key is read as a generic allergen-free claim, which any
+    allergen hit or unread may-contain contradicts.
+    """
+    keys = [str(k).strip().lower() for k in claim_keys or [] if str(k).strip()]
+    if not keys:
+        return False
+    for key in keys:
+        if key in FREE_FROM_CLAIM_ALLERGENS:
+            if free_from_claim_contradiction(key, allergen_hits, unparsed_may_contain) is not None:
+                return False
+        elif unparsed_may_contain or any(isinstance(h, dict) for h in allergen_hits or []):
+            return False
+    return True
+
+
+def gluten_free_claim_contradicted(
+    allergen_hits: Any, conflicts: Any, unparsed_may_contain: bool = False,
+) -> bool:
+    """Whether label evidence contradicts a gluten-free claim: a recorded
+    gluten/wheat conflict or ``free_from_claim_contradiction("gluten", ...)``."""
+    if any("gluten" in str(c).lower() or "wheat" in str(c).lower() for c in conflicts or []):
+        return True
+    return free_from_claim_contradiction("gluten", allergen_hits, unparsed_may_contain) is not None
 
 
 def normalize_product_evidence_scope(value: Any) -> str:
@@ -701,16 +801,44 @@ def _is_verified_canonical(value: Any) -> bool:
     return bool(canonical) and canonical not in _GENERIC_BLEND_IDENTITIES and not canonical.startswith("blend_")
 
 
-def _is_non_scorable_header_identity(row: Dict[str, Any]) -> bool:
-    """A blend header whose identity is kept for interactions only: its total
-    is the blend's, never that ingredient's amount."""
-    return row.get("identity_resolution_rationale") == HEADER_INTERACTION_ONLY_RATIONALE
+def _is_interaction_only_identity(row: Dict[str, Any]) -> bool:
+    """A non-scorable row's identity kept for interactions only: identity is
+    not scorability, so it owns no Evidence and feeds no Dose or route. A
+    later owner that re-identifies the row (a recognized non-scorable record)
+    ends that."""
+    return (
+        row.get("identity_resolution_rationale") == NON_SCORING_IDENTITY_RATIONALE
+        and _norm(row.get("canonical_id")) == _norm(row.get("canonical_id_before"))
+    )
+
+
+def score_eligible_identity_view(product: Dict[str, Any]) -> Dict[str, Any]:
+    """The product as the scorer reads it: a row whose identity is kept for
+    interactions only carries no canonical, as before that identity was kept.
+    Returns the product itself when there is nothing to hide."""
+    iqd = product.get("ingredient_quality_data") if isinstance(product, dict) else None
+    if not isinstance(iqd, dict):
+        return product
+    view, changed = dict(iqd), False
+    for key in ("ingredients", "ingredients_skipped", "ingredients_scorable"):
+        rows = iqd.get(key)
+        if not isinstance(rows, list):
+            continue
+        out = []
+        for row in rows:
+            if isinstance(row, dict) and _is_interaction_only_identity(row) and row.get("canonical_id") is not None:
+                printed = row.get("raw_source_text")
+                row = dict(row, canonical_id=None, canonical_id_after=None, standard_name=printed, standardName=printed)
+                changed = True
+            out.append(row)
+        view[key] = out
+    return {**product, "ingredient_quality_data": view} if changed else product
 
 
 def _verified_anchor_canonical(row: Dict[str, Any]) -> str:
     """The row's cleaner-verified ingredient identity, or "" when the cleaner
     left it unmapped or only a generic blend identity is present."""
-    if _is_non_scorable_header_identity(row):
+    if _is_interaction_only_identity(row):
         return ""
     canonical = _slug(row.get("canonical_id"))
     return canonical if _is_verified_canonical(canonical) else ""
@@ -1912,10 +2040,9 @@ def derive_product_scoring_evidence(product: Dict[str, Any]) -> List[Dict[str, A
                     active_row["standardName"] = standard_name
             if identity_row.get("source_label_key"):
                 active_row["source_label_key"] = identity_row["source_label_key"]
-            if _is_non_scorable_header_identity(identity_row):
-                # A blend header keeps its identity for interactions, but its
-                # total is the blend's, not that ingredient's amount: scoring
-                # reads the printed heading as a structural anchor only.
+            if _is_interaction_only_identity(identity_row):
+                # Scoring reads the row exactly as before its identity was kept:
+                # no canonical, the printed name as a structural anchor only.
                 active_row["canonical_id"] = None
                 active_row["standardName"] = (
                     identity_row.get("raw_source_text") or raw_active.get("name")
@@ -1926,7 +2053,10 @@ def derive_product_scoring_evidence(product: Dict[str, Any]) -> List[Dict[str, A
         active_rows.append(active_row)
 
     skipped_rows = [
-        row
+        (
+            dict(row, canonical_id=None, canonical_id_after=None, standardName=row.get("raw_source_text"))
+            if _is_interaction_only_identity(row) else row
+        )
         for row in _safe_list(iqd.get("ingredients_skipped"))
         if isinstance(row, dict)
         and (
@@ -6319,15 +6449,6 @@ def _named_in_title(row: Dict[str, Any], title_norm: str) -> bool:
         _norm(row.get("standard_name")),
         canonical.replace("_", " "),
     ]
-    # One word of a derived identity name is no title evidence: "Raw organic
-    # Svetol" is green_coffee_bean, and "coffee" alone does not make "Fit
-    # Coffee" name it. Derived names match only whole; the printed name may
-    # match by any of its words.
-    printed_tokens = {
-        token
-        for value in (row.get("name"), row.get("raw_source_text"))
-        for token in re.split(r"[^a-z0-9]+", _norm(value)) if token
-    }
     # A forms[] member the cleaner expanded from a reviewed blend header
     # (BLEND_HEADER_EXACT_NAMES) loses that header row, so its parent_blend is
     # the surviving source fact for the header's title role.  A nestedRows[]
@@ -6336,7 +6457,6 @@ def _named_in_title(row: Dict[str, Any], title_norm: str) -> bool:
     parent_blend = row.get("parent_blend") or row.get("parentBlend")
     if parent_blend and ".forms[" in str(row.get("raw_source_path") or ""):
         candidates.append(_norm(parent_blend))
-        printed_tokens.update(re.split(r"[^a-z0-9]+", _norm(parent_blend)))
     curated_aliases = _ROLE_TITLE_ALIASES_BY_CANONICAL.get(canonical, ())
     # Curated identity aliases may be shorter than the generic four-character
     # title-token floor (notably D2/D3). Their canonical-scoped allowlist is
@@ -6365,12 +6485,7 @@ def _named_in_title(row: Dict[str, Any], title_norm: str) -> bool:
         # names ("oil" of "Fish Oil").
         min_len = 3 if len(candidate_tokens) == 1 else 4
         for token in candidate_tokens:
-            if (
-                len(token) >= min_len
-                and token not in _ROLE_TITLE_STOPWORDS
-                and token in title_tokens
-                and (len(candidate_tokens) == 1 or token in printed_tokens)
-            ):
+            if len(token) >= min_len and token not in _ROLE_TITLE_STOPWORDS and token in title_tokens:
                 return True
     return False
 
