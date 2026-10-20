@@ -2208,3 +2208,13 @@ gained 218 and changed 111, all label text). Replay of 567 + 30 controls (`~/pg_
 the only changed path is `blob:$.ingredients[*].standardization_note`; the updated audit finds 0 dropped claims vs 329 on
 main. Flutter lib/ has no reader of this field. Open: DSLD row text on 1627 guarana says "3% ginsenosides" (likely a DSLD
 transcription error, shown as recorded).
+
+## October 20 — INGR_TART_CHERRY record corrections (PR205, claude/ingr-tart-cherry-evidence)
+
+Class: curated clinical data (description, identifier, references); no intended score change. Owner:
+`backed_clinical_studies.json::INGR_TART_CHERRY`. Content-verified: PMID 35790450 is a null 30-day RCT (not recovery
+review evidence); UNII BUC5I9595W (GSRS "CHERRY", mixture) → 1L29G6428X (SOUR CHERRY); PMID 33440334 (recovery
+systematic review and meta-analysis) added to references; PMID 40964149 graded systematic_review. **Deferred:** renaming
+`standard_name` to "Tart Cherry" (option A) — measured +0.7 to +2.9 Evidence on 12 products whose tart cherry rows are
+non-material, undosed blend members, because direct clinical matches earn ingredient_points without a materiality check.
+Re-apply "Tart Cherry" after that Evidence defect (its own task) lands.
