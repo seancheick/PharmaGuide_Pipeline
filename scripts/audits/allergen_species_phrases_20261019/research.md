@@ -60,7 +60,9 @@ them; "menhaden" statements already name other species). "highly refined" (D.9) 
 PG_SUB_C29FA… has none) plus 400 seeded controls from PR #176's route cohort; `snapshot --full
 --blob` base origin/main 941d273d3 vs candidate e8f45ac4d.
 
-- 138 records changed (106 affected + 32 whose existing fish hit only takes the corrected note).
+- 138 records changed: the 106 affected; 31 whose existing fish hit only takes the corrected note;
+  297629, whose soy hit moves from its facility statement to its own "may contain traces of soy"
+  (higher precedence, same label).
   Allergen ids gained match the corpus re-check exactly (fish 46 without the submission,
   crustaceans 18, milk 23, soy 8, eggs 5, wheat 2, tree nuts 2, oats 1, peanuts 1, molluscs 1,
   sulfites 1); lost: the 6 false wheat/soy flags above. No product_status, product_status_detail,
