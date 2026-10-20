@@ -12974,19 +12974,36 @@ class SupplementEnricherV3:
                 )
             return
 
-        # CRITICAL: Check for negation patterns FIRST - skip entire statement if negated
-        # These statements list allergens the product is FREE FROM, not containing
+        # CRITICAL: a negator declares what the product is FREE FROM. Everything
+        # from the first negator on is dropped, and only what precedes it is
+        # read: "Contains milk and doesn't contain gluten" still declares milk.
         negation_patterns = [
-            r'\bcontains?(?:\s*:\s*|\s+)no\b\s*:?\s*',  # Contains No: / Contains: no
-            r'does\s+not\s+contain',        # "Does not contain milk"
+            r'\bcontains?(?:\s*:\s*|\s+)(?:no|none)\b\s*:?\s*',  # Contains No: / Contains none of
+            r"\b(?:does|do)(?:\s+not|n'?t)\s+contains?",  # "Does not contain milk", "doesn't contains"
+            r'\bnone\s+of\b',               # "... and none of the following: wheat"
             r'free\s+(?:from|of)\s+',       # "Free from milk"
             r'without\s+',                  # "Without milk"
             r'no\s+added\s+',               # "No added milk"
         ]
-        for neg_pattern in negation_patterns:
-            if re.search(neg_pattern, text_lower):
-                self.logger.debug(f"Skipping negated allergen statement: {text[:80]}...")
-                return  # Skip this entire statement - it's declaring what product is FREE FROM
+        negator_starts = [
+            match.start()
+            for neg_pattern in negation_patterns
+            for match in [re.search(neg_pattern, text_lower)]
+            if match
+        ]
+        if negator_starts:
+            self.logger.debug(f"Dropping negated allergen text: {text[:80]}...")
+            text_lower = text_lower[:min(negator_starts)].strip()
+            if not text_lower:
+                return
+
+        # Only a clause that opens with the declaration ("Contains: ...",
+        # "Allergens: May contain ...") may name a source by phrase; prose such
+        # as "krill oil contains astaxanthin ..." matches only exact aliases.
+        declares = bool(re.match(
+            r'^\W*(?:allerg(?:en|y)s?(?:\s+information)?\s*:\s*)?(?:contains|may\s+contain)\b',
+            text_lower,
+        ))
 
         # Pattern 1: "Contains X" / "Contains: X, Y"
         contains_patterns = [
@@ -12998,7 +13015,7 @@ class SupplementEnricherV3:
             if match:
                 allergen_text = match.group(1)
                 self._extract_allergens_from_text(allergen_text, allergen_lookup, found,
-                                                   "contains", source, text)
+                                                   "contains", source, text, by_phrase=declares)
 
         # Pattern 2: "May contain X"
         may_contain_patterns = [
@@ -13010,7 +13027,7 @@ class SupplementEnricherV3:
             if match:
                 allergen_text = match.group(1)
                 self._extract_allergens_from_text(allergen_text, allergen_lookup, found,
-                                                   "may_contain", source, text)
+                                                   "may_contain", source, text, by_phrase=declares)
 
         # Pattern 3: Facility warnings
         facility_patterns = [
@@ -13023,22 +13040,41 @@ class SupplementEnricherV3:
             if match:
                 allergen_text = match.group(1)
                 self._extract_allergens_from_text(allergen_text, allergen_lookup, found,
-                                                   "facility_warning", source, text)
+                                                   "facility_warning", source, text, by_phrase=True)
 
     def _extract_allergens_from_text(self, text: str, allergen_lookup: Dict, found: List[Dict],
-                                      presence_type: str, source: str, evidence: str) -> None:
+                                      presence_type: str, source: str, evidence: str,
+                                      by_phrase: bool = False) -> None:
         """Extract individual allergens from a comma/and-separated text."""
         # Split on comma, "and", "&"
         parts = re.split(r'[,&]|\band\b', text.lower())
+        allergen_list = self.databases.get('allergens', {}).get('allergens', [])
+        phrase_patterns = self._allergen_phrase_patterns(allergen_list)
 
         for part in parts:
             part = part.strip()
             if not part:
                 continue
 
-            # Check if this matches any allergen
+            # An exact alias, else every entry the part names as a whole word
+            # ("sardines", "crustaceans (krill)"), with the same vetoes and
+            # negation as ingredient rows.
             if part in allergen_lookup:
-                allergen = allergen_lookup[part]
+                matched = [allergen_lookup[part]]
+            elif not by_phrase:
+                matched = []
+            else:
+                matched = [
+                    allergen
+                    for allergen, phrase_pattern in zip(allergen_list, phrase_patterns)
+                    if phrase_pattern and self._allergen_label_text_match(
+                        phrase_pattern,
+                        (allergen.get('match_rules') or {}).get('negative_match_terms', []),
+                        part,
+                        [],
+                    )
+                ]
+            for allergen in matched:
                 found.append({
                     "allergen_id": allergen.get('id', ''),
                     "allergen_name": allergen.get('standard_name', ''),
@@ -13055,7 +13091,13 @@ class SupplementEnricherV3:
                 })
 
     def _allergen_phrase_patterns(self, allergen_list: List[Dict]) -> List[Optional[re.Pattern]]:
-        """One whole-word alias pattern per allergen entry, built once per list."""
+        """One whole-word pattern per allergen entry, built once per list.
+
+        Besides the aliases it carries match_rules.phrase_match_terms: label
+        words that name the source (fish species such as "cod", "krill") but
+        are not identity aliases, so the cleaner's lookup and IQM routing
+        ("Cod Liver Oil" -> cod_liver_oil) stay unchanged.
+        """
         cached = getattr(self, "_allergen_phrase_pattern_cache", None)
         if cached is not None and cached[0] is allergen_list:
             return cached[1]
@@ -13063,7 +13105,11 @@ class SupplementEnricherV3:
         for allergen in allergen_list:
             terms = {
                 safety_normalize_text(term)
-                for term in [allergen.get('standard_name', ''), *(allergen.get('aliases') or [])]
+                for term in [
+                    allergen.get('standard_name', ''),
+                    *(allergen.get('aliases') or []),
+                    *((allergen.get('match_rules') or {}).get('phrase_match_terms') or []),
+                ]
             }
             terms.discard("")
             patterns.append(re.compile(

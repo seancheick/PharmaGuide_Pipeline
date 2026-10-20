@@ -217,6 +217,7 @@ never be reintroduced. Final export rejects any non-v4 Stage-3 artifact.
 | **Claim alignment** | Descriptive overlap between label claims and reviewed outcomes. It contributes no clinical-evidence points and cannot change scientific identity, dose applicability, or study strength. |
 | **Strain allocation owner** | A source label container whose complete descendants are probiotic identities. Enrichment emits its stable row reference so Transparency can avoid charging twice for undisclosed strain allocation. Mixed or unresolved containers do not qualify; positional indexes are not ownership proof. |
 | **Clinical source of truth** | Primary regulatory or scientific evidence plus curated, tested local data. Generated reports are review queues, not authoritative data. |
+| **Allergen phrase match terms** | `allergens.json` `match_rules.phrase_match_terms`: label words that name an allergen source but are not identity aliases (fish species such as "cod", "tuna"; "krill"). The enricher matches them, like aliases, as whole words in an ingredient row's name or forms and in declaration-shaped "Contains"/"May contain"/facility statements; the cleaner never reads them, so IQM identity ("Cod Liver Oil" → `cod_liver_oil`) is unchanged. `match_rules.negative_match_terms` vetoes them the same way. |
 
 ## Submission extraction contracts
 

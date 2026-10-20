@@ -118,7 +118,9 @@ Primary key: `allergens` (array)
 |-------|------|----------|-------------|
 | `id` | string | YES | Unique ID (e.g., `ALLERGEN_MILK`) |
 | `standard_name` | string | YES | Canonical allergen name |
-| `aliases` | string[] | YES | Detection terms |
+| `aliases` | string[] | YES | Detection terms. Also identity aliases in the cleaner's lookup (allergen tier before IQM), so ingredient names that must keep IQM identity (fish oil, cod liver oil, krill oil) do not belong here |
+| `match_rules.phrase_match_terms` | string[] | NO | Label words that name the source but are not identity aliases (fish species such as `cod`, `tuna`; `krill`). Only the enricher reads them, as whole words in a row's name or forms and in declaration-shaped statements |
+| `match_rules.negative_match_terms` | string[] | NO | Vetoes for the enricher's phrase match. A term containing an alias or phrase term (`milk thistle`) cancels only the span it overlaps; any other term (`pollen`, `highly refined`) covers its own text and, from the row name, the row's forms |
 | `prevalence` | string | YES | Population prevalence level |
 | `severity_level` | string | YES | Clinical severity |
 | `regulatory_status` | string | YES | Regulatory classification |
