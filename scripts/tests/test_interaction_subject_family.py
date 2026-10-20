@@ -31,7 +31,7 @@ def test_every_family_id_and_member_is_a_live_iqm_identity():
 
 def test_every_family_is_declared_by_an_iqm_field():
     """A new family needs its IQM-declared group and an equality pin below."""
-    assert set(INTERACTION_SUBJECT_FAMILY.values()) == {"vitamin_k", "probiotics"}
+    assert set(INTERACTION_SUBJECT_FAMILY.values()) == {"vitamin_k", "probiotics", "fish_oil"}
 
 
 def test_vitamin_k_family_matches_iqm_nutrient_group():
@@ -55,3 +55,18 @@ def test_strain_tags_reach_the_generic_probiotic_subject():
     assert interaction_subject_ids("lactobacillus_rhamnosus") == ["lactobacillus_rhamnosus", "probiotics"]
     assert interaction_subject_ids("saccharomyces_boulardii") == ["saccharomyces_boulardii", "probiotics"]
     assert interaction_subject_ids("bacteriophages") == ["bacteriophages"]
+
+
+def test_epa_dha_oil_family_is_every_iqm_oil_that_contains_dha_or_epa():
+    """The rule on fish_oil rests on EPA and DHA: an oil whose IQM relationships
+    say it contains either answers to it (algal oil, krill oil)."""
+    expected = {
+        k for k, v in _entries().items()
+        if k != "fish_oil" and any(
+            r.get("type") == "contains" and r.get("target_id") in {"dha", "epa"}
+            for r in v.get("relationships") or []
+        )
+    }
+    actual = {m for m, f in INTERACTION_SUBJECT_FAMILY.items() if f == "fish_oil"}
+    assert actual == expected == {"algae_oil", "krill_oil"}
+    assert interaction_subject_ids("algae_oil") == ["algae_oil", "fish_oil"]

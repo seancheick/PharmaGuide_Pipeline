@@ -50,10 +50,13 @@ facility warning) keeps the validated claim and eligible evidence; 204624 (wheat
 ## Per-group free-from rule (audit of #187; final head f6d876855)
 
 **Rule.** `scoring_input_contract.free_from_claim_contradiction(group, hits, unparsed)` is the one
-decision for every free-from claim group (`FREE_FROM_CLAIM_ALLERGENS`: gluten, dairy, soy, nut,
-peanut, egg, shellfish, yeast). An own-group source hit gives `allergen_conflict`. An own-group
-cross-contact hit, or an unread may-contain sentence, gives `may_contain_warning`. Gluten counts
-wheat as a source and wheat, rye or barley as cross-contact (21 CFR 101.91(a)(1)). Readers:
+decision for every free-from claim group (`FREE_FROM_CLAIM_ALLERGENS`: gluten and
+gluten_certified → wheat, rye, barley; dairy → milk; soy; nut → tree nuts and peanuts; peanut;
+egg; shellfish → crustaceans and molluscs; sesame; yeast → none). An own-group source hit gives
+`allergen_conflict`. An own-group cross-contact hit, or an unread may-contain sentence, gives
+`may_contain_warning`. Gluten counts wheat, rye or barley as cross-contact (21 CFR 101.91(a)(1));
+a rye or barley *ingredient* counts as a source while
+`GLUTEN_GRAIN_INGREDIENT_CONTRADICTS_GLUTEN_FREE` is True (ledger D30). Readers:
 - the compliance gates (`dairy_free`, `soy_free`, `gluten_free` → core `is_gluten_free`, the app's
   Gluten-Free badge; barley/rye cross-contact now clears it);
 - the claim evidence (`evidence_based.allergen_free_claims`; dietary claims keep the global
@@ -120,3 +123,18 @@ identical counts):
   `claim_gluten_free_validated`; 274671 loses it.
 - 220 gain `claim_allergen_free_validated` (L1), 59 of them controls. Its only reader is the
   scorer's `claim_validations` metadata; no score moves from it.
+
+## Low cleanups after #187/#188 (2026-10-20)
+
+- A barley or rye **ingredient** (a source while `GLUTEN_GRAIN_INGREDIENT_CONTRADICTS_GLUTEN_FREE`)
+  is recorded as "gluten-free claim conflicts with a gluten-grain source", and its claim evidence as
+  `allergen_conflict:gluten grain detected`; "gluten-grain cross-contact" and "gluten/wheat
+  detected" were wrong for it.
+- The "< 20 ppm" exemption in the unread may-contain check covers only the qualifier clause; the
+  rest of the sentence is still read ("May contain traces of grains processed on shared lines
+  (tested below 20 ppm)" now voids the claim; 273865's qualifier alone does not).
+
+Replay `~/pg_quality/lucidbanach_freefromcleanup_20261020/` (the #187 cohort, 784 labels, main
+112bc904d vs the cleanup head): 2 records change, 297644 and 274671, in conflict wording and
+evidence label only; 0 score, status, badge or allergen-hit changes. The ppm guard has no trigger
+in this cohort.

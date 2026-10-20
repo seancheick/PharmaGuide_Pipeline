@@ -13017,6 +13017,13 @@ class SupplementEnricherV3:
         re.I,
     )
 
+    _PPM_QUALIFIER = re.compile(
+        r"\([^()]*\b(?:ppm|parts\s+per\s+million)\b[^()]*\)"
+        r"|\b(?:less\s+than|below|under|fewer\s+than)\s+\d+\s*(?:ppm|parts\s+per\s+million)\b(?:\s+(?:of\s+)?gluten)?"
+        r"|<\s*\d+\s*(?:ppm|parts\s+per\s+million)\b(?:\s+(?:of\s+)?gluten)?",
+        re.I,
+    )
+
     def _has_unparsed_may_contain(self, product: Dict) -> bool:
         """A "may contain"/"shared equipment" sentence with allergen wording that
         the parser reads no allergen from."""
@@ -13032,10 +13039,11 @@ class SupplementEnricherV3:
         for text in texts:
             for sentence in re.split(r'(?<=[.!?;])\s+|[\r\n\t]+', text):
                 # "(may contain trace amounts less than 20 ppm)" qualifies a
-                # gluten-free claim (21 CFR 101.91); it names no allergen.
+                # gluten-free claim (21 CFR 101.91); it names no allergen. Only
+                # that clause is set aside; the rest of the sentence is read.
+                sentence = self._PPM_QUALIFIER.sub(' ', sentence)
                 if (re.search(r'may\s+contain|shared\s+equipment', sentence, re.I)
-                        and self._UNRESOLVED_ALLERGEN_WORDING.search(sentence)
-                        and not re.search(r'\bppm\b|parts\s+per\s+million', sentence, re.I)):
+                        and self._UNRESOLVED_ALLERGEN_WORDING.search(sentence)):
                     parsed: List[Dict] = []
                     self._parse_allergen_statement(sentence, allergen_lookup, parsed, "probe")
                     if not parsed:
@@ -13514,10 +13522,14 @@ class SupplementEnricherV3:
             return free_from_claim_contradiction(group, detected_allergens, unread_may_contain) is not None
 
         def _conflict_message(group: str, detected: str) -> str:
-            if free_from_claim_contradiction(group, detected_allergens) is None:
+            contradiction = free_from_claim_contradiction(group, detected_allergens)
+            if contradiction is None:
                 return UNREAD_MAY_CONTAIN_CONFLICT
             if group != 'gluten' or _allergen_in_detected('wheat', 'gluten'):
                 return detected
+            # Barley or rye: an ingredient is a source, a warning is cross-contact.
+            if contradiction == 'allergen_conflict':
+                return "gluten-free claim conflicts with a gluten-grain source"
             return "gluten-free claim conflicts with gluten-grain cross-contact"
 
         # Initial conflict pass (Stage-1-only). Stays here so the
@@ -13628,6 +13640,8 @@ class SupplementEnricherV3:
             evidence['score_eligible'] = False
             if contradiction == 'allergen_conflict':
                 label = evidence_conflict_labels.get(group, f'{group} detected')
+                if group in ('gluten', 'gluten_certified') and not _allergen_in_detected('wheat', 'gluten'):
+                    label = 'gluten grain detected'  # barley or rye, not wheat
                 evidence['ineligibility_reason'] = f'allergen_conflict:{label}'
                 evidence['proximity_conflicts'].append(label)
             else:
