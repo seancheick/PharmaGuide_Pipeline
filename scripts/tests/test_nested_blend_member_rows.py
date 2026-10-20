@@ -426,7 +426,55 @@ def test_comma_joined_sub_blend_without_forms_keeps_its_members(normalizer):
         # The sub-blend's own printed total bounds its members; no member amount is invented.
         assert row["parentBlendMass"] == 200.0
         assert row["quantity"] in (0, 0.0, None)
+        assert row["cleaner_row_role"] == "nested_display_only"
+    # The sub-blend itself is a header carrying its printed total, never a scored active.
+    header = actives["ingredientRows[0].nestedRows[1]"]
+    assert header["name"] == sub_blend
+    assert header["cleaner_row_role"] == "blend_header_total"
+    assert (header["quantity"], header["unit"]) == (200.0, "mg")
     assert actives["ingredientRows[0].nestedRows[0]"]["quantity"] == 200.0
+
+
+def _fish_oil_comma_total_without_forms(members):
+    """A "DHA, EPA" total that lists members as rows and declares no forms (latent shape)."""
+    return {
+        "id": 259484, "fullName": "Omega-3", "brandName": "Test",
+        "servingSizes": [{"order": 1, "minQuantity": 1, "maxQuantity": 1,
+                          "minDailyServings": 1, "maxDailyServings": 1, "unit": "Softgel(s)"}],
+        "ingredientRows": [
+            _row("Fish Oil", "fat", "Fish Oil", 4.5, "Gram(s)", 7, [
+                _row("DHA, EPA", "blend", "Blend", 2, "Gram(s)", 8, members),
+            ]),
+        ],
+        "otheringredients": {"text": None, "ingredients": []},
+    }
+
+
+def test_comma_total_whose_members_all_print_amounts_is_still_lifted(normalizer):
+    """Without forms, dosed members still replace the total (259484 lift); no second active."""
+    cleaned = normalizer.normalize_product(_fish_oil_comma_total_without_forms([
+        _row("Eicosapentaenoic Acid", "fatty acid", "EPA (Eicosapentaenoic Acid)", 1.5, "Gram(s)", 9),
+        _row("Docosahexaenoic Acid", "fatty acid", "DHA (Docosahexaenoic Acid)", 500, "mg", 10),
+    ]))
+    actives = _actives_by_path(cleaned)
+    doses = {row.get("canonical_id"): (row.get("quantity"), row.get("unit")) for row in actives.values()}
+    assert doses.get("epa") == (1.5, "Gram(s)") and doses.get("dha") == (500.0, "mg")
+    assert "DHA, EPA" not in {row["name"] for row in actives.values()}
+
+
+def test_comma_epa_dha_total_with_undosed_members_is_a_header_not_a_second_fish_oil(normalizer):
+    cleaned = normalizer.normalize_product(_fish_oil_comma_total_without_forms([
+        _row("Eicosapentaenoic Acid", "fatty acid", "EPA (Eicosapentaenoic Acid)", 0, "NP", 9),
+        _row("Docosahexaenoic Acid", "fatty acid", "DHA (Docosahexaenoic Acid)", 0, "NP", 10),
+    ]))
+    actives = _actives_by_path(cleaned)
+    header = actives["ingredientRows[0].nestedRows[0]"]
+    assert header["cleaner_row_role"] == "blend_header_total"
+    scored = [row for row in actives.values() if row.get("cleaner_row_role") == "active_scorable"]
+    assert [row["name"] for row in scored] == ["Fish Oil"], "the 2 g total is not a second fish oil"
+    for path in ("ingredientRows[0].nestedRows[0].nestedRows[0]", "ingredientRows[0].nestedRows[0].nestedRows[1]"):
+        assert actives[path]["cleaner_row_role"] == "nested_display_only"
+        assert actives[path]["parentBlendMass"] == 2.0
 
 
 def test_comma_joined_sub_blend_members_reach_their_interaction_rules(normalizer, enricher):

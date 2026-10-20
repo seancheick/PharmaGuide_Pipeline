@@ -6924,12 +6924,19 @@ class EnhancedDSLDNormalizer:
         cat = (nested_ing.get("category") or "").strip().lower()
 
         # Pattern 2: DSLD-tagged blend leaf with comma-joined marker names.
-        # A comma row that lists its members as rows and declares no forms
-        # is a sub-blend listing ("Valerian root powder, Lemon Balm extract
-        # and Passion Flower herb powder" 200 mg, DSLD 27312), not a name
-        # token: nothing else would describe its members, so it stays a blend.
+        # A comma row that lists its members as rows, declares no forms and
+        # prints no amount for some member is a sub-blend listing ("Valerian
+        # root powder, Lemon Balm extract and Passion Flower herb powder"
+        # 200 mg, DSLD 27312), not a name token: nothing else would describe
+        # those members, so it stays a blend. Members that all print amounts
+        # are lifted in its place (_lift_decomposition_members, 259484).
         if cat == "blend" and "," in name:
-            return not (nested_ing.get("nestedRows") and not nested_ing.get("forms"))
+            members = [m for m in nested_ing.get("nestedRows") or [] if isinstance(m, dict)]
+            return not (
+                members
+                and not nested_ing.get("forms")
+                and not all(cls._extract_primary_mass_unit(m)[0] for m in members)
+            )
 
         # Pattern 1: counter-ion descriptor leaf with no own dose. A member of
         # a DSLD blend is its own ingredient ("Potassium Chloride" in a Water
@@ -6968,8 +6975,8 @@ class EnhancedDSLDNormalizer:
         them; skipping the total must not drop them. Only members that each
         print their own amount are lifted: members without amounts stay
         described by the total's forms, as before (lifting them too counted
-        EPA/DHA twice, 231416). A comma row with members and no forms is not a
-        decomposition row at all (see _is_chemical_decomposition_leaf). A
+        EPA/DHA twice, 231416). A comma row with an undosed member and no forms
+        is not a decomposition row at all (see _is_chemical_decomposition_leaf). A
         decomposition row with no members is left to the caller's leaf handling.
         """
         lifted: List[Any] = []
@@ -11826,11 +11833,13 @@ class EnhancedDSLDNormalizer:
             and quantity is not None
             and str(unit or "").strip().upper() != "NP"
             and _states_only_epa_and_dha(ing.get("name"))
+            and not ing.get("nestedRows")
         )
         if is_disclosed_epa_dha_child:
             # DSLD sometimes copies the parent's ``category=blend`` onto a
             # quantified EPA/DHA child (Up & Up 74302).  The child is a real
             # disclosed marker dose; only the parent owns the blend total.
+            # A row that lists its own members is their total, not a dose.
             return False
         # The flatten pass preserves a DSLD blend parent for label fidelity and
         # marks it after extracting its children. At that point the parent is a
