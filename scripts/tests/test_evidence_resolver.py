@@ -402,10 +402,14 @@ def test_false_transfer_canary_pumpkin_food_vs_extract():
 
 
 def test_false_transfer_canary_broccoli_food_vs_extract():
-    """Crude broccoli vegetable powder cannot inherit standardized sulforaphane sprout extract trials."""
+    """Crude broccoli vegetable powder earns no reviewed-evidence credit.
+
+    The broccoli record's only citation (PMID 30372361) is a short narrative review, not a
+    sprout-extract trial (literature records review 2026-10-20), so it reads review pending.
+    """
     res = er.resolve_evidence_for_canonical("broccoli", dose_value=500.0, dose_unit="mg")
-    assert res.disposition == EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value
-    assert "literature_applicability_unestablished" in res.blocking_reasons
+    assert res.disposition == EvidenceDisposition.LITERATURE_RESOLUTION_REQUIRED.value
+    assert res.blocking_reasons == ["literature_verification_pending"]
 
 
 def test_tribulus_null_unfavorable():
@@ -487,10 +491,11 @@ def test_material_context_preserves_specific_disclosure():
         "amount": 500,
         "unit": "mg",
     })
-    assert res_crude_broccoli.disposition == EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value
-    assert res_crude_broccoli.applicability_status == "crude_whole_food_powder_blocked"
+    # The broccoli literature record cites no verified human trial (only a narrative review),
+    # so crude broccoli reads review pending (literature records review 2026-10-20).
+    assert res_crude_broccoli.disposition == EvidenceDisposition.LITERATURE_RESOLUTION_REQUIRED.value
 
-    # 2. Standardized broccoli sprout extract with sulforaphane matches clinical extract
+    # 2. A standardized sulforaphane sprout extract matches its own reviewed clinical record
     res_std_broccoli = er.resolve_evidence_for_row({
         "canonical_id": "broccoli",
         "name": "Broccoli Sprout Extract",
@@ -499,6 +504,7 @@ def test_material_context_preserves_specific_disclosure():
         "unit": "mg",
     })
     assert res_std_broccoli.disposition == EvidenceDisposition.RESOLVED_BY_REVIEWED_CLINICAL_EVIDENCE.value
+    assert res_std_broccoli.matched_owners == ["backed_clinical_studies"]
 
     # 3. Crude pumpkin seed powder blocked from purified seed oil trials
     res_crude_pumpkin = er.resolve_evidence_for_row({
@@ -663,7 +669,9 @@ def test_phase4_batch4_standardized_clinical_canaries():
     assert peppermint.disposition == EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value
     assert peppermint.points_eligible is False
     assert "24100754" in peppermint.owner_facts["literature_evidence"]["pmids"]
-    clinical_cids = ["cranberry_fruit", "butchers_broom_root", "horse_chestnut_seed", "boswellia_serrata_resin"]
+    # boswellia_serrata_resin cites only a rat/in-vitro study: review pending
+    # (test_literature_records_review_20261020.py).
+    clinical_cids = ["cranberry_fruit", "butchers_broom_root", "horse_chestnut_seed"]
     for cid in clinical_cids:
         res = er.resolve_evidence_for_canonical(cid)
         assert res.disposition == EvidenceDisposition.RESOLVED_BY_REVIEWED_CLINICAL_EVIDENCE.value, (
@@ -744,12 +752,16 @@ def test_phase4_batch5_food_matrix_and_crude_materials():
 
 def test_phase4_batch5_standardized_clinical_botanicals():
     """Batch 5 standardized clinical botanicals and bioactives."""
+    # Removed by the literature records review (2026-10-20,
+    # test_literature_records_review_20261020.py): superoxide_dismutase, schisandra and
+    # perilla_oil cite no human trial (review pending); shiitake_mushroom (whole food),
+    # black_garlic (aged garlic extract), olive_fruit_extract (leaf extract) and fucoxanthin
+    # (combination) were studied as a different preparation.
     botanicals = [
-        "citrus_bergamot", "coleus_forskohlii_root", "african_mango", "superoxide_dismutase",
-        "eps_7630", "english_ivy", "turkey_tail", "shiitake_mushroom", "diosmin",
-        "puerarin", "ashwagandha_root", "green_tea_leaf", "schisandra", "arjuna",
-        "dgl_deglycyrrhizinated_licorice", "mastic_gum", "perilla_oil", "undecylenic_acid",
-        "black_garlic", "cocoa", "olive_fruit_extract", "fucoxanthin"
+        "citrus_bergamot", "coleus_forskohlii_root", "african_mango",
+        "eps_7630", "english_ivy", "turkey_tail", "diosmin",
+        "puerarin", "ashwagandha_root", "green_tea_leaf", "arjuna",
+        "dgl_deglycyrrhizinated_licorice", "mastic_gum", "undecylenic_acid", "cocoa",
     ]
     for cid in botanicals:
         res = er.resolve_evidence_for_canonical(cid)

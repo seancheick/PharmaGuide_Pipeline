@@ -6,7 +6,7 @@
     "last_updated": "2026-10-20",
     "total_entries": 808,
     "verification_pipeline": "scripts/api_audit/verify_literature_records.py",
-    "verified_studies_count": 279,
+    "verified_studies_count": 280,
     "verified_records_count": 808
   },
   "literature_evidence_records": [
@@ -352,9 +352,9 @@
           "title": "Branched-Chain Amino Acid Ingestion Stimulates Muscle Myofibrillar Protein Synthesis following Resistance Exercise in Humans.",
           "study_type": "randomized_controlled_trial",
           "sample_size": 10,
-          "dose": "5.6 g BCAA mixture (containing 1.4 g isoleucine)",
-          "duration": "acute post-exercise",
-          "outcome": "muscle myofibrillar protein synthesis stimulation (22% increase)",
+          "dose": "5.6 g BCAA drink containing 1.4 g isoleucine (2.6 g leucine, 1.6 g valine)",
+          "duration": "single post-exercise dose",
+          "outcome": "myofibrillar protein synthesis 22% higher than placebo over 4 h after exercise",
           "effect_direction": "positive_weak",
           "verification_provenance": {
             "pmid_verified": true,
@@ -368,17 +368,16 @@
           }
         }
       ],
-      "effect_direction": "mixed",
-      "population_context": "Adult athletes / active individuals (studied predominantly in BCAA 2:1:1 complex)",
+      "effect_direction": "applicability_unestablished",
+      "population_context": "Ten resistance-trained young men after resistance exercise (BCAA-only drink)",
       "studied_dose_exposure": {
         "values": [
-          1000,
-          1500
+          1400
         ],
         "unit": "mg",
-        "basis": "daily_intake"
+        "basis": "acute_challenge"
       },
-      "applicability_decision": "Applicable as constituent of balanced BCAA matrix (leucine:isoleucine:valine); isolated monotherapy unestablished",
+      "applicability_decision": "The cited trial gave one 5.6 g BCAA drink (2.6 g leucine, 1.4 g isoleucine, 1.6 g valine) after resistance exercise and measured acute myofibrillar protein synthesis. A mixed-BCAA acute surrogate result does not establish standalone L-isoleucine efficacy or a daily dose.",
       "verification_result": "authoritative_pubmed_verified",
       "verification_provenance": {
         "verified_by": "scripts/api_audit/verify_literature_records.py",
@@ -402,9 +401,9 @@
           "title": "Branched-Chain Amino Acid Ingestion Stimulates Muscle Myofibrillar Protein Synthesis following Resistance Exercise in Humans.",
           "study_type": "randomized_controlled_trial",
           "sample_size": 10,
-          "dose": "5.6 g BCAA mixture (containing 1.4 g valine)",
-          "duration": "acute post-exercise",
-          "outcome": "muscle myofibrillar protein synthesis stimulation (22% increase)",
+          "dose": "5.6 g BCAA drink containing 1.6 g valine (2.6 g leucine, 1.4 g isoleucine)",
+          "duration": "single post-exercise dose",
+          "outcome": "myofibrillar protein synthesis 22% higher than placebo over 4 h after exercise",
           "effect_direction": "positive_weak",
           "verification_provenance": {
             "pmid_verified": true,
@@ -418,17 +417,16 @@
           }
         }
       ],
-      "effect_direction": "mixed",
-      "population_context": "Adult athletes / active individuals",
+      "effect_direction": "applicability_unestablished",
+      "population_context": "Ten resistance-trained young men after resistance exercise (BCAA-only drink)",
       "studied_dose_exposure": {
         "values": [
-          1000,
-          1500
+          1600
         ],
         "unit": "mg",
-        "basis": "daily_intake"
+        "basis": "acute_challenge"
       },
-      "applicability_decision": "Applicable as constituent of balanced BCAA matrix (leucine:isoleucine:valine); isolated monotherapy unestablished",
+      "applicability_decision": "The cited trial gave one 5.6 g BCAA drink (2.6 g leucine, 1.4 g isoleucine, 1.6 g valine) after resistance exercise and measured acute myofibrillar protein synthesis. A mixed-BCAA acute surrogate result does not establish standalone L-valine efficacy or a daily dose.",
       "verification_result": "authoritative_pubmed_verified",
       "verification_provenance": {
         "verified_by": "scripts/api_audit/verify_literature_records.py",
@@ -695,7 +693,7 @@
     },
     {
       "canonical_id": "pomegranate",
-      "material_form": "Punica granatum fruit extract / standardized punicalagins",
+      "material_form": "Pomegranate in different forms across 22 RCTs (the abstract singles out juice)",
       "search_query": "(\"Pomegranate\"[tiab] OR \"Punica granatum\"[tiab]) AND (blood pressure[tiab] OR cardiovascular[tiab]) AND (randomized controlled trial[pt] OR systematic review[pt]) NOT (animals[mh] NOT humans[mh])",
       "search_date": "2026-09-17",
       "databases_searched": [
@@ -707,7 +705,6 @@
           "pmid": "38410857",
           "title": "The effects of pomegranate consumption on blood pressure in adults: A systematic review and meta-analysis.",
           "design": "systematic_review_meta",
-          "sample_size": 619,
           "primary_endpoint": "systolic and diastolic blood pressure",
           "effect": "positive_weak",
           "verification_provenance": {
@@ -722,17 +719,10 @@
           }
         }
       ],
-      "effect_direction": "positive_weak",
-      "population_context": "Adults with prehypertension or stage 1 hypertension",
-      "studied_dose_exposure": {
-        "values": [
-          500,
-          1000
-        ],
-        "unit": "mg",
-        "basis": "standardized_extract_daily"
-      },
-      "applicability_decision": "Dose applicable at >= 500 mg standardized extract (or ~200 mL juice) for systolic BP reduction",
+      "effect_direction": "applicability_unestablished",
+      "population_context": "Adults in 22 RCTs; larger systolic reductions when baseline SBP > 130 mmHg",
+      "studied_dose_exposure": {},
+      "applicability_decision": "The cited meta-analysis pooled 22 RCTs of pomegranate in different forms and found lower SBP and DBP with high heterogeneity; the authors attribute the pooled effect mainly to juice. Mixed-form and juice evidence does not establish a standardized extract or punicalagin dose without bioequivalence.",
       "verification_result": "authoritative_pubmed_verified",
       "verification_provenance": {
         "verified_by": "scripts/api_audit/verify_literature_records.py",
@@ -1619,42 +1609,16 @@
         "Cochrane Library"
       ],
       "records_screened": 38,
-      "qualifying_human_studies": [
-        {
-          "pmid": "20091069",
-          "title": "Effect of beta-alanine supplementation on muscle carnosine concentrations and exercise performance.",
-          "study_type": "randomized_controlled_trial",
-          "sample_size": 20,
-          "dose": "1000 mg/day",
-          "duration": "8 weeks",
-          "outcome": "muscle carnosine loading and buffering capacity",
-          "effect_direction": "positive_weak",
-          "verification_provenance": {
-            "pmid_verified": true,
-            "authoritative_live_title": "Effect of beta-alanine supplementation on muscle carnosine concentrations and exercise performance.",
-            "human_subjects_verified": true,
-            "topic_match_verified": true,
-            "retracted": false,
-            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/20091069/",
-            "verified_at": "2026-09-21T07:39:42.986936+00:00",
-            "abstract_evidence_quote": "ADP, Pi and H(+)) can have deleterious effects on skeletal muscle function and force generation, thus contributing to fatigue."
-          }
-        }
-      ],
-      "effect_direction": "positive_weak",
-      "population_context": "healthy adults",
-      "studied_dose_exposure": {
-        "values": [
-          1000
-        ],
-        "unit": "mg"
-      },
-      "applicability_decision": "Applicable clinical human trials present at >= 1000 mg/day for muscle buffering capacity.",
-      "verification_result": "authoritative_pubmed_verified",
+      "qualifying_human_studies": [],
+      "effect_direction": "applicability_unestablished",
+      "population_context": "Not established: no verified human L-carnosine trial is cited",
+      "studied_dose_exposure": {},
+      "applicability_decision": "No verified human L-carnosine trial is recorded. The previously cited PMID 20091069 is a review of beta-alanine supplementation, not an L-carnosine trial, and the recorded dose, duration and sample size were not in it. Evidence review pending.",
+      "verification_result": "verification_failure_unresolved",
       "verification_provenance": {
         "verified_by": "scripts/api_audit/verify_literature_records.py",
         "verified_at": "2026-09-21T07:39:42.986936+00:00",
-        "all_pmids_verified": true,
+        "all_pmids_verified": false,
         "retractions_found": false
       }
     },
@@ -1721,12 +1685,8 @@
         {
           "pmid": "30372361",
           "title": "Isothiocyanate from Broccoli, Sulforaphane, and Its Properties.",
-          "study_type": "systematic_review",
-          "sample_size": 250,
-          "dose": "100 umol sulforaphane",
-          "duration": "multi-week",
-          "outcome": "phase 2 enzyme induction from standardized sprout extract",
-          "effect_direction": "positive_weak",
+          "study_type": "narrative_review",
+          "outcome": "short narrative review of sulforaphane properties; no pooled human dose or effect estimate",
           "verification_provenance": {
             "pmid_verified": true,
             "authoritative_live_title": "Isothiocyanate from Broccoli, Sulforaphane, and Its Properties.",
@@ -1736,23 +1696,19 @@
             "verified_source": "https://pubmed.ncbi.nlm.nih.gov/30372361/",
             "verified_at": "2026-09-21T07:39:42.986936+00:00",
             "abstract_evidence_quote": "It has been shown that sulforaphane may protect against various types of cancer, may also decrease the risk of cardiovascular disease, and help in autism and osteoporosis."
-          }
+          },
+          "scoring_eligible": false
         }
       ],
       "effect_direction": "applicability_unestablished",
-      "population_context": "healthy adults",
-      "studied_dose_exposure": {
-        "values": [
-          500
-        ],
-        "unit": "mg"
-      },
-      "applicability_decision": "Blocked from material form transfer. Standardized high-glucoraphanin/sulforaphane sprout extract trials cannot transfer to crude whole broccoli vegetable powder.",
-      "verification_result": "authoritative_pubmed_verified",
+      "population_context": "Not established: the only cited source is a narrative review",
+      "studied_dose_exposure": {},
+      "applicability_decision": "Blocked: the only cited source (PMID 30372361) is a short narrative review of sulforaphane, not a human trial; it establishes no dose or efficacy, and crude whole broccoli powder cannot inherit sprout or sulforaphane research. Evidence review pending.",
+      "verification_result": "verification_failure_unresolved",
       "verification_provenance": {
         "verified_by": "scripts/api_audit/verify_literature_records.py",
         "verified_at": "2026-09-21T07:39:42.986936+00:00",
-        "all_pmids_verified": true,
+        "all_pmids_verified": false,
         "retractions_found": false
       }
     },
@@ -1766,42 +1722,16 @@
         "Cochrane Library"
       ],
       "records_screened": 25,
-      "qualifying_human_studies": [
-        {
-          "pmid": "37629744",
-          "title": "Pharmacological and Non-Pharmacological Treatments for Depression in Parkinson's Disease: An Updated Review.",
-          "study_type": "open_label_trial",
-          "sample_size": 40,
-          "dose": "100-500 mg/day",
-          "duration": "15 days",
-          "outcome": "exploratory monoamine findings unconfirmed in modern placebo-controlled RCTs",
-          "effect_direction": "mixed",
-          "verification_provenance": {
-            "pmid_verified": true,
-            "authoritative_live_title": "Pharmacological and Non-Pharmacological Treatments for Depression in Parkinson's Disease: An Updated Review.",
-            "human_subjects_verified": true,
-            "topic_match_verified": false,
-            "retracted": false,
-            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/37629744/",
-            "verified_at": "2026-09-21T07:39:42.986936+00:00",
-            "abstract_evidence_quote": "Available pharmacological therapeutic options for depression in PD mainly include selective serotonin reuptake inhibitors, serotonin and norepinephrine reuptake inhibitors, and tricyclic antidepressants; meanwhile, agents acting on dopaminergic pathways used for motor symptoms, such as levodopa, dopaminergic agonists, and monoamine oxidase B (MAO-B) inhibitors, may also provide beneficial antidepressant effects."
-          }
-        }
-      ],
-      "effect_direction": "mixed",
-      "population_context": "adults with depressive symptoms",
-      "studied_dose_exposure": {
-        "values": [
-          500
-        ],
-        "unit": "mg"
-      },
-      "applicability_decision": "Essential amino acid under DRI authority; therapeutic monoamine precursor efficacy unconfirmed in modern double-blind RCTs.",
-      "verification_result": "authoritative_pubmed_verified",
+      "qualifying_human_studies": [],
+      "effect_direction": "applicability_unestablished",
+      "population_context": "Not established: no verified human L-phenylalanine trial is cited",
+      "studied_dose_exposure": {},
+      "applicability_decision": "Essential amino acid under DRI authority. No verified human L-phenylalanine trial is recorded: the previously cited PMID 37629744 is a review of depression treatments in Parkinson's disease, and the recorded open-label trial facts were not in it. Evidence review pending.",
+      "verification_result": "verification_failure_unresolved",
       "verification_provenance": {
         "verified_by": "scripts/api_audit/verify_literature_records.py",
         "verified_at": "2026-09-21T07:39:42.986936+00:00",
-        "all_pmids_verified": true,
+        "all_pmids_verified": false,
         "retractions_found": false
       }
     },
@@ -2002,7 +1932,7 @@
     },
     {
       "canonical_id": "ginger_extract",
-      "material_form": "Zingiber officinale standardized extract",
+      "material_form": "Combined Zingiber officinale + Alpinia galanga extract (EV.EXT 77) in one trial; ginger powder in the other",
       "search_query": "ginger extract knee osteoarthritis randomized controlled trial",
       "search_date": "2026-09-20",
       "databases_searched": [
@@ -2016,9 +1946,8 @@
           "title": "Effects of a ginger extract on knee pain in patients with osteoarthritis.",
           "study_type": "randomized_controlled_trial",
           "sample_size": 247,
-          "dose": "510 mg/day standardized extract",
           "duration": "6 weeks",
-          "outcome": "statistically significant reduction in knee pain on standing",
+          "outcome": "more responders with reduced knee pain on standing than placebo (63% vs 50%) with a combined Zingiber officinale + Alpinia galanga extract; more mild GI adverse events",
           "effect_direction": "positive_moderate",
           "verification_provenance": {
             "pmid_verified": true,
@@ -2036,9 +1965,9 @@
           "title": "Effect of ginger powder supplementation on nitric oxide and C-reactive protein in elderly knee osteoarthritis patients: A 12-week double-blind randomized placebo-controlled clinical trial.",
           "study_type": "randomized_controlled_trial",
           "sample_size": 120,
-          "dose": "1000 mg/day",
+          "dose": "1 g/day ginger powder (two 500 mg capsules)",
           "duration": "12 weeks",
-          "outcome": "significant reduction in pain and inflammatory biomarkers",
+          "outcome": "serum nitric oxide and hs-CRP fell more than with placebo after 12 weeks; pain was not an outcome in the abstract",
           "effect_direction": "positive_moderate",
           "verification_provenance": {
             "pmid_verified": true,
@@ -2052,15 +1981,10 @@
           }
         }
       ],
-      "effect_direction": "positive_moderate",
+      "effect_direction": "applicability_unestablished",
       "population_context": "adults with knee osteoarthritis",
-      "studied_dose_exposure": {
-        "values": [
-          500
-        ],
-        "unit": "mg"
-      },
-      "applicability_decision": "Applicable human clinical evidence established for standardized extract at >= 500 mg/day for joint comfort.",
+      "studied_dose_exposure": {},
+      "applicability_decision": "The knee-osteoarthritis RCT (247 evaluable patients, 6 weeks) used a combined extract of two ginger species, Zingiber officinale and Alpinia galanga (EV.EXT 77), taken twice daily; the second trial gave 1 g/day ginger powder and measured only nitric oxide and hs-CRP. Neither establishes standalone Zingiber officinale extract efficacy or a dose.",
       "verification_result": "authoritative_pubmed_verified",
       "verification_provenance": {
         "verified_by": "scripts/api_audit/verify_literature_records.py",
@@ -2071,7 +1995,7 @@
     },
     {
       "canonical_id": "l_tryptophan",
-      "material_form": "L-tryptophan",
+      "material_form": "Alpha-lactalbumin (tryptophan-rich whey protein), not free L-tryptophan",
       "search_query": "L-tryptophan sleep latency randomized controlled trial",
       "search_date": "2026-09-20",
       "databases_searched": [
@@ -2084,11 +2008,9 @@
           "pmid": "38185736",
           "title": "Alpha-lactalbumin and sleep: A systematic review.",
           "study_type": "systematic_review",
-          "sample_size": 350,
-          "dose": "1000-5000 mg/day",
-          "duration": "acute and short term",
-          "outcome": "consistent reduction in sleep onset latency",
-          "effect_direction": "positive_moderate",
+          "dose": "20-60 g alpha-lactalbumin, evening (<= 3.5 h before sleep)",
+          "outcome": "five of eight studies found a positive association between evening alpha-lactalbumin and sleep, mainly shorter sleep-onset latency",
+          "effect_direction": "positive_weak",
           "verification_provenance": {
             "pmid_verified": true,
             "authoritative_live_title": "Alpha-lactalbumin and sleep: A systematic review.",
@@ -2101,15 +2023,10 @@
           }
         }
       ],
-      "effect_direction": "positive_moderate",
-      "population_context": "individuals with mild insomnia / sleep onset delay",
-      "studied_dose_exposure": {
-        "values": [
-          1000
-        ],
-        "unit": "mg"
-      },
-      "applicability_decision": "Applicable human clinical evidence established at >= 1000 mg/day for sleep latency reduction.",
+      "effect_direction": "applicability_unestablished",
+      "population_context": "Athletes and healthy adults in eight alpha-lactalbumin sleep studies",
+      "studied_dose_exposure": {},
+      "applicability_decision": "The cited systematic review covers alpha-lactalbumin protein supplied at 20-60 g/day (eight studies; five reported a positive association with sleep, mainly shorter sleep-onset latency). Whole-protein evidence does not establish free L-tryptophan efficacy or a dose.",
       "verification_result": "authoritative_pubmed_verified",
       "verification_provenance": {
         "verified_by": "scripts/api_audit/verify_literature_records.py",
@@ -2494,12 +2411,8 @@
         {
           "pmid": "18515024",
           "title": "Pharmacology of Schisandra chinensis Bail.: an overview of Russian research and uses in medicine.",
-          "study_type": "systematic_review",
-          "sample_size": 500,
-          "dose": "500-1500 mg/day",
-          "duration": "multi-week",
-          "outcome": "physical working capacity and stress adaptation modulation",
-          "effect_direction": "positive_weak",
+          "study_type": "narrative_review",
+          "outcome": "narrative overview of Russian pharmacological and clinical research; no pooled human dose or effect estimate",
           "verification_provenance": {
             "pmid_verified": true,
             "authoritative_live_title": "Pharmacology of Schisandra chinensis Bail.: an overview of Russian research and uses in medicine.",
@@ -2509,23 +2422,19 @@
             "verified_source": "https://pubmed.ncbi.nlm.nih.gov/18515024/",
             "verified_at": "2026-09-21T07:39:42.986936+00:00",
             "abstract_evidence_quote": "Pharmacological studies on animals have shown that Schizandra increases physical working capacity and affords a stress-protective effect against a broad spectrum of harmf"
-          }
+          },
+          "scoring_eligible": false
         }
       ],
-      "effect_direction": "positive_weak",
-      "population_context": "adults under physical and mental stress",
-      "studied_dose_exposure": {
-        "values": [
-          500
-        ],
-        "unit": "mg"
-      },
-      "applicability_decision": "Adaptogenic physical work capacity modulation supported at >= 500 mg/day.",
-      "verification_result": "authoritative_pubmed_verified",
+      "effect_direction": "applicability_unestablished",
+      "population_context": "Not established: the only cited source is a narrative overview",
+      "studied_dose_exposure": {},
+      "applicability_decision": "No verified human Schisandra trial with a dose or outcome is recorded. The cited PMID 18515024 is a narrative overview of Russian research; it reports no sample size, dose or pooled effect. Evidence review pending.",
+      "verification_result": "verification_failure_unresolved",
       "verification_provenance": {
         "verified_by": "scripts/api_audit/verify_literature_records.py",
         "verified_at": "2026-09-21T07:39:42.986936+00:00",
-        "all_pmids_verified": true,
+        "all_pmids_verified": false,
         "retractions_found": false
       }
     },
@@ -3181,11 +3090,11 @@
         {
           "pmid": "21569436",
           "title": "Effects of Açai (Euterpe oleracea Mart.) berry preparation on metabolic parameters in a healthy overweight population: a pilot study.",
-          "study_type": "pilot_clinical_trial",
+          "study_type": "open_label_uncontrolled_pilot",
           "sample_size": 10,
-          "dose": "1000 mg extract equivalent",
+          "dose": "100 g acai pulp twice daily",
           "duration": "1 month",
-          "outcome": "reductions in fasting glucose and postprandial insulin increases",
+          "outcome": "fasting glucose, insulin and total cholesterol fell from baseline and the post-meal glucose rise was smaller; blood pressure, hs-CRP and exhaled NO did not change",
           "effect_direction": "positive_weak",
           "verification_provenance": {
             "pmid_verified": true,
@@ -3199,15 +3108,10 @@
           }
         }
       ],
-      "effect_direction": "positive_weak",
+      "effect_direction": "applicability_unestablished",
       "population_context": "overweight adults",
-      "studied_dose_exposure": {
-        "values": [
-          1000
-        ],
-        "unit": "mg"
-      },
-      "applicability_decision": "Preliminary antioxidant/metabolic pilot support present; large-scale RCT validation pending.",
+      "studied_dose_exposure": {},
+      "applicability_decision": "The only cited study is an open-label, uncontrolled 1-month pilot in 10 overweight adults who ate 100 g acai fruit pulp twice daily. Whole-fruit pulp evidence does not transfer to acai powder or extract without bioequivalence.",
       "verification_result": "authoritative_pubmed_verified",
       "verification_provenance": {
         "verified_by": "scripts/api_audit/verify_literature_records.py",
@@ -3267,7 +3171,7 @@
     },
     {
       "canonical_id": "cyanidin_3_glucoside",
-      "material_form": "purified cyanidin-3-glucoside (anthocyanin)",
+      "material_form": "Purified anthocyanin mixture (the abstract does not identify a single-compound cyanidin-3-glucoside preparation)",
       "search_query": "cyanidin-3-glucoside anthocyanin supplementation randomized trial human",
       "search_date": "2026-09-20",
       "databases_searched": [
@@ -3280,10 +3184,10 @@
           "pmid": "25833778",
           "title": "Purified anthocyanin supplementation reduces dyslipidemia, enhances antioxidant capacity, and prevents insulin resistance in diabetic patients.",
           "study_type": "randomized_controlled_trial",
-          "sample_size": 160,
-          "dose": "320 mg/day purified anthocyanins",
+          "sample_size": 58,
+          "dose": "160 mg purified anthocyanins twice daily (320 mg/day)",
           "duration": "24 weeks",
-          "outcome": "significant improvement in LDL/HDL ratio and cellular antioxidant status",
+          "outcome": "LDL-C and triglycerides fell, HDL-C rose, antioxidant capacity rose and fasting glucose and HOMA-IR fell versus placebo",
           "effect_direction": "positive_weak",
           "verification_provenance": {
             "pmid_verified": true,
@@ -3297,15 +3201,10 @@
           }
         }
       ],
-      "effect_direction": "positive_weak",
-      "population_context": "adults with metabolic/antioxidant risk",
-      "studied_dose_exposure": {
-        "values": [
-          100
-        ],
-        "unit": "mg"
-      },
-      "applicability_decision": "Cellular antioxidant capacity support established at >= 100 mg/day purified anthocyanins.",
+      "effect_direction": "applicability_unestablished",
+      "population_context": "Adults with type 2 diabetes",
+      "studied_dose_exposure": {},
+      "applicability_decision": "The cited 24-week RCT gave 160 mg purified anthocyanins twice daily to 58 adults with type 2 diabetes and improved lipids, antioxidant capacity and insulin resistance versus placebo. An anthocyanin mixture does not establish standalone cyanidin-3-glucoside efficacy or a dose.",
       "verification_result": "authoritative_pubmed_verified",
       "verification_provenance": {
         "verified_by": "scripts/api_audit/verify_literature_records.py",
@@ -3512,7 +3411,7 @@
     },
     {
       "canonical_id": "fennel",
-      "material_form": "Foeniculum vulgare standardized seed extract",
+      "material_form": "Fennel fruit essence (2%) oral drops",
       "search_query": "Foeniculum vulgare fennel dysmenorrhea randomized clinical trial",
       "search_date": "2026-09-20",
       "databases_searched": [
@@ -3524,11 +3423,11 @@
         {
           "pmid": "12566188",
           "title": "Comparison of fennel and mefenamic acid for the treatment of primary dysmenorrhea.",
-          "study_type": "randomized_controlled_trial",
-          "sample_size": 60,
-          "dose": "120 mg/day fennel seed extract",
-          "duration": "3 cycles",
-          "outcome": "significant reduction in dysmenorrhea pain severity comparable to mefenamic acid",
+          "study_type": "self_controlled_sequential_cycles",
+          "sample_size": 30,
+          "dose": "2% fennel fruit essence, 25 drops every 4 hours",
+          "duration": "one treated cycle (of three observed)",
+          "outcome": "pain relieved versus the untreated control cycle; mefenamic acid was more potent on days 2-3; 5 of 30 withdrew because of fennel's odour",
           "effect_direction": "positive_moderate",
           "verification_provenance": {
             "pmid_verified": true,
@@ -3542,15 +3441,10 @@
           }
         }
       ],
-      "effect_direction": "positive_moderate",
-      "population_context": "women with primary dysmenorrhea",
-      "studied_dose_exposure": {
-        "values": [
-          120
-        ],
-        "unit": "mg"
-      },
-      "applicability_decision": "Menstrual comfort and antispasmodic support supported at >= 120 mg standardized seed extract.",
+      "effect_direction": "applicability_unestablished",
+      "population_context": "Women aged 15-24 with moderate to severe primary dysmenorrhea",
+      "studied_dose_exposure": {},
+      "applicability_decision": "The cited study compared an untreated cycle, a mefenamic acid cycle and a fennel-essence cycle (25 drops of 2% essence every 4 hours) in 30 women; it was not randomized. Fennel relieved pain versus the untreated cycle but was less potent than mefenamic acid on days 2-3, and 5 women withdrew because of its odour. An essence preparation does not establish seed or extract efficacy or a dose.",
       "verification_result": "authoritative_pubmed_verified",
       "verification_provenance": {
         "verified_by": "scripts/api_audit/verify_literature_records.py",
@@ -3784,7 +3678,7 @@
     },
     {
       "canonical_id": "phosphatidylcholine",
-      "material_form": "purified phosphatidylcholine phospholipids",
+      "material_form": "Delayed intestinal-release lecithin containing 30% phosphatidylcholine",
       "search_query": "phosphatidylcholine ulcerative colitis liver randomized clinical trial",
       "search_date": "2026-09-20",
       "databases_searched": [
@@ -3796,11 +3690,10 @@
         {
           "pmid": "33440385",
           "title": "Delayed-Release Phosphatidylcholine Is Effective for Treatment of Ulcerative Colitis: A Meta-Analysis.",
-          "study_type": "clinical_trial",
-          "sample_size": 30,
-          "dose": "1000 mg/day",
-          "duration": "12 weeks",
-          "outcome": "significant improvement in mucosal healing and colitis activity index",
+          "study_type": "meta_analysis_rct",
+          "sample_size": 160,
+          "dose": "delayed intestinal-release 30% PC lecithin (dose not given in the abstract)",
+          "outcome": "remission, clinical and endoscopic outcomes improved versus placebo in ulcerative colitis; one trial of >94% PC lecithin failed",
           "effect_direction": "positive_moderate",
           "verification_provenance": {
             "pmid_verified": true,
@@ -3814,16 +3707,10 @@
           }
         }
       ],
-      "effect_direction": "positive_moderate",
-      "population_context": "adults requiring phospholipid mucosal or hepatic support",
-      "studied_dose_exposure": {
-        "values": [
-          500,
-          1000
-        ],
-        "unit": "mg"
-      },
-      "applicability_decision": "Mucosal barrier and hepatic phospholipid support supported at >= 500 mg/day.",
+      "effect_direction": "applicability_unestablished",
+      "population_context": "Adults with ulcerative colitis",
+      "studied_dose_exposure": {},
+      "applicability_decision": "The cited meta-analysis pooled three RCTs (160 patients with ulcerative colitis) of a delayed intestinal-release 30% phosphatidylcholine lecithin; a trial of >94% phosphatidylcholine lecithin failed. Ordinary or purified phosphatidylcholine supplements do not inherit this preparation-specific result, and no dose is established.",
       "verification_result": "authoritative_pubmed_verified",
       "verification_provenance": {
         "verified_by": "scripts/api_audit/verify_literature_records.py",
@@ -3930,7 +3817,7 @@
     },
     {
       "canonical_id": "marshmallow_root",
-      "material_form": "Althaea officinalis standardized root extract",
+      "material_form": "Combination cough syrup (ivy leaf extract main active, thyme and aniseed decoction, marshmallow root mucilage)",
       "search_query": "Althaea officinalis marshmallow root cough randomized clinical trial",
       "search_date": "2026-09-20",
       "databases_searched": [
@@ -3941,12 +3828,12 @@
         {
           "pmid": "16391481",
           "title": "Open trial to assess aspects of safety and efficacy of a combined herbal cough syrup with ivy and thyme.",
-          "study_type": "clinical_trial",
-          "sample_size": 822,
-          "dose": "500 mg/day equivalent extract",
-          "duration": "7 days",
-          "outcome": "significant and rapid reduction in dry cough frequency and throat irritation",
-          "effect_direction": "positive_moderate",
+          "study_type": "open_uncontrolled_trial",
+          "sample_size": 62,
+          "dose": "mean 10 mL/day (7.5-15 mL) combination syrup",
+          "duration": "mean 12 days (3-23 days)",
+          "outcome": "cough and expectoration symptom scores improved from baseline; no control group",
+          "effect_direction": "positive_weak",
           "verification_provenance": {
             "pmid_verified": true,
             "authoritative_live_title": "Open trial to assess aspects of safety and efficacy of a combined herbal cough syrup with ivy and thyme.",
@@ -3959,15 +3846,10 @@
           }
         }
       ],
-      "effect_direction": "positive_moderate",
-      "population_context": "adults with mucosal irritation and dry cough",
-      "studied_dose_exposure": {
-        "values": [
-          500
-        ],
-        "unit": "mg"
-      },
-      "applicability_decision": "Mucosal demulcent soothing established at >= 500 mg extract/syrup equivalent.",
+      "effect_direction": "applicability_unestablished",
+      "population_context": "Patients aged 16-89 with irritating cough",
+      "studied_dose_exposure": {},
+      "applicability_decision": "The only cited study is an open, uncontrolled trial of a combination cough syrup whose main active ingredient is ivy leaf extract. It does not establish standalone marshmallow root efficacy or a dose.",
       "verification_result": "authoritative_pubmed_verified",
       "verification_provenance": {
         "verified_by": "scripts/api_audit/verify_literature_records.py",
@@ -4114,12 +3996,11 @@
         {
           "pmid": "37004875",
           "title": "Length of Adaptation Has No Effect on the Threonine Requirement Determined in Healthy Young Adult Males Using the Indicator Amino Acid Oxidation Method.",
-          "study_type": "clinical_trial",
-          "sample_size": 7,
-          "dose": "15 mg/kg/day",
-          "duration": "acute metabolic",
-          "outcome": "established mean dietary requirement and physiological indispensability",
-          "effect_direction": "positive_moderate",
+          "study_type": "amino_acid_requirement_study",
+          "sample_size": 11,
+          "dose": "six test intakes from 5 to 35 mg/kg/day",
+          "duration": "9-day periods (1, 3 and 7 days of adaptation)",
+          "outcome": "mean threonine requirement 10.5-12.1 mg/kg/day; adaptation length did not change it",
           "verification_provenance": {
             "pmid_verified": true,
             "authoritative_live_title": "Length of Adaptation Has No Effect on the Threonine Requirement Determined in Healthy Young Adult Males Using the Indicator Amino Acid Oxidation Method.",
@@ -4132,15 +4013,10 @@
           }
         }
       ],
-      "effect_direction": "positive_moderate",
+      "effect_direction": "applicability_unestablished",
       "population_context": "healthy adults",
-      "studied_dose_exposure": {
-        "values": [
-          500
-        ],
-        "unit": "mg"
-      },
-      "applicability_decision": "Essential amino acid dietary adequacy established under DRI benchmarks; standalone therapeutic claims beyond nutrition authority require indication proof.",
+      "studied_dose_exposure": {},
+      "applicability_decision": "Essential amino acid dietary adequacy is established under DRI benchmarks. The cited study measured the threonine requirement (indicator amino acid oxidation) in 11 healthy men and is not an efficacy trial; standalone therapeutic claims beyond nutrition authority require indication proof.",
       "verification_result": "authoritative_pubmed_verified",
       "verification_provenance": {
         "verified_by": "scripts/api_audit/verify_literature_records.py",
@@ -4538,12 +4414,8 @@
         {
           "pmid": "30716358",
           "title": "The n-3 docosapentaenoic acid (DPA): A new player in the n-3 long chain polyunsaturated fatty acid family.",
-          "study_type": "randomized_controlled_trial",
-          "sample_size": 24,
-          "dose": "1000 mg/day purified DPA",
-          "duration": "4 weeks",
-          "outcome": "significantly reduced collagen-stimulated platelet aggregation",
-          "effect_direction": "positive_moderate",
+          "study_type": "narrative_review",
+          "outcome": "narrative review of n-3 DPA sources, metabolism and reported effects; no intervention estimate",
           "verification_provenance": {
             "pmid_verified": true,
             "authoritative_live_title": "The n-3 docosapentaenoic acid (DPA): A new player in the n-3 long chain polyunsaturated fatty acid family.",
@@ -4553,24 +4425,19 @@
             "verified_source": "https://pubmed.ncbi.nlm.nih.gov/30716358/",
             "verified_at": "2026-09-21T07:39:42.986936+00:00",
             "abstract_evidence_quote": "Recent results showed"
-          }
+          },
+          "scoring_eligible": false
         }
       ],
-      "effect_direction": "positive_moderate",
-      "population_context": "healthy adults requiring cardiovascular and lipid support",
-      "studied_dose_exposure": {
-        "values": [
-          500,
-          1000
-        ],
-        "unit": "mg"
-      },
-      "applicability_decision": "Cardiovascular platelet and omega-3 index support established at >= 500 mg/day.",
-      "verification_result": "authoritative_pubmed_verified",
+      "effect_direction": "applicability_unestablished",
+      "population_context": "Not established: the only cited source is a narrative review",
+      "studied_dose_exposure": {},
+      "applicability_decision": "No verified human DPA intervention trial is recorded. The cited PMID 30716358 is a narrative review of n-3 DPA; the recorded RCT (24 participants, 1,000 mg/day, 4 weeks, platelet aggregation) is not in it. Evidence review pending.",
+      "verification_result": "verification_failure_unresolved",
       "verification_provenance": {
         "verified_by": "scripts/api_audit/verify_literature_records.py",
         "verified_at": "2026-09-21T07:39:42.986936+00:00",
-        "all_pmids_verified": true,
+        "all_pmids_verified": false,
         "retractions_found": false
       }
     },
@@ -4674,7 +4541,7 @@
     },
     {
       "canonical_id": "chrysin",
-      "material_form": "Chrysin (5,7-dihydroxyflavone)",
+      "material_form": "Propolis and honey containing chrysin (food matrix), not isolated chrysin",
       "search_query": "chrysin testosterone aromatase randomized double blind human",
       "search_date": "2026-09-20",
       "databases_searched": [
@@ -4686,10 +4553,9 @@
           "pmid": "14977449",
           "title": "Effects of chrysin on urinary testosterone levels in human males.",
           "study_type": "clinical_trial",
-          "sample_size": 7,
-          "dose": "3000 mg/day",
+          "dose": "propolis and honey containing chrysin (amount not given in the abstract)",
           "duration": "21 days",
-          "outcome": "no effect on serum testosterone, androstenedione, or aromatase inhibition due to negligible oral bioavailability",
+          "outcome": "urinary testosterone did not change at 7, 14 or 21 days versus baseline or controls",
           "effect_direction": "null",
           "verification_provenance": {
             "pmid_verified": true,
@@ -4703,15 +4569,10 @@
           }
         }
       ],
-      "effect_direction": "null",
-      "population_context": "healthy men",
-      "studied_dose_exposure": {
-        "values": [
-          3000
-        ],
-        "unit": "mg"
-      },
-      "applicability_decision": "Failed to increase testosterone or inhibit aromatase in clinical human trial due to near-zero bioavailability; reviewed null.",
+      "effect_direction": "applicability_unestablished",
+      "population_context": "Male volunteers",
+      "studied_dose_exposure": {},
+      "applicability_decision": "The only cited study gave propolis and honey containing chrysin for 21 days and found no change in urinary testosterone. A food-matrix result does not establish an effect, or a lack of effect, for isolated chrysin supplements; the abstract does not report a chrysin dose or bioavailability.",
       "verification_result": "authoritative_pubmed_verified",
       "verification_provenance": {
         "verified_by": "scripts/api_audit/verify_literature_records.py",
@@ -5248,12 +5109,8 @@
         {
           "pmid": "34823458",
           "title": "Millennium Nutrient N,N-Dimethylglycine (DMG) and its Effectiveness in Autism Spectrum Disorders.",
-          "study_type": "randomized_controlled_trial",
-          "sample_size": 16,
-          "dose": "1500 mg/day",
-          "duration": "14 days",
-          "outcome": "no significant improvement in VO2 max, blood lactate, or endurance performance",
-          "effect_direction": "null",
+          "study_type": "narrative_review",
+          "outcome": "narrative review of DMG chemistry, pharmacology and clinical studies in autism spectrum disorder; no exercise outcome",
           "verification_provenance": {
             "pmid_verified": true,
             "authoritative_live_title": "Millennium Nutrient N,N-Dimethylglycine (DMG) and its Effectiveness in Autism Spectrum Disorders.",
@@ -5263,23 +5120,19 @@
             "verified_source": "https://pubmed.ncbi.nlm.nih.gov/34823458/",
             "verified_at": "2026-09-21T07:39:42.986936+00:00",
             "abstract_evidence_quote": "The adverse side effects of conventional medicine and"
-          }
+          },
+          "scoring_eligible": false
         }
       ],
-      "effect_direction": "null",
-      "population_context": "athletes",
-      "studied_dose_exposure": {
-        "values": [
-          1500
-        ],
-        "unit": "mg"
-      },
-      "applicability_decision": "Failed to enhance aerobic or anaerobic endurance in double-blind human RCTs; reviewed null.",
-      "verification_result": "authoritative_pubmed_verified",
+      "effect_direction": "applicability_unestablished",
+      "population_context": "Not established: the only cited source is a narrative review",
+      "studied_dose_exposure": {},
+      "applicability_decision": "No verified human DMG trial is recorded. The cited PMID 34823458 is a narrative review of DMG in autism spectrum disorder; the recorded endurance RCT (16 athletes, 1,500 mg/day, 14 days) is not in it. Evidence review pending.",
+      "verification_result": "verification_failure_unresolved",
       "verification_provenance": {
         "verified_by": "scripts/api_audit/verify_literature_records.py",
         "verified_at": "2026-09-21T07:39:42.986936+00:00",
-        "all_pmids_verified": true,
+        "all_pmids_verified": false,
         "retractions_found": false
       }
     },
@@ -5336,7 +5189,7 @@
     },
     {
       "canonical_id": "keratin",
-      "material_form": "solubilized bioactive keratin peptides (Cynatine HNS)",
+      "material_form": "Cynatine HNS: Cynatine keratin (500 mg/day) combined with vitamins and minerals",
       "search_query": "solubilized keratin hair nail randomized clinical trial",
       "search_date": "2026-09-20",
       "databases_searched": [
@@ -5349,9 +5202,9 @@
           "title": "A clinical trial to investigate the effect of Cynatine HNS on hair and nail parameters.",
           "study_type": "randomized_controlled_trial",
           "sample_size": 50,
-          "dose": "500 mg/day Cynatine HNS",
+          "dose": "2 capsules/day of Cynatine HNS (500 mg keratin plus vitamins and minerals)",
           "duration": "90 days",
-          "outcome": "statistically significant improvements in hair strength, shine, and reduced hair loss",
+          "outcome": "hair and nail measures improved versus placebo",
           "effect_direction": "positive_moderate",
           "verification_provenance": {
             "pmid_verified": true,
@@ -5365,15 +5218,10 @@
           }
         }
       ],
-      "effect_direction": "positive_moderate",
-      "population_context": "adults with damaged hair or brittle nails",
-      "studied_dose_exposure": {
-        "values": [
-          500
-        ],
-        "unit": "mg"
-      },
-      "applicability_decision": "Hair and nail structural resilience supported at >= 500 mg/day solubilized keratin peptides.",
+      "effect_direction": "applicability_unestablished",
+      "population_context": "Women",
+      "studied_dose_exposure": {},
+      "applicability_decision": "The only cited RCT (50 women, 90 days) tested Cynatine HNS, keratin combined with vitamins and minerals. A combination result does not establish standalone keratin efficacy or a dose.",
       "verification_result": "authoritative_pubmed_verified",
       "verification_provenance": {
         "verified_by": "scripts/api_audit/verify_literature_records.py",
@@ -5432,7 +5280,7 @@
     },
     {
       "canonical_id": "cat_s_claw",
-      "material_form": "Uncaria tomentosa standardized pentacyclic alkaloid extract",
+      "material_form": "Freeze-dried Uncaria guianensis (cited trial); U. tomentosa equivalence shown only in vitro",
       "search_query": "Uncaria tomentosa cats claw osteoarthritis randomized clinical trial",
       "search_date": "2026-09-20",
       "databases_searched": [
@@ -5446,9 +5294,9 @@
           "title": "Efficacy and safety of freeze-dried cat's claw in osteoarthritis of the knee: mechanisms of action of the species Uncaria guianensis.",
           "study_type": "randomized_controlled_trial",
           "sample_size": 45,
-          "dose": "100 mg/day standardized extract",
+          "dose": "freeze-dried Uncaria guianensis (amount not given in the abstract)",
           "duration": "4 weeks",
-          "outcome": "significant reduction in knee pain during physical activity compared to placebo",
+          "outcome": "pain on activity and medical and patient assessment scores fell versus placebo; pain at rest or at night and knee circumference did not",
           "effect_direction": "positive_moderate",
           "verification_provenance": {
             "pmid_verified": true,
@@ -5462,15 +5310,10 @@
           }
         }
       ],
-      "effect_direction": "positive_moderate",
+      "effect_direction": "applicability_unestablished",
       "population_context": "patients with knee osteoarthritis or joint discomfort",
-      "studied_dose_exposure": {
-        "values": [
-          100
-        ],
-        "unit": "mg"
-      },
-      "applicability_decision": "Joint inflammatory comfort support supported at >= 100 mg standardized pentacyclic alkaloid extract.",
+      "studied_dose_exposure": {},
+      "applicability_decision": "The cited 4-week knee-osteoarthritis trial (30 treated, 15 placebo) used freeze-dried Uncaria guianensis; U. tomentosa was compared only in vitro. The trial does not establish U. tomentosa pentacyclic-alkaloid extract efficacy or a dose.",
       "verification_result": "authoritative_pubmed_verified",
       "verification_provenance": {
         "verified_by": "scripts/api_audit/verify_literature_records.py",
@@ -5819,7 +5662,7 @@
     },
     {
       "canonical_id": "barberry_root",
-      "material_form": "Berberis vulgaris standardized extract (std. to berberine)",
+      "material_form": "Berberis vulgaris root extract capsules (500 mg)",
       "search_query": "Berberis vulgaris barberry metabolic syndrome lipid randomized clinical trial",
       "search_date": "2026-09-20",
       "databases_searched": [
@@ -5831,11 +5674,11 @@
           "pmid": "37575603",
           "title": "Evaluation of the Effect of Barberry Root (Berberis Vulgaris) on the Prevention of Metabolic Syndrome Caused by Atypical Antipsychotic Drugs in Patients with Schizophrenia: A Three-Blind Placebo-Controlled Clinical Trial.",
           "study_type": "randomized_controlled_trial",
-          "sample_size": 84,
-          "dose": "500 mg/day standardized extract",
-          "duration": "8 weeks",
-          "outcome": "statistically significant improvements in fasting blood sugar, total cholesterol, and antioxidant capacity",
-          "effect_direction": "positive_moderate",
+          "sample_size": 88,
+          "dose": "500 mg barberry root extract three times daily",
+          "duration": "3 months",
+          "outcome": "metabolic syndrome measures worsened in both groups; weight and waist were higher than placebo",
+          "effect_direction": "null",
           "verification_provenance": {
             "pmid_verified": true,
             "authoritative_live_title": "Evaluation of the Effect of Barberry Root (Berberis Vulgaris) on the Prevention of Metabolic Syndrome Caused by Atypical Antipsychotic Drugs in Patients with Schizophrenia: A Three-Blind Placebo-Controlled Clinical Trial.",
@@ -5848,15 +5691,16 @@
           }
         }
       ],
-      "effect_direction": "positive_moderate",
-      "population_context": "patients with metabolic syndrome or glycemic dysregulation",
+      "effect_direction": "null",
+      "population_context": "Patients with schizophrenia on atypical antipsychotics",
       "studied_dose_exposure": {
         "values": [
-          500
+          1500
         ],
-        "unit": "mg"
+        "unit": "mg",
+        "basis": "daily_intake"
       },
-      "applicability_decision": "Metabolic glycemic and lipid support established at >= 500 mg standardized extract.",
+      "applicability_decision": "In the cited 3-month RCT (88 patients with schizophrenia on atypical antipsychotics), 500 mg barberry root extract three times daily did not prevent antipsychotic-related metabolic-syndrome changes; weight and waist were higher than with placebo.",
       "verification_result": "authoritative_pubmed_verified",
       "verification_provenance": {
         "verified_by": "scripts/api_audit/verify_literature_records.py",
@@ -5991,7 +5835,7 @@
     },
     {
       "canonical_id": "wild_yam_root",
-      "material_form": "Dioscorea villosa root extract",
+      "material_form": "Topical wild yam cream (no oral preparation studied)",
       "search_query": "Dioscorea villosa wild yam menopausal symptoms randomized trial",
       "search_date": "2026-09-20",
       "databases_searched": [
@@ -6004,9 +5848,9 @@
           "title": "Effects of wild yam extract on menopausal symptoms, lipids and sex hormones in healthy menopausal women.",
           "study_type": "randomized_controlled_trial",
           "sample_size": 23,
-          "dose": "root extract cream / oral equivalent",
+          "dose": "topical wild yam cream (active vs placebo cream)",
           "duration": "3 months",
-          "outcome": "no significant improvement in menopausal symptoms or changes in progesterone or estradiol levels",
+          "outcome": "no difference from placebo in menopausal symptom scores; no change in lipids, FSH, estradiol or serum/salivary progesterone",
           "effect_direction": "null",
           "verification_provenance": {
             "pmid_verified": true,
@@ -6020,13 +5864,13 @@
           }
         }
       ],
-      "effect_direction": "null",
-      "population_context": "postmenopausal women",
+      "effect_direction": "applicability_unestablished",
+      "population_context": "Healthy menopausal women",
       "studied_dose_exposure": {
         "values": [],
         "unit": "mg"
       },
-      "applicability_decision": "Diosgenin cannot enzymatically convert to progesterone or estrogen in the human body; clinical trials show no benefit over placebo; reviewed null.",
+      "applicability_decision": "The only cited trial applied wild yam cream to the skin for 3 months (23 women, crossover) and found no difference from placebo in symptoms, lipids or hormones. A topical result does not establish an effect, or a lack of effect, for oral wild yam preparations.",
       "verification_result": "authoritative_pubmed_verified",
       "verification_provenance": {
         "verified_by": "scripts/api_audit/verify_literature_records.py",
@@ -7077,7 +6921,7 @@
     },
     {
       "canonical_id": "pumpkin_seed_oil",
-      "material_form": "Cucurbita pepo cold-pressed seed oil extract",
+      "material_form": "Pumpkin seed extract capsules (cited trial); no seed-oil arm",
       "search_query": "Cucurbita pepo pumpkin seed oil benign prostatic hyperplasia randomized",
       "search_date": "2026-09-20",
       "databases_searched": [
@@ -7091,10 +6935,10 @@
           "title": "Effects of pumpkin seed in men with lower urinary tract symptoms due to benign prostatic hyperplasia in the one-year, randomized, placebo-controlled GRANU study.",
           "study_type": "randomized_controlled_trial",
           "sample_size": 1431,
-          "dose": "500 mg pumpkin seed extract twice daily",
+          "dose": "500 mg pumpkin seed extract twice daily (a separate arm took 5 g pumpkin seed twice daily)",
           "duration": "12 months",
-          "outcome": "statistically significant and clinically relevant reduction in International Prostate Symptom Score (IPSS) compared to placebo (P = 0.014)",
-          "effect_direction": "positive_moderate",
+          "outcome": "IPSS responder rate with the extract did not differ from placebo at 12 months; the whole-seed arm was descriptively better (58.5% vs 47.3%)",
+          "effect_direction": "null",
           "verification_provenance": {
             "pmid_verified": true,
             "authoritative_live_title": "Effects of pumpkin seed in men with lower urinary tract symptoms due to benign prostatic hyperplasia in the one-year, randomized, placebo-controlled GRANU study.",
@@ -7107,15 +6951,10 @@
           }
         }
       ],
-      "effect_direction": "positive_moderate",
-      "population_context": "men with lower urinary tract symptoms and benign prostatic hyperplasia",
-      "studied_dose_exposure": {
-        "values": [
-          500
-        ],
-        "unit": "mg"
-      },
-      "applicability_decision": "Prostate urinary symptom relief and lower urinary tract comfort established for pumpkin seed oil/extract at >= 500 mg/serving.",
+      "effect_direction": "applicability_unestablished",
+      "population_context": "Men aged 50-80 with BPH/LUTS",
+      "studied_dose_exposure": {},
+      "applicability_decision": "In the GRANU trial (1,431 men, 12 months) the pumpkin seed extract arm (500 mg twice daily) did not differ from placebo; only the whole-seed arm (5 g twice daily) showed a descriptive difference needing confirmation. No seed-oil arm was studied, so the trial does not establish pumpkin seed oil efficacy or a dose.",
       "verification_result": "authoritative_pubmed_verified",
       "verification_provenance": {
         "verified_by": "scripts/api_audit/verify_literature_records.py",
@@ -7347,7 +7186,7 @@
     },
     {
       "canonical_id": "spearmint",
-      "material_form": "Mentha spicata standardized rosmarinic acid extract",
+      "material_form": "Brewed tea from a high-rosmarinic acid spearmint variety",
       "search_query": "Mentha spicata spearmint osteoarthritis rosmarinic acid trial",
       "search_date": "2026-09-20",
       "databases_searched": [
@@ -7361,10 +7200,10 @@
           "title": "High-rosmarinic acid spearmint tea in the management of knee osteoarthritis symptoms.",
           "study_type": "randomized_controlled_trial",
           "sample_size": 46,
-          "dose": "Standardized high-rosmarinic acid spearmint tea twice daily",
+          "dose": "tea brewed from high-rosmarinic acid spearmint, twice daily (control: commercial spearmint tea)",
           "duration": "16 weeks",
-          "outcome": "statistically significant reduction in WOMAC pain scores and physical disability compared to control",
-          "effect_direction": "positive_weak",
+          "outcome": "WOMAC pain fell within the high-rosA group only (no between-group pain test reported); stiffness and disability fell in both groups",
+          "effect_direction": "mixed",
           "verification_provenance": {
             "pmid_verified": true,
             "authoritative_live_title": "High-rosmarinic acid spearmint tea in the management of knee osteoarthritis symptoms.",
@@ -7377,15 +7216,10 @@
           }
         }
       ],
-      "effect_direction": "positive_weak",
+      "effect_direction": "applicability_unestablished",
       "population_context": "adults with knee osteoarthritis",
-      "studied_dose_exposure": {
-        "values": [
-          500
-        ],
-        "unit": "mg"
-      },
-      "applicability_decision": "Joint comfort and oxidative stress reduction established for standardized rosmarinic acid-rich spearmint extract.",
+      "studied_dose_exposure": {},
+      "applicability_decision": "The cited 16-week trial (46 analysed) compared high-rosmarinic acid spearmint tea with commercial spearmint tea twice daily: pain fell only within the high-rosA group (the abstract reports no between-group pain test), stiffness and disability fell in both, and quality-of-life scores did not differ between groups. Brewed-tea evidence does not establish an extract's efficacy or dose without bioequivalence.",
       "verification_result": "authoritative_pubmed_verified",
       "verification_provenance": {
         "verified_by": "scripts/api_audit/verify_literature_records.py",
@@ -7421,7 +7255,7 @@
     },
     {
       "canonical_id": "magnolia_bark",
-      "material_form": "Magnolia officinalis standardized bark extract (honokiol/magnolol)",
+      "material_form": "Relora: proprietary Magnolia officinalis + Phellodendron amurense blend",
       "search_query": "Magnolia officinalis bark extract anxiety stress randomized trial",
       "search_date": "2026-09-20",
       "databases_searched": [
@@ -7434,10 +7268,10 @@
           "pmid": "18426577",
           "title": "Effect of a proprietary Magnolia and Phellodendron extract on stress levels in healthy women: a pilot, double-blind, placebo-controlled clinical trial.",
           "study_type": "randomized_controlled_trial",
-          "sample_size": 56,
-          "dose": "250 mg standardized extract twice daily",
-          "duration": "4 weeks",
-          "outcome": "statistically significant reduction in salivary cortisol (-18%) and total state anxiety compared to placebo",
+          "sample_size": 40,
+          "dose": "250 mg Relora (Magnolia + Phellodendron) three times daily",
+          "duration": "6 weeks",
+          "outcome": "state anxiety fell versus placebo; trait anxiety, salivary cortisol, sleep and appetite did not change",
           "effect_direction": "positive_weak",
           "verification_provenance": {
             "pmid_verified": true,
@@ -7451,15 +7285,10 @@
           }
         }
       ],
-      "effect_direction": "positive_weak",
-      "population_context": "healthy adults experiencing moderate stress",
-      "studied_dose_exposure": {
-        "values": [
-          250
-        ],
-        "unit": "mg"
-      },
-      "applicability_decision": "Stress and cortisol modulation supported for standardized honokiol/magnolol bark extracts at >= 250 mg/serving.",
+      "effect_direction": "applicability_unestablished",
+      "population_context": "Overweight premenopausal women with stress-related eating and above-average anxiety",
+      "studied_dose_exposure": {},
+      "applicability_decision": "The only cited trial tested Relora, a Magnolia + Phellodendron blend, 250 mg three times daily for 6 weeks (40 women in the intent-to-treat population). It reduced transitory (state) anxiety but did not change trait anxiety, salivary cortisol, sleep or appetite. A blend does not establish standalone magnolia bark efficacy or a dose.",
       "verification_result": "authoritative_pubmed_verified",
       "verification_provenance": {
         "verified_by": "scripts/api_audit/verify_literature_records.py",
@@ -7495,7 +7324,7 @@
     },
     {
       "canonical_id": "moringa",
-      "material_form": "Moringa oleifera dried leaf powder / standardized extract",
+      "material_form": "Fresh Moringa oleifera leaves added to the diet (20, 40 or 60 g/day)",
       "search_query": "Moringa oleifera leaf postprandial glucose randomized controlled trial",
       "search_date": "2026-09-20",
       "databases_searched": [
@@ -7508,11 +7337,11 @@
           "pmid": "37229639",
           "title": "Effects of Moringa oleifera leaves on the blood glucose, blood pressure, and lipid profile of type 2 diabetic subjects: A parallel group randomized clinical trial of efficacy.",
           "study_type": "randomized_controlled_trial",
-          "sample_size": 60,
-          "dose": "4 g/day dried Moringa leaf powder",
-          "duration": "12 weeks",
-          "outcome": "statistically significant reduction in fasting blood glucose and HbA1c compared to control",
-          "effect_direction": "positive_weak",
+          "sample_size": 40,
+          "dose": "20, 40 or 60 g Moringa leaves daily added to the diet",
+          "duration": "14 days",
+          "outcome": "fasting glucose did not differ between groups; no significant differences in any parameter after adjusting for baseline",
+          "effect_direction": "null",
           "verification_provenance": {
             "pmid_verified": true,
             "authoritative_live_title": "Effects of Moringa oleifera leaves on the blood glucose, blood pressure, and lipid profile of type 2 diabetic subjects: A parallel group randomized clinical trial of efficacy.",
@@ -7525,15 +7354,10 @@
           }
         }
       ],
-      "effect_direction": "positive_weak",
-      "population_context": "healthy adults",
-      "studied_dose_exposure": {
-        "values": [
-          1000
-        ],
-        "unit": "mg"
-      },
-      "applicability_decision": "Postprandial glycemic moderation supported for dried Moringa oleifera leaf preparations at >= 1000 mg.",
+      "effect_direction": "applicability_unestablished",
+      "population_context": "Adults with type 2 diabetes in rural Nigeria",
+      "studied_dose_exposure": {},
+      "applicability_decision": "The only cited trial added 20, 40 or 60 g Moringa leaves to the diet of 40 adults with type 2 diabetes for 14 days and found no significant effect on glucose, blood pressure or lipids after adjustment. Whole-leaf food use does not establish effects of powder or extract preparations.",
       "verification_result": "authoritative_pubmed_verified",
       "verification_provenance": {
         "verified_by": "scripts/api_audit/verify_literature_records.py",
@@ -8282,7 +8106,7 @@
     },
     {
       "canonical_id": "shiitake",
-      "material_form": "Lentinula edodes standardized mycelial extract (AHCC / Lentinan)",
+      "material_form": "Whole dried shiitake mushrooms eaten daily (5 or 10 g)",
       "search_query": "Lentinula edodes shiitake AHCC immune randomized trial human",
       "search_date": "2026-09-20",
       "databases_searched": [
@@ -8294,11 +8118,11 @@
         {
           "pmid": "25866155",
           "title": "Consuming Lentinula edodes (Shiitake) Mushrooms Daily Improves Human Immunity: A Randomized Dietary Intervention in Healthy Young Adults.",
-          "study_type": "randomized_controlled_trial",
+          "study_type": "randomized_parallel_dose_groups_no_placebo",
           "sample_size": 52,
           "dose": "5 g or 10 g daily dried shiitake mushrooms",
           "duration": "4 weeks",
-          "outcome": "statistically significant enhancement in gamma-delta T-cell proliferation and secretory immunoglobulin A (sIgA)",
+          "outcome": "gamma-delta T and NK-T cell proliferation and salivary sIgA rose, CRP fell after 4 weeks of eating shiitake",
           "effect_direction": "positive_weak",
           "verification_provenance": {
             "pmid_verified": true,
@@ -8312,15 +8136,10 @@
           }
         }
       ],
-      "effect_direction": "positive_weak",
-      "population_context": "immunocompromised or recovering adults",
-      "studied_dose_exposure": {
-        "values": [
-          1000
-        ],
-        "unit": "mg"
-      },
-      "applicability_decision": "Innate immune NK cell activity and cytokine balance established for standardized Lentinula edodes mycelial extracts at >= 1000 mg/day.",
+      "effect_direction": "applicability_unestablished",
+      "population_context": "Healthy adults aged 21-41",
+      "studied_dose_exposure": {},
+      "applicability_decision": "The cited 4-week study fed 52 healthy adults 5 or 10 g of whole dried shiitake daily (two dose groups, no placebo) and measured immune-cell and sIgA changes. Whole-mushroom food evidence does not establish mycelial extract (AHCC or lentinan) efficacy or a dose.",
       "verification_result": "authoritative_pubmed_verified",
       "verification_provenance": {
         "verified_by": "scripts/api_audit/verify_literature_records.py",
@@ -8331,7 +8150,7 @@
     },
     {
       "canonical_id": "winged_treebine",
-      "material_form": "Cissus quadrangularis standardized ketosterone stem extract",
+      "material_form": "Cissus quadrangularis formulation that also contains green tea, soy, chromium, selenium and B vitamins",
       "search_query": "Cissus quadrangularis weight loss joint pain randomized controlled trial",
       "search_date": "2026-09-20",
       "databases_searched": [
@@ -8344,10 +8163,10 @@
           "pmid": "16948861",
           "title": "The use of a Cissus quadrangularis formulation in the management of weight loss and metabolic syndrome.",
           "study_type": "randomized_controlled_trial",
-          "sample_size": 92,
-          "dose": "514 mg twice daily standardized Cissus extract",
+          "sample_size": 123,
+          "dose": "514 mg Cissus formulation twice daily (formulation includes green tea, soy, chromium, selenium, B vitamins)",
           "duration": "8 weeks",
-          "outcome": "statistically significant reduction in body weight (-8.8%) and waist circumference compared to placebo (P < 0.01)",
+          "outcome": "net reductions in weight, central obesity, fasting glucose, lipids and CRP versus placebo",
           "effect_direction": "positive_weak",
           "verification_provenance": {
             "pmid_verified": true,
@@ -8361,15 +8180,10 @@
           }
         }
       ],
-      "effect_direction": "positive_weak",
-      "population_context": "overweight adults with metabolic markers",
-      "studied_dose_exposure": {
-        "values": [
-          300
-        ],
-        "unit": "mg"
-      },
-      "applicability_decision": "Metabolic and joint comfort support established for standardized ketosterone-rich Cissus quadrangularis extract at >= 300 mg/serving.",
+      "effect_direction": "applicability_unestablished",
+      "population_context": "Overweight and obese adults (123 participants)",
+      "studied_dose_exposure": {},
+      "applicability_decision": "The cited 8-week RCT tested a Cissus quadrangularis formulation (514 mg twice daily) that also contains green tea, soy, chromium, selenium and B vitamins (full text, PMC1570348). A multi-ingredient formulation does not establish standalone Cissus efficacy or a dose.",
       "verification_result": "authoritative_pubmed_verified",
       "verification_provenance": {
         "verified_by": "scripts/api_audit/verify_literature_records.py",
@@ -8702,7 +8516,7 @@
     },
     {
       "canonical_id": "oolong_tea_leaf",
-      "material_form": "Camellia sinensis partially fermented oolong tea extract",
+      "material_form": "Oolong tea (8 g/day)",
       "search_query": "oolong tea Camellia sinensis energy expenditure randomized controlled trial",
       "search_date": "2026-09-20",
       "databases_searched": [
@@ -8714,11 +8528,11 @@
         {
           "pmid": "19271168",
           "title": "Beneficial effects of oolong tea consumption on diet-induced overweight and obese subjects.",
-          "study_type": "randomized_controlled_trial",
+          "study_type": "uncontrolled_intervention",
           "sample_size": 102,
-          "dose": "8 g/day oolong tea infusion / equivalent standardized extract",
+          "dose": "8 g/day oolong tea",
           "duration": "6 weeks",
-          "outcome": "statistically significant decrease in body weight and body fat content in 70% of severely obese subjects",
+          "outcome": "64-70% of participants lost more than 1 kg; plasma TG and TC fell in hyperlipidemic participants (no control group)",
           "effect_direction": "positive_weak",
           "verification_provenance": {
             "pmid_verified": true,
@@ -8732,15 +8546,10 @@
           }
         }
       ],
-      "effect_direction": "positive_weak",
+      "effect_direction": "applicability_unestablished",
       "population_context": "overweight and obese adults",
-      "studied_dose_exposure": {
-        "values": [
-          500
-        ],
-        "unit": "mg"
-      },
-      "applicability_decision": "Metabolic rate support and lipid oxidation modulation supported for standardized oolong tea polyphenol extracts at >= 500 mg/day.",
+      "studied_dose_exposure": {},
+      "applicability_decision": "The cited 6-week study gave 8 g/day oolong tea to 102 overweight or obese adults without a control group. Uncontrolled tea-drinking evidence does not establish oolong extract efficacy or a dose.",
       "verification_result": "authoritative_pubmed_verified",
       "verification_provenance": {
         "verified_by": "scripts/api_audit/verify_literature_records.py",
@@ -8850,7 +8659,7 @@
     },
     {
       "canonical_id": "dark_sweet_cherry",
-      "material_form": "Prunus avium standardized anthocyanin fruit extract",
+      "material_form": "Fresh Bing sweet cherries (280 g, single dose)",
       "search_query": "sweet cherry Prunus avium exercise muscle soreness urate randomized",
       "search_date": "2026-09-20",
       "databases_searched": [
@@ -8862,11 +8671,11 @@
         {
           "pmid": "12771324",
           "title": "Consumption of cherries lowers plasma urate in healthy women.",
-          "study_type": "clinical_trial",
-          "sample_size": 18,
-          "dose": "280 g sweet cherries / equivalent anthocyanin extract",
-          "duration": "acute crossover",
-          "outcome": "statistically significant reduction in plasma urate (-14%) and urinary urate excretion elevation",
+          "study_type": "uncontrolled_single_dose",
+          "sample_size": 10,
+          "dose": "280 g fresh Bing sweet cherries, single dose",
+          "duration": "5 hours",
+          "outcome": "plasma urate fell 14% at 5 h and urinary urate excretion rose; CRP and NO fell marginally (P < 0.1)",
           "effect_direction": "positive_weak",
           "verification_provenance": {
             "pmid_verified": true,
@@ -8880,15 +8689,10 @@
           }
         }
       ],
-      "effect_direction": "positive_weak",
-      "population_context": "healthy women and adults with elevated uric acid markers",
-      "studied_dose_exposure": {
-        "values": [
-          500
-        ],
-        "unit": "mg"
-      },
-      "applicability_decision": "Uric acid homeostasis and exercise muscle recovery support established for standardized sweet cherry extract at >= 500 mg.",
+      "effect_direction": "applicability_unestablished",
+      "population_context": "Healthy women aged 22-40",
+      "studied_dose_exposure": {},
+      "applicability_decision": "The only cited study fed 10 healthy women one 280 g serving of fresh Bing cherries and measured urate over 5 hours (no control). A single whole-fruit serving does not establish a cherry extract's efficacy or dose, and exercise recovery was not studied.",
       "verification_result": "authoritative_pubmed_verified",
       "verification_provenance": {
         "verified_by": "scripts/api_audit/verify_literature_records.py",
@@ -9088,12 +8892,8 @@
         {
           "pmid": "32565872",
           "title": "An Anti-Inflammatory Composition of Boswellia serrata Resin Extracts Alleviates Pain and Protects Cartilage in Monoiodoacetate-Induced Osteoarthritis in Rats.",
-          "study_type": "randomized_controlled_trial",
-          "sample_size": 75,
-          "dose": "100 mg/day standardized AKBA-enriched Boswellia extract",
-          "duration": "90 days",
-          "outcome": "statistically significant reduction in VAS pain score and WOMAC index scores compared to placebo (P < 0.001)",
-          "effect_direction": "positive_moderate",
+          "study_type": "animal_and_in_vitro",
+          "outcome": "LI13019F1 inhibited 5-LOX and inflammatory mediators in vitro and reduced pain and cartilage damage in MIA-induced osteoarthritic rats",
           "verification_provenance": {
             "pmid_verified": true,
             "authoritative_live_title": "An Anti-Inflammatory Composition of Boswellia serrata Resin Extracts Alleviates Pain and Protects Cartilage in Monoiodoacetate-Induced Osteoarthritis in Rats.",
@@ -9103,23 +8903,19 @@
             "verified_source": "https://pubmed.ncbi.nlm.nih.gov/32565872/",
             "verified_at": "2026-09-21T07:39:42.986936+00:00",
             "abstract_evidence_quote": "Besides, LI13019F1 reduced TNF-α production with the IC50 of 12.38 ± 0.423 μg/mL."
-          }
+          },
+          "scoring_eligible": false
         }
       ],
-      "effect_direction": "positive_moderate",
-      "population_context": "adults with knee osteoarthritis",
-      "studied_dose_exposure": {
-        "values": [
-          100
-        ],
-        "unit": "mg"
-      },
-      "applicability_decision": "Joint comfort, mobility, and cartilage integrity supported for standardized Boswellia serrata gum resin extracts at >= 100 mg/day.",
-      "verification_result": "authoritative_pubmed_verified",
+      "effect_direction": "applicability_unestablished",
+      "population_context": "Not established: the only cited source is a rat and in-vitro study",
+      "studied_dose_exposure": {},
+      "applicability_decision": "No verified human Boswellia trial is recorded. The cited PMID 32565872 is an in-vitro and rat osteoarthritis study of the LI13019F1 (Serratrin) composition; the recorded human RCT (75 adults, 100 mg/day, 90 days) is not in it. Evidence review pending.",
+      "verification_result": "verification_failure_unresolved",
       "verification_provenance": {
         "verified_by": "scripts/api_audit/verify_literature_records.py",
         "verified_at": "2026-09-21T07:39:42.986936+00:00",
-        "all_pmids_verified": true,
+        "all_pmids_verified": false,
         "retractions_found": false
       }
     },
@@ -9858,7 +9654,7 @@
     },
     {
       "canonical_id": "olive_fruit_extract",
-      "material_form": "Olea europaea fruit extract standardized to >= 10% hydroxytyrosol / polyphenols",
+      "material_form": "Olive LEAF polyphenol extract (51.1 mg oleuropein, 9.7 mg hydroxytyrosol per day)",
       "search_query": "olea europaea olive leaf polyphenols insulin sensitivity crossover trial",
       "search_date": "2026-09-20",
       "databases_searched": [
@@ -9874,7 +9670,7 @@
           "sample_size": 46,
           "dose": "51.1 mg oleuropein and 9.7 mg hydroxytyrosol per day",
           "duration": "12 weeks",
-          "outcome": "Significant 15% improvement in insulin sensitivity and 28% improvement in pancreatic beta-cell responsiveness compared to placebo.",
+          "outcome": "insulin sensitivity improved 15% and beta-cell responsiveness 28% versus placebo with olive leaf extract; lipids, blood pressure and body composition unchanged",
           "effect_direction": "positive_moderate",
           "verification_provenance": {
             "pmid_verified": true,
@@ -9888,16 +9684,10 @@
           }
         }
       ],
-      "effect_direction": "positive_moderate",
-      "population_context": "adult populations in double-blind clinical trials",
-      "studied_dose_exposure": {
-        "values": [
-          50,
-          100
-        ],
-        "unit": "mg"
-      },
-      "applicability_decision": "Standardized olive polyphenolic extract (hydroxytyrosol/oleuropein) supported at >= 50-100 mg/day for cardiometabolic and antioxidant protection.",
+      "effect_direction": "applicability_unestablished",
+      "population_context": "Overweight middle-aged men",
+      "studied_dose_exposure": {},
+      "applicability_decision": "The cited 12-week crossover RCT (46 men) used olive leaf polyphenols and improved insulin sensitivity and beta-cell responsiveness, with no effect on lipids, blood pressure or body composition. Leaf-extract evidence does not establish olive fruit extract efficacy or a dose.",
       "applicability_status": "applicable_reviewed_trials",
       "verification_provenance": {
         "verified_by": "scripts/api_audit/verify_literature_records.py",
@@ -10150,7 +9940,7 @@
     },
     {
       "canonical_id": "black_garlic",
-      "material_form": "Allium sativum aged / fermented black garlic standardized to S-allyl-cysteine (SAC)",
+      "material_form": "Aged garlic extract (1.2 g/day, 1.2 mg S-allylcysteine), not black (heat-fermented) garlic",
       "search_query": "aged garlic extract blood pressure cardiovascular markers age at heart trial",
       "search_date": "2026-09-20",
       "databases_searched": [
@@ -10164,9 +9954,9 @@
           "title": "The effect of aged garlic extract on blood pressure and other cardiovascular risk factors in uncontrolled hypertensives: the AGE at Heart trial.",
           "study_type": "randomized_controlled_trial",
           "sample_size": 88,
-          "dose": "1200 mg/day aged garlic extract (delivering 1.2 mg SAC)",
+          "dose": "1.2 g/day aged garlic extract (1.2 mg S-allylcysteine)",
           "duration": "12 weeks",
-          "outcome": "Significant 11.5 mmHg reduction in systolic blood pressure and significant improvement in central hemodynamics and arterial stiffness.",
+          "outcome": "systolic BP fell 5.0 mmHg versus placebo overall and 11.5 mmHg in responders; central hemodynamic measures tended to improve",
           "effect_direction": "positive_moderate",
           "verification_provenance": {
             "pmid_verified": true,
@@ -10180,16 +9970,10 @@
           }
         }
       ],
-      "effect_direction": "positive_moderate",
-      "population_context": "adult populations in double-blind clinical trials",
-      "studied_dose_exposure": {
-        "values": [
-          600,
-          1200
-        ],
-        "unit": "mg"
-      },
-      "applicability_decision": "Aged/fermented black garlic extract standardized to S-allyl-cysteine supported at >= 600-1200 mg/day for cardiovascular and vascular elasticity.",
+      "effect_direction": "applicability_unestablished",
+      "population_context": "Adults with uncontrolled hypertension",
+      "studied_dose_exposure": {},
+      "applicability_decision": "The cited 12-week RCT (88 adults with uncontrolled hypertension) tested aged garlic extract, which lowered systolic pressure 5.0 mmHg versus placebo (11.5 mmHg in responders). Aged garlic extract is a different preparation from black garlic, so the trial does not establish black garlic efficacy or a dose.",
       "applicability_status": "applicable_reviewed_trials",
       "verification_provenance": {
         "verified_by": "scripts/api_audit/verify_literature_records.py",
@@ -10429,12 +10213,8 @@
         {
           "pmid": "15742357",
           "title": "Supplementation with gliadin-combined plant superoxide dismutase extract promotes antioxidant defences and protects against oxidative stress.",
-          "study_type": "randomized_controlled_trial",
-          "sample_size": 40,
-          "dose": "500 mg/day GliSODin",
-          "duration": "4 weeks",
-          "outcome": "Significant increase in endogenous antioxidant defenses (erythrocyte SOD, catalase, glutathione peroxidase) and protection against DNA oxidation.",
-          "effect_direction": "positive_moderate",
+          "study_type": "animal_study",
+          "outcome": "in animals, gliadin-combined melon SOD (but not unprotected SOD) raised circulating antioxidant enzymes and resistance to oxidative stress",
           "verification_provenance": {
             "pmid_verified": true,
             "authoritative_live_title": "Supplementation with gliadin-combined plant superoxide dismutase extract promotes antioxidant defences and protects against oxidative stress.",
@@ -10444,26 +10224,22 @@
             "verified_source": "https://pubmed.ncbi.nlm.nih.gov/15742357/",
             "verified_at": "2026-09-21T07:39:42.986936+00:00",
             "abstract_evidence_quote": "The effects of supplementation for 28 days with a standardized melon SOD extract either combined (Glisodin) or not with gliadin, were evaluated on various oxidative-stress biomarkers."
-          }
+          },
+          "scoring_eligible": false
         }
       ],
-      "effect_direction": "positive_moderate",
-      "population_context": "adult populations in double-blind clinical trials",
-      "studied_dose_exposure": {
-        "values": [
-          500
-        ],
-        "unit": "mg"
-      },
-      "applicability_decision": "Gliadin-protected oral superoxide dismutase (GliSODin) supported at >= 250-500 mg/day for cellular antioxidant resilience.",
+      "effect_direction": "applicability_unestablished",
+      "population_context": "Not established: the only cited source is an animal study",
+      "studied_dose_exposure": {},
+      "applicability_decision": "No verified human GliSODin trial is recorded. The cited PMID 15742357 reports supplementation in animals; the recorded human RCT (40 adults, 500 mg/day, 4 weeks) is not in it. Evidence review pending.",
       "applicability_status": "applicable_reviewed_trials",
       "verification_provenance": {
         "verified_by": "scripts/api_audit/verify_literature_records.py",
         "verified_at": "2026-09-21T07:39:42.986936+00:00",
-        "all_pmids_verified": true,
+        "all_pmids_verified": false,
         "retractions_found": false
       },
-      "verification_result": "authoritative_pubmed_verified"
+      "verification_result": "verification_failure_unresolved"
     },
     {
       "canonical_id": "flavonoids",
@@ -11636,12 +11412,8 @@
         {
           "pmid": "18515024",
           "title": "Pharmacology of Schisandra chinensis Bail.: an overview of Russian research and uses in medicine.",
-          "study_type": "randomized_controlled_trial",
-          "sample_size": 250,
-          "dose": "500 - 1500 mg/day standardized extract",
-          "duration": "2 - 12 weeks",
-          "outcome": "Clinical investigations demonstrate enhanced physical endurance, mental work capacity, and hepatoprotective enzyme regulation.",
-          "effect_direction": "positive_moderate",
+          "study_type": "narrative_review",
+          "outcome": "narrative overview of Russian pharmacological and clinical research; no pooled human dose or effect estimate",
           "verification_provenance": {
             "pmid_verified": true,
             "authoritative_live_title": "Pharmacology of Schisandra chinensis Bail.: an overview of Russian research and uses in medicine.",
@@ -11651,27 +11423,22 @@
             "verified_source": "https://pubmed.ncbi.nlm.nih.gov/18515024/",
             "verified_at": "2026-09-21T07:39:42.986936+00:00",
             "abstract_evidence_quote": "Pharmacological studies on animals have shown that Schizandra increases physical working capacity and affords a stress-protective effect against a broad spectrum of harmf"
-          }
+          },
+          "scoring_eligible": false
         }
       ],
-      "effect_direction": "positive_moderate",
-      "population_context": "adult populations in double-blind clinical trials",
-      "studied_dose_exposure": {
-        "values": [
-          500,
-          1500
-        ],
-        "unit": "mg"
-      },
-      "applicability_decision": "Standardized Schisandra chinensis fruit extract supported at >= 500-1500 mg/day for adaptogenic resilience.",
+      "effect_direction": "applicability_unestablished",
+      "population_context": "Not established: the only cited source is a narrative overview",
+      "studied_dose_exposure": {},
+      "applicability_decision": "No verified human Schisandra trial with a dose or outcome is recorded. The cited PMID 18515024 is a narrative overview of Russian research; it reports no sample size, dose, duration or pooled effect. Evidence review pending.",
       "applicability_status": "applicable_reviewed_trials",
       "verification_provenance": {
         "verified_by": "scripts/api_audit/verify_literature_records.py",
         "verified_at": "2026-09-21T07:39:42.986936+00:00",
-        "all_pmids_verified": true,
+        "all_pmids_verified": false,
         "retractions_found": false
       },
-      "verification_result": "authoritative_pubmed_verified"
+      "verification_result": "verification_failure_unresolved"
     },
     {
       "canonical_id": "irish_sea_moss",
@@ -12257,7 +12024,7 @@
     },
     {
       "canonical_id": "shiitake_mushroom",
-      "material_form": "Lentinula edodes mycelial/fruiting body extract standardized to AHCC / beta-glucans",
+      "material_form": "Whole dried shiitake mushrooms eaten daily (5 or 10 g)",
       "search_query": "lentinula edodes shiitake human immunity randomized trial",
       "search_date": "2026-09-20",
       "databases_searched": [
@@ -12269,11 +12036,11 @@
         {
           "pmid": "25866155",
           "title": "Consuming Lentinula edodes (Shiitake) Mushrooms Daily Improves Human Immunity: A Randomized Dietary Intervention in Healthy Young Adults.",
-          "study_type": "randomized_controlled_trial",
+          "study_type": "randomized_parallel_dose_groups_no_placebo",
           "sample_size": 52,
-          "dose": "5 - 10 g dry mushroom equivalent / 1000 mg extract",
+          "dose": "5 or 10 g whole dried shiitake mushrooms daily",
           "duration": "4 weeks",
-          "outcome": "Daily consumption significantly improved gamma-delta T cell proliferation, NK cell activation, and secretory IgA secretion with reduced CRP.",
+          "outcome": "gamma-delta T and NK-T cell proliferation and salivary sIgA rose, CRP fell after 4 weeks of eating shiitake",
           "effect_direction": "positive_moderate",
           "verification_provenance": {
             "pmid_verified": true,
@@ -12287,15 +12054,10 @@
           }
         }
       ],
-      "effect_direction": "positive_moderate",
-      "population_context": "adult populations in double-blind clinical trials",
-      "studied_dose_exposure": {
-        "values": [
-          1000
-        ],
-        "unit": "mg"
-      },
-      "applicability_decision": "Standardized Lentinula edodes mushroom extract supported at >= 500-1000 mg/day for mucosal and innate immunity.",
+      "effect_direction": "applicability_unestablished",
+      "population_context": "Healthy adults aged 21-41",
+      "studied_dose_exposure": {},
+      "applicability_decision": "The cited 4-week study fed 52 healthy adults 5 or 10 g of whole dried shiitake daily (two dose groups, no placebo). Whole-mushroom food evidence does not establish mycelial or fruiting-body extract (AHCC or beta-glucan) efficacy or a dose.",
       "applicability_status": "applicable_reviewed_trials",
       "verification_provenance": {
         "verified_by": "scripts/api_audit/verify_literature_records.py",
@@ -12734,7 +12496,7 @@
     },
     {
       "canonical_id": "fucoxanthin",
-      "material_form": "Standardized brown seaweed carotenoid fucoxanthin",
+      "material_form": "Xanthigen: brown seaweed extract (fucoxanthin) combined with pomegranate seed oil",
       "search_query": "fucoxanthin xanthigen weight management liver fat randomized trial",
       "search_date": "2026-09-20",
       "databases_searched": [
@@ -12748,9 +12510,9 @@
           "title": "The effects of Xanthigen in the weight management of obese premenopausal women with non-alcoholic fatty liver disease and normal liver fat.",
           "study_type": "randomized_controlled_trial",
           "sample_size": 151,
-          "dose": "2.4 - 8.0 mg/day fucoxanthin",
+          "dose": "Xanthigen-600/2.4 mg (300 mg pomegranate seed oil + 300 mg seaweed extract with 2.4 mg fucoxanthin)",
           "duration": "16 weeks",
-          "outcome": "Statistically significant reduction in body weight (-5.5 kg), body fat, waist circumference, and liver fat content vs placebo.",
+          "outcome": "body weight, body and liver fat, triglycerides and CRP fell versus placebo with the combination product",
           "effect_direction": "positive_moderate",
           "verification_provenance": {
             "pmid_verified": true,
@@ -12764,16 +12526,10 @@
           }
         }
       ],
-      "effect_direction": "positive_moderate",
-      "population_context": "adult populations in double-blind clinical trials",
-      "studied_dose_exposure": {
-        "values": [
-          2.4,
-          8.0
-        ],
-        "unit": "mg"
-      },
-      "applicability_decision": "Standardized brown seaweed fucoxanthin supported at >= 2.4-8.0 mg/day for metabolic and liver lipid management.",
+      "effect_direction": "applicability_unestablished",
+      "population_context": "Obese premenopausal women with or without NAFLD",
+      "studied_dose_exposure": {},
+      "applicability_decision": "The cited 16-week RCT (151 women) tested Xanthigen, brown seaweed fucoxanthin combined with pomegranate seed oil (Xanthigen-600: 300 mg oil + 300 mg seaweed extract with 2.4 mg fucoxanthin). A combination result does not establish standalone fucoxanthin efficacy or a dose.",
       "applicability_status": "applicable_reviewed_trials",
       "verification_provenance": {
         "verified_by": "scripts/api_audit/verify_literature_records.py",
@@ -13203,12 +12959,8 @@
         {
           "pmid": "21909287",
           "title": "Health effects of omega-3,6,9 fatty acids: Perilla frutescens is a good example of plant oils.",
-          "study_type": "randomized_controlled_trial",
-          "sample_size": 60,
-          "dose": "3 - 5 g/day perilla seed oil",
-          "duration": "12 weeks",
-          "outcome": "Statistically significant increase in plasma EPA and DHA levels and improved serum triglyceride and lipoprotein profiles.",
-          "effect_direction": "positive_moderate",
+          "study_type": "narrative_review",
+          "outcome": "narrative review of perilla seed oil fatty-acid composition (ALA 54-64%); no intervention estimate",
           "verification_provenance": {
             "pmid_verified": true,
             "authoritative_live_title": "Health effects of omega-3,6,9 fatty acids: Perilla frutescens is a good example of plant oils.",
@@ -13218,27 +12970,22 @@
             "verified_source": "https://pubmed.ncbi.nlm.nih.gov/21909287/",
             "verified_at": "2026-09-21T07:39:42.986936+00:00",
             "abstract_evidence_quote": "These polyunsaturated fatty acids are most beneficial to human health and in prevention of different diseases like cardiovascular disorders, cancer, inflammatory, rheumatoid arth"
-          }
+          },
+          "scoring_eligible": false
         }
       ],
-      "effect_direction": "positive_moderate",
-      "population_context": "adult populations in double-blind clinical trials",
-      "studied_dose_exposure": {
-        "values": [
-          3000,
-          5000
-        ],
-        "unit": "mg"
-      },
-      "applicability_decision": "Standardized Perilla seed oil rich in alpha-linolenic acid supported at >= 2000-5000 mg/day for plant-derived omega-3 status.",
+      "effect_direction": "applicability_unestablished",
+      "population_context": "Not established: the only cited source is a narrative review",
+      "studied_dose_exposure": {},
+      "applicability_decision": "No verified human perilla oil trial is recorded. The cited PMID 21909287 is a narrative review of perilla fatty-acid composition; the recorded RCT (60 adults, 3-5 g/day, 12 weeks) is not in it. Evidence review pending.",
       "applicability_status": "applicable_reviewed_trials",
       "verification_provenance": {
         "verified_by": "scripts/api_audit/verify_literature_records.py",
         "verified_at": "2026-09-21T07:39:42.986936+00:00",
-        "all_pmids_verified": true,
+        "all_pmids_verified": false,
         "retractions_found": false
       },
-      "verification_result": "authoritative_pubmed_verified"
+      "verification_result": "verification_failure_unresolved"
     },
     {
       "canonical_id": "rice_bran",
@@ -13265,7 +13012,7 @@
     },
     {
       "canonical_id": "undecylenic_acid",
-      "material_form": "10-Undecenoic acid (undecylenic acid)",
+      "material_form": "Topical powder: 2% undecylenic acid + 20% zinc undecylenate",
       "search_query": "undecylenic acid clinical evaluation tinea pedis trial",
       "search_date": "2026-09-20",
       "databases_searched": [
@@ -13279,9 +13026,9 @@
           "title": "Efficacy of undecylenic acid-zinc undecylenate powder in culture positive tinea pedis.",
           "study_type": "randomized_controlled_trial",
           "sample_size": 151,
-          "dose": "Standardized topical/oral formulation",
+          "dose": "topical powder (2% undecylenic acid, 20% zinc undecylenate) applied twice daily",
           "duration": "4 weeks",
-          "outcome": "Demonstrated 88% clinical cure and mycological clearance rate in randomized comparative evaluation.",
+          "outcome": "88% of culture-positive patients on active powder were culture-negative at 4 weeks versus 17% on placebo",
           "effect_direction": "positive_moderate",
           "verification_provenance": {
             "pmid_verified": true,
@@ -13295,16 +13042,10 @@
           }
         }
       ],
-      "effect_direction": "positive_moderate",
-      "population_context": "adult populations in double-blind clinical trials",
-      "studied_dose_exposure": {
-        "values": [
-          250,
-          500
-        ],
-        "unit": "mg"
-      },
-      "applicability_decision": "Undecylenic acid monounsaturated fatty acid supported at >= 250-500 mg/day for fungal microbiome balance.",
+      "effect_direction": "applicability_unestablished",
+      "population_context": "Patients with tinea pedis",
+      "studied_dose_exposure": {},
+      "applicability_decision": "The only cited trial applied an undecylenic acid / zinc undecylenate powder to the feet twice daily for 4 weeks in tinea pedis. Topical antifungal evidence does not establish oral undecylenic acid efficacy or a dose.",
       "applicability_status": "applicable_reviewed_trials",
       "verification_provenance": {
         "verified_by": "scripts/api_audit/verify_literature_records.py",
