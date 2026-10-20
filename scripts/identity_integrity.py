@@ -1177,15 +1177,40 @@ def resolve_identity(
             # no adrenal tissue; a "Glutamic Acid" header of caseinate and whey
             # is those proteins' amino profile).
             identity_names = canonical_registry.standard_names_of(canonical_before)
-            member_names_identity = any(map(names_the_identity, form_canonicals)) or any(
-                _label_spells_identity(item.value, identity_names)
+            members = [
+                (item.value, _canonical(named[0]) if named else None)
                 for item in form_evidence
                 if item.field.startswith("forms[")
+                for named in [canonical_registry.resolve_preferred(item.value)]
+            ]
+            # BCM-95's "Total Curcuminoids complex (with Essential Oils)" lists the
+            # turmeric-oil fraction it is made with (curcumin with turmeric
+            # essential oils, PMID 25994138): part of a curcumin header, never a
+            # contradiction. Only when the oil or an enclosing row names turmeric.
+            turmeric_named = any(
+                re.search(r"\bturmeric\b", str(name or ""), re.I)
+                for name in [row.get("parentBlend"), *(row.get("_ancestor_blends") or [])]
+            )
+            turmeric_oil = [
+                value for value, member in members
+                if canonical_before == "curcumin"
+                and (member == "volatile_oils" or re.search(r"\b(?:essential oils?|oleoresin)\b", value, re.I))
+                and (turmeric_named or re.search(r"\bturmeric\b", value, re.I))
+            ]
+            members = [(value, member) for value, member in members if value not in turmeric_oil]
+            member_names_identity = any(
+                (member and names_the_identity(member)) or _label_spells_identity(value, identity_names)
+                for value, member in members
             )
             printed_name = raw_evidence[0].value if raw_evidence else ""
+            printed_names_identity = _label_spells_identity(printed_name, identity_names) or bool(
+                turmeric_oil and canonical_registry.names_identity(
+                    re.sub(r"\s+(?:complex|blend)$", "", printed_name.strip(), flags=re.I), canonical_before
+                )
+            )
             forms_contradict = not (
-                (_label_spells_identity(printed_name, identity_names) or member_names_identity)
-                and (member_names_identity or not form_canonicals)
+                (printed_names_identity or member_names_identity)
+                and (member_names_identity or not any(member for _, member in members))
             )
         else:
             forms_contradict = not all(map(names_the_identity, form_canonicals))
