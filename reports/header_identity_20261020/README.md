@@ -1,8 +1,8 @@
 # Blend headers keep their identity, for interactions only (F2b) — October 20, 2026
 
 Coordinator decision, quoted: "a header keeps its identity, and therefore its interaction rules through #185, while
-routing and Dose read only score-eligible rows." Stacked on the audited #196
-(`claude/nonscorable-identity`, 477f218ab).
+routing and Dose read only score-eligible rows." Stacked on #196 after its delta audit fixes
+(`claude/nonscorable-identity`, 31aa7f7b9).
 
 ## Change
 
@@ -18,12 +18,13 @@ routing and Dose read only score-eligible rows." Stacked on the audited #196
 
 ## Measurement
 
-1,984 labels (the F2 cohort plus every product with an identified header). Base #196 477f218ab,
+1,984 labels (the F2 cohort plus every product with an identified header). Base #196 31aa7f7b9,
 candidate this branch, `replay.py snapshot --full --blob`. Records:
-`~/pg_quality/lostsubj_pr203_20261020/` (`base.jsonl`, `cand2.jsonl`). Per product:
-`f2b_fulldiff.out`.
+`~/pg_quality/lostsubj_pr203_20261020/` (`base2.jsonl`, `cand3.jsonl`, `compare3.json`). Per
+product: `f2b_fulldiff.out`.
 
-- **0 score moves, 0 product_safety_status changes, 0 rules removed.**
+- **0 score moves, 0 product_safety_status changes, 0 rules removed.** No scored artifact differs
+  from #196's (`compare3.json`). Header identities are interaction-only through #196's view.
 - **+11 rules**, each on a header whose printed name is the substance:
   - RULE_INGREDIENT_CAFFEINE: Ravage 1179, 12800, 28981.
   - RULE_IQM_CHONDROITIN: Flex-A-Min 17471, 17536, 17539.
