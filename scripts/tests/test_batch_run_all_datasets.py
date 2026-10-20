@@ -486,3 +486,15 @@ def test_batch_runner_checks_catalog_raw_labels_when_a_snapshot_will_run(tmp_pat
     assert result.returncode != 0, combined
     assert f"raw DSLD dataset missing: {dataset_root / 'Thorne'}" in combined
     assert "clean-reached" not in combined
+
+
+@pytest.mark.parametrize("targets", ["Olly,", ",Olly", "Olly, ,Thorne", ","])
+def test_batch_runner_refuses_an_empty_target_instead_of_running_every_brand(tmp_path, targets):
+    # An empty entry is a substring of every folder name, so it would select all brands.
+    dataset_root, script = _raw_label_batch(tmp_path, real_preflight=False, brands=("Olly", "Thorne"))
+    result = subprocess.run(["bash", str(script), "--root", str(dataset_root), "--targets", targets],
+                            capture_output=True, text=True, timeout=60)
+    combined = result.stdout + result.stderr
+    assert result.returncode != 0, combined
+    assert f"--targets {targets!r} contains an empty entry" in combined
+    assert "clean-reached" not in combined and "essential-preflight-reached" not in combined

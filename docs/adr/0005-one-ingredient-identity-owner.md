@@ -63,6 +63,9 @@ Measurements and receipts: `reports/identity_line_20261019/research.md`.
   `run_pipeline.py`) and before snapshot assembly, naming the expected path. Every gate BLOCKER
   names its product, raw row path (`label` for a whole-label finding), field, source value and
   exported value, and the gate log lists each one; the gate has no skip flag or receipt reuse.
+  A location without a raw_source_path is prefixed `cleaned:` or `blob:`, never shown as a raw
+  row. The catalog receipt (`promote_release_artifacts.py::catalog_input_binding`) binds the raw
+  label contents, so changed raw labels make the catalog stale and the comparison reruns.
 
 ## Open decision (Sean)
 

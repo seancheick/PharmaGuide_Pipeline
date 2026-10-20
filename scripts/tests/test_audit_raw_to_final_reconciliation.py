@@ -453,8 +453,10 @@ def test_every_line_finding_names_row_field_and_both_values():
         "field": "row_ledger.row_ref", "source_value": "Cellulose", "exported_value": None}]
     assert [(f["row_path"], f["field"], f["source_value"], f["exported_value"])
             for f in by_code["LEDGER_ROW_NOT_IN_RAW"]] == [
-        ("ingredientRows[7]", "row_ledger.row_ref", None, "Ghost"),
-        ("ingredientRows[8]", "ingredients.raw_source_path", None, "Phantom")]
+        ("ingredientRows[7]", "row_ledger.row_ref", None, "ingredientRows[7]"),
+        ("ingredientRows[8]", "ingredients.raw_source_path", None, "ingredientRows[8]")]
+    # The exported value is the path the field holds; the row's name stays in `ingredient`.
+    assert [f.get("ingredient") for f in by_code["LEDGER_ROW_NOT_IN_RAW"]] == ["Ghost", "Phantom"]
     assert [(f["row_path"], f["field"], f["source_value"], f["exported_value"])
             for f in by_code["LEDGER_NAME_DIFFERS_FROM_RAW"]] == [
         ("ingredientRows[1].nestedRows[0]", "row_ledger.source_label", "organic Wheat Grass", "Couch Grass")]
@@ -552,3 +554,22 @@ def test_gate_has_no_environment_or_flag_bypass():
     assert "environ" not in names and "getenv" not in names
     # The only threshold flag can tighten the gate, never loosen it below BLOCKER.
     assert '"--severity-min", default="BLOCKER"' in source
+
+
+def test_a_location_that_is_not_a_raw_row_path_says_which_layer_it_is():
+    from audit_raw_to_final import (
+        _check_raw_inactives_present_in_blob, _check_unsafe_unit_conversion)
+    record = _record()
+    _check_raw_actives_present_in_blob(record, {"activeIngredients": [
+        {"name": "Zinc Picolinate"}, {"name": "Boron Citrate", "raw_source_path": "ingredientRows[4]"}]}, {})
+    _check_raw_inactives_present_in_blob(record, {"otheringredients": {"ingredients": ["Silica"]}}, {})
+    _check_unsafe_unit_conversion(record, {"ingredients": [{"name": "Vitamin A", "unit": "IU", "quantity": 5000}]})
+    _check_blend_children(record, {"proprietary_blend_detail": {"blends": [
+        {"name": "Energy Blend", "child_ingredients": [{"amount": 5}]}]}})
+    assert [f.row_path for f in record.findings] == [
+        "cleaned:activeIngredients[0]",
+        "ingredientRows[4]",
+        "cleaned:otheringredients.ingredients[0]",
+        "blob:ingredients[0]",
+        "blob:proprietary_blend_detail.blends[0].child_ingredients[0]",
+    ]
