@@ -37,19 +37,36 @@ Sean, 2026-10-19:
 
 No resveratrol or knotweed entry exists in `curated_interactions/` (checked all three files).
 
+## Knotweed → resveratrol relationship (audit follow-up, October 20, 2026)
+
+Sean's amendment calls for a source-qualified relationship from knotweed itself, not one that
+depends on a declared percentage. It lives in
+`identity/interaction.py::BOTANICAL_CONSTITUENT_SOURCE` (`japanese_knotweed` → IQM `resveratrol`),
+for interaction lookup only; scoring still credits resveratrol only through a declared percentage
+(the marker route). Sources, read by content:
+- PMID 30901974: Hu Zhang rhizome is "one of the richest natural sources of resveratrol".
+- PMID 33388645: resveratrol is among its five major quantified constituents.
+- PMID 16830819: resveratrol is highest in root and rhizome (~0.4%).
+
+Grape stays linked only by a declared percentage, the standard its evidence supports.
+
 ## Replay
 
 Every raw label mentioning resveratrol, knotweed, Hu Zhang, Polygonum cuspidatum or BioVin, every
-label whose row notes name a marker keyword, and 200 controls (1,478), main 2e80642ca vs this
-branch, `--full --blob`. Per-product list: `replay_changes.tsv`.
+label whose row notes name a marker keyword, and 200 controls (1,478 labels). Base main 3d7fe8adf
+vs this branch, `--full --blob`. Records: `~/pg_quality/lostsubj_pr199_20261020/`
+(`base_rv.jsonl`, `cand_rv.jsonl`, `fulldiff_rv.out`).
 
-- **Rules added (11)**: RULE_INGREDIENT_CURCUMIN ×6 (turmeric rows whose notes declare 95%
-  curcuminoids: 1851, 3514, 16374, 69625, 82607, 228978); RULE_IQM_RESVERATROL_BLEEDING ×5 (BioVin
-  269265, 302705; knotweed declaring 50% 251683, 98% 232731; knotweed + grape header declaring 35%
-  2502).
-- **Rules removed (14)**: RULE_IQM_RESVERATROL_BLEEDING on 13 Alive! multivitamins whose
-  "Japanese Knotweed Root Extract" (0 NP in a blend) declares no resveratrol, and 58854 DHEA
-  Complete, whose header "Japanese Knotweed extract and whole Red Grape extract blend" declares
-  35% trans-resveratrol but has no identity (header follow-up). **For Sean.**
-- **Reworded (215)**: the qualified advisory text on every product carrying the resveratrol rule.
+- **Rules added (11):**
+  - RULE_INGREDIENT_CURCUMIN ×6, on turmeric rows whose notes declare 95% curcuminoids: 1851,
+    3514, 16374, 69625, 82607, 228978.
+  - RULE_IQM_RESVERATROL_BLEEDING ×5: BioVin 269265, 302705; knotweed declaring 50% (251683) and
+    98% (232731); knotweed + grape header declaring 35% (2502).
+- **Rules removed: 0.** The 13 Alive! multivitamins with undeclared "Japanese Knotweed Root
+  Extract", and 58854 DHEA Complete, keep the qualified advisory through the knotweed
+  relationship.
+- **Reworded:** the qualified advisory text on every product carrying the resveratrol rule.
 - **0 score changes, 0 product_safety_status changes.**
+- Merged main 3d7fe8adf; the IQM conflict was re-applied with `data_batch.py check`.
+- Slow file `test_clean_unmapped_alias_regressions.py` (BioVin → Grape pin), run by name: pass.
+  No other SLOW_TEST_FILES entry pins BioVin, cabbage palm, wheatgrass or green bell pepper.
