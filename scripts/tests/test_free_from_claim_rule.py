@@ -271,3 +271,30 @@ def test_tree_nut_facility_does_not_contradict_a_peanut_free_claim(run):
     # products that contain egg, fish, shellfish, soy and tree nuts."
     enriched, transparency = run("75073")
     assert _b2(transparency) == 0.0
+
+
+# Gluten qualified by a ppm limit is a 21 CFR 101.91 qualifier, not an
+# allergen warning, in both the parsed and the unread may-contain paths.
+@pytest.mark.parametrize("statement", [
+    "Gluten-free: may contain trace amounts of gluten below 20 ppm.",   # unread path
+    "May contain less than 20 ppm gluten.",                             # parsed path
+    "May contain traces of gluten (less than 20 parts per million).",   # parsed path
+])
+def test_gluten_qualified_by_a_ppm_limit_keeps_the_gluten_free_claim(run, statement):
+    enriched, transparency = run("328751", extra_statements=(statement,))
+    assert enriched["compliance_data"]["gluten_free"] is True
+    assert enriched["claim_gluten_free_validated"] is True
+    assert "ALLERGEN_WHEAT" not in {h["allergen_id"] for h in enriched["contaminant_data"]["allergens"]["allergens"]}
+    assert _b2(transparency) == 0.0
+
+
+def test_a_ppm_note_does_not_hide_other_allergens_in_its_sentence(run):
+    enriched, _ = run("328751", extra_statements=("May contain milk and soy (gluten below 20 ppm).",))
+    ids = {h["allergen_id"] for h in enriched["contaminant_data"]["allergens"]["allergens"]}
+    assert {"ALLERGEN_MILK", "ALLERGEN_SOY"} <= ids and "ALLERGEN_WHEAT" not in ids
+
+
+def test_a_measured_gluten_level_is_not_a_ppm_limit(run):
+    enriched, _ = run("328751", extra_statements=("Contains gluten (40 ppm).",))
+    assert "ALLERGEN_WHEAT" in {h["allergen_id"] for h in enriched["contaminant_data"]["allergens"]["allergens"]}
+    assert enriched["compliance_data"]["gluten_free"] is False

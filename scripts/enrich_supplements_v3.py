@@ -13004,12 +13004,23 @@ class SupplementEnricherV3:
         re.I,
     )
 
-    _PPM_QUALIFIER = re.compile(
-        r"\([^()]*\b(?:ppm|parts\s+per\s+million)\b[^()]*\)"
-        r"|\b(?:less\s+than|below|under|fewer\s+than)\s+\d+\s*(?:ppm|parts\s+per\s+million)\b(?:\s+(?:of\s+)?gluten)?"
-        r"|<\s*\d+\s*(?:ppm|parts\s+per\s+million)\b(?:\s+(?:of\s+)?gluten)?",
-        re.I,
+    # 21 CFR 101.91: a gluten-free food may hold < 20 ppm gluten. In a sentence
+    # that states a ppm limit, the limit and every gluten mention ("trace
+    # amounts of gluten below 20 ppm", "(less than 20 parts per million)") are
+    # that qualifier, not an allergen warning; other allergens there still read.
+    _PPM_LIMIT_TEXT = (
+        r"(?:\b(?:less\s+than|below|under|fewer\s+than)\s+|<\s*)\d+(?:\.\d+)?\s*(?:ppm|parts\s+per\s+million)\b"
     )
+    _PPM_LIMIT = re.compile(rf"\([^()]*{_PPM_LIMIT_TEXT}[^()]*\)|{_PPM_LIMIT_TEXT}", re.I)
+    _QUALIFIED_GLUTEN = re.compile(r"\b(?:(?:traces?|trace\s+amounts?)\s+of\s+)?gluten\b", re.I)
+
+    @classmethod
+    def _without_gluten_ppm_qualifier(cls, text: str) -> str:
+        def strip(sentence: str) -> str:
+            if not cls._PPM_LIMIT.search(sentence):  # a limit, not a measured level
+                return sentence
+            return cls._QUALIFIED_GLUTEN.sub(" ", cls._PPM_LIMIT.sub(" ", sentence))
+        return "".join(strip(part) for part in re.split(r"((?<=[.!?;])\s+|[\r\n\t]+)", text))
 
     def _has_unparsed_may_contain(self, product: Dict) -> bool:
         """A "may contain"/"shared equipment" sentence with allergen wording that
@@ -13026,9 +13037,8 @@ class SupplementEnricherV3:
         for text in texts:
             for sentence in re.split(r'(?<=[.!?;])\s+|[\r\n\t]+', text):
                 # "(may contain trace amounts less than 20 ppm)" qualifies a
-                # gluten-free claim (21 CFR 101.91); it names no allergen. Only
-                # that clause is set aside; the rest of the sentence is read.
-                sentence = self._PPM_QUALIFIER.sub(' ', sentence)
+                # gluten-free claim; only that qualifier is set aside.
+                sentence = self._without_gluten_ppm_qualifier(sentence)
                 if (re.search(r'may\s+contain|shared\s+equipment', sentence, re.I)
                         and self._UNRESOLVED_ALLERGEN_WORDING.search(sentence)):
                     parsed: List[Dict] = []
@@ -13051,7 +13061,7 @@ class SupplementEnricherV3:
         - "Free from milk and soy" -> NOT added
         - "Does not contain milk" -> NOT added
         """
-        text_lower = text.lower().strip()
+        text_lower = self._without_gluten_ppm_qualifier(text.lower().strip())
 
         # Scope negation to its own clause. A product can legitimately say
         # "Made without gluten. Contains milk"; the first clause must not erase
