@@ -127,3 +127,22 @@ def test_export_carries_the_enricher_identity_even_when_unresolved(products):
     ledger = [r for r in blob["display_ingredients"] if r.get("raw_source_path") == path]
     assert ledger and all(not (r.get("analysis") or {}).get("canonical_id") for r in ledger)
     assert any(r.get("canonical_id") == "probiotics" for r in ledger)
+
+
+@pytest.mark.parametrize("literal,not_owner", [
+    # BioVin / BioVin Advanced are red-wine grape extracts (5% trans-resveratrol standard for
+    # Advanced); a grape extract row is not a resveratrol row (replay 2026-10-19: 269265, 328514).
+    ("BioVin", "resveratrol"),
+    ("BioVin Advanced", "resveratrol"),
+    # "Cabbage palm" names Sabal palmetto and acai (Euterpe oleracea); the corpus row sits in a
+    # berry blend that DSLD groups as Acai (64382).
+    ("Cabbage Palm", "saw_palmetto"),
+])
+def test_ambiguous_or_brand_aliases_do_not_name_another_substance(pipeline, literal, not_owner):
+    registry = pipeline[1]._current_canonical_identity_registry()
+    assert not registry.literal_identity_matches(literal, not_owner)
+
+
+def test_biovin_advanced_is_a_grape_extract(pipeline):
+    registry = pipeline[1]._current_canonical_identity_registry()
+    assert registry.literal_identity_matches("BioVin Advanced", "grape")

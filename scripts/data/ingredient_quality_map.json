@@ -32,7 +32,7 @@
     "statistics": {
       "total_parents": 655,
       "total_forms": 1474,
-      "total_form_aliases": 12295,
+      "total_form_aliases": 12292,
       "parents_with_parent_aliases": 149,
       "parents_with_contains_aliases": 0,
       "parents_with_pattern_aliases": 0
@@ -13749,10 +13749,7 @@
           "resvida",
           "resvinol-25",
           "resveratrol 50% extract",
-          "Veri-te resveratrol",
-          "BioVin",
-          "biovin advanced red wine extract",
-          "biovin advanced"
+          "Veri-te resveratrol"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
