@@ -123,3 +123,18 @@ identical counts):
   `claim_gluten_free_validated`; 274671 loses it.
 - 220 gain `claim_allergen_free_validated` (L1), 59 of them controls. Its only reader is the
   scorer's `claim_validations` metadata; no score moves from it.
+
+## Low cleanups after #187/#188 (2026-10-20)
+
+- A barley or rye **ingredient** (a source while `GLUTEN_GRAIN_INGREDIENT_CONTRADICTS_GLUTEN_FREE`)
+  is recorded as "gluten-free claim conflicts with a gluten-grain source", and its claim evidence as
+  `allergen_conflict:gluten grain detected`; "gluten-grain cross-contact" and "gluten/wheat
+  detected" were wrong for it.
+- The "< 20 ppm" exemption in the unread may-contain check covers only the qualifier clause; the
+  rest of the sentence is still read ("May contain traces of grains processed on shared lines
+  (tested below 20 ppm)" now voids the claim; 273865's qualifier alone does not).
+
+Replay `~/pg_quality/lucidbanach_freefromcleanup_20261020/` (the #187 cohort, 784 labels, main
+112bc904d vs the cleanup head): 2 records change, 297644 and 274671, in conflict wording and
+evidence label only; 0 score, status, badge or allergen-hit changes. The ppm guard has no trigger
+in this cohort.
