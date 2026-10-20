@@ -1763,20 +1763,16 @@
         "zylofresh"
       ],
       "category": "vitamin_supplement",
-      "evidence_level": "preclinical",
+      "evidence_level": "reference",
       "published_studies": [
-        "animal"
+        "22556508"
       ],
       "score_contribution": "tier_3",
       "key_endpoints": [
-        "chlorophyll ↑",
-        "detox ↑"
+        "Rabbit lipid outcomes with generic Medicago sativa seed extract"
       ],
-      "health_goals_supported": [
-        "Healthy Aging/Longevity",
-        "Digestive Health"
-      ],
-      "notes": "No PubMed-indexed human trials were identified for ZyloFresh branded extract. The fallback literature is limited and largely nonhuman, so the entry remains preclinical.",
+      "health_goals_supported": [],
+      "notes": "No verified human ZyloFresh product trial is recorded. The cited generic alfalfa seed-extract rabbit study is reference context; it does not establish branded human efficacy.",
       "study_type": "animal_study",
       "last_updated": "2026-03-06",
       "notable_studies": "No PubMed-indexed human trials were identified for ZyloFresh branded extract. Nonhuman alfalfa lipid data include the rabbit study indexed as PMID 22556508, but that does not support a human branded-evidence claim.",
@@ -1805,13 +1801,11 @@
         "unii": "DJO934BRBD"
       },
       "effect_direction": "positive_weak",
-      "primary_outcome": "Healthy Aging/Longevity",
-      "total_enrollment": 20,
+      "primary_outcome": "Rabbit lipid outcomes with generic Medicago sativa seed extract",
+      "total_enrollment": null,
       "effect_direction_confidence": "low",
-      "effect_direction_rationale": "Retained positive_weak classification; study_type=animal_study; evidence_level=preclinical; primary_outcome=Healthy Aging/Longevity; published_tags=animal; total_enrollment=20; endpoint_tags=healthy_aging.",
-      "endpoint_relevance_tags": [
-        "healthy_aging"
-      ]
+      "effect_direction_rationale": "Descriptive nonhuman activity retained as reference context. PMID 22556508 concerns generic alfalfa seed extract in rabbits, not a ZyloFresh human product trial. Human branded efficacy and enrollment are not established by this source.",
+      "endpoint_relevance_tags": []
     },
     {
       "id": "BRAND_CREAPURE",
@@ -11338,20 +11332,19 @@
       "evidence_level": "ingredient-human",
       "score_contribution": "tier_2",
       "key_endpoints": [
-        "senescent cells ↓",
-        "inflammation ↓"
+        "Biological age decreased in 4 participants, increased in 5 and was unchanged in 1",
+        "No statistically significant telomere-length change"
       ],
       "health_goals_supported": [
         "Healthy Aging/Longevity"
       ],
       "notes": "Fisetin remains primarily preclinical. Human data are limited to a small uncontrolled pilot with mixed biological-age results (PMID 39269340), while the main placebo-controlled efficacy studies are still ongoing on ClinicalTrials.gov.",
-      "study_type": "rct_single",
+      "study_type": "observational",
       "published_studies": [
-        "RCT",
-        "Phase 2"
+        "39269340"
       ],
       "last_updated": "2026-03-07",
-      "notable_studies": "A small pilot in healthy older adults (PMID 39269340) did not show a consistent anti-aging signal and had no control arm. No completed placebo-controlled fisetin efficacy trial is published yet; ongoing randomized studies include AFFIRM-LITE (ClinicalTrials.gov NCT03675724) and COVID-FISETIN (ClinicalTrials.gov NCT04476953).",
+      "notable_studies": "PMID 39269340 is an uncontrolled pilot in 10 adults over 50: 500 mg fisetin daily for one week per month for six months. Biological-age results were mixed and telomere length did not change significantly; the study does not establish an anti-aging benefit.",
       "references_structured": [
         {
           "type": "pubmed",
@@ -11387,16 +11380,13 @@
         "unii": "OO2ABO9578"
       },
       "effect_direction": "mixed",
-      "primary_outcome": "Healthy Aging/Longevity",
-      "total_enrollment": 75,
-      "registry_completed_trials_count": 6,
+      "primary_outcome": "Biological age and telomere length in an uncontrolled pilot",
+      "total_enrollment": 10,
+      "registry_completed_trials_count": null,
       "effect_direction_confidence": "medium",
-      "effect_direction_rationale": "Retained mixed classification; study_type=rct_single; evidence_level=ingredient-human; primary_outcome=Healthy Aging/Longevity; published_tags=RCT,Phase 2; registry_completed_trials_count=6; total_enrollment=75; endpoint_tags=joint_health,cardiovascular,glycemic_control,muscle_recovery; notes/citations include mixed-evidence language.",
+      "effect_direction_rationale": "Mixed descriptive findings in an uncontrolled 10-person pilot, PMID 39269340: four biological-age decreases, five increases and one unchanged; no significant telomere-length change. No placebo-controlled efficacy conclusion or completed randomized-trial count is established.",
       "endpoint_relevance_tags": [
-        "joint_health",
-        "cardiovascular",
-        "glycemic_control",
-        "muscle_recovery"
+        "healthy_aging"
       ]
     },
     {
@@ -11520,21 +11510,17 @@
         "alpha ketoglutarate"
       ],
       "category": "metabolic_blood_sugar",
-      "evidence_level": "preclinical",
+      "evidence_level": "reference",
       "score_contribution": "tier_3",
       "key_endpoints": [
-        "epigenetic regulation ↑",
-        "healthspan ↑"
+        "Protocol and recruitment feasibility; efficacy outcomes not reported"
       ],
-      "health_goals_supported": [
-        "Healthy Aging/Longevity",
-        "Increase Energy"
-      ],
+      "health_goals_supported": [],
       "notes": "AKG remains predominantly preclinical for longevity claims. Published translational literature is limited to study-protocol and feasibility papers, while peer-reviewed standalone efficacy outcomes are still unavailable.",
-      "study_type": "animal_study",
+      "study_type": "reference",
       "published_studies": [
-        "mechanistic",
-        "animal"
+        "37217632",
+        "40819772"
       ],
       "last_updated": "2026-03-07",
       "notable_studies": "The published translational literature includes the ABLE study protocol (PMID 37217632) and a recruitment feasibility paper (PMID 40819772). Registry data also include mixed-context intervention studies, but standalone Ca-AKG efficacy outcomes for healthy-aging claims remain unconfirmed.",
@@ -11608,14 +11594,12 @@
         "unii": "8ID597Z82X"
       },
       "effect_direction": "positive_weak",
-      "primary_outcome": "Healthy Aging/Longevity",
-      "total_enrollment": 20,
-      "registry_completed_trials_count": 7,
+      "primary_outcome": "ABLE study protocol and recruitment feasibility, not efficacy outcomes",
+      "total_enrollment": null,
+      "registry_completed_trials_count": null,
       "effect_direction_confidence": "low",
-      "effect_direction_rationale": "Retained positive_weak classification; study_type=animal_study; evidence_level=preclinical; primary_outcome=Healthy Aging/Longevity; published_tags=mechanistic,animal; registry_completed_trials_count=7; total_enrollment=20; endpoint_tags=healthy_aging; registry evidence includes mixed-context human interventions, but standalone efficacy outcomes for Ca-AKG remain unconfirmed.",
-      "endpoint_relevance_tags": [
-        "healthy_aging"
-      ]
+      "effect_direction_rationale": "Reference context only: PMID 37217632 is a protocol and PMID 40819772 reports recruitment feasibility. The cited records do not report Ca-AKG efficacy outcomes; planned or recruited participants are not completed efficacy evidence.",
+      "endpoint_relevance_tags": []
     },
     {
       "id": "PRECLIN_APIGENIN",
@@ -11625,21 +11609,16 @@
         "chamomile apigenin"
       ],
       "category": "anti_inflammatory",
-      "evidence_level": "preclinical",
+      "evidence_level": "reference",
       "score_contribution": "tier_3",
       "key_endpoints": [
-        "CD38 inhibition ↑",
-        "NAD+ ↑"
+        "Generalized anxiety symptoms with chamomile extract"
       ],
-      "health_goals_supported": [
-        "Sleep Quality",
-        "Healthy Aging/Longevity"
-      ],
+      "health_goals_supported": [],
       "notes": "Apigenin remains predominantly preclinical for sleep and healthy-aging claims. Registry records show early human intervention studies, but peer-reviewed standalone efficacy outcomes are still limited and mostly not attributable to apigenin alone.",
-      "study_type": "in_vitro",
+      "study_type": "rct_single",
       "published_studies": [
-        "mechanistic",
-        "in-vitro"
+        "19593179"
       ],
       "last_updated": "2026-03-01",
       "notable_studies": "Chamomile-derived exposure studies and registry-listed direct apigenin interventions support continued monitoring, but standalone published efficacy evidence remains too limited for a human-evidence upgrade. CD38 inhibition and NAD+ support remain primarily mechanistic.",
@@ -11688,15 +11667,12 @@
         "unii": "7V515PI7F6"
       },
       "effect_direction": "positive_weak",
-      "primary_outcome": "Sleep Quality",
-      "total_enrollment": 15,
-      "registry_completed_trials_count": 10,
+      "primary_outcome": "Generalized anxiety symptoms with chamomile extract, not isolated apigenin",
+      "total_enrollment": null,
+      "registry_completed_trials_count": null,
       "effect_direction_confidence": "low",
-      "effect_direction_rationale": "Retained positive_weak classification; study_type=in_vitro; evidence_level=preclinical; primary_outcome=Sleep Quality; published_tags=mechanistic,in-vitro; registry_completed_trials_count=10; total_enrollment=15; endpoint_tags=stress_mood,sleep; registry evidence includes direct and combination-formula human interventions, but standalone published efficacy outcomes remain limited and not yet strong enough to upgrade this entry.",
-      "endpoint_relevance_tags": [
-        "stress_mood",
-        "sleep"
-      ]
+      "effect_direction_rationale": "Descriptive source result retained as reference context. PMID 19593179 tested chamomile extract for generalized anxiety disorder, not isolated apigenin for sleep or aging. No isolated-apigenin efficacy or enrollment is established by this source.",
+      "endpoint_relevance_tags": []
     },
     {
       "id": "PRECLIN_LUTEOLIN",
@@ -11706,21 +11682,16 @@
         "flavonoid luteolin"
       ],
       "category": "anti_inflammatory",
-      "evidence_level": "preclinical",
+      "evidence_level": "reference",
       "score_contribution": "tier_3",
       "key_endpoints": [
-        "mast cell stabilization ↑",
-        "inflammation ↓"
+        "Olfactory function with PEA-luteolin plus olfactory training"
       ],
-      "health_goals_supported": [
-        "Immune Support",
-        "Healthy Aging/Longevity"
-      ],
+      "health_goals_supported": [],
       "notes": "Luteolin remains predominantly preclinical for immune and healthy-aging claims. Published human evidence is currently formula-level or adjunctive, so benefit cannot be attributed confidently to standalone luteolin.",
-      "study_type": "animal_study",
+      "study_type": "rct_single",
       "published_studies": [
-        "mechanistic",
-        "animal"
+        "35450527"
       ],
       "last_updated": "2026-03-01",
       "notable_studies": "Registry records include combination-formula and adjunctive luteolin interventions in allergy, cardiometabolic, and neurocognitive settings. These human signals justify continued monitoring, but standalone published efficacy evidence remains limited.",
@@ -11761,15 +11732,12 @@
         "unii": "KUX1ZNC9J2"
       },
       "effect_direction": "positive_weak",
-      "primary_outcome": "Immune Support",
-      "total_enrollment": 15,
-      "registry_completed_trials_count": 10,
+      "primary_outcome": "Post-COVID olfactory function with PEA-LUT plus olfactory training",
+      "total_enrollment": null,
+      "registry_completed_trials_count": null,
       "effect_direction_confidence": "low",
-      "effect_direction_rationale": "Retained positive_weak classification; study_type=animal_study; evidence_level=preclinical; primary_outcome=Immune Support; published_tags=mechanistic,animal; registry_completed_trials_count=10; total_enrollment=15; endpoint_tags=focus_memory,glycemic_control; human signals are currently combination-formula or adjunctive and do not yet justify standalone luteolin efficacy claims.",
-      "endpoint_relevance_tags": [
-        "focus_memory",
-        "glycemic_control"
-      ]
+      "effect_direction_rationale": "Descriptive source result retained as reference context. PMID 35450527 tested a PEA-luteolin combination with olfactory training, not isolated luteolin. This source does not establish standalone luteolin efficacy or enrollment.",
+      "endpoint_relevance_tags": []
     },
     {
       "id": "INGR_TAURINE",
@@ -21084,21 +21052,16 @@
         "undecenoic acid"
       ],
       "category": "immune",
-      "evidence_level": "ingredient-human",
+      "evidence_level": "reference",
       "study_type": "in_vitro",
       "published_studies": [
-        "mechanistic",
-        "topical monograph"
+        "10991877"
       ],
       "score_contribution": "tier_3",
       "key_endpoints": [
-        "Candida colonization ↓",
-        "fungal infection resolution ↑"
+        "Inhibition of Candida albicans yeast-to-hypha transition in vitro"
       ],
-      "health_goals_supported": [
-        "Immune Support",
-        "Digestive Health"
-      ],
+      "health_goals_supported": [],
       "notes": "The clinically relevant use case for undecylenic acid is topical antifungal therapy and mechanism-informed OTC monograph support, not a robust modern randomized oral-trial literature.",
       "last_updated": "2026-03-23",
       "notable_studies": "The best indexed primary paper is the in-vitro Candida morphogenesis study (PMID 10991877), and the practical clinical-use anchor remains the FDA OTC topical antifungal monograph rather than a modern oral RCT literature. This ingredient should therefore be presented conservatively as a topical antifungal mechanism/reference record, not as a human RCT-backed oral evidence entry.",
@@ -21111,7 +21074,7 @@
           "title": "Undecylenic acid inhibits morphogenesis of Candida albicans.",
           "citation": "Antimicrobial agents and chemotherapy (2000 Oct)",
           "url": "https://pubmed.ncbi.nlm.nih.gov/10991877/",
-          "published_date": "2001-07-01",
+          "published_date": "2000-10-01",
           "publication_types": [
             "Journal Article"
           ],
@@ -21127,16 +21090,12 @@
         "unii": "K3D86KJ24N"
       },
       "effect_direction": "positive_strong",
-      "primary_outcome": "Immune Support",
-      "total_enrollment": 20,
-      "registry_completed_trials_count": 7,
+      "primary_outcome": "Candida albicans morphogenesis (in vitro)",
+      "total_enrollment": null,
+      "registry_completed_trials_count": null,
       "effect_direction_confidence": "low",
-      "effect_direction_rationale": "Retained positive_strong classification; study_type=in_vitro; evidence_level=ingredient-human; primary_outcome=Immune Support; published_tags=mechanistic,topical monograph; registry_completed_trials_count=7; total_enrollment=20; endpoint_tags=focus_memory,cardiovascular,glycemic_control; notes/citations contain no automated downgrade signals.",
-      "endpoint_relevance_tags": [
-        "focus_memory",
-        "cardiovascular",
-        "glycemic_control"
-      ]
+      "effect_direction_rationale": "Descriptive in-vitro activity retained; PMID 10991877 tested denture liners and Candida morphogenesis, not human oral efficacy. Human enrollment and completed efficacy-trial count are unverified. Existing reference eligibility withholds numerical clinical credit.",
+      "endpoint_relevance_tags": []
     },
     {
       "id": "INGR_BENFOTIAMINE",

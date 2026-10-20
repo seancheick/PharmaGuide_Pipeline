@@ -1043,6 +1043,10 @@ def _is_verified_product_level_entry(entry: Dict[str, Any]) -> bool:
     if not _safe_list(entry.get("references_structured")):
         return False
     evidence_level = _norm_text(entry.get("evidence_level"))
+    # Explicit nonhuman source metadata cannot become a human product trial
+    # through a brand identifier. General preclinical scoring is separate.
+    if evidence_level == "preclinical" or _norm_text(entry.get("study_type")) in {"animal_study", "in_vitro"}:
+        return False
     entry_id = _norm_text(entry.get("id"))
     return (
         evidence_level in {"product-human", "product_human", "product-rct", "product_rct", "branded-rct", "branded_rct"}

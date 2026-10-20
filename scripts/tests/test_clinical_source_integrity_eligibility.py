@@ -57,3 +57,76 @@ def test_no_eligible_backed_record_does_not_resolve_as_reviewed_benefit(monkeypa
     result = er.resolve_evidence_for_canonical("audit_material", name="Audit Material")
     assert result.points_eligible is False
     assert result.applicability_status != "applicable_reviewed_trials"
+
+
+
+def test_undecylenic_reference_cannot_resolve_oral_human_efficacy():
+    import json
+    from clinical_applicability import assess_clinical_applicability
+    from scoring_v4.modules.generic_evidence import _is_verified_ingredient_human_entry
+    data = json.loads((Path(__file__).resolve().parents[1] / "data" / "backed_clinical_studies.json").read_text())
+    entry = next(r for r in data["backed_clinical_studies"] if r["id"] == "ING_UNDECYLENIC_ACID")
+    assert entry["study_type"] == "in_vitro"
+    assert entry["evidence_level"] == "reference"
+    assert entry["effect_direction"] == "positive_strong"  # descriptive preclinical effect retained
+    assert entry["total_enrollment"] is None
+    assert entry["registry_completed_trials_count"] is None
+    assert entry["endpoint_relevance_tags"] == []
+    assert entry["published_studies"] == ["10991877"]
+    assert not er.clinical_record_sources_eligible(entry)
+    assert not _is_verified_ingredient_human_entry(entry)
+    resolution = er.resolve_evidence_for_canonical("undecylenic_acid", name="Undecylenic Acid")
+    assert resolution.points_eligible is False
+    assert resolution.blocking_reasons == ["clinical_sources_ineligible"]
+    row = {"name": "Undecylenic Acid", "canonical_id": "undecylenic_acid", "quantity": 250, "unit": "mg", "raw_source_path": "ingredientRows[0]"}
+    product = {"form_factor_canonical": "capsule", "activeIngredients": [row], "ingredient_quality_data": {"ingredients": [row], "ingredients_scorable": [row]}}
+    stale = {**entry, "evidence_level": "ingredient-human", "total_enrollment": 20, "registry_completed_trials_count": 7}
+    assert assess_clinical_applicability(product, stale, assess_amount=False)["reason_code"] == "reference_only_clinical_record"
+
+
+@pytest.mark.parametrize("metadata", [
+    {"evidence_level": "preclinical", "study_type": "animal_study"},
+    {"evidence_level": "product-human", "study_type": "in_vitro"},
+])
+def test_brand_identifier_never_overrides_explicit_nonhuman_sources(metadata):
+    from scoring_v4.modules.generic_evidence import _is_verified_product_level_entry
+    entry = _entry([{"pmid": "22556508"}], id="BRAND_AUDIT_MATERIAL", **metadata)
+    assert not _is_verified_product_level_entry(entry)
+    control = _entry([{"pmid": "28661438"}], id="BRAND_AUDIT_MATERIAL", evidence_level="product-human")
+    assert _is_verified_product_level_entry(control)
+
+
+def test_backed_records_do_not_transfer_generic_or_combination_or_protocol_results():
+    import json
+    data = json.loads((Path(__file__).resolve().parents[1] / "data" / "backed_clinical_studies.json").read_text())
+    records = {r["id"]: r for r in data["backed_clinical_studies"]}
+    for key in ["BRAND_ZYLOFRESH", "PRECLIN_AKG", "PRECLIN_APIGENIN", "PRECLIN_LUTEOLIN"]:
+        entry = records[key]
+        assert entry["evidence_level"] == "reference"
+        assert entry["total_enrollment"] is None
+        assert entry["effect_direction"] == "positive_weak"
+        assert not er.clinical_record_sources_eligible(entry)
+    assert records["BRAND_ZYLOFRESH"]["study_type"] == "animal_study"
+    assert records["PRECLIN_AKG"]["study_type"] == "reference"
+    assert records["PRECLIN_APIGENIN"]["published_studies"] == ["19593179"]
+    assert records["PRECLIN_LUTEOLIN"]["published_studies"] == ["35450527"]
+    fisetin = records["PRECLIN_FISETIN"]
+    assert fisetin["study_type"] == "observational"
+    assert fisetin["total_enrollment"] == 10
+    assert fisetin["registry_completed_trials_count"] is None
+    assert fisetin["effect_direction"] == "mixed"
+    assert fisetin["published_studies"] == ["39269340"]
+    assert "uncontrolled" in fisetin["notable_studies"]
+
+
+@pytest.mark.parametrize("key,expected", [
+    ("BRAND_ZYLOFRESH", ["Rabbit lipid outcomes with generic Medicago sativa seed extract"]),
+    ("PRECLIN_AKG", ["Protocol and recruitment feasibility; efficacy outcomes not reported"]),
+    ("PRECLIN_APIGENIN", ["Generalized anxiety symptoms with chamomile extract"]),
+    ("PRECLIN_LUTEOLIN", ["Olfactory function with PEA-luteolin plus olfactory training"]),
+])
+def test_reference_endpoints_describe_the_cited_intervention(key, expected):
+    import json
+    data = json.loads((Path(__file__).resolve().parents[1] / "data" / "backed_clinical_studies.json").read_text())
+    entry = next(r for r in data["backed_clinical_studies"] if r["id"] == key)
+    assert entry["key_endpoints"] == expected
