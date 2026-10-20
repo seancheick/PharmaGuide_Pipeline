@@ -2190,3 +2190,21 @@ Open, not in this PR: F2 (non-scorable identity erasure in resolve_identity; aft
 /pg-scoring-change), "Proprietary Blend" → BLEND_GENERAL losing 48 products' rules (saw palmetto 320 mg),
 algae_oil omega-3 link (/data-fix), and Sean's decisions on green tea, RULE_INGREDIENT_OMEGA_3 subject,
 generic omega-3 → fish_oil, Nordic Naturals 42683/43191 label correction, prenatal DHA carrier-oil route.
+
+## October 20 — standardization_note shows only label text (PR201, claude/standardization-note-label-first)
+
+Class: display-only export wording (no calculation, identity, state, contract or eligibility change). Owner:
+`build_final_db.py::_compute_standardization_note`, plus its release check `audit_raw_to_final.py::_check_standardization`.
+Defect (pre-existing, found on #198): the call site passed `"notes": m.get("notes") or ing.get("notes")`, so a
+mapped row's IQM curation notes hid the label's own row notes, and the matched IQM form name was read first. Mapped
+rows showed IQM standards as label claims ("organic Turmeric" 3% curcuminoids; "Turmeric root extract" 95%), the label's own
+figure was replaced (93% → 3%), and the 11 green tea products #198 releases lost "23–94% EGCG" (Teavigo: None, though
+its label notes say 94% EGCG). Fix: label notes, then label name, only; en/em-dash ranges rejected; "total" qualifier and
+"epigallocatechin gallate" = EGCG; the audit recomputes from the cleaned label row by raw_source_path.
+Checks: fail-first on main for 9 real labels + the 11 #198 products (relationship applied in memory) + dash/wording
+cases; 2 stale tests corrected (they called the IQM form name "DSLD-authored"); 15 export/audit/contract files 515 passed,
+75 artifact skips. Measurement over the 15,414-product baseline: 699 rows / 567 products (lost 370, all IQM-sourced;
+gained 218 and changed 111, all label text). Replay of 567 + 30 controls (`~/pg_quality/standardization_note_pr_20261020`):
+the only changed path is `blob:$.ingredients[*].standardization_note`; the updated audit finds 0 dropped claims vs 329 on
+main. Flutter lib/ has no reader of this field. Open: DSLD row text on 1627 guarana says "3% ginsenosides" (likely a DSLD
+transcription error, shown as recorded).

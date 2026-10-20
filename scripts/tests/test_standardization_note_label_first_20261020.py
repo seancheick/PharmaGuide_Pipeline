@@ -51,17 +51,27 @@ def test_the_note_is_the_labels_own_standardization(pipeline, pid, name, note):
     assert _blob_row(pipeline, pid, name)["standardization_note"] == note
 
 
-@pytest.mark.parametrize("pid, name", [
-    ("59208", "Green Tea decaffeinated extract"),
-    ("231721", "Green Tea extract"),
+@pytest.mark.parametrize("pid, name, note", [
+    # The 11 products #198 releases: each label's own EGCG standard.
+    ("231721", "Green Tea extract", "45% EGCG"),
+    ("231722", "Green Tea decaffeinated extract", "45% EGCG"),
+    ("59208", "Green Tea decaffeinated extract", "45% EGCG"),
+    ("59553", "Green Tea decaffeinated extract", "45% EGCG"),
+    ("278368", "Green Tea Leaf Extract", "94% EGCG"),
+    ("33233", "Green Tea extract", "94% EGCG"),
+    ("33246", "Green Tea extract", "94% EGCG"),
+    ("37250", "Green Tea extract", "94% EGCG"),
+    ("294047", "Green Tea Leaf Extract", "23% EGCG"),
+    ("309484", "Green Tea Leaf Extract", "70% EGCG"),
+    ("330014", "Green Tea Leaf Extract", "50% EGCG"),
 ])
-def test_a_mapped_green_tea_row_keeps_its_labels_egcg(pipeline, pid, name):
+def test_a_mapped_green_tea_row_keeps_its_labels_egcg(pipeline, pid, name, note):
     def contains_egcg(databases):
         databases["ingredient_quality_map"]["green_tea_extract"]["relationships"] = [
             {"type": "contains", "target_id": "egcg"}]
     row = _blob_row(pipeline, pid, name, contains_egcg)
     assert row["form_match_status"] != "unmapped"
-    assert row["standardization_note"] == "45% EGCG"
+    assert row["standardization_note"] == note
 
 
 @pytest.mark.parametrize("text", [
