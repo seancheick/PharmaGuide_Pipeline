@@ -6,6 +6,7 @@
     "last_updated": "2026-10-20",
     "total_entries": 210,
     "changelog": [
+      "2026-10-20: INGR_TART_CHERRY standard_name is Tart Cherry (\"tart cherry extract\" kept as an alias), the rename deferred from PR205. Its juice-only applicability (PR213) rejects every non-juice row the name now reaches; measured on all 552 cherry-mentioning labels: 0 score, pillar or blob changes.",
       "2026-10-05: Sean-approved four amount transfers. Descriptive research exposure is owned by Dose, with no new positive adequacy benchmark. Zinc uses discrete clusters, WKB retains preparation/reference uncertainty, D-mannose and DAA retain no affirmative credit; added content-verified PMID 25844073 and distinguished its negative 6 g/day result. Supersedes the four historical applicability amount floors.",
       "2026-10-02: INGR_OMEGA3 removes unsupported plant ALA intervention aliases and excludes stale ALA matches from marine EPA/DHA evidence through the existing clinical-applicability owner. No dose thresholds or numerical magnitudes changed.",
       "5.6.3 (2026-10-01): Correct INGR_BIFIDOBACTERIUM_LONGUM and INGR_LACTOBACILLUS_ACIDOPHILUS source attribution, strain/formula scopes, endpoint roles and unverifiable aggregate counts. Retain both as non-scoring reference context; existing exact-strain evidence remains authoritative. No numerical config, strain registry or Dose benchmark changed.",
@@ -9383,8 +9384,9 @@
     },
     {
       "id": "INGR_TART_CHERRY",
-      "standard_name": "Tart Cherry Extract",
+      "standard_name": "Tart Cherry",
       "aliases": [
+        "tart cherry extract",
         "montmorency cherry",
         "sour cherry extract",
         "prunus cerasus"
