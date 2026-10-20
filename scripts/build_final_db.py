@@ -2759,13 +2759,31 @@ def derive_v4_tradeoffs(
         "may_contain": "May contain",
         "manufactured_in_facility": "Made in a facility that also handles",
     }
+    # A declared source is one row per allergen (the app's
+    # _collapseAllergenSources joins them); each cross-contact presence is ONE
+    # row listing its allergens, because the app collapses only declared rows.
+    allergen_severity_rank = {"low": 0, "moderate": 1, "high": 2}
+    allergen_rows: Dict[Tuple[str, str], Dict[str, Any]] = {}
     for a in safe_list(enriched.get("allergen_hits")):
-        if isinstance(a, dict):
-            presence = export_allergen_presence(a.get("presence_type"))
+        if not isinstance(a, dict):
+            continue
+        presence = export_allergen_presence(a.get("presence_type"))
+        name = safe_str(a.get("allergen_name"))
+        key = (presence, name if presence == "contains" else "")
+        row = allergen_rows.setdefault(key, {"names": set(), "severity": ""})
+        row["names"].add(name)
+        severity = safe_str(a.get("severity_level"))
+        if allergen_severity_rank.get(severity, -1) > allergen_severity_rank.get(row["severity"], -1):
+            row["severity"] = severity
+    for presence in allergen_label_prefix:
+        for (row_presence, _), row in allergen_rows.items():
+            if row_presence != presence:
+                continue
+            names = ", ".join(sorted(n for n in row["names"] if n))
             penalties.append({
                 "id": "B2",
-                "label": f"{allergen_label_prefix[presence]}: {safe_str(a.get('allergen_name'))}",
-                "severity": safe_str(a.get("severity_level")),
+                "label": f"{allergen_label_prefix[presence]}: {names}",
+                "severity": row["severity"],
                 "presence": presence,
             })
     # B1 dietary sugar — already enriched-gated in v3; carried over verbatim.

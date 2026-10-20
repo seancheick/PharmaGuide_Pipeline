@@ -13118,6 +13118,8 @@ class SupplementEnricherV3:
         # A cue inside the line decides otherwise: "Allergen information: No
         # milk" negates, "Allergens: Produced on equipment that ..." is a
         # facility warning (read below), "Allergens: May contain ..." may-contain.
+        # A gluten-test or free qualifier is not a declaration ("Gluten tested",
+        # "Below 20 ppm gluten", "Wheat (gluten) free"); it drops only its own item.
         listed = re.match(r'^\W*allerg(?:en|y)s?(?:\s+information)?\s*:\s*([^.]+)', text_lower)
         if listed and not re.match(
             r'\s*(?:contains|may\s+contain|no|none|free)\b', listed.group(1)
@@ -13125,8 +13127,9 @@ class SupplementEnricherV3:
             r'\b(?:facility|facilities|equipment|production\s+lines?|manufactured|produced|processed)\b',
             listed.group(1),
         ):
-            self._extract_allergens_from_text(listed.group(1), allergen_lookup, found,
-                                               "contains", source, text, by_phrase=True)
+            self._extract_allergens_from_text(
+                self._drop_qualified_items(listed.group(1), r'\b(?:free|test(?:s|ed|ing)?|ppm|zero|below)\b|<'),
+                allergen_lookup, found, "contains", source, text, by_phrase=True)
 
         # Pattern 1: "Contains X" / "Contains: X, Y"
         contains_patterns = [
@@ -13182,8 +13185,24 @@ class SupplementEnricherV3:
         ):
             cue = None
         if cue:
-            self._extract_allergens_from_text(text_lower[cue.end():], allergen_lookup, found,
-                                               "facility_warning", source, text, by_phrase=True)
+            # "never handles peanuts", "to avoid gluten cross contamination",
+            # "tests every batch for gluten", "processes no wheat" name no source.
+            self._extract_allergens_from_text(
+                self._drop_qualified_items(
+                    text_lower[cue.end():],
+                    r'\b(?:never|avoid(?:s|ed|ing)?|test(?:s|ed|ing)?|verif(?:y|ies|ied))\b'
+                    r'|\b(?:process(?:es)?|handles?|uses?)\s+no\b',
+                ),
+                allergen_lookup, found, "facility_warning", source, text, by_phrase=True)
+
+    @staticmethod
+    def _drop_qualified_items(text: str, qualifier: str) -> str:
+        """The list items of ``text`` (split as _extract_allergens_from_text
+        splits them) that do not match ``qualifier``."""
+        return ", ".join(
+            part for part in re.split(r'[,&]|\band\b', text)
+            if part.strip() and not re.search(qualifier, part)
+        )
 
     def _extract_allergens_from_text(self, text: str, allergen_lookup: Dict, found: List[Dict],
                                       presence_type: str, source: str, evidence: str,

@@ -107,3 +107,74 @@ def test_f6_export_allergen_row_matching_is_whole_word(pattern_text, term, expec
     from build_final_db import matching_allergen_hits, normalize_text
     hit = {"allergen_id": "X"}
     assert bool(matching_allergen_hits([{"pattern": normalize_text(pattern_text), "hit": hit}], term)) is expected
+
+
+def test_n1_cross_contact_penalty_rows_are_one_per_presence_type():
+    # 239602: 8 facility allergens became 8 "What to consider" rows; the app
+    # collapses only "Declared allergen source" rows (tradeoffs_section.dart
+    # _collapseAllergenSources). Cross-contact rows are grouped here instead.
+    from build_final_db import build_structured_allergens, derive_v4_tradeoffs
+    facility = ["Wheat", "Eggs", "Fish", "Soy", "Tree Nuts", "Peanuts", "Crustaceans", "Sesame"]
+    hits = [{"allergen_id": f"ALLERGEN_{n.upper().replace(' ', '_')}", "allergen_name": n,
+             "presence_type": "facility_warning", "severity_level": "moderate"} for n in facility]
+    hits += [
+        {"allergen_id": "ALLERGEN_PEANUTS", "allergen_name": "Peanuts", "presence_type": "facility_warning", "severity_level": "high"},
+        {"allergen_id": "ALLERGEN_SOY", "allergen_name": "Soy", "presence_type": "may_contain", "severity_level": "low"},
+        {"allergen_id": "ALLERGEN_MILK", "allergen_name": "Milk", "presence_type": "may_contain", "severity_level": "moderate"},
+        {"allergen_id": "ALLERGEN_MILK", "allergen_name": "Milk", "presence_type": "ingredient_list", "severity_level": "moderate"},
+    ]
+    enriched = {"allergen_hits": hits}
+    rows = [p for p in derive_v4_tradeoffs({}, enriched)[1] if p["id"] == "B2"]
+    assert [(r["presence"], r["label"]) for r in rows] == [
+        ("contains", "Declared allergen source: Milk"),
+        ("may_contain", "May contain: Milk, Soy"),
+        ("manufactured_in_facility",
+         "Made in a facility that also handles: Crustaceans, Eggs, Fish, Peanuts, Sesame, Soy, Tree Nuts, Wheat"),
+    ]
+    assert rows[2]["severity"] == "high"
+    # The review-before-use card reads per-allergen blob allergens[], which stays one row each.
+    assert len(build_structured_allergens(enriched)) >= 9
+
+
+@pytest.mark.parametrize("statement", [
+    "Allergen information: Tested for gluten",
+    "Allergen information: Gluten tested",
+    "Allergen information: Gluten < 20 ppm",
+    "Allergen information: Below 20 ppm gluten",
+    "Allergen information: zero gluten",
+    "Allergen information: Wheat (gluten) free",
+])
+def test_n2_a_gluten_test_or_free_qualifier_is_not_a_contains_declaration(enricher, statement):
+    assert "ALLERGEN_WHEAT" not in _hits(enricher, statement)
+
+
+def test_n2_a_qualifier_drops_only_its_own_list_item(enricher):
+    hits = _hits(enricher, "Allergen information: Milk, soy, gluten tested below 20 ppm")
+    assert hits.get("ALLERGEN_MILK") == "contains" and hits.get("ALLERGEN_SOY") == "contains"
+    assert "ALLERGEN_WHEAT" not in hits
+
+
+@pytest.mark.parametrize("statement,absent", [
+    ("Made in a facility that never handles peanuts.", "ALLERGEN_PEANUTS"),
+    ("Produced on equipment that never processes peanuts.", "ALLERGEN_PEANUTS"),
+    ("Produced in a facility that uses strict procedures to avoid gluten cross contamination.", "ALLERGEN_WHEAT"),
+    ("Manufactured in a facility that tests every batch for gluten and processes no wheat.", "ALLERGEN_WHEAT"),
+    ("Our facility uses testing to verify gluten levels.", "ALLERGEN_WHEAT"),
+    # Already unflagged (no processing verb after the cue); kept as controls.
+    ("We follow strict procedures to avoid gluten cross contamination in our facility.", "ALLERGEN_WHEAT"),
+    ("Manufactured in a facility that tests for gluten.", "ALLERGEN_WHEAT"),
+])
+def test_n3_never_avoid_and_testing_wording_name_no_facility_source(enricher, statement, absent):
+    assert absent not in _hits(enricher, statement)
+
+
+@pytest.mark.parametrize("statement,expected", [
+    ("Processed in a facility that also handles peanuts and wheat.",
+     {"ALLERGEN_PEANUTS": "facility_warning", "ALLERGEN_WHEAT": "facility_warning"}),
+    ("Made in a facility that tests for gluten and also processes milk and soy.",
+     {"ALLERGEN_MILK": "facility_warning", "ALLERGEN_SOY": "facility_warning"}),
+    ("Processed in a facility that also handles peanuts, fish (no shellfish).",
+     {"ALLERGEN_PEANUTS": "facility_warning", "ALLERGEN_FISH": "facility_warning"}),
+])
+def test_n3_a_real_facility_source_still_reads(enricher, statement, expected):
+    assert _hits(enricher, statement) == expected
