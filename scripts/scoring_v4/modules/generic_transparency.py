@@ -31,6 +31,7 @@ from scoring_input_contract import (
     B2_CLAIM_GROUP_RULE,
     UNREAD_MAY_CONTAIN_CONFLICT,
     free_from_claim_contradiction,
+    free_from_claim_contradicting_hits,
     free_from_claims_all_hold,
     gluten_free_claim_contradicted,
     has_source_printed_amount,
@@ -241,7 +242,13 @@ def _score_b2_false_allergen_claim_penalty(product: Dict[str, Any]) -> Tuple[flo
 
     raw = 0.0
     if matched_groups:
-        raw = max((seen.get(group, 0.0) for group in matched_groups), default=0.0)
+        # The highest severity among the hits that contradict a matched group;
+        # a group matched only by conflict text (no hit) takes the cap.
+        raw = max((
+            B2_SEVERITY_POINTS.get(_norm_text(hit.get("severity_level")), 0.0)
+            for group in matched_groups if group in B2_CLAIM_GROUP_RULE
+            for hit in free_from_claim_contradicting_hits(B2_CLAIM_GROUP_RULE[group], allergens)
+        ), default=0.0)
         if raw == 0.0:
             raw = B2_CAP
     elif "allergen" in claim_groups and bool(compliance.get("has_may_contain_warning", False)):

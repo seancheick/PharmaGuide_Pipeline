@@ -34,7 +34,7 @@ from supplement_type_utils import (
     _ingredient_name,
 )
 from constants import CLEANER_NON_SCORABLE_ROLES
-from scoring_v4.route_features import B_COMPLEX_DISQUALIFY_CANONICALS
+from scoring_v4.route_features import B_COMPLEX_DISQUALIFY_CANONICALS, has_protein_product_intent
 from scoring_input_contract import (
     CLASSIFICATION_INPUT_CONTRACT,
     CLASSIFICATION_INPUT_SOURCE,
@@ -297,6 +297,58 @@ def _specialized_panel_identity(
         )
 
     return None
+
+_ACCESSORY_PROTEIN_RE = re.compile(r"\bwith\b.*\b(?:protein|whey|casein)\b")
+_COMPETING_PROTEIN_TITLE_TOKENS = (
+    "collagen", "gelatin", "prenatal", "fish oil", "krill", "omega", "fiber", "fibre",
+    "multivitamin", "multi-vitamin", "multi ",
+)
+
+
+def _declared_protein_identity(
+    product: dict[str, Any],
+    product_name: str,
+    canonical_ids: frozenset[str],
+) -> tuple[str, str, list[str]] | None:
+    """R5 protein panel: protein title intent plus declared Nutrition Facts grams.
+
+    A protein total is a Nutrition Facts row, never a scoring row, so a protein powder's
+    identity is absent from ``canonical_ids``. The router's own pair identifies it
+    (``route_features.has_protein_product_intent`` + ``nutrition_summary.protein_g``);
+    neither alone suffices and the macro row never becomes an active. A title naming
+    another identity (collagen, greens, omega, fiber, prenatal, multivitamin, pre-workout) or a dominant
+    collagen/omega row keeps that identity, and "X with protein" marks protein as an
+    accessory.
+    """
+    try:
+        protein_g = float((product.get("nutrition_summary") or {}).get("protein_g") or 0)
+    except (TypeError, ValueError):
+        protein_g = 0.0
+    title = " ".join(str(product.get(k) or "") for k in ("product_name", "fullName"))
+    if protein_g <= 0 or not has_protein_product_intent(title):
+        return None
+    if (
+        any(token in product_name for token in _COMPETING_PROTEIN_TITLE_TOKENS)
+        or any(token in product_name for token in _GREENS_NAME_TOKENS)
+        or any(token in product_name for token in _PRE_WORKOUT_NAME_TOKENS)
+        or _PRE_WORKOUT_PANEL_INTENT_RE.search(product_name)
+        # Per title field: "with" ending one copy must not pair with "protein" in the next.
+        or any(
+            _ACCESSORY_PROTEIN_RE.search(_normalize_text(str(product.get(k) or "")))
+            for k in ("product_name", "fullName", "bundleName")
+        )
+        # A collagen or omega row that dominates the label is its identity; one
+        # ingredient of a gainer's protein or fat blend is not.
+        or len(canonical_ids & _COLLAGEN_IDS) * 2 > len(canonical_ids)
+        or len(canonical_ids & _OMEGA_CANONICAL_IDS) * 2 > len(canonical_ids)
+    ):
+        return None
+    return (
+        "protein_powder",
+        "declared_nutrition_protein_product",
+        [f"nutrition_facts_protein_{protein_g:g}g"],
+    )
+
 
 # Secondary type detection: compound → secondary_type
 _SECONDARY_TYPE_MAP = {
@@ -900,7 +952,9 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
             or any(t in product_name for t in ("multi", "daily vitamin", "one daily", "complete", "prenatal"))
         )
     )
-    specialized_panel_identity = _specialized_panel_identity(product_name, cid_set)
+    specialized_panel_identity = _specialized_panel_identity(
+        product_name, cid_set
+    ) or _declared_protein_identity(product, product_name, cid_set)
     ala_only_signal = bool(cid_set & _ALA_CANONICAL_IDS) and not bool(cid_set & _OMEGA_CANONICAL_IDS)
     iqd = product.get("ingredient_quality_data") or {}
     botanical_blend_total = any(
