@@ -1,0 +1,4382 @@
+{
+ "all_methods": {
+  "__init__": {
+   "calls": [
+    "_build_daily_value_lookup",
+    "_build_enhanced_indices",
+    "_build_hierarchy_lookup",
+    "_build_skip_sets",
+    "_build_strain_lookup",
+    "_load_json",
+    "_preflight_iqm_banned_collision_check"
+   ],
+   "length": 187,
+   "line": 1244,
+   "module_globals": [
+    "DAILY_VALUES_PATH",
+    "EnhancedIngredientMatcher",
+    "_install_instance_caches",
+    "logger"
+   ],
+   "params": 0,
+   "reads": [],
+   "writes": [
+    "ARTIFICIAL_COLOR_INDICATORS",
+    "EXPLICIT_ARTIFICIAL_DYES",
+    "EXPLICIT_NATURAL_DYES",
+    "NATURAL_COLOR_INDICATORS",
+    "_allergen_variations_cache",
+    "_blend_header_high_conf_patterns",
+    "_cache_stats",
+    "_canonical_id_by_std_name",
+    "_common_ingredients_cache",
+    "_context_canonical_overrides_by_dsld_id",
+    "_daily_value_lookup",
+    "_enable_case_insensitive_skip",
+    "_form_variations_cache",
+    "_harmful_variations_cache",
+    "_hierarchy_lookup",
+    "_ingredient_variations_cache",
+    "_label_corrections_by_dsld_id",
+    "_max_workers",
+    "_non_harmful_variations_cache",
+    "_parallel_threshold",
+    "_preprocessed_blend_header_exact",
+    "_preprocessed_excluded_labels",
+    "_preprocessed_excluded_nutrition",
+    "_probiotic_strain_lookup",
+    "_probiotic_strain_names",
+    "_skip_exact",
+    "_skip_exact_ci",
+    "_skip_normalized",
+    "_skip_normalized_ci",
+    "_spec_string_patterns",
+    "absorption_enhancers",
+    "allergens_db",
+    "banned_recalled",
+    "botanical_ingredients",
+    "canonical_equivalences",
+    "clinical_strains_db",
+    "daily_values",
+    "enhanced_delivery",
+    "grouping_handler",
+    "harmful_additives",
+    "ingredient_classification",
+    "ingredient_map",
+    "manufacturers_db",
+    "matcher",
+    "other_ingredients",
+    "proprietary_blends",
+    "reference_versions",
+    "standardized_botanicals",
+    "unmapped_details",
+    "unmapped_ingredients",
+    "unmapped_tracker"
+   ]
+  },
+  "_active_rows_from_rescued_inactive_forms": {
+   "calls": [
+    "_process_single_ingredient_enhanced"
+   ],
+   "length": 47,
+   "line": 9654,
+   "module_globals": [],
+   "params": 1,
+   "reads": [
+    "matcher"
+   ],
+   "writes": []
+  },
+  "_activity_dose_from_notes": {
+   "calls": [],
+   "length": 22,
+   "line": 4678,
+   "module_globals": [],
+   "params": 0,
+   "reads": [],
+   "writes": []
+  },
+  "_apply_context_canonical_override": {
+   "calls": [],
+   "length": 121,
+   "line": 6158,
+   "module_globals": [
+    "_validate_context_canonical_override_review",
+    "logger"
+   ],
+   "params": 3,
+   "reads": [
+    "_context_canonical_overrides_by_dsld_id"
+   ],
+   "writes": []
+  },
+  "_apply_label_corrections": {
+   "calls": [],
+   "length": 283,
+   "line": 5797,
+   "module_globals": [
+    "_LABEL_CORRECTION_SCORING_DISPOSITIONS",
+    "logger"
+   ],
+   "params": 2,
+   "reads": [
+    "_label_corrections_by_dsld_id"
+   ],
+   "writes": []
+  },
+  "_apply_z1_enzyme_cid_fallback": {
+   "calls": [],
+   "length": 113,
+   "line": 6280,
+   "module_globals": [],
+   "params": 2,
+   "reads": [
+    "_Z1_ENZYME_CHILD_TOKENS",
+    "_Z1_ENZYME_HEADER_TOKENS",
+    "_Z1_ENZYME_PRODUCT_SIGNALS",
+    "_Z1_NON_DOSE_UNITS"
+   ],
+   "writes": []
+  },
+  "_build_canonical_id_reverse_index": {
+   "calls": [],
+   "length": 44,
+   "line": 3370,
+   "module_globals": [
+    "logger"
+   ],
+   "params": 0,
+   "reads": [
+    "botanical_ingredients",
+    "canonical_equivalences",
+    "ingredient_map",
+    "other_ingredients",
+    "proprietary_blends",
+    "standardized_botanicals"
+   ],
+   "writes": [
+    "_canonical_id_by_std_name",
+    "_canonical_identity_registry",
+    "_canonical_parent_relationships"
+   ]
+  },
+  "_build_daily_value_lookup": {
+   "calls": [
+    "_normalize_dv_lookup_key"
+   ],
+   "length": 17,
+   "line": 2306,
+   "module_globals": [],
+   "params": 0,
+   "reads": [
+    "daily_values"
+   ],
+   "writes": []
+  },
+  "_build_display_ingredients": {
+   "calls": [
+    "_default_display_resolution_type",
+    "_exact_label_dose_text",
+    "_label_form_distinct_from_identity",
+    "_normalize_label_unit",
+    "_queue_label_ledger_omission",
+    "_reconcile_orphan_source_rows",
+    "_safe_float",
+    "_safe_int",
+    "_source_path_is_inactive"
+   ],
+   "length": 423,
+   "line": 10738,
+   "module_globals": [],
+   "params": 2,
+   "reads": [],
+   "writes": []
+  },
+  "_build_enhanced_indices": {
+   "calls": [
+    "_build_canonical_id_reverse_index",
+    "_build_fast_lookups_impl",
+    "_build_iqm_branded_form_names"
+   ],
+   "length": 273,
+   "line": 3067,
+   "module_globals": [
+    "logger"
+   ],
+   "params": 0,
+   "reads": [
+    "allergens_db",
+    "botanical_ingredients",
+    "harmful_additives",
+    "ingredient_map",
+    "matcher",
+    "other_ingredients"
+   ],
+   "writes": [
+    "allergen_lookup",
+    "harmful_lookup",
+    "ingredient_alias_lookup",
+    "ingredient_context_lookup",
+    "ingredient_forms_lookup",
+    "other_ingredients_exact_lookup",
+    "other_ingredients_lookup"
+   ]
+  },
+  "_build_fast_lookups_impl": {
+   "calls": [
+    "_build_unii_to_payload_lookup",
+    "_derive_banned_severity"
+   ],
+   "length": 325,
+   "line": 1522,
+   "module_globals": [
+    "logger"
+   ],
+   "params": 0,
+   "reads": [
+    "absorption_enhancers",
+    "allergen_lookup",
+    "banned_recalled",
+    "botanical_ingredients",
+    "enhanced_delivery",
+    "harmful_lookup",
+    "ingredient_alias_lookup",
+    "ingredient_map",
+    "matcher",
+    "other_ingredients",
+    "other_ingredients_exact_lookup",
+    "other_ingredients_lookup",
+    "proprietary_blends",
+    "standardized_botanicals"
+   ],
+   "writes": [
+    "_fast_exact_lookup",
+    "_group_exact_lookup",
+    "_identity_unii_to_payload_lookup",
+    "_safety_exact_lookup",
+    "_safety_unii_to_payload_lookup",
+    "_unii_to_payload_lookup"
+   ]
+  },
+  "_build_hierarchy_lookup": {
+   "calls": [],
+   "length": 57,
+   "line": 2921,
+   "module_globals": [
+    "logger"
+   ],
+   "params": 0,
+   "reads": [
+    "ingredient_classification",
+    "matcher"
+   ],
+   "writes": []
+  },
+  "_build_iqm_branded_form_names": {
+   "calls": [],
+   "length": 28,
+   "line": 3341,
+   "module_globals": [],
+   "params": 0,
+   "reads": [
+    "ingredient_map"
+   ],
+   "writes": [
+    "_iqm_branded_form_names"
+   ]
+  },
+  "_build_label_ledger_audit": {
+   "calls": [
+    "_classify_label_source_structure"
+   ],
+   "length": 52,
+   "line": 10626,
+   "module_globals": [],
+   "params": 2,
+   "reads": [],
+   "writes": []
+  },
+  "_build_label_source_rows": {
+   "calls": [
+    "_source_path_is_inactive"
+   ],
+   "length": 41,
+   "line": 10514,
+   "module_globals": [],
+   "params": 1,
+   "reads": [],
+   "writes": []
+  },
+  "_build_proprietary_blend_disclosure": {
+   "calls": [],
+   "length": 40,
+   "line": 10401,
+   "module_globals": [],
+   "params": 0,
+   "reads": [],
+   "writes": []
+  },
+  "_build_skip_sets": {
+   "calls": [
+    "_normalize_for_skip"
+   ],
+   "length": 45,
+   "line": 2765,
+   "module_globals": [
+    "logger"
+   ],
+   "params": 0,
+   "reads": [
+    "ingredient_classification"
+   ],
+   "writes": []
+  },
+  "_build_strain_lookup": {
+   "calls": [],
+   "length": 27,
+   "line": 3000,
+   "module_globals": [
+    "logger"
+   ],
+   "params": 0,
+   "reads": [
+    "clinical_strains_db"
+   ],
+   "writes": []
+  },
+  "_build_unii_to_payload_lookup": {
+   "calls": [
+    "_derive_banned_severity"
+   ],
+   "length": 263,
+   "line": 1848,
+   "module_globals": [
+    "_is_same_unii_identity_variant",
+    "_normalize_unii",
+    "logger"
+   ],
+   "params": 0,
+   "reads": [
+    "_fast_exact_lookup",
+    "banned_recalled",
+    "harmful_lookup",
+    "matcher"
+   ],
+   "writes": [
+    "_identity_unii_to_payload_lookup",
+    "_safety_unii_to_payload_lookup",
+    "_unii_to_payload_lookup"
+   ]
+  },
+  "_build_unmapped_detail": {
+   "calls": [],
+   "length": 37,
+   "line": 11676,
+   "module_globals": [
+    "NEEDS_VERIFICATION_RULES"
+   ],
+   "params": 5,
+   "reads": [
+    "matcher"
+   ],
+   "writes": []
+  },
+  "_calculate_transparency_metrics": {
+   "calls": [],
+   "length": 44,
+   "line": 10442,
+   "module_globals": [],
+   "params": 2,
+   "reads": [],
+   "writes": []
+  },
+  "_citrus_bioflavonoid_source_identity": {
+   "calls": [
+    "_enhanced_ingredient_mapping",
+    "_resolve_canonical_identity"
+   ],
+   "length": 31,
+   "line": 3750,
+   "module_globals": [],
+   "params": 1,
+   "reads": [
+    "_CITRUS_SOURCE_RE"
+   ],
+   "writes": []
+  },
+  "_classify_hierarchy_type": {
+   "calls": [],
+   "length": 20,
+   "line": 2979,
+   "module_globals": [],
+   "params": 1,
+   "reads": [
+    "_hierarchy_lookup",
+    "matcher"
+   ],
+   "writes": []
+  },
+  "_classify_label_source_structure": {
+   "calls": [],
+   "length": 68,
+   "line": 10557,
+   "module_globals": [],
+   "params": 2,
+   "reads": [],
+   "writes": []
+  },
+  "_contextual_ala_identity": {
+   "calls": [],
+   "length": 22,
+   "line": 3782,
+   "module_globals": [],
+   "params": 1,
+   "reads": [],
+   "writes": []
+  },
+  "_daily_value_target_group_from_dv_group": {
+   "calls": [
+    "_normalize_daily_value_target_group"
+   ],
+   "length": 16,
+   "line": 2365,
+   "module_globals": [],
+   "params": 1,
+   "reads": [],
+   "writes": []
+  },
+  "_daily_value_target_group_from_variants": {
+   "calls": [
+    "_normalize_daily_value_target_group"
+   ],
+   "length": 10,
+   "line": 2382,
+   "module_globals": [],
+   "params": 1,
+   "reads": [],
+   "writes": []
+  },
+  "_dedupe_inactive_ingredients": {
+   "calls": [
+    "_queue_label_ledger_omission"
+   ],
+   "length": 80,
+   "line": 9702,
+   "module_globals": [
+    "logger"
+   ],
+   "params": 2,
+   "reads": [
+    "matcher"
+   ],
+   "writes": []
+  },
+  "_default_display_resolution_type": {
+   "calls": [],
+   "length": 11,
+   "line": 10726,
+   "module_globals": [],
+   "params": 2,
+   "reads": [],
+   "writes": []
+  },
+  "_derive_banned_severity": {
+   "calls": [],
+   "length": 19,
+   "line": 2212,
+   "module_globals": [
+    "BANNED_STATUS_SEVERITY"
+   ],
+   "params": 1,
+   "reads": [],
+   "writes": []
+  },
+  "_determine_disclosure_level": {
+   "calls": [
+    "_is_proprietary_blend_name"
+   ],
+   "length": 61,
+   "line": 12660,
+   "module_globals": [],
+   "params": 4,
+   "reads": [],
+   "writes": []
+  },
+  "_display_only_row_from_source": {
+   "calls": [
+    "_safe_int",
+    "_source_path_is_inactive"
+   ],
+   "length": 72,
+   "line": 11196,
+   "module_globals": [],
+   "params": 3,
+   "reads": [],
+   "writes": []
+  },
+  "_enhanced_allergen_check": {
+   "calls": [
+    "_enhanced_allergen_check_cached"
+   ],
+   "length": 8,
+   "line": 4401,
+   "module_globals": [],
+   "params": 2,
+   "reads": [],
+   "writes": [
+    "_cache_stats"
+   ]
+  },
+  "_enhanced_allergen_check_cached": {
+   "calls": [],
+   "length": 41,
+   "line": 4410,
+   "module_globals": [],
+   "params": 2,
+   "reads": [
+    "allergen_lookup",
+    "matcher"
+   ],
+   "writes": []
+  },
+  "_enhanced_harmful_check": {
+   "calls": [
+    "_enhanced_harmful_check_cached"
+   ],
+   "length": 4,
+   "line": 4452,
+   "module_globals": [],
+   "params": 1,
+   "reads": [],
+   "writes": [
+    "_cache_stats"
+   ]
+  },
+  "_enhanced_harmful_check_cached": {
+   "calls": [],
+   "length": 27,
+   "line": 4457,
+   "module_globals": [],
+   "params": 1,
+   "reads": [
+    "harmful_lookup"
+   ],
+   "writes": []
+  },
+  "_enhanced_ingredient_mapping": {
+   "calls": [
+    "_enhanced_ingredient_mapping_cached"
+   ],
+   "length": 52,
+   "line": 3851,
+   "module_globals": [],
+   "params": 3,
+   "reads": [
+    "matcher"
+   ],
+   "writes": [
+    "_cache_stats"
+   ]
+  },
+  "_enhanced_ingredient_mapping_cached": {
+   "calls": [
+    "_perform_ingredient_mapping"
+   ],
+   "length": 6,
+   "line": 3904,
+   "module_globals": [],
+   "params": 3,
+   "reads": [],
+   "writes": []
+  },
+  "_enhanced_non_harmful_check": {
+   "calls": [
+    "_enhanced_non_harmful_check_cached"
+   ],
+   "length": 4,
+   "line": 4485,
+   "module_globals": [],
+   "params": 1,
+   "reads": [],
+   "writes": [
+    "_cache_stats"
+   ]
+  },
+  "_enhanced_non_harmful_check_cached": {
+   "calls": [
+    "non_harmful_variations"
+   ],
+   "length": 27,
+   "line": 4490,
+   "module_globals": [
+    "logger"
+   ],
+   "params": 1,
+   "reads": [
+    "matcher",
+    "other_ingredients_lookup"
+   ],
+   "writes": []
+  },
+  "_exact_ingredient_group_lookup": {
+   "calls": [],
+   "length": 6,
+   "line": 2205,
+   "module_globals": [],
+   "params": 1,
+   "reads": [
+    "_group_exact_lookup"
+   ],
+   "writes": []
+  },
+  "_exact_label_dose_text": {
+   "calls": [
+    "_activity_dose_from_notes",
+    "_format_label_quantity",
+    "_normalize_label_unit"
+   ],
+   "length": 25,
+   "line": 4701,
+   "module_globals": [],
+   "params": 1,
+   "reads": [],
+   "writes": []
+  },
+  "_expand_compound_form_name": {
+   "calls": [
+    "_source_path_is_inactive"
+   ],
+   "length": 17,
+   "line": 9536,
+   "module_globals": [],
+   "params": 2,
+   "reads": [
+    "matcher"
+   ],
+   "writes": []
+  },
+  "_expand_header_forms_for_processing": {
+   "calls": [
+    "_expand_compound_form_name",
+    "_extract_primary_mass_unit",
+    "_is_label_header",
+    "_is_semantic_label_qualifier",
+    "_is_structural_form_container",
+    "_is_zero_dose_omega_molecular_form_attribute",
+    "_quantity_for_single_form_protein_child",
+    "_queue_display_ingredient",
+    "_queue_label_ledger_omission",
+    "_safe_int",
+    "_should_preserve_expanded_form",
+    "_source_path_is_inactive",
+    "_stamp_expanded_form_cleaner_contract"
+   ],
+   "length": 212,
+   "line": 9130,
+   "module_globals": [
+    "logger"
+   ],
+   "params": 2,
+   "reads": [],
+   "writes": []
+  },
+  "_extract_branded_token": {
+   "calls": [],
+   "length": 29,
+   "line": 2811,
+   "module_globals": [
+    "logger"
+   ],
+   "params": 1,
+   "reads": [],
+   "writes": []
+  },
+  "_extract_clean_claims": {
+   "calls": [],
+   "length": 94,
+   "line": 11535,
+   "module_globals": [],
+   "params": 2,
+   "reads": [],
+   "writes": []
+  },
+  "_extract_directions": {
+   "calls": [],
+   "length": 12,
+   "line": 11468,
+   "module_globals": [],
+   "params": 1,
+   "reads": [],
+   "writes": []
+  },
+  "_extract_discontinued_date": {
+   "calls": [],
+   "length": 8,
+   "line": 9950,
+   "module_globals": [],
+   "params": 1,
+   "reads": [],
+   "writes": []
+  },
+  "_extract_forms_from_ingredient_name": {
+   "calls": [],
+   "length": 93,
+   "line": 9845,
+   "module_globals": [],
+   "params": 1,
+   "reads": [],
+   "writes": []
+  },
+  "_extract_net_contents": {
+   "calls": [],
+   "length": 10,
+   "line": 9959,
+   "module_globals": [],
+   "params": 1,
+   "reads": [],
+   "writes": []
+  },
+  "_extract_nutritional_info": {
+   "calls": [
+    "_process_quantity",
+    "_record_nutrition_fact"
+   ],
+   "length": 123,
+   "line": 7135,
+   "module_globals": [
+    "logger"
+   ],
+   "params": 1,
+   "reads": [],
+   "writes": []
+  },
+  "_extract_origin": {
+   "calls": [],
+   "length": 53,
+   "line": 11481,
+   "module_globals": [],
+   "params": 2,
+   "reads": [],
+   "writes": []
+  },
+  "_extract_original_label_text": {
+   "calls": [],
+   "length": 17,
+   "line": 10265,
+   "module_globals": [],
+   "params": 1,
+   "reads": [],
+   "writes": []
+  },
+  "_extract_primary_mass_unit": {
+   "calls": [],
+   "length": 16,
+   "line": 4636,
+   "module_globals": [],
+   "params": 0,
+   "reads": [],
+   "writes": []
+  },
+  "_extract_storage": {
+   "calls": [],
+   "length": 9,
+   "line": 11458,
+   "module_globals": [],
+   "params": 1,
+   "reads": [],
+   "writes": []
+  },
+  "_fast_ingredient_lookup": {
+   "calls": [],
+   "length": 13,
+   "line": 2191,
+   "module_globals": [],
+   "params": 1,
+   "reads": [
+    "_fast_exact_lookup",
+    "matcher"
+   ],
+   "writes": []
+  },
+  "_find_daily_value_record": {
+   "calls": [
+    "_normalize_dv_lookup_key"
+   ],
+   "length": 19,
+   "line": 2393,
+   "module_globals": [],
+   "params": 3,
+   "reads": [
+    "_daily_value_lookup",
+    "daily_values"
+   ],
+   "writes": []
+  },
+  "_flatten_nested_ingredients": {
+   "calls": [
+    "_expand_header_forms_for_processing",
+    "_extract_primary_mass_unit",
+    "_flatten_nested_ingredients",
+    "_has_declared_mass",
+    "_has_dsld_blend_group_signal",
+    "_is_chemical_decomposition_leaf",
+    "_is_dosed_explicit_amino_aggregate_owner",
+    "_is_dosed_omega_aggregate_owner",
+    "_is_dsld_active_blend_total_row",
+    "_is_dsld_group_blend_container",
+    "_is_label_header",
+    "_is_nutrition_fact",
+    "_is_probiotic_cfu_total_row",
+    "_is_proprietary_blend_name",
+    "_is_structural_active_blend_leaf",
+    "_is_structural_active_container",
+    "_is_structural_active_display_only_leaf",
+    "_lift_decomposition_members",
+    "_queue_display_ingredient",
+    "_raw_child_names_for_display",
+    "_should_skip_ingredient"
+   ],
+   "length": 404,
+   "line": 5392,
+   "module_globals": [
+    "STRUCTURAL_ACTIVE_SUMMARY_WRAPPER_NAMES",
+    "logger"
+   ],
+   "params": 2,
+   "reads": [
+    "matcher"
+   ],
+   "writes": []
+  },
+  "_format_label_quantity": {
+   "calls": [],
+   "length": 8,
+   "line": 4654,
+   "module_globals": [],
+   "params": 0,
+   "reads": [],
+   "writes": []
+  },
+  "_generate_image_url": {
+   "calls": [],
+   "length": 5,
+   "line": 9944,
+   "module_globals": [],
+   "params": 2,
+   "reads": [],
+   "writes": []
+  },
+  "_generate_label_text": {
+   "calls": [],
+   "length": 29,
+   "line": 10235,
+   "module_globals": [],
+   "params": 3,
+   "reads": [],
+   "writes": []
+  },
+  "_has_curated_other_ingredient_identity": {
+   "calls": [],
+   "length": 18,
+   "line": 2896,
+   "module_globals": [],
+   "params": 1,
+   "reads": [
+    "matcher",
+    "other_ingredients_exact_lookup",
+    "other_ingredients_lookup"
+   ],
+   "writes": []
+  },
+  "_has_declared_mass": {
+   "calls": [
+    "_extract_primary_mass_unit"
+   ],
+   "length": 12,
+   "line": 12455,
+   "module_globals": [],
+   "params": 1,
+   "reads": [],
+   "writes": []
+  },
+  "_has_dsld_blend_group_signal": {
+   "calls": [],
+   "length": 5,
+   "line": 12469,
+   "module_globals": [],
+   "params": 0,
+   "reads": [],
+   "writes": []
+  },
+  "_inactive_row_is_empty_panel_active_rescue_candidate": {
+   "calls": [],
+   "length": 26,
+   "line": 9610,
+   "module_globals": [],
+   "params": 2,
+   "reads": [
+    "matcher"
+   ],
+   "writes": []
+  },
+  "_infer_plant_part_from_name": {
+   "calls": [],
+   "length": 45,
+   "line": 10354,
+   "module_globals": [],
+   "params": 1,
+   "reads": [
+    "_PLANT_PART_TOKENS"
+   ],
+   "writes": []
+  },
+  "_is_active_source_form_wrapper": {
+   "calls": [],
+   "length": 20,
+   "line": 12538,
+   "module_globals": [],
+   "params": 1,
+   "reads": [
+    "matcher"
+   ],
+   "writes": []
+  },
+  "_is_analytical_fraction_marker": {
+   "calls": [],
+   "length": 27,
+   "line": 9451,
+   "module_globals": [],
+   "params": 2,
+   "reads": [],
+   "writes": []
+  },
+  "_is_chemical_decomposition_leaf": {
+   "calls": [],
+   "length": 57,
+   "line": 7392,
+   "module_globals": [],
+   "params": 1,
+   "reads": [],
+   "writes": []
+  },
+  "_is_dosed_explicit_amino_aggregate_owner": {
+   "calls": [
+    "_has_declared_mass"
+   ],
+   "length": 23,
+   "line": 12431,
+   "module_globals": [
+    "_EXPLICIT_BCAA_TOTAL_NAME"
+   ],
+   "params": 1,
+   "reads": [],
+   "writes": []
+  },
+  "_is_dosed_omega_aggregate_owner": {
+   "calls": [
+    "_extract_primary_mass_unit",
+    "_is_zero_dose_omega_molecular_form_attribute",
+    "_source_path_is_inactive"
+   ],
+   "length": 33,
+   "line": 9479,
+   "module_globals": [],
+   "params": 2,
+   "reads": [],
+   "writes": []
+  },
+  "_is_dsld_active_blend_total_row": {
+   "calls": [
+    "_extract_primary_mass_unit",
+    "_has_dsld_blend_group_signal",
+    "_is_dosed_explicit_amino_aggregate_owner",
+    "_is_proprietary_blend_name",
+    "_is_structural_active_blend_leaf"
+   ],
+   "length": 75,
+   "line": 12355,
+   "module_globals": [],
+   "params": 1,
+   "reads": [
+    "_canonical_identity_registry",
+    "standardized_botanicals"
+   ],
+   "writes": []
+  },
+  "_is_dsld_group_blend_container": {
+   "calls": [],
+   "length": 14,
+   "line": 12645,
+   "module_globals": [
+    "STRUCTURAL_ACTIVE_SUMMARY_WRAPPER_NAMES"
+   ],
+   "params": 1,
+   "reads": [
+    "matcher"
+   ],
+   "writes": []
+  },
+  "_is_inactive_unmapped_report_container": {
+   "calls": [
+    "_has_dsld_blend_group_signal"
+   ],
+   "length": 28,
+   "line": 12475,
+   "module_globals": [
+    "INACTIVE_CONTAINER_DESCRIPTOR_TOKENS",
+    "STRUCTURAL_OTHER_FORM_CONTAINER_NAMES"
+   ],
+   "params": 1,
+   "reads": [
+    "matcher"
+   ],
+   "writes": []
+  },
+  "_is_label_header": {
+   "calls": [],
+   "length": 2,
+   "line": 12303,
+   "module_globals": [
+    "is_label_header"
+   ],
+   "params": 1,
+   "reads": [],
+   "writes": []
+  },
+  "_is_nutrition_fact": {
+   "calls": [],
+   "length": 526,
+   "line": 11776,
+   "module_globals": [
+    "logger"
+   ],
+   "params": 6,
+   "reads": [
+    "_canonical_id_by_std_name",
+    "_preprocessed_excluded_labels",
+    "_preprocessed_excluded_nutrition",
+    "ingredient_map",
+    "matcher"
+   ],
+   "writes": []
+  },
+  "_is_probiotic_cfu_total_row": {
+   "calls": [
+    "_is_dsld_active_blend_total_row"
+   ],
+   "length": 10,
+   "line": 12344,
+   "module_globals": [],
+   "params": 1,
+   "reads": [
+    "matcher"
+   ],
+   "writes": []
+  },
+  "_is_proprietary_blend_name": {
+   "calls": [],
+   "length": 14,
+   "line": 12630,
+   "module_globals": [
+    "logger"
+   ],
+   "params": 1,
+   "reads": [],
+   "writes": []
+  },
+  "_is_semantic_label_qualifier": {
+   "calls": [
+    "_is_label_header"
+   ],
+   "length": 15,
+   "line": 12306,
+   "module_globals": [],
+   "params": 1,
+   "reads": [],
+   "writes": []
+  },
+  "_is_structural_active_blend_leaf": {
+   "calls": [],
+   "length": 11,
+   "line": 12332,
+   "module_globals": [
+    "STRUCTURAL_ACTIVE_BLEND_LEAF_NAMES"
+   ],
+   "params": 1,
+   "reads": [
+    "matcher"
+   ],
+   "writes": []
+  },
+  "_is_structural_active_container": {
+   "calls": [],
+   "length": 9,
+   "line": 12322,
+   "module_globals": [
+    "STRUCTURAL_ACTIVE_CONTAINER_NAMES",
+    "STRUCTURAL_ACTIVE_SUMMARY_WRAPPER_NAMES"
+   ],
+   "params": 2,
+   "reads": [
+    "matcher"
+   ],
+   "writes": []
+  },
+  "_is_structural_active_display_only_leaf": {
+   "calls": [],
+   "length": 11,
+   "line": 12516,
+   "module_globals": [
+    "STRUCTURAL_ACTIVE_CONTEXTUAL_DISPLAY_ONLY_LEAF_NAMES",
+    "STRUCTURAL_ACTIVE_DISPLAY_ONLY_LEAF_NAMES"
+   ],
+   "params": 1,
+   "reads": [
+    "matcher"
+   ],
+   "writes": []
+  },
+  "_is_structural_active_form_display_only": {
+   "calls": [],
+   "length": 11,
+   "line": 12504,
+   "module_globals": [
+    "STRUCTURAL_ACTIVE_FORM_DISPLAY_ONLY_NAMES"
+   ],
+   "params": 1,
+   "reads": [
+    "matcher"
+   ],
+   "writes": []
+  },
+  "_is_structural_form_container": {
+   "calls": [],
+   "length": 9,
+   "line": 12528,
+   "module_globals": [
+    "STRUCTURAL_ACTIVE_CONTAINER_NAMES",
+    "STRUCTURAL_OTHER_FORM_CONTAINER_NAMES"
+   ],
+   "params": 2,
+   "reads": [
+    "matcher"
+   ],
+   "writes": []
+  },
+  "_is_total_or_nutrition_rollup": {
+   "calls": [
+    "_is_nutrition_fact"
+   ],
+   "length": 21,
+   "line": 11162,
+   "module_globals": [],
+   "params": 2,
+   "reads": [],
+   "writes": []
+  },
+  "_is_zero_dose_omega_molecular_form_attribute": {
+   "calls": [
+    "_extract_primary_mass_unit",
+    "_has_dsld_blend_group_signal",
+    "_is_proprietary_blend_name",
+    "_source_path_is_inactive"
+   ],
+   "length": 64,
+   "line": 9343,
+   "module_globals": [],
+   "params": 3,
+   "reads": [
+    "matcher"
+   ],
+   "writes": []
+  },
+  "_label_form_distinct_from_identity": {
+   "calls": [],
+   "length": 18,
+   "line": 4728,
+   "module_globals": [],
+   "params": 1,
+   "reads": [],
+   "writes": []
+  },
+  "_lift_decomposition_members": {
+   "calls": [
+    "_extract_primary_mass_unit",
+    "_is_chemical_decomposition_leaf"
+   ],
+   "length": 21,
+   "line": 7450,
+   "module_globals": [],
+   "params": 1,
+   "reads": [],
+   "writes": []
+  },
+  "_load_json": {
+   "calls": [],
+   "length": 17,
+   "line": 2279,
+   "module_globals": [
+    "logger"
+   ],
+   "params": 1,
+   "reads": [
+    "CRITICAL_DATABASES"
+   ],
+   "writes": []
+  },
+  "_map_inactive_name_prefer_other": {
+   "calls": [
+    "_enhanced_ingredient_mapping"
+   ],
+   "length": 29,
+   "line": 12559,
+   "module_globals": [],
+   "params": 3,
+   "reads": [
+    "matcher",
+    "other_ingredients_exact_lookup",
+    "other_ingredients_lookup"
+   ],
+   "writes": []
+  },
+  "_marker_fits_inside_parent": {
+   "calls": [],
+   "length": 18,
+   "line": 9432,
+   "module_globals": [],
+   "params": 4,
+   "reads": [],
+   "writes": []
+  },
+  "_match_probiotic_strain": {
+   "calls": [],
+   "length": 12,
+   "line": 3028,
+   "module_globals": [],
+   "params": 1,
+   "reads": [
+    "_probiotic_strain_lookup"
+   ],
+   "writes": []
+  },
+  "_maybe_correct_dv_backed_unit": {
+   "calls": [
+    "_daily_value_target_group_from_variants",
+    "_find_daily_value_record",
+    "_normalize_daily_value_unit"
+   ],
+   "length": 137,
+   "line": 2413,
+   "module_globals": [],
+   "params": 0,
+   "reads": [],
+   "writes": []
+  },
+  "_maybe_correct_parent_equivalent_unit": {
+   "calls": [
+    "_normalize_daily_value_unit",
+    "_normalize_dv_lookup_key"
+   ],
+   "length": 74,
+   "line": 2643,
+   "module_globals": [],
+   "params": 0,
+   "reads": [],
+   "writes": []
+  },
+  "_maybe_restore_folate_dfe_parent_unit": {
+   "calls": [
+    "_daily_value_target_group_from_variants",
+    "_normalize_daily_value_unit",
+    "_normalize_dv_lookup_key",
+    "_process_quantity"
+   ],
+   "length": 91,
+   "line": 2551,
+   "module_globals": [],
+   "params": 0,
+   "reads": [],
+   "writes": []
+  },
+  "_merge_alternate_serving_rows": {
+   "calls": [],
+   "length": 464,
+   "line": 4927,
+   "module_globals": [
+    "EnhancedDSLDNormalizer",
+    "logger"
+   ],
+   "params": 1,
+   "reads": [],
+   "writes": []
+  },
+  "_normalize_daily_value_target_group": {
+   "calls": [
+    "_normalize_dv_lookup_key"
+   ],
+   "length": 30,
+   "line": 2334,
+   "module_globals": [],
+   "params": 1,
+   "reads": [],
+   "writes": []
+  },
+  "_normalize_daily_value_unit": {
+   "calls": [],
+   "length": 9,
+   "line": 2324,
+   "module_globals": [],
+   "params": 1,
+   "reads": [],
+   "writes": []
+  },
+  "_normalize_dv_lookup_key": {
+   "calls": [],
+   "length": 8,
+   "line": 2297,
+   "module_globals": [],
+   "params": 1,
+   "reads": [],
+   "writes": []
+  },
+  "_normalize_for_skip": {
+   "calls": [],
+   "length": 14,
+   "line": 2718,
+   "module_globals": [],
+   "params": 1,
+   "reads": [],
+   "writes": []
+  },
+  "_normalize_label_unit": {
+   "calls": [],
+   "length": 12,
+   "line": 4664,
+   "module_globals": [],
+   "params": 0,
+   "reads": [],
+   "writes": []
+  },
+  "_orphan_canonical_identity": {
+   "calls": [
+    "_map_inactive_name_prefer_other",
+    "_resolve_canonical_identity"
+   ],
+   "length": 11,
+   "line": 11184,
+   "module_globals": [],
+   "params": 1,
+   "reads": [],
+   "writes": []
+  },
+  "_parent_is_standardized_botanical_extract": {
+   "calls": [],
+   "length": 16,
+   "line": 9408,
+   "module_globals": [],
+   "params": 1,
+   "reads": [],
+   "writes": []
+  },
+  "_parse_botanical_details": {
+   "calls": [],
+   "length": 59,
+   "line": 10283,
+   "module_globals": [],
+   "params": 1,
+   "reads": [],
+   "writes": []
+  },
+  "_perform_ingredient_mapping": {
+   "calls": [
+    "_enhanced_allergen_check",
+    "_enhanced_harmful_check",
+    "_exact_ingredient_group_lookup",
+    "_fast_ingredient_lookup",
+    "_match_probiotic_strain",
+    "_perform_ingredient_mapping",
+    "allergen_variations",
+    "form_variations",
+    "harmful_variations",
+    "ingredient_variations"
+   ],
+   "length": 488,
+   "line": 3911,
+   "module_globals": [
+    "logger"
+   ],
+   "params": 4,
+   "reads": [
+    "ARTIFICIAL_COLOR_INDICATORS",
+    "EXPLICIT_ARTIFICIAL_DYES",
+    "EXPLICIT_NATURAL_DYES",
+    "NATURAL_COLOR_INDICATORS",
+    "_PLANT_PART_TOKENS",
+    "_canonical_identity_registry",
+    "_safety_exact_lookup",
+    "allergen_lookup",
+    "harmful_lookup",
+    "ingredient_alias_lookup",
+    "ingredient_context_lookup",
+    "ingredient_forms_lookup",
+    "ingredient_map",
+    "matcher",
+    "other_ingredients_lookup"
+   ],
+   "writes": []
+  },
+  "_preflight_iqm_banned_collision_check": {
+   "calls": [],
+   "length": 85,
+   "line": 1432,
+   "module_globals": [
+    "INTENTIONAL_IQM_BR_DUAL_CLASSIFICATION",
+    "logger"
+   ],
+   "params": 0,
+   "reads": [
+    "banned_recalled",
+    "ingredient_map",
+    "matcher"
+   ],
+   "writes": []
+  },
+  "_printed_nutrient_identity": {
+   "calls": [
+    "_enhanced_ingredient_mapping",
+    "_exact_ingredient_group_lookup",
+    "_fast_ingredient_lookup",
+    "_resolve_canonical_identity",
+    "_strip_qualifier_suffixes",
+    "_try_unii_match"
+   ],
+   "length": 118,
+   "line": 3627,
+   "module_globals": [],
+   "params": 1,
+   "reads": [
+    "ingredient_map"
+   ],
+   "writes": []
+  },
+  "_priority_based_classification": {
+   "calls": [
+    "_enhanced_allergen_check",
+    "_enhanced_harmful_check",
+    "_enhanced_non_harmful_check",
+    "_fast_ingredient_lookup",
+    "_safety_lookup_for_priority_classification"
+   ],
+   "length": 93,
+   "line": 4519,
+   "module_globals": [],
+   "params": 2,
+   "reads": [],
+   "writes": []
+  },
+  "_process_claims": {
+   "calls": [],
+   "length": 15,
+   "line": 10188,
+   "module_globals": [],
+   "params": 1,
+   "reads": [],
+   "writes": []
+  },
+  "_process_ingredients_enhanced": {
+   "calls": [
+    "_expand_header_forms_for_processing",
+    "_is_active_source_form_wrapper",
+    "_is_dosed_explicit_amino_aggregate_owner",
+    "_is_dsld_active_blend_total_row",
+    "_is_label_header",
+    "_is_probiotic_cfu_total_row",
+    "_is_structural_active_blend_leaf",
+    "_is_structural_active_display_only_leaf",
+    "_is_structural_active_form_display_only",
+    "_is_structural_form_container",
+    "_process_single_ingredient_enhanced",
+    "_queue_display_ingredient"
+   ],
+   "length": 116,
+   "line": 7259,
+   "module_globals": [
+    "logger"
+   ],
+   "params": 2,
+   "reads": [],
+   "writes": []
+  },
+  "_process_ingredients_sequential": {
+   "calls": [
+    "_classify_hierarchy_type",
+    "_enhanced_allergen_check",
+    "_enhanced_harmful_check",
+    "_enhanced_ingredient_mapping",
+    "_expand_header_forms_for_processing",
+    "_is_inactive_unmapped_report_container",
+    "_is_label_header",
+    "_is_nutrition_fact",
+    "_is_proprietary_blend_name",
+    "_is_structural_form_container",
+    "_map_inactive_name_prefer_other",
+    "_queue_display_ingredient",
+    "_record_unmapped_ingredient",
+    "_resolve_inactive_canonical_identity",
+    "_should_skip_inactive_ingredient"
+   ],
+   "length": 277,
+   "line": 8814,
+   "module_globals": [
+    "logger"
+   ],
+   "params": 1,
+   "reads": [
+    "other_ingredients_exact_lookup"
+   ],
+   "writes": []
+  },
+  "_process_other_ingredients_enhanced": {
+   "calls": [
+    "_process_ingredients_sequential"
+   ],
+   "length": 43,
+   "line": 8769,
+   "module_globals": [],
+   "params": 1,
+   "reads": [
+    "grouping_handler"
+   ],
+   "writes": []
+  },
+  "_process_quantity": {
+   "calls": [
+    "_daily_value_target_group_from_dv_group",
+    "_safe_float",
+    "_safe_float_flagged"
+   ],
+   "length": 201,
+   "line": 9970,
+   "module_globals": [
+    "logger"
+   ],
+   "params": 1,
+   "reads": [],
+   "writes": []
+  },
+  "_process_serving_sizes": {
+   "calls": [
+    "_safe_float",
+    "_safe_int"
+   ],
+   "length": 31,
+   "line": 10204,
+   "module_globals": [],
+   "params": 1,
+   "reads": [],
+   "writes": []
+  },
+  "_process_single_ingredient_enhanced": {
+   "calls": [
+    "_citrus_bioflavonoid_source_identity",
+    "_classify_hierarchy_type",
+    "_contextual_ala_identity",
+    "_determine_disclosure_level",
+    "_enhanced_ingredient_mapping",
+    "_exact_ingredient_group_lookup",
+    "_expand_header_forms_for_processing",
+    "_extract_branded_token",
+    "_extract_forms_from_ingredient_name",
+    "_extract_nutritional_info",
+    "_extract_primary_mass_unit",
+    "_has_dsld_blend_group_signal",
+    "_infer_plant_part_from_name",
+    "_is_analytical_fraction_marker",
+    "_is_chemical_decomposition_leaf",
+    "_is_dosed_explicit_amino_aggregate_owner",
+    "_is_dosed_omega_aggregate_owner",
+    "_is_dsld_active_blend_total_row",
+    "_is_inactive_unmapped_report_container",
+    "_is_label_header",
+    "_is_nutrition_fact",
+    "_is_probiotic_cfu_total_row",
+    "_is_proprietary_blend_name",
+    "_is_structural_active_blend_leaf",
+    "_is_structural_active_display_only_leaf",
+    "_is_structural_active_form_display_only",
+    "_lift_decomposition_members",
+    "_marker_fits_inside_parent",
+    "_maybe_correct_dv_backed_unit",
+    "_maybe_correct_parent_equivalent_unit",
+    "_maybe_restore_folate_dfe_parent_unit",
+    "_normalize_daily_value_unit",
+    "_parent_is_standardized_botanical_extract",
+    "_parse_botanical_details",
+    "_printed_nutrient_identity",
+    "_priority_based_classification",
+    "_process_quantity",
+    "_process_single_ingredient_enhanced",
+    "_queue_display_ingredient",
+    "_raw_child_names_for_display",
+    "_record_unmapped_ingredient",
+    "_registered_strain_species_identity",
+    "_resolve_canonical_identity",
+    "_resolve_inactive_canonical_identity",
+    "_should_skip_ingredient",
+    "_single_declared_source_form_identity",
+    "_single_nested_marker_form_identity",
+    "_strip_duplicate_label_artifacts",
+    "_try_unii_match"
+   ],
+   "length": 1296,
+   "line": 7472,
+   "module_globals": [
+    "logger"
+   ],
+   "params": 2,
+   "reads": [
+    "_canonical_identity_registry",
+    "_canonical_parent_relationships",
+    "ingredient_map",
+    "matcher",
+    "other_ingredients_exact_lookup"
+   ],
+   "writes": []
+  },
+  "_process_statements": {
+   "calls": [],
+   "length": 15,
+   "line": 10172,
+   "module_globals": [],
+   "params": 1,
+   "reads": [],
+   "writes": []
+  },
+  "_promote_inactive_row_to_active_identity": {
+   "calls": [],
+   "length": 16,
+   "line": 9637,
+   "module_globals": [],
+   "params": 1,
+   "reads": [
+    "matcher"
+   ],
+   "writes": []
+  },
+  "_quantity_for_single_form_protein_child": {
+   "calls": [],
+   "length": 37,
+   "line": 9092,
+   "module_globals": [],
+   "params": 2,
+   "reads": [],
+   "writes": []
+  },
+  "_queue_display_ingredient": {
+   "calls": [
+    "_default_display_resolution_type",
+    "_exact_label_dose_text",
+    "_process_quantity"
+   ],
+   "length": 46,
+   "line": 10679,
+   "module_globals": [],
+   "params": 7,
+   "reads": [],
+   "writes": [
+    "_display_ingredients_buffer"
+   ]
+  },
+  "_queue_label_ledger_omission": {
+   "calls": [],
+   "length": 26,
+   "line": 10487,
+   "module_globals": [],
+   "params": 2,
+   "reads": [],
+   "writes": [
+    "_label_ledger_omissions"
+   ]
+  },
+  "_raw_child_names_for_display": {
+   "calls": [],
+   "length": 12,
+   "line": 4824,
+   "module_globals": [],
+   "params": 1,
+   "reads": [],
+   "writes": []
+  },
+  "_reconcile_orphan_source_rows": {
+   "calls": [
+    "_display_only_row_from_source",
+    "_is_label_header",
+    "_is_semantic_label_qualifier",
+    "_is_total_or_nutrition_rollup",
+    "_orphan_canonical_identity",
+    "_queue_label_ledger_omission",
+    "_safe_int"
+   ],
+   "length": 188,
+   "line": 11269,
+   "module_globals": [],
+   "params": 2,
+   "reads": [
+    "matcher"
+   ],
+   "writes": []
+  },
+  "_record_nutrition_fact": {
+   "calls": [],
+   "length": 31,
+   "line": 7103,
+   "module_globals": [],
+   "params": 5,
+   "reads": [],
+   "writes": []
+  },
+  "_record_unmapped_ingredient": {
+   "calls": [
+    "_build_unmapped_detail"
+   ],
+   "length": 16,
+   "line": 11714,
+   "module_globals": [],
+   "params": 5,
+   "reads": [],
+   "writes": [
+    "unmapped_details",
+    "unmapped_ingredients"
+   ]
+  },
+  "_record_unsupported_label_source": {
+   "calls": [
+    "_queue_label_ledger_omission"
+   ],
+   "length": 22,
+   "line": 4842,
+   "module_globals": [],
+   "params": 3,
+   "reads": [],
+   "writes": [
+    "_display_source_rows"
+   ]
+  },
+  "_registered_strain_species_identity": {
+   "calls": [
+    "_exact_ingredient_group_lookup",
+    "_resolve_canonical_identity"
+   ],
+   "length": 25,
+   "line": 3041,
+   "module_globals": [],
+   "params": 3,
+   "reads": [
+    "_probiotic_strain_names"
+   ],
+   "writes": []
+  },
+  "_repair_explicit_epa_note_contradictions": {
+   "calls": [],
+   "length": 75,
+   "line": 6081,
+   "module_globals": [
+    "logger"
+   ],
+   "params": 1,
+   "reads": [],
+   "writes": []
+  },
+  "_rescue_empty_panel_active_identity_from_otheringredients": {
+   "calls": [
+    "_active_rows_from_rescued_inactive_forms",
+    "_inactive_row_is_empty_panel_active_rescue_candidate",
+    "_promote_inactive_row_to_active_identity"
+   ],
+   "length": 39,
+   "line": 9570,
+   "module_globals": [],
+   "params": 3,
+   "reads": [
+    "matcher"
+   ],
+   "writes": []
+  },
+  "_resolve_canonical_identity": {
+   "calls": [
+    "_strip_qualifier_suffixes"
+   ],
+   "length": 43,
+   "line": 3418,
+   "module_globals": [],
+   "params": 2,
+   "reads": [
+    "_canonical_id_by_std_name"
+   ],
+   "writes": []
+  },
+  "_resolve_inactive_canonical_identity": {
+   "calls": [
+    "_resolve_canonical_identity"
+   ],
+   "length": 40,
+   "line": 12589,
+   "module_globals": [],
+   "params": 2,
+   "reads": [
+    "_canonical_identity_registry",
+    "matcher",
+    "other_ingredients_exact_lookup",
+    "other_ingredients_lookup"
+   ],
+   "writes": []
+  },
+  "_safe_float": {
+   "calls": [],
+   "length": 22,
+   "line": 9810,
+   "module_globals": [
+    "logger"
+   ],
+   "params": 3,
+   "reads": [],
+   "writes": []
+  },
+  "_safe_float_flagged": {
+   "calls": [],
+   "length": 11,
+   "line": 9833,
+   "module_globals": [
+    "logger"
+   ],
+   "params": 3,
+   "reads": [],
+   "writes": []
+  },
+  "_safe_int": {
+   "calls": [],
+   "length": 23,
+   "line": 9786,
+   "module_globals": [
+    "logger"
+   ],
+   "params": 3,
+   "reads": [],
+   "writes": []
+  },
+  "_safety_lookup_for_priority_classification": {
+   "calls": [],
+   "length": 21,
+   "line": 4613,
+   "module_globals": [],
+   "params": 2,
+   "reads": [
+    "_safety_exact_lookup"
+   ],
+   "writes": []
+  },
+  "_sanitize_label_source_container": {
+   "calls": [
+    "_record_unsupported_label_source"
+   ],
+   "length": 60,
+   "line": 4865,
+   "module_globals": [],
+   "params": 3,
+   "reads": [],
+   "writes": []
+  },
+  "_should_preserve_expanded_form": {
+   "calls": [
+    "_enhanced_ingredient_mapping",
+    "_map_inactive_name_prefer_other",
+    "_should_skip_ingredient"
+   ],
+   "length": 15,
+   "line": 9554,
+   "module_globals": [],
+   "params": 2,
+   "reads": [],
+   "writes": []
+  },
+  "_should_skip_inactive_ingredient": {
+   "calls": [
+    "_has_curated_other_ingredient_identity",
+    "_should_skip_ingredient"
+   ],
+   "length": 5,
+   "line": 2915,
+   "module_globals": [],
+   "params": 1,
+   "reads": [],
+   "writes": []
+  },
+  "_should_skip_ingredient": {
+   "calls": [
+    "_normalize_for_skip"
+   ],
+   "length": 54,
+   "line": 2841,
+   "module_globals": [],
+   "params": 1,
+   "reads": [
+    "_blend_header_high_conf_patterns",
+    "_enable_case_insensitive_skip",
+    "_preprocessed_blend_header_exact",
+    "_preprocessed_excluded_labels",
+    "_skip_exact",
+    "_skip_exact_ci",
+    "_skip_normalized",
+    "_skip_normalized_ci",
+    "_spec_string_patterns",
+    "matcher"
+   ],
+   "writes": []
+  },
+  "_single_declared_source_form_identity": {
+   "calls": [
+    "_enhanced_ingredient_mapping",
+    "_exact_ingredient_group_lookup",
+    "_parse_botanical_details",
+    "_resolve_canonical_identity"
+   ],
+   "length": 164,
+   "line": 3462,
+   "module_globals": [],
+   "params": 1,
+   "reads": [
+    "_canonical_parent_relationships",
+    "ingredient_map"
+   ],
+   "writes": []
+  },
+  "_single_nested_marker_form_identity": {
+   "calls": [
+    "_enhanced_ingredient_mapping",
+    "_resolve_canonical_identity"
+   ],
+   "length": 45,
+   "line": 3805,
+   "module_globals": [],
+   "params": 1,
+   "reads": [],
+   "writes": []
+  },
+  "_source_path_is_inactive": {
+   "calls": [],
+   "length": 3,
+   "line": 4838,
+   "module_globals": [],
+   "params": 0,
+   "reads": [],
+   "writes": []
+  },
+  "_stamp_expanded_form_cleaner_contract": {
+   "calls": [
+    "_source_path_is_inactive"
+   ],
+   "length": 22,
+   "line": 9513,
+   "module_globals": [],
+   "params": 2,
+   "reads": [],
+   "writes": []
+  },
+  "_stamp_raw_source_paths": {
+   "calls": [
+    "_exact_label_dose_text",
+    "_normalize_label_unit",
+    "_queue_label_ledger_omission",
+    "_raw_child_names_for_display",
+    "_source_path_is_inactive",
+    "_stamp_raw_source_paths"
+   ],
+   "length": 76,
+   "line": 4747,
+   "module_globals": [],
+   "params": 5,
+   "reads": [],
+   "writes": [
+    "_display_source_rows"
+   ]
+  },
+  "_strip_duplicate_label_artifacts": {
+   "calls": [],
+   "length": 31,
+   "line": 2733,
+   "module_globals": [],
+   "params": 1,
+   "reads": [],
+   "writes": []
+  },
+  "_strip_qualifier_suffixes": {
+   "calls": [],
+   "length": 2,
+   "line": 3415,
+   "module_globals": [],
+   "params": 1,
+   "reads": [],
+   "writes": []
+  },
+  "_try_unii_match": {
+   "calls": [],
+   "length": 78,
+   "line": 2112,
+   "module_globals": [
+    "_normalize_unii"
+   ],
+   "params": 1,
+   "reads": [
+    "_unii_to_payload_lookup"
+   ],
+   "writes": []
+  },
+  "_validate_upc": {
+   "calls": [],
+   "length": 4,
+   "line": 9939,
+   "module_globals": [],
+   "params": 1,
+   "reads": [],
+   "writes": []
+  },
+  "allergen_variations": {
+   "calls": [],
+   "length": 7,
+   "line": 2261,
+   "module_globals": [],
+   "params": 0,
+   "reads": [
+    "allergen_lookup"
+   ],
+   "writes": [
+    "_allergen_variations_cache"
+   ]
+  },
+  "form_variations": {
+   "calls": [],
+   "length": 5,
+   "line": 2240,
+   "module_globals": [],
+   "params": 0,
+   "reads": [
+    "ingredient_forms_lookup"
+   ],
+   "writes": [
+    "_form_variations_cache"
+   ]
+  },
+  "get_unmapped_delta": {
+   "calls": [],
+   "length": 41,
+   "line": 11633,
+   "module_globals": [],
+   "params": 1,
+   "reads": [
+    "unmapped_details",
+    "unmapped_ingredients"
+   ],
+   "writes": []
+  },
+  "get_unmapped_snapshot": {
+   "calls": [],
+   "length": 3,
+   "line": 11629,
+   "module_globals": [],
+   "params": 0,
+   "reads": [
+    "unmapped_ingredients"
+   ],
+   "writes": []
+  },
+  "harmful_variations": {
+   "calls": [],
+   "length": 5,
+   "line": 2247,
+   "module_globals": [],
+   "params": 0,
+   "reads": [
+    "harmful_lookup"
+   ],
+   "writes": [
+    "_harmful_variations_cache"
+   ]
+  },
+  "ingredient_variations": {
+   "calls": [],
+   "length": 5,
+   "line": 2233,
+   "module_globals": [],
+   "params": 0,
+   "reads": [
+    "ingredient_alias_lookup"
+   ],
+   "writes": [
+    "_ingredient_variations_cache"
+   ]
+  },
+  "non_harmful_variations": {
+   "calls": [],
+   "length": 5,
+   "line": 2254,
+   "module_globals": [],
+   "params": 0,
+   "reads": [
+    "other_ingredients_lookup"
+   ],
+   "writes": [
+    "_non_harmful_variations_cache"
+   ]
+  },
+  "normalize_product": {
+   "calls": [
+    "_apply_context_canonical_override",
+    "_apply_label_corrections",
+    "_apply_z1_enzyme_cid_fallback",
+    "_build_display_ingredients",
+    "_build_label_ledger_audit",
+    "_build_label_source_rows",
+    "_build_proprietary_blend_disclosure",
+    "_calculate_transparency_metrics",
+    "_dedupe_inactive_ingredients",
+    "_extract_clean_claims",
+    "_extract_directions",
+    "_extract_discontinued_date",
+    "_extract_net_contents",
+    "_extract_nutritional_info",
+    "_extract_origin",
+    "_extract_original_label_text",
+    "_extract_storage",
+    "_flatten_nested_ingredients",
+    "_generate_image_url",
+    "_generate_label_text",
+    "_is_label_header",
+    "_merge_alternate_serving_rows",
+    "_process_claims",
+    "_process_ingredients_enhanced",
+    "_process_other_ingredients_enhanced",
+    "_process_serving_sizes",
+    "_process_statements",
+    "_record_unsupported_label_source",
+    "_repair_explicit_epa_note_contradictions",
+    "_rescue_empty_panel_active_identity_from_otheringredients",
+    "_safe_int",
+    "_sanitize_label_source_container",
+    "_should_skip_inactive_ingredient",
+    "_stamp_raw_source_paths",
+    "_validate_upc"
+   ],
+   "length": 708,
+   "line": 6394,
+   "module_globals": [
+    "is_label_header",
+    "logger",
+    "parse_other_ingredient_disclosure"
+   ],
+   "params": 1,
+   "reads": [
+    "_context_canonical_overrides_by_dsld_id",
+    "_label_corrections_by_dsld_id",
+    "matcher",
+    "reference_versions"
+   ],
+   "writes": [
+    "_canonical_serving_row",
+    "_display_ingredients_buffer",
+    "_display_source_rows",
+    "_label_ledger_omissions"
+   ]
+  },
+  "process_and_save_unmapped_tracking": {
+   "calls": [],
+   "length": 44,
+   "line": 11731,
+   "module_globals": [
+    "logger"
+   ],
+   "params": 1,
+   "reads": [
+    "unmapped_details",
+    "unmapped_ingredients",
+    "unmapped_tracker"
+   ],
+   "writes": []
+  },
+  "set_output_directory": {
+   "calls": [],
+   "length": 3,
+   "line": 1518,
+   "module_globals": [],
+   "params": 1,
+   "reads": [],
+   "writes": [
+    "unmapped_tracker"
+   ]
+  }
+ },
+ "attributes": {
+  "ARTIFICIAL_COLOR_INDICATORS": {
+   "class": "load_once",
+   "read_in": 1,
+   "written_in": [
+    "__init__"
+   ]
+  },
+  "CRITICAL_DATABASES": {
+   "class": "never_written_here",
+   "read_in": 1,
+   "written_in": []
+  },
+  "EXPLICIT_ARTIFICIAL_DYES": {
+   "class": "load_once",
+   "read_in": 1,
+   "written_in": [
+    "__init__"
+   ]
+  },
+  "EXPLICIT_NATURAL_DYES": {
+   "class": "load_once",
+   "read_in": 1,
+   "written_in": [
+    "__init__"
+   ]
+  },
+  "NATURAL_COLOR_INDICATORS": {
+   "class": "load_once",
+   "read_in": 1,
+   "written_in": [
+    "__init__"
+   ]
+  },
+  "_CITRUS_SOURCE_RE": {
+   "class": "never_written_here",
+   "read_in": 1,
+   "written_in": []
+  },
+  "_PLANT_PART_TOKENS": {
+   "class": "never_written_here",
+   "read_in": 2,
+   "written_in": []
+  },
+  "_Z1_ENZYME_CHILD_TOKENS": {
+   "class": "never_written_here",
+   "read_in": 1,
+   "written_in": []
+  },
+  "_Z1_ENZYME_HEADER_TOKENS": {
+   "class": "never_written_here",
+   "read_in": 1,
+   "written_in": []
+  },
+  "_Z1_ENZYME_PRODUCT_SIGNALS": {
+   "class": "never_written_here",
+   "read_in": 1,
+   "written_in": []
+  },
+  "_Z1_NON_DOSE_UNITS": {
+   "class": "never_written_here",
+   "read_in": 1,
+   "written_in": []
+  },
+  "_allergen_variations_cache": {
+   "class": "init_and_rebuilt",
+   "read_in": 0,
+   "written_in": [
+    "__init__",
+    "allergen_variations"
+   ]
+  },
+  "_blend_header_high_conf_patterns": {
+   "class": "load_once",
+   "read_in": 1,
+   "written_in": [
+    "__init__"
+   ]
+  },
+  "_cache_stats": {
+   "class": "init_and_rebuilt",
+   "read_in": 0,
+   "written_in": [
+    "__init__",
+    "_enhanced_allergen_check",
+    "_enhanced_harmful_check",
+    "_enhanced_ingredient_mapping",
+    "_enhanced_non_harmful_check"
+   ]
+  },
+  "_canonical_id_by_std_name": {
+   "class": "init_and_rebuilt",
+   "read_in": 2,
+   "written_in": [
+    "__init__",
+    "_build_canonical_id_reverse_index"
+   ]
+  },
+  "_canonical_identity_registry": {
+   "class": "per_run_mutable",
+   "read_in": 4,
+   "written_in": [
+    "_build_canonical_id_reverse_index"
+   ]
+  },
+  "_canonical_parent_relationships": {
+   "class": "per_run_mutable",
+   "read_in": 2,
+   "written_in": [
+    "_build_canonical_id_reverse_index"
+   ]
+  },
+  "_canonical_serving_row": {
+   "class": "per_run_mutable",
+   "read_in": 0,
+   "written_in": [
+    "normalize_product"
+   ]
+  },
+  "_common_ingredients_cache": {
+   "class": "load_once",
+   "read_in": 0,
+   "written_in": [
+    "__init__"
+   ]
+  },
+  "_context_canonical_overrides_by_dsld_id": {
+   "class": "load_once",
+   "read_in": 2,
+   "written_in": [
+    "__init__"
+   ]
+  },
+  "_daily_value_lookup": {
+   "class": "load_once",
+   "read_in": 1,
+   "written_in": [
+    "__init__"
+   ]
+  },
+  "_display_ingredients_buffer": {
+   "class": "per_run_mutable",
+   "read_in": 0,
+   "written_in": [
+    "_queue_display_ingredient",
+    "normalize_product"
+   ]
+  },
+  "_display_source_rows": {
+   "class": "per_run_mutable",
+   "read_in": 0,
+   "written_in": [
+    "_record_unsupported_label_source",
+    "_stamp_raw_source_paths",
+    "normalize_product"
+   ]
+  },
+  "_enable_case_insensitive_skip": {
+   "class": "load_once",
+   "read_in": 1,
+   "written_in": [
+    "__init__"
+   ]
+  },
+  "_fast_exact_lookup": {
+   "class": "per_run_mutable",
+   "read_in": 2,
+   "written_in": [
+    "_build_fast_lookups_impl"
+   ]
+  },
+  "_form_variations_cache": {
+   "class": "init_and_rebuilt",
+   "read_in": 0,
+   "written_in": [
+    "__init__",
+    "form_variations"
+   ]
+  },
+  "_group_exact_lookup": {
+   "class": "per_run_mutable",
+   "read_in": 1,
+   "written_in": [
+    "_build_fast_lookups_impl"
+   ]
+  },
+  "_harmful_variations_cache": {
+   "class": "init_and_rebuilt",
+   "read_in": 0,
+   "written_in": [
+    "__init__",
+    "harmful_variations"
+   ]
+  },
+  "_hierarchy_lookup": {
+   "class": "load_once",
+   "read_in": 1,
+   "written_in": [
+    "__init__"
+   ]
+  },
+  "_identity_unii_to_payload_lookup": {
+   "class": "per_run_mutable",
+   "read_in": 0,
+   "written_in": [
+    "_build_fast_lookups_impl",
+    "_build_unii_to_payload_lookup"
+   ]
+  },
+  "_ingredient_variations_cache": {
+   "class": "init_and_rebuilt",
+   "read_in": 0,
+   "written_in": [
+    "__init__",
+    "ingredient_variations"
+   ]
+  },
+  "_iqm_branded_form_names": {
+   "class": "per_run_mutable",
+   "read_in": 0,
+   "written_in": [
+    "_build_iqm_branded_form_names"
+   ]
+  },
+  "_label_corrections_by_dsld_id": {
+   "class": "load_once",
+   "read_in": 2,
+   "written_in": [
+    "__init__"
+   ]
+  },
+  "_label_ledger_omissions": {
+   "class": "per_run_mutable",
+   "read_in": 0,
+   "written_in": [
+    "_queue_label_ledger_omission",
+    "normalize_product"
+   ]
+  },
+  "_max_workers": {
+   "class": "load_once",
+   "read_in": 0,
+   "written_in": [
+    "__init__"
+   ]
+  },
+  "_non_harmful_variations_cache": {
+   "class": "init_and_rebuilt",
+   "read_in": 0,
+   "written_in": [
+    "__init__",
+    "non_harmful_variations"
+   ]
+  },
+  "_parallel_threshold": {
+   "class": "load_once",
+   "read_in": 0,
+   "written_in": [
+    "__init__"
+   ]
+  },
+  "_preprocessed_blend_header_exact": {
+   "class": "load_once",
+   "read_in": 1,
+   "written_in": [
+    "__init__"
+   ]
+  },
+  "_preprocessed_excluded_labels": {
+   "class": "load_once",
+   "read_in": 2,
+   "written_in": [
+    "__init__"
+   ]
+  },
+  "_preprocessed_excluded_nutrition": {
+   "class": "load_once",
+   "read_in": 1,
+   "written_in": [
+    "__init__"
+   ]
+  },
+  "_probiotic_strain_lookup": {
+   "class": "load_once",
+   "read_in": 1,
+   "written_in": [
+    "__init__"
+   ]
+  },
+  "_probiotic_strain_names": {
+   "class": "load_once",
+   "read_in": 1,
+   "written_in": [
+    "__init__"
+   ]
+  },
+  "_safety_exact_lookup": {
+   "class": "per_run_mutable",
+   "read_in": 2,
+   "written_in": [
+    "_build_fast_lookups_impl"
+   ]
+  },
+  "_safety_unii_to_payload_lookup": {
+   "class": "per_run_mutable",
+   "read_in": 0,
+   "written_in": [
+    "_build_fast_lookups_impl",
+    "_build_unii_to_payload_lookup"
+   ]
+  },
+  "_skip_exact": {
+   "class": "load_once",
+   "read_in": 1,
+   "written_in": [
+    "__init__"
+   ]
+  },
+  "_skip_exact_ci": {
+   "class": "load_once",
+   "read_in": 1,
+   "written_in": [
+    "__init__"
+   ]
+  },
+  "_skip_normalized": {
+   "class": "load_once",
+   "read_in": 1,
+   "written_in": [
+    "__init__"
+   ]
+  },
+  "_skip_normalized_ci": {
+   "class": "load_once",
+   "read_in": 1,
+   "written_in": [
+    "__init__"
+   ]
+  },
+  "_spec_string_patterns": {
+   "class": "load_once",
+   "read_in": 1,
+   "written_in": [
+    "__init__"
+   ]
+  },
+  "_unii_to_payload_lookup": {
+   "class": "per_run_mutable",
+   "read_in": 1,
+   "written_in": [
+    "_build_fast_lookups_impl",
+    "_build_unii_to_payload_lookup"
+   ]
+  },
+  "absorption_enhancers": {
+   "class": "load_once",
+   "read_in": 1,
+   "written_in": [
+    "__init__"
+   ]
+  },
+  "allergen_lookup": {
+   "class": "per_run_mutable",
+   "read_in": 4,
+   "written_in": [
+    "_build_enhanced_indices"
+   ]
+  },
+  "allergens_db": {
+   "class": "load_once",
+   "read_in": 1,
+   "written_in": [
+    "__init__"
+   ]
+  },
+  "banned_recalled": {
+   "class": "load_once",
+   "read_in": 3,
+   "written_in": [
+    "__init__"
+   ]
+  },
+  "botanical_ingredients": {
+   "class": "load_once",
+   "read_in": 3,
+   "written_in": [
+    "__init__"
+   ]
+  },
+  "canonical_equivalences": {
+   "class": "load_once",
+   "read_in": 1,
+   "written_in": [
+    "__init__"
+   ]
+  },
+  "clinical_strains_db": {
+   "class": "load_once",
+   "read_in": 1,
+   "written_in": [
+    "__init__"
+   ]
+  },
+  "daily_values": {
+   "class": "load_once",
+   "read_in": 2,
+   "written_in": [
+    "__init__"
+   ]
+  },
+  "enhanced_delivery": {
+   "class": "load_once",
+   "read_in": 1,
+   "written_in": [
+    "__init__"
+   ]
+  },
+  "grouping_handler": {
+   "class": "load_once",
+   "read_in": 1,
+   "written_in": [
+    "__init__"
+   ]
+  },
+  "harmful_additives": {
+   "class": "load_once",
+   "read_in": 1,
+   "written_in": [
+    "__init__"
+   ]
+  },
+  "harmful_lookup": {
+   "class": "per_run_mutable",
+   "read_in": 5,
+   "written_in": [
+    "_build_enhanced_indices"
+   ]
+  },
+  "ingredient_alias_lookup": {
+   "class": "per_run_mutable",
+   "read_in": 3,
+   "written_in": [
+    "_build_enhanced_indices"
+   ]
+  },
+  "ingredient_classification": {
+   "class": "load_once",
+   "read_in": 2,
+   "written_in": [
+    "__init__"
+   ]
+  },
+  "ingredient_context_lookup": {
+   "class": "per_run_mutable",
+   "read_in": 1,
+   "written_in": [
+    "_build_enhanced_indices"
+   ]
+  },
+  "ingredient_forms_lookup": {
+   "class": "per_run_mutable",
+   "read_in": 2,
+   "written_in": [
+    "_build_enhanced_indices"
+   ]
+  },
+  "ingredient_map": {
+   "class": "load_once",
+   "read_in": 10,
+   "written_in": [
+    "__init__"
+   ]
+  },
+  "manufacturers_db": {
+   "class": "load_once",
+   "read_in": 0,
+   "written_in": [
+    "__init__"
+   ]
+  },
+  "matcher": {
+   "class": "load_once",
+   "read_in": 37,
+   "written_in": [
+    "__init__"
+   ]
+  },
+  "other_ingredients": {
+   "class": "load_once",
+   "read_in": 3,
+   "written_in": [
+    "__init__"
+   ]
+  },
+  "other_ingredients_exact_lookup": {
+   "class": "per_run_mutable",
+   "read_in": 6,
+   "written_in": [
+    "_build_enhanced_indices"
+   ]
+  },
+  "other_ingredients_lookup": {
+   "class": "per_run_mutable",
+   "read_in": 7,
+   "written_in": [
+    "_build_enhanced_indices"
+   ]
+  },
+  "proprietary_blends": {
+   "class": "load_once",
+   "read_in": 2,
+   "written_in": [
+    "__init__"
+   ]
+  },
+  "reference_versions": {
+   "class": "load_once",
+   "read_in": 1,
+   "written_in": [
+    "__init__"
+   ]
+  },
+  "standardized_botanicals": {
+   "class": "load_once",
+   "read_in": 3,
+   "written_in": [
+    "__init__"
+   ]
+  },
+  "unmapped_details": {
+   "class": "init_and_rebuilt",
+   "read_in": 2,
+   "written_in": [
+    "__init__",
+    "_record_unmapped_ingredient"
+   ]
+  },
+  "unmapped_ingredients": {
+   "class": "init_and_rebuilt",
+   "read_in": 3,
+   "written_in": [
+    "__init__",
+    "_record_unmapped_ingredient"
+   ]
+  },
+  "unmapped_tracker": {
+   "class": "init_and_rebuilt",
+   "read_in": 1,
+   "written_in": [
+    "__init__",
+    "set_output_directory"
+   ]
+  }
+ },
+ "class": "EnhancedDSLDNormalizer",
+ "closures": {
+  "per_method": {
+   "_build_display_ingredients": {
+    "closure_loc": 2181,
+    "closure_members": [
+     "_activity_dose_from_notes",
+     "_default_display_resolution_type",
+     "_display_only_row_from_source",
+     "_enhanced_allergen_check",
+     "_enhanced_allergen_check_cached",
+     "_enhanced_harmful_check",
+     "_enhanced_harmful_check_cached",
+     "_enhanced_ingredient_mapping",
+     "_enhanced_ingredient_mapping_cached",
+     "_exact_ingredient_group_lookup",
+     "_exact_label_dose_text",
+     "_fast_ingredient_lookup",
+     "_format_label_quantity",
+     "_is_label_header",
+     "_is_nutrition_fact",
+     "_is_semantic_label_qualifier",
+     "_is_total_or_nutrition_rollup",
+     "_label_form_distinct_from_identity",
+     "_map_inactive_name_prefer_other",
+     "_match_probiotic_strain",
+     "_normalize_label_unit",
+     "_orphan_canonical_identity",
+     "_perform_ingredient_mapping",
+     "_queue_label_ledger_omission",
+     "_reconcile_orphan_source_rows",
+     "_resolve_canonical_identity",
+     "_safe_float",
+     "_safe_int",
+     "_source_path_is_inactive",
+     "_strip_qualifier_suffixes",
+     "allergen_variations",
+     "form_variations",
+     "harmful_variations",
+     "ingredient_variations"
+    ],
+    "closure_methods": 34,
+    "exclusive_helpers": [],
+    "exclusive_loc": 0,
+    "transitive_module_globals": [
+     "is_label_header",
+     "logger"
+    ],
+    "transitive_reads": [
+     "ARTIFICIAL_COLOR_INDICATORS",
+     "EXPLICIT_ARTIFICIAL_DYES",
+     "EXPLICIT_NATURAL_DYES",
+     "NATURAL_COLOR_INDICATORS",
+     "_PLANT_PART_TOKENS",
+     "_canonical_id_by_std_name",
+     "_canonical_identity_registry",
+     "_fast_exact_lookup",
+     "_group_exact_lookup",
+     "_preprocessed_excluded_labels",
+     "_preprocessed_excluded_nutrition",
+     "_probiotic_strain_lookup",
+     "_safety_exact_lookup",
+     "allergen_lookup",
+     "harmful_lookup",
+     "ingredient_alias_lookup",
+     "ingredient_context_lookup",
+     "ingredient_forms_lookup",
+     "ingredient_map",
+     "matcher",
+     "other_ingredients_exact_lookup",
+     "other_ingredients_lookup"
+    ],
+    "transitive_writes": [
+     "_allergen_variations_cache",
+     "_cache_stats",
+     "_form_variations_cache",
+     "_harmful_variations_cache",
+     "_ingredient_variations_cache",
+     "_label_ledger_omissions"
+    ]
+   },
+   "_flatten_nested_ingredients": {
+    "closure_loc": 2886,
+    "closure_members": [
+     "_activity_dose_from_notes",
+     "_daily_value_target_group_from_dv_group",
+     "_default_display_resolution_type",
+     "_enhanced_allergen_check",
+     "_enhanced_allergen_check_cached",
+     "_enhanced_harmful_check",
+     "_enhanced_harmful_check_cached",
+     "_enhanced_ingredient_mapping",
+     "_enhanced_ingredient_mapping_cached",
+     "_exact_ingredient_group_lookup",
+     "_exact_label_dose_text",
+     "_expand_compound_form_name",
+     "_expand_header_forms_for_processing",
+     "_extract_primary_mass_unit",
+     "_fast_ingredient_lookup",
+     "_format_label_quantity",
+     "_has_declared_mass",
+     "_has_dsld_blend_group_signal",
+     "_is_chemical_decomposition_leaf",
+     "_is_dosed_explicit_amino_aggregate_owner",
+     "_is_dosed_omega_aggregate_owner",
+     "_is_dsld_active_blend_total_row",
+     "_is_dsld_group_blend_container",
+     "_is_label_header",
+     "_is_nutrition_fact",
+     "_is_probiotic_cfu_total_row",
+     "_is_proprietary_blend_name",
+     "_is_semantic_label_qualifier",
+     "_is_structural_active_blend_leaf",
+     "_is_structural_active_container",
+     "_is_structural_active_display_only_leaf",
+     "_is_structural_form_container",
+     "_is_zero_dose_omega_molecular_form_attribute",
+     "_lift_decomposition_members",
+     "_map_inactive_name_prefer_other",
+     "_match_probiotic_strain",
+     "_normalize_daily_value_target_group",
+     "_normalize_dv_lookup_key",
+     "_normalize_for_skip",
+     "_normalize_label_unit",
+     "_perform_ingredient_mapping",
+     "_process_quantity",
+     "_quantity_for_single_form_protein_child",
+     "_queue_display_ingredient",
+     "_queue_label_ledger_omission",
+     "_raw_child_names_for_display",
+     "_safe_float",
+     "_safe_float_flagged",
+     "_safe_int",
+     "_should_preserve_expanded_form",
+     "_should_skip_ingredient",
+     "_source_path_is_inactive",
+     "_stamp_expanded_form_cleaner_contract",
+     "allergen_variations",
+     "form_variations",
+     "harmful_variations",
+     "ingredient_variations"
+    ],
+    "closure_methods": 57,
+    "exclusive_helpers": [],
+    "exclusive_loc": 0,
+    "transitive_module_globals": [
+     "STRUCTURAL_ACTIVE_BLEND_LEAF_NAMES",
+     "STRUCTURAL_ACTIVE_CONTAINER_NAMES",
+     "STRUCTURAL_ACTIVE_CONTEXTUAL_DISPLAY_ONLY_LEAF_NAMES",
+     "STRUCTURAL_ACTIVE_DISPLAY_ONLY_LEAF_NAMES",
+     "STRUCTURAL_ACTIVE_SUMMARY_WRAPPER_NAMES",
+     "STRUCTURAL_OTHER_FORM_CONTAINER_NAMES",
+     "_EXPLICIT_BCAA_TOTAL_NAME",
+     "is_label_header",
+     "logger"
+    ],
+    "transitive_reads": [
+     "ARTIFICIAL_COLOR_INDICATORS",
+     "EXPLICIT_ARTIFICIAL_DYES",
+     "EXPLICIT_NATURAL_DYES",
+     "NATURAL_COLOR_INDICATORS",
+     "_PLANT_PART_TOKENS",
+     "_blend_header_high_conf_patterns",
+     "_canonical_id_by_std_name",
+     "_canonical_identity_registry",
+     "_enable_case_insensitive_skip",
+     "_fast_exact_lookup",
+     "_group_exact_lookup",
+     "_preprocessed_blend_header_exact",
+     "_preprocessed_excluded_labels",
+     "_preprocessed_excluded_nutrition",
+     "_probiotic_strain_lookup",
+     "_safety_exact_lookup",
+     "_skip_exact",
+     "_skip_exact_ci",
+     "_skip_normalized",
+     "_skip_normalized_ci",
+     "_spec_string_patterns",
+     "allergen_lookup",
+     "harmful_lookup",
+     "ingredient_alias_lookup",
+     "ingredient_context_lookup",
+     "ingredient_forms_lookup",
+     "ingredient_map",
+     "matcher",
+     "other_ingredients_exact_lookup",
+     "other_ingredients_lookup",
+     "standardized_botanicals"
+    ],
+    "transitive_writes": [
+     "_allergen_variations_cache",
+     "_cache_stats",
+     "_display_ingredients_buffer",
+     "_form_variations_cache",
+     "_harmful_variations_cache",
+     "_ingredient_variations_cache",
+     "_label_ledger_omissions"
+    ]
+   },
+   "_perform_ingredient_mapping": {
+    "closure_loc": 621,
+    "closure_members": [
+     "_enhanced_allergen_check",
+     "_enhanced_allergen_check_cached",
+     "_enhanced_harmful_check",
+     "_enhanced_harmful_check_cached",
+     "_exact_ingredient_group_lookup",
+     "_fast_ingredient_lookup",
+     "_match_probiotic_strain",
+     "allergen_variations",
+     "form_variations",
+     "harmful_variations",
+     "ingredient_variations"
+    ],
+    "closure_methods": 11,
+    "exclusive_helpers": [],
+    "exclusive_loc": 0,
+    "transitive_module_globals": [
+     "logger"
+    ],
+    "transitive_reads": [
+     "ARTIFICIAL_COLOR_INDICATORS",
+     "EXPLICIT_ARTIFICIAL_DYES",
+     "EXPLICIT_NATURAL_DYES",
+     "NATURAL_COLOR_INDICATORS",
+     "_PLANT_PART_TOKENS",
+     "_canonical_identity_registry",
+     "_fast_exact_lookup",
+     "_group_exact_lookup",
+     "_probiotic_strain_lookup",
+     "_safety_exact_lookup",
+     "allergen_lookup",
+     "harmful_lookup",
+     "ingredient_alias_lookup",
+     "ingredient_context_lookup",
+     "ingredient_forms_lookup",
+     "ingredient_map",
+     "matcher",
+     "other_ingredients_lookup"
+    ],
+    "transitive_writes": [
+     "_allergen_variations_cache",
+     "_cache_stats",
+     "_form_variations_cache",
+     "_harmful_variations_cache",
+     "_ingredient_variations_cache"
+    ]
+   },
+   "_process_claims": {
+    "closure_loc": 15,
+    "closure_members": [],
+    "closure_methods": 0,
+    "exclusive_helpers": [],
+    "exclusive_loc": 0,
+    "transitive_module_globals": [],
+    "transitive_reads": [],
+    "transitive_writes": []
+   },
+   "_process_ingredients_enhanced": {
+    "closure_loc": 5594,
+    "closure_members": [
+     "_activity_dose_from_notes",
+     "_build_unmapped_detail",
+     "_citrus_bioflavonoid_source_identity",
+     "_classify_hierarchy_type",
+     "_contextual_ala_identity",
+     "_daily_value_target_group_from_dv_group",
+     "_daily_value_target_group_from_variants",
+     "_default_display_resolution_type",
+     "_determine_disclosure_level",
+     "_enhanced_allergen_check",
+     "_enhanced_allergen_check_cached",
+     "_enhanced_harmful_check",
+     "_enhanced_harmful_check_cached",
+     "_enhanced_ingredient_mapping",
+     "_enhanced_ingredient_mapping_cached",
+     "_enhanced_non_harmful_check",
+     "_enhanced_non_harmful_check_cached",
+     "_exact_ingredient_group_lookup",
+     "_exact_label_dose_text",
+     "_expand_compound_form_name",
+     "_expand_header_forms_for_processing",
+     "_extract_branded_token",
+     "_extract_forms_from_ingredient_name",
+     "_extract_nutritional_info",
+     "_extract_primary_mass_unit",
+     "_fast_ingredient_lookup",
+     "_find_daily_value_record",
+     "_format_label_quantity",
+     "_has_declared_mass",
+     "_has_dsld_blend_group_signal",
+     "_infer_plant_part_from_name",
+     "_is_active_source_form_wrapper",
+     "_is_analytical_fraction_marker",
+     "_is_chemical_decomposition_leaf",
+     "_is_dosed_explicit_amino_aggregate_owner",
+     "_is_dosed_omega_aggregate_owner",
+     "_is_dsld_active_blend_total_row",
+     "_is_inactive_unmapped_report_container",
+     "_is_label_header",
+     "_is_nutrition_fact",
+     "_is_probiotic_cfu_total_row",
+     "_is_proprietary_blend_name",
+     "_is_semantic_label_qualifier",
+     "_is_structural_active_blend_leaf",
+     "_is_structural_active_display_only_leaf",
+     "_is_structural_active_form_display_only",
+     "_is_structural_form_container",
+     "_is_zero_dose_omega_molecular_form_attribute",
+     "_lift_decomposition_members",
+     "_map_inactive_name_prefer_other",
+     "_marker_fits_inside_parent",
+     "_match_probiotic_strain",
+     "_maybe_correct_dv_backed_unit",
+     "_maybe_correct_parent_equivalent_unit",
+     "_maybe_restore_folate_dfe_parent_unit",
+     "_normalize_daily_value_target_group",
+     "_normalize_daily_value_unit",
+     "_normalize_dv_lookup_key",
+     "_normalize_for_skip",
+     "_normalize_label_unit",
+     "_parent_is_standardized_botanical_extract",
+     "_parse_botanical_details",
+     "_perform_ingredient_mapping",
+     "_printed_nutrient_identity",
+     "_priority_based_classification",
+     "_process_quantity",
+     "_process_single_ingredient_enhanced",
+     "_quantity_for_single_form_protein_child",
+     "_queue_display_ingredient",
+     "_queue_label_ledger_omission",
+     "_raw_child_names_for_display",
+     "_record_nutrition_fact",
+     "_record_unmapped_ingredient",
+     "_registered_strain_species_identity",
+     "_resolve_canonical_identity",
+     "_resolve_inactive_canonical_identity",
+     "_safe_float",
+     "_safe_float_flagged",
+     "_safe_int",
+     "_safety_lookup_for_priority_classification",
+     "_should_preserve_expanded_form",
+     "_should_skip_ingredient",
+     "_single_declared_source_form_identity",
+     "_single_nested_marker_form_identity",
+     "_source_path_is_inactive",
+     "_stamp_expanded_form_cleaner_contract",
+     "_strip_duplicate_label_artifacts",
+     "_strip_qualifier_suffixes",
+     "_try_unii_match",
+     "allergen_variations",
+     "form_variations",
+     "harmful_variations",
+     "ingredient_variations",
+     "non_harmful_variations"
+    ],
+    "closure_methods": 94,
+    "exclusive_helpers": [
+     "_is_active_source_form_wrapper",
+     "_process_single_ingredient_enhanced"
+    ],
+    "exclusive_loc": 1316,
+    "transitive_module_globals": [
+     "INACTIVE_CONTAINER_DESCRIPTOR_TOKENS",
+     "NEEDS_VERIFICATION_RULES",
+     "STRUCTURAL_ACTIVE_BLEND_LEAF_NAMES",
+     "STRUCTURAL_ACTIVE_CONTAINER_NAMES",
+     "STRUCTURAL_ACTIVE_CONTEXTUAL_DISPLAY_ONLY_LEAF_NAMES",
+     "STRUCTURAL_ACTIVE_DISPLAY_ONLY_LEAF_NAMES",
+     "STRUCTURAL_ACTIVE_FORM_DISPLAY_ONLY_NAMES",
+     "STRUCTURAL_OTHER_FORM_CONTAINER_NAMES",
+     "_EXPLICIT_BCAA_TOTAL_NAME",
+     "_normalize_unii",
+     "is_label_header",
+     "logger"
+    ],
+    "transitive_reads": [
+     "ARTIFICIAL_COLOR_INDICATORS",
+     "EXPLICIT_ARTIFICIAL_DYES",
+     "EXPLICIT_NATURAL_DYES",
+     "NATURAL_COLOR_INDICATORS",
+     "_CITRUS_SOURCE_RE",
+     "_PLANT_PART_TOKENS",
+     "_blend_header_high_conf_patterns",
+     "_canonical_id_by_std_name",
+     "_canonical_identity_registry",
+     "_canonical_parent_relationships",
+     "_daily_value_lookup",
+     "_enable_case_insensitive_skip",
+     "_fast_exact_lookup",
+     "_group_exact_lookup",
+     "_hierarchy_lookup",
+     "_preprocessed_blend_header_exact",
+     "_preprocessed_excluded_labels",
+     "_preprocessed_excluded_nutrition",
+     "_probiotic_strain_lookup",
+     "_probiotic_strain_names",
+     "_safety_exact_lookup",
+     "_skip_exact",
+     "_skip_exact_ci",
+     "_skip_normalized",
+     "_skip_normalized_ci",
+     "_spec_string_patterns",
+     "_unii_to_payload_lookup",
+     "allergen_lookup",
+     "daily_values",
+     "harmful_lookup",
+     "ingredient_alias_lookup",
+     "ingredient_context_lookup",
+     "ingredient_forms_lookup",
+     "ingredient_map",
+     "matcher",
+     "other_ingredients_exact_lookup",
+     "other_ingredients_lookup",
+     "standardized_botanicals"
+    ],
+    "transitive_writes": [
+     "_allergen_variations_cache",
+     "_cache_stats",
+     "_display_ingredients_buffer",
+     "_form_variations_cache",
+     "_harmful_variations_cache",
+     "_ingredient_variations_cache",
+     "_label_ledger_omissions",
+     "_non_harmful_variations_cache",
+     "unmapped_details",
+     "unmapped_ingredients"
+    ]
+   },
+   "_process_ingredients_sequential": {
+    "closure_loc": 2680,
+    "closure_members": [
+     "_activity_dose_from_notes",
+     "_build_unmapped_detail",
+     "_classify_hierarchy_type",
+     "_daily_value_target_group_from_dv_group",
+     "_default_display_resolution_type",
+     "_enhanced_allergen_check",
+     "_enhanced_allergen_check_cached",
+     "_enhanced_harmful_check",
+     "_enhanced_harmful_check_cached",
+     "_enhanced_ingredient_mapping",
+     "_enhanced_ingredient_mapping_cached",
+     "_exact_ingredient_group_lookup",
+     "_exact_label_dose_text",
+     "_expand_compound_form_name",
+     "_expand_header_forms_for_processing",
+     "_extract_primary_mass_unit",
+     "_fast_ingredient_lookup",
+     "_format_label_quantity",
+     "_has_curated_other_ingredient_identity",
+     "_has_dsld_blend_group_signal",
+     "_is_inactive_unmapped_report_container",
+     "_is_label_header",
+     "_is_nutrition_fact",
+     "_is_proprietary_blend_name",
+     "_is_semantic_label_qualifier",
+     "_is_structural_form_container",
+     "_is_zero_dose_omega_molecular_form_attribute",
+     "_map_inactive_name_prefer_other",
+     "_match_probiotic_strain",
+     "_normalize_daily_value_target_group",
+     "_normalize_dv_lookup_key",
+     "_normalize_for_skip",
+     "_normalize_label_unit",
+     "_perform_ingredient_mapping",
+     "_process_quantity",
+     "_quantity_for_single_form_protein_child",
+     "_queue_display_ingredient",
+     "_queue_label_ledger_omission",
+     "_record_unmapped_ingredient",
+     "_resolve_canonical_identity",
+     "_resolve_inactive_canonical_identity",
+     "_safe_float",
+     "_safe_float_flagged",
+     "_safe_int",
+     "_should_preserve_expanded_form",
+     "_should_skip_inactive_ingredient",
+     "_should_skip_ingredient",
+     "_source_path_is_inactive",
+     "_stamp_expanded_form_cleaner_contract",
+     "_strip_qualifier_suffixes",
+     "allergen_variations",
+     "form_variations",
+     "harmful_variations",
+     "ingredient_variations"
+    ],
+    "closure_methods": 54,
+    "exclusive_helpers": [],
+    "exclusive_loc": 0,
+    "transitive_module_globals": [
+     "INACTIVE_CONTAINER_DESCRIPTOR_TOKENS",
+     "NEEDS_VERIFICATION_RULES",
+     "STRUCTURAL_ACTIVE_CONTAINER_NAMES",
+     "STRUCTURAL_OTHER_FORM_CONTAINER_NAMES",
+     "is_label_header",
+     "logger"
+    ],
+    "transitive_reads": [
+     "ARTIFICIAL_COLOR_INDICATORS",
+     "EXPLICIT_ARTIFICIAL_DYES",
+     "EXPLICIT_NATURAL_DYES",
+     "NATURAL_COLOR_INDICATORS",
+     "_PLANT_PART_TOKENS",
+     "_blend_header_high_conf_patterns",
+     "_canonical_id_by_std_name",
+     "_canonical_identity_registry",
+     "_enable_case_insensitive_skip",
+     "_fast_exact_lookup",
+     "_group_exact_lookup",
+     "_hierarchy_lookup",
+     "_preprocessed_blend_header_exact",
+     "_preprocessed_excluded_labels",
+     "_preprocessed_excluded_nutrition",
+     "_probiotic_strain_lookup",
+     "_safety_exact_lookup",
+     "_skip_exact",
+     "_skip_exact_ci",
+     "_skip_normalized",
+     "_skip_normalized_ci",
+     "_spec_string_patterns",
+     "allergen_lookup",
+     "harmful_lookup",
+     "ingredient_alias_lookup",
+     "ingredient_context_lookup",
+     "ingredient_forms_lookup",
+     "ingredient_map",
+     "matcher",
+     "other_ingredients_exact_lookup",
+     "other_ingredients_lookup"
+    ],
+    "transitive_writes": [
+     "_allergen_variations_cache",
+     "_cache_stats",
+     "_display_ingredients_buffer",
+     "_form_variations_cache",
+     "_harmful_variations_cache",
+     "_ingredient_variations_cache",
+     "_label_ledger_omissions",
+     "unmapped_details",
+     "unmapped_ingredients"
+    ]
+   },
+   "_process_other_ingredients_enhanced": {
+    "closure_loc": 2723,
+    "closure_members": [
+     "_activity_dose_from_notes",
+     "_build_unmapped_detail",
+     "_classify_hierarchy_type",
+     "_daily_value_target_group_from_dv_group",
+     "_default_display_resolution_type",
+     "_enhanced_allergen_check",
+     "_enhanced_allergen_check_cached",
+     "_enhanced_harmful_check",
+     "_enhanced_harmful_check_cached",
+     "_enhanced_ingredient_mapping",
+     "_enhanced_ingredient_mapping_cached",
+     "_exact_ingredient_group_lookup",
+     "_exact_label_dose_text",
+     "_expand_compound_form_name",
+     "_expand_header_forms_for_processing",
+     "_extract_primary_mass_unit",
+     "_fast_ingredient_lookup",
+     "_format_label_quantity",
+     "_has_curated_other_ingredient_identity",
+     "_has_dsld_blend_group_signal",
+     "_is_inactive_unmapped_report_container",
+     "_is_label_header",
+     "_is_nutrition_fact",
+     "_is_proprietary_blend_name",
+     "_is_semantic_label_qualifier",
+     "_is_structural_form_container",
+     "_is_zero_dose_omega_molecular_form_attribute",
+     "_map_inactive_name_prefer_other",
+     "_match_probiotic_strain",
+     "_normalize_daily_value_target_group",
+     "_normalize_dv_lookup_key",
+     "_normalize_for_skip",
+     "_normalize_label_unit",
+     "_perform_ingredient_mapping",
+     "_process_ingredients_sequential",
+     "_process_quantity",
+     "_quantity_for_single_form_protein_child",
+     "_queue_display_ingredient",
+     "_queue_label_ledger_omission",
+     "_record_unmapped_ingredient",
+     "_resolve_canonical_identity",
+     "_resolve_inactive_canonical_identity",
+     "_safe_float",
+     "_safe_float_flagged",
+     "_safe_int",
+     "_should_preserve_expanded_form",
+     "_should_skip_inactive_ingredient",
+     "_should_skip_ingredient",
+     "_source_path_is_inactive",
+     "_stamp_expanded_form_cleaner_contract",
+     "_strip_qualifier_suffixes",
+     "allergen_variations",
+     "form_variations",
+     "harmful_variations",
+     "ingredient_variations"
+    ],
+    "closure_methods": 55,
+    "exclusive_helpers": [
+     "_process_ingredients_sequential"
+    ],
+    "exclusive_loc": 277,
+    "transitive_module_globals": [
+     "INACTIVE_CONTAINER_DESCRIPTOR_TOKENS",
+     "NEEDS_VERIFICATION_RULES",
+     "STRUCTURAL_ACTIVE_CONTAINER_NAMES",
+     "STRUCTURAL_OTHER_FORM_CONTAINER_NAMES",
+     "is_label_header",
+     "logger"
+    ],
+    "transitive_reads": [
+     "ARTIFICIAL_COLOR_INDICATORS",
+     "EXPLICIT_ARTIFICIAL_DYES",
+     "EXPLICIT_NATURAL_DYES",
+     "NATURAL_COLOR_INDICATORS",
+     "_PLANT_PART_TOKENS",
+     "_blend_header_high_conf_patterns",
+     "_canonical_id_by_std_name",
+     "_canonical_identity_registry",
+     "_enable_case_insensitive_skip",
+     "_fast_exact_lookup",
+     "_group_exact_lookup",
+     "_hierarchy_lookup",
+     "_preprocessed_blend_header_exact",
+     "_preprocessed_excluded_labels",
+     "_preprocessed_excluded_nutrition",
+     "_probiotic_strain_lookup",
+     "_safety_exact_lookup",
+     "_skip_exact",
+     "_skip_exact_ci",
+     "_skip_normalized",
+     "_skip_normalized_ci",
+     "_spec_string_patterns",
+     "allergen_lookup",
+     "grouping_handler",
+     "harmful_lookup",
+     "ingredient_alias_lookup",
+     "ingredient_context_lookup",
+     "ingredient_forms_lookup",
+     "ingredient_map",
+     "matcher",
+     "other_ingredients_exact_lookup",
+     "other_ingredients_lookup"
+    ],
+    "transitive_writes": [
+     "_allergen_variations_cache",
+     "_cache_stats",
+     "_display_ingredients_buffer",
+     "_form_variations_cache",
+     "_harmful_variations_cache",
+     "_ingredient_variations_cache",
+     "_label_ledger_omissions",
+     "unmapped_details",
+     "unmapped_ingredients"
+    ]
+   },
+   "_process_quantity": {
+    "closure_loc": 288,
+    "closure_members": [
+     "_daily_value_target_group_from_dv_group",
+     "_normalize_daily_value_target_group",
+     "_normalize_dv_lookup_key",
+     "_safe_float",
+     "_safe_float_flagged"
+    ],
+    "closure_methods": 5,
+    "exclusive_helpers": [],
+    "exclusive_loc": 0,
+    "transitive_module_globals": [
+     "logger"
+    ],
+    "transitive_reads": [],
+    "transitive_writes": []
+   },
+   "_process_serving_sizes": {
+    "closure_loc": 76,
+    "closure_members": [
+     "_safe_float",
+     "_safe_int"
+    ],
+    "closure_methods": 2,
+    "exclusive_helpers": [],
+    "exclusive_loc": 0,
+    "transitive_module_globals": [
+     "logger"
+    ],
+    "transitive_reads": [],
+    "transitive_writes": []
+   },
+   "_process_single_ingredient_enhanced": {
+    "closure_loc": 5458,
+    "closure_members": [
+     "_activity_dose_from_notes",
+     "_build_unmapped_detail",
+     "_citrus_bioflavonoid_source_identity",
+     "_classify_hierarchy_type",
+     "_contextual_ala_identity",
+     "_daily_value_target_group_from_dv_group",
+     "_daily_value_target_group_from_variants",
+     "_default_display_resolution_type",
+     "_determine_disclosure_level",
+     "_enhanced_allergen_check",
+     "_enhanced_allergen_check_cached",
+     "_enhanced_harmful_check",
+     "_enhanced_harmful_check_cached",
+     "_enhanced_ingredient_mapping",
+     "_enhanced_ingredient_mapping_cached",
+     "_enhanced_non_harmful_check",
+     "_enhanced_non_harmful_check_cached",
+     "_exact_ingredient_group_lookup",
+     "_exact_label_dose_text",
+     "_expand_compound_form_name",
+     "_expand_header_forms_for_processing",
+     "_extract_branded_token",
+     "_extract_forms_from_ingredient_name",
+     "_extract_nutritional_info",
+     "_extract_primary_mass_unit",
+     "_fast_ingredient_lookup",
+     "_find_daily_value_record",
+     "_format_label_quantity",
+     "_has_declared_mass",
+     "_has_dsld_blend_group_signal",
+     "_infer_plant_part_from_name",
+     "_is_analytical_fraction_marker",
+     "_is_chemical_decomposition_leaf",
+     "_is_dosed_explicit_amino_aggregate_owner",
+     "_is_dosed_omega_aggregate_owner",
+     "_is_dsld_active_blend_total_row",
+     "_is_inactive_unmapped_report_container",
+     "_is_label_header",
+     "_is_nutrition_fact",
+     "_is_probiotic_cfu_total_row",
+     "_is_proprietary_blend_name",
+     "_is_semantic_label_qualifier",
+     "_is_structural_active_blend_leaf",
+     "_is_structural_active_display_only_leaf",
+     "_is_structural_active_form_display_only",
+     "_is_structural_form_container",
+     "_is_zero_dose_omega_molecular_form_attribute",
+     "_lift_decomposition_members",
+     "_map_inactive_name_prefer_other",
+     "_marker_fits_inside_parent",
+     "_match_probiotic_strain",
+     "_maybe_correct_dv_backed_unit",
+     "_maybe_correct_parent_equivalent_unit",
+     "_maybe_restore_folate_dfe_parent_unit",
+     "_normalize_daily_value_target_group",
+     "_normalize_daily_value_unit",
+     "_normalize_dv_lookup_key",
+     "_normalize_for_skip",
+     "_normalize_label_unit",
+     "_parent_is_standardized_botanical_extract",
+     "_parse_botanical_details",
+     "_perform_ingredient_mapping",
+     "_printed_nutrient_identity",
+     "_priority_based_classification",
+     "_process_quantity",
+     "_quantity_for_single_form_protein_child",
+     "_queue_display_ingredient",
+     "_queue_label_ledger_omission",
+     "_raw_child_names_for_display",
+     "_record_nutrition_fact",
+     "_record_unmapped_ingredient",
+     "_registered_strain_species_identity",
+     "_resolve_canonical_identity",
+     "_resolve_inactive_canonical_identity",
+     "_safe_float",
+     "_safe_float_flagged",
+     "_safe_int",
+     "_safety_lookup_for_priority_classification",
+     "_should_preserve_expanded_form",
+     "_should_skip_ingredient",
+     "_single_declared_source_form_identity",
+     "_single_nested_marker_form_identity",
+     "_source_path_is_inactive",
+     "_stamp_expanded_form_cleaner_contract",
+     "_strip_duplicate_label_artifacts",
+     "_strip_qualifier_suffixes",
+     "_try_unii_match",
+     "allergen_variations",
+     "form_variations",
+     "harmful_variations",
+     "ingredient_variations",
+     "non_harmful_variations"
+    ],
+    "closure_methods": 92,
+    "exclusive_helpers": [],
+    "exclusive_loc": 0,
+    "transitive_module_globals": [
+     "INACTIVE_CONTAINER_DESCRIPTOR_TOKENS",
+     "NEEDS_VERIFICATION_RULES",
+     "STRUCTURAL_ACTIVE_BLEND_LEAF_NAMES",
+     "STRUCTURAL_ACTIVE_CONTAINER_NAMES",
+     "STRUCTURAL_ACTIVE_CONTEXTUAL_DISPLAY_ONLY_LEAF_NAMES",
+     "STRUCTURAL_ACTIVE_DISPLAY_ONLY_LEAF_NAMES",
+     "STRUCTURAL_ACTIVE_FORM_DISPLAY_ONLY_NAMES",
+     "STRUCTURAL_OTHER_FORM_CONTAINER_NAMES",
+     "_EXPLICIT_BCAA_TOTAL_NAME",
+     "_normalize_unii",
+     "is_label_header",
+     "logger"
+    ],
+    "transitive_reads": [
+     "ARTIFICIAL_COLOR_INDICATORS",
+     "EXPLICIT_ARTIFICIAL_DYES",
+     "EXPLICIT_NATURAL_DYES",
+     "NATURAL_COLOR_INDICATORS",
+     "_CITRUS_SOURCE_RE",
+     "_PLANT_PART_TOKENS",
+     "_blend_header_high_conf_patterns",
+     "_canonical_id_by_std_name",
+     "_canonical_identity_registry",
+     "_canonical_parent_relationships",
+     "_daily_value_lookup",
+     "_enable_case_insensitive_skip",
+     "_fast_exact_lookup",
+     "_group_exact_lookup",
+     "_hierarchy_lookup",
+     "_preprocessed_blend_header_exact",
+     "_preprocessed_excluded_labels",
+     "_preprocessed_excluded_nutrition",
+     "_probiotic_strain_lookup",
+     "_probiotic_strain_names",
+     "_safety_exact_lookup",
+     "_skip_exact",
+     "_skip_exact_ci",
+     "_skip_normalized",
+     "_skip_normalized_ci",
+     "_spec_string_patterns",
+     "_unii_to_payload_lookup",
+     "allergen_lookup",
+     "daily_values",
+     "harmful_lookup",
+     "ingredient_alias_lookup",
+     "ingredient_context_lookup",
+     "ingredient_forms_lookup",
+     "ingredient_map",
+     "matcher",
+     "other_ingredients_exact_lookup",
+     "other_ingredients_lookup",
+     "standardized_botanicals"
+    ],
+    "transitive_writes": [
+     "_allergen_variations_cache",
+     "_cache_stats",
+     "_display_ingredients_buffer",
+     "_form_variations_cache",
+     "_harmful_variations_cache",
+     "_ingredient_variations_cache",
+     "_label_ledger_omissions",
+     "_non_harmful_variations_cache",
+     "unmapped_details",
+     "unmapped_ingredients"
+    ]
+   },
+   "_process_statements": {
+    "closure_loc": 15,
+    "closure_members": [],
+    "closure_methods": 0,
+    "exclusive_helpers": [],
+    "exclusive_loc": 0,
+    "transitive_module_globals": [],
+    "transitive_reads": [],
+    "transitive_writes": []
+   },
+   "normalize_product": {
+    "closure_loc": 9774,
+    "closure_members": [
+     "_active_rows_from_rescued_inactive_forms",
+     "_activity_dose_from_notes",
+     "_apply_context_canonical_override",
+     "_apply_label_corrections",
+     "_apply_z1_enzyme_cid_fallback",
+     "_build_display_ingredients",
+     "_build_label_ledger_audit",
+     "_build_label_source_rows",
+     "_build_proprietary_blend_disclosure",
+     "_build_unmapped_detail",
+     "_calculate_transparency_metrics",
+     "_citrus_bioflavonoid_source_identity",
+     "_classify_hierarchy_type",
+     "_classify_label_source_structure",
+     "_contextual_ala_identity",
+     "_daily_value_target_group_from_dv_group",
+     "_daily_value_target_group_from_variants",
+     "_dedupe_inactive_ingredients",
+     "_default_display_resolution_type",
+     "_determine_disclosure_level",
+     "_display_only_row_from_source",
+     "_enhanced_allergen_check",
+     "_enhanced_allergen_check_cached",
+     "_enhanced_harmful_check",
+     "_enhanced_harmful_check_cached",
+     "_enhanced_ingredient_mapping",
+     "_enhanced_ingredient_mapping_cached",
+     "_enhanced_non_harmful_check",
+     "_enhanced_non_harmful_check_cached",
+     "_exact_ingredient_group_lookup",
+     "_exact_label_dose_text",
+     "_expand_compound_form_name",
+     "_expand_header_forms_for_processing",
+     "_extract_branded_token",
+     "_extract_clean_claims",
+     "_extract_directions",
+     "_extract_discontinued_date",
+     "_extract_forms_from_ingredient_name",
+     "_extract_net_contents",
+     "_extract_nutritional_info",
+     "_extract_origin",
+     "_extract_original_label_text",
+     "_extract_primary_mass_unit",
+     "_extract_storage",
+     "_fast_ingredient_lookup",
+     "_find_daily_value_record",
+     "_flatten_nested_ingredients",
+     "_format_label_quantity",
+     "_generate_image_url",
+     "_generate_label_text",
+     "_has_curated_other_ingredient_identity",
+     "_has_declared_mass",
+     "_has_dsld_blend_group_signal",
+     "_inactive_row_is_empty_panel_active_rescue_candidate",
+     "_infer_plant_part_from_name",
+     "_is_active_source_form_wrapper",
+     "_is_analytical_fraction_marker",
+     "_is_chemical_decomposition_leaf",
+     "_is_dosed_explicit_amino_aggregate_owner",
+     "_is_dosed_omega_aggregate_owner",
+     "_is_dsld_active_blend_total_row",
+     "_is_dsld_group_blend_container",
+     "_is_inactive_unmapped_report_container",
+     "_is_label_header",
+     "_is_nutrition_fact",
+     "_is_probiotic_cfu_total_row",
+     "_is_proprietary_blend_name",
+     "_is_semantic_label_qualifier",
+     "_is_structural_active_blend_leaf",
+     "_is_structural_active_container",
+     "_is_structural_active_display_only_leaf",
+     "_is_structural_active_form_display_only",
+     "_is_structural_form_container",
+     "_is_total_or_nutrition_rollup",
+     "_is_zero_dose_omega_molecular_form_attribute",
+     "_label_form_distinct_from_identity",
+     "_lift_decomposition_members",
+     "_map_inactive_name_prefer_other",
+     "_marker_fits_inside_parent",
+     "_match_probiotic_strain",
+     "_maybe_correct_dv_backed_unit",
+     "_maybe_correct_parent_equivalent_unit",
+     "_maybe_restore_folate_dfe_parent_unit",
+     "_merge_alternate_serving_rows",
+     "_normalize_daily_value_target_group",
+     "_normalize_daily_value_unit",
+     "_normalize_dv_lookup_key",
+     "_normalize_for_skip",
+     "_normalize_label_unit",
+     "_orphan_canonical_identity",
+     "_parent_is_standardized_botanical_extract",
+     "_parse_botanical_details",
+     "_perform_ingredient_mapping",
+     "_printed_nutrient_identity",
+     "_priority_based_classification",
+     "_process_claims",
+     "_process_ingredients_enhanced",
+     "_process_ingredients_sequential",
+     "_process_other_ingredients_enhanced",
+     "_process_quantity",
+     "_process_serving_sizes",
+     "_process_single_ingredient_enhanced",
+     "_process_statements",
+     "_promote_inactive_row_to_active_identity",
+     "_quantity_for_single_form_protein_child",
+     "_queue_display_ingredient",
+     "_queue_label_ledger_omission",
+     "_raw_child_names_for_display",
+     "_reconcile_orphan_source_rows",
+     "_record_nutrition_fact",
+     "_record_unmapped_ingredient",
+     "_record_unsupported_label_source",
+     "_registered_strain_species_identity",
+     "_repair_explicit_epa_note_contradictions",
+     "_rescue_empty_panel_active_identity_from_otheringredients",
+     "_resolve_canonical_identity",
+     "_resolve_inactive_canonical_identity",
+     "_safe_float",
+     "_safe_float_flagged",
+     "_safe_int",
+     "_safety_lookup_for_priority_classification",
+     "_sanitize_label_source_container",
+     "_should_preserve_expanded_form",
+     "_should_skip_inactive_ingredient",
+     "_should_skip_ingredient",
+     "_single_declared_source_form_identity",
+     "_single_nested_marker_form_identity",
+     "_source_path_is_inactive",
+     "_stamp_expanded_form_cleaner_contract",
+     "_stamp_raw_source_paths",
+     "_strip_duplicate_label_artifacts",
+     "_strip_qualifier_suffixes",
+     "_try_unii_match",
+     "_validate_upc",
+     "allergen_variations",
+     "form_variations",
+     "harmful_variations",
+     "ingredient_variations",
+     "non_harmful_variations"
+    ],
+    "closure_methods": 139,
+    "exclusive_helpers": [],
+    "exclusive_loc": 0,
+    "transitive_module_globals": [
+     "EnhancedDSLDNormalizer",
+     "INACTIVE_CONTAINER_DESCRIPTOR_TOKENS",
+     "NEEDS_VERIFICATION_RULES",
+     "STRUCTURAL_ACTIVE_BLEND_LEAF_NAMES",
+     "STRUCTURAL_ACTIVE_CONTAINER_NAMES",
+     "STRUCTURAL_ACTIVE_CONTEXTUAL_DISPLAY_ONLY_LEAF_NAMES",
+     "STRUCTURAL_ACTIVE_DISPLAY_ONLY_LEAF_NAMES",
+     "STRUCTURAL_ACTIVE_FORM_DISPLAY_ONLY_NAMES",
+     "STRUCTURAL_ACTIVE_SUMMARY_WRAPPER_NAMES",
+     "STRUCTURAL_OTHER_FORM_CONTAINER_NAMES",
+     "_EXPLICIT_BCAA_TOTAL_NAME",
+     "_LABEL_CORRECTION_SCORING_DISPOSITIONS",
+     "_normalize_unii",
+     "_validate_context_canonical_override_review",
+     "is_label_header",
+     "logger",
+     "parse_other_ingredient_disclosure"
+    ],
+    "transitive_reads": [
+     "ARTIFICIAL_COLOR_INDICATORS",
+     "EXPLICIT_ARTIFICIAL_DYES",
+     "EXPLICIT_NATURAL_DYES",
+     "NATURAL_COLOR_INDICATORS",
+     "_CITRUS_SOURCE_RE",
+     "_PLANT_PART_TOKENS",
+     "_Z1_ENZYME_CHILD_TOKENS",
+     "_Z1_ENZYME_HEADER_TOKENS",
+     "_Z1_ENZYME_PRODUCT_SIGNALS",
+     "_Z1_NON_DOSE_UNITS",
+     "_blend_header_high_conf_patterns",
+     "_canonical_id_by_std_name",
+     "_canonical_identity_registry",
+     "_canonical_parent_relationships",
+     "_context_canonical_overrides_by_dsld_id",
+     "_daily_value_lookup",
+     "_enable_case_insensitive_skip",
+     "_fast_exact_lookup",
+     "_group_exact_lookup",
+     "_hierarchy_lookup",
+     "_label_corrections_by_dsld_id",
+     "_preprocessed_blend_header_exact",
+     "_preprocessed_excluded_labels",
+     "_preprocessed_excluded_nutrition",
+     "_probiotic_strain_lookup",
+     "_probiotic_strain_names",
+     "_safety_exact_lookup",
+     "_skip_exact",
+     "_skip_exact_ci",
+     "_skip_normalized",
+     "_skip_normalized_ci",
+     "_spec_string_patterns",
+     "_unii_to_payload_lookup",
+     "allergen_lookup",
+     "daily_values",
+     "grouping_handler",
+     "harmful_lookup",
+     "ingredient_alias_lookup",
+     "ingredient_context_lookup",
+     "ingredient_forms_lookup",
+     "ingredient_map",
+     "matcher",
+     "other_ingredients_exact_lookup",
+     "other_ingredients_lookup",
+     "reference_versions",
+     "standardized_botanicals"
+    ],
+    "transitive_writes": [
+     "_allergen_variations_cache",
+     "_cache_stats",
+     "_canonical_serving_row",
+     "_display_ingredients_buffer",
+     "_display_source_rows",
+     "_form_variations_cache",
+     "_harmful_variations_cache",
+     "_ingredient_variations_cache",
+     "_label_ledger_omissions",
+     "_non_harmful_variations_cache",
+     "unmapped_details",
+     "unmapped_ingredients"
+    ]
+   }
+  },
+  "shared_helper_counts": {
+   "_build_display_ingredients": {
+    "_flatten_nested_ingredients": 27,
+    "_perform_ingredient_mapping": 12,
+    "_process_ingredients_enhanced": 29,
+    "_process_ingredients_sequential": 29,
+    "_process_other_ingredients_enhanced": 29,
+    "_process_quantity": 1,
+    "_process_serving_sizes": 2,
+    "_process_single_ingredient_enhanced": 29,
+    "normalize_product": 35
+   },
+   "_flatten_nested_ingredients": {
+    "_build_display_ingredients": 27,
+    "_perform_ingredient_mapping": 12,
+    "_process_ingredients_enhanced": 55,
+    "_process_ingredients_sequential": 45,
+    "_process_other_ingredients_enhanced": 45,
+    "_process_quantity": 6,
+    "_process_serving_sizes": 2,
+    "_process_single_ingredient_enhanced": 55,
+    "normalize_product": 58
+   },
+   "_perform_ingredient_mapping": {
+    "_build_display_ingredients": 12,
+    "_flatten_nested_ingredients": 12,
+    "_process_ingredients_enhanced": 12,
+    "_process_ingredients_sequential": 12,
+    "_process_other_ingredients_enhanced": 12,
+    "_process_single_ingredient_enhanced": 12,
+    "normalize_product": 12
+   },
+   "_process_claims": {
+    "normalize_product": 1
+   },
+   "_process_ingredients_enhanced": {
+    "_build_display_ingredients": 29,
+    "_flatten_nested_ingredients": 55,
+    "_perform_ingredient_mapping": 12,
+    "_process_ingredients_sequential": 52,
+    "_process_other_ingredients_enhanced": 52,
+    "_process_quantity": 6,
+    "_process_serving_sizes": 2,
+    "_process_single_ingredient_enhanced": 93,
+    "normalize_product": 95
+   },
+   "_process_ingredients_sequential": {
+    "_build_display_ingredients": 29,
+    "_flatten_nested_ingredients": 45,
+    "_perform_ingredient_mapping": 12,
+    "_process_ingredients_enhanced": 52,
+    "_process_other_ingredients_enhanced": 55,
+    "_process_quantity": 6,
+    "_process_serving_sizes": 2,
+    "_process_single_ingredient_enhanced": 52,
+    "normalize_product": 55
+   },
+   "_process_other_ingredients_enhanced": {
+    "_build_display_ingredients": 29,
+    "_flatten_nested_ingredients": 45,
+    "_perform_ingredient_mapping": 12,
+    "_process_ingredients_enhanced": 52,
+    "_process_ingredients_sequential": 55,
+    "_process_quantity": 6,
+    "_process_serving_sizes": 2,
+    "_process_single_ingredient_enhanced": 52,
+    "normalize_product": 56
+   },
+   "_process_quantity": {
+    "_build_display_ingredients": 1,
+    "_flatten_nested_ingredients": 6,
+    "_process_ingredients_enhanced": 6,
+    "_process_ingredients_sequential": 6,
+    "_process_other_ingredients_enhanced": 6,
+    "_process_serving_sizes": 1,
+    "_process_single_ingredient_enhanced": 6,
+    "normalize_product": 6
+   },
+   "_process_serving_sizes": {
+    "_build_display_ingredients": 2,
+    "_flatten_nested_ingredients": 2,
+    "_process_ingredients_enhanced": 2,
+    "_process_ingredients_sequential": 2,
+    "_process_other_ingredients_enhanced": 2,
+    "_process_quantity": 1,
+    "_process_single_ingredient_enhanced": 2,
+    "normalize_product": 3
+   },
+   "_process_single_ingredient_enhanced": {
+    "_build_display_ingredients": 29,
+    "_flatten_nested_ingredients": 55,
+    "_perform_ingredient_mapping": 12,
+    "_process_ingredients_enhanced": 93,
+    "_process_ingredients_sequential": 52,
+    "_process_other_ingredients_enhanced": 52,
+    "_process_quantity": 6,
+    "_process_serving_sizes": 2,
+    "normalize_product": 93
+   },
+   "_process_statements": {
+    "normalize_product": 1
+   },
+   "normalize_product": {
+    "_build_display_ingredients": 35,
+    "_flatten_nested_ingredients": 58,
+    "_perform_ingredient_mapping": 12,
+    "_process_claims": 1,
+    "_process_ingredients_enhanced": 95,
+    "_process_ingredients_sequential": 55,
+    "_process_other_ingredients_enhanced": 56,
+    "_process_quantity": 6,
+    "_process_serving_sizes": 3,
+    "_process_single_ingredient_enhanced": 93,
+    "_process_statements": 1
+   }
+  },
+  "summary": {
+   "peer_prefix": "_process_",
+   "peers": 8,
+   "shared_core_helpers": [
+    "_activity_dose_from_notes",
+    "_build_unmapped_detail",
+    "_classify_hierarchy_type",
+    "_daily_value_target_group_from_dv_group",
+    "_default_display_resolution_type",
+    "_enhanced_allergen_check",
+    "_enhanced_allergen_check_cached",
+    "_enhanced_harmful_check",
+    "_enhanced_harmful_check_cached",
+    "_enhanced_ingredient_mapping",
+    "_enhanced_ingredient_mapping_cached",
+    "_exact_ingredient_group_lookup",
+    "_exact_label_dose_text",
+    "_expand_compound_form_name",
+    "_expand_header_forms_for_processing",
+    "_extract_primary_mass_unit",
+    "_fast_ingredient_lookup",
+    "_format_label_quantity",
+    "_has_dsld_blend_group_signal",
+    "_is_inactive_unmapped_report_container",
+    "_is_label_header",
+    "_is_nutrition_fact",
+    "_is_proprietary_blend_name",
+    "_is_semantic_label_qualifier",
+    "_is_structural_form_container",
+    "_is_zero_dose_omega_molecular_form_attribute",
+    "_map_inactive_name_prefer_other",
+    "_match_probiotic_strain",
+    "_normalize_daily_value_target_group",
+    "_normalize_dv_lookup_key",
+    "_normalize_for_skip",
+    "_normalize_label_unit",
+    "_perform_ingredient_mapping",
+    "_process_quantity",
+    "_quantity_for_single_form_protein_child",
+    "_queue_display_ingredient",
+    "_queue_label_ledger_omission",
+    "_record_unmapped_ingredient",
+    "_resolve_canonical_identity",
+    "_resolve_inactive_canonical_identity",
+    "_safe_float",
+    "_safe_float_flagged",
+    "_safe_int",
+    "_should_preserve_expanded_form",
+    "_should_skip_ingredient",
+    "_source_path_is_inactive",
+    "_stamp_expanded_form_cleaner_contract",
+    "_strip_qualifier_suffixes",
+    "allergen_variations",
+    "form_variations",
+    "harmful_variations",
+    "ingredient_variations"
+   ],
+   "shared_core_loc": 2380,
+   "union_helper_loc": 5778,
+   "union_helpers": 97
+  }
+ },
+ "methods": 157,
+ "path": "scripts/enhanced_normalizer.py",
+ "selected_methods": {
+  "_build_display_ingredients": {
+   "calls": [
+    "_default_display_resolution_type",
+    "_exact_label_dose_text",
+    "_label_form_distinct_from_identity",
+    "_normalize_label_unit",
+    "_queue_label_ledger_omission",
+    "_reconcile_orphan_source_rows",
+    "_safe_float",
+    "_safe_int",
+    "_source_path_is_inactive"
+   ],
+   "length": 423,
+   "line": 10738,
+   "module_globals": [],
+   "params": 2,
+   "reads": [],
+   "writes": []
+  },
+  "_flatten_nested_ingredients": {
+   "calls": [
+    "_expand_header_forms_for_processing",
+    "_extract_primary_mass_unit",
+    "_flatten_nested_ingredients",
+    "_has_declared_mass",
+    "_has_dsld_blend_group_signal",
+    "_is_chemical_decomposition_leaf",
+    "_is_dosed_explicit_amino_aggregate_owner",
+    "_is_dosed_omega_aggregate_owner",
+    "_is_dsld_active_blend_total_row",
+    "_is_dsld_group_blend_container",
+    "_is_label_header",
+    "_is_nutrition_fact",
+    "_is_probiotic_cfu_total_row",
+    "_is_proprietary_blend_name",
+    "_is_structural_active_blend_leaf",
+    "_is_structural_active_container",
+    "_is_structural_active_display_only_leaf",
+    "_lift_decomposition_members",
+    "_queue_display_ingredient",
+    "_raw_child_names_for_display",
+    "_should_skip_ingredient"
+   ],
+   "length": 404,
+   "line": 5392,
+   "module_globals": [
+    "STRUCTURAL_ACTIVE_SUMMARY_WRAPPER_NAMES",
+    "logger"
+   ],
+   "params": 2,
+   "reads": [
+    "matcher"
+   ],
+   "writes": []
+  },
+  "_perform_ingredient_mapping": {
+   "calls": [
+    "_enhanced_allergen_check",
+    "_enhanced_harmful_check",
+    "_exact_ingredient_group_lookup",
+    "_fast_ingredient_lookup",
+    "_match_probiotic_strain",
+    "_perform_ingredient_mapping",
+    "allergen_variations",
+    "form_variations",
+    "harmful_variations",
+    "ingredient_variations"
+   ],
+   "length": 488,
+   "line": 3911,
+   "module_globals": [
+    "logger"
+   ],
+   "params": 4,
+   "reads": [
+    "ARTIFICIAL_COLOR_INDICATORS",
+    "EXPLICIT_ARTIFICIAL_DYES",
+    "EXPLICIT_NATURAL_DYES",
+    "NATURAL_COLOR_INDICATORS",
+    "_PLANT_PART_TOKENS",
+    "_canonical_identity_registry",
+    "_safety_exact_lookup",
+    "allergen_lookup",
+    "harmful_lookup",
+    "ingredient_alias_lookup",
+    "ingredient_context_lookup",
+    "ingredient_forms_lookup",
+    "ingredient_map",
+    "matcher",
+    "other_ingredients_lookup"
+   ],
+   "writes": []
+  },
+  "_process_claims": {
+   "calls": [],
+   "length": 15,
+   "line": 10188,
+   "module_globals": [],
+   "params": 1,
+   "reads": [],
+   "writes": []
+  },
+  "_process_ingredients_enhanced": {
+   "calls": [
+    "_expand_header_forms_for_processing",
+    "_is_active_source_form_wrapper",
+    "_is_dosed_explicit_amino_aggregate_owner",
+    "_is_dsld_active_blend_total_row",
+    "_is_label_header",
+    "_is_probiotic_cfu_total_row",
+    "_is_structural_active_blend_leaf",
+    "_is_structural_active_display_only_leaf",
+    "_is_structural_active_form_display_only",
+    "_is_structural_form_container",
+    "_process_single_ingredient_enhanced",
+    "_queue_display_ingredient"
+   ],
+   "length": 116,
+   "line": 7259,
+   "module_globals": [
+    "logger"
+   ],
+   "params": 2,
+   "reads": [],
+   "writes": []
+  },
+  "_process_ingredients_sequential": {
+   "calls": [
+    "_classify_hierarchy_type",
+    "_enhanced_allergen_check",
+    "_enhanced_harmful_check",
+    "_enhanced_ingredient_mapping",
+    "_expand_header_forms_for_processing",
+    "_is_inactive_unmapped_report_container",
+    "_is_label_header",
+    "_is_nutrition_fact",
+    "_is_proprietary_blend_name",
+    "_is_structural_form_container",
+    "_map_inactive_name_prefer_other",
+    "_queue_display_ingredient",
+    "_record_unmapped_ingredient",
+    "_resolve_inactive_canonical_identity",
+    "_should_skip_inactive_ingredient"
+   ],
+   "length": 277,
+   "line": 8814,
+   "module_globals": [
+    "logger"
+   ],
+   "params": 1,
+   "reads": [
+    "other_ingredients_exact_lookup"
+   ],
+   "writes": []
+  },
+  "_process_other_ingredients_enhanced": {
+   "calls": [
+    "_process_ingredients_sequential"
+   ],
+   "length": 43,
+   "line": 8769,
+   "module_globals": [],
+   "params": 1,
+   "reads": [
+    "grouping_handler"
+   ],
+   "writes": []
+  },
+  "_process_quantity": {
+   "calls": [
+    "_daily_value_target_group_from_dv_group",
+    "_safe_float",
+    "_safe_float_flagged"
+   ],
+   "length": 201,
+   "line": 9970,
+   "module_globals": [
+    "logger"
+   ],
+   "params": 1,
+   "reads": [],
+   "writes": []
+  },
+  "_process_serving_sizes": {
+   "calls": [
+    "_safe_float",
+    "_safe_int"
+   ],
+   "length": 31,
+   "line": 10204,
+   "module_globals": [],
+   "params": 1,
+   "reads": [],
+   "writes": []
+  },
+  "_process_single_ingredient_enhanced": {
+   "calls": [
+    "_citrus_bioflavonoid_source_identity",
+    "_classify_hierarchy_type",
+    "_contextual_ala_identity",
+    "_determine_disclosure_level",
+    "_enhanced_ingredient_mapping",
+    "_exact_ingredient_group_lookup",
+    "_expand_header_forms_for_processing",
+    "_extract_branded_token",
+    "_extract_forms_from_ingredient_name",
+    "_extract_nutritional_info",
+    "_extract_primary_mass_unit",
+    "_has_dsld_blend_group_signal",
+    "_infer_plant_part_from_name",
+    "_is_analytical_fraction_marker",
+    "_is_chemical_decomposition_leaf",
+    "_is_dosed_explicit_amino_aggregate_owner",
+    "_is_dosed_omega_aggregate_owner",
+    "_is_dsld_active_blend_total_row",
+    "_is_inactive_unmapped_report_container",
+    "_is_label_header",
+    "_is_nutrition_fact",
+    "_is_probiotic_cfu_total_row",
+    "_is_proprietary_blend_name",
+    "_is_structural_active_blend_leaf",
+    "_is_structural_active_display_only_leaf",
+    "_is_structural_active_form_display_only",
+    "_lift_decomposition_members",
+    "_marker_fits_inside_parent",
+    "_maybe_correct_dv_backed_unit",
+    "_maybe_correct_parent_equivalent_unit",
+    "_maybe_restore_folate_dfe_parent_unit",
+    "_normalize_daily_value_unit",
+    "_parent_is_standardized_botanical_extract",
+    "_parse_botanical_details",
+    "_printed_nutrient_identity",
+    "_priority_based_classification",
+    "_process_quantity",
+    "_process_single_ingredient_enhanced",
+    "_queue_display_ingredient",
+    "_raw_child_names_for_display",
+    "_record_unmapped_ingredient",
+    "_registered_strain_species_identity",
+    "_resolve_canonical_identity",
+    "_resolve_inactive_canonical_identity",
+    "_should_skip_ingredient",
+    "_single_declared_source_form_identity",
+    "_single_nested_marker_form_identity",
+    "_strip_duplicate_label_artifacts",
+    "_try_unii_match"
+   ],
+   "length": 1296,
+   "line": 7472,
+   "module_globals": [
+    "logger"
+   ],
+   "params": 2,
+   "reads": [
+    "_canonical_identity_registry",
+    "_canonical_parent_relationships",
+    "ingredient_map",
+    "matcher",
+    "other_ingredients_exact_lookup"
+   ],
+   "writes": []
+  },
+  "_process_statements": {
+   "calls": [],
+   "length": 15,
+   "line": 10172,
+   "module_globals": [],
+   "params": 1,
+   "reads": [],
+   "writes": []
+  },
+  "normalize_product": {
+   "calls": [
+    "_apply_context_canonical_override",
+    "_apply_label_corrections",
+    "_apply_z1_enzyme_cid_fallback",
+    "_build_display_ingredients",
+    "_build_label_ledger_audit",
+    "_build_label_source_rows",
+    "_build_proprietary_blend_disclosure",
+    "_calculate_transparency_metrics",
+    "_dedupe_inactive_ingredients",
+    "_extract_clean_claims",
+    "_extract_directions",
+    "_extract_discontinued_date",
+    "_extract_net_contents",
+    "_extract_nutritional_info",
+    "_extract_origin",
+    "_extract_original_label_text",
+    "_extract_storage",
+    "_flatten_nested_ingredients",
+    "_generate_image_url",
+    "_generate_label_text",
+    "_is_label_header",
+    "_merge_alternate_serving_rows",
+    "_process_claims",
+    "_process_ingredients_enhanced",
+    "_process_other_ingredients_enhanced",
+    "_process_serving_sizes",
+    "_process_statements",
+    "_record_unsupported_label_source",
+    "_repair_explicit_epa_note_contradictions",
+    "_rescue_empty_panel_active_identity_from_otheringredients",
+    "_safe_int",
+    "_sanitize_label_source_container",
+    "_should_skip_inactive_ingredient",
+    "_stamp_raw_source_paths",
+    "_validate_upc"
+   ],
+   "length": 708,
+   "line": 6394,
+   "module_globals": [
+    "is_label_header",
+    "logger",
+    "parse_other_ingredient_disclosure"
+   ],
+   "params": 1,
+   "reads": [
+    "_context_canonical_overrides_by_dsld_id",
+    "_label_corrections_by_dsld_id",
+    "matcher",
+    "reference_versions"
+   ],
+   "writes": [
+    "_canonical_serving_row",
+    "_display_ingredients_buffer",
+    "_display_source_rows",
+    "_label_ledger_omissions"
+   ]
+  }
+ }
+}

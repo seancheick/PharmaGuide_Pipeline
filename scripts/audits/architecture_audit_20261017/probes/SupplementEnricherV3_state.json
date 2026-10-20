@@ -1,0 +1,7694 @@
+{
+ "all_methods": {
+  "ARTIFICIAL_COLOR_INDICATORS": {
+   "calls": [],
+   "length": 4,
+   "line": 12612,
+   "module_globals": [],
+   "params": 0,
+   "reads": [
+    "databases"
+   ],
+   "writes": []
+  },
+  "EXPLICIT_ARTIFICIAL_DYES": {
+   "calls": [],
+   "length": 4,
+   "line": 12624,
+   "module_globals": [],
+   "params": 0,
+   "reads": [
+    "databases"
+   ],
+   "writes": []
+  },
+  "EXPLICIT_NATURAL_DYES": {
+   "calls": [],
+   "length": 4,
+   "line": 12618,
+   "module_globals": [],
+   "params": 0,
+   "reads": [
+    "databases"
+   ],
+   "writes": []
+  },
+  "NATURAL_COLOR_INDICATORS": {
+   "calls": [],
+   "length": 8,
+   "line": 12602,
+   "module_globals": [],
+   "params": 0,
+   "reads": [
+    "databases"
+   ],
+   "writes": []
+  },
+  "__init__": {
+   "calls": [
+    "_apply_logging_config",
+    "_build_performance_indexes",
+    "_compile_patterns",
+    "_init_scoring_modules",
+    "_load_all_databases",
+    "_load_config",
+    "_resolve_company_fuzzy_threshold",
+    "_setup_logging"
+   ],
+   "length": 66,
+   "line": 1093,
+   "module_globals": [],
+   "params": 1,
+   "reads": [],
+   "writes": [
+    "_ambiguity_warning_count",
+    "_color_context_pattern",
+    "_form_fallback_details",
+    "_hyphen_space_pattern_cache",
+    "_inactive_ingredient_resolver",
+    "_iqm_exact_index",
+    "_iqm_norm_index",
+    "_low_precision_token_alias_cache",
+    "_match_quality_cache",
+    "_nonscorable_index",
+    "_nonscorable_unii_index",
+    "_parent_fallback_details",
+    "_parent_fallback_info_count",
+    "_product_text_cache",
+    "_product_text_cache_enabled",
+    "_product_text_lower_cache",
+    "_quality_parent_context_index_cache",
+    "_rda_reference_stamp",
+    "_rda_ul_warning_count",
+    "_regex_pattern_cache",
+    "_safe_token_alias_cache",
+    "_short_acronym_alias_cache",
+    "_token_bounded_pattern_cache",
+    "company_fuzzy_threshold",
+    "config",
+    "databases",
+    "logger",
+    "match_counters",
+    "unmapped_tracker"
+   ]
+  },
+  "_active_ingredient_from_scoring_row": {
+   "calls": [],
+   "length": 21,
+   "line": 1398,
+   "module_globals": [],
+   "params": 1,
+   "reads": [],
+   "writes": []
+  },
+  "_allowlist_match": {
+   "calls": [
+    "_cached_compile_regex",
+    "_hyphen_space_token_pattern",
+    "_normalize_text",
+    "_token_bounded_match"
+   ],
+   "length": 42,
+   "line": 3336,
+   "module_globals": [],
+   "params": 2,
+   "reads": [],
+   "writes": []
+  },
+  "_amount_missing_disposition": {
+   "calls": [],
+   "length": 19,
+   "line": 19514,
+   "module_globals": [],
+   "params": 2,
+   "reads": [],
+   "writes": []
+  },
+  "_analyze_sodium_content": {
+   "calls": [
+    "_convert_mass",
+    "_find_sodium_in_ingredients",
+    "_normalize_threshold_unit"
+   ],
+   "length": 50,
+   "line": 18686,
+   "module_globals": [],
+   "params": 2,
+   "reads": [
+    "SODIUM_THRESHOLDS"
+   ],
+   "writes": []
+  },
+  "_analyze_sugar_content": {
+   "calls": [
+    "_convert_mass",
+    "_find_sugar_in_ingredients",
+    "_is_unresolved_source_descriptor",
+    "_normalize_threshold_unit"
+   ],
+   "length": 81,
+   "line": 18604,
+   "module_globals": [],
+   "params": 2,
+   "reads": [
+    "SUGAR_THRESHOLDS"
+   ],
+   "writes": []
+  },
+  "_anchor_form_reading": {
+   "calls": [
+    "_identity_mismatch_forms",
+    "_match_quality_map",
+    "_row_form_match_status"
+   ],
+   "length": 25,
+   "line": 17236,
+   "module_globals": [],
+   "params": 2,
+   "reads": [
+    "databases"
+   ],
+   "writes": []
+  },
+  "_append_product_evidence_dose_assessments": {
+   "calls": [],
+   "length": 156,
+   "line": 17394,
+   "module_globals": [],
+   "params": 0,
+   "reads": [],
+   "writes": []
+  },
+  "_append_unique_iqd_row": {
+   "calls": [],
+   "length": 3,
+   "line": 6023,
+   "module_globals": [],
+   "params": 1,
+   "reads": [],
+   "writes": []
+  },
+  "_apply_absorption_enhancer_demotion": {
+   "calls": [
+    "_normalize_text"
+   ],
+   "length": 116,
+   "line": 5709,
+   "module_globals": [],
+   "params": 3,
+   "reads": [
+    "databases"
+   ],
+   "writes": []
+  },
+  "_apply_context_canonical_override_match": {
+   "calls": [],
+   "length": 96,
+   "line": 2313,
+   "module_globals": [],
+   "params": 2,
+   "reads": [],
+   "writes": []
+  },
+  "_apply_curcumin_c3_bioperine_pairing_upgrade": {
+   "calls": [],
+   "length": 77,
+   "line": 5829,
+   "module_globals": [],
+   "params": 1,
+   "reads": [
+    "databases"
+   ],
+   "writes": []
+  },
+  "_apply_logging_config": {
+   "calls": [],
+   "length": 10,
+   "line": 1468,
+   "module_globals": [],
+   "params": 0,
+   "reads": [
+    "config",
+    "logger"
+   ],
+   "writes": []
+  },
+  "_apply_product_level_omega_form_disclosure": {
+   "calls": [
+    "_specific_form_in_parent"
+   ],
+   "length": 88,
+   "line": 5581,
+   "module_globals": [],
+   "params": 2,
+   "reads": [
+    "databases"
+   ],
+   "writes": []
+  },
+  "_assess_category_contamination_risk": {
+   "calls": [],
+   "length": 57,
+   "line": 14287,
+   "module_globals": [],
+   "params": 1,
+   "reads": [
+    "HIGH_CONTAMINATION_RISK_CATEGORIES"
+   ],
+   "writes": []
+  },
+  "_atomic_write_json": {
+   "calls": [],
+   "length": 15,
+   "line": 1047,
+   "module_globals": [],
+   "params": 2,
+   "reads": [],
+   "writes": []
+  },
+  "_attach_banned_safety_flags_to_ingredients": {
+   "calls": [],
+   "length": 51,
+   "line": 12090,
+   "module_globals": [],
+   "params": 2,
+   "reads": [],
+   "writes": []
+  },
+  "_banned_form_evidence_values": {
+   "calls": [],
+   "length": 20,
+   "line": 12547,
+   "module_globals": [],
+   "params": 3,
+   "reads": [],
+   "writes": []
+  },
+  "_banned_label_evidence_hits": {
+   "calls": [],
+   "length": 51,
+   "line": 12495,
+   "module_globals": [],
+   "params": 5,
+   "reads": [
+    "_inactive_ingredient_resolver"
+   ],
+   "writes": []
+  },
+  "_base_comparison_unit": {
+   "calls": [],
+   "length": 2,
+   "line": 19251,
+   "module_globals": [],
+   "params": 1,
+   "reads": [
+    "_EQUIVALENT_BASE_MASS_UNITS"
+   ],
+   "writes": []
+  },
+  "_botanical_source_identity": {
+   "calls": [],
+   "length": 42,
+   "line": 2156,
+   "module_globals": [
+    "BOTANICAL_CANONICAL_SOURCE_DBS"
+   ],
+   "params": 1,
+   "reads": [
+    "_botanical_source_identities",
+    "_nonscorable_index"
+   ],
+   "writes": []
+  },
+  "_brand_family_exact_match": {
+   "calls": [
+    "_normalize_company_name"
+   ],
+   "length": 22,
+   "line": 16120,
+   "module_globals": [],
+   "params": 3,
+   "reads": [],
+   "writes": []
+  },
+  "_brand_mentioned": {
+   "calls": [
+    "_get_all_product_text_lower"
+   ],
+   "length": 23,
+   "line": 15867,
+   "module_globals": [],
+   "params": 4,
+   "reads": [],
+   "writes": []
+  },
+  "_build_form_info_from_cleaned": {
+   "calls": [
+    "_infer_preferred_parent_from_context_cached",
+    "_is_provided_marker_form",
+    "_norm_form_name",
+    "_parent_identity_names",
+    "_parse_single_form",
+    "_should_keep_from_prefixed_form_as_actual"
+   ],
+   "length": 376,
+   "line": 8698,
+   "module_globals": [
+    "_COUNTER_ION_SALT_RE"
+   ],
+   "params": 3,
+   "reads": [
+    "databases"
+   ],
+   "writes": []
+  },
+  "_build_match_ledger": {
+   "calls": [
+    "_normalize_text"
+   ],
+   "length": 371,
+   "line": 24455,
+   "module_globals": [
+    "_CLEANER_MATCH_METHOD_MAP"
+   ],
+   "params": 2,
+   "reads": [
+    "company_fuzzy_threshold"
+   ],
+   "writes": []
+  },
+  "_build_performance_indexes": {
+   "calls": [
+    "_collect_clinical_aliases",
+    "_normalize_text"
+   ],
+   "length": 290,
+   "line": 1848,
+   "module_globals": [
+    "BOTANICAL_CANONICAL_SOURCE_DBS",
+    "_normalize_unii"
+   ],
+   "params": 0,
+   "reads": [
+    "databases",
+    "logger"
+   ],
+   "writes": [
+    "_botanical_source_identities",
+    "_clinical_study_index_source",
+    "_clinical_study_key_index",
+    "_clinical_study_norm_index",
+    "_iqm_exact_index",
+    "_iqm_norm_index",
+    "_nonscorable_index",
+    "_nonscorable_unii_index",
+    "_standardized_botanical_iqm_parents"
+   ]
+  },
+  "_build_quality_entry": {
+   "calls": [
+    "_compute_blend_flags",
+    "_compute_excipient_flags",
+    "_dropped_label_forms",
+    "_extract_enzyme_activity_dose",
+    "_has_valid_therapeutic_dose",
+    "_identity_mismatch_forms",
+    "_infer_category_from_name",
+    "_is_source_descriptor_form",
+    "_mark_cleaner_contract_fallback",
+    "_missing_cleaner_contract_fields",
+    "_normalize_unit_for_signal",
+    "_quality_match_identity_confidence",
+    "_quality_match_scoring_canonical",
+    "_row_form_match_status",
+    "_tag_fallback_decision"
+   ],
+   "length": 333,
+   "line": 7377,
+   "module_globals": [
+    "_normalize_parent_blend_mg"
+   ],
+   "params": 7,
+   "reads": [
+    "databases"
+   ],
+   "writes": []
+  },
+  "_build_quality_parent_context_index": {
+   "calls": [],
+   "length": 25,
+   "line": 24404,
+   "module_globals": [],
+   "params": 1,
+   "reads": [],
+   "writes": []
+  },
+  "_build_verification_assessment": {
+   "calls": [],
+   "length": 113,
+   "line": 13808,
+   "module_globals": [],
+   "params": 2,
+   "reads": [],
+   "writes": []
+  },
+  "_cached_compile_regex": {
+   "calls": [],
+   "length": 10,
+   "line": 3135,
+   "module_globals": [],
+   "params": 1,
+   "reads": [
+    "_REGEX_CACHE_LIMIT"
+   ],
+   "writes": [
+    "_regex_pattern_cache"
+   ]
+  },
+  "_cached_token_bounded_pattern": {
+   "calls": [],
+   "length": 13,
+   "line": 3146,
+   "module_globals": [],
+   "params": 1,
+   "reads": [
+    "_REGEX_CACHE_LIMIT"
+   ],
+   "writes": [
+    "_token_bounded_pattern_cache"
+   ]
+  },
+  "_calculate_completeness": {
+   "calls": [],
+   "length": 11,
+   "line": 24290,
+   "module_globals": [],
+   "params": 1,
+   "reads": [],
+   "writes": []
+  },
+  "_candidate_clinical_studies": {
+   "calls": [
+    "_normalize_text"
+   ],
+   "length": 26,
+   "line": 2859,
+   "module_globals": [],
+   "params": 2,
+   "reads": [
+    "_clinical_study_index_source",
+    "_clinical_study_key_index",
+    "_clinical_study_norm_index"
+   ],
+   "writes": []
+  },
+  "_canonical_registry_ids": {
+   "calls": [],
+   "length": 7,
+   "line": 4149,
+   "module_globals": [],
+   "params": 0,
+   "reads": [
+    "databases"
+   ],
+   "writes": [
+    "_canonical_registry_id_cache"
+   ]
+  },
+  "_cfu_text_count_matches": {
+   "calls": [],
+   "length": 32,
+   "line": 17802,
+   "module_globals": [],
+   "params": 1,
+   "reads": [
+    "compiled_patterns"
+   ],
+   "writes": []
+  },
+  "_cfu_unit_multiplier": {
+   "calls": [],
+   "length": 22,
+   "line": 17668,
+   "module_globals": [],
+   "params": 1,
+   "reads": [
+    "CFU_EQUIVALENT_PATTERNS"
+   ],
+   "writes": []
+  },
+  "_check_additive_match": {
+   "calls": [
+    "_normalize_text"
+   ],
+   "length": 51,
+   "line": 3081,
+   "module_globals": [],
+   "params": 4,
+   "reads": [],
+   "writes": []
+  },
+  "_check_allergens": {
+   "calls": [
+    "_exact_match",
+    "_extract_allergen_presence_from_text"
+   ],
+   "length": 88,
+   "line": 13025,
+   "module_globals": [],
+   "params": 2,
+   "reads": [
+    "ALLERGEN_PRESENCE_PRIORITY",
+    "databases"
+   ],
+   "writes": []
+  },
+  "_check_banned_substances": {
+   "calls": [
+    "_allowlist_match",
+    "_banned_form_evidence_values",
+    "_banned_label_evidence_hits",
+    "_check_additive_match",
+    "_denylist_match",
+    "_derive_banned_severity",
+    "_filter_safe_token_aliases",
+    "_is_negated_match_phrase",
+    "_token_bounded_match",
+    "_token_match_has_required_context"
+   ],
+   "length": 352,
+   "line": 12142,
+   "module_globals": [],
+   "params": 2,
+   "reads": [
+    "databases"
+   ],
+   "writes": []
+  },
+  "_check_claim_with_validation": {
+   "calls": [],
+   "length": 166,
+   "line": 13324,
+   "module_globals": [
+    "_free_from_clause_spans"
+   ],
+   "params": 4,
+   "reads": [
+    "logger"
+   ],
+   "writes": []
+  },
+  "_check_harmful_additives": {
+   "calls": [
+    "ARTIFICIAL_COLOR_INDICATORS",
+    "EXPLICIT_ARTIFICIAL_DYES",
+    "EXPLICIT_NATURAL_DYES",
+    "NATURAL_COLOR_INDICATORS",
+    "_check_additive_match"
+   ],
+   "length": 206,
+   "line": 12629,
+   "module_globals": [],
+   "params": 1,
+   "reads": [
+    "_inactive_ingredient_resolver",
+    "databases"
+   ],
+   "writes": []
+  },
+  "_check_problematic_sweeteners": {
+   "calls": [
+    "_dietary_name_matches"
+   ],
+   "length": 74,
+   "line": 18823,
+   "module_globals": [],
+   "params": 1,
+   "reads": [],
+   "writes": []
+  },
+  "_check_top_manufacturer": {
+   "calls": [
+    "_brand_family_exact_match",
+    "_exact_match",
+    "_fuzzy_company_match",
+    "_normalize_company_name"
+   ],
+   "length": 92,
+   "line": 16027,
+   "module_globals": [],
+   "params": 2,
+   "reads": [
+    "databases"
+   ],
+   "writes": []
+  },
+  "_check_unsubstantiated_claims": {
+   "calls": [],
+   "length": 24,
+   "line": 15891,
+   "module_globals": [],
+   "params": 1,
+   "reads": [
+    "compiled_patterns"
+   ],
+   "writes": []
+  },
+  "_check_violations": {
+   "calls": [
+    "_normalize_company_name"
+   ],
+   "length": 106,
+   "line": 16143,
+   "module_globals": [],
+   "params": 2,
+   "reads": [
+    "databases"
+   ],
+   "writes": []
+  },
+  "_cleaner_skip_reason": {
+   "calls": [],
+   "length": 19,
+   "line": 6400,
+   "module_globals": [],
+   "params": 1,
+   "reads": [],
+   "writes": []
+  },
+  "_clinical_study_match": {
+   "calls": [
+    "_collect_clinical_aliases",
+    "_normalize_text"
+   ],
+   "length": 88,
+   "line": 2886,
+   "module_globals": [],
+   "params": 2,
+   "reads": [],
+   "writes": []
+  },
+  "_clinical_ui_evidence_scope": {
+   "calls": [],
+   "length": 9,
+   "line": 15362,
+   "module_globals": [],
+   "params": 0,
+   "reads": [],
+   "writes": []
+  },
+  "_collect_absorption_data": {
+   "calls": [
+    "_exact_match",
+    "_normalize_text",
+    "_primary_active_ingredients_for_enrichment"
+   ],
+   "length": 134,
+   "line": 10957,
+   "module_globals": [],
+   "params": 1,
+   "reads": [
+    "databases"
+   ],
+   "writes": []
+  },
+  "_collect_bonus_features": {
+   "calls": [
+    "_get_all_product_text"
+   ],
+   "length": 19,
+   "line": 16335,
+   "module_globals": [],
+   "params": 1,
+   "reads": [
+    "compiled_patterns"
+   ],
+   "writes": []
+  },
+  "_collect_certification_data": {
+   "calls": [
+    "_assess_category_contamination_risk",
+    "_build_verification_assessment",
+    "_collect_claims_from_rules_db",
+    "_collect_gmp_data",
+    "_collect_manufacturer_cert_signals",
+    "_collect_traceability_data",
+    "_get_all_product_text",
+    "_merge_evidence_batch_traceability",
+    "_merge_evidence_third_party_programs",
+    "_resolve_verified_cert_programs"
+   ],
+   "length": 90,
+   "line": 13717,
+   "module_globals": [],
+   "params": 1,
+   "reads": [
+    "reference_versions"
+   ],
+   "writes": []
+  },
+  "_collect_claims_from_rules_db": {
+   "calls": [
+    "_check_claim_with_validation",
+    "_deduplicate_evidence",
+    "_extract_text_sources",
+    "_get_context_snippet",
+    "_get_field_groups"
+   ],
+   "length": 54,
+   "line": 13491,
+   "module_globals": [],
+   "params": 2,
+   "reads": [
+    "databases"
+   ],
+   "writes": []
+  },
+  "_collect_clinical_aliases": {
+   "calls": [],
+   "length": 17,
+   "line": 2841,
+   "module_globals": [],
+   "params": 1,
+   "reads": [],
+   "writes": []
+  },
+  "_collect_compliance_data": {
+   "calls": [
+    "_collect_claims_from_rules_db",
+    "_collect_contaminant_data",
+    "_get_all_product_text_lower"
+   ],
+   "length": 194,
+   "line": 13114,
+   "module_globals": [],
+   "params": 2,
+   "reads": [
+    "reference_versions"
+   ],
+   "writes": []
+  },
+  "_collect_contaminant_data": {
+   "calls": [
+    "_attach_banned_safety_flags_to_ingredients",
+    "_check_allergens",
+    "_check_banned_substances",
+    "_check_harmful_additives"
+   ],
+   "length": 29,
+   "line": 12060,
+   "module_globals": [],
+   "params": 1,
+   "reads": [],
+   "writes": []
+  },
+  "_collect_delivery_data": {
+   "calls": [
+    "_flatten_active_ingredients_for_analysis",
+    "_physical_state_description"
+   ],
+   "length": 109,
+   "line": 10847,
+   "module_globals": [
+    "_net_contents_texts"
+   ],
+   "params": 1,
+   "reads": [
+    "databases"
+   ],
+   "writes": [
+    "_last_delivery_data"
+   ]
+  },
+  "_collect_dietary_sensitivity_data": {
+   "calls": [
+    "_analyze_sodium_content",
+    "_analyze_sugar_content",
+    "_check_problematic_sweeteners",
+    "_generate_dietary_warnings"
+   ],
+   "length": 42,
+   "line": 18084,
+   "module_globals": [],
+   "params": 1,
+   "reads": [],
+   "writes": []
+  },
+  "_collect_evidence_data": {
+   "calls": [
+    "_brand_mentioned",
+    "_candidate_clinical_studies",
+    "_check_unsubstantiated_claims",
+    "_clinical_study_match",
+    "_clinical_ui_evidence_scope",
+    "_collect_clinical_aliases",
+    "_evidence_subject_ingredients_for_enrichment",
+    "_get_all_product_text",
+    "_has_bcaa_mixture_evidence_identity",
+    "_is_source_descriptor_form",
+    "_normalize_text",
+    "_product_context_branded_token_for_ingredient"
+   ],
+   "length": 416,
+   "line": 15450,
+   "module_globals": [],
+   "params": 2,
+   "reads": [
+    "_BCAA_EVIDENCE_CANONICALS",
+    "databases"
+   ],
+   "writes": []
+  },
+  "_collect_formulation_data": {
+   "calls": [
+    "_collect_organic_data",
+    "_collect_standardized_botanicals",
+    "_collect_synergy_data",
+    "_get_all_product_text"
+   ],
+   "length": 14,
+   "line": 11092,
+   "module_globals": [],
+   "params": 1,
+   "reads": [],
+   "writes": []
+  },
+  "_collect_gmp_data": {
+   "calls": [],
+   "length": 13,
+   "line": 14185,
+   "module_globals": [],
+   "params": 1,
+   "reads": [
+    "compiled_patterns"
+   ],
+   "writes": []
+  },
+  "_collect_ingredient_quality_data": {
+   "calls": [
+    "_append_unique_iqd_row",
+    "_apply_absorption_enhancer_demotion",
+    "_apply_context_canonical_override_match",
+    "_apply_curcumin_c3_bioperine_pairing_upgrade",
+    "_apply_product_level_omega_form_disclosure",
+    "_botanical_source_identity",
+    "_build_quality_entry",
+    "_cleaner_skip_reason",
+    "_compute_blend_flags",
+    "_compute_delivers_markers",
+    "_compute_excipient_flags",
+    "_flatten_active_ingredients_for_analysis",
+    "_get_all_product_text",
+    "_has_valid_therapeutic_dose",
+    "_infer_category_from_name",
+    "_iqd_row_has_dose_evidence",
+    "_is_blocked_botanical_source_marker_match",
+    "_is_contract_scorable_iqd_row",
+    "_is_generic_unspecified_omega3",
+    "_is_recognized_non_scorable",
+    "_is_source_descriptor_form",
+    "_mark_cleaner_contract_fallback",
+    "_mark_parent_total_rows",
+    "_match_quality_map",
+    "_missing_cleaner_contract_fields",
+    "_normalize_text",
+    "_normalize_unit_for_signal",
+    "_preserve_cleaner_botanical_canonical",
+    "_preserve_cleaner_safety_canonical",
+    "_product_context_branded_token_for_ingredient",
+    "_product_context_iqm_match_reason",
+    "_project_repaired_identity_to_active_row",
+    "_resolve_iqd_identity",
+    "_restamp_recognized_non_scorable_identity",
+    "_route_non_scorable_iqd_row",
+    "_should_promote_to_scorable",
+    "_should_skip_from_scoring",
+    "_stamp_iqd_identity",
+    "_structural_parent_total_row_ids",
+    "_tag_fallback_decision",
+    "_track_unmapped"
+   ],
+   "length": 940,
+   "line": 4640,
+   "module_globals": [],
+   "params": 1,
+   "reads": [
+    "databases",
+    "logger"
+   ],
+   "writes": []
+  },
+  "_collect_interaction_profile": {
+   "calls": [
+    "_collect_profile_context",
+    "_derive_interaction_subject_ref",
+    "_derived_marker_interaction_rows",
+    "_empty_interaction_profile",
+    "_evaluate_dose_thresholds_for_target",
+    "_evaluate_min_effective_dose",
+    "_evaluate_min_effective_dose_decision",
+    "_floor_status_for_emission",
+    "_interaction_row_key",
+    "_interaction_rule_applies",
+    "_interaction_severity_weight_map",
+    "_is_interaction_label_row",
+    "_normalize_interaction_db_key"
+   ],
+   "length": 531,
+   "line": 20086,
+   "module_globals": [],
+   "params": 2,
+   "reads": [
+    "databases"
+   ],
+   "writes": []
+  },
+  "_collect_manufacturer_cert_signals": {
+   "calls": [
+    "_check_top_manufacturer",
+    "_normalize_text"
+   ],
+   "length": 64,
+   "line": 13985,
+   "module_globals": [],
+   "params": 1,
+   "reads": [
+    "_MANUFACTURER_CERT_PATTERNS",
+    "databases"
+   ],
+   "writes": []
+  },
+  "_collect_manufacturer_data": {
+   "calls": [
+    "_check_top_manufacturer",
+    "_check_violations",
+    "_collect_bonus_features",
+    "_extract_country"
+   ],
+   "length": 26,
+   "line": 15920,
+   "module_globals": [],
+   "params": 1,
+   "reads": [],
+   "writes": []
+  },
+  "_collect_nutrition_summary": {
+   "calls": [],
+   "length": 63,
+   "line": 18127,
+   "module_globals": [],
+   "params": 1,
+   "reads": [],
+   "writes": []
+  },
+  "_collect_organic_data": {
+   "calls": [
+    "_collect_claims_from_rules_db"
+   ],
+   "length": 46,
+   "line": 11107,
+   "module_globals": [],
+   "params": 2,
+   "reads": [
+    "compiled_patterns",
+    "reference_versions"
+   ],
+   "writes": []
+  },
+  "_collect_probiotic_data": {
+   "calls": [
+    "_extract_cfu",
+    "_extract_guarantee_type",
+    "_flatten_active_ingredients_for_analysis",
+    "_get_safe_text_field",
+    "_has_non_probiotic_active_for_cfu_evidence",
+    "_is_cfu_equivalent_unit",
+    "_parse_cfu_text_count",
+    "_statement_cfu_per_serving"
+   ],
+   "length": 853,
+   "line": 16382,
+   "module_globals": [
+    "_compute_probiotic_confidence_hybrid",
+    "_derive_clinical_support_level",
+    "_net_contents_texts",
+    "_probiotic_research_presentation"
+   ],
+   "params": 1,
+   "reads": [
+    "SURVIVABILITY_BRAND_MARKERS",
+    "databases",
+    "logger"
+   ],
+   "writes": []
+  },
+  "_collect_product_scoring_classification": {
+   "calls": [],
+   "length": 10,
+   "line": 17551,
+   "module_globals": [],
+   "params": 1,
+   "reads": [],
+   "writes": []
+  },
+  "_collect_product_scoring_evidence": {
+   "calls": [
+    "_anchor_form_reading",
+    "_has_non_probiotic_active_for_cfu_evidence"
+   ],
+   "length": 130,
+   "line": 17262,
+   "module_globals": [],
+   "params": 1,
+   "reads": [],
+   "writes": []
+  },
+  "_collect_product_signals": {
+   "calls": [
+    "_extract_strain_ids_from_product",
+    "_get_all_product_text"
+   ],
+   "length": 58,
+   "line": 15129,
+   "module_globals": [],
+   "params": 5,
+   "reads": [],
+   "writes": []
+  },
+  "_collect_profile_context": {
+   "calls": [],
+   "length": 37,
+   "line": 19159,
+   "module_globals": [],
+   "params": 1,
+   "reads": [],
+   "writes": []
+  },
+  "_collect_proprietary_data": {
+   "calls": [
+    "_excluded_text_reason",
+    "_is_known_therapeutic",
+    "_merge_blend_evidence",
+    "_normalize_exclusion_text"
+   ],
+   "length": 570,
+   "line": 14345,
+   "module_globals": [
+    "_RAW_CHILD_ROW"
+   ],
+   "params": 1,
+   "reads": [
+    "blend_detector",
+    "databases",
+    "logger"
+   ],
+   "writes": []
+  },
+  "_collect_rda_ul_data": {
+   "calls": [
+    "_collect_special_use_flags",
+    "_declared_folate_dfe_totals",
+    "_declared_same_identity_totals",
+    "_declared_vitamin_a_components",
+    "_dose_active_ingredients_for_enrichment",
+    "_excluded_text_reason",
+    "_identity_unii_values",
+    "_is_cfu_equivalent_unit",
+    "_nested_daily_value_nutrient_owners",
+    "_normalize_text",
+    "_probiotic_composition_share_owners",
+    "_rda_dose_lineage",
+    "_to_float_safe",
+    "_ul_exposure_basis"
+   ],
+   "length": 2278,
+   "line": 21693,
+   "module_globals": [
+    "_ACTIVITY_UNIT_CANONICALS",
+    "_FOLIC_ACID_ADULT_UL_MCG",
+    "_FOLIC_ACID_UNII",
+    "_NON_UL_ACTIVITY_UNITS",
+    "_NON_UL_BOTANICAL_CANONICALS",
+    "_NON_UL_BOTANICAL_QUANTITY_UNITS",
+    "_NON_UL_PROBIOTIC_QUANTITY_UNITS",
+    "_RDA_REFERENCE_PROFILE",
+    "_VITAMIN_A_PREFORMED_ADULT_UL_MCG_RAE",
+    "_VITAMIN_E_ADULT_UL_MG",
+    "_VITAMIN_E_NATURAL_MG_PER_IU",
+    "_explicit_mixed_vitamin_a_preformed_fraction",
+    "_has_no_official_ul_reference",
+    "_mixed_vitamin_a_total_mcg_rae",
+    "_rda_mass_unit_key",
+    "_unknown_folate_ul_screening"
+   ],
+   "params": 3,
+   "reads": [
+    "_rda_reference_stamp",
+    "databases",
+    "logger",
+    "rda_calculator",
+    "unit_converter"
+   ],
+   "writes": [
+    "_rda_ul_warning_count"
+   ]
+  },
+  "_collect_serving_basis_data": {
+   "calls": [
+    "_derive_serving_size_from_container",
+    "_normalize_form_factor",
+    "_normalize_serving_unit_label",
+    "_parse_dosage_from_directions",
+    "_physical_state_description",
+    "_select_canonical_serving",
+    "_serving_units_to_servings"
+   ],
+   "length": 213,
+   "line": 18260,
+   "module_globals": [],
+   "params": 1,
+   "reads": [],
+   "writes": []
+  },
+  "_collect_special_use_flags": {
+   "calls": [
+    "_normalize_text"
+   ],
+   "length": 53,
+   "line": 20929,
+   "module_globals": [
+    "_rda_mass_unit_key"
+   ],
+   "params": 1,
+   "reads": [],
+   "writes": []
+  },
+  "_collect_standardized_botanicals": {
+   "calls": [
+    "_derive_disclosed_marker_percentage",
+    "_exact_match",
+    "_extract_percentage",
+    "_extract_text_windows_by_terms",
+    "_get_all_product_text",
+    "_has_marker_word_match",
+    "_merge_standardized_botanicals",
+    "_primary_active_ingredients_for_enrichment"
+   ],
+   "length": 177,
+   "line": 11154,
+   "module_globals": [],
+   "params": 1,
+   "reads": [
+    "databases"
+   ],
+   "writes": []
+  },
+  "_collect_synergy_data": {
+   "calls": [
+    "_convert_amount_to_target_unit",
+    "_normalize_text",
+    "_normalize_threshold_unit",
+    "_primary_active_ingredients_for_enrichment",
+    "_synthesize_ingredients_from_name"
+   ],
+   "length": 340,
+   "line": 11715,
+   "module_globals": [],
+   "params": 1,
+   "reads": [
+    "databases"
+   ],
+   "writes": []
+  },
+  "_collect_traceability_data": {
+   "calls": [],
+   "length": 15,
+   "line": 14199,
+   "module_globals": [],
+   "params": 1,
+   "reads": [
+    "compiled_patterns"
+   ],
+   "writes": []
+  },
+  "_compare_threshold": {
+   "calls": [],
+   "length": 12,
+   "line": 19287,
+   "module_globals": [],
+   "params": 3,
+   "reads": [],
+   "writes": []
+  },
+  "_compile_patterns": {
+   "calls": [],
+   "length": 74,
+   "line": 2458,
+   "module_globals": [],
+   "params": 0,
+   "reads": [],
+   "writes": [
+    "compiled_patterns"
+   ]
+  },
+  "_compute_blend_flags": {
+   "calls": [],
+   "length": 18,
+   "line": 6285,
+   "module_globals": [],
+   "params": 2,
+   "reads": [],
+   "writes": []
+  },
+  "_compute_delivers_markers": {
+   "calls": [
+    "_scan_label_for_standardization"
+   ],
+   "length": 140,
+   "line": 3553,
+   "module_globals": [],
+   "params": 1,
+   "reads": [
+    "databases"
+   ],
+   "writes": []
+  },
+  "_compute_excipient_flags": {
+   "calls": [
+    "_is_known_therapeutic"
+   ],
+   "length": 49,
+   "line": 6235,
+   "module_globals": [],
+   "params": 1,
+   "reads": [
+    "databases"
+   ],
+   "writes": []
+  },
+  "_conversion_form_context": {
+   "calls": [],
+   "length": 11,
+   "line": 19441,
+   "module_globals": [],
+   "params": 0,
+   "reads": [],
+   "writes": []
+  },
+  "_convert_amount_to_target_unit": {
+   "calls": [
+    "_convert_amount_to_target_unit_with_evidence"
+   ],
+   "length": 16,
+   "line": 19300,
+   "module_globals": [],
+   "params": 5,
+   "reads": [],
+   "writes": []
+  },
+  "_convert_amount_to_target_unit_with_evidence": {
+   "calls": [
+    "_base_comparison_unit",
+    "_convert_mass",
+    "_is_comparable_quantity_unit",
+    "_is_mass_unit",
+    "_normalize_threshold_unit"
+   ],
+   "length": 122,
+   "line": 19317,
+   "module_globals": [],
+   "params": 5,
+   "reads": [
+    "logger",
+    "unit_converter"
+   ],
+   "writes": []
+  },
+  "_convert_mass": {
+   "calls": [
+    "_base_comparison_unit",
+    "_is_mass_unit"
+   ],
+   "length": 7,
+   "line": 19270,
+   "module_globals": [],
+   "params": 3,
+   "reads": [
+    "_MASS_FACTORS_MG"
+   ],
+   "writes": []
+  },
+  "_counter_ion_form": {
+   "calls": [
+    "_match_quality_map",
+    "_norm_form_name"
+   ],
+   "length": 24,
+   "line": 9317,
+   "module_globals": [],
+   "params": 3,
+   "reads": [],
+   "writes": []
+  },
+  "_current_canonical_identity_registry": {
+   "calls": [],
+   "length": 7,
+   "line": 4157,
+   "module_globals": [],
+   "params": 0,
+   "reads": [
+    "databases"
+   ],
+   "writes": [
+    "_canonical_identity_databases",
+    "_canonical_identity_registry"
+   ]
+  },
+  "_declared_folate_dfe_totals": {
+   "calls": [
+    "_normalize_text",
+    "_rda_source_label_key"
+   ],
+   "length": 49,
+   "line": 20983,
+   "module_globals": [
+    "_rda_mass_unit_key"
+   ],
+   "params": 1,
+   "reads": [],
+   "writes": []
+  },
+  "_declared_same_identity_totals": {
+   "calls": [
+    "_normalize_text",
+    "_rda_source_label_key",
+    "_same_identity_unit_key"
+   ],
+   "length": 146,
+   "line": 21033,
+   "module_globals": [],
+   "params": 1,
+   "reads": [],
+   "writes": []
+  },
+  "_declared_vitamin_a_components": {
+   "calls": [
+    "_normalize_text",
+    "_rda_source_label_key"
+   ],
+   "length": 105,
+   "line": 21180,
+   "module_globals": [
+    "_rda_mass_unit_key"
+   ],
+   "params": 1,
+   "reads": [
+    "unit_converter"
+   ],
+   "writes": []
+  },
+  "_decorate_percentile_category": {
+   "calls": [],
+   "length": 28,
+   "line": 18033,
+   "module_globals": [],
+   "params": 1,
+   "reads": [],
+   "writes": []
+  },
+  "_deduplicate_evidence": {
+   "calls": [],
+   "length": 46,
+   "line": 13670,
+   "module_globals": [],
+   "params": 1,
+   "reads": [],
+   "writes": []
+  },
+  "_default_config": {
+   "calls": [],
+   "length": 21,
+   "line": 1479,
+   "module_globals": [],
+   "params": 0,
+   "reads": [],
+   "writes": []
+  },
+  "_denylist_match": {
+   "calls": [
+    "_cached_compile_regex",
+    "_hyphen_space_token_pattern",
+    "_normalize_text",
+    "_token_bounded_match"
+   ],
+   "length": 48,
+   "line": 3379,
+   "module_globals": [],
+   "params": 2,
+   "reads": [
+    "logger"
+   ],
+   "writes": []
+  },
+  "_derive_banned_severity": {
+   "calls": [],
+   "length": 29,
+   "line": 12568,
+   "module_globals": [],
+   "params": 1,
+   "reads": [],
+   "writes": []
+  },
+  "_derive_disclosed_marker_percentage": {
+   "calls": [
+    "_has_marker_word_match",
+    "_to_float_safe"
+   ],
+   "length": 51,
+   "line": 11455,
+   "module_globals": [
+    "_normalize_parent_blend_mg"
+   ],
+   "params": 2,
+   "reads": [],
+   "writes": []
+  },
+  "_derive_interaction_subject_ref": {
+   "calls": [
+    "_interaction_registry_ids",
+    "_normalize_interaction_db_key"
+   ],
+   "length": 30,
+   "line": 19043,
+   "module_globals": [],
+   "params": 1,
+   "reads": [],
+   "writes": []
+  },
+  "_derive_serving_size_from_container": {
+   "calls": [
+    "_normalize_serving_unit_label"
+   ],
+   "length": 40,
+   "line": 18209,
+   "module_globals": [],
+   "params": 2,
+   "reads": [],
+   "writes": []
+  },
+  "_derived_marker_interaction_rows": {
+   "calls": [
+    "_to_float_safe"
+   ],
+   "length": 48,
+   "line": 19074,
+   "module_globals": [],
+   "params": 1,
+   "reads": [],
+   "writes": []
+  },
+  "_dietary_name_matches": {
+   "calls": [
+    "_is_unresolved_source_descriptor"
+   ],
+   "length": 19,
+   "line": 18743,
+   "module_globals": [],
+   "params": 2,
+   "reads": [
+    "databases"
+   ],
+   "writes": []
+  },
+  "_disclosed_unmapped_match": {
+   "calls": [],
+   "length": 14,
+   "line": 9351,
+   "module_globals": [],
+   "params": 0,
+   "reads": [],
+   "writes": []
+  },
+  "_dose_active_ingredients_for_enrichment": {
+   "calls": [
+    "_source_owned_active_ingredients_for_enrichment"
+   ],
+   "length": 8,
+   "line": 1258,
+   "module_globals": [],
+   "params": 1,
+   "reads": [],
+   "writes": []
+  },
+  "_dose_decision_rule": {
+   "calls": [
+    "_amount_missing_disposition",
+    "_normalize_threshold_unit",
+    "_to_float_safe"
+   ],
+   "length": 26,
+   "line": 19534,
+   "module_globals": [],
+   "params": 3,
+   "reads": [],
+   "writes": []
+  },
+  "_dropped_label_forms": {
+   "calls": [
+    "_build_form_info_from_cleaned",
+    "_is_specific_form_match",
+    "_match_multi_form"
+   ],
+   "length": 22,
+   "line": 9278,
+   "module_globals": [],
+   "params": 3,
+   "reads": [
+    "databases"
+   ],
+   "writes": []
+  },
+  "_empty_interaction_profile": {
+   "calls": [],
+   "length": 18,
+   "line": 18955,
+   "module_globals": [],
+   "params": 2,
+   "reads": [],
+   "writes": []
+  },
+  "_empty_rda_ul_payload": {
+   "calls": [],
+   "length": 19,
+   "line": 20618,
+   "module_globals": [
+    "_RDA_REFERENCE_PROFILE"
+   ],
+   "params": 1,
+   "reads": [
+    "_rda_reference_stamp"
+   ],
+   "writes": []
+  },
+  "_enrich_display_ingredients": {
+   "calls": [],
+   "length": 79,
+   "line": 15947,
+   "module_globals": [],
+   "params": 1,
+   "reads": [],
+   "writes": []
+  },
+  "_evaluate_dose_thresholds_for_target": {
+   "calls": [
+    "_amount_missing_disposition",
+    "_compare_threshold",
+    "_conversion_form_context",
+    "_convert_amount_to_target_unit_with_evidence",
+    "_dose_decision_rule",
+    "_marker_amount_for_threshold_unit",
+    "_normalize_threshold_unit",
+    "_to_float_safe"
+   ],
+   "length": 272,
+   "line": 19561,
+   "module_globals": [],
+   "params": 7,
+   "reads": [],
+   "writes": []
+  },
+  "_evaluate_min_effective_dose": {
+   "calls": [
+    "_conversion_form_context",
+    "_convert_amount_to_target_unit",
+    "_normalize_threshold_unit",
+    "_to_float_safe"
+   ],
+   "length": 69,
+   "line": 19834,
+   "module_globals": [],
+   "params": 3,
+   "reads": [],
+   "writes": []
+  },
+  "_evaluate_min_effective_dose_decision": {
+   "calls": [
+    "_conversion_form_context",
+    "_convert_amount_to_target_unit_with_evidence",
+    "_normalize_threshold_unit",
+    "_to_float_safe"
+   ],
+   "length": 159,
+   "line": 19904,
+   "module_globals": [],
+   "params": 4,
+   "reads": [],
+   "writes": []
+  },
+  "_evidence_subject_ingredients_for_enrichment": {
+   "calls": [
+    "_active_ingredient_from_scoring_row",
+    "_primary_active_ingredients_for_enrichment"
+   ],
+   "length": 38,
+   "line": 1219,
+   "module_globals": [],
+   "params": 2,
+   "reads": [
+    "logger"
+   ],
+   "writes": []
+  },
+  "_exact_match": {
+   "calls": [
+    "_normalize_text"
+   ],
+   "length": 18,
+   "line": 2822,
+   "module_globals": [],
+   "params": 3,
+   "reads": [],
+   "writes": []
+  },
+  "_excluded_text_reason": {
+   "calls": [
+    "_normalize_exclusion_text"
+   ],
+   "length": 88,
+   "line": 6311,
+   "module_globals": [],
+   "params": 1,
+   "reads": [],
+   "writes": []
+  },
+  "_extract_allergen_presence_from_text": {
+   "calls": [
+    "_parse_allergen_statement"
+   ],
+   "length": 68,
+   "line": 12845,
+   "module_globals": [],
+   "params": 1,
+   "reads": [
+    "databases"
+   ],
+   "writes": []
+  },
+  "_extract_allergens_from_text": {
+   "calls": [],
+   "length": 28,
+   "line": 12996,
+   "module_globals": [],
+   "params": 6,
+   "reads": [],
+   "writes": []
+  },
+  "_extract_cfu": {
+   "calls": [
+    "_cfu_unit_multiplier",
+    "_extract_guarantee_type",
+    "_parse_cfu_text_count"
+   ],
+   "length": 75,
+   "line": 17835,
+   "module_globals": [],
+   "params": 4,
+   "reads": [
+    "logger"
+   ],
+   "writes": []
+  },
+  "_extract_country": {
+   "calls": [
+    "_get_all_product_text",
+    "_top_manufacturer_country"
+   ],
+   "length": 61,
+   "line": 16258,
+   "module_globals": [],
+   "params": 2,
+   "reads": [
+    "_HIGH_REG_COUNTRIES",
+    "compiled_patterns"
+   ],
+   "writes": []
+  },
+  "_extract_enzyme_activity_dose": {
+   "calls": [
+    "_normalize_unit_for_signal"
+   ],
+   "length": 48,
+   "line": 5962,
+   "module_globals": [],
+   "params": 1,
+   "reads": [],
+   "writes": []
+  },
+  "_extract_form_from_label": {
+   "calls": [
+    "_parse_single_form"
+   ],
+   "length": 108,
+   "line": 2573,
+   "module_globals": [],
+   "params": 1,
+   "reads": [
+    "logger"
+   ],
+   "writes": []
+  },
+  "_extract_guarantee_type": {
+   "calls": [
+    "_guarantee_timing",
+    "_parse_cfu_text_count",
+    "_statement_cfu_per_serving"
+   ],
+   "length": 104,
+   "line": 17911,
+   "module_globals": [
+    "_GUARANTEE_UNIT_SPLIT_RE",
+    "_NON_PROBIOTIC_POTENCY_SUBJECT_RE"
+   ],
+   "params": 6,
+   "reads": [],
+   "writes": []
+  },
+  "_extract_percentage": {
+   "calls": [
+    "_has_marker_word_match"
+   ],
+   "length": 39,
+   "line": 11415,
+   "module_globals": [],
+   "params": 3,
+   "reads": [
+    "compiled_patterns"
+   ],
+   "writes": []
+  },
+  "_extract_strain_ids_from_product": {
+   "calls": [
+    "_get_all_product_text"
+   ],
+   "length": 16,
+   "line": 15112,
+   "module_globals": [],
+   "params": 1,
+   "reads": [],
+   "writes": []
+  },
+  "_extract_text_sources": {
+   "calls": [],
+   "length": 82,
+   "line": 13546,
+   "module_globals": [],
+   "params": 1,
+   "reads": [],
+   "writes": []
+  },
+  "_extract_text_windows_by_terms": {
+   "calls": [],
+   "length": 31,
+   "line": 11383,
+   "module_globals": [],
+   "params": 4,
+   "reads": [],
+   "writes": []
+  },
+  "_filter_safe_token_aliases": {
+   "calls": [
+    "_is_low_precision_token_alias"
+   ],
+   "length": 13,
+   "line": 3273,
+   "module_globals": [],
+   "params": 2,
+   "reads": [],
+   "writes": [
+    "_safe_token_alias_cache"
+   ]
+  },
+  "_find_sodium_in_ingredients": {
+   "calls": [],
+   "length": 36,
+   "line": 18786,
+   "module_globals": [],
+   "params": 1,
+   "reads": [],
+   "writes": []
+  },
+  "_find_sugar_in_ingredients": {
+   "calls": [
+    "_dietary_name_matches"
+   ],
+   "length": 22,
+   "line": 18763,
+   "module_globals": [],
+   "params": 1,
+   "reads": [],
+   "writes": []
+  },
+  "_flatten_active_ingredients_for_analysis": {
+   "calls": [],
+   "length": 46,
+   "line": 4593,
+   "module_globals": [],
+   "params": 0,
+   "reads": [],
+   "writes": []
+  },
+  "_floor_status_for_emission": {
+   "calls": [],
+   "length": 20,
+   "line": 20065,
+   "module_globals": [],
+   "params": 1,
+   "reads": [],
+   "writes": []
+  },
+  "_form_curation_report": {
+   "calls": [
+    "_norm_form_name"
+   ],
+   "length": 42,
+   "line": 24307,
+   "module_globals": [],
+   "params": 0,
+   "reads": [
+    "_form_fallback_details"
+   ],
+   "writes": []
+  },
+  "_form_gap_reason": {
+   "calls": [
+    "_form_reads_as_named"
+   ],
+   "length": 12,
+   "line": 24350,
+   "module_globals": [],
+   "params": 3,
+   "reads": [
+    "databases"
+   ],
+   "writes": []
+  },
+  "_form_reads_as_named": {
+   "calls": [
+    "_build_form_info_from_cleaned",
+    "_is_specific_form_match",
+    "_match_multi_form"
+   ],
+   "length": 8,
+   "line": 24363,
+   "module_globals": [],
+   "params": 3,
+   "reads": [
+    "databases"
+   ],
+   "writes": []
+  },
+  "_form_token_context": {
+   "calls": [
+    "_is_recorded_source",
+    "_is_source_material_descriptor",
+    "_is_standardization_marker_token",
+    "_norm_form_name",
+    "_normalize_source_token_text",
+    "_normalize_text",
+    "_restates_identity",
+    "_standardization_marker_names"
+   ],
+   "length": 71,
+   "line": 9411,
+   "module_globals": [
+    "_CARRIER_OIL_PARENT_CATEGORIES",
+    "_PREPARATION_WORDS"
+   ],
+   "params": 4,
+   "reads": [
+    "_SOURCE_MATERIAL_TERMS",
+    "_iqm_norm_index",
+    "databases"
+   ],
+   "writes": []
+  },
+  "_fuzzy_company_match": {
+   "calls": [
+    "_normalize_company_name"
+   ],
+   "length": 68,
+   "line": 2753,
+   "module_globals": [],
+   "params": 3,
+   "reads": [
+    "company_fuzzy_threshold",
+    "config"
+   ],
+   "writes": []
+  },
+  "_generate_dietary_warnings": {
+   "calls": [],
+   "length": 52,
+   "line": 18898,
+   "module_globals": [],
+   "params": 3,
+   "reads": [],
+   "writes": []
+  },
+  "_get_all_product_text": {
+   "calls": [
+    "_get_safe_text_field"
+   ],
+   "length": 60,
+   "line": 3438,
+   "module_globals": [],
+   "params": 1,
+   "reads": [],
+   "writes": [
+    "_product_text_cache"
+   ]
+  },
+  "_get_all_product_text_lower": {
+   "calls": [
+    "_get_all_product_text"
+   ],
+   "length": 16,
+   "line": 3499,
+   "module_globals": [],
+   "params": 1,
+   "reads": [],
+   "writes": [
+    "_product_text_lower_cache"
+   ]
+  },
+  "_get_context_snippet": {
+   "calls": [],
+   "length": 40,
+   "line": 13629,
+   "module_globals": [],
+   "params": 3,
+   "reads": [
+    "logger"
+   ],
+   "writes": []
+  },
+  "_get_field_groups": {
+   "calls": [],
+   "length": 10,
+   "line": 13313,
+   "module_globals": [],
+   "params": 0,
+   "reads": [
+    "databases"
+   ],
+   "writes": []
+  },
+  "_get_safe_text_field": {
+   "calls": [],
+   "length": 8,
+   "line": 3429,
+   "module_globals": [],
+   "params": 2,
+   "reads": [],
+   "writes": []
+  },
+  "_guarantee_timing": {
+   "calls": [],
+   "length": 16,
+   "line": 18016,
+   "module_globals": [],
+   "params": 1,
+   "reads": [
+    "compiled_patterns"
+   ],
+   "writes": []
+  },
+  "_has_bcaa_mixture_evidence_identity": {
+   "calls": [],
+   "length": 76,
+   "line": 15373,
+   "module_globals": [],
+   "params": 2,
+   "reads": [],
+   "writes": []
+  },
+  "_has_high_signal_potency": {
+   "calls": [],
+   "length": 10,
+   "line": 7285,
+   "module_globals": [],
+   "params": 1,
+   "reads": [],
+   "writes": []
+  },
+  "_has_marker_word_match": {
+   "calls": [],
+   "length": 29,
+   "line": 11507,
+   "module_globals": [],
+   "params": 2,
+   "reads": [],
+   "writes": []
+  },
+  "_has_non_probiotic_active_for_cfu_evidence": {
+   "calls": [
+    "_is_fiber_primary_with_accessory_probiotics",
+    "_normalize_unit_for_signal"
+   ],
+   "length": 26,
+   "line": 17620,
+   "module_globals": [],
+   "params": 1,
+   "reads": [],
+   "writes": []
+  },
+  "_has_potency_markers": {
+   "calls": [
+    "_has_high_signal_potency"
+   ],
+   "length": 12,
+   "line": 7296,
+   "module_globals": [],
+   "params": 1,
+   "reads": [],
+   "writes": []
+  },
+  "_has_therapeutic_signal": {
+   "calls": [],
+   "length": 21,
+   "line": 6892,
+   "module_globals": [],
+   "params": 2,
+   "reads": [],
+   "writes": []
+  },
+  "_has_valid_therapeutic_dose": {
+   "calls": [],
+   "length": 45,
+   "line": 5907,
+   "module_globals": [],
+   "params": 1,
+   "reads": [],
+   "writes": []
+  },
+  "_hyphen_space_token_pattern": {
+   "calls": [
+    "_normalize_text"
+   ],
+   "length": 17,
+   "line": 3318,
+   "module_globals": [],
+   "params": 1,
+   "reads": [
+    "_REGEX_CACHE_LIMIT"
+   ],
+   "writes": [
+    "_hyphen_space_pattern_cache"
+   ]
+  },
+  "_identity_candidate_resolver": {
+   "calls": [
+    "_current_canonical_identity_registry",
+    "_infer_preferred_parent_from_context_cached",
+    "_match_quality_map",
+    "_quality_match_scoring_canonical"
+   ],
+   "length": 47,
+   "line": 4101,
+   "module_globals": [],
+   "params": 2,
+   "reads": [],
+   "writes": []
+  },
+  "_identity_mismatch_forms": {
+   "calls": [],
+   "length": 8,
+   "line": 9269,
+   "module_globals": [],
+   "params": 1,
+   "reads": [
+    "databases"
+   ],
+   "writes": []
+  },
+  "_identity_parent_predicate": {
+   "calls": [],
+   "length": 52,
+   "line": 4190,
+   "module_globals": [],
+   "params": 1,
+   "reads": [
+    "databases"
+   ],
+   "writes": [
+    "_identity_parent_descendants",
+    "_identity_parent_quality_map",
+    "_identity_parent_relationship_document"
+   ]
+  },
+  "_identity_taxonomy_coherent": {
+   "calls": [
+    "_identity_unii_values",
+    "_infer_preferred_parent_from_context_cached",
+    "_is_generic_unspecified_omega3",
+    "_is_reviewed_context_override_match",
+    "_is_reviewed_same_identity_alias_match",
+    "_match_quality_map",
+    "_normalize_text",
+    "_quality_match_identity_confidence",
+    "_quality_match_scoring_canonical"
+   ],
+   "length": 185,
+   "line": 3903,
+   "module_globals": [],
+   "params": 3,
+   "reads": [],
+   "writes": []
+  },
+  "_identity_unii_values": {
+   "calls": [
+    "_is_source_descriptor_form"
+   ],
+   "length": 44,
+   "line": 3706,
+   "module_globals": [
+    "_normalize_unii"
+   ],
+   "params": 1,
+   "reads": [],
+   "writes": []
+  },
+  "_infer_category_from_name": {
+   "calls": [],
+   "length": 12,
+   "line": 7364,
+   "module_globals": [
+    "SupplementEnricherV3"
+   ],
+   "params": 1,
+   "reads": [],
+   "writes": []
+  },
+  "_infer_preferred_parent_from_context_cached": {
+   "calls": [
+    "_build_quality_parent_context_index"
+   ],
+   "length": 23,
+   "line": 24430,
+   "module_globals": [],
+   "params": 2,
+   "reads": [
+    "databases"
+   ],
+   "writes": [
+    "_quality_parent_context_index_cache"
+   ]
+  },
+  "_init_scoring_modules": {
+   "calls": [],
+   "length": 35,
+   "line": 1170,
+   "module_globals": [],
+   "params": 0,
+   "reads": [
+    "logger"
+   ],
+   "writes": [
+    "blend_detector",
+    "dosage_normalizer",
+    "rda_calculator",
+    "unit_converter"
+   ]
+  },
+  "_interaction_registry_ids": {
+   "calls": [
+    "_canonical_registry_ids"
+   ],
+   "length": 8,
+   "line": 19034,
+   "module_globals": [],
+   "params": 0,
+   "reads": [],
+   "writes": []
+  },
+  "_interaction_row_key": {
+   "calls": [],
+   "length": 8,
+   "line": 19009,
+   "module_globals": [],
+   "params": 0,
+   "reads": [],
+   "writes": []
+  },
+  "_interaction_rule_applies": {
+   "calls": [
+    "_row_form_ids"
+   ],
+   "length": 24,
+   "line": 19134,
+   "module_globals": [],
+   "params": 2,
+   "reads": [],
+   "writes": []
+  },
+  "_interaction_severity_weight_map": {
+   "calls": [],
+   "length": 22,
+   "line": 18974,
+   "module_globals": [],
+   "params": 1,
+   "reads": [],
+   "writes": []
+  },
+  "_iqd_row_has_dose_evidence": {
+   "calls": [
+    "_normalize_unit_for_signal"
+   ],
+   "length": 28,
+   "line": 6045,
+   "module_globals": [],
+   "params": 1,
+   "reads": [],
+   "writes": []
+  },
+  "_is_absorption_enhancer": {
+   "calls": [],
+   "length": 31,
+   "line": 6860,
+   "module_globals": [],
+   "params": 2,
+   "reads": [],
+   "writes": []
+  },
+  "_is_blocked_botanical_source_marker_match": {
+   "calls": [
+    "_botanical_source_identity",
+    "_current_canonical_identity_registry",
+    "_identity_parent_predicate",
+    "_is_reviewed_context_override_match",
+    "_match_quality_map",
+    "_normalize_text",
+    "_quality_match_scoring_canonical"
+   ],
+   "length": 113,
+   "line": 2199,
+   "module_globals": [
+    "BOTANICAL_CANONICAL_SOURCE_DBS"
+   ],
+   "params": 2,
+   "reads": [
+    "_standardized_botanical_iqm_parents",
+    "databases"
+   ],
+   "writes": []
+  },
+  "_is_cfu_equivalent_unit": {
+   "calls": [
+    "_cfu_unit_multiplier"
+   ],
+   "length": 8,
+   "line": 17691,
+   "module_globals": [],
+   "params": 1,
+   "reads": [],
+   "writes": []
+  },
+  "_is_comparable_quantity_unit": {
+   "calls": [
+    "_base_comparison_unit",
+    "_is_mass_unit"
+   ],
+   "length": 15,
+   "line": 19254,
+   "module_globals": [],
+   "params": 1,
+   "reads": [],
+   "writes": []
+  },
+  "_is_contract_scorable_iqd_row": {
+   "calls": [
+    "_iqd_row_has_dose_evidence"
+   ],
+   "length": 8,
+   "line": 6074,
+   "module_globals": [],
+   "params": 1,
+   "reads": [],
+   "writes": []
+  },
+  "_is_cross_class_source_form": {
+   "calls": [],
+   "length": 7,
+   "line": 9241,
+   "module_globals": [
+    "_DEFINED_NUTRIENT_PARENT_CATEGORIES",
+    "_SOURCE_CLASS_FORM_CATEGORIES"
+   ],
+   "params": 1,
+   "reads": [],
+   "writes": []
+  },
+  "_is_display_only_blend_scoring_row": {
+   "calls": [],
+   "length": 10,
+   "line": 1387,
+   "module_globals": [],
+   "params": 1,
+   "reads": [],
+   "writes": []
+  },
+  "_is_dsld_source_descriptor_form": {
+   "calls": [
+    "_should_keep_from_prefixed_form_as_actual"
+   ],
+   "length": 9,
+   "line": 9249,
+   "module_globals": [
+    "_SOURCE_DESCRIPTOR_FORM_CATEGORIES",
+    "_SOURCE_DESCRIPTOR_FORM_PREFIXES"
+   ],
+   "params": 1,
+   "reads": [],
+   "writes": []
+  },
+  "_is_fiber_primary_with_accessory_probiotics": {
+   "calls": [],
+   "length": 13,
+   "line": 17606,
+   "module_globals": [],
+   "params": 0,
+   "reads": [],
+   "writes": []
+  },
+  "_is_generic_unspecified_omega3": {
+   "calls": [
+    "_normalize_text"
+   ],
+   "length": 20,
+   "line": 3751,
+   "module_globals": [],
+   "params": 1,
+   "reads": [],
+   "writes": []
+  },
+  "_is_interaction_label_row": {
+   "calls": [],
+   "length": 14,
+   "line": 19019,
+   "module_globals": [],
+   "params": 0,
+   "reads": [],
+   "writes": []
+  },
+  "_is_known_therapeutic": {
+   "calls": [
+    "_match_quality_map",
+    "_normalize_text"
+   ],
+   "length": 53,
+   "line": 6914,
+   "module_globals": [],
+   "params": 4,
+   "reads": [],
+   "writes": []
+  },
+  "_is_low_precision_token_alias": {
+   "calls": [
+    "_normalize_text"
+   ],
+   "length": 48,
+   "line": 3224,
+   "module_globals": [],
+   "params": 1,
+   "reads": [],
+   "writes": [
+    "_low_precision_token_alias_cache"
+   ]
+  },
+  "_is_low_severity_additive": {
+   "calls": [],
+   "length": 5,
+   "line": 6229,
+   "module_globals": [],
+   "params": 1,
+   "reads": [
+    "databases"
+   ],
+   "writes": []
+  },
+  "_is_mass_unit": {
+   "calls": [],
+   "length": 2,
+   "line": 19248,
+   "module_globals": [],
+   "params": 1,
+   "reads": [
+    "_MASS_FACTORS_MG"
+   ],
+   "writes": []
+  },
+  "_is_negated_match_phrase": {
+   "calls": [],
+   "length": 2,
+   "line": 12598,
+   "module_globals": [],
+   "params": 2,
+   "reads": [],
+   "writes": []
+  },
+  "_is_provided_marker_form": {
+   "calls": [
+    "_excluded_text_reason"
+   ],
+   "length": 6,
+   "line": 8691,
+   "module_globals": [],
+   "params": 1,
+   "reads": [],
+   "writes": []
+  },
+  "_is_recognized_non_scorable": {
+   "calls": [
+    "_current_canonical_identity_registry",
+    "_normalize_text"
+   ],
+   "length": 316,
+   "line": 6968,
+   "module_globals": [
+    "_normalize_unii"
+   ],
+   "params": 3,
+   "reads": [
+    "_nonscorable_index",
+    "_nonscorable_unii_index",
+    "databases"
+   ],
+   "writes": []
+  },
+  "_is_recorded_source": {
+   "calls": [],
+   "length": 13,
+   "line": 9381,
+   "module_globals": [],
+   "params": 3,
+   "reads": [
+    "databases"
+   ],
+   "writes": []
+  },
+  "_is_reviewed_context_override_match": {
+   "calls": [],
+   "length": 10,
+   "line": 4090,
+   "module_globals": [],
+   "params": 0,
+   "reads": [],
+   "writes": []
+  },
+  "_is_reviewed_same_identity_alias_match": {
+   "calls": [],
+   "length": 56,
+   "line": 3772,
+   "module_globals": [],
+   "params": 3,
+   "reads": [],
+   "writes": []
+  },
+  "_is_short_acronym_alias": {
+   "calls": [],
+   "length": 16,
+   "line": 3190,
+   "module_globals": [],
+   "params": 1,
+   "reads": [],
+   "writes": [
+    "_short_acronym_alias_cache"
+   ]
+  },
+  "_is_single_child_wrapper_parent": {
+   "calls": [
+    "_has_valid_therapeutic_dose",
+    "_normalize_exclusion_text"
+   ],
+   "length": 37,
+   "line": 6695,
+   "module_globals": [],
+   "params": 1,
+   "reads": [],
+   "writes": []
+  },
+  "_is_source_descriptor_form": {
+   "calls": [
+    "_should_keep_from_prefixed_form_as_actual"
+   ],
+   "length": 38,
+   "line": 3864,
+   "module_globals": [
+    "_SOURCE_DESCRIPTOR_FORM_CATEGORIES",
+    "_SOURCE_DESCRIPTOR_FORM_PREFIXES"
+   ],
+   "params": 1,
+   "reads": [
+    "databases"
+   ],
+   "writes": []
+  },
+  "_is_source_material_descriptor": {
+   "calls": [
+    "_token_is_latin_source_descriptor"
+   ],
+   "length": 53,
+   "line": 7891,
+   "module_globals": [],
+   "params": 1,
+   "reads": [
+    "_SOURCE_MATERIAL_TERMS",
+    "_SOURCE_WORD_TOKENS"
+   ],
+   "writes": []
+  },
+  "_is_specific_form_match": {
+   "calls": [],
+   "length": 8,
+   "line": 9260,
+   "module_globals": [],
+   "params": 1,
+   "reads": [],
+   "writes": []
+  },
+  "_is_standardization_marker_token": {
+   "calls": [],
+   "length": 6,
+   "line": 8043,
+   "module_globals": [],
+   "params": 1,
+   "reads": [
+    "_STANDARDIZATION_MARKER_TERMS"
+   ],
+   "writes": []
+  },
+  "_is_unresolved_source_descriptor": {
+   "calls": [],
+   "length": 4,
+   "line": 18738,
+   "module_globals": [],
+   "params": 0,
+   "reads": [],
+   "writes": []
+  },
+  "_literal_short_acronym_match": {
+   "calls": [],
+   "length": 16,
+   "line": 3207,
+   "module_globals": [],
+   "params": 2,
+   "reads": [],
+   "writes": []
+  },
+  "_load_all_databases": {
+   "calls": [
+    "_validate_loaded_databases"
+   ],
+   "length": 154,
+   "line": 1501,
+   "module_globals": [],
+   "params": 0,
+   "reads": [
+    "config",
+    "logger"
+   ],
+   "writes": [
+    "databases"
+   ]
+  },
+  "_load_config": {
+   "calls": [
+    "_default_config"
+   ],
+   "length": 24,
+   "line": 1420,
+   "module_globals": [],
+   "params": 1,
+   "reads": [
+    "logger"
+   ],
+   "writes": []
+  },
+  "_log_reference_versions": {
+   "calls": [],
+   "length": 43,
+   "line": 1711,
+   "module_globals": [],
+   "params": 0,
+   "reads": [
+    "databases",
+    "logger"
+   ],
+   "writes": [
+    "reference_versions"
+   ]
+  },
+  "_mark_cleaner_contract_fallback": {
+   "calls": [],
+   "length": 7,
+   "line": 6037,
+   "module_globals": [],
+   "params": 2,
+   "reads": [],
+   "writes": []
+  },
+  "_mark_parent_total_rows": {
+   "calls": [
+    "_normalize_text"
+   ],
+   "length": 126,
+   "line": 8159,
+   "module_globals": [],
+   "params": 1,
+   "reads": [],
+   "writes": []
+  },
+  "_marker_amount_for_threshold_unit": {
+   "calls": [
+    "_convert_mass",
+    "_normalize_threshold_unit",
+    "_to_float_safe"
+   ],
+   "length": 59,
+   "line": 19453,
+   "module_globals": [],
+   "params": 3,
+   "reads": [],
+   "writes": []
+  },
+  "_match_multi_form": {
+   "calls": [
+    "_counter_ion_form",
+    "_form_token_context",
+    "_infer_preferred_parent_from_context_cached",
+    "_is_cross_class_source_form",
+    "_is_dsld_source_descriptor_form",
+    "_is_specific_form_match",
+    "_match_quality_map",
+    "_norm_form_name",
+    "_parent_identity_names",
+    "_restated_parent",
+    "_specific_form_in_parent"
+   ],
+   "length": 404,
+   "line": 8286,
+   "module_globals": [],
+   "params": 3,
+   "reads": [],
+   "writes": []
+  },
+  "_match_quality_map": {
+   "calls": [
+    "_match_quality_map",
+    "_match_quality_map_impl",
+    "_read_form_in_row_notes"
+   ],
+   "length": 64,
+   "line": 9118,
+   "module_globals": [],
+   "params": 10,
+   "reads": [],
+   "writes": [
+    "_match_quality_cache"
+   ]
+  },
+  "_match_quality_map_impl": {
+   "calls": [
+    "_build_form_info_from_cleaned",
+    "_disclosed_unmapped_match",
+    "_extract_form_from_label",
+    "_infer_preferred_parent_from_context_cached",
+    "_is_provided_marker_form",
+    "_is_specific_form_match",
+    "_match_multi_form",
+    "_match_quality_map",
+    "_normalize_exact_text",
+    "_normalize_text",
+    "_reviewed_same_identity_parent_for_label",
+    "_specific_form_in_parent"
+   ],
+   "length": 1355,
+   "line": 9483,
+   "module_globals": [
+    "IQM_CANONICAL_CROSS_PARENT_ALLOWLIST"
+   ],
+   "params": 9,
+   "reads": [
+    "_iqm_exact_index",
+    "_iqm_norm_index",
+    "databases",
+    "logger"
+   ],
+   "writes": [
+    "_ambiguity_warning_count",
+    "_parent_fallback_details",
+    "_parent_fallback_info_count",
+    "match_counters"
+   ]
+  },
+  "_merge_blend_evidence": {
+   "calls": [
+    "_normalize_exclusion_text"
+   ],
+   "length": 195,
+   "line": 14916,
+   "module_globals": [],
+   "params": 2,
+   "reads": [],
+   "writes": []
+  },
+  "_merge_evidence_batch_traceability": {
+   "calls": [],
+   "length": 37,
+   "line": 14215,
+   "module_globals": [],
+   "params": 2,
+   "reads": [],
+   "writes": []
+  },
+  "_merge_evidence_third_party_programs": {
+   "calls": [
+    "_normalize_text"
+   ],
+   "length": 40,
+   "line": 13922,
+   "module_globals": [],
+   "params": 2,
+   "reads": [],
+   "writes": []
+  },
+  "_merge_standardized_botanicals": {
+   "calls": [
+    "_normalize_text"
+   ],
+   "length": 50,
+   "line": 11332,
+   "module_globals": [],
+   "params": 1,
+   "reads": [],
+   "writes": []
+  },
+  "_missing_cleaner_contract_fields": {
+   "calls": [],
+   "length": 2,
+   "line": 6034,
+   "module_globals": [],
+   "params": 1,
+   "reads": [
+    "_CLEANER_CONTRACT_FIELDS"
+   ],
+   "writes": []
+  },
+  "_nested_daily_value_nutrient_owners": {
+   "calls": [
+    "_normalize_text",
+    "_rda_source_label_key",
+    "_same_identity_unit_key"
+   ],
+   "length": 196,
+   "line": 21286,
+   "module_globals": [],
+   "params": 1,
+   "reads": [],
+   "writes": []
+  },
+  "_norm_form_name": {
+   "calls": [],
+   "length": 2,
+   "line": 9222,
+   "module_globals": [],
+   "params": 0,
+   "reads": [],
+   "writes": []
+  },
+  "_normalize_company_name": {
+   "calls": [],
+   "length": 8,
+   "line": 2564,
+   "module_globals": [],
+   "params": 1,
+   "reads": [],
+   "writes": []
+  },
+  "_normalize_exact_text": {
+   "calls": [],
+   "length": 8,
+   "line": 2555,
+   "module_globals": [],
+   "params": 1,
+   "reads": [],
+   "writes": []
+  },
+  "_normalize_exclusion_text": {
+   "calls": [],
+   "length": 6,
+   "line": 6304,
+   "module_globals": [],
+   "params": 1,
+   "reads": [],
+   "writes": []
+  },
+  "_normalize_form_factor": {
+   "calls": [],
+   "length": 24,
+   "line": 18474,
+   "module_globals": [],
+   "params": 1,
+   "reads": [],
+   "writes": []
+  },
+  "_normalize_interaction_db_key": {
+   "calls": [],
+   "length": 10,
+   "line": 18997,
+   "module_globals": [],
+   "params": 1,
+   "reads": [],
+   "writes": []
+  },
+  "_normalize_serving_unit_label": {
+   "calls": [],
+   "length": 17,
+   "line": 18191,
+   "module_globals": [],
+   "params": 1,
+   "reads": [],
+   "writes": []
+  },
+  "_normalize_source_token_text": {
+   "calls": [
+    "_normalize_text"
+   ],
+   "length": 9,
+   "line": 7711,
+   "module_globals": [],
+   "params": 1,
+   "reads": [],
+   "writes": []
+  },
+  "_normalize_text": {
+   "calls": [],
+   "length": 17,
+   "line": 2537,
+   "module_globals": [],
+   "params": 1,
+   "reads": [],
+   "writes": []
+  },
+  "_normalize_threshold_unit": {
+   "calls": [],
+   "length": 18,
+   "line": 19197,
+   "module_globals": [],
+   "params": 1,
+   "reads": [
+    "_IU_UNIT_ALIASES",
+    "_MASS_FACTORS_MG"
+   ],
+   "writes": []
+  },
+  "_normalize_unit_for_signal": {
+   "calls": [],
+   "length": 8,
+   "line": 5953,
+   "module_globals": [],
+   "params": 1,
+   "reads": [],
+   "writes": []
+  },
+  "_parent_identity_names": {
+   "calls": [],
+   "length": 13,
+   "line": 9226,
+   "module_globals": [],
+   "params": 3,
+   "reads": [],
+   "writes": []
+  },
+  "_parse_allergen_statement": {
+   "calls": [
+    "_extract_allergens_from_text",
+    "_parse_allergen_statement"
+   ],
+   "length": 81,
+   "line": 12914,
+   "module_globals": [],
+   "params": 4,
+   "reads": [
+    "logger"
+   ],
+   "writes": []
+  },
+  "_parse_cfu_text_count": {
+   "calls": [
+    "_cfu_text_count_matches"
+   ],
+   "length": 8,
+   "line": 17700,
+   "module_globals": [],
+   "params": 2,
+   "reads": [],
+   "writes": []
+  },
+  "_parse_dosage_from_directions": {
+   "calls": [],
+   "length": 87,
+   "line": 18516,
+   "module_globals": [],
+   "params": 1,
+   "reads": [
+    "WORD_TO_NUM"
+   ],
+   "writes": []
+  },
+  "_parse_single_form": {
+   "calls": [],
+   "length": 70,
+   "line": 2682,
+   "module_globals": [],
+   "params": 2,
+   "reads": [],
+   "writes": []
+  },
+  "_physical_state_description": {
+   "calls": [],
+   "length": 6,
+   "line": 10840,
+   "module_globals": [],
+   "params": 0,
+   "reads": [],
+   "writes": []
+  },
+  "_preserve_cleaner_botanical_canonical": {
+   "calls": [],
+   "length": 25,
+   "line": 2432,
+   "module_globals": [],
+   "params": 1,
+   "reads": [],
+   "writes": []
+  },
+  "_preserve_cleaner_safety_canonical": {
+   "calls": [],
+   "length": 19,
+   "line": 2411,
+   "module_globals": [],
+   "params": 1,
+   "reads": [],
+   "writes": []
+  },
+  "_primary_active_ingredients_for_enrichment": {
+   "calls": [
+    "_source_owned_active_ingredients_for_enrichment"
+   ],
+   "length": 12,
+   "line": 1206,
+   "module_globals": [],
+   "params": 2,
+   "reads": [],
+   "writes": []
+  },
+  "_probiotic_composition_share_owners": {
+   "calls": [
+    "_is_cfu_equivalent_unit",
+    "_normalize_text",
+    "_rda_source_label_key"
+   ],
+   "length": 48,
+   "line": 21640,
+   "module_globals": [],
+   "params": 1,
+   "reads": [],
+   "writes": []
+  },
+  "_product_context_branded_token_for_ingredient": {
+   "calls": [],
+   "length": 105,
+   "line": 2975,
+   "module_globals": [],
+   "params": 4,
+   "reads": [],
+   "writes": []
+  },
+  "_product_context_iqm_match_reason": {
+   "calls": [],
+   "length": 35,
+   "line": 5670,
+   "module_globals": [],
+   "params": 3,
+   "reads": [],
+   "writes": []
+  },
+  "_project_repaired_identity_to_active_row": {
+   "calls": [
+    "_botanical_source_identity",
+    "_current_canonical_identity_registry"
+   ],
+   "length": 69,
+   "line": 4522,
+   "module_globals": [
+    "BOTANICAL_CANONICAL_SOURCE_DBS"
+   ],
+   "params": 2,
+   "reads": [],
+   "writes": []
+  },
+  "_project_scoring_fields": {
+   "calls": [],
+   "length": 168,
+   "line": 15188,
+   "module_globals": [],
+   "params": 1,
+   "reads": [],
+   "writes": []
+  },
+  "_quality_match_identity_confidence": {
+   "calls": [],
+   "length": 6,
+   "line": 3699,
+   "module_globals": [],
+   "params": 0,
+   "reads": [],
+   "writes": []
+  },
+  "_quality_match_scoring_canonical": {
+   "calls": [],
+   "length": 23,
+   "line": 4166,
+   "module_globals": [],
+   "params": 1,
+   "reads": [],
+   "writes": []
+  },
+  "_rda_dose_lineage": {
+   "calls": [
+    "_normalize_text",
+    "_rda_source_label_key",
+    "_same_identity_unit_key"
+   ],
+   "length": 144,
+   "line": 21495,
+   "module_globals": [],
+   "params": 1,
+   "reads": [],
+   "writes": []
+  },
+  "_rda_source_label_key": {
+   "calls": [
+    "_normalize_text"
+   ],
+   "length": 22,
+   "line": 20638,
+   "module_globals": [],
+   "params": 1,
+   "reads": [],
+   "writes": []
+  },
+  "_read_form_in_row_notes": {
+   "calls": [
+    "_dropped_label_forms",
+    "_is_specific_form_match",
+    "_specific_form_in_parent"
+   ],
+   "length": 23,
+   "line": 9197,
+   "module_globals": [],
+   "params": 6,
+   "reads": [],
+   "writes": []
+  },
+  "_recognition_blocks_scoring": {
+   "calls": [],
+   "length": 15,
+   "line": 2140,
+   "module_globals": [],
+   "params": 0,
+   "reads": [],
+   "writes": []
+  },
+  "_record_form_curation_gaps": {
+   "calls": [
+    "_form_gap_reason",
+    "_norm_form_name"
+   ],
+   "length": 31,
+   "line": 24372,
+   "module_globals": [],
+   "params": 1,
+   "reads": [],
+   "writes": [
+    "_form_fallback_details"
+   ]
+  },
+  "_resolve_company_fuzzy_threshold": {
+   "calls": [],
+   "length": 22,
+   "line": 1445,
+   "module_globals": [],
+   "params": 0,
+   "reads": [
+    "config",
+    "logger"
+   ],
+   "writes": []
+  },
+  "_resolve_iqd_identity": {
+   "calls": [
+    "_current_canonical_identity_registry",
+    "_identity_candidate_resolver",
+    "_identity_parent_predicate",
+    "_identity_taxonomy_coherent",
+    "_is_generic_unspecified_omega3",
+    "_is_reviewed_context_override_match",
+    "_is_reviewed_same_identity_alias_match",
+    "_match_quality_map",
+    "_quality_match_scoring_canonical",
+    "_reviewed_same_identity_parent_for_label",
+    "_row_unii_is_iqm_parent_unii"
+   ],
+   "length": 194,
+   "line": 4250,
+   "module_globals": [],
+   "params": 3,
+   "reads": [],
+   "writes": []
+  },
+  "_resolve_verified_cert_programs": {
+   "calls": [
+    "_normalize_text"
+   ],
+   "length": 134,
+   "line": 14050,
+   "module_globals": [],
+   "params": 3,
+   "reads": [
+    "_LABEL_ASSERTED_B4A_PROGRAMS",
+    "_LABEL_ASSERTED_OMEGA_ONLY_PROGRAMS",
+    "logger"
+   ],
+   "writes": [
+    "_cert_registry_cache"
+   ]
+  },
+  "_restamp_recognized_non_scorable_identity": {
+   "calls": [
+    "_botanical_source_identity",
+    "_is_low_severity_additive",
+    "_resolve_iqd_identity",
+    "_stamp_iqd_identity"
+   ],
+   "length": 117,
+   "line": 6111,
+   "module_globals": [
+    "BOTANICAL_CANONICAL_SOURCE_DBS"
+   ],
+   "params": 4,
+   "reads": [],
+   "writes": []
+  },
+  "_restated_parent": {
+   "calls": [],
+   "length": 6,
+   "line": 9343,
+   "module_globals": [
+    "IQM_CANONICAL_CROSS_PARENT_ALLOWLIST"
+   ],
+   "params": 1,
+   "reads": [],
+   "writes": []
+  },
+  "_restates_identity": {
+   "calls": [],
+   "length": 14,
+   "line": 9396,
+   "module_globals": [
+    "_PREPARATION_WORDS"
+   ],
+   "params": 1,
+   "reads": [],
+   "writes": []
+  },
+  "_reviewed_same_identity_parent_for_label": {
+   "calls": [],
+   "length": 34,
+   "line": 3829,
+   "module_globals": [],
+   "params": 2,
+   "reads": [
+    "_iqm_exact_index"
+   ],
+   "writes": []
+  },
+  "_route_non_scorable_iqd_row": {
+   "calls": [
+    "_append_unique_iqd_row"
+   ],
+   "length": 27,
+   "line": 6083,
+   "module_globals": [],
+   "params": 3,
+   "reads": [],
+   "writes": []
+  },
+  "_row_form_ids": {
+   "calls": [],
+   "length": 9,
+   "line": 19124,
+   "module_globals": [],
+   "params": 0,
+   "reads": [],
+   "writes": []
+  },
+  "_row_form_match_status": {
+   "calls": [],
+   "length": 15,
+   "line": 9301,
+   "module_globals": [],
+   "params": 2,
+   "reads": [
+    "databases"
+   ],
+   "writes": []
+  },
+  "_row_unii_is_iqm_parent_unii": {
+   "calls": [],
+   "length": 5,
+   "line": 4244,
+   "module_globals": [],
+   "params": 2,
+   "reads": [],
+   "writes": []
+  },
+  "_same_identity_unit_key": {
+   "calls": [],
+   "length": 10,
+   "line": 21484,
+   "module_globals": [],
+   "params": 0,
+   "reads": [],
+   "writes": []
+  },
+  "_scan_label_for_standardization": {
+   "calls": [],
+   "length": 27,
+   "line": 3525,
+   "module_globals": [],
+   "params": 2,
+   "reads": [],
+   "writes": []
+  },
+  "_select_canonical_serving": {
+   "calls": [],
+   "length": 10,
+   "line": 18499,
+   "module_globals": [],
+   "params": 2,
+   "reads": [],
+   "writes": []
+  },
+  "_serving_units_to_servings": {
+   "calls": [],
+   "length": 9,
+   "line": 18250,
+   "module_globals": [],
+   "params": 2,
+   "reads": [],
+   "writes": []
+  },
+  "_setup_logging": {
+   "calls": [],
+   "length": 9,
+   "line": 1160,
+   "module_globals": [],
+   "params": 0,
+   "reads": [],
+   "writes": []
+  },
+  "_should_keep_from_prefixed_form_as_actual": {
+   "calls": [
+    "_normalize_text"
+   ],
+   "length": 42,
+   "line": 9075,
+   "module_globals": [],
+   "params": 1,
+   "reads": [],
+   "writes": []
+  },
+  "_should_promote_to_scorable": {
+   "calls": [
+    "_excluded_text_reason",
+    "_has_high_signal_potency",
+    "_has_therapeutic_signal",
+    "_has_valid_therapeutic_dose",
+    "_is_absorption_enhancer",
+    "_is_known_therapeutic",
+    "_is_recognized_non_scorable",
+    "_normalize_exclusion_text",
+    "_recognition_blocks_scoring"
+   ],
+   "length": 126,
+   "line": 6733,
+   "module_globals": [],
+   "params": 4,
+   "reads": [],
+   "writes": []
+  },
+  "_should_skip_from_scoring": {
+   "calls": [
+    "_compute_excipient_flags",
+    "_excluded_text_reason",
+    "_extract_enzyme_activity_dose",
+    "_has_potency_markers",
+    "_has_valid_therapeutic_dose",
+    "_is_generic_unspecified_omega3",
+    "_is_known_therapeutic",
+    "_is_recognized_non_scorable",
+    "_is_single_child_wrapper_parent",
+    "_normalize_exclusion_text",
+    "_recognition_blocks_scoring"
+   ],
+   "length": 274,
+   "line": 6420,
+   "module_globals": [],
+   "params": 3,
+   "reads": [],
+   "writes": []
+  },
+  "_source_owned_active_ingredients_for_enrichment": {
+   "calls": [
+    "_active_ingredient_from_scoring_row",
+    "_flatten_active_ingredients_for_analysis",
+    "_is_display_only_blend_scoring_row",
+    "_normalize_text"
+   ],
+   "length": 119,
+   "line": 1267,
+   "module_globals": [],
+   "params": 1,
+   "reads": [
+    "logger"
+   ],
+   "writes": []
+  },
+  "_specific_form_in_parent": {
+   "calls": [
+    "_is_specific_form_match",
+    "_match_quality_map"
+   ],
+   "length": 13,
+   "line": 9183,
+   "module_globals": [],
+   "params": 3,
+   "reads": [],
+   "writes": []
+  },
+  "_stamp_iqd_identity": {
+   "calls": [
+    "_canonical_registry_ids",
+    "_quality_match_scoring_canonical",
+    "_rda_source_label_key"
+   ],
+   "length": 76,
+   "line": 4445,
+   "module_globals": [],
+   "params": 5,
+   "reads": [
+    "databases"
+   ],
+   "writes": []
+  },
+  "_standardization_marker_names": {
+   "calls": [
+    "_norm_form_name"
+   ],
+   "length": 14,
+   "line": 9366,
+   "module_globals": [],
+   "params": 0,
+   "reads": [
+    "databases"
+   ],
+   "writes": [
+    "_marker_names_cache"
+   ]
+  },
+  "_statement_cfu_per_serving": {
+   "calls": [
+    "_cfu_text_count_matches",
+    "_normalize_serving_unit_label",
+    "_serving_units_to_servings"
+   ],
+   "length": 70,
+   "line": 17731,
+   "module_globals": [
+    "_GUARANTEE_UNIT_SPLIT_RE"
+   ],
+   "params": 4,
+   "reads": [
+    "WORD_TO_NUM",
+    "_STATEMENT_CFU_BASIS"
+   ],
+   "writes": []
+  },
+  "_structural_parent_total_row_ids": {
+   "calls": [
+    "_normalize_text"
+   ],
+   "length": 108,
+   "line": 8050,
+   "module_globals": [
+    "_normalize_parent_blend_mg"
+   ],
+   "params": 1,
+   "reads": [],
+   "writes": []
+  },
+  "_synthesize_ingredients_from_name": {
+   "calls": [
+    "_normalize_text"
+   ],
+   "length": 141,
+   "line": 11573,
+   "module_globals": [],
+   "params": 2,
+   "reads": [
+    "_NAME_FALLBACK_BLOCK_SUFFIXES",
+    "_NAME_FALLBACK_PATTERNS",
+    "databases"
+   ],
+   "writes": []
+  },
+  "_tag_fallback_decision": {
+   "calls": [],
+   "length": 5,
+   "line": 6028,
+   "module_globals": [],
+   "params": 2,
+   "reads": [],
+   "writes": []
+  },
+  "_to_float_safe": {
+   "calls": [],
+   "length": 8,
+   "line": 19278,
+   "module_globals": [],
+   "params": 1,
+   "reads": [],
+   "writes": []
+  },
+  "_token_bounded_match": {
+   "calls": [
+    "_cached_token_bounded_pattern",
+    "_is_short_acronym_alias",
+    "_literal_short_acronym_match",
+    "_normalize_text"
+   ],
+   "length": 29,
+   "line": 3160,
+   "module_globals": [],
+   "params": 3,
+   "reads": [],
+   "writes": []
+  },
+  "_token_is_latin_source_descriptor": {
+   "calls": [],
+   "length": 69,
+   "line": 7945,
+   "module_globals": [],
+   "params": 1,
+   "reads": [
+    "_LATIN_GENUS_NAMES"
+   ],
+   "writes": []
+  },
+  "_token_match_has_required_context": {
+   "calls": [
+    "_normalize_text"
+   ],
+   "length": 30,
+   "line": 3287,
+   "module_globals": [],
+   "params": 3,
+   "reads": [
+    "_color_context_pattern"
+   ],
+   "writes": []
+  },
+  "_top_manufacturer_country": {
+   "calls": [],
+   "length": 14,
+   "line": 16320,
+   "module_globals": [],
+   "params": 1,
+   "reads": [
+    "databases"
+   ],
+   "writes": [
+    "_top_mfr_country_cache"
+   ]
+  },
+  "_track_unmapped": {
+   "calls": [],
+   "length": 4,
+   "line": 24302,
+   "module_globals": [],
+   "params": 2,
+   "reads": [],
+   "writes": [
+    "unmapped_tracker"
+   ]
+  },
+  "_ul_exposure_basis": {
+   "calls": [
+    "_identity_unii_values",
+    "_normalize_text",
+    "_ul_scope_form_name_keys",
+    "_ul_scoped_form_name_keys",
+    "_ul_scoped_form_uniis"
+   ],
+   "length": 203,
+   "line": 20725,
+   "module_globals": [
+    "_normalize_unii"
+   ],
+   "params": 1,
+   "reads": [
+    "databases",
+    "rda_calculator"
+   ],
+   "writes": []
+  },
+  "_ul_scope_form_name_keys": {
+   "calls": [],
+   "length": 14,
+   "line": 20662,
+   "module_globals": [],
+   "params": 0,
+   "reads": [],
+   "writes": []
+  },
+  "_ul_scoped_form_name_keys": {
+   "calls": [
+    "_ul_scope_form_name_keys"
+   ],
+   "length": 14,
+   "line": 20710,
+   "module_globals": [],
+   "params": 1,
+   "reads": [
+    "rda_calculator"
+   ],
+   "writes": []
+  },
+  "_ul_scoped_form_uniis": {
+   "calls": [
+    "_identity_unii_values",
+    "_ul_scope_form_name_keys",
+    "_ul_scoped_form_name_keys"
+   ],
+   "length": 32,
+   "line": 20677,
+   "module_globals": [],
+   "params": 1,
+   "reads": [],
+   "writes": []
+  },
+  "_validate_banned_match_allowlist": {
+   "calls": [],
+   "length": 41,
+   "line": 1755,
+   "module_globals": [],
+   "params": 0,
+   "reads": [
+    "config",
+    "databases",
+    "logger"
+   ],
+   "writes": []
+  },
+  "_validate_export_contract_fields": {
+   "calls": [],
+   "length": 27,
+   "line": 1018,
+   "module_globals": [],
+   "params": 1,
+   "reads": [
+    "EXPORT_REQUIRED_IQD_FIELDS"
+   ],
+   "writes": []
+  },
+  "_validate_loaded_databases": {
+   "calls": [
+    "_log_reference_versions",
+    "_validate_banned_match_allowlist",
+    "_validate_snake_case_keys"
+   ],
+   "length": 54,
+   "line": 1656,
+   "module_globals": [],
+   "params": 0,
+   "reads": [
+    "databases",
+    "logger"
+   ],
+   "writes": []
+  },
+  "_validate_snake_case_keys": {
+   "calls": [],
+   "length": 50,
+   "line": 1797,
+   "module_globals": [],
+   "params": 2,
+   "reads": [
+    "config",
+    "logger"
+   ],
+   "writes": []
+  },
+  "_write_quarantine": {
+   "calls": [
+    "_atomic_write_json"
+   ],
+   "length": 29,
+   "line": 1063,
+   "module_globals": [],
+   "params": 6,
+   "reads": [
+    "VERSION",
+    "logger"
+   ],
+   "writes": []
+  },
+  "apply_taxonomy_projection": {
+   "calls": [
+    "_append_product_evidence_dose_assessments",
+    "_collect_product_scoring_classification",
+    "_collect_product_scoring_evidence"
+   ],
+   "length": 42,
+   "line": 17562,
+   "module_globals": [],
+   "params": 1,
+   "reads": [],
+   "writes": []
+  },
+  "enrich_product": {
+   "calls": [
+    "_build_match_ledger",
+    "_calculate_completeness",
+    "_collect_absorption_data",
+    "_collect_certification_data",
+    "_collect_compliance_data",
+    "_collect_contaminant_data",
+    "_collect_delivery_data",
+    "_collect_dietary_sensitivity_data",
+    "_collect_evidence_data",
+    "_collect_formulation_data",
+    "_collect_ingredient_quality_data",
+    "_collect_interaction_profile",
+    "_collect_manufacturer_data",
+    "_collect_nutrition_summary",
+    "_collect_probiotic_data",
+    "_collect_product_signals",
+    "_collect_proprietary_data",
+    "_collect_rda_ul_data",
+    "_collect_serving_basis_data",
+    "_decorate_percentile_category",
+    "_empty_rda_ul_payload",
+    "_enrich_display_ingredients",
+    "_normalize_company_name",
+    "_project_scoring_fields",
+    "_record_form_curation_gaps",
+    "_validate_export_contract_fields",
+    "apply_taxonomy_projection",
+    "validate_product"
+   ],
+   "length": 313,
+   "line": 23976,
+   "module_globals": [],
+   "params": 1,
+   "reads": [
+    "COMPATIBLE_SCORING_VERSIONS",
+    "EMPTY_ENRICHMENT_SCHEMA",
+    "VERSION",
+    "config",
+    "dosage_normalizer",
+    "logger",
+    "reference_versions"
+   ],
+   "writes": [
+    "_product_text_cache",
+    "_product_text_cache_enabled",
+    "_product_text_lower_cache"
+   ]
+  },
+  "process_all": {
+   "calls": [
+    "_atomic_write_json",
+    "_form_curation_report",
+    "process_batch"
+   ],
+   "length": 171,
+   "line": 24917,
+   "module_globals": [],
+   "params": 3,
+   "reads": [
+    "VERSION",
+    "_form_fallback_details",
+    "_parent_fallback_details",
+    "config",
+    "logger",
+    "match_counters",
+    "unmapped_tracker"
+   ],
+   "writes": []
+  },
+  "process_batch": {
+   "calls": [
+    "_atomic_write_json",
+    "_write_quarantine",
+    "enrich_product"
+   ],
+   "length": 85,
+   "line": 24831,
+   "module_globals": [],
+   "params": 2,
+   "reads": [
+    "config",
+    "logger"
+   ],
+   "writes": []
+  },
+  "validate_product": {
+   "calls": [],
+   "length": 37,
+   "line": 980,
+   "module_globals": [
+    "SupplementEnricherV3"
+   ],
+   "params": 0,
+   "reads": [],
+   "writes": []
+  }
+ },
+ "attributes": {
+  "ALLERGEN_PRESENCE_PRIORITY": {
+   "class": "never_written_here",
+   "read_in": 1,
+   "written_in": []
+  },
+  "CFU_EQUIVALENT_PATTERNS": {
+   "class": "never_written_here",
+   "read_in": 1,
+   "written_in": []
+  },
+  "COMPATIBLE_SCORING_VERSIONS": {
+   "class": "never_written_here",
+   "read_in": 1,
+   "written_in": []
+  },
+  "EMPTY_ENRICHMENT_SCHEMA": {
+   "class": "never_written_here",
+   "read_in": 1,
+   "written_in": []
+  },
+  "EXPORT_REQUIRED_IQD_FIELDS": {
+   "class": "never_written_here",
+   "read_in": 1,
+   "written_in": []
+  },
+  "HIGH_CONTAMINATION_RISK_CATEGORIES": {
+   "class": "never_written_here",
+   "read_in": 1,
+   "written_in": []
+  },
+  "SODIUM_THRESHOLDS": {
+   "class": "never_written_here",
+   "read_in": 1,
+   "written_in": []
+  },
+  "SUGAR_THRESHOLDS": {
+   "class": "never_written_here",
+   "read_in": 1,
+   "written_in": []
+  },
+  "SURVIVABILITY_BRAND_MARKERS": {
+   "class": "never_written_here",
+   "read_in": 1,
+   "written_in": []
+  },
+  "VERSION": {
+   "class": "never_written_here",
+   "read_in": 3,
+   "written_in": []
+  },
+  "WORD_TO_NUM": {
+   "class": "never_written_here",
+   "read_in": 2,
+   "written_in": []
+  },
+  "_BCAA_EVIDENCE_CANONICALS": {
+   "class": "never_written_here",
+   "read_in": 1,
+   "written_in": []
+  },
+  "_CLEANER_CONTRACT_FIELDS": {
+   "class": "never_written_here",
+   "read_in": 1,
+   "written_in": []
+  },
+  "_EQUIVALENT_BASE_MASS_UNITS": {
+   "class": "never_written_here",
+   "read_in": 1,
+   "written_in": []
+  },
+  "_HIGH_REG_COUNTRIES": {
+   "class": "never_written_here",
+   "read_in": 1,
+   "written_in": []
+  },
+  "_IU_UNIT_ALIASES": {
+   "class": "never_written_here",
+   "read_in": 1,
+   "written_in": []
+  },
+  "_LABEL_ASSERTED_B4A_PROGRAMS": {
+   "class": "never_written_here",
+   "read_in": 1,
+   "written_in": []
+  },
+  "_LABEL_ASSERTED_OMEGA_ONLY_PROGRAMS": {
+   "class": "never_written_here",
+   "read_in": 1,
+   "written_in": []
+  },
+  "_LATIN_GENUS_NAMES": {
+   "class": "never_written_here",
+   "read_in": 1,
+   "written_in": []
+  },
+  "_MANUFACTURER_CERT_PATTERNS": {
+   "class": "never_written_here",
+   "read_in": 1,
+   "written_in": []
+  },
+  "_MASS_FACTORS_MG": {
+   "class": "never_written_here",
+   "read_in": 3,
+   "written_in": []
+  },
+  "_NAME_FALLBACK_BLOCK_SUFFIXES": {
+   "class": "never_written_here",
+   "read_in": 1,
+   "written_in": []
+  },
+  "_NAME_FALLBACK_PATTERNS": {
+   "class": "never_written_here",
+   "read_in": 1,
+   "written_in": []
+  },
+  "_REGEX_CACHE_LIMIT": {
+   "class": "never_written_here",
+   "read_in": 3,
+   "written_in": []
+  },
+  "_SOURCE_MATERIAL_TERMS": {
+   "class": "never_written_here",
+   "read_in": 2,
+   "written_in": []
+  },
+  "_SOURCE_WORD_TOKENS": {
+   "class": "never_written_here",
+   "read_in": 1,
+   "written_in": []
+  },
+  "_STANDARDIZATION_MARKER_TERMS": {
+   "class": "never_written_here",
+   "read_in": 1,
+   "written_in": []
+  },
+  "_STATEMENT_CFU_BASIS": {
+   "class": "never_written_here",
+   "read_in": 1,
+   "written_in": []
+  },
+  "_ambiguity_warning_count": {
+   "class": "init_and_rebuilt",
+   "read_in": 0,
+   "written_in": [
+    "__init__",
+    "_match_quality_map_impl"
+   ]
+  },
+  "_botanical_source_identities": {
+   "class": "per_run_mutable",
+   "read_in": 1,
+   "written_in": [
+    "_build_performance_indexes"
+   ]
+  },
+  "_canonical_identity_databases": {
+   "class": "per_run_mutable",
+   "read_in": 0,
+   "written_in": [
+    "_current_canonical_identity_registry"
+   ]
+  },
+  "_canonical_identity_registry": {
+   "class": "per_run_mutable",
+   "read_in": 0,
+   "written_in": [
+    "_current_canonical_identity_registry"
+   ]
+  },
+  "_canonical_registry_id_cache": {
+   "class": "per_run_mutable",
+   "read_in": 0,
+   "written_in": [
+    "_canonical_registry_ids"
+   ]
+  },
+  "_cert_registry_cache": {
+   "class": "per_run_mutable",
+   "read_in": 0,
+   "written_in": [
+    "_resolve_verified_cert_programs"
+   ]
+  },
+  "_clinical_study_index_source": {
+   "class": "per_run_mutable",
+   "read_in": 1,
+   "written_in": [
+    "_build_performance_indexes"
+   ]
+  },
+  "_clinical_study_key_index": {
+   "class": "per_run_mutable",
+   "read_in": 1,
+   "written_in": [
+    "_build_performance_indexes"
+   ]
+  },
+  "_clinical_study_norm_index": {
+   "class": "per_run_mutable",
+   "read_in": 1,
+   "written_in": [
+    "_build_performance_indexes"
+   ]
+  },
+  "_color_context_pattern": {
+   "class": "load_once",
+   "read_in": 1,
+   "written_in": [
+    "__init__"
+   ]
+  },
+  "_form_fallback_details": {
+   "class": "init_and_rebuilt",
+   "read_in": 2,
+   "written_in": [
+    "__init__",
+    "_record_form_curation_gaps"
+   ]
+  },
+  "_hyphen_space_pattern_cache": {
+   "class": "init_and_rebuilt",
+   "read_in": 0,
+   "written_in": [
+    "__init__",
+    "_hyphen_space_token_pattern"
+   ]
+  },
+  "_identity_parent_descendants": {
+   "class": "per_run_mutable",
+   "read_in": 0,
+   "written_in": [
+    "_identity_parent_predicate"
+   ]
+  },
+  "_identity_parent_quality_map": {
+   "class": "per_run_mutable",
+   "read_in": 0,
+   "written_in": [
+    "_identity_parent_predicate"
+   ]
+  },
+  "_identity_parent_relationship_document": {
+   "class": "per_run_mutable",
+   "read_in": 0,
+   "written_in": [
+    "_identity_parent_predicate"
+   ]
+  },
+  "_inactive_ingredient_resolver": {
+   "class": "load_once",
+   "read_in": 2,
+   "written_in": [
+    "__init__"
+   ]
+  },
+  "_iqm_exact_index": {
+   "class": "init_and_rebuilt",
+   "read_in": 2,
+   "written_in": [
+    "__init__",
+    "_build_performance_indexes"
+   ]
+  },
+  "_iqm_norm_index": {
+   "class": "init_and_rebuilt",
+   "read_in": 2,
+   "written_in": [
+    "__init__",
+    "_build_performance_indexes"
+   ]
+  },
+  "_last_delivery_data": {
+   "class": "per_run_mutable",
+   "read_in": 0,
+   "written_in": [
+    "_collect_delivery_data"
+   ]
+  },
+  "_low_precision_token_alias_cache": {
+   "class": "init_and_rebuilt",
+   "read_in": 0,
+   "written_in": [
+    "__init__",
+    "_is_low_precision_token_alias"
+   ]
+  },
+  "_marker_names_cache": {
+   "class": "per_run_mutable",
+   "read_in": 0,
+   "written_in": [
+    "_standardization_marker_names"
+   ]
+  },
+  "_match_quality_cache": {
+   "class": "init_and_rebuilt",
+   "read_in": 0,
+   "written_in": [
+    "__init__",
+    "_match_quality_map"
+   ]
+  },
+  "_nonscorable_index": {
+   "class": "init_and_rebuilt",
+   "read_in": 2,
+   "written_in": [
+    "__init__",
+    "_build_performance_indexes"
+   ]
+  },
+  "_nonscorable_unii_index": {
+   "class": "init_and_rebuilt",
+   "read_in": 1,
+   "written_in": [
+    "__init__",
+    "_build_performance_indexes"
+   ]
+  },
+  "_parent_fallback_details": {
+   "class": "init_and_rebuilt",
+   "read_in": 1,
+   "written_in": [
+    "__init__",
+    "_match_quality_map_impl"
+   ]
+  },
+  "_parent_fallback_info_count": {
+   "class": "init_and_rebuilt",
+   "read_in": 0,
+   "written_in": [
+    "__init__",
+    "_match_quality_map_impl"
+   ]
+  },
+  "_product_text_cache": {
+   "class": "init_and_rebuilt",
+   "read_in": 0,
+   "written_in": [
+    "__init__",
+    "_get_all_product_text",
+    "enrich_product"
+   ]
+  },
+  "_product_text_cache_enabled": {
+   "class": "init_and_rebuilt",
+   "read_in": 0,
+   "written_in": [
+    "__init__",
+    "enrich_product"
+   ]
+  },
+  "_product_text_lower_cache": {
+   "class": "init_and_rebuilt",
+   "read_in": 0,
+   "written_in": [
+    "__init__",
+    "_get_all_product_text_lower",
+    "enrich_product"
+   ]
+  },
+  "_quality_parent_context_index_cache": {
+   "class": "init_and_rebuilt",
+   "read_in": 0,
+   "written_in": [
+    "__init__",
+    "_infer_preferred_parent_from_context_cached"
+   ]
+  },
+  "_rda_reference_stamp": {
+   "class": "load_once",
+   "read_in": 2,
+   "written_in": [
+    "__init__"
+   ]
+  },
+  "_rda_ul_warning_count": {
+   "class": "init_and_rebuilt",
+   "read_in": 0,
+   "written_in": [
+    "__init__",
+    "_collect_rda_ul_data"
+   ]
+  },
+  "_regex_pattern_cache": {
+   "class": "init_and_rebuilt",
+   "read_in": 0,
+   "written_in": [
+    "__init__",
+    "_cached_compile_regex"
+   ]
+  },
+  "_safe_token_alias_cache": {
+   "class": "init_and_rebuilt",
+   "read_in": 0,
+   "written_in": [
+    "__init__",
+    "_filter_safe_token_aliases"
+   ]
+  },
+  "_short_acronym_alias_cache": {
+   "class": "init_and_rebuilt",
+   "read_in": 0,
+   "written_in": [
+    "__init__",
+    "_is_short_acronym_alias"
+   ]
+  },
+  "_standardized_botanical_iqm_parents": {
+   "class": "per_run_mutable",
+   "read_in": 1,
+   "written_in": [
+    "_build_performance_indexes"
+   ]
+  },
+  "_token_bounded_pattern_cache": {
+   "class": "init_and_rebuilt",
+   "read_in": 0,
+   "written_in": [
+    "__init__",
+    "_cached_token_bounded_pattern"
+   ]
+  },
+  "_top_mfr_country_cache": {
+   "class": "per_run_mutable",
+   "read_in": 0,
+   "written_in": [
+    "_top_manufacturer_country"
+   ]
+  },
+  "blend_detector": {
+   "class": "per_run_mutable",
+   "read_in": 1,
+   "written_in": [
+    "_init_scoring_modules"
+   ]
+  },
+  "company_fuzzy_threshold": {
+   "class": "load_once",
+   "read_in": 2,
+   "written_in": [
+    "__init__"
+   ]
+  },
+  "compiled_patterns": {
+   "class": "per_run_mutable",
+   "read_in": 9,
+   "written_in": [
+    "_compile_patterns"
+   ]
+  },
+  "config": {
+   "class": "load_once",
+   "read_in": 9,
+   "written_in": [
+    "__init__"
+   ]
+  },
+  "databases": {
+   "class": "init_and_rebuilt",
+   "read_in": 57,
+   "written_in": [
+    "__init__",
+    "_load_all_databases"
+   ]
+  },
+  "dosage_normalizer": {
+   "class": "per_run_mutable",
+   "read_in": 1,
+   "written_in": [
+    "_init_scoring_modules"
+   ]
+  },
+  "logger": {
+   "class": "load_once",
+   "read_in": 29,
+   "written_in": [
+    "__init__"
+   ]
+  },
+  "match_counters": {
+   "class": "init_and_rebuilt",
+   "read_in": 1,
+   "written_in": [
+    "__init__",
+    "_match_quality_map_impl"
+   ]
+  },
+  "rda_calculator": {
+   "class": "per_run_mutable",
+   "read_in": 3,
+   "written_in": [
+    "_init_scoring_modules"
+   ]
+  },
+  "reference_versions": {
+   "class": "per_run_mutable",
+   "read_in": 4,
+   "written_in": [
+    "_log_reference_versions"
+   ]
+  },
+  "unit_converter": {
+   "class": "per_run_mutable",
+   "read_in": 3,
+   "written_in": [
+    "_init_scoring_modules"
+   ]
+  },
+  "unmapped_tracker": {
+   "class": "init_and_rebuilt",
+   "read_in": 1,
+   "written_in": [
+    "__init__",
+    "_track_unmapped"
+   ]
+  }
+ },
+ "class": "SupplementEnricherV3",
+ "closures": {
+  "per_method": {
+   "_build_match_ledger": {
+    "closure_loc": 388,
+    "closure_members": [
+     "_normalize_text"
+    ],
+    "closure_methods": 1,
+    "exclusive_helpers": [],
+    "exclusive_loc": 0,
+    "transitive_module_globals": [
+     "_CLEANER_MATCH_METHOD_MAP"
+    ],
+    "transitive_reads": [
+     "company_fuzzy_threshold"
+    ],
+    "transitive_writes": []
+   },
+   "_check_banned_substances": {
+    "closure_loc": 804,
+    "closure_members": [
+     "_allowlist_match",
+     "_banned_form_evidence_values",
+     "_banned_label_evidence_hits",
+     "_cached_compile_regex",
+     "_cached_token_bounded_pattern",
+     "_check_additive_match",
+     "_denylist_match",
+     "_derive_banned_severity",
+     "_filter_safe_token_aliases",
+     "_hyphen_space_token_pattern",
+     "_is_low_precision_token_alias",
+     "_is_negated_match_phrase",
+     "_is_short_acronym_alias",
+     "_literal_short_acronym_match",
+     "_normalize_text",
+     "_token_bounded_match",
+     "_token_match_has_required_context"
+    ],
+    "closure_methods": 17,
+    "exclusive_helpers": [],
+    "exclusive_loc": 0,
+    "transitive_module_globals": [],
+    "transitive_reads": [
+     "_REGEX_CACHE_LIMIT",
+     "_color_context_pattern",
+     "_inactive_ingredient_resolver",
+     "databases",
+     "logger"
+    ],
+    "transitive_writes": [
+     "_hyphen_space_pattern_cache",
+     "_low_precision_token_alias_cache",
+     "_regex_pattern_cache",
+     "_safe_token_alias_cache",
+     "_short_acronym_alias_cache",
+     "_token_bounded_pattern_cache"
+    ]
+   },
+   "_collect_absorption_data": {
+    "closure_loc": 377,
+    "closure_members": [
+     "_active_ingredient_from_scoring_row",
+     "_exact_match",
+     "_flatten_active_ingredients_for_analysis",
+     "_is_display_only_blend_scoring_row",
+     "_normalize_text",
+     "_primary_active_ingredients_for_enrichment",
+     "_source_owned_active_ingredients_for_enrichment"
+    ],
+    "closure_methods": 7,
+    "exclusive_helpers": [],
+    "exclusive_loc": 0,
+    "transitive_module_globals": [],
+    "transitive_reads": [
+     "databases",
+     "logger"
+    ],
+    "transitive_writes": []
+   },
+   "_collect_bonus_features": {
+    "closure_loc": 87,
+    "closure_members": [
+     "_get_all_product_text",
+     "_get_safe_text_field"
+    ],
+    "closure_methods": 2,
+    "exclusive_helpers": [],
+    "exclusive_loc": 0,
+    "transitive_module_globals": [],
+    "transitive_reads": [
+     "compiled_patterns"
+    ],
+    "transitive_writes": [
+     "_product_text_cache"
+    ]
+   },
+   "_collect_certification_data": {
+    "closure_loc": 1254,
+    "closure_members": [
+     "_assess_category_contamination_risk",
+     "_brand_family_exact_match",
+     "_build_verification_assessment",
+     "_check_claim_with_validation",
+     "_check_top_manufacturer",
+     "_collect_claims_from_rules_db",
+     "_collect_gmp_data",
+     "_collect_manufacturer_cert_signals",
+     "_collect_traceability_data",
+     "_deduplicate_evidence",
+     "_exact_match",
+     "_extract_text_sources",
+     "_fuzzy_company_match",
+     "_get_all_product_text",
+     "_get_context_snippet",
+     "_get_field_groups",
+     "_get_safe_text_field",
+     "_merge_evidence_batch_traceability",
+     "_merge_evidence_third_party_programs",
+     "_normalize_company_name",
+     "_normalize_text",
+     "_resolve_verified_cert_programs"
+    ],
+    "closure_methods": 22,
+    "exclusive_helpers": [
+     "_assess_category_contamination_risk",
+     "_build_verification_assessment",
+     "_collect_gmp_data",
+     "_collect_manufacturer_cert_signals",
+     "_collect_traceability_data",
+     "_merge_evidence_batch_traceability",
+     "_merge_evidence_third_party_programs",
+     "_resolve_verified_cert_programs"
+    ],
+    "exclusive_loc": 473,
+    "transitive_module_globals": [
+     "_free_from_clause_spans"
+    ],
+    "transitive_reads": [
+     "HIGH_CONTAMINATION_RISK_CATEGORIES",
+     "_LABEL_ASSERTED_B4A_PROGRAMS",
+     "_LABEL_ASSERTED_OMEGA_ONLY_PROGRAMS",
+     "_MANUFACTURER_CERT_PATTERNS",
+     "company_fuzzy_threshold",
+     "compiled_patterns",
+     "config",
+     "databases",
+     "logger",
+     "reference_versions"
+    ],
+    "transitive_writes": [
+     "_cert_registry_cache",
+     "_product_text_cache"
+    ]
+   },
+   "_collect_claims_from_rules_db": {
+    "closure_loc": 398,
+    "closure_members": [
+     "_check_claim_with_validation",
+     "_deduplicate_evidence",
+     "_extract_text_sources",
+     "_get_context_snippet",
+     "_get_field_groups"
+    ],
+    "closure_methods": 5,
+    "exclusive_helpers": [],
+    "exclusive_loc": 0,
+    "transitive_module_globals": [
+     "_free_from_clause_spans"
+    ],
+    "transitive_reads": [
+     "databases",
+     "logger"
+    ],
+    "transitive_writes": []
+   },
+   "_collect_clinical_aliases": {
+    "closure_loc": 17,
+    "closure_members": [],
+    "closure_methods": 0,
+    "exclusive_helpers": [],
+    "exclusive_loc": 0,
+    "transitive_module_globals": [],
+    "transitive_reads": [],
+    "transitive_writes": []
+   },
+   "_collect_compliance_data": {
+    "closure_loc": 2069,
+    "closure_members": [
+     "ARTIFICIAL_COLOR_INDICATORS",
+     "EXPLICIT_ARTIFICIAL_DYES",
+     "EXPLICIT_NATURAL_DYES",
+     "NATURAL_COLOR_INDICATORS",
+     "_allowlist_match",
+     "_attach_banned_safety_flags_to_ingredients",
+     "_banned_form_evidence_values",
+     "_banned_label_evidence_hits",
+     "_cached_compile_regex",
+     "_cached_token_bounded_pattern",
+     "_check_additive_match",
+     "_check_allergens",
+     "_check_banned_substances",
+     "_check_claim_with_validation",
+     "_check_harmful_additives",
+     "_collect_claims_from_rules_db",
+     "_collect_contaminant_data",
+     "_deduplicate_evidence",
+     "_denylist_match",
+     "_derive_banned_severity",
+     "_exact_match",
+     "_extract_allergen_presence_from_text",
+     "_extract_allergens_from_text",
+     "_extract_text_sources",
+     "_filter_safe_token_aliases",
+     "_get_all_product_text",
+     "_get_all_product_text_lower",
+     "_get_context_snippet",
+     "_get_field_groups",
+     "_get_safe_text_field",
+     "_hyphen_space_token_pattern",
+     "_is_low_precision_token_alias",
+     "_is_negated_match_phrase",
+     "_is_short_acronym_alias",
+     "_literal_short_acronym_match",
+     "_normalize_text",
+     "_parse_allergen_statement",
+     "_token_bounded_match",
+     "_token_match_has_required_context"
+    ],
+    "closure_methods": 39,
+    "exclusive_helpers": [
+     "_collect_contaminant_data"
+    ],
+    "exclusive_loc": 29,
+    "transitive_module_globals": [
+     "_free_from_clause_spans"
+    ],
+    "transitive_reads": [
+     "ALLERGEN_PRESENCE_PRIORITY",
+     "_REGEX_CACHE_LIMIT",
+     "_color_context_pattern",
+     "_inactive_ingredient_resolver",
+     "databases",
+     "logger",
+     "reference_versions"
+    ],
+    "transitive_writes": [
+     "_hyphen_space_pattern_cache",
+     "_low_precision_token_alias_cache",
+     "_product_text_cache",
+     "_product_text_lower_cache",
+     "_regex_pattern_cache",
+     "_safe_token_alias_cache",
+     "_short_acronym_alias_cache",
+     "_token_bounded_pattern_cache"
+    ]
+   },
+   "_collect_contaminant_data": {
+    "closure_loc": 1393,
+    "closure_members": [
+     "ARTIFICIAL_COLOR_INDICATORS",
+     "EXPLICIT_ARTIFICIAL_DYES",
+     "EXPLICIT_NATURAL_DYES",
+     "NATURAL_COLOR_INDICATORS",
+     "_allowlist_match",
+     "_attach_banned_safety_flags_to_ingredients",
+     "_banned_form_evidence_values",
+     "_banned_label_evidence_hits",
+     "_cached_compile_regex",
+     "_cached_token_bounded_pattern",
+     "_check_additive_match",
+     "_check_allergens",
+     "_check_banned_substances",
+     "_check_harmful_additives",
+     "_denylist_match",
+     "_derive_banned_severity",
+     "_exact_match",
+     "_extract_allergen_presence_from_text",
+     "_extract_allergens_from_text",
+     "_filter_safe_token_aliases",
+     "_hyphen_space_token_pattern",
+     "_is_low_precision_token_alias",
+     "_is_negated_match_phrase",
+     "_is_short_acronym_alias",
+     "_literal_short_acronym_match",
+     "_normalize_text",
+     "_parse_allergen_statement",
+     "_token_bounded_match",
+     "_token_match_has_required_context"
+    ],
+    "closure_methods": 29,
+    "exclusive_helpers": [],
+    "exclusive_loc": 0,
+    "transitive_module_globals": [],
+    "transitive_reads": [
+     "ALLERGEN_PRESENCE_PRIORITY",
+     "_REGEX_CACHE_LIMIT",
+     "_color_context_pattern",
+     "_inactive_ingredient_resolver",
+     "databases",
+     "logger"
+    ],
+    "transitive_writes": [
+     "_hyphen_space_pattern_cache",
+     "_low_precision_token_alias_cache",
+     "_regex_pattern_cache",
+     "_safe_token_alias_cache",
+     "_short_acronym_alias_cache",
+     "_token_bounded_pattern_cache"
+    ]
+   },
+   "_collect_delivery_data": {
+    "closure_loc": 161,
+    "closure_members": [
+     "_flatten_active_ingredients_for_analysis",
+     "_physical_state_description"
+    ],
+    "closure_methods": 2,
+    "exclusive_helpers": [],
+    "exclusive_loc": 0,
+    "transitive_module_globals": [
+     "_net_contents_texts"
+    ],
+    "transitive_reads": [
+     "databases"
+    ],
+    "transitive_writes": [
+     "_last_delivery_data"
+    ]
+   },
+   "_collect_dietary_sensitivity_data": {
+    "closure_loc": 409,
+    "closure_members": [
+     "_analyze_sodium_content",
+     "_analyze_sugar_content",
+     "_base_comparison_unit",
+     "_check_problematic_sweeteners",
+     "_convert_mass",
+     "_dietary_name_matches",
+     "_find_sodium_in_ingredients",
+     "_find_sugar_in_ingredients",
+     "_generate_dietary_warnings",
+     "_is_mass_unit",
+     "_is_unresolved_source_descriptor",
+     "_normalize_threshold_unit"
+    ],
+    "closure_methods": 12,
+    "exclusive_helpers": [
+     "_analyze_sodium_content",
+     "_analyze_sugar_content",
+     "_check_problematic_sweeteners",
+     "_dietary_name_matches",
+     "_find_sodium_in_ingredients",
+     "_find_sugar_in_ingredients",
+     "_generate_dietary_warnings",
+     "_is_unresolved_source_descriptor"
+    ],
+    "exclusive_loc": 338,
+    "transitive_module_globals": [],
+    "transitive_reads": [
+     "SODIUM_THRESHOLDS",
+     "SUGAR_THRESHOLDS",
+     "_EQUIVALENT_BASE_MASS_UNITS",
+     "_IU_UNIT_ALIASES",
+     "_MASS_FACTORS_MG",
+     "databases"
+    ],
+    "transitive_writes": []
+   },
+   "_collect_evidence_data": {
+    "closure_loc": 1211,
+    "closure_members": [
+     "_active_ingredient_from_scoring_row",
+     "_brand_mentioned",
+     "_candidate_clinical_studies",
+     "_check_unsubstantiated_claims",
+     "_clinical_study_match",
+     "_clinical_ui_evidence_scope",
+     "_collect_clinical_aliases",
+     "_evidence_subject_ingredients_for_enrichment",
+     "_flatten_active_ingredients_for_analysis",
+     "_get_all_product_text",
+     "_get_all_product_text_lower",
+     "_get_safe_text_field",
+     "_has_bcaa_mixture_evidence_identity",
+     "_is_display_only_blend_scoring_row",
+     "_is_source_descriptor_form",
+     "_normalize_text",
+     "_primary_active_ingredients_for_enrichment",
+     "_product_context_branded_token_for_ingredient",
+     "_should_keep_from_prefixed_form_as_actual",
+     "_source_owned_active_ingredients_for_enrichment"
+    ],
+    "closure_methods": 20,
+    "exclusive_helpers": [
+     "_brand_mentioned",
+     "_candidate_clinical_studies",
+     "_check_unsubstantiated_claims",
+     "_clinical_study_match",
+     "_clinical_ui_evidence_scope",
+     "_collect_clinical_aliases",
+     "_evidence_subject_ingredients_for_enrichment",
+     "_has_bcaa_mixture_evidence_identity"
+    ],
+    "exclusive_loc": 301,
+    "transitive_module_globals": [
+     "_SOURCE_DESCRIPTOR_FORM_CATEGORIES",
+     "_SOURCE_DESCRIPTOR_FORM_PREFIXES"
+    ],
+    "transitive_reads": [
+     "_BCAA_EVIDENCE_CANONICALS",
+     "_clinical_study_index_source",
+     "_clinical_study_key_index",
+     "_clinical_study_norm_index",
+     "compiled_patterns",
+     "databases",
+     "logger"
+    ],
+    "transitive_writes": [
+     "_product_text_cache",
+     "_product_text_lower_cache"
+    ]
+   },
+   "_collect_formulation_data": {
+    "closure_loc": 1817,
+    "closure_members": [
+     "_active_ingredient_from_scoring_row",
+     "_base_comparison_unit",
+     "_check_claim_with_validation",
+     "_collect_claims_from_rules_db",
+     "_collect_organic_data",
+     "_collect_standardized_botanicals",
+     "_collect_synergy_data",
+     "_convert_amount_to_target_unit",
+     "_convert_amount_to_target_unit_with_evidence",
+     "_convert_mass",
+     "_deduplicate_evidence",
+     "_derive_disclosed_marker_percentage",
+     "_exact_match",
+     "_extract_percentage",
+     "_extract_text_sources",
+     "_extract_text_windows_by_terms",
+     "_flatten_active_ingredients_for_analysis",
+     "_get_all_product_text",
+     "_get_context_snippet",
+     "_get_field_groups",
+     "_get_safe_text_field",
+     "_has_marker_word_match",
+     "_is_comparable_quantity_unit",
+     "_is_display_only_blend_scoring_row",
+     "_is_mass_unit",
+     "_merge_standardized_botanicals",
+     "_normalize_text",
+     "_normalize_threshold_unit",
+     "_primary_active_ingredients_for_enrichment",
+     "_source_owned_active_ingredients_for_enrichment",
+     "_synthesize_ingredients_from_name",
+     "_to_float_safe"
+    ],
+    "closure_methods": 32,
+    "exclusive_helpers": [
+     "_collect_organic_data",
+     "_collect_standardized_botanicals",
+     "_collect_synergy_data"
+    ],
+    "exclusive_loc": 563,
+    "transitive_module_globals": [
+     "_free_from_clause_spans",
+     "_normalize_parent_blend_mg"
+    ],
+    "transitive_reads": [
+     "_EQUIVALENT_BASE_MASS_UNITS",
+     "_IU_UNIT_ALIASES",
+     "_MASS_FACTORS_MG",
+     "_NAME_FALLBACK_BLOCK_SUFFIXES",
+     "_NAME_FALLBACK_PATTERNS",
+     "compiled_patterns",
+     "databases",
+     "logger",
+     "reference_versions",
+     "unit_converter"
+    ],
+    "transitive_writes": [
+     "_product_text_cache"
+    ]
+   },
+   "_collect_gmp_data": {
+    "closure_loc": 13,
+    "closure_members": [],
+    "closure_methods": 0,
+    "exclusive_helpers": [],
+    "exclusive_loc": 0,
+    "transitive_module_globals": [],
+    "transitive_reads": [
+     "compiled_patterns"
+    ],
+    "transitive_writes": []
+   },
+   "_collect_ingredient_quality_data": {
+    "closure_loc": 7704,
+    "closure_members": [
+     "_append_unique_iqd_row",
+     "_apply_absorption_enhancer_demotion",
+     "_apply_context_canonical_override_match",
+     "_apply_curcumin_c3_bioperine_pairing_upgrade",
+     "_apply_product_level_omega_form_disclosure",
+     "_botanical_source_identity",
+     "_build_form_info_from_cleaned",
+     "_build_quality_entry",
+     "_build_quality_parent_context_index",
+     "_canonical_registry_ids",
+     "_cleaner_skip_reason",
+     "_compute_blend_flags",
+     "_compute_delivers_markers",
+     "_compute_excipient_flags",
+     "_counter_ion_form",
+     "_current_canonical_identity_registry",
+     "_disclosed_unmapped_match",
+     "_dropped_label_forms",
+     "_excluded_text_reason",
+     "_extract_enzyme_activity_dose",
+     "_extract_form_from_label",
+     "_flatten_active_ingredients_for_analysis",
+     "_form_token_context",
+     "_get_all_product_text",
+     "_get_safe_text_field",
+     "_has_high_signal_potency",
+     "_has_potency_markers",
+     "_has_therapeutic_signal",
+     "_has_valid_therapeutic_dose",
+     "_identity_candidate_resolver",
+     "_identity_mismatch_forms",
+     "_identity_parent_predicate",
+     "_identity_taxonomy_coherent",
+     "_identity_unii_values",
+     "_infer_category_from_name",
+     "_infer_preferred_parent_from_context_cached",
+     "_iqd_row_has_dose_evidence",
+     "_is_absorption_enhancer",
+     "_is_blocked_botanical_source_marker_match",
+     "_is_contract_scorable_iqd_row",
+     "_is_cross_class_source_form",
+     "_is_dsld_source_descriptor_form",
+     "_is_generic_unspecified_omega3",
+     "_is_known_therapeutic",
+     "_is_low_severity_additive",
+     "_is_provided_marker_form",
+     "_is_recognized_non_scorable",
+     "_is_recorded_source",
+     "_is_reviewed_context_override_match",
+     "_is_reviewed_same_identity_alias_match",
+     "_is_single_child_wrapper_parent",
+     "_is_source_descriptor_form",
+     "_is_source_material_descriptor",
+     "_is_specific_form_match",
+     "_is_standardization_marker_token",
+     "_mark_cleaner_contract_fallback",
+     "_mark_parent_total_rows",
+     "_match_multi_form",
+     "_match_quality_map",
+     "_match_quality_map_impl",
+     "_missing_cleaner_contract_fields",
+     "_norm_form_name",
+     "_normalize_exact_text",
+     "_normalize_exclusion_text",
+     "_normalize_source_token_text",
+     "_normalize_text",
+     "_normalize_unit_for_signal",
+     "_parent_identity_names",
+     "_parse_single_form",
+     "_preserve_cleaner_botanical_canonical",
+     "_preserve_cleaner_safety_canonical",
+     "_product_context_branded_token_for_ingredient",
+     "_product_context_iqm_match_reason",
+     "_project_repaired_identity_to_active_row",
+     "_quality_match_identity_confidence",
+     "_quality_match_scoring_canonical",
+     "_rda_source_label_key",
+     "_read_form_in_row_notes",
+     "_recognition_blocks_scoring",
+     "_resolve_iqd_identity",
+     "_restamp_recognized_non_scorable_identity",
+     "_restated_parent",
+     "_restates_identity",
+     "_reviewed_same_identity_parent_for_label",
+     "_route_non_scorable_iqd_row",
+     "_row_form_match_status",
+     "_row_unii_is_iqm_parent_unii",
+     "_scan_label_for_standardization",
+     "_should_keep_from_prefixed_form_as_actual",
+     "_should_promote_to_scorable",
+     "_should_skip_from_scoring",
+     "_specific_form_in_parent",
+     "_stamp_iqd_identity",
+     "_standardization_marker_names",
+     "_structural_parent_total_row_ids",
+     "_tag_fallback_decision",
+     "_token_is_latin_source_descriptor",
+     "_track_unmapped"
+    ],
+    "closure_methods": 98,
+    "exclusive_helpers": [
+     "_append_unique_iqd_row",
+     "_apply_absorption_enhancer_demotion",
+     "_apply_context_canonical_override_match",
+     "_apply_curcumin_c3_bioperine_pairing_upgrade",
+     "_apply_product_level_omega_form_disclosure",
+     "_botanical_source_identity",
+     "_build_quality_entry",
+     "_cleaner_skip_reason",
+     "_compute_blend_flags",
+     "_compute_delivers_markers",
+     "_compute_excipient_flags",
+     "_current_canonical_identity_registry",
+     "_extract_enzyme_activity_dose",
+     "_has_high_signal_potency",
+     "_has_potency_markers",
+     "_has_therapeutic_signal",
+     "_has_valid_therapeutic_dose",
+     "_identity_candidate_resolver",
+     "_identity_parent_predicate",
+     "_identity_taxonomy_coherent",
+     "_infer_category_from_name",
+     "_iqd_row_has_dose_evidence",
+     "_is_absorption_enhancer",
+     "_is_blocked_botanical_source_marker_match",
+     "_is_contract_scorable_iqd_row",
+     "_is_generic_unspecified_omega3",
+     "_is_low_severity_additive",
+     "_is_recognized_non_scorable",
+     "_is_reviewed_context_override_match",
+     "_is_reviewed_same_identity_alias_match",
+     "_is_single_child_wrapper_parent",
+     "_mark_cleaner_contract_fallback",
+     "_mark_parent_total_rows",
+     "_missing_cleaner_contract_fields",
+     "_preserve_cleaner_botanical_canonical",
+     "_preserve_cleaner_safety_canonical",
+     "_product_context_iqm_match_reason",
+     "_project_repaired_identity_to_active_row",
+     "_quality_match_identity_confidence",
+     "_quality_match_scoring_canonical",
+     "_recognition_blocks_scoring",
+     "_resolve_iqd_identity",
+     "_restamp_recognized_non_scorable_identity",
+     "_route_non_scorable_iqd_row",
+     "_row_unii_is_iqm_parent_unii",
+     "_scan_label_for_standardization",
+     "_should_promote_to_scorable",
+     "_should_skip_from_scoring",
+     "_stamp_iqd_identity",
+     "_structural_parent_total_row_ids",
+     "_tag_fallback_decision",
+     "_track_unmapped"
+    ],
+    "exclusive_loc": 3334,
+    "transitive_module_globals": [
+     "BOTANICAL_CANONICAL_SOURCE_DBS",
+     "IQM_CANONICAL_CROSS_PARENT_ALLOWLIST",
+     "SupplementEnricherV3",
+     "_CARRIER_OIL_PARENT_CATEGORIES",
+     "_COUNTER_ION_SALT_RE",
+     "_DEFINED_NUTRIENT_PARENT_CATEGORIES",
+     "_PREPARATION_WORDS",
+     "_SOURCE_CLASS_FORM_CATEGORIES",
+     "_SOURCE_DESCRIPTOR_FORM_CATEGORIES",
+     "_SOURCE_DESCRIPTOR_FORM_PREFIXES",
+     "_normalize_parent_blend_mg",
+     "_normalize_unii"
+    ],
+    "transitive_reads": [
+     "_CLEANER_CONTRACT_FIELDS",
+     "_LATIN_GENUS_NAMES",
+     "_SOURCE_MATERIAL_TERMS",
+     "_SOURCE_WORD_TOKENS",
+     "_STANDARDIZATION_MARKER_TERMS",
+     "_botanical_source_identities",
+     "_iqm_exact_index",
+     "_iqm_norm_index",
+     "_nonscorable_index",
+     "_nonscorable_unii_index",
+     "_standardized_botanical_iqm_parents",
+     "databases",
+     "logger"
+    ],
+    "transitive_writes": [
+     "_ambiguity_warning_count",
+     "_canonical_identity_databases",
+     "_canonical_identity_registry",
+     "_canonical_registry_id_cache",
+     "_identity_parent_descendants",
+     "_identity_parent_quality_map",
+     "_identity_parent_relationship_document",
+     "_marker_names_cache",
+     "_match_quality_cache",
+     "_parent_fallback_details",
+     "_parent_fallback_info_count",
+     "_product_text_cache",
+     "_quality_parent_context_index_cache",
+     "match_counters",
+     "unmapped_tracker"
+    ]
+   },
+   "_collect_interaction_profile": {
+    "closure_loc": 1603,
+    "closure_members": [
+     "_amount_missing_disposition",
+     "_base_comparison_unit",
+     "_canonical_registry_ids",
+     "_collect_profile_context",
+     "_compare_threshold",
+     "_conversion_form_context",
+     "_convert_amount_to_target_unit",
+     "_convert_amount_to_target_unit_with_evidence",
+     "_convert_mass",
+     "_derive_interaction_subject_ref",
+     "_derived_marker_interaction_rows",
+     "_dose_decision_rule",
+     "_empty_interaction_profile",
+     "_evaluate_dose_thresholds_for_target",
+     "_evaluate_min_effective_dose",
+     "_evaluate_min_effective_dose_decision",
+     "_floor_status_for_emission",
+     "_interaction_registry_ids",
+     "_interaction_row_key",
+     "_interaction_rule_applies",
+     "_interaction_severity_weight_map",
+     "_is_comparable_quantity_unit",
+     "_is_interaction_label_row",
+     "_is_mass_unit",
+     "_marker_amount_for_threshold_unit",
+     "_normalize_interaction_db_key",
+     "_normalize_threshold_unit",
+     "_row_form_ids",
+     "_to_float_safe"
+    ],
+    "closure_methods": 29,
+    "exclusive_helpers": [
+     "_amount_missing_disposition",
+     "_collect_profile_context",
+     "_compare_threshold",
+     "_conversion_form_context",
+     "_derive_interaction_subject_ref",
+     "_derived_marker_interaction_rows",
+     "_dose_decision_rule",
+     "_empty_interaction_profile",
+     "_evaluate_dose_thresholds_for_target",
+     "_evaluate_min_effective_dose",
+     "_evaluate_min_effective_dose_decision",
+     "_floor_status_for_emission",
+     "_interaction_registry_ids",
+     "_interaction_row_key",
+     "_interaction_rule_applies",
+     "_interaction_severity_weight_map",
+     "_is_interaction_label_row",
+     "_marker_amount_for_threshold_unit",
+     "_normalize_interaction_db_key",
+     "_row_form_ids"
+    ],
+    "exclusive_loc": 875,
+    "transitive_module_globals": [],
+    "transitive_reads": [
+     "_EQUIVALENT_BASE_MASS_UNITS",
+     "_IU_UNIT_ALIASES",
+     "_MASS_FACTORS_MG",
+     "databases",
+     "logger",
+     "unit_converter"
+    ],
+    "transitive_writes": [
+     "_canonical_registry_id_cache"
+    ]
+   },
+   "_collect_manufacturer_cert_signals": {
+    "closure_loc": 289,
+    "closure_members": [
+     "_brand_family_exact_match",
+     "_check_top_manufacturer",
+     "_exact_match",
+     "_fuzzy_company_match",
+     "_normalize_company_name",
+     "_normalize_text"
+    ],
+    "closure_methods": 6,
+    "exclusive_helpers": [],
+    "exclusive_loc": 0,
+    "transitive_module_globals": [],
+    "transitive_reads": [
+     "_MANUFACTURER_CERT_PATTERNS",
+     "company_fuzzy_threshold",
+     "config",
+     "databases"
+    ],
+    "transitive_writes": []
+   },
+   "_collect_manufacturer_data": {
+    "closure_loc": 519,
+    "closure_members": [
+     "_brand_family_exact_match",
+     "_check_top_manufacturer",
+     "_check_violations",
+     "_collect_bonus_features",
+     "_exact_match",
+     "_extract_country",
+     "_fuzzy_company_match",
+     "_get_all_product_text",
+     "_get_safe_text_field",
+     "_normalize_company_name",
+     "_normalize_text",
+     "_top_manufacturer_country"
+    ],
+    "closure_methods": 12,
+    "exclusive_helpers": [
+     "_check_violations",
+     "_collect_bonus_features",
+     "_extract_country",
+     "_top_manufacturer_country"
+    ],
+    "exclusive_loc": 200,
+    "transitive_module_globals": [],
+    "transitive_reads": [
+     "_HIGH_REG_COUNTRIES",
+     "company_fuzzy_threshold",
+     "compiled_patterns",
+     "config",
+     "databases"
+    ],
+    "transitive_writes": [
+     "_product_text_cache",
+     "_top_mfr_country_cache"
+    ]
+   },
+   "_collect_nutrition_summary": {
+    "closure_loc": 63,
+    "closure_members": [],
+    "closure_methods": 0,
+    "exclusive_helpers": [],
+    "exclusive_loc": 0,
+    "transitive_module_globals": [],
+    "transitive_reads": [],
+    "transitive_writes": []
+   },
+   "_collect_organic_data": {
+    "closure_loc": 444,
+    "closure_members": [
+     "_check_claim_with_validation",
+     "_collect_claims_from_rules_db",
+     "_deduplicate_evidence",
+     "_extract_text_sources",
+     "_get_context_snippet",
+     "_get_field_groups"
+    ],
+    "closure_methods": 6,
+    "exclusive_helpers": [],
+    "exclusive_loc": 0,
+    "transitive_module_globals": [
+     "_free_from_clause_spans"
+    ],
+    "transitive_reads": [
+     "compiled_patterns",
+     "databases",
+     "logger",
+     "reference_versions"
+    ],
+    "transitive_writes": []
+   },
+   "_collect_probiotic_data": {
+    "closure_loc": 1315,
+    "closure_members": [
+     "_cfu_text_count_matches",
+     "_cfu_unit_multiplier",
+     "_extract_cfu",
+     "_extract_guarantee_type",
+     "_flatten_active_ingredients_for_analysis",
+     "_get_safe_text_field",
+     "_guarantee_timing",
+     "_has_non_probiotic_active_for_cfu_evidence",
+     "_is_cfu_equivalent_unit",
+     "_is_fiber_primary_with_accessory_probiotics",
+     "_normalize_serving_unit_label",
+     "_normalize_unit_for_signal",
+     "_parse_cfu_text_count",
+     "_serving_units_to_servings",
+     "_statement_cfu_per_serving"
+    ],
+    "closure_methods": 15,
+    "exclusive_helpers": [
+     "_cfu_text_count_matches",
+     "_extract_cfu",
+     "_extract_guarantee_type",
+     "_guarantee_timing",
+     "_parse_cfu_text_count",
+     "_statement_cfu_per_serving"
+    ],
+    "exclusive_loc": 305,
+    "transitive_module_globals": [
+     "_GUARANTEE_UNIT_SPLIT_RE",
+     "_NON_PROBIOTIC_POTENCY_SUBJECT_RE",
+     "_compute_probiotic_confidence_hybrid",
+     "_derive_clinical_support_level",
+     "_net_contents_texts",
+     "_probiotic_research_presentation"
+    ],
+    "transitive_reads": [
+     "CFU_EQUIVALENT_PATTERNS",
+     "SURVIVABILITY_BRAND_MARKERS",
+     "WORD_TO_NUM",
+     "_STATEMENT_CFU_BASIS",
+     "compiled_patterns",
+     "databases",
+     "logger"
+    ],
+    "transitive_writes": []
+   },
+   "_collect_product_scoring_classification": {
+    "closure_loc": 10,
+    "closure_members": [],
+    "closure_methods": 0,
+    "exclusive_helpers": [],
+    "exclusive_loc": 0,
+    "transitive_module_globals": [],
+    "transitive_reads": [],
+    "transitive_writes": []
+   },
+   "_collect_product_scoring_evidence": {
+    "closure_loc": 3241,
+    "closure_members": [
+     "_anchor_form_reading",
+     "_build_form_info_from_cleaned",
+     "_build_quality_parent_context_index",
+     "_counter_ion_form",
+     "_disclosed_unmapped_match",
+     "_dropped_label_forms",
+     "_excluded_text_reason",
+     "_extract_form_from_label",
+     "_form_token_context",
+     "_has_non_probiotic_active_for_cfu_evidence",
+     "_identity_mismatch_forms",
+     "_infer_preferred_parent_from_context_cached",
+     "_is_cross_class_source_form",
+     "_is_dsld_source_descriptor_form",
+     "_is_fiber_primary_with_accessory_probiotics",
+     "_is_provided_marker_form",
+     "_is_recorded_source",
+     "_is_source_material_descriptor",
+     "_is_specific_form_match",
+     "_is_standardization_marker_token",
+     "_match_multi_form",
+     "_match_quality_map",
+     "_match_quality_map_impl",
+     "_norm_form_name",
+     "_normalize_exact_text",
+     "_normalize_exclusion_text",
+     "_normalize_source_token_text",
+     "_normalize_text",
+     "_normalize_unit_for_signal",
+     "_parent_identity_names",
+     "_parse_single_form",
+     "_read_form_in_row_notes",
+     "_restated_parent",
+     "_restates_identity",
+     "_reviewed_same_identity_parent_for_label",
+     "_row_form_match_status",
+     "_should_keep_from_prefixed_form_as_actual",
+     "_specific_form_in_parent",
+     "_standardization_marker_names",
+     "_token_is_latin_source_descriptor"
+    ],
+    "closure_methods": 40,
+    "exclusive_helpers": [
+     "_anchor_form_reading"
+    ],
+    "exclusive_loc": 25,
+    "transitive_module_globals": [
+     "IQM_CANONICAL_CROSS_PARENT_ALLOWLIST",
+     "_CARRIER_OIL_PARENT_CATEGORIES",
+     "_COUNTER_ION_SALT_RE",
+     "_DEFINED_NUTRIENT_PARENT_CATEGORIES",
+     "_PREPARATION_WORDS",
+     "_SOURCE_CLASS_FORM_CATEGORIES",
+     "_SOURCE_DESCRIPTOR_FORM_CATEGORIES",
+     "_SOURCE_DESCRIPTOR_FORM_PREFIXES"
+    ],
+    "transitive_reads": [
+     "_LATIN_GENUS_NAMES",
+     "_SOURCE_MATERIAL_TERMS",
+     "_SOURCE_WORD_TOKENS",
+     "_STANDARDIZATION_MARKER_TERMS",
+     "_iqm_exact_index",
+     "_iqm_norm_index",
+     "databases",
+     "logger"
+    ],
+    "transitive_writes": [
+     "_ambiguity_warning_count",
+     "_marker_names_cache",
+     "_match_quality_cache",
+     "_parent_fallback_details",
+     "_parent_fallback_info_count",
+     "_quality_parent_context_index_cache",
+     "match_counters"
+    ]
+   },
+   "_collect_product_signals": {
+    "closure_loc": 142,
+    "closure_members": [
+     "_extract_strain_ids_from_product",
+     "_get_all_product_text",
+     "_get_safe_text_field"
+    ],
+    "closure_methods": 3,
+    "exclusive_helpers": [
+     "_extract_strain_ids_from_product"
+    ],
+    "exclusive_loc": 16,
+    "transitive_module_globals": [],
+    "transitive_reads": [],
+    "transitive_writes": [
+     "_product_text_cache"
+    ]
+   },
+   "_collect_profile_context": {
+    "closure_loc": 37,
+    "closure_members": [],
+    "closure_methods": 0,
+    "exclusive_helpers": [],
+    "exclusive_loc": 0,
+    "transitive_module_globals": [],
+    "transitive_reads": [],
+    "transitive_writes": []
+   },
+   "_collect_proprietary_data": {
+    "closure_loc": 3834,
+    "closure_members": [
+     "_build_form_info_from_cleaned",
+     "_build_quality_parent_context_index",
+     "_counter_ion_form",
+     "_disclosed_unmapped_match",
+     "_dropped_label_forms",
+     "_excluded_text_reason",
+     "_extract_form_from_label",
+     "_form_token_context",
+     "_infer_preferred_parent_from_context_cached",
+     "_is_cross_class_source_form",
+     "_is_dsld_source_descriptor_form",
+     "_is_known_therapeutic",
+     "_is_provided_marker_form",
+     "_is_recorded_source",
+     "_is_source_material_descriptor",
+     "_is_specific_form_match",
+     "_is_standardization_marker_token",
+     "_match_multi_form",
+     "_match_quality_map",
+     "_match_quality_map_impl",
+     "_merge_blend_evidence",
+     "_norm_form_name",
+     "_normalize_exact_text",
+     "_normalize_exclusion_text",
+     "_normalize_source_token_text",
+     "_normalize_text",
+     "_parent_identity_names",
+     "_parse_single_form",
+     "_read_form_in_row_notes",
+     "_restated_parent",
+     "_restates_identity",
+     "_reviewed_same_identity_parent_for_label",
+     "_should_keep_from_prefixed_form_as_actual",
+     "_specific_form_in_parent",
+     "_standardization_marker_names",
+     "_token_is_latin_source_descriptor"
+    ],
+    "closure_methods": 36,
+    "exclusive_helpers": [
+     "_merge_blend_evidence"
+    ],
+    "exclusive_loc": 195,
+    "transitive_module_globals": [
+     "IQM_CANONICAL_CROSS_PARENT_ALLOWLIST",
+     "_CARRIER_OIL_PARENT_CATEGORIES",
+     "_COUNTER_ION_SALT_RE",
+     "_DEFINED_NUTRIENT_PARENT_CATEGORIES",
+     "_PREPARATION_WORDS",
+     "_RAW_CHILD_ROW",
+     "_SOURCE_CLASS_FORM_CATEGORIES",
+     "_SOURCE_DESCRIPTOR_FORM_CATEGORIES",
+     "_SOURCE_DESCRIPTOR_FORM_PREFIXES"
+    ],
+    "transitive_reads": [
+     "_LATIN_GENUS_NAMES",
+     "_SOURCE_MATERIAL_TERMS",
+     "_SOURCE_WORD_TOKENS",
+     "_STANDARDIZATION_MARKER_TERMS",
+     "_iqm_exact_index",
+     "_iqm_norm_index",
+     "blend_detector",
+     "databases",
+     "logger"
+    ],
+    "transitive_writes": [
+     "_ambiguity_warning_count",
+     "_marker_names_cache",
+     "_match_quality_cache",
+     "_parent_fallback_details",
+     "_parent_fallback_info_count",
+     "_quality_parent_context_index_cache",
+     "match_counters"
+    ]
+   },
+   "_collect_rda_ul_data": {
+    "closure_loc": 3791,
+    "closure_members": [
+     "_active_ingredient_from_scoring_row",
+     "_cfu_unit_multiplier",
+     "_collect_special_use_flags",
+     "_declared_folate_dfe_totals",
+     "_declared_same_identity_totals",
+     "_declared_vitamin_a_components",
+     "_dose_active_ingredients_for_enrichment",
+     "_excluded_text_reason",
+     "_flatten_active_ingredients_for_analysis",
+     "_identity_unii_values",
+     "_is_cfu_equivalent_unit",
+     "_is_display_only_blend_scoring_row",
+     "_is_source_descriptor_form",
+     "_nested_daily_value_nutrient_owners",
+     "_normalize_exclusion_text",
+     "_normalize_text",
+     "_probiotic_composition_share_owners",
+     "_rda_dose_lineage",
+     "_rda_source_label_key",
+     "_same_identity_unit_key",
+     "_should_keep_from_prefixed_form_as_actual",
+     "_source_owned_active_ingredients_for_enrichment",
+     "_to_float_safe",
+     "_ul_exposure_basis",
+     "_ul_scope_form_name_keys",
+     "_ul_scoped_form_name_keys",
+     "_ul_scoped_form_uniis"
+    ],
+    "closure_methods": 27,
+    "exclusive_helpers": [
+     "_collect_special_use_flags",
+     "_declared_folate_dfe_totals",
+     "_declared_same_identity_totals",
+     "_declared_vitamin_a_components",
+     "_dose_active_ingredients_for_enrichment",
+     "_nested_daily_value_nutrient_owners",
+     "_probiotic_composition_share_owners",
+     "_rda_dose_lineage",
+     "_same_identity_unit_key",
+     "_ul_exposure_basis",
+     "_ul_scope_form_name_keys",
+     "_ul_scoped_form_name_keys",
+     "_ul_scoped_form_uniis"
+    ],
+    "exclusive_loc": 1022,
+    "transitive_module_globals": [
+     "_ACTIVITY_UNIT_CANONICALS",
+     "_FOLIC_ACID_ADULT_UL_MCG",
+     "_FOLIC_ACID_UNII",
+     "_NON_UL_ACTIVITY_UNITS",
+     "_NON_UL_BOTANICAL_CANONICALS",
+     "_NON_UL_BOTANICAL_QUANTITY_UNITS",
+     "_NON_UL_PROBIOTIC_QUANTITY_UNITS",
+     "_RDA_REFERENCE_PROFILE",
+     "_SOURCE_DESCRIPTOR_FORM_CATEGORIES",
+     "_SOURCE_DESCRIPTOR_FORM_PREFIXES",
+     "_VITAMIN_A_PREFORMED_ADULT_UL_MCG_RAE",
+     "_VITAMIN_E_ADULT_UL_MG",
+     "_VITAMIN_E_NATURAL_MG_PER_IU",
+     "_explicit_mixed_vitamin_a_preformed_fraction",
+     "_has_no_official_ul_reference",
+     "_mixed_vitamin_a_total_mcg_rae",
+     "_normalize_unii",
+     "_rda_mass_unit_key",
+     "_unknown_folate_ul_screening"
+    ],
+    "transitive_reads": [
+     "CFU_EQUIVALENT_PATTERNS",
+     "_rda_reference_stamp",
+     "databases",
+     "logger",
+     "rda_calculator",
+     "unit_converter"
+    ],
+    "transitive_writes": [
+     "_rda_ul_warning_count"
+    ]
+   },
+   "_collect_serving_basis_data": {
+    "closure_loc": 406,
+    "closure_members": [
+     "_derive_serving_size_from_container",
+     "_normalize_form_factor",
+     "_normalize_serving_unit_label",
+     "_parse_dosage_from_directions",
+     "_physical_state_description",
+     "_select_canonical_serving",
+     "_serving_units_to_servings"
+    ],
+    "closure_methods": 7,
+    "exclusive_helpers": [
+     "_derive_serving_size_from_container",
+     "_normalize_form_factor",
+     "_parse_dosage_from_directions",
+     "_select_canonical_serving"
+    ],
+    "exclusive_loc": 161,
+    "transitive_module_globals": [],
+    "transitive_reads": [
+     "WORD_TO_NUM"
+    ],
+    "transitive_writes": []
+   },
+   "_collect_special_use_flags": {
+    "closure_loc": 70,
+    "closure_members": [
+     "_normalize_text"
+    ],
+    "closure_methods": 1,
+    "exclusive_helpers": [],
+    "exclusive_loc": 0,
+    "transitive_module_globals": [
+     "_rda_mass_unit_key"
+    ],
+    "transitive_reads": [],
+    "transitive_writes": []
+   },
+   "_collect_standardized_botanicals": {
+    "closure_loc": 696,
+    "closure_members": [
+     "_active_ingredient_from_scoring_row",
+     "_derive_disclosed_marker_percentage",
+     "_exact_match",
+     "_extract_percentage",
+     "_extract_text_windows_by_terms",
+     "_flatten_active_ingredients_for_analysis",
+     "_get_all_product_text",
+     "_get_safe_text_field",
+     "_has_marker_word_match",
+     "_is_display_only_blend_scoring_row",
+     "_merge_standardized_botanicals",
+     "_normalize_text",
+     "_primary_active_ingredients_for_enrichment",
+     "_source_owned_active_ingredients_for_enrichment",
+     "_to_float_safe"
+    ],
+    "closure_methods": 15,
+    "exclusive_helpers": [],
+    "exclusive_loc": 0,
+    "transitive_module_globals": [
+     "_normalize_parent_blend_mg"
+    ],
+    "transitive_reads": [
+     "compiled_patterns",
+     "databases",
+     "logger"
+    ],
+    "transitive_writes": [
+     "_product_text_cache"
+    ]
+   },
+   "_collect_synergy_data": {
+    "closure_loc": 888,
+    "closure_members": [
+     "_active_ingredient_from_scoring_row",
+     "_base_comparison_unit",
+     "_convert_amount_to_target_unit",
+     "_convert_amount_to_target_unit_with_evidence",
+     "_convert_mass",
+     "_flatten_active_ingredients_for_analysis",
+     "_is_comparable_quantity_unit",
+     "_is_display_only_blend_scoring_row",
+     "_is_mass_unit",
+     "_normalize_text",
+     "_normalize_threshold_unit",
+     "_primary_active_ingredients_for_enrichment",
+     "_source_owned_active_ingredients_for_enrichment",
+     "_synthesize_ingredients_from_name"
+    ],
+    "closure_methods": 14,
+    "exclusive_helpers": [],
+    "exclusive_loc": 0,
+    "transitive_module_globals": [],
+    "transitive_reads": [
+     "_EQUIVALENT_BASE_MASS_UNITS",
+     "_IU_UNIT_ALIASES",
+     "_MASS_FACTORS_MG",
+     "_NAME_FALLBACK_BLOCK_SUFFIXES",
+     "_NAME_FALLBACK_PATTERNS",
+     "databases",
+     "logger",
+     "unit_converter"
+    ],
+    "transitive_writes": []
+   },
+   "_collect_traceability_data": {
+    "closure_loc": 15,
+    "closure_members": [],
+    "closure_methods": 0,
+    "exclusive_helpers": [],
+    "exclusive_loc": 0,
+    "transitive_module_globals": [],
+    "transitive_reads": [
+     "compiled_patterns"
+    ],
+    "transitive_writes": []
+   },
+   "_enrich_display_ingredients": {
+    "closure_loc": 79,
+    "closure_members": [],
+    "closure_methods": 0,
+    "exclusive_helpers": [],
+    "exclusive_loc": 0,
+    "transitive_module_globals": [],
+    "transitive_reads": [],
+    "transitive_writes": []
+   },
+   "_match_quality_map": {
+    "closure_loc": 3016,
+    "closure_members": [
+     "_build_form_info_from_cleaned",
+     "_build_quality_parent_context_index",
+     "_counter_ion_form",
+     "_disclosed_unmapped_match",
+     "_dropped_label_forms",
+     "_excluded_text_reason",
+     "_extract_form_from_label",
+     "_form_token_context",
+     "_infer_preferred_parent_from_context_cached",
+     "_is_cross_class_source_form",
+     "_is_dsld_source_descriptor_form",
+     "_is_provided_marker_form",
+     "_is_recorded_source",
+     "_is_source_material_descriptor",
+     "_is_specific_form_match",
+     "_is_standardization_marker_token",
+     "_match_multi_form",
+     "_match_quality_map_impl",
+     "_norm_form_name",
+     "_normalize_exact_text",
+     "_normalize_exclusion_text",
+     "_normalize_source_token_text",
+     "_normalize_text",
+     "_parent_identity_names",
+     "_parse_single_form",
+     "_read_form_in_row_notes",
+     "_restated_parent",
+     "_restates_identity",
+     "_reviewed_same_identity_parent_for_label",
+     "_should_keep_from_prefixed_form_as_actual",
+     "_specific_form_in_parent",
+     "_standardization_marker_names",
+     "_token_is_latin_source_descriptor"
+    ],
+    "closure_methods": 33,
+    "exclusive_helpers": [],
+    "exclusive_loc": 0,
+    "transitive_module_globals": [
+     "IQM_CANONICAL_CROSS_PARENT_ALLOWLIST",
+     "_CARRIER_OIL_PARENT_CATEGORIES",
+     "_COUNTER_ION_SALT_RE",
+     "_DEFINED_NUTRIENT_PARENT_CATEGORIES",
+     "_PREPARATION_WORDS",
+     "_SOURCE_CLASS_FORM_CATEGORIES",
+     "_SOURCE_DESCRIPTOR_FORM_CATEGORIES",
+     "_SOURCE_DESCRIPTOR_FORM_PREFIXES"
+    ],
+    "transitive_reads": [
+     "_LATIN_GENUS_NAMES",
+     "_SOURCE_MATERIAL_TERMS",
+     "_SOURCE_WORD_TOKENS",
+     "_STANDARDIZATION_MARKER_TERMS",
+     "_iqm_exact_index",
+     "_iqm_norm_index",
+     "databases",
+     "logger"
+    ],
+    "transitive_writes": [
+     "_ambiguity_warning_count",
+     "_marker_names_cache",
+     "_match_quality_cache",
+     "_parent_fallback_details",
+     "_parent_fallback_info_count",
+     "_quality_parent_context_index_cache",
+     "match_counters"
+    ]
+   },
+   "_match_quality_map_impl": {
+    "closure_loc": 3016,
+    "closure_members": [
+     "_build_form_info_from_cleaned",
+     "_build_quality_parent_context_index",
+     "_counter_ion_form",
+     "_disclosed_unmapped_match",
+     "_dropped_label_forms",
+     "_excluded_text_reason",
+     "_extract_form_from_label",
+     "_form_token_context",
+     "_infer_preferred_parent_from_context_cached",
+     "_is_cross_class_source_form",
+     "_is_dsld_source_descriptor_form",
+     "_is_provided_marker_form",
+     "_is_recorded_source",
+     "_is_source_material_descriptor",
+     "_is_specific_form_match",
+     "_is_standardization_marker_token",
+     "_match_multi_form",
+     "_match_quality_map",
+     "_norm_form_name",
+     "_normalize_exact_text",
+     "_normalize_exclusion_text",
+     "_normalize_source_token_text",
+     "_normalize_text",
+     "_parent_identity_names",
+     "_parse_single_form",
+     "_read_form_in_row_notes",
+     "_restated_parent",
+     "_restates_identity",
+     "_reviewed_same_identity_parent_for_label",
+     "_should_keep_from_prefixed_form_as_actual",
+     "_specific_form_in_parent",
+     "_standardization_marker_names",
+     "_token_is_latin_source_descriptor"
+    ],
+    "closure_methods": 33,
+    "exclusive_helpers": [],
+    "exclusive_loc": 0,
+    "transitive_module_globals": [
+     "IQM_CANONICAL_CROSS_PARENT_ALLOWLIST",
+     "_CARRIER_OIL_PARENT_CATEGORIES",
+     "_COUNTER_ION_SALT_RE",
+     "_DEFINED_NUTRIENT_PARENT_CATEGORIES",
+     "_PREPARATION_WORDS",
+     "_SOURCE_CLASS_FORM_CATEGORIES",
+     "_SOURCE_DESCRIPTOR_FORM_CATEGORIES",
+     "_SOURCE_DESCRIPTOR_FORM_PREFIXES"
+    ],
+    "transitive_reads": [
+     "_LATIN_GENUS_NAMES",
+     "_SOURCE_MATERIAL_TERMS",
+     "_SOURCE_WORD_TOKENS",
+     "_STANDARDIZATION_MARKER_TERMS",
+     "_iqm_exact_index",
+     "_iqm_norm_index",
+     "databases",
+     "logger"
+    ],
+    "transitive_writes": [
+     "_ambiguity_warning_count",
+     "_marker_names_cache",
+     "_match_quality_cache",
+     "_parent_fallback_details",
+     "_parent_fallback_info_count",
+     "_quality_parent_context_index_cache",
+     "match_counters"
+    ]
+   },
+   "_project_scoring_fields": {
+    "closure_loc": 168,
+    "closure_members": [],
+    "closure_methods": 0,
+    "exclusive_helpers": [],
+    "exclusive_loc": 0,
+    "transitive_module_globals": [],
+    "transitive_reads": [],
+    "transitive_writes": []
+   },
+   "apply_taxonomy_projection": {
+    "closure_loc": 3449,
+    "closure_members": [
+     "_anchor_form_reading",
+     "_append_product_evidence_dose_assessments",
+     "_build_form_info_from_cleaned",
+     "_build_quality_parent_context_index",
+     "_collect_product_scoring_classification",
+     "_collect_product_scoring_evidence",
+     "_counter_ion_form",
+     "_disclosed_unmapped_match",
+     "_dropped_label_forms",
+     "_excluded_text_reason",
+     "_extract_form_from_label",
+     "_form_token_context",
+     "_has_non_probiotic_active_for_cfu_evidence",
+     "_identity_mismatch_forms",
+     "_infer_preferred_parent_from_context_cached",
+     "_is_cross_class_source_form",
+     "_is_dsld_source_descriptor_form",
+     "_is_fiber_primary_with_accessory_probiotics",
+     "_is_provided_marker_form",
+     "_is_recorded_source",
+     "_is_source_material_descriptor",
+     "_is_specific_form_match",
+     "_is_standardization_marker_token",
+     "_match_multi_form",
+     "_match_quality_map",
+     "_match_quality_map_impl",
+     "_norm_form_name",
+     "_normalize_exact_text",
+     "_normalize_exclusion_text",
+     "_normalize_source_token_text",
+     "_normalize_text",
+     "_normalize_unit_for_signal",
+     "_parent_identity_names",
+     "_parse_single_form",
+     "_read_form_in_row_notes",
+     "_restated_parent",
+     "_restates_identity",
+     "_reviewed_same_identity_parent_for_label",
+     "_row_form_match_status",
+     "_should_keep_from_prefixed_form_as_actual",
+     "_specific_form_in_parent",
+     "_standardization_marker_names",
+     "_token_is_latin_source_descriptor"
+    ],
+    "closure_methods": 43,
+    "exclusive_helpers": [],
+    "exclusive_loc": 0,
+    "transitive_module_globals": [
+     "IQM_CANONICAL_CROSS_PARENT_ALLOWLIST",
+     "_CARRIER_OIL_PARENT_CATEGORIES",
+     "_COUNTER_ION_SALT_RE",
+     "_DEFINED_NUTRIENT_PARENT_CATEGORIES",
+     "_PREPARATION_WORDS",
+     "_SOURCE_CLASS_FORM_CATEGORIES",
+     "_SOURCE_DESCRIPTOR_FORM_CATEGORIES",
+     "_SOURCE_DESCRIPTOR_FORM_PREFIXES"
+    ],
+    "transitive_reads": [
+     "_LATIN_GENUS_NAMES",
+     "_SOURCE_MATERIAL_TERMS",
+     "_SOURCE_WORD_TOKENS",
+     "_STANDARDIZATION_MARKER_TERMS",
+     "_iqm_exact_index",
+     "_iqm_norm_index",
+     "databases",
+     "logger"
+    ],
+    "transitive_writes": [
+     "_ambiguity_warning_count",
+     "_marker_names_cache",
+     "_match_quality_cache",
+     "_parent_fallback_details",
+     "_parent_fallback_info_count",
+     "_quality_parent_context_index_cache",
+     "match_counters"
+    ]
+   },
+   "enrich_product": {
+    "closure_loc": 21985,
+    "closure_members": [
+     "ARTIFICIAL_COLOR_INDICATORS",
+     "EXPLICIT_ARTIFICIAL_DYES",
+     "EXPLICIT_NATURAL_DYES",
+     "NATURAL_COLOR_INDICATORS",
+     "_active_ingredient_from_scoring_row",
+     "_allowlist_match",
+     "_amount_missing_disposition",
+     "_analyze_sodium_content",
+     "_analyze_sugar_content",
+     "_anchor_form_reading",
+     "_append_product_evidence_dose_assessments",
+     "_append_unique_iqd_row",
+     "_apply_absorption_enhancer_demotion",
+     "_apply_context_canonical_override_match",
+     "_apply_curcumin_c3_bioperine_pairing_upgrade",
+     "_apply_product_level_omega_form_disclosure",
+     "_assess_category_contamination_risk",
+     "_attach_banned_safety_flags_to_ingredients",
+     "_banned_form_evidence_values",
+     "_banned_label_evidence_hits",
+     "_base_comparison_unit",
+     "_botanical_source_identity",
+     "_brand_family_exact_match",
+     "_brand_mentioned",
+     "_build_form_info_from_cleaned",
+     "_build_match_ledger",
+     "_build_quality_entry",
+     "_build_quality_parent_context_index",
+     "_build_verification_assessment",
+     "_cached_compile_regex",
+     "_cached_token_bounded_pattern",
+     "_calculate_completeness",
+     "_candidate_clinical_studies",
+     "_canonical_registry_ids",
+     "_cfu_text_count_matches",
+     "_cfu_unit_multiplier",
+     "_check_additive_match",
+     "_check_allergens",
+     "_check_banned_substances",
+     "_check_claim_with_validation",
+     "_check_harmful_additives",
+     "_check_problematic_sweeteners",
+     "_check_top_manufacturer",
+     "_check_unsubstantiated_claims",
+     "_check_violations",
+     "_cleaner_skip_reason",
+     "_clinical_study_match",
+     "_clinical_ui_evidence_scope",
+     "_collect_absorption_data",
+     "_collect_bonus_features",
+     "_collect_certification_data",
+     "_collect_claims_from_rules_db",
+     "_collect_clinical_aliases",
+     "_collect_compliance_data",
+     "_collect_contaminant_data",
+     "_collect_delivery_data",
+     "_collect_dietary_sensitivity_data",
+     "_collect_evidence_data",
+     "_collect_formulation_data",
+     "_collect_gmp_data",
+     "_collect_ingredient_quality_data",
+     "_collect_interaction_profile",
+     "_collect_manufacturer_cert_signals",
+     "_collect_manufacturer_data",
+     "_collect_nutrition_summary",
+     "_collect_organic_data",
+     "_collect_probiotic_data",
+     "_collect_product_scoring_classification",
+     "_collect_product_scoring_evidence",
+     "_collect_product_signals",
+     "_collect_profile_context",
+     "_collect_proprietary_data",
+     "_collect_rda_ul_data",
+     "_collect_serving_basis_data",
+     "_collect_special_use_flags",
+     "_collect_standardized_botanicals",
+     "_collect_synergy_data",
+     "_collect_traceability_data",
+     "_compare_threshold",
+     "_compute_blend_flags",
+     "_compute_delivers_markers",
+     "_compute_excipient_flags",
+     "_conversion_form_context",
+     "_convert_amount_to_target_unit",
+     "_convert_amount_to_target_unit_with_evidence",
+     "_convert_mass",
+     "_counter_ion_form",
+     "_current_canonical_identity_registry",
+     "_declared_folate_dfe_totals",
+     "_declared_same_identity_totals",
+     "_declared_vitamin_a_components",
+     "_decorate_percentile_category",
+     "_deduplicate_evidence",
+     "_denylist_match",
+     "_derive_banned_severity",
+     "_derive_disclosed_marker_percentage",
+     "_derive_interaction_subject_ref",
+     "_derive_serving_size_from_container",
+     "_derived_marker_interaction_rows",
+     "_dietary_name_matches",
+     "_disclosed_unmapped_match",
+     "_dose_active_ingredients_for_enrichment",
+     "_dose_decision_rule",
+     "_dropped_label_forms",
+     "_empty_interaction_profile",
+     "_empty_rda_ul_payload",
+     "_enrich_display_ingredients",
+     "_evaluate_dose_thresholds_for_target",
+     "_evaluate_min_effective_dose",
+     "_evaluate_min_effective_dose_decision",
+     "_evidence_subject_ingredients_for_enrichment",
+     "_exact_match",
+     "_excluded_text_reason",
+     "_extract_allergen_presence_from_text",
+     "_extract_allergens_from_text",
+     "_extract_cfu",
+     "_extract_country",
+     "_extract_enzyme_activity_dose",
+     "_extract_form_from_label",
+     "_extract_guarantee_type",
+     "_extract_percentage",
+     "_extract_strain_ids_from_product",
+     "_extract_text_sources",
+     "_extract_text_windows_by_terms",
+     "_filter_safe_token_aliases",
+     "_find_sodium_in_ingredients",
+     "_find_sugar_in_ingredients",
+     "_flatten_active_ingredients_for_analysis",
+     "_floor_status_for_emission",
+     "_form_gap_reason",
+     "_form_reads_as_named",
+     "_form_token_context",
+     "_fuzzy_company_match",
+     "_generate_dietary_warnings",
+     "_get_all_product_text",
+     "_get_all_product_text_lower",
+     "_get_context_snippet",
+     "_get_field_groups",
+     "_get_safe_text_field",
+     "_guarantee_timing",
+     "_has_bcaa_mixture_evidence_identity",
+     "_has_high_signal_potency",
+     "_has_marker_word_match",
+     "_has_non_probiotic_active_for_cfu_evidence",
+     "_has_potency_markers",
+     "_has_therapeutic_signal",
+     "_has_valid_therapeutic_dose",
+     "_hyphen_space_token_pattern",
+     "_identity_candidate_resolver",
+     "_identity_mismatch_forms",
+     "_identity_parent_predicate",
+     "_identity_taxonomy_coherent",
+     "_identity_unii_values",
+     "_infer_category_from_name",
+     "_infer_preferred_parent_from_context_cached",
+     "_interaction_registry_ids",
+     "_interaction_row_key",
+     "_interaction_rule_applies",
+     "_interaction_severity_weight_map",
+     "_iqd_row_has_dose_evidence",
+     "_is_absorption_enhancer",
+     "_is_blocked_botanical_source_marker_match",
+     "_is_cfu_equivalent_unit",
+     "_is_comparable_quantity_unit",
+     "_is_contract_scorable_iqd_row",
+     "_is_cross_class_source_form",
+     "_is_display_only_blend_scoring_row",
+     "_is_dsld_source_descriptor_form",
+     "_is_fiber_primary_with_accessory_probiotics",
+     "_is_generic_unspecified_omega3",
+     "_is_interaction_label_row",
+     "_is_known_therapeutic",
+     "_is_low_precision_token_alias",
+     "_is_low_severity_additive",
+     "_is_mass_unit",
+     "_is_negated_match_phrase",
+     "_is_provided_marker_form",
+     "_is_recognized_non_scorable",
+     "_is_recorded_source",
+     "_is_reviewed_context_override_match",
+     "_is_reviewed_same_identity_alias_match",
+     "_is_short_acronym_alias",
+     "_is_single_child_wrapper_parent",
+     "_is_source_descriptor_form",
+     "_is_source_material_descriptor",
+     "_is_specific_form_match",
+     "_is_standardization_marker_token",
+     "_is_unresolved_source_descriptor",
+     "_literal_short_acronym_match",
+     "_mark_cleaner_contract_fallback",
+     "_mark_parent_total_rows",
+     "_marker_amount_for_threshold_unit",
+     "_match_multi_form",
+     "_match_quality_map",
+     "_match_quality_map_impl",
+     "_merge_blend_evidence",
+     "_merge_evidence_batch_traceability",
+     "_merge_evidence_third_party_programs",
+     "_merge_standardized_botanicals",
+     "_missing_cleaner_contract_fields",
+     "_nested_daily_value_nutrient_owners",
+     "_norm_form_name",
+     "_normalize_company_name",
+     "_normalize_exact_text",
+     "_normalize_exclusion_text",
+     "_normalize_form_factor",
+     "_normalize_interaction_db_key",
+     "_normalize_serving_unit_label",
+     "_normalize_source_token_text",
+     "_normalize_text",
+     "_normalize_threshold_unit",
+     "_normalize_unit_for_signal",
+     "_parent_identity_names",
+     "_parse_allergen_statement",
+     "_parse_cfu_text_count",
+     "_parse_dosage_from_directions",
+     "_parse_single_form",
+     "_physical_state_description",
+     "_preserve_cleaner_botanical_canonical",
+     "_preserve_cleaner_safety_canonical",
+     "_primary_active_ingredients_for_enrichment",
+     "_probiotic_composition_share_owners",
+     "_product_context_branded_token_for_ingredient",
+     "_product_context_iqm_match_reason",
+     "_project_repaired_identity_to_active_row",
+     "_project_scoring_fields",
+     "_quality_match_identity_confidence",
+     "_quality_match_scoring_canonical",
+     "_rda_dose_lineage",
+     "_rda_source_label_key",
+     "_read_form_in_row_notes",
+     "_recognition_blocks_scoring",
+     "_record_form_curation_gaps",
+     "_resolve_iqd_identity",
+     "_resolve_verified_cert_programs",
+     "_restamp_recognized_non_scorable_identity",
+     "_restated_parent",
+     "_restates_identity",
+     "_reviewed_same_identity_parent_for_label",
+     "_route_non_scorable_iqd_row",
+     "_row_form_ids",
+     "_row_form_match_status",
+     "_row_unii_is_iqm_parent_unii",
+     "_same_identity_unit_key",
+     "_scan_label_for_standardization",
+     "_select_canonical_serving",
+     "_serving_units_to_servings",
+     "_should_keep_from_prefixed_form_as_actual",
+     "_should_promote_to_scorable",
+     "_should_skip_from_scoring",
+     "_source_owned_active_ingredients_for_enrichment",
+     "_specific_form_in_parent",
+     "_stamp_iqd_identity",
+     "_standardization_marker_names",
+     "_statement_cfu_per_serving",
+     "_structural_parent_total_row_ids",
+     "_synthesize_ingredients_from_name",
+     "_tag_fallback_decision",
+     "_to_float_safe",
+     "_token_bounded_match",
+     "_token_is_latin_source_descriptor",
+     "_token_match_has_required_context",
+     "_top_manufacturer_country",
+     "_track_unmapped",
+     "_ul_exposure_basis",
+     "_ul_scope_form_name_keys",
+     "_ul_scoped_form_name_keys",
+     "_ul_scoped_form_uniis",
+     "_validate_export_contract_fields",
+     "apply_taxonomy_projection",
+     "validate_product"
+    ],
+    "closure_methods": 271,
+    "exclusive_helpers": [],
+    "exclusive_loc": 0,
+    "transitive_module_globals": [
+     "BOTANICAL_CANONICAL_SOURCE_DBS",
+     "IQM_CANONICAL_CROSS_PARENT_ALLOWLIST",
+     "SupplementEnricherV3",
+     "_ACTIVITY_UNIT_CANONICALS",
+     "_CARRIER_OIL_PARENT_CATEGORIES",
+     "_CLEANER_MATCH_METHOD_MAP",
+     "_COUNTER_ION_SALT_RE",
+     "_DEFINED_NUTRIENT_PARENT_CATEGORIES",
+     "_FOLIC_ACID_ADULT_UL_MCG",
+     "_FOLIC_ACID_UNII",
+     "_GUARANTEE_UNIT_SPLIT_RE",
+     "_NON_PROBIOTIC_POTENCY_SUBJECT_RE",
+     "_NON_UL_ACTIVITY_UNITS",
+     "_NON_UL_BOTANICAL_CANONICALS",
+     "_NON_UL_BOTANICAL_QUANTITY_UNITS",
+     "_NON_UL_PROBIOTIC_QUANTITY_UNITS",
+     "_PREPARATION_WORDS",
+     "_RAW_CHILD_ROW",
+     "_RDA_REFERENCE_PROFILE",
+     "_SOURCE_CLASS_FORM_CATEGORIES",
+     "_SOURCE_DESCRIPTOR_FORM_CATEGORIES",
+     "_SOURCE_DESCRIPTOR_FORM_PREFIXES",
+     "_VITAMIN_A_PREFORMED_ADULT_UL_MCG_RAE",
+     "_VITAMIN_E_ADULT_UL_MG",
+     "_VITAMIN_E_NATURAL_MG_PER_IU",
+     "_compute_probiotic_confidence_hybrid",
+     "_derive_clinical_support_level",
+     "_explicit_mixed_vitamin_a_preformed_fraction",
+     "_free_from_clause_spans",
+     "_has_no_official_ul_reference",
+     "_mixed_vitamin_a_total_mcg_rae",
+     "_net_contents_texts",
+     "_normalize_parent_blend_mg",
+     "_normalize_unii",
+     "_probiotic_research_presentation",
+     "_rda_mass_unit_key",
+     "_unknown_folate_ul_screening"
+    ],
+    "transitive_reads": [
+     "ALLERGEN_PRESENCE_PRIORITY",
+     "CFU_EQUIVALENT_PATTERNS",
+     "COMPATIBLE_SCORING_VERSIONS",
+     "EMPTY_ENRICHMENT_SCHEMA",
+     "EXPORT_REQUIRED_IQD_FIELDS",
+     "HIGH_CONTAMINATION_RISK_CATEGORIES",
+     "SODIUM_THRESHOLDS",
+     "SUGAR_THRESHOLDS",
+     "SURVIVABILITY_BRAND_MARKERS",
+     "VERSION",
+     "WORD_TO_NUM",
+     "_BCAA_EVIDENCE_CANONICALS",
+     "_CLEANER_CONTRACT_FIELDS",
+     "_EQUIVALENT_BASE_MASS_UNITS",
+     "_HIGH_REG_COUNTRIES",
+     "_IU_UNIT_ALIASES",
+     "_LABEL_ASSERTED_B4A_PROGRAMS",
+     "_LABEL_ASSERTED_OMEGA_ONLY_PROGRAMS",
+     "_LATIN_GENUS_NAMES",
+     "_MANUFACTURER_CERT_PATTERNS",
+     "_MASS_FACTORS_MG",
+     "_NAME_FALLBACK_BLOCK_SUFFIXES",
+     "_NAME_FALLBACK_PATTERNS",
+     "_REGEX_CACHE_LIMIT",
+     "_SOURCE_MATERIAL_TERMS",
+     "_SOURCE_WORD_TOKENS",
+     "_STANDARDIZATION_MARKER_TERMS",
+     "_STATEMENT_CFU_BASIS",
+     "_botanical_source_identities",
+     "_clinical_study_index_source",
+     "_clinical_study_key_index",
+     "_clinical_study_norm_index",
+     "_color_context_pattern",
+     "_inactive_ingredient_resolver",
+     "_iqm_exact_index",
+     "_iqm_norm_index",
+     "_nonscorable_index",
+     "_nonscorable_unii_index",
+     "_rda_reference_stamp",
+     "_standardized_botanical_iqm_parents",
+     "blend_detector",
+     "company_fuzzy_threshold",
+     "compiled_patterns",
+     "config",
+     "databases",
+     "dosage_normalizer",
+     "logger",
+     "rda_calculator",
+     "reference_versions",
+     "unit_converter"
+    ],
+    "transitive_writes": [
+     "_ambiguity_warning_count",
+     "_canonical_identity_databases",
+     "_canonical_identity_registry",
+     "_canonical_registry_id_cache",
+     "_cert_registry_cache",
+     "_form_fallback_details",
+     "_hyphen_space_pattern_cache",
+     "_identity_parent_descendants",
+     "_identity_parent_quality_map",
+     "_identity_parent_relationship_document",
+     "_last_delivery_data",
+     "_low_precision_token_alias_cache",
+     "_marker_names_cache",
+     "_match_quality_cache",
+     "_parent_fallback_details",
+     "_parent_fallback_info_count",
+     "_product_text_cache",
+     "_product_text_cache_enabled",
+     "_product_text_lower_cache",
+     "_quality_parent_context_index_cache",
+     "_rda_ul_warning_count",
+     "_regex_pattern_cache",
+     "_safe_token_alias_cache",
+     "_short_acronym_alias_cache",
+     "_token_bounded_pattern_cache",
+     "_top_mfr_country_cache",
+     "match_counters",
+     "unmapped_tracker"
+    ]
+   }
+  },
+  "shared_helper_counts": {
+   "_build_match_ledger": {
+    "_check_banned_substances": 1,
+    "_collect_absorption_data": 1,
+    "_collect_certification_data": 1,
+    "_collect_compliance_data": 1,
+    "_collect_contaminant_data": 1,
+    "_collect_evidence_data": 1,
+    "_collect_formulation_data": 1,
+    "_collect_ingredient_quality_data": 1,
+    "_collect_manufacturer_cert_signals": 1,
+    "_collect_manufacturer_data": 1,
+    "_collect_product_scoring_evidence": 1,
+    "_collect_proprietary_data": 1,
+    "_collect_rda_ul_data": 1,
+    "_collect_special_use_flags": 1,
+    "_collect_standardized_botanicals": 1,
+    "_collect_synergy_data": 1,
+    "_match_quality_map": 1,
+    "_match_quality_map_impl": 1,
+    "apply_taxonomy_projection": 1,
+    "enrich_product": 2
+   },
+   "_check_banned_substances": {
+    "_build_match_ledger": 1,
+    "_collect_absorption_data": 1,
+    "_collect_certification_data": 1,
+    "_collect_compliance_data": 18,
+    "_collect_contaminant_data": 18,
+    "_collect_evidence_data": 1,
+    "_collect_formulation_data": 1,
+    "_collect_ingredient_quality_data": 1,
+    "_collect_manufacturer_cert_signals": 1,
+    "_collect_manufacturer_data": 1,
+    "_collect_product_scoring_evidence": 1,
+    "_collect_proprietary_data": 1,
+    "_collect_rda_ul_data": 1,
+    "_collect_special_use_flags": 1,
+    "_collect_standardized_botanicals": 1,
+    "_collect_synergy_data": 1,
+    "_match_quality_map": 1,
+    "_match_quality_map_impl": 1,
+    "apply_taxonomy_projection": 1,
+    "enrich_product": 18
+   },
+   "_collect_absorption_data": {
+    "_build_match_ledger": 1,
+    "_check_banned_substances": 1,
+    "_collect_certification_data": 2,
+    "_collect_compliance_data": 2,
+    "_collect_contaminant_data": 2,
+    "_collect_delivery_data": 1,
+    "_collect_evidence_data": 6,
+    "_collect_formulation_data": 7,
+    "_collect_ingredient_quality_data": 2,
+    "_collect_manufacturer_cert_signals": 2,
+    "_collect_manufacturer_data": 2,
+    "_collect_probiotic_data": 1,
+    "_collect_product_scoring_evidence": 1,
+    "_collect_proprietary_data": 1,
+    "_collect_rda_ul_data": 5,
+    "_collect_special_use_flags": 1,
+    "_collect_standardized_botanicals": 7,
+    "_collect_synergy_data": 6,
+    "_match_quality_map": 1,
+    "_match_quality_map_impl": 1,
+    "apply_taxonomy_projection": 1,
+    "enrich_product": 8
+   },
+   "_collect_bonus_features": {
+    "_collect_certification_data": 2,
+    "_collect_compliance_data": 2,
+    "_collect_evidence_data": 2,
+    "_collect_formulation_data": 2,
+    "_collect_ingredient_quality_data": 2,
+    "_collect_manufacturer_data": 3,
+    "_collect_probiotic_data": 1,
+    "_collect_product_signals": 2,
+    "_collect_standardized_botanicals": 2,
+    "enrich_product": 3
+   },
+   "_collect_certification_data": {
+    "_build_match_ledger": 1,
+    "_check_banned_substances": 1,
+    "_collect_absorption_data": 2,
+    "_collect_bonus_features": 2,
+    "_collect_claims_from_rules_db": 6,
+    "_collect_compliance_data": 10,
+    "_collect_contaminant_data": 2,
+    "_collect_evidence_data": 3,
+    "_collect_formulation_data": 10,
+    "_collect_gmp_data": 1,
+    "_collect_ingredient_quality_data": 3,
+    "_collect_manufacturer_cert_signals": 7,
+    "_collect_manufacturer_data": 8,
+    "_collect_organic_data": 6,
+    "_collect_probiotic_data": 1,
+    "_collect_product_scoring_evidence": 1,
+    "_collect_product_signals": 2,
+    "_collect_proprietary_data": 1,
+    "_collect_rda_ul_data": 1,
+    "_collect_special_use_flags": 1,
+    "_collect_standardized_botanicals": 4,
+    "_collect_synergy_data": 1,
+    "_collect_traceability_data": 1,
+    "_match_quality_map": 1,
+    "_match_quality_map_impl": 1,
+    "apply_taxonomy_projection": 1,
+    "enrich_product": 23
+   },
+   "_collect_claims_from_rules_db": {
+    "_collect_certification_data": 6,
+    "_collect_compliance_data": 6,
+    "_collect_formulation_data": 6,
+    "_collect_organic_data": 6,
+    "enrich_product": 6
+   },
+   "_collect_clinical_aliases": {
+    "_collect_evidence_data": 1,
+    "enrich_product": 1
+   },
+   "_collect_compliance_data": {
+    "_build_match_ledger": 1,
+    "_check_banned_substances": 18,
+    "_collect_absorption_data": 2,
+    "_collect_bonus_features": 2,
+    "_collect_certification_data": 10,
+    "_collect_claims_from_rules_db": 6,
+    "_collect_contaminant_data": 30,
+    "_collect_evidence_data": 4,
+    "_collect_formulation_data": 10,
+    "_collect_ingredient_quality_data": 3,
+    "_collect_manufacturer_cert_signals": 2,
+    "_collect_manufacturer_data": 4,
+    "_collect_organic_data": 6,
+    "_collect_probiotic_data": 1,
+    "_collect_product_scoring_evidence": 1,
+    "_collect_product_signals": 2,
+    "_collect_proprietary_data": 1,
+    "_collect_rda_ul_data": 1,
+    "_collect_special_use_flags": 1,
+    "_collect_standardized_botanicals": 4,
+    "_collect_synergy_data": 1,
+    "_match_quality_map": 1,
+    "_match_quality_map_impl": 1,
+    "apply_taxonomy_projection": 1,
+    "enrich_product": 40
+   },
+   "_collect_contaminant_data": {
+    "_build_match_ledger": 1,
+    "_check_banned_substances": 18,
+    "_collect_absorption_data": 2,
+    "_collect_certification_data": 2,
+    "_collect_compliance_data": 30,
+    "_collect_evidence_data": 1,
+    "_collect_formulation_data": 2,
+    "_collect_ingredient_quality_data": 1,
+    "_collect_manufacturer_cert_signals": 2,
+    "_collect_manufacturer_data": 2,
+    "_collect_product_scoring_evidence": 1,
+    "_collect_proprietary_data": 1,
+    "_collect_rda_ul_data": 1,
+    "_collect_special_use_flags": 1,
+    "_collect_standardized_botanicals": 2,
+    "_collect_synergy_data": 1,
+    "_match_quality_map": 1,
+    "_match_quality_map_impl": 1,
+    "apply_taxonomy_projection": 1,
+    "enrich_product": 30
+   },
+   "_collect_delivery_data": {
+    "_collect_absorption_data": 1,
+    "_collect_evidence_data": 1,
+    "_collect_formulation_data": 1,
+    "_collect_ingredient_quality_data": 1,
+    "_collect_probiotic_data": 1,
+    "_collect_rda_ul_data": 1,
+    "_collect_serving_basis_data": 1,
+    "_collect_standardized_botanicals": 1,
+    "_collect_synergy_data": 1,
+    "enrich_product": 3
+   },
+   "_collect_dietary_sensitivity_data": {
+    "_collect_formulation_data": 4,
+    "_collect_interaction_profile": 4,
+    "_collect_synergy_data": 4,
+    "enrich_product": 13
+   },
+   "_collect_evidence_data": {
+    "_build_match_ledger": 1,
+    "_check_banned_substances": 1,
+    "_collect_absorption_data": 6,
+    "_collect_bonus_features": 2,
+    "_collect_certification_data": 3,
+    "_collect_clinical_aliases": 1,
+    "_collect_compliance_data": 4,
+    "_collect_contaminant_data": 1,
+    "_collect_delivery_data": 1,
+    "_collect_formulation_data": 8,
+    "_collect_ingredient_quality_data": 7,
+    "_collect_manufacturer_cert_signals": 1,
+    "_collect_manufacturer_data": 3,
+    "_collect_probiotic_data": 2,
+    "_collect_product_scoring_evidence": 2,
+    "_collect_product_signals": 2,
+    "_collect_proprietary_data": 2,
+    "_collect_rda_ul_data": 7,
+    "_collect_special_use_flags": 1,
+    "_collect_standardized_botanicals": 8,
+    "_collect_synergy_data": 6,
+    "_match_quality_map": 2,
+    "_match_quality_map_impl": 2,
+    "apply_taxonomy_projection": 2,
+    "enrich_product": 21
+   },
+   "_collect_formulation_data": {
+    "_build_match_ledger": 1,
+    "_check_banned_substances": 1,
+    "_collect_absorption_data": 7,
+    "_collect_bonus_features": 2,
+    "_collect_certification_data": 10,
+    "_collect_claims_from_rules_db": 6,
+    "_collect_compliance_data": 10,
+    "_collect_contaminant_data": 2,
+    "_collect_delivery_data": 1,
+    "_collect_dietary_sensitivity_data": 4,
+    "_collect_evidence_data": 8,
+    "_collect_ingredient_quality_data": 4,
+    "_collect_interaction_profile": 8,
+    "_collect_manufacturer_cert_signals": 2,
+    "_collect_manufacturer_data": 4,
+    "_collect_organic_data": 7,
+    "_collect_probiotic_data": 2,
+    "_collect_product_scoring_evidence": 1,
+    "_collect_product_signals": 2,
+    "_collect_proprietary_data": 1,
+    "_collect_rda_ul_data": 6,
+    "_collect_special_use_flags": 1,
+    "_collect_standardized_botanicals": 16,
+    "_collect_synergy_data": 15,
+    "_match_quality_map": 1,
+    "_match_quality_map_impl": 1,
+    "apply_taxonomy_projection": 1,
+    "enrich_product": 33
+   },
+   "_collect_gmp_data": {
+    "_collect_certification_data": 1,
+    "enrich_product": 1
+   },
+   "_collect_ingredient_quality_data": {
+    "_build_match_ledger": 1,
+    "_check_banned_substances": 1,
+    "_collect_absorption_data": 2,
+    "_collect_bonus_features": 2,
+    "_collect_certification_data": 3,
+    "_collect_compliance_data": 3,
+    "_collect_contaminant_data": 1,
+    "_collect_delivery_data": 1,
+    "_collect_evidence_data": 7,
+    "_collect_formulation_data": 4,
+    "_collect_interaction_profile": 1,
+    "_collect_manufacturer_cert_signals": 1,
+    "_collect_manufacturer_data": 3,
+    "_collect_probiotic_data": 3,
+    "_collect_product_scoring_evidence": 37,
+    "_collect_product_signals": 2,
+    "_collect_proprietary_data": 35,
+    "_collect_rda_ul_data": 8,
+    "_collect_special_use_flags": 1,
+    "_collect_standardized_botanicals": 4,
+    "_collect_synergy_data": 2,
+    "_match_quality_map": 34,
+    "_match_quality_map_impl": 34,
+    "apply_taxonomy_projection": 37,
+    "enrich_product": 99
+   },
+   "_collect_interaction_profile": {
+    "_collect_dietary_sensitivity_data": 4,
+    "_collect_formulation_data": 8,
+    "_collect_ingredient_quality_data": 1,
+    "_collect_profile_context": 1,
+    "_collect_rda_ul_data": 1,
+    "_collect_standardized_botanicals": 1,
+    "_collect_synergy_data": 7,
+    "enrich_product": 30
+   },
+   "_collect_manufacturer_cert_signals": {
+    "_build_match_ledger": 1,
+    "_check_banned_substances": 1,
+    "_collect_absorption_data": 2,
+    "_collect_certification_data": 7,
+    "_collect_compliance_data": 2,
+    "_collect_contaminant_data": 2,
+    "_collect_evidence_data": 1,
+    "_collect_formulation_data": 2,
+    "_collect_ingredient_quality_data": 1,
+    "_collect_manufacturer_data": 6,
+    "_collect_product_scoring_evidence": 1,
+    "_collect_proprietary_data": 1,
+    "_collect_rda_ul_data": 1,
+    "_collect_special_use_flags": 1,
+    "_collect_standardized_botanicals": 2,
+    "_collect_synergy_data": 1,
+    "_match_quality_map": 1,
+    "_match_quality_map_impl": 1,
+    "apply_taxonomy_projection": 1,
+    "enrich_product": 7
+   },
+   "_collect_manufacturer_data": {
+    "_build_match_ledger": 1,
+    "_check_banned_substances": 1,
+    "_collect_absorption_data": 2,
+    "_collect_bonus_features": 3,
+    "_collect_certification_data": 8,
+    "_collect_compliance_data": 4,
+    "_collect_contaminant_data": 2,
+    "_collect_evidence_data": 3,
+    "_collect_formulation_data": 4,
+    "_collect_ingredient_quality_data": 3,
+    "_collect_manufacturer_cert_signals": 6,
+    "_collect_probiotic_data": 1,
+    "_collect_product_scoring_evidence": 1,
+    "_collect_product_signals": 2,
+    "_collect_proprietary_data": 1,
+    "_collect_rda_ul_data": 1,
+    "_collect_special_use_flags": 1,
+    "_collect_standardized_botanicals": 4,
+    "_collect_synergy_data": 1,
+    "_match_quality_map": 1,
+    "_match_quality_map_impl": 1,
+    "apply_taxonomy_projection": 1,
+    "enrich_product": 13
+   },
+   "_collect_nutrition_summary": {
+    "enrich_product": 1
+   },
+   "_collect_organic_data": {
+    "_collect_certification_data": 6,
+    "_collect_claims_from_rules_db": 6,
+    "_collect_compliance_data": 6,
+    "_collect_formulation_data": 7,
+    "enrich_product": 7
+   },
+   "_collect_probiotic_data": {
+    "_collect_absorption_data": 1,
+    "_collect_bonus_features": 1,
+    "_collect_certification_data": 1,
+    "_collect_compliance_data": 1,
+    "_collect_delivery_data": 1,
+    "_collect_evidence_data": 2,
+    "_collect_formulation_data": 2,
+    "_collect_ingredient_quality_data": 3,
+    "_collect_manufacturer_data": 1,
+    "_collect_product_scoring_evidence": 3,
+    "_collect_product_signals": 1,
+    "_collect_rda_ul_data": 3,
+    "_collect_serving_basis_data": 2,
+    "_collect_standardized_botanicals": 2,
+    "_collect_synergy_data": 1,
+    "apply_taxonomy_projection": 3,
+    "enrich_product": 16
+   },
+   "_collect_product_scoring_classification": {
+    "apply_taxonomy_projection": 1,
+    "enrich_product": 1
+   },
+   "_collect_product_scoring_evidence": {
+    "_build_match_ledger": 1,
+    "_check_banned_substances": 1,
+    "_collect_absorption_data": 1,
+    "_collect_certification_data": 1,
+    "_collect_compliance_data": 1,
+    "_collect_contaminant_data": 1,
+    "_collect_evidence_data": 2,
+    "_collect_formulation_data": 1,
+    "_collect_ingredient_quality_data": 37,
+    "_collect_manufacturer_cert_signals": 1,
+    "_collect_manufacturer_data": 1,
+    "_collect_probiotic_data": 3,
+    "_collect_proprietary_data": 34,
+    "_collect_rda_ul_data": 4,
+    "_collect_special_use_flags": 1,
+    "_collect_standardized_botanicals": 1,
+    "_collect_synergy_data": 1,
+    "_match_quality_map": 34,
+    "_match_quality_map_impl": 34,
+    "apply_taxonomy_projection": 41,
+    "enrich_product": 41
+   },
+   "_collect_product_signals": {
+    "_collect_bonus_features": 2,
+    "_collect_certification_data": 2,
+    "_collect_compliance_data": 2,
+    "_collect_evidence_data": 2,
+    "_collect_formulation_data": 2,
+    "_collect_ingredient_quality_data": 2,
+    "_collect_manufacturer_data": 2,
+    "_collect_probiotic_data": 1,
+    "_collect_standardized_botanicals": 2,
+    "enrich_product": 4
+   },
+   "_collect_profile_context": {
+    "_collect_interaction_profile": 1,
+    "enrich_product": 1
+   },
+   "_collect_proprietary_data": {
+    "_build_match_ledger": 1,
+    "_check_banned_substances": 1,
+    "_collect_absorption_data": 1,
+    "_collect_certification_data": 1,
+    "_collect_compliance_data": 1,
+    "_collect_contaminant_data": 1,
+    "_collect_evidence_data": 2,
+    "_collect_formulation_data": 1,
+    "_collect_ingredient_quality_data": 35,
+    "_collect_manufacturer_cert_signals": 1,
+    "_collect_manufacturer_data": 1,
+    "_collect_product_scoring_evidence": 34,
+    "_collect_rda_ul_data": 4,
+    "_collect_special_use_flags": 1,
+    "_collect_standardized_botanicals": 1,
+    "_collect_synergy_data": 1,
+    "_match_quality_map": 34,
+    "_match_quality_map_impl": 34,
+    "apply_taxonomy_projection": 34,
+    "enrich_product": 37
+   },
+   "_collect_rda_ul_data": {
+    "_build_match_ledger": 1,
+    "_check_banned_substances": 1,
+    "_collect_absorption_data": 5,
+    "_collect_certification_data": 1,
+    "_collect_compliance_data": 1,
+    "_collect_contaminant_data": 1,
+    "_collect_delivery_data": 1,
+    "_collect_evidence_data": 7,
+    "_collect_formulation_data": 6,
+    "_collect_ingredient_quality_data": 8,
+    "_collect_interaction_profile": 1,
+    "_collect_manufacturer_cert_signals": 1,
+    "_collect_manufacturer_data": 1,
+    "_collect_probiotic_data": 3,
+    "_collect_product_scoring_evidence": 4,
+    "_collect_proprietary_data": 4,
+    "_collect_special_use_flags": 2,
+    "_collect_standardized_botanicals": 6,
+    "_collect_synergy_data": 5,
+    "_match_quality_map": 4,
+    "_match_quality_map_impl": 4,
+    "apply_taxonomy_projection": 4,
+    "enrich_product": 28
+   },
+   "_collect_serving_basis_data": {
+    "_collect_delivery_data": 1,
+    "_collect_probiotic_data": 2,
+    "enrich_product": 8
+   },
+   "_collect_special_use_flags": {
+    "_build_match_ledger": 1,
+    "_check_banned_substances": 1,
+    "_collect_absorption_data": 1,
+    "_collect_certification_data": 1,
+    "_collect_compliance_data": 1,
+    "_collect_contaminant_data": 1,
+    "_collect_evidence_data": 1,
+    "_collect_formulation_data": 1,
+    "_collect_ingredient_quality_data": 1,
+    "_collect_manufacturer_cert_signals": 1,
+    "_collect_manufacturer_data": 1,
+    "_collect_product_scoring_evidence": 1,
+    "_collect_proprietary_data": 1,
+    "_collect_rda_ul_data": 2,
+    "_collect_standardized_botanicals": 1,
+    "_collect_synergy_data": 1,
+    "_match_quality_map": 1,
+    "_match_quality_map_impl": 1,
+    "apply_taxonomy_projection": 1,
+    "enrich_product": 2
+   },
+   "_collect_standardized_botanicals": {
+    "_build_match_ledger": 1,
+    "_check_banned_substances": 1,
+    "_collect_absorption_data": 7,
+    "_collect_bonus_features": 2,
+    "_collect_certification_data": 4,
+    "_collect_compliance_data": 4,
+    "_collect_contaminant_data": 2,
+    "_collect_delivery_data": 1,
+    "_collect_evidence_data": 8,
+    "_collect_formulation_data": 16,
+    "_collect_ingredient_quality_data": 4,
+    "_collect_interaction_profile": 1,
+    "_collect_manufacturer_cert_signals": 2,
+    "_collect_manufacturer_data": 4,
+    "_collect_probiotic_data": 2,
+    "_collect_product_scoring_evidence": 1,
+    "_collect_product_signals": 2,
+    "_collect_proprietary_data": 1,
+    "_collect_rda_ul_data": 6,
+    "_collect_special_use_flags": 1,
+    "_collect_synergy_data": 6,
+    "_match_quality_map": 1,
+    "_match_quality_map_impl": 1,
+    "apply_taxonomy_projection": 1,
+    "enrich_product": 16
+   },
+   "_collect_synergy_data": {
+    "_build_match_ledger": 1,
+    "_check_banned_substances": 1,
+    "_collect_absorption_data": 6,
+    "_collect_certification_data": 1,
+    "_collect_compliance_data": 1,
+    "_collect_contaminant_data": 1,
+    "_collect_delivery_data": 1,
+    "_collect_dietary_sensitivity_data": 4,
+    "_collect_evidence_data": 6,
+    "_collect_formulation_data": 15,
+    "_collect_ingredient_quality_data": 2,
+    "_collect_interaction_profile": 7,
+    "_collect_manufacturer_cert_signals": 1,
+    "_collect_manufacturer_data": 1,
+    "_collect_probiotic_data": 1,
+    "_collect_product_scoring_evidence": 1,
+    "_collect_proprietary_data": 1,
+    "_collect_rda_ul_data": 5,
+    "_collect_special_use_flags": 1,
+    "_collect_standardized_botanicals": 6,
+    "_match_quality_map": 1,
+    "_match_quality_map_impl": 1,
+    "apply_taxonomy_projection": 1,
+    "enrich_product": 15
+   },
+   "_collect_traceability_data": {
+    "_collect_certification_data": 1,
+    "enrich_product": 1
+   },
+   "_enrich_display_ingredients": {
+    "enrich_product": 1
+   },
+   "_match_quality_map": {
+    "_build_match_ledger": 1,
+    "_check_banned_substances": 1,
+    "_collect_absorption_data": 1,
+    "_collect_certification_data": 1,
+    "_collect_compliance_data": 1,
+    "_collect_contaminant_data": 1,
+    "_collect_evidence_data": 2,
+    "_collect_formulation_data": 1,
+    "_collect_ingredient_quality_data": 34,
+    "_collect_manufacturer_cert_signals": 1,
+    "_collect_manufacturer_data": 1,
+    "_collect_product_scoring_evidence": 34,
+    "_collect_proprietary_data": 34,
+    "_collect_rda_ul_data": 4,
+    "_collect_special_use_flags": 1,
+    "_collect_standardized_botanicals": 1,
+    "_collect_synergy_data": 1,
+    "_match_quality_map_impl": 34,
+    "apply_taxonomy_projection": 34,
+    "enrich_product": 34
+   },
+   "_match_quality_map_impl": {
+    "_build_match_ledger": 1,
+    "_check_banned_substances": 1,
+    "_collect_absorption_data": 1,
+    "_collect_certification_data": 1,
+    "_collect_compliance_data": 1,
+    "_collect_contaminant_data": 1,
+    "_collect_evidence_data": 2,
+    "_collect_formulation_data": 1,
+    "_collect_ingredient_quality_data": 34,
+    "_collect_manufacturer_cert_signals": 1,
+    "_collect_manufacturer_data": 1,
+    "_collect_product_scoring_evidence": 34,
+    "_collect_proprietary_data": 34,
+    "_collect_rda_ul_data": 4,
+    "_collect_special_use_flags": 1,
+    "_collect_standardized_botanicals": 1,
+    "_collect_synergy_data": 1,
+    "_match_quality_map": 34,
+    "apply_taxonomy_projection": 34,
+    "enrich_product": 34
+   },
+   "_project_scoring_fields": {
+    "enrich_product": 1
+   },
+   "apply_taxonomy_projection": {
+    "_build_match_ledger": 1,
+    "_check_banned_substances": 1,
+    "_collect_absorption_data": 1,
+    "_collect_certification_data": 1,
+    "_collect_compliance_data": 1,
+    "_collect_contaminant_data": 1,
+    "_collect_evidence_data": 2,
+    "_collect_formulation_data": 1,
+    "_collect_ingredient_quality_data": 37,
+    "_collect_manufacturer_cert_signals": 1,
+    "_collect_manufacturer_data": 1,
+    "_collect_probiotic_data": 3,
+    "_collect_product_scoring_classification": 1,
+    "_collect_product_scoring_evidence": 41,
+    "_collect_proprietary_data": 34,
+    "_collect_rda_ul_data": 4,
+    "_collect_special_use_flags": 1,
+    "_collect_standardized_botanicals": 1,
+    "_collect_synergy_data": 1,
+    "_match_quality_map": 34,
+    "_match_quality_map_impl": 34,
+    "enrich_product": 44
+   },
+   "enrich_product": {
+    "_build_match_ledger": 2,
+    "_check_banned_substances": 18,
+    "_collect_absorption_data": 8,
+    "_collect_bonus_features": 3,
+    "_collect_certification_data": 23,
+    "_collect_claims_from_rules_db": 6,
+    "_collect_clinical_aliases": 1,
+    "_collect_compliance_data": 40,
+    "_collect_contaminant_data": 30,
+    "_collect_delivery_data": 3,
+    "_collect_dietary_sensitivity_data": 13,
+    "_collect_evidence_data": 21,
+    "_collect_formulation_data": 33,
+    "_collect_gmp_data": 1,
+    "_collect_ingredient_quality_data": 99,
+    "_collect_interaction_profile": 30,
+    "_collect_manufacturer_cert_signals": 7,
+    "_collect_manufacturer_data": 13,
+    "_collect_nutrition_summary": 1,
+    "_collect_organic_data": 7,
+    "_collect_probiotic_data": 16,
+    "_collect_product_scoring_classification": 1,
+    "_collect_product_scoring_evidence": 41,
+    "_collect_product_signals": 4,
+    "_collect_profile_context": 1,
+    "_collect_proprietary_data": 37,
+    "_collect_rda_ul_data": 28,
+    "_collect_serving_basis_data": 8,
+    "_collect_special_use_flags": 2,
+    "_collect_standardized_botanicals": 16,
+    "_collect_synergy_data": 15,
+    "_collect_traceability_data": 1,
+    "_enrich_display_ingredients": 1,
+    "_match_quality_map": 34,
+    "_match_quality_map_impl": 34,
+    "_project_scoring_fields": 1,
+    "apply_taxonomy_projection": 44
+   }
+  },
+  "summary": {
+   "peer_prefix": "_collect_",
+   "peers": 30,
+   "shared_core_helpers": [
+    "_active_ingredient_from_scoring_row",
+    "_base_comparison_unit",
+    "_brand_family_exact_match",
+    "_build_form_info_from_cleaned",
+    "_build_quality_parent_context_index",
+    "_check_claim_with_validation",
+    "_check_top_manufacturer",
+    "_collect_claims_from_rules_db",
+    "_convert_amount_to_target_unit",
+    "_convert_amount_to_target_unit_with_evidence",
+    "_convert_mass",
+    "_counter_ion_form",
+    "_deduplicate_evidence",
+    "_disclosed_unmapped_match",
+    "_dropped_label_forms",
+    "_exact_match",
+    "_excluded_text_reason",
+    "_extract_form_from_label",
+    "_extract_text_sources",
+    "_flatten_active_ingredients_for_analysis",
+    "_form_token_context",
+    "_fuzzy_company_match",
+    "_get_all_product_text",
+    "_get_context_snippet",
+    "_get_field_groups",
+    "_get_safe_text_field",
+    "_infer_preferred_parent_from_context_cached",
+    "_is_comparable_quantity_unit",
+    "_is_cross_class_source_form",
+    "_is_display_only_blend_scoring_row",
+    "_is_dsld_source_descriptor_form",
+    "_is_mass_unit",
+    "_is_provided_marker_form",
+    "_is_recorded_source",
+    "_is_source_descriptor_form",
+    "_is_source_material_descriptor",
+    "_is_specific_form_match",
+    "_is_standardization_marker_token",
+    "_match_multi_form",
+    "_match_quality_map",
+    "_match_quality_map_impl",
+    "_norm_form_name",
+    "_normalize_company_name",
+    "_normalize_exact_text",
+    "_normalize_exclusion_text",
+    "_normalize_source_token_text",
+    "_normalize_text",
+    "_normalize_threshold_unit",
+    "_normalize_unit_for_signal",
+    "_parent_identity_names",
+    "_parse_single_form",
+    "_primary_active_ingredients_for_enrichment",
+    "_read_form_in_row_notes",
+    "_restated_parent",
+    "_restates_identity",
+    "_reviewed_same_identity_parent_for_label",
+    "_should_keep_from_prefixed_form_as_actual",
+    "_source_owned_active_ingredients_for_enrichment",
+    "_specific_form_in_parent",
+    "_standardization_marker_names",
+    "_to_float_safe",
+    "_token_is_latin_source_descriptor"
+   ],
+   "shared_core_loc": 4134,
+   "union_helper_loc": 14012,
+   "union_helpers": 240
+  }
+ },
+ "methods": 291,
+ "path": "scripts/enrich_supplements_v3.py",
+ "selected_methods": {
+  "_build_match_ledger": {
+   "calls": [
+    "_normalize_text"
+   ],
+   "length": 371,
+   "line": 24455,
+   "module_globals": [
+    "_CLEANER_MATCH_METHOD_MAP"
+   ],
+   "params": 2,
+   "reads": [
+    "company_fuzzy_threshold"
+   ],
+   "writes": []
+  },
+  "_check_banned_substances": {
+   "calls": [
+    "_allowlist_match",
+    "_banned_form_evidence_values",
+    "_banned_label_evidence_hits",
+    "_check_additive_match",
+    "_denylist_match",
+    "_derive_banned_severity",
+    "_filter_safe_token_aliases",
+    "_is_negated_match_phrase",
+    "_token_bounded_match",
+    "_token_match_has_required_context"
+   ],
+   "length": 352,
+   "line": 12142,
+   "module_globals": [],
+   "params": 2,
+   "reads": [
+    "databases"
+   ],
+   "writes": []
+  },
+  "_collect_absorption_data": {
+   "calls": [
+    "_exact_match",
+    "_normalize_text",
+    "_primary_active_ingredients_for_enrichment"
+   ],
+   "length": 134,
+   "line": 10957,
+   "module_globals": [],
+   "params": 1,
+   "reads": [
+    "databases"
+   ],
+   "writes": []
+  },
+  "_collect_bonus_features": {
+   "calls": [
+    "_get_all_product_text"
+   ],
+   "length": 19,
+   "line": 16335,
+   "module_globals": [],
+   "params": 1,
+   "reads": [
+    "compiled_patterns"
+   ],
+   "writes": []
+  },
+  "_collect_certification_data": {
+   "calls": [
+    "_assess_category_contamination_risk",
+    "_build_verification_assessment",
+    "_collect_claims_from_rules_db",
+    "_collect_gmp_data",
+    "_collect_manufacturer_cert_signals",
+    "_collect_traceability_data",
+    "_get_all_product_text",
+    "_merge_evidence_batch_traceability",
+    "_merge_evidence_third_party_programs",
+    "_resolve_verified_cert_programs"
+   ],
+   "length": 90,
+   "line": 13717,
+   "module_globals": [],
+   "params": 1,
+   "reads": [
+    "reference_versions"
+   ],
+   "writes": []
+  },
+  "_collect_claims_from_rules_db": {
+   "calls": [
+    "_check_claim_with_validation",
+    "_deduplicate_evidence",
+    "_extract_text_sources",
+    "_get_context_snippet",
+    "_get_field_groups"
+   ],
+   "length": 54,
+   "line": 13491,
+   "module_globals": [],
+   "params": 2,
+   "reads": [
+    "databases"
+   ],
+   "writes": []
+  },
+  "_collect_clinical_aliases": {
+   "calls": [],
+   "length": 17,
+   "line": 2841,
+   "module_globals": [],
+   "params": 1,
+   "reads": [],
+   "writes": []
+  },
+  "_collect_compliance_data": {
+   "calls": [
+    "_collect_claims_from_rules_db",
+    "_collect_contaminant_data",
+    "_get_all_product_text_lower"
+   ],
+   "length": 194,
+   "line": 13114,
+   "module_globals": [],
+   "params": 2,
+   "reads": [
+    "reference_versions"
+   ],
+   "writes": []
+  },
+  "_collect_contaminant_data": {
+   "calls": [
+    "_attach_banned_safety_flags_to_ingredients",
+    "_check_allergens",
+    "_check_banned_substances",
+    "_check_harmful_additives"
+   ],
+   "length": 29,
+   "line": 12060,
+   "module_globals": [],
+   "params": 1,
+   "reads": [],
+   "writes": []
+  },
+  "_collect_delivery_data": {
+   "calls": [
+    "_flatten_active_ingredients_for_analysis",
+    "_physical_state_description"
+   ],
+   "length": 109,
+   "line": 10847,
+   "module_globals": [
+    "_net_contents_texts"
+   ],
+   "params": 1,
+   "reads": [
+    "databases"
+   ],
+   "writes": [
+    "_last_delivery_data"
+   ]
+  },
+  "_collect_dietary_sensitivity_data": {
+   "calls": [
+    "_analyze_sodium_content",
+    "_analyze_sugar_content",
+    "_check_problematic_sweeteners",
+    "_generate_dietary_warnings"
+   ],
+   "length": 42,
+   "line": 18084,
+   "module_globals": [],
+   "params": 1,
+   "reads": [],
+   "writes": []
+  },
+  "_collect_evidence_data": {
+   "calls": [
+    "_brand_mentioned",
+    "_candidate_clinical_studies",
+    "_check_unsubstantiated_claims",
+    "_clinical_study_match",
+    "_clinical_ui_evidence_scope",
+    "_collect_clinical_aliases",
+    "_evidence_subject_ingredients_for_enrichment",
+    "_get_all_product_text",
+    "_has_bcaa_mixture_evidence_identity",
+    "_is_source_descriptor_form",
+    "_normalize_text",
+    "_product_context_branded_token_for_ingredient"
+   ],
+   "length": 416,
+   "line": 15450,
+   "module_globals": [],
+   "params": 2,
+   "reads": [
+    "_BCAA_EVIDENCE_CANONICALS",
+    "databases"
+   ],
+   "writes": []
+  },
+  "_collect_formulation_data": {
+   "calls": [
+    "_collect_organic_data",
+    "_collect_standardized_botanicals",
+    "_collect_synergy_data",
+    "_get_all_product_text"
+   ],
+   "length": 14,
+   "line": 11092,
+   "module_globals": [],
+   "params": 1,
+   "reads": [],
+   "writes": []
+  },
+  "_collect_gmp_data": {
+   "calls": [],
+   "length": 13,
+   "line": 14185,
+   "module_globals": [],
+   "params": 1,
+   "reads": [
+    "compiled_patterns"
+   ],
+   "writes": []
+  },
+  "_collect_ingredient_quality_data": {
+   "calls": [
+    "_append_unique_iqd_row",
+    "_apply_absorption_enhancer_demotion",
+    "_apply_context_canonical_override_match",
+    "_apply_curcumin_c3_bioperine_pairing_upgrade",
+    "_apply_product_level_omega_form_disclosure",
+    "_botanical_source_identity",
+    "_build_quality_entry",
+    "_cleaner_skip_reason",
+    "_compute_blend_flags",
+    "_compute_delivers_markers",
+    "_compute_excipient_flags",
+    "_flatten_active_ingredients_for_analysis",
+    "_get_all_product_text",
+    "_has_valid_therapeutic_dose",
+    "_infer_category_from_name",
+    "_iqd_row_has_dose_evidence",
+    "_is_blocked_botanical_source_marker_match",
+    "_is_contract_scorable_iqd_row",
+    "_is_generic_unspecified_omega3",
+    "_is_recognized_non_scorable",
+    "_is_source_descriptor_form",
+    "_mark_cleaner_contract_fallback",
+    "_mark_parent_total_rows",
+    "_match_quality_map",
+    "_missing_cleaner_contract_fields",
+    "_normalize_text",
+    "_normalize_unit_for_signal",
+    "_preserve_cleaner_botanical_canonical",
+    "_preserve_cleaner_safety_canonical",
+    "_product_context_branded_token_for_ingredient",
+    "_product_context_iqm_match_reason",
+    "_project_repaired_identity_to_active_row",
+    "_resolve_iqd_identity",
+    "_restamp_recognized_non_scorable_identity",
+    "_route_non_scorable_iqd_row",
+    "_should_promote_to_scorable",
+    "_should_skip_from_scoring",
+    "_stamp_iqd_identity",
+    "_structural_parent_total_row_ids",
+    "_tag_fallback_decision",
+    "_track_unmapped"
+   ],
+   "length": 940,
+   "line": 4640,
+   "module_globals": [],
+   "params": 1,
+   "reads": [
+    "databases",
+    "logger"
+   ],
+   "writes": []
+  },
+  "_collect_interaction_profile": {
+   "calls": [
+    "_collect_profile_context",
+    "_derive_interaction_subject_ref",
+    "_derived_marker_interaction_rows",
+    "_empty_interaction_profile",
+    "_evaluate_dose_thresholds_for_target",
+    "_evaluate_min_effective_dose",
+    "_evaluate_min_effective_dose_decision",
+    "_floor_status_for_emission",
+    "_interaction_row_key",
+    "_interaction_rule_applies",
+    "_interaction_severity_weight_map",
+    "_is_interaction_label_row",
+    "_normalize_interaction_db_key"
+   ],
+   "length": 531,
+   "line": 20086,
+   "module_globals": [],
+   "params": 2,
+   "reads": [
+    "databases"
+   ],
+   "writes": []
+  },
+  "_collect_manufacturer_cert_signals": {
+   "calls": [
+    "_check_top_manufacturer",
+    "_normalize_text"
+   ],
+   "length": 64,
+   "line": 13985,
+   "module_globals": [],
+   "params": 1,
+   "reads": [
+    "_MANUFACTURER_CERT_PATTERNS",
+    "databases"
+   ],
+   "writes": []
+  },
+  "_collect_manufacturer_data": {
+   "calls": [
+    "_check_top_manufacturer",
+    "_check_violations",
+    "_collect_bonus_features",
+    "_extract_country"
+   ],
+   "length": 26,
+   "line": 15920,
+   "module_globals": [],
+   "params": 1,
+   "reads": [],
+   "writes": []
+  },
+  "_collect_nutrition_summary": {
+   "calls": [],
+   "length": 63,
+   "line": 18127,
+   "module_globals": [],
+   "params": 1,
+   "reads": [],
+   "writes": []
+  },
+  "_collect_organic_data": {
+   "calls": [
+    "_collect_claims_from_rules_db"
+   ],
+   "length": 46,
+   "line": 11107,
+   "module_globals": [],
+   "params": 2,
+   "reads": [
+    "compiled_patterns",
+    "reference_versions"
+   ],
+   "writes": []
+  },
+  "_collect_probiotic_data": {
+   "calls": [
+    "_extract_cfu",
+    "_extract_guarantee_type",
+    "_flatten_active_ingredients_for_analysis",
+    "_get_safe_text_field",
+    "_has_non_probiotic_active_for_cfu_evidence",
+    "_is_cfu_equivalent_unit",
+    "_parse_cfu_text_count",
+    "_statement_cfu_per_serving"
+   ],
+   "length": 853,
+   "line": 16382,
+   "module_globals": [
+    "_compute_probiotic_confidence_hybrid",
+    "_derive_clinical_support_level",
+    "_net_contents_texts",
+    "_probiotic_research_presentation"
+   ],
+   "params": 1,
+   "reads": [
+    "SURVIVABILITY_BRAND_MARKERS",
+    "databases",
+    "logger"
+   ],
+   "writes": []
+  },
+  "_collect_product_scoring_classification": {
+   "calls": [],
+   "length": 10,
+   "line": 17551,
+   "module_globals": [],
+   "params": 1,
+   "reads": [],
+   "writes": []
+  },
+  "_collect_product_scoring_evidence": {
+   "calls": [
+    "_anchor_form_reading",
+    "_has_non_probiotic_active_for_cfu_evidence"
+   ],
+   "length": 130,
+   "line": 17262,
+   "module_globals": [],
+   "params": 1,
+   "reads": [],
+   "writes": []
+  },
+  "_collect_product_signals": {
+   "calls": [
+    "_extract_strain_ids_from_product",
+    "_get_all_product_text"
+   ],
+   "length": 58,
+   "line": 15129,
+   "module_globals": [],
+   "params": 5,
+   "reads": [],
+   "writes": []
+  },
+  "_collect_profile_context": {
+   "calls": [],
+   "length": 37,
+   "line": 19159,
+   "module_globals": [],
+   "params": 1,
+   "reads": [],
+   "writes": []
+  },
+  "_collect_proprietary_data": {
+   "calls": [
+    "_excluded_text_reason",
+    "_is_known_therapeutic",
+    "_merge_blend_evidence",
+    "_normalize_exclusion_text"
+   ],
+   "length": 570,
+   "line": 14345,
+   "module_globals": [
+    "_RAW_CHILD_ROW"
+   ],
+   "params": 1,
+   "reads": [
+    "blend_detector",
+    "databases",
+    "logger"
+   ],
+   "writes": []
+  },
+  "_collect_rda_ul_data": {
+   "calls": [
+    "_collect_special_use_flags",
+    "_declared_folate_dfe_totals",
+    "_declared_same_identity_totals",
+    "_declared_vitamin_a_components",
+    "_dose_active_ingredients_for_enrichment",
+    "_excluded_text_reason",
+    "_identity_unii_values",
+    "_is_cfu_equivalent_unit",
+    "_nested_daily_value_nutrient_owners",
+    "_normalize_text",
+    "_probiotic_composition_share_owners",
+    "_rda_dose_lineage",
+    "_to_float_safe",
+    "_ul_exposure_basis"
+   ],
+   "length": 2278,
+   "line": 21693,
+   "module_globals": [
+    "_ACTIVITY_UNIT_CANONICALS",
+    "_FOLIC_ACID_ADULT_UL_MCG",
+    "_FOLIC_ACID_UNII",
+    "_NON_UL_ACTIVITY_UNITS",
+    "_NON_UL_BOTANICAL_CANONICALS",
+    "_NON_UL_BOTANICAL_QUANTITY_UNITS",
+    "_NON_UL_PROBIOTIC_QUANTITY_UNITS",
+    "_RDA_REFERENCE_PROFILE",
+    "_VITAMIN_A_PREFORMED_ADULT_UL_MCG_RAE",
+    "_VITAMIN_E_ADULT_UL_MG",
+    "_VITAMIN_E_NATURAL_MG_PER_IU",
+    "_explicit_mixed_vitamin_a_preformed_fraction",
+    "_has_no_official_ul_reference",
+    "_mixed_vitamin_a_total_mcg_rae",
+    "_rda_mass_unit_key",
+    "_unknown_folate_ul_screening"
+   ],
+   "params": 3,
+   "reads": [
+    "_rda_reference_stamp",
+    "databases",
+    "logger",
+    "rda_calculator",
+    "unit_converter"
+   ],
+   "writes": [
+    "_rda_ul_warning_count"
+   ]
+  },
+  "_collect_serving_basis_data": {
+   "calls": [
+    "_derive_serving_size_from_container",
+    "_normalize_form_factor",
+    "_normalize_serving_unit_label",
+    "_parse_dosage_from_directions",
+    "_physical_state_description",
+    "_select_canonical_serving",
+    "_serving_units_to_servings"
+   ],
+   "length": 213,
+   "line": 18260,
+   "module_globals": [],
+   "params": 1,
+   "reads": [],
+   "writes": []
+  },
+  "_collect_special_use_flags": {
+   "calls": [
+    "_normalize_text"
+   ],
+   "length": 53,
+   "line": 20929,
+   "module_globals": [
+    "_rda_mass_unit_key"
+   ],
+   "params": 1,
+   "reads": [],
+   "writes": []
+  },
+  "_collect_standardized_botanicals": {
+   "calls": [
+    "_derive_disclosed_marker_percentage",
+    "_exact_match",
+    "_extract_percentage",
+    "_extract_text_windows_by_terms",
+    "_get_all_product_text",
+    "_has_marker_word_match",
+    "_merge_standardized_botanicals",
+    "_primary_active_ingredients_for_enrichment"
+   ],
+   "length": 177,
+   "line": 11154,
+   "module_globals": [],
+   "params": 1,
+   "reads": [
+    "databases"
+   ],
+   "writes": []
+  },
+  "_collect_synergy_data": {
+   "calls": [
+    "_convert_amount_to_target_unit",
+    "_normalize_text",
+    "_normalize_threshold_unit",
+    "_primary_active_ingredients_for_enrichment",
+    "_synthesize_ingredients_from_name"
+   ],
+   "length": 340,
+   "line": 11715,
+   "module_globals": [],
+   "params": 1,
+   "reads": [
+    "databases"
+   ],
+   "writes": []
+  },
+  "_collect_traceability_data": {
+   "calls": [],
+   "length": 15,
+   "line": 14199,
+   "module_globals": [],
+   "params": 1,
+   "reads": [
+    "compiled_patterns"
+   ],
+   "writes": []
+  },
+  "_enrich_display_ingredients": {
+   "calls": [],
+   "length": 79,
+   "line": 15947,
+   "module_globals": [],
+   "params": 1,
+   "reads": [],
+   "writes": []
+  },
+  "_match_quality_map": {
+   "calls": [
+    "_match_quality_map",
+    "_match_quality_map_impl",
+    "_read_form_in_row_notes"
+   ],
+   "length": 64,
+   "line": 9118,
+   "module_globals": [],
+   "params": 10,
+   "reads": [],
+   "writes": [
+    "_match_quality_cache"
+   ]
+  },
+  "_match_quality_map_impl": {
+   "calls": [
+    "_build_form_info_from_cleaned",
+    "_disclosed_unmapped_match",
+    "_extract_form_from_label",
+    "_infer_preferred_parent_from_context_cached",
+    "_is_provided_marker_form",
+    "_is_specific_form_match",
+    "_match_multi_form",
+    "_match_quality_map",
+    "_normalize_exact_text",
+    "_normalize_text",
+    "_reviewed_same_identity_parent_for_label",
+    "_specific_form_in_parent"
+   ],
+   "length": 1355,
+   "line": 9483,
+   "module_globals": [
+    "IQM_CANONICAL_CROSS_PARENT_ALLOWLIST"
+   ],
+   "params": 9,
+   "reads": [
+    "_iqm_exact_index",
+    "_iqm_norm_index",
+    "databases",
+    "logger"
+   ],
+   "writes": [
+    "_ambiguity_warning_count",
+    "_parent_fallback_details",
+    "_parent_fallback_info_count",
+    "match_counters"
+   ]
+  },
+  "_project_scoring_fields": {
+   "calls": [],
+   "length": 168,
+   "line": 15188,
+   "module_globals": [],
+   "params": 1,
+   "reads": [],
+   "writes": []
+  },
+  "apply_taxonomy_projection": {
+   "calls": [
+    "_append_product_evidence_dose_assessments",
+    "_collect_product_scoring_classification",
+    "_collect_product_scoring_evidence"
+   ],
+   "length": 42,
+   "line": 17562,
+   "module_globals": [],
+   "params": 1,
+   "reads": [],
+   "writes": []
+  },
+  "enrich_product": {
+   "calls": [
+    "_build_match_ledger",
+    "_calculate_completeness",
+    "_collect_absorption_data",
+    "_collect_certification_data",
+    "_collect_compliance_data",
+    "_collect_contaminant_data",
+    "_collect_delivery_data",
+    "_collect_dietary_sensitivity_data",
+    "_collect_evidence_data",
+    "_collect_formulation_data",
+    "_collect_ingredient_quality_data",
+    "_collect_interaction_profile",
+    "_collect_manufacturer_data",
+    "_collect_nutrition_summary",
+    "_collect_probiotic_data",
+    "_collect_product_signals",
+    "_collect_proprietary_data",
+    "_collect_rda_ul_data",
+    "_collect_serving_basis_data",
+    "_decorate_percentile_category",
+    "_empty_rda_ul_payload",
+    "_enrich_display_ingredients",
+    "_normalize_company_name",
+    "_project_scoring_fields",
+    "_record_form_curation_gaps",
+    "_validate_export_contract_fields",
+    "apply_taxonomy_projection",
+    "validate_product"
+   ],
+   "length": 313,
+   "line": 23976,
+   "module_globals": [],
+   "params": 1,
+   "reads": [
+    "COMPATIBLE_SCORING_VERSIONS",
+    "EMPTY_ENRICHMENT_SCHEMA",
+    "VERSION",
+    "config",
+    "dosage_normalizer",
+    "logger",
+    "reference_versions"
+   ],
+   "writes": [
+    "_product_text_cache",
+    "_product_text_cache_enabled",
+    "_product_text_lower_cache"
+   ]
+  }
+ }
+}

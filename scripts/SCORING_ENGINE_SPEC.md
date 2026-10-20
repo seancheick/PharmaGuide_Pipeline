@@ -26,6 +26,8 @@ Primary implementation:
 The production score is v4 `/100`. Stage 3 produces the complete v4 artifact;
 final export consumes it directly and never invokes a second scorer.
 
+For a team-facing explanation of all six pillars, category differences, exact omega tables, worked arithmetic and calibration review questions, see the [October 17 scoring review packet](../docs/scoring/SCORING_TEAM_REVIEW_2026-10-17.md). It describes source behavior and distinguishes it from the currently delivered catalog.
+
 ## 2. Non-negotiable invariants
 
 1. `quality_score_v4_100` is the only canonical public score.
