@@ -12918,13 +12918,7 @@ class SupplementEnricherV3:
 
         found = []
 
-        # Build allergen lookup by name/alias
-        allergen_lookup = {}
-        for allergen in allergen_list:
-            allergen_name = allergen.get('standard_name', '').lower()
-            allergen_lookup[allergen_name] = allergen
-            for alias in allergen.get('aliases', []):
-                allergen_lookup[alias.lower()] = allergen
+        allergen_lookup = self._allergen_alias_lookup(allergen_list)
 
         # Source 1: labelText.parsed.allergens
         label_text = product.get('labelText', {})
@@ -12970,6 +12964,36 @@ class SupplementEnricherV3:
             self._parse_allergen_statement(statement_text, allergen_lookup, found, "label_statement")
 
         return found
+
+    @staticmethod
+    def _allergen_alias_lookup(allergen_list: List[Dict]) -> Dict[str, Dict]:
+        """Exact name/alias -> allergen entry, for label statement parts."""
+        allergen_lookup = {}
+        for allergen in allergen_list:
+            allergen_lookup[allergen.get('standard_name', '').lower()] = allergen
+            for alias in allergen.get('aliases', []):
+                allergen_lookup[alias.lower()] = allergen
+        return allergen_lookup
+
+    def _has_unparsed_may_contain(self, product: Dict) -> bool:
+        """A "may contain"/"shared equipment" sentence the parser reads no allergen from."""
+        allergen_list = self.databases.get('allergens', {}).get('allergens', [])
+        allergen_lookup = self._allergen_alias_lookup(allergen_list)
+        texts = [
+            (s.get('text', '') or s.get('notes', '') or '') if isinstance(s, dict) else str(s)
+            for s in product.get('statements', []) or []
+        ]
+        label_text = product.get('labelText', {})
+        if isinstance(label_text, dict):
+            texts.extend(str(w) for w in (label_text.get('parsed') or {}).get('warnings', []) or [])
+        for text in texts:
+            for sentence in re.split(r'(?<=[.!?;])\s+|[\r\n\t]+', text):
+                if re.search(r'may\s+contain|shared\s+equipment', sentence, re.I):
+                    parsed: List[Dict] = []
+                    self._parse_allergen_statement(sentence, allergen_lookup, parsed, "probe")
+                    if not parsed:
+                        return True
+        return False
 
     def _parse_allergen_statement(self, text: str, allergen_lookup: Dict, found: List[Dict], source: str) -> None:
         """
@@ -15484,7 +15508,10 @@ class SupplementEnricherV3:
             any(term in c for term in ["allergen", "dairy", "soy", "egg", "gluten", "wheat", "shellfish", "nut"])
             for c in conflicts
         )
-        gluten_contradiction = gluten_free_claim_contradicted(allergen_hits, has_may_contain, conflicts)
+        gluten_contradiction = gluten_free_claim_contradicted(
+            allergen_hits, has_may_contain, conflicts,
+            unparsed_may_contain=bool(has_may_contain) and self._has_unparsed_may_contain(enriched),
+        )
         vegan_contradiction = any(
             any(term in c for term in ["gelatin", "bovine", "porcine", "vegan", "vegetarian"])
             for c in conflicts

@@ -100,6 +100,7 @@ _CROSS_CONTACT_PRESENCE = frozenset({"may_contain", "facility_warning"})
 
 def gluten_free_claim_contradicted(
     allergen_hits: Any, has_may_contain_warning: Any, conflicts: Any,
+    unparsed_may_contain: bool = False,
 ) -> bool:
     """Whether label evidence contradicts a gluten-free claim.
 
@@ -107,8 +108,12 @@ def gluten_free_claim_contradicted(
     does. A may-contain or facility warning that names only other allergens
     ("a facility that also produces products that contain milk") does not.
     A may-contain signal that no parsed warning explains still does, since
-    the unparsed text may name a gluten grain.
+    the unparsed text may name a gluten grain: with no parsed cross-contact
+    hit at all, or when the caller found a "may contain"/"shared equipment"
+    sentence the allergen parser reads no allergen from.
     """
+    if unparsed_may_contain:
+        return True
     if any("gluten" in str(c).lower() or "wheat" in str(c).lower() for c in conflicts or []):
         return True
     cross = [

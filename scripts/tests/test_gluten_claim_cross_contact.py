@@ -69,3 +69,34 @@ def _hit(allergen_id, presence):
 def test_gluten_cross_contact_rule(hits, has_may_contain, conflicts, expected):
     from scoring_input_contract import gluten_free_claim_contradicted
     assert gluten_free_claim_contradicted(hits, has_may_contain, conflicts) is expected
+
+
+def test_a_parsed_warning_does_not_explain_a_separate_unparsed_one(pipeline):
+    # Review of #187: a parsed milk facility warning must not clear the
+    # contradiction from another "may contain" sentence no parsed hit came from.
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    from enrich_supplements_v3 import SupplementEnricherV3
+    raw = json.loads((FIXTURES / "gluten_claim_304605_raw.json").read_text(encoding="utf-8"))
+    raw["statements"] = list(raw.get("statements") or []) + [
+        {"type": "Precautions", "notes": "May contain traces of grain products."}
+    ]
+    enriched, _ = SupplementEnricherV3().enrich_product(EnhancedDSLDNormalizer().normalize_product(raw))
+    assert enriched["claim_gluten_free_validated"] is False
+
+
+def test_unparsed_may_contain_flag_keeps_the_contradiction():
+    from scoring_input_contract import gluten_free_claim_contradicted
+    milk = [{"allergen_id": "ALLERGEN_MILK", "presence_type": "facility_warning"}]
+    assert gluten_free_claim_contradicted(milk, True, [], unparsed_may_contain=True) is True
+    assert gluten_free_claim_contradicted(milk, True, [], unparsed_may_contain=False) is False
+
+
+def test_a_parsed_sentence_merged_into_another_hit_is_not_unparsed():
+    # 204521: "May contain traces of soy due to agriculture practices." is
+    # parsed (soy) even when the kept soy hit carries another statement's text.
+    from enrich_supplements_v3 import SupplementEnricherV3
+    product = {"statements": [
+        {"notes": "Manufactured in a facility that also processes egg, milk, soy and tree nuts. May contain traces of soy due to agriculture practices."},
+        {"notes": "CONTAINS: MILK, PEANUTS AND TREE NUTS (COCONUT AND MAY CONTAIN TRACE AMOUNTS OF ALMOND AND CASHEW)."},
+    ]}
+    assert SupplementEnricherV3()._has_unparsed_may_contain(product) is False
