@@ -115,6 +115,7 @@ from scoring_input_contract import (
     is_nutrition_fact_declaration,
     get_scoring_ingredients,
     normalize_product_evidence_scope,
+    score_eligible_identity_view,
     scoring_input_scope,
     source_linked_rows,
     _positive_quantity,
@@ -24742,8 +24743,12 @@ class SupplementEnricherV3:
             # nutrition, taxonomy, and native scoring-classification
             # projections. Running earlier stamps a different decision from a
             # replay on the completed enriched artifact.
+            # Evidence reads score-eligible identities only: a row kept for
+            # interactions owns no Evidence.
+            evidence_product = score_eligible_identity_view(enriched)
             enriched["evidence_data"] = self._collect_evidence_data(
-                enriched, ingredient_quality_data=enriched.get("ingredient_quality_data")
+                evidence_product,
+                ingredient_quality_data=evidence_product.get("ingredient_quality_data"),
             )
             if formula_match:
                 enriched["evidence_data"]["clinical_matches"].append(formula_match)

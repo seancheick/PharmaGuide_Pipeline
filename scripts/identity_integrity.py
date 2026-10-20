@@ -9,6 +9,7 @@ from collections.abc import Callable, Iterable, Mapping
 from dataclasses import dataclass
 from typing import Any, Literal
 
+from identity.interaction import INTERACTION_SUBJECT_FAMILY
 from normalization import strip_label_identity_qualifiers
 from probiotic_measurements import is_probiotic_source_header as _is_structural_blend_header
 
@@ -34,6 +35,15 @@ IDENTITY_DISPOSITIONS: tuple[IdentityDisposition, ...] = (
 _SCOREABLE_DISPOSITIONS = frozenset({"clean", "repaired", "taxonomy_only"})
 # The catch-all proprietary-blend owner names no specific identity of its own.
 _GENERAL_BLEND_ID = "BLEND_GENERAL"
+# Cleaner matches made from one declared form rather than the row's own name.
+_FORM_DERIVED_MATCH_METHODS = frozenset({
+    "unii_form_exact_match", "single_declared_marker_form", "single_declared_nutrient_form",
+})
+NON_SCORING_IDENTITY_RATIONALE = (
+    "The row was intentionally classified as non-scorable; the cleaner's standard "
+    "name proves its identity, which is retained for interactions only and never "
+    "owns Evidence or Dose."
+)
 
 
 def safety_only_conflict_paths(rows: Iterable[Mapping[str, Any]]) -> set[str]:
@@ -1115,24 +1125,63 @@ def resolve_identity(
     # L-Arginine); a stale id the row's text never named is not kept, nor is
     # one its label contradicts, nor a role or catch-all record (a
     # proprietary blend, an other-ingredient role), which is no substance.
+    # Nor is an identity the cleaner took from one declared form when the row
+    # lists several ("Bifidobacterium": B. bifidum, B. animalis lactis is not
+    # B. lactis alone), or from a marker form of a plant ("Sawasabi Wasabi
+    # powder": Total Isothiocyanate is not the plant), or one a declared form
+    # names as another substance ("Arginine" as whey protein isolate) unless
+    # that form is a member of it ("Lactobacillus": L. acidophilus ...).
+    # An identity kept only on that standardName is for interactions alone
+    # (NON_SCORING_IDENTITY_RATIONALE).
+    label_proves_canonical = bool(canonical_before) and (
+        structured_canonical == canonical_before
+        or raw_canonical == canonical_before
+        or taxonomy_coherent
+    )
+    declared_forms = {
+        normalize_label_display(item.value).casefold()
+        for item in form_evidence
+        if item.field.startswith("forms[")
+    }
+    form_derived_identity = row.get("cleaner_match_method") in _FORM_DERIVED_MATCH_METHODS
+    forms_contradict = form_derived_identity and (
+        len(declared_forms) > 1
+        or (
+            row.get("cleaner_match_method") == "single_declared_marker_form"
+            and str(row.get("raw_category") or row.get("category") or "").casefold() == "botanical"
+        )
+    )
+    if canonical_before and canonical_registry is not None and not forms_contradict:
+        for item in form_evidence:
+            if not item.field.startswith("forms["):
+                continue
+            named = canonical_registry.resolve_preferred(item.value)
+            form_canonical = _canonical(named[0]) if named else None
+            if (
+                form_canonical
+                and form_canonical != canonical_before
+                and INTERACTION_SUBJECT_FAMILY.get(form_canonical) != canonical_before
+                and not (canonical_parent_of and canonical_parent_of(canonical_before, form_canonical))
+            ):
+                forms_contradict = True
+                break
+    standard_name_proves_canonical = bool(canonical_before) and (
+        not raw_canonicals
+        and canonical_registry is not None
+        and not _is_blend_header_row(row)
+        and not forms_contradict
+        and not canonical_registry.is_role_record(canonical_before)
+        and canonical_registry.literal_identity_matches(
+            str(row.get("standardName") or ""), canonical_before
+        )
+    )
     retained_unscoreable_canonical = (
         canonical_before
-        if canonical_before
-        and (
-            structured_canonical == canonical_before
-            or raw_canonical == canonical_before
-            or taxonomy_coherent
-            or (
-                not raw_canonicals
-                and canonical_registry is not None
-                and not _is_blend_header_row(row)
-                and not canonical_registry.is_role_record(canonical_before)
-                and canonical_registry.literal_identity_matches(
-                    str(row.get("standardName") or ""), canonical_before
-                )
-            )
-        )
+        if label_proves_canonical or standard_name_proves_canonical
         else None
+    )
+    interaction_only_identity = (
+        standard_name_proves_canonical and not label_proves_canonical
     )
 
     if display_name is None:
@@ -1222,7 +1271,9 @@ def resolve_identity(
     elif allow_unscoreable_taxonomy_only:
         disposition = "taxonomy_only"
         canonical_after = retained_unscoreable_canonical
-        if canonical_after:
+        if canonical_after and interaction_only_identity:
+            rationale = NON_SCORING_IDENTITY_RATIONALE
+        elif canonical_after:
             rationale = (
                 "The row was intentionally classified as non-scorable; its "
                 "validated source identity was retained for non-scoring lineage."

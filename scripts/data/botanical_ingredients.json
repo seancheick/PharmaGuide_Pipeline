@@ -3,7 +3,7 @@
     "description": "Non-standardized whole herb powders and simple botanical extracts without guaranteed marker compounds. Used for basic ingredient mapping. For premium standardized extracts with marker compounds, see standardized_botanicals.json.",
     "purpose": "ingredient_mapping",
     "schema_version": "5.2.0",
-    "last_updated": "2026-10-19",
+    "last_updated": "2026-10-20",
     "total_entries": 558,
     "functional_roles_field": {
       "added_in": "5.1.0",
@@ -3127,12 +3127,11 @@
       "aliases": [
         "agave americana",
         "agave americana extract",
-        "agave extract",
         "maguey"
       ],
       "category": "herb",
       "notes": "Plain identity (relocated from standardized_botanicals.json via MO-2, 2026-05-22). No documented standardization marker; identity-only mapping with no A5b bonus pathway. Botanical ingredient standardized for saponins. Commonly used in dietary supplements.",
-      "last_updated": "2026-05-22",
+      "last_updated": "2026-10-20",
       "external_ids": {
         "unii": "024852X0VD"
       },
@@ -14137,11 +14136,12 @@
         "wasabi root extract",
         "wasabia japonica",
         "wasabia japonica extract",
-        "eutrema japonicum"
+        "eutrema japonicum",
+        "sawasabi wasabi powder"
       ],
       "category": "root",
       "notes": "Eutrema japonicum (syn. Wasabia japonica, Brassicaceae) rhizome. Contains 6-MSITC (6-methylsulfinylhexyl isothiocyanate). Potent antimicrobial. Most commercial wasabi is horseradish substitute.",
-      "last_updated": "2026-03-01",
+      "last_updated": "2026-10-20",
       "external_ids": {
         "unii": "69JM5DKE22"
       },

@@ -41,6 +41,7 @@ from scoring_reference_resolver import (
 from identity.omega_labels import states_only_epa_and_dha
 from identity_integrity import (
     IDENTITY_DISPOSITIONS,
+    NON_SCORING_IDENTITY_RATIONALE,
     is_identity_scoreable,
 )
 # One probiotic row-identity owner for enrichment, taxonomy, routing and scoring.
@@ -700,9 +701,40 @@ def _is_verified_canonical(value: Any) -> bool:
     return bool(canonical) and canonical not in _GENERIC_BLEND_IDENTITIES and not canonical.startswith("blend_")
 
 
+def _is_interaction_only_identity(row: Dict[str, Any]) -> bool:
+    """A non-scorable row's identity kept for interactions only: identity is
+    not scorability, so it owns no Evidence and feeds no Dose or route."""
+    return row.get("identity_resolution_rationale") == NON_SCORING_IDENTITY_RATIONALE
+
+
+def score_eligible_identity_view(product: Dict[str, Any]) -> Dict[str, Any]:
+    """The product as the scorer reads it: a row whose identity is kept for
+    interactions only carries no canonical, as before that identity was kept.
+    Returns the product itself when there is nothing to hide."""
+    iqd = product.get("ingredient_quality_data") if isinstance(product, dict) else None
+    if not isinstance(iqd, dict):
+        return product
+    view, changed = dict(iqd), False
+    for key in ("ingredients", "ingredients_skipped", "ingredients_scorable"):
+        rows = iqd.get(key)
+        if not isinstance(rows, list):
+            continue
+        out = []
+        for row in rows:
+            if isinstance(row, dict) and _is_interaction_only_identity(row) and row.get("canonical_id") is not None:
+                printed = row.get("raw_source_text")
+                row = dict(row, canonical_id=None, canonical_id_after=None, standard_name=printed, standardName=printed)
+                changed = True
+            out.append(row)
+        view[key] = out
+    return {**product, "ingredient_quality_data": view} if changed else product
+
+
 def _verified_anchor_canonical(row: Dict[str, Any]) -> str:
     """The row's cleaner-verified ingredient identity, or "" when the cleaner
     left it unmapped or only a generic blend identity is present."""
+    if _is_interaction_only_identity(row):
+        return ""
     canonical = _slug(row.get("canonical_id"))
     return canonical if _is_verified_canonical(canonical) else ""
 
@@ -1903,13 +1935,23 @@ def derive_product_scoring_evidence(product: Dict[str, Any]) -> List[Dict[str, A
                     active_row["standardName"] = standard_name
             if identity_row.get("source_label_key"):
                 active_row["source_label_key"] = identity_row["source_label_key"]
+            if _is_interaction_only_identity(identity_row):
+                # Scoring reads the row exactly as before its identity was kept:
+                # no canonical, the printed name as a structural anchor only.
+                active_row["canonical_id"] = None
+                active_row["standardName"] = (
+                    identity_row.get("raw_source_text") or raw_active.get("name")
+                )
         disposition = active_row.get("identity_disposition")
         if disposition is not None and not is_identity_scoreable(disposition):
             continue
         active_rows.append(active_row)
 
     skipped_rows = [
-        row
+        (
+            dict(row, canonical_id=None, canonical_id_after=None, standardName=row.get("raw_source_text"))
+            if _is_interaction_only_identity(row) else row
+        )
         for row in _safe_list(iqd.get("ingredients_skipped"))
         if isinstance(row, dict)
         and (
@@ -6302,15 +6344,6 @@ def _named_in_title(row: Dict[str, Any], title_norm: str) -> bool:
         _norm(row.get("standard_name")),
         canonical.replace("_", " "),
     ]
-    # One word of a derived identity name is no title evidence: "Raw organic
-    # Svetol" is green_coffee_bean, and "coffee" alone does not make "Fit
-    # Coffee" name it. Derived names match only whole; the printed name may
-    # match by any of its words.
-    printed_tokens = {
-        token
-        for value in (row.get("name"), row.get("raw_source_text"))
-        for token in re.split(r"[^a-z0-9]+", _norm(value)) if token
-    }
     # A forms[] member the cleaner expanded from a reviewed blend header
     # (BLEND_HEADER_EXACT_NAMES) loses that header row, so its parent_blend is
     # the surviving source fact for the header's title role.  A nestedRows[]
@@ -6319,7 +6352,6 @@ def _named_in_title(row: Dict[str, Any], title_norm: str) -> bool:
     parent_blend = row.get("parent_blend") or row.get("parentBlend")
     if parent_blend and ".forms[" in str(row.get("raw_source_path") or ""):
         candidates.append(_norm(parent_blend))
-        printed_tokens.update(re.split(r"[^a-z0-9]+", _norm(parent_blend)))
     curated_aliases = _ROLE_TITLE_ALIASES_BY_CANONICAL.get(canonical, ())
     # Curated identity aliases may be shorter than the generic four-character
     # title-token floor (notably D2/D3). Their canonical-scoped allowlist is
@@ -6348,12 +6380,7 @@ def _named_in_title(row: Dict[str, Any], title_norm: str) -> bool:
         # names ("oil" of "Fish Oil").
         min_len = 3 if len(candidate_tokens) == 1 else 4
         for token in candidate_tokens:
-            if (
-                len(token) >= min_len
-                and token not in _ROLE_TITLE_STOPWORDS
-                and token in title_tokens
-                and (len(candidate_tokens) == 1 or token in printed_tokens)
-            ):
+            if len(token) >= min_len and token not in _ROLE_TITLE_STOPWORDS and token in title_tokens:
                 return True
     return False
 
