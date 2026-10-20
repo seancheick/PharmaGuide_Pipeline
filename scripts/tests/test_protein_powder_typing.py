@@ -151,3 +151,46 @@ def test_gainer_with_a_vitamin_panel_is_typed_like_other_gainers(pipeline):
     taxonomy = pipeline(_label("318103", "Dynamic Gainer Chocolate",
                                [_row(0, "Protein", "protein", "Protein (unspecified)", 50, "g")] + vitamins + collagen))
     assert taxonomy["primary_type"] == "protein_powder"
+
+
+_MVM_ROWS = [
+    _row(i + 1, name, category, name, amount, unit, 100)
+    for i, (name, category, amount, unit) in enumerate([
+        ("Vitamin A", "vitamin", 900, "mcg"), ("Vitamin C", "vitamin", 90, "mg"),
+        ("Vitamin D", "vitamin", 20, "mcg"), ("Vitamin E", "vitamin", 15, "mg"),
+        ("Thiamin", "vitamin", 1.2, "mg"), ("Riboflavin", "vitamin", 1.3, "mg"),
+        ("Vitamin B6", "vitamin", 1.7, "mg"), ("Vitamin B12", "vitamin", 2.4, "mcg"),
+        ("Zinc", "mineral", 11, "mg"), ("Selenium", "mineral", 55, "mcg"),
+        ("Magnesium", "mineral", 100, "mg"),
+    ])
+]
+
+
+# Audit M1 (2026-10-20): a multivitamin title that also names protein keeps its multivitamin identity.
+@pytest.mark.parametrize("title,protein_g", [
+    ("Women's Multi + Protein", 5),
+    ("Multivitamin Protein Shake", 10),
+    ("Daily Multi-Vitamin & Protein Powder", 20),
+])
+def test_multivitamin_title_naming_protein_stays_multivitamin(pipeline, title, protein_g):
+    taxonomy = pipeline(_label("rc_mvm", title,
+                               [_row(0, "Protein", "protein", "Protein (unspecified)", protein_g, "g")] + _MVM_ROWS,
+                               product_type="Multi-Vitamin and Mineral (MVM)"))
+    assert taxonomy["primary_type"] == "multivitamin", taxonomy["classification_reasons"]
+
+
+def test_accessory_with_is_matched_within_one_title_field(pipeline):
+    # Audit L1: the title fields are joined, so "with" ending one copy and "protein" starting the
+    # next (product_name duplicates fullName) must not mark protein as an accessory.
+    taxonomy = pipeline(_label("16839", "Whey Protein Shake with Vitamins", _panel(17),
+                               product_type="Multi-Vitamin and Mineral (MVM)"))
+    assert taxonomy["primary_type"] == "protein_powder", taxonomy["classification_reasons"]
+
+
+def test_fibre_spelling_keeps_fiber_identity(pipeline):
+    # Audit L2: British spelling of the fiber guard.
+    taxonomy = pipeline(_label("rc_fibre", "Organic Hemp Protein & Fibre",
+                               [_row(0, "Protein", "protein", "Protein (unspecified)", 11, "g"),
+                                _row(1, "Hemp Seed Powder", "botanical", "Hemp", 30, "g")],
+                               product_type="Other"))
+    assert taxonomy["primary_type"] != "protein_powder", taxonomy["classification_reasons"]

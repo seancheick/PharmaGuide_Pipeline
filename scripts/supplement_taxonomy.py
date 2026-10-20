@@ -300,7 +300,8 @@ def _specialized_panel_identity(
 
 _ACCESSORY_PROTEIN_RE = re.compile(r"\bwith\b.*\b(?:protein|whey|casein)\b")
 _COMPETING_PROTEIN_TITLE_TOKENS = (
-    "collagen", "gelatin", "prenatal", "fish oil", "krill", "omega", "fiber",
+    "collagen", "gelatin", "prenatal", "fish oil", "krill", "omega", "fiber", "fibre",
+    "multivitamin", "multi-vitamin", "multi ",
 )
 
 
@@ -315,7 +316,7 @@ def _declared_protein_identity(
     identity is absent from ``canonical_ids``. The router's own pair identifies it
     (``route_features.has_protein_product_intent`` + ``nutrition_summary.protein_g``);
     neither alone suffices and the macro row never becomes an active. A title naming
-    another identity (collagen, greens, omega, fiber, prenatal, pre-workout) or a dominant
+    another identity (collagen, greens, omega, fiber, prenatal, multivitamin, pre-workout) or a dominant
     collagen/omega row keeps that identity, and "X with protein" marks protein as an
     accessory.
     """
@@ -331,7 +332,11 @@ def _declared_protein_identity(
         or any(token in product_name for token in _GREENS_NAME_TOKENS)
         or any(token in product_name for token in _PRE_WORKOUT_NAME_TOKENS)
         or _PRE_WORKOUT_PANEL_INTENT_RE.search(product_name)
-        or _ACCESSORY_PROTEIN_RE.search(product_name)
+        # Per title field: "with" ending one copy must not pair with "protein" in the next.
+        or any(
+            _ACCESSORY_PROTEIN_RE.search(_normalize_text(str(product.get(k) or "")))
+            for k in ("product_name", "fullName", "bundleName")
+        )
         # A collagen or omega row that dominates the label is its identity; one
         # ingredient of a gainer's protein or fat blend is not.
         or len(canonical_ids & _COLLAGEN_IDS) * 2 > len(canonical_ids)
