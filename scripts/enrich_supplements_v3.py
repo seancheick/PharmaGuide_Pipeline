@@ -7820,7 +7820,7 @@ class SupplementEnricherV3:
         "strawberry extract", "strawberry fruit extract", "pomegranate hull extract",
         "holy basil leaf extract", "ampelopsis grossedentata", "laminaria japonica extract",
         "undaria pinnatifida extract", "ajuga l. whole herb extract",
-        "sceletium tortuosum aerial parts extract", "helianthus annuus", "soy", "soybeans",
+        "sceletium tortuosum aerial parts extract", "helianthus annuus", "soy", "soybean", "soybeans",
         "soy isoflavones concentrate", "pine", "wheat oil extract", "wheat seed oil",
         "norway spruce knotwood extract", "picea abies", "secale cereale", "morus alba powder",
         "european black currant fruit extract", "hawthorn extract", "hawthorn fruit flower stem extract",
@@ -9411,6 +9411,22 @@ class SupplementEnricherV3:
             self._marker_names_cache = cached
         return cached
 
+    def _curated_latin_names(self) -> frozenset:
+        """Normalized species names from botanical_ingredients.json latin_name
+        ("Actaea racemosa (Cimicifuga racemosa)" gives both binomials)."""
+        cached = getattr(self, "_latin_names_cache", None)
+        if cached is None:
+            db = (self.databases or {}).get("botanical_ingredients") or {}
+            cached = frozenset(
+                self._norm_form_name(name)
+                for entry in db.get("botanical_ingredients") or []
+                if isinstance(entry, dict)
+                for name in re.findall(r"[A-Z][a-z]+(?:\s+(?:x\s+|×\s*)?[a-z][a-z-]+){1,2}",
+                                       str(entry.get("latin_name") or ""))
+            )
+            self._latin_names_cache = cached
+        return cached
+
     def _is_recorded_source(self, token: str, group: str, parent_key: Optional[str]) -> bool:
         """The token names a botanical that botanical_marker_contributions.json
         records as delivering this parent ("Marigold Flower Extract" under
@@ -9448,8 +9464,10 @@ class SupplementEnricherV3:
         stays unmapped for curation):
 
         - ``restatement``: the row's own identity again: by name, by name plus
-          plant-part words, or a botanical token in the row's DSLD ingredient
-          group ("Matricaria chamomilla Flower Extract" under Chamomile).
+          plant-part words, a botanical token in the row's DSLD ingredient
+          group ("Matricaria chamomilla Flower Extract" under Chamomile), or
+          the parent's curated species name ("Hordeum vulgare" under Barley
+          Grass).
         - ``marker``: a standardization marker ("Polyphenols", "Total Rosavins",
           "Salidrosides"), or any token DSLD prefixes "standardized ..." or "std. ...".
         - ``source``: the material the nutrient comes from ("Cantaloupe"
@@ -9471,7 +9489,15 @@ class SupplementEnricherV3:
         # DSLD files a salt under the nutrient it supplies (every calcium salt
         # has group "Calcium"), so an equal group only restates the identity
         # for a botanical token ("Matricaria chamomilla" under Chamomile).
-        botanical_restatement = category == 'botanical' and group and group in parent_names
+        # A scientific name names the plant, never a preparation: a curated
+        # species name the identity registries record for this parent
+        # ("Hordeum vulgare" under Barley Grass) restates it too. Only the
+        # species field qualifies; other curated names can state a
+        # preparation or brand ("Curcumin Powder", "Capsimax").
+        botanical_restatement = category == 'botanical' and (
+            (group and group in parent_names)
+            or (parent_key and token in self._curated_latin_names()
+                and self._current_canonical_identity_registry().names_identity(raw, parent_key)))
         singular = lambda words: {w[:-1] if len(w) > 3 and w.endswith('s') else w for w in words}
         label_words = singular(self._norm_form_name(row_label).split())
         repeats_label = bool(token) and singular(token.split()) <= label_words

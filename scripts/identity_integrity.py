@@ -125,6 +125,12 @@ class CanonicalIdentityRegistry:
             literal = self.resolve_preferred(strip_label_identity_qualifiers(str(value or "")))
         return literal is not None and literal[0] == canonical_id
 
+    def names_identity(self, value: Any, canonical_id: str) -> bool:
+        """A curated name of this identity in any owned registry, even one it
+        shares with related records ("Hordeum vulgare" is barley grass, its
+        powder and its juice)."""
+        return canonical_id in self.candidates_index.get(self._key(value), ())
+
     def preparation_identity_matches(
         self, value: Any, canonical_id: str, source_db: str,
     ) -> bool:
@@ -140,7 +146,7 @@ class CanonicalIdentityRegistry:
         # Recognition may retain an authored non-scoring preparation beside
         # a higher-priority IQM primary owner. Both are literal source owners;
         # preferred-index priority is not proof that the preparation is absent.
-        return any(canonical_id in self.candidates_index.get(self._key(label), ())
+        return any(self.names_identity(label, canonical_id)
                    for label in (value, strip_label_identity_qualifiers(str(value or ""))))
 
     def standard_names_of(self, canonical_id: str) -> tuple[str, ...]:
