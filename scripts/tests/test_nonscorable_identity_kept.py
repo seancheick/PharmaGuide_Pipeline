@@ -158,6 +158,27 @@ def test_blend_header_row_is_kept_unscored():
     assert (decision.canonical_id, decision.scoreable_identity) == ("caffeine", False)
 
 
+def test_blend_header_its_printed_name_does_not_name_is_not_kept():
+    """The cleaner's standardName alone never names a header: "Adrenal Blend" is not caffeine."""
+    assert _decide("Adrenal Blend", "caffeine", "Caffeine", cleaner_row_role="blend_header_total").canonical_id is None
+
+
+@pytest.mark.parametrize("dsld_id,label", [
+    # Schisandra, rhodiola, ashwagandha, eleuthero: an adrenal-support formula, not adrenal tissue.
+    (204571, "Organic Adrenal Blend"),
+    (274389, "Organic Adrenal Blend"),
+    # Saw palmetto, beta-sitosterol, pumpkin seed, lycopene: not prostate tissue.
+    (33607, "Prostate Formula"),
+    # Members caseinate, whey, egg albumin, milk protein: those proteins' amino profile.
+    (228823, "Glutamic Acid"),
+])
+def test_blend_header_whose_members_name_other_substances_is_not_kept(enrich, dsld_id, label):
+    iqd = enrich(dsld_id)["ingredient_quality_data"]
+    rows = [r for r in iqd["ingredients"] + iqd["ingredients_skipped"]
+            if r.get("raw_source_text") == label and r.get("cleaner_row_role") == "blend_header_total"]
+    assert rows and {r["canonical_id"] for r in rows} == {None}
+
+
 def test_role_record_is_not_kept_as_a_substance():
     assert _decide("Raw Certified Organic Superfood Blend", "BLEND_SUPERFOOD", "Superfood Blend").canonical_id is None
 

@@ -1169,11 +1169,26 @@ def resolve_identity(
             for named in [canonical_registry.resolve_preferred(item.value)]
             if named
         ]
-        # A blend header's forms are its other members ("Caffeine Blend":
-        # Anhydrous Caffeine, Piperine), never a contradiction of its name.
-        forms_contradict = not _is_blend_header_row(row) and not all(
-            map(names_the_identity, form_canonicals)
-        )
+        if _is_blend_header_row(row):
+            # A blend header's forms are its members ("Caffeine Blend":
+            # Anhydrous Caffeine, Piperine). It keeps an identity only when its
+            # printed name or a member names it, and, when members resolve, one
+            # of them must ("Organic Adrenal Blend" of schisandra and rhodiola is
+            # no adrenal tissue; a "Glutamic Acid" header of caseinate and whey
+            # is those proteins' amino profile).
+            identity_names = canonical_registry.standard_names_of(canonical_before)
+            member_names_identity = any(map(names_the_identity, form_canonicals)) or any(
+                _label_spells_identity(item.value, identity_names)
+                for item in form_evidence
+                if item.field.startswith("forms[")
+            )
+            printed_name = raw_evidence[0].value if raw_evidence else ""
+            forms_contradict = not (
+                (_label_spells_identity(printed_name, identity_names) or member_names_identity)
+                and (member_names_identity or not form_canonicals)
+            )
+        else:
+            forms_contradict = not all(map(names_the_identity, form_canonicals))
     # A row listed under a parent (or any enclosing row) that names another
     # material is that material's constituent ("Arginine" in "Solae Soy
     # Protein isolate"; in Amino Acids in Cilantro), not the substance added
