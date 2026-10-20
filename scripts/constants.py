@@ -265,6 +265,27 @@ EXCLUDED_NUTRITION_FACTS = {
     "digestive aids and enzymes",
 }
 
+# Totals and aggregates among the exclusions above ("Total Omega-3 Fatty Acids", "Total Lacto
+# Cultures", "Other Omega-3s", "EPA + DHA"): they sum rows printed beside them. They are excluded
+# like Nutrition Facts but recorded in the row ledger as summary wrappers. Nutrition Facts panel
+# totals ("Total Fat", "Total Carbohydrates") remain nutrition facts.
+_NUTRITION_PANEL_TOTALS = {
+    "total fat", "total fats", "total carbohydrates", "total carbohydrate", "total carbs",
+    "total carb", "total carb.", "total sugars", "total calories", "total protein",
+    "total cholesterol", "total chloride", "total saturated fatty acids",
+    "total unsaturated fatty acids",
+}
+LABEL_ROLLUP_NAMES = frozenset(
+    name for name in EXCLUDED_NUTRITION_FACTS
+    if name.startswith(("total ", "other ", "typical ", "all other "))
+    and name not in _NUTRITION_PANEL_TOTALS
+) | frozenset(
+    name for name in ("omega-3 fatty acids, total", "omega-6 fatty acids, total",
+                      "omega-9 fatty acids, total", "probiotic cfu total",
+                      "epa+dha", "epa + dha", "dha and epa")
+    if name in EXCLUDED_NUTRITION_FACTS
+)
+
 # Label phrases and headers that should be excluded from ingredient processing
 # IMPORTANT: All entries must be lowercase for proper comparison with preprocessed text
 EXCLUDED_LABEL_PHRASES = {

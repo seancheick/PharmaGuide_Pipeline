@@ -27,6 +27,7 @@ from constants import (
     TOP_MANUFACTURERS,
     PROPRIETARY_BLENDS,
     EXCLUDED_NUTRITION_FACTS,
+    LABEL_ROLLUP_NAMES,
     EXCLUDED_LABEL_PHRASES,
     STANDARDIZED_BOTANICALS,
     BANNED_RECALLED,
@@ -962,6 +963,9 @@ class EnhancedDSLDNormalizer:
         }
         self._preprocessed_excluded_nutrition = {
             self.matcher.preprocess_text(fact) for fact in EXCLUDED_NUTRITION_FACTS
+        }
+        self._preprocessed_label_rollups = {
+            self.matcher.preprocess_text(name) for name in LABEL_ROLLUP_NAMES
         }
         self._preprocessed_blend_header_exact = {
             self.matcher.preprocess_text(name) for name in BLEND_HEADER_EXACT_NAMES
@@ -5048,7 +5052,9 @@ class EnhancedDSLDNormalizer:
                     raw_source_text=name,
                     source_section="activeIngredients",
                     display_type=(
-                        "nutrition_fact" if is_nutrition_fact else "summary_wrapper"
+                        self._excluded_row_display_type(name)
+                        if is_nutrition_fact
+                        else "summary_wrapper"
                     ),
                     score_included=False,
                     source_row=ing,
@@ -5153,7 +5159,7 @@ class EnhancedDSLDNormalizer:
                             raw_source_text=nested_name,
                             source_section="activeIngredients",
                             display_type=(
-                                "nutrition_fact"
+                                self._excluded_row_display_type(nested_name)
                                 if is_nutrition_fact
                                 else "summary_wrapper"
                             ),
@@ -6408,6 +6414,10 @@ class EnhancedDSLDNormalizer:
                 active_ingredients,
                 inactive_ingredients,
             )
+            # Header-expanded rows carry their depth as working state until the
+            # display ledger is built; raw_taxonomy.nested_depth is the emitted copy.
+            for ing in inactive_ingredients:
+                ing.pop("_raw_nested_depth", None)
             label_source_rows = self._build_label_source_rows(display_ingredients)
             label_ledger_audit = self._build_label_ledger_audit(
                 display_ingredients,
@@ -6484,9 +6494,6 @@ class EnhancedDSLDNormalizer:
 
                 # Serving info
                 "servingSizes": serving_sizes,
-
-                # Label relationships
-                "labelRelationships": raw_data.get("labelRelationships", []) or [],
 
                 # ========== LABEL TEXT (STRUCTURED) ==========
                 "labelText": {
@@ -6796,8 +6803,6 @@ class EnhancedDSLDNormalizer:
                                 "name": form_name,
                                 "ingredientId": form.get("ingredientId"),
                                 "order": form.get("order", ing.get("order", 0)),
-                                # Mark as coming from a label header (for transparency)
-                                "_fromLabelHeader": name
                             }
                             # Process as inactive since "Less than 2%" items are minor ingredients
                             processed_form = self._process_single_ingredient_enhanced(synthetic_ing, is_active=False)
@@ -6995,10 +7000,6 @@ class EnhancedDSLDNormalizer:
                         else:
                             nested_processed["parentBlend"] = name
                             nested_processed["isNestedIngredient"] = True
-                            nested_processed["quantityProvided"] = (
-                                nested_processed.get("quantity", 0) > 0 and
-                                nested_processed.get("unit", "") != "NP"
-                            )
                             nested_results.append(nested_processed)
                 if nested_results:
                     return nested_results
@@ -7143,9 +7144,9 @@ class EnhancedDSLDNormalizer:
         ):
             logger.debug(f"Skipping nutrition fact: {name} (group: {ingredient_group}, unit: {unit_raw})")
             # Sprint E1.2.5 follow-up (2026-05-13): emit a display
-            # trail entry tagged 'nutrition_fact' so the build's
-            # ingredients_dropped_reasons surfaces DROPPED_NUTRITION_FACT
-            # for these rows. Without this, the E1.6 defense gate
+            # trail entry ('nutrition_fact', or 'summary_wrapper' for a label
+            # total) so the build's ingredients_dropped_reasons surfaces
+            # DROPPED_NUTRITION_FACT / DROPPED_SUMMARY_WRAPPER for these rows. Without this, the E1.6 defense gate
             # ("all raw actives reclassified as inactive") mis-fires on
             # legitimate-nutrition-facts products whose otheringredients
             # later land as inactives — the gate could not distinguish
@@ -7157,7 +7158,7 @@ class EnhancedDSLDNormalizer:
             self._queue_display_ingredient(
                 raw_source_text=raw_name,
                 source_section="activeIngredients" if is_active else "inactiveIngredients",
-                display_type="nutrition_fact",
+                display_type=self._excluded_row_display_type(name),
                 score_included=False,
                 source_row=ing,
                 children=_form_names_for_display,
@@ -7496,9 +7497,6 @@ class EnhancedDSLDNormalizer:
                         for item in nested_processed:
                             item["parentBlend"] = name
                             item["isNestedIngredient"] = True
-                            item["quantityProvided"] = (
-                                item.get("quantity", 0) > 0 and item.get("unit", "") != "NP"
-                            )
                             if _parent_blend_mass is not None:
                                 item.setdefault("parentBlendMass", _parent_blend_mass)
                                 item.setdefault("parentBlendUnit", _parent_blend_unit)
@@ -7506,10 +7504,6 @@ class EnhancedDSLDNormalizer:
                     else:
                         nested_processed["parentBlend"] = name
                         nested_processed["isNestedIngredient"] = True
-                        # Add quantityProvided flag for nested ingredients
-                        nested_qty = nested_processed.get("quantity", 0)
-                        nested_unit = nested_processed.get("unit", "")
-                        nested_processed["quantityProvided"] = nested_qty > 0 and nested_unit != "NP"
                         if _parent_blend_mass is not None:
                             nested_processed.setdefault("parentBlendMass", _parent_blend_mass)
                             nested_processed.setdefault("parentBlendUnit", _parent_blend_unit)
@@ -7603,13 +7597,10 @@ class EnhancedDSLDNormalizer:
                 f.get("name") for f in forms_structured
                 if isinstance(f, dict) and f.get("source") != "name_extraction"
             ]
-            for source, text in [("name_inference", raw_name or name)] + [
-                ("form_inference", form_name) for form_name in label_forms
-            ]:
+            for text in [raw_name or name] + label_forms:
                 inferred_part = self._infer_plant_part_from_name(text or "")
                 if inferred_part:
                     botanical_details["plantPart"] = inferred_part
-                    botanical_details["plantPart_source"] = source
                     break
 
         # Attribute additive function only from declared names/aliases. Identity
@@ -8209,8 +8200,6 @@ class EnhancedDSLDNormalizer:
         # Add botanical details if present
         if botanical_details.get("plantPart"):
             result["plantPart"] = botanical_details["plantPart"]
-            if botanical_details.get("plantPart_source"):
-                result["plantPart_source"] = botanical_details["plantPart_source"]
         if botanical_details.get("genus"):
             result["genus"] = botanical_details["genus"]
         if botanical_details.get("species"):
@@ -8698,8 +8687,6 @@ class EnhancedDSLDNormalizer:
                             "percent": form.get("percent"),
                             "forms": [],
                             "alternateNames": [],
-                            "_fromLabelHeader": name,
-                            "_transparency": "standard",
                         }
                         carry_form_dose_and_correction(
                             row,
@@ -8733,8 +8720,6 @@ class EnhancedDSLDNormalizer:
                         "percent": form.get("percent"),
                         "forms": [],
                         "alternateNames": [],
-                        "_fromLabelHeader": name,
-                        "_transparency": "standard",
                     }
                     carry_form_dose_and_correction(
                         row,
@@ -8755,8 +8740,6 @@ class EnhancedDSLDNormalizer:
                             "ingredientGroup": ingredient.get("ingredientGroup"),
                             "forms": [],
                             "alternateNames": [],
-                            "_fromLabelHeader": name,
-                            "_transparency": "standard",
                         })
                     continue
                 if self._is_label_header(form) or self._is_structural_form_container(
@@ -8779,8 +8762,6 @@ class EnhancedDSLDNormalizer:
                         "ingredientGroup": ingredient.get("ingredientGroup"),
                         "forms": [],
                         "alternateNames": [],
-                        "_fromLabelHeader": name,
-                        "_transparency": "standard",
                     })
 
         for row in expanded:
@@ -9858,6 +9839,18 @@ class EnhancedDSLDNormalizer:
         return None
 
     @staticmethod
+    def _nested_amount_disclosed(row: Dict[str, Any]) -> bool:
+        """A blend member's own amount is printed: a positive quantity with a dose unit (not a %)."""
+        quantity = row.get("quantity", 0)
+        unit = str(row.get("unit") or "").strip().upper()
+        return (
+            isinstance(quantity, (int, float))
+            and not isinstance(quantity, bool)
+            and quantity > 0
+            and unit not in {"", "NP", "UNSPECIFIED", "NOT PROVIDED", "UNKNOWN", "N/A", "%", "PERCENT"}
+        )
+
+    @staticmethod
     def _build_proprietary_blend_disclosure(
         proprietary_blends: List[Dict[str, Any]],
     ) -> Optional[Dict[str, Any]]:
@@ -9881,9 +9874,7 @@ class EnhancedDSLDNormalizer:
                 has_total = False
 
             individual_disclosed = bool(nested) and all(
-                row.get("quantityProvided") is True
-                and str(row.get("unit") or "").strip().upper() not in {"", "NP"}
-                for row in nested
+                EnhancedDSLDNormalizer._nested_amount_disclosed(row) for row in nested
             )
             disclosures.append({
                 "name": blend.get("name") or blend.get("standardName") or "Proprietary blend",
@@ -9920,7 +9911,7 @@ class EnhancedDSLDNormalizer:
         disclosed_quantities = sum(
             1 for b in proprietary_blends
             for n in b.get("nestedIngredients", [])
-            if n.get("quantityProvided", False)
+            if self._nested_amount_disclosed(n)
         )
         undisclosed_quantities = total_nested - disclosed_quantities
 
@@ -10013,8 +10004,8 @@ class EnhancedDSLDNormalizer:
                 add(omission)
         return inventory
 
-    @staticmethod
     def _classify_label_source_structure(
+        self,
         display_rows: List[Dict[str, Any]],
         meaningful_source_rows: int,
         unsupported: bool,
@@ -10054,8 +10045,13 @@ class EnhancedDSLDNormalizer:
             for row in active_rows
         ):
             return "elemental_mineral_source_compound"
+        # A label total recorded as a summary wrapper is not a blend.
         if any(
-            row.get("display_type") in {"structural_container", "summary_wrapper"}
+            row.get("display_type") == "structural_container"
+            or (
+                row.get("display_type") == "summary_wrapper"
+                and not self._is_label_rollup(row.get("raw_source_text"))
+            )
             or "blend" in str(row.get("ingredient_group") or "").casefold()
             for row in active_rows
         ):
@@ -11234,6 +11230,15 @@ class EnhancedDSLDNormalizer:
             ),
         }
     
+    def _is_label_rollup(self, name: str) -> bool:
+        """A label total or aggregate (constants.LABEL_ROLLUP_NAMES), e.g. "Total Omega-3 Fatty Acids"."""
+        return self.matcher.preprocess_text(name or "") in self._preprocessed_label_rollups
+
+    def _excluded_row_display_type(self, name: str) -> str:
+        """Ledger type of a row excluded as a nutrition fact: a label total or aggregate is a
+        summary wrapper; everything else is a nutrition fact."""
+        return "summary_wrapper" if self._is_label_rollup(name) else "nutrition_fact"
+
     def _is_nutrition_fact(
         self,
         name: str,
@@ -11304,18 +11309,10 @@ class EnhancedDSLDNormalizer:
         # is a real mineral, not a sodium-chloride nutrition-panel entry.
         # The unit-based {Calories}/{Gram(s)} check below still runs because
         # those units are unambiguous label-panel indicators.
+        # A vitamin or mineral printed only as %DV (calcium/iron on legacy protein-food
+        # panels) is still that nutrient: it goes to the RDA/UL owner like a %DV-only vitamin,
+        # which converts it through the Daily Value equation or records it unresolved.
         _cat_lower = (dsld_category or "").lower().strip()
-        _unit_lower = str(unit or "").strip().lower().strip("{}")
-        if (
-            _cat_lower == "mineral"
-            and _unit_lower in {"%", "percent", "percent dv", "%dv"}
-            and not has_forms
-        ):
-            # Legacy protein-food labels sometimes expose calcium/iron only
-            # as percent Daily Value. That is a Nutrition Facts disclosure,
-            # not a measured supplement dose. Preserve it in the label ledger
-            # while keeping it out of active-ingredient dose math.
-            return True
         _SUPPLEMENT_INGREDIENT_CATEGORIES = {
             "vitamin",
             "mineral",
@@ -11455,47 +11452,6 @@ class EnhancedDSLDNormalizer:
             "fiber", "total fiber", "dietary fiber", "soluble fiber", "insoluble fiber",
             "protein",  # handled carefully — see below
         }
-        # E1.6: Curated allowlist of supplements DSLD tags under category=fat
-        # but which are REAL active ingredients (phospholipids, marine oils,
-        # plant oils, sterols, MCTs). Without this list, the legacy D1.3
-        # rule treated every fat-category row as a Nutrition-Facts-panel
-        # exclusion and silently dropped ~186 single-active products like
-        # Phosphatidyl Serine 300 mg, Neptune Krill Oil, Phytosterols,
-        # Evening Primrose Oil, Flaxseed Oil. Match is case-insensitive
-        # against the row's ingredientGroup.
-        _FAT_CATEGORY_REAL_ACTIVES = {
-            # Phospholipids
-            "phosphatidylserine", "phosphatidylcholine", "phosphatidylinositol",
-            "phosphatidylethanolamine", "phosphatidic acid",
-            # Marine / animal oils
-            "krill oil", "fish oil", "cod liver oil", "salmon oil",
-            "sardine oil", "anchovy oil", "calamari oil", "menhaden oil",
-            # Plant / seed oils with active claims
-            "flaxseed oil", "evening primrose oil", "borage oil",
-            "black currant seed oil", "perilla seed oil",
-            "hemp seed oil", "chia seed oil", "sea buckthorn oil",
-            # Sterols / stanols
-            "phytosterols (unspecified)", "phytosterols",
-            # DSLD ingredientGroup variant for mixed phytosterol esters
-            # (e.g. Thorne Sterolipin) — added Sprint E1.2.5 follow-up.
-            "phytosterol (mixed)", "phytosterol esters",
-            "beta-sitosterol", "stigmasterol", "campesterol",
-            "plant sterols", "plant stanols",
-            # MCT / fractionated coconut. DSLD's ingredientGroup for MCT
-            # products varies — capture the common variants observed in
-            # the Nutricost / SR Sports Research / GNC catalogs.
-            "mct", "mct oil", "medium chain triglycerides",
-            "medium chain triglycerides (mct)", "medium chain triglyceride oil",
-            # Lecithin family
-            "lecithin", "soy lecithin", "sunflower lecithin",
-            # Fat-soluble actives DSLD occasionally tags category=fat
-            # instead of category=fatty acid (the latter triggers
-            # _bypass_name_match correctly; the former leaks).
-            "monolaurin", "lauric acid", "caprylic acid", "capric acid",
-            "caproic acid", "palmitic acid",
-            # Conjugated linoleic acid — supplement-grade, not panel
-            "conjugated linoleic acid", "cla",
-        }
         if unit:
             unit_lower = unit.lower().strip()
             # Strip braces if present so we accept both forms.
@@ -11606,14 +11562,12 @@ class EnhancedDSLDNormalizer:
                 # nutrition-fact signal at this layer. The replacement:
                 # only exclude here when the NAME is in the curated
                 # nutrition-facts list, OR the ingredientGroup is a
-                # known panel-disclosure group. Real-fat-class
-                # ingredientGroups (MCT, phospholipid, krill oil,
-                # phytosterol) explicitly survive. Anything else falls
-                # through to the downstream mapper, which is the right
-                # disambiguator for unfamiliar gram-unit rows.
+                # known panel-disclosure group. Real fat-class rows (MCT,
+                # phospholipid, krill oil, phytosterol) survive on their names.
+                # Anything else falls through to the downstream mapper, which
+                # is the right disambiguator for unfamiliar gram-unit rows.
                 elif not _bypass_name_match:
                     _processed_name_check = self.matcher.preprocess_text(name)
-                    _group_lower = (ingredient_group or "").lower().strip()
                     if _processed_name_check in self._preprocessed_excluded_nutrition:
                         logger.debug(
                             "Excluding via gram unit + known nutrition-fact name: "
@@ -11621,25 +11575,12 @@ class EnhancedDSLDNormalizer:
                             name, unit, dsld_category,
                         )
                         return True
-                    if _group_lower in _FAT_CATEGORY_REAL_ACTIVES:
-                        logger.debug(
-                            "E1.6: gram-unit row %r kept — ingredientGroup %r is a "
-                            "known fat-class active",
-                            name, ingredient_group,
-                        )
-                        # Fall through; downstream mapper handles it.
-                    # Otherwise: trust DSLD's row even with non-supplement
-                    # category. Do NOT exclude here.
-            # D1.3 + E1.6: Sugar/Fat/Carb rows are Nutrition Facts panel
-            # disclosures by default — UNLESS one of:
-            #   - the ingredientGroup matches a known fat-class active
-            #     (Phosphatidyl Serine, Krill Oil, Phytosterols, MCT, …)
-            #   - the row's NAME is not in the curated nutrition-facts list
-            #     (preserves real sugar-class supplements such as D-Mannose,
-            #     D-Ribose, Galactooligosaccharides, and complex-carb
-            #     supplements that DSLD tags ``category='sugar'`` or
-            #     ``category='complex carbohydrate'`` — Sprint E1.2.5
-            #     follow-up, 2026-05-13)
+            # D1.3: Sugar/Fat/Carb rows are Nutrition Facts panel disclosures
+            # by default — UNLESS the row's NAME is not in the curated
+            # nutrition-facts list. That keeps Phosphatidyl Serine, Krill Oil,
+            # Phytosterols and MCT (category=fat) and D-Mannose, D-Ribose,
+            # Galactooligosaccharides (category=sugar / complex carbohydrate)
+            # as actives (Sprint E1.2.5 follow-up, 2026-05-13).
             # This preserves the original D1.3 behavior for genuine panel
             # rows (Total Carbohydrates, Total Sugars, Total Fat, Cholesterol,
             # bare "Sugar"/"Sodium") while exempting real label-disclosed
@@ -11674,14 +11615,7 @@ class EnhancedDSLDNormalizer:
                     "soybean oil", "canola oil", "rapeseed oil",
                     "cottonseed oil", "vegetable oil",
                 }
-                if ingredient_group_lower in _FAT_CATEGORY_REAL_ACTIVES:
-                    logger.debug(
-                        "E1.6: ingredientGroup %r is a known fat-class active — "
-                        "routing %s to actives despite category=%s",
-                        ingredient_group, name, _cat_lower,
-                    )
-                    # Fall through to subsequent checks; do NOT exclude here.
-                elif ingredient_group_lower in _PANEL_CARRIER_GROUPS:
+                if ingredient_group_lower in _PANEL_CARRIER_GROUPS:
                     # A typed, exact registered fiber preparation is not a
                     # carrier merely because DSLD supplies a generic sugar
                     # group. Preserve its own declared mass; never assign it

@@ -10,6 +10,43 @@ Isolated final candidate2026.10.19.220556, core SHA256 a1c8d6339406468ee1a9d5408
 
 Remaining boundary: remote main advanced throughfd51b5828 with PR175/176 during validation. Clean/Enrich/Score code fingerprints now differ; reference hashes match. Completed outputs cannot be relabeled as latest-main artifacts. No rerun is authorized. Image readiness requires27missing DSLD images and thumbnail backfill; that changes the DB checksum, so the final publication comparison must bind any renewed exception to its actual final hash. No image backfill, promotion, Supabase upload, Flutter bundle import or IPA was performed. Release profile was deliberately stopped with143 after the newer-main provenance block was established; its partial progress is not a completed pass and remaining live gates were not run. Initial candidate freshness and all standalone snapshot gates passed. The remaining full detail-record comparison/release profile belongs to the final source/image candidate. Documentation-only closeout: full diff/reference review and git diff --check; no repeat broad suite or corpus run. Safe primary synchronization preserves all four original draft change sets and14private inputs; exact receipts remain local. Completed temporary branch is retired only after main containment. Four tracked drafts and14private inputs are preserved with exact diff/hash receipts; untracked research remains untouched. Detailed evidence and readable report: reports/postrun_20261019_final/.
 
+## Cleaner RC2/RC5 batch — PR #184, October 19 (Claude, claude/keen-shirley-de1d6d)
+
+Goal: remove cleaner outputs nothing reads (RC5) and decide nutrition-fact status by nutrient role (RC2), from reports/cleaner_root_cause_audit_20261019. Owners: enhanced_normalizer.py::_is_nutrition_fact/_excluded_row_display_type/_classify_label_source_structure, constants.py::EXCLUDED_NUTRITION_FACTS (LABEL_ROLLUP_NAMES is a computed subset), supplement_taxonomy.py::_is_non_quantified, the RDA/UL owner in the enricher (unchanged). Will NOT create a classifier, normalizer, data file, public field or status. Class: behavioral cleaner/taxonomy change.
+
+Changes:
+- RC5: five row fields and labelRelationships removed. entryDate, updatedDate, productVersionCode and offMarket have readers and stay.
+- RC2: a %DV-only Calcium/Iron row now goes to the RDA/UL owner as unresolved. This supersedes 12a7a3dcf. Sean, 2026-10-19: "%DV-only calcium and iron — yes, include them in the existing assessment. Do not discard their nutrient identity merely because mass is unavailable. Convert only when the applicable DV basis and conversion are established. Otherwise retain an indeterminate assessment: no guessed mass, no invented UL exceedance and no 'within limits' reassurance. This does not automatically approve every additional interaction message. Review dose-dependent warnings and vague pregnancy/heart-disease messages for actual applicability." Label totals are recorded as summary wrappers. The no-op _FAT_CATEGORY_REAL_ACTIVES is deleted. Only label totals stop counting as a proprietary blend.
+- Taxonomy: a %DV-only row is not a quantified dose. This fixes the 16872 casein regression the audit found.
+- Warning review (d011e75bb). The 9 products gained 63 warnings across 11 rule x condition types.
+  - Calcium/heart_disease is the only dose-dependent one (> 1,000 mg/day). For an unknown amount it showed above-threshold cardiovascular copy. It now shows authored "amount unclear — check with your clinician" copy via enrich_supplements_v3._amount_unknown_copy (threshold *_if_amount_unknown); the disposition stays review.
+  - Iron pregnancy/lactation said "no_data / Limited safety data". It is now monitor/established, with copy covering both pregnancy and breastfeeding, sourced to NIH ODS Iron (pregnancy RDA 27 mg, lactation 9-10 mg, UL 45 mg), with the missing profile_gate added (/data-fix, 2 entries, data_batch check exact, strict citations PASS).
+  - Kept: calcium/iron spacing advice with thyroid medications and fluoroquinolones, and iron with antihypertensives (sourced, dose-independent).
+  - Kept but flagged: calcium pregnancy "standard nutrient" (applicable; no source); iron/liver_disease (conditional wording; limited evidence).
+  - The per-warning table is in the PR #184 body.
+- RC3: nothing moved. No curated owner takes the 37 lists without a behavior change, so the options went to Sean (~/pg_quality/cleaner_rc235_20261019/RC3_OWNER_CHECK.md).
+
+Evidence:
+- Fail-first tests: test_cleaner_dead_outputs_removed.py and test_nutrition_fact_nutrient_role.py (real rows 16730, 1060, 252496, 307577, 232129, 16872).
+- Clean-only hash over all 15,414 labels with the RC5 keys stripped: identical.
+- Replay on base 2a7d65139 vs candidate dcf272c97, 1,613 labels (611 changed + 799/800 with %-unit rows + 1,000 controls), --full --blob, compare --all-paths (delta3.json):
+  - 1,000 controls: only RC5 fields changed.
+  - 581 products: 758 total rows relabelled nutrition_fact to summary_wrapper. They move from the app's Nutrition section to Active, matching the printed Supplement Facts.
+  - 0 source_structure changes.
+  - 9 GNC protein powders: scores, pillars and safety status identical. Each gains 5-11 caution/monitor interaction warnings for calcium/iron (these default to suppressed) and loses none. Types: 16872 protein_powder (unchanged); 16730 vitamin_complex to general_supplement; 16839, 16841, 16844, 16845, 16863, 16865 and 16866 stay single_mineral (potassium) as on main.
+  - 799/800: only the classification_row_evidence quantified flag changed; type and score unchanged.
+- Warning replay, d011e75bb vs 4e0fcffe6, 929 unique labels: all 67 corpus products with an amount-unknown calcium heart warning, the 9, a 300-label iron sample, a 300-label calcium sample (the groups overlap, since many products contain both) and 300 controls with neither. 408 labels changed: 389 carry the new iron pregnancy/lactation copy and 76 the calcium amount-unknown heart copy; 57 carry both. Only warning/interaction paths changed; 0 controls changed; 0 score or status moves. Corpus-wide, all 1,008 iron products get the new pregnancy/lactation warning. Tests: 10 in test_nutrition_fact_nutrient_role.py; interaction slice 1,319 passed, 6 skipped. CI green on d011e75bb.
+- Canaries 33/33 unchanged.
+- Named slices: 3,468 / 508 / taxonomy 2,697 passed.
+- Independent review and the integrator's audit found no code defect.
+- Integrator's local rung on 4f7d02ed0: 491 passed, 1 failed. The failure is the known stale-build folate highest_ul test, which also fails on main because the build predates bc2b6c76d.
+
+Follow-ups:
+- Taxonomy does not treat the active Protein/Dietary Fiber rows of protein powders as classification rows. That leaves them typed single_mineral (potassium mg row) or no-active (16730). Pre-existing on main.
+- The build_final_db._infer_final_label_source_structure fallback still counts every summary wrapper as a blend. It runs only without an upstream structure.
+- Rule data: source the shared "Standard nutrient" pregnancy template (calcium, zinc and others); review whether iron/liver_disease should depend on the amount.
+- RC3 data files.
+
 ## Previous consumer/catalog audit — October19 (Codex)
 
 Owner: existing manifests/fingerprints, replay hashes, scored-artifact receipts, candidate-only snapshot/export and Flutter consumer owners. Will NOT create policy, scorer, registry, public field/status, hash exclusion or restamped receipt. Read-only artifact audit plus documentation correction; runtime951a05415/app6fcd unchanged. Fresh263named pipeline tests, app analysis/244named tests/9actual-blob tests pass. All114manifests/174payloads/15,426products and87,870receipts verify. Canonical isolated candidate2026.10.19.151859 passes16gates,0errors/skips/quarantines/failures; every core score/status/tier/safety equals Stage3, all8tested blobs identical. All22prior glycinate capsules remain in34source-form matches. No pipeline, publication, bundle import or IPA. App stale handoff corrected/pushed as documentation-only126ba014.

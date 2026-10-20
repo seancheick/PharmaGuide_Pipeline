@@ -447,8 +447,13 @@ def test_folate_total_and_folic_acid_child_emit_separate_intake_and_ul_roles() -
     assert child["per_day_max"] == pytest.approx(1360.0)
 
 
-def test_percent_only_panel_mineral_routes_to_nutrition_not_active() -> None:
-    """Legacy protein labels can expose only %DV for panel calcium/iron."""
+def test_percent_only_panel_mineral_routes_to_rda_ul_owner_with_printed_amount() -> None:
+    """Legacy protein labels can expose only %DV for panel calcium/iron.
+
+    Like a %DV-only vitamin, the mineral goes to the RDA/UL owner with its printed
+    amount; without a Daily Value target group nothing converts it (cleaner audit RC2,
+    2026-10-19, replacing the 2026-08-19 nutrition-fact routing).
+    """
     raw = _raw_product(
         [
             {
@@ -471,15 +476,15 @@ def test_percent_only_panel_mineral_routes_to_nutrition_not_active() -> None:
 
     cleaned = EnhancedDSLDNormalizer().normalize_product(raw)
 
-    assert cleaned["activeIngredients"] == []
-    nutrition_rows = [
-        row
-        for row in cleaned["display_ingredients"]
-        if row.get("display_type") == "nutrition_fact"
+    assert [(row["name"], row["quantity"], row["unit"]) for row in cleaned["activeIngredients"]] == [
+        ("Calcium", 6, "%"),
+        ("Iron", 8, "%"),
     ]
-    assert [(row["label_display_name"], row["exact_dose_text"]) for row in nutrition_rows] == [
-        ("Calcium", "6 %"),
-        ("Iron", "8 %"),
+    assert not any(row.get("dose_data_quality") for row in cleaned["activeIngredients"])
+    display = {row["label_display_name"]: row for row in cleaned["display_ingredients"]}
+    assert [(display[name]["display_type"], display[name]["exact_dose_text"]) for name in ("Calcium", "Iron")] == [
+        ("mapped_ingredient", "6 %"),
+        ("mapped_ingredient", "8 %"),
     ]
 
 

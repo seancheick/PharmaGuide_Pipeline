@@ -19,8 +19,8 @@ def test_proprietary_disclosure_retains_every_blend_and_uses_clear_unknown_copy(
             "unit": "mg",
             "proprietaryBlend": True,
             "nestedIngredients": [
-                {"name": "Turmeric", "quantityProvided": False, "unit": "NP"},
-                {"name": "Ginger", "quantityProvided": False, "unit": "NP"},
+                {"name": "Turmeric", "quantity": 0, "unit": "NP"},
+                {"name": "Ginger", "quantity": 0, "unit": "NP"},
             ],
         },
         {
@@ -29,7 +29,7 @@ def test_proprietary_disclosure_retains_every_blend_and_uses_clear_unknown_copy(
             "unit": "NP",
             "proprietaryBlend": True,
             "nestedIngredients": [
-                {"name": "Protease", "quantityProvided": True, "unit": "mg"},
+                {"name": "Protease", "quantity": 50, "unit": "mg"},
             ],
         },
     ]
@@ -43,6 +43,7 @@ def test_proprietary_disclosure_retains_every_blend_and_uses_clear_unknown_copy(
     ]
     assert disclosure["blends"][0]["individualAmounts"] == "Not disclosed"
     assert disclosure["blends"][1]["totalAmount"] == "Not disclosed"
+    assert disclosure["blends"][1]["individualAmounts"] == "Disclosed"
 
 
 def test_enricher_cli_overrides_are_independent() -> None:
