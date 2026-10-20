@@ -87,6 +87,35 @@ free-from claim and a cross-contact signal, plus the named products and 300 seed
 - 218190 keeps its B2 −2: a dairy-free claim and "produced in a facility that also handles dairy
   ingredients" is an own-group contradiction (the milk-facility + dairy-free control), so it does
   not go 13 → 15.
-- 297644 (barley grass juice ingredient, gluten-free claim): a barley or rye ingredient does not
-  contradict a gluten-free claim, as on main. That is the open 21 CFR 101.91 question (processed
-  grasses, wheat dextrin, malt) for Sean.
+- 297644 and 274671 (barley grass ingredient, gluten-free claim): a wheat, rye or barley
+  *ingredient* hit contradicts a gluten-free claim (`allergen_conflict`) while
+  `scoring_input_contract.GLUTEN_GRAIN_INGREDIENT_CONTRADICTS_GLUTEN_FREE` is True. That
+  reproduces main's B2 −2. Since the re-audit below, the compliance `gluten_free` flag (the badge),
+  `claim_gluten_free_validated` and the claim evidence follow the same setting, so both products
+  lose the badge. Whether processed grasses, wheat dextrin or malt may carry a gluten-free claim
+  (21 CFR 101.91) is Sean's open question; his answer flips that one constant.
+
+## Re-audit of #187 (H1, M1, L1, L4; head a69d80d86 on main 0826118d5)
+
+- **H1.** An unread may-contain sentence now clears the compliance `gluten_free` flag (core
+  `is_gluten_free`, the app's Gluten-Free badge) and `claim_gluten_free_validated`, not only B2.
+  A sentence about gluten under 20 ppm is a gluten-free qualifier, not an unread allergen warning.
+  293779 loses the badge; 273865 ("may contain trace amounts less than 20 ppm") keeps it and loses
+  its B2 −2 (44.6 → 47.6).
+- **M1.** B2's own-group match goes through `free_from_claim_contradiction` (`B2_CLAIM_GROUP_RULE`).
+  The second group mapper (`_present_allergen_groups`) is deleted. Gluten-grain ingredient hits
+  follow the one switch `GLUTEN_GRAIN_INGREDIENT_CONTRADICTS_GLUTEN_FREE` (see 297644 above).
+- **L1.** `claim_allergen_free_validated` uses `free_from_claims_all_hold`: each claimed group must
+  hold under the rule; an unknown claim key fails on any hit or unread warning.
+- **L4.** A shellfish-free claim covers crustaceans and molluscs; a sesame-free claim covers sesame.
+
+**Replay** (`~/pg_quality/lucidbanach_pr187_20261020/r2/`, same 784 frozen labels, `--full
+--blob`, main 0826118d5 vs a69d80d86; an earlier run on main 2e80642ca at the lane root gave
+identical counts):
+- 541 records change; 0 allergen-hit changes; 0 status changes.
+- 161 products gain 1.5–3.0 points, all B2 removed (+2.0 ×104, +3.0 ×40, +2.7 ×15, +1.5 ×2);
+  26 tiers up, 0 down. Per product: `per_product_deltas.csv`.
+- Gluten-Free badge (`gluten_free`) cleared on 3: 293779 (H1), 297644 and 274671 (M1). 364 regain
+  `claim_gluten_free_validated`; 274671 loses it.
+- 220 gain `claim_allergen_free_validated` (L1), 59 of them controls. Its only reader is the
+  scorer's `claim_validations` metadata; no score moves from it.
