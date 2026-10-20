@@ -178,3 +178,34 @@ def test_owners_are_the_same_inside_and_outside_the_scoring_scope(enriched, dsld
     with scoring_input_scope(product):
         inside = split(product)
     assert outside == inside
+
+
+@pytest.mark.parametrize("dsld_id", ["212273", "251549"])
+def test_undosed_blend_owners_are_assessed_without_becoming_doses(enriched, dsld_id):
+    """D31 A: actual raw-label owners get research assessment, never parent mass."""
+    import copy
+    from evidence_resolver import evidence_row_key
+    from scoring_input_contract import get_evidence_subject_rows
+    from scoring_v4.modules.generic_helpers import has_usable_individual_dose
+    from scoring_v4.scored_artifact import build_scored_artifact
+
+    product = enriched[dsld_id]
+    original = copy.deepcopy(product)
+    owners = evidence_owner_canonicals(product, module="generic")
+    undosed = [row for row in get_evidence_subject_rows(product)
+               if row.get("canonical_id") in owners
+               and row.get("scoring_input_kind") != "product_level_evidence"
+               and not has_usable_individual_dose(row)]
+    assert undosed
+    artifact = build_scored_artifact(copy.deepcopy(product))
+    assessments = artifact["assessment_readiness"]["evidence"]["ingredient_assessments"]
+    indexed = {(row["source_row_ref"], row["canonical_id"]): row for row in assessments}
+    for row in undosed:
+        assessment = indexed[evidence_row_key(row)]
+        assert assessment["evidence_applicability"] == "individual_ingredient"
+        assert assessment["state"] != "not_applicable"
+        assert assessment["source_value"] == row.get("quantity", row.get("dose_value"))
+        assert assessment["source_unit"] == (row.get("unit") or row.get("dose_unit"))
+        assert not has_usable_individual_dose(row)
+    # Research assessment must not fabricate or mutate any input exposure.
+    assert product == original

@@ -1367,3 +1367,56 @@ def test_resolved_or_absent_microorganism_measurements_preserve_dose_readiness(m
     product = _product(_row("Calcium", "calcium", quantity=500))
     product["probiotic_data"] = probiotic_data
     assert evaluate_assessment_readiness(product, module=module)["dose"]["readiness"] == "complete"
+
+
+@pytest.mark.parametrize("reviewed", [True, False])
+@pytest.mark.parametrize("parent_is_material", [True, False])
+def test_undosed_evidence_owner_readiness_does_not_promote_dose_materiality(
+    monkeypatch, reviewed, parent_is_material,
+):
+    """An inherited/fallback research owner is assessable without a known dose."""
+    import evidence_resolver
+    import assessment_readiness
+
+    row = _row("Undosed Botanical", "undosed_botanical", quantity=None, unit="NP")
+    row.update(has_dose=False, isNestedIngredient=True,
+               raw_source_path="ingredientRows[0].nestedRows[0]",
+               source_row_ref="ingredientRows[0].nestedRows[0]")
+    header = _row("Botanical Blend", "botanical_blend", quantity=1000)
+    product = _product(row, title="Botanical Formula")
+    monkeypatch.setattr(evidence_resolver, "_evidence_subject_roles", lambda *args: (
+        [row], [{"role": "adjunct"}], [header],
+        [{"role": "major" if parent_is_material else "adjunct"}],
+    ))
+    monkeypatch.setattr(assessment_readiness, "resolved_clinical_matches",
+                        lambda *args, **kwargs: ([_match(row, "positive_strong")] if reviewed else [], []))
+    assert row["canonical_id"] in evidence_resolver.evidence_owner_canonicals(product, module="generic")
+    result = assessment_readiness.evaluate_evidence_assessment(product, module="generic")
+    item = result["ingredient_assessments"][0]
+    assert item["evidence_applicability"] == "individual_ingredient"
+    assert item["state"] == ("evaluated_supported" if reviewed else "not_yet_evaluated")
+    assert result["readiness"] == ("complete" if reviewed else "incomplete")
+    assert item["material"] is False  # Dose still consumes physical material roles.
+    assert item["role"] == "adjunct"
+    assert item["source_value"] is None
+    assert item["source_unit"] == "NP"
+    assert result["not_yet_evaluated_count"] == int(not reviewed)
+
+
+def test_undosed_nonowner_remains_outside_individual_evidence(monkeypatch):
+    """A named primary elsewhere does not promote an unrelated undosed adjunct."""
+    import evidence_resolver
+    import assessment_readiness
+
+    owner = _row("N-Acetylcysteine", "nac")
+    adjunct = _row("Undosed Adjunct", "undosed_adjunct", quantity=None, unit="NP")
+    adjunct.update(has_dose=False, raw_source_path="ingredientRows[1]")
+    product = _product(owner)
+    monkeypatch.setattr(evidence_resolver, "_evidence_subject_roles", lambda *args: (
+        [owner, adjunct], [{"role": "primary"}, {"role": "adjunct"}], [], [],
+    ))
+    result = assessment_readiness.evaluate_evidence_assessment(product, module="generic")
+    item = next(x for x in result["ingredient_assessments"] if x["canonical_id"] == "undosed_adjunct")
+    assert item["state"] == "not_applicable"
+    assert item["reason_code"] == "non_material_active"
+    assert item["source_value"] is None

@@ -357,8 +357,9 @@ def evaluate_evidence_assessment(
     """Classify every score row without treating a missing match as a review."""
     # Use the same subject set and whole-label prominence context as the
     # Evidence resolver. Undosed named blend members still need a review.
-    from evidence_resolver import _evidence_subject_roles
+    from evidence_resolver import _evidence_subject_roles, evidence_owner_canonicals
     subjects, subject_roles, other_rows, other_roles = _evidence_subject_roles(product, module)
+    evidence_owners = evidence_owner_canonicals(product, module=module)
     # Retain structural strict rows for the exposure consumer, while marking
     # them outside the individual Evidence question.
     rows, roles = subjects + other_rows, subject_roles + other_roles
@@ -395,7 +396,7 @@ def evaluate_evidence_assessment(
             applicability = EVIDENCE_APPLICABILITY_NOT_APPLICABLE
             state = EVIDENCE_NOT_APPLICABLE
             reason = "structural_row_not_evidence_subject"
-        elif not material:
+        elif not material and canonical_id not in evidence_owners:
             applicability = EVIDENCE_APPLICABILITY_NOT_APPLICABLE
             state = EVIDENCE_NOT_APPLICABLE
             reason = "non_material_active"
@@ -491,9 +492,11 @@ def evaluate_evidence_assessment(
     individual_count = applicability_counts.get(
         EVIDENCE_APPLICABILITY_INDIVIDUAL, 0
     )
+    # D31: an undosed owner can have a research question without a
+    # material Dose row. Keep physical material flags and amounts intact.
     readiness = (
         READINESS_NOT_APPLICABLE
-        if material_count == 0
+        if material_count == 0 and individual_count == 0
         else READINESS_INCOMPLETE
         if incomplete_refs
         else READINESS_COMPLETE
