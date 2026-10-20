@@ -9787,7 +9787,7 @@
           "condition_id": "bleeding_disorders",
           "severity": "caution",
           "evidence_level": "established",
-          "mechanism": "EPA and DHA competitively inhibit arachidonic acid metabolism, suppressing thromboxane A2 (TXA2) synthesis and reducing platelet aggregation. At doses >3 g/day of combined EPA+DHA, clinically measurable prolongation of bleeding time has been observed. In fish-oil studies, lower factor VII levels (a vitamin K-dependent coagulation factor) have also been reported; algal DHA at 1.62 g/day did not alter the thrombogenic factors measured (PMID 9001371).",
+          "mechanism": "EPA and DHA competitively inhibit arachidonic acid metabolism, suppressing thromboxane A2 (TXA2) synthesis and reducing platelet aggregation. At doses >3 g/day of combined EPA+DHA, clinically measurable prolongation of bleeding time has been observed. A fish-oil case report notes that omega-3 fatty acids may decrease factor VII levels (a vitamin K-dependent coagulation factor); algal DHA at 1.62 g/day did not alter the thrombogenic factors measured (PMID 9001371).",
           "action": "If you have a bleeding disorder, discuss omega-3 (EPA/DHA) supplements with your clinician. Clinically significant bleeding is not consistently demonstrated in trials; your other medicines and condition matter.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/17192169/",
@@ -9823,7 +9823,7 @@
           "condition_id": "surgery_scheduled",
           "severity": "monitor",
           "evidence_level": "probable",
-          "mechanism": "Antiplatelet effects via TXA2 suppression may theoretically increase perioperative bleeding risk. A large RCT (OPERA, n=1516) found no significant increase in surgical bleeding at standard doses; however, high-dose use (6 g/day) combined with anticoagulants has produced serious hemorrhagic events.",
+          "mechanism": "Antiplatelet effects via TXA2 suppression may theoretically increase perioperative bleeding risk. In a large fish-oil trial (OPERA, n=1516; 8-10 g before surgery, then 2 g/day), perioperative bleeding was not increased. In one reported case, 6 g/day of omega-3 taken with warfarin and aspirin was followed by a subdural hematoma after a fall.",
           "action": "Inform your surgical team about omega-3 (EPA/DHA) supplements and any blood thinners, and follow their product-specific instructions.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/30571332/",

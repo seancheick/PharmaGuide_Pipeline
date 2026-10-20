@@ -67,6 +67,10 @@ def test_epa_dha_oil_mechanism_scopes_fish_oil_findings():
     for sub in rule["condition_rules"] + rule["drug_class_rules"]:
         for sentence in re.split(r"(?<=[.;])\s+", sub["mechanism"]):
             if "fish" in sentence.lower():
-                assert sentence.startswith(("In fish-oil studies", "In one reported case")), (
-                    sub.get("condition_id") or sub.get("drug_class_id"), sentence)
+                assert sentence.startswith(
+                    ("In a large fish-oil trial", "In one reported case", "A fish-oil case report")
+                ), (sub.get("condition_id") or sub.get("drug_class_id"), sentence)
+        # One case is never "events", and OPERA's 8-10 g load was not a standard dose.
+        for claim in ("has produced", "standard doses"):
+            assert claim not in sub["mechanism"], (sub.get("condition_id") or sub.get("drug_class_id"), claim)
 

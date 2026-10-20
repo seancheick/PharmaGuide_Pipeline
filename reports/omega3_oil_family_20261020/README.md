@@ -54,8 +54,9 @@ Every raw label naming algal/algae/krill/life's/Schizochytrium (399), 300 sample
   - The subdural-hematoma case is "in one reported case".
   - The NSAID line says "omega-3 (EPA/DHA) supplements".
   - `mechanism_batch.py`; the copy test now covers mechanisms.
-- **F2:** merged main 3d7fe8adf (IQM conflict on `_metadata` only; batch re-applied). Both batch
-  scripts note their `data_batch.py check` line.
+- **F2:** merged main (most recently 8f9c22e09); each IQM `_metadata` conflict was resolved by
+  re-applying the batch and checking it with `data_batch.py check`. Both batch scripts name that
+  check.
 - **F4, blob-only changes, no score or safety change:** 243663, 328792 and 75286 "Superba Boost
   Krill Oil", and 82325 "Algae Oil". The oil row moves from inactive to active_form_duplicate, and
   that blob row then loses its CUI/UNII/RXCUI/notes.
@@ -64,3 +65,16 @@ Every raw label naming algal/algae/krill/life's/Schizochytrium (399), 300 sample
   sources (ODS gives 2–15 g/day).
 - **Next follow-up, same class:** cod_liver_oil, tuna_oil, calamari_oil, calanus_oil and seal_oil
   have no omega-3 family link or rule.
+
+## Delta audit (October 20, 2026; `mechanism_batch2.py`)
+
+- **surgery_scheduled mechanism:** "In a large fish-oil trial (OPERA, n=1516; 8-10 g before
+  surgery, then 2 g/day), perioperative bleeding was not increased. In one reported case, 6 g/day
+  of omega-3 taken with warfarin and aspirin was followed by a subdural hematoma after a fall."
+  - The old text said "standard doses", but OPERA (PMID 30571332) used an 8–10 g loading dose.
+  - It also said such use "has produced serious hemorrhagic events", which rested on one case
+    (PMID 17192169).
+- **Factor VII:** now "A fish-oil case report notes that omega-3 fatty acids may decrease factor
+  VII levels". Its only source, PMID 14742793, is one warfarin/INR case report.
+- **Test:** the mechanism test also rejects "has produced" and "standard doses".
+- All three PMIDs were re-read by content; citation strict check passes.
