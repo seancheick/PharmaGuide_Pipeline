@@ -703,8 +703,13 @@ def _is_verified_canonical(value: Any) -> bool:
 
 def _is_interaction_only_identity(row: Dict[str, Any]) -> bool:
     """A non-scorable row's identity kept for interactions only: identity is
-    not scorability, so it owns no Evidence and feeds no Dose or route."""
-    return row.get("identity_resolution_rationale") == NON_SCORING_IDENTITY_RATIONALE
+    not scorability, so it owns no Evidence and feeds no Dose or route. A
+    later owner that re-identifies the row (a recognized non-scorable record)
+    ends that."""
+    return (
+        row.get("identity_resolution_rationale") == NON_SCORING_IDENTITY_RATIONALE
+        and _norm(row.get("canonical_id")) == _norm(row.get("canonical_id_before"))
+    )
 
 
 def score_eligible_identity_view(product: Dict[str, Any]) -> Dict[str, Any]:

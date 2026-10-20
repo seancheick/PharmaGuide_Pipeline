@@ -17754,8 +17754,9 @@ class SupplementEnricherV3:
         No fallback: classifying an empty product on failure silently routed the
         real one as generic. A failure now surfaces as a failed enrichment.
         """
+        # Routes and roles read score-eligible identities only.
         return build_scoring_classification(
-            enriched,
+            score_eligible_identity_view(enriched),
             classification_origin="native_enrichment",
         )
 

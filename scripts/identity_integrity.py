@@ -1130,7 +1130,8 @@ def resolve_identity(
     # B. lactis alone), or from a marker form of a plant ("Sawasabi Wasabi
     # powder": Total Isothiocyanate is not the plant), or one a declared form
     # names as another substance ("Arginine" as whey protein isolate) unless
-    # that form is a member of it ("Lactobacillus": L. acidophilus ...).
+    # that form is a member of it ("Lactobacillus": L. acidophilus ...), or a
+    # constituent its parent row names ("Arginine" in soy protein isolate).
     # An identity kept only on that standardName is for interactions alone
     # (NON_SCORING_IDENTITY_RATIONALE).
     label_proves_canonical = bool(canonical_before) and (
@@ -1165,6 +1166,23 @@ def resolve_identity(
             ):
                 forms_contradict = True
                 break
+    # A row listed under a parent that names another material is that
+    # material's constituent ("Arginine" in "Solae Soy Protein isolate"), not
+    # the substance added on its own; a family or category parent keeps it.
+    parent_named = (
+        canonical_registry.resolve_preferred(row.get("parentBlend"))
+        if canonical_before and canonical_registry is not None and row.get("parentBlend")
+        else None
+    )
+    parent_canonical = _canonical(parent_named[0]) if parent_named else None
+    if (
+        parent_canonical
+        and parent_canonical != canonical_before
+        and not canonical_registry.is_role_record(parent_canonical)
+        and INTERACTION_SUBJECT_FAMILY.get(canonical_before) != parent_canonical
+        and not (canonical_parent_of and canonical_parent_of(parent_canonical, canonical_before))
+    ):
+        forms_contradict = True
     standard_name_proves_canonical = bool(canonical_before) and (
         not raw_canonicals
         and canonical_registry is not None

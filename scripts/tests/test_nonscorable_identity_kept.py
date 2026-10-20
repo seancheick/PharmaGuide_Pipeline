@@ -57,6 +57,8 @@ def enrich():
         (233668, "Lactobacillus", "probiotics", "RULE_IQM_PROBIOTICS_IMMUNOCOMPROMISED"),
         # Amplified Muscle Igniter 4X: "Yerba Mate leaf extract" in an energy blend.
         (18473, "Yerba Mate leaf extract", "yerba_mate_leaf", "RULE_IQM_YERBA_MATE_CARDIOVASCULAR"),
+        # Staminol: the row declares L-Arginine itself inside a proprietary blend.
+        (315814, "Arginine", "l_arginine", "RULE_IQM_L_ARGININE_HYPERTENSION"),
     ],
 )
 def test_non_scorable_row_keeps_its_identity_and_meets_its_rules(enrich, dsld_id, label, canonical_id, rule_id):
@@ -139,6 +141,8 @@ def test_role_record_is_not_kept_as_a_substance():
     (288699, "Bifidobacterium", "bifidobacterium_lactis"),
     # Forms name whey protein isolate: an amino-profile constituent, not supplemental arginine.
     (176044, "Arginine", "l_arginine"),
+    # Listed inside "Solae Soy Protein isolate": the protein's amino profile.
+    (79397, "Arginine", "l_arginine"),
     # DSLD group "Agave" names the genus only; century_plant is Agave americana.
     (31062, "Agave powder", "century_plant"),
     # The marker form "Total Isothiocyanate" is not the plant.
@@ -167,6 +171,8 @@ def test_wasabi_label_keeps_its_plant(enrich):
     (204521, "evidence", 10.0),
     # A 0.4 mg iron row kept for interactions feeds no Dose.
     (178728, "dose", 11.4),
+    # "organic Beet" re-identified later as Beetroot Powder (as on main) still scores.
+    (62890, "formulation", 10.8),
 ])
 def test_interaction_only_identity_owns_no_evidence_or_dose(enrich, dsld_id, pillar, expected):
     from scoring_v4.scored_artifact import build_scored_artifact
