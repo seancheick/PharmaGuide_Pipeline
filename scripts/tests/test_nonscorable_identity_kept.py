@@ -223,7 +223,8 @@ def test_wasabi_label_keeps_its_plant(enrich):
     # A 0.4 mg iron row kept for interactions feeds no Dose.
     (178728, "dose", 11.4),
     # "organic Beet" re-identified later as Beetroot Powder (as on main) still scores.
-    (62890, "formulation", 10.8),
+    # 10.8 on main; 12.4 since PR214, whose multi panel no longer averages adjunct rows.
+    (62890, "formulation", 12.4),
 ])
 def test_interaction_only_identity_owns_no_evidence_or_dose(enrich, dsld_id, pillar, expected):
     from scoring_v4.scored_artifact import build_scored_artifact
@@ -278,7 +279,8 @@ def _scoring_inputs(artifact):
                                  "pomegranate", "spinach", "strawberry", "tart_cherry", "tomato"],
              "dose_credits": [12.54]}),
     (327402, {"score": 72.8, "status": "complete", "evidence_owners": None, "dose_credits": [1.28, 6.19]}),
-    (328104, {"score": 83.8, "status": "complete", "evidence_owners": None, "dose_credits": [4.65, 13.17]}),
+    # 83.8 on main; 83.9 since PR214 (multi panel form quality reads material rows only).
+    (328104, {"score": 83.9, "status": "complete", "evidence_owners": None, "dose_credits": [4.65, 13.17]}),
 ])
 def test_scoring_inputs_equal_main_when_a_row_keeps_an_identity(enrich, dsld_id, expected):
     """Values captured from main 92881c049 for the same raw labels."""

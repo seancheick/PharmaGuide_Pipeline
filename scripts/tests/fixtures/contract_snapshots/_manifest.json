@@ -1152,6 +1152,18 @@
         327416
       ],
       "source_commit": "92881c049"
+    },
+    {
+      "date": "2026-10-20",
+      "notes": "PR #214 (claude/panel-form-quality-materiality): a multi's panel form quality averages only material-role rows (panel micronutrients and mass-major actives), so non-panel add-ons no longer move Formulation; the role owner also counts IU/DFE-dosed vitamins and vitamin A declared as beta-carotene as panel members. Formulation only: 182730 Pure Encapsulations Athletic Pure Pack 16.7 -> 17.1 (80.0 -> 80.4); 12012 CVS Spectravite 16.0 -> 15.8 (77.6 -> 77.4); 288344 Garden of Life Men 14.9 -> 14.8 (80.2 -> 80.1); 278454 Ritual Essential for Women 16.8 -> 16.6 (86.6 -> 86.4); 239600 CVS Men's Daily Gummies 12.4 -> 11.8 (77.3 -> 76.7). Each is a gate mover in the 15,426-product corpus measurement (~/pg_quality/panel_materiality_pr_20261020/v2). Complete 33 raw-canary check: these were the only drifts. Refreshed from raw only.",
+      "dsld_ids": [
+        182730,
+        12012,
+        288344,
+        278454,
+        239600
+      ],
+      "source_commit": "cf1ed244e"
     }
   ]
 }

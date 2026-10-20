@@ -16,10 +16,8 @@ from typing import Any, Dict, Iterable, List, Mapping
 from dose_assessment import CONVERSION_FAILED, NO_UL_APPLICABLE
 from probiotic_measurements import AFU_REVIEW_REASON, pending_afu_measurements, declared_total_cfu, unresolved_cfu_measurements
 from scoring_input_contract import (
+    MATERIAL_ROLES,
     ROLE_ADJUNCT,
-    ROLE_CLAIM_PROMINENT,
-    ROLE_MAJOR,
-    ROLE_PRIMARY,
     build_scoring_classification,
     classify_ingredient_roles,
     get_scoring_ingredients,
@@ -131,7 +129,6 @@ VERIFICATION_VERIFIED_PRESENT = "verified_present"
 VERIFICATION_VERIFIED_ABSENT = "verified_absent"
 VERIFICATION_NOT_EVALUATED = "not_evaluated"
 
-_MATERIAL_ROLES = frozenset({ROLE_PRIMARY, ROLE_CLAIM_PROMINENT, ROLE_MAJOR})
 _VALID_MODULES = frozenset({
     "generic",
     "probiotic",
@@ -379,7 +376,7 @@ def evaluate_evidence_assessment(
         canonical_id = _norm(row.get("canonical_id")) or None
         source_ref = _row_ref(row, index)
         role_name = str(role.get("role") or ROLE_ADJUNCT)
-        material = role_name in _MATERIAL_ROLES
+        material = role_name in MATERIAL_ROLES
         probiotic_state = _probiotic_native_evidence_state(product, row) if module == "probiotic" else None
         linked = [
             match

@@ -9,6 +9,8 @@ equal form quality, and dosage form alone neither earns nor loses points.
 from __future__ import annotations
 
 import json
+
+import pytest
 import sys
 from pathlib import Path
 
@@ -332,3 +334,79 @@ def test_omega_evidence_row_does_not_count_its_label_row_twice(monkeypatch) -> N
 
     panel, avg, _, _ = formulation._score_panel_form_quality(_product())
     assert avg == 10.0  # (12 + 8) / 2; the evidence row adds no second vote
+
+
+def test_an_adjunct_row_does_not_move_panel_form_quality() -> None:
+    """Life Extension Mix (47815 and 22 siblings): an 85 mg tart cherry extract
+    among grams of panel nutrients is an adjunct; its form rating, high or low,
+    leaves panel form quality unchanged. A panel vitamin in IU still counts."""
+    from scoring_v4.modules.multi_prenatal_formulation import _score_panel_form_quality
+
+    panel = [
+        _ingredient("vitamin_c", name="Vitamin C", bio_score=11, quantity=2000),
+        _ingredient("vitamin_a", name="Vitamin A", bio_score=7, quantity=5000, unit="IU"),
+        _ingredient("vitamin_b9_folate", name="Folate", bio_score=5, quantity=400, unit="mcg DFE"),
+        _ingredient("zinc", name="Zinc", bio_score=12, quantity=35),
+    ]
+    alone = _score_panel_form_quality(_product(ingredients=panel))
+    for bio in (2.0, 15.0):
+        cherry = _ingredient("tart_cherry", name="Tart Cherry Extract", bio_score=bio, quantity=85)
+        assert _score_panel_form_quality(_product(ingredients=panel + [cherry])) == alone
+    without_a = _score_panel_form_quality(_product(ingredients=[r for r in panel if r["canonical_id"] != "vitamin_a"]))
+    assert without_a != alone
+
+
+def test_life_extension_mix_panel_form_quality_ignores_its_cherry_row() -> None:
+    """Real label 47815: vitamins A/D/E (IU) are panel members, and the CherryPure
+    tart cherry row (85 mg of a 2 g-vitamin-C panel) is not in the panel average."""
+    import copy, logging
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    from enrich_supplements_v3 import SupplementEnricherV3
+    from scoring_input_contract import classify_ingredient_roles
+    import scoring_v4.modules.multi_prenatal_formulation as formulation
+
+    logging.disable(logging.INFO)
+    raw = json.loads((Path(__file__).parent / "fixtures" / "panel_materiality_47815_raw.json").read_text())
+    enriched, _ = SupplementEnricherV3().enrich_product(EnhancedDSLDNormalizer().normalize_product(raw))
+    rows = formulation._active_ingredients(enriched)
+    roles = {r["canonical_id"]: r["role"] for r in classify_ingredient_roles(enriched, module="multi_or_prenatal", rows=rows)}
+    assert roles["vitamin_a"] == roles["vitamin_d"] == "major"
+    panel_ids = {r.get("canonical_id") for r in formulation._scorable_ingredients(copy.deepcopy(enriched))}
+    assert {"vitamin_a", "vitamin_d", "vitamin_c"} <= panel_ids
+    assert not any("cherry" in str(c) for c in panel_ids)
+
+
+def test_vitamin_a_as_beta_carotene_stays_in_the_panel() -> None:
+    """Real label 294074 Pure Encapsulations Women's Nutrients: "Vitamin A
+    (as beta-carotene)" resolves to beta_carotene; it is the panel's vitamin A."""
+    import logging
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    from enrich_supplements_v3 import SupplementEnricherV3
+    import scoring_v4.modules.multi_prenatal_formulation as formulation
+
+    logging.disable(logging.INFO)
+    raw = json.loads((Path(__file__).parent / "fixtures" / "panel_materiality_294074_raw.json").read_text())
+    enriched, _ = SupplementEnricherV3().enrich_product(EnhancedDSLDNormalizer().normalize_product(raw))
+    panel = formulation._scorable_ingredients(enriched)
+    assert any(r.get("canonical_id") == "beta_carotene" and str(r.get("name")).lower().startswith("vitamin a")
+               for r in panel)
+    # The gate itself: the label's non-panel extras (boron, lutein) are not averaged.
+    assert not {"boron", "lutein"} & {r.get("canonical_id") for r in panel}
+
+
+@pytest.mark.parametrize("pid, canonical", [
+    ("176166", "cryptoxanthin"),  # GNC: Beta-Cryptoxanthin 10 mcg in "Super Antioxidant Blend"
+    ("181511", "beta_carotene"),  # Solgar: standalone "Mixed Carotenoids" 29 mcg
+])
+def test_an_undeclared_carotenoid_is_not_the_panels_vitamin_a(pid, canonical) -> None:
+    import logging
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    from enrich_supplements_v3 import SupplementEnricherV3
+    import scoring_v4.modules.multi_prenatal_formulation as formulation
+
+    logging.disable(logging.INFO)
+    raw = json.loads((Path(__file__).parent / "fixtures" / f"panel_materiality_{pid}_raw.json").read_text())
+    enriched, _ = SupplementEnricherV3().enrich_product(EnhancedDSLDNormalizer().normalize_product(raw))
+    rows = [r for r in formulation._active_ingredients(enriched) if r.get("canonical_id") == canonical]
+    assert rows
+    assert not any(r in formulation._scorable_ingredients(enriched) for r in rows)

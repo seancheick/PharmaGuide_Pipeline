@@ -238,7 +238,9 @@ _PROBIOTIC_LABEL_RE = re.compile(
 )
 
 _PRIMARY_ROLES = frozenset({"primary", "claim_prominent"})
-_MATERIAL_ROLES = frozenset({"primary", "claim_prominent", "major"})
+# The roles that make a row a material active of its product (the one copy;
+# scoring_input_contract re-exports it).
+MATERIAL_ROLES = frozenset({"primary", "claim_prominent", "major"})
 _FIBER_CATEGORY_VALUES = frozenset({"fiber", "fibers"})
 _FIBER_DECLARATION_RE = re.compile(
     r"\b(fib(?:er|re)|psyllium|inulin|prebiotic|glucomannan|guar|pectin|"
@@ -797,7 +799,7 @@ def extract_route_features(
             and all(_FIBER_DELIVERY_CARRIER_RE.search(row_name(row)) for row in fiber_rows)
         ),
         "fiber_primary_role": bool(fiber_roles & _PRIMARY_ROLES),
-        "fiber_material_role": bool(fiber_roles & _MATERIAL_ROLES),
+        "fiber_material_role": bool(fiber_roles & MATERIAL_ROLES),
         "observed_fiber_row_count": len(observed_fiber_rows),
         "observed_fiber_category_row_count": len(observed_fiber_category_rows),
         "observed_nutrition_fiber_row_count": len(observed_nutrition_fiber_rows),
@@ -849,7 +851,7 @@ def extract_route_features(
         "product_level_protein_row_count": len(product_level_protein_rows),
         "protein_title_intent": has_protein_product_intent(product_title_text(product)),
         "protein_primary_role": bool(protein_roles & _PRIMARY_ROLES),
-        "protein_material_role": bool(protein_roles & _MATERIAL_ROLES),
+        "protein_material_role": bool(protein_roles & MATERIAL_ROLES),
         "explicit_preworkout_statement": explicit_preworkout_statement,
         "observed_sports_canonical_ids": observed_sports_ids,
         "observed_sports_identity_count": len(observed_sports_ids),

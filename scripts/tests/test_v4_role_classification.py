@@ -206,6 +206,56 @@ def test_multi_panel_micronutrients_major_tiny_blend_adjunct():
     assert roles["green_tea_extract"]["role"] == "adjunct"
 
 
+def test_multi_panel_members_dosed_in_activity_units_are_major():
+    """Life Extension Mix 47815 prints vitamins A, D and E in IU; labels print
+    folate in mcg DFE and vitamin A in mcg RAE. These are the panel's own
+    nutrients, not add-ons, whatever unit the label uses."""
+    product = _product("Daily Multivitamin", "multivitamin", [
+        _row("vitamin_c", "Vitamin C", 2000, "mg"),
+        _row("vitamin_a", "Vitamin A", 5000, "IU"),
+        _row("vitamin_d", "Vitamin D3", 2000, "IU"),
+        _row("vitamin_e", "Vitamin E", 100, "IU"),
+        _row("vitamin_b9_folate", "Folate", 400, "mcg DFE"),
+        _row("vitamin_k", "Vitamin K", 0, "mcg"),
+        # 60740 Life Extension Mix as enriched: "Niacin" 190 with unit NP and
+        # has_dose=True counts; Dose readiness then holds its undeclared unit.
+        _row("vitamin_b3_niacin", "Niacin", 190, "NP", has_dose=True),
+        _row("zinc", "Zinc", 6, "NP"),  # NP without has_dose: no dose
+        # 294074 Pure Encapsulations: "Vitamin A (as beta-carotene)" resolves to beta_carotene.
+        _row("beta_carotene", "Vitamin A", 3000, "mcg RAE"),
+        # 217397: "Beta-Carotene" nested under a "Vitamin A" parent row.
+        _row("alpha_carotene", "Beta-Carotene", 900, "mcg", parent_blend="Vitamin A"),
+        # 176166: a carotenoid inside an antioxidant blend is an add-on.
+        _row("cryptoxanthin", "Beta-Cryptoxanthin", 10, "mcg", parent_blend="Super Antioxidant Blend"),
+        _row("tart_cherry", "Tart Cherry", 85, "mg"),
+    ])
+
+    roles = _by_canonical(product, module="multi_or_prenatal")
+
+    for canonical in ("vitamin_a", "vitamin_d", "vitamin_e", "vitamin_b9_folate"):
+        assert (roles[canonical]["role"], roles[canonical]["role_reason"]) == ("major", "multi_panel_member"), canonical
+    assert roles["vitamin_k"]["role"] == "adjunct"  # no disclosed amount
+    assert roles["vitamin_b3_niacin"]["role"] == "major"
+    assert roles["zinc"]["role"] == "adjunct"
+    assert (roles["beta_carotene"]["role"], roles["beta_carotene"]["role_reason"]) == ("major", "multi_panel_member")
+    assert (roles["alpha_carotene"]["role"], roles["alpha_carotene"]["role_reason"]) == ("major", "multi_panel_member")
+    assert roles["cryptoxanthin"]["role"] == "adjunct"
+    assert roles["tart_cherry"]["role"] == "adjunct"
+
+
+def test_multi_standalone_mixed_carotenoids_are_not_the_panels_vitamin_a():
+    """181511 Solgar: a standalone "Mixed Carotenoids" 29 mcg row resolves to
+    beta_carotene but the label does not declare it as vitamin A."""
+    product = _product("Daily Multivitamin", "multivitamin", [
+        _row("vitamin_c", "Vitamin C", 500, "mg"),
+        _row("vitamin_a", "Vitamin A", 900, "mcg"),
+        _row("beta_carotene", "Mixed Carotenoids", 29, "mcg"),
+    ])
+    roles = _by_canonical(product, module="multi_or_prenatal")
+    assert roles["vitamin_a"]["role"] == "major"
+    assert roles["beta_carotene"]["role"] == "adjunct"
+
+
 def test_multi_nonessential_trace_addons_are_not_material_panel_members():
     product = _product("Daily Multivitamin", "multivitamin", [
         _row("vitamin_c", "Vitamin C", 90, "mg"),

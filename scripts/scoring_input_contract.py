@@ -53,6 +53,7 @@ from scoring_v4.route_features import (
     BCAA_CANONICALS,
     EAA_CANONICALS,
     MATERIAL_FIBER_CANONICALS,
+    MATERIAL_ROLES,
     PROTEIN_CANONICALS as ROUTE_FEATURE_PROTEIN_CANONICALS,
     extract_route_features,
     has_protein_product_intent,
@@ -5393,7 +5394,6 @@ _PROFILE_MATERIAL_NONBOTANICAL_DOMAINS = frozenset({
     "omega_parent", "sports_active", "probiotic_strain", "enzyme", "collagen",
     "fiber",
 })
-_PROFILE_DELIVERABLE_ROLES = frozenset({"primary", "claim_prominent", "major"})
 _PROFILE_MICRONUTRIENT_DOMAINS = frozenset({"vitamin", "mineral"})
 _PROFILE_STANDARDIZED_EVIDENCE = frozenset({
     "standardized_botanical_source_db", "product_standardized_botanical",
@@ -5884,13 +5884,13 @@ def _classify_botanical_owner_type(
     # Material non-botanical deliverables — comparable mass units only (advisor #4).
     material_blockers = [
         c for r, c in non_botanical_pairs
-        if c.get("role") in _PROFILE_DELIVERABLE_ROLES
+        if c.get("role") in MATERIAL_ROLES
         and c.get("ingredient_domain") in _PROFILE_MATERIAL_NONBOTANICAL_DOMAINS
         and _profile_material_blocking_mass(r, botanical_mass)
     ]
     micronutrient_deliverables = [
         c for _r, c in non_botanical_pairs
-        if c.get("role") in _PROFILE_DELIVERABLE_ROLES
+        if c.get("role") in MATERIAL_ROLES
         and c.get("ingredient_domain") in _PROFILE_MICRONUTRIENT_DOMAINS
     ]
     botanical_standardized = any(
@@ -6349,12 +6349,28 @@ _ROLE_MULTI_ESSENTIAL_MINERALS = frozenset({
 })
 
 
-def _role_is_required_multi_panel_member(canonical: str) -> bool:
-    """Return whether an identity is part of the defining nutrient panel."""
-    return (
+_ROLE_DECLARED_VITAMIN_A_RE = re.compile(r"^\s*vitamin\s+a\b", re.IGNORECASE)
+
+
+def _role_is_required_multi_panel_member(canonical: str, row: Dict[str, Any]) -> bool:
+    """Return whether an identity is part of the defining nutrient panel.
+
+    A provitamin judged against a vitamin's DRI (beta-carotene, alpha-carotene,
+    cryptoxanthin) is the panel's vitamin A only where the label declares it so:
+    the row is named "Vitamin A" ("Vitamin A (as beta-carotene)" resolves to
+    beta_carotene) or sits under a "Vitamin A" parent row. A carotenoid inside
+    an antioxidant blend or a standalone "Mixed Carotenoids" stays an add-on.
+    """
+    if (
         canonical.startswith("vitamin_")
         or canonical in _ROLE_MULTI_ESSENTIAL_MINERALS
         or canonical == "choline"
+    ):
+        return True
+    from scoring_v4.modules.generic_dose import judged_against_vitamin_dri  # lazy: it imports this module
+    return judged_against_vitamin_dri(canonical) and any(
+        _ROLE_DECLARED_VITAMIN_A_RE.match(str(row.get(field) or ""))
+        for field in ("name", "raw_source_text", "parent_blend")
     )
 
 def _role_mass_mg(row: Dict[str, Any]) -> Optional[float]:
@@ -6649,13 +6665,18 @@ def _classify_one(row: Dict[str, Any], ctx: Dict[str, Any]) -> Dict[str, Any]:
     mass_mg = _role_mass_mg(row)
 
     # L4 — required for subtype: micronutrient panel members of a multi/prenatal.
-    # Panel members are mass-dosed; a CFU probiotic add-on is NOT mass-dosed and
-    # so stays adjunct, so Phase 3 won't cap a multi for an adjunct's data gap.
+    # A panel member needs a usable disclosed dose (the dose owner): vitamins
+    # A, D and E are printed in IU and folate in mcg DFE. A printed amount whose
+    # unit is "NP" counts when the enricher marks it has_dose (60740 "Niacin"
+    # 190 NP); Dose readiness then holds the product on its undeclared unit.
+    # A CFU probiotic add-on is not a panel identity and so stays adjunct, so
+    # Phase 3 won't cap a multi for an adjunct's data gap.
+    from scoring_v4.modules.generic_helpers import has_usable_individual_dose  # lazy: it imports this module
     if (
         module == "multi_or_prenatal"
-        and mass_mg is not None
+        and has_usable_individual_dose(row)
         and not is_blend
-        and _role_is_required_multi_panel_member(canonical)
+        and _role_is_required_multi_panel_member(canonical, row)
     ):
         return out(ROLE_MAJOR, "multi_panel_member", "module_subtype", "medium")
 
