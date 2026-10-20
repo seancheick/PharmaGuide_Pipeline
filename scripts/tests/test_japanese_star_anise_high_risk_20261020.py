@@ -3,7 +3,7 @@
 Illicium anisatum (GSRS UNII 96MVO223I9 "ILLICIUM ANISATUM WHOLE", UMLS C0949938)
 contains the neurotoxin anisatin (PMID 22484123). FDA advisory P03-67 (2003)
 calls it long recognized as toxic, not GRAS and fit for decorative use only.
-No prohibition is in force (EU Decision 2002/75/EC ended 2003-08-11), so it is
+No current prohibition was found (EU Decision 2002/75/EC ended 2003-08-11), so it is
 high_risk, not banned. A row naming it used to stay unmapped with no warning.
 
 Chinese star anise (Illicium verum, botanical star_anise) is a different,
