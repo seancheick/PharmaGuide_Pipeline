@@ -50,10 +50,13 @@ facility warning) keeps the validated claim and eligible evidence; 204624 (wheat
 ## Per-group free-from rule (audit of #187; final head f6d876855)
 
 **Rule.** `scoring_input_contract.free_from_claim_contradiction(group, hits, unparsed)` is the one
-decision for every free-from claim group (`FREE_FROM_CLAIM_ALLERGENS`: gluten, dairy, soy, nut,
-peanut, egg, shellfish, yeast). An own-group source hit gives `allergen_conflict`. An own-group
-cross-contact hit, or an unread may-contain sentence, gives `may_contain_warning`. Gluten counts
-wheat as a source and wheat, rye or barley as cross-contact (21 CFR 101.91(a)(1)). Readers:
+decision for every free-from claim group (`FREE_FROM_CLAIM_ALLERGENS`: gluten and
+gluten_certified → wheat, rye, barley; dairy → milk; soy; nut → tree nuts and peanuts; peanut;
+egg; shellfish → crustaceans and molluscs; sesame; yeast → none). An own-group source hit gives
+`allergen_conflict`. An own-group cross-contact hit, or an unread may-contain sentence, gives
+`may_contain_warning`. Gluten counts wheat, rye or barley as cross-contact (21 CFR 101.91(a)(1));
+a rye or barley *ingredient* counts as a source while
+`GLUTEN_GRAIN_INGREDIENT_CONTRADICTS_GLUTEN_FREE` is True (ledger D30). Readers:
 - the compliance gates (`dairy_free`, `soy_free`, `gluten_free` → core `is_gluten_free`, the app's
   Gluten-Free badge; barley/rye cross-contact now clears it);
 - the claim evidence (`evidence_based.allergen_free_claims`; dietary claims keep the global
