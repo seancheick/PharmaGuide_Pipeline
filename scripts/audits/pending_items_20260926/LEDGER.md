@@ -16,8 +16,14 @@ Goal: remove cleaner outputs nothing reads (RC5) and decide nutrition-fact statu
 
 Changes:
 - RC5: five row fields and labelRelationships removed. entryDate, updatedDate, productVersionCode and offMarket have readers and stay.
-- RC2: a %DV-only Calcium/Iron row now goes to the RDA/UL owner as unresolved, which reverses 12a7a3dcf and is awaiting Sean's confirmation. Label totals are recorded as summary wrappers. The no-op _FAT_CATEGORY_REAL_ACTIVES is deleted. Only label totals stop counting as a proprietary blend.
+- RC2: a %DV-only Calcium/Iron row now goes to the RDA/UL owner as unresolved. This supersedes 12a7a3dcf. Sean, 2026-10-19: "%DV-only calcium and iron — yes, include them in the existing assessment. Do not discard their nutrient identity merely because mass is unavailable. Convert only when the applicable DV basis and conversion are established. Otherwise retain an indeterminate assessment: no guessed mass, no invented UL exceedance and no 'within limits' reassurance. This does not automatically approve every additional interaction message. Review dose-dependent warnings and vague pregnancy/heart-disease messages for actual applicability." Label totals are recorded as summary wrappers. The no-op _FAT_CATEGORY_REAL_ACTIVES is deleted. Only label totals stop counting as a proprietary blend.
 - Taxonomy: a %DV-only row is not a quantified dose. This fixes the 16872 casein regression the audit found.
+- Warning review (d011e75bb). The 9 products gained 63 warnings across 11 rule x condition types.
+  - Calcium/heart_disease is the only dose-dependent one (> 1,000 mg/day). For an unknown amount it showed above-threshold cardiovascular copy. It now shows authored "amount unclear — check with your clinician" copy via enrich_supplements_v3._amount_unknown_copy (threshold *_if_amount_unknown); the disposition stays review.
+  - Iron pregnancy/lactation said "no_data / Limited safety data". It is now monitor/established, sourced to NIH ODS Iron (pregnancy RDA 27 mg, lactation 9-10 mg, UL 45 mg), with the missing profile_gate added (/data-fix, 2 entries, data_batch check exact, strict citations PASS).
+  - Kept: calcium/iron spacing advice with thyroid medications and fluoroquinolones, and iron with antihypertensives (sourced, dose-independent).
+  - Kept but flagged: calcium pregnancy "standard nutrient" (applicable; no source); iron/liver_disease (conditional wording; limited evidence).
+  - The per-warning table is in the PR #184 body.
 - RC3: nothing moved. No curated owner takes the 37 lists without a behavior change, so the options went to Sean (~/pg_quality/cleaner_rc235_20261019/RC3_OWNER_CHECK.md).
 
 Evidence:
@@ -29,6 +35,7 @@ Evidence:
   - 0 source_structure changes.
   - 9 GNC protein powders: scores, pillars and safety status identical. Each gains 5-11 caution/monitor interaction warnings for calcium/iron (these default to suppressed) and loses none. Types: 16872 protein_powder (unchanged); 16730 vitamin_complex to general_supplement; 16839, 16841, 16844, 16845, 16863, 16865 and 16866 stay single_mineral (potassium) as on main.
   - 799/800: only the classification_row_evidence quantified flag changed; type and score unchanged.
+- Warning replay, d011e75bb vs 4e0fcffe6 (929 labels: 67 calcium products with an unknown heart amount, the 9, 300 iron, 300 calcium and 300 controls): 408 changed = 386 iron (pregnancy/lactation copy) + 76 calcium (amount-unknown heart copy). Only warning/interaction paths changed; 0 controls changed; 0 score or status moves. Corpus-wide, all 1,008 iron products get the new pregnancy/lactation warning. Tests: 10 in test_nutrition_fact_nutrient_role.py; interaction slice 1,319 passed, 6 skipped. CI green on d011e75bb.
 - Canaries 33/33 unchanged.
 - Named slices: 3,468 / 508 / taxonomy 2,697 passed.
 - Independent review and the integrator's audit found no code defect.
@@ -37,7 +44,7 @@ Evidence:
 Follow-ups:
 - Taxonomy does not treat the active Protein/Dietary Fiber rows of protein powders as classification rows. That leaves them typed single_mineral (potassium mg row) or no-active (16730). Pre-existing on main.
 - The build_final_db._infer_final_label_source_structure fallback still counts every summary wrapper as a blend. It runs only without an upstream structure.
-- Rule data: iron pregnancy/lactation is listed as "no_data"; the calcium heart-disease rule reviews when the amount is missing.
+- Rule data: source the shared "Standard nutrient" pregnancy template (calcium, zinc and others); review whether iron/liver_disease should depend on the amount.
 - RC3 data files.
 
 ## Previous consumer/catalog audit — October19 (Codex)
