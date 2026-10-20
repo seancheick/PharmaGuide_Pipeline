@@ -98,3 +98,22 @@ def test_notoginseng_advisory_is_qualified_and_antiplatelet_only():
     assert "not established" in text
     for claim in ("stop", "dose reduction", "INR", "warfarin"):
         assert claim.lower() not in sub["alert_body"].lower()
+
+
+@pytest.mark.parametrize("drug_classes,fires", [
+    ([], False),
+    (["anticoagulants"], False),
+    (["antiplatelets"], True),
+])
+def test_notoginseng_advisory_reaches_only_antiplatelet_users(drug_classes, fires):
+    from profile_gate_evaluator import evaluate_profile_gate
+
+    rules = json.loads((SCRIPTS / "data" / "ingredient_interaction_rules.json").read_text())
+    sub = {r["id"]: r for r in rules["interaction_rules"]}[RULE_ID]["drug_class_rules"][0]
+    result = evaluate_profile_gate(
+        sub["profile_gate"],
+        {"conditions": [], "drug_classes": drug_classes, "profile_flags": []},
+        {},
+        base_severity=sub["severity"],
+    )
+    assert result.fires is fires
