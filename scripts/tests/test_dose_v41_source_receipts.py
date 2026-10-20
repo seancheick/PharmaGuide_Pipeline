@@ -129,3 +129,31 @@ def test_receipt_records_existing_unassessed_primary_constraint():
     assert receipt['reconciles'] is True
     assert any('l_leucine' in row['value_display'] and '11.4' in row['value_display']
                for row in _dose_receipt_facts(receipt))
+
+
+def test_undosed_blend_neutral_is_not_presented_as_a_clinical_dose():
+    """A disclosed total gets existing neutral handling, not member-dose proof."""
+    import copy
+    from scoring_v4.modules.generic_evidence import score_evidence
+    from scoring_v4.scored_artifact import build_scored_artifact
+
+    import json
+    from pathlib import Path
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    from enrich_supplements_v3 import SupplementEnricherV3
+
+    raw = json.loads((Path(__file__).parent / "fixtures" / "evidence_subject_212273_raw.json").read_text())
+    product, _ = SupplementEnricherV3().enrich_product(
+        EnhancedDSLDNormalizer().normalize_product(raw))
+    artifact = build_scored_artifact(copy.deepcopy(product))
+    dose = artifact["quality_pillars_v4"]["dose"]
+    [item] = dose["explanation"]["dose_receipt"]["contributions"]
+    assert item["assessment"] == "botanical_profile"
+    assert item["reference_kind"] == "pharmaguide_policy"
+    assert "individual amounts unknown" in item["reference"]
+    assert dose["receipt"]["entries"][0]["kind"] == "neutral"
+    assert "amount_at_minimum" not in item
+    assert "reference_value" not in item
+    assert dose["explanation"]["dose_receipt"]["reference_assessments"] == []
+    assert score_evidence(copy.deepcopy(product), apply_primary_floor=True,
+                          owner_scoped=True)["metadata"]["primary_evidence_floor"] == 0

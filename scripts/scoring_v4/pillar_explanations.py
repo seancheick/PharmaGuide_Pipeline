@@ -181,6 +181,8 @@ def _dose_contributions(module: Optional[str], metadata: Dict[str, Any], factor:
         assessment = str(entry.get("assessment") or "")
         if assessment.endswith("_contribution_policy"):
             label, kind = "PharmaGuide contribution target", "pharmaguide_policy"
+        elif entry.get("band") == "blend_total_only":
+            label, kind = "blend total only; individual amounts unknown", "pharmaguide_policy"
         elif (assessment.endswith("_completed_no_general_benchmark")
               or entry.get("band") in {"no_benchmark_neutral", "disclosed_no_reference"}):
             label, kind = "no applicable general benchmark: neutral value", "pharmaguide_policy"
