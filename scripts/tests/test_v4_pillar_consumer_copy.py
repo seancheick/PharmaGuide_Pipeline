@@ -447,3 +447,19 @@ def test_parent_total_disclosure_check_does_not_claim_amounts_are_hidden():
     pillar = _assemble(_shadow(module="generic", bd=bd))["quality_pillars_v4"]["transparency"]
     assert pillar["score"] == 9
     assert pillar["reason"] == "The label includes an ingredient total; complete individual-amount disclosure was not verified."
+
+
+@pytest.mark.parametrize("full_credit", [False, True])
+def test_score_explanation_ties_ignore_serialized_mapping_order(full_credit):
+    from itertools import permutations
+    from build_final_db import _build_v4_score_explanation
+    from scoring_v4.quality_score import _config
+    order = list(_config()["pillars"])
+    pillars = {name: {"score": 10 if full_credit else 5, "max": 10, "reason": name}
+               for name in order}
+    expected = _build_v4_score_explanation(pillars)
+    assert expected["strengths" if full_credit else "drags"] == [
+        {"pillar": name, "reason": name}
+        for name in ([n for n in reversed(order) if n != "safety_hygiene"][:3] if full_credit else order[:3])]
+    for permutation in permutations(order):
+        assert _build_v4_score_explanation({name: pillars[name] for name in permutation}) == expected
