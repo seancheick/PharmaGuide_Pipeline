@@ -3,7 +3,7 @@
     "description": "Deterministic ingredient-level interaction rules keyed by canonical database identity",
     "purpose": "interaction_alert_rules",
     "schema_version": "6.3.0",
-    "last_updated": "2026-10-19",
+    "last_updated": "2026-10-20",
     "total_entries": 152,
     "structure_note": "One entry per ingredient (or per form-scoped variant). All conditions, drug classes, and dose thresholds for that ingredient are in one object. As of v6.0.0, every sub-rule (condition_rules[], drug_class_rules[], dose_thresholds[], pregnancy_lactation block) carries an explicit profile_gate predicate that consumers MUST evaluate against the user profile before firing the alert.",
     "total_rules": 152,
@@ -5373,15 +5373,16 @@
           "drug_class_id": "antihypertensives",
           "severity": "caution",
           "evidence_level": "limited",
-          "mechanism": "The evidence is drug-specific. Ferrous sulphate lowered unconjugated captopril exposure by 37% without a measured blood-pressure change (PMID 9803987). Ferrous sulfate and gluconate reduced methyldopa absorption, and blood pressure rose in 4 of 5 hypertensive patients taking methyldopa (PMID 3356082). No interaction is established for other antihypertensives.",
-          "action": "If you take methyldopa or captopril, take iron supplements at a different time of day and ask your prescriber how far apart. Other blood-pressure medicines were not shown to interact.",
+          "mechanism": "The evidence is drug-specific. Methyldopa label (DailyMed): ferrous sulfate or gluconate lowers methyldopa bioavailability, may adversely affect blood pressure control, and coadministration is not recommended; blood pressure rose in 4 of 5 hypertensive patients on concurrent iron (PMID 3356082). Ferrous sulphate lowered unconjugated captopril exposure by 37% without a measured blood-pressure change (PMID 9803987). Other antihypertensives were not studied.",
+          "action": "If you take methyldopa, taking iron with it is not recommended: talk to your prescriber before taking iron. If you take captopril, ask your prescriber, because iron can lower captopril levels. Other blood-pressure medicines weren't studied.",
           "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/9803987/",
-            "https://pubmed.ncbi.nlm.nih.gov/3356082/"
+            "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=9e22e1d8-04ec-4b67-92ea-b09c706f2703",
+            "https://pubmed.ncbi.nlm.nih.gov/3356082/",
+            "https://pubmed.ncbi.nlm.nih.gov/9803987/"
           ],
-          "alert_headline": "Methyldopa or captopril: take iron at a different time",
-          "alert_body": "Iron can lower absorption of methyldopa and captopril; with methyldopa, blood pressure rose in a small study. Other blood-pressure drugs weren't studied. Ask your prescriber about timing.",
-          "informational_note": "Iron can reduce absorption of methyldopa and captopril — relevant only if you take one of them.",
+          "alert_headline": "Methyldopa or captopril: talk to your prescriber about iron",
+          "alert_body": "Iron with methyldopa is not recommended; it can weaken blood-pressure control. Iron can also lower captopril levels. Other blood-pressure drugs weren't studied.",
+          "informational_note": "Iron can affect methyldopa and captopril — relevant only if you take one of them.",
           "profile_gate": {
             "gate_type": "drug_class",
             "requires": {

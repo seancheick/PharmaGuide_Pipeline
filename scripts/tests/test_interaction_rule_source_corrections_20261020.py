@@ -1,9 +1,11 @@
 """Interaction-rule corrections from the PR #184 warning audit (2026-10-20), verified by content.
 
-1. Iron / antihypertensives: the evidence is drug-specific. PMID 9803987 (captopril + ferrous
-   sulphate): unconjugated captopril AUC fell 37%, "no significant differences in systolic and
-   diastolic blood pressures". PMID 3356082 (methyldopa + ferrous sulfate/gluconate): absorption
-   fell and blood pressure rose in 4 of 5 hypertensive patients. No class-wide claim.
+1. Iron / antihypertensives: the evidence is drug-specific. Methyldopa label (DailyMed setid
+   9e22e1d8-04ec-4b67-92ea-b09c706f2703): iron "may adversely affect blood pressure control" and
+   coadministration with ferrous sulfate or gluconate "is not recommended"; PMID 3356082 agrees
+   (blood pressure rose in 4 of 5 hypertensive patients). PMID 9803987 (captopril + ferrous
+   sulphate): unconjugated captopril AUC fell 37% with no blood-pressure difference. No spacing
+   interval was tested; other antihypertensives were not studied.
 2. Iron / liver disease: scoped to iron-overload conditions. NIH ODS Iron fact sheet: AASLD
    recommends that treatment of hemochromatosis include avoiding iron and vitamin C supplements
    (AASLD 2011 guideline, PMID 21452290). PMID 33676282 (CoQ10 in hemochromatosis) did not
@@ -30,15 +32,24 @@ def _consumer_copy(block):
     return " ".join(str(block.get(k) or "") for k in ("alert_headline", "alert_body", "action", "informational_note"))
 
 
-def test_iron_antihypertensive_copy_names_the_studied_drugs_and_no_class_claim():
+def test_iron_antihypertensive_copy_follows_the_methyldopa_label_with_no_spacing_claim():
     block = next(item for item in _rule("RULE_IQM_IRON_HYPERTENSION")["drug_class_rules"]
                  if item["drug_class_id"] == "antihypertensives")
     copy = _consumer_copy(block)
+    lowered = copy.lower()
     assert "methyldopa" in block["alert_headline"].lower() and "captopril" in block["alert_headline"].lower()
+    # Methyldopa label (DailyMed): coadministration with ferrous sulfate/gluconate "is not recommended".
+    assert "not recommended" in block["alert_body"] and "not recommended" in block["action"]
+    # Captopril (PMID 9803987): lower unconjugated captopril levels; neither study tested a spacing interval.
+    assert "captopril levels" in block["alert_body"] and "captopril levels" in block["action"]
+    for spacing in ("hours", "different time", "how far apart", "separate"):
+        assert spacing not in lowered, spacing
+    # Other antihypertensives were not studied; never claim they don't interact.
+    assert "weren't studied" in block["alert_body"] and "weren't studied" in block["action"]
+    assert "not shown to interact" not in lowered
     assert "May affect blood-pressure control" not in copy
-    assert "Iron can affect blood pressure" not in copy
-    assert "2 hours" not in copy  # neither study tested a spacing interval
     assert set(block["sources"]) == {
+        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=9e22e1d8-04ec-4b67-92ea-b09c706f2703",
         "https://pubmed.ncbi.nlm.nih.gov/9803987/",
         "https://pubmed.ncbi.nlm.nih.gov/3356082/",
     }
