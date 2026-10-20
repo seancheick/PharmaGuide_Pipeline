@@ -178,6 +178,7 @@ from match_ledger import (
     METHOD_ALTERNATE_NAME,
 )
 from identity.interaction import (
+    interaction_subject_ids,
     interaction_subject_refs,
     interaction_twin_form,
     label_row_establishes_presence,
@@ -19144,10 +19145,13 @@ class SupplementEnricherV3:
     def _is_interaction_label_row(row: Dict) -> bool:
         """A recognized row the scorer skipped that still shows the ingredient
         is in the product: a blend child, or a top-level row with a positive
-        amount, a printed %DV or no amount stated (D1, D1c). Blend headers,
-        additives, markers, sources, specification limits and measured zeros
+        amount, a printed %DV or no amount stated (D1, D1c), or a blend header
+        that keeps a specific identity ("Coenzyme Q10 complex", "Seneactiv").
+        Additives, markers, sources, specification limits and measured zeros
         keep their own owners."""
         skip = row.get("skip_reason")
+        if skip == SKIP_REASON_BLEND_HEADER_WITH_WEIGHT:
+            return label_row_establishes_presence(row)
         if label_row_is_blend_child(row):
             return skip in (SKIP_REASON_NESTED_NON_THERAPEUTIC, SKIP_REASON_RECOGNIZED_NON_SCORABLE)
         return skip in (
@@ -19155,6 +19159,53 @@ class SupplementEnricherV3:
             "daily_value_no_amount",  # the cleaner role, passed through by _cleaner_skip_reason
             SKIP_REASON_NUTRITION_FACT,
         ) and label_row_establishes_presence(row)
+
+    @staticmethod
+    def _blend_headers_restated_inside(rows: List[Dict]) -> set:
+        """Paths of blend headers whose interaction subject (itself, family or
+        twin: "LAB4 Probiotics" over its strains) a row inside them, present on
+        the label, also answers to."""
+        headers = {
+            str(row["raw_source_path"]): set(interaction_subject_ids(row["canonical_id"]))
+            for row in rows
+            if row.get("skip_reason") == SKIP_REASON_BLEND_HEADER_WITH_WEIGHT
+            and row.get("canonical_id") and row.get("raw_source_path")
+        }
+        return {
+            path
+            for row in rows
+            for path, subjects in headers.items()
+            if str(row.get("raw_source_path") or "").startswith(path + ".")
+            and subjects & set(interaction_subject_ids(row.get("canonical_id")))
+            and label_row_establishes_presence(row)
+        }
+
+    def _blend_header_scope_row(self, header: Dict, label_row: Optional[Dict]) -> Dict:
+        """A blend header is never form-matched for scoring, but the forms its
+        label row declares still confirm a plant part for part-scoped rules:
+        "Stinging Nettle Root Extract" is not the leaf the glucose rule is about."""
+        label_row = label_row or {}
+        forms = label_row.get("forms") or (header.get("raw_taxonomy") or {}).get("forms") or []
+        match = self._match_quality_map(
+            header.get("raw_source_text") or header.get("name") or "",
+            header.get("standard_name"),
+            self.databases.get("ingredient_quality_map", {}),
+            cleaned_forms=forms,
+            cleaner_canonical_id=header.get("canonical_id"),
+            row_notes=label_row.get("notes"),
+        ) if forms else None
+        if (
+            not isinstance(match, dict)
+            or match.get("canonical_id") != header.get("canonical_id")
+            or not (match.get("form_id") or match.get("matched_forms"))
+        ):
+            return header
+        return {
+            **header,
+            "form_id": match.get("form_id"),
+            "matched_forms": match.get("matched_forms") or [],
+            "form_match_status": "mapped",
+        }
 
     def _interaction_registry_ids(self) -> Dict[str, set]:
         """Ids held by each registry a row can be an interaction subject of,
@@ -20239,7 +20290,13 @@ class SupplementEnricherV3:
             # sit in both lists; it is scanned once.
             scanned = {id(row) for row in ingredients}
             scanned_keys = {self._interaction_row_key(row) for row in ingredients}
-            skipped = []
+            # A header whose identity a row inside it restates leaves that row,
+            # with its own amount, the subject; any other header is scanned
+            # last, so it only adds what no other row already warns about.
+            restated_headers = self._blend_headers_restated_inside(
+                ingredients + [row for row in raw_ingredients + raw_skipped if isinstance(row, dict)]
+            )
+            skipped, deferred_headers = [], []
             for row in raw_ingredients + raw_skipped:
                 if not isinstance(row, dict) or id(row) in scanned:
                     continue
@@ -20249,11 +20306,18 @@ class SupplementEnricherV3:
                     continue
                 if subject_db != "ingredient_quality_map":
                     skipped.append(row)
-                elif self._is_interaction_label_row(row):
+                elif self._is_interaction_label_row(row) and (
+                    str(row.get("raw_source_path") or "") not in restated_headers
+                ):
                     key = self._interaction_row_key(row)
                     if key not in scanned_keys:
                         scanned_keys.add(key)
-                        skipped.append(row)
+                        (
+                            deferred_headers
+                            if row.get("skip_reason") == SKIP_REASON_BLEND_HEADER_WITH_WEIGHT
+                            else skipped
+                        ).append(row)
+            skipped += deferred_headers
             label_rows = {
                 id(row) for row in skipped
                 if (self._derive_interaction_subject_ref(row) or {}).get("db") == "ingredient_quality_map"
@@ -20322,10 +20386,12 @@ class SupplementEnricherV3:
         # with an IQM identity (7-keto DHEA, bitter orange citrus bioflavonoids)
         # still meets the rules authored on its safety record.
         safety_subjects_by_path: Dict[str, List[Tuple[str, str]]] = {}
+        label_rows_by_path: Dict[str, Dict] = {}
         for section_key in ("activeIngredients", "inactiveIngredients"):
             for label_row in enriched.get(section_key) or []:
                 if not isinstance(label_row, dict) or not label_row.get("raw_source_path"):
                     continue
+                label_rows_by_path.setdefault(label_row["raw_source_path"], label_row)
                 for flag in label_row.get("safety_flags") or []:
                     if isinstance(flag, dict) and flag.get("entry_id") and flag.get("source_db"):
                         safety_subjects_by_path.setdefault(label_row["raw_source_path"], []).append(
@@ -20348,6 +20414,8 @@ class SupplementEnricherV3:
                 all_ingredient_rows.append(("ingredients_skipped", row))
                 if id(row) in label_rows:
                     repeat_checked_rows.add(id(row))
+                if row.get("skip_reason") == SKIP_REASON_BLEND_HEADER_WITH_WEIGHT:
+                    continue
                 for marker_row in self._derived_marker_interaction_rows(row):
                     all_ingredient_rows.append(("derived_marker", marker_row))
                     if id(row) in label_rows:
@@ -20357,6 +20425,14 @@ class SupplementEnricherV3:
             subject = self._derive_interaction_subject_ref(ingredient)
             if not subject:
                 continue
+            # A blend header's amount is the blend's, never its named
+            # substance's dose (D1c): its dose rules read "amount unknown", and
+            # no marker is derived from it.
+            dose_row = (
+                {**ingredient, "quantity": None}
+                if ingredient.get("skip_reason") == SKIP_REASON_BLEND_HEADER_WITH_WEIGHT
+                else ingredient
+            )
 
             # A vitamer also answers to rules authored on its family (vitamin
             # K1/K2 -> vitamin K) and a botanical to its IQM twin (garlic bulb
@@ -20383,7 +20459,12 @@ class SupplementEnricherV3:
             )
             scope_row = (
                 {**ingredient, "form_id": twin_form, "matched_forms": [], "form_match_status": "mapped"}
-                if twin_form else ingredient
+                if twin_form
+                else self._blend_header_scope_row(
+                    ingredient, label_rows_by_path.get(ingredient.get("raw_source_path"))
+                )
+                if ingredient.get("skip_reason") == SKIP_REASON_BLEND_HEADER_WITH_WEIGHT
+                else ingredient
             )
 
             for rule in matched_rules:
@@ -20409,7 +20490,7 @@ class SupplementEnricherV3:
                         thresholds=thresholds,
                         target_type="condition",
                         target_id=condition_id,
-                        ingredient=ingredient,
+                        ingredient=dose_row,
                         servings_per_day_max=servings_per_day_max,
                         base_severity=severity,
                         materiality=cond_rule.get("materiality"),
@@ -20419,13 +20500,13 @@ class SupplementEnricherV3:
                     min_effective_dose = cond_rule.get("min_effective_dose")
                     dose_floor_status = self._floor_status_for_emission(
                         self._evaluate_min_effective_dose(
-                            min_effective_dose, ingredient, servings_per_day_max
+                            min_effective_dose, dose_row, servings_per_day_max
                         ),
                         severity,
                     )
                     dose_decision = threshold_eval or self._evaluate_min_effective_dose_decision(
                         min_effective_dose,
-                        ingredient,
+                        dose_row,
                         servings_per_day_max,
                         severity,
                     )
@@ -20490,7 +20571,7 @@ class SupplementEnricherV3:
                         thresholds=thresholds,
                         target_type="drug_class",
                         target_id=drug_class_id,
-                        ingredient=ingredient,
+                        ingredient=dose_row,
                         servings_per_day_max=servings_per_day_max,
                         base_severity=severity,
                         materiality=drug_rule.get("materiality"),
@@ -20500,13 +20581,13 @@ class SupplementEnricherV3:
                     min_effective_dose = drug_rule.get("min_effective_dose")
                     dose_floor_status = self._floor_status_for_emission(
                         self._evaluate_min_effective_dose(
-                            min_effective_dose, ingredient, servings_per_day_max
+                            min_effective_dose, dose_row, servings_per_day_max
                         ),
                         severity,
                     )
                     dose_decision = threshold_eval or self._evaluate_min_effective_dose_decision(
                         min_effective_dose,
-                        ingredient,
+                        dose_row,
                         servings_per_day_max,
                         severity,
                     )
@@ -20543,7 +20624,7 @@ class SupplementEnricherV3:
                         thresholds=[threshold],
                         target_type="",
                         target_id="",
-                        ingredient=ingredient,
+                        ingredient=dose_row,
                         servings_per_day_max=servings_per_day_max,
                         base_severity=str(threshold.get("severity_if_not_met") or "informational").strip().lower(),
                     )

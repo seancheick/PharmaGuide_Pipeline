@@ -1,0 +1,4699 @@
+[
+ {
+  "id": "1055",
+  "product": "Phyto-Estrogen Formula",
+  "path": "ingredientRows[10]",
+  "label": "Isolase(R)",
+  "before": "PII_ISOLASE",
+  "has_rule": false,
+  "group": "Proprietary Blend (non-nutrient/non-botanical)",
+  "forms": []
+ },
+ {
+  "id": "12834",
+  "product": "Re-Grow Double Chocolate",
+  "path": "ingredientRows[14]",
+  "label": "BioCore Edge(TM)",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (non-nutrient/non-botanical)",
+  "forms": [
+   "Peptidase",
+   "Protease"
+  ]
+ },
+ {
+  "id": "1650",
+  "product": "Ultra Probiotic Rescue & Refresh Kit 150 Billion CFUs",
+  "path": "ingredientRows[0]",
+  "label": "LAB4 Probiotics",
+  "before": "probiotics",
+  "has_rule": true,
+  "group": "Proprietary Blend (non-nutrient/non-botanical)",
+  "forms": []
+ },
+ {
+  "id": "1658",
+  "product": "Women's Ultra Mega With Probiotics",
+  "path": "ingredientRows[25]",
+  "label": "LAB4 Probiotics",
+  "before": "probiotics",
+  "has_rule": true,
+  "group": "Proprietary Blend (non-nutrient/non-botanical)",
+  "forms": [
+   "Bifidobacterium lactis & bifidum",
+   "Lactobacillus acidophilus (CUL 60)",
+   "Lactobacillus acidophilus (CUL-21)"
+  ]
+ },
+ {
+  "id": "175409",
+  "product": "Complete Vegan Gainer Natural Chocolate",
+  "path": "ingredientRows[11].nestedRows[2]",
+  "label": "ElevATP",
+  "before": "shilajit",
+  "has_rule": false,
+  "group": "Proprietary Blend (Combination)",
+  "forms": [
+   "Ancient Peat",
+   "Apple Extract"
+  ]
+ },
+ {
+  "id": "176071",
+  "product": "Super Digestive Enzymes",
+  "path": "ingredientRows[0]",
+  "label": "n-zimes Proprietary Blend",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (non-nutrient/non-botanical)",
+  "forms": []
+ },
+ {
+  "id": "176071",
+  "product": "Super Digestive Enzymes",
+  "path": "ingredientRows[1]",
+  "label": "CereCalase Proprietary Blend",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (Metabolite, constituent, extract, isolate, or combination of these)",
+  "forms": []
+ },
+ {
+  "id": "178791",
+  "product": "Women's Multivitamin",
+  "path": "ingredientRows[25]",
+  "label": "Green Tea extract",
+  "before": "green_tea_extract",
+  "has_rule": true,
+  "group": "Proprietary Blend (Combination)",
+  "forms": [
+   "extract"
+  ]
+ },
+ {
+  "id": "182149",
+  "product": "Lean Shake Burn Cookies & Cream",
+  "path": "ingredientRows[29].nestedRows[1]",
+  "label": "BioCore Edge",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (non-nutrient/non-botanical)",
+  "forms": []
+ },
+ {
+  "id": "182263",
+  "product": "Advanced Cortisol Balance",
+  "path": "ingredientRows[0]",
+  "label": "Relora",
+  "before": "magnolia_phellodendron_blend",
+  "has_rule": false,
+  "group": "Proprietary Blend (Herb/Botanical)",
+  "forms": []
+ },
+ {
+  "id": "182263",
+  "product": "Advanced Cortisol Balance",
+  "path": "ingredientRows[1]",
+  "label": "Oligonol",
+  "before": "lychee_polyphenol",
+  "has_rule": false,
+  "group": "Proprietary Blend (Herb/Botanical)",
+  "forms": []
+ },
+ {
+  "id": "182712",
+  "product": "Once-Daily Health Booster",
+  "path": "ingredientRows[9]",
+  "label": "Lycopene Proprietary Blend",
+  "before": "lycopene",
+  "has_rule": false,
+  "group": "Proprietary Blend (Combination)",
+  "forms": []
+ },
+ {
+  "id": "182829",
+  "product": "Digestion GB",
+  "path": "ingredientRows[0]",
+  "label": "Proprietary Enzyme Blend",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (non-nutrient/non-botanical)",
+  "forms": []
+ },
+ {
+  "id": "182831",
+  "product": "Digestion GB",
+  "path": "ingredientRows[0]",
+  "label": "Proprietary Enzyme Blend",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (non-nutrient/non-botanical)",
+  "forms": []
+ },
+ {
+  "id": "182908",
+  "product": "Gluten/Dairy Digest",
+  "path": "ingredientRows[1]",
+  "label": "BioCore Dairy",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (non-nutrient/non-botanical)",
+  "forms": []
+ },
+ {
+  "id": "18382",
+  "product": "Milk Thistle Sport",
+  "path": "ingredientRows[1]",
+  "label": "n-zimes(R) Proprietary Blend",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (non-nutrient/non-botanical)",
+  "forms": []
+ },
+ {
+  "id": "1840",
+  "product": "Multi-Enzyme Formula",
+  "path": "ingredientRows[1]",
+  "label": "CereCalase Proprietary Blend",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend",
+  "forms": []
+ },
+ {
+  "id": "1841",
+  "product": "Multi-Enzyme Formula",
+  "path": "ingredientRows[1]",
+  "label": "CereCalase Proprietary Blend",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend",
+  "forms": []
+ },
+ {
+  "id": "184300",
+  "product": "Gluten/Dairy Digest",
+  "path": "ingredientRows[1]",
+  "label": "BioCore Dairy",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (non-nutrient/non-botanical)",
+  "forms": []
+ },
+ {
+  "id": "184411",
+  "product": "Digestive Enzymes Ultra",
+  "path": "ingredientRows[0]",
+  "label": "Proprietary Enzyme Blend",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (non-nutrient/non-botanical)",
+  "forms": []
+ },
+ {
+  "id": "184421",
+  "product": "Digestive Enzymes Ultra with Betaine HCl",
+  "path": "ingredientRows[0]",
+  "label": "Proprietary Enzyme Blend",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (non-nutrient/non-botanical)",
+  "forms": []
+ },
+ {
+  "id": "18453",
+  "product": "Healthy Digestion Formula Refreshing Citrus",
+  "path": "ingredientRows[3].nestedRows[0]",
+  "label": "LAB4 Probiotics",
+  "before": "probiotics",
+  "has_rule": true,
+  "group": "Proprietary Blend (non-nutrient/non-botanical)",
+  "forms": []
+ },
+ {
+  "id": "187602",
+  "product": "Seditol",
+  "path": "ingredientRows[0]",
+  "label": "Seditol",
+  "before": "PII_SEDITOL_BRANDED_BLEND",
+  "has_rule": false,
+  "group": "Proprietary Blend (Herb/Botanical)",
+  "forms": []
+ },
+ {
+  "id": "19483",
+  "product": "Re-Built Mass Strawberry Milkshake",
+  "path": "ingredientRows[15]",
+  "label": "BioCore Edge(TM)",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (non-nutrient/non-botanical)",
+  "forms": [
+   "Peptidase",
+   "Protease"
+  ]
+ },
+ {
+  "id": "19494",
+  "product": "Re-Built Mass Cookies & Cream",
+  "path": "ingredientRows[15]",
+  "label": "BioCore Edge(TM)",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (non-nutrient/non-botanical)",
+  "forms": [
+   "Peptidase",
+   "Protease"
+  ]
+ },
+ {
+  "id": "19499",
+  "product": "Re-Grow Vanilla Ice Cream",
+  "path": "ingredientRows[14]",
+  "label": "BioCore Edge(TM)",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (non-nutrient/non-botanical)",
+  "forms": [
+   "Peptidase",
+   "Protease"
+  ]
+ },
+ {
+  "id": "19504",
+  "product": "Re-Built Mass Cookies & Cream",
+  "path": "ingredientRows[15]",
+  "label": "BioCore Edge(TM)",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (non-nutrient/non-botanical)",
+  "forms": [
+   "Peptidase",
+   "Protease"
+  ]
+ },
+ {
+  "id": "199511",
+  "product": "Wheybolic Strawberries and Cream",
+  "path": "ingredientRows[9].nestedRows[4]",
+  "label": "ProHydrolase Protease Enzyme Blend",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (Metabolite, constituent, extract, isolate, or combination of these)",
+  "forms": [
+   "Proteases"
+  ]
+ },
+ {
+  "id": "199513",
+  "product": "Wheybolic Chocolate Fudge",
+  "path": "ingredientRows[13]",
+  "label": "ProHydrolase Protease Enzyme Blend",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (Metabolite, constituent, extract, isolate, or combination of these)",
+  "forms": [
+   "Proteases"
+  ]
+ },
+ {
+  "id": "199514",
+  "product": "Wheybolic Classic Vanilla",
+  "path": "ingredientRows[12]",
+  "label": "ProHydrolase Protease Enzyme Blend",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (Metabolite, constituent, extract, isolate, or combination of these)",
+  "forms": [
+   "Proteases"
+  ]
+ },
+ {
+  "id": "199515",
+  "product": "Wheybolic Cookies and Cream",
+  "path": "ingredientRows[12]",
+  "label": "ProHydrolase Protease Enzyme Blend",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (Metabolite, constituent, extract, isolate, or combination of these)",
+  "forms": [
+   "Proteases"
+  ]
+ },
+ {
+  "id": "209374",
+  "product": "Bladder Support Go-Less plus Cranberry with Cranberex",
+  "path": "ingredientRows[0]",
+  "label": "Go-Less Proprietary Blend",
+  "before": "PII_BRAND_COMPLEX_DESCRIPTOR",
+  "has_rule": false,
+  "group": "Proprietary Blend (Combination)",
+  "forms": []
+ },
+ {
+  "id": "210510",
+  "product": "Wheybolic Alpha Chocolate Fudge",
+  "path": "ingredientRows[10].nestedRows[3]",
+  "label": "ProHydrolase Protease Enzyme Blend",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (Metabolite, constituent, extract, isolate, or combination of these)",
+  "forms": [
+   "Proteases"
+  ]
+ },
+ {
+  "id": "210801",
+  "product": "Once-Daily Health Booster",
+  "path": "ingredientRows[9]",
+  "label": "Lycopene Proprietary Blend",
+  "before": "lycopene",
+  "has_rule": false,
+  "group": "Proprietary Blend (Combination)",
+  "forms": []
+ },
+ {
+  "id": "210808",
+  "product": "Once-Daily Health Booster",
+  "path": "ingredientRows[9]",
+  "label": "Lycopene Proprietary Blend",
+  "before": "lycopene",
+  "has_rule": false,
+  "group": "Proprietary Blend (Combination)",
+  "forms": []
+ },
+ {
+  "id": "210815",
+  "product": "Endothelial Defense Pomegranate Complete",
+  "path": "ingredientRows[4]",
+  "label": "Superoxide Dismutase/Gliadin Complex",
+  "before": "superoxide_dismutase",
+  "has_rule": false,
+  "group": "Proprietary Blend (Combination)",
+  "forms": []
+ },
+ {
+  "id": "211015",
+  "product": "Green T-Max",
+  "path": "ingredientRows[0]",
+  "label": "Origine 8 Liposome",
+  "before": "green_tea_extract",
+  "has_rule": true,
+  "group": "Proprietary Blend (Combination)",
+  "forms": []
+ },
+ {
+  "id": "211789",
+  "product": "TamaFlex Fast Acting",
+  "path": "ingredientRows[0]",
+  "label": "TamaFlex",
+  "before": "tamarind_extract",
+  "has_rule": false,
+  "group": "Proprietary Blend (Herb/Botanical)",
+  "forms": []
+ },
+ {
+  "id": "211802",
+  "product": "TamaFlex",
+  "path": "ingredientRows[0]",
+  "label": "TamaFlex",
+  "before": "tamarind_extract",
+  "has_rule": false,
+  "group": "Proprietary Blend (Herb/Botanical)",
+  "forms": []
+ },
+ {
+  "id": "212429",
+  "product": "Probiotic Complex 50 Billion CFUs",
+  "path": "ingredientRows[0]",
+  "label": "LAB4 Probiotics",
+  "before": "probiotics",
+  "has_rule": true,
+  "group": "Proprietary Blend (non-nutrient/non-botanical)",
+  "forms": []
+ },
+ {
+  "id": "212443",
+  "product": "Probiotic Complex Extra Strength 100 Billion CFUs",
+  "path": "ingredientRows[0].nestedRows[0]",
+  "label": "LAB4 Probiotics",
+  "before": "probiotics",
+  "has_rule": true,
+  "group": "Proprietary Blend (non-nutrient/non-botanical)",
+  "forms": []
+ },
+ {
+  "id": "213941",
+  "product": "Celadrin Glucosamine Complex",
+  "path": "ingredientRows[1]",
+  "label": "Celadrin",
+  "before": "celadrin",
+  "has_rule": false,
+  "group": "Proprietary Blend (Fatty Acid or Fat/Oil supplement)",
+  "forms": []
+ },
+ {
+  "id": "219039",
+  "product": "Energy & Metabolism Vanilla",
+  "path": "ingredientRows[34].nestedRows[1]",
+  "label": "ProHydrolase Protease Enzyme Blend",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (non-nutrient/non-botanical)",
+  "forms": []
+ },
+ {
+  "id": "219249",
+  "product": "TamaFlex Complete",
+  "path": "ingredientRows[3]",
+  "label": "TamaFlex",
+  "before": "tamarind_extract",
+  "has_rule": false,
+  "group": "Proprietary Blend (Herb/Botanical)",
+  "forms": [
+   "Tamarindus indica seed extract",
+   "Turmeric (Curcuma longa) rhizome extract"
+  ]
+ },
+ {
+  "id": "219703",
+  "product": "Wheybolic Chocolate Fudge",
+  "path": "ingredientRows[13]",
+  "label": "ProHydrolase Protease Enzyme Blend",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (Metabolite, constituent, extract, isolate, or combination of these)",
+  "forms": [
+   "Proteases"
+  ]
+ },
+ {
+  "id": "219788",
+  "product": "Wheybolic Classic Vanilla",
+  "path": "ingredientRows[12]",
+  "label": "ProHydrolase Protease Enzyme Blend",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (Metabolite, constituent, extract, isolate, or combination of these)",
+  "forms": [
+   "Proteases"
+  ]
+ },
+ {
+  "id": "219791",
+  "product": "Wheybolic Strawberries and Cream",
+  "path": "ingredientRows[12]",
+  "label": "ProHydrolase Protease Enzyme Blend",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (Metabolite, constituent, extract, isolate, or combination of these)",
+  "forms": [
+   "Proteases"
+  ]
+ },
+ {
+  "id": "219813",
+  "product": "LIT Rainbow Candy",
+  "path": "ingredientRows[4].nestedRows[3]",
+  "label": "elevATP",
+  "before": "shilajit",
+  "has_rule": false,
+  "group": "Proprietary Blend (Combination)",
+  "forms": [
+   "Ancient Peat extract",
+   "Apple Extract"
+  ]
+ },
+ {
+  "id": "219819",
+  "product": "Precision EAA Elevated Gummy Worm",
+  "path": "ingredientRows[7].nestedRows[0]",
+  "label": "TamaFlex",
+  "before": "tamarind_extract",
+  "has_rule": false,
+  "group": "Proprietary Blend (Herb/Botanical)",
+  "forms": [
+   "Tamarind (Tamarindus indicus) seed extract",
+   "Turmeric (Curcuma longa) rhizome extract"
+  ]
+ },
+ {
+  "id": "219827",
+  "product": "Precision EAA Elevated Grape",
+  "path": "ingredientRows[7].nestedRows[0]",
+  "label": "TamaFlex",
+  "before": "tamarind_extract",
+  "has_rule": false,
+  "group": "Proprietary Blend (Herb/Botanical)",
+  "forms": [
+   "Tamarind (Tamarindus indicus) seed extract",
+   "Turmeric (Curcuma longa) rhizome extract"
+  ]
+ },
+ {
+  "id": "219832",
+  "product": "Precision EAA Elevated Raspberry Iced Tea",
+  "path": "ingredientRows[7].nestedRows[0]",
+  "label": "TamaFlex",
+  "before": "tamarind_extract",
+  "has_rule": false,
+  "group": "Proprietary Blend (Herb/Botanical)",
+  "forms": [
+   "Tamarind (Tamarindus indicus) seed extract",
+   "Turmeric (Curcuma longa) rhizome extract"
+  ]
+ },
+ {
+  "id": "219898",
+  "product": "Wheybolic Cookies and Cream",
+  "path": "ingredientRows[12]",
+  "label": "ProHydrolase Protease Enzyme Blend",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (Metabolite, constituent, extract, isolate, or combination of these)",
+  "forms": [
+   "Proteases"
+  ]
+ },
+ {
+  "id": "219925",
+  "product": "Wheybolic Creamy Peanut Butter",
+  "path": "ingredientRows[12]",
+  "label": "ProHydrolase Protease Enzyme Blend",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (Metabolite, constituent, extract, isolate, or combination of these)",
+  "forms": [
+   "Proteases"
+  ]
+ },
+ {
+  "id": "219937",
+  "product": "Wheybolic Banana Milkshake",
+  "path": "ingredientRows[12]",
+  "label": "ProHydrolase Protease Enzyme Blend",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (Metabolite, constituent, extract, isolate, or combination of these)",
+  "forms": [
+   "Proteases"
+  ]
+ },
+ {
+  "id": "219941",
+  "product": "Wheybolic Salted Caramel",
+  "path": "ingredientRows[12]",
+  "label": "ProHydrolase Protease Enzyme Blend",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (Metabolite, constituent, extract, isolate, or combination of these)",
+  "forms": [
+   "Proteases"
+  ]
+ },
+ {
+  "id": "219957",
+  "product": "LIT Bubble Gum",
+  "path": "ingredientRows[4].nestedRows[3]",
+  "label": "elevATP",
+  "before": "shilajit",
+  "has_rule": false,
+  "group": "Proprietary Blend (Combination)",
+  "forms": [
+   "Ancient Peat extract",
+   "Apple Extract"
+  ]
+ },
+ {
+  "id": "219970",
+  "product": "LIT Grape",
+  "path": "ingredientRows[4].nestedRows[3]",
+  "label": "elevATP",
+  "before": "shilajit",
+  "has_rule": false,
+  "group": "Proprietary Blend (Combination)",
+  "forms": [
+   "Ancient Peat",
+   "Apple extract"
+  ]
+ },
+ {
+  "id": "219972",
+  "product": "LIT Cotton Candy",
+  "path": "ingredientRows[4].nestedRows[3]",
+  "label": "elevATP",
+  "before": "shilajit",
+  "has_rule": false,
+  "group": "Proprietary Blend (Combination)",
+  "forms": [
+   "Ancient Peat extract",
+   "Apple Extract"
+  ]
+ },
+ {
+  "id": "220004",
+  "product": "LIT Iced Tea Lemonade",
+  "path": "ingredientRows[4].nestedRows[3]",
+  "label": "elevATP",
+  "before": "shilajit",
+  "has_rule": false,
+  "group": "Proprietary Blend (Combination)",
+  "forms": [
+   "Ancient Peat",
+   "Apple extract"
+  ]
+ },
+ {
+  "id": "220019",
+  "product": "Wheybolic Natural Chocolate",
+  "path": "ingredientRows[14]",
+  "label": "ProHydrolase Protease Enzyme Blend",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (Metabolite, constituent, extract, isolate, or combination of these)",
+  "forms": [
+   "Proteases"
+  ]
+ },
+ {
+  "id": "220023",
+  "product": "Wheybolic Natural Vanilla",
+  "path": "ingredientRows[14]",
+  "label": "ProHydrolase Protease Enzyme Blend",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (Metabolite, constituent, extract, isolate, or combination of these)",
+  "forms": [
+   "Proteases"
+  ]
+ },
+ {
+  "id": "220047",
+  "product": "LIT Blue Raspberry",
+  "path": "ingredientRows[4].nestedRows[3]",
+  "label": "elevATP",
+  "before": "shilajit",
+  "has_rule": false,
+  "group": "Proprietary Blend (Herb/Botanical)",
+  "forms": [
+   "Ancient Peat extract",
+   "Apple Extract"
+  ]
+ },
+ {
+  "id": "220050",
+  "product": "LIT Icy Fireworks",
+  "path": "ingredientRows[4].nestedRows[3]",
+  "label": "elevATP",
+  "before": "shilajit",
+  "has_rule": false,
+  "group": "Proprietary Blend (Herb/Botanical)",
+  "forms": [
+   "Ancient Peat extract",
+   "Apple Extract"
+  ]
+ },
+ {
+  "id": "220054",
+  "product": "LIT Gummy Worm",
+  "path": "ingredientRows[4].nestedRows[3]",
+  "label": "elevATP",
+  "before": "shilajit",
+  "has_rule": false,
+  "group": "Proprietary Blend (Combination)",
+  "forms": [
+   "Ancient Peat extract",
+   "Apple Extract"
+  ]
+ },
+ {
+  "id": "220074",
+  "product": "Wheybolic Chocolate Fudge",
+  "path": "ingredientRows[15]",
+  "label": "ProHydrolase Protease Enzyme Blend",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (Metabolite, constituent, extract, isolate, or combination of these)",
+  "forms": [
+   "Proteases"
+  ]
+ },
+ {
+  "id": "220082",
+  "product": "Wheybolic Ripped Chocolate Fudge",
+  "path": "ingredientRows[17].nestedRows[3]",
+  "label": "ProHydrolase Protease Enzyme Blend",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (Metabolite, constituent, extract, isolate, or combination of these)",
+  "forms": [
+   "Proteases"
+  ]
+ },
+ {
+  "id": "220085",
+  "product": "LIT Gummy Worm",
+  "path": "ingredientRows[4].nestedRows[3]",
+  "label": "elevATP",
+  "before": "shilajit",
+  "has_rule": false,
+  "group": "Proprietary Blend (Herb/Botanical)",
+  "forms": [
+   "Ancient Peat extract",
+   "Apple Extract"
+  ]
+ },
+ {
+  "id": "220089",
+  "product": "LIT Snow Cone",
+  "path": "ingredientRows[4].nestedRows[2]",
+  "label": "elevATP",
+  "before": "shilajit",
+  "has_rule": false,
+  "group": "Proprietary Blend (Combination)",
+  "forms": [
+   "Ancient Peat",
+   "Apple extract"
+  ]
+ },
+ {
+  "id": "220094",
+  "product": "LIT Beyond Dew",
+  "path": "ingredientRows[4].nestedRows[2]",
+  "label": "elevATP",
+  "before": "shilajit",
+  "has_rule": false,
+  "group": "Proprietary Blend (Herb/Botanical)",
+  "forms": [
+   "Ancient Peat extract",
+   "Apple Extract"
+  ]
+ },
+ {
+  "id": "220098",
+  "product": "LIT Watermelon Candy",
+  "path": "ingredientRows[4].nestedRows[2]",
+  "label": "elevATP",
+  "before": "shilajit",
+  "has_rule": false,
+  "group": "Proprietary Blend (Combination)",
+  "forms": [
+   "Ancient Peat",
+   "Apple extract"
+  ]
+ },
+ {
+  "id": "220101",
+  "product": "LIT Lemon Ice",
+  "path": "ingredientRows[4].nestedRows[2]",
+  "label": "elevATP",
+  "before": "shilajit",
+  "has_rule": false,
+  "group": "Proprietary Blend (Combination)",
+  "forms": [
+   "Ancient Peat extract",
+   "Apple Extract"
+  ]
+ },
+ {
+  "id": "220108",
+  "product": "Wheybolic Ripped Classic Vanilla",
+  "path": "ingredientRows[17].nestedRows[3]",
+  "label": "ProHydrolase Protease Enzyme Blend",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (Metabolite, constituent, extract, isolate, or combination of these)",
+  "forms": [
+   "Proteases"
+  ]
+ },
+ {
+  "id": "220191",
+  "product": "Wheybolic Ripped Strawberries and Cream",
+  "path": "ingredientRows[17].nestedRows[3]",
+  "label": "ProHydrolase Protease Enzyme Blend",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (Metabolite, constituent, extract, isolate, or combination of these)",
+  "forms": [
+   "Proteases"
+  ]
+ },
+ {
+  "id": "220211",
+  "product": "Wheybolic Ripped Cookies and Cream",
+  "path": "ingredientRows[17].nestedRows[3]",
+  "label": "ProHydrolase Protease Enzyme Blend",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (Metabolite, constituent, extract, isolate, or combination of these)",
+  "forms": [
+   "Proteases"
+  ]
+ },
+ {
+  "id": "220215",
+  "product": "Wheybolic Alpha Chocolate Fudge",
+  "path": "ingredientRows[10].nestedRows[3]",
+  "label": "ProHydrolase Protease Enzyme Blend",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (Metabolite, constituent, extract, isolate, or combination of these)",
+  "forms": [
+   "Proteases"
+  ]
+ },
+ {
+  "id": "220276",
+  "product": "Digestive Enzymes",
+  "path": "ingredientRows[0]",
+  "label": "n-zimes Proprietary Blend",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (non-nutrient/non-botanical)",
+  "forms": []
+ },
+ {
+  "id": "220276",
+  "product": "Digestive Enzymes",
+  "path": "ingredientRows[1]",
+  "label": "CereCalase Proprietary Blend",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (Metabolite, constituent, extract, isolate, or combination of these)",
+  "forms": []
+ },
+ {
+  "id": "221095",
+  "product": "Energy & Metabolism Chocolate",
+  "path": "ingredientRows[36].nestedRows[0]",
+  "label": "ProHydrolase Protease Enzyme Blend",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (non-nutrient/non-botanical)",
+  "forms": []
+ },
+ {
+  "id": "221108",
+  "product": "Wheybolic Alpha Classic Vanilla",
+  "path": "ingredientRows[9].nestedRows[3]",
+  "label": "ProHydrolase Protease Enzyme Blend",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (Metabolite, constituent, extract, isolate, or combination of these)",
+  "forms": [
+   "Proteases"
+  ]
+ },
+ {
+  "id": "221113",
+  "product": "Wheybolic Alpha Strawberries and Cream",
+  "path": "ingredientRows[18].nestedRows[3]",
+  "label": "ProHydrolase Protease Enzyme Blend",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (Metabolite, constituent, extract, isolate, or combination of these)",
+  "forms": [
+   "Proteases"
+  ]
+ },
+ {
+  "id": "221123",
+  "product": "Wheybolic Alpha Cookies and Cream",
+  "path": "ingredientRows[20].nestedRows[3]",
+  "label": "ProHydrolase Protease Enzyme Blend",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (Metabolite, constituent, extract, isolate, or combination of these)",
+  "forms": [
+   "Proteases"
+  ]
+ },
+ {
+  "id": "221127",
+  "product": "Iso-Casein P.M. Chocolate",
+  "path": "ingredientRows[10].nestedRows[0]",
+  "label": "ProHydrolase Protease Enzyme Blend",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (Metabolite, constituent, extract, isolate, or combination of these)",
+  "forms": [
+   "Proteases"
+  ]
+ },
+ {
+  "id": "221166",
+  "product": "Wheybolic Ripped Chocolate Peanut Butter",
+  "path": "ingredientRows[17].nestedRows[3]",
+  "label": "ProHydrolase Protease Enzyme Blend",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (Metabolite, constituent, extract, isolate, or combination of these)",
+  "forms": [
+   "Proteases"
+  ]
+ },
+ {
+  "id": "221174",
+  "product": "TamaFlex",
+  "path": "ingredientRows[0]",
+  "label": "TamaFlex",
+  "before": "tamarind_extract",
+  "has_rule": false,
+  "group": "Proprietary Blend (Herb/Botanical)",
+  "forms": []
+ },
+ {
+  "id": "2221",
+  "product": "Re-Built Mass Vanilla Cake Batter",
+  "path": "ingredientRows[15]",
+  "label": "BioCore Edge (Non-Nutrient/Non-Botanical)",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (non-nutrient/non-botanical)",
+  "forms": []
+ },
+ {
+  "id": "224635",
+  "product": "Isomer E 268.4 mg (400 IU)",
+  "path": "ingredientRows[2]",
+  "label": "Toco-Rich",
+  "before": "vitamin_e",
+  "has_rule": true,
+  "group": "Proprietary Blend (Combination)",
+  "forms": []
+ },
+ {
+  "id": "228024",
+  "product": "Fortify Optima Immune Probiotic 50 Billion",
+  "path": "ingredientRows[1]",
+  "label": "Fortify Optima",
+  "before": "PII_FORTIFY_OPTIMA_BRANDED_BLEND",
+  "has_rule": false,
+  "group": "Proprietary Blend (non-nutrient/non-botanical)",
+  "forms": []
+ },
+ {
+  "id": "228524",
+  "product": "Wheybolic Classic Vanilla",
+  "path": "ingredientRows[14]",
+  "label": "ProHydrolase Protease Enzyme Blend",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (Metabolite, constituent, extract, isolate, or combination of these)",
+  "forms": [
+   "Proteases"
+  ]
+ },
+ {
+  "id": "228711",
+  "product": "Wheybolic Alpha Classic Vanilla",
+  "path": "ingredientRows[9].nestedRows[3]",
+  "label": "ProHydrolase Protease Enzyme Blend",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (Metabolite, constituent, extract, isolate, or combination of these)",
+  "forms": [
+   "Proteases"
+  ]
+ },
+ {
+  "id": "228714",
+  "product": "Wheybolic Ripped Cookies and Cream",
+  "path": "ingredientRows[13].nestedRows[3]",
+  "label": "ProHydrolase Protease Enzyme Blend",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (Metabolite, constituent, extract, isolate, or combination of these)",
+  "forms": [
+   "Proteases"
+  ]
+ },
+ {
+  "id": "228812",
+  "product": "Wheybolic Ripped Strawberries and Cream",
+  "path": "ingredientRows[13].nestedRows[3]",
+  "label": "ProHydrolase Protease Enzyme Blend",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (Metabolite, constituent, extract, isolate, or combination of these)",
+  "forms": [
+   "Proteases"
+  ]
+ },
+ {
+  "id": "228817",
+  "product": "Wheybolic Ripped Classic Vanilla",
+  "path": "ingredientRows[13].nestedRows[3]",
+  "label": "ProHydrolase Protease Enzyme Blend",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (Metabolite, constituent, extract, isolate, or combination of these)",
+  "forms": [
+   "Proteases"
+  ]
+ },
+ {
+  "id": "228822",
+  "product": "Wheybolic Ripped Chocolate Fudge",
+  "path": "ingredientRows[13].nestedRows[3]",
+  "label": "ProHydrolase Protease Enzyme Blend",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (Metabolite, constituent, extract, isolate, or combination of these)",
+  "forms": [
+   "Proteases"
+  ]
+ },
+ {
+  "id": "229510",
+  "product": "Wheybolic Cafe Latte",
+  "path": "ingredientRows[10].nestedRows[3]",
+  "label": "ProHydrolase Protease Enzyme Blend",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (Metabolite, constituent, extract, isolate, or combination of these)",
+  "forms": [
+   "Proteases"
+  ]
+ },
+ {
+  "id": "229778",
+  "product": "Peak02",
+  "path": "ingredientRows[2]",
+  "label": "PeakO2",
+  "before": "medicinal_mushroom_blend",
+  "has_rule": false,
+  "group": "Proprietary Blend (non-nutrient/non-botanical)",
+  "forms": []
+ },
+ {
+  "id": "229917",
+  "product": "LIT Rawberry Fizz",
+  "path": "ingredientRows[4].nestedRows[2]",
+  "label": "elevATP",
+  "before": "shilajit",
+  "has_rule": false,
+  "group": "Proprietary Blend (Combination)",
+  "forms": [
+   "Ancient Peat",
+   "Apple extract"
+  ]
+ },
+ {
+  "id": "231711",
+  "product": "Fast-Acting Joint Formula",
+  "path": "ingredientRows[0]",
+  "label": "Hyal-Joint Complex",
+  "before": "hyaluronic_acid",
+  "has_rule": false,
+  "group": "Proprietary Blend (Combination)",
+  "forms": []
+ },
+ {
+  "id": "231738",
+  "product": "Fast-Acting Joint Formula",
+  "path": "ingredientRows[0]",
+  "label": "Hyal-Joint Complex",
+  "before": "hyaluronic_acid",
+  "has_rule": false,
+  "group": "Proprietary Blend (Combination)",
+  "forms": []
+ },
+ {
+  "id": "231826",
+  "product": "Optimized African Mango Irvingia With Phase 3 Calorie Control Complex",
+  "path": "ingredientRows[3].nestedRows[0]",
+  "label": "InSea2",
+  "before": "fucoidan",
+  "has_rule": false,
+  "group": "Proprietary Blend (non-nutrient/non-botanical)",
+  "forms": []
+ },
+ {
+  "id": "231868",
+  "product": "Eye Pressure Support with Mirtogenol",
+  "path": "ingredientRows[0]",
+  "label": "Mirtogenol",
+  "before": "NHA_MIRTOGENOL",
+  "has_rule": false,
+  "group": "Proprietary Blend (Herb/Botanical)",
+  "forms": []
+ },
+ {
+  "id": "231917",
+  "product": "CinSulin with InSea2 and Crominex 3+",
+  "path": "ingredientRows[3]",
+  "label": "InSea2",
+  "before": "fucoidan",
+  "has_rule": false,
+  "group": "Proprietary Blend (non-nutrient/non-botanical)",
+  "forms": []
+ },
+ {
+  "id": "231921",
+  "product": "Advanced Anti-Adipocyte",
+  "path": "ingredientRows[0]",
+  "label": "Meratrim Proprietary Blend",
+  "before": "NHA_MERATRIM",
+  "has_rule": false,
+  "group": "Proprietary Blend (Herb/Botanical)",
+  "forms": []
+ },
+ {
+  "id": "241322",
+  "product": "Paleo Defense Daily",
+  "path": "ingredientRows[0]",
+  "label": "elevATP",
+  "before": "shilajit",
+  "has_rule": false,
+  "group": "Proprietary Blend (Herb/Botanical)",
+  "forms": [
+   "Ancient Peat extract",
+   "Apple Extract"
+  ]
+ },
+ {
+  "id": "241325",
+  "product": "Paleo Defense Immune",
+  "path": "ingredientRows[0]",
+  "label": "elevATP",
+  "before": "shilajit",
+  "has_rule": false,
+  "group": "Proprietary Blend (Combination)",
+  "forms": [
+   "Ancient Peat extract",
+   "Apple Extract"
+  ]
+ },
+ {
+  "id": "241328",
+  "product": "Paleo Defense Ultra",
+  "path": "ingredientRows[0]",
+  "label": "elevATP",
+  "before": "shilajit",
+  "has_rule": false,
+  "group": "Proprietary Blend (Herb/Botanical)",
+  "forms": [
+   "Ancient Peat extract",
+   "Apple Extract"
+  ]
+ },
+ {
+  "id": "241331",
+  "product": "Paleo Defense Women",
+  "path": "ingredientRows[0]",
+  "label": "elevATP",
+  "before": "shilajit",
+  "has_rule": false,
+  "group": "Proprietary Blend (Herb/Botanical)",
+  "forms": [
+   "Ancient Peat extract",
+   "Apple Extract"
+  ]
+ },
+ {
+  "id": "241684",
+  "product": "Flatter Me",
+  "path": "ingredientRows[0]",
+  "label": "Proprietary Enzyme Blend",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (non-nutrient/non-botanical)",
+  "forms": []
+ },
+ {
+  "id": "242615",
+  "product": "Omega-Zyme",
+  "path": "ingredientRows[2]",
+  "label": "Proprietary Enzyme Blend",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (non-nutrient/non-botanical)",
+  "forms": []
+ },
+ {
+  "id": "242615",
+  "product": "Omega-Zyme",
+  "path": "ingredientRows[3]",
+  "label": "Poten-Zyme Botanical Blend",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (Herb/Botanical)",
+  "forms": []
+ },
+ {
+  "id": "242617",
+  "product": "Q-Zyme Ultra",
+  "path": "ingredientRows[0]",
+  "label": "Q-Zyme Ultra Enzyme Relay Blend",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (Metabolite, constituent, extract, isolate, or combination of these)",
+  "forms": []
+ },
+ {
+  "id": "243022",
+  "product": "Strawberry Lemonade",
+  "path": "ingredientRows[4].nestedRows[3]",
+  "label": "elevATP",
+  "before": "shilajit",
+  "has_rule": false,
+  "group": "Proprietary Blend (Combination)",
+  "forms": [
+   "Ancient Peat extract",
+   "Apple Extract"
+  ]
+ },
+ {
+  "id": "243028",
+  "product": "Gummy Worm",
+  "path": "ingredientRows[4].nestedRows[3]",
+  "label": "elevATP",
+  "before": "shilajit",
+  "has_rule": false,
+  "group": "Proprietary Blend (Combination)",
+  "forms": [
+   "Ancient Peat",
+   "Apple extract"
+  ]
+ },
+ {
+  "id": "243029",
+  "product": "Orange Mango",
+  "path": "ingredientRows[4].nestedRows[3]",
+  "label": "elevATP",
+  "before": "shilajit",
+  "has_rule": false,
+  "group": "Proprietary Blend (Combination)",
+  "forms": [
+   "Ancient Peat",
+   "Apple extract"
+  ]
+ },
+ {
+  "id": "243032",
+  "product": "LIT Dragon Fruit",
+  "path": "ingredientRows[4].nestedRows[3]",
+  "label": "elevATP",
+  "before": "shilajit",
+  "has_rule": false,
+  "group": "Proprietary Blend (Combination)",
+  "forms": [
+   "Ancient Peat",
+   "Apple extract"
+  ]
+ },
+ {
+  "id": "243035",
+  "product": "LIT Rainbow Candy",
+  "path": "ingredientRows[4].nestedRows[3]",
+  "label": "elevATP",
+  "before": "shilajit",
+  "has_rule": false,
+  "group": "Proprietary Blend (Combination)",
+  "forms": [
+   "Ancient Peat extract",
+   "Apple Extract"
+  ]
+ },
+ {
+  "id": "243037",
+  "product": "LIT Jolly Rancher Green Apple",
+  "path": "ingredientRows[4].nestedRows[3]",
+  "label": "elevATP",
+  "before": "shilajit",
+  "has_rule": false,
+  "group": "Proprietary Blend (Combination)",
+  "forms": [
+   "Ancient Peat extract",
+   "Apple Extract"
+  ]
+ },
+ {
+  "id": "243041",
+  "product": "LIT Raspberry Tea",
+  "path": "ingredientRows[4].nestedRows[3]",
+  "label": "elevATP",
+  "before": "shilajit",
+  "has_rule": false,
+  "group": "Proprietary Blend (Combination)",
+  "forms": [
+   "Ancient Peat extract",
+   "Apple Extract"
+  ]
+ },
+ {
+  "id": "243045",
+  "product": "LIT Pineapple Upside Down Cake",
+  "path": "ingredientRows[4].nestedRows[3]",
+  "label": "elevATP",
+  "before": "shilajit",
+  "has_rule": false,
+  "group": "Proprietary Blend (Combination)",
+  "forms": [
+   "Ancient Peat extract",
+   "Apple Extract"
+  ]
+ },
+ {
+  "id": "243050",
+  "product": "Wheybolic Chocolate Fudge",
+  "path": "ingredientRows[15]",
+  "label": "ProHydrolase Protease Enzyme Blend",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (Metabolite, constituent, extract, isolate, or combination of these)",
+  "forms": [
+   "Proteases"
+  ]
+ },
+ {
+  "id": "243134",
+  "product": "Turmeric Sport",
+  "path": "ingredientRows[0]",
+  "label": "TamaFlex Proprietary Blend",
+  "before": "tamarind_extract",
+  "has_rule": false,
+  "group": "Proprietary Blend (Herb/Botanical)",
+  "forms": []
+ },
+ {
+  "id": "243686",
+  "product": "Digestive Enzymes",
+  "path": "ingredientRows[0]",
+  "label": "n Zimes Proprietary Blend",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (non-nutrient/non-botanical)",
+  "forms": []
+ },
+ {
+  "id": "243686",
+  "product": "Digestive Enzymes",
+  "path": "ingredientRows[1]",
+  "label": "CereCalase Proprietary Blend",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (non-nutrient/non-botanical)",
+  "forms": []
+ },
+ {
+  "id": "247106",
+  "product": "One Daily Superfood Multi-Vitamin with Iron",
+  "path": "ingredientRows[27]",
+  "label": "Nature's C with QPower",
+  "before": "vitamin_c",
+  "has_rule": true,
+  "group": "Proprietary Blend (Combination)",
+  "forms": []
+ },
+ {
+  "id": "249741",
+  "product": "Preseries Bulk Blue Raspberry",
+  "path": "ingredientRows[18]",
+  "label": "AstraGin",
+  "before": "NHA_ASTRAGIN",
+  "has_rule": false,
+  "group": "Proprietary Blend (Herb/Botanical)",
+  "forms": []
+ },
+ {
+  "id": "2512",
+  "product": "Water-Soluble Pumpkin Seed Extract With Soy Isoflavones",
+  "path": "ingredientRows[0].nestedRows[1]",
+  "label": "SoyLife Soy extract",
+  "before": "isoflavones",
+  "has_rule": false,
+  "group": "Proprietary Blend",
+  "forms": [
+   "Isoflavones"
+  ]
+ },
+ {
+  "id": "25219",
+  "product": "Best Red Yeast Rice With CoQ10 And Cholesstrinol",
+  "path": "ingredientRows[3].forms[0]",
+  "label": "PMF-source Citrus Flavones",
+  "before": "citrus_polymethoxylated_flavones",
+  "has_rule": false,
+  "group": "Proprietary Blend (non-nutrient/non-botanical)",
+  "forms": []
+ },
+ {
+  "id": "25712",
+  "product": "Amplified Wheybolic Extreme 60 Power Chocolate Fudge",
+  "path": "ingredientRows[10].nestedRows[0].nestedRows[3]",
+  "label": "CereCalase",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (Metabolite, constituent, extract, isolate, or combination of these)",
+  "forms": []
+ },
+ {
+  "id": "25712",
+  "product": "Amplified Wheybolic Extreme 60 Power Chocolate Fudge",
+  "path": "ingredientRows[10].nestedRows[1]",
+  "label": "Aminogen",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend",
+  "forms": []
+ },
+ {
+  "id": "25712",
+  "product": "Amplified Wheybolic Extreme 60 Power Chocolate Fudge",
+  "path": "ingredientRows[10].nestedRows[2]",
+  "label": "Carbogen",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend",
+  "forms": []
+ },
+ {
+  "id": "25903",
+  "product": "Advanced Formula Glucosamine Chondroitin Triple Strength With Univestin",
+  "path": "ingredientRows[5]",
+  "label": "Univestin",
+  "before": "NHA_UNIVESTIN",
+  "has_rule": false,
+  "group": "Proprietary Blend (Combination)",
+  "forms": []
+ },
+ {
+  "id": "259585",
+  "product": "Probiotic Complex Daily Need 25 Billion CFUs",
+  "path": "ingredientRows[0]",
+  "label": "LAB4 Probiotics",
+  "before": "probiotics",
+  "has_rule": true,
+  "group": "Proprietary Blend (non-nutrient/non-botanical)",
+  "forms": []
+ },
+ {
+  "id": "259590",
+  "product": "Probiotic Complex Extra Strength 75 Billion CFUs",
+  "path": "ingredientRows[0]",
+  "label": "LAB4 Probiotics",
+  "before": "probiotics",
+  "has_rule": true,
+  "group": "Proprietary Blend (non-nutrient/non-botanical)",
+  "forms": []
+ },
+ {
+  "id": "259592",
+  "product": "Probiotic Complex Daily Need 25 Billion CFUs",
+  "path": "ingredientRows[0]",
+  "label": "LAB4 Probiotics",
+  "before": "probiotics",
+  "has_rule": true,
+  "group": "Proprietary Blend (non-nutrient/non-botanical)",
+  "forms": []
+ },
+ {
+  "id": "259595",
+  "product": "Probiotic Solutions Sport 25 Billion CFUs",
+  "path": "ingredientRows[0]",
+  "label": "LAB4 Probiotics",
+  "before": "probiotics",
+  "has_rule": true,
+  "group": "Proprietary Blend (non-nutrient/non-botanical)",
+  "forms": []
+ },
+ {
+  "id": "259595",
+  "product": "Probiotic Solutions Sport 25 Billion CFUs",
+  "path": "ingredientRows[2]",
+  "label": "elevATP",
+  "before": "shilajit",
+  "has_rule": false,
+  "group": "Proprietary Blend (Herb/Botanical)",
+  "forms": [
+   "Ancient Peat extract",
+   "Apple Extract"
+  ]
+ },
+ {
+  "id": "259595",
+  "product": "Probiotic Solutions Sport 25 Billion CFUs",
+  "path": "ingredientRows[3]",
+  "label": "ProHydrolase Protease Enzyme Blend",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (non-nutrient/non-botanical)",
+  "forms": []
+ },
+ {
+  "id": "259602",
+  "product": "Probiotic Complex Daily Need 50 Billion CFUs",
+  "path": "ingredientRows[0]",
+  "label": "LAB4 Probiotics",
+  "before": "probiotics",
+  "has_rule": true,
+  "group": "Proprietary Blend (non-nutrient/non-botanical)",
+  "forms": []
+ },
+ {
+  "id": "268387",
+  "product": "Biotin Gummies Natural Berry Flavor",
+  "path": "ingredientRows[4]",
+  "label": "Organic VItaBerry Blend",
+  "before": "PII_VITABERRY_BRANDED_BLEND",
+  "has_rule": false,
+  "group": "Proprietary Blend",
+  "forms": [
+   "organic"
+  ]
+ },
+ {
+  "id": "26905",
+  "product": "Airborne",
+  "path": "ingredientRows[12]",
+  "label": "Herbal Extract Proprietary Blend",
+  "before": "PII_HERBAL_EXTRACT_GENERIC",
+  "has_rule": false,
+  "group": "Proprietary Blend (Herb/Botanical)",
+  "forms": [
+   "extract"
+  ]
+ },
+ {
+  "id": "269286",
+  "product": "Saw Palmetto 320 mg",
+  "path": "ingredientRows[0]",
+  "label": "Prosterol",
+  "before": "saw_palmetto",
+  "has_rule": true,
+  "group": "Proprietary Blend",
+  "forms": [
+   "Saw Palmetto Berry Extract"
+  ]
+ },
+ {
+  "id": "269589",
+  "product": "Saw Palmetto 320 mg",
+  "path": "ingredientRows[0]",
+  "label": "Prosterol",
+  "before": "saw_palmetto",
+  "has_rule": true,
+  "group": "Proprietary Blend",
+  "forms": [
+   "Saw Palmetto Berry Extract"
+  ]
+ },
+ {
+  "id": "269718",
+  "product": "Bladder Support Complex with Go-Less",
+  "path": "ingredientRows[2]",
+  "label": "Go-Less Proprietary Blend",
+  "before": "PII_BRAND_COMPLEX_DESCRIPTOR",
+  "has_rule": false,
+  "group": "Proprietary Blend (Herb/Botanical)",
+  "forms": []
+ },
+ {
+  "id": "274620",
+  "product": "Concept X Gummy Worm",
+  "path": "ingredientRows[11]",
+  "label": "Rephyll",
+  "before": "beta_caryophyllene",
+  "has_rule": false,
+  "group": "Proprietary Blend",
+  "forms": [
+   "Curcuma longa extract",
+   "Piper nigrum Berry Extract"
+  ]
+ },
+ {
+  "id": "274620",
+  "product": "Concept X Gummy Worm",
+  "path": "ingredientRows[18]",
+  "label": "AstraGin",
+  "before": "NHA_ASTRAGIN",
+  "has_rule": false,
+  "group": "Proprietary Blend",
+  "forms": [
+   "Astragalus root extract",
+   "Tienchi ginseng root extract"
+  ]
+ },
+ {
+  "id": "277667",
+  "product": "Digestive Enzyme Chewables Natural Mixed Berry Flavor",
+  "path": "ingredientRows[0]",
+  "label": "DigeZyme Multienzyme Complex",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (non-nutrient/non-botanical)",
+  "forms": []
+ },
+ {
+  "id": "278021",
+  "product": "Pancreatic VegEnzymes",
+  "path": "ingredientRows[0]",
+  "label": "Proprietary Enzyme Blend",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (non-nutrient/non-botanical)",
+  "forms": []
+ },
+ {
+  "id": "27806",
+  "product": "Women's Ultra Mega With Probiotics",
+  "path": "ingredientRows[25]",
+  "label": "LAB4 Probiotics",
+  "before": "probiotics",
+  "has_rule": true,
+  "group": "Proprietary Blend (non-nutrient/non-botanical)",
+  "forms": []
+ },
+ {
+  "id": "27809",
+  "product": "Amplified Wheybolic Extreme 60 Power French Vanilla",
+  "path": "ingredientRows[10].nestedRows[0].nestedRows[3]",
+  "label": "CereCalase",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (Metabolite, constituent, extract, isolate, or combination of these)",
+  "forms": []
+ },
+ {
+  "id": "27809",
+  "product": "Amplified Wheybolic Extreme 60 Power French Vanilla",
+  "path": "ingredientRows[10].nestedRows[0].nestedRows[13]",
+  "label": "Aminogen",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend",
+  "forms": []
+ },
+ {
+  "id": "27809",
+  "product": "Amplified Wheybolic Extreme 60 Power French Vanilla",
+  "path": "ingredientRows[10].nestedRows[0].nestedRows[14]",
+  "label": "Carbogen",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend",
+  "forms": []
+ },
+ {
+  "id": "27810",
+  "product": "Amplified Wheybolic Extreme 60 Ripped French Vanilla",
+  "path": "ingredientRows[12].nestedRows[0].nestedRows[0].nestedRows[3]",
+  "label": "CereCalase",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (Metabolite, constituent, extract, isolate, or combination of these)",
+  "forms": []
+ },
+ {
+  "id": "27810",
+  "product": "Amplified Wheybolic Extreme 60 Ripped French Vanilla",
+  "path": "ingredientRows[12].nestedRows[0].nestedRows[1]",
+  "label": "Aminogen",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend",
+  "forms": []
+ },
+ {
+  "id": "27810",
+  "product": "Amplified Wheybolic Extreme 60 Ripped French Vanilla",
+  "path": "ingredientRows[12].nestedRows[0].nestedRows[2]",
+  "label": "Carbogen",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend",
+  "forms": []
+ },
+ {
+  "id": "28720",
+  "product": "Omega-Zyme Digestive Enzyme Blend",
+  "path": "ingredientRows[0]",
+  "label": "Proprietary Enzyme Blend",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (non-nutrient/non-botanical)",
+  "forms": []
+ },
+ {
+  "id": "287462",
+  "product": "PMS Essentials",
+  "path": "ingredientRows[6]",
+  "label": "Relora Proprietary Blend",
+  "before": "magnolia_phellodendron_blend",
+  "has_rule": false,
+  "group": "Proprietary Blend (Herb/Botanical)",
+  "forms": []
+ },
+ {
+  "id": "287467",
+  "product": "RevitalAge Ultra",
+  "path": "ingredientRows[4]",
+  "label": "MicroActive Q10-Cyclodextrin Complex",
+  "before": "coq10",
+  "has_rule": true,
+  "group": "Proprietary Blend (Combination)",
+  "forms": [
+   "CoQ10"
+  ]
+ },
+ {
+  "id": "28973",
+  "product": "ReBuilt Mass Chocolate Mass",
+  "path": "ingredientRows[15]",
+  "label": "BioCore Edge(TM)",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (non-nutrient/non-botanical)",
+  "forms": [
+   "Peptidase",
+   "Protease"
+  ]
+ },
+ {
+  "id": "29043",
+  "product": "Raw Fit",
+  "path": "ingredientRows[18].nestedRows[2]",
+  "label": "ProHydrolase",
+  "before": "protease",
+  "has_rule": false,
+  "group": "Proprietary Blend (Metabolite, constituent, extract, isolate, or combination of these)",
+  "forms": []
+ },
+ {
+  "id": "29148",
+  "product": "Raw Fit",
+  "path": "ingredientRows[18].nestedRows[2]",
+  "label": "ProHydrolase",
+  "before": "protease",
+  "has_rule": false,
+  "group": "Proprietary Blend (Metabolite, constituent, extract, isolate, or combination of these)",
+  "forms": []
+ },
+ {
+  "id": "292796",
+  "product": "Advanced Omega Citrus Flavor",
+  "path": "ingredientRows[2]",
+  "label": "PureSeaOmega3 MSC CoC-Grade Fish Oil",
+  "before": "fish_oil",
+  "has_rule": true,
+  "group": "Proprietary Blend",
+  "forms": [
+   "fish oil"
+  ]
+ },
+ {
+  "id": "29295",
+  "product": "Intensive Strength Digest 13",
+  "path": "ingredientRows[0]",
+  "label": "Proprietary Enzyme Blend",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (Metabolite, constituent, extract, isolate, or combination of these)",
+  "forms": []
+ },
+ {
+  "id": "293928",
+  "product": "CarbCrave Complex",
+  "path": "ingredientRows[4]",
+  "label": "Relora",
+  "before": "magnolia_phellodendron_blend",
+  "has_rule": false,
+  "group": "Proprietary Blend (Herb/Botanical)",
+  "forms": []
+ },
+ {
+  "id": "293955",
+  "product": "Daily Pure Pack PureLean Weight Support",
+  "path": "ingredientRows[29]",
+  "label": "Relora",
+  "before": "magnolia_phellodendron_blend",
+  "has_rule": false,
+  "group": "Proprietary Blend (Herb/Botanical)",
+  "forms": []
+ },
+ {
+  "id": "293957",
+  "product": "Digestive Enzymes Ultra",
+  "path": "ingredientRows[0]",
+  "label": "Proprietary Enzyme Blend",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend",
+  "forms": []
+ },
+ {
+  "id": "293958",
+  "product": "Digestive Enzymes Ultra with Betaine HCl",
+  "path": "ingredientRows[0]",
+  "label": "Proprietary Enzyme Blend",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend",
+  "forms": []
+ },
+ {
+  "id": "293966",
+  "product": "Gluten/Dairy Digest",
+  "path": "ingredientRows[0]",
+  "label": "Tolerase G",
+  "before": "protease",
+  "has_rule": false,
+  "group": "Proprietary Blend",
+  "forms": [
+   "Prolyl Endopeptidase"
+  ]
+ },
+ {
+  "id": "293966",
+  "product": "Gluten/Dairy Digest",
+  "path": "ingredientRows[1]",
+  "label": "BioCore Dairy",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (non-nutrient/non-botanical)",
+  "forms": []
+ },
+ {
+  "id": "293967",
+  "product": "Gluten/Dairy Digest",
+  "path": "ingredientRows[0]",
+  "label": "Tolerase G",
+  "before": "protease",
+  "has_rule": false,
+  "group": "Proprietary Blend",
+  "forms": [
+   "Prolyl Endopeptidase"
+  ]
+ },
+ {
+  "id": "293967",
+  "product": "Gluten/Dairy Digest",
+  "path": "ingredientRows[1]",
+  "label": "BioCore Dairy",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (non-nutrient/non-botanical)",
+  "forms": []
+ },
+ {
+  "id": "293969",
+  "product": "Heartburn Essentials",
+  "path": "ingredientRows[6]",
+  "label": "Proprietary Enzyme Blend",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend",
+  "forms": []
+ },
+ {
+  "id": "294043",
+  "product": "ProSoothe II",
+  "path": "ingredientRows[6]",
+  "label": "Relora",
+  "before": "magnolia_phellodendron_blend",
+  "has_rule": false,
+  "group": "Proprietary Blend (Herb/Botanical)",
+  "forms": []
+ },
+ {
+  "id": "295514",
+  "product": "Heartburn Essentials",
+  "path": "ingredientRows[6]",
+  "label": "Proprietary Enzyme Blend",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend",
+  "forms": []
+ },
+ {
+  "id": "297656",
+  "product": "Advanced Omega Citrus Flavor",
+  "path": "ingredientRows[2]",
+  "label": "PureSeaOmega3 MSC CoC-Grade Fish Oil",
+  "before": "fish_oil",
+  "has_rule": true,
+  "group": "Proprietary Blend",
+  "forms": [
+   "Protectins",
+   "Resolvins",
+   "SPM"
+  ]
+ },
+ {
+  "id": "297693",
+  "product": "Gas & Bloating Daily Care",
+  "path": "ingredientRows[0]",
+  "label": "PreforPro Prebiotic Blend",
+  "before": "OI_PREFORPRO",
+  "has_rule": false,
+  "group": "Proprietary Blend",
+  "forms": []
+ },
+ {
+  "id": "297693",
+  "product": "Gas & Bloating Daily Care",
+  "path": "ingredientRows[0].nestedRows[2]",
+  "label": "PreforPro",
+  "before": "bacteriophages",
+  "has_rule": false,
+  "group": "Proprietary Blend",
+  "forms": [
+   "LH01-Myoviridae",
+   "LL12-Myoviridae",
+   "LL5-Siphoviridae",
+   "T4D-Myoviridae"
+  ]
+ },
+ {
+  "id": "299053",
+  "product": "Gluten/Dairy Digest",
+  "path": "ingredientRows[0]",
+  "label": "Tolerase G",
+  "before": "protease",
+  "has_rule": false,
+  "group": "Proprietary Blend",
+  "forms": [
+   "Prolyl Endopeptidase"
+  ]
+ },
+ {
+  "id": "299053",
+  "product": "Gluten/Dairy Digest",
+  "path": "ingredientRows[1]",
+  "label": "BioCore Dairy",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (non-nutrient/non-botanical)",
+  "forms": []
+ },
+ {
+  "id": "299056",
+  "product": "GlutenAssure Multivitamin",
+  "path": "ingredientRows[27]",
+  "label": "Tolerase G",
+  "before": "protease",
+  "has_rule": false,
+  "group": "Proprietary Blend",
+  "forms": [
+   "Prolyl Endopeptidase"
+  ]
+ },
+ {
+  "id": "299239",
+  "product": "Synbiotic+",
+  "path": "ingredientRows[2]",
+  "label": "PreforPro",
+  "before": "bacteriophages",
+  "has_rule": false,
+  "group": "Proprietary Blend",
+  "forms": []
+ },
+ {
+  "id": "299744",
+  "product": "Biotin Complex Hair & Skin",
+  "path": "ingredientRows[1]",
+  "label": "Lustriva",
+  "before": "keratin",
+  "has_rule": false,
+  "group": "Proprietary Blend",
+  "forms": [
+   "Inositol-Stabilized Arginine Silicate",
+   "Magnesium Biotinate"
+  ]
+ },
+ {
+  "id": "300082",
+  "product": "LIT Iced Tea Lemonade",
+  "path": "ingredientRows[8]",
+  "label": "ElevATP",
+  "before": "shilajit",
+  "has_rule": false,
+  "group": "Proprietary Blend (Combination)",
+  "forms": []
+ },
+ {
+  "id": "302646",
+  "product": "Celadrin 500 mg",
+  "path": "ingredientRows[0]",
+  "label": "Celadrin",
+  "before": "celadrin",
+  "has_rule": false,
+  "group": "Proprietary Blend",
+  "forms": [
+   "Esterified Fatty Acid Carbons"
+  ]
+ },
+ {
+  "id": "302668",
+  "product": "Gluten Rescue with Glutalytic",
+  "path": "ingredientRows[0]",
+  "label": "Glutalytic",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend",
+  "forms": []
+ },
+ {
+  "id": "302689",
+  "product": "Menopause Spectrum with EstroG-100",
+  "path": "ingredientRows[0]",
+  "label": "EstroG-100 Proprietary Blend",
+  "before": "PII_ESTROG100_BRANDED_BLEND",
+  "has_rule": false,
+  "group": "Proprietary Blend (Herb/Botanical)",
+  "forms": []
+ },
+ {
+  "id": "309960",
+  "product": "Preseries Stim-Free Blue Raspberry",
+  "path": "ingredientRows[7]",
+  "label": "ElevATP",
+  "before": "shilajit",
+  "has_rule": false,
+  "group": "Proprietary Blend (Combination)",
+  "forms": [
+   "Ancient Peat",
+   "Apple Extract"
+  ]
+ },
+ {
+  "id": "309960",
+  "product": "Preseries Stim-Free Blue Raspberry",
+  "path": "ingredientRows[8]",
+  "label": "Senactiv",
+  "before": "ginseng",
+  "has_rule": true,
+  "group": "Proprietary Blend",
+  "forms": [
+   "Panax notoginseng",
+   "Rosa roxburghii"
+  ]
+ },
+ {
+  "id": "31064",
+  "product": "Amplified Wheybolic Extreme 60 Ripped Chocolate Fudge",
+  "path": "ingredientRows[12].nestedRows[0].nestedRows[3]",
+  "label": "CereCalase",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (Metabolite, constituent, extract, isolate, or combination of these)",
+  "forms": []
+ },
+ {
+  "id": "31064",
+  "product": "Amplified Wheybolic Extreme 60 Ripped Chocolate Fudge",
+  "path": "ingredientRows[12].nestedRows[1]",
+  "label": "Aminogen",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend",
+  "forms": []
+ },
+ {
+  "id": "31064",
+  "product": "Amplified Wheybolic Extreme 60 Ripped Chocolate Fudge",
+  "path": "ingredientRows[12].nestedRows[2]",
+  "label": "Carbogen",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend",
+  "forms": []
+ },
+ {
+  "id": "31148",
+  "product": "Active Mixed Berry",
+  "path": "ingredientRows[47]",
+  "label": "n-zimes Proprietary Blend",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend",
+  "forms": []
+ },
+ {
+  "id": "31148",
+  "product": "Active Mixed Berry",
+  "path": "ingredientRows[48]",
+  "label": "CereCalase Proprietary Blend",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (Metabolite, constituent, extract, isolate, or combination of these)",
+  "forms": []
+ },
+ {
+  "id": "315325",
+  "product": "Probiotic Solutions Men's 30 Billion CFUs",
+  "path": "ingredientRows[0].nestedRows[0]",
+  "label": "LAB4 Probiotics",
+  "before": "probiotics",
+  "has_rule": true,
+  "group": "Proprietary Blend (non-nutrient/non-botanical)",
+  "forms": []
+ },
+ {
+  "id": "315333",
+  "product": "One Daily Multivitamin plus Probiotics",
+  "path": "ingredientRows[24]",
+  "label": "LAB4 Probiotics",
+  "before": "probiotics",
+  "has_rule": true,
+  "group": "Proprietary Blend (non-nutrient/non-botanical)",
+  "forms": []
+ },
+ {
+  "id": "318101",
+  "product": "Burn MF Gummy Burn",
+  "path": "ingredientRows[2]",
+  "label": "Neumentix",
+  "before": "spearmint",
+  "has_rule": false,
+  "group": "Proprietary Blend",
+  "forms": [
+   "Spearmint Aerial Parts Extract"
+  ]
+ },
+ {
+  "id": "318105",
+  "product": "LIT Jolly Rancher Green Apple",
+  "path": "ingredientRows[4].nestedRows[2]",
+  "label": "elevATP",
+  "before": "shilajit",
+  "has_rule": false,
+  "group": "Proprietary Blend (Herb/Botanical)",
+  "forms": [
+   "Ancient Peat extract",
+   "Apple Extract"
+  ]
+ },
+ {
+  "id": "318108",
+  "product": "LIT Jolly Rancher Blue Raspberry",
+  "path": "ingredientRows[4].nestedRows[3]",
+  "label": "elevATP",
+  "before": "shilajit",
+  "has_rule": false,
+  "group": "Proprietary Blend",
+  "forms": [
+   "Ancient Peat Extract",
+   "Apple Extract"
+  ]
+ },
+ {
+  "id": "319899",
+  "product": "LIT Jolly Rancher Blue Raspberry Zero Sugar",
+  "path": "ingredientRows[4].nestedRows[2]",
+  "label": "elevATP",
+  "before": "shilajit",
+  "has_rule": false,
+  "group": "Proprietary Blend (Herb/Botanical)",
+  "forms": [
+   "Ancient Peat extract",
+   "Apple Extract"
+  ]
+ },
+ {
+  "id": "319900",
+  "product": "LIT Jolly Rancher Watermelon",
+  "path": "ingredientRows[4].nestedRows[2]",
+  "label": "elevATP",
+  "before": "shilajit",
+  "has_rule": false,
+  "group": "Proprietary Blend (Herb/Botanical)",
+  "forms": [
+   "Ancient Peat extract",
+   "Apple Extract"
+  ]
+ },
+ {
+  "id": "319921",
+  "product": "LIT Jolly Rancher Cherry",
+  "path": "ingredientRows[9]",
+  "label": "elevATP",
+  "before": "shilajit",
+  "has_rule": false,
+  "group": "Proprietary Blend (Combination)",
+  "forms": []
+ },
+ {
+  "id": "319922",
+  "product": "LIT Orange Mango",
+  "path": "ingredientRows[4].nestedRows[3]",
+  "label": "elevATP",
+  "before": "shilajit",
+  "has_rule": false,
+  "group": "Proprietary Blend",
+  "forms": [
+   "Ancient Peat Extract",
+   "Apple Extract"
+  ]
+ },
+ {
+  "id": "31999",
+  "product": "Digestive Enzymes",
+  "path": "ingredientRows[0]",
+  "label": "n-zimes Proprietary Blend",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (Metabolite, constituent, extract, isolate, or combination of these)",
+  "forms": []
+ },
+ {
+  "id": "31999",
+  "product": "Digestive Enzymes",
+  "path": "ingredientRows[1]",
+  "label": "CereCalase(TM) Proprietary Blend",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (non-nutrient/non-botanical)",
+  "forms": []
+ },
+ {
+  "id": "321358",
+  "product": "Omega-Zyme Ultra Ultimate Digestive Enzyme Blend",
+  "path": "ingredientRows[0]",
+  "label": "Omega-Zyme ULTRA Enzyme Relay Blend",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (Metabolite, constituent, extract, isolate, or combination of these)",
+  "forms": []
+ },
+ {
+  "id": "321826",
+  "product": "LIT Spiced Cider",
+  "path": "ingredientRows[9]",
+  "label": "elevATP",
+  "before": "shilajit",
+  "has_rule": false,
+  "group": "Proprietary Blend (Combination)",
+  "forms": []
+ },
+ {
+  "id": "321944",
+  "product": "Energy Optimizer",
+  "path": "ingredientRows[2]",
+  "label": "PeakO2",
+  "before": "medicinal_mushroom_blend",
+  "has_rule": false,
+  "group": "Proprietary Blend",
+  "forms": []
+ },
+ {
+  "id": "321945",
+  "product": "Immune Optimizer",
+  "path": "ingredientRows[1]",
+  "label": "PeakO2 Proprietary Blend",
+  "before": "medicinal_mushroom_blend",
+  "has_rule": false,
+  "group": "Proprietary Blend",
+  "forms": []
+ },
+ {
+  "id": "323126",
+  "product": "Pre-Workout Elite Citrus Berry Flavored",
+  "path": "ingredientRows[2]",
+  "label": "PeakO2",
+  "before": "medicinal_mushroom_blend",
+  "has_rule": false,
+  "group": "Proprietary Blend",
+  "forms": []
+ },
+ {
+  "id": "323127",
+  "product": "Prebiotic + Pomegranate Berry",
+  "path": "ingredientRows[3]",
+  "label": "PreforPro",
+  "before": "bacteriophages",
+  "has_rule": false,
+  "group": "Proprietary Blend",
+  "forms": []
+ },
+ {
+  "id": "325581",
+  "product": "LIT Gummy Worm",
+  "path": "ingredientRows[4].nestedRows[3]",
+  "label": "elevATP",
+  "before": "shilajit",
+  "has_rule": false,
+  "group": "Proprietary Blend (Combination)",
+  "forms": [
+   "Ancient Peat extract",
+   "Apple Extract"
+  ]
+ },
+ {
+  "id": "325832",
+  "product": "Quercetin Complex",
+  "path": "ingredientRows[1]",
+  "label": "Ester-C",
+  "before": "vitamin_c",
+  "has_rule": true,
+  "group": "Proprietary Blend",
+  "forms": [
+   "Calcium L-Ascorbate",
+   "Vitamin C"
+  ]
+ },
+ {
+  "id": "326238",
+  "product": "Biotin + Vitamin C Natural Berry Flavor",
+  "path": "ingredientRows[4]",
+  "label": "Organic VItaBerry Blend",
+  "before": "PII_VITABERRY_BRANDED_BLEND",
+  "has_rule": false,
+  "group": "Proprietary Blend",
+  "forms": [
+   "organic"
+  ]
+ },
+ {
+  "id": "326253",
+  "product": "Digestive Enzymes",
+  "path": "ingredientRows[0].nestedRows[0]",
+  "label": "ProHydrolase",
+  "before": "protease",
+  "has_rule": false,
+  "group": "Proprietary Blend",
+  "forms": []
+ },
+ {
+  "id": "326762",
+  "product": "Probiotics 100 Billion",
+  "path": "ingredientRows[0]",
+  "label": "PreforPro Prebiotic Blend",
+  "before": "OI_PREFORPRO",
+  "has_rule": false,
+  "group": "Proprietary Blend",
+  "forms": []
+ },
+ {
+  "id": "326762",
+  "product": "Probiotics 100 Billion",
+  "path": "ingredientRows[0].nestedRows[2]",
+  "label": "PreforPro",
+  "before": "bacteriophages",
+  "has_rule": false,
+  "group": "Proprietary Blend",
+  "forms": [
+   "LH01-Myoviridae",
+   "LL12-Myoviridae",
+   "LL5-Siphoviridae",
+   "T4D-Myoviridae"
+  ]
+ },
+ {
+  "id": "326763",
+  "product": "Probiotics Calm 50 Billion",
+  "path": "ingredientRows[1]",
+  "label": "PreforPro Prebiotic Blend",
+  "before": "OI_PREFORPRO",
+  "has_rule": false,
+  "group": "Proprietary Blend",
+  "forms": []
+ },
+ {
+  "id": "326763",
+  "product": "Probiotics Calm 50 Billion",
+  "path": "ingredientRows[1].nestedRows[1]",
+  "label": "PreforPro",
+  "before": "bacteriophages",
+  "has_rule": false,
+  "group": "Proprietary Blend",
+  "forms": [
+   "LH01-Myoviridae",
+   "LL12-Myoviridae",
+   "LL5-Siphoviridae",
+   "T4D-Myoviridae"
+  ]
+ },
+ {
+  "id": "326764",
+  "product": "Probiotics Gas & Bloating 50 Billion",
+  "path": "ingredientRows[0]",
+  "label": "PreforPro Prebiotic Blend",
+  "before": "OI_PREFORPRO",
+  "has_rule": false,
+  "group": "Proprietary Blend",
+  "forms": []
+ },
+ {
+  "id": "326764",
+  "product": "Probiotics Gas & Bloating 50 Billion",
+  "path": "ingredientRows[0].nestedRows[2]",
+  "label": "PreforPro",
+  "before": "bacteriophages",
+  "has_rule": false,
+  "group": "Proprietary Blend",
+  "forms": [
+   "LH01-Myoviridae",
+   "LL12-Myoviridae",
+   "LL5-Siphoviridae",
+   "T4D-Myoviridae"
+  ]
+ },
+ {
+  "id": "326765",
+  "product": "Probiotics Immune 50 Billion",
+  "path": "ingredientRows[2]",
+  "label": "PreforPro Prebiotic Blend",
+  "before": "OI_PREFORPRO",
+  "has_rule": false,
+  "group": "Proprietary Blend",
+  "forms": []
+ },
+ {
+  "id": "326765",
+  "product": "Probiotics Immune 50 Billion",
+  "path": "ingredientRows[2].nestedRows[2]",
+  "label": "PreforPro",
+  "before": "bacteriophages",
+  "has_rule": false,
+  "group": "Proprietary Blend",
+  "forms": [
+   "LH01-Myoviridae",
+   "LL12-Myoviridae",
+   "LL5-Siphoviridae",
+   "T4D-Myoviridae"
+  ]
+ },
+ {
+  "id": "326766",
+  "product": "Probiotics Women's pH 50 Billion",
+  "path": "ingredientRows[0]",
+  "label": "PreforPro Prebiotic Blend",
+  "before": "OI_PREFORPRO",
+  "has_rule": false,
+  "group": "Proprietary Blend",
+  "forms": []
+ },
+ {
+  "id": "326766",
+  "product": "Probiotics Women's pH 50 Billion",
+  "path": "ingredientRows[0].nestedRows[2]",
+  "label": "PreforPro",
+  "before": "bacteriophages",
+  "has_rule": false,
+  "group": "Proprietary Blend",
+  "forms": [
+   "LH01-Myoviridae",
+   "LL12-Myoviridae",
+   "LL5-Siphoviridae",
+   "T4D-Myoviridae"
+  ]
+ },
+ {
+  "id": "328293",
+  "product": "Blueberry Extract Capsules",
+  "path": "ingredientRows[2]",
+  "label": "AuroraBlue",
+  "before": "blueberry",
+  "has_rule": false,
+  "group": "Proprietary Blend",
+  "forms": [
+   "Wildcrafted Blueberry Complex"
+  ]
+ },
+ {
+  "id": "328408",
+  "product": "Cortisol-Stress Balance",
+  "path": "ingredientRows[0]",
+  "label": "Relora",
+  "before": "magnolia_phellodendron_blend",
+  "has_rule": false,
+  "group": "Proprietary Blend (Herb/Botanical)",
+  "forms": []
+ },
+ {
+  "id": "328408",
+  "product": "Cortisol-Stress Balance",
+  "path": "ingredientRows[1]",
+  "label": "Oligonol",
+  "before": "lychee_polyphenol",
+  "has_rule": false,
+  "group": "Proprietary Blend",
+  "forms": []
+ },
+ {
+  "id": "328444",
+  "product": "Enhanced Sex for Women 50+",
+  "path": "ingredientRows[0].nestedRows[1]",
+  "label": "EstroG-100",
+  "before": "PII_ESTROG100_BRANDED_BLEND",
+  "has_rule": false,
+  "group": "Proprietary Blend",
+  "forms": [
+   "Angelica gigas Root Extract",
+   "Cynanchum wilfordii root extract",
+   "Phlomis umbrosa Root Extract"
+  ]
+ },
+ {
+  "id": "328459",
+  "product": "Eye Pressure Support with Mirtogenol",
+  "path": "ingredientRows[0]",
+  "label": "Mirtogenol",
+  "before": "NHA_MIRTOGENOL",
+  "has_rule": false,
+  "group": "Proprietary Blend (Herb/Botanical)",
+  "forms": []
+ },
+ {
+  "id": "328460",
+  "product": "Fast Acting Relief",
+  "path": "ingredientRows[0]",
+  "label": "Rhuleave-K",
+  "before": "curcumin",
+  "has_rule": true,
+  "group": "Proprietary Blend",
+  "forms": [
+   "AKBA",
+   "Black Sesame Seed Oil",
+   "Indian Frankincense gum resin extract",
+   "Total Curcuminoids",
+   "Turmeric Rhizome Extract"
+  ]
+ },
+ {
+  "id": "328785",
+  "product": "TamaFlex",
+  "path": "ingredientRows[0]",
+  "label": "TamaFlex",
+  "before": "tamarind_extract",
+  "has_rule": false,
+  "group": "Proprietary Blend (Herb/Botanical)",
+  "forms": []
+ },
+ {
+  "id": "328797",
+  "product": "Waist-Line Control",
+  "path": "ingredientRows[0]",
+  "label": "Meratrim Proprietary Blend",
+  "before": "NHA_MERATRIM",
+  "has_rule": false,
+  "group": "Proprietary Blend (Herb/Botanical)",
+  "forms": []
+ },
+ {
+  "id": "329215",
+  "product": "Stim-Free Blue Raspberry",
+  "path": "ingredientRows[9]",
+  "label": "elevATP",
+  "before": "shilajit",
+  "has_rule": false,
+  "group": "Proprietary Blend (Combination)",
+  "forms": [
+   "Ancient Peat",
+   "Apple Extract"
+  ]
+ },
+ {
+  "id": "329215",
+  "product": "Stim-Free Blue Raspberry",
+  "path": "ingredientRows[10]",
+  "label": "Senactiv",
+  "before": "ginseng",
+  "has_rule": true,
+  "group": "Proprietary Blend",
+  "forms": [
+   "Panax notoginseng",
+   "Rosa roxburghii"
+  ]
+ },
+ {
+  "id": "330833",
+  "product": "Concept X Sweet & Tart",
+  "path": "ingredientRows[11]",
+  "label": "Rephyll",
+  "before": "beta_caryophyllene",
+  "has_rule": false,
+  "group": "Proprietary Blend",
+  "forms": [
+   "Curcuma longa Rhizome Extract",
+   "Piper nigrum Berry Extract"
+  ]
+ },
+ {
+  "id": "330833",
+  "product": "Concept X Sweet & Tart",
+  "path": "ingredientRows[18]",
+  "label": "AstraGin",
+  "before": "NHA_ASTRAGIN",
+  "has_rule": false,
+  "group": "Proprietary Blend",
+  "forms": [
+   "Astragalus membranaceus Root Extract",
+   "Tienchi Ginseng Root Extract"
+  ]
+ },
+ {
+  "id": "330834",
+  "product": "Concept X Orange Mango",
+  "path": "ingredientRows[11]",
+  "label": "Rephyll",
+  "before": "beta_caryophyllene",
+  "has_rule": false,
+  "group": "Proprietary Blend",
+  "forms": [
+   "Curcuma longa extract",
+   "Piper nigrum Berry Extract"
+  ]
+ },
+ {
+  "id": "330834",
+  "product": "Concept X Orange Mango",
+  "path": "ingredientRows[18]",
+  "label": "AstraGin",
+  "before": "NHA_ASTRAGIN",
+  "has_rule": false,
+  "group": "Proprietary Blend",
+  "forms": [
+   "Astragalus root extract",
+   "Tienchi ginseng root extract"
+  ]
+ },
+ {
+  "id": "330835",
+  "product": "LIT Gummy Worm Zero Sugar",
+  "path": "ingredientRows[4].nestedRows[2]",
+  "label": "elevATP",
+  "before": "shilajit",
+  "has_rule": false,
+  "group": "Proprietary Blend (Herb/Botanical)",
+  "forms": [
+   "Ancient Peat extract",
+   "Apple Extract"
+  ]
+ },
+ {
+  "id": "330836",
+  "product": "LIT Blue Raspberry",
+  "path": "ingredientRows[4].nestedRows[3]",
+  "label": "elevATP",
+  "before": "shilajit",
+  "has_rule": false,
+  "group": "Proprietary Blend",
+  "forms": [
+   "Ancient Peat Extract",
+   "Apple Extract"
+  ]
+ },
+ {
+  "id": "330837",
+  "product": "LIT Fruit Punch",
+  "path": "ingredientRows[8]",
+  "label": "elevATP",
+  "before": "shilajit",
+  "has_rule": false,
+  "group": "Proprietary Blend",
+  "forms": [
+   "Ancient Peat",
+   "Apple Fruit Extract"
+  ]
+ },
+ {
+  "id": "330838",
+  "product": "LIT Jolly Rancher Blue Raspberry",
+  "path": "ingredientRows[4].nestedRows[3]",
+  "label": "elevATP",
+  "before": "shilajit",
+  "has_rule": false,
+  "group": "Proprietary Blend",
+  "forms": [
+   "Ancient Peat Extract",
+   "Apple Extract"
+  ]
+ },
+ {
+  "id": "330840",
+  "product": "LIT Jolly Rancher Watermelon",
+  "path": "ingredientRows[4].nestedRows[3]",
+  "label": "elevATP",
+  "before": "shilajit",
+  "has_rule": false,
+  "group": "Proprietary Blend (Combination)",
+  "forms": [
+   "Ancient Peat extract",
+   "Apple Extract"
+  ]
+ },
+ {
+  "id": "330841",
+  "product": "LIT Orange Mango",
+  "path": "ingredientRows[4].nestedRows[3]",
+  "label": "elevATP",
+  "before": "shilajit",
+  "has_rule": false,
+  "group": "Proprietary Blend",
+  "forms": [
+   "Ancient Peat Extract",
+   "Apple Extract"
+  ]
+ },
+ {
+  "id": "330843",
+  "product": "LIT Strawberry Lemonade",
+  "path": "ingredientRows[4].nestedRows[3]",
+  "label": "elevATP",
+  "before": "shilajit",
+  "has_rule": false,
+  "group": "Proprietary Blend (Combination)",
+  "forms": [
+   "Ancient Peat extract",
+   "Apple Extract"
+  ]
+ },
+ {
+  "id": "331687",
+  "product": "Melatonin-Free Sleep Tart Cherry Peach Flavor",
+  "path": "ingredientRows[2]",
+  "label": "Lutemax 2020",
+  "before": "lutein",
+  "has_rule": false,
+  "group": "Proprietary Blend",
+  "forms": [
+   "Lutein",
+   "Zeaxanthin"
+  ]
+ },
+ {
+  "id": "334591",
+  "product": "Lean Shake Burn Chocolate Fudge",
+  "path": "ingredientRows[31]",
+  "label": "BioCore Edge",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (non-nutrient/non-botanical)",
+  "forms": []
+ },
+ {
+  "id": "334592",
+  "product": "Lean Shake Burn Strawberry",
+  "path": "ingredientRows[31]",
+  "label": "BioCore Edge",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (non-nutrient/non-botanical)",
+  "forms": []
+ },
+ {
+  "id": "335191",
+  "product": "Quick Brain Nootropic",
+  "path": "ingredientRows[2]",
+  "label": "Lutemax 2020",
+  "before": "lutein",
+  "has_rule": false,
+  "group": "Proprietary Blend",
+  "forms": [
+   "Marigold Flower Extract"
+  ]
+ },
+ {
+  "id": "33608",
+  "product": "Amplified Creatine XXX Ripped Fruit Punch",
+  "path": "ingredientRows[7]",
+  "label": "Creatine Complex",
+  "before": "creatine_monohydrate",
+  "has_rule": true,
+  "group": "Proprietary Blend",
+  "forms": []
+ },
+ {
+  "id": "36340",
+  "product": "Balanced Mood Support",
+  "path": "ingredientRows[3]",
+  "label": "Vitaberry Plus(TM)",
+  "before": "PII_VITABERRY_BRANDED_BLEND",
+  "has_rule": false,
+  "group": "Proprietary Blend (Herb/Botanical)",
+  "forms": []
+ },
+ {
+  "id": "36642",
+  "product": "Ultra Probiotic Complex 25 Billion CFUs",
+  "path": "ingredientRows[0]",
+  "label": "LAB4 Probiotics",
+  "before": "probiotics",
+  "has_rule": true,
+  "group": "Proprietary Blend (non-nutrient/non-botanical)",
+  "forms": []
+ },
+ {
+  "id": "37280",
+  "product": "Re-Grow Vanilla Cream",
+  "path": "ingredientRows[11]",
+  "label": "Fast-Acting Proprietary Blend (Herb/Botanical)",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (Herb/Botanical)",
+  "forms": []
+ },
+ {
+  "id": "37280",
+  "product": "Re-Grow Vanilla Cream",
+  "path": "ingredientRows[12].nestedRows[0]",
+  "label": "BioCore Edge(TM) Blend",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (non-nutrient/non-botanical)",
+  "forms": []
+ },
+ {
+  "id": "42187",
+  "product": "Re-Grow Chocolate",
+  "path": "ingredientRows[11].nestedRows[0]",
+  "label": "BioCore Edge(TM) Blend",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (non-nutrient/non-botanical)",
+  "forms": []
+ },
+ {
+  "id": "42260",
+  "product": "Super Digestive Enzymes",
+  "path": "ingredientRows[0]",
+  "label": "n-zimes Proprietary Blend",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend",
+  "forms": []
+ },
+ {
+  "id": "42260",
+  "product": "Super Digestive Enzymes",
+  "path": "ingredientRows[1]",
+  "label": "CereCalase Proprietary Blend",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (Metabolite, constituent, extract, isolate, or combination of these)",
+  "forms": []
+ },
+ {
+  "id": "42263",
+  "product": "Balanced Mood Support",
+  "path": "ingredientRows[3]",
+  "label": "Vitaberry Plus(TM)",
+  "before": "PII_VITABERRY_BRANDED_BLEND",
+  "has_rule": false,
+  "group": "Proprietary Blend (Herb/Botanical)",
+  "forms": []
+ },
+ {
+  "id": "42349",
+  "product": "Amplified Wheybolic Extreme 60 Original Chocolate",
+  "path": "ingredientRows[11].nestedRows[0].nestedRows[3]",
+  "label": "CereCalase(R)",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (non-nutrient/non-botanical)",
+  "forms": []
+ },
+ {
+  "id": "42349",
+  "product": "Amplified Wheybolic Extreme 60 Original Chocolate",
+  "path": "ingredientRows[11].nestedRows[1]",
+  "label": "Aminogen",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend",
+  "forms": []
+ },
+ {
+  "id": "42349",
+  "product": "Amplified Wheybolic Extreme 60 Original Chocolate",
+  "path": "ingredientRows[11].nestedRows[2]",
+  "label": "Carbogen",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend",
+  "forms": []
+ },
+ {
+  "id": "42357",
+  "product": "Amplified Wheybolic Extreme 60 Original Cookies & Cream",
+  "path": "ingredientRows[11].nestedRows[0].nestedRows[3]",
+  "label": "CereCalase(R)",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (non-nutrient/non-botanical)",
+  "forms": []
+ },
+ {
+  "id": "42357",
+  "product": "Amplified Wheybolic Extreme 60 Original Cookies & Cream",
+  "path": "ingredientRows[11].nestedRows[1]",
+  "label": "Aminogen",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend",
+  "forms": []
+ },
+ {
+  "id": "42357",
+  "product": "Amplified Wheybolic Extreme 60 Original Cookies & Cream",
+  "path": "ingredientRows[11].nestedRows[2]",
+  "label": "Carbogen",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend",
+  "forms": []
+ },
+ {
+  "id": "42360",
+  "product": "Amplified Wheybolic Extreme 60 Original Banana Cream",
+  "path": "ingredientRows[11].nestedRows[0].nestedRows[3]",
+  "label": "CereCalase(R)",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (non-nutrient/non-botanical)",
+  "forms": []
+ },
+ {
+  "id": "42360",
+  "product": "Amplified Wheybolic Extreme 60 Original Banana Cream",
+  "path": "ingredientRows[11].nestedRows[1]",
+  "label": "Aminogen",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend",
+  "forms": []
+ },
+ {
+  "id": "42360",
+  "product": "Amplified Wheybolic Extreme 60 Original Banana Cream",
+  "path": "ingredientRows[11].nestedRows[2]",
+  "label": "Carbogen",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend",
+  "forms": []
+ },
+ {
+  "id": "4287",
+  "product": "Amplified Wheybolic Extreme 60 Vanilla",
+  "path": "ingredientRows[11].nestedRows[0].nestedRows[3]",
+  "label": "CereCalase",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend",
+  "forms": []
+ },
+ {
+  "id": "4287",
+  "product": "Amplified Wheybolic Extreme 60 Vanilla",
+  "path": "ingredientRows[11].nestedRows[1]",
+  "label": "Aminogen",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (non-nutrient/non-botanical)",
+  "forms": []
+ },
+ {
+  "id": "4287",
+  "product": "Amplified Wheybolic Extreme 60 Vanilla",
+  "path": "ingredientRows[11].nestedRows[2]",
+  "label": "Carbogen",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend",
+  "forms": []
+ },
+ {
+  "id": "4288",
+  "product": "Amplified Wheybolic Extreme 60 Chocolate",
+  "path": "ingredientRows[11].nestedRows[0].nestedRows[3]",
+  "label": "CereCalase",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend",
+  "forms": []
+ },
+ {
+  "id": "4288",
+  "product": "Amplified Wheybolic Extreme 60 Chocolate",
+  "path": "ingredientRows[11].nestedRows[1]",
+  "label": "Aminogen",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (non-nutrient/non-botanical)",
+  "forms": []
+ },
+ {
+  "id": "4288",
+  "product": "Amplified Wheybolic Extreme 60 Chocolate",
+  "path": "ingredientRows[11].nestedRows[2]",
+  "label": "Carbogen",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend",
+  "forms": []
+ },
+ {
+  "id": "4289",
+  "product": "Amplified Wheybolic Extreme 60 Vanilla",
+  "path": "ingredientRows[11].nestedRows[0].nestedRows[3]",
+  "label": "CereCalase",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend",
+  "forms": []
+ },
+ {
+  "id": "4289",
+  "product": "Amplified Wheybolic Extreme 60 Vanilla",
+  "path": "ingredientRows[11].nestedRows[1]",
+  "label": "Aminogen",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (non-nutrient/non-botanical)",
+  "forms": []
+ },
+ {
+  "id": "4289",
+  "product": "Amplified Wheybolic Extreme 60 Vanilla",
+  "path": "ingredientRows[11].nestedRows[2]",
+  "label": "Carbogen",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend",
+  "forms": []
+ },
+ {
+  "id": "43975",
+  "product": "Perfect Food Alkalizer & Detoxifier",
+  "path": "ingredientRows[11].nestedRows[55]",
+  "label": "ProHydrolase",
+  "before": "protease",
+  "has_rule": false,
+  "group": "Proprietary Blend (Metabolite, constituent, extract, isolate, or combination of these)",
+  "forms": []
+ },
+ {
+  "id": "43988",
+  "product": "Amplified 100% Whey Protein",
+  "path": "ingredientRows[10].nestedRows[0]",
+  "label": "BioCore Edge(TM) Blend",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (non-nutrient/non-botanical)",
+  "forms": []
+ },
+ {
+  "id": "44049",
+  "product": "Amplified 100% Whey Protein Vanilla",
+  "path": "ingredientRows[10].nestedRows[0]",
+  "label": "BioCore Edge(TM) Blend",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (non-nutrient/non-botanical)",
+  "forms": []
+ },
+ {
+  "id": "45062",
+  "product": "Amplified Wheybolic Extreme 60 Strength Chocolate",
+  "path": "ingredientRows[11].nestedRows[0].nestedRows[3]",
+  "label": "CereCalase(R)",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (non-nutrient/non-botanical)",
+  "forms": []
+ },
+ {
+  "id": "45062",
+  "product": "Amplified Wheybolic Extreme 60 Strength Chocolate",
+  "path": "ingredientRows[11].nestedRows[1]",
+  "label": "Aminogen",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend",
+  "forms": []
+ },
+ {
+  "id": "45062",
+  "product": "Amplified Wheybolic Extreme 60 Strength Chocolate",
+  "path": "ingredientRows[11].nestedRows[2]",
+  "label": "Carbogen",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend",
+  "forms": []
+ },
+ {
+  "id": "45067",
+  "product": "Amplified Wheybolic Extreme 60 Strength Vanilla",
+  "path": "ingredientRows[11].nestedRows[0].nestedRows[3]",
+  "label": "CereCalase(R)",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (non-nutrient/non-botanical)",
+  "forms": []
+ },
+ {
+  "id": "45067",
+  "product": "Amplified Wheybolic Extreme 60 Strength Vanilla",
+  "path": "ingredientRows[11].nestedRows[1]",
+  "label": "Aminogen",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend",
+  "forms": []
+ },
+ {
+  "id": "45067",
+  "product": "Amplified Wheybolic Extreme 60 Strength Vanilla",
+  "path": "ingredientRows[11].nestedRows[2]",
+  "label": "Carbogen",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend",
+  "forms": []
+ },
+ {
+  "id": "45069",
+  "product": "Amplified Wheybolic Extreme 60 Strength Chocolate",
+  "path": "ingredientRows[11].nestedRows[0].nestedRows[3]",
+  "label": "CereCalase(R)",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (non-nutrient/non-botanical)",
+  "forms": []
+ },
+ {
+  "id": "45069",
+  "product": "Amplified Wheybolic Extreme 60 Strength Chocolate",
+  "path": "ingredientRows[11].nestedRows[1]",
+  "label": "Aminogen",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend",
+  "forms": []
+ },
+ {
+  "id": "45069",
+  "product": "Amplified Wheybolic Extreme 60 Strength Chocolate",
+  "path": "ingredientRows[11].nestedRows[2]",
+  "label": "Carbogen",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend",
+  "forms": []
+ },
+ {
+  "id": "45072",
+  "product": "Amplified Wheybolic Extreme 60 Strength Vanilla",
+  "path": "ingredientRows[11].nestedRows[0].nestedRows[3]",
+  "label": "CereCalase(R)",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (non-nutrient/non-botanical)",
+  "forms": []
+ },
+ {
+  "id": "45072",
+  "product": "Amplified Wheybolic Extreme 60 Strength Vanilla",
+  "path": "ingredientRows[11].nestedRows[1]",
+  "label": "Aminogen",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend",
+  "forms": []
+ },
+ {
+  "id": "45072",
+  "product": "Amplified Wheybolic Extreme 60 Strength Vanilla",
+  "path": "ingredientRows[11].nestedRows[2]",
+  "label": "Carbogen",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend",
+  "forms": []
+ },
+ {
+  "id": "45074",
+  "product": "Amplified Wheybolic Extreme 60 Strength Strawberry",
+  "path": "ingredientRows[11].nestedRows[0].nestedRows[3]",
+  "label": "CereCalase(R)",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (non-nutrient/non-botanical)",
+  "forms": []
+ },
+ {
+  "id": "45074",
+  "product": "Amplified Wheybolic Extreme 60 Strength Strawberry",
+  "path": "ingredientRows[11].nestedRows[1]",
+  "label": "Aminogen",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend",
+  "forms": []
+ },
+ {
+  "id": "45074",
+  "product": "Amplified Wheybolic Extreme 60 Strength Strawberry",
+  "path": "ingredientRows[11].nestedRows[2]",
+  "label": "Carbogen",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend",
+  "forms": []
+ },
+ {
+  "id": "45081",
+  "product": "Amplified Wheybolic Extreme 60 Strength Fruit Punch",
+  "path": "ingredientRows[11].nestedRows[0].nestedRows[3]",
+  "label": "CereCalase(R)",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (non-nutrient/non-botanical)",
+  "forms": []
+ },
+ {
+  "id": "45081",
+  "product": "Amplified Wheybolic Extreme 60 Strength Fruit Punch",
+  "path": "ingredientRows[11].nestedRows[1]",
+  "label": "Aminogen",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend",
+  "forms": []
+ },
+ {
+  "id": "45081",
+  "product": "Amplified Wheybolic Extreme 60 Strength Fruit Punch",
+  "path": "ingredientRows[11].nestedRows[2]",
+  "label": "Carbogen",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend",
+  "forms": []
+ },
+ {
+  "id": "47225",
+  "product": "Amplified Wheybolic Extreme 60 Casein Chocolate Mousse",
+  "path": "ingredientRows[13].nestedRows[0].nestedRows[3]",
+  "label": "CereCalase",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (Metabolite, constituent, extract, isolate, or combination of these)",
+  "forms": []
+ },
+ {
+  "id": "47225",
+  "product": "Amplified Wheybolic Extreme 60 Casein Chocolate Mousse",
+  "path": "ingredientRows[13].nestedRows[1]",
+  "label": "Aminogen",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend",
+  "forms": []
+ },
+ {
+  "id": "47225",
+  "product": "Amplified Wheybolic Extreme 60 Casein Chocolate Mousse",
+  "path": "ingredientRows[13].nestedRows[2]",
+  "label": "Carbogen",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend",
+  "forms": []
+ },
+ {
+  "id": "47234",
+  "product": "Amplified Wheybolic Extreme 60 Casein Vanilla Frosting",
+  "path": "ingredientRows[12].nestedRows[0].nestedRows[3]",
+  "label": "CereCalase",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (Metabolite, constituent, extract, isolate, or combination of these)",
+  "forms": []
+ },
+ {
+  "id": "47234",
+  "product": "Amplified Wheybolic Extreme 60 Casein Vanilla Frosting",
+  "path": "ingredientRows[12].nestedRows[1]",
+  "label": "Aminogen",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend",
+  "forms": []
+ },
+ {
+  "id": "47234",
+  "product": "Amplified Wheybolic Extreme 60 Casein Vanilla Frosting",
+  "path": "ingredientRows[12].nestedRows[2]",
+  "label": "Carbogen",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend",
+  "forms": []
+ },
+ {
+  "id": "47584",
+  "product": "Amplified Wheybolic Extreme 60 Strawberry",
+  "path": "ingredientRows[11].nestedRows[0].nestedRows[3]",
+  "label": "CereCalase",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (Metabolite, constituent, extract, isolate, or combination of these)",
+  "forms": []
+ },
+ {
+  "id": "47584",
+  "product": "Amplified Wheybolic Extreme 60 Strawberry",
+  "path": "ingredientRows[11].nestedRows[1]",
+  "label": "Aminogen",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend",
+  "forms": []
+ },
+ {
+  "id": "47584",
+  "product": "Amplified Wheybolic Extreme 60 Strawberry",
+  "path": "ingredientRows[11].nestedRows[2]",
+  "label": "Carbogen",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend",
+  "forms": []
+ },
+ {
+  "id": "4794",
+  "product": "Amplified Wheybolic Extreme 60 Vanilla",
+  "path": "ingredientRows[11].nestedRows[0].nestedRows[3]",
+  "label": "CereCalase(R)",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (non-nutrient/non-botanical)",
+  "forms": []
+ },
+ {
+  "id": "4794",
+  "product": "Amplified Wheybolic Extreme 60 Vanilla",
+  "path": "ingredientRows[11].nestedRows[1]",
+  "label": "Aminogen",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend",
+  "forms": []
+ },
+ {
+  "id": "4794",
+  "product": "Amplified Wheybolic Extreme 60 Vanilla",
+  "path": "ingredientRows[11].nestedRows[2]",
+  "label": "Carbogen",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend",
+  "forms": []
+ },
+ {
+  "id": "4795",
+  "product": "Amplified Wheybolic Extreme 60 Chocolate",
+  "path": "ingredientRows[11].nestedRows[0].nestedRows[3]",
+  "label": "CereCalase",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (Metabolite, constituent, extract, isolate, or combination of these)",
+  "forms": []
+ },
+ {
+  "id": "4795",
+  "product": "Amplified Wheybolic Extreme 60 Chocolate",
+  "path": "ingredientRows[11].nestedRows[1]",
+  "label": "Aminogen",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend",
+  "forms": []
+ },
+ {
+  "id": "4795",
+  "product": "Amplified Wheybolic Extreme 60 Chocolate",
+  "path": "ingredientRows[11].nestedRows[2]",
+  "label": "Carbogen",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend",
+  "forms": []
+ },
+ {
+  "id": "4805",
+  "product": "Amplified 100% Whey Protein Vanilla",
+  "path": "ingredientRows[10].nestedRows[0]",
+  "label": "BioCore Edge Blend",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (Combination)",
+  "forms": []
+ },
+ {
+  "id": "4806",
+  "product": "Amplified Muscle Meal Chocolate",
+  "path": "ingredientRows[33].nestedRows[0]",
+  "label": "BioCore Edge Blend",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (Combination)",
+  "forms": []
+ },
+ {
+  "id": "4807",
+  "product": "Amplified Muscle Meal Vanilla",
+  "path": "ingredientRows[33].nestedRows[0]",
+  "label": "BioCore Edge Blend",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (Combination)",
+  "forms": []
+ },
+ {
+  "id": "4812",
+  "product": "Amplified Wheybolic Extreme 60 Strawberry",
+  "path": "ingredientRows[11].nestedRows[0].nestedRows[3]",
+  "label": "CereCalase(R)",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (non-nutrient/non-botanical)",
+  "forms": []
+ },
+ {
+  "id": "4812",
+  "product": "Amplified Wheybolic Extreme 60 Strawberry",
+  "path": "ingredientRows[11].nestedRows[2]",
+  "label": "Carbogen",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend",
+  "forms": []
+ },
+ {
+  "id": "4813",
+  "product": "Amplified Wheybolic Extreme 60 Cookies & Cream",
+  "path": "ingredientRows[11].nestedRows[0].nestedRows[3]",
+  "label": "CereCalase(R)",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (non-nutrient/non-botanical)",
+  "forms": []
+ },
+ {
+  "id": "4813",
+  "product": "Amplified Wheybolic Extreme 60 Cookies & Cream",
+  "path": "ingredientRows[11].nestedRows[2]",
+  "label": "Carbogen",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend",
+  "forms": []
+ },
+ {
+  "id": "4814",
+  "product": "Amplified 100% Whey Protein Cookies & Cream",
+  "path": "ingredientRows[10].nestedRows[0]",
+  "label": "BioCore Edge(TM) Blend",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (non-nutrient/non-botanical)",
+  "forms": []
+ },
+ {
+  "id": "4815",
+  "product": "Amplified 100% Whey Protein Chocolate",
+  "path": "ingredientRows[10].nestedRows[0]",
+  "label": "BioCore Edge(TM) Blend",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (non-nutrient/non-botanical)",
+  "forms": []
+ },
+ {
+  "id": "4816",
+  "product": "Amplified 100% Whey Protein Chocolate",
+  "path": "ingredientRows[10].nestedRows[0]",
+  "label": "BioCore Edge(TM) Blend",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (non-nutrient/non-botanical)",
+  "forms": []
+ },
+ {
+  "id": "48186",
+  "product": "Amplified Wheybolic Extreme 60 Power Chocolate Fudge",
+  "path": "ingredientRows[10].nestedRows[0].nestedRows[3]",
+  "label": "CereCalase",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (Metabolite, constituent, extract, isolate, or combination of these)",
+  "forms": []
+ },
+ {
+  "id": "48186",
+  "product": "Amplified Wheybolic Extreme 60 Power Chocolate Fudge",
+  "path": "ingredientRows[10].nestedRows[1]",
+  "label": "Aminogen",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend",
+  "forms": []
+ },
+ {
+  "id": "48186",
+  "product": "Amplified Wheybolic Extreme 60 Power Chocolate Fudge",
+  "path": "ingredientRows[10].nestedRows[2]",
+  "label": "Carbogen",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend",
+  "forms": []
+ },
+ {
+  "id": "49236",
+  "product": "Super Booster Softgels With Advanced K2 Complex",
+  "path": "ingredientRows[7]",
+  "label": "Lycopene Proprietary Blend",
+  "before": "lycopene",
+  "has_rule": false,
+  "group": "Proprietary Blend (Combination)",
+  "forms": []
+ },
+ {
+  "id": "49563",
+  "product": "Enzyme 13",
+  "path": "ingredientRows[0]",
+  "label": "Proprietary Enzyme Blend",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (Metabolite, constituent, extract, isolate, or combination of these)",
+  "forms": []
+ },
+ {
+  "id": "49626",
+  "product": "Amplified Creatine XXX Ripped Orange Twist",
+  "path": "ingredientRows[7]",
+  "label": "Creatine Complex",
+  "before": "creatine_monohydrate",
+  "has_rule": true,
+  "group": "Proprietary Blend",
+  "forms": []
+ },
+ {
+  "id": "49632",
+  "product": "Amplified Wheybolic Extreme 60 Power Strawberry",
+  "path": "ingredientRows[10].nestedRows[0].nestedRows[3]",
+  "label": "CereCalase",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (Metabolite, constituent, extract, isolate, or combination of these)",
+  "forms": []
+ },
+ {
+  "id": "49632",
+  "product": "Amplified Wheybolic Extreme 60 Power Strawberry",
+  "path": "ingredientRows[10].nestedRows[1]",
+  "label": "Aminogen",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend",
+  "forms": []
+ },
+ {
+  "id": "49632",
+  "product": "Amplified Wheybolic Extreme 60 Power Strawberry",
+  "path": "ingredientRows[10].nestedRows[2]",
+  "label": "Carbogen",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend",
+  "forms": []
+ },
+ {
+  "id": "49634",
+  "product": "Amplified Wheybolic Extreme 60 Power Strawberry",
+  "path": "ingredientRows[10].nestedRows[0].nestedRows[3]",
+  "label": "CereCalase",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (Metabolite, constituent, extract, isolate, or combination of these)",
+  "forms": []
+ },
+ {
+  "id": "49634",
+  "product": "Amplified Wheybolic Extreme 60 Power Strawberry",
+  "path": "ingredientRows[10].nestedRows[1]",
+  "label": "Aminogen",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend",
+  "forms": []
+ },
+ {
+  "id": "49634",
+  "product": "Amplified Wheybolic Extreme 60 Power Strawberry",
+  "path": "ingredientRows[10].nestedRows[2]",
+  "label": "Carbogen",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend",
+  "forms": []
+ },
+ {
+  "id": "59118",
+  "product": "SODzyme With GliSODin & Wolfberry",
+  "path": "ingredientRows[1]",
+  "label": "Superoxide Dismutase/Gliadin Complex",
+  "before": "superoxide_dismutase",
+  "has_rule": false,
+  "group": "Proprietary Blend (Combination)",
+  "forms": []
+ },
+ {
+  "id": "59705",
+  "product": "Super Booster Softgels With Advanced K2 Complex",
+  "path": "ingredientRows[8]",
+  "label": "Lycopene proprietary blend",
+  "before": "lycopene",
+  "has_rule": false,
+  "group": "Proprietary Blend (Combination)",
+  "forms": []
+ },
+ {
+  "id": "60197",
+  "product": "Hyal-Joint",
+  "path": "ingredientRows[0]",
+  "label": "Hyal-Joint",
+  "before": "hyaluronic_acid",
+  "has_rule": false,
+  "group": "Proprietary Blend (Combination)",
+  "forms": [
+   "Rooster Comb Cartilage"
+  ]
+ },
+ {
+  "id": "60404",
+  "product": "Super Booster Softgels With Advanced K2 Complex",
+  "path": "ingredientRows[8]",
+  "label": "Lycopene Proprietary Blend",
+  "before": "lycopene",
+  "has_rule": false,
+  "group": "Proprietary Blend (Combination)",
+  "forms": []
+ },
+ {
+  "id": "62075",
+  "product": "Once-Daily Health Booster (Formerly Super Booster)",
+  "path": "ingredientRows[8]",
+  "label": "Lycopene Proprietary Blend",
+  "before": "lycopene",
+  "has_rule": false,
+  "group": "Proprietary Blend (Combination)",
+  "forms": []
+ },
+ {
+  "id": "62816",
+  "product": "Natural Glucose",
+  "path": "ingredientRows[3]",
+  "label": "InSea2",
+  "before": "fucoidan",
+  "has_rule": false,
+  "group": "Proprietary Blend (non-nutrient/non-botanical)",
+  "forms": []
+ },
+ {
+  "id": "63367",
+  "product": "Active Chocolate",
+  "path": "ingredientRows[33].nestedRows[0]",
+  "label": "ProHydrolase Protease Enzyme Blend",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (non-nutrient/non-botanical)",
+  "forms": []
+ },
+ {
+  "id": "63774",
+  "product": "Raw Digestive Complex",
+  "path": "ingredientRows[1]",
+  "label": "n-Zimes Proprietary Blend",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (non-nutrient/non-botanical)",
+  "forms": []
+ },
+ {
+  "id": "63774",
+  "product": "Raw Digestive Complex",
+  "path": "ingredientRows[2]",
+  "label": "CereCalase Proprietary Blend",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (non-nutrient/non-botanical)",
+  "forms": []
+ },
+ {
+  "id": "63923",
+  "product": "Re-Built Mass Chocolate Brownie",
+  "path": "ingredientRows[15]",
+  "label": "BioCore Edge (Non-Nutrient/Non-Botanical)",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (non-nutrient/non-botanical)",
+  "forms": []
+ },
+ {
+  "id": "63926",
+  "product": "Celadrin Complex With Glucosamine",
+  "path": "ingredientRows[1]",
+  "label": "Celadrin",
+  "before": "celadrin",
+  "has_rule": false,
+  "group": "Proprietary Blend (Fatty Acid or Fat/Oil supplement)",
+  "forms": []
+ },
+ {
+  "id": "64784",
+  "product": "Omega-Zyme",
+  "path": "ingredientRows[2]",
+  "label": "Proprietary Enzyme Blend",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (non-nutrient/non-botanical)",
+  "forms": []
+ },
+ {
+  "id": "64784",
+  "product": "Omega-Zyme",
+  "path": "ingredientRows[3]",
+  "label": "Poten-Zyme Botanical Blend",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (Herb/Botanical)",
+  "forms": []
+ },
+ {
+  "id": "64963",
+  "product": "Once-Daily Health Booster",
+  "path": "ingredientRows[9]",
+  "label": "Lycopene Proprietary Blend",
+  "before": "lycopene",
+  "has_rule": false,
+  "group": "Proprietary Blend (Combination)",
+  "forms": []
+ },
+ {
+  "id": "66983",
+  "product": "Amplified Wheybolic Extreme 60 Original Chocolate",
+  "path": "ingredientRows[10].nestedRows[0].nestedRows[3]",
+  "label": "CereCalase",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (Metabolite, constituent, extract, isolate, or combination of these)",
+  "forms": [
+   "Beta-Glucanase",
+   "Hemicellulase",
+   "Phytase"
+  ]
+ },
+ {
+  "id": "66983",
+  "product": "Amplified Wheybolic Extreme 60 Original Chocolate",
+  "path": "ingredientRows[10].nestedRows[1]",
+  "label": "Aminogen",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (non-nutrient/non-botanical)",
+  "forms": []
+ },
+ {
+  "id": "66983",
+  "product": "Amplified Wheybolic Extreme 60 Original Chocolate",
+  "path": "ingredientRows[10].nestedRows[2]",
+  "label": "Carbogen",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend",
+  "forms": []
+ },
+ {
+  "id": "67394",
+  "product": "Amplified Wheybolic Extreme 60 Casein",
+  "path": "ingredientRows[13].nestedRows[0].nestedRows[3]",
+  "label": "CereCalase",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (non-nutrient/non-botanical)",
+  "forms": []
+ },
+ {
+  "id": "67394",
+  "product": "Amplified Wheybolic Extreme 60 Casein",
+  "path": "ingredientRows[13].nestedRows[1]",
+  "label": "Aminogen",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (non-nutrient/non-botanical)",
+  "forms": []
+ },
+ {
+  "id": "67394",
+  "product": "Amplified Wheybolic Extreme 60 Casein",
+  "path": "ingredientRows[13].nestedRows[2]",
+  "label": "Carbogen",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend",
+  "forms": []
+ },
+ {
+  "id": "69320",
+  "product": "LIT Fruit Punch",
+  "path": "ingredientRows[4].nestedRows[3]",
+  "label": "ElevATP",
+  "before": "shilajit",
+  "has_rule": false,
+  "group": "Proprietary Blend (Combination)",
+  "forms": []
+ },
+ {
+  "id": "69357",
+  "product": "Amplified 100% Whey Protein Vanilla",
+  "path": "ingredientRows[10].nestedRows[0]",
+  "label": "BioCore Edge Blend",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (Combination)",
+  "forms": []
+ },
+ {
+  "id": "69374",
+  "product": "Amplified Wheybolic Extreme 60 Ripped Chocolate Peanut Butter",
+  "path": "ingredientRows[12].nestedRows[0].nestedRows[3]",
+  "label": "CereCalase",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (non-nutrient/non-botanical)",
+  "forms": []
+ },
+ {
+  "id": "69374",
+  "product": "Amplified Wheybolic Extreme 60 Ripped Chocolate Peanut Butter",
+  "path": "ingredientRows[12].nestedRows[0].nestedRows[13]",
+  "label": "Aminogen",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (non-nutrient/non-botanical)",
+  "forms": []
+ },
+ {
+  "id": "69374",
+  "product": "Amplified Wheybolic Extreme 60 Ripped Chocolate Peanut Butter",
+  "path": "ingredientRows[12].nestedRows[0].nestedRows[14]",
+  "label": "Carbogen",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend",
+  "forms": []
+ },
+ {
+  "id": "69425",
+  "product": "Amplified Wheybolic Extreme 60 Power Strawberries & Cream",
+  "path": "ingredientRows[10].nestedRows[0].nestedRows[3]",
+  "label": "CereCalase",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend",
+  "forms": []
+ },
+ {
+  "id": "69425",
+  "product": "Amplified Wheybolic Extreme 60 Power Strawberries & Cream",
+  "path": "ingredientRows[10].nestedRows[0].nestedRows[13]",
+  "label": "Aminogen",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (non-nutrient/non-botanical)",
+  "forms": []
+ },
+ {
+  "id": "69425",
+  "product": "Amplified Wheybolic Extreme 60 Power Strawberries & Cream",
+  "path": "ingredientRows[10].nestedRows[0].nestedRows[14]",
+  "label": "Carbogen",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend",
+  "forms": []
+ },
+ {
+  "id": "69455",
+  "product": "Amplified Wheybolic Extreme 60 Ripped Strawberries & Cream",
+  "path": "ingredientRows[12].nestedRows[0].nestedRows[3]",
+  "label": "CereCalase",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (non-nutrient/non-botanical)",
+  "forms": []
+ },
+ {
+  "id": "69455",
+  "product": "Amplified Wheybolic Extreme 60 Ripped Strawberries & Cream",
+  "path": "ingredientRows[12].nestedRows[0].nestedRows[13]",
+  "label": "Aminogen",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (non-nutrient/non-botanical)",
+  "forms": []
+ },
+ {
+  "id": "69455",
+  "product": "Amplified Wheybolic Extreme 60 Ripped Strawberries & Cream",
+  "path": "ingredientRows[12].nestedRows[0].nestedRows[14]",
+  "label": "Carbogen",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend",
+  "forms": []
+ },
+ {
+  "id": "69504",
+  "product": "Digestive Enzymes",
+  "path": "ingredientRows[0]",
+  "label": "n Zimes Proprietary Blend",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (Metabolite, constituent, extract, isolate, or combination of these)",
+  "forms": []
+ },
+ {
+  "id": "69504",
+  "product": "Digestive Enzymes",
+  "path": "ingredientRows[1]",
+  "label": "CereCalase Proprietary Blend",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend",
+  "forms": []
+ },
+ {
+  "id": "69507",
+  "product": "Women's Advanced Protein Cinnamon Bun",
+  "path": "ingredientRows[21]",
+  "label": "ProHydrolase Protease Enzyme Blend",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (non-nutrient/non-botanical)",
+  "forms": []
+ },
+ {
+  "id": "69645",
+  "product": "Amplified Wheybolic Extreme 60 Ripped Cookies & Cream",
+  "path": "ingredientRows[11].nestedRows[0].nestedRows[3]",
+  "label": "CereCalase",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend",
+  "forms": []
+ },
+ {
+  "id": "69645",
+  "product": "Amplified Wheybolic Extreme 60 Ripped Cookies & Cream",
+  "path": "ingredientRows[11].nestedRows[0].nestedRows[13]",
+  "label": "Aminogen",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend",
+  "forms": []
+ },
+ {
+  "id": "69645",
+  "product": "Amplified Wheybolic Extreme 60 Ripped Cookies & Cream",
+  "path": "ingredientRows[11].nestedRows[0].nestedRows[14]",
+  "label": "Carbogen",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend",
+  "forms": []
+ },
+ {
+  "id": "69692",
+  "product": "Digestive Enzyme Blend",
+  "path": "ingredientRows[0]",
+  "label": "Proprietary Enzyme Blend",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend",
+  "forms": []
+ },
+ {
+  "id": "69734",
+  "product": "Active Vanilla",
+  "path": "ingredientRows[34].nestedRows[0]",
+  "label": "ProHydrolase Protease Enzyme Blend",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (non-nutrient/non-botanical)",
+  "forms": []
+ },
+ {
+  "id": "69759",
+  "product": "Energy & Metabolism Vanilla",
+  "path": "ingredientRows[36].nestedRows[0]",
+  "label": "ProHydrolase Protease Enzyme Blend",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (non-nutrient/non-botanical)",
+  "forms": []
+ },
+ {
+  "id": "69770",
+  "product": "Energy & Metabolism Chocolate",
+  "path": "ingredientRows[28].nestedRows[22]",
+  "label": "ProHydrolase Protease Enzyme Blend",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (non-nutrient/non-botanical)",
+  "forms": []
+ },
+ {
+  "id": "70017",
+  "product": "Energy & Metabolism Chocolate",
+  "path": "ingredientRows[4].nestedRows[17]",
+  "label": "ProHydrolase Protease Enzyme Blend",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (non-nutrient/non-botanical)",
+  "forms": []
+ },
+ {
+  "id": "70018",
+  "product": "Energy & Metabolism Vanilla",
+  "path": "ingredientRows[4].nestedRows[17]",
+  "label": "ProHydrolase Protease Enzyme Blend",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (non-nutrient/non-botanical)",
+  "forms": []
+ },
+ {
+  "id": "70021",
+  "product": "Sport Chocolate",
+  "path": "ingredientRows[33].nestedRows[0]",
+  "label": "ProHydrolase Protease Enzyme Blend",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (non-nutrient/non-botanical)",
+  "forms": []
+ },
+ {
+  "id": "70034",
+  "product": "Sport Vanilla",
+  "path": "ingredientRows[33].nestedRows[0]",
+  "label": "ProHydrolase Protease Enzyme Blend",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (non-nutrient/non-botanical)",
+  "forms": []
+ },
+ {
+  "id": "70066",
+  "product": "SuperFoods Supreme Berry flavor",
+  "path": "ingredientRows[6].nestedRows[5]",
+  "label": "ModCarb",
+  "before": "NHA_MODCARB",
+  "has_rule": false,
+  "group": "Proprietary Blend (Combination)",
+  "forms": []
+ },
+ {
+  "id": "70292",
+  "product": "Women's Advanced Protein Chocolate Cupcake",
+  "path": "ingredientRows[21]",
+  "label": "ProHydrolase Protease Enzyme Blend",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (non-nutrient/non-botanical)",
+  "forms": []
+ },
+ {
+  "id": "70297",
+  "product": "Amplified Wheybolic Extreme 60 Original Vanilla",
+  "path": "ingredientRows[11].nestedRows[0].nestedRows[3]",
+  "label": "CereCalase",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend",
+  "forms": []
+ },
+ {
+  "id": "70297",
+  "product": "Amplified Wheybolic Extreme 60 Original Vanilla",
+  "path": "ingredientRows[11].nestedRows[1]",
+  "label": "Aminogen",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend",
+  "forms": []
+ },
+ {
+  "id": "70297",
+  "product": "Amplified Wheybolic Extreme 60 Original Vanilla",
+  "path": "ingredientRows[11].nestedRows[2]",
+  "label": "Carbogen",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend",
+  "forms": []
+ },
+ {
+  "id": "74605",
+  "product": "Women's Advanced Protein Vanilla Ice Cream",
+  "path": "ingredientRows[22]",
+  "label": "ProHydrolase Protease Enzyme Blend",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (non-nutrient/non-botanical)",
+  "forms": []
+ },
+ {
+  "id": "74704",
+  "product": "Once-Daily Health Booster",
+  "path": "ingredientRows[9]",
+  "label": "Lycopene Proprietary Blend",
+  "before": "lycopene",
+  "has_rule": false,
+  "group": "Proprietary Blend (Combination)",
+  "forms": []
+ },
+ {
+  "id": "74777",
+  "product": "Energy & Metabolism Vanilla",
+  "path": "ingredientRows[36].nestedRows[0]",
+  "label": "ProHydrolase Protease Enzyme Blend",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (non-nutrient/non-botanical)",
+  "forms": []
+ },
+ {
+  "id": "74856",
+  "product": "Amplified Wheybolic Extreme 60 Casein Vanilla",
+  "path": "ingredientRows[12].nestedRows[0].nestedRows[3]",
+  "label": "CereCalase",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (non-nutrient/non-botanical)",
+  "forms": [
+   "Beta-Glucanase",
+   "Hemicellulose",
+   "Phytase"
+  ]
+ },
+ {
+  "id": "74856",
+  "product": "Amplified Wheybolic Extreme 60 Casein Vanilla",
+  "path": "ingredientRows[12].nestedRows[2]",
+  "label": "Carbogen",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (Combination)",
+  "forms": [
+   "Amylase",
+   "Cellulase",
+   "Hemicellulase",
+   "Maltodextrin"
+  ]
+ },
+ {
+  "id": "74872",
+  "product": "Amplified Wheybolic Extreme 60 Power French Vanilla",
+  "path": "ingredientRows[10].nestedRows[0].nestedRows[3]",
+  "label": "CereCalase",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (Metabolite, constituent, extract, isolate, or combination of these)",
+  "forms": [
+   "Beta-Glucanase",
+   "Hemicellulase",
+   "Phytase"
+  ]
+ },
+ {
+  "id": "74872",
+  "product": "Amplified Wheybolic Extreme 60 Power French Vanilla",
+  "path": "ingredientRows[10].nestedRows[1]",
+  "label": "Aminogen",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend",
+  "forms": []
+ },
+ {
+  "id": "74872",
+  "product": "Amplified Wheybolic Extreme 60 Power French Vanilla",
+  "path": "ingredientRows[10].nestedRows[2]",
+  "label": "Carbogen",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend",
+  "forms": []
+ },
+ {
+  "id": "75098",
+  "product": "Kids Chewable Probiotic For Kids 4-12 Natural Strawberry Flavor",
+  "path": "ingredientRows[3]",
+  "label": "LAB4 Probiotics",
+  "before": "probiotics",
+  "has_rule": true,
+  "group": "Proprietary Blend (non-nutrient/non-botanical)",
+  "forms": []
+ },
+ {
+  "id": "75206",
+  "product": "Amplified Wheybolic Extreme 60 Original Vanilla",
+  "path": "ingredientRows[11].nestedRows[0].nestedRows[3]",
+  "label": "CereCalase",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (Metabolite, constituent, extract, isolate, or combination of these)",
+  "forms": [
+   "Beta-Glucanase",
+   "Hemicellulase",
+   "Phytase"
+  ]
+ },
+ {
+  "id": "75206",
+  "product": "Amplified Wheybolic Extreme 60 Original Vanilla",
+  "path": "ingredientRows[11].nestedRows[2]",
+  "label": "Carbogen",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (Combination)",
+  "forms": [
+   "Amylase",
+   "Cellulase",
+   "Hemicellulase",
+   "Maltodextrin"
+  ]
+ },
+ {
+  "id": "75571",
+  "product": "Energy & Metabolism Chocolate",
+  "path": "ingredientRows[33].nestedRows[1]",
+  "label": "ProHydrolase Protease Enzyme Blend",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (non-nutrient/non-botanical)",
+  "forms": []
+ },
+ {
+  "id": "76805",
+  "product": "Probiotic Complex With Fiber Unflavored",
+  "path": "ingredientRows[2]",
+  "label": "LAB4 Probiotics",
+  "before": "probiotics",
+  "has_rule": true,
+  "group": "Proprietary Blend (non-nutrient/non-botanical)",
+  "forms": []
+ },
+ {
+  "id": "76840",
+  "product": "Super Digestive Enzymes",
+  "path": "ingredientRows[0]",
+  "label": "n-zimes Proprietary Blend",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend",
+  "forms": []
+ },
+ {
+  "id": "76840",
+  "product": "Super Digestive Enzymes",
+  "path": "ingredientRows[1]",
+  "label": "CereCalase Proprietary Blend",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend",
+  "forms": []
+ },
+ {
+  "id": "76886",
+  "product": "Fast Stix Mixed Berry",
+  "path": "ingredientRows[2]",
+  "label": "LAB4 Probiotics",
+  "before": "probiotics",
+  "has_rule": true,
+  "group": "Proprietary Blend (non-nutrient/non-botanical)",
+  "forms": []
+ },
+ {
+  "id": "76892",
+  "product": "Probiotic Complex 25 Billion CFUs",
+  "path": "ingredientRows[0]",
+  "label": "LAB4 Probiotics",
+  "before": "probiotics",
+  "has_rule": true,
+  "group": "Proprietary Blend (non-nutrient/non-botanical)",
+  "forms": []
+ },
+ {
+  "id": "76895",
+  "product": "Probiotic Complex 75 Billion",
+  "path": "ingredientRows[0]",
+  "label": "LAB4 Probiotics",
+  "before": "probiotics",
+  "has_rule": true,
+  "group": "Proprietary Blend (non-nutrient/non-botanical)",
+  "forms": []
+ },
+ {
+  "id": "76899",
+  "product": "Probiotic Solutions Energy 25 Billion CFUs",
+  "path": "ingredientRows[14]",
+  "label": "LAB4 Probiotics",
+  "before": "probiotics",
+  "has_rule": true,
+  "group": "Proprietary Blend (non-nutrient/non-botanical)",
+  "forms": []
+ },
+ {
+  "id": "76901",
+  "product": "Probiotic Solutions Immune Support 25 Billion CFUs",
+  "path": "ingredientRows[5]",
+  "label": "LAB4 Probiotics",
+  "before": "probiotics",
+  "has_rule": true,
+  "group": "Proprietary Blend (non-nutrient/non-botanical)",
+  "forms": []
+ },
+ {
+  "id": "77146",
+  "product": "Probiotic Solutions with Enzymes 25 Billion CFUs",
+  "path": "ingredientRows[0]",
+  "label": "LAB4 Probiotics",
+  "before": "probiotics",
+  "has_rule": true,
+  "group": "Proprietary Blend (non-nutrient/non-botanical)",
+  "forms": []
+ },
+ {
+  "id": "77147",
+  "product": "Probiotic Solutions Multi Strain 25 Billion CFUs",
+  "path": "ingredientRows[0].nestedRows[0]",
+  "label": "LAB4 Probiotics",
+  "before": "probiotics",
+  "has_rule": true,
+  "group": "Proprietary Blend (non-nutrient/non-botanical)",
+  "forms": []
+ },
+ {
+  "id": "77156",
+  "product": "Probiotic Solutions Women's 30 Billion CFUs",
+  "path": "ingredientRows[0].nestedRows[0]",
+  "label": "LAB4 Probiotics",
+  "before": "probiotics",
+  "has_rule": true,
+  "group": "Proprietary Blend (non-nutrient/non-botanical)",
+  "forms": []
+ },
+ {
+  "id": "77162",
+  "product": "Probiotic Complex 25 Billion CFUs",
+  "path": "ingredientRows[0]",
+  "label": "LAB4 Probiotics",
+  "before": "probiotics",
+  "has_rule": true,
+  "group": "Proprietary Blend (non-nutrient/non-botanical)",
+  "forms": []
+ },
+ {
+  "id": "77163",
+  "product": "Probiotic Solutions with Enzymes 25 Billion CFUs",
+  "path": "ingredientRows[0]",
+  "label": "LAB4 Probiotics",
+  "before": "probiotics",
+  "has_rule": true,
+  "group": "Proprietary Blend (non-nutrient/non-botanical)",
+  "forms": []
+ },
+ {
+  "id": "77164",
+  "product": "Probiotic Solutions Sport 25 Billion CFUs",
+  "path": "ingredientRows[0]",
+  "label": "LAB4 Probiotics",
+  "before": "probiotics",
+  "has_rule": true,
+  "group": "Proprietary Blend (non-nutrient/non-botanical)",
+  "forms": []
+ },
+ {
+  "id": "77164",
+  "product": "Probiotic Solutions Sport 25 Billion CFUs",
+  "path": "ingredientRows[2]",
+  "label": "elevATP",
+  "before": "shilajit",
+  "has_rule": false,
+  "group": "Proprietary Blend (Combination)",
+  "forms": [
+   "Apple extract",
+   "Peat"
+  ]
+ },
+ {
+  "id": "77164",
+  "product": "Probiotic Solutions Sport 25 Billion CFUs",
+  "path": "ingredientRows[3]",
+  "label": "ProHydrolase Protease Enzyme Blend",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (Metabolite, constituent, extract, isolate, or combination of these)",
+  "forms": []
+ },
+ {
+  "id": "77175",
+  "product": "Probiotic Complex Daily Need 1 Billion CFUs",
+  "path": "ingredientRows[0].nestedRows[0]",
+  "label": "LAB4 Probiotics",
+  "before": "probiotics",
+  "has_rule": true,
+  "group": "Proprietary Blend (non-nutrient/non-botanical)",
+  "forms": []
+ },
+ {
+  "id": "77179",
+  "product": "Probiotic Complex 10 Billion CFUs",
+  "path": "ingredientRows[0].nestedRows[0]",
+  "label": "LAB4 Probiotics",
+  "before": "probiotics",
+  "has_rule": true,
+  "group": "Proprietary Blend (non-nutrient/non-botanical)",
+  "forms": []
+ },
+ {
+  "id": "77201",
+  "product": "Chewable Vanilla Berry",
+  "path": "ingredientRows[0].nestedRows[0]",
+  "label": "LAB4 Probiotics",
+  "before": "probiotics",
+  "has_rule": true,
+  "group": "Proprietary Blend (non-nutrient/non-botanical)",
+  "forms": []
+ },
+ {
+  "id": "77202",
+  "product": "Probiotic Complex 50 Billion CFUs",
+  "path": "ingredientRows[0]",
+  "label": "LAB4 Probiotics",
+  "before": "probiotics",
+  "has_rule": true,
+  "group": "Proprietary Blend (non-nutrient/non-botanical)",
+  "forms": []
+ },
+ {
+  "id": "77203",
+  "product": "Probiotic Solutions Women's 30 Billion CFUs",
+  "path": "ingredientRows[0].nestedRows[0]",
+  "label": "LAB4 Probiotics",
+  "before": "probiotics",
+  "has_rule": true,
+  "group": "Proprietary Blend (non-nutrient/non-botanical)",
+  "forms": []
+ },
+ {
+  "id": "78133",
+  "product": "Precision BCAA Blue Raspberry Lemonade",
+  "path": "ingredientRows[7].nestedRows[2]",
+  "label": "Univestin",
+  "before": "NHA_UNIVESTIN",
+  "has_rule": false,
+  "group": "Proprietary Blend (Herb/Botanical)",
+  "forms": [
+   "Chinese Skullcap root extract",
+   "Cutch Tree wood & bark extract"
+  ]
+ },
+ {
+  "id": "78148",
+  "product": "LIT Gummy Worm",
+  "path": "ingredientRows[4].nestedRows[3]",
+  "label": "ElevATP",
+  "before": "shilajit",
+  "has_rule": false,
+  "group": "Proprietary Blend (Combination)",
+  "forms": [
+   "Ancient Peat",
+   "Apple Extract"
+  ]
+ },
+ {
+  "id": "78327",
+  "product": "Ultra Mega Green Active Berry",
+  "path": "ingredientRows[34].nestedRows[9]",
+  "label": "ModCarb",
+  "before": "NHA_MODCARB",
+  "has_rule": false,
+  "group": "Proprietary Blend",
+  "forms": []
+ },
+ {
+  "id": "78327",
+  "product": "Ultra Mega Green Active Berry",
+  "path": "ingredientRows[40].nestedRows[1]",
+  "label": "Modcarb",
+  "before": "NHA_MODCARB",
+  "has_rule": false,
+  "group": "Proprietary Blend (Herb/Botanical)",
+  "forms": [
+   "organic Amaranth",
+   "organic Buckwheat",
+   "organic Chia",
+   "organic Millet",
+   "organic Oat Bran",
+   "organic Quinoa"
+  ]
+ },
+ {
+  "id": "80096",
+  "product": "Digestive Enzymes",
+  "path": "ingredientRows[0]",
+  "label": "N.Zimes Proprietary Blend",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (non-nutrient/non-botanical)",
+  "forms": []
+ },
+ {
+  "id": "80096",
+  "product": "Digestive Enzymes",
+  "path": "ingredientRows[1]",
+  "label": "CereCalase Proprietary Blend",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (Metabolite, constituent, extract, isolate, or combination of these)",
+  "forms": []
+ },
+ {
+  "id": "82403",
+  "product": "Cellular Antioxidant Formula",
+  "path": "ingredientRows[19]",
+  "label": "Spectra Blend (Combination)",
+  "before": "PII_SPECTRA_BRANDED_BLEND",
+  "has_rule": false,
+  "group": "Proprietary Blend (Combination)",
+  "forms": []
+ },
+ {
+  "id": "82433",
+  "product": "Probiotic Complex 10 Billion CFUs",
+  "path": "ingredientRows[0].nestedRows[0]",
+  "label": "LAB4 Probiotics:",
+  "before": "probiotics",
+  "has_rule": true,
+  "group": "Proprietary Blend (non-nutrient/non-botanical)",
+  "forms": []
+ },
+ {
+  "id": "82601",
+  "product": "Enzyme Blend - AM Packet",
+  "path": "ingredientRows[0]",
+  "label": "n-zimes Proprietary Blend (Non-Nutrient/Non-Botanical)",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (non-nutrient/non-botanical)",
+  "forms": []
+ },
+ {
+  "id": "82601",
+  "product": "Enzyme Blend - AM Packet",
+  "path": "ingredientRows[1]",
+  "label": "CereCalase Proprietary Blend",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (non-nutrient/non-botanical)",
+  "forms": []
+ },
+ {
+  "id": "82604",
+  "product": "Enzyme Blend - PM Packet",
+  "path": "ingredientRows[0]",
+  "label": "n-zimes Proprietary Blend (Non-Nutrient/Non-Botanical)",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (non-nutrient/non-botanical)",
+  "forms": []
+ },
+ {
+  "id": "82604",
+  "product": "Enzyme Blend - PM Packet",
+  "path": "ingredientRows[1]",
+  "label": "CereCalase Proprietary Blend",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (non-nutrient/non-botanical)",
+  "forms": []
+ },
+ {
+  "id": "82782",
+  "product": "Lean Shake Burn Vanilla Creme",
+  "path": "ingredientRows[29].nestedRows[1]",
+  "label": "BioCore Edge",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (non-nutrient/non-botanical)",
+  "forms": []
+ },
+ {
+  "id": "82888",
+  "product": "Precision BCAA Blue Raspberry Lemonade",
+  "path": "ingredientRows[8].nestedRows[1]",
+  "label": "Univestin",
+  "before": "NHA_UNIVESTIN",
+  "has_rule": false,
+  "group": "Proprietary Blend (Herb/Botanical)",
+  "forms": [
+   "Chinese Skullcap root extract",
+   "Cutch Tree wood & bark extract"
+  ]
+ },
+ {
+  "id": "82893",
+  "product": "Iso-Casein P.M. Vanilla",
+  "path": "ingredientRows[10].nestedRows[0]",
+  "label": "ProHydrolase Protease Enzyme Blend",
+  "before": "digestive_enzymes",
+  "has_rule": false,
+  "group": "Proprietary Blend (non-nutrient/non-botanical)",
+  "forms": []
+ },
+ {
+  "id": "992",
+  "product": "Menopause Formula",
+  "path": "ingredientRows[2]",
+  "label": "Isolase(R)",
+  "before": "PII_ISOLASE",
+  "has_rule": false,
+  "group": "Proprietary Blend (non-nutrient/non-botanical)",
+  "forms": []
+ }
+]

@@ -1,0 +1,2277 @@
+[
+ {
+  "canonical_id": "branched_chain_amino_acids",
+  "label": "Branched-Chain Amino Acids",
+  "disposition": "clean",
+  "has_rule": false,
+  "products": 67,
+  "example": {
+   "id": "199511",
+   "qty": 15.0,
+   "unit": "Gram(s)",
+   "forms": [],
+   "children": [
+    "l_isoleucine",
+    "l_leucine",
+    "l_valine"
+   ]
+  }
+ },
+ {
+  "canonical_id": "digestive_enzymes",
+  "label": "Enzyme Blend",
+  "disposition": "taxonomy_only",
+  "has_rule": false,
+  "products": 44,
+  "example": {
+   "id": "18453",
+   "qty": 152.5,
+   "unit": "mg",
+   "forms": [
+    "Acid Protease",
+    "Alkaline Proteases",
+    "Amylase",
+    "Bromelain",
+    "Cellulase",
+    "Lactase",
+    "Lipase"
+   ],
+   "children": []
+  }
+ },
+ {
+  "canonical_id": "fiber",
+  "label": "Fiber Blend",
+  "disposition": "taxonomy_only",
+  "has_rule": true,
+  "products": 29,
+  "example": {
+   "id": "1060",
+   "qty": 8.0,
+   "unit": "g",
+   "forms": [
+    "Cellulose",
+    "FOS-Fructoligosaccharides",
+    "Gum Arabic",
+    "Inulin",
+    "Resistant Starch",
+    "Soy Fiber"
+   ],
+   "children": []
+  }
+ },
+ {
+  "canonical_id": "olive_leaf",
+  "label": "Verbascoside/Oleuropein",
+  "disposition": "taxonomy_only",
+  "has_rule": true,
+  "products": 24,
+  "example": {
+   "id": "182716",
+   "qty": 4.4,
+   "unit": "mg",
+   "forms": [],
+   "children": [
+    "olive_leaf",
+    "verbascoside"
+   ]
+  }
+ },
+ {
+  "canonical_id": "olive_leaf",
+  "label": "Hydroxytyrosol/Tyrosol",
+  "disposition": "taxonomy_only",
+  "has_rule": true,
+  "products": 23,
+  "example": {
+   "id": "182716",
+   "qty": 5.2,
+   "unit": "mg",
+   "forms": [],
+   "children": [
+    "olive_fruit_extract",
+    "olive_leaf"
+   ]
+  }
+ },
+ {
+  "canonical_id": "citrus_bioflavonoids",
+  "label": "Citrus Bioflavonoid Complex",
+  "disposition": "taxonomy_only",
+  "has_rule": false,
+  "products": 20,
+  "example": {
+   "id": "201803",
+   "qty": 30.0,
+   "unit": "mg",
+   "forms": [
+    "Grapefruit",
+    "Lemon",
+    "Lime",
+    "Orange",
+    "Tangerine"
+   ],
+   "children": []
+  }
+ },
+ {
+  "canonical_id": "branched_chain_amino_acids",
+  "label": "Micronized BCAA",
+  "disposition": "taxonomy_only",
+  "has_rule": false,
+  "products": 20,
+  "example": {
+   "id": "211337",
+   "qty": 10.0,
+   "unit": "Gram(s)",
+   "forms": [],
+   "children": [
+    "l_isoleucine",
+    "l_leucine",
+    "l_valine"
+   ]
+  }
+ },
+ {
+  "canonical_id": "PII_PHOSPHOLIPID_DESCRIPTOR",
+  "label": "Phospholipids",
+  "disposition": "taxonomy_only",
+  "has_rule": false,
+  "products": 18,
+  "example": {
+   "id": "302654",
+   "qty": 240.0,
+   "unit": "mg",
+   "forms": [],
+   "children": []
+  }
+ },
+ {
+  "canonical_id": "broccoli",
+  "label": "Broccoli Concentrate Blend",
+  "disposition": "clean",
+  "has_rule": false,
+  "products": 18,
+  "example": {
+   "id": "328514",
+   "qty": 525.0,
+   "unit": "mg",
+   "forms": [
+    "Broccoli Sprout Extract, Powder",
+    "Broccoli Floret Extract, Powder",
+    "Broccoli Seed Extract, Powder"
+   ],
+   "children": []
+  }
+ },
+ {
+  "canonical_id": "hesperidin",
+  "label": "Hesperidin Complex",
+  "disposition": "taxonomy_only",
+  "has_rule": false,
+  "products": 17,
+  "example": {
+   "id": "14015",
+   "qty": 5.0,
+   "unit": "mg",
+   "forms": [],
+   "children": []
+  }
+ },
+ {
+  "canonical_id": "pancreatin",
+  "label": "Pancreatin",
+  "disposition": "taxonomy_only",
+  "has_rule": false,
+  "products": 17,
+  "example": {
+   "id": "184036",
+   "qty": 100.0,
+   "unit": "mg",
+   "forms": [],
+   "children": []
+  }
+ },
+ {
+  "canonical_id": "shilajit",
+  "label": "PrimaVie Shilajit Fulvic Acid Complex",
+  "disposition": "repaired",
+  "has_rule": false,
+  "products": 16,
+  "example": {
+   "id": "182715",
+   "qty": 100.0,
+   "unit": "mg",
+   "forms": [],
+   "children": []
+  }
+ },
+ {
+  "canonical_id": "PII_PHOSPHOLIPID_DESCRIPTOR",
+  "label": "Phospholipids",
+  "disposition": "clean",
+  "has_rule": false,
+  "products": 14,
+  "example": {
+   "id": "232624",
+   "qty": 60.0,
+   "unit": "mg",
+   "forms": [],
+   "children": []
+  }
+ },
+ {
+  "canonical_id": "branched_chain_amino_acids",
+  "label": "Branched-Chain Amino Acids, Instantized",
+  "disposition": "clean",
+  "has_rule": false,
+  "products": 14,
+  "example": {
+   "id": "249741",
+   "qty": 4000.0,
+   "unit": "mg",
+   "forms": [],
+   "children": []
+  }
+ },
+ {
+  "canonical_id": "branched_chain_amino_acids",
+  "label": "Branched Chain Amino Acids",
+  "disposition": "taxonomy_only",
+  "has_rule": false,
+  "products": 12,
+  "example": {
+   "id": "184308",
+   "qty": 1200.0,
+   "unit": "mg",
+   "forms": [],
+   "children": [
+    "l_isoleucine",
+    "l_leucine",
+    "l_valine"
+   ]
+  }
+ },
+ {
+  "canonical_id": "kefir_culture",
+  "label": "Eastern European Wild Kefir Culture",
+  "disposition": "taxonomy_only",
+  "has_rule": false,
+  "products": 10,
+  "example": {
+   "id": "174659",
+   "qty": 0.0,
+   "unit": "NP",
+   "forms": [],
+   "children": [
+    "bifidobacterium_longum",
+    "brettanomyces_anomalus",
+    "brewers_yeast",
+    "debaryomyces_hansenii",
+    "kluyveromyces_marxianus",
+    "lactobacillus_brevis",
+    "lactobacillus_fermentum",
+    "lactobacillus_helveticus",
+    "lactobacillus_kefir",
+    "lactobacillus_kefiranofaciens",
+    "lactobacillus_parakefir",
+    "lactobacillus_plantarum",
+    "leuconostoc_dextranicum",
+    "leuconostoc_lactis",
+    "leuconostoc_mesenteroides",
+    "saccharomyces_exiguus",
+    "saccharomyces_turicensis",
+    "saccharomyces_unisporus",
+    "torulaspora_delbrueckii"
+   ]
+  }
+ },
+ {
+  "canonical_id": "polyphenols",
+  "label": "Polyphenols",
+  "disposition": "taxonomy_only",
+  "has_rule": false,
+  "products": 10,
+  "example": {
+   "id": "201577",
+   "qty": 20.0,
+   "unit": "mg",
+   "forms": [
+    "Grape extract",
+    "Green Tea extract"
+   ],
+   "children": []
+  }
+ },
+ {
+  "canonical_id": "probiotics",
+  "label": "Probiotics",
+  "disposition": "taxonomy_only",
+  "has_rule": true,
+  "products": 10,
+  "example": {
+   "id": "247106",
+   "qty": 55.0,
+   "unit": "mg",
+   "forms": [],
+   "children": [
+    "OI_BEET_FIBER",
+    "beta_glucan",
+    "bifidobacterium_longum",
+    "lactobacillus_acidophilus",
+    "lactobacillus_plantarum",
+    "lactobacillus_rhamnosus",
+    "prebiotics",
+    "streptococcus_thermophilus"
+   ]
+  }
+ },
+ {
+  "canonical_id": "probiotics",
+  "label": "LAB4 Probiotics",
+  "disposition": "taxonomy_only",
+  "has_rule": true,
+  "products": 8,
+  "example": {
+   "id": "206362",
+   "qty": 0.0,
+   "unit": "NP",
+   "forms": [],
+   "children": [
+    "bifidobacterium_bifidum",
+    "bifidobacterium_lactis",
+    "lactobacillus_acidophilus"
+   ]
+  }
+ },
+ {
+  "canonical_id": "digestive_enzymes",
+  "label": "Digestive Enzymes",
+  "disposition": "taxonomy_only",
+  "has_rule": false,
+  "products": 7,
+  "example": {
+   "id": "221127",
+   "qty": 256.7,
+   "unit": "mg",
+   "forms": [],
+   "children": [
+    "BLEND_GENERAL",
+    "lactase"
+   ]
+  }
+ },
+ {
+  "canonical_id": "turmeric",
+  "label": "Organic Turmeric Blend",
+  "disposition": "taxonomy_only",
+  "has_rule": true,
+  "products": 7,
+  "example": {
+   "id": "243236",
+   "qty": 553.0,
+   "unit": "mg",
+   "forms": [
+    "organic"
+   ],
+   "children": [
+    "turmeric"
+   ]
+  }
+ },
+ {
+  "canonical_id": "PII_TEST1700_MARKETING_DESCRIPTOR",
+  "label": "Test 1700 Activator",
+  "disposition": "taxonomy_only",
+  "has_rule": false,
+  "products": 6,
+  "example": {
+   "id": "210555",
+   "qty": 1.7,
+   "unit": "Gram(s)",
+   "forms": [],
+   "children": [
+    "ashwagandha",
+    "fenugreek",
+    "tribulus"
+   ]
+  }
+ },
+ {
+  "canonical_id": "cla",
+  "label": "CLA Complex",
+  "disposition": "clean",
+  "has_rule": false,
+  "products": 6,
+  "example": {
+   "id": "252540",
+   "qty": 1000.0,
+   "unit": "mg",
+   "forms": [
+    "Conjugated Linoleic Acid"
+   ],
+   "children": []
+  }
+ },
+ {
+  "canonical_id": "triphala_powder",
+  "label": "Triphala Powder",
+  "disposition": "taxonomy_only",
+  "has_rule": false,
+  "products": 6,
+  "example": {
+   "id": "252753",
+   "qty": 1000.0,
+   "unit": "mg",
+   "forms": [],
+   "children": []
+  }
+ },
+ {
+  "canonical_id": "phytosterols",
+  "label": "Sterols",
+  "disposition": "taxonomy_only",
+  "has_rule": false,
+  "products": 5,
+  "example": {
+   "id": "182620",
+   "qty": 20.0,
+   "unit": "mg",
+   "forms": [
+    "Pine"
+   ],
+   "children": []
+  }
+ },
+ {
+  "canonical_id": "turmeric",
+  "label": "organic Turmeric Blend",
+  "disposition": "clean",
+  "has_rule": true,
+  "products": 5,
+  "example": {
+   "id": "204669",
+   "qty": 553.0,
+   "unit": "mg",
+   "forms": [
+    "organic fermented Turmeric",
+    "organic Turmeric root extract"
+   ],
+   "children": [
+    "curcumin"
+   ]
+  }
+ },
+ {
+  "canonical_id": "amylase",
+  "label": "Carbohydrate-Digesting Enzymes",
+  "disposition": "taxonomy_only",
+  "has_rule": false,
+  "products": 5,
+  "example": {
+   "id": "241379",
+   "qty": 0.0,
+   "unit": "NP",
+   "forms": [],
+   "children": [
+    "alpha_galactosidase",
+    "amylase",
+    "beta_glucanase",
+    "cellulase",
+    "hemicellulase",
+    "invertase",
+    "lactase",
+    "maltase",
+    "pectinase",
+    "phytase"
+   ]
+  }
+ },
+ {
+  "canonical_id": "sweet_orange",
+  "label": "Red Orange Complex",
+  "disposition": "clean",
+  "has_rule": false,
+  "products": 5,
+  "example": {
+   "id": "243134",
+   "qty": 50.0,
+   "unit": "mg",
+   "forms": [],
+   "children": []
+  }
+ },
+ {
+  "canonical_id": "citrus_bioflavonoids",
+  "label": "Citrus Bioflavonoids Complex",
+  "disposition": "taxonomy_only",
+  "has_rule": false,
+  "products": 5,
+  "example": {
+   "id": "263869",
+   "qty": 200.0,
+   "unit": "mg",
+   "forms": [],
+   "children": [
+    "None",
+    "acerola_cherry",
+    "citrus_bioflavonoids",
+    "hesperidin",
+    "lemon",
+    "lime",
+    "sweet_orange",
+    "tangerine"
+   ]
+  }
+ },
+ {
+  "canonical_id": "tmg_betaine",
+  "label": "Tri-MG",
+  "disposition": "clean",
+  "has_rule": false,
+  "products": 5,
+  "example": {
+   "id": "4805",
+   "qty": 1.25,
+   "unit": "g",
+   "forms": [],
+   "children": [
+    "tmg_betaine"
+   ]
+  }
+ },
+ {
+  "canonical_id": "whey_protein",
+  "label": "hydrolyzed Whey Peptide Complex",
+  "disposition": "clean",
+  "has_rule": false,
+  "products": 5,
+  "example": {
+   "id": "66898",
+   "qty": 100.0,
+   "unit": "mg",
+   "forms": [],
+   "children": []
+  }
+ },
+ {
+  "canonical_id": "fatty_acids",
+  "label": "Fatty Acids",
+  "disposition": "taxonomy_only",
+  "has_rule": false,
+  "products": 4,
+  "example": {
+   "id": "179983",
+   "qty": 408.0,
+   "unit": "mg",
+   "forms": [],
+   "children": []
+  }
+ },
+ {
+  "canonical_id": "zeaxanthin",
+  "label": "Meso-Zeaxanthin & Trans-Zeaxanthin",
+  "disposition": "taxonomy_only",
+  "has_rule": false,
+  "products": 4,
+  "example": {
+   "id": "182388",
+   "qty": 4.0,
+   "unit": "mg",
+   "forms": [],
+   "children": [
+    "zeaxanthin"
+   ]
+  }
+ },
+ {
+  "canonical_id": "NHA_UNIVESTIN",
+  "label": "Acacia catechu wood & bark extract and Chinese Skullcap root extract",
+  "disposition": "taxonomy_only",
+  "has_rule": false,
+  "products": 4,
+  "example": {
+   "id": "220275",
+   "qty": 250.0,
+   "unit": "mg",
+   "forms": [
+    "extract"
+   ],
+   "children": [
+    "None",
+    "acacia_catechu"
+   ]
+  }
+ },
+ {
+  "canonical_id": "lipase",
+  "label": "Fat-Digesting Enzymes",
+  "disposition": "taxonomy_only",
+  "has_rule": false,
+  "products": 4,
+  "example": {
+   "id": "241379",
+   "qty": 0.0,
+   "unit": "NP",
+   "forms": [],
+   "children": [
+    "lipase"
+   ]
+  }
+ },
+ {
+  "canonical_id": "lactase",
+  "label": "Dairy Digestive Enzymes",
+  "disposition": "taxonomy_only",
+  "has_rule": false,
+  "products": 4,
+  "example": {
+   "id": "242617",
+   "qty": 140.0,
+   "unit": "mg",
+   "forms": [],
+   "children": [
+    "lactase",
+    "protease"
+   ]
+  }
+ },
+ {
+  "canonical_id": "creatine_monohydrate",
+  "label": "Con-Cret",
+  "disposition": "clean",
+  "has_rule": true,
+  "products": 4,
+  "example": {
+   "id": "306204",
+   "qty": 750.0,
+   "unit": "mg",
+   "forms": [
+    "Creatine Hydrochloride"
+   ],
+   "children": []
+  }
+ },
+ {
+  "canonical_id": "turmeric",
+  "label": "Turmeric (Curcuma longa) Blend",
+  "disposition": "clean",
+  "has_rule": true,
+  "products": 3,
+  "example": {
+   "id": "180094",
+   "qty": 500.0,
+   "unit": "mg",
+   "forms": [],
+   "children": [
+    "turmeric"
+   ]
+  }
+ },
+ {
+  "canonical_id": "phosphatidylserine",
+  "label": "Phosphatidylserine Complex",
+  "disposition": "clean",
+  "has_rule": false,
+  "products": 3,
+  "example": {
+   "id": "218838",
+   "qty": 500.0,
+   "unit": "mg",
+   "forms": [],
+   "children": []
+  }
+ },
+ {
+  "canonical_id": "OI_IONIC_OCEAN_MINERALS",
+  "label": "Ionic Ocean Based Minerals",
+  "disposition": "taxonomy_only",
+  "has_rule": false,
+  "products": 3,
+  "example": {
+   "id": "242617",
+   "qty": 0.0,
+   "unit": "NP",
+   "forms": [],
+   "children": []
+  }
+ },
+ {
+  "canonical_id": "coq10",
+  "label": "Coenzyme Q10 complex",
+  "disposition": "clean",
+  "has_rule": true,
+  "products": 3,
+  "example": {
+   "id": "247322",
+   "qty": 50.0,
+   "unit": "mg",
+   "forms": [
+    "CoQ10",
+    "Microactive Q10-Cyclodextrin"
+   ],
+   "children": []
+  }
+ },
+ {
+  "canonical_id": "lactobacillus_acidophilus",
+  "label": "Lactobacillus acidophilus Blend",
+  "disposition": "clean",
+  "has_rule": false,
+  "products": 3,
+  "example": {
+   "id": "259626",
+   "qty": 100.0,
+   "unit": "mg",
+   "forms": [],
+   "children": []
+  }
+ },
+ {
+  "canonical_id": "sweet_orange",
+  "label": "Red Orange Complex",
+  "disposition": "repaired",
+  "has_rule": false,
+  "products": 3,
+  "example": {
+   "id": "268402",
+   "qty": 100.0,
+   "unit": "mg",
+   "forms": [
+    "Citrus sinensis"
+   ],
+   "children": []
+  }
+ },
+ {
+  "canonical_id": "branched_chain_amino_acids",
+  "label": "2:1:1 BCAA",
+  "disposition": "taxonomy_only",
+  "has_rule": false,
+  "products": 3,
+  "example": {
+   "id": "269317",
+   "qty": 1000.0,
+   "unit": "mg",
+   "forms": [],
+   "children": [
+    "l_isoleucine",
+    "l_leucine",
+    "l_valine"
+   ]
+  }
+ },
+ {
+  "canonical_id": "probiotics",
+  "label": "Probiotic",
+  "disposition": "taxonomy_only",
+  "has_rule": true,
+  "products": 3,
+  "example": {
+   "id": "273631",
+   "qty": 66.0,
+   "unit": "mg",
+   "forms": [],
+   "children": [
+    "bacillus_coagulans"
+   ]
+  }
+ },
+ {
+  "canonical_id": "branched_chain_amino_acids",
+  "label": "BCAA",
+  "disposition": "clean",
+  "has_rule": false,
+  "products": 3,
+  "example": {
+   "id": "306235",
+   "qty": 5000.0,
+   "unit": "mg",
+   "forms": [],
+   "children": []
+  }
+ },
+ {
+  "canonical_id": "superoxide_dismutase",
+  "label": "Superoxide Dismutase/Gliadin Complex",
+  "disposition": "clean",
+  "has_rule": false,
+  "products": 3,
+  "example": {
+   "id": "59478",
+   "qty": 500.0,
+   "unit": "mg",
+   "forms": [
+    "Superoxide Dismutase"
+   ],
+   "children": []
+  }
+ },
+ {
+  "canonical_id": "zeaxanthin",
+  "label": "Meso-Zeaxanthin & Trans-Zeaxanthin Blend",
+  "disposition": "clean",
+  "has_rule": false,
+  "products": 3,
+  "example": {
+   "id": "62075",
+   "qty": 4.0,
+   "unit": "mg",
+   "forms": [],
+   "children": [
+    "zeaxanthin"
+   ]
+  }
+ },
+ {
+  "canonical_id": "fatty_acids",
+  "label": "Fatty Acid Blend",
+  "disposition": "taxonomy_only",
+  "has_rule": false,
+  "products": 2,
+  "example": {
+   "id": "13241",
+   "qty": 200.0,
+   "unit": "mg",
+   "forms": [
+    "Borage Oil",
+    "high Oleic Sunflower Oil",
+    "Soy Lecithin Oil"
+   ],
+   "children": []
+  }
+ },
+ {
+  "canonical_id": "NHA_NATURAL_COLORS",
+  "label": "Carotenoid Complex",
+  "disposition": "repaired",
+  "has_rule": false,
+  "products": 2,
+  "example": {
+   "id": "14015",
+   "qty": 15.0,
+   "unit": "mg",
+   "forms": [],
+   "children": []
+  }
+ },
+ {
+  "canonical_id": "phytosterols",
+  "label": "Sterolins",
+  "disposition": "taxonomy_only",
+  "has_rule": false,
+  "products": 2,
+  "example": {
+   "id": "182620",
+   "qty": 200.0,
+   "unit": "mcg",
+   "forms": [],
+   "children": []
+  }
+ },
+ {
+  "canonical_id": "krill_oil",
+  "label": "Krill Oil Blend",
+  "disposition": "taxonomy_only",
+  "has_rule": false,
+  "products": 2,
+  "example": {
+   "id": "184935",
+   "qty": 1400.0,
+   "unit": "mg",
+   "forms": [
+    "krill oil"
+   ],
+   "children": [
+    "PII_PHOSPHOLIPID_DESCRIPTOR",
+    "astaxanthin",
+    "dha",
+    "epa",
+    "fish_oil"
+   ]
+  }
+ },
+ {
+  "canonical_id": "turmeric",
+  "label": "Certified Organic Turmeric Blend",
+  "disposition": "clean",
+  "has_rule": true,
+  "products": 2,
+  "example": {
+   "id": "204676",
+   "qty": 254.0,
+   "unit": "mg",
+   "forms": [
+    "organic"
+   ],
+   "children": [
+    "black_pepper",
+    "turmeric"
+   ]
+  }
+ },
+ {
+  "canonical_id": "digestive_enzymes",
+  "label": "Vegetarian Enzymes",
+  "disposition": "taxonomy_only",
+  "has_rule": false,
+  "products": 2,
+  "example": {
+   "id": "205179",
+   "qty": 370.0,
+   "unit": "mg",
+   "forms": [],
+   "children": [
+    "amylase",
+    "cellulase",
+    "invertase",
+    "lactase",
+    "lipase",
+    "phytase",
+    "protease"
+   ]
+  }
+ },
+ {
+  "canonical_id": "turmeric",
+  "label": "Turmeric Curcumin Complex",
+  "disposition": "taxonomy_only",
+  "has_rule": true,
+  "products": 2,
+  "example": {
+   "id": "210474",
+   "qty": 500.0,
+   "unit": "mg",
+   "forms": [],
+   "children": [
+    "turmeric"
+   ]
+  }
+ },
+ {
+  "canonical_id": "turmeric",
+  "label": "Turmeric Phospholipid Blend",
+  "disposition": "clean",
+  "has_rule": true,
+  "products": 2,
+  "example": {
+   "id": "210718",
+   "qty": 600.0,
+   "unit": "mg",
+   "forms": [
+    "phospholipid"
+   ],
+   "children": [
+    "None",
+    "PII_PHOSPHOLIPID_DESCRIPTOR",
+    "turmeric"
+   ]
+  }
+ },
+ {
+  "canonical_id": "boron",
+  "label": "Boron Complex",
+  "disposition": "clean",
+  "has_rule": false,
+  "products": 2,
+  "example": {
+   "id": "213448",
+   "qty": 3.0,
+   "unit": "mg",
+   "forms": [
+    "Boron Aspartate",
+    "Citric Acid",
+    "Rice Protein"
+   ],
+   "children": []
+  }
+ },
+ {
+  "canonical_id": "l_glutamine",
+  "label": "Sustamine",
+  "disposition": "clean",
+  "has_rule": false,
+  "products": 2,
+  "example": {
+   "id": "2221",
+   "qty": 100.0,
+   "unit": "mg",
+   "forms": [],
+   "children": []
+  }
+ },
+ {
+  "canonical_id": "andrographis",
+  "label": "Paractin (Bioactive 14-Neo-Andro Compound) Andrographis extract",
+  "disposition": "clean",
+  "has_rule": true,
+  "products": 2,
+  "example": {
+   "id": "231708",
+   "qty": 25.0,
+   "unit": "mg",
+   "forms": [
+    "14-Deoxyandrographolides",
+    "Andrographolides",
+    "Neoandrographolides"
+   ],
+   "children": []
+  }
+ },
+ {
+  "canonical_id": "turmeric",
+  "label": "Meriva Turmeric Phytosome Complex",
+  "disposition": "clean",
+  "has_rule": true,
+  "products": 2,
+  "example": {
+   "id": "246533",
+   "qty": 100.0,
+   "unit": "mg",
+   "forms": [
+    "Curcuminoids",
+    "Sunflower Phospholipid",
+    "Turmeric (Curcuma longa) extract"
+   ],
+   "children": []
+  }
+ },
+ {
+  "canonical_id": "prebiotics",
+  "label": "Prebiotic",
+  "disposition": "clean",
+  "has_rule": false,
+  "products": 2,
+  "example": {
+   "id": "247106",
+   "qty": 0.0,
+   "unit": "NP",
+   "forms": [],
+   "children": [
+    "OI_BEET_FIBER",
+    "beta_glucan",
+    "prebiotics"
+   ]
+  }
+ },
+ {
+  "canonical_id": "echinacea",
+  "label": "Echinacea Root Complex",
+  "disposition": "clean",
+  "has_rule": true,
+  "products": 2,
+  "example": {
+   "id": "251557",
+   "qty": 900.0,
+   "unit": "mg",
+   "forms": [],
+   "children": [
+    "echinacea"
+   ]
+  }
+ },
+ {
+  "canonical_id": "NHA_NATURAL_COLORS",
+  "label": "Carotenoid Blend",
+  "disposition": "clean",
+  "has_rule": false,
+  "products": 2,
+  "example": {
+   "id": "263835",
+   "qty": 816.0,
+   "unit": "mcg",
+   "forms": [
+    "D. salina"
+   ],
+   "children": [
+    "alpha_carotene",
+    "cryptoxanthin",
+    "lutein",
+    "zeaxanthin"
+   ]
+  }
+ },
+ {
+  "canonical_id": "protease",
+  "label": "Protein-Digesting Enzymes",
+  "disposition": "taxonomy_only",
+  "has_rule": false,
+  "products": 2,
+  "example": {
+   "id": "274686",
+   "qty": 0.0,
+   "unit": "NP",
+   "forms": [],
+   "children": [
+    "bromelain",
+    "papain",
+    "protease"
+   ]
+  }
+ },
+ {
+  "canonical_id": "coq10",
+  "label": "MicroActive CoQ10-cyclodextrin Complex",
+  "disposition": "clean",
+  "has_rule": true,
+  "products": 2,
+  "example": {
+   "id": "278360",
+   "qty": 100.0,
+   "unit": "mg",
+   "forms": [
+    "Coenzyme Q10"
+   ],
+   "children": []
+  }
+ },
+ {
+  "canonical_id": "quercetin",
+  "label": "Quercetin Phytosome Complex",
+  "disposition": "taxonomy_only",
+  "has_rule": true,
+  "products": 2,
+  "example": {
+   "id": "284255",
+   "qty": 100.0,
+   "unit": "mg",
+   "forms": [
+    "Phospholipid",
+    "Sophora japonica extract"
+   ],
+   "children": []
+  }
+ },
+ {
+  "canonical_id": "branched_chain_amino_acids",
+  "label": "Branched Chain Amino Acids",
+  "disposition": "clean",
+  "has_rule": false,
+  "products": 2,
+  "example": {
+   "id": "293899",
+   "qty": 1200.0,
+   "unit": "mg",
+   "forms": [],
+   "children": [
+    "l_isoleucine",
+    "l_leucine",
+    "l_valine"
+   ]
+  }
+ },
+ {
+  "canonical_id": "phytosterols",
+  "label": "Phytosterol Complex",
+  "disposition": "taxonomy_only",
+  "has_rule": false,
+  "products": 2,
+  "example": {
+   "id": "293931",
+   "qty": 1000.0,
+   "unit": "mg",
+   "forms": [],
+   "children": [
+    "phytosterols"
+   ]
+  }
+ },
+ {
+  "canonical_id": "algae_oil",
+  "label": "PureAlgaeOmega3",
+  "disposition": "taxonomy_only",
+  "has_rule": false,
+  "products": 2,
+  "example": {
+   "id": "297604",
+   "qty": 670.0,
+   "unit": "mg",
+   "forms": [
+    "Triglyceride Algal Oil"
+   ],
+   "children": [
+    "dha"
+   ]
+  }
+ },
+ {
+  "canonical_id": "medicinal_mushroom_blend",
+  "label": "Mushroom Blend",
+  "disposition": "taxonomy_only",
+  "has_rule": false,
+  "products": 2,
+  "example": {
+   "id": "326161",
+   "qty": 0.0,
+   "unit": "NP",
+   "forms": [],
+   "children": [
+    "chaga",
+    "lion_s_mane",
+    "maitake",
+    "reishi",
+    "shiitake"
+   ]
+  }
+ },
+ {
+  "canonical_id": "pancreatin",
+  "label": "Pancreatic Enzymes",
+  "disposition": "taxonomy_only",
+  "has_rule": false,
+  "products": 2,
+  "example": {
+   "id": "327997",
+   "qty": 361.0,
+   "unit": "mg",
+   "forms": [],
+   "children": [
+    "amylase",
+    "lipase",
+    "protease"
+   ]
+  }
+ },
+ {
+  "canonical_id": "prebiotics",
+  "label": "Prebiotics",
+  "disposition": "taxonomy_only",
+  "has_rule": false,
+  "products": 2,
+  "example": {
+   "id": "336854",
+   "qty": 0.0,
+   "unit": "NP",
+   "forms": [],
+   "children": [
+    "OI_BEET_FIBER",
+    "beta_glucan",
+    "inulin"
+   ]
+  }
+ },
+ {
+  "canonical_id": "artichoke",
+  "label": "Artichoke Extract Blend",
+  "disposition": "clean",
+  "has_rule": false,
+  "products": 2,
+  "example": {
+   "id": "64707",
+   "qty": 500.0,
+   "unit": "mg",
+   "forms": [
+    "extract"
+   ],
+   "children": [
+    "None",
+    "artichoke",
+    "chlorogenic_acids",
+    "cynarin"
+   ]
+  }
+ },
+ {
+  "canonical_id": "chondroitin",
+  "label": "Chondroitin Complex",
+  "disposition": "clean",
+  "has_rule": true,
+  "products": 1,
+  "example": {
+   "id": "12144",
+   "qty": 290.0,
+   "unit": "mg",
+   "forms": [
+    "Chondroitin Sulfate",
+    "White Willow Bark Extract"
+   ],
+   "children": []
+  }
+ },
+ {
+  "canonical_id": "citrus_bioflavonoids",
+  "label": "Bioflavonoid Complex (Non-Nutrient/Non-Botanical)",
+  "disposition": "taxonomy_only",
+  "has_rule": false,
+  "products": 1,
+  "example": {
+   "id": "173708",
+   "qty": 150.0,
+   "unit": "mg",
+   "forms": [],
+   "children": [
+    "citrus_bioflavonoids"
+   ]
+  }
+ },
+ {
+  "canonical_id": "japanese_knotweed",
+  "label": "Japanese Knotweed (root) and whole Red Grape extracts",
+  "disposition": "taxonomy_only",
+  "has_rule": false,
+  "products": 1,
+  "example": {
+   "id": "181895",
+   "qty": 3.0,
+   "unit": "mg",
+   "forms": [
+    "Trans-Resveratrol"
+   ],
+   "children": [
+    "grape",
+    "resveratrol"
+   ]
+  }
+ },
+ {
+  "canonical_id": "protease",
+  "label": "BioCore Recovery(TM) Enzyme Blend",
+  "disposition": "repaired",
+  "has_rule": false,
+  "products": 1,
+  "example": {
+   "id": "18480",
+   "qty": 832.0,
+   "unit": "mg",
+   "forms": [],
+   "children": [
+    "protease"
+   ]
+  }
+ },
+ {
+  "canonical_id": "green_tea",
+  "label": "Green Tea Complex",
+  "disposition": "clean",
+  "has_rule": false,
+  "products": 1,
+  "example": {
+   "id": "20009",
+   "qty": 400.0,
+   "unit": "mg",
+   "forms": [],
+   "children": [
+    "green_tea_extract",
+    "green_tea_leaf"
+   ]
+  }
+ },
+ {
+  "canonical_id": "phosphatidylserine",
+  "label": "SerinAid Phosphatidylserine complex",
+  "disposition": "clean",
+  "has_rule": false,
+  "products": 1,
+  "example": {
+   "id": "213475",
+   "qty": 500.0,
+   "unit": "mg",
+   "forms": [],
+   "children": [
+    "phosphatidylserine"
+   ]
+  }
+ },
+ {
+  "canonical_id": "hesperidin",
+  "label": "Hesperidin complex",
+  "disposition": "taxonomy_only",
+  "has_rule": false,
+  "products": 1,
+  "example": {
+   "id": "214014",
+   "qty": 10.0,
+   "unit": "mg",
+   "forms": [
+    "Hesperidin",
+    "Orange"
+   ],
+   "children": []
+  }
+ },
+ {
+  "canonical_id": "collagen",
+  "label": "UC-II Type II Collagen Complex",
+  "disposition": "clean",
+  "has_rule": false,
+  "products": 1,
+  "example": {
+   "id": "219249",
+   "qty": 20.0,
+   "unit": "mg",
+   "forms": [],
+   "children": []
+  }
+ },
+ {
+  "canonical_id": "cla",
+  "label": "Clarinol CLA Complex",
+  "disposition": "clean",
+  "has_rule": false,
+  "products": 1,
+  "example": {
+   "id": "227855",
+   "qty": 1.3,
+   "unit": "Gram(s)",
+   "forms": [
+    "Conjugated Linoleic Acid"
+   ],
+   "children": []
+  }
+ },
+ {
+  "canonical_id": "l_glutamine",
+  "label": "Glutamine",
+  "disposition": "taxonomy_only",
+  "has_rule": false,
+  "products": 1,
+  "example": {
+   "id": "228823",
+   "qty": 0.0,
+   "unit": "NP",
+   "forms": [
+    "Calcium Caseinate",
+    "Cocoa",
+    "Egg Albumin",
+    "Glutamine Peptides",
+    "Milk Protein isolate",
+    "Whey Protein concentrate",
+    "Whey Protein Isolate"
+   ],
+   "children": []
+  }
+ },
+ {
+  "canonical_id": "NHA_INULIN",
+  "label": "Inulin/FOS",
+  "disposition": "taxonomy_only",
+  "has_rule": false,
+  "products": 1,
+  "example": {
+   "id": "232341",
+   "qty": 1537.0,
+   "unit": "mg",
+   "forms": [
+    "Agave tequilana (Blue Agave) juice extract"
+   ],
+   "children": []
+  }
+ },
+ {
+  "canonical_id": "diindolylmethane",
+  "label": "Diindolylmethane Complex",
+  "disposition": "taxonomy_only",
+  "has_rule": false,
+  "products": 1,
+  "example": {
+   "id": "246078",
+   "qty": 100.0,
+   "unit": "mg",
+   "forms": [],
+   "children": [
+    "PII_CORN_STARCH",
+    "diindolylmethane",
+    "phosphatidylcholine",
+    "silica",
+    "vitamin_e"
+   ]
+  }
+ },
+ {
+  "canonical_id": "caffeine",
+  "label": "Infinergy",
+  "disposition": "clean",
+  "has_rule": true,
+  "products": 1,
+  "example": {
+   "id": "249741",
+   "qty": 30.0,
+   "unit": "mg",
+   "forms": [],
+   "children": []
+  }
+ },
+ {
+  "canonical_id": "japanese_knotweed",
+  "label": "Whole grape extract (Vitis vinifera) and Polygonum cuspidatum (root) extract",
+  "disposition": "taxonomy_only",
+  "has_rule": false,
+  "products": 1,
+  "example": {
+   "id": "2502",
+   "qty": 3.0,
+   "unit": "mg",
+   "forms": [
+    "extract"
+   ],
+   "children": []
+  }
+ },
+ {
+  "canonical_id": "pancreatin",
+  "label": "Pancreatin 8x",
+  "disposition": "taxonomy_only",
+  "has_rule": false,
+  "products": 1,
+  "example": {
+   "id": "2505",
+   "qty": 400.0,
+   "unit": "mg",
+   "forms": [],
+   "children": []
+  }
+ },
+ {
+  "canonical_id": "branched_chain_amino_acids",
+  "label": "BCAA",
+  "disposition": "taxonomy_only",
+  "has_rule": false,
+  "products": 1,
+  "example": {
+   "id": "259714",
+   "qty": 5.0,
+   "unit": "Gram(s)",
+   "forms": [],
+   "children": [
+    "l_isoleucine",
+    "l_leucine",
+    "l_valine"
+   ]
+  }
+ },
+ {
+  "canonical_id": "branched_chain_amino_acids",
+  "label": "Branched-Chain Amino Acids, Micronized",
+  "disposition": "clean",
+  "has_rule": false,
+  "products": 1,
+  "example": {
+   "id": "260096",
+   "qty": 5.0,
+   "unit": "Gram(s)",
+   "forms": [],
+   "children": [
+    "l_isoleucine",
+    "l_leucine",
+    "l_valine"
+   ]
+  }
+ },
+ {
+  "canonical_id": "sesbania",
+  "label": "Sesbania Leaf Extract",
+  "disposition": "clean",
+  "has_rule": false,
+  "products": 1,
+  "example": {
+   "id": "275997",
+   "qty": 0.0,
+   "unit": "NP",
+   "forms": [
+    "extract"
+   ],
+   "children": []
+  }
+ },
+ {
+  "canonical_id": "turmeric",
+  "label": "Turmeric Complex",
+  "disposition": "taxonomy_only",
+  "has_rule": true,
+  "products": 1,
+  "example": {
+   "id": "278388",
+   "qty": 100.0,
+   "unit": "mg",
+   "forms": [
+    "Curcuma longa rhizome extract",
+    "Quillaja Wood Extract"
+   ],
+   "children": []
+  }
+ },
+ {
+  "canonical_id": "boswellia",
+  "label": "Indian Frankincense Phytosome Complex",
+  "disposition": "clean",
+  "has_rule": true,
+  "products": 1,
+  "example": {
+   "id": "284197",
+   "qty": 350.0,
+   "unit": "mg",
+   "forms": [],
+   "children": [
+    "PII_PHOSPHOLIPID_DESCRIPTOR",
+    "boswellia"
+   ]
+  }
+ },
+ {
+  "canonical_id": "curcumin",
+  "label": "Curcumin Phytosome Complex",
+  "disposition": "clean",
+  "has_rule": true,
+  "products": 1,
+  "example": {
+   "id": "284229",
+   "qty": 250.0,
+   "unit": "mg",
+   "forms": [],
+   "children": [
+    "PII_PHOSPHOLIPID_DESCRIPTOR",
+    "turmeric"
+   ]
+  }
+ },
+ {
+  "canonical_id": "triphala_powder",
+  "label": "Triphala",
+  "disposition": "taxonomy_only",
+  "has_rule": false,
+  "products": 1,
+  "example": {
+   "id": "287496",
+   "qty": 0.0,
+   "unit": "NP",
+   "forms": [
+    "Tannins"
+   ],
+   "children": [
+    "None",
+    "amla",
+    "belleric_myrobalan"
+   ]
+  }
+ },
+ {
+  "canonical_id": "diindolylmethane",
+  "label": "Diindolylmethane Complex",
+  "disposition": "clean",
+  "has_rule": false,
+  "products": 1,
+  "example": {
+   "id": "293959",
+   "qty": 100.0,
+   "unit": "mg",
+   "forms": [],
+   "children": [
+    "PII_CORN_STARCH",
+    "diindolylmethane",
+    "phosphatidylcholine",
+    "silica",
+    "vitamin_e"
+   ]
+  }
+ },
+ {
+  "canonical_id": "curcumin",
+  "label": "Mervia",
+  "disposition": "taxonomy_only",
+  "has_rule": true,
+  "products": 1,
+  "example": {
+   "id": "293989",
+   "qty": 100.0,
+   "unit": "mg",
+   "forms": [
+    "Turmeric Phytosome"
+   ],
+   "children": []
+  }
+ },
+ {
+  "canonical_id": "ginseng",
+  "label": "Seneactiv",
+  "disposition": "taxonomy_only",
+  "has_rule": true,
+  "products": 1,
+  "example": {
+   "id": "295773",
+   "qty": 50.0,
+   "unit": "mg",
+   "forms": [
+    "Panax notoginseng",
+    "Rosa roxburghii"
+   ],
+   "children": []
+  }
+ },
+ {
+  "canonical_id": "protease",
+  "label": "Protein-Digesting Enzyme Blend",
+  "disposition": "repaired",
+  "has_rule": false,
+  "products": 1,
+  "example": {
+   "id": "297590",
+   "qty": 50.0,
+   "unit": "mg",
+   "forms": [],
+   "children": [
+    "protease"
+   ]
+  }
+ },
+ {
+  "canonical_id": "digestive_enzymes",
+  "label": "Protein-Digesting Enzyme Blend",
+  "disposition": "taxonomy_only",
+  "has_rule": false,
+  "products": 1,
+  "example": {
+   "id": "297600",
+   "qty": 50.0,
+   "unit": "mg",
+   "forms": [],
+   "children": [
+    "protease"
+   ]
+  }
+ },
+ {
+  "canonical_id": "fish_oil",
+  "label": "Krill Oil",
+  "disposition": "repaired",
+  "has_rule": true,
+  "products": 1,
+  "example": {
+   "id": "302654",
+   "qty": 1720.0,
+   "unit": "mg",
+   "forms": [
+    "Euphausia superba",
+    "Superba2",
+    "Fish Oil Omega-3 Complex"
+   ],
+   "children": [
+    "PII_PHOSPHOLIPID_DESCRIPTOR",
+    "astaxanthin",
+    "dha",
+    "epa"
+   ]
+  }
+ },
+ {
+  "canonical_id": "curcumin",
+  "label": "Curcumin C3 Complex",
+  "disposition": "clean",
+  "has_rule": true,
+  "products": 1,
+  "example": {
+   "id": "302672",
+   "qty": 1000.0,
+   "unit": "mg",
+   "forms": [],
+   "children": [
+    "turmeric"
+   ]
+  }
+ },
+ {
+  "canonical_id": "digestive_enzymes",
+  "label": "Proteolytic Enzyme Blend",
+  "disposition": "taxonomy_only",
+  "has_rule": false,
+  "products": 1,
+  "example": {
+   "id": "302701",
+   "qty": 0.0,
+   "unit": "NP",
+   "forms": [],
+   "children": [
+    "amylase",
+    "bromelain",
+    "citrus_bioflavonoids",
+    "lipase",
+    "papain",
+    "protease",
+    "serrapeptase"
+   ]
+  }
+ },
+ {
+  "canonical_id": "eucalyptus",
+  "label": "Eucalyptus leaf essential Oil Complex",
+  "disposition": "clean",
+  "has_rule": false,
+  "products": 1,
+  "example": {
+   "id": "307595",
+   "qty": 50.0,
+   "unit": "mg",
+   "forms": [],
+   "children": []
+  }
+ },
+ {
+  "canonical_id": "prebiotics",
+  "label": "Inulin-FOS",
+  "disposition": "clean",
+  "has_rule": false,
+  "products": 1,
+  "example": {
+   "id": "307624",
+   "qty": 210.0,
+   "unit": "mg",
+   "forms": [
+    "fructooligosaccharide",
+    "inulin"
+   ],
+   "children": []
+  }
+ },
+ {
+  "canonical_id": "shilajit",
+  "label": "Shilajit Fulvic Acid Complex",
+  "disposition": "clean",
+  "has_rule": false,
+  "products": 1,
+  "example": {
+   "id": "307734",
+   "qty": 250.0,
+   "unit": "mg",
+   "forms": [],
+   "children": []
+  }
+ },
+ {
+  "canonical_id": "valerian",
+  "label": "Valerian root Complex",
+  "disposition": "clean",
+  "has_rule": true,
+  "products": 1,
+  "example": {
+   "id": "307735",
+   "qty": 400.0,
+   "unit": "mg",
+   "forms": [],
+   "children": []
+  }
+ },
+ {
+  "canonical_id": "hops",
+  "label": "Hops strobile Complex",
+  "disposition": "clean",
+  "has_rule": false,
+  "products": 1,
+  "example": {
+   "id": "307735",
+   "qty": 100.0,
+   "unit": "mg",
+   "forms": [],
+   "children": []
+  }
+ },
+ {
+  "canonical_id": "lemon_balm",
+  "label": "Lemon Balm leaf Complex",
+  "disposition": "clean",
+  "has_rule": false,
+  "products": 1,
+  "example": {
+   "id": "307735",
+   "qty": 100.0,
+   "unit": "mg",
+   "forms": [],
+   "children": []
+  }
+ },
+ {
+  "canonical_id": "quercetin",
+  "label": "Quercefit",
+  "disposition": "clean",
+  "has_rule": true,
+  "products": 1,
+  "example": {
+   "id": "309492",
+   "qty": 300.0,
+   "unit": "mg",
+   "forms": [
+    "Quercetin Phytosome"
+   ],
+   "children": []
+  }
+ },
+ {
+  "canonical_id": "probiotics",
+  "label": "Ultra Probiotics",
+  "disposition": "taxonomy_only",
+  "has_rule": true,
+  "products": 1,
+  "example": {
+   "id": "31062",
+   "qty": 12.5,
+   "unit": "Billion CFU",
+   "forms": [
+    "Bacillus coagulans"
+   ],
+   "children": []
+  }
+ },
+ {
+  "canonical_id": "blueberry",
+  "label": "Blueberry Fruit Extract Blend, Wild",
+  "disposition": "clean",
+  "has_rule": false,
+  "products": 1,
+  "example": {
+   "id": "313200",
+   "qty": 100.0,
+   "unit": "mg",
+   "forms": [
+    "extract"
+   ],
+   "children": []
+  }
+ },
+ {
+  "canonical_id": "phosphatidylcholine",
+  "label": "Phosphatidyl Choline Complex",
+  "disposition": "clean",
+  "has_rule": false,
+  "products": 1,
+  "example": {
+   "id": "315689",
+   "qty": 1200.0,
+   "unit": "mg",
+   "forms": [],
+   "children": [
+    "phosphatidylcholine"
+   ]
+  }
+ },
+ {
+  "canonical_id": "collagen",
+  "label": "Collagen Type I, II, & III Blend",
+  "disposition": "clean",
+  "has_rule": false,
+  "products": 1,
+  "example": {
+   "id": "321351",
+   "qty": 10.0,
+   "unit": "Gram(s)",
+   "forms": [],
+   "children": [
+    "collagen"
+   ]
+  }
+ },
+ {
+  "canonical_id": "digestive_enzymes",
+  "label": "Carbohydrate Digestive Enzymes",
+  "disposition": "taxonomy_only",
+  "has_rule": false,
+  "products": 1,
+  "example": {
+   "id": "321357",
+   "qty": 0.0,
+   "unit": "NP",
+   "forms": [],
+   "children": [
+    "None",
+    "alpha_galactosidase",
+    "amylase",
+    "beta_glucanase",
+    "cellulase",
+    "hemicellulase",
+    "invertase",
+    "pectinase",
+    "phytase"
+   ]
+  }
+ },
+ {
+  "canonical_id": "quercetin",
+  "label": "Quercetin Biolipid Complex",
+  "disposition": "clean",
+  "has_rule": true,
+  "products": 1,
+  "example": {
+   "id": "326284",
+   "qty": 1250.0,
+   "unit": "mg",
+   "forms": [],
+   "children": [
+    "lecithin",
+    "mct_oil",
+    "quercetin"
+   ]
+  }
+ },
+ {
+  "canonical_id": "citrus_bioflavonoids",
+  "label": "Citrus Bioflavonoid Complex",
+  "disposition": "clean",
+  "has_rule": false,
+  "products": 1,
+  "example": {
+   "id": "328084",
+   "qty": 50.0,
+   "unit": "mg",
+   "forms": [],
+   "children": [
+    "None",
+    "lemon",
+    "lime",
+    "orange",
+    "tangerine"
+   ]
+  }
+ },
+ {
+  "canonical_id": "collagen",
+  "label": "Collagen Peptide Complex, Hydrolyzed",
+  "disposition": "clean",
+  "has_rule": false,
+  "products": 1,
+  "example": {
+   "id": "328400",
+   "qty": 11.1,
+   "unit": "Gram(s)",
+   "forms": [
+    "Bovine Collagen, Hydrolyzed",
+    "Chicken Collagen, Hydrolyzed"
+   ],
+   "children": []
+  }
+ },
+ {
+  "canonical_id": "stinging_nettle",
+  "label": "Stinging & Dwarf Nettle Extracts",
+  "disposition": "taxonomy_only",
+  "has_rule": true,
+  "products": 1,
+  "example": {
+   "id": "328719",
+   "qty": 141.0,
+   "unit": "mg",
+   "forms": [
+    "Dwarf Nettle Root Extract",
+    "Stinging Nettle Root Extract"
+   ],
+   "children": []
+  }
+ },
+ {
+  "canonical_id": "sweet_orange",
+  "label": "Sicilian Blood Orange Complex",
+  "disposition": "clean",
+  "has_rule": false,
+  "products": 1,
+  "example": {
+   "id": "33095",
+   "qty": 100.0,
+   "unit": "mg",
+   "forms": [],
+   "children": []
+  }
+ },
+ {
+  "canonical_id": "milk_thistle",
+  "label": "Siliphos",
+  "disposition": "clean",
+  "has_rule": true,
+  "products": 1,
+  "example": {
+   "id": "336352",
+   "qty": 180.0,
+   "unit": "mg",
+   "forms": [
+    "Silybin Phytosome"
+   ],
+   "children": []
+  }
+ },
+ {
+  "canonical_id": "green_tea_extract",
+  "label": "Organic Green & White Tea Extract",
+  "disposition": "taxonomy_only",
+  "has_rule": true,
+  "products": 1,
+  "example": {
+   "id": "336897",
+   "qty": 0.0,
+   "unit": "NP",
+   "forms": [
+    "extract",
+    "organic"
+   ],
+   "children": [
+    "green_tea_extract",
+    "white_tea"
+   ]
+  }
+ },
+ {
+  "canonical_id": "chondroitin",
+  "label": "Chondroitin Sulfate Complex",
+  "disposition": "clean",
+  "has_rule": true,
+  "products": 1,
+  "example": {
+   "id": "65963",
+   "qty": 1139.0,
+   "unit": "mg",
+   "forms": [
+    "sulfate"
+   ],
+   "children": [
+    "boswellia",
+    "citrus_bioflavonoids",
+    "collagen",
+    "hyaluronic_acid",
+    "msm",
+    "silica"
+   ]
+  }
+ },
+ {
+  "canonical_id": "citrus_bioflavonoids",
+  "label": "Citrus Bioflavonoids / Rutin Complex",
+  "disposition": "taxonomy_only",
+  "has_rule": false,
+  "products": 1,
+  "example": {
+   "id": "66367",
+   "qty": 38.0,
+   "unit": "mg",
+   "forms": [],
+   "children": [
+    "citrus_bioflavonoids"
+   ]
+  }
+ },
+ {
+  "canonical_id": "NHA_UNIVESTIN",
+  "label": "Univestin",
+  "disposition": "taxonomy_only",
+  "has_rule": false,
+  "products": 1,
+  "example": {
+   "id": "69579",
+   "qty": 250.0,
+   "unit": "mg",
+   "forms": [
+    "Chinese Skullcap extract",
+    "Cutch Tree wood & bark extract"
+   ],
+   "children": []
+  }
+ },
+ {
+  "canonical_id": "resveratrol",
+  "label": "Circulation Optimizing Blend",
+  "disposition": "clean",
+  "has_rule": true,
+  "products": 1,
+  "example": {
+   "id": "70152",
+   "qty": 30.0,
+   "unit": "mg",
+   "forms": [],
+   "children": [
+    "resveratrol"
+   ]
+  }
+ },
+ {
+  "canonical_id": "turmeric",
+  "label": "Turmeric root extract (Curcuma longa) Blend",
+  "disposition": "clean",
+  "has_rule": true,
+  "products": 1,
+  "example": {
+   "id": "74547",
+   "qty": 500.0,
+   "unit": "mg",
+   "forms": [
+    "Curcuminoids",
+    "Curcuminoids"
+   ],
+   "children": []
+  }
+ },
+ {
+  "canonical_id": "lutein",
+  "label": "Lutemax 2020",
+  "disposition": "clean",
+  "has_rule": false,
+  "products": 1,
+  "example": {
+   "id": "74903",
+   "qty": 2.0,
+   "unit": "mg",
+   "forms": [],
+   "children": []
+  }
+ },
+ {
+  "canonical_id": "vitamin_e",
+  "label": "Tocotrienol Complex",
+  "disposition": "clean",
+  "has_rule": true,
+  "products": 1,
+  "example": {
+   "id": "74932",
+   "qty": 900.0,
+   "unit": "mcg",
+   "forms": [],
+   "children": []
+  }
+ },
+ {
+  "canonical_id": "beta_glucan",
+  "label": "Beta 1,3 Glucans complex",
+  "disposition": "clean",
+  "has_rule": false,
+  "products": 1,
+  "example": {
+   "id": "76899",
+   "qty": 60.0,
+   "unit": "mg",
+   "forms": [
+    "Beta 1,3 Glucans"
+   ],
+   "children": []
+  }
+ },
+ {
+  "canonical_id": "protease",
+  "label": "ProHydrolase Protease Blend",
+  "disposition": "repaired",
+  "has_rule": false,
+  "products": 1,
+  "example": {
+   "id": "82367",
+   "qty": 150.0,
+   "unit": "mg",
+   "forms": [],
+   "children": []
+  }
+ },
+ {
+  "canonical_id": "digestive_enzymes",
+  "label": "Enzyme Blend (Non-/Nutrient/Non-Botanical)",
+  "disposition": "taxonomy_only",
+  "has_rule": false,
+  "products": 1,
+  "example": {
+   "id": "82943",
+   "qty": 100.0,
+   "unit": "mg",
+   "forms": [],
+   "children": [
+    "amylase",
+    "beta_glucanase",
+    "bromelain",
+    "cellulase",
+    "hemicellulase",
+    "lipase",
+    "papain",
+    "phytase",
+    "protease"
+   ]
+  }
+ }
+]
