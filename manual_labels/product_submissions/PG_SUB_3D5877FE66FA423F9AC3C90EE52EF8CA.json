@@ -1,0 +1,126 @@
+{
+  "id": "PG_SUB_3D5877FE66FA423F9AC3C90EE52EF8CA",
+  "brandName": "Trader Joe's",
+  "fullName": "Vitamin C 1000 mg",
+  "ingredientRows": [
+    {
+      "forms": [
+        {
+          "name": "Ascorbic Acid"
+        }
+      ],
+      "ingredientGroup": "Vitamin C",
+      "name": "Vitamin C",
+      "nestedRows": [],
+      "notes": "1,111% Daily Value",
+      "order": 1,
+      "quantity": [
+        {
+          "quantity": 1000,
+          "unit": "mg"
+        }
+      ]
+    },
+    {
+      "forms": [],
+      "ingredientGroup": "Rose Hips",
+      "name": "Dried Rose Hips (Rosa canina)",
+      "nestedRows": [],
+      "notes": "Daily Value not established",
+      "order": 2,
+      "quantity": [
+        {
+          "quantity": 100,
+          "unit": "mg"
+        }
+      ]
+    }
+  ],
+  "offMarket": 0,
+  "otherIngredients": {
+    "ingredients": [
+      {
+        "name": "Calcium phosphate"
+      },
+      {
+        "name": "stearic acid (vegetable source)"
+      },
+      {
+        "name": "microcrystalline cellulose"
+      },
+      {
+        "name": "coating (hydroxypropyl methylcellulose, glycerin, carnauba wax)"
+      },
+      {
+        "name": "silicon dioxide"
+      },
+      {
+        "name": "magnesium stearate (vegetable source)"
+      }
+    ]
+  },
+  "otherIngredientsDisclosure": "present",
+  "physicalState": {
+    "name": "Tablet(s)"
+  },
+  "productType": {
+    "name": "Dietary Supplement"
+  },
+  "servingSizes": [
+    {
+      "inSFB": true,
+      "maxDailyServings": 1,
+      "maxQuantity": 1,
+      "minDailyServings": 1,
+      "minQuantity": 1,
+      "order": 1,
+      "unit": "Tablet(s)"
+    }
+  ],
+  "servingsPerContainer": "250",
+  "statements": [
+    {
+      "notes": "Dietary Supplement",
+      "type": "FDA Statement of Identity"
+    },
+    {
+      "notes": "Take one tablet daily with food.",
+      "type": "Suggested/Recommended/Usage/Directions"
+    },
+    {
+      "notes": "People with medical concerns should check with their physician before using this or any dietary supplement. Store in a cool, dry place. Keep out of reach of children.",
+      "type": "Precautions re: All Other"
+    },
+    {
+      "notes": "Gluten Free.",
+      "type": "Formulation re: Does NOT Contain"
+    },
+    {
+      "notes": "Vegan",
+      "type": "Formulation re: Vegetarian/Vegan"
+    },
+    {
+      "notes": "Dist. & Sold Exclusively By: Trader Joe's, 800 S. Shamrock, Monrovia, CA 91016. SKU# 74998.",
+      "type": "Other"
+    }
+  ],
+  "upcSku": "00749985",
+  "src": "local/manual_labels/product_submissions/PG_SUB_3D5877FE66FA423F9AC3C90EE52EF8CA",
+  "source_type": "external_manual",
+  "manual_product_provenance": {
+    "source_kind": "private_product_submission",
+    "source_record_id": "3d5877fe-66fa-423f-9ac3-c90ee52ef8ca",
+    "label_verified_at": "2026-10-09",
+    "review_status": "verified",
+    "reviewer": "PharmaGuide Clinical Team"
+  },
+  "label_record_metadata": {
+    "source_name": "PharmaGuide verified product submission",
+    "source_record_id": "3d5877fe-66fa-423f-9ac3-c90ee52ef8ca",
+    "source_date": "2026-10-09",
+    "source_updated_date": "2026-10-09",
+    "product_status": "active",
+    "lineage_key": "pharmaguide_submission:3d5877fe-66fa-423f-9ac3-c90ee52ef8ca",
+    "reviewed_at": "2026-10-09T17:43:43.191848+00:00"
+  }
+}

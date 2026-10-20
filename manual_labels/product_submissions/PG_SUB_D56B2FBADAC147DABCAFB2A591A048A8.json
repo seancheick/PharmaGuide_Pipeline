@@ -1,0 +1,105 @@
+{
+  "id": "PG_SUB_D56B2FBADAC147DABCAFB2A591A048A8",
+  "brandName": "North Star Labs",
+  "fullName": "Creatine Hydrochloride (HCl)",
+  "ingredientRows": [
+    {
+      "forms": [],
+      "ingredientGroup": "Creatine",
+      "name": "Creatine Hydrochloride",
+      "nestedRows": [],
+      "order": 1,
+      "quantity": [
+        {
+          "quantity": 750,
+          "unit": "mg"
+        }
+      ]
+    }
+  ],
+  "otherIngredients": {
+    "ingredients": [
+      {
+        "name": "Vegetarian capsule (Hypromellose)"
+      }
+    ]
+  },
+  "otherIngredientsDisclosure": "present",
+  "physicalState": {
+    "langualCodeDescription": "Capsule",
+    "name": "Capsule"
+  },
+  "servingSizes": [
+    {
+      "maxDailyServings": 5,
+      "maxQuantity": 1,
+      "minDailyServings": 1,
+      "minQuantity": 1,
+      "order": 1,
+      "unit": "Capsule"
+    }
+  ],
+  "servingsPerContainer": "60",
+  "statements": [
+    {
+      "notes": "DIETARY SUPPLEMENT",
+      "type": "FDA Statement of Identity"
+    },
+    {
+      "notes": "Supports Muscle Strength* Supports Muscle Recovery*",
+      "type": "General Statements: All Other Content"
+    },
+    {
+      "notes": "NO CALORIES. NO SUGAR. GLUTEN FREE. STIMULANT FREE.",
+      "type": "Formulation re: Does NOT Contain"
+    },
+    {
+      "notes": "WARNINGS: This product is not intended (or recommended) for children under the age of 18. If you are pregnant, nursing, taking any medications or have any medical conditions, consult your doctor before use. If any adverse reactions occur, immediately stop using this product and consult your doctor. Do not use if safety seal is damaged or missing. Maintain adequate hydration.",
+      "type": "Precautions re: All Other"
+    },
+    {
+      "notes": "KEEP OUT OF REACH OF CHILDREN.",
+      "type": "Precautions re: Children"
+    },
+    {
+      "notes": "Store in a cool, dry place. Avoid excessive heat.",
+      "type": "Storage"
+    },
+    {
+      "notes": "Manufactured for North Star Labs™ by Vireo Resources. Plattsmouth, NE 68048. Questions? Call 1-855-442-6466",
+      "type": "General Statements: All Other Content"
+    },
+    {
+      "notes": "Made in the USA at our SQF/GMP facility with domestic and international components",
+      "type": "General Statements: All Other Content"
+    },
+    {
+      "notes": "SUGGESTED USE: Take 1 – 2 servings per day for general health. Take 2 – 3 servings per day for intense exercise, not to exceed 5 servings per day. Take with food or protein.",
+      "type": "Suggested/Recommended/Usage/Directions"
+    },
+    {
+      "notes": "*These statements have not been evaluated by the Food and Drug Administration. This product is not intended to diagnose, treat, cure, or prevent any disease.",
+      "type": "FDA Disclaimer Statement"
+    }
+  ],
+  "offMarket": 0,
+  "upcSku": "0349597002807",
+  "src": "local/manual_labels/product_submissions/PG_SUB_D56B2FBADAC147DABCAFB2A591A048A8",
+  "source_type": "external_manual",
+  "manual_product_provenance": {
+    "source_kind": "private_product_submission",
+    "source_record_id": "d56b2fba-dac1-47da-bcaf-b2a591a048a8",
+    "label_verified_at": "2026-10-09",
+    "review_status": "verified",
+    "reviewer": "PharmaGuide Clinical Team"
+  },
+  "label_record_metadata": {
+    "source_name": "PharmaGuide verified product submission",
+    "source_record_id": "d56b2fba-dac1-47da-bcaf-b2a591a048a8",
+    "source_date": "2026-10-09",
+    "source_updated_date": "2026-10-09",
+    "product_status": "active",
+    "lineage_key": "pharmaguide_submission:d56b2fba-dac1-47da-bcaf-b2a591a048a8",
+    "reviewed_at": "2026-10-09T17:52:06.644665+00:00"
+  }
+}

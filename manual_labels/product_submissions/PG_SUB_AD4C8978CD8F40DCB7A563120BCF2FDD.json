@@ -1,0 +1,150 @@
+{
+  "id": "PG_SUB_AD4C8978CD8F40DCB7A563120BCF2FDD",
+  "brandName": "Trader Joe's",
+  "fullName": "Calcium Magnesium & Zinc",
+  "ingredientRows": [
+    {
+      "forms": [
+        {
+          "name": "calcium carbonate"
+        }
+      ],
+      "ingredientGroup": "Calcium",
+      "name": "Calcium (as calcium carbonate)",
+      "nestedRows": [],
+      "order": 1,
+      "quantity": [
+        {
+          "quantity": 1000,
+          "unit": "mg"
+        }
+      ]
+    },
+    {
+      "forms": [
+        {
+          "name": "magnesium oxide"
+        }
+      ],
+      "ingredientGroup": "Magnesium",
+      "name": "Magnesium (as magnesium oxide)",
+      "nestedRows": [],
+      "order": 2,
+      "quantity": [
+        {
+          "quantity": 500,
+          "unit": "mg"
+        }
+      ]
+    },
+    {
+      "forms": [
+        {
+          "name": "zinc oxide"
+        }
+      ],
+      "ingredientGroup": "Zinc",
+      "name": "Zinc (as zinc oxide)",
+      "nestedRows": [],
+      "order": 3,
+      "quantity": [
+        {
+          "quantity": 15,
+          "unit": "mg"
+        }
+      ]
+    }
+  ],
+  "otherIngredients": {
+    "ingredients": [
+      {
+        "name": "Microcrystalline cellulose"
+      },
+      {
+        "name": "coating (hydroxypropyl methylcellulose, titanium dioxide [color], glycerin, carnauba wax)"
+      },
+      {
+        "name": "stearic acid (vegetable source)"
+      },
+      {
+        "name": "croscarmellose sodium"
+      },
+      {
+        "name": "magnesium stearate (vegetable source)"
+      },
+      {
+        "name": "silicon dioxide"
+      }
+    ]
+  },
+  "otherIngredientsDisclosure": "present",
+  "physicalState": {
+    "langualCodeDescription": "Tablet or Pill",
+    "name": "Tablet or Pill"
+  },
+  "servingSizes": [
+    {
+      "maxDailyServings": 1,
+      "maxQuantity": 2,
+      "minDailyServings": 1,
+      "minQuantity": 2,
+      "order": 1,
+      "unit": "Tablets"
+    }
+  ],
+  "servingsPerContainer": "30",
+  "statements": [
+    {
+      "notes": "DIETARY SUPPLEMENT",
+      "type": "FDA Statement of Identity"
+    },
+    {
+      "notes": "SUGGESTED USE: Take 2 tablets daily with food.",
+      "type": "Suggested/Recommended/Usage/Directions"
+    },
+    {
+      "notes": "People with medical concerns should check with their physician before using this or any dietary supplement.",
+      "type": "Precautions re: All Other"
+    },
+    {
+      "notes": "Store in a cool, dry place.",
+      "type": "Storage"
+    },
+    {
+      "notes": "Keep out of reach of children.",
+      "type": "Precautions re: Children"
+    },
+    {
+      "notes": "Vegan",
+      "type": "Formulation re: Vegetarian/Vegan"
+    },
+    {
+      "notes": "Dist. & Sold Exclusively By: Trader Joe's, 800 S. Shamrock, Monrovia, CA 91016",
+      "type": "General Statements: All Other Content"
+    },
+    {
+      "notes": "GLUTEN FREE",
+      "type": "Formulation re: Does NOT Contain"
+    }
+  ],
+  "offMarket": 0,
+  "upcSku": "00671422",
+  "src": "local/manual_labels/product_submissions/PG_SUB_AD4C8978CD8F40DCB7A563120BCF2FDD",
+  "source_type": "external_manual",
+  "manual_product_provenance": {
+    "source_kind": "private_product_submission",
+    "source_record_id": "ad4c8978-cd8f-40dc-b7a5-63120bcf2fdd",
+    "label_verified_at": "2026-10-10",
+    "review_status": "verified",
+    "reviewer": "PharmaGuide Clinical Team"
+  },
+  "label_record_metadata": {
+    "source_name": "PharmaGuide verified product submission",
+    "source_record_id": "ad4c8978-cd8f-40dc-b7a5-63120bcf2fdd",
+    "source_date": "2026-10-10",
+    "source_updated_date": "2026-10-10",
+    "product_status": "active",
+    "lineage_key": "pharmaguide_submission:ad4c8978-cd8f-40dc-b7a5-63120bcf2fdd",
+    "reviewed_at": "2026-10-10T20:21:45.557294+00:00"
+  }
+}
