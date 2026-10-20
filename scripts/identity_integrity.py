@@ -34,6 +34,10 @@ IDENTITY_DISPOSITIONS: tuple[IdentityDisposition, ...] = (
 _SCOREABLE_DISPOSITIONS = frozenset({"clean", "repaired", "taxonomy_only"})
 # The catch-all proprietary-blend owner names no specific identity of its own.
 _GENERAL_BLEND_ID = "BLEND_GENERAL"
+HEADER_INTERACTION_ONLY_RATIONALE = (
+    "The blend header's own standard name proves its identity; it is retained "
+    "for interactions only, since the header's total is the blend's amount."
+)
 
 
 def safety_only_conflict_paths(rows: Iterable[Mapping[str, Any]]) -> set[str]:
@@ -1108,31 +1112,36 @@ def resolve_identity(
 
     # Non-scorability is a row role, not evidence against the substance: a row
     # the caller will not score keeps a supplied identity its own text proves.
-    # A blend header is left out: its identity would carry the blend's total
-    # into scoring routes, a separate decision.
     # The cleaner records that proof as the row's standardName ("Caffeine
     # Blend" -> Caffeine, "Lactobacillus" -> Probiotics, "Arginine" ->
     # L-Arginine); a stale id the row's text never named is not kept, nor is
     # one its label contradicts, nor a role or catch-all record (a
     # proprietary blend, an other-ingredient role), which is no substance.
+    # A blend header kept only through that standardName ("Caffeine Blend")
+    # keeps it for interactions alone: its total is the blend's, so scoring
+    # treats it as before (HEADER_INTERACTION_ONLY_RATIONALE).
+    label_proves_canonical = bool(canonical_before) and (
+        structured_canonical == canonical_before
+        or raw_canonical == canonical_before
+        or taxonomy_coherent
+    )
+    standard_name_proves_canonical = bool(canonical_before) and (
+        not raw_canonicals
+        and canonical_registry is not None
+        and not canonical_registry.is_role_record(canonical_before)
+        and canonical_registry.literal_identity_matches(
+            str(row.get("standardName") or ""), canonical_before
+        )
+    )
     retained_unscoreable_canonical = (
         canonical_before
-        if canonical_before
-        and (
-            structured_canonical == canonical_before
-            or raw_canonical == canonical_before
-            or taxonomy_coherent
-            or (
-                not raw_canonicals
-                and canonical_registry is not None
-                and not _is_blend_header_row(row)
-                and not canonical_registry.is_role_record(canonical_before)
-                and canonical_registry.literal_identity_matches(
-                    str(row.get("standardName") or ""), canonical_before
-                )
-            )
-        )
+        if label_proves_canonical or standard_name_proves_canonical
         else None
+    )
+    header_interaction_only = (
+        not label_proves_canonical
+        and standard_name_proves_canonical
+        and _is_blend_header_row(row)
     )
 
     if display_name is None:
@@ -1222,7 +1231,9 @@ def resolve_identity(
     elif allow_unscoreable_taxonomy_only:
         disposition = "taxonomy_only"
         canonical_after = retained_unscoreable_canonical
-        if canonical_after:
+        if canonical_after and header_interaction_only:
+            rationale = HEADER_INTERACTION_ONLY_RATIONALE
+        elif canonical_after:
             rationale = (
                 "The row was intentionally classified as non-scorable; its "
                 "validated source identity was retained for non-scoring lineage."

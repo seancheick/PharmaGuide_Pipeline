@@ -9,11 +9,12 @@ identity, and with it every interaction rule (951a05415 capture: 90 rows). The
 row stays unscored; only a label that names a different substance, or a role
 record (a proprietary blend), keeps it from the supplied identity.
 
-Blend headers are left out for now: a header identity would carry the blend
-total into scoring routes ("Caffeine Blend" stays unresolved, so Ravage keeps
-main's caffeine warning gap until the header follow-up). Restoring a row's
-identity must not route a product either: a blend total lent to an identified
-member is not that member's amount (327570).
+A blend header keeps its identity too ("Caffeine Blend", Ravage), and meets its
+interaction rules (#185), but scoring reads it as its printed heading: its total
+is the blend's, never that ingredient's amount, so the identity cannot route,
+dose or double-count it (LIT AF 219842, Echinacea Complex 73300). Restoring a
+row's identity must not route a product either: a blend total lent to an
+identified member is not that member's amount (327570).
 """
 
 from __future__ import annotations
@@ -69,11 +70,30 @@ def test_non_scorable_row_keeps_its_identity_and_meets_its_rules(enrich, dsld_id
     assert label in {a["ingredient_name"] for a in alerts}
 
 
-def test_blend_header_is_not_restored_yet(enrich):
-    """1179 "Caffeine Blend" is a weight-only blend header: out of this batch."""
-    iqd = enrich(1179)["ingredient_quality_data"]
-    rows = [r for r in iqd["ingredients"] if r.get("raw_source_text") == "Caffeine Blend"]
-    assert rows and {r["canonical_id"] for r in rows} == {None}
+def test_blend_header_keeps_its_identity_and_meets_its_rules(enrich):
+    """1179 Ravage: the weight-only "Caffeine Blend" header is caffeine."""
+    enriched = enrich(1179)
+    rows = [r for r in enriched["ingredient_quality_data"]["ingredients"] if r.get("raw_source_text") == "Caffeine Blend"]
+    assert rows and {r["canonical_id"] for r in rows} == {"caffeine"}
+    assert any(a["rule_id"] == "RULE_INGREDIENT_CAFFEINE"
+               for a in enriched["interaction_profile"]["ingredient_alerts"])
+
+
+@pytest.mark.parametrize("dsld_id,pillar,expected", [
+    # LIT AF: a 300 mg "Caffeine Blend" header over 250 mg + 50 mg caffeine rows. The
+    # header's identity must not add a second 300 mg to the caffeine ceiling.
+    (219842, "dose", 13.0),
+    # Echinacea Complex: the header identity must not replace the blend's lent
+    # echinacea anchor that routes and doses the product.
+    (73300, "dose", 11.4),
+    # Joint Health: a header whose printed name is itself an alias (Univestin)
+    # already scored on main; keeping header identities must not take it away.
+    (243676, "dose", 11.4),
+])
+def test_header_identity_does_not_enter_scoring(enrich, dsld_id, pillar, expected):
+    from scoring_v4.scored_artifact import build_scored_artifact
+
+    assert build_scored_artifact(enrich(dsld_id))["quality_pillars_v4"][pillar]["score"] == expected
 
 
 def test_identified_food_blend_member_does_not_route_a_vitamin_product(enrich):
@@ -126,8 +146,9 @@ def test_stale_id_the_row_never_named_is_not_kept():
     assert _decide("Antimony", "caffeine", "Antimony").canonical_id is None
 
 
-def test_blend_header_row_is_not_kept():
-    assert _decide("Caffeine Blend", "caffeine", "Caffeine", cleaner_row_role="blend_header_total").canonical_id is None
+def test_blend_header_row_is_kept_unscored():
+    decision = _decide("Caffeine Blend", "caffeine", "Caffeine", cleaner_row_role="blend_header_total")
+    assert (decision.canonical_id, decision.scoreable_identity) == ("caffeine", False)
 
 
 def test_role_record_is_not_kept_as_a_substance():

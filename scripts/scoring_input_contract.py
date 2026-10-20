@@ -40,6 +40,7 @@ from scoring_reference_resolver import (
 # the enricher stamps rows with.
 from identity.omega_labels import states_only_epa_and_dha
 from identity_integrity import (
+    HEADER_INTERACTION_ONLY_RATIONALE,
     IDENTITY_DISPOSITIONS,
     is_identity_scoreable,
 )
@@ -700,9 +701,17 @@ def _is_verified_canonical(value: Any) -> bool:
     return bool(canonical) and canonical not in _GENERIC_BLEND_IDENTITIES and not canonical.startswith("blend_")
 
 
+def _is_non_scorable_header_identity(row: Dict[str, Any]) -> bool:
+    """A blend header whose identity is kept for interactions only: its total
+    is the blend's, never that ingredient's amount."""
+    return row.get("identity_resolution_rationale") == HEADER_INTERACTION_ONLY_RATIONALE
+
+
 def _verified_anchor_canonical(row: Dict[str, Any]) -> str:
     """The row's cleaner-verified ingredient identity, or "" when the cleaner
     left it unmapped or only a generic blend identity is present."""
+    if _is_non_scorable_header_identity(row):
+        return ""
     canonical = _slug(row.get("canonical_id"))
     return canonical if _is_verified_canonical(canonical) else ""
 
@@ -1903,6 +1912,14 @@ def derive_product_scoring_evidence(product: Dict[str, Any]) -> List[Dict[str, A
                     active_row["standardName"] = standard_name
             if identity_row.get("source_label_key"):
                 active_row["source_label_key"] = identity_row["source_label_key"]
+            if _is_non_scorable_header_identity(identity_row):
+                # A blend header keeps its identity for interactions, but its
+                # total is the blend's, not that ingredient's amount: scoring
+                # reads the printed heading as a structural anchor only.
+                active_row["canonical_id"] = None
+                active_row["standardName"] = (
+                    identity_row.get("raw_source_text") or raw_active.get("name")
+                )
         disposition = active_row.get("identity_disposition")
         if disposition is not None and not is_identity_scoreable(disposition):
             continue
