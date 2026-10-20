@@ -1,5 +1,9 @@
 # PharmaGuide master completion plan
 
+### Worktree preservation checkpoint — October 20
+
+All 18 historical checkouts from the 22-checkout inventory have no hidden unfinished source fixes; 2,245 unique files are checksum-preserved outside the public repository. Six historical Claude checkouts were removed. Six old Codex checkouts are archived; six owning-chat archive requests remain queued. Active follow-ups are preserved. PR219's epilepsy rule is held by Sean. PR220 is integrated at 1a1bc81ed after exact-head CI39450146123 passed all four groups; 10 named tests and 18 unchanged replay controls are verified. Local has 544 passes, one existing stale-catalog folate failure and 25 declared skips; artifact/release readiness remains open. Evidence title, literature and new comma-subblend lanes are still active. No pipeline, release, app import or artifact gate closed. Details and limits: [worktree closeout](../../scripts/audits/integration_audit_20261020/WORKTREE_CLOSEOUT.md); the execution register remains LEDGER.
+
 ## Post-run catalog qualification — October 19 (Codex)
 
 Sean's completed 37-brand plus submission run is preserved: 15,426 products, including 14 manual inputs; all 114 manifests and 174 payload hashes verified. No Clean, Enrich or Score rerun. Dashboard index refreshed with ingredients (38 partitions, 219,925 label rows); 53 golden products / 520 checks pass, with zero receipt or pillar-total mismatches.
