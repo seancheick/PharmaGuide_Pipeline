@@ -116,7 +116,7 @@ def test_blend_disclosure_reads_amounts_not_a_stored_flag(normalizer, cleaned):
     assert disclosure["blends"][0]["individualAmounts"] == "Not disclosed"  # strains are NP
 
 
-@pytest.mark.parametrize("unit", ["", "NP", "np", " unspecified ", None])
+@pytest.mark.parametrize("unit", ["", "NP", "np", " unspecified ", None, "%", "percent"])
 def test_an_amount_without_a_real_unit_is_not_disclosed(unit):
     assert not EnhancedDSLDNormalizer._nested_amount_disclosed({"quantity": 50, "unit": unit})
 

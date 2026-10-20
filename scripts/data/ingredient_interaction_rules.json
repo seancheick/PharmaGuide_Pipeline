@@ -5476,13 +5476,13 @@
         "lactation_category": "monitor",
         "evidence_level": "established",
         "mechanism": "Iron needs rise in pregnancy (RDA 27 mg/day; 9-10 mg/day during lactation). The Tolerable Upper Intake Level for adults, including during pregnancy and lactation, is 45 mg/day; high-dose iron supplements can cause gastrointestinal effects.",
-        "notes": "Required nutrient in pregnancy and lactation; dose-sensitive above the UL.",
+        "notes": "Required nutrient in pregnancy and lactation (needs differ by stage); dose-sensitive above the UL.",
         "sources": [
           "https://ods.od.nih.gov/factsheets/Iron-HealthProfessional/"
         ],
-        "alert_headline": "Iron needs rise in pregnancy — keep within your prenatal plan",
-        "alert_body": "Iron needs are higher during pregnancy, and many prenatal plans include iron. High doses can upset the stomach. If you are pregnant or nursing, keep your total iron within your clinician's plan.",
-        "informational_note": "Iron is a required pregnancy nutrient; 45 mg/day is the adult upper limit.",
+        "alert_headline": "Iron in pregnancy or breastfeeding — follow your clinician's plan",
+        "alert_body": "Iron needs are higher during pregnancy and lower while breastfeeding. High doses can upset the stomach. If you are pregnant or nursing, keep your total iron within your clinician's plan.",
+        "informational_note": "Iron is a required nutrient in pregnancy and breastfeeding; 45 mg/day is the adult upper limit.",
         "profile_gate": {
           "gate_type": "profile_flag",
           "requires": {

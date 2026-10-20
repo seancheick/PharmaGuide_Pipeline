@@ -221,3 +221,5 @@ def test_iron_pregnancy_entry_is_sourced_not_limited_data():
     assert block["sources"] == ["https://ods.od.nih.gov/factsheets/Iron-HealthProfessional/"]
     assert "Limited safety data" not in json.dumps(block)
     assert block["profile_gate"]["requires"]["profile_flags_any"] == ["pregnant", "breastfeeding"]
+    # The gate matches either stage, so the headline must not be pregnancy-only.
+    assert "breastfeeding" in block["alert_headline"] and "pregnancy" in block["alert_headline"]

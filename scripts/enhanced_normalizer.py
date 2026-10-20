@@ -9840,14 +9840,14 @@ class EnhancedDSLDNormalizer:
 
     @staticmethod
     def _nested_amount_disclosed(row: Dict[str, Any]) -> bool:
-        """A blend member's own amount is printed: a positive quantity with a real unit."""
+        """A blend member's own amount is printed: a positive quantity with a dose unit (not a %)."""
         quantity = row.get("quantity", 0)
         unit = str(row.get("unit") or "").strip().upper()
         return (
             isinstance(quantity, (int, float))
             and not isinstance(quantity, bool)
             and quantity > 0
-            and unit not in {"", "NP", "UNSPECIFIED", "NOT PROVIDED", "UNKNOWN", "N/A"}
+            and unit not in {"", "NP", "UNSPECIFIED", "NOT PROVIDED", "UNKNOWN", "N/A", "%", "PERCENT"}
         )
 
     @staticmethod
