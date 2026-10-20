@@ -1773,7 +1773,7 @@
       ],
       "health_goals_supported": [],
       "notes": "No verified human ZyloFresh product trial is recorded. The cited generic alfalfa seed-extract rabbit study is reference context; it does not establish branded human efficacy.",
-      "study_type": "animal_study",
+      "study_type": "reference",
       "last_updated": "2026-03-06",
       "notable_studies": "No PubMed-indexed human trials were identified for ZyloFresh branded extract. Nonhuman alfalfa lipid data include the rabbit study indexed as PMID 22556508, but that does not support a human branded-evidence claim.",
       "references_structured": [
@@ -11616,7 +11616,7 @@
       ],
       "health_goals_supported": [],
       "notes": "Apigenin remains predominantly preclinical for sleep and healthy-aging claims. Registry records show early human intervention studies, but peer-reviewed standalone efficacy outcomes are still limited and mostly not attributable to apigenin alone.",
-      "study_type": "rct_single",
+      "study_type": "reference",
       "published_studies": [
         "19593179"
       ],
@@ -11689,7 +11689,7 @@
       ],
       "health_goals_supported": [],
       "notes": "Luteolin remains predominantly preclinical for immune and healthy-aging claims. Published human evidence is currently formula-level or adjunctive, so benefit cannot be attributed confidently to standalone luteolin.",
-      "study_type": "rct_single",
+      "study_type": "reference",
       "published_studies": [
         "35450527"
       ],
@@ -21053,7 +21053,7 @@
       ],
       "category": "immune",
       "evidence_level": "reference",
-      "study_type": "in_vitro",
+      "study_type": "reference",
       "published_studies": [
         "10991877"
       ],

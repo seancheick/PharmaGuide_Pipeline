@@ -66,7 +66,7 @@ def test_undecylenic_reference_cannot_resolve_oral_human_efficacy():
     from scoring_v4.modules.generic_evidence import _is_verified_ingredient_human_entry
     data = json.loads((Path(__file__).resolve().parents[1] / "data" / "backed_clinical_studies.json").read_text())
     entry = next(r for r in data["backed_clinical_studies"] if r["id"] == "ING_UNDECYLENIC_ACID")
-    assert entry["study_type"] == "in_vitro"
+    assert entry["study_type"] == "reference"
     assert entry["evidence_level"] == "reference"
     assert entry["effect_direction"] == "positive_strong"  # descriptive preclinical effect retained
     assert entry["total_enrollment"] is None
@@ -106,7 +106,7 @@ def test_backed_records_do_not_transfer_generic_or_combination_or_protocol_resul
         assert entry["total_enrollment"] is None
         assert entry["effect_direction"] == "positive_weak"
         assert not er.clinical_record_sources_eligible(entry)
-    assert records["BRAND_ZYLOFRESH"]["study_type"] == "animal_study"
+    assert records["BRAND_ZYLOFRESH"]["study_type"] == "reference"
     assert records["PRECLIN_AKG"]["study_type"] == "reference"
     assert records["PRECLIN_APIGENIN"]["published_studies"] == ["19593179"]
     assert records["PRECLIN_LUTEOLIN"]["published_studies"] == ["35450527"]
