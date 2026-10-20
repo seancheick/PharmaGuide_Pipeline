@@ -699,6 +699,14 @@ def _has_whole_microbial_identity(value: str) -> bool:
     )
 
 
+def _is_blend_header_row(row: Mapping[str, Any]) -> bool:
+    """The cleaner's blend-total header row."""
+    return (
+        row.get("cleaner_row_role") == "blend_header_total"
+        or row.get("hierarchyType") == "blend_header"
+    )
+
+
 def is_identity_scoreable(disposition: str | None) -> bool:
     return disposition in _SCOREABLE_DISPOSITIONS
 
@@ -1098,6 +1106,15 @@ def resolve_identity(
     display_name = normalize_label_display(source_name) or None
     display_form = normalize_label_display(source_form) or None
 
+    # Non-scorability is a row role, not evidence against the substance: a row
+    # the caller will not score keeps a supplied identity its own text proves.
+    # A blend header is left out: its identity would carry the blend's total
+    # into scoring routes, a separate decision.
+    # The cleaner records that proof as the row's standardName ("Caffeine
+    # Blend" -> Caffeine, "Lactobacillus" -> Probiotics, "Arginine" ->
+    # L-Arginine); a stale id the row's text never named is not kept, nor is
+    # one its label contradicts, nor a role or catch-all record (a
+    # proprietary blend, an other-ingredient role), which is no substance.
     retained_unscoreable_canonical = (
         canonical_before
         if canonical_before
@@ -1105,6 +1122,15 @@ def resolve_identity(
             structured_canonical == canonical_before
             or raw_canonical == canonical_before
             or taxonomy_coherent
+            or (
+                not raw_canonicals
+                and canonical_registry is not None
+                and not _is_blend_header_row(row)
+                and not canonical_registry.is_role_record(canonical_before)
+                and canonical_registry.literal_identity_matches(
+                    str(row.get("standardName") or ""), canonical_before
+                )
+            )
         )
         else None
     )

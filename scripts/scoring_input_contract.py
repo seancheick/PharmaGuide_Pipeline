@@ -5709,11 +5709,25 @@ def _classify_botanical_owner_type(
     primary_candidates = [
         pair for pair in botanical_pairs if id(pair[0]) in owner_candidate_ids
     ] or botanical_pairs
-    primary_row, primary_contract = max(
-        primary_candidates,
-        key=lambda p: (_role_mass_mg(p[0]) or 0.0),
+    # A blend total lent to a member is not the member's amount (D1c): it
+    # cannot outrank non-botanical actives that carry their own label amounts
+    # (327570: a beet row borrowing a 242 mg food blend beside B12, B6 and
+    # folate). When none does, the lent member remains the best route.
+    own_amount_actives = any(
+        not _row_profile_eligible(contract, "botanical")
+        and not is_lent_blend_mass(row)
+        and _norm(row.get("scoring_input_kind")) != "product_level_evidence"
+        and (_role_mass_mg(row) or _positive_quantity(row))
+        for row, contract in pairs
     )
-    botanical_mass = _role_mass_mg(primary_row) or 0.0
+
+    def own_mass(row: Dict[str, Any]) -> float:
+        if own_amount_actives and is_lent_blend_mass(row):
+            return 0.0
+        return _role_mass_mg(row) or 0.0
+
+    primary_row, primary_contract = max(primary_candidates, key=lambda p: own_mass(p[0]))
+    botanical_mass = own_mass(primary_row)
     non_botanical_pairs = [(r, c) for r, c in pairs if not _row_profile_eligible(c, "botanical")]
     botanical_is_material = _profile_is_material(botanical_mass, non_botanical_pairs)
     botanical_is_title_head = _profile_botanical_is_title_head(
@@ -6288,6 +6302,15 @@ def _named_in_title(row: Dict[str, Any], title_norm: str) -> bool:
         _norm(row.get("standard_name")),
         canonical.replace("_", " "),
     ]
+    # One word of a derived identity name is no title evidence: "Raw organic
+    # Svetol" is green_coffee_bean, and "coffee" alone does not make "Fit
+    # Coffee" name it. Derived names match only whole; the printed name may
+    # match by any of its words.
+    printed_tokens = {
+        token
+        for value in (row.get("name"), row.get("raw_source_text"))
+        for token in re.split(r"[^a-z0-9]+", _norm(value)) if token
+    }
     # A forms[] member the cleaner expanded from a reviewed blend header
     # (BLEND_HEADER_EXACT_NAMES) loses that header row, so its parent_blend is
     # the surviving source fact for the header's title role.  A nestedRows[]
@@ -6296,6 +6319,7 @@ def _named_in_title(row: Dict[str, Any], title_norm: str) -> bool:
     parent_blend = row.get("parent_blend") or row.get("parentBlend")
     if parent_blend and ".forms[" in str(row.get("raw_source_path") or ""):
         candidates.append(_norm(parent_blend))
+        printed_tokens.update(re.split(r"[^a-z0-9]+", _norm(parent_blend)))
     curated_aliases = _ROLE_TITLE_ALIASES_BY_CANONICAL.get(canonical, ())
     # Curated identity aliases may be shorter than the generic four-character
     # title-token floor (notably D2/D3). Their canonical-scoped allowlist is
@@ -6324,7 +6348,12 @@ def _named_in_title(row: Dict[str, Any], title_norm: str) -> bool:
         # names ("oil" of "Fish Oil").
         min_len = 3 if len(candidate_tokens) == 1 else 4
         for token in candidate_tokens:
-            if len(token) >= min_len and token not in _ROLE_TITLE_STOPWORDS and token in title_tokens:
+            if (
+                len(token) >= min_len
+                and token not in _ROLE_TITLE_STOPWORDS
+                and token in title_tokens
+                and (len(candidate_tokens) == 1 or token in printed_tokens)
+            ):
                 return True
     return False
 

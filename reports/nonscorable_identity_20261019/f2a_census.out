@@ -1,0 +1,80 @@
+products 529 with a change; 522 with new identities; 30 score moves; rules +85 -0; safety changes 0
+pillars moved: Counter({'evidence': 17, 'dose': 12, 'formulation': 9})
+ 121 row    'organic Beet'                                -> beetroot
+  97 row    'Beet'                                        -> beetroot
+  95 row    'organic Apple'                               -> apple_fruit
+  89 row    'Apple'                                       -> apple_fruit
+  46 row    'Lactobacillus'                               -> probiotics
+  46 row    'Apple, Powder'                               -> apple_fruit
+  44 row    'Beet, Powder'                                -> beetroot
+  36 row    'Arginine'                                    -> l_arginine
+  34 row    'Apple powder'                                -> apple_fruit
+  26 row    'Lactobacillus Blend'                         -> probiotics
+  26 row    'Raspberry'                                   -> red_raspberry_fruit
+  23 row    'organic Oat Grass'                           -> oat_straw
+  18 row    'Apple Extract, Powder'                       -> apple_fruit
+  17 row    'Oat Grass'                                   -> oat_straw
+  15 row    'Raw organic Svetol'                          -> green_coffee_bean
+  14 row    'Glutamic Acid'                               -> l_glutamic_acid
+  11 row    'organic Red Raspberry'                       -> red_raspberry_fruit
+   9 row    'Hibiscus flower powder'                      -> hibiscus_extract
+   9 row    'organic Oat'                                 -> oat_generic
+   9 row    'Chia'                                        -> chia_seed
+   8 row    'Oat Grass Juice'                             -> oat_generic
+   7 row    'Oat Grass Juice, Powder'                     -> oat_generic
+   6 row    'Yerba Mate leaf extract'                     -> yerba_mate_leaf
+   6 row    'Black Tea leaf extract'                      -> black_tea_leaf
+   6 row    'organic Poria cocos'                         -> poria_cocos
+   6 row    'organic Coffeeberry whole Coffee fruit extract' -> coffeeberry
+   5 row    'Bifidobacterium'                             -> probiotics
+   4 row    'organic Green Coffee'                        -> green_coffee_bean
+   4 row    'organic Agaricus blazei'                     -> royal_sun_blazei
+   3 row    'organic Beet root juice powder'              -> beetroot
+   3 row    'organic Enokitake'                           -> enokitake
+   3 row    'organic Himematsutake'                       -> royal_sun_blazei
+   3 row    'Sphaeranthus indicus extract'                -> sphaeranthus_indicus
+   3 row    'organic grass fed Butter'                    -> grass_fed_butter_powder
+   3 row    'organic Citrus Bioflavonoids'                -> citrus_bioflavonoids
+   3 row    'organic Svetol'                              -> green_coffee_bean
+   3 row    'organic Schizophyllum commune'               -> split_gill_polypore
+   3 row    'organic Coriolus versicolor'                 -> turkey_tail
+   3 row    'Aloe Vera Gel, Powder'                       -> aloe_vera
+   3 row    'Gamma-Carotene'                              -> vitamin_a
+   3 row    'Bifidobacterium'                             -> bifidobacterium_lactis
+   3 row    'Oat grass juice'                             -> oat_generic
+   3 row    'Shiitake fruiting body extract'              -> shiitake
+   2 row    'organic Yerba Mate extract'                  -> yerba_mate
+   2 row    'Oat straw powder'                            -> oat_straw
+   2 row    'Black Tea'                                   -> black_tea_leaf
+   2 row    'Gamma-carotene'                              -> vitamin_a
+   2 row    'Glycosides'                                  -> resveratrol
+   2 row    'Organic Kidney Bean'                         -> common_bean_extract
+   2 row    'HOWARU Lactobacillus rhamnosus HN001'        -> lactobacillus_rhamnosus
+   2 row    'Svetol, Raw'                                 -> green_coffee_bean
+   2 row    'Beet Root Juice'                             -> beetroot
+   2 row    'Red Raspberry'                               -> red_raspberry_fruit
+   2 row    'Resveratrol analogs'                         -> pterostilbene
+   1 row    'Black Tea Leaf Extract'                      -> black_tea_leaf
+   1 row    'organic Wheat Grass'                         -> wheatgrass
+   1 row    'Pycnogenol French Maritime Pine extract'     -> pine_bark_extract
+   1 row    'organic Wheat Grass juice powder'            -> wheatgrass
+   1 row    'organic Oat grass juice powder'              -> oat_generic
+   1 row    'organic Turkey Tail'                         -> turkey_tail
+   1 row    'organic Lion’s Mane'                         -> lions_mane
+   1 row    'organic Curry leaf extract'                  -> curry_leaf
+   1 row    'Oat Grass Extract'                           -> oat_straw
+   1 row    'Oat Grass juice powder'                      -> oat_generic
+   1 row    'Kidney Bean'                                 -> common_bean_extract
+   1 row    'Calcium Silicate'                            -> silicon
+   1 row    'Organic Tremella fuciformis'                 -> tremella
+   1 row    'RAW Organic Svetol'                          -> green_coffee_bean
+   1 row    'organic Millet'                              -> millet
+   1 row    'Agave powder'                                -> century_plant
+   1 row    'HOWARU'                                      -> bifidobacterium_lactis
+   1 row    'Wasabi, Powder'                              -> wasabi_root
+   1 row    'Coffeeberry(C) whole Coffee fruit extract'   -> coffeeberry
+   1 row    'Sawasabi Wasabi powder'                      -> isothiocyanates
+   1 row    'Ginseng root extract'                        -> ginseng_root_panax
+   1 row    'Buchu leaves powder'                         -> buchu_leaf
+   1 row    'Cumin powder'                                -> cumin_seed
+   1 row    'Cratevox Three-leaf Caper (Crateva nurvala) extract' -> crateva_nurvala
