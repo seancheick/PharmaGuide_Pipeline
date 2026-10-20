@@ -55,3 +55,18 @@ def test_epa_dha_oil_rule_copy_names_no_single_source():
     for sub in subs:
         for field in ("alert_headline", "alert_body", "action", "informational_note", "notes"):
             assert "fish" not in str(sub.get(field) or "").lower(), (sub.get("condition_id") or sub.get("drug_class_id"), field)
+
+
+def test_epa_dha_oil_mechanism_scopes_fish_oil_findings():
+    """The mechanism ships as warnings[].detail and Flutter shows it: a finding from
+    fish-oil studies is said to be one, never stated of every EPA/DHA oil (algal DHA
+    at 1.62 g/day did not alter thrombogenic factors, PMID 9001371)."""
+    import re
+
+    [rule] = [r for r in RULES if r["id"] == "RULE_INGREDIENT_FISH_OIL"]
+    for sub in rule["condition_rules"] + rule["drug_class_rules"]:
+        for sentence in re.split(r"(?<=[.;])\s+", sub["mechanism"]):
+            if "fish" in sentence.lower():
+                assert sentence.startswith(("In fish-oil studies", "In one reported case")), (
+                    sub.get("condition_id") or sub.get("drug_class_id"), sentence)
+

@@ -10,6 +10,9 @@ Entries:
   ingredient_interaction_rules RULE_INGREDIENT_FISH_OIL consumer copy names "omega-3 (EPA/DHA)",
                                       not fish oil; verbs, dose qualifiers, severities, sources unchanged.
 """
+# Prove it landed: scripts/data_batch.py check scripts/data/ingredient_quality_map.json --since <ref>
+#   --expect algae_oil,krill_oil  and  ... ingredient_interaction_rules.json --expect
+#   interaction_rules/RULE_INGREDIENT_FISH_OIL
 import sys
 sys.path.insert(0, "scripts")
 import data_batch  # noqa: E402

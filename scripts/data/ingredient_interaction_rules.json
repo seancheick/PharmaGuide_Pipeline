@@ -9787,11 +9787,12 @@
           "condition_id": "bleeding_disorders",
           "severity": "caution",
           "evidence_level": "established",
-          "mechanism": "EPA and DHA competitively inhibit arachidonic acid metabolism, suppressing thromboxane A2 (TXA2) synthesis and reducing platelet aggregation. At doses >3 g/day of combined EPA+DHA, clinically measurable prolongation of bleeding time has been observed. Fish oil may also reduce factor VII levels, a vitamin K-dependent coagulation factor.",
+          "mechanism": "EPA and DHA competitively inhibit arachidonic acid metabolism, suppressing thromboxane A2 (TXA2) synthesis and reducing platelet aggregation. At doses >3 g/day of combined EPA+DHA, clinically measurable prolongation of bleeding time has been observed. In fish-oil studies, lower factor VII levels (a vitamin K-dependent coagulation factor) have also been reported; algal DHA at 1.62 g/day did not alter the thrombogenic factors measured (PMID 9001371).",
           "action": "If you have a bleeding disorder, discuss omega-3 (EPA/DHA) supplements with your clinician. Clinically significant bleeding is not consistently demonstrated in trials; your other medicines and condition matter.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/17192169/",
-            "https://pubmed.ncbi.nlm.nih.gov/14742793/"
+            "https://pubmed.ncbi.nlm.nih.gov/14742793/",
+            "https://pubmed.ncbi.nlm.nih.gov/9001371/"
           ],
           "alert_headline": "High-dose omega-3 may affect bleeding",
           "alert_body": "High-dose EPA/DHA (3g+/day) can modestly affect platelet function. If you have a bleeding disorder or use blood thinners, review your omega-3 dose with your clinician.",
@@ -9894,7 +9895,7 @@
           "drug_class_id": "antiplatelets",
           "severity": "caution",
           "evidence_level": "established",
-          "mechanism": "Additive inhibition of platelet aggregation through independent TXA2 suppression. Combined use of high-dose fish oil with aspirin and warfarin has been associated with subdural hematoma after minor trauma.",
+          "mechanism": "Additive inhibition of platelet aggregation through independent TXA2 suppression. In one reported case, high-dose fish oil taken with aspirin and warfarin was followed by a subdural hematoma after minor trauma.",
           "action": "Discuss omega-3 (EPA/DHA) supplements with your antiplatelet prescriber and report unusual bruising or bleeding.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/17192169/",
@@ -9930,7 +9931,7 @@
           "drug_class_id": "nsaids",
           "severity": "monitor",
           "evidence_level": "theoretical",
-          "mechanism": "The retained sources do not establish a direct clinical NSAID interaction or a universal combined gastrointestinal-bleeding risk from fish oil. A possible interaction remains a precaution.",
+          "mechanism": "The retained sources do not establish a direct clinical NSAID interaction or a universal combined gastrointestinal-bleeding risk from omega-3 (EPA/DHA) supplements. A possible interaction remains a precaution.",
           "action": "Monitor for GI symptoms when combining omega-3 (EPA/DHA) with NSAIDs. Take NSAIDs with food.",
           "sources": [
             "https://ods.od.nih.gov/factsheets/Omega3FattyAcids-HealthProfessional/",
