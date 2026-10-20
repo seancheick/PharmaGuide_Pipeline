@@ -35,10 +35,33 @@ lines were read: each is a cross-contact or allergen declaration on the label.
   allergen-free claim conflicts with a may-contain or facility warning
   (`generic_transparency._score_b2_false_allergen_claim_penalty`). 36 change tier (Very good → Good
   25, Good → Needs improvement 9, Exceptional → Excellent 1, Excellent → Very good 1).
-- `gluten_free_validated` is lost on 180 products: 35 whose new facility statement names wheat,
-  and 145 whose new warnings name only other allergens. Those 145 are PR #187's defect
-  (`gluten_contradiction = has_may_contain`) and do not occur once #187 merges.
+- `gluten_free_validated` is lost on 180 products. 37 are real: 35 whose new facility statement
+  names wheat, plus 294321 and 294322, whose new "Allergen Information: Wheat" line declares wheat.
+  The other 143 have new warnings that name only other allergens: PR #187's defect
+  (`gluten_contradiction = has_may_contain`), which does not occur once #187 merges.
 
 Tests: `scripts/tests/test_allergen_statement_phrasings.py` (corpus strings, positives fail on main;
 negated controls "facility free from", "not manufactured with", "does not process", "peanut-free
 facility").
+
+## Audit follow-up (7f413ce9a)
+
+- F1: a statement line starts a new clause only when it opens with a new cue (contains, may
+  contain, allergen information, a facility verb, "this product", a negator); any other line
+  continues the list above it ("Contains:\nMilk, Soy", "Contains milk\tsoy", 287762
+  "Contains:\r\nMilk.").
+- F2: "which/that contain(s)" after a negator stays in the negated phrase ("Free of dairy, which
+  contains lactose").
+- F3: an "Allergen information:" line led by no/none/free is negated; one with a facility or
+  equipment cue is read as a facility warning, not "contains".
+- F4: per-allergen precedence is contains > ingredient_list > may_contain > facility_warning, so a
+  real ingredient is never relabelled as cross-contact (76850 peanuts, 316791 soybean oil, 27807
+  wheat grass).
+- F5: `build_final_db.export_allergen_presence` maps enrichment presence to the app vocabulary
+  (`ingredient_list` → `contains`, `facility_warning` → `manufactured_in_facility`), documented in
+  FINAL_EXPORT_SCHEMA_V1.md; `allergen_summary`, blob `allergens[]` and the B2 card use it, so a
+  facility hit is never "Contains:". No app change is needed: the app already knows these three
+  values.
+- F6: export allergen-row matching is whole-word (70066 "organic Buckwheat", 78327 "Pea").
+- Probe: a facility clause must name something processed ("Our facility tests every lot for
+  gluten" names no source).
