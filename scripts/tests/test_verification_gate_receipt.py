@@ -215,3 +215,15 @@ def test_failed_command_still_writes_nonzero_receipt(tmp_path: Path) -> None:
     payload = json.loads(receipt.read_text(encoding="utf-8"))
     assert payload["exit_code"] == 7
     assert payload["completed_at"]
+
+
+def test_tool_call_bookkeeping_does_not_invalidate_real_configuration(tmp_path, monkeypatch):
+    args = _reusable_probe(tmp_path)
+    monkeypatch.setenv('CODEX_TOOL_CALL_ID', 'first-command')
+    assert run_gate(**args) == 0
+    monkeypatch.setenv('CODEX_TOOL_CALL_ID', 'reviewed-retry')
+    assert run_gate(**args) == 0
+    assert (tmp_path / 'calls').read_text() == 'x'
+    monkeypatch.setenv('PG_TEST_POLICY', 'new-policy')
+    assert run_gate(**args) == 0
+    assert (tmp_path / 'calls').read_text() == 'xx'
