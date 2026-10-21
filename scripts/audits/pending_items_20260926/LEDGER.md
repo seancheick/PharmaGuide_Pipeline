@@ -2438,6 +2438,46 @@ Selective source-reviewed raw canaries204571/74716 refreshed with independent pa
 
 Original22worktrees fully audited; five later scratch trees and lucid-banach also verified integrated/stale and removed after preserving two unique patch receipts (one D31 policy experiment remains held).2245unique evidence files/1160618052bytes preserved with SHA256. Sean subsequently authorized normal Git removal of the six queued managed worktrees. All six and their empty parent folders were removed without force; all HEADs integrated, no uncommitted source fix or active checkout,322 current and275 historical evidence hashes reverified after removal,14 private hashes unchanged. Final cleanup receipt registers only primary; root audit trees were also archived/removed. Final user rebuild/artifact parity/release/app gates remain open. Full source/measurement report:scripts/audits/integration_audit_20261020/FOLLOWUP.md; private receipts:~/pg_quality/worktree_closeout_20261020.
 
+## October 21 — pre-beta coverage and personal-warning candidate
+
+Owner: `scoring_v4/scored_artifact.py` owns product safety/verdict and
+`scoring_input_contract.py` owns mapped coverage; `ingredient_interaction_rules.json` plus
+`enrich_supplements_v3.py` own target-specific warning applicability, reason and sources. Flutter
+renders those outputs and the existing coverage value separately. No new status, export field,
+clinical registry or app-side decision engine was created.
+
+Candidate behavior: low mapped coverage no longer converts an otherwise concern-free product to
+CAUTION. The app keeps the product's pipeline-authored quality/safety result visible and mounts its
+existing Analysis Coverage section directly below the hero. Explicit pregnancy or breastfeeding
+condition rows replace the weaker shared fallback for that target; shared actionable fallbacks keep
+their curated reason and source. Sage, St. John's wort, NAC and licorice have target-specific copy
+where the clinical reason differs; the final shared ephedra/yohimbe prose now names both authored
+life stages. Unknown/no-data amounts and clinical evidence remain unknown and
+do not become warnings, Dose credit or an effectiveness claim.
+
+Measurement: 58 completed enriched files / 15,426 products contain 88,703 actionable life-stage
+warning instances; 29,756 source-less instances affect 5,055 products in the released output.
+Projecting the exact emitted rule/target pairs through this candidate leaves zero missing sources,
+reasons or target owners. Final independent review caught a breastfeeding-only vitamin-B6 reason
+reaching pregnant users; the registry now gives pregnancy one explicit NIH ODS-sourced owner while
+retaining the separate lactation reason. Nine of eleven frozen raw products change only Enrich/blob warning copy/provenance;
+Clean, scored output, score, quality status/tier, product safety status, active ingredients and
+allergens are unchanged. Real-app cases cover pregnant and breastfeeding St. John's wort, pregnant
+sage, kidney disease plus magnesium, levothyroxine plus calcium, no-data-only behavior, an unaffected
+control, duplicate magnesium accumulation and the authored calcium/iron stack warning. Receipt:
+`reports/prebeta_launch_gates_20261021/README.md`; machine detail:
+`~/pg_quality/prebeta_launch_gates_20261021/lifestage_census.json`.
+
+State: source implementation, bounded measurement, independent review and local validation are
+complete. The final focused owner/consumer slice passed 219 tests; after exact-head CI exposed one
+overlong vitamin-B6 consumer body, the 198-character correction passed its three exact regressions,
+the 188-test combined safety/coverage slice and the local behavioral rung (546 passed, 24 declared
+opt-in skips, green skip guard). The app candidate passed clean analysis and 3,962 tests, its
+compiled 28-file engine closure/parity check, and the 10-case refreshed real-product gate. A new
+exact-head CI checkpoint, integration, rebuilt-catalog parity and Flutter release acceptance remain
+unchecked. The candidate changes Enrich/Score behavior; Sean's next producer run starts from the
+earliest stale stage after integration. No producer pipeline or release ran in this lane.
+
 ### Score-explanation/export integration (Sean decision October20) — PR231 / app PR130
 
 Owner: existing quality_score/pillar_explanations consumer copy/facts and build_final_db normalized-dose projection; dosage_normalizer source_field remains the row owner. Will NOT create another converter, scorer, app selector or clinical policy. Author explanation0cfc37195 and export12386b153 are contained in the integration ancestry. Integrator corrections remove numeric Dose-cap arithmetic, preserve tiny/rounding-boundary UL exceedances, and reject missing/ambiguous or different-source normalization fallbacks. Six fail-first review regressions;342focused checks pass, plus a frozen raw218842 production-seam regression. Raw2500IU exports750mcgRAE using its existing rule; the undosed same-name sibling remainsunknown.

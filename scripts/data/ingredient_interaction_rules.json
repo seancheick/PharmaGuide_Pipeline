@@ -3,7 +3,7 @@
     "description": "Deterministic ingredient-level interaction rules keyed by canonical database identity",
     "purpose": "interaction_alert_rules",
     "schema_version": "6.3.0",
-    "last_updated": "2026-10-20",
+    "last_updated": "2026-10-21",
     "total_entries": 154,
     "structure_note": "One entry per ingredient (or per form-scoped variant). All conditions, drug classes, and dose thresholds for that ingredient are in one object. As of v6.0.0, every sub-rule (condition_rules[], drug_class_rules[], dose_thresholds[], pregnancy_lactation block) carries an explicit profile_gate predicate that consumers MUST evaluate against the user profile before firing the alert.",
     "total_rules": 154,
@@ -201,7 +201,9 @@
       "2026-09-27: Dandelion root now carries the EMA pregnancy/lactation and liver/biliary recommendations; eleuthero carries only the EMA pregnancy/lactation recommendation because the monograph reports no interactions and removed the hypertension contraindication; DGL uses its distinct botanical identity instead of an unread form_exclusion field.",
       "2026-09-27: Dandelion glucose sub-rules were folded back into RULE_IQM_DANDELION_KIDNEY so one ingredient has one rule owner and one pregnancy/lactation policy.",
       "2026-10-01: Q52 agent source correction, not a new clinician sign-off: CoQ10 high_cholesterol and statins copy follows the 2026 ACC/AHA dyslipidemia guideline (PMID41824590, section5.1 recommendation4, Class3 No Benefit/B-R) for routine prevention/treatment of statin-attributed muscle symptoms. Circulating depletion and conflicting supplementation studies remain distinct; unsupported routine doses and blanket safe-coadministration claims removed. Severity, evidence level, profile gates, direction, materiality and human review stamps unchanged. Heart-failure, TTC and anticoagulant siblings unchanged.",
-      "2026-10-07 canonical preparation safety review: TGA liver precaution is recorded for both existing turmeric and curcumin subjects; no safe lower dose inferred. Removed three unsupported 120 mg salicin cutoffs that were being compared with whole bark mass (D8 policy). Distinct Salix babylonica bark has an evidence-limited class precaution in its own botanical subject; no white-willow identity, grade or marker dose inherited. Source receipts: post_pipeline_20261007/mapping_warning_safety_pubmed_efetch.xml and primary TGA/EMA guidance. Removed the old liver-dose threshold (>500 mg) because it contradicts the source precaution and could lower avoid to caution. Existing clinical review dates retained; this source audit is not clinician sign-off."
+      "2026-10-07 canonical preparation safety review: TGA liver precaution is recorded for both existing turmeric and curcumin subjects; no safe lower dose inferred. Removed three unsupported 120 mg salicin cutoffs that were being compared with whole bark mass (D8 policy). Distinct Salix babylonica bark has an evidence-limited class precaution in its own botanical subject; no white-willow identity, grade or marker dose inherited. Source receipts: post_pipeline_20261007/mapping_warning_safety_pubmed_efetch.xml and primary TGA/EMA guidance. Removed the old liver-dose threshold (>500 mg) because it contradicts the source precaution and could lower avoid to caution. Existing clinical review dates retained; this source audit is not clinician sign-off.",
+      "2026-10-21: Added target-specific life-stage copy where the shared fallback hid the reason. RULE_IQM_SAGE_LACTATION pregnancy now explains the thujone concern with NCCIH; RULE_INGREDIENT_ST_JOHNS_WORT lactation now explains the reported infant colic/drowsiness/lethargy with LactMed and NCCIH. Existing severities remain unchanged.",
+      "2026-10-21: Life-stage warning provenance repair. Shared actionable fallbacks now carry their existing official ODS/NCCIH/FDA sources for vitamin D, zinc, magnesium, potassium, chromium, manganese, selenium, copper, fish oil, bitter orange and CBD. NAC and both canonical licorice subjects add breastfeeding-specific reasons and LactMed sources so pregnancy-only copy is not reused for nursing users. The remaining shared ephedra and yohimbe copy now names both authored life stages. Severities and profile applicability are unchanged."
     ]
   },
   "interaction_rules": [
@@ -373,9 +375,9 @@
         "sources": [
           "https://www.mskcc.org/cancer-care/integrative-medicine/herbs/ephedra"
         ],
-        "alert_headline": "Do not use during pregnancy",
-        "alert_body": "Ephedra carries serious cardiovascular and neurologic risks and is FDA-banned as a supplement ingredient. If you are pregnant, do not use ephedra-containing products.",
-        "informational_note": "Ephedra is an FDA-banned stimulant with cardiovascular risks relevant to anyone pregnant or planning pregnancy.",
+        "alert_headline": "Do not use during pregnancy or breastfeeding",
+        "alert_body": "Ephedra carries serious cardiovascular and neurologic risks and is FDA-banned as a supplement ingredient. Do not use ephedra-containing products during pregnancy or breastfeeding.",
+        "informational_note": "Ephedra is an FDA-banned stimulant with cardiovascular risks relevant during pregnancy and breastfeeding.",
         "profile_gate": {
           "gate_type": "profile_flag",
           "requires": {
@@ -505,7 +507,10 @@
           "dose": null
         },
         "direction": "harmful",
-        "materiality": "presence"
+        "materiality": "presence",
+        "sources": [
+          "https://www.nccih.nih.gov/health/bitter-orange"
+        ]
       },
       "last_reviewed": "2026-03-18",
       "review_owner": "pharmaguide_clinical_team",
@@ -629,9 +634,9 @@
         "sources": [
           "https://www.mskcc.org/cancer-care/integrative-medicine/herbs/yohimbe"
         ],
-        "alert_headline": "Do not use during pregnancy",
-        "alert_body": "Yohimbe's stimulant and hemodynamic effects raise maternal-fetal risk. If you are pregnant, do not use yohimbe-containing products.",
-        "informational_note": "Yohimbe has stimulant effects relevant to anyone pregnant or planning pregnancy.",
+        "alert_headline": "Do not use during pregnancy or breastfeeding",
+        "alert_body": "Yohimbe has stimulant and hemodynamic effects, and safety data are limited. Do not use yohimbe-containing products during pregnancy or breastfeeding.",
+        "informational_note": "Yohimbe has stimulant effects relevant during pregnancy and breastfeeding.",
         "profile_gate": {
           "gate_type": "profile_flag",
           "requires": {
@@ -2224,7 +2229,10 @@
           "dose": null
         },
         "direction": "neutral",
-        "materiality": "presence"
+        "materiality": "presence",
+        "sources": [
+          "https://ods.od.nih.gov/factsheets/Chromium-HealthProfessional/"
+        ]
       },
       "last_reviewed": "2026-02-28",
       "review_owner": "pharmaguide_clinical_team",
@@ -5713,6 +5721,39 @@
           },
           "direction": "harmful",
           "materiality": "presence"
+        },
+        {
+          "condition_id": "lactation",
+          "severity": "caution",
+          "evidence_level": "probable",
+          "mechanism": "LactMed reports that glycyrrhizin is detectable in some breastmilk samples and licorice can reduce prolactin, which might decrease milk production early in lactation. Long-term or excessive use should probably be avoided while nursing.",
+          "action": "Discuss medicinal licorice use with the infant’s clinician while breastfeeding, and avoid long-term or excessive use.",
+          "sources": [
+            "https://www.ncbi.nlm.nih.gov/books/NBK501840/"
+          ],
+          "alert_headline": "May affect milk supply",
+          "alert_body": "Licorice glycyrrhizin can enter breastmilk and may reduce prolactin and milk supply. Discuss use with the infant’s clinician; avoid long-term or excessive use while breastfeeding.",
+          "informational_note": "Licorice may affect milk production and prolonged exposure has limited breastfeeding safety evidence.",
+          "profile_gate": {
+            "gate_type": "profile_flag",
+            "requires": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [
+                "breastfeeding"
+              ]
+            },
+            "excludes": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [],
+              "product_forms_any": [],
+              "nutrient_forms_any": []
+            },
+            "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "drug_class_rules": [
@@ -5759,7 +5800,8 @@
         "mechanism": "Glycyrrhizin inhibits placental 11-beta-HSD2, allowing excess maternal cortisol to reach the fetus. Finnish cohort studies documented >2-fold preterm delivery risk and neurodevelopmental harm (IQ reduction, ADHD risk) with heavy glycyrrhizin exposure.",
         "notes": "Avoid during pregnancy. Even confectionery licorice at sustained intake poses risk.",
         "sources": [
-          "https://www.nccih.nih.gov/health/licorice-root"
+          "https://pubmed.ncbi.nlm.nih.gov/11390327/",
+          "https://pubmed.ncbi.nlm.nih.gov/28158597/"
         ],
         "alert_headline": "Review use during pregnancy or breastfeeding",
         "alert_body": "Whole licorice's glycyrrhizin can raise maternal cortisol reaching the fetus, linked to preterm delivery. If you are pregnant, talk to your obstetrician; DGL licorice does not carry this concern. Breastfeeding safety needs a separate clinician review; pregnancy advice alone does not establish safety for a nursing infant.",
@@ -6067,7 +6109,10 @@
           "dose": null
         },
         "direction": "neutral",
-        "materiality": "presence"
+        "materiality": "presence",
+        "sources": [
+          "https://ods.od.nih.gov/factsheets/Magnesium-HealthProfessional/"
+        ]
       },
       "last_reviewed": "2026-04-26",
       "review_owner": "pharmaguide_clinical_team",
@@ -6314,7 +6359,10 @@
           "dose": null
         },
         "direction": "neutral",
-        "materiality": "presence"
+        "materiality": "presence",
+        "sources": [
+          "https://ods.od.nih.gov/factsheets/Potassium-HealthProfessional/"
+        ]
       },
       "last_reviewed": "2026-03-18",
       "review_owner": "pharmaguide_clinical_team",
@@ -6541,6 +6589,40 @@
               "drug_classes_any": [],
               "profile_flags_any": [
                 "pregnant"
+              ]
+            },
+            "excludes": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [],
+              "product_forms_any": [],
+              "nutrient_forms_any": []
+            },
+            "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "presence"
+        },
+        {
+          "condition_id": "lactation",
+          "severity": "caution",
+          "evidence_level": "probable",
+          "mechanism": "Limited breastfeeding reports describe infant colic, drowsiness, or lethargy. LactMed prefers an alternative while nursing a newborn or preterm infant because published experience is limited.",
+          "action": "Discuss St. John’s wort with the infant's clinician before use while breastfeeding, especially for a newborn or preterm infant.",
+          "sources": [
+            "https://www.ncbi.nlm.nih.gov/books/NBK501770/",
+            "https://www.nccih.nih.gov/health/st-johns-wort"
+          ],
+          "alert_headline": "Infant side effects have been reported",
+          "alert_body": "Limited breastfeeding reports describe infant colic, drowsiness, or lethargy. Discuss St. John’s wort with the infant's clinician before use, especially for a newborn or preterm infant.",
+          "informational_note": "St. John’s wort has limited breastfeeding evidence and reported infant side effects.",
+          "profile_gate": {
+            "gate_type": "profile_flag",
+            "requires": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [
+                "breastfeeding"
               ]
             },
             "excludes": {
@@ -8336,8 +8418,8 @@
           "https://www.nccih.nih.gov/health/yohimbe"
         ],
         "alert_headline": "Avoid during pregnancy and breastfeeding",
-        "alert_body": "Avoid yohimbe pregnancy during pregnancy and breastfeeding. Ask your clinician about safer options and discuss any exposure.",
-        "informational_note": "Yohimbe has stimulant effects relevant to anyone pregnant or planning pregnancy.",
+        "alert_body": "Yohimbe has stimulant effects and limited safety data. Avoid yohimbe during pregnancy and breastfeeding; ask your clinician about safer options and discuss any exposure.",
+        "informational_note": "Yohimbe has stimulant effects relevant during pregnancy and breastfeeding.",
         "profile_gate": {
           "gate_type": "profile_flag",
           "requires": {
@@ -9991,7 +10073,10 @@
           "dose": null
         },
         "direction": "beneficial",
-        "materiality": "presence"
+        "materiality": "presence",
+        "sources": [
+          "https://ods.od.nih.gov/factsheets/Omega3FattyAcids-HealthProfessional/"
+        ]
       },
       "last_reviewed": "2026-07-04",
       "review_owner": "pharmaguide_clinical_team"
@@ -11123,7 +11208,10 @@
           "dose": null
         },
         "direction": "neutral",
-        "materiality": "presence"
+        "materiality": "presence",
+        "sources": [
+          "https://ods.od.nih.gov/factsheets/VitaminD-HealthProfessional/"
+        ]
       },
       "last_reviewed": "2026-04-26",
       "review_owner": "pharmaguide_clinical_team"
@@ -12486,7 +12574,10 @@
           "dose": null
         },
         "direction": "neutral",
-        "materiality": "presence"
+        "materiality": "presence",
+        "sources": [
+          "https://ods.od.nih.gov/factsheets/Zinc-HealthProfessional/"
+        ]
       },
       "last_reviewed": "2026-04-09",
       "review_owner": "pharmaguide_clinical_team",
@@ -12662,7 +12753,10 @@
           "dose": null
         },
         "direction": "neutral",
-        "materiality": "presence"
+        "materiality": "presence",
+        "sources": [
+          "https://ods.od.nih.gov/factsheets/Selenium-HealthProfessional/"
+        ]
       },
       "last_reviewed": "2026-04-23",
       "review_owner": "pharmaguide_clinical_team"
@@ -14106,6 +14200,40 @@
       },
       "condition_rules": [
         {
+          "condition_id": "pregnancy",
+          "severity": "monitor",
+          "evidence_level": "probable",
+          "mechanism": "Vitamin B6 is required during pregnancy, but high supplemental intakes can cause sensory nerve damage and therapeutic regimens for pregnancy nausea can approach the pregnancy upper limit.",
+          "action": "Review concentrated or therapeutic-dose vitamin B6 with your prenatal clinician and count vitamin B6 from all supplements. Normal prenatal-vitamin amounts do not trigger this concern.",
+          "sources": [
+            "https://ods.od.nih.gov/factsheets/Pregnancy-HealthProfessional/",
+            "https://ods.od.nih.gov/factsheets/VitaminB6-HealthProfessional/"
+          ],
+          "alert_headline": "Review concentrated vitamin B6 doses",
+          "alert_body": "Vitamin B6 supports pregnancy, but high supplemental intakes can cause nerve damage. Review concentrated B6 with your prenatal clinician; normal prenatal-vitamin amounts do not trigger this concern.",
+          "informational_note": "Pregnancy-specific guidance concerns concentrated or therapeutic-dose vitamin B6, not normal prenatal-vitamin amounts.",
+          "profile_gate": {
+            "gate_type": "profile_flag",
+            "requires": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [
+                "pregnant"
+              ]
+            },
+            "excludes": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [],
+              "product_forms_any": [],
+              "nutrient_forms_any": []
+            },
+            "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "presence"
+        },
+        {
           "condition_id": "lactation",
           "severity": "caution",
           "evidence_level": "theoretical",
@@ -14225,6 +14353,39 @@
         "canonical_id": "sage"
       },
       "condition_rules": [
+        {
+          "condition_id": "pregnancy",
+          "severity": "avoid",
+          "evidence_level": "theoretical",
+          "mechanism": "Common sage can contain thujone, which may have harmful effects during pregnancy; concentrated preparations can deliver more than culinary use.",
+          "action": "Avoid concentrated sage supplements during pregnancy and discuss any medicinal use with your prenatal clinician.",
+          "sources": [
+            "https://www.nccih.nih.gov/health/sage/"
+          ],
+          "alert_headline": "Thujone concern during pregnancy",
+          "alert_body": "If you are pregnant, common sage contains thujone that may be harmful. Discuss medicinal use with your prenatal clinician and do not use concentrated sage supplements.",
+          "informational_note": "This warning concerns concentrated sage supplements rather than normal culinary amounts.",
+          "profile_gate": {
+            "gate_type": "profile_flag",
+            "requires": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [
+                "pregnant"
+              ]
+            },
+            "excludes": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [],
+              "product_forms_any": [],
+              "nutrient_forms_any": []
+            },
+            "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "presence"
+        },
         {
           "condition_id": "lactation",
           "severity": "caution",
@@ -15790,6 +15951,39 @@
           },
           "direction": "harmful",
           "materiality": "presence"
+        },
+        {
+          "condition_id": "lactation",
+          "severity": "caution",
+          "evidence_level": "probable",
+          "mechanism": "LactMed reports that glycyrrhizin is detectable in some breastmilk samples and licorice can reduce prolactin, which might decrease milk production early in lactation. Long-term or excessive use should probably be avoided while nursing.",
+          "action": "Discuss medicinal licorice use with the infant’s clinician while breastfeeding, and avoid long-term or excessive use.",
+          "sources": [
+            "https://www.ncbi.nlm.nih.gov/books/NBK501840/"
+          ],
+          "alert_headline": "May affect milk supply",
+          "alert_body": "Licorice glycyrrhizin can enter breastmilk and may reduce prolactin and milk supply. Discuss use with the infant’s clinician; avoid long-term or excessive use while breastfeeding.",
+          "informational_note": "Licorice may affect milk production and prolonged exposure has limited breastfeeding safety evidence.",
+          "profile_gate": {
+            "gate_type": "profile_flag",
+            "requires": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [
+                "breastfeeding"
+              ]
+            },
+            "excludes": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [],
+              "product_forms_any": [],
+              "nutrient_forms_any": []
+            },
+            "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "drug_class_rules": [
@@ -15896,7 +16090,11 @@
           "dose": null
         },
         "direction": "harmful",
-        "materiality": "presence"
+        "materiality": "presence",
+        "sources": [
+          "https://pubmed.ncbi.nlm.nih.gov/11390327/",
+          "https://pubmed.ncbi.nlm.nih.gov/28158597/"
+        ]
       },
       "last_reviewed": "2026-04-09",
       "review_owner": "pharmaguide_clinical_team"
@@ -16874,7 +17072,10 @@
           "dose": null
         },
         "direction": "neutral",
-        "materiality": "presence"
+        "materiality": "presence",
+        "sources": [
+          "https://ods.od.nih.gov/factsheets/Copper-HealthProfessional/"
+        ]
       },
       "last_reviewed": "2026-04-09",
       "review_owner": "pharmaguide_clinical_team"
@@ -16951,7 +17152,10 @@
           "dose": null
         },
         "direction": "neutral",
-        "materiality": "presence"
+        "materiality": "presence",
+        "sources": [
+          "https://ods.od.nih.gov/factsheets/Manganese-HealthProfessional/"
+        ]
       },
       "last_reviewed": "2026-04-09",
       "review_owner": "pharmaguide_clinical_team"
@@ -17484,6 +17688,39 @@
             "dose": null
           },
           "direction": "neutral",
+          "materiality": "presence"
+        },
+        {
+          "condition_id": "lactation",
+          "severity": "monitor",
+          "evidence_level": "limited",
+          "mechanism": "LactMed reports no published information on acetylcysteine use during breastfeeding. Guidance for prescribed or inhaled acetylcysteine does not establish the safety of routine oral NAC supplement use.",
+          "action": "Discuss oral NAC supplement use with the infant’s clinician while breastfeeding; prescribed treatment is a separate context.",
+          "sources": [
+            "https://www.ncbi.nlm.nih.gov/books/NBK500931/"
+          ],
+          "alert_headline": "Breastfeeding data are unavailable",
+          "alert_body": "Published breastfeeding information for acetylcysteine is unavailable. Discuss oral NAC supplement use with the infant’s clinician; prescribed or inhaled treatment is a separate context.",
+          "informational_note": "Breastfeeding evidence for oral NAC supplements is unavailable.",
+          "profile_gate": {
+            "gate_type": "profile_flag",
+            "requires": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [
+                "breastfeeding"
+              ]
+            },
+            "excludes": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [],
+              "product_forms_any": [],
+              "nutrient_forms_any": []
+            },
+            "dose": null
+          },
+          "direction": "unknown",
           "materiality": "presence"
         }
       ],
@@ -21452,7 +21689,10 @@
           "dose": null
         },
         "direction": "harmful",
-        "materiality": "presence"
+        "materiality": "presence",
+        "sources": [
+          "https://www.fda.gov/consumers/consumer-updates/what-you-need-know-and-what-were-working-find-out-about-products-containing-cannabis-or-cannabis"
+        ]
       },
       "last_reviewed": "2026-04-14",
       "review_owner": "drug_label_mining"
@@ -21719,7 +21959,11 @@
           "dose": null
         },
         "direction": "harmful",
-        "materiality": "presence"
+        "materiality": "presence",
+        "sources": [
+          "https://www.nccih.nih.gov/health/bitter-orange",
+          "https://www.canada.ca/en/health-canada/services/drugs-health-products/natural-non-prescription/regulation/about-products/synephrine.html"
+        ]
       },
       "last_reviewed": "2026-04-26",
       "review_owner": "pharmaguide_clinical_team"

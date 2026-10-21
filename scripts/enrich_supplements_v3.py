@@ -20920,8 +20920,17 @@ class SupplementEnricherV3:
                         "profile_gate": cond_rule.get("profile_gate"),
                     })
 
+                explicit_condition_ids = {
+                    str(hit.get("condition_id") or "").strip().lower()
+                    for hit in condition_hits
+                }
                 if pregnancy_block:
                     for cond_key, field in (("pregnancy", "pregnancy_category"), ("lactation", "lactation_category")):
+                        # A target-specific condition rule already carries the
+                        # curated reason, action, sources and gate. Do not add a
+                        # second, weaker life-stage copy for the same target.
+                        if cond_key in explicit_condition_ids:
+                            continue
                         severity = str(pregnancy_block.get(field) or "").strip().lower()
                         if severity and cond_key in valid_conditions and severity in severity_weights:
                             sources = [str(s).strip() for s in (pregnancy_block.get("sources") or []) if str(s).strip()]
@@ -20931,11 +20940,10 @@ class SupplementEnricherV3:
                             target_flag = derived_flags_by_condition.get(cond_key)
                             if target_gate and target_flag:
                                 target_gate.setdefault("requires", {})["profile_flags_any"] = [target_flag]
-                            # Shared life-stage prose can contain pregnancy-only
-                            # mechanisms. Render this target's curated category;
-                            # keep full source prose on safety_hits for audit.
-                            # Explicit condition rules retain their own copy,
-                            # sources and applicability in the separate hits above.
+                            # Keep the gate and action target-specific, then
+                            # retain the source-authored shared reason. A
+                            # target-specific condition rule takes precedence
+                            # above whenever the two life stages differ.
                             target_label = valid_conditions[cond_key].get("label", cond_key)
                             target_action = {
                                 "contraindicated": "Do not use",
@@ -20946,16 +20954,31 @@ class SupplementEnricherV3:
                                 "no_data": "Safety data are not available",
                             }[severity]
                             target_sentence = f"{target_action} during {target_label.lower()}."
+                            # ``alert_body`` is the registry's consumer-facing
+                            # reason.  The old projection discarded it and
+                            # replaced it with an action-only sentence, hiding
+                            # why the warning exists.  Keep ``mechanism`` for
+                            # structured audit detail, but do not make it a
+                            # second copy owner.
+                            source_body = str(pregnancy_block.get("alert_body") or "").strip()
+                            source_mechanism = str(pregnancy_block.get("mechanism") or "").strip()
+                            # ``alert_body`` is the reviewed cross-life-stage
+                            # consumer reason.  Internal mechanisms can be
+                            # pregnancy-specific even when the same rule also
+                            # owns lactation, so they are only a fallback when
+                            # no reviewed body exists.
+                            target_reason = source_body or source_mechanism or target_sentence
+                            target_body = target_reason
                             target_copy = {
                                 "alert_headline": f"{target_label}: {target_action.lower()}",
-                                "alert_body": target_sentence,
+                                "alert_body": target_body,
                                 "action": target_sentence,
                             }
                             condition_hits.append({
                                 "condition_id": cond_key,
                                 "severity": severity,
                                 "evidence_level": str(pregnancy_block.get("evidence_level") or "").strip().lower() or None,
-                                "mechanism": target_sentence,
+                                "mechanism": target_reason,
                                 "action": target_copy.get("action"),
                                 "sources": sources,
                                 "alert_headline": target_copy.get("alert_headline"),

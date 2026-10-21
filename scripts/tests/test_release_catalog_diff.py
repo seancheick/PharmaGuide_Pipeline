@@ -181,10 +181,9 @@ def test_the_safety_ladder_follows_the_public_precedence():
 
 def test_precedence_names_every_public_verdict():
     seen = {
-        _public_verdict({"quality_score_status": status, "v4_verdict": verdict}, coverage)
+        _public_verdict({"quality_score_status": status, "v4_verdict": verdict})
         for status in ("scored", "not_scored", "suppressed_safety", "", "other")
         for verdict in (*PUBLIC_VERDICT_PRECEDENCE, "", "junk")
-        for coverage in (0.0, 1.0)
     }
     assert seen <= set(PUBLIC_VERDICT_PRECEDENCE)
 

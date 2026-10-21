@@ -774,8 +774,6 @@ def audit_scoring(args: argparse.Namespace) -> list[Finding]:
                 ))
 
             coverage = mapped_coverage_value(product)
-            if verdict == "SAFE" and coverage is not None and coverage < 0.3:
-                findings.append(Finding("SCORING_SAFE_LOW_COVERAGE", f"{pid}: SAFE with mapped_coverage={coverage}", str(file_path)))
             if verdict == "NUTRITION_ONLY":
                 findings.append(Finding(
                     "SCORING_RETIRED_NUTRITION_ONLY",

@@ -143,12 +143,12 @@ def test_scoring_audit_rejects_failed_strict_contract(tmp_path: Path) -> None:
     assert "SCORING_STRICT_CONTRACT_FAILED" in codes
 
 
-def test_scoring_audit_rejects_safe_below_mapping_threshold(tmp_path: Path) -> None:
+def test_scoring_audit_keeps_mapping_coverage_separate_from_verdict(tmp_path: Path) -> None:
     path = tmp_path / "scored.json"
     _write(path, _scored(mapped_coverage=0.2))
 
     codes = {finding.code for finding in audit_scoring(_args(path))}
-    assert "SCORING_SAFE_LOW_COVERAGE" in codes
+    assert "SCORING_SAFE_LOW_COVERAGE" not in codes
 
 
 def test_scoring_audit_requires_full_mapping_for_scored_product(tmp_path: Path) -> None:

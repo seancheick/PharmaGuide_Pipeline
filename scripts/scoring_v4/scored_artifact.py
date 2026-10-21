@@ -26,8 +26,6 @@ from supplement_taxonomy import percentile_label_for
 
 
 SCORED_ARTIFACT_SCHEMA_VERSION = "4.4.0"
-LOW_COVERAGE_TRUST_FLOOR = 0.3
-
 #: Compatibility disposition precedence, including retired POOR for reading
 #: existing catalogs. New artifacts never emit POOR; quality_tier owns quality.
 #: Consumer safety is exclusively product_safety_status, not this legacy field.
@@ -67,8 +65,8 @@ def _inactive_penalty_details(module_breakdown: Any) -> list[Dict[str, Any]]:
     return [dict(item) for item in raw_details if isinstance(item, dict)]
 
 
-def _public_verdict(v4: Dict[str, Any], mapped_coverage: float) -> str:
-    """Resolve public verdict precedence, including the data-trust floor."""
+def _public_verdict(v4: Dict[str, Any]) -> str:
+    """Resolve legacy verdict precedence without treating coverage as risk."""
     status = str(v4.get("quality_score_status") or "")
     verdict = str(v4.get("v4_verdict") or "").upper()
     if status == "suppressed_safety":
@@ -79,8 +77,6 @@ def _public_verdict(v4: Dict[str, Any], mapped_coverage: float) -> str:
         return "NOT_SCORED"
     if verdict in {"BLOCKED", "UNSAFE", "CAUTION"}:
         return verdict
-    if mapped_coverage < LOW_COVERAGE_TRUST_FLOOR:
-        return "CAUTION"
     return "SAFE"
 
 
@@ -91,8 +87,8 @@ def _product_safety_status(
 ) -> str:
     """Project only catalog safety-gate policy into the consumer safety state.
 
-    Legacy verdict also carries quality and coverage policy (POOR and the
-    low-coverage CAUTION), so it must never be the source for this field.
+    Legacy verdict also carries compatibility and quality history, so it must
+    never be the source for this field.
     """
     if not was_assessed:
         return "not_assessed"
@@ -317,7 +313,7 @@ def assemble_scored_artifact(
         status, dose_safety, v4.get("quality_pillars_v4"), unfinished
     )
     quality_score = v4.get("quality_score_v4_100")
-    verdict = _public_verdict(v4, mapped_coverage)
+    verdict = _public_verdict(v4)
     safety_verdict = str(safety_gate.get("verdict") or "SAFE").upper()
     safety_decision = _safe_dict(safety_gate.get("safety_decision"))
     safety_review_records = list(safety_gate.get("review_records") or [])
@@ -328,8 +324,6 @@ def assemble_scored_artifact(
         else None
     )
     safety_signals = list(safety_gate.get("safety_signals") or [])
-    if verdict == "CAUTION" and mapped_coverage < LOW_COVERAGE_TRUST_FLOOR:
-        safety_signals = list(dict.fromkeys(safety_signals + ["low_mapped_coverage"]))
 
     taxonomy = dict(_safe_dict(enriched_product.get("supplement_taxonomy")))
     percentile_category = taxonomy.get("percentile_category")
