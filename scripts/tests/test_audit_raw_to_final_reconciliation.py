@@ -655,3 +655,54 @@ def test_app_dose_checks_block_injected_fallback_amounts(field, value):
     (finding,) = _line_findings(raw, cleaned, enriched, blob)
     assert finding["code"] == "AMOUNT_CHANGE_WITHOUT_EVIDENCE"
     assert finding["field"] == f"display_ingredients.{field}"
+
+
+def _beta_carotene_fixture():
+    """DSLD 218842 shape: a dosed panel row and a same-name undosed blend row."""
+    enriched = {
+        "activeIngredients": [
+            {"raw_source_path": "ingredientRows[0]", "name": "Beta-Carotene"},
+            {"raw_source_path": "ingredientRows[5].nestedRows[2]", "name": "Beta-Carotene"},
+        ],
+        "dosage_normalization": {"normalized_ingredients": [
+            {"original_name": "Beta-Carotene", "normalized_amount": 75.0,
+             "normalized_unit": "mcg RAE", "source_field": "activeIngredients[0]"},
+            {"original_name": "Beta-Carotene", "normalized_amount": None,
+             "normalized_unit": "", "source_field": "activeIngredients[1]"},
+        ]},
+    }
+    blob = {"ingredients": [
+        {"raw_source_path": "ingredientRows[0]", "name": "Beta-Carotene",
+         "normalized_amount": 75.0, "normalized_unit": "mcg RAE"},
+        {"raw_source_path": "ingredientRows[5].nestedRows[2]", "name": "Beta-Carotene",
+         "normalized_amount": None, "normalized_unit": ""},
+    ]}
+    return enriched, blob
+
+
+def _dose_codes(enriched, blob):
+    record = _record()
+    _check_export_identity(record, enriched, blob)
+    return [finding.code for finding in record.findings]
+
+
+def test_export_normalized_dose_matches_each_rows_own_entry():
+    assert _dose_codes(*_beta_carotene_fixture()) == []
+
+
+def test_export_blocks_a_normalized_dose_taken_from_a_same_name_sibling():
+    enriched, blob = _beta_carotene_fixture()
+    blob["ingredients"][0].update(normalized_amount=None, normalized_unit="")
+    assert _dose_codes(enriched, blob) == ["NORMALIZED_DOSE_NOT_FROM_OWN_ROW"]
+
+
+def test_export_blocks_a_normalized_unit_swapped_alone():
+    enriched, blob = _beta_carotene_fixture()
+    blob["ingredients"][0]["normalized_unit"] = "IU"
+    assert _dose_codes(enriched, blob) == ["NORMALIZED_DOSE_NOT_FROM_OWN_ROW"]
+
+
+def test_legacy_name_keyed_normalization_is_not_judged():
+    enriched, blob = _beta_carotene_fixture()
+    enriched["dosage_normalization"]["normalized_ingredients"] = {"Beta-Carotene": {"normalized_amount": 1.0}}
+    assert _dose_codes(enriched, blob) == []
