@@ -14210,7 +14210,7 @@
             "https://ods.od.nih.gov/factsheets/VitaminB6-HealthProfessional/"
           ],
           "alert_headline": "Review concentrated vitamin B6 doses",
-          "alert_body": "Vitamin B6 supports pregnancy and is used for nausea, but high supplemental intakes can cause nerve damage and treatment doses can approach the pregnancy upper limit. Review concentrated vitamin B6 with your prenatal clinician; normal prenatal-vitamin amounts do not trigger this concern.",
+          "alert_body": "Vitamin B6 supports pregnancy, but high supplemental intakes can cause nerve damage. Review concentrated B6 with your prenatal clinician; normal prenatal-vitamin amounts do not trigger this concern.",
           "informational_note": "Pregnancy-specific guidance concerns concentrated or therapeutic-dose vitamin B6, not normal prenatal-vitamin amounts.",
           "profile_gate": {
             "gate_type": "profile_flag",

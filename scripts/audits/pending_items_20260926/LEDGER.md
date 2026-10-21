@@ -2468,11 +2468,13 @@ control, duplicate magnesium accumulation and the authored calcium/iron stack wa
 `reports/prebeta_launch_gates_20261021/README.md`; machine detail:
 `~/pg_quality/prebeta_launch_gates_20261021/lifestage_census.json`.
 
-State: source implementation, bounded measurement and local validation complete. The final focused
-owner/consumer slice passed 219 tests; the local behavioral rung passed 546 with 24 declared opt-in
-skips and a green skip guard. The app candidate passed clean analysis and 3,962 tests, its compiled
-28-file engine closure/parity check, and the 10-case refreshed real-product gate. Exact-head CI,
-independent review, integration, rebuilt-catalog parity and Flutter release acceptance remain
+State: source implementation, bounded measurement, independent review and local validation are
+complete. The final focused owner/consumer slice passed 219 tests; after exact-head CI exposed one
+overlong vitamin-B6 consumer body, the 198-character correction passed its three exact regressions,
+the 188-test combined safety/coverage slice and the local behavioral rung (546 passed, 24 declared
+opt-in skips, green skip guard). The app candidate passed clean analysis and 3,962 tests, its
+compiled 28-file engine closure/parity check, and the 10-case refreshed real-product gate. A new
+exact-head CI checkpoint, integration, rebuilt-catalog parity and Flutter release acceptance remain
 unchecked. The candidate changes Enrich/Score behavior; Sean's next producer run starts from the
 earliest stale stage after integration. No producer pipeline or release ran in this lane.
 
