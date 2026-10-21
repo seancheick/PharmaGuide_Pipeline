@@ -78,3 +78,26 @@ def test_ambiguous_legacy_same_name_conversions_stay_unknown():
 def test_a_different_source_list_is_not_a_legacy_name_match():
     foreign = [_entry("supplementFacts[2]", 2500.0, "IU", 750.0)]
     assert _normalized_dose_entry(foreign, 2, "Beta-Carotene", "Beta-Carotene") == {}
+
+
+def test_real_solgar_same_name_rows_export_their_own_normalized_amounts():
+    import json
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    from enrich_supplements_v3 import SupplementEnricherV3
+    from scoring_v4.scored_artifact import build_scored_artifact
+    from build_final_db import build_detail_blob
+    from audit_raw_to_final import ProductRecord, _check_unsafe_unit_conversion
+
+    raw = json.loads((Path(__file__).parent / "fixtures" / "normalized_dose_218842_raw.json").read_text())
+    enriched, _ = SupplementEnricherV3().enrich_product(EnhancedDSLDNormalizer().normalize_product(raw))
+    blob = build_detail_blob(enriched, build_scored_artifact(enriched))
+    rows = {row["raw_source_path"]: row for row in blob["ingredients"]}
+    dosed = rows["ingredientRows[0].nestedRows[1]"]
+    undosed = rows["ingredientRows[14].nestedRows[1]"]
+    assert (dosed["quantity"], dosed["unit"]) == (2500.0, "IU")
+    assert (dosed["normalized_amount"], dosed["normalized_unit"]) == (750.0, "mcg RAE")
+    assert dosed["conversion_evidence"]["conversion_rule_id"] == "vitamin_a_beta_carotene_supplement"
+    assert undosed["normalized_amount"] is None
+    rec = ProductRecord("218842", "", "", "")
+    _check_unsafe_unit_conversion(rec, blob)
+    assert not rec.findings
