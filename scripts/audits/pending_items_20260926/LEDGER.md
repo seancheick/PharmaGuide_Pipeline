@@ -10,7 +10,11 @@ and ffc58287f equal the new values (`~/pg_quality/lucidbanach_canary_b2_20261020
 those four from raw with the owner tool (`freeze_contract_snapshots.py <id> --raw-root`), cause in
 the manifest changelog; the complete check is then 33/33.
 
-## Current execution — post-run catalog qualification, October 19 (Codex)
+## Current execution — export fidelity integration, October 20 (Codex)
+
+Behavioral source batch: Claude export warning dedup/own-row reconciliation plus target-specific reproductive assessments, niacin source-form UL exposure, authoritative empty app nutrient analysis and current dashboard readers. Owner/measurements/review: [EXPORT_FIDELITY.md](../integration_audit_20261020/EXPORT_FIDELITY.md). Candidate pipeline012a4b61e passes all4CI39523993805 groups; appabf421ab CI39524221406 pending. Paired179raw replay: zero score/pillar/route/status/safety moves,1,348condition severity/source tuples and437source blocks unchanged;95additive cards restored. Private niacin source probe: Dose11.4→10 under the existing ceiling, no invented amount. Local545passed/24optional skips/one known stale-folate catalog failure. No artifact/release gate closed and no pipeline run. Dose V4.1 source implementation is already integrated; old not-started brief is superseded. Current stage hashes require Sean's next run from Clean. Stale-tree removal follows integration, hash-verified preservation and inactivity checks.
+
+## Previous execution — post-run catalog qualification, October 19 (Codex)
 
 Goal: synchronize main without losing drafts; refresh the dashboard index with ingredients and verify the completed run before release. Sean prohibits another pipeline run. Owner: existing stage_manifest/pipeline_freshness; score_index reader/projection and Trace/Overview; serving_basis and RDA nutrient_unit; candidate snapshot/export, catalog_diff approvals and existing Flutter consumers. Evidence: matrix/glossary/callers, real Pure205309/copper259789/blocked18924, fail-first tests, exact-source CI, stage fingerprints, all-row parity and exact-hash safety comparison. Will NOT create a scorer, clinical policy, public field/status, hash exemption, restamp or pipeline job.
 

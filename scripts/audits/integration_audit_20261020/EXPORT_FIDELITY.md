@@ -1,0 +1,28 @@
+# Export fidelity integration — October 20
+
+Owner: `build_final_db::_warning_dedup_key`, `audit_raw_to_final::_check_export_identity`, `SupplementEnricherV3::_collect_interaction_profile` / `_ul_scope_form_name_keys`, dashboard `score_index::project_product`, and Flutter `ProductHealthFacts::_extractNutrients`. Evidence: source matrix/callers, author full-corpus receipts, fail-first tests and paired frozen-input replay. Will NOT create another scorer, converter, clinical policy, registry or profile evaluator.
+
+## Source corrections
+
+Claude's export audit correctly found title-less identity collisions hiding additive/dietary cards. Its independent normalized-dose gate correctly checks that each exported amount belongs to its own row. The original source is integrated in this candidate without weakening either guard.
+
+The reproductive root cause was the shared pregnancy-or-breastfeeding gate copied onto two independently classified assessments. The existing clinical taxonomy owns condition-to-profile-flag mapping. Each projected hit now uses its own flag and curated severity/source. Shared prose can describe fetal effects only, so target hits render their own category without extrapolating that mechanism to breastfeeding. Full original curated blocks remain on ingredient safety hits; independent authored condition rules retain their wording, dose/form restrictions and citations. Four profile combinations are tested. Vitamin A's rule-level preformed-form scope applies before either emission path; no new carotenoid warning policy is introduced. Missing evidence remains unknown, not evidence of harm.
+
+Niacin source labels such as “Niacin (as Niacinamide)” now resolve the printed form at the existing UL exposure owner, without treating unrelated compound mass as nutrient mass. The app preserves an explicitly empty nutrient analysis rather than reconstructing a withheld exposure from raw ingredient rows. Raw ingredient display remains available. Dashboard readers now use the current scored owners instead of four deprecated compatibility keys.
+
+## Measurement and validation
+
+- Author's preserved 15,426-product export census: additive warning loss affected 5,582 products, plus 143 dietary products; corrected title collisions are zero after the fix. Independent normalized-dose gate reproduces 717 old mismatches across 213 products and zero with the corrected export owner.
+- Final paired replay: 179 frozen raw labels, full Clean/Enrich/Score/blob records, representatives of reproductive rules plus 50 non-reproductive controls. Zero total/pillar/route/status/product-safety changes. 129 enriched and 151 blob records change. All 1,348 condition severity/source tuples and 437 original source blocks are retained exactly. Export restores 95 additive cards in this subset; interaction, drug, banned/high-risk and other warning counts are unchanged. No broad reproductive flag remains on a target-specific hit.
+- Real private niacin submission through `enrich_product` and the production scorer: 40 mg niacinamide becomes eligible for the existing 35 mg adult UL comparison. Dose 11.4→10, total 58.8→57.4. Its actual amount remains 40 mg; no inferred compound conversion is added. A census of all stored corpus UL analyses finds this is the only ineligible parenthetical-niacin candidate. Private raw/source material is not published.
+- Fail-first regressions reproduced. Fresh-context review found and resolved source/copy provenance and pregnancy-mechanism leakage. 153 focused owner tests, 29 profile/export-gate checks, 251 Dose V4.1 checks, 75 app owner tests and 43 app Dose V4.1 acceptance checks pass.
+- Final local rung: 545 passed, 24 explicitly optional live-stack/OCR skips, one existing artifact failure: 127 stale exported folate entries use 1667 where the current reference is 1700 mcg DFE. This is not a green artifact/release checkpoint; source tests and raw replay do not replace catalog validation. No test was weakened.
+- Exact runtime pipeline CI39523993805 on `012a4b61e` passes all four groups. Paired app `abf421ab` CI39524221406 is pending. Documentation-only closeout does not change the validated runtime.
+
+## Dose V4.1 and operator boundary
+
+The old “implementation not started” brief is stale. Pipeline `5b34112b9` and app `51567dae` are contained in their remote main histories. Current real-scorer checks confirm Pure 205309 total76.6/Dose10 and control299065 total86.6/Dose20. Recent explanation cleanup intentionally changes rendering while retaining audit receipts. Existing delivery metadata remains bonus context only, per Sean's decision.
+
+All 38 manifests at each stage are stale against the final source fingerprints; references are unchanged. Clean's recorded code hash differs, so the next operator run must begin at Clean, not Score or Enrich alone. No pipeline, catalog, release, upload, import or IPA was run here. Generated catalog/app qualification remains pending Sean's rerun.
+
+Private measurements, original source evidence, preservation inventories, verified Git bundles and completion receipts: `~/pg_quality/export_fidelity_integration_20261021/`. The canonical full baseline and published catalog remain protected. Active Claude checkouts are not removed while their processes still own them.
