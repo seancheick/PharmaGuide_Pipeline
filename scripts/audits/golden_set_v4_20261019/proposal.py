@@ -477,6 +477,59 @@ def build(doc: dict, products: dict, tiers: list) -> dict:
     return out
 
 
+def _dose_safety_not_charged(pillar: dict) -> bool:
+    """Read the old prose invariant through the current structured pillar contract.
+
+    The v2 explanation puts the dose finding in a consumer fact when another
+    concern leads the reason. Audit the recorded charge and warning, never
+    change a score or accept an extra dose deduction to satisfy old wording.
+    """
+    components = pillar.get("components") or {}
+    penalties = ("class_i_recall_penalty", "clean_label_penalty", "additive_or_sweetener_penalty")
+    if not isinstance(components, dict):
+        return False
+    if set(components) - {"clean_base", "dose_safety_state_counts", *penalties}:
+        return False
+    def numeric(value):
+        return isinstance(value, (int, float)) and not isinstance(value, bool) and math.isfinite(value)
+    amounts = [components.get("clean_base"), pillar.get("max"), pillar.get("score")]
+    amounts += [components.get(key, 0) for key in penalties]
+    if not all(numeric(value) and value >= 0 for value in amounts):
+        return False
+    clean, maximum, score, *deductions = amounts
+    expected = round(max(0, min(maximum, clean - sum(deductions))), 1)
+    receipt = pillar.get("receipt")
+    if not isinstance(receipt, dict):
+        return False
+    entries = receipt.get("entries")
+    if not isinstance(entries, list) or not entries or not all(isinstance(entry, dict) and numeric(entry.get("points")) for entry in entries):
+        return False
+    ids = [entry.get("id") for entry in entries]
+    if not all(isinstance(entry_id, str) for entry_id in ids):
+        return False
+    if len(ids) != len(set(ids)) or set(ids) - {"catalog_screen", "safety_hygiene_floor", *penalties}:
+        return False
+    if "catalog_screen" not in ids or not math.isclose(score, expected, abs_tol=0.001):
+        return False
+    if not math.isclose(score, sum(entry["points"] for entry in entries), abs_tol=0.051):
+        return False
+    counts = components.get("dose_safety_state_counts")
+    if not isinstance(counts, dict):
+        return False
+    count = counts.get("confirmed_over_threshold", 0)
+    if not numeric(count) or count < 1:
+        return False
+    if str(pillar.get("reason") or "").startswith("Not deducted here:"):
+        return True
+    explanation = pillar.get("explanation") or {}
+    facts = explanation.get("facts") if isinstance(explanation, dict) else None
+    if not isinstance(facts, list):
+        return False
+    return any(isinstance(fact, dict) and fact.get("id") == "dose_safety_not_deducted"
+               and fact.get("audience") == "consumer" and bool(fact.get("value_display"))
+               for fact in facts)
+
+
 def evaluate(proposed: dict, products: dict, tiers: list, core_ids: set) -> list:
     rows = []
     for c in proposed["canaries"]:
@@ -511,7 +564,15 @@ def evaluate(proposed: dict, products: dict, tiers: list, core_ids: set) -> list
         for inv in c["expected_pillar_invariants"]:
             fails = []
             for path, op, value in proposed["_metadata"]["golden_set"]["pillar_invariants"][inv]["checks"]:
-                ok, got = check(prod, path, op, value)
+                # Exact compatibility for the retired one-sentence prose pin.
+                # All other document checks, including edits to this one, stay literal.
+                safety = get(prod, f"{SH}", {})
+                if (inv == "ul_exceedance_not_double_counted"
+                        and [path, op, value] == [f"{SH}.reason", "contains_text", "Not deducted here"]
+                        and isinstance(safety, dict) and safety.get("receipt")):
+                    ok, got = _dose_safety_not_charged(safety), "structured dose finding / Safety-Hygiene receipt"
+                else:
+                    ok, got = check(prod, path, op, value)
                 if not ok:
                     fails.append(f"{path} {op} {value!r}: got {str(got)[:80]!r}")
             res["checks"].append((inv, not fails, "; ".join(fails)))

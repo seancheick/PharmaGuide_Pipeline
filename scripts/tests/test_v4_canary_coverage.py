@@ -299,3 +299,49 @@ def test_golden_evaluator_reads_the_document_invariant():
     doc['_metadata']['golden_set']['pillar_invariants'][name]['checks'][0][2] = 'wrong'
     checks = evaluate(doc, {'1': product}, [], {'1'})[0]['checks']
     assert next(ok for key, ok, _ in checks if key == name) is False
+
+
+@pytest.mark.parametrize('mutation, expected', [
+    (None, True), ('missing_fact', False), ('double_charge', False),
+    ('extra_charge', False), ('unknown_component', False), ('audit_only_fact', False),
+    ('wrong_expectation', False), ('main_reason', True), ('malformed_receipt', False),
+])
+def test_golden_legacy_dose_wording_uses_v2_warning_and_numeric_receipt(mutation, expected):
+    from audits.golden_set_v4_20261019.proposal import evaluate
+
+    name = 'ul_exceedance_not_double_counted'
+    doc = {'_metadata': {'golden_set': {'pillar_invariants': {
+        name: {'checks': [['quality_pillars_v4.safety_hygiene.reason', 'contains_text',
+                          'Not deducted here']]}
+    }}}, 'canaries': [{
+        'dsld_id': '1', 'expected_v4_module': 'generic',
+        'expected_quality_score_status': 'not_scored',
+        'expected_quality_assessment_status': 'partial',
+        'expected_product_safety_status': 'caution',
+        'expected_quality_tier_band': None, 'expected_pillar_invariants': [name],
+    }]}
+    safety = {'score': 8.5, 'max': 10, 'reason': 'Formula check: low-concern additives.',
+              'components': {'clean_base': 10, 'class_i_recall_penalty': 0,
+                             'additive_or_sweetener_penalty': 1.5,
+                             'dose_safety_state_counts': {'confirmed_over_threshold': 1}},
+              'explanation': {'schema_version': 2, 'facts': [{
+                  'id': 'dose_safety_not_deducted', 'audience': 'consumer',
+                  'value_display': 'One or more supplemental amounts exceed an established upper limit'}]},
+              'receipt': {'entries': [
+                  {'id': 'catalog_screen', 'points': 10},
+                  {'id': 'additive_or_sweetener_penalty', 'points': -1.5}]}}
+    if mutation == 'missing_fact': safety['explanation']['facts'] = []
+    if mutation == 'double_charge': safety['score'] = 7
+    if mutation == 'extra_charge': safety['receipt']['entries'].append({'id': 'dose_safety_penalty', 'points': -1})
+    if mutation == 'unknown_component': safety['components']['dose_safety_penalty'] = 1
+    if mutation == 'audit_only_fact': safety['explanation']['facts'][0]['audience'] = 'audit'
+    if mutation == 'wrong_expectation': doc['_metadata']['golden_set']['pillar_invariants'][name]['checks'][0][2] = 'wrong'
+    if mutation == 'main_reason':
+        safety['reason'] = 'Not deducted here: supplemental amounts exceed an upper limit.'
+        safety.pop('explanation')
+    if mutation == 'malformed_receipt': safety['receipt']['entries'] = [{'id': [], 'points': 1}]
+    product = {'_v4_module': 'generic', 'quality_score_status': 'not_scored',
+               'quality_assessment_status': 'partial', 'quality_tier': None,
+               'product_safety_status': 'caution', 'quality_pillars_v4': {'safety_hygiene': safety}}
+    checks = evaluate(doc, {'1': product}, [], {'1'})[0]['checks']
+    assert next(ok for key, ok, _ in checks if key == name) is expected
