@@ -64,9 +64,11 @@ Do not delete validation because a run failed late. Fix the ordering, preserve m
 
 ## WorkOS: separate external dependency
 
-The authorized staging retest and sanitized support follow-up were completed October 15. Explicit-resource binding now passes the manual-client staging cases. Two authorization blockers remain: a resource-less grant can still obtain a resource through refresh, and the observed reusable/mutable consent claims do not identify one immutable authorization attempt for an exact snapshot. WorkOS must provide a supported enforcement and binding contract; production personal access and snapshot uploads remain disabled. Both production containment probes still returned 503 after public catalog publication. No private environment/client identifiers are published here.
+Updated October 20 after the latest support answer: explicit-resource binding passed the October 15 manual-client staging tests. WorkOS now reports required-resource enforcement built but awaiting deployment/enablement; legacy unbound grants will still require revocation. Fresh October 20 missing/empty-resource authorization-entry probes still redirect to sign-in, so the new rejection is not verified. No grant was completed in that check.
 
-Public catalog search works independently. No WorkOS runtime or personal-account end-to-end success is claimed. The next step is the provider’s technical resolution, then fresh grant/refresh/concurrency tests before any production enablement.
+WorkOS confirms it still cannot identify one immutable authorization attempt across refresh for the exact-snapshot flow and supplies no delivery date. Do not use mutable consent claims or unsupported token-to-consent identifier mapping as a substitute. Production personal access and snapshot uploads remain disabled: both deployed probes returned 503 again on October 20, and 56 focused authorization tests passed. No production WorkOS integration or personal-account end-to-end success is claimed.
+
+Sean requested no further support exchange. The supported current path is the independent public connector (actual Codex magnesium-name search passed) plus the app's existing scoped preview/Copy brief for context the user chooses to paste. Automatic private access remains blocked; reopening it needs the missing provider contract or a separately reviewed authorization redesign, followed by fresh resource, legacy-grant revocation, exact-consent, concurrency, pairing and lifecycle acceptance. This does not require a corpus pipeline rerun. See `reports/release_resume_20261015/private-workos-followup.md` and its sanitized October 20 receipt for the bounded checks and limits.
 
 ## Routine preparation correction — October 15
 
