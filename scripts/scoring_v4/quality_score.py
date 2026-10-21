@@ -330,7 +330,7 @@ def _over_limit_dose_reason(dim: Dict[str, Any]) -> Optional[str]:
     if ceiling is not None:
         nutrient = str(ceiling.get("nutrient") or "One nutrient")
         cap = _num(ceiling.get("cap_public"))
-        outcome = ("so Dose is set to 0" if cap == 0 else f"so Dose is capped at {cap:g}")
+        outcome = ("so Dose credit is withheld" if cap == 0 else "so Dose credit is limited")
         if ceiling.get("kind") == "caffeine_daily_total":
             use = ("at one serving a day (the label gives no daily directions)" if ceiling.get("frequency_defaulted")
                    else "even at the lowest directed daily use" if ceiling.get("minimum_exceeds")
@@ -341,13 +341,13 @@ def _over_limit_dose_reason(dim: Dict[str, Any]) -> Optional[str]:
                     f"not associated with negative effects for most adults, {outcome}.")
         if ceiling.get("frequency_defaulted"):
             exposure = (f"The label gives no daily directions; at one serving a day {nutrient} exceeds its "
-                        f"established upper limit ({_num(ceiling.get('pct_ul')):.0f}% of the limit)")
+                        "established upper limit")
         elif ceiling.get("minimum_exceeds"):
             exposure = (f"Even the lowest directed daily use of {nutrient} exceeds its established "
-                        f"upper limit ({_num(ceiling.get('pct_ul')):.0f}% of the limit at the highest directed use)")
+                        "upper limit")
         else:
             exposure = (f"The higher directed daily amounts of {nutrient} exceed its established "
-                        f"upper limit ({_num(ceiling.get('pct_ul')):.0f}% of the limit at the highest directed use)")
+                        "upper limit")
         return f"{exposure}, {outcome}."
     flags = evaluation.get("flags")
     if isinstance(flags, list) and flags:

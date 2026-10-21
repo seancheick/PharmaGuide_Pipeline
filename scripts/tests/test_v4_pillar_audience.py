@@ -85,7 +85,7 @@ def test_ul_cap_reason_is_one_sentence_and_policy_moves_to_audit():
     pillar = _assembled_dose(dim, module_bd)
     assert pillar["score"] == 0.0
     assert pillar["reason"] == ("The higher directed daily amounts of Vitamin C exceed its established upper "
-                                "limit (150% of the limit at the highest directed use), so Dose is set to 0.")
+                                "limit, so Dose credit is withheld.")
     assert _one_sentence(pillar["reason"])
     facts = {f["id"]: f for f in pillar["explanation"]["facts"]}
     assert "not a medical toxicity grade" in facts["dose_safety_ceiling"]["value_display"]
@@ -250,3 +250,30 @@ def test_builder_fact_blocks_are_versioned_without_an_attach():
     block = qs._pillar_verification({}, 15, qs._config())["explanation"]
     assert block["schema_version"] == PILLAR_EXPLANATION_SCHEMA_VERSION
     assert {f["audience"] for f in block["facts"]} == {"audit"}
+
+
+def test_consumer_cap_reason_keeps_the_hazard_without_score_arithmetic():
+    dim, _ = _ul_capped_vitamin_c()
+    for cap in (0.0, 10.0):
+        dim["metadata"]["B7_safety_evaluation"]["dose_ceiling"]["cap_public"] = cap
+        reason = qs._over_limit_dose_reason(dim)
+        assert "exceed" in reason
+        assert "upper limit" in reason
+        assert not re.search(r"\b(?:0|10|150)\b", reason), reason
+        assert _one_sentence(reason)
+
+
+def test_tiny_upper_limit_exceedance_is_still_visible():
+    from scoring_v4.pillar_explanations import _dose_consumer_fact
+    receipt = _receipt_with()
+    receipt["upper_reference"] = receipt["upper_reference"] | {"pct_ul": 100.01}
+    value = _dose_consumer_fact(receipt)["value_display"]
+    assert "100.0%" not in value
+    assert ">100%" in value
+
+
+def test_upper_limit_rounding_boundaries_never_hide_exceedance():
+    from scoring_v4.pillar_explanations import _percent
+    for value in (100.00001, 100.01, 100.05, 100.049999, 100.49, 100.5):
+        text = _percent(value)
+        assert text == ">100" or float(text) > 100, (value, text)
