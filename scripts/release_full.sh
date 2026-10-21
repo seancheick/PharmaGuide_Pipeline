@@ -727,6 +727,10 @@ else
   skip "Strict gate: scoring snapshot contract already passed before candidate promotion"
 fi
 
+# Seal metadata written by the validated gates before a review hold can exit.
+# The retry may reuse assembly; every publication gate still runs again.
+"$PG_PYTHON" "$CATALOG_STATE_SCRIPT" --record-catalog "$CATALOG_INPUT_BINDING"
+
 # Compare every product with each catalog users can have: the app bundle
 # committed on the app's main, and the live Supabase catalog the in-app updater
 # downloads when that differs. Milder safety and warned-product removal require
@@ -765,9 +769,8 @@ fi
 # manifest. Publish the staged asset and move the pin with the bundle, so the
 # bundle commit never names an interaction DB the app cannot hydrate. Only when
 # this run commits the bundle; a no-op without network when the pin is current.
-# All candidate gates above may stamp their owned metadata. Reseal that exact
-# result, then verify the freeze regardless of which publication flags are set.
-"$PG_PYTHON" "$CATALOG_STATE_SCRIPT" --record-catalog "$CATALOG_INPUT_BINDING"
+# The completed catalog was sealed before review; verify the source freeze
+# regardless of which publication flags are set.
 "$PG_PYTHON" "$CATALOG_STATE_SCRIPT" --check-input-binding "$CATALOG_INPUT_BINDING"
 if (( SKIP_FLUTTER == 0 && SKIP_SUPABASE == 0 && SUPABASE_DRY_RUN == 0 )); then
   run_strict_gate "interaction DB release asset + app hydration pin" \
