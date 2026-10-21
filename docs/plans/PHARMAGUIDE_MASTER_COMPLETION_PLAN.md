@@ -4,7 +4,7 @@
 
 - [x] Independently reviewed Claude export fixes; corrected reproductive target scope/copy, niacin UL source-form recognition, authoritative empty app nutrient analysis and dashboard owner mismatches. Curated categories/sources and full source blocks preserved.
 - [x] 179-label paired raw replay and real private niacin probe; focused source/app tests and fresh review complete. Dose V4.1 current canaries reconfirmed.
-- [ ] Exact candidate CI/integration and final stale-tree cleanup. Existing folate catalog artifact failure and final regenerated catalog/release acceptance remain open; Sean runs the pipeline.
+- [x] Exact source CI green; pipeline PR234 and app PR131 merged. All temporary branches/worktrees from this batch retired with verified evidence/history preservation. Existing folate catalog artifact failure and regenerated catalog/release acceptance remain open; Sean runs the pipeline.
 
 Details: [export fidelity](../../scripts/audits/integration_audit_20261020/EXPORT_FIDELITY.md); LEDGER remains the execution register.
 
@@ -21,7 +21,7 @@ Owner: existing LEDGER decision register, Git histories and integration audit re
 
 - [x] Source-qualified title/role correction: flavor phrases and generic plant-part words no longer select unrelated Evidence/Dose owners; B-12 names resolve through the existing title owner. No undosed/trace scoring policy change.
 - [x] Independent2,090-pair full-record review: 57 explained score changes, unchanged clinical/safety/identity/amount facts; one explained complete→partial assessment. Combined82 focused checks and76 fresh raw controls pass; exact-runtime28762 CI39454297455 is green. Local544 passes with the existing stale-catalog folate failure/25skips; no artifact/release gate closed.
-- [ ] Complete literature223, comma224 and demonstrated omega concentration owner correction before the final operator run. PR219 epilepsy rule remains held by Sean. No integration-agent pipeline run.
+- [x] Literature223, comma224, title225/226 and omega/source227 corrections are integrated. PR219 epilepsy proposal was closed unmerged at Sean’s direction. Final generated-artifact acceptance remains open; no integration-agent pipeline run.
 
 Details: [title qualification](../../scripts/audits/integration_audit_20261020/TITLE_OWNERSHIP.md); execution register remains LEDGER.
 
