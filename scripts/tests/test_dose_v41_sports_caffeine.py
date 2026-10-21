@@ -68,7 +68,11 @@ def test_caffeine_ceiling_reaches_the_public_dose_on_any_route_and_names_its_pol
     artifact = build_scored_artifact(_caffeine(300, 2))
     dose = artifact["quality_pillars_v4"]["dose"]
     assert dose["score"] == 0.0
-    assert "400 mg" in dose["reason"] and "PharmaGuide scoring policy" in dose["reason"]
+    assert "400 mg" in dose["reason"]
+    facts = {f["id"]: f for f in dose["explanation"]["facts"]}
+    assert "PharmaGuide scoring policy" in facts["dose_safety_ceiling"]["value_display"]
+    assert facts["dose_upper_limit_result"]["value_display"] == (
+        "Up to 600 mg of caffeine a day; reference 400 mg a day for most adults")
 
 
 def test_two_co_primaries_average_instead_of_the_strongest():

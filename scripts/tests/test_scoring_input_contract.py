@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 import sys
 from pathlib import Path
 
@@ -2417,6 +2418,44 @@ def test_vitamin_carried_in_fish_oil_does_not_emit_omega_evidence() -> None:
     ]
     assert class_for_product(product) == "generic"
 
+
+
+# Frozen raw label (source phase): moved from the corpus-artifact file
+# test_scoring_evidence_contract_v1.py, whose tests all need generated output.
+def test_identity_bearing_preparation_keeps_its_printed_mass_without_a_blend_projection() -> None:
+    # The label declares one Quercefit preparation with a Quercetin Phytosome
+    # form, not a blend with independently listed constituent ingredients.
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    from enrich_supplements_v3 import SupplementEnricherV3
+    from score_supplements_v4 import score_product_v4
+
+    raw = json.loads((Path(__file__).parent / "fixtures" / "evidence_readiness_309492_raw.json").read_text())
+    product, _ = SupplementEnricherV3().enrich_product(
+        EnhancedDSLDNormalizer().normalize_product(raw))
+    rows = get_scoring_ingredients(product, strict=True).rows
+    assert len(rows) == 1
+    [row] = rows
+    assert row["canonical_id"] == "quercetin"
+    assert row["matched_form"] == "quercetin phytosome"
+    assert row["raw_source_path"] == "ingredientRows[0]"
+    assert row["quantity"] == 300.0
+    assert row["unit"] == "mg"
+    assert row.get("scoring_input_kind") != "product_level_evidence"
+    assert not [row for row in rows if row.get("scoring_input_kind") == "product_level_evidence"
+                and row.get("evidence_type") == "blend_anchor_mass"]
+
+    out = score_product_v4(product)
+    [assessment] = out["v4_breakdown"]["assessment_readiness"]["evidence"]["ingredient_assessments"]
+    assert assessment["evidence_applicability"] == "individual_ingredient"
+    assert assessment["state"] == "evaluated_supported"
+    assert assessment["source_value"] == 300.0
+    assert set(assessment["evidence_ids"]) == {"INGR_QUERCETIN", "PRECLIN_QUERCETIN_PHYTOSOME"}
+    assert out["v4_verdict"] != "NOT_SCORED"
+    assert out["raw_score_v4_100"] is not None
+    completeness = out["v4_breakdown"]["completeness_gate"]
+    assert "conservative_blend_anchor_mass" not in completeness["soft_missing"]
+    assert completeness["score_cap"] is None
+    assert completeness["verdict_ceiling"] is None
 
 
 def test_galu_enzyme_activity_reaches_v4_as_non_mass_dose_evidence() -> None:

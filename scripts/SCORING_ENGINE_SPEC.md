@@ -260,6 +260,9 @@ Since config 1.26.0 (V4.1 Step 4) every fact earns or loses points once:
   - The Dose explanation carries a `dose_receipt`: daily use, contributions
     and aggregation rule, adequacy before safety, the upper reference with its
     population and exposure, the cap and the reconciling final value.
+  - Pillar reasons are one sentence; each explanation fact carries
+    `audience` (`consumer` | `audit`), with at most one consumer fact per
+    pillar (see `scripts/FINAL_EXPORT_SCHEMA_V1.md`).
 - Probiotic research certainty counts only when it applies to the product.
 - A score is `partial` when the unfinished work is ours (an unresolved
   benchmark identity, or a printed nutrient or sugars amount we could not
