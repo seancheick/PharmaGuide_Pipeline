@@ -186,7 +186,8 @@ def test_reproductive_hits_are_scoped_to_their_own_curated_condition(enricher):
                 assert result.severity == hit["severity"]
 
     breastfeeding = next(hit for hit in hits if hit["condition_id"] == "lactation")
-    assert breastfeeding["alert_body"] == "Avoid use during breastfeeding."
+    assert "stimulant effects" in breastfeeding["alert_body"]
+    assert "during pregnancy and breastfeeding" in breastfeeding["alert_body"]
     assert "pregnan" not in breastfeeding["alert_headline"].lower()
     assert breastfeeding["sources"] == ["https://www.nccih.nih.gov/health/yohimbe"]
     # Rendering target-specific copy must not rewrite the curated source record.
@@ -196,3 +197,136 @@ def test_reproductive_hits_are_scoped_to_their_own_curated_condition(enricher):
         if hit.get("pregnancy_lactation", {}).get("lactation_category") == "avoid"
     )
     assert source_block["profile_gate"]["requires"]["profile_flags_any"] == ["pregnant", "breastfeeding"]
+
+
+def test_sage_pregnancy_warning_explains_why_and_cites_the_reason(enricher):
+    enriched = {
+        "ingredient_quality_data": {
+            "ingredients": [_ingredient("Sage extract", "sage")],
+            "ingredients_skipped": [],
+        }
+    }
+
+    enricher._collect_interaction_profile(enriched)
+
+    pregnancy_hits = [
+        condition
+        for hit in enriched["ingredient_quality_data"]["ingredients"][0]["safety_hits"]
+        for condition in hit.get("condition_hits", [])
+        if condition.get("condition_id") == "pregnancy"
+    ]
+    assert len(pregnancy_hits) == 1
+    pregnancy = pregnancy_hits[0]
+    reason = f"{pregnancy.get('mechanism', '')} {pregnancy.get('alert_body', '')}".lower()
+    assert pregnancy["severity"] == "avoid"
+    assert "thujone" in reason
+    assert any("nccih.nih.gov/health/sage" in source for source in pregnancy["sources"])
+    assert pregnancy["profile_gate"]["requires"]["profile_flags_any"] == ["pregnant"]
+
+
+def test_st_johns_wort_breastfeeding_warning_has_target_specific_reason(enricher):
+    enriched = {
+        "ingredient_quality_data": {
+            "ingredients": [_ingredient("St. John's Wort", "st_johns_wort")],
+            "ingredients_skipped": [],
+        }
+    }
+
+    enricher._collect_interaction_profile(enriched)
+
+    lactation_hits = [
+        condition
+        for hit in enriched["ingredient_quality_data"]["ingredients"][0]["safety_hits"]
+        for condition in hit.get("condition_hits", [])
+        if condition.get("condition_id") == "lactation"
+    ]
+    assert len(lactation_hits) == 1
+    lactation = lactation_hits[0]
+    reason = f"{lactation.get('mechanism', '')} {lactation.get('alert_body', '')}".lower()
+    assert lactation["severity"] == "caution"
+    assert "colic" in reason
+    assert "drowsiness" in reason
+    assert "fetal" not in reason
+    assert any("NBK501770" in source for source in lactation["sources"])
+    assert lactation["profile_gate"]["requires"]["profile_flags_any"] == ["breastfeeding"]
+
+
+def test_shared_life_stage_warning_keeps_authored_reason_and_source(enricher):
+    enriched = {
+        "ingredient_quality_data": {
+            "ingredients": [_ingredient("Zinc", "zinc")],
+            "ingredients_skipped": [],
+        }
+    }
+
+    enricher._collect_interaction_profile(enriched)
+
+    hits = [
+        condition
+        for hit in enriched["ingredient_quality_data"]["ingredients"][0]["safety_hits"]
+        for condition in hit.get("condition_hits", [])
+        if condition.get("condition_id") in {"pregnancy", "lactation"}
+    ]
+    assert {hit["condition_id"] for hit in hits} == {"pregnancy", "lactation"}
+    for hit in hits:
+        assert "RDA-range doses" in hit["alert_body"]
+        assert "Higher therapeutic doses" in hit["alert_body"]
+        assert hit["sources"] == [
+            "https://ods.od.nih.gov/factsheets/Zinc-HealthProfessional/"
+        ]
+        expected_flag = "pregnant" if hit["condition_id"] == "pregnancy" else "breastfeeding"
+        assert hit["profile_gate"]["requires"]["profile_flags_any"] == [expected_flag]
+
+
+def test_shared_lactation_warning_uses_reviewed_body_not_pregnancy_mechanism(enricher):
+    enriched = {
+        "ingredient_quality_data": {
+            "ingredients": [_ingredient("Black cohosh", "black_cohosh")],
+            "ingredients_skipped": [],
+        }
+    }
+
+    enricher._collect_interaction_profile(enriched)
+
+    lactation_hits = [
+        condition
+        for hit in enriched["ingredient_quality_data"]["ingredients"][0]["safety_hits"]
+        for condition in hit.get("condition_hits", [])
+        if condition.get("condition_id") == "lactation"
+    ]
+    assert len(lactation_hits) == 1
+    lactation = lactation_hits[0]
+    reason = f"{lactation.get('mechanism', '')} {lactation.get('alert_body', '')}".lower()
+    assert "breastfeeding safety" in reason
+    assert "nursing infant" in reason
+    assert lactation["mechanism"] == lactation["alert_body"]
+    assert not lactation["mechanism"].startswith("Pregnancy safety is uncertain")
+    assert lactation["profile_gate"]["requires"]["profile_flags_any"] == [
+        "breastfeeding"
+    ]
+
+
+def test_licorice_breastfeeding_warning_does_not_reuse_fetal_reason(enricher):
+    enriched = {
+        "ingredient_quality_data": {
+            "ingredients": [_ingredient("Licorice root", "licorice_root")],
+            "ingredients_skipped": [],
+        }
+    }
+
+    enricher._collect_interaction_profile(enriched)
+
+    hits = [
+        condition
+        for hit in enriched["ingredient_quality_data"]["ingredients"][0]["safety_hits"]
+        for condition in hit.get("condition_hits", [])
+        if condition.get("condition_id") == "lactation"
+    ]
+    assert len(hits) == 1
+    lactation = hits[0]
+    reason = f"{lactation.get('mechanism', '')} {lactation.get('alert_body', '')}".lower()
+    assert "milk" in reason or "breastfeed" in reason
+    assert "fetus" not in reason
+    assert "placental" not in reason
+    assert any("NBK501840" in source for source in lactation["sources"])
+    assert lactation["profile_gate"]["requires"]["profile_flags_any"] == ["breastfeeding"]

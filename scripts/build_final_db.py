@@ -2052,8 +2052,6 @@ def validate_export_contract(enriched: Dict, scored: Dict) -> List[str]:
         coverage_ok = False
     if not coverage_ok:
         issues.append("review_queue: mapped_coverage must be numeric within [0,1].")
-    elif safe_str(scored.get("verdict")).upper() == "SAFE" and coverage_number < 0.3:
-        issues.append("review_queue: SAFE verdict is forbidden below mapped_coverage 0.3.")
 
     if verdict == "NOT_SCORED":
         if v4_status != "not_scored":

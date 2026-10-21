@@ -370,7 +370,7 @@ def test_missing_scoring_rows_cannot_emit_safe() -> None:
     assert artifact["strict_scoring_contract"]["passed"] is True
 
 
-def test_low_coverage_trust_floor_downgrades_safe_verdict(
+def test_low_coverage_is_reported_without_manufacturing_a_safety_caution(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     scorable_rows = [_row()]
@@ -402,8 +402,9 @@ def test_low_coverage_trust_floor_downgrades_safe_verdict(
 
     assert artifact["mapped_coverage"] == 0.25
     assert artifact["quality_score_status"] == "scored"
-    assert artifact["verdict"] == "CAUTION"
-    assert artifact["safety_signal_reason"] == "low_mapped_coverage"
+    assert artifact["verdict"] == "SAFE"
+    assert "low_mapped_coverage" not in artifact.get("safety_signals", [])
+    assert artifact["safety_signal_reason"] is None
     assert artifact["product_safety_status"] == "no_known_catalog_concern"
     assert artifact["quality_assessment_status"] == "complete"
 
