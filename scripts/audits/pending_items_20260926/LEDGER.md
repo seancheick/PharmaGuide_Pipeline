@@ -2458,7 +2458,9 @@ do not become warnings, Dose credit or an effectiveness claim.
 Measurement: 58 completed enriched files / 15,426 products contain 88,703 actionable life-stage
 warning instances; 29,756 source-less instances affect 5,055 products in the released output.
 Projecting the exact emitted rule/target pairs through this candidate leaves zero missing sources,
-reasons or target owners. Eight of ten frozen raw products change only Enrich/blob warning copy/provenance;
+reasons or target owners. Final independent review caught a breastfeeding-only vitamin-B6 reason
+reaching pregnant users; the registry now gives pregnancy one explicit NIH ODS-sourced owner while
+retaining the separate lactation reason. Nine of eleven frozen raw products change only Enrich/blob warning copy/provenance;
 Clean, scored output, score, quality status/tier, product safety status, active ingredients and
 allergens are unchanged. Real-app cases cover pregnant and breastfeeding St. John's wort, pregnant
 sage, kidney disease plus magnesium, levothyroxine plus calcium, no-data-only behavior, an unaffected
@@ -2467,7 +2469,7 @@ control, duplicate magnesium accumulation and the authored calcium/iron stack wa
 `~/pg_quality/prebeta_launch_gates_20261021/lifestage_census.json`.
 
 State: source implementation, bounded measurement and local validation complete. The final focused
-owner/consumer slice passed 192 tests; the local behavioral rung passed 546 with 24 declared opt-in
+owner/consumer slice passed 219 tests; the local behavioral rung passed 546 with 24 declared opt-in
 skips and a green skip guard. The app candidate passed clean analysis and 3,962 tests, its compiled
 28-file engine closure/parity check, and the 10-case refreshed real-product gate. Exact-head CI,
 independent review, integration, rebuilt-catalog parity and Flutter release acceptance remain
