@@ -1283,7 +1283,11 @@ def _check_export_normalized_dose(rec: ProductRecord, enriched: Mapping[str, Any
                 unpositioned = [e for e in entries if name and not e.get("source_field")
                                 and e.get("original_name") == name]
                 if unpositioned:
-                    entry = unpositioned[0] if len(unpositioned) == 1 else {}
+                    matching_rows = sum(
+                        name in {safe_str(active.get("raw_source_text")), safe_str(active.get("name"))}
+                        for active in actives if isinstance(active, dict)
+                    )
+                    entry = unpositioned[0] if len(unpositioned) == 1 and matching_rows == 1 else {}
                     break
         expected = (safe_float(entry.get("normalized_amount")), safe_str(entry.get("normalized_unit")))
         exported = (row.get("normalized_amount"), row.get("normalized_unit") or "")

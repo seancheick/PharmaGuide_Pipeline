@@ -738,3 +738,12 @@ def test_a_non_finite_amount_is_exported_as_unknown():
     enriched["dosage_normalization"]["normalized_ingredients"][0]["normalized_amount"] = float("nan")
     blob["ingredients"][0]["normalized_amount"] = None
     assert _dose_codes(enriched, blob) == []
+
+
+def test_one_positionless_entry_cannot_establish_two_rows_own_doses():
+    enriched, blob = _beta_carotene_fixture()
+    entries = enriched["dosage_normalization"]["normalized_ingredients"]
+    entries[:] = entries[:1]
+    del entries[0]["source_field"]
+    blob["ingredients"][1].update(normalized_amount=75.0, normalized_unit="mcg RAE")
+    assert _dose_codes(enriched, blob) == ["NORMALIZED_DOSE_NOT_FROM_OWN_ROW"] * 2

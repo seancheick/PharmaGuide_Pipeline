@@ -88,21 +88,14 @@ unstripped units — fixed with tests. Noted: the title fallback lets identity-l
 of different types merge if they share a title; measured 0 on the corpus (titles carry a
 type-specific prefix).
 
-## #4 — options for Sean (not patched)
+## #4 — corrected by the integration batch
 
-The `pregnant OR breastfeeding` hit comes from Enrich with generated or mismatched copy
-(254734: "Avoid yohimbe pregnancy during pregnancy and breastfeeding"; the banned-rule twin
-carries pregnancy-only text under a breastfeeding gate). Options:
-(a) add the gate to the pipeline dedup key (mirror the app): ships that copy to breastfeeding
-users and shows pregnant users two pregnancy cards;
-(b) fix the Enrich emission so the combined block produces a lactation-target hit with lactation
-copy, leaving dedup unchanged (needs a clinical copy review);
-(c) keep as is (breastfeeding users get only the weaker lactation card).
-Recommendation: (b); it changes Enrich and authored copy, so it is Sean's call.
+The counts above describe the pre-change combined pregnancy-or-breastfeeding gate, not a currently missing breastfeeding contraindication. The curated block has separate categories for each target. Enrich now emits each assessment under its own taxonomy-derived flag, retaining the target's category and sources without transferring pregnancy-only clinical claims. Original source prose remains preserved on safety hits. Independently authored condition rules keep their original restrictions and citations. Four profile combinations and the paired 179-label replay verify the correction; no condition severity/source tuple is lost.
+
+Late review also hardened positionless normalized-dose fallback: both exporter and independent audit require a unique active-row owner, not merely one same-name normalization entry. Ambiguous duplicates remain unknown. Fail-first regressions cover both owners.
 
 ## Stage reruns
 
-- #1 and #2 are export-only (`build_final_db.py` is in no stage fingerprint): no Clean/Enrich/Score
-  rerun; the next catalog rebuild picks them up.
-- The new gate runs inside the existing snapshot/raw-to-final step.
-- #4 option (b) and #6 would need Enrich (and Score) reruns when decided.
+The original #1/#2 export-only changes do not invalidate Clean/Enrich/Score themselves. The combined integration also changes Enrich. Current manifest inspection finds all38 manifests at each stage stale, including Clean from earlier integrated edits, so Sean's next run must start at Clean. No pipeline or catalog build was run by this audit. The new gate runs in the existing raw-to-final reconciliation step.
+
+Current combined evidence and limitations: [integration report](../integration_audit_20261020/EXPORT_FIDELITY.md).

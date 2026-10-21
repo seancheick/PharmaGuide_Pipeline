@@ -101,3 +101,12 @@ def test_real_solgar_same_name_rows_export_their_own_normalized_amounts():
     rec = ProductRecord("218842", "", "", "")
     _check_unsafe_unit_conversion(rec, blob)
     assert not rec.findings
+
+
+def test_positionless_dose_requires_unique_active_row_ownership():
+    entry = [{"original_name": "Beta-Carotene", "normalized_amount": 75,
+              "normalized_unit": "mcg RAE"}]
+    rows = [{"name": "Beta-Carotene"}, {"name": "Beta-Carotene"}]
+    assert _normalized_dose_entry(entry, 0, "Beta-Carotene", "Beta-Carotene", rows) == {}
+    assert _normalized_dose_entry(entry, 1, "Beta-Carotene", "Beta-Carotene", rows) == {}
+    assert _normalized_dose_entry(entry, 0, "Beta-Carotene", "Beta-Carotene", rows[:1]) == entry[0]

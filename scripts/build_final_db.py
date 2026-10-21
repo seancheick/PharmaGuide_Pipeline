@@ -6698,7 +6698,8 @@ def _product_context_warnings(enriched: Dict) -> List[Dict]:
     return result
 
 
-def _normalized_dose_entry(norm_raw: Any, index: int, raw: str, name: str) -> Dict:
+def _normalized_dose_entry(norm_raw: Any, index: int, raw: str, name: str,
+                           active_rows: Optional[List[Dict]] = None) -> Dict:
     """The dosage-normalization entry for activeIngredients[index].
 
     The normalizer records each entry's own row as ``source_field``. A label can
@@ -6721,6 +6722,13 @@ def _normalized_dose_entry(norm_raw: Any, index: int, raw: str, name: str) -> Di
         matches = [item for item in items if item.get("original_name") == candidate
                    and not safe_str(item.get("source_field"))]
         if len(matches) == 1:
+            if active_rows is not None and sum(
+                candidate in {
+                    safe_str(row.get("raw_source_text")), safe_str(row.get("name"))
+                }
+                for row in active_rows if isinstance(row, dict)
+            ) != 1:
+                return {}
             return matches[0]
         if matches:
             return {}
@@ -6876,7 +6884,9 @@ def build_detail_blob(
         raw = safe_str(ing.get("raw_source_text"))
         name = safe_str(ing.get("name"), raw)
         m = take_iqd_match(ing)
-        ne = _normalized_dose_entry(norm_raw, active_index, raw, name)
+        ne = _normalized_dose_entry(
+            norm_raw, active_index, raw, name, safe_list(enriched.get("activeIngredients"))
+        )
         canonical_standard_name = safe_str(
             m.get("standard_name")
             or ing.get("standard_name")
