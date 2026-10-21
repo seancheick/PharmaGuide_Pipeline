@@ -14200,6 +14200,40 @@
       },
       "condition_rules": [
         {
+          "condition_id": "pregnancy",
+          "severity": "monitor",
+          "evidence_level": "probable",
+          "mechanism": "Vitamin B6 is required during pregnancy, but high supplemental intakes can cause sensory nerve damage and therapeutic regimens for pregnancy nausea can approach the pregnancy upper limit.",
+          "action": "Review concentrated or therapeutic-dose vitamin B6 with your prenatal clinician and count vitamin B6 from all supplements. Normal prenatal-vitamin amounts do not trigger this concern.",
+          "sources": [
+            "https://ods.od.nih.gov/factsheets/Pregnancy-HealthProfessional/",
+            "https://ods.od.nih.gov/factsheets/VitaminB6-HealthProfessional/"
+          ],
+          "alert_headline": "Review concentrated vitamin B6 doses",
+          "alert_body": "Vitamin B6 supports pregnancy and is used for nausea, but high supplemental intakes can cause nerve damage and treatment doses can approach the pregnancy upper limit. Review concentrated vitamin B6 with your prenatal clinician; normal prenatal-vitamin amounts do not trigger this concern.",
+          "informational_note": "Pregnancy-specific guidance concerns concentrated or therapeutic-dose vitamin B6, not normal prenatal-vitamin amounts.",
+          "profile_gate": {
+            "gate_type": "profile_flag",
+            "requires": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [
+                "pregnant"
+              ]
+            },
+            "excludes": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [],
+              "product_forms_any": [],
+              "nutrient_forms_any": []
+            },
+            "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "presence"
+        },
+        {
           "condition_id": "lactation",
           "severity": "caution",
           "evidence_level": "theoretical",

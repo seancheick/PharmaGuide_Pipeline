@@ -306,6 +306,38 @@ def test_shared_lactation_warning_uses_reviewed_body_not_pregnancy_mechanism(enr
     ]
 
 
+def test_vitamin_b6_pregnancy_warning_does_not_reuse_lactation_reason(enricher):
+    enriched = {
+        "ingredient_quality_data": {
+            "ingredients": [_ingredient("Vitamin B6", "vitamin_b6_pyridoxine")],
+            "ingredients_skipped": [],
+        }
+    }
+
+    enricher._collect_interaction_profile(enriched)
+
+    pregnancy_hits = [
+        condition
+        for hit in enriched["ingredient_quality_data"]["ingredients"][0]["safety_hits"]
+        for condition in hit.get("condition_hits", [])
+        if condition.get("condition_id") == "pregnancy"
+    ]
+    assert len(pregnancy_hits) == 1
+    pregnancy = pregnancy_hits[0]
+    reason = f"{pregnancy.get('mechanism', '')} {pregnancy.get('alert_body', '')}".lower()
+    assert pregnancy["severity"] == "monitor"
+    assert "nerve damage" in reason
+    assert "milk supply" not in reason
+    assert "breastfeed" not in reason
+    assert any(
+        "ods.od.nih.gov/factsheets/Pregnancy-HealthProfessional" in source
+        for source in pregnancy["sources"]
+    )
+    assert pregnancy["profile_gate"]["requires"]["profile_flags_any"] == [
+        "pregnant"
+    ]
+
+
 def test_licorice_breastfeeding_warning_does_not_reuse_fetal_reason(enricher):
     enriched = {
         "ingredient_quality_data": {
