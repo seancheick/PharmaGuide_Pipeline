@@ -21252,7 +21252,11 @@ class SupplementEnricherV3:
         keys = set()
         for candidate in candidates:
             for part in re.split(r"\s+(?:or|and)\s+|[/,;]", candidate):
-                key = norm_module.make_normalized_key(part.strip())
+                # A Facts declaration may spell its source as "(as niacinamide)".
+                # Strip that source prefix within this existing form-name owner.
+                key = norm_module.make_normalized_key(
+                    re.sub(r"^(?:as|from)\s+", "", part.strip(), flags=re.IGNORECASE)
+                )
                 if key:
                     keys.add(key)
         return keys
