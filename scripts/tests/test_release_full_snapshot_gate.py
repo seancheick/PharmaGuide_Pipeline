@@ -164,3 +164,15 @@ def test_catalog_staging_has_no_second_build_or_mtime_decision():
     source = RELEASE_SCRIPT.read_text()
     assert source.count('bash scripts/rebuild_dashboard_snapshot.sh') == 1
     assert 'step2_needs_run()' not in source
+
+
+def test_completed_manifest_is_sealed_before_a_review_hold_can_exit():
+    source = RELEASE_SCRIPT.read_text()
+    stamp = source.index('run_strict_gate "stamp export manifest contract metadata"')
+    comparison = source.index('run_strict_gate "catalog changes vs what users have"')
+    seal = source.index('--record-catalog "$CATALOG_INPUT_BINDING"', stamp)
+    # A review hold exits the shell. Preserve the validated metadata in the
+    # content receipt first, so retrying cannot rebuild a new hash to approve.
+    assert stamp < seal < comparison
+    publication = source.index('run_strict_gate "interaction DB release asset + app hydration pin"')
+    assert comparison < source.index('--check-input-binding "$CATALOG_INPUT_BINDING"', comparison) < publication

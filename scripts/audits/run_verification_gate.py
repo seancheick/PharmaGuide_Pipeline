@@ -102,7 +102,8 @@ def _input_binding(cwd: Path, command: Sequence[str], patterns: Sequence[str]) -
     # Never persist credentials or environment values. The fingerprint binds
     # effective configuration, not shell bookkeeping or the per-run lock token.
     ignored = {'_', 'PWD', 'OLDPWD', 'SHLVL', 'SHELL_PID',
-               'PG_RELEASE_LOCK_TOKEN', 'PG_RELEASE_LOCK_WRAPPED'}
+               'PG_RELEASE_LOCK_TOKEN', 'PG_RELEASE_LOCK_WRAPPED',
+               'CODEX_TOOL_CALL_ID'}
     environment = {key: value for key, value in os.environ.items() if key not in ignored}
     files = {}
     for pattern in patterns:
