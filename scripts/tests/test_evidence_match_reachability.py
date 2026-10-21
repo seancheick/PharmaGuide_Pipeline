@@ -122,3 +122,27 @@ def test_removed_or_narrowed_match_is_reported_as_stale():
     assert report["products"][0]["stale_native_ids"] == [
         "BRAND_GENERIC_ALIAS_LEAK"
     ]
+
+
+def test_replay_uses_the_same_score_eligible_identity_view_as_native_enrichment():
+    from copy import deepcopy
+    from types import SimpleNamespace
+    from audits.evidence_match_reachability import recompute_evidence
+    from scoring_input_contract import NON_SCORING_IDENTITY_RATIONALE
+
+    product = _product()
+    product['ingredient_quality_data'] = {'ingredients': [
+        {'canonical_id': 'garlic', 'name': 'Garlic', 'quantity': 1200, 'unit': 'mg'},
+        {'canonical_id': 'probiotics', 'name': 'Trace blend',
+         'identity_resolution_rationale': NON_SCORING_IDENTITY_RATIONALE},
+    ]}
+    original = deepcopy(product)
+    seen = []
+    def collect(view, iqd):
+        assert view['ingredient_quality_data'] is iqd
+        seen.extend(row.get('canonical_id') for row in iqd['ingredients'])
+        return {'clinical_matches': [_match('INGR_GARLIC')], 'match_count': 1}
+    evidence = recompute_evidence(SimpleNamespace(_collect_evidence_data=collect), product)
+    assert seen == ['garlic', None]
+    assert evidence['match_count'] == 1
+    assert product == original  # retained interaction identity is never mutated
