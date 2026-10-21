@@ -144,6 +144,7 @@ FINDING_CATALOG: dict[str, str] = {
     "LEDGER_NAME_DIFFERS_FROM_RAW":           SEVERITY_BLOCKER,
     "EXPORT_IDENTITY_NOT_FROM_ENRICHER":      SEVERITY_BLOCKER,
     "AMOUNT_CHANGE_WITHOUT_EVIDENCE":         SEVERITY_BLOCKER,
+    "NORMALIZED_DOSE_NOT_FROM_OWN_ROW":       SEVERITY_BLOCKER,
     "BLOB_WITHOUT_ENRICHED_RECORD":           SEVERITY_BLOCKER,
     # HIGH — contract violation that breaks routing / interaction matching
     "CANONICAL_ID_MISSING_ON_MAPPED":         SEVERITY_HIGH,
@@ -1244,6 +1245,61 @@ def _check_export_identity(rec: ProductRecord, enriched: Mapping[str, Any] | Non
                     f"{sorted(decided[path])!r}", ingredient=row.get("name"), stage="blob",
                     row_path=path, field=f"{key}.canonical_id",
                     source=sorted(decided[path]), exported=identity.get("canonical_id"))
+    _check_export_normalized_dose(rec, enriched, blob)
+
+
+def _check_export_normalized_dose(rec: ProductRecord, enriched: Mapping[str, Any] | None,
+                                  blob: Mapping[str, Any]) -> None:
+    """The enricher's normalized dose for a row is what ships, never a same-name sibling's.
+
+    A row's dose is the entry whose source_field is that row, else the one entry
+    with no position under its name; with neither, the dose ships as unknown.
+    """
+    from build_final_db import safe_float, safe_str
+
+    entries = ((enriched or {}).get("dosage_normalization") or {}).get("normalized_ingredients")
+    if not isinstance(entries, list):
+        return  # legacy name-keyed artifacts carry no row identity to judge
+    entries = [entry for entry in entries if isinstance(entry, dict)]
+    own: dict[str, dict] = {}
+    for entry in entries:
+        if entry.get("source_field"):
+            own.setdefault(entry["source_field"], entry)
+    actives = (enriched or {}).get("activeIngredients") or []
+    index_by_path: dict[str, int] = {}
+    for index, row in enumerate(actives):
+        if isinstance(row, dict) and row.get("raw_source_path"):
+            index_by_path.setdefault(row["raw_source_path"], index)
+    for row in blob.get("ingredients") or []:
+        path = row.get("raw_source_path") if isinstance(row, dict) else None
+        if path not in index_by_path:
+            continue
+        entry = own.get(f"activeIngredients[{index_by_path[path]}]")
+        if entry is None:
+            source = actives[index_by_path[path]]
+            raw = safe_str(source.get("raw_source_text"))
+            entry = {}
+            for name in dict.fromkeys((raw, safe_str(source.get("name"), raw))):
+                unpositioned = [e for e in entries if name and not e.get("source_field")
+                                and e.get("original_name") == name]
+                if unpositioned:
+                    matching_rows = sum(
+                        name in {safe_str(active.get("raw_source_text")), safe_str(active.get("name"))}
+                        for active in actives if isinstance(active, dict)
+                    )
+                    entry = unpositioned[0] if len(unpositioned) == 1 and matching_rows == 1 else {}
+                    break
+        expected = (safe_float(entry.get("normalized_amount")), safe_str(entry.get("normalized_unit")))
+        exported = (row.get("normalized_amount"), row.get("normalized_unit") or "")
+        if expected[1] != exported[1] or not (
+            expected[0] == exported[0]
+            or (expected[0] is not None and exported[0] is not None and _same_amount(expected[0], exported[0]))
+        ):
+            rec.add("NORMALIZED_DOSE_NOT_FROM_OWN_ROW",
+                    f"ingredients {path}: exported {exported[0]} {exported[1]}, its own normalization "
+                    f"entry says {expected[0]} {expected[1]}", ingredient=row.get("name"), stage="blob",
+                    row_path=path, field="ingredients.normalized_amount",
+                    source=f"{expected[0]} {expected[1]}", exported=f"{exported[0]} {exported[1]}")
 
 
 def audit_product(

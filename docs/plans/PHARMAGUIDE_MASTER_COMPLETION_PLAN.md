@@ -1,5 +1,13 @@
 # PharmaGuide master completion plan
 
+### Export fidelity checkpoint — October 20
+
+- [x] Independently reviewed Claude export fixes; corrected reproductive target scope/copy, niacin UL source-form recognition, authoritative empty app nutrient analysis and dashboard owner mismatches. Curated categories/sources and full source blocks preserved.
+- [x] 179-label paired raw replay and real private niacin probe; focused source/app tests and fresh review complete. Dose V4.1 current canaries reconfirmed.
+- [ ] Exact candidate CI/integration and final stale-tree cleanup. Existing folate catalog artifact failure and final regenerated catalog/release acceptance remain open; Sean runs the pipeline.
+
+Details: [export fidelity](../../scripts/audits/integration_audit_20261020/EXPORT_FIDELITY.md); LEDGER remains the execution register.
+
 ### Decision and cleanup closeout — October 20
 
 - [x] PR219 closed unmerged at Sean’s request after source-applicability review; research and unique commits preserved in a verified Git bundle. The separate toxic Japanese-star-anise guard in PR220 remains integrated.

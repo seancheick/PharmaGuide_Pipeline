@@ -20722,6 +20722,16 @@ class SupplementEnricherV3:
             str(item.get("id")).strip().lower()
             for item in evidence_defs if isinstance(item, dict) and item.get("id")
         }
+        # The taxonomy owns which profile flag represents each condition.
+        # A pregnancy/lactation source block has two independent assessments;
+        # its shared OR gate cannot be copied onto either individual hit.
+        derived_flags_by_condition = {
+            str(item["source_condition_id"]): str(item["id"])
+            for item in taxonomy_db.get("profile_flags", [])
+            if isinstance(item, dict)
+            and item.get("capture_mode") == "derived_from_condition"
+            and item.get("source_condition_id") and item.get("id")
+        }
         severity_weights = self._interaction_severity_weight_map(taxonomy_db)
         # Canonical daily-serving policy, shared with the v4 scorers so a dose
         # threshold and a score can never disagree about how many servings a day
@@ -20917,20 +20927,44 @@ class SupplementEnricherV3:
                             sources = [str(s).strip() for s in (pregnancy_block.get("sources") or []) if str(s).strip()]
                             for src in sources:
                                 source_set.add(src)
+                            target_gate = copy.deepcopy(pregnancy_block.get("profile_gate"))
+                            target_flag = derived_flags_by_condition.get(cond_key)
+                            if target_gate and target_flag:
+                                target_gate.setdefault("requires", {})["profile_flags_any"] = [target_flag]
+                            # Shared life-stage prose can contain pregnancy-only
+                            # mechanisms. Render this target's curated category;
+                            # keep full source prose on safety_hits for audit.
+                            # Explicit condition rules retain their own copy,
+                            # sources and applicability in the separate hits above.
+                            target_label = valid_conditions[cond_key].get("label", cond_key)
+                            target_action = {
+                                "contraindicated": "Do not use",
+                                "avoid": "Avoid use",
+                                "caution": "Use with caution",
+                                "monitor": "Monitoring is advised",
+                                "informational": "Informational guidance",
+                                "no_data": "Safety data are not available",
+                            }[severity]
+                            target_sentence = f"{target_action} during {target_label.lower()}."
+                            target_copy = {
+                                "alert_headline": f"{target_label}: {target_action.lower()}",
+                                "alert_body": target_sentence,
+                                "action": target_sentence,
+                            }
                             condition_hits.append({
                                 "condition_id": cond_key,
                                 "severity": severity,
                                 "evidence_level": str(pregnancy_block.get("evidence_level") or "").strip().lower() or None,
-                                "mechanism": pregnancy_block.get("mechanism"),
-                                "action": pregnancy_block.get("notes"),
+                                "mechanism": target_sentence,
+                                "action": target_copy.get("action"),
                                 "sources": sources,
-                                "alert_headline": pregnancy_block.get("alert_headline"),
-                                "alert_body": pregnancy_block.get("alert_body"),
-                                "informational_note": pregnancy_block.get("informational_note"),
+                                "alert_headline": target_copy.get("alert_headline"),
+                                "alert_body": target_copy.get("alert_body"),
+                                "informational_note": target_copy.get("informational_note"),
                                 "warning_type": pregnancy_block.get("warning_type"),
                                 "direction": pregnancy_block.get("direction"),
                                 "materiality": pregnancy_block.get("materiality"),
-                                "profile_gate": pregnancy_block.get("profile_gate"),
+                                "profile_gate": target_gate,
                             })
 
                 for drug_rule in rule.get("drug_class_rules", []) or []:
@@ -21252,7 +21286,11 @@ class SupplementEnricherV3:
         keys = set()
         for candidate in candidates:
             for part in re.split(r"\s+(?:or|and)\s+|[/,;]", candidate):
-                key = norm_module.make_normalized_key(part.strip())
+                # A Facts declaration may spell its source as "(as niacinamide)".
+                # Strip that source prefix within this existing form-name owner.
+                key = norm_module.make_normalized_key(
+                    re.sub(r"^(?:as|from)\s+", "", part.strip(), flags=re.IGNORECASE)
+                )
                 if key:
                     keys.add(key)
         return keys

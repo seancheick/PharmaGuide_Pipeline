@@ -1930,3 +1930,18 @@ def test_unspecified_nickel_worst_case_uses_maximum_directed_exposure(enricher):
     assert assessment["readiness"] == "incomplete"
     assert result["has_over_ul"] is False
     assert evaluate_dose_safety({"rda_ul_data": result}).dose_ceiling() is None
+
+
+def test_parenthetical_niacinamide_declares_ul_scoped_vitamin_not_unresolved_compound(enricher):
+    # Corpus submission PG_SUB_C926... declares Niacin (as Niacinamide) 40 mg.
+    # It has neither a DV nor UNII, but its parent and matched source are explicit.
+    product = _mag([{
+        "name": "Niacin (as Niacinamide)", "raw_source_text": "Niacin (as Niacinamide)",
+        "standardName": "Vitamin B3 (Niacin)", "canonical_id": "vitamin_b3_niacin",
+        "canonical_source_db": "ingredient_quality_map", "matched_form": "niacinamide",
+        "quantity": 40.0, "unit": "mg", "dailyValue": None,
+    }])
+    result = enricher._collect_rda_ul_data(product, min_servings_per_day=1, max_servings_per_day=1)
+    row = result["analyzed_ingredients"][0]
+    assert row["ul_gate_eligible"] is True
+    assert result["has_over_ul"] is True

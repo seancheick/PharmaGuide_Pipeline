@@ -254,7 +254,7 @@ def project_product(product: dict[str, Any], *, source_part: str, blob_sha256: s
     pillars = product.get("quality_pillars_v4") or {}
     if not isinstance(pillars, dict):
         pillars = {}
-    provenance = product.get("v4_score_provenance") or {}
+    provenance = product.get("_v4_provenance") or {}
 
     # Release values come from products_core first: it is what ships.
     sources = (core, provenance, product) if core else (product, provenance)
@@ -327,10 +327,10 @@ def project_product(product: dict[str, Any], *, source_part: str, blob_sha256: s
     evidence = pillars.get("evidence") or {}
     dose_entries = ((pillars.get("dose") or {}).get("receipt") or {}).get("entries") or []
     verification = (pillars.get("verification") or {}).get("components") or {}
-    dose_eval = product.get("dose_safety_evaluation") or product.get("v4_dose_safety") or {}
+    dose_eval = product.get("dose_safety_evaluation") or {}
     ceiling = dose_eval.get("dose_ceiling") if isinstance(dose_eval, dict) else None
-    completeness = product.get("_v4_completeness_gate") or product.get("v4_completeness_gate") or {}
-    safety_gate = product.get("_v4_safety_gate") or product.get("v4_safety_gate") or {}
+    completeness = product.get("_v4_completeness_gate") or {}
+    safety_gate = product.get("_v4_safety_gate") or {}
     version, fingerprint = _config_identity(pick("_v4_config_fingerprint", "config_fingerprint"))
     if version is None:
         version = _text(pick("quality_score_version"))

@@ -304,3 +304,50 @@ def test_a_below_floor_row_never_displaces_the_row_that_fires() -> None:
         ("below", "suppress"), ("at_or_above", "review"),
     ]
     assert len(_dedup_warnings([above, dict(above, ingredient_name="Nettle leaf")])) == 1
+
+
+# ---------------------------------------------------------------------------
+# A warning with no rule, subject or ingredient identity is identified by its
+# title. Harmful-additive and dietary cards carry none of the identity fields,
+# so the severity-only key merged every additive of one severity into one card
+# (Sucralose under FD&C Yellow No. 6 on DSLD 178352) and the Diabetes dietary
+# card under Hypertension (DSLD 213042).
+# ---------------------------------------------------------------------------
+
+def _additive_card(name: str, severity: str) -> dict:
+    return {
+        "type": "harmful_additive", "severity": severity, "title": f"Contains {name}",
+        "detail": f"{name} mechanism.", "source": "harmful_additives_db",
+        "display_mode_default": "suppress" if severity == "low" else "critical",
+    }
+
+
+@pytest.mark.parametrize("severity", ["low", "moderate"])
+def test_distinct_additives_of_one_severity_keep_their_own_cards(severity) -> None:
+    cards = [_additive_card("FD&C Yellow No. 6", severity), _additive_card("Sucralose", severity)]
+    assert [c["title"] for c in _dedup_warnings(cards)] == [
+        "Contains FD&C Yellow No. 6", "Contains Sucralose",
+    ]
+
+
+def test_the_same_additive_twice_still_shows_one_card() -> None:
+    card = _additive_card("Sucralose", "moderate")
+    assert len(_dedup_warnings([card, dict(card, detail="")])) == 1
+
+
+def test_distinct_dietary_cards_are_not_merged() -> None:
+    cards = [
+        {"type": "dietary", "severity": "moderate", "title": title, "detail": detail,
+         "source": "dietary_sensitivity_data", "display_mode_default": "informational"}
+        for title, detail in (("Hypertension", "High sodium."), ("Diabetes", "Contains sugar."))
+    ]
+    assert [c["title"] for c in _dedup_warnings(cards)] == ["Hypertension", "Diabetes"]
+
+
+def test_context_event_key_is_unchanged_for_critical_events() -> None:
+    """Context events keep their own (detail, urls) identity, title or not."""
+    base = {"type": "manufacturer_violation", "severity": "high", "title": "FDA warning letter",
+            "source": "manufacturer_violations", "display_mode_default": "critical"}
+    a, b = dict(base, detail="Letter A"), dict(base, detail="Letter B")
+    assert len(_dedup_warnings([a, b])) == 2
+    assert len(_dedup_warnings([a, dict(a)])) == 1
