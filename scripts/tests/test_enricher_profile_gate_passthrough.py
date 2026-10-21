@@ -149,3 +149,50 @@ def test_profile_gate_shape_matches_source_rule(enricher):
     assert emitted_gate is not None
     assert emitted_gate.get("gate_type") == expected_gate["gate_type"]
     assert emitted_gate.get("requires", {}).get("profile_flags_any") == expected_gate["requires"]["profile_flags_any"]
+
+
+def test_reproductive_hits_are_scoped_to_their_own_curated_condition(enricher):
+    """A shared source block must not apply pregnancy severity to breastfeeding."""
+    enriched = {
+        "ingredient_quality_data": {
+            "ingredients": [_ingredient("Yohimbe", "yohimbe")],
+            "ingredients_skipped": [],
+        }
+    }
+    enricher._collect_interaction_profile(enriched)
+    hits = [
+        condition
+        for hit in enriched["ingredient_quality_data"]["ingredients"][0]["safety_hits"]
+        for condition in hit.get("condition_hits", [])
+        if condition["condition_id"] in {"pregnancy", "lactation"}
+    ]
+    assert hits
+    from profile_gate_evaluator import evaluate_profile_gate, validate_profile_gate
+    expected = {"pregnancy": "pregnant", "lactation": "breastfeeding"}
+    for hit in hits:
+        assert hit["profile_gate"]["requires"]["profile_flags_any"] == [expected[hit["condition_id"]]]
+    assert any(hit["condition_id"] == "lactation" and hit["severity"] == "avoid" for hit in hits)
+    assert any(hit["condition_id"] == "pregnancy" and hit["severity"] == "contraindicated" for hit in hits)
+
+    for flags in ([], ["pregnant"], ["breastfeeding"], ["pregnant", "breastfeeding"]):
+        for hit in hits:
+            gate = hit["profile_gate"]
+            assert validate_profile_gate(gate) == []
+            result = evaluate_profile_gate(
+                gate, {"profile_flags": flags}, {}, base_severity=hit["severity"]
+            )
+            assert result.fires == (expected[hit["condition_id"]] in flags)
+            if result.fires:
+                assert result.severity == hit["severity"]
+
+    breastfeeding = next(hit for hit in hits if hit["condition_id"] == "lactation")
+    assert breastfeeding["alert_body"] == "Avoid use during breastfeeding."
+    assert "pregnan" not in breastfeeding["alert_headline"].lower()
+    assert breastfeeding["sources"] == ["https://www.nccih.nih.gov/health/yohimbe"]
+    # Rendering target-specific copy must not rewrite the curated source record.
+    source_block = next(
+        hit["pregnancy_lactation"]
+        for hit in enriched["ingredient_quality_data"]["ingredients"][0]["safety_hits"]
+        if hit.get("pregnancy_lactation", {}).get("lactation_category") == "avoid"
+    )
+    assert source_block["profile_gate"]["requires"]["profile_flags_any"] == ["pregnant", "breastfeeding"]
