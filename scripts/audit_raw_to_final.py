@@ -1250,22 +1250,42 @@ def _check_export_identity(rec: ProductRecord, enriched: Mapping[str, Any] | Non
 
 def _check_export_normalized_dose(rec: ProductRecord, enriched: Mapping[str, Any] | None,
                                   blob: Mapping[str, Any]) -> None:
-    """The enricher's normalized dose for a row is what ships, never a same-name sibling's."""
+    """The enricher's normalized dose for a row is what ships, never a same-name sibling's.
+
+    A row's dose is the entry whose source_field is that row, else the one entry
+    with no position under its name; with neither, the dose ships as unknown.
+    """
+    from build_final_db import safe_float, safe_str
+
     entries = ((enriched or {}).get("dosage_normalization") or {}).get("normalized_ingredients")
     if not isinstance(entries, list):
         return  # legacy name-keyed artifacts carry no row identity to judge
-    own = {entry.get("source_field"): entry for entry in entries
-           if isinstance(entry, dict) and entry.get("source_field")}
+    entries = [entry for entry in entries if isinstance(entry, dict)]
+    own: dict[str, dict] = {}
+    for entry in entries:
+        if entry.get("source_field"):
+            own.setdefault(entry["source_field"], entry)
+    actives = (enriched or {}).get("activeIngredients") or []
     index_by_path: dict[str, int] = {}
-    for index, row in enumerate((enriched or {}).get("activeIngredients") or []):
+    for index, row in enumerate(actives):
         if isinstance(row, dict) and row.get("raw_source_path"):
             index_by_path.setdefault(row["raw_source_path"], index)
     for row in blob.get("ingredients") or []:
         path = row.get("raw_source_path") if isinstance(row, dict) else None
-        entry = own.get(f"activeIngredients[{index_by_path[path]}]") if path in index_by_path else None
-        if entry is None:
+        if path not in index_by_path:
             continue
-        expected = (entry.get("normalized_amount"), entry.get("normalized_unit") or "")
+        entry = own.get(f"activeIngredients[{index_by_path[path]}]")
+        if entry is None:
+            source = actives[index_by_path[path]]
+            raw = safe_str(source.get("raw_source_text"))
+            entry = {}
+            for name in dict.fromkeys((raw, safe_str(source.get("name"), raw))):
+                unpositioned = [e for e in entries if name and not e.get("source_field")
+                                and e.get("original_name") == name]
+                if unpositioned:
+                    entry = unpositioned[0] if len(unpositioned) == 1 else {}
+                    break
+        expected = (safe_float(entry.get("normalized_amount")), safe_str(entry.get("normalized_unit")))
         exported = (row.get("normalized_amount"), row.get("normalized_unit") or "")
         if expected[1] != exported[1] or not (
             expected[0] == exported[0]

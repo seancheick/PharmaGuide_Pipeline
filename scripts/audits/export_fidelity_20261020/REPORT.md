@@ -70,7 +70,23 @@ drop, overwrite or distort relative to the enriched and scored artifacts?
 
 - main's pre-fix exporter (1d60f43f3): 717 findings in 213 products, e.g. 218842 beta-carotene
   exported None vs its own 750 mcg RAE; 312861 exported 400 mg vs 8,000 mg; 241710 100 mg vs 600 mg.
-- this branch's exporter: 0 findings.
+- this branch's exporter (rebased on main 1575a57e3): 0 findings, also after the review hardening
+  below (own entry, else one positionless same-name entry, else unknown; values coerced with the
+  exporter's `safe_float`/`safe_str`).
+
+## Post-fix measurement (`full_v2_postfix.jsonl` vs `full_v2.jsonl`)
+
+Distinct-title collapses: harmful_additive 6,184 → 0 (`warnings`), 769 → 0 (`profile_gated`);
+dietary 143 → 0 in each list; interaction, drug_interaction, high_risk, watchlist and banned counts
+unchanged; 0 merges across warning types.
+
+## Independent review (fresh-context agent, requirement + diff only)
+
+No blocker. Acted on: gate false negative when a row has no entry of its own (a name fallback
+could hand it a sibling's dose) and gate false positives on string / non-finite amounts and
+unstripped units — fixed with tests. Noted: the title fallback lets identity-less critical cards
+of different types merge if they share a title; measured 0 on the corpus (titles carry a
+type-specific prefix).
 
 ## #4 — options for Sean (not patched)
 

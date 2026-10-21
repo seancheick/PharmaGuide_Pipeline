@@ -706,3 +706,35 @@ def test_legacy_name_keyed_normalization_is_not_judged():
     enriched, blob = _beta_carotene_fixture()
     enriched["dosage_normalization"]["normalized_ingredients"] = {"Beta-Carotene": {"normalized_amount": 1.0}}
     assert _dose_codes(enriched, blob) == []
+
+
+def test_export_blocks_a_dose_borrowed_by_a_row_without_its_own_entry():
+    # Review finding: row 1 has no entry; a name fallback would hand it row 0's 75 mcg RAE.
+    enriched, blob = _beta_carotene_fixture()
+    del enriched["dosage_normalization"]["normalized_ingredients"][1]
+    blob["ingredients"][1].update(normalized_amount=75.0, normalized_unit="mcg RAE")
+    assert _dose_codes(enriched, blob) == ["NORMALIZED_DOSE_NOT_FROM_OWN_ROW"]
+
+
+def test_a_unique_positionless_name_entry_is_the_rows_own():
+    enriched, blob = _beta_carotene_fixture()
+    enriched["activeIngredients"] = enriched["activeIngredients"][:1]
+    blob["ingredients"] = blob["ingredients"][:1]
+    del enriched["dosage_normalization"]["normalized_ingredients"][0]["source_field"]
+    del enriched["dosage_normalization"]["normalized_ingredients"][1]
+    assert _dose_codes(enriched, blob) == []
+
+
+@pytest.mark.parametrize("amount,unit", [("75", "mcg RAE"), (75, " mcg RAE ")])
+def test_values_are_compared_as_the_exporter_coerces_them(amount, unit):
+    enriched, blob = _beta_carotene_fixture()
+    enriched["dosage_normalization"]["normalized_ingredients"][0].update(
+        normalized_amount=amount, normalized_unit=unit)
+    assert _dose_codes(enriched, blob) == []
+
+
+def test_a_non_finite_amount_is_exported_as_unknown():
+    enriched, blob = _beta_carotene_fixture()
+    enriched["dosage_normalization"]["normalized_ingredients"][0]["normalized_amount"] = float("nan")
+    blob["ingredients"][0]["normalized_amount"] = None
+    assert _dose_codes(enriched, blob) == []
