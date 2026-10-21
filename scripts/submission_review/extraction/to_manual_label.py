@@ -198,6 +198,12 @@ def _rows(rows: Sequence[Any], missing) -> list[dict[str, Any]]:
 
         amount = _amount(row.get("amount"))
         printed_amount = _printed_source(row.get("amount"))
+        printed_dv = _field_value(row.get("percent_dv"))
+        # The approval schema has no numeric percentage field. Preserve the
+        # printed DV beside dosed rows too, without inventing a DV population
+        # or deriving a nutrient amount from it.
+        if printed_dv is not None:
+            entry["notes"] = f"Printed %DV: {printed_dv}"
         if amount is not None:
             entry["quantity"] = [amount]
         elif _field_value(row.get("percent_dv")) is not None:
@@ -205,8 +211,7 @@ def _rows(rows: Sequence[Any], missing) -> list[dict[str, Any]]:
             # numeric field for the percentage. Keep the printed value in the
             # row's notes so it is not lost, and still tell the reviewer that
             # the catalog cannot record it as a quantity.
-            printed = _field_value(row.get("percent_dv"))
-            entry["notes"] = f"Printed %DV: {printed}"
+            printed = printed_dv
             missing(f"{path}.quantity", FREE_TEXT_ONLY if printed_amount else NO_TARGET_FIELD,
                     printed_amount or f"%DV {printed}")
         elif printed_amount or row.get("is_blend_header") is not True:

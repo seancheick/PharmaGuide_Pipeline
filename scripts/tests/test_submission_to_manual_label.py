@@ -265,3 +265,14 @@ def test_every_row_names_its_missing_ingredient_group() -> None:
     assert {"ingredientRows[0].ingredientGroup",
             "ingredientRows[1].ingredientGroup"} <= paths
     assert "ingredientGroup" not in skeleton.payload["ingredientRows"][0]
+
+
+@pytest.mark.parametrize('amount,unit,dv', [(160, 'mg', 38), (25, 'mcg', 45), (0, 'mg', 0)])
+def test_printed_percent_dv_survives_alongside_a_printed_amount(amount, unit, dv):
+    skeleton = to_manual_label(_draft(ingredient_rows=[
+        _row('Printed nutrient', amount=_f({'value': amount, 'unit_text': unit}),
+             percent_dv=_f(dv)),
+    ]))
+    row = skeleton.payload['ingredientRows'][0]
+    assert row['quantity'] == [{'quantity': float(amount), 'unit': unit}]
+    assert row['notes'] == f'Printed %DV: {dv}'
