@@ -242,6 +242,8 @@ def test_omega_formulation_reason_separates_form_disclosure_from_concentration()
             "label": "Molecular form",
             "value": "tg",
             "value_display": "Triglyceride",
+            # The reason already names the form; this fact is audit detail.
+            "audience": "audit",
         },
     ]
 

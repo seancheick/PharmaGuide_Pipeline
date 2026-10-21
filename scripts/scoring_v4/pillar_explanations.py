@@ -1,17 +1,26 @@
 """Pipeline-authored pillar explanation facts.
 
 A pure adapter that turns module-breakdown metadata the scorer already computed
-into small, versioned, consumer-facing "facts" that explain a pillar. It never
-recomputes a score, never mutates ``score``/``max``/``reason``, and never
-generates prose — it only attaches an optional ``explanation`` block to a
-pillar. New fact sources are added here, not in the scorer.
+into small, versioned "facts" that explain a pillar. It never recomputes a
+score and never mutates ``score``/``max``/``reason`` — it only attaches an
+optional ``explanation`` block to a pillar. New fact sources are added here,
+not in the scorer.
+
+Every fact carries ``audience``: ``"consumer"`` for the one key fact the app
+shows under the pillar's one-sentence reason (Sean, 2026-10-20), ``"audit"`` for
+detail kept for the dashboard and audits. A pillar has at most one consumer
+fact; consumer text names ingredients by display name and carries no points,
+policy paragraphs or arithmetic.
 """
 
 from __future__ import annotations
 
 from typing import Any, Dict, List, Optional
 
-PILLAR_EXPLANATION_SCHEMA_VERSION = 1
+PILLAR_EXPLANATION_SCHEMA_VERSION = 2
+
+CONSUMER = "consumer"
+AUDIT = "audit"
 
 # Internal omega molecular-form codes (omega_formulation._detect_form) -> the
 # consumer copy shown on the score card. "undefined" is intentionally absent so
@@ -34,6 +43,24 @@ def _num(value: Any) -> Optional[float]:
 
 def _format_mg_per_day(value: float) -> str:
     return f"{int(round(value))} mg/day"
+
+
+def _amount(value: float) -> str:
+    """Consumer number: thousands separators, no trailing zeros."""
+    rounded = round(value, 2)
+    if float(rounded).is_integer():
+        return f"{int(rounded):,}"
+    return f"{rounded:,.2f}".rstrip("0").rstrip(".")
+
+
+def facts_block(facts: List[Dict[str, Any]]) -> Dict[str, Any]:
+    """A pillar builder's explanation block, versioned even where no attach runs."""
+    return {"schema_version": PILLAR_EXPLANATION_SCHEMA_VERSION, "facts": facts}
+
+
+def audit_fact(fact_id: str, label: str, value_display: str) -> Dict[str, Any]:
+    """A detail fact kept for the dashboard and audits, never shown to users."""
+    return {"id": fact_id, "label": label, "value_display": value_display, "audience": AUDIT}
 
 
 def _nonnegative_int(value: Any) -> Optional[int]:
@@ -99,6 +126,8 @@ def _proprietary_blend_facts(transparency_dim: Dict[str, Any]) -> List[Dict[str,
             "id": "undisclosed_ingredient_amount_count",
             "label": "Ingredient amounts not disclosed",
             "value_display": str(hidden_count),
+            # The disclosure gap is the key fact only when an amount is hidden.
+            "audience": CONSUMER if hidden_count else AUDIT,
         },
     ]
 
@@ -121,6 +150,7 @@ def _zero_evidence_facts(
             "id": "matched_evidence_records",
             "label": "Qualifying evidence matches",
             "value_display": "0 in PharmaGuide's current evidence data",
+            "audience": CONSUMER,
         }
     ]
 
@@ -281,11 +311,106 @@ def _dose_receipt(pillar: Dict[str, Any], dose: Dict[str, Any], module: Optional
     return receipt
 
 
+def _ingredient_display(item: Dict[str, Any], receipt: Dict[str, Any]) -> str:
+    """The display name for a receipt contribution, never its canonical ID.
+
+    Contributions key on the scorer's identity, which may be a canonical ID
+    (``vitamin_c``). The source-owned reference row carries the display name;
+    without one, the ID is spelled as words.
+    """
+    ingredient = str(item.get("ingredient") or "")
+    for row in receipt.get("reference_assessments") or []:
+        if isinstance(row, dict) and row.get("nutrient") and row.get("canonical_id") == ingredient:
+            return str(row["nutrient"])
+    return ingredient.replace("_", " ")
+
+
+def _percent(value: float) -> str:
+    """A triggered upper-limit percentage never rounds down to the limit itself."""
+    return f"{value:.1f}" if 100 < value < 100.5 else f"{value:.0f}"
+
+
+def _dose_consumer_fact(receipt: Dict[str, Any]) -> Optional[Dict[str, Any]]:
+    """The one Dose fact users see: the upper-limit result when a cap applies,
+    otherwise one assessed amount against its nutritional reference, otherwise
+    the honest disclosure gap. Built only from the receipt; nothing is
+    recomputed. A PharmaGuide policy target is never shown as a reference."""
+    daily_use = receipt.get("daily_use") or {}
+    fixed = _num(daily_use.get("minimum_servings")) == _num(daily_use.get("maximum_servings"))
+    upper = receipt.get("upper_reference")
+    if upper:
+        qualifier = {">=": "At least ", ">": "More than "}.get(upper.get("quantity_operator"))
+        if daily_use.get("defaulted"):
+            lead = "At one serving a day, "
+        else:
+            lead = qualifier or ("" if fixed else "Up to ")
+        if upper.get("kind") == "caffeine_daily_total":
+            amount, reference = _num(upper.get("amount_mg_day")), _num(upper.get("exceeds_above_mg_day"))
+            if amount is None or reference is None:
+                return None
+            value = (f"{lead}{_amount(amount)} mg of caffeine a day; "
+                     f"reference {_amount(reference)} mg a day for most adults")
+        else:
+            pct, limit = _num(upper.get("pct_ul")), _num(upper.get("ul"))
+            if pct is None or limit is None:
+                return None
+            unit = upper.get("ul_unit") or ""
+            rows = [row for row in receipt.get("reference_assessments") or []
+                    if isinstance(row, dict) and row.get("nutrient") == upper.get("nutrient")]
+            highest = _num(rows[0].get("per_day_max")) if len(rows) == 1 else None
+            if highest is not None and abs(highest - limit * pct / 100) > max(1.0, highest * 0.01):
+                highest = None  # the row is not the exposure the ceiling compared
+            if daily_use.get("defaulted"):
+                exposure = "At one serving a day"
+            elif highest is not None:
+                exposure = f"{lead}{_amount(highest)} {unit} a day".strip()
+            else:
+                exposure = "At the highest directed use"
+            exposure = exposure[0].upper() + exposure[1:]
+            value = (f"{exposure}: {_percent(pct)}% of the {_amount(limit)} {unit} {upper.get('nutrient')} "
+                     f"upper limit ({upper.get('ul_population') or 'general adult'})")
+        value = value[0].upper() + value[1:]
+        return {"id": "dose_upper_limit_result", "label": "Upper limit", "value_display": value, "audience": CONSUMER}
+    contributions = receipt.get("contributions") or []
+    if len(contributions) == 1:
+        item = contributions[0]
+        low, high = _num(item.get("amount_at_minimum")), _num(item.get("amount_at_maximum"))
+        reference, unit = _num(item.get("reference_value")), item.get("amount_unit")
+        label = str(item.get("reference") or "")
+        if label.startswith("RDA/AI"):
+            reference_name = "RDA/AI"
+        elif item.get("reference_kind") == "nutritional_reference" and label.endswith("mg/day reference"):
+            reference_name = "reference"  # the omega EPA + DHA nutritional reference
+        else:
+            reference = None  # policy targets and benchmarks are not consumer references
+        if (low is not None and reference is not None and unit
+                and item.get("quantity_operator") in (None, "=")):
+            span = _amount(low) if high in (None, low) else f"{_amount(low)}-{_amount(high)}"
+            use = " at one serving a day" if daily_use.get("defaulted") else " a day"
+            return {"id": "dose_amount_vs_reference", "label": "Amount vs reference",
+                    "value_display": (f"{span} {unit} {_ingredient_display(item, receipt)}{use}; "
+                                      f"{reference_name} {_amount(reference)} {unit}"),
+                    "audience": CONSUMER}
+    states = {str(item.get("assessment")) for item in contributions}
+    if contributions and states == {"neutral_amount_not_disclosed"}:
+        return {"id": "dose_amount_gap", "label": "Not on the label",
+                "value_display": "Per-strain amounts are not listed", "audience": CONSUMER}
+    if contributions and states == {"hidden_amount_neutral"}:
+        return {"id": "dose_amount_gap", "label": "Not on the label",
+                "value_display": "Individual ingredient amounts are not listed", "audience": CONSUMER}
+    return None
+
+
 def _dose_receipt_facts(receipt: Dict[str, Any], metadata: Optional[Dict[str, Any]] = None) -> List[Dict[str, Any]]:
     facts: List[Dict[str, Any]] = []
     if receipt.get("assessment_status") == "incomplete":
         return [{"id": "dose_assessment_incomplete", "label": "Dose assessment incomplete",
-                 "value_display": "A required ingredient amount could not be assessed. Known ingredient contributions do not establish a final Dose score."}]
+                 "value_display": "A required ingredient amount could not be assessed", "audience": CONSUMER},
+                audit_fact("dose_assessment_incomplete_detail", "Dose assessment incomplete",
+                           "Known ingredient contributions do not establish a final Dose score.")]
+    consumer = _dose_consumer_fact(receipt)
+    if consumer is not None:
+        facts.append(consumer)
     aggregation = receipt.get("aggregation")
     contributions = receipt.get("contributions") or []
     if contributions:
@@ -301,7 +426,7 @@ def _dose_receipt_facts(receipt: Dict[str, Any], metadata: Optional[Dict[str, An
             return f", {span} {basis}".replace(" /day", "/day")
 
         shown = "; ".join(
-            f"{item['ingredient']}: {item['reference']}"
+            f"{_ingredient_display(item, receipt)}: {item['reference']}"
             + (f" {item['reference_value']:g} {item.get('amount_unit') or ''}".rstrip() if _num(item.get("reference_value")) is not None else "")
             + amounts(item)
             + (f", {item['pct_of_reference']:.0f}% of it at the lowest daily use" if _num(item.get("pct_of_reference")) is not None else "")
@@ -319,7 +444,7 @@ def _dose_receipt_facts(receipt: Dict[str, Any], metadata: Optional[Dict[str, An
         if per_serving is not None and context is not None and per_serving > context:
             facts.append({"id": "dose_absorption_context", "label": "Absorption context",
                           "value_display": (
-                              f"One serving provides {per_serving:g} {item.get('amount_unit') or 'mg'} of {item['ingredient']}. "
+                              f"One serving provides {per_serving:g} {item.get('amount_unit') or 'mg'} of {_ingredient_display(item, receipt)}. "
                               f"NIH notes the body absorbs calcium best in amounts of {context:g} mg or less at a time. "
                               "This is context only and does not change the score.")})
     if aggregation in {"panel", "b_complex_panel"}:
@@ -338,7 +463,7 @@ def _dose_receipt_facts(receipt: Dict[str, Any], metadata: Optional[Dict[str, An
     if receipt.get("primary_active_unassessed") and _num(receipt.get("partial_credit_value")) is not None:
         facts.append({"id": "dose_primary_reference_gap", "label": "Primary active reference gap",
                       "value_display": (
-                          f"The main active {receipt['primary_active_unassessed']} has no applicable reference. "
+                          f"The main active {str(receipt['primary_active_unassessed']).replace('_', ' ')} has no applicable reference. "
                           f"The existing assessment limits adequacy to {receipt['partial_credit_value']:g}/20; "
                           "the assessed secondary nutrients cannot establish the main active's dose adequacy.")})
     metadata = metadata or {}
@@ -400,6 +525,8 @@ def attach_pillar_explanations(
 
     Returns ``pillars`` for convenience. Facts are built only from the module
     breakdown metadata the scorer already produced; absent inputs emit no fact.
+    Facts a pillar builder already attached (a reason's moved detail) are kept
+    first. Any fact without an ``audience`` is audit detail.
     """
     dims = (module_bd or {}).get("dimensions") or {}
     specs = (cfg or {}).get("pillars") or {}
@@ -410,7 +537,7 @@ def attach_pillar_explanations(
         if not isinstance(pillar, dict):
             continue
         assembler = spec.get("assembler")
-        facts: List[Dict[str, Any]] = []
+        facts: List[Dict[str, Any]] = list((pillar.get("explanation") or {}).get("facts") or [])
         builder = _FACT_BUILDERS.get(assembler) if module == "omega" else None
         if builder is not None:
             facts.extend(builder(dim_by_assembler.get(assembler) or {}))
@@ -435,7 +562,8 @@ def attach_pillar_explanations(
                 )}
                 assessment["raw_dose"] = (pillar.get("components") or {}).get("raw_dose")
                 assessment["normalization_reference"] = (pillar.get("components") or {}).get("reference")
-                pillar["explanation"] = {"schema_version": PILLAR_EXPLANATION_SCHEMA_VERSION, "assessment": assessment}
+                pillar["explanation"] = {**(pillar.get("explanation") or {}),
+                                         "schema_version": PILLAR_EXPLANATION_SCHEMA_VERSION, "assessment": assessment}
             ceiling = ((metadata.get("B7_safety_evaluation") or {}).get("dose_ceiling") or {})
             if _num(ceiling.get("cap_public")) is not None:
                 if ceiling.get("kind") == "caffeine_daily_total":
@@ -490,6 +618,12 @@ def attach_pillar_explanations(
             facts.extend(_zero_evidence_facts(pillar, dims.get("evidence") or {}))
         if spec.get("source_dim") == "transparency":
             facts.extend(_proprietary_blend_facts(dims.get("transparency") or {}))
+        unique: Dict[tuple, Dict[str, Any]] = {}
+        for fact in facts:
+            # Re-attaching the same pillars must not repeat a fact.
+            unique.setdefault((fact.get("id"), fact.get("value_display")),
+                              {**fact, "audience": fact.get("audience") or AUDIT})
+        facts = list(unique.values())
         if facts:
             pillar["explanation"] = {
                 **(pillar.get("explanation") or {}),

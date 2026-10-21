@@ -82,8 +82,10 @@ def _generic_module_bd(*, matched_entries=0, blend_counts=None):
 def test_omega_dose_pillar_emits_epa_dha_per_day_fact():
     pillars = attach_pillar_explanations(_pillars(), _module_bd(per_day_min_mg=660.0), _cfg(), "omega")
     explanation = pillars["Dose"]["explanation"]
-    assert explanation["schema_version"] == 1
+    assert explanation["schema_version"] == 2
     fact = explanation["facts"][0]
+    # Detail for audits; the Dose consumer fact comes from the receipt.
+    assert fact["audience"] == "audit"
     assert fact["id"] == "epa_dha_per_day"
     assert fact["value_mg"] == 660.0
     assert fact["value_display"] == "660 mg/day"
@@ -97,8 +99,9 @@ def test_omega_formulation_pillar_emits_detected_form_fact():
     assert fact["value_display"] == "Ethyl ester"
 
 
-def test_schema_version_constant_is_one_and_ids_are_stable():
-    assert PILLAR_EXPLANATION_SCHEMA_VERSION == 1
+def test_schema_version_constant_is_two_and_ids_are_stable():
+    # v2 (2026-10-20) adds the fact ``audience``; schema-1 readers show no facts.
+    assert PILLAR_EXPLANATION_SCHEMA_VERSION == 2
     pillars = attach_pillar_explanations(_pillars(), _module_bd(), _cfg(), "omega")
     ids = {
         pillars["Dose"]["explanation"]["facts"][0]["id"],
@@ -145,17 +148,19 @@ def test_generic_transparency_emits_sku_282638_shaped_blend_facts_in_order():
     )
 
     explanation = pillars["Transparency"]["explanation"]
-    assert explanation["schema_version"] == 1
+    assert explanation["schema_version"] == 2
     assert explanation["facts"] == [
         {
             "id": "proprietary_blend_count",
             "label": "Proprietary blends",
             "value_display": "4",
+            "audience": "audit",
         },
         {
             "id": "undisclosed_ingredient_amount_count",
             "label": "Ingredient amounts not disclosed",
             "value_display": "54",
+            "audience": "consumer",
         },
     ]
     for name, pillar in pillars.items():
@@ -174,12 +179,13 @@ def test_zero_evidence_pillar_emits_current_data_fact():
     )
 
     assert pillars["Evidence"]["explanation"] == {
-        "schema_version": 1,
+        "schema_version": 2,
         "facts": [
             {
                 "id": "matched_evidence_records",
                 "label": "Qualifying evidence matches",
                 "value_display": "0 in PharmaGuide's current evidence data",
+                "audience": "consumer",
             }
         ],
     }

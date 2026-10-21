@@ -66,12 +66,18 @@ def test_no_dose_safety_subtraction_remains_and_the_evaluation_is_kept():
 
 
 def test_explanation_distinguishes_minimum_from_maximum_exceedance():
-    always = dose(product(120.0))['reason']
-    ranged = dose(product(137.0, pct_rda=30.0, low=1, high=4))['reason']
+    always_pillar = dose(product(120.0))
+    ranged_pillar = dose(product(137.0, pct_rda=30.0, low=1, high=4))
+    always, ranged = always_pillar['reason'], ranged_pillar['reason']
     assert 'even the lowest directed daily use' in always.lower()
     assert 'higher directed daily amounts' in ranged.lower()
-    for reason in (always, ranged):
-        assert 'pharmaguide scoring policy' in reason.lower()
+    for pillar in (always_pillar, ranged_pillar):
+        # One-sentence reason; the policy statement is kept as audit detail.
+        assert 'scoring policy' not in pillar['reason'].lower()
+        facts = {f['id']: f for f in pillar['explanation']['facts']}
+        assert 'pharmaguide scoring policy' in facts['dose_safety_ceiling']['value_display'].lower()
+        assert facts['dose_safety_ceiling']['audience'] == 'audit'
+        assert facts['dose_upper_limit_result']['audience'] == 'consumer'
 
 
 def test_receipt_itemizes_the_ceiling_and_reconciles():

@@ -127,8 +127,10 @@ def test_receipt_records_existing_unassessed_primary_constraint():
                 'dose_contributions': [{'ingredient': 'Vitamin D', 'assessment': 'dri_reference', 'credit_raw': 22}]}
     receipt = _dose_receipt(pillar, {'score':12.54, 'metadata': metadata}, 'generic')
     assert receipt['reconciles'] is True
-    assert any('l_leucine' in row['value_display'] and '11.4' in row['value_display']
+    # Audit text names the active in words, never by canonical ID.
+    assert any('l leucine' in row['value_display'] and '11.4' in row['value_display']
                for row in _dose_receipt_facts(receipt))
+    assert not any('l_leucine' in row['value_display'] for row in _dose_receipt_facts(receipt))
 
 
 def test_undosed_blend_neutral_is_not_presented_as_a_clinical_dose():

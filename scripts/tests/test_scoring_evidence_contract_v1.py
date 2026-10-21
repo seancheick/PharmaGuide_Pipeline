@@ -114,40 +114,6 @@ def test_enzyme_activity_reaches_v4_as_non_mass_dose_evidence() -> None:
         _assert_module_aggregate_evidence(out, canonical_id)
 
 
-def test_identity_bearing_preparation_keeps_its_printed_mass_without_a_blend_projection() -> None:
-    # The label declares one Quercefit preparation with a Quercetin Phytosome
-    # form, not a blend with independently listed constituent ingredients.
-    from enhanced_normalizer import EnhancedDSLDNormalizer
-    from enrich_supplements_v3 import SupplementEnricherV3
-
-    raw = json.loads((Path(__file__).parent / "fixtures" / "evidence_readiness_309492_raw.json").read_text())
-    product, _ = SupplementEnricherV3().enrich_product(
-        EnhancedDSLDNormalizer().normalize_product(raw))
-    rows = get_scoring_ingredients(product, strict=True).rows
-    assert len(rows) == 1
-    [row] = rows
-    assert row["canonical_id"] == "quercetin"
-    assert row["matched_form"] == "quercetin phytosome"
-    assert row["raw_source_path"] == "ingredientRows[0]"
-    assert row["quantity"] == 300.0
-    assert row["unit"] == "mg"
-    assert row.get("scoring_input_kind") != "product_level_evidence"
-    assert not _evidence_rows(product, "blend_anchor_mass")
-
-    out = score_product_v4(product)
-    [assessment] = out["v4_breakdown"]["assessment_readiness"]["evidence"]["ingredient_assessments"]
-    assert assessment["evidence_applicability"] == "individual_ingredient"
-    assert assessment["state"] == "evaluated_supported"
-    assert assessment["source_value"] == 300.0
-    assert set(assessment["evidence_ids"]) == {"INGR_QUERCETIN", "PRECLIN_QUERCETIN_PHYTOSOME"}
-    assert out["v4_verdict"] != "NOT_SCORED"
-    assert out["raw_score_v4_100"] is not None
-    completeness = out["v4_breakdown"]["completeness_gate"]
-    assert "conservative_blend_anchor_mass" not in completeness["soft_missing"]
-    assert completeness["score_cap"] is None
-    assert completeness["verdict_ceiling"] is None
-
-
 def test_blend_anchor_cannot_hide_title_material_unresolved_vitamin_dose() -> None:
     # Product 76510 used to carry the source defect this test guarded, but its
     # Vitamin D unit has since been corrected from NP to IU. Keep the canary

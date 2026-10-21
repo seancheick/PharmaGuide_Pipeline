@@ -233,7 +233,10 @@ def test_over_ul_b_complex_takes_the_dose_ceiling_and_keeps_the_safety_concern()
     assert dose["metadata"]["B7_safety_evaluation"]["dose_ceiling"]["cap_public"] == 0.0
     assert safety["score"] == safety["max"] - safety["components"]["additive_or_sweetener_penalty"]
     assert "over_ul_penalty" not in safety["components"]
-    assert "exceed an established upper limit" in safety["reason"]
+    # The dose-safety finding stays visible here as the pillar's consumer fact.
+    not_deducted = [f for f in safety["explanation"]["facts"] if f["audience"] == "consumer"]
+    assert [f["id"] for f in not_deducted] == ["dose_safety_not_deducted"]
+    assert "exceed an established upper limit" in not_deducted[0]["value_display"]
     # B6 at 588% of its UL sets Dose to 0 (Dose V4.1 §2.4); the total stays
     # below "Very good".
     assert scored["quality_pillars_v4"]["dose"]["score"] == 0.0

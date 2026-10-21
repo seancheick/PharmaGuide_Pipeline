@@ -46,7 +46,7 @@ def test_reviewed_zero_still_states_its_record_count():
     out = _explain({"evidence": pillar}, {"evidence": dim})
     facts = out["evidence"]["explanation"]["facts"]
     assert {"id": "matched_evidence_records", "label": "Qualifying evidence matches",
-            "value_display": "0 in PharmaGuide's current evidence data"} in facts
+            "value_display": "0 in PharmaGuide's current evidence data", "audience": "consumer"} in facts
 
 
 def test_authority_copy_requires_awarded_points():
@@ -90,8 +90,8 @@ def test_botanical_formulation_names_what_earned_the_points():
     pillar = qs._pillar_formulation(dim, 20, "generic_botanical_branded", _cfg())
     assert pillar["score"] == 14.7
     assert pillar["reason"] == (
-        "The recognized botanical identity receives neutral credit. "
-        "Credited: extract preparation. Not credited: marker standardization.")
+        "The recognized botanical identity receives neutral credit; "
+        "credited: extract preparation; not credited: marker standardization.")
     assert "disclosed amount" not in pillar["reason"] and "verified" not in pillar["reason"]
     assert "absorbed" not in pillar["reason"] and "forms" not in pillar["reason"]
 
@@ -132,11 +132,15 @@ def test_unknown_verification_states_its_neutral_baseline():
     pillar = qs._pillar_verification(_module_bd(), 15, _cfg())
     assert pillar["score"] == 6.0
     assert pillar["reason"] == (
-        "Unknown: no independent verification on file; neutral 6 of 15, 9 points need verified evidence.")
+        "Unknown: no independent verification on file; it gets neutral credit, not a penalty.")
+    # The baseline arithmetic is kept for audits, never shown in the reason.
+    assert pillar["explanation"]["facts"] == [{
+        "id": "verification_neutral_baseline", "label": "Neutral value", "audience": "audit",
+        "value_display": "Neutral 6 of 15; 9 points need verified evidence."}]
 
 
-CLEAN_SCREEN = ("No catalog-level formula concerns found in the checks performed. "
-                "Personal suitability was not assessed.")
+CLEAN_SCREEN = ("No catalog-level formula concerns were found in the checks performed; "
+                "personal suitability was not assessed.")
 
 
 def test_clean_screen_describes_its_scope():
@@ -216,5 +220,8 @@ def test_dose_finding_is_not_worded_as_this_pillars_deduction_when_it_deducts_fo
     bd = _module_bd(state_counts={"confirmed_over_threshold": 1})
     safety = qs._pillar_safety_hygiene(bd, 10, _cfg(), clean_label_penalty=1.0)
     assert safety["score"] == 9.0
-    assert safety["reason"] == ("Safety concern: it contains a restricted additive. Not deducted here: "
-                                "one or more supplemental amounts exceed an established upper limit.")
+    assert safety["reason"] == "Safety concern: it contains a restricted additive."
+    # The dose-safety finding stays visible as this pillar's one consumer fact.
+    assert safety["explanation"]["facts"] == [{
+        "id": "dose_safety_not_deducted", "label": "Dose-safety finding", "audience": "consumer",
+        "value_display": "One or more supplemental amounts exceed an established upper limit"}]
