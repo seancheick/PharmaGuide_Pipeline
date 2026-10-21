@@ -24,6 +24,7 @@ if str(SCRIPTS_DIR) not in sys.path:
 
 from enrich_supplements_v3 import SupplementEnricherV3  # noqa: E402
 from stage_manifest import MANIFEST_NAME, select_stage_files  # noqa: E402
+from scoring_input_contract import score_eligible_identity_view  # noqa: E402
 
 
 REPORT_SCHEMA_VERSION = "1.0.0"
@@ -77,7 +78,12 @@ def recompute_evidence(enricher: SupplementEnricherV3, product: dict[str, Any]) 
     """
     from studied_formulas import formula_clinical_match
 
-    evidence = enricher._collect_evidence_data(product, product.get("ingredient_quality_data"))
+    # Match the production evidence boundary: retained interaction-only
+    # identities are not Evidence participants (enrich_product Section C).
+    evidence_product = score_eligible_identity_view(product)
+    evidence = enricher._collect_evidence_data(
+        evidence_product, evidence_product.get("ingredient_quality_data")
+    )
     formula = formula_clinical_match(product)
     if formula:
         matches = [m for m in _clinical_matches(evidence) if _entry_id(m) != formula["id"]]

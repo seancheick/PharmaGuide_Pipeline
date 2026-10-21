@@ -548,6 +548,60 @@
           "why": "safety: CAUTION \u2192 no safety warning"
         }
       ]
+    },
+    {
+      "reason": "Technical exact-artifact revalidation under Sean's standing instruction to complete the verified release through Flutter. The three dsld_id/from/to transitions and baseline hash are identical to Sean's explicit October 19, 2026 approval; the rebuilt catalog has a new candidate hash. Codex rechecked each current label assessment: 1700 mcg DFE equals the existing 1700 mcg DFE limit (100%, not an exceedance). Only the previously approved false folate warnings clear; no new clinical decision, safety threshold, exception product or transition is introduced. The original human approval is preserved unchanged. This record is Codex's technical artifact review, not a claim that Sean separately reviewed the new hash.",
+      "approved_by": "Codex integration audit (artifact revalidation under Sean's existing correction and release authorization)",
+      "date": "2026-10-21",
+      "baseline_sha256": "aa00384d450ac268b8921d5889f4a4e388183d4dcf2ed30b3146568a9ae1d850",
+      "candidate_sha256": "e6f6ad5d888b659fe017f51dfa70b4b49ce515f82963b2d453a2c2367a8a77d1",
+      "changes": [
+        {
+          "dsld_id": "259789",
+          "from": {
+            "verdict": "CAUTION",
+            "tier": "Very good",
+            "score": 80.0
+          },
+          "to": {
+            "verdict": "NO_KNOWN_CATALOG_CONCERN",
+            "tier": "Very good",
+            "score": 82.0
+          },
+          "product_name": "Multivitamin Active",
+          "why": "safety: CAUTION \u2192 no safety warning"
+        },
+        {
+          "dsld_id": "75159",
+          "from": {
+            "verdict": "CAUTION",
+            "tier": "Very good",
+            "score": 86.0
+          },
+          "to": {
+            "verdict": "NO_KNOWN_CATALOG_CONCERN",
+            "tier": "Very good",
+            "score": 85.0
+          },
+          "product_name": "Prenatal Formula With DHA",
+          "why": "safety: CAUTION \u2192 no safety warning"
+        },
+        {
+          "dsld_id": "75293",
+          "from": {
+            "verdict": "CAUTION",
+            "tier": "Very good",
+            "score": 85.0
+          },
+          "to": {
+            "verdict": "NO_KNOWN_CATALOG_CONCERN",
+            "tier": "Very good",
+            "score": 84.0
+          },
+          "product_name": "Prenatal Formula With Iron",
+          "why": "safety: CAUTION \u2192 no safety warning"
+        }
+      ]
     }
   ]
 }
