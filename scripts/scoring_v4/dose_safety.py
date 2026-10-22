@@ -196,7 +196,8 @@ class DoseSafetyResult:
             "nutrient": "Caffeine",
             "amount_mg_day": round(float(total), 4),
             "amount_mg_day_at_minimum": minimum,
-            "minimum_exceeds": (minimum > threshold or minimum == threshold and operator == ">") if minimum is not None else None,
+            "minimum_exceeds": (True if minimum is not None and (minimum > threshold or minimum == threshold and operator == ">")
+                                else False if minimum is not None and operator == "=" else None),
             "quantity_operator": operator,
             "frequency_defaulted": self.frequency_defaulted,
             "exceeds_above_mg_day": float(policy["exceeds_above_mg_day"]),
@@ -556,7 +557,7 @@ def _classify(flag: Dict[str, Any], minimum_share: float = 1.0) -> DoseSafetyFla
         nutrient=nutrient,
         canonical_id=canonical_id,
         pct_ul=pct_ul,
-        pct_ul_at_minimum=round(pct_ul * minimum_share, 4),
+        pct_ul_at_minimum=pct_ul * minimum_share,
         reference_nutrient=str(flag.get("reference_nutrient") or "") or None,
         ul=_as_float(flag.get("ul"), None),
         # The flag's own reference unit, projected from the rda_ul_data record.

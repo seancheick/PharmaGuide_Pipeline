@@ -360,3 +360,22 @@ def test_a_named_alternate_creatine_form_cannot_borrow_a_monohydrate_form_match(
            'matched_form': 'creatine monohydrate'}
     artifact = build_scored_artifact(_product(row, name='Creatine Hydrochloride', primary_type='pre_workout'))
     assert artifact['quality_pillars_v4']['dose']['score'] == 11.4
+
+
+@pytest.mark.parametrize("operator", [">", ">="])
+def test_lower_bound_minimum_does_not_prove_optional_only_excess(operator):
+    product = _caffeine(250, 3)
+    product["ingredient_quality_data"]["ingredients_scorable"][0]["quantity_operator"] = operator
+    ceiling = evaluate_dose_safety(product).dose_ceiling()
+    assert ceiling["minimum_exceeds"] is None
+    assert "deduction_public" not in ceiling
+    assert ceiling["cap_public"] == 0.0
+
+
+def test_partly_unknown_caffeine_cannot_claim_minimum_within_limit():
+    extra = {**_row("caffeine", None, "mg", name="Caffeine from tea"),
+             "raw_source_path": "activeIngredients[tea]"}
+    ceiling = evaluate_dose_safety(_caffeine(250, 3, (extra,))).dose_ceiling()
+    assert ceiling["minimum_exceeds"] is None
+    assert ceiling["cap_public"] == 0.0
+    assert "deduction_public" not in ceiling

@@ -164,3 +164,7 @@ def test_optional_receipt_reconciles_and_retains_reference():
     assert assessment['upper_reference']['pct_ul'] == 150
     assert assessment['reconciles'] is True
     assert p['receipt']['realized_deductions'] == -2.0
+
+
+def test_minimum_exceedance_is_not_rounded_into_optional_relief():
+    assert dose(product(300.0001, low=1, high=3))['score'] == 0.0
