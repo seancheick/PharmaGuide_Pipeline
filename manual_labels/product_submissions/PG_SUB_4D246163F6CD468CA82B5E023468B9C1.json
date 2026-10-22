@@ -1,0 +1,106 @@
+{
+  "id": "PG_SUB_4D246163F6CD468CA82B5E023468B9C1",
+  "brandName": "Dr Juan Santo Remedio",
+  "fullName": "Nopal",
+  "ingredientRows": [
+    {
+      "forms": [],
+      "ingredientGroup": "Nopal",
+      "name": "Nopal Cactus Stem Powder (Opuntia ficus-indica)",
+      "nestedRows": [],
+      "order": 1,
+      "quantity": [
+        {
+          "quantity": 700,
+          "unit": "mg"
+        }
+      ]
+    }
+  ],
+  "otherIngredients": {
+    "ingredients": [
+      {
+        "name": "Gelatin (capsule)"
+      },
+      {
+        "name": "Microcrystalline Cellulose"
+      },
+      {
+        "name": "Magnesium Stearate"
+      },
+      {
+        "name": "Silica"
+      }
+    ]
+  },
+  "otherIngredientsDisclosure": "present",
+  "physicalState": {
+    "langualCodeDescription": "Capsule",
+    "name": "Capsule"
+  },
+  "servingSizes": [
+    {
+      "maxDailyServings": 1,
+      "maxQuantity": 2,
+      "minDailyServings": 1,
+      "minQuantity": 2,
+      "order": 1,
+      "unit": "Capsules"
+    }
+  ],
+  "servingsPerContainer": "30",
+  "statements": [
+    {
+      "notes": "Dietary Supplement",
+      "type": "FDA Statement of Identity"
+    },
+    {
+      "notes": "Directions: Adults, as a dietary supplement, take two (2) capsules daily.",
+      "type": "Suggested/Recommended/Usage/Directions"
+    },
+    {
+      "notes": "Warnings: Pregnant or nursing women, individuals taking medication(s), or persons who have a health condition should consult their doctor before using this product. Discontinue use and consult your doctor if any adverse reactions occur.",
+      "type": "Precautions re: Pregnant or Nursing or Prescription Medications"
+    },
+    {
+      "notes": "Keep out of reach of children.",
+      "type": "Precautions re: Children"
+    },
+    {
+      "notes": "For your protection, do not purchase if the seal is broken or missing.",
+      "type": "Precautions re: All Other"
+    },
+    {
+      "notes": "Protect from heat, light, and moisture. Store at 15-30°C (59-86°F). Keep bottle tightly closed.",
+      "type": "Storage"
+    },
+    {
+      "notes": "Warning: Consuming this product can expose you to chemicals including lead, which is known to the State of California to cause cancer, birth defects or other reproductive harm. For more information go to www.P65Warnings.ca.gov/food.",
+      "type": "Precautions re: All Other"
+    },
+    {
+      "notes": "Distributed by: Santo Remedio, LLC Miami, FL 33166 855-REMEDIO | misantoremedio.com",
+      "type": "General Statements: All Other Content"
+    }
+  ],
+  "offMarket": 0,
+  "upcSku": "810047700036",
+  "src": "local/manual_labels/product_submissions/PG_SUB_4D246163F6CD468CA82B5E023468B9C1",
+  "source_type": "external_manual",
+  "manual_product_provenance": {
+    "source_kind": "private_product_submission",
+    "source_record_id": "4d246163-f6cd-468c-a82b-5e023468b9c1",
+    "label_verified_at": "2026-10-21",
+    "review_status": "verified",
+    "reviewer": "PharmaGuide Clinical Team"
+  },
+  "label_record_metadata": {
+    "source_name": "PharmaGuide verified product submission",
+    "source_record_id": "4d246163-f6cd-468c-a82b-5e023468b9c1",
+    "source_date": "2026-10-21",
+    "source_updated_date": "2026-10-21",
+    "product_status": "active",
+    "lineage_key": "pharmaguide_submission:4d246163-f6cd-468c-a82b-5e023468b9c1",
+    "reviewed_at": "2026-10-21T02:43:19.460272+00:00"
+  }
+}
