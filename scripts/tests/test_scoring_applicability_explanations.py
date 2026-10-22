@@ -181,7 +181,7 @@ def test_an_unrated_ingredient_form_is_neutral_not_zero():
     pillar = _pillar_formulation(dim, 20, "generic_single_molecule", _config())
 
     assert pillar["score"] == 12.0  # the module's own neutral (9 of 15), 0.6 of the pillar
-    assert "not rated" in pillar["reason"].lower()
+    assert pillar["reason"] == "Ingredient-form quality has not been assessed for these ingredients."
 
 
 def test_a_rated_but_weak_form_is_not_lifted_to_neutral():

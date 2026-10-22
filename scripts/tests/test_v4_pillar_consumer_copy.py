@@ -463,3 +463,20 @@ def test_score_explanation_ties_ignore_serialized_mapping_order(full_credit):
         for name in ([n for n in reversed(order) if n != "safety_hygiene"][:3] if full_credit else order[:3])]
     for permutation in permutations(order):
         assert _build_v4_score_explanation({name: pillars[name] for name in permutation}) == expected
+
+
+def test_assessment_gaps_are_not_exported_as_product_drawbacks():
+    from build_final_db import _build_v4_score_explanation
+    pillars = {
+        "evidence": {"score": 0, "max": 20, "display_state": "applicability_unestablished",
+                     "reason": "Research applicability is unresolved."},
+        "formulation": {"score": 12, "max": 20, "reason": "Form assessment pending."},
+        "verification": {"score": 8, "max": 15, "reason": "No product testing verified."},
+    }
+    module = {"dimensions": {"formulation": {"metadata": {
+        "iqm_form_quality_assessed_count": 0}, "penalties": {}}}}
+    result = _build_v4_score_explanation(pillars, module)
+    assert [row["pillar"] for row in result["drags"]] == ["verification"]
+    # Actual reviewed unfavorable evidence still belongs in considerations.
+    pillars["evidence"]["display_state"] = "assessed"
+    assert "evidence" in [row["pillar"] for row in _build_v4_score_explanation(pillars, module)["drags"]]
