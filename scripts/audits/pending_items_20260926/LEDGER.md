@@ -2581,11 +2581,18 @@ Per-entry primary-source receipts: `scripts/audits/submission_mapping_20261022/r
 
 Focused nutrition/import/consumer slice:307passed; final identity/resolver/dedup slice:59passed.
 Data-batch check:8explicit changed/added entries,0problems. Citation verifiers:0changed citations,
-0changed interaction rules. Frozen five current approved labels plus native affected rows and
-three controls:70raw inputs selected from15414local native labels; full-stage measurement and
-local checkpoint finishing. Initial30-label result:all five approved-label actives/inactives map;
-creatine20kcal retained; NAC66.3→65.8 from existing MCC excipient deduction; no other score movement
-or safety-status change. Final measurement/local/CI status must be recorded before integration.
+0changed interaction rules. Final full-stage frozen comparison at aec0088a:70raw labels (five current approvals,65native
+affected candidates/controls) selected using15414local native labels.48Clean/Enrich records
+change;22unchanged, including all three controls. All five approvals have mapped actives/inactives
+and retained canonical display rows; creatine20kcal survives. NAC66.3→65.8 is the sole numeric
+movement, from the existing MCC excipient deduction. No quality/safety-status changes or lost
+additive signals. Native244301 shares the corrected pea-starch identity (Modified Starch→Pea
+Starch); its50g amount, role, numeric score and no-applicable-UL determination remain unchanged.
+Final local at aec0088a:546passed,24declared external/opt-in skips; skip guard green.
+CI39859254606 had three green shards and one stale oat-fiber→generic-oat assertion.
+Corrected that assertion against the JRS source; added plain/organic precise-identity assertions
+and retained generic Oat/Avena sativa controls.46affected tests pass; production source/data
+and measured fingerprints unchanged. The corrected exact-candidate CI remains pending.
 Private raw exports/replays/logs: `~/pg_quality/submission_mapping_20261022/`.
 
 No corpus rebuild, import materialization/promotion, storage upload or release ran. Existing

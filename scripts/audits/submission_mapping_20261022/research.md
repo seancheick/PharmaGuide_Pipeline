@@ -70,3 +70,21 @@ capsule chemistry. Regressions cover both seams and the generic-capsule negative
 
 Validation and integration results are recorded in the existing pending-items LEDGER.
 Full-corpus regeneration and catalog/app release acceptance remain separate work.
+
+## Measured result
+
+At source `aec0088a`, 70 frozen raw labels were replayed through Clean, Enrich and
+Score against `fa6fb2495`. The set covers all five current approved submissions,
+65 native affected candidates/controls, and includes three unaffected control labels.
+48 Clean/Enrich records change; 22 remain unchanged, including every control.
+All five approvals have mapped active/inactive ingredients and canonical display
+rows; creatine retains 20 kcal. The only numerical movement is NAC 66.3 to 65.8
+from the existing microcrystalline-cellulose excipient deduction. No quality/safety
+status changes or additive-signal losses occur. Native label 244301 also uses pea
+starch in its active panel: its identity changes from Modified Starch to Pea Starch,
+with its 50 g amount, role, numerical score and no-applicable-UL result preserved.
+Source fingerprints prove the candidate remained fixed during capture.
+
+All 114 existing stage manifests are stale (38 each Clean, Enrich and Score); the
+next catalog regeneration must start at Clean. These source corrections do not
+update the existing catalog, promote approvals or qualify an external release.
