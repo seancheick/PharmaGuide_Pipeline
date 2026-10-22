@@ -750,9 +750,19 @@ def assess_probiotic_evidence(product: Mapping) -> dict:
         elif id(row) not in accepted:
             # A finished literature review that found no qualifying human
             # evidence is a conclusion, not an open review.
-            status = ("strain_reviewed_no_qualifying_human_evidence"
-                      if strain_literature_review_concluded(reference)
-                      else "strain_identity_or_review_unresolved")
+            if strain_literature_review_concluded(reference):
+                # A review may reject individual-strain attribution while
+                # retaining reviewed combination research. Preserve that
+                # applicability gap without accepting individual credit.
+                status = ("strain_context_not_applicable" if any(
+                    c.get("status") == "source_context_recorded"
+                    and context_accepted_for_scoring(c)
+                    and c.get("dose_comparison") not in {
+                        "identity_owner_unresolved", "organism_preparation_mismatch"}
+                    for c in result["study_contexts"])
+                    else "strain_reviewed_no_qualifying_human_evidence")
+            else:
+                status = "strain_identity_or_review_unresolved"
         elif row.get("is_inactivated") or row.get("is_postbiotic"):
             status = "strain_context_mismatch"
         elif result["cfu_per_day"] is None or result["cfu_per_day"] <= 0:

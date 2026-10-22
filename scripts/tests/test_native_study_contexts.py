@@ -291,7 +291,7 @@ def test_lpc37_sources_join_without_new_approval_or_interpolated_dose():
     unrelated = deepcopy(product)
     unrelated["product_name"] = "Digestive support probiotic"
     assert score_evidence(unrelated)["score"] == 0
-    assert score_evidence(unrelated)["metadata"]["evidence_result_state"] == "applicability_unestablished"
+    assert score_evidence(unrelated)["metadata"]["evidence_result_state"] == "research_present_applicability_unestablished"
 
 
 @pytest.mark.parametrize("stale_field", ["indication_primary", "indication_secondary", "clinical_support_level"])

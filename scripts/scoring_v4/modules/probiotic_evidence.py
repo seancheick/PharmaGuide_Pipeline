@@ -121,7 +121,9 @@ def score_evidence(product: Any) -> Dict[str, Any]:
         state = "evaluated_null"
     elif components["product_applicability"] > 0:
         state = "evaluated_applicable"
-    elif research_score > 0:
+    elif research_score > 0 or any(
+            row.get("status") == "strain_context_not_applicable"
+            for row in assessment["strain_assessments"]):
         state = "research_present_applicability_unestablished"
     elif any(not _human_research_reviewed({"clinical_id": row.get("clinical_id")}, assessment)
              for row in assessment["strain_assessments"]
