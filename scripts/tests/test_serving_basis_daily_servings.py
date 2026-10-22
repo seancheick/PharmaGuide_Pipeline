@@ -410,7 +410,8 @@ def test_ranged_capsule_regimen_keeps_the_facts_panel_amount_basis(pid, amount):
     artifact = build_scored_artifact(enriched)
     assert artifact["quality_score_status"] == "scored"
     # Adequacy at one capsule, safety at four (480/600 mg against 350 mg).
-    assert artifact["quality_pillars_v4"]["dose"]["score"] == (0 if amount == 150 else 10)
+    assert artifact["quality_pillars_v4"]["dose"]["score"] == 18
+    assert artifact["quality_pillars_v4"]["dose"]["components"]["adequacy_before_safety"] == 20
     assert artifact["product_safety_status"] == "caution"
     assert artifact["_v4_module_breakdown"]["dimensions"]["dose"]["metadata"]["assessment_basis"] == "directed_daily_use"
     assert artifact["dose_safety_evaluation"]["flags"][0]["state"] == "confirmed_over_threshold"

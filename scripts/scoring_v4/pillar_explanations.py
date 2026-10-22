@@ -271,10 +271,10 @@ def _dose_receipt(pillar: Dict[str, Any], dose: Dict[str, Any], module: Optional
     adequacy = score if adequacy is None else adequacy
     ceiling = (metadata.get("B7_safety_evaluation") or {}).get("dose_ceiling")
     upper = None
-    if isinstance(ceiling, dict) and _num(ceiling.get("cap_public")) is not None:
+    if isinstance(ceiling, dict) and (ceiling.get("cap_public") is not None or ceiling.get("deduction_public") is not None):
         upper = {key: ceiling.get(key) for key in (
             "kind", "nutrient", "ul", "ul_unit", "ul_population", "pct_ul", "pct_ul_at_minimum", "amount_mg_day",
-            "amount_mg_day_at_minimum", "exceeds_above_mg_day", "minimum_exceeds", "cap_public", "quantity_operator") if ceiling.get(key) is not None}
+            "amount_mg_day_at_minimum", "exceeds_above_mg_day", "minimum_exceeds", "cap_public", "deduction_public", "quantity_operator") if ceiling.get(key) is not None}
         upper["policy"] = "pharmaguide_scoring_policy"
     receipt = {
         "daily_use": metadata.get("daily_use"),
@@ -307,7 +307,7 @@ def _dose_receipt(pillar: Dict[str, Any], dose: Dict[str, Any], module: Optional
         return receipt
     receipt["reconciles"] = (score is not None and adequacy is not None
                              and abs(adequacy - min(weight, accounted)) < 0.051
-                             and abs(score - (min(adequacy, cap) if cap is not None else adequacy)) < 0.05)
+                             and abs(score - (min(adequacy, cap) if cap is not None else max(0.0, adequacy - (_num((upper or {}).get("deduction_public")) or 0.0)))) < 0.05)
     return receipt
 
 
@@ -503,10 +503,14 @@ def _dose_receipt_facts(receipt: Dict[str, Any], metadata: Optional[Dict[str, An
                      + f" ({upper.get('ul_population') or 'general adult'} limit) at the highest directed use"
                      + (f", {at_min:.0f}% at the lowest" if at_min is not None else ""))
         facts.append({"id": "dose_upper_reference", "label": "Upper-limit check",
-                      "value_display": f"{limit}; Dose is capped at {_num(upper['cap_public']):g} (PharmaGuide scoring policy)."})
+                      "value_display": (f"{limit}; Dose deduction {_num(upper['deduction_public']):g} (PharmaGuide scoring policy)."
+                                        if upper.get("deduction_public") is not None else
+                                        f"{limit}; Dose is capped at {_num(upper['cap_public']):g} (PharmaGuide scoring policy).")})
     if adequacy is not None and final is not None:
         if upper:
-            arithmetic = (f"Adequacy {adequacy:g}/20, capped at {_num(upper['cap_public']):g}: Dose {final:g}/20.")
+            arithmetic = (f"Adequacy {adequacy:g}/20, deduction {_num(upper['deduction_public']):g}: Dose {final:g}/20."
+                          if upper.get("deduction_public") is not None else
+                          f"Adequacy {adequacy:g}/20, capped at {_num(upper['cap_public']):g}: Dose {final:g}/20.")
         else:
             arithmetic = f"Adequacy {adequacy:g}/20; no upper-limit cap applies: Dose {final:g}/20."
         facts.append({"id": "dose_arithmetic", "label": "How Dose adds up", "value_display": arithmetic})
@@ -569,8 +573,11 @@ def attach_pillar_explanations(
                 pillar["explanation"] = {**(pillar.get("explanation") or {}),
                                          "schema_version": PILLAR_EXPLANATION_SCHEMA_VERSION, "assessment": assessment}
             ceiling = ((metadata.get("B7_safety_evaluation") or {}).get("dose_ceiling") or {})
-            if _num(ceiling.get("cap_public")) is not None:
-                if ceiling.get("kind") == "caffeine_daily_total":
+            if ceiling.get("cap_public") is not None or ceiling.get("deduction_public") is not None:
+                if ceiling.get("deduction_public") is not None:
+                    rule = (f"Only optional higher directed use exceeds the reference; subtract {ceiling['deduction_public']:g} "
+                            "points from earned minimum-use Dose credit, once, with a floor of zero. ")
+                elif ceiling.get("kind") == "caffeine_daily_total":
                     rule = (f"When the highest directed daily use provides more than {ceiling['exceeds_above_mg_day']:g} mg "
                             f"of caffeine, Dose is at most {ceiling['partial_ceiling_public']:g}; at "
                             f"{ceiling['zero_at_mg_day']:g} mg/day or more it is 0. Single doses above 200 mg are "
@@ -582,7 +589,7 @@ def attach_pillar_explanations(
                     "id": "dose_safety_ceiling", "label": "Upper-limit scoring rule",
                     "value_display": (
                         rule
-                        + "This product-level cap is applied once, after the ingredient assessment, and never raises a lower score. "
+                        + "This product-level adjustment is applied once, after the ingredient assessment, and never raises a lower score. "
                         "It is PharmaGuide scoring policy, not a medical toxicity grade. "
                         "The applicable reference determines which food, supplement or medication sources count; their limits are not interchangeable."
                     ),

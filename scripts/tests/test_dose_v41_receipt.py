@@ -32,11 +32,15 @@ def test_every_archetype_dose_receipt_reconciles(case):
     assert receipt["aggregation"] is not None, case.case_id
     assert any(fact["id"] == "dose_arithmetic" for fact in dose["explanation"]["facts"])
     if receipt["upper_reference"]:
-        assert dose["score"] <= receipt["upper_reference"]["cap_public"]
+        upper = receipt["upper_reference"]
+        if upper.get("deduction_public") is not None:
+            assert dose["score"] == max(0, receipt["adequacy_before_safety"] - upper["deduction_public"])
+        else:
+            assert dose["score"] <= upper["cap_public"]
 
 
 def test_the_worked_example_reads_like_the_plan():
-    # 120 mg magnesium, 1-4 servings (Pure 205309 shape): adequacy 20, cap 10.
+    # 120 mg magnesium, 1-4 servings (Pure 205309 shape): adequacy 20, optional-use deduction 2.
     product = ceiling_product(137.14, pct_rda=30.0, low=1, high=4)
     row = product["rda_ul_data"]["adequacy_results"][0]
     row.update(per_day_min=120.0, per_day_max=480.0)
@@ -49,10 +53,10 @@ def test_the_worked_example_reads_like_the_plan():
     assert item["pct_of_reference"] == pytest.approx(142.86, abs=0.01)
     assert (item["amount_at_minimum"], item["amount_at_maximum"]) == (120.0, 480.0)
     upper = receipt["upper_reference"]
-    assert upper["ul"] == 350.0 and upper["ul_population"] == "general adult" and upper["cap_public"] == 10.0
-    assert receipt["adequacy_before_safety"] == 20.0 and receipt["final"] == 10.0
+    assert upper["ul"] == 350.0 and upper["ul_population"] == "general adult" and upper["deduction_public"] == 2.0
+    assert receipt["adequacy_before_safety"] == 20.0 and receipt["final"] == 18.0
     facts = {fact["id"]: fact["value_display"] for fact in dose["explanation"]["facts"]}
-    assert facts["dose_arithmetic"] == "Adequacy 20/20, capped at 10: Dose 10/20."
+    assert facts["dose_arithmetic"] == "Adequacy 20/20, deduction 2: Dose 18/20."
     assert "(general adult limit)" in facts["dose_upper_reference"]
     assert "PharmaGuide scoring policy" in facts["dose_upper_reference"]
 

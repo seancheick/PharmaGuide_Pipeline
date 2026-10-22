@@ -138,13 +138,14 @@ def test_malformed_flag_entries_are_contained():
     assert _cap(result) == 0.0
 
 
-def test_minimum_directed_use_only_changes_the_explanation():
+def test_optional_maximum_use_gets_one_deduction():
     product = {"rda_ul_data": {"safety_flags": [{"nutrient": "Magnesium", "pct_ul": 137.0,
                                                  "ul_gate_eligible": True}]},
                "serving_basis": {"min_servings_per_day": 1, "max_servings_per_day": 4,
                                  "servings_per_day_source": "directions"}}
     ceiling = evaluate_dose_safety(product).dose_ceiling()
-    assert ceiling["cap_public"] == 10.0
+    assert ceiling["cap_public"] is None
+    assert ceiling["deduction_public"] == 2.0
     assert ceiling["pct_ul_at_minimum"] == 34.25 and ceiling["minimum_exceeds"] is False
 
 

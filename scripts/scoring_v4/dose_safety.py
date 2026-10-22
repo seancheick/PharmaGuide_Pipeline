@@ -139,7 +139,7 @@ class DoseSafetyFlag:
     canonical_id: Optional[str] = None
     pct_ul: Any = None
     reason: Optional[str] = None
-    # The same exposure at the minimum directed daily use: explanation only.
+    # The same exposure at minimum directed use; keep full precision for policy.
     pct_ul_at_minimum: Optional[float] = None
     # The reference nutrient whose limit applies (the label text is `nutrient`).
     reference_nutrient: Optional[str] = None
@@ -164,11 +164,20 @@ class DoseSafetyResult:
     def dose_ceiling(self) -> Optional[Dict[str, Any]]:
         """The strongest confirmed exceedance and the public Dose ceiling it sets.
 
-        Exactly 100% is not an exceedance. The maximum directed daily use sets
-        the band; the minimum only says whether even the lowest use exceeds.
+        Exactly 100% is not an exceedance. Minimum-use exceedances retain
+        their maximum-use ceiling; optional-only excess gets one deduction
+        from earned adequacy (Sean 2026-10-22). Safety flags stay unchanged.
         """
         candidates = [ceiling for ceiling in (self._ul_ceiling(), self._caffeine_ceiling()) if ceiling]
-        return min(candidates, key=lambda ceiling: ceiling["cap_public"]) if candidates else None
+        if not candidates:
+            return None
+        result = min(candidates, key=lambda ceiling: (ceiling.get("minimum_exceeds") is False, ceiling["cap_public"]))
+        if result.get("minimum_exceeds") is False and not self.frequency_defaulted:
+            result["deduction_public"] = float(_CEILING["optional_use_deduction_public"])
+            # No absolute safety cap in the optional-only case. The existing
+            # public Dose maximum is applied by its scoring owner.
+            result["cap_public"] = None
+        return result
 
     def _caffeine_ceiling(self) -> Optional[Dict[str, Any]]:
         policy = _CEILING["caffeine"]
@@ -187,7 +196,8 @@ class DoseSafetyResult:
             "nutrient": "Caffeine",
             "amount_mg_day": round(float(total), 4),
             "amount_mg_day_at_minimum": minimum,
-            "minimum_exceeds": (minimum > threshold or minimum == threshold and operator == ">") if minimum is not None else None,
+            "minimum_exceeds": (True if minimum is not None and (minimum > threshold or minimum == threshold and operator == ">")
+                                else False if minimum is not None and operator == "=" else None),
             "quantity_operator": operator,
             "frequency_defaulted": self.frequency_defaulted,
             "exceeds_above_mg_day": float(policy["exceeds_above_mg_day"]),
@@ -201,7 +211,9 @@ class DoseSafetyResult:
                      and flag.pct_ul > float(_CEILING["exceeds_above_pct"])]
         if not confirmed:
             return None
-        driver = max(confirmed, key=lambda flag: (flag.pct_ul, _norm_text(flag.nutrient)))
+        driver = max(confirmed, key=lambda flag: (
+            flag.pct_ul_at_minimum is None or flag.pct_ul_at_minimum > float(_CEILING["exceeds_above_pct"]),
+            flag.pct_ul, _norm_text(flag.nutrient)))
         zero_at = float(_CEILING["zero_at_pct"])
         cap = 0.0 if driver.pct_ul >= zero_at else float(_CEILING["partial_ceiling_public"])
         minimum = driver.pct_ul_at_minimum
@@ -545,7 +557,7 @@ def _classify(flag: Dict[str, Any], minimum_share: float = 1.0) -> DoseSafetyFla
         nutrient=nutrient,
         canonical_id=canonical_id,
         pct_ul=pct_ul,
-        pct_ul_at_minimum=round(pct_ul * minimum_share, 4),
+        pct_ul_at_minimum=pct_ul * minimum_share,
         reference_nutrient=str(flag.get("reference_nutrient") or "") or None,
         ul=_as_float(flag.get("ul"), None),
         # The flag's own reference unit, projected from the rda_ul_data record.

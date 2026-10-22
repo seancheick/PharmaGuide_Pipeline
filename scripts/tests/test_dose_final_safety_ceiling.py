@@ -82,11 +82,11 @@ def test_explanation_distinguishes_minimum_from_maximum_exceedance():
 
 def test_receipt_itemizes_the_ceiling_and_reconciles():
     pillar = dose(product(137.0, pct_rda=30.0, low=1, high=4))
-    assert pillar['score'] == 10.0
+    assert pillar['score'] == 18.0
     entries = pillar['receipt']['entries']
     cap = [e for e in entries if e['id'] == 'dose_safety_ceiling']
-    assert cap and cap[0]['kind'] == 'cap' and cap[0]['points'] == -10.0
-    assert round(sum(e['points'] for e in entries), 4) == 10.0
+    assert cap and cap[0]['kind'] == 'deduction' and cap[0]['points'] == -2.0
+    assert round(sum(e['points'] for e in entries), 4) == 18.0
 
 
 def test_the_ceiling_names_the_reference_nutrient_not_the_label_brand():
@@ -120,3 +120,51 @@ def test_a_neutral_adequacy_under_a_ceiling_takes_the_lower_value():
 def test_the_ceiling_starts_where_a_confirmed_exceedance_starts():
     from scoring_v4 import dose_safety
     assert float(dose_safety._CEILING["exceeds_above_pct"]) == dose_safety._CONFIRMED_UL_EXCEEDANCE_PCT == 100.0
+
+
+def test_optional_higher_use_keeps_earned_minimum_dose_credit():
+    # Sean2026-10-22: optional high use is a small deduction, not loss of
+    # otherwise earned adequacy. Exact magnitude is owned by approved config.
+    fixed = dose(product(50.0))
+    optional = dose(product(150.0, low=1, high=3))
+    assert fixed['score'] == 20.0
+    assert optional['score'] == fixed['score'] - 2.0
+    assert optional['components']['adequacy_before_safety'] == fixed['score']
+
+
+def test_optional_excess_does_not_remove_safety_finding():
+    artifact = build_scored_artifact(product(150.0, low=1, high=3))
+    evaluation = artifact['_v4_module_breakdown']['dimensions']['dose']['metadata']['B7_safety_evaluation']
+    assert evaluation['state_counts']['confirmed_over_threshold'] == 1
+    assert evaluation['flags'][0]['pct_ul'] == 150.0
+    assert evaluation['flags'][0]['pct_ul_at_minimum'] == 50.0
+
+
+@pytest.mark.parametrize('pct', [100.01, 137.0, 150.0, 299.99, 300.0])
+def test_optional_deduction_is_two_points_regardless_of_high_end(pct):
+    assert dose(product(pct, low=1, high=3))['score'] == 18.0
+
+
+def test_optional_deduction_is_once_and_never_negative():
+    flags = [_flag('Magnesium', 'magnesium', 150), _flag('Zinc', 'zinc', 160)]
+    assert dose(product(150, low=1, high=3, flags=flags))['score'] == 18.0
+    baseline = dose(product(50, pct_rda=0.1, low=1, high=3))['score']
+    assert baseline < 2
+    assert dose(product(150, pct_rda=0.1, low=1, high=3))['score'] == 0
+
+
+def test_minimum_exceedance_retains_stronger_rule():
+    assert dose(product(300.01, low=1, high=3))['score'] == 0.0
+
+
+def test_optional_receipt_reconciles_and_retains_reference():
+    p = dose(product(150, low=1, high=3))
+    assessment = p['explanation']['dose_receipt']
+    assert assessment['upper_reference']['deduction_public'] == 2
+    assert assessment['upper_reference']['pct_ul'] == 150
+    assert assessment['reconciles'] is True
+    assert p['receipt']['realized_deductions'] == -2.0
+
+
+def test_minimum_exceedance_is_not_rounded_into_optional_relief():
+    assert dose(product(300.0001, low=1, high=3))['score'] == 0.0

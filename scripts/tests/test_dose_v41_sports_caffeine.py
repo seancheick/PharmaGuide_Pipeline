@@ -38,10 +38,12 @@ def _caffeine(per_serving, servings=1, extra=()):
 
 
 @pytest.mark.parametrize("per_serving,servings,cap", [
-    (400, 1, None), (401, 1, 10.0), (599, 1, 10.0), (600, 1, 0.0), (200, 3, 0.0), (250, 2, 10.0)])
+    (400, 1, None), (401, 1, 10.0), (599, 1, 10.0), (600, 1, 0.0), (200, 3, None), (250, 2, None)])
 def test_daily_caffeine_ceiling_boundaries(per_serving, servings, cap):
     ceiling = evaluate_dose_safety(_caffeine(per_serving, servings)).dose_ceiling()
     assert (ceiling or {}).get("cap_public") == cap
+    if servings > 1:
+        assert ceiling["deduction_public"] == 2.0
 
 
 def test_caffeine_from_several_quantified_sources_is_summed():
@@ -67,7 +69,7 @@ def test_unknown_caffeine_amount_stays_unknown():
 def test_caffeine_ceiling_reaches_the_public_dose_on_any_route_and_names_its_policy():
     artifact = build_scored_artifact(_caffeine(300, 2))
     dose = artifact["quality_pillars_v4"]["dose"]
-    assert dose["score"] == 0.0
+    assert dose["score"] == 18.0
     assert "400 mg" in dose["reason"]
     facts = {f["id"]: f for f in dose["explanation"]["facts"]}
     assert "PharmaGuide scoring policy" in facts["dose_safety_ceiling"]["value_display"]
@@ -358,3 +360,22 @@ def test_a_named_alternate_creatine_form_cannot_borrow_a_monohydrate_form_match(
            'matched_form': 'creatine monohydrate'}
     artifact = build_scored_artifact(_product(row, name='Creatine Hydrochloride', primary_type='pre_workout'))
     assert artifact['quality_pillars_v4']['dose']['score'] == 11.4
+
+
+@pytest.mark.parametrize("operator", [">", ">="])
+def test_lower_bound_minimum_does_not_prove_optional_only_excess(operator):
+    product = _caffeine(250, 3)
+    product["ingredient_quality_data"]["ingredients_scorable"][0]["quantity_operator"] = operator
+    ceiling = evaluate_dose_safety(product).dose_ceiling()
+    assert ceiling["minimum_exceeds"] is None
+    assert "deduction_public" not in ceiling
+    assert ceiling["cap_public"] == 0.0
+
+
+def test_partly_unknown_caffeine_cannot_claim_minimum_within_limit():
+    extra = {**_row("caffeine", None, "mg", name="Caffeine from tea"),
+             "raw_source_path": "activeIngredients[tea]"}
+    ceiling = evaluate_dose_safety(_caffeine(250, 3, (extra,))).dose_ceiling()
+    assert ceiling["minimum_exceeds"] is None
+    assert ceiling["cap_public"] == 0.0
+    assert "deduction_public" not in ceiling

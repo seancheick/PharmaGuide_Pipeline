@@ -78,6 +78,7 @@ def test_dose_safety_ceiling_has_one_config_owner():
         "exceeds_above_pct": 100.0,
         "zero_at_pct": 150.0,
         "partial_ceiling_public": 10.0,
+        "optional_use_deduction_public": 2.0,
     }
     assert "dose_safety_policy" not in CFG
     # Dose V4.1 D3: caffeine is the one approved non-UL upper reference.
