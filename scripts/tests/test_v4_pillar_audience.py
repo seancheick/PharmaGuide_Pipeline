@@ -10,6 +10,8 @@ numbers, policy paragraphs or arithmetic.
 from __future__ import annotations
 
 import re
+import pytest
+
 import sys
 from pathlib import Path
 
@@ -99,7 +101,7 @@ def test_ul_cap_consumer_fact_is_the_upper_limit_result():
     _assert_consumer_contract(pillar)
     assert _consumer(pillar) == [{
         "id": "dose_upper_limit_result", "label": "Upper limit", "audience": "consumer",
-        "value_display": "Up to 3,000 mg a day: 150% of the 2,000 mg Vitamin C upper limit (general adult)"}]
+        "value_display": "1,000 mg per serving; directions: 1–3 servings a day. Up to 3,000 mg a day: 150% of the 2,000 mg Vitamin C upper limit (general adult)"}]
 
 
 def test_audit_contributions_use_display_name_not_canonical_id():
@@ -277,3 +279,17 @@ def test_upper_limit_rounding_boundaries_never_hide_exceedance():
     for value in (100.00001, 100.01, 100.05, 100.049999, 100.49, 100.5):
         text = _percent(value)
         assert text == ">100" or float(text) > 100, (value, text)
+
+
+@pytest.mark.parametrize("basis,scope", [("supplemental_only", "from supplements"),
+                                         ("total_intake", "from all sources"),
+                                         ("synthetic_only", "synthetic forms")])
+def test_upper_limit_fact_explains_serving_range_and_reference_scope(basis, scope):
+    dim, module_bd = _ul_capped_vitamin_c()
+    dim["metadata"]["reference_assessments"][0]["reference"] = {"ul_basis": basis}
+    text = _consumer(_assembled_dose(dim, module_bd))[0]["value_display"]
+    assert "1,000 mg per serving" in text
+    assert "1–3 servings a day" in text
+    assert "3,000 mg" in text
+    assert scope in text
+    assert "capsule" not in text  # No unit-count inference from serving counts.

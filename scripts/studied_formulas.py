@@ -750,9 +750,14 @@ def assess_probiotic_evidence(product: Mapping) -> dict:
         elif id(row) not in accepted:
             # A finished literature review that found no qualifying human
             # evidence is a conclusion, not an open review.
-            status = ("strain_reviewed_no_qualifying_human_evidence"
-                      if strain_literature_review_concluded(reference)
-                      else "strain_identity_or_review_unresolved")
+            if strain_literature_review_concluded(reference):
+                # A review may reject individual-strain attribution while
+                # retaining reviewed combination research. Preserve that
+                # applicability gap without accepting individual credit.
+                status = ("strain_context_not_applicable" if reviewed_native_context_present(result)
+                    else "strain_reviewed_no_qualifying_human_evidence")
+            else:
+                status = "strain_identity_or_review_unresolved"
         elif row.get("is_inactivated") or row.get("is_postbiotic"):
             status = "strain_context_mismatch"
         elif result["cfu_per_day"] is None or result["cfu_per_day"] <= 0:
@@ -974,6 +979,20 @@ NATIVE_CONTEXT_QUALITY_ENUMS = {
     "funding": frozenset({"industry", "independent", "mixed", "unreported"}),
     "source_tier": frozenset({"A", "B", "C", "D", "E"}),
 }
+
+
+def reviewed_native_context_present(strain: Mapping) -> bool:
+    """Research inventory is independent of label amount and credit eligibility."""
+    if strain.get("status") in {"strain_identity_mismatch", "strain_context_mismatch"}:
+        return False
+    return any(
+        context.get("status") == "source_context_recorded"
+        and context.get("review_status") == "clinician_approved"
+        and clinical_review_provenance_valid(context)
+        and context.get("dose_comparison") not in {
+            "identity_owner_unresolved", "organism_preparation_mismatch"}
+        for context in strain.get("study_contexts", [])
+    )
 
 
 def valid_native_study_context(context: Mapping, reference_id: str) -> bool:

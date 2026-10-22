@@ -892,8 +892,7 @@ def _pillar_formulation(dim: Dict[str, Any], weight: float, archetype: str,
     ):
         # An unrated form is unknown, not poor: the module's A1 already carries
         # the shared unrated neutral (generic_formulation.UNRATED_FORM_NEUTRAL).
-        reason = ("Ingredient-form quality is not rated in PharmaGuide's current data, "
-                  "so it receives neutral credit.")
+        reason = "Ingredient-form quality has not been assessed for these ingredients."
     if archetype == "omega":
         reason = _omega_formulation_reason(dim, reason)
     return {
@@ -990,8 +989,7 @@ _EVIDENCE_ZERO_REASON = {
         "Active ingredient identity or material form requires further scientific clarification before evidence can be assessed."
     ),
     "applicability_unestablished": (
-        "We reviewed the evidence for these ingredients, but it does not match this label's "
-        "form, dose or delivery, so it cannot be applied to this product."
+        "Available research has not established a match to this product's assessed ingredients and use."
     ),
     "evaluated_unfavorable": "Reviewed human research did not show benefit for these ingredients.",
     "evaluated_null": (
@@ -1073,10 +1071,8 @@ def _pillar_evidence(dim: Dict[str, Any], weight: float, archetype: str,
                          "product's assessed preparation, purpose and population; this is not "
                          "a product-quality finding.")
         if archetype == "probiotic" and state == "research_present_applicability_unestablished":
-            zero_copy = ("Research on these probiotic strains exists, but our review did not "
-                         "establish that it applies to this product's strains, purpose and "
-                         "population, so it earns no Evidence points; this is not a "
-                         "product-quality finding.")
+            zero_copy = ("Research involving these microorganisms is recorded, but its applicability "
+                         "to this product's preparation, purpose and population is not established.")
         if zero_copy is None:
             zero_copy = _EVIDENCE_ZERO_REASON.get(
                 _EVIDENCE_ZERO_CLASS_FALLBACK.get(

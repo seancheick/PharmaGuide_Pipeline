@@ -87,7 +87,7 @@ def test_unrated_form_is_distinct_from_an_explicit_rating(bio_score, assessed) -
     # 12/20 public); an explicit 0 rating stays 0.
     assert dim["components"]["A1_bio_score"] == (UNRATED_FORM_NEUTRAL if bio_score is None else bio_score)
     reason = result["quality_pillars_v4"]["formulation"]["reason"]
-    assert ("not rated" in reason) is (bio_score is None)
+    assert ("not been assessed" in reason) is (bio_score is None)
     if bio_score is None:
         assert result["quality_pillars_v4"]["formulation"]["score"] == 12.0
 

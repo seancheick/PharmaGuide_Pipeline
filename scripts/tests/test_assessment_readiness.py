@@ -1311,7 +1311,9 @@ def test_evidence_readiness_includes_undosed_active_blend_subject():
     assert result["not_yet_evaluated_count"] == 1
 
 @pytest.mark.parametrize("owned", [True, False])
-def test_la5_negative_review_requires_exact_label_row_owner(owned):
+def test_la5_reviewed_context_requires_exact_label_row_owner(owned):
+    # Reviewed combination context is limited evidence, not an unfinished review
+    # or a positive individual-strain result. It still requires the label owner.
     from assessment_readiness import _probiotic_native_evidence_state
     row = _row("Lactobacillus acidophilus LA-5", "lactobacillus_acidophilus", quantity=500, unit="million CFU")
     product = _product(row)
@@ -1420,3 +1422,18 @@ def test_undosed_nonowner_remains_outside_individual_evidence(monkeypatch):
     assert item["state"] == "not_applicable"
     assert item["reason_code"] == "non_material_active"
     assert item["source_value"] is None
+
+
+@pytest.mark.parametrize("review_status", ["pending_review", "rejected", "needs_revision"])
+def test_retained_native_context_cannot_close_explicit_review_hold(review_status):
+    from assessment_readiness import evaluate_evidence_assessment
+    row = _row("Lactobacillus rhamnosus GG", "lactobacillus_rhamnosus", quantity=1e10, unit="CFU")
+    product = _product(row)
+    product["activeIngredients"] = [row]
+    product["probiotic_data"] = {"is_probiotic_product": True, "clinical_strains": [{
+        "clinical_id": "STRAIN_LGG", "strain": row["name"],
+        "source_row_ref": "ingredientRows[0]", "review_status": review_status,
+    }]}
+    result = evaluate_evidence_assessment(product, module="probiotic")
+    assert result["not_yet_evaluated_count"] == 1
+    assert result["ingredient_assessments"][0]["state"] == "not_yet_evaluated"

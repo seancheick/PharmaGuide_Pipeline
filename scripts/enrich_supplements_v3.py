@@ -22461,6 +22461,7 @@ class SupplementEnricherV3:
                 "warning": ul_exceedance_sentence(
                     float(shown), float(result.ul), str(shown_in or ""),
                     result.ul_population.get("label") or "children",
+                    ul_basis=(result.reference or {}).get("ul_basis"),
                 ),
                 "severity": ul_display_severity(result.pct_ul),
             }
@@ -24033,6 +24034,9 @@ class SupplementEnricherV3:
                                 "warning": ul_exceedance_sentence(
                                     float(ul_amount or 0.0), float(safety_ul or 0.0), str(ul_unit or ""),
                                     (safety_ul_population or {}).get("label") or "general adult",
+                                    ul_basis=(adequacy_dict.get("reference") or {}).get("ul_basis"),
+                                    exposure_label=("At the assessed daily amount" if servings_estimated
+                                                    else "At maximum directed daily use"),
                                 ),
                                 "severity": ul_display_severity(pct_ul_val),
                                 "reference": adequacy_dict.get("reference"),
@@ -24387,6 +24391,9 @@ class SupplementEnricherV3:
                                 + ul_exceedance_sentence(
                                     float(group["total_amount"] or 0.0), float(agg_adequacy.ul or 0.0), str(group["unit"] or ""),
                                     (agg_adequacy.ul_population or {}).get("label") or "general adult",
+                                    ul_basis=(agg_adequacy.reference or {}).get("ul_basis"),
+                                    exposure_label=("at the assessed daily amount" if servings_estimated
+                                                    else "at maximum directed daily use"),
                                 )
                             ),
                             "severity": ul_display_severity(pct_ul_val),

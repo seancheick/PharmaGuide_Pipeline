@@ -6009,7 +6009,7 @@ def _certification_gmp_detail(label_gmp: Any, pillars: Any, enriched: Optional[D
     return detail
 
 
-def _build_v4_score_explanation(pillars: Any) -> Optional[Dict[str, Any]]:
+def _build_v4_score_explanation(pillars: Any, module_breakdown: Any = None, penalties: Any = None) -> Optional[Dict[str, Any]]:
     """Top strength / drag pillar reasons — the consumer "how it scored X".
 
     Ranks the six v4 pillars by their (score - max) delta: the largest gaps
@@ -6031,6 +6031,22 @@ def _build_v4_score_explanation(pillars: Any) -> Optional[Dict[str, Any]]:
         try:
             delta = float(p.get("score")) - float(p.get("max"))
         except (TypeError, ValueError):
+            continue
+        # Assessment gaps remain visible in their pillar and coverage notice;
+        # they are not demonstrated product drawbacks.
+        if name == "evidence" and p.get("display_state") in {
+                "not_yet_reviewed", "applicability_unestablished", "not_applicable"}:
+            continue
+        if (name == "dose"
+                and safe_dict(safe_dict(p.get("explanation")).get("dose_receipt")).get("upper_reference")
+                and any(safe_dict(item).get("id") == "B7" for item in safe_list(penalties))):
+            continue  # The qualified UL concern already appears in Tradeoffs.
+        dim = safe_dict(safe_dict(safe_dict(module_breakdown).get("dimensions")).get(name))
+        meta = safe_dict(dim.get("metadata"))
+        if (name == "formulation" and meta.get("iqm_form_quality_assessed_count") == 0
+                and not meta.get("botanical_profile_applied")
+                and not meta.get("collagen_profile_applied")
+                and not any(safe_float(v, 0) < 0 for v in safe_dict(dim.get("penalties")).values())):
             continue
         concern = bool(dose_concern) and name in {"dose", "safety_hygiene"}
         ranked.append((delta, name, p.get("reason"), concern))
@@ -8412,7 +8428,7 @@ def build_detail_blob(
             "suppressed_reason": scored.get("quality_score_suppressed_reason"),
             "safety_signal_reason": scored.get("safety_signal_reason"),
         }
-        blob["v4_score_explanation"] = _build_v4_score_explanation(pillars)
+        blob["v4_score_explanation"] = _build_v4_score_explanation(pillars, scored.get("_v4_module_breakdown"), penalties)
 
     return project_detail_blob(
         blob,

@@ -3,7 +3,7 @@
     "description": "Comprehensive database of harmful additives, contaminants, and concerning ingredients found in dietary supplements. Used for scoring penalties and consumer warnings.",
     "purpose": "penalty_scoring",
     "schema_version": "5.4.0",
-    "last_updated": "2026-10-13",
+    "last_updated": "2026-10-22",
     "total_entries": 115,
     "functional_roles_field": {
       "added_in": "5.2.0",
@@ -6490,14 +6490,13 @@
         {
           "type": "regulatory",
           "authority": "EFSA",
-          "title": "EFSA Panel on Food Additives - E470b re-evaluation",
-          "citation": "EFSA Panel on Food Additives - E470b re-evaluation",
-          "url": "https://www.efsa.europa.eu/en/efsajournal/pub/5765",
-          "published_date": "2018-12-01",
+          "title": "Re-evaluation of sodium, potassium and calcium salts of fatty acids (E 470a) and magnesium salts of fatty acids (E 470b) as food additives",
+          "citation": "EFSA Journal 2018;16(3):5180",
+          "url": "https://doi.org/10.2903/j.efsa.2018.5180",
+          "published_date": "2018-03-02",
           "evidence_grade": "A",
           "supports_claims": [
-            "regulatory_status",
-            "mechanism_of_harm"
+            "regulatory_status"
           ]
         }
       ],
@@ -6527,7 +6526,7 @@
             "start": "1995-01-01",
             "end": null
           },
-          "source_ref": "https://www.efsa.europa.eu/en/efsajournal/pub/5765"
+          "source_ref": "https://doi.org/10.2903/j.efsa.2018.5180"
         },
         {
           "authority": "WHO",
@@ -6566,6 +6565,12 @@
             "date": "2026-10-02",
             "by": "claude-audit",
             "change": "LEDGER Q57: DOI citations content-checked (Crossref + PubMed, 2026-10-02). Removed 1 that resolve to an unrelated paper or to nothing: 10.1016/j.ejpb.2008.09.017. Receipt: scripts/audits/pending_items_20260926/research.md Q57."
+          },
+          {
+            "date": "2026-10-22",
+            "by": "Codex source audit",
+            "change": "Corrected wrong-topic EFSA link to the content-verified E470a/E470b assessment, publication date and citation. Citation supports regulatory context, not absorption claims. Severity and scoring policy unchanged.",
+            "reason": "assessment_explanation_source_audit"
           }
         ]
       },

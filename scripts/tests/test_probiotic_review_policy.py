@@ -222,7 +222,7 @@ def test_amount_cannot_make_unmatched_purpose_evidence_applicable(registry):
         evidence = score_evidence(product)
         assert evidence["score"] == 0
         states.append(evidence["metadata"]["evidence_result_state"])
-    assert states == ["applicability_unestablished", "applicability_unestablished"]
+    assert states == ["research_present_applicability_unestablished"] * 2
 
 
 def test_pediatric_context_cannot_supply_adult_summary_applicability(registry):
@@ -242,3 +242,26 @@ def test_pediatric_context_cannot_supply_adult_summary_applicability(registry):
     assert evidence["components"]["independent_replication_consistency"] == 0
     assert evidence["score"] == 0
     assert evidence["metadata"]["evidence_result_state"] == "research_present_applicability_unestablished"
+
+
+@pytest.mark.parametrize("recorded", [True, False])
+@pytest.mark.parametrize("scoring_eligible", [True, False])
+def test_finished_individual_review_preserves_combination_research(registry, recorded, scoring_eligible):
+    # The literature conclusion concerns individual-strain attribution, while
+    # combination research remains a distinct, reviewed research context.
+    registry[STUB]["literature_review"] = deepcopy(
+        registry["STRAIN_RHAMNOSUS_GR1"]["literature_review"])
+    registry[STUB]["study_contexts"] = ([positive_rct(
+        approved=True, identity_scope="combination", components=[STUB, "STRAIN_LGG"],
+        scoring_eligible=scoring_eligible)]
+        if recorded else [])
+    product = la14_product(dose=None)
+    product["probiotic_data"]["is_probiotic_product"] = True
+    assessed = studied_formulas.assess_probiotic_evidence(product)
+    evidence = score_evidence(product)
+    assert evidence["score"] == 0
+    assert assessed["strain_assessments"][0]["dose_applicable"] is False
+    expected = ("research_present_applicability_unestablished" if recorded
+                else "no_qualifying_human_evidence")
+    assert evidence["metadata"]["evidence_result_state"] == expected
+    assert studied_formulas.assess_probiotic_component_disposition(product)["disposition_state"] == expected

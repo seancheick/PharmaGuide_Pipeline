@@ -463,3 +463,30 @@ def test_score_explanation_ties_ignore_serialized_mapping_order(full_credit):
         for name in ([n for n in reversed(order) if n != "safety_hygiene"][:3] if full_credit else order[:3])]
     for permutation in permutations(order):
         assert _build_v4_score_explanation({name: pillars[name] for name in permutation}) == expected
+
+
+def test_assessment_gaps_are_not_exported_as_product_drawbacks():
+    from build_final_db import _build_v4_score_explanation
+    pillars = {
+        "evidence": {"score": 0, "max": 20, "display_state": "applicability_unestablished",
+                     "reason": "Research applicability is unresolved."},
+        "formulation": {"score": 12, "max": 20, "reason": "Form assessment pending."},
+        "verification": {"score": 8, "max": 15, "reason": "No product testing verified."},
+    }
+    module = {"dimensions": {"formulation": {"metadata": {
+        "iqm_form_quality_assessed_count": 0}, "penalties": {}}}}
+    result = _build_v4_score_explanation(pillars, module)
+    assert [row["pillar"] for row in result["drags"]] == ["verification"]
+    # Actual reviewed unfavorable evidence still belongs in considerations.
+    pillars["evidence"]["display_state"] = "assessed"
+    assert "evidence" in [row["pillar"] for row in _build_v4_score_explanation(pillars, module)["drags"]]
+
+
+def test_ul_tradeoff_does_not_repeat_the_dose_pillar():
+    from build_final_db import _build_v4_score_explanation
+    pillars = {"dose": {"score": 18, "max": 20, "reason": "Maximum use exceeds the limit.",
+                        "explanation": {"dose_receipt": {"upper_reference": {"kind": "established_upper_limit"}}}},
+               "verification": {"score": 10, "max": 15, "reason": "No product certification."}}
+    result = _build_v4_score_explanation(pillars, penalties=[{"id": "B7", "label": "Maximum use exceeds UL"}])
+    assert [r["pillar"] for r in result["drags"]] == ["verification"]
+    assert "dose" in [r["pillar"] for r in _build_v4_score_explanation(pillars)["drags"]]

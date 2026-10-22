@@ -216,7 +216,7 @@ def test_research_that_does_not_apply_to_the_product_earns_no_evidence_points():
     pillar = artifact["quality_pillars_v4"]["evidence"]
     assert pillar["score"] == 0.0
     assert pillar["display_state"] == "applicability_unestablished"
-    assert pillar["reason"].startswith("Research on these probiotic strains exists")
+    assert pillar["reason"].startswith("Research involving these microorganisms is recorded")
     assert "0/10" not in pillar["reason"]
     # Applicable research keeps every component.
     direct = build_scored_artifact(_product())["_v4_module_breakdown"]["dimensions"]["evidence"]
