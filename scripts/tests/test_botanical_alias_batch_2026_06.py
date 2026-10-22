@@ -46,7 +46,8 @@ def enricher():
         ("Barley extract", "barley_unspecified"),
         ("Barley powder", "barley_unspecified"),
         ("Wheat Germ Oil", "wheat_germ_oil"),
-        ("Oat Fiber", "oat_generic"),
+        ("Oat", "oat_generic"),
+        ("Avena sativa", "oat_generic"),
     ],
 )
 def test_botanical_label_recognized_as_identity(enricher, label, expected_id):
@@ -63,6 +64,17 @@ def test_tropical_almond_stays_unmapped_until_context_review(enricher):
         "Triphala/Chebulic Myrobalan context, while the common name may also "
         "refer to Terminalia catappa."
     )
+
+
+@pytest.mark.parametrize("label", ["Oat Fiber", "organic oat fiber"])
+def test_oat_fiber_prefers_its_specific_inactive_identity(enricher, label):
+    # JRS describes cell-wall fiber, distinct from whole oats/bran. The
+    # precise inactive identity outranks the older botanical fallback.
+    result = enricher._is_recognized_non_scorable(label, label)
+    assert result is not None
+    assert result["matched_entry_id"] == "PII_OAT_FIBER"
+    assert result["recognition_source"] == "other_ingredients"
+    assert result["recognition_type"] == "non_scorable"
 
 
 def test_muira_puama_bark_has_a_distinct_standard_name():

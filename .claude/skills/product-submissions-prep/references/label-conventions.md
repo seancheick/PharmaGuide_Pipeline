@@ -87,6 +87,14 @@ sources + region), not bare objects/strings: `record` refuses a bare one. Only
     children; children point at the header's index. Never express a form as
     a child row.
   - `status`: `read`, `partial` or `unreadable` for the row as a whole.
+  - **Calories, Total Fat, Total Carbohydrate, Sugars, Protein or Sodium printed
+    inside the Supplement Facts panel** is a row like any other: one row per
+    printed line, amount and unit as printed (`20` + `Calories`). Clean files it
+    under Nutrition Facts, never as an active ingredient. Do not also type it into
+    the console's Nutrition Facts fields. Tell the reviewer in your report that the
+    row is intentional; moving it is harmless since 2026-10-22 (Clean keeps the
+    typed value) but duplicating it is not needed. A label whose panel is titled
+    "Nutrition Facts" is a food: see SKILL.md.
 - **other_ingredients**: `text` is the full printed list, verbatim, one
   string, without the "Other Ingredients:" heading. `disclosure_hint`:
   - `present`: a list is printed, **wherever it sits**: below the panel, in
