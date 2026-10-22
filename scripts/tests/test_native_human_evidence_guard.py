@@ -125,8 +125,10 @@ def test_nonhuman_zero_is_not_presented_as_evidence_of_no_benefit(monkeypatch):
                                           name="Lactobacillus acidophilus NCFM"))
     reason = _pillar_evidence(result, 20, "probiotic", config())["reason"]
     # A finished review that earns nothing must still never read as "no benefit".
-    assert "does not establish" in reason
-    assert "not a product-quality finding" in reason
+    assert result["score"] == 0
+    assert "applicability" in reason
+    assert "not established" in reason
+    assert "human clinical research" not in reason.lower()
     for overclaim in ("no benefit", "no clinical evidence", "ineffective", "does not work"):
         assert overclaim not in reason.lower()
 

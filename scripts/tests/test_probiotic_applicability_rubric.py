@@ -283,7 +283,10 @@ def test_evidence_copy_distinguishes_missing_applicability_from_poor_quality():
     dim = score_evidence(strain_product())
     result = _pillar_evidence(dim, 20, "probiotic", config())
     assert "preparation, purpose and population" in result["reason"]
-    assert "not a product-quality finding" in result["reason"]
+    assert dim["score"] == 0
+    assert "applicability" in result["reason"]
+    assert "not established" in result["reason"]
+    assert "poor quality" not in result["reason"].lower()
     assert "dose" not in result["reason"].lower()
 
 
