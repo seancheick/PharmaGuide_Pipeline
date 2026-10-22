@@ -129,3 +129,36 @@ console.log(JSON.stringify({calls,...vm.runInContext('({approved:state.review?.a
     assert "load_review" in result["calls"]
     assert result["approved"] == "Approved"
     assert result["payload"] == "Approved"
+
+
+def test_starting_a_review_does_not_reload_over_unsaved_edits():
+    node = shutil.which("node")
+    if node is None:
+        pytest.skip("Node.js required for console behavior")
+    asset = Path(__file__).parents[1] / "submission_review/static/app.js"
+    harness = r"""
+const fs=require('node:fs'),vm=require('node:vm');
+const [asset]=process.argv.slice(1), calls=[];
+const ctx=vm.createContext({calls,document:{getElementById(){return {value:'',checked:false,hidden:true,textContent:''};}}});
+vm.runInContext(fs.readFileSync(asset.replace('app.js','canonical.js'),'utf8'),ctx);
+vm.runInContext(fs.readFileSync(asset,'utf8')+`
+function boot(){} function renderDetail(){} function renderQueue(){} function scheduleUrlRefresh(){}
+function setStatus(){} function setDecisionAvailability(){} async function loadQueue(){} async function autoPrepare(){}
+`,ctx);
+(async()=>{
+await vm.runInContext(`(async()=>{
+state.session={access_token:'t'};
+state.selected={id:'a',kind:'missing_product',review_status:'submitted',evidence_revision:1,evidence_manifest_sha256:'a'.repeat(64)};
+state.reviewLoadedFor='a:1'; state.payload={fullName:'Unsaved edit'};
+edge=async(body)=>{ calls.push(body.action);
+  if(body.action==='list') return {submissions:[{id:'a',kind:'missing_product',review_status:'under_review',evidence_revision:1,evidence_manifest_sha256:'a'.repeat(64)}]};
+  return {review:{draft:{payload:{fullName:'Older saved draft'}},verifications:[],reviewer_images:[]}}; };
+await refreshSelected();
+})()`,ctx);
+console.log(JSON.stringify({calls,payload:vm.runInContext('state.payload.fullName',ctx)}));
+})().catch(e=>{console.error(e);process.exitCode=1});
+"""
+    completed = subprocess.run([node, "-e", harness, str(asset)], capture_output=True, text=True, timeout=15, check=True)
+    result = json.loads(completed.stdout)
+    assert "load_review" not in result["calls"]
+    assert result["payload"] == "Unsaved edit"

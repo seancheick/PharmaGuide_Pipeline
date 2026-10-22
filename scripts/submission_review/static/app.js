@@ -412,9 +412,12 @@ async function refreshSelected() {
       }
       state.selected = fresh;
       renderDetail();
-      // A decision changes the status but not the evidence, so the cached
-      // review predates it (no approved label yet). Load the decided review.
-      if (fresh.review_status !== selection.review_status) {
+      // Approval changes the status but not the evidence, so the cached
+      // review predates it (no approved label yet). Load the approved review;
+      // an approved label is read-only, so no unsaved edit can be replaced.
+      // Earlier in-flight loads become stale.
+      if (fresh.review_status === 'approved' && selection.review_status !== 'approved') {
+        state.reviewLoadRequest += 1;
         state.reviewLoadedFor = null;
         await loadReview();
       }
@@ -1695,6 +1698,7 @@ async function loadReview() {
   try {
     ({ review } = await edge({ action: 'load_review', submission_id: submission.id }));
   } catch {
+    if (state.reviewLoadRequest !== requestId) return;  // a newer load owns the marker
     state.reviewLoadedFor = null;
     setStatus('Saved review could not be loaded; your edits will not persist.', true);
     return;

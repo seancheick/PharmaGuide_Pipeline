@@ -6016,12 +6016,18 @@ class EnhancedDSLDNormalizer:
             # A reviewer can type printed Nutrition Facts values in the
             # submission console (DSLD's raw {amount, unit} shape). Keep each
             # one the printed rows did not supply; a printed row always wins.
-            for key, entry in (raw_data.get("nutritionalInfo") or {}).items():
-                if key in nutritional_info or not isinstance(entry, dict):
+            # An undosed printed row (unit "unspecified") supplies nothing.
+            typed = raw_data.get("nutritionalInfo")
+            for key, entry in (typed.items() if isinstance(typed, dict) else ()):
+                printed = nutritional_info.get(key)
+                if isinstance(printed, dict) and printed.get("unit") not in (None, "", "unspecified"):
+                    continue
+                if not isinstance(entry, dict):
                     continue
                 amount, unit = entry.get("amount"), entry.get("unit")
                 if (isinstance(amount, (int, float)) and not isinstance(amount, bool)
-                        and math.isfinite(amount) and isinstance(unit, str) and unit.strip()):
+                        and math.isfinite(amount) and amount >= 0
+                        and isinstance(unit, str) and unit.strip()):
                     nutritional_info[key] = {"amount": float(amount), "unit": unit.strip()}
 
             active_ingredients = self._process_ingredients_enhanced(flattened_ingredients, is_active=True)

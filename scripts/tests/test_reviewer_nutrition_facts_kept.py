@@ -79,3 +79,28 @@ def test_malformed_typed_entries_are_not_invented() -> None:
     info = _clean(product)
     for key in ("calories", "totalFat", "sodium", "sugars"):
         assert key not in info
+
+
+def test_typed_value_replaces_an_undosed_printed_row_but_not_a_printed_zero() -> None:
+    undosed = copy.deepcopy(_BASE)
+    undosed["ingredientRows"].insert(0, {**_calories_row(0), "quantity": []})
+    undosed["nutritionalInfo"] = {"calories": {"amount": 20, "unit": "kcal"}}
+    assert _clean(undosed)["calories"] == {"amount": 20.0, "unit": "kcal"}
+
+    printed_zero = copy.deepcopy(_BASE)
+    printed_zero["ingredientRows"].insert(0, _calories_row(0))
+    printed_zero["nutritionalInfo"] = {"calories": {"amount": 20, "unit": "kcal"}}
+    assert _clean(printed_zero)["calories"]["amount"] == 0.0
+
+
+def test_negative_amounts_and_malformed_containers_are_ignored() -> None:
+    negative = copy.deepcopy(_BASE)
+    negative["nutritionalInfo"] = {"calories": {"amount": -20, "unit": "kcal"},
+                                   "protein": {"amount": 0, "unit": "g"}}
+    info = _clean(negative)
+    assert "calories" not in info and info["protein"]["amount"] == 0.0
+
+    for container in ([{"calories": 20}], "20 kcal", 7):
+        product = copy.deepcopy(_BASE)
+        product["nutritionalInfo"] = container
+        assert "calories" not in _clean(product)
