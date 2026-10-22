@@ -85,3 +85,47 @@ console.log(JSON.stringify({calls,...vm.runInContext('({selected:state.selected,
         assert result["calls"] == []
         assert result["payload"].get("fullName") != "Old draft"
         assert result["identity"] is None and result["image"] is None
+
+
+def test_a_decision_reloads_the_review_so_the_approved_label_shows():
+    """After Approve the console refreshed the status but kept the review it had
+    loaded before the decision, so the approved label was missing and the page
+    said it 'could not be loaded' (S03, 2026-10-22). A status change reloads it."""
+    node = shutil.which("node")
+    if node is None:
+        pytest.skip("Node.js required for console behavior")
+    asset = Path(__file__).parents[1] / "submission_review/static/app.js"
+    harness = r"""
+const fs=require('node:fs'),vm=require('node:vm');
+const [asset]=process.argv.slice(1), calls=[];
+const ctx=vm.createContext({calls,document:{getElementById(){return {value:'',checked:false,hidden:true,textContent:''};}}});
+vm.runInContext(fs.readFileSync(asset.replace('app.js','canonical.js'),'utf8'),ctx);
+vm.runInContext(fs.readFileSync(asset,'utf8')+`
+function boot(){} function renderDetail(){} function renderQueue(){} function scheduleUrlRefresh(){}
+function setStatus(){} function setDecisionAvailability(){} async function loadQueue(){}
+function syncFieldsFromPayload(){} function renderRows(){} async function updateShaPreview(){}
+function renderProductPictureOptions(){} function renderVerifyChecklist(){} function renderReadiness(){}
+function renderBarcodePanel(){} function setApprovedReadOnly(){} async function autoPrepare(){} async function checkIdentity(){}
+`,ctx);
+(async()=>{
+await vm.runInContext(`(async()=>{
+state.session={access_token:'t'};
+state.selected={id:'a',kind:'missing_product',review_status:'under_review',evidence_revision:1,evidence_manifest_sha256:'a'.repeat(64)};
+state.reviewLoadedFor='a:1';
+state.review={draft:{payload:{fullName:'Draft'}},approved_label:null};
+edge=async(body)=>{
+  calls.push(body.action);
+  if(body.action==='list') return {submissions:[{id:'a',kind:'missing_product',review_status:'approved',evidence_revision:1,evidence_manifest_sha256:'a'.repeat(64)}]};
+  if(body.action==='load_review') return {review:{approved_label:{approved_payload:{fullName:'Approved'}},draft:null,verifications:[],reviewer_images:[]}};
+  return {};
+};
+await refreshSelected();
+})()`,ctx);
+console.log(JSON.stringify({calls,...vm.runInContext('({approved:state.review?.approved_label?.approved_payload?.fullName ?? null,payload:state.payload?.fullName ?? null})',ctx)}));
+})().catch(e=>{console.error(e);process.exitCode=1});
+"""
+    completed = subprocess.run([node, "-e", harness, str(asset)], capture_output=True, text=True, timeout=15, check=True)
+    result = json.loads(completed.stdout)
+    assert "load_review" in result["calls"]
+    assert result["approved"] == "Approved"
+    assert result["payload"] == "Approved"

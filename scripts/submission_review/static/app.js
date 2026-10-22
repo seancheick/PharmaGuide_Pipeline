@@ -412,6 +412,12 @@ async function refreshSelected() {
       }
       state.selected = fresh;
       renderDetail();
+      // A decision changes the status but not the evidence, so the cached
+      // review predates it (no approved label yet). Load the decided review.
+      if (fresh.review_status !== selection.review_status) {
+        state.reviewLoadedFor = null;
+        await loadReview();
+      }
       if (state.reviewerImages.length) await refreshReviewerPictureUrls();
       // The one-submission read is what carries its drafts.
       void autoPrepare();
@@ -1841,7 +1847,7 @@ function renderReviewBanner() {
   if (state.selected?.review_status === 'approved') {
     message = state.review?.approved_label
       ? 'Approved label — read-only. This is the record used by the catalog importer.'
-      : 'The approved label could not be loaded. This does not mean it was deleted. Reopen this review.';
+      : 'The approved label could not be loaded. This does not mean it was deleted. Select this submission again to reload it.';
   } else if (state.reviewDigestMismatch) {
     message = 'This page and the server disagree about the label text. ' +
       'Reopen this submission before approving.';
