@@ -88,3 +88,18 @@ Source fingerprints prove the candidate remained fixed during capture.
 All 114 existing stage manifests are stale (38 each Clean, Enrich and Score); the
 next catalog regeneration must start at Clean. These source corrections do not
 update the existing catalog, promote approvals or qualify an external release.
+
+## Integration receipt
+
+Exact candidate `06941283` passed all four shards of [pipeline-tests run 39860722912](https://github.com/seancheick/PharmaGuide_Pipeline/actions/runs/39860722912).
+PR242 merged as `71da9c32d`. Local main was fast-forwarded. Every candidate runtime/data
+file matches main; main additionally has five pre-existing untracked FDA cache files.
+A full replay of the same 70 labels on integrated main produces **zero** Clean,
+Enrich or Score differences from the candidate, verifying the local-cache boundary.
+Local profile: 546 passed, 24 declared opt-in skips; skip guard passed. The one stale
+generic-oat CI assertion was corrected with precise-fiber checks and independent
+generic Oat/Avena controls. Actual detail blobs for all five approvals retain all
+17 inactive rows as recognized and preserve canonical display-ledger identities.
+A fresh read confirms all five approval payloads remain unchanged and fully mapped.
+No corpus rebuild or release ran. The pre-existing product-picture upload issue
+was not reproduced or changed by this mapping/nutrition batch.

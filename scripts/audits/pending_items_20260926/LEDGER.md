@@ -2592,7 +2592,12 @@ Final local at aec0088a:546passed,24declared external/opt-in skips; skip guard g
 CI39859254606 had three green shards and one stale oat-fiber→generic-oat assertion.
 Corrected that assertion against the JRS source; added plain/organic precise-identity assertions
 and retained generic Oat/Avena sativa controls.46affected tests pass; production source/data
-and measured fingerprints unchanged. The corrected exact-candidate CI remains pending.
+and measured fingerprints unchanged. Exact corrected candidate06941283 CI39860722912 passed all four shards. PR242 merged
+71da9c32d; local main fast-forwarded to origin/main. All candidate runtime/data files match;
+main also has five pre-existing untracked FDA cache files. Replaying all70labels on integrated
+main produces zero Clean/Enrich/Score differences from the candidate. Actual detail-blob export
+of all five approvals retains all17inactive rows as recognized with canonical display entries.
+Final fresh read:5current approval payloads unchanged and fully mapped.
 Private raw exports/replays/logs: `~/pg_quality/submission_mapping_20261022/`.
 
 No corpus rebuild, import materialization/promotion, storage upload or release ran. Existing
