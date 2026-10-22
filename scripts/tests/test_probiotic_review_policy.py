@@ -222,7 +222,7 @@ def test_amount_cannot_make_unmatched_purpose_evidence_applicable(registry):
         evidence = score_evidence(product)
         assert evidence["score"] == 0
         states.append(evidence["metadata"]["evidence_result_state"])
-    assert states == ["applicability_unestablished", "applicability_unestablished"]
+    assert states == ["research_present_applicability_unestablished"] * 2
 
 
 def test_pediatric_context_cannot_supply_adult_summary_applicability(registry):

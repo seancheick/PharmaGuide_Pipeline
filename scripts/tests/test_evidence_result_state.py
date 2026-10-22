@@ -135,8 +135,7 @@ def test_zero_without_review_coverage_never_says_limited_evidence():
 
 def test_zero_state_copy_is_specific():
     assert _zero_reason("applicability_unestablished") == (
-        "We reviewed the evidence for these ingredients, but it does not match this label's "
-        "form, dose or delivery, so it cannot be applied to this product."
+        "Available research has not established a match to this product's assessed ingredients and use."
     )
     assert _zero_reason("evaluated_unfavorable") == (
         "Reviewed human research did not show benefit for these ingredients."
@@ -190,7 +189,8 @@ def test_finished_review_still_names_undisclosed_strain_amounts():
     product = strain_product(clinical_id="STRAIN_LACTIS_BI07",
                              name="Bifidobacterium lactis Bi-07", dose=None)
     evidence = probiotic_evidence(product)
-    assert evidence["metadata"]["evidence_result_state"] == "applicability_unestablished"
+    assert evidence["metadata"]["evidence_result_state"] == "research_present_applicability_unestablished"
+    assert evidence["score"] == 0
     reason = _pillar_evidence(evidence, 20, "probiotic", _config())["reason"]
     assert "studied dose" not in reason
     from scoring_v4.modules.probiotic_dose import score_dose

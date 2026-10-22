@@ -754,13 +754,7 @@ def assess_probiotic_evidence(product: Mapping) -> dict:
                 # A review may reject individual-strain attribution while
                 # retaining reviewed combination research. Preserve that
                 # applicability gap without accepting individual credit.
-                status = ("strain_context_not_applicable" if any(
-                    c.get("status") == "source_context_recorded"
-                    and c.get("review_status") == "clinician_approved"
-                    and clinical_review_provenance_valid(c)
-                    and c.get("dose_comparison") not in {
-                        "identity_owner_unresolved", "organism_preparation_mismatch"}
-                    for c in result["study_contexts"])
+                status = ("strain_context_not_applicable" if reviewed_native_context_present(result)
                     else "strain_reviewed_no_qualifying_human_evidence")
             else:
                 status = "strain_identity_or_review_unresolved"
@@ -985,6 +979,20 @@ NATIVE_CONTEXT_QUALITY_ENUMS = {
     "funding": frozenset({"industry", "independent", "mixed", "unreported"}),
     "source_tier": frozenset({"A", "B", "C", "D", "E"}),
 }
+
+
+def reviewed_native_context_present(strain: Mapping) -> bool:
+    """Research inventory is independent of label amount and credit eligibility."""
+    if strain.get("status") in {"strain_identity_mismatch", "strain_context_mismatch"}:
+        return False
+    return any(
+        context.get("status") == "source_context_recorded"
+        and context.get("review_status") == "clinician_approved"
+        and clinical_review_provenance_valid(context)
+        and context.get("dose_comparison") not in {
+            "identity_owner_unresolved", "organism_preparation_mismatch"}
+        for context in strain.get("study_contexts", [])
+    )
 
 
 def valid_native_study_context(context: Mapping, reference_id: str) -> bool:

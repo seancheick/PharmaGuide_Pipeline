@@ -45,7 +45,8 @@ def test_unknown_scope_preserves_research_facts_without_inventing_specificity(mo
     assert row["dose_applicable"] is False
     assert result["score"] == 0  # Unresolved identity scope cannot establish a product-specific family.
     reason = _pillar_evidence(result, 20, "probiotic", config())["reason"]
-    assert "does not establish probiotic benefit" in reason
+    assert "applicability to this product" in reason
+    assert "not established" in reason
     assert "species-level" not in reason
 
 

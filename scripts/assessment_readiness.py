@@ -301,7 +301,7 @@ def _is_supportive_human_match(match: Mapping[str, Any]) -> bool:
 def _probiotic_native_evidence_state(product: Mapping[str, Any], row: Mapping[str, Any] | None = None) -> str | None:
     from studied_formulas import (
         assess_probiotic_evidence, clinical_strain_matches_source_row,
-        independent_clinical_strains, label_owned_native_strains,
+        independent_clinical_strains, label_owned_native_strains, reviewed_native_context_present,
     )
     owned = label_owned_native_strains(product)
     if row is not None:
@@ -312,8 +312,14 @@ def _probiotic_native_evidence_state(product: Mapping[str, Any], row: Mapping[st
         owned_ids = {strain.get("clinical_id") for strain in owned}
         conclusions = [assessment for assessment in reviewed
                        if assessment.get("clinical_id") in owned_ids]
-        if conclusions and all(assessment.get("status") == "strain_reviewed_no_qualifying_human_evidence"
-                               for assessment in conclusions):
+        if conclusions and all(
+                assessment.get("status") == "strain_reviewed_no_qualifying_human_evidence"
+                or (assessment.get("status") == "strain_context_not_applicable"
+                    and not assessment.get("research_accepted")
+                    and reviewed_native_context_present(assessment))
+                for assessment in conclusions):
+            # A completed contextual review can be limited without supporting
+            # this product. Do not turn that applicability gap into missing review.
             return EVIDENCE_EVALUATED_LIMITED_OR_NEGATIVE
     strains = independent_clinical_strains(product)
     if row is not None:

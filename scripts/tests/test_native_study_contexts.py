@@ -392,7 +392,8 @@ def test_undisclosed_cfu_with_accepted_human_research_is_terminal_contextual_cre
 
     p = strain_product(clinical_id="STRAIN_LGG", name="Lactobacillus rhamnosus GG", dose=None)
     evidence = score_evidence(p)
-    assert evidence["metadata"]["evidence_result_state"] == "applicability_unestablished"
+    assert evidence["metadata"]["evidence_result_state"] == "research_present_applicability_unestablished"
+    assert evidence["score"] == 0
     assert "dose_applicability" not in evidence["components"]
     assert score_evidence(strain_product(clinical_id="STRAIN_LGG",
         name="Lactobacillus rhamnosus GG", dose=1e9))["components"] == evidence["components"]

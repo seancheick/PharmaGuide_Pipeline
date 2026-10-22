@@ -452,7 +452,7 @@ def test_unrated_discrete_enzyme_earns_the_neutral_floor_not_zero() -> None:
     pillar = _pillar_formulation(dim, 20.0, "generic_single_molecule", _config())
     assert dim["metadata"]["iqm_form_quality_assessed_count"] == 0
     assert pillar["score"] == 12.0
-    assert "not rated" in pillar["reason"].lower()
+    assert "not been assessed" in pillar["reason"].lower()
 
 
 def test_unrated_discrete_enzyme_reason_does_not_claim_averageness() -> None:

@@ -21,7 +21,7 @@ from studied_formulas import (assess_probiotic_evidence,
                              assess_probiotic_component_disposition,
                              independent_clinical_strains, reviewed_strains_without_qualifying_evidence,
                              strain_assessments_for_match,
-                             valid_native_study_context)
+                             valid_native_study_context, reviewed_native_context_present)
 
 
 PHASE_MARKER = "P2.3_probiotic_evidence"
@@ -122,7 +122,7 @@ def score_evidence(product: Any) -> Dict[str, Any]:
     elif components["product_applicability"] > 0:
         state = "evaluated_applicable"
     elif research_score > 0 or any(
-            row.get("status") == "strain_context_not_applicable"
+            reviewed_native_context_present(row)
             for row in assessment["strain_assessments"]):
         state = "research_present_applicability_unestablished"
     elif any(not _human_research_reviewed({"clinical_id": row.get("clinical_id")}, assessment)

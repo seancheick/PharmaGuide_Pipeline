@@ -83,7 +83,8 @@ def test_applicability_unresolved_is_neither_unreviewed_nor_a_verdict():
 
     assert pillar["display_state"] == "applicability_unestablished"
     assert pillar["display_state"] != "not_yet_reviewed"
-    assert "reviewed" in pillar["reason"].lower()
+    assert "research" in pillar["reason"].lower()
+    assert "not established a match" in pillar["reason"]
     assert "pending" not in pillar["reason"].lower()
 
 

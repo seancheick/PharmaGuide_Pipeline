@@ -543,6 +543,7 @@ def test_raw_wrapper_strain_reaches_scored_artifact_without_positive_evidence(en
     artifact = build_scored_artifact(product)
     evidence = artifact["quality_pillars_v4"]["evidence"]
     assert evidence["score"] == 0
-    assert evidence["display_state"] == "assessed"
-    assert "applicable to this product" in evidence["reason"]
+    assert evidence["display_state"] == "applicability_unestablished"
+    assert "Research involving these microorganisms is recorded" in evidence["reason"]
+    assert "not established" in evidence["reason"]
     assert artifact["product_safety_status"] == "no_known_catalog_concern"
