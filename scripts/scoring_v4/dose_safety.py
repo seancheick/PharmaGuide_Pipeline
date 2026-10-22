@@ -139,7 +139,7 @@ class DoseSafetyFlag:
     canonical_id: Optional[str] = None
     pct_ul: Any = None
     reason: Optional[str] = None
-    # The same exposure at the minimum directed daily use: explanation only.
+    # The same exposure at minimum directed use; keep full precision for policy.
     pct_ul_at_minimum: Optional[float] = None
     # The reference nutrient whose limit applies (the label text is `nutrient`).
     reference_nutrient: Optional[str] = None
