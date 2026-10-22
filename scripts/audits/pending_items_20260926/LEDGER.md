@@ -2489,3 +2489,75 @@ Final candidate57725b338 whole-fast CI39518630772 green/all4groups (runtime06202
 All three stagecode fingerprints change through transitive imports: Clean32cf97d5→9cc5eace, Enrich4c1b8ca2→287e14aa, Scoree50e051b→4e474d09; referencefingerprintunchanged. The next operator run startsClean, notScore-only. Sean owns that run; subsequent candidate/raw-to-final/release/app acceptance and publication remain open. Active unrelated authorwork is preserved; integratedbranches retire only after clean/status/evidence checks.
 
 Integration closeout: app authorbranch/worktree removed after verified ancestry, clean status and2,563ignored-entry inventory;3uniqueinputs privately preserved.287author evidence files/34,472,937bytes copied andSHA256verified; source/app Gitbundles verified. Large auditcaptures compressedlosslessly with original/compressed hashes. Claude-owned pipeline directories remain active (live cwd/processes or separate fidelity work), so they are preserved; no unfinished lane removed. The author-reported D53/deprecated-dashboard-reader follow-up remains with that separate fidelity audit; no release/artifact closure is claimed. Prior unowned release-readiness runbook edits remain untouched.
+
+
+### Catalog assessment and explanation audit — October 22, 2026
+
+Behavioral batch; pipeline PR241 runtime4e0f73a7, app PR133 runtime905d7b10
+(visual fixtures b674e340). Owner: studied_formulas::assess_probiotic_evidence /
+reviewed_native_context_present; probiotic_evidence::score_evidence;
+assessment_readiness::_probiotic_native_evidence_state; existing quality_score,
+pillar_explanations, rda_ul_calculator and build_final_db projections. Flutter renders
+canonical display_state/reason and comparison qualifications. Evidence: source matrix,
+caller audit, fail-first regressions and frozen production-seam comparisons. Will NOT
+create another scorer, clinical registry, public state, inferred amount, intake tracking
+or personalized product score.
+
+Recorded, approved combination research now remains research with unresolved applicability,
+not absence of research. Dose disclosure cannot change that inventory; explicit pending,
+rejected and needs_revision holds remain open. Completed contextual reviews retain the
+existing limited-review readiness classification. No individual-strain benefit or dose
+credit is inferred from combination trials. Shared serving/range facts use existing normalized
+amounts and reference source scope; conditional maximum-use warnings remain actionable.
+Unassessed formulation/Evidence gaps are excluded from product-drawback lists, duplicate UL
+tradeoff copy is removed while the safety finding and Dose explanation remain. Flutter shows
+canonical research qualifications, neutral qualified alternatives, and complete wrapped
+quality/direction text. The magnesium-stearate EFSA citation was an unrelated pest report;
+it now points to the verified E470a/E470b assessment2018.5180, with regulatory claim scope only.
+Severity, scoring and warning rules are unchanged by that citation repair.
+
+Measured8283 stored enriched products:0 numeric pillar/total/tier/status/readiness/safety-status
+changes from this explanation batch.107 evidence metadata changes;5561 export explanation
+changes.9 false-absence products and79 further applicability labels now preserve recorded
+research. Full raw/blob all-path replay covers1332 distinct labels (1140DSLD+3manual initial
+population;111 final-context products/controls with overlap;154additional native-probiotic cases). No changed identity, amount,
+score, safety status or lost warning; final readiness regressions are corrected. No corpus
+pipeline or release ran. Durable full inputs/results/hashes, findings register and independent
+review: ~/pg_quality/assessment_audit_20261022/.
+
+The prior approved optional-use policy is general (PR240,main6ab81d731): one2point deduction
+from earned Dose when only optional higher directed use exceeds; minimum-use exceedances
+retain the stronger existing rule. All1050ceiling products+22controls were measured;148Dose
+moves,97tiers,0safety/readiness/mapping/nonDose movements. VitaminC3262920→18 and Pure20530910→18
+are examples, not exceptions. Raw canaries32unchanged;29392478.9→85.6 is reproduced on both
+PR241 baseline and candidate and traces to that already-approved policy (Dose10→16.7).
+Its stored fixture still describes pre-regeneration output; qualify the source-grounded
+fixture after Sean's run, before snapshot/release. No historical fixture was silently restamped.
+
+Independent review caught blocked/unscored comparison wording and an intermediate explicit-hold
+readiness regression; both reproduced fail-first and fixed. Final reviewer121checks and
+281focused boundary checks pass;156copy/consumer and23cross-route checks pass. Initial CI
+exposed stale copy expectations plus the dose/readiness boundary defects; the corrections
+retain zero-credit, null/negative, identity and hold controls. One infrastructure startup-deadline
+failure passed unchanged in isolation; only a complete final CI pass can close the checkpoint.
+Final local:546passed,24declared opt-in skips; skip guard passed. Flutter analysis and3965tests
+pass; exact app CI39844629244green, PR133merged657c7c0e. Final pipeline CI found two obsolete
+copy assertions, corrected test-only e2793d2a;61tests and independent review pass. Runtime remains
+4e0f73a7. Exact pipeline CI39846842277 passed all four shards; PR241 merged14215663e.
+Local main matches origin/main; completed local/remote branch removed.
+Additional154native-probiotic cases:5copy-only changes, no new evidence/score/readiness/safety
+changes. Full comparisons preserved.
+
+Clinical hold: the external Fem-Dophilus assessment uses another numerical rubric. PMID12628548
+already exists as reviewed combination context with flora/surrogate outcomes and unresolved
+regimen/outcome attribution. This correction cannot authorize individual-strain credit or a
+universal benefit claim. Unknown per-strain quantities stay unknown. Additive processing-aid
+quality deductions are existing policy, not assertions of clinical harm. New clinical attribution
+or scoring-policy changes remain separate decisions.
+
+All114current stage manifests are stale against this candidate, includingClean (code and
+reference fingerprints). Sean owns one Clean→Enrich→Score pipeline-only run after integration.
+Post-run catalog parity, the updated canary and real-device Flutter acceptance remain open.
+Local iOS simulator launch is blocked by existing GoogleMLKit architecture support; no device
+screenshot or release-readiness claim. Light/dark golden images were inspected and updated for
+the intentional research-qualification precedence; phone-width/large-text tests pass.

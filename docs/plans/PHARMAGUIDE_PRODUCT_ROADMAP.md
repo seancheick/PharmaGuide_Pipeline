@@ -441,3 +441,14 @@ October 14 post-run checkpoint: Sean completed the corpus, but the final export 
 
 
 October 14 bounded shilajit label qualification: PR142 source da1bc55f preserves recognized aliases and accepted sugar/count corrections, and closes preparation-specific shilajit/peppermint Evidence transfer. Native Meru55.7/100 (13.3/11.4/0/15/6/10); research remains reference context where label applicability is unestablished.6,585 frozen labels reviewed,375 explained score changes; identities/amounts/safety/status unchanged. Final named1,458 tests, CI20,749/192declaredskips and local546/24declaredoptinskips pass; independent review closed. Source/measurement complete; draft PR not integrated, corpus not rebuilt or released. Concurrent main policy reconciliation and final delivery validation remain; no launch-track box is closed. Details: existing LEDGER/research and private clinical RESULT.
+
+
+October22 catalog-assessment checkpoint: shared optional-use Dose policy is integrated(PR240),
+not product-specific. Evidence/explanation batch PR241 and paired Flutter PR133 preserve research
+context, honest unknowns, source-qualified daily-use warnings and comparison qualifications.
+8283stored products and1332distinct raw labels measured; no additional numeric score or safety
+changes. Source integrated: pipeline PR241 at14215663e, app PR133 at657c7c0e; exact
+candidate CI/local/review passed, recorded in the existing pending-items LEDGER. Combination clinical attribution remains an explicit hold.
+Sean runs the necessary Clean-first pipeline-only regeneration after integration; catalog parity,
+canary refresh and real-device Flutter acceptance remain release gates. No pipeline/release run
+by this lane, and no launch phase is marked complete from these checks.
