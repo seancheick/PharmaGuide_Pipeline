@@ -38,10 +38,12 @@ def _caffeine(per_serving, servings=1, extra=()):
 
 
 @pytest.mark.parametrize("per_serving,servings,cap", [
-    (400, 1, None), (401, 1, 10.0), (599, 1, 10.0), (600, 1, 0.0), (200, 3, 0.0), (250, 2, 10.0)])
+    (400, 1, None), (401, 1, 10.0), (599, 1, 10.0), (600, 1, 0.0), (200, 3, None), (250, 2, None)])
 def test_daily_caffeine_ceiling_boundaries(per_serving, servings, cap):
     ceiling = evaluate_dose_safety(_caffeine(per_serving, servings)).dose_ceiling()
     assert (ceiling or {}).get("cap_public") == cap
+    if servings > 1:
+        assert ceiling["deduction_public"] == 2.0
 
 
 def test_caffeine_from_several_quantified_sources_is_summed():
@@ -67,7 +69,7 @@ def test_unknown_caffeine_amount_stays_unknown():
 def test_caffeine_ceiling_reaches_the_public_dose_on_any_route_and_names_its_policy():
     artifact = build_scored_artifact(_caffeine(300, 2))
     dose = artifact["quality_pillars_v4"]["dose"]
-    assert dose["score"] == 0.0
+    assert dose["score"] == 18.0
     assert "400 mg" in dose["reason"]
     facts = {f["id"]: f for f in dose["explanation"]["facts"]}
     assert "PharmaGuide scoring policy" in facts["dose_safety_ceiling"]["value_display"]

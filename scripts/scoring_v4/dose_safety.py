@@ -164,11 +164,20 @@ class DoseSafetyResult:
     def dose_ceiling(self) -> Optional[Dict[str, Any]]:
         """The strongest confirmed exceedance and the public Dose ceiling it sets.
 
-        Exactly 100% is not an exceedance. The maximum directed daily use sets
-        the band; the minimum only says whether even the lowest use exceeds.
+        Exactly 100% is not an exceedance. Minimum-use exceedances retain
+        their maximum-use ceiling; optional-only excess gets one deduction
+        from earned adequacy (Sean 2026-10-22). Safety flags stay unchanged.
         """
         candidates = [ceiling for ceiling in (self._ul_ceiling(), self._caffeine_ceiling()) if ceiling]
-        return min(candidates, key=lambda ceiling: ceiling["cap_public"]) if candidates else None
+        if not candidates:
+            return None
+        result = min(candidates, key=lambda ceiling: (ceiling.get("minimum_exceeds") is False, ceiling["cap_public"]))
+        if result.get("minimum_exceeds") is False and not self.frequency_defaulted:
+            result["deduction_public"] = float(_CEILING["optional_use_deduction_public"])
+            # No absolute safety cap in the optional-only case. The existing
+            # public Dose maximum is applied by its scoring owner.
+            result["cap_public"] = None
+        return result
 
     def _caffeine_ceiling(self) -> Optional[Dict[str, Any]]:
         policy = _CEILING["caffeine"]
@@ -201,7 +210,9 @@ class DoseSafetyResult:
                      and flag.pct_ul > float(_CEILING["exceeds_above_pct"])]
         if not confirmed:
             return None
-        driver = max(confirmed, key=lambda flag: (flag.pct_ul, _norm_text(flag.nutrient)))
+        driver = max(confirmed, key=lambda flag: (
+            flag.pct_ul_at_minimum is None or flag.pct_ul_at_minimum > float(_CEILING["exceeds_above_pct"]),
+            flag.pct_ul, _norm_text(flag.nutrient)))
         zero_at = float(_CEILING["zero_at_pct"])
         cap = 0.0 if driver.pct_ul >= zero_at else float(_CEILING["partial_ceiling_public"])
         minimum = driver.pct_ul_at_minimum

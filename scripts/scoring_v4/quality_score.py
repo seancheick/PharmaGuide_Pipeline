@@ -315,7 +315,8 @@ def _dose_ceiling(dim: Dict[str, Any]) -> Optional[Dict[str, Any]]:
     metadata = dim.get("metadata") if isinstance(dim, dict) else None
     evaluation = metadata.get("B7_safety_evaluation") if isinstance(metadata, dict) else None
     ceiling = evaluation.get("dose_ceiling") if isinstance(evaluation, dict) else None
-    return ceiling if isinstance(ceiling, dict) and _num(ceiling.get("cap_public"), -1) >= 0 else None
+    return ceiling if isinstance(ceiling, dict) and (
+        _num(ceiling.get("cap_public"), -1) >= 0 or _num(ceiling.get("deduction_public"), -1) >= 0) else None
 
 
 def _over_limit_dose_reason(dim: Dict[str, Any]) -> Optional[str]:
@@ -330,7 +331,9 @@ def _over_limit_dose_reason(dim: Dict[str, Any]) -> Optional[str]:
     if ceiling is not None:
         nutrient = str(ceiling.get("nutrient") or "One nutrient")
         cap = _num(ceiling.get("cap_public"))
-        outcome = ("so Dose credit is withheld" if cap == 0 else "so Dose credit is limited")
+        outcome = ("so a small deduction applies to the Dose credit earned at the lowest directed use"
+                   if ceiling.get("deduction_public") is not None else
+                   "so Dose credit is withheld" if cap == 0 else "so Dose credit is limited")
         if ceiling.get("kind") == "caffeine_daily_total":
             use = ("at one serving a day (the label gives no daily directions)" if ceiling.get("frequency_defaulted")
                    else "even at the lowest directed daily use" if ceiling.get("minimum_exceeds")
@@ -1141,7 +1144,11 @@ def _pillar_dose(dim: Dict[str, Any], weight: float, archetype: str,
     # Dose V4.1 §2.4: the strongest confirmed exceedance caps Dose once, after
     # aggregation and normalization; a ceiling never raises a lower score.
     ceiling = _dose_ceiling(dim)
-    val = adequacy if ceiling is None else min(adequacy, _num(ceiling.get("cap_public")))
+    val = adequacy
+    if ceiling is not None:
+        val = (round(max(0.0, adequacy - _num(ceiling["deduction_public"])), 1)
+               if ceiling.get("deduction_public") is not None
+               else min(adequacy, _num(ceiling.get("cap_public"))))
     over_limit_reason = _over_limit_dose_reason(dim)
     reason = over_limit_reason
     if reason is None:
@@ -1162,7 +1169,10 @@ def _pillar_dose(dim: Dict[str, Any], weight: float, archetype: str,
     components = {"raw_dose": score, "archetype": archetype, "reference": ref}
     if ceiling is not None:
         components["adequacy_before_safety"] = adequacy
-        components["safety_ceiling"] = _num(ceiling.get("cap_public"))
+        if ceiling.get("deduction_public") is not None:
+            components["safety_deduction"] = _num(ceiling["deduction_public"])
+        else:
+            components["safety_ceiling"] = _num(ceiling.get("cap_public"))
     facts = _probiotic_dose_facts(dim) if archetype == "probiotic" and over_limit_reason is None else []
     return {
         "score": val,
@@ -1582,7 +1592,13 @@ def _normalized_receipt(name: str, pillar: Dict[str, Any], dim: Dict[str, Any],
     if ceiling is not None and clipped > _num(ceiling):
         entries.append(_receipt_entry("dose_safety_ceiling", "cap", "dose_safety_ceiling", None,
                                       _num(ceiling) - clipped))
-    without_score = _num(rebuild({**dim, "score": without_deductions})["score"])
+    deduction = components.get("safety_deduction") if name == "dose" else None
+    if deduction is not None:
+        entries.append(_receipt_entry("dose_safety_ceiling", "deduction", "dose_safety_ceiling", None,
+                                      -min(clipped, _num(deduction))))
+    without_score = (round(max(0.0, min(float(weight), without_deductions * factor)), 1)
+                     if deduction is not None else
+                     _num(rebuild({**dim, "score": without_deductions})["score"]))
     return _finish_receipt(pillar, entries, without_score)
 
 

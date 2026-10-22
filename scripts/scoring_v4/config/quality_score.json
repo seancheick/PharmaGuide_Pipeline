@@ -152,7 +152,7 @@
     "dietary_sugar_cap": 4.0
   },
   "dose_safety_ceiling": {
-    "_doc": "Dose V4.1 \u00a72.4 (Sean D1, 2026-10-17): one product-level ceiling on the public Dose pillar, applied once after route aggregation and normalization, from the strongest confirmed exceedance at maximum directed daily use (rda_ul_data.safety_flags via scoring_v4.dose_safety). Exactly exceeds_above_pct is not an exceedance; above it and below zero_at_pct Dose is at most partial_ceiling_public; at or above zero_at_pct Dose is 0. A ceiling never raises a lower score; material_but_unresolved sets none. These bands are PharmaGuide scoring policy, not medically established toxicity grades. Replaces the per-nutrient UL bands and the B7 subtraction (-2/flag, cap 3).",
+    "_doc": "Sean 2026-10-22: if the lowest explicitly directed use is within the reference and only optional higher use exceeds it, subtract optional_use_deduction_public once from earned Dose, floored at zero; preserve safety findings. Otherwise retain Dose V4.1 \u00a72.4 (Sean D1, 2026-10-17): one product-level ceiling on the public Dose pillar, applied once after route aggregation and normalization, from the strongest confirmed exceedance at maximum directed daily use (rda_ul_data.safety_flags via scoring_v4.dose_safety). Exactly exceeds_above_pct is not an exceedance; above it and below zero_at_pct Dose is at most partial_ceiling_public; at or above zero_at_pct Dose is 0. A ceiling never raises a lower score; material_but_unresolved sets none. These bands are PharmaGuide scoring policy, not medically established toxicity grades. Replaces the per-nutrient UL bands and the B7 subtraction (-2/flag, cap 3).",
     "reference_semantics": {
       "review_date": "2026-10-17",
       "reference_type": "safety_only_reference",
@@ -174,6 +174,7 @@
     "exceeds_above_pct": 100.0,
     "zero_at_pct": 150.0,
     "partial_ceiling_public": 10.0,
+    "optional_use_deduction_public": 2.0,
     "caffeine": {
       "_doc": "Dose V4.1 \u00a73.3 (Sean D3): total declared daily caffeine at maximum directed daily use, quantified caffeine rows summed without counting a declared total and its components twice, feeds the same ceiling as an approved non-UL upper reference. Unknown amounts stay unknown. 400 mg/day is FDA's amount generally not associated with negative effects for most adults; the 600 mg boundary and the points are PharmaGuide policy. EFSA context: single doses up to 200 mg. The per-use performance benchmark stays a separate adequacy assessment.",
       "exceeds_above_mg_day": 400.0,
