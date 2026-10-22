@@ -480,3 +480,13 @@ def test_assessment_gaps_are_not_exported_as_product_drawbacks():
     # Actual reviewed unfavorable evidence still belongs in considerations.
     pillars["evidence"]["display_state"] = "assessed"
     assert "evidence" in [row["pillar"] for row in _build_v4_score_explanation(pillars, module)["drags"]]
+
+
+def test_ul_tradeoff_does_not_repeat_the_dose_pillar():
+    from build_final_db import _build_v4_score_explanation
+    pillars = {"dose": {"score": 18, "max": 20, "reason": "Maximum use exceeds the limit.",
+                        "explanation": {"dose_receipt": {"upper_reference": {"kind": "established_upper_limit"}}}},
+               "verification": {"score": 10, "max": 15, "reason": "No product certification."}}
+    result = _build_v4_score_explanation(pillars, penalties=[{"id": "B7", "label": "Maximum use exceeds UL"}])
+    assert [r["pillar"] for r in result["drags"]] == ["verification"]
+    assert "dose" in [r["pillar"] for r in _build_v4_score_explanation(pillars)["drags"]]
