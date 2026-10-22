@@ -83,3 +83,15 @@ def test_synthetic_antioxidants_umbrella_defers_tbhq_immunotox_to_canonical_entr
 
     assert "PMC9147452" not in synthetic
     assert "See ADD_TBHQ for immunotoxicity citations" in synthetic
+
+
+def test_magnesium_stearate_efsa_reference_is_fatty_acid_salts_not_pest_report():
+    entry = _entries_by_id()["ADD_MAGNESIUM_STEARATE"]
+    refs = [r for r in entry["references_structured"] if r.get("authority") == "EFSA"]
+    assert len(refs) == 1
+    assert refs[0]["url"] == "https://doi.org/10.2903/j.efsa.2018.5180"
+    assert "magnesium salts of fatty acids" in refs[0]["title"]
+    assert "5765" not in _entry_text(entry)
+    eu = [r for r in entry["jurisdictional_statuses"] if r["jurisdiction"] == "EU"]
+    assert eu[0]["source_ref"] == refs[0]["url"]
+    assert entry["severity_level"] == "low"
