@@ -2561,3 +2561,32 @@ Post-run catalog parity, the updated canary and real-device Flutter acceptance r
 Local iOS simulator launch is blocked by existing GoogleMLKit architecture support; no device
 screenshot or release-readiness claim. Light/dark golden images were inspected and updated for
 the intentional research-qualification precedence; phone-width/large-text tests pass.
+
+### 2026-10-22 approved-submission mapping and nutrition takeover
+
+Behavioral pipeline/data batch, on PR242. Owner:
+`enhanced_normalizer.py::EnhancedDSLDNormalizer._process_other_ingredients_enhanced`,
+`_lookup_other_ingredient_exact`, `_extract_nutritional_info`; console `refreshSelected/loadReview`;
+`other_ingredients.json` aliases. Evidence: matrix/glossary/caller search, real approved exports.
+Will NOT create: parallel parser, registry, public state, scoring policy or inferred capsule chemistry.
+
+Audited Claude's typed-nutrition/approval-only reload corrections. Added fail-first identity,
+conjunction, blend, malformed/unknown and structured-source controls. Corrected rice aliases,
+explicit hypromellose capsule recognition, pea-starch/modified-starch and oat-fiber/generic-oat
+misidentities. Shared literal identity lookup retains parenthetical chemistry without mapping
+bare veggie capsule. Independent review caught and verified fixes for child display-ledger
+path deduplication and recognition/mapping disagreement. Original disclosure remains the parent;
+all children retain distinct paths and parent identity. No clinical efficacy/identifier change.
+Per-entry primary-source receipts: `scripts/audits/submission_mapping_20261022/research.md`.
+
+Focused nutrition/import/consumer slice:307passed; final identity/resolver/dedup slice:59passed.
+Data-batch check:8explicit changed/added entries,0problems. Citation verifiers:0changed citations,
+0changed interaction rules. Frozen five current approved labels plus native affected rows and
+three controls:70raw inputs selected from15414local native labels; full-stage measurement and
+local checkpoint finishing. Initial30-label result:all five approved-label actives/inactives map;
+creatine20kcal retained; NAC66.3→65.8 from existing MCC excipient deduction; no other score movement
+or safety-status change. Final measurement/local/CI status must be recorded before integration.
+Private raw exports/replays/logs: `~/pg_quality/submission_mapping_20261022/`.
+
+No corpus rebuild, import materialization/promotion, storage upload or release ran. Existing
+assessment-audit Clean→Enrich→Score regeneration and catalog/app acceptance remain separate.

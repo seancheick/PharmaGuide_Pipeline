@@ -287,6 +287,8 @@ October15 receipt checkpoint: pipeline PR145 merged c72607e09 with the verified 
   rows. Needs privacy-preserving not-found counts; replay priority = risk × frequency × ambiguity.
 - [ ] **3.3 Submission flywheel.** The flow exists (`scripts/submission_review/`, app submission
   sheet, human review). Add a confidence-aware confirm step in the app and finish ledger Q10, Q16.
+  Submission import/mapping corrections (2026-10-22, PR242) are tracked in the existing pending-items
+  LEDGER; source validation does not complete the flywheel or catalog regeneration.
 
 ### Phase 4 — Change Watch
 

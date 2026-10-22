@@ -2441,6 +2441,16 @@ class EnhancedDSLDNormalizer:
 
         return False
 
+    def _lookup_other_ingredient_exact(self, name: str) -> Optional[Dict]:
+        """Match literal inactive names without discarding printed chemistry."""
+        exact = self.other_ingredients_exact_lookup.get(name.strip().lower())
+        if exact is not None:
+            return exact
+        # A parenthesized alias indexed through preprocess_text would erase
+        # its chemistry and make generic capsule wording claim that identity.
+        literal = norm_module.make_normalized_key(name).replace("_", " ")
+        return self.other_ingredients_exact_lookup.get(literal)
+
     def _has_curated_other_ingredient_identity(self, name: str) -> bool:
         """Return True when an inactive label row resolves to a known excipient.
 
@@ -2452,8 +2462,7 @@ class EnhancedDSLDNormalizer:
         """
         if not name:
             return False
-        exact_name = name.strip().lower()
-        if exact_name in self.other_ingredients_exact_lookup:
+        if self._lookup_other_ingredient_exact(name) is not None:
             return True
         processed_name = self.matcher.preprocess_text(name)
         if processed_name in self.other_ingredients_lookup:
@@ -8346,9 +8355,76 @@ class EnhancedDSLDNormalizer:
                         "name": specific_ingredient,
                     })
             else:
-                expanded_ingredients.append(ingredient)
+                name = ingredient.get("name", "")
+                # A structured row already owns its forms/quantity. Do not
+                # copy a container amount or source form onto every child.
+                structured = any(ingredient.get(key) for key in ("forms", "quantity", "amount", "nestedRows"))
+                names = [name] if structured else self._expand_inactive_disclosure(name)
+                if names != [name]:
+                    self._queue_display_ingredient(
+                        raw_source_text=ingredient.get("name", ""),
+                        source_section="inactiveIngredients",
+                        display_type="structural_container",
+                        score_included=False,
+                        source_row=ingredient,
+                        children=names,
+                    )
+                    expanded_ingredients.extend(self._expand_header_forms_for_processing(
+                        {**ingredient, "forms": [{"name": part} for part in names]},
+                        source_path="inactiveIngredients",
+                    ))
+                else:
+                    expanded_ingredients.append(ingredient)
 
         return self._process_ingredients_sequential(expanded_ingredients)
+
+    def _expand_inactive_disclosure(self, name: str) -> List[str]:
+        """Expand printed blend parts and identity-checked top-level conjunctions.
+
+        Curated whole names win (including names containing 'and'). A blend
+        lists its components explicitly; parentheses on an ordinary ingredient
+        remain source/form details. Unknown conjunction halves stay unresolved.
+        """
+        if self._has_curated_other_ingredient_identity(name):
+            return [name]
+        blend = re.fullmatch(r"((?:.*\s)?blend)\s*\((.+)\)\.?", name, re.IGNORECASE)
+        if blend:
+            try:
+                rows = parse_other_ingredient_disclosure(blend.group(2))
+            except ValueError:
+                return [name]
+            if all(not row.get("forms") for row in rows):
+                names = [part for row in rows for part in self._expand_inactive_disclosure(row["name"])]
+                if len(names) > 1:
+                    return names
+
+        # Only delimiters outside source/form parentheses can separate names.
+        stack = []
+        matching = {")": "(", "]": "[", "}": "{"}
+        cuts = []
+        for match in re.finditer(r"[()\[\]{}]|\s+and\s+", name, re.IGNORECASE):
+            token = match.group()
+            if token in "([{":
+                stack.append(token)
+            elif token in ")]}":
+                if not stack or stack.pop() != matching[token]:
+                    return [name]
+            elif not stack:
+                cuts.append(match.span())
+        if stack or not cuts:
+            return [name]
+        parts = []
+        start = 0
+        for left, right in cuts:
+            parts.append(name[start:left].strip())
+            start = right
+        parts.append(name[start:].strip())
+        if all(self._has_curated_other_ingredient_identity(part) or any(
+                self._has_curated_other_ingredient_identity(candidate)
+                for candidate in norm_module.descriptor_fallback_candidates(part)
+        ) for part in parts):
+            return parts
+        return [name]
 
 
     def _process_ingredients_sequential(self, ingredients: List[Dict]) -> List[Dict]:
@@ -8614,6 +8690,10 @@ class EnhancedDSLDNormalizer:
                 # Hierarchy classification for scoring (source/summary/component)
                 "hierarchyType": self._classify_hierarchy_type(name)
             }
+
+            if ing.get("parent_source_path"):
+                result["parent_source_path"] = ing["parent_source_path"]
+                result["parentBlend"] = ing.get("parentBlend")
 
             # Add additive metadata flag (for enrichment phase to use)
             if is_additive:
@@ -12088,8 +12168,7 @@ class EnhancedDSLDNormalizer:
         Exact inactive matches should prefer other_ingredients over active-canonical aliases.
         This prevents rows like 'Soy Lecithin' from being re-routed to active choline forms.
         """
-        exact_name = name.strip().lower()
-        other_ingredient = self.other_ingredients_exact_lookup.get(exact_name)
+        other_ingredient = self._lookup_other_ingredient_exact(name)
         if other_ingredient:
             return other_ingredient.get("standard_name", name), True, forms or []
 
