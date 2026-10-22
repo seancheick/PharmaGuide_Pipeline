@@ -164,3 +164,13 @@ def test_magnesium_preserves_reference_scope_and_source(calculator):
     assert result["reference"]["ul_basis"] == "supplemental_only"
     assert result["reference"]["source_url"] == "https://ods.od.nih.gov/factsheets/Magnesium-HealthProfessional/"
     assert result["reference"]["ul_note"] == "UL applies to supplemental magnesium only, not food sources"
+
+
+def test_ul_sentence_qualifies_exposure_and_supplement_scope():
+    from rda_ul_calculator import ul_exceedance_sentence
+    text = ul_exceedance_sentence(480, 350, "mg", ul_basis="supplemental_only",
+                                  exposure_label="At maximum directed daily use")
+    assert text.startswith("At maximum directed daily use")
+    assert "from supplements" in text
+    assert "480 mg" in text
+    assert "before other sources" not in text

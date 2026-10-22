@@ -371,8 +371,28 @@ def _dose_consumer_fact(receipt: Dict[str, Any]) -> Optional[Dict[str, Any]]:
             else:
                 exposure = "At the highest directed use"
             exposure = exposure[0].upper() + exposure[1:]
+            reference = (rows[0].get("reference") or {}) if len(rows) == 1 else {}
+            from rda_ul_calculator import ul_source_scope
+            scope = ul_source_scope(reference.get("ul_basis"))
             value = (f"{exposure}: {_percent(pct)}% of the {_amount(limit)} {unit} {upper.get('nutrient')} "
-                     f"upper limit ({upper.get('ul_population') or 'general adult'})")
+                     f"upper limit{scope} ({upper.get('ul_population') or 'general adult'})")
+            # Show only an explicitly recorded, matching contribution. Aggregate
+            # exposures and uncertain amounts must not acquire a serving amount.
+            contributions = [item for item in receipt.get("contributions") or []
+                             if len(rows) == 1 and item.get("ingredient") == rows[0].get("canonical_id")]
+            low = _num(daily_use.get("minimum_servings"))
+            high = _num(daily_use.get("maximum_servings"))
+            if len(contributions) == 1 and not daily_use.get("defaulted"):
+                item = contributions[0]
+                per_serving = _num(item.get("amount_per_serving"))
+                if (per_serving is not None and low is not None and high is not None
+                        and low > 0 and high >= low and item.get("amount_unit") == unit
+                        and item.get("quantity_operator") in (None, "=")
+                        and highest is not None and _num(item.get("amount_at_maximum")) == highest):
+                    span = _amount(low) if low == high else f"{_amount(low)}–{_amount(high)}"
+                    serving_word = "serving" if low == high == 1 else "servings"
+                    value = (f"{_amount(per_serving)} {unit} per serving; directions: "
+                             f"{span} {serving_word} a day. {value}")
         value = value[0].upper() + value[1:]
         return {"id": "dose_upper_limit_result", "label": "Upper limit", "value_display": value, "audience": CONSUMER}
     contributions = receipt.get("contributions") or []

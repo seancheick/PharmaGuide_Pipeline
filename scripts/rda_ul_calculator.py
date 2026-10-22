@@ -310,15 +310,17 @@ def _pediatric_age_label(ages: Sequence[str]) -> str:
     return f"{who} {' and '.join(spans)}"
 
 
-def ul_exceedance_sentence(amount: float, ul: float, unit: str, scope_label: str = "general adult") -> str:
-    """The consumer sentence for an amount above the upper limit.
+def ul_source_scope(ul_basis: Optional[str]) -> str:
+    """Render the reference owner's source scope without inferring a basis."""
+    return {"supplemental_only": " from supplements",
+            "total_intake": " from all sources",
+            "synthetic_only": " for synthetic forms"}.get(ul_basis, "")
 
-    Says what this product alone provides, names whose upper limit applies,
-    and says that other sources are not yet counted: the UL applies to
-    total daily intake, and this app sees one label at a time. It does not
-    say "unsafe" or "do not use"; a clinician can direct a higher dose, and the
-    action copy beside it says so.
-    """
+
+def ul_exceedance_sentence(amount: float, ul: float, unit: str, scope_label: str = "general adult",
+                           *, ul_basis: Optional[str] = None,
+                           exposure_label: str = "At the assessed daily amount") -> str:
+    """Qualify the assessed exposure, population and recorded reference scope."""
     def _n(value: float) -> str:
         return f"{value:.0f}" if abs(value - round(value)) < 0.05 else f"{value:.1f}"
 
@@ -326,8 +328,8 @@ def ul_exceedance_sentence(amount: float, ul: float, unit: str, scope_label: str
     limit = ("general adult upper limit" if scope_label == "general adult"
              else f"upper limit for {scope_label}")
     return (
-        f"Provides {_n(amount)} {unit} per day on its own, {pct:.0f}% of the "
-        f"{limit} of {_n(ul)} {unit}, before other sources are counted."
+        f"{exposure_label}, this product provides {_n(amount)} {unit} per day, "
+        f"{pct:.0f}% of the {limit} of {_n(ul)} {unit}{ul_source_scope(ul_basis)}."
     )
 
 
@@ -682,7 +684,8 @@ class RDAULCalculator:
                     over_ul_amount = amount_in_ref - ul
                     warnings.append(ul_exceedance_sentence(
                         amount_in_ref, ul, ref_unit_label,
-                        (population or {}).get("label") or "general adult"))
+                        (population or {}).get("label") or "general adult",
+                        ul_basis=nutrient_data.get("ul_basis")))
 
         # Determine adequacy band. Magnesium is a special case because the UL
         # applies to supplemental intake only while the RDA is total intake.
