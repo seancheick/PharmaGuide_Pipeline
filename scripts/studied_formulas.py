@@ -756,7 +756,8 @@ def assess_probiotic_evidence(product: Mapping) -> dict:
                 # applicability gap without accepting individual credit.
                 status = ("strain_context_not_applicable" if any(
                     c.get("status") == "source_context_recorded"
-                    and context_accepted_for_scoring(c)
+                    and c.get("review_status") == "clinician_approved"
+                    and clinical_review_provenance_valid(c)
                     and c.get("dose_comparison") not in {
                         "identity_owner_unresolved", "organism_preparation_mismatch"}
                     for c in result["study_contexts"])

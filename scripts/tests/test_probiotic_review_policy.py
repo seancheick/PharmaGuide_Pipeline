@@ -245,13 +245,15 @@ def test_pediatric_context_cannot_supply_adult_summary_applicability(registry):
 
 
 @pytest.mark.parametrize("recorded", [True, False])
-def test_finished_individual_review_preserves_combination_research(registry, recorded):
+@pytest.mark.parametrize("scoring_eligible", [True, False])
+def test_finished_individual_review_preserves_combination_research(registry, recorded, scoring_eligible):
     # The literature conclusion concerns individual-strain attribution, while
     # combination research remains a distinct, reviewed research context.
     registry[STUB]["literature_review"] = deepcopy(
         registry["STRAIN_RHAMNOSUS_GR1"]["literature_review"])
     registry[STUB]["study_contexts"] = ([positive_rct(
-        approved=True, identity_scope="combination", components=[STUB, "STRAIN_LGG"])]
+        approved=True, identity_scope="combination", components=[STUB, "STRAIN_LGG"],
+        scoring_eligible=scoring_eligible)]
         if recorded else [])
     product = la14_product(dose=None)
     product["probiotic_data"]["is_probiotic_product"] = True
