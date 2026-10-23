@@ -1150,7 +1150,8 @@ def _check_line_integrity(
     blob: Mapping[str, Any],
 ) -> None:
     raws = _raw_paths(raw)
-    raws.update(_verified_corrected_form_paths(raw, rec.dsld_id))
+    for path, form in _verified_corrected_form_paths(raw, rec.dsld_id).items():
+        raws.setdefault(path, form)
     rows = {path for path in raws if ".forms[" not in path}
     ledger = [entry for entry in blob.get("row_ledger") or [] if isinstance(entry, dict)]
     refs = {entry.get("row_ref") for entry in ledger}

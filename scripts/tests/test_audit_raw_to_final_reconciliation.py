@@ -781,3 +781,23 @@ def test_reviewed_form_correction_does_not_authorize_an_extra_form():
     record = ProductRecord("1179", None, None, None)
     _check_line_integrity(record, raw, None, None, blob)
     assert sum(f.code == "LEDGER_ROW_NOT_IN_RAW" for f in record.findings) == 2
+
+
+def test_corrected_forms_keep_original_inventory_labels_on_existing_paths():
+    from audit_raw_to_final import _check_line_integrity
+    raw = {"id": "1179", "ingredientRows": [{"name": "vitamin B", "forms": [
+        {"name": "Pyridoxine Hydrochloride"}], "nestedRows": []}]}
+    blob = {"row_ledger": [{"row_ref": "ingredientRows[0].forms[0]",
+                            "source_label": "Pyridoxine Hydrochloride"}]}
+    record = ProductRecord("1179", None, None, None)
+    _check_line_integrity(record, raw, None, None, blob)
+    assert not any(f.code == "LEDGER_NAME_DIFFERS_FROM_RAW" for f in record.findings)
+
+
+def test_reviewed_new_form_still_requires_its_exact_source_label():
+    from audit_raw_to_final import _check_line_integrity
+    raw = {"id": "1179", "ingredientRows": [{"name": "vitamin B", "forms": [], "nestedRows": []}]}
+    blob = {"row_ledger": [{"row_ref": "ingredientRows[0].forms[5]", "source_label": "Invented"}]}
+    record = ProductRecord("1179", None, None, None)
+    _check_line_integrity(record, raw, None, None, blob)
+    assert any(f.code == "LEDGER_NAME_DIFFERS_FROM_RAW" for f in record.findings)
