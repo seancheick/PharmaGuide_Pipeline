@@ -2986,3 +2986,12 @@ from506retained benchmark subjects/3118products/4259rows. All83currently lack so
 no new clinician approval or claim of complete literature review. Extramel review packet now
 records industry support in both trials. Exact dependencies and closure questions are supplied;
 remaining preparation and clinician holds remain open. Independent revised-code review accepts.
+
+First completed candidate01a34133a: focused664passed, local546passed/24declared skips164.54s.
+CI40040820208 had exactly1failure: generic Dose read canonical_source_db directly, violating
+the existing profile-classification ownership guard. No allowlist/test was weakened. The
+consumer now uses build_scoring_classification once and matches exact row reference/canonical
+identity against its botanical eligibility result.193focused generic-dose/contract/real-label
+checks pass. Fresh30candidate comparison and final CI/local qualification follow; first CI is
+explicitly not a pass. Static CSV line endings and missing existing saw-palmetto trial links
+were corrected; these review projections do not change runtime behavior.

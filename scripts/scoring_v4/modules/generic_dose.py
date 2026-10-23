@@ -35,6 +35,7 @@ from scoring_v4.modules.generic_helpers import (
     _safe_list,
 )
 from scoring_input_contract import (
+    build_scoring_classification,
     ROLE_CLAIM_PROMINENT,
     ROLE_PRIMARY,
     classify_ingredient_roles,
@@ -291,6 +292,13 @@ def _score_declared_purpose_window(
     compatibility path for products whose source has not yet supplied one.
     """
     rows = [row for row in nutrient_delivering_rows(product) if isinstance(row, dict)]
+    # Profile eligibility is owned by the shared classification contract, not
+    # inferred again from raw registry/taxonomy fields in the Dose consumer.
+    botanical_rows = {
+        (item.get("row_ref"), item.get("canonical_id"))
+        for item in build_scoring_classification(product).get("ingredients", [])
+        if item.get("profile_eligibility", {}).get("botanical", {}).get("eligible") is True
+    }
     aggregate = positive_aggregate_clinical_benchmark(product, rows)
     aggregate_members = set(aggregate.member_canonical_ids) if aggregate is not None else set()
     # A declared mixture keeps one purpose vote when its clinical numerical
@@ -422,8 +430,9 @@ def _score_declared_purpose_window(
             specialized = score_immune_purpose_dose(product, purpose)
             specialized_owner = "immune_support"
         if (specialized is None
-                and purpose.get("canonical_source_db") in {"botanical_ingredients", "standardized_botanicals"}):
-            # A source-owned botanical purpose still needs its preparation review
+                and (purpose.get("raw_source_path") or purpose.get("source"),
+                     purpose.get("canonical_id")) in botanical_rows):
+            # A classified botanical purpose still needs its preparation review
             # when co-formulated nutrients select a non-botanical product route.
             # Preserve the existing specialized owners' precedence.
             specialized = score_botanical_purpose_dose(product, purpose)
