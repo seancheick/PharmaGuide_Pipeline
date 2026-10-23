@@ -856,4 +856,7 @@ def _botanical_benchmark(row: Dict[str, Any]) -> str:
         and str(semantics.get("approval_status") or "").startswith("approved_existing_neutral_")
     ):
         return "absent"
-    return "absent" if _recognized_botanical_identity(row) else "unresolved"
+    # Recognizing the ingredient completes identity, not the scientific search
+    # for an applicable benchmark. Only the reviewed owners above can establish
+    # a completed no-benchmark conclusion (and therefore neutral Dose credit).
+    return "unresolved"

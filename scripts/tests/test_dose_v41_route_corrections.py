@@ -122,8 +122,9 @@ def test_per_use_atp_target_is_not_multiplied_by_daily_directions():
 
 @pytest.mark.parametrize("quantity,hidden,expected", [(None, False, 0), (None, True, 11.4), (300, False, 11.4)])
 def test_no_botanical_benchmark_does_not_hide_missing_capture(quantity, hidden, expected):
-    row = _botanical_ingredient(name="Elderflower", standard_name="Elderflower",
-                               canonical_id="elderflower", quantity=quantity, unit="mg")
+    # Use the explicitly reviewed Ashwagandha no-benchmark record. Mere
+    # recognition of an unreviewed botanical cannot establish this premise.
+    row = _botanical_ingredient(quantity=quantity, unit="mg")
     if hidden:
         row["isNestedIngredient"] = True
     assert _dose(_botanical_product(row)) == expected

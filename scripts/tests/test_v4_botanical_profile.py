@@ -334,8 +334,9 @@ def test_dose_disclosed_no_clinical_reference():
     ing = _botanical_ingredient(name="Eyebright", standard_name="Eyebright",
                                 canonical_id="eyebright", form="Eyebright Herb", quantity=300)
     out = score_botanical_dose(_botanical_product(ingredient=ing))
-    # No benchmark: the shared unbenchmarked neutral, not a quality verdict.
-    assert out["score"] == _neutral() == 11.97
+    # A missing reference is unfinished review, not a reviewed absence.
+    assert out["score"] == 0
+    assert out["metadata"]["benchmark"] == "unresolved"
     assert out["band"] == "disclosed_no_reference"
 
 
@@ -585,16 +586,18 @@ def test_top_level_proprietary_botanical_blend_total_gets_conservative_profile()
     assert is_botanical_product(product) is True
     dose = score_botanical_dose(product)
     assert dose["band"] == "blend_total_only"
-    # Milk thistle has no studied range on file: the shared neutral applies.
-    assert dose["metadata"]["benchmark"] == "absent"
-    assert dose["score"] == _neutral()
+    # Hidden component amounts remain a label limitation, while the missing
+    # benchmark review is independently PharmaGuide's unfinished work.
+    assert dose["metadata"]["benchmark"] == "unresolved"
+    assert dose["score"] == 0
 
     result = score_generic(product)
     formulation = result.dimensions["formulation"]
     assert formulation.metadata["botanical_profile_applied"] is True
     assert result.dimensions["dose"].metadata["botanical_dose_band"] == "blend_total_only"
     assert result.dimensions["evidence"].metadata["primary_evidence_floor"] == 0.0
-    assert result.score_100 > 20.0
+    assert result.dimensions["formulation"].score > 0
+    assert result.dimensions["dose"].score == 0
 
 
 def test_top_level_food_matrix_blend_does_not_create_botanical_profile():
@@ -762,3 +765,18 @@ def test_botanical_profile_evidence_does_not_replace_strict_identity(scoreable, 
            "raw_taxonomy": {"category": "blend"},
            "_scoring_classification": {"profile_eligibility": {"botanical": {"eligible": eligible}}}}
     assert _recognized_botanical_identity(row) is False
+
+
+def test_recognized_identity_without_benchmark_review_stays_unfinished(monkeypatch):
+    """Identity recognition cannot certify that a benchmark search completed."""
+    import scoring_v4.modules.botanical_profile as owner
+    import evidence_resolver
+    monkeypatch.setattr(owner, "_dosing_entry_for", lambda row: None)
+    monkeypatch.setattr(evidence_resolver, "_load_literature_evidence", lambda: {})
+    product = _botanical_product()
+    assert owner._recognized_botanical_identity(_primary_botanical_active(product)) is True
+    from scoring_v4.scored_artifact import build_scored_artifact
+    artifact = build_scored_artifact(product)
+    assert score_botanical_dose(product)["metadata"]["benchmark"] == "unresolved"
+    assert artifact["quality_pillars_v4"]["dose"]["score"] == 0
+    assert artifact["quality_assessment_status"] == "partial"
