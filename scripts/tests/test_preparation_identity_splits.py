@@ -1101,3 +1101,56 @@ def test_unrelated_extract_form_cannot_upgrade_whole_powder(pipeline, base, cano
     row = next(r for r in rows if r.get("raw_source_path") == "ingredientRows[0]")
     assert row.get("canonical_id") == canonical or row.get("scoreable_identity") is False
     assert row.get("form_match_status") != "mapped" or row.get("form_id") != canonical + " extract"
+
+
+@pytest.mark.parametrize('part', ['Whole Grass', 'Thallus'])
+def test_exact_kombu_source_part_preserves_identity_without_form_grade(pipeline, part):
+    from scoring_v4.scored_artifact import build_scored_artifact
+    row = _raw_row(1, 'Kelp Extract', 'Kelp', quantity=500, unit='mg',
+                   forms=(f'Laminaria japonica {part} Extract',))
+    enriched = pipeline(_raw_product(991023, [row]))
+    actual = enriched['ingredient_quality_data']['ingredients'][0]
+    assert actual['canonical_id'] == 'kombu'
+    assert actual['form_match_status'] == 'n/a'
+    assert actual.get('bio_score') is None
+    from scoring_v4.modules.botanical_profile import _botanical_benchmark
+    assert _botanical_benchmark(actual) == 'unresolved'
+    artifact = build_scored_artifact(enriched)
+    release = artifact['assessment_readiness']['release_assessment']
+    assert release['is_complete'] is False
+    assert 'dose_benchmark_identity_unresolved' in release['blockers']
+    assert artifact['quality_assessment_status'] == 'partial'
+
+
+@pytest.mark.parametrize('limitation', ['partial', 'mixed', 'nested', 'source_only'])
+def test_kombu_source_parts_do_not_own_partial_or_mixed_amounts(limitation):
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    row = _raw_row(1, 'Kelp Extract', 'Kelp', quantity=500, unit='mg',
+                   forms=('Laminaria japonica Thallus Extract',))
+    if limitation == 'partial':
+        row['forms'][0]['percent'] = 10
+    elif limitation == 'mixed':
+        row['forms'].append(dict(row['forms'][0], name='Fucus vesiculosus Thallus Extract'))
+    elif limitation == 'nested':
+        row['nestedRows'] = [_raw_row(2, 'Iodine', 'Iodine', category='mineral', quantity=225, unit='mcg')]
+    else:
+        row['forms'][0]['prefix'] = 'from'
+    assert EnhancedDSLDNormalizer()._single_declared_source_form_identity(row) is None
+
+
+def test_iodine_kelp_extract_keeps_unfinished_preparation_hold(pipeline):
+    from scoring_v4.scored_artifact import build_scored_artifact
+    raw = json.loads((SCRIPTS / 'tests/fixtures/identity_309387_raw.json').read_text())
+    product = pipeline(raw)
+    rows = product['ingredient_quality_data']['ingredients']
+    by_id = {row['canonical_id']: row for row in rows}
+    assert by_id['iodine']['quantity'] == 225
+    assert by_id['calcium']['quantity'] == 80
+    assert by_id['kombu']['quantity'] == 33.75
+    artifact = build_scored_artifact(product)
+    release = artifact['assessment_readiness']['release_assessment']
+    assert release['is_complete'] is False
+    assert 'dose_benchmark_identity_unresolved' in release['blockers']
+    assessments = artifact['assessment_readiness']['evidence']['ingredient_assessments']
+    kelp = next(row for row in assessments if row['canonical_id'] == 'kombu')
+    assert kelp['state'] == 'not_yet_evaluated'

@@ -1432,3 +1432,11 @@ holds remain. Final eight-label owner comparison preserves scores, quantities an
 hits; no corpus rerun or rebuilt closure. Runtime40ddaac416 passes whole-fast CI40037728786
 (23,601passed/192declared skips), final local546passed/24declared skips, and independent
 review. Execution LEDGER and current handoff retain qualification/integration receipts. Preparation/benchmark and clinician review work remains open; no phase box closes.
+
+October23 preparation review continuation: exact kombu source recognition implemented without
+form grade or benchmark. Thirty-label diagnostics retain all eight affected preparation/Evidence
+holds and preserve quantities/warnings;22controls' scored artifacts unchanged except scored_date. Existing dose and
+Evidence owners prevent mineral routing or culinary scope from completing an unreviewed extract.
+Shareable review handoff separates83legacy-record dependencies and506retained benchmark subjects.
+No scientific closure, corpus regeneration, app acceptance or release claimed. Final qualification
+and integration receipts are in the execution LEDGER/current handoff.

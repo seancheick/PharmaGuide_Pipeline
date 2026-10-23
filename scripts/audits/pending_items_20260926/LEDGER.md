@@ -2954,3 +2954,35 @@ are historical, not unresolved. Source corrections are implemented and bounded-v
 remaining preparation/benchmark assessments, clinical approvals, rebuilt corpus and Flutter
 acceptance stay open. No pipeline, export, promotion or release performed. Main integration
 is authorized; final commit/remote containment receipt is retained in the current handoff.
+
+### 2026-10-23 preparation/benchmark continuation
+
+Behavioral classification. Owner: enhanced_normalizer::_single_declared_source_form_identity,
+botanical_ingredients::kombu, evidence_resolver::resolve_evidence_for_row,
+generic_dose::_score_declared_purpose_window. Evidence: exact eight NIH kelp labels, live
+GSRS/NLM identity receipts, existing culinary kombu scope and reproduced owner checks.
+Will NOT create: new matcher, clinical registry, benchmark, numerical grade or approval.
+
+Two exact source aliases plus thallus/whole-grass complete-material handling fix species
+recognition. Fail-first2positive/4negative tests protect single/partial/mixed/nested/from-source
+boundaries. Fresh review caught309387 becoming release-complete through a mineral route and
+culinary evidence transfer. Three additional fail-first nodes reproduced those gaps; existing
+botanical-purpose and evidence owners now retain both preparation/benchmark holds. Seven
+nutrient fallback regressions exposed overly broad dispatch; scope was corrected to source-owned
+botanical registries and all original assertions retained. A culinary-extract negative control
+also failed before the guard was narrowed to non-extract reviewed material. No invented scores.
+
+Thirty-label before/after diagnostics: eight kelp identities corrected; seven provisional45.7,
+309387provisional44.0, all eight still release-blocked for benchmark and Evidence incompleteness.
+All30quantities/units and interaction profiles unchanged;all22control scored artifacts identical except scored_date,
+including original20. No production pipeline/export/import or corpus restamp. Initial focused
+identity slice1337passed;final completeness slice, local and CI recorded at final qualification.
+Source-entry check:only botanical_ingredients/kombu,0problems (initial short-key invocation was
+rejected and rerun with canonical key). Citation verifiers selected0citations/0interaction rules;
+primary live taxonomy/GSRS/NLM and NIH label receipts establish the actual source verification.
+
+Shareable CLINICAL_REVIEW_HANDOFF.md separates83legacy records/410frozen products/524links
+from506retained benchmark subjects/3118products/4259rows. All83currently lack source contexts;
+no new clinician approval or claim of complete literature review. Extramel review packet now
+records industry support in both trials. Exact dependencies and closure questions are supplied;
+remaining preparation and clinician holds remain open. Independent revised-code review accepts.

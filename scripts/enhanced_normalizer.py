@@ -3098,7 +3098,7 @@ class EnhancedDSLDNormalizer:
             if (mapped and canonical and source in {"botanical_ingredients", "standardized_botanicals"}
                     and str(ingredient.get("category") or "").casefold() in {"botanical", "fat"}
                     and str(forms[0].get("category") or "").casefold() == "botanical"
-                    and re.search(r"\b(?:root|rhizome|leaf|bark|stem|fruit|berry|seed|flower|powder)\b", form_name, re.I)
+                    and re.search(r"\b(?:root|rhizome|leaf|bark|stem|fruit|berry|seed|flower|powder|thallus|whole grass)\b", form_name, re.I)
                     and self._exact_ingredient_group_lookup(form_name).get("type")
                     in {"botanical", "standardized_botanical"}):
                 printed_canonical, _ = self._resolve_canonical_identity(

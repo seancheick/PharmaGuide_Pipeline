@@ -1073,6 +1073,25 @@ def resolve_evidence_for_row(
 
         # Check if food matrix / excipient is not efficacy relevant
         if lit_entry.get("effect_direction") == "not_efficacy_relevant":
+            material = _norm(lit_entry.get("material_form"))
+            from clinical_applicability import _row_text
+            declared = _row_text(row_dict, source_only=True) + _row_text(row_dict)
+            # A culinary-matrix conclusion is preparation-specific too. It
+            # cannot finish an extract's review merely through species identity.
+            if (re.search(r"\b(?:whole|culinary)\b", material)
+                    and not re.search(r"\bextract\b", material)
+                    and re.search(r"\bextract\b", declared, re.I)):
+                return EvidenceResolution(
+                    canonical_id=canonical,
+                    ingredient_name=name,
+                    matched_owners=matched_owners,
+                    disposition=EvidenceDisposition.LITERATURE_RESOLUTION_REQUIRED.value,
+                    points_eligible=False,
+                    applicability_status="literature_applicability_unestablished",
+                    reason_code="culinary_matrix_review_cannot_complete_extract",
+                    owner_facts=owner_facts,
+                    blocking_reasons=["literature_applicability_unestablished"],
+                )
             return EvidenceResolution(
                 canonical_id=canonical,
                 ingredient_name=name,

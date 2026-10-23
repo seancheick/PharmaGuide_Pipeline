@@ -377,3 +377,36 @@ warning preservation, mapped-but-ungraded readiness, null co-form arithmetic and
 preparation identity leakage. Bounded six-label owner replay is diagnostic only; no corpus
 pipeline, artifact promotion or public release. Rebuilt closure and clinician reviews remain
 open. Exact candidate validation and integration results are recorded in the execution LEDGER.
+
+## 2026-10-23 preparation and benchmark review handoff
+
+[Shareable clinical review request](CLINICAL_REVIEW_HANDOFF.md), with exact 83-record legacy
+review dependencies and the separate 506-subject retained benchmark worklist. Source-context
+checks use the current clinical owner; neither list creates approvals or a parallel registry.
+These are retained diagnostic dependencies, not fresh corpus counts.
+
+Kelp source labels331151/331152/331154/312063–312066 disclose Laminaria japonica Whole Grass
+Extract500mg;309387 discloses Laminaria japonica Thallus Extract33.75mg beside separately
+owned iodine225mcg and calcium80mg. All eight exact NIH JSON records retrieved individually
+on2026-10-23; no visual PDF inspection newly claimed. Only the first three disclose10:1.
+Live NCATS GSRS WE98HW412B confirms Laminaria japonica whole alga and thallus/extract names;
+NLM C0696815 confirms the same species. NCBI taxonomy88149 records Saccharina japonica and
+its Laminaria japonica basionym. No identifier or chemical-equivalence claim added.
+Sources: https://gsrs.ncats.nih.gov/ginas/app/api/v1/substances(WE98HW412B)?view=full ;
+https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=88149 ;
+https://api.ods.od.nih.gov/dsld/v9/label/331151 and /309387 (each other ID independently fetched).
+
+Owner correction: enhanced_normalizer::_single_declared_source_form_identity excluded thallus
+and whole-grass wording. Existing kombu receives only the two exact source-preparation aliases;
+complete single-form, no partial quantity, no nested blend, exact registry and source guards
+remain. No IQM form score or botanical benchmark is created. Alias-only probing was insufficient;
+source recognition and the existing complete-material owner both require correction.
+
+Benchmark sources revisited: Schisandra32260466 and Extramel19754931/24949549 full text;
+Boswellia18667054/35512759 source content and existing preparation review. No new general
+benchmark is justified. Correction to the earlier packet: BOTH Extramel trials had Seppic/Bionov
+support; the2014 paper separately declares no conflict. Full text inspected via Europe PMC XML
+when PMC browser retrieval presented a challenge. Clinical-purpose/preparation holds remain.
+Cranberry330664 and mixed grape330882 exact NIH rows reconfirm the separate-species and mixed-
+component limitations. Numerical quality changes, bounded checks and integration are recorded
+in the execution LEDGER; full corpus/Flutter closure remains deferred.

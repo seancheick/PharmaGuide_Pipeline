@@ -1426,3 +1426,22 @@ def test_clinical_owner_excludes_retracted_source_identifiers_and_legacy_fallbac
     monkeypatch.setattr(er, '_backed_studies_index', lambda: {'test_preparation': [study]})
     result = er.resolve_evidence_for_canonical('test_preparation')
     assert result.owner_facts['backed_clinical_studies']['pmids'] == ['222']
+
+
+@pytest.mark.parametrize('name,form', [('Kelp Thallus Extract', None), ('Kelp', 'Laminaria japonica Thallus Extract')])
+def test_culinary_kelp_review_does_not_complete_extract(name, form):
+    result = er.resolve_evidence_for_canonical('kombu', name=name, matched_form=form)
+    assert result.disposition == EvidenceDisposition.LITERATURE_RESOLUTION_REQUIRED.value
+    assert result.points_eligible is False
+    culinary = er.resolve_evidence_for_canonical('kombu', name='Whole culinary kombu')
+    assert culinary.disposition == EvidenceDisposition.NOT_EFFICACY_RELEVANT.value
+
+
+def test_culinary_scope_respects_structured_preparation_and_reviewed_extract():
+    result = er.resolve_evidence_for_row({
+        'canonical_id': 'kombu', 'name': 'Kelp', 'raw_source_text': 'Kelp',
+        'raw_taxonomy': {'forms': [{'name': 'Laminaria japonica Thallus Extract'}]},
+    })
+    assert result.disposition == EvidenceDisposition.LITERATURE_RESOLUTION_REQUIRED.value
+    reviewed = er.resolve_evidence_for_canonical('nha_cherry_flavor', name='Natural Cherry Flavor Extract')
+    assert reviewed.disposition == EvidenceDisposition.NOT_EFFICACY_RELEVANT.value

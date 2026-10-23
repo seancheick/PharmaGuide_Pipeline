@@ -421,6 +421,13 @@ def _score_declared_purpose_window(
         if specialized is None:
             specialized = score_immune_purpose_dose(product, purpose)
             specialized_owner = "immune_support"
+        if (specialized is None
+                and purpose.get("canonical_source_db") in {"botanical_ingredients", "standardized_botanicals"}):
+            # A source-owned botanical purpose still needs its preparation review
+            # when co-formulated nutrients select a non-botanical product route.
+            # Preserve the existing specialized owners' precedence.
+            specialized = score_botanical_purpose_dose(product, purpose)
+            specialized_owner = "botanical_profile"
         if specialized is not None:
             completed_botanical_neutral = (
                 specialized_owner == "botanical_profile"

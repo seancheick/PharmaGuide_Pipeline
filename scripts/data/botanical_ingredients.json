@@ -3,7 +3,7 @@
     "description": "Non-standardized whole herb powders and simple botanical extracts without guaranteed marker compounds. Used for basic ingredient mapping. For premium standardized extracts with marker compounds, see standardized_botanicals.json.",
     "purpose": "ingredient_mapping",
     "schema_version": "5.2.0",
-    "last_updated": "2026-10-20",
+    "last_updated": "2026-10-23",
     "total_entries": 559,
     "functional_roles_field": {
       "added_in": "5.1.0",
@@ -15627,7 +15627,9 @@
         "laminaria japonica aresch extract",
         "Laminaria japonica Aresch extract",
         "brown seaweed (laminaria japonica) extract",
-        "Japanese Kelp extract"
+        "Japanese Kelp extract",
+        "Laminaria japonica Whole Grass Extract",
+        "Laminaria japonica Thallus Extract"
       ],
       "category": "seaweed",
       "notes": "Laminaria japonica / Saccharina japonica — edible brown seaweed. Richest natural iodine source. 'Aresch' (or 'Areschoug') is the botanical authority suffix for Laminaria japonica Aresch., the original taxonomic citation; same species.",
