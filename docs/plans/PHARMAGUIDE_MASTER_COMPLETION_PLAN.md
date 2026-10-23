@@ -4,6 +4,9 @@
 
 - [x] Preserve exact15,437-product baseline with verified manifest-owned files.
 - [x] Reproduce and repair Neumentix canonical botanical recognition and Pepogest multiline delivery provenance; targeted tests pass. These are implemented, not rebuilt/scientifically closed.
+- [x] Prepare source-content packets for all83 actual-used legacy dependencies in the727 cohort, bound to exact affected IDs. User chose retained clinician holds; full-text/product applicability is not approved by these packets.
+- [x] Correct cross-route native readiness, nutrient authority propagation, fabricated clinical-ID identity joins, excluded-source citation provenance and seven source-attribution records. Fresh14-label replay preserves all cleaned labels/safety; five explained Evidence decreases. Implemented and bounded-verified, not whole-corpus closed.
+- [x] Final continuation checkpoint94aa39a4c: source-hold completion defect fixed; CI40001885853 passes23,526 tests/192declared skips, all4groups and guards green; local546/24declared optional-service skips passed. CI39999730631 was cancelled and is not counted as a pass. Scientific holds and rebuilt-corpus acceptance remain open.
 - [ ] Reconcile the727credited-but-incomplete (corrected frozen-baseline census; prior689was a state-filter count) products, all unresolved identity/dose/evidence causes and used legacy applicability dependencies.
 - [x] Implement dependency-aware release integrity through existing owners; targeted and real-product checks preserve completed negative findings and unavoidable label limitations. Full rebuilt-corpus enforcement remains pending.
 - [x] Independent candidate review, local546 tests,33 raw canaries and23 actual-record Flutter component checks pass. Whole-fastCI39993622215 passes23481 tests; no full-screen/import claim.
