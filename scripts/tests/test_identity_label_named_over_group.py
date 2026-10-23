@@ -143,3 +143,34 @@ def test_ambiguous_or_brand_aliases_do_not_name_another_substance(pipeline, lite
 def test_biovin_advanced_is_a_grape_extract(pipeline):
     registry = pipeline[1]._current_canonical_identity_registry()
     assert registry.literal_identity_matches("BioVin Advanced", "grape")
+
+
+def test_exact_cherry_species_survives_generic_group_and_powder_suffix(products):
+    row = _row(products['294296'][0], 'ingredientRows[0]')
+    assert row['canonical_id'] == 'dark_sweet_cherry'
+    assert row['label_display_name'] == 'Wild Cherry Fruit Extract, Powder'
+    assert row['quantity'] == 500 and row['unit'] == 'mg'
+
+
+def test_biotinate_is_recognized_without_a_form_grade_or_completed_assessment(products):
+    from scoring_v4.scored_artifact import build_scored_artifact
+    enriched, _ = products['299744']
+    row = _row(enriched, 'ingredientRows[0]')
+    assert row['canonical_id'] == 'vitamin_b7_biotin'
+    assert row['form_id'] == 'magnesium biotinate'
+    assert row['form_match_status'] == 'mapped' and row['bio_score'] is None
+    assert row['quantity'] == 10000 and row['unit'] == 'mcg'
+    artifact = build_scored_artifact(enriched)
+    assert artifact['quality_score_status'] == 'not_scored'
+    assert 'form_quality_unassessed' in artifact['strict_scoring_contract']['findings']
+    assert not any(r.get('canonical_id') == 'keratin' for r in enriched['ingredient_quality_data']['ingredients'])
+
+
+def test_named_hair_complex_does_not_invent_component_amounts_or_clear_holds(products):
+    from scoring_v4.scored_artifact import build_scored_artifact
+    enriched, _ = products['336100']
+    row = _row(enriched, 'ingredientRows[0]')
+    assert row['quantity'] == 10000 and row['unit'] == 'mcg'
+    assert row['bio_score'] is None
+    assert build_scored_artifact(enriched)['quality_score_status'] == 'not_scored'
+    assert not any(r.get('canonical_id') == 'keratin' for r in enriched['ingredient_quality_data']['ingredients'])

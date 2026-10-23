@@ -186,3 +186,21 @@ def test_verified_preparation_alias_keeps_the_existing_parent_form(enricher, par
     assert match['unmapped_forms'] == []
     assert [(f['form_key'], f['percent_share']) for f in match['matched_forms']] == [(expected, 1.0)]
     assert match['bio_score'] == iqm[parent]['forms'][expected]['bio_score']
+
+
+@pytest.mark.parametrize("names", [["Magnesium biotinate"], ["Magnesium biotinate", "D-biotin"]])
+def test_unassessed_biotinate_cannot_borrow_an_assessed_coform_score(enricher, names):
+    info = enricher._build_form_info_from_cleaned("Biotin", [
+        {"name": name, "prefix": "as", "category": "mineral" if name.startswith("Magnesium") else "vitamin"}
+        for name in names])
+    match = enricher._match_multi_form(info, enricher.databases['ingredient_quality_map'],
+                                     cleaner_canonical_id='vitamin_b7_biotin')
+    assert match and match['unmapped_forms'] == []
+    assert 'magnesium biotinate' in {f['form_key'] for f in match['matched_forms']}
+    assert match['bio_score'] is None
+
+
+def test_source_preparation_form_cannot_reidentify_a_standalone_compound(enricher):
+    resolver = enricher._identity_candidate_resolver(enricher.databases['ingredient_quality_map'],
+                                                    supplied_canonical_id='magnesium')
+    assert resolver('Magnesium Biotinate') != 'vitamin_b7_biotin'

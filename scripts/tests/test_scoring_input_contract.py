@@ -2907,3 +2907,15 @@ def test_dose_source_membership_cannot_borrow_a_stale_identity_mirror(change):
     assert len(get_assessable_evidence_ingredients(product)) == 3
     bound = get_assessable_evidence_ingredients(product, source_bound=True)
     assert {row["canonical_id"] for row in bound} == {"l_leucine", "l_isoleucine"}
+
+
+def test_recognized_form_without_quality_assessment_remains_incomplete():
+    from scoring_v4.scored_artifact import build_scored_artifact
+    row = _row(name="Biotin", canonical_id="vitamin_b7_biotin", bio_score=None,
+               form_match_status="mapped", form_id="magnesium biotinate")
+    product = _product([row])
+    result = get_scoring_ingredients(product, strict=True)
+    assert "form_quality_unassessed" in result.contract_findings
+    artifact = build_scored_artifact(product)
+    assert "form_quality_unassessed" in artifact["strict_scoring_contract"]["findings"]
+    assert artifact["quality_score_status"] == "not_scored"

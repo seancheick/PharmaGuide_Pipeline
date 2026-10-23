@@ -2898,3 +2898,27 @@ Wild Cherry structured group before resolving that competing specific form for s
 The existing forms_contradict guard protects non-scoring retention. This is a confirmed owner
 finding, not grounds for a global Wild Cherry alias: correction needs species/part/mixture and
 interaction-preservation controls. Receipt records the source hash and pending owner work.
+
+### 2026-10-23 species / magnesium biotinate correction batch
+
+Behavioral code/data classification. Owner: identity_integrity::resolve_identity,
+IQM vitamin_b7_biotin.forms, enrich_supplements_v3 form resolver, scoring_input_contract;
+evidence: matrix ADR0005, exact NIH294293–294296/299744/336100 labels and primary sources
+in literature_records_review_20261020/research.md. Will NOT create: matcher, scorer,
+registry, clinical approval, inferred nutrient amount or numerical form-quality policy.
+
+Implemented explicit complete botanical-form precedence only when printed identity does
+not independently contradict it; preserve mixed/partial/safety conflicts and raw wording.
+Implemented chemically recognized magnesium biotinate with null grade and an explicit
+unfinished-form contract finding. Null co-forms do not borrow scores. Source-preparation
+matching cannot replace independent source identity. Fresh review found conflicting-species
+and source-identity edge cases; fail-first regressions and corrections are included.
+
+Six exact-label diagnostic owner comparisons:294293–5 remain43;294296 species corrected
+and remains held;299744 form recognized/ungraded and held;336100 unchanged/held. All six
+scores/statuses and quantities unchanged; all interaction rule hits preserved.299744 dose
+provenance now names the recognized form. No corpus pipeline or export run. Existing
+snapshot/backlog denominators unchanged; these items are implemented, not rebuilt-closed.
+473 owner tests passed before final review corrections;154 final changed-seam tests and52
+schema/nullable-contract tests pass. Final local and exact whole-fast CI pending. Independent
+review accepts revised candidate, including refreshed six-label measurements.

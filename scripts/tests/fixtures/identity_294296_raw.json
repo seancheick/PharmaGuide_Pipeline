@@ -1,0 +1,204 @@
+{
+  "src": "01-raw/2023-11-22/data/label_418.json",
+  "id": 294296,
+  "nhanesId": "",
+  "bundleName": "",
+  "fullName": "Wild Cherry Extract",
+  "brandName": "BulkSupplements.com",
+  "brandIpSymbol": "\u00ae",
+  "upcSku": "X002ETKD7L",
+  "productVersionCode": "001",
+  "pdf": "294296_document.pdf",
+  "thumbnail": "294296_thumbnail.jpg",
+  "servingsPerContainer": "1000",
+  "hasOuterCarton": null,
+  "percentDvFootnote": "Not Present",
+  "labelRelationships": [],
+  "contacts": [
+    {
+      "contactId": 22143,
+      "text": "Distributed exclusively by",
+      "types": [
+        "Distributor"
+      ],
+      "contactDetails": {
+        "src": "01-raw/2025-09-25/data/contact_4.json",
+        "id": 22143,
+        "name": "BulkSupplements.com",
+        "streetAddress": "7511 Eastgate Rd",
+        "city": "Henderson",
+        "state": "NV",
+        "country": "USA",
+        "zipCode": "89011",
+        "phoneNumber": "",
+        "email": "",
+        "webAddress": "BulkSupplements.com"
+      }
+    }
+  ],
+  "netContents": [
+    {
+      "order": 1,
+      "quantity": 500,
+      "unit": "Gram(s)",
+      "display": "500 Gram(s)"
+    },
+    {
+      "order": 2,
+      "quantity": 17.6,
+      "unit": "Ounce(s)",
+      "display": "17.6 Ounce(s)"
+    }
+  ],
+  "physicalState": {
+    "langualCode": "E0162",
+    "langualCodeDescription": "Powder"
+  },
+  "servingSizes": [
+    {
+      "order": 1,
+      "minQuantity": 500,
+      "maxQuantity": 500,
+      "minDailyServings": 1,
+      "maxDailyServings": 1,
+      "unit": "mg",
+      "notes": "about 1/5 tsp",
+      "inSFB": true
+    }
+  ],
+  "targetGroups": [
+    "Adult (18 - 50 Years)",
+    "Gluten Free",
+    "Dairy Free"
+  ],
+  "productType": {
+    "langualCode": "A1306",
+    "langualCodeDescription": "Botanical"
+  },
+  "statements": [
+    {
+      "type": "Brand IP Statement(s) re: (c), (TM), (SM)",
+      "notes": "BulkSupplements.com\r\nClean & pure bulk supplements"
+    },
+    {
+      "type": "Formulation re: Other",
+      "notes": "Color may vary"
+    },
+    {
+      "type": "FDA Disclaimer Statement",
+      "notes": "Warning:\r\nThis product is not intended to diagnose, treat, cure, or prevent any disease."
+    },
+    {
+      "type": "Precautions re: All Other",
+      "notes": "Always consult a physician before taking any dietary supplement."
+    },
+    {
+      "type": "Precautions re: Children",
+      "notes": "Keep out of reach of children."
+    },
+    {
+      "type": "Formulation re: Does NOT Contain",
+      "notes": "Free of: Added sugar, soy, dairy, yeast, gluten, additives"
+    },
+    {
+      "type": "Suggested/Recommended/Usage/Directions",
+      "notes": "Suggested Use: As a dietary supplement, take 500mg (about 1/5 tsp) once daily, or as directed by a physician."
+    },
+    {
+      "type": "Storage",
+      "notes": "Store in a dry, cool place"
+    },
+    {
+      "type": "Formula re: Contains",
+      "notes": "Cherry extract powder"
+    },
+    {
+      "type": "General Statements: All Other Content",
+      "notes": "New"
+    }
+  ],
+  "claims": [
+    {
+      "langualCode": "P0115",
+      "langualCodeDescription": "All Other"
+    },
+    {
+      "langualCode": "P0265",
+      "langualCodeDescription": "Structure/Function"
+    }
+  ],
+  "events": [
+    {
+      "date": "2023-07-18",
+      "type": "Date entered into DSLD"
+    }
+  ],
+  "userGroups": [
+    {
+      "dailyValueTargetGroupName": "Adults and children 4 or more years of age",
+      "langualCode": "P0250",
+      "langualCodeDescription": "Adults and Children 4 years and above"
+    }
+  ],
+  "ingredientRows": [
+    {
+      "order": 1,
+      "ingredientId": 328335,
+      "description": "",
+      "notes": "",
+      "quantity": [
+        {
+          "servingSizeOrder": 1,
+          "servingSizeQuantity": 500,
+          "operator": "=",
+          "quantity": 500,
+          "unit": "mg",
+          "dailyValueTargetGroup": [
+            {
+              "name": "Adults and children 4 or more years of age",
+              "operator": null,
+              "percent": null,
+              "footnote": "Daily Value not established"
+            }
+          ],
+          "servingSizeUnit": "mg"
+        }
+      ],
+      "nestedRows": [],
+      "name": "Wild Cherry Fruit Extract, Powder",
+      "category": "botanical",
+      "ingredientGroup": "Wild Cherry",
+      "uniiCode": null,
+      "alternateNames": [],
+      "forms": [
+        {
+          "order": 1,
+          "ingredientId": 328336,
+          "prefix": null,
+          "percent": null,
+          "name": "Prunus avium Fruit Extract, Powder",
+          "category": "botanical",
+          "ingredientGroup": "Wild Cherry",
+          "uniiCode": null
+        }
+      ]
+    }
+  ],
+  "otheringredients": {
+    "text": null,
+    "ingredients": [
+      {
+        "order": 1,
+        "ingredientId": 5923,
+        "name": "None",
+        "category": "other",
+        "ingredientGroup": "None",
+        "uniiCode": null,
+        "alternateNames": [],
+        "forms": []
+      }
+    ]
+  },
+  "offMarket": 0,
+  "entryDate": "2023-07-18"
+}

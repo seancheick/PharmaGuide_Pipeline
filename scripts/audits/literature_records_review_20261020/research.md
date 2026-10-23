@@ -327,3 +327,53 @@ actual299744 source alias changes from keratin to unresolved. Full rebuilt closu
 No Clean, Enrich, Score, export or release run was performed. The generic changed-citation tool
 selected zero citations here and is not evidence of source verification; live content reads above
 and the captured per-entry receipts are the verification evidence.
+
+## 2026-10-23 species routing and ungraded magnesium biotinate
+
+Owner: identity_integrity::resolve_identity (ADR-0005), IQM vitamin_b7_biotin.forms,
+enrich_supplements_v3 form/identity resolution and scoring_input_contract. No parallel
+matcher, chemical registry, clinical approval, inferred amounts or score calibration.
+
+NIH labels294293–294296 were retrieved individually from
+https://api.ods.od.nih.gov/dsld/v9/label/294296 (substitute each exact ID).
+The294296 PDF previously visually inspected prints Prunus avium fruit500mg:
+https://api.ods.od.nih.gov/dsld/s3/pdf/294296.pdf . Live Kew confirms the accepted
+species: https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:30093848-2 .
+Existing curated Prunus avium fruit-extract identity now outranks the generic
+Wild Cherry grouping when the literal name is unresolved and a sole complete
+botanical form establishes it. Mixed/partial declarations, independently resolved
+contradictory names and interaction-rule loss retain identity_conflict. Exact source
+wording is preserved. No global Wild Cherry alias or new botanical form grade.
+294293–294295 already route correctly and remain43;294296 corrects black_cherry to
+dark_sweet_cherry while retaining its unmapped-form hold. This is identity repair,
+not a completed preparation/benchmark review.
+
+Magnesium biotinate identity verified live on2026-10-23 against PubChem CID139593965:
+https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/cid/139593965/property/IUPACName,MolecularFormula,InChI,InChIKey/JSON
+Formula C20H30MgN4O6S2; InChIKey MVTGGXOWRFOAHX-VXTDSVKWSA-L. Health Canada18320
+lists Magnesium biotinate as an approved chemical name with Biotin subingredient:
+https://webprod.hc-sc.gc.ca/nhpid-bdipsn/ingredReq?id=18320&lang=eng&wbdisable=true .
+These establish chemistry, not human absorption equivalence, effectiveness or approval.
+The distinct IQM source form has bio_score=null and unknown absorption. Parent-scoped
+form recognition cannot redefine a standalone source compound as the delivered nutrient.
+A mapped null-grade form remains an unfinished assessment through the existing contract;
+co-forms and branded fallbacks cannot supply its missing grade.
+
+The2021 Kalman/Hewlings randomized90-person12-week oral Lustriva combination paper
+is separate from the12-person oral-plus-topical abstract. Original full text inspected:
+https://www.longdom.org/pdfdownload.php?aid=61185&download=open-access/a-randomized-doubleblind-evaluation-of-a-novel-biotin-and-silicon-ingredient-complex-on-the-hair-and-skin-of-healthy-wom.pdf .
+Its title is A Randomized Double-Blind Evaluation of a Novel Biotin and Silicon Ingredient
+Complex on the Hair and Skin of Healthy Women; the retrieval metadata has an unrelated
+title, so the PDF content was checked. Combination findings do not isolate magnesium
+biotinate or establish its numerical form quality. No efficacy credit or clinician approval
+is added. Exact299744 and336100 NIH fixtures preserve their disclosed10000mcg biotin;
+no magnesium/component quantity is inferred.299744 becomes mapped/ungraded;336100's
+Advanced Hair Complex form remains unresolved. Both remain not_scored. Existing safety
+hits, including the undisclosed magnesium source warning, remain present;299744's dose
+provenance changes only its form-context text.
+
+Fail-first regressions cover routing, contradictory species, partial/multiple forms,
+warning preservation, mapped-but-ungraded readiness, null co-form arithmetic and source
+preparation identity leakage. Bounded six-label owner replay is diagnostic only; no corpus
+pipeline, artifact promotion or public release. Rebuilt closure and clinician reviews remain
+open. Exact candidate validation and integration results are recorded in the execution LEDGER.

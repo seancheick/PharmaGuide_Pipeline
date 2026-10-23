@@ -1424,3 +1424,10 @@ October20 follow-up register: PR220/224/225/226 and author literature223 are int
 - [ ] Operator rebuild fromClean, then catalog/release/app acceptance. Transitive imports invalidateallthreecodefingerprints; no agent pipeline/publication performed. Existing staleexportfolate assertion staysopen until newartifact acceptance. AppPR130 is merged with greenCI39517446478; pipelinePR231 is merged atcbeb19ef6. Active separate fidelity work and finalartifactacceptance remainopen.
 
 October23 follow-up: all ten quality holds audited; twelve actual export blobs succeed with honest withheld scores preserved. Verified correction provenance resolves213846; TiO2 color-purpose assessment restored at existing owner. New submission photo audit found reviewer-owned corrections and S12 unreadable text; those remain open before approval. [Audit](../../scripts/audits/holds_submissions_20261023/README.md). No pipeline or release ran.
+
+October23 species/biotinate continuation: bounded source corrections implemented through
+identity_integrity, IQM and existing assessment contracts. Exact294296 species repaired;
+299744 biotinate recognized without invented form grade. Conflicting species and clinical
+holds remain. Six-label owner comparison preserves scores, quantities and interaction hits;
+no corpus rerun or rebuilt closure. Execution LEDGER owns remaining local/CI/integration
+checks. Preparation/benchmark and clinician review work remains open; no phase box closes.

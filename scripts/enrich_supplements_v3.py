@@ -4200,6 +4200,12 @@ class SupplementEnricherV3:
             )
             if isinstance(match_result, dict):
                 canonical_id = match_result.get("canonical_id")
+                form = (quality_map.get(canonical_id, {}).get("forms", {})
+                        .get(match_result.get("form_id"), {}))
+                if form.get("alias_identity_scope") == "source_preparation":
+                    # Parent-scoped form recognition is not authority to
+                    # reidentify the source compound as the delivered nutrient.
+                    return None
                 if (
                     canonical_id
                     and match_result.get("match_status") != "FORM_UNMAPPED"
@@ -8693,18 +8699,21 @@ class SupplementEnricherV3:
         unknown_parent_key = preferred_parent or matched_forms[0].get('canonical_id')
         unknown_parent = quality_map.get(unknown_parent_key) or {}
         unknown = unknown_form_quality(unknown_parent)
-        unknown_bio = (unknown['bio_score'] if unknown
-                       else min(f['bio_score'] for f in matched_forms))
-        if total_weight > 0:
-            final_bio_score = (
-                sum(f['bio_score'] * f['percent_share'] for f in matched_forms)
-                + unknown_bio * unmatched_weight
-            ) / total_weight
+        if any(f['bio_score'] is None for f in matched_forms):
+            # A recognized but unassessed form cannot borrow its co-form's grade.
+            final_bio_score = None
         else:
-            final_bio_score = sum(f['bio_score'] for f in matched_forms) / len(matched_forms)
-
-        # Round to 1 decimal place for consistency
-        final_bio_score = round(final_bio_score, 1)
+            unknown_bio = (unknown['bio_score'] if unknown
+                           else min(f['bio_score'] for f in matched_forms))
+            if unmatched_weight and unknown_bio is None:
+                final_bio_score = None
+            elif total_weight > 0:
+                final_bio_score = round((
+                    sum(f['bio_score'] * f['percent_share'] for f in matched_forms)
+                    + (unknown_bio or 0.0) * unmatched_weight
+                ) / total_weight, 1)
+            else:
+                final_bio_score = round(sum(f['bio_score'] for f in matched_forms) / len(matched_forms), 1)
 
         # Use primary form (first matched) as the base for canonical fields
         primary_match = matched_forms[0]['full_match_data']
@@ -9831,7 +9840,9 @@ class SupplementEnricherV3:
                                 branded_match = _try_branded_token_fallback()
                                 if (branded_match
                                         and self._is_specific_form_match(branded_match, quality_map)
-                                        and branded_match.get('bio_score', 0) > multi_form_result.get('bio_score', 0)):
+                                        and branded_match.get('bio_score') is not None
+                                    and multi_form_result.get('bio_score') is not None
+                                    and branded_match['bio_score'] > multi_form_result['bio_score']):
                                     return branded_match
                             return multi_form_result
 
@@ -9932,7 +9943,9 @@ class SupplementEnricherV3:
                             branded_match = _try_branded_token_fallback()
                             if (branded_match
                                     and self._is_specific_form_match(branded_match, quality_map)
-                                    and branded_match.get('bio_score', 0) > multi_form_result.get('bio_score', 0)):
+                                    and branded_match.get('bio_score') is not None
+                                    and multi_form_result.get('bio_score') is not None
+                                    and branded_match['bio_score'] > multi_form_result['bio_score']):
                                 return branded_match
                         return multi_form_result
 
@@ -10294,8 +10307,10 @@ class SupplementEnricherV3:
                             continue
                         if unknown['form_id'] and any(name == unknown['form_id'] for name, _ in hinted):
                             return unknown['form_id'], unknown['form']
-                        best = min(hinted, key=lambda it: (effective_form_bio(parent_data, it[1]), _norm(it[0])))
-                        if effective_form_bio(parent_data, best[1]) <= unknown['bio_score']:
+                        best = min(hinted, key=lambda it: (effective_form_bio(parent_data, it[1]) is not None, effective_form_bio(parent_data, it[1]) or 0, _norm(it[0])))
+                        if (effective_form_bio(parent_data, best[1]) is None
+                                or (unknown['bio_score'] is not None
+                                    and effective_form_bio(parent_data, best[1]) <= unknown['bio_score'])):
                             return best
                     return None
 
