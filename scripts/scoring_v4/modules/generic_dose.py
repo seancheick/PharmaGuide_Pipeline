@@ -622,7 +622,7 @@ def _unread_declared_purpose_rows(product: Dict[str, Any]) -> List[Dict[str, Any
     """
     source_rows = [row for row in nutrient_delivering_rows(product) if isinstance(row, dict)]
     source_roles = classify_ingredient_roles(product, module="generic", rows=source_rows)
-    return [row for row, role in zip(source_rows, source_roles)
+    unread = [row for row, role in zip(source_rows, source_roles)
               if role.get("role") in {ROLE_PRIMARY, ROLE_CLAIM_PROMINENT}
               and not row.get("is_parent_total")
               and dose_disclosure_status(row) != "not_disclosed_blend"
@@ -630,6 +630,16 @@ def _unread_declared_purpose_rows(product: Dict[str, Any]) -> List[Dict[str, Any
               and (quantity_is_unresolved(row) or (
                   not has_usable_individual_dose(row, allow_zero=True)
                   and _product_evidence_dose_credit(row)[0] <= 0))]
+    # A completed botanical no-benchmark assessment needs disclosure, not a
+    # mass conversion. Keep unresolved source quantities blocked even when
+    # their captured numeric value looks usable.
+    if is_botanical_product(product):
+        unread = [row for row in unread if quantity_is_unresolved(row) or not (
+            (assessment := score_botanical_purpose_dose(product, row))
+            and assessment.get("band") == "disclosed_no_reference"
+            and assessment.get("metadata", {}).get("benchmark") == "absent"
+        )]
+    return unread
 
 
 def score_dose(product: Dict[str, Any]) -> Dict[str, Any]:

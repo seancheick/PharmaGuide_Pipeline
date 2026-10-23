@@ -805,10 +805,13 @@ def score_botanical_purpose_dose(
             or row.get("evidence_type") == "blend_anchor_mass"):
         return unassessed_amount_band("blend_total_only", benchmark)
 
-    mass = _mass_mg(row)
-    if mass is None:
+    # No numerical benchmark is being compared here. A printed volume is a
+    # disclosed amount even when no mass conversion is available; the shared
+    # disclosure owner also keeps missing/hidden source amounts distinct.
+    disclosure = dose_disclosure_status(row)
+    if disclosure != "disclosed":
         return unassessed_amount_band("primary_no_dose", benchmark,
-                                      label_hidden=dose_disclosure_status(row) == "not_disclosed_blend")
+                                      label_hidden=disclosure == "not_disclosed_blend")
     # Reviewed source regimens remain descriptive. None of these broad
     # preparation records establishes an approved general minimum/window.
     return unassessed_amount_band("disclosed_no_reference", benchmark)

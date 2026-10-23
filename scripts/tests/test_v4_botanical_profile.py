@@ -688,3 +688,29 @@ def test_primary_botanical_tie_break_reads_form_quality_through_its_owner():
     product["ingredient_quality_data"]["ingredients_scorable"] = [retired_only, current]
     product["ingredient_quality_data"]["ingredients"] = [retired_only, current]
     assert _primary_botanical_active(product)["canonical_id"] == "ashwagandha"
+
+
+def test_completed_no_benchmark_accepts_printed_volume_without_inventing_mass():
+    row = _botanical_ingredient(quantity=0.2, unit="mL")
+    assert _mass_mg(row) is None
+    result = score_botanical_dose(_botanical_product(ingredient=row))
+    assert result["band"] == "disclosed_no_reference"
+    assert result["score"] == _neutral()
+
+
+def test_disclosed_volume_does_not_complete_unresolved_benchmark(monkeypatch):
+    import scoring_v4.modules.botanical_profile as owner
+    monkeypatch.setattr(owner, "_botanical_benchmark", lambda row: "unresolved")
+    row = _botanical_ingredient(quantity=0.2, unit="mL")
+    result = score_botanical_dose(_botanical_product(ingredient=row))
+    assert result["score"] == 0
+    assert result["metadata"]["benchmark"] == "unresolved"
+
+
+def test_printed_botanical_volume_reaches_public_dose_pillar():
+    from scoring_v4.scored_artifact import build_scored_artifact
+    product = _botanical_product(ingredient=_botanical_ingredient(quantity=0.2, unit="mL"))
+    artifact = build_scored_artifact(product)
+    dose = artifact["quality_pillars_v4"]["dose"]
+    assert dose["score"] == 11.4
+    assert "no amount" not in " ".join(dose.get("reasons", [])).lower()
