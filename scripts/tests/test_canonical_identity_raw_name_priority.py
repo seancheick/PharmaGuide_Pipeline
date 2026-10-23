@@ -109,3 +109,13 @@ class TestRawNamePriority:
             raw_name=None,
         )
         assert result == ("fish_oil", "ingredient_quality_map")
+
+
+@pytest.mark.parametrize("name,expected", [("Grape skin extract", "grape"), ("Safflower Oil", "PII_SAFFLOWER_OIL"), ("Grape Seed Extract", "grape_seed_extract"), ("CLA safflower oil", "cla")])
+def test_source_material_does_not_become_a_different_studied_preparation(name, expected):
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    product = {"id": "source-material-identity", "fullName": name,
+        "ingredientRows": [{"name": name, "category": "botanical" if "Grape" in name else "fat",
+            "quantity": [{"quantity": 100, "unit": "mg"}], "forms": [], "nestedRows": []}]}
+    rows = EnhancedDSLDNormalizer().normalize_product(product)["activeIngredients"]
+    assert rows and rows[0]["canonical_id"] == expected

@@ -32,7 +32,7 @@
     "statistics": {
       "total_parents": 655,
       "total_forms": 1474,
-      "total_form_aliases": 12287,
+      "total_form_aliases": 12285,
       "parents_with_parent_aliases": 150,
       "parents_with_contains_aliases": 0,
       "parents_with_pattern_aliases": 0
@@ -53,7 +53,7 @@
       "vitamins": 25
     },
     "schema_version": "5.6.1",
-    "last_updated": "2026-10-20",
+    "last_updated": "2026-10-22",
     "pipeline_integration": "Used by enrichment to assign form quality (bio_score) to matched ingredient forms. Match ingredient name against forms aliases (case-insensitive).",
     "matching_notes": [
       "Match ingredient name + forms text against aliases array (case-insensitive)",
@@ -26454,7 +26454,6 @@
           "full-spectrum grape extract",
           "grape fruit extract",
           "whole grape powder",
-          "grape skin extract",
           "unprocessed grape extract",
           "pure grape extract",
           "BioVin Grape extract",
@@ -42984,8 +42983,7 @@
           "CLA80 Femme",
           "c9-t11:t10-c12",
           "Cis-9, Trans 11 Isomer",
-          "Trans-10, Cis-12 Isomer",
-          "safflower oil"
+          "Trans-10, Cis-12 Isomer"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
