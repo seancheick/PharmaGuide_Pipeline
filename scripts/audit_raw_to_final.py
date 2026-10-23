@@ -741,8 +741,9 @@ def _is_reciprocal_display_remap(
     return False
 
 
-def _check_display_label_collapse(rec: ProductRecord, blob: dict) -> None:
+def _check_display_label_collapse(rec: ProductRecord, blob: dict, raw: Mapping[str, Any] | None = None) -> None:
     """Invariant #1 from test_label_fidelity_contract.py."""
+    corrected = _corrected_source_paths(raw, rec.dsld_id) if raw else {}
     rows = _app_active_rows(blob)
     for ing in rows:
         display = _app_display_label(ing)
@@ -756,6 +757,11 @@ def _check_display_label_collapse(rec: ProductRecord, blob: dict) -> None:
         canonical = str(canonical).strip()
         source = (ing.get("raw_source_text") or ing.get("name") or "").strip()
         if not display or not canonical or not source:
+            continue
+        correction = corrected.get(ing.get("raw_source_path")) or {}
+        if (correction.get("_label_correction_applied")
+                and source == correction.get("_pre_correction_name")
+                and display == correction.get("name")):
             continue
         if (display.lower() == canonical.lower()
                 and source.lower() != canonical.lower()
@@ -1095,19 +1101,23 @@ def _verified_corrected_form_paths(raw: Mapping[str, Any], product_id: str) -> d
     Original ingredient rows and amounts remain the independent audit source.
     Only form inventories explicitly replaced by an applied correction differ.
     """
-    owner = _label_correction_owner()
-    if str(product_id) not in owner._label_corrections_by_dsld_id:
-        return {}
-    corrected = dict(raw)
-    corrected["ingredientRows"] = owner._apply_label_corrections(
-        deepcopy(raw.get("ingredientRows") or []), str(product_id))
-    paths = _raw_paths(corrected)
+    paths = _corrected_source_paths(raw, product_id)
     out = {}
     for path, row in paths.items():
         if row.get("_label_correction_applied") and "_pre_correction_forms" in row:
             prefix = f"{path}.forms["
             out.update({ref: form for ref, form in paths.items() if ref.startswith(prefix)})
     return out
+
+
+def _corrected_source_paths(raw: Mapping[str, Any], product_id: str) -> dict[str, dict]:
+    owner = _label_correction_owner()
+    if str(product_id) not in owner._label_corrections_by_dsld_id:
+        return {}
+    corrected = dict(raw)
+    corrected["ingredientRows"] = owner._apply_label_corrections(
+        deepcopy(raw.get("ingredientRows") or []), str(product_id))
+    return _raw_paths(corrected)
 
 
 def _line_text(value: Any) -> str:
@@ -1343,6 +1353,7 @@ def audit_product(
     excluded_by_gate: Mapping[str, list[str]] | None = None,
     *,
     cleaned_record: dict | None = None,
+    raw_record: dict | None = None,
 ) -> ProductRecord:
     blob = _read_blob(blob_dir, dsld_id)
     if blob is None:
@@ -1421,7 +1432,7 @@ def audit_product(
     _check_unmapped_consistency(rec, blob)
     _check_v1_5_0_contract(rec, blob)
     _check_canonical_id_on_mapped(rec, blob)
-    _check_display_label_collapse(rec, blob)
+    _check_display_label_collapse(rec, blob, raw_record)
     _check_branded_tokens(rec, blob)
     _check_plant_part(rec, blob)
     _check_standardization(rec, blob, cleaned)
@@ -1480,8 +1491,15 @@ def audit_all_products(
                 continue
             if not (blob_dir / f"{dsld_id}.json").exists() and dsld_id not in excluded_by_gate:
                 continue  # never exported (e.g. the active-count gate); not a row-line question
+            raw_record = None
+            if not from_submission and dsld_id in raw_index:
+                try:
+                    raw_record = json.loads(raw_index[dsld_id].read_text())
+                except (OSError, UnicodeDecodeError, json.JSONDecodeError):
+                    pass  # The independent raw-availability check below reports it.
             rec = audit_product(dsld_id, None, blob_dir, products_root, db_path, None,
-                                excluded_by_gate, cleaned_record=cleaned_by_id.get(dsld_id))
+                                excluded_by_gate, cleaned_record=cleaned_by_id.get(dsld_id),
+                                raw_record=raw_record)
             blob = _read_blob(blob_dir, dsld_id)
             if blob is not None:
                 if from_submission or enriched.get("manual_product_provenance"):
@@ -1492,7 +1510,7 @@ def audit_all_products(
                             row_path="label", field="raw_label", exported=f"detail_blobs/{dsld_id}.json")
                 else:
                     try:
-                        raw = json.loads(raw_index[dsld_id].read_text())
+                        raw = raw_record if raw_record is not None else json.loads(raw_index[dsld_id].read_text())
                     except (OSError, UnicodeDecodeError, json.JSONDecodeError) as exc:
                         rec.add("RAW_LABEL_UNREADABLE", f"raw DSLD label {raw_index[dsld_id]} under {raw_root} "
                                 f"cannot be read: {exc}", stage="raw", row_path="label", field="raw_label",
