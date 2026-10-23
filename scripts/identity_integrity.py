@@ -1064,6 +1064,44 @@ def resolve_identity(
     if declared_material_validates_identity:
         form_validates_specific_over_structured_parent = True
 
+    # A complete, explicitly named botanical material is stronger than a
+    # generic DSLD group. Resolve only curated literal forms (including the
+    # shared comma-qualifier normalization), never a guessed species token.
+    botanical_form_ids = []
+    if canonical_registry and isinstance(declared_forms, (list, tuple)):
+        for form in declared_forms:
+            if not isinstance(form, Mapping) or str(form.get("category") or "").casefold() != "botanical":
+                continue
+            literal = str(form.get("name") or "")
+            named = canonical_registry.resolve_verified_preferred(literal)
+            if named is None:
+                named = canonical_registry.resolve_verified_preferred(strip_label_identity_qualifiers(literal))
+            if named and not canonical_registry.is_role_record(named[0]):
+                botanical_form_ids.append(named[0])
+    botanical_form_conflict = bool(
+        canonical_before and botanical_form_ids
+        and str(row.get("category") or (row.get("raw_taxonomy") or {}).get("category") or "").casefold() == "botanical"
+        and any(cid != canonical_before for cid in botanical_form_ids)
+        and not _is_blend_header_row(row)
+        and not allow_unscoreable_taxonomy_only
+    )
+    botanical_material_canonical = None
+    if botanical_form_conflict and len(declared_forms) == 1:
+        form = declared_forms[0]
+        target = botanical_form_ids[0]
+        if (
+            form.get("percent") in {None, 100, "100"}
+            and form.get("quantity") in (None, [])
+            and form.get("amount") is None
+            and str(form.get("prefix") or "").strip().casefold() in {"", "as"}
+            # An independently resolved printed identity cannot be overridden
+            # by a contradictory form, even when the group repeats that name.
+            and raw_canonical in {None, target}
+            and (interaction_rules_of is None
+                 or interaction_rules_of(canonical_before) <= interaction_rules_of(target))
+        ):
+            botanical_material_canonical = target
+
     microbial_derivative_conflict = bool(
         has_nonlive_microbial_derivative_evidence(row)
         and (
@@ -1112,7 +1150,7 @@ def resolve_identity(
         prefer_literal_source=(declared_material_validates_identity
                                or not form_validates_specific_over_structured_parent),
     )
-    if literal_preparation_canonical:
+    if literal_preparation_canonical or (botanical_form_conflict and raw_evidence):
         source_name = raw_evidence[0].value
     source_form = next(
         (item.value for item in evidence if item.kind == "source_form"),
@@ -1300,6 +1338,16 @@ def resolve_identity(
             "Structured line evidence resolved to conflicting canonical identities: "
             + ", ".join(sorted(structured_canonicals))
             + "."
+        )
+    elif botanical_form_conflict:
+        canonical_after = botanical_material_canonical
+        disposition = "repaired" if canonical_after else "identity_conflict"
+        rationale = (
+            "The sole complete botanical material is explicitly named by a curated "
+            "source-form alias; the generic structured group cannot replace it."
+            if canonical_after else
+            "Botanical source forms contradict the supplied identity; complete material "
+            "ownership and preservation of interaction rules are not established."
         )
     elif reviewed_senactiv_header:
         disposition = "taxonomy_only"

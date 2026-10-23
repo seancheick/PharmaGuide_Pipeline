@@ -1299,3 +1299,49 @@ def test_lustriva_formula_cannot_resolve_as_keratin():
     for name in ('lustriva', 'lustriva keratin'):
         assert registry.resolve_unambiguous(name) != 'keratin'
     assert registry.resolve_unambiguous('keratin') == 'keratin'
+
+@pytest.mark.parametrize('forms,expected', [
+    ([{'name': 'Prunus avium Fruit Extract, Powder', 'category': 'botanical'}], 'sweet'),
+    ([{'name': 'Prunus serotina Bark', 'category': 'botanical'}], 'bark'),
+    ([{'name': 'Prunus avium Fruit Extract', 'category': 'botanical'},
+      {'name': 'Prunus serotina Bark', 'category': 'botanical'}], None),
+    ([{'name': 'Prunus avium Fruit Extract', 'category': 'botanical', 'percent': 10}], None),
+])
+def test_explicit_botanical_material_does_not_inherit_generic_group(forms, expected):
+    registry = build_canonical_identity_registry({'ingredient_quality_map': {
+        'black': {'standard_name': 'Black Cherry', 'aliases': ['Wild Cherry'], 'forms': {}},
+        'sweet': {'standard_name': 'Sweet Cherry', 'aliases': ['Prunus avium Fruit Extract'], 'forms': {}},
+        'bark': {'standard_name': 'Cherry Bark', 'aliases': ['Prunus serotina Bark'], 'forms': {}},
+    }})
+    row = {'name': 'Wild Cherry Fruit Extract, Powder', 'category': 'botanical', 'ingredientGroup': 'Wild Cherry', 'forms': forms}
+    decision = resolve_identity(row, 'black', registry.resolve_unambiguous,
+                                canonical_registry=registry, interaction_rules_of=lambda _: frozenset())
+    assert decision.canonical_id == expected
+    assert decision.disposition == ('repaired' if expected else 'identity_conflict')
+    assert decision.label_display_name == 'Wild Cherry Fruit Extract, Powder'
+
+
+def test_botanical_form_repair_cannot_drop_an_interaction_rule():
+    registry = build_canonical_identity_registry({'ingredient_quality_map': {
+        'black': {'standard_name': 'Black Cherry', 'aliases': ['Wild Cherry'], 'forms': {}},
+        'sweet': {'standard_name': 'Sweet Cherry', 'aliases': ['Prunus avium Fruit Extract'], 'forms': {}},
+    }})
+    row = {'name': 'Wild Cherry Fruit Extract, Powder', 'category': 'botanical', 'ingredientGroup': 'Wild Cherry',
+           'forms': [{'name': 'Prunus avium Fruit Extract', 'category': 'botanical'}]}
+    decision = resolve_identity(row, 'black', registry.resolve_unambiguous, canonical_registry=registry,
+        interaction_rules_of=lambda cid: frozenset({'warning'}) if cid == 'black' else frozenset())
+    assert decision.disposition == 'identity_conflict'
+    assert decision.canonical_id is None
+
+
+@pytest.mark.parametrize("group", ["Wild Cherry", "Prunus serotina Bark"])
+def test_conflicting_printed_botanical_species_stays_held(group):
+    registry = build_canonical_identity_registry({'ingredient_quality_map': {
+        'bark': {'standard_name': 'Prunus serotina Bark', 'aliases': ['Wild Cherry'], 'forms': {}},
+        'sweet': {'standard_name': 'Sweet Cherry', 'aliases': ['Prunus avium Fruit Extract'], 'forms': {}},
+    }})
+    row = {'name': 'Prunus serotina Bark', 'category': 'botanical', 'ingredientGroup': group,
+           'forms': [{'name': 'Prunus avium Fruit Extract', 'category': 'botanical'}]}
+    decision = resolve_identity(row, 'bark', registry.resolve_unambiguous, canonical_registry=registry)
+    assert decision.disposition == 'identity_conflict'
+    assert decision.canonical_id is None
