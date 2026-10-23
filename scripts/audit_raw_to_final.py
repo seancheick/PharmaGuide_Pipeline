@@ -40,6 +40,8 @@ from __future__ import annotations
 
 import argparse
 import collections
+from copy import deepcopy
+from functools import lru_cache
 import contextlib
 import json
 import re
@@ -1081,6 +1083,33 @@ def _raw_paths(raw: Mapping[str, Any]) -> dict[str, dict]:
     return paths
 
 
+@lru_cache(maxsize=1)
+def _label_correction_owner():
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    return EnhancedDSLDNormalizer()
+
+
+def _verified_corrected_form_paths(raw: Mapping[str, Any], product_id: str) -> dict[str, dict]:
+    """Read reviewed form replacements through the cleaner's guarded applier.
+
+    Original ingredient rows and amounts remain the independent audit source.
+    Only form inventories explicitly replaced by an applied correction differ.
+    """
+    owner = _label_correction_owner()
+    if str(product_id) not in owner._label_corrections_by_dsld_id:
+        return {}
+    corrected = dict(raw)
+    corrected["ingredientRows"] = owner._apply_label_corrections(
+        deepcopy(raw.get("ingredientRows") or []), str(product_id))
+    paths = _raw_paths(corrected)
+    out = {}
+    for path, row in paths.items():
+        if row.get("_label_correction_applied") and "_pre_correction_forms" in row:
+            prefix = f"{path}.forms["
+            out.update({ref: form for ref, form in paths.items() if ref.startswith(prefix)})
+    return out
+
+
 def _line_text(value: Any) -> str:
     return re.sub(r"\s+", " ", str(value or "")).strip().casefold()
 
@@ -1121,6 +1150,7 @@ def _check_line_integrity(
     blob: Mapping[str, Any],
 ) -> None:
     raws = _raw_paths(raw)
+    raws.update(_verified_corrected_form_paths(raw, rec.dsld_id))
     rows = {path for path in raws if ".forms[" not in path}
     ledger = [entry for entry in blob.get("row_ledger") or [] if isinstance(entry, dict)]
     refs = {entry.get("row_ref") for entry in ledger}

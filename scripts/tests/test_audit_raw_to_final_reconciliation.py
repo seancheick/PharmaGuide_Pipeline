@@ -747,3 +747,37 @@ def test_one_positionless_entry_cannot_establish_two_rows_own_doses():
     del entries[0]["source_field"]
     blob["ingredients"][1].update(normalized_amount=75.0, normalized_unit="mcg RAE")
     assert _dose_codes(enriched, blob) == ["NORMALIZED_DOSE_NOT_FROM_OWN_ROW"] * 2
+
+
+def test_line_integrity_accepts_only_current_verified_corrected_form_paths():
+    raw = {"id": "1179", "ingredientRows": [{
+        "name": "vitamin B", "ingredientGroup": "Vitamin B6 (pyridoxine)",
+        "forms": [{"name": "Pyridoxine Hydrochloride"}],
+        "quantity": [{"quantity": 5.3, "unit": "g"}], "nestedRows": []}]}
+    blob = {"row_ledger": [{"row_ref": "ingredientRows[0].forms[5]",
+                            "source_label": "Yohimbe Powder (Pausinystalia yohimbe) (bark)"}],
+            "ingredients": [{"name": "Yohimbe Powder (Pausinystalia yohimbe) (bark)",
+                             "raw_source_path": "ingredientRows[0].forms[5]"}]}
+    from audit_raw_to_final import _check_line_integrity
+    record = ProductRecord("1179", None, None, None)
+    _check_line_integrity(record, raw, None, None, blob)
+    assert not any(f.code == "LEDGER_ROW_NOT_IN_RAW" for f in record.findings)
+
+    for product_id, name in [("999", "vitamin B"), ("1179", "Different source row")]:
+        import copy
+        changed = copy.deepcopy(raw)
+        changed["id"] = product_id
+        changed["ingredientRows"][0]["name"] = name
+        record = ProductRecord(product_id, None, None, None)
+        _check_line_integrity(record, changed, None, None, blob)
+        assert any(f.code == "LEDGER_ROW_NOT_IN_RAW" for f in record.findings)
+
+
+def test_reviewed_form_correction_does_not_authorize_an_extra_form():
+    from audit_raw_to_final import _check_line_integrity
+    raw = {"id": "1179", "ingredientRows": [{"name": "vitamin B", "forms": [], "nestedRows": []}]}
+    blob = {"row_ledger": [{"row_ref": "ingredientRows[0].forms[99]", "source_label": "Invented"}],
+            "ingredients": [{"raw_source_path": "ingredientRows[0].forms[99]", "name": "Invented"}]}
+    record = ProductRecord("1179", None, None, None)
+    _check_line_integrity(record, raw, None, None, blob)
+    assert sum(f.code == "LEDGER_ROW_NOT_IN_RAW" for f in record.findings) == 2
