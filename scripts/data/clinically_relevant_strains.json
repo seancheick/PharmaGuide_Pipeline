@@ -3,7 +3,7 @@
     "description": "Clinically relevant probiotic strains and prebiotic compounds",
     "purpose": "probiotic_strain_validation",
     "schema_version": "5.1.1",
-    "last_updated": "2026-10-18",
+    "last_updated": "2026-10-23",
     "total_entries": 132,
     "data_source": null,
     "version": "2.4.1",
@@ -4017,7 +4017,7 @@
           ],
           "trial_family": "meta_299v_ibs_37541528",
           "limitations": [
-            "The 299v-specific conclusion is graded LOW certainty by the reviewers; no 299v RCT is separately recorded this wave, so this meta is the strain's IBS record."
+            "The 299v-specific conclusion is graded LOW certainty by the reviewers. The separately recorded PMID 22912552 RCT retains its own trial family; this synthesis is not an independent replication of included trials."
           ],
           "review_status": "clinician_approved",
           "study_design": "meta_analysis",
@@ -4609,31 +4609,47 @@
           ],
           "population": {
             "age_group": "adult",
-            "description": "214 adults with Rome III IBS, one 299v capsule daily or placebo for 4 weeks"
+            "description": "214 adults aged 18-70 randomized at four Indian centres; Rome III IBS, predominantly IBS-D; 108 active and 106 placebo; 10 excluded from efficacy analysis."
           },
           "purpose": "treatment",
           "condition": "irritable_bowel_syndrome",
           "dose": {
-            "basis": "unresolved",
+            "basis": "discrete_daily_arms",
             "unit": "CFU",
-            "values": [],
-            "dosage_forms": [],
+            "values": [
+              10000000000
+            ],
+            "dosage_forms": [
+              "capsule"
+            ],
             "duration_days": 28,
             "co_therapies": [],
-            "dose_status": "extraction_pending",
+            "dose_status": "verified",
             "dose_basis": "per_strain_daily",
-            "duration_basis": "fixed_protocol"
+            "duration_basis": "fixed_protocol",
+            "administration_frequency": "once_daily",
+            "source_provenance": {
+              "pmid": "22912552",
+              "source_url": "https://www.wjgnet.com/1007-9327/full/v18/i30/4012.htm",
+              "location": "Abstract Methods; Study products; Study design"
+            }
           },
           "outcomes": [
             {
-              "name": "abdominal_pain_severity_and_frequency",
-              "hierarchy": "unresolved",
+              "name": "abdominal_pain_frequency",
+              "hierarchy": "primary",
+              "kind": "patient_important",
+              "direction": "positive"
+            },
+            {
+              "name": "abdominal_pain_severity",
+              "hierarchy": "secondary",
               "kind": "patient_important",
               "direction": "positive"
             },
             {
               "name": "bloating",
-              "hierarchy": "unresolved",
+              "hierarchy": "secondary",
               "kind": "patient_important",
               "direction": "positive"
             },
@@ -4646,18 +4662,22 @@
           ],
           "trial_family": "p299v_ibs_22912552",
           "limitations": [
-            "The abstract does not name a primary endpoint; CFU per capsule not stated."
+            "Four-week study; male-predominant Indian population, mostly IBS-D; limited generalizability.",
+            "Analysis excluded 10 randomized participants.",
+            "Four-point symptom-frequency scale; unusually low placebo global response.",
+            "Supported by Rosell-Lallemand and Probi AB; products supplied by Rosell-Lallemand.",
+            "Global efficacy rating hierarchy not explicitly designated."
           ],
           "review_status": "clinician_approved",
           "study_design": "rct",
           "sample_size": 214,
           "blinding": "double",
-          "funding": "unreported",
+          "funding": "industry",
           "source_tier": "C",
           "trial_registration": null,
           "comparator": "placebo",
           "authored_on": "2026-09-22",
-          "authoring_method": "PubMed efetch XML abstract read (and Europe PMC full text where named); Codex audit response",
+          "authoring_method": "PubMed efetch XML abstract read (and Europe PMC full text where named); Codex audit response; Codex primary publisher full-text factual extraction, 2026-10-23; no new clinician sign-off",
           "context_schema_version": "1.1.0",
           "evidence_role": "direct_rct",
           "component_registration_status": "fully_registered",
@@ -5188,15 +5208,27 @@
           "purpose": "treatment",
           "condition": "irritable_bowel_syndrome",
           "dose": {
-            "basis": "unresolved",
+            "basis": "discrete_daily_arms",
             "unit": "CFU",
-            "values": [],
-            "dosage_forms": [],
+            "values": [
+              1000000,
+              100000000,
+              10000000000
+            ],
+            "dosage_forms": [
+              "capsule"
+            ],
             "duration_days": 28,
             "co_therapies": [],
-            "dose_status": "extraction_pending",
+            "dose_status": "verified",
             "dose_basis": "per_strain_daily",
-            "duration_basis": "fixed_protocol"
+            "duration_basis": "fixed_protocol",
+            "administration_frequency": "once_daily",
+            "source_provenance": {
+              "pmid": "16863564",
+              "source_url": "https://probiotika-prebiotika.cz/wp-content/uploads/2022/06/Whorwell-et-al-2006-B.infantis-35624-IBS-Am-J-Gastroenterol.pdf",
+              "location": "Study Protocol and Probiotic Preparation, pp 1584-1585"
+            }
           },
           "outcomes": [
             {
@@ -5215,22 +5247,25 @@
           "trial_family": "b35624_ibs_dose_ranging_16863564",
           "limitations": [
             "Only the 1 x 10^8 arm beat placebo; the 10^6 and 10^10 arms did not, so no dose-response.",
-            "The abstract gives doses in cfu/mL for a capsule; the per-day dose is left unresolved."
+            "The full Methods specify one capsule daily with discrete viable-cell doses; these are study arms, not a general effective-dose range.",
+            "The highest-dose formulation had delivery problems. Four-week results in women with IBS do not establish efficacy in an unselected population.",
+            "No positive IBS credit: the existing 2026-09-22 clinical sign-off for this strain records pooled single-strain null findings; this individual positive arm does not supersede that restriction.",
+            "Public and Procter & Gamble support, with industry-affiliated coauthors, is reported in the paper."
           ],
           "review_status": "clinician_approved",
           "study_design": "rct",
           "sample_size": 362,
-          "blinding": "unreported",
-          "funding": "unreported",
+          "blinding": "double",
+          "funding": "mixed",
           "source_tier": "C",
           "trial_registration": null,
           "comparator": "placebo",
           "authored_on": "2026-09-22",
-          "authoring_method": "PubMed efetch XML abstract read (and Europe PMC full text where named); Codex audit response",
+          "authoring_method": "PubMed efetch XML abstract read (and Europe PMC full text where named); Codex audit response; Codex primary full-text regimen extraction, 2026-10-23; no new clinician sign-off",
           "context_schema_version": "1.1.0",
           "evidence_role": "direct_rct",
           "component_registration_status": "fully_registered",
-          "scoring_eligible": true,
+          "scoring_eligible": false,
           "clinical_review": {
             "reviewer": "Claude Opus 5 research review (Codex audit response, 2026-09-22), delegated by Sean B (engineering owner); not a clinician sign-off",
             "reviewed_at": "2026-09-22T15:34:46Z",

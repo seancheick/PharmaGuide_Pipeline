@@ -112,7 +112,12 @@ def test_marketing_cannot_prove_patient_condition_or_regimen(registry):
     p = strain_product(dose=1e9)
     before = assessment(p)["study_contexts"]
     p.update(product_name="Treat constipation in adults for 28 days", statements=["constipation"])
-    assert assessment(p)["study_contexts"] == before
+    after = assessment(p)["study_contexts"]
+    # A claimed purpose can change, but it cannot establish patient diagnosis,
+    # dose applicability or the source trial facts.
+    assert [{k: v for k, v in c.items() if k != "claimed_purpose_assessment"} for c in after] == [
+        {k: v for k, v in c.items() if k != "claimed_purpose_assessment"} for c in before]
+    assert after[0]["clinical_applicability"] == "not_established"
     assert before[0]["clinical_applicability"] == "not_established"
 
 
@@ -347,6 +352,7 @@ def test_clinician_approved_research_is_a_finished_review_even_without_credit():
     for dose in (None, 1e9):
         p = strain_product(clinical_id="STRAIN_ACIDOPHILUS_NCFM",
                            name="Lactobacillus acidophilus NCFM", dose=dose)
+        p['product_name'] = 'Probiotic for irritable bowel syndrome'
         review = studied_formulas.assess_probiotic_evidence(p)["native_context_review"]
         evidence = score_evidence(p)
         assert review["status"] == "clinically_reviewed" and review["pending_context_ids"] == []
@@ -414,6 +420,8 @@ def test_pending_review_is_independent_of_existing_positive_or_null_credit(monke
     from scoring_v4.confidence import _evidence_confidence
 
     p = strain_product(clinical_id=cid, name=name, dose=1e9)
+    if cid == 'STRAIN_LACTIS_HN019':
+        p['product_name'] = 'Probiotic for functional constipation'
     reviewed = score_evidence(p)
     assert reviewed["metadata"]["evidence_assessment"]["native_context_review"]["status"] == "clinically_reviewed"
     assert reviewed["score"] == 0  # These adult labels have no eligible positive primary family.
@@ -509,3 +517,39 @@ def test_dose_comparison_wording_agrees_with_the_credited_class(registry):
     result = assessment(strain_product(dose=label))["study_contexts"][0]
     assert result["dose_applicability_class"] == "EXACT_TESTED_DOSE"
     assert result["dose_comparison"] == "matches_tested_daily_dose"
+
+
+@pytest.mark.parametrize("strain_id,context_id,pmid,values", [
+    ("STRAIN_PLANTARUM_299V", "p299v_ibs_rome3_22912552", "22912552", [1e10]),
+    ("STRAIN_INFANTIS_35624", "b35624_ibs_women_dose_ranging_16863564", "16863564", [1e6, 1e8, 1e10]),
+])
+def test_reviewed_ibs_source_regimens_preserve_discrete_arms(strain_id, context_id, pmid, values):
+    entry = studied_formulas._clinical_strain_registry()[strain_id]
+    ctx = next(c for c in entry["study_contexts"] if c["context_id"] == context_id)
+    dose = ctx["dose"]
+    assert dose["dose_status"] == "verified"
+    assert dose["basis"] == "discrete_daily_arms"
+    assert dose["values"] == values
+    assert dose["administration_frequency"] == "once_daily"
+    assert dose["duration_days"] == 28
+    assert dose["dosage_forms"] == ["capsule"]
+    assert dose["source_provenance"]["pmid"] == pmid
+    assert dose["source_provenance"]["location"]
+    assert ctx["condition"] == "irritable_bowel_syndrome"
+    # Completing source extraction cannot invent a monotonic efficacy curve.
+    assert entry["reference_semantics"]["curve"] == "completed_no_benchmark_neutral"
+    if strain_id == "STRAIN_INFANTIS_35624":
+        assert {o["direction"] for o in ctx["outcomes"]} == {"positive", "null"}
+    else:
+        assert next(o for o in ctx["outcomes"] if o["name"] == "abdominal_pain_frequency")["hierarchy"] == "primary"
+        assert ctx["funding"] == "industry"
+        assert "no 299v RCT is separately recorded" not in str(entry)
+
+
+def test_specific_35624_clinical_lock_survives_source_extraction():
+    entry = studied_formulas._clinical_strain_registry()["STRAIN_INFANTIS_35624"]
+    assert "No positive IBS credit" in entry["cfu_thresholds"]["dr_pham_signoff_verification_note"]
+    ctx = next(c for c in entry["study_contexts"]
+               if c["context_id"] == "b35624_ibs_women_dose_ranging_16863564")
+    assert pm.context_accepted_for_scoring(ctx) is False
+    assert {o["direction"] for o in ctx["outcomes"]} == {"positive", "null"}
