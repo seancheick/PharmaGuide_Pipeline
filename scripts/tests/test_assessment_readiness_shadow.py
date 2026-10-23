@@ -160,3 +160,28 @@ def test_shadow_reads_only_manifest_owned_files(tmp_path: Path) -> None:
 
     assert report["summary"]["product_count"] == 1
     assert report["summary"]["incomplete_product_count"] == 0
+
+
+def test_shared_cause_keeps_each_label_and_requires_rebuilt_closure(tmp_path: Path) -> None:
+    products = [_product(str(i), _row("Unreviewed Botanical", "unreviewed_botanical"))
+                for i in (1, 2)]
+    _write_stage(tmp_path, products)
+    report = build_shadow_report(tmp_path)
+    groups = report["cause_backlog"]
+    assert len(groups) == 1
+    group = groups[0]
+    assert group["dimension"] == "evidence"
+    assert group["canonical_id"] == "unreviewed_botanical"
+    assert group["affected_product_ids"] == ["1", "2"]
+    assert group["owner"] == "assessment_readiness.py::evaluate_evidence_assessment"
+    assert group["resolution"] is None
+    assert group["regression_coverage"] == []
+    assert group["review_result"] is None
+    assert group["rebuilt_verification"] is None
+    assert group["status"] == "open"
+    assert {item["dsld_id"] for item in group["source_evidence"]} == {"1", "2"}
+    for item in group["source_evidence"]:
+        assert item["source_row_ref"] == "ingredientRows[0]"
+        assert item["artifact_sha256"] == report["stages"][0]["owned_files"][0]["sha256"]
+        assert item["assessment"]["state"] == "not_yet_evaluated"
+    assert report["summary"]["product_count"] == 2

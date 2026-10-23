@@ -22,7 +22,7 @@ from scoring_v4.router import class_for_product  # noqa: E402
 from stage_manifest import MANIFEST_NAME, select_stage_files  # noqa: E402
 
 
-REPORT_SCHEMA_VERSION = "1.0.0"
+REPORT_SCHEMA_VERSION = "1.1.0"
 
 
 class AssessmentReadinessShadowError(RuntimeError):
@@ -133,6 +133,7 @@ def build_shadow_report(
     verification_not_evaluated_count = 0
     legacy_dose_inference_count = 0
     shadow_incomplete_count = 0
+    cause_backlog: dict[tuple[str, str, str], dict[str, Any]] = {}
 
     for stage_dir in _stage_dirs(products_dir):
         manifest_path = stage_dir / MANIFEST_NAME
@@ -158,6 +159,8 @@ def build_shadow_report(
         })
 
         for source_file in owned_files:
+            artifact_sha256 = next(item["sha256"] for item in stages[-1]["owned_files"]
+                                   if item["name"] == source_file.name)
             payload = json.loads(source_file.read_text(encoding="utf-8"))
             for product in _iter_products(payload, source_file):
                 product_count += 1
@@ -174,6 +177,43 @@ def build_shadow_report(
                     product,
                     module=module,
                 )
+                # This is a report of the existing owner's decisions, never a
+                # second readiness classifier. Regeneration cannot close work:
+                # closure also needs reviewed resolution and rebuilt evidence.
+                for dimension, symbol in {
+                    "identity": "_identity_readiness",
+                    "dose": "_dose_readiness",
+                    "evidence": "evaluate_evidence_assessment",
+                    "verification": "evaluate_verification_assessment",
+                    "route": "_route_readiness",
+                }.items():
+                    detail = readiness.get(dimension) or {}
+                    if detail.get("readiness") != "incomplete":
+                        continue
+                    findings = ([item for item in detail.get("ingredient_assessments", [])
+                                 if item.get("state") == "not_yet_evaluated"]
+                                if dimension == "evidence" else [])
+                    for finding in findings or [detail]:
+                        reason = str(finding.get("reason_code") or "incomplete_assessment")
+                        canonical_id = str(finding.get("canonical_id") or "")
+                        key = (dimension, reason, canonical_id)
+                        group = cause_backlog.setdefault(key, {
+                            "dimension": dimension, "cause": reason,
+                            "canonical_id": canonical_id,
+                            "owner": f"assessment_readiness.py::{symbol}",
+                            "affected_product_ids": set(), "source_evidence": [],
+                            "status": "open", "resolution": None,
+                            "regression_coverage": [], "review_result": None,
+                            "rebuilt_verification": None,
+                        })
+                        group["affected_product_ids"].add(dsld_id)
+                        group["source_evidence"].append({
+                            "dsld_id": dsld_id, "stage_owner": stage_owner,
+                            "source_file": source_file.name,
+                            "artifact_sha256": artifact_sha256,
+                            "source_row_ref": finding.get("source_row_ref"),
+                            "assessment": finding,
+                        })
 
                 for dimension in (
                     "identity",
@@ -288,6 +328,10 @@ def build_shadow_report(
             sorted(unavailable_reason_counts.items())
         ),
         "remediation_queue": remediation_queue,
+        "cause_backlog": [
+            {**group, "affected_product_ids": sorted(group["affected_product_ids"])}
+            for _, group in sorted(cause_backlog.items())
+        ],
         "stages": stages,
     }
     report["report_sha256"] = hashlib.sha256(_canonical_bytes(report)).hexdigest()
