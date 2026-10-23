@@ -729,3 +729,36 @@ def test_exact_printed_zero_is_disclosure_without_positive_neutral_credit():
 def test_stale_disclosure_flag_does_not_turn_invalid_volume_into_neutral(quantity):
     row = _botanical_ingredient(quantity=quantity, unit="mL", has_dose=True)
     assert score_botanical_dose(_botanical_product(ingredient=row))["score"] == 0
+
+
+def test_canonical_botanical_identity_survives_raw_blend_parent():
+    from scoring_v4.scored_artifact import build_scored_artifact
+    row = _botanical_ingredient(
+        name="Neumentix Phenolic Complex K110-42", standard_name="Spearmint",
+        canonical_id="spearmint", quantity=900, matched_form="neumentix spearmint extract",
+        scoreable_identity=True, identity_confidence=1.0,
+        raw_source_path="ingredientRows[0]", canonical_source_db="ingredient_quality_map",
+        raw_taxonomy={"category": "blend", "ingredientGroup": "Proprietary Blend (Herb/Botanical)",
+                      "forms": [{"name": "Spearmint extract", "category": "botanical"}]},
+    )
+    product = _botanical_product(row, standardized=False)
+    product["product_name"] = "Neumentix"
+    owner = _primary_botanical_active(product)
+    assert owner["_scoring_classification"]["profile_eligibility"]["botanical"]["eligible"] is True
+    artifact = build_scored_artifact(product)
+    formulation = artifact["quality_pillars_v4"]["formulation"]
+    assert score_botanical_formulation(product)["metadata"]["recognized"] is True
+    assert formulation["score"] > 0
+    assert "weak_or_unidentified_botanical" not in str(formulation)
+
+
+@pytest.mark.parametrize("scoreable, eligible, canonical", [
+    (False, True, "spearmint"), (True, False, "spearmint"),
+    (True, True, ""), (True, True, "blend_unknown"),
+])
+def test_botanical_profile_evidence_does_not_replace_strict_identity(scoreable, eligible, canonical):
+    from scoring_v4.modules.botanical_profile import _recognized_botanical_identity
+    row = {"canonical_id": canonical, "category": "herbs", "scoreable_identity": scoreable,
+           "raw_taxonomy": {"category": "blend"},
+           "_scoring_classification": {"profile_eligibility": {"botanical": {"eligible": eligible}}}}
+    assert _recognized_botanical_identity(row) is False

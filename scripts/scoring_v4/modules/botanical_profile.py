@@ -422,6 +422,16 @@ def _primary_botanical_active(product: Dict[str, Any]) -> Optional[Dict[str, Any
 def _recognized_botanical_identity(row: Dict[str, Any]) -> bool:
     from evidence_resolver import is_reviewed_branded_material
 
+    # The strict input owner has already resolved identity and botanical
+    # source evidence, including a botanical form beneath a raw blend parent.
+    # A broad category alone is not a verified identity or a clinical claim.
+    if (row.get("scoreable_identity") is True
+            and row.get("scoring_input_kind") != "product_level_evidence"
+            and row.get("evidence_type") != "blend_anchor_mass"
+            and bool(_norm(row.get("canonical_id")))
+            and not _norm(row.get("canonical_id")).startswith("blend")
+            and _classification_profile_eligible(row, "botanical") is True):
+        return True
     keys = set(_ingredient_identity_keys(row))
     return bool(keys & _known_botanical_identity_set()) or is_reviewed_branded_material(
         row.get("canonical_id"), row.get("name")
