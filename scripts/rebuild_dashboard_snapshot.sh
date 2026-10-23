@@ -156,6 +156,11 @@ run_strict_gate() {
 RAW_ROOT="$("$PG_PYTHON" -c 'import sys; sys.path.insert(0, "scripts"); from dataset_paths import brand_dataset_root; print(brand_dataset_root())')"
 run_strict_gate "raw DSLD label availability" \
   "$PG_PYTHON" scripts/preflight.py --quick --raw-root "$RAW_ROOT" --products-dir scripts/products
+# Fail known unfinished assessments before corpus audits and catalog assembly.
+# This source-only check cannot waive the independent candidate audit below.
+run_strict_gate "scoring assessment completeness preflight" \
+  "$PG_PYTHON" "$SOURCE_OF_TRUTH_AUDIT" scoring \
+    --products-dir "$REPO_ROOT/scripts/products" --completion-only --strict-release
 run_strict_gate "source-of-truth matrix" \
   "$PG_PYTHON" "$SOURCE_OF_TRUTH_AUDIT" matrix --strict-release
 run_strict_gate "IQM form-evidence contract" \

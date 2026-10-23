@@ -510,3 +510,26 @@ def test_warning_containment_cannot_erase_release_completion_blocker(tmp_path, m
     args = _args(path)
     args.dist_dir = str(tmp_path)
     assert 'SCORING_RELEASE_ASSESSMENT_INCOMPLETE' in {f.code for f in audit_scoring(args)}
+
+
+def test_completion_preflight_defers_candidate_contract_but_not_completion(tmp_path):
+    product = _scored(scoring_ingredients_source='deliberately_invalid_source')
+    path = tmp_path / 'scored.json'
+    _write(path, product)
+    args = _args(path)
+    args.completion_only = True
+    assert audit_scoring(args) == []
+    args.completion_only = False
+    assert 'SCORING_SOURCE_FORBIDDEN' in {f.code for f in audit_scoring(args)}
+
+
+@pytest.mark.parametrize('status', ['scored', 'not_scored', 'suppressed_safety'])
+def test_completion_preflight_enforces_missing_receipt_without_strict_flag(tmp_path, status):
+    product = _scored(quality_score_status=status)
+    product['assessment_readiness'].pop('release_assessment')
+    path = tmp_path / 'scored.json'
+    _write(path, product)
+    args = _args(path)
+    args.completion_only = True
+    args.strict_release = False
+    assert {f.code for f in audit_scoring(args)} == {'SCORING_RELEASE_ASSESSMENT_MISSING'}

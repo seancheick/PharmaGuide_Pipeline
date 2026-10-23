@@ -707,10 +707,11 @@ def audit_scoring(args: argparse.Namespace) -> list[Finding]:
     if not files:
         return [Finding("SCORING_NO_INPUT", "no scored product files found for scoring contract audit")]
 
+    completion_only = bool(getattr(args, "completion_only", False))
     quarantines = {}
     warning_only = set()
     blocked_warning_only = set()
-    if getattr(args, "dist_dir", None):
+    if getattr(args, "dist_dir", None) and not completion_only:
         try:
             quarantines = verified_contract_quarantines(repo_path(args.dist_dir))
             warning_only = verified_warning_only_products(repo_path(args.dist_dir))
@@ -733,7 +734,7 @@ def audit_scoring(args: argparse.Namespace) -> list[Finding]:
         for product in products:
             pid = product_identity(product)
             finding_start = len(findings)
-            if getattr(args, "strict_release", False):
+            if getattr(args, "strict_release", False) or completion_only:
                 release = _safe_dict(_safe_dict(product.get("assessment_readiness")).get("release_assessment"))
                 if (not isinstance(release.get("is_complete"), bool)
                         or not isinstance(release.get("blockers"), list)
@@ -744,6 +745,9 @@ def audit_scoring(args: argparse.Namespace) -> list[Finding]:
                       or release["unfinished_source_assessment"] is not None):
                     findings.append(Finding("SCORING_RELEASE_ASSESSMENT_INCOMPLETE",
                         f"{pid}: unfinished release assessment: {release['blockers']}", str(file_path)))
+            if completion_only:
+                # Candidate quarantine/export checks still run after assembly.
+                continue
             typed_suppressed_dose_failure = False
             verdict = str(product.get("verdict") or "").upper()
             diag = _scoring_diag(product)
@@ -2089,6 +2093,8 @@ def build_parser() -> argparse.ArgumentParser:
     scoring.add_argument("--scored-file", dest="product_file", action="append", default=[])
     scoring.add_argument("--product-file", action="append", default=[])
     scoring.add_argument("--dist-dir", default=None)
+    scoring.add_argument("--completion-only", action="store_true",
+                         help="preflight source completion only; does not replace candidate contract audit")
     scoring.set_defaults(prefer_scored=True)
     scoring.set_defaults(func=audit_scoring)
 

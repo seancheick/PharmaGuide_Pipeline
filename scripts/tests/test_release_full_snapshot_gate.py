@@ -189,3 +189,30 @@ def test_release_runs_strict_assessment_audit_after_optional_snapshot_before_pub
     cleaner = source.index('run_strict_gate "cleaner/IQD row contract"')
     assert cleaner < gate
     assert '\nif ' not in source[cleaner:gate]
+
+
+def test_snapshot_unfinished_completion_stops_before_builder(tmp_path):
+    source = SNAPSHOT_SCRIPT.read_text()
+    # Execute the real preassembly gate block with bounded gate stubs.
+    gates = source[source.index('run_strict_gate "raw DSLD label availability"'):
+                   source.index('# 1. Collect enriched + scored dirs.')]
+    script = '''set -euo pipefail
+REPO_ROOT=repo
+PG_PYTHON=python
+SOURCE_OF_TRUTH_AUDIT=audit.py
+RAW_ROOT=raw
+run_strict_gate() {
+  if [[ "$1" == "scoring assessment completeness preflight" ]]; then
+    [[ "$*" == *"--completion-only"* ]] || exit 99
+    return 37
+  fi
+}
+''' + gates + '\nprintf builder_reached\n'
+    result = subprocess.run(['bash', '-c', script], capture_output=True, text=True)
+    assert result.returncode == 37, result.stdout + result.stderr
+    assert 'builder_reached' not in result.stdout
+    # Candidate-sensitive checks are still unconditional after assembly.
+    build = source.index('"$PG_PYTHON" scripts/build_final_db.py')
+    assert source.index('run_strict_gate "scoring assessment readiness"') > build
+    assert source.index('run_strict_gate "active identity integrity"') > build
+    assert source.index('run_strict_gate "raw-to-final line integrity"') > build
