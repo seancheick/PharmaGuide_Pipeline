@@ -3591,3 +3591,16 @@ def test_same_name_green_tea_rows_keep_separate_marker_percentages(normalizer, e
     assert all(m["estimated_dose_mg"] is None and m["confidence_scale"] == 0.0
                for m in rows[0].get("delivers_markers", []))
     assert rows[1]["delivers_markers"][0]["estimated_dose_mg"] == 125.0
+
+
+def test_inactive_color_purpose_annotation_preserves_known_identity(normalizer):
+    plain = normalizer._map_inactive_name_prefer_other("Titanium Dioxide")
+    annotated = normalizer._map_inactive_name_prefer_other("Titanium Dioxide (For Color)")
+    assert plain[1] is True
+    assert annotated[:2] == plain[:2]
+
+
+@pytest.mark.parametrize("name", ["Titanium Dioxide (Iron Oxide)", "Titanium Dioxide (For Color and Iron Oxide)"])
+def test_color_fallback_does_not_discard_composition(name):
+    from normalization import descriptor_fallback_candidates
+    assert "titanium dioxide" not in descriptor_fallback_candidates(name)

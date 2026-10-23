@@ -636,6 +636,16 @@ def descriptor_fallback_candidates(text: str) -> Tuple[str, ...]:
     seen = {base}
     queue = [base]
     candidates = []
+    # A stated colorant purpose is not a preparation or extra ingredient.
+    # Keep composition-bearing parentheses intact; exact matching precedes
+    # this narrowly scoped fallback at every consumer.
+    purpose_stripped = re.sub(
+        r"\s*\(for colou?r\)$", "", normalize_text(text).strip()
+    ).strip(string.punctuation + string.whitespace)
+    if purpose_stripped and purpose_stripped != base:
+        seen.add(purpose_stripped)
+        candidates.append(purpose_stripped)
+        queue.append(purpose_stripped)
 
     while queue:
         current = queue.pop(0).strip(string.punctuation + string.whitespace)
