@@ -433,41 +433,20 @@ def _load_iqm() -> Dict[str, Any]:
     return {k: v for k, v in raw.items() if k != "_metadata" and isinstance(v, dict)}
 
 
-@lru_cache(maxsize=1)
-def _essential_nutrient_canonicals() -> Set[str]:
-    """Authoritative canonical set of essential dietary vitamins and minerals."""
-    canonicals = {
-        "calcium", "magnesium", "zinc", "iron", "selenium", "copper",
-        "manganese", "molybdenum", "chromium", "iodine", "sodium",
-        "potassium", "chloride", "phosphorus", "boron", "nickel", "tin",
-        "thiamin", "riboflavin", "niacin", "folate", "biotin", "pantothenic_acid",
-        "choline", "inositol",
-    }
-    try:
-        from scoring_input_contract import _CLASSIFICATION_MINERAL_CANONICALS
-        canonicals.update(_CLASSIFICATION_MINERAL_CANONICALS)
-    except ImportError:
-        pass
-    try:
-        from scoring_v4.route_features import B_VITAMIN_CANONICALS
-        canonicals.update(B_VITAMIN_CANONICALS)
-    except ImportError:
-        pass
-    return canonicals
-
-
 def is_essential_dietary_nutrient(canonical: str, name: str = "", iqm_entry: Optional[Dict[str, Any]] = None) -> bool:
-    """Return whether an identity represents an essential dietary vitamin or mineral."""
-    norm_c = _norm(canonical)
-    if norm_c.startswith("vitamin_") or norm_c in _essential_nutrient_canonicals():
+    """Use the scoring owner's DRI set, with the shared reference owner's aliases.
+
+    IQM categories and vitamin-like names classify ingredients; neither proves
+    established nutritional authority. A reference may contain only a safety
+    bound or another non-authority assessment, so its presence alone is not enough.
+    """
+    from scoring_v4.modules.generic_evidence import DRI_ESSENTIAL_NUTRIENTS
+
+    if _norm(canonical) in DRI_ESSENTIAL_NUTRIENTS:
         return True
-    if iqm_entry:
-        cat = _norm(iqm_entry.get("category_enum") or iqm_entry.get("category"))
-        if cat in {"vitamins", "minerals"}:
-            return True
-    return False
-
-
+    reference = rda_ul_reference_entry(canonical_id=canonical, name=name) or {}
+    reference_keys = [reference.get("id"), *(reference.get("aliases") or [])]
+    return any(_norm(key) in DRI_ESSENTIAL_NUTRIENTS for key in reference_keys)
 
 
 @lru_cache(maxsize=1)
