@@ -376,7 +376,7 @@ def test_search_rejects_invalid_quality_score(score):
 
 def test_comparison_migration_matches_bootstrap_search_owner():
     schema = SCHEMA_SQL.read_text()
-    migration = (SCHEMA_SQL.parent / "migrations/20261013213803_public_catalog_comparison.sql").read_text()
+    migration = (SCHEMA_SQL.parent / "migrations/20261023190000_public_catalog_search_precision.sql").read_text()
     start = "CREATE OR REPLACE FUNCTION public.search_catalog("
     assert schema[schema.index(start):] == migration[migration.index(start):]
     assert "count(*) OVER () AS total_matches" in migration
@@ -397,3 +397,75 @@ def test_republish_skips_identical_rows_and_repairs_only_changed_or_missing(tmp_
     sync.publish_catalog_search(client, db_path=str(db_path), catalog_version='v1')
     assert not any(call[0] == 'upsert' for call in client.calls)
     assert client.rows == {(r['catalog_version'], r['dsld_id']): r for r in expected}
+
+
+@pytest.fixture(scope="module")
+def catalog_sql():
+    """Run the actual search owner in a disposable PostgreSQL, never a remote DB."""
+    import json
+    import shutil
+    import subprocess
+    import tempfile
+
+    pg_config = shutil.which("pg_config")
+    candidates = [Path(subprocess.check_output([pg_config, "--bindir"], text=True).strip())] if pg_config else []
+    candidates += [Path("/opt/homebrew/opt/postgresql@16/bin"), Path("/usr/lib/postgresql/16/bin")]
+    binaries = next((p for p in candidates if (p / "initdb").is_file()), None)
+    assert binaries, "Install PostgreSQL 16 with pg_trgm to run catalog SQL regressions"
+    with tempfile.TemporaryDirectory(prefix="pg-mcp-", dir="/tmp") as root:
+        root = Path(root)
+        def run(name, *args, input=None):
+            return subprocess.run([str(binaries / name), *map(str, args)], input=input,
+                                  text=True, capture_output=True, check=True).stdout
+        run("initdb", "-D", root / "db", "-A", "trust", "-U", "postgres", "--no-locale", "--encoding=UTF8")
+        run("pg_ctl", "-D", root / "db", "-l", root / "log", "-o",
+            f"-F -k {root} -c listen_addresses=''", "-w", "start")
+        try:
+            def sql(statement):
+                return run("psql", "-X", "-h", root, "-U", "postgres", "-d", "postgres",
+                           "-v", "ON_ERROR_STOP=1", "-tA", input=statement).strip()
+            sql("CREATE ROLE anon; CREATE ROLE authenticated; CREATE ROLE service_role; CREATE SCHEMA extensions; "
+                "CREATE TABLE export_manifest(db_version text, is_current boolean); "
+                "INSERT INTO export_manifest VALUES ('v1', true), ('old', false);")
+            schema = SCHEMA_SQL.read_text()
+            sql(schema[schema.index("CREATE EXTENSION IF NOT EXISTS pg_trgm"):])
+            sql("""INSERT INTO catalog_search(catalog_version, dsld_id, product_name, brand_name,
+              form_factor, supplement_type, quality_score_status, quality_assessment_status, quality_score_v4_100)
+              VALUES ('v1','1','Magnesium Glycinate 200 mg','Exact','capsule','single_mineral','scored','complete',80),
+                     ('v1','2','Magnesium (Glycinate)','Exact','capsule','single_mineral','scored','complete',90),
+                     ('v1','3','Magnesium Gluconate 500 mg','Other','capsule','single_mineral','scored','complete',99),
+                     ('v1','4','Magnesium Glycinate Powder','Exact','powder','single_mineral','scored','complete',95),
+                     ('v1','5','Magnesium Glycinate','Exact','capsule','single_mineral','scored','incomplete',100),
+                     ('old','6','Magnesium Glycinate','Old','capsule','single_mineral','scored','complete',100);""")
+            def query(args):
+                return json.loads(sql(f"SELECT coalesce(json_agg(r), '[]'::json) FROM search_catalog({args}) r;"))
+            yield query
+        finally:
+            run("pg_ctl", "-D", root / "db", "-m", "immediate", "-w", "stop")
+
+
+def test_sql_exact_matches_exclude_fuzzy_chemistry_before_quality_and_paging(catalog_sql):
+    args = "'magnesium glycinate', NULL, 'capsule', 2, 'quality'"
+    first = catalog_sql(args)
+    assert [r['dsld_id'] for r in first] == ['2', '1']
+    assert [r['total_matches'] for r in first] == [3, 3]
+    second = catalog_sql(args + ", 2, 'v1', 'single_mineral'")
+    assert [r['dsld_id'] for r in second] == ['5']
+    assert second[0]['total_matches'] == 3
+    assert catalog_sql(args + ", 3") == []
+
+
+def test_sql_fuzzy_fallback_respects_filters_and_preserves_typo_discovery(catalog_sql):
+    typo = catalog_sql("'magnesium glycinat', NULL, 'capsule', 25")
+    assert '1' in [r['dsld_id'] for r in typo]
+    filtered = catalog_sql("'magnesium glycinate', 'Other', 'capsule', 25")
+    assert [r['dsld_id'] for r in filtered] == ['3']
+    assert catalog_sql("'zzzznonexistentproductxyz'") == []
+    assert catalog_sql("'magnesium', NULL, NULL, 25, 'quality', 0, 'old'") == []
+
+
+def test_sql_broad_search_preserves_distinct_forms_and_incomplete_products(catalog_sql):
+    rows = catalog_sql("'magnesium', NULL, 'capsule', 25, 'quality'")
+    assert [r['dsld_id'] for r in rows] == ['3', '2', '1', '5']
+    assert all(r['total_matches'] == 4 for r in rows)
+    assert rows[0]['quality_score_v4_100'] == 99

@@ -413,7 +413,10 @@ GRANT SELECT ON TABLE public.catalog_search_current TO service_role;
 GRANT SELECT ON TABLE public.export_manifest TO service_role;
 
 -- Ranked search for the public MCP `search_products` tool. Trigram similarity
--- (typo tolerant) blended with a full-text rank; match_score is in [0, 1].
+-- is a fallback only when no full-text matches exist within the filters.
+-- Select the matching set before quality sorting/counting/paging; never mix
+-- similarly spelled substances into exact matches. This is text discovery,
+-- not chemical identity resolution. match_score is in [0, 1].
 -- SECURITY INVOKER: it can only ever see what its caller (service_role) sees.
 CREATE OR REPLACE FUNCTION public.search_catalog(
   p_query text,
@@ -452,6 +455,17 @@ AS $$
   WITH q AS (
     SELECT lower(left(btrim(coalesce(p_query, '')), 200)) AS text,
            websearch_to_tsquery('simple'::regconfig, left(btrim(coalesce(p_query, '')), 200)) AS tsq
+  ), candidates AS MATERIALIZED (
+    SELECT c.*, c.search_tsv @@ q.tsq AS exact_match
+      FROM public.catalog_search_current c, q
+   WHERE length(q.text) > 0
+     AND p_sort IN ('relevance', 'quality')
+     AND (p_supplement_type IS NULL OR c.supplement_type = p_supplement_type)
+     AND (p_catalog_version IS NULL OR c.catalog_version = p_catalog_version)
+     AND (c.search_tsv @@ q.tsq OR q.text <% c.product_name OR q.text <% c.brand_name)
+     AND (p_brand IS NULL OR strpos(lower(concat_ws(' ', c.brand_name, c.brand_family)),
+                                    lower(btrim(p_brand))) > 0)
+     AND (p_form IS NULL OR strpos(lower(coalesce(c.form_factor, '')), lower(btrim(p_form))) > 0)
   )
   SELECT c.catalog_version, c.dsld_id, c.product_name, c.brand_name, c.brand_family,
          c.product_line, c.upc_sku, c.form_factor, c.supplement_type, c.product_status,
@@ -466,15 +480,8 @@ AS $$
            + ts_rank_cd(c.search_tsv, q.tsq, 32) * 0.2
          )::real AS match_score,
          c.quality_score_v4_100, count(*) OVER () AS total_matches
-    FROM public.catalog_search_current c, q
-   WHERE length(q.text) > 0
-     AND p_sort IN ('relevance', 'quality')
-     AND (p_supplement_type IS NULL OR c.supplement_type = p_supplement_type)
-     AND (p_catalog_version IS NULL OR c.catalog_version = p_catalog_version)
-     AND (c.search_tsv @@ q.tsq OR q.text <% c.product_name OR q.text <% c.brand_name)
-     AND (p_brand IS NULL OR strpos(lower(concat_ws(' ', c.brand_name, c.brand_family)),
-                                    lower(btrim(p_brand))) > 0)
-     AND (p_form IS NULL OR strpos(lower(coalesce(c.form_factor, '')), lower(btrim(p_form))) > 0)
+    FROM candidates c, q
+   WHERE c.exact_match OR NOT EXISTS (SELECT 1 FROM candidates WHERE exact_match)
    ORDER BY CASE WHEN p_sort = 'quality' AND c.quality_score_status = 'scored'
                        AND c.quality_assessment_status = 'complete'
                  THEN c.quality_score_v4_100 END DESC NULLS LAST,
