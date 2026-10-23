@@ -14,7 +14,7 @@ import re
 from typing import Any, Dict, Iterable, List, Mapping
 
 from dose_assessment import CONVERSION_FAILED, NO_UL_APPLICABLE
-from probiotic_measurements import AFU_REVIEW_REASON, pending_afu_measurements, declared_total_cfu, unresolved_cfu_measurements
+from probiotic_measurements import AFU_REVIEW_REASON, pending_afu_measurements, declared_total_cfu, unresolved_cfu_measurements, is_probiotic_source_identity
 from scoring_input_contract import (
     MATERIAL_ROLES,
     ROLE_ADJUNCT,
@@ -383,7 +383,11 @@ def evaluate_evidence_assessment(
         source_ref = _row_ref(row, index)
         role_name = str(role.get("role") or ROLE_ADJUNCT)
         material = role_name in MATERIAL_ROLES
-        probiotic_state = _probiotic_native_evidence_state(product, row) if module == "probiotic" else None
+        # A source-owned native review is the same conclusion on a mixed
+        # product route. The native helper still binds it to this label row.
+        probiotic_state = (_probiotic_native_evidence_state(product, row)
+                           if module == "probiotic" or is_probiotic_source_identity(row)
+                           else None)
         linked = [
             match
             for match, keys in indexed_matches
@@ -423,7 +427,7 @@ def evaluate_evidence_assessment(
         elif linked:
             state = EVIDENCE_EVALUATED_LIMITED_OR_NEGATIVE
             reason = "reviewed_evidence_limited_or_negative"
-        elif module == "probiotic" and probiotic_state is not None:
+        elif probiotic_state is not None:
             state = probiotic_state
             reason = "reviewed_native_clinical_strain_evidence"
         else:

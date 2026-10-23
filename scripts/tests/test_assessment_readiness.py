@@ -1424,8 +1424,9 @@ def test_undosed_nonowner_remains_outside_individual_evidence(monkeypatch):
     assert item["source_value"] is None
 
 
+@pytest.mark.parametrize("module", ["probiotic", "generic", "fiber_digestive", "sports", "multi_or_prenatal"])
 @pytest.mark.parametrize("review_status", ["pending_review", "rejected", "needs_revision"])
-def test_retained_native_context_cannot_close_explicit_review_hold(review_status):
+def test_retained_native_context_cannot_close_explicit_review_hold(review_status, module):
     from assessment_readiness import evaluate_evidence_assessment
     row = _row("Lactobacillus rhamnosus GG", "lactobacillus_rhamnosus", quantity=1e10, unit="CFU")
     product = _product(row)
@@ -1434,7 +1435,7 @@ def test_retained_native_context_cannot_close_explicit_review_hold(review_status
         "clinical_id": "STRAIN_LGG", "strain": row["name"],
         "source_row_ref": "ingredientRows[0]", "review_status": review_status,
     }]}
-    result = evaluate_evidence_assessment(product, module="probiotic")
+    result = evaluate_evidence_assessment(product, module=module)
     assert result["not_yet_evaluated_count"] == 1
     assert result["ingredient_assessments"][0]["state"] == "not_yet_evaluated"
 
@@ -1571,3 +1572,34 @@ def test_zero_native_credit_does_not_close_unreviewed_purpose_transfer():
         {'module': 'probiotic', 'dimensions': {'evidence': evidence}}, unfinished_source=None)
     assert result['is_complete'] is False
     assert 'probiotic_evidence_assessment_incomplete' in result['blockers']
+
+
+@pytest.mark.parametrize("module", ["generic", "fiber_digestive", "sports", "multi_or_prenatal"])
+@pytest.mark.parametrize("clinical_id,name", [
+    ("STRAIN_ACIDOPHILUS_CUL21", "Lactobacillus acidophilus CUL-21"),
+    ("STRAIN_ACIDOPHILUS_LA5", "Lactobacillus acidophilus LA-5"),
+])
+def test_cross_module_native_review_stays_bound_to_its_label_row(module, clinical_id, name):
+    from assessment_readiness import evaluate_evidence_assessment
+    reviewed = _row(name, "lactobacillus_acidophilus", quantity=500, unit="million CFU")
+    species = {**reviewed, "name": "Lactobacillus acidophilus", "standard_name": "Lactobacillus acidophilus",
+               "raw_source_path": "ingredientRows[1]", "source_row_ref": "ingredientRows[1]"}
+    unresolved = {**reviewed, "name": "Lactobacillus paracasei DSM-16105", "standard_name": "Lactobacillus paracasei DSM-16105",
+                  "canonical_id": "lactobacillus_paracasei", "raw_source_path": "ingredientRows[2]", "source_row_ref": "ingredientRows[2]"}
+    product = _product(reviewed)
+    product["activeIngredients"] = [reviewed, species, unresolved]
+    product["ingredient_quality_data"]["ingredients"] = product["activeIngredients"]
+    product["ingredient_quality_data"]["ingredients_scorable"] = product["activeIngredients"]
+    product["probiotic_data"] = {"is_probiotic_product": True, "clinical_strains": [{
+        "clinical_id": clinical_id, "strain": name, "source_row_ref": "ingredientRows[0]",
+        "research_match_status": "no_qualifying_human_evidence",
+        "review_status": "literature_reviewed_no_qualifying_evidence",
+    }]}
+    result = evaluate_evidence_assessment(product, module=module)
+    by_ref = {r["source_row_ref"]: r for r in result["ingredient_assessments"]}
+    assert by_ref["ingredientRows[0]"]["state"] == "evaluated_limited_or_negative"
+    assert by_ref["ingredientRows[0]"]["reason_code"] == "reviewed_native_clinical_strain_evidence"
+    # Neither a generic same-species sibling nor an unresolved designation may
+    # borrow another source row's completed review.
+    for ref in ["ingredientRows[1]", "ingredientRows[2]"]:
+        assert by_ref[ref]["state"] == "not_yet_evaluated"
