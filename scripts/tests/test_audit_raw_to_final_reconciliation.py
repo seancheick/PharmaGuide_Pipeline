@@ -803,15 +803,15 @@ def test_reviewed_new_form_still_requires_its_exact_source_label():
     assert any(f.code == "LEDGER_NAME_DIFFERS_FROM_RAW" for f in record.findings)
 
 
-@pytest.mark.parametrize("unii,expected", [("S95658MI3W", False), ("WRONG", True)])
-def test_display_audit_checks_verified_name_correction_against_original_raw(unii, expected):
+@pytest.mark.parametrize("product_id,expected", [("213846", False), ("999", True)])
+def test_display_audit_checks_verified_name_correction_against_original_raw(product_id, expected):
     raw = {"id": "213846", "ingredientRows": [{
-        "name": "Alpha-Glucan Oligosaccharide", "uniiCode": unii,
+        "name": "Alpha-Glucan Oligosaccharide", "uniiCode": "S95658MI3W",
         "quantity": [{"quantity": 500, "unit": "mg"}], "forms": [], "nestedRows": []}]}
     blob = {"ingredients": [{"name": "Alpha-Glucan Oligosaccharide",
             "raw_source_text": "Alpha-Glucan Oligosaccharide",
             "raw_source_path": "ingredientRows[0]", "display_label": "L-Cystine",
             "canonical_name": "L-Cystine"}]}
-    rec = ProductRecord("213846", None, None, None)
+    rec = ProductRecord(product_id, None, None, None)
     _check_display_label_collapse(rec, blob, raw)
     assert any(f.code == "DISPLAY_LABEL_COLLAPSES_TO_CANONICAL" for f in rec.findings) is expected
