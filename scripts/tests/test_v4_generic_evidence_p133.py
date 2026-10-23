@@ -835,12 +835,8 @@ def test_non_nac_primary_active_recovers_verified_ingredient_human_evidence() ->
     assert payload["score"] == 14.0
 
 
-def test_l_glycine_alias_recovers_existing_glycine_evidence() -> None:
-    """L-glycine products should match the existing verified glycine entry.
-
-    This is a deterministic identity bridge: it does not add a new study or
-    borrow evidence from an unrelated ingredient.
-    """
+def test_l_glycine_alias_cannot_bypass_source_review_hold() -> None:
+    """Known identity cannot override the unresolved human-efficacy review."""
     from scoring_v4.modules.generic_evidence import score_evidence
 
     product = _product(
@@ -858,9 +854,13 @@ def test_l_glycine_alias_recovers_existing_glycine_evidence() -> None:
 
     payload = score_evidence(product, apply_primary_floor=True)
 
-    assert payload["metadata"]["recovered_matches"] == ["INGR_GLYCINE"]
-    assert payload["metadata"]["matched_entries"] == 1
-    assert payload["score"] > 0.0
+    from clinical_applicability import reviewed_entries
+    entry = reviewed_entries()["INGR_GLYCINE"]
+    assert "l-glycine" in entry["aliases"]
+    assert entry["scoring_eligible"] is False
+    assert payload["metadata"]["recovered_matches"] == []
+    assert payload["metadata"]["matched_entries"] == 0
+    assert payload["score"] == 0.0
 
 
 def test_trace_active_does_not_recover_generic_ingredient_evidence() -> None:
