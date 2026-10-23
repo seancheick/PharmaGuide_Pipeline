@@ -350,6 +350,12 @@ def validate_frozen_context(
             errors.append("dose.source_review_incomplete")
         if dose.get("duration_basis") == "extraction_pending":
             errors.append("dose.duration_review_incomplete")
+        frequency = dose.get("administration_frequency")
+        if (not _nonempty_text(frequency)
+                or frequency in {"extraction_pending", "conflicting_source_values", "unresolved", "unknown"}):
+            errors.append("dose.frequency_review_incomplete")
+        if not _text_list(dose.get("co_therapies"), allow_empty=True):
+            errors.append("dose.cotherapies_review_incomplete")
         if not _text_list(dose.get("dosage_forms")):
             errors.append("dose.delivery_required_for_complete_review")
         # A source that did not report a regimen is a reviewed limitation, not

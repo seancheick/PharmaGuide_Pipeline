@@ -1533,6 +1533,7 @@ def _install_completed_release_context(monkeypatch, dose_status='verified'):
                                     'scope': 'identity_dose_outcome_applicability'})
     context['dose']['dose_status'] = dose_status
     context['dose']['dosage_forms'] = ['capsule']
+    context['dose']['administration_frequency'] = 'once_daily'
     if dose_status == 'source_not_reported':
         context['dose'].update(values=[], dose_basis='not_applicable', basis='unresolved')
     monkeypatch.setattr(clinical_applicability, 'reviewed_entries', lambda: {'used': {'id': 'used', 'study_contexts': [context]}})

@@ -1090,3 +1090,26 @@ def test_approval_without_eligibility_flag_cannot_complete_uncertain_source(monk
     context.pop('scoring_eligible', None)
     context[field] = value
     assert assess_clinical_source_review({'id': 'used'})['is_complete'] is False
+
+
+@pytest.mark.parametrize('field,value', [('administration_frequency', None),
+    ('administration_frequency', 'extraction_pending'), ('co_therapies', None)])
+def test_incomplete_regimen_cannot_be_a_completed_source_review(monkeypatch, field, value):
+    from test_assessment_readiness import _install_completed_release_context
+    from clinical_applicability import assess_clinical_source_review
+    context = _install_completed_release_context(monkeypatch)
+    assert assess_clinical_source_review({'id': 'used'})['is_complete']
+    if value is None:
+        context['dose'].pop(field)
+    else:
+        context['dose'][field] = value
+    assert not assess_clinical_source_review({'id': 'used'})['is_complete']
+
+
+def test_malformed_curated_context_cannot_silently_disappear(monkeypatch):
+    import clinical_applicability
+    from test_assessment_readiness import _install_completed_release_context
+    context = _install_completed_release_context(monkeypatch)
+    monkeypatch.setattr(clinical_applicability, 'reviewed_entries',
+                        lambda: {'used': {'study_contexts': [context, 'malformed']}})
+    assert not clinical_applicability.assess_clinical_source_review({'id': 'used'})['is_complete']

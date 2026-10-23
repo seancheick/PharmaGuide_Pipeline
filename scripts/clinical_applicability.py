@@ -378,6 +378,44 @@ def _source_delivery_forms(product: Mapping, row: Mapping, excluded_terms=(), *,
     return result
 
 
+def native_product_positioning_texts(product: Mapping) -> list[str]:
+    """Retained native label positioning, shared by category and exact scope checks."""
+    parts = [str(product.get(field) or "") for field in
+             ("product_name", "brand_name", "serving_description", "suggested_use")]
+    if not product.get("product_name"):
+        parts.append(str(product.get("fullName") or ""))
+    for statement in product.get("statements") or []:
+        if isinstance(statement, Mapping) and _key(statement.get("type")) in {
+            "general statements all other content", "formula re type", "formulation re other",
+        }:
+            parts.append(str(statement.get("notes") or statement.get("text") or ""))
+    return parts
+
+
+def assess_native_claimed_purpose(product: Mapping, context: Mapping) -> dict:
+    """Match a treatment/challenge study to an affirmative *claimed* purpose.
+
+    This proves neither a user's diagnosis nor membership in the trial population.
+    Broad indication categories and unreviewed aliases cannot establish the
+    source's exact condition. Population/preparation checks remain independent.
+    """
+    if context.get("purpose") not in {"treatment", "challenge"}:
+        return {"status": "applicable", "reason_code": "no_condition_specific_claim_required"}
+    condition = _key(context.get("condition"))
+    if condition:
+        pattern = re.compile(r"(?<!\w)" + r"[\s_-]+".join(re.escape(word) for word in condition.split()) + r"(?!\w)", re.I)
+        # Names and warnings about a condition are not a claimed product purpose.
+        # The existing native positioning source set excludes precaution blocks;
+        # brand/serving metadata are omitted from this narrower affirmative test.
+        excluded = {str(product.get("brand_name") or ""), str(product.get("serving_description") or "")}
+        for text in native_product_positioning_texts(product):
+            if text and text not in excluded and find_affirmative_label_match(pattern, text):
+                return {"status": "applicable", "reason_code": "affirmative_exact_source_condition_claim",
+                        "condition": context.get("condition")}
+    return {"status": "unresolved", "reason_code": "source_condition_claim_unestablished",
+            "condition": context.get("condition")}
+
+
 def assess_clinical_source_review(entry: Mapping) -> dict:
     """Validate contributing research at the existing clinical scope owner.
 
@@ -389,6 +427,8 @@ def assess_clinical_source_review(entry: Mapping) -> dict:
     contexts = reference.get("study_contexts")
     if not isinstance(contexts, list) or not contexts:
         return {"is_complete": False, "errors": ["clinical_source_contexts_missing"], "context_ids": []}
+    if any(not isinstance(context, Mapping) for context in contexts):
+        return {"is_complete": False, "errors": ["clinical_source_context_invalid"], "context_ids": []}
     contributing = [context for context in contexts if isinstance(context, Mapping)
                     and context.get("scoring_eligible") is not False
                     and context.get("review_status") != "rejected_source"]
