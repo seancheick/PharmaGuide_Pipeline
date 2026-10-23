@@ -25,7 +25,7 @@ import sqlite3
 import sys
 import threading
 import time
-from concurrent.futures import ThreadPoolExecutor, as_completed
+from concurrent.futures import ThreadPoolExecutor, as_completed, wait, FIRST_COMPLETED
 
 DEFAULT_MAX_WORKERS = 8
 DEFAULT_DISCOVERY_WORKERS = 8
@@ -417,41 +417,6 @@ def validate_bucket_upload_capacity(client, *, bucket, object_size_bytes):
     )
 
 
-def detail_index_blob_paths(detail_index):
-    """Return content-addressed blob storage paths referenced by a detail index."""
-    paths = set()
-    for dsld_id, entry in detail_index.items():
-        if not isinstance(entry, dict):
-            raise ValueError(f"detail_index entry for dsld_id={dsld_id} is not an object")
-        storage_path = entry.get("storage_path")
-        if not storage_path:
-            raise ValueError(f"detail_index entry for dsld_id={dsld_id} is missing storage_path")
-        paths.add(storage_path)
-    return paths
-
-
-def load_remote_detail_index_blob_paths(client, bucket, db_version, download_fn):
-    """Download an active remote detail index and return its referenced blob paths."""
-    remote_path = f"v{db_version}/detail_index.json"
-    payload = download_fn(client, bucket, remote_path)
-    if isinstance(payload, bytes):
-        text = payload.decode("utf-8")
-    elif isinstance(payload, bytearray):
-        text = bytes(payload).decode("utf-8")
-    elif isinstance(payload, str):
-        text = payload
-    else:
-        raise TypeError(
-            "Supabase detail_index download returned unsupported payload type: "
-            f"{type(payload).__name__}"
-        )
-
-    detail_index = json.loads(text)
-    if not isinstance(detail_index, dict):
-        raise ValueError(f"Remote detail_index at {remote_path} is not a JSON object")
-    return detail_index_blob_paths(detail_index)
-
-
 def collect_detail_blobs(build_dir):
     """Return sorted list of detail blob file paths."""
     detail_dir = os.path.join(build_dir, "detail_blobs")
@@ -569,9 +534,9 @@ def _discover_existing_remote_paths_for_directory(
             remote_path = f"{directory}/{name}"
             if remote_path in expected_paths:
                 existing.add(remote_path)
-        if len(page) < page_size:
+        if existing == expected_paths:
             break
-        offset += page_size
+        offset += len(page)
     return existing
 
 
@@ -743,6 +708,25 @@ def make_thread_local_client_factory(client_factory):
     return get_client
 
 
+def _bounded_results(executor, operation, items, max_pending):
+    """Keep only a small window of tasks alive, including completed futures."""
+    items = iter(items)
+    pending = set()
+    exhausted = False
+    while pending or not exhausted:
+        while not exhausted and len(pending) < max_pending:
+            try:
+                item = next(items)
+            except StopIteration:
+                exhausted = True
+                break
+            pending.add(executor.submit(operation, item))
+        if pending:
+            done, pending = wait(pending, return_when=FIRST_COMPLETED)
+            for future in done:
+                yield future.result()
+
+
 def upload_detail_blobs(
     client,
     bucket,
@@ -783,24 +767,13 @@ def upload_detail_blobs(
     else:
         client_getter = make_thread_local_client_factory(client_factory) if client_factory else (lambda: client)
         with ThreadPoolExecutor(max_workers=max_workers) as executor:
-            futures = []
-            for upload in pending_uploads:
-                futures.append(
-                    executor.submit(
-                        _upload_blob_task_with_factory,
-                        client_getter,
-                        upload_fn,
-                        bucket,
-                        upload["local_path"],
-                        upload["remote_path"],
-                        retries,
-                        base_delay,
-                        upload["blob_sha256"],
-                    )
+            def one(upload):
+                return _upload_blob_task_with_factory(
+                    client_getter, upload_fn, bucket, upload["local_path"],
+                    upload["remote_path"], retries, base_delay, upload["blob_sha256"],
                 )
-            for future in as_completed(futures):
+            for error in _bounded_results(executor, one, pending_uploads, max_workers * 2):
                 completed += 1
-                error = future.result()
                 if error:
                     errors.append(error)
                 if (completed + skipped) % progress_every == 0 or (completed + skipped) == total:
@@ -937,9 +910,20 @@ def _upload_image_task(client, upload_fn, bucket, local_path, remote_path, retri
         return {"remote_path": remote_path, "error": str(exc)}
 
 
-def _upload_image_task_with_factory(client_getter, upload_fn, bucket, local_path, remote_path, retries, base_delay):
+def _upload_image_task_with_factory(client_getter, upload_fn, bucket, local_path, remote_path,
+                                    retries, base_delay, download_fn=None, verify_existing=False):
+    client = client_getter()
+    if download_fn and verify_existing:
+        try:
+            remote_bytes = upload_with_retries(
+                lambda: download_fn(client, bucket, remote_path), retries, base_delay,
+            )
+            if hashlib.sha256(remote_bytes).hexdigest() == _compute_file_sha256(local_path):
+                return "skipped"
+        except Exception:
+            pass  # No identity proof: overwrite safely rather than skip.
     return _upload_image_task(
-        client_getter(), upload_fn, bucket, local_path, remote_path, retries, base_delay,
+        client, upload_fn, bucket, local_path, remote_path, retries, base_delay,
     )
 
 
@@ -953,10 +937,11 @@ def upload_product_images(
     base_delay=DEFAULT_RETRY_BASE_DELAY,
     client_factory=None,
     dry_run=False,
+    download_fn=None,
 ):
     """Upload product_images/*.webp to Supabase Storage bucket.
 
-    Skips files that already exist remotely with matching size.
+    Skips only files whose remote bytes match, when a downloader is supplied.
     Returns dict with uploaded, skipped, failed counts.
     """
     index, image_dir = load_product_image_index(build_dir)
@@ -984,7 +969,7 @@ def upload_product_images(
                 size = metadata.get("size") or metadata.get("contentLength") or 0
                 if name:
                     existing_sizes[name] = int(size) if size else 0
-            if not page or len(page) < page_size:
+            if not page:
                 break
             offset += len(page)
     except Exception:
@@ -993,49 +978,44 @@ def upload_product_images(
     # Build upload list
     uploads = []
     skipped = 0
+    errors = []
     for dsld_id, entry in sorted(index.items()):
         filename = entry["filename"]
         local_path = os.path.join(image_dir, filename)
         remote_path = filename  # flat: {dsld_id}.webp
-        local_size = entry.get("size_bytes", 0)
-
-        if not os.path.exists(local_path):
+        if not os.path.isfile(local_path):
+            errors.append({"remote_path": remote_path, "error": "Indexed local image is missing"})
             continue
+        local_size = os.path.getsize(local_path)
+        uploads.append({"local_path": local_path, "remote_path": remote_path,
+                        "verify_existing": existing_sizes.get(filename) == local_size})
 
-        if filename in existing_sizes and existing_sizes[filename] > 0 and abs(existing_sizes[filename] - local_size) < 1024:
-            skipped += 1
-            continue
-
-        uploads.append({"local_path": local_path, "remote_path": remote_path})
-
-    errors = []
     uploaded = 0
     start = time.time()
 
     if not uploads:
-        print(f"  All {skipped} images already uploaded — nothing to do")
-        return {"uploaded": 0, "skipped": skipped, "failed": 0}
+        print(f"  Images: {skipped} unchanged, {len(errors)} missing local files")
+        return {"uploaded": 0, "skipped": skipped, "failed": len(errors)}
 
     client_getter = make_thread_local_client_factory(client_factory) if client_factory else (lambda: client)
     with ThreadPoolExecutor(max_workers=max_workers) as executor:
-        futures = [
-            executor.submit(
-                _upload_image_task_with_factory,
+        def one(upload):
+            return _upload_image_task_with_factory(
                 client_getter, upload_fn, PRODUCT_IMAGE_BUCKET,
-                u["local_path"], u["remote_path"], retries, base_delay,
+                upload["local_path"], upload["remote_path"], retries, base_delay,
+                download_fn, upload["verify_existing"],
             )
-            for u in uploads
-        ]
-        for future in as_completed(futures):
-            error = future.result()
-            if error:
+        for error in _bounded_results(executor, one, uploads, max_workers * 2):
+            if error == "skipped":
+                skipped += 1
+            elif error:
                 errors.append(error)
             else:
                 uploaded += 1
-            done = uploaded + len(errors)
-            if done % 500 == 0 or done == len(uploads):
+            done = uploaded + skipped + len(errors)
+            if done % 500 == 0 or done == total:
                 elapsed = time.time() - start
-                print(f"  Images: {done + skipped}/{total} ({elapsed:.1f}s)")
+                print(f"  Images: {done}/{total} ({elapsed:.1f}s)")
 
     elapsed = time.time() - start
     print(
@@ -1201,25 +1181,16 @@ def publish_catalog_search(
     rows = catalog_search_rows(db_path, catalog_version)
     if not rows:
         raise ValueError("catalog_search: core DB has no products to publish")
-    for start in range(0, len(rows), batch_size):
-        batch = rows[start:start + batch_size]
-        upload_with_retries(
-            lambda batch=batch: client.table(CATALOG_SEARCH_TABLE)
-            .upsert(batch, on_conflict="catalog_version,dsld_id")
-            .execute(),
-            retries,
-            base_delay,
-            sleep_fn,
-        )
     # Read every existing ID before deleting: offset pagination during deletion
     # can skip rows, and the server may cap a page below the requested limit.
-    desired_ids = {row["dsld_id"] for row in rows}
+    desired = {row["dsld_id"]: row for row in rows}
+    unchanged = set()
     stale_ids = []
     last_id = None
     while True:
         query = (
             client.table(CATALOG_SEARCH_TABLE)
-            .select("dsld_id")
+            .select(",".join(rows[0]))
             .eq("catalog_version", catalog_version)
             .order("dsld_id")
             .limit(CATALOG_SEARCH_BATCH_SIZE)
@@ -1230,8 +1201,25 @@ def publish_catalog_search(
         existing = response.data or []
         if not existing:
             break
-        stale_ids.extend(row["dsld_id"] for row in existing if row["dsld_id"] not in desired_ids)
+        for row in existing:
+            key = row["dsld_id"]
+            if key not in desired:
+                stale_ids.append(key)
+            elif all(column in row and row[column] == value
+                     for column, value in desired[key].items()):
+                unchanged.add(key)
         last_id = existing[-1]["dsld_id"]
+    changed_rows = [row for row in rows if row["dsld_id"] not in unchanged]
+    for start in range(0, len(changed_rows), batch_size):
+        batch = changed_rows[start:start + batch_size]
+        upload_with_retries(
+            lambda batch=batch: client.table(CATALOG_SEARCH_TABLE)
+            .upsert(batch, on_conflict="catalog_version,dsld_id")
+            .execute(),
+            retries,
+            base_delay,
+            sleep_fn,
+        )
     for start in range(0, len(stale_ids), CATALOG_SEARCH_BATCH_SIZE):
         obsolete = stale_ids[start:start + CATALOG_SEARCH_BATCH_SIZE]
         upload_with_retries(
@@ -1374,132 +1362,69 @@ def sync(
     else:
         print("  No remote version found (first push)")
 
-    if not needs_update(local, remote, force=force):
-        print(f"Uploading canonical share-index shards for {version}...")
-        for shard in SHARE_INDEX_SHARDS:
-            upload_file(
-                client,
-                bucket,
-                f"v{version}/{SHARE_INDEX_DIRNAME}/{shard}.json",
-                os.path.join(build_stats["share_index_dir"], f"{shard}.json"),
-                content_type="application/json",
-                cache_control=CATALOG_MUTABLE_CACHE_SECONDS,
-            )
-        _publish_catalog_search_step(
-            client,
-            db_path=build_stats["db_path"],
-            version=version,
-            retries=retry_count,
-            base_delay=retry_base_delay,
+    catalog_changed = needs_update(local, remote, force=force)
+    remote_db_path = core_db_remote_path(version)
+    catalog_upload_needed = catalog_changed
+    if not catalog_changed:
+        # The current manifest owns byte identity, but does not prove the object
+        # survived storage deletion. Check its exact path without downloading DB.
+        present = _discover_existing_remote_paths_for_directory(
+            client, bucket, f"v{version}", {remote_db_path}, list_storage_paths, 1000,
         )
-        print("Already up to date. Verifying registry state...")
-        remote_detail_index_path = f"v{version}/detail_index.json"
-        _ensure_registry_validating(
-            client,
-            db_version=version,
-            detail_index_url=remote_detail_index_path,
+        catalog_upload_needed = remote_db_path not in present
+    if catalog_upload_needed:
+        validate_bucket_upload_capacity(
+            client, bucket=bucket,
+            object_size_bytes=os.path.getsize(build_stats["db_path"]),
         )
-        _promote_registry_release(client, db_version=version)
-        print("Already up to date. Nothing to upload.")
-        return {"status": "up_to_date", "version": version}
 
-    validate_bucket_upload_capacity(
-        client,
-        bucket=bucket,
-        object_size_bytes=os.path.getsize(build_stats["db_path"]),
-    )
-
-    active_remote_blob_paths = set()
-    active_index_time = 0.0
-    remote_version = remote.get("db_version") if remote else None
-    if remote_version and remote_version != version:
-        print(f"\nLoading active remote detail index for blob reuse ({remote_version})...")
-        start = time.time()
+    def sync_mutable(remote_path, local_path, content_type="application/json"):
+        # These paths are mutable, so neither existence nor size proves identity.
+        # A failed read never authorizes a skip; upload with the same retry policy.
         try:
-            active_remote_blob_paths = load_remote_detail_index_blob_paths(
-                client,
-                bucket,
-                remote_version,
-                download_file,
-            )
-            active_index_time = time.time() - start
-            print(
-                f"  Found {len(active_remote_blob_paths)} active hashed blob paths "
-                f"in {active_index_time:.1f}s"
-            )
-        except Exception as exc:
-            active_index_time = time.time() - start
-            print(
-                "  [warn] Could not load active remote detail index "
-                f"(will fall back to storage discovery): {type(exc).__name__}: {exc}"
-            )
+            remote_bytes = download_file(client, bucket, remote_path)
+            unchanged = hashlib.sha256(remote_bytes).hexdigest() == _compute_file_sha256(local_path)
+        except Exception:
+            unchanged = False
+        if unchanged and not force:
+            return
+        upload_with_retries(
+            lambda: upload_file(
+                client, bucket, remote_path, local_path, content_type=content_type,
+                cache_control=CATALOG_MUTABLE_CACHE_SECONDS,
+            ), retry_count, retry_base_delay,
+        )
 
     # Upload SQLite DB
     db_path = build_stats["db_path"]
 
-    remote_db_path = core_db_remote_path(version)
-    print(f"\nUploading {remote_db_path}...")
+    print(f"\n{'Uploading' if catalog_upload_needed else 'Reusing current'} {remote_db_path}...")
     start = time.time()
-    upload_file(client, bucket, remote_db_path, db_path,
-                cache_control=CATALOG_MUTABLE_CACHE_SECONDS)
+    if catalog_upload_needed:
+        upload_with_retries(
+            lambda: upload_file(client, bucket, remote_db_path, db_path,
+                                cache_control=CATALOG_MUTABLE_CACHE_SECONDS),
+            retry_count, retry_base_delay,
+        )
     db_time = time.time() - start
     db_size_mb = build_stats["db_size_mb"]
     print(f"  Done ({db_size_mb:.1f} MB in {db_time:.1f}s)")
-
-    detail_index_path = build_stats["detail_index_path"]
-    remote_detail_index_path = f"v{version}/detail_index.json"
-    print(f"\nUploading {remote_detail_index_path}...")
-    start = time.time()
-    upload_file(client, bucket, remote_detail_index_path, detail_index_path,
-                content_type="application/json", cache_control=CATALOG_MUTABLE_CACHE_SECONDS)
-    detail_index_time = time.time() - start
-    print(f"  Done ({detail_index_time:.1f}s)")
-
-    print(f"\nUploading canonical share-index shards for {version}...")
-    start = time.time()
-    for shard in SHARE_INDEX_SHARDS:
-        upload_file(
-            client,
-            bucket,
-            f"v{version}/{SHARE_INDEX_DIRNAME}/{shard}.json",
-            os.path.join(build_stats["share_index_dir"], f"{shard}.json"),
-            content_type="application/json",
-            cache_control=CATALOG_MUTABLE_CACHE_SECONDS,
-        )
-    share_index_time = time.time() - start
-    print(f"  Done ({share_index_time:.1f}s)")
 
     # Upload unique detail blobs with bounded concurrency, retry logic, and remote dedupe.
     uploads = build_stats["unique_blob_uploads"]
     blob_count = build_stats["blob_count"]
     unique_blob_count = build_stats["unique_blob_count"]
-    expected_remote_paths = {upload["remote_path"] for upload in uploads}
-    if active_remote_blob_paths:
-        print("\nReusing existing hashed blobs from active detail index...")
-        existing_remote_paths = expected_remote_paths & active_remote_blob_paths
-        discover_time = active_index_time
-        print(f"  Found {len(existing_remote_paths)} reusable active-version blobs")
-    else:
-        print("\nDiscovering existing remote hashed blobs...")
-        start = time.time()
-        try:
-            existing_remote_paths = discover_existing_remote_blob_paths(
-                client,
-                bucket,
-                uploads,
-                list_storage_paths,
-                max_workers=min(max_workers, DEFAULT_DISCOVERY_WORKERS),
-                client_factory=get_supabase_client,
-            )
-        except Exception as exc:
-            raise RuntimeError(
-                "Failed discovering existing remote hashed blobs. "
-                "The DB and detail_index uploads are upsert-safe; rerun after "
-                "the Supabase Storage listing issue clears. "
-                f"Root error: {type(exc).__name__}: {exc}"
-            ) from exc
-        discover_time = time.time() - start
-        print(f"  Found {len(existing_remote_paths)} existing hashed blobs in {discover_time:.1f}s")
+    # An index reference is not proof that an object still exists, and ignores
+    # objects already uploaded by a failed attempt. Discover every target shard.
+    print("\nDiscovering existing remote hashed blobs...")
+    start = time.time()
+    existing_remote_paths = discover_existing_remote_blob_paths(
+        client, bucket, uploads, list_storage_paths,
+        max_workers=min(max_workers, DEFAULT_DISCOVERY_WORKERS),
+        client_factory=get_supabase_client,
+    )
+    discover_time = time.time() - start
+    print(f"  Found {len(existing_remote_paths)} existing hashed blobs in {discover_time:.1f}s")
     print(
         f"\nUploading {unique_blob_count} unique detail blobs "
         f"(from {blob_count} product mappings) with max_workers={max_workers}, retries={retry_count}..."
@@ -1520,24 +1445,29 @@ def sync(
         f"{uploaded_count} uploaded, {skipped_count} skipped, {len(errors)} errors)"
     )
 
-    # Upload product images (non-blocking — image failures don't abort sync)
+    # Indexed images are an independent required upload phase.
     print("\nUploading product images...")
-    upload_product_images(
+    image_result = upload_product_images(
         client=client,
         build_dir=build_dir,
         upload_fn=upload_file,
         list_fn=list_storage_paths,
+        download_fn=download_file,
         max_workers=max_workers,
         retries=retry_count,
         base_delay=retry_base_delay,
         client_factory=get_supabase_client,
     )
 
-    # Abort manifest rotation if any blobs failed — prevents clients from
-    # seeing the new version and getting 404s on missing detail blobs.
+    if image_result["failed"]:
+        errors.append({"blob_sha256": "product-images", "error":
+                       f"{image_result['failed']} indexed image uploads failed"})
+
+    # Abort publication if required objects failed — prevents activating an
+    # incomplete release or publishing indexes for missing detail/image objects.
     if errors:
         failure_report = write_failure_report(build_dir, version, errors)
-        print(f"\nAborting manifest rotation: {len(errors)} unique blob uploads failed.")
+        print(f"\nAborting manifest rotation: {len(errors)} required upload failures.")
         for err in errors[:10]:
             print(f"  - {err['blob_sha256']}: {err['error']}")
         if len(errors) > 10:
@@ -1553,6 +1483,26 @@ def sync(
             "error_count": len(errors),
             "time_seconds": round(time.monotonic() - sync_started_at, 1),
         }
+
+    # Publish mutable indexes only once their referenced detail/image objects
+    # succeeded, including same-version repairs of an already visible catalog.
+    detail_index_path = build_stats["detail_index_path"]
+    remote_detail_index_path = f"v{version}/detail_index.json"
+    print(f"\nUploading {remote_detail_index_path}...")
+    start = time.time()
+    sync_mutable(remote_detail_index_path, detail_index_path)
+    detail_index_time = time.time() - start
+    print(f"  Done ({detail_index_time:.1f}s)")
+
+    print(f"\nUploading canonical share-index shards for {version}...")
+    start = time.time()
+    for shard in SHARE_INDEX_SHARDS:
+        sync_mutable(
+            f"v{version}/{SHARE_INDEX_DIRNAME}/{shard}.json",
+            os.path.join(build_stats["share_index_dir"], f"{shard}.json"),
+        )
+    share_index_time = time.time() - start
+    print(f"  Done ({share_index_time:.1f}s)")
 
     # Public MCP search rows for this release go in BEFORE the manifest flip;
     # catalog_search_current exposes them only once rotate_manifest runs.
@@ -1580,7 +1530,8 @@ def sync(
     # Insert manifest (only if all blobs uploaded successfully AND registry
     # is at least VALIDATING — see P3.6b above).
     print(f"\nUpdating manifest (version {version})...")
-    insert_manifest(client, local)
+    if catalog_changed:
+        insert_manifest(client, local)
     print("  Done")
 
     # P3.6b Stage 2: bring catalog_releases to ACTIVE AFTER manifest flip.
@@ -1610,6 +1561,8 @@ def sync(
         if len(errors) > 10:
             print(f"  ... and {len(errors) - 10} more")
 
+    if not catalog_changed:
+        return {"status": "up_to_date", "version": version}
     return {
         "status": "synced",
         "version": version,

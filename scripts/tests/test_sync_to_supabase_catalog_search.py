@@ -383,3 +383,17 @@ def test_comparison_migration_matches_bootstrap_search_owner():
     assert "c.quality_score_status = 'scored'" in migration
     assert "c.quality_assessment_status = 'complete'" in migration
     assert "THEN c.quality_score_v4_100 END DESC NULLS LAST" in migration
+
+
+def test_republish_skips_identical_rows_and_repairs_only_changed_or_missing(tmp_path):
+    db_path = tmp_path / 'core.db'
+    _write_db(db_path, 3)
+    expected = sync.catalog_search_rows(str(db_path), 'v1')
+    client = _FakeClient([], rows=expected[:2], page_cap=1)
+    client.rows[('v1', '100001')]['product_name'] = 'stale'
+    sync.publish_catalog_search(client, db_path=str(db_path), catalog_version='v1')
+    assert sum(call[2] for call in client.calls if call[0] == 'upsert') == 2
+    client.calls.clear()
+    sync.publish_catalog_search(client, db_path=str(db_path), catalog_version='v1')
+    assert not any(call[0] == 'upsert' for call in client.calls)
+    assert client.rows == {(r['catalog_version'], r['dsld_id']): r for r in expected}

@@ -305,6 +305,8 @@ def test_sync_skips_bucket_capacity_check_when_catalog_is_already_current(
         "_promote_registry_release",
         lambda *_args, **_kwargs: None,
     )
+    monkeypatch.setattr(supabase_client, "list_storage_paths", lambda *a, **kw:
+                        [{"name": "pharmaguide_core.db"}] if kw.get("offset", 0) == 0 else [])
     catalog_search_versions = []
     monkeypatch.setattr(
         sync_to_supabase,
@@ -312,6 +314,15 @@ def test_sync_skips_bucket_capacity_check_when_catalog_is_already_current(
         lambda _client, **kwargs: catalog_search_versions.append(kwargs["version"]),
     )
 
+    monkeypatch.setattr(sync_to_supabase, "discover_existing_remote_blob_paths",
+                        lambda *a, **kw: set())
+    monkeypatch.setattr(sync_to_supabase, "upload_detail_blobs",
+                        lambda **kw: (0, [], 0, 3))
+    def download(_c, _b, path):
+        if path.endswith("/detail_index.json"):
+            return (tmp_path / "detail_index.json").read_bytes()
+        raise FileNotFoundError(path)
+    monkeypatch.setattr(supabase_client, "download_file", download)
     result = sync_to_supabase.sync(str(tmp_path))
 
     assert result == {
@@ -365,48 +376,6 @@ def test_sync_bounds_mutable_release_cache_but_keeps_hashed_blobs_immutable(
     hashed = {path: opts for path, opts in uploads.items() if path.startswith("shared/details/sha256/")}
     assert len(hashed) == 2
     assert all(opts["cache_control"] == supabase_client.CACHE_CONTROL_IMMUTABLE for opts in hashed.values())
-
-
-def test_detail_index_blob_paths_extracts_storage_paths():
-    """detail_index_blob_paths returns the content-addressed blob paths."""
-    from sync_to_supabase import detail_index_blob_paths
-
-    assert detail_index_blob_paths({
-        "1000": {"storage_path": "shared/details/sha256/aa/aa.json"},
-        "1001": {"storage_path": "shared/details/sha256/bb/bb.json"},
-    }) == {
-        "shared/details/sha256/aa/aa.json",
-        "shared/details/sha256/bb/bb.json",
-    }
-
-
-def test_load_remote_detail_index_blob_paths_downloads_and_parses_bytes():
-    """Active remote detail_index.json can be used as the release blob reuse set."""
-    from sync_to_supabase import load_remote_detail_index_blob_paths
-
-    client = object()
-    calls = []
-    payload = json.dumps({
-        "1000": {"storage_path": "shared/details/sha256/aa/aa.json"},
-        "1001": {"storage_path": "shared/details/sha256/bb/bb.json"},
-    }).encode("utf-8")
-
-    def fake_download(_client, bucket, remote_path):
-        calls.append((_client, bucket, remote_path))
-        return payload
-
-    paths = load_remote_detail_index_blob_paths(
-        client=client,
-        bucket="pharmaguide",
-        db_version="2026.06.15.145720",
-        download_fn=fake_download,
-    )
-
-    assert paths == {
-        "shared/details/sha256/aa/aa.json",
-        "shared/details/sha256/bb/bb.json",
-    }
-    assert calls == [(client, "pharmaguide", "v2026.06.15.145720/detail_index.json")]
 
 
 def test_collect_detail_blobs():
@@ -976,7 +945,7 @@ def test_discover_existing_remote_paths_for_directory_recovers_from_transient_js
     )
     assert existing == expected
     # 1 failed attempt + 1 successful = 2 calls (no extra pages since
-    # len(page) < page_size triggered the break)
+    # all requested paths have been found)
     assert len(call_log) == 2
 
 
@@ -1055,6 +1024,7 @@ def test_product_images_reuse_all_remote_pages_and_upload_changes(tmp_path, exis
 
     result = upload_product_images(
         object(), str(tmp_path), upload, listing, max_workers=1, retries=0,
+        download_fn=lambda *_args: b"x" * 2048,
     )
     assert sorted(uploaded) == ["changed.webp", "new.webp"]
     assert result == {"uploaded": 2, "skipped": existing_count, "failed": 0}
@@ -1097,3 +1067,96 @@ def test_sync_elapsed_time_includes_images_and_publication(tmp_path, monkeypatch
     assert result["time_seconds"] == clock["now"] - 100.0
     if not blob_failed:
         assert f"Total time:  {result['time_seconds']:.1f}s" in capsys.readouterr().out
+
+
+def test_images_do_not_confuse_equal_sizes_with_equal_bytes(tmp_path):
+    from sync_to_supabase import upload_product_images
+    (tmp_path / 'image.webp').write_bytes(b'new')
+    (tmp_path / 'product_image_index.json').write_text(json.dumps({
+        '1': {'filename': 'image.webp', 'size_bytes': 3}}))
+    uploaded = []
+    result = upload_product_images(
+        object(), str(tmp_path), lambda *a, **kw: uploaded.append(a[2]),
+        lambda *a, **kw: [{'name': 'image.webp', 'metadata': {'size': 3}}]
+        if kw['offset'] == 0 else [], max_workers=1, retries=0)
+    assert uploaded == ['image.webp']
+    assert result['uploaded'] == 1
+
+
+def test_images_missing_local_file_is_failure(tmp_path):
+    from sync_to_supabase import upload_product_images
+    (tmp_path / 'product_image_index.json').write_text(json.dumps({
+        '1': {'filename': 'missing.webp', 'size_bytes': 3}}))
+    result = upload_product_images(object(), str(tmp_path), lambda *a, **kw: None,
+                                   lambda *a, **kw: [], max_workers=1, retries=0)
+    assert result['failed'] == 1
+
+
+@pytest.mark.parametrize('same_catalog,image_failed,core_missing', [
+    (False, True, False), (True, True, False), (True, False, False), (True, False, True)])
+def test_sync_repairs_independent_phases_before_activation(tmp_path, monkeypatch, same_catalog, image_failed, core_missing):
+    import supabase_client
+    import sync_to_supabase as syncer
+    _make_build_output(str(tmp_path), product_count=2)
+    local = syncer.load_local_manifest(str(tmp_path))
+    detail_index = syncer.load_detail_index(str(tmp_path))
+    blob_paths = [entry['storage_path'] for entry in detail_index.values()]
+    writes, events = [], []
+    monkeypatch.setattr(supabase_client, 'list_storage_paths', lambda *a, **kw:
+                        [] if core_missing else [{'name': 'pharmaguide_core.db'}])
+    monkeypatch.setattr(supabase_client, 'get_supabase_client', lambda: object())
+    remote = dict(local) if same_catalog else {**local, 'db_version': 'older'}
+    monkeypatch.setattr(supabase_client, 'fetch_current_manifest', lambda _c: remote)
+    monkeypatch.setattr(supabase_client, 'download_file', lambda _c, _b, path:
+                        (tmp_path / path.split('/', 1)[1]).read_bytes())
+    monkeypatch.setattr(supabase_client, 'upload_file', lambda _c, _b, path, *_a, **_k: writes.append(path))
+    monkeypatch.setattr(supabase_client, 'insert_manifest', lambda *_a: events.append('manifest'))
+    monkeypatch.setattr(syncer, 'validate_bucket_upload_capacity', lambda *_a, **_k: None)
+    def discover(*_a, **_kw):
+        events.append('discover')
+        return {blob_paths[0]}  # One existing retry blob, one missing object.
+    monkeypatch.setattr(syncer, 'discover_existing_remote_blob_paths', discover)
+    def images(**_kw):
+        events.append('images')
+        return {'uploaded': 0, 'skipped': 0, 'failed': int(image_failed)}
+    monkeypatch.setattr(syncer, 'upload_product_images', images)
+    monkeypatch.setattr(syncer, '_publish_catalog_search_step', lambda *_a, **_k: events.append('search'))
+    monkeypatch.setattr(syncer, '_ensure_registry_validating', lambda *_a, **_k: events.append('validating'))
+    monkeypatch.setattr(syncer, '_promote_registry_release', lambda *_a, **_k: events.append('active'))
+    result = syncer.sync(str(tmp_path), max_workers=1, retry_count=0)
+    assert blob_paths[0] not in writes
+    assert blob_paths[1] in writes
+    assert not any('/share_index/' in path or path.endswith('/detail_index.json') for path in writes)
+    assert events[:2] == ['discover', 'images']
+    if image_failed:
+        assert result['status'] == 'partial_failure'
+        assert not any(step in events for step in ['search', 'validating', 'manifest', 'active'])
+    else:
+        assert result['status'] == 'up_to_date'
+        assert events == ['discover', 'images', 'search', 'validating', 'active']
+        assert any(path.endswith('.db') for path in writes) == core_missing
+
+
+def test_detail_upload_queue_is_bounded(monkeypatch):
+    import sync_to_supabase as syncer
+    from concurrent.futures import Future
+    state = {'submitted': 0, 'consumed': 0}
+    class Result(Future):
+        def result(self, *args, **kwargs):
+            state['consumed'] += 1
+            return super().result(*args, **kwargs)
+    class Pool:
+        def __init__(self, max_workers): pass
+        def __enter__(self): return self
+        def __exit__(self, *args): pass
+        def submit(self, fn, *args):
+            state['submitted'] += 1
+            assert state['submitted'] - state['consumed'] <= 8
+            future = Result()
+            future.set_result(fn(*args))
+            return future
+    monkeypatch.setattr(syncer, 'ThreadPoolExecutor', Pool)
+    uploads = [{'local_path': str(i), 'remote_path': str(i), 'blob_sha256': str(i)} for i in range(100)]
+    _, errors, uploaded, skipped = syncer.upload_detail_blobs(
+        None, 'bucket', uploads, lambda *a, **kw: None, 4, 0, 0)
+    assert (errors, uploaded, skipped) == ([], 100, 0)
