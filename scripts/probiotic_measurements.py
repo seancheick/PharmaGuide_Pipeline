@@ -425,14 +425,14 @@ def probiotic_label_identity_summary(product: Mapping) -> dict:
             # actual source owner. A dangling reference cannot bypass sources.
             for owner in source_rows or ([] if owners else [None]):
                 for key, state, exact in identities(name, owner):
-                    # A heading can declare several organisms through forms.
-                    # Join the projected name to its source-owned member only;
-                    # the complete member set still owns the denominator above.
-                    if owner is not None and not (
-                        clinical_strain_identity_key(state.get("strain")) == clinical_strain_identity_key(name)
-                        or (state.get("clinical_id") in registry
-                            and clinical_strain_identity_matches(name, registry[state["clinical_id"]]))
-                    ):
+                    # A heading denotes its full source-owned member set.
+                    # A projected member name denotes only that member; the
+                    # complete set still owns the denominator above.
+                    if (owner is not None
+                            and clinical_strain_identity_key(owner.get("name")) != clinical_strain_identity_key(name)
+                            and clinical_strain_identity_key(state.get("strain")) != clinical_strain_identity_key(name)
+                            and not (state.get("clinical_id") in registry
+                                     and clinical_strain_identity_matches(name, registry[state["clinical_id"]]))):
                         continue
                     keys.add(key)
                     blend_keys.add(key)
