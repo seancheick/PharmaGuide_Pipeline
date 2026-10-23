@@ -6,8 +6,8 @@
     "scope": "Only fires for an exact (dsld_id, raw_ingredient_text) tuple match. Case-sensitive on raw_ingredient_text by design — manufacturers may print 'Insulin' in one product and 'INSULIN' in another, and each needs independent reviewer sign-off because the surrounding context (sibling ingredients, product category, regulatory status) must be re-evaluated per occurrence.",
     "review_policy": "Every product entry is keyed by dsld_id and must carry: brand, product_name (for human-readable audit trail), raw_ingredient_text (the source row being corrected), corrected_ingredient_text (the text the cleaner should see, unchanged for unit-only corrections), correction_fields, evidence (free-text rationale with regulatory citations), sources (authoritative URLs — FDA, NIH, DailyMed, etc.), reviewer, and review_date (ISO 8601 YYYY-MM-DD). A verified cross-row defect may add additional_row_corrections, which inherit the product-level evidence, sources, reviewer, review_date, scope, and provenance tag. Quantity changes require exact raw and corrected value/unit pairs and must be supported by the official manufacturer or label image. Restoring a quantity absent from a form row additionally requires raw_quantity_missing=true, a positive corrected value/unit, and exact same-record source text that states the dose; the applier refuses to overwrite any existing quantity representation. A reviewed Daily Value correction requires an exact raw_daily_value and corrected_daily_value from the same official label; it rewrites only matching source percentages, never derives a percentage or changes a different value. A reviewed unresolved_unit scoring_disposition preserves exact raw_quantity_value/raw_quantity_unit, makes no inferred unit correction, and marks dose and upper-limit assessment unresolved until independent exact-label evidence resolves the conflict. It applies only when the raw name, value and unit all match.",
     "unmatched_drug_tokens_policy": "When a row's raw_ingredient_text matches a known regulated-drug name (e.g., 'Insulin', 'Acetaminophen', 'Ibuprofen') and there is NO matching override for the product, the row must NOT be silently mapped. The cleaner emits the row to a quarantine path with reason='requires_human_review_drug_token_in_supplement' and excludes the product from scoring. New occurrences enter the reviewer pipeline via the same schema.",
-    "last_updated": "2026-10-15",
-    "total_entries": 73,
+    "last_updated": "2026-10-22",
+    "total_entries": 78,
     "loaded_by": "scripts/enhanced_normalizer.py via _load_label_corrections (cached on first product)"
   },
   "corrections": {
@@ -625,7 +625,36 @@
       "reviewer": "PharmaGuide data integrity review (Sean Cheick, owner of record)",
       "review_date": "2026-08-19",
       "scope": "dsld_id_only",
-      "provenance_tag": "official_label_unit_correction"
+      "provenance_tag": "official_label_unit_correction",
+      "additional_row_corrections": [
+        {
+          "brand": "Nature's Way",
+          "product_name": "Alive! Once Daily Men's 50+",
+          "raw_ingredient_text": "Iodine",
+          "corrected_ingredient_text": "Iodine",
+          "raw_quantity_value": 100,
+          "raw_quantity_unit": "mg",
+          "corrected_quantity_value": 150,
+          "corrected_quantity_unit": "mcg",
+          "correction_fields": [
+            "quantity.value",
+            "quantity.unit",
+            "quantity.dailyValueTargetGroup.percent"
+          ],
+          "evidence": "The exact historical NIH DSLD label PDF prints Iodine 150 mcg; the source JSON transcribes 100 mg. Original Supplement Facts panel visually checked on 2026-10-22. Correct only this exact product, row, amount and unit; do not infer units from Daily Value. The same label prints 100% Daily Value for iodine; correct the exact mistranscribed 10% to the printed 100%, without calculating a replacement.",
+          "sources": [
+            "https://api.ods.od.nih.gov/dsld/v9/label/46729",
+            "https://api.ods.od.nih.gov/dsld/s3/pdf/46729.pdf"
+          ],
+          "reviewer": "Codex original-label data integrity review",
+          "review_date": "2026-10-22",
+          "scope": "dsld_id_only",
+          "provenance_tag": "official_label_quantity_correction",
+          "raw_daily_value": 10,
+          "corrected_daily_value": 100,
+          "raw_daily_value_target_group": "Adults and children 4 or more years of age"
+        }
+      ]
     },
     "69455": {
       "brand": "GNC Pro Performance AMP",
@@ -1680,6 +1709,142 @@
       "review_date": "2026-10-15",
       "scope": "dsld_id_only",
       "provenance_tag": "official_label_unit_correction"
+    },
+    "77801": {
+      "brand": "Nature's Way",
+      "product_name": "Alive! Max3 Daily",
+      "raw_ingredient_text": "Iodine",
+      "corrected_ingredient_text": "Iodine",
+      "raw_quantity_value": 153,
+      "raw_quantity_unit": "mg",
+      "corrected_quantity_value": 153,
+      "corrected_quantity_unit": "mcg",
+      "correction_fields": [
+        "quantity.value",
+        "quantity.unit"
+      ],
+      "evidence": "The exact historical NIH DSLD label PDF prints Iodine 153 mcg; the source JSON transcribes 153 mg. Original Supplement Facts panel visually checked on 2026-10-22. Correct only this exact product, row, amount and unit; do not infer units from Daily Value.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/77801",
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/77801.pdf"
+      ],
+      "reviewer": "Codex original-label data integrity review",
+      "review_date": "2026-10-22",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_quantity_correction"
+    },
+    "78327": {
+      "brand": "GNC",
+      "product_name": "Ultra Mega Green Active Berry",
+      "raw_ingredient_text": "Iodine",
+      "corrected_ingredient_text": "Iodine",
+      "raw_quantity_value": 18,
+      "raw_quantity_unit": "mg",
+      "corrected_quantity_value": 150,
+      "corrected_quantity_unit": "mcg",
+      "correction_fields": [
+        "quantity.value",
+        "quantity.unit"
+      ],
+      "evidence": "The exact historical NIH DSLD label PDF prints Iodine 150 mcg; the source JSON transcribes 18 mg. Original Supplement Facts panel visually checked on 2026-10-22. Correct only this exact product, row, amount and unit; do not infer units from Daily Value.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/78327",
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/78327.pdf"
+      ],
+      "reviewer": "Codex original-label data integrity review",
+      "review_date": "2026-10-22",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_quantity_correction"
+    },
+    "33660": {
+      "brand": "GNC",
+      "product_name": "Mega Men Energy & Metabolism Vitapak",
+      "raw_ingredient_text": "Selenium",
+      "corrected_ingredient_text": "Selenium",
+      "raw_quantity_value": 25,
+      "raw_quantity_unit": "mg",
+      "corrected_quantity_value": 200,
+      "corrected_quantity_unit": "mcg",
+      "correction_fields": [
+        "quantity.value",
+        "quantity.unit"
+      ],
+      "evidence": "The exact historical NIH DSLD label PDF prints Selenium 200 mcg; the source JSON transcribes 25 mg. Original Supplement Facts panel visually checked on 2026-10-22. Correct only this exact product, row, amount and unit; do not infer units from Daily Value.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/33660",
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/33660.pdf"
+      ],
+      "reviewer": "Codex original-label data integrity review",
+      "review_date": "2026-10-22",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_quantity_correction"
+    },
+    "27807": {
+      "brand": "GNC Women’s Ultra Mega",
+      "product_name": "Maximum Nutrition Milk Chocolate",
+      "raw_ingredient_text": "Molybdenum",
+      "corrected_ingredient_text": "Molybdenum",
+      "raw_quantity_unit": "mg",
+      "corrected_quantity_unit": null,
+      "correction_fields": [
+        "scoring_disposition"
+      ],
+      "evidence": "The exact historical NIH PDF prints Molybdenum 75 mg at 100% Daily Value. The printed amount and Daily Value conflict; the label does not establish an intended microgram dose. Preserve the printed amount and mark exposure unresolved through the existing reviewed-label-unit-conflict contract. No extrapolation from sibling products.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/27807",
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/27807.pdf"
+      ],
+      "reviewer": "Codex original-label data integrity review",
+      "review_date": "2026-10-22",
+      "scope": "dsld_id_only",
+      "provenance_tag": "reviewed_label_unit_conflict",
+      "raw_quantity_value": 75,
+      "scoring_disposition": "unresolved_unit",
+      "additional_row_corrections": [
+        {
+          "brand": "GNC Women’s Ultra Mega",
+          "product_name": "Maximum Nutrition Milk Chocolate",
+          "raw_ingredient_text": "Zeaxanthin",
+          "corrected_ingredient_text": "Zeaxanthin",
+          "raw_quantity_unit": "mg",
+          "corrected_quantity_unit": "mcg",
+          "correction_fields": [
+            "quantity.unit"
+          ],
+          "evidence": "The exact historical NIH PDF prints Zeaxanthin 190 mcg; the source JSON transcribes 190 mg. Original Supplement Facts panel visually checked on 2026-10-22. Correct only this exact product, row, amount and unit.",
+          "sources": [
+            "https://api.ods.od.nih.gov/dsld/v9/label/27807",
+            "https://api.ods.od.nih.gov/dsld/s3/pdf/27807.pdf"
+          ],
+          "reviewer": "Codex original-label data integrity review",
+          "review_date": "2026-10-22",
+          "scope": "dsld_id_only",
+          "provenance_tag": "official_label_unit_correction",
+          "raw_quantity_value": 190
+        }
+      ]
+    },
+    "802": {
+      "brand": "GNC Women’s Ultra Mega",
+      "product_name": "Maximum Nutrition Vanilla Creme",
+      "raw_ingredient_text": "Molybdenum",
+      "corrected_ingredient_text": "Molybdenum",
+      "raw_quantity_unit": "mg",
+      "corrected_quantity_unit": null,
+      "correction_fields": [
+        "scoring_disposition"
+      ],
+      "evidence": "The exact historical NIH PDF prints Molybdenum 75 mg at 100% Daily Value. The printed amount and Daily Value conflict; the label does not establish an intended microgram dose. Preserve the printed amount and mark exposure unresolved through the existing reviewed-label-unit-conflict contract. No extrapolation from sibling products.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/802",
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/802.pdf"
+      ],
+      "reviewer": "Codex original-label data integrity review",
+      "review_date": "2026-10-22",
+      "scope": "dsld_id_only",
+      "provenance_tag": "reviewed_label_unit_conflict",
+      "raw_quantity_value": 75,
+      "scoring_disposition": "unresolved_unit"
     }
   }
 }

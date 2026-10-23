@@ -1113,3 +1113,45 @@ def test_reviewed_daily_value_correction_matches_only_the_exact_source_percent(n
     if dsld_id == 312980 and raw_dv == 5:
         assert active["source_correction"]["original_daily_value"] == 5
         assert active["source_correction"]["corrected_daily_value"] == 57
+
+
+@pytest.mark.parametrize("pid,name,value,expected", [
+    (77801, "Iodine", 153, 153),
+    (78327, "Iodine", 18, 150),
+    (33660, "Selenium", 25, 200),
+    (46729, "Iodine", 100, 150),
+])
+def test_zero_dose_audit_official_label_quantities(normalizer, pid, name, value, expected):
+    raw = _make_raw_product(pid, [])
+    raw["ingredientRows"] = [{**_make_ingredient_row(name, category="mineral"),
+        "ingredientGroup": name, "quantity": [{"quantity": value, "unit": "mg"}],
+        "nestedRows": [], "forms": []}]
+    active = normalizer.normalize_product(raw)["activeIngredients"][0]
+    assert (active["quantity"], active["unit"]) == (expected, "mcg")
+    assert active["source_correction"]["original_quantity_unit"] == "mg"
+
+
+@pytest.mark.parametrize("pid", [27807, 802])
+def test_zero_dose_audit_conflicting_label_is_unresolved_not_a_guessed_dose(normalizer, pid):
+    raw = _make_raw_product(pid, [])
+    raw["ingredientRows"] = [{**_make_ingredient_row("Molybdenum", category="mineral"),
+        "ingredientGroup": "Molybdenum", "quantity": [{"quantity": 75, "unit": "mg"}],
+        "nestedRows": [], "forms": []}]
+    active = normalizer.normalize_product(raw)["activeIngredients"][0]
+    assert (active["quantity"], active["unit"]) == (75, "mg")
+    assert active["dose_data_quality"]["status"] == "unresolved_unit"
+
+
+def test_zero_dose_audit_companion_source_errors_are_corrected(normalizer):
+    raw = _make_raw_product(27807, [])
+    raw["ingredientRows"] = [{**_make_ingredient_row("Zeaxanthin"),
+        "quantity": [{"quantity": 190, "unit": "mg"}], "nestedRows": [], "forms": []}]
+    active = normalizer.normalize_product(raw)["activeIngredients"][0]
+    assert (active["quantity"], active["unit"]) == (190, "mcg")
+    raw = _make_raw_product(46729, [])
+    raw["ingredientRows"] = [{**_make_ingredient_row("Iodine", category="mineral"),
+        "quantity": [{"quantity": 100, "unit": "mg", "dailyValueTargetGroup": [
+            {"name": "Adults and children 4 or more years of age", "percent": 10}]}],
+        "nestedRows": [], "forms": []}]
+    active = normalizer.normalize_product(raw)["activeIngredients"][0]
+    assert active["dailyValue"] == 100
