@@ -2943,3 +2943,14 @@ unmapped, unknown absorption retained rather than transferred from d-biotin. B34
 unchanged; explicit absorption value=null satisfies it. No old valid safety assertion was
 weakened. All216 combined failure-class tests pass; independent review accepts the final
 corrections. A new exact-candidate whole-fast and local checkpoint is required before merge.
+
+Final qualification: runtime40ddaac416f4a1e6e8ecb628f5dfd0476423828f passed whole-fast
+CI40037728786 (all four groups;23,601passed/192declared skips;all skip guards green).
+Final local546passed/24declared optional-service skips,150.61s;guard green. Final eight-label
+comparison adds soy204040 and barley312995 controls: all scores/statuses, quantities and
+interaction hits unchanged; only the intended identity/form recognition and299744 form-context
+provenance differ. Fresh independent review accepts the final candidate. Earlier failures above
+are historical, not unresolved. Source corrections are implemented and bounded-verified;
+remaining preparation/benchmark assessments, clinical approvals, rebuilt corpus and Flutter
+acceptance stay open. No pipeline, export, promotion or release performed. Main integration
+is authorized; final commit/remote containment receipt is retained in the current handoff.
