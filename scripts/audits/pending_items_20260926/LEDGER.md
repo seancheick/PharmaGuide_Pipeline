@@ -27,7 +27,10 @@ reads; safe retries and fewer writes do not imply every unchanged release is fas
 
 Fail-first: bundle failure falsely completed, skipped Flutter wrote references, quoted app path broke JSON read,
 image size-only identity/missing image, search unconditional upserts, capped detail pagination and receipt cases.
-Final runtime ebdb61de: 229 combined owner/consumer tests passed in20.34s; final candidate CI pending.
+Final runtime ebdb61de:229 combined owner/consumer tests passed in20.34s plus105 downstream/deadcode checks.
+Exact candidate63ac45522 whole-fast CI39972973617 SUCCESS:23,369passed/192declaredskips; all4groups
+and skip guards green. Final independent reviews clear; git diff --check passes. Infrastructure-only batch
+used named owner/consumer and CI checks; no corpus-dependent behavior changed, so no broad local/release rung.
 Independent review caught real staged-manifest stamping mismatch in initial interaction reuse; corrected separate
 source/staged seals and real build/validate/stage/next-day-restage regression independently passed. Final review clear. All Clean/Enrich/Score code/reference fingerprints match baseline; no corpus
 regeneration indicated. Current catalog and private submissions untouched. No live release/upload/app mutation.
