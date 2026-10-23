@@ -32,7 +32,7 @@
     "statistics": {
       "total_parents": 655,
       "total_forms": 1474,
-      "total_form_aliases": 12285,
+      "total_form_aliases": 12283,
       "parents_with_parent_aliases": 150,
       "parents_with_contains_aliases": 0,
       "parents_with_pattern_aliases": 0
@@ -53,7 +53,7 @@
       "vitamins": 25
     },
     "schema_version": "5.6.1",
-    "last_updated": "2026-10-22",
+    "last_updated": "2026-10-23",
     "pipeline_integration": "Used by enrichment to assign form quality (bio_score) to matched ingredient forms. Match ingredient name against forms aliases (case-insensitive).",
     "matching_notes": [
       "Match ingredient name + forms text against aliases array (case-insensitive)",
@@ -62627,8 +62627,6 @@
           "cynatine flx",
           "cynatine",
           "cynatine keratin",
-          "lustriva",
-          "lustriva keratin",
           "solubilized keratin",
           "keratin peptides, hydrolyzed",
           "keratin peptides hydrolyzed"

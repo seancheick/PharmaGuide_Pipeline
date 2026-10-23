@@ -1288,3 +1288,14 @@ def test_structured_group_may_refine_to_a_registered_child_of_the_label_identity
     )
     assert decision.disposition == "repaired"
     assert decision.canonical_id == "soy_isoflavones"
+
+
+def test_lustriva_formula_cannot_resolve_as_keratin():
+    """DSLD299744 names arginine silicate and magnesium biotinate, not keratin."""
+    import json
+    from pathlib import Path
+    iqm = json.loads((Path(__file__).resolve().parents[1] / 'data/ingredient_quality_map.json').read_text())
+    registry = build_canonical_identity_registry({'ingredient_quality_map': iqm})
+    for name in ('lustriva', 'lustriva keratin'):
+        assert registry.resolve_unambiguous(name) != 'keratin'
+    assert registry.resolve_unambiguous('keratin') == 'keratin'
