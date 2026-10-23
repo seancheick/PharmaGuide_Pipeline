@@ -1,5 +1,10 @@
 # PharmaGuide product roadmap
 
+October23 release performance batch is implemented and independently reviewed on `codex/release-performance`: bounded upload queues,
+content-bound interaction reuse, and release failure protections; no clinical/public contract change or release.
+229 focused checks pass; component scaling benchmarks and pending exact-candidate CI are tracked in the existing pending-items LEDGER.
+This does not complete catalog/app release acceptance.
+
 Written October 1, 2026 from the business strategists' review (pipeline, app and market
 recommendations), checked against the three repositories and the live market. Sean approved the
 order below on October 1.

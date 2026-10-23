@@ -316,6 +316,14 @@ The downstream steps are:
 Release progress is unbuffered when saved to a log. Sync elapsed time includes
 images, search-index updates, registry work and activation, not just blob upload.
 
+Interaction rebuild reuse is content-bound to its build dependencies and staged outputs;
+missing or invalid receipts rebuild rather than relying on timestamps. Existing
+clinical live checks still run. `--skip-flutter` suppresses reference-data writes
+but retains the read-only parity gate. A failed local bundle commit exits nonzero
+and reports that cloud publication may already be live; review and commit the
+staged app changes before pushing. It does not close submission receipts or
+report full completion. No cleanup is attempted on that path.
+
 Before Supabase, release runs the cleaner/enrichment/clinical/interaction/
 freshness/export/RDA/scoring-snapshot contracts. A failure there stops cloud
 and app publication.

@@ -1,3 +1,37 @@
+## Current execution — release performance and accuracy, October 23 (Codex)
+
+User approved implementation only: no release, main push, clinical-policy or public-contract change.
+Baseline main99795803b; isolated codex/release-performance worktree. Infrastructure correctness class.
+Owner: promote_release_artifacts::catalog_input_binding; audits/run_verification_gate::_input_binding;
+release_interaction_artifact::interaction_build_inputs; sync_to_supabase::sync/upload_product_images/publish_catalog_search;
+release_full.sh orchestration. Evidence: matrix/glossary/caller census, fail-first regressions and existing release ADR.
+Will NOT create: a second orchestrator/scorer, new clinical policy, public field or parallel freshness registry.
+
+Implemented: bounded upload futures, independent artifact reconciliation, content-verified mutable image skips,
+missing/image-failure activation protection, capped-page discovery, changed-row-only search writes,
+content-bound interaction build reuse/restaging, explicit bundle-commit failure, skip-flutter write protection,
+quoted custom app path handling, pass-local hash deduplication and binding timing diagnostics.
+No clinical/live gate removed; four heavy source gates already reused receipts before this batch.
+Catalog source checks before/after output hashing and before publication remain independent content reads.
+
+Measurements (offline, not release throughput): real enriched 96 batches/7,439,768,511 bytes hash 4.23s baseline
+versus4.25s candidate, so no speed claim; peak traced Python allocation2.25MB→1.53MB. Synthetic100k overlap
+binding0.326s→0.274s with identical digest and half the content reads. Mock100k detail-upload queue allocation
+172.88MiB→1.61MiB, elapsed3.04s→2.98s; no network latency, SDK memory or workload setup included.
+Search100k unchanged writes200→0;1%changed200→2;10%retry200→20. Images100k require100k bounded GETs
+to prove bytes (old unsafe size check0); one equal-size correction now uploads1instead of silently skipping.
+This is a correctness cost, not a speed gain.25k/50k/100k changed/unchanged/retry and2x/10x history probes retained under ignored
+scripts/reports/release_performance_20261023 with reproducible offline runners. Those are component
+benchmarks, not a100k clinical qualification or end-to-end release promise. Remote content verification adds
+reads; safe retries and fewer writes do not imply every unchanged release is faster.
+
+Fail-first: bundle failure falsely completed, skipped Flutter wrote references, quoted app path broke JSON read,
+image size-only identity/missing image, search unconditional upserts, capped detail pagination and receipt cases.
+Final runtime ebdb61de: 229 combined owner/consumer tests passed in20.34s; final candidate CI pending.
+Independent review caught real staged-manifest stamping mismatch in initial interaction reuse; corrected separate
+source/staged seals and real build/validate/stage/next-day-restage regression independently passed. Final review clear. All Clean/Enrich/Score code/reference fingerprints match baseline; no corpus
+regeneration indicated. Current catalog and private submissions untouched. No live release/upload/app mutation.
+
 ## Canary refresh after PR #209 — October 20 (Claude, claude/canary-refreeze-b2)
 
 `freeze_contract_snapshots.py --check --raw-root` on main ffc58287f: 4 of 33 canaries drift, all
