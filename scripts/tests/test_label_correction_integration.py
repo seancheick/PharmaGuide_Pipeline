@@ -602,24 +602,19 @@ def test_product_scoped_correction_removes_ravage_phantom_vitamin_b6(normalizer)
     }]
 
     normalized = normalizer.normalize_product(raw_product)
-    owner = next(
-        row
-        for row in normalized["activeIngredients"]
-        if row.get("name") == "Anabolic Muscle Primer"
-    )
-
-    assert owner["canonical_id"] is None
-    assert owner["cleaner_row_role"] == "blend_header_total"
-    assert owner["score_eligible_by_cleaner"] is False
-    assert owner["score_exclusion_reason"] == "blend_header_total"
-    assert "Pyridoxine Hydrochloride" not in {
-        form.get("name") for form in owner["forms"]
+    # The reviewed header is display context; its printed members now pass
+    # through the existing exact-name expansion without borrowing its 5.3 g.
+    header = next(row for row in normalized["display_ingredients"]
+                  if row.get("display_name") == "Anabolic Muscle Primer")
+    assert header["score_included"] is False
+    assert "5.3" in header["exact_dose_text"]
+    members = normalized["activeIngredients"]
+    assert {row.get("canonical_id") for row in members} >= {
+        "tmg_betaine", "hmb", "yohimbe", "saw_palmetto", "wild_yam",
     }
-    assert {form.get("name") for form in owner["forms"]} >= {
-        "Betaine Anhydrous",
-        "Micronized L-Leucine",
-        "HMB Powder",
-    }
+    assert all(not row.get("quantity") for row in members)
+    assert all(row.get("canonical_id") != "vitamin_b6" for row in members)
+    assert not any("pyridoxine" in str(row).lower() for row in members)
 
 
 def test_product_scoped_correction_restores_statement_backed_form_dose(normalizer):
@@ -1192,3 +1187,18 @@ def test_additional_magnesium_correction_preserves_existing_niacin_correction(no
     rows = {r["name"]: r for r in normalizer.normalize_product(raw)["activeIngredients"]}
     assert (rows["Niacin"]["quantity"], rows["Niacin"]["unit"]) == (37, "mg")
     assert (rows["Magnesium"]["quantity"], rows["Magnesium"]["unit"]) == (125, "mg")
+
+
+def test_solgar_cystine_is_not_the_misattributed_alpha_glucan(normalizer):
+    raw = _make_raw_product(213846, [])
+    raw["fullName"] = "L-Cystine 500 mg"
+    raw["ingredientRows"] = [{"name": "Alpha-Glucan Oligosaccharide",
+        "category": "complex carbohydrate", "ingredientGroup": "Alpha Glucans",
+        "uniiCode": "S95658MI3W", "notes": "L-Cystine Note: free form ",
+        "quantity": [{"quantity": 500, "unit": "mg"}], "forms": [], "nestedRows": []}]
+    row = normalizer.normalize_product(raw)["activeIngredients"][0]
+    assert row["name"] == "L-Cystine"
+    assert row["quantity"] == 500 and row["unit"] == "mg"
+    assert row["uniiCode"] is None
+    assert row["canonical_id"] not in {"l_cysteine", "NHA_ALPHA_GLUCAN_OLIGOSACCHARIDE"}
+    assert row["source_correction"]["provenance_tag"] == "official_source_identity_correction"

@@ -7,7 +7,7 @@
     "review_policy": "Every product entry is keyed by dsld_id and must carry: brand, product_name (for human-readable audit trail), raw_ingredient_text (the source row being corrected), corrected_ingredient_text (the text the cleaner should see, unchanged for unit-only corrections), correction_fields, evidence (free-text rationale with regulatory citations), sources (authoritative URLs — FDA, NIH, DailyMed, etc.), reviewer, and review_date (ISO 8601 YYYY-MM-DD). A verified cross-row defect may add additional_row_corrections, which inherit the product-level evidence, sources, reviewer, review_date, scope, and provenance tag. Quantity changes require exact raw and corrected value/unit pairs and must be supported by the official manufacturer or label image. Restoring a quantity absent from a form row additionally requires raw_quantity_missing=true, a positive corrected value/unit, and exact same-record source text that states the dose; the applier refuses to overwrite any existing quantity representation. A reviewed Daily Value correction requires an exact raw_daily_value and corrected_daily_value from the same official label; it rewrites only matching source percentages, never derives a percentage or changes a different value. A reviewed unresolved_unit scoring_disposition preserves exact raw_quantity_value/raw_quantity_unit, makes no inferred unit correction, and marks dose and upper-limit assessment unresolved until independent exact-label evidence resolves the conflict. It applies only when the raw name, value and unit all match.",
     "unmatched_drug_tokens_policy": "When a row's raw_ingredient_text matches a known regulated-drug name (e.g., 'Insulin', 'Acetaminophen', 'Ibuprofen') and there is NO matching override for the product, the row must NOT be silently mapped. The cleaner emits the row to a quarantine path with reason='requires_human_review_drug_token_in_supplement' and excludes the product from scoring. New occurrences enter the reviewer pipeline via the same schema.",
     "last_updated": "2026-10-22",
-    "total_entries": 83,
+    "total_entries": 84,
     "loaded_by": "scripts/enhanced_normalizer.py via _load_label_corrections (cached on first product)"
   },
   "corrections": {
@@ -1998,6 +1998,35 @@
       "raw_daily_value": 1000,
       "corrected_daily_value": 10000,
       "raw_daily_value_target_group": "Adults and children 4 or more years of age"
+    },
+    "213846": {
+      "brand": "Solgar",
+      "product_name": "L-Cystine 500 mg",
+      "raw_ingredient_text": "Alpha-Glucan Oligosaccharide",
+      "corrected_ingredient_text": "L-Cystine",
+      "corrected_unii_code": null,
+      "corrected_category": "amino acid",
+      "corrected_ingredient_group": "Cystine",
+      "corrected_forms": [],
+      "correction_fields": [
+        "name",
+        "uniiCode",
+        "category",
+        "ingredientGroup",
+        "forms"
+      ],
+      "evidence": "The original NIH-hosted label image prints L-Cystine (Free Form) 500 mg per vegetable capsule and describes cystine as a disulfide containing two L-cysteine molecules. The structured row instead names Alpha-Glucan Oligosaccharide and assigns its unrelated UNII, despite the same-record note identifying L-Cystine. This exact product-row correction restores the printed amino-acid identity, clears the misattributed identifier and preserves the 500 mg amount. Cystine is not cysteine; no cysteine clinical/form credit or new chemical identifier is assigned. An unreviewed identity remains unresolved under existing scoring/readiness rules.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/213846",
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/213846.pdf",
+        "https://pubchem.ncbi.nlm.nih.gov/compound/67678",
+        "https://pubchem.ncbi.nlm.nih.gov/compound/5862"
+      ],
+      "reviewer": "Codex source verification (agent review; not clinical approval)",
+      "review_date": "2026-10-22",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_source_identity_correction",
+      "raw_unii_code": "S95658MI3W"
     }
   }
 }

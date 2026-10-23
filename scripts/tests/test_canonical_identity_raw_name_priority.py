@@ -119,3 +119,32 @@ def test_source_material_does_not_become_a_different_studied_preparation(name, e
             "quantity": [{"quantity": 100, "unit": "mg"}], "forms": [], "nestedRows": []}]}
     rows = EnhancedDSLDNormalizer().normalize_product(product)["activeIngredients"]
     assert rows and rows[0]["canonical_id"] == expected
+
+
+@pytest.mark.parametrize("name", ["L-Cystine", "Cystine"])
+def test_cystine_does_not_borrow_cysteine_identity(normalizer, name):
+    product = {"id": "cystine-identity", "fullName": name,
+        "ingredientRows": [{"name": name, "category": "amino acid",
+            "quantity": [{"quantity": 500, "unit": "mg"}], "forms": [], "nestedRows": []}]}
+    rows = normalizer.normalize_product(product)["activeIngredients"]
+    assert rows and rows[0]["name"] == name
+    assert rows[0]["canonical_id"] != "l_cysteine"
+    assert rows[0]["quantity"] == 500
+
+
+def test_cysteine_identity_remains_mapped(normalizer):
+    assert normalizer._resolve_canonical_identity(
+        standard_name="L-Cysteine", raw_name="L-Cysteine"
+    ) == ("l_cysteine", "ingredient_quality_map")
+
+
+def test_separate_cystine_row_does_not_veto_cysteine(normalizer):
+    raw = {"id": "separate-amino-acids", "fullName": "Amino acids",
+        "ingredientRows": [{"name": name, "category": "amino acid",
+            "quantity": [{"quantity": 500, "unit": "mg"}], "forms": [], "nestedRows": []}
+            for name in ["L-Cystine", "L-Cysteine", "N-Acetyl-L-Cysteine"]]}
+    rows = normalizer.normalize_product(raw)["activeIngredients"]
+    by_name = {row["name"]: row for row in rows}
+    assert by_name["L-Cystine"]["canonical_id"] != "l_cysteine"
+    assert by_name["L-Cysteine"]["canonical_id"] == "l_cysteine"
+    assert by_name["N-Acetyl-L-Cysteine"]["canonical_id"] == "nac"

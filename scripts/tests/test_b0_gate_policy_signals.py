@@ -74,12 +74,19 @@ def test_regional_rule_does_not_zero_the_safety_base(pipeline) -> None:
 
 def test_gate_concern_zeroes_the_safety_base_once(pipeline) -> None:
     scored = _score(pipeline["19598"])
-    assert scored["v4_verdict"] == "CAUTION"
+    # The reviewed constituent expansion now exposes missing individual
+    # amounts, so Quality is held. Safety remains assessed independently.
+    assert scored["quality_score_status"] == "not_scored"
+    assert scored["quality_pillars_v4"] is None
     assert "B0_HIGH_RISK_SUBSTANCE" in scored["v4_breakdown"]["safety_gate"]["safety_signals"]
-    assert _base(scored)["score"] == 0.0
-    pillar = scored["quality_pillars_v4"]["safety_hygiene"]
-    assert pillar["score"] == 0, pillar
-    assert "high-risk ingredient" in pillar["reason"], pillar["reason"]
+    from scoring_v4.modules.safety_hygiene import score_safety_hygiene_base
+    base = score_safety_hygiene_base(pipeline["19598"])
+    assert base.score == 0
+    assert base.metadata["hard_cleanliness_failure"] is True
+    from scoring_v4.scored_artifact import build_scored_artifact
+    artifact = build_scored_artifact(pipeline["19598"])
+    assert artifact["product_safety_status"] == "caution"
+    assert artifact["safety_verdict"] == "CAUTION"
 
 
 def test_one_rule_on_two_rows_is_one_charge(pipeline) -> None:
@@ -104,6 +111,6 @@ def test_routed_module_reuses_the_gate_evaluation(pipeline, monkeypatch) -> None
         return original(product, **kwargs)
 
     monkeypatch.setattr(gate, "evaluate_safety_gate", counting)
-    scored = _score(pipeline["19598"])
+    scored = _score(pipeline["315305"])
     assert _base(scored)["score"] == 0.0
     assert calls == []

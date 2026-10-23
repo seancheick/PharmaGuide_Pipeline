@@ -70,6 +70,17 @@ def test_ravage_is_open_only_for_l_phenylalanine(enriched):
     evidence = build_scored_artifact(enriched["1179"])["quality_pillars_v4"]["evidence"]
     assert evidence["display_state"] == "not_yet_reviewed"
 
+    # The source-verified Anabolic Muscle Primer lists yohimbe bark. Its
+    # absence must never hide the existing high-risk finding or lend a dose.
+    artifact = build_scored_artifact(enriched["1179"])
+    assert set(artifact["_v4_safety_gate"]["safety_signals"]) >= {
+        "B0_HIGH_RISK_SUBSTANCE", "STIMULANT_UNDISCLOSED_BLEND",
+    }
+    from scoring_input_contract import get_evidence_subject_rows
+    yohimbe = next(row for row in get_evidence_subject_rows(enriched["1179"])
+                   if row.get("canonical_id") == "yohimbe")
+    assert not yohimbe.get("quantity")
+
 
 def test_tesnor_and_sytrinol_resolve_to_their_reviewed_trials(enriched):
     from evidence_resolver import resolve_product_evidence
