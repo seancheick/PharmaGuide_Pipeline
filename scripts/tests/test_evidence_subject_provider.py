@@ -119,11 +119,20 @@ def test_only_evidence_owners_are_added_beyond_the_label_actives(enricher, enric
 
 
 def test_a_blend_total_is_not_a_member_dose_for_applicability(enriched):
-    """The blend total lent to D-aspartic acid is not its amount, so it cannot
-    satisfy the reviewed 3 g/day minimum."""
-    for match in enriched["19505"]["evidence_data"]["clinical_matches"]:
-        if match["id"] == "INGR_D_ASPARTIC_ACID":
-            assert (match.get("applicability_assessment") or {}).get("status") != "applicable"
+    """Evidence can review an undosed named member; Dose cannot borrow its total."""
+    from scoring_v4.exposure import row_exposure
+    product = enriched["19505"]
+    members = [row for row in get_evidence_subject_rows(product)
+               if row.get("canonical_id") == "d_aspartic_acid"]
+    assert members
+    for row in members:
+        assert not row.get("quantity")
+        assert row_exposure(product, row, basis="daily", unit="g").benchmark_amount is None
+    # The current reviewed D-aspartic record is null, not positive efficacy
+    # evidence. Reviewing its preparation does not establish an effective dose.
+    matches = [match for match in product["evidence_data"]["clinical_matches"]
+               if match["id"] == "INGR_D_ASPARTIC_ACID"]
+    assert matches and all(match["effect_direction"] == "null" for match in matches)
 
 
 _INELIGIBLE = [
@@ -227,3 +236,28 @@ def test_assessed_blend_children_keep_scoring_display_annotation(enricher, sourc
     assert display['score_included'] is True
     assert display['is_label_context'] is False
     assert display['identity_integrity_state'] == 'clean'
+
+
+@pytest.mark.parametrize("name,forms,expected", [
+    ("CurQfen", ["Fenugreek", "Turmeric Rhizome Extract"], {"fenugreek", "turmeric"}),
+    ("Neumentix Phenolic Complex K110-42", ["Spearmint extract"], {"spearmint"}),
+    ("TRISYNEX(TM) Complex", ["Cetylated Fatty Acids", "Modified Cellulose"], {"celadrin"}),
+])
+@pytest.mark.parametrize("include_group", [True, False])
+def test_explicit_blend_forms_reach_evidence_without_lending_total(enricher, name, forms, expected, include_group):
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    from scoring_v4.scored_artifact import build_scored_artifact
+    raw = {"id": "blend-forms-regression", "fullName": name, "brandName": "Source fixture",
+        "ingredientRows": [{"name": name, "category": "blend", "ingredientGroup": "Proprietary Blend",
+            "quantity": [{"quantity": 1000, "unit": "mg"}], "nestedRows": [],
+            "forms": [{"name": form, "ingredientGroup": form if include_group else None, "category": "botanical" if form not in {"Cetylated Fatty Acids", "Modified Cellulose"} else "other"} for form in forms]}]}
+    clean = EnhancedDSLDNormalizer().normalize_product(raw)
+    enriched, _ = enricher.enrich_product(clean)
+    subjects = get_evidence_subject_rows(enriched)
+    assert expected <= _canonicals(subjects)
+    for row in subjects:
+        if row.get("canonical_id") in expected:
+            assert not row.get("quantity")
+            assert ".forms[" in row["raw_source_path"]
+    artifact = build_scored_artifact(enriched)
+    assert artifact["quality_pillars_v4"]["evidence"]["evidence_result_state"] != "no_assessable_actives"
