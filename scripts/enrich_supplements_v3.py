@@ -108,6 +108,7 @@ from serving_frequency import (
 )
 from scoring_input_contract import (
     build_scoring_classification,
+    has_source_printed_amount,
     UNRESOLVED_IDENTITY_FORM_UNMAPPED,
     UNRESOLVED_IDENTITY_NO_QUALITY_MAP_MATCH,
     derive_product_scoring_evidence,
@@ -119,6 +120,7 @@ from scoring_input_contract import (
     gluten_free_claim_contradicted,
     is_nutrition_fact_declaration,
     get_scoring_ingredients,
+    get_source_score_eligible_active_rows,
     normalize_product_evidence_scope,
     score_eligible_identity_view,
     scoring_input_scope,
@@ -1297,6 +1299,16 @@ class SupplementEnricherV3:
                 and not self._is_display_only_blend_scoring_row(row)
             )
         ]
+        if include_ancestors:
+            # Exact printed zero owns a completed dose determination even
+            # though it is not a positive scoring exposure. Rejoin its actual
+            # label row below; never promote it to the scoring ingredient list.
+            scoring_rows.extend(
+                row for row in get_source_score_eligible_active_rows(product)
+                if row.get("quantity") == 0
+                and has_source_printed_amount(row, allow_zero=True)
+                and row not in scoring_rows
+            )
         if not scoring_rows:
             return []
 
@@ -18067,7 +18079,11 @@ class SupplementEnricherV3:
     def _has_non_probiotic_active_for_cfu_evidence(self, product: Dict[str, Any]) -> bool:
         """Detect cleaner-eligible non-probiotic actives that make CFU evidence accessory."""
         fiber_primary_with_accessory_probiotics = self._is_fiber_primary_with_accessory_probiotics(product)
-        for row in product.get("activeIngredients") or []:
+        quality = product.get("ingredient_quality_data") or {}
+        source_rows = (get_source_score_eligible_active_rows(product)
+                       if isinstance(quality.get("ingredients"), list)
+                       else product.get("activeIngredients") or [])
+        for row in source_rows:
             if not isinstance(row, dict):
                 continue
             if row.get("score_eligible_by_cleaner") is not True:
@@ -22707,7 +22723,11 @@ class SupplementEnricherV3:
                     except (ValueError, TypeError):
                         continue
 
-                    if quantity_float == 0:
+                    # Preserve a source-proven exact zero as a typed assessment;
+                    # absent/default/censored quantities still need remediation.
+                    if quantity_float == 0 and not has_source_printed_amount(
+                        ingredient, allow_zero=True
+                    ):
                         continue
                     dose_data_quality = (
                         dict(ingredient["dose_data_quality"])
@@ -22806,8 +22826,7 @@ class SupplementEnricherV3:
                                 "vitamin_a_mixed_explicit_preformed_fraction"
                             ),
                             conversion_factor=(
-                                explicit_mixed_vitamin_a_total_rae
-                                / quantity_float
+                                _mixed_vitamin_a_total_mcg_rae(1.0, unit)
                             ),
                             nutrient_detected=std_name,
                             form_detected="mixed_explicit_preformed_fraction",

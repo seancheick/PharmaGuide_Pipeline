@@ -1631,3 +1631,40 @@ def test_unresolved_clinical_source_hold_is_not_a_completed_negative_review(cano
     assert result['readiness'] == 'incomplete'
     assert result['ingredient_assessments'][0]['state'] == 'not_yet_evaluated'
     assert result['ingredient_assessments'][0]['reason_code'] == 'clinical_sources_ineligible'
+
+
+def test_explicit_zero_source_reuses_completed_typed_assessment():
+    from assessment_readiness import _dose_readiness
+    row = _row('Vitamin C', 'vitamin_c', quantity=0, unit='mg')
+    row['raw_taxonomy'] = {'quantityVariants': [{'quantity': 0, 'unit': 'mg',
+        'quantity_parsed': True, 'selected_for_analysis': True}]}
+    product = _product(row)
+    product['rda_ul_data']['dose_assessments'][0].update({
+        'source_path': 'ingredientRows[0]', 'source_value': 0,
+        'source_unit': 'mg', 'readiness': 'complete', 'material': False})
+    assert _dose_readiness(product, [{'material': False}], module='generic')['readiness'] == 'complete'
+
+
+@pytest.mark.parametrize("change", ["missing_source", "unparsed", "np", "censored", "missing_typed", "unit_mismatch"])
+def test_zero_completion_requires_source_and_typed_proof(change):
+    from assessment_readiness import _dose_readiness
+    row = _row("Vitamin C", "vitamin_c", quantity=0, unit="mg")
+    row["raw_taxonomy"] = {"quantityVariants": [{"quantity": 0, "unit": "mg",
+        "quantity_parsed": True, "selected_for_analysis": True, "operator": "="}]}
+    product = _product(row)
+    typed = product["rda_ul_data"]["dose_assessments"][0]
+    typed.update(source_value=0, source_unit="mg", readiness="complete", material=False)
+    variant = row["raw_taxonomy"]["quantityVariants"][0]
+    if change == "missing_source":
+        row.pop("raw_source_path")
+    elif change == "unparsed":
+        variant["quantity_parsed"] = False
+    elif change == "np":
+        row["unit"] = variant["unit"] = "NP"
+    elif change == "censored":
+        variant["operator"] = "<"
+    elif change == "missing_typed":
+        product["rda_ul_data"]["dose_assessments"] = []
+    else:
+        typed["source_unit"] = "g"
+    assert _dose_readiness(product, [{"material": False}], module="generic")["readiness"] == "incomplete"

@@ -1402,3 +1402,19 @@ def test_unprinted_unit_count_is_one_and_unknown_explicit_basis_is_rejected(enri
         'minDailyServings': 1, 'maxDailyServings': 1})
     enriched = enricher.enrich_product(product)[0]
     assert enriched['probiotic_data']['total_cfu'] == expected
+
+
+def test_real_np_strain_uses_disclosed_cfu_despite_nutrition_sodium(enricher):
+    import json
+    from pathlib import Path
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    from scoring_v4.scored_artifact import build_scored_artifact
+    raw = json.loads((Path(__file__).parent / 'fixtures' / 'probiotic_np_dose_267563_raw.json').read_text())
+    enriched, _ = enricher.enrich_product(EnhancedDSLDNormalizer().normalize_product(raw))
+    assert enriched['probiotic_data']['total_cfu'] == 15e9
+    assert _cfu_evidence(enriched['product_scoring_evidence'])['scoreable'] is True
+    scored = build_scored_artifact(enriched)
+    assert scored['assessment_readiness']['dose']['readiness'] == 'complete'
+    assert scored['assessment_readiness']['identity']['readiness'] == 'complete'
+    strain = next(row for row in enriched['activeIngredients'] if row['name'] == 'Lactobacillus rhamnosus GG')
+    assert (strain['quantity'], strain['unit']) == (50, 'NP')

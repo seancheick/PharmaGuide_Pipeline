@@ -23,6 +23,7 @@ from scoring_input_contract import (
     get_scoring_ingredients,
     get_source_score_eligible_active_rows,
     has_scoring_identity,
+    has_source_printed_amount,
 )
 from scoring_v4.modules.generic_evidence import (
     DRI_ESSENTIAL_NUTRIENTS,
@@ -990,7 +991,7 @@ def _dose_readiness(
         ]
 
         def _ready_typed_source_assessment(
-            source_ref: str,
+            source_ref: str, source_row: Mapping[str, Any],
         ) -> Mapping[str, Any] | None:
             for assessment in assessments:
                 assessment_refs = {
@@ -1009,7 +1010,12 @@ def _dose_readiness(
                 source_unit = _unit(assessment.get("source_unit"))
                 if (
                     source_value is not None
-                    and source_value > 0
+                    and (source_value > 0 or (
+                        source_value == 0
+                        and _number(source_row.get("quantity")) == 0
+                        and source_unit == _unit(source_row.get("unit"))
+                        and has_source_printed_amount(source_row, allow_zero=True)
+                    ))
                     and source_unit
                     and assessment.get("readiness")
                     in {READINESS_COMPLETE, READINESS_NOT_APPLICABLE}
@@ -1021,7 +1027,7 @@ def _dose_readiness(
         missing_dose_refs = []
         for index, row in enumerate(source_rows):
             source_ref = _row_ref(row, index)
-            typed = _ready_typed_source_assessment(source_ref)
+            typed = _ready_typed_source_assessment(source_ref, row)
             if typed is not None:
                 ready_source_assessments[source_ref] = typed
                 continue

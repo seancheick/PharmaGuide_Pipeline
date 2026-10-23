@@ -28,6 +28,8 @@ from constants import (
     CLEANER_NON_SCORABLE_ROLES,
     CLEANER_SCORABLE_ROLES,
     IQD_DOSE_EVIDENCE_CLASSES,
+    DOSE_NOT_PROVIDED_UNITS,
+    PSEUDO_UNITS_INVALID,
 )
 from scoring_reference_resolver import (
     has_therapeutic_reference,
@@ -593,10 +595,6 @@ def epa_dha_row_is_trustworthy(row: Dict[str, Any], *, allow_zero: bool = False)
     return True
 
 
-# DSLD writes quantity 0 with unit "NP" (not provided) for a row printed with no amount.
-DOSE_NOT_PROVIDED_UNITS = frozenset({"np", "n/p", "not provided", ""})
-
-
 def has_source_printed_amount(row: Mapping[str, Any], *, allow_zero: bool = False) -> bool:
     """Whether the selected source-label amount proves this row's quantity.
 
@@ -608,6 +606,16 @@ def has_source_printed_amount(row: Mapping[str, Any], *, allow_zero: bool = Fals
     if allow_zero and _positive_quantity(row, allow_zero=True) == 0:
         selected = [v for v in variants if isinstance(v, dict) and v.get("selected_for_analysis") is True]
         if len(selected) != 1 or selected[0].get("quantity_parsed") is not True:
+            return False
+        source_unit = str(row.get("unit") or "").strip()
+        if _norm(source_unit) in PSEUDO_UNITS_INVALID:
+            return False
+        from scoring_v4.exposure import row_exposure
+        # Disclosure proves the printed amount, not a mass conversion. Ignore
+        # any stale normalized-unit projection when checking source exactness.
+        exposure = row_exposure({}, {**row, "unit_normalized": source_unit},
+                                basis="per_use", unit=source_unit)
+        if not exposure.exact or exposure.per_serving_amount != 0:
             return False
     return bool(row.get("raw_source_path")) and any(
         isinstance(v, dict) and v.get("selected_for_analysis") is True
@@ -644,13 +652,7 @@ def dose_disclosure_status(row: Mapping[str, Any]) -> str:
         and unit not in DOSE_NOT_PROVIDED_UNITS
         and has_source_printed_amount(row, allow_zero=True)
     ):
-        # A parsed exact zero is label disclosure, not a positive exposure.
-        # Reuse the unit/operator owner; defaults, NP and ambiguous captures
-        # must never become a statement that the label printed zero.
-        from scoring_v4.exposure import row_exposure
-        exposure = row_exposure({}, row, basis="per_use", unit="mg")
-        if exposure.exact and exposure.per_serving_amount == 0:
-            return "disclosed"
+        return "disclosed"
     member = (
         row.get("isNestedIngredient") or row.get("proprietaryBlend") or row.get("parent_blend")
         or row.get("cleaner_row_role") == "nested_display_only"
@@ -1454,8 +1456,14 @@ def _has_non_probiotic_strict_active(product: Dict[str, Any]) -> bool:
         row for row in _safe_list(_safe_dict(product.get("ingredient_quality_data")).get("ingredients_scorable"))
         if isinstance(row, dict)
     )
+    # Once enrichment owns the source classification, its nutrition/structural
+    # exclusions outrank the earlier raw cleaner flags.
+    quality = _safe_dict(product.get("ingredient_quality_data"))
+    source_rows = (get_source_score_eligible_active_rows(product)
+                   if isinstance(quality.get("ingredients"), list)
+                   else _safe_list(product.get("activeIngredients")))
     rows.extend(
-        row for row in _safe_list(product.get("activeIngredients"))
+        row for row in source_rows
         if isinstance(row, dict)
         and row.get("score_eligible_by_cleaner") is True
         and _norm(row.get("cleaner_row_role") or "active_scorable") == "active_scorable"

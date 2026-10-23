@@ -1321,6 +1321,9 @@ PROMOTE_REASON_HAS_DOSE = "has_measurable_dose"
 PROMOTE_REASON_PRODUCT_TYPE_RESCUE = "product_type_rescue"
 PROMOTE_REASON_ABSORPTION_ENHANCER = "absorption_enhancer_exception"
 
+# DSLD missing-amount sentinels are never measurement units.
+DOSE_NOT_PROVIDED_UNITS = frozenset({"np", "n/p", "not provided", "not present", "notprovided", "notpresent", "unspecified", ""})
+
 # Pseudo-units that should NOT be treated as valid dose units
 # These appear in dirty data and should be treated as "no dose"
 PSEUDO_UNITS_INVALID = {
@@ -1330,7 +1333,7 @@ PSEUDO_UNITS_INVALID = {
     "n/a", "na", "none", "unknown", "—", "-", "–", "",
     "piece", "pieces", "pack", "packs", "packet", "packets",
     "dose", "doses", "portion", "portions",
-}
+} | DOSE_NOT_PROVIDED_UNITS
 
 # Branded ingredient tokens that should be extracted from compound names
 # These are proprietary/trademarked ingredient names that indicate specific forms

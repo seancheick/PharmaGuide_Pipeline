@@ -128,3 +128,19 @@ def test_printed_zero_survives_clean_enrich_artifact_as_disclosure_only():
     disclosure = artifact['_v4_module_breakdown']['dimensions']['transparency']['metadata']['complete_active_disclosure']
     assert disclosure['qualifies'] is True
     assert disclosure['declared_active_count'] == disclosure['active_row_count'] == 1
+
+
+@pytest.mark.parametrize('unit', ['unknown', 'n/a', 'none', '—', 'packet'])
+def test_zero_pseudo_units_are_not_disclosed_measurements(unit):
+    row = {'quantity': 0, 'unit': unit, 'raw_source_path': 'ingredientRows[0]',
+        'raw_taxonomy': {'quantityVariants': [{'quantity': 0, 'unit': unit,
+            'quantity_parsed': True, 'selected_for_analysis': True}]}}
+    assert dose_disclosure_status(row) == 'missing'
+
+
+@pytest.mark.parametrize('unit', ['IU', 'mg NE', 'DU'])
+def test_exact_zero_disclosure_keeps_non_mass_units(unit):
+    row = {'quantity': 0, 'unit': unit, 'raw_source_path': 'ingredientRows[0]',
+        'raw_taxonomy': {'quantityVariants': [{'quantity': 0, 'unit': unit,
+            'quantity_parsed': True, 'selected_for_analysis': True}]}}
+    assert dose_disclosure_status(row) == 'disclosed'
