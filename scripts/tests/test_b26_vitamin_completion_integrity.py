@@ -140,19 +140,14 @@ def test_b26_mechanical_in_band(iqm, pid, fname, vmin, vmax, basis):
     )
 
 
-def test_biotin_parent_fully_populated(iqm):
-    """B7 parent should now have ZERO null forms — first-ever full
-    population per Zempleni 1999 (PMID:10075337) anchor.
-    """
+def test_biotin_distinct_forms_retain_unknown_absorption(iqm):
+    """Free d-biotin PK does not establish racemate or magnesium-salt absorption."""
     forms = iqm['vitamin_b7_biotin']['forms']
-    null_forms = [
-        fn for fn, f in forms.items()
-        if (f.get('absorption_structured') or {}).get('value') is None
-    ]
-    assert set(null_forms) == {'dl-biotin (racemic)'}, (
-        f'vitamin_b7_biotin should have ZERO null forms after B26; '
-        f'still null: {null_forms}'
-    )
+    null_forms = {fn for fn, form in forms.items()
+                  if (form.get('absorption_structured') or {}).get('value') is None}
+    assert null_forms == {'dl-biotin (racemic)', 'magnesium biotinate'}
+    assert forms['magnesium biotinate']['bio_score'] is None
+    assert forms['magnesium biotinate']['absorption_structured']['quality'] == 'unknown'
 
 
 def test_biotin_zempleni_pmid_anchored(iqm):

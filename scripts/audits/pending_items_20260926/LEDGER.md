@@ -2922,3 +2922,24 @@ snapshot/backlog denominators unchanged; these items are implemented, not rebuil
 473 owner tests passed before final review corrections;154 final changed-seam tests and52
 schema/nullable-contract tests pass. Final local and exact whole-fast CI pending. Independent
 review accepts revised candidate, including refreshed six-label measurements.
+
+Local checkpoint update: the initial isolated worktree omitted the retained
+reports/canary_rebuild mount (465pass/105skips; guard correctly rejected81 missing-artifact
+skips). Connected that existing directory without rebuilding or altering it. Final local:
+546passed/24declared optional-service skips, skip guard green,161.04s. Curated diff contains
+only vitamin_b7_biotin; changed-entry verifier found5existing citations matching source
+content. No changed interaction citations. Biotinate chemistry was independently verified
+against live PubChem/Health Canada, not inferred from those biotin citations. Candidate
+runtime1856f1f8fea203960c6d1d331b3f4e6aa879897d; whole-fast CI40036316382 pending.
+Durable six-label captures, hashes and parity receipts:
+~/pg_quality/assessment_integrity_20261023/research/species-biotinate/.
+
+Initial CI40036316382 failed7tests across4groups; not a pass. Two genuine regression
+classes were reproduced and corrected: botanical marker/source mixtures (soy204040 and
+inulin) must retain their existing owner; DB integrity must distinguish explicit null
+from a missing grade while retaining integer/range validation. Four obsolete biotinate
+expectations were reconciled against verified chemistry: recognized/null rather than
+unmapped, unknown absorption retained rather than transferred from d-biotin. B34 remains
+unchanged; explicit absorption value=null satisfies it. No old valid safety assertion was
+weakened. All216 combined failure-class tests pass; independent review accepts the final
+corrections. A new exact-candidate whole-fast and local checkpoint is required before merge.

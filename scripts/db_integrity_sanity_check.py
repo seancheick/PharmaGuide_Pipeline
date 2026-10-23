@@ -774,10 +774,13 @@ def check_iqm(findings: List[Finding], data: Dict[str, Any], file: str) -> None:
                 if q not in valid_abs_quality:
                     findings.append(Finding("error", file, f"{ing_key}.forms.{form_name}.absorption_structured.quality", "enum_value_not_supported", "|".join(sorted(valid_abs_quality)), str(q)))
 
-            # bio_score is a whole integer 0-15 (used directly by scorer).
+            # A present null is an unassessed form, held by scoring_input_contract.
+            # An absent grade remains a schema error; assessed grades are 0-15.
             bs = form.get("bio_score")
-            if bs is None:
-                findings.append(Finding("error", file, f"{ing_key}.forms.{form_name}.bio_score", "missing_required_key", "number", "missing"))
+            if "bio_score" not in form:
+                findings.append(Finding("error", file, f"{ing_key}.forms.{form_name}.bio_score", "missing_required_key", "integer or explicit null", "missing"))
+            elif bs is None:
+                pass
             elif type(bs) is not int:
                 findings.append(Finding("error", file, f"{ing_key}.forms.{form_name}.bio_score", "type_mismatch", "integer", _type_name(bs)))
             elif not 0 <= bs <= 15:

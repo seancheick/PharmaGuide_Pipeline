@@ -114,3 +114,18 @@ def test_eligible_trial_with_no_endpoints_or_goals_still_fails():
     findings = []
     check_clinical_db(findings, {"backed_clinical_studies": [row]}, "backed_clinical_studies.json")
     assert not findings
+
+
+def test_form_quality_null_is_explicitly_unassessed_not_a_missing_key():
+    import json
+    from copy import deepcopy
+    from db_integrity_sanity_check import check_iqm
+    parent = json.loads((Path(__file__).parents[1] / 'data/ingredient_quality_map.json').read_text())['vitamin_b7_biotin']
+    data = {'vitamin_b7_biotin': deepcopy(parent)}
+    findings = []
+    check_iqm(findings, data, 'ingredient_quality_map.json')
+    assert not [f for f in findings if f.severity == 'error']
+    del data['vitamin_b7_biotin']['forms']['magnesium biotinate']['bio_score']
+    findings = []
+    check_iqm(findings, data, 'ingredient_quality_map.json')
+    assert any(f.issue == 'missing_required_key' and f.path.endswith('bio_score') for f in findings)

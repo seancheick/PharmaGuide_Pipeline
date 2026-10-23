@@ -4248,7 +4248,8 @@
         "notes": "Distinct magnesium salt of biotin, verified against PubChem CID 139593965 and Health Canada NHPID 18320 on 2026-10-23. Recognized only as a source form of an explicitly identified biotin row; not equivalent to free d-biotin or keratin. No numerical form-quality assessment established. Combination Lustriva studies do not isolate this salt. Retain assessment holds; do not infer elemental magnesium or biotin amounts from compound or blend mass.",
         "absorption_structured": {
           "quality": "unknown",
-          "notes": "Chemical identity established; human pharmacokinetic equivalence and numerical form quality are not established."
+          "notes": "Chemical identity established; human pharmacokinetic equivalence and numerical form quality are not established.",
+          "value": null
         },
         "form_evidence_axis": "systemic_bioavailability"
       }

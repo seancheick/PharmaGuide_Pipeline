@@ -674,9 +674,11 @@ def test_generic_vitamin_c_names_do_not_claim_ascorbic_acid(iqm_data):
 
 
 def test_magnesium_biotinate_is_not_d_biotin(iqm_data):
-    # Distinct compound (PubChem CID 139593965, C20H30MgN4O6S2): no reviewed IQM form yet.
+    # Distinct compound (PubChem CID139593965): recognized salt, still no approved form grade.
     forms = iqm_data['vitamin_b7_biotin']['forms']
-    assert all('magnesium biotinate' not in {a.lower() for a in f.get('aliases') or []} for f in forms.values())
+    assert 'magnesium biotinate' not in {a.lower() for a in forms['d-biotin']['aliases']}
+    assert forms['magnesium biotinate']['bio_score'] is None
+    assert forms['magnesium biotinate']['alias_identity_scope'] == 'source_preparation'
 
 
 def _biotin_row(form):
@@ -690,17 +692,18 @@ def _biotin_row(form):
     return {"id": "TEST_BIOTINATE", "product_name": "Test Biotin", "activeIngredients": [row]}
 
 
-def test_declared_but_unresolved_form_is_recorded_not_dropped(enricher):
-    # DSLD 299744: "Biotin (as Magnesium Biotinate)". The salt matches no IQM
-    # form: the row keeps the biotin identity, the declared form is unmapped
-    # (held for curation), and it is never scored as the row name's form.
+def test_declared_but_unassessed_form_is_recorded_not_dropped(enricher):
+    # DSLD299744: recognize its distinct salt without borrowing d-biotin quality.
     form = {"name": "Magnesium Biotinate", "order": 1, "prefix": None, "percent": None,
             "category": "mineral", "ingredientGroup": "Magnesium", "uniiCode": None}
     enriched, _ = enricher.enrich_product(_biotin_row(form))
     row = next(r for r in enriched['ingredient_quality_data']['ingredients_scorable']
                if r.get('canonical_id') == 'vitamin_b7_biotin')
-    assert row['unmapped_forms'] == ['Magnesium Biotinate']
-    assert row['form_match_status'] == 'unmapped' and row['bio_score'] is None
+    assert row['unmapped_forms'] == []
+    assert row['form_id'] == 'magnesium biotinate'
+    assert row['form_match_status'] == 'mapped' and row['bio_score'] is None
+    from scoring_input_contract import get_scoring_ingredients
+    assert 'form_quality_unassessed' in get_scoring_ingredients(enriched, strict=True).contract_findings
 
 
 def test_generic_alias_form_text_is_not_unresolved(enricher):

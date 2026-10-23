@@ -1080,6 +1080,11 @@ def resolve_identity(
                 botanical_form_ids.append(named[0])
     botanical_form_conflict = bool(
         canonical_before and botanical_form_ids
+        # Nutrient/marker plus source-plant rows are not whole botanical
+        # materials (e.g. isoflavones plus soybean). Their existing owner wins.
+        and all(isinstance(form, Mapping)
+                and str(form.get("category") or "").casefold() == "botanical"
+                for form in declared_forms)
         and str(row.get("category") or (row.get("raw_taxonomy") or {}).get("category") or "").casefold() == "botanical"
         and any(cid != canonical_before for cid in botanical_form_ids)
         and not _is_blend_header_row(row)
