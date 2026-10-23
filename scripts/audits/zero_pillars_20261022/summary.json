@@ -6,8 +6,8 @@
     "evidence_zero": 5089,
     "zero_union": 5427,
     "dose_zero": 436,
-    "saved_dose_zero_now_positive": 83,
-    "not_scored": 9
+    "saved_dose_zero_now_positive": 82,
+    "not_scored": 10
   },
   "new_zero_ids": [],
   "new_hold_ids": [
@@ -36,35 +36,35 @@
     "855"
   ],
   "dose_dispositions": {
-    "nonzero": 5068,
+    "nonzero": 5067,
     "individual_amount_not_disclosed": 14,
     "epa_dha_amount_not_established_no_carrier_mass_substitution": 58,
     "withheld_by_existing_upper_reference_policy": 327,
-    "not_scored_hold": 9,
+    "not_scored_hold": 10,
     "unfinished_benchmark_review": 32,
     "actual_protein_grams_not_disclosed_ingredient_mass_preserved": 5
   },
   "evidence_dispositions": {
     "preparation_purpose_or_population_match_unestablished": 3317,
-    "nonzero": 415,
+    "nonzero": 414,
     "unresolved_identity_or_material": 141,
     "research_present_match_unestablished": 293,
     "no_eligible_individual_efficacy_subject": 349,
     "unfinished_clinical_review": 246,
     "completed_review_no_clear_benefit": 300,
     "completed_review_no_qualifying_applicable_human_benefit": 402,
-    "not_scored_hold": 9,
+    "not_scored_hold": 10,
     "authority_review_no_earned_credit": 41
   },
   "evidence_zero_states": {
     "applicability_unestablished": 3317,
-    "clinical_review_not_covered": 246,
-    "no_qualifying_human_evidence": 402,
     "no_assessable_actives": 349,
-    "identity_material_unresolved": 141,
-    "evaluated_null": 300,
     "research_present_applicability_unestablished": 293,
+    "evaluated_null": 300,
+    "clinical_review_not_covered": 246,
+    "identity_material_unresolved": 141,
+    "no_qualifying_human_evidence": 402,
     "evaluated_authority": 41
   },
-  "csv_sha256": "ef28930a5ddd0e0a8229a034e42dabfa4d1e025d1ca731b2d4d4b4bf1061722f"
+  "csv_sha256": "eea996c343406d5c7f6b1369fa5bd8d259dfb90e02dd7aad5764759a16b03b24"
 }

@@ -2609,40 +2609,52 @@ assessment-audit Clean→Enrich→Score regeneration and catalog/app acceptance 
 Behavioral pipeline/data batch. Owner: scoring_v4 botanical_profile/generic_dose/quality_score,
 enhanced_normalizer::_expand_header_forms_for_processing, constants::BLEND_HEADER_EXACT_NAMES,
 product_label_corrections and ingredient_quality_map — evidence: matrix/glossary/caller search,
-15,427 current-scorer census,5,512 frozen zero-union raw audit and original NIH panels.
+15,427 baseline-scorer census,5,512 frozen zero-union raw audit and original NIH panels.
 Will NOT create: parallel scorer, numerical floor, clinical policy, registry, guessed amount,
 unreviewed form rating, public status or export bypass. Sean explicitly authorized fixes and main push.
 
 All5,512 saved-zero products classified in `scripts/audits/zero_pillars_20261022/products.csv`;
-one newly held control adds a5513th row.83 prior Dosezeros now positive:74 stale saved artifacts,
-9 verified source fixes. Remaining436Dosezeros:327 existing upper-reference withholding,
-77 missing constituent/protein/EPADHA amounts,32 unfinished benchmarks. Remaining5089Evidencezeros:
+one newly held control adds a5513th row.82 prior Dosezeros now positive:74 stale saved artifacts,
+8 source fixes. Remaining436Dosezeros:327 existing upper-reference withholding,77 missing
+constituent/protein/EPADHA amounts,32 unfinished benchmarks. Remaining5089Evidencezeros:
 743 completed zero-credit reviews;4346 eligibility/applicability/unresolved or unfinished reviews,
 not proof of absent research. No originalEvidencezero was raised by assumed clinical credit.
-Thirteen source-correction keys verified; four IQM entries corrected. Printed volumes are disclosed
-through the canonical quantity owner; three exact reviewed header names preserve printed members
-without borrowing totals. Generic forms expansion was rejected after real CI carrier/root guards.
+Thirteen source-correction keys verified; five IQM entries corrected. Printed volumes use the
+canonical quantity owner; three exact reviewed header names preserve printed members without
+borrowing totals. Generic forms expansion was rejected after real CI carrier/root guards.
 
 Immutable1039raw full/blob pair b06f38597→92fbaa33:135 record movers,64 totals/5held statuses,
-14Dose/7Evidence/52Formulation including null,0route. Final cystine6raw full-stage pair b6aaa5f8:
-4 source products held; actualcysteine/NAC controls scored. One input overlaps:1044unique paired,
-combined68totals/9statuses/18Dose/11Evidence/56Formulation changes including nulls. Independent full
-identity/source/clinical-credit/safety review accepted both pairs. Four printedyohimbe restorations
-includeRampant14168 plusRavage1179/12800/19471; priorstimulant warnings retained. Profile removals
-follow corrected exposures and retain full warning records. Cystine warning/interaction payloads
-unchanged. Source text/500mg preserved and unrelatedalpha-glucanUNII/falsecysteinealias removed.
-Cystine213846 remains strictly blocked atblob export by UNRESOLVED_SCORE_ACTIVE; do not invent a
-rating/identity or broaden the warning-only exception. This is an explicit release blocker.
+14Dose/7Evidence/52Formulation including null,0route. Cystine6raw full-stage pair b6aaa5f8:
+4 source products held; actualcysteine/NAC controls scored. Final19755342c seven-label follow-up:
+only78327 changes, retaining printedN-Acetyl-L-Cystine15mg as unresolved rather than NAC from
+its conflicting structured group. Iodine150mcg source correction remains. The original panel
+also printsCystine; no guessed manufacturer-intended NAC or new chemical identifier. Only its
+borrowed NAC warning group disappears;32otheringredient-alert groups and safety gate unchanged.
+Its blob retains the unresolved literal row with quality withheld via existing known-unscored
+intact-source containment; no gate changed. Four other cystine labels and two controls unchanged.
 
-Final runtimeb6aaa5f8:110 owner/failure-class checks pass; actual held-export/consumer assertions4pass;
-33rawcanaries pass; local546pass/24declared optional-service skips and guardgreen. Exact-runtime
-whole-fastCI39892624194 passed all4groups/skipguards. Earlier39888610678/39891352694 failed and were
-investigated; not green checkpoints. Final appended export-guard assertion/report are test/docs only,
-production fingerprints identical to the green runtime. Causal overlay is not a fresh final-source
-replay of all5512/15427; immutable capture heads/hashes and per-product origins are explicit.
-All114stage fingerprints stale (38eachClean/Enrich/Score). No restamp/corpus/materialization/catalog/
-Supabase/app-bundle/release ran; Sean retains the final producer and catalog/app acceptance task.
-The source audit is complete; unresolved scientific reviews and cystine registry/export qualification
-remain open. Private receipts `~/pg_quality/zero_pillars_20261022/`; full public report and source checks
-in the dated audit directory. Proven-duplicate948-record baseline removed only after all input/stage
+1044unique paired labels overall:68total/10status/18Dose/12Evidence/57Formulation changes including
+nulls,0route. Independent full identity/source/credit/safety review accepted all three pairs.
+Four printedyohimbe restorations includeRampant14168 andRavage1179/12800/19471; priorstimulant
+warnings retained. Other profile removals follow verified corrected exposures and retain full warning
+records. Literalcystine warning/interaction payloads unchanged. Source text/500mg retained and
+unrelatedalpha-glucanUNII/falsecysteinealias removed.213846 remains blocked atblob export by
+UNRESOLVED_SCORE_ACTIVE; do not invent a rating/identity or broaden the intact-source exception.
+
+Prior runtimeb6aaa5f8 whole-fastCI39892624194 passed23321/192declaredskips/all4groups/skipguards.
+Follow-up19755342c:30affected owner tests pass; source-shaped group fallback fails first then passes;
+NACcitation3360052livecontentmatch,0mismatch. Finalraw33canaries pass; final local546pass/24declared
+optional-service skips/guardgreen. Finalwhole-fastCI39894910595 passed23323/192declaredskips/all4groups/skipguards. Earlier39888610678 and
+39891352694 failed and were investigated, never counted as passes. Redundant source-equivalent
+report-only CI runs cancelled, not passes. Initial source-qualified batch integrated mained955b316;
+last NAC correction19755342c now has its own passing exact-source checkpoint; final439production
+file hashes match the immutable7label capture and CI runtime.
+
+Causal overlay is not a fresh final-source replay of all5512/15427; immutable capture heads/hashes
+and per-product origins explicit. Finalnative-name stem sweep15414labels identifies all5cystine/
+acetylated-cystine source IDs; controls measured.114stagefingerprints stale (38eachClean/Enrich/Score).
+No restamp/corpus/materialization/catalog/Supabase/app-bundle/release ran; Sean retains the final
+producer and catalog/app acceptance task. Unresolved scientific reviews and213846exportqualification
+remain open. Private receipts `~/pg_quality/zero_pillars_20261022/`; public report/source checks in
+its dated audit directory. Proven-duplicate948-record baseline removed only after all input/stage
 hashes matched retained1039baseline; unique current/failed-attempt receipts preserved.

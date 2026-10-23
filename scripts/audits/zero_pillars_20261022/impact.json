@@ -2,12 +2,12 @@
   "paired_unique": 1044,
   "counts": {
     "total_movers": 68,
-    "evidence_movers": 11,
-    "formulation_movers": 56,
+    "evidence_movers": 12,
+    "formulation_movers": 57,
     "cleaned_record_movers": 60,
     "enriched_record_movers": 105,
     "scored_record_movers": 121,
-    "status_movers": 9,
+    "status_movers": 10,
     "dose_movers": 18
   },
   "total_mover_ids": [

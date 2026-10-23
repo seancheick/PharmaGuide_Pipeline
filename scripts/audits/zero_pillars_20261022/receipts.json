@@ -53,13 +53,25 @@
     "output_sha256": "c4b1e87a7e6822301cf6cd5f704f3f80d0c6f72f9f34c629d6811a4ca6611785",
     "head": "b6aaa5f8296a1585fff5c40bb36288dfe0402031"
   },
-  "final_source_equivalence": {
-    "runtime": "b6aaa5f8296a1585fff5c40bb36288dfe0402031",
-    "production_file_count": 439,
-    "changed_production_files": [],
-    "verification": "repository_provenance source_sha256 matches final6 capture exactly; only subsequent docs/test assertions differ"
+  "acetyl_baseline": {
+    "exit_code": 0,
+    "source_unchanged": true,
+    "expected_product_count": 7,
+    "product_count": 7,
+    "inputs_manifest_sha256": "3571d511b5825194a2c56e8e3949f1fd2966ca3a0ca7ec0d99770399ae29974b",
+    "output_sha256": "48c456a4e72131261716e0f38506f190fda1becb5d2cbd1d8b55108cb3f4d44c",
+    "head": "ed955b316b3dae9a2e96ba595ad54ec6ac210085"
   },
-  "whole_fast_ci": {
+  "acetyl_candidate": {
+    "exit_code": 0,
+    "source_unchanged": true,
+    "expected_product_count": 7,
+    "product_count": 7,
+    "inputs_manifest_sha256": "3571d511b5825194a2c56e8e3949f1fd2966ca3a0ca7ec0d99770399ae29974b",
+    "output_sha256": "0180ccc20016a69c447755d71e8dbb8f9c61ef98c527379eb8aa4b8bcadc425c",
+    "head": "19755342c13c53db898f4efee286ddf3c36c591a"
+  },
+  "whole_fast_ci_prior": {
     "run_id": 39892624194,
     "runtime": "b6aaa5f8296a1585fff5c40bb36288dfe0402031",
     "conclusion": "success",
@@ -67,5 +79,20 @@
     "passed": 23321,
     "declared_skips": 192,
     "all_skip_guards": "success"
+  },
+  "whole_fast_ci": {
+    "run_id": 39894910595,
+    "runtime": "19755342c13c53db898f4efee286ddf3c36c591a",
+    "conclusion": "success",
+    "groups": 4,
+    "passed": 23323,
+    "declared_skips": 192,
+    "all_skip_guards": "success"
+  },
+  "final_source_equivalence": {
+    "runtime": "19755342c13c53db898f4efee286ddf3c36c591a",
+    "production_file_count": 439,
+    "changed_production_files": [],
+    "verification": "All production hashes match immutable final7 capture and passing CI runtime; later changes are audit docs only."
   }
 }

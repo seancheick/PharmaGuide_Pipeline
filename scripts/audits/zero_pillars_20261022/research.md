@@ -8,7 +8,7 @@ No new clinical identifier, numerical rating, dose threshold or scoring policy w
 | Correction key | Original panel result | Receipt |
 | --- | --- | --- |
 | 77801 | Iodine153mcg, not153mg; existing automatic cleaner correction corroborated | [NIH label](https://api.ods.od.nih.gov/dsld/s3/pdf/77801.pdf) |
-| 78327 | Iodine150mcg, not18mg | [NIH label](https://api.ods.od.nih.gov/dsld/s3/pdf/78327.pdf) |
+| 78327 | Iodine150mcg, not18mg; independent acetylated-cystine identity ambiguity stays held | [NIH label](https://api.ods.od.nih.gov/dsld/s3/pdf/78327.pdf) |
 | 33660 | Selenium200mcg, not25mg | [NIH label](https://api.ods.od.nih.gov/dsld/s3/pdf/33660.pdf) |
 | 46729 | Iodine150mcg/100%DV, not100mg/10%DV; retain existing B6 correction | [NIH label](https://api.ods.od.nih.gov/dsld/s3/pdf/46729.pdf) |
 | 27807 | Molybdenum75mg conflicts with100%DV on original: preserve printed amount and hold, never guess75mcg. Zeaxanthin190mcg | [NIH label](https://api.ods.od.nih.gov/dsld/s3/pdf/27807.pdf) |
@@ -31,6 +31,19 @@ No new clinical identifier, numerical rating, dose threshold or scoring policy w
   finds213846,328818,337851,297638; all measured, true cysteine/NAC controls retained. The current
   absence of a reviewed cystine canonical owner remains an explicit hold;213846 blob export is
   correctly refused by the existing unresolved-active ledger guard.
+- **Acetylated cystine / NAC:** the full source-name stem screen also finds78327's printed
+  N-Acetyl-L-Cystine15mg, incorrectly grouped as N-Acetyl Cysteine in structured data. The original
+  NIH panel also prints Cystine, so no manufacturer-intended NAC correction is inferred. Live
+  [PubChem N-monoacetylcystine](https://pubchem.ncbi.nlm.nih.gov/compound/12049111) and
+  [N-acetyl-L-cysteine](https://pubchem.ncbi.nlm.nih.gov/compound/12035) responses distinguish
+  disulfide wording from NAC. These do not uniquely identify the ambiguous label as CID12049111;
+  neither identifier is assigned. Existing NAC negative-match rules exclude cystine, preserve15mg
+  literal wording and withhold quality. Its verified iodine150mcg correction remains. Only the
+  borrowed NAC warning group is removed;32 other ingredient-alert groups and safety gate unchanged.
+  No NAC clinical match existed before or after. The seven-label follow-up preserves all other
+  six results, including true NAC/cysteine controls. Original NAC citation3360052 content-checks
+  match. Unlike213846, this intact literal source qualifies for the existing known-unscored export
+  containment; blob export succeeds with unresolved identity and no awarded quality. No gate changed.
 - **Grape skin:** remove skin-only alias from IQM's multi-part whole-grape preparation. It resolves
   to the existing grape botanical, not grape seed research. [NCCIH](https://www.nccih.nih.gov/health/grape-seed-extract)
   identifies grape seed extract as the seed preparation. Explicit seed/multi-part aliases retained.
