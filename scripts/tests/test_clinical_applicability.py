@@ -1028,3 +1028,29 @@ def test_native_two_explicit_functions_keep_unbenchmarked_caffeine_in_dose(enric
     assert dose['purpose_ingredient_count'] == 2
     assert 'caffeine' in dose['unbenchmarked_purpose_ingredients']
     assert not dose['positive_clinical_benchmark_assessments']
+
+
+@pytest.mark.parametrize("notes, marker, extra, accepted", [
+    ("Soothes occasional digestive discomfort\r\nEnteric coating withstands stomach acid\r\nDelivers to the area of discomfort", None, False, True),
+    ("Digestive support. Enteric coating withstands stomach acid. Swallow whole.", None, False, True),
+    ("Digestive support\nNot enteric coated\nSwallow whole", None, False, False),
+    ("Digestive support\nNot enteric coated\nSwallow whole", "enteric coated", False, False),
+    ("Digestive support\nEnteric coating withstands stomach acid", "Different source\nEnteric coating withstands stomach acid", False, False),
+    ("Digestive support\nEnteric coating withstands stomach acid", None, True, False),
+    ("Digestive support\nOrdinary capsule", None, False, False),
+])
+def test_multiclause_delivery_marker_preserves_provenance_and_negation(notes, marker, extra, accepted):
+    row = {"name": "Peppermint Aerial Parts Oil", "canonical_id": "peppermint",
+           "raw_source_text": "Peppermint Aerial Parts Oil", "quantity": 0.2, "unit": "mL",
+           "raw_source_path": "ingredientRows[0]"}
+    product = {"activeIngredients": [row],
+               "statements": [{"type": "Formulation re: Other", "notes": notes}],
+               "delivery_data": {"systems": [{"canonical_name": "enteric-coated",
+                   "match_source": "statements[0]", "raw_source_text": marker or notes}]}}
+    if extra:
+        product["activeIngredients"].append({"name": "Fish Oil", "raw_source_text": "Fish Oil",
+            "quantity": 1000, "unit": "mg", "raw_source_path": "ingredientRows[1]"})
+    entry = {**reviewed_entries()["INGR_PEPPERMINT_OIL"],
+             "ingredient": row["name"], "matched_source_row_refs": [row["raw_source_path"]]}
+    result = assess_clinical_applicability(product, entry, assess_amount=False)
+    assert (result["status"] == "applicable") is accepted

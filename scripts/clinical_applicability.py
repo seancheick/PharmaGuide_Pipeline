@@ -360,8 +360,21 @@ def _source_delivery_forms(product: Mapping, row: Mapping, excluded_terms=(), *,
         if any(" " + _key(term) + " " in normalized_source for term in excluded_terms):
             continue
         marker_pattern = re.compile(r"(?<!\w)" + re.escape(marker) + r"(?!\w)", re.I)
-        if find_affirmative_label_match(marker_pattern, source_text):
-            result.add(_key(system.get("canonical_name") or system.get("name")))
+        if not marker_pattern.search(source_text):
+            continue
+        # raw_source_text is the retained source field, often several clauses,
+        # rather than the matched delivery token. Validate provenance above,
+        # then apply the shared negation matcher to the actual delivery terms.
+        from scoring_v4.modules.generic_helpers import _delivery_definitions, _delivery_patterns
+
+        name = str(system.get("canonical_name") or system.get("name") or "").lower().strip()
+        definition = _delivery_definitions().get(name)
+        if not isinstance(definition, Mapping):
+            continue
+        patterns = _delivery_patterns([name, *(definition.get("aliases") or [])])
+        if any(find_affirmative_label_match(pattern, marker)
+               and find_affirmative_label_match(pattern, source_text) for pattern in patterns):
+            result.add(_key(name))
     return result
 
 
