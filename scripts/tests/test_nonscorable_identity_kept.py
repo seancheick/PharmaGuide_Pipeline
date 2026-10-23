@@ -91,16 +91,23 @@ def test_blend_header_keeps_its_identity_and_meets_its_rules(enrich, dsld_id, la
     # header's identity must not add a second 300 mg to the caffeine ceiling.
     (219842, "dose", 13.0),
     # Echinacea Complex: the header identity must not replace the blend's lent
-    # echinacea anchor that routes and doses the product.
-    (73300, "dose", 11.4),
+    # echinacea anchor. Its unfinished benchmark earns zero; the separate
+    # non-botanical neutral contribution remains, giving 5.7 after aggregation.
+    (73300, "dose", 5.7),
     # Joint Health: a header whose printed name is itself an alias (Univestin)
-    # already scored on main; keeping header identities must not take it away.
-    (243676, "dose", 11.4),
+    # retains its identity, but an unfinished botanical benchmark earns no Dose.
+    (243676, "dose", 0.0),
 ])
 def test_header_identity_does_not_enter_scoring(enrich, dsld_id, pillar, expected):
     from scoring_v4.scored_artifact import build_scored_artifact
 
-    assert build_scored_artifact(enrich(dsld_id))["quality_pillars_v4"][pillar]["score"] == expected
+    scored = build_scored_artifact(enrich(dsld_id))
+    assert scored["quality_pillars_v4"][pillar]["score"] == expected
+    if dsld_id in {73300, 243676}:
+        dose = scored["_v4_module_breakdown"]["dimensions"]["dose"]["metadata"]
+        botanical = [row for row in dose["dose_contributions"] if row["assessment"] == "botanical_profile"]
+        assert botanical and all(row["credit_raw"] == 0 for row in botanical)
+        assert scored["quality_assessment_status"] == "partial"
 
 
 def test_identified_food_blend_member_does_not_route_a_vitamin_product(enrich):
@@ -273,7 +280,7 @@ def _scoring_inputs(artifact):
 
 @pytest.mark.parametrize("dsld_id,expected", [
     # Recognition re-identifies the row itself, as on main: the coptis owner stays.
-    (252567, {"score": 57.1, "status": "complete", "evidence_owners": ["coptis_rhizome"], "dose_credits": [11.97]}),
+    (252567, {"score": 45.7, "status": "partial", "evidence_owners": ["coptis_rhizome"], "dose_credits": [0]}),
     (315814, {"score": 50.6, "status": "partial", "evidence_owners": ["gaba", "maca", "oat_straw", "yohimbe"],
               "dose_credits": [12.54]}),
     # A kept coffeeberry row is invisible to scoring, never re-matched as coffee.

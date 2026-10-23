@@ -207,6 +207,17 @@
   ],
   "changelog": [
     {
+      "date": "2026-10-23",
+      "phase": "Assessment completeness: unresolved botanical benchmarks",
+      "source_commit": "7e87f062313486c91235f017b2945bbeb7ebba91",
+      "products_updated": [
+        270831,
+        239741,
+        336337
+      ],
+      "notes": "Paired full raw Clean/Enrich/Score/blob replay confirms all three lose 11.4 Dose points previously awarded solely from recognized botanical identity without a completed benchmark review. Canonical benchmark owner now leaves this unresolved. Cleaned/enriched content, ingredient identities/amounts and source safety flags/status/verdict unchanged. Yohimbe270831 retains CAUTION and B0_HIGH_RISK_SUBSTANCE; it is not a banned/recalled fixture. Ginseng239741 and green-tea336337 become partial assessments. This is removal of unreviewed neutral credit, not proof of inferior clinical efficacy or a new threshold. Other30 raw canaries unchanged. Private paired receipts at assessment_integrity_20261023/canary-movers-*; scientific benchmark reviews and final corpus acceptance remain open."
+    },
+    {
       "date": "2026-10-22",
       "phase": "Current-source raw canary reconciliation during zero-pillar audit",
       "source_commit": "b06f38597728c658d8297696f25c9528d8a86ae9",
