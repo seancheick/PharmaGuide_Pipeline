@@ -592,7 +592,7 @@ def preprocess_text(text: str) -> str:
 
 
 @lru_cache(maxsize=5000)
-def descriptor_fallback_candidates(text: str) -> Tuple[str, ...]:
+def descriptor_fallback_candidates(text: str, *, purpose_only: bool = False) -> Tuple[str, ...]:
     """
     Generate late-stage fallback candidates by stripping common label descriptors.
 
@@ -646,6 +646,9 @@ def descriptor_fallback_candidates(text: str) -> Tuple[str, ...]:
         seen.add(purpose_stripped)
         candidates.append(purpose_stripped)
         queue.append(purpose_stripped)
+
+    if purpose_only:
+        return tuple(candidates)
 
     while queue:
         current = queue.pop(0).strip(string.punctuation + string.whitespace)

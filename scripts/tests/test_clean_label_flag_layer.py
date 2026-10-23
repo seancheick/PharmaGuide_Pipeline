@@ -437,3 +437,11 @@ def test_color_purpose_resolution_does_not_discard_composition():
     from inactive_ingredient_resolver import InactiveIngredientResolver
     resolver = InactiveIngredientResolver()
     assert resolver.resolve("Titanium Dioxide (For Color and Iron Oxide)", role="inactive").matched_rule_id is None
+
+
+def test_policy_terms_keep_literals_before_purpose_and_do_not_add_grade_fallbacks():
+    from inactive_ingredient_resolver import _collect_terms
+    assert _collect_terms("Titanium Dioxide (For Color)", "Iron Oxide") == [
+        "titanium dioxide (for color", "iron oxide", "titanium dioxide"]
+    assert _collect_terms("Pharmaceutical Grade Titanium Dioxide") == [
+        "pharmaceutical grade titanium dioxide"]

@@ -161,12 +161,16 @@ def _collect_terms(*values: Any) -> list[str]:
     out: list[str] = []
     from normalization import descriptor_fallback_candidates
 
-    for v in values:
-        for candidate in (v, *descriptor_fallback_candidates(str(v or ""))):
-            n = _normalize(candidate)
-            if n and n not in seen:
-                seen.add(n)
-                out.append(n)
+    # Literal terms retain precedence; only explicit purpose annotations may
+    # supply a fallback, never generic preparation/grade descriptors.
+    candidates = list(values)
+    candidates.extend(candidate for value in values for candidate in
+                      descriptor_fallback_candidates(str(value or ""), purpose_only=True))
+    for candidate in candidates:
+        n = _normalize(candidate)
+        if n and n not in seen:
+            seen.add(n)
+            out.append(n)
     return out
 
 
