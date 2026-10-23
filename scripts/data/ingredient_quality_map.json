@@ -41536,7 +41536,10 @@
       "match_mode": "alias_and_fuzzy",
       "exclusions": [],
       "parent_id": null,
-      "confidence": "high"
+      "confidence": "high",
+      "negative_match_terms": [
+        "cystine"
+      ]
     },
     "category_enum": "amino_acids",
     "data_quality": {

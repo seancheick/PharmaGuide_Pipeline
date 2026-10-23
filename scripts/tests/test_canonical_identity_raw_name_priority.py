@@ -148,3 +148,17 @@ def test_separate_cystine_row_does_not_veto_cysteine(normalizer):
     assert by_name["L-Cystine"]["canonical_id"] != "l_cysteine"
     assert by_name["L-Cysteine"]["canonical_id"] == "l_cysteine"
     assert by_name["N-Acetyl-L-Cysteine"]["canonical_id"] == "nac"
+
+
+@pytest.mark.parametrize("group", [None, "N-Acetyl Cysteine"])
+def test_acetylated_cystine_does_not_borrow_nac_from_source_group(normalizer, group):
+    # 78327's original NIH panel prints this disulfide name too. A possible
+    # label typo is not permission to substitute the distinct NAC molecule.
+    name = "N-Acetyl-L-Cystine"
+    raw = {"id": "acetyl-cystine", "fullName": "Source ambiguity",
+        "ingredientRows": [{"name": name, "ingredientGroup": group,
+            "category": "non-nutrient/non-botanical",
+            "quantity": [{"quantity": 15, "unit": "mg"}], "forms": [], "nestedRows": []}]}
+    row = normalizer.normalize_product(raw)["activeIngredients"][0]
+    assert row["name"] == name and row["quantity"] == 15 and row["unit"] == "mg"
+    assert row["canonical_id"] not in {"nac", "l_cysteine"}
