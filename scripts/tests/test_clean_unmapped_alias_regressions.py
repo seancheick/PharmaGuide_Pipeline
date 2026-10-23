@@ -3598,6 +3598,9 @@ def test_inactive_color_purpose_annotation_preserves_known_identity(normalizer):
     annotated = normalizer._map_inactive_name_prefer_other("Titanium Dioxide (For Color)")
     assert plain[1] is True
     assert annotated[:2] == plain[:2]
+    assert normalizer._resolve_inactive_canonical_identity(
+        "Titanium Dioxide (For Color)", annotated[0]
+    ) == normalizer._resolve_inactive_canonical_identity("Titanium Dioxide", plain[0])
 
 
 @pytest.mark.parametrize("name", ["Titanium Dioxide (Iron Oxide)", "Titanium Dioxide (For Color and Iron Oxide)"])

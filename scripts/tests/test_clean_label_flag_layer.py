@@ -421,3 +421,19 @@ def test_quality_flag_citation_null_when_absent() -> None:
     f = out["clean_label_flags_v4"][0]
     assert "regulation_citation" in f and f["regulation_citation"] is None
     assert "regulation_url" in f and f["regulation_url"] is None
+
+
+def test_color_purpose_annotation_retains_existing_titanium_policy():
+    from inactive_ingredient_resolver import InactiveIngredientResolver
+    resolver = InactiveIngredientResolver()
+    plain = resolver.resolve("Titanium Dioxide", role="inactive")
+    annotated = resolver.resolve("Titanium Dioxide (For Color)", role="inactive")
+    assert annotated.matched_rule_id == plain.matched_rule_id == "BANNED_ADD_TITANIUM_DIOXIDE"
+    assert annotated.clean_label_penalty_base == plain.clean_label_penalty_base
+    assert annotated.raw_name == "Titanium Dioxide (For Color)"
+
+
+def test_color_purpose_resolution_does_not_discard_composition():
+    from inactive_ingredient_resolver import InactiveIngredientResolver
+    resolver = InactiveIngredientResolver()
+    assert resolver.resolve("Titanium Dioxide (For Color and Iron Oxide)", role="inactive").matched_rule_id is None

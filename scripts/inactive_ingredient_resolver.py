@@ -159,11 +159,14 @@ def _collect_terms(*values: Any) -> list[str]:
     """Dedupe + normalize candidate terms in order of preference."""
     seen: set[str] = set()
     out: list[str] = []
+    from normalization import descriptor_fallback_candidates
+
     for v in values:
-        n = _normalize(v)
-        if n and n not in seen:
-            seen.add(n)
-            out.append(n)
+        for candidate in (v, *descriptor_fallback_candidates(str(v or ""))):
+            n = _normalize(candidate)
+            if n and n not in seen:
+                seen.add(n)
+                out.append(n)
     return out
 
 
