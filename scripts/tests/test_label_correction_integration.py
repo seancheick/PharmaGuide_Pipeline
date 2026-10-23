@@ -1196,9 +1196,22 @@ def test_solgar_cystine_is_not_the_misattributed_alpha_glucan(normalizer):
         "category": "complex carbohydrate", "ingredientGroup": "Alpha Glucans",
         "uniiCode": "S95658MI3W", "notes": "L-Cystine Note: free form ",
         "quantity": [{"quantity": 500, "unit": "mg"}], "forms": [], "nestedRows": []}]
-    row = normalizer.normalize_product(raw)["activeIngredients"][0]
+    cleaned = normalizer.normalize_product(raw)
+    row = cleaned["activeIngredients"][0]
     assert row["name"] == "L-Cystine"
     assert row["quantity"] == 500 and row["unit"] == "mg"
     assert row["uniiCode"] is None
     assert row["canonical_id"] not in {"l_cysteine", "NHA_ALPHA_GLUCAN_OLIGOSACCHARIDE"}
     assert row["source_correction"]["provenance_tag"] == "official_source_identity_correction"
+
+    # Known printed identity is preserved, but no reviewed canonical owner or
+    # cysteine clinical credit is fabricated to make the export pass.
+    from enrich_supplements_v3 import SupplementEnricherV3
+    from scoring_v4.scored_artifact import build_scored_artifact
+    from build_final_db import build_detail_blob
+    enriched, _ = SupplementEnricherV3().enrich_product(cleaned)
+    artifact = build_scored_artifact(enriched)
+    assert artifact["quality_score_status"] == "not_scored"
+    assert artifact["quality_pillars_v4"] is None
+    with pytest.raises(ValueError, match="UNRESOLVED_SCORE_ACTIVE"):
+        build_detail_blob(enriched, artifact)

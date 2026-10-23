@@ -1,0 +1,71 @@
+{
+  "current_scoring": {
+    "exit_code": 0,
+    "source_unchanged": true,
+    "expected_product_count": 15427,
+    "product_count": 15427,
+    "inputs_manifest_sha256": "af99b4d6cebc68fd4c005b222455917609d4e1bf806f5da5b550ca2161fc1cb6",
+    "output_sha256": "bb0f47145e05a194da4b37d224702cba94c21b8bf267615184efc6d4a897126d",
+    "head": "b06f38597728c658d8297696f25c9528d8a86ae9"
+  },
+  "current_raw": {
+    "exit_code": 0,
+    "source_unchanged": true,
+    "expected_product_count": 5512,
+    "product_count": 5512,
+    "inputs_manifest_sha256": "9f7d5b12e2a300bdb2b866808ceedc77513717bb396406dbec8b7720e5b3d2ec",
+    "output_sha256": "d1d26283d4db7e58daf56873fd274cc386eb29130603f9c4624d41148177054b",
+    "head": "3453a22be90b8f4c74ca55c6c0be11e7391cd8b3"
+  },
+  "final_baseline": {
+    "exit_code": 0,
+    "source_unchanged": true,
+    "expected_product_count": 1039,
+    "product_count": 1039,
+    "inputs_manifest_sha256": "a31c74d1d769c7a2b66174351c9961b3ad315a39fa96047f75f7f5e620b0a78f",
+    "output_sha256": "8c8df06d1f908dd935cf4fb0bf628b25aace867cf3bbb064a15f3c419fb1883e",
+    "head": "b06f38597728c658d8297696f25c9528d8a86ae9"
+  },
+  "final_candidate": {
+    "exit_code": 0,
+    "source_unchanged": true,
+    "expected_product_count": 1039,
+    "product_count": 1039,
+    "inputs_manifest_sha256": "a31c74d1d769c7a2b66174351c9961b3ad315a39fa96047f75f7f5e620b0a78f",
+    "output_sha256": "b048baf7dd10393d02e21994ad29803d1cbe8587049a527a1fef2ff9a22e988b",
+    "head": "92fbaa336d76332ea7309508fab8b16dd8678980"
+  },
+  "cystine_baseline_full": {
+    "exit_code": 0,
+    "source_unchanged": true,
+    "expected_product_count": 6,
+    "product_count": 6,
+    "inputs_manifest_sha256": "7f73330865f319d87ec5791d36b206e529efc3727f822ceaa357b477dfdebb45",
+    "output_sha256": "75c3313434f271049908f136c3264d92fd852411928a43b3209cc19db0858636",
+    "head": "b06f38597728c658d8297696f25c9528d8a86ae9"
+  },
+  "cystine_candidate_full": {
+    "exit_code": 0,
+    "source_unchanged": true,
+    "expected_product_count": 6,
+    "product_count": 6,
+    "inputs_manifest_sha256": "7f73330865f319d87ec5791d36b206e529efc3727f822ceaa357b477dfdebb45",
+    "output_sha256": "c4b1e87a7e6822301cf6cd5f704f3f80d0c6f72f9f34c629d6811a4ca6611785",
+    "head": "b6aaa5f8296a1585fff5c40bb36288dfe0402031"
+  },
+  "final_source_equivalence": {
+    "runtime": "b6aaa5f8296a1585fff5c40bb36288dfe0402031",
+    "production_file_count": 439,
+    "changed_production_files": [],
+    "verification": "repository_provenance source_sha256 matches final6 capture exactly; only subsequent docs/test assertions differ"
+  },
+  "whole_fast_ci": {
+    "run_id": 39892624194,
+    "runtime": "b6aaa5f8296a1585fff5c40bb36288dfe0402031",
+    "conclusion": "success",
+    "groups": 4,
+    "passed": 23321,
+    "declared_skips": 192,
+    "all_skip_guards": "success"
+  }
+}
