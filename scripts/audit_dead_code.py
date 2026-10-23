@@ -72,7 +72,6 @@ KEEP: dict[str, str] = {
     "scripts/safety_alerts.py::applies_to": "reference of the device-side alert applicability the app implements",
     "scripts/export_schema.py::resolve_warning_rule_refs": "reference of schema-3 warning-ref rehydration (app: warning_rule_ref_resolver.dart)",
     # Owned elsewhere: another lane or Sean decides.
-    "scripts/clinical_evidence_schema.py::validate_ingredient_context": "validator for ingredient-lane study contexts, not yet wired into a data gate (a wiring decision)",
     "scripts/submission_review/extraction/development.py::run_development_split": "submission-extraction lane owns the development harness",
     "scripts/release_safety/gates.py::failure_summary": "part of evaluate_cleanup_gates, unwired since e3e64f43 and superseded by protected set + expected-count + quarantine; removing the gate module is Sean's call (ledger Q41)",
 }

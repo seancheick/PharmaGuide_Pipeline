@@ -526,7 +526,3 @@ def _clinical_strains(product: Dict[str, Any]) -> List[Dict[str, Any]]:
 
 def _norm_text(value: Any) -> str:
     return re.sub(r"[^a-z0-9]+", " ", str(value or "").strip().lower()).strip()
-
-
-def _safe_list(value: Any) -> list:
-    return value if isinstance(value, list) else []
