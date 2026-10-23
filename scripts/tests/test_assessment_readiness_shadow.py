@@ -4,13 +4,14 @@ import copy
 import json
 import sys
 from pathlib import Path
+import pytest
 
 
 SCRIPTS = Path(__file__).resolve().parents[1]
 if str(SCRIPTS) not in sys.path:
     sys.path.insert(0, str(SCRIPTS))
 
-from audits.assessment_readiness_shadow import build_shadow_report  # noqa: E402
+from audits.assessment_readiness_shadow import build_shadow_report, AssessmentReadinessShadowError  # noqa: E402
 from stage_manifest import write_stage_manifest  # noqa: E402
 
 
@@ -185,3 +186,34 @@ def test_shared_cause_keeps_each_label_and_requires_rebuilt_closure(tmp_path: Pa
         assert item["artifact_sha256"] == report["stages"][0]["owned_files"][0]["sha256"]
         assert item["assessment"]["state"] == "not_yet_evaluated"
     assert report["summary"]["product_count"] == 2
+
+
+def test_release_dependencies_are_queued_even_when_readiness_is_complete(tmp_path: Path) -> None:
+    _write_stage(tmp_path, [_product("ready", _row("Magnesium", "magnesium"))])
+    stage = tmp_path / 'output_Test_scored' / 'scored'
+    stage.mkdir(parents=True)
+    path = stage / 'scored_batch_1.json'
+    path.write_text(json.dumps([{'dsld_id': 'ready', 'assessment_readiness': {
+        'release_assessment': {'is_complete': False, 'blockers': [
+            'contributing_source_review_incomplete:used-study']}}}]))
+    write_stage_manifest(stage, 'score', [path], run_id='release-test')
+    report = build_shadow_report(tmp_path, scored_products_dir=tmp_path)
+    assert report['release_assessments_included'] is True
+    assert report['summary']['live_ready_product_count'] == 1
+    assert report['remediation_queue'] == []
+    assert len(report['cause_backlog']) == 1
+    group = report['cause_backlog'][0]
+    assert group['dimension'] == 'release'
+    assert group['cause'] == 'contributing_source_review_incomplete'
+    assert group['canonical_id'] == 'used-study'
+    assert group['affected_product_ids'] == ['ready']
+    assert group['source_evidence'][0]['artifact_sha256']
+    assert group['rebuilt_verification'] is None
+    path.write_text(json.dumps([{'dsld_id': 'ready'}]))
+    write_stage_manifest(stage, 'score', [path], run_id='old-score-test')
+    report = build_shadow_report(tmp_path, scored_products_dir=tmp_path)
+    assert report['cause_backlog'][0]['cause'] == 'release_assessment_receipt_missing'
+    path.write_text(json.dumps([{'dsld_id': 'different-cohort'}]))
+    write_stage_manifest(stage, 'score', [path], run_id='mismatched-score-test')
+    with pytest.raises(AssessmentReadinessShadowError, match='cohorts differ'):
+        build_shadow_report(tmp_path, scored_products_dir=tmp_path)

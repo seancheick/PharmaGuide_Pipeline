@@ -116,6 +116,7 @@ def build_shadow_report(
     products_dir: Path,
     *,
     generated_at: str | None = None,
+    scored_products_dir: Path | None = None,
 ) -> dict[str, Any]:
     """Return a manifest-owned, measure-only assessment-readiness report."""
     products_dir = Path(products_dir).resolve()
@@ -294,6 +295,47 @@ def build_shadow_report(
                         "dose_assessment_source": dose.get("assessment_source"),
                     })
 
+    if scored_products_dir is not None:
+        scored_root = Path(scored_products_dir).resolve()
+        scored_stages = sorted(scored_root.glob(f"output_*_scored/scored/{MANIFEST_NAME}"))
+        if not scored_stages:
+            raise AssessmentReadinessShadowError("No manifest-owned scored stages found")
+        scored_ids: set[str] = set()
+        for manifest_path in scored_stages:
+            stage = manifest_path.parent
+            manifest_digest = _sha256(manifest_path)
+            for path in select_stage_files([stage], "score", require_manifest=True):
+                digest = _sha256(path)
+                for product in _iter_products(json.loads(path.read_text()), path):
+                    pid = str(product.get("dsld_id") or product.get("dsldId") or product.get("id") or "")
+                    if not pid or pid in scored_ids:
+                        raise AssessmentReadinessShadowError("Missing or duplicate scored product ID")
+                    scored_ids.add(pid)
+                    readiness = product.get("assessment_readiness") or {}
+                    receipt = readiness.get("release_assessment") or {}
+                    blockers = receipt.get("blockers")
+                    if (not isinstance(blockers, list) or
+                            (receipt.get("is_complete") is not True and not blockers)):
+                        blockers = ["release_assessment_receipt_missing"]
+                    for blocker in blockers:
+                        cause, _, subject = str(blocker).partition(":")
+                        group = cause_backlog.setdefault(("release", cause, subject), {
+                            "dimension": "release", "cause": cause, "canonical_id": subject,
+                            "owner": "assessment_readiness.py::evaluate_release_assessment",
+                            "affected_product_ids": set(), "source_evidence": [],
+                            "status": "open", "resolution": None, "regression_coverage": [],
+                            "review_result": None, "rebuilt_verification": None,
+                        })
+                        group["affected_product_ids"].add(pid)
+                        group["source_evidence"].append({
+                            "dsld_id": pid, "stage_owner": stage.parent.name,
+                            "source_file": path.name, "artifact_sha256": digest,
+                            "manifest_sha256": manifest_digest,
+                            "assessment": receipt,
+                        })
+        if scored_ids != set(product_id_counts):
+            raise AssessmentReadinessShadowError("Scored and enriched product cohorts differ")
+
     duplicate_count = sum(
         count - 1 for count in product_id_counts.values() if count > 1
     )
@@ -303,6 +345,7 @@ def build_shadow_report(
         "mode": "measure_only",
         "enforcement_enabled": False,
         "catalog_eligibility_changed": False,
+        "release_assessments_included": scored_products_dir is not None,
         "generated_at": generated_at
         or datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
         "products_dir": str(products_dir),
@@ -342,9 +385,11 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--products-dir", default="scripts/products")
     parser.add_argument("--output", required=True)
+    parser.add_argument("--scored-products-dir", help="Include existing scored release-completion receipts")
     args = parser.parse_args()
 
-    report = build_shadow_report(Path(args.products_dir))
+    report = build_shadow_report(Path(args.products_dir),
+        scored_products_dir=Path(args.scored_products_dir) if args.scored_products_dir else None)
     output = Path(args.output).resolve()
     output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(
