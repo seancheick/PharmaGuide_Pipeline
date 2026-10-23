@@ -7,7 +7,7 @@
     "review_policy": "Every product entry is keyed by dsld_id and must carry: brand, product_name (for human-readable audit trail), raw_ingredient_text (the source row being corrected), corrected_ingredient_text (the text the cleaner should see, unchanged for unit-only corrections), correction_fields, evidence (free-text rationale with regulatory citations), sources (authoritative URLs — FDA, NIH, DailyMed, etc.), reviewer, and review_date (ISO 8601 YYYY-MM-DD). A verified cross-row defect may add additional_row_corrections, which inherit the product-level evidence, sources, reviewer, review_date, scope, and provenance tag. Quantity changes require exact raw and corrected value/unit pairs and must be supported by the official manufacturer or label image. Restoring a quantity absent from a form row additionally requires raw_quantity_missing=true, a positive corrected value/unit, and exact same-record source text that states the dose; the applier refuses to overwrite any existing quantity representation. A reviewed Daily Value correction requires an exact raw_daily_value and corrected_daily_value from the same official label; it rewrites only matching source percentages, never derives a percentage or changes a different value. A reviewed unresolved_unit scoring_disposition preserves exact raw_quantity_value/raw_quantity_unit, makes no inferred unit correction, and marks dose and upper-limit assessment unresolved until independent exact-label evidence resolves the conflict. It applies only when the raw name, value and unit all match.",
     "unmatched_drug_tokens_policy": "When a row's raw_ingredient_text matches a known regulated-drug name (e.g., 'Insulin', 'Acetaminophen', 'Ibuprofen') and there is NO matching override for the product, the row must NOT be silently mapped. The cleaner emits the row to a quarantine path with reason='requires_human_review_drug_token_in_supplement' and excludes the product from scoring. New occurrences enter the reviewer pipeline via the same schema.",
     "last_updated": "2026-10-22",
-    "total_entries": 78,
+    "total_entries": 83,
     "loaded_by": "scripts/enhanced_normalizer.py via _load_label_corrections (cached on first product)"
   },
   "corrections": {
@@ -605,7 +605,30 @@
       "reviewer": "PharmaGuide data integrity review (Sean Cheick, owner of record)",
       "review_date": "2026-08-19",
       "scope": "dsld_id_only",
-      "provenance_tag": "official_label_unit_correction"
+      "provenance_tag": "official_label_unit_correction",
+      "additional_row_corrections": [
+        {
+          "brand": "Nature's Way",
+          "product_name": "Multi Vitamin",
+          "raw_ingredient_text": "Magnesium",
+          "corrected_ingredient_text": "Magnesium",
+          "raw_quantity_unit": "mcg",
+          "corrected_quantity_unit": "mg",
+          "correction_fields": [
+            "quantity.unit"
+          ],
+          "evidence": "The exact historical NIH DSLD PDF prints Magnesium 125 mg; source JSON transcribes mcg. Visually verified against the original panel on 2026-10-22. Preserve the numeric amounts and exact product scope; this is not a Daily Value inference.",
+          "sources": [
+            "https://api.ods.od.nih.gov/dsld/v9/label/66380",
+            "https://api.ods.od.nih.gov/dsld/s3/pdf/66380.pdf"
+          ],
+          "reviewer": "Codex original-label data integrity review",
+          "review_date": "2026-10-22",
+          "scope": "dsld_id_only",
+          "provenance_tag": "official_label_unit_correction",
+          "raw_quantity_value": 125
+        }
+      ]
     },
     "46729": {
       "brand": "Nature's Way",
@@ -1845,6 +1868,136 @@
       "provenance_tag": "reviewed_label_unit_conflict",
       "raw_quantity_value": 75,
       "scoring_disposition": "unresolved_unit"
+    },
+    "64433": {
+      "brand": "CVS",
+      "product_name": "Spectravite Ultra Women 50+",
+      "raw_ingredient_text": "Vitamin D",
+      "corrected_ingredient_text": "Vitamin D",
+      "raw_quantity_unit": "mg",
+      "corrected_quantity_unit": "IU",
+      "correction_fields": [
+        "quantity.unit"
+      ],
+      "evidence": "The exact historical NIH DSLD PDF prints Vitamin D 800 IU; source JSON transcribes mg. Visually verified against the original panel on 2026-10-22. Preserve the numeric amounts and exact product scope; this is not a Daily Value inference.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/64433",
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/64433.pdf"
+      ],
+      "reviewer": "Codex original-label data integrity review",
+      "review_date": "2026-10-22",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_unit_correction",
+      "raw_quantity_value": 800
+    },
+    "64821": {
+      "brand": "CVS",
+      "product_name": "Spectravite Ultra Women 50+",
+      "raw_ingredient_text": "Vitamin D",
+      "corrected_ingredient_text": "Vitamin D",
+      "raw_quantity_unit": "mg",
+      "corrected_quantity_unit": "IU",
+      "correction_fields": [
+        "quantity.unit"
+      ],
+      "evidence": "The exact historical NIH DSLD PDF prints Vitamin D 800 IU; source JSON transcribes mg. Visually verified against the original panel on 2026-10-22. Preserve the numeric amounts and exact product scope; this is not a Daily Value inference.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/64821",
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/64821.pdf"
+      ],
+      "reviewer": "Codex original-label data integrity review",
+      "review_date": "2026-10-22",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_unit_correction",
+      "raw_quantity_value": 800
+    },
+    "273629": {
+      "brand": "Olly",
+      "product_name": "Lil’Ollys Kids’ Multi + Probiotic Yum Berry Punch",
+      "raw_ingredient_text": "Folic Acid",
+      "corrected_ingredient_text": "Folic Acid",
+      "raw_quantity_unit": "mg",
+      "corrected_quantity_unit": "mcg",
+      "correction_fields": [
+        "quantity.unit"
+      ],
+      "evidence": "The exact historical NIH DSLD PDF prints Folic Acid 200 (two gummies) and 100 (one gummy) mcg; source JSON transcribes mg. Visually verified against the original panel on 2026-10-22. Preserve the numeric amounts and exact product scope; this is not a Daily Value inference.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/273629",
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/273629.pdf"
+      ],
+      "reviewer": "Codex original-label data integrity review",
+      "review_date": "2026-10-22",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_unit_correction",
+      "additional_row_corrections": [
+        {
+          "brand": "Olly",
+          "product_name": "Lil’Ollys Kids’ Multi + Probiotic Yum Berry Punch",
+          "raw_ingredient_text": "Biotin",
+          "corrected_ingredient_text": "Biotin",
+          "raw_quantity_unit": "mg",
+          "corrected_quantity_unit": "mcg",
+          "correction_fields": [
+            "quantity.unit"
+          ],
+          "evidence": "The same original NIH DSLD 273629 label prints Biotin 75 mcg per two gummies and 37.5 mcg per one gummy. Both source JSON columns incorrectly say mg. Preserve both numeric amounts and the printed microgram units; no amount is inferred. Visually verified 2026-10-22.",
+          "sources": [
+            "https://api.ods.od.nih.gov/dsld/v9/label/273629",
+            "https://api.ods.od.nih.gov/dsld/s3/pdf/273629.pdf"
+          ],
+          "reviewer": "Codex original-label data integrity review",
+          "review_date": "2026-10-22",
+          "scope": "dsld_id_only",
+          "provenance_tag": "official_label_unit_correction"
+        }
+      ]
+    },
+    "241969": {
+      "brand": "Double Wood",
+      "product_name": "Vitamin C Chewable",
+      "raw_ingredient_text": "Vitamin D3",
+      "corrected_ingredient_text": "Vitamin D3",
+      "raw_quantity_unit": "mcg",
+      "corrected_quantity_unit": null,
+      "correction_fields": [
+        "scoring_disposition"
+      ],
+      "evidence": "The original NIH DSLD PDF prints Vitamin D3 125 mcg (1000 IU), 125% Daily Value. Those two stated units are inconsistent, so neither 125 mcg nor an inferred 25 mcg is a verified exposure. Preserve the printed 125 mcg and mark the source exposure unresolved using the existing unit-conflict contract. Visually verified 2026-10-22.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/241969",
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/241969.pdf"
+      ],
+      "reviewer": "Codex original-label data integrity review",
+      "review_date": "2026-10-22",
+      "scope": "dsld_id_only",
+      "provenance_tag": "reviewed_label_unit_conflict",
+      "raw_quantity_value": 125,
+      "scoring_disposition": "unresolved_unit"
+    },
+    "64494": {
+      "brand": "Life Extension",
+      "product_name": "Life Extension Mix Tablets",
+      "raw_ingredient_text": "Vitamin B12",
+      "corrected_ingredient_text": "Vitamin B12",
+      "raw_quantity_unit": "mcg",
+      "corrected_quantity_unit": "mcg",
+      "correction_fields": [
+        "quantity.dailyValueTargetGroup.percent"
+      ],
+      "evidence": "The exact historical NIH DSLD PDF prints Vitamin B12 600 mcg at 10,000% Daily Value. JSON transcribes 1,000%. Preserve the amount and unit and restore only the printed percentage, without deriving it from a reference. Visually verified 2026-10-22.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/64494",
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/64494.pdf"
+      ],
+      "reviewer": "Codex original-label data integrity review",
+      "review_date": "2026-10-22",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_unit_correction",
+      "raw_quantity_value": 600,
+      "raw_daily_value": 1000,
+      "corrected_daily_value": 10000,
+      "raw_daily_value_target_group": "Adults and children 4 or more years of age"
     }
   }
 }

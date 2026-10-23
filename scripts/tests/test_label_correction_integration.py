@@ -1155,3 +1155,40 @@ def test_zero_dose_audit_companion_source_errors_are_corrected(normalizer):
         "nestedRows": [], "forms": []}]
     active = normalizer.normalize_product(raw)["activeIngredients"][0]
     assert active["dailyValue"] == 100
+
+
+@pytest.mark.parametrize("pid,name,value,unit,expected_unit", [
+    (64433, "Vitamin D", 800, "mg", "IU"),
+    (64821, "Vitamin D", 800, "mg", "IU"),
+    (66380, "Magnesium", 125, "mcg", "mg"),
+    (273629, "Folic Acid", 200, "mg", "mcg"),
+    (273629, "Folic Acid", 100, "mg", "mcg"),
+    (273629, "Biotin", 75, "mg", "mcg"),
+    (273629, "Biotin", 37.5, "mg", "mcg"),
+])
+def test_zero_dose_audit_additional_official_unit_corrections(normalizer, pid, name, value, unit, expected_unit):
+    raw = _make_raw_product(pid, [])
+    raw["ingredientRows"] = [{**_make_ingredient_row(name, category="vitamin" if name != "Magnesium" else "mineral"),
+        "quantity": [{"quantity": value, "unit": unit}], "nestedRows": [], "forms": []}]
+    active = normalizer.normalize_product(raw)["activeIngredients"][0]
+    assert (active["quantity"], active["unit"]) == (value, expected_unit)
+
+
+def test_zero_dose_audit_inconsistent_dual_vitamin_d_units_remain_unresolved(normalizer):
+    raw = _make_raw_product(241969, [])
+    raw["ingredientRows"] = [{**_make_ingredient_row("Vitamin D3", category="vitamin"),
+        "quantity": [{"quantity": 125, "unit": "mcg"}], "nestedRows": [], "forms": []}]
+    active = normalizer.normalize_product(raw)["activeIngredients"][0]
+    assert active["quantity"] == 125
+    assert active["dose_data_quality"]["status"] == "unresolved_unit"
+
+
+def test_additional_magnesium_correction_preserves_existing_niacin_correction(normalizer):
+    raw = _make_raw_product(66380, [])
+    raw["ingredientRows"] = [
+        {**_make_ingredient_row("Niacin", category="vitamin"), "quantity": [{"quantity": 37, "unit": "ng"}], "nestedRows": [], "forms": []},
+        {**_make_ingredient_row("Magnesium", category="mineral"), "quantity": [{"quantity": 125, "unit": "mcg"}], "nestedRows": [], "forms": []},
+    ]
+    rows = {r["name"]: r for r in normalizer.normalize_product(raw)["activeIngredients"]}
+    assert (rows["Niacin"]["quantity"], rows["Niacin"]["unit"]) == (37, "mg")
+    assert (rows["Magnesium"]["quantity"], rows["Magnesium"]["unit"]) == (125, "mg")
