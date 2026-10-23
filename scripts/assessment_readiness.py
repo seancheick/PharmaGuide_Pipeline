@@ -1420,11 +1420,10 @@ def evaluate_release_assessment(
             pending = {"strain_reference_unreviewed", "strain_identity_mismatch",
                        "strain_identity_or_review_unresolved", "strain_context_review_pending",
                        "strain_dose_reference_unreviewed"}
-            from studied_formulas import reviewed_native_context_present
             reviewed_conclusion = evidence_meta.get("evidence_result_state") in {
                 "evaluated_applicable", "evaluated_null", "evaluated_unfavorable",
                 "no_qualifying_human_evidence",
-            } or any(reviewed_native_context_present(row) for row in strains)
+            }
             if (not native or not reviewed_conclusion
                     or any(row.get("status") in pending for row in strains)):
                 blockers.append("probiotic_evidence_assessment_incomplete")

@@ -1554,3 +1554,20 @@ def test_empty_generic_dependencies_pass_only_for_actual_selected_nutrition_auth
     assert evaluate_release_assessment(product, readiness, module, unfinished_source=None)['is_complete'] is True
     payload['metadata']['primary_evidence_floor_decisive'] = False
     assert evaluate_release_assessment(product, readiness, module, unfinished_source=None)['is_complete'] is False
+
+
+def test_zero_native_credit_does_not_close_unreviewed_purpose_transfer():
+    from test_probiotic_applicability_rubric import strain_product
+    from scoring_v4.modules.probiotic_evidence import score_evidence
+    from assessment_readiness import evaluate_release_assessment
+    product = strain_product(clinical_id='STRAIN_PLANTARUM_299V',
+                             name='Lactobacillus plantarum 299v', dose=1e10)
+    evidence = score_evidence(product)
+    assert evidence['score'] == 0
+    assert evidence['metadata']['evidence_result_state'] == 'research_present_applicability_unestablished'
+    readiness = {name: {'readiness': 'complete'} for name in
+                 ('identity', 'dose', 'evidence', 'verification', 'route')}
+    result = evaluate_release_assessment(product, readiness,
+        {'module': 'probiotic', 'dimensions': {'evidence': evidence}}, unfinished_source=None)
+    assert result['is_complete'] is False
+    assert 'probiotic_evidence_assessment_incomplete' in result['blockers']
