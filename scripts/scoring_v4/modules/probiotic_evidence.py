@@ -114,12 +114,13 @@ def score_evidence(product: Any) -> Dict[str, Any]:
         if family["source"] == "native_context":
             contributing_contexts.append(family["context"])
         elif family["source"] == "registry":
-            from clinical_applicability import assess_clinical_applicability
+            from clinical_applicability import assess_clinical_applicability, assess_clinical_source_review
             for entry in owned:
                 if entry.get("id") == family["family"]:
                     decision = (formula if formula.get("status") == "assessed_studied_formula"
                                 else assess_clinical_applicability(product, entry, assess_amount=False))
                     contributing_records.append({"id": entry.get("id"), **decision,
+                        "source_review": assess_clinical_source_review(entry),
                         "scope_qualification_complete": bool(decision.get("studied_population")
                             and decision.get("supported_outcomes"))})
                     break

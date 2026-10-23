@@ -416,7 +416,7 @@ def score_evidence(product: Dict[str, Any], *, apply_primary_floor: bool = False
                             if canonical in top_canonicals]
             if depth_bonus > 0 and scoped_matches:
                 dependencies.append(max(scoped_matches, key=lambda entry: _published_study_count(entry) or 0))
-    from clinical_applicability import assess_clinical_applicability, reviewed_entries
+    from clinical_applicability import assess_clinical_applicability, assess_clinical_source_review, reviewed_entries
     receipts = []
     for entry in {_entry_id(entry): entry for entry in dependencies}.values():
         decision = assess_clinical_applicability(product, entry, assess_amount=False)
@@ -430,6 +430,7 @@ def score_evidence(product: Dict[str, Any], *, apply_primary_floor: bool = False
         receipts.append({"id": _entry_id(entry), "status": decision["status"],
                          "reason_code": decision["reason_code"],
                          "scope_qualification_complete": bool(decision["status"] == "applicable" and population and outcomes),
+                         "source_review": assess_clinical_source_review(entry),
                          "studied_population": population, "supported_outcomes": outcomes or [],
                          "source_references": reference.get("references_structured") or reference.get("references") or [],
                          "studied_regimens": reference.get("studied_regimens"),
@@ -437,6 +438,8 @@ def score_evidence(product: Dict[str, Any], *, apply_primary_floor: bool = False
 
     metadata = {
         "contributing_record_assessments": receipts,
+        "selected_nutrition_authority": (nutrition_authority_canonical
+            if total > 0 and primary_floor_decisive else None),
         "phase": PHASE_MARKER,
         "ingredient_points": {k: round(v, 4) for k, v in sorted(ingredient_points.items())},
         "matched_entries": len(matched_entry_ids),

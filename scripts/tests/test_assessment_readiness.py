@@ -1451,7 +1451,8 @@ def test_release_completion_is_separate_and_blocks_owned_missing_work(dimension)
 
 
 @pytest.mark.parametrize('status,expected', [('applicable', True), ('not_curated', False), ('unresolved', False)])
-def test_release_completion_uses_actual_generic_credit_dependencies(status, expected):
+def test_release_completion_uses_actual_generic_credit_dependencies(status, expected, monkeypatch):
+    _install_completed_release_context(monkeypatch)
     from assessment_readiness import evaluate_release_assessment
     readiness = {name: {'readiness': 'complete'} for name in
                  ('identity', 'dose', 'evidence', 'verification', 'route')}
@@ -1490,7 +1491,8 @@ def test_release_native_omega_does_not_consume_unused_generic_credit():
 @pytest.mark.parametrize('scope_complete,regimen_status,expected', [
     (False, 'verified', False), (True, 'extraction_pending', False),
     (True, 'source_not_reported', True), (True, 'verified', True)])
-def test_generic_release_requires_scoped_review_but_never_invents_numeric_benchmark(scope_complete, regimen_status, expected):
+def test_generic_release_requires_scoped_review_but_never_invents_numeric_benchmark(scope_complete, regimen_status, expected, monkeypatch):
+    _install_completed_release_context(monkeypatch, regimen_status)
     from assessment_readiness import evaluate_release_assessment
     readiness = {name: {'readiness': 'complete'} for name in
                  ('identity', 'dose', 'evidence', 'verification', 'route')}
@@ -1500,3 +1502,54 @@ def test_generic_release_requires_scoped_review_but_never_invents_numeric_benchm
     module = {'module': 'generic', 'dimensions': {'evidence': {'score': 10,
         'metadata': {'contributing_record_assessments': [receipt]}}}}
     assert evaluate_release_assessment({}, readiness, module, unfinished_source=None)['is_complete'] is expected
+
+
+def test_positive_generic_empty_dependencies_need_selected_authority_proof():
+    from assessment_readiness import evaluate_release_assessment
+    readiness = {name: {'readiness': 'complete'} for name in
+                 ('identity', 'dose', 'evidence', 'verification', 'route')}
+    module = {'module': 'generic', 'dimensions': {'evidence': {'score': 14,
+        'metadata': {'contributing_record_assessments': []}}}}
+    assert evaluate_release_assessment({}, readiness, module, unfinished_source=None)['is_complete'] is False
+
+
+def test_positive_generic_population_and_outcome_are_not_full_source_review():
+    from assessment_readiness import evaluate_release_assessment
+    readiness = {name: {'readiness': 'complete'} for name in
+                 ('identity', 'dose', 'evidence', 'verification', 'route')}
+    receipt = {'id': 'partial', 'status': 'applicable', 'scope_qualification_complete': True,
+               'studied_population': 'adults', 'supported_outcomes': ['sleep']}
+    module = {'module': 'generic', 'dimensions': {'evidence': {'score': 14,
+        'metadata': {'contributing_record_assessments': [receipt]}}}}
+    assert evaluate_release_assessment({}, readiness, module, unfinished_source=None)['is_complete'] is False
+
+
+def _install_completed_release_context(monkeypatch, dose_status='verified'):
+    import clinical_applicability
+    from test_clinical_evidence_schema_ingredient import _context
+    context = _context()
+    context.update(review_status='clinician_approved', study_design='rct', purpose='treatment',
+                   clinical_review={'reviewer': 'Synthetic reviewer', 'reviewed_at': '2026-01-01T00:00:00Z',
+                                    'scope': 'identity_dose_outcome_applicability'})
+    context['dose']['dose_status'] = dose_status
+    context['dose']['dosage_forms'] = ['capsule']
+    if dose_status == 'source_not_reported':
+        context['dose'].update(values=[], dose_basis='not_applicable', basis='unresolved')
+    monkeypatch.setattr(clinical_applicability, 'reviewed_entries', lambda: {'used': {'id': 'used', 'study_contexts': [context]}})
+    return context
+
+
+def test_empty_generic_dependencies_pass_only_for_actual_selected_nutrition_authority():
+    from assessment_readiness import evaluate_release_assessment
+    from scoring_v4.modules.generic_evidence import score_evidence
+    from test_v4_generic_evidence_p133 import _product, _match
+    product = _product(matches=[_match(id='UNREVIEWED_SYNTHETIC', study_type='rct_single', effect_direction='positive_weak')])
+    payload = score_evidence(product, apply_primary_floor=True)
+    assert payload['metadata']['contributing_record_assessments'] == []
+    assert payload['metadata']['selected_nutrition_authority'] == 'magnesium'
+    readiness = {name: {'readiness': 'complete'} for name in
+                 ('identity', 'dose', 'evidence', 'verification', 'route')}
+    module = {'module': 'generic', 'dimensions': {'evidence': payload}}
+    assert evaluate_release_assessment(product, readiness, module, unfinished_source=None)['is_complete'] is True
+    payload['metadata']['primary_evidence_floor_decisive'] = False
+    assert evaluate_release_assessment(product, readiness, module, unfinished_source=None)['is_complete'] is False

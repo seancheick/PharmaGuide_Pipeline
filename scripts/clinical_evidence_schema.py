@@ -302,6 +302,7 @@ def validate_frozen_context(
     context: Mapping,
     *,
     known_component_ids: Set[str] | None = None,
+    require_complete_review: bool = False,
 ) -> list[str]:
     """Return stable error codes for a context using schema ``1.1.0``.
 
@@ -331,6 +332,39 @@ def validate_frozen_context(
         errors.append("context.scoring_eligible_invalid")
     errors.extend(_dose_errors(context, known_component_ids))
     errors.extend(_outcome_errors(context))
+    if require_complete_review:
+        from probiotic_measurements import context_accepted_for_scoring
+        if not context_accepted_for_scoring(context):
+            errors.append("review.approval_required")
+        for field in ("context_id", "condition", "purpose", "trial_family", "study_design"):
+            if not _nonempty_text(context.get(field)):
+                errors.append(field + ".required_for_complete_review")
+        population = context.get("population")
+        if not isinstance(population, Mapping) or not _nonempty_text(population.get("description")):
+            errors.append("population.required_for_complete_review")
+        if not _text_list(context.get("limitations")):
+            errors.append("limitations.required_for_complete_review")
+        dose = context.get("dose")
+        dose = dose if isinstance(dose, Mapping) else {}
+        if dose.get("dose_status") in {"extraction_pending", "conflicting_source_values"}:
+            errors.append("dose.source_review_incomplete")
+        if dose.get("duration_basis") == "extraction_pending":
+            errors.append("dose.duration_review_incomplete")
+        if not _text_list(dose.get("dosage_forms")):
+            errors.append("dose.delivery_required_for_complete_review")
+        # A source that did not report a regimen is a reviewed limitation, not
+        # an instruction to invent an amount. It still needs a source locator.
+        provenance = dose.get("source_provenance")
+        if (not isinstance(provenance, Mapping)
+                or provenance.get("pmid") not in context.get("source_pmids", [])
+                or not _nonempty_text(provenance.get("location"))):
+            errors.append("dose.source_locator_required_for_complete_review")
+        for outcome in context.get("outcomes") or []:
+            if isinstance(outcome, Mapping) and (outcome.get("hierarchy") == "unresolved"
+                                               or outcome.get("direction") == "unresolved"):
+                errors.append("outcomes.review_incomplete")
+        if context.get("included_study_pmids") == "extraction_pending":
+            errors.append("included_studies.review_incomplete")
     return errors
 
 
@@ -339,6 +373,7 @@ def validate_ingredient_context(
     *,
     known_component_ids: Set[str] | None = None,
     authoring: bool = False,
+    require_complete_review: bool = False,
 ) -> list[str]:
     """Return stable error codes for an ingredient-lane study context.
 
@@ -351,7 +386,8 @@ def validate_ingredient_context(
 
     if not isinstance(context, Mapping):
         return ["context.invalid"]
-    errors = list(validate_frozen_context(context, known_component_ids=known_component_ids))
+    errors = list(validate_frozen_context(context, known_component_ids=known_component_ids,
+                                         require_complete_review=require_complete_review))
 
     scope = context.get("identity_scope")
     if scope not in INGREDIENT_IDENTITY_SCOPES:
@@ -415,6 +451,12 @@ def validate_ingredient_context(
         normalization = dose.get("normalization")
         if not isinstance(normalization, Mapping) or not _nonempty_text(normalization.get("basis")):
             errors.append("dose.normalization_provenance_required")
+
+    if require_complete_review:
+        if human != "confirmed":
+            errors.append("human_status.confirmed_required_for_complete_review")
+        if integrity in {"retracted", "expression_of_concern"}:
+            errors.append("source_integrity.complete_review_not_eligible")
 
     if authoring and context.get("review_status") != "source_verified_pending_clinical_review":
         errors.append("review_status.pending_required_for_authoring")

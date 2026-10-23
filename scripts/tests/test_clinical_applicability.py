@@ -1054,3 +1054,39 @@ def test_multiclause_delivery_marker_preserves_provenance_and_negation(notes, ma
              "ingredient": row["name"], "matched_source_row_refs": [row["raw_source_path"]]}
     result = assess_clinical_applicability(product, entry, assess_amount=False)
     assert (result["status"] == "applicable") is accepted
+
+
+@pytest.mark.parametrize('missing', ['identity', 'route', 'exposure_basis', 'population', 'outcomes',
+                                    'source_pmids', 'limitations', 'clinical_review', 'dose'])
+def test_contributing_record_requires_complete_authoritative_source_context(monkeypatch, missing):
+    import clinical_applicability
+    from test_assessment_readiness import _install_completed_release_context
+    context = _install_completed_release_context(monkeypatch)
+    assert clinical_applicability.assess_clinical_source_review({'id': 'used'})['is_complete'] is True
+    context.pop(missing)
+    # A caller's optimistic receipt cannot repair the source record.
+    result = clinical_applicability.assess_clinical_source_review({'id': 'used',
+        'source_review': {'is_complete': True}, 'study_contexts': [{'review_status': 'clinician_approved'}]})
+    assert result['is_complete'] is False
+    assert result['errors']
+
+
+@pytest.mark.parametrize('status,expected', [('verified', True), ('source_not_reported', True),
+                                            ('extraction_pending', False)])
+def test_source_regimen_review_is_not_a_required_numeric_dose_benchmark(monkeypatch, status, expected):
+    from test_assessment_readiness import _install_completed_release_context
+    from clinical_applicability import assess_clinical_source_review
+    context = _install_completed_release_context(monkeypatch, status)
+    assert 'minimum_daily_dose' not in context['dose']
+    assert 'maximum_daily_dose' not in context['dose']
+    assert assess_clinical_source_review({'id': 'used'})['is_complete'] is expected
+
+
+@pytest.mark.parametrize('field,value', [('human_status', 'ambiguous'), ('source_integrity', 'expression_of_concern')])
+def test_approval_without_eligibility_flag_cannot_complete_uncertain_source(monkeypatch, field, value):
+    from test_assessment_readiness import _install_completed_release_context
+    from clinical_applicability import assess_clinical_source_review
+    context = _install_completed_release_context(monkeypatch)
+    context.pop('scoring_eligible', None)
+    context[field] = value
+    assert assess_clinical_source_review({'id': 'used'})['is_complete'] is False

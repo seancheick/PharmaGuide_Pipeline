@@ -449,6 +449,10 @@ def test_release_blocks_pending_study_extraction_not_unknown_label_cfu(source_pe
     payload = copy.deepcopy(payload)
     contexts = payload['metadata']['contributing_native_contexts']
     assert contexts
+    # This control isolates manufacturer uncertainty using a complete synthetic
+    # delivery fact. The real registry's unextracted delivery remains held.
+    for context in contexts:
+        context['dose']['dosage_forms'] = ['drops']
     if source_pending:
         contexts[0]['dose']['dose_status'] = 'extraction_pending'
         contexts[0]['dose']['values'] = []
@@ -461,3 +465,32 @@ def test_release_blocks_pending_study_extraction_not_unknown_label_cfu(source_pe
     result = evaluate_release_assessment({}, readiness,
         {'module': 'probiotic', 'dimensions': {'evidence': payload}}, unfinished_source=None)
     assert result['is_complete'] is (not source_pending), result
+
+
+@pytest.mark.parametrize('field', ['population', 'limitations', 'source_pmids', 'outcomes', 'dose'])
+def test_used_native_context_missing_source_fields_cannot_complete_release(field):
+    import copy
+    from assessment_readiness import evaluate_release_assessment
+    payload = copy.deepcopy(probiotic_evidence.score_evidence(_infant_product()))
+    assert payload['metadata']['contributing_native_contexts']
+    payload['metadata']['contributing_native_contexts'][0].pop(field)
+    readiness = {name: {'readiness': 'complete'} for name in
+                 ('identity', 'dose', 'evidence', 'verification', 'route')}
+    result = evaluate_release_assessment({}, readiness,
+        {'module': 'probiotic', 'dimensions': {'evidence': payload}}, unfinished_source=None)
+    assert result['is_complete'] is False
+
+
+@pytest.mark.parametrize('field', ['dose_status', 'dose_basis', 'duration_basis', 'dosage_forms', 'source_provenance'])
+def test_used_native_context_missing_regimen_fields_cannot_complete_release(field):
+    import copy
+    from assessment_readiness import evaluate_release_assessment
+    payload = copy.deepcopy(probiotic_evidence.score_evidence(_infant_product()))
+    for context in payload['metadata']['contributing_native_contexts']:
+        context['dose']['dosage_forms'] = ['drops']  # complete synthetic delivery control
+    readiness = {name: {'readiness': 'complete'} for name in
+                 ('identity', 'dose', 'evidence', 'verification', 'route')}
+    module = {'module': 'probiotic', 'dimensions': {'evidence': payload}}
+    assert evaluate_release_assessment({}, readiness, module, unfinished_source=None)['is_complete'] is True
+    payload['metadata']['contributing_native_contexts'][0]['dose'].pop(field)
+    assert evaluate_release_assessment({}, readiness, module, unfinished_source=None)['is_complete'] is False

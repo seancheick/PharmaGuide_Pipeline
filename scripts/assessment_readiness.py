@@ -1377,18 +1377,6 @@ def evaluate_release_assessment(
     missing owner facts are not. Scored artifacts retain this receipt because
     the enriched source needed to reconstruct it is intentionally omitted.
     """
-    def _source_review_pending(value: Any) -> bool:
-        # Consume explicit source states only; no benchmark is not pending.
-        if isinstance(value, Mapping):
-            return any((key.endswith("status") or key == "state") and item in {
-                "extraction_pending", "conflicting_source_values", "pending_review",
-                "adjudication_required", "unresolved",
-            } for key, item in value.items() if isinstance(item, str)) or any(
-                _source_review_pending(item) for item in value.values())
-        if isinstance(value, list):
-            return any(_source_review_pending(item) for item in value)
-        return False
-
     blockers = []
     if unfinished_source:
         blockers.append(unfinished_source)
@@ -1447,16 +1435,15 @@ def evaluate_release_assessment(
                     blockers.append("probiotic_contributing_evidence_receipts_missing")
                 else:
                     from studied_formulas import context_accepted_for_scoring
-                    from probiotic_measurements import effective_clinical_dose_basis
+                    from clinical_evidence_schema import validate_frozen_context
                     for context in contexts:
-                        dose = _safe_dict(context.get("dose"))
                         if (not context_accepted_for_scoring(context)
-                                or dose.get("dose_status") in {"extraction_pending", "conflicting_source_values"}
-                                or dose.get("duration_basis") == "extraction_pending"
-                                or effective_clinical_dose_basis(dose) != "discrete_daily_arms"
-                                or not dose.get("values")):
+                                or validate_frozen_context(context, require_complete_review=True)):
                             blockers.append("probiotic_contributing_context_incomplete:" + str(context.get("context_id") or "unknown"))
                     for receipt in records:
+                        from clinical_applicability import assess_clinical_source_review
+                        if not assess_clinical_source_review(receipt)["is_complete"]:
+                            blockers.append("contributing_source_review_incomplete:" + str(receipt.get("id") or "unknown"))
                         if (receipt.get("status") not in {"applicable", "assessed_studied_formula"}
                                 or receipt.get("scope_qualification_complete") is not True):
                             blockers.append("clinical_applicability_unreviewed:" + str(receipt.get("id") or "unknown"))
@@ -1469,13 +1456,23 @@ def evaluate_release_assessment(
             if receipts is None:
                 # Category modules may embed the generic owner's receipt.
                 receipts = _safe_dict(evidence_meta.get("generic_evidence_metadata")).get("contributing_record_assessments")
-            if receipts is not None:
+            if isinstance(receipts, list):
+                authority = evidence_meta.get("selected_nutrition_authority")
+                selected_authority = (
+                    authority in DRI_ESSENTIAL_NUTRIENTS
+                    and evidence_meta.get("nutrition_authority_floor_applied") is True
+                    and evidence_meta.get("primary_evidence_floor_decisive") is True
+                    and evidence_meta.get("nutrition_authority_canonical") == authority
+                )
+                if (not receipts and float(_safe_dict(dimensions.get("evidence")).get("score") or 0) > 0
+                        and not selected_authority):
+                    blockers.append("contributing_evidence_receipts_missing")
                 for receipt in receipts:
                     if (receipt.get("status") != "applicable"
                             or receipt.get("scope_qualification_complete") is not True):
                         blockers.append("clinical_applicability_unreviewed:" + str(receipt.get("id") or "unknown"))
-                    if (_source_review_pending(receipt.get("studied_regimens"))
-                            or _source_review_pending(receipt.get("reference_semantics"))):
+                    from clinical_applicability import assess_clinical_source_review
+                    if not assess_clinical_source_review(receipt)["is_complete"]:
                         blockers.append("contributing_source_review_incomplete:" + str(receipt.get("id") or "unknown"))
             elif float(_safe_dict(dimensions.get("evidence")).get("score") or 0) > 0:
                 blockers.append("contributing_evidence_receipts_missing")

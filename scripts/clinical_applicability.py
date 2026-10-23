@@ -378,6 +378,30 @@ def _source_delivery_forms(product: Mapping, row: Mapping, excluded_terms=(), *,
     return result
 
 
+def assess_clinical_source_review(entry: Mapping) -> dict:
+    """Validate contributing research at the existing clinical scope owner.
+
+    Review flags on enriched matches cannot invent a source context or override
+    the curated record. This is completion evidence, not a new dose benchmark.
+    """
+    from clinical_evidence_schema import validate_ingredient_context
+    reference = reviewed_entries().get(str(entry.get("id") or entry.get("study_id")), {})
+    contexts = reference.get("study_contexts")
+    if not isinstance(contexts, list) or not contexts:
+        return {"is_complete": False, "errors": ["clinical_source_contexts_missing"], "context_ids": []}
+    contributing = [context for context in contexts if isinstance(context, Mapping)
+                    and context.get("scoring_eligible") is not False
+                    and context.get("review_status") != "rejected_source"]
+    errors = []
+    if not contributing:
+        errors.append("clinical_contributing_contexts_missing")
+    for context in contributing:
+        errors.extend(str(context.get("context_id") or "unknown") + ":" + error
+                      for error in validate_ingredient_context(context, require_complete_review=True))
+    return {"is_complete": not errors, "errors": errors,
+            "context_ids": [context.get("context_id") for context in contributing]}
+
+
 def assess_clinical_applicability(product: Mapping, entry: Mapping, *, assess_amount: bool = True) -> dict:
     reference = reviewed_entries().get(str(entry.get("id") or entry.get("study_id")), {})
     # The curated owner can retain research for context while withdrawing
