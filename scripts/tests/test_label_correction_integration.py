@@ -1219,14 +1219,14 @@ def test_solgar_cystine_is_not_the_misattributed_alpha_glucan(normalizer):
     assert cleaned["label_source_rows"][0]["raw_source_text"] == "Alpha-Glucan Oligosaccharide"
 
 
-@pytest.mark.parametrize("mutation", ["missing", "forged", "original", "corrected", "inventory", "product"])
+@pytest.mark.parametrize("mutation", ["missing", "forged", "original", "corrected", "inventory", "product", "unii", "missing_unii", "duplicate"])
 def test_verified_identity_correction_cannot_authorize_stale_or_forged_export(mutation):
     from build_final_db import _verified_corrected_source_label
     row = {"raw_source_path": "ingredientRows[0]", "label_display_name": "L-Cystine"}
     active = {"raw_source_path": "ingredientRows[0]", "name": "L-Cystine", "source_correction": {
         "provenance_tag": "official_source_identity_correction",
         "original_ingredient_text": "Alpha-Glucan Oligosaccharide",
-        "corrected_ingredient_text": "L-Cystine"}}
+        "corrected_ingredient_text": "L-Cystine", "original_unii_code": "S95658MI3W", "corrected_unii_code": None}}
     source = {"raw_source_text": "Alpha-Glucan Oligosaccharide"}
     enriched = {"id": "213846", "activeIngredients": [active]}
     if mutation == "missing": active.pop("source_correction")
@@ -1235,4 +1235,7 @@ def test_verified_identity_correction_cannot_authorize_stale_or_forged_export(mu
     elif mutation == "corrected": active["source_correction"]["corrected_ingredient_text"] = "Cysteine"
     elif mutation == "inventory": source["raw_source_text"] = "Other"
     elif mutation == "product": enriched["id"] = "unreviewed"
+    elif mutation == "unii": active["source_correction"]["original_unii_code"] = "wrong"
+    elif mutation == "missing_unii": active["source_correction"].pop("original_unii_code")
+    elif mutation == "duplicate": enriched["activeIngredients"].append(dict(active))
     assert _verified_corrected_source_label(enriched, row, source) is None

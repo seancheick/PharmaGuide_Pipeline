@@ -3436,6 +3436,15 @@ def _verified_corrected_source_label(enriched, row, source):
             and corrected == normalize_label_display(candidate.get("corrected_ingredient_text"))
             and active[0].get("name") == candidate.get("corrected_ingredient_text")
             and not active[0].get("canonical_id")
+            and ("raw_unii_code" not in candidate or (
+                correction.get("original_unii_code") == candidate["raw_unii_code"]
+                and "original_unii_code" in correction
+            ))
+            and ("corrected_unii_code" not in candidate or (
+                "corrected_unii_code" in correction
+                and correction["corrected_unii_code"] == candidate["corrected_unii_code"]
+                and active[0].get("uniiCode") == candidate["corrected_unii_code"]
+            ))
         ):
             return normalize_label_display(original)
     return None
