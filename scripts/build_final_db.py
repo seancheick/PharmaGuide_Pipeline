@@ -3404,6 +3404,43 @@ def _classify_export_contract_issues(
     return "warning"
 
 
+def _verified_corrected_source_label(enriched, row, source):
+    """Reconcile a reviewed label correction with its immutable API inventory."""
+    from constants import PRODUCT_LABEL_CORRECTIONS
+
+    path = row.get("raw_source_path")
+    active = [item for item in safe_list(enriched.get("activeIngredients"))
+              if isinstance(item, dict) and item.get("raw_source_path") == path]
+    if len(active) != 1:
+        return None
+    correction = safe_dict(active[0].get("source_correction"))
+    if not (correction.get("original_ingredient_text")
+            and correction.get("corrected_ingredient_text")
+            and correction.get("provenance_tag") == "official_source_identity_correction"):
+        return None
+    with PRODUCT_LABEL_CORRECTIONS.open(encoding="utf-8") as handle:
+        registry = json.load(handle).get("corrections", {})
+    entry = safe_dict(registry.get(str(enriched.get("id") or enriched.get("dsld_id"))))
+    entries = [entry] + safe_list(entry.get("additional_row_corrections"))
+    original = source.get("raw_source_text")
+    corrected = row.get("label_display_name")
+    for candidate in entries:
+        if not isinstance(candidate, dict):
+            continue
+        if (
+            candidate.get("provenance_tag") == "official_source_identity_correction"
+            and correction.get("provenance_tag") == candidate.get("provenance_tag")
+            and original == candidate.get("raw_ingredient_text")
+            and correction.get("original_ingredient_text") == original
+            and correction.get("corrected_ingredient_text") == candidate.get("corrected_ingredient_text")
+            and corrected == normalize_label_display(candidate.get("corrected_ingredient_text"))
+            and active[0].get("name") == candidate.get("corrected_ingredient_text")
+            and not active[0].get("canonical_id")
+        ):
+            return normalize_label_display(original)
+    return None
+
+
 def _warning_only_identity_labels(
     enriched: Dict[str, Any], scored: Dict[str, Any],
 ) -> Dict[str, str]:
@@ -3448,6 +3485,12 @@ def _warning_only_identity_labels(
         path = row.get("raw_source_path")
         source = [item for item in source_rows if isinstance(item, dict)
                   and item.get("raw_source_path") == path]
+        corrected_source = (
+            _verified_corrected_source_label(enriched, row, source[0])
+            if (known_unscored and len(source) == 1
+                and row.get("label_display_name") != normalize_label_display(source[0].get("raw_source_text")))
+            else None
+        )
         if not (
             isinstance(path, str) and path.strip() and row_paths.count(path) == 1
             and len(source) == 1
@@ -3463,10 +3506,10 @@ def _warning_only_identity_labels(
             and row["source_label_name"].strip()
             and row.get("label_display_name") == normalize_label_display(row["source_label_name"])
             and row["label_display_name"] == normalize_label_display(row.get("raw_source_text"))
-            and row["label_display_name"] == normalize_label_display(source[0].get("raw_source_text"))
+            and (corrected_source or row["label_display_name"] == normalize_label_display(source[0].get("raw_source_text")))
         ):
             continue
-        labels[path] = row["label_display_name"]
+        labels[path] = corrected_source or row["label_display_name"]
     return labels
 
 

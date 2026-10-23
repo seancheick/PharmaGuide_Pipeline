@@ -1213,5 +1213,26 @@ def test_solgar_cystine_is_not_the_misattributed_alpha_glucan(normalizer):
     artifact = build_scored_artifact(enriched)
     assert artifact["quality_score_status"] == "not_scored"
     assert artifact["quality_pillars_v4"] is None
-    with pytest.raises(ValueError, match="UNRESOLVED_SCORE_ACTIVE"):
-        build_detail_blob(enriched, artifact)
+    blob = build_detail_blob(enriched, artifact)
+    assert blob["v4_score_provenance"]["quality_score_status"] == "not_scored"
+    assert blob["quality_pillars_v4"] is None
+    assert cleaned["label_source_rows"][0]["raw_source_text"] == "Alpha-Glucan Oligosaccharide"
+
+
+@pytest.mark.parametrize("mutation", ["missing", "forged", "original", "corrected", "inventory", "product"])
+def test_verified_identity_correction_cannot_authorize_stale_or_forged_export(mutation):
+    from build_final_db import _verified_corrected_source_label
+    row = {"raw_source_path": "ingredientRows[0]", "label_display_name": "L-Cystine"}
+    active = {"raw_source_path": "ingredientRows[0]", "name": "L-Cystine", "source_correction": {
+        "provenance_tag": "official_source_identity_correction",
+        "original_ingredient_text": "Alpha-Glucan Oligosaccharide",
+        "corrected_ingredient_text": "L-Cystine"}}
+    source = {"raw_source_text": "Alpha-Glucan Oligosaccharide"}
+    enriched = {"id": "213846", "activeIngredients": [active]}
+    if mutation == "missing": active.pop("source_correction")
+    elif mutation == "forged": active["source_correction"]["provenance_tag"] = "self_asserted"
+    elif mutation == "original": active["source_correction"]["original_ingredient_text"] = "Other"
+    elif mutation == "corrected": active["source_correction"]["corrected_ingredient_text"] = "Cysteine"
+    elif mutation == "inventory": source["raw_source_text"] = "Other"
+    elif mutation == "product": enriched["id"] = "unreviewed"
+    assert _verified_corrected_source_label(enriched, row, source) is None
