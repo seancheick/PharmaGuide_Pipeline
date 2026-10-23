@@ -409,3 +409,39 @@ def test_matching_path_does_not_authorize_another_strains_measurement():
     assert result["score"] is None
     assert result["metadata"]["assessment_status"] == "incomplete"
     assert result["metadata"]["measurements"][0]["reason_code"] == "cfu_source_identity_mismatch"
+
+
+def test_species_form_on_header_proves_measurement_without_clinical_approval():
+    from probiotic_measurements import probiotic_label_identity_summary, unresolved_cfu_measurements
+    p = {
+        'activeIngredients': [{'name': 'Ultra Probiotics', 'canonical_id': 'probiotics',
+            'raw_category': 'blend', 'cleaner_row_role': 'blend_header_total',
+            'raw_source_path': 'ingredientRows[0]',
+            'forms': [{'name': 'Bacillus coagulans', 'category': 'bacteria'}]}],
+        'probiotic_data': {'probiotic_blends': [{'name': 'Ultra Probiotics',
+            'strains': ['Bacillus coagulans'], 'raw_source_path': 'ingredientRows[0]',
+            'cfu_data': {'has_cfu': True, 'cfu_count': 12.5e9, 'billion_count': 12.5,
+                'evidence_scope': 'row_level', 'raw_source_path': 'ingredientRows[0]'}}]}}
+    summary = probiotic_label_identity_summary(p)
+    assert summary['blend_identity_resolutions'][0]
+    assert all(r.get('clinical_id') is None for r in summary['blend_identity_resolutions'][0])
+    assert unresolved_cfu_measurements(p) == []
+    p['probiotic_data']['probiotic_blends'][0]['strains'] = ['Bifidobacterium lactis BB-12']
+    assert unresolved_cfu_measurements(p)[0]['reason_code'] == 'cfu_source_identity_mismatch'
+
+
+@pytest.mark.parametrize('nonlive', [False, True])
+def test_header_forms_never_allocate_aggregate_cfu_to_members(nonlive):
+    from probiotic_measurements import probiotic_label_identity_summary
+    p = {'activeIngredients': [{'name': 'Probiotic blend', 'canonical_id': 'probiotics',
+        'raw_category': 'blend', 'raw_source_path': 'ingredientRows[0]',
+        'forms': [{'name': 'Bacillus coagulans', 'category': 'bacteria'},
+                  {'name': 'Bacillus subtilis' + (' heat killed' if nonlive else ''), 'category': 'bacteria'}]}],
+        'probiotic_data': {'probiotic_blends': [{'strains': ['Bacillus coagulans'],
+            'raw_source_path': 'ingredientRows[0]', 'cfu_data': {'has_cfu': True,
+            'cfu_count': 12.5e9, 'evidence_scope': 'row_level'}}]}}
+    summary = probiotic_label_identity_summary(p)
+    assert summary['per_strain_cfu_disclosed_count'] == 0
+    if not nonlive:
+        assert summary['total_strain_count'] == 2
+        assert len(summary['blend_identity_resolutions'][0]) == 1
