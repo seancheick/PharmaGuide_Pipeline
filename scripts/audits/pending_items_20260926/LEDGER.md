@@ -2850,3 +2850,51 @@ backlog-verification.json, backlog-zero-source-proof.json, and named validation 
 Current owner fingerprint comparison marks all 114 stage manifests stale against the corrected
 source (38 each Clean/Enrich/Score); no manifest was restamped. The eventual authorized corpus run
 must start at Clean. No corpus rebuild, catalog promotion, upload, Flutter import or release performed.
+
+### 2026-10-23 source review continuation — no pipeline rerun
+
+Owner Check: ingredient_quality_map::keratin.forms aliases and identity_integrity canonical
+registry; api_audit/verify_literature_records::verify_literature_file and existing literature
+verification_provenance. Evidence: exact NIH299744/336100 PDFs, live primary citation content,
+canonical-owner lookup before/after, and fail-first regressions. Will NOT create a form score,
+clinical benchmark, identity registry, approval or additional completeness authority.
+
+28f76f46 removes two false Lustriva→keratin aliases. ceeed9e1 corrects three nonhuman-study
+provenance flags (Boswellia32565872, SOD15742357, Graviola14521988) and the verifier substring bug.
+The generator requires indexed human subjects and excludes cellular indexing from automatic
+human-subject verification. Unindexed or mixed studies require review, not a negative clinical
+conclusion. Existing reviewed negative/null source findings retain their disposition; independent
+review caught and verified correction of this distinction with a real Graviola round-trip test.
+No numerical evidence/dose/quality policy changed. Existing holds and safety conclusions retained.
+
+460 named owner/data/verifier tests pass. Owner comparison: all three evidence-resolution results
+unchanged; exact299744 Lustriva source lookup changes keratin→unresolved. No Clean/Enrich/Score
+replay was run, honoring Sean's restriction; rebuilt score/consumer closure remains pending.
+Changed-entry checks confirm only keratin and three literature entries; citation tools selected
+zero applicable citations/rules and are NOT represented as content verification. Primary-source
+content reads and hashed captures supply that evidence. Final local passes546 tests with24 declared optional-service skips and a green skip guard.
+Three live-PubMed API verifier probes preserve the existing evidence dispositions. CI40031813379
+on exact runtime ceeed9e1 passes all four groups:23,586 passed,192 declared skips,zero failures/errors.
+Subsequent documentation changes leave the tested runtime unchanged. Main integration authorized.
+
+Research packets cover source identity/hierarchy for299744/336100, four botanical cause groups,
+Schisandra preparation-specific RCT32260466 and Extramel trials19754931/24949549; existing
+Boswellia preparation review was reused. No generic benchmark was added. Magnesium biotinate
+chemical identity is confirmed but numerical form assessment is not established. Prunus avium
+routing and kelp/kombu ownership need source/owner correction review; Vaccinium oxycoccos cannot
+borrow macrocarpon credit; grape210mg row contains seed AND skin, so no component amounts inferred.
+Exact Extramel label reviews now identify specific gaps:232942 liquid hemp combination differs
+from trial capsules;328442 arterial-purpose/36mg exposure differs;328521 matches10mg/140IU but
+claims liver support outside stress/fatigue trials. Research is implemented as packets, not scientific
+approval or rebuilt closure.
+
+Receipts: ~/pg_quality/assessment_integrity_20261023/research/{identity-source-continuation,
+botanical-identity-continuation,benchmark-source-continuation,source-continuation-owner-comparison}.json.
+Public per-entry sources: scripts/audits/literature_records_review_20261020/research.md.
+No corpus rerun, manifest restamp, export, Flutter import or product release.
+Additional source trace: exact NIH294296 PDF was visually verified after the packet; it prints
+Prunus avium fruit500mg. identity_integrity::resolve_identity currently accepts the matching
+Wild Cherry structured group before resolving that competing specific form for scored rows.
+The existing forms_contradict guard protects non-scoring retention. This is a confirmed owner
+finding, not grounds for a global Wild Cherry alias: correction needs species/part/mixture and
+interaction-preservation controls. Receipt records the source hash and pending owner work.
