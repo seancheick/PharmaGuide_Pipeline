@@ -3,7 +3,7 @@
     "description": "Phase 4 shadow literature resolution registry for high-impact canonical actives",
     "purpose": "literature_evidence_resolution",
     "schema_version": "5.0.0",
-    "last_updated": "2026-10-20",
+    "last_updated": "2026-10-23",
     "total_entries": 808,
     "verification_pipeline": "scripts/api_audit/verify_literature_records.py",
     "verified_studies_count": 279,
@@ -8637,7 +8637,7 @@
           "verification_provenance": {
             "pmid_verified": true,
             "authoritative_live_title": "An Anti-Inflammatory Composition of Boswellia serrata Resin Extracts Alleviates Pain and Protects Cartilage in Monoiodoacetate-Induced Osteoarthritis in Rats.",
-            "human_subjects_verified": true,
+            "human_subjects_verified": false,
             "topic_match_verified": true,
             "retracted": false,
             "verified_source": "https://pubmed.ncbi.nlm.nih.gov/32565872/",
@@ -8729,7 +8729,7 @@
           "verification_provenance": {
             "pmid_verified": true,
             "authoritative_live_title": "The mitochondrial complex I inhibitor annonacin is toxic to mesencephalic dopaminergic neurons by impairment of energy metabolism.",
-            "human_subjects_verified": true,
+            "human_subjects_verified": false,
             "topic_match_verified": false,
             "retracted": false,
             "verified_source": "https://pubmed.ncbi.nlm.nih.gov/14521988/",
@@ -9925,7 +9925,7 @@
           "verification_provenance": {
             "pmid_verified": true,
             "authoritative_live_title": "Supplementation with gliadin-combined plant superoxide dismutase extract promotes antioxidant defences and protects against oxidative stress.",
-            "human_subjects_verified": true,
+            "human_subjects_verified": false,
             "topic_match_verified": true,
             "retracted": false,
             "verified_source": "https://pubmed.ncbi.nlm.nih.gov/15742357/",

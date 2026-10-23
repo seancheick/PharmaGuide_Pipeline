@@ -188,18 +188,32 @@ def verify_literature_file(apply_fixes: bool = True) -> Dict[str, Any]:
             topic_words = words(cid.replace("_", " "), s.get("study_type", ""))
             found_topic = any(tw in all_text for tw in topic_words)
 
-            # Check human subjects
-            is_human = (
-                "human" in all_text
-                or "humans" in mesh_terms
-                or "patients" in all_text
-                or "adults" in all_text
-                or "men" in all_text
-                or "women" in all_text
-                or "subjects" in all_text
-                or "participants" in all_text
-                or any("clinical trial" in m for m in mesh_terms)
+            # Text mentions (including "men" inside "supplementation") do not
+            # establish a human population. Human-derived cells can also carry
+            # the Humans MeSH heading. Ambiguous/mixed cellular research needs
+            # source review rather than automatic human-subject verification.
+            indexed_terms = {str(term).strip().casefold() for term in mesh_terms}
+            cellular_research = any(
+                term == "in vitro techniques"
+                or term == "cells, cultured"
+                or term.startswith("cell line")
+                for term in indexed_terms
             )
+            is_human = "humans" in indexed_terms and not cellular_research
+            # A reviewed negative laboratory finding is still valid source
+            # evidence. Human efficacy and source validity are distinct; retain
+            # the existing reviewed-negative disposition, never create one.
+            reviewed_negative = (
+                r.get("applicability_status") == "reviewed_null_evidence"
+                and r.get("effect_direction") in {"negative", "null", "reviewed_null_unfavorable"}
+            )
+            if not is_human and not reviewed_negative:
+                failures.append({
+                    "canonical_id": cid,
+                    "pmid": pmid,
+                    "error": "human_population_not_verified",
+                })
+                record_provenance["all_pmids_verified"] = False
 
             # Extract an evidence quote from abstract
             evidence_quote = ""

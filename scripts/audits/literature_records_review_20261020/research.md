@@ -288,3 +288,42 @@ All 155 changed literature records were checked individually against current pri
 Additional corrections retain beta-glucan's 250 mg regimen; distinguish titrated 24–96 g/day shark-cartilage exposure from an efficacy threshold; retain unknown chitosan/pregnenolone doses; distinguish within-group arjuna findings; and report 72-day larch exposure. Lecithin retains the placebo group without inventing random allocation. Grape-seed primary blood-pressure outcomes were null, with exploratory subgroup findings. Leucine umbrella enrollment is not assigned an unsupported 699 participants. Rhubarb had 42 randomized/39 analyzed and derivative content expressed as rhein; red-clover review totals are separated from its hot-flush subset. Vinegar reports AUC, and blueberry is a systematic review rather than a meta-analysis. Lion’s-mane tablet mass does not establish an exact powder dose or plant part; Schisandra preparation remains unknown and review pending. Capsaicin research does not establish capsiate equivalence.
 
 The existing A/B application reproduces every current record exactly except clock-only replacement verification timestamps. B retains its no-determination-change guard. No new clinical policy, registry, status or efficacy threshold is introduced. Primary receipts and complete per-entry dispositions remain in the durable integration audit; CI and representative replay do not establish unreviewed clinical facts.
+
+## 2026-10-23 bounded identity and benchmark continuation
+
+Source-content review is not clinical approval. Exact NIH DSLD label299744 identifies
+Lustriva as inositol-stabilized arginine silicate plus magnesium biotinate, not keratin:
+https://api.ods.od.nih.gov/dsld/s3/pdf/299744.pdf . Label336100 really prints Biotin
+from Advanced Hair Complex; no hierarchy correction is justified:
+https://api.ods.od.nih.gov/dsld/s3/pdf/336100.pdf . Removed only the two false Lustriva
+aliases from the existing keratin form. No replacement form score, amount or benchmark.
+
+Three retained studies incorrectly carried human_subjects_verified=true:
+- boswellia_serrata_resin / PMID32565872: rats and human-derived cells, not a human trial.
+  https://pubmed.ncbi.nlm.nih.gov/32565872/
+- superoxide_dismutase / PMID15742357: animal supplementation experiment.
+  https://pubmed.ncbi.nlm.nih.gov/15742357/
+- graviola / PMID14521988: cultured mesencephalic neurons. Its negative laboratory
+  finding remains negative; denying human provenance must not remove that finding.
+  https://pubmed.ncbi.nlm.nih.gov/14521988/
+
+Corrected those three flags without changing evidence dispositions, safety text or approvals.
+The machine verifier no longer accepts substrings such as men inside supplementation as human
+subjects. Indexed human population is required; cultured-cell indexing remains unverified for
+human-subject purposes. This deliberately requires source review for unindexed or mixed studies,
+not a conclusion that they contain no human evidence. Existing reviewed negative/null source
+findings retain their disposition. Fail-first tests exercise the actual verifier and registry.
+
+Private source packets under pg_quality/assessment_integrity_20261023/research retain exact
+label/API captures, hashes and per-entry dispositions in identity-source-continuation.json,
+botanical-identity-continuation.json and benchmark-source-continuation.json. Schisandra
+PMID32260466 and Extramel PMIDs19754931/24949549 have preparation-specific review packets,
+not approved general benchmarks. Existing Boswellia preparation review is reused. Kelp taxonomy,
+Prunus avium routing, Vaccinium oxycoccos species and mixed grape seed/skin ownership remain
+separate source/owner follow-ups; no generic alias or component proportions were invented.
+
+Owner comparison confirms unchanged evidence-resolution results for all three corrected records;
+actual299744 source alias changes from keratin to unresolved. Full rebuilt closure is pending.
+No Clean, Enrich, Score, export or release run was performed. The generic changed-citation tool
+selected zero citations here and is not evidence of source verification; live content reads above
+and the captured per-entry receipts are the verification evidence.
