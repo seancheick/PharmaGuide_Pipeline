@@ -615,3 +615,177 @@ def test_publish_flag_is_wired_into_the_cli(tmp_path, capsys):
 
     assert rc == 0
     assert "already names" in capsys.readouterr().out
+
+
+@pytest.fixture
+def freshness_tree(tmp_path, monkeypatch):
+    repo = tmp_path / 'repo'
+    suppai = tmp_path / 'suppai'
+    dist = repo / 'scripts/dist'
+    for rel in ria.INTERACTION_REQUIRED_INPUTS:
+        path = repo / rel
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text('VALUE = 1\n' if path.suffix == '.py' else '{}')
+    for name in ria.SUPPAI_INPUT_NAMES:
+        suppai.mkdir(exist_ok=True)
+        (suppai / name).write_text('{}')
+    (repo / 'scripts/config/interaction_db_release.json').write_text('{"interaction_db_version": "1.0.0"}')
+    for rel in ('scripts/data/curated_interactions/one.json', *ria.INTERACTION_DERIVED_INPUTS):
+        path = repo / rel
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text('{}')
+    dist.mkdir(parents=True)
+    for name in (ria.DB_FILENAME, ria.MANIFEST_FILENAME):
+        (dist / name).write_text('{}')
+        (repo / "scripts/interaction_db_output" / name).write_text('{}')
+    monkeypatch.setattr(ria, 'validate_release_candidate', lambda **kw: {})
+    return repo, suppai, dist
+
+
+def test_interaction_receipt_binds_content_and_outputs(freshness_tree):
+    import os
+    repo, suppai, dist = freshness_tree
+    inputs = ria.interaction_build_inputs(repo, suppai)
+    ria.seal_interaction_build(repo, suppai, dist, inputs)
+    assert ria.interaction_build_is_current(repo, suppai, dist)
+    source = repo / 'scripts/data/ingredient_quality_map.json'
+    stat = source.stat()
+    os.utime(source, ns=(stat.st_atime_ns, stat.st_mtime_ns + 1_000_000))
+    assert ria.interaction_build_is_current(repo, suppai, dist)
+    source.write_text('[]')
+    os.utime(source, ns=(stat.st_atime_ns, stat.st_mtime_ns))
+    assert not ria.interaction_build_is_current(repo, suppai, dist)
+    with pytest.raises(ria.ReleaseValidationError, match='changed'):
+        ria.seal_interaction_build(repo, suppai, dist, inputs)
+
+
+@pytest.mark.parametrize('relative', [
+    'scripts/data/curated_interactions/two.json',
+    'scripts/interaction_db_output/research_pairs.json',
+    'scripts/dist/interaction_db.sqlite',
+    'scripts/interaction_db_output/interaction_db.sqlite',
+    'scripts/interaction_db_output/interaction_db_manifest.json',
+    'scripts/dist/interaction_db_manifest.json',
+    'scripts/api_audit/verify_cui.py',
+])
+def test_interaction_receipt_rejects_modified_dependencies(freshness_tree, relative):
+    repo, suppai, dist = freshness_tree
+    ria.seal_interaction_build(repo, suppai, dist, ria.interaction_build_inputs(repo, suppai))
+    (repo / relative).write_text('{} # modified')
+    assert not ria.interaction_build_is_current(repo, suppai, dist)
+
+
+def test_interaction_receipt_missing_inputs_and_unsealed_build(freshness_tree):
+    repo, suppai, dist = freshness_tree
+    assert not ria.interaction_build_is_current(repo, suppai, dist)
+    ria.seal_interaction_build(repo, suppai, dist, ria.interaction_build_inputs(repo, suppai))
+    (suppai / 'meta.json').unlink()
+    assert not ria.interaction_build_is_current(repo, suppai, dist)
+    with pytest.raises(FileNotFoundError):
+        ria.interaction_build_inputs(repo, suppai)
+
+
+def test_interaction_receipt_failed_validation_cannot_seal(freshness_tree, monkeypatch):
+    repo, suppai, dist = freshness_tree
+    def fail(**kw):
+        raise ria.ReleaseValidationError('invalid DB')
+    monkeypatch.setattr(ria, 'validate_release_candidate', fail)
+    with pytest.raises(ria.ReleaseValidationError):
+        ria.seal_interaction_build(repo, suppai, dist, ria.interaction_build_inputs(repo, suppai))
+    assert not (repo / "scripts/interaction_db_output" / ria.INTERACTION_RECEIPT).exists()
+
+
+def test_interaction_receipt_binds_runtime_and_rejects_offline(freshness_tree, monkeypatch):
+    repo, suppai, dist = freshness_tree
+    ria.seal_interaction_build(repo, suppai, dist, ria.interaction_build_inputs(repo, suppai))
+    monkeypatch.setenv('INTERACTION_TEST_CONFIG', 'changed')
+    assert not ria.interaction_build_is_current(repo, suppai, dist)
+    ria.seal_interaction_build(repo, suppai, dist,
+        ria.interaction_build_inputs(repo, suppai, offline=True), offline=True)
+    assert not ria.interaction_build_is_current(repo, suppai, dist)
+
+
+def test_interaction_receipt_rechecks_after_validation(freshness_tree, monkeypatch):
+    repo, suppai, dist = freshness_tree
+    inputs = ria.interaction_build_inputs(repo, suppai)
+    def change_source(**kw):
+        (suppai / 'meta.json').write_text('[]')
+    monkeypatch.setattr(ria, 'validate_release_candidate', change_source)
+    with pytest.raises(ria.ReleaseValidationError, match='changed'):
+        ria.seal_interaction_build(repo, suppai, dist, inputs)
+    assert not (repo / "scripts/interaction_db_output" / ria.INTERACTION_RECEIPT).exists()
+
+
+def test_interaction_capture_invalidates_prior_success_before_failure(freshness_tree):
+    repo, suppai, dist = freshness_tree
+    ria.seal_interaction_build(repo, suppai, dist, ria.interaction_build_inputs(repo, suppai))
+    (suppai / 'meta.json').unlink()
+    assert ria.main(['--repo-root', str(repo), '--suppai-dir', str(suppai),
+        '--output-dir', str(dist), '--capture-build-inputs', str(repo / 'pending.json')]) == 1
+    assert not (repo / "scripts/interaction_db_output" / ria.INTERACTION_RECEIPT).exists()
+
+
+def test_interaction_receipt_detects_same_timestamp_import_change(freshness_tree):
+    import os
+    repo, suppai, dist = freshness_tree
+    entry = repo / 'scripts/build_interaction_db.py'
+    entry.write_text('import helper\n')
+    helper = repo / 'scripts/helper.py'
+    helper.write_text('VALUE = 1\n')
+    ria.seal_interaction_build(repo, suppai, dist, ria.interaction_build_inputs(repo, suppai))
+    stamp = helper.stat()
+    helper.write_text('VALUE = 2\n')
+    os.utime(helper, ns=(stamp.st_atime_ns, stamp.st_mtime_ns))
+    assert not ria.interaction_build_is_current(repo, suppai, dist)
+
+
+def test_interaction_receipt_tampering_rejected(freshness_tree):
+    repo, suppai, dist = freshness_tree
+    ria.seal_interaction_build(repo, suppai, dist, ria.interaction_build_inputs(repo, suppai))
+    target = repo / "scripts/interaction_db_output" / ria.INTERACTION_RECEIPT
+    receipt = json.loads(target.read_text())
+    receipt['schema_version'] = 2
+    target.write_text(json.dumps(receipt))
+    assert not ria.interaction_build_is_current(repo, suppai, dist)
+
+
+def test_interaction_receipt_survives_catalog_dist_replacement(freshness_tree, monkeypatch):
+    repo, suppai, dist = freshness_tree
+    ria.seal_interaction_build(repo, suppai, dist, ria.interaction_build_inputs(repo, suppai))
+    for path in dist.iterdir():
+        path.unlink()
+    def stage(**kw):
+        import shutil
+        for name in (ria.DB_FILENAME, ria.MANIFEST_FILENAME):
+            shutil.copyfile(repo / 'scripts/interaction_db_output' / name, dist / name)
+    monkeypatch.setattr(ria, 'stage_release', stage)
+    assert ria.ensure_interaction_build_current(repo, suppai, dist)
+    assert ria.interaction_build_is_current(repo, suppai, dist)
+
+
+def test_real_staged_manifest_seals_and_restages_with_new_timestamp(freshness_tree, tmp_path, monkeypatch):
+    import shutil
+    from datetime import datetime, timedelta
+    repo, suppai, dist = freshness_tree
+    monkeypatch.undo()  # Exercise the real DB/manifest validation and staging.
+    monkeypatch.setattr(ria, 'DEFAULT_MIN_INTERACTIONS', 1)
+    seed = _seed_build(tmp_path)
+    build_dir = repo / 'scripts/interaction_db_output'
+    for name in (ria.DB_FILENAME, ria.MANIFEST_FILENAME):
+        shutil.copyfile(seed['work'] / name, build_dir / name)
+    validation = ria.validate_release_candidate(input_dir=build_dir, min_interactions=1)
+    ria.stage_release(validation=validation, output_dir=dist)
+    ria.seal_interaction_build(repo, suppai, dist, ria.interaction_build_inputs(repo, suppai))
+    original_manifest = (dist / ria.MANIFEST_FILENAME).read_bytes()
+    assert original_manifest != (build_dir / ria.MANIFEST_FILENAME).read_bytes()
+    assert ria.interaction_build_is_current(repo, suppai, dist)
+    for path in dist.iterdir():
+        path.unlink()
+    class Tomorrow(datetime):
+        @classmethod
+        def now(cls, tz=None):
+            return datetime.now(tz) + timedelta(days=1)
+    monkeypatch.setattr(ria, 'datetime', Tomorrow)
+    assert ria.ensure_interaction_build_current(repo, suppai, dist)
+    assert (dist / ria.MANIFEST_FILENAME).read_bytes() != original_manifest
+    assert ria.interaction_build_is_current(repo, suppai, dist)

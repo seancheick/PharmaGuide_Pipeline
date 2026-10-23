@@ -97,6 +97,8 @@ from datetime import date, datetime, timezone
 from pathlib import Path
 from typing import Any, Callable
 
+from audits.run_verification_gate import _canonical_sha256, _input_binding, _write_receipt
+
 
 DB_FILENAME = "interaction_db.sqlite"
 MANIFEST_FILENAME = "interaction_db_manifest.json"
@@ -122,6 +124,154 @@ def compute_sha256(path: Path, *, chunk_size: int = 1024 * 1024) -> str:
                 break
             h.update(chunk)
     return h.hexdigest()
+
+
+# Local build reuse evidence, deliberately separate from the public manifest.
+INTERACTION_RECEIPT = ".interaction_build_receipt.json"
+SUPPAI_INPUT_NAMES = (
+    "cui_metadata.json", "interaction_id_dict.json", "meta.json",
+    "paper_metadata.json", "sentence_dict.json",
+)
+INTERACTION_CODE_ENTRIES = (
+    "scripts/build_interaction_db.py", "scripts/ingest_suppai.py",
+    "scripts/api_audit/verify_interactions.py", "scripts/api_audit/verify_cui.py",
+    "scripts/release_interaction_artifact.py",
+)
+INTERACTION_REQUIRED_INPUTS = INTERACTION_CODE_ENTRIES + (
+    "scripts/rebuild_interaction_db.sh", "scripts/python_env.sh",
+    "scripts/pipeline_freshness.py", "scripts/build_final_db.py",
+    "scripts/config/interaction_db_release.json",
+    "scripts/data/ingredient_interaction_rules.json",
+    "scripts/data/drug_classes.json", "scripts/data/ingredient_quality_map.json",
+    "scripts/data/evidence_strength_vocab.json", "scripts/data/form_keywords_vocab.json",
+    "scripts/data/severity_vocab.json", "scripts/data/medication_profile_gate_rules.json",
+    "scripts/data/botanical_ingredients.json", "scripts/data/banned_recalled_ingredients.json",
+    "scripts/data/harmful_additives.json", "scripts/data/other_ingredients.json",
+    "scripts/data/curated_overrides/cui_overrides.json",
+)
+INTERACTION_DERIVED_INPUTS = (
+    "scripts/interaction_db_output/research_pairs.json",
+    "scripts/interaction_db_output/interactions_verified.json",
+)
+
+
+def interaction_build_inputs(repo_root: Path, suppai_dir: Path, *,
+                             offline: bool = False, version: str | None = None) -> dict:
+    """Bind every local source and executable dependency, never file timestamps.
+
+    API audit imports also use their directory as a Python import root. The
+    existing import walker supplies that closure; raw byte hashes (and clearing
+    its parse cache) ensure preserved timestamps cannot conceal changed code.
+    """
+    from pipeline_freshness import _PARSED, _imported_modules
+
+    repo_root = repo_root.resolve()
+    scripts = repo_root / "scripts"
+    required = {repo_root / name for name in INTERACTION_REQUIRED_INPUTS}
+    for path in required:
+        if not path.is_file():
+            raise FileNotFoundError(f"Missing interaction build input: {path}")
+    drafts = list((scripts / "data/curated_interactions").glob("*.json"))
+    if not drafts:
+        raise FileNotFoundError("Missing curated interaction drafts")
+    required.update(drafts)
+    _PARSED.clear()
+    seen = set()
+    todo = [repo_root / name for name in INTERACTION_CODE_ENTRIES]
+    while todo:
+        path = todo.pop()
+        if path in seen:
+            continue
+        seen.add(path)
+        dependencies = _imported_modules(scripts, path)
+        if path.is_relative_to(scripts / "api_audit"):
+            dependencies.update(_imported_modules(scripts / "api_audit", path))
+        todo.extend(dependencies - seen)
+    required.update(seen)
+    hashes = {path.relative_to(repo_root).as_posix(): compute_sha256(path)
+              for path in sorted(required)}
+    for name in SUPPAI_INPUT_NAMES:
+        hashes[f"suppai/{name}"] = compute_sha256(suppai_dir / name)
+    config = json.loads((scripts / "config/interaction_db_release.json").read_text())
+    return {"files": hashes, "offline": offline,
+            "runtime": _input_binding(repo_root, [sys.executable],
+                (".env", "requirements*.txt", ".python-version")),
+            "version": version or config["interaction_db_version"]}
+
+
+def _interaction_output_hashes(repo_root: Path, output_dir: Path) -> dict:
+    paths = {name: output_dir / name for name in (DB_FILENAME, MANIFEST_FILENAME)}
+    paths.update({name: repo_root / name for name in INTERACTION_DERIVED_INPUTS})
+    return {name: compute_sha256(path) for name, path in paths.items()}
+
+
+def seal_interaction_build(repo_root: Path, suppai_dir: Path, output_dir: Path,
+                           captured: dict, *, offline: bool = False,
+                           version: str | None = None) -> None:
+    """Seal only a successfully staged build whose inputs did not change."""
+    current = interaction_build_inputs(repo_root, suppai_dir, offline=offline, version=version)
+    if captured != current:
+        raise ReleaseValidationError("Interaction inputs changed during build; rebuild required")
+    build_dir = repo_root / "scripts/interaction_db_output"
+    validate_release_candidate(input_dir=output_dir, min_interactions=DEFAULT_MIN_INTERACTIONS)
+    validate_release_candidate(input_dir=build_dir, min_interactions=DEFAULT_MIN_INTERACTIONS)
+    if compute_sha256(build_dir / DB_FILENAME) != compute_sha256(output_dir / DB_FILENAME):
+        raise ReleaseValidationError("Staged interaction outputs differ from successful build")
+    receipt = {"schema_version": 1, "inputs": current,
+               "source_outputs": _interaction_output_hashes(repo_root, build_dir),
+               "outputs": _interaction_output_hashes(repo_root, output_dir)}
+    if current != interaction_build_inputs(repo_root, suppai_dir, offline=offline, version=version):
+        raise ReleaseValidationError("Interaction inputs changed while sealing; rebuild required")
+    _write_receipt(build_dir / INTERACTION_RECEIPT, receipt)
+
+
+def _current_interaction_receipt(repo_root: Path, suppai_dir: Path) -> dict | None:
+    try:
+        build_dir = repo_root / "scripts/interaction_db_output"
+        receipt = json.loads((build_dir / INTERACTION_RECEIPT).read_text())
+        if not isinstance(receipt, dict):
+            return None
+        seal = receipt.pop("receipt_sha256", None)
+        if (seal == _canonical_sha256(receipt) and receipt.get("schema_version") == 1
+                and receipt.get("inputs") == interaction_build_inputs(repo_root, suppai_dir)
+                and receipt.get("source_outputs") == _interaction_output_hashes(repo_root, build_dir)):
+            return receipt
+    except (OSError, ValueError, KeyError, TypeError, SyntaxError):
+        pass
+    return None
+
+
+def interaction_build_is_current(repo_root: Path, suppai_dir: Path, output_dir: Path) -> bool:
+    """Both the sealed source build and the staged bytes must still match."""
+    receipt = _current_interaction_receipt(repo_root, suppai_dir)
+    try:
+        return bool(receipt and receipt["outputs"] == _interaction_output_hashes(repo_root, output_dir))
+    except OSError:
+        return False
+
+
+def ensure_interaction_build_current(repo_root: Path, suppai_dir: Path, output_dir: Path) -> bool:
+    """Restage a verified unchanged build after catalog promotion replaces dist."""
+    receipt = _current_interaction_receipt(repo_root, suppai_dir)
+    if receipt is None:
+        return False
+    try:
+        if receipt["outputs"] == _interaction_output_hashes(repo_root, output_dir):
+            return True
+    except OSError:
+        pass
+    build_dir = repo_root / "scripts/interaction_db_output"
+    validation = validate_release_candidate(input_dir=build_dir,
+                                            min_interactions=DEFAULT_MIN_INTERACTIONS)
+    stage_release(validation=validation, output_dir=output_dir)
+    outputs = _interaction_output_hashes(repo_root, output_dir)
+    # Staging adds its own timestamp and checksum alias. Bind its actual new
+    # bytes separately from the unchanged builder manifest.
+    if _current_interaction_receipt(repo_root, suppai_dir) != receipt:
+        return False
+    receipt["outputs"] = outputs
+    _write_receipt(build_dir / INTERACTION_RECEIPT, receipt)
+    return True
 
 
 def strip_sha256_prefix(value: str | None) -> str | None:
@@ -749,6 +899,16 @@ def _parse_args(argv: list[str] | None = None) -> argparse.Namespace:
             "it) and point FLUTTER_REPO's tool/interaction_db.release.json at it."
         ),
     )
+    freshness = p.add_mutually_exclusive_group()
+    freshness.add_argument("--check-build-current", action="store_true")
+    freshness.add_argument("--restage-build-current", action="store_true")
+    freshness.add_argument("--capture-build-inputs", type=Path)
+    freshness.add_argument("--seal-build-inputs", type=Path)
+    p.add_argument("--repo-root", type=Path, default=Path(__file__).resolve().parents[1])
+    p.add_argument("--suppai-dir", type=Path, default=Path(os.environ.get(
+        "PHARMAGUIDE_SUPPAI_DIR", "/Users/seancheick/Downloads/Supp ai DB")))
+    p.add_argument("--build-offline", action="store_true")
+    p.add_argument("--build-version")
     return p.parse_args(argv)
 
 
@@ -756,6 +916,27 @@ def main(argv: list[str] | None = None) -> int:
     args = _parse_args(argv)
     input_dir = Path(args.input_dir).resolve()
     output_dir = Path(args.output_dir).resolve()
+
+    if args.restage_build_current:
+        return 0 if ensure_interaction_build_current(args.repo_root, args.suppai_dir, output_dir) else 1
+    if args.check_build_current:
+        return 0 if interaction_build_is_current(args.repo_root, args.suppai_dir, output_dir) else 1
+    if args.capture_build_inputs or args.seal_build_inputs:
+        try:
+            if args.capture_build_inputs:
+                # Invalidate reuse before any rebuild work can fail.
+                (args.repo_root / "scripts/interaction_db_output" / INTERACTION_RECEIPT).unlink(missing_ok=True)
+                captured = interaction_build_inputs(args.repo_root, args.suppai_dir,
+                    offline=args.build_offline, version=args.build_version)
+                args.capture_build_inputs.write_text(json.dumps(captured, sort_keys=True))
+            else:
+                captured = json.loads(args.seal_build_inputs.read_text())
+                seal_interaction_build(args.repo_root, args.suppai_dir, output_dir, captured,
+                    offline=args.build_offline, version=args.build_version)
+            return 0
+        except (OSError, ValueError, KeyError, TypeError, SyntaxError, ReleaseValidationError) as exc:
+            print(f"[interaction-release] build receipt refused: {exc}", file=sys.stderr)
+            return 1
 
     if args.publish_flutter_pin:
         flutter_repo = Path(args.publish_flutter_pin).resolve()

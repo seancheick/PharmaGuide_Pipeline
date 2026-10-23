@@ -127,8 +127,9 @@ def test_interaction_rebuild_default_comes_from_tracked_release_config() -> None
     assert "build_time_utc" in source
     assert '--build-time "$INTERACTION_BUILD_TIME"' in source
     assert (
-        '"$REPO_ROOT/scripts/config/interaction_db_release.json"'
-        in release_source
+        '--restage-build-current' in release_source
+        and 'scripts/config/interaction_db_release.json' in
+        SCRIPT.with_name('release_interaction_artifact.py').read_text()
     )
     assert 'INTERACTION_VERSION="1.0.2"' not in source
 
@@ -141,12 +142,13 @@ def test_interaction_rebuild_regenerates_the_derived_suppai_feed() -> None:
     assert '--suppai-dir "$SUPPAI_DIR"' in source
     assert '--build-time "$INTERACTION_BUILD_TIME"' in source
     assert 'if [[ ! -f "$OUTPUT_DIR/research_pairs.json" ]]' not in source
-    assert '"$REPO_ROOT/scripts/data/ingredient_quality_map.json"' in release_source
-    assert '"$SUPPAI_DIR/cui_metadata.json"' in release_source
-    assert '"$SUPPAI_DIR/interaction_id_dict.json"' in release_source
-    assert '"$SUPPAI_DIR/meta.json"' in release_source
-    assert '"$SUPPAI_DIR/paper_metadata.json"' in release_source
-    assert '"$SUPPAI_DIR/sentence_dict.json"' in release_source
+    import release_interaction_artifact as interaction_owner
+    assert '--restage-build-current' in release_source
+    assert 'scripts/data/ingredient_quality_map.json' in interaction_owner.INTERACTION_REQUIRED_INPUTS
+    assert set(interaction_owner.SUPPAI_INPUT_NAMES) == {
+        'cui_metadata.json', 'interaction_id_dict.json', 'meta.json',
+        'paper_metadata.json', 'sentence_dict.json',
+    }
 
 
 def test_release_moves_the_app_hydration_pin_with_the_bundle() -> None:
@@ -479,17 +481,18 @@ git() {{
 }}
 '''
     result = subprocess.run(['bash', '-c', harness + block + '\necho RELEASE_FINISHED\n'], capture_output=True, text=True)
-    assert result.returncode == 0, result.stdout + result.stderr
+    assert result.returncode == (1 if commit_outcome == 'failure' else 0), result.stdout + result.stderr
+    if commit_outcome == 'failure':
+        assert 'RELEASE_FINISHED' not in result.stdout
+        assert 'commit failed' in result.stdout
+        assert not calls.exists()
+        return
     assert not calls.exists(), 'release must not wait on optional storage listing/deletion'
     assert 'Version cleanup: DEFERRED' in result.stdout
     assert 'Orphan cleanup: DEFERRED' in result.stdout
     assert 'cleanup_old_versions.py' in result.stdout
     assert 'RELEASE_FINISHED' in result.stdout
-    if commit_outcome == 'failure':
-        assert 'commit failed' in result.stdout
-        assert 'committed locally' not in result.stdout
-        assert 'Bundle committed' not in result.stdout
-    elif commit_outcome == 'success':
+    if commit_outcome == 'success':
         assert 'Flutter bundle committed locally' in result.stdout
     else:
         assert 'already committed' in result.stdout
@@ -510,3 +513,38 @@ def test_release_python_progress_is_visible_through_a_pipe():
     result = subprocess.run(['bash', '-c', prefix + command], env=env, capture_output=True, text=True)
     assert result.returncode == 0, result.stderr
     assert result.stdout.strip() == 'True', 'piped release progress must not sit in Python buffers'
+
+@pytest.mark.parametrize('skip_flutter', [0, 1])
+def test_reference_data_skip_flutter_never_writes_app(tmp_path, skip_flutter):
+    import subprocess
+    source = SCRIPT.read_text()
+    block = source[source.index('# Pipeline reference files are canonical.'):source.index('# A fresh per-brand rebuild')]
+    harness = f'''SKIP_FLUTTER={skip_flutter}
+PG_PYTHON=python
+FLUTTER_REPO=/app
+run_strict_gate() {{ printf '%s\\n' "$*"; }}
+skip() {{ :; }}
+'''
+    result = subprocess.run(['bash', '-c', harness + block], capture_output=True, text=True)
+    assert result.returncode == 0
+    calls = [line for line in result.stdout.splitlines() if 'sync_flutter_reference_data.py' in line]
+    assert calls
+    if skip_flutter:
+        assert all('--check' in line for line in calls)
+    else:
+        assert len(calls) == 2
+
+def test_manifest_field_reader_handles_quoted_custom_app_path(tmp_path):
+    import shlex
+    import subprocess
+    import sys
+    manifest = tmp_path / "Sean's app.json"
+    manifest.write_text(json.dumps({'checksum_sha256': 'verified'}))
+    source = SCRIPT.read_text()
+    function = source[source.index('json_field() {'):source.index('\nfile_sha256()')]
+    result = subprocess.run(['bash', '-c',
+        'PG_PYTHON=' + shlex.quote(sys.executable) + '\n' + function +
+        '\njson_field ' + shlex.quote(str(manifest)) + ' checksum_sha256'],
+        capture_output=True, text=True)
+    assert result.returncode == 0
+    assert result.stdout.strip() == 'verified'

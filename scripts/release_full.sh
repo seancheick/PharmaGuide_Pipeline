@@ -322,22 +322,9 @@ info "flutter-repo:     $FLUTTER_REPO"
 info "================================================================"
 
 # ---------------------------------------------------------------------------
-# Helpers — freshness primitives. All return 0 (true) or 1 (false) for use
-# in `if` blocks. Catalog assembly uses sealed content receipts; interaction
-# assembly retains its existing mtime trigger plus final parity gates.
+# Helpers — content-bound release checks and artifact fields.
+# Catalog and interaction assembly both use sealed content receipts.
 # ---------------------------------------------------------------------------
-
-# any_newer_input <output_path> <input_path...>
-# Returns 0 if any input is newer than output (or output is missing).
-any_newer_input() {
-  local output="$1"; shift
-  [[ ! -e "$output" ]] && return 0
-  local i
-  for i in "$@"; do
-    [[ -e "$i" && "$i" -nt "$output" ]] && return 0
-  done
-  return 1
-}
 
 # json_field <path> <key>
 # Cheap JSON-string extractor for top-level checksum_sha256-style fields.
@@ -349,11 +336,11 @@ json_field() {
   "$PG_PYTHON" -c "
 import json, sys
 try:
-    with open('$path') as f: d = json.load(f)
-    print(d.get('$key', ''))
+    with open(sys.argv[1]) as f: d = json.load(f)
+    print(d.get(sys.argv[2], ''))
 except Exception:
     pass
-" 2>/dev/null
+" "$path" "$key" 2>/dev/null
 }
 
 file_sha256() {
@@ -585,39 +572,25 @@ sync_final_db_output_catalog_from_dist
 # ---------------------------------------------------------------------------
 # Step 4: Rebuild interaction DB (delegates verify → build → stage)
 #
-# Skip when: dist/interaction_db.sqlite is newer than every interaction-rule
-# input file. The inputs are the curated drafts, the System A rules JSON,
-# the drug-classes file, and the suppai research_pairs feed.
+# Reuse only a successful build bound to current source/code/research bytes
+# and intact staged outputs. Clinical verification still runs on every rebuild.
 # ---------------------------------------------------------------------------
 
-DIST_INTERACTION="$DIST_DIR/interaction_db.sqlite"
 SUPPAI_DIR="${PHARMAGUIDE_SUPPAI_DIR:-/Users/seancheick/Downloads/Supp ai DB}"
-INTERACTION_INPUTS=(
-  "$REPO_ROOT/scripts/data/curated_interactions/curated_interactions_v1.json"
-  "$REPO_ROOT/scripts/data/curated_interactions/med_med_pairs_v1.json"
-  "$REPO_ROOT/scripts/data/ingredient_interaction_rules.json"
-  "$REPO_ROOT/scripts/data/drug_classes.json"
-  "$REPO_ROOT/scripts/data/ingredient_quality_map.json"
-  "$REPO_ROOT/scripts/config/interaction_db_release.json"
-  "$REPO_ROOT/scripts/interaction_db_output/research_pairs.json"
-  "$SUPPAI_DIR/cui_metadata.json"
-  "$SUPPAI_DIR/interaction_id_dict.json"
-  "$SUPPAI_DIR/meta.json"
-  "$SUPPAI_DIR/paper_metadata.json"
-  "$SUPPAI_DIR/sentence_dict.json"
-)
 
 step4_needs_run() {
   (( FORCE == 1 )) && return 0
-  any_newer_input "$DIST_INTERACTION" "${INTERACTION_INPUTS[@]}"
+  ! "$PG_PYTHON" "$REPO_ROOT/scripts/release_interaction_artifact.py" \
+    --restage-build-current --repo-root "$REPO_ROOT" \
+    --suppai-dir "$SUPPAI_DIR" --output-dir "$DIST_DIR"
 }
 
 if step4_needs_run; then
-  info "Step 4/8: Interaction-rule inputs newer than bundled DB — rebuilding..."
+  info "Step 4/8: Interaction build receipt missing or stale — rebuilding..."
   run_strict_gate "interaction database assembly" bash scripts/rebuild_interaction_db.sh
   ok "Interaction DB rebuilt + staged"
 else
-  skip "Step 4/8: Interaction DB up to date with rule sources — skipping rebuild"
+  skip "Step 4/8: Interaction build inputs and outputs match — skipping rebuild"
 fi
 
 # ---------------------------------------------------------------------------
@@ -708,8 +681,12 @@ run_strict_gate "export contract" \
 
 # Pipeline reference files are canonical. Regenerate and validate both Flutter
 # copies before any bundle commit can occur.
-run_strict_gate "Flutter reference-data parity" \
-  "$PG_PYTHON" scripts/sync_flutter_reference_data.py --flutter-repo "$FLUTTER_REPO"
+if (( SKIP_FLUTTER == 0 )); then
+  run_strict_gate "Flutter reference-data parity" \
+    "$PG_PYTHON" scripts/sync_flutter_reference_data.py --flutter-repo "$FLUTTER_REPO"
+else
+  skip "Flutter reference-data writes skipped (--skip-flutter); parity still checked"
+fi
 
 # The sync above WRITES the Flutter copies, so on its own it can only ever
 # agree with itself. Re-run in check mode so the committed state is verified
@@ -913,7 +890,9 @@ if (( SKIP_FLUTTER == 0 && SKIP_SUPABASE == 0 && SUPABASE_DRY_RUN == 0 )); then
       if git -C "$FLUTTER_REPO" commit -q -m "chore(catalog): bundle catalog v${CATALOG_VERSION} + interaction v${INTERACTION_VERSION}"; then
         ok "Flutter bundle committed locally (push remains manual)"
       else
-        warn "Flutter bundle commit failed — review the app repository before pushing"
+        err "Flutter bundle commit failed — release is incomplete; cloud publication may already be live."
+        err "Review and commit the staged app bundle locally before pushing. No submission receipts were closed."
+        exit 1
       fi
     else
       skip "Flutter bundle already committed — nothing to commit"

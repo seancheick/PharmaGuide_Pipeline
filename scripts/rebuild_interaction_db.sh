@@ -99,6 +99,14 @@ OUTPUT_DIR="scripts/interaction_db_output"
 DIST_DIR="scripts/dist"
 mkdir -p "$OUTPUT_DIR" "$DIST_DIR"
 
+# Capture before ingest/verification; only successful staging can seal reuse.
+BUILD_INPUTS="$OUTPUT_DIR/.build_inputs.$$.json"
+trap 'rm -f "$BUILD_INPUTS"' EXIT
+RECEIPT_ARGS=(--suppai-dir "$SUPPAI_DIR" --build-version "$INTERACTION_VERSION")
+[[ -z "$OFFLINE_FLAG" ]] || RECEIPT_ARGS+=(--build-offline)
+"$PG_PYTHON" scripts/release_interaction_artifact.py \
+  --capture-build-inputs "$BUILD_INPUTS" "${RECEIPT_ARGS[@]}"
+
 # ---------------------------------------------------------------------------
 # Rebuild the derived research feed
 # ---------------------------------------------------------------------------
@@ -164,6 +172,8 @@ ok "SQLite built"
 info "Step 3/4: Staging release to dist/..."
 "$PG_PYTHON" scripts/release_interaction_artifact.py
 
+"$PG_PYTHON" scripts/release_interaction_artifact.py \
+  --seal-build-inputs "$BUILD_INPUTS" "${RECEIPT_ARGS[@]}"
 ok "Interaction DB staged to $DIST_DIR/"
 
 # ---------------------------------------------------------------------------
