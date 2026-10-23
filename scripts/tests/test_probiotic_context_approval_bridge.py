@@ -52,7 +52,12 @@ def test_approved_context_with_matching_dose_and_positive_primary_outcome_is_app
     registry["STRAIN_LGG"]["evidence_level"] = "high"
     registry["STRAIN_LGG"]["cfu_thresholds"]["evidence"]["evidence_strength"] = "high"
     registry["STRAIN_LGG"]["study_contexts"] = [approved(study_design="rct")]
-    row = assessment(strain_product(dose=1e9))
+    product = strain_product(dose=1e9)
+    # The approved synthetic source treats constipation; broad daily use is
+    # not evidence of that claimed purpose and must retain zero Evidence.
+    assert score_evidence(product)["score"] == 0
+    product["statements"] = [{"type": "Formulation re: Other", "notes": "Support for constipation"}]
+    row = assessment(product)
     assert row["status"] == "strain_dose_applicable"
     assert row["dose_applicable"] is True
     ctx = row["study_contexts"][0]
@@ -60,15 +65,15 @@ def test_approved_context_with_matching_dose_and_positive_primary_outcome_is_app
     assert ctx["applicability_reason"] == "clinician_approved_context_dose_and_outcome_match"
     assert ctx["dose_applicability_class"] == "EXACT_TESTED_DOSE"
     assert ctx["dose_applicability_credit"] == 1.0
-    evidence = score_evidence(strain_product(dose=1e9))
+    evidence = score_evidence(product)
     assert evidence["components"] == {
         "evidence_family_certainty": 10.0,
-        "product_applicability": 3.0,
+        "product_applicability": 6.0,
         "independent_replication_consistency": 0.0,
     }
-    assert evidence["score"] == 13.0  # Broad daily positioning receives partial applicability.
+    assert evidence["score"] == 16.0  # Exact claimed purpose; no patient diagnosis inferred.
     from scoring_v4.modules.probiotic_dose import score_dose
-    assert score_dose(strain_product(dose=1e9))["metadata"]["evidence_assessment"]["strain_assessments"][0]["dose_applicability_credit"] == 1.0
+    assert score_dose(product)["metadata"]["evidence_assessment"]["strain_assessments"][0]["dose_applicability_credit"] == 1.0
 
 
 @pytest.mark.parametrize("dose,reason", [

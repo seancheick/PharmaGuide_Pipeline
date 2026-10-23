@@ -594,6 +594,9 @@ def test_is2_scoring_provenance_uses_the_actual_digestive_family(quantity):
         strain='Bacillus coagulans Unique IS-2', dr_pham_signoff=True,
         research_match_status='exact_strain', review_status='clinician_verified',
     )
+    # A digestive category alone cannot transfer an IBS treatment trial.
+    assert score_evidence(product)['score'] == 0
+    product['statements'] = [{'type': 'Formulation re: Other', 'notes': 'Support for irritable bowel syndrome'}]
     result = score_evidence(product)
     assert result['score'] == 16
     assert 'unique_is2_adult_ibs_31434935' in result['metadata']['notes']

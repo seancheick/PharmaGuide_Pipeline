@@ -21,7 +21,14 @@ def test_nonhuman_native_reference_does_not_earn_human_clinical_credit(clinical_
     """The signed summary's nonhuman anchor never earns human credit. The identity's
     own approved exact-strain human trials are its human evidence (one owner):
     NCFM's are null, Bl-04's are one positive RCT and one null."""
-    result = score_evidence(strain_product(clinical_id=clinical_id, name=name))
+    product = strain_product(clinical_id=clinical_id, name=name)
+    if clinical_id == "STRAIN_ACIDOPHILUS_NCFM":
+        # A null IBS trial is not a completed negative review for every daily
+        # probiotic purpose. Establish its exact claimed scope for this guard.
+        assert score_evidence(product)["metadata"]["evidence_result_state"] == "research_present_applicability_unestablished"
+        product["statements"] = [{"type": "Formulation re: Other",
+                                  "notes": "Support for irritable bowel syndrome"}]
+    result = score_evidence(product)
     metadata = result["metadata"]
     assessment = metadata["evidence_assessment"]["strain_assessments"][0]
     assert assessment["research_accepted"] is True  # Identity/review is a separate decision.
