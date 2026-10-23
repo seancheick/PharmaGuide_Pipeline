@@ -466,9 +466,6 @@ def _backed_studies_index() -> Dict[str, List[Dict[str, Any]]]:
         study_id = _norm(study.get("id"))
         if study_id:
             keys.add(study_id)
-            if study_id.startswith("ingr_"):
-                keys.add(study_id[5:].replace("_", " "))
-                keys.add(study_id[5:])
         for field_name in ("canonical_id", "ingredient_canonical_id", "standard_name", "ingredient", "study_name"):
             val = _canonical_text(study.get(field_name))
             if val:
@@ -871,8 +868,9 @@ def resolve_evidence_for_row(
         studies_idx.get(canonical, [])
         + studies_idx.get(canonical.replace("_", " "), [])
         + studies_idx.get(norm_name, [])
-        + studies_idx.get(f"ingr_{canonical}", [])
         + (studies_idx.get(iqm_std_name, []) if iqm_std_name else [])
+        + [study for alias in (iqm_entry or {}).get("aliases", [])
+           for study in studies_idx.get(_canonical_text(alias), [])]
     )
     # Enrichment may use a different native identity namespace for this
     # exact label row. Reuse its source-bound record ID, then reassess the
@@ -930,11 +928,28 @@ def resolve_evidence_for_row(
                     reason_code="label_purpose_evidence_mismatch", owner_facts=owner_facts,
                     blocking_reasons=["label_purpose_evidence_mismatch"],
                 )
+        excluded_pmids = {
+            str(ref.get("pmid")) for study in valid_studies
+            for ref in study.get("references_structured", [])
+            if isinstance(ref, Mapping) and (
+                ref.get("retracted") or ref.get("expression_of_concern")
+                or ref.get("scoring_eligible") is False
+            )
+        }
         owner_facts["backed_clinical_studies"] = {
             "study_count": len(valid_studies),
             "study_types": list({s.get("study_type") for s in valid_studies}),
             "effect_directions": list({s.get("effect_direction") for s in valid_studies}),
-            "pmids": [pmid for s in valid_studies for pmid in s.get("published_studies", [])],
+            "pmids": list(dict.fromkeys(
+                str(pmid) for study in valid_studies
+                for pmid in [
+                    *(ref.get("pmid") for ref in study.get("references_structured", [])
+                      if isinstance(ref, Mapping)),
+                    *study.get("published_studies", []),
+                ]
+                if re.fullmatch(r"[1-9][0-9]*", str(pmid))
+                and str(pmid) not in excluded_pmids
+            )),
         }
 
         # Check applicability: preparation/form only. Amount adequacy is owned

@@ -1381,3 +1381,48 @@ def test_dri_aliases_use_existing_reference_owner(canonical):
     result = er.resolve_evidence_for_canonical(canonical, dose_value=10, dose_unit='mg')
     assert result.reason_code == 'dietary_reference_intake_authority_established'
     assert result.canonical_id == canonical
+
+@pytest.mark.parametrize('name', ['Pea', 'Pea Protein', 'Organic Pea Protein'])
+def test_food_pea_cannot_inherit_palmitoylethanolamide_research(name, monkeypatch):
+    studies = tuple(s for s in er._load_backed_studies() if s['id'] == 'INGR_PEA')
+    monkeypatch.setattr(er, '_load_backed_studies', lambda: studies)
+    er._backed_studies_index.cache_clear()
+    result = er.resolve_evidence_for_canonical('pea', name=name)
+    er._backed_studies_index.cache_clear()
+    assert 'backed_clinical_studies' not in result.matched_owners
+
+
+def test_explicit_palmitoylethanolamide_keeps_its_clinical_owner():
+    result = er.resolve_evidence_for_canonical('palmitoylethanolamide', name='Palmitoylethanolamide')
+    assert 'backed_clinical_studies' in result.matched_owners
+    assert result.owner_facts['backed_clinical_studies']['study_count'] == 1
+
+
+def test_internal_study_id_suffix_is_not_an_identity_alias(monkeypatch):
+    monkeypatch.setattr(er, '_load_backed_studies', lambda: ({
+        'id': 'INGR_ARBITRARY_RECORD_KEY', 'standard_name': 'Reviewed preparation',
+        'aliases': ['Exact preparation alias'],
+    },))
+    er._backed_studies_index.cache_clear()
+    try:
+        index = er._backed_studies_index()
+        assert 'arbitrary_record_key' not in index
+        assert 'arbitrary record key' not in index
+        assert index['exact preparation alias'][0]['id'] == 'INGR_ARBITRARY_RECORD_KEY'
+        assert index['ingr_arbitrary_record_key'][0]['id'] == 'INGR_ARBITRARY_RECORD_KEY'
+    finally:
+        er._backed_studies_index.cache_clear()
+
+
+def test_clinical_owner_reports_identifiers_not_study_type_tags():
+    result = er.resolve_evidence_for_canonical('palmitoylethanolamide', name='Palmitoylethanolamide')
+    assert result.owner_facts['backed_clinical_studies']['pmids'] == ['36986081']
+
+
+def test_clinical_owner_excludes_retracted_source_identifiers_and_legacy_fallback(monkeypatch):
+    study = {'id': 'TEST', 'standard_name': 'Test preparation', 'study_type': 'rct_single',
+             'published_studies': ['111', '222', 'RCT'],
+             'references_structured': [{'pmid': '111', 'retracted': True}, {'pmid': '222'}]}
+    monkeypatch.setattr(er, '_backed_studies_index', lambda: {'test_preparation': [study]})
+    result = er.resolve_evidence_for_canonical('test_preparation')
+    assert result.owner_facts['backed_clinical_studies']['pmids'] == ['222']
