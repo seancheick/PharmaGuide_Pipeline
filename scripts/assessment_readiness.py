@@ -453,9 +453,11 @@ def evaluate_evidence_assessment(
                          else EVIDENCE_EVALUATED_LIMITED_OR_NEGATIVE)
                 reason = resolution.reason_code
             elif (disposition == EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value
-                  and "backed_clinical_studies" in resolution.matched_owners):
+                  and "backed_clinical_studies" in resolution.matched_owners
+                  and resolution.reason_code != "clinical_sources_ineligible"):
                 # Verified literature has been reviewed, even when it cannot
-                # apply here. Species/stub and pending native reviews stay open.
+                # apply here. An unresolved source hold is not a completed
+                # negative review. Species/stub and pending native reviews stay open.
                 state = EVIDENCE_EVALUATED_LIMITED_OR_NEGATIVE
                 reason = resolution.reason_code
             elif disposition == EvidenceDisposition.NOT_EFFICACY_RELEVANT.value:
@@ -464,7 +466,9 @@ def evaluate_evidence_assessment(
                 reason = resolution.reason_code
             else:
                 state = EVIDENCE_NOT_YET_EVALUATED
-                reason = "no_reviewed_evidence_assessment"
+                reason = (resolution.reason_code
+                          if resolution.reason_code == "clinical_sources_ineligible"
+                          else "no_reviewed_evidence_assessment")
 
         if (
             applicability == EVIDENCE_APPLICABILITY_INDIVIDUAL

@@ -209,7 +209,7 @@ def test_same_conflicting_depression_reviews_do_not_establish_joint_or_adjunct_c
     row = backed()['INGR_SAME']
     assert not clinical_record_sources_eligible(row)
     assert row['health_goals_supported'] == []
-    assert row['primary_outcome'] == 'Depressive symptoms in patients with depression'
+    assert 'primary_outcome' not in row  # no misleading legacy display category
     assert 'neither establishes a stronger adjunctive benefit' in row['notes']
     assert {r['pmid'] for r in row['references_structured']} == {'38423354', '38199136'}
     assert row['effect_direction'] == 'positive_strong'  # retained historical grade, explicitly held

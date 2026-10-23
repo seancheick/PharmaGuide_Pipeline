@@ -1,4 +1,4 @@
-"""Every evidence owner of these 8 labels has a finished literature review.
+"""Blend-owner reviews do not complete unresolved individual active reviews.
 
 Each product scored Evidence 0 with the pillar saying `not_yet_reviewed`:
 its purpose-owning identity was a proprietary blend (or branded blend) that
@@ -22,7 +22,8 @@ PRODUCTS = ["1179", "14168", "315089", "243271", "282638", "299755", "54775", "2
 # citation, PMID 37629744, is a review of depression treatment in Parkinson's disease, not a
 # phenylalanine trial (literature records review 2026-10-20), so that review is genuinely open
 # again. Its blend owners stay finished; test_ravage_is_open_only_for_l_phenylalanine pins that.
-_REVIEW_PRODUCTS = [pid for pid in PRODUCTS if pid != "1179"]
+# Whole turmeric cannot inherit Curcumin trials from an INGR_ key suffix.
+_REVIEW_PRODUCTS = [pid for pid in PRODUCTS if pid not in {"1179", "243271"}]
 
 
 @pytest.fixture(scope="module")
@@ -109,7 +110,10 @@ def test_a_lent_blend_total_is_not_a_member_dose(enriched, pid, canonical):
         if r.get("canonical_id") == canonical
     )
     resolution = resolve_evidence_for_row(row, enriched[pid])
-    assert resolution.applicability_status == "applicable_reviewed_trials"
+    assert resolution.applicability_status == (
+        "no_reviewed_clinical_studies" if canonical == "turmeric"
+        else "applicable_reviewed_trials"
+    )
 
     # Evidence now grades the applicable research without reading amount. Dose
     # still refuses to borrow the blend total as this member's exposure.
@@ -250,3 +254,19 @@ def test_tesnor_notes_distinguish_primary_symptoms_from_secondary_biomarkers():
     assert "symptom score was primary" in notes
     assert "hormone levels and strength were secondary" in notes
     assert "outside this blend cannot borrow" in notes
+
+
+def test_golden_milk_whole_turmeric_does_not_inherit_curcumin_identity(enriched):
+    from evidence_resolver import resolve_product_evidence
+    from scoring_v4.scored_artifact import build_scored_artifact
+
+    product = enriched["243271"]
+    resolution = resolve_product_evidence(product, owner_scoped=True)
+    unresolved = [r.canonical_id for r in resolution.resolutions
+                  if r.disposition == "literature_resolution_required"]
+    assert unresolved == ["turmeric"]
+    turmeric = next(r for r in resolution.resolutions if r.canonical_id == "turmeric")
+    assert "backed_clinical_studies" not in turmeric.matched_owners
+    assert not resolution.is_assessment_complete
+    evidence = build_scored_artifact(product)["quality_pillars_v4"]["evidence"]
+    assert evidence["display_state"] == "not_yet_reviewed"

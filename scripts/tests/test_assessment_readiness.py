@@ -1621,3 +1621,13 @@ def test_nonessential_mineral_does_not_borrow_nutrition_authority(canonical):
     from assessment_readiness import evaluate_evidence_assessment
     evidence = evaluate_evidence_assessment(_product(_row(canonical, canonical)), module='generic')
     assert evidence['ingredient_assessments'][0]['evidence_applicability'] != 'nutrition_authority'
+
+
+@pytest.mark.parametrize('canonical,name', [('same', 'S-Adenosyl Methionine'), ('l_glycine', 'L-Glycine')])
+def test_unresolved_clinical_source_hold_is_not_a_completed_negative_review(canonical, name):
+    from assessment_readiness import evaluate_evidence_assessment
+    row = _row(name, canonical)
+    result = evaluate_evidence_assessment(_product(row), module='generic')
+    assert result['readiness'] == 'incomplete'
+    assert result['ingredient_assessments'][0]['state'] == 'not_yet_evaluated'
+    assert result['ingredient_assessments'][0]['reason_code'] == 'clinical_sources_ineligible'
