@@ -1,5 +1,14 @@
 # PharmaGuide master completion plan
 
+### Zero Dose / Evidence source audit — October 22
+
+- [x] Audit all5,512 saved-zero products and fix verified source/identity/quantity owners. [Per-product results and limits](../../scripts/audits/zero_pillars_20261022/README.md).
+- [x] Measure1,044 unique affected/control raw labels and independently review identity, credit, holds and safety.82 former Dose zeros now positive;10 honest holds retained; no Evidence credit invented.
+- [x] Integrate runtime19755342c/report2a04ad859 into main. Final exact-source CI39894910595 passes23,323tests/192declared skips/allfourgroups; local546/24declared skips and33rawcanaries pass.439captured production fingerprints match main; four extra primary FDA caches use identical physical inputs.
+- [ ] Existing producer/catalog/app acceptance:114saved stage fingerprints stale; rebuild startsClean.213846export qualification and unfinished scientific reviews remain open. No catalog/release or whole-phase completion claimed.
+
+Owner: existing LEDGER and canonical scoring/identity/correction owners — evidence: matrix/glossary/source tracing and dated receipts. Will NOT create scoring policy, numerical floors, registry, chemical guesses or export exceptions. LEDGER remains the execution register.
+
 ### Export fidelity checkpoint — October 20
 
 - [x] Independently reviewed Claude export fixes; corrected reproductive target scope/copy, niacin UL source-form recognition, authoritative empty app nutrient analysis and dashboard owner mismatches. Curated categories/sources and full source blocks preserved.
