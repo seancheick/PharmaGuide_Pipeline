@@ -436,7 +436,12 @@ def evaluate_evidence_assessment(
             from evidence_resolver import EvidenceDisposition, resolve_evidence_for_row
             resolution = resolve_evidence_for_row(row, product=product)
             disposition = resolution.disposition
-            if (disposition in {
+            if (disposition == EvidenceDisposition.RESOLVED_BY_AUTHORITY.value
+                    and resolution.owner_facts.get("nutrition_authority", {}).get("is_essential") is True):
+                applicability = EVIDENCE_APPLICABILITY_NUTRITION_AUTHORITY
+                state = EVIDENCE_EVALUATED_SUPPORTED
+                reason = resolution.reason_code
+            elif (disposition in {
                 EvidenceDisposition.NO_QUALIFYING_HUMAN_EVIDENCE.value,
                 EvidenceDisposition.REVIEWED_NULL_UNFAVORABLE.value,
             } and "literature_evidence" in resolution.owner_facts):

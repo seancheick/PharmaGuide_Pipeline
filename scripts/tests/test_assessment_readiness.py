@@ -1603,3 +1603,21 @@ def test_cross_module_native_review_stays_bound_to_its_label_row(module, clinica
     # borrow another source row's completed review.
     for ref in ["ingredientRows[1]", "ingredientRows[2]"]:
         assert by_ref[ref]["state"] == "not_yet_evaluated"
+
+
+def test_vitamin_a_precursor_uses_existing_nutrition_authority_review():
+    from assessment_readiness import evaluate_evidence_assessment
+    row = _row('Vitamin A', 'beta_carotene', quantity=900, unit='mcg RAE')
+    evidence = evaluate_evidence_assessment(_product(row), module='generic')
+    assessment = evidence['ingredient_assessments'][0]
+    assert assessment['evidence_applicability'] == 'nutrition_authority'
+    assert assessment['state'] == 'evaluated_supported'
+    assert assessment['reason_code'] == 'dietary_reference_intake_authority_established'
+    assert assessment['evidence_ids'] == []
+
+
+@pytest.mark.parametrize('canonical', ['boron', 'vanadium'])
+def test_nonessential_mineral_does_not_borrow_nutrition_authority(canonical):
+    from assessment_readiness import evaluate_evidence_assessment
+    evidence = evaluate_evidence_assessment(_product(_row(canonical, canonical)), module='generic')
+    assert evidence['ingredient_assessments'][0]['evidence_applicability'] != 'nutrition_authority'
