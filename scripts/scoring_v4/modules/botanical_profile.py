@@ -36,7 +36,7 @@ from typing import Any, Dict, List, Optional
 
 _DATA_DIR = Path(__file__).resolve().parents[2] / "data"
 
-from scoring_input_contract import dose_disclosure_status
+from scoring_input_contract import dose_disclosure_status, _positive_quantity
 from scoring_v4.modules.generic_helpers import bio_score_of
 from scoring_v4.quality_score_config import block as _cfg_block
 
@@ -809,7 +809,7 @@ def score_botanical_purpose_dose(
     # disclosed amount even when no mass conversion is available; the shared
     # disclosure owner also keeps missing/hidden source amounts distinct.
     disclosure = dose_disclosure_status(row)
-    if disclosure != "disclosed":
+    if disclosure != "disclosed" or _positive_quantity(row) is None:
         return unassessed_amount_band("primary_no_dose", benchmark,
                                       label_hidden=disclosure == "not_disclosed_blend")
     # Reviewed source regimens remain descriptive. None of these broad

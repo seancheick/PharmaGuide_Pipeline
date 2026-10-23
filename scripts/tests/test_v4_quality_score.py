@@ -1020,3 +1020,24 @@ def test_quality_band_never_changes_safety_disposition(safety_verdict) -> None:
     assert low["quality_tier"] == _lowest_tier()
     assert high["quality_tier"] != _lowest_tier()
     assert low["v4_verdict"] == high["v4_verdict"] == safety_verdict
+
+
+@pytest.mark.parametrize("raw_score,expects_neutral", [(0.0, False), (11.4, True)])
+def test_opaque_sports_reason_matches_actual_neutral_credit(raw_score, expects_neutral):
+    from scoring_v4.quality_score import assemble_quality_score
+    bd = _module_bd(dose=raw_score)
+    bd["dimensions"]["dose"]["metadata"] = {"not_evaluable_reason": "opaque_primary_sports_blend"}
+    out = assemble_quality_score(_shadow(bd=bd))["quality_pillars_v4"]["dose"]
+    assert ("neutral assessment value" in out["reason"]) is expects_neutral
+
+
+def test_unresolved_botanical_benchmark_is_explained_as_incomplete_review():
+    from scoring_v4.quality_score import assemble_quality_score
+    bd = _module_bd(dose=0)
+    bd["dimensions"]["dose"]["metadata"] = {
+        "botanical_dose_band": "disclosed_no_reference",
+        "botanical_dose": {"benchmark": "unresolved"},
+    }
+    out = assemble_quality_score(_shadow(module="generic", bd=bd))["quality_pillars_v4"]["dose"]
+    assert "review" in out["reason"].lower()
+    assert "unavailable" not in out["reason"].lower()

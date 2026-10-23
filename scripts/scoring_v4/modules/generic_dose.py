@@ -425,6 +425,7 @@ def _score_declared_purpose_window(
             completed_botanical_neutral = (
                 specialized_owner == "botanical_profile"
                 and specialized.get("band") == "disclosed_no_reference"
+                and specialized.get("metadata", {}).get("benchmark") == "absent"
             )
             vote(key, "no_benchmark_neutral" if completed_botanical_neutral else specialized_owner,
                  float(specialized["score"]), band=specialized.get("band"))
@@ -749,7 +750,8 @@ def score_dose(product: Dict[str, Any]) -> Dict[str, Any]:
                 "method": "botanical_clinical_dose_v1",
                 "dose_participation_basis": "single_profile_assessment",
                 "dose_contributions": [{"ingredient": "botanical", "assessment": (
-                    "no_benchmark_neutral" if bot.get("band") == "disclosed_no_reference" else "botanical_profile"),
+                    "no_benchmark_neutral" if bot.get("band") == "disclosed_no_reference"
+                    and bot.get("metadata", {}).get("benchmark") == "absent" else "botanical_profile"),
                                         "band": bot.get("band"), "credit_raw": round(float(bot["score"]), 4)}],
                 "botanical_dose_band": bot["band"],
                 "botanical_dose": bot.get("metadata", {}),

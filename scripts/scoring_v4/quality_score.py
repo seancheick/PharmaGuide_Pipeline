@@ -283,8 +283,8 @@ def _undisclosed_component_dose_reason(dim: Dict[str, Any]) -> Optional[str]:
             "The blend total is disclosed, but individual ingredient amounts aren't."
         )
     if metadata.get("not_evaluable_reason") == "opaque_primary_sports_blend":
-        return ("The main ingredient's amount is hidden in a proprietary blend, so its dose "
-                "cannot be assessed; Dose takes the neutral assessment value.")
+        reason = "The main ingredient's amount is hidden in a proprietary blend, so its dose cannot be assessed"
+        return reason + ("; Dose takes the neutral assessment value." if _num(dim.get("score"), 0) > 0 else ".")
     return None
 
 
@@ -298,6 +298,8 @@ def _unassessed_primary_dose_reason(dim: Dict[str, Any]) -> Optional[str]:
         return "The printed amount could not be read yet, so its dose has not been assessed."
     if "primary_no_dose" in bands:
         return "No amount is disclosed for the main ingredient, so its dose cannot be assessed."
+    if (metadata.get("botanical_dose") or {}).get("benchmark") == "unresolved":
+        return "The amount is disclosed, but the applicable dose benchmark review is incomplete."
     if "disclosed_no_reference" in bands or metadata.get("window_proxy_status") in {
         "partial_credit_without_rda_proxy",
         "partial_credit_primary_active_unassessed",

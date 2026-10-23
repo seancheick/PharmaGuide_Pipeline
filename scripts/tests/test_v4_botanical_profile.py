@@ -714,3 +714,18 @@ def test_printed_botanical_volume_reaches_public_dose_pillar():
     dose = artifact["quality_pillars_v4"]["dose"]
     assert dose["score"] == 11.4
     assert "no amount" not in " ".join(dose.get("reasons", [])).lower()
+
+
+def test_exact_printed_zero_is_disclosure_without_positive_neutral_credit():
+    row = _botanical_ingredient(quantity=0, unit="mg", raw_source_path="ingredientRows[0]",
+        raw_taxonomy={"category": "botanical", "quantityVariants": [{
+            "quantity": 0, "unit": "mg", "selected_for_analysis": True, "quantity_parsed": True}]})
+    from scoring_input_contract import dose_disclosure_status
+    assert dose_disclosure_status(row) == "disclosed"
+    assert score_botanical_dose(_botanical_product(ingredient=row))["score"] == 0
+
+
+@pytest.mark.parametrize("quantity", [-0.2, 0, None, float("nan")])
+def test_stale_disclosure_flag_does_not_turn_invalid_volume_into_neutral(quantity):
+    row = _botanical_ingredient(quantity=quantity, unit="mL", has_dose=True)
+    assert score_botanical_dose(_botanical_product(ingredient=row))["score"] == 0
