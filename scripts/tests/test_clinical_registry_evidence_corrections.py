@@ -155,3 +155,73 @@ def test_probiotic_review_retains_combination_research_without_isolated_credit()
         r=strains()[id]
         assert r['evidence_level']=='none'
         assert 'combination' in r['literature_review']['note'].lower()
+
+
+def test_bifidum_summary_cannot_transfer_strain_viability_or_combination_results():
+    from evidence_resolver import clinical_record_sources_eligible
+    row = backed()['INGR_BIFIDOBACTERIUM_BIFIDUM']
+    assert not clinical_record_sources_eligible(row)
+    assert row['study_type'] == 'reference'
+    assert 'effect_direction' not in row
+    assert 'published_studies_count' not in row
+    refs = {str(r.get('pmid')): r for r in row['references_structured']}
+    assert {'21418261', '32277872', '32300799', '31342226'} <= refs.keys()
+    assert 'non-viable' in refs['32277872']['note']
+    assert 'combination' in refs['32300799']['note']
+    assert 'L. plantarum CCFM8610' in refs['31342226']['note']
+    assert 'not a species-specific participant total' in row['notes']
+    assert 'not a B. bifidum-only RCT' in row['notable_studies']
+
+
+def test_ginger_citations_keep_pregnancy_and_chemotherapy_outcomes_distinct():
+    row = backed()['INGR_GINGER']
+    assert row['primary_outcome'] == 'Digestive Health'
+    assert row['endpoint_relevance_tags'] == ['digestive_health']
+    assert 'concomitant 5-HT3' in row['notable_studies']
+    assert 'PMID 21818642 is a randomized trial' in row['notable_studies']
+    assert 'vitamin B6' in row['notable_studies']
+    assert 'do not support' in row['notable_studies']
+
+
+def test_turmeric_citations_distinguish_oa_symptoms_from_biomarkers():
+    row = backed()['INGR_TURMERIC']
+    assert row['primary_outcome'] == 'Joint & Bone Health'
+    assert row['endpoint_relevance_tags'] == ['joint_pain']
+    assert 'PMID 38576215 is an umbrella review' in row['notable_studies']
+    assert 'PMID 40615851 reviews inflammatory biomarkers' in row['notable_studies']
+    assert 'no significant effects' in row['notable_studies']
+    assert 'equivalence between generic turmeric powder' in row['notes']
+
+
+def test_glycine_rat_mechanism_is_not_human_clinical_efficacy():
+    from evidence_resolver import clinical_record_sources_eligible
+    row = backed()['INGR_GLYCINE']
+    refs = {r['pmid']: r for r in row['references_structured']}
+    assert refs['25533534']['scoring_eligible'] is False
+    assert {'22529837', '25533534', '37851316'} <= refs.keys()
+    assert 'rats' in row['notable_studies']
+    assert row['endpoint_relevance_tags'] == ['sleep']
+    assert not clinical_record_sources_eligible(row)
+
+
+def test_same_conflicting_depression_reviews_do_not_establish_joint_or_adjunct_credit():
+    from evidence_resolver import clinical_record_sources_eligible
+    row = backed()['INGR_SAME']
+    assert not clinical_record_sources_eligible(row)
+    assert row['health_goals_supported'] == []
+    assert row['primary_outcome'] == 'Depressive symptoms in patients with depression'
+    assert 'neither establishes a stronger adjunctive benefit' in row['notes']
+    assert {r['pmid'] for r in row['references_structured']} == {'38423354', '38199136'}
+    assert row['effect_direction'] == 'positive_strong'  # retained historical grade, explicitly held
+
+
+def test_niacin_keeps_wrong_topic_identifiers_as_excluded_history_not_clinical_depth():
+    row = backed()['INGR_VITAMIN_B3_NIACIN']
+    assert row['primary_outcome'] == 'Cardiovascular/Heart Health'
+    assert row['endpoint_relevance_tags'] == ['cardiovascular']
+    assert all(k not in row for k in ('total_enrollment', 'published_studies_count', 'registry_completed_trials_count'))
+    assert all(n in row['notable_studies'] for n in ('NCT01411436', 'NCT00619541', 'NCT02961829'))
+    assert 'Excluded from niacin lipid-efficacy support' in row['notable_studies']
+    refs = {r['pmid']:r for r in row['references_structured']}
+    assert set(refs) == {'11498460','15642562','9732910','25141367'}
+    assert 'not standalone niacin efficacy' in refs['25141367']['note']

@@ -159,7 +159,7 @@ Primary key: `backed_clinical_studies` (array)
 | `health_goals_supported` | string[] | YES | Mapped health goals |
 | `primary_outcome` | string | NO | Primary health outcome category |
 | `endpoint_relevance_tags` | string[] | NO | Coarse operator-facing endpoint tags derived from trial outcome text or curated manually |
-| `effect_direction` | string | YES | 5-tier classification: `positive_strong`, `positive_weak`, `mixed`, `null`, `negative` |
+| `effect_direction` | string | Except reference-only | 5-tier classification: `positive_strong`, `positive_weak`, `mixed`, `null`, `negative` |
 | `effect_direction_confidence` | string | NO | Auditability label for effect-direction certainty (`high`, `medium`, `low`) |
 | `effect_direction_rationale` | string | NO | Short evidence rationale supporting the current `effect_direction` classification |
 | `total_enrollment` | int | NO | Largest trial enrollment from ClinicalTrials.gov |
@@ -176,7 +176,7 @@ Primary key: `backed_clinical_studies` (array)
 Clinical evidence notes:
 - Clinical entries require source-backed `key_endpoints`; read `_metadata.total_entries` rather than copying a drifting count into documentation.
 - `references_structured` supports three reference types: `clinical_trial` (NCT ID), `pubmed` (PMID/DOI), and `chembl` (ChEMBL ID + max_phase).
-- `effect_direction` is required on every entry; read the live file when distribution counts are needed.
+- `effect_direction` is required on clinical efficacy entries. Reference-only summaries may omit it when no aggregate efficacy determination is established; do not invent an effect grade or backfill one for heterogeneous source summaries. Read the live file when distribution counts are needed.
 - `published_studies_count` is the dedicated numeric field for Section C depth bonus. Entries without a reliable count omit it; scoring does not infer counts from the human-readable `published_studies` tags.
 - `registry_completed_trials_count` is discovery/enrichment metadata, not a substitute for published study counts. Keep it separate from `published_studies_count`.
 - `effect_direction_rationale`, `effect_direction_confidence`, and `endpoint_relevance_tags` are auditability fields. They improve reviewability and operator trust; they are not direct scoring inputs in the current model.

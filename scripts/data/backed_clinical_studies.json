@@ -3,7 +3,7 @@
     "description": "Ingredients backed by clinical research and studies - Enhanced for Section C v3.4.0",
     "purpose": "evidence_scoring",
     "schema_version": "5.6.4",
-    "last_updated": "2026-10-20",
+    "last_updated": "2026-10-23",
     "total_entries": 210,
     "changelog": [
       "2026-10-20: INGR_TART_CHERRY standard_name is Tart Cherry (\"tart cherry extract\" kept as an alias), the rename deferred from PR205. Its juice-only applicability (PR213) rejects every non-juice row the name now reaches; measured on all 552 cherry-mentioning labels: 0 score, pillar or blob changes.",
@@ -5954,7 +5954,7 @@
         "sam-e",
         "s adenosyl methionine"
       ],
-      "category": "joint_bone",
+      "category": "sleep_mood",
       "evidence_level": "ingredient-human",
       "published_studies": [
         "RCT",
@@ -5962,18 +5962,14 @@
       ],
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "depression symptoms ↓",
-        "joint function ↑",
-        "liver health ↑"
+        "In a 23-trial meta-analysis of 2,183 participants with depression, SAMe monotherapy was superior to placebo; adjunctive SAMe versus placebo added to antidepressants and SAMe versus antidepressants did not show significant differences (PMID: 38423354).",
+        "A separate 14-trial meta-analysis of 1,522 participants found no significant differences for the examined placebo, active-comparator or adjunctive depression comparisons (PMID: 38199136)."
       ],
-      "health_goals_supported": [
-        "Reduce Stress/Anxiety",
-        "Healthy Aging/Longevity"
-      ],
-      "notes": "Human evidence supports SAMe for depression, especially as adjunctive therapy, and older randomized osteoarthritis studies suggest symptom relief comparable to NSAIDs with fewer adverse effects.",
+      "health_goals_supported": [],
+      "notes": "The cited sources concern depression treatment. They disagree about monotherapy versus placebo, and neither establishes a stronger adjunctive benefit. They do not support the former joint-function or liver-health claims. Source selection, overlapping trials, preparation and treatment-context differences require adjudication before a general clinical effect grade is applied.",
       "study_type": "systematic_review_meta",
-      "last_updated": "2026-03-06",
-      "notable_studies": "Recent depression meta-analyses include PMID 38423354 and PMID 38199136, both supporting antidepressant benefit with the strongest signal in adjunctive use. Older osteoarthritis evidence remains supportive but dates back to earlier randomized comparisons summarized in the classic review literature.",
+      "last_updated": "2026-10-23",
+      "notable_studies": "PMID 38423354 included 23 trials (2,183 participants): monotherapy versus placebo SMD -0.58 (95% CI -0.93 to -0.23), adjunctive SAMe versus placebo with antidepressants SMD -0.22 (95% CI -0.63 to 0.19), and SAMe versus antidepressants SMD 0.06 (95% CI -0.06 to 0.18). PMID 38199136 included 14 trials (1,522 participants), doses 200-3,200 mg/day and durations 2-12 weeks, and reported no significant differences in the examined comparisons. These review populations may overlap and must not be summed as independent participants or confirmations. No joint or liver source is cited in this entry.",
       "references_structured": [
         {
           "type": "pubmed",
@@ -6038,15 +6034,15 @@
         "unii": "7LP2MPO46S"
       },
       "effect_direction": "positive_strong",
-      "primary_outcome": "Reduce Stress/Anxiety",
+      "primary_outcome": "Depressive symptoms in patients with depression",
       "total_enrollment": 376,
       "registry_completed_trials_count": 41,
       "effect_direction_confidence": "high",
-      "effect_direction_rationale": "Retained positive_strong classification; study_type=systematic_review_meta; evidence_level=ingredient-human; primary_outcome=Reduce Stress/Anxiety; published_tags=RCT,meta-analysis; registry_completed_trials_count=41; total_enrollment=376; endpoint_tags=cardiovascular,glycemic_control; notes/citations contain no automated downgrade signals.",
+      "effect_direction_rationale": "The stored positive_strong grade has not been re-established by this factual correction. Cited depression reviews disagree about monotherapy and report nonsignificant adjunctive comparisons. Existing score eligibility is held pending reconciliation of review methods and source-specific applicability; this note supplies no replacement clinical grade.",
       "endpoint_relevance_tags": [
-        "cardiovascular",
-        "glycemic_control"
-      ]
+        "stress_mood"
+      ],
+      "scoring_eligible": false
     },
     {
       "id": "INGR_CAFFEINE",
@@ -8356,22 +8352,16 @@
       ],
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "CRP ↓",
-        "TNF-α ↓",
-        "IL-6 ↓",
-        "inflammation ↓",
-        "oxidative stress ↓",
-        "joint pain ↓"
+        "osteoarthritis pain and physical function",
+        "inflammatory and oxidative-stress biomarkers"
       ],
       "health_goals_supported": [
-        "Reduce Stress/Anxiety",
-        "Healthy Aging/Longevity",
         "Joint & Bone Health"
       ],
-      "notes": "Systematic-review evidence supports curcumin for lowering inflammatory markers and improving osteoarthritis pain, but effect sizes vary by formulation and bioavailability remains a major limitation for generic turmeric products.",
-      "notable_studies": "Recent meta-analyses include PMID 38945354 and PMID 38576215, both reporting reductions in CRP and related inflammatory markers with curcumin. Osteoarthritis pain support is also summarized in PMID 40615851. Stronger outcomes tend to come from enhanced formulations rather than plain turmeric powder.",
+      "notes": "The cited reviews concern curcumin preparations for osteoarthritis symptoms and inflammatory, oxidative-stress and endothelial biomarkers. Findings differ by outcome and preparation. They do not establish stress/anxiety or longevity benefits, or equivalence between generic turmeric powder and the studied curcumin formulations. Study preparation and product applicability remain unreviewed.",
+      "notable_studies": "PMID 38576215 is an umbrella review of curcumin for osteoarthritis pain, stiffness and physical function. PMID 38945354 reviews inflammatory, oxidative-stress and endothelial biomarkers. PMID 40615851 reviews inflammatory biomarkers in knee osteoarthritis, with reported CRP and TNF-alpha reductions but no significant effects on ESR, IL-1 beta, IL-6 or PGE2; it is not the cited source for osteoarthritis pain outcomes. These studies do not establish stress/anxiety benefits.",
       "study_type": "systematic_review_meta",
-      "last_updated": "2026-03-07",
+      "last_updated": "2026-10-23",
       "references_structured": [
         {
           "type": "pubmed",
@@ -8465,13 +8455,13 @@
         "unii": "IT942ZTH98"
       },
       "effect_direction": "positive_strong",
-      "primary_outcome": "Reduce Stress/Anxiety",
+      "primary_outcome": "Joint & Bone Health",
       "total_enrollment": 90,
       "registry_completed_trials_count": 216,
       "effect_direction_confidence": "high",
-      "effect_direction_rationale": "Retained positive_strong classification; study_type=systematic_review_meta; evidence_level=ingredient-human; primary_outcome=Reduce Stress/Anxiety; published_tags=RCT,meta-analysis,systematic_review; registry_completed_trials_count=216; total_enrollment=90; endpoint_tags=stress_mood; notes/citations contain no automated downgrade signals.",
+      "effect_direction_rationale": "The cited evidence concerns osteoarthritis outcomes and biomarkers, not stress/anxiety. The existing aggregate direction and confidence have not been reassessed in this factual attribution correction and do not establish preparation or product applicability. Completed-trial and enrollment aggregates require separate verification.",
       "endpoint_relevance_tags": [
-        "stress_mood"
+        "joint_pain"
       ]
     },
     {
@@ -8630,18 +8620,16 @@
       ],
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "nausea ↓",
-        "joint pain ↓",
-        "inflammation ↓"
+        "pregnancy-associated nausea symptoms",
+        "acute chemotherapy-associated nausea with concomitant antiemetic treatment"
       ],
       "health_goals_supported": [
-        "Digestive Health",
-        "Healthy Aging/Longevity"
+        "Digestive Health"
       ],
-      "notes": "Human evidence supports ginger most clearly for nausea-related indications, especially pregnancy-associated nausea, with additional but smaller anti-inflammatory and pain-related benefits.",
+      "notes": "Cited human studies concern pregnancy-associated nausea and vomiting and acute chemotherapy-associated nausea. These populations and treatment contexts are distinct; the cited set does not establish general digestive, joint-pain, inflammatory-marker or longevity benefits. Study preparation and product applicability remain unreviewed.",
       "study_type": "systematic_review_meta",
-      "last_updated": "2026-03-07",
-      "notable_studies": "Pregnancy-nausea evidence is synthesized in PMID 24642205 and PMID 21818642, both supporting ginger in common dose ranges. Anti-inflammatory-marker reductions were summarized by Jalali et al. (2020, PMID 31937153). Evidence outside nausea is supportive but less consistent.",
+      "last_updated": "2026-10-23",
+      "notable_studies": "PMID 24642205 and PMID 31937153 synthesize pregnancy-associated nausea and vomiting trials: nausea-related benefits versus placebo were reported, while vomiting improvement and superiority to vitamin B6 were not consistently established. PMID 21818642 is a randomized trial of ginger for acute chemotherapy-associated nausea, with concomitant 5-HT3 antagonist treatment; it is not a pregnancy meta-analysis. These citations do not support the previous attribution of inflammatory-marker reductions to PMID 31937153.",
       "references_structured": [
         {
           "type": "pubmed",
@@ -8757,11 +8745,9 @@
       "total_enrollment": 298,
       "registry_completed_trials_count": 128,
       "effect_direction_confidence": "high",
-      "effect_direction_rationale": "Retained positive_strong classification; study_type=systematic_review_meta; evidence_level=ingredient-human; primary_outcome=Digestive Health; published_tags=systematic_review,meta-analysis,RCT; registry_completed_trials_count=128; total_enrollment=298; endpoint_tags=cardiovascular,digestive_health,muscle_recovery; notes/citations contain no automated downgrade signals.",
+      "effect_direction_rationale": "The cited evidence concerns nausea in pregnancy and chemotherapy contexts. The existing aggregate direction and confidence have not been reassessed in this factual attribution correction and do not establish preparation or product applicability. Completed-trial and enrollment aggregates require separate verification.",
       "endpoint_relevance_tags": [
-        "cardiovascular",
-        "digestive_health",
-        "muscle_recovery"
+        "digestive_health"
       ]
     },
     {
@@ -9265,17 +9251,16 @@
       ],
       "score_contribution": "tier_2",
       "key_endpoints": [
-        "sleep quality ↑",
-        "sleep onset ↓",
-        "core body temperature ↓"
+        "In a small human sleep-restriction study, 3 g glycine before bedtime for three nights reduced subjective next-day fatigue and improved psychomotor vigilance; sleepiness findings varied by measure (PMID: 22529837).",
+        "A systematic review describes small human sleep studies with high risk of bias; a general clinical sleep benefit is not established by this bounded source review (PMID: 37851316)."
       ],
       "health_goals_supported": [
         "Sleep Quality"
       ],
-      "notes": "Small human trials suggest glycine may improve subjective sleep quality and next-day fatigue, but the evidence base is still limited and much smaller than for mainstream sleep agents.",
+      "notes": "Human evidence for bedtime glycine is limited by small samples and risk of bias. The sleep-restriction study assessed next-day fatigue, sleepiness and performance. The cited sleep-promoting, sleep-latency and hypothermia mechanism study was conducted in rats and cannot establish those outcomes in humans.",
       "study_type": "rct_single",
-      "last_updated": "2026-03-07",
-      "notable_studies": "Small crossover and sleep-restriction studies include PMID 22529837 and PMID 25533534, both suggesting better subjective sleep quality or less next-day fatigue with bedtime glycine. A recent review is indexed as PMID 37851316 and notes that the evidence remains limited by sample size and study count.",
+      "last_updated": "2026-10-23",
+      "notable_studies": "PMID 22529837 studied 3 g glycine before bedtime during three nights of restricted sleep in healthy volunteers and also reported separate animal mechanistic work. PMID 25533534 studied sleep-promoting and hypothermic mechanisms in rats; it is retained for mechanism context only and excluded from affirmative human clinical scoring. PMID 37851316 reviewed human glycine studies and identified small samples and high risk of bias in the healthy-population sleep evidence.",
       "references_structured": [
         {
           "type": "pubmed",
@@ -9333,7 +9318,9 @@
           "evidence_grade": "journal_article",
           "retracted": false,
           "supports_claims": [],
-          "verification_source": "pubmed_eutils"
+          "verification_source": "pubmed_eutils",
+          "scoring_eligible": false,
+          "note": "Rat mechanistic study of NMDA-receptor-mediated sleep and hypothermia; retained as nonhuman mechanism context, not affirmative human clinical efficacy. Live abstract content verified 2026-10-23."
         },
         {
           "type": "pubmed",
@@ -9369,11 +9356,11 @@
       "total_enrollment": 948,
       "registry_completed_trials_count": 145,
       "effect_direction_confidence": "medium",
-      "effect_direction_rationale": "Retained positive_strong classification; study_type=rct_single; evidence_level=ingredient-human; primary_outcome=Sleep Quality; published_tags=RCT,crossover; registry_completed_trials_count=145; total_enrollment=948; endpoint_tags=focus_memory,glycemic_control; notes/citations contain no automated downgrade signals.",
+      "effect_direction_rationale": "The stored positive_strong grade has not been re-established by this factual correction. Human sleep evidence is small and at high risk of bias; PMID 25533534 is animal mechanism evidence. Existing score eligibility is held pending source-specific human efficacy and applicability adjudication; this note is not a replacement clinical grade.",
       "endpoint_relevance_tags": [
-        "focus_memory",
-        "glycemic_control"
-      ]
+        "sleep"
+      ],
+      "scoring_eligible": false
     },
     {
       "id": "INGR_TART_CHERRY",
@@ -10085,12 +10072,12 @@
         "mobility ↑"
       ],
       "health_goals_supported": [
-        "Healthy Aging/Longevity"
+        "Joint & Bone Health"
       ],
       "notes": "Human evidence supports prescription-grade crystalline glucosamine sulfate for osteoarthritis pain and possibly structural progression, but results are more mixed for other glucosamine forms.",
       "study_type": "systematic_review_meta",
-      "last_updated": "2026-03-23",
-      "notable_studies": "The evidence for glucosamine sulfate is better than generic glucosamine but still depends heavily on formulation and osteoarthritis context. The umbrella review PMID 33488785 and the later systematic review/meta-analysis PMID 40005447 support symptomatic benefit in knee osteoarthritis, with higher confidence for prescription-grade sulfate preparations than for undifferentiated retail glucosamine products.",
+      "last_updated": "2026-10-23",
+      "notable_studies": "PMID 33488785 is an umbrella review whose conclusion concerns prescription crystalline glucosamine sulfate in knee osteoarthritis. PMID 40005447 pools symptomatic slow-acting osteoarthritis drugs, including glucosamine sulfate, chondroitin sulfate and herbal combinations; its methods explicitly exclude glucosamine hydrochloride. A pooled drug-class finding does not establish a single preparation effect. Neither review establishes generic longevity or muscle-recovery benefit.",
       "references_structured": [
         {
           "type": "pubmed",
@@ -10146,15 +10133,27 @@
         "unii": "N08U5BOQ1K"
       },
       "effect_direction": "mixed",
-      "primary_outcome": "Healthy Aging/Longevity",
+      "primary_outcome": "Joint & Bone Health",
       "total_enrollment": 1588,
       "registry_completed_trials_count": 81,
       "effect_direction_confidence": "medium",
-      "effect_direction_rationale": "Retained mixed classification; study_type=systematic_review_meta; evidence_level=ingredient-human; primary_outcome=Healthy Aging/Longevity; published_tags=RCT,meta-analysis; registry_completed_trials_count=81; total_enrollment=1588; endpoint_tags=joint_pain,muscle_recovery; notes/citations include mixed-evidence language.",
+      "effect_direction_rationale": "The existing mixed grade is retained. These sources concern knee osteoarthritis and heterogeneous preparations. Hydrochloride is excluded by the cited review; passing that exclusion does not establish a completed dose, population, outcome or clinical applicability review. Legacy aggregate enrollment and trial counts have not been verified in this correction.",
       "endpoint_relevance_tags": [
-        "joint_pain",
-        "muscle_recovery"
-      ]
+        "joint_pain"
+      ],
+      "applicability": {
+        "scope": "ingredient",
+        "excluded_form_terms": [
+          "hydrochloride",
+          "hcl"
+        ],
+        "source_pmids": [
+          "33488785",
+          "40005447"
+        ],
+        "reviewed_at": "2026-10-23",
+        "reason": "The cited sulfate reviews do not support hydrochloride: PMID 40005447 explicitly excludes hydrochloride trials. This preparation exclusion does not establish completed product applicability or prescription equivalence."
+      }
     },
     {
       "id": "INGR_CHONDROITIN_SULFATE",
@@ -21518,56 +21517,53 @@
       ],
       "score_contribution": "tier_2",
       "key_endpoints": [
-        "Increased HDL cholesterol by 15-35% with niacin-statin combination in coronary artery disease patients (PMID: 11498460)",
-        "Reduced cardiovascular events and total mortality through 15-year follow-up in Coronary Drug Project at 3g/day (n=8,341) (PMID: 15642562)",
-        "Decreased plasma fibrinogen and LDL cholesterol in peripheral vascular disease patients (r=0.61, p<0.009) (PMID: 9732910)",
-        "Reduced total cholesterol by 12% and LDL cholesterol by 17.3% in hypercholesterolemia patients (PMID: 25141367)"
+        "PMID 11498460: In 153 coronary-artery-disease patients with low HDL, simvastatin plus niacin changed lipid measures over 12 months; added antioxidants blunted the HDL response. This combination study does not isolate niacin efficacy.",
+        "PMID 15642562: A Coronary Drug Project analysis reports cardiovascular and mortality findings for niacin versus placebo in men with previous myocardial infarction, including extended follow-up. The full 8,341-person trial included multiple drug regimens, not only niacin.",
+        "PMID 9732910: In peripheral-vascular-disease patients, niacin lowered fibrinogen and LDL; changes were correlated. These are selected-population surrogate outcomes; the abstract does not establish dose or course.",
+        "PMID 25141367: An uncontrolled red-yeast-rice-led multi-ingredient pilot reported lipid changes in 16 analyzed participants. It cannot establish independent niacin efficacy."
       ],
       "health_goals_supported": [
-        "Immune Support"
+        "Cardiovascular/Heart Health"
       ],
-      "primary_outcome": "Immune Support",
+      "primary_outcome": "Cardiovascular/Heart Health",
       "effect_direction": "positive_strong",
-      "total_enrollment": 1637,
-      "notes": "Niacin has strong lipid-modifying evidence at pharmacologic doses (1-3g/day). AIM-HIGH and HPS2-THRIVE found no incremental benefit when added to statin therapy, but standalone evidence from the Coronary Drug Project remains positive. Supplement doses (50-500mg) have less direct evidence.",
-      "last_updated": "2026-04-02",
-      "notable_studies": "NCT01411436 (n=1637): Nexavar Post-marketing Surveillance for Hepatocellular Carcinoma in Japan. NCT00619541 (n=46): Study of Sorafenib and Infusional 5-Fluorouracil in Advanced Hepatocellular Carcinoma (HCC). NCT02961829 (n=30): Multi Interventional Study Exploring HIV-1 Residual Replication: a Step Towards HIV-1 Eradication and Sterilizing Cure.",
+      "notes": "Niacin has strong lipid-modifying evidence at pharmacologic doses (1-3g/day). AIM-HIGH and HPS2-THRIVE found no incremental benefit when added to statin therapy, but standalone evidence from the Coronary Drug Project remains positive. Supplement doses (50-500mg) have less direct evidence. The cited combination, uncontrolled and selected disease-population studies require separate applicability review. Nicotinamide in HIV research is not equivalent to nicotinic-acid lipid efficacy.",
+      "last_updated": "2026-10-23",
+      "notable_studies": "The retained PubMed sources concern lipid outcomes or secondary prevention: 11498460 (simvastatin-niacin combination), 15642562 (Coronary Drug Project post-MI analysis), 9732910 (peripheral vascular disease biomarkers), and 25141367 (uncontrolled multi-ingredient pilot). Excluded from niacin lipid-efficacy support: NCT01411436 is sorafenib postmarketing surveillance in hepatocellular carcinoma; NCT00619541 is sorafenib plus infusional 5-fluorouracil in hepatocellular carcinoma. NCT02961829 includes nicotinamide with antiretroviral therapy in HIV and does not establish nicotinic-acid lipid efficacy. These identifiers are retained for traceability, not counted as qualifying niacin studies.",
       "references_structured": [
         {
           "pmid": "11498460",
           "url": "https://pubmed.ncbi.nlm.nih.gov/11498460/",
           "source": "PubMed",
           "verified": true,
-          "note": "Extracted from key_endpoints text — needs content verification"
+          "note": "Content verified 2026-10-23. PMID 11498460: In 153 coronary-artery-disease patients with low HDL, simvastatin plus niacin changed lipid measures over 12 months; added antioxidants blunted the HDL response. This combination study does not isolate niacin efficacy."
         },
         {
           "pmid": "15642562",
           "url": "https://pubmed.ncbi.nlm.nih.gov/15642562/",
           "source": "PubMed",
           "verified": true,
-          "note": "Extracted from key_endpoints text — needs content verification"
+          "note": "Content verified 2026-10-23. PMID 15642562: A Coronary Drug Project analysis reports cardiovascular and mortality findings for niacin versus placebo in men with previous myocardial infarction, including extended follow-up. The full 8,341-person trial included multiple drug regimens, not only niacin."
         },
         {
           "pmid": "9732910",
           "url": "https://pubmed.ncbi.nlm.nih.gov/9732910/",
           "source": "PubMed",
           "verified": true,
-          "note": "Extracted from key_endpoints text — needs content verification"
+          "note": "Content verified 2026-10-23. PMID 9732910: In peripheral-vascular-disease patients, niacin lowered fibrinogen and LDL; changes were correlated. These are selected-population surrogate outcomes; the abstract does not establish dose or course."
         },
         {
           "pmid": "25141367",
           "url": "https://pubmed.ncbi.nlm.nih.gov/25141367/",
           "source": "PubMed",
           "verified": true,
-          "note": "Extracted from key_endpoints text — needs content verification"
+          "note": "Content verified 2026-10-23. PMID 25141367: An uncontrolled red-yeast-rice-led multi-ingredient pilot reported lipid changes in 16 analyzed participants. It cannot establish independent niacin efficacy. This is not standalone niacin efficacy."
         }
       ],
-      "published_studies_count": 852,
-      "registry_completed_trials_count": 852,
       "effect_direction_confidence": "medium",
-      "effect_direction_rationale": "Retained positive_strong classification; study_type=rct_single; evidence_level=ingredient-human; primary_outcome=Immune Support; published_tags=RCT; published_studies_count=852; registry_completed_trials_count=852; total_enrollment=1637; endpoint_tags=focus_memory; notes/citations contain no automated downgrade signals.",
+      "effect_direction_rationale": "Existing effect_direction is retained pending clinical synthesis; no new grade is assigned by this factual correction. The cited sources concern cardiovascular/lipid outcomes in specific disease populations, including combination and uncontrolled studies. Immune Support and focus_memory are not established by these citations. The previously quoted registry counts and enrollment do not establish this record evidence strength.",
       "endpoint_relevance_tags": [
-        "focus_memory"
+        "cardiovascular"
       ]
     },
     {
@@ -22392,73 +22388,79 @@
         "bifidobacterium bifidum"
       ],
       "category": "probiotics",
-      "evidence_level": "ingredient-human",
-      "study_type": "rct_multiple",
+      "evidence_level": "reference",
+      "study_type": "reference",
       "published_studies": [
+        "reference",
         "RCT"
       ],
-      "score_contribution": "tier_1",
+      "score_contribution": "tier_3",
       "key_endpoints": [
-        "Reduced global IBS symptoms by 0.88 points vs 0.16 placebo (p<0.0001) with 57% responder rate vs 21% placebo in 4-week RCT of MIMBb75 strain (n=122) (PMID: 21418261)",
-        "34% achieved composite endpoint (>=30% abdominal pain improvement + adequate relief in >=4/8 weeks) vs 19% placebo (RR 1.7, p=0.0007) in 443-patient multicenter RCT (PMID: 32277872)",
-        "Improved mental flexibility scores (p<0.05) and increased serum BDNF levels (p<0.05) at 12 weeks in 63 older adults receiving BGN4 strain (PMID: 32300799)",
-        "Decreased SCORAD index and increased gut Bacteroidetes proportion in 109 atopic dermatitis patients with CCFM16 strain (PMID: 31342226)"
+        "Live B. bifidum MIMBb75 was studied once daily for 4 weeks in 122 IBS patients. Global symptom change was -0.88 versus -0.16 points; overall responders were 57% versus 21%, while adequate relief was 47% versus 11%. Exact-strain findings, not species-wide efficacy (PMID: 21418261).",
+        "Heat-inactivated, non-viable HI-MIMBb75 (SYN-HI-001) was studied at 1 billion cells daily for 8 weeks in 443 IBS patients. The primary composite endpoint was reached by 34% versus 19% with placebo. Non-viable cells must not be relabeled CFU or treated as confirmation of the same live preparation (PMID: 32277872).",
+        "A B. bifidum BGN4 plus B. longum BORI combination was studied in 63 randomized older adults, with 53 completers analyzed, at 1 billion total CFU/day for 12 weeks. Mental-flexibility, stress and serum BDNF findings belong to the combination, not BGN4 alone; endpoint hierarchy is not established by this bounded extraction (PMID: 32300799).",
+        "In a four-arm pilot study of 109 patients with atopic dermatitis, the abstract attributes reduced SCORAD and increased IL-10 to L. plantarum CCFM8610. B. bifidum CCFM16 and CCFM8610 both altered microbiome measures; this source does not establish CCFM16 symptom benefit (PMID: 31342226)."
       ],
       "health_goals_supported": [
         "Digestive Health"
       ],
       "primary_outcome": "Digestive Health",
-      "effect_direction": "positive_strong",
-      "total_enrollment": 583,
-      "notes": "B. bifidum has strong IBS evidence from the MIMBb75 strain: landmark 122-patient RCT (PMID: 21418261) and confirmatory 443-patient multicenter trial (PMID: 32277872). Also shows cognitive/BDNF benefits (BGN4 strain, PMID: 32300799) and skin-related immune modulation. Strain specificity matters.",
-      "last_updated": "2026-04-02",
-      "notable_studies": "NCT01709825 (n=583): The Effect of Probiotics (L. Helveticus, B. Longum, and B. Bifidum) on Immune Function and Digestive Health. NCT06035835 (n=437): Probiotics and Breastmilk Decrease Risk of Atopic Dermatitis in Premature Infants. NCT04958460 (n=150): Effect of Probiotics on ADHD.",
+      "notes": "REFERENCE CONTEXT ONLY: these sources concern exact live MIMBb75, heat-inactivated HI-MIMBb75, a BGN4 plus BORI combination, or separate CCFM16 and CCFM8610 arms. They do not establish efficacy for arbitrary Bifidobacterium bifidum labels. Live and heat-inactivated preparations are distinct; combination effects cannot be assigned to BGN4 alone, and the reported SCORAD improvement belongs to L. plantarum CCFM8610. No generic-species numerical clinical credit is authorized. Named-strain assessments remain with clinically_relevant_strains.json; this summary creates no new strain approval and does not establish absence of B. bifidum human evidence. The former aggregate positive_strong/high assessment and 73 publication/completed-trial counts have no verified supporting species-level synthesis or enumerated census here. The former total_enrollment 583 belongs to one four-arm registration, not a species-specific participant total; its source enrollment remains recorded below.",
+      "last_updated": "2026-10-23",
+      "notable_studies": "NCT01709825 enrolled 583 participants across separate B. bifidum R0071, L. helveticus R0052, B. longum subsp. infantis R0033 and placebo arms in academically stressed university students; no posted registry results. NCT06035835 is a retrospective cohort of 437 premature infants, with groups including LGG or an acidophilus ATCC 4356 plus bifidum ATCC 15696 combination, not a B. bifidum-only RCT; no posted registry results. NCT04958460 enrolled 150 participants in an exact Bf-688 ADHD trial, not generic digestive evidence; no posted registry results. Completed registrations are not demonstrated clinical benefit.",
       "references_structured": [
         {
           "type": "clinical_trial",
           "nct_id": "NCT01709825",
           "title": "The Effect of Probiotics (L. Helveticus, B. Longum, and B. Bifidum) on Immune Function and Digestive Health",
-          "evidence_grade": "rct",
-          "enrollment": 583
+          "evidence_grade": "reference",
+          "enrollment": 583,
+          "note": "ClinicalTrials.gov API content verified 2026-10-23: 583 actual participants total across separate R0071, R0052, R0033 and placebo arms in academically stressed university students; one capsule daily for 6 weeks. R0071 is the B. bifidum arm. No posted registry results. This enrollment is not B. bifidum-specific enrollment or proof of benefit."
         },
         {
           "pmid": "21418261",
           "url": "https://pubmed.ncbi.nlm.nih.gov/21418261/",
           "source": "PubMed",
           "verified": true,
-          "note": "Extracted from key_endpoints text — needs content verification"
+          "note": "Content independently verified 2026-10-23 against primary abstract: exact live MIMBb75, 122 IBS patients, once daily for 4 weeks; 57% versus 21% overall responders, distinct from 47% versus 11% adequate relief. No generic species transfer. Abstract does not specify cell dose."
         },
         {
           "pmid": "32277872",
           "url": "https://pubmed.ncbi.nlm.nih.gov/32277872/",
           "source": "PubMed",
           "verified": true,
-          "note": "Extracted from key_endpoints text — needs content verification"
+          "note": "Content independently verified 2026-10-23: non-viable heat-inactivated HI-MIMBb75 (SYN-HI-001), 443 IBS patients; two capsules totaling 1 billion non-viable cells once daily for 8 weeks; primary composite reached by 34% versus 19%. Not live MIMBb75 or CFU evidence."
         },
         {
           "pmid": "32300799",
           "url": "https://pubmed.ncbi.nlm.nih.gov/32300799/",
           "source": "PubMed",
           "verified": true,
-          "note": "Extracted from key_endpoints text — needs content verification"
+          "note": "Content independently verified 2026-10-23 against abstract and PMC7861012 full text: B. bifidum BGN4 plus B. longum BORI combination, 63 randomized and 53 completers analyzed; 1 billion total CFU/day in four soybean-oil capsules, two after morning meal and two after evening meal, 12 weeks. Cognitive/stress/BDNF observations cannot be assigned to BGN4 alone."
         },
         {
           "pmid": "31342226",
           "url": "https://pubmed.ncbi.nlm.nih.gov/31342226/",
           "source": "PubMed",
           "verified": true,
-          "note": "Extracted from key_endpoints text — needs content verification"
+          "note": "Content independently verified 2026-10-23 against primary abstract: 109 AD patients in four arms; SCORAD improvement and IL-10 increase attributed to L. plantarum CCFM8610. Both CCFM8610 and B. bifidum CCFM16 had microbiome changes; abstract does not establish CCFM16 clinical symptom efficacy. Dose/course remain unextracted."
         }
       ],
-      "published_studies_count": 73,
-      "registry_completed_trials_count": 73,
-      "effect_direction_confidence": "high",
-      "effect_direction_rationale": "Retained positive_strong classification; study_type=rct_multiple; evidence_level=ingredient-human; primary_outcome=Digestive Health; published_tags=RCT; published_studies_count=73; registry_completed_trials_count=73; total_enrollment=583; endpoint_tags=immune_support,sleep,digestive_health; notes/citations contain no automated downgrade signals.",
       "endpoint_relevance_tags": [
-        "immune_support",
-        "sleep",
-        "digestive_health"
-      ]
+        "digestive_health",
+        "stress_mood"
+      ],
+      "applicability": {
+        "scope": "ingredient",
+        "source_pmids": [
+          "21418261",
+          "32277872",
+          "32300799",
+          "31342226"
+        ],
+        "reviewed_at": "2026-10-23",
+        "reason": "Reference-only source attribution review; heterogeneous strain, viability and combination contexts cannot establish species-wide efficacy. Existing exact-strain owners remain authoritative. No new clinical approval or generic efficacy inference."
+      }
     },
     {
       "id": "INGR_BLACK_COHOSH",

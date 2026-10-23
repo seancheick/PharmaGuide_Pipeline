@@ -289,3 +289,15 @@ def test_discover_apply_refuses_to_write_evidence_before_any_network_call(monkey
     assert exit_info.value.code != 0
     assert "pending" in capsys.readouterr().err
     assert clinical_db.read_text() == before
+
+
+def test_reference_only_summaries_do_not_get_effect_grade_auditability_backfill():
+    class NoNetwork:
+        @property
+        def circuit_open(self):
+            raise AssertionError('reference-only summaries must not request clinical backfill')
+    from api_audit.discover_clinical_evidence import backfill_auditability_metadata
+    for field in ('study_type', 'evidence_level'):
+        record = {'id': 'REFERENCE_ONLY', field: 'reference', 'standard_name': 'Reference'}
+        assert backfill_auditability_metadata(NoNetwork(), {'backed_clinical_studies': [record]}, apply=True) == []
+        assert 'effect_direction_confidence' not in record

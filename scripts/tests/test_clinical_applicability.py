@@ -1113,3 +1113,27 @@ def test_malformed_curated_context_cannot_silently_disappear(monkeypatch):
     monkeypatch.setattr(clinical_applicability, 'reviewed_entries',
                         lambda: {'used': {'study_contexts': [context, 'malformed']}})
     assert not clinical_applicability.assess_clinical_source_review({'id': 'used'})['is_complete']
+
+
+@pytest.mark.parametrize('form', ['Glucosamine Hydrochloride', 'Glucosamine HCl'])
+@pytest.mark.parametrize('quantity', [None, 1500])
+def test_glucosamine_sulfate_sources_cannot_credit_hydrochloride(form, quantity):
+    row = {'name': form, 'canonical_id': 'glucosamine', 'quantity': quantity, 'unit': 'mg',
+           'raw_source_path': 'ingredientRows[0]'}
+    entry = {**reviewed_entries()['INGR_GLUCOSAMINE_SULFATE'],
+             'ingredient': form, 'matched_source_row_refs': ['ingredientRows[0]']}
+    result = assess_clinical_applicability({'activeIngredients': [row]}, entry, assess_amount=False)
+    assert result['status'] == 'not_applicable'
+    assert result['reason_code'] == 'clinical_form_excluded'
+
+
+@pytest.mark.parametrize('form', ['Glucosamine', 'Glucosamine sulfate 2KCl', 'Crystalline glucosamine sulfate'])
+def test_glucosamine_not_excluded_does_not_establish_completed_clinical_review(form):
+    from clinical_applicability import assess_clinical_source_review
+    row = {'name': form, 'canonical_id': 'glucosamine', 'quantity': 1500, 'unit': 'mg',
+           'raw_source_path': 'ingredientRows[0]'}
+    entry = {**reviewed_entries()['INGR_GLUCOSAMINE_SULFATE'],
+             'ingredient': form, 'matched_source_row_refs': ['ingredientRows[0]']}
+    result = assess_clinical_applicability({'activeIngredients': [row]}, entry, assess_amount=False)
+    assert result['status'] != 'not_applicable'
+    assert assess_clinical_source_review(entry)['is_complete'] is False

@@ -980,8 +980,10 @@ def backfill_auditability_metadata(
     entries = clinical_db.get("backed_clinical_studies", [])
     candidates = [
         entry for entry in entries
-        if not entry.get("effect_direction_rationale")
-        or not entry.get("effect_direction_confidence")
+        if (not entry.get("effect_direction_rationale")
+            or not entry.get("effect_direction_confidence"))
+        and str(entry.get("study_type", "")).lower() != "reference"
+        and str(entry.get("evidence_level", "")).lower() != "reference"
     ]
     candidates.sort(key=_evidence_impact_score, reverse=True)
     selected = candidates[:limit]
