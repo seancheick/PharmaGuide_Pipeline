@@ -249,6 +249,8 @@ def score_evidence(product: Dict[str, Any], *, apply_primary_floor: bool = False
         else set()
     )
     active_canonical_index = _active_canonical_index(product)
+    contributing_entries = {}
+    floor_receipt = {}
     ingredient_points: Dict[str, float] = defaultdict(float)
     matched_entry_ids: set[str] = set()
     scoped_matches: List[Dict[str, Any]] = []
@@ -301,6 +303,8 @@ def score_evidence(product: Dict[str, Any], *, apply_primary_floor: bool = False
         )
         if canonical:
             ingredient_points[canonical] += raw
+            if raw > 0:
+                contributing_entries[entry_id] = (canonical, entry)
 
     capped_scores = sorted(
         (min(CAP_PER_INGREDIENT, pts) for pts in ingredient_points.values()),
@@ -326,7 +330,7 @@ def score_evidence(product: Dict[str, Any], *, apply_primary_floor: bool = False
         from evidence_resolver import evidence_prominent_row_keys
         prominent = evidence_prominent_row_keys(product)
         primary_floor, floor_canonical = _primary_mass_floor(
-            product, scoped_matches, prominent=prominent
+            product, scoped_matches, prominent=prominent, receipt=floor_receipt
         )
         # P5: DRI-essential nutrient authority floor. An essential vitamin/mineral
         # with established RDA/AI has evidence of necessity even without a strong
@@ -398,7 +402,41 @@ def score_evidence(product: Dict[str, Any], *, apply_primary_floor: bool = False
         ),
     )
 
+    # Internal dependency receipts describe the selected numerical path only.
+    # Audit-only generic matches in native modules never become their owners.
+    dependencies = []
+    if total > 0:
+        if primary_floor_decisive:
+            if not nutrition_authority_canonical and floor_receipt:
+                dependencies = [floor_receipt["entry"]]
+        else:
+            top_canonicals = set(sorted(ingredient_points,
+                key=lambda k: min(CAP_PER_INGREDIENT, ingredient_points[k]), reverse=True)[:len(TOP_N_WEIGHTS)])
+            dependencies = [entry for canonical, entry in contributing_entries.values()
+                            if canonical in top_canonicals]
+            if depth_bonus > 0 and scoped_matches:
+                dependencies.append(max(scoped_matches, key=lambda entry: _published_study_count(entry) or 0))
+    from clinical_applicability import assess_clinical_applicability, reviewed_entries
+    receipts = []
+    for entry in {_entry_id(entry): entry for entry in dependencies}.values():
+        decision = assess_clinical_applicability(product, entry, assess_amount=False)
+        if (entry.get("evidence_origin") == "verified_formula_contract"
+                and entry.get("applicability_assessment", {}).get("status") == "assessed_studied_formula"):
+            decision = {"status": "applicable", "reason_code": "reviewed_formula_contract"}
+        reference = reviewed_entries().get(_entry_id(entry), entry)
+        formula_review = entry.get("applicability_assessment", {}) if entry.get("evidence_origin") == "verified_formula_contract" else {}
+        population = decision.get("studied_population") or formula_review.get("studied_population")
+        outcomes = decision.get("supported_outcomes") or formula_review.get("supported_outcomes")
+        receipts.append({"id": _entry_id(entry), "status": decision["status"],
+                         "reason_code": decision["reason_code"],
+                         "scope_qualification_complete": bool(decision["status"] == "applicable" and population and outcomes),
+                         "studied_population": population, "supported_outcomes": outcomes or [],
+                         "source_references": reference.get("references_structured") or reference.get("references") or [],
+                         "studied_regimens": reference.get("studied_regimens"),
+                         "reference_semantics": reference.get("reference_semantics")})
+
     metadata = {
+        "contributing_record_assessments": receipts,
         "phase": PHASE_MARKER,
         "ingredient_points": {k: round(v, 4) for k, v in sorted(ingredient_points.items())},
         "matched_entries": len(matched_entry_ids),
@@ -1647,6 +1685,7 @@ def _primary_mass_floor(
     matches: List[Any],
     *,
     prominent: Optional[set] = None,
+    receipt: Optional[dict] = None,
 ) -> Tuple[float, Optional[str]]:
     """Evidence floor when a PROMINENT active is strongly & positively evidenced
     at a clinical dose. Returns (floor, canonical) or (0.0, None).
@@ -1725,6 +1764,8 @@ def _primary_mass_floor(
             candidate = min(candidate, round(PRIMARY_FLOOR_MODERATE * effect_multiplier, 4))
         if candidate > floor:
             floor, floor_canon = candidate, canonical
+            if receipt is not None:
+                receipt["entry"] = entry
     return floor, floor_canon
 
 

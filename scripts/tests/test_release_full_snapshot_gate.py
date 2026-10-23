@@ -176,3 +176,16 @@ def test_completed_manifest_is_sealed_before_a_review_hold_can_exit():
     assert stamp < seal < comparison
     publication = source.index('run_strict_gate "interaction DB release asset + app hydration pin"')
     assert comparison < source.index('--check-input-binding "$CATALOG_INPUT_BINDING"', comparison) < publication
+
+
+def test_release_runs_strict_assessment_audit_after_optional_snapshot_before_publication():
+    source = RELEASE_SCRIPT.read_text(encoding='utf-8')
+    gate = source.index('run_strict_gate "scoring assessment completion contract"')
+    publication = source.index('run_strict_gate "interaction DB release asset + app hydration pin"')
+    assert gate < publication
+    command = source[gate:source.index('run_strict_gate "clinical drift contract"', gate)]
+    assert 'scoring --products-dir "$PRODUCTS_DIR" --dist-dir "$DIST_DIR" --strict-release' in command
+    # This sits among unconditional final gates, after all snapshot/reuse branches.
+    cleaner = source.index('run_strict_gate "cleaner/IQD row contract"')
+    assert cleaner < gate
+    assert '\nif ' not in source[cleaner:gate]

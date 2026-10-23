@@ -108,6 +108,27 @@ def score_evidence(product: Any) -> Dict[str, Any]:
             and (context.get("trial_family") or context.get("context_id")) == family["family"]
             for pmid in context.get("source_pmids") or []
         })
+    contributing_contexts = []
+    contributing_records = []
+    if score > 0:
+        if family["source"] == "native_context":
+            contributing_contexts.append(family["context"])
+        elif family["source"] == "registry":
+            from clinical_applicability import assess_clinical_applicability
+            for entry in owned:
+                if entry.get("id") == family["family"]:
+                    decision = (formula if formula.get("status") == "assessed_studied_formula"
+                                else assess_clinical_applicability(product, entry, assess_amount=False))
+                    contributing_records.append({"id": entry.get("id"), **decision,
+                        "scope_qualification_complete": bool(decision.get("studied_population")
+                            and decision.get("supported_outcomes"))})
+                    break
+        if components["independent_replication_consistency"] > 0:
+            selected = next(row for row in consistency["conditions"] if row["credit"] == consistency["credit"])
+            contributing_contexts.extend(context for _, context in eligible
+                if context.get("condition") == selected["condition"]
+                and (context.get("trial_family") or context.get("context_id")) in selected["families"])
+    contributing_contexts = list({context["context_id"]: context for context in contributing_contexts}.values())
     directions = [outcome.get("direction") for _, context in eligible
                   for outcome in _qualifying_outcomes(context)]
     directions += [_norm_text(row.get("effect_direction")) for row in owned]
@@ -142,6 +163,8 @@ def score_evidence(product: Any) -> Dict[str, Any]:
         "penalties": {}, "phase": PHASE_MARKER,
         "metadata": {
             "phase": PHASE_MARKER, "evidence_assessment": assessment,
+            "contributing_native_contexts": contributing_contexts,
+            "contributing_record_assessments": contributing_records,
             "evidence_result_state": state, "claim_alignment": relevance,
             "studied_formula_assessment": formula,
             "credit_owner": "none" if score <= 0 else (
@@ -182,6 +205,7 @@ def _strongest_single_family_certainty(
         "identity_weight": 1.0,
         "family": context.get("trial_family") or context.get("context_id"),
         "source": "native_context", "design": context.get("study_design"),
+        "context": context,
         "direction": sorted({o.get("direction") for o in _qualifying_outcomes(context)}),
     } for _, context in _eligible_native_contexts(assessment, relevance)]
     return max(families, key=lambda row: (row["certainty"], row["identity_weight"]), default={

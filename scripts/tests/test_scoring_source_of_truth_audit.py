@@ -33,6 +33,7 @@ def _write(path: Path, product: dict) -> None:
 
 def _scored(**overrides) -> dict:
     assessment_readiness = {
+        "release_assessment": {"is_complete": True, "blockers": [], "unfinished_source_assessment": None},
         "enforcement_mode": "enforced",
         "enforced_dimensions": ["dose", "identity", "route", "verification"],
         "is_live_ready": True,
@@ -471,3 +472,41 @@ def test_scoring_audit_treats_a_capture_gap_as_a_fact(tmp_path: Path) -> None:
 
     codes = {finding.code for finding in audit_scoring(_args(path))}
     assert "SCORING_SAFETY_ASSESSMENT_INCOMPLETE" not in codes
+
+@pytest.mark.parametrize('status', ['scored', 'not_scored', 'suppressed_safety'])
+def test_strict_release_requires_completion_receipt_for_every_record(tmp_path, status):
+    product = _scored(quality_score_status=status)
+    product['assessment_readiness'].pop('release_assessment')
+    path = tmp_path / 'scored.json'
+    _write(path, product)
+    codes = {f.code for f in audit_scoring(_args(path))}
+    assert 'SCORING_RELEASE_ASSESSMENT_MISSING' in codes
+
+
+def test_strict_release_rejects_unfinished_source_even_with_complete_dimensions(tmp_path):
+    product = _scored()
+    product['assessment_readiness']['release_assessment'] = {
+        'is_complete': False, 'blockers': ['dose_amount_unread'],
+        'unfinished_source_assessment': 'dose_amount_unread',
+    }
+    path = tmp_path / 'scored.json'
+    _write(path, product)
+    assert 'SCORING_RELEASE_ASSESSMENT_INCOMPLETE' in {f.code for f in audit_scoring(_args(path))}
+
+
+def test_warning_containment_cannot_erase_release_completion_blocker(tmp_path, monkeypatch):
+    import audit_source_of_truth_contract as audit
+    product = _scored(quality_score_status='not_scored', verdict='NOT_SCORED',
+                      quality_score_v4_100=None, score_100_equivalent=None)
+    product['assessment_readiness']['release_assessment'] = {
+        'is_complete': False, 'blockers': ['evidence_assessment_incomplete'],
+        'unfinished_source_assessment': None,
+    }
+    monkeypatch.setattr(audit, 'verified_contract_quarantines', lambda _path: {})
+    monkeypatch.setattr(audit, 'verified_warning_only_products',
+                        lambda _path, blocked_only=False: set() if blocked_only else {'P1'})
+    path = tmp_path / 'scored.json'
+    _write(path, product)
+    args = _args(path)
+    args.dist_dir = str(tmp_path)
+    assert 'SCORING_RELEASE_ASSESSMENT_INCOMPLETE' in {f.code for f in audit_scoring(args)}

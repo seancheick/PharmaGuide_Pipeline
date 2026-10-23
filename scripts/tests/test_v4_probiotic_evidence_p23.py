@@ -430,3 +430,34 @@ def test_native_and_registry_evidence_are_both_consumed_without_stacking():
     assert both["components"] == native_only["components"]
     native_product["evidence_data"]["clinical_matches"] *= 2
     assert score_evidence(native_product)["components"] == both["components"]
+
+
+def test_native_contributing_context_receipt_tracks_selected_evidence():
+    payload = probiotic_evidence.score_evidence(_infant_product())
+    assert payload['score'] > 0
+    contexts = payload['metadata']['contributing_native_contexts']
+    assert contexts
+    assert all(c['context_id'] and c['source_pmids'] for c in contexts)
+    assert payload['metadata']['contributing_record_assessments'] == []
+
+
+@pytest.mark.parametrize('source_pending', [True, False])
+def test_release_blocks_pending_study_extraction_not_unknown_label_cfu(source_pending):
+    import copy
+    from assessment_readiness import evaluate_release_assessment
+    payload = probiotic_evidence.score_evidence(_infant_product())
+    payload = copy.deepcopy(payload)
+    contexts = payload['metadata']['contributing_native_contexts']
+    assert contexts
+    if source_pending:
+        contexts[0]['dose']['dose_status'] = 'extraction_pending'
+        contexts[0]['dose']['values'] = []
+    # Label uncertainty remains distinct from these complete study facts.
+    for strain in payload['metadata']['evidence_assessment']['strain_assessments']:
+        strain['status'] = 'strain_dose_unknown'
+        strain['cfu_per_day'] = None
+    readiness = {name: {'readiness': 'complete'} for name in
+                 ('identity', 'dose', 'evidence', 'verification', 'route')}
+    result = evaluate_release_assessment({}, readiness,
+        {'module': 'probiotic', 'dimensions': {'evidence': payload}}, unfinished_source=None)
+    assert result['is_complete'] is (not source_pending), result

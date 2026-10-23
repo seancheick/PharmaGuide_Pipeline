@@ -592,3 +592,15 @@ def test_legacy_quality_verdict_cannot_become_public_safety(tier, score):
     assert artifact["quality_tier"] == tier
     assert artifact["verdict"] == "SAFE"
     assert artifact["product_safety_status"] == "no_known_catalog_concern"
+
+
+def test_scored_artifact_persists_unfinished_source_for_release_without_changing_score(monkeypatch):
+    monkeypatch.setattr(scored_artifact, 'score_product_v4', lambda _product: _canned_v4())
+    monkeypatch.setattr(scored_artifact, 'unfinished_source_assessment', lambda *_args: 'dose_amount_unread')
+    artifact = scored_artifact.build_scored_artifact(_product())
+    assert artifact['quality_score_v4_100'] == 82.0
+    assert artifact['quality_score_status'] == 'scored'
+    receipt = artifact['assessment_readiness']['release_assessment']
+    assert receipt['unfinished_source_assessment'] == 'dose_amount_unread'
+    assert 'dose_amount_unread' in receipt['blockers']
+    assert receipt['is_complete'] is False

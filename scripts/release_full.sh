@@ -649,6 +649,8 @@ run_strict_gate "cleaner/IQD row contract" \
   "$PG_PYTHON" "$SOURCE_OF_TRUTH_AUDIT" cleaner --products-dir "$PRODUCTS_DIR" --strict-release
 run_strict_gate "enrichment/IQD source-of-truth contract" \
   "$PG_PYTHON" "$SOURCE_OF_TRUTH_AUDIT" enrichment --products-dir "$PRODUCTS_DIR" --strict-release
+run_strict_gate "scoring assessment completion contract" \
+  "$PG_PYTHON" "$SOURCE_OF_TRUTH_AUDIT" scoring --products-dir "$PRODUCTS_DIR" --dist-dir "$DIST_DIR" --strict-release
 run_strict_gate "clinical drift contract" \
   "$PG_PYTHON" "$SOURCE_OF_TRUTH_AUDIT" clinical --products-dir "$PRODUCTS_DIR" --strict-release
 run_strict_gate "clinical evidence match reachability" \

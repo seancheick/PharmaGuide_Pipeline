@@ -1471,3 +1471,26 @@ def test_explicit_purposes_are_order_independent_and_not_oxidative_stress():
         entry.update(primary_outcome='Reduced oxidative stress biomarkers',
             health_goals_supported=[], endpoint_relevance_tags=[], key_endpoints=[])
     assert build_scored_artifact(product)['quality_pillars_v4']['evidence']['score'] == 0
+
+
+def test_contributing_receipt_follows_authority_floor_not_unused_legacy_match():
+    from scoring_v4.modules.generic_evidence import score_evidence
+    product = _product(matches=[_match(id='UNREVIEWED_SYNTHETIC', study_type='rct_single', effect_direction='positive_weak')])
+    base = score_evidence(product)
+    receipts = base['metadata']['contributing_record_assessments']
+    assert len(receipts) == 1
+    assert receipts[0]['id'] == 'UNREVIEWED_SYNTHETIC'
+    assert receipts[0]['status'] == 'not_curated'
+    assert receipts[0]['reason_code'] == 'no_reviewed_scope_constraints'
+    assert receipts[0]['scope_qualification_complete'] is False
+    authority = score_evidence(product, apply_primary_floor=True)
+    assert authority['metadata']['nutrition_authority_floor_applied'] is True
+    assert authority['metadata']['primary_evidence_floor_decisive'] is True
+    assert authority['metadata']['contributing_record_assessments'] == []
+
+
+def test_zero_negative_evidence_has_no_positive_record_dependencies():
+    from scoring_v4.modules.generic_evidence import score_evidence
+    payload = score_evidence(_product(matches=[_match(id='NEGATIVE_SYNTHETIC', effect_direction='negative')]))
+    assert payload['score'] == 0
+    assert payload['metadata']['contributing_record_assessments'] == []

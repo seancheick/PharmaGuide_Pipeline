@@ -733,6 +733,17 @@ def audit_scoring(args: argparse.Namespace) -> list[Finding]:
         for product in products:
             pid = product_identity(product)
             finding_start = len(findings)
+            if getattr(args, "strict_release", False):
+                release = _safe_dict(_safe_dict(product.get("assessment_readiness")).get("release_assessment"))
+                if (not isinstance(release.get("is_complete"), bool)
+                        or not isinstance(release.get("blockers"), list)
+                        or "unfinished_source_assessment" not in release):
+                    findings.append(Finding("SCORING_RELEASE_ASSESSMENT_MISSING",
+                        f"{pid}: missing internal release completion facts", str(file_path)))
+                elif (release["is_complete"] is not True or release["blockers"]
+                      or release["unfinished_source_assessment"] is not None):
+                    findings.append(Finding("SCORING_RELEASE_ASSESSMENT_INCOMPLETE",
+                        f"{pid}: unfinished release assessment: {release['blockers']}", str(file_path)))
             typed_suppressed_dose_failure = False
             verdict = str(product.get("verdict") or "").upper()
             diag = _scoring_diag(product)

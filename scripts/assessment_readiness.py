@@ -43,10 +43,9 @@ EVIDENCE_APPLICABILITY_NUTRITION_AUTHORITY = "nutrition_authority"
 EVIDENCE_APPLICABILITY_MODULE_AGGREGATE = "module_aggregate"
 EVIDENCE_APPLICABILITY_NOT_APPLICABLE = "not_applicable"
 
-# Readiness dimensions that gate the live catalog. Evidence is deliberately
-# absent: `not_yet_evaluated` records an uncurated ingredient, not a defective
-# product, and enforcing it would quarantine on curation backlog. It stays fully
-# measured and reported in shadow so the backlog is visible and burnable.
+# Readiness dimensions that gate calculation eligibility. Evidence stays out
+# so unfinished curation never changes provisional quality calculations. The
+# independent internal release assessment below requires completed owner work.
 ENFORCED_READINESS_DIMENSIONS = frozenset({
     "identity",
     "dose",
@@ -112,7 +111,7 @@ _STANDALONE_CARBOHYDRATE_POWDER_RE = re.compile(
 
 
 def has_canonical_enforced_dimensions(value: Any) -> bool:
-    """Return whether an artifact declares the exact release-gating contract."""
+    """Return whether an artifact declares the exact calculation contract."""
     return (
         isinstance(value, list)
         and len(value) == len(ENFORCED_READINESS_DIMENSIONS)
@@ -1365,3 +1364,120 @@ def evaluate_assessment_readiness(
         "unavailable_reasons": unavailable_reasons,
         "shadow_incomplete_dimensions": shadow_incomplete_dimensions,
     }
+
+
+def evaluate_release_assessment(
+    product: Mapping[str, Any], readiness: Mapping[str, Any],
+    module_breakdown: Mapping[str, Any], *, unfinished_source: str | None,
+) -> Dict[str, Any]:
+    """Internal completion decision; never changes provisional calculation.
+
+    Consume the existing identity, exposure and clinical owners. A completed
+    negative answer and an explicitly recorded label limitation are conclusions;
+    missing owner facts are not. Scored artifacts retain this receipt because
+    the enriched source needed to reconstruct it is intentionally omitted.
+    """
+    def _source_review_pending(value: Any) -> bool:
+        # Consume explicit source states only; no benchmark is not pending.
+        if isinstance(value, Mapping):
+            return any((key.endswith("status") or key == "state") and item in {
+                "extraction_pending", "conflicting_source_values", "pending_review",
+                "adjudication_required", "unresolved",
+            } for key, item in value.items() if isinstance(item, str)) or any(
+                _source_review_pending(item) for item in value.values())
+        if isinstance(value, list):
+            return any(_source_review_pending(item) for item in value)
+        return False
+
+    blockers = []
+    if unfinished_source:
+        blockers.append(unfinished_source)
+    intentional = (_safe_dict(readiness.get("catalog_disposition")).get("disposition")
+                   == CATALOG_DISPOSITION_INTENTIONAL_NON_SCOREABLE)
+    dimensions = _safe_dict(module_breakdown.get("dimensions"))
+    evidence_meta = _safe_dict(_safe_dict(dimensions.get("evidence")).get("metadata"))
+    module = str(module_breakdown.get("module") or "")
+    for name in ("identity", "dose", "verification", "route"):
+        payload = _safe_dict(readiness.get(name))
+        if intentional and name in {"identity", "dose", "route"}:
+            continue
+        if payload.get("migration_inference") is True:
+            blockers.append(f"{name}_migration_inference")
+        if _is_ready(str(payload.get("readiness") or "")):
+            continue
+        # Only an explicit source-owned missing label amount closes this
+        # particular question. A missing typed row or failed printed conversion
+        # must never be waived by no_scoreable_active_dose.
+        refs = payload.get("incomplete_source_row_refs") or []
+        typed = _safe_list(_safe_dict(product.get("rda_ul_data")).get("dose_assessments"))
+        hidden_refs = {
+            str(row.get("source_path") or row.get("source_row_ref") or "")
+            for row in typed if isinstance(row, dict)
+            and row.get("reason_code") == "amount_not_declared"
+            and row.get("source_value") in (None, "")
+        }
+        if name == "dose" and refs and set(refs) <= hidden_refs:
+            continue
+        blockers.append(f"{name}_assessment_incomplete")
+    if not intentional:
+        if module == "omega":
+            # Native omega standards own this question; generic evidence is
+            # retained only as audit metadata and contributes no omega credit.
+            if evidence_meta.get("evidence_result_state") not in {
+                    "evaluated_authority", "evaluated_applicable", "applicability_unestablished"}:
+                blockers.append("omega_evidence_assessment_incomplete")
+        elif module == "probiotic":
+            native = _safe_dict(evidence_meta.get("evidence_assessment"))
+            strains = _safe_list(native.get("strain_assessments"))
+            pending = {"strain_reference_unreviewed", "strain_identity_mismatch",
+                       "strain_identity_or_review_unresolved", "strain_context_review_pending",
+                       "strain_dose_reference_unreviewed"}
+            from studied_formulas import reviewed_native_context_present
+            reviewed_conclusion = evidence_meta.get("evidence_result_state") in {
+                "evaluated_applicable", "evaluated_null", "evaluated_unfavorable",
+                "no_qualifying_human_evidence",
+            } or any(reviewed_native_context_present(row) for row in strains)
+            if (not native or not reviewed_conclusion
+                    or any(row.get("status") in pending for row in strains)):
+                blockers.append("probiotic_evidence_assessment_incomplete")
+            if float(_safe_dict(dimensions.get("evidence")).get("score") or 0) > 0:
+                contexts = evidence_meta.get("contributing_native_contexts")
+                records = evidence_meta.get("contributing_record_assessments")
+                if not isinstance(contexts, list) or not isinstance(records, list) or not (contexts or records):
+                    blockers.append("probiotic_contributing_evidence_receipts_missing")
+                else:
+                    from studied_formulas import context_accepted_for_scoring
+                    from probiotic_measurements import effective_clinical_dose_basis
+                    for context in contexts:
+                        dose = _safe_dict(context.get("dose"))
+                        if (not context_accepted_for_scoring(context)
+                                or dose.get("dose_status") in {"extraction_pending", "conflicting_source_values"}
+                                or dose.get("duration_basis") == "extraction_pending"
+                                or effective_clinical_dose_basis(dose) != "discrete_daily_arms"
+                                or not dose.get("values")):
+                            blockers.append("probiotic_contributing_context_incomplete:" + str(context.get("context_id") or "unknown"))
+                    for receipt in records:
+                        if (receipt.get("status") not in {"applicable", "assessed_studied_formula"}
+                                or receipt.get("scope_qualification_complete") is not True):
+                            blockers.append("clinical_applicability_unreviewed:" + str(receipt.get("id") or "unknown"))
+        elif not _is_ready(str(_safe_dict(readiness.get("evidence")).get("readiness") or "")):
+            blockers.append("evidence_assessment_incomplete")
+        # The scoring owner records only records used by the winning generic
+        # path. Missing applicability cannot publish provisional legacy credit.
+        if module in {"generic", "sports", "fiber_digestive"}:
+            receipts = evidence_meta.get("contributing_record_assessments")
+            if receipts is None:
+                # Category modules may embed the generic owner's receipt.
+                receipts = _safe_dict(evidence_meta.get("generic_evidence_metadata")).get("contributing_record_assessments")
+            if receipts is not None:
+                for receipt in receipts:
+                    if (receipt.get("status") != "applicable"
+                            or receipt.get("scope_qualification_complete") is not True):
+                        blockers.append("clinical_applicability_unreviewed:" + str(receipt.get("id") or "unknown"))
+                    if (_source_review_pending(receipt.get("studied_regimens"))
+                            or _source_review_pending(receipt.get("reference_semantics"))):
+                        blockers.append("contributing_source_review_incomplete:" + str(receipt.get("id") or "unknown"))
+            elif float(_safe_dict(dimensions.get("evidence")).get("score") or 0) > 0:
+                blockers.append("contributing_evidence_receipts_missing")
+    return {"is_complete": not blockers, "blockers": list(dict.fromkeys(blockers)),
+            "unfinished_source_assessment": unfinished_source}

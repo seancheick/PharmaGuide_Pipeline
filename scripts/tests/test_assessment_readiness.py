@@ -1437,3 +1437,66 @@ def test_retained_native_context_cannot_close_explicit_review_hold(review_status
     result = evaluate_evidence_assessment(product, module="probiotic")
     assert result["not_yet_evaluated_count"] == 1
     assert result["ingredient_assessments"][0]["state"] == "not_yet_evaluated"
+
+@pytest.mark.parametrize('dimension', ['identity', 'dose', 'evidence', 'verification', 'route'])
+def test_release_completion_is_separate_and_blocks_owned_missing_work(dimension):
+    from assessment_readiness import evaluate_release_assessment
+    readiness = {name: {'readiness': 'complete'} for name in
+                 ('identity', 'dose', 'evidence', 'verification', 'route')}
+    readiness[dimension]['readiness'] = 'incomplete'
+    result = evaluate_release_assessment({}, readiness, {'module': 'generic'}, unfinished_source=None)
+    assert result['is_complete'] is False
+    assert f'{dimension}_assessment_incomplete' in result['blockers']
+    assert readiness[dimension]['readiness'] == 'incomplete'
+
+
+@pytest.mark.parametrize('status,expected', [('applicable', True), ('not_curated', False), ('unresolved', False)])
+def test_release_completion_uses_actual_generic_credit_dependencies(status, expected):
+    from assessment_readiness import evaluate_release_assessment
+    readiness = {name: {'readiness': 'complete'} for name in
+                 ('identity', 'dose', 'evidence', 'verification', 'route')}
+    module = {'module': 'generic', 'dimensions': {'evidence': {'score': 14, 'metadata': {
+        'contributing_record_assessments': [{'id': 'used', 'status': status, 'scope_qualification_complete': status == 'applicable'}]}}}}
+    result = evaluate_release_assessment({}, readiness, module, unfinished_source=None)
+    assert result['is_complete'] is expected
+
+
+@pytest.mark.parametrize('reason,value,expected', [
+    ('amount_not_declared', None, True), ('amount_not_declared', 100, False),
+    ('conversion_failed', None, False), ('no_ul_applicable', None, False)])
+def test_release_dose_label_limitation_requires_explicit_owner_proof(reason, value, expected):
+    from assessment_readiness import evaluate_release_assessment
+    readiness = {name: {'readiness': 'complete'} for name in
+                 ('identity', 'dose', 'evidence', 'verification', 'route')}
+    readiness['dose'] = {'readiness': 'incomplete', 'reason_code': 'no_scoreable_active_dose',
+                         'incomplete_source_row_refs': ['row1']}
+    product = {'rda_ul_data': {'dose_assessments': [{'source_path': 'row1',
+               'reason_code': reason, 'source_value': value}]}}
+    result = evaluate_release_assessment(product, readiness, {'module': 'generic'}, unfinished_source=None)
+    assert result['is_complete'] is expected
+
+
+def test_release_native_omega_does_not_consume_unused_generic_credit():
+    from assessment_readiness import evaluate_release_assessment
+    readiness = {name: {'readiness': 'complete'} for name in
+                 ('identity', 'dose', 'evidence', 'verification', 'route')}
+    readiness['evidence']['readiness'] = 'incomplete'
+    module = {'module': 'omega', 'dimensions': {'evidence': {'score': 14, 'metadata': {
+        'evidence_result_state': 'evaluated_applicable',
+        'generic_evidence_metadata': {'contributing_record_assessments': [{'id': 'unused', 'status': 'not_curated'}]}}}}}
+    assert evaluate_release_assessment({}, readiness, module, unfinished_source=None)['is_complete'] is True
+
+
+@pytest.mark.parametrize('scope_complete,regimen_status,expected', [
+    (False, 'verified', False), (True, 'extraction_pending', False),
+    (True, 'source_not_reported', True), (True, 'verified', True)])
+def test_generic_release_requires_scoped_review_but_never_invents_numeric_benchmark(scope_complete, regimen_status, expected):
+    from assessment_readiness import evaluate_release_assessment
+    readiness = {name: {'readiness': 'complete'} for name in
+                 ('identity', 'dose', 'evidence', 'verification', 'route')}
+    receipt = {'id': 'used', 'status': 'applicable',
+               'scope_qualification_complete': scope_complete,
+               'studied_regimens': [{'dose_status': regimen_status}]}
+    module = {'module': 'generic', 'dimensions': {'evidence': {'score': 10,
+        'metadata': {'contributing_record_assessments': [receipt]}}}}
+    assert evaluate_release_assessment({}, readiness, module, unfinished_source=None)['is_complete'] is expected

@@ -309,6 +309,11 @@ def assemble_scored_artifact(
         was_assessed=safety_was_assessed,
     )
     unfinished = unfinished_source_assessment(enriched_product, _safe_dict(module_breakdown))
+    from assessment_readiness import evaluate_release_assessment
+    assessment_readiness = {**assessment_readiness, "release_assessment": evaluate_release_assessment(
+        enriched_product, assessment_readiness, _safe_dict(module_breakdown),
+        unfinished_source=unfinished,
+    )}
     quality_assessment_status = _quality_assessment_status(
         status, dose_safety, v4.get("quality_pillars_v4"), unfinished
     )
