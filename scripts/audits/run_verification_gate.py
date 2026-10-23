@@ -49,11 +49,8 @@ def _utc_now() -> str:
 
 
 def _sha256(path: Path) -> str:
-    digest = hashlib.sha256()
     with path.open("rb") as handle:
-        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
-            digest.update(chunk)
-    return digest.hexdigest()
+        return hashlib.file_digest(handle, "sha256").hexdigest()
 
 
 def _canonical_sha256(payload: dict) -> str:
@@ -106,9 +103,17 @@ def _input_binding(cwd: Path, command: Sequence[str], patterns: Sequence[str]) -
                'CODEX_TOOL_CALL_ID'}
     environment = {key: value for key, value in os.environ.items() if key not in ignored}
     files = {}
+    # This cache lives for one content pass only. Never carry hashes across
+    # the before/after verification boundary or a later publication check.
+    digests = {}
     for pattern in patterns:
-        files[pattern] = [(str(path.relative_to(cwd)), _sha256(path))
-                          for path in sorted(cwd.glob(pattern)) if path.is_file()]
+        entries = []
+        for path in sorted(cwd.glob(pattern)):
+            if path.is_file():
+                if path not in digests:
+                    digests[path] = _sha256(path)
+                entries.append((str(path.relative_to(cwd)), digests[path]))
+        files[pattern] = entries
     executable = shutil.which(str(command[0]))
     return _canonical_sha256({
         'files': files, 'environment': environment, 'python': sys.version,
@@ -146,10 +151,13 @@ def _run_gate(*, name: str, command: Sequence[str], log_path: Path,
     log_path = Path(log_path).resolve()
     receipt_path = Path(receipt_path).resolve()
     log_path.parent.mkdir(parents=True, exist_ok=True)
+    binding_started = time.monotonic()
     binding = _input_binding(cwd, command, input_globs) if input_globs else None
+    binding_duration = time.monotonic() - binding_started
     if binding and _can_reuse(receipt_path, log_path, name=name, binding=binding,
                              max_age_seconds=max_age_seconds):
-        print(f'REUSED: {name} — verified unchanged inputs and successful log', flush=True)
+        print(f'REUSED: {name} — verified unchanged inputs and successful log '
+              f'| input binding {binding_duration:.3f}s', flush=True)
         return 0
     started_at = _utc_now()
     started_monotonic = time.monotonic()
@@ -185,9 +193,13 @@ def _run_gate(*, name: str, command: Sequence[str], log_path: Path,
         finally:
             process.stdout.close()
 
-    if binding and _input_binding(cwd, command, input_globs) != binding:
-        print(f'FAILED: {name} — inputs changed during verification', file=sys.stderr)
-        exit_code = exit_code or 125
+    if binding:
+        binding_started = time.monotonic()
+        final_binding = _input_binding(cwd, command, input_globs)
+        binding_duration += time.monotonic() - binding_started
+        if final_binding != binding:
+            print(f'FAILED: {name} — inputs changed during verification', file=sys.stderr)
+            exit_code = exit_code or 125
 
     payload = {
         "receipt_schema_version": RECEIPT_SCHEMA_VERSION,
@@ -201,6 +213,8 @@ def _run_gate(*, name: str, command: Sequence[str], log_path: Path,
         "log": str(log_path),
         "log_sha256": _sha256(log_path),
         "input_binding": binding,
+        "input_binding_duration_seconds": round(binding_duration, 6),
+        "log_bytes": log_path.stat().st_size,
     }
     _write_receipt(receipt_path, payload)
     print(f'FINISHED: {name} | exit {exit_code} | {payload["duration_seconds"]:.3f}s', flush=True)

@@ -227,3 +227,32 @@ def test_tool_call_bookkeeping_does_not_invalidate_real_configuration(tmp_path, 
     monkeypatch.setenv('PG_TEST_POLICY', 'new-policy')
     assert run_gate(**args) == 0
     assert (tmp_path / 'calls').read_text() == 'xx'
+
+
+def test_binding_hashes_overlapping_inputs_once_per_pass(tmp_path, monkeypatch):
+    from audits import run_verification_gate as gate
+    path = tmp_path / 'one.json'
+    path.write_text('{}')
+    calls = []
+    original = gate._sha256
+    def tracked(path):
+        calls.append(path)
+        return original(path)
+    monkeypatch.setattr(gate, '_sha256', tracked)
+    first = gate._input_binding(tmp_path, ['unresolved-probe'], ['*.json', 'one.json'])
+    assert calls == [path]
+    # Same size and timestamp cannot hide a changed byte on the next pass.
+    stamp = path.stat()
+    path.write_text('[]')
+    os.utime(path, ns=(stamp.st_atime_ns, stamp.st_mtime_ns))
+    second = gate._input_binding(tmp_path, ['unresolved-probe'], ['*.json', 'one.json'])
+    assert second != first
+    assert calls == [path, path]
+
+
+def test_receipt_reports_binding_overhead_separately(tmp_path):
+    args = _reusable_probe(tmp_path)
+    assert run_gate(**args) == 0
+    payload = json.loads(args['receipt_path'].read_text())
+    assert payload['input_binding_duration_seconds'] >= 0
+    assert payload['log_bytes'] == args['log_path'].stat().st_size
