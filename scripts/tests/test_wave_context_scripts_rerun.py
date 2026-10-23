@@ -25,6 +25,7 @@ def test_wave2_contexts_rerun_verifies_patched_rows_without_writing():
 
 
 @pytest.mark.parametrize('context_id,field,bad_value', [
+    ('lp299v_ibs_meta_37541528', 'limitations', ['High certainty; independent replication established.']),
     ('is2_moderate_covid19_adjunct_39866999', 'population', {'age_group': 'adult', 'description': 'B. coagulans UBBC-07'}),
     ('mtcc5856_healthy_microbiome_37335737', 'blinding', 'unreported'),
     ('mtcc5856_functional_gas_bloating_36862903', 'funding', 'industry'),

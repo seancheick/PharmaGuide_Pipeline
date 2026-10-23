@@ -79,6 +79,11 @@ def _declared_disposition_patches():
         ("comparator", "Intact-protein formula with scGOS/lcFOS; breastfed group is a separate nonrandomized reference."),
         ("limitations[1]", "Active formula contained partially hydrolyzed whey protein whereas comparator contained intact protein; preparation differences prevent isolated attribution to M-16V. Randomized N=224, not 284."),
     ])
+    # October 23: the already-recorded 299v RCT now has source-extracted
+    # regimen facts. Accept only the corrected inventory/replication wording;
+    # never waive the rest of this meta-analysis's source facts or review.
+    patches.setdefault("lp299v_ibs_meta_37541528", []).append((
+        "limitations", ["The 299v-specific conclusion is graded LOW certainty by the reviewers. The separately recorded PMID 22912552 RCT retains its own trial family; this synthesis is not an independent replication of included trials."]))
     return patches
 
 
