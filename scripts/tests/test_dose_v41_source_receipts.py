@@ -133,8 +133,8 @@ def test_receipt_records_existing_unassessed_primary_constraint():
     assert not any('l_leucine' in row['value_display'] for row in _dose_receipt_facts(receipt))
 
 
-def test_undosed_blend_neutral_is_not_presented_as_a_clinical_dose():
-    """A disclosed total gets existing neutral handling, not member-dose proof."""
+def test_undosed_blend_with_unfinished_benchmark_is_not_presented_as_a_clinical_dose():
+    """A disclosed total proves neither member dose nor completed benchmark review."""
     import copy
     from scoring_v4.modules.generic_evidence import score_evidence
     from scoring_v4.scored_artifact import build_scored_artifact
@@ -153,9 +153,40 @@ def test_undosed_blend_neutral_is_not_presented_as_a_clinical_dose():
     assert item["assessment"] == "botanical_profile"
     assert item["reference_kind"] == "pharmaguide_policy"
     assert "individual amounts unknown" in item["reference"]
-    assert dose["receipt"]["entries"][0]["kind"] == "neutral"
+    # Identity recognition no longer completes the scientific benchmark review.
+    # This real blend has an unresolved review, so zero cannot imply neutral credit.
+    metadata = artifact["_v4_module_breakdown"]["dimensions"]["dose"]["metadata"]
+    assert metadata["botanical_dose"]["benchmark"] == "unresolved"
+    assert dose["score"] == 0
+    assert dose["receipt"]["entries"] == []
     assert "amount_at_minimum" not in item
     assert "reference_value" not in item
     assert dose["explanation"]["dose_receipt"]["reference_assessments"] == []
     assert score_evidence(copy.deepcopy(product), apply_primary_floor=True,
                           owner_scoped=True)["metadata"]["primary_evidence_floor"] == 0
+
+
+@pytest.mark.parametrize('assessment,credit,expected', [
+    ('botanical_profile', 0.0, 'applicable dose benchmark review is incomplete'),
+    ('no_benchmark_neutral', 12.54, 'no applicable general benchmark: neutral value'),
+])
+def test_botanical_receipt_preserves_unfinished_vs_completed_benchmark_review(assessment, credit, expected):
+    from scoring_v4.pillar_explanations import _dose_receipt, _dose_receipt_facts
+
+    # Both owner outcomes share the amount band. Only the completed review is
+    # recorded as no_benchmark_neutral by generic_dose.
+    pillar = {'score': credit, 'max': 22,
+              'components': {'reference': 22, 'adequacy_before_safety': credit}}
+    dose = {'score': credit, 'metadata': {
+        'dose_participation_basis': 'single_profile_assessment',
+        'dose_contributions': [{'ingredient': 'botanical', 'assessment': assessment,
+                               'band': 'disclosed_no_reference', 'credit_raw': credit}]}}
+    original = deepcopy(dose)
+    receipt = _dose_receipt(pillar, dose, 'generic')
+    assert receipt['contributions'][0]['reference'] == expected
+    fact = next(row for row in _dose_receipt_facts(receipt) if row['id'] == 'dose_contributions')
+    assert expected in fact['value_display']
+    assert receipt['final'] == credit
+    assert receipt['contributions'][0]['points'] == credit
+    assert receipt['reconciles'] is True
+    assert dose == original

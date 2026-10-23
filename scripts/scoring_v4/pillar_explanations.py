@@ -213,6 +213,10 @@ def _dose_contributions(module: Optional[str], metadata: Dict[str, Any], factor:
             label, kind = "PharmaGuide contribution target", "pharmaguide_policy"
         elif entry.get("band") == "blend_total_only":
             label, kind = "blend total only; individual amounts unknown", "pharmaguide_policy"
+        elif assessment == "botanical_profile" and entry.get("band") == "disclosed_no_reference":
+            # The Dose owner marks a completed botanical review explicitly as
+            # no_benchmark_neutral. The shared amount band alone is not proof.
+            label, kind = "applicable dose benchmark review is incomplete", "pharmaguide_policy"
         elif (assessment.endswith("_completed_no_general_benchmark")
               or entry.get("band") in {"no_benchmark_neutral", "disclosed_no_reference"}):
             label, kind = "no applicable general benchmark: neutral value", "pharmaguide_policy"
