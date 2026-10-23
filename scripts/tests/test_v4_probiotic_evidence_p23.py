@@ -276,7 +276,9 @@ def test_inactivated_bb12_cannot_inherit_live_strain_research():
     from studied_formulas import _clinical_strain_registry
     from scoring_v4.modules.probiotic_evidence import score_evidence
     ref = _clinical_strain_registry()['STRAIN_LACTIS_BB12']
-    product = {'product_name': 'Infant Probiotic Colic Digestive', 'form_factor': 'capsule',
+    # The preparation control states the source condition contiguously;
+    # broad/separated category words no longer establish treatment purpose.
+    product = {'product_name': 'Infant Colic Probiotic Digestive', 'form_factor': 'capsule',
                'activeIngredients': [{'name': ref['standard_name'], 'raw_source_path': 'ingredientRows[0]'}],
                'evidence_data': {'clinical_matches': []},
                'probiotic_data': {'clinical_strains': [{'strain': ref['standard_name'],

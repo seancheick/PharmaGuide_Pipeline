@@ -35,12 +35,6 @@ CAP_EVIDENCE = _EM["cap_evidence"]
 from evidence_resolver import evidence_indication_categories as _categories_from_text
 
 
-POSITIONING_STATEMENT_TYPES = {
-    "general statements all other content",
-    "formula re type",
-    "formulation re other",
-}
-
 BROAD_PROBIOTIC_CATEGORIES = {"digestive", "immune"}
 PARTIAL_RELEVANCE_PAIRS = {
     ("prenatal", "infant"),
@@ -400,6 +394,9 @@ def _eligible_native_contexts(assessment: dict, relevance: dict) -> list[tuple[s
                     or not valid_native_study_context(context, clinical_id)
                     or not _qualifying_outcomes(context)):
                 continue
+            if (context.get("purpose") in {"treatment", "challenge"}
+                    and context.get("claimed_purpose_assessment", {}).get("status") != "applicable"):
+                continue
             context_text = " ".join([
                 str(context.get("condition") or ""),
                 *(str(outcome.get("name") or "") for outcome in _qualifying_outcomes(context)),
@@ -488,17 +485,8 @@ def _is_strain_match(match: dict) -> bool:
 
 
 def _product_positioning_categories(product: Dict[str, Any]) -> Set[str]:
-    text_parts = [
-        str(product.get(field) or "")
-        for field in ("product_name", "brand_name", "serving_description", "suggested_use")
-    ]
-    for statement in _safe_list(product.get("statements")):
-        if not isinstance(statement, dict):
-            continue
-        statement_type = _norm_text(statement.get("type"))
-        if statement_type not in POSITIONING_STATEMENT_TYPES:
-            continue
-        text_parts.append(str(statement.get("notes") or statement.get("text") or ""))
+    from clinical_applicability import native_product_positioning_texts
+    text_parts = native_product_positioning_texts(product)
     categories = _categories_from_text(" ".join(text_parts))
     # "Probiotic" by itself is generic class text, not a targeted claim.
     categories.discard("probiotic")

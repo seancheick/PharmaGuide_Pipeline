@@ -397,3 +397,59 @@ def test_evidence_explanation_never_reintroduces_amount_ownership(amount):
         assert "dose" not in text.lower()
         assert "CFU" not in text
     assert "confirmation" in breakdown["value_display"].lower()
+
+
+@pytest.mark.parametrize('dose', [None, 1e10])
+@pytest.mark.parametrize('claim', ['Digestive Health Probiotic', 'IBS Probiotic',
+    'Not for irritable bowel syndrome. Digestive Health Probiotic'])
+def test_299v_treatment_context_does_not_transfer_from_broad_or_negated_label_purpose(dose, claim):
+    product = strain_product(dose=dose, clinical_id='STRAIN_PLANTARUM_299V',
+                             name='Lactobacillus plantarum 299v')
+    product['product_name'] = claim
+    result = score_evidence(product)
+    assert result['score'] == 0
+    assert result['metadata']['evidence_result_state'] == 'research_present_applicability_unestablished'
+    assert result['metadata']['evidence_assessment']['strain_assessments'][0]['source_pmids']
+
+
+@pytest.mark.parametrize('dose', [None, 1e10])
+def test_exact_source_condition_is_a_claim_match_not_patient_membership(dose):
+    product = strain_product(dose=dose, clinical_id='STRAIN_PLANTARUM_299V',
+                             name='Lactobacillus plantarum 299v')
+    product['product_name'] = 'Irritable Bowel Syndrome Probiotic'
+    result = score_evidence(product)
+    assert result['score'] == 16
+    used = result['metadata']['contributing_native_contexts']
+    assert len(used) == 1
+    assert used[0]['claimed_purpose_assessment'] == {
+        'status': 'applicable', 'reason_code': 'affirmative_exact_source_condition_claim',
+        'condition': 'irritable_bowel_syndrome'}
+    assert 'patient' not in used[0]['claimed_purpose_assessment']
+
+
+@pytest.mark.parametrize('purpose', ['prevention', 'physiology', 'challenge'])
+def test_native_prevention_controls_do_not_require_a_treatment_condition_claim(monkeypatch, purpose):
+    registry = deepcopy(studied_formulas._clinical_strain_registry())
+    context = next(c for c in registry['STRAIN_PLANTARUM_299V']['study_contexts']
+                   if c['context_id'] == 'p299v_ibs_rome3_22912552')
+    # Synthetic scope control; no production clinical claim or approval changes.
+    context.update(purpose=purpose, condition='digestive_symptoms')
+    context['population'] = {'age_group': 'adult', 'description': 'Healthy adults'}
+    monkeypatch.setattr(studied_formulas, '_clinical_strain_registry', lambda: registry)
+    product = strain_product(dose=None, clinical_id='STRAIN_PLANTARUM_299V',
+                             name='Lactobacillus plantarum 299v')
+    product['product_name'] = 'Digestive Health Probiotic'
+    result = score_evidence(product)
+    assert result['score'] == (0 if purpose == 'challenge' else 16)
+
+
+def test_exact_condition_claim_cannot_override_special_population_guard(monkeypatch):
+    registry = deepcopy(studied_formulas._clinical_strain_registry())
+    context = next(c for c in registry['STRAIN_PLANTARUM_299V']['study_contexts']
+                   if c['context_id'] == 'p299v_ibs_rome3_22912552')
+    context['population'] = {'age_group': 'child', 'description': 'Children with IBS'}
+    monkeypatch.setattr(studied_formulas, '_clinical_strain_registry', lambda: registry)
+    product = strain_product(dose=1e10, clinical_id='STRAIN_PLANTARUM_299V',
+                             name='Lactobacillus plantarum 299v')
+    product['product_name'] = 'Irritable Bowel Syndrome Probiotic'
+    assert score_evidence(product)['score'] == 0
