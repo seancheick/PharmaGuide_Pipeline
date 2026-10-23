@@ -3607,3 +3607,34 @@ def test_inactive_color_purpose_annotation_preserves_known_identity(normalizer):
 def test_color_fallback_does_not_discard_composition(name):
     from normalization import descriptor_fallback_candidates
     assert "titanium dioxide" not in descriptor_fallback_candidates(name)
+
+
+def test_womens_blend_maps_nested_members_without_lending_total(normalizer, enricher):
+    """A structural total has no identity; its actual members do."""
+    import copy
+    from scoring_v4.scored_artifact import build_scored_artifact
+    from build_final_db import build_detail_blob
+
+    raw = {"id": 999901, "fullName": "Probiotic Women's Formula",
+           "brandName": "Example", "ingredientRows": [{
+               "name": "Women's Blend", "ingredientGroup": "Women's Blend",
+               "quantity": [{"quantity": 250, "unit": "mg"}], "forms": [],
+               "nestedRows": [
+                   {"name": name, "ingredientGroup": name, "quantity": [],
+                    "forms": [], "nestedRows": []}
+                   for name in ["D-Mannose", "Cranberry (Fruit) Juice Concentrate"]
+               ]}], "servingSizes": [{"minQuantity": 1, "maxQuantity": 1, "unit": "Tablet"}]}
+    clean = normalizer.normalize_product(raw)
+    header = clean["activeIngredients"][0]
+    assert header["cleaner_row_role"] == "blend_header_total"
+    assert header["canonical_id"] is None
+    assert header["quantity"] == 250
+    members = header["nestedIngredients"]
+    assert {row["canonical_id"] for row in members} == {"d_mannose", "cranberry"}
+    assert all(row["mapped"] for row in members)
+    assert all(not row["quantity"] and not row["score_eligible_by_cleaner"] for row in members)
+    assert all(row["parentBlendMass"] == 250 for row in members)
+    enriched, _ = enricher.enrich_product(copy.deepcopy(clean))
+    artifact = build_scored_artifact(enriched)
+    blob = build_detail_blob(enriched, artifact)
+    assert blob
