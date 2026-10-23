@@ -207,6 +207,15 @@
   ],
   "changelog": [
     {
+      "date": "2026-10-22",
+      "phase": "Current-source raw canary reconciliation during zero-pillar audit",
+      "source_commit": "b06f38597728c658d8297696f25c9528d8a86ae9",
+      "products_updated": [
+        293924
+      ],
+      "notes": "Pre-existing main drift, reproduced from the exact raw label on unchanged main before the zero-pillar fixes: Calcium Magnesium (Citrate/Malate) 78.9\u219285.6 (Good\u2192Very good). Each serving declares225mg calcium and225mg magnesium, directions1\u20132servings/day. Minimum-use adequacy18.7publicDose retains the approved optional-only higher-use deduction2 (Dose16.7) instead of the obsolete max-use cap. No identity, amount, formulation, Evidence, verification, source safety or status change. This is the already-integrated quality_score1.30.0 policy, not a new threshold or the blend/member fix. Existing raw checker refreshes only this canary; all other32are unchanged. Old stored corpus remains stale; release snapshot checks require rebuilt artifacts."
+    },
+    {
       "date": "2026-10-19",
       "phase": "Sean-approved adult catalog score and informational child UL notes",
       "source_commit": "f0841a7b31c654db402b4454909a1d3b460e32e6",
