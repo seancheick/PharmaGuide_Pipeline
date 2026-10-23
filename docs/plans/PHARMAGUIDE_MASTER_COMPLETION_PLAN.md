@@ -1,5 +1,17 @@
 # PharmaGuide master completion plan
 
+### Assessment integrity — October 23
+
+- [x] Preserve exact15,437-product baseline with verified manifest-owned files.
+- [x] Reproduce and repair Neumentix canonical botanical recognition and Pepogest multiline delivery provenance; targeted tests pass. These are implemented, not rebuilt/scientifically closed.
+- [ ] Reconcile the727credited-but-incomplete (corrected frozen-baseline census; prior689was a state-filter count) products, all unresolved identity/dose/evidence causes and used legacy applicability dependencies.
+- [x] Implement dependency-aware release integrity through existing owners; targeted and real-product checks preserve completed negative findings and unavoidable label limitations. Full rebuilt-corpus enforcement remains pending.
+- [x] Independent candidate review, local546 tests,33 raw canaries and23 actual-record Flutter component checks pass. Whole-fastCI39993622215 passes23481 tests; no full-screen/import claim.
+- [ ] Complete remaining source-backed reviews, one necessary Clean→Enrich→Score rebuild and full-corpus/Flutter import acceptance. No release authorized by this batch.
+
+Owner: existing assessment, evidence and release owners; evidence: frozen corpus and reproduced defects. Will NOT create a second scorer, registry or completion authority. Existing LEDGER is the execution register.
+
+
 ### Zero Dose / Evidence source audit — October 22
 
 - [x] Audit all5,512 saved-zero products and fix verified source/identity/quantity owners. [Per-product results and limits](../../scripts/audits/zero_pillars_20261022/README.md).
