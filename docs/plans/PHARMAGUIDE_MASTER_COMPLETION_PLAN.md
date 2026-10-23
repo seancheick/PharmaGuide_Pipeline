@@ -10,7 +10,8 @@
 - [ ] Reconcile the727credited-but-incomplete (corrected frozen-baseline census; prior689was a state-filter count) products, all unresolved identity/dose/evidence causes and used legacy applicability dependencies.
 - [x] Implement dependency-aware release integrity through existing owners; targeted and real-product checks preserve completed negative findings and unavoidable label limitations. Full rebuilt-corpus enforcement remains pending.
 - [x] Independent candidate review, local546 tests,33 raw canaries and23 actual-record Flutter component checks pass. Whole-fastCI39993622215 passes23481 tests; no full-screen/import claim.
-- [ ] Complete remaining source-backed reviews, one necessary Clean→Enrich→Score rebuild and full-corpus/Flutter import acceptance. No release authorized by this batch.
+- [x] User completed Clean→Enrich→Score;114fresh manifests and exact15437frozen IDs verified. Local catalog identity/raw-line checks passed; strict completion gate correctly blocks9887products. Rebuilt23Flutter component projection passes24tests.
+- [ ] Complete remaining source-backed reviews and full-corpus/Flutter import acceptance:143identity/112Dose-readiness cases remain open; frozen727 now79release-complete/648blocked. No release authorized. No automatic rerun of completed corpus; choose earliest affected stage only after actual owner corrections.
 
 Owner: existing assessment, evidence and release owners; evidence: frozen corpus and reproduced defects. Will NOT create a second scorer, registry or completion authority. Existing LEDGER is the execution register.
 
