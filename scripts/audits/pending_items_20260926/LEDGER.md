@@ -2789,3 +2789,64 @@ Owner: enhanced_normalizer::_process_single_ingredient_enhanced / existing neste
 Sean reports completed15437productcorpus/export then7LEDGER_ROW_NOT_IN_RAWblockers1179 and1HIGHdisplaycollapse. Owner: audit_raw_to_final::_check_line_integrity / _check_display_label_collapse delegatingenhanced_normalizer::_apply_label_corrections — evidence: realstored1179 before7/after0 and213846displaybeforeHIGH/after0; willNOTcreatecorrectionregistry, clinicalpolicy, amounts, identities or blanketamnesty.
 Auditonly: recognize otherwiseabsentguardedreviewedformpaths; preserveoriginaloverlappingform0labels/mainrowamounts; exactnewformnameschecked. Displayauditusesactualoriginalrawtoidentifyexactappliednamecorrection. Negativewrongproduct/staleraw/invented99/wronglabel/originaloverlap controls retained.14corrected-formproducts+2unmodifiedcontrols actualstoredClean/Enrich/Score/blobline/display checksallzero findings. Noartifactpromotion/producer/release run. Existingfailedsnapshotcandidatecleanedbytrap, livecatalogstale.59reconciliationtests pass;freshindependentreviewaccepted. Allpipelinefreshnessissues0; changedmoduleoutsideClean/Enrich/Scorecodegraphs. FinalcombinedCI/localpending, notgreen. Private ~/pg_quality/dashboard_line_audit_20261023/. Main10untrackedprivatesubmissionlabels preserved, neverstage.
 Finaldashboardauditcandidatee1380f93 whole-fastCI39960719974SUCCESS23341passed192declaredskips/all4groups/skipguardsgreen;final local546passed24optional-serviceskips/guardgreen;59reconciliationpass;16actualstoredproductauditszero findings. Independentreviewacceptsraw-groundeddisplayfixalso. No producer/snapshot/release ran. Finalaudit-only fixintegratesmain; docs-onlysubsequentcommitsreusesamevalidatedruntime. Resume bash scripts/rebuild_dashboard_snapshot.sh && bash scripts/release_full.sh (operatorruns; notexecutedbyagent).
+
+
+### 2026-10-23 assessment backlog correction and early completion preflight
+
+Behavioral pipeline/release batch. Sean authorized commit, merge and main push; prohibited a corpus
+rerun and publication. Frozen 15,437-product baseline remains unchanged.
+
+Owner Check: audit_source_of_truth_contract::audit_scoring and rebuild_dashboard_snapshot::run_strict_gate;
+enrich_supplements_v3::_source_owned_active_ingredients_for_enrichment / _collect_rda_ul_data;
+scoring_input_contract::has_source_printed_amount / get_source_score_eligible_active_rows;
+constants::PSEUDO_UNITS_INVALID with the existing missing-unit vocabulary;
+probiotic_measurements::probiotic_label_identity_summary. Evidence: matrix/glossary/callers,
+238 saved identity/dose cases, source captures and failing regressions. Will NOT create another
+scorer, matcher, registry, approval, public field or release authority.
+
+Implemented:
+- 0d9e86ac adds source-completeness preflight before expensive corpus audits/catalog assembly.
+  Final candidate, quarantine, identity, raw-line, safety and publication checks remain.
+  Read-only preflight reproduces all 9,887 saved-source failures in 5.36 seconds, with
+  625,410,048 bytes max RSS (local warm-cache observation). This prevents known-wasted assembly;
+  it is not an end-to-end release throughput benchmark.
+- bdead5b0 joins biological form members through the existing source identity owner.
+- 8f5cc820f retains exact printed zero in typed Dose without making it a positive scoring exposure;
+  repairs its strict source projection and mixed-Vitamin-A zero conversion; shares NP/missing-unit
+  vocabulary; and honors canonical nutrition exclusions before rejecting probiotic CFU as accessory.
+- 59d4a73db preserves the full member set when a projection names the actual heading. Explicit
+  member names remain restricted. Wrong-strain, aggregate-allocation and nonlive guards remain.
+
+No raw quantities, identities, benchmark values or clinical approvals were edited. All 44 saved
+zero-dose labels have exact selected source proofs; this is source inspection, not 44 rebuilt
+assessments. The five Culturelle labels share the corrected missing-unit cause; 31062 exercises
+source-form identity. Structured blend-form ambiguity on 336100/299744 still requires source
+resolution. The benchmark census covers 3,118 products / 4,259 rows / 506 subjects and found no
+confirmed overlooked eligible existing benchmark. Genuine review gaps remain held; missing review
+must not be changed to a reviewed absence merely to pass a gate.
+
+Bounded verification: nine frozen raw labels traversed actual Clean/Enrich/Score/blob on the exact
+candidate; source remained unchanged during capture. All cleaned hashes and safety/warning contents
+are unchanged. Four assessments move: 250856 and 267563 regain provisional scores 79.6 and 74.1,
+retaining STRAIN_LGG review/applicability holds; 31062 regains provisional 62.0 and retains incomplete
+Evidence; 311671 has complete exact-zero Dose and remains not_scored. Five controls are unchanged:
+299v, Neumentix, Pepogest, creatine and unresolved 336100. These are implemented and bounded-verified,
+not closed across the rebuilt corpus. The existing cause register retains dependencies, affected IDs,
+regressions, resolution, review result and pending corpus verification.
+
+Tests: 712 named owner/consumer checks passed. Independent review found zero-IU and pseudo-unit
+edge cases, corrected with fail-first controls; 204 affected tests plus three non-mass controls pass.
+The first local checkpoint exposed 18 whole-heading projection regressions and missing worktree
+canary mounts; it is not a pass. After correction, 197 affected tests plus three header/member checks
+pass. Independent review accepts the final heading/member distinction. Final mounted local passes
+546 tests with 24 declared optional-service skips and a green skip guard. CI 40028356094 was
+superseded/cancelled, not passed. Exact-candidate CI 40028755311 on 59d4a73db passes all four groups: 23,574 passed,
+192 declared skips, zero failures/errors. Runtime candidate is approved for authorized main integration;
+subsequent documentation changes do not alter the tested runtime.
+
+Private receipts: ~/pg_quality/assessment_integrity_20261023/research/identity-dose-followup.json,
+benchmark-followup.json, backlog-validated.jsonl (+ records/metadata), backlog-validated-delta.json,
+backlog-verification.json, backlog-zero-source-proof.json, and named validation logs.
+Current owner fingerprint comparison marks all 114 stage manifests stale against the corrected
+source (38 each Clean/Enrich/Score); no manifest was restamped. The eventual authorized corpus run
+must start at Clean. No corpus rebuild, catalog promotion, upload, Flutter import or release performed.
