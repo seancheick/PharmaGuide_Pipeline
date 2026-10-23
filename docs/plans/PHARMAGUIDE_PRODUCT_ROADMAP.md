@@ -1,6 +1,6 @@
 # PharmaGuide product roadmap
 
-October23 MCP usability candidate: existing catalog search now prefers full-text matches before fuzzy fallback; shared personal-containment copy and canonical connection guide updated in the app counterpart. Both exact-source CIs passed (pipeline40008017706/app40008166478), plus79pipeline-focused/114connector tests,15HTTP checks,6actualCodex calls and4live-detail parity checks. Evidence is in the existing LEDGER. ClaudeCode still needs local sign-in; merge/deployment approval and production acceptance remain pending; personal access stays disabled. No catalog rebuild or clinical changes in this batch.
+October23 MCP usability deployed: existing catalog search prefers full-text matches before fuzzy fallback; shared disabled-personal copy and canonical connection guide are live. PR243pipeline/134app merged with approval. Both exact-source CIs passed (pipeline40008017706/app40008166478); production15HTTP checks and6actualCodex calls passed. Details and migration/function versions are in the existing LEDGER. ClaudeCode testing deferred by Sean due token exhaustion; personal access stays disabled. No catalog rebuild or clinical changes in this batch.
 
 October23 release performance batch is implemented and independently reviewed on `codex/release-performance`: bounded upload queues,
 content-bound interaction reuse, and release failure protections; no clinical/public contract change or release.
