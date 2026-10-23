@@ -1020,6 +1020,12 @@ HOLD_PROBIOTIC_STRAINS = {
 
 # Exact blend-header labels seen in DSLD where dose is blend total, not per-active dose.
 BLEND_HEADER_EXACT_NAMES = {
+    # Original NIH panels reviewed 2026-10-22: these list actual members,
+    # not chemical sources/carriers. Preserve each member without lending
+    # the total (271115 CurQfen;19598 Trisynex;1179 Ravage).
+    "curqfen",
+    "trisynex complex",
+    "anabolic muscle primer",
     # EAA blend header: a class of essential amino acids carrying a total, not a per-active dose
     "essential amino acids",
     "acid comfort",

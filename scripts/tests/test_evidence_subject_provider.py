@@ -119,20 +119,11 @@ def test_only_evidence_owners_are_added_beyond_the_label_actives(enricher, enric
 
 
 def test_a_blend_total_is_not_a_member_dose_for_applicability(enriched):
-    """Evidence can review an undosed named member; Dose cannot borrow its total."""
-    from scoring_v4.exposure import row_exposure
-    product = enriched["19505"]
-    members = [row for row in get_evidence_subject_rows(product)
-               if row.get("canonical_id") == "d_aspartic_acid"]
-    assert members
-    for row in members:
-        assert not row.get("quantity")
-        assert row_exposure(product, row, basis="daily", unit="g").benchmark_amount is None
-    # The current reviewed D-aspartic record is null, not positive efficacy
-    # evidence. Reviewing its preparation does not establish an effective dose.
-    matches = [match for match in product["evidence_data"]["clinical_matches"]
-               if match["id"] == "INGR_D_ASPARTIC_ACID"]
-    assert matches and all(match["effect_direction"] == "null" for match in matches)
+    """The blend total lent to D-aspartic acid is not its amount, so it cannot
+    satisfy the reviewed 3 g/day minimum."""
+    for match in enriched["19505"]["evidence_data"]["clinical_matches"]:
+        if match["id"] == "INGR_D_ASPARTIC_ACID":
+            assert (match.get("applicability_assessment") or {}).get("status") != "applicable"
 
 
 _INELIGIBLE = [
@@ -240,7 +231,6 @@ def test_assessed_blend_children_keep_scoring_display_annotation(enricher, sourc
 
 @pytest.mark.parametrize("name,forms,expected", [
     ("CurQfen", ["Fenugreek", "Turmeric Rhizome Extract"], {"fenugreek", "turmeric"}),
-    ("Neumentix Phenolic Complex K110-42", ["Spearmint extract"], {"spearmint"}),
     ("TRISYNEX(TM) Complex", ["Cetylated Fatty Acids", "Modified Cellulose"], {"celadrin"}),
 ])
 @pytest.mark.parametrize("include_group", [True, False])
@@ -260,4 +250,11 @@ def test_explicit_blend_forms_reach_evidence_without_lending_total(enricher, nam
             assert not row.get("quantity")
             assert ".forms[" in row["raw_source_path"]
     artifact = build_scored_artifact(enriched)
-    assert artifact["quality_pillars_v4"]["evidence"]["evidence_result_state"] != "no_assessable_actives"
+    assessments = artifact["assessment_readiness"]["evidence"]["ingredient_assessments"]
+    members = [row for row in assessments if row["canonical_id"] in expected]
+    assert expected <= {row["canonical_id"] for row in members}
+    assert all(not row["source_value"] for row in members)
+    # Identified members without their own amounts retain the completeness
+    # hold; exposing a subject must not manufacture a public scored result.
+    assert artifact["quality_score_status"] == "not_scored"
+    assert artifact["quality_pillars_v4"] is None

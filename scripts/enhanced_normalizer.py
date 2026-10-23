@@ -4909,20 +4909,6 @@ class EnhancedDSLDNormalizer:
                 flattened.append(ing)
                 continue
 
-            # DSLD also files named blend members in forms[] rather than
-            # nestedRows (CurQfen, Neumentix). Feed them through the same
-            # member path, keeping each source reference and its own amount;
-            # the container's total never becomes a constituent dose. Known
-            # single-identity preparations keep their existing treatment.
-            if (not nested and ing.get("forms")
-                    and self._has_dsld_blend_group_signal(ing)
-                    and not self._is_structural_active_form_display_only(ing)
-                    and self._is_dsld_active_blend_total_row(ing)):
-                nested = self._expand_header_forms_for_processing(
-                    ing, ing.get("raw_source_path") or "activeIngredients")
-                self._mark_enzyme_source_descriptors(ing, nested)
-                ing = {**ing, "nestedRows": nested}
-
             # DSLD GROUP BLEND CONTAINER: detect by ingredientGroup + nestedRows.
             # Catches named blends (WellBody 365, UAF1000+, etc.) that don't
             # match STRUCTURAL_ACTIVE_CONTAINER_NAMES or PROPRIETARY_BLEND_INDICATORS

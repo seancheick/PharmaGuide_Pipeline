@@ -91,3 +91,21 @@ def test_blend_group_is_identity_evidence_only_on_a_header(role, kept):
     assert groups == (["ingredientGroup", "raw_taxonomy.ingredientGroup"] if kept else [])
     plain = {"name": "Saw Palmetto", "ingredientGroup": "Saw Palmetto", "cleaner_row_role": role}
     assert [e.value for e in extract_label_evidence(plain) if e.kind == "structured_identity"] == ["Saw Palmetto"]
+
+
+def test_neumentix_named_single_extract_keeps_its_printed_dose(pipeline):
+    normalizer, enricher = pipeline
+    from scoring_v4.scored_artifact import build_scored_artifact
+    raw = {"id": 232839, "fullName": "Focus Tea Spearmint", "ingredientRows": [{
+        "name": "Neumentix Phenolic Complex K110-42", "category": "blend",
+        "ingredientGroup": "Proprietary Blend (Herb/Botanical)",
+        "quantity": [{"quantity": 900, "unit": "mg"}], "nestedRows": [],
+        "forms": [{"name": "Spearmint extract", "category": "botanical", "ingredientGroup": "Spearmint"}]}]}
+    clean = normalizer.normalize_product(raw)
+    [row] = clean["activeIngredients"]
+    assert row["canonical_id"] == "spearmint"
+    assert (row["quantity"], row["unit"]) == (900, "mg")
+    assert row["cleaner_row_role"] != "blend_header_total"
+    enriched, _ = enricher.enrich_product(clean)
+    evidence = build_scored_artifact(enriched)["quality_pillars_v4"]["evidence"]
+    assert evidence["evidence_result_state"] != "no_assessable_actives"
