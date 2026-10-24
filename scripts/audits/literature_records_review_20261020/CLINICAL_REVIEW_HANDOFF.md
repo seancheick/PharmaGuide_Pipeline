@@ -97,3 +97,17 @@ PQQ review must include corrected Table4 (notice35917215 for trial34415830) and 
 the abstract's adverse-event wording with the submitter's account in FDA-hosted GRN1118,
 page53. Table retrieval remains unresolved; the secondary account is not FDA endorsement
 and does not by itself establish a treatment-related risk or efficacy conclusion.
+
+
+## Exact-species source review follow-up
+
+The research log now contains bounded packets for kelp34206160, sweet cherry40077655,
+and cranberry–lingonberry11431298. Kelp and cherry full texts were retrieved; cranberry
+species attribution still requires accessible full text. None establishes the exact unresolved
+extract's benchmark. Cherry publications share a trial cohort and require independence review;
+within-group improvement must not become an overall between-group claim.
+
+Required reviewer decisions remain preparation/label correspondence, population/outcome and
+regimen applicability, limitations, and attributable clinical approval for affirmative contexts.
+The B.bifidum correction34652462 is subscription-restricted; its effect remains unresolved.
+No clinical or benchmark item is rebuilt-closed by these packets, and no approval was created.

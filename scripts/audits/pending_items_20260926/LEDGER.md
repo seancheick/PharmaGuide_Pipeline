@@ -3041,3 +3041,14 @@ skip guard passed. The earlier failed checkpoint remains recorded above. Subsequ
 are documentation only:175stored-title comparisons across402links, PQQ access/discrepancy
 limitations and this receipt. No clinical hold closed, curated data changed or pipeline rerun.
 Main integration is authorized; exact remote containment is recorded in the current handoff.
+
+
+### 2026-10-23 exact-species source continuation
+Class: research documentation only; source packets do not change executable/config/data,
+assessment semantics or public copy. Owner: clinical_applicability::assess_clinical_source_review
+and botanical_profile::_botanical_benchmark (existing handoff/dependency lists). Will NOT create
+benchmarks, registry or approvals. Inspected kelp34206160/cherry40077655 full-text XMLs and
+cranberry11431298 primary indexed abstract; recorded precise preparation/outcome/trial-family
+limitations, access failures and retained holds. No runtime defect established in this bounded
+pass; no curated fix, clinical clearance, corpus run or score movement claimed. Review full
+diff/references and git diff --check; no test/CI checkpoint required for research docs only.
