@@ -6,8 +6,8 @@ nobody had searched. Sean asked on 2026-09-28 for all of them to be reviewed
 (scripts/audits/rr_correctness_20260928/CALIBRATION_PACKET.md item 3). A blend
 with no published human trial gets a reproducible search record that
 concludes so; a branded blend with trials (Tesnor, Sytrinol) gets its reviewed
-clinical entry. The answer then depends on the evidence, never on a missing
-review.
+clinical entry. Empty automated verification stamps are not finished source searches. Such
+individual owners remain pending independently of the blend review.
 """
 import json
 import logging
@@ -21,9 +21,10 @@ PRODUCTS = ["1179", "14168", "315089", "243271", "282638", "299755", "54775", "2
 # 1179 (Ravage) also carries L-phenylalanine as a primary active. Its literature record's only
 # citation, PMID 37629744, is a review of depression treatment in Parkinson's disease, not a
 # phenylalanine trial (literature records review 2026-10-20), so that review is genuinely open
-# again. Its blend owners stay finished; test_ravage_is_open_only_for_l_phenylalanine pins that.
+# again. Methionine also has only an empty automated verification stamp; neither
+# unfinished individual review is completed by the blend owners.
 # Whole turmeric cannot inherit Curcumin trials from an INGR_ key suffix.
-_REVIEW_PRODUCTS = [pid for pid in PRODUCTS if pid not in {"1179", "243271"}]
+_REVIEW_PRODUCTS = [pid for pid in PRODUCTS if pid not in {"1179", "243271", "282638"}]
 
 
 @pytest.fixture(scope="module")
@@ -58,7 +59,7 @@ def test_the_evidence_pillar_no_longer_says_not_yet_reviewed(enriched, pid):
     assert evidence["display_state"] != "not_yet_reviewed"
 
 
-def test_ravage_is_open_only_for_l_phenylalanine(enriched):
+def test_ravage_retains_each_unfinished_individual_review(enriched):
     from evidence_resolver import resolve_product_evidence
     from scoring_v4.scored_artifact import build_scored_artifact
 
@@ -67,7 +68,9 @@ def test_ravage_is_open_only_for_l_phenylalanine(enriched):
         (r.canonical_id, r.blocking_reasons) for r in resolution.resolutions
         if r.disposition == "literature_resolution_required"
     ]
-    assert open_owners == [("l_phenylalanine", ["literature_verification_pending"])]
+    assert open_owners == [("methionine", ["literature_verification_pending"]),
+                           ("l_phenylalanine", ["literature_verification_pending"])]
+    _assert_empty_automated_source_is_unfinished("methionine")
     evidence = build_scored_artifact(enriched["1179"])["quality_pillars_v4"]["evidence"]
     assert evidence["display_state"] == "not_yet_reviewed"
 
@@ -264,9 +267,33 @@ def test_golden_milk_whole_turmeric_does_not_inherit_curcumin_identity(enriched)
     resolution = resolve_product_evidence(product, owner_scoped=True)
     unresolved = [r.canonical_id for r in resolution.resolutions
                   if r.disposition == "literature_resolution_required"]
-    assert unresolved == ["turmeric"]
+    assert unresolved == ["turmeric", "cardamom"]
+    _assert_empty_automated_source_is_unfinished("cardamom")
     turmeric = next(r for r in resolution.resolutions if r.canonical_id == "turmeric")
     assert "backed_clinical_studies" not in turmeric.matched_owners
     assert not resolution.is_assessment_complete
+    evidence = build_scored_artifact(product)["quality_pillars_v4"]["evidence"]
+    assert evidence["display_state"] == "not_yet_reviewed"
+
+
+def _assert_empty_automated_source_is_unfinished(canonical):
+    data = json.loads((Path(__file__).parents[1] / "data" / "literature_evidence_records.json").read_text())
+    entry = next(row for row in data["literature_evidence_records"] if row["canonical_id"] == canonical)
+    assert entry["qualifying_human_studies"] == []
+    assert entry["verification_result"] == "authoritative_pubmed_verified"
+    assert entry["verification_provenance"]["verified_by"] == "scripts/api_audit/verify_literature_records.py"
+
+
+def test_finished_blend_does_not_finish_empty_alfalfa_source_review(enriched):
+    from evidence_resolver import resolve_product_evidence
+    from scoring_v4.scored_artifact import build_scored_artifact
+
+    _assert_empty_automated_source_is_unfinished("alfalfa")
+    product = enriched["282638"]
+    resolution = resolve_product_evidence(product, owner_scoped=True)
+    assert not resolution.is_assessment_complete
+    pending = [(row.canonical_id, row.blocking_reasons) for row in resolution.resolutions
+               if row.disposition == "literature_resolution_required"]
+    assert pending == [("alfalfa", ["literature_verification_pending"])]
     evidence = build_scored_artifact(product)["quality_pillars_v4"]["evidence"]
     assert evidence["display_state"] == "not_yet_reviewed"

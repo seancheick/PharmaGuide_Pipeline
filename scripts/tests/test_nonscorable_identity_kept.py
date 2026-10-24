@@ -286,7 +286,8 @@ def _scoring_inputs(artifact):
     # A kept coffeeberry row is invisible to scoring, never re-matched as coffee.
     # Since "Fruit" no longer names Apple (title owner), vitamin C is a major owner and
     # the vitamins are the Dose panel (60.7 and [12.54] on main).
-    (40089, {"score": 66.6, "status": "complete",
+    # Empty automated grape review remains unfinished; score/owners/dose are unchanged.
+    (40089, {"score": 66.6, "status": "partial",
              "evidence_owners": ["bilberry", "blackberry", "blueberry", "carrot", "cranberry", "grape", "plum",
                                  "pomegranate", "spinach", "strawberry", "tart_cherry", "tomato", "vitamin_c"],
              "dose_credits": [12.83, 15.12, 17.46]}),
@@ -298,7 +299,18 @@ def test_scoring_inputs_equal_main_when_a_row_keeps_an_identity(enrich, dsld_id,
     """Values captured from main 92881c049 for the same raw labels."""
     from scoring_v4.scored_artifact import build_scored_artifact
 
-    assert _scoring_inputs(build_scored_artifact(enrich(dsld_id))) == expected
+    product = enrich(dsld_id)
+    assert _scoring_inputs(build_scored_artifact(product)) == expected
+    if dsld_id == 40089:
+        from evidence_resolver import resolve_product_evidence
+        resolution = resolve_product_evidence(product, owner_scoped=True)
+        pending = [(row.canonical_id, row.blocking_reasons) for row in resolution.resolutions
+                   if row.disposition == "literature_resolution_required"]
+        assert pending == [("grape", ["literature_verification_pending"])]
+        data = json.loads((SCRIPTS / "data" / "literature_evidence_records.json").read_text())
+        source = next(row for row in data["literature_evidence_records"] if row["canonical_id"] == "grape")
+        assert source["qualifying_human_studies"] == []
+        assert source["verification_provenance"]["verified_by"] == "scripts/api_audit/verify_literature_records.py"
 
 
 def test_recognition_clears_the_interaction_only_marker(enrich):

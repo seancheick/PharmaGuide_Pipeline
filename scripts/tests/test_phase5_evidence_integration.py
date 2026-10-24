@@ -199,9 +199,9 @@ def test_broad_chemical_classes_remain_unresolved_residuals():
 # ============================================================================
 
 def test_no_qualifying_human_evidence_semantics():
-    """No qualifying human evidence produces 0 points, assessed display state, complete."""
+    """A genuinely authored bounded negative review completes without positive credit."""
     prod = _wrap_product([
-        {"canonical_id": "fadogia_agrestis", "name": "Fadogia Agrestis", "amount": 500, "unit": "mg", "cleaner_row_role": "active_scorable"},
+        {"canonical_id": "pectinase", "name": "Pectinase", "amount": 500, "unit": "mg", "cleaner_row_role": "active_scorable"},
     ])
     ev = score_evidence(prod)
     assert ev["score"] == 0.0
@@ -485,3 +485,24 @@ def test_points_never_prove_the_assessment_finished():
         {"canonical_id": "zinc", "name": "Zinc", "amount": 15, "unit": "mg", "cleaner_row_role": "active_scorable"},
     ])
     assert _evidence_result_state(complete, 10.0, set(), []) == "evaluated_applicable"
+
+
+def test_empty_automated_fadogia_stamp_does_not_complete_a_negative_review():
+    import json
+    from pathlib import Path
+
+    data = json.loads((Path(__file__).parents[1] / "data" / "literature_evidence_records.json").read_text())
+    source = next(row for row in data["literature_evidence_records"] if row["canonical_id"] == "fadogia_agrestis")
+    assert source["qualifying_human_studies"] == []
+    assert source["verification_provenance"]["verified_by"] == "scripts/api_audit/verify_literature_records.py"
+    product = _wrap_product([
+        {"canonical_id": "fadogia_agrestis", "name": "Fadogia Agrestis", "amount": 500,
+         "unit": "mg", "cleaner_row_role": "active_scorable"},
+    ])
+    resolution = resolve_product_evidence(product)
+    assert not resolution.is_assessment_complete
+    assert resolution.resolutions[0].blocking_reasons == ["literature_verification_pending"]
+    evidence = score_evidence(product)
+    assert evidence["score"] == 0.0
+    assert evidence["metadata"]["evidence_result_state"] == "clinical_review_not_covered"
+    assert evidence_display_state(evidence["metadata"]["evidence_result_state"]) == "not_yet_reviewed"
