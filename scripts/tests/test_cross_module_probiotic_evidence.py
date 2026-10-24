@@ -15,7 +15,8 @@ Pins the single canonical probiotic Evidence owner contract:
      'research_present_applicability_unestablished' with score 0.0 (no points manufactured).
 4. Product-level composition:
    - When companion actives earn applicable evidence points, the product-level state
-     may be 'evaluated_applicable', but the probiotic component disposition in
+     may be 'evaluated_applicable' only when source review is complete. Missing
+     companion-source review remains 'clinical_review_not_covered'; the component disposition in
      metadata['probiotic_component_evidence'] is strictly preserved.
    - The digestive-enzyme labels (232295, 209440, 208587) are such products: their
      named Bromelain blend member is an Evidence subject
@@ -76,7 +77,7 @@ def _load_enriched_product(brand_dir: str, target_id: str) -> dict | None:
     return None
 
 
-def _assert_companion_points_only(product: dict, ev) -> None:
+def _assert_companion_points_only(product: dict, ev, *, pending_source_review: bool = False) -> None:
     """Evidence points come from companion actives, never from the probiotic rows.
 
     All three labels omit the member's mass, but declare enzyme activity in
@@ -98,7 +99,14 @@ def _assert_companion_points_only(product: dict, ev) -> None:
     if floor > points["bromelain"]:
         assert ev.metadata["primary_evidence_floor_canonical"] == "bromelain"
         assert ev.metadata["primary_evidence_floor_decisive"] is True
-    assert ev.metadata["evidence_result_state"] == "evaluated_applicable"
+    if pending_source_review:
+        assert ev.metadata["evidence_result_state"] == "clinical_review_not_covered"
+        assessments = ev.metadata["contributing_record_assessments"]
+        companion = next(row for row in assessments if row["id"] == "INGR_BROMELAIN")
+        assert companion["source_review"]["is_complete"] is False
+        assert "clinical_source_contexts_missing" in companion["source_review"]["errors"]
+    else:
+        assert ev.metadata["evidence_result_state"] == "evaluated_applicable"
     component = ev.metadata["probiotic_component_evidence"]
     assert component["disposition_state"] == "research_present_applicability_unestablished"
     assert component["evidence_score"] == 0.0
@@ -188,7 +196,7 @@ class TestCrossModuleExactStrainDisposition:
         # Evaluated through fiber_digestive: Bromelain, a member of the enzyme
         # blend, earns the points.
         res = score_fiber_digestive(p)
-        _assert_companion_points_only(p, res.dimensions["evidence"])
+        _assert_companion_points_only(p, res.dimensions["evidence"], pending_source_review=True)
 
 
 class TestCrossModuleSpeciesOnlyDisposition:
@@ -206,7 +214,7 @@ class TestCrossModuleSpeciesOnlyDisposition:
         # Evaluated through fiber_digestive: Bromelain, a member of the enzyme
         # blend, earns the points.
         res = score_fiber_digestive(p)
-        _assert_companion_points_only(p, res.dimensions["evidence"])
+        _assert_companion_points_only(p, res.dimensions["evidence"], pending_source_review=True)
 
     def test_garden_of_life_collagen_creamer_bacillus_subtilis(self):
         """Garden of Life Collagen Creamer (222870) routes through generic and has species-only Bacillus subtilis."""
@@ -231,7 +239,7 @@ class TestCrossModuleSpeciesOnlyDisposition:
         assert disp["evidence_score"] == 0.0
 
         res = score_fiber_digestive(p)
-        _assert_companion_points_only(p, res.dimensions["evidence"])
+        _assert_companion_points_only(p, res.dimensions["evidence"], pending_source_review=True)
 
 
 class TestProductLevelCompanionComposition:
