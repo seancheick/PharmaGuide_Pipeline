@@ -38,8 +38,8 @@ matcher, clinical approval authority or completeness system.
    These 506 subjects are not automatically clinician holds. The CSV records required actions;
    none is scientifically closed merely by this source packet.
 3. **Identity/dose:** the frozen 238-label diagnostic remains a bounded sample, with causes and
-   final replay counts: 132 identity-incomplete, 51 dose-incomplete, 10 overlapping,
-   173 products in their union (baseline 177). Four shared producer corrections resolve four cases. Remaining cases include genuine species/
+   final replay counts: 133 identity-incomplete, 51 dose-incomplete, 10 overlapping,
+   174 products in their union (baseline 177). Final replay confirms three resolved cases. Remaining cases include genuine species/
    plant-part conflicts, unknown preparations, conflicting label units, vitamin A DFE labelling,
    unresolved elemental potassium-iodide ownership, undisclosed mixtures and unscoreable source
    quantities. Label limitations must be documented separately from unfinished PharmaGuide work.
@@ -58,8 +58,8 @@ No clinician sign-off created; no required hold removed. Exact per-entry scope a
 receipts remain in research.md and the named owner tests.
 
 Shared producer fixes distinguish physical probiotic container headings from actual strains,
-preserve independent CFU totals, and retain structured constituent/blend/plant-part provenance.
-Negation and real identity conflicts remain held; transient matching context is not exported.
+preserve independent CFU totals, and retain structured constituent/plant-part provenance.
+Named proprietary complexes, negation and real identity conflicts remain held; transient matching context is not exported.
 
 Bibliographic owner verified 50 entries / 198 PMID claims, strict pass with no missing/title/ghost
 findings. This proves citation binding, not full-text review or approved clinical applicability.
@@ -76,3 +76,10 @@ After decisions and corrections are stable, inspect current fingerprints and run
 pipeline-only Clean → Enrich → Score command from main. Do not use release_full.sh to rebuild.
 A diagnostic rebuild can preserve holds, but cannot establish release readiness. Publication
 requires rebuilt invariant checks, consumer validation and separate release authorization.
+
+Final CI correction: optional legacy outcome categories are omitted for 19 records whose exact
+study endpoints do not fit a truthful coarse category. Detailed findings and sources remain;
+no category or benefit claim is invented. Existing empty-reference-hold and source-vocabulary
+assertions remain unchanged. The named Advanced Hair Complex hold remains, with no invented
+component dose or d-biotin preparation. Cached and direct match results sanitize private context
+at the same implementation boundary. Earlier provisional four-case clearance is superseded.

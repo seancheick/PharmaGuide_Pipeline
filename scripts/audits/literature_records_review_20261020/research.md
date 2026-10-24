@@ -769,3 +769,12 @@ All rows are implemented and source-screened; clinical approval and rebuilt clos
 | INGR_SLIPPERY_ELM | 20954962, 32151878 | Reference only; affirmative credit disabled |
 | INGR_BILBERRY | 25191571, 25923485, 32106548 | Source scope reconciled; clinical context required |
 | INGR_CERAMIDES | 33055441, 35719159, 35807914, 38999848 | Source scope reconciled; clinical context required |
+
+Final contract review: CI40057355582 failed three existing assertions: inappropriate empty
+outcome categories, named-hair-complex hold regression, and direct/cache result inequality.
+All reproduced locally. Unrepresentable optional primary_outcome is omitted (existing schema/
+consumer contract), preserving exact endpoint/source facts. Proprietary Blend exception removed;
+336100 retains its preparation hold. Private context sanitation moved to implementation boundary;
+cache equivalence test expanded, equality assertion unchanged. Existing safety/hold/vocabulary
+assertions not weakened.131source/contract and196producer checks pass; final combined checkpoint
+and stable raw comparisons qualify the corrected candidate, not the failed one.

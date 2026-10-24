@@ -3163,3 +3163,34 @@ purpose credit withdrawal:18422561.9→49.7;18442162.9→50.7;20944378.7→74.2;
 28615774.8→71.7;30758050.1→45.8;7169182→80.9. No other total/status movements. These are bounded
 replays, not a rebuilt corpus or new clinical approvals. Current238sample still173identity/dose
 incomplete products, not173independent scientific subjects or the corpus total.
+
+Qualification source candidate: `2db576f7b612e892028eed09457f4da9fc6974c4` (producer f9191d51,
+clinical 011b81d8). Final replay captured uncommitted candidate content at baseline HEAD;
+all443captured source file hashes match committed candidate (0mismatches), not an assertion
+that baseline source contains the corrections. Both captures stable,0errors. Local546passed /
+24declaredopt-inskips in145.55s; skipguardpassed. Namedowner/consumer645passed. Source review,
+implementation and bounded measurement qualified; clinical and rebuilt closure not qualified.
+Receipts retained in `.claude/state/completion-batch/` with SHA256SUMS.json. Automatic approval
+review rejected copying broader raw/derived receipt payload into the separate audit folder;
+no copy or workaround performed. Current workspace receipts remain available.
+
+Warning/interaction parity inspected across all285full records:44827 adds the newly analyzed
+moringa row with empty warning arrays; no warning removed.336100 interaction difference is only
+form_context VitaminB7(Biotin)→d-biotin in four dose-trace positions. Rule IDs, thresholds,
+actions, severities and decisions unchanged. No clinical warning weakened or lost.
+
+CI40057355582 failed (not a pass): optional outcome empty-string encoding; overbroad
+Proprietary Blend context incorrectly clearing336100; cache/direct equality differing by private
+context. All existing assertions reproduced unchanged. Corrected optional category omission,
+removed blend allowance and sanitized at impl boundary.131source/contract and196producer tests
+pass. Earlier four-case clearance is superseded:336100 remains held. No guessed preparation.
+Final replacement captures/combined qualification follow.
+
+Corrected final candidate validation:736namedowner/consumer tests pass. Stable238identity-dose+
+47clinical raw replay0errors, source_unchanged=True. Clean identities/amounts and safety decision
+projections unchanged. Identity incomplete135→133; dose52→51; overlap10; union177→174. Only251169,
+277387,44827 move not_scored→scored (53.9/69.7/66.5);336100 retains named-complex hold. Same seven
+Evidence-only decreases as the prior source comparison; no other total/status movements.
+All50reference bindings unchanged from strict198PMID pass. Exact50data_batch still passes.
+Independent source and producer reviewers clear the final corrections. Final local/wholefast
+replacement checkpoint follows; CI40057355582 is failed and never counted as qualification.

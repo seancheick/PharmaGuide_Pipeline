@@ -1525,3 +1525,19 @@ purpose credit withdrawal:18422561.9→49.7;18442162.9→50.7;20944378.7→74.2;
 28615774.8→71.7;30758050.1→45.8;7169182→80.9. No other total/status movements. These are bounded
 replays, not a rebuilt corpus or new clinical approvals. Current238sample still173identity/dose
 incomplete products, not173independent scientific subjects or the corpus total.
+
+CI40057355582 failed (not a pass): optional outcome empty-string encoding; overbroad
+Proprietary Blend context incorrectly clearing336100; cache/direct equality differing by private
+context. All existing assertions reproduced unchanged. Corrected optional category omission,
+removed blend allowance and sanitized at impl boundary.131source/contract and196producer tests
+pass. Earlier four-case clearance is superseded:336100 remains held. No guessed preparation.
+Final replacement captures/combined qualification follow.
+
+Corrected final candidate validation:736namedowner/consumer tests pass. Stable238identity-dose+
+47clinical raw replay0errors, source_unchanged=True. Clean identities/amounts and safety decision
+projections unchanged. Identity incomplete135→133; dose52→51; overlap10; union177→174. Only251169,
+277387,44827 move not_scored→scored (53.9/69.7/66.5);336100 retains named-complex hold. Same seven
+Evidence-only decreases as the prior source comparison; no other total/status movements.
+All50reference bindings unchanged from strict198PMID pass. Exact50data_batch still passes.
+Independent source and producer reviewers clear the final corrections. Final local/wholefast
+replacement checkpoint follows; CI40057355582 is failed and never counted as qualification.
