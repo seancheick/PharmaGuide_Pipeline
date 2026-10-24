@@ -3027,3 +3027,10 @@ recorded; current lutein retraction exclusion confirmed. All83clinical and506ben
 remain subject to their existing review owners. No new clinician approval or numerical benchmark.
 Focused owner/transport slice:75passed before final documentation. Whole-fast CI pending;
 no corpus/local pipeline checks required for this audit-only change. No pipeline/export/release.
+
+Initial CI40045182402: three groups green, one failed only the dead-code ownership ratchet:
+`verify_all_citations_content::search_pubmed` lost its sole caller when unsafe citation
+replacement was removed. Repo/scripts/shell/config/docs and Flutter searches found no
+remaining caller, including manual CLI use; delete the wrapper rather than add an exemption.
+50focused dead-code/literature/citation checks pass after removal. No curated data or
+production assessment changes. Final candidate requires a fresh green CI checkpoint.

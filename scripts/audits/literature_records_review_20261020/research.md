@@ -69,7 +69,7 @@ Base 31fc2b653, candidate 86d5aa789 (rebased unchanged to the branch tip). **0 o
   `verify_literature_records.py` checks existence/topic only. This is how the wrong-paper rows passed.
 - `evidence_resolver.py` pumpkin gate treats "oil" in a label as a material match to "purified oil trials", but
   the only cited trial (GRANU, PMID 25196580) had no oil arm and its extract arm was null.
-- `verify_literature_records.py` has no `--help` or dry-run: invoking it rewrites the data file in place.
+- Historical October20 finding: `verify_literature_records.py` had no `--help` or dry-run and rewrote data by default. The October23 clearance batch below replaces that behavior with read-only default and explicit report/apply options.
 - `myricetin`: `effect_direction: negative` with no studies (pre-existing `verify_semantic_applicability` violation).
 - graviola neurotoxicity has no safety-owner rule (harmful_additives / banned_recalled); its only signal is this
   Evidence record.
@@ -483,3 +483,26 @@ literature findings and exact native registration payloads) are retained under
 All clinical and benchmark worklists retain their holds; none is scientifically closed merely
 by these lookups. The 506-subject benchmark workload still requires owner-level applicability
 and defensible numerical or completed-no-benchmark decisions. No corpus was regenerated.
+
+### Five topic-screen findings: source-content triage
+
+Full retrieved abstracts were read; these are not full-text applicability approvals.
+Guarana [16533867](https://pubmed.ncbi.nlm.nih.gov/16533867/) is a lexical false positive
+(accented guaraná), with a specific PC-102 extract and acute cognitive outcomes. The tested
+doses are not a generic seed/extract benchmark. FOS [16569219](https://pubmed.ncbi.nlm.nih.gov/16569219/)
+is a hyphenation/name-screen gap for short-chain fructo-oligosaccharides; microbial counts
+are not proof of general symptom benefit. Its studied range must not become a universal
+minimum-effective-dose threshold. Neither screen failure means the citation is unrelated.
+
+Citrus bioflavonoids [33141449](https://pubmed.ncbi.nlm.nih.gov/33141449/) pools multiple
+phlebotonic preparations; it cannot qualify an arbitrary crude citrus complex. Beetroot
+[40085422](https://pubmed.ncbi.nlm.nih.gov/40085422/) reviews nitrate exposure and mixed
+exercise outcomes; root-powder mass does not establish nitrate exposure. Alpha-amylase
+[30156436](https://pubmed.ncbi.nlm.nih.gov/30156436/) tests a multienzyme combination;
+its existing standalone-applicability hold is supported, not repaired by borrowing the
+formula outcome. No source or numerical grade was altered from this triage.
+
+The retained83-record projection finds zero stored-title mismatches or drifts across402links.
+The506benchmark projection finds341exact canonical literature records,124with study rows;
+missing exact joins are not proof of missing evidence because other dose owners and aliases
+still require tracing. These projections prioritize work and do not replace existing owners.

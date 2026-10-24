@@ -361,26 +361,6 @@ def fetch_articles(pmids: list[str], abstract_chars: int | None = 800) -> dict[s
     return articles
 
 
-def search_pubmed(query: str, max_results: int = 3) -> list[dict]:
-    """Search PubMed for papers matching a query. Returns [{pmid, title}]."""
-    try:
-        result = citation_client().esearch(query, retmax=max_results, sort="relevance")
-        pmids = result.get("esearchresult", {}).get("idlist", [])
-
-        if not pmids:
-            return []
-
-        articles = fetch_articles(pmids)
-        return [
-            {"pmid": p, "title": articles.get(p, {}).get("title", "")}
-            for p in pmids
-            if p in articles
-        ]
-    except Exception as e:
-        print(f"  Citation search unavailable ({type(e).__name__})", file=sys.stderr)
-        return []
-
-
 # ── Content matching ───────────────────────────────────────────────────
 
 def extract_topic_words(entry: dict, config: dict) -> list[str]:

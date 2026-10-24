@@ -82,3 +82,13 @@ The existing research packets retain exact source and label hashes. The [researc
 and [execution ledger](../pending_items_20260926/LEDGER.md) record verification limits and results.
 This bounded review does not establish that all literature has been searched or that every
 remaining corpus hold is represented by the named priority cases.
+
+## Read-only clearance audit update
+
+The October23 continuation resolved the five-source citation inventory without curated writes.
+All402citation links for the83legacy records resolve and match stored titles; this is
+bibliographic screening only. No clinical hold was cleared. The research log now separates
+publication corrections, biotinate absorption versus combination efficacy, native registration
+protocols, and five topic-screen dispositions. Full-text access and approval limitations remain
+explicit. Use these receipts to avoid repeating verified lookups, while completing the missing
+clinical/preparation/outcome review through the existing owners.
