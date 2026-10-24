@@ -1444,3 +1444,9 @@ and integration receipts are in the execution LEDGER/current handoff.
 Preparation batch qualification: runtime4716035b6 passes whole-fast CI40041950609
 (23,611 passed / 192 declared skips), local546passed/24declared skips,30-label comparison
 and independent review. Clinical/preparation holds and post-rebuild acceptance remain open.
+
+October23 clearance continuation: read-only audit fixes implemented and focused-tested;
+source retrieval covers five principal reference files with unchanged curated hashes.
+API lookup is not clinical closure. Existing research/LEDGER retain publication-notice
+triage, preparation packet additions and remaining83clinical/506benchmark worklists.
+Audit infrastructure qualified on cf6065013 with whole-fast CI40046197738:23,624passed/192declared skips, all skip guards passed. The larger scientific clearance remains open. No pipeline rerun.

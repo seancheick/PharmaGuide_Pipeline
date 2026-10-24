@@ -69,7 +69,7 @@ Base 31fc2b653, candidate 86d5aa789 (rebased unchanged to the branch tip). **0 o
   `verify_literature_records.py` checks existence/topic only. This is how the wrong-paper rows passed.
 - `evidence_resolver.py` pumpkin gate treats "oil" in a label as a material match to "purified oil trials", but
   the only cited trial (GRANU, PMID 25196580) had no oil arm and its extract arm was null.
-- `verify_literature_records.py` has no `--help` or dry-run: invoking it rewrites the data file in place.
+- Historical October20 finding: `verify_literature_records.py` had no `--help` or dry-run and rewrote data by default. The October23 clearance batch below replaces that behavior with read-only default and explicit report/apply options.
 - `myricetin`: `effect_direction: negative` with no studies (pre-existing `verify_semantic_applicability` violation).
 - graviola neurotoxicity has no safety-owner rule (harmful_additives / banned_recalled); its only signal is this
   Evidence record.
@@ -410,3 +410,107 @@ when PMC browser retrieval presented a challenge. Clinical-purpose/preparation h
 Cranberry330664 and mixed grape330882 exact NIH rows reconfirm the separate-species and mixed-
 component limitations. Numerical quality changes, bounded checks and integration are recorded
 in the execution LEDGER; full corpus/Flutter closure remains deferred.
+
+## 2026-10-23 clearance continuation: read-only API screening
+
+Owner: `verify_literature_records::verify_literature_file`,
+`verify_all_citations_content::fetch_articles`, `pubmed_client::parse_pubmed_article_xml`,
+and `verify_clinical_trials::extract_nct_ids`. These are screening owners, not clinical
+approval authorities. No curated data or scoring weights changed in this batch.
+
+The five-source inventory (backed clinical, native strains, literature, nutrient references,
+therapeutic references) requested 1,576 distinct citation identifiers. All resolved through
+the existing PubMed/DOI/PMC client and its freshness-controlled cache. Identifiers include
+aliases for the same paper; they must not be counted as 1,576 independent studies.
+All five curated input SHA256 hashes remained unchanged. The 83 held legacy records retain
+396 unique citation identifiers / 402 record-citation links and 410 frozen dependent products.
+Retrieval is not content applicability, full-text review or clinician approval.
+
+Whole literature screening inspected 808 records / 279 study rows / 261 distinct PMIDs.
+It reported 618 findings: 573 records with no studies to verify, 31 human-indexing gaps,
+nine correction notices and five topic-screen gaps. Zero retractions appeared in this
+literature subset. Empty study lists are not evidence that a prior documented negative
+finding is wrong; this verifier simply cannot certify them. No finding was auto-applied.
+The broader inventory contains 42 distinct publication-notice records after PMID alias
+reconciliation: 40 errata and two retraction-related records. The latter are the already
+excluded lutein paper41573009 and notice42211211, not two newly discovered unsafe sources.
+
+Coverage remains limited: full-text preparation/dose/outcome/population synthesis, all
+non-PubMed nutrition authority content, historical/rejected literature references outside
+qualifying_human_studies, trial-family independence, and genuine clinician approvals are
+not established by this run. The generic citation gate and backed-studies gate are not
+complete clinical-applicability verifiers. The existing DRI tool uses a pinned reference
+comparison, not fresh authority-page verification. These are explicit remaining gates.
+
+### Preparation packet additions; no grade or approval
+
+- Magnesium biotinate: [2019 pharmacokinetic abstract](https://pmc.ncbi.nlm.nih.gov/articles/PMC6574044/),
+  DOI10.1093/cdn/nzz031.P06-027-19, reports single-dose human exposure after magnesium
+  biotinate. This is an abstract-level absorption lead, without a conventional-biotin
+  comparator; it does not establish superior bioavailability, hair efficacy or a form grade.
+  Primary indexed abstract was accessible; direct PMC access challenged and fullTextXML
+  failed. No successful full-text API verification is claimed.
+- The existing [2021 Lustriva randomized combination trial](https://www.longdom.org/open-access/a-randomized-doubleblind-evaluation-of-a-novel-biotin-and-silicon-ingredient-complex-on-the-hair-and-skin-of-healthy-women-61185.html)
+  was re-read. Selected hair/wrinkle findings concern the complete combination; nail outcomes
+  did not differ between groups. JDS funding and CRO employment belong in the review.
+  Labels299744/336100 remain preparation/clinical-review cases, not established isolated
+  magnesium-biotinate efficacy or inferred component quantities.
+- [Oral plus topical experience abstract](https://pmc.ncbi.nlm.nih.gov/articles/PMC8181505/),
+  DOI10.1093/cdn/nzab037_084, is a separate uncontrolled combined-route lead. It cannot
+  establish oral-only effects. Direct full-text retrieval remains unverified.
+
+### Publication notices affecting held legacy records
+
+| Record | Original → correction | Review disposition |
+|---|---|---|
+| Saw palmetto |12006122 → J Altern Complement Med2006;12(2):199 | PubMed links a correction without a notice PMID; content unresolved. |
+| Calcium |17720017 → Lancet2012;380(9844):806 | Notice content unresolved; do not invent an identifier. |
+| Calcium |26510847 → [27401092](https://pubmed.ncbi.nlm.nih.gov/27401092/) | Correction includes additional analyses; exact numerical synthesis must use corrected paper. Current registry prose contains no obsolete percentage estimates; clinical review remains open. |
+| Whey/protein |28698222 → [32943392](https://pmc.ncbi.nlm.nih.gov/articles/PMC7513243/) | Disclosure correction; incorporate author advisory-board relationship in limitations. No automatic invalidity or scoring change. |
+| B. bifidum |31342226 → [34652462](https://pubmed.ncbi.nlm.nih.gov/34652462/) | Identity verified; correction scope inaccessible in this pass. |
+| Omega-3 |31383846 → [34493705](https://pmc.ncbi.nlm.nih.gov/articles/PMC8423804/) | Author-name correction; clinical applicability and approval remain separate. |
+| PQQ |34415830 → [35917215](https://pubmed.ncbi.nlm.nih.gov/35917215/) | Publisher describes corrected Table4; actual table/outcome impact still needs inspection. |
+| Lutein |41573009 → [42211211](https://pubmed.ncbi.nlm.nih.gov/41573009/) | Retraction already explicitly excluded in current INGR_LUTEIN; no duplicate remediation. |
+
+Native registrations NCT02974894 (299v stress/cortisol study) and NCT01773967
+(LGG pediatric gastroenteritis) were retrieved through the existing ClinicalTrials client.
+Their protocol populations/outcomes must not be transferred to unrelated claims. The former
+has no posted results in this response; the latter has results. Neither fact supplies approval.
+
+Audit receipts (inventory, source hashes, complete retrieved abstracts, publication notices,
+literature findings and exact native registration payloads) are retained under
+`.claude/state/clearance-audit/` and the durable assessment-integrity research directory.
+All clinical and benchmark worklists retain their holds; none is scientifically closed merely
+by these lookups. The 506-subject benchmark workload still requires owner-level applicability
+and defensible numerical or completed-no-benchmark decisions. No corpus was regenerated.
+
+### Five topic-screen findings: source-content triage
+
+Full retrieved abstracts were read; these are not full-text applicability approvals.
+Guarana [16533867](https://pubmed.ncbi.nlm.nih.gov/16533867/) is a lexical false positive
+(accented guaraná), with a specific PC-102 extract and acute cognitive outcomes. The tested
+doses are not a generic seed/extract benchmark. FOS [16569219](https://pubmed.ncbi.nlm.nih.gov/16569219/)
+is a hyphenation/name-screen gap for short-chain fructo-oligosaccharides; microbial counts
+are not proof of general symptom benefit. Its studied range must not become a universal
+minimum-effective-dose threshold. Neither screen failure means the citation is unrelated.
+
+Citrus bioflavonoids [33141449](https://pubmed.ncbi.nlm.nih.gov/33141449/) pools multiple
+phlebotonic preparations; it cannot qualify an arbitrary crude citrus complex. Beetroot
+[40085422](https://pubmed.ncbi.nlm.nih.gov/40085422/) reviews nitrate exposure and mixed
+exercise outcomes; root-powder mass does not establish nitrate exposure. Alpha-amylase
+[30156436](https://pubmed.ncbi.nlm.nih.gov/30156436/) tests a multienzyme combination;
+its existing standalone-applicability hold is supported, not repaired by borrowing the
+formula outcome. No source or numerical grade was altered from this triage.
+
+The retained83-record projection finds zero mismatches or drifts among175available stored titles
+across402citation links; absent stored titles are explicitly not compared.
+The506benchmark projection finds341exact canonical literature records,124with study rows;
+missing exact joins are not proof of missing evidence because other dose owners and aliases
+still require tracing. These projections prioritize work and do not replace existing owners.
+
+PQQ follow-up: the corrected Table4 remains inaccessible (publisher403; no accessible
+repository copy located). Separately, [FDA-hosted GRN1118](https://www.fda.gov/media/173619/download),
+PDF page53, describes mild events in both trial arms, whereas the original abstract says
+no adverse events. This is a submitter-authored secondary account, not the corrected table
+or FDA efficacy endorsement. Record the discrepancy for full-text review; do not infer
+causation, invent corrected values, or repeat an unqualified no-events claim. Existing holds remain.
