@@ -1465,3 +1465,9 @@ removed unsupported150–300mg/day threshold, clarified enrollment/reporting lim
 local546passed/24declared skips pass. Final whole-fast qualification pending. Saved completion
 preflight still blocks9887assessments; broader clinical/benchmark closure and full pipeline
 remain deferred. This factual fix does not create a benchmark or clear clinical approval.
+
+Final bounded regimen/preparation batch extends to8source records, with14additional
+fail-first cases and179owner checks.17representative raw labels across all8subjects and
+2controls remain identical through all3stages. Unsupported brand/standardization claims
+and single-dose/day confusion corrected at the literature owner; clinical holds preserved.
+Whole-fast qualification applies to the final combined candidate, not superseded runs.

@@ -659,3 +659,20 @@ Source contents, not those indexing flags, support these bounded factual correct
 Earlier CI40049888078 was superseded/cancelled before integration and is not a pass;
 the final combined candidate receives its own checkpoint. Larger clinical and benchmark
 worklists remain open; no source receipt substitutes for required clinician approval.
+
+
+Final source-preparation reconciliation in the same eight-entry batch:
+maqui's MaquiBright/BrightSight preparation replaces the unsupported Delphinol name.
+Ashwagandha full text PMC3573577 explicitly identifies KSM-66 root-only extract,
+at least5%withanolides by HPLC, so Sensoril is removed from this source description.
+Royal-jelly10-HDA standardization, caralluma pregnane-glycoside standardization and
+willow's exact Salix alba species were not established by the inspected abstracts;
+their source descriptions now state the verified material and verification limits.
+This does not change canonical identity routing or claim those preparations lack
+such constituents. Five fail-first preparation assertions reproduced these unsupported
+source descriptors.179combined owner/consumer checks pass. Final17raw-label comparison
+spans all8subjects plus2controls (royal jelly has one representative);0errors and0full
+Clean/Enrich/Score record changes. One earlier candidate capture was invalidated by a
+concurrent commit; stable final capture, not the rejected receipt, supports comparison.
+The intermediate source-data CI was superseded; final exact candidate qualification
+is recorded below in the execution LEDGER. No clinical approval or benchmark closure.

@@ -3076,3 +3076,19 @@ census is not fresh-corpus closure. Reference hash changes for all3stages; code 
 unchanged. Defer full run until source/clinical dependencies and bounded fixes are ready.
 Research-only checks for pomegranate/blueberry/cayenne preserve existing holds; full-text
 limitations and precise active-basis distinction recorded. No new defect proven there.
+
+
+Same-class final extension: seven more records had unproven minimum-threshold wording;
+primary abstracts verified per entry (research.md). Ornithine now includes6000mg exercise
+day after7days at2000mg; ashwagandha daily exposure600mg replaces300/600range. Willow
+study row retains both120/240salicin arms. Five source-preparation descriptors reconciled:
+MaquiBright rather than Delphinol; KSM-66 root-only rather than Sensoril equivalence;
+unverified royal-jelly10-HDA/caralluma-pregnane/willow-species details removed from source
+descriptions, not canonical identity registries. Nine regimen plus five preparation fail-first
+cases reproduced;179focused checks pass. Exactly8indexed entries changed. All8PMIDs retrieved;
+literature screen reports2human-indexing findings despite explicit human trial populations
+in primary abstracts; this screen is not recorded as passing or clinician review.
+Final17raw representatives across8subjects+2controls:0errors/0full-record changes. Initial
+candidate capture invalidated by concurrent commit; stable final capture replaces it.
+Intermediate CI40049888078/40050283585/40050546021/40050549288 superseded/cancelled, not
+passes. Final combined source candidate checkpoint follows. No corpus run or clinical closure.

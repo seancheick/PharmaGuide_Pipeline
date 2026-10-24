@@ -3742,7 +3742,7 @@
     },
     {
       "canonical_id": "white_willow_bark",
-      "material_form": "Salix alba standardized bark extract",
+      "material_form": "Willow (Salix) bark extract with declared salicin exposure; exact species not established by the cited abstract",
       "search_query": "Salix alba white willow bark back pain osteoarthritis randomized trial",
       "search_date": "2026-09-20",
       "databases_searched": [
@@ -6012,7 +6012,7 @@
     },
     {
       "canonical_id": "maqui",
-      "material_form": "Aristotelia chilensis standardized delphinidin-rich extract (Delphinol)",
+      "material_form": "Standardized maqui berry extract MaquiBright (also called BrightSight in PMID 31193920)",
       "search_query": "Aristotelia chilensis maqui clinical trial human dry eye",
       "search_date": "2026-09-20",
       "databases_searched": [
@@ -6363,7 +6363,7 @@
     },
     {
       "canonical_id": "royal_jelly",
-      "material_form": "Apis mellifera lyophilized royal jelly (standardized to 10-HDA)",
+      "material_form": "Oral royal jelly capsules; preparation standardization not established by the cited abstract",
       "search_query": "royal jelly menopausal symptoms randomized controlled trial",
       "search_date": "2026-09-20",
       "databases_searched": [
@@ -7594,7 +7594,7 @@
     },
     {
       "canonical_id": "caralluma",
-      "material_form": "Caralluma fimbriata standardized pregnane glycoside extract",
+      "material_form": "Caralluma fimbriata extract; chemical standardization not established by the cited abstract",
       "search_query": "Caralluma fimbriata appetite waist circumference randomized controlled trial",
       "search_date": "2026-09-20",
       "databases_searched": [
@@ -13090,7 +13090,7 @@
     },
     {
       "canonical_id": "ashwagandha_root",
-      "material_form": "Withania somnifera root extract standardized to >= 5% withanolides (KSM-66 / Sensoril)",
+      "material_form": "KSM-66 Withania somnifera root-only extract, at least 5% withanolides by HPLC (PMC3573577)",
       "search_query": "withania somnifera ashwagandha stress anxiety cortisol randomized double-blind",
       "search_date": "2026-09-20",
       "databases_searched": [

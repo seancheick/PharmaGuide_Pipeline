@@ -438,3 +438,12 @@ def test_ornithine_includes_the_exercise_day_regimen(records):
 
 def test_ashwagandha_single_capsule_is_not_a_daily_dose(records):
     assert records['ashwagandha_root']['studied_dose_exposure']['values'] == [600]
+
+
+@pytest.mark.parametrize('cid, unsupported', [
+    ('maqui', 'Delphinol'), ('ashwagandha_root', 'Sensoril'),
+    ('royal_jelly', '10-HDA'), ('caralluma', 'pregnane'),
+    ('white_willow_bark', 'Salix alba'),
+])
+def test_source_preparation_does_not_add_unverified_brand_or_standardization(records, cid, unsupported):
+    assert unsupported not in records[cid]['material_form']
