@@ -388,10 +388,8 @@ def test_false_transfer_canary_cryptoxanthin():
 # Phase 4 Batch 2 Canaries
 
 def test_false_transfer_canary_polyphenols_broad_umbrella():
-    """Generic polyphenols cannot inherit trials on specific flavanols/anthocyanins/resveratrol."""
-    res = er.resolve_evidence_for_canonical("polyphenols", dose_value=500.0, dose_unit="mg")
-    assert res.disposition == EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value
-    assert "literature_applicability_unestablished" in res.blocking_reasons
+    """An empty generated record cannot supply research for a broad umbrella."""
+    _assert_incomplete_source_review("polyphenols")
 
 
 def test_false_transfer_canary_pumpkin_food_vs_extract():
@@ -528,15 +526,9 @@ def test_absence_of_qualifying_studies_cannot_emit_reviewed_null():
     - reviewed_null_unfavorable: requires qualifying human studies with null/negative findings.
     - no_qualifying_human_evidence: reproducible search found 0 qualifying human trials.
     """
-    # 1. Real records with zero qualifying studies must emit NO_QUALIFYING_HUMAN_EVIDENCE
+    # A machine-only empty receipt establishes neither reviewed null nor absence.
     for cid in ["juniper", "l_norvaline", "eyebright", "damiana", "muira_puama"]:
-        res = er.resolve_evidence_for_canonical(cid)
-        assert res.disposition == EvidenceDisposition.NO_QUALIFYING_HUMAN_EVIDENCE.value, (
-            f"{cid} must emit no_qualifying_human_evidence, got {res.disposition}"
-        )
-        assert res.disposition != EvidenceDisposition.REVIEWED_NULL_UNFAVORABLE.value
-        assert res.applicability_status == "no_qualifying_trials_found"
-        assert res.points_eligible is False
+        _assert_incomplete_source_review(cid)
 
     # 2. Genuine reviewed null cases with qualifying human studies must emit REVIEWED_NULL_UNFAVORABLE
     for cid in ["garcinia_cambogia", "tribulus", "evening_primrose_oil", "dong_quai"]:
@@ -560,14 +552,8 @@ def test_absence_of_qualifying_studies_cannot_emit_reviewed_null():
     "pediococcus_pentosaceus",
     "sweet_clover",
 ])
-def test_legacy_zero_study_records_resolve_as_no_qualifying_human_evidence(canonical_id):
-    """A completed bounded search with no qualifying studies is a reviewed zero."""
-    res = er.resolve_evidence_for_canonical(canonical_id)
-
-    assert res.disposition == EvidenceDisposition.NO_QUALIFYING_HUMAN_EVIDENCE.value
-    assert res.applicability_status == "no_qualifying_trials_found"
-    assert res.reason_code == "reproducible_search_found_no_qualifying_human_studies"
-    assert res.points_eligible is False
+def test_legacy_machine_only_zero_study_records_remain_incomplete(canonical_id):
+    _assert_incomplete_source_review(canonical_id)
 
 
 def test_legacy_analytical_marker_preserves_identity_material_hold():
@@ -581,18 +567,8 @@ def test_legacy_analytical_marker_preserves_identity_material_hold():
     assert res.points_eligible is False
 
 
-def test_legacy_isolated_marker_preserves_applicability_hold():
-    """Whole-extract research cannot complete review for an isolated marker."""
-    res = er.resolve_evidence_for_canonical("withaferin_a")
-
-    assert (
-        res.disposition
-        == EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value
-    )
-    assert res.applicability_status == "applicability_unestablished"
-    assert res.reason_code == "literature_applicability_unestablished"
-    assert "literature_applicability_unestablished" in res.blocking_reasons
-    assert res.points_eligible is False
+def test_legacy_unreviewed_isolated_marker_cannot_complete_applicability():
+    _assert_incomplete_source_review("withaferin_a")
 
 
 def test_literature_registry_has_no_legacy_no_qualifying_evidence_token():
@@ -626,18 +602,13 @@ def test_phase4_batch4_null_unfavorable_canaries():
 
 
 def test_phase4_batch4_no_qualifying_evidence_canaries():
-    """Batch 4 reproducible searches finding 0 qualifying human trials must emit NO_QUALIFYING_HUMAN_EVIDENCE."""
+    """Batch 4 unverified legacy search records finding 0 qualifying human trials must remain incomplete."""
     zero_study_cids = [
         "sarsaparilla", "catuaba", "corn_silk", "motherwort_herb",
         "raspberry_ketones", "cnidium", "organ_extracts", "black_radish", "plantain"
     ]
     for cid in zero_study_cids:
-        res = er.resolve_evidence_for_canonical(cid)
-        assert res.disposition == EvidenceDisposition.NO_QUALIFYING_HUMAN_EVIDENCE.value, (
-            f"{cid} must emit no_qualifying_human_evidence, got {res.disposition}"
-        )
-        assert res.applicability_status == "no_qualifying_trials_found"
-        assert res.points_eligible is False
+        _assert_incomplete_source_review(cid)
 
 
 def test_phase4_batch4_food_matrix_and_umbrella_guards():
@@ -651,10 +622,7 @@ def test_phase4_batch4_food_matrix_and_umbrella_guards():
 
     # Crude powders lacking standardization stay applicability unestablished
     for cid in ["papaya", "papaya_fruit_powder", "alfalfa_leaf", "wheatgrass_powder", "fiber"]:
-        res = er.resolve_evidence_for_canonical(cid)
-        assert res.disposition == EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value, (
-            f"{cid} must emit applicability_unestablished, got {res.disposition}"
-        )
+        _assert_incomplete_source_review(cid)
 
 
 def test_phase4_batch4_standardized_clinical_canaries():
@@ -677,9 +645,7 @@ def test_phase4_batch4_standardized_clinical_canaries():
 def test_phase4_semantic_applicability_canaries():
     """Semantic applicability canaries: verify interventions match credited identity."""
     # 1. Colostrinin polypeptide cannot transfer to standalone L-proline (0 qualifying trials)
-    res_proline = er.resolve_evidence_for_canonical("l_proline")
-    assert res_proline.disposition == EvidenceDisposition.NO_QUALIFYING_HUMAN_EVIDENCE.value
-    assert res_proline.applicability_status == "no_qualifying_trials_found"
+    _assert_incomplete_source_review("l_proline")
 
     # 2. Material / drug / combination mismatches must stay applicability_unestablished
     canary_unestablished = [
@@ -713,7 +679,7 @@ def test_phase4_batch5_reviewed_null_unfavorable_canaries():
 
 
 def test_phase4_batch5_no_qualifying_evidence_canaries():
-    """Batch 5 reproducible searches with zero qualifying human trials."""
+    """Batch 5 unverified legacy search records with zero qualifying human trials."""
     zero_study_cids = [
         "mulberry_mistletoe", "galla_chinensis", "yellow_dock_root", "long_pepper",
         "yarrow_aerial_parts", "anise", "star_anise", "yucca", "cassia_seed",
@@ -721,12 +687,7 @@ def test_phase4_batch5_no_qualifying_evidence_canaries():
         "l_pyroglutamic_acid", "orotic_acid", "glucuronolactone"
     ]
     for cid in zero_study_cids:
-        res = er.resolve_evidence_for_canonical(cid)
-        assert res.disposition == EvidenceDisposition.NO_QUALIFYING_HUMAN_EVIDENCE.value, (
-            f"{cid} must emit no_qualifying_human_evidence, got {res.disposition}"
-        )
-        assert res.applicability_status == "no_qualifying_trials_found"
-        assert res.points_eligible is False
+        _assert_incomplete_source_review(cid)
 
 
 def test_phase4_batch5_food_matrix_and_crude_materials():
@@ -738,10 +699,7 @@ def test_phase4_batch5_food_matrix_and_crude_materials():
         )
 
     for cid in ["wild_yam", "buckthorn_bark", "grapefruit_seed", "watercress"]:
-        res = er.resolve_evidence_for_canonical(cid)
-        assert res.disposition == EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value, (
-            f"{cid} must emit applicability_unestablished, got {res.disposition}"
-        )
+        _assert_incomplete_source_review(cid)
 
 
 def test_phase4_batch5_standardized_clinical_botanicals():
@@ -821,7 +779,7 @@ def test_phase4_final_sweep_identity_debt_handling():
 
 
 def test_phase4_final_sweep_zero_study_actives():
-    """Final sweep reproducible searches with zero qualifying human trials."""
+    """Final sweep unverified legacy search records with zero qualifying human trials."""
     zero_study_cids = [
         "fadogia_agrestis", "suma", "belleric_myrobalan", "french_melon",
         "glycitein", "myrrh_resin", "pau_darco", "indian_tinospora",
@@ -837,12 +795,7 @@ def test_phase4_final_sweep_zero_study_actives():
         "purple_corn_extract", "purple_tea", "white_oak"
     ]
     for cid in zero_study_cids:
-        res = er.resolve_evidence_for_canonical(cid)
-        assert res.disposition == EvidenceDisposition.NO_QUALIFYING_HUMAN_EVIDENCE.value, (
-            f"{cid} must emit no_qualifying_human_evidence, got {res.disposition}"
-        )
-        assert res.applicability_status == "no_qualifying_trials_found"
-        assert res.points_eligible is False
+        _assert_incomplete_source_review(cid)
 
 
 def test_phase4_final_sweep_crude_and_unestablished_materials():
@@ -853,11 +806,7 @@ def test_phase4_final_sweep_crude_and_unestablished_materials():
         "ursolic_acid", "corosolic_acid", "PII_KOMBUCHA_POWDER"
     ]
     for cid in unestablished_cids:
-        res = er.resolve_evidence_for_canonical(cid)
-        assert res.disposition == EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value, (
-            f"{cid} must emit applicability_unestablished, got {res.disposition}"
-        )
-        assert res.points_eligible is False
+        _assert_incomplete_source_review(cid)
 
 
 def test_phase4_final_sweep_culinary_food_matrices():
@@ -940,12 +889,15 @@ def test_literature_resolution_cannot_substitute_another_claimed_purpose(monkeyp
     product = json.loads((Path(__file__).parent / 'fixtures/stress_gut_evidence_enriched.json').read_text())[0]
     row = next(r for r in get_scoring_ingredients(product, strict=True).rows if r.get('canonical_id') == 'l_theanine')
     monkeypatch.setattr(er, '_backed_studies_index', lambda: {})
-    monkeypatch.setattr(er, '_load_literature_evidence', lambda: {'l_theanine': {
-        'verification_result': 'authoritative_pubmed_verified',
-        'verification_provenance': {'all_pmids_verified': True, 'retractions_found': False},
-        'effect_direction': 'positive_strong', 'primary_outcome': 'Improved bowel regularity',
-        'studied_dose_exposure': {'values': [100], 'unit': 'mg'},
-    }})
+    records = json.loads((SCRIPTS_ROOT / 'data/backed_clinical_studies.json').read_text())['backed_clinical_studies']
+    source = next(r for r in records if r['id'] == 'INGR_L_THEANINE')
+    pmid = next(r['pmid'] for r in source['references_structured'] if r.get('pmid'))
+    entry = {'verification_result': 'authoritative_pubmed_verified',
+             'verification_provenance': {'all_pmids_verified': True, 'retractions_found': False},
+             'qualifying_human_studies': [{'pmid': pmid}],
+             'effect_direction': 'positive_strong', 'primary_outcome': 'Improved bowel regularity',
+             'studied_dose_exposure': {'values': [100], 'unit': 'mg'}}
+    monkeypatch.setattr(er, '_load_literature_evidence', lambda: {'l_theanine': entry})
     result = er.resolve_evidence_for_row(row, product)
     assert result.disposition == EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value
     assert result.reason_code == 'label_purpose_evidence_mismatch'
@@ -1445,3 +1397,84 @@ def test_culinary_scope_respects_structured_preparation_and_reviewed_extract():
     assert result.disposition == EvidenceDisposition.LITERATURE_RESOLUTION_REQUIRED.value
     reviewed = er.resolve_evidence_for_canonical('nha_cherry_flavor', name='Natural Cherry Flavor Extract')
     assert reviewed.disposition == EvidenceDisposition.NOT_EFFICACY_RELEVANT.value
+
+
+def test_empty_machine_verification_stamp_cannot_complete_a_negative_search(monkeypatch):
+    import copy
+    record = copy.deepcopy(er._load_literature_evidence()['cistanche'])
+    record['qualifying_human_studies'] = []
+    record['effect_direction'] = 'no_qualifying_human_evidence'
+    record['verification_result'] = 'authoritative_pubmed_verified'
+    record['verification_provenance'] = {'all_pmids_verified': True, 'retractions_found': False,
+                                         'verified_by': 'scripts/api_audit/verify_literature_records.py'}
+    monkeypatch.setattr(er, '_load_literature_evidence', lambda: {'cistanche': record})
+    result = er.resolve_evidence_for_canonical('cistanche', name='Cistanche Extract')
+    assert result.disposition == EvidenceDisposition.LITERATURE_RESOLUTION_REQUIRED.value
+    assert result.points_eligible is False
+    assert result.blocking_reasons == ['literature_verification_pending']
+    from assessment_readiness import evaluate_evidence_assessment
+    row = {'name': 'Cistanche Extract', 'canonical_id': 'cistanche', 'quantity': 500,
+           'unit': 'mg', 'mapped': True, 'raw_source_path': 'ingredientRows[0]'}
+    product = {'ingredient_quality_data': {'ingredients': [row], 'ingredients_scorable': [row]}}
+    assert evaluate_evidence_assessment(product, module='botanical')['readiness'] != 'complete'
+
+
+@pytest.mark.parametrize('canonical', ['pectinase', 'hemicellulase', 'beta_glucanase'])
+def test_traceable_bounded_negative_reviews_survive_empty_study_guard(canonical):
+    result = er.resolve_evidence_for_canonical(canonical)
+    assert result.disposition == EvidenceDisposition.NO_QUALIFYING_HUMAN_EVIDENCE.value
+    assert result.points_eligible is False
+    assert result.blocking_reasons == []
+
+
+@pytest.mark.parametrize('direction', ['positive_strong', 'positive_weak', 'mixed'])
+def test_a_review_label_cannot_replace_missing_affirmative_studies(monkeypatch, direction):
+    import copy
+    record = copy.deepcopy(er._load_literature_evidence()['cistanche'])
+    record['qualifying_human_studies'] = []
+    record['verification_result'] = 'authoritative_pubmed_verified'
+    record['effect_direction'] = direction
+    record['verification_provenance']['verified_by'] = 'synthetic manual-review label'
+    monkeypatch.setattr(er, '_backed_studies_index', lambda: {})
+    monkeypatch.setattr(er, '_load_literature_evidence', lambda: {'cistanche': record})
+    result = er.resolve_evidence_for_canonical('cistanche')
+    assert result.disposition == EvidenceDisposition.LITERATURE_RESOLUTION_REQUIRED.value
+    assert result.points_eligible is False
+
+
+def _assert_incomplete_source_review(canonical):
+    record = er._load_literature_evidence()[er._norm(canonical)]
+    if record.get('qualifying_human_studies'):
+        # Source existence was repaired, but preparation/outcome qualification is unfinished.
+        assert record['verification_result'] == 'verification_failure_unresolved'
+        assert record['effect_direction'] == 'applicability_unestablished'
+        assert all(study.get('scoring_eligible') is False for study in record['qualifying_human_studies'])
+    else:
+        assert record['verification_provenance']['verified_by'] == 'scripts/api_audit/verify_literature_records.py'
+    result = er.resolve_evidence_for_canonical(canonical)
+    assert result.disposition == EvidenceDisposition.LITERATURE_RESOLUTION_REQUIRED.value
+    assert result.points_eligible is False
+    assert result.blocking_reasons == ['literature_verification_pending']
+
+
+@pytest.mark.parametrize('missing', ['search_query', 'search_date', 'databases_searched', 'records_screened', 'material_form', 'population_context', 'applicability_decision', 'verified_at'])
+def test_empty_negative_review_requires_traceable_search_scope(monkeypatch, missing):
+    import copy
+    record = copy.deepcopy(er._load_literature_evidence()['pectinase'])
+    if missing == 'verified_at':
+        record['verification_provenance'].pop(missing)
+    else:
+        record.pop(missing)
+    monkeypatch.setattr(er, '_load_literature_evidence', lambda: {'pectinase': record})
+    result = er.resolve_evidence_for_canonical('pectinase')
+    assert result.disposition == EvidenceDisposition.LITERATURE_RESOLUTION_REQUIRED.value
+    assert result.points_eligible is False
+
+
+@pytest.mark.parametrize('value', [-1, True, '0'])
+def test_empty_negative_review_rejects_invalid_screened_counts(monkeypatch, value):
+    import copy
+    record = copy.deepcopy(er._load_literature_evidence()['pectinase'])
+    record['records_screened'] = value
+    monkeypatch.setattr(er, '_load_literature_evidence', lambda: {'pectinase': record})
+    assert er.resolve_evidence_for_canonical('pectinase').disposition == EvidenceDisposition.LITERATURE_RESOLUTION_REQUIRED.value

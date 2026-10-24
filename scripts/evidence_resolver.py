@@ -28,6 +28,7 @@ from __future__ import annotations
 import json
 import re
 from dataclasses import dataclass, field
+from datetime import date, datetime
 from enum import Enum
 from functools import lru_cache
 from pathlib import Path
@@ -1019,6 +1020,37 @@ def resolve_evidence_for_row(
             and lit_entry.get("effect_direction") == "not_efficacy_relevant"
             and not lit_entry.get("qualifying_human_studies")
         )
+        if (is_verified
+                and lit_entry.get("verification_result") == "authoritative_pubmed_verified"
+                and not lit_entry.get("qualifying_human_studies")):
+            # Bibliographic verification over an empty list establishes neither
+            # a negative search nor affirmative research. Preserve authored
+            # bounded nonpositive reviews and identity-only classifications.
+            direction = lit_entry.get("effect_direction")
+            reviewer = str(prov.get("verified_by") or "").strip()
+            try:
+                date.fromisoformat(lit_entry.get("search_date"))
+                datetime.fromisoformat(str(prov.get("verified_at") or "").replace("Z", "+00:00"))
+                review_dates_valid = True
+            except (TypeError, ValueError):
+                review_dates_valid = False
+            databases = lit_entry.get("databases_searched")
+            screened = lit_entry.get("records_screened")
+            search_scope_complete = (
+                all(isinstance(lit_entry.get(key), str) and lit_entry[key].strip()
+                    for key in ("search_query", "material_form", "population_context", "applicability_decision"))
+                and isinstance(databases, list) and bool(databases)
+                and all(isinstance(value, str) and value.strip() for value in databases)
+                and isinstance(screened, int) and not isinstance(screened, bool) and screened >= 0
+                and review_dates_valid
+            )
+            is_verified = direction in {
+                "not_efficacy_relevant", "identity_material_unresolved", "identity_insufficient",
+            } or (direction in {
+                "null", "negative", "reviewed_null_unfavorable",
+                "no_qualifying_human_evidence", "applicability_unestablished",
+            } and search_scope_complete and isinstance(prov.get("verified_by"), str)
+               and bool(reviewer) and reviewer != "scripts/api_audit/verify_literature_records.py")
         if not is_verified:
             # Unverified or generated record membership alone MUST NOT complete Evidence
             return EvidenceResolution(

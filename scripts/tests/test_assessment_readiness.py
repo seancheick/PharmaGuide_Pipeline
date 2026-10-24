@@ -1066,7 +1066,7 @@ def test_schema_2x_input_measures_readiness_without_changing_score_status() -> N
 
 
 def test_real_label_aggregate_identity_keeps_its_individual_evidence_question() -> None:
-    """Canonical vocabulary alone cannot turn a source label row synthetic."""
+    """Canonical vocabulary makes neither a synthetic row nor a completed source review."""
     from assessment_readiness import evaluate_assessment_readiness
 
     row = _row("Fiber", "fiber", quantity=25.0)
@@ -1076,10 +1076,10 @@ def test_real_label_aggregate_identity_keeps_its_individual_evidence_question() 
     assessment = evidence["ingredient_assessments"][0]
     assert assessment["scoring_input_kind"] != "product_level_evidence"
     assert assessment["evidence_applicability"] == "individual_ingredient"
-    assert assessment["state"] == "evaluated_limited_or_negative"
-    assert assessment["reason_code"] == "literature_applicability_unestablished"
-    assert evidence["not_yet_evaluated_count"] == 0
-    assert evidence["readiness"] == "complete"
+    assert assessment["state"] == "not_yet_evaluated"
+    assert assessment["reason_code"] == "no_reviewed_evidence_assessment"
+    assert evidence["not_yet_evaluated_count"] == 1
+    assert evidence["readiness"] == "incomplete"
 
 
 def test_row_level_active_projection_keeps_its_individual_evidence_question() -> None:
