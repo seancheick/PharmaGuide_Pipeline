@@ -2995,3 +2995,11 @@ identity against its botanical eligibility result.193focused generic-dose/contra
 checks pass. Fresh30candidate comparison and final CI/local qualification follow; first CI is
 explicitly not a pass. Static CSV line endings and missing existing saw-palmetto trial links
 were corrected; these review projections do not change runtime behavior.
+
+Final qualification: runtime4716035b6ce9b418ce891a1ecd3144927d4508de passes whole-fast
+CI40041950609 (23,611 passed / 192 declared skips; all four skip guards green). Final local:
+546 passed / 24 declared optional-service skips,175.34s, guard green. Final30-label typed-contract
+comparison matches the reviewed candidate except scored_date; independent reviewer accepts.
+The new fallback covers exact source-row/identity bindings; source-less legacy compatibility
+rows are not claimed closed. No pipeline rerun, corpus closure, app verification or release.
+Main integration authorized; final remote containment receipt belongs in the current handoff.

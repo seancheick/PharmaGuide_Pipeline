@@ -1440,3 +1440,7 @@ Evidence owners prevent mineral routing or culinary scope from completing an unr
 Shareable review handoff separates83legacy-record dependencies and506retained benchmark subjects.
 No scientific closure, corpus regeneration, app acceptance or release claimed. Final qualification
 and integration receipts are in the execution LEDGER/current handoff.
+
+Preparation batch qualification: runtime4716035b6 passes whole-fast CI40041950609
+(23,611 passed / 192 declared skips), local546passed/24declared skips,30-label comparison
+and independent review. Clinical/preparation holds and post-rebuild acceptance remain open.
