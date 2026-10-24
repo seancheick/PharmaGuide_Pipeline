@@ -4137,20 +4137,15 @@ class EnhancedDSLDNormalizer:
         notes = str(value or "").strip()
         if not notes:
             return ""
-        activity = re.search(
-            r"\(([\d,]+(?:\.\d+)?)\s*"
-            r"(HUT|SAPU|PC|FIP|FCC|DU|ALU|SU|SPU|CU|HDU)\)",
-            notes,
-            re.IGNORECASE,
-        )
-        if not activity:
+        quantity, unit = norm_module.extract_enzyme_activity(notes)
+        if quantity is None:
             return ""
         qualifier = re.search(
             r"\((high pH|low pH|mid pH|neutral pH)\)",
             notes,
             re.IGNORECASE,
         )
-        result = f"{activity.group(1)} {activity.group(2).upper()}"
+        result = f"{EnhancedDSLDNormalizer._format_label_quantity(quantity)} {unit}"
         if qualifier:
             result += f" · {qualifier.group(1)}"
         return result
@@ -5474,7 +5469,10 @@ class EnhancedDSLDNormalizer:
                 return row
             name = row.get("name")
             entry = corrections_by_raw_text.get(name)
-            if entry and entry.get("scoring_disposition") == "unresolved_unit":
+            if entry and entry.get("raw_source_path") and row.get("raw_source_path") != entry["raw_source_path"]:
+                entry = None
+            if (entry and (entry.get("scoring_disposition") or "corrected_notes" in entry)
+                    and "raw_quantity_value" in entry and "raw_quantity_unit" in entry):
                 quantities = row.get("quantity")
                 quantities = quantities if isinstance(quantities, list) else [quantities]
                 # A manufacturer revision must not inherit an old unit hold.
@@ -5529,6 +5527,7 @@ class EnhancedDSLDNormalizer:
                     ("category", "corrected_category"),
                     ("ingredientGroup", "corrected_ingredient_group"),
                     ("forms", "corrected_forms"),
+                    ("notes", "corrected_notes"),
                 )
                 for row_field, correction_field in source_field_corrections:
                     if correction_field not in entry:
@@ -5599,8 +5598,82 @@ class EnhancedDSLDNormalizer:
                         rewrite(child)
             return row
 
+        # Exact-label hierarchy repairs share this correction authority. Paths
+        # were stamped before corrections: moving the working row never
+        # rewrites its immutable API source reference or any quantity.
+        hierarchy_entries = [e for e in correction_entries if e.get("corrected_child_row_refs")]
+        note_entries = [e for e in correction_entries if "corrected_notes" in e]
+        moves = []
+        if hierarchy_entries or note_entries:
+            by_path = {}
+            def index_rows(rows):
+                for row in rows:
+                    if not isinstance(row, dict):
+                        continue
+                    path = row.get("raw_source_path")
+                    if path in by_path:
+                        raise ValueError("Duplicate source path in reviewed hierarchy correction")
+                    if path:
+                        by_path[path] = (row, rows)
+                    index_rows(row.get("nestedRows") or [])
+            index_rows(ingredient_rows)
+            for entry in note_entries:
+                row = by_path.get(entry.get("raw_source_path"), (None, None))[0]
+                quantities = (row or {}).get("quantity") or []
+                if (not row or row.get("name") != entry.get("raw_ingredient_text")
+                        or "raw_notes" not in entry
+                        or row.get("notes") not in (entry["raw_notes"], entry["corrected_notes"])
+                        or not any(isinstance(q, dict)
+                                   and not isinstance(q.get("quantity"), bool)
+                                   and q.get("quantity") == entry.get("raw_quantity_value")
+                                   and q.get("unit") == entry.get("raw_quantity_unit") for q in quantities)):
+                    raise ValueError(f"Reviewed note attribution changed for DSLD {product_id}")
+            claimed = set()
+            for entry in hierarchy_entries:
+                parent_path = entry.get("raw_source_path")
+                parent = by_path.get(parent_path, (None, None))[0]
+                quantities = (parent or {}).get("quantity") or []
+                if (not parent or parent.get("name") != entry["raw_ingredient_text"]
+                        or not isinstance(quantities, list)
+                        or not any(isinstance(q, dict)
+                                   and q.get("quantity") == entry.get("raw_quantity_value")
+                                   and q.get("unit") == entry.get("raw_quantity_unit") for q in quantities)):
+                    raise ValueError(f"Reviewed hierarchy parent changed for DSLD {product_id}")
+                for spec in entry["corrected_child_row_refs"]:
+                    child_path = spec.get("raw_source_path")
+                    child, container = by_path.get(child_path, (None, None))
+                    if (not child or child_path in claimed or child is parent
+                            or str(parent_path).startswith(str(child_path) + ".")
+                            or child.get("name") != spec.get("raw_ingredient_text")
+                            or [x.get("name") for x in child.get("nestedRows") or []]
+                            != spec.get("raw_child_names")
+                            or (container is not ingredient_rows and container is not parent.get("nestedRows"))):
+                        raise ValueError(f"Reviewed hierarchy child changed for DSLD {product_id}: {child_path}")
+                    claimed.add(child_path)
+                    moves.append((parent, child, container, entry))
         for r in ingredient_rows:
             rewrite(r)
+
+        # Validate the entire reviewed group before mutating any membership.
+        def set_reviewed_depth(row, depth, provenance):
+            row["_label_correction_applied"] = True
+            row["_label_correction_provenance"] = provenance
+            previous = row.get("_raw_nested_depth", 0)
+            if previous != depth:
+                row.setdefault("_pre_correction_nested_depth", previous)
+                row["_raw_nested_depth"] = depth
+            for nested in row.get("nestedRows") or []:
+                set_reviewed_depth(nested, depth + 1, provenance)
+        for parent, child, container, entry in moves:
+            children = parent.setdefault("nestedRows", [])
+            if container is not children:
+                container.remove(child)
+                children.append(child)
+            set_reviewed_depth(child, parent.get("_raw_nested_depth", 0) + 1,
+                               entry.get("provenance_tag") or "official_label_hierarchy_correction")
+            for row in (parent, child):
+                row["_label_correction_applied"] = True
+                row["_label_correction_provenance"] = entry.get("provenance_tag") or "official_label_hierarchy_correction"
         return ingredient_rows
 
     def _repair_explicit_epa_note_contradictions(
@@ -10349,6 +10422,7 @@ class EnhancedDSLDNormalizer:
                 "raw_source_path": source_row.get("raw_source_path"),
                 "source_order": source_row.get("order"),
                 "nested_depth": source_row.get("_raw_nested_depth", 0),
+                "_hierarchy_corrected": source_row.get("_label_correction_provenance") == "official_label_hierarchy_correction",
                 "parent_label": source_row.get("parentBlend"),
                 "parent_source_path": source_row.get("parent_source_path"),
                 "exact_dose_text": self._exact_label_dose_text(source_row),
@@ -10513,6 +10587,7 @@ class EnhancedDSLDNormalizer:
                         if isinstance(ing.get("raw_taxonomy"), dict)
                         else ing.get("_raw_nested_depth", 0),
                         "parent_label": ing.get("parentBlend"),
+                        "_hierarchy_corrected": (ing.get("source_correction") or {}).get("provenance_tag") == "official_label_hierarchy_correction",
                         "parent_source_path": ing.get("parent_source_path"),
                         "exact_dose_text": (
                             "" if serving_variants else self._exact_label_dose_text(ing)
@@ -10580,6 +10655,9 @@ class EnhancedDSLDNormalizer:
             source = source_for(candidate)
             row = dict(candidate)
             for key, value in source.items():
+                if (row.get("_hierarchy_corrected")
+                        and key in {"nested_depth", "parent_label", "parent_source_path"}):
+                    continue  # Retain reviewed geometry, not the API's bad flat grouping.
                 if key == "label_display_name" and row.get("label_display_name"):
                     continue
                 if row.get("_has_alternate_servings") and key in {
@@ -10610,6 +10688,7 @@ class EnhancedDSLDNormalizer:
             ).strip()
             row["exact_dose_text"] = str(row.get("exact_dose_text") or "").strip()
             row.pop("_exact_dose_corrected", None)
+            row.pop("_hierarchy_corrected", None)
             row.pop("_has_alternate_servings", None)
             row["nested_depth"] = self._safe_int(row.get("nested_depth"), default=0)
             row["score_included"] = bool(row.get("score_included"))

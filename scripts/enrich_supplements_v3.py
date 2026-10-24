@@ -14909,10 +14909,16 @@ class SupplementEnricherV3:
         # detector and cleaner evidence. A detector's category alias must not
         # override a declared nutrient/preparation row. Explicit blend totals,
         # actual members and missing source descendants never qualify.
-        single_material_fields = set()
+        non_opaque_source_fields = set()
         for section, ingredients in (("activeIngredients", active_ingredients),
                                      ("inactiveIngredients", inactive_ingredients)):
             for index, row in enumerate(ingredients):
+                # Source descriptors are the cleaner's provenance decision,
+                # not independently formulated hidden actives. Their elemental
+                # profile can remain unknown without creating B5 opacity.
+                if row.get("cleaner_row_role") == "source_descriptor":
+                    non_opaque_source_fields.add(f"{section}[{index}]")
+                    continue
                 ref = str(row.get("raw_source_path") or "")
                 group = str(row.get("ingredientGroup") or "").casefold()
                 category = str(row.get("raw_category") or "").casefold()
@@ -14944,7 +14950,7 @@ class SupplementEnricherV3:
                     row.get("name") or "", row.get("standardName") or row.get("name") or "",
                     quality_map, botanicals_db,
                 ):
-                    single_material_fields.add(f"{section}[{index}]")
+                    non_opaque_source_fields.add(f"{section}[{index}]")
 
         # Step 1: Collect detector blends (pattern-based)
         detector_blends = []
@@ -14973,7 +14979,7 @@ class SupplementEnricherV3:
                 ]
             result = self.blend_detector.analyze_product(detector_product)
             for blend in result.blends_detected:
-                if (blend.source_field in single_material_fields
+                if (blend.source_field in non_opaque_source_fields
                         or label_source_refs.get(blend.source_field) in source_only_preparations):
                     continue
                 detector_with_amounts = blend.ingredients_with_amounts or []
@@ -15143,7 +15149,7 @@ class SupplementEnricherV3:
                 # canonical ingredient, so they fall through and keep the B5
                 # opacity penalty.
                 if (
-                    source_field in single_material_fields
+                    source_field in non_opaque_source_fields
                 ):
                     continue
 

@@ -5,8 +5,8 @@ display label and both v4 Transparency modules read it directly.
 
 Disclosure is a label fact: a printed enzyme activity (45,000 HUT) is disclosed
 even though Dose cannot use it as a mass exposure. Real record 232243 (digestive
-enzymes in HUT, FIP, CU, USP ...): Transparency used to count 2 of its 11 active
-rows as dose-disclosed while the export showed all 11 amounts.
+enzymes in HUT, FIP, CU, USP ...): The archived panel has 12 enzyme activity rows; source organisms are not
+additional enzymes, and whole-formula anchors are not individual enzyme doses.
 """
 import json
 import math
@@ -53,7 +53,17 @@ def test_real_enzyme_label_rows_are_all_disclosed():
     enriched, _ = SupplementEnricherV3().enrich_product(EnhancedDSLDNormalizer().normalize_product(raw))
     scored = build_scored_artifact(enriched)
     disclosure = scored['_v4_module_breakdown']['dimensions']['transparency']['metadata']['complete_active_disclosure']
-    assert disclosure['complete_row_count'] == disclosure['active_row_count'] == 11
+    from scoring_v4.modules.generic_helpers import get_active_ingredients, has_usable_individual_dose
+    rows = get_active_ingredients(enriched)
+    native = [x for x in rows if x.get('evidence_type') == 'enzyme_activity']
+    anchors = [x for x in rows if x.get('evidence_type') == 'blend_anchor_mass']
+    assert len(native) == 12
+    assert {x['raw_source_path'] for x in native} == {f'ingredientRows[0].nestedRows[{i}]' for i in range(12)}
+    assert all(dose_disclosure_status(x) == 'disclosed' for x in native)
+    pectinase = next(x for x in native if x['raw_source_path'] == 'ingredientRows[0].nestedRows[10]')
+    assert pectinase['dose_value'] == 50 and pectinase['dose_unit'] == 'ENDO-PGU'
+    assert len(anchors) == 2 and not any(has_usable_individual_dose(x) for x in anchors)
+    assert disclosure['complete_row_count'] == disclosure['active_row_count'] == 14
 
 
 def _printed_zero(unit='mcg'):

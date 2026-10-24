@@ -22,10 +22,10 @@ VERSION = "1.0.0"
 ENZYME_ACTIVITY_UNITS = frozenset({
     "alu", "ppi", "blgu", "hut", "sapu", "spu", "fip", "cu", "gdu", "dppiv", "dpp-iv",
     "lacu", "fcc", "fccpu", "galu", "au", "skb", "mwu", "pu", "dp", "ckpu", "aju", "usp",
-    "du", "pc", "agu", "bgu", "lu", "phy", "ftu", "su", "fu",
+    "du", "pc", "agu", "bgu", "lu", "phy", "ftu", "su", "fu", "hcu", "hdu", "pgu", "endopgu", "xu", "sod",
 })
 _ENZYME_ACTIVITY_RE = re.compile(
-    r"(?P<value>\d[\d,]*(?:\.\d+)?)\s*(?P<unit>ALU|PPI|BLGU|HUT|SAPU|SPU|FIP|CU|GDU|DPP[- ]?IV|LACU|FCC(?:\s*\(\s*PU\s*\)|\s*PU|\s+lactase\s+units?)|GALU|AU|SKB|MWU|PU|DP|CKPU|AJU|USP|DU|PC|AGU|BGU|LU|PHY|FTU|SU|FU|fibrinolytic\s+units?)(?!\w)",
+    r"(?P<value>\d[\d,]*(?:\.\d+)?)\s*(?P<unit>ALU|PPI|BLGU|HUT|SAPU|SPU|FIP|CU|GDU|DPP[- ]?IV|LACU|FCC(?:\s*\(\s*PU\s*\)|\s*PU|\s+lactase\s+units?)|GALU|AU|SKB|MWU|PU|DP|CKPU|AJU|USP|DU|PC|AGU|BGU|LU|PHY|FTU|SU|FU|HCU|HDU|ENDO[- ]?PGU|PGU|XU|SOD(?:\s+units?)?|fibrinolytic\s+units?)(?!\w)",
     re.IGNORECASE,
 )
 
@@ -33,12 +33,14 @@ _ENZYME_ACTIVITY_RE = re.compile(
 def extract_enzyme_activity(text, quantity=None, unit=None):
     """Read an explicit activity declaration without treating carrier mass as activity."""
     normalized_unit = re.sub(r"[\s()-]", "", str(unit or "").lower())
+    if normalized_unit in {"sodunit", "sodunits"}:
+        normalized_unit = "sod"
     try:
         value = float(str(quantity).replace(",", ""))
     except (TypeError, ValueError):
         value = None
     if normalized_unit in ENZYME_ACTIVITY_UNITS and value and math.isfinite(value) and value > 0:
-        return value, normalized_unit.upper()
+        return value, "ENDO-PGU" if normalized_unit == "endopgu" else normalized_unit.upper()
     declaration = str(text or "")
     for match in _ENZYME_ACTIVITY_RE.finditer(declaration):
         # A potency per mass is not a serving activity. Preserve the label's
@@ -50,6 +52,10 @@ def extract_enzyme_activity(text, quantity=None, unit=None):
         if not math.isfinite(value) or value <= 0:
             continue
         unit_text = re.sub(r"[\s()-]", "", match.group("unit").upper())
+        if unit_text == "ENDOPGU":
+            unit_text = "ENDO-PGU"
+        if unit_text.startswith("SOD"):
+            unit_text = "SOD"
         if unit_text.startswith("FIBRINOLYTIC"):
             unit_text = "FU"
         elif unit_text.startswith("FCCLACTASE"):

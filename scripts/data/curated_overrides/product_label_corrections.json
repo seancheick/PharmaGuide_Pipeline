@@ -1,13 +1,13 @@
 {
   "_metadata": {
-    "schema_version": "1.4.0",
+    "schema_version": "1.5.0",
     "description": "Reviewer-signed product-row corrections and exact-match containment of reviewed label-unit conflicts.",
     "purpose": "Per-product source-row correction with provenance. Each entry targets one (dsld_id, raw_ingredient_text) pair before cleaner identity resolution and may correct label text, a misattributed UNII, a verified quantity value/unit, or a combination of those fields. Global aliases and global identifier suppression are not supported.",
     "scope": "Only fires for an exact (dsld_id, raw_ingredient_text) tuple match. Case-sensitive on raw_ingredient_text by design — manufacturers may print 'Insulin' in one product and 'INSULIN' in another, and each needs independent reviewer sign-off because the surrounding context (sibling ingredients, product category, regulatory status) must be re-evaluated per occurrence.",
-    "review_policy": "Every product entry is keyed by dsld_id and must carry: brand, product_name (for human-readable audit trail), raw_ingredient_text (the source row being corrected), corrected_ingredient_text (the text the cleaner should see, unchanged for unit-only corrections), correction_fields, evidence (free-text rationale with regulatory citations), sources (authoritative URLs — FDA, NIH, DailyMed, etc.), reviewer, and review_date (ISO 8601 YYYY-MM-DD). A verified cross-row defect may add additional_row_corrections, which inherit the product-level evidence, sources, reviewer, review_date, scope, and provenance tag. Quantity changes require exact raw and corrected value/unit pairs and must be supported by the official manufacturer or label image. Restoring a quantity absent from a form row additionally requires raw_quantity_missing=true, a positive corrected value/unit, and exact same-record source text that states the dose; the applier refuses to overwrite any existing quantity representation. A reviewed Daily Value correction requires an exact raw_daily_value and corrected_daily_value from the same official label; it rewrites only matching source percentages, never derives a percentage or changes a different value. A reviewed unresolved_unit scoring_disposition preserves exact raw_quantity_value/raw_quantity_unit, makes no inferred unit correction, and marks dose and upper-limit assessment unresolved until independent exact-label evidence resolves the conflict. It applies only when the raw name, value and unit all match.",
+    "review_policy": "Every product entry is keyed by dsld_id and must carry: brand, product_name (for human-readable audit trail), raw_ingredient_text (the source row being corrected), corrected_ingredient_text (the text the cleaner should see, unchanged for unit-only corrections), correction_fields, evidence (free-text rationale with regulatory citations), sources (authoritative URLs — FDA, NIH, DailyMed, etc.), reviewer, and review_date (ISO 8601 YYYY-MM-DD). A verified cross-row defect may add additional_row_corrections, which inherit the product-level evidence, sources, reviewer, review_date, scope, and provenance tag. Quantity changes require exact raw and corrected value/unit pairs and must be supported by the official manufacturer or label image. Restoring a quantity absent from a form row additionally requires raw_quantity_missing=true, a positive corrected value/unit, and exact same-record source text that states the dose; the applier refuses to overwrite any existing quantity representation. A reviewed Daily Value correction requires an exact raw_daily_value and corrected_daily_value from the same official label; it rewrites only matching source percentages, never derives a percentage or changes a different value. A reviewed unresolved_unit scoring_disposition preserves exact raw_quantity_value/raw_quantity_unit, makes no inferred unit correction, and marks dose and upper-limit assessment unresolved until independent exact-label evidence resolves the conflict. It applies only when the raw name, value and unit all match. Reviewed hierarchy corrections may supply corrected_child_row_refs with exact parent raw_source_path/name/value/unit and exact child source paths/names/raw_child_names. The existing applier validates the whole group before moving working rows; it preserves original API source references and quantities and fails closed on mismatch. A source_descriptor disposition with an authored raw value/unit applies only to that exact quantity edition. Exact-source corrected_notes repairs require raw source paths, names, notes and quantity pairs for the entire bundle; a mismatch fails closed before edits. Original working notes retain _pre_correction_notes, and source paths remain unchanged.",
     "unmatched_drug_tokens_policy": "When a row's raw_ingredient_text matches a known regulated-drug name (e.g., 'Insulin', 'Acetaminophen', 'Ibuprofen') and there is NO matching override for the product, the row must NOT be silently mapped. The cleaner emits the row to a quarantine path with reason='requires_human_review_drug_token_in_supplement' and excludes the product from scoring. New occurrences enter the reviewer pipeline via the same schema.",
-    "last_updated": "2026-10-22",
-    "total_entries": 84,
+    "last_updated": "2026-10-24",
+    "total_entries": 86,
     "loaded_by": "scripts/enhanced_normalizer.py via _load_label_corrections (cached on first product)"
   },
   "corrections": {
@@ -2027,6 +2027,138 @@
       "scope": "dsld_id_only",
       "provenance_tag": "official_source_identity_correction",
       "raw_unii_code": "S95658MI3W"
+    },
+    "275412": {
+      "brand": "Garden of Life",
+      "product_name": "Raw Enzymes Women 50 & Wiser",
+      "raw_ingredient_text": "RAW Enzyme Blend",
+      "corrected_ingredient_text": "RAW Enzyme Blend",
+      "raw_source_path": "ingredientRows[12]",
+      "raw_quantity_value": 620,
+      "raw_quantity_unit": "mg",
+      "correction_fields": [
+        "nestedRows"
+      ],
+      "corrected_child_row_refs": [
+        {
+          "raw_source_path": "ingredientRows[13]",
+          "raw_ingredient_text": "Protein-Digesting Enzymes",
+          "raw_child_names": [
+            "Bromelain",
+            "Papain",
+            "Peptidase",
+            "Protease",
+            "Protease",
+            "Protease",
+            "Protease"
+          ]
+        },
+        {
+          "raw_source_path": "ingredientRows[14]",
+          "raw_ingredient_text": "Carbohydrate-Digesting Enzymes",
+          "raw_child_names": [
+            "Alpha-Galactosidase",
+            "Amylase",
+            "Beta-Glucanase",
+            "Cellulase",
+            "Glucoamylase",
+            "Hemicellulase",
+            "Invertase",
+            "Lactase",
+            "Maltase",
+            "Pectinase",
+            "Phytase",
+            "Xylanase"
+          ]
+        },
+        {
+          "raw_source_path": "ingredientRows[15]",
+          "raw_ingredient_text": "Fat-Digesting Enzymes",
+          "raw_child_names": [
+            "Lipase"
+          ]
+        }
+      ],
+      "evidence": "The exact archived NIH label edition REWW90L-111114 (PDF SHA256 972fed921a162cffa75500dbead06a2901740202ba826814bc9fe214b2e76334) prints the 620 mg RAW Enzyme Blend across seven protein-digesting, twelve carbohydrate-digesting and one fat-digesting enzyme entries. A horizontal rule after Lipase separates the 31 mg Enzyme-Generating Probiotic Blend. Nattokinase 67 FU, Superoxide Dismutase 5 SOD Units and Mineral Enzyme Activators 1 mg are separate declarations. The API incorrectly places the three digestive headers beside the 620 mg parent. Restore only their verified parent linkage, preserving immutable API row paths, all quantities/activity units and unknown individual masses. The marketed 22 enzymes includes separate nattokinase and SOD; it is not a 22-mass allocation inside 620 mg. The API also duplicates the one printed Total Cultures 500,000,000 CFU declaration into each species note. Attribute that exact label total to the separate 31 mg probiotic header, retaining the at-time-of-blending qualifier and leaving each species count unknown. This corrects a false 1 billion sum; it does not allocate CFU equally or convert milligrams to CFU.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/275412.pdf",
+        "https://api.ods.od.nih.gov/dsld/v9/label/275412"
+      ],
+      "reviewer": "Codex exact-label source-content verification; not clinical approval",
+      "review_date": "2026-10-24",
+      "provenance_tag": "official_label_hierarchy_correction",
+      "scope": "dsld_id_only",
+      "additional_row_corrections": [
+        {
+          "corrected_ingredient_text": "Enzyme-Generating Probiotic Blend",
+          "correction_fields": [
+            "notes"
+          ],
+          "reviewer": "Codex exact-label source-content verification; not clinical approval",
+          "review_date": "2026-10-24",
+          "scope": "dsld_id_only",
+          "provenance_tag": "official_label_cfu_attribution_correction",
+          "raw_ingredient_text": "Enzyme-Generating Probiotic Blend",
+          "raw_source_path": "ingredientRows[16]",
+          "raw_quantity_value": 31,
+          "raw_quantity_unit": "mg",
+          "raw_notes": null,
+          "corrected_notes": "Total Cultures 500,000,000 CFU (At time of blending)"
+        },
+        {
+          "corrected_ingredient_text": "Bacillus coagulans",
+          "correction_fields": [
+            "notes"
+          ],
+          "reviewer": "Codex exact-label source-content verification; not clinical approval",
+          "review_date": "2026-10-24",
+          "scope": "dsld_id_only",
+          "provenance_tag": "official_label_cfu_attribution_correction",
+          "raw_ingredient_text": "Bacillus coagulans",
+          "raw_source_path": "ingredientRows[16].nestedRows[0]",
+          "raw_quantity_value": 0,
+          "raw_quantity_unit": "NP",
+          "raw_notes": "Total Cultures 500,000,000 CFU (At time of blending)",
+          "corrected_notes": "At time of blending"
+        },
+        {
+          "corrected_ingredient_text": "Saccharomyces boulardii",
+          "correction_fields": [
+            "notes"
+          ],
+          "reviewer": "Codex exact-label source-content verification; not clinical approval",
+          "review_date": "2026-10-24",
+          "scope": "dsld_id_only",
+          "provenance_tag": "official_label_cfu_attribution_correction",
+          "raw_ingredient_text": "Saccharomyces boulardii",
+          "raw_source_path": "ingredientRows[16].nestedRows[1]",
+          "raw_quantity_value": 0,
+          "raw_quantity_unit": "NP",
+          "raw_notes": "Total Cultures 500,000,000 CFU, (At time of blending)",
+          "corrected_notes": "At time of blending"
+        }
+      ]
+    },
+    "182990": {
+      "brand": "Pure Encapsulations",
+      "product_name": "Mineral2O Powder",
+      "raw_ingredient_text": "Trace Mineral Complex",
+      "corrected_ingredient_text": "Trace Mineral Complex",
+      "raw_quantity_value": 700,
+      "raw_quantity_unit": "mg",
+      "correction_fields": [
+        "scoring_disposition"
+      ],
+      "scoring_disposition": "source_descriptor",
+      "evidence": "The exact NIH archived M2OP v1 label (PDF SHA256 d78376726f9ab58bd0db596afa43973d2daa027a6e09e4c5e33096020445133e) declares a 700 mg natural trace-mineral source and separately prints calcium 50 mg, magnesium 150 mg, chloride 245 mg, sodium 6 mg and potassium 50 mg. The manufacturer 2018 New Products brochure page 8 identifies the source as naturally varying Great Salt Lake mineral concentrate; GIVOCAL calcium glycerophosphate and GIVOMAG magnesium glycerophosphate are separately formulated sources. This provenance mass is not a second independent 700 mg elemental exposure or a formula of 72 separately added, undosed actives. Seven typical trace-element ranges remain uncertain ranges, not guaranteed serving doses. The brochure potassium 45 mg is a different document value: preserve the exact archived label 50 mg. This source descriptor does not assert complete elemental exposure coverage, chemical-form qualification, clinical efficacy, purity or clinician approval.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/182990.pdf",
+        "https://www.pureencapsulationspro.com/media/18_10_Broch_NewProd_FIN_web.pdf"
+      ],
+      "reviewer": "Codex exact-label source-content verification; not clinical approval",
+      "review_date": "2026-10-24",
+      "provenance_tag": "official_label_source_material_correction",
+      "scope": "dsld_id_only"
     }
   }
 }
