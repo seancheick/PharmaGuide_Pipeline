@@ -126,10 +126,28 @@ def test_35624_historical_spellings_resolve_to_one_existing_class_rating():
     readings = [enricher._match_quality_map(
         label, label, iqm, preferred_parent="bifidobacterium_longum",
         cleaner_canonical_id="bifidobacterium_longum",
-    ) for label in ["B. infantis 35624", "B. longum 35624", "Align", "Bifantis"]]
+    ) for label in [
+        "B. infantis 35624",
+        "B. longum 35624",
+        "Bifidobacterium longum subsp. longum 35624™",
+        "Align",
+        "Bifantis",
+    ]]
     assert {(row["canonical_id"], row["form_id"], row["bio_score"]) for row in readings} == {
         ("bifidobacterium_longum", "bifidobacterium longum 35624", 7)
     }
+
+    printed_label = enricher._match_quality_map(
+        "Bifidobacterium longum subsp. longum 35624™",
+        "Bifidobacterium Longum",
+        iqm,
+        preferred_parent="bifidobacterium_longum",
+        cleaner_canonical_id="bifidobacterium_longum",
+    )
+    assert (printed_label["form_id"], printed_label["bio_score"]) == (
+        "bifidobacterium longum 35624",
+        7,
+    )
 
 
 def test_alphawave_does_not_resolve_to_taiyo_preparation():

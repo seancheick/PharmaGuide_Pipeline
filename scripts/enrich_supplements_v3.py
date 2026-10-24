@@ -10195,11 +10195,17 @@ class SupplementEnricherV3:
             def add(value: Optional[str], source: int):
                 if not value:
                     return
-                normed = self._normalize_exact_text(value)
-                if not normed:
-                    return
-                if normed not in out or source < out[normed]:
-                    out[normed] = source
+                # Trademark glyphs are printed label fidelity, not chemical
+                # identity. Keep the literal exact candidate, but also try the
+                # same text without the mark at the same precedence so a row
+                # such as "... 35624™" cannot lose its reviewed strain form to
+                # the generic parent merely because standardName has no mark.
+                for candidate in (value, re.sub(r"[™®©]", "", value)):
+                    normed = self._normalize_exact_text(candidate)
+                    if not normed:
+                        continue
+                    if normed not in out or source < out[normed]:
+                        out[normed] = source
 
             add(ing_name, 0)
             add(std_name, 1)
