@@ -83,3 +83,14 @@ no category or benefit claim is invented. Existing empty-reference-hold and sour
 assertions remain unchanged. The named Advanced Hair Complex hold remains, with no invented
 component dose or d-biotin preparation. Cached and direct match results sanitize private context
 at the same implementation boundary. Earlier provisional four-case clearance is superseded.
+
+The clinical CSV explicitly separates source-content inspection, full-text verification,
+exact applicability review, attributable clinician approval and downstream verification, with
+owner/regression/closure columns. Bounded dependency replay does not imply corpus or scientific
+closure. Unfinished full-text/applicability work remains visible for every record.
+
+Final engineering qualification: candidate690e05ed passes [whole-fast CI40058400911](https://github.com/seancheick/PharmaGuide_Pipeline/actions/runs/40058400911):
+23,724 passed /192 declared skips, all skip guards pass. Local546passed/24declared skips;
+736named owner/consumer checks; corrected285-label stable comparisons. These establish bounded
+implementation verification. Scientific approval, whole-corpus integrity and actual app rendering
+remain open as listed above. Workspace receipts: `.claude/state/completion-batch/`.

@@ -1541,3 +1541,18 @@ Evidence-only decreases as the prior source comparison; no other total/status mo
 All50reference bindings unchanged from strict198PMID pass. Exact50data_batch still passes.
 Independent source and producer reviewers clear the final corrections. Final local/wholefast
 replacement checkpoint follows; CI40057355582 is failed and never counted as qualification.
+
+Final qualification: runtime/source candidate `690e05ed2924d0174f03438aca230d01b2998e59` passes
+whole-fast CI40058400911 (all4groups):23,724passed /192declaredskips; all4skipguards pass.
+Final local546passed/24declaredopt-inskips in149.07s, skipguardpassed;736namedowner/consumer
+checks pass. Stable285raw-label replay and443source-file hash binding cover the corrected
+candidate. FirstCI40057355582 remainsfailed/superseded, not qualification. Final report-only
+changes distinguish source/full-text/applicability/approval/rebuild stages; independent read-only
+review confirms no false closure, no runtime/data/test change after green candidate.
+Integrate under Sean's explicit main-push authorization; main-containment/cleanup receipts live
+in CURRENT_HANDOFF. Implemented/source-screened/bounded-tested/integrated does not mean clinically
+approved or release-validated. No full corpus pipeline, export, actual Flutter rebuild or release.
+Remaining:147conditional clinical contexts+generatedcollagen;506benchmarksubjects;174of238
+identity/dose diagnostic products (overlapping issues); final necessary corpus/app validation.
+Use the consolidated CLINICAL_REVIEW_HANDOFF and its155-row staged-review register, not
+superseded interim microbatch counts. Pipeline remainsdeferred until scientificdecisions stable.
