@@ -222,3 +222,75 @@ def test_unrepresentable_outcome_uses_existing_optional_field_contract(completio
     assert "primary_outcome" not in record
     assert record["key_endpoints"]
     assert record["references_structured"]
+
+
+def test_magtein_trial_and_correction_have_distinct_source_roles():
+    import json
+    records = json.loads((Path(__file__).parents[1] / 'data/backed_clinical_studies.json').read_text())['backed_clinical_studies']
+    row = next(r for r in records if r['id'] == 'BRAND_MAGTEIN')
+    refs = {r.get('pmid'): r for r in row['references_structured']}
+    assert '39252819' in refs  # Original 21-day trial, not its correction notice.
+    assert refs['40567408']['scoring_eligible'] is False
+    text = row['notes'] + row['notable_studies']
+    assert 'phosphatidylserine' in text and 'objective sleep outcomes' in text
+    assert 'must not be counted as another trial' in text
+
+
+@pytest.mark.parametrize('record_id,required', [
+    ('BRAND_MITOPURE', ['primary endpoint', 'within-group', '0.058']),
+    ('BRAND_LUTEMAX_2020', ['EyePromise', 'omega-3', 'mesozeaxanthin']),
+    ('PRECLIN_SULFORAPHANE', ['did not meet', '0.3 mmol/L', 'exploratory']),
+    ('INGR_COLLAGEN_PEPTIDES', ['non-pharmaceutical-funded', 'high-quality', 'high risk of bias']),
+])
+def test_source_summaries_keep_null_endpoints_and_preparation_limits(record_id, required):
+    import json
+    from clinical_applicability import assess_clinical_source_review
+    records = json.loads((Path(__file__).parents[1] / 'data/backed_clinical_studies.json').read_text())['backed_clinical_studies']
+    row = next(r for r in records if r['id'] == record_id)
+    text = row['notes'] + row['notable_studies']
+    assert all(fragment in text for fragment in required)
+    assert assess_clinical_source_review(row)['is_complete'] is False
+
+
+def test_berberine_registered_dose_conflict_is_not_a_single_daily_regimen():
+    import json
+    records = json.loads((Path(__file__).parents[1] / 'data/backed_clinical_studies.json').read_text())['backed_clinical_studies']
+    row = next(r for r in records if r['id'] == 'INGR_BERBERINE')
+    text = row['notes'] + row['notable_studies']
+    assert '300mg daily' in text and '300mg twice daily' in text
+    assert 'conflict' in text and 'multi-ingredient' in text
+    assert 'not standalone' in text
+
+
+def test_st_johns_wort_ssri_comparator_is_not_relabelled_placebo():
+    import json
+    records = json.loads((Path(__file__).parents[1] / 'data/backed_clinical_studies.json').read_text())['backed_clinical_studies']
+    row = next(r for r in records if r['id'] == 'INGR_ST_JOHNS_WORT')
+    assert 'comparing St John\'s wort with SSRIs' in row['notable_studies']
+    assert 'did not establish placebo superiority' in row['notable_studies']
+    assert row['notes'] == 'Consistent evidence for mild-to-moderate depression contexts, but clinically significant CYP/P-gp drug interaction risk requires caution.'
+
+
+@pytest.mark.parametrize('record_id,unsupported', [
+    ('INGR_RHODIOLA', 'evidence supports Rhodiola rosea for stress-related fatigue'),
+    ('INGR_GINSENG', 'supportive data for selected cognitive'),
+    ('INGR_LEMON_BALM', 'additional cognitive findings in small trials'),
+])
+def test_source_scope_corrections_remove_contradictory_opening_claims(record_id, unsupported):
+    import json
+    rows = json.loads((Path(__file__).parents[1] / 'data/backed_clinical_studies.json').read_text())['backed_clinical_studies']
+    row = next(r for r in rows if r['id'] == record_id)
+    assert unsupported not in row['notes']
+    assert 'not' in row['notes'] or 'unreviewed' in row['notes']
+
+
+def test_hyaluronic_retained_skin_sources_do_not_award_joint_or_longevity_scope():
+    import json
+    rows = json.loads((Path(__file__).parents[1] / 'data/backed_clinical_studies.json').read_text())['backed_clinical_studies']
+    row = next(r for r in rows if r['id'] == 'INGR_HYALURONIC_ACID')
+    assert row['health_goals_supported'] == ['Skin, Hair & Nails']
+    assert row['primary_outcome'] == 'Skin, Hair & Nails'
+    assert row['endpoint_relevance_tags'] == ['skin_health']
+    assert not any('joint' in endpoint.lower() for endpoint in row['key_endpoints'])
+    assert 'no joint research exists elsewhere' in row['notes']
+    assert 'registry_completed_trials_count' not in row

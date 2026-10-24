@@ -447,3 +447,41 @@ def test_ashwagandha_single_capsule_is_not_a_daily_dose(records):
 ])
 def test_source_preparation_does_not_add_unverified_brand_or_standardization(records, cid, unsupported):
     assert unsupported not in records[cid]['material_form']
+
+
+def test_tart_cherry_source_summary_retains_pre_event_and_race_day_regimen(records):
+    row = records['tart_cherry']
+    assert '7 days before and on race day' in row['applicability_decision']
+    assert '7 days before and on race day' == _study(row, '20459662')['duration']
+    assert 'does not transfer to dry tart cherry powder or extract' in row['applicability_decision']
+
+
+@pytest.mark.parametrize('canonical,pmids', [
+    ('skullcap', {'12652886','23878109'}),
+    ('noni', {'21294416','23097636','22436097'}),
+    ('corn_silk', {'25727941'}),
+    ('yarrow_aerial_parts', {'26238568'}),
+    ('korean_pine', {'18355411'}),
+    ('tremella_fuciformis', {'29319408','38439104'}),
+    ('cistanche', {'33477648'}),
+    ('french_oak', {'32230721'}),
+    ('shatavari', {'34959836'}),
+    ('black_rice', {'34547006'}),
+    ('juniper', {'39842749'}),
+    ('peppermint_essential_oil', {'42024666'}),
+    ('theacrine', {'26766930','27164220','31660991','40048726'}),
+    ('kawaratake', {'12814145','25006989','28375640'}),
+    ('oi_solarplast', {'39684397'}),
+])
+def test_related_human_sources_replace_false_absence_without_clinical_clearance(records, canonical, pmids):
+    from evidence_resolver import resolve_evidence_for_canonical, EvidenceDisposition
+    record = records[canonical]
+    assert record['effect_direction'] == 'applicability_unestablished'
+    assert record['verification_result'] == 'verification_failure_unresolved'
+    assert pmids <= {str(study['pmid']) for study in record['qualifying_human_studies']}
+    assert all(study['scoring_eligible'] is False for study in record['qualifying_human_studies'])
+    assert record['studied_dose_exposure'] == {}
+    assert not record.get('reference_semantics')
+    result = resolve_evidence_for_canonical(canonical)
+    assert result.disposition == EvidenceDisposition.LITERATURE_RESOLUTION_REQUIRED.value
+    assert result.points_eligible is False

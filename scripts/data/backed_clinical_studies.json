@@ -3,7 +3,7 @@
     "description": "Ingredients backed by clinical research and studies - Enhanced for Section C v3.4.0",
     "purpose": "evidence_scoring",
     "schema_version": "5.6.4",
-    "last_updated": "2026-10-23",
+    "last_updated": "2026-10-24",
     "total_entries": 210,
     "changelog": [
       "2026-10-20: INGR_TART_CHERRY standard_name is Tart Cherry (\"tart cherry extract\" kept as an alias), the rename deferred from PR205. Its juice-only applicability (PR213) rejects every non-juice row the name now reaches; measured on all 552 cherry-mentioning labels: 0 score, pillar or blob changes.",
@@ -4867,10 +4867,10 @@
         "Increase Energy",
         "Healthy Aging/Longevity"
       ],
-      "notes": "Patented urolithin A product with randomized human evidence for muscle-endurance and mitochondrial-biomarker effects; not all whole-body performance endpoints are consistently positive.",
+      "notes": "Urolithin A studies distinguish physiological biomarkers from clinical performance. In the four-month ATLAS trial, the prespecified peak-power-output primary endpoint did not differ significantly from placebo. Muscle-strength measures improved, while aerobic-endurance and six-minute-walk improvements at 1,000 mg/day were principally within-group; peak VO2 versus placebo was not significant (p=0.058). Amazentis funded the trial and disclosed employee, board and advisory relationships. The earlier first-in-human study primarily assessed tolerability and mitochondrial biomarkers, not demonstrated durable functional benefit.",
       "study_type": "rct_multiple",
-      "last_updated": "2026-03-06",
-      "notable_studies": "Singh et al. (2022, PMID 35584623) randomized trial in middle-aged adults reported improved muscle strength, aerobic endurance, and mitochondrial-health biomarkers after 4 months of urolithin A. Andreux et al. (2019, PMID 32694802) first-in-human trial confirmed safety and a molecular signature of improved mitochondrial and cellular health.",
+      "last_updated": "2026-10-24",
+      "notable_studies": "PMID 35584623 randomized 88 middle-aged adults to 500 mg/day, 1,000 mg/day urolithin A or placebo for four months. Peak power output, the primary endpoint, was null between groups; selected strength findings were favorable. The 1,000 mg/day aerobic and walking changes were within-group findings and should not be presented as confirmed between-group efficacy. PMID 32694802 is an earlier first-in-human study of single doses and four-week supplementation, with primary safety/tolerability and secondary biomarker outcomes.",
       "references_structured": [
         {
           "type": "pubmed",
@@ -5200,10 +5200,10 @@
         "Skin, Hair & Nails",
         "Joint & Bone Health"
       ],
-      "notes": "Systematic-review evidence supports hydrolyzed collagen peptides for skin hydration, elasticity, and wrinkles, with newer randomized knee-osteoarthritis studies adding supportive joint-outcome data.",
-      "notable_studies": "Pu et al. (2023, PMID 37432180) meta-analysis of 26 RCTs found significant improvements in skin hydration and elasticity. More recent syntheses include PMID 40324552 for skin-aging outcomes and PMID 37717022 for osteoarthritis pain, with a newer placebo-controlled knee-OA trial indexed as PMID 39839727.",
+      "notes": "Collagen evidence is outcome- and preparation-specific. PMID 37432180 pooled 26 RCTs (1,721 participants) and reported hydration/elasticity benefits with identified study biases. PMID 40324552 pooled 23 RCTs (1,474 participants): overall skin results were favorable, but benefits were absent in non-pharmaceutical-funded and high-quality subgroups, and the authors did not support a current clinical skin-aging treatment claim. Knee-osteoarthritis evidence is separate: PMID 37717022 pooled four trials (507 participants), all rated high risk of bias, with heterogeneous pain benefit and uncertain adverse-event evidence. A specific 10 g hydrolyzed preparation in PMID 39839727 cannot establish universal equivalence or a dose threshold for all collagen products. Generated collagen recovery requires a traceable applicable source context and authentic approval; no clinical clearance is implied.",
+      "notable_studies": "PMID 37432180 and PMID 40324552 assess skin outcomes and reach materially different conclusions after study-quality and funding sensitivity analysis; their overlapping trial cohorts are not independent replication. PMID 37717022 assesses knee-OA pain and reports all included studies at high risk of bias. PMID 39839727 evaluates a specific hydrolyzed collagen preparation in grade II/III knee OA. Skin hydration/elasticity, OA pain and longevity are different outcomes and must not substitute for one another.",
       "study_type": "systematic_review_meta",
-      "last_updated": "2026-02-20",
+      "last_updated": "2026-10-24",
       "references_structured": [
         {
           "type": "pubmed",
@@ -5327,7 +5327,7 @@
         "hyaluronan",
         "sodium hyaluronate"
       ],
-      "category": "joint_bone",
+      "category": "skin_hair_collagen",
       "evidence_level": "ingredient-human",
       "published_studies": [
         "systematic_review",
@@ -5335,17 +5335,15 @@
       ],
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "joint lubrication ↑",
-        "skin moisture ↑",
-        "wrinkles ↓"
+        "Skin hydration and selected wrinkle outcomes in the retained oral preparations."
       ],
       "health_goals_supported": [
-        "Healthy Aging/Longevity"
+        "Skin, Hair & Nails"
       ],
-      "notes": "Oral hyaluronic acid has human evidence for skin hydration and wrinkle-related endpoints, with more limited but supportive literature for osteoarthritis symptoms.",
+      "notes": "The three retained references assess oral hyaluronic acid for skin hydration, elasticity and wrinkle outcomes, not osteoarthritis or joint-lubrication efficacy. PMID 28761365 and PMID 34203487 used specific 120 mg/day preparations for 12 weeks in selected adult skin populations. PMID 40911749 pools seven skin trials; hydration, elasticity and wrinkle depth improved, while firmness, wrinkle volume and transepidermal water loss did not differ significantly. Source preparation, molecular weight and clinical applicability remain distinct; this review does not establish that no joint research exists elsewhere.",
       "study_type": "systematic_review_meta",
-      "last_updated": "2026-03-06",
-      "notable_studies": "Skin-focused human evidence includes the wrinkle trial indexed as PMID 28761365 and the later placebo-controlled study PMID 34203487. A newer skin meta-analysis is indexed as PMID 40911749. Osteoarthritis support is less consolidated but remains directionally positive across oral-HA trials and reviews.",
+      "last_updated": "2026-10-24",
+      "notable_studies": "PMID 28761365 randomized 60 adults with crow-feet wrinkles to two molecular-weight hyaluronan preparations or placebo for12weeks. PMID 34203487 randomized 40 adults to120mg/day hyaluronan or placebo for12weeks for skin outcomes. PMID 40911749 is a seven-RCT skin meta-analysis with heterogeneous and partly null outcomes. None of these retained references studies OA symptoms.",
       "references_structured": [
         {
           "type": "pubmed",
@@ -5433,13 +5431,11 @@
         }
       ],
       "effect_direction": "positive_strong",
-      "primary_outcome": "Healthy Aging/Longevity",
-      "total_enrollment": 216,
-      "registry_completed_trials_count": 923,
+      "primary_outcome": "Skin, Hair & Nails",
       "effect_direction_confidence": "high",
-      "effect_direction_rationale": "Retained positive_strong classification; study_type=systematic_review_meta; evidence_level=ingredient-human; primary_outcome=Healthy Aging/Longevity; published_tags=systematic_review,RCT; registry_completed_trials_count=923; total_enrollment=216; endpoint_tags=joint_pain; notes/citations contain no automated downgrade signals.",
+      "effect_direction_rationale": "Existing positive_strong classification retained pending attributable clinical synthesis; no new grade is assigned. The retained sources evaluate skin outcomes with preparation, molecular-weight, population and study-heterogeneity limits. They do not establish joint or longevity efficacy, and no verified aggregate enrollment or completed-registry count is supplied.",
       "endpoint_relevance_tags": [
-        "joint_pain"
+        "skin_health"
       ]
     },
     {
@@ -7888,9 +7884,9 @@
       "health_goals_supported": [
         "Increase Energy"
       ],
-      "notes": "Human evidence for Panax ginseng is strongest for fatigue-related outcomes, with more mixed but still supportive data for selected cognitive and metabolic endpoints depending on extract type and population. Retained-source scope and limitations: Fatigue syntheses include different American/Asian preparations and populations (PMID: 29624410; 35776997) Metabolic markers in Panax/Korean-red-ginseng studies; not retained immune or cognitive efficacy evidence (PMID: 35509826)",
+      "notes": "The retained sources evaluate disease-related fatigue and selected metabolic biomarkers, not cognitive efficacy. PMID 29624410 reviews both American and Asian ginseng in fatigue; PMID 35776997 pools disease-related fatigue trials. PMID 35509826 pools different Panax and Korean-red-ginseng preparations and populations for metabolic markers. Preparation, species, population and regimen cannot be collapsed into universal effects; study limitations and clinical applicability remain unresolved.",
       "study_type": "systematic_review_meta",
-      "last_updated": "2026-03-07",
+      "last_updated": "2026-10-24",
       "notable_studies": "Fatigue-focused syntheses include PMID 29624410 and PMID 35776997, both supporting modest benefit with acceptable safety. Additional metabolic and cardiometabolic evidence is summarized in PMID 35509826, but results vary across preparations and indications.",
       "references_structured": [
         {
@@ -8005,9 +8001,9 @@
       "health_goals_supported": [
         "Increase Energy"
       ],
-      "notes": "Human evidence supports Rhodiola rosea for stress-related fatigue and some endurance or exertion outcomes, but effect estimates vary meaningfully by extract standardization and study design. Retained-source scope and limitations: endurance and related physiological biomarkers; inflammatory-marker findings were not significant, and this retained source does not establish mood/stress-fatigue benefit (PMID: 41080184)",
+      "notes": "The retained source PMID 41080184 synthesizes 26 randomized trials in 668 healthy participants, with endurance-performance and physiological biomarker outcomes. Endurance measures and selected oxidative-stress/muscle-damage markers improved, but inflammatory-marker findings were not significant. This source does not establish mood or clinical stress-related fatigue benefit, equivalence among extracts, or a universal dosing threshold. Study heterogeneity and predominantly young healthy participants limit transfer.",
       "study_type": "systematic_review_meta",
-      "last_updated": "2026-03-07",
+      "last_updated": "2026-10-24",
       "notable_studies": "Recent endurance-performance meta-analysis PMID 41080184 found modest improvements in endurance-related outcomes and biomarkers, though trial quality and extract heterogeneity remain important limitations.",
       "references_structured": [
         {
@@ -11177,10 +11173,10 @@
       "health_goals_supported": [
         "Reduce Stress/Anxiety"
       ],
-      "notes": "Human evidence supports lemon balm for acute anxiety or mood-calming effects, with some additional cognitive findings in small trials. The overall evidence base remains modest and somewhat heterogeneous. Retained-source scope and limitations: Depression/anxiety symptom synthesis with high heterogeneity and few studies; not a retained cognitive-performance endpoint (PMID: 34449930)",
+      "notes": "The retained source PMID 34449930 synthesizes randomized trials of lemon balm for depressive and anxiety symptoms. Pooled effects favored lemon balm, but heterogeneity, few trials and differing acute/chronic methods limit certainty and transfer. It does not establish cognitive-performance efficacy or a universal preparation/dose threshold. Exact source preparation and product applicability remain unreviewed.",
       "study_type": "systematic_review_meta",
-      "last_updated": "2026-03-07",
-      "notable_studies": "The best pooled evidence is PMID 34449930, which found significant reductions in anxiety and depression scores with lemon balm across small clinical trials. Individual randomized studies such as the Cases trial remain supportive but not definitive.",
+      "last_updated": "2026-10-24",
+      "notable_studies": "PMID 34449930 reports pooled improvements in anxiety and depression scores versus placebo, with substantial heterogeneity and methodological differences across a small number of trials. The present retained reference does not supply a cognitive-performance determination.",
       "references_structured": [
         {
           "type": "pubmed",
@@ -12319,7 +12315,7 @@
         "Healthy Aging/Longevity",
         "Immune Support"
       ],
-      "notes": "Sulforaphane now has meaningful human trial evidence across autism, former-smoker chemoprevention biomarkers, prediabetes, and inflammatory settings, but effect sizes vary by indication, formulation, and baseline responder profile. Broccoli sprout preparations remain the main clinical source.",
+      "notes": "Sulforaphane studies concern specific broccoli-sprout preparations and indication-specific outcomes. The prediabetes trial PMID 39929977 did not meet its prespecified primary target of a 0.3 mmol/L fasting-glucose reduction versus placebo. The observed overall reduction was 0.2 mmol/L (95% CI -0.44 to -0.01; p=0.04); responder and microbiome subgroup analyses were exploratory and require confirmation. Gastrointestinal adverse effects occurred. The former-smoker trial measures bronchial Ki-67, a biomarker, not proven cancer prevention; autism evidence remains preparation- and population-specific.",
       "study_type": "systematic_review_meta",
       "published_studies": [
         "mechanistic",
@@ -12328,8 +12324,8 @@
         "systematic_review",
         "meta-analysis"
       ],
-      "last_updated": "2026-03-07",
-      "notable_studies": "A randomized phase II trial in former smokers found significant reduction in bronchial Ki-67 labeling with sulforaphane versus placebo (PMID 40041932). Autism evidence now includes a 2025 meta-analysis of six RCTs with selective symptom improvement but notable heterogeneity (PMID 40458076), alongside individual randomized trials such as PMIDs 32347624, 34034808, and 36427174. In prediabetes, a 12-week placebo-controlled trial showed only a small overall fasting-glucose reduction with responder heterogeneity (PMID 39929977).",
+      "last_updated": "2026-10-24",
+      "notable_studies": "PMID 40041932 assessed bronchial Ki-67 in former smokers. PMID 40458076 synthesized six autism trials with heterogeneous selected symptom findings. PMID 39929977 studied once-daily broccoli sprout extract for 12 weeks in drug-naive prediabetes (35 active, 39 placebo): its prespecified 0.3 mmol/L primary target was not met; a smaller overall effect and exploratory responder signals were observed.",
       "references_structured": [
         {
           "type": "pubmed",
@@ -15705,9 +15701,9 @@
         "Sleep Quality",
         "Healthy Aging/Longevity"
       ],
-      "notes": "Magnesium L-threonate formulation with randomized human evidence for cognition and emerging placebo-controlled evidence for sleep quality.",
-      "last_updated": "2026-03-06",
-      "notable_studies": "Zhang et al. (2022, PMID 36558392) found improved memory-test performance after 30 days of a Magtein-based formula in healthy adults. Lopresti and Smith (2025, PMID 41601871) reported better cognitive performance and sleep outcomes after 6 weeks of Magtein, and the 21-day sleep-focused trial is indexed as PMID 40567408.",
+      "notes": "The cited evidence includes different preparations and outcomes. PMID 36558392 tested MagteinPS, a combination of magnesium L-threonate, phosphatidylserine and vitamins C and D, not isolated Magtein. PMID 41601871 found benefits on selected cognition and subjective sleep-related impairment outcomes, but no between-group differences in objective sleep outcomes or several other sleep measures. The 21-day sleep trial is PMID 39252819; PMID 40567408 is its linked corrigendum, not an independent trial. Selected questionnaire and wearable outcomes improved, while many measures did not differ from placebo. The original sleep paper reports AIDP funding; the correction content still requires verification. None of these facts supplies clinician approval or a universal dose threshold.",
+      "last_updated": "2026-10-24",
+      "notable_studies": "PMID 36558392 randomized 109 healthy Chinese adults to a 2 g/day MagteinPS combination or placebo for 30 days. PMID 41601871 randomized 100 adults aged 18-45 with dissatisfied sleep to 2 g/day Magtein or placebo for six weeks; NIH composite cognition and some subjective outcomes improved, but Raven performance and objective sleep outcomes did not. PMID 39252819 randomized 80 adults aged 35-55 with sleep problems to 1 g/day Magtein or placebo for 21 days; selected subjective and wearable measures improved. PMID 40567408 corrects that article and must not be counted as another trial.",
       "references_structured": [
         {
           "type": "pubmed",
@@ -15776,7 +15772,24 @@
           "evidence_grade": "journal_article",
           "retracted": false,
           "supports_claims": [],
-          "verification_source": "pubmed_eutils"
+          "verification_source": "pubmed_eutils",
+          "scoring_eligible": false,
+          "note": "Linked correction notice for original trial PMID39252819; not an independent clinical trial. Full correction content remains unverified; retain clinical qualification hold."
+        },
+        {
+          "type": "pubmed",
+          "authority": "NCBI PubMed",
+          "pmid": "39252819",
+          "doi": "10.1016/j.sleepx.2024.100121",
+          "title": "Magnesium-L-threonate improves sleep quality and daytime functioning in adults with self-reported sleep problems: A randomized controlled trial.",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/39252819/",
+          "published_date": "2024-12-15",
+          "publication_types": [
+            "Journal Article"
+          ],
+          "retracted": false,
+          "verification_source": "pubmed_eutils",
+          "note": "Original21day sleep trial; correctionPMID40567408 remains linked and requires content review. This bibliographic/source correction is not clinical approval."
         }
       ],
       "external_ids": {
@@ -15784,10 +15797,8 @@
       },
       "effect_direction": "positive_strong",
       "primary_outcome": "Focus & Mental Clarity",
-      "total_enrollment": 50,
-      "registry_completed_trials_count": 2,
       "effect_direction_confidence": "medium",
-      "effect_direction_rationale": "Retained positive_strong classification; study_type=rct_multiple; evidence_level=branded-rct; primary_outcome=Focus & Mental Clarity; published_tags=RCT,double-blind,placebo-controlled; registry_completed_trials_count=1; total_enrollment=44; endpoint_tags=focus_memory; notes/citations contain no automated downgrade signals.",
+      "effect_direction_rationale": "Existing positive_strong classification retained pending attributable clinical synthesis; no new grade is assigned. The cited sources differ in formulation, endpoints and trial family. A correction notice is not an independent trial; combination-formula findings cannot establish isolated Magtein efficacy. Historical automated enrollment/count summaries do not establish evidence strength.",
       "endpoint_relevance_tags": [
         "focus_memory"
       ]
@@ -16575,10 +16586,10 @@
         "Eye & Vision",
         "Focus & Mental Clarity"
       ],
-      "notes": "Human evidence supports lutein, zeaxanthin, and meso-zeaxanthin mixtures for visual performance and screen-related eye-strain outcomes, but much of the indexed literature is ingredient-form rather than clearly brand-labeled Lutemax 2020.",
-      "notable_studies": "Stringham et al. (2017, PMID 28661438) reported better visual performance, sleep quality, and reduced physical symptoms in high-screen-time adults taking a lutein-zeaxanthin-meso-zeaxanthin formulation. Additional human supplementation evidence includes Bovier et al. (2014, PMID 25251377) and Stringham et al. (2024, PMID 38890092), which support the carotenoid combination more broadly than a uniquely branded Lutemax 2020 trial set.",
+      "notes": "The cited carotenoid trials use materially different preparations. PMID 28661438 studied a lutein/zeaxanthin/mesozeaxanthin mixture in high-screen-time adults. PMID 25251377 instead studied EyePromise Zeaxanthin (20 mg/day zeaxanthin) and EyePromise vizual EDGE (26 mg zeaxanthin, 8 mg lutein and 190 mg mixed omega-3 fatty acids/day); it does not establish the same mesozeaxanthin-containing or Lutemax preparation. PMID 38890092 studied another three-carotenoid mixture and reported inflammatory and oxidized-LDL biomarkers, not clinical cardiovascular event prevention. Exact branded correspondence and preparation-specific applicability remain required.",
+      "notable_studies": "PMID 28661438 studied 48 healthy young adults with substantial screen exposure for six months. PMID 25251377 used four-month zeaxanthin-only or zeaxanthin/lutein/omega-3 formulations with a small placebo group; supplementation arms were considered together for reported processing-speed effects. PMID 38890092 used lutein 10 mg, mesozeaxanthin 10 mg and zeaxanthin 2 mg over six months and assessed inflammatory/oxidation biomarkers. These studies cannot be pooled as identical branded-formula replications.",
       "study_type": "rct_multiple",
-      "last_updated": "2026-02-17",
+      "last_updated": "2026-10-24",
       "references_structured": [
         {
           "type": "pubmed",
@@ -16948,9 +16959,9 @@
         "Reduce Stress/Anxiety"
       ],
       "notes": "Consistent evidence for mild-to-moderate depression contexts, but clinically significant CYP/P-gp drug interaction risk requires caution.",
-      "notable_studies": "Meta-analytic evidence supports Hypericum perforatum for mild-to-moderate depression. A 2017 meta-analysis (PMID 28064110) found superiority to placebo with tolerability advantages in many studies, and the major-depression Cochrane review (PMID 18843608) reached a similar direction of effect while emphasizing product heterogeneity and interaction risk.",
+      "notable_studies": "PMID 28064110 pooled 27 trials with 3,808 patients comparing St John's wort with SSRIs; it did not establish placebo superiority. It reported comparable response/remission and lower discontinuation, with short 4-12-week follow-up and uncertain applicability to severe depression or high suicide risk. Cochrane PMID 18843608 separately included 29 trials with 5,489 patients, including placebo and standard-antidepressant comparisons; placebo-controlled effects were heterogeneous and more favorable in smaller and German-speaking-country trials. Product heterogeneity and clinically significant CYP/P-gp interactions remain important.",
       "study_type": "systematic_review_meta",
-      "last_updated": "2026-03-23",
+      "last_updated": "2026-10-24",
       "references_structured": [
         {
           "type": "pubmed",
@@ -21051,9 +21062,9 @@
         "Cardiovascular/Heart Health",
         "Digestive Health"
       ],
-      "notes": "Isoquinoline alkaloid (ChEMBL CHEMBL295124, natural product) with 68 completed clinical trials on ClinicalTrials.gov. Phase 4 RCTs demonstrate efficacy in H. pylori eradication (n=524, NCT04697186) and metabolic syndrome parameters. A 1000-patient Phase 2/3 RCT (NCT03281096) tested berberine for colorectal adenoma chemoprevention. Multiple RCTs confirm glucose-lowering comparable to metformin and lipid-lowering effects. ChEMBL max_phase=4.",
-      "last_updated": "2026-04-02",
-      "notable_studies": "NCT04697186 (n=524 Phase 4 RCT): berberine + amoxicillin triple therapy non-inferior to bismuth quadruple therapy for H. pylori eradication. NCT03281096 (n=1000 Phase 2/3 RCT): berberine HCl 300mg daily for colorectal adenoma prevention in post-cancer patients. NCT02548832 (Phase 3): berberine + bezafibrate vs monotherapy for mixed dyslipidemia.",
+      "notes": "The cited berberine sources concern different interventions. PMID 18442638 is a small diabetes pilot with a randomized berberine-versus-metformin cohort and a separate add-on cohort; gastrointestinal adverse effects were frequent. PMID 27157250 instead synthesizes a multi-ingredient formula containing red yeast rice, berberine, policosanol, astaxanthin, coenzyme Q10 and folic acid; its effects cannot be assigned to isolated berberine. NCT04697186 concerns berberine plus amoxicillin and rabeprazole for Helicobacter pylori, not standalone supplement treatment. NCT03281096 registered post-colorectal-cancer adenoma prevention, but its brief regimen and arm-level schedule conflict; a universal daily exposure is not established by that registration. Registry phase or completion counts are not clinical efficacy.",
+      "last_updated": "2026-10-24",
+      "notable_studies": "PMID 18442638 randomized 36 newly diagnosed type2 diabetes patients to berberine or metformin and separately studied 48 poorly controlled patients receiving add-on berberine; it does not establish universal clinical equivalence. PMID 27157250 pools a six-ingredient nutraceutical combination. The published NCT04697186 report (PMC10107123) concerns a complete antibiotic/PPI/berberine regimen. NCT03281096 lists1,000 participants but has no posted results in the inspected registry payload; its description says300mg daily while intervention arms specify300mg twice daily for3years. Resolve the source conflict before quantitative applicability; absence of posted registry results does not prove no publication exists.",
       "references_structured": [
         {
           "type": "clinical_trial",

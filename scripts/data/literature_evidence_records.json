@@ -3,7 +3,7 @@
     "description": "Phase 4 shadow literature resolution registry for high-impact canonical actives",
     "purpose": "literature_evidence_resolution",
     "schema_version": "5.0.0",
-    "last_updated": "2026-10-23",
+    "last_updated": "2026-10-24",
     "total_entries": 808,
     "verification_pipeline": "scripts/api_audit/verify_literature_records.py",
     "verified_studies_count": 279,
@@ -5193,27 +5193,39 @@
     {
       "canonical_id": "juniper",
       "material_form": "Juniperus communis berry powder",
-      "search_query": "Juniperus communis juniper berry clinical trial human",
-      "search_date": "2026-09-20",
+      "search_query": "Bounded source-content review of PMID 39842749; not an exhaustive negative search.",
+      "search_date": "2026-10-24",
       "databases_searched": [
         "PubMed"
       ],
-      "records_screened": 12,
-      "qualifying_human_studies": [],
-      "effect_direction": "no_qualifying_human_evidence",
+      "records_screened": 1,
+      "qualifying_human_studies": [
+        {
+          "pmid": "39842749",
+          "title": "Efficacy and safety of abhal (Juniperus communis L). on pain intensity, uterine artery doppler flow, and quality of life in primary dysmenorrhea: A double-blind, randomized controlled trial.",
+          "scoring_eligible": false,
+          "outcome": "A randomized human juniper-berry study in primary dysmenorrhea uses an active mefenamic-acid comparator, not placebo. Source-specific results do not establish general wellness efficacy or a minimum useful dose; exact preparation, comparator, population and outcome qualification remain unfinished.",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "Efficacy and safety of abhal (Juniperus communis L). on pain intensity, uterine artery doppler flow, and quality of life in primary dysmenorrhea: A double-blind, randomized controlled trial.",
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/39842749/",
+            "verified_at": "2026-10-24",
+            "retracted": false
+          }
+        }
+      ],
+      "effect_direction": "applicability_unestablished",
       "population_context": "adults",
-      "studied_dose_exposure": {
-        "values": [],
-        "unit": "mg"
-      },
-      "applicability_decision": "Reproducible search found zero qualifying randomized human clinical trials; no qualifying human evidence.",
-      "verification_result": "authoritative_pubmed_verified",
+      "studied_dose_exposure": {},
+      "applicability_decision": "A randomized human juniper-berry study in primary dysmenorrhea uses an active mefenamic-acid comparator, not placebo. Source-specific results do not establish general wellness efficacy or a minimum useful dose; exact preparation, comparator, population and outcome qualification remain unfinished. Source existence is established; scientific and product applicability are not cleared.",
+      "verification_result": "verification_failure_unresolved",
       "verification_provenance": {
-        "verified_by": "scripts/api_audit/verify_literature_records.py",
-        "verified_at": "2026-09-21T07:39:42.986936+00:00",
+        "verified_by": "Codex bounded primary-source content review; clinical qualification remains incomplete",
+        "verified_at": "2026-10-24",
         "all_pmids_verified": true,
         "retractions_found": false
-      }
+      },
+      "applicability_status": "applicability_unestablished"
     },
     {
       "canonical_id": "omega_9_fatty_acids",
@@ -5273,7 +5285,7 @@
       ],
       "effect_direction": "applicability_unestablished",
       "population_context": "healthy runners in a long-distance relay race",
-      "applicability_decision": "Tart cherry juice trial evidence (355 mL twice daily for 7 days; one RCT, 54 runners, post-run muscle pain) does not transfer to dry tart cherry powder or extract without bioequivalence.",
+      "applicability_decision": "Tart cherry juice trial evidence (355 mL twice daily for 7 days before and on race day; one RCT, 54 runners, post-run muscle pain) does not transfer to dry tart cherry powder or extract without bioequivalence.",
       "verification_result": "authoritative_pubmed_verified",
       "verification_provenance": {
         "verified_by": "scripts/api_audit/verify_literature_records.py",
@@ -6519,27 +6531,52 @@
     {
       "canonical_id": "corn_silk",
       "material_form": "Zea mays stigma maydis extract / tea",
-      "search_query": "corn silk Zea mays randomized clinical trial human",
-      "search_date": "2026-09-20",
+      "search_query": "Bounded source-content review of PMID 25727941, PMID 39151489; not an exhaustive negative search.",
+      "search_date": "2026-10-24",
       "databases_searched": [
         "PubMed"
       ],
-      "records_screened": 14,
-      "qualifying_human_studies": [],
-      "effect_direction": "no_qualifying_human_evidence",
+      "records_screened": 2,
+      "qualifying_human_studies": [
+        {
+          "pmid": "25727941",
+          "title": "Corn silk aqueous extracts and intraocular pressure of systemic and non-systemic hypertensive subjects.",
+          "scoring_eligible": false,
+          "outcome": "Randomizedstudy40subjects(20systemichypertensive/20nonsystemic), wateronly andmaskedcornsilkaqueousextract doses60/130/192.5/260mg/kgat2weekintervals; acute8hBP/IOPmeasurements; higher3doseconditions hadreductions. Doubleblindmethod details notestablishedfromabstract. Limitations: Acutehighbodyweight-relativeextractexposuresnotchronicretailtea/powderadequacy, therapeuticrecommendation, safetyceiling or nutrient-dose conversion. Need primarymethods/specificcomposition and laterpapers review.",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "Corn silk aqueous extracts and intraocular pressure of systemic and non-systemic hypertensive subjects.",
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/25727941/",
+            "verified_at": "2026-10-24",
+            "retracted": false
+          }
+        },
+        {
+          "pmid": "39151489",
+          "title": "Nontargeted metabolomic profiling analysis of patients with type 2 diabetes mellitus undergoing corn silk treatment.",
+          "scoring_eligible": false,
+          "outcome": "Human studies include acute masked-dose aqueous corn-silk extract research on blood/intraocular pressure and a randomized T2DM water-extract metabolomics study. Extract, population, exposure and endpoint correspondence to retail silk powder/tea remain unestablished; do not infer a chronic dose threshold or nutrient exposure from these studies.",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "Nontargeted metabolomic profiling analysis of patients with type 2 diabetes mellitus undergoing corn silk treatment.",
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/39151489/",
+            "verified_at": "2026-10-24",
+            "retracted": false
+          }
+        }
+      ],
+      "effect_direction": "applicability_unestablished",
       "population_context": "adults",
-      "studied_dose_exposure": {
-        "values": [],
-        "unit": "mg"
-      },
-      "applicability_decision": "Traditional folk diuretic and urinary soothing agent; reproducible search found zero qualifying randomized human clinical trials; no qualifying human evidence.",
-      "verification_result": "authoritative_pubmed_verified",
+      "studied_dose_exposure": {},
+      "applicability_decision": "Human studies include acute masked-dose aqueous corn-silk extract research on blood/intraocular pressure and a randomized T2DM water-extract metabolomics study. Extract, population, exposure and endpoint correspondence to retail silk powder/tea remain unestablished; do not infer a chronic dose threshold or nutrient exposure from these studies. Source existence is established; scientific and product applicability are not cleared.",
+      "verification_result": "verification_failure_unresolved",
       "verification_provenance": {
-        "verified_by": "scripts/api_audit/verify_literature_records.py",
-        "verified_at": "2026-09-21T07:39:42.986936+00:00",
+        "verified_by": "Codex bounded primary-source content review; clinical qualification remains incomplete",
+        "verified_at": "2026-10-24",
         "all_pmids_verified": true,
         "retractions_found": false
-      }
+      },
+      "applicability_status": "applicability_unestablished"
     },
     {
       "canonical_id": "coffee_bean_plain",
@@ -11464,26 +11501,52 @@
     {
       "canonical_id": "yarrow_aerial_parts",
       "material_form": "Achillea millefolium herb",
-      "search_query": "yarrow achillea millefolium randomized controlled trial human",
-      "search_date": "2026-09-20",
+      "search_query": "Bounded source-content review of PMID 26238568, PMID 30599916; not an exhaustive negative search.",
+      "search_date": "2026-10-24",
       "databases_searched": [
-        "PubMed",
-        "Cochrane Library"
+        "PubMed"
       ],
-      "records_screened": 25,
-      "qualifying_human_studies": [],
-      "effect_direction": "no_qualifying_human_evidence",
+      "records_screened": 2,
+      "qualifying_human_studies": [
+        {
+          "pmid": "26238568",
+          "title": "Effect of Achillea Millefolium on Relief of Primary Dysmenorrhea: A Double-Blind Randomized Clinical Trial.",
+          "scoring_eligible": false,
+          "outcome": "RandomizeddoubleblindplacebocontrolledAchilleamillefolium teabagtrialinuniversitystudentswithprimarydysmenorrhea;3daysintwomensescycles; pain-scorechange greaterthanplaceboat1/2months. Abstractdoesnotstateexactherbmass/samplecount; noinventeddose. Limitations: Teabagpreparationcannotbepowder/extractratioorany-aerialpartsdose; disease/population-specificpainoutcome; fulltext/methods andclinicalcontext reviewrequired. Relatedmouthrinse/topical/combination trialsdonotqualifystandaloneoralroutineuse.",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "Effect of Achillea Millefolium on Relief of Primary Dysmenorrhea: A Double-Blind Randomized Clinical Trial.",
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/26238568/",
+            "verified_at": "2026-10-24",
+            "retracted": false
+          }
+        },
+        {
+          "pmid": "30599916",
+          "title": "Achillea millefolium is beneficial as an add-on therapy in patients with multiple sclerosis: A randomized placebo-controlled clinical trial.",
+          "scoring_eligible": false,
+          "outcome": "Human Achillea millefolium research includes tea in primary dysmenorrhea and aqueous extract as adjunctive treatment in multiple sclerosis. Preparations, indications and regimens differ; these do not establish an interchangeable retail aerial-part dose, general wellness efficacy or clinical scoring approval.",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "Achillea millefolium is beneficial as an add-on therapy in patients with multiple sclerosis: A randomized placebo-controlled clinical trial.",
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/30599916/",
+            "verified_at": "2026-10-24",
+            "retracted": false
+          }
+        }
+      ],
+      "effect_direction": "applicability_unestablished",
       "population_context": "human clinical efficacy unestablished",
       "studied_dose_exposure": {},
-      "applicability_decision": "Reproducible literature search identified zero qualifying randomized, double-blind, placebo-controlled human clinical trials for standalone Achillea millefolium herb.",
-      "applicability_status": "no_qualifying_trials_found",
+      "applicability_decision": "Human Achillea millefolium research includes tea in primary dysmenorrhea and aqueous extract as adjunctive treatment in multiple sclerosis. Preparations, indications and regimens differ; these do not establish an interchangeable retail aerial-part dose, general wellness efficacy or clinical scoring approval. Source existence is established; scientific and product applicability are not cleared.",
+      "applicability_status": "applicability_unestablished",
       "verification_provenance": {
-        "verified_by": "scripts/api_audit/verify_literature_records.py",
-        "verified_at": "2026-09-21T07:39:42.986936+00:00",
+        "verified_by": "Codex bounded primary-source content review; clinical qualification remains incomplete",
+        "verified_at": "2026-10-24",
         "all_pmids_verified": true,
         "retractions_found": false
       },
-      "verification_result": "authoritative_pubmed_verified"
+      "verification_result": "verification_failure_unresolved"
     },
     {
       "canonical_id": "brown_kelp",
@@ -11559,26 +11622,39 @@
     {
       "canonical_id": "black_rice",
       "material_form": "Oryza sativa var. japonica",
-      "search_query": "black rice extract randomized controlled trial human",
-      "search_date": "2026-09-20",
+      "search_query": "Bounded source-content review of PMID 34547006; not an exhaustive negative search.",
+      "search_date": "2026-10-24",
       "databases_searched": [
-        "PubMed",
-        "Cochrane Library"
+        "PubMed"
       ],
-      "records_screened": 25,
-      "qualifying_human_studies": [],
-      "effect_direction": "no_qualifying_human_evidence",
+      "records_screened": 1,
+      "qualifying_human_studies": [
+        {
+          "pmid": "34547006",
+          "title": "Efficacy of black rice extract on obesity in obese postmenopausal women: a 12-week randomized, double-blind, placebo-controlled preliminary clinical trial.",
+          "scoring_eligible": false,
+          "outcome": "A preliminary placebo-controlled black-rice-extract trial exists in obese postmenopausal women. Selected DXA fat outcomes favored extract, while weight/BMI and other anthropometric measures were not significantly different. This does not establish whole-rice powder equivalence, general weight-loss efficacy or a useful-dose threshold.",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "Efficacy of black rice extract on obesity in obese postmenopausal women: a 12-week randomized, double-blind, placebo-controlled preliminary clinical trial.",
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/34547006/",
+            "verified_at": "2026-10-24",
+            "retracted": false
+          }
+        }
+      ],
+      "effect_direction": "applicability_unestablished",
       "population_context": "human clinical efficacy unestablished",
       "studied_dose_exposure": {},
-      "applicability_decision": "Reproducible literature search identified zero qualifying randomized, double-blind, placebo-controlled human clinical trials for standalone Oryza sativa var. japonica.",
-      "applicability_status": "no_qualifying_trials_found",
+      "applicability_decision": "A preliminary placebo-controlled black-rice-extract trial exists in obese postmenopausal women. Selected DXA fat outcomes favored extract, while weight/BMI and other anthropometric measures were not significantly different. This does not establish whole-rice powder equivalence, general weight-loss efficacy or a useful-dose threshold. Source existence is established; scientific and product applicability are not cleared.",
+      "applicability_status": "applicability_unestablished",
       "verification_provenance": {
-        "verified_by": "scripts/api_audit/verify_literature_records.py",
-        "verified_at": "2026-09-21T07:39:42.986936+00:00",
+        "verified_by": "Codex bounded primary-source content review; clinical qualification remains incomplete",
+        "verified_at": "2026-10-24",
         "all_pmids_verified": true,
         "retractions_found": false
       },
-      "verification_result": "authoritative_pubmed_verified"
+      "verification_result": "verification_failure_unresolved"
     },
     {
       "canonical_id": "green_lipped_mussel",
@@ -11607,26 +11683,65 @@
     {
       "canonical_id": "noni",
       "material_form": "Morinda citrifolia fruit",
-      "search_query": "morinda citrifolia noni fruit clinical trial human",
-      "search_date": "2026-09-20",
+      "search_query": "Bounded primary-content review of PMID21294416, PMID23097636 and PMID22436097; not an exhaustive negative search.",
+      "search_date": "2026-10-24",
       "databases_searched": [
-        "PubMed",
-        "Cochrane Library"
+        "PubMed"
       ],
-      "records_screened": 25,
-      "qualifying_human_studies": [],
-      "effect_direction": "no_qualifying_human_evidence",
+      "records_screened": 3,
+      "qualifying_human_studies": [
+        {
+          "pmid": "21294416",
+          "title": "Morinda citrifolia Linn. for prevention of postoperative nausea and vomiting.",
+          "scoring_eligible": false,
+          "outcome": "21294416:100surgicalpatients randomizeddoubleblindplacebo,150/300/600mgboiled-dried-fruitextractsinglepreoperativeexposure; only600mgfirst6h nausea comparisonpositive, otherperiodsnull.23097636:132smokerscompletedrandomizeddoubleblindplaceboNoniJUICEtrial,29.5–188mL/day1month, lipidriskmarkers.22436097:9healthyvolunteersfreeze-driedfruit1.5/2/2.5gPKonly, noefficacyendpoint. Limitations: Juice, boiled-fruitextract andfreeze-driedwholefruit arenotinterchangeable bymass;perioperative/smoker findings notgenericwellness/powderbenefit. No general curative dose, safetyceiling orpositive grade.",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "Morinda citrifolia Linn. for prevention of postoperative nausea and vomiting.",
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/21294416/",
+            "verified_at": "2026-10-24",
+            "retracted": false
+          }
+        },
+        {
+          "pmid": "23097636",
+          "title": "Noni juice improves serum lipid profiles and other risk markers in cigarette smokers.",
+          "scoring_eligible": false,
+          "outcome": "21294416:100surgicalpatients randomizeddoubleblindplacebo,150/300/600mgboiled-dried-fruitextractsinglepreoperativeexposure; only600mgfirst6h nausea comparisonpositive, otherperiodsnull.23097636:132smokerscompletedrandomizeddoubleblindplaceboNoniJUICEtrial,29.5–188mL/day1month, lipidriskmarkers.22436097:9healthyvolunteersfreeze-driedfruit1.5/2/2.5gPKonly, noefficacyendpoint. Limitations: Juice, boiled-fruitextract andfreeze-driedwholefruit arenotinterchangeable bymass;perioperative/smoker findings notgenericwellness/powderbenefit. No general curative dose, safetyceiling orpositive grade.",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "Noni juice improves serum lipid profiles and other risk markers in cigarette smokers.",
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/23097636/",
+            "verified_at": "2026-10-24",
+            "retracted": false
+          }
+        },
+        {
+          "pmid": "22436097",
+          "title": "Pharmacokinetic study of Noni fruit extract.",
+          "scoring_eligible": false,
+          "outcome": "21294416:100surgicalpatients randomizeddoubleblindplacebo,150/300/600mgboiled-dried-fruitextractsinglepreoperativeexposure; only600mgfirst6h nausea comparisonpositive, otherperiodsnull.23097636:132smokerscompletedrandomizeddoubleblindplaceboNoniJUICEtrial,29.5–188mL/day1month, lipidriskmarkers.22436097:9healthyvolunteersfreeze-driedfruit1.5/2/2.5gPKonly, noefficacyendpoint. Limitations: Juice, boiled-fruitextract andfreeze-driedwholefruit arenotinterchangeable bymass;perioperative/smoker findings notgenericwellness/powderbenefit. No general curative dose, safetyceiling orpositive grade.",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "Pharmacokinetic study of Noni fruit extract.",
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/22436097/",
+            "verified_at": "2026-10-24",
+            "retracted": false
+          }
+        }
+      ],
+      "effect_direction": "applicability_unestablished",
       "population_context": "human clinical efficacy unestablished",
       "studied_dose_exposure": {},
-      "applicability_decision": "Reproducible literature search identified zero qualifying randomized, double-blind, placebo-controlled human clinical trials for standalone Morinda citrifolia fruit.",
-      "applicability_status": "no_qualifying_trials_found",
+      "applicability_decision": "Human Morinda citrifolia studies include preparation-specific perioperative fruit-extract, smoker juice and pharmacokinetic studies. Selected early-nausea or lipid-marker findings do not establish efficacy or an effective-dose benchmark for unspecified retail fruit powders/extracts. Full preparation, population, outcome and clinical-review applicability remains unfinished. Source existence is verified; full preparation/outcome qualification remains unfinished. No positive grade, benchmark or clinical approval is assigned.",
+      "applicability_status": "applicability_unestablished",
       "verification_provenance": {
-        "verified_by": "scripts/api_audit/verify_literature_records.py",
-        "verified_at": "2026-09-21T07:39:42.986936+00:00",
+        "verified_by": "Codex bounded primary-abstract source-content review; clinical applicability remains incomplete",
+        "verified_at": "2026-10-24",
         "all_pmids_verified": true,
         "retractions_found": false
       },
-      "verification_result": "authoritative_pubmed_verified"
+      "verification_result": "verification_failure_unresolved"
     },
     {
       "canonical_id": "star_anise",
@@ -11842,26 +11957,65 @@
     {
       "canonical_id": "skullcap",
       "material_form": "Scutellaria lateriflora herb",
-      "search_query": "skullcap scutellaria lateriflora randomized controlled trial human",
-      "search_date": "2026-09-20",
+      "search_query": "Bounded source-content review of PMID 12652886, PMID 23878109, PMID 40362800; not an exhaustive negative search.",
+      "search_date": "2026-10-24",
       "databases_searched": [
-        "PubMed",
-        "Cochrane Library"
+        "PubMed"
       ],
-      "records_screened": 25,
-      "qualifying_human_studies": [],
-      "effect_direction": "no_qualifying_human_evidence",
+      "records_screened": 3,
+      "qualifying_human_studies": [
+        {
+          "pmid": "12652886",
+          "title": "An investigation into the efficacy of Scutellaria lateriflora in healthy volunteers.",
+          "scoring_eligible": false,
+          "outcome": "PMID23878109:43healthyvolunteers, randomizeddoubleblindplacebocontrolledcrossover;350mgScutellarialateriflora three timesdaily,2weeks eachperiod; BAIbetween-treatmentcomparisonnull(P=.191), moodchangefrompretest, carryover/baselineimbalance limitations.12652886earlierdoubleblindcontrolledhumansource lacks sample/exposure inabstract. Limitations: No currentretailherb/extractspecificationcorrespondence, clinicallyanxiouspopulationbenefit, general doseminimum oraffirmativegrade established. Moodwithin-armchangecannotbecomeplacebo-adjustedanxietybenefit.",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "An investigation into the efficacy of Scutellaria lateriflora in healthy volunteers.",
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/12652886/",
+            "verified_at": "2026-10-24",
+            "retracted": false
+          }
+        },
+        {
+          "pmid": "23878109",
+          "title": "American Skullcap (Scutellaria lateriflora): a randomised, double-blind placebo-controlled crossover study of its effects on mood in healthy volunteers.",
+          "scoring_eligible": false,
+          "outcome": "PMID23878109:43healthyvolunteers, randomizeddoubleblindplacebocontrolledcrossover;350mgScutellarialateriflora three timesdaily,2weeks eachperiod; BAIbetween-treatmentcomparisonnull(P=.191), moodchangefrompretest, carryover/baselineimbalance limitations.12652886earlierdoubleblindcontrolledhumansource lacks sample/exposure inabstract. Limitations: No currentretailherb/extractspecificationcorrespondence, clinicallyanxiouspopulationbenefit, general doseminimum oraffirmativegrade established. Moodwithin-armchangecannotbecomeplacebo-adjustedanxietybenefit.",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "American Skullcap (Scutellaria lateriflora): a randomised, double-blind placebo-controlled crossover study of its effects on mood in healthy volunteers.",
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/23878109/",
+            "verified_at": "2026-10-24",
+            "retracted": false
+          }
+        },
+        {
+          "pmid": "40362800",
+          "title": "Efficacy and Tolerability of a Chemically Characterized Scutellaria lateriflora L. Extract-Based Food Supplement for Sleep Management: A Single-Center, Controlled, Randomized, Crossover, Double-Blind Clinical Trial.",
+          "scoring_eligible": false,
+          "outcome": "Human Scutellaria lateriflora studies include a small healthy-volunteer crossover with no significant between-treatment anxiety difference and a later preparation-specific insomnia trial. Carryover/order, baseline, population and preparation limitations require clinical review. S. lateriflora is not S. baicalensis; no universal herb/extract dose or efficacy grade follows.",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "Efficacy and Tolerability of a Chemically Characterized Scutellaria lateriflora L. Extract-Based Food Supplement for Sleep Management: A Single-Center, Controlled, Randomized, Crossover, Double-Blind Clinical Trial.",
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/40362800/",
+            "verified_at": "2026-10-24",
+            "retracted": false
+          }
+        }
+      ],
+      "effect_direction": "applicability_unestablished",
       "population_context": "human clinical efficacy unestablished",
       "studied_dose_exposure": {},
-      "applicability_decision": "Reproducible literature search identified zero qualifying randomized, double-blind, placebo-controlled human clinical trials for standalone Scutellaria lateriflora herb.",
-      "applicability_status": "no_qualifying_trials_found",
+      "applicability_decision": "Human Scutellaria lateriflora studies include a small healthy-volunteer crossover with no significant between-treatment anxiety difference and a later preparation-specific insomnia trial. Carryover/order, baseline, population and preparation limitations require clinical review. S. lateriflora is not S. baicalensis; no universal herb/extract dose or efficacy grade follows. Source existence is established; scientific and product applicability are not cleared.",
+      "applicability_status": "applicability_unestablished",
       "verification_provenance": {
-        "verified_by": "scripts/api_audit/verify_literature_records.py",
-        "verified_at": "2026-09-21T07:39:42.986936+00:00",
+        "verified_by": "Codex bounded primary-source content review; clinical qualification remains incomplete",
+        "verified_at": "2026-10-24",
         "all_pmids_verified": true,
         "retractions_found": false
       },
-      "verification_result": "authoritative_pubmed_verified"
+      "verification_result": "verification_failure_unresolved"
     },
     {
       "canonical_id": "black_ginger",
@@ -12404,26 +12558,39 @@
     {
       "canonical_id": "cistanche",
       "material_form": "Cistanche tubulosa / salsa",
-      "search_query": "cistanche tubulosa clinical trial human",
-      "search_date": "2026-09-20",
+      "search_query": "Bounded source-content review of PMID 33477648; not an exhaustive negative search.",
+      "search_date": "2026-10-24",
       "databases_searched": [
-        "PubMed",
-        "Cochrane Library"
+        "PubMed"
       ],
-      "records_screened": 25,
-      "qualifying_human_studies": [],
-      "effect_direction": "no_qualifying_human_evidence",
+      "records_screened": 1,
+      "qualifying_human_studies": [
+        {
+          "pmid": "33477648",
+          "title": "Effects of Cistanche tubulosa Wight Extract on Locomotive Syndrome: A Placebo-Controlled, Randomized, Double-Blind Study.",
+          "scoring_eligible": false,
+          "outcome": "A randomized placebo-controlled Cistanche tubulosa extract study exists: 26 completers with locomotive syndrome, selected older-subgroup walking findings and no muscle-mass change. Preparation, age/subgroup analysis and clinical applicability remain unqualified; this cannot be generalized to C. salsa, arbitrary powders or all indications.",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "Effects of Cistanche tubulosa Wight Extract on Locomotive Syndrome: A Placebo-Controlled, Randomized, Double-Blind Study.",
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/33477648/",
+            "verified_at": "2026-10-24",
+            "retracted": false
+          }
+        }
+      ],
+      "effect_direction": "applicability_unestablished",
       "population_context": "human clinical efficacy unestablished",
       "studied_dose_exposure": {},
-      "applicability_decision": "Reproducible literature search identified zero qualifying randomized, double-blind, placebo-controlled human clinical trials for standalone Cistanche tubulosa / salsa.",
-      "applicability_status": "no_qualifying_trials_found",
+      "applicability_decision": "A randomized placebo-controlled Cistanche tubulosa extract study exists: 26 completers with locomotive syndrome, selected older-subgroup walking findings and no muscle-mass change. Preparation, age/subgroup analysis and clinical applicability remain unqualified; this cannot be generalized to C. salsa, arbitrary powders or all indications. Source existence is established; scientific and product applicability are not cleared.",
+      "applicability_status": "applicability_unestablished",
       "verification_provenance": {
-        "verified_by": "scripts/api_audit/verify_literature_records.py",
-        "verified_at": "2026-09-21T07:39:42.986936+00:00",
+        "verified_by": "Codex bounded primary-source content review; clinical qualification remains incomplete",
+        "verified_at": "2026-10-24",
         "all_pmids_verified": true,
         "retractions_found": false
       },
-      "verification_result": "authoritative_pubmed_verified"
+      "verification_result": "verification_failure_unresolved"
     },
     {
       "canonical_id": "fatty_acids",
@@ -12547,26 +12714,52 @@
     {
       "canonical_id": "tremella_fuciformis",
       "material_form": "Tremella fuciformis mushroom",
-      "search_query": "tremella fuciformis snow fungus randomized trial human",
-      "search_date": "2026-09-20",
+      "search_query": "Bounded source-content review of PMID 29319408, PMID 38439104; not an exhaustive negative search.",
+      "search_date": "2026-10-24",
       "databases_searched": [
-        "PubMed",
-        "Cochrane Library"
+        "PubMed"
       ],
-      "records_screened": 25,
-      "qualifying_human_studies": [],
-      "effect_direction": "no_qualifying_human_evidence",
+      "records_screened": 2,
+      "qualifying_human_studies": [
+        {
+          "pmid": "29319408",
+          "title": "Efficacy and Safety of Tremella fuciformis in Individuals with Subjective Cognitive Impairment: A Randomized Controlled Trial.",
+          "scoring_eligible": false,
+          "outcome": "75SCIindividuals,8weekrandomizeddoubleblindplaceboTF600mg/day(n30),1200mg/day(n30),placebo(n15);subjectivememorycomplaintquestionnaireprimary, shorttermmemory/executivefunctionsecondary andbrainmorphologyexploratory. Limitations: Exactretailpreparation/chemicalspecificationnotestablishedbyabstract; smallspecificSCIpopulation; cannotinferuniversalpreventive/cognitivebenefit or600mgminimum. New38439104source isunderclinical-lane review.",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "Efficacy and Safety of Tremella fuciformis in Individuals with Subjective Cognitive Impairment: A Randomized Controlled Trial.",
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/29319408/",
+            "verified_at": "2026-10-24",
+            "retracted": false
+          }
+        },
+        {
+          "pmid": "38439104",
+          "title": "Tremella fuciformis beverage improves glycated hemoglobin A1c and waist circumference in overweight/obese prediabetic subjects: a randomized controlled trial.",
+          "scoring_eligible": false,
+          "outcome": "Human Tremella fuciformis research includes an eight-week subjective-cognitive-impairment trial and a twelve-week prediabetes beverage study. The latter reports within-arm HbA1c and waist changes; between-group efficacy and beverage-composition correspondence require source review. Do not transfer those findings across preparations/populations or derive a universal minimum from discrete trial doses.",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "Tremella fuciformis beverage improves glycated hemoglobin A1c and waist circumference in overweight/obese prediabetic subjects: a randomized controlled trial.",
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/38439104/",
+            "verified_at": "2026-10-24",
+            "retracted": false
+          }
+        }
+      ],
+      "effect_direction": "applicability_unestablished",
       "population_context": "human clinical efficacy unestablished",
       "studied_dose_exposure": {},
-      "applicability_decision": "Reproducible literature search identified zero qualifying randomized, double-blind, placebo-controlled human clinical trials for standalone Tremella fuciformis mushroom.",
-      "applicability_status": "no_qualifying_trials_found",
+      "applicability_decision": "Human Tremella fuciformis research includes an eight-week subjective-cognitive-impairment trial and a twelve-week prediabetes beverage study. The latter reports within-arm HbA1c and waist changes; between-group efficacy and beverage-composition correspondence require source review. Do not transfer those findings across preparations/populations or derive a universal minimum from discrete trial doses. Source existence is established; scientific and product applicability are not cleared.",
+      "applicability_status": "applicability_unestablished",
       "verification_provenance": {
-        "verified_by": "scripts/api_audit/verify_literature_records.py",
-        "verified_at": "2026-09-21T07:39:42.986936+00:00",
+        "verified_by": "Codex bounded primary-source content review; clinical qualification remains incomplete",
+        "verified_at": "2026-10-24",
         "all_pmids_verified": true,
         "retractions_found": false
       },
-      "verification_result": "authoritative_pubmed_verified"
+      "verification_result": "verification_failure_unresolved"
     },
     {
       "canonical_id": "OI_ADRENAL_CORTEX",
@@ -13660,26 +13853,39 @@
     {
       "canonical_id": "shatavari",
       "material_form": "Asparagus racemosus root",
-      "search_query": "asparagus racemosus shatavari randomized trial human",
-      "search_date": "2026-09-20",
+      "search_query": "Bounded source-content review of PMID 34959836; not an exhaustive negative search.",
+      "search_date": "2026-10-24",
       "databases_searched": [
-        "PubMed",
-        "Cochrane Library"
+        "PubMed"
       ],
-      "records_screened": 25,
-      "qualifying_human_studies": [],
-      "effect_direction": "no_qualifying_human_evidence",
+      "records_screened": 1,
+      "qualifying_human_studies": [
+        {
+          "pmid": "34959836",
+          "title": "Shatavari Supplementation in Postmenopausal Women Improves Handgrip Strength and Increases Vastus lateralis Myosin Regulatory Light Chain Phosphorylation but Does Not Alter Markers of Bone Turnover.",
+          "scoring_eligible": false,
+          "outcome": "A small randomized human shatavari study in postmenopausal women exists, with improved handgrip but not knee-extensor strength or bone-turnover measures. A source exposure is not a universal minimum. Preparation, population, trial-family and other purpose-specific sources require clinical qualification; no grade or safety conclusion is assigned.",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "Shatavari Supplementation in Postmenopausal Women Improves Handgrip Strength and Increases Vastus lateralis Myosin Regulatory Light Chain Phosphorylation but Does Not Alter Markers of Bone Turnover.",
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/34959836/",
+            "verified_at": "2026-10-24",
+            "retracted": false
+          }
+        }
+      ],
+      "effect_direction": "applicability_unestablished",
       "population_context": "human clinical efficacy unestablished",
       "studied_dose_exposure": {},
-      "applicability_decision": "Reproducible literature search identified zero qualifying randomized, double-blind, placebo-controlled human clinical trials for standalone Asparagus racemosus root.",
-      "applicability_status": "no_qualifying_trials_found",
+      "applicability_decision": "A small randomized human shatavari study in postmenopausal women exists, with improved handgrip but not knee-extensor strength or bone-turnover measures. A source exposure is not a universal minimum. Preparation, population, trial-family and other purpose-specific sources require clinical qualification; no grade or safety conclusion is assigned. Source existence is established; scientific and product applicability are not cleared.",
+      "applicability_status": "applicability_unestablished",
       "verification_provenance": {
-        "verified_by": "scripts/api_audit/verify_literature_records.py",
-        "verified_at": "2026-09-21T07:39:42.986936+00:00",
+        "verified_by": "Codex bounded primary-source content review; clinical qualification remains incomplete",
+        "verified_at": "2026-10-24",
         "all_pmids_verified": true,
         "retractions_found": false
       },
-      "verification_result": "authoritative_pubmed_verified"
+      "verification_result": "verification_failure_unresolved"
     },
     {
       "canonical_id": "sophora_japonica",
@@ -13917,26 +14123,78 @@
     {
       "canonical_id": "theacrine",
       "material_form": "Theacrine (1,3,7,9-tetramethyluric acid)",
-      "search_query": "theacrine chronic cognitive clinical trial human",
-      "search_date": "2026-09-20",
+      "search_query": "Bounded source-content review of PMID 26766930, PMID 27164220, PMID 31660991, PMID 40048726; not an exhaustive negative search.",
+      "search_date": "2026-10-24",
       "databases_searched": [
-        "PubMed",
-        "Cochrane Library"
+        "PubMed"
       ],
-      "records_screened": 25,
-      "qualifying_human_studies": [],
-      "effect_direction": "no_qualifying_human_evidence",
+      "records_screened": 4,
+      "qualifying_human_studies": [
+        {
+          "pmid": "26766930",
+          "title": "Safety of TeaCrine®, a non-habituating, naturally-occurring purine alkaloid over eight weeks of continuous use.",
+          "scoring_eligible": false,
+          "outcome": "Controlled human theacrine/TeaCrine studies exist. Small acute subjective findings coexist with null objective resistance/cycling performance results. One cycling study reports higher resting blood pressure at its higher weight-relative dose and adverse symptoms; these are contextual study findings, not a generic warning threshold. An eight-week safety study is not a universal upper limit or efficacy reference. Exact clinical and safety applicability remain unfinished.",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "Safety of TeaCrine®, a non-habituating, naturally-occurring purine alkaloid over eight weeks of continuous use.",
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/26766930/",
+            "verified_at": "2026-10-24",
+            "retracted": false
+          }
+        },
+        {
+          "pmid": "27164220",
+          "title": "A Two-Part Approach to Examine the Effects of Theacrine (TeaCrine®) Supplementation on Oxygen Consumption, Hemodynamic Responses, and Subjective Measures of Cognitive and Psychometric Parameters.",
+          "scoring_eligible": false,
+          "outcome": "Controlled human theacrine/TeaCrine studies exist. Small acute subjective findings coexist with null objective resistance/cycling performance results. One cycling study reports higher resting blood pressure at its higher weight-relative dose and adverse symptoms; these are contextual study findings, not a generic warning threshold. An eight-week safety study is not a universal upper limit or efficacy reference. Exact clinical and safety applicability remain unfinished.",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "A Two-Part Approach to Examine the Effects of Theacrine (TeaCrine®) Supplementation on Oxygen Consumption, Hemodynamic Responses, and Subjective Measures of Cognitive and Psychometric Parameters.",
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/27164220/",
+            "verified_at": "2026-10-24",
+            "retracted": false
+          }
+        },
+        {
+          "pmid": "31660991",
+          "title": "The effects of a caffeine-like supplement, TeaCrine®, on muscular strength, endurance and power performance in resistance-trained men.",
+          "scoring_eligible": false,
+          "outcome": "Controlled human theacrine/TeaCrine studies exist. Small acute subjective findings coexist with null objective resistance/cycling performance results. One cycling study reports higher resting blood pressure at its higher weight-relative dose and adverse symptoms; these are contextual study findings, not a generic warning threshold. An eight-week safety study is not a universal upper limit or efficacy reference. Exact clinical and safety applicability remain unfinished.",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "The effects of a caffeine-like supplement, TeaCrine®, on muscular strength, endurance and power performance in resistance-trained men.",
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/31660991/",
+            "verified_at": "2026-10-24",
+            "retracted": false
+          }
+        },
+        {
+          "pmid": "40048726",
+          "title": "Different doses of theacrine do not improve 4 km cycling time trial performance.",
+          "scoring_eligible": false,
+          "outcome": "Controlled human theacrine/TeaCrine studies exist. Small acute subjective findings coexist with null objective resistance/cycling performance results. One cycling study reports higher resting blood pressure at its higher weight-relative dose and adverse symptoms; these are contextual study findings, not a generic warning threshold. An eight-week safety study is not a universal upper limit or efficacy reference. Exact clinical and safety applicability remain unfinished.",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "Different doses of theacrine do not improve 4 km cycling time trial performance.",
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/40048726/",
+            "verified_at": "2026-10-24",
+            "retracted": false
+          }
+        }
+      ],
+      "effect_direction": "applicability_unestablished",
       "population_context": "human clinical efficacy unestablished",
       "studied_dose_exposure": {},
-      "applicability_decision": "Reproducible literature search identified zero qualifying randomized, double-blind, placebo-controlled human clinical trials for standalone Theacrine (1,3,7,9-tetramethyluric acid).",
-      "applicability_status": "no_qualifying_trials_found",
+      "applicability_decision": "Controlled human theacrine/TeaCrine studies exist. Small acute subjective findings coexist with null objective resistance/cycling performance results. One cycling study reports higher resting blood pressure at its higher weight-relative dose and adverse symptoms; these are contextual study findings, not a generic warning threshold. An eight-week safety study is not a universal upper limit or efficacy reference. Exact clinical and safety applicability remain unfinished. Source existence is established; scientific and product applicability are not cleared.",
+      "applicability_status": "applicability_unestablished",
       "verification_provenance": {
-        "verified_by": "scripts/api_audit/verify_literature_records.py",
-        "verified_at": "2026-09-21T07:39:42.986936+00:00",
+        "verified_by": "Codex bounded primary-source content review; clinical qualification remains incomplete",
+        "verified_at": "2026-10-24",
         "all_pmids_verified": true,
         "retractions_found": false
       },
-      "verification_result": "authoritative_pubmed_verified"
+      "verification_result": "verification_failure_unresolved"
     },
     {
       "canonical_id": "ursolic_acid",
@@ -14430,26 +14688,39 @@
     {
       "canonical_id": "french_oak",
       "material_form": "Quercus robur extract",
-      "search_query": "french oak wood extract robuvit randomized trial human",
-      "search_date": "2026-09-20",
+      "search_query": "Bounded source-content review of PMID 32230721; not an exhaustive negative search.",
+      "search_date": "2026-10-24",
       "databases_searched": [
-        "PubMed",
-        "Cochrane Library"
+        "PubMed"
       ],
-      "records_screened": 25,
-      "qualifying_human_studies": [],
-      "effect_direction": "no_qualifying_human_evidence",
+      "records_screened": 1,
+      "qualifying_human_studies": [
+        {
+          "pmid": "32230721",
+          "title": "The Oak-wood Extract Robuvit® Improves Recovery and Oxidative Stress after Hysterectomy: A Randomized, Double-blind, Placebo-controlled Pilot Study.",
+          "scoring_eligible": false,
+          "outcome": "A placebo-controlled human study of standardized French oak wood extract Robuvit exists in recovery after hysterectomy, with selected recovery and oxidative-stress outcomes. Wood is not bark; this specific preparation and postoperative population cannot establish generic oak-material efficacy or a general useful-dose threshold.",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "The Oak-wood Extract Robuvit® Improves Recovery and Oxidative Stress after Hysterectomy: A Randomized, Double-blind, Placebo-controlled Pilot Study.",
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/32230721/",
+            "verified_at": "2026-10-24",
+            "retracted": false
+          }
+        }
+      ],
+      "effect_direction": "applicability_unestablished",
       "population_context": "human clinical efficacy unestablished",
       "studied_dose_exposure": {},
-      "applicability_decision": "Reproducible literature search identified zero qualifying randomized, double-blind, placebo-controlled human clinical trials for standalone Quercus robur extract.",
-      "applicability_status": "no_qualifying_trials_found",
+      "applicability_decision": "A placebo-controlled human study of standardized French oak wood extract Robuvit exists in recovery after hysterectomy, with selected recovery and oxidative-stress outcomes. Wood is not bark; this specific preparation and postoperative population cannot establish generic oak-material efficacy or a general useful-dose threshold. Source existence is established; scientific and product applicability are not cleared.",
+      "applicability_status": "applicability_unestablished",
       "verification_provenance": {
-        "verified_by": "scripts/api_audit/verify_literature_records.py",
-        "verified_at": "2026-09-21T07:39:42.986936+00:00",
+        "verified_by": "Codex bounded primary-source content review; clinical qualification remains incomplete",
+        "verified_at": "2026-10-24",
         "all_pmids_verified": true,
         "retractions_found": false
       },
-      "verification_result": "authoritative_pubmed_verified"
+      "verification_result": "verification_failure_unresolved"
     },
     {
       "canonical_id": "fucoidan",
@@ -14505,26 +14776,65 @@
     {
       "canonical_id": "kawaratake",
       "material_form": "Trametes versicolor (Kawaratake)",
-      "search_query": "kawaratake clinical trial human",
-      "search_date": "2026-09-20",
+      "search_query": "Bounded source-content review of PMID 12814145, PMID 25006989, PMID 28375640; not an exhaustive negative search.",
+      "search_date": "2026-10-24",
       "databases_searched": [
-        "PubMed",
-        "Cochrane Library"
+        "PubMed"
       ],
-      "records_screened": 25,
-      "qualifying_human_studies": [],
-      "effect_direction": "no_qualifying_human_evidence",
+      "records_screened": 3,
+      "qualifying_human_studies": [
+        {
+          "pmid": "12814145",
+          "title": "Coriolus versicolor polysaccharide peptide slows progression of advanced non-small cell lung cancer.",
+          "scoring_eligible": false,
+          "outcome": "Human Coriolus/Trametes research exists for polysaccharopeptide or specific disease preparations, including advanced lung cancer, microbiome endpoints and a small HCC trial with a null primary time-to-progression result. These are not evidence of generic raw-mushroom efficacy, cancer prevention or a universal dose. Corrected identity-specific searches replace a query that dropped the organism term; qualification remains unfinished.",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "Coriolus versicolor polysaccharide peptide slows progression of advanced non-small cell lung cancer.",
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/12814145/",
+            "verified_at": "2026-10-24",
+            "retracted": false
+          }
+        },
+        {
+          "pmid": "25006989",
+          "title": "Effects of polysaccharopeptide from Trametes versicolor and amoxicillin on the gut microbiome of healthy volunteers: a randomized clinical trial.",
+          "scoring_eligible": false,
+          "outcome": "Human Coriolus/Trametes research exists for polysaccharopeptide or specific disease preparations, including advanced lung cancer, microbiome endpoints and a small HCC trial with a null primary time-to-progression result. These are not evidence of generic raw-mushroom efficacy, cancer prevention or a universal dose. Corrected identity-specific searches replace a query that dropped the organism term; qualification remains unfinished.",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "Effects of polysaccharopeptide from Trametes versicolor and amoxicillin on the gut microbiome of healthy volunteers: a randomized clinical trial.",
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/25006989/",
+            "verified_at": "2026-10-24",
+            "retracted": false
+          }
+        },
+        {
+          "pmid": "28375640",
+          "title": "Coriolus versicolor (Yunzhi) Use as Therapy in Advanced Hepatocellular Carcinoma Patients with Poor Liver Function or Who Are Unfit for Standard Therapy.",
+          "scoring_eligible": false,
+          "outcome": "Human Coriolus/Trametes research exists for polysaccharopeptide or specific disease preparations, including advanced lung cancer, microbiome endpoints and a small HCC trial with a null primary time-to-progression result. These are not evidence of generic raw-mushroom efficacy, cancer prevention or a universal dose. Corrected identity-specific searches replace a query that dropped the organism term; qualification remains unfinished.",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "Coriolus versicolor (Yunzhi) Use as Therapy in Advanced Hepatocellular Carcinoma Patients with Poor Liver Function or Who Are Unfit for Standard Therapy.",
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/28375640/",
+            "verified_at": "2026-10-24",
+            "retracted": false
+          }
+        }
+      ],
+      "effect_direction": "applicability_unestablished",
       "population_context": "human clinical efficacy unestablished",
       "studied_dose_exposure": {},
-      "applicability_decision": "Reproducible literature search identified zero qualifying randomized, double-blind, placebo-controlled human clinical trials for standalone Trametes versicolor (Kawaratake).",
-      "applicability_status": "no_qualifying_trials_found",
+      "applicability_decision": "Human Coriolus/Trametes research exists for polysaccharopeptide or specific disease preparations, including advanced lung cancer, microbiome endpoints and a small HCC trial with a null primary time-to-progression result. These are not evidence of generic raw-mushroom efficacy, cancer prevention or a universal dose. Corrected identity-specific searches replace a query that dropped the organism term; qualification remains unfinished. Source existence is established; scientific and product applicability are not cleared.",
+      "applicability_status": "applicability_unestablished",
       "verification_provenance": {
-        "verified_by": "scripts/api_audit/verify_literature_records.py",
-        "verified_at": "2026-09-21T07:39:42.986936+00:00",
+        "verified_by": "Codex bounded primary-source content review; clinical qualification remains incomplete",
+        "verified_at": "2026-10-24",
         "all_pmids_verified": true,
         "retractions_found": false
       },
-      "verification_result": "authoritative_pubmed_verified"
+      "verification_result": "verification_failure_unresolved"
     },
     {
       "canonical_id": "lumbrokinase",
@@ -15969,26 +16279,52 @@
     {
       "canonical_id": "korean_pine",
       "material_form": "Pinus koraiensis seed",
-      "search_query": "korean pine pinus koraiensis clinical trial human",
-      "search_date": "2026-09-20",
+      "search_query": "Bounded source-content review of PMID 18355411, PMID 39275181; not an exhaustive negative search.",
+      "search_date": "2026-10-24",
       "databases_searched": [
-        "PubMed",
-        "Cochrane Library"
+        "PubMed"
       ],
-      "records_screened": 25,
-      "qualifying_human_studies": [],
-      "effect_direction": "no_qualifying_human_evidence",
+      "records_screened": 2,
+      "qualifying_human_studies": [
+        {
+          "pmid": "18355411",
+          "title": "The effect of Korean pine nut oil on in vitro CCK release, on appetite sensations and on gut hormones in post-menopausal overweight women.",
+          "scoring_eligible": false,
+          "outcome": "18overweightpostmenopausalwomen, randomizeddoubleblindplacebocontrolledcrossover,3gPinuskoraiensis nutfree-fattyacidsortriglycerides versusoliveoilwithbreakfast. AcuteCCK/GLP1andprospectivefood-intakefeelings; actualweightlossnotestablished. Limitations: Seed-derivedoil/fattyacidsdifferfromwhole/crudeseedpowder; satietyhormonesnotchronicweightloss. This is relatedresearchratherthanproofthatcurrentprecisewholeseedclaimisfalse.",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "The effect of Korean pine nut oil on in vitro CCK release, on appetite sensations and on gut hormones in post-menopausal overweight women.",
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/18355411/",
+            "verified_at": "2026-10-24",
+            "retracted": false
+          }
+        },
+        {
+          "pmid": "39275181",
+          "title": "The Impact of Pinus koraiensis Leaf Extract Consumption on Postprandial ApoB100 and Lipid Metabolism: A Randomized, Double-Blind, Placebo-Controlled Trial in Healthy Participants Subjected to an Oral High-Fat Challenge.",
+          "scoring_eligible": false,
+          "outcome": "Related human research uses Korean pine nut fatty-acid/triglyceride preparations for acute satiety signals and a separate leaf extract for postprandial lipid markers. Neither establishes crude whole-seed equivalence, sustained weight loss or a universal dose; leaf and seed must remain distinct.",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "The Impact of Pinus koraiensis Leaf Extract Consumption on Postprandial ApoB100 and Lipid Metabolism: A Randomized, Double-Blind, Placebo-Controlled Trial in Healthy Participants Subjected to an Oral High-Fat Challenge.",
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/39275181/",
+            "verified_at": "2026-10-24",
+            "retracted": false
+          }
+        }
+      ],
+      "effect_direction": "applicability_unestablished",
       "population_context": "human clinical efficacy unestablished",
       "studied_dose_exposure": {},
-      "applicability_decision": "Reproducible literature search identified zero qualifying randomized, double-blind, placebo-controlled human clinical trials for standalone Pinus koraiensis seed.",
-      "applicability_status": "no_qualifying_trials_found",
+      "applicability_decision": "Related human research uses Korean pine nut fatty-acid/triglyceride preparations for acute satiety signals and a separate leaf extract for postprandial lipid markers. Neither establishes crude whole-seed equivalence, sustained weight loss or a universal dose; leaf and seed must remain distinct. Source existence is established; scientific and product applicability are not cleared.",
+      "applicability_status": "applicability_unestablished",
       "verification_provenance": {
-        "verified_by": "scripts/api_audit/verify_literature_records.py",
-        "verified_at": "2026-09-21T07:39:42.986936+00:00",
+        "verified_by": "Codex bounded primary-source content review; clinical qualification remains incomplete",
+        "verified_at": "2026-10-24",
         "all_pmids_verified": true,
         "retractions_found": false
       },
-      "verification_result": "authoritative_pubmed_verified"
+      "verification_result": "verification_failure_unresolved"
     },
     {
       "canonical_id": "magnolia_phellodendron_blend",
@@ -21559,26 +21895,39 @@
     {
       "canonical_id": "peppermint_essential_oil",
       "material_form": "Mentha piperita essential oil flavoring/vehicle",
-      "search_query": "(\"peppermint essential oil\"[tiab] OR \"Mentha\"[tiab]) AND (randomized controlled trial[pt] OR meta-analysis[pt]) AND humans[mh]",
-      "search_date": "2026-09-21",
+      "search_query": "Bounded source-content review of PMID 42024666; not an exhaustive negative search.",
+      "search_date": "2026-10-24",
       "databases_searched": [
-        "PubMed",
-        "Cochrane Library"
+        "PubMed"
       ],
-      "records_screened": 20,
-      "qualifying_human_studies": [],
-      "effect_direction": "no_qualifying_human_evidence",
+      "records_screened": 1,
+      "qualifying_human_studies": [
+        {
+          "pmid": "42024666",
+          "title": "Effects of peppermint (Mentha x piperita L.) oil on cardiometabolic outcomes in patients with pre- and stage 1 hypertension: A placebo randomized controlled trial.",
+          "scoring_eligible": false,
+          "outcome": "A small twenty-day placebo-controlled oral peppermint-oil trial exists in pre/stage1 hypertension with a blood-pressure primary outcome. Its volume exposure must not be converted to mass, an IBS reference or a long-term efficacy/safety determination. Retail flavoring/vehicle and studied-preparation applicability remain unqualified.",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "Effects of peppermint (Mentha x piperita L.) oil on cardiometabolic outcomes in patients with pre- and stage 1 hypertension: A placebo randomized controlled trial.",
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/42024666/",
+            "verified_at": "2026-10-24",
+            "retracted": false
+          }
+        }
+      ],
+      "effect_direction": "applicability_unestablished",
       "population_context": "human clinical trials unestablished",
       "studied_dose_exposure": {},
-      "applicability_decision": "Reproducible literature search identified zero qualifying randomized, double-blind, placebo-controlled human clinical trials for standalone Mentha piperita essential oil flavoring/vehicle in dietary supplement indications.",
-      "applicability_status": "no_qualifying_trials_found",
+      "applicability_decision": "A small twenty-day placebo-controlled oral peppermint-oil trial exists in pre/stage1 hypertension with a blood-pressure primary outcome. Its volume exposure must not be converted to mass, an IBS reference or a long-term efficacy/safety determination. Retail flavoring/vehicle and studied-preparation applicability remain unqualified. Source existence is established; scientific and product applicability are not cleared.",
+      "applicability_status": "applicability_unestablished",
       "verification_provenance": {
-        "verified_by": "scripts/api_audit/verify_literature_records.py",
-        "verified_at": "2026-09-21T07:39:42.986936+00:00",
+        "verified_by": "Codex bounded primary-source content review; clinical qualification remains incomplete",
+        "verified_at": "2026-10-24",
         "all_pmids_verified": true,
         "retractions_found": false
       },
-      "verification_result": "authoritative_pubmed_verified"
+      "verification_result": "verification_failure_unresolved"
     },
     {
       "canonical_id": "prickly_ash",
@@ -21871,26 +22220,39 @@
     {
       "canonical_id": "oi_solarplast",
       "material_form": "Enzymatically enhanced chloroplast extract lacking independent human trials",
-      "search_query": "(\"oi solarplast\"[tiab] OR \"Enzymatically\"[tiab]) AND (randomized controlled trial[pt] OR meta-analysis[pt]) AND humans[mh]",
-      "search_date": "2026-09-21",
+      "search_query": "Bounded source-content review of PMID 39684397; not an exhaustive negative search.",
+      "search_date": "2026-10-24",
       "databases_searched": [
-        "PubMed",
-        "Cochrane Library"
+        "PubMed"
       ],
-      "records_screened": 20,
-      "qualifying_human_studies": [],
-      "effect_direction": "no_qualifying_human_evidence",
+      "records_screened": 1,
+      "qualifying_human_studies": [
+        {
+          "pmid": "39684397",
+          "title": "Solarplast® Demonstrates Anti-Inflammatory and Anti-Oxidant Activity In Vivo and Positively Modulates Perceived Anti-Ageing Quality of Life Questionnaire and Skin Analogue Scale.",
+          "scoring_eligible": false,
+          "outcome": "A published human study of the exact enzymatically treated spinach preparation Solarplast exists, with selected oxidative/inflammatory and subjective outcomes over45days. The source does not establish a general efficacy threshold, cross-preparation equivalence or clinical scoring approval; complete source, funding and outcome qualification remains unfinished.",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "Solarplast® Demonstrates Anti-Inflammatory and Anti-Oxidant Activity In Vivo and Positively Modulates Perceived Anti-Ageing Quality of Life Questionnaire and Skin Analogue Scale.",
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/39684397/",
+            "verified_at": "2026-10-24",
+            "retracted": false
+          }
+        }
+      ],
+      "effect_direction": "applicability_unestablished",
       "population_context": "human clinical trials unestablished",
       "studied_dose_exposure": {},
-      "applicability_decision": "Reproducible literature search identified zero qualifying randomized, double-blind, placebo-controlled human clinical trials for standalone Enzymatically enhanced chloroplast extract lacking independent human trials in dietary supplement indications.",
-      "applicability_status": "no_qualifying_trials_found",
+      "applicability_decision": "A published human study of the exact enzymatically treated spinach preparation Solarplast exists, with selected oxidative/inflammatory and subjective outcomes over45days. The source does not establish a general efficacy threshold, cross-preparation equivalence or clinical scoring approval; complete source, funding and outcome qualification remains unfinished. Source existence is established; scientific and product applicability are not cleared.",
+      "applicability_status": "applicability_unestablished",
       "verification_provenance": {
-        "verified_by": "scripts/api_audit/verify_literature_records.py",
-        "verified_at": "2026-09-21T07:39:42.986936+00:00",
+        "verified_by": "Codex bounded primary-source content review; clinical qualification remains incomplete",
+        "verified_at": "2026-10-24",
         "all_pmids_verified": true,
         "retractions_found": false
       },
-      "verification_result": "authoritative_pubmed_verified"
+      "verification_result": "verification_failure_unresolved"
     },
     {
       "canonical_id": "nha_immuno_lp20",
