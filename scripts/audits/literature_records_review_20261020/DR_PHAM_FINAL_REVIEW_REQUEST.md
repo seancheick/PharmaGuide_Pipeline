@@ -130,7 +130,7 @@ Do not substitute ordinary magnesium, isolated biotin or invented component amou
 
 241681 literal forskolin25mg is distinct from its250mg parent extract;321393/321394 print cracked-wall chlorella250mg;326244 prints vitaminC180mg as calcium ascorbate with separate calcium40mg. These label corrections do not themselves approve benefit claims.
 
-Other corrected source summaries to verify within the item lists: Mitopure primary peak-power result was null; peakVO2versusplacebo p=.058 and within-group findings must stay distinct. Lutemax must not borrow an EyePromise combination as an independent replication. Sulforaphane failed the stated primary glucose target; subgroup findings remain exploratory. Berberine combination studies and a trial-registration dose discrepancy remain separated. St.John’s wort active-comparator findings must not become placebo claims, and existing interaction warnings stay intact. Rhodiola, ginseng, lemon balm and hyaluronic acid must retain only the outcomes their cited papers actually address.
+Other corrected source summaries to verify within the item lists: Mitopure primary peak-power result was null; peak VO2 versus placebo p=.058 and within-group findings must stay distinct. Lutemax must not borrow an EyePromise combination as an independent replication. Sulforaphane failed the stated primary glucose target; subgroup findings remain exploratory. Berberine combination studies and a trial-registration dose discrepancy remain separated. St. John’s wort active-comparator findings must not become placebo claims, and existing interaction warnings stay intact. Rhodiola, ginseng, lemon balm and hyaluronic acid must retain only the outcomes their cited papers actually address.
 
 ## 5. Source gaps that need explicit disposition
 
@@ -140,11 +140,11 @@ Please identify the required full texts, inspect relevant corrections/retraction
 
 Two already-inspected corrections also need to remain accurately reflected in any accepted scope:5-MTHF31425504→39083531changes red-cell folate to whole-blood folate in an infant-formula study; it does not establish a general adult benefit. Inositol38163998→39208274adds dataset attribution. These notices must not be counted as independent efficacy trials.
 
-For the15 subjects whose old text overstated an absence of human research—skullcap,noni,corn silk,yarrow,Korean pine,Tremella,Cistanche,French oak,Shatavari,black rice,juniper,peppermint oil,theacrine,kawaratake andSolarplast—we have corrected source existence without assigning a benefit grade or dose reference. Please evaluate the actual preparation and findings. A retracted Shatavari source40434025 must not be used affirmatively; its retraction notice is42820926.
+For the15 subjects whose old text overstated an absence of human research—skullcap,noni,corn silk,yarrow,Korean pine,Tremella,Cistanche,French oak,Shatavari,black rice,juniper,peppermint oil,theacrine,kawaratake and Solarplast—we have corrected source existence without assigning a benefit grade or dose reference. Please evaluate the actual preparation and findings. A retracted Shatavari source40434025 must not be used affirmatively; its retraction notice is42820926.
 
-## 6. Complete ingredient/preparation evidence list —147records plus generated collagen,148items
+## 6. Complete ingredient/preparation evidence list — 147 records plus generated collagen, 148 items
 
-Each item below still requires the decision in section2. The current summaries are starting material to verify, **not accepted conclusions**. Sources may include reviews, corrections, historical exclusions or combinations; explicitly choose which qualify. Listed public labels are the exact saved editions, not a claim that a manufacturer’s current formula is identical. One preparation-level decision may cover many labels only when its stated boundaries genuinely match.
+Each item below still requires the decision in section 2. The current summaries are starting material to verify, **not accepted conclusions**. Sources may include reviews, corrections, historical exclusions or combinations; explicitly choose which qualify. Listed public labels are the exact saved editions, not a claim that a manufacturer’s current formula is identical. One preparation-level decision may cover many labels only when its stated boundaries genuinely match.
 
 ### A001. Affron Saffron Extract — `BRAND_AFFRON`
 
@@ -156,7 +156,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [264117](https://api.ods.od.nih.gov/dsld/s3/pdf/264117.pdf), [273387](https://api.ods.od.nih.gov/dsld/s3/pdf/273387.pdf), [275086](https://api.ods.od.nih.gov/dsld/s3/pdf/275086.pdf), 293411
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A002. AstaReal Astaxanthin — `BRAND_ASTAREAL`
 
@@ -168,7 +168,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [269631](https://api.ods.od.nih.gov/dsld/s3/pdf/269631.pdf), [269659](https://api.ods.od.nih.gov/dsld/s3/pdf/269659.pdf), [315588](https://api.ods.od.nih.gov/dsld/s3/pdf/315588.pdf)
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A003. BCM-95 Curcumin — `BRAND_BCM95`
 
@@ -180,7 +180,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [181881](https://api.ods.od.nih.gov/dsld/s3/pdf/181881.pdf), [182713](https://api.ods.od.nih.gov/dsld/s3/pdf/182713.pdf), [209156](https://api.ods.od.nih.gov/dsld/s3/pdf/209156.pdf), 209949, 211219, 231687, 60405, 60682, 62076, 63661, 63705, 74706
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A004. BioCell Collagen — `BRAND_BIOCELL`
 
@@ -192,7 +192,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [249560](https://api.ods.od.nih.gov/dsld/s3/pdf/249560.pdf), [263912](https://api.ods.od.nih.gov/dsld/s3/pdf/263912.pdf), [293288](https://api.ods.od.nih.gov/dsld/s3/pdf/293288.pdf), 294001, 295524, 333751
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A005. Carnipure L-Carnitine — `BRAND_CARNIPURE`
 
@@ -204,7 +204,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [33684](https://api.ods.od.nih.gov/dsld/s3/pdf/33684.pdf)
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A006. Kaneka Ubiquinol — `BRAND_KANEKA_UBIQUINOL`
 
@@ -216,7 +216,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [211225](https://api.ods.od.nih.gov/dsld/s3/pdf/211225.pdf), [213971](https://api.ods.od.nih.gov/dsld/s3/pdf/213971.pdf), [213975](https://api.ods.od.nih.gov/dsld/s3/pdf/213975.pdf), 232782, 233419, 239457, 278373, 278374, 302711, 302712, 317970, 328406
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A007. KSM-66 — `BRAND_KSM66`
 
@@ -228,7 +228,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [199401](https://api.ods.od.nih.gov/dsld/s3/pdf/199401.pdf), [211123](https://api.ods.od.nih.gov/dsld/s3/pdf/211123.pdf), [221112](https://api.ods.od.nih.gov/dsld/s3/pdf/221112.pdf), 242478, 245156, 251347, 253114, 255449, 259795, 291236, 298076, 300086, 305203, 306237, 317812, 317963, 317965, 317967, 318247, 318249, 318270, 333642, 339541, 49202, 78448, 79573
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A008. LactoSpore Bacillus Coagulans — `BRAND_LACTOSPORE`
 
@@ -240,7 +240,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [230149](https://api.ods.od.nih.gov/dsld/s3/pdf/230149.pdf), [230251](https://api.ods.od.nih.gov/dsld/s3/pdf/230251.pdf), [297603](https://api.ods.od.nih.gov/dsld/s3/pdf/297603.pdf), 82415
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A009. LJ100 Tongkat Ali — `BRAND_LJ100`
 
@@ -252,7 +252,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [316118](https://api.ods.od.nih.gov/dsld/s3/pdf/316118.pdf)
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A010. Lutemax 2020 — `BRAND_LUTEMAX_2020`
 
@@ -264,7 +264,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [232506](https://api.ods.od.nih.gov/dsld/s3/pdf/232506.pdf), [253192](https://api.ods.od.nih.gov/dsld/s3/pdf/253192.pdf), [269662](https://api.ods.od.nih.gov/dsld/s3/pdf/269662.pdf), 269675, 313832, 331687, 335191
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A011. Magtein Magnesium L-Threonate — `BRAND_MAGTEIN`
 
@@ -276,7 +276,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [182038](https://api.ods.od.nih.gov/dsld/s3/pdf/182038.pdf), [182334](https://api.ods.od.nih.gov/dsld/s3/pdf/182334.pdf), [204457](https://api.ods.od.nih.gov/dsld/s3/pdf/204457.pdf), 232311, 269596, 299037, 307646, 315679, 326265, 328600, 334884
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A012. Mitopure Urolithin A — `BRAND_MITOPURE`
 
@@ -288,7 +288,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [261870](https://api.ods.od.nih.gov/dsld/s3/pdf/261870.pdf), [278350](https://api.ods.od.nih.gov/dsld/s3/pdf/278350.pdf)
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A013. Niagen Nicotinamide Riboside — `BRAND_NIAGEN`
 
@@ -300,7 +300,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [182475](https://api.ods.od.nih.gov/dsld/s3/pdf/182475.pdf), [232083](https://api.ods.od.nih.gov/dsld/s3/pdf/232083.pdf), [232682](https://api.ods.od.nih.gov/dsld/s3/pdf/232682.pdf), 60565
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A014. Nitrosigine — `BRAND_NITROSIGINE`
 
@@ -312,7 +312,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [224622](https://api.ods.od.nih.gov/dsld/s3/pdf/224622.pdf), [229727](https://api.ods.od.nih.gov/dsld/s3/pdf/229727.pdf), [232772](https://api.ods.od.nih.gov/dsld/s3/pdf/232772.pdf), 232837, 243122
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A015. OptiMSM — `BRAND_OPTIMSM`
 
@@ -324,7 +324,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [201278](https://api.ods.od.nih.gov/dsld/s3/pdf/201278.pdf), [218240](https://api.ods.od.nih.gov/dsld/s3/pdf/218240.pdf), [218432](https://api.ods.od.nih.gov/dsld/s3/pdf/218432.pdf), 241192, 302663, 302664, 302665, 302666, 302667, 302691, 302714, 327985, 336626, 73627, 73668, 78820
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A016. PureWay-C — `BRAND_PUREWAY_C`
 
@@ -336,7 +336,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [269374](https://api.ods.od.nih.gov/dsld/s3/pdf/269374.pdf), [299750](https://api.ods.od.nih.gov/dsld/s3/pdf/299750.pdf)
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A017. Pycnogenol — `BRAND_PYCNOGENOL`
 
@@ -348,7 +348,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [201603](https://api.ods.od.nih.gov/dsld/s3/pdf/201603.pdf), [224611](https://api.ods.od.nih.gov/dsld/s3/pdf/224611.pdf), [227871](https://api.ods.od.nih.gov/dsld/s3/pdf/227871.pdf), 231940, 232628, 2692, 284242, 293218, 29345, 318196, 328459, 328643, 328647, 4135, 67210
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A018. Quatrefolic — `BRAND_QUATREFOLIC`
 
@@ -360,7 +360,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [302662](https://api.ods.od.nih.gov/dsld/s3/pdf/302662.pdf), [307654](https://api.ods.od.nih.gov/dsld/s3/pdf/307654.pdf), [321957](https://api.ods.od.nih.gov/dsld/s3/pdf/321957.pdf), 60812
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A019. Relora — `BRAND_RELORA`
 
@@ -372,7 +372,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [182263](https://api.ods.od.nih.gov/dsld/s3/pdf/182263.pdf), [328408](https://api.ods.od.nih.gov/dsld/s3/pdf/328408.pdf)
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A020. Sensoril Ashwagandha — `BRAND_SENSORIL`
 
@@ -384,7 +384,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [212974](https://api.ods.od.nih.gov/dsld/s3/pdf/212974.pdf), [213645](https://api.ods.od.nih.gov/dsld/s3/pdf/213645.pdf), [227938](https://api.ods.od.nih.gov/dsld/s3/pdf/227938.pdf), 232090, 232093, 245996, 246236, 250940, 250981, 250984, 256029, 259330, 265191, 271112, 273389, 275087, 275088, 278389, 286319, 286869, 287484, 293928, 295100, 309487, 309905, 321944, 327581, 327871, 328062, 328275, 328276, 328399, 328446, 328609, 328751, 333767, 335160, 335162, 62784, 62785, 63417, 82300
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A021. Setria Glutathione — `BRAND_SETRIA`
 
@@ -396,7 +396,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [184661](https://api.ods.od.nih.gov/dsld/s3/pdf/184661.pdf), [184663](https://api.ods.od.nih.gov/dsld/s3/pdf/184663.pdf), [227921](https://api.ods.od.nih.gov/dsld/s3/pdf/227921.pdf), 277961, 299077, 328468
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A022. Shoden Ashwagandha — `BRAND_SHODEN`
 
@@ -408,7 +408,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [315311](https://api.ods.od.nih.gov/dsld/s3/pdf/315311.pdf), [315334](https://api.ods.od.nih.gov/dsld/s3/pdf/315334.pdf), [315850](https://api.ods.od.nih.gov/dsld/s3/pdf/315850.pdf), 328650
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A023. Sunfiber PHGG — `BRAND_SUNFIBER`
 
@@ -420,7 +420,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [227960](https://api.ods.od.nih.gov/dsld/s3/pdf/227960.pdf), [228873](https://api.ods.od.nih.gov/dsld/s3/pdf/228873.pdf), [278325](https://api.ods.od.nih.gov/dsld/s3/pdf/278325.pdf), 337859
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A024. Suntheanine — `BRAND_SUNTHEANINE`
 
@@ -432,7 +432,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [182869](https://api.ods.od.nih.gov/dsld/s3/pdf/182869.pdf), [184354](https://api.ods.od.nih.gov/dsld/s3/pdf/184354.pdf), [184853](https://api.ods.od.nih.gov/dsld/s3/pdf/184853.pdf), 184862, 201642, 214982, 220233, 230220, 243017, 246519, 25543, 256130, 261621, 261741, 268507, 269486, 287429, 287430, 293918, 294045, 295522, 298051, 315327, 318102, 321368, 321814, 321971, 326262, 326697, 333901, 333903, 336340, 59011, 74751, 82946, 851
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A025. Sytrinol — `BRAND_SYTRINOL`
 
@@ -444,7 +444,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [214956](https://api.ods.od.nih.gov/dsld/s3/pdf/214956.pdf), [251856](https://api.ods.od.nih.gov/dsld/s3/pdf/251856.pdf), [54775](https://api.ods.od.nih.gov/dsld/s3/pdf/54775.pdf), 81801
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A026. TamaFlex — `BRAND_TAMAFLEX`
 
@@ -456,7 +456,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [211789](https://api.ods.od.nih.gov/dsld/s3/pdf/211789.pdf), [211802](https://api.ods.od.nih.gov/dsld/s3/pdf/211802.pdf), [219249](https://api.ods.od.nih.gov/dsld/s3/pdf/219249.pdf), 221174, 328785
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A027. Tesnor — `BRAND_TESNOR`
 
@@ -468,7 +468,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [315089](https://api.ods.od.nih.gov/dsld/s3/pdf/315089.pdf), [315816](https://api.ods.od.nih.gov/dsld/s3/pdf/315816.pdf), [328726](https://api.ods.od.nih.gov/dsld/s3/pdf/328726.pdf)
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A028. Testofen Fenugreek — `BRAND_TESTOFEN`
 
@@ -480,7 +480,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [210510](https://api.ods.od.nih.gov/dsld/s3/pdf/210510.pdf), [210555](https://api.ods.od.nih.gov/dsld/s3/pdf/210555.pdf), [220215](https://api.ods.od.nih.gov/dsld/s3/pdf/220215.pdf), 221108, 221113, 221123, 223553, 223607, 228711, 229821, 231343, 243087, 27805, 304641, 313075, 317609, 63763, 69278
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A029. Theracurmin Curcumin — `BRAND_THERACURMIN`
 
@@ -492,7 +492,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [201110](https://api.ods.od.nih.gov/dsld/s3/pdf/201110.pdf), [205153](https://api.ods.od.nih.gov/dsld/s3/pdf/205153.pdf), [212953](https://api.ods.od.nih.gov/dsld/s3/pdf/212953.pdf), 259371
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A030. UC-II Undenatured Type II Collagen — `BRAND_UCII`
 
@@ -504,7 +504,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [178806](https://api.ods.od.nih.gov/dsld/s3/pdf/178806.pdf), [182041](https://api.ods.od.nih.gov/dsld/s3/pdf/182041.pdf), [19435](https://api.ods.od.nih.gov/dsld/s3/pdf/19435.pdf), 216987, 217032, 217059, 220746, 239447, 240066, 241155, 25839, 264119, 321604, 76848
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A031. Zynamite — `BRAND_ZYNAMITE`
 
@@ -516,7 +516,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [328301](https://api.ods.od.nih.gov/dsld/s3/pdf/328301.pdf)
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A032. Seed DS-01 Daily Synbiotic — `FORMULA_SEED_DS01`
 
@@ -530,7 +530,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** No public label edition listed.
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A033. 5-Hydroxytryptophan — `INGR_5HTP`
 
@@ -542,7 +542,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [178269](https://api.ods.od.nih.gov/dsld/s3/pdf/178269.pdf), [203180](https://api.ods.od.nih.gov/dsld/s3/pdf/203180.pdf), [236947](https://api.ods.od.nih.gov/dsld/s3/pdf/236947.pdf), 25152, 269267, 269894, 269896, 288626, 288646, 293866, 293867, 295132, 296189, 302635, 307544, 307545, 310602, 327852, 329624, 329625, 329626, 329627, 329628, 329635, 329636, 329637, 329640, 332135, 65483, 66979
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A034. Acetyl-L-Carnitine — `INGR_ACETYL_L_CARNITINE`
 
@@ -554,7 +554,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [204288](https://api.ods.od.nih.gov/dsld/s3/pdf/204288.pdf), [212977](https://api.ods.od.nih.gov/dsld/s3/pdf/212977.pdf), [213878](https://api.ods.od.nih.gov/dsld/s3/pdf/213878.pdf), 213912, 227837, 232618, 232634, 241708, 252601, 253517, 253523, 253560, 269270, 269952, 284202, 293876, 293877, 302636, 310613, 310614, 310615, 310616, 310727, 328273, 328274, 328611, 329659, 329660, 329661, 329662, 329663, 336344, 336625, 4235, 59032, 59033, 59709, 64800, 79380, 81731
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A035. Alpha-GPC (L-Alpha Glycerylphosphorylcholine) — `INGR_ALPHA_GPC`
 
@@ -566,7 +566,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [183561](https://api.ods.od.nih.gov/dsld/s3/pdf/183561.pdf), [183566](https://api.ods.od.nih.gov/dsld/s3/pdf/183566.pdf), [232505](https://api.ods.od.nih.gov/dsld/s3/pdf/232505.pdf), 245969, 245975, 248654, 24985, 269275, 286144, 307550, 310645, 312857, 313200, 315306, 315587, 318107, 319902, 319903, 323126, 328398, 329912, 330193, 330194, 330195, 59107
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A036. Alpha-Lipoic Acid — `INGR_ALPHA_LIPOIC_ACID`
 
@@ -578,7 +578,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [12160](https://api.ods.od.nih.gov/dsld/s3/pdf/12160.pdf), [17323](https://api.ods.od.nih.gov/dsld/s3/pdf/17323.pdf), [179979](https://api.ods.od.nih.gov/dsld/s3/pdf/179979.pdf), 182721, 183259, 183684, 187580, 19949, 200505, 202942, 203028, 213716, 213851, 217241, 217250, 219050, 2222, 224762, 242997, 247312, 25153, 25479, 26433, 269276, 269333, 269355, 269561, 269591, 270951, 27473, 276184, 277693, 277694, 278345, 287431, 287467, 28978, 293882, 293883, 293884, 293885, 294024, 294054, 295491, 295492, 295493, 299752, 302708, 306055, 306056, 309911, 310638, 310639, 310640, 310641, 311818, 311819, 311820, 311821, 311822, 311823, 313002, 318183, 328720, 329913, 33543, 336360, 3535, 4240, 43534, 59197, 60103, 60308, 73294, 73539
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A037. Ashwagandha (Generic) — `INGR_ASHWAGANDHA`
 
@@ -590,7 +590,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [18343](https://api.ods.od.nih.gov/dsld/s3/pdf/18343.pdf), [201708](https://api.ods.od.nih.gov/dsld/s3/pdf/201708.pdf), [204571](https://api.ods.od.nih.gov/dsld/s3/pdf/204571.pdf), 204585, 221676, 227849, 232090, 232093, 251056, 252644, 253857, 259889, 274389, 274392, 277775, 291316, 293891, 295496, 307555, 316434, 316995, 328062, 328275, 328276, 328446, 329917, 329949, 329950, 329951, 330263, 330264, 330265, 330266, 335686, 63280, 78369
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A038. Astragalus — `INGR_ASTRAGALUS`
 
@@ -602,7 +602,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [201484](https://api.ods.od.nih.gov/dsld/s3/pdf/201484.pdf), [216776](https://api.ods.od.nih.gov/dsld/s3/pdf/216776.pdf), [216796](https://api.ods.od.nih.gov/dsld/s3/pdf/216796.pdf), 222704, 241713, 248698, 251041, 251495, 256392, 259294, 265187, 273257, 299740, 310659, 310660, 310661, 310662, 312860, 327873, 330281, 330282, 330283, 330284, 333905, 337212, 337240, 43659, 54461, 63009, 63290, 63472, 74595, 863
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A039. Bacopa Monnieri — `INGR_BACOPA`
 
@@ -614,7 +614,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [241717](https://api.ods.od.nih.gov/dsld/s3/pdf/241717.pdf), [241719](https://api.ods.od.nih.gov/dsld/s3/pdf/241719.pdf), [242475](https://api.ods.od.nih.gov/dsld/s3/pdf/242475.pdf), 269955, 302639, 309485, 310917, 310918, 310919, 310920, 330287, 330288, 330289
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A040. Beetroot (Dietary Nitrate) — `INGR_BEETROOT`
 
@@ -626,7 +626,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [310986](https://api.ods.od.nih.gov/dsld/s3/pdf/310986.pdf), [312861](https://api.ods.od.nih.gov/dsld/s3/pdf/312861.pdf), [329919](https://api.ods.od.nih.gov/dsld/s3/pdf/329919.pdf), 329952, 329953, 329954
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A041. Benfotiamine — `INGR_BENFOTIAMINE`
 
@@ -638,7 +638,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [209443](https://api.ods.od.nih.gov/dsld/s3/pdf/209443.pdf), [269347](https://api.ods.od.nih.gov/dsld/s3/pdf/269347.pdf), [269585](https://api.ods.od.nih.gov/dsld/s3/pdf/269585.pdf), 277776, 293901, 302640, 310987, 310988, 310989, 310990, 310991, 310992, 310993, 315591, 328287, 328567, 330352, 330353, 330354, 330356, 330358, 330360, 62231
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A042. Berberine — `INGR_BERBERINE`
 
@@ -652,7 +652,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [185288](https://api.ods.od.nih.gov/dsld/s3/pdf/185288.pdf), [230947](https://api.ods.od.nih.gov/dsld/s3/pdf/230947.pdf), [287431](https://api.ods.od.nih.gov/dsld/s3/pdf/287431.pdf), 287494, 294024
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A043. Berberine HCl — `INGR_BERBERINE_HCL`
 
@@ -664,7 +664,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [185288](https://api.ods.od.nih.gov/dsld/s3/pdf/185288.pdf), [248774](https://api.ods.od.nih.gov/dsld/s3/pdf/248774.pdf), [255568](https://api.ods.od.nih.gov/dsld/s3/pdf/255568.pdf), 269318, 287431, 294024, 298058, 299739, 310677, 310678, 310679, 310680, 310681, 310682, 315592, 316999, 328820, 330361, 330362, 330363, 330364, 330365, 330366, 331631, 336355
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A044. Beta-Alanine — `INGR_BETA_ALANINE`
 
@@ -676,7 +676,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [220089](https://api.ods.od.nih.gov/dsld/s3/pdf/220089.pdf), [229917](https://api.ods.od.nih.gov/dsld/s3/pdf/229917.pdf), [248748](https://api.ods.od.nih.gov/dsld/s3/pdf/248748.pdf), 248750, 249741, 252445, 253622, 253637, 253650, 270256, 270257, 2722, 291773, 295773, 300082, 303533, 306184, 306381, 306382, 308247, 308248, 308249, 308250, 308251, 308259, 308260, 308261, 308262, 308263, 309959, 309960, 310994, 310995, 310996, 310997, 311801, 311872, 311873, 311874, 311876, 311877, 311878, 311948, 311949, 312653, 315321, 315593, 316791, 317610, 318105, 319385, 319386, 319899, 319900, 329215, 329921, 330835, 63919, 63920, 63921, 63922, 63973, 63974, 66891, 66892, 66957, 69301, 74724
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A045. Bilberry — `INGR_BILBERRY`
 
@@ -690,7 +690,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [13035](https://api.ods.od.nih.gov/dsld/s3/pdf/13035.pdf), [17226](https://api.ods.od.nih.gov/dsld/s3/pdf/17226.pdf), [178411](https://api.ods.od.nih.gov/dsld/s3/pdf/178411.pdf), 178523, 180413, 212986, 216564, 219982, 222846, 222860, 231868, 232427, 239847, 248776, 253751, 259308, 293909, 307559, 310692, 310693, 310695, 310696, 327877, 327878, 328459, 330411, 330412, 330413, 330414, 332907, 39982, 40089, 4234, 59063, 64382, 64387, 74528, 74670, 81778, 83008, 845, 869
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A046. Biotin — `INGR_BIOTIN`
 
@@ -702,7 +702,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [176179](https://api.ods.od.nih.gov/dsld/s3/pdf/176179.pdf), [178534](https://api.ods.od.nih.gov/dsld/s3/pdf/178534.pdf), [178536](https://api.ods.od.nih.gov/dsld/s3/pdf/178536.pdf), 178538, 179651, 179658, 179750, 179952, 179953, 180096, 180146, 180191, 180371, 184057, 19975, 19991, 200885, 200888, 203148, 207507, 207514, 207524, 209367, 210537, 213411, 224638, 224639, 224767, 227976, 228071, 229804, 236953, 236992, 239729, 239938, 240382, 240390, 241697, 241715, 242522, 242527, 242528, 242530, 242531, 242532, 245991, 253130, 258717, 26479, 26644, 268387, 269327, 270258, 270952, 270954, 271610, 27477, 277390, 277412, 286323, 287807, 287808, 288647, 293910, 294480, 294481, 299902, 302642, 302758, 306187, 307551, 307552, 307561, 307722, 308188, 308189, 308204, 308215, 308216, 308221, 312654, 312655, 312714, 317615, 318184, 318556, 326238, 326239, 326240, 326241, 327414, 328279, 328290, 329924, 330375, 330376, 330377, 330378, 330379, 330380, 330381, 330415, 330416, 330418, 336328, 336852, 62316, 63951, 64380, 64443, 67444, 67560, 69113, 71682, 71687, 73398, 73555, 74376, 75070, 76062, 81929, 83026
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A047. Bitter Melon Extract — `INGR_BITTER_MELON`
 
@@ -714,7 +714,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [222884](https://api.ods.od.nih.gov/dsld/s3/pdf/222884.pdf), [252474](https://api.ods.od.nih.gov/dsld/s3/pdf/252474.pdf), [253810](https://api.ods.od.nih.gov/dsld/s3/pdf/253810.pdf), 253815, 253817, 269397, 306188, 310697, 310698, 310699, 310700, 330419, 330420, 330421, 330422
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A048. Black Cohosh — `INGR_BLACK_COHOSH`
 
@@ -728,7 +728,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [184497](https://api.ods.od.nih.gov/dsld/s3/pdf/184497.pdf), [199530](https://api.ods.od.nih.gov/dsld/s3/pdf/199530.pdf), [211450](https://api.ods.od.nih.gov/dsld/s3/pdf/211450.pdf), 230017, 236993, 243701, 251578, 251977, 259508, 293911, 306189, 311156, 311157, 311158, 311159, 313489, 327879, 327880, 330427, 330428, 330429, 330430, 332906, 337242, 338997, 35646, 39986, 74671, 74738, 75187, 846, 992
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A049. Black Seed Oil (Nigella Sativa) — `INGR_BLACK_SEED_OIL`
 
@@ -742,7 +742,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [220068](https://api.ods.od.nih.gov/dsld/s3/pdf/220068.pdf), [231992](https://api.ods.od.nih.gov/dsld/s3/pdf/231992.pdf), [232471](https://api.ods.od.nih.gov/dsld/s3/pdf/232471.pdf), 294478, 294479, 312656, 317111, 326242, 328009, 330431, 47814
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A050. Branched Chain Amino Acids — `INGR_BRANCHED_CHAIN_AMINO_ACIDS`
 
@@ -754,7 +754,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [184308](https://api.ods.od.nih.gov/dsld/s3/pdf/184308.pdf), [184320](https://api.ods.od.nih.gov/dsld/s3/pdf/184320.pdf), [184322](https://api.ods.od.nih.gov/dsld/s3/pdf/184322.pdf), 211337, 219833, 219927, 219933, 219945, 219947, 219950, 219952, 220827, 220956, 221014, 224676, 227869, 229913, 231773, 244210, 244220, 244222, 244227, 244232, 244238, 244243, 244248, 244265, 244272, 252404, 252409, 252414, 253383, 253390, 253409, 253415, 253419, 253423, 253425, 259615, 259714, 260096, 261713, 269317, 269664, 270253, 2715, 2719, 272969, 293899, 295062, 295063, 295064, 295065, 295066, 295498, 299033, 306062, 306174, 306181, 306182, 306183, 307768, 307769, 307770, 307771, 307772, 307773, 308223, 308224, 308225, 308226, 309076, 310663, 310664, 310962, 310963, 310964, 310965, 310966, 310967, 310968, 310969, 310970, 315320, 328302, 330319, 330320, 330321, 337875, 59952, 65755, 66893, 67304, 69317, 69579, 71680, 74587, 74828, 74854, 77108, 78133, 78476, 82888
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A051. Bromelain — `INGR_BROMELAIN`
 
@@ -766,7 +766,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [173708](https://api.ods.od.nih.gov/dsld/s3/pdf/173708.pdf), [176071](https://api.ods.od.nih.gov/dsld/s3/pdf/176071.pdf), [1840](https://api.ods.od.nih.gov/dsld/s3/pdf/1840.pdf), 1841, 18453, 208587, 208593, 209440, 217410, 220276, 229119, 229793, 231769, 232295, 232635, 232659, 232979, 239745, 241684, 242461, 242615, 242617, 243686, 255590, 256924, 259886, 269399, 269400, 274013, 274884, 277020, 28720, 28733, 29295, 293871, 293872, 293915, 293970, 29499, 295501, 297644, 302676, 302701, 307568, 31999, 321357, 321358, 321385, 321398, 321403, 321404, 321405, 321406, 322514, 327997, 328448, 331630, 332937, 42260, 49563, 63774, 64784, 64816, 64842, 66822, 67360, 69504, 70066, 76840, 76841, 79431, 80096, 82601, 82604
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A052. Caffeine — `INGR_CAFFEINE`
 
@@ -778,7 +778,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [1640](https://api.ods.od.nih.gov/dsld/s3/pdf/1640.pdf), [176190](https://api.ods.od.nih.gov/dsld/s3/pdf/176190.pdf), [18266](https://api.ods.od.nih.gov/dsld/s3/pdf/18266.pdf), 18317, 191084, 213223, 221006, 221101, 227971, 228344, 228348, 228350, 228352, 228714, 228812, 228817, 228822, 228897, 242242, 243242, 243303, 252539, 253281, 253290, 253774, 253778, 253781, 25594, 270265, 27350, 273838, 27420, 27450, 27460, 29242, 295048, 297218, 304636, 304713, 304714, 306192, 307776, 307777, 310543, 311206, 312638, 312657, 312658, 312799, 312800, 312801, 312802, 313333, 315848, 317612, 326261, 328480, 328484, 329939, 329940, 331492, 33681, 339533, 42242, 4256, 45104, 49201, 5773, 5820, 5883, 5886, 65942, 67032, 67281, 67289, 68956, 69535, 69663, 70327, 74239, 74529, 74669, 74766, 74768, 75010, 77208, 78153, 79141, 79192, 82055, 82059
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A053. Calcium — `INGR_CALCIUM`
 
@@ -790,7 +790,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [1055](https://api.ods.od.nih.gov/dsld/s3/pdf/1055.pdf), [12010](https://api.ods.od.nih.gov/dsld/s3/pdf/12010.pdf), [12928](https://api.ods.od.nih.gov/dsld/s3/pdf/12928.pdf), 17181, 176262, 177088, 177234, 177246, 177247, 177248, 177319, 178366, 179489, 179843, 179869, 179904, 180219, 18136, 182990, 182999, 183946, 183985, 184615, 19069, 19168, 19169, 199408, 19992, 19995, 20015, 20019, 20022, 20031, 206377, 207226, 207398, 210396, 211053, 211452, 212720, 212738, 212836, 213300, 213893, 213895, 213953, 214002, 214151, 214864, 214939, 214944, 217496, 217507, 217508, 217510, 217514, 217529, 217542, 217558, 219395, 219403, 223493, 223571, 223574, 224643, 225806, 230123, 232679, 232726, 233021, 236941, 236945, 239533, 241702, 243001, 243015, 243749, 246021, 248746, 2504, 252433, 253368, 253372, 253375, 25891, 25914, 259625, 259828, 261866, 261872, 26493, 26563, 270290, 270292, 271077, 271078, 271419, 271432, 272475, 272556, 272560, 272561, 272562, 272800, 273644, 273645, 274170, 278026, 278474, 278476, 279713, 279715, 279716, 279767, 286326, 286328, 287368, 293919, 293920, 293921, 293922, 293923, 293924, 293927, 294026, 294027, 294032, 294058, 295502, 299034, 299035, 299036, 2998, 302506, 302695, 302759, 302761, 303969, 304639, 304644, 304671, 305830, 306193, 306215, 306216, 307549, 308308, 308309, 308310, 308311, 308312, 308313, 311207, 311243, 311244, 311245, 311246, 311247, 311248, 311249, 311250, 311251, 311252, 311253, 311254, 311263, 311264, 311265, 311266, 311271, 311272, 311273, 311274, 311275, 311276, 311277, 311278, 311724, 311725, 311726, 311727, 311728, 312703, 312770, 312771, 312772, 312773, 312819, 312820, 312821, 312867, 312868, 312869, 312870, 313695, 315090, 315308, 315817, 317561, 317647, 317810, 321339, 327404, 327559, 327560, 327890, 327892, 327902, 327903, 327904, 327905, 327906, 327955, 328093, 328096, 328292, 328300, 328305, 328449, 328473, 329093, 329962, 330493, 330495, 330498, 330499, 330500, 330501, 330502, 330503, 330504, 330505, 330507, 330508, 330509, 331489, 331500, 332908, 332961, 332962, 333477, 333700, 333704, 333868, 333899, 336311, 337855, 338012, 35627, 4142, 4183, 4221, 42262, 4257, 44180, 46731, 57504, 60164, 62665, 64383, 64446, 64887, 65764, 65943, 69711, 71234, 71241, 71289, 73320, 73573, 74311, 74317, 74755, 75073, 76091, 76200, 77110, 77111, 79149, 79197, 82255, 82374, 82539, 8734, 8745, 8806, 8951, 9192
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A054. Ceramides — `INGR_CERAMIDES`
 
@@ -804,7 +804,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [179910](https://api.ods.od.nih.gov/dsld/s3/pdf/179910.pdf), [179913](https://api.ods.od.nih.gov/dsld/s3/pdf/179913.pdf), [179916](https://api.ods.od.nih.gov/dsld/s3/pdf/179916.pdf), 182373, 230132, 232318, 241699, 268631, 269670, 277019, 299955, 326300, 58955
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A055. Chamomile Extract — `INGR_CHAMOMILE`
 
@@ -816,7 +816,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [182999](https://api.ods.od.nih.gov/dsld/s3/pdf/182999.pdf), [184359](https://api.ods.od.nih.gov/dsld/s3/pdf/184359.pdf), [1850](https://api.ods.od.nih.gov/dsld/s3/pdf/1850.pdf), 232814, 242482, 242488, 251531, 252511, 253453, 253457, 253458, 267341, 273729, 273939, 293903, 294032, 307549, 308206, 312676, 312677, 312678, 312679, 312872, 327913, 330557, 330558, 330559, 330560, 330571, 337244, 79431, 79940
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A056. Chlorella — `INGR_CHLORELLA`
 
@@ -830,7 +830,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [201693](https://api.ods.od.nih.gov/dsld/s3/pdf/201693.pdf), [251532](https://api.ods.od.nih.gov/dsld/s3/pdf/251532.pdf), [267303](https://api.ods.od.nih.gov/dsld/s3/pdf/267303.pdf), 267326, 267327, 273822, 273825, 274662, 29092, 29094, 29098, 29100, 29105, 29109, 29161, 293971, 295017, 295018, 295019, 295020, 295515, 306196, 306197, 306198, 306368, 309388, 311326, 311327, 311328, 311339, 311628, 311680, 321361, 327395, 327405, 327407, 327914, 330576, 330577, 330578, 330579, 330686, 40598, 64905, 78306
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A057. Chondroitin Sulfate — `INGR_CHONDROITIN_SULFATE`
 
@@ -842,7 +842,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [12188](https://api.ods.od.nih.gov/dsld/s3/pdf/12188.pdf), [12196](https://api.ods.od.nih.gov/dsld/s3/pdf/12196.pdf), [1653](https://api.ods.od.nih.gov/dsld/s3/pdf/1653.pdf), 17352, 174870, 179343, 179454, 179468, 180260, 182929, 184042, 19428, 19464, 20035, 20037, 20038, 201498, 201568, 201570, 205146, 207402, 211448, 212516, 213964, 218187, 218189, 218213, 218235, 219869, 224647, 228785, 239481, 239721, 239722, 239727, 239868, 239880, 239951, 243597, 243611, 243612, 243613, 243614, 243630, 24954, 25878, 25903, 26372, 26415, 26419, 26631, 267982, 268025, 269285, 270417, 271076, 271091, 275998, 277420, 277683, 277689, 277690, 277691, 277692, 29207, 29223, 304425, 304426, 305838, 307592, 307593, 307594, 308198, 312696, 312697, 312698, 312699, 312873, 313697, 321610, 321611, 328467, 336356, 3559, 46740, 46741, 5894, 63031, 64331, 64456, 65035, 66980, 67559, 69623, 71334, 71650, 73017, 73070, 74214, 75040, 75845, 75856, 76849, 76850, 76851, 78621, 78636, 83047, 832, 841
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A058. Cinnamon Extract — `INGR_CINNAMON_EXTRACT`
 
@@ -854,7 +854,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [14168](https://api.ods.od.nih.gov/dsld/s3/pdf/14168.pdf), [18294](https://api.ods.od.nih.gov/dsld/s3/pdf/18294.pdf), [199919](https://api.ods.od.nih.gov/dsld/s3/pdf/199919.pdf), 20002, 201087, 206466, 231917, 239203, 243271, 252538, 253544, 253634, 253640, 259599, 26465, 271336, 274428, 27471, 293936, 294468, 294469, 294470, 294471, 297063, 30135, 302647, 302648, 312739, 312740, 312741, 312742, 327917, 330606, 331637, 332911, 33538, 3532, 46706, 60315, 71358, 74689, 80090, 81031, 82261, 82411, 864
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A059. Hydrolyzed Collagen Peptides — `INGR_COLLAGEN_PEPTIDES`
 
@@ -866,7 +866,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [222864](https://api.ods.od.nih.gov/dsld/s3/pdf/222864.pdf), [229093](https://api.ods.od.nih.gov/dsld/s3/pdf/229093.pdf), [230141](https://api.ods.od.nih.gov/dsld/s3/pdf/230141.pdf), 232456, 232810, 243668, 246073, 246077, 246117, 246412, 250086, 265081, 269491, 269620, 269677, 270299, 273817, 274274, 274276, 274304, 286148, 293939, 295509, 297645, 302649, 306200, 311944, 312028, 312030, 312031, 312032, 312036, 312037, 312038, 312039, 312040, 312932, 312976, 313512, 313513, 315978, 317050, 326160, 326693, 326694, 327397, 327398, 327399, 328823, 329737, 329892, 329935, 329936, 329937, 329938, 331018, 331019, 331020, 331023, 331293, 331294, 65024, 65027, 70136
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A060. Coenzyme Q10 — `INGR_COQ10`
 
@@ -878,7 +878,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [12259](https://api.ods.od.nih.gov/dsld/s3/pdf/12259.pdf), [17550](https://api.ods.od.nih.gov/dsld/s3/pdf/17550.pdf), [176800](https://api.ods.od.nih.gov/dsld/s3/pdf/176800.pdf), 178318, 178363, 178577, 178599, 178601, 178606, 178793, 178852, 179252, 179510, 179581, 179676, 179677, 179710, 179908, 179969, 180125, 180233, 180234, 180235, 180262, 180332, 180379, 180420, 18184, 182715, 182820, 1839, 184016, 184046, 184279, 1843, 18439, 1844, 184683, 187535, 20033, 201089, 201096, 201097, 202908, 202992, 203196, 203219, 203235, 207421, 207534, 207540, 209640, 210337, 210343, 211553, 212330, 212363, 213965, 213968, 213972, 213974, 213976, 217615, 217619, 217627, 217634, 217637, 218709, 220783, 2222, 223077, 223163, 223350, 223595, 224609, 224628, 224629, 224630, 228110, 231809, 231836, 231845, 231850, 231852, 232008, 232551, 232556, 232605, 232607, 242537, 243057, 24968, 25001, 25169, 253061, 253144, 253169, 255113, 256106, 259366, 259829, 260151, 262176, 264118, 26417, 26426, 26475, 266057, 266094, 268409, 269246, 269314, 269357, 269359, 269578, 269604, 269665, 269685, 269688, 269722, 269730, 269734, 270300, 270947, 271138, 271153, 271463, 271517, 271710, 272658, 274677, 277382, 277383, 277392, 277656, 278360, 278528, 285747, 287363, 28978, 290587, 293943, 293944, 293945, 293946, 295004, 295005, 295511, 295512, 298065, 302671, 302698, 304707, 307575, 307576, 307712, 307713, 307714, 307715, 307716, 307717, 308194, 312966, 315979, 316108, 321363, 321607, 321964, 326248, 326249, 326702, 327920, 329976, 329977, 330638, 330639, 330640, 330641, 330642, 330643, 330644, 331491, 337364, 337950, 3520, 3556, 4161, 4162, 4180, 4181, 44202, 44208, 47213, 47218, 47219, 49221, 57501, 58960, 59004, 59006, 59924, 60407, 60556, 60601, 60845, 62078, 62723, 63664, 63709, 64454, 66731, 69698, 73959, 73960, 74003, 74264, 74708, 75290, 75842, 75844, 76304, 76316, 76337, 76340, 76514, 76529, 76814, 81056, 81061, 81382, 81545, 81814, 81815, 81816, 81840, 82062, 83091, 844, 8782, 8924, 8953
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A061. Cranberry Extract — `INGR_CRANBERRY`
 
@@ -890,7 +890,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [12139](https://api.ods.od.nih.gov/dsld/s3/pdf/12139.pdf), [17226](https://api.ods.od.nih.gov/dsld/s3/pdf/17226.pdf), [17795](https://api.ods.od.nih.gov/dsld/s3/pdf/17795.pdf), 178364, 178608, 178610, 178728, 178794, 179808, 179858, 180160, 180419, 18301, 184061, 19951, 19952, 203398, 204637, 209374, 209577, 210738, 211402, 212761, 212923, 217643, 2245, 228946, 230947, 231814, 233013, 233016, 239478, 239643, 239647, 239735, 239817, 240673, 240682, 243147, 246023, 246024, 246041, 246044, 251303, 257094, 257096, 259327, 259627, 259857, 259877, 259888, 259894, 263841, 26453, 265177, 26635, 267347, 271083, 271087, 271593, 27291, 273652, 273653, 273677, 273679, 273916, 273922, 274135, 274542, 287366, 287370, 287494, 294456, 294457, 297657, 299073, 299074, 306202, 306422, 312967, 326238, 327586, 327921, 327938, 327939, 327940, 327941, 327942, 327943, 327944, 328005, 329979, 330659, 330660, 330662, 330663, 330665, 330666, 330667, 331497, 331660, 332873, 332880, 332912, 332913, 333698, 341410, 35921, 40089, 4434, 46328, 60281, 60311, 62786, 63493, 64382, 64385, 64387, 67283, 69691, 71578, 73293, 74399, 74542, 74599, 79140, 82318, 82608, 82894, 871
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A062. Creatine Monohydrate — `INGR_CREATINE_MONOHYDRATE`
 
@@ -902,7 +902,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [175321](https://api.ods.od.nih.gov/dsld/s3/pdf/175321.pdf), [176055](https://api.ods.od.nih.gov/dsld/s3/pdf/176055.pdf), [178732](https://api.ods.od.nih.gov/dsld/s3/pdf/178732.pdf), 178757, 182615, 183513, 184096, 18461, 184702, 203266, 210519, 211339, 214026, 219813, 219842, 219914, 219916, 219919, 219921, 219923, 219957, 219970, 219972, 220004, 220047, 220050, 220054, 220085, 220140, 220208, 220238, 220239, 221132, 221165, 221167, 221370, 221476, 2219, 229547, 232794, 243022, 243028, 243029, 243032, 243035, 243037, 243041, 243045, 243091, 243094, 244276, 244288, 244298, 244301, 252585, 253731, 253763, 253769, 25606, 269425, 2697, 2698, 270330, 2707, 2716, 2717, 27343, 27346, 27358, 274620, 28981, 291751, 294028, 295923, 298066, 299751, 306203, 307782, 307783, 307784, 308693, 308694, 309604, 312227, 312751, 312753, 312883, 315323, 315324, 315598, 318103, 318106, 318108, 319643, 319907, 319908, 319921, 319922, 321826, 322238, 322563, 322564, 325581, 325587, 326283, 328409, 328780, 328847, 330833, 330834, 330836, 330837, 330838, 330840, 330841, 330843, 335662, 336326, 336362, 4278, 4292, 49630, 62355, 66883, 66885, 66888, 69320, 69334, 69400, 74452, 74586, 74603, 74753, 77130, 78148, 78468, 83268
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A063. Digestive Enzyme Complex — `INGR_DIGESTIVE_ENZYMES`
 
@@ -914,7 +914,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [182908](https://api.ods.od.nih.gov/dsld/s3/pdf/182908.pdf), [184300](https://api.ods.od.nih.gov/dsld/s3/pdf/184300.pdf), [216759](https://api.ods.od.nih.gov/dsld/s3/pdf/216759.pdf), 269428, 333715, 59047, 76837
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A064. Echinacea — `INGR_ECHINACEA`
 
@@ -926,7 +926,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [13034](https://api.ods.od.nih.gov/dsld/s3/pdf/13034.pdf), [13245](https://api.ods.od.nih.gov/dsld/s3/pdf/13245.pdf), [17226](https://api.ods.od.nih.gov/dsld/s3/pdf/17226.pdf), 17306, 178632, 180410, 18370, 18386, 19953, 200046, 200789, 201286, 201717, 206905, 216256, 216682, 218873, 233637, 239813, 251557, 251572, 259759, 260118, 273459, 273728, 275836, 28965, 293272, 293273, 297660, 298046, 306211, 306212, 318188, 327953, 328440, 330809, 330810, 332914, 39973, 44391, 44484, 59848, 61957, 62116, 63218, 63493, 699, 73300, 74602, 74690, 82996, 848
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A065. Elderberry Extract — `INGR_ELDERBERRY`
 
@@ -938,7 +938,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [204048](https://api.ods.od.nih.gov/dsld/s3/pdf/204048.pdf), [221073](https://api.ods.od.nih.gov/dsld/s3/pdf/221073.pdf), [228923](https://api.ods.od.nih.gov/dsld/s3/pdf/228923.pdf), 242865, 243137, 249719, 249723, 256173, 256392, 259888, 260121, 267347, 268432, 268441, 271338, 273622, 273728, 273729, 277519, 277520, 28561, 28568, 290625, 294044, 295097, 295205, 297657, 297662, 304699, 304701, 306190, 308196, 317022, 317115, 317117, 318189, 326238, 326687, 327777, 328043, 328046, 330816, 330817, 330818, 330819, 340127, 63493, 64382, 64387, 702, 73300, 74660
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A066. Fenugreek Extract — `INGR_FENUGREEK`
 
@@ -950,7 +950,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [211172](https://api.ods.od.nih.gov/dsld/s3/pdf/211172.pdf), [271597](https://api.ods.od.nih.gov/dsld/s3/pdf/271597.pdf), [306217](https://api.ods.od.nih.gov/dsld/s3/pdf/306217.pdf), 312477, 312478, 312479, 312480, 315300, 327958, 328130, 332917, 33604, 39978, 42329, 63773, 66430, 74593, 74594, 862
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A067. L-5-Methyltetrahydrofolate — `INGR_FOLATE_MTHF`
 
@@ -962,7 +962,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [184302](https://api.ods.od.nih.gov/dsld/s3/pdf/184302.pdf), [184894](https://api.ods.od.nih.gov/dsld/s3/pdf/184894.pdf), [184899](https://api.ods.od.nih.gov/dsld/s3/pdf/184899.pdf), 232417, 246424, 284181, 284182, 293963, 293964, 299031, 337850
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A068. Gamma-Aminobutyric Acid (GABA) — `INGR_GABA`
 
@@ -974,7 +974,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [224649](https://api.ods.od.nih.gov/dsld/s3/pdf/224649.pdf), [228119](https://api.ods.od.nih.gov/dsld/s3/pdf/228119.pdf), [241801](https://api.ods.od.nih.gov/dsld/s3/pdf/241801.pdf), 242477, 243055, 249530, 252353, 252410, 253262, 253263, 253264, 253268, 253269, 253270, 269433, 270416, 27462, 277675, 277676, 284251, 284252, 294437, 294438, 307591, 312517, 312518, 312519, 312520, 312895, 315304, 315647, 315814, 328836, 333709, 334422, 33552, 336348, 5878, 63772, 68958, 74632, 77141, 77154, 82384, 964
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A069. Garlic Extract — `INGR_GARLIC`
 
@@ -986,7 +986,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [12009](https://api.ods.od.nih.gov/dsld/s3/pdf/12009.pdf), [16374](https://api.ods.od.nih.gov/dsld/s3/pdf/16374.pdf), [17226](https://api.ods.od.nih.gov/dsld/s3/pdf/17226.pdf), 17295, 176178, 178709, 179322, 179523, 18291, 183550, 184004, 184903, 184905, 185005, 185008, 20003, 211187, 213225, 214652, 217818, 221073, 221102, 227974, 228070, 228923, 228978, 231794, 239051, 246104, 246130, 251530, 251594, 251595, 252421, 253326, 253329, 253332, 256120, 256392, 267303, 267326, 267327, 267832, 271604, 273822, 274662, 275343, 278388, 278416, 28863, 28897, 29169, 302765, 304654, 304655, 304656, 304657, 306221, 312531, 312532, 312533, 312534, 317614, 321385, 321397, 326257, 327405, 327406, 327407, 327969, 327970, 330686, 330939, 330940, 330941, 332923, 333918, 334424, 35886, 36333, 3741, 40598, 4150, 4349, 43981, 44354, 44355, 45105, 67610, 70328, 74433, 74447, 74453, 82600, 858, 860
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A070. Ginger Root — `INGR_GINGER`
 
@@ -998,7 +998,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [15698](https://api.ods.od.nih.gov/dsld/s3/pdf/15698.pdf), [17226](https://api.ods.od.nih.gov/dsld/s3/pdf/17226.pdf), [179978](https://api.ods.od.nih.gov/dsld/s3/pdf/179978.pdf), 18473, 18540, 204665, 208540, 208543, 218876, 228957, 233642, 240015, 241318, 243271, 250769, 2511, 256392, 257096, 259326, 259854, 265157, 265177, 267303, 267326, 267327, 27350, 273756, 273823, 274428, 274662, 275355, 275811, 275837, 277677, 278416, 28561, 285635, 28568, 287370, 28863, 28897, 291135, 294029, 295106, 297644, 302677, 306222, 312701, 315295, 315296, 317646, 321338, 321385, 321397, 326161, 326253, 327405, 327406, 327407, 327553, 330686, 330943, 330944, 330945, 330946, 333753, 40604, 4282, 43981, 47945, 5817, 5863, 59451, 60218, 75017, 78388, 79431, 82599
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A071. Panax Ginseng — `INGR_GINSENG`
 
@@ -1010,7 +1010,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [1627](https://api.ods.od.nih.gov/dsld/s3/pdf/1627.pdf), [1628](https://api.ods.od.nih.gov/dsld/s3/pdf/1628.pdf), [1630](https://api.ods.od.nih.gov/dsld/s3/pdf/1630.pdf), 176189, 18276, 205266, 214060, 216622, 219043, 232035, 239074, 239741, 241914, 251494, 259593, 269558, 269748, 278018, 310646, 310647, 310648, 310649, 312543, 312544, 312545, 312546, 312547, 312858, 316119, 327872, 329914, 330196, 330197, 330198, 330199, 332892, 3752, 40590, 63928, 67031, 74798, 74799
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A072. Glucosamine Sulfate — `INGR_GLUCOSAMINE_SULFATE`
 
@@ -1022,7 +1022,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [12174](https://api.ods.od.nih.gov/dsld/s3/pdf/12174.pdf), [17172](https://api.ods.od.nih.gov/dsld/s3/pdf/17172.pdf), [182925](https://api.ods.od.nih.gov/dsld/s3/pdf/182925.pdf), 182967, 184221, 184924, 199911, 199945, 201255, 211177, 212432, 212433, 212452, 212455, 213713, 213715, 213941, 214082, 218200, 239657, 24954, 252451, 253377, 253382, 253384, 25921, 264919, 269285, 269291, 269545, 271346, 277681, 277685, 277686, 277687, 29188, 29207, 307593, 307594, 307704, 311082, 311083, 311084, 311085, 312548, 312549, 312550, 312551, 328466, 337249, 3781, 59533, 63926, 66980, 67559, 73070
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A073. Grape Seed Extract — `INGR_GRAPE_SEED_EXTRACT`
 
@@ -1036,7 +1036,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [15698](https://api.ods.od.nih.gov/dsld/s3/pdf/15698.pdf), [1635](https://api.ods.od.nih.gov/dsld/s3/pdf/1635.pdf), [18272](https://api.ods.od.nih.gov/dsld/s3/pdf/18272.pdf), 18473, 18540, 205563, 211990, 213482, 218276, 218280, 219241, 220040, 220055, 228820, 250120, 251683, 251845, 252508, 252509, 253598, 253600, 253601, 253603, 253604, 253606, 259888, 26370, 270419, 271087, 27350, 277696, 297658, 298041, 299073, 299074, 304663, 304664, 312254, 312575, 312576, 312577, 312578, 312900, 315307, 315310, 315847, 317966, 323104, 330965, 330966, 33167, 336254, 337248, 3522, 3555, 3782, 5817, 5863, 64473, 66739, 67175, 67278, 67580, 70587, 74064, 74687, 79190, 79930, 83093, 865
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A074. Green Tea Extract — `INGR_GREEN_TEA`
 
@@ -1048,7 +1048,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [15385](https://api.ods.od.nih.gov/dsld/s3/pdf/15385.pdf), [178385](https://api.ods.od.nih.gov/dsld/s3/pdf/178385.pdf), [178400](https://api.ods.od.nih.gov/dsld/s3/pdf/178400.pdf), 178796, 179527, 18375, 20009, 211015, 214380, 229960, 231721, 231722, 240742, 241706, 24966, 252526, 252529, 253683, 253697, 253727, 26193, 270687, 277699, 277700, 278368, 284226, 28548, 294075, 303970, 307598, 312587, 312588, 312589, 312590, 312591, 312592, 312593, 312902, 312903, 314911, 328410, 330014, 333900, 333902, 336336, 336337, 40592, 42239, 59208, 59553, 60151, 62034, 62121, 66957, 69691, 73359, 74438, 74691, 74692, 74694, 82369, 850, 854
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A075. HMB (Beta-Hydroxy Beta-Methylbutyrate) — `INGR_HMB`
 
@@ -1060,7 +1060,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [1179](https://api.ods.od.nih.gov/dsld/s3/pdf/1179.pdf), [12800](https://api.ods.od.nih.gov/dsld/s3/pdf/12800.pdf), [18416](https://api.ods.od.nih.gov/dsld/s3/pdf/18416.pdf), 2219, 2221, 232366, 241804, 248667, 269547, 270422, 28981, 330015, 337570, 74748, 75181, 82069
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A076. Honey — `INGR_HONEY`
 
@@ -1072,7 +1072,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [293387](https://api.ods.od.nih.gov/dsld/s3/pdf/293387.pdf), [304687](https://api.ods.od.nih.gov/dsld/s3/pdf/304687.pdf)
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A077. Hyaluronic Acid — `INGR_HYALURONIC_ACID`
 
@@ -1084,7 +1084,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [1653](https://api.ods.od.nih.gov/dsld/s3/pdf/1653.pdf), [17476](https://api.ods.od.nih.gov/dsld/s3/pdf/17476.pdf), [174842](https://api.ods.od.nih.gov/dsld/s3/pdf/174842.pdf), 184522, 20035, 20037, 20038, 201285, 201287, 211448, 212122, 212138, 223311, 229100, 230165, 231711, 231738, 231904, 239868, 239880, 239951, 241688, 241806, 252712, 252713, 254851, 254867, 254869, 254875, 254883, 254885, 254887, 264813, 264814, 26631, 267347, 269556, 269557, 269579, 269587, 270505, 273673, 290591, 291377, 293973, 302681, 302682, 307599, 307620, 312013, 312014, 312015, 312016, 312017, 312018, 312019, 312909, 321611, 331012, 331013, 331014, 331016, 331017, 3767, 46741, 60197, 71650, 73017, 74880, 75845, 75856
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A078. Inositol — `INGR_INOSITOL`
 
@@ -1096,7 +1096,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [252549](https://api.ods.od.nih.gov/dsld/s3/pdf/252549.pdf), [254952](https://api.ods.od.nih.gov/dsld/s3/pdf/254952.pdf), [254953](https://api.ods.od.nih.gov/dsld/s3/pdf/254953.pdf), 254955, 254956, 254957, 254994, 287471, 294420, 294421, 305833, 306233, 306234, 307397, 307622, 312910, 315653, 322381, 323062, 328505, 330016, 331139, 331140, 331141, 337251, 81640
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A079. Inulin — `INGR_INULIN`
 
@@ -1108,7 +1108,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [202696](https://api.ods.od.nih.gov/dsld/s3/pdf/202696.pdf), [202701](https://api.ods.od.nih.gov/dsld/s3/pdf/202701.pdf), [213312](https://api.ods.od.nih.gov/dsld/s3/pdf/213312.pdf), 213830, 229133, 239537, 251338, 252551, 254958, 255001, 255009, 255022, 259857, 293279, 306369, 307711, 312048, 312049, 312050, 312051, 327563, 329981, 329982, 329983, 329984, 331143, 331144, 331145, 331146, 331630, 332874, 332875, 4156, 74394
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A080. Iron Bisglycinate — `INGR_IRON_BISGLYCINATE`
 
@@ -1120,7 +1120,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [212633](https://api.ods.od.nih.gov/dsld/s3/pdf/212633.pdf), [217573](https://api.ods.od.nih.gov/dsld/s3/pdf/217573.pdf), [229829](https://api.ods.od.nih.gov/dsld/s3/pdf/229829.pdf), 240107, 246356, 269432, 293987, 294035, 299059, 299926, 299927, 299928, 302673, 306236, 315354, 321969, 323082, 327558, 333193, 333194, 65137, 65473, 73620
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A081. Lactoferrin — `INGR_LACTOFERRIN`
 
@@ -1132,7 +1132,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [231972](https://api.ods.od.nih.gov/dsld/s3/pdf/231972.pdf), [307634](https://api.ods.od.nih.gov/dsld/s3/pdf/307634.pdf), [315654](https://api.ods.od.nih.gov/dsld/s3/pdf/315654.pdf), 321954, 328508
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A082. Lemon Balm Extract — `INGR_LEMON_BALM`
 
@@ -1144,7 +1144,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [182999](https://api.ods.od.nih.gov/dsld/s3/pdf/182999.pdf), [1850](https://api.ods.od.nih.gov/dsld/s3/pdf/1850.pdf), [212555](https://api.ods.od.nih.gov/dsld/s3/pdf/212555.pdf), 242482, 242488, 242585, 251578, 251635, 251927, 259895, 267341, 273729, 28561, 28568, 293904, 303972, 304706, 308206, 308210, 312141, 312142, 312143, 312144, 328447, 331161, 331162, 332956, 333759
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A083. Lion's Mane Mushroom — `INGR_LION_MANE`
 
@@ -1156,7 +1156,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [297676](https://api.ods.od.nih.gov/dsld/s3/pdf/297676.pdf), [297677](https://api.ods.od.nih.gov/dsld/s3/pdf/297677.pdf), [306330](https://api.ods.od.nih.gov/dsld/s3/pdf/306330.pdf), 321368, 326697, 329996
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A084. Lutein — `INGR_LUTEIN`
 
@@ -1168,7 +1168,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [12253](https://api.ods.od.nih.gov/dsld/s3/pdf/12253.pdf), [176066](https://api.ods.od.nih.gov/dsld/s3/pdf/176066.pdf), [176068](https://api.ods.od.nih.gov/dsld/s3/pdf/176068.pdf), 184325, 184326, 184592, 185108, 20013, 206967, 207547, 209399, 210456, 210457, 211183, 232737, 233011, 242501, 242507, 252002, 26111, 269356, 269376, 269708, 27707, 294007, 294414, 294415, 295527, 302687, 302688, 307644, 311941, 312297, 312973, 314035, 321608, 326263, 326264, 328563, 328648, 331193, 331194, 337215, 3533, 44502, 46276, 59664, 59729, 60779, 60783, 60833, 63231, 64348, 65026, 66348, 69691, 79373, 82103
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A085. L-Arginine — `INGR_L_ARGININE`
 
@@ -1180,7 +1180,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [176055](https://api.ods.od.nih.gov/dsld/s3/pdf/176055.pdf), [178389](https://api.ods.od.nih.gov/dsld/s3/pdf/178389.pdf), [178404](https://api.ods.od.nih.gov/dsld/s3/pdf/178404.pdf), 191085, 200511, 217340, 217342, 2222, 224675, 224678, 224689, 243694, 252589, 252590, 25593, 259818, 26577, 269649, 269651, 270513, 2720, 2721, 2725, 28978, 30565, 306238, 306239, 306240, 306241, 311730, 311945, 312078, 312079, 312080, 312081, 312082, 312083, 312088, 312089, 312090, 312091, 312704, 312823, 312824, 312825, 312826, 312911, 315841, 315849, 317649, 318194, 328509, 330018, 33554, 336345, 336346, 44591, 5816, 5819, 5873, 5880, 63792, 66957, 67290, 69292, 69538, 69592, 73374, 74586, 74753, 75181, 79152
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A086. L-Carnitine — `INGR_L_CARNITINE`
 
@@ -1192,7 +1192,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [12147](https://api.ods.od.nih.gov/dsld/s3/pdf/12147.pdf), [187545](https://api.ods.od.nih.gov/dsld/s3/pdf/187545.pdf), [20008](https://api.ods.od.nih.gov/dsld/s3/pdf/20008.pdf), 213540, 213550, 213565, 213939, 221030, 221037, 221076, 221100, 221150, 223349, 227864, 227866, 228856, 228859, 228893, 231960, 239103, 241130, 248751, 25160, 251622, 252576, 252617, 253858, 253864, 253873, 254133, 254135, 254137, 259631, 266815, 2704, 27461, 293992, 296190, 298072, 299218, 304635, 307635, 307636, 312096, 312097, 312098, 312099, 312108, 312109, 312110, 312111, 312256, 312913, 328510, 330885, 331159, 36248, 36250, 42240, 58935, 60214, 69300, 69536, 69664, 74440, 74456, 74484, 79147, 79230, 81737, 81780
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A087. L-Citrulline — `INGR_L_CITRULLINE`
 
@@ -1204,7 +1204,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [1179](https://api.ods.od.nih.gov/dsld/s3/pdf/1179.pdf), [12800](https://api.ods.od.nih.gov/dsld/s3/pdf/12800.pdf), [16385](https://api.ods.od.nih.gov/dsld/s3/pdf/16385.pdf), 19471, 207201, 2219, 223363, 223380, 224677, 241807, 252577, 252627, 252628, 253880, 253904, 253913, 254205, 254208, 254211, 254249, 254250, 254252, 25704, 269653, 269655, 270515, 270613, 2723, 277959, 28981, 299073, 299074, 302684, 306316, 306317, 308232, 308233, 308234, 308235, 308236, 308237, 311618, 312118, 312119, 312120, 312121, 312122, 312123, 312124, 312125, 312126, 312127, 312128, 312129, 312914, 33327, 33341, 5887, 60215, 69274, 74583, 74788, 77227, 77261
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A088. L-Theanine — `INGR_L_THEANINE`
 
@@ -1216,7 +1216,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [179653](https://api.ods.od.nih.gov/dsld/s3/pdf/179653.pdf), [204646](https://api.ods.od.nih.gov/dsld/s3/pdf/204646.pdf), [221249](https://api.ods.od.nih.gov/dsld/s3/pdf/221249.pdf), 223413, 230232, 232231, 241681, 241813, 242482, 242488, 242541, 252828, 252838, 254772, 254806, 254807, 254808, 254809, 254810, 254811, 264104, 267341, 267342, 269720, 270958, 273643, 274556, 290588, 290589, 290592, 291235, 291265, 291266, 291267, 291292, 293317, 293318, 293779, 295128, 295129, 295130, 299913, 303971, 304570, 307737, 307738, 308206, 308207, 310256, 312272, 312273, 312274, 312275, 312276, 312277, 312278, 312925, 313831, 315980, 323062, 327991, 328482, 328523, 328727, 330020, 332932, 36340, 42263, 59062, 65917
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A089. Magnesium (Generic) — `INGR_MAGNESIUM_GENERIC`
 
@@ -1228,7 +1228,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [176178](https://api.ods.od.nih.gov/dsld/s3/pdf/176178.pdf), [177247](https://api.ods.od.nih.gov/dsld/s3/pdf/177247.pdf), [177248](https://api.ods.od.nih.gov/dsld/s3/pdf/177248.pdf), 177958, 177978, 178682, 179534, 179652, 179715, 179929, 179940, 179947, 179948, 180223, 180442, 182990, 182999, 183550, 184615, 184671, 187494, 19505, 19516, 19971, 201495, 201597, 204716, 205309, 207448, 209393, 212793, 213225, 213757, 214824, 217149, 217578, 217587, 219379, 219453, 219466, 219667, 221102, 223424, 224653, 224655, 224666, 224703, 224737, 224740, 227974, 228070, 230986, 236914, 239320, 241135, 241141, 241142, 241825, 241839, 241846, 242510, 243047, 243072, 246151, 247324, 250775, 253851, 253853, 253872, 253890, 255606, 256981, 256990, 265310, 265313, 267697, 267698, 269725, 269726, 269804, 269892, 270605, 270606, 270719, 270965, 271329, 271342, 271641, 273823, 278242, 278243, 278245, 278375, 279878, 291376, 293271, 293295, 293398, 293951, 294012, 294013, 294014, 294015, 294017, 294018, 294026, 294027, 294031, 294032, 294058, 294062, 294412, 294413, 294869, 294870, 297681, 298074, 299065, 299929, 30570, 306215, 306216, 306334, 307647, 308308, 308309, 308310, 308311, 308312, 308313, 310116, 310730, 310731, 310732, 310733, 310736, 310737, 310738, 310739, 310740, 310741, 310742, 310743, 310744, 310745, 310746, 310747, 310750, 310752, 310753, 310754, 310755, 310797, 310798, 310799, 310800, 311724, 311725, 311726, 311727, 311728, 312930, 312975, 313829, 315317, 315676, 315677, 315678, 315680, 315681, 317034, 317118, 317123, 317614, 319644, 322383, 322551, 326761, 327413, 327566, 327567, 327577, 327578, 327579, 327993, 328306, 328441, 328453, 328564, 328565, 328641, 328832, 329630, 329631, 329633, 329634, 329641, 329642, 329643, 329646, 329651, 329652, 329653, 329654, 329719, 329720, 329721, 329722, 329745, 329881, 329882, 329883, 329884, 329885, 329886, 329887, 330691, 330695, 333758, 334872, 334873, 337252, 338012, 36333, 40604, 45105, 45115, 49483, 49512, 62665, 65045, 65689, 69336, 69467, 70328, 72877, 74054, 75024, 75031, 76542, 77165, 80101
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A090. Magnesium Glycinate — `INGR_MAG_GLYCINATE`
 
@@ -1240,7 +1240,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [182999](https://api.ods.od.nih.gov/dsld/s3/pdf/182999.pdf), [294032](https://api.ods.od.nih.gov/dsld/s3/pdf/294032.pdf)
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A091. Melatonin — `INGR_MELATONIN`
 
@@ -1252,7 +1252,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [12210](https://api.ods.od.nih.gov/dsld/s3/pdf/12210.pdf), [17393](https://api.ods.od.nih.gov/dsld/s3/pdf/17393.pdf), [178273](https://api.ods.od.nih.gov/dsld/s3/pdf/178273.pdf), 178688, 179774, 179777, 179965, 180126, 180147, 180228, 180250, 180264, 180266, 180288, 180295, 180296, 180311, 180337, 18142, 184638, 185032, 19984, 19985, 203073, 203221, 207551, 209357, 209485, 209660, 210467, 211171, 211422, 211439, 213478, 213788, 213982, 216981, 218548, 224743, 224755, 224757, 224768, 224770, 228848, 231640, 231643, 231645, 231659, 231759, 232159, 232359, 232365, 239805, 239815, 240122, 241493, 241585, 243019, 243079, 246232, 246281, 253065, 253069, 253193, 25516, 257098, 259249, 260265, 264231, 267297, 267349, 267359, 267363, 270948, 271095, 271339, 271540, 271543, 271557, 271605, 271645, 271754, 277378, 277427, 277770, 278553, 286334, 286393, 293389, 294020, 294021, 294022, 294023, 294404, 294405, 295530, 298036, 299063, 299064, 306354, 308205, 308208, 312831, 313835, 317035, 317818, 317819, 317820, 317821, 317822, 318193, 326688, 328445, 328461, 328572, 328573, 328574, 328846, 329742, 329743, 329744, 329746, 329747, 329748, 329897, 337223, 35632, 46282, 58626, 60251, 60286, 60319, 60401, 60854, 62274, 63301, 64854, 65131, 65690, 69293, 71735, 77236, 79636
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A092. Milk Thistle (Silymarin) — `INGR_MILK_THISTLE`
 
@@ -1264,7 +1264,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [13295](https://api.ods.od.nih.gov/dsld/s3/pdf/13295.pdf), [180411](https://api.ods.od.nih.gov/dsld/s3/pdf/180411.pdf), [18296](https://api.ods.od.nih.gov/dsld/s3/pdf/18296.pdf), 18297, 183275, 18335, 18382, 201735, 205152, 211319, 218939, 218969, 219189, 219238, 227927, 227940, 228932, 229831, 230947, 231939, 232106, 232540, 246048, 251847, 26310, 26477, 26673, 273822, 273825, 278357, 287494, 287809, 294008, 295528, 302707, 306356, 307696, 311048, 311049, 311050, 311051, 312934, 321361, 3233, 328071, 328072, 328076, 332136, 336352, 336357, 3514, 35915, 40598, 4129, 43479, 49203, 59213, 59514, 59717, 60011, 60149, 60153, 60706, 62149, 63667, 63721, 63753, 74544, 74546, 74552, 74596, 74597, 74598, 76539, 79228, 79233, 79582, 80081, 82607, 866
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A093. MSM (Methylsulfonylmethane) — `INGR_MSM`
 
@@ -1276,7 +1276,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [12196](https://api.ods.od.nih.gov/dsld/s3/pdf/12196.pdf), [1653](https://api.ods.od.nih.gov/dsld/s3/pdf/1653.pdf), [17471](https://api.ods.od.nih.gov/dsld/s3/pdf/17471.pdf), 182940, 184231, 199942, 199947, 199952, 20034, 20035, 20037, 20038, 201417, 202773, 203181, 211448, 214640, 214647, 214651, 218227, 224694, 224696, 239581, 239731, 239868, 239880, 239951, 24954, 251637, 25832, 259471, 26631, 268018, 269281, 269285, 269326, 269711, 269727, 273861, 275999, 277684, 277688, 288677, 29211, 293287, 294030, 299068, 307593, 307594, 307699, 307700, 307701, 307702, 308198, 311060, 311061, 311062, 311063, 311064, 311065, 321611, 322384, 328283, 328580, 4108, 4117, 44712, 46739, 46741, 59869, 64456, 66980, 67559, 71650, 73017, 73070, 75845, 75856, 77150
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A094. N-Acetylcysteine — `INGR_NAC`
 
@@ -1288,7 +1288,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [183201](https://api.ods.od.nih.gov/dsld/s3/pdf/183201.pdf), [185288](https://api.ods.od.nih.gov/dsld/s3/pdf/185288.pdf), [219203](https://api.ods.od.nih.gov/dsld/s3/pdf/219203.pdf), 223489, 252658, 252668, 253974, 253977, 255627, 269593, 269709, 277779, 277780, 277781, 277782, 277953, 278301, 287433, 293970, 296809, 299070, 306361, 306362, 311093, 311094, 311095, 311096, 311731, 323064, 326269, 328582, 329943, 329944, 336347, 64159, 64164, 64165
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A095. Omega-3 Fatty Acids — `INGR_OMEGA3`
 
@@ -1300,7 +1300,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [15717](https://api.ods.od.nih.gov/dsld/s3/pdf/15717.pdf), [178674](https://api.ods.od.nih.gov/dsld/s3/pdf/178674.pdf), [179650](https://api.ods.od.nih.gov/dsld/s3/pdf/179650.pdf), 18180, 1837, 1838, 188691, 188704, 201113, 218681, 231415, 231904, 269603, 271458, 28639, 28661, 28681, 291378, 294584, 302769, 304676, 312984, 313195, 313533, 313534, 315698, 327995, 328645, 330632, 332936, 33514, 33652, 36159, 58693, 59030, 70588
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A096. Pantethine — `INGR_PANTETHINE`
 
@@ -1312,7 +1312,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [182289](https://api.ods.od.nih.gov/dsld/s3/pdf/182289.pdf), [211992](https://api.ods.od.nih.gov/dsld/s3/pdf/211992.pdf), [212298](https://api.ods.od.nih.gov/dsld/s3/pdf/212298.pdf), 232086, 264974, 278022, 278023, 291791, 307706, 328291, 337209, 67165
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A097. Passionflower Extract — `INGR_PASSIONFLOWER`
 
@@ -1324,7 +1324,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [1850](https://api.ods.od.nih.gov/dsld/s3/pdf/1850.pdf), [242585](https://api.ods.od.nih.gov/dsld/s3/pdf/242585.pdf), [330226](https://api.ods.od.nih.gov/dsld/s3/pdf/330226.pdf), 330227, 330228, 330229
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A098. Palmitoylethanolamide (PEA) — `INGR_PEA`
 
@@ -1336,7 +1336,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [222789](https://api.ods.od.nih.gov/dsld/s3/pdf/222789.pdf), [232808](https://api.ods.od.nih.gov/dsld/s3/pdf/232808.pdf), [328401](https://api.ods.od.nih.gov/dsld/s3/pdf/328401.pdf), 328402, 328415, 67178, 67311
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A099. Peppermint Oil — `INGR_PEPPERMINT_OIL`
 
@@ -1348,7 +1348,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [253235](https://api.ods.od.nih.gov/dsld/s3/pdf/253235.pdf), [294392](https://api.ods.od.nih.gov/dsld/s3/pdf/294392.pdf), [294393](https://api.ods.od.nih.gov/dsld/s3/pdf/294393.pdf)
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A100. Phosphatidylserine — `INGR_PHOSPHATIDYLSERINE`
 
@@ -1360,7 +1360,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [182305](https://api.ods.od.nih.gov/dsld/s3/pdf/182305.pdf), [187516](https://api.ods.od.nih.gov/dsld/s3/pdf/187516.pdf), [203178](https://api.ods.od.nih.gov/dsld/s3/pdf/203178.pdf), 209417, 213475, 218600, 218838, 232174, 241931, 243046, 252790, 254213, 254214, 254216, 254217, 254218, 254219, 264981, 264982, 264983, 278262, 278263, 287463, 288796, 291784, 293377, 306271, 311426, 311427, 311428, 311429, 311430, 311431, 311432, 312942, 315690, 321947, 321959, 321960, 321961, 323123, 328646, 330242, 330243, 330244, 330245, 330246, 330247, 330248, 330267, 333764, 336350, 81960, 82935
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A101. Plant Sterols/Stanols — `INGR_PLANT_STEROLS`
 
@@ -1372,7 +1372,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [15714](https://api.ods.od.nih.gov/dsld/s3/pdf/15714.pdf), [179813](https://api.ods.od.nih.gov/dsld/s3/pdf/179813.pdf), [179818](https://api.ods.od.nih.gov/dsld/s3/pdf/179818.pdf), 182620, 183999, 18441, 209969, 212783, 213572, 228009, 228846, 232811, 259506, 26633, 270710, 271299, 27191, 285745, 291789, 293905, 293931, 293932, 294571, 294572, 294573, 294574, 295499, 295505, 297644, 299745, 299746, 311433, 311434, 311435, 311436, 312863, 328635, 328636, 330268, 330269, 330270, 330271, 33511, 33553, 33628, 3521, 48040, 5879, 59206, 60775, 60789, 64891, 64892, 66730, 67180, 71081, 74767, 81877, 83090
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A102. Potassium — `INGR_POTASSIUM`
 
@@ -1384,7 +1384,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [12014](https://api.ods.od.nih.gov/dsld/s3/pdf/12014.pdf), [16734](https://api.ods.od.nih.gov/dsld/s3/pdf/16734.pdf), [16747](https://api.ods.od.nih.gov/dsld/s3/pdf/16747.pdf), 16801, 16846, 16896, 175429, 176178, 177247, 177248, 179101, 182990, 183550, 184615, 20184, 210463, 210621, 212553, 213225, 214452, 217589, 221102, 223549, 224656, 224712, 227974, 228070, 228849, 240336, 242519, 243679, 252870, 252873, 264037, 266471, 269750, 270720, 270721, 270725, 271361, 272817, 278238, 278239, 278241, 278376, 280355, 294026, 294027, 294032, 294058, 306215, 306216, 308308, 308309, 308310, 308311, 308312, 308313, 311607, 311608, 311609, 311610, 311611, 311615, 311616, 311617, 311620, 311622, 311724, 311725, 311726, 311727, 311728, 312944, 312946, 317614, 328017, 330065, 330066, 330322, 330323, 330324, 330325, 330338, 330339, 330340, 330341, 330342, 330343, 330344, 330345, 330346, 330347, 330348, 334876, 334877, 336334, 338012, 36333, 45105, 46330, 62665, 70328, 78016, 79426, 81029, 9198
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A103. Lactobacillus and Bifidobacterium Strains — `INGR_PROBIOTICS`
 
@@ -1396,7 +1396,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [273631](https://api.ods.od.nih.gov/dsld/s3/pdf/273631.pdf), [291259](https://api.ods.od.nih.gov/dsld/s3/pdf/291259.pdf)
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A104. Psyllium Husk — `INGR_PSYLLIUM_HUSK`
 
@@ -1408,7 +1408,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [17192](https://api.ods.od.nih.gov/dsld/s3/pdf/17192.pdf), [17778](https://api.ods.od.nih.gov/dsld/s3/pdf/17778.pdf), [1834](https://api.ods.od.nih.gov/dsld/s3/pdf/1834.pdf), 184942, 210533, 213312, 218637, 218641, 219048, 219049, 2259, 227922, 230979, 246102, 252907, 254361, 254362, 254363, 259626, 269793, 270532, 287495, 293280, 293400, 311639, 311642, 311646, 311649, 317119, 330038, 330039, 330040, 333746, 54515, 54557, 59332, 59333, 63293, 74394, 74719, 74840, 74844, 76540, 76810, 77220, 82099
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A105. Quercetin — `INGR_QUERCETIN`
 
@@ -1420,7 +1420,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [176273](https://api.ods.od.nih.gov/dsld/s3/pdf/176273.pdf), [186337](https://api.ods.od.nih.gov/dsld/s3/pdf/186337.pdf), [210981](https://api.ods.od.nih.gov/dsld/s3/pdf/210981.pdf), 2222, 232452, 232753, 241939, 243002, 254033, 254062, 267343, 267345, 2693, 270729, 274138, 274148, 278343, 278344, 289060, 28978, 293970, 295200, 296185, 298048, 306385, 307720, 307721, 308266, 309492, 312950, 322516, 325831, 325832, 326284, 328477, 328615, 328654, 328796, 328840, 330398, 330399, 330400, 330401, 336310, 336336, 61991, 62046, 63342, 63347
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A106. Red Yeast Rice — `INGR_RED_YEAST_RICE`
 
@@ -1432,7 +1432,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [206443](https://api.ods.od.nih.gov/dsld/s3/pdf/206443.pdf), [213840](https://api.ods.od.nih.gov/dsld/s3/pdf/213840.pdf), [223429](https://api.ods.od.nih.gov/dsld/s3/pdf/223429.pdf), 243202, 24676, 24678, 24681, 25216, 25217, 25219, 291777, 293379, 298027, 307723, 311956, 321943, 330490, 330491, 333929, 46333, 54463, 54464, 60307, 60310, 62130, 68861, 77190, 79129
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A107. Rhodiola Rosea — `INGR_RHODIOLA`
 
@@ -1444,7 +1444,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [213648](https://api.ods.od.nih.gov/dsld/s3/pdf/213648.pdf), [219045](https://api.ods.od.nih.gov/dsld/s3/pdf/219045.pdf), [227841](https://api.ods.od.nih.gov/dsld/s3/pdf/227841.pdf), 227946, 241674, 241941, 278353, 278354, 306386, 307549, 311875, 312320, 313332, 317968, 328039, 328652, 330590, 330591, 330593, 330594, 330595, 330596, 336353, 698, 74601
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A108. Vitamin B2 (Riboflavin) — `INGR_RIBOFLAVIN_B2`
 
@@ -1456,7 +1456,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [13233](https://api.ods.od.nih.gov/dsld/s3/pdf/13233.pdf), [13240](https://api.ods.od.nih.gov/dsld/s3/pdf/13240.pdf), [217399](https://api.ods.od.nih.gov/dsld/s3/pdf/217399.pdf), 224665, 232326, 288632, 293888, 306403, 306404, 312323, 312324, 312325, 312326, 312327, 312952, 328040, 328041, 328579, 330097, 73713, 74272, 83025
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A109. Saw Palmetto — `INGR_SAW_PALMETTO`
 
@@ -1470,7 +1470,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [14234](https://api.ods.od.nih.gov/dsld/s3/pdf/14234.pdf), [15715](https://api.ods.od.nih.gov/dsld/s3/pdf/15715.pdf), [178321](https://api.ods.od.nih.gov/dsld/s3/pdf/178321.pdf), 179983, 18274, 18337, 184926, 185253, 187612, 187614, 188671, 204040, 206963, 210490, 213090, 213096, 218983, 219040, 220281, 228795, 259817, 259832, 26360, 269286, 269589, 270733, 27449, 278359, 287468, 293954, 294541, 294542, 304643, 311538, 312985, 313538, 315813, 315842, 31997, 328054, 328055, 328056, 330651, 330718, 330719, 333944, 33632, 35647, 4138, 46335, 60238, 60240, 62841, 68955, 69696, 71741, 74543, 74635, 74800, 74802, 75045, 75840, 77222, 853, 867, 995, 996
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A110. Sea Buckthorn — `INGR_SEA_BUCKTHORN`
 
@@ -1484,7 +1484,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [252829](https://api.ods.od.nih.gov/dsld/s3/pdf/252829.pdf), [254388](https://api.ods.od.nih.gov/dsld/s3/pdf/254388.pdf), [254389](https://api.ods.od.nih.gov/dsld/s3/pdf/254389.pdf), 254390, 311545, 311546, 311547, 311548, 330725, 330726
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A111. Selenium — `INGR_SELENIUM`
 
@@ -1496,7 +1496,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [177481](https://api.ods.od.nih.gov/dsld/s3/pdf/177481.pdf), [177489](https://api.ods.od.nih.gov/dsld/s3/pdf/177489.pdf), [183271](https://api.ods.od.nih.gov/dsld/s3/pdf/183271.pdf), 184923, 20195, 203414, 214937, 218674, 218677, 227951, 227954, 232076, 25860, 269732, 269798, 278355, 278356, 290548, 307733, 315700, 315976, 327580, 328057, 328721, 336333, 43982, 59702, 60301, 71746, 73740, 76067, 78376, 81103, 81106, 8808
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A112. Spirulina — `INGR_SPIRULINA`
 
@@ -1510,7 +1510,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [178716](https://api.ods.od.nih.gov/dsld/s3/pdf/178716.pdf), [178733](https://api.ods.od.nih.gov/dsld/s3/pdf/178733.pdf), [218719](https://api.ods.od.nih.gov/dsld/s3/pdf/218719.pdf), 232481, 232485, 264083, 267303, 267326, 267327, 273825, 274662, 294363, 294364, 294365, 294366, 306368, 306374, 309388, 311643, 311644, 311645, 311647, 311680, 311681, 312953, 313694, 321361, 327405, 327407, 328065, 330051, 330052, 330053, 330054, 330686, 60835, 63308, 65047, 74778, 77257, 78306
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A113. St. John's Wort — `INGR_ST_JOHNS_WORT`
 
@@ -1522,7 +1522,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [180412](https://api.ods.od.nih.gov/dsld/s3/pdf/180412.pdf), [18219](https://api.ods.od.nih.gov/dsld/s3/pdf/18219.pdf), [182957](https://api.ods.od.nih.gov/dsld/s3/pdf/182957.pdf), 184344, 20197, 212646, 212962, 216747, 219184, 224715, 229843, 239740, 239819, 251799, 259591, 26127, 26413, 308209, 311654, 311655, 312359, 328067, 330855, 330856, 330857, 330858, 331300, 333772, 40662, 59201, 74615
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A114. Taurine — `INGR_TAURINE`
 
@@ -1534,7 +1534,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [184932](https://api.ods.od.nih.gov/dsld/s3/pdf/184932.pdf), [185257](https://api.ods.od.nih.gov/dsld/s3/pdf/185257.pdf), [218727](https://api.ods.od.nih.gov/dsld/s3/pdf/218727.pdf), 218735, 218738, 224727, 227831, 231633, 232411, 246352, 252737, 252739, 254085, 254086, 284265, 293938, 294354, 294355, 294356, 294523, 294524, 294525, 294526, 306390, 306391, 307736, 310541, 311692, 311693, 311694, 311695, 311879, 312954, 323062, 328724, 328725, 330876, 336349, 58686, 63292, 66957
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A115. Curcumin — `INGR_TURMERIC`
 
@@ -1546,7 +1546,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [177145](https://api.ods.od.nih.gov/dsld/s3/pdf/177145.pdf), [177474](https://api.ods.od.nih.gov/dsld/s3/pdf/177474.pdf), [180094](https://api.ods.od.nih.gov/dsld/s3/pdf/180094.pdf), 182824, 182880, 18392, 184133, 184189, 184197, 184265, 185123, 187546, 202134, 204502, 209396, 210474, 213170, 219376, 219891, 221158, 221657, 222791, 222792, 223436, 229447, 229934, 230947, 239820, 241090, 241200, 242577, 242580, 243134, 243618, 243683, 248670, 253255, 256166, 259880, 26256, 269335, 271092, 271554, 273386, 277771, 277772, 277955, 278229, 278548, 284229, 284239, 284255, 287486, 287492, 287494, 293873, 293989, 294006, 294352, 294353, 295526, 298077, 298078, 298079, 300258, 302651, 302652, 302672, 305921, 306375, 306396, 307577, 307578, 307579, 312958, 317000, 317006, 317826, 31998, 321351, 326288, 327562, 328068, 328825, 328826, 330088, 330089, 330090, 330091, 331029, 331030, 331032, 331033, 332949, 336322, 336336, 337856, 35922, 59810, 60257, 60306, 63466, 67282, 695, 69503, 74430, 74547, 74555, 74565, 74570, 83084
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A116. Valerian Root — `INGR_VALERIAN`
 
@@ -1558,7 +1558,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [12853](https://api.ods.od.nih.gov/dsld/s3/pdf/12853.pdf), [178735](https://api.ods.od.nih.gov/dsld/s3/pdf/178735.pdf), [20198](https://api.ods.od.nih.gov/dsld/s3/pdf/20198.pdf), 213353, 219009, 221230, 239743, 242585, 251861, 251868, 273477, 294511, 294512, 294513, 294514, 304709, 311754, 311755, 311756, 311757, 312959, 328079, 328080, 328081, 328815, 331036, 331037, 331038, 331039, 333775, 3550, 39981, 63235, 63711, 63712, 705, 74664, 75851, 82985
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A117. Vitamin B3 (Niacin) — `INGR_VITAMIN_B3_NIACIN`
 
@@ -1572,7 +1572,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [13460](https://api.ods.od.nih.gov/dsld/s3/pdf/13460.pdf), [180399](https://api.ods.od.nih.gov/dsld/s3/pdf/180399.pdf), [184695](https://api.ods.od.nih.gov/dsld/s3/pdf/184695.pdf), 18477, 20020, 201426, 201437, 211387, 223533, 224667, 224669, 224674, 236915, 239475, 240009, 242284, 242518, 252730, 252751, 254064, 254069, 25539, 25895, 261851, 263987, 263988, 272788, 277956, 277957, 277958, 293410, 302710, 306364, 306365, 306366, 308197, 311120, 311121, 311122, 311123, 311124, 311125, 311126, 311127, 312497, 312498, 312499, 312500, 312939, 312940, 328002, 328602, 328764, 329946, 337868, 3558, 46291, 59710, 60853, 62189, 62224, 62268, 66746, 74314, 83096
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A118. Vitamin B6 — `INGR_VITAMIN_B6`
 
@@ -1584,7 +1584,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [176178](https://api.ods.od.nih.gov/dsld/s3/pdf/176178.pdf), [179413](https://api.ods.od.nih.gov/dsld/s3/pdf/179413.pdf), [183550](https://api.ods.od.nih.gov/dsld/s3/pdf/183550.pdf), 200361, 201653, 201657, 202910, 213225, 213397, 218430, 218431, 221102, 227974, 228070, 231785, 243042, 269851, 270623, 272975, 278016, 278017, 302632, 311810, 312258, 317614, 328793, 328839, 330387, 330388, 330389, 330390, 330391, 330392, 330393, 330394, 330395, 330396, 336013, 36333, 4334, 45105, 61996, 62684, 63214, 63232, 70328, 73714, 73715, 73719, 74273, 77209, 8851, 9190
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A119. Vitamin C — `INGR_VITAMIN_C`
 
@@ -1596,7 +1596,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [17186](https://api.ods.od.nih.gov/dsld/s3/pdf/17186.pdf), [184615](https://api.ods.od.nih.gov/dsld/s3/pdf/184615.pdf), [186337](https://api.ods.od.nih.gov/dsld/s3/pdf/186337.pdf), 252560, 253359, 257096, 265177, 271087, 28561, 28568, 287370, 293970, 306215, 306216, 307549, 308308, 308309, 308310, 308311, 308312, 308313, 311724, 311725, 311726, 311727, 311728, 321385, 326238, 327586, 328477, 328796, 332873, 332880, 40089, 46707, 63493
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A120. Vitamin D3 — `INGR_VITAMIN_D3`
 
@@ -1608,7 +1608,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [12016](https://api.ods.od.nih.gov/dsld/s3/pdf/12016.pdf), [12054](https://api.ods.od.nih.gov/dsld/s3/pdf/12054.pdf), [12190](https://api.ods.od.nih.gov/dsld/s3/pdf/12190.pdf), 12193, 12202, 13186, 13217, 13228, 13471, 15903, 17344, 17358, 17390, 173945, 17400, 176872, 177089, 177091, 177518, 178267, 178309, 178320, 178365, 178388, 178403, 178417, 178549, 178720, 178745, 178754, 178758, 178795, 179356, 179359, 179566, 179572, 179602, 179621, 179633, 179637, 179645, 179695, 179702, 179704, 179711, 179720, 179745, 179824, 179943, 179955, 179976, 179977, 179985, 180091, 180110, 180164, 180200, 180202, 180207, 180208, 180209, 180242, 180255, 180338, 180421, 180423, 180434, 182208, 182837, 184058, 184424, 19965, 19968, 20032, 201079, 20205, 203341, 205006, 206354, 207318, 211265, 211405, 216969, 217422, 217436, 217447, 217450, 217536, 217539, 219199, 219206, 219329, 219350, 219969, 221684, 223165, 223174, 223310, 223324, 223333, 223337, 223345, 223579, 224614, 224714, 224716, 228700, 230288, 231996, 232014, 232016, 232274, 232339, 232342, 232347, 232757, 232774, 233695, 239122, 239143, 239443, 239630, 239650, 239676, 239739, 239816, 239888, 239934, 239936, 240372, 240393, 240629, 240685, 240689, 240696, 240722, 240732, 240870, 241202, 241208, 241211, 241229, 241538, 241624, 241695, 242808, 242816, 242948, 242953, 243013, 243034, 243036, 243053, 243389, 243404, 243677, 246047, 246219, 246415, 247332, 247350, 24784, 24791, 24809, 250750, 251592, 253094, 253191, 2534, 253856, 254434, 254440, 25491, 256930, 257077, 257081, 257082, 257084, 257099, 25835, 25841, 25908, 25909, 259878, 26189, 261950, 261951, 26295, 263872, 264065, 264066, 264171, 265184, 265282, 265283, 265305, 26672, 266768, 26692, 26696, 267271, 267287, 267346, 26743, 267556, 267580, 267585, 268430, 268647, 269493, 269529, 269535, 269628, 270293, 270957, 270960, 271121, 271125, 271137, 271140, 271313, 271334, 271352, 271449, 271464, 271509, 271651, 271716, 27207, 272476, 272720, 272823, 272824, 272970, 273228, 273480, 273532, 273627, 273639, 273671, 273867, 274168, 274175, 274355, 274365, 274574, 275996, 277024, 277389, 277405, 278380, 278460, 278524, 278525, 279461, 279473, 282948, 285638, 285746, 286149, 286327, 286329, 287360, 287470, 287488, 287806, 288162, 288758, 291220, 29152, 29222, 29227, 29277, 29311, 293216, 293384, 293397, 293421, 293423, 293925, 293948, 293952, 293960, 294066, 294067, 294068, 294069, 294070, 294071, 294072, 294476, 294477, 295471, 295536, 296191, 296192, 296193, 298052, 298102, 299032, 299757, 299908, 299912, 302697, 302718, 302760, 302762, 302774, 304571, 304682, 304683, 304686, 305548, 305549, 305550, 305903, 305904, 306268, 306409, 306410, 306411, 306414, 307746, 307747, 307748, 307749, 308191, 308192, 308199, 308200, 309609, 311783, 313818, 313819, 313820, 313821, 313822, 313823, 313824, 313825, 313826, 313827, 313828, 313833, 313834, 316345, 317047, 317813, 317999, 318000, 318001, 318002, 318185, 318186, 318191, 318200, 318201, 318557, 321340, 321395, 321606, 321613, 326251, 326291, 326293, 326294, 326302, 326706, 327420, 327587, 327588, 327891, 328085, 328086, 328304, 328478, 328760, 330099, 331069, 331070, 331071, 331072, 332952, 333930, 33509, 335161, 336330, 336339, 336897, 337229, 337257, 35643, 4184, 4226, 4340, 43708, 44551, 46331, 46332, 46728, 46730, 47763, 58715, 59123, 59280, 59934, 59955, 60006, 60692, 60696, 62002, 62053, 62163, 62280, 62523, 62677, 62961, 62982, 62989, 64702, 64793, 65760, 65809, 65963, 69758, 7083, 71376, 72975, 73060, 73268, 73328, 73330, 74088, 74220, 74330, 74398, 74410, 76079, 76177, 76510, 78384, 82336, 82408, 82475, 83004, 83209, 83238, 8836, 8837, 8912, 8955, 8957, 9115, 9193, 9244
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A121. Protein Supplementation — `INGR_WHEY_PROTEIN`
 
@@ -1620,7 +1620,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [12834](https://api.ods.od.nih.gov/dsld/s3/pdf/12834.pdf), [16725](https://api.ods.od.nih.gov/dsld/s3/pdf/16725.pdf), [16730](https://api.ods.od.nih.gov/dsld/s3/pdf/16730.pdf), 16767, 16772, 16774, 16785, 16786, 16787, 16789, 16790, 16792, 16794, 16796, 16797, 16799, 16837, 16844, 16845, 16863, 16865, 16866, 16872, 175027, 176044, 182560, 18452, 18469, 18518, 19166, 19167, 19483, 19494, 19499, 19504, 199511, 199513, 199514, 199515, 208915, 209005, 212544, 214464, 214465, 218854, 219703, 219788, 219791, 219898, 219925, 219937, 219941, 220019, 220023, 220074, 220076, 220081, 220082, 220090, 220097, 220108, 220191, 220202, 220211, 220213, 220959, 221127, 221166, 221372, 221377, 221379, 221423, 221432, 221436, 221458, 221460, 221471, 2262, 2263, 228292, 228303, 228306, 228314, 228524, 228831, 228833, 228836, 228838, 229510, 229563, 229623, 229695, 232341, 232385, 232387, 232422, 232798, 241193, 241233, 242991, 243026, 243050, 243061, 243069, 243081, 243085, 243089, 243092, 243102, 243105, 243117, 243119, 243124, 243127, 243133, 243246, 243250, 243254, 243265, 243275, 248656, 248662, 252510, 253633, 253638, 253654, 25624, 25694, 256949, 25712, 259621, 259624, 259628, 259634, 259709, 259805, 259821, 259857, 259877, 259883, 259884, 259885, 259894, 259900, 259903, 259966, 259970, 259992, 260074, 260134, 263871, 264069, 264070, 264071, 264072, 264073, 264168, 264833, 264834, 268690, 273696, 27422, 274376, 277517, 27809, 27810, 28518, 28553, 28973, 294048, 294073, 294273, 30573, 306228, 306229, 306377, 306415, 306416, 307778, 307779, 307780, 308228, 308242, 308243, 308244, 308267, 308268, 308269, 308270, 308271, 308273, 308274, 308275, 308276, 308277, 308278, 308279, 308280, 308281, 308282, 308283, 308284, 308285, 308286, 308287, 308326, 308327, 308328, 308336, 308337, 308338, 308339, 308340, 308689, 308690, 31064, 311409, 311410, 311411, 311412, 311852, 311853, 311880, 311937, 311938, 311939, 311947, 312355, 312356, 312357, 312706, 312709, 314431, 314432, 314433, 314434, 314435, 314436, 315312, 315313, 315315, 315316, 316252, 316253, 316254, 316256, 316257, 317416, 317417, 317418, 317419, 317420, 317421, 317422, 317617, 317618, 317619, 317620, 317621, 317622, 317623, 317625, 317626, 317631, 317632, 317633, 317634, 317635, 317636, 317637, 317639, 317640, 317641, 317642, 317643, 317644, 317652, 318104, 319897, 319898, 321948, 322633, 323133, 327395, 328849, 328850, 329967, 329968, 330034, 330035, 330036, 330037, 330526, 330527, 330528, 330529, 330779, 330780, 330846, 331099, 331100, 331101, 331102, 331104, 331105, 331106, 331232, 334137, 334443, 334444, 33537, 33560, 33563, 33623, 33624, 336325, 33665, 337877, 37261, 37280, 40581, 40595, 42277, 42281, 42282, 42284, 42290, 42301, 42302, 42304, 42305, 42306, 42308, 42309, 42311, 42314, 42320, 42325, 42349, 42357, 42360, 4287, 4288, 4289, 43988, 44049, 45062, 45067, 45069, 45072, 45074, 45081, 47225, 47234, 47584, 4794, 4795, 4796, 4797, 4805, 4812, 4813, 4814, 4815, 4816, 48182, 48186, 49632, 49634, 49902, 49905, 60399, 60686, 60688, 60691, 61999, 62168, 64862, 66898, 66983, 67001, 67004, 67052, 67269, 67345, 67349, 67394, 69304, 69317, 69357, 69374, 69403, 69425, 69455, 69494, 69498, 69599, 69608, 69622, 69645, 70288, 70297, 74722, 74856, 74872, 75206, 77903, 78128, 79389, 79624, 79630, 82367, 82893, 82898, 82899
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A122. White Kidney Bean Extract — `INGR_WHITE_KIDNEY_BEAN`
 
@@ -1632,7 +1632,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [213183](https://api.ods.od.nih.gov/dsld/s3/pdf/213183.pdf), [213310](https://api.ods.od.nih.gov/dsld/s3/pdf/213310.pdf), [232395](https://api.ods.od.nih.gov/dsld/s3/pdf/232395.pdf), 269870, 294278, 294279, 294280, 294281, 306417, 31139, 311860, 311861, 311862, 311863, 331233, 331237, 331238, 331239, 36211, 74436
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A123. Zinc acetate/gluconate lozenges — `INGR_ZINC_PICOLINATE`
 
@@ -1644,7 +1644,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [204841](https://api.ods.od.nih.gov/dsld/s3/pdf/204841.pdf), [214039](https://api.ods.od.nih.gov/dsld/s3/pdf/214039.pdf), [232003](https://api.ods.od.nih.gov/dsld/s3/pdf/232003.pdf), 232155, 232613, 240993, 293417, 295203, 315703, 328053, 332955, 333934, 333936, 58893, 60604
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A124. Artichoke Extract — `PRECLIN_ARTICHOKE`
 
@@ -1656,7 +1656,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [252639](https://api.ods.od.nih.gov/dsld/s3/pdf/252639.pdf), [253754](https://api.ods.od.nih.gov/dsld/s3/pdf/253754.pdf), [253756](https://api.ods.od.nih.gov/dsld/s3/pdf/253756.pdf), 253758, 269954, 310831, 310838, 74064
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A125. Astaxanthin (Generic) — `PRECLIN_ASTAXANTHIN_GENERIC`
 
@@ -1668,7 +1668,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [179791](https://api.ods.od.nih.gov/dsld/s3/pdf/179791.pdf), [183770](https://api.ods.od.nih.gov/dsld/s3/pdf/183770.pdf), [183837](https://api.ods.od.nih.gov/dsld/s3/pdf/183837.pdf), 19950, 211454, 221690, 222695, 232542, 24322, 260138, 268371, 269279, 294487, 294488, 306060, 306061, 307556, 312651, 321949, 326236, 326237, 328284, 4229, 58992, 59906, 59907, 59908, 59912, 59917, 7091, 73764, 81021, 81374
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A126. Berberine — `PRECLIN_BERBERINE_GENERIC`
 
@@ -1680,7 +1680,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [184659](https://api.ods.od.nih.gov/dsld/s3/pdf/184659.pdf), [185088](https://api.ods.od.nih.gov/dsld/s3/pdf/185088.pdf), [185288](https://api.ods.od.nih.gov/dsld/s3/pdf/185288.pdf), 219047, 230947, 243044, 259493, 270533, 287431, 287494, 294024, 327975, 328007, 333191, 337255
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A127. Betaine Anhydrous — `PRECLIN_BETAINE_ANHYDROUS`
 
@@ -1692,7 +1692,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [175375](https://api.ods.od.nih.gov/dsld/s3/pdf/175375.pdf), [175409](https://api.ods.od.nih.gov/dsld/s3/pdf/175409.pdf), [185045](https://api.ods.od.nih.gov/dsld/s3/pdf/185045.pdf), 18541, 18551, 201848, 212237, 218309, 222769, 231669, 232421, 252462, 253682, 253701, 253704, 260081, 264827, 264828, 264829, 269321, 269835, 284244, 291788, 293972, 295516, 306185, 306235, 310998, 310999, 311000, 311001, 311733, 311734, 318109, 328729, 328745, 36992, 37217, 37224, 42235, 42236, 42237, 58667, 59727, 63923, 69302
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A128. Boswellia Serrata — `PRECLIN_BOSWELLIA`
 
@@ -1704,7 +1704,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [1653](https://api.ods.od.nih.gov/dsld/s3/pdf/1653.pdf), [17536](https://api.ods.od.nih.gov/dsld/s3/pdf/17536.pdf), [17539](https://api.ods.od.nih.gov/dsld/s3/pdf/17539.pdf), 182967, 188685, 19436, 20036, 212269, 27350, 278226, 278228, 284197, 29262, 293913, 293914, 293990, 295500, 295513, 297644, 311175, 311176, 311177, 311178, 312866, 315595, 327885, 328270, 328282, 329934, 330458, 330459, 330460, 330461, 337853, 46741, 67066, 74761, 852
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A129. Cordyceps Mushroom — `PRECLIN_CORDYCEPS`
 
@@ -1716,7 +1716,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [25545](https://api.ods.od.nih.gov/dsld/s3/pdf/25545.pdf), [306201](https://api.ods.od.nih.gov/dsld/s3/pdf/306201.pdf), [306367](https://api.ods.od.nih.gov/dsld/s3/pdf/306367.pdf), 307781, 311676
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A130. Curcumin — `PRECLIN_CURCUMIN_GENERIC`
 
@@ -1728,7 +1728,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [210629](https://api.ods.od.nih.gov/dsld/s3/pdf/210629.pdf), [210639](https://api.ods.od.nih.gov/dsld/s3/pdf/210639.pdf), [232507](https://api.ods.od.nih.gov/dsld/s3/pdf/232507.pdf), 232780, 232925, 233012, 233015, 239850, 257070, 277379, 317709, 326287, 327582, 327583, 327584, 327585, 328035, 328404, 336336
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A131. Deglycyrrhizinated Licorice — `PRECLIN_DGL`
 
@@ -1740,7 +1740,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [229866](https://api.ods.od.nih.gov/dsld/s3/pdf/229866.pdf), [229869](https://api.ods.od.nih.gov/dsld/s3/pdf/229869.pdf), [229935](https://api.ods.od.nih.gov/dsld/s3/pdf/229935.pdf), 241316, 251625, 252772, 254497, 254502, 254503, 275343, 275824, 306329, 312165, 312166, 312167, 312168, 44423
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A132. Fisetin — `PRECLIN_FISETIN`
 
@@ -1752,7 +1752,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [241780](https://api.ods.od.nih.gov/dsld/s3/pdf/241780.pdf), [302658](https://api.ods.od.nih.gov/dsld/s3/pdf/302658.pdf), [328289](https://api.ods.od.nih.gov/dsld/s3/pdf/328289.pdf), 81967
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A133. Huperzine A — `PRECLIN_HUPERZINE_A`
 
@@ -1764,7 +1764,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [231945](https://api.ods.od.nih.gov/dsld/s3/pdf/231945.pdf), [243149](https://api.ods.od.nih.gov/dsld/s3/pdf/243149.pdf), [252711](https://api.ods.od.nih.gov/dsld/s3/pdf/252711.pdf), 254819, 254820, 254821, 254823, 254825, 255595, 270423, 306232, 312007, 312008, 312009, 312010, 312011, 312012, 312991, 315651, 328475, 59711, 709, 74667
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A134. Nicotinamide Mononucleotide — `PRECLIN_NMN`
 
@@ -1776,7 +1776,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [241894](https://api.ods.od.nih.gov/dsld/s3/pdf/241894.pdf), [241908](https://api.ods.od.nih.gov/dsld/s3/pdf/241908.pdf), [252756](https://api.ods.od.nih.gov/dsld/s3/pdf/252756.pdf), 254088, 254089, 254090, 270614, 270688, 304447, 311128, 311129, 311130, 311131, 315688, 329947
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A135. Pyrroloquinoline Quinone — `PRECLIN_PQQ`
 
@@ -1788,7 +1788,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [203334](https://api.ods.od.nih.gov/dsld/s3/pdf/203334.pdf), [212032](https://api.ods.od.nih.gov/dsld/s3/pdf/212032.pdf), [212034](https://api.ods.od.nih.gov/dsld/s3/pdf/212034.pdf), 212035, 231832, 232072, 232074, 232138, 241932, 264976, 264977, 264978, 270726, 302700, 306379, 307708, 307709, 307710, 307718, 307719, 311732, 47811
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A136. Pterostilbene — `PRECLIN_PTEROSTILBENE`
 
@@ -1800,7 +1800,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [181999](https://api.ods.od.nih.gov/dsld/s3/pdf/181999.pdf), [212054](https://api.ods.od.nih.gov/dsld/s3/pdf/212054.pdf), [241938](https://api.ods.od.nih.gov/dsld/s3/pdf/241938.pdf), 265080, 270728, 286155, 307740
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A137. Quercetin Phytosome — `PRECLIN_QUERCETIN_PHYTOSOME`
 
@@ -1812,7 +1812,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [328477](https://api.ods.od.nih.gov/dsld/s3/pdf/328477.pdf), [328796](https://api.ods.od.nih.gov/dsld/s3/pdf/328796.pdf), [336336](https://api.ods.od.nih.gov/dsld/s3/pdf/336336.pdf)
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A138. Resveratrol — `PRECLIN_RESVERATROL`
 
@@ -1824,7 +1824,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [182477](https://api.ods.od.nih.gov/dsld/s3/pdf/182477.pdf), [182479](https://api.ods.od.nih.gov/dsld/s3/pdf/182479.pdf), [187549](https://api.ods.od.nih.gov/dsld/s3/pdf/187549.pdf), 187551, 201611, 218658, 218664, 255631, 26370, 269797, 277367, 278351, 278352, 293418, 294053, 294551, 294552, 294553, 294554, 302680, 304640, 307724, 307725, 307726, 312951, 313541, 315092, 315819, 321367, 328038, 328599, 328616, 328651, 328750, 330070, 330071, 330515, 330549, 330550, 330551, 330553, 330569, 330570, 33605, 336336, 44483, 60689, 60754, 60874, 60875, 60882, 61935, 62632, 62634, 62801, 65048, 66349, 66429, 69275, 7088
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A139. Saffron Extract — `PRECLIN_SAFFRON`
 
@@ -1836,7 +1836,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [182388](https://api.ods.od.nih.gov/dsld/s3/pdf/182388.pdf), [232205](https://api.ods.od.nih.gov/dsld/s3/pdf/232205.pdf), [232206](https://api.ods.od.nih.gov/dsld/s3/pdf/232206.pdf), 241947, 315693
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A140. Spermidine — `PRECLIN_SPERMIDINE`
 
@@ -1848,7 +1848,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [286157](https://api.ods.od.nih.gov/dsld/s3/pdf/286157.pdf), [315697](https://api.ods.od.nih.gov/dsld/s3/pdf/315697.pdf)
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A141. Sulforaphane — `PRECLIN_SULFORAPHANE`
 
@@ -1860,7 +1860,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [232918](https://api.ods.od.nih.gov/dsld/s3/pdf/232918.pdf), [284207](https://api.ods.od.nih.gov/dsld/s3/pdf/284207.pdf), [307567](https://api.ods.od.nih.gov/dsld/s3/pdf/307567.pdf), 315699, 321953, 328824
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A142. Zinc Carnosine — `PRECLIN_ZINC_CARNOSINE`
 
@@ -1872,7 +1872,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [278223](https://api.ods.od.nih.gov/dsld/s3/pdf/278223.pdf), [328463](https://api.ods.od.nih.gov/dsld/s3/pdf/328463.pdf)
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A143. Bifidobacterium animalis subsp. lactis BB-12 — `STRAIN_BB12`
 
@@ -1884,7 +1884,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [217182](https://api.ods.od.nih.gov/dsld/s3/pdf/217182.pdf), [241240](https://api.ods.od.nih.gov/dsld/s3/pdf/241240.pdf), [264106](https://api.ods.od.nih.gov/dsld/s3/pdf/264106.pdf), 44161, 44163, 79324
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A144. Bacillus coagulans GBI-30, 6086 — `STRAIN_BC30`
 
@@ -1896,7 +1896,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [59635](https://api.ods.od.nih.gov/dsld/s3/pdf/59635.pdf), [63294](https://api.ods.od.nih.gov/dsld/s3/pdf/63294.pdf)
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A145. Bifidobacterium animalis subsp. lactis HN019 — `STRAIN_HN019`
 
@@ -1908,7 +1908,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [241707](https://api.ods.od.nih.gov/dsld/s3/pdf/241707.pdf), [257033](https://api.ods.od.nih.gov/dsld/s3/pdf/257033.pdf), [267830](https://api.ods.od.nih.gov/dsld/s3/pdf/267830.pdf), 276704, 308258, 328802, 333195
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A146. Lactobacillus rhamnosus GG — `STRAIN_LGG`
 
@@ -1920,7 +1920,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [178595](https://api.ods.od.nih.gov/dsld/s3/pdf/178595.pdf), [180820](https://api.ods.od.nih.gov/dsld/s3/pdf/180820.pdf), [183996](https://api.ods.od.nih.gov/dsld/s3/pdf/183996.pdf), 184373, 184468, 184610, 206889, 206896, 206904, 207214, 207218, 213643, 218073, 218139, 218190, 218195, 218199, 219289, 240347, 241331, 242657, 242658, 246008, 246009, 246011, 246012, 250224, 250619, 250636, 250846, 250851, 250853, 250859, 250866, 250868, 250870, 250874, 250878, 250881, 250886, 250901, 250910, 250912, 250916, 250917, 250929, 250953, 256941, 261856, 264115, 264116, 267554, 267566, 267569, 267602, 273839, 273846, 287361, 294046, 297693, 299239, 317030, 317109, 317110, 326252, 326764, 327965, 331641, 333747, 47256, 62007, 62008, 80971
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A147. Saccharomyces boulardii — `STRAIN_SBOULARDII`
 
@@ -1932,7 +1932,7 @@ Each item below still requires the decision in section2. The current summaries a
 
 **Exact public label editions:** [242637](https://api.ods.od.nih.gov/dsld/s3/pdf/242637.pdf), [242654](https://api.ods.od.nih.gov/dsld/s3/pdf/242654.pdf), [247319](https://api.ods.od.nih.gov/dsld/s3/pdf/247319.pdf), 261618, 274671, 306291, 306383, 307727, 307728, 321379, 322603, 322604, 323130, 64676
 
-**Your scoped decision (section2):** ____________________
+**Your scoped decision (section 2):** ____________________
 
 ### A148. Generated collagen assessment — `RECOVERED_COLLAGEN_PEPTIDES_V1`
 
@@ -1944,7 +1944,7 @@ This assessment uses the collagen-peptides source record above rather than an in
 
 **Required reply:** accept or reject the source relationship, preparation boundaries, applicable outcome and regimen, with the same review details asA001–A147.
 
-## 7. Complete dose/preparation list —506subjects
+## 7. Complete dose/preparation list — 506 subjects
 
 For eachBitem, choose one:
 
@@ -1953,7 +1953,7 @@ For eachBitem, choose one:
 - **Genuine label limitation:** identify the undisclosed or conflicting fact; no invented amount or conversion.
 - **Still held:** specify the exact source or preparation decision needed.
 
-The five draft no-general-curve conclusions foraloe vera,flaxseed,green tea leaf,lignans andpygeum are **not approved or active**. Please evaluate each, rather than accepting them as a group. A lack of a dose reference does not automatically require the same type of approval as a positive benefit claim.
+The five draft no-general-curve conclusions for aloe vera, flaxseed, green tea leaf, lignans and pygeum are **not approved or active**. Please evaluate each, rather than accepting them as a group. A lack of a dose reference does not automatically require the same type of approval as a positive benefit claim.
 
 The following table is the complete subject list. “No attached source” means source work remains; it does not mean no research exists. Existing preparation wording is included for verification and may itself be incomplete or wrong. All 506 remain open.
 
@@ -2974,7 +2974,7 @@ The following table is the complete subject list. “No attached source” means
 
 ## 8. Remaining identity and dose questions in the diagnostic sample
 
-This list uses the final bounded replay for the original238 products.171 still have an identity or dose limitation (130 identity,51 dose,10 overlapping). These are not171independent literature reviews, and they are not a fresh full-catalog count. Some items should close as a documented manufacturer limitation or an intentionally unassessable product; do not force a score.
+This list uses the final bounded replay for the original238 products.171 still have an identity or dose limitation (130 identity,51 dose,10 overlapping). These are not171 independent literature reviews, and they are not a fresh full-catalog count. Some items should close as a documented manufacturer limitation or an intentionally unassessable product; do not force a score.
 
 **What I need:** confirm the exact identity/preparation when source evidence supports it; reject wrong transfers; otherwise state the specific missing identity, form, unit, constituent amount or label correction. A question about how our software maps an already-confirmed identity stays with me to fix. You are not being asked to debug software or approve an invented form-quality grade.
 
@@ -3331,9 +3331,166 @@ The separately saved private-submission case remains held and is not included in
 
 Five records retain sources for reference but cannot supply positive benefit credit: `INGR_MOLYBDENUM`, `INGR_PROPOLIS`, `INGR_SLIPPERY_ELM`, `INGR_VITAMIN_E` and `PRECLIN_BETAINE_HCL`. Three records are historical-only in this saved contributor audit: `INGR_BIFIDOBACTERIUM_BIFIDUM`, `INGR_GLYCINE` and `INGR_SAME`. Unused history does not block publication. This is not permission to delete sources or to reuse an old approval for new intake. If any becomes an actual contributing source later, its required review must be satisfied before use.
 
-## 10. What will count as closed
+## 10. Existing citation flags — 146 rows requiring explicit disposition, not blanket reapproval
 
-For everyA/B/Citem, I need an explicit decision, supporting sources, exact scope, your name/date/time zone and any remaining source gap. A repeated preparation may share one answer if every covered item is named and the boundaries match. “Approved generally,” a checked citation title or a positive score is not enough.
+The wider source audit also retains146 automated mismatch flags. These are **flags, not146 newly proven scientific errors**. Some references are already suppressed or retained only as history; some use DOI/PMC identifiers rather than a PMID and need a technical check. A title-word mismatch alone cannot decide whether a source supports a claim.
+
+I will trace which references actually contribute to a current assessment or warning and handle format-only/history-only issues. An unused or already-excluded historical reference does not block publication by itself. For any source that is actually relied on, the decision must be explicit: it supports the exact recorded claim within stated limits, it does not support that claim and stays excluded, or a named replacement/source fact is required. Please do not reactivate an excluded source or remove a real warning simply to clear a flag.
+
+The complete flagged list is below so these references do not become a hidden follow-up request. An example is the oral-contraceptive/magnesium record: its inherited unrelated PMID is already marked for revision and the warning is suppressed; that source must not silently become evidence again. The table identifies the current reference to check, not a claim that its title alone establishes a defect.
+
+| Item / reference key | Topic | Source | Resolved article title from the audit, if available | Disposition to record after actual use/content check |
+|---|---|---|---|---|
+| D001 `DEP_OCP_MAGNESIUM` | Medication–nutrient statements | [23636014](https://pubmed.ncbi.nlm.nih.gov/23636014/) | Hypertension-related target organ damage: is it a continuum? | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D002 `DEP_OCP_ZINC` | Medication–nutrient statements | [23636014](https://pubmed.ncbi.nlm.nih.gov/23636014/) | Hypertension-related target organ damage: is it a continuum? | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D003 `DEP_ANTIPSYCHOTICS_VITAMIND` | Medication–nutrient statements | [25638514](https://pubmed.ncbi.nlm.nih.gov/25638514/) | Agreement between stroke volume measured by oesophageal Doppler and uncalibrated pulse contour analysis during fluid loads in severe aortic stenosis. | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D004 `DEP_ANTIPSYCHOTICS_COQ10` | Medication–nutrient statements | [18316143](https://pubmed.ncbi.nlm.nih.gov/18316143/) | Linking chemical extraction to microbial degradation of 14C-hexadecane in soil. | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D005 `DEP_STIMULANTS_VITAMINC` | Medication–nutrient statements | [10870150](https://pubmed.ncbi.nlm.nih.gov/10870150/) | Comparison between the outer table and intracortical methods of obtaining autogenous bone graft from the iliac crest. | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D006 `DEP_HIVPI_VITAMIND` | Medication–nutrient statements | [21694637](https://pubmed.ncbi.nlm.nih.gov/21694637/) | Exploring potential noninvasive biomarkers in eosinophilic esophagitis in children. | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D007 `DEP_HIVPI_ZINC` | Medication–nutrient statements | [12591569](https://pubmed.ncbi.nlm.nih.gov/12591569/) | T2 relaxation time histograms in multiple sclerosis. | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D008 `DEP_IMMUNOSUPPRESSANTS_MAGNESIUM` | Medication–nutrient statements | [16641596](https://pubmed.ncbi.nlm.nih.gov/16641596/) | Preemptive versus Non-preemptive simultaneous pancreas-kidney transplantation: a single-center, long-term, follow-up study. | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D009 `DEP_IMMUNOSUPPRESSANTS_VITAMIND` | Medication–nutrient statements | [19528952](https://pubmed.ncbi.nlm.nih.gov/19528952/) | Screening individual hybridomas by microengraving to discover monoclonal antibodies. | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D010 `DEP_BENZODIAZEPINES_MELATONIN` | Medication–nutrient statements | [2733455](https://pubmed.ncbi.nlm.nih.gov/2733455/) | Philadelphia-positive chronic myelogenous leukemia with typical bcr/abl molecular features and atypical, prolonged survival. | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D011 `STRAIN_LACTIS_HN019` | Exact strain references | [40327349](https://pubmed.ncbi.nlm.nih.gov/40327349/) | Clarification for Late Trial Registration and Additional Study Limitations. | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D012 `STRAIN_PLANTARUM_LP01` | Exact strain references | [29799760](https://pubmed.ncbi.nlm.nih.gov/29799760/) | Single Charge and Exciton Dynamics Probed by Molecular-Scale-Induced Electroluminescence. | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D013 `STRAIN_CASEI_LC11` | Exact strain references | [35875231](https://pubmed.ncbi.nlm.nih.gov/35875231/) | In vitro assessment of histamine and lactate production by a multi-strain synbiotic. | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D014 `vitamin_b2_riboflavin` | Ingredient/form references | [23351578](https://pubmed.ncbi.nlm.nih.gov/23351578/) | Wax-matrix extended-release niacin vs inositol hexanicotinate: a comparison of wax-matrix, extended-release niacin to inositol hexanicotinate "no-flush" niacin in persons with mild to moderate dyslipidemia. | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D015 `iron` | Ingredient/form references | [25888289](https://pubmed.ncbi.nlm.nih.gov/25888289/) | The effectiveness of high dose zinc acetate lozenges on various common cold symptoms: a meta-analysis. | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D016 `manganese` | Ingredient/form references | [25888289](https://pubmed.ncbi.nlm.nih.gov/25888289/) | The effectiveness of high dose zinc acetate lozenges on various common cold symptoms: a meta-analysis. | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D017 `sea_buckthorn` | Ingredient/form references | [7491892](https://pubmed.ncbi.nlm.nih.gov/7491892/) | Absorption of dietary quercetin glycosides and quercetin in healthy ileostomy volunteers. | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D018 `inositol` | Ingredient/form references | [28165863](https://pubmed.ncbi.nlm.nih.gov/28165863/) | Dietary fiber and prebiotics and the gastrointestinal microbiota. | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D019 `fluoride` | Ingredient/form references | [28165863](https://pubmed.ncbi.nlm.nih.gov/28165863/) | Dietary fiber and prebiotics and the gastrointestinal microbiota. | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D020 `inositol` | Ingredient/form references | [29163194](https://pubmed.ncbi.nlm.nih.gov/29163194/) | On the Metabolism of Exogenous Ketones in Humans. | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D021 `methionine` | Ingredient/form references | [34202683](https://pubmed.ncbi.nlm.nih.gov/34202683/) | Inositols Depletion and Resistance: Principal Mechanisms and Therapeutic Strategies. | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D022 `fluoride` | Ingredient/form references | [34202683](https://pubmed.ncbi.nlm.nih.gov/34202683/) | Inositols Depletion and Resistance: Principal Mechanisms and Therapeutic Strategies. | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D023 `docosapentaenoic_acid_dpa` | Ingredient/form references | [34202683](https://pubmed.ncbi.nlm.nih.gov/34202683/) | Inositols Depletion and Resistance: Principal Mechanisms and Therapeutic Strategies. | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D024 `tudca` | Ingredient/form references | [34202683](https://pubmed.ncbi.nlm.nih.gov/34202683/) | Inositols Depletion and Resistance: Principal Mechanisms and Therapeutic Strategies. | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D025 `methionine` | Ingredient/form references | [28261556](https://pubmed.ncbi.nlm.nih.gov/28261556/) | Relationships between Dietary Intake and Cognitive Function in Healthy Korean Children and Adolescents. | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D026 `inositol` | Ingredient/form references | [29618497](https://pubmed.ncbi.nlm.nih.gov/29618497/) | Distal versus proximal intestinal short-chain fatty acid release in man. | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D027 `fluoride` | Ingredient/form references | [29618497](https://pubmed.ncbi.nlm.nih.gov/29618497/) | Distal versus proximal intestinal short-chain fatty acid release in man. | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D028 `chromium` | Ingredient/form references | [2718922](https://pubmed.ncbi.nlm.nih.gov/2718922/) | Copper absorption and retention in young men at three levels of dietary copper by use of the stable isotope 65Cu. | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D029 `molybdenum` | Ingredient/form references | [2718922](https://pubmed.ncbi.nlm.nih.gov/2718922/) | Copper absorption and retention in young men at three levels of dietary copper by use of the stable isotope 65Cu. | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D030 `copper` | Ingredient/form references | [7572711](https://pubmed.ncbi.nlm.nih.gov/7572711/) | Molybdenum absorption, excretion, and retention studied with stable isotopes in young men at five intakes of dietary molybdenum. | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D031 `red_wine_extract` | Ingredient/form references | [26889234](https://pubmed.ncbi.nlm.nih.gov/26889234/) | Bioavailability and safety study of resveratrol 500 mg tablets in healthy male and female volunteers. | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D032 `l_leucine` | Ingredient/form references | [34642762](https://pubmed.ncbi.nlm.nih.gov/34642762/) | Ingestion of Free Amino Acids Compared with an Equivalent Amount of Intact Protein Results in More Rapid Amino Acid Absorption and Greater Postprandial Plasma Amino Acid Availability Without Affecting Muscle Protein Synthesis Rates in Young Adults in a Double-Blind Randomized Trial. | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D033 `l_valine` | Ingredient/form references | [34642762](https://pubmed.ncbi.nlm.nih.gov/34642762/) | Ingestion of Free Amino Acids Compared with an Equivalent Amount of Intact Protein Results in More Rapid Amino Acid Absorption and Greater Postprandial Plasma Amino Acid Availability Without Affecting Muscle Protein Synthesis Rates in Young Adults in a Double-Blind Randomized Trial. | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D034 `l_isoleucine` | Ingredient/form references | [34642762](https://pubmed.ncbi.nlm.nih.gov/34642762/) | Ingestion of Free Amino Acids Compared with an Equivalent Amount of Intact Protein Results in More Rapid Amino Acid Absorption and Greater Postprandial Plasma Amino Acid Availability Without Affecting Muscle Protein Synthesis Rates in Young Adults in a Double-Blind Randomized Trial. | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D035 `diosgenin` | Ingredient/form references | [21116018](https://pubmed.ncbi.nlm.nih.gov/21116018/) | Effects of a purported aromatase and 5α-reductase inhibitor on hormone profiles in college-age men. | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D036 `nicotinamide_riboside` | Ingredient/form references | [27720903](https://pubmed.ncbi.nlm.nih.gov/27720903/) | Early Development of Definitive Erythroblasts from Human Pluripotent Stem Cells Defined by Expression of Glycophorin A/CD235a, CD34, and CD36. | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D037 `shiitake` | Ingredient/form references | [41943369](https://pubmed.ncbi.nlm.nih.gov/41943369/) | From nature to clinic: Lessons from successfully marketed polysaccharide drugs. | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D038 `turkey_tail` | Ingredient/form references | [23921761](https://pubmed.ncbi.nlm.nih.gov/23921761/) | 5-Fluorouracil, mitomycin-c, and polysaccharide-k versus uracil-ftorafur and polysaccharide-K as adjuvant chemoimmunotherapy for patients with locally advanced gastric cancer with curative resection. | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D039 `turkey_tail` | Ingredient/form references | [20229169](https://pubmed.ncbi.nlm.nih.gov/20229169/) | PSK may suppress CD57(+) T cells to improve survival of advanced gastric cancer patients. | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D040 `boswellia` | Ingredient/form references | [21235550](https://pubmed.ncbi.nlm.nih.gov/21235550/) | Shoaling and mate choice of wild-type Tanichthys albonubes in the presence of the red fluorescent transgenic conspecifics. | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D041 `black_seed_oil` | Ingredient/form references | [26328782](https://pubmed.ncbi.nlm.nih.gov/26328782/) | Similar eicosapentaenoic acid and docosahexaenoic acid plasma levels achieved with fish oil or krill oil in a randomized double-blind four-week bioavailability study. | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D042 `manuka_honey` | Ingredient/form references | [26328782](https://pubmed.ncbi.nlm.nih.gov/26328782/) | Similar eicosapentaenoic acid and docosahexaenoic acid plasma levels achieved with fish oil or krill oil in a randomized double-blind four-week bioavailability study. | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D043 `black_seed_oil` | Ingredient/form references | [26395129](https://pubmed.ncbi.nlm.nih.gov/26395129/) | Clinical evaluation of purified Shilajit on testosterone levels in healthy volunteers. | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D044 `tuna_oil` | Ingredient/form references | [26395129](https://pubmed.ncbi.nlm.nih.gov/26395129/) | Clinical evaluation of purified Shilajit on testosterone levels in healthy volunteers. | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D045 `manuka_honey` | Ingredient/form references | [26395129](https://pubmed.ncbi.nlm.nih.gov/26395129/) | Clinical evaluation of purified Shilajit on testosterone levels in healthy volunteers. | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D046 `krill_oil` | Ingredient/form references | [26395129](https://pubmed.ncbi.nlm.nih.gov/26395129/) | Clinical evaluation of purified Shilajit on testosterone levels in healthy volunteers. | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D047 `calamari_oil` | Ingredient/form references | [26434126](https://pubmed.ncbi.nlm.nih.gov/26434126/) | Effects of Thymoquinone on the Pharmacokinetics and Pharmacodynamics of Glibenclamide in a Rat Model. | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D048 `tuna_oil` | Ingredient/form references | [26434126](https://pubmed.ncbi.nlm.nih.gov/26434126/) | Effects of Thymoquinone on the Pharmacokinetics and Pharmacodynamics of Glibenclamide in a Rat Model. | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D049 `manuka_honey` | Ingredient/form references | [26434126](https://pubmed.ncbi.nlm.nih.gov/26434126/) | Effects of Thymoquinone on the Pharmacokinetics and Pharmacodynamics of Glibenclamide in a Rat Model. | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D050 `krill_oil` | Ingredient/form references | [26434126](https://pubmed.ncbi.nlm.nih.gov/26434126/) | Effects of Thymoquinone on the Pharmacokinetics and Pharmacodynamics of Glibenclamide in a Rat Model. | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D051 `fenugreek` | Ingredient/form references | [12571654](https://pubmed.ncbi.nlm.nih.gov/12571654/) | Bioavailability in humans of the flavanones hesperidin and narirutin after the ingestion of two doses of orange juice. | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D052 `silk_amino_acids` | Ingredient/form references | [35905137](https://pubmed.ncbi.nlm.nih.gov/35905137/) | Sphingolipids as Functional Food Components: Benefits in Skin Improvement and Disease Prevention. | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D053 `silk_amino_acids` | Ingredient/form references | [34208952](https://pubmed.ncbi.nlm.nih.gov/34208952/) | Dietary Sphingolipids Contribute to Health via Intestinal Maintenance. | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D054 `organ_extracts` | Ingredient/form references | [34208952](https://pubmed.ncbi.nlm.nih.gov/34208952/) | Dietary Sphingolipids Contribute to Health via Intestinal Maintenance. | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D055 `ceramides` | Ingredient/form references | [447109](https://pubmed.ncbi.nlm.nih.gov/447109/) | Comparison of oral feeding of peptide and amino acid meals to normal human subjects. | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D056 `organ_extracts` | Ingredient/form references | [447109](https://pubmed.ncbi.nlm.nih.gov/447109/) | Comparison of oral feeding of peptide and amino acid meals to normal human subjects. | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D057 `perilla_oil` | Ingredient/form references | [12323085](https://pubmed.ncbi.nlm.nih.gov/12323085/) | Eicosapentaenoic and docosapentaenoic acids are the principal products of alpha-linolenic acid metabolism in young men*. | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D058 `ahiflower_seed_oil` | Ingredient/form references | [22279143](https://pubmed.ncbi.nlm.nih.gov/22279143/) | Effects of dietary stearidonic acid on biomarkers of lipid metabolism. | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D059 `devils_claw` | Ingredient/form references | [11054882](https://pubmed.ncbi.nlm.nih.gov/11054882/) | Vascular imaging and intervention in peripheral arteries in the diabetic patient. | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D060 `nobiletin` | Ingredient/form references | [27476752](https://pubmed.ncbi.nlm.nih.gov/27476752/) | Aluminum chloride induced splenic lymphocytes apoptosis through NF-κB inhibition. | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D061 `sage` | Ingredient/form references | [20377818](https://pubmed.ncbi.nlm.nih.gov/20377818/) | Effect of aromatherapy on patients with Alzheimer's disease. | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D062 `sage` | Ingredient/form references | [16205659](https://pubmed.ncbi.nlm.nih.gov/16205659/) | [Not Available]. | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D063 `cascara_sagrada` | Ingredient/form references | [22982073](https://pubmed.ncbi.nlm.nih.gov/22982073/) | Coupling of UDP-glucuronosyltransferases and multidrug resistance-associated proteins is responsible for the intestinal disposition and poor bioavailability of emodin. | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D064 `cayenne_pepper` | Ingredient/form references | [6528310](https://pubmed.ncbi.nlm.nih.gov/6528310/) | Antiplatelet effect of capsaicin. | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D065 `african_geranium` | Botanical identity references | [18425868](https://pubmed.ncbi.nlm.nih.gov/18425868/) | House dust mite control measures for asthma. | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D066 `beet_root` | Botanical identity references | [28983845](https://pubmed.ncbi.nlm.nih.gov/28983845/) | Correction to: Oxidizable Phenolic Concentrations Do Not Affect Development and Survival of Paropsis Atomaria Larvae Eating Eucalyptus Foliage. | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D067 `boswellia_serrata_resin` | Botanical identity references | [21110389](https://pubmed.ncbi.nlm.nih.gov/21110389/) | Application of liquid chromatography-tandem mass spectrometry method for the simultaneous quantitative analysis of propentofylline and its chiral metabolite M1 in rats. | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D068 `devils_claw_tuber` | Botanical identity references | [14669258](https://pubmed.ncbi.nlm.nih.gov/14669258/) | Effect of Nigella sativa (black seed) on subjective feeling in patients with allergic diseases. | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D069 `fenugreek_seed` | Botanical identity references | [20676249](https://pubmed.ncbi.nlm.nih.gov/20676249/) | Providing more choices for those who depend on ventilators. | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D070 `feverfew` | Botanical identity references | [15257711](https://pubmed.ncbi.nlm.nih.gov/15257711/) | Resonance-thrombography indices of the haemostatic process in relation to risk of incident coronary heart disease: 9 years follow-up in the Caerphilly Prospective Heart Disease Study. | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D071 `graviola` | Botanical identity references | [15269786](https://pubmed.ncbi.nlm.nih.gov/15269786/) | Ancient adaptive evolution of the primate antiviral DNA-editing enzyme APOBEC3G. | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D072 `guava` | Botanical identity references | [20170471](https://pubmed.ncbi.nlm.nih.gov/20170471/) | General Practice Super Clinics - how will they meet their educational objectives? | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D073 `milk_thistle_seed` | Botanical identity references | [17127537](https://pubmed.ncbi.nlm.nih.gov/17127537/) | Is caffeine addictive?--a review of the literature. | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D074 `nigella` | Botanical identity references | [28068824](https://pubmed.ncbi.nlm.nih.gov/28068824/) | Three-dimensional power Doppler ultrasound in the early assessment of response to concurrent chemo-radiotherapy for advanced cervical cancer. | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D075 `polypodium_leucotomos` | Botanical identity references | [25064166](https://pubmed.ncbi.nlm.nih.gov/25064166/) | What is "masked syndrome of inappropriate antidiuretic hormone?" Is it an "isonatremic syndrome?". | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D076 `pomegranate` | Botanical identity references | [22648174](https://pubmed.ncbi.nlm.nih.gov/22648174/) | Dietary supplementation with methyl donors reduces fatty liver and modifies the fatty acid synthase DNA methylation profile in rats fed an obesogenic diet. | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D077 `prune` | Botanical identity references | [21681165](https://pubmed.ncbi.nlm.nih.gov/21681165/) | Baseline simple and complex reaction times in female compared to male boxers. | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D078 `rose_hips` | Botanical identity references | [18326603](https://pubmed.ncbi.nlm.nih.gov/18326603/) | Effect of cereal test breakfasts differing in glycemic index and content of indigestible carbohydrates on daylong glucose tolerance in healthy subjects. | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D079 `tylophora_leaf` | Botanical identity references | [18288292](https://pubmed.ncbi.nlm.nih.gov/18288292/) | Placental implications of peroxisome proliferator-activated receptors in gestation and parturition. | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D080 `valerian_root` | Botanical identity references | [16619700](https://pubmed.ncbi.nlm.nih.gov/16619700/) | Pancreatic duct rupture in a 26-year-old patient. | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D081 `white_willow_bark` | Botanical identity references | [11201053](https://pubmed.ncbi.nlm.nih.gov/11201053/) | Successful separation of apoptosis and necrosis pathways in HaCaT keratinocyte cells induced by UVB irradiation. | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D082 `russian_tarragon` | Botanical identity references | [22034519](https://pubmed.ncbi.nlm.nih.gov/22034519/) | Review of the NICE guidance on bacterial meningitis and meningococcal septicaemia. | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D083 `astaxanthin_haematococcus_pluvialis` | Standardized preparations | [21962237](https://pubmed.ncbi.nlm.nih.gov/21962237/) | Inhibition of TLR8- and TLR4-induced Type I IFN induction by alcohol is different from its effects on inflammatory cytokine production in monocytes. | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D084 `astazine` | Standardized preparations | [21962237](https://pubmed.ncbi.nlm.nih.gov/21962237/) | Inhibition of TLR8- and TLR4-induced Type I IFN induction by alcohol is different from its effects on inflammatory cytokine production in monocytes. | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D085 `bil_max` | Standardized preparations | [15642341](https://pubmed.ncbi.nlm.nih.gov/15642341/) | AtNTRB is the major mitochondrial thioredoxin reductase in Arabidopsis thaliana. | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D086 `bilberry` | Standardized preparations | [21660670](https://pubmed.ncbi.nlm.nih.gov/21660670/) | A systematic review with meta-analysis of the effect of low-level laser therapy (LLLT) in cancer therapy-induced oral mucositis. | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D087 `blue_max` | Standardized preparations | [22376060](https://pubmed.ncbi.nlm.nih.gov/22376060/) | Sufentanil versus fentanyl: efficacy and patient satisfaction with intrathecal pain management. | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D088 `boswellia` | Standardized preparations | [21679876](https://pubmed.ncbi.nlm.nih.gov/21679876/) | Maimonides: part 1--The man and his writings. | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D089 `boswellia` | Standardized preparations | [18667066](https://pubmed.ncbi.nlm.nih.gov/18667066/) | Predictors of adherence to antiretroviral therapy among HIV-infected persons: a prospective study in Southwest Ethiopia. | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D090 `chromax` | Standardized preparations | [16823477](https://pubmed.ncbi.nlm.nih.gov/16823477/) | Inflammation and insulin resistance. | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D091 `coffeeberry` | Standardized preparations | [24013626](https://pubmed.ncbi.nlm.nih.gov/24013626/) | Role for cis-acting RNA sequences in the temperature-dependent expression of the multiadhesive lig proteins in Leptospira interrogans. | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D092 `neurofactor` | Standardized preparations | [24013626](https://pubmed.ncbi.nlm.nih.gov/24013626/) | Role for cis-acting RNA sequences in the temperature-dependent expression of the multiadhesive lig proteins in Leptospira interrogans. | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D093 `cognigrape` | Standardized preparations | [28391595](https://pubmed.ncbi.nlm.nih.gov/28391595/) | Human METTL12 is a mitochondrial methyltransferase that modifies citrate synthase. | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D094 `cordyceps` | Standardized preparations | [18197785](https://pubmed.ncbi.nlm.nih.gov/18197785/) | Gene expression in pulmonary fibrosis. | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D095 `cordyceps_militaris` | Standardized preparations | [28012484](https://pubmed.ncbi.nlm.nih.gov/28012484/) | Blue. | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D096 `cordyceps_militaris` | Standardized preparations | [23538328](https://pubmed.ncbi.nlm.nih.gov/23538328/) | MDCT angiography to evaluate the therapeutic effect of PTVE for esophageal varices. | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D097 `cran_max` | Standardized preparations | [12010289](https://pubmed.ncbi.nlm.nih.gov/12010289/) | US-guided fine-needle aspiration biopsy of thyroid nodules. | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D098 `eps_7630` | Standardized preparations | [24199972](https://pubmed.ncbi.nlm.nih.gov/24199972/) | Valerian/lemon balm use for sleep disorders during menopause. | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D099 `floraglo` | Standardized preparations | [23644932](https://pubmed.ncbi.nlm.nih.gov/23644932/) | Lutein + zeaxanthin and omega-3 fatty acids for age-related macular degeneration: the Age-Related Eye Disease Study 2 (AREDS2) randomized clinical trial. | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D100 `flowens` | Standardized preparations | [27530809](https://pubmed.ncbi.nlm.nih.gov/27530809/) | Adaptive deep brain stimulation for Parkinson's disease demonstrates reduced speech side effects compared to conventional stimulation in the acute setting. | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D101 `fruitex_b_calcium_fructoborate` | Standardized preparations | [21669589](https://pubmed.ncbi.nlm.nih.gov/21669589/) | Nutritional adequacy of energy restricted diets for young obese women. | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D102 `grape_seed` | Standardized preparations | [17190620](https://pubmed.ncbi.nlm.nih.gov/17190620/) | The CASH (color, architecture, symmetry, and homogeneity) algorithm for dermoscopy. | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D103 `grape_seed` | Standardized preparations | [12867234](https://pubmed.ncbi.nlm.nih.gov/12867234/) | Older Asian Americans and Pacific Islanders dying of cancer use hospice less frequently than older white patients. | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D104 `green_coffee_bean` | Standardized preparations | [21861914](https://pubmed.ncbi.nlm.nih.gov/21861914/) | Two-year home-based nocturnal noninvasive ventilation added to rehabilitation in chronic obstructive pulmonary disease patients: a randomized controlled trial. | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D105 `life_s_dha` | Standardized preparations | [18689548](https://pubmed.ncbi.nlm.nih.gov/18689548/) | Immunoassay for human serum hepcidin. | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D106 `sea_buckthorn_seed_oil` | Standardized preparations | [18689548](https://pubmed.ncbi.nlm.nih.gov/18689548/) | Immunoassay for human serum hepcidin. | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D107 `lutemax_2020` | Standardized preparations | [28494836](https://pubmed.ncbi.nlm.nih.gov/28494836/) | Pulmonary Toxicity in Rats Caused by Exposure to Intratracheal Instillation of SiO2 Nanoparticles. | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D108 `lutemax_2020` | Standardized preparations | [29144655](https://pubmed.ncbi.nlm.nih.gov/29144655/) | Dulaglutide (Addendum to Commission A15-07) | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D109 `microactive_melatonin` | Standardized preparations | [27535533](https://pubmed.ncbi.nlm.nih.gov/27535533/) | Analysis of protein-coding genetic variation in 60,706 humans. | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D110 `nettle` | Standardized preparations | [15211420](https://pubmed.ncbi.nlm.nih.gov/15211420/) | Ethical listening as therapy. | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D111 `optiberry` | Standardized preparations | [15050362](https://pubmed.ncbi.nlm.nih.gov/15050362/) | Measurements of 60Co in spoons activated by neutrons during the JCO criticality accident at Tokai-mura in 1999. | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D112 `optiberry` | Standardized preparations | [16219800](https://pubmed.ncbi.nlm.nih.gov/16219800/) | Stem cell transplantation with reduced-intensity conditioning for hemophagocytic lymphohistiocytosis. | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D113 `pacran` | Standardized preparations | [27013539](https://pubmed.ncbi.nlm.nih.gov/27013539/) | Subtype-Specific Interactions and Prognosis in Cardiac Amyloidosis. | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D114 `pycnogenol` | Standardized preparations | [22260513](https://pubmed.ncbi.nlm.nih.gov/22260513/) | The effect of nitric-oxide-related supplements on human performance. | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D115 `sea_buckthorn` | Standardized preparations | [20429767](https://pubmed.ncbi.nlm.nih.gov/20429767/) | Breast plasmacytoma. | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D116 `sea_buckthorn` | Standardized preparations | [24787677](https://pubmed.ncbi.nlm.nih.gov/24787677/) | A Methodological Approach to Quantifying Plyometric Intensity. | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D117 `sea_buckthorn_seed_oil` | Standardized preparations | [19883366](https://pubmed.ncbi.nlm.nih.gov/19883366/) | Bone modeling and remodeling. | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D118 `sharp_ps_green` | Standardized preparations | [24345046](https://pubmed.ncbi.nlm.nih.gov/24345046/) | Resveratrol in peanuts. | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D119 `sunactive_iron` | Standardized preparations | [19674817](https://pubmed.ncbi.nlm.nih.gov/19674817/) | Synthesis, anticonvulsant and CNS depressant activity of some new bioactive 1-(4-substituted-phenyl)-3-(4-oxo-2-phenyl/ethyl-4H-quinazolin-3-yl)-urea. | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D120 `thermosil` | Standardized preparations | [18046594](https://pubmed.ncbi.nlm.nih.gov/18046594/) | Comparison of low fat and low carbohydrate diets on circulating fatty acid composition and markers of inflammation. | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D121 `turkey_tail` | Standardized preparations | [22972503](https://pubmed.ncbi.nlm.nih.gov/22972503/) | Expression of the molecular chaperone αB-crystallin in infiltrating ductal breast carcinomas and the significance thereof: an immunohistochemical and proteomics-based strategy. | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D122 `turmipure_gold` | Standardized preparations | [31935893](https://pubmed.ncbi.nlm.nih.gov/31935893/) | A Wrapper Feature Selection Algorithm: An Emotional Assessment Using Physiological Recordings from Wearable Sensors. | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D123 `uniflex` | Standardized preparations | [19185917](https://pubmed.ncbi.nlm.nih.gov/19185917/) | Impact on survival of different treatments for myelodysplastic syndromes (MDS). | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D124 `ADD_BLUE1` | Additive concerns | [doi:10.1016/s0140-6736(07)61306-3](https://doi.org/10.1016/s0140-6736(07)61306-3) | Food additives and hyperactive behaviour in 3-year-old and 8/9-year-old children in the community: a randomised, double-blinded, placebo-controlled trial. | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D125 `ADD_BLUE2` | Additive concerns | [doi:10.1016/s0140-6736(07)61306-3](https://doi.org/10.1016/s0140-6736(07)61306-3) | Food additives and hyperactive behaviour in 3-year-old and 8/9-year-old children in the community: a randomised, double-blinded, placebo-controlled trial. | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D126 `ADD_RED40` | Additive concerns | [doi:10.1016/s0140-6736(07)61306-3](https://doi.org/10.1016/s0140-6736(07)61306-3) | Food additives and hyperactive behaviour in 3-year-old and 8/9-year-old children in the community: a randomised, double-blinded, placebo-controlled trial. | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D127 `ADD_CALCIUM_ALUMINUM_PHOSPHATE` | Additive concerns | [doi:10.2903/j.efsa.2008.754](https://doi.org/10.2903/j.efsa.2008.754) | Safety of aluminium from dietary intake - Scientific Opinion of the Panel on Food Additives, Flavourings, Processing Aids and Food Contact Materials (AFC). | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D128 `ADD_CORN_OIL` | Additive concerns | [doi:10.2903/j.efsa.2010.1461](https://doi.org/10.2903/j.efsa.2010.1461) | Scientific Opinion on Dietary Reference Values for fats, including saturated fatty acids, polyunsaturated fatty acids, monounsaturated fatty acids, trans fatty acids, and cholesterol | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D129 `ADD_CARAMEL_COLOR` | Additive concerns | [17342198](https://pubmed.ncbi.nlm.nih.gov/17342198/) | Toxicology and carcinogenesis studies of 4-methylimidazole (Cas No. 822-36-6) in F344/N rats and B6C3F1 mice (feed studies). | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D130 `ADD_UNSPECIFIED_COLORS` | Additive concerns | [doi:10.2903/j.efsa.2015.4288](https://doi.org/10.2903/j.efsa.2015.4288) | Scientific Opinion on the re-evaluation of cochineal, carminic acid, carmines (E 120) as a food additive. | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D131 `ADD_FATTY_ACID_POLYGLYCEROL_ESTERS` | Additive concerns | [25731162](https://pubmed.ncbi.nlm.nih.gov/25731162/) | Dietary emulsifiers impact the mouse gut microbiota promoting colitis and metabolic syndrome. | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D132 `ADD_FATTY_ACID_POLYGLYCEROL_ESTERS` | Additive concerns | [doi:10.1038/nature14232](https://doi.org/10.1038/nature14232) | Dietary emulsifiers impact the mouse gut microbiota promoting colitis and metabolic syndrome. | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D133 `ADD_SOY_MONOGLYCERIDES` | Additive concerns | [doi:10.1038/nature14232](https://doi.org/10.1038/nature14232) | Dietary emulsifiers impact the mouse gut microbiota promoting colitis and metabolic syndrome. | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D134 `ADD_PALM_OIL` | Additive concerns | [doi:10.2903/j.efsa.2018.5083](https://doi.org/10.2903/j.efsa.2018.5083) | Update of the risk assessment on 3-monochloropropane diol and its fatty acid esters. | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D135 `ADD_SODIUM_HEXAMETAPHOSPHATE` | Additive concerns | [doi:10.1161/atvbaha.123.319198](https://doi.org/10.1161/atvbaha.123.319198) | Phosphate in Cardiovascular Disease: From New Insights Into Molecular Mechanisms to Clinical Implications. | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D136 `ADD_SODIUM_TRIPOLYPHOSPHATE` | Additive concerns | [doi:10.2903/j.efsa.2019.5674](https://doi.org/10.2903/j.efsa.2019.5674) | Re-evaluation of phosphoric acid-phosphates - di-, tri- and polyphosphates (E 338-341, E 343, E 450-452) as food additives and the safety of proposed extension of use. | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D137 `ADD_SYNTHETIC_B_VITAMINS` | Additive concerns | [22529856](https://pubmed.ncbi.nlm.nih.gov/22529856/) | Circulating unmetabolized folic Acid: relationship to folate status and effect of supplementation. | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D138 `ADD_YELLOW5` | Additive concerns | [17825405](https://pubmed.ncbi.nlm.nih.gov/17825405/) | Food additives and hyperactive behaviour in 3-year-old and 8/9-year-old children in the community: a randomised, double-blinded, placebo-controlled trial. | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D139 `BANNED_ADD_SYNTHETIC_ESTROGENS` | Banned/recalled/high-risk references | [doi:10.1210/er.2015-1010](https://doi.org/10.1210/er.2015-1010) | EDC-2: The Endocrine Society's Second Scientific Statement on Endocrine-Disrupting Chemicals. | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D140 `RECALLED_JACK3D` | Banned/recalled/high-risk references | [23397688](https://pubmed.ncbi.nlm.nih.gov/23397688/) | Case reports: Death of active duty soldiers following ingestion of dietary supplements containing 1,3-dimethylamylamine (DMAA). | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D141 `HIGH_RISK_CHAPARRAL` | Banned/recalled/high-risk references | [17672511](https://pubmed.ncbi.nlm.nih.gov/17672511/) | Oxidation of the lignan nordihydroguaiaretic acid. | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D142 `HIGH_RISK_PENNYROYAL` | Banned/recalled/high-risk references | [26969934](https://pubmed.ncbi.nlm.nih.gov/26969934/) | Tandem mass spectrometric analysis of S- and N-linked glutathione conjugates of pulegone and menthofuran and identification of P450 enzymes mediating their formation. | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D143 `NOOTROPIC_PHENYLPIRACETAM` | Banned/recalled/high-risk references | [40047835](https://pubmed.ncbi.nlm.nih.gov/40047835/) | [Efficacy and safety of fonturacetam in asthenia: a systematic review and meta-analysis]. | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D144 `SCHED_AMANITA_MUSCARIA` | Banned/recalled/high-risk references | [41955162](https://pubmed.ncbi.nlm.nih.gov/41955162/) | Severe Illness Associated with Eating Mushroom-Containing Chocolate Products - United States, January-October 2024. | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D145 `omega3_niacin_lipid` | Combination statements | [PMC10600480](https://pmc.ncbi.nlm.nih.gov/articles/PMC10600480/) | Nutrient synergy: definition, evidence, and future directions. | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+| D146 `japanese_knotweed` | Plant marker references | [34410415](https://pubmed.ncbi.nlm.nih.gov/34410415/) | Response Surface Methodology to Optimize Supercritical Carbon Dioxide Extraction of Polygonum cuspidatum. | Supports exact used claim / keep excluded / format-only / replacement needed: ____ |
+
+## 11. What will count as closed
+
+For every A/B/C item and any actually relied-on D reference, I need an explicit decision, supporting sources, exact scope, your name/date/time zone and any remaining source gap. A repeated preparation may share one answer if every covered item is named and the boundaries match. “Approved generally,” a checked citation title or a positive score is not enough.
 
 Once your consolidated reply is returned, I will:
 
@@ -3341,12 +3498,12 @@ Once your consolidated reply is returned, I will:
 2. Fix any remaining software mapping issues against those decisions and run the corresponding regression checks.
 3. Reconcile every listed item as accepted within scope, completed negative/inapplicable, documented label limitation, intentionally unassessable, or still held for a specifically named missing fact.
 4. Rebuild once from the first required stage when the required source decisions are complete.
-5. Verify the entire rebuilt product set and app, including source explanations, dose limitations, safety warnings and the original20examples.
+5. Verify the entire rebuilt product set and app, including source explanations, dose limitations, safety warnings and the original 20 examples.
 6. Keep publication separate until those checks pass and I authorize it.
 
 A returned review closes a supported scientific decision; I will only mark the product issue fully closed after the rebuilt output shows the correct result. We will not reopen a settled item because of a different subjective score, a wording preference or another request to “review again.” Reopening requires a concrete new source, changed label/preparation, correction/retraction, safety finding or reproducible defect. Any item still missing information stays clearly held with one precise next action rather than restarting the whole review.
 
-The original20checks are label editions270330,310116,261951,13801,185032,299952,317006,19067,12129,12153,1059,213846,201101,329943,328014,213826,19598,271115,1179and232839. Their scores are not targets to reproduce; their identities, source applicability, amounts, limitations and explanations are the checks.
+The original 20 checks are label editions270330,310116,261951,13801,185032,299952,317006,19067,12129,12153,1059,213846,201101,329943,328014,213826,19598,271115,1179and232839. Their scores are not targets to reproduce; their identities, source applicability, amounts, limitations and explanations are the checks.
 
 Please return one consolidated response covering these lists, including a clear list of any items you cannot finish and exactly what would resolve each. I want this to be one bounded closeout, with real uncertainty preserved and no unsupported claims.
 
