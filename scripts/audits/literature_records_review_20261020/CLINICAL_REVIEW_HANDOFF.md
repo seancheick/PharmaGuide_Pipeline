@@ -118,3 +118,11 @@ African mango update: the existing record now describes IGOB131150mg twice daily
 has enrollment/attrition reporting inconsistencies;102is retained only as completers.
 Review preparation correspondence, study limitations and applicability before affirmative
 clinical approval. This factual correction clears no clinical hold or benchmark item.
+
+
+The same regimen correction class also covers theobromine, willow bark, ornithine,
+maqui, royal jelly, caralluma and ashwagandha. Research receipts identify each source,
+actual dose/course and outcome limits. Ornithine includes its6000mg exercise day;
+ashwagandha's300mg twice-daily regimen is600mg/day. These are descriptive study facts,
+not new dose benchmarks or clinician approvals. Exact preparation/product correspondence
+and applicable clinical-review holds remain mandatory.

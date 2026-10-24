@@ -422,3 +422,19 @@ def test_african_mango_daily_exposure_is_not_a_threshold_or_single_dose(records)
     assert '>=' not in record['applicability_decision']
     assert '150 mg twice daily' in record['applicability_decision']
     assert record.get('reference_semantics', {}).get('curve') != 'completed_no_benchmark_neutral'
+
+
+@pytest.mark.parametrize('cid', ['theobromine', 'white_willow_bark', 'l_ornithine', 'maqui', 'royal_jelly', 'caralluma', 'ashwagandha_root'])
+def test_single_regimen_does_not_become_an_open_ended_minimum(records, cid):
+    assert '>=' not in records[cid]['applicability_decision']
+
+
+def test_ornithine_includes_the_exercise_day_regimen(records):
+    r = records['l_ornithine']
+    assert r['studied_dose_exposure']['values'] == [2000, 6000]
+    s = _study(r, '19083482')
+    assert '6000' in s['dose'] and s['duration'] == '8 days'
+
+
+def test_ashwagandha_single_capsule_is_not_a_daily_dose(records):
+    assert records['ashwagandha_root']['studied_dose_exposure']['values'] == [600]

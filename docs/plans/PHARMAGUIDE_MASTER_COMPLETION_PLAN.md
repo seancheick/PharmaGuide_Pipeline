@@ -1457,3 +1457,11 @@ sweet-cherry40077655 full-text preparation/outcome limits, shared cherry trial c
 and cranberry11431298 abstract with unresolved full-text species confirmation.
 These advance review documentation only; numerical benchmark, clinical approval and
 rebuilt closure remain open. Pipeline remains deferred.
+
+
+October23 African-mango correction: implemented exact300mg/day descriptive study exposure,
+removed unsupported150–300mg/day threshold, clarified enrollment/reporting limitations.
+12raw affected/control labels unchanged through Clean/Enrich/Score;165focused checks and
+local546passed/24declared skips pass. Final whole-fast qualification pending. Saved completion
+preflight still blocks9887assessments; broader clinical/benchmark closure and full pipeline
+remain deferred. This factual fix does not create a benchmark or clear clinical approval.

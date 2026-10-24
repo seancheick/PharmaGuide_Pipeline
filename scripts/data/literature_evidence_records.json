@@ -2951,7 +2951,7 @@
         ],
         "unit": "mg"
       },
-      "applicability_decision": "Lipid biomarker modulation demonstrated at >= 850 mg/day.",
+      "applicability_decision": "PMID 23595874 studied 850 mg/day pure theobromine for 4 weeks in healthy adults, alongside separate cocoa and cocoa-plus-theobromine arms. HDL and other lipid biomarkers were measured; this is not a minimum effective dose or demonstrated cardiovascular-outcome benefit.",
       "verification_result": "authoritative_pubmed_verified",
       "verification_provenance": {
         "verified_by": "scripts/api_audit/verify_literature_records.py",
@@ -3756,7 +3756,7 @@
           "title": "Treatment of low back pain exacerbations with willow bark extract: a randomized double-blind study.",
           "study_type": "randomized_controlled_trial",
           "sample_size": 210,
-          "dose": "240 mg/day salicin",
+          "dose": "120 or 240 mg/day salicin from willow bark extract",
           "duration": "4 weeks",
           "outcome": "significantly more patients pain-free compared to placebo",
           "effect_direction": "positive_strong",
@@ -3781,7 +3781,7 @@
         ],
         "unit": "mg"
       },
-      "applicability_decision": "Musculoskeletal pain relief established at >= 120-240 mg standardized salicin equivalent.",
+      "applicability_decision": "PMID 10936472 compared willow bark extract supplying 120 or 240 mg/day salicin with placebo for 4 weeks in patients with exacerbations of chronic low back pain. These are two tested salicin exposures, not an open-ended minimum or a benchmark for crude bark mass or all musculoskeletal pain.",
       "verification_result": "authoritative_pubmed_verified",
       "verification_provenance": {
         "verified_by": "scripts/api_audit/verify_literature_records.py",
@@ -4303,8 +4303,8 @@
           "title": "L-ornithine supplementation attenuates physical fatigue in healthy volunteers by modulating lipid and amino acid metabolism.",
           "study_type": "randomized_controlled_trial",
           "sample_size": 17,
-          "dose": "2000 mg/day",
-          "duration": "7 days",
+          "dose": "2000 mg/day for 7 days, then 6000 mg on the exercise day, as L-ornithine hydrochloride",
+          "duration": "8 days",
           "outcome": "significantly reduced subjective physical fatigue and blood ammonia accumulation",
           "effect_direction": "positive_moderate",
           "verification_provenance": {
@@ -4323,11 +4323,12 @@
       "population_context": "adults under physical exercise or mental stress",
       "studied_dose_exposure": {
         "values": [
-          2000
+          2000,
+          6000
         ],
         "unit": "mg"
       },
-      "applicability_decision": "Physical fatigue and urea-cycle metabolic recovery supported at >= 2000 mg/day.",
+      "applicability_decision": "PMID 19083482 studied 2000 mg/day for 7 days followed by 6000 mg on the exercise day, as L-ornithine hydrochloride, in 17 healthy volunteers over 8 days. Fatigue, biochemical and female-subgroup performance findings concern this complete regimen; they do not establish a 2000 mg/day minimum or general urea-cycle recovery benefit.",
       "verification_result": "authoritative_pubmed_verified",
       "verification_provenance": {
         "verified_by": "scripts/api_audit/verify_literature_records.py",
@@ -6048,7 +6049,7 @@
         ],
         "unit": "mg"
       },
-      "applicability_decision": "Eye comfort and tear fluid production support established for standardized delphinidin-rich maqui extract at >= 60 mg/day.",
+      "applicability_decision": "PMID 31193920 studied 60 mg/day MaquiBright standardized extract for 4 weeks in 74 Japanese adults with eye dryness/fatigue and prolonged visual-display work. Tear production and selected symptom findings concern this preparation and population, not a minimum effective dose or equivalence to generic maqui products.",
       "verification_result": "authoritative_pubmed_verified",
       "verification_provenance": {
         "verified_by": "scripts/api_audit/verify_literature_records.py",
@@ -6400,7 +6401,7 @@
         ],
         "unit": "mg"
       },
-      "applicability_decision": "Menopausal quality of life and vasomotor symptom support established for standardized royal jelly at >= 1000 mg/day.",
+      "applicability_decision": "PMID 31470366 studied 1000 mg/day oral royal jelly for 8 weeks in 200 postmenopausal women. Reported symptom findings concern that regimen; the abstract does not establish a minimum effective dose or a universal standardized preparation, and further confirmation is needed.",
       "verification_result": "authoritative_pubmed_verified",
       "verification_provenance": {
         "verified_by": "scripts/api_audit/verify_literature_records.py",
@@ -7631,7 +7632,7 @@
         ],
         "unit": "mg"
       },
-      "applicability_decision": "Appetite suppression and waist circumference management supported for standardized Caralluma fimbriata extract at >= 1000 mg/day.",
+      "applicability_decision": "PMID 17097761 studied 1000 mg/day Caralluma fimbriata extract for 60 days in 50 overweight adults receiving diet/activity advice. Hunger and waist circumference improved versus placebo, while body weight, BMI, body fat and energy-intake differences were not significant. This is not a minimum effective dose or established general weight-loss efficacy.",
       "verification_result": "authoritative_pubmed_verified",
       "verification_provenance": {
         "verified_by": "scripts/api_audit/verify_literature_records.py",
@@ -13123,12 +13124,11 @@
       "population_context": "adult populations in double-blind clinical trials",
       "studied_dose_exposure": {
         "values": [
-          300,
           600
         ],
         "unit": "mg"
       },
-      "applicability_decision": "Standardized Withania somnifera root extract supported at >= 300-600 mg/day for neuro-endocrine adaptation and stress reduction.",
+      "applicability_decision": "PMID 23439798 studied 300 mg high-concentration full-spectrum root extract twice daily (600 mg/day) for 60 days in 64 adults with chronic stress. Stress-scale and cortisol findings concern that preparation and regimen; this does not establish a 300–600 mg/day minimum range or equivalence to other root preparations.",
       "applicability_status": "applicable_reviewed_trials",
       "verification_provenance": {
         "verified_by": "scripts/api_audit/verify_literature_records.py",
