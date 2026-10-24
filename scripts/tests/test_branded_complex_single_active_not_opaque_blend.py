@@ -180,3 +180,97 @@ def test_blend_with_undisclosed_nested_children_stays_opaque(enricher):
     opaque = _opaque_blend_entries(proprietary_data)
     assert opaque, "A blend with undisclosed nested children must stay opaque."
     assert any((b.get("hidden_count") or 0) >= 1 for b in opaque)
+
+
+@pytest.fixture(scope="module")
+def preparation_labels():
+    import json
+    from pathlib import Path
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    from scoring_v4.scored_artifact import build_scored_artifact
+    from build_final_db import build_detail_blob
+    normalizer, enricher = EnhancedDSLDNormalizer(), SupplementEnricherV3()
+    products = {}
+    for pid in ("231852", "219249", "201405", "246073", "302668", "277667", "243050", "307567", "188685", "69759"):
+        raw = json.loads((Path(__file__).parent / "fixtures" / f"blend_preparation_{pid}_raw.json").read_text())
+        cleaned = normalizer.normalize_product(raw)
+        enriched, _ = enricher.enrich_product(cleaned)
+        scored = build_scored_artifact(enriched)
+        products[pid] = (cleaned, enriched, scored, build_detail_blob(enriched, scored))
+    return products
+
+
+@pytest.mark.parametrize("pid,ref,canonical,amount", [
+    ("231852", "ingredientRows[3]", "shilajit", 200),
+    ("219249", "ingredientRows[4]", "collagen", 20),
+])
+def test_exact_preparation_is_not_a_generic_blend_total(preparation_labels, pid, ref, canonical, amount):
+    cleaned, enriched, scored, blob = preparation_labels[pid]
+    [row] = [x for x in cleaned["activeIngredients"] if x["raw_source_path"] == ref]
+    assert row["canonical_id"] == canonical
+    assert row["quantity"] == amount and row["unit"] == "mg"
+    assert row["cleaner_row_role"] == "active_scorable"
+    assert row["proprietaryBlend"] is False
+    assert not any(x.get("source_row_ref") == ref for x in enriched["proprietary_data"]["blends"])
+    if pid == "231852":
+        transparency = scored["_v4_module_breakdown"]["dimensions"]["transparency"]
+        assert transparency["penalties"]["B5_proprietary_blend_opacity"] == 0
+        assert transparency["metadata"]["complete_active_disclosure"]["complete_row_count"] == 2
+        assert blob["proprietary_blend_detail"]["has_proprietary_blends"] is False
+        assert [x["quantity"] for x in cleaned["activeIngredients"]] == [200, 200]
+
+
+@pytest.mark.parametrize("pid,ref", [("201405", "ingredientRows[0]"), ("243050", "ingredientRows[11]")])
+def test_nutrient_source_form_is_not_an_independent_opaque_formula(preparation_labels, pid, ref):
+    cleaned, enriched, _, _ = preparation_labels[pid]
+    # Select the literal printed nutrient, not a blend/category alias.
+    nutrient = "Potassium" if pid == "201405" else "Chromium"
+    [row] = [x for x in cleaned["activeIngredients"] if x["name"] == nutrient]
+    assert row["quantity"] > 0
+    assert not any(x.get("source_row_ref") == row["raw_source_path"] for x in enriched["proprietary_data"]["blends"])
+
+
+def test_quantified_biocell_source_constituents_remain_disclosed(preparation_labels):
+    _, enriched, _, blob = preparation_labels["246073"]
+    blends = [x for x in blob["proprietary_blend_detail"]["blends"] if x.get("source_row_ref") == "ingredientRows[2]"]
+    assert blends and all(x["disclosure_level"] == "full" for x in blends)
+    assert sorted(x["amount"] for x in blends[0]["child_ingredients"]) == [50, 100, 300]
+
+
+@pytest.mark.parametrize("pid,units", [("302668", {"HUT", "SAPU", "DPPIV"}), ("277667", {"PC", "LU", "DU", "ALU", "CU"})])
+def test_printed_enzyme_activity_is_disclosure_without_mass_conversion(preparation_labels, pid, units):
+    _, enriched, _, _ = preparation_labels[pid]
+    blends = [x for x in enriched["proprietary_data"]["blends"] if x.get("source_row_ref") == "ingredientRows[0]"]
+    assert len(blends) == 1
+    assert blends[0]["disclosure_level"] == "full"
+    assert {x["unit"] for x in blends[0]["child_ingredients"]} == units
+    assert all(x["amount"] > 0 for x in blends[0]["child_ingredients"])
+
+
+def test_genuine_tamaflex_formula_keeps_its_member_limitation(preparation_labels):
+    _, enriched, _, _ = preparation_labels["219249"]
+    blends = [x for x in enriched["proprietary_data"]["blends"] if x.get("source_row_ref") == "ingredientRows[3]"]
+    assert blends and all(x["disclosure_level"] != "full" for x in blends)
+    assert any(x.get("hidden_count", 0) > 0 for x in blends)
+
+
+@pytest.mark.parametrize("pid,ref", [
+    ("307567", "ingredientRows[0]"), ("188685", "ingredientRows[2]"),
+    ("69759", "ingredientRows[36].nestedRows[0].nestedRows[0]"),
+])
+def test_explicit_mixture_context_retains_a_real_opacity_penalty(preparation_labels, pid, ref):
+    _, enriched, scored, _ = preparation_labels[pid]
+    # A recognized ingredient/assay total does not disclose the other active
+    # material (myrosinase) or the members of a protease-source mixture.
+    evidence = scored["_v4_module_breakdown"]["dimensions"]["transparency"]["metadata"]["B5_blend_evidence"]
+    assert any(x.get("source_row_ref") == ref and x["computed_blend_penalty_magnitude"] > 0 for x in evidence)
+    assert enriched["proprietary_data"]["has_proprietary_blends"] is True
+
+
+def test_a_named_ingredient_amount_is_not_an_unquantified_mixture_total(preparation_labels):
+    cleaned, enriched, _, _ = preparation_labels['307567']
+    [source] = [r for r in cleaned['activeIngredients'] if r['raw_source_path'] == 'ingredientRows[0]']
+    assert source['quantity'] == 35 and source['unit'] == 'mg'
+    blends = [r for r in enriched['proprietary_data']['blends'] if r.get('source_row_ref') == 'ingredientRows[0]']
+    assert blends
+    assert all(r['blend_total_mg'] is None for r in blends)

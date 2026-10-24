@@ -32,7 +32,7 @@
     "statistics": {
       "total_parents": 655,
       "total_forms": 1475,
-      "total_form_aliases": 12284,
+      "total_form_aliases": 12286,
       "parents_with_parent_aliases": 150,
       "parents_with_contains_aliases": 0,
       "parents_with_pattern_aliases": 0
@@ -53,7 +53,7 @@
       "vitamins": 25
     },
     "schema_version": "5.6.1",
-    "last_updated": "2026-10-23",
+    "last_updated": "2026-10-24",
     "pipeline_integration": "Used by enrichment to assign form quality (bio_score) to matched ingredient forms. Match ingredient name against forms aliases (case-insensitive).",
     "matching_notes": [
       "Match ingredient name + forms text against aliases array (case-insensitive)",
@@ -25502,7 +25502,8 @@
           "chicken collagen type II",
           "cartilage",
           "chicken collagen",
-          "UC-II Chicken Cartilage"
+          "UC-II Chicken Cartilage",
+          "UC-II Type II Collagen Complex"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -46842,7 +46843,8 @@
           "primavie",
           "patented shilajit",
           "primavie purified shilajit",
-          "primavie shilajit extract"
+          "primavie shilajit extract",
+          "PrimaVie Shilajit Fulvic Acid Complex"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {

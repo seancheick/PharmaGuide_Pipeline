@@ -107,6 +107,7 @@ from serving_frequency import (
     select_canonical_serving,
 )
 from scoring_input_contract import (
+    disclosed_source_amount,
     build_scoring_classification,
     has_source_printed_amount,
     UNRESOLVED_IDENTITY_FORM_UNMAPPED,
@@ -14904,14 +14905,66 @@ class SupplementEnricherV3:
                 return True
             return False
 
+        # Reconcile the same source-backed single-material proof for BOTH
+        # detector and cleaner evidence. A detector's category alias must not
+        # override a declared nutrient/preparation row. Explicit blend totals,
+        # actual members and missing source descendants never qualify.
+        single_material_fields = set()
+        for section, ingredients in (("activeIngredients", active_ingredients),
+                                     ("inactiveIngredients", inactive_ingredients)):
+            for index, row in enumerate(ingredients):
+                ref = str(row.get("raw_source_path") or "")
+                group = str(row.get("ingredientGroup") or "").casefold()
+                category = str(row.get("raw_category") or "").casefold()
+                if (row.get("nestedIngredients") or row.get("parentBlend")
+                        or row.get("parent_source_path")
+                        or row.get("cleaner_row_role") == "blend_header_total"
+                        or row.get("dose_class") == "blend_total_weight"
+                        or category == "blend" or "blend" in group
+                        or any(path.startswith(ref + ".nestedRows[")
+                               for path in source_inventory if ref)):
+                    continue
+                context = " ".join(str(row.get(key) or "") for key in ("notes", "description")).casefold()
+                # A nutrient's own declared amount can be known despite a
+                # mixture of source salts. For other materials, explicit added
+                # actives/protease-blend context defeats a name-only escape.
+                if not row.get("label_nutrient_context") and (
+                    any(marker in context for marker in ProprietaryBlendDetector.EXPLICIT_OPACITY_MARKERS)
+                    or (category == "enzyme" and re.search(r"\bblend\b", context))
+                ):
+                    continue
+                quantity = row.get("quantity")
+                if (not isinstance(quantity, (int, float)) or isinstance(quantity, bool)
+                        or not math.isfinite(quantity) or quantity <= 0 or not row.get("unit")
+                        or str(row.get("unit")).casefold() == "np"):
+                    continue
+                if self._is_known_therapeutic(
+                    row.get("name") or "", row.get("standardName") or row.get("name") or "",
+                    quality_map, botanicals_db,
+                ):
+                    single_material_fields.add(f"{section}[{index}]")
+
         # Step 1: Collect detector blends (pattern-based)
         detector_blends = []
         if self.blend_detector:
             # A detector failure fails the product (enrich_product records it);
             # dropping its blends would silently skip the B5 penalty.
-            result = self.blend_detector.analyze_product(product)
+            # The cleaner may flatten nestedRows. Restore only physically
+            # linked members for the detector; never infer membership by name
+            # or co-occurrence, and never change the input product.
+            detector_product = dict(product)
+            for section, rows in (("activeIngredients", active_ingredients),
+                                  ("inactiveIngredients", inactive_ingredients)):
+                detector_product[section] = [
+                    {**row, "nestedIngredients": children_by_parent[row["raw_source_path"]]}
+                    if (not row.get("nestedIngredients")
+                        and row.get("raw_source_path") in children_by_parent)
+                    else row for row in rows
+                ]
+            result = self.blend_detector.analyze_product(detector_product)
             for blend in result.blends_detected:
-                if label_source_refs.get(blend.source_field) in source_only_preparations:
+                if (blend.source_field in single_material_fields
+                        or label_source_refs.get(blend.source_field) in source_only_preparations):
                     continue
                 detector_with_amounts = blend.ingredients_with_amounts or []
                 detector_without_amounts = blend.ingredients_without_amounts or []
@@ -14970,13 +15023,13 @@ class SupplementEnricherV3:
                 if child.get("cleaner_row_role") in CLEANER_NON_EFFICACY_ROLES:
                     continue
                 child_name = (child.get("name", "") or "").strip()
-                child_qty = child.get("quantity")
-                if isinstance(child_qty, (int, float)) and child_qty > 0:
+                child_qty, child_unit = disclosed_source_amount(child)
+                if child_qty is not None:
                     with_amounts.append(
                         {
                             "name": child_name,
                             "amount": float(child_qty),
-                            "unit": (child.get("unit", "") or ""),
+                            "unit": child_unit,
                         }
                     )
                 elif child_name:
@@ -15024,6 +15077,8 @@ class SupplementEnricherV3:
                 structurally_nested = is_nested or bool(parent_source_path)
                 is_blend = (
                     ingredient.get('proprietaryBlend', False)
+                    or ingredient.get("cleaner_row_role") == "blend_header_total"
+                    or ingredient.get("dose_class") == "blend_total_weight"
                 )
                 # The cleaner assigns blend ownership to the parent header.
                 # Flattened display-only members deliberately remain
@@ -15035,6 +15090,12 @@ class SupplementEnricherV3:
 
                 disclosure = ingredient.get('disclosureLevel', 'none')
                 nested = ingredient.get('nestedIngredients', [])
+                # DSLD can list the separately formulated members as forms
+                # rather than nestedRows (TamaFlex). Only a structural blend
+                # owner authorizes these as members; nutrient source forms do not.
+                if (not nested and ingredient.get("cleaner_row_role") == "blend_header_total"
+                        and "blend" in str(ingredient.get("ingredientGroup") or "").casefold()):
+                    nested = ingredient.get("forms") or []
                 quantity = ingredient.get('quantity', 0) or 0
                 unit = ingredient.get('unit', '') or ''
                 ingredient_group = ingredient.get('ingredientGroup', '') or ''
@@ -15072,14 +15133,7 @@ class SupplementEnricherV3:
                 # canonical ingredient, so they fall through and keep the B5
                 # opacity penalty.
                 if (
-                    not has_nested_children
-                    and not has_parent
-                    and self._is_known_therapeutic(
-                        name,
-                        (ingredient.get('standardName', '') or name),
-                        quality_map,
-                        botanicals_db,
-                    )
+                    source_field in single_material_fields
                 ):
                     continue
 
@@ -15153,9 +15207,8 @@ class SupplementEnricherV3:
                     if parent_header and parent_header.get("source_field"):
                         group["_source_fields"].add(parent_header["source_field"])
                     child_name = (ingredient.get('name', '') or '').strip()
-                    child_qty = ingredient.get('quantity')
-                    child_unit = ingredient.get('unit', '') or ''
-                    if isinstance(child_qty, (int, float)) and child_qty > 0 and child_name:
+                    child_qty, child_unit = disclosed_source_amount(ingredient)
+                    if child_qty is not None and child_name:
                         group["_children_with_amounts"].append(
                             {"name": child_name, "amount": float(child_qty), "unit": child_unit}
                         )
@@ -15292,6 +15345,11 @@ class SupplementEnricherV3:
                     # The printed total is the sole component's amount.
                     with_amounts = [{"name": without_amounts[0], "amount": group["total_weight"], "unit": group["unit"]}]
                     without_amounts = []
+            if (with_amounts and not without_amounts and child_rows == len(with_amounts)
+                    and sum(1 for path in label_row_paths if group.get("source_row_ref")
+                            and _RAW_CHILD_ROW.fullmatch(path[len(group["source_row_ref"]):]
+                                if path.startswith(group["source_row_ref"]) else "")) == child_rows):
+                group["disclosure_level"] = "full"
             group["child_ingredients"] = [
                 {
                     "name": item.get("name", ""),
@@ -15472,6 +15530,19 @@ class SupplementEnricherV3:
                 return False
             if not (blend_source_paths(detector) & blend_source_paths(cleaner)):
                 return False
+            if (detector.get("source_row_ref")
+                    and detector.get("source_row_ref") == cleaner.get("source_row_ref")):
+                # Category aliases and printed names can differ (Digestive
+                # Enzyme Blends / Glutalytic). One physical owner is stronger
+                # evidence than matching those names. Conflicting totals stay
+                # separate rather than silently choosing an amount.
+                dt, ct = detector.get("total_weight"), cleaner.get("total_weight")
+                if dt is not None and ct is not None and (
+                    dt != ct or str(detector.get("unit") or "").casefold()
+                    != str(cleaner.get("unit") or "").casefold()
+                ):
+                    return False
+                return True
             detector_evidence = detector.get("evidence") or {}
             matched_text = self._normalize_exclusion_text(
                 str(detector_evidence.get("matched_text") or "")

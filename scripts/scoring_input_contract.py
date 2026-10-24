@@ -629,6 +629,21 @@ def has_source_printed_amount(row: Mapping[str, Any], *, allow_zero: bool = Fals
     )
 
 
+def disclosed_source_amount(row: Mapping[str, Any]) -> Tuple[Optional[float], Optional[str]]:
+    """The positive label amount/unit, including an explicitly parsed activity.
+
+    This is disclosure, not a mass conversion or dose-adequacy decision. Reuse
+    the source quantity selector and the normalizer's activity-unit owner.
+    """
+    values = {key: value for key, value in row.items() if not isinstance(value, bool)}
+    amount = _positive_quantity(values)
+    unit = _row_unit(row)
+    if (amount is not None and math.isfinite(amount)
+            and _norm(unit) not in DOSE_NOT_PROVIDED_UNITS):
+        return amount, str(unit)
+    return extract_enzyme_activity("", row.get("activity_quantity"), row.get("activity_unit"))
+
+
 def dose_disclosure_status(row: Mapping[str, Any]) -> str:
     """'disclosed' | 'not_disclosed_blend' | 'missing' for one label row; the one
     owner the export's dose_status and display label and v4 Transparency read.
@@ -643,9 +658,9 @@ def dose_disclosure_status(row: Mapping[str, Any]) -> str:
     is missing capture. Blend membership is the cleaner's flag on either row
     shape (export row or scoring row).
     """
-    amount = _positive_quantity(row)
+    amount, _ = disclosed_source_amount(row)
     unit = _norm(_row_unit(row))
-    if (amount is not None and math.isfinite(amount) and unit not in DOSE_NOT_PROVIDED_UNITS) or row.get("has_dose"):
+    if amount is not None or row.get("has_dose"):
         return "disclosed"
     if (
         _positive_quantity(row, allow_zero=True) == 0

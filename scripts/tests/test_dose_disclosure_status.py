@@ -144,3 +144,11 @@ def test_exact_zero_disclosure_keeps_non_mass_units(unit):
         'raw_taxonomy': {'quantityVariants': [{'quantity': 0, 'unit': unit,
             'quantity_parsed': True, 'selected_for_analysis': True}]}}
     assert dose_disclosure_status(row) == 'disclosed'
+
+
+def test_typed_printed_enzyme_activity_is_disclosed_even_when_mass_is_np():
+    row = {'name': 'Protease', 'quantity': 0, 'unit': 'NP',
+           'activity_quantity': 75000, 'activity_unit': 'HUT',
+           'isNestedIngredient': True}
+    assert dose_disclosure_status(row) == 'disclosed'
+    assert row['quantity'] == 0 and row['unit'] == 'NP'

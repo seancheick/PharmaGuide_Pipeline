@@ -25,6 +25,8 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Dict, List, Optional, Any, Tuple
 
+from scoring_input_contract import disclosed_source_amount
+
 logger = logging.getLogger(__name__)
 
 
@@ -55,15 +57,15 @@ def _row_has_amount(row: Dict[str, Any]) -> bool:
     quantity = row.get("quantity")
     entries = quantity if isinstance(quantity, list) else [quantity]
     return any(
-        isinstance(value, (int, float)) and value > 0
-        and str(unit or "").strip().casefold() not in {"", "np"}
-        for value, unit in (
-            (e.get("quantity"), e.get("unit")) if isinstance(e, dict)
-            else (e, row.get("unit")) for e in entries
-        )
+        disclosed_source_amount({
+            "quantity": e.get("quantity") if isinstance(e, dict) else e,
+            "unit": e.get("unit") if isinstance(e, dict) else row.get("unit"),
+            "activity_quantity": row.get("activity_quantity"),
+            "activity_unit": row.get("activity_unit"),
+        })[0] is not None for e in entries
     ) and all(
         isinstance(child, dict) and _row_has_amount(child)
-        for child in row.get("nestedRows") or row.get("ingredients") or []
+        for child in row.get("nestedRows") or row.get("ingredients") or row.get("nestedIngredients") or []
     )
 
 
@@ -406,7 +408,8 @@ class ProprietaryBlendDetector:
             text_to_search = f"{name} {description}".strip()
 
             # Check for sub-ingredients (indicates a blend)
-            sub_ingredients = ingredient.get("ingredients", []) or ingredient.get("subIngredients", [])
+            sub_ingredients = (ingredient.get("ingredients", []) or ingredient.get("subIngredients", [])
+                               or ingredient.get("nestedIngredients", []))
         elif isinstance(ingredient, str):
             text_to_search = ingredient
             sub_ingredients = []
@@ -437,7 +440,14 @@ class ProprietaryBlendDetector:
                 # Analyze disclosure level
                 disclosure_info = self._analyze_disclosure(
                     ingredient if isinstance(ingredient, dict) else {"name": ingredient},
-                    sub_ingredients
+                    sub_ingredients,
+                    quantity_is_total=(
+                        match.end() <= len(str(name if isinstance(ingredient, dict) else ingredient).strip())
+                        or (isinstance(ingredient, dict) and (
+                            ingredient.get("cleaner_row_role") == "blend_header_total"
+                            or ingredient.get("dose_class") == "blend_total_weight"
+                        ))
+                    ),
                 )
 
                 # Determine penalty based on disclosure
@@ -476,7 +486,9 @@ class ProprietaryBlendDetector:
     def _analyze_disclosure(
         self,
         blend_data: Dict,
-        sub_ingredients: List
+        sub_ingredients: List,
+        *,
+        quantity_is_total: bool = True,
     ) -> Dict:
         """
         Analyze the disclosure level of a blend.
@@ -506,16 +518,17 @@ class ProprietaryBlendDetector:
 
         # Check for total amount in blend
         name = blend_data.get("name", "") or ""
-        amount = blend_data.get("amount")
-        unit = blend_data.get("unit", "")
+        # A detector hit in a note can describe a different, undosed
+        # mixture. Only a named/structural blend owner lends its quantity.
+        amount, unit = disclosed_source_amount(blend_data) if quantity_is_total else (None, None)
 
         if amount is not None:
             result["total_declared"] = True
-            result["total_amount"] = self._parse_amount(amount)
+            result["total_amount"] = amount
             result["total_unit"] = unit
         else:
             # Try to extract from name
-            match = self.TOTAL_AMOUNT_PATTERN.search(name)
+            match = self.TOTAL_AMOUNT_PATTERN.search(name) if quantity_is_total else None
             if match:
                 result["total_declared"] = True
                 result["total_amount"] = float(match.group(1).replace(",", ""))
@@ -526,7 +539,8 @@ class ProprietaryBlendDetector:
             # Check if blend_data has nested ingredients
             sub_ingredients = blend_data.get("ingredients", []) or \
                              blend_data.get("subIngredients", []) or \
-                             blend_data.get("components", [])
+                             blend_data.get("components", []) or \
+                             blend_data.get("nestedIngredients", [])
 
         if sub_ingredients:
             result["ingredients_listed"] = True
@@ -535,13 +549,13 @@ class ProprietaryBlendDetector:
             for sub in sub_ingredients:
                 if isinstance(sub, dict):
                     sub_name = sub.get("name", "") or sub.get("ingredient", "")
-                    sub_amount = sub.get("amount") or sub.get("quantity")
+                    sub_amount, sub_unit = disclosed_source_amount(sub)
 
-                    if sub_amount is not None and sub_amount != "" and sub_amount != 0:
+                    if sub_amount is not None:
                         result["with_amounts"].append({
                             "name": sub_name,
                             "amount": sub_amount,
-                            "unit": sub.get("unit", "")
+                            "unit": sub_unit,
                         })
                     else:
                         result["without_amounts"].append(sub_name)
@@ -570,23 +584,6 @@ class ProprietaryBlendDetector:
 
         return result
 
-    def _parse_amount(self, amount: Any) -> Optional[float]:
-        """Parse amount to float."""
-        if amount is None:
-            return None
-        if isinstance(amount, (int, float)):
-            return float(amount)
-        if isinstance(amount, str):
-            try:
-                # Remove commas and parse
-                clean = amount.replace(",", "").strip()
-                # Handle ranges - take lower bound
-                if "-" in clean and not clean.startswith("-"):
-                    clean = clean.split("-")[0].strip()
-                return float(clean)
-            except ValueError:
-                return None
-        return None
 
 
 # Convenience function

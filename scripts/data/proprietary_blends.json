@@ -3,7 +3,7 @@
     "description": "Proprietary blend recognition database for supplement label mapping",
     "purpose": "blend_recognition_mapping",
     "schema_version": "5.0.0",
-    "last_updated": "2026-10-11",
+    "last_updated": "2026-10-24",
     "total_entries": 19,
     "schema_notes": "This file is for MAPPING only. It identifies and categorizes proprietary blend names found on supplement labels. Penalty scoring is handled entirely by the scorer (B5 engine) based on disclosure_level (full/partial/none) — NOT by this file. Each entry has: id, standard_name, blend_terms (label text patterns), risk_factors (safety concerns for user-facing notes), notes (user-facing explanation shown in product detail view)."
   },
@@ -389,7 +389,6 @@
         "Proprietary Enterolactone Precursors Blend",
         "CLA Blend",
         "Bioactive Liver Compound Complex",
-        "PrimaVie Shilajit Fulvic Acid Complex",
         "Prostate Support Formula",
         "Acti-Joint",
         "Mitochondria/Plasma membrane",

@@ -1,0 +1,199 @@
+{
+  "scope": "grouped read-only census of saved manifest-owned output; no reprocessing/scoring, not rebuilt closure",
+  "counts": {
+    "manifests": 38,
+    "products": 15437,
+    "repeated_physical_blend_owners": 145,
+    "flagged_products": 2839,
+    "blend_records": 5796,
+    "declared_source_amount_absent_from_blend_total": 460,
+    "source_children_absent_from_blend_summary": 272,
+    "quantified_source_children_absent_from_blend_summary": 129
+  },
+  "stored_disclosure_tiers": {
+    "partial": 3535,
+    "none": 1305,
+    "full": 956
+  },
+  "source_binding": {
+    "bound": 5438,
+    "unbound": 358
+  },
+  "source_shapes": {
+    "recorded_children": 4847,
+    "owner_role:blend_header_total": 5036,
+    "owner_category:blend": 4951,
+    "owner_role:active_scorable": 351,
+    "owner_category:vitamin": 37,
+    "owner_category:mineral": 48,
+    "no_recorded_children": 949,
+    "owner_category:non-nutrient/non-botanical": 100,
+    "owner_category:fat": 32,
+    "owner_role:nested_display_only": 51,
+    "owner_category:fiber": 2,
+    "owner_category:enzyme": 13,
+    "owner_category:botanical": 59,
+    "owner_category:amino acid": 110,
+    "owner_category:protein": 21,
+    "owner_category:fatty acid": 21,
+    "owner_category:bacteria": 5,
+    "owner_category:animal part or source": 13,
+    "owner_category:other": 22,
+    "owner_category:None": 4
+  },
+  "content_integrity_mismatches": [],
+  "manifests": [
+    {
+      "path": "scripts/products/output_Airborne_enriched/enriched/.stage_manifest.json",
+      "sha256": "874a2d223266e20af80185cee880f117b60367bea932b5597af8d42519939a5b"
+    },
+    {
+      "path": "scripts/products/output_BulkSupplements_enriched/enriched/.stage_manifest.json",
+      "sha256": "faa84048dd5555aee40a2535ed3cd496ec13a8120a009bd02ee898e639c17c93"
+    },
+    {
+      "path": "scripts/products/output_CVS_enriched/enriched/.stage_manifest.json",
+      "sha256": "e1668a9a3c7dcf4d8dc19f7a3b345f6247de2a87e78233fe6e3b319b54cca85f"
+    },
+    {
+      "path": "scripts/products/output_Centrum_enriched/enriched/.stage_manifest.json",
+      "sha256": "13c32f101d8578d290dda931ca7da9df5515c795de140add03d55614e108fddf"
+    },
+    {
+      "path": "scripts/products/output_Culturelle_enriched/enriched/.stage_manifest.json",
+      "sha256": "bf4433005f656c01d7f96677d3af8ca2912aa6708c5df9e8d75e9ad23d6f7470"
+    },
+    {
+      "path": "scripts/products/output_Doctors_Best_enriched/enriched/.stage_manifest.json",
+      "sha256": "ef70c6813a913780651275ee69fd71d9f591fa1abfaa077fc04ef072cbac4e1a"
+    },
+    {
+      "path": "scripts/products/output_Double_Wood_Supplements_enriched/enriched/.stage_manifest.json",
+      "sha256": "ca114ae8b8f8b68257bae19ba79e58243fd640fa43400428954f1e0819eeaf10"
+    },
+    {
+      "path": "scripts/products/output_Emergen_C_enriched/enriched/.stage_manifest.json",
+      "sha256": "9563ef4eae327c4ee63de2271095a52e8d452b343ab78c2f4748895cedc61ede"
+    },
+    {
+      "path": "scripts/products/output_Equate_enriched/enriched/.stage_manifest.json",
+      "sha256": "6c0733ed180dfe501976566594bb993880d6d2276edc805d26eed5b1139a3f5f"
+    },
+    {
+      "path": "scripts/products/output_GNC_enriched/enriched/.stage_manifest.json",
+      "sha256": "f819f99e98748a7bc8ee1552cf3509d783eeebd2f91c180393be4ddcc0bae77f"
+    },
+    {
+      "path": "scripts/products/output_Garden_of_life_enriched/enriched/.stage_manifest.json",
+      "sha256": "39a180983f108c92d3b829c26d1a47efaadf3910d14cc50daab272f6af2dcfa6"
+    },
+    {
+      "path": "scripts/products/output_Goli_enriched/enriched/.stage_manifest.json",
+      "sha256": "bee5e2b4756f10aa5638a4e187beee46a5e995fd6165ad70e1504bb0d44eb6ef"
+    },
+    {
+      "path": "scripts/products/output_Hum_enriched/enriched/.stage_manifest.json",
+      "sha256": "cc9e3714192d047743efa4525e9c052ad4627d225e467dcf9e60d579d00ae940"
+    },
+    {
+      "path": "scripts/products/output_Jarrow_Formulas_enriched/enriched/.stage_manifest.json",
+      "sha256": "86daafdb2f00ffeb78c57d0cb78bd1b8a51cdafb6035cc6ad0ce31ebb672735a"
+    },
+    {
+      "path": "scripts/products/output_Kirkland_Signature_enriched/enriched/.stage_manifest.json",
+      "sha256": "5a64dfd3ab0972ff21f6b84747a8c737f418d5cb3c744fbb3bf87184c49b963e"
+    },
+    {
+      "path": "scripts/products/output_Legion_enriched/enriched/.stage_manifest.json",
+      "sha256": "4405072f53b2b9d49604b72f5c00dcbf0f73215a9362694d0cb5f684599723f3"
+    },
+    {
+      "path": "scripts/products/output_Life_Extension_enriched/enriched/.stage_manifest.json",
+      "sha256": "ee7f4fb3c3f40bb5a34b893a031b9b724701899eeec698b7d48ebf2a2a0a6ef9"
+    },
+    {
+      "path": "scripts/products/output_MegaFood_enriched/enriched/.stage_manifest.json",
+      "sha256": "d0a10f730cda69307aaca7533d7bb088772b7e1e6202cb40f77dd04bf7130ec0"
+    },
+    {
+      "path": "scripts/products/output_Members_Mark_enriched/enriched/.stage_manifest.json",
+      "sha256": "d60cb3da758598e3ee75e0f7a450edda4a5de1ff900a657c1590ebce5804cd3c"
+    },
+    {
+      "path": "scripts/products/output_Nature_Made_enriched/enriched/.stage_manifest.json",
+      "sha256": "b1b8b8df403252f80c6e7683b73f6889919317454c5c94d9201f06d0a9724277"
+    },
+    {
+      "path": "scripts/products/output_Natures_Bounty_enriched/enriched/.stage_manifest.json",
+      "sha256": "d48666ba54b0ba9c3170062f62114f48b245aeb5d38607400534b6a8fd7ba64e"
+    },
+    {
+      "path": "scripts/products/output_Natures_Way_enriched/enriched/.stage_manifest.json",
+      "sha256": "f7e5a85810d4de5b5517049d4d6106ee75601d052579f4513eae989c189078ba"
+    },
+    {
+      "path": "scripts/products/output_Nutricost_enriched/enriched/.stage_manifest.json",
+      "sha256": "2b9ba8616a71edc4dd1862749759d081383e9a3a1fd474ad8cc2fa6fede4855f"
+    },
+    {
+      "path": "scripts/products/output_Olly_enriched/enriched/.stage_manifest.json",
+      "sha256": "09fc48f33d8fdb5ed057c88067e33c1c40c66af78e164cd839425541f4dba963"
+    },
+    {
+      "path": "scripts/products/output_One_A_Day_enriched/enriched/.stage_manifest.json",
+      "sha256": "a6a9c8a1a0391e2294fdc8cb7648988ad4bd8d8da2a99b7af59da184db93d4ee"
+    },
+    {
+      "path": "scripts/products/output_Ora_enriched/enriched/.stage_manifest.json",
+      "sha256": "d4845a139727a17df8276dd06747ec066f044879e29e1642bd411c2524ebd557"
+    },
+    {
+      "path": "scripts/products/output_Product_Submissions_enriched/enriched/.stage_manifest.json",
+      "sha256": "5f4342dea6960619b353d651b18150a7d82b594a58bc76138d57a129eb58878b"
+    },
+    {
+      "path": "scripts/products/output_Pure_Encapsulations_enriched/enriched/.stage_manifest.json",
+      "sha256": "784fe75159825e6866f9aad88c4170c92f8fc240388d4cdc0bb3c347417a2643"
+    },
+    {
+      "path": "scripts/products/output_Ritual_enriched/enriched/.stage_manifest.json",
+      "sha256": "0fa5303af2d3b8b14bd2a941959dca0465ea8333c692b9561daa712440652b91"
+    },
+    {
+      "path": "scripts/products/output_Solgar_enriched/enriched/.stage_manifest.json",
+      "sha256": "955f167f056d081a54ed67dbb08d184b96928bf1358247434141c1821ab60e85"
+    },
+    {
+      "path": "scripts/products/output_Sports_Research_enriched/enriched/.stage_manifest.json",
+      "sha256": "e1d12af5536ac7face23f071061c9035283398bcef9fd994cf9c1367ea87c20c"
+    },
+    {
+      "path": "scripts/products/output_Spring_Valley_enriched/enriched/.stage_manifest.json",
+      "sha256": "ef11aeb42269f8497c08023612313fd7e81421b62f7b4a5e0a69f3705c91c396"
+    },
+    {
+      "path": "scripts/products/output_Thorne_enriched/enriched/.stage_manifest.json",
+      "sha256": "f30901053d647e02cdd520bd33d0576c0f786899ef20193853ec994514bcd8b9"
+    },
+    {
+      "path": "scripts/products/output_Transparent_Labs_enriched/enriched/.stage_manifest.json",
+      "sha256": "c33afdaf4b444bebb18d32fba49592b5b2eb6c80bc93e4d959180a3aa4eacdf5"
+    },
+    {
+      "path": "scripts/products/output_Up_and_Up_enriched/enriched/.stage_manifest.json",
+      "sha256": "917fc301e8348f904d61175abf79daaefb448b9d172569bc763db6d585cdb57f"
+    },
+    {
+      "path": "scripts/products/output_Vitafusion_enriched/enriched/.stage_manifest.json",
+      "sha256": "b4e6bb2194e945626b5678e0739a70dfe5b2c8e73765c53439fbb6d6a03772f6"
+    },
+    {
+      "path": "scripts/products/output_nordic-naturals_enriched/enriched/.stage_manifest.json",
+      "sha256": "c387cfba434b8a15bee8e1b474679d2c0034d34f84516233f260d27052bdbe77"
+    },
+    {
+      "path": "scripts/products/output_paradise-earth-blend_enriched/enriched/.stage_manifest.json",
+      "sha256": "643fb94875af7e4c81b3441e3e43e5c47ada88c674596d865eb583f8b8831f9a"
+    }
+  ]
+}

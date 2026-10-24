@@ -1,5 +1,15 @@
 # PharmaGuide master completion plan
 
+### Branded preparation integrity — October 24
+
+- [x] Source-review all165priority records/163products and group all2,839flagged products/5,796saved blend records, with unchanged content manifests.
+- [x] Implement canonical single-material disclosure, physical blend ownership, typed activity disclosure and source-aware app explanations; preserve real blend penalties and clinical holds. Stable186-label raw replay and355named owner/consumer tests pass; appmakecheck4013passes.
+- [ ] Complete local/visual/whole-fastCI qualification and integrate both repositories. Pending is not passing.
+- [ ] Resolve source composition/preparation cases275412/182990 through existing owners; retain limitations meanwhile. Existing clinical-context/benchmark backlog and final corpus/app/release qualification remain open.
+
+Owner: existing enrichment, dose-disclosure, detector, B5/export and Flutter label-confidence owners — evidence: [per-entry register and measured replay](../../scripts/audits/branded_preparation_integrity_20261024/README.md). Will NOT create patent exemptions, policy, registry or clinical approvals. No corpus rerun/publication in this batch.
+
+
 ### Assessment integrity — October 23
 
 - [x] Preserve exact15,437-product baseline with verified manifest-owned files.

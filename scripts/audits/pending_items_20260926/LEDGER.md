@@ -3209,3 +3209,38 @@ Remaining:147conditional clinical contexts+generatedcollagen;506benchmarksubject
 identity/dose diagnostic products (overlapping issues); final necessary corpus/app validation.
 Use the consolidated CLINICAL_REVIEW_HANDOFF and its155-row staged-review register, not
 superseded interim microbatch counts. Pipeline remainsdeferred until scientificdecisions stable.
+
+### Branded preparation/disclosure batch — October 24 (qualification in progress)
+
+Sean authorized the complete 165-record/163-product review and integration in both repositories,
+without corpus rerun/publication. Owner: existing `_collect_proprietary_data`, IQM forms,
+`scoring_input_contract::dose_disclosure_status`, detector, B5/disclosure readers, detail export
+and Flutter label-confidence helper/section/caller. Evidence: exact raw row/hash register,
+fail-first cases and bounded replay. Will NOT create a patent exemption, matcher/registry/scorer,
+clinical approval, invented constituent amounts or public fields. Behavioral code/data class.
+
+All165source records reviewed:66initial correction candidates,95real member/proportion
+limitations,2typed enzyme-activity cases,2unresolved composition/preparation cases. Shared fixes
+reconcile canonical single-material disclosure, physical nested ownership, typed activities,
+structural headers and duplicate owners. Notes-only mixture detection cannot borrow an
+individual ingredient amount as the mixture total. Flutter uses existing disclosure metadata
+for full/partial/unknown distinctions and preserves independent coverage and clinical limits.
+
+Stable186-label raw replay (163candidates+23controls),0errors,source_unchanged=True. Printed
+quantities/names/units/activities and safety decision projections unchanged. Clean identity
+changes only16PrimaVie rows formerly BLEND_GENERAL, now shilajit.133totals move, no status
+changes; onlyTransparency133/Formulation17move, noDose/Evidence/Verification/Safety pillar
+movement.63record-level charges removed:60quantified material/source rows,2activity groups,
+1duplicate outer owner whose inner protease opacity remains.59records retain reduced charges,
+29increase,14unchanged after canonical ownership/total correction. Six of66initial material
+candidates already had noB5charge and remainnot_scored.23185279→77.8:Transparency12→15,
+Formulation20→15.8 because the actual shilajit preparation is assessed rather than skipped.
+No automatic positive bonus for branding. Required holds retained.
+
+355named owner/consumer checks pass; exact data-batch checks2IQM+1blendentry,0problems;
+IQMcitation verifier12matches/0mismatches. App9b8f0d25 rebased onto33c04c89 passesmakecheck:
+cleananalysis/4013tests. Independent final source review clear, including35mgmixture-total
+regression. Local/simulator/whole-fastCI and main integration still pending here; do not count
+pending gates as passed. [Register, measurements and limits](../branded_preparation_integrity_20261024/README.md).
+Remaining composition cases275412/182990 retain limitations; consolidated clinical/benchmark
+handoff remains authoritative. No pipeline, clinical closure, real catalog import or release.
