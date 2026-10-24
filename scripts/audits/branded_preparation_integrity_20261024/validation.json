@@ -14,7 +14,7 @@
   "replay_exit_code": 0,
   "replay_source_unchanged": true,
   "frozen_input_manifest_sha256": "5b90ffb02d115f9d5eedc3e7a1037234a28aa15d966266803957227bea16414a",
-  "candidate_output_sha256": "0a9d7cf31a062b93a68ee8cf9719cde189f21ad3c251cbf78696beefd7e85ef1",
+  "candidate_output_sha256": "e12d9034f883042ab306c29925affc712ca0aaf1f993a2911627b13a96d5cd72",
   "baseline_output_sha256": "82f37fab63d82268db3cc52b3eae7a0cd388b73535c09813ec4390070c4d7cc4",
   "candidate_source_sha256": {
     "scripts/analyze_blob_churn.py": "2a0344ff164abf4204245fbe69cf93f1e50b0372448933087c1374ddc0b3b7b3",
@@ -277,8 +277,8 @@
     "scripts/dsld_api_client.py": "a85116e592a2e19cc781901c2caf21ad0fb9c266fb128631876355fbb4b97546",
     "scripts/dsld_api_sync.py": "ddf34c144fb9c44b5628024cbc865e9c932fc9704371c62367b6729b26e9f89c",
     "scripts/dsld_validator.py": "8655d00d5e2190fb12818c772c2848d3711a9bd9e748700de58e38f5c05a18be",
-    "scripts/enhanced_normalizer.py": "c800b5292c57fbd1b26f6cb14322347821bd1bc8a658c3be590a39c9f52f7a05",
-    "scripts/enrich_supplements_v3.py": "14f31176cd7d60cea9847682da3bfb8616b024bf973038218f2af4fefbeb092b",
+    "scripts/enhanced_normalizer.py": "e454d499bf6b4194fbfb9fd899f0409ae9f2c05e68292f70a76929a336acb677",
+    "scripts/enrich_supplements_v3.py": "723e080f0c195da8deb0f97068d7ae637578d8dbcaf281e73224e02cb4030e34",
     "scripts/enrichment_contract_validator.py": "b245c16c36ca7a477422709c06f2816de140f7ba10baf079c7fd683e963076c8",
     "scripts/env_loader.py": "d1a18a4da4ac54cb70c860a90960f7741e7f59f1f39edde5aec5d6e440f1bed3",
     "scripts/evidence_resolver.py": "1325cf3357eaf2385bcf43e8b9ef40f12b7ddd01ad61026b7539593b03006a00",
@@ -687,20 +687,6 @@
       }
     },
     {
-      "id": "201803",
-      "name": "Alive! Children's Chewable Multi-Vitamin",
-      "before": 82.8,
-      "after": 79.6,
-      "status_before": "scored",
-      "status_after": "scored",
-      "pillars": {
-        "transparency": [
-          12.2,
-          9.0
-        ]
-      }
-    },
-    {
       "id": "210510",
       "name": "Wheybolic Alpha Chocolate Fudge",
       "before": 82.4,
@@ -743,20 +729,6 @@
         "transparency": [
           9.2,
           11.8
-        ]
-      }
-    },
-    {
-      "id": "213448",
-      "name": "Boron Complex 3 mg",
-      "before": 58.4,
-      "after": 47.9,
-      "status_before": "scored",
-      "status_after": "scored",
-      "pillars": {
-        "transparency": [
-          15.0,
-          4.5
         ]
       }
     },
@@ -2503,12 +2475,12 @@
   ],
   "status_changes": [],
   "pillar_movement_counts": {
-    "transparency": 133,
+    "transparency": 131,
     "formulation": 17
   },
   "owner_consumer_tests": {
-    "passed": 355,
-    "profile": "named fast files"
+    "passed": 465,
+    "profile": "16 named fast files, including unchanged missing-descendant canary"
   },
   "app_make_check": {
     "analysis": "pass",
@@ -2516,10 +2488,132 @@
     "candidate": "9b8f0d25"
   },
   "independent_source_review": "no blockers, including final mixture-total guard",
-  "local_check": "pending",
-  "whole_fast_ci": "pending",
-  "simulator_visual": "pending",
+  "local_check": {
+    "profile": "local",
+    "passed": 546,
+    "skipped": 24,
+    "skip_guard": "pass; declared optional-service opt-ins",
+    "seconds": 129.21,
+    "source_candidate": "379e538eaddee5f6956c06f26b4adb24a81b432e"
+  },
+  "whole_fast_ci": {
+    "run_id": 40064982337,
+    "candidate": "379e538eaddee5f6956c06f26b4adb24a81b432e",
+    "conclusion": "success",
+    "passed": 23748,
+    "skipped": 192,
+    "successful_skip_guards": 4,
+    "shards": [
+      {
+        "passed": 5869,
+        "skipped": 68,
+        "line": "2026-10-24T05:16:04.9009215Z ========== 5869 passed, 68 skipped, 14 warnings in 491.13s (0:08:11) ==========="
+      },
+      {
+        "passed": 5791,
+        "skipped": 41,
+        "line": "2026-10-24T05:14:34.1406455Z ================= 5791 passed, 41 skipped in 400.74s (0:06:40) ================="
+      },
+      {
+        "passed": 5857,
+        "skipped": 15,
+        "line": "2026-10-24T05:15:41.0634066Z ========== 5857 passed, 15 skipped, 64 warnings in 474.08s (0:07:54) ==========="
+      },
+      {
+        "passed": 6231,
+        "skipped": 68,
+        "line": "2026-10-24T05:17:18.3859895Z ========== 6231 passed, 68 skipped, 61 warnings in 563.46s (0:09:23) ==========="
+      }
+    ],
+    "url": "https://github.com/seancheick/PharmaGuide_Pipeline/actions/runs/40064982337"
+  },
+  "simulator_visual": {
+    "result": "pass",
+    "scope": "9 actual production display files, hash-bound into an isolated minimal native simulator host; connected wiring tested separately",
+    "source_sha256": {
+      "features/product_detail/v2/sections/label_confidence_helpers.dart": "47d5f3af105f2500ea95f9668b950109c77d7e8b6c99564170f4daa70f2bf422",
+      "features/product_detail/v2/sections/label_confidence_section.dart": "45e6447cb41a0ed995041e25afc4d3ebb5a5a5dcf0c30326bb72e54e2af016bb",
+      "core/components/pg_label_confidence_card.dart": "96867d810be9ad00ddfc4d7c4a9e025f74c7974e6dc7ca82c61eefc471ab9c80",
+      "core/scoring/coverage.dart": "a5c9c489d2706ee344ee76df4c7bf3216801a187a6ad760c4ac9746a27098b18",
+      "core/widgets/pg_modal.dart": "24c2041b234e27252ca94f82d51644ee268bae924c7f0aec87a739bc707350f0",
+      "core/theme/v2/v2_spacing.dart": "7b07dd2d95604af87c5f109a10dd693b31319cd80728119085ecf5f5389544f3",
+      "core/theme/v2/v2_typography.dart": "3175e7f8ef6e4c36f54e3322310e1c8d5ddeed866c5f1d79794db0bf95d535da",
+      "core/theme/v2/v2_colors.dart": "53cf7d10ca9f0e81a82c2ac85f005b9a422aa3301485a7c580efd94b45bacedd",
+      "core/theme/v2/v2_palette.dart": "e88b3061e35314fa829e41ac4b59e788d9397fe0c67c02fc414a40dce88cac91"
+    },
+    "screenshot_sha256": "5b48115880546755ef4c6ecc8ac9787c008ded8247506b09247c460f3a6a864f",
+    "exported_disclosure_projection_matches_final_replay": true
+  },
   "clinical_approval": "not granted by this batch; required holds retained",
   "whole_corpus_rebuild": "not performed",
-  "publication": "not performed"
+  "publication": "not performed",
+  "warning_parity": {
+    "lost_nonempty_warnings": 0,
+    "newly_analyzed_row_warning_paths_null_to_empty": 108
+  },
+  "pipeline_runtime_candidate": "379e538eaddee5f6956c06f26b4adb24a81b432e",
+  "app_main_integration": "8c5ab48a25ce2f246d2ab5c0a8a83f8b8241d6c0",
+  "app_make_check_reuse": "4013 tests and clean analysis on9b8f0d25; subsequent integration changes no lib/test/pubspec/ios/android source",
+  "superseded_ci": [
+    {
+      "run_id": 40063277118,
+      "conclusion": "cancelled; not qualification"
+    },
+    {
+      "run_id": 40063751192,
+      "conclusion": "failure; one reproduced missing-descendant assertion, fixed without weakening test; not qualification"
+    }
+  ],
+  "control_reconciliation": {
+    "213448": "original58.4 retained; declared nutrient amount not hidden member formula; no elemental conversion",
+    "201803": "original82.8 retained; exact citrus material/source fruits, not independently dosed actives"
+  },
+  "interrupted_capture_disposition": "accepted.jsonl overlapped source/HEAD changes and is not used; guarded.jsonl is the final unmodified-source receipt at379e538e",
+  "release_assessment_parity": {
+    "changed_products": 0,
+    "lost_required_clinical_blockers": []
+  },
+  "missing_descendant_regression": {
+    "node": "test_cleaner_first_contract_canary.py::test_missing_source_descendant_cannot_suppress_detector_opacity",
+    "fail_first": "reproduced local/CI",
+    "fix": "only rehydrate a flattened child inventory when every direct physical child is retained",
+    "canary_module_passed": 23,
+    "intact_186_total_status_changes_vs_prior_stable": 0
+  },
+  "replay_capture": "guarded.jsonl",
+  "stage_fingerprints": {
+    "scope": "read-only existing stage code/reference fingerprint inspection; no writes/rebuild/restamp",
+    "source_candidate": "379e538eaddee5f6956c06f26b4adb24a81b432e",
+    "stale_by_stage": {
+      "clean": 38,
+      "enrich": 38,
+      "score": 38
+    },
+    "earliest_required_stage": "clean",
+    "current_inputs": {
+      "clean": {
+        "reference_data_sha256_v1": "5c04e9ee0ed4e5b40e0125f3826d98987695d70b5d9c24a609515456cbe85b48",
+        "stage_code_sha256_v1": "23db422c17429e7ee4130cfc782829de49a7cf93ba79163ba64c61871bc3fd44"
+      },
+      "enrich": {
+        "reference_data_sha256_v1": "5c04e9ee0ed4e5b40e0125f3826d98987695d70b5d9c24a609515456cbe85b48",
+        "stage_code_sha256_v1": "905ac5f7ea4724a3475a18559f3e37aafd404a5d521b2b99cf89e770040b9683"
+      },
+      "score": {
+        "reference_data_sha256_v1": "5c04e9ee0ed4e5b40e0125f3826d98987695d70b5d9c24a609515456cbe85b48",
+        "stage_code_sha256_v1": "f54cdd57b2291ef66df838edcadfbb738736d8c7dcc323f68b24438b845446f0"
+      }
+    }
+  },
+  "integration": {
+    "pipeline_runtime_commits": [
+      "63ad40e710da57c1b939a1624b74a62fddc76e40",
+      "f3b8169d31a39f09a99dbcb1ba4726202dce28d4",
+      "379e538eaddee5f6956c06f26b4adb24a81b432e"
+    ],
+    "app_fix": "9b8f0d25efb574fa38b38064696ba992402e0ac6",
+    "app_main_merge": "8c5ab48a25ce2f246d2ab5c0a8a83f8b8241d6c0",
+    "pipeline_report_only_followup": "This report changes no runtime/data/config/tests; main containment is verified in the final handoff.",
+    "qualification_scope": "source and bounded outputs; no clinical approval or corpus/release validation"
+  }
 }

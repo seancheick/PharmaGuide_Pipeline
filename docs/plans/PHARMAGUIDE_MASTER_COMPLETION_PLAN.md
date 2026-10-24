@@ -3,8 +3,8 @@
 ### Branded preparation integrity — October 24
 
 - [x] Source-review all165priority records/163products and group all2,839flagged products/5,796saved blend records, with unchanged content manifests.
-- [x] Implement canonical single-material disclosure, physical blend ownership, typed activity disclosure and source-aware app explanations; preserve real blend penalties and clinical holds. Stable186-label raw replay and355named owner/consumer tests pass; appmakecheck4013passes.
-- [ ] Complete local/visual/whole-fastCI qualification and integrate both repositories. Pending is not passing.
+- [x] Implement canonical single-material disclosure, physical blend ownership, typed activity disclosure and source-aware app explanations; preserve real blend penalties and clinical holds. Stable186-label raw replay,465named owner/consumer tests andlocal546/24declaredskips pass; appmakecheck4013passes. Appintegrated at8c5ab48a with native component display verified.
+- [x] Qualify final379e538e: whole-fastCI40064982337 passes23,748tests/192declaredskips/all4skipguards; final local546/24declaredskips passes. App source integrated through8c5ab48a; pipeline source integrates with report-only follow-up and final main-containment verification. FailedCI40063751192 and cancelledCI40063277118 are not qualification.
 - [ ] Resolve source composition/preparation cases275412/182990 through existing owners; retain limitations meanwhile. Existing clinical-context/benchmark backlog and final corpus/app/release qualification remain open.
 
 Owner: existing enrichment, dose-disclosure, detector, B5/export and Flutter label-confidence owners — evidence: [per-entry register and measured replay](../../scripts/audits/branded_preparation_integrity_20261024/README.md). Will NOT create patent exemptions, policy, registry or clinical approvals. No corpus rerun/publication in this batch.

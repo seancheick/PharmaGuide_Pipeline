@@ -3210,7 +3210,7 @@ identity/dose diagnostic products (overlapping issues); final necessary corpus/a
 Use the consolidated CLINICAL_REVIEW_HANDOFF and its155-row staged-review register, not
 superseded interim microbatch counts. Pipeline remainsdeferred until scientificdecisions stable.
 
-### Branded preparation/disclosure batch — October 24 (qualification in progress)
+### Branded preparation/disclosure batch — October 24 (source qualified)
 
 Sean authorized the complete 165-record/163-product review and integration in both repositories,
 without corpus rerun/publication. Owner: existing `_collect_proprietary_data`, IQM forms,
@@ -3226,10 +3226,10 @@ structural headers and duplicate owners. Notes-only mixture detection cannot bor
 individual ingredient amount as the mixture total. Flutter uses existing disclosure metadata
 for full/partial/unknown distinctions and preserves independent coverage and clinical limits.
 
-Stable186-label raw replay (163candidates+23controls),0errors,source_unchanged=True. Printed
+Final stable186-label raw replay (163candidates+23controls) at379e538e,0errors,source_unchanged=True;443source-file bindings match. Printed
 quantities/names/units/activities and safety decision projections unchanged. Clean identity
-changes only16PrimaVie rows formerly BLEND_GENERAL, now shilajit.133totals move, no status
-changes; onlyTransparency133/Formulation17move, noDose/Evidence/Verification/Safety pillar
+changes only16PrimaVie rows formerly BLEND_GENERAL, now shilajit.131totals move, no status
+changes; onlyTransparency131/Formulation17move, noDose/Evidence/Verification/Safety pillar
 movement.63record-level charges removed:60quantified material/source rows,2activity groups,
 1duplicate outer owner whose inner protease opacity remains.59records retain reduced charges,
 29increase,14unchanged after canonical ownership/total correction. Six of66initial material
@@ -3237,10 +3237,23 @@ candidates already had noB5charge and remainnot_scored.23185279→77.8:Transpare
 Formulation20→15.8 because the actual shilajit preparation is assessed rather than skipped.
 No automatic positive bonus for branding. Required holds retained.
 
-355named owner/consumer checks pass; exact data-batch checks2IQM+1blendentry,0problems;
+465named owner/consumer checks pass; exact data-batch checks2IQM+1blendentry,0problems;
 IQMcitation verifier12matches/0mismatches. App9b8f0d25 rebased onto33c04c89 passesmakecheck:
 cleananalysis/4013tests. Independent final source review clear, including35mgmixture-total
-regression. Local/simulator/whole-fastCI and main integration still pending here; do not count
-pending gates as passed. [Register, measurements and limits](../branded_preparation_integrity_20261024/README.md).
+regression. Final local546/24declaredskips passes in129.21s; skipguardpasses. No nonempty
+warning removed; all186release-assessment decisions and clinical blockers unchanged. Both real
+nutrient/citrus controls retain their originalscores after fail-first owner corrections.
+Actual display components pass isolated native simulatorpreview, with connected wiring tests;
+ordinaryapphostOCRpluginarchitecture restriction is not claimed resolved. Appintegrated
+through8c5ab48a including unrelated connector work; identical checked Dartsource preserved.
+Whole-fastCI40064982337 on379e538e passesall4groups:23,748passed/192declaredskips,
+all4skipguards green. Main integration/containment is recorded in the final handoff; report-only
+follow-up changes no runtime/data/config/test source. CI40063751192
+failed one unchanged missing-descendant assertion; reproduced locally and fixed by refusing
+partial physical-child rehydration.23canary tests pass,465expanded owner/consumer tests pass;
+final186replay unchanged from the prior stable131movement results. Final379e538e local check
+passes546tests/24declaredskips in129.21s, with skipguardpassing. Read-only stage fingerprints
+are38Clean/38Enrich/38Scorestale; earliestClean. No output was rebuilt or restamped. EarlierCI40063277118 was
+cancelled/superseded after control findings. Neither failed nor cancelledCI is qualification. [Register, measurements and limits](../branded_preparation_integrity_20261024/README.md).
 Remaining composition cases275412/182990 retain limitations; consolidated clinical/benchmark
-handoff remains authoritative. No pipeline, clinical closure, real catalog import or release.
+handoff remains authoritative. No whole-corpus pipeline, clinical closure, real catalog import or release.
