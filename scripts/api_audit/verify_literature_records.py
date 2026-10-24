@@ -5,12 +5,14 @@ Deterministic verification gate for Phase 4 literature records:
 - Queries PubMed API for all cited PMIDs
 - Verifies title exact/close match, publication types, human population, topic match
 - Detects retractions and errata
-- If a title mismatch / bad PMID is detected, queries PubMed for the correct canonical PMID
+- Title mismatches and missing PMIDs remain unresolved for manual review
 - Extracts verified evidence quote from live abstract
-- Persists machine-verifiable provenance on each record
+- Reports machine screening separately from clinical applicability; source writes require --apply
 """
 from __future__ import annotations
 
+import argparse
+import hashlib
 import datetime
 import json
 import os
@@ -37,7 +39,7 @@ if _env.exists():
             k, _, v = line.partition("=")
             os.environ.setdefault(k.strip(), v.strip())
 
-from verify_all_citations_content import fetch_articles, search_pubmed
+from verify_all_citations_content import fetch_articles
 from pubmed_xml import clean_text
 
 
@@ -71,12 +73,19 @@ def title_overlap(a: str, b: str) -> float:
     return len(wa & wb) / len(wa | wb)
 
 
-def verify_literature_file(apply_fixes: bool = True) -> Dict[str, Any]:
+def verify_literature_file(apply_fixes: bool = False, record_ids: Set[str] | None = None) -> Dict[str, Any]:
     if not LITERATURE_RECORDS_PATH.exists():
         raise FileNotFoundError(f"Missing {LITERATURE_RECORDS_PATH}")
 
-    payload = json.loads(LITERATURE_RECORDS_PATH.read_text(encoding="utf-8"))
+    source_bytes = LITERATURE_RECORDS_PATH.read_bytes()
+    payload = json.loads(source_bytes)
     records = payload.get("literature_evidence_records", [])
+
+    if record_ids is not None:
+        unknown = record_ids - {r.get("canonical_id") for r in records}
+        if unknown:
+            raise ValueError(f"Unknown record IDs: {sorted(unknown)}")
+        records = [r for r in records if r.get("canonical_id") in record_ids]
 
     all_pmids: Set[str] = set()
     for r in records:
@@ -86,7 +95,7 @@ def verify_literature_file(apply_fixes: bool = True) -> Dict[str, Any]:
                 all_pmids.add(p)
 
     print(f"Fetching {len(all_pmids)} unique PMIDs from live PubMed API...")
-    fetched_articles = fetch_articles(sorted(all_pmids))
+    fetched_articles = fetch_articles(sorted(all_pmids), abstract_chars=None)
     print(f"Successfully fetched {len(fetched_articles)} articles.")
 
     total_records = len(records)
@@ -113,69 +122,16 @@ def verify_literature_file(apply_fixes: bool = True) -> Dict[str, Any]:
             stored_title = s.get("title", "")
 
             art = fetched_articles.get(pmid)
-            if not art:
-                # Not found by PMID; try search by title
-                print(f"[{cid}] PMID {pmid} not found in PubMed. Searching by title: {stored_title[:50]}...")
-                search_res = search_pubmed(stored_title, max_results=2)
-                if search_res:
-                    correct_pmid = search_res[0]["pmid"]
-                    corrections.append({
-                        "canonical_id": cid,
-                        "old_pmid": pmid,
-                        "new_pmid": correct_pmid,
-                        "title": stored_title,
-                        "reason": "pmid_not_found_resolved_via_title_search",
-                    })
-                    pmid = correct_pmid
-                    s["pmid"] = pmid
-                    # fetch newly found article
-                    new_art = fetch_articles([pmid])
-                    art = new_art.get(pmid)
-                else:
-                    failures.append({
-                        "canonical_id": cid,
-                        "pmid": pmid,
-                        "title": stored_title,
-                        "error": "pmid_not_found_in_pubmed",
-                    })
-                    record_provenance["all_pmids_verified"] = False
-                    continue
-
-            # Title comparison
-            live_title = art.get("title", "")
+            live_title = art.get("title", "") if art else ""
             overlap = title_overlap(stored_title, live_title)
-
-            if overlap < 0.30:
-                # Likely wrong PMID for this title; search PubMed for the intended title
-                print(f"[{cid}] Title mismatch (overlap={overlap:.2f}) for PMID {pmid}:")
-                print(f"   Stored: {stored_title}")
-                print(f"   Live:   {live_title}")
-                search_res = search_pubmed(stored_title, max_results=2)
-                if search_res:
-                    correct_pmid = search_res[0]["pmid"]
-                    print(f"   -> Found canonical PMID: {correct_pmid} ({search_res[0]['title']})")
-                    corrections.append({
-                        "canonical_id": cid,
-                        "old_pmid": pmid,
-                        "new_pmid": correct_pmid,
-                        "stored_title": stored_title,
-                        "resolved_title": search_res[0]["title"],
-                        "reason": "title_mismatch_corrected_to_canonical_pmid",
-                    })
-                    pmid = correct_pmid
-                    s["pmid"] = pmid
-                    new_art = fetch_articles([pmid])
-                    art = new_art.get(pmid, art)
-                    live_title = art.get("title", live_title)
-                else:
-                    failures.append({
-                        "canonical_id": cid,
-                        "pmid": pmid,
-                        "stored_title": stored_title,
-                        "live_title": live_title,
-                        "error": "title_mismatch_no_search_hit",
-                    })
-                    record_provenance["all_pmids_verified"] = False
+            if not art or overlap < 0.30:
+                # A title-search result is a discovery lead, never a reviewed
+                # replacement citation. Leave the source unchanged for review.
+                failures.append({"canonical_id": cid, "pmid": pmid,
+                                 "stored_title": stored_title, "live_title": live_title,
+                                 "error": "pmid_not_found_in_pubmed" if not art else "title_mismatch"})
+                record_provenance["all_pmids_verified"] = False
+                continue
 
             # Update study title to match live authoritative title
             s["title"] = live_title
@@ -185,8 +141,11 @@ def verify_literature_file(apply_fixes: bool = True) -> Dict[str, Any]:
             mesh_terms = art.get("mesh_terms", [])
             all_text = f"{live_title} {abstract} {' '.join(mesh_terms)}".lower()
 
-            topic_words = words(cid.replace("_", " "), s.get("study_type", ""))
-            found_topic = any(tw in all_text for tw in topic_words)
+            topic_words = words(cid.replace("_", " "), r.get("material_form", ""))
+            found_topic = any(re.search(r"\b" + re.escape(tw) + r"\b", all_text) for tw in topic_words)
+            if not found_topic:
+                failures.append({"canonical_id": cid, "pmid": pmid, "error": "topic_match_not_verified"})
+                record_provenance["all_pmids_verified"] = False
 
             # Text mentions (including "men" inside "supplementation") do not
             # establish a human population. Human-derived cells can also carry
@@ -229,7 +188,10 @@ def verify_literature_file(apply_fixes: bool = True) -> Dict[str, Any]:
 
             # Check retraction
             is_retracted = (
-                "retracted publication" in [m.lower() for m in mesh_terms]
+                art.get("retracted") is True
+                or "retracted publication" in [m.lower() for m in art.get("publication_types", [])]
+                or any(c.get("type") == "RetractionIn" for c in art.get("comments_corrections", []))
+                or "retracted publication" in [m.lower() for m in mesh_terms]
                 or "retraction of" in live_title.lower()
                 or "retraction:" in live_title.lower()
             )
@@ -240,6 +202,11 @@ def verify_literature_file(apply_fixes: bool = True) -> Dict[str, Any]:
                     "title": live_title,
                 })
                 record_provenance["retractions_found"] = True
+
+            for flag in ("expression_of_concern", "has_erratum"):
+                if art.get(flag):
+                    failures.append({"canonical_id": cid, "pmid": pmid, "error": flag + "_requires_review"})
+                    record_provenance["all_pmids_verified"] = False
 
             # Persist study-level machine verification provenance
             s["verification_provenance"] = {
@@ -253,6 +220,9 @@ def verify_literature_file(apply_fixes: bool = True) -> Dict[str, Any]:
                 "abstract_evidence_quote": evidence_quote,
             }
 
+        if not studies:
+            record_provenance["all_pmids_verified"] = False
+            failures.append({"canonical_id": cid, "error": "no_studies_to_verify"})
         r["verification_provenance"] = record_provenance
         if record_provenance["retractions_found"]:
             r["verification_result"] = "retraction_detected_unresolved"
@@ -261,6 +231,9 @@ def verify_literature_file(apply_fixes: bool = True) -> Dict[str, Any]:
         else:
             r["verification_result"] = "authoritative_pubmed_verified"
 
+    if apply_fixes and record_ids is not None:
+        # Global verification counts must never describe a selected subset.
+        raise ValueError("Selected audits are read-only; apply reviewed changes through data_batch")
     if apply_fixes:
         payload["_metadata"]["last_updated"] = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%d")
         payload["_metadata"]["verification_pipeline"] = "scripts/api_audit/verify_literature_records.py"
@@ -270,6 +243,11 @@ def verify_literature_file(apply_fixes: bool = True) -> Dict[str, Any]:
         print(f"Saved verified records to {LITERATURE_RECORDS_PATH}")
 
     report = {
+        "mode": "apply" if apply_fixes else "read_only",
+        "source_sha256": hashlib.sha256(source_bytes).hexdigest(),
+        "clinical_applicability_verified": False,
+        "verification_scope": "PubMed bibliographic and abstract screening only; not full-text, dose, outcome or clinician approval",
+        "records": records,
         "records_checked": total_records,
         "studies_checked": total_studies,
         "verification_failures_count": len(failures),
@@ -282,17 +260,30 @@ def verify_literature_file(apply_fixes: bool = True) -> Dict[str, Any]:
     return report
 
 
+def main(argv=None):
+    parser = argparse.ArgumentParser(description="Read-only PubMed literature screening; not clinical approval")
+    parser.add_argument("--record-id", action="append", help="Canonical ID to audit (repeatable)")
+    parser.add_argument("--report", type=Path, help="Write audit report outside curated data")
+    parser.add_argument("--apply", action="store_true", help="Explicitly apply reviewed whole-file machine provenance changes")
+    args = parser.parse_args(argv)
+    if args.report and (args.report.resolve() == LITERATURE_RECORDS_PATH.resolve()
+                        or (SCRIPTS_ROOT / "data").resolve() in args.report.resolve().parents):
+        parser.error("Audit reports must not overwrite curated data")
+    if args.apply and args.record_id:
+        parser.error("Selected audits are read-only; apply reviewed changes through data_batch")
+    try:
+        report = verify_literature_file(apply_fixes=args.apply,
+                                       record_ids=set(args.record_id) if args.record_id else None)
+    except ValueError as exc:
+        parser.error(str(exc))
+    if args.report:
+        args.report.parent.mkdir(parents=True, exist_ok=True)
+        args.report.write_text(json.dumps(report, indent=2, ensure_ascii=False) + "\n")
+    print(f"{report['mode']}: {report['records_checked']} records; {report['studies_checked']} studies; "
+          f"{report['verification_failures_count']} findings; {report['retractions_count']} retractions")
+    print(report['verification_scope'])
+    return int(bool(report['verification_failures_count'] or report['retractions_count']))
+
+
 if __name__ == "__main__":
-    report = verify_literature_file(apply_fixes=True)
-    print("\n" + "=" * 60)
-    print("PHASE 4 BATCH 1 — AUTHORITATIVE LITERATURE VERIFICATION AUDIT")
-    print("=" * 60)
-    print(f"Records Checked: {report['records_checked']}")
-    print(f"Studies Checked: {report['studies_checked']}")
-    print(f"Verification Failures: {report['verification_failures_count']}")
-    print(f"Corrections Applied: {report['corrections_count']}")
-    for c in report["corrections"]:
-        print(f"  - [{c['canonical_id']}] {c['reason']}: old PMID {c['old_pmid']} -> new PMID {c['new_pmid']}")
-    print(f"Retractions Found: {report['retractions_count']}")
-    for ret in report["retractions"]:
-        print(f"  - RETRACTED: [{ret['canonical_id']}] PMID {ret['pmid']}: {ret['title']}")
+    sys.exit(main())

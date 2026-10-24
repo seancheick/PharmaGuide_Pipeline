@@ -410,3 +410,76 @@ when PMC browser retrieval presented a challenge. Clinical-purpose/preparation h
 Cranberry330664 and mixed grape330882 exact NIH rows reconfirm the separate-species and mixed-
 component limitations. Numerical quality changes, bounded checks and integration are recorded
 in the execution LEDGER; full corpus/Flutter closure remains deferred.
+
+## 2026-10-23 clearance continuation: read-only API screening
+
+Owner: `verify_literature_records::verify_literature_file`,
+`verify_all_citations_content::fetch_articles`, `pubmed_client::parse_pubmed_article_xml`,
+and `verify_clinical_trials::extract_nct_ids`. These are screening owners, not clinical
+approval authorities. No curated data or scoring weights changed in this batch.
+
+The five-source inventory (backed clinical, native strains, literature, nutrient references,
+therapeutic references) requested 1,576 distinct citation identifiers. All resolved through
+the existing PubMed/DOI/PMC client and its freshness-controlled cache. Identifiers include
+aliases for the same paper; they must not be counted as 1,576 independent studies.
+All five curated input SHA256 hashes remained unchanged. The 83 held legacy records retain
+396 unique citation identifiers / 402 record-citation links and 410 frozen dependent products.
+Retrieval is not content applicability, full-text review or clinician approval.
+
+Whole literature screening inspected 808 records / 279 study rows / 261 distinct PMIDs.
+It reported 618 findings: 573 records with no studies to verify, 31 human-indexing gaps,
+nine correction notices and five topic-screen gaps. Zero retractions appeared in this
+literature subset. Empty study lists are not evidence that a prior documented negative
+finding is wrong; this verifier simply cannot certify them. No finding was auto-applied.
+The broader inventory contains 42 distinct publication-notice records after PMID alias
+reconciliation: 40 errata and two retraction-related records. The latter are the already
+excluded lutein paper41573009 and notice42211211, not two newly discovered unsafe sources.
+
+Coverage remains limited: full-text preparation/dose/outcome/population synthesis, all
+non-PubMed nutrition authority content, historical/rejected literature references outside
+qualifying_human_studies, trial-family independence, and genuine clinician approvals are
+not established by this run. The generic citation gate and backed-studies gate are not
+complete clinical-applicability verifiers. The existing DRI tool uses a pinned reference
+comparison, not fresh authority-page verification. These are explicit remaining gates.
+
+### Preparation packet additions; no grade or approval
+
+- Magnesium biotinate: [2019 pharmacokinetic abstract](https://pmc.ncbi.nlm.nih.gov/articles/PMC6574044/),
+  DOI10.1093/cdn/nzz031.P06-027-19, reports single-dose human exposure after magnesium
+  biotinate. This is an abstract-level absorption lead, without a conventional-biotin
+  comparator; it does not establish superior bioavailability, hair efficacy or a form grade.
+  Primary indexed abstract was accessible; direct PMC access challenged and fullTextXML
+  failed. No successful full-text API verification is claimed.
+- The existing [2021 Lustriva randomized combination trial](https://www.longdom.org/open-access/a-randomized-doubleblind-evaluation-of-a-novel-biotin-and-silicon-ingredient-complex-on-the-hair-and-skin-of-healthy-women-61185.html)
+  was re-read. Selected hair/wrinkle findings concern the complete combination; nail outcomes
+  did not differ between groups. JDS funding and CRO employment belong in the review.
+  Labels299744/336100 remain preparation/clinical-review cases, not established isolated
+  magnesium-biotinate efficacy or inferred component quantities.
+- [Oral plus topical experience abstract](https://pmc.ncbi.nlm.nih.gov/articles/PMC8181505/),
+  DOI10.1093/cdn/nzab037_084, is a separate uncontrolled combined-route lead. It cannot
+  establish oral-only effects. Direct full-text retrieval remains unverified.
+
+### Publication notices affecting held legacy records
+
+| Record | Original → correction | Review disposition |
+|---|---|---|
+| Saw palmetto |12006122 → J Altern Complement Med2006;12(2):199 | PubMed links a correction without a notice PMID; content unresolved. |
+| Calcium |17720017 → Lancet2012;380(9844):806 | Notice content unresolved; do not invent an identifier. |
+| Calcium |26510847 → [27401092](https://pubmed.ncbi.nlm.nih.gov/27401092/) | Correction includes additional analyses; exact numerical synthesis must use corrected paper. Current registry prose contains no obsolete percentage estimates; clinical review remains open. |
+| Whey/protein |28698222 → [32943392](https://pmc.ncbi.nlm.nih.gov/articles/PMC7513243/) | Disclosure correction; incorporate author advisory-board relationship in limitations. No automatic invalidity or scoring change. |
+| B. bifidum |31342226 → [34652462](https://pubmed.ncbi.nlm.nih.gov/34652462/) | Identity verified; correction scope inaccessible in this pass. |
+| Omega-3 |31383846 → [34493705](https://pmc.ncbi.nlm.nih.gov/articles/PMC8423804/) | Author-name correction; clinical applicability and approval remain separate. |
+| PQQ |34415830 → [35917215](https://pubmed.ncbi.nlm.nih.gov/35917215/) | Publisher describes corrected Table4; actual table/outcome impact still needs inspection. |
+| Lutein |41573009 → [42211211](https://pubmed.ncbi.nlm.nih.gov/41573009/) | Retraction already explicitly excluded in current INGR_LUTEIN; no duplicate remediation. |
+
+Native registrations NCT02974894 (299v stress/cortisol study) and NCT01773967
+(LGG pediatric gastroenteritis) were retrieved through the existing ClinicalTrials client.
+Their protocol populations/outcomes must not be transferred to unrelated claims. The former
+has no posted results in this response; the latter has results. Neither fact supplies approval.
+
+Audit receipts (inventory, source hashes, complete retrieved abstracts, publication notices,
+literature findings and exact native registration payloads) are retained under
+`.claude/state/clearance-audit/` and the durable assessment-integrity research directory.
+All clinical and benchmark worklists retain their holds; none is scientifically closed merely
+by these lookups. The 506-subject benchmark workload still requires owner-level applicability
+and defensible numerical or completed-no-benchmark decisions. No corpus was regenerated.

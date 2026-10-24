@@ -471,3 +471,26 @@ def test_dose_reference_semantics_citations_reach_existing_content_verifier():
             'https://pubmed.ncbi.nlm.nih.gov/29214616/','NIH_ODS_CHOLINE']},
     },{'source_format':'pmid_list','sources_field':'references'})
     assert {r['pmid'] for r in refs}=={'18208600','21847611','29214616'}
+
+
+def test_shared_pubmed_notice_metadata_survives_fetch(monkeypatch):
+    xml = '''<PubmedArticleSet><PubmedArticle><MedlineCitation><PMID>123</PMID>
+    <Article><ArticleTitle>Melon trial</ArticleTitle><PublicationTypeList>
+    <PublicationType>Randomized Controlled Trial</PublicationType></PublicationTypeList></Article>
+    <CommentsCorrectionsList><CommentsCorrections RefType="RetractionIn"><PMID>456</PMID>
+    </CommentsCorrections><CommentsCorrections RefType="ExpressionOfConcernIn"/>
+    <CommentsCorrections RefType="ErratumIn"/></CommentsCorrectionsList>
+    </MedlineCitation></PubmedArticle></PubmedArticleSet>'''
+    monkeypatch.setattr(vac.citation_client(), 'efetch', lambda ids: xml)
+    article = vac.fetch_articles(['123'])['123']
+    assert article['retracted'] is True
+    assert article['expression_of_concern'] is True
+    assert article['has_erratum'] is True
+    assert article['publication_types'] == ['Randomized Controlled Trial']
+
+
+def test_cli_unresolved_retrieval_is_not_success(monkeypatch):
+    monkeypatch.setattr(sys, 'argv', ['audit', '--file', 'timing_rules.json'])
+    monkeypatch.setattr(vac, 'verify_file', lambda *a: {
+        'file': 'timing_rules.json', 'not_found': 1, 'entries': []})
+    assert vac.main() == 1

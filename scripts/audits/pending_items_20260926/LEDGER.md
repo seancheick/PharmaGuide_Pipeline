@@ -3003,3 +3003,27 @@ comparison matches the reviewed candidate except scored_date; independent review
 The new fallback covers exact source-row/identity bindings; source-less legacy compatibility
 rows are not claimed closed. No pipeline rerun, corpus closure, app verification or release.
 Main integration authorized; final remote containment receipt belongs in the current handoff.
+
+### 2026-10-23 clearance API audit — bounded implementation
+
+Class: audit infrastructure, no scoring/data/consumer change. Owner: existing literature,
+shared PubMed and ClinicalTrials audit functions (research.md records exact symbols).
+Will NOT create a verifier, clinical registry, approval authority or benchmark.
+Five initial fail-first cases reproduced default source write, absent selection/report API,
+missing publication-type retraction handling and unresolved citation handling. Additional
+fail-first checks reproduce missing native registrations, dropped protocol/results fields,
+and generic citation CLI success on unresolved retrieval. Fixture setup errors were corrected
+before recording the protocol-field regression. Read-only is now the literature default;
+explicit apply remains separate, unknown selectors fail, report destinations cannot overwrite
+curated data. No first-search-hit PMID substitution. Empty studies and unresolved screening
+return nonzero. Shared PubMed parser preserves publication notices and full abstracts are used
+for literature screening. Native trial reports retain protocol/results without clinical approval.
+
+Five-source read-only retrieval resolved all1,576identifier requests; source hashes unchanged.
+Literature screening intentionally returns failure for618findings across808records (see
+research.md for573no-study/31human/9erratum/5topic breakdown). No scientific completion implied.
+Eight held-record publication-notice dispositions and biotinate/Lustriva packet additions are
+recorded; current lutein retraction exclusion confirmed. All83clinical and506benchmark worklists
+remain subject to their existing review owners. No new clinician approval or numerical benchmark.
+Focused owner/transport slice:75passed before final documentation. Whole-fast CI pending;
+no corpus/local pipeline checks required for this audit-only change. No pipeline/export/release.

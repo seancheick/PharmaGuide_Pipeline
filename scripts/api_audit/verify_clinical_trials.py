@@ -219,6 +219,13 @@ def extract_nct_ids(entry: dict) -> set[str]:
     """Extract all NCT IDs from a backed_clinical_studies entry."""
     nct_ids: set[str] = set()
 
+    # Native clinical contexts retain registrations separately from prose.
+    for context in entry.get("study_contexts") or []:
+        if isinstance(context, dict):
+            registration = context.get("trial_registration")
+            if isinstance(registration, str):
+                nct_ids.update(NCT_RE.findall(registration))
+
     # Search notable_studies text
     notable = entry.get("notable_studies", "")
     if isinstance(notable, str):
@@ -337,6 +344,9 @@ def _extract_study_info(study_data: dict) -> dict[str, Any]:
         "nct_id": ident.get("nctId", ""),
         "title": ident.get("officialTitle") or ident.get("briefTitle", ""),
         "status": status_mod.get("overallStatus", "UNKNOWN"),
+        "protocol": {key: protocol.get(key, {}) for key in (
+            "armsInterventionsModule", "outcomesModule", "eligibilityModule", "designModule")},
+        "posted_results": study_data.get("resultsSection"),
         "study_type_raw": study_type,
         "allocation": allocation,
         "our_study_type": our_type,
@@ -441,6 +451,9 @@ def verify_clinical_file(
                 "ct_phases": info["phases"],
                 "ct_enrollment": info["enrollment"],
                 "ct_conditions": info["conditions"][:5],
+                "protocol": info["protocol"],
+                "posted_results": info["posted_results"],
+                "clinical_applicability_verified": False,
             }
 
             # Mismatch logic:

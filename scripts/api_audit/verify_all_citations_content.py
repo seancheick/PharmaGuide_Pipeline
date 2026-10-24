@@ -42,7 +42,7 @@ DATA_DIR = SCRIPTS_ROOT / "data"
 if str(SCRIPTS_ROOT) not in sys.path:
     sys.path.insert(0, str(SCRIPTS_ROOT))
 
-from api_audit.pubmed_client import PubMedClient  # noqa: E402
+from api_audit.pubmed_client import PubMedClient, parse_pubmed_article_xml  # noqa: E402
 from api_audit.pubmed_xml import element_text  # noqa: E402
 
 PMID_RE = re.compile(r"pubmed\.ncbi\.nlm\.nih\.gov/(\d+)")
@@ -315,9 +315,15 @@ def fetch_articles(pmids: list[str], abstract_chars: int | None = 800) -> dict[s
             raw = citation_client().efetch(batch)
             root = ET.fromstring(raw)
 
+            for parsed in parse_pubmed_article_xml(raw):
+                parsed["mesh_terms"] = [m.lower() for m in parsed["mesh_terms"]]
+                if abstract_chars is not None:
+                    parsed["abstract"] = parsed["abstract"][:abstract_chars]
+                articles[parsed["pmid"]] = parsed
+
             # A book record (PubmedBookArticle: NBK chapters, HTA dossiers) has a
             # BookTitle instead of an ArticleTitle; without it, it read as "not found".
-            for article in root.findall(".//PubmedArticle") + root.findall(".//PubmedBookArticle"):
+            for article in root.findall(".//PubmedBookArticle"):
                 pmid_el = article.find(".//PMID")
                 if pmid_el is None:
                     continue
@@ -343,6 +349,7 @@ def fetch_articles(pmids: list[str], abstract_chars: int | None = 800) -> dict[s
                     "title": title,
                     "abstract": abstract if abstract_chars is None else abstract[:abstract_chars],
                     "mesh_terms": mesh_terms,
+
                 }
         except Exception as e:
             print(f"  Citation batch {i} unavailable ({type(e).__name__}); {len(batch)} IDs require review/retry", file=sys.stderr)
@@ -783,7 +790,9 @@ def main():
             print(f"  NEW MISMATCH {file} {entry['entry_id']} {cite_label(entry['pmid'])}: {entry['article_title']}")
         return 1 if new or unresolved else 0
 
-    return 1 if total_mismatch > 0 else 0
+    return 1 if total_mismatch > 0 or any(
+        r.get("not_found", 0) or r.get("status") == "not_found" for r in all_results
+    ) else 0
 
 
 if __name__ == "__main__":
