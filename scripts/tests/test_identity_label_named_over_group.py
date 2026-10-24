@@ -174,3 +174,27 @@ def test_named_hair_complex_does_not_invent_component_amounts_or_clear_holds(pro
     assert row['bio_score'] is None
     assert build_scored_artifact(enriched)['quality_score_status'] == 'not_scored'
     assert not any(r.get('canonical_id') == 'keratin' for r in enriched['ingredient_quality_data']['ingredients'])
+
+
+def test_reviewed_source_species_preserves_the_printed_corn_silk_identity(pipeline):
+    # Exact NIH labels 312640/312713/330886 print Cornsilk (Zea mays) Powder,
+    # 6.25 mg. The source form is the species, not a competing kernel dose.
+    normalizer, enricher = pipeline
+    raw = {
+        'id': 'source_alias_corn_silk', 'fullName': 'Corn Silk source-row control',
+        'ingredientRows': [{
+            'name': 'Corn Silk, Powder', 'category': 'botanical',
+            'ingredientGroup': 'Corn Silk', 'order': 1,
+            'quantity': [{'quantity': 6.25, 'unit': 'mg'}],
+            'forms': [{'name': 'Zea mays, Powder', 'category': 'botanical',
+                       'ingredientGroup': 'Corn'}],
+        }],
+    }
+    cleaned = normalizer.normalize_product(raw)
+    enriched, _ = enricher.enrich_product(cleaned)
+    [row] = enriched['ingredient_quality_data']['ingredients']
+    assert row['canonical_id'] == 'corn_silk'
+    assert row['identity_disposition'] == 'clean'
+    assert row['quantity'] == 6.25 and row['unit'] == 'mg'
+    assert row['raw_source_path'] == 'ingredientRows[0]'
+    assert row['source_label_name'] == 'Corn Silk, Powder'

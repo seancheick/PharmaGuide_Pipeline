@@ -1,13 +1,13 @@
 {
   "_metadata": {
-    "schema_version": "1.5.0",
+    "schema_version": "1.6",
     "description": "Reviewer-signed product-row corrections and exact-match containment of reviewed label-unit conflicts.",
     "purpose": "Per-product source-row correction with provenance. Each entry targets one (dsld_id, raw_ingredient_text) pair before cleaner identity resolution and may correct label text, a misattributed UNII, a verified quantity value/unit, or a combination of those fields. Global aliases and global identifier suppression are not supported.",
     "scope": "Only fires for an exact (dsld_id, raw_ingredient_text) tuple match. Case-sensitive on raw_ingredient_text by design — manufacturers may print 'Insulin' in one product and 'INSULIN' in another, and each needs independent reviewer sign-off because the surrounding context (sibling ingredients, product category, regulatory status) must be re-evaluated per occurrence.",
     "review_policy": "Every product entry is keyed by dsld_id and must carry: brand, product_name (for human-readable audit trail), raw_ingredient_text (the source row being corrected), corrected_ingredient_text (the text the cleaner should see, unchanged for unit-only corrections), correction_fields, evidence (free-text rationale with regulatory citations), sources (authoritative URLs — FDA, NIH, DailyMed, etc.), reviewer, and review_date (ISO 8601 YYYY-MM-DD). A verified cross-row defect may add additional_row_corrections, which inherit the product-level evidence, sources, reviewer, review_date, scope, and provenance tag. Quantity changes require exact raw and corrected value/unit pairs and must be supported by the official manufacturer or label image. Restoring a quantity absent from a form row additionally requires raw_quantity_missing=true, a positive corrected value/unit, and exact same-record source text that states the dose; the applier refuses to overwrite any existing quantity representation. A reviewed Daily Value correction requires an exact raw_daily_value and corrected_daily_value from the same official label; it rewrites only matching source percentages, never derives a percentage or changes a different value. A reviewed unresolved_unit scoring_disposition preserves exact raw_quantity_value/raw_quantity_unit, makes no inferred unit correction, and marks dose and upper-limit assessment unresolved until independent exact-label evidence resolves the conflict. It applies only when the raw name, value and unit all match. Reviewed hierarchy corrections may supply corrected_child_row_refs with exact parent raw_source_path/name/value/unit and exact child source paths/names/raw_child_names. The existing applier validates the whole group before moving working rows; it preserves original API source references and quantities and fails closed on mismatch. A source_descriptor disposition with an authored raw value/unit applies only to that exact quantity edition. Exact-source corrected_notes repairs require raw source paths, names, notes and quantity pairs for the entire bundle; a mismatch fails closed before edits. Original working notes retain _pre_correction_notes, and source paths remain unchanged.",
     "unmatched_drug_tokens_policy": "When a row's raw_ingredient_text matches a known regulated-drug name (e.g., 'Insulin', 'Acetaminophen', 'Ibuprofen') and there is NO matching override for the product, the row must NOT be silently mapped. The cleaner emits the row to a quarantine path with reason='requires_human_review_drug_token_in_supplement' and excludes the product from scoring. New occurrences enter the reviewer pipeline via the same schema.",
     "last_updated": "2026-10-24",
-    "total_entries": 86,
+    "total_entries": 90,
     "loaded_by": "scripts/enhanced_normalizer.py via _load_label_corrections (cached on first product)"
   },
   "corrections": {
@@ -2160,6 +2160,151 @@
       "provenance_tag": "official_label_source_material_correction",
       "scope": "dsld_id_only",
       "raw_source_path": "ingredientRows[5]"
+    },
+    "326244": {
+      "brand": "SR Sports Research",
+      "product_name": "Collagen Beauty Complex Unflavored",
+      "raw_ingredient_text": "Vitamin C",
+      "corrected_ingredient_text": "Vitamin C",
+      "raw_source_path": "ingredientRows[2]",
+      "raw_quantity_value": 180,
+      "raw_quantity_unit": "mg",
+      "raw_forms": [
+        {
+          "order": 1,
+          "ingredientId": 292621,
+          "prefix": null,
+          "percent": null,
+          "name": "Calcium Carbonate",
+          "category": "mineral",
+          "ingredientGroup": "Calcium",
+          "uniiCode": "H0G9379FGK"
+        }
+      ],
+      "corrected_forms": [
+        {
+          "name": "Calcium Ascorbate",
+          "prefix": "as",
+          "category": "vitamin",
+          "ingredientGroup": "Vitamin C"
+        }
+      ],
+      "correction_fields": [
+        "forms"
+      ],
+      "evidence": "The exact Supplement Facts panel prints Vitamin C (as Calcium Ascorbate) 180 mg. The API Calcium Carbonate form belongs to a different chemical salt and is a transcription error. Keep Vitamin C mass180mg and separate calcium40mg; do not infer a calcium-ascorbate compound mass or branded Ester-C preparation. Exact archived PDF SHA256 3d50c59bc4ec505b47aad0905aaa7da38ab2ddf64def2df1e9c4f77981b5e606.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/326244.pdf",
+        "https://api.ods.od.nih.gov/dsld/v9/label/326244"
+      ],
+      "reviewer": "Codex exact-label source-content verification; not clinical approval",
+      "review_date": "2026-10-24",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_form_correction"
+    },
+    "321393": {
+      "brand": "Garden of Life Vitamin Code",
+      "product_name": "Raw D3 2,000 IU (50 mcg)",
+      "raw_ingredient_text": "Chlorella",
+      "corrected_ingredient_text": "High Omega-9 Cracked-Wall Chlorella",
+      "raw_source_path": "ingredientRows[1]",
+      "raw_quantity_value": 250,
+      "raw_quantity_unit": "mg",
+      "raw_forms": [
+        {
+          "order": 1,
+          "ingredientId": 285309,
+          "prefix": null,
+          "percent": null,
+          "name": "Omega-9 Fatty Acids",
+          "category": "fatty acid",
+          "ingredientGroup": "Omega-9",
+          "uniiCode": "0"
+        }
+      ],
+      "corrected_forms": [],
+      "correction_fields": [
+        "name",
+        "forms"
+      ],
+      "evidence": "The exact panel prints High Omega-9 Cracked-Wall Chlorella250mg. Highomega9 describes the chlorella material, not a separately quantified fatty acid or chemical form of Chlorella. Remove only the API Omega-9 Fatty Acids form. Preserve the original highomega9 note,250mg material amount and all unknown species, fatty-acid composition and clinical applicability. Exact archived PDF SHA256 04d64ac242ac1d60595207adeae7a780dad42877347f554e2b925d5e327a294f. Restore the exact printed High Omega-9 Cracked-Wall Chlorella preparation name: cell-wall processing is disclosed even though species and fatty-acid amounts are not. Resolve only the existing reviewed broken-cell-wall form, with no new species or grade.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/321393.pdf",
+        "https://api.ods.od.nih.gov/dsld/v9/label/321393"
+      ],
+      "reviewer": "Codex exact-label source-content verification; not clinical approval",
+      "review_date": "2026-10-24",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_form_correction"
+    },
+    "321394": {
+      "brand": "Garden of Life Vitamin Code",
+      "product_name": "Raw D3 2,000 IU (50 mcg)",
+      "raw_ingredient_text": "Chlorella",
+      "corrected_ingredient_text": "High Omega-9 Cracked-Wall Chlorella",
+      "raw_source_path": "ingredientRows[1]",
+      "raw_quantity_value": 250,
+      "raw_quantity_unit": "mg",
+      "raw_forms": [
+        {
+          "order": 1,
+          "ingredientId": 285309,
+          "prefix": null,
+          "percent": null,
+          "name": "Omega-9 Fatty Acids",
+          "category": "fatty acid",
+          "ingredientGroup": "Omega-9",
+          "uniiCode": "0"
+        }
+      ],
+      "corrected_forms": [],
+      "correction_fields": [
+        "name",
+        "forms"
+      ],
+      "evidence": "Independently inspected exact label prints High Omega-9 Cracked-Wall Chlorella250mg. It does not declare Omega-9 Fatty Acids as a chemical form, an isolated fatty-acid dose or a species. Remove only that erroneous API form; preserve250mg material and source descriptor without guessing species/composition/clinical applicability. Exact archived PDF SHA256 f474ab877c73d287de90b099200fa76a1d5a49024cecb96bfbf2674c16fa437f. Restore the exact printed High Omega-9 Cracked-Wall Chlorella preparation name: cell-wall processing is disclosed even though species and fatty-acid amounts are not. Resolve only the existing reviewed broken-cell-wall form, with no new species or grade.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/321394.pdf",
+        "https://api.ods.od.nih.gov/dsld/v9/label/321394"
+      ],
+      "reviewer": "Codex exact-label source-content verification; not clinical approval",
+      "review_date": "2026-10-24",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_form_correction"
+    },
+    "241681": {
+      "brand": "HUM",
+      "product_name": "Counter Cravings",
+      "raw_ingredient_text": "Forskolin",
+      "corrected_ingredient_text": "Forskolin",
+      "raw_source_path": "ingredientRows[0].nestedRows[0]",
+      "raw_quantity_value": 25,
+      "raw_quantity_unit": "mg",
+      "raw_forms": [
+        {
+          "order": 1,
+          "ingredientId": 51840,
+          "prefix": "from",
+          "percent": null,
+          "name": "Coleus forskohlii extract",
+          "category": "botanical",
+          "ingredientGroup": "Coleus",
+          "uniiCode": null
+        }
+      ],
+      "corrected_category": "non-nutrient/non-botanical",
+      "correction_fields": [
+        "category"
+      ],
+      "evidence": "The exact NIH label explicitly declares Forskolin (from Coleus forskohlii extract)25mg beneath separately quantified extract250mg standardizedto10%. Forskolin is a discrete diterpene compound (live PubChem CID47936; source receipt retained), not an alternate whole-plant identity. Correct only API category botanical to non-nutrient/non-botanical; preserve printed25mg marker,250mg parent, source-form text and all unknown clinical applicability. No percent-derived amount, broad botanical-source alias or efficacy threshold is inferred. Exact PDF SHA256 8fe08d30abf27d523306f4cad64345e384ff2985f21187373f52fbd0f64ee944.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/241681.pdf",
+        "https://pubchem.ncbi.nlm.nih.gov/compound/47936"
+      ],
+      "reviewer": "Codex exact-label and chemical source-content verification; not clinical approval",
+      "review_date": "2026-10-24",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_category_correction"
     }
   }
 }

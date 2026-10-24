@@ -50,6 +50,7 @@ from __future__ import annotations
 
 import json
 import os
+from pathlib import Path
 from typing import Any, Dict
 
 import pytest
@@ -539,3 +540,115 @@ def test_maximum_nutrition_molybdenum_conflict_is_not_a_verified_unit_correction
         assert entry["corrected_quantity_unit"] == "mcg"
         assert "quantity.unit" in entry["correction_fields"]
     assert f"https://api.ods.od.nih.gov/dsld/s3/pdf/{dsld_id}.pdf" in entry["sources"]
+
+
+@pytest.mark.parametrize("pid,name,forms,amount", [
+    ("326244", "Vitamin C", ["Calcium Ascorbate"], 180),
+    ("321393", "Chlorella", [], 250),
+    ("321394", "Chlorella", [], 250),
+])
+def test_exact_source_forms_do_not_borrow_wrong_api_chemistry(pid, name, forms, amount):
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    raw = json.loads((Path(__file__).parent / "fixtures" / f"completion_source_{pid}_raw.json").read_text())
+    cleaned = EnhancedDSLDNormalizer().normalize_product(raw)
+    source_ref = 'ingredientRows[2]' if name == 'Vitamin C' else 'ingredientRows[1]'
+    [row] = [r for r in cleaned["activeIngredients"] if r['raw_source_path'] == source_ref]
+    assert [form["name"] for form in row["forms"]] == forms
+    assert row["quantity"] == amount and row["unit"] == "mg"
+    assert row["canonical_id"] == ("vitamin_c" if name == "Vitamin C" else "chlorella")
+    assert row["source_correction"]["provenance_tag"] == "official_label_form_correction"
+
+
+@pytest.mark.parametrize("change", ["amount", "unit", "path", "form"])
+def test_exact_source_form_correction_does_not_transfer_to_a_changed_edition(change):
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    raw = json.loads((Path(__file__).parent / "fixtures" / "completion_source_326244_raw.json").read_text())
+    rows = raw["ingredientRows"]
+    if change == "amount":
+        rows[2]["quantity"][0]["quantity"] = 181
+    elif change == "unit":
+        rows[2]["quantity"][0]["unit"] = "mcg"
+    elif change == "path":
+        rows[2], rows[3] = rows[3], rows[2]
+    else:
+        rows[2]["forms"][0]["name"] = "Other declared form"
+    cleaned = EnhancedDSLDNormalizer().normalize_product(raw)
+    [row] = [r for r in cleaned["activeIngredients"] if r["name"] == "Vitamin C"]
+    assert [form["name"] for form in row["forms"]] == (["Other declared form"] if change == "form" else ["Calcium Carbonate"])
+
+
+def test_reviewed_form_correction_preserves_malformed_source_for_normal_validation():
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    raw = json.loads((Path(__file__).parent / 'fixtures' / 'completion_source_321393_raw.json').read_text())
+    rows = raw['ingredientRows']
+    rows[1]['forms'] = ['unparsed source form']
+    normalizer = EnhancedDSLDNormalizer()
+    normalizer._stamp_raw_source_paths(rows, 'ingredientRows')
+    normalizer._apply_label_corrections(rows, '321393')
+    assert rows[1]['forms'] == ['unparsed source form']
+    assert not rows[1].get('_label_correction_applied')
+
+
+def test_printed_forskolin_marker_dose_keeps_compound_identity_not_source_plant():
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    from enrich_supplements_v3 import SupplementEnricherV3
+    raw = json.loads((Path(__file__).parent / 'fixtures' / 'completion_source_241681_raw.json').read_text())
+    cleaned = EnhancedDSLDNormalizer().normalize_product(raw)
+    enriched, _ = SupplementEnricherV3().enrich_product(cleaned)
+    rows = enriched['ingredient_quality_data']['ingredients']
+    [row] = [r for r in rows if r.get('raw_source_path') == 'ingredientRows[0].nestedRows[0]']
+    assert row['canonical_id'] == 'forskolin'
+    assert row['quantity'] == 25 and row['unit'] == 'mg'
+    [parent] = [r for r in cleaned['activeIngredients'] if r.get('raw_source_path') == 'ingredientRows[0]']
+    assert parent['quantity'] == 250 and parent['unit'] == 'mg'
+    assert row['source_label_name'] == 'Forskolin'
+
+
+@pytest.mark.parametrize('forms', [None, {}, ['unparsed form']])
+def test_category_only_correction_requires_its_reviewed_source_form(forms):
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    raw = json.loads((Path(__file__).parent / 'fixtures' / 'completion_source_241681_raw.json').read_text())
+    rows = raw['ingredientRows']; marker = rows[0]['nestedRows'][0]; marker['forms'] = forms
+    normalizer = EnhancedDSLDNormalizer(); normalizer._stamp_raw_source_paths(rows, 'ingredientRows')
+    normalizer._apply_label_corrections(rows, '241681')
+    assert marker['category'] == 'botanical'
+    assert not marker.get('_label_correction_applied')
+
+
+def test_working_corrected_forms_cannot_mutate_cached_correction_source():
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    normalizer = EnhancedDSLDNormalizer()
+    def apply():
+        rows = json.loads((Path(__file__).parent / 'fixtures' / 'completion_source_326244_raw.json').read_text())['ingredientRows']
+        normalizer._stamp_raw_source_paths(rows, 'ingredientRows'); normalizer._apply_label_corrections(rows, '326244')
+        return rows[2]
+    first = apply(); first['forms'][0]['name'] = 'Mutated working object'
+    second = apply()
+    assert second['forms'][0]['name'] == 'Calcium Ascorbate'
+
+
+@pytest.mark.parametrize('pid,source_ref,wrong', [
+    ('326244', 'ingredientRows[2]', 'Calcium Carbonate'),
+    ('321393', 'ingredientRows[1]', 'Omega-9 Fatty Acids'),
+    ('321394', 'ingredientRows[1]', 'Omega-9 Fatty Acids'),
+])
+def test_reviewed_form_facts_survive_the_export_display_ledger(pid, source_ref, wrong):
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    from enrich_supplements_v3 import SupplementEnricherV3
+    from scoring_v4.scored_artifact import build_scored_artifact
+    from build_final_db import build_detail_blob
+    raw = json.loads((Path(__file__).parent / 'fixtures' / f'completion_source_{pid}_raw.json').read_text())
+    clean = EnhancedDSLDNormalizer().normalize_product(raw)
+    enriched, _ = SupplementEnricherV3().enrich_product(clean)
+    blob = build_detail_blob(enriched, build_scored_artifact(enriched))
+    [row] = [r for r in blob['display_ingredients'] if r.get('raw_source_path') == source_ref]
+    assert '_label_forms_corrected' not in json.dumps(clean)
+    assert '_forms_corrected' not in json.dumps(blob)
+    assert wrong not in str(row.get('label_display_form') or '')
+    if pid == '326244':
+        assert row['label_display_form'] == 'Calcium Ascorbate'
+    else:
+        [ingredient] = [r for r in enriched['ingredient_quality_data']['ingredients'] if r.get('raw_source_path') == source_ref]
+        assert 'cracked-wall' in ingredient['source_label_name'].casefold()
+        assert ingredient['form_match_status'] != 'FORM_UNMAPPED'
+        assert 'does not identify' not in str(ingredient.get('consumer_note') or '')

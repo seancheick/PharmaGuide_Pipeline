@@ -4,6 +4,7 @@ Enhanced DSLD Data Normalizer Module
 Exact ingredient mapping with text preprocessing and expanded aliases
 """
 import re
+from copy import deepcopy
 import json
 import hashlib
 import logging
@@ -5471,7 +5472,19 @@ class EnhancedDSLDNormalizer:
             entry = corrections_by_raw_text.get(name)
             if entry and entry.get("raw_source_path") and row.get("raw_source_path") != entry["raw_source_path"]:
                 entry = None
-            if (entry and (entry.get("scoring_disposition") or "corrected_notes" in entry)
+            if entry and "raw_forms" in entry:
+                forms = row.get("forms")
+                source_forms = [
+                    {key: value for key, value in form.items()
+                     if key not in {"raw_source_path", "_raw_nested_depth"}}
+                    for form in forms if isinstance(form, dict)
+                ] if isinstance(forms, list) and all(isinstance(form, dict) for form in forms) else None
+                allowed_forms = [entry["raw_forms"]]
+                if isinstance(entry.get("corrected_forms"), list):
+                    allowed_forms.append(entry["corrected_forms"])
+                if source_forms is None or source_forms not in allowed_forms:
+                    entry = None
+            if (entry and (entry.get("scoring_disposition") or "corrected_notes" in entry or "corrected_forms" in entry or "raw_forms" in entry)
                     and "raw_quantity_value" in entry and "raw_quantity_unit" in entry):
                 quantities = row.get("quantity")
                 quantities = quantities if isinstance(quantities, list) else [quantities]
@@ -5536,7 +5549,7 @@ class EnhancedDSLDNormalizer:
                     if row.get(row_field) == corrected_value:
                         continue
                     row[f"_pre_correction_{row_field}"] = row.get(row_field)
-                    row[row_field] = corrected_value
+                    row[row_field] = deepcopy(corrected_value)
                     correction_applied = True
                 # Same-record printed Daily Value is a source fact, not an
                 # RDA-derived substitute. Rewrite only the reviewed raw percent;
@@ -8383,6 +8396,8 @@ class EnhancedDSLDNormalizer:
                     "_label_scoring_disposition"
                 )
             result["source_correction"] = source_correction
+            if "_pre_correction_forms" in ing:
+                result["_label_forms_corrected"] = True  # Consumed by the display builder, never exported.
 
         # Add additive metadata flag (for enrichment phase to use)
         if is_additive:
@@ -10423,6 +10438,9 @@ class EnhancedDSLDNormalizer:
                 "source_order": source_row.get("order"),
                 "nested_depth": source_row.get("_raw_nested_depth", 0),
                 "_hierarchy_corrected": source_row.get("_label_correction_provenance") == "official_label_hierarchy_correction",
+                "_forms_corrected": "_pre_correction_forms" in source_row,
+                **({"label_display_form": (source_row.get("forms") or [{}])[0].get("name")}
+                   if "_pre_correction_forms" in source_row else {}),
                 "parent_label": source_row.get("parentBlend"),
                 "parent_source_path": source_row.get("parent_source_path"),
                 "exact_dose_text": self._exact_label_dose_text(source_row),
@@ -10588,6 +10606,10 @@ class EnhancedDSLDNormalizer:
                         else ing.get("_raw_nested_depth", 0),
                         "parent_label": ing.get("parentBlend"),
                         "_hierarchy_corrected": (ing.get("source_correction") or {}).get("provenance_tag") == "official_label_hierarchy_correction",
+                        "_forms_corrected": ing.get("_label_forms_corrected", False),
+                        **({"children": [form.get("name") for form in ing.get("forms") or []
+                                         if isinstance(form, dict) and form.get("name")]}
+                           if ing.get("_label_forms_corrected") else {}),
                         "parent_source_path": ing.get("parent_source_path"),
                         "exact_dose_text": (
                             "" if serving_variants else self._exact_label_dose_text(ing)
@@ -10648,6 +10670,11 @@ class EnhancedDSLDNormalizer:
                     return source
             return {}
 
+        reviewed_form_paths = {candidate.get("raw_source_path") for candidate in candidates
+                               if candidate.get("_forms_corrected")}
+        for ingredients in (active_ingredients, inactive_ingredients):
+            for ingredient in ingredients:
+                ingredient.pop("_label_forms_corrected", None)
         by_identity: Dict[str, Dict[str, Any]] = {}
         for candidate in candidates:
             if not isinstance(candidate, dict):
@@ -10658,6 +10685,8 @@ class EnhancedDSLDNormalizer:
                 if (row.get("_hierarchy_corrected")
                         and key in {"nested_depth", "parent_label", "parent_source_path"}):
                     continue  # Retain reviewed geometry, not the API's bad flat grouping.
+                if row.get("_forms_corrected") and key in {"label_display_form", "children"}:
+                    continue  # The reviewed form can replace or explicitly remove an API form.
                 if key == "label_display_name" and row.get("label_display_name"):
                     continue
                 if row.get("_has_alternate_servings") and key in {
@@ -10689,6 +10718,7 @@ class EnhancedDSLDNormalizer:
             row["exact_dose_text"] = str(row.get("exact_dose_text") or "").strip()
             row.pop("_exact_dose_corrected", None)
             row.pop("_hierarchy_corrected", None)
+            row.pop("_forms_corrected", None)
             row.pop("_has_alternate_servings", None)
             row["nested_depth"] = self._safe_int(row.get("nested_depth"), default=0)
             row["score_included"] = bool(row.get("score_included"))
@@ -10811,6 +10841,11 @@ class EnhancedDSLDNormalizer:
                     or source.get("parent_source_path") != parent_path
                     or ".forms[" not in source_path
                 ):
+                    continue
+                if parent_path in reviewed_form_paths:
+                    # The immutable API snapshot is retained as provenance,
+                    # but its superseded form must not re-enter public copy.
+                    self._queue_label_ledger_omission(source, omission_reason="duplicate_source_line")
                     continue
                 source_form = str(source.get("raw_source_text") or "").strip()
                 if (

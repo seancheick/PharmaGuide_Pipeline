@@ -117,6 +117,7 @@ class CanonicalIdentityRegistry:
     candidates_index: Mapping[str, tuple[str, ...]]
     canonical_redirects: Mapping[tuple[str, str], tuple[str, str]]
     standard_names: Mapping[tuple[str, str], str]
+    source_form_aliases: Mapping[tuple[str, str], frozenset[str]]
 
     @staticmethod
     def _key(value: Any) -> str:
@@ -194,6 +195,7 @@ def build_canonical_identity_registry(
     normalized_ranked: dict[str, list[tuple[tuple[int, int], str, str]]] = {}
     candidates: dict[str, set[str]] = {}
     standard_names: dict[tuple[str, str], str] = {}
+    source_form_aliases: dict[tuple[str, str], set[str]] = {}
     source_priority = {
         "ingredient_quality_map": 0,
         "standardized_botanicals": 1,
@@ -304,6 +306,17 @@ def build_canonical_identity_registry(
                         # identity of the declared dose.  The source registry
                         # owns primary identity for these labels.
                         continue
+                    if isinstance(form, Mapping) and form.get("alias_identity_scope") == "same_identity":
+                        # Keep reviewed source clues local to the literal
+                        # preparation; they must never become global aliases.
+                        aliases = {CanonicalIdentityRegistry._key(value)
+                                   for value in form.get("source_form_aliases") or ()
+                                   if str(value or "").strip()}
+                        canonical, _ = canonical_owner(str(canonical_id), "ingredient_quality_map")
+                        for label in (form_name, *(form.get("aliases") or ())):
+                            source_form_aliases.setdefault(
+                                (canonical, CanonicalIdentityRegistry._key(label)), set()
+                            ).update(aliases)
                     put(form_name, canonical_id, "ingredient_quality_map", 2)
                     if isinstance(form, Mapping):
                         for alias in form.get("aliases") or ():
@@ -349,6 +362,7 @@ def build_canonical_identity_registry(
         },
         canonical_redirects=dict(canonical_redirects),
         standard_names=standard_names,
+        source_form_aliases={key: frozenset(values) for key, values in source_form_aliases.items()},
     )
 
 
@@ -1068,7 +1082,22 @@ def resolve_identity(
     # generic DSLD group. Resolve only curated literal forms (including the
     # shared comma-qualifier normalization), never a guessed species token.
     botanical_form_ids = []
-    if canonical_registry and isinstance(declared_forms, (list, tuple)):
+    reviewed_botanical_source = bool(
+        canonical_registry and canonical_before and raw_evidence
+        and canonical_registry.literal_identity_matches(raw_evidence[0].value, canonical_before)
+        and isinstance(declared_forms, (list, tuple)) and len(declared_forms) == 1
+        and isinstance(declared_forms[0], Mapping)
+        and str(declared_forms[0].get("category") or "").casefold() == "botanical"
+        and str(row.get("category") or (row.get("raw_taxonomy") or {}).get("category") or "").casefold() == "botanical"
+        and declared_forms[0].get("percent") in {None, 100, "100"}
+        and declared_forms[0].get("quantity") in (None, [])
+        and declared_forms[0].get("amount") is None
+        and str(declared_forms[0].get("prefix") or "").strip().casefold() in {"", "as"}
+        and canonical_registry._key(declared_forms[0].get("name"))
+        in canonical_registry.source_form_aliases.get(
+            (canonical_before, canonical_registry._key(raw_evidence[0].value)), frozenset())
+    )
+    if canonical_registry and isinstance(declared_forms, (list, tuple)) and not reviewed_botanical_source:
         for form in declared_forms:
             if not isinstance(form, Mapping) or str(form.get("category") or "").casefold() != "botanical":
                 continue

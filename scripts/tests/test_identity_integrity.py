@@ -1345,3 +1345,67 @@ def test_conflicting_printed_botanical_species_stays_held(group):
     decision = resolve_identity(row, 'bark', registry.resolve_unambiguous, canonical_registry=registry)
     assert decision.disposition == 'identity_conflict'
     assert decision.canonical_id is None
+
+
+def _corn_silk_source_registry(*, reviewed=True, scope="same_identity"):
+    return build_canonical_identity_registry({'ingredient_quality_map': {
+        'corn_silk': {'standard_name': 'Corn Silk', 'forms': {
+            'corn silk extract': {
+                'alias_identity_scope': scope,
+                'aliases': ['Corn Silk, Powder'],
+                'source_form_aliases': ['Zea mays, Powder'] if reviewed else [],
+            }}},
+        'corn': {'standard_name': 'Corn', 'aliases': ['Zea mays', 'Zea mays, Powder']},
+    }})
+
+
+def test_reviewed_botanical_source_alias_does_not_erase_the_literal_plant_part():
+    registry = _corn_silk_source_registry()
+    decision = resolve_identity(
+        {'raw_source_text': 'Corn Silk, Powder', 'category': 'botanical',
+         'ingredientGroup': 'Corn Silk', 'forms': [
+             {'name': 'Zea mays, Powder', 'category': 'botanical', 'ingredientGroup': 'Corn'}]},
+        'corn_silk', registry.resolve_unambiguous,
+        canonical_registry=registry, taxonomy_coherent=True,
+    )
+    assert decision.canonical_id == 'corn_silk'
+    assert decision.disposition == 'clean'
+    # The source alias does not become a global corn-silk identity.
+    assert registry.resolve_unambiguous('Zea mays, Powder') == 'corn'
+
+
+@pytest.mark.parametrize('change', ['unreviewed', 'different_label', 'different_form',
+                                  'two_forms', 'quantity', 'fraction', 'providing'])
+def test_botanical_source_alias_is_literal_local_and_complete(change):
+    registry = _corn_silk_source_registry(reviewed=change != 'unreviewed')
+    row = {'raw_source_text': 'Corn Silk, Powder', 'category': 'botanical',
+           'ingredientGroup': 'Corn Silk', 'forms': [
+               {'name': 'Zea mays, Powder', 'category': 'botanical', 'ingredientGroup': 'Corn'}]}
+    if change == 'different_label':
+        row['raw_source_text'] = 'Corn kernel powder'
+    elif change == 'different_form':
+        row['forms'][0]['name'] = 'Zea mays'
+    elif change == 'two_forms':
+        row['forms'].append({'name': 'Zea mays', 'category': 'botanical'})
+    elif change == 'quantity':
+        row['forms'][0]['quantity'] = [{'quantity': 5, 'unit': 'mg'}]
+    elif change == 'fraction':
+        row['forms'][0]['percent'] = 50
+    elif change == 'providing':
+        row['forms'][0]['prefix'] = 'providing'
+    decision = resolve_identity(row, 'corn_silk', registry.resolve_unambiguous,
+                                canonical_registry=registry, taxonomy_coherent=True)
+    assert decision.canonical_id != 'corn_silk'
+
+
+def test_source_preparation_alias_cannot_masquerade_as_same_identity_source_proof():
+    registry = _corn_silk_source_registry(scope="source_preparation")
+    assert registry.source_form_aliases.get(('corn_silk', registry._key('Corn Silk, Powder'))) is None
+    decision = resolve_identity(
+        {'raw_source_text': 'Corn Silk, Powder', 'category': 'botanical',
+         'ingredientGroup': 'Corn Silk', 'forms': [
+             {'name': 'Zea mays, Powder', 'category': 'botanical', 'ingredientGroup': 'Corn'}]},
+        'corn_silk', registry.resolve_unambiguous,
+        canonical_registry=registry, taxonomy_coherent=True,
+    )
+    assert decision.canonical_id != 'corn_silk'
