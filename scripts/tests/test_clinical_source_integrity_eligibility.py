@@ -136,3 +136,81 @@ def test_reference_hold_withholds_benefit_chips_and_preserves_source_context(key
     assert entry["scoring_eligible"] is False
     assert source in entry["effect_direction_rationale"]
     assert topic in entry["effect_direction_rationale"]
+
+
+@pytest.fixture(scope='module')
+def completion_source_records():
+    import json
+    return {x['id']: x for x in json.loads((Path(__file__).resolve().parents[1] / 'data' / 'backed_clinical_studies.json').read_text())['backed_clinical_studies']}
+
+
+@pytest.mark.parametrize('rid,wrong', [
+    ('INGR_SEA_BUCKTHORN', '101 women'), ('INGR_BILBERRY', '320mg/day'),
+    ('INGR_BLACK_SEED_OIL', '12 months'), ('INGR_CERAMIDES', 'Meta-analysis of 66 RCTs confirmed oral ceramide'),
+    ('INGR_MAG_GLYCINATE', 'sleep quality ↑'), ('INGR_CINNAMON_EXTRACT', 'HbA1c ↓'),
+    ('PRECLIN_SPERMIDINE', 'lifespan ↑'), ('PRECLIN_DGL', 'ulcer healing ↑'),
+    ('PRECLIN_QUERCETIN_PHYTOSOME', 'senolysis ↑'), ('PRECLIN_SAFFRON', 'retinal protection ↑'),
+    ('BRAND_TESTOFEN', 'muscle strength ↑'), ('BRAND_KANEKA_UBIQUINOL', 'statin myopathy ↓'),
+    ('PRECLIN_PTEROSTILBENE', 'cognition ↑'),
+])
+def test_completed_source_facts_remove_unrelated_benefit_endpoints(completion_source_records, rid, wrong):
+    assert wrong not in ' '.join(completion_source_records[rid]['key_endpoints'])
+
+
+@pytest.mark.parametrize('rid', ['INGR_SLIPPERY_ELM', 'INGR_MOLYBDENUM', 'INGR_PROPOLIS', 'INGR_VITAMIN_E', 'PRECLIN_BETAINE_HCL'])
+def test_no_generic_benefit_from_combination_topical_risk_or_pk_reference(completion_source_records, rid):
+    r = completion_source_records[rid]
+    assert r['study_type'] == 'reference'
+    assert r['scoring_eligible'] is False
+    assert r['key_endpoints'] == []
+    assert r['health_goals_supported'] == []
+    assert not er.clinical_record_sources_eligible(r)
+
+
+def test_source_hierarchy_and_trial_family_counts_remain_explicit(completion_source_records):
+    r = completion_source_records
+    assert '0.125' in r['INGR_BENFOTIAMINE']['notable_studies']
+    assert 'alcohol consumption' in r['INGR_BENFOTIAMINE']['notable_studies']
+    assert '100 randomized' in r['PRECLIN_SPERMIDINE']['notable_studies']
+    assert '0.47 g' in ' '.join(r['INGR_BILBERRY']['key_endpoints'])
+    assert '3 months' in ' '.join(r['INGR_BLACK_SEED_OIL']['key_endpoints'])
+    assert r['PRECLIN_PTEROSTILBENE']['total_enrollment'] == 80
+    assert r['INGR_CERAMIDES']['primary_outcome'] != 'Cardiovascular/Heart Health'
+
+
+@pytest.mark.parametrize('rid,pmid,topic', [
+ ('BRAND_SENSORIL','27647541','knee'),('BRAND_BCM95','30975196','open-label'),
+ ('BRAND_PYCNOGENOL','18386255','osteoarthritis'),('BRAND_ASTAREAL','22428137','topical'),
+ ('BRAND_CREAPURE','22971354','comparator'),('INGR_LACTOFERRIN','35276902','iron'),
+ ('INGR_PHOSPHATIDYLSERINE','20523044','combination'),('BRAND_SUNTHEANINE','22214254','ADHD'),
+ ('BRAND_OPTIMSM','37447322','knee'),('BRAND_LONGVIDA','25277322','mood'),
+ ('BRAND_UCII','24153020','within-group'),('BRAND_NIAGEN','29992272','NAD'),
+ ('BRAND_RELORA','23924268','cortisol'),('INGR_SELENIUM','38243784','thyroid'),
+ ('INGR_QUERCETIN','27405810','pressure'),('INGR_COQ10','25282031','heart failure'),
+ ('INGR_GINSENG','29624410','fatigue'),('INGR_FENUGREEK','32048383','testosterone'),
+ ('INGR_DIGESTIVE_ENZYMES','37976892','combination'),('INGR_LEMON_BALM','34449930','anxiety'),
+ ('INGR_RHODIOLA','41080184','endurance'),('INGR_ASTRAGALUS','37952511','markers'),
+ ('INGR_BROMELAIN','37157782','topical'),('INGR_CHAMOMILE','39106912','sleep'),
+ ('INGR_VITAMIN_B6','36719452','pregnancy'),('INGR_MAGNESIUM_GENERIC','26752497','route'),
+ ('INGR_PSYLLIUM_HUSK','30239559','lipid'),('INGR_BEETROOT','33554654','nitrate'),
+ ('PRECLIN_RESVERATROL','29305228','lipid'),
+])
+def test_retained_clinical_endpoint_scope_is_traceable_to_actual_source(completion_source_records,rid,pmid,topic):
+    text = ' '.join(completion_source_records[rid]['key_endpoints'])
+    assert pmid in text and topic.lower() in text.lower()
+
+
+@pytest.mark.parametrize('rid,forbidden', [
+ ('INGR_QUERCETIN','immune'),('BRAND_CREAPURE','cognitive_neurological'),
+ ('INGR_MAGNESIUM_GENERIC','mood'),('PRECLIN_RESVERATROL','aging_longevity'),
+ ('BRAND_NIAGEN','mitochondrial_energy'),('INGR_MAG_GLYCINATE','digestive'),
+ ('PRECLIN_ASTAXANTHIN_GENERIC','cognitive_neurological'),
+])
+def test_source_exclusion_caveats_cannot_create_purpose_matches(completion_source_records,rid,forbidden):
+    assert forbidden not in er._evidence_entry_purposes(completion_source_records[rid])
+
+
+def test_source_reconciliations_rewrite_rationale_and_design(completion_source_records):
+    for rid,stale in [('PRECLIN_SPERMIDINE','Retained positive_weak'),('INGR_BENFOTIAMINE','Retained positive_strong')]:
+        assert stale not in completion_source_records[rid]['effect_direction_rationale']
+    assert 'RCT' not in completion_source_records['INGR_SLIPPERY_ELM']['published_studies']

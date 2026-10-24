@@ -637,15 +637,14 @@
       ],
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "stress ↓",
-        "sleep quality ↑",
-        "cognition ↑"
+        "Aqueous-extract knee pain/function (PMID: 27647541)",
+        "Root-and-leaf aqueous-extract chronic stress findings (PMID: 38732539)"
       ],
       "health_goals_supported": [
         "Joint & Bone Health",
         "Reduce Stress/Anxiety"
       ],
-      "notes": "Root-and-leaf ashwagandha extract with one clear Sensoril-labeled randomized PubMed trial in knee discomfort and additional composition-matched root-and-leaf stress data; earlier marketing language overstated the branded RCT count. Cited knee trial randomized 60; stress trial enrolled 131 with 98 in final analysis. Unique aggregate enrollment and exact preparation overlap are unresolved.",
+      "notes": "Root-and-leaf ashwagandha extract with one clear Sensoril-labeled randomized PubMed trial in knee discomfort and additional composition-matched root-and-leaf stress data; earlier marketing language overstated the branded RCT count. Cited knee trial randomized 60; stress trial enrolled 131 with 98 in final analysis. Unique aggregate enrollment and exact preparation overlap are unresolved. Retained-source scope and limitations: Aqueous-extract knee pain/function findings, not a cognition trial (PMID: 27647541) Root-and-leaf aqueous-extract chronic-stress findings; exact preparation and population matter (PMID: 38732539)",
       "study_type": "rct_multiple",
       "last_updated": "2026-10-11",
       "notable_studies": "Tiwari et al. (2016, PMID 27647541) randomized adults with knee joint pain and explicitly used a Sensoril-characterized Withania extract. Broader root-and-leaf stress evidence includes the randomized trial indexed as PMID 38732539, but not every later study is explicitly Sensoril-labeled.",
@@ -716,7 +715,7 @@
       "total_enrollment": null,
       "registry_completed_trials_count": 9,
       "effect_direction_confidence": "high",
-      "effect_direction_rationale": "Cited knee trial randomized 60; stress trial enrolled 131 with 98 in final analysis. Unique aggregate enrollment and exact preparation overlap are unresolved.",
+      "effect_direction_rationale": "Source-content attribution reconciled against retained primary references on2026-10-23. Current descriptive direction: positive_strong. Actual measured outcomes and source limitations are recorded separately. This is not attributable clinician approval; existing clinical context holds remain.",
       "endpoint_relevance_tags": [
         "joint_pain",
         "stress_mood"
@@ -738,14 +737,13 @@
       ],
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "inflammation ↓",
-        "depression ↓",
-        "joint pain ↓"
+        "Knee osteoarthritis pain/function in an open-label active-comparator trial (PMID: 30975196)",
+        "Knee osteoarthritis active-comparator non-inferiority outcomes (PMID: 33516238)"
       ],
       "health_goals_supported": [
         "Joint & Bone Health"
       ],
-      "notes": "Curcumin-turmeric-oil formulation with explicit branded randomized evidence in knee osteoarthritis; broader mood and inflammatory support exists, but much of that literature is curcumin-level rather than uniquely BCM-95-specific. Cited active-comparator studies report 139 randomized and 144 completers, respectively. Enrollment and completion are distinct; no unique aggregate is asserted. The diclofenac study was open-label and the paracetamol study assessed non-inferiority, not placebo superiority.",
+      "notes": "Curcumin-turmeric-oil formulation with explicit branded randomized evidence in knee osteoarthritis; broader mood and inflammatory support exists, but much of that literature is curcumin-level rather than uniquely BCM-95-specific. Cited active-comparator studies report 139 randomized and 144 completers, respectively. Enrollment and completion are distinct; no unique aggregate is asserted. The diclofenac study was open-label and the paracetamol study assessed non-inferiority, not placebo superiority. Retained-source scope and limitations: Knee osteoarthritis pain/function in an open-label active-comparator trial, not placebo-controlled depression evidence (PMID: 30975196) Knee osteoarthritis active-comparator non-inferiority outcomes; not proof of general equivalence or depression benefit (PMID: 33516238)",
       "study_type": "rct_multiple",
       "last_updated": "2026-10-11",
       "notable_studies": "Shep et al. (2019, PMID 30975196) compared BCM-95 against diclofenac in knee osteoarthritis and reported similar symptom improvement with fewer GI complaints. Singhal et al. (2021, PMID 33516238) also tested BCM-95 against paracetamol in knee osteoarthritis. Depression evidence exists for curcumin more broadly, but the clearest directly indexed BCM-95 anchors are musculoskeletal.",
@@ -828,7 +826,7 @@
       "total_enrollment": null,
       "registry_completed_trials_count": 4,
       "effect_direction_confidence": "medium",
-      "effect_direction_rationale": "Cited active-comparator studies report 139 randomized and 144 completers, respectively. Enrollment and completion are distinct; no unique aggregate is asserted. The diclofenac study was open-label and the paracetamol study assessed non-inferiority, not placebo superiority.",
+      "effect_direction_rationale": "Source-content attribution reconciled against retained primary references on2026-10-23. Current descriptive direction: positive_strong. Actual measured outcomes and source limitations are recorded separately. This is not attributable clinician approval; existing clinical context holds remain.",
       "endpoint_relevance_tags": [
         "joint_pain"
       ]
@@ -1182,15 +1180,13 @@
       ],
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "circulation ↑",
-        "skin health ↑",
-        "ADHD ↓",
-        "blood pressure ↓"
+        "Knee osteoarthritis symptoms/function (PMID: 18386255)",
+        "Blood-pressure/cardiometabolic measures in heterogeneous syntheses (PMID: 31637782; 31585179)"
       ],
       "health_goals_supported": [
         "Joint & Bone Health"
       ],
-      "notes": "Branded pine-bark extract with explicit randomized evidence in osteoarthritis and supportive meta-analytic evidence for cardiometabolic endpoints. The cited OA trial randomized 156; meta-analyses report 922 and 1594 participants. Meta-analysis and individual-trial populations may overlap; no unique aggregate is asserted.",
+      "notes": "Branded pine-bark extract with explicit randomized evidence in osteoarthritis and supportive meta-analytic evidence for cardiometabolic endpoints. The cited OA trial randomized 156; meta-analyses report 922 and 1594 participants. Meta-analysis and individual-trial populations may overlap; no unique aggregate is asserted. Retained-source scope and limitations: Knee osteoarthritis symptoms/function (PMID: 18386255) Blood-pressure and cardiometabolic measures in heterogeneous syntheses; retained sources do not establish ADHD or skin efficacy (PMID: 31637782; 31585179)",
       "study_type": "rct_multiple",
       "last_updated": "2026-10-11",
       "notable_studies": "Belcaro et al. (2008, PMID 18386255) randomized osteoarthritis trial found reduced symptoms and analgesic use with Pycnogenol. Cardiometabolic support is summarized in later meta-analyses including Pourmasoumi et al. (2020, PMID 31637782) and Malekahmadi et al. (2019, PMID 31585179).",
@@ -1307,7 +1303,7 @@
       "total_enrollment": null,
       "registry_completed_trials_count": 41,
       "effect_direction_confidence": "high",
-      "effect_direction_rationale": "The cited OA trial randomized 156; meta-analyses report 922 and 1594 participants. Meta-analysis and individual-trial populations may overlap; no unique aggregate is asserted.",
+      "effect_direction_rationale": "Source-content attribution reconciled against retained primary references on2026-10-23. Current descriptive direction: positive_strong. Actual measured outcomes and source limitations are recorded separately. This is not attributable clinician approval; existing clinical context holds remain.",
       "endpoint_relevance_tags": [
         "joint_pain"
       ]
@@ -1425,15 +1421,12 @@
       ],
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "eye strain ↓",
-        "skin elasticity ↑",
-        "endurance ↑",
-        "oxidative stress ↓"
+        "Skin findings: uncontrolled oral-plus-topical treatment in women and a separate placebo-controlled oral study in men (PMID: 22428137)"
       ],
       "health_goals_supported": [
         "Skin, Hair & Nails"
       ],
-      "notes": "Natural astaxanthin from H. pluvialis with explicit human evidence for skin-aging endpoints; broader exercise and eye-strain claims are supported less directly. PMID 22428137 reports 30 women receiving combined oral/topical astaxanthin without a control and 36 men in an oral placebo-controlled study. PMID 31221944 is BioCell cartilage, not astaxanthin, and is excluded from this record. Unique brand-specific aggregate and broader eye/exercise outcomes remain unestablished.",
+      "notes": "Natural astaxanthin from H. pluvialis with explicit human evidence for skin-aging endpoints; broader exercise and eye-strain claims are supported less directly. PMID 22428137 reports 30 women receiving combined oral/topical astaxanthin without a control and 36 men in an oral placebo-controlled study. PMID 31221944 is BioCell cartilage, not astaxanthin, and is excluded from this record. Unique brand-specific aggregate and broader eye/exercise outcomes remain unestablished. Retained-source scope and limitations: Skin findings: women received combined oral and topical astaxanthin without a control; a separate male oral study was placebo controlled. No retained eye-strain/endurance endpoint (PMID: 22428137)",
       "study_type": "rct_multiple",
       "last_updated": "2026-10-11",
       "notable_studies": "Tominaga et al. (2012, PMID 22428137) reported selected skin endpoints: an uncontrolled oral-plus-topical study in 30 women and a placebo-controlled oral study in 36 men. Exact AstaReal preparation and broader eye-strain or exercise outcomes require separate source verification.",
@@ -1480,7 +1473,7 @@
       "total_enrollment": null,
       "registry_completed_trials_count": 12,
       "effect_direction_confidence": "medium",
-      "effect_direction_rationale": "PMID 22428137 reports 30 women receiving combined oral/topical astaxanthin without a control and 36 men in an oral placebo-controlled study. PMID 31221944 is BioCell cartilage, not astaxanthin, and is excluded from this record. Unique brand-specific aggregate and broader eye/exercise outcomes remain unestablished.",
+      "effect_direction_rationale": "Source-content attribution reconciled against retained primary references on2026-10-23. Current descriptive direction: positive_strong. Actual measured outcomes and source limitations are recorded separately. This is not attributable clinician approval; existing clinical context holds remain.",
       "endpoint_relevance_tags": [
         "skin_health"
       ]
@@ -1557,15 +1550,13 @@
       ],
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "heart failure ↑",
-        "statin myopathy ↓",
-        "energy ↑"
+        "Flow-mediated dilation in dyslipidemic adults not taking statins over 8 weeks (PMID: 32326664)",
+        "Ubiquinol absorption and short-term tolerability (PMID: 16919858)"
       ],
       "health_goals_supported": [
-        "Cardiovascular/Heart Health",
-        "Increase Energy"
+        "Cardiovascular/Heart Health"
       ],
-      "notes": "Bioactive reduced CoQ10 form with explicit randomized human evidence for endothelial function and strong PK/safety evidence in healthy volunteers.",
+      "notes": "Bioactive reduced CoQ10 form with explicit randomized human evidence for endothelial function and strong PK/safety evidence in healthy volunteers. Retained-source scope and limitations: Improved flow-mediated dilation in dyslipidemic adults not taking statins, without clinical cardiovascular disease, over 8 weeks (PMID: 32326664) Absorption and short-term tolerability in healthy volunteers; not heart-failure, statin-myopathy or general energy efficacy (PMID: 16919858)",
       "study_type": "rct_multiple",
       "last_updated": "2026-03-06",
       "notable_studies": "Sabbatinelli et al. (2020, PMID 32326664) randomized dyslipidemia trial found improved flow-mediated dilation with Kaneka ubiquinol. Hosoe et al. (2007, PMID 16919858) documented dose-dependent absorption and short-term safety up to 300 mg/day in healthy volunteers.",
@@ -1648,7 +1639,7 @@
       "primary_outcome": "Cardiovascular/Heart Health",
       "total_enrollment": 101,
       "effect_direction_confidence": "medium",
-      "effect_direction_rationale": "Retained positive_strong classification; study_type=rct_multiple; evidence_level=branded-rct; primary_outcome=Cardiovascular/Heart Health; published_tags=RCT; total_enrollment=101; endpoint_tags=cardiovascular; notes/citations contain no automated downgrade signals.",
+      "effect_direction_rationale": "Source-content attribution reconciled against retained primary references on2026-10-23. Current descriptive direction: positive_strong. Actual measured outcomes and source limitations are recorded separately. This is not attributable clinician approval; existing clinical context holds remain.",
       "endpoint_relevance_tags": [
         "cardiovascular"
       ]
@@ -1822,14 +1813,12 @@
       ],
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "strength ↑",
-        "power ↑",
-        "cognition ↑"
+        "Creatine-monohydrate comparator training/retention outcomes (PMID: 22971354; 24568653)"
       ],
       "health_goals_supported": [
         "Muscle Growth & Recovery"
       ],
-      "notes": "High-purity creatine monohydrate source with published trials explicitly using Creapure in methods, but most efficacy conclusions still reflect the broader creatine-monohydrate literature rather than unique Creapure superiority. Cited comparator studies randomized 36 and used 10 crossover participants. Their preparation-specific use does not establish unique branded superiority over other verified creatine monohydrate.",
+      "notes": "High-purity creatine monohydrate source with published trials explicitly using Creapure in methods, but most efficacy conclusions still reflect the broader creatine-monohydrate literature rather than unique Creapure superiority. Cited comparator studies randomized 36 and used 10 crossover participants. Their preparation-specific use does not establish unique branded superiority over other verified creatine monohydrate. Retained-source scope and limitations: Creatine-monohydrate comparator findings in training/retention studies; neither retained study tests cognition or proves every commercial preparation equivalent (PMID: 22971354; 24568653)",
       "study_type": "rct_single",
       "last_updated": "2026-10-11",
       "notable_studies": "Jagim et al. (2012, PMID 22971354) used Creapure creatine monohydrate as the comparator in a double-blind resistance-training trial and confirmed expected increases in muscle creatine and training adaptation with standard creatine monohydrate dosing. Oliver et al. (2014, PMID 24568653) also used Creapure in a crossover retention study. These support Creapure as a validated source material, while the wider ergogenic evidence remains generic creatine literature.",
@@ -1881,7 +1870,7 @@
       "total_enrollment": null,
       "registry_completed_trials_count": 5,
       "effect_direction_confidence": "medium",
-      "effect_direction_rationale": "Cited comparator studies randomized 36 and used 10 crossover participants. Their preparation-specific use does not establish unique branded superiority over other verified creatine monohydrate.",
+      "effect_direction_rationale": "Source-content attribution reconciled against retained primary references on2026-10-23. Current descriptive direction: positive_strong. Actual measured outcomes and source limitations are recorded separately. This is not attributable clinician approval; existing clinical context holds remain.",
       "endpoint_relevance_tags": [
         "muscle_recovery"
       ]
@@ -2148,14 +2137,11 @@
       ],
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "iron status ↑",
-        "immunity ↑"
+        "Iron-status outcomes in an iron-deficiency-anemia synthesis (PMID: 35276902)",
+        "Iron-deficiency anemia comparison in pregnant women (PMID: 19639462)"
       ],
-      "health_goals_supported": [
-        "Increase Energy",
-        "Immune Support"
-      ],
-      "notes": "Ingredient-level record (formerly BRAND_OPTIFERRIN, whose brand identity was never verified). Bovine lactoferrin 100 mg twice daily (200 mg/day) matched ferrous sulfate for hemoglobin, ferritin and serum iron in 100 pregnant women with iron-deficiency anemia, with fewer gastrointestinal effects (PMID 19639462); a meta-analysis of intervention studies found better serum iron, ferritin and hemoglobin than ferrous sulfate (PMID 35276902).",
+      "health_goals_supported": [],
+      "notes": "Ingredient-level record (formerly BRAND_OPTIFERRIN, whose brand identity was never verified). Bovine lactoferrin 100 mg twice daily (200 mg/day) matched ferrous sulfate for hemoglobin, ferritin and serum iron in 100 pregnant women with iron-deficiency anemia, with fewer gastrointestinal effects (PMID 19639462); a meta-analysis of intervention studies found better serum iron, ferritin and hemoglobin than ferrous sulfate (PMID 35276902). Retained-source scope and limitations: Preparation/population-specific iron-status outcomes in an iron-deficiency-anemia synthesis (PMID: 35276902) Iron-deficiency anemia comparison in pregnant women; not general immune efficacy (PMID: 19639462)",
       "study_type": "systematic_review_meta",
       "last_updated": "2026-09-29",
       "notable_studies": "Zhao et al. (2022, PMID 35276902) meta-analysis found oral lactoferrin improved ferritin and hemoglobin outcomes versus ferrous sulfate in iron-deficiency anemia trials. Nappi et al. (2009, PMID 19639462) randomized pregnant women with iron-deficiency anemia and reported better tolerability with bovine lactoferrin. No PubMed-indexed RCTs were found for an 'OptiFerrin' brand specifically.",
@@ -2229,14 +2215,12 @@
         "unii": "KG21X1090A"
       },
       "effect_direction": "positive_strong",
-      "primary_outcome": "Increase Energy",
+      "primary_outcome": "",
       "total_enrollment": 500,
       "effect_direction_confidence": "high",
-      "effect_direction_rationale": "Retained positive_strong classification; study_type=systematic_review_meta; evidence_level=ingredient-human; primary_outcome=Increase Energy; published_tags=systematic_review,meta-analysis; total_enrollment=500; notes/citations contain no automated downgrade signals.",
+      "effect_direction_rationale": "Source-content attribution reconciled against retained primary references on2026-10-23. Current descriptive direction: positive_strong. Actual measured outcomes and source limitations are recorded separately. This is not attributable clinician approval; existing clinical context holds remain.",
       "registry_completed_trials_count": 10,
-      "endpoint_relevance_tags": [
-        "energy_metabolism"
-      ],
+      "endpoint_relevance_tags": [],
       "min_clinical_dose": 200,
       "dose_unit": "mg",
       "reference_semantics": {
@@ -2671,14 +2655,13 @@
       ],
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "memory ↑",
-        "stress ↓",
-        "exercise recovery ↑"
+        "Exploratory memory findings from a PS-DHA combination (PMID: 20523044)",
+        "Soy-PS overall test-score improvement in all groups, with subgroup/baseline memory findings (PMID: 21103034)"
       ],
       "health_goals_supported": [
         "Focus & Mental Clarity"
       ],
-      "notes": "Human evidence supports phosphatidylserine as an ingredient, but the cited trials are on soy-derived PS products such as Sharp-PS and Soy-PS rather than on a clearly validated SerinAid-specific trial set. Cited trials randomized 157 to PS-DHA and 78 to soybean-derived PS. The preparations differ; the soybean trial had no overall cognitive-score separation and baseline-defined analyses must remain qualified. No unique aggregate is asserted.",
+      "notes": "Human evidence supports phosphatidylserine as an ingredient, but the cited trials are on soy-derived PS products such as Sharp-PS and Soy-PS rather than on a clearly validated SerinAid-specific trial set. Cited trials randomized 157 to PS-DHA and 78 to soybean-derived PS. The preparations differ; the soybean trial had no overall cognitive-score separation and baseline-defined analyses must remain qualified. No unique aggregate is asserted. Retained-source scope and limitations: Exploratory memory findings from a PS-DHA combination; not isolated-PS stress/exercise recovery evidence (PMID: 20523044) Soy-PS study had overall test-score improvement in all groups, with subgroup/baseline memory findings requiring qualification (PMID: 21103034)",
       "study_type": "rct_multiple",
       "last_updated": "2026-10-11",
       "notable_studies": "Vakhapova et al. (2010, PMID 20523044) placebo-controlled trial found PS-DHA improved memory measures in non-demented older adults with memory complaints. Kato-Kataoka et al. (2010, PMID 21103034) reported benefits in lower-baseline-memory subgroups taking soy-derived phosphatidylserine. The evidence is therefore ingredient-level rather than clearly SerinAid-brand-specific; the record was reclassified from a branded entry to ingredient-human on 2026-09-05 because neither cited trial studied SerinAid (PS-DHA and soybean-derived PS respectively).",
@@ -2746,7 +2729,7 @@
       "total_enrollment": null,
       "registry_completed_trials_count": 1,
       "effect_direction_confidence": "medium",
-      "effect_direction_rationale": "Cited trials randomized 157 to PS-DHA and 78 to soybean-derived PS. The preparations differ; the soybean trial had no overall cognitive-score separation and baseline-defined analyses must remain qualified. No unique aggregate is asserted.",
+      "effect_direction_rationale": "Source-content attribution reconciled against retained primary references on2026-10-23. Current descriptive direction: mixed. Actual measured outcomes and source limitations are recorded separately. This is not attributable clinician approval; existing clinical context holds remain.",
       "endpoint_relevance_tags": [
         "focus_memory"
       ]
@@ -3031,15 +3014,14 @@
       ],
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "anxiety ↓",
-        "focus ↑",
-        "alpha waves ↑"
+        "Selected stress/sleep/cognitive measures (PMID: 31623400)",
+        "Selected objective sleep measures in boys with ADHD (PMID: 22214254)"
       ],
       "health_goals_supported": [
         "Reduce Stress/Anxiety",
         "Sleep Quality"
       ],
-      "notes": "L-theanine product with explicit randomized human evidence for stress-related symptoms and sleep quality. Cited adult and ADHD-boy trials involved 30 and 98 participants. Adult stress reductions were described versus baseline; placebo-separated selected sleep and baseline-defined verbal-fluency results are narrower. Pediatric sleep latency was unchanged. Unique aggregate is not asserted.",
+      "notes": "L-theanine product with explicit randomized human evidence for stress-related symptoms and sleep quality. Cited adult and ADHD-boy trials involved 30 and 98 participants. Adult stress reductions were described versus baseline; placebo-separated selected sleep and baseline-defined verbal-fluency results are narrower. Pediatric sleep latency was unchanged. Unique aggregate is not asserted. Retained-source scope and limitations: Selected stress/sleep/cognitive measures; retained source does not measure alpha-wave efficacy (PMID: 31623400) Selected objective sleep measures in boys with ADHD; sleep latency unchanged, not general adult sleep efficacy (PMID: 22214254)",
       "study_type": "rct_multiple",
       "last_updated": "2026-10-11",
       "notable_studies": "Hidese et al. (2019, PMID 31623400) crossover RCT found 200 mg/day improved stress-related symptoms and some cognitive measures in healthy adults. Lyon et al. (2011, PMID 22214254) reported improved sleep quality in boys with ADHD using Suntheanine 400 mg/day.",
@@ -3122,7 +3104,7 @@
       "total_enrollment": null,
       "registry_completed_trials_count": 38,
       "effect_direction_confidence": "high",
-      "effect_direction_rationale": "Cited adult and ADHD-boy trials involved 30 and 98 participants. Adult stress reductions were described versus baseline; placebo-separated selected sleep and baseline-defined verbal-fluency results are narrower. Pediatric sleep latency was unchanged. Unique aggregate is not asserted.",
+      "effect_direction_rationale": "Source-content attribution reconciled against retained primary references on2026-10-23. Current descriptive direction: positive_strong. Actual measured outcomes and source limitations are recorded separately. This is not attributable clinician approval; existing clinical context holds remain.",
       "endpoint_relevance_tags": [
         "stress_mood",
         "sleep"
@@ -3545,14 +3527,13 @@
       ],
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "joint pain ↓",
-        "inflammation ↓",
-        "exercise recovery ↑"
+        "Knee osteoarthritis pain/function pilot (PMID: 16309928)",
+        "Mild knee-pain JKOM outcomes (PMID: 37447322)"
       ],
       "health_goals_supported": [
         "Joint & Bone Health"
       ],
-      "notes": "Distilled MSM with explicit randomized human evidence in knee pain and osteoarthritis; newer mild-knee-pain data extend support but remain ingredient-like rather than uniquely product-specific. Studied doses: 6 g/day (PMID 16309928, MSM 3 g twice daily; source not named in the abstract) and 2 g/day (PMID 37447322, ten 200 mg OptiMSM tablets). Generic MSM draws on INGR_MSM, not on this brand record. Cited studies randomized 50 OA and 88 mild-knee-discomfort participants. Selected pain/function findings at 6 g/day and JKOM findings at 2 g/day must remain dose-specific. Exact branded preparation and unique aggregate require methods-level verification.",
+      "notes": "Distilled MSM with explicit randomized human evidence in knee pain and osteoarthritis; newer mild-knee-pain data extend support but remain ingredient-like rather than uniquely product-specific. Studied doses: 6 g/day (PMID 16309928, MSM 3 g twice daily; source not named in the abstract) and 2 g/day (PMID 37447322, ten 200 mg OptiMSM tablets). Generic MSM draws on INGR_MSM, not on this brand record. Cited studies randomized 50 OA and 88 mild-knee-discomfort participants. Selected pain/function findings at 6 g/day and JKOM findings at 2 g/day must remain dose-specific. Exact branded preparation and unique aggregate require methods-level verification. Retained-source scope and limitations: Knee osteoarthritis pain/function in a small pilot (PMID: 16309928) Mild knee-pain JKOM outcomes; not exercise-recovery or measured anti-inflammatory efficacy (PMID: 37447322)",
       "study_type": "rct_multiple",
       "last_updated": "2026-10-11",
       "notable_studies": "Kim et al. (2006, PMID 16309928) placebo-controlled osteoarthritis trial found improved pain and physical function with MSM. More recent randomized knee-pain data include Toguchi et al. (2023, PMID 37447322), which showed improved quality-of-life measures after 12 weeks of MSM intake.",
@@ -3634,7 +3615,7 @@
       "primary_outcome": "Joint & Bone Health",
       "total_enrollment": null,
       "effect_direction_confidence": "medium",
-      "effect_direction_rationale": "Cited studies randomized 50 OA and 88 mild-knee-discomfort participants. Selected pain/function findings at 6 g/day and JKOM findings at 2 g/day must remain dose-specific. Exact branded preparation and unique aggregate require methods-level verification.",
+      "effect_direction_rationale": "Source-content attribution reconciled against retained primary references on2026-10-23. Current descriptive direction: positive_strong. Actual measured outcomes and source limitations are recorded separately. This is not attributable clinician approval; existing clinical context holds remain.",
       "endpoint_relevance_tags": [
         "joint_pain"
       ],
@@ -3883,14 +3864,12 @@
       ],
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "cognitive function ↑",
-        "inflammation ↓",
-        "bioavailability ↑"
+        "Selected cognition/mood findings in older adults (PMID: 25277322; 32512782)"
       ],
       "health_goals_supported": [
         "Focus & Mental Clarity"
       ],
-      "notes": "Patented solid lipid formulation; multiple human studies on brain health, mood, and superior absorption compared to standard curcumin. The cited studies randomized 60 and 80; no unique aggregate is asserted without cohort reconciliation. A 400 mg formulation delivered 80 mg curcumin; cognition outcomes do not themselves measure superior absorption.",
+      "notes": "Retained cognition/mood studies do not themselves establish superior comparative absorption. The cited cohorts were60and80participants; no unique aggregate is asserted without reconciliation. The400mg formulation in32512782delivered80mg curcumin and the study reported elevated glucose. Source-content review is separate from clinical approval.",
       "study_type": "rct_multiple",
       "last_updated": "2026-10-11",
       "notable_studies": "Cox et al. (2015, PMID 25277322) found that Longvida curcumin improved working memory and reduced fatigue over 4 weeks in healthy older adults. A 12-week partial replication study (PMID 32512782) again found benefits for mood and working memory, supporting a small but genuinely branded RCT evidence base.",
@@ -3977,7 +3956,7 @@
       "primary_outcome": "Focus & Mental Clarity",
       "total_enrollment": null,
       "effect_direction_confidence": "medium",
-      "effect_direction_rationale": "The cited studies randomized 60 and 80; no unique aggregate is asserted without cohort reconciliation. A 400 mg formulation delivered 80 mg curcumin; cognition outcomes do not themselves measure superior absorption.",
+      "effect_direction_rationale": "Source-content attribution reconciled against retained primary references on2026-10-23. Current descriptive direction: positive_weak. Actual measured outcomes and source limitations are recorded separately. This is not attributable clinician approval; existing clinical context holds remain.",
       "endpoint_relevance_tags": [
         "focus_memory"
       ]
@@ -4067,14 +4046,13 @@
       ],
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "joint pain ↓",
-        "mobility ↑",
-        "inflammation ↓"
+        "Knee osteoarthritis symptoms/function (PMID: 26822714)",
+        "Knee extension and within-group pain-free-exertion findings (PMID: 24153020)"
       ],
       "health_goals_supported": [
         "Joint & Bone Health"
       ],
-      "notes": "Patented low-dose undenatured type II collagen with randomized evidence in knee osteoarthritis and activity-related joint discomfort. Cited OA and healthy-discomfort trials randomized 191 and 55. The 2013 paper is by Lugo, not Crowley; knee extension separated from placebo, while longer pain-free exertion was a within-group change. Unique aggregate is not asserted.",
+      "notes": "Patented low-dose undenatured type II collagen with randomized evidence in knee osteoarthritis and activity-related joint discomfort. Cited OA and healthy-discomfort trials randomized 191 and 55. The 2013 paper is by Lugo, not Crowley; knee extension separated from placebo, while longer pain-free exertion was a within-group change. Unique aggregate is not asserted. Retained-source scope and limitations: Knee osteoarthritis symptoms/function (PMID: 26822714) Knee extension and within-group pain-free-exertion findings in healthy volunteers; not demonstrated inflammation efficacy (PMID: 24153020)",
       "study_type": "rct_multiple",
       "last_updated": "2026-10-11",
       "notable_studies": "Lugo et al. (2016, PMID 26822714) studied 191 OA participants with UC-II40mg/day for180days. Lugo et al. (2013, PMID 24153020) studied55 healthy volunteers: knee extension improved versus placebo; longer pain-free exertion was a within-group change.",
@@ -4145,7 +4123,7 @@
       "primary_outcome": "Joint & Bone Health",
       "total_enrollment": null,
       "effect_direction_confidence": "medium",
-      "effect_direction_rationale": "Cited OA and healthy-discomfort trials randomized 191 and 55. The 2013 paper is by Lugo, not Crowley; knee extension separated from placebo, while longer pain-free exertion was a within-group change. Unique aggregate is not asserted.",
+      "effect_direction_rationale": "Source-content attribution reconciled against retained primary references on2026-10-23. Current descriptive direction: positive_strong. Actual measured outcomes and source limitations are recorded separately. This is not attributable clinician approval; existing clinical context holds remain.",
       "endpoint_relevance_tags": [
         "joint_pain"
       ]
@@ -4319,12 +4297,10 @@
       ],
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "NAD+ levels ↑",
-        "mitochondrial function ↑",
-        "inflammation ↓"
+        "NAD metabolism and short-term tolerability in retained human studies (PMID: 29599478; 29992272)"
       ],
       "health_goals_supported": [],
-      "notes": "Patented nicotinamide riboside precursor with randomized human evidence for NAD+ elevation and safety; downstream cardiometabolic benefits remain mixed. Cited studies include a 24-person crossover and 40 obese men. NAD biomarkers increased but insulin sensitivity, energy expenditure and body composition were null in the obese-men trial. Brand identity and unique aggregate remain separate from efficacy.",
+      "notes": "Patented nicotinamide riboside precursor with randomized human evidence for NAD+ elevation and safety; downstream cardiometabolic benefits remain mixed. Cited studies include a 24-person crossover and 40 obese men. NAD biomarkers increased but insulin sensitivity, energy expenditure and body composition were null in the obese-men trial. Brand identity and unique aggregate remain separate from efficacy. Retained-source scope and limitations: NAD metabolism and tolerability; physiological hypotheses require further testing (PMID: 29599478) Did not improve insulin sensitivity, energy expenditure or body composition in obese insulin-resistant men; not improved general mitochondrial function (PMID: 29992272)",
       "study_type": "rct_multiple",
       "last_updated": "2026-10-11",
       "notable_studies": "Martens et al. (2018, PMID 29599478) crossover RCT (n=24, ages 55-79): nicotinamide riboside 1000 mg/day for 6 weeks raised whole-blood NAD+ by about 60% with exploratory vascular benefits. Dollerup et al. (2018, PMID 29992272) RCT (n=40 obese men): 2000 mg/day for 12 weeks confirmed NAD+ pathway activity and safety but did not improve insulin sensitivity.",
@@ -4404,11 +4380,11 @@
         "unii": "0I8H2M0L7N"
       },
       "effect_direction": "mixed",
-      "primary_outcome": "Healthy Aging/Longevity",
+      "primary_outcome": "",
       "total_enrollment": null,
       "registry_completed_trials_count": 26,
       "effect_direction_confidence": "medium",
-      "effect_direction_rationale": "Cited studies include a 24-person crossover and 40 obese men. NAD biomarkers increased but insulin sensitivity, energy expenditure and body composition were null in the obese-men trial. Brand identity and unique aggregate remain separate from efficacy.",
+      "effect_direction_rationale": "Source-content attribution reconciled against retained primary references on2026-10-23. Current descriptive direction: mixed. Actual measured outcomes and source limitations are recorded separately. This is not attributable clinician approval; existing clinical context holds remain.",
       "endpoint_relevance_tags": []
     },
     {
@@ -4713,15 +4689,12 @@
       ],
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "cortisol ↓",
-        "stress eating ↓",
-        "mood ↑"
+        "Salivary cortisol and mood for a Magnolia/Phellodendron combination (PMID: 23924268)"
       ],
       "health_goals_supported": [
-        "Reduce Stress/Anxiety",
-        "Weight Management"
+        "Reduce Stress/Anxiety"
       ],
-      "notes": "Proprietary magnolia-phellodendron blend with one clear PubMed-indexed randomized stress trial; supporting weight-control and anxiety claims are less robustly indexed.",
+      "notes": "Proprietary magnolia-phellodendron blend with one clear PubMed-indexed randomized stress trial; supporting weight-control and anxiety claims are less robustly indexed. Retained-source scope and limitations: Salivary cortisol and mood findings for a Magnolia/Phellodendron combination; stress eating was not a retained measured endpoint (PMID: 23924268)",
       "study_type": "rct_single",
       "last_updated": "2026-03-23",
       "notable_studies": "Talbott et al. (2013, PMID 23924268) reported lower salivary cortisol and improved mood-state measures with Relora over 4 weeks in moderately stressed adults. The direct branded evidence is still narrow and should be framed as a small human trial plus supporting mechanistic or brand-cited material, not as a broad multi-RCT base.",
@@ -4751,7 +4724,7 @@
       "total_enrollment": 40,
       "registry_completed_trials_count": 1,
       "effect_direction_confidence": "medium",
-      "effect_direction_rationale": "Retained positive_strong classification; study_type=rct_single; evidence_level=product-human; primary_outcome=Reduce Stress/Anxiety; published_tags=clinical trial; registry_completed_trials_count=1; total_enrollment=40; endpoint_tags=stress_mood; notes/citations contain no automated downgrade signals.",
+      "effect_direction_rationale": "Source-content attribution reconciled against retained primary references on2026-10-23. Current descriptive direction: positive_strong. Actual measured outcomes and source limitations are recorded separately. This is not attributable clinician approval; existing clinical context holds remain.",
       "endpoint_relevance_tags": [
         "stress_mood"
       ]
@@ -5702,15 +5675,10 @@
       ],
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "thyroid function ↑",
-        "antioxidant status ↑",
-        "cancer risk ↓"
+        "Hashimoto thyroiditis antibody/TSH and other surrogate markers with heterogeneous clinical implications (PMID: 38243784; 37335715; 20883174; 27702392)"
       ],
-      "health_goals_supported": [
-        "Immune Support",
-        "Healthy Aging/Longevity"
-      ],
-      "notes": "Human evidence for selenium is strongest in autoimmune thyroid disease, where supplementation can reduce thyroid autoantibody levels in some populations; broader cancer-prevention claims are not a strong supplement-level clinical indication.",
+      "health_goals_supported": [],
+      "notes": "Human evidence for selenium is strongest in autoimmune thyroid disease, where supplementation can reduce thyroid autoantibody levels in some populations; broader cancer-prevention claims are not a strong supplement-level clinical indication. Retained-source scope and limitations: Hashimoto thyroiditis antibody/TSH and other surrogate markers; clinical outcome implications remain uncertain, not cancer-risk reduction evidence (PMID: 38243784; 37335715; 20883174; 27702392)",
       "study_type": "systematic_review_meta",
       "last_updated": "2026-03-06",
       "notable_studies": "Hashimoto-thyroiditis meta-analyses include PMID 38243784 and PMID 37335715, both showing reductions in thyroid autoantibodies in some trial settings. Earlier evidence is summarized in PMID 20883174 and PMID 27702392. Benefits outside specific deficiency or thyroid-autoimmunity contexts are less clinically consistent.",
@@ -5836,15 +5804,12 @@
         "unii": "H6241UJ22B"
       },
       "effect_direction": "positive_strong",
-      "primary_outcome": "Immune Support",
+      "primary_outcome": "",
       "total_enrollment": 17448,
       "registry_completed_trials_count": 214,
       "effect_direction_confidence": "high",
-      "effect_direction_rationale": "Retained positive_strong classification; study_type=systematic_review_meta; evidence_level=ingredient-human; primary_outcome=Immune Support; published_tags=systematic_review,meta-analysis,RCT; registry_completed_trials_count=214; total_enrollment=17448; endpoint_tags=immune_support,glycemic_control; notes/citations contain no automated downgrade signals.",
-      "endpoint_relevance_tags": [
-        "immune_support",
-        "glycemic_control"
-      ]
+      "effect_direction_rationale": "Source-content attribution reconciled against retained primary references on2026-10-23. Current descriptive direction: positive_strong. Actual measured outcomes and source limitations are recorded separately. This is not attributable clinician approval; existing clinical context holds remain.",
+      "endpoint_relevance_tags": []
     },
     {
       "id": "INGR_5HTP",
@@ -6529,16 +6494,10 @@
       ],
       "score_contribution": "tier_2",
       "key_endpoints": [
-        "sleep quality ↑",
-        "insomnia severity ↓",
-        "anxiety ↓",
-        "GI tolerance ↑"
+        "Pregnancy-related leg-cramp frequency and intensity (PMID: 22909270)"
       ],
-      "health_goals_supported": [
-        "Sleep Quality",
-        "Reduce Stress/Anxiety"
-      ],
-      "notes": "Direct human evidence specific to magnesium bisglycinate is limited. Small trials suggest good tolerability and possible benefit for leg cramps or sleep-related outcomes, while the larger evidence base is for magnesium more generally rather than the glycinate form alone.",
+      "health_goals_supported": [],
+      "notes": "The retained direct bisglycinate trial concerns pregnancy-related leg cramps, not sleep, anxiety or superior GI tolerance. Broader magnesium findings cannot establish exact-form sleep efficacy without separate applicable sources. Clinical source-context review remains incomplete. Retained-source scope and limitations: Reduced pregnancy-related leg-cramp frequency and intensity over 4 weeks with 300 mg/day magnesium bisglycinate; nausea and diarrhea did not differ from placebo (PMID: 22909270) In22909270,nausea and diarrhea did not differ from placebo; these adverse-event observations are not digestive benefit.",
       "notable_studies": "Direct bisglycinate evidence includes the pregnancy leg-cramp trial indexed as PMID 22909270. Broader magnesium-sleep evidence is limited and not specific to the glycinate form.",
       "study_type": "rct_single",
       "last_updated": "2026-03-07",
@@ -6582,15 +6541,12 @@
         "unii": "I38ZP9992A"
       },
       "effect_direction": "positive_weak",
-      "primary_outcome": "Sleep Quality",
+      "primary_outcome": "",
       "total_enrollment": 250,
       "registry_completed_trials_count": 11,
       "effect_direction_confidence": "medium",
-      "effect_direction_rationale": "Retained positive_weak classification; study_type=rct_single; evidence_level=ingredient-human; primary_outcome=Sleep Quality; published_tags=RCT,systematic_review,meta-analysis; registry_completed_trials_count=11; total_enrollment=250; endpoint_tags=cardiovascular,digestive_health; notes/citations include weak-effect language.",
-      "endpoint_relevance_tags": [
-        "cardiovascular",
-        "digestive_health"
-      ]
+      "effect_direction_rationale": "Source-content attribution reconciled against retained primary references on2026-10-23. Current descriptive direction: positive_weak. Actual measured outcomes and source limitations are recorded separately. This is not attributable clinician approval; existing clinical context holds remain.",
+      "endpoint_relevance_tags": []
     },
     {
       "id": "INGR_NAC",
@@ -6801,15 +6757,10 @@
       ],
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "inflammation ↓",
-        "immune function ↑",
-        "antiviral activity ↑"
+        "Blood-pressure outcomes in meta-analyses (PMID: 27405810; 35948195)"
       ],
-      "health_goals_supported": [
-        "Immune Support",
-        "Healthy Aging/Longevity"
-      ],
-      "notes": "Human evidence for quercetin is strongest for modest blood-pressure and inflammatory-marker effects. Immune and antiviral claims are studied frequently, but often in combination regimens that make standalone attribution difficult.",
+      "health_goals_supported": [],
+      "notes": "Human evidence for quercetin is strongest for modest blood-pressure and inflammatory-marker effects. Immune and antiviral claims are studied frequently, but often in combination regimens that make standalone attribution difficult. Retained-source scope and limitations: Blood-pressure findings in meta-analyses; not retained immune or antiviral efficacy evidence (PMID: 27405810; 35948195)",
       "study_type": "systematic_review_meta",
       "last_updated": "2026-03-23",
       "notable_studies": "Systematic review/meta-analysis evidence supports modest blood-pressure lowering with quercetin supplementation. Key pooled analyses include PMID 27405810 and the updated 2022 meta-analysis PMID 35948195, while broader immune or antiviral claims remain less secure as standalone quercetin effects.",
@@ -6874,16 +6825,13 @@
         "unii": "9IKM0I5T1E"
       },
       "effect_direction": "positive_weak",
-      "primary_outcome": "Immune Support",
+      "primary_outcome": "",
       "total_enrollment": 200,
       "registry_completed_trials_count": 70,
       "effect_direction_confidence": "medium",
-      "effect_direction_rationale": "Retained positive_weak classification; study_type=systematic_review_meta; evidence_level=ingredient-human; primary_outcome=Immune Support; published_tags=systematic_review,meta-analysis,RCT; registry_completed_trials_count=70; total_enrollment=200; endpoint_tags=stress_mood,sleep,cardiovascular,glycemic_control; notes/citations include weak-effect language.",
+      "effect_direction_rationale": "Source-content attribution reconciled against retained primary references on2026-10-23. Current descriptive direction: positive_weak. Actual measured outcomes and source limitations are recorded separately. This is not attributable clinician approval; existing clinical context holds remain.",
       "endpoint_relevance_tags": [
-        "stress_mood",
-        "sleep",
-        "cardiovascular",
-        "glycemic_control"
+        "cardiovascular"
       ]
     },
     {
@@ -7112,17 +7060,12 @@
       ],
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "all-cause mortality ↓ (HF)",
-        "HF hospitalization ↓",
-        "ATP production ↑",
-        "mitochondrial function ↑",
-        "statin myopathy ↓"
+        "Adjunctive heart failure outcomes from Q-SYMBIO and a synthesis (PMID: 25282031; 39462324)"
       ],
       "health_goals_supported": [
-        "Cardiovascular/Heart Health",
-        "Increase Energy"
+        "Cardiovascular/Heart Health"
       ],
-      "notes": "Human evidence for CoQ10 is strongest in heart-failure and cardiometabolic settings, with additional support for statin-associated muscle symptoms in some trials. The superiority of ubiquinone versus ubiquinol is not settled uniformly across use cases.",
+      "notes": "Retained sources39462324and25282031concern adjunctive treatment in heart failure. They do not establish statin-myopathy or universal energy benefits. Outcomes and populations require clinical applicability review.",
       "notable_studies": "The strongest CoQ10 evidence remains cardiovascular. A recent heart-failure meta-analysis of randomized controlled trials is indexed as PMID 39462324, and the landmark Q-SYMBIO randomized trial (PMID 25282031) reported lower major adverse cardiovascular events in chronic heart failure.",
       "study_type": "systematic_review_meta",
       "last_updated": "2026-03-23",
@@ -7213,9 +7156,8 @@
       "total_enrollment": 420,
       "registry_completed_trials_count": 138,
       "effect_direction_confidence": "high",
-      "effect_direction_rationale": "Retained positive_strong classification; study_type=systematic_review_meta; evidence_level=ingredient-human; primary_outcome=Cardiovascular/Heart Health; published_tags=RCT,meta-analysis,systematic_review; registry_completed_trials_count=138; total_enrollment=420; endpoint_tags=stress_mood,cardiovascular; notes/citations contain no automated downgrade signals.",
+      "effect_direction_rationale": "Source-content attribution reconciled against retained primary references on2026-10-23. Current descriptive direction: positive_strong. Actual measured outcomes and source limitations are recorded separately. This is not attributable clinician approval; existing clinical context holds remain.",
       "endpoint_relevance_tags": [
-        "stress_mood",
         "cardiovascular"
       ]
     },
@@ -7945,16 +7887,13 @@
       ],
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "mental performance ↑",
-        "immune function ↑",
-        "fatigue ↓"
+        "Fatigue syntheses across different American/Asian preparations (PMID: 29624410; 35776997)",
+        "Metabolic markers in Panax/Korean-red-ginseng studies (PMID: 35509826)"
       ],
       "health_goals_supported": [
-        "Focus & Mental Clarity",
-        "Immune Support",
         "Increase Energy"
       ],
-      "notes": "Human evidence for Panax ginseng is strongest for fatigue-related outcomes, with more mixed but still supportive data for selected cognitive and metabolic endpoints depending on extract type and population.",
+      "notes": "Human evidence for Panax ginseng is strongest for fatigue-related outcomes, with more mixed but still supportive data for selected cognitive and metabolic endpoints depending on extract type and population. Retained-source scope and limitations: Fatigue syntheses include different American/Asian preparations and populations (PMID: 29624410; 35776997) Metabolic markers in Panax/Korean-red-ginseng studies; not retained immune or cognitive efficacy evidence (PMID: 35509826)",
       "study_type": "systematic_review_meta",
       "last_updated": "2026-03-07",
       "notable_studies": "Fatigue-focused syntheses include PMID 29624410 and PMID 35776997, both supporting modest benefit with acceptable safety. Additional metabolic and cardiometabolic evidence is summarized in PMID 35509826, but results vary across preparations and indications.",
@@ -8040,13 +7979,12 @@
         "unii": "CUQ3A77YXI"
       },
       "effect_direction": "mixed",
-      "primary_outcome": "Focus & Mental Clarity",
+      "primary_outcome": "Increase Energy",
       "total_enrollment": 327,
       "registry_completed_trials_count": 121,
       "effect_direction_confidence": "medium",
-      "effect_direction_rationale": "Retained mixed classification; study_type=systematic_review_meta; evidence_level=ingredient-human; primary_outcome=Focus & Mental Clarity; published_tags=systematic_review,meta-analysis,RCT; registry_completed_trials_count=121; total_enrollment=327; endpoint_tags=focus_memory,cardiovascular,glycemic_control; notes/citations include mixed-evidence language.",
+      "effect_direction_rationale": "Source-content attribution reconciled against retained primary references on2026-10-23. Current descriptive direction: mixed. Actual measured outcomes and source limitations are recorded separately. This is not attributable clinician approval; existing clinical context holds remain.",
       "endpoint_relevance_tags": [
-        "focus_memory",
         "cardiovascular",
         "glycemic_control"
       ]
@@ -8067,14 +8005,12 @@
       ],
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "stress fatigue ↓",
-        "mood ↑"
+        "Endurance and physiological biomarkers; inflammatory-marker findings were not significant (PMID: 41080184)"
       ],
       "health_goals_supported": [
-        "Reduce Stress/Anxiety",
         "Increase Energy"
       ],
-      "notes": "Human evidence supports Rhodiola rosea for stress-related fatigue and some endurance or exertion outcomes, but effect estimates vary meaningfully by extract standardization and study design.",
+      "notes": "Human evidence supports Rhodiola rosea for stress-related fatigue and some endurance or exertion outcomes, but effect estimates vary meaningfully by extract standardization and study design. Retained-source scope and limitations: endurance and related physiological biomarkers; inflammatory-marker findings were not significant, and this retained source does not establish mood/stress-fatigue benefit (PMID: 41080184)",
       "study_type": "systematic_review_meta",
       "last_updated": "2026-03-07",
       "notable_studies": "Recent endurance-performance meta-analysis PMID 41080184 found modest improvements in endurance-related outcomes and biomarkers, though trial quality and extract heterogeneity remain important limitations.",
@@ -8101,16 +8037,12 @@
         }
       ],
       "effect_direction": "positive_weak",
-      "primary_outcome": "Reduce Stress/Anxiety",
+      "primary_outcome": "Increase Energy",
       "total_enrollment": 220,
       "registry_completed_trials_count": 17,
       "effect_direction_confidence": "medium",
-      "effect_direction_rationale": "Retained positive_weak classification; study_type=systematic_review_meta; evidence_level=ingredient-human; primary_outcome=Reduce Stress/Anxiety; published_tags=systematic_review,meta-analysis,RCT; registry_completed_trials_count=17; total_enrollment=220; endpoint_tags=immune_support,stress_mood,sleep; notes/citations include weak-effect language.",
-      "endpoint_relevance_tags": [
-        "immune_support",
-        "stress_mood",
-        "sleep"
-      ]
+      "effect_direction_rationale": "Source-content attribution reconciled against retained primary references on2026-10-23. Current descriptive direction: positive_weak. Actual measured outcomes and source limitations are recorded separately. This is not attributable clinician approval; existing clinical context holds remain.",
+      "endpoint_relevance_tags": []
     },
     {
       "id": "INGR_VITAMIN_B12",
@@ -9693,15 +9625,10 @@
       ],
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "blood glucose ↓",
-        "testosterone ↑",
-        "libido ↑"
+        "Serum testosterone in a four-trial extract synthesis (PMID: 32048383)"
       ],
-      "health_goals_supported": [
-        "Blood Sugar Support",
-        "Increase Energy"
-      ],
-      "notes": "Human evidence supports fenugreek most consistently for glycemic outcomes, with smaller and more variable support for testosterone- or libido-related endpoints in men.",
+      "health_goals_supported": [],
+      "notes": "The retained32048383source synthesizes testosterone measurements. It does not establish glycemic or libido benefit for arbitrary fenugreek preparations. Clinical applicability remains unreviewed.",
       "study_type": "systematic_review_meta",
       "last_updated": "2026-03-07",
       "notable_studies": "Testosterone-related evidence is summarized in PMID 32048383, which found modest androgen-related effects in men.",
@@ -9742,16 +9669,12 @@
         "unii": "654825W09Z"
       },
       "effect_direction": "positive_weak",
-      "primary_outcome": "Blood Sugar Support",
+      "primary_outcome": "",
       "total_enrollment": 107,
       "registry_completed_trials_count": 18,
       "effect_direction_confidence": "medium",
-      "effect_direction_rationale": "Retained positive_weak classification; study_type=systematic_review_meta; evidence_level=ingredient-human; primary_outcome=Blood Sugar Support; published_tags=systematic_review,meta-analysis,RCT; registry_completed_trials_count=18; total_enrollment=107; endpoint_tags=stress_mood,cardiovascular,glycemic_control; notes/citations include weak-effect language.",
-      "endpoint_relevance_tags": [
-        "stress_mood",
-        "cardiovascular",
-        "glycemic_control"
-      ]
+      "effect_direction_rationale": "Source-content attribution reconciled against retained primary references on2026-10-23. Current descriptive direction: positive_weak. Actual measured outcomes and source limitations are recorded separately. This is not attributable clinician approval; existing clinical context holds remain.",
+      "endpoint_relevance_tags": []
     },
     {
       "id": "INGR_BITTER_MELON",
@@ -10416,17 +10339,15 @@
       ],
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "blood glucose ↓",
-        "HbA1c ↓",
-        "insulin sensitivity ↑"
+        "Fasting glucose and lipid markers in a heterogeneous synthesis; HbA1c change was not significant (PMID: 24019277)"
       ],
       "health_goals_supported": [
         "Blood Sugar Support"
       ],
-      "notes": "Meta-analytic human evidence supports cinnamon for modest fasting-glucose and insulin-resistance improvements, but HbA1c and long-term glycemic effects are less consistently robust across trials. Applicability is scoped to Cassia/Cinnulin preparations; Ceylon cinnamon is excluded pending its own source review, which is not a finding of ineffectiveness.",
+      "notes": "Meta-analytic human evidence supports cinnamon for modest fasting-glucose and insulin-resistance improvements, but HbA1c and long-term glycemic effects are less consistently robust across trials. Applicability is scoped to Cassia/Cinnulin preparations; Ceylon cinnamon is excluded pending its own source review, which is not a finding of ineffectiveness. Retained-source scope and limitations: Fasting glucose and selected lipid changes in a heterogeneous meta-analysis of 10 RCTs; HbA1c did not significantly change (PMID: 24019277)",
       "study_type": "systematic_review_meta",
       "last_updated": "2026-09-05",
-      "notable_studies": "Meta-analysis PMID 24019277 found favorable glycemic and lipid shifts with cinnamon supplementation, although the effect size on HbA1c remained modest.",
+      "notable_studies": "PMID 24019277: 10 RCTs, 543 patients with type 2 diabetes; HbA1c difference -0.16 percentage points (95% CI -0.39 to 0.02), not statistically significant. High heterogeneity limits dose/preparation generalization.",
       "references_structured": [
         {
           "type": "pubmed",
@@ -10471,7 +10392,7 @@
       "total_enrollment": 229,
       "registry_completed_trials_count": 22,
       "effect_direction_confidence": "medium",
-      "effect_direction_rationale": "Retained positive_weak classification; study_type=systematic_review_meta; evidence_level=ingredient-human; primary_outcome=Blood Sugar Support; published_tags=RCT,meta-analysis; registry_completed_trials_count=22; total_enrollment=229; endpoint_tags=cardiovascular,glycemic_control; notes/citations include weak-effect language.",
+      "effect_direction_rationale": "Source-content attribution reconciled against retained primary references on2026-10-23. Current descriptive direction: positive_weak. Actual measured outcomes and source limitations are recorded separately. This is not attributable clinician approval; existing clinical context holds remain.",
       "endpoint_relevance_tags": [
         "cardiovascular",
         "glycemic_control"
@@ -10493,14 +10414,12 @@
       ],
       "score_contribution": "tier_2",
       "key_endpoints": [
-        "digestion ↑",
-        "bloating ↓",
-        "nutrient absorption ↑"
+        "Dyspepsia quality of life and pain in a specific multi-enzyme combination (PMID: 37976892)"
       ],
       "health_goals_supported": [
         "Digestive Health"
       ],
-      "notes": "Placebo-controlled functional dyspepsia trial (PMID 37976892) evaluated an unbranded five-enzyme fungal fermentation formulation (amylase, protease, cellulase, lactase, lipase; 200 mg BID). Does not transfer to standalone protease, lipase, amylase, cellulase, or animal pancreatin.",
+      "notes": "Placebo-controlled functional dyspepsia trial (PMID 37976892) evaluated an unbranded five-enzyme fungal fermentation formulation (amylase, protease, cellulase, lactase, lipase; 200 mg BID). Does not transfer to standalone protease, lipase, amylase, cellulase, or animal pancreatin. Retained-source scope and limitations: Dyspepsia quality-of-life, pain and sleep outcomes for a specific multi-enzyme combination; not measured nutrient absorption or isolated-enzyme efficacy (PMID: 37976892)",
       "study_type": "rct_single",
       "last_updated": "2026-03-07",
       "notable_studies": "One placebo-controlled dyspepsia trial (PMID 37976892) evaluated an unbranded five-enzyme fungal formulation in functional dyspepsia. Applicability requires matching multi-enzyme fungal formulation facts; standalone discrete enzymes do not inherit this evidence.",
@@ -10546,7 +10465,7 @@
       "total_enrollment": 168,
       "registry_completed_trials_count": 7,
       "effect_direction_confidence": "medium",
-      "effect_direction_rationale": "Retained positive_strong classification; study_type=rct_single; evidence_level=ingredient-human; primary_outcome=Digestive Health; published_tags=RCT,clinical; registry_completed_trials_count=7; total_enrollment=168; endpoint_tags=digestive_health; notes/citations contain no automated downgrade signals.",
+      "effect_direction_rationale": "Source-content attribution reconciled against retained primary references on2026-10-23. Current descriptive direction: positive_strong. Actual measured outcomes and source limitations are recorded separately. This is not attributable clinician approval; existing clinical context holds remain.",
       "endpoint_relevance_tags": [
         "digestive_health"
       ]
@@ -11259,15 +11178,12 @@
       ],
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "mood ↑",
-        "cognitive performance ↑",
-        "stress ↓"
+        "Depression/anxiety symptom synthesis with high heterogeneity (PMID: 34449930)"
       ],
       "health_goals_supported": [
-        "Reduce Stress/Anxiety",
-        "Focus & Mental Clarity"
+        "Reduce Stress/Anxiety"
       ],
-      "notes": "Human evidence supports lemon balm for acute anxiety or mood-calming effects, with some additional cognitive findings in small trials. The overall evidence base remains modest and somewhat heterogeneous.",
+      "notes": "Human evidence supports lemon balm for acute anxiety or mood-calming effects, with some additional cognitive findings in small trials. The overall evidence base remains modest and somewhat heterogeneous. Retained-source scope and limitations: Depression/anxiety symptom synthesis with high heterogeneity and few studies; not a retained cognitive-performance endpoint (PMID: 34449930)",
       "study_type": "systematic_review_meta",
       "last_updated": "2026-03-07",
       "notable_studies": "The best pooled evidence is PMID 34449930, which found significant reductions in anxiety and depression scores with lemon balm across small clinical trials. Individual randomized studies such as the Cases trial remain supportive but not definitive.",
@@ -11310,12 +11226,9 @@
       "total_enrollment": 123,
       "registry_completed_trials_count": 12,
       "effect_direction_confidence": "medium",
-      "effect_direction_rationale": "Retained positive_weak classification; study_type=systematic_review_meta; evidence_level=ingredient-human; primary_outcome=Reduce Stress/Anxiety; published_tags=systematic_review,RCT; registry_completed_trials_count=12; total_enrollment=123; endpoint_tags=stress_mood,sleep,digestive_health,muscle_recovery; notes/citations include weak-effect language.",
+      "effect_direction_rationale": "Source-content attribution reconciled against retained primary references on2026-10-23. Current descriptive direction: positive_weak. Actual measured outcomes and source limitations are recorded separately. This is not attributable clinician approval; existing clinical context holds remain.",
       "endpoint_relevance_tags": [
-        "stress_mood",
-        "sleep",
-        "digestive_health",
-        "muscle_recovery"
+        "stress_mood"
       ]
     },
     {
@@ -11397,13 +11310,11 @@
       "evidence_level": "ingredient-human",
       "score_contribution": "tier_2",
       "key_endpoints": [
-        "autophagy ↑",
-        "lifespan ↑"
+        "Exploratory memory findings in a small plant-extract pilot (PMID: 30388439)",
+        "No significant primary memory or secondary-outcome improvement in a larger wheat-germ-supplement trial (PMID: 35616942)"
       ],
-      "health_goals_supported": [
-        "Healthy Aging/Longevity"
-      ],
-      "notes": "Induces autophagy and extends lifespan in yeast, flies, and mice; mechanistic rationale for aging.",
+      "health_goals_supported": [],
+      "notes": "Induces autophagy and extends lifespan in yeast, flies, and mice; mechanistic rationale for aging. Retained-source scope and limitations: Small plant-extract pilot reported exploratory memory findings in subjective cognitive decline (PMID: 30388439) Larger 12-month wheat-germ-supplement trial found no significant primary memory or secondary-outcome improvement; exploratory findings require confirmation (PMID: 35616942)",
       "study_type": "rct_single",
       "published_studies": [
         "mechanistic",
@@ -11411,7 +11322,7 @@
         "RCT"
       ],
       "last_updated": "2026-03-01",
-      "notable_studies": "Wirth et al. (2018, PMID 30388439) phase IIa DB-RCT (n=30) reported positive memory effects in subjective cognitive decline; Schwarz et al. (2022, PMID 35616942) DB-RCT (n=37) confirmed safety with modest biomarker changes.",
+      "notable_studies": "PMID 30388439: 30-person, 3-month plant-extract pilot; effect-size estimates were imprecise. PMID 35616942: 100 randomized, 89 completed, 0.9 mg spermidine/day from wheat germ for 12 months; primary mnemonic discrimination p=0.47 and secondary outcomes were not significantly improved. These are not human lifespan or autophagy efficacy trials.",
       "references_structured": [
         {
           "type": "pubmed",
@@ -11486,16 +11397,14 @@
       "external_ids": {
         "unii": "U87FK77H25"
       },
-      "effect_direction": "positive_weak",
-      "primary_outcome": "Healthy Aging/Longevity",
+      "effect_direction": "mixed",
+      "primary_outcome": "",
       "total_enrollment": 829,
       "registry_completed_trials_count": 8,
       "effect_direction_confidence": "medium",
-      "effect_direction_rationale": "Retained positive_weak classification; study_type=rct_single; evidence_level=ingredient-human; primary_outcome=Healthy Aging/Longevity; published_tags=mechanistic,animal,RCT; registry_completed_trials_count=8; total_enrollment=829; endpoint_tags=immune_support,focus_memory,glycemic_control; notes/citations include weak-effect language.",
+      "effect_direction_rationale": "Source-content attribution reconciled against retained primary references on2026-10-23. Current descriptive direction: mixed. Actual measured outcomes and source limitations are recorded separately. This is not attributable clinician approval; existing clinical context holds remain.",
       "endpoint_relevance_tags": [
-        "immune_support",
-        "focus_memory",
-        "glycemic_control"
+        "focus_memory"
       ]
     },
     {
@@ -11842,14 +11751,12 @@
       "evidence_level": "ingredient-human",
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "bioavailability ↑",
-        "senolysis ↑"
+        "Formulation-dependent quercetin pharmacokinetics (PMID: 40037045)",
+        "Selected allergy symptoms (PMID: 35776034)",
+        "Disease-specific early-COVID outcomes in an open-label study (PMID: 36712674)"
       ],
-      "health_goals_supported": [
-        "Healthy Aging/Longevity",
-        "Immune Support"
-      ],
-      "notes": "Human evidence supports quercetin phytosome as a better-absorbed formulation than quercetin aglycone, with a small number of formulation-specific clinical trials. Outcome evidence is still limited and indication-specific rather than broad or definitive.",
+      "health_goals_supported": [],
+      "notes": "Human evidence supports quercetin phytosome as a better-absorbed formulation than quercetin aglycone, with a small number of formulation-specific clinical trials. Outcome evidence is still limited and indication-specific rather than broad or definitive. Retained-source scope and limitations: Formulation-dependent quercetin exposure in human pharmacokinetic studies (PMID: 40037045) Selected allergy symptom improvement in a 4-week placebo-controlled Quercetin Phytosome trial (PMID: 35776034) Disease-specific open-label early-COVID findings; not general antiviral or human senolysis evidence (PMID: 36712674)",
       "study_type": "rct_multiple",
       "published_studies": [
         "mechanistic",
@@ -11943,17 +11850,12 @@
         "unii": "9IKM0I5T1E"
       },
       "effect_direction": "mixed",
-      "primary_outcome": "Healthy Aging/Longevity",
+      "primary_outcome": "",
       "total_enrollment": 161,
       "registry_completed_trials_count": 7,
       "effect_direction_confidence": "medium",
-      "effect_direction_rationale": "Retained mixed classification; study_type=rct_multiple; evidence_level=ingredient-human; primary_outcome=Healthy Aging/Longevity; published_tags=mechanistic,animal,RCT,systematic_review,meta-analysis; registry_completed_trials_count=7; total_enrollment=161; endpoint_tags=sleep,cardiovascular,glycemic_control,muscle_recovery.",
-      "endpoint_relevance_tags": [
-        "sleep",
-        "cardiovascular",
-        "glycemic_control",
-        "muscle_recovery"
-      ]
+      "effect_direction_rationale": "Source-content attribution reconciled against retained primary references on2026-10-23. Current descriptive direction: mixed. Actual measured outcomes and source limitations are recorded separately. This is not attributable clinician approval; existing clinical context holds remain.",
+      "endpoint_relevance_tags": []
     },
     {
       "id": "PRECLIN_NADH",
@@ -12227,13 +12129,11 @@
       "evidence_level": "ingredient-human",
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "oxidative stress ↓",
-        "skin protection ↑"
+        "Selected exercise/training outcomes (PMID: 38243785)",
+        "Oxidative/inflammatory biomarkers, skin measures and mixed cardiometabolic findings in separate syntheses (PMID: 35091276; 34578794; 32755613)"
       ],
-      "health_goals_supported": [
-        "Healthy Aging/Longevity"
-      ],
-      "notes": "Human meta-analytic evidence supports generic astaxanthin for modest improvements in exercise-related fatigue/efficiency, oxidative-stress biomarkers, and some skin-aging endpoints. Cardiometabolic effects are less consistent, and branded preparations still have the stronger individual trial base.",
+      "health_goals_supported": [],
+      "notes": "PMID38243785reports a trend for fatigue in two studies, marginal cognitive accuracy and null reaction time, alongside selected exercise/training outcomes. Other retained syntheses concern skin and biomarkers; no universal fatigue or longevity benefit is established.",
       "study_type": "systematic_review_meta",
       "published_studies": [
         "mechanistic",
@@ -12243,7 +12143,7 @@
         "meta-analysis"
       ],
       "last_updated": "2026-03-07",
-      "notable_studies": "A 2024 meta-analysis of 11 RCTs found improvements in fatigue, motor function, and exercise efficiency (PMID 38243785). Additional meta-analyses support reductions in oxidative-stress and inflammation biomarkers (PMID 35091276) and improvements in skin-aging measures (PMID 34578794), whereas cardiometabolic outcomes are more mixed despite some favorable pooled signals (PMID 32755613).",
+      "notable_studies": "PMID 38243785: 11 RCTs; subjective fatigue showed a trend in only two studies, cognitive accuracy was marginal and reaction time null. Selected exercise/training outcomes differed. Other retained syntheses concern oxidative/inflammatory biomarkers (35091276), skin outcomes (34578794) and mixed cardiometabolic findings (32755613), not universal fatigue or longevity efficacy.",
       "references_structured": [
         {
           "type": "pubmed",
@@ -12403,13 +12303,11 @@
         "unii": "8XPW32PR7I"
       },
       "effect_direction": "positive_weak",
-      "primary_outcome": "Healthy Aging/Longevity",
+      "primary_outcome": "",
       "total_enrollment": 40,
       "effect_direction_confidence": "medium",
-      "effect_direction_rationale": "Retained positive_weak classification; study_type=systematic_review_meta; evidence_level=ingredient-human; primary_outcome=Healthy Aging/Longevity; published_tags=mechanistic,animal,RCT,systematic_review,meta-analysis; total_enrollment=40; endpoint_tags=healthy_aging; notes/citations include weak-effect language.",
-      "endpoint_relevance_tags": [
-        "healthy_aging"
-      ]
+      "effect_direction_rationale": "Source-content attribution reconciled against retained primary references on2026-10-23. Current descriptive direction: positive_weak. Actual measured outcomes and source limitations are recorded separately. This is not attributable clinician approval; existing clinical context holds remain.",
+      "endpoint_relevance_tags": []
     },
     {
       "id": "PRECLIN_SULFORAPHANE",
@@ -12563,14 +12461,11 @@
       "evidence_level": "ingredient-human",
       "score_contribution": "tier_2",
       "key_endpoints": [
-        "cognition ↑",
-        "oxidative stress ↓"
+        "Blood-pressure reductions and LDL increase with monotherapy in an 80-person trial (PMID: 25057276)",
+        "Companion short-term safety-marker analysis from the same trial (PMID: 23431291)"
       ],
-      "health_goals_supported": [
-        "Focus & Mental Clarity",
-        "Healthy Aging/Longevity"
-      ],
-      "notes": "Human evidence for pterostilbene exists but remains limited. The main randomized trial suggests possible blood-pressure benefit and acceptable short-term tolerability, but the same program also raised concern for LDL increases with monotherapy (PMID 25057276, PMID 23431291).",
+      "health_goals_supported": [],
+      "notes": "The two retained publications describe the same 80-person metabolic/safety program, not 120 independent participants. LDL increased with pterostilbene monotherapy. Retained sources do not establish cognitive or human longevity benefit; preparation, population and clinical applicability review remain required. Retained-source scope and limitations: Blood-pressure reductions and LDL increase with monotherapy in an 80-person metabolic trial (PMID: 25057276) Short-term safety-marker report from the same 80-person trial, not independent cognitive evidence (PMID: 23431291)",
       "study_type": "rct_single",
       "published_studies": [
         "mechanistic",
@@ -12623,15 +12518,13 @@
         "unii": "26R60S6A5I"
       },
       "effect_direction": "mixed",
-      "primary_outcome": "Focus & Mental Clarity",
-      "total_enrollment": 120,
+      "primary_outcome": "",
+      "total_enrollment": 80,
       "registry_completed_trials_count": 10,
       "effect_direction_confidence": "medium",
-      "effect_direction_rationale": "The randomized program reported possible blood-pressure benefit but also an LDL increase with pterostilbene monotherapy, so the human result is mixed rather than strongly positive.",
+      "effect_direction_rationale": "Source-content attribution reconciled against retained primary references on2026-10-23. Current descriptive direction: mixed. Actual measured outcomes and source limitations are recorded separately. This is not attributable clinician approval; existing clinical context holds remain.",
       "endpoint_relevance_tags": [
-        "cardiovascular",
-        "digestive_health",
-        "muscle_recovery"
+        "cardiovascular"
       ]
     },
     {
@@ -12858,13 +12751,13 @@
       "evidence_level": "ingredient-human",
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "gastric mucosa ↑",
-        "ulcer healing ↑"
+        "No placebo advantage in a DGL duodenal-ulcer trial (PMID: 4933135)",
+        "GutGard-specific dyspepsia symptoms, H. pylori test outcomes and reflux symptoms (PMID: 21747893; 23606875; 39929150)"
       ],
       "health_goals_supported": [
         "Digestive Health"
       ],
-      "notes": "Human evidence for deglycyrrhizinated licorice is modest but real. The strongest modern trials are on the standardized GutGard extract for functional dyspepsia, H. pylori management, and reflux-related symptoms, while older classic DGL ulcer trials were mixed or negative (PMID 21747893, PMID 23606875, PMID 39929150, PMID 4933135).",
+      "notes": "Human evidence for deglycyrrhizinated licorice is modest but real. The strongest modern trials are on the standardized GutGard extract for functional dyspepsia, H. pylori management, and reflux-related symptoms, while older classic DGL ulcer trials were mixed or negative (PMID 21747893, PMID 23606875, PMID 39929150, PMID 4933135). Retained-source scope and limitations: No advantage over placebo in a 47-person DGL duodenal-ulcer trial (PMID: 4933135) Preparation-specific GutGard dyspepsia symptoms, H. pylori test outcomes and reflux symptoms; not proof of generic ulcer healing (PMID: 21747893; 23606875; 39929150)",
       "study_type": "rct_multiple",
       "published_studies": [
         "mechanistic",
@@ -12993,10 +12886,9 @@
       "total_enrollment": 485,
       "registry_completed_trials_count": 3,
       "effect_direction_confidence": "medium",
-      "effect_direction_rationale": "Retained mixed classification; study_type=rct_multiple; evidence_level=ingredient-human; primary_outcome=Digestive Health; published_tags=mechanistic,animal,RCT; registry_completed_trials_count=3; total_enrollment=485; endpoint_tags=cardiovascular,muscle_recovery; notes/citations include mixed-evidence language.",
+      "effect_direction_rationale": "Source-content attribution reconciled against retained primary references on2026-10-23. Current descriptive direction: mixed. Actual measured outcomes and source limitations are recorded separately. This is not attributable clinician approval; existing clinical context holds remain.",
       "endpoint_relevance_tags": [
-        "cardiovascular",
-        "muscle_recovery"
+        "digestive_health"
       ]
     },
     {
@@ -13556,14 +13448,13 @@
       "evidence_level": "ingredient-human",
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "ATP production ↑",
-        "oxygen utilization ↑"
+        "Preparation-specific exercise thresholds and stem-cell markers (PMID: 20804368; 38501161)",
+        "Cordyceps-containing mushroom blend: no significant time-by-treatment interaction at one week; a small subset continued to three weeks (PMID: 27408987)"
       ],
       "health_goals_supported": [
-        "Increase Energy",
-        "Cardiovascular/Heart Health"
+        "Increase Energy"
       ],
-      "notes": "Human evidence for Cordyceps is modest and mostly exercise-related. Small randomized trials suggest improvements in ventilatory or metabolic thresholds and high-intensity exercise tolerance, but they do not establish large or consistent VO2max gains across populations (PMID 20804368, PMID 27408987, PMID 38501161).",
+      "notes": "Human evidence for Cordyceps is modest and mostly exercise-related. Small randomized trials suggest improvements in ventilatory or metabolic thresholds and high-intensity exercise tolerance, but they do not establish large or consistent VO2max gains across populations (PMID 20804368, PMID 27408987, PMID 38501161). Retained-source scope and limitations: ATP production ↑ oxygen utilization ↑",
       "study_type": "rct_multiple",
       "published_studies": [
         "mechanistic",
@@ -13571,7 +13462,7 @@
         "RCT"
       ],
       "last_updated": "2026-03-07",
-      "notable_studies": "In healthy older adults, a placebo-controlled trial of Cs-4 improved metabolic and ventilatory thresholds after 12 weeks but not VO2max itself (PMID 20804368). A later randomized study of Cordyceps militaris found better tolerance to high-intensity exercise after acute and chronic supplementation (PMID 27408987). A newer human study also reported altered skeletal-muscle stem-cell recruitment after interval exercise (PMID 38501161), but the broader performance evidence remains limited.",
+      "notable_studies": "PMID 20804368: preparation-specific Cs-4 thresholds in older adults, not consistent VO2max benefit. PMID 27408987: Cordyceps-containing mushroom blend, 28 participants; no significant time-by-treatment interaction at one week, with 10 volunteers continuing to three weeks. The blend cannot establish Cordyceps-only efficacy. PMID 38501161 concerns exercise-associated muscle stem-cell recruitment, not established general performance benefit.",
       "references_structured": [
         {
           "type": "pubmed",
@@ -13674,11 +13565,8 @@
       "total_enrollment": 40,
       "registry_completed_trials_count": 3,
       "effect_direction_confidence": "medium",
-      "effect_direction_rationale": "Retained positive_weak classification; study_type=rct_multiple; evidence_level=ingredient-human; primary_outcome=Increase Energy; published_tags=mechanistic,animal,RCT; registry_completed_trials_count=3; total_enrollment=40; endpoint_tags=stress_mood,digestive_health; notes/citations include weak-effect language.",
-      "endpoint_relevance_tags": [
-        "stress_mood",
-        "digestive_health"
-      ]
+      "effect_direction_rationale": "Source-content attribution reconciled against retained primary references on2026-10-23. Current descriptive direction: positive_weak. Actual measured outcomes and source limitations are recorded separately. This is not attributable clinician approval; existing clinical context holds remain.",
+      "endpoint_relevance_tags": []
     },
     {
       "id": "PRECLIN_BETAINE_HCL",
@@ -13688,23 +13576,18 @@
         "digestive betaine"
       ],
       "category": "digestive_gut",
-      "evidence_level": "ingredient-human",
+      "evidence_level": "reference",
       "score_contribution": "tier_2",
-      "key_endpoints": [
-        "stomach acid ↑",
-        "protein digestion ↑"
-      ],
-      "health_goals_supported": [
-        "Digestive Health"
-      ],
-      "notes": "Betaine HCl has human physiological evidence for transient gastric re-acidification under drug-induced hypochlorhydria, but direct symptom-outcome trials for dyspepsia, reflux, or protein digestion are still lacking. It should not be presented as purely preclinical, yet the human evidence remains narrow and mechanistic (PMID 23980906, PMID 25274610).",
-      "study_type": "rct_single",
+      "key_endpoints": [],
+      "health_goals_supported": [],
+      "notes": "23980906 measures transient gastric pH in drug-induced hypochlorhydria;25274610 measures dasatinib exposure. Neither tests protein-digestion or general digestive-symptom benefit. Drug-exposure findings are not a self-treatment recommendation. Reference context only; no affirmative ingredient-level clinical credit or clinician approval established.",
+      "study_type": "reference",
       "published_studies": [
         "mechanistic",
         "RCT"
       ],
       "last_updated": "2026-03-07",
-      "notable_studies": "A pilot human study showed that 1500 mg betaine HCl rapidly lowered gastric pH in rabeprazole-induced hypochlorhydria (PMID 23980906). A randomized crossover study then demonstrated that this re-acidification restored dasatinib exposure under hypochlorhydric conditions (PMID 25274610). These are meaningful human mechanism studies, but not direct digestive-symptom efficacy trials.",
+      "notable_studies": "A pilot human study showed that 1500 mg betaine HCl rapidly lowered gastric pH in rabeprazole-induced hypochlorhydria (PMID 23980906). A randomized crossover study then demonstrated that this re-acidification restored dasatinib exposure under hypochlorhydric conditions (PMID 25274610). These are meaningful human mechanism studies, but not direct digestive-symptom efficacy trials. Source disposition: 23980906 measures transient gastric pH in drug-induced hypochlorhydria;25274610 measures dasatinib exposure. Neither tests protein-digestion or general digestive-symptom benefit. Drug-exposure findings are not a self-treatment recommendation.",
       "references_structured": [
         {
           "type": "pubmed",
@@ -13790,17 +13673,13 @@
         "unii": "3SCV180C9W"
       },
       "effect_direction": "positive_strong",
-      "primary_outcome": "Digestive Health",
-      "total_enrollment": 100,
-      "registry_completed_trials_count": 46,
+      "primary_outcome": "",
+      "total_enrollment": null,
+      "registry_completed_trials_count": null,
       "effect_direction_confidence": "medium",
-      "effect_direction_rationale": "Retained positive_strong classification; study_type=rct_single; evidence_level=ingredient-human; primary_outcome=Digestive Health; published_tags=mechanistic,RCT; registry_completed_trials_count=46; total_enrollment=100; endpoint_tags=stress_mood,cardiovascular,glycemic_control,muscle_recovery; notes/citations contain no automated downgrade signals.",
-      "endpoint_relevance_tags": [
-        "stress_mood",
-        "cardiovascular",
-        "glycemic_control",
-        "muscle_recovery"
-      ]
+      "effect_direction_rationale": "Source-content attribution reconciled against retained primary references on2026-10-23. Current descriptive direction: positive_strong. Actual measured outcomes and source limitations are recorded separately. This is not attributable clinician approval; existing clinical context holds remain.",
+      "endpoint_relevance_tags": [],
+      "scoring_eligible": false
     },
     {
       "id": "PRECLIN_SAFFRON",
@@ -13814,14 +13693,14 @@
       "evidence_level": "ingredient-human",
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "neuroprotection ↑",
-        "retinal protection ↑"
+        "Depression/anxiety symptom syntheses with publication-bias limitations (PMID: 31135916)",
+        "No significant symptom-efficacy difference in small SSRI-comparator trials (PMID: 38913392)",
+        "Self-report measures improved, while clinician-rated scales did not significantly improve (PMID: 41693488)"
       ],
       "health_goals_supported": [
-        "Focus & Mental Clarity",
-        "Healthy Aging/Longevity"
+        "Reduce Stress/Anxiety"
       ],
-      "notes": "Human evidence for saffron is strongest in mild-to-moderate depressive symptoms, where multiple meta-analyses show benefit versus placebo and no clear inferiority versus SSRIs. The evidence is still concentrated in a relatively small and geographically clustered trial base, so the signal is promising rather than definitive (PMID 31135916, PMID 38913392, PMID 41693488).",
+      "notes": "Human evidence for saffron is strongest in mild-to-moderate depressive symptoms, where multiple meta-analyses show benefit versus placebo and no clear inferiority versus SSRIs. The evidence is still concentrated in a relatively small and geographically clustered trial base, so the signal is promising rather than definitive (PMID 31135916, PMID 38913392, PMID 41693488). Retained-source scope and limitations: Depression/anxiety symptom findings with publication-bias and population limitations (PMID: 31135916) No clear symptom efficacy difference versus SSRIs in pooled small comparative trials; not proof of equivalence (PMID: 38913392) Self-reported depression/anxiety scales improved, while clinician-rated scales did not significantly improve in a heterogeneous synthesis (PMID: 41693488)",
       "study_type": "systematic_review_meta",
       "published_studies": [
         "mechanistic",
@@ -13908,16 +13787,13 @@
         "unii": "E849G4X5YJ"
       },
       "effect_direction": "positive_strong",
-      "primary_outcome": "Focus & Mental Clarity",
+      "primary_outcome": "Reduce Stress/Anxiety",
       "total_enrollment": 732,
       "registry_completed_trials_count": 19,
       "effect_direction_confidence": "high",
-      "effect_direction_rationale": "Retained positive_strong classification; study_type=systematic_review_meta; evidence_level=ingredient-human; primary_outcome=Focus & Mental Clarity; published_tags=mechanistic,animal,RCT,systematic_review,meta-analysis; registry_completed_trials_count=19; total_enrollment=732; endpoint_tags=stress_mood,sleep,focus_memory,digestive_health; notes/citations contain no automated downgrade signals.",
+      "effect_direction_rationale": "Source-content attribution reconciled against retained primary references on2026-10-23. Current descriptive direction: positive_strong. Actual measured outcomes and source limitations are recorded separately. This is not attributable clinician approval; existing clinical context holds remain.",
       "endpoint_relevance_tags": [
-        "stress_mood",
-        "sleep",
-        "focus_memory",
-        "digestive_health"
+        "stress_mood"
       ]
     },
     {
@@ -14592,14 +14468,12 @@
       "evidence_level": "ingredient-human",
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "SIRT1 activation ↑",
-        "longevity ↑"
+        "Mixed inflammatory/lipid biomarker syntheses in selected patient groups (PMID: 39872318; 35905799; 39255906; 29305228)"
       ],
       "health_goals_supported": [
-        "Healthy Aging/Longevity",
         "Cardiovascular/Heart Health"
       ],
-      "notes": "Resveratrol has a broad human trial base, but the overall evidence remains mixed and outcome-specific. Some meta-analyses find modest improvements in inflammatory or lipid biomarkers, while others show no consistent clinically meaningful effect, so longevity-style claims remain substantially ahead of the data (PMID 39872318, PMID 35905799, PMID 39255906, PMID 29305228).",
+      "notes": "Resveratrol has a broad human trial base, but the overall evidence remains mixed and outcome-specific. Some meta-analyses find modest improvements in inflammatory or lipid biomarkers, while others show no consistent clinically meaningful effect, so longevity-style claims remain substantially ahead of the data (PMID 39872318, PMID 35905799, PMID 39255906, PMID 29305228). Retained-source scope and limitations: Mixed inflammatory/lipid biomarker syntheses in selected patient groups; retained sources do not establish human longevity benefit (PMID: 39872318; 35905799; 39255906; 29305228)",
       "study_type": "rct_multiple",
       "published_studies": [
         "mechanistic",
@@ -14795,15 +14669,14 @@
         "unii": "Q369O8926L"
       },
       "effect_direction": "mixed",
-      "primary_outcome": "Healthy Aging/Longevity",
+      "primary_outcome": "Cardiovascular/Heart Health",
       "total_enrollment": 66,
       "registry_completed_trials_count": 150,
       "effect_direction_confidence": "medium",
-      "effect_direction_rationale": "Retained mixed classification; study_type=rct_multiple; evidence_level=ingredient-human; primary_outcome=Healthy Aging/Longevity; published_tags=mechanistic,animal,RCT,systematic_review,meta-analysis; registry_completed_trials_count=150; total_enrollment=66; endpoint_tags=cardiovascular,glycemic_control,muscle_recovery; notes/citations include mixed-evidence language.",
+      "effect_direction_rationale": "Source-content attribution reconciled against retained primary references on2026-10-23. Current descriptive direction: mixed. Actual measured outcomes and source limitations are recorded separately. This is not attributable clinician approval; existing clinical context holds remain.",
       "endpoint_relevance_tags": [
         "cardiovascular",
-        "glycemic_control",
-        "muscle_recovery"
+        "glycemic_control"
       ]
     },
     {
@@ -15723,18 +15596,13 @@
       ],
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "testosterone ↑",
-        "libido ↑",
-        "muscle strength ↑",
-        "body composition ↑"
+        "Libido and self-reported strength satisfaction with a Testofen-plus-mineral formulation (PMID: 21312304)",
+        "Androgen-symptom questionnaire, sexual function and testosterone measures (PMID: 26791805)"
       ],
-      "health_goals_supported": [
-        "Increase Energy",
-        "Healthy Aging/Longevity"
-      ],
-      "notes": "Fenugreek extract with PubMed-indexed randomized evidence for libido, androgen-deficiency symptoms, and selected testosterone-related outcomes in men.",
+      "health_goals_supported": [],
+      "notes": "Fenugreek extract with PubMed-indexed randomized evidence for libido, androgen-deficiency symptoms, and selected testosterone-related outcomes in men. Retained-source scope and limitations: Libido findings from a Testofen-plus-mineral formulation; muscle-strength satisfaction was self-reported, not measured strength (PMID: 21312304) Androgen-symptom questionnaire, sexual-function and testosterone measures in older men (PMID: 26791805)",
       "last_updated": "2026-03-06",
-      "notable_studies": "Steels et al. (2011, PMID 21312304) randomized healthy men and found improved libido with 600 mg/day of Testofen for 6 weeks. Rao et al. (2016, PMID 26791805) reported improved symptoms of androgen deficiency, sexual function, and testosterone measures after 12 weeks in ageing men.",
+      "notable_studies": "PMID 21312304: 60 men, 600 mg/day Testofen with minerals for 6 weeks; libido and self-reported satisfaction, not objective strength/body-composition testing. PMID 26791805: 120 older men, 600 mg/day for 12 weeks; AMS, sexual function and testosterone measures.",
       "references_structured": [
         {
           "type": "pubmed",
@@ -15812,13 +15680,11 @@
         "unii": "654825W09Z"
       },
       "effect_direction": "positive_strong",
-      "primary_outcome": "Increase Energy",
+      "primary_outcome": "",
       "total_enrollment": 150,
       "effect_direction_confidence": "medium",
-      "effect_direction_rationale": "Retained positive_strong classification; study_type=rct_multiple; evidence_level=branded-rct; primary_outcome=Increase Energy; published_tags=RCT,double-blind; total_enrollment=120; endpoint_tags=muscle_recovery; notes/citations contain no automated downgrade signals.",
-      "endpoint_relevance_tags": [
-        "muscle_recovery"
-      ],
+      "effect_direction_rationale": "Source-content attribution reconciled against retained primary references on2026-10-23. Current descriptive direction: positive_strong. Actual measured outcomes and source limitations are recorded separately. This is not attributable clinician approval; existing clinical context holds remain.",
+      "endpoint_relevance_tags": [],
       "registry_completed_trials_count": 1
     },
     {
@@ -17185,25 +17051,18 @@
         "tocotrienols"
       ],
       "category": "vitamin_supplement",
-      "evidence_level": "ingredient-human",
+      "evidence_level": "reference",
       "published_studies": [
         "RCT",
         "meta-analysis",
         "systematic_review"
       ],
       "score_contribution": "tier_1",
-      "key_endpoints": [
-        "oxidative stress markers ↓",
-        "immune function support ↑"
-      ],
-      "health_goals_supported": [
-        "Healthy Aging/Longevity",
-        "Immune Support",
-        "Skin, Hair & Nails"
-      ],
-      "notes": "Clinical data are broad and endpoint-specific; strongest support is for antioxidant biology rather than universal disease-risk reduction.",
-      "notable_studies": "Large pooled human evidence is mixed and endpoint-specific. The landmark mortality meta-analysis (PMID 15537682) raised concern about high-dose vitamin E supplementation, so this ingredient is best framed around deficiency correction and selected antioxidant contexts rather than broad disease-prevention promises.",
-      "study_type": "systematic_review_meta",
+      "key_endpoints": [],
+      "health_goals_supported": [],
+      "notes": "15537682 is an all-cause mortality meta-analysis with high-dose risk signals and generalizability limitations, not affirmative immune/antioxidant efficacy. Preserve this adverse source context; it does not establish a universal risk threshold for every product. Reference context only; no affirmative ingredient-level clinical credit or clinician approval established.",
+      "notable_studies": "Large pooled human evidence is mixed and endpoint-specific. The landmark mortality meta-analysis (PMID 15537682) raised concern about high-dose vitamin E supplementation, so this ingredient is best framed around deficiency correction and selected antioxidant contexts rather than broad disease-prevention promises. Source disposition: 15537682 is an all-cause mortality meta-analysis with high-dose risk signals and generalizability limitations, not affirmative immune/antioxidant efficacy. Preserve this adverse source context; it does not establish a universal risk threshold for every product.",
+      "study_type": "reference",
       "last_updated": "2026-03-23",
       "references_structured": [
         {
@@ -17241,16 +17100,13 @@
         "unii": "KP2MW85SSQ"
       },
       "effect_direction": "mixed",
-      "primary_outcome": "Healthy Aging/Longevity",
-      "total_enrollment": 14641,
-      "registry_completed_trials_count": 560,
+      "primary_outcome": "",
+      "total_enrollment": null,
+      "registry_completed_trials_count": null,
       "effect_direction_confidence": "medium",
-      "effect_direction_rationale": "Retained mixed classification; study_type=systematic_review_meta; evidence_level=ingredient-human; primary_outcome=Healthy Aging/Longevity; published_tags=RCT,meta-analysis,systematic_review; registry_completed_trials_count=560; total_enrollment=14641; endpoint_tags=stress_mood,cardiovascular,glycemic_control; notes/citations include mixed-evidence language.",
-      "endpoint_relevance_tags": [
-        "stress_mood",
-        "cardiovascular",
-        "glycemic_control"
-      ]
+      "effect_direction_rationale": "Source-content attribution reconciled against retained primary references on2026-10-23. Current descriptive direction: mixed. Actual measured outcomes and source limitations are recorded separately. This is not attributable clinician approval; existing clinical context holds remain.",
+      "endpoint_relevance_tags": [],
+      "scoring_eligible": false
     },
     {
       "id": "INGR_VITAMIN_A_BETA_CAROTENE",
@@ -17435,16 +17291,13 @@
       ],
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "blood pressure ↓",
-        "migraine frequency ↓",
-        "sleep quality ↑ (subset)"
+        "Blood-pressure outcomes depend on population and heterogeneity (PMID: 41000008)",
+        "Migraine studies require route separation: intravenous acute treatment and oral prophylaxis (PMID: 26752497; 8792038)"
       ],
       "health_goals_supported": [
-        "Cardiovascular/Heart Health",
-        "Sleep Quality",
-        "Healthy Aging/Longevity"
+        "Cardiovascular/Heart Health"
       ],
-      "notes": "Human evidence supports magnesium supplementation for selected outcomes such as blood pressure and migraine prevention, especially in deficiency-risk or higher-dose contexts. NIH ODS also notes that many Americans underconsume magnesium and that supplemental effects are outcome-, dose-, and population-dependent rather than universal.",
+      "notes": "Human evidence supports magnesium supplementation for selected outcomes such as blood pressure and migraine prevention, especially in deficiency-risk or higher-dose contexts. NIH ODS also notes that many Americans underconsume magnesium and that supplemental effects are outcome-, dose-, and population-dependent rather than universal. Retained-source scope and limitations: Blood-pressure findings depend on population and heterogeneity; no source-derived dose-response relationship established (PMID: 41000008) Migraine studies require route separation between intravenous acute treatment and oral prophylaxis; not retained sleep efficacy evidence (PMID: 26752497; 8792038)",
       "notable_studies": "NIH ODS Magnesium identifies hypertension, migraine, and low intake as the main clinically relevant contexts for supplementation. A recent blood-pressure meta-analysis found reductions of about 2.8/2.0 mm Hg overall, with larger effects in hypertensive or hypomagnesemic participants (PMID 41000008). For migraine, oral/intravenous magnesium meta-analysis and classic oral prophylaxis data support benefit in at least some patients (PMID 26752497; PMID 8792038).",
       "study_type": "systematic_review_meta",
       "last_updated": "2026-03-07",
@@ -17550,10 +17403,9 @@
       "total_enrollment": 8563,
       "registry_completed_trials_count": 8,
       "effect_direction_confidence": "high",
-      "effect_direction_rationale": "Retained positive_strong classification; study_type=systematic_review_meta; evidence_level=ingredient-human; primary_outcome=Cardiovascular/Heart Health; published_tags=RCT,meta-analysis,systematic_review; registry_completed_trials_count=8; total_enrollment=8563; endpoint_tags=stress_mood,digestive_health; notes/citations contain no automated downgrade signals.",
+      "effect_direction_rationale": "Source-content attribution reconciled against retained primary references on2026-10-23. Current descriptive direction: positive_strong. Actual measured outcomes and source limitations are recorded separately. This is not attributable clinician approval; existing clinical context holds remain.",
       "endpoint_relevance_tags": [
-        "stress_mood",
-        "digestive_health"
+        "cardiovascular"
       ]
     },
     {
@@ -17689,16 +17541,11 @@
       ],
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "nausea in pregnancy ↓",
-        "pms symptom burden ↓",
-        "homocysteine ↓ (with B-complex)"
+        "Nausea/vomiting during pregnancy in standalone/combination interventions (PMID: 36719452)",
+        "Premenstrual symptoms in generally low-quality trials (PMID: 10334745)"
       ],
-      "health_goals_supported": [
-        "Hormone Balance",
-        "Cardiovascular/Heart Health",
-        "Focus & Mental Clarity"
-      ],
-      "notes": "Human evidence for vitamin B6 is indication-specific. The clearest supplementation support is for nausea and vomiting of pregnancy and for some premenstrual symptoms, while broader neurological or cardiovascular claims are usually tied to deficiency correction or combination B-vitamin regimens. NIH ODS also emphasizes neuropathy risk at high chronic doses.",
+      "health_goals_supported": [],
+      "notes": "Human evidence for vitamin B6 is indication-specific. The clearest supplementation support is for nausea and vomiting of pregnancy and for some premenstrual symptoms, while broader neurological or cardiovascular claims are usually tied to deficiency correction or combination B-vitamin regimens. NIH ODS also emphasizes neuropathy risk at high chronic doses. Retained-source scope and limitations: Nausea/vomiting during pregnancy, with standalone and combination interventions kept distinct (PMID: 36719452) Premenstrual symptoms in generally low-quality trials; not retained homocysteine efficacy evidence (PMID: 10334745)",
       "notable_studies": "NIH ODS Vitamin B6 summarizes B6's established role in deficiency prevention and cautions against chronic high-dose exposure. A systematic review and meta-analysis found pyridoxine improves nausea-and-vomiting-of-pregnancy scores (PMID 36719452). Older randomized evidence also supports benefit for premenstrual symptoms, though trial quality was limited (PMID 10334745).",
       "study_type": "systematic_review_meta",
       "last_updated": "2026-03-07",
@@ -17767,14 +17614,12 @@
         "unii": "KV2JZ1BI6Z"
       },
       "effect_direction": "positive_strong",
-      "primary_outcome": "Hormone Balance",
+      "primary_outcome": "",
       "total_enrollment": 389,
       "registry_completed_trials_count": 278,
       "effect_direction_confidence": "high",
-      "effect_direction_rationale": "Retained positive_strong classification; study_type=systematic_review_meta; evidence_level=ingredient-human; primary_outcome=Hormone Balance; published_tags=RCT,systematic_review; registry_completed_trials_count=278; total_enrollment=389; endpoint_tags=focus_memory; notes/citations contain no automated downgrade signals.",
-      "endpoint_relevance_tags": [
-        "focus_memory"
-      ]
+      "effect_direction_rationale": "Source-content attribution reconciled against retained primary references on2026-10-23. Current descriptive direction: positive_strong. Actual measured outcomes and source limitations are recorded separately. This is not attributable clinician approval; existing clinical context holds remain.",
+      "endpoint_relevance_tags": []
     },
     {
       "id": "INGR_THIAMINE_B1",
@@ -18610,16 +18455,12 @@
       ],
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "LDL cholesterol ↓",
-        "bowel regularity ↑",
-        "postprandial glycemic response ↓"
+        "Conventional/alternative lipid markers (PMID: 30239559; 18985059)"
       ],
       "health_goals_supported": [
-        "Cardiovascular/Heart Health",
-        "Digestive Health",
-        "Blood Sugar Support"
+        "Cardiovascular/Heart Health"
       ],
-      "notes": "Strong evidence base for LDL-lowering and bowel-regularity outcomes; supports cardiometabolic and GI-health use.",
+      "notes": "Strong evidence base for LDL-lowering and bowel-regularity outcomes; supports cardiometabolic and GI-health use. Retained-source scope and limitations: Conventional/alternative lipid markers in psyllium syntheses; retained sources do not themselves establish bowel/glycemia endpoints (PMID: 30239559; 18985059)",
       "notable_studies": "Systematic review/meta-analysis evidence shows psyllium lowers LDL cholesterol and related lipid targets. Key pooled analyses include PMID 30239559 and PMID 18985059, which support cardiometabolic use when soluble-fiber dosing is adequate.",
       "study_type": "systematic_review_meta",
       "last_updated": "2026-03-23",
@@ -18700,11 +18541,9 @@
       "total_enrollment": 200,
       "registry_completed_trials_count": 68,
       "effect_direction_confidence": "high",
-      "effect_direction_rationale": "Retained positive_strong classification; study_type=systematic_review_meta; evidence_level=ingredient-human; primary_outcome=Cardiovascular/Heart Health; published_tags=RCT,meta-analysis,systematic_review; registry_completed_trials_count=68; total_enrollment=200; endpoint_tags=sleep,glycemic_control,digestive_health; notes/citations contain no automated downgrade signals.",
+      "effect_direction_rationale": "Source-content attribution reconciled against retained primary references on2026-10-23. Current descriptive direction: positive_strong. Actual measured outcomes and source limitations are recorded separately. This is not attributable clinician approval; existing clinical context holds remain.",
       "endpoint_relevance_tags": [
-        "sleep",
-        "glycemic_control",
-        "digestive_health"
+        "cardiovascular"
       ]
     },
     {
@@ -18850,14 +18689,10 @@
       ],
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "immune marker support ↑",
-        "fatigue symptom support ↑"
+        "Humoral/cellular immune markers with substantial heterogeneity (PMID: 37952511)"
       ],
-      "health_goals_supported": [
-        "Immune Support",
-        "Increase Energy"
-      ],
-      "notes": "Human evidence indicates immunomodulatory effects, but heterogeneity and methodological variability are substantial. The root (Radix Astragali, huang qi) is the medicinal part named by this family, so a source-declared root preparation or extract is a family-level join; the 2023 meta-analysis pooled heterogeneous human Astragalus interventions and does not establish preparation, route or dose equivalence.",
+      "health_goals_supported": [],
+      "notes": "Human evidence indicates immunomodulatory effects, but heterogeneity and methodological variability are substantial. The root (Radix Astragali, huang qi) is the medicinal part named by this family, so a source-declared root preparation or extract is a family-level join; the 2023 meta-analysis pooled heterogeneous human Astragalus interventions and does not establish preparation, route or dose equivalence. Retained-source scope and limitations: Humoral/cellular immune markers with substantial heterogeneity; not retained clinical fatigue efficacy (PMID: 37952511)",
       "notable_studies": "Systematic review/meta-analysis of human studies found favorable immune-marker changes with high heterogeneity (PMID: 37952511).",
       "study_type": "systematic_review_meta",
       "last_updated": "2026-09-05",
@@ -18896,15 +18731,12 @@
         "unii": "922OP8YUPF"
       },
       "effect_direction": "positive_strong",
-      "primary_outcome": "Immune Support",
+      "primary_outcome": "",
       "total_enrollment": 112,
       "registry_completed_trials_count": 60,
       "effect_direction_confidence": "high",
-      "effect_direction_rationale": "Retained positive_strong classification; study_type=systematic_review_meta; evidence_level=ingredient-human; primary_outcome=Immune Support; published_tags=systematic_review,RCT; registry_completed_trials_count=60; total_enrollment=112; endpoint_tags=joint_pain,muscle_recovery; notes/citations contain no automated downgrade signals.",
-      "endpoint_relevance_tags": [
-        "joint_pain",
-        "muscle_recovery"
-      ]
+      "effect_direction_rationale": "Source-content attribution reconciled against retained primary references on2026-10-23. Current descriptive direction: positive_strong. Actual measured outcomes and source limitations are recorded separately. This is not attributable clinician approval; existing clinical context holds remain.",
+      "endpoint_relevance_tags": []
     },
     {
       "id": "INGR_BROMELAIN",
@@ -18922,15 +18754,10 @@
       ],
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "sinus symptom burden ↓",
-        "post-exercise inflammation markers ↓",
-        "digestive comfort ↑"
+        "Oral pain/sinus findings and separate topical debridement outcomes (PMID: 37157782)"
       ],
-      "health_goals_supported": [
-        "Digestive Health",
-        "Healthy Aging/Longevity"
-      ],
-      "notes": "Systematic review evidence suggests modest pain/sinus-related benefits with generally acceptable safety.",
+      "health_goals_supported": [],
+      "notes": "Systematic review evidence suggests modest pain/sinus-related benefits with generally acceptable safety. Retained-source scope and limitations: Oral pain/sinus findings and separate topical debridement evidence; route-specific outcomes cannot establish swallowed wound-healing or generic digestive efficacy (PMID: 37157782)",
       "notable_studies": "Systematic review/meta-analysis of 54 studies found small but significant oral pain benefit and potential sinusitis utility (PMID: 37157782).",
       "study_type": "systematic_review_meta",
       "last_updated": "2026-02-17",
@@ -18967,19 +18794,12 @@
         "unii": "U182GP2CF3"
       },
       "effect_direction": "positive_weak",
-      "primary_outcome": "Digestive Health",
+      "primary_outcome": "",
       "total_enrollment": 110,
       "registry_completed_trials_count": 22,
       "effect_direction_confidence": "medium",
-      "effect_direction_rationale": "Retained positive_weak classification; study_type=systematic_review_meta; evidence_level=ingredient-human; primary_outcome=Digestive Health; published_tags=systematic_review,RCT; registry_completed_trials_count=22; total_enrollment=110; endpoint_tags=joint_health,immune_support,stress_mood,cardiovascular,digestive_health,muscle_recovery; notes/citations include weak-effect language.",
-      "endpoint_relevance_tags": [
-        "joint_health",
-        "immune_support",
-        "stress_mood",
-        "cardiovascular",
-        "digestive_health",
-        "muscle_recovery"
-      ]
+      "effect_direction_rationale": "Source-content attribution reconciled against retained primary references on2026-10-23. Current descriptive direction: positive_weak. Actual measured outcomes and source limitations are recorded separately. This is not attributable clinician approval; existing clinical context holds remain.",
+      "endpoint_relevance_tags": []
     },
     {
       "id": "INGR_PROPOLIS",
@@ -18990,26 +18810,18 @@
         "propolis extract"
       ],
       "category": "immune",
-      "evidence_level": "ingredient-human",
+      "evidence_level": "reference",
       "published_studies": [
         "RCT",
         "systematic_review",
         "meta-analysis"
       ],
       "score_contribution": "tier_1",
-      "key_endpoints": [
-        "oral health outcomes ↑",
-        "mucositis severity ↓",
-        "wound healing markers ↑",
-        "immune modulation ↑"
-      ],
-      "health_goals_supported": [
-        "Immune Support",
-        "Healthy Aging/Longevity"
-      ],
-      "notes": "Human trials and meta-analyses support oral-health applications, with results influenced by extract standardization.",
-      "notable_studies": "Recent meta-analysis of RCTs found propolis mouthwash reduced plaque/gingival inflammation outcomes (PMID: 41003407).",
-      "study_type": "systematic_review_meta",
+      "key_endpoints": [],
+      "health_goals_supported": [],
+      "notes": "41003407 concerns local mouthwashes/toothpastes and dental plaque/gingival measures. It does not establish swallowed-supplement immune, wound-healing or mucositis efficacy. Reference context only; no affirmative ingredient-level clinical credit or clinician approval established.",
+      "notable_studies": "Recent meta-analysis of RCTs found propolis mouthwash reduced plaque/gingival inflammation outcomes (PMID: 41003407). Source disposition: 41003407 concerns local mouthwashes/toothpastes and dental plaque/gingival measures. It does not establish swallowed-supplement immune, wound-healing or mucositis efficacy.",
+      "study_type": "reference",
       "last_updated": "2026-02-17",
       "references_structured": [
         {
@@ -19037,15 +18849,13 @@
         "unii": "6Y8XYV2NOF"
       },
       "effect_direction": "positive_strong",
-      "primary_outcome": "Immune Support",
-      "total_enrollment": 200,
-      "registry_completed_trials_count": 83,
+      "primary_outcome": "",
+      "total_enrollment": null,
+      "registry_completed_trials_count": null,
       "effect_direction_confidence": "high",
-      "effect_direction_rationale": "Retained positive_strong classification; study_type=systematic_review_meta; evidence_level=ingredient-human; primary_outcome=Immune Support; published_tags=RCT,systematic_review,meta-analysis; registry_completed_trials_count=83; total_enrollment=200; endpoint_tags=immune_support,sleep; notes/citations contain no automated downgrade signals.",
-      "endpoint_relevance_tags": [
-        "immune_support",
-        "sleep"
-      ]
+      "effect_direction_rationale": "Source-content attribution reconciled against retained primary references on2026-10-23. Current descriptive direction: positive_strong. Actual measured outcomes and source limitations are recorded separately. This is not attributable clinician approval; existing clinical context holds remain.",
+      "endpoint_relevance_tags": [],
+      "scoring_eligible": false
     },
     {
       "id": "INGR_ECHINACEA",
@@ -20326,15 +20136,12 @@
       ],
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "sleep quality ↑",
-        "sleep latency ↓",
-        "anxiety symptom scores ↓"
+        "Sleep outcomes varying by measure (PMID: 39106912)"
       ],
       "health_goals_supported": [
-        "Sleep Quality",
-        "Reduce Stress/Anxiety"
+        "Sleep Quality"
       ],
-      "notes": "Systematic-review-level evidence supports chamomile for selected sleep and anxiety outcomes, with moderate heterogeneity by population and preparation.",
+      "notes": "Systematic-review-level evidence supports chamomile for selected sleep and anxiety outcomes, with moderate heterogeneity by population and preparation. Retained-source scope and limitations: sleep outcomes vary by measure; retained synthesis does not establish anxiety efficacy or universal improvement in sleep duration/efficiency (PMID: 39106912)",
       "last_updated": "2026-02-20",
       "notable_studies": "A 2024 systematic review/meta-analysis reported sleep-related improvements in several clinical contexts, with heterogeneity across populations and preparations (PMID: 39106912).",
       "references_structured": [
@@ -20377,10 +20184,9 @@
       "total_enrollment": 248,
       "registry_completed_trials_count": 29,
       "effect_direction_confidence": "high",
-      "effect_direction_rationale": "Retained positive_strong classification; study_type=systematic_review_meta; evidence_level=ingredient-human; primary_outcome=Sleep Quality; published_tags=RCT,systematic_review,meta-analysis; registry_completed_trials_count=29; total_enrollment=248; endpoint_tags=stress_mood,muscle_recovery; notes/citations contain no automated downgrade signals.",
+      "effect_direction_rationale": "Source-content attribution reconciled against retained primary references on2026-10-23. Current descriptive direction: positive_strong. Actual measured outcomes and source limitations are recorded separately. This is not attributable clinician approval; existing clinical context holds remain.",
       "endpoint_relevance_tags": [
-        "stress_mood",
-        "muscle_recovery"
+        "sleep"
       ]
     },
     {
@@ -20403,15 +20209,11 @@
       ],
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "time-to-exhaustion ↑",
-        "exercise economy ↑",
-        "systolic blood pressure ↓"
+        "Dietary nitrate muscular-performance measures (PMID: 33554654)",
+        "Food-source-specific endurance measures (PMID: 34965876)"
       ],
-      "health_goals_supported": [
-        "Muscle Growth & Recovery",
-        "Cardiovascular/Heart Health"
-      ],
-      "notes": "Nitrate-rich beetroot has systematic-review evidence for small-to-moderate improvements in exercise performance and modest blood-pressure reductions.",
+      "health_goals_supported": [],
+      "notes": "Retained33554654and34965876sources concern nitrate/food-source muscular and endurance outcomes. They do not establish blood-pressure benefit in this record or equivalence between root-powder mass and nitrate exposure.",
       "last_updated": "2026-03-23",
       "notable_studies": "Meta-analyses report small-to-moderate ergogenic and vascular effects from dietary nitrate/beetroot interventions in adults (PMIDs: 33554654, 34965876).",
       "references_structured": [
@@ -20479,15 +20281,12 @@
         }
       ],
       "effect_direction": "positive_weak",
-      "primary_outcome": "Muscle Growth & Recovery",
+      "primary_outcome": "",
       "total_enrollment": 80,
       "registry_completed_trials_count": 72,
       "effect_direction_confidence": "medium",
-      "effect_direction_rationale": "Retained positive_weak classification; study_type=systematic_review_meta; evidence_level=ingredient-human; primary_outcome=Muscle Growth & Recovery; published_tags=RCT,systematic_review,meta-analysis; registry_completed_trials_count=72; total_enrollment=80; endpoint_tags=cardiovascular,muscle_recovery; notes/citations include weak-effect language.",
-      "endpoint_relevance_tags": [
-        "cardiovascular",
-        "muscle_recovery"
-      ]
+      "effect_direction_rationale": "Source-content attribution reconciled against retained primary references on2026-10-23. Current descriptive direction: positive_weak. Actual measured outcomes and source limitations are recorded separately. This is not attributable clinician approval; existing clinical context holds remain.",
+      "endpoint_relevance_tags": []
     },
     {
       "id": "INGR_WHEY_PROTEIN",
@@ -21105,17 +20904,13 @@
       ],
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "cognitive decline",
-        "neuropathy",
-        "AGE reduction"
+        "Primary ADAS-Cog p=0.125; secondary CDR p=0.034 and exploratory AGE p=0.044 (PMID: 33074237)",
+        "Alcohol-consumption findings in a small female subgroup (PMID: 23992649)"
       ],
-      "health_goals_supported": [
-        "Focus & Mental Clarity",
-        "Blood Sugar Support"
-      ],
-      "notes": "Fat-soluble thiamine derivative with higher bioavailability than thiamine. Phase II Alzheimer's RCT (PMID 33074237) showed reduced cognitive decline. Alcohol dependence RCT (PMID 23992649) showed neurological benefit. Distinct from thiamine — different absorption, different endpoints studied.",
+      "health_goals_supported": [],
+      "notes": "Benfotiamine is a distinct thiamine derivative. Retained sources have mixed and endpoint-specific findings; primary, secondary and exploratory outcomes must remain separate. They do not establish general neurological benefit. Clinical applicability and approval remain incomplete. Retained-source scope and limitations: Primary ADAS-Cog change was not statistically significant (p=0.125); secondary CDR and exploratory AGE findings differed (PMID: 33074237) Alcohol-consumption findings in a small female subgroup, not demonstrated neurological improvement (PMID: 23992649)",
       "last_updated": "2026-03-24",
-      "notable_studies": "Gibson et al. (2020, PMID 33074237) Phase II RCT in Alzheimer's disease found benfotiamine reduced cognitive decline vs placebo over 12 months (n=70). Manzardo et al. (2013, PMID 23992649) double-blind RCT in severe alcohol dependence (n=120) showed neurological improvement.",
+      "notable_studies": "PMID 33074237: 70 participants over 12 months; primary ADAS-Cog p=0.125, secondary CDR p=0.034, exploratory AGE p=0.044. PMID 23992649: 120 randomized, 70 completed; alcohol consumption, with significant findings in a small female subgroup, not a neurological efficacy endpoint.",
       "references_structured": [
         {
           "pmid": "33074237",
@@ -21128,16 +20923,15 @@
           "evidence_grade": "rct"
         }
       ],
-      "effect_direction": "positive_strong",
-      "primary_outcome": "Focus & Mental Clarity",
+      "effect_direction": "mixed",
+      "primary_outcome": "",
       "total_enrollment": 500,
       "published_studies_count": 42,
       "registry_completed_trials_count": 11,
       "effect_direction_confidence": "high",
-      "effect_direction_rationale": "Retained positive_strong classification; study_type=rct_multiple; evidence_level=ingredient-human; primary_outcome=Focus & Mental Clarity; published_tags=RCT; published_studies_count=42; registry_completed_trials_count=11; total_enrollment=500; endpoint_tags=stress_mood,glycemic_control; notes/citations contain no automated downgrade signals.",
+      "effect_direction_rationale": "Source-content attribution reconciled against retained primary references on2026-10-23. Current descriptive direction: mixed. Actual measured outcomes and source limitations are recorded separately. This is not attributable clinician approval; existing clinical context holds remain.",
       "endpoint_relevance_tags": [
-        "stress_mood",
-        "glycemic_control"
+        "focus_memory"
       ]
     },
     {
@@ -21572,26 +21366,20 @@
         "molybdenum"
       ],
       "category": "mineral_supplement",
-      "evidence_level": "ingredient-human",
-      "study_type": "rct_single",
+      "evidence_level": "reference",
+      "study_type": "reference",
       "published_studies": [
         "RCT"
       ],
       "score_contribution": "tier_2",
-      "key_endpoints": [
-        "Decreased stroke mortality in combination with vitamin C in Linxian General Population Trial (n=29,584, 5.25-year RCT) (PMID: 19318634)",
-        "Essential cofactor for sulfite oxidase, xanthine oxidase, and aldehyde oxidase enzymatic function (no standalone supplement RCT available)",
-        "No significant standalone cancer mortality reduction in Linxian 15-year follow-up (PMID: 16896051)"
-      ],
-      "health_goals_supported": [
-        "Immune Support"
-      ],
-      "primary_outcome": "Immune Support",
+      "key_endpoints": [],
+      "health_goals_supported": [],
+      "primary_outcome": "",
       "effect_direction": "positive_strong",
-      "total_enrollment": 75,
-      "notes": "Molybdenum has extremely limited standalone clinical trial data. Primary evidence comes from the Linxian trials where it was co-administered with vitamin C, making individual contribution impossible to isolate. Biological role as enzyme cofactor is well-established but supplement-specific clinical evidence is sparse.",
+      "total_enrollment": null,
+      "notes": "16896051 and19318634 are Linxian combination-regimen reports; vitamin C plus molybdenum does not isolate molybdenum benefit. Lung-cancer mortality was not significantly reduced. Dental-mechanics/ALXN registrations are not dietary molybdenum efficacy trials. Reference context only; no affirmative ingredient-level clinical credit or clinician approval established.",
       "last_updated": "2026-04-02",
-      "notable_studies": "NCT04892056 (n=30): Evaluation of the Rate of Anterior Segment Retraction Using Two Types of Mechanics. NCT01894165 (n=24): Phase 1 Single Dose Study of ALXN1101 in Healthy Volunteers. NCT04594252 (n=17): Copper Balance in Healthy Participants Administered ALXN1840.",
+      "notable_studies": "NCT04892056 (n=30): Evaluation of the Rate of Anterior Segment Retraction Using Two Types of Mechanics. NCT01894165 (n=24): Phase 1 Single Dose Study of ALXN1101 in Healthy Volunteers. NCT04594252 (n=17): Copper Balance in Healthy Participants Administered ALXN1840. Source disposition: 16896051 and19318634 are Linxian combination-regimen reports; vitamin C plus molybdenum does not isolate molybdenum benefit. Lung-cancer mortality was not significantly reduced. Dental-mechanics/ALXN registrations are not dietary molybdenum efficacy trials.",
       "references_structured": [
         {
           "pmid": "19318634",
@@ -21608,13 +21396,12 @@
           "note": "Extracted from key_endpoints text — needs content verification"
         }
       ],
-      "published_studies_count": 28,
-      "registry_completed_trials_count": 28,
+      "published_studies_count": null,
+      "registry_completed_trials_count": null,
       "effect_direction_confidence": "medium",
-      "effect_direction_rationale": "Retained positive_strong classification; study_type=rct_single; evidence_level=ingredient-human; primary_outcome=Immune Support; published_tags=RCT; published_studies_count=28; registry_completed_trials_count=28; total_enrollment=75; endpoint_tags=immune_support; notes/citations contain no automated downgrade signals.",
-      "endpoint_relevance_tags": [
-        "immune_support"
-      ]
+      "effect_direction_rationale": "Source-content attribution reconciled against retained primary references on2026-10-23. Current descriptive direction: positive_strong. Actual measured outcomes and source limitations are recorded separately. This is not attributable clinician approval; existing clinical context holds remain.",
+      "endpoint_relevance_tags": [],
+      "scoring_eligible": false
     },
     {
       "id": "INGR_SPIRULINA",
@@ -22045,13 +21832,11 @@
       "key_endpoints": [
         "Reduced fasting blood glucose by 21.43 mg/dL (p=0.005) and HbA1c by 0.44% (p=0.01) in T2DM patients, meta-analysis of 16 RCTs (PMID: 40210172)",
         "Reduced systolic BP by 3.06 mmHg (p<0.001) and diastolic BP by 2.69 mmHg (p<0.001) in meta-analysis of RCTs (PMID: 37341696)",
-        "2g/day for 12 months lowered FBG by avg 62 mg/dL and reduced HbA1c by 1.52% with improved insulin resistance (HOMA2) in 94-patient RCT (PMID: 21675032)",
+        "Seed capsules at 1, 2 or 3 g/day for 3 months as adjunct to diabetes drugs; 2 g group FBG changes were 45/62/56 mg/dL at weeks 4/8/12, not an oil-only 12-month result (PMID: 21675032)",
         "500mg twice daily achieved 62% symptom recovery vs 36% control (p=0.001) with shorter recovery duration in 173-patient COVID-19 RCT (PMID: 34407441)"
       ],
-      "health_goals_supported": [
-        "Healthy Aging/Longevity"
-      ],
-      "primary_outcome": "Healthy Aging/Longevity",
+      "health_goals_supported": [],
+      "primary_outcome": "",
       "effect_direction": "positive_strong",
       "total_enrollment": 500,
       "notes": "Black seed oil (Nigella sativa) has strong evidence from multiple large meta-analyses (16-30 RCTs) with consistent glycemic and blood pressure endpoints. FBG and HbA1c reductions are well-replicated across studies.",
@@ -22104,12 +21889,10 @@
       "published_studies_count": 28,
       "registry_completed_trials_count": 28,
       "effect_direction_confidence": "high",
-      "effect_direction_rationale": "Retained positive_strong classification; study_type=rct_multiple; evidence_level=ingredient-human; primary_outcome=Healthy Aging/Longevity; published_tags=RCT; published_studies_count=28; registry_completed_trials_count=28; total_enrollment=500; endpoint_tags=immune_support,cardiovascular,glycemic_control,muscle_recovery; notes/citations contain no automated downgrade signals.",
+      "effect_direction_rationale": "Source-content attribution reconciled against retained primary references on2026-10-23. Current descriptive direction: positive_strong. Actual measured outcomes and source limitations are recorded separately. This is not attributable clinician approval; existing clinical context holds remain.",
       "endpoint_relevance_tags": [
-        "immune_support",
         "cardiovascular",
-        "glycemic_control",
-        "muscle_recovery"
+        "glycemic_control"
       ]
     },
     {
@@ -22128,16 +21911,13 @@
       "key_endpoints": [
         "Attenuated tear film osmolarity increase vs placebo during 3-month supplementation with 2g/day oil (ITT p=0.04, PP p=0.02) (PMID: 20554904)",
         "Reduced contact lens-related eye discomfort days from 81% to 65% vs placebo (p=0.049) in 3-month RCT (PMID: 20554904)",
-        "Reduced triglycerides (SMD -0.722, p<0.001), total cholesterol (SMD -0.345, p=0.021), and LDL-C (SMD -0.396, p=0.031) in meta-analysis of 15 RCTs (PMID: 36043374)",
-        "Improved skin hydration, elasticity, and texture vs placebo by week 4 in 12-week RCT of 101 women aged 40-59 (PMID: 23472020)"
+        "Reduced triglycerides (SMD -0.722, p<0.001), total cholesterol (SMD -0.345, p=0.021), and LDL-C (SMD -0.396, p=0.031) in meta-analysis of 15 RCTs (PMID: 36043374)"
       ],
-      "health_goals_supported": [
-        "Healthy Aging/Longevity"
-      ],
-      "primary_outcome": "Healthy Aging/Longevity",
+      "health_goals_supported": [],
+      "primary_outcome": "",
       "effect_direction": "positive_strong",
       "total_enrollment": 138,
-      "notes": "Sea buckthorn has moderate evidence across dry eye, metabolic, and skin health endpoints. The strongest trial evidence is for dry eye/tear film effects (PMID: 20554904) and the lipid meta-analysis of 15 RCTs (PMID: 36043374). Omega-7 fatty acid (palmitoleic acid) is the primary bioactive.",
+      "notes": "Retained human sources concern dry-eye and lipid outcomes (20554904, 36043374). PMID 23472020 is aflatoxin poisoning in broiler chickens, not a human skin trial; it supplies no human skin-benefit credit. Exact preparation and clinical review remain necessary.",
       "last_updated": "2026-04-02",
       "notable_studies": "NCT01697085 (n=116): Effects of Sea Buckthorn Oil on Mucous Membranes. NCT02140697 (n=80): Efficacy and Safety of Hippophae Rhamnoides L. Leaf Extract on Body Fat. NCT05581108 (n=66): Enhancement of Learning and Memory Following Supplementation With Juice PLUS+® OMEGA in an Adolescent Population.",
       "references_structured": [
@@ -22167,17 +21947,16 @@
           "url": "https://pubmed.ncbi.nlm.nih.gov/23472020/",
           "source": "PubMed",
           "verified": true,
-          "note": "Extracted from key_endpoints text — needs content verification"
+          "note": "Broiler-chicken aflatoxin experiment; not a human skin trial.",
+          "scoring_eligible": false
         }
       ],
       "published_studies_count": 12,
       "registry_completed_trials_count": 12,
       "effect_direction_confidence": "high",
-      "effect_direction_rationale": "Retained positive_strong classification; study_type=rct_multiple; evidence_level=ingredient-human; primary_outcome=Healthy Aging/Longevity; published_tags=RCT; published_studies_count=12; registry_completed_trials_count=12; total_enrollment=138; endpoint_tags=immune_support,focus_memory,glycemic_control; notes/citations contain no automated downgrade signals.",
+      "effect_direction_rationale": "Source-content attribution reconciled against retained primary references on2026-10-23. Current descriptive direction: positive_strong. Actual measured outcomes and source limitations are recorded separately. This is not attributable clinician approval; existing clinical context holds remain.",
       "endpoint_relevance_tags": [
-        "immune_support",
-        "focus_memory",
-        "glycemic_control"
+        "cardiovascular"
       ]
     },
     {
@@ -22187,26 +21966,20 @@
         "slippery elm"
       ],
       "category": "general_herbs",
-      "evidence_level": "ingredient-human",
-      "study_type": "rct_single",
+      "evidence_level": "reference",
+      "study_type": "reference",
       "published_studies": [
-        "RCT"
+        "uncontrolled clinical studies"
       ],
       "score_contribution": "tier_2",
-      "key_endpoints": [
-        "Reduced IBS global symptom severity (p=0.0005), abdominal pain (p=0.032), and bloating (p=0.034) in constipation-predominant IBS as part of multi-herb formula (PMID: 20954962)",
-        "Reduced bloating (p<0.0001), flatulence (p=0.0001), and abdominal pain (p=0.006) in diarrhea-predominant IBS as part of multi-herb formula (PMID: 20954962)",
-        "Improved indigestion, heartburn, nausea, and abdominal pain with positive gut microbiome changes over 16 weeks in 43 adults as part of combination formula (PMID: 32151878)"
-      ],
-      "health_goals_supported": [
-        "Healthy Aging/Longevity"
-      ],
-      "primary_outcome": "Healthy Aging/Longevity",
+      "key_endpoints": [],
+      "health_goals_supported": [],
+      "primary_outcome": "",
       "effect_direction": "positive_strong",
-      "total_enrollment": 618,
-      "notes": "IMPORTANT: No rigorous standalone slippery elm RCTs exist. All human data comes from multi-ingredient formulas containing slippery elm. Auto-discovered NCTs (NCT04036006, NCT02233088) are mismatches — they are 'Enhanced Lifestyles for Metabolic Syndrome (ELM)' lifestyle studies, not slippery elm trials. Traditional use for GI mucosal soothing is well-documented but lacks standalone clinical validation.",
+      "total_enrollment": null,
+      "notes": "20954962 is a 31-person uncontrolled two-formula pilot;32151878 is a43-completer multi-ingredient pre/post study. Neither isolates slippery elm. Previously associated ELM lifestyle registrations are unrelated; their counts cannot substantiate supplement efficacy. Reference context only; no affirmative ingredient-level clinical credit or clinician approval established.",
       "last_updated": "2026-04-02",
-      "notable_studies": "NOTE: Originally auto-associated NCTs (NCT04036006, NCT02233088) are mismatches — these are 'Enhanced Lifestyles for Metabolic Syndrome' lifestyle studies. Actual slippery elm evidence: PMID 20954962 (IBS pilot, multi-herb formula, n=31), PMID 32151878 (Gut Relief combination formula, n=43).",
+      "notable_studies": "NOTE: Originally auto-associated NCTs (NCT04036006, NCT02233088) are mismatches — these are 'Enhanced Lifestyles for Metabolic Syndrome' lifestyle studies. Actual slippery elm evidence: PMID 20954962 (IBS pilot, multi-herb formula, n=31), PMID 32151878 (Gut Relief combination formula, n=43). Source disposition: 20954962 is a 31-person uncontrolled two-formula pilot;32151878 is a43-completer multi-ingredient pre/post study. Neither isolates slippery elm. Previously associated ELM lifestyle registrations are unrelated; their counts cannot substantiate supplement efficacy.",
       "references_structured": [
         {
           "pmid": "20954962",
@@ -22223,15 +21996,12 @@
           "note": "Extracted from key_endpoints text — needs content verification"
         }
       ],
-      "published_studies_count": 7,
-      "registry_completed_trials_count": 7,
+      "published_studies_count": null,
+      "registry_completed_trials_count": null,
       "effect_direction_confidence": "medium",
-      "effect_direction_rationale": "Retained positive_strong classification; study_type=rct_single; evidence_level=ingredient-human; primary_outcome=Healthy Aging/Longevity; published_tags=RCT; published_studies_count=7; registry_completed_trials_count=7; total_enrollment=618; endpoint_tags=stress_mood,glycemic_control,digestive_health; notes/citations contain no automated downgrade signals.",
-      "endpoint_relevance_tags": [
-        "stress_mood",
-        "glycemic_control",
-        "digestive_health"
-      ]
+      "effect_direction_rationale": "Source-content attribution reconciled against retained primary references on2026-10-23. Current descriptive direction: positive_strong. Actual measured outcomes and source limitations are recorded separately. This is not attributable clinician approval; existing clinical context holds remain.",
+      "endpoint_relevance_tags": [],
+      "scoring_eligible": false
     },
     {
       "id": "INGR_BILBERRY",
@@ -22247,17 +22017,15 @@
       ],
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "Improved ciliary muscle contraction (HFC-1) vs placebo (p=0.017) and reduced VDT-induced eye strain (p=0.049) at 240mg/day for 12 weeks in 109 adults (PMID: 32106548)",
+        "Objective ciliary-muscle accommodation HFC-1 with 240 mg/day extract; p=0.049 concerns task-related change (PMID: 32106548)",
         "Alleviated critical flicker fusion decline (p=0.023) and reduced subjective eye fatigue symptoms at 480mg/day for 8 weeks in VDT workers (PMID: 25923485)",
-        "Increased HDL cholesterol and decreased LDL cholesterol at 320mg/day bilberry-derived anthocyanins for 12 weeks in hypercholesterolemic individuals (PMID: 25191571)"
+        "Single 0.47 g standardized extract in eight men with T2D reduced postprandial glucose/insulin AUC (PMID: 25191571)"
       ],
-      "health_goals_supported": [
-        "Healthy Aging/Longevity"
-      ],
-      "primary_outcome": "Healthy Aging/Longevity",
+      "health_goals_supported": [],
+      "primary_outcome": "",
       "effect_direction": "positive_strong",
       "total_enrollment": 169,
-      "notes": "Bilberry has moderate evidence for eye fatigue/visual function endpoints (PMID: 32106548, 25923485) and anthocyanin-mediated lipid improvements. NCT03415503 confirmed as anthocyanin dose-dependent lipid metabolism trial (n=300). Standardized extracts typically contain 36% anthocyanins.",
+      "notes": "Retained eye-fatigue/accommodation trials and an acute eight-man glycemia study concern specific preparations/outcomes. They do not support the former chronic lipid claim attributed to 25191571. Named NCTs are retained provenance, not proof of bilberry-specific efficacy or independently verified aggregate enrollment. Retained-source scope and limitations: Objective ciliary-muscle accommodation HFC-1 findings with 240 mg/day extract for 12 weeks; p=0.049 concerns task-related change, not a subjective eye-strain score (PMID: 32106548) Alleviated critical flicker fusion decline (p=0.023) and reduced subjective eye fatigue symptoms at 480mg/day for 8 weeks in VDT workers (PMID: 25923485) Single 0.47 g standardized-extract capsule in eight men with diet-controlled T2D reduced postprandial glucose/insulin AUC; not a 12-week lipid trial (PMID: 25191571)",
       "last_updated": "2026-04-02",
       "notable_studies": "NCT03415503 (n=169): Dietary Anthocyanins Improve Lipid Metabolism in a Dose - Dependent Manner. NCT01568983 (n=153): The Effects of Polyphenol-rich Berry Juice on Blood Pressure in Hypertensive Subjects. NCT02194361 (n=119): Efficacy of a Standardised Bilberry Extract in Improving the Night Vision of Healthy Volunteers.",
       "references_structured": [
@@ -22293,10 +22061,8 @@
       "published_studies_count": 30,
       "registry_completed_trials_count": 30,
       "effect_direction_confidence": "high",
-      "effect_direction_rationale": "Retained positive_strong classification; study_type=rct_multiple; evidence_level=ingredient-human; primary_outcome=Healthy Aging/Longevity; published_tags=RCT; published_studies_count=30; registry_completed_trials_count=30; total_enrollment=169; endpoint_tags=stress_mood,cardiovascular,glycemic_control; notes/citations contain no automated downgrade signals.",
+      "effect_direction_rationale": "Source-content attribution reconciled against retained primary references on2026-10-23. Current descriptive direction: positive_strong. Actual measured outcomes and source limitations are recorded separately. This is not attributable clinician approval; existing clinical context holds remain.",
       "endpoint_relevance_tags": [
-        "stress_mood",
-        "cardiovascular",
         "glycemic_control"
       ]
     },
@@ -22539,7 +22305,7 @@
       "aliases": [
         "ceramides"
       ],
-      "category": "cardiovascular",
+      "category": "skin_hair_collagen",
       "evidence_level": "ingredient-human",
       "study_type": "rct_multiple",
       "published_studies": [
@@ -22549,16 +22315,16 @@
       "key_endpoints": [
         "Improved stratum corneum hydration over 12 weeks of oral ceramide supplementation (0.8mg dihydroceramide/day) vs placebo (PMID: 33055441)",
         "Reduced transepidermal water loss (TEWL) vs placebo at 12 weeks (p=0.04) with oral ceramides in 30-patient double-blind RCT (PMID: 38999848)",
-        "Improved skin hydration, firmness, elasticity, and reduced wrinkle severity (all p<0.01) with oral rice ceramide supplementation in 50 participants (PMID: 35807914)",
-        "Meta-analysis of 66 RCTs confirmed oral ceramide supplementation increases skin hydration and decreases TEWL vs placebo (PMID: 35719159)"
+        "Open-label prospective 50-volunteer rice-ceramide study reported baseline changes, not placebo-adjusted efficacy (PMID: 35807914)",
+        "Review included 66 RCTs across multiple skin supplements; the ceramide subset, not 66 ceramide trials, supported hydration/TEWL findings (PMID: 35719159)"
       ],
       "health_goals_supported": [
-        "Cardiovascular/Heart Health"
+        "Skin, Hair & Nails"
       ],
-      "primary_outcome": "Cardiovascular/Heart Health",
+      "primary_outcome": "Skin, Hair & Nails",
       "effect_direction": "positive_strong",
       "total_enrollment": 129,
-      "notes": "Ceramides have consistent evidence for skin barrier improvement: TEWL reduction and hydration increase are the most replicated endpoints. Strongest placebo-controlled evidence from meta-analysis (PMID: 35719159) and wine lees RCT (PMID: 38999848). Effective doses range from 0.8-5mg ceramides/day.",
+      "notes": "Retained sources concern preparation-specific skin hydration/barrier outcomes, not cardiovascular or cognitive effects. Rice-ceramide source35807914 is open-label; review35719159 includes66trials across different supplement classes. Studied preparations/exposures do not establish a universal ceramide dose threshold.",
       "last_updated": "2026-04-02",
       "notable_studies": "NCT06097871 (n=102): RCT of an Oral Acne Supplement for Adult Women. NCT04249128 (n=75): Nourishing Hair, Skin & Nails Supplement Study (Derm Aid). NCT05390866 (n=36): Investigating the Circulating Sphingolipidome Response to a Single High-intensity Interval Training Session.",
       "references_structured": [
@@ -22594,9 +22360,9 @@
       "published_studies_count": 26,
       "registry_completed_trials_count": 26,
       "effect_direction_confidence": "high",
-      "effect_direction_rationale": "Retained positive_strong classification; study_type=rct_multiple; evidence_level=ingredient-human; primary_outcome=Cardiovascular/Heart Health; published_tags=RCT; published_studies_count=26; registry_completed_trials_count=26; total_enrollment=129; endpoint_tags=focus_memory; notes/citations contain no automated downgrade signals.",
+      "effect_direction_rationale": "Source-content attribution reconciled against retained primary references on2026-10-23. Current descriptive direction: positive_strong. Actual measured outcomes and source limitations are recorded separately. This is not attributable clinician approval; existing clinical context holds remain.",
       "endpoint_relevance_tags": [
-        "focus_memory"
+        "skin_health"
       ]
     },
     {
