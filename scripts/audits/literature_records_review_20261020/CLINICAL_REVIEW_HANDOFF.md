@@ -109,7 +109,7 @@ expectations; corrected tests require the missing context and preserve nontransf
 assertions (12named tests pass). CI40117945440 failed six obsolete source-completion assertions across three portable test files.
 All were corrected against actual empty automated stamps, retaining genuine authored-negative
 controls and unchanged score/owner/dose assertions;75+18named tests pass. Earlier40117665750
-was cancelled/superseded. Neither run is a pass. Final whole-fastCI40119008766 passes on3b9a3f37ed9a37f051cc0dedf05f278d0b77aad7:23,844passed/192declaredskips, all4groups/skipguards green. Final report-only follow-up preserves qualified runtime/data/tests. Main integration is next; scientific/rebuild gates remain blocked.
+was cancelled/superseded. Neither run is a pass. Final whole-fastCI40119008766 passes on3b9a3f37ed9a37f051cc0dedf05f278d0b77aad7:23,844passed/192declaredskips, all4groups/skipguards green. Final report-only follow-up preserves qualified runtime/data/tests. Main integration completed; scientific/rebuild gates remain blocked.
 
 ## Single forwardable request
 
@@ -124,3 +124,5 @@ through the existing review handoff owner, not a new assessment registry.
 The standalone Dr.Pham message also includes all146existing generic citation flags with exact record/source/title references, explicitly distinguishing actual-use decisions from format-only, excluded and unused historical references. It does not create146new approval obligations or imply title-word flags are confirmed scientific defects.
 
 Final independent bounded technical review of the completed runtime found no concrete remaining blocker. All443capture source bindings match;19suppressed controls retain release treatment. The final forwardable document coverage is148Aitems/506Bsubjects/171Csamplecases/146Dsource flags,36NCTidentifiers; source decisions and actual-use triage remain explicitly separate.
+
+Integration verified: `d7e8e6954` and qualified candidate `3b9a3f37ed9a37f051cc0dedf05f278d0b77aad7` are contained in fetched `origin/main`. Main source/data/tests match the green checkpoint; intervening changes are review documents only. Whole-fastCI40119008766 passed23,844tests/192declaredskips; local546/24declaredskips passed. No duplicate checkpoint is required for this documentation-only integration note. Scientific pre-rebuild and post-rebuild release gates remain BLOCKED. Unrelated concurrent private-submission and submission-import-test working edits were preserved and not included in this verified batch.
