@@ -2215,7 +2215,6 @@
         "unii": "KG21X1090A"
       },
       "effect_direction": "positive_strong",
-      "primary_outcome": "",
       "total_enrollment": 500,
       "effect_direction_confidence": "high",
       "effect_direction_rationale": "Source-content attribution reconciled against retained primary references on2026-10-23. Current descriptive direction: positive_strong. Actual measured outcomes and source limitations are recorded separately. This is not attributable clinician approval; existing clinical context holds remain.",
@@ -4380,7 +4379,6 @@
         "unii": "0I8H2M0L7N"
       },
       "effect_direction": "mixed",
-      "primary_outcome": "",
       "total_enrollment": null,
       "registry_completed_trials_count": 26,
       "effect_direction_confidence": "medium",
@@ -5804,7 +5802,6 @@
         "unii": "H6241UJ22B"
       },
       "effect_direction": "positive_strong",
-      "primary_outcome": "",
       "total_enrollment": 17448,
       "registry_completed_trials_count": 214,
       "effect_direction_confidence": "high",
@@ -6541,7 +6538,6 @@
         "unii": "I38ZP9992A"
       },
       "effect_direction": "positive_weak",
-      "primary_outcome": "",
       "total_enrollment": 250,
       "registry_completed_trials_count": 11,
       "effect_direction_confidence": "medium",
@@ -6825,7 +6821,6 @@
         "unii": "9IKM0I5T1E"
       },
       "effect_direction": "positive_weak",
-      "primary_outcome": "",
       "total_enrollment": 200,
       "registry_completed_trials_count": 70,
       "effect_direction_confidence": "medium",
@@ -9669,7 +9664,6 @@
         "unii": "654825W09Z"
       },
       "effect_direction": "positive_weak",
-      "primary_outcome": "",
       "total_enrollment": 107,
       "registry_completed_trials_count": 18,
       "effect_direction_confidence": "medium",
@@ -11398,7 +11392,6 @@
         "unii": "U87FK77H25"
       },
       "effect_direction": "mixed",
-      "primary_outcome": "",
       "total_enrollment": 829,
       "registry_completed_trials_count": 8,
       "effect_direction_confidence": "medium",
@@ -11850,7 +11843,6 @@
         "unii": "9IKM0I5T1E"
       },
       "effect_direction": "mixed",
-      "primary_outcome": "",
       "total_enrollment": 161,
       "registry_completed_trials_count": 7,
       "effect_direction_confidence": "medium",
@@ -12303,7 +12295,6 @@
         "unii": "8XPW32PR7I"
       },
       "effect_direction": "positive_weak",
-      "primary_outcome": "",
       "total_enrollment": 40,
       "effect_direction_confidence": "medium",
       "effect_direction_rationale": "Source-content attribution reconciled against retained primary references on2026-10-23. Current descriptive direction: positive_weak. Actual measured outcomes and source limitations are recorded separately. This is not attributable clinician approval; existing clinical context holds remain.",
@@ -12518,7 +12509,6 @@
         "unii": "26R60S6A5I"
       },
       "effect_direction": "mixed",
-      "primary_outcome": "",
       "total_enrollment": 80,
       "registry_completed_trials_count": 10,
       "effect_direction_confidence": "medium",
@@ -15680,7 +15670,6 @@
         "unii": "654825W09Z"
       },
       "effect_direction": "positive_strong",
-      "primary_outcome": "",
       "total_enrollment": 150,
       "effect_direction_confidence": "medium",
       "effect_direction_rationale": "Source-content attribution reconciled against retained primary references on2026-10-23. Current descriptive direction: positive_strong. Actual measured outcomes and source limitations are recorded separately. This is not attributable clinician approval; existing clinical context holds remain.",
@@ -17614,7 +17603,6 @@
         "unii": "KV2JZ1BI6Z"
       },
       "effect_direction": "positive_strong",
-      "primary_outcome": "",
       "total_enrollment": 389,
       "registry_completed_trials_count": 278,
       "effect_direction_confidence": "high",
@@ -18731,7 +18719,6 @@
         "unii": "922OP8YUPF"
       },
       "effect_direction": "positive_strong",
-      "primary_outcome": "",
       "total_enrollment": 112,
       "registry_completed_trials_count": 60,
       "effect_direction_confidence": "high",
@@ -18794,7 +18781,6 @@
         "unii": "U182GP2CF3"
       },
       "effect_direction": "positive_weak",
-      "primary_outcome": "",
       "total_enrollment": 110,
       "registry_completed_trials_count": 22,
       "effect_direction_confidence": "medium",
@@ -20281,7 +20267,6 @@
         }
       ],
       "effect_direction": "positive_weak",
-      "primary_outcome": "",
       "total_enrollment": 80,
       "registry_completed_trials_count": 72,
       "effect_direction_confidence": "medium",
@@ -20924,7 +20909,6 @@
         }
       ],
       "effect_direction": "mixed",
-      "primary_outcome": "",
       "total_enrollment": 500,
       "published_studies_count": 42,
       "registry_completed_trials_count": 11,
@@ -21836,7 +21820,6 @@
         "500mg twice daily achieved 62% symptom recovery vs 36% control (p=0.001) with shorter recovery duration in 173-patient COVID-19 RCT (PMID: 34407441)"
       ],
       "health_goals_supported": [],
-      "primary_outcome": "",
       "effect_direction": "positive_strong",
       "total_enrollment": 500,
       "notes": "Black seed oil (Nigella sativa) has strong evidence from multiple large meta-analyses (16-30 RCTs) with consistent glycemic and blood pressure endpoints. FBG and HbA1c reductions are well-replicated across studies.",
@@ -21914,7 +21897,6 @@
         "Reduced triglycerides (SMD -0.722, p<0.001), total cholesterol (SMD -0.345, p=0.021), and LDL-C (SMD -0.396, p=0.031) in meta-analysis of 15 RCTs (PMID: 36043374)"
       ],
       "health_goals_supported": [],
-      "primary_outcome": "",
       "effect_direction": "positive_strong",
       "total_enrollment": 138,
       "notes": "Retained human sources concern dry-eye and lipid outcomes (20554904, 36043374). PMID 23472020 is aflatoxin poisoning in broiler chickens, not a human skin trial; it supplies no human skin-benefit credit. Exact preparation and clinical review remain necessary.",
@@ -22022,7 +22004,6 @@
         "Single 0.47 g standardized extract in eight men with T2D reduced postprandial glucose/insulin AUC (PMID: 25191571)"
       ],
       "health_goals_supported": [],
-      "primary_outcome": "",
       "effect_direction": "positive_strong",
       "total_enrollment": 169,
       "notes": "Retained eye-fatigue/accommodation trials and an acute eight-man glycemia study concern specific preparations/outcomes. They do not support the former chronic lipid claim attributed to 25191571. Named NCTs are retained provenance, not proof of bilberry-specific efficacy or independently verified aggregate enrollment. Retained-source scope and limitations: Objective ciliary-muscle accommodation HFC-1 findings with 240 mg/day extract for 12 weeks; p=0.049 concerns task-related change, not a subjective eye-strain score (PMID: 32106548) Alleviated critical flicker fusion decline (p=0.023) and reduced subjective eye fatigue symptoms at 480mg/day for 8 weeks in VDT workers (PMID: 25923485) Single 0.47 g standardized-extract capsule in eight men with diet-controlled T2D reduced postprandial glucose/insulin AUC; not a 12-week lipid trial (PMID: 25191571)",

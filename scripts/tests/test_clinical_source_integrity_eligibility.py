@@ -214,3 +214,11 @@ def test_source_reconciliations_rewrite_rationale_and_design(completion_source_r
     for rid,stale in [('PRECLIN_SPERMIDINE','Retained positive_weak'),('INGR_BENFOTIAMINE','Retained positive_strong')]:
         assert stale not in completion_source_records[rid]['effect_direction_rationale']
     assert 'RCT' not in completion_source_records['INGR_SLIPPERY_ELM']['published_studies']
+
+
+@pytest.mark.parametrize("rid", ['INGR_LACTOFERRIN', 'BRAND_NIAGEN', 'INGR_SELENIUM', 'INGR_MAG_GLYCINATE', 'INGR_QUERCETIN', 'INGR_FENUGREEK', 'PRECLIN_SPERMIDINE', 'PRECLIN_QUERCETIN_PHYTOSOME', 'PRECLIN_ASTAXANTHIN_GENERIC', 'PRECLIN_PTEROSTILBENE', 'BRAND_TESTOFEN', 'INGR_VITAMIN_B6', 'INGR_ASTRAGALUS', 'INGR_BROMELAIN', 'INGR_BEETROOT', 'INGR_BENFOTIAMINE', 'INGR_BLACK_SEED_OIL', 'INGR_SEA_BUCKTHORN', 'INGR_BILBERRY'])
+def test_unrepresentable_outcome_uses_existing_optional_field_contract(completion_source_records, rid):
+    record = completion_source_records[rid]
+    assert "primary_outcome" not in record
+    assert record["key_endpoints"]
+    assert record["references_structured"]
