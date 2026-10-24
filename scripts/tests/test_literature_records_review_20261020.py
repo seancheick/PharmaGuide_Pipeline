@@ -411,3 +411,14 @@ def test_b0_schisandra_preparation_stays_unknown_and_review_pending(records):
     assert "plant part and extraction unspecified" in record["material_form"]
     assert record["verification_result"] == "verification_failure_unresolved"
     assert _study(record, "18515024")["scoring_eligible"] is False
+
+
+def test_african_mango_daily_exposure_is_not_a_threshold_or_single_dose(records):
+    record = records['african_mango']
+    study = _study(record, '19254366')
+    assert record['studied_dose_exposure'] == {'values': [300], 'unit': 'mg'}
+    assert '120' in study['notes'] and '102' in study['notes']
+    assert 'minimum' in record['applicability_decision']
+    assert '>=' not in record['applicability_decision']
+    assert '150 mg twice daily' in record['applicability_decision']
+    assert record.get('reference_semantics', {}).get('curve') != 'completed_no_benchmark_neutral'

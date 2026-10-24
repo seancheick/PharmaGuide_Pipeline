@@ -577,3 +577,39 @@ Verification: primary API JSON and two full-text XMLs retained in
 not exhaustive literature reviews, clinician sign-offs or rebuilt closure. Required next
 steps: exact preparation/claim correspondence, source limitations and trial-family review,
 attributable approval for affirmative contexts, then rebuilt owner/consumer verification.
+
+
+### African mango source correction — October 23, 2026
+
+Owner: `evidence_resolver::_load_literature_evidence` and existing
+`literature_evidence_records.json` exposure/applicability fields. Will NOT create a
+benchmark, grade, registry or clinical approval.
+
+Entry `african_mango`, study [19254366](https://pubmed.ncbi.nlm.nih.gov/19254366/),
+[primary full text PMC2651880](https://pmc.ncbi.nlm.nih.gov/articles/PMC2651880/):
+methods describe IGOB131 150 mg before lunch and dinner for 10 weeks. Daily exposure
+is 300 mg; the old `[150,300]` daily exposure and `>=150–300 mg/day` support language
+mixed single-dose and daily amounts and asserted an untested threshold. Corrected
+exposure to300mg/day and replaced threshold prose with the exact descriptive regimen
+and explicit lack of minimum-dose, dose-response or other-preparation equivalence.
+The trial's reported positive direction is retained, not upgraded or generalized.
+Full text describes120 initially allocated and102completers, whereas abstract says102;
+retained sample_size102 is now explicitly described as completers. Allocation/dropout
+arithmetic is internally inconsistent, so no invented corrected enrollment is substituted.
+Exact product applicability and required clinician approval remain unresolved.
+
+Existing frozen benchmark dependencies:310617,310618,310619,310620,330138,330139,
+330140,330141,339533,79524. They remain diagnostic dependencies, not newly cleared products.
+Fail-first regression reproduced the150/300range;165 literature/source-owner tests pass.
+Generic changed-entry citation verifier selected zero citations for this file; this is
+not counted as source verification. The existing selected literature verifier inspected
+one record/one PMID with zero screening findings/retractions; primary full text was read
+separately for dose/counts. Data-batch exact indexed key225 check passes, one entry only.
+Bounded replay and required local/whole-fast qualification are recorded in the LEDGER.
+No full corpus run or release; no clinical hold was cleared by this correction.
+
+Apple-cider-vinegar retraction screen: publisher
+[retraction notice](https://nutrition.bmj.com/content/early/2025/09/23/bmjnph-2023-000823ret)
+confirms trial38966098 is retracted. The current apple_cider_vinegar literature record
+cites28292654 and14694010 instead; this search establishes no new defect in that record.
+No retracted replacement source or weight-loss benchmark was introduced.

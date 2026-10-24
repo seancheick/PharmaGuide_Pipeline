@@ -9276,19 +9276,19 @@
             "verified_source": "https://pubmed.ncbi.nlm.nih.gov/19254366/",
             "verified_at": "2026-09-21T07:39:42.986936+00:00",
             "abstract_evidence_quote": "This study was therefore aimed at evaluating the effects of IGOB131, an extract of Irvingia gabonensis, on body weight and associated metabolic parameters in overweight human volunteers."
-          }
+          },
+          "notes": "The abstract reports 102 participants, while the full-text methods/results describe 120 initially allocated and 102 completers. The retained sample_size 102 describes completers, not randomized enrollment. Full-text allocation and dropout counts have internal inconsistencies; clinical review must assess attrition and reporting limitations. Source: PMC2651880, Participants and methods; Results. Verified 2026-10-23."
         }
       ],
       "effect_direction": "positive_moderate",
       "population_context": "adult populations in double-blind clinical trials",
       "studied_dose_exposure": {
         "values": [
-          150,
           300
         ],
         "unit": "mg"
       },
-      "applicability_decision": "Standardized Irvingia gabonensis seed extract IGOB131 supported at >= 150-300 mg/day for weight and metabolic parameters.",
+      "applicability_decision": "PMID 19254366 studied IGOB131 seed extract at 150 mg twice daily (300 mg/day), before lunch and dinner, for 10 weeks in overweight or obese adults. This single regimen does not establish a minimum effective dose, a dose-response range, or equivalence to other Irvingia preparations. Exact product applicability and required clinical approval remain with the existing assessment owners.",
       "applicability_status": "applicable_reviewed_trials",
       "verification_provenance": {
         "verified_by": "scripts/api_audit/verify_literature_records.py",

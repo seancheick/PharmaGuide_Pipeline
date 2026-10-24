@@ -111,3 +111,10 @@ Required reviewer decisions remain preparation/label correspondence, population/
 regimen applicability, limitations, and attributable clinical approval for affirmative contexts.
 The B.bifidum correction34652462 is subscription-restricted; its effect remains unresolved.
 No clinical or benchmark item is rebuilt-closed by these packets, and no approval was created.
+
+
+African mango update: the existing record now describes IGOB131150mg twice daily
+(300mg/day), without the unsupported150–300mg/day minimum threshold. The primary paper
+has enrollment/attrition reporting inconsistencies;102is retained only as completers.
+Review preparation correspondence, study limitations and applicability before affirmative
+clinical approval. This factual correction clears no clinical hold or benchmark item.
