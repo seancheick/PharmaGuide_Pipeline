@@ -502,7 +502,15 @@ exercise outcomes; root-powder mass does not establish nitrate exposure. Alpha-a
 its existing standalone-applicability hold is supported, not repaired by borrowing the
 formula outcome. No source or numerical grade was altered from this triage.
 
-The retained83-record projection finds zero stored-title mismatches or drifts across402links.
+The retained83-record projection finds zero mismatches or drifts among175available stored titles
+across402citation links; absent stored titles are explicitly not compared.
 The506benchmark projection finds341exact canonical literature records,124with study rows;
 missing exact joins are not proof of missing evidence because other dose owners and aliases
 still require tracing. These projections prioritize work and do not replace existing owners.
+
+PQQ follow-up: the corrected Table4 remains inaccessible (publisher403; no accessible
+repository copy located). Separately, [FDA-hosted GRN1118](https://www.fda.gov/media/173619/download),
+PDF page53, describes mild events in both trial arms, whereas the original abstract says
+no adverse events. This is a submitter-authored secondary account, not the corrected table
+or FDA efficacy endorsement. Record the discrepancy for full-text review; do not infer
+causation, invent corrected values, or repeat an unqualified no-events claim. Existing holds remain.

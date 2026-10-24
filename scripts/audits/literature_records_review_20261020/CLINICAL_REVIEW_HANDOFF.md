@@ -86,9 +86,14 @@ remaining corpus hold is represented by the named priority cases.
 ## Read-only clearance audit update
 
 The October23 continuation resolved the five-source citation inventory without curated writes.
-All402citation links for the83legacy records resolve and match stored titles; this is
+All402citation links for the83legacy records resolve; all175available stored titles match. This is
 bibliographic screening only. No clinical hold was cleared. The research log now separates
 publication corrections, biotinate absorption versus combination efficacy, native registration
 protocols, and five topic-screen dispositions. Full-text access and approval limitations remain
 explicit. Use these receipts to avoid repeating verified lookups, while completing the missing
 clinical/preparation/outcome review through the existing owners.
+
+PQQ review must include corrected Table4 (notice35917215 for trial34415830) and reconcile
+the abstract's adverse-event wording with the submitter's account in FDA-hosted GRN1118,
+page53. Table retrieval remains unresolved; the secondary account is not FDA endorsement
+and does not by itself establish a treatment-related risk or efficacy conclusion.

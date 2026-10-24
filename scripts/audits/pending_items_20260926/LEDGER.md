@@ -3025,7 +3025,7 @@ research.md for573no-study/31human/9erratum/5topic breakdown). No scientific com
 Eight held-record publication-notice dispositions and biotinate/Lustriva packet additions are
 recorded; current lutein retraction exclusion confirmed. All83clinical and506benchmark worklists
 remain subject to their existing review owners. No new clinician approval or numerical benchmark.
-Focused owner/transport slice:75passed before final documentation. Whole-fast CI pending;
+Focused owner/transport slice:75passed before final documentation. Final whole-fast CI qualified below;
 no corpus/local pipeline checks required for this audit-only change. No pipeline/export/release.
 
 Initial CI40045182402: three groups green, one failed only the dead-code ownership ratchet:
@@ -3034,3 +3034,10 @@ replacement was removed. Repo/scripts/shell/config/docs and Flutter searches fou
 remaining caller, including manual CLI use; delete the wrapper rather than add an exemption.
 50focused dead-code/literature/citation checks pass after removal. No curated data or
 production assessment changes. Final candidate requires a fresh green CI checkpoint.
+
+Final audit-infrastructure qualification: candidate cf6065013fbfaa9e78a3ba7e6a7c917da844f3fd
+passes whole-fast CI40046197738: all four groups,23,624passed/192declared skips; every
+skip guard passed. The earlier failed checkpoint remains recorded above. Subsequent changes
+are documentation only:175stored-title comparisons across402links, PQQ access/discrepancy
+limitations and this receipt. No clinical hold closed, curated data changed or pipeline rerun.
+Main integration is authorized; exact remote containment is recorded in the current handoff.

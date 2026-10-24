@@ -1449,4 +1449,4 @@ October23 clearance continuation: read-only audit fixes implemented and focused-
 source retrieval covers five principal reference files with unchanged curated hashes.
 API lookup is not clinical closure. Existing research/LEDGER retain publication-notice
 triage, preparation packet additions and remaining83clinical/506benchmark worklists.
-Whole-fast qualification and the larger scientific clearance remain open. No pipeline rerun.
+Audit infrastructure qualified on cf6065013 with whole-fast CI40046197738:23,624passed/192declared skips, all skip guards passed. The larger scientific clearance remains open. No pipeline rerun.
