@@ -14960,7 +14960,15 @@ class SupplementEnricherV3:
                 detector_product[section] = [
                     {**row, "nestedIngredients": children_by_parent[row["raw_source_path"]]}
                     if (not row.get("nestedIngredients")
-                        and row.get("raw_source_path") in children_by_parent)
+                        and row.get("raw_source_path") in children_by_parent
+                        # A retained subset cannot become a sole-component
+                        # proof when the physical inventory names a lost child.
+                        and not any(
+                            path.startswith(row["raw_source_path"])
+                            and _RAW_CHILD_ROW.fullmatch(path[len(row["raw_source_path"]):])
+                            and path not in source_paths
+                            for path in source_inventory
+                        ))
                     else row for row in rows
                 ]
             result = self.blend_detector.analyze_product(detector_product)
