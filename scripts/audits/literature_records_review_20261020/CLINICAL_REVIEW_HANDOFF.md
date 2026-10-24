@@ -111,3 +111,18 @@ Required reviewer decisions remain preparation/label correspondence, population/
 regimen applicability, limitations, and attributable clinical approval for affirmative contexts.
 The B.bifidum correction34652462 is subscription-restricted; its effect remains unresolved.
 No clinical or benchmark item is rebuilt-closed by these packets, and no approval was created.
+
+
+African mango update: the existing record now describes IGOB131150mg twice daily
+(300mg/day), without the unsupported150–300mg/day minimum threshold. The primary paper
+has enrollment/attrition reporting inconsistencies;102is retained only as completers.
+Review preparation correspondence, study limitations and applicability before affirmative
+clinical approval. This factual correction clears no clinical hold or benchmark item.
+
+
+The same regimen correction class also covers theobromine, willow bark, ornithine,
+maqui, royal jelly, caralluma and ashwagandha. Research receipts identify each source,
+actual dose/course and outcome limits. Ornithine includes its6000mg exercise day;
+ashwagandha's300mg twice-daily regimen is600mg/day. These are descriptive study facts,
+not new dose benchmarks or clinician approvals. Exact preparation/product correspondence
+and applicable clinical-review holds remain mandatory.

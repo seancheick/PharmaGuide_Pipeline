@@ -577,3 +577,102 @@ Verification: primary API JSON and two full-text XMLs retained in
 not exhaustive literature reviews, clinician sign-offs or rebuilt closure. Required next
 steps: exact preparation/claim correspondence, source limitations and trial-family review,
 attributable approval for affirmative contexts, then rebuilt owner/consumer verification.
+
+
+### African mango source correction — October 23, 2026
+
+Owner: `evidence_resolver::_load_literature_evidence` and existing
+`literature_evidence_records.json` exposure/applicability fields. Will NOT create a
+benchmark, grade, registry or clinical approval.
+
+Entry `african_mango`, study [19254366](https://pubmed.ncbi.nlm.nih.gov/19254366/),
+[primary full text PMC2651880](https://pmc.ncbi.nlm.nih.gov/articles/PMC2651880/):
+methods describe IGOB131 150 mg before lunch and dinner for 10 weeks. Daily exposure
+is 300 mg; the old `[150,300]` daily exposure and `>=150–300 mg/day` support language
+mixed single-dose and daily amounts and asserted an untested threshold. Corrected
+exposure to300mg/day and replaced threshold prose with the exact descriptive regimen
+and explicit lack of minimum-dose, dose-response or other-preparation equivalence.
+The trial's reported positive direction is retained, not upgraded or generalized.
+Full text describes120 initially allocated and102completers, whereas abstract says102;
+retained sample_size102 is now explicitly described as completers. Allocation/dropout
+arithmetic is internally inconsistent, so no invented corrected enrollment is substituted.
+Exact product applicability and required clinician approval remain unresolved.
+
+Existing frozen benchmark dependencies:310617,310618,310619,310620,330138,330139,
+330140,330141,339533,79524. They remain diagnostic dependencies, not newly cleared products.
+Fail-first regression reproduced the150/300range;165 literature/source-owner tests pass.
+Generic changed-entry citation verifier selected zero citations for this file; this is
+not counted as source verification. The existing selected literature verifier inspected
+one record/one PMID with zero screening findings/retractions; primary full text was read
+separately for dose/counts. Data-batch exact indexed key225 check passes, one entry only.
+Bounded replay and required local/whole-fast qualification are recorded in the LEDGER.
+No full corpus run or release; no clinical hold was cleared by this correction.
+
+Apple-cider-vinegar retraction screen: publisher
+[retraction notice](https://nutrition.bmj.com/content/early/2025/09/23/bmjnph-2023-000823ret)
+confirms trial38966098 is retracted. The current apple_cider_vinegar literature record
+cites28292654 and14694010 instead; this search establishes no new defect in that record.
+No retracted replacement source or weight-loss benchmark was introduced.
+
+
+Additional high-exposure benchmark source checks (no curated changes):
+- Pomegranate38410857: primary abstract confirms22 adult trials, mixed preparations
+  and high heterogeneity. This cannot establish one punicalagin/extract benchmark.
+  Extract-specific diastolic details still require accessible full tables.
+- Blueberry30999017: primary indexed abstract confirms12studies across11articles,
+  mostly freeze-dried blueberry, and inconsistent doses/anthocyanin exposure. Its
+  cognition findings do not establish a general powder/extract dose threshold.
+- Cayenne24246368: the authors themselves suggest2mg capsaicinoids for acute energy
+  intake, with high heterogeneity; this is not an invented source number, but does
+  not quantify crude pepper or establish long-term weight loss. Primary full text
+  [23844093](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0067786),
+  Dosage section, separately specifies2.56mg capsaicin per meal from red chili, not
+  total capsaicinoids. Existing study prose preserves that distinction. The aggregate
+  family-level exposure list is not a validated common-analyte dose-response curve;
+  no active-basis reinterpretation or derived efficacy threshold was introduced.
+These checks narrow remaining source work but clear no product preparation/benchmark
+hold. Exact frozen dependencies remain in benchmark_review_backlog.csv.
+
+
+### Same-class regimen corrections — October 23, 2026
+
+Primary indexed abstracts retrieved through Europe PMC for each entry; full abstract
+content was read against the existing study and parent-record fields. These corrections
+preserve evidence direction and required clinical holds, and add no numeric benchmark.
+
+| Entry | Verified source | Corrected interpretation |
+|---|---|---|
+|theobromine|[23595874](https://pubmed.ncbi.nlm.nih.gov/23595874/)|850mg/day pure theobromine was tested for4weeks; separate cocoa arms are distinct. Lipid biomarkers are not cardiovascular outcomes or a minimum-dose proof.|
+|white_willow_bark|[10936472](https://pubmed.ncbi.nlm.nih.gov/10936472/)|Study row now retains both120and240mg/day salicin arms, not just240. Specific low-back-pain study cannot become an open-ended minimum for all musculoskeletal pain or crude bark mass.|
+|l_ornithine|[19083482](https://pubmed.ncbi.nlm.nih.gov/19083482/)|Study was8days:2000mg/day for7days then6000mg on exercise day, as hydrochloride. Dose/duration/exposure corrected together; the complete regimen and subgroup findings do not establish a2000mg minimum.|
+|maqui|[31193920](https://pubmed.ncbi.nlm.nih.gov/31193920/)|60mg/day MaquiBright for4weeks,74Japanese adults with prolonged display work. Exact preparation/regimen replaces unsupported minimum threshold.|
+|royal_jelly|[31470366](https://pubmed.ncbi.nlm.nih.gov/31470366/)|1000mg/day for8weeks in200postmenopausal women. Abstract does not establish a universal standardized preparation or minimum dose; symptom findings require confirmation.|
+|caralluma|[17097761](https://pubmed.ncbi.nlm.nih.gov/17097761/)|1000mg/day extract for60days with diet/activity advice. Hunger/waist changes must stay distinct from non-significant weight/BMI/body-fat/energy-intake differences; no minimum threshold.|
+|ashwagandha_root|[23439798](https://pubmed.ncbi.nlm.nih.gov/23439798/)|300mg capsule twice daily gives600mg/day for60days, not a300–600mg/day minimum range. Exact preparation and chronically stressed population retained.|
+
+Nine additional fail-first assertions reproduce threshold, omitted exercise-day dose,
+and capsule/day errors;174combined literature/source-owner tests pass. Existing literature
+screen selected all8changed records and retrieved all8PMIDs; it returns two human-indexing
+findings for maqui and ashwagandha. Their primary abstracts explicitly describe human trial
+participants, but no verifier flags were rewritten and no screening pass is claimed.
+Source contents, not those indexing flags, support these bounded factual corrections.
+Earlier CI40049888078 was superseded/cancelled before integration and is not a pass;
+the final combined candidate receives its own checkpoint. Larger clinical and benchmark
+worklists remain open; no source receipt substitutes for required clinician approval.
+
+
+Final source-preparation reconciliation in the same eight-entry batch:
+maqui's MaquiBright/BrightSight preparation replaces the unsupported Delphinol name.
+Ashwagandha full text PMC3573577 explicitly identifies KSM-66 root-only extract,
+at least5%withanolides by HPLC, so Sensoril is removed from this source description.
+Royal-jelly10-HDA standardization, caralluma pregnane-glycoside standardization and
+willow's exact Salix alba species were not established by the inspected abstracts;
+their source descriptions now state the verified material and verification limits.
+This does not change canonical identity routing or claim those preparations lack
+such constituents. Five fail-first preparation assertions reproduced these unsupported
+source descriptors.179combined owner/consumer checks pass. Final17raw-label comparison
+spans all8subjects plus2controls (royal jelly has one representative);0errors and0full
+Clean/Enrich/Score record changes. One earlier candidate capture was invalidated by a
+concurrent commit; stable final capture, not the rejected receipt, supports comparison.
+The intermediate source-data CI was superseded; final exact candidate qualification
+is recorded below in the execution LEDGER. No clinical approval or benchmark closure.

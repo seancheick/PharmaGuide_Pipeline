@@ -3052,3 +3052,65 @@ cranberry11431298 primary indexed abstract; recorded precise preparation/outcome
 limitations, access failures and retained holds. No runtime defect established in this bounded
 pass; no curated fix, clinical clearance, corpus run or score movement claimed. Review full
 diff/references and git diff --check; no test/CI checkpoint required for research docs only.
+
+
+### 2026-10-23 African-mango factual correction
+Owner: evidence_resolver::_load_literature_evidence, existing literature exposure and
+applicability contract; botanical_profile::_botanical_benchmark remains the benchmark owner.
+Will NOT create benchmark, policy or approval. Clinical-data behavioral class.
+Fail-first test reproduces150/300mg daily range; existing record now states300mg/day
+(150mg twice daily) descriptively, removes unsupported minimum threshold, and distinguishes
+102completers from full text's120initial allocations without repairing inconsistent counts.
+One indexed entry225 changed, data-batch check passes. Selected literature owner verifies
+one PMID with0screening findings; primary full text independently read. Generic changed-entry
+verifier selected0citations and is not counted as verification.165owner/consumer tests pass.
+Raw12-label replay:10affected+2controls, stable identical input hashes,0errors,0total/pillar/
+status/route changes and0full Clean/Enrich/Score record changes. Local546passed/24declared
+opt-in skips; skip guard passed. Initial local attempt lacked sandbox test-lock access;
+rerun with lock access passed, not a source failure. Whole-fast CI40049888078 pending on
+488b616062caea00ec7d131a540413731143fe7c. Final qualification follows; no corpus rerun.
+Read-only saved completion preflight still fails9887assessments (overlapping causes:
+6389contributing source-review,5610clinical applicability,3118benchmark,1539evidence,
+305probiotic,143identity,140omega,111dose,5dose-amount,1nutrient-amount). Saved-output
+census is not fresh-corpus closure. Reference hash changes for all3stages; code hashes
+unchanged. Defer full run until source/clinical dependencies and bounded fixes are ready.
+Research-only checks for pomegranate/blueberry/cayenne preserve existing holds; full-text
+limitations and precise active-basis distinction recorded. No new defect proven there.
+
+
+Same-class final extension: seven more records had unproven minimum-threshold wording;
+primary abstracts verified per entry (research.md). Ornithine now includes6000mg exercise
+day after7days at2000mg; ashwagandha daily exposure600mg replaces300/600range. Willow
+study row retains both120/240salicin arms. Five source-preparation descriptors reconciled:
+MaquiBright rather than Delphinol; KSM-66 root-only rather than Sensoril equivalence;
+unverified royal-jelly10-HDA/caralluma-pregnane/willow-species details removed from source
+descriptions, not canonical identity registries. Nine regimen plus five preparation fail-first
+cases reproduced;179focused checks pass. Exactly8indexed entries changed. All8PMIDs retrieved;
+literature screen reports2human-indexing findings despite explicit human trial populations
+in primary abstracts; this screen is not recorded as passing or clinician review.
+Final17raw representatives across8subjects+2controls:0errors/0full-record changes. Initial
+candidate capture invalidated by concurrent commit; stable final capture replaces it.
+Intermediate CI40049888078/40050283585/40050546021/40050549288 superseded/cancelled, not
+passes. Final combined source candidate checkpoint follows. No corpus run or clinical closure.
+
+Final combined candidate1e1fd8e217a14a6d300b6dc9a36196c2048e26cf:179focused owner/consumer
+checks pass; final local546passed/24declared opt-in skips in139.40s, skip guard passes.
+Whole-fast CI40050737289 pending. Final17-label comparison is stable and identical at
+all3full-record layers, not just totals. PR246 describes all8records. Required clinical
+holds remain; initial83clinical/506benchmark worklists are not scientifically closed.
+
+Independent read-only final review of1e1fd8e2 against primary8abstracts and ashwagandha
+full text found no actionable confirmed issue: new dose/preparation/population statements
+match sources; no evidence direction or hold changed. The17-label result remains bounded,
+not corpus readiness. Final source/receipt folder:
+`/Users/seancheick/pg_quality/assessment_integrity_20261023/research/regimen-preparation-20261023/`.
+
+Final qualification: runtime1e1fd8e217a14a6d300b6dc9a36196c2048e26cf passes whole-fast
+CI40050737289, all4groups:23,639passed/192declared skips and4passing skip guards.
+Final local546passed/24declared skips;179focused owner/consumer checks; independent source
+review clear;17raw comparison0changes. Subsequent changes only record these results.
+PR246 integrates this verified eight-entry batch under Sean's main-push authorization;
+remote containment/branch cleanup receipts in CURRENT_HANDOFF. No pipeline/export/release.
+Pipeline remains deferred: source/clinical/benchmark worklists and saved9887completion
+findings remain unresolved; the next required full regeneration starts from Clean under
+current reference fingerprints, after remaining bounded corrections/approvals are ready.

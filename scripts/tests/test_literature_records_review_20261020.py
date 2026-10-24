@@ -411,3 +411,39 @@ def test_b0_schisandra_preparation_stays_unknown_and_review_pending(records):
     assert "plant part and extraction unspecified" in record["material_form"]
     assert record["verification_result"] == "verification_failure_unresolved"
     assert _study(record, "18515024")["scoring_eligible"] is False
+
+
+def test_african_mango_daily_exposure_is_not_a_threshold_or_single_dose(records):
+    record = records['african_mango']
+    study = _study(record, '19254366')
+    assert record['studied_dose_exposure'] == {'values': [300], 'unit': 'mg'}
+    assert '120' in study['notes'] and '102' in study['notes']
+    assert 'minimum' in record['applicability_decision']
+    assert '>=' not in record['applicability_decision']
+    assert '150 mg twice daily' in record['applicability_decision']
+    assert record.get('reference_semantics', {}).get('curve') != 'completed_no_benchmark_neutral'
+
+
+@pytest.mark.parametrize('cid', ['theobromine', 'white_willow_bark', 'l_ornithine', 'maqui', 'royal_jelly', 'caralluma', 'ashwagandha_root'])
+def test_single_regimen_does_not_become_an_open_ended_minimum(records, cid):
+    assert '>=' not in records[cid]['applicability_decision']
+
+
+def test_ornithine_includes_the_exercise_day_regimen(records):
+    r = records['l_ornithine']
+    assert r['studied_dose_exposure']['values'] == [2000, 6000]
+    s = _study(r, '19083482')
+    assert '6000' in s['dose'] and s['duration'] == '8 days'
+
+
+def test_ashwagandha_single_capsule_is_not_a_daily_dose(records):
+    assert records['ashwagandha_root']['studied_dose_exposure']['values'] == [600]
+
+
+@pytest.mark.parametrize('cid, unsupported', [
+    ('maqui', 'Delphinol'), ('ashwagandha_root', 'Sensoril'),
+    ('royal_jelly', '10-HDA'), ('caralluma', 'pregnane'),
+    ('white_willow_bark', 'Salix alba'),
+])
+def test_source_preparation_does_not_add_unverified_brand_or_standardization(records, cid, unsupported):
+    assert unsupported not in records[cid]['material_form']
