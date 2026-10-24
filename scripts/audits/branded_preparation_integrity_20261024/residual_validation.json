@@ -1213,5 +1213,35 @@
       "groups": 4,
       "skip_guards": "all passed"
     }
+  },
+  "adversarial_audit": {
+    "baseline": "e3939fd5ff929c441e41125f9183535ba751350b",
+    "runtime_candidate": "e8474a704302a7a65f6e918118c1bb85d7d99e08",
+    "finding": "182990 source_descriptor correction lacked existing physical-row fence",
+    "resolution": "Bind existing raw_source_path to ingredientRows[5]",
+    "current_saved_label_impact": "none",
+    "replay": {
+      "products": 22,
+      "changed": 0,
+      "errors": 0,
+      "source_unchanged": true,
+      "source_files": 443
+    },
+    "named_owner_tests": 266,
+    "local": {
+      "passed": 546,
+      "declared_skips": 24,
+      "skip_guard": "passed"
+    },
+    "clinical_holds": "unchanged",
+    "pipeline_rerun": false,
+    "ci": {
+      "run": 40109157375,
+      "status": "success",
+      "passed": 23773,
+      "declared_skips": 192,
+      "groups": 4,
+      "skip_guards": "all passed"
+    }
   }
 }
