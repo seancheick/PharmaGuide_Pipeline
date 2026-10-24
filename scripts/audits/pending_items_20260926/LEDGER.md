@@ -3092,3 +3092,25 @@ Final17raw representatives across8subjects+2controls:0errors/0full-record change
 candidate capture invalidated by concurrent commit; stable final capture replaces it.
 Intermediate CI40049888078/40050283585/40050546021/40050549288 superseded/cancelled, not
 passes. Final combined source candidate checkpoint follows. No corpus run or clinical closure.
+
+Final combined candidate1e1fd8e217a14a6d300b6dc9a36196c2048e26cf:179focused owner/consumer
+checks pass; final local546passed/24declared opt-in skips in139.40s, skip guard passes.
+Whole-fast CI40050737289 pending. Final17-label comparison is stable and identical at
+all3full-record layers, not just totals. PR246 describes all8records. Required clinical
+holds remain; initial83clinical/506benchmark worklists are not scientifically closed.
+
+Independent read-only final review of1e1fd8e2 against primary8abstracts and ashwagandha
+full text found no actionable confirmed issue: new dose/preparation/population statements
+match sources; no evidence direction or hold changed. The17-label result remains bounded,
+not corpus readiness. Final source/receipt folder:
+`/Users/seancheick/pg_quality/assessment_integrity_20261023/research/regimen-preparation-20261023/`.
+
+Final qualification: runtime1e1fd8e217a14a6d300b6dc9a36196c2048e26cf passes whole-fast
+CI40050737289, all4groups:23,639passed/192declared skips and4passing skip guards.
+Final local546passed/24declared skips;179focused owner/consumer checks; independent source
+review clear;17raw comparison0changes. Subsequent changes only record these results.
+PR246 integrates this verified eight-entry batch under Sean's main-push authorization;
+remote containment/branch cleanup receipts in CURRENT_HANDOFF. No pipeline/export/release.
+Pipeline remains deferred: source/clinical/benchmark worklists and saved9887completion
+findings remain unresolved; the next required full regeneration starts from Clean under
+current reference fingerprints, after remaining bounded corrections/approvals are ready.

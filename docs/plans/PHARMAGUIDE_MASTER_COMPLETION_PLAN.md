@@ -1471,3 +1471,8 @@ fail-first cases and179owner checks.17representative raw labels across all8subje
 2controls remain identical through all3stages. Unsupported brand/standardization claims
 and single-dose/day confusion corrected at the literature owner; clinical holds preserved.
 Whole-fast qualification applies to the final combined candidate, not superseded runs.
+
+Qualified final regimen/preparation candidate1e1fd8e2: whole-fast CI40050737289 green,
+23,639passed/192declared skips, all4skip guards; final local546passed/24declared skips;
+179focused checks and independent source review clear.17raw comparisons unchanged.
+Integration PR246; scientific/backlog/rebuilt acceptance remains open, pipeline deferred.
