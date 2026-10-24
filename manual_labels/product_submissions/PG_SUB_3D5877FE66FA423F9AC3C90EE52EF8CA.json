@@ -61,7 +61,8 @@
   },
   "otherIngredientsDisclosure": "present",
   "physicalState": {
-    "name": "Tablet(s)"
+    "langualCodeDescription": "Tablet or Pill",
+    "name": "Tablet or Pill"
   },
   "productType": {
     "name": "Dietary Supplement"

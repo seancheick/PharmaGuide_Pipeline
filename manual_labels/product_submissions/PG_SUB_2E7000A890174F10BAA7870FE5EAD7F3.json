@@ -1,0 +1,161 @@
+{
+  "id": "PG_SUB_2E7000A890174F10BAA7870FE5EAD7F3",
+  "brandName": "Nutricost",
+  "fullName": "KSM-66® Ashwagandha Root Extract",
+  "ingredientRows": [
+    {
+      "forms": [],
+      "ingredientGroup": "Ashwagandha",
+      "name": "Organic KSM-66® Ashwagandha Extract (Withania somnifera)(root) (min. 5% total withanolides) (<0.1% Withaferin A)",
+      "nestedRows": [],
+      "notes": "Daily Value not established",
+      "order": 1,
+      "quantity": [
+        {
+          "quantity": 600,
+          "unit": "mg"
+        }
+      ]
+    },
+    {
+      "forms": [],
+      "ingredientGroup": "Black Pepper",
+      "name": "BioPerine® Black Pepper Extract (Piper nigrum)(fruit)(min. 95% Piperine)",
+      "nestedRows": [],
+      "notes": "Daily Value not established",
+      "order": 2,
+      "quantity": [
+        {
+          "quantity": 5,
+          "unit": "mg"
+        }
+      ]
+    }
+  ],
+  "otherIngredients": {
+    "ingredients": [
+      {
+        "name": "Hypromellose (cellulose) capsule"
+      },
+      {
+        "name": "organic flow agent blend (organic oat fiber, organic pea starch, organic bamboo extract, organic gum arabic, organic sunflower oil, organic sunflower lecithin)"
+      },
+      {
+        "name": "silica"
+      },
+      {
+        "name": "magnesium stearate (vegetable source)"
+      }
+    ]
+  },
+  "otherIngredientsDisclosure": "present",
+  "physicalState": {
+    "langualCodeDescription": "Capsule",
+    "name": "Capsule"
+  },
+  "servingSizes": [
+    {
+      "maxDailyServings": 1,
+      "maxQuantity": 1,
+      "minDailyServings": 1,
+      "minQuantity": 1,
+      "order": 1,
+      "unit": "Capsule"
+    }
+  ],
+  "servingsPerContainer": "60",
+  "statements": [
+    {
+      "notes": "Dietary Supplement",
+      "type": "FDA Statement of Identity"
+    },
+    {
+      "notes": "600MG Per Serving | 60 Capsules | 60 Servings",
+      "type": "General Statements: All Other Content"
+    },
+    {
+      "notes": "Quality nutricost Guaranteed",
+      "type": "Seals/Symbols"
+    },
+    {
+      "notes": "SUGGESTED USE: As a dietary supplement, take 1 capsule daily with 8-12 oz of water or as directed by your healthcare professional.",
+      "type": "Suggested/Recommended/Usage/Directions"
+    },
+    {
+      "notes": "Third Party Tested†",
+      "type": "General Statements: All Other Content"
+    },
+    {
+      "notes": "Gluten-Free†",
+      "type": "Formulation re: Does NOT Contain"
+    },
+    {
+      "notes": "WARNING: For healthy individuals 18 years and older.",
+      "type": "Precautions re: All Other"
+    },
+    {
+      "notes": "Consult a healthcare professional prior to use if you are pregnant or nursing, taking medication, or have a medical condition.",
+      "type": "Precautions re: Pregnant or Nursing or Prescription Medications"
+    },
+    {
+      "notes": "Keep out of reach of children.",
+      "type": "Precautions re: Children"
+    },
+    {
+      "notes": "Do not use if safety seal is broken or missing.",
+      "type": "Precautions re: All Other"
+    },
+    {
+      "notes": "NOTICE: Store in a cool, dry place.",
+      "type": "Storage"
+    },
+    {
+      "notes": "† These statements have not been evaluated by the Food and Drug Administration. This product is not intended to diagnose, treat, cure, or prevent any disease.",
+      "type": "FDA Disclaimer Statement"
+    },
+    {
+      "notes": "MADE AND QUALITY TESTED IN THE USA WITH GLOBALLY SOURCED INGREDIENTS.",
+      "type": "General Statements: All Other Content"
+    },
+    {
+      "notes": "Manufactured for: nutricost 351 E 1750 N, Vineyard, UT 84059 (866) 438-3694 | support@nutricost.com nutricost.com",
+      "type": "General Statements: All Other Content"
+    },
+    {
+      "notes": "KSM-66® is a registered trademark of Ixoreal Biomed",
+      "type": "General Statements: All Other Content"
+    },
+    {
+      "notes": "BioPerine® is a registered trademark of Sabinsa Corporation.",
+      "type": "General Statements: All Other Content"
+    },
+    {
+      "notes": "GMP Compliant",
+      "type": "Seals/Symbols"
+    },
+    {
+      "notes": "Non-GMO",
+      "type": "Seals/Symbols"
+    }
+  ],
+  "offMarket": 0,
+  "upcSku": "0810014679273",
+  "src": "local/manual_labels/product_submissions/PG_SUB_2E7000A890174F10BAA7870FE5EAD7F3",
+  "source_type": "external_manual",
+  "manual_product_provenance": {
+    "source_kind": "private_product_submission",
+    "source_record_id": "2e7000a8-9017-4f10-baa7-870fe5ead7f3",
+    "label_verified_at": "2026-10-22",
+    "review_status": "verified",
+    "reviewer": "PharmaGuide Clinical Team"
+  },
+  "label_record_metadata": {
+    "source_name": "PharmaGuide verified product submission",
+    "source_record_id": "2e7000a8-9017-4f10-baa7-870fe5ead7f3",
+    "source_date": "2026-10-22",
+    "source_updated_date": "2026-10-22",
+    "product_status": "active",
+    "lineage_key": "pharmaguide_submission:2e7000a8-9017-4f10-baa7-870fe5ead7f3",
+    "reviewed_at": "2026-10-22T21:18:13.295115+00:00"
+  }
+}

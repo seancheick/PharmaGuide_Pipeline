@@ -46,7 +46,8 @@
   },
   "otherIngredientsDisclosure": "present",
   "physicalState": {
-    "name": "Softgel(s)"
+    "langualCodeDescription": "Softgel Capsule",
+    "name": "Softgel Capsule"
   },
   "productType": {
     "name": "Dietary Supplement"

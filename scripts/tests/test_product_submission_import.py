@@ -263,6 +263,82 @@ def test_committed_submission_labels_keep_reviewer_accounts_private():
         assert "reviewer_record_id" not in label["manual_product_provenance"], path.name
 
 
+def test_october_submitted_labels_preserve_photo_verified_details():
+    labels_dir = Path(__file__).resolve().parents[2] / "manual_labels/product_submissions"
+    ids = {
+        "align": "PG_SUB_4ACB39B94D394C19815F63B0A783EF08",
+        "trader_joes_vitamin_c": "PG_SUB_3D5877FE66FA423F9AC3C90EE52EF8CA",
+        "just_ingredients": "PG_SUB_5E4D136A84A8485F98E1F3C0BCF49A73",
+        "pure": "PG_SUB_6AFDA9855BFA449BB235FCFE6ECBAF96",
+        "trader_joes_d3": "PG_SUB_5EB9F9D6F38C4648A6560B489E0E4916",
+        "sports_research": "PG_SUB_8F025E8FFB164793B3B68B15EED2CD31",
+        "trader_joes_melatonin": "PG_SUB_21B7F5A0D3414040948D242FB03DD01B",
+        "santo_remedio": "PG_SUB_4D246163F6CD468CA82B5E023468B9C1",
+        "nutricost": "PG_SUB_2E7000A890174F10BAA7870FE5EAD7F3",
+        "trader_joes_probiotic": "PG_SUB_1A28723DBDAF4AC1897AA5FF156FACA1",
+    }
+    labels = {
+        key: json.loads((labels_dir / f"{product_id}.json").read_text(encoding="utf-8"))
+        for key, product_id in ids.items()
+    }
+
+    expected_forms = {
+        "align": "Capsule",
+        "trader_joes_vitamin_c": "Tablet or Pill",
+        "just_ingredients": "Capsule",
+        "pure": "Capsule",
+        "trader_joes_d3": "Softgel Capsule",
+        "sports_research": "Capsule",
+        "trader_joes_melatonin": "Tablet or Pill",
+        "santo_remedio": "Capsule",
+        "nutricost": "Capsule",
+        "trader_joes_probiotic": "Capsule",
+    }
+    for key, expected_form in expected_forms.items():
+        assert labels[key]["physicalState"] == {
+            "langualCodeDescription": expected_form,
+            "name": expected_form,
+        }
+        serving = labels[key]["servingSizes"][0]
+        assert serving["minDailyServings"] == 1
+        assert serving["maxDailyServings"] == (2 if key == "sports_research" else 1)
+
+    align_rows = labels["align"]["ingredientRows"]
+    assert align_rows[0]["name"] == "Bifidobacterium longum subsp. longum 35624™"
+    assert [row["name"] for row in align_rows[1]["nestedRows"]] == [
+        "Lactobacillus acidophilus La-14®",
+        "Lacticaseibacillus rhamnosus HN001™",
+    ]
+
+    assert labels["sports_research"]["ingredientRows"][0]["notes"] == "38% Daily Value"
+    assert labels["trader_joes_melatonin"]["ingredientRows"][0]["notes"] == (
+        "Daily Value not established"
+    )
+    assert labels["santo_remedio"]["ingredientRows"][0]["notes"] == (
+        "Daily Value not established"
+    )
+    assert all(
+        row["notes"] == "Daily Value not established"
+        for row in labels["nutricost"]["ingredientRows"]
+    )
+    assert labels["trader_joes_probiotic"]["ingredientRows"][0]["notes"].endswith(
+        "Daily Value not established."
+    )
+
+    santo_inactive = {
+        row["name"]
+        for row in labels["santo_remedio"]["otherIngredients"]["ingredients"]
+    }
+    assert santo_inactive == {
+        "Gelatin (capsule)",
+        "Microcrystalline Cellulose",
+        "Magnesium Stearate",
+        "Silica",
+    }
+    pure_label_text = json.dumps(labels["pure"]).lower()
+    assert all(term not in pure_label_text for term in ("lanolin", "geraniol", "farnesol"))
+
+
 def test_present_other_ingredients_become_supported_pipeline_rows():
     from enhanced_normalizer import EnhancedDSLDNormalizer
     from product_submission_import import build_manual_label

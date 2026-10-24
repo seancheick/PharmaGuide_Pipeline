@@ -6,7 +6,7 @@
     {
       "forms": [],
       "ingredientGroup": "Bifidobacterium longum",
-      "name": "Bifidobacterium longum subsp. longum 35624",
+      "name": "Bifidobacterium longum subsp. longum 35624™",
       "nestedRows": [],
       "notes": "Gut Health Probiotic. Daily Value not established.",
       "order": 1,
@@ -25,7 +25,7 @@
         {
           "forms": [],
           "ingredientGroup": "Lactobacillus acidophilus La-14",
-          "name": "Lactobacillus acidophilus La-14",
+          "name": "Lactobacillus acidophilus La-14®",
           "nestedRows": [],
           "order": 1,
           "quantity": []
@@ -33,7 +33,7 @@
         {
           "forms": [],
           "ingredientGroup": "Lacticaseibacillus rhamnosus HN001",
-          "name": "Lacticaseibacillus rhamnosus HN001",
+          "name": "Lacticaseibacillus rhamnosus HN001™",
           "nestedRows": [],
           "order": 2,
           "quantity": []
@@ -90,7 +90,8 @@
   },
   "otherIngredientsDisclosure": "present",
   "physicalState": {
-    "name": "Capsule(s)"
+    "langualCodeDescription": "Capsule",
+    "name": "Capsule"
   },
   "productType": {
     "name": "Dietary Supplement"
@@ -98,7 +99,9 @@
   "servingSizes": [
     {
       "inSFB": true,
+      "maxDailyServings": 1,
       "maxQuantity": 1,
+      "minDailyServings": 1,
       "minQuantity": 1,
       "order": 1,
       "unit": "Capsule(s)"

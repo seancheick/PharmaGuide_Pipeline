@@ -1,0 +1,200 @@
+{
+  "id": "PG_SUB_1A28723DBDAF4AC1897AA5FF156FACA1",
+  "brandName": "Trader Joe's",
+  "fullName": "Advanced Strength Probiotic",
+  "ingredientRows": [
+    {
+      "forms": [],
+      "ingredientGroup": "Proprietary Probiotic Blend",
+      "name": "Proprietary Probiotic Blend",
+      "nestedRows": [
+        {
+          "forms": [],
+          "ingredientGroup": "Lactobacillus acidophilus",
+          "name": "Lactobacillus acidophilus",
+          "nestedRows": [],
+          "quantity": []
+        },
+        {
+          "forms": [],
+          "ingredientGroup": "Bifidobacterium bifidum",
+          "name": "Bifidobacterium bifidum",
+          "nestedRows": [],
+          "quantity": []
+        },
+        {
+          "forms": [],
+          "ingredientGroup": "Bifidobacterium breve",
+          "name": "Bifidobacterium breve",
+          "nestedRows": [],
+          "quantity": []
+        },
+        {
+          "forms": [],
+          "ingredientGroup": "Lactobacillus paracasei",
+          "name": "Lactobacillus paracasei",
+          "nestedRows": [],
+          "quantity": []
+        },
+        {
+          "forms": [],
+          "ingredientGroup": "Lactobacillus plantarum",
+          "name": "Lactobacillus plantarum",
+          "nestedRows": [],
+          "quantity": []
+        },
+        {
+          "forms": [],
+          "ingredientGroup": "Lactobacillus rhamnosus",
+          "name": "Lactobacillus rhamnosus",
+          "nestedRows": [],
+          "quantity": []
+        },
+        {
+          "forms": [],
+          "ingredientGroup": "Bifidobacterium infantis",
+          "name": "Bifidobacterium infantis",
+          "nestedRows": [],
+          "quantity": []
+        },
+        {
+          "forms": [],
+          "ingredientGroup": "Bifidobacterium longum",
+          "name": "Bifidobacterium longum",
+          "nestedRows": [],
+          "quantity": []
+        }
+      ],
+      "notes": "30 Billion CFUs** total; minimum at time of manufacture. Daily Value not established.",
+      "order": 1,
+      "quantity": [
+        {
+          "quantity": 335,
+          "unit": "mg"
+        },
+        {
+          "quantity": 30000000000,
+          "unit": "CFU"
+        }
+      ]
+    }
+  ],
+  "otherIngredients": {
+    "ingredients": [
+      {
+        "name": "Microcrystalline Cellulose"
+      },
+      {
+        "name": "Silicon Dioxide"
+      },
+      {
+        "name": "Magnesium Stearate (Vegetable Source)"
+      },
+      {
+        "name": "Titanium Dioxide (For Color)"
+      }
+    ]
+  },
+  "otherIngredientsDisclosure": "present",
+  "physicalState": {
+    "langualCodeDescription": "Capsule",
+    "name": "Capsule"
+  },
+  "servingSizes": [
+    {
+      "maxDailyServings": 1,
+      "maxQuantity": 1,
+      "minDailyServings": 1,
+      "minQuantity": 1,
+      "order": 1,
+      "unit": "capsule"
+    }
+  ],
+  "servingsPerContainer": 30,
+  "statements": [
+    {
+      "notes": "DIETARY SUPPLEMENT",
+      "type": "FDA Statement of Identity"
+    },
+    {
+      "notes": "3X CFU‡ PER CAPSULE",
+      "type": "General Statements: All Other Content"
+    },
+    {
+      "notes": "30 BILLION CFUs** PER CAPSULE",
+      "type": "General Statements: All Other Content"
+    },
+    {
+      "notes": "8 PROBIOTIC STRAINS",
+      "type": "General Statements: All Other Content"
+    },
+    {
+      "notes": "30 CAPSULES",
+      "type": "General Statements: All Other Content"
+    },
+    {
+      "notes": "Gluten Free",
+      "type": "Formulation re: Does NOT Contain"
+    },
+    {
+      "notes": "SUGGESTED USE: One capsule daily, preferably with a meal, or as recommended by a health care practitioner.",
+      "type": "Suggested/Recommended/Usage/Directions"
+    },
+    {
+      "notes": "Do not exceed recommended dose.",
+      "type": "Precautions re: All Other"
+    },
+    {
+      "notes": "This probiotic helps support digestive and immune health and helps maintain healthy digestive balance.* Trader Joe's Advanced Strength Probiotic Supplement is formulated with 8 strains of healthy bacteria and contains 30 billion Colony Forming Units (CFUs) per capsule.**",
+      "type": "General Statements: All Other Content"
+    },
+    {
+      "notes": "*This statement has not been evaluated by the Food and Drug Administration. This product is not intended to diagnose, treat, cure or prevent any disease.",
+      "type": "FDA Disclaimer Statement"
+    },
+    {
+      "notes": "** Each capsule contains a minimum of 30 billion live cultures at time of manufacture. ‡ This is three times more CFUs compared to Trader Joe's Super Acidophilus Complex.",
+      "type": "General Statements: All Other Content"
+    },
+    {
+      "notes": "People with medical concerns should check with their physician before using this or any dietary supplement.",
+      "type": "Precautions re: All Other"
+    },
+    {
+      "notes": "KEEP OUT OF REACH OF CHILDREN",
+      "type": "Precautions re: Children"
+    },
+    {
+      "notes": "BEST IF STORED AT 72°F (22°C) OR BELOW",
+      "type": "Storage"
+    },
+    {
+      "notes": "Contains Milk.",
+      "type": "Formula re: Contains"
+    },
+    {
+      "notes": "Dist. & Sold Exclusively By: Trader Joe's, 800 S. Shamrock Ave. Monrovia, CA 91016",
+      "type": "General Statements: All Other Content"
+    }
+  ],
+  "offMarket": 0,
+  "upcSku": "00568456",
+  "src": "local/manual_labels/product_submissions/PG_SUB_1A28723DBDAF4AC1897AA5FF156FACA1",
+  "source_type": "external_manual",
+  "manual_product_provenance": {
+    "source_kind": "private_product_submission",
+    "source_record_id": "1a28723d-bdaf-4ac1-897a-a5ff156faca1",
+    "label_verified_at": "2026-10-23",
+    "review_status": "verified",
+    "reviewer": "PharmaGuide Clinical Team"
+  },
+  "label_record_metadata": {
+    "source_name": "PharmaGuide verified product submission",
+    "source_record_id": "1a28723d-bdaf-4ac1-897a-a5ff156faca1",
+    "source_date": "2026-10-23",
+    "source_updated_date": "2026-10-23",
+    "product_status": "active",
+    "lineage_key": "pharmaguide_submission:1a28723d-bdaf-4ac1-897a-a5ff156faca1",
+    "reviewed_at": "2026-10-23T07:32:59.276663+00:00"
+  }
+}

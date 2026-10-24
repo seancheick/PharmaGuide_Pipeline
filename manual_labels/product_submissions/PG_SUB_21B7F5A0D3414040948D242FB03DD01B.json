@@ -1,0 +1,126 @@
+{
+  "id": "PG_SUB_21B7F5A0D3414040948D242FB03DD01B",
+  "brandName": "Trader Joe's",
+  "fullName": "Chewable Melatonin Peppermint Flavor 3 mg",
+  "ingredientRows": [
+    {
+      "forms": [],
+      "ingredientGroup": "Melatonin",
+      "name": "Melatonin",
+      "nestedRows": [],
+      "notes": "Daily Value not established",
+      "order": 1,
+      "quantity": [
+        {
+          "quantity": 3,
+          "unit": "mg"
+        }
+      ]
+    }
+  ],
+  "otherIngredients": {
+    "ingredients": [
+      {
+        "name": "Lactose (Milk)"
+      },
+      {
+        "name": "Microcrystalline Cellulose"
+      },
+      {
+        "name": "Natural Peppermint Flavor"
+      },
+      {
+        "name": "Croscarmellose Sodium"
+      },
+      {
+        "name": "Magnesium Stearate (Vegetable Source)"
+      }
+    ]
+  },
+  "otherIngredientsDisclosure": "present",
+  "physicalState": {
+    "langualCodeDescription": "Tablet or Pill",
+    "name": "Tablet or Pill"
+  },
+  "servingSizes": [
+    {
+      "maxDailyServings": 1,
+      "maxQuantity": 1,
+      "minDailyServings": 1,
+      "minQuantity": 1,
+      "order": 1,
+      "unit": "tablet"
+    }
+  ],
+  "servingsPerContainer": 100,
+  "statements": [
+    {
+      "notes": "DIETARY SUPPLEMENT",
+      "type": "FDA Statement of Identity"
+    },
+    {
+      "notes": "CHEWABLE",
+      "type": "General Statements: All Other Content"
+    },
+    {
+      "notes": "PEPPERMINT FLAVOR",
+      "type": "General Statements: All Other Content"
+    },
+    {
+      "notes": "100 TABLETS",
+      "type": "General Statements: All Other Content"
+    },
+    {
+      "notes": "SUGGESTED USE: Take one (1) tablet daily, preferably 30 to 60 minutes before bedtime, or as directed by a health professional.",
+      "type": "Suggested/Recommended/Usage/Directions"
+    },
+    {
+      "notes": "WARNING: Do not exceed the recommended dosage. Do not use if taking any medications or supplements containing valerian or 5-HTP. May cause drowsiness. Do not drive or operate machinery while taking this product.",
+      "type": "Precautions re: Pregnant or Nursing or Prescription Medications"
+    },
+    {
+      "notes": "People with medical concerns should check with their physician before using this or any dietary supplement.",
+      "type": "Precautions re: All Other"
+    },
+    {
+      "notes": "CONTAINS MILK.",
+      "type": "Formula re: Contains"
+    },
+    {
+      "notes": "PRODUCT OF CANADA",
+      "type": "General Statements: All Other Content"
+    },
+    {
+      "notes": "Dist. & Sold Exclusively By: Trader Joe's, 800 S. Shamrock Ave., Monrovia, CA 91016",
+      "type": "General Statements: All Other Content"
+    },
+    {
+      "notes": "STORE IN A COOL DRY PLACE.",
+      "type": "Storage"
+    },
+    {
+      "notes": "KEEP OUT OF REACH OF CHILDREN.",
+      "type": "Precautions re: Children"
+    }
+  ],
+  "offMarket": 0,
+  "upcSku": "00568012",
+  "src": "local/manual_labels/product_submissions/PG_SUB_21B7F5A0D3414040948D242FB03DD01B",
+  "source_type": "external_manual",
+  "manual_product_provenance": {
+    "source_kind": "private_product_submission",
+    "source_record_id": "21b7f5a0-d341-4040-948d-242fb03dd01b",
+    "label_verified_at": "2026-10-23",
+    "review_status": "verified",
+    "reviewer": "PharmaGuide Clinical Team"
+  },
+  "label_record_metadata": {
+    "source_name": "PharmaGuide verified product submission",
+    "source_record_id": "21b7f5a0-d341-4040-948d-242fb03dd01b",
+    "source_date": "2026-10-23",
+    "source_updated_date": "2026-10-23",
+    "product_status": "active",
+    "lineage_key": "pharmaguide_submission:21b7f5a0-d341-4040-948d-242fb03dd01b",
+    "reviewed_at": "2026-10-23T07:31:10.222419+00:00"
+  }
+}

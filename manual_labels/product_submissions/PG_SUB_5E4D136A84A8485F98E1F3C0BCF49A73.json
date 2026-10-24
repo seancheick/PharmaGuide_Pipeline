@@ -86,7 +86,8 @@
   },
   "otherIngredientsDisclosure": "present",
   "physicalState": {
-    "name": "Capsule(s)"
+    "langualCodeDescription": "Capsule",
+    "name": "Capsule"
   },
   "productType": {
     "name": "Dietary Supplement"
@@ -94,7 +95,9 @@
   "servingSizes": [
     {
       "inSFB": true,
+      "maxDailyServings": 1,
       "maxQuantity": 2,
+      "minDailyServings": 1,
       "minQuantity": 2,
       "order": 1,
       "unit": "Capsule(s)"

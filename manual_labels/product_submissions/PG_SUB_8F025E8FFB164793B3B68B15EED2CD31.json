@@ -1,0 +1,145 @@
+{
+  "id": "PG_SUB_8F025E8FFB164793B3B68B15EED2CD31",
+  "brandName": "Sports Research",
+  "fullName": "Magnesium Glycinate Chelated",
+  "ingredientRows": [
+    {
+      "forms": [
+        {
+          "name": "chelated magnesium glycinate"
+        }
+      ],
+      "ingredientGroup": "Magnesium",
+      "name": "Magnesium (from 1441 mg chelated magnesium glycinate)",
+      "nestedRows": [],
+      "notes": "38% Daily Value",
+      "order": 1,
+      "quantity": [
+        {
+          "quantity": 160,
+          "unit": "mg"
+        }
+      ]
+    }
+  ],
+  "otherIngredients": {
+    "ingredients": [
+      {
+        "name": "Veggie capsule (hypromellose)"
+      },
+      {
+        "name": "organic rice hulls"
+      }
+    ]
+  },
+  "otherIngredientsDisclosure": "present",
+  "physicalState": {
+    "langualCodeDescription": "Capsule",
+    "name": "Capsule"
+  },
+  "servingSizes": [
+    {
+      "maxDailyServings": 2,
+      "maxQuantity": 2,
+      "minDailyServings": 1,
+      "minQuantity": 2,
+      "order": 1,
+      "unit": "Veggie Capsules"
+    }
+  ],
+  "servingsPerContainer": "45",
+  "statements": [
+    {
+      "notes": "Dietary Supplement",
+      "type": "FDA Statement of Identity"
+    },
+    {
+      "notes": "160MG Magnesium Per Serving",
+      "type": "General Statements: All Other Content"
+    },
+    {
+      "notes": "Supports Enzymatic Processes*",
+      "type": "General Statements: All Other Content"
+    },
+    {
+      "notes": "Vegan | Gluten-Free | Non-GMO",
+      "type": "Formulation re: Vegetarian/Vegan"
+    },
+    {
+      "notes": "SUGGESTED USE: Adults take 2 veggie capsules 1–2 times daily with a meal, or as recommended by a qualified healthcare professional.",
+      "type": "Suggested/Recommended/Usage/Directions"
+    },
+    {
+      "notes": "Non-GMO Verified",
+      "type": "Formulation re: Other"
+    },
+    {
+      "notes": "Gluten-Free",
+      "type": "Formulation re: Does NOT Contain"
+    },
+    {
+      "notes": "Third Party Tested",
+      "type": "General Statements: All Other Content"
+    },
+    {
+      "notes": "cGMP Compliant",
+      "type": "General Statements: All Other Content"
+    },
+    {
+      "notes": "NON GMO Project VERIFIED nongmoproject.org",
+      "type": "Seals/Symbols"
+    },
+    {
+      "notes": "Certified Vegan vegan.org",
+      "type": "Seals/Symbols"
+    },
+    {
+      "notes": "CAUTION: KEEP OUT OF REACH OF CHILDREN AND PETS.",
+      "type": "Precautions re: Children"
+    },
+    {
+      "notes": "Consult with a qualified healthcare professional prior to using this product, especially if you are pregnant, nursing, have a diagnosed medical condition (e.g. kidney disease), or are taking a prescription medication.",
+      "type": "Precautions re: Pregnant or Nursing or Prescription Medications"
+    },
+    {
+      "notes": "Do not exceed recommended daily intake.",
+      "type": "Precautions re: All Other"
+    },
+    {
+      "notes": "Do not use if safety seal is damaged or missing.",
+      "type": "Precautions re: All Other"
+    },
+    {
+      "notes": "Store at room temperature, in a dry place. Protect product from excessive heat, freezing, humidity and light.",
+      "type": "Storage"
+    },
+    {
+      "notes": "*This statement has not been evaluated by the Food and Drug Administration. This product is not intended to diagnose, treat, cure, or prevent any disease.",
+      "type": "FDA Disclaimer Statement"
+    },
+    {
+      "notes": "Distributed By: Sports Research · 310.519.1484 784 Channel St. San Pedro, CA 90731 sportsresearch.com @sportsresearch",
+      "type": "General Statements: All Other Content"
+    }
+  ],
+  "offMarket": 0,
+  "upcSku": "0023249092193",
+  "src": "local/manual_labels/product_submissions/PG_SUB_8F025E8FFB164793B3B68B15EED2CD31",
+  "source_type": "external_manual",
+  "manual_product_provenance": {
+    "source_kind": "private_product_submission",
+    "source_record_id": "8f025e8f-fb16-4793-b3b6-8b15eed2cd31",
+    "label_verified_at": "2026-10-22",
+    "review_status": "verified",
+    "reviewer": "PharmaGuide Clinical Team"
+  },
+  "label_record_metadata": {
+    "source_name": "PharmaGuide verified product submission",
+    "source_record_id": "8f025e8f-fb16-4793-b3b6-8b15eed2cd31",
+    "source_date": "2026-10-22",
+    "source_updated_date": "2026-10-22",
+    "product_status": "active",
+    "lineage_key": "pharmaguide_submission:8f025e8f-fb16-4793-b3b6-8b15eed2cd31",
+    "reviewed_at": "2026-10-22T21:13:54.070978+00:00"
+  }
+}

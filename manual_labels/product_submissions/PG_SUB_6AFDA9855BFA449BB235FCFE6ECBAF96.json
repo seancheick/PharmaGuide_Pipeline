@@ -55,6 +55,7 @@
   },
   "otherIngredientsDisclosure": "present",
   "physicalState": {
+    "langualCodeDescription": "Capsule",
     "name": "Capsule"
   },
   "productType": {
