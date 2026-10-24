@@ -346,3 +346,42 @@ def test_parenthetical_qualified_preparation_keeps_full_identity(pipeline, name)
     assert row['bio_score'] is None
     assert readiness['is_live_ready'] is False
     assert any(q[0] == 'disclosed_form_unmapped' for q in queue)
+
+
+@pytest.mark.parametrize('raw,category,group,prefix,parent,expected', [
+    ('Mixed Tocopherols', 'vitamin', 'Vitamin E', 'containing', 'chasteberry', 'marker'),
+    ('Mixed Carotenoids', 'non-nutrient/non-botanical', 'carotenoids', 'containing', 'moringa', 'marker'),
+    ('Advanced Hair Complex', 'blend', 'Proprietary Blend', '', 'vitamin_b7_biotin', 'placeholder'),
+    ('Calcium Carbonate', 'mineral', 'Calcium', '', 'vitamin_c', None),
+    ('Oat Seed Extract', 'botanical', 'Oats', '', 'oat_straw', None),
+    ('Mixed Tocopherols', 'vitamin', 'Vitamin E', 'not containing', 'chasteberry', None),
+])
+def test_structured_constituent_and_blend_context_preserves_real_form_conflicts(pipeline, raw, category, group, prefix, parent, expected):
+    _, enricher = pipeline
+    form = {'raw_form_text': raw, 'dsld_category': category,
+            'dsld_ingredient_group': group, 'dsld_prefix': prefix}
+    assert enricher._form_token_context(form, {parent.replace('_', ' ')}, parent) == expected
+
+
+def test_recorded_plant_part_context_does_not_hide_a_different_part(pipeline):
+    _, enricher = pipeline
+    form = {'raw_form_text': 'Fruit', 'dsld_category': 'blend',
+            'dsld_ingredient_group': 'Blend (Herb/Botanical)', 'parent_plant_part': 'fruit'}
+    assert enricher._form_token_context(form, {'citrus bioflavonoids'}, 'citrus_bioflavonoids') == 'restatement'
+    form.update(raw_form_text='Seed', parent_plant_part='straw')
+    assert enricher._form_token_context(form, {'oat straw'}, 'oat_straw') is None
+
+
+def test_repeated_plant_part_is_source_context_through_normalize_enrich(pipeline):
+    row = _row(1, 'Citrus Bioflavonoids', 'Citrus Bioflavonoids', 'bioflavonoid', ['Fruit'])
+    row['notes'] = 'PlantPart: fruit'
+    row['forms'][0].update(category='blend', ingredientGroup='Blend (Herb/Botanical)')
+    enriched, _, rows, queue = _run(pipeline, _label(277387, [row]))
+    assert rows['Citrus Bioflavonoids']['form_match_status'] != 'unmapped'
+    assert not any('Fruit' == token for _,token,_ in queue)
+    assert row['forms'][0].get('_parent_plant_part') is None
+    assert 'parent_plant_part' not in json.dumps(enriched)
+    # Parent-part context participates in the existing memoized form input.
+    row['notes'] = 'PlantPart: seed'
+    _, _, different, _ = _run(pipeline, _label(277388, [row]))
+    assert different['Citrus Bioflavonoids']['form_match_status'] == 'unmapped'

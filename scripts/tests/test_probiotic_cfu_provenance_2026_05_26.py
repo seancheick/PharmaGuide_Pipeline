@@ -1418,3 +1418,29 @@ def test_real_np_strain_uses_disclosed_cfu_despite_nutrition_sodium(enricher):
     assert scored['assessment_readiness']['identity']['readiness'] == 'complete'
     strain = next(row for row in enriched['activeIngredients'] if row['name'] == 'Lactobacillus rhamnosus GG')
     assert (strain['quantity'], strain['unit']) == (50, 'NP')
+
+
+@pytest.mark.parametrize('members', [
+    ['Lactobacillus rhamnosus (HN001)'],
+    ['Lactobacillus rhamnosus (HN001)', 'Lactobacillus acidophilus (La-14)'],
+])
+def test_flattened_actual_members_repair_marketing_header_projection(enricher, members):
+    # DSLD251169: physical heading owns CFU; actual descendants own identities.
+    from probiotic_measurements import probiotic_label_identity_summary
+    ref = 'ingredientRows[2]'
+    rows = [{'name': 'Baby & Me Healthy Microbiome', 'standardName': 'Lactobacillus Rhamnosus',
+             'raw_source_path': ref, 'category': 'bacteria', 'raw_category': 'bacteria',
+             'cleaner_row_role': 'active_scorable', 'notes': '10 billion colony forming units (CFU)',
+             'nestedIngredients': [], 'forms': []}]
+    rows += [{'name': name, 'raw_source_path': f'{ref}.nestedRows[{i}]',
+              'parent_source_path': ref, 'category': 'bacteria', 'raw_category': 'bacteria',
+              'cleaner_row_role': 'nested_display_only', 'nestedIngredients': [], 'forms': []}
+             for i, name in enumerate(members)]
+    product = {'id': '251169', 'activeIngredients': rows, 'statements': [], 'servingSizes': []}
+    product['probiotic_data'] = enricher._collect_probiotic_data(product)
+    heading = next(b for b in product['probiotic_data']['probiotic_blends'] if b['raw_source_path'] == ref)
+    assert heading['strains'] == members
+    assert heading['is_blend_header_total'] is True
+    identity = probiotic_label_identity_summary(product)
+    assert identity['total_strain_count'] == len(members)
+    assert identity['per_strain_cfu_disclosed_count'] == (1 if len(members) == 1 else 0)

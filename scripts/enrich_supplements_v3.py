@@ -4987,7 +4987,9 @@ class SupplementEnricherV3:
 
             # Scorable ingredient - try to match against quality map
             # Pass cleaned forms[] to enable form-aware matching (P0 form-loss fix)
-            ingredient_forms = ingredient.get('forms') or []
+            ingredient_forms = [dict(form, _parent_plant_part=ingredient.get('plantPart'))
+                                if isinstance(form, dict) else form
+                                for form in (ingredient.get('forms') or [])]
             if ingredient.get("cleaner_match_method") == "single_declared_nutrient_form":
                 ingredient_forms = [form for form in ingredient_forms
                                     if not self._is_source_descriptor_form(form, parent_row=ingredient)]
@@ -5375,7 +5377,9 @@ class SupplementEnricherV3:
                 promotion_confidence = promotion_result.get('confidence', 'MEDIUM')
                 dose_present = bool(quantity and unit)
 
-                ingredient_forms = ingredient.get('forms') or []
+                ingredient_forms = [dict(form, _parent_plant_part=ingredient.get('plantPart'))
+                                    if isinstance(form, dict) else form
+                                    for form in (ingredient.get('forms') or [])]
                 # Phase 3: propagate cleaner IQM canonical_id (see Pass 1 note above).
                 _cleaner_iqm_cid = (
                     ingredient.get('canonical_id')
@@ -9141,6 +9145,7 @@ class SupplementEnricherV3:
                 # so `_match_multi_form` can short-circuit source descriptors
                 # without relying on text heuristics.
                 'dsld_category': form.get('category'),
+                'parent_plant_part': form.get('_parent_plant_part'),
                 'dsld_prefix': form.get('prefix'),
                 'dsld_ingredient_group': form.get('ingredientGroup'),
                 'dsld_unii_code': form.get('uniiCode'),
@@ -9222,6 +9227,15 @@ class SupplementEnricherV3:
         )
         return any(token in normalized for token in delivery_tokens)
 
+    @staticmethod
+    def _strip_private_form_context(match: Optional[Dict]) -> Optional[Dict]:
+        """Keep transient source context out of serialized form evidence."""
+        if isinstance(match, dict):
+            for form in match.get("extracted_forms") or []:
+                if isinstance(form, dict):
+                    form.pop("parent_plant_part", None)
+        return match
+
     def _match_quality_map(self, ing_name: str, std_name: str, quality_map: Dict,
                            _form_extraction_attempt: bool = False,
                            cleaned_forms: Optional[List[Dict]] = None,
@@ -9267,12 +9281,12 @@ class SupplementEnricherV3:
             )
         except (TypeError, ValueError):
             # Unserializable argument (rare) → correctness over speed: bypass cache.
-            return self._match_quality_map_impl(
+            return self._strip_private_form_context(self._match_quality_map_impl(
                 ing_name, std_name, quality_map, _form_extraction_attempt,
                 cleaned_forms, preferred_parent, branded_token,
                 cleaner_canonical_id,
                 source_context,
-            )
+            ))
 
         if key in self._match_quality_cache:
             return copy.deepcopy(self._match_quality_cache[key])
@@ -9282,6 +9296,7 @@ class SupplementEnricherV3:
             cleaned_forms, preferred_parent, branded_token, cleaner_canonical_id,
             source_context,
         )
+        result = self._strip_private_form_context(result)
         # Store an isolated copy (defends against any impl-side aliasing) and
         # hand every caller its own isolated copy — the cache entry is immutable.
         self._match_quality_cache[key] = copy.deepcopy(result)
@@ -9562,7 +9577,8 @@ class SupplementEnricherV3:
         group = self._norm_form_name(form_data.get('dsld_ingredient_group'))
         category = (form_data.get('dsld_category') or '').lower().strip()
         prefix = (form_data.get('dsld_prefix') or '').lower().strip()
-        if category == 'tbd' or prefix == 'from culture of':
+        if (category == 'tbd' or prefix == 'from culture of'
+                or (category == 'blend' and group == 'proprietary blend')):
             return 'placeholder'
         # DSLD files a salt under the nutrient it supplies (every calcium salt
         # has group "Calcium"), so an equal group only restates the identity
@@ -9580,6 +9596,10 @@ class SupplementEnricherV3:
         singular = lambda words: {w[:-1] if len(w) > 3 and w.endswith('s') else w for w in words}
         label_words = singular(self._norm_form_name(row_label).split())
         repeats_label = bool(token) and singular(token.split()) <= label_words
+        recorded_part = self._norm_form_name(form_data.get('parent_plant_part'))
+        if (category == 'blend' and group == 'blend herb botanical'
+                and recorded_part and token == recorded_part):
+            return 'restatement'
         if (token in parent_names or botanical_restatement or repeats_label
                 or self._restates_identity(token, parent_names)):
             return 'restatement'
@@ -9588,6 +9608,7 @@ class SupplementEnricherV3:
         # and DSLD's own "standardized for" / "std. to 85%-" prefix marks one.
         unprefixed = token[len('total '):] if token.startswith('total ') else token
         if (prefix.startswith(('standardized', 'std.', 'expressed as'))
+                or prefix == 'containing'
                 or any(singular(unprefixed.split()) == singular(marker.split())
                        for marker in self._standardization_marker_names())
                 or self._is_standardization_marker_token(source_text)):
@@ -17012,16 +17033,28 @@ class SupplementEnricherV3:
                 parent_ref = str(parent.get("parent_source_path") or _parent_path(parent_ref))
             return False
 
+        # Actual source descendants also establish a container when an old
+        # cleaner retained an active role on its marketing heading. Reuse the
+        # physical owner/parent links; a similar name never establishes this.
+        source_descendants = {
+            ref: [row for row in source_rows_by_ref.values() if _belongs_to_owner(row, ref)]
+            for ref, owner in source_rows_by_ref.items()
+            if _is_blend_header_total(owner) or _is_probiotic_identity(owner)
+        }
+        source_header_refs = {
+            ref for ref, descendants in source_descendants.items()
+            if _is_blend_header_total(source_rows_by_ref[ref]) or descendants
+        }
         strain_allocation_owner_refs = set()
         for owner in source_rows:
             ref = _row_path(owner)
-            if not ref or not _is_blend_header_total(owner):
+            if not ref or ref not in source_header_refs:
                 continue
-            descendants = [r for r in source_rows if _belongs_to_owner(r, ref)]
+            descendants = source_descendants[ref]
             if descendants:
-                members = [r for r in descendants if not _is_blend_header_total(r)]
+                members = [r for r in descendants if _row_path(r) not in source_header_refs]
                 incomplete = any(
-                    _is_blend_header_total(r)
+                    _row_path(r) in source_header_refs
                     and r.get("dose_role") != "declared_total"
                     and not any(
                         _belongs_to_owner(child, _row_path(r))
@@ -17054,6 +17087,9 @@ class SupplementEnricherV3:
 
             if is_probiotic:
                 nested = ingredient.get('nestedIngredients', [])
+                if not nested and ingredient_source_path in source_header_refs:
+                    nested = [row for row in source_descendants[ingredient_source_path]
+                              if _row_path(row) not in source_header_refs]
                 harvest = ingredient.get('harvestMethod', '') or ''
                 notes = ingredient.get('notes', '') or ''
 
@@ -17072,7 +17108,8 @@ class SupplementEnricherV3:
                     cfu_data,
                 )
 
-                is_blend_header = _is_blend_header_total(ingredient)
+                is_blend_header = (_is_blend_header_total(ingredient)
+                                   or ingredient_source_path in source_header_refs)
                 # Some DSLD probiotic blends encode their declared species as
                 # structured ``forms[]`` percentages instead of nested label
                 # rows. These forms establish identity for the owner CFU total
@@ -17089,6 +17126,7 @@ class SupplementEnricherV3:
                     row for row in (nested or form_strains)
                     if not has_nonlive_microbial_derivative_evidence(row)
                     and not _is_blend_header_total(row)
+                    and _row_path(row) not in source_header_refs
                 ]
                 # A header is not a strain. Its source-derived components
                 # cannot turn it into an organism through the header name.
