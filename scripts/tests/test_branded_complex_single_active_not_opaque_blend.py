@@ -191,7 +191,7 @@ def preparation_labels():
     from build_final_db import build_detail_blob
     normalizer, enricher = EnhancedDSLDNormalizer(), SupplementEnricherV3()
     products = {}
-    for pid in ("231852", "219249", "201405", "246073", "302668", "277667", "243050", "307567", "188685", "69759"):
+    for pid in ("231852", "219249", "201405", "246073", "302668", "277667", "243050", "307567", "188685", "69759", "213448", "201803"):
         raw = json.loads((Path(__file__).parent / "fixtures" / f"blend_preparation_{pid}_raw.json").read_text())
         cleaned = normalizer.normalize_product(raw)
         enriched, _ = enricher.enrich_product(cleaned)
@@ -274,3 +274,43 @@ def test_a_named_ingredient_amount_is_not_an_unquantified_mixture_total(preparat
     blends = [r for r in enriched['proprietary_data']['blends'] if r.get('source_row_ref') == 'ingredientRows[0]']
     assert blends
     assert all(r['blend_total_mg'] is None for r in blends)
+
+
+def test_structural_header_does_not_override_printed_nutrient_context(preparation_labels):
+    cleaned, enriched, _, _ = preparation_labels["213448"]
+    [row] = cleaned["activeIngredients"]
+    assert row["raw_category"] == "mineral" and row["canonical_id"] == "boron"
+    assert row["label_nutrient_context"] and row["quantity"] == 3 and row["unit"] == "mg"
+    assert row["cleaner_row_role"] == "blend_header_total"
+    assert not any(x.get("source_row_ref") == row["raw_source_path"] for x in enriched["proprietary_data"]["blends"])
+
+
+def test_citrus_source_fruits_are_not_separately_undosed_actives(preparation_labels):
+    cleaned, enriched, _, _ = preparation_labels["201803"]
+    [row] = [x for x in cleaned["activeIngredients"] if x["raw_source_path"] == "ingredientRows[22]"]
+    assert row["canonical_id"] == "citrus_bioflavonoids"
+    assert row["quantity"] == 30 and row["unit"] == "mg"
+    assert row["cleaner_row_role"] == "active_scorable"
+    assert not any(x.get("source_row_ref") == row["raw_source_path"] for x in enriched["proprietary_data"]["blends"])
+
+
+@pytest.mark.parametrize("change", ["extra_active", "member", "unknown_amount", "proprietary", "name_conflict", "negated_source"])
+def test_citrus_source_exception_does_not_hide_real_or_unresolved_formulas(change):
+    import json
+    from pathlib import Path
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    raw = json.loads((Path(__file__).parent / "fixtures/blend_preparation_201803_raw.json").read_text())["ingredientRows"][22]
+    if change == "extra_active":
+        raw["forms"].append({"name": "Bromelain", "category": "enzyme", "prefix": "with"})
+    elif change == "member":
+        raw["nestedRows"] = [{"name": "Quercetin", "quantity": []}]
+    elif change == "unknown_amount":
+        raw["quantity"] = []
+    elif change == "proprietary":
+        raw["notes"] += " Proprietary blend"
+    elif change == "name_conflict":
+        raw["name"] += " with Quercetin"
+    else:
+        for form in raw["forms"]:
+            form["prefix"] = "not from"
+    assert EnhancedDSLDNormalizer()._is_dsld_active_blend_total_row(raw) is True

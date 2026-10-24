@@ -14918,8 +14918,10 @@ class SupplementEnricherV3:
                 category = str(row.get("raw_category") or "").casefold()
                 if (row.get("nestedIngredients") or row.get("parentBlend")
                         or row.get("parent_source_path")
-                        or row.get("cleaner_row_role") == "blend_header_total"
-                        or row.get("dose_class") == "blend_total_weight"
+                        or (not row.get("label_nutrient_context") and (
+                            row.get("cleaner_row_role") == "blend_header_total"
+                            or row.get("dose_class") == "blend_total_weight"
+                        ))
                         or category == "blend" or "blend" in group
                         or any(path.startswith(ref + ".nestedRows[")
                                for path in source_inventory if ref)):

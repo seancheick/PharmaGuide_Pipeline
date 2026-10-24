@@ -3305,7 +3305,7 @@ class EnhancedDSLDNormalizer:
     )
 
     def _citrus_bioflavonoid_source_identity(
-        self, ingredient: Dict[str, Any]
+        self, ingredient: Dict[str, Any], *, source_material_only: bool = False,
     ) -> Optional[Tuple[str, str, str]]:
         """A generic bioflavonoid row whose declared botanical source is a citrus fruit.
 
@@ -3321,8 +3321,28 @@ class EnhancedDSLDNormalizer:
         standard_name, mapped, _ = self._enhanced_ingredient_mapping(
             name, [], ingredient_group=ingredient.get("ingredientGroup")
         )
-        if not mapped or self._resolve_canonical_identity(standard_name, raw_name=name)[0] != "bioflavonoids":
+        identities = {"bioflavonoids", "citrus_bioflavonoids"} if source_material_only else {"bioflavonoids"}
+        if not mapped or self._resolve_canonical_identity(standard_name, raw_name=name)[0] not in identities:
             return None
+        forms = ingredient.get("forms") or []
+        if source_material_only:
+            # A disclosed flavonoid material's citrus origins are provenance,
+            # not additional actives. Require the exact existing identity and
+            # explicit source forms; mixed or structural members stay blends.
+            if (self._canonical_identity_registry.resolve_verified_preferred(name)
+                    != ("citrus_bioflavonoids", "ingredient_quality_map")
+                    or not self._has_declared_mass(ingredient) or not forms
+                    or ingredient.get("nestedRows") or ingredient.get("_nested_rows_flattened")
+                    or ingredient.get("isNestedIngredient") or ingredient.get("parentBlend")
+                    or re.search(r"\b(?:blend|proprietary)\b", " ".join(
+                        str(ingredient.get(key) or "") for key in ("name", "ingredientGroup", "notes", "description")
+                    ), re.I)
+                    or not any(isinstance(form, dict) and str(form.get("prefix") or "").strip().casefold() == "from" for form in forms)
+                    or not all(isinstance(form, dict)
+                               and str(form.get("category") or "").strip().casefold() == "botanical"
+                               and self._CITRUS_SOURCE_RE.search(f"{form.get('name') or ''} {form.get('ingredientGroup') or ''}")
+                               for form in forms)):
+                return None
         citrus_source = any(
             isinstance(form, dict)
             and str(form.get("category") or "").strip().casefold() == "botanical"
@@ -11929,6 +11949,8 @@ class EnhancedDSLDNormalizer:
         strong_blend_signal = self._has_dsld_blend_group_signal(ing)
         weak_blend_signal = self._is_proprietary_blend_name(ing.get("name", ""))
         if not (strong_blend_signal or weak_blend_signal):
+            return False
+        if self._citrus_bioflavonoid_source_identity(ing, source_material_only=True):
             return False
         quantity, unit = self._extract_primary_mass_unit(ing)
         is_disclosed_epa_dha_child = bool(
