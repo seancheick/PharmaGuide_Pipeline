@@ -514,3 +514,66 @@ PDF page53, describes mild events in both trial arms, whereas the original abstr
 no adverse events. This is a submitter-authored secondary account, not the corrected table
 or FDA efficacy endorsement. Record the discrepancy for full-text review; do not infer
 causation, invent corrected values, or repeat an unqualified no-events claim. Existing holds remain.
+
+
+### Exact-species benchmark continuation — October 23, 2026
+
+Owner: `clinical_applicability::assess_clinical_source_review` and
+`scoring_v4/modules/botanical_profile::_botanical_benchmark`; existing handoff and
+backlog own product dependencies. Will NOT create a registry, numeric benchmark or approval.
+This batch adds source-review packets only; no runtime or curated assessment is changed.
+
+**Kelp — labels 331151/331152/331154/312063–312066 and source 309387.**
+[PMID34206160](https://pubmed.ncbi.nlm.nih.gov/34206160/),
+[full text PMC8307228](https://pmc.ncbi.nlm.nih.gov/articles/PMC8307228/), methods 4.1–4.3,
+results 2.3–2.5: iodine-reduced, boiled Laminaria japonica powder, approximately 6 g/day,
+30 tablets/day for 8 weeks; 50 randomized overweight Japanese adults, 48 analyzed. Body-fat
+benefit was observed in men; women and overall lipid results did not show equivalent
+benefit. Tablet weight 500 mg is not kelp amount: tablets contain 39.3% kelp powder.
+The preparation supplies measured alginate and iodine. A 500 mg extract or 10:1 ratio
+alone cannot establish correspondence. Normal thyroid measures in this selected,
+short-duration population do not justify universal iodine reassurance. Manufacturer/CRO
+employment is disclosed. Full-text XML retrieved successfully through Europe PMC.
+Disposition: this source does not establish a numerical benchmark for these exact labels;
+preparation/clinical applicability remains unresolved. Clinician approval, where required,
+must follow preparation correspondence; no dose, grade or warning changed.
+
+**Sweet cherry — label 294296.**
+[PMID40077655](https://pubmed.ncbi.nlm.nih.gov/40077655/),
+[full text PMC11901987](https://pmc.ncbi.nlm.nih.gov/articles/PMC11901987/), methods 2.1–2.3,
+results 3.2: 30-day single-blind trial, 40 completers with obesity. Each twice-daily drink
+contains 50 mL concentrate plus 3 g Prunus avium powder, diluted to 200 mL. Neither powder
+alone nor an unspecified extract is the tested intervention. Within-group digit-span
+improvement does not establish an overall between-group effect: change in backward span
+was not significant overall; subgroup findings and multiple outcomes require review.
+Other cognitive tests showed no between-group advantage. The paper reuses an earlier
+trial cohort (NCT05586386; recruitment 2020–2021, registration 2022); associated publications
+must not count as independent replications. Full-text XML and primary indexed abstract
+retrieved. Disposition: useful exact-species source, insufficient preparation correspondence
+or threshold evidence for this label. Existing ungraded preparation/benchmark assessment
+and applicable clinical holds remain; no generic tart-cherry evidence transfer.
+
+**Cranberry — label 330664.**
+[PMID11431298](https://pubmed.ncbi.nlm.nih.gov/11431298/), DOI10.1136/bmj.322.7302.1571:
+primary indexed abstract verified through Europe PMC. 150 women with prior E.coli UTI;
+open randomized study, 50 mL cranberry–lingonberry concentrate daily for 6 months, with
+12-month follow-up. Fewer recurrences occurred versus no intervention at 6 months.
+The indexed full-text search describes oxycoccos plus vitis-idaea; direct PMC access
+challenged, Europe PMC fullTextXML returned 500, BMJ returned 403. Species attribution
+therefore remains a full-text confirmation requirement, not a completed verification.
+Even if confirmed, combination juice does not establish isolated oxycoccos extract
+mass/PAC equivalence or a universal benchmark. Disposition: retain source lead and label
+hold; do not claim absence of human research or import macrocarpon efficacy.
+
+**Publication-notice access follow-up.**
+[Correction34652462](https://link.springer.com/article/10.1007/s00394-021-02705-x)
+resolves to the publisher preview, which requires subscription for the notice body.
+Its clinical-content impact remains unknown. Existing B.bifidum reference-only summary
+already separates CCFM16 microbiome findings from CCFM8610 symptom findings; no positive
+species credit is restored. PQQ and the other inaccessible correction bodies remain open.
+
+Verification: primary API JSON and two full-text XMLs retained in
+`.claude/state/clearance-followup/`; no pipeline run. These are bounded source dispositions,
+not exhaustive literature reviews, clinician sign-offs or rebuilt closure. Required next
+steps: exact preparation/claim correspondence, source limitations and trial-family review,
+attributable approval for affirmative contexts, then rebuilt owner/consumer verification.

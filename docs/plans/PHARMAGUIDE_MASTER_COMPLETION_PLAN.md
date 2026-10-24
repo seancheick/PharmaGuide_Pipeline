@@ -1450,3 +1450,10 @@ source retrieval covers five principal reference files with unchanged curated ha
 API lookup is not clinical closure. Existing research/LEDGER retain publication-notice
 triage, preparation packet additions and remaining83clinical/506benchmark worklists.
 Audit infrastructure qualified on cf6065013 with whole-fast CI40046197738:23,624passed/192declared skips, all skip guards passed. The larger scientific clearance remains open. No pipeline rerun.
+
+
+October23 exact-species follow-up: source packets now describe kelp34206160 and
+sweet-cherry40077655 full-text preparation/outcome limits, shared cherry trial cohort,
+and cranberry11431298 abstract with unresolved full-text species confirmation.
+These advance review documentation only; numerical benchmark, clinical approval and
+rebuilt closure remain open. Pipeline remains deferred.
