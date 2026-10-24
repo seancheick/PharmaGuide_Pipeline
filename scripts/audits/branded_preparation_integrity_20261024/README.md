@@ -49,8 +49,8 @@ The existing live IQM citation verifier reports 12 matching bindings and zero mi
 
 ## Remaining work and release boundary
 
-- **275412 RAW Enzyme:** raw flat grouping does not prove physical composition; preserve its limitation pending a source label establishing membership.
-- **182990 Trace Mineral:** preparation/constituent ranges do not establish an exact usable profile or component quantities; retain the existing preparation/benchmark hold.
+- **275412 RAW Enzyme:** exact physical label now verifies composition; hierarchy, native activities and duplicated CFU ownership are corrected. Genuine individual-dose limitations remain. See [source follow-up](research.md).
+- **182990 Trace Mineral:** the natural 700 mg source matrix now uses its existing source-descriptor owner, with separately declared minerals and ranges preserved. Clinical/benchmark holds remain. See [source follow-up](research.md).
 - Existing clinical backlog remains in [CLINICAL_REVIEW_HANDOFF](../literature_records_review_20261020/CLINICAL_REVIEW_HANDOFF.md): 147 conditional clinical contexts plus generated collagen binding/context; 506 benchmark subjects are shared scientific questions, not 506 automatic clinician holds. Do not fabricate sign-off. The older 174/238 identity-dose diagnostic is not an updated count from this separate blend batch.
 - No whole-corpus pipeline, catalog publication, production app import or release occurred. After scientific decisions are stable, inspect current stage fingerprints and perform one necessary combined regeneration, then validate the corpus invariant, catalog and real consumer. No old artifact is restamped to imply this source has run.
 

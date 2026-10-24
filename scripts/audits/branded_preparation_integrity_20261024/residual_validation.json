@@ -1,0 +1,1217 @@
+{
+  "runtime_candidate": "e600050d67201ec90b8be22d22f0ff9e3c7a3658",
+  "baseline": "39b2457e84ebd3a5831233aef35ef12eefc1ff85",
+  "replay": {
+    "products": 22,
+    "errors": 0,
+    "source_unchanged": true,
+    "source_files": 443,
+    "output_sha256": "3a36894381df9766d4fae803b972d6927a06bc74796970ad0aefb02a5cb1b97c",
+    "manifest_sha256": "fcc528efa811e101e696b3ea036d596af8672054a9efc5d266606835c2851be0"
+  },
+  "measurements": {
+    "products": 22,
+    "score_changes": [
+      {
+        "id": "182990",
+        "before": 61.7,
+        "after": 70.2,
+        "status_before": "scored",
+        "status_after": "scored",
+        "pillars": {
+          "transparency": [
+            6.5,
+            15.0
+          ]
+        }
+      },
+      {
+        "id": "232243",
+        "before": 42.9,
+        "after": 52.7,
+        "status_before": "scored",
+        "status_after": "scored",
+        "pillars": {
+          "transparency": [
+            0.0,
+            9.8
+          ]
+        }
+      },
+      {
+        "id": "275412",
+        "before": 62.9,
+        "after": 66.2,
+        "status_before": "scored",
+        "status_after": "scored",
+        "pillars": {
+          "transparency": [
+            5.0,
+            8.3
+          ]
+        }
+      }
+    ],
+    "quantity_identity_changes": [],
+    "activity_changes": [
+      {
+        "id": "232243",
+        "ref": "ingredientRows[0].nestedRows[9]",
+        "before": [
+          null,
+          null
+        ],
+        "after": [
+          4000.0,
+          "HCU"
+        ]
+      },
+      {
+        "id": "232243",
+        "ref": "ingredientRows[0].nestedRows[11]",
+        "before": [
+          null,
+          null
+        ],
+        "after": [
+          600.0,
+          "XU"
+        ]
+      },
+      {
+        "id": "232243",
+        "ref": "ingredientRows[0].nestedRows[10]",
+        "before": [
+          null,
+          null
+        ],
+        "after": [
+          50.0,
+          "ENDO-PGU"
+        ]
+      },
+      {
+        "id": "275412",
+        "ref": "ingredientRows[14].nestedRows[5]",
+        "before": [
+          null,
+          null
+        ],
+        "after": [
+          1248.0,
+          "HCU"
+        ]
+      },
+      {
+        "id": "275412",
+        "ref": "ingredientRows[14].nestedRows[11]",
+        "before": [
+          null,
+          null
+        ],
+        "after": [
+          840.0,
+          "XU"
+        ]
+      },
+      {
+        "id": "275412",
+        "ref": "ingredientRows[14].nestedRows[9]",
+        "before": [
+          null,
+          null
+        ],
+        "after": [
+          65.0,
+          "PGU"
+        ]
+      },
+      {
+        "id": "275412",
+        "ref": "ingredientRows[18]",
+        "before": [
+          null,
+          null
+        ],
+        "after": [
+          5.0,
+          "SOD"
+        ]
+      }
+    ],
+    "parent_changes": [
+      {
+        "id": "275412",
+        "ref": "ingredientRows[13]",
+        "before": null,
+        "after": "ingredientRows[12]"
+      },
+      {
+        "id": "275412",
+        "ref": "ingredientRows[15]",
+        "before": null,
+        "after": "ingredientRows[12]"
+      },
+      {
+        "id": "275412",
+        "ref": "ingredientRows[14]",
+        "before": null,
+        "after": "ingredientRows[12]"
+      }
+    ],
+    "safety_changes": [],
+    "warning_changes": [],
+    "release_changes": [],
+    "targets": {
+      "182990": {
+        "before": {
+          "blends": [
+            {
+              "blend_total_mg": 700.0,
+              "child_ingredients": [],
+              "detector_group": null,
+              "disclosure_level": "none",
+              "evidence": {
+                "ingredients_with_amounts": [],
+                "ingredients_without_amounts": [],
+                "source_field": "activeIngredients[5]"
+              },
+              "hidden_count": 0,
+              "name": "Trace Mineral Complex",
+              "nested_count": 0,
+              "source_field": "activeIngredients[5]",
+              "source_path": "activeIngredients[5]",
+              "source_row_ref": "ingredientRows[5]",
+              "sources": [
+                "cleaning"
+              ],
+              "total_weight": 700.0,
+              "unit": "mg"
+            }
+          ],
+          "b5": [
+            {
+              "base_penalty_formula": "none: -(2 + 5*impact)",
+              "blend_class": "generic",
+              "blend_name": "Trace Mineral Complex",
+              "blend_total_mg": 700.0,
+              "children_with_amount_count": 0,
+              "children_without_amount_count": 0,
+              "class_multiplier_applied": 1.0,
+              "computed_blend_penalty": -5.6842,
+              "computed_blend_penalty_magnitude": 5.6842,
+              "dedupe_fingerprint": "trace mineral complex||700.000|activeingredients[5]",
+              "disclosed_child_mg_sum": 0.0,
+              "disclosure_tier": "none",
+              "hidden_mass_mg": 700.0,
+              "impact_floor_applied": false,
+              "impact_ratio": 0.736842,
+              "impact_source": "mg_share",
+              "pre_discount_blend_penalty_magnitude": 5.6842,
+              "presence_penalty": 2.0,
+              "proportional_coef": 5.0,
+              "source_field": "activeIngredients",
+              "source_path": "activeIngredients[5]",
+              "source_row_ref": "ingredientRows[5]",
+              "trivial_micro_blend_discount_applied": false,
+              "unit_conversion_failed": false
+            }
+          ],
+          "release": {
+            "blockers": [
+              "clinical_applicability_unreviewed:INGR_CALCIUM",
+              "contributing_source_review_incomplete:INGR_CALCIUM",
+              "clinical_applicability_unreviewed:INGR_MAGNESIUM_GENERIC",
+              "contributing_source_review_incomplete:INGR_MAGNESIUM_GENERIC",
+              "clinical_applicability_unreviewed:INGR_POTASSIUM",
+              "contributing_source_review_incomplete:INGR_POTASSIUM"
+            ],
+            "is_complete": false,
+            "unfinished_source_assessment": null
+          }
+        },
+        "after": {
+          "blends": [],
+          "b5": [],
+          "release": {
+            "blockers": [
+              "clinical_applicability_unreviewed:INGR_CALCIUM",
+              "contributing_source_review_incomplete:INGR_CALCIUM",
+              "clinical_applicability_unreviewed:INGR_MAGNESIUM_GENERIC",
+              "contributing_source_review_incomplete:INGR_MAGNESIUM_GENERIC",
+              "clinical_applicability_unreviewed:INGR_POTASSIUM",
+              "contributing_source_review_incomplete:INGR_POTASSIUM"
+            ],
+            "is_complete": false,
+            "unfinished_source_assessment": null
+          }
+        }
+      },
+      "232243": {
+        "before": {
+          "blends": [
+            {
+              "blend_total_mg": null,
+              "child_ingredients": [],
+              "detector_group": "Digestive Enzyme Blends",
+              "disclosure_level": "none",
+              "evidence": {
+                "amounts_present": "none",
+                "blend_id": "BLEND_ENZYME",
+                "ingredients_with_amounts": [],
+                "ingredients_without_amounts": [],
+                "matched_text": "Protease SP",
+                "penalty_applicable": -10,
+                "penalty_reason": "No ingredient amounts disclosed",
+                "risk_category": "enzyme",
+                "severity_level": "low",
+                "source_field": "activeIngredients[1]"
+              },
+              "hidden_count": 0,
+              "name": "Digestive Enzyme Blends",
+              "nested_count": 0,
+              "source_field": "activeIngredients[1]",
+              "source_path": "activeIngredients[1]",
+              "source_row_ref": "ingredientRows[0].nestedRows[0]",
+              "sources": [
+                "detector"
+              ],
+              "total_weight": 97000.0,
+              "unit": "HUT"
+            },
+            {
+              "blend_total_mg": 200.0,
+              "child_ingredients": [
+                {
+                  "amount": 97000.0,
+                  "name": "Protease SP",
+                  "unit": "HUT"
+                },
+                {
+                  "amount": 10500.0,
+                  "name": "Protease",
+                  "unit": "PC"
+                },
+                {
+                  "amount": 10.0,
+                  "name": "Acid Protease",
+                  "unit": "SAPU"
+                },
+                {
+                  "amount": 4000.0,
+                  "name": "Lipase",
+                  "unit": "FIP"
+                },
+                {
+                  "amount": 2400.0,
+                  "name": "Cellulase",
+                  "unit": "CU"
+                },
+                {
+                  "amount": 20000.0,
+                  "name": "Trypsin",
+                  "unit": "USP"
+                },
+                {
+                  "amount": 3336.0,
+                  "name": "Chymotrypsin",
+                  "unit": "USP"
+                },
+                {
+                  "amount": 20.0,
+                  "name": "Phytase",
+                  "unit": "FTU"
+                },
+                {
+                  "amount": 30.0,
+                  "name": "Beta-Glucanase",
+                  "unit": "BGU"
+                },
+                {
+                  "amount": null,
+                  "name": "Hemicellulase",
+                  "unit": ""
+                },
+                {
+                  "amount": null,
+                  "name": "Pectinase",
+                  "unit": ""
+                },
+                {
+                  "amount": null,
+                  "name": "Xylanase",
+                  "unit": ""
+                }
+              ],
+              "detector_group": null,
+              "disclosure_level": "partial",
+              "evidence": {
+                "ingredients_with_amounts": [
+                  {
+                    "amount": 97000.0,
+                    "name": "Protease SP",
+                    "unit": "HUT"
+                  },
+                  {
+                    "amount": 10500.0,
+                    "name": "Protease",
+                    "unit": "PC"
+                  },
+                  {
+                    "amount": 10.0,
+                    "name": "Acid Protease",
+                    "unit": "SAPU"
+                  },
+                  {
+                    "amount": 4000.0,
+                    "name": "Lipase",
+                    "unit": "FIP"
+                  },
+                  {
+                    "amount": 2400.0,
+                    "name": "Cellulase",
+                    "unit": "CU"
+                  },
+                  {
+                    "amount": 20000.0,
+                    "name": "Trypsin",
+                    "unit": "USP"
+                  },
+                  {
+                    "amount": 3336.0,
+                    "name": "Chymotrypsin",
+                    "unit": "USP"
+                  },
+                  {
+                    "amount": 20.0,
+                    "name": "Phytase",
+                    "unit": "FTU"
+                  },
+                  {
+                    "amount": 30.0,
+                    "name": "Beta-Glucanase",
+                    "unit": "BGU"
+                  }
+                ],
+                "ingredients_without_amounts": [
+                  "Hemicellulase",
+                  "Pectinase",
+                  "Xylanase"
+                ],
+                "source_field": "activeIngredients[0]",
+                "source_fields": [
+                  "activeIngredients[0]",
+                  "activeIngredients[10]",
+                  "activeIngredients[11]",
+                  "activeIngredients[12]",
+                  "activeIngredients[1]",
+                  "activeIngredients[2]",
+                  "activeIngredients[3]",
+                  "activeIngredients[4]",
+                  "activeIngredients[5]",
+                  "activeIngredients[6]",
+                  "activeIngredients[7]",
+                  "activeIngredients[8]",
+                  "activeIngredients[9]"
+                ]
+              },
+              "hidden_count": 3,
+              "name": "Nutrient Absorption Blend",
+              "nested_count": 12,
+              "source_field": "activeIngredients[0]",
+              "source_fields": [
+                "activeIngredients[0]",
+                "activeIngredients[10]",
+                "activeIngredients[11]",
+                "activeIngredients[12]",
+                "activeIngredients[1]",
+                "activeIngredients[2]",
+                "activeIngredients[3]",
+                "activeIngredients[4]",
+                "activeIngredients[5]",
+                "activeIngredients[6]",
+                "activeIngredients[7]",
+                "activeIngredients[8]",
+                "activeIngredients[9]"
+              ],
+              "source_path": "activeIngredients[0]",
+              "source_row_ref": "ingredientRows[0]",
+              "sources": [
+                "cleaning"
+              ],
+              "total_weight": 200.0,
+              "unit": "mg"
+            }
+          ],
+          "b5": [
+            {
+              "base_penalty_formula": "partial: -(1 + 3*impact)",
+              "blend_class": "generic",
+              "blend_name": "Nutrient Absorption Blend",
+              "blend_total_mg": 200.0,
+              "children_with_amount_count": 9,
+              "children_without_amount_count": 3,
+              "class_multiplier_applied": 1.0,
+              "computed_blend_penalty": -4.0,
+              "computed_blend_penalty_magnitude": 4.0,
+              "dedupe_fingerprint": "nutrient absorption blend|acid protease,beta glucanase,cellulase,chymotrypsin,hemicellulase,lipase,pectinase,phytase,protease,protease sp,trypsin,xylanase|200.000|activeingredients[0]",
+              "disclosed_child_mg_sum": 0.0,
+              "disclosure_tier": "partial",
+              "hidden_mass_mg": 200.0,
+              "impact_floor_applied": false,
+              "impact_ratio": 1.0,
+              "impact_source": "mg_share",
+              "pre_discount_blend_penalty_magnitude": 4.0,
+              "presence_penalty": 1.0,
+              "proportional_coef": 3.0,
+              "source_field": "activeIngredients",
+              "source_path": "activeIngredients[0]",
+              "source_row_ref": "ingredientRows[0]",
+              "trivial_micro_blend_discount_applied": false,
+              "unit_conversion_failed": true
+            },
+            {
+              "base_penalty_formula": "none: -(2 + 5*impact)",
+              "blend_class": "generic",
+              "blend_name": "Digestive Enzyme Blends",
+              "blend_total_mg": null,
+              "children_with_amount_count": 0,
+              "children_without_amount_count": 0,
+              "class_multiplier_applied": 1.0,
+              "computed_blend_penalty": -2.0,
+              "computed_blend_penalty_magnitude": 2.0,
+              "dedupe_fingerprint": "digestive enzyme blends|||activeingredients[1]",
+              "disclosed_child_mg_sum": 0.0,
+              "disclosure_tier": "none",
+              "hidden_mass_mg": null,
+              "impact_floor_applied": false,
+              "impact_ratio": 0.0,
+              "impact_source": "count_share",
+              "pre_discount_blend_penalty_magnitude": 2.0,
+              "presence_penalty": 2.0,
+              "proportional_coef": 5.0,
+              "source_field": "activeIngredients",
+              "source_path": "activeIngredients[1]",
+              "source_row_ref": "ingredientRows[0].nestedRows[0]",
+              "trivial_micro_blend_discount_applied": false,
+              "unit_conversion_failed": true
+            }
+          ],
+          "release": {
+            "blockers": [],
+            "is_complete": true,
+            "unfinished_source_assessment": null
+          }
+        },
+        "after": {
+          "blends": [
+            {
+              "blend_total_mg": null,
+              "child_ingredients": [],
+              "detector_group": "Digestive Enzyme Blends",
+              "disclosure_level": "none",
+              "evidence": {
+                "amounts_present": "none",
+                "blend_id": "BLEND_ENZYME",
+                "ingredients_with_amounts": [],
+                "ingredients_without_amounts": [],
+                "matched_text": "Protease SP",
+                "penalty_applicable": -10,
+                "penalty_reason": "No ingredient amounts disclosed",
+                "risk_category": "enzyme",
+                "severity_level": "low",
+                "source_field": "activeIngredients[1]"
+              },
+              "hidden_count": 0,
+              "name": "Digestive Enzyme Blends",
+              "nested_count": 0,
+              "source_field": "activeIngredients[1]",
+              "source_path": "activeIngredients[1]",
+              "source_row_ref": "ingredientRows[0].nestedRows[0]",
+              "sources": [
+                "detector"
+              ],
+              "total_weight": 97000.0,
+              "unit": "HUT"
+            },
+            {
+              "blend_total_mg": 200.0,
+              "child_ingredients": [
+                {
+                  "amount": 97000.0,
+                  "name": "Protease SP",
+                  "unit": "HUT"
+                },
+                {
+                  "amount": 10500.0,
+                  "name": "Protease",
+                  "unit": "PC"
+                },
+                {
+                  "amount": 10.0,
+                  "name": "Acid Protease",
+                  "unit": "SAPU"
+                },
+                {
+                  "amount": 4000.0,
+                  "name": "Lipase",
+                  "unit": "FIP"
+                },
+                {
+                  "amount": 2400.0,
+                  "name": "Cellulase",
+                  "unit": "CU"
+                },
+                {
+                  "amount": 20000.0,
+                  "name": "Trypsin",
+                  "unit": "USP"
+                },
+                {
+                  "amount": 3336.0,
+                  "name": "Chymotrypsin",
+                  "unit": "USP"
+                },
+                {
+                  "amount": 20.0,
+                  "name": "Phytase",
+                  "unit": "FTU"
+                },
+                {
+                  "amount": 30.0,
+                  "name": "Beta-Glucanase",
+                  "unit": "BGU"
+                },
+                {
+                  "amount": 4000.0,
+                  "name": "Hemicellulase",
+                  "unit": "HCU"
+                },
+                {
+                  "amount": 50.0,
+                  "name": "Pectinase",
+                  "unit": "ENDO-PGU"
+                },
+                {
+                  "amount": 600.0,
+                  "name": "Xylanase",
+                  "unit": "XU"
+                }
+              ],
+              "detector_group": null,
+              "disclosure_level": "full",
+              "evidence": {
+                "ingredients_with_amounts": [
+                  {
+                    "amount": 97000.0,
+                    "name": "Protease SP",
+                    "unit": "HUT"
+                  },
+                  {
+                    "amount": 10500.0,
+                    "name": "Protease",
+                    "unit": "PC"
+                  },
+                  {
+                    "amount": 10.0,
+                    "name": "Acid Protease",
+                    "unit": "SAPU"
+                  },
+                  {
+                    "amount": 4000.0,
+                    "name": "Lipase",
+                    "unit": "FIP"
+                  },
+                  {
+                    "amount": 2400.0,
+                    "name": "Cellulase",
+                    "unit": "CU"
+                  },
+                  {
+                    "amount": 20000.0,
+                    "name": "Trypsin",
+                    "unit": "USP"
+                  },
+                  {
+                    "amount": 3336.0,
+                    "name": "Chymotrypsin",
+                    "unit": "USP"
+                  },
+                  {
+                    "amount": 20.0,
+                    "name": "Phytase",
+                    "unit": "FTU"
+                  },
+                  {
+                    "amount": 30.0,
+                    "name": "Beta-Glucanase",
+                    "unit": "BGU"
+                  },
+                  {
+                    "amount": 4000.0,
+                    "name": "Hemicellulase",
+                    "unit": "HCU"
+                  },
+                  {
+                    "amount": 50.0,
+                    "name": "Pectinase",
+                    "unit": "ENDO-PGU"
+                  },
+                  {
+                    "amount": 600.0,
+                    "name": "Xylanase",
+                    "unit": "XU"
+                  }
+                ],
+                "ingredients_without_amounts": [],
+                "source_field": "activeIngredients[0]",
+                "source_fields": [
+                  "activeIngredients[0]",
+                  "activeIngredients[10]",
+                  "activeIngredients[11]",
+                  "activeIngredients[12]",
+                  "activeIngredients[1]",
+                  "activeIngredients[2]",
+                  "activeIngredients[3]",
+                  "activeIngredients[4]",
+                  "activeIngredients[5]",
+                  "activeIngredients[6]",
+                  "activeIngredients[7]",
+                  "activeIngredients[8]",
+                  "activeIngredients[9]"
+                ]
+              },
+              "hidden_count": 0,
+              "name": "Nutrient Absorption Blend",
+              "nested_count": 12,
+              "source_field": "activeIngredients[0]",
+              "source_fields": [
+                "activeIngredients[0]",
+                "activeIngredients[10]",
+                "activeIngredients[11]",
+                "activeIngredients[12]",
+                "activeIngredients[1]",
+                "activeIngredients[2]",
+                "activeIngredients[3]",
+                "activeIngredients[4]",
+                "activeIngredients[5]",
+                "activeIngredients[6]",
+                "activeIngredients[7]",
+                "activeIngredients[8]",
+                "activeIngredients[9]"
+              ],
+              "source_path": "activeIngredients[0]",
+              "source_row_ref": "ingredientRows[0]",
+              "sources": [
+                "cleaning"
+              ],
+              "total_weight": 200.0,
+              "unit": "mg"
+            }
+          ],
+          "b5": [
+            {
+              "base_penalty_formula": "full: 0",
+              "blend_class": "generic",
+              "blend_name": "Nutrient Absorption Blend",
+              "blend_total_mg": 200.0,
+              "children_with_amount_count": 12,
+              "children_without_amount_count": 0,
+              "class_multiplier_applied": 1.0,
+              "computed_blend_penalty": -0.0,
+              "computed_blend_penalty_magnitude": 0.0,
+              "dedupe_fingerprint": "nutrient absorption blend|acid protease,beta glucanase,cellulase,chymotrypsin,hemicellulase,lipase,pectinase,phytase,protease,protease sp,trypsin,xylanase|200.000|activeingredients[0]",
+              "disclosed_child_mg_sum": 0.0,
+              "disclosure_tier": "full",
+              "hidden_mass_mg": 200.0,
+              "impact_floor_applied": false,
+              "impact_ratio": 1.0,
+              "impact_source": "mg_share",
+              "pre_discount_blend_penalty_magnitude": 0.0,
+              "presence_penalty": 0.0,
+              "proportional_coef": 0.0,
+              "source_field": "activeIngredients",
+              "source_path": "activeIngredients[0]",
+              "source_row_ref": "ingredientRows[0]",
+              "trivial_micro_blend_discount_applied": false,
+              "unit_conversion_failed": true
+            },
+            {
+              "base_penalty_formula": "none: -(2 + 5*impact)",
+              "blend_class": "generic",
+              "blend_name": "Digestive Enzyme Blends",
+              "blend_total_mg": null,
+              "children_with_amount_count": 0,
+              "children_without_amount_count": 0,
+              "class_multiplier_applied": 1.0,
+              "computed_blend_penalty": -2.0,
+              "computed_blend_penalty_magnitude": 2.0,
+              "dedupe_fingerprint": "digestive enzyme blends|||activeingredients[1]",
+              "disclosed_child_mg_sum": 0.0,
+              "disclosure_tier": "none",
+              "hidden_mass_mg": null,
+              "impact_floor_applied": false,
+              "impact_ratio": 0.0,
+              "impact_source": "count_share",
+              "pre_discount_blend_penalty_magnitude": 2.0,
+              "presence_penalty": 2.0,
+              "proportional_coef": 5.0,
+              "source_field": "activeIngredients",
+              "source_path": "activeIngredients[1]",
+              "source_row_ref": "ingredientRows[0].nestedRows[0]",
+              "trivial_micro_blend_discount_applied": false,
+              "unit_conversion_failed": true
+            }
+          ],
+          "release": {
+            "blockers": [],
+            "is_complete": true,
+            "unfinished_source_assessment": null
+          }
+        }
+      },
+      "275412": {
+        "before": {
+          "blends": [
+            {
+              "blend_total_mg": 620.0,
+              "child_ingredients": [],
+              "detector_group": "Digestive Enzyme Blends",
+              "disclosure_level": "none",
+              "evidence": {
+                "amounts_present": "none",
+                "blend_id": "BLEND_ENZYME",
+                "ingredients_with_amounts": [],
+                "ingredients_without_amounts": [],
+                "matched_text": "Enzyme Blend",
+                "penalty_applicable": -10,
+                "penalty_reason": "No ingredient amounts disclosed",
+                "risk_category": "enzyme",
+                "severity_level": "low",
+                "source_field": "activeIngredients[12]"
+              },
+              "hidden_count": 0,
+              "name": "RAW Enzyme Blend",
+              "nested_count": 0,
+              "source_field": "activeIngredients[12]",
+              "source_fields": [
+                "activeIngredients[12]"
+              ],
+              "source_path": "activeIngredients[12]",
+              "source_row_ref": "ingredientRows[12]",
+              "sources": [
+                "cleaning",
+                "detector"
+              ],
+              "total_weight": 620.0,
+              "unit": "mg"
+            },
+            {
+              "blend_total_mg": 31.0,
+              "child_ingredients": [
+                {
+                  "amount": null,
+                  "name": "Bacillus coagulans",
+                  "unit": ""
+                },
+                {
+                  "amount": null,
+                  "name": "Saccharomyces boulardii",
+                  "unit": ""
+                }
+              ],
+              "detector_group": "Probiotic & Microbiome Blends",
+              "disclosure_level": "partial",
+              "evidence": {
+                "amounts_present": "none",
+                "blend_id": "BLEND_PROBIOTIC",
+                "ingredients_with_amounts": [],
+                "ingredients_without_amounts": [
+                  "Bacillus coagulans",
+                  "Saccharomyces boulardii"
+                ],
+                "matched_text": "Probiotic Blend",
+                "penalty_applicable": -5,
+                "penalty_reason": "Some ingredient amounts disclosed",
+                "risk_category": "probiotic",
+                "severity_level": "low",
+                "source_field": "activeIngredients[36]"
+              },
+              "hidden_count": 2,
+              "name": "Enzyme-Generating Probiotic Blend",
+              "nested_count": 2,
+              "source_field": "activeIngredients[36]",
+              "source_fields": [
+                "activeIngredients[36]",
+                "activeIngredients[37]",
+                "activeIngredients[38]"
+              ],
+              "source_path": "activeIngredients[36]",
+              "source_row_ref": "ingredientRows[16]",
+              "sources": [
+                "cleaning",
+                "detector"
+              ],
+              "total_weight": 31.0,
+              "unit": "mg"
+            },
+            {
+              "blend_total_mg": null,
+              "child_ingredients": [],
+              "detector_group": null,
+              "disclosure_level": "none",
+              "evidence": {
+                "ingredients_with_amounts": [],
+                "ingredients_without_amounts": [],
+                "source_field": "activeIngredients[13]"
+              },
+              "hidden_count": 0,
+              "name": "Protein-Digesting Enzymes",
+              "nested_count": 0,
+              "source_field": "activeIngredients[13]",
+              "source_path": "activeIngredients[13]",
+              "source_row_ref": "ingredientRows[13]",
+              "sources": [
+                "cleaning"
+              ],
+              "total_weight": 0,
+              "unit": "NP"
+            },
+            {
+              "blend_total_mg": null,
+              "child_ingredients": [],
+              "detector_group": null,
+              "disclosure_level": "none",
+              "evidence": {
+                "ingredients_with_amounts": [],
+                "ingredients_without_amounts": [],
+                "source_field": "activeIngredients[21]"
+              },
+              "hidden_count": 0,
+              "name": "Carbohydrate-Digesting Enzymes",
+              "nested_count": 0,
+              "source_field": "activeIngredients[21]",
+              "source_path": "activeIngredients[21]",
+              "source_row_ref": "ingredientRows[14]",
+              "sources": [
+                "cleaning"
+              ],
+              "total_weight": 0,
+              "unit": "NP"
+            },
+            {
+              "blend_total_mg": null,
+              "child_ingredients": [],
+              "detector_group": null,
+              "disclosure_level": "none",
+              "evidence": {
+                "ingredients_with_amounts": [],
+                "ingredients_without_amounts": [],
+                "source_field": "activeIngredients[34]"
+              },
+              "hidden_count": 0,
+              "name": "Fat-Digesting Enzymes",
+              "nested_count": 0,
+              "source_field": "activeIngredients[34]",
+              "source_path": "activeIngredients[34]",
+              "source_row_ref": "ingredientRows[15]",
+              "sources": [
+                "cleaning"
+              ],
+              "total_weight": 0,
+              "unit": "NP"
+            }
+          ],
+          "b5": [
+            {
+              "base_penalty_formula": "partial: -(1 + 3*impact)",
+              "blend_class": "multi_or_prenatal",
+              "blend_name": "Enzyme-Generating Probiotic Blend",
+              "blend_total_mg": 31.0,
+              "children_with_amount_count": 0,
+              "children_without_amount_count": 2,
+              "class_multiplier_applied": 1.3,
+              "computed_blend_penalty": -1.69,
+              "computed_blend_penalty_magnitude": 1.69,
+              "dedupe_fingerprint": "enzyme generating probiotic blend|bacillus coagulans,saccharomyces boulardii|31.000|activeingredients[36]",
+              "disclosed_child_mg_sum": 0.0,
+              "disclosure_tier": "partial",
+              "hidden_mass_mg": 31.0,
+              "impact_floor_applied": true,
+              "impact_ratio": 0.1,
+              "impact_source": "mg_share",
+              "pre_discount_blend_penalty_magnitude": 1.69,
+              "presence_penalty": 1.0,
+              "proportional_coef": 3.0,
+              "source_field": "activeIngredients",
+              "source_path": "activeIngredients[36]",
+              "source_row_ref": "ingredientRows[16]",
+              "trivial_micro_blend_discount_applied": false,
+              "unit_conversion_failed": false
+            },
+            {
+              "base_penalty_formula": "none: -(2 + 5*impact)",
+              "blend_class": "multi_or_prenatal",
+              "blend_name": "RAW Enzyme Blend",
+              "blend_total_mg": 620.0,
+              "children_with_amount_count": 0,
+              "children_without_amount_count": 0,
+              "class_multiplier_applied": 1.3,
+              "computed_blend_penalty": -8.7806,
+              "computed_blend_penalty_magnitude": 8.7806,
+              "dedupe_fingerprint": "raw enzyme blend||620.000|activeingredients[12]",
+              "disclosed_child_mg_sum": 0.0,
+              "disclosure_tier": "none",
+              "hidden_mass_mg": 620.0,
+              "impact_floor_applied": false,
+              "impact_ratio": 0.950865,
+              "impact_source": "mg_share",
+              "pre_discount_blend_penalty_magnitude": 8.7806,
+              "presence_penalty": 2.0,
+              "proportional_coef": 5.0,
+              "source_field": "activeIngredients",
+              "source_path": "activeIngredients[12]",
+              "source_row_ref": "ingredientRows[12]",
+              "trivial_micro_blend_discount_applied": false,
+              "unit_conversion_failed": false
+            }
+          ],
+          "release": {
+            "blockers": [],
+            "is_complete": true,
+            "unfinished_source_assessment": null
+          }
+        },
+        "after": {
+          "blends": [
+            {
+              "blend_total_mg": 620.0,
+              "child_ingredients": [
+                {
+                  "amount": null,
+                  "name": "Carbohydrate-Digesting Enzymes",
+                  "unit": ""
+                },
+                {
+                  "amount": null,
+                  "name": "Fat-Digesting Enzymes",
+                  "unit": ""
+                },
+                {
+                  "amount": null,
+                  "name": "Protein-Digesting Enzymes",
+                  "unit": ""
+                }
+              ],
+              "detector_group": "Digestive Enzyme Blends",
+              "disclosure_level": "partial",
+              "evidence": {
+                "amounts_present": "none",
+                "blend_id": "BLEND_ENZYME",
+                "ingredients_with_amounts": [],
+                "ingredients_without_amounts": [
+                  "Carbohydrate-Digesting Enzymes",
+                  "Fat-Digesting Enzymes",
+                  "Protein-Digesting Enzymes"
+                ],
+                "matched_text": "Enzyme Blend",
+                "penalty_applicable": -5,
+                "penalty_reason": "Some ingredient amounts disclosed",
+                "risk_category": "enzyme",
+                "severity_level": "low",
+                "source_field": "activeIngredients[12]"
+              },
+              "hidden_count": 3,
+              "name": "RAW Enzyme Blend",
+              "nested_count": 3,
+              "source_field": "activeIngredients[12]",
+              "source_fields": [
+                "activeIngredients[12]",
+                "activeIngredients[13]",
+                "activeIngredients[21]",
+                "activeIngredients[34]"
+              ],
+              "source_path": "activeIngredients[12]",
+              "source_row_ref": "ingredientRows[12]",
+              "sources": [
+                "cleaning",
+                "detector"
+              ],
+              "total_weight": 620.0,
+              "unit": "mg"
+            },
+            {
+              "blend_total_mg": 31.0,
+              "child_ingredients": [
+                {
+                  "amount": null,
+                  "name": "Bacillus coagulans",
+                  "unit": ""
+                },
+                {
+                  "amount": null,
+                  "name": "Saccharomyces boulardii",
+                  "unit": ""
+                }
+              ],
+              "detector_group": "Probiotic & Microbiome Blends",
+              "disclosure_level": "partial",
+              "evidence": {
+                "amounts_present": "none",
+                "blend_id": "BLEND_PROBIOTIC",
+                "ingredients_with_amounts": [],
+                "ingredients_without_amounts": [
+                  "Bacillus coagulans",
+                  "Saccharomyces boulardii"
+                ],
+                "matched_text": "Probiotic Blend",
+                "penalty_applicable": -5,
+                "penalty_reason": "Some ingredient amounts disclosed",
+                "risk_category": "probiotic",
+                "severity_level": "low",
+                "source_field": "activeIngredients[36]"
+              },
+              "hidden_count": 2,
+              "name": "Enzyme-Generating Probiotic Blend",
+              "nested_count": 2,
+              "source_field": "activeIngredients[36]",
+              "source_fields": [
+                "activeIngredients[36]",
+                "activeIngredients[37]",
+                "activeIngredients[38]"
+              ],
+              "source_path": "activeIngredients[36]",
+              "source_row_ref": "ingredientRows[16]",
+              "sources": [
+                "cleaning",
+                "detector"
+              ],
+              "total_weight": 31.0,
+              "unit": "mg"
+            }
+          ],
+          "b5": [
+            {
+              "base_penalty_formula": "partial: -(1 + 3*impact)",
+              "blend_class": "multi_or_prenatal",
+              "blend_name": "RAW Enzyme Blend",
+              "blend_total_mg": 620.0,
+              "children_with_amount_count": 0,
+              "children_without_amount_count": 3,
+              "class_multiplier_applied": 1.3,
+              "computed_blend_penalty": -5.0084,
+              "computed_blend_penalty_magnitude": 5.0084,
+              "dedupe_fingerprint": "raw enzyme blend|carbohydrate digesting enzymes,fat digesting enzymes,protein digesting enzymes|620.000|activeingredients[12]",
+              "disclosed_child_mg_sum": 0.0,
+              "disclosure_tier": "partial",
+              "hidden_mass_mg": 620.0,
+              "impact_floor_applied": false,
+              "impact_ratio": 0.950865,
+              "impact_source": "mg_share",
+              "pre_discount_blend_penalty_magnitude": 5.0084,
+              "presence_penalty": 1.0,
+              "proportional_coef": 3.0,
+              "source_field": "activeIngredients",
+              "source_path": "activeIngredients[12]",
+              "source_row_ref": "ingredientRows[12]",
+              "trivial_micro_blend_discount_applied": false,
+              "unit_conversion_failed": false
+            },
+            {
+              "base_penalty_formula": "partial: -(1 + 3*impact)",
+              "blend_class": "multi_or_prenatal",
+              "blend_name": "Enzyme-Generating Probiotic Blend",
+              "blend_total_mg": 31.0,
+              "children_with_amount_count": 0,
+              "children_without_amount_count": 2,
+              "class_multiplier_applied": 1.3,
+              "computed_blend_penalty": -1.69,
+              "computed_blend_penalty_magnitude": 1.69,
+              "dedupe_fingerprint": "enzyme generating probiotic blend|bacillus coagulans,saccharomyces boulardii|31.000|activeingredients[36]",
+              "disclosed_child_mg_sum": 0.0,
+              "disclosure_tier": "partial",
+              "hidden_mass_mg": 31.0,
+              "impact_floor_applied": true,
+              "impact_ratio": 0.1,
+              "impact_source": "mg_share",
+              "pre_discount_blend_penalty_magnitude": 1.69,
+              "presence_penalty": 1.0,
+              "proportional_coef": 3.0,
+              "source_field": "activeIngredients",
+              "source_path": "activeIngredients[36]",
+              "source_row_ref": "ingredientRows[16]",
+              "trivial_micro_blend_discount_applied": false,
+              "unit_conversion_failed": false
+            }
+          ],
+          "release": {
+            "blockers": [],
+            "is_complete": true,
+            "unfinished_source_assessment": null
+          }
+        }
+      },
+      "328300": {
+        "before": {
+          "blends": [],
+          "b5": [],
+          "release": {
+            "blockers": [
+              "evidence_assessment_incomplete",
+              "clinical_applicability_unreviewed:INGR_CALCIUM",
+              "contributing_source_review_incomplete:INGR_CALCIUM"
+            ],
+            "is_complete": false,
+            "unfinished_source_assessment": null
+          }
+        },
+        "after": {
+          "blends": [],
+          "b5": [],
+          "release": {
+            "blockers": [
+              "evidence_assessment_incomplete",
+              "clinical_applicability_unreviewed:INGR_CALCIUM",
+              "contributing_source_review_incomplete:INGR_CALCIUM"
+            ],
+            "is_complete": false,
+            "unfinished_source_assessment": null
+          }
+        }
+      }
+    }
+  },
+  "limits": [
+    "No full-corpus rerun or publication",
+    "Required clinical and benchmark holds retained",
+    "No real app catalog import"
+  ],
+  "derived_cfu_correction": {
+    "product": "275412",
+    "before": 1000000000,
+    "after": 500000000,
+    "scope": "blend total, at time of blending; individual species counts unknown"
+  },
+  "verification": {
+    "named_owner_consumer": {
+      "passed": 665
+    },
+    "local": {
+      "passed": 546,
+      "declared_skips": 24,
+      "skip_guard": "passed"
+    },
+    "flutter_existing_consumers": {
+      "passed": 85
+    },
+    "independent_source_review": "no remaining blocker in bounded scope",
+    "whole_fast_ci": {
+      "run": 40090782652,
+      "status": "success",
+      "passed": 23771,
+      "declared_skips": 192,
+      "groups": 4,
+      "skip_guards": "all passed"
+    }
+  }
+}

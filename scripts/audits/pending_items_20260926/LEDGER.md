@@ -3257,3 +3257,15 @@ are38Clean/38Enrich/38Scorestale; earliestClean. No output was rebuilt or restam
 cancelled/superseded after control findings. Neither failed nor cancelledCI is qualification. [Register, measurements and limits](../branded_preparation_integrity_20261024/README.md).
 Remaining composition cases275412/182990 retain limitations; consolidated clinical/benchmark
 handoff remains authoritative. No whole-corpus pipeline, clinical closure, real catalog import or release.
+
+
+## October 24 — exact-source residual blend corrections
+
+Behavioral source/data batch; baseline39b2457e, runtimee600050d67201ec90b8be22d22f0ff9e3c7a3658.
+Owner: enhanced_normalizer::_apply_label_corrections/display construction, normalization::extract_enzyme_activity, enrich_supplements_v3::_collect_proprietary_data — evidence: exact NIH PDF geometry, original API notes, fail-first tests and frozen22-label replay. Will NOT create: second classifier/registry/scorer, public fields, guessed doses or clinical approvals.
+
+275412 exact620mg enzyme hierarchy restored with separate31mg probiotic, nattokinase/SOD/activators. Original API total copied into both probiotic species caused false1billionCFU; corrected500million at blend only, no individual species counts or expiry guarantee. Guarded revisions fail before mutation. Native HCU/PGU/XU/SOD and distinctENDO-PGU supported through shared owner, HDU compatibility preserved.182990700mg naturally occurring matrix uses existing source_descriptor, K50mg and seven ranges preserved; no second elemental exposure. Required clinical/benchmark holds retained.
+
+22-label replay0errors,443runtime bindings match; three Transparency movements (27541262.9→66.2,18299061.7→70.2,23224342.9→52.7),19controls unchanged. Dose/Evidence/Formulation/Verification/Safety, warnings and release-assessment blockers unchanged. Seven native activity additions and three parent-link corrections are intentional; derivedCFU1billion→500million separately recorded.665named owner/consumer tests pass; local546pass/24declared optional-service skips, skipguardpass; unchanged Flutter consumers85pass. Independent source review clear. Final exports checked; no private hierarchy marker leaked.
+
+Whole-fastCI40090782652 on exacte600050d6 passes23,771tests/192declaredskips, all4groups/skipguardsgreen; report-onlyfollow-up changes no qualified runtime/data/config/testsource. Source facts, PDF SHA-256, measurements and limitations: [research](../branded_preparation_integrity_20261024/research.md), [validation](../branded_preparation_integrity_20261024/residual_validation.json). User recent114stage manifests match pre-batch source; all38Clean/Enrich/Score nowstale, earliestClean. No whole-corpus run, app catalog import, manifest restamp, publication or clinical closure. Existing clinical147+generatedcollagen/506benchmarksubject handoff remains authoritative.
