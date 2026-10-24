@@ -351,7 +351,7 @@ def test_parenthetical_qualified_preparation_keeps_full_identity(pipeline, name)
 @pytest.mark.parametrize('raw,category,group,prefix,parent,expected', [
     ('Mixed Tocopherols', 'vitamin', 'Vitamin E', 'containing', 'chasteberry', 'marker'),
     ('Mixed Carotenoids', 'non-nutrient/non-botanical', 'carotenoids', 'containing', 'moringa', 'marker'),
-    ('Advanced Hair Complex', 'blend', 'Proprietary Blend', '', 'vitamin_b7_biotin', 'placeholder'),
+    ('Advanced Hair Complex', 'blend', 'Proprietary Blend', '', 'vitamin_b7_biotin', None),
     ('Calcium Carbonate', 'mineral', 'Calcium', '', 'vitamin_c', None),
     ('Oat Seed Extract', 'botanical', 'Oats', '', 'oat_straw', None),
     ('Mixed Tocopherols', 'vitamin', 'Vitamin E', 'not containing', 'chasteberry', None),

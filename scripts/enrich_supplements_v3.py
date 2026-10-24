@@ -9281,12 +9281,12 @@ class SupplementEnricherV3:
             )
         except (TypeError, ValueError):
             # Unserializable argument (rare) → correctness over speed: bypass cache.
-            return self._strip_private_form_context(self._match_quality_map_impl(
+            return self._match_quality_map_impl(
                 ing_name, std_name, quality_map, _form_extraction_attempt,
                 cleaned_forms, preferred_parent, branded_token,
                 cleaner_canonical_id,
                 source_context,
-            ))
+            )
 
         if key in self._match_quality_cache:
             return copy.deepcopy(self._match_quality_cache[key])
@@ -9296,7 +9296,6 @@ class SupplementEnricherV3:
             cleaned_forms, preferred_parent, branded_token, cleaner_canonical_id,
             source_context,
         )
-        result = self._strip_private_form_context(result)
         # Store an isolated copy (defends against any impl-side aliasing) and
         # hand every caller its own isolated copy — the cache entry is immutable.
         self._match_quality_cache[key] = copy.deepcopy(result)
@@ -9577,8 +9576,7 @@ class SupplementEnricherV3:
         group = self._norm_form_name(form_data.get('dsld_ingredient_group'))
         category = (form_data.get('dsld_category') or '').lower().strip()
         prefix = (form_data.get('dsld_prefix') or '').lower().strip()
-        if (category == 'tbd' or prefix == 'from culture of'
-                or (category == 'blend' and group == 'proprietary blend')):
+        if category == 'tbd' or prefix == 'from culture of':
             return 'placeholder'
         # DSLD files a salt under the nutrient it supplies (every calcium salt
         # has group "Calcium"), so an equal group only restates the identity
@@ -9847,6 +9845,10 @@ class SupplementEnricherV3:
                         form_info, quality_map,
                         cleaner_canonical_id=cleaner_iqm_canonical,
                     )
+                    # Matching has consumed this private input. Sanitize at the
+                    # implementation boundary so uncached and cached results agree.
+                    self._strip_private_form_context(form_info)
+                    self._strip_private_form_context(multi_form_result)
                     if multi_form_result:
                         if multi_form_result.get("cleaner_canonical_enforced"):
                             cleaner_form_constraint_enforced = True

@@ -157,6 +157,13 @@ def test_cached_equals_uncached_across_argument_matrix(enricher, qmap):
         dict(ing_name="Totally Unknown Junk XYZ", std_name="Totally Unknown Junk XYZ",
              quality_map=qmap),
     ]
+    matrix.extend([
+        dict(ing_name="Citrus Bioflavonoids", std_name="Citrus Bioflavonoids", quality_map=qmap,
+             cleaner_canonical_id="citrus_bioflavonoids", cleaned_forms=[
+                 {"name": "Fruit", "category": "blend", "ingredientGroup": "Blend (Herb/Botanical)",
+                  "_parent_plant_part": part}])
+        for part in ("fruit", "seed")
+    ])
     # Reference (uncached) computed first so the wrapper cache can't influence it.
     refs = [copy.deepcopy(_ref(enricher, **args)) for args in matrix]
     # Run wrapper twice over the matrix (second pass = all cache hits).
