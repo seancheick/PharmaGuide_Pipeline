@@ -167,3 +167,24 @@ def test_reviewed_cfu_attribution_is_atomic_and_exact(change):
     with pytest.raises(ValueError, match='note attribution'):
         normalizer._apply_label_corrections(rows, '275412')
     assert rows == before
+
+
+def test_trace_material_correction_does_not_transfer_to_another_physical_row():
+    raw = raw_label('182990')
+    raw['ingredientRows'].append(copy.deepcopy(raw['ingredientRows'][5]))
+    rows = raw['ingredientRows']
+    normalizer = EnhancedDSLDNormalizer()
+    normalizer._stamp_raw_source_paths(rows, 'ingredientRows')
+    normalizer._apply_label_corrections(rows, '182990')
+    assert rows[5]['_label_scoring_disposition'] == 'source_descriptor'
+    assert rows[6].get('_label_scoring_disposition') is None
+
+
+def test_reviewed_hierarchy_and_note_corrections_are_idempotent():
+    normalizer = EnhancedDSLDNormalizer()
+    rows = raw_label('275412')['ingredientRows']
+    normalizer._stamp_raw_source_paths(rows, 'ingredientRows')
+    normalizer._apply_label_corrections(rows, '275412')
+    first = copy.deepcopy(rows)
+    normalizer._apply_label_corrections(rows, '275412')
+    assert rows == first

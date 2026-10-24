@@ -2158,7 +2158,8 @@
       "reviewer": "Codex exact-label source-content verification; not clinical approval",
       "review_date": "2026-10-24",
       "provenance_tag": "official_label_source_material_correction",
-      "scope": "dsld_id_only"
+      "scope": "dsld_id_only",
+      "raw_source_path": "ingredientRows[5]"
     }
   }
 }
