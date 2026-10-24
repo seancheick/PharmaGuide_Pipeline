@@ -1,128 +1,78 @@
-# Preparation and clinical review handoff — October 23, 2026
+# Consolidated scientific completion handoff — October 23, 2026
 
-This is a shareable review request, not clinical approval or a release-readiness certificate.
-The initial 15,437-product snapshot is unchanged. Product dependencies below come from retained
-October 23 diagnostics; they are not a fresh corpus census. No production pipeline was rerun.
+## Scope and authority
 
-## What needs a clinician, and what needs source work first
+Finish confirmed shared producer/source-attribution defects; preserve original 15,437-product
+snapshot and 727-product positive-Evidence/incomplete cohort. Source inspection is not clinician
+approval. No scoring weights, clinical approval authority, safety policy or release authorization
+changed. No full corpus rebuild, export or publication performed in this batch.
 
-A source's existence, chemical identity, an abstract review and a successful score calculation
-are separate from a completed clinical assessment. The existing clinical context owner requires
-attributable clinician approval for contexts used for affirmative clinical scoring. The reviewer
-must also establish exact identity/preparation, delivery, dose/regimen, population, outcome,
-evidence strength, limitations and product applicability. Approval cannot fill an undisclosed
-manufacturer quantity or establish equivalence between different preparations.
+Owner: `scripts/enrich_supplements_v3.py::_collect_probiotic_data/_form_token_context` — evidence:
+fail-first physical-parent/constituent/form regressions and raw-label replay.
+Owner: `scripts/data/backed_clinical_studies.json` through existing applicability/evidence resolvers —
+evidence: exact-record source inspection, source eligibility and purpose-consumer regressions.
+Owner: existing assessment readiness and botanical benchmark owners — evidence: saved contribution
+census and all 4,259 frozen benchmark row decisions. Will NOT create another scorer, registry,
+matcher, clinical approval authority or completeness system.
 
-The [83-record clinical review list](clinical_review_holds.csv) names every actual-used legacy
-record in the frozen 727-product positive-Evidence/incomplete cohort, its exact dependent IDs,
-source links and current source-review result. These records cover 410 distinct frozen products
-(524 overlapping record-product dependencies), not all 727 cohort products. All 83 currently return
-`clinical_source_contexts_missing` through `clinical_applicability::assess_clinical_source_review`.
-This means source-context extraction and applicable review remain necessary; it does not mean
-83 independent literature searches or 727 independent approvals. SAMe and glycine additionally
-remain explicitly ineligible for scoring. Frozen dependencies do not assert current positive credit.
-Previously approved native strain contexts are not revoked by this legacy-record list.
+## One remaining-work list
 
-The [506-subject benchmark worklist](benchmark_review_backlog.csv) preserves the retained
-3,118-product / 4,259-row diagnostic. Its subject lists overlap; counts must not be summed as
-unique products. These are unresolved reviews, not 506 newly imposed clinician holds.
-A completed, source-backed no-benchmark determination can be legitimate under the existing
-owner; neither an unsuccessful bounded search nor a studied dose establishes that determination.
+1. **Clinical approval:** saved manifest-owned corpus has 153 contributing record IDs across
+   6,389 record-product dependencies: 152 curated records and generated
+   `RECOVERED_COLLAGEN_PEPTIDES_V1` (24 products). All 152 curated records lack study contexts.
+   Five are now reference-only, ineligible for affirmative credit: INGR_MOLYBDENUM,
+   INGR_PROPOLIS, INGR_SLIPPERY_ELM, INGR_VITAMIN_E, PRECLIN_BETAINE_HCL.
+   **147 remaining source-eligible curated records require attributable context review before
+   affirmative clinical use**, plus review of the generated collagen source binding/context.
+   Verify identity/strain, preparation/delivery, dose/regimen, population, outcome and limitations.
+   Reusable contexts can cover many products. These are not 147 separate literature searches.
+   `clinical_review_holds.csv` is the sharing list: 155 union rows preserve all original 83 cohort
+   records, add actual saved contributors and distinguish three historical-only records
+   (INGR_BIFIDOBACTERIUM_BIFIDUM, INGR_GLYCINE, INGR_SAME). Unused history does not block release.
+2. **Benchmarks/preparations:** 506 subjects / 4,259 frozen rows / 3,118 products remain open.
+   Actual alias-aware owner lookup partitions rows into 43 preparation guards, 1,771 with
+   literature study rows, 1,206 without study rows and 1,239 without an eligible exact owner.
+   No row currently resolves a completed applicable benchmark. Review exact preparations and
+   document supported regimen or defensible negative/no-general-benchmark findings through the
+   existing owner. One tested dose is not an efficacy threshold, optimum or safety upper limit.
+   These 506 subjects are not automatically clinician holds. The CSV records required actions;
+   none is scientifically closed merely by this source packet.
+3. **Identity/dose:** the frozen 238-label diagnostic remains a bounded sample, with causes and
+   final replay counts: 132 identity-incomplete, 51 dose-incomplete, 10 overlapping,
+   173 products in their union (baseline 177). Four shared producer corrections resolve four cases. Remaining cases include genuine species/
+   plant-part conflicts, unknown preparations, conflicting label units, vitamin A DFE labelling,
+   unresolved elemental potassium-iodide ownership, undisclosed mixtures and unscoreable source
+   quantities. Label limitations must be documented separately from unfinished PharmaGuide work.
+   Do not guess quantities, species or conversions to clear them.
+4. **Verification after decisions:** rebuild the corpus once from the earliest stale stage, then
+   enforce the complete evidence/dose invariant on every assessment and inspect Flutter, including
+   original 20 labels and banned/recalled discoverability. Targeted replay is not corpus clearance.
 
-## Priority preparation reviews
+## Implemented batch and verification limits
 
-| Subject / exact labels | Verified facts and limits | Requested decision / missing evidence |
-|---|---|---|
-| Schisandra: 210629,210738,232056,27350,294537–294540,295208,298046,311541–311544,312701,317646,327583,328521,330720–330723,67289 | [Trial 32260466](https://pmc.ncbi.nlm.nih.gov/articles/PMC7177795/): BPK-SC-001 extract, 20% ethanol extraction, measured schizandrin; 1,000 mg/day for 12 weeks; 52 randomized postmenopausal women, 45 completed. Quadriceps-strength result is not a universal benefit or dose threshold. | Establish exact preparation, directions and purpose for each shared label family. Do not convert total schisandrins to schizandrin or borrow muscle findings for liver claims. |
-| Boswellia resin: 311175–311178,312866,329934,330458–330461 | Existing [5-Loxin](https://pubmed.ncbi.nlm.nih.gov/18667054/) and [Aflapin](https://pubmed.ncbi.nlm.nih.gov/35512759/) reviews describe specific preparations and knee-OA regimens. Rat source 32565872 remains nonhuman and ineligible. | Confirm exact preparation/standardization and applicability; generic resin mass does not establish branded preparation equivalence. No universal resin benchmark proposed. |
-| Extramel 232942 | Stress-purpose label declares 140 IU daily in a liquid hemp combination. Trials used 10 mg/140 units in capsules of palm-oil-coated microgranules. | Establish protected-delivery equivalence and ingredient-level applicability in this combination/population. Do not infer mass from activity. |
-| Extramel 328442 | 36 mg/500 IU daily in a multi-active softgel; arterial-support purpose. | The reviewed stress/fatigue trials do not support this arterial claim. Identify a separately applicable source if one exists; higher dose alone does not qualify. |
-| Extramel + Schisandra 328521 | Label declares 10 mg/140 IU Extramel and 250 mg Schisandra with 9% total schisandrins; liver-metabolism purpose. | Neither reviewed trial family establishes this liver claim. Resolve exact preparation and purpose before affirmative credit. |
-| Other SOD: 315306,67283 | Generic SOD, GliSODin and Extramel are not interchangeable. | Establish the exact preparation, protection/delivery, regimen and outcome. Existing nonhuman source 15742357 remains ineligible for human benefit credit. |
-| Magnesium biotinate: 299744,336100 | Chemistry verified; distinct salt recognized without numerical form grade. Oral Lustriva trial is a biotin/silicon combination. | Evaluate preparation-specific human absorption/form quality separately from combination outcomes. Preserve ungraded status and existing holds; no invented elemental quantities. |
-| Kelp: 331151,331152,331154,312063–312066 | Exact Laminaria japonica whole-source extract, 500 mg. Only 331151/52/54 declare 10:1; the ratio is not copied to the other labels. | Species routing correction does not complete preparation/benchmark review. Retain unresolved benchmark assessment. |
-| Kelp source in iodine product 309387 | Exact thallus extract 33.75 mg; separately declared iodine 225 mcg and calcium 80 mg. | Retain the extract preparation and benchmark holds even when nutrient assessment completes. The prior mineral-route bypass is corrected; no inferred iodine concentration or generic kelp benchmark. |
-| Cranberry 330664 | Label names Vaccinium oxycoccus/oxycoccos, not macrocarpon. | Establish species-specific preparation and applicability. Do not borrow macrocarpon form credit, benchmarks or remove warnings based solely on taxonomy. |
-| Mixed grape 330882 | One row contains seed AND skin, total 210 mg; separate seed row is 125 mg. | Establish the actual mixed preparation and applicable evidence. No component quantities or BioVin equivalence are established by this label alone. |
-| Cherry 294296 | Explicit Prunus avium fruit identity corrected previously; preparation remains ungraded. | Complete exact extract/preparation and benchmark review; identity correction does not approve a dose or clinical claim. |
+50 exact curated source records corrected together: trial design, actual preparation/regimen,
+primary-versus-secondary/null findings, supported endpoints and source counts. Five reference-only
+withdrawals preserve citations/history. Benfotiamine and spermidine describe mixed results.
+Negated/null/adverse-event language remains in notes rather than affirmative purpose matching.
+No clinician sign-off created; no required hold removed. Exact per-entry scope and primary source
+receipts remain in research.md and the named owner tests.
 
-Extramel sources: [2009 trial](https://pmc.ncbi.nlm.nih.gov/articles/PMC2757026/),
-[2014 trial](https://pmc.ncbi.nlm.nih.gov/articles/PMC4073155/). Both had Seppic/Bionov support.
-The later paper separately declares no conflict of interest. Both facts should be visible;
-funding does not by itself invalidate results. Small studies and subjective stress/fatigue
-outcomes limit transfer. This corrects the earlier packet's incomplete funding description.
+Shared producer fixes distinguish physical probiotic container headings from actual strains,
+preserve independent CFU totals, and retain structured constituent/blend/plant-part provenance.
+Negation and real identity conflicts remain held; transient matching context is not exported.
 
-## Required reviewer return and closure
+Bibliographic owner verified 50 entries / 198 PMID claims, strict pass with no missing/title/ghost
+findings. This proves citation binding, not full-text review or approved clinical applicability.
+Publication corrections and restricted full texts remain explicit limitations, including PQQ
+corrected Table 4 / GRN1118 attribution and B. bifidum correction 34652462. Earlier stopped or
+uncovered generic verification is not counted as passing. See research.md for retained packets.
 
-For each shared cause or clinical subject, return the record/context ID; affected label IDs;
-source citation and inspected section/full-text availability; exact preparation/delivery;
-normalized dose and its provenance; population and outcome hierarchy; results and limitations;
-applicable, inapplicable or still-unresolved conclusion with reasons; and reviewer identity,
-qualifications and dated approval where required by the existing clinical owner.
+## Pipeline timing
 
-Engineering then applies the result through the existing registry/assessment owner, adds
-regressions, verifies affected labels and controls, and checks the eventual rebuilt outputs.
-A source review or code fix is **implemented**, not **rebuilt-closed**. No blanket approval,
-new numerical benchmark, scoring-weight change, manufactured amount or publication is requested.
-Banned/recalled discoverability and warnings remain mandatory.
-
-## Provenance and scope
-
-Owner: `clinical_applicability::assess_clinical_source_review`,
-`clinical_evidence_schema::validate_ingredient_context`,
-`probiotic_measurements::context_accepted_for_scoring`, and
-`botanical_profile::_botanical_benchmark`. These files own decisions; this document and CSVs
-are static projections for review, not a second registry or completion authority.
-
-Source baseline: `1012f3753`. Legacy dependency input SHA256:
-`d19092d2f05e9c4d8a278ba9287ecb2ba4f8f998138b78352a5596a2e0f32d1b`.
-Benchmark diagnostic input SHA256:
-`53afc610bba5c1e938d6323b866d54548a1558aa02b7aeb0be11818766c53363`.
-The existing research packets retain exact source and label hashes. The [research log](research.md)
-and [execution ledger](../pending_items_20260926/LEDGER.md) record verification limits and results.
-This bounded review does not establish that all literature has been searched or that every
-remaining corpus hold is represented by the named priority cases.
-
-## Read-only clearance audit update
-
-The October23 continuation resolved the five-source citation inventory without curated writes.
-All402citation links for the83legacy records resolve; all175available stored titles match. This is
-bibliographic screening only. No clinical hold was cleared. The research log now separates
-publication corrections, biotinate absorption versus combination efficacy, native registration
-protocols, and five topic-screen dispositions. Full-text access and approval limitations remain
-explicit. Use these receipts to avoid repeating verified lookups, while completing the missing
-clinical/preparation/outcome review through the existing owners.
-
-PQQ review must include corrected Table4 (notice35917215 for trial34415830) and reconcile
-the abstract's adverse-event wording with the submitter's account in FDA-hosted GRN1118,
-page53. Table retrieval remains unresolved; the secondary account is not FDA endorsement
-and does not by itself establish a treatment-related risk or efficacy conclusion.
-
-
-## Exact-species source review follow-up
-
-The research log now contains bounded packets for kelp34206160, sweet cherry40077655,
-and cranberry–lingonberry11431298. Kelp and cherry full texts were retrieved; cranberry
-species attribution still requires accessible full text. None establishes the exact unresolved
-extract's benchmark. Cherry publications share a trial cohort and require independence review;
-within-group improvement must not become an overall between-group claim.
-
-Required reviewer decisions remain preparation/label correspondence, population/outcome and
-regimen applicability, limitations, and attributable clinical approval for affirmative contexts.
-The B.bifidum correction34652462 is subscription-restricted; its effect remains unresolved.
-No clinical or benchmark item is rebuilt-closed by these packets, and no approval was created.
-
-
-African mango update: the existing record now describes IGOB131150mg twice daily
-(300mg/day), without the unsupported150–300mg/day minimum threshold. The primary paper
-has enrollment/attrition reporting inconsistencies;102is retained only as completers.
-Review preparation correspondence, study limitations and applicability before affirmative
-clinical approval. This factual correction clears no clinical hold or benchmark item.
-
-
-The same regimen correction class also covers theobromine, willow bark, ornithine,
-maqui, royal jelly, caralluma and ashwagandha. Research receipts identify each source,
-actual dose/course and outcome limits. Ornithine includes its6000mg exercise day;
-ashwagandha's300mg twice-daily regimen is600mg/day. These are descriptive study facts,
-not new dose benchmarks or clinician approvals. Exact preparation/product correspondence
-and applicable clinical-review holds remain mandatory.
+**Do not run the full pipeline yet.** Finish required source/preparation decisions and obtain
+attributable approvals for affirmative contexts, or retain their existing holds. The last saved
+preflight reports 9,887 incomplete assessments (overlapping causes; not a new candidate result).
+After decisions and corrections are stable, inspect current fingerprints and run the operator's
+pipeline-only Clean → Enrich → Score command from main. Do not use release_full.sh to rebuild.
+A diagnostic rebuild can preserve holds, but cannot establish release readiness. Publication
+requires rebuilt invariant checks, consumer validation and separate release authorization.

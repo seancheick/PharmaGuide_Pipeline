@@ -3114,3 +3114,52 @@ remote containment/branch cleanup receipts in CURRENT_HANDOFF. No pipeline/expor
 Pipeline remains deferred: source/clinical/benchmark worklists and saved9887completion
 findings remain unresolved; the next required full regeneration starts from Clean under
 current reference fingerprints, after remaining bounded corrections/approvals are ready.
+
+
+## October23 consolidated completion candidate (supersedes fragmented workload counts)
+
+Behavioral pipeline/data class. Goal: finish all reproduced shared defects in one bounded candidate;
+no full pipeline/export/publication or invented clinical approval. Owner: enrich_supplements_v3::
+_collect_probiotic_data/_form_token_context, backed_clinical_studies via existing evidence and
+clinical applicability owners. Evidence: fail-first source-parent/form/source-field/purpose tests,
+exact50 data_batch check, strict198PMID bindings, saved contributor inventory. Will NOT create
+another matcher, scorer, registry, completion authority or clinical approval.
+
+Implemented: physical-parent probiotic headers/flattened children preserve CFU reconciliation;
+structured constituent and proprietary-blend provenance; exact recorded plant-part restatement
+without suppressing real different-part conflicts. Matching-only context stripped before export.
+Synthetic500non-probiotic-row probe improved0.0641s→0.0166s after limiting descendant work to
+potential owners (single bounded microbenchmark, not release/pipeline speed claim).
+
+50curated records corrected by retained primary-source content: actual preparation/design/dose,
+primary/secondary/null outcomes, unsupported endpoints/counts, and source-purpose attribution.
+Five reference-only withdrawals; two descriptive directions reconciled to mixed. Source IDs/history
+and clinical holds retained. No approval/context fields changed. data_batch:50entries,0problems;
+backed-citation owner strict:198PMIDclaims,0missing/title/ghost findings. Bibliography/content
+screening is not full-text or clinical clearance. Independent read-only review found no remaining
+scoped source/contract defect. Final named owner/consumer run645passed; producer slice164passed.
+
+Reconciled corpus inventory:38manifests/15437products/153saved contribution IDs/6389dependencies;
+152curated, plus generated collagen24products. All152lackcontexts;5reference-only leaves147
+conditional affirmative clinical reviews, plus generated collagen binding/context. Historical83
+frozen cohort records preserved;155union rows distinguish3historical-only cases. Prior163claim
+is superseded, not a verified actual-use count. Benchmark506subjects/4259rows/3118products all
+unresolved; alias-aware partitions43preparationguards/1771withstudies/1206withoutstudies/1239no
+eligibleowner. These are shared scientific questions, not506automaticclinicianholds.
+
+Targeted final replays/local/whole-fast qualification and integration receipts follow below.
+Original snapshot/727cohort preserved. Items are implemented, not rebuilt-closed. The saved9887
+completion-failure count is historical, not a new candidate result. Pipeline remains deferred until
+required source/preparation decisions/approvals are stable; retain explicit holds. Final corpus
+and Flutter presentation acceptance and release authorization remain open.
+
+Final stable raw replay:238/238identity-dose and47/47clinical representatives,0errors;
+source_unchanged=True on both baselines/candidates. Normalized Clean content, including identities
+and amounts, unchanged; safety decision/flags/dose-safety projections unchanged across all285cases.
+Identity incomplete135→132; dose52→51; overlap10; union177→173. Four previously unscored labels
+now score after corrected source provenance (25116953.9;27738769.7;33610058.6;4482766.5), retaining
+independent Evidence completeness. Seven clinical totals decline following unsupported source/
+purpose credit withdrawal:18422561.9→49.7;18442162.9→50.7;20944378.7→74.2;25242358.6→43.0;
+28615774.8→71.7;30758050.1→45.8;7169182→80.9. No other total/status movements. These are bounded
+replays, not a rebuilt corpus or new clinical approvals. Current238sample still173identity/dose
+incomplete products, not173independent scientific subjects or the corpus total.

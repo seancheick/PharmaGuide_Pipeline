@@ -676,3 +676,96 @@ Clean/Enrich/Score record changes. One earlier candidate capture was invalidated
 concurrent commit; stable final capture, not the rejected receipt, supports comparison.
 The intermediate source-data CI was superseded; final exact candidate qualification
 is recorded below in the execution LEDGER. No clinical approval or benchmark closure.
+
+
+## Consolidated completion batch — October 23, 2026
+
+This section supersedes inherited 163 “actual-used” and incomplete 83-only workload counts.
+Read-only manifest census covers 38 manifests, 15,437 products, 153 contributing record IDs,
+152 curated records and 6,389 record-product dependencies. Enriched candidate matches (173 IDs)
+are not proof of awarded credit. Frozen 727 cohort and original 83 records remain preserved in
+clinical_review_holds.csv; its 155 union rows flag saved contributors separately. Five reference-only
+withdrawals leave 147 source-eligible contributors needing attributable clinical contexts.
+Generated RECOVERED_COLLAGEN_PEPTIDES_V1 is separately identified, not silently curated.
+
+50 exact source records received factual attribution corrections. Representative primary receipts:
+[sea buckthorn chicken experiment](https://pubmed.ncbi.nlm.nih.gov/23472020/),
+[bilberry acute T2D crossover](https://pubmed.ncbi.nlm.nih.gov/25191571/),
+[magnesium pregnancy cramps](https://pubmed.ncbi.nlm.nih.gov/22909270/),
+[benfotiamine primary and secondary endpoints](https://pubmed.ncbi.nlm.nih.gov/33074237/),
+[spermidine 12-month trial](https://pubmed.ncbi.nlm.nih.gov/35616942/),
+[vitamin E mortality meta-analysis](https://pubmed.ncbi.nlm.nih.gov/15537682/).
+Source-content screening was checked per entry against retrieved primary abstracts; full-text
+access is not asserted for every source. Existing source titles/identifiers were retained and
+strictly checked through verify_backed_studies_citations (50 entries, 198 PMID claims, all OK).
+A bibliographic pass never substitutes for clinical-context approval.
+
+Clinical source-integrity regressions record each corrected endpoint/design/preparation fact;
+seven purpose-owner controls prove negated, null and adverse-effect text does not award unrelated
+purpose credit. Trial limitations remain in notes, not deleted. Five withdrawals retain historical
+sources with reference/scoring_eligible=False rather than fabricating negative efficacy grades.
+No new approval or study_context was manufactured.
+
+Benchmark CSV annotates all 506 subjects / 4,259 rows through actual alias-aware owner lookup:
+43 guarded preparations; 1,771 literature-with-study; 1,206 literature-without-study;
+1,239 without eligible owner. Exact canonical-only inventories give different partitions and
+must not be mixed with this lookup. All remain scientifically open; absence of a benchmark is
+not evidence that no benchmark exists. Preparation mismatch is not cured by a name match.
+Final raw replays, qualification receipts and remaining gates are recorded in the LEDGER/handoff.
+
+### Exact source correction register
+
+All rows are implemented and source-screened; clinical approval and rebuilt closure remain open.
+
+| Record | Retained source IDs | Candidate disposition |
+|---|---|---|
+| BRAND_SENSORIL | 27647541, 38732539 | Source scope reconciled; clinical context required |
+| BRAND_BCM95 | 30975196, 33516238 | Source scope reconciled; clinical context required |
+| BRAND_PYCNOGENOL | 18386255, 31585179, 31637782 | Source scope reconciled; clinical context required |
+| BRAND_ASTAREAL | 22428137 | Source scope reconciled; clinical context required |
+| BRAND_KANEKA_UBIQUINOL | 16919858, 32326664 | Source scope reconciled; clinical context required |
+| BRAND_CREAPURE | 22971354, 24568653 | Source scope reconciled; clinical context required |
+| INGR_LACTOFERRIN | 19639462, 35276902 | Source scope reconciled; clinical context required |
+| INGR_PHOSPHATIDYLSERINE | 20523044, 21103034 | Source scope reconciled; clinical context required |
+| BRAND_SUNTHEANINE | 22214254, 31623400 | Source scope reconciled; clinical context required |
+| BRAND_OPTIMSM | 16309928, 37447322 | Source scope reconciled; clinical context required |
+| BRAND_LONGVIDA | 25277322, 32512782 | Source scope reconciled; clinical context required |
+| BRAND_UCII | 24153020, 26822714 | Source scope reconciled; clinical context required |
+| BRAND_NIAGEN | 29599478, 29992272 | Source scope reconciled; clinical context required |
+| BRAND_RELORA | 23924268 | Source scope reconciled; clinical context required |
+| INGR_SELENIUM | 20883174, 27702392, 37335715, 38243784 | Source scope reconciled; clinical context required |
+| INGR_MAG_GLYCINATE | 22909270 | Source scope reconciled; clinical context required |
+| INGR_QUERCETIN | 27405810, 35948195 | Source scope reconciled; clinical context required |
+| INGR_COQ10 | 25282031, 39462324 | Source scope reconciled; clinical context required |
+| INGR_GINSENG | 29624410, 35509826, 35776997 | Source scope reconciled; clinical context required |
+| INGR_RHODIOLA | 41080184 | Source scope reconciled; clinical context required |
+| INGR_FENUGREEK | 32048383 | Source scope reconciled; clinical context required |
+| INGR_CINNAMON_EXTRACT | 24019277 | Source scope reconciled; clinical context required |
+| INGR_DIGESTIVE_ENZYMES | 37976892 | Source scope reconciled; clinical context required |
+| INGR_LEMON_BALM | 34449930 | Source scope reconciled; clinical context required |
+| PRECLIN_SPERMIDINE | 30388439, 35616942 | Source scope reconciled; clinical context required |
+| PRECLIN_QUERCETIN_PHYTOSOME | 35776034, 36712674, 40037045 | Source scope reconciled; clinical context required |
+| PRECLIN_ASTAXANTHIN_GENERIC | 32755613, 34578794, 35091276, 38243785 | Source scope reconciled; clinical context required |
+| PRECLIN_PTEROSTILBENE | 23431291, 25057276 | Source scope reconciled; clinical context required |
+| PRECLIN_DGL | 21747893, 23606875, 39929150, 4933135 | Source scope reconciled; clinical context required |
+| PRECLIN_CORDYCEPS | 20804368, 27408987, 38501161 | Source scope reconciled; clinical context required |
+| PRECLIN_BETAINE_HCL | 23980906, 25274610 | Reference only; affirmative credit disabled |
+| PRECLIN_SAFFRON | 31135916, 38913392, 41693488 | Source scope reconciled; clinical context required |
+| PRECLIN_RESVERATROL | 24111838, 29305228, 35905799, 36145131, 39255906, 39872318 | Source scope reconciled; clinical context required |
+| BRAND_TESTOFEN | 21312304, 26791805 | Source scope reconciled; clinical context required |
+| INGR_VITAMIN_E | 15537682 | Reference only; affirmative credit disabled |
+| INGR_MAGNESIUM_GENERIC | 26752497, 41000008, 8792038 | Source scope reconciled; clinical context required |
+| INGR_VITAMIN_B6 | 10334745, 36719452 | Source scope reconciled; clinical context required |
+| INGR_PSYLLIUM_HUSK | 18985059, 30239559 | Source scope reconciled; clinical context required |
+| INGR_ASTRAGALUS | 37952511 | Source scope reconciled; clinical context required |
+| INGR_BROMELAIN | 37157782 | Source scope reconciled; clinical context required |
+| INGR_PROPOLIS | 41003407 | Reference only; affirmative credit disabled |
+| INGR_CHAMOMILE | 39106912 | Source scope reconciled; clinical context required |
+| INGR_BEETROOT | 33554654, 34965876 | Source scope reconciled; clinical context required |
+| INGR_BENFOTIAMINE | 23992649, 33074237 | Source scope reconciled; clinical context required |
+| INGR_MOLYBDENUM | 16896051, 19318634 | Reference only; affirmative credit disabled |
+| INGR_BLACK_SEED_OIL | 21675032, 34407441, 37341696, 40210172 | Source scope reconciled; clinical context required |
+| INGR_SEA_BUCKTHORN | 20554904, 23472020, 36043374 | Source scope reconciled; clinical context required |
+| INGR_SLIPPERY_ELM | 20954962, 32151878 | Reference only; affirmative credit disabled |
+| INGR_BILBERRY | 25191571, 25923485, 32106548 | Source scope reconciled; clinical context required |
+| INGR_CERAMIDES | 33055441, 35719159, 35807914, 38999848 | Source scope reconciled; clinical context required |
