@@ -112,7 +112,11 @@ from scoring_v4.modules.fiber_digestive_helpers import (
     total_fiber_grams as _total_fiber_goal_grams,
 )
 from scoring_v4.modules.generic_formulation import _dietary_sugar_penalty_detail
-from scoring_v4.quality_score import shipped_whole_score
+from scoring_v4.quality_score import (
+    evidence_pillar_reason_is_affirmative,
+    formulation_pillar_reason_is_affirmative,
+    shipped_whole_score,
+)
 from score_supplements_v4 import SCORING_ENGINE_VERSION
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
@@ -6098,12 +6102,36 @@ def _build_v4_score_explanation(pillars: Any, module_breakdown: Any = None, pena
         if name == "evidence" and p.get("display_state") in {
                 "not_yet_reviewed", "applicability_unestablished", "not_applicable"}:
             continue
+        # A completed nutrition-authority disposition is earned Evidence, not
+        # a product drawback. Its exact scope remains visible in the pillar.
+        if name == "evidence" and evidence_pillar_reason_is_affirmative(p):
+            continue
+        # Fail-open Verification is explicitly neutral by policy. Calling it a
+        # drag contradicts both the score and the consumer reason.
+        verification_components = safe_dict(p.get("components"))
+        if (name == "verification"
+                and verification_components.get("fail_open_neutral") is True
+                and safe_float(
+                    verification_components.get("quality_system_violation_penalty"), 0
+                ) <= 0):
+            continue
         if (name == "dose"
                 and safe_dict(safe_dict(p.get("explanation")).get("dose_receipt")).get("upper_reference")
                 and any(safe_dict(item).get("id") == "B7" for item in safe_list(penalties))):
             continue  # The qualified UL concern already appears in Tradeoffs.
         dim = safe_dict(safe_dict(safe_dict(module_breakdown).get("dimensions")).get(name))
         meta = safe_dict(dim.get("metadata"))
+        # Formulation's high band is affirmative earned credit even when the
+        # archetype normalization does not land at exactly 20/20. Retain a
+        # real module penalty as a consideration; otherwise the pillar detail
+        # already explains the earned credit without mislabeling it a drag.
+        if (name == "formulation"
+                and formulation_pillar_reason_is_affirmative(p, dim)
+                and not any(
+                    safe_float(value, 0) < 0
+                    for value in safe_dict(dim.get("penalties")).values()
+                )):
+            continue
         if (name == "formulation" and meta.get("iqm_form_quality_assessed_count") == 0
                 and not meta.get("botanical_profile_applied")
                 and not meta.get("collagen_profile_applied")

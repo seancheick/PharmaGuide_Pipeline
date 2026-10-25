@@ -362,6 +362,214 @@ def test_score_explanation_never_lists_a_penalized_pillar_as_a_strength() -> Non
     ]
 
 
+def test_positive_and_neutral_pillar_results_are_not_exported_as_tradeoff_drags() -> None:
+    """Trader Joe's Vitamin C exposed three earned/neutral statements under
+    `What to consider`, where the app then called each one `Holds back`."""
+    from build_final_db import _build_v4_score_explanation
+
+    pillars = {
+        "formulation": {
+            "score": 17.4,
+            "max": 20,
+            "reason": "Well-formulated — uses high-quality, well-absorbed ingredient forms.",
+            "components": {"raw_formulation": 20.9, "reference": 24.0},
+        },
+        "evidence": {
+            "score": 11.1,
+            "max": 20,
+            "reason": (
+                "Established nutritional authority recognizes the physiological "
+                "necessity of these essential nutrients."
+            ),
+            "evidence_result_state": "evaluated_authority",
+            "display_state": "assessed",
+        },
+        "verification": {
+            "score": 6.0,
+            "max": 15,
+            "reason": (
+                "Unknown: no independent verification on file; it gets neutral "
+                "credit, not a penalty."
+            ),
+            "components": {"fail_open_neutral": True, "tier": "unknown"},
+        },
+        "safety_hygiene": {
+            "score": 9.0,
+            "max": 10,
+            "reason": "Safety concern: it contains additive concerns.",
+        },
+    }
+
+    explanation = _build_v4_score_explanation(pillars)
+
+    assert explanation["drags"] == [
+        {
+            "pillar": "safety_hygiene",
+            "reason": "Safety concern: it contains additive concerns.",
+        }
+    ]
+
+
+def test_high_formulation_with_a_real_penalty_remains_a_tradeoff_drag() -> None:
+    """The high-band presentation rule must not hide a sourced formulation
+    penalty merely because the final pillar still lands above 80 percent."""
+    from build_final_db import _build_v4_score_explanation
+
+    pillars = {
+        "formulation": {
+            "score": 17.0,
+            "max": 20,
+            "reason": "The formula includes a form-specific limitation.",
+        },
+        "transparency": {
+            "score": 15.0,
+            "max": 15,
+            "reason": "The active ingredients are fully disclosed.",
+        },
+    }
+    module_breakdown = {
+        "dimensions": {
+            "formulation": {
+                "penalties": {"form_specific_limit": -1.0},
+            },
+        },
+    }
+
+    explanation = _build_v4_score_explanation(pillars, module_breakdown)
+
+    assert explanation["drags"] == [
+        {
+            "pillar": "formulation",
+            "reason": "The formula includes a form-specific limitation.",
+        }
+    ]
+
+
+def test_favorable_human_evidence_is_not_exported_as_a_tradeoff_drag() -> None:
+    from build_final_db import _build_v4_score_explanation
+
+    explanation = _build_v4_score_explanation({
+        "evidence": {
+            "score": 16.7,
+            "max": 20,
+            "reason": "Backed by strong human research.",
+            "evidence_result_state": "evaluated_applicable",
+            "display_state": "assessed",
+        },
+        "transparency": {
+            "score": 15,
+            "max": 15,
+            "reason": "The active ingredients are fully disclosed.",
+        },
+    })
+
+    assert (explanation or {"drags": []})["drags"] == []
+
+
+@pytest.mark.parametrize(
+    ("score", "state", "reason"),
+    [
+        (5.6, "evaluated_applicable", "Limited human evidence for these ingredients."),
+        (
+            0,
+            "evaluated_authority",
+            "These ingredients were reviewed against established nutritional authority, "
+            "which earned no Evidence points for this product.",
+        ),
+    ],
+)
+def test_reviewed_evidence_limitations_remain_tradeoff_drags(score, state, reason) -> None:
+    from build_final_db import _build_v4_score_explanation
+
+    explanation = _build_v4_score_explanation({
+        "evidence": {
+            "score": score,
+            "max": 20,
+            "reason": reason,
+            "evidence_result_state": state,
+            "display_state": "assessed",
+        },
+    })
+
+    assert [row["pillar"] for row in explanation["drags"]] == ["evidence"]
+
+
+def test_neutral_verification_with_a_quality_violation_remains_a_drag() -> None:
+    from build_final_db import _build_v4_score_explanation
+
+    explanation = _build_v4_score_explanation({
+        "verification": {
+            "score": 2,
+            "max": 15,
+            "reason": (
+                "Unknown: no independent verification on file; it gets neutral "
+                "credit, not a penalty; the maker has an open quality-system violation."
+            ),
+            "components": {
+                "fail_open_neutral": True,
+                "quality_system_violation_penalty": 4,
+            },
+        },
+    })
+
+    assert [row["pillar"] for row in explanation["drags"]] == ["verification"]
+
+
+def test_high_formulation_with_an_authored_limitation_remains_a_drag() -> None:
+    from build_final_db import _build_v4_score_explanation
+
+    explanation = _build_v4_score_explanation({
+        "formulation": {
+            "score": 17,
+            "max": 20,
+            "reason": "Molecular form is not disclosed on the label.",
+        },
+    }, {"dimensions": {"formulation": {"penalties": {}}}})
+
+    assert [row["pillar"] for row in explanation["drags"]] == ["formulation"]
+
+
+@pytest.mark.parametrize(
+    ("reason", "components", "dimension"),
+    [
+        (
+            "Strong formulation credit for protein source quality.",
+            {"archetype": "generic_single_molecule"},
+            {"components": {"sports_protein_quality": 13}, "metadata": {}},
+        ),
+        (
+            "Molecular form is disclosed as triglyceride; EPA + DHA make up "
+            "72% of the disclosed omega-oil amount.",
+            {"archetype": "omega"},
+            {
+                "metadata": {
+                    "form_detected": "tg",
+                    "epa_dha_concentration": {"ratio": 0.72},
+                },
+            },
+        ),
+    ],
+)
+def test_route_specific_positive_formulation_is_not_a_tradeoff_drag(
+    reason, components, dimension
+) -> None:
+    from build_final_db import _build_v4_score_explanation
+
+    explanation = _build_v4_score_explanation(
+        {
+            "formulation": {
+                "score": 17,
+                "max": 20,
+                "reason": reason,
+                "components": components,
+            },
+        },
+        {"dimensions": {"formulation": dimension}},
+    )
+
+    assert (explanation or {"drags": []})["drags"] == []
+
+
 def test_certification_detail_gmp_carries_the_pillar_audited_decision() -> None:
     from build_final_db import _certification_gmp_detail
 

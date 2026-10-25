@@ -4059,6 +4059,97 @@ def test_batch43_inactive_structural_wrappers_unwrap_forms_without_parent(contai
     assert display_by_raw[container_name]["score_included"] is False
 
 
+def test_generic_coating_parentheses_expand_declared_children_without_inventing_shellac():
+    """A generic wrapper is structure, not an alias for Natural Glaze."""
+    normalizer = EnhancedDSLDNormalizer()
+    raw_text = (
+        "coating (hydroxypropyl methylcellulose, glycerin, carnauba wax)"
+    )
+    raw_product = {
+        "id": "trader-joes-vitamin-c-coating",
+        "fullName": "Vitamin C 1000 mg",
+        "brandName": "Trader Joe's",
+        "ingredientRows": [],
+        "otheringredients": {"ingredients": [{"name": raw_text, "order": 1}]},
+    }
+
+    cleaned = normalizer.normalize_product(raw_product)
+    inactives = cleaned.get("inactiveIngredients", [])
+    raw_names = [row.get("name") for row in inactives]
+    standard_names = [row.get("standardName") for row in inactives]
+
+    assert raw_text not in raw_names
+    assert raw_names == [
+        "hydroxypropyl methylcellulose",
+        "glycerin",
+        "carnauba wax",
+    ]
+    assert "Natural Glaze" not in standard_names
+    assert not any(row.get("canonical_id") == "PII_NATURAL_GLAZE" for row in inactives)
+    display_parent = next(
+        row
+        for row in cleaned.get("display_ingredients", [])
+        if row.get("raw_source_text") == raw_text
+    )
+    assert display_parent["display_type"] == "structural_container"
+    child_rows = [
+        row
+        for row in cleaned.get("display_ingredients", [])
+        if row.get("parent_label") == raw_text
+    ]
+    assert [row.get("raw_source_text") for row in child_rows] == raw_names
+
+
+def test_generic_coating_expansion_handles_nested_child_annotations():
+    normalizer = EnhancedDSLDNormalizer()
+    assert normalizer._expand_inactive_disclosure(
+        "coating (hydroxypropyl methylcellulose, titanium dioxide [color], "
+        "glycerin, carnauba wax)"
+    ) == [
+        "hydroxypropyl methylcellulose",
+        "titanium dioxide [color]",
+        "glycerin",
+        "carnauba wax",
+    ]
+
+
+def test_single_child_structural_wrapper_expands_without_splitting_annotations():
+    normalizer = EnhancedDSLDNormalizer()
+    assert normalizer._expand_inactive_disclosure(
+        "capsule shell (hypromellose)"
+    ) == ["hypromellose"]
+
+
+def test_structural_wrapper_inside_an_inactive_header_form_expands():
+    normalizer = EnhancedDSLDNormalizer()
+    expanded = normalizer._expand_header_forms_for_processing(
+        {
+            "name": "Less than 2% of:",
+            "forms": [{"name": "Color (Annatto Extract [seed])"}],
+        },
+        source_path="inactiveIngredients[0]",
+    )
+    assert [row["name"] for row in expanded] == ["Annatto Extract [seed]"]
+    assert normalizer._display_ingredients_buffer[-1]["children"] == [
+        "Annatto Extract [seed]"
+    ]
+
+
+@pytest.mark.parametrize(
+    "semantic_parenthetical",
+    [
+        "gelatin (capsule)",
+        "magnesium stearate (vegetable source)",
+        "silicon dioxide (E551)",
+    ],
+)
+def test_semantic_parentheses_remain_one_inactive_ingredient(semantic_parenthetical):
+    normalizer = EnhancedDSLDNormalizer()
+    assert normalizer._expand_inactive_disclosure(semantic_parenthetical) == [
+        semantic_parenthetical
+    ]
+
+
 def test_batch43_rice_bran_oil_titanium_dioxide_color_splits_into_child_ingredients():
     from enhanced_normalizer import EnhancedDSLDNormalizer
 

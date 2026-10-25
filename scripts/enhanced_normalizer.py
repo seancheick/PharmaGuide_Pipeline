@@ -534,6 +534,23 @@ STRUCTURAL_OTHER_FORM_CONTAINER_NAMES = frozenset({
     "isoflavones and saponins",
 })
 
+# Generic label wrappers whose parenthetical content names the actual inactive
+# ingredients. These are structural only when the parentheses contain at least
+# two top-level ingredient rows; one-item annotations such as
+# ``gelatin (capsule)`` remain attached to their ingredient identity.
+STRUCTURAL_PARENTHETICAL_CONTAINER_NAMES = frozenset({
+    "coating",
+    "aqueous coating",
+    "tablet coating",
+    "film coating",
+    "capsule shell",
+    "softgel shell",
+    "soft gel shell",
+    "glaze",
+    "color",
+    "coloring",
+})
+
 INACTIVE_CONTAINER_DESCRIPTOR_TOKENS = frozenset({
     "base",
     "bits",
@@ -8599,6 +8616,23 @@ class EnhancedDSLDNormalizer:
         lists its components explicitly; parentheses on an ordinary ingredient
         remain source/form details. Unknown conjunction halves stay unresolved.
         """
+        container = re.fullmatch(r"\s*([^()]+?)\s*\((.+)\)\.?\s*", name)
+        if container:
+            container_name = self.matcher.preprocess_text(container.group(1))
+            if container_name in STRUCTURAL_PARENTHETICAL_CONTAINER_NAMES:
+                try:
+                    rows = parse_other_ingredient_disclosure(container.group(2))
+                except ValueError:
+                    return [name]
+                if rows and all(not row.get("forms") for row in rows):
+                    names = [
+                        part
+                        for row in rows
+                        for part in self._expand_inactive_disclosure(row["name"])
+                    ]
+                    if names and names != [name]:
+                        return names
+
         if self._has_curated_other_ingredient_identity(name):
             return [name]
         blend = re.fullmatch(r"((?:.*\s)?blend)\s*\((.+)\)\.?", name, re.IGNORECASE)
@@ -8967,30 +9001,35 @@ class EnhancedDSLDNormalizer:
         forms = ingredient.get("forms", []) or []
         expanded: List[Dict[str, Any]] = []
         ingredient_source_path = ingredient.get("raw_source_path") or source_path
+        source_is_inactive = self._source_path_is_inactive(ingredient_source_path)
         parent_mass, parent_unit = self._extract_primary_mass_unit(ingredient)
         if self._is_label_header(name):
             if forms and self._is_semantic_label_qualifier(name):
+                display_children = []
+                for form in forms:
+                    form_name = (
+                        str(form.get("name") or "").strip()
+                        if isinstance(form, dict)
+                        else str(form).strip()
+                    )
+                    if not form_name:
+                        continue
+                    display_children.extend(
+                        self._expand_inactive_disclosure(form_name)
+                        if source_is_inactive
+                        else [form_name]
+                    )
                 self._queue_display_ingredient(
                     raw_source_text=name,
                     source_section=(
                         "inactiveIngredients"
-                        if self._source_path_is_inactive(ingredient_source_path)
+                        if source_is_inactive
                         else "activeIngredients"
                     ),
                     display_type="structural_container",
                     score_included=False,
                     source_row=ingredient,
-                    children=[
-                        str(form.get("name") or "").strip()
-                        if isinstance(form, dict)
-                        else str(form).strip()
-                        for form in forms
-                        if (
-                            str(form.get("name") or "").strip()
-                            if isinstance(form, dict)
-                            else str(form).strip()
-                        )
-                    ],
+                    children=display_children,
                 )
             else:
                 self._queue_label_ledger_omission(
@@ -9003,7 +9042,7 @@ class EnhancedDSLDNormalizer:
             return expanded
 
         logger.debug(f"Extracting {len(forms)} ingredients from label header: {name}")
-        is_active_source = not self._source_path_is_inactive(ingredient_source_path)
+        is_active_source = not source_is_inactive
 
         def carry_form_dose_and_correction(
             row: Dict[str, Any],
@@ -9059,7 +9098,21 @@ class EnhancedDSLDNormalizer:
                     else ingredient.get("ingredientGroup"))
                 form_source_path = form.get("raw_source_path") or indexed_form_source_path
                 inherited_quantity = self._quantity_for_single_form_protein_child(ingredient, forms)
-                expanded_names = self._expand_compound_form_name(form_name, source_path)
+                disclosure_names = (
+                    [form_name]
+                    if is_active_source
+                    else self._expand_inactive_disclosure(form_name)
+                )
+                expanded_names = []
+                for disclosure_name in disclosure_names:
+                    compound_names = self._expand_compound_form_name(
+                        disclosure_name,
+                        source_path,
+                    )
+                    if compound_names:
+                        expanded_names.extend(compound_names)
+                    elif disclosure_name != form_name:
+                        expanded_names.append(disclosure_name)
                 if expanded_names:
                     for expanded_name in expanded_names:
                         row = {
