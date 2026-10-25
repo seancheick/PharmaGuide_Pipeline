@@ -474,7 +474,7 @@ def assess_clinical_applicability(product: Mapping, entry: Mapping, *, assess_am
     dosage_form = _key(product.get("form_factor_canonical") or product.get("form_factor") or physical)
     allowed = {_key(f) for f in policy.get("dosage_forms") or []}
 
-    lower, upper, _ = resolve_daily_serving_range(dict(product))
+    lower, upper, frequency_defaulted = resolve_daily_serving_range(dict(product))
     reasons = []
     source_only = policy.get("require_source_label_form", False)
     if source_only:
@@ -525,6 +525,9 @@ def assess_clinical_applicability(product: Mapping, entry: Mapping, *, assess_am
         unit_scale = _mass_unit_scale(row.get("unit_normalized") or row.get("unit"))
         target_scale = _mass_unit_scale(policy.get("dose_unit"))
         if assess_amount and target_scale is not None:
+            if frequency_defaulted:
+                reasons.append("clinical_dose_unresolved")
+                continue
             if amount is None or amount <= 0 or unit_scale is None:
                 reasons.append("clinical_dose_unresolved")
                 continue

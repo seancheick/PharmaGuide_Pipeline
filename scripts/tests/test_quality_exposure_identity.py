@@ -88,6 +88,30 @@ def test_daily_exposure_preserves_frequency_uncertainty_and_source():
         exposure.maximum = 3
 
 
+def test_minimum_daily_frequency_does_not_establish_a_maximum():
+    from scoring_v4.exposure import row_exposure
+    ingredient = row("magnesium", 40, "mg")
+    value = product([ingredient])
+    value["servingSizes"][0]["maxDailyServings"] = None
+    # Stale derived metadata must not erase the explicit source limitation.
+    value["serving_basis"] = {"min_servings_per_day": 1, "max_servings_per_day": 1}
+    assert resolve_daily_serving_range(value) == (1, 1, True)
+    exposure = row_exposure(value, ingredient, basis="daily", unit="mg")
+    assert exposure.per_serving_amount == 40
+    assert exposure.minimum is None and exposure.maximum is None
+    assert exposure.uncertainty == "daily_frequency_unknown"
+
+
+def test_export_does_not_invent_daily_cadence_from_minimum_only():
+    from build_final_db import generate_dosing_summary
+    value = {"form_factor_canonical": "powder", "servingSizes": [
+        {"minQuantity": 10.4, "maxQuantity": 10.4, "unit": "Gram(s)",
+         "minDailyServings": 1, "maxDailyServings": None}],
+        "serving_basis": {"basis_count": 10.4, "basis_unit": "gram",
+                          "min_servings_per_day": 1, "max_servings_per_day": 1}}
+    assert generate_dosing_summary(value)["dosing_summary"] == "See product label"
+
+
 def test_explicit_daily_exposure_preserves_interval_without_selecting_new_policy():
     from scoring_v4.exposure import row_exposure
     ingredient = row("creatine", 1500, "mg")

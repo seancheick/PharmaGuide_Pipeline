@@ -10059,8 +10059,10 @@ class EnhancedDSLDNormalizer:
                 "maxQuantity": max_qty,
                 "unit": serving.get("unit", "serving"),
                 "notes": serving.get("notes", ""),
-                "minDailyServings": self._safe_int(raw_min_daily if raw_min_daily is not None else DEFAULT_DAILY_SERVINGS),
-                "maxDailyServings": self._safe_int(raw_max_daily if raw_max_daily is not None else DEFAULT_DAILY_SERVINGS),
+                "minDailyServings": (None if raw_min_daily is None and daily_from_label else
+                                     self._safe_int(raw_min_daily if raw_min_daily is not None else DEFAULT_DAILY_SERVINGS)),
+                "maxDailyServings": (None if raw_max_daily is None and daily_from_label else
+                                     self._safe_int(raw_max_daily if raw_max_daily is not None else DEFAULT_DAILY_SERVINGS)),
                 "normalizedServing": max_qty,  # Use max as normalized
                 "servingQuantitySource": "label" if qty_from_label else "default",
                 "dailyServingsSource": "label" if daily_from_label else "default",

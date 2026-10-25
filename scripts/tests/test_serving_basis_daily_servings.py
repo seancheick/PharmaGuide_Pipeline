@@ -486,8 +486,15 @@ def test_child_adult_range_exports_only_the_selected_adult_column(pid, basis_cou
     cleaned = EnhancedDSLDNormalizer().normalize_product(raw)
     enriched, _ = SupplementEnricherV3().enrich_product(cleaned)
     assert enriched["serving_basis"]["basis_count"] == basis_count
-    assert resolve_daily_serving_range(enriched) == (daily, daily, False)
-    assert quantity_text in generate_dosing_summary(enriched)["dosing_summary"]
+    if pid == "173920":
+        # Exact directions say "one or more times per day"; the adult
+        # Facts column is known, but one/day is not a declared maximum.
+        assert raw["servingSizes"][0]["maxDailyServings"] is None
+        assert resolve_daily_serving_range(enriched) == (daily, daily, True)
+        assert generate_dosing_summary(enriched)["dosing_summary"] == "See product label"
+    else:
+        assert resolve_daily_serving_range(enriched) == (daily, daily, False)
+        assert quantity_text in generate_dosing_summary(enriched)["dosing_summary"]
 
 
 @pytest.mark.parametrize("unit,form,expected", [

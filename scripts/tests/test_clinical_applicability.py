@@ -351,8 +351,19 @@ def test_policy_dose_unit_accepts_canonical_spellings(monkeypatch):
     entries["INGR_ZINC_PICOLINATE"]["applicability"]["dose_unit"] = "Milligram(s)"
     monkeypatch.setattr(clinical_applicability, "reviewed_entries", lambda: entries)
     product = zinc_product("zinc acetate", 80, "lozenge")
+    product["serving_basis"] = {"min_servings_per_day": 1, "max_servings_per_day": 1}
     verdict = assess_clinical_applicability(product, product["evidence_data"]["clinical_matches"][0])
     assert verdict["status"] == "applicable", verdict
+
+
+@pytest.mark.parametrize("frequency", [{}, {"minDailyServings": 1, "maxDailyServings": None}])
+def test_unknown_daily_frequency_cannot_qualify_a_studied_daily_dose(frequency):
+    product = zinc_product("zinc acetate", 80, "lozenge")
+    product["servingSizes"] = [{"quantity": 1, "unit": "lozenge", **frequency}]
+    verdict = assess_clinical_applicability(product, scoped_entry({
+        "scope": "ingredient", "minimum_daily_dose": 80, "dose_unit": "mg"}))
+    assert verdict["status"] != "applicable"
+    assert verdict["reason_code"] == "clinical_dose_unresolved"
 
 
 # --- resolved material identity and multi-row ownership (Wave 1 applicability repair) -------------

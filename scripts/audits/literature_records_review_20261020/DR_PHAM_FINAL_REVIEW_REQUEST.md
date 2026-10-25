@@ -3013,7 +3013,7 @@ This list uses the final bounded replay for the original238 products.171 still h
 
 | C012 [19598](https://api.ods.od.nih.gov/dsld/s3/pdf/19598.pdf) Trisynex | No remaining identity limitation in this replay. | Quantity/form/unit or component exposure remains unresolved; confirm only source-supported values. | Decision / missing fact: ____ |
 
-| C013 [25501](https://api.ods.od.nih.gov/dsld/s3/pdf/25501.pdf) High Absorption 100% Chelated Magnesium | Magnesium: magnesium glycinate/lysinate chelate | No remaining dose limitation in this replay. | Exact25501API/PDFalreadyindependentlyverified;200mgMg/two tablets twice daily=400mg/day. Mixedchelate qualification remains;do not repeat access request. Source facts only; not runtime/rebuilt clearance. |
+| C013 [25501](https://api.ods.od.nih.gov/dsld/s3/pdf/25501.pdf) High Absorption 100% Chelated Magnesium | Magnesium: magnesium glycinate/lysinate chelate | No remaining dose limitation in this replay. | Batch10 source+runtime verified:200mg/two tablets twice daily=400mg/day;350mg supplemental UL warning retained. No source amount clarification needed. Mixed-ligand numerical form assessment still held; not rebuilt closure. |
 
 | C014 [25583](https://api.ods.od.nih.gov/dsld/s3/pdf/25583.pdf) Breakfast Squares Oatmeal Chocolate Chip | No remaining identity limitation in this replay. | Quantity/form/unit or component exposure remains unresolved; confirm only source-supported values. | Decision / missing fact: ____ |
 
@@ -3069,9 +3069,9 @@ This list uses the final bounded replay for the original238 products.171 still h
 
 | C040 [78327](https://api.ods.od.nih.gov/dsld/s3/pdf/78327.pdf) Ultra Mega Green Active Berry | N-Acetyl-L-Cystine | No remaining dose limitation in this replay. | Decision / missing fact: ____ |
 
-| C041 [188790](https://api.ods.od.nih.gov/dsld/s3/pdf/188790.pdf) PureLean Pure Pack | Chromium: Zychrome Chromium Dinicocysteinate | No remaining dose limitation in this replay. | Decision / missing fact: ____ |
+| C041 [188790](https://api.ods.od.nih.gov/dsld/s3/pdf/188790.pdf) PureLean Pure Pack | Chromium: Zychrome Chromium Dinicocysteinate | No remaining dose limitation in this replay. | Batch10 exact API/PDF verified:200mcg chromium perpacket, explicit50%Zychrome=100mcg elemental contribution; percent retained in runtime. Both original papers400mcg/day, second exploratory reanalysis; no qualified packet glucose/weight benefit. Exact preparation assessment remains held; no invented mass/grade. |
 
-| C042 [203385](https://api.ods.od.nih.gov/dsld/s3/pdf/203385.pdf) CoQ10 L-Carnitine Magnesium | Magnesium Bisglycinate Chelate buffered: Magnesium Bisglycinate Chelate buffered | No remaining dose limitation in this replay. | Exact203385PDFverified:200mgMgfrom1112mgbufferedbisglycinateper3capsdaily. Buffer composition/allocation undisclosed; no assumedoxide identity. Source facts only; not runtime/rebuilt clearance. |
+| C042 [203385](https://api.ods.od.nih.gov/dsld/s3/pdf/203385.pdf) CoQ10 L-Carnitine Magnesium | Magnesium Bisglycinate Chelate buffered: Magnesium Bisglycinate Chelate buffered | No remaining dose limitation in this replay. | Batch10 source+runtime verified:200mg magnesium/day;1112mg buffered source is non-distinct for UL. Exact internal allocation unverified; required only for component-specific claims. No numerical form approval or rebuilt closure. |
 
 | C043 [212398](https://api.ods.od.nih.gov/dsld/s3/pdf/212398.pdf) Colon Pure Unflavored | No remaining identity limitation in this replay. | Quantity/form/unit or component exposure remains unresolved; confirm only source-supported values. | Decision / missing fact: ____ |
 
@@ -3285,9 +3285,9 @@ This list uses the final bounded replay for the original238 products.171 still h
 
 | C148 [315691](https://api.ods.od.nih.gov/dsld/s3/pdf/315691.pdf) Potassium Iodide Tablets 130 mg | No remaining identity limitation in this replay. | iodine / compound_mass_not_elemental / mg | Keep documented emergency-use/compound-mass limitation; already intentionally unassessable, not a new release hold. |
 
-| C149 [322515](https://api.ods.od.nih.gov/dsld/s3/pdf/322515.pdf) High Absorption Magnesium 200 mg | Albion Magnesium Lysinate Glycinate Chelate: Albion Magnesium Lysinate Glycinate Chelate | No remaining dose limitation in this replay. | Exact322515PDFverified:200mgMgper2tabs,twice/day=>400mg/day;Albionmixedlysinate-glycinateidentityprinted. No plainbisglycinate transfer. Source facts only; not runtime/rebuilt clearance. |
+| C149 [322515](https://api.ods.od.nih.gov/dsld/s3/pdf/322515.pdf) High Absorption Magnesium 200 mg | Albion Magnesium Lysinate Glycinate Chelate: Albion Magnesium Lysinate Glycinate Chelate | No remaining dose limitation in this replay. | Batch10 source+runtime verified:400mg elemental magnesium/day, source chelate mass not added;350mg supplemental UL warning retained. Named mixed-ligand numerical form review remains held; no plainbisglycinate transfer. |
 
-| C150 [323080](https://api.ods.od.nih.gov/dsld/s3/pdf/323080.pdf) Catalyte Lemon Lime Flavored Electrolytes | Magnesium: Albion Magnesium Lysinate Glycinate Chelate | No remaining dose limitation in this replay. | Exact323080PDFverified:40mgMgperscoop,Albionlysinate-glycinate,withinelectrolyteformula;noisolated-form claim. Source facts only; not runtime/rebuilt clearance. |
+| C150 [323080](https://api.ods.od.nih.gov/dsld/s3/pdf/323080.pdf) Catalyte Lemon Lime Flavored Electrolytes | Magnesium: Albion Magnesium Lysinate Glycinate Chelate | No remaining dose limitation in this replay. | Batch10 supersedes original replay dose column:40mg/scoop known; finite daily maximum not established. Cleaner/frequency/estimated-RDA/export correction implemented and bounded-replayed; assessment basis is not maximum. Exact form hold and pregnancy/California warnings retained; no rebuilt closure. |
 
 | C151 [328127](https://api.ods.od.nih.gov/dsld/s3/pdf/328127.pdf) Blood Sugar Manager | Vitamin A: Mixed Carotenoids | No remaining dose limitation in this replay. | Exact 328127: 450 mcg vitamin A per three capsules twice daily =900 mcg RAE/day, beta-carotene from mixed carotenoids. Runtime cadence/total correct; retain label exclusions and glucose monitoring. Source/replay finding; no rebuilt-product closure. |
 

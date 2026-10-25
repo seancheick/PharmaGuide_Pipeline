@@ -100,7 +100,7 @@ from scoring_input_contract import DOSE_NOT_PROVIDED_UNITS, dose_disclosure_stat
 from serving_frequency import (
     select_canonical_serving,
     format_daily_frequency,
-    resolve_daily_serving_multiplier,
+    resolve_daily_serving_range,
 )
 from label_record_contract import build_label_record_contract
 from row_ledger import build_row_ledger, summarize_row_ledger, validate_row_ledger
@@ -10141,7 +10141,7 @@ def generate_dosing_summary(enriched: Dict) -> Dict:
     # it has one owner pipeline-wide. Deriving it here from servingSizes[0]
     # printed the child regimen on products that declare both a child and an
     # adult serving row.
-    max_daily = resolve_daily_serving_multiplier(enriched)
+    _, max_daily, frequency_defaulted = resolve_daily_serving_range(enriched)
 
     # Serving size comes from the same canonical owner as scoring.
     sb = safe_dict(enriched.get("serving_basis"))
@@ -10157,7 +10157,7 @@ def generate_dosing_summary(enriched: Dict) -> Dict:
     min_qty = safe_float(min_qty_raw)
     max_qty = safe_float(max_qty_raw)
 
-    if min_qty is None and max_qty is None:
+    if frequency_defaulted or (min_qty is None and max_qty is None):
         # No usable quantity data — graceful fallback.
         summary = "See product label"
     else:

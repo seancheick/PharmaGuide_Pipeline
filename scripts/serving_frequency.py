@@ -115,6 +115,10 @@ def resolve_facts_panel_serving_basis(record: Dict[str, Any]) -> Optional[Dict[s
         serving.get("minDailyServings"),
         serving.get("maxDailyServings"),
     )
+    if any(_positive_float(serving.get(key)) is None
+           for key in ("minDailyServings", "maxDailyServings")):
+        # A Facts amount basis cannot complete a missing daily regimen bound.
+        daily_range = None
     if serving_quantity is None or not serving_unit:
         return None
 
@@ -351,6 +355,17 @@ def resolve_daily_serving_range(record: Dict[str, Any]) -> Tuple[float, float, b
     composite = _composite_pack_daily_range(record)
     if composite is not None:
         return composite[0], composite[1], False
+
+    serving = select_canonical_serving(record.get("servingSizes"))
+    if serving is not None:
+        low = _positive_float(serving.get("minDailyServings"))
+        high = _positive_float(serving.get("maxDailyServings"))
+        if (low is None) != (high is None):
+            # Keep the existing numeric assessment basis, but never describe
+            # the copied endpoint as a fully declared daily range. Source
+            # uncertainty wins over older derived serving_basis metadata.
+            pair = _ordered_pair(low, high)
+            return pair[0], pair[1], True
 
     facts_panel = resolve_facts_panel_serving_basis(record)
     if facts_panel is not None and "min_servings_per_day" in facts_panel:

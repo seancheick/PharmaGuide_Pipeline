@@ -22780,6 +22780,7 @@ class SupplementEnricherV3:
             servings_estimated = True
         if servings_max is None or servings_max <= 0:
             servings_max = servings_min
+            servings_estimated = True
 
         # D4.3: per-canonical aggregation buckets. A product declaring
         # multiple forms of the same nutrient (e.g., Vitamin A from
@@ -25201,11 +25202,11 @@ class SupplementEnricherV3:
                 # Same canonical policy as the interaction thresholds. %RDA and
                 # UL comparisons are per-day, so a derived serving frequency
                 # would misreport tolerable-upper-limit proximity.
-                servings_min, servings_max, _ = resolve_daily_serving_range(enriched)
+                servings_min, servings_max, frequency_defaulted = resolve_daily_serving_range(enriched)
                 enriched["rda_ul_data"] = self._collect_rda_ul_data(
                     enriched,
                     min_servings_per_day=servings_min,
-                    max_servings_per_day=servings_max
+                    max_servings_per_day=None if frequency_defaulted else servings_max
                 )
                 if isinstance(enriched["rda_ul_data"], dict):
                     enriched["rda_ul_data"]["collection_enabled"] = True
