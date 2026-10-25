@@ -7,7 +7,7 @@
     "review_policy": "Every product entry is keyed by dsld_id and must carry: brand, product_name (for human-readable audit trail), raw_ingredient_text (the source row being corrected), corrected_ingredient_text (the text the cleaner should see, unchanged for unit-only corrections), correction_fields, evidence (free-text rationale with regulatory citations), sources (authoritative URLs — FDA, NIH, DailyMed, etc.), reviewer, and review_date (ISO 8601 YYYY-MM-DD). A verified cross-row defect may add additional_row_corrections, which inherit the product-level evidence, sources, reviewer, review_date, scope, and provenance tag. Quantity changes require exact raw and corrected value/unit pairs and must be supported by the official manufacturer or label image. Restoring a quantity absent from a form row additionally requires raw_quantity_missing=true, a positive corrected value/unit, and exact same-record source text that states the dose; the applier refuses to overwrite any existing quantity representation. A reviewed Daily Value correction requires an exact raw_daily_value and corrected_daily_value from the same official label; it rewrites only matching source percentages, never derives a percentage or changes a different value. A reviewed unresolved_unit scoring_disposition preserves exact raw_quantity_value/raw_quantity_unit, makes no inferred unit correction, and marks dose and upper-limit assessment unresolved until independent exact-label evidence resolves the conflict. It applies only when the raw name, value and unit all match. Reviewed hierarchy corrections may supply corrected_child_row_refs with exact parent raw_source_path/name/value/unit and exact child source paths/names/raw_child_names. The existing applier validates the whole group before moving working rows; it preserves original API source references and quantities and fails closed on mismatch. A source_descriptor disposition with an authored raw value/unit applies only to that exact quantity edition. Exact-source corrected_notes repairs require raw source paths, names, notes and quantity pairs for the entire bundle; a mismatch fails closed before edits. Original working notes retain _pre_correction_notes, and source paths remain unchanged. A reviewed source quantity conflict may set corrected_quantity_operator to ambiguous or unknown only with raw_quantities matching the entire original quantity array exactly. It preserves every number, unit and serving basis, changes only the existing unresolved qualifier, and retains original quantities for audit; it does not invent a replacement amount. Reviewed serving_basis_correction binds the exact ingredientRows, servingSizes and statements content SHA256 before replacing serving metadata or assigning quantity variants to individually reviewed preparation columns. It preserves all alternative amounts and original source snapshots and fails closed on any changed binding. corrected_quantities requires the entire raw_quantities array and preserves column count; it restores only individually image-verified value/unit transcriptions.",
     "unmatched_drug_tokens_policy": "When a row's raw_ingredient_text matches a known regulated-drug name (e.g., 'Insulin', 'Acetaminophen', 'Ibuprofen') and there is NO matching override for the product, the row must NOT be silently mapped. The cleaner emits the row to a quarantine path with reason='requires_human_review_drug_token_in_supplement' and excludes the product from scoring. New occurrences enter the reviewer pipeline via the same schema.",
     "last_updated": "2026-10-25",
-    "total_entries": 112,
+    "total_entries": 121,
     "loaded_by": "scripts/enhanced_normalizer.py via _load_label_corrections (cached on first product)"
   },
   "corrections": {
@@ -6861,6 +6861,679 @@
           }
         ]
       }
+    },
+    "312832": {
+      "brand": "BulkSupplements.com",
+      "product_name": "Omega 3-6-9 Softgels 2400 mg",
+      "raw_ingredient_text": "Fish Oil",
+      "corrected_ingredient_text": "Fish Oil",
+      "raw_source_path": "ingredientRows[0]",
+      "correction_fields": [
+        "statements.directions",
+        "statements.formula_total"
+      ],
+      "evidence": "Exact001 panel says two softgels daily and three oils800mg each (2400mg total). API up-to-three-times and24000mg note contradict this edition. Preserve older editions, oil masses and all warnings; do not invent EPA/DHA/GLA amounts.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/312832",
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/312832.pdf"
+      ],
+      "reviewer": "Codex independent exact-label content verification; no clinical scoring approval",
+      "review_date": "2026-10-25",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_source_correction_20261025_batch12",
+      "serving_basis_correction": {
+        "raw_source_sha256": "7cff5e6bddf58da76afb94f7625359f11117ab6275bed54979d67b970a0dbf69",
+        "serving_sizes": [
+          {
+            "order": 1,
+            "minQuantity": 2,
+            "maxQuantity": 2,
+            "minDailyServings": 1,
+            "maxDailyServings": 1,
+            "unit": "Softgel(s)",
+            "notes": "",
+            "inSFB": true
+          }
+        ],
+        "corrected_statements": [
+          {
+            "type": "Suggested/Recommended/Usage/Directions",
+            "notes": "As a dietary supplement take 2 softgels daily, or as directed by a physician."
+          },
+          {
+            "type": "FDA Disclaimer Statement",
+            "notes": "Warning: This product is not intended to diagnose, treat, cure, or prevent any disease."
+          },
+          {
+            "type": "Precautions re: All Other",
+            "notes": "Always consult a physician before taking any dietary supplement."
+          },
+          {
+            "type": "Precautions re: Children",
+            "notes": "Keep out of reach of children."
+          },
+          {
+            "type": "Formulation re: Does NOT Contain",
+            "notes": "Free of: Added sugar, soy, dairy, yeast, gluten, additives"
+          },
+          {
+            "type": "Storage",
+            "notes": "Store in a dry, cool place"
+          },
+          {
+            "type": "General Statements: All Other Content",
+            "notes": "New\r\nScan Me"
+          },
+          {
+            "type": "Formula re: Contains",
+            "notes": "Omega 3-6-9 2400mg per serving\r\nOmega 369 Softgels"
+          }
+        ]
+      }
+    },
+    "330191": {
+      "brand": "BulkSupplements.com",
+      "product_name": "Oyster Extract Powder 500 mg",
+      "raw_ingredient_text": "Oyster Shell Extract",
+      "corrected_ingredient_text": "Oyster Extract",
+      "raw_source_path": "ingredientRows[0]",
+      "correction_fields": [
+        "ingredient_text",
+        "forms"
+      ],
+      "evidence": "Exact004 panel identifies Oyster Extract10:1 (Ostrea gigas Thunberg) (Whole),500mg once daily. Shell is an API transcription error; no calcium/zinc allocation or chemical identifier inferred. Preserve shellfish warning.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/330191",
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/330191.pdf"
+      ],
+      "reviewer": "Codex independent exact-label content verification; no clinical scoring approval",
+      "review_date": "2026-10-25",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_source_correction_20261025_batch12",
+      "serving_basis_correction": {
+        "raw_source_sha256": "d7fba0ddee8a69484a428ed6a130ee9013ca428d72a0825672fb22b269380715",
+        "serving_sizes": [
+          {
+            "order": 1,
+            "minQuantity": 500,
+            "maxQuantity": 500,
+            "minDailyServings": 1,
+            "maxDailyServings": 1,
+            "unit": "mg",
+            "notes": "About 1/5 tsp",
+            "inSFB": true
+          }
+        ]
+      },
+      "raw_forms": [
+        {
+          "order": 1,
+          "ingredientId": 328714,
+          "prefix": null,
+          "percent": null,
+          "name": "Ostrea gigas Thunberg Shell Extract",
+          "category": "animal part or source",
+          "ingredientGroup": "oyster",
+          "uniiCode": "5I0R0U8ZL0"
+        }
+      ],
+      "corrected_forms": [
+        {
+          "order": 1,
+          "ingredientId": null,
+          "prefix": null,
+          "percent": null,
+          "name": "Ostrea gigas Thunberg whole oyster extract",
+          "category": "animal part or source",
+          "ingredientGroup": "oyster",
+          "uniiCode": null
+        }
+      ]
+    },
+    "330664": {
+      "brand": "BulkSupplements.com",
+      "product_name": "Cranberry Powder 5 g",
+      "raw_ingredient_text": "Cranberry, Powder",
+      "corrected_ingredient_text": "Cranberry, Powder",
+      "raw_source_path": "ingredientRows[0]",
+      "correction_fields": [
+        "forms"
+      ],
+      "evidence": "Exact003 panel names Vaccinium macrocarpon fruit powder5g, not V.oxycoccus. Front prints200servings while Facts20; retain this genuine source conflict and all quantities. No PAC amount or extract equivalence.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/330664",
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/330664.pdf"
+      ],
+      "reviewer": "Codex independent exact-label content verification; no clinical scoring approval",
+      "review_date": "2026-10-25",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_source_correction_20261025_batch12",
+      "serving_basis_correction": {
+        "raw_source_sha256": "5978f25a0d4e3827d239b3c7198e06300daa2aca6e882b0668d1dcbb040be69b",
+        "serving_sizes": [
+          {
+            "order": 1,
+            "minQuantity": 5,
+            "maxQuantity": 5,
+            "minDailyServings": 1,
+            "maxDailyServings": 1,
+            "unit": "Gram(s)",
+            "notes": "about 2 tsp",
+            "inSFB": true
+          }
+        ]
+      },
+      "raw_forms": [
+        {
+          "order": 1,
+          "ingredientId": 342967,
+          "prefix": null,
+          "percent": null,
+          "name": "Vaccinium oxycoccus, Powder",
+          "category": "botanical",
+          "ingredientGroup": "Small Cranberry",
+          "uniiCode": null
+        }
+      ],
+      "corrected_forms": [
+        {
+          "order": 1,
+          "ingredientId": null,
+          "prefix": null,
+          "percent": null,
+          "name": "Vaccinium macrocarpon fruit powder",
+          "category": "botanical",
+          "ingredientGroup": "cranberry",
+          "uniiCode": null
+        }
+      ]
+    },
+    "328649": {
+      "brand": "Life Extension",
+      "product_name": "Reishi Extract Mushroom Complex",
+      "raw_ingredient_text": "Reishi Mushroom, Shell-Broken",
+      "corrected_ingredient_text": "Shell-broken Reishi mushroom spore",
+      "raw_source_path": "ingredientRows[1]",
+      "correction_fields": [
+        "ingredient_text",
+        "forms"
+      ],
+      "evidence": "ExactL01708F04/2024 panel separates shell-broken Ganoderma lucidum spores150mg from fruit-body extract980mg. Extract standards13.5%polysaccharides/6%triterpenes do not apply to spores. Do not relabel polysaccharides as beta-glucans or approve efficacy.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/328649",
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/328649.pdf"
+      ],
+      "reviewer": "Codex independent exact-label content verification; no clinical scoring approval",
+      "review_date": "2026-10-25",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_source_correction_20261025_batch12",
+      "serving_basis_correction": {
+        "raw_source_sha256": "fe135a91bcc96958dcff2e56f1ce3c1438e5e0bcc62b41183cdcbe16f3d5aff6",
+        "serving_sizes": [
+          {
+            "order": 1,
+            "minQuantity": 2,
+            "maxQuantity": 2,
+            "minDailyServings": 1,
+            "maxDailyServings": 1,
+            "unit": "Capsule(s)",
+            "notes": "",
+            "inSFB": true
+          }
+        ]
+      },
+      "raw_forms": [
+        {
+          "order": 1,
+          "ingredientId": 357272,
+          "prefix": null,
+          "percent": null,
+          "name": "Ganoderma lucidum, Shell-Broken",
+          "category": "botanical",
+          "ingredientGroup": "Reishi mushroom",
+          "uniiCode": null
+        }
+      ],
+      "corrected_forms": [
+        {
+          "order": 1,
+          "ingredientId": null,
+          "prefix": null,
+          "percent": null,
+          "name": "Ganoderma lucidum spore, shell-broken",
+          "category": "botanical",
+          "ingredientGroup": "Reishi mushroom",
+          "uniiCode": null
+        }
+      ]
+    },
+    "43662": {
+      "brand": "MegaFood",
+      "product_name": "Daily Purify",
+      "raw_ingredient_text": "FoodState Farm Fresh Fruit Phenolic Blend",
+      "corrected_ingredient_text": "FoodState Farm Fresh Fruit Phenolic Blend",
+      "raw_source_path": "ingredientRows[5]",
+      "correction_fields": [
+        "ingredientRows.hierarchy"
+      ],
+      "evidence": "Exact051494900048 image places orange/blueberry/cranberry under140mg fruit blend, separate from200mg Reishi. Move original rows without changing original source references or unknown NP amounts. No individual fruit allocation or preparation equivalence.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/43662",
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/43662.pdf"
+      ],
+      "reviewer": "Codex independent exact-label content verification; no clinical scoring approval",
+      "review_date": "2026-10-25",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_source_correction_20261025_batch12",
+      "serving_basis_correction": {
+        "raw_source_sha256": "5a685f1d82e1c428bb3a3d618955c5e2d4dd4fcec3cb448a2494862f3538efdc",
+        "serving_sizes": [
+          {
+            "order": 1,
+            "minQuantity": 1.96,
+            "maxQuantity": 1.96,
+            "minDailyServings": 1,
+            "maxDailyServings": 1,
+            "unit": "Gram(s)",
+            "notes": "1 packet",
+            "inSFB": true
+          }
+        ]
+      },
+      "raw_quantity_value": 140,
+      "raw_quantity_unit": "mg",
+      "corrected_child_row_refs": [
+        {
+          "raw_source_path": "ingredientRows[3].nestedRows[0]",
+          "raw_parent_source_path": "ingredientRows[3]",
+          "raw_ingredient_text": "Uncle Matt's Organic(R) whole Oranges",
+          "raw_child_names": [],
+          "raw_quantities": [
+            {
+              "servingSizeOrder": 1,
+              "servingSizeQuantity": 1.96,
+              "operator": "=",
+              "quantity": 0,
+              "unit": "NP",
+              "dailyValueTargetGroup": [],
+              "servingSizeUnit": "Gram(s)"
+            }
+          ]
+        },
+        {
+          "raw_source_path": "ingredientRows[3].nestedRows[1]",
+          "raw_parent_source_path": "ingredientRows[3]",
+          "raw_ingredient_text": "organic Blueberry",
+          "raw_child_names": [],
+          "raw_quantities": [
+            {
+              "servingSizeOrder": 1,
+              "servingSizeQuantity": 1.96,
+              "operator": "=",
+              "quantity": 0,
+              "unit": "NP",
+              "dailyValueTargetGroup": [],
+              "servingSizeUnit": "Gram(s)"
+            }
+          ]
+        },
+        {
+          "raw_source_path": "ingredientRows[3].nestedRows[2]",
+          "raw_parent_source_path": "ingredientRows[3]",
+          "raw_ingredient_text": "organic Cranberry",
+          "raw_child_names": [],
+          "raw_quantities": [
+            {
+              "servingSizeOrder": 1,
+              "servingSizeQuantity": 1.96,
+              "operator": "=",
+              "quantity": 0,
+              "unit": "NP",
+              "dailyValueTargetGroup": [],
+              "servingSizeUnit": "Gram(s)"
+            }
+          ]
+        }
+      ]
+    },
+    "277705": {
+      "brand": "Pure Encapsulations",
+      "product_name": "Hemp CBD VESIsorb",
+      "raw_ingredient_text": "Phytocannabinoids",
+      "corrected_ingredient_text": "Phytocannabinoids and terpenes",
+      "raw_source_path": "ingredientRows[0].nestedRows[0]",
+      "correction_fields": [
+        "ingredient_text",
+        "notes",
+        "scoring_disposition"
+      ],
+      "evidence": "ExactHEV3v4 states35mg phytocannabinoids AND terpenes including25mgCBD within334mg extract.35mg is combined constituents, not pure cannabinoid mass; CBD is included, not additive. No10mg terpene inference. All liver/pregnancy/under18/medication warnings unchanged.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/277705",
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/277705.pdf"
+      ],
+      "reviewer": "Codex independent exact-label content verification; no clinical scoring approval",
+      "review_date": "2026-10-25",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_source_correction_20261025_batch12",
+      "serving_basis_correction": {
+        "raw_source_sha256": "27e7f2413cf8cc8c75115ded334b49d59fcb79d107218f87702e554152ef01bd",
+        "serving_sizes": [
+          {
+            "order": 1,
+            "minQuantity": 1,
+            "maxQuantity": 1,
+            "minDailyServings": 1,
+            "maxDailyServings": 1,
+            "unit": "Softgel(s)",
+            "inSFB": true
+          }
+        ]
+      },
+      "raw_quantity_value": 35,
+      "raw_quantity_unit": "mg",
+      "raw_notes": "",
+      "corrected_notes": "Combined phytocannabinoids and terpenes, including beta-caryophyllene and 25 mg cannabidiol (CBD); included within the 334 mg VESIsorb hemp oil extract. Individual terpene quantities are not disclosed.",
+      "scoring_disposition": "source_descriptor"
+    },
+    "312947": {
+      "brand": "BulkSupplements.com",
+      "product_name": "Psyllium Husk 1400 mg Veg Capsules",
+      "raw_ingredient_text": "Psyllium",
+      "corrected_ingredient_text": "Psyllium",
+      "raw_source_path": "ingredientRows[0]",
+      "correction_fields": [
+        "servingsPerContainer",
+        "notes"
+      ],
+      "evidence": "Archived002 front/Facts print120servings, two capsules and1400mg Psyllium Husk (Plantago asiatica). API container count2 is a transcription error. Preserve this species, not modern003 P.ovata; no species/preparation clinical equivalence inferred. Retain original Psyllium identity and explicitly record husk in notes: the generic Psyllium Husk alias resolves to a different existing P.ovata preparation. This transcription repair must not grant that preparation credit or remove the existing P.asiatica assessment hold.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/312947",
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/312947.pdf"
+      ],
+      "reviewer": "Codex independent exact-label content verification; no clinical scoring approval",
+      "review_date": "2026-10-25",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_source_correction_20261025_batch12",
+      "serving_basis_correction": {
+        "raw_source_sha256": "27bfdc996745abeb70b083d2406917dfdafd7b1728cc91e2eba0c3aaf80017de",
+        "serving_sizes": [
+          {
+            "order": 1,
+            "minQuantity": 2,
+            "maxQuantity": 2,
+            "minDailyServings": 1,
+            "maxDailyServings": 1,
+            "unit": "Veg Capsule(s)",
+            "notes": "",
+            "inSFB": true
+          }
+        ],
+        "raw_product_fields": {
+          "servingsPerContainer": "2"
+        },
+        "corrected_product_fields": {
+          "servingsPerContainer": "120"
+        }
+      },
+      "raw_quantity_value": 1400,
+      "raw_quantity_unit": "mg",
+      "raw_notes": "",
+      "corrected_notes": "Psyllium husk (Plantago asiatica)."
+    },
+    "285637": {
+      "brand": "Garden of Life MyKind Organics",
+      "product_name": "Sleep Well R&R Spray",
+      "raw_ingredient_text": "Organic Herbal Sleep Blend",
+      "corrected_ingredient_text": "Organic Herbal Sleep Blend",
+      "raw_source_path": "ingredientRows[1]",
+      "correction_fields": [
+        "targetGroups"
+      ],
+      "evidence": "ExactMKOHSWSL-042722 direction states children6years and older under adult supervision, already retained in statements. Replace conflicting generic4+target metadata only; do not reinterpret DV reference group as eligibility or approve pediatric efficacy. Preserve all directions/cautions.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/285637",
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/285637.pdf"
+      ],
+      "reviewer": "Codex independent exact-label content verification; no clinical scoring approval",
+      "review_date": "2026-10-25",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_source_correction_20261025_batch12",
+      "serving_basis_correction": {
+        "raw_source_sha256": "f1a90a4064e4f01eeed9b89dec72e21e93b41d3d51460b165d3268a7967632a2",
+        "serving_sizes": [
+          {
+            "order": 1,
+            "minQuantity": 2,
+            "maxQuantity": 2,
+            "minDailyServings": 1,
+            "maxDailyServings": 1,
+            "unit": "mL",
+            "notes": "5 sprays",
+            "inSFB": true
+          }
+        ],
+        "raw_product_fields": {
+          "targetGroups": [
+            "Children 4 or More Years of Age",
+            "Vegan",
+            "Vegetarian",
+            "Adult (18 - 50 Years)",
+            "Kosher",
+            "Organic",
+            "Gluten Free",
+            "Dairy Free"
+          ]
+        },
+        "corrected_product_fields": {
+          "targetGroups": [
+            "Children 6 years and older under adult supervision",
+            "Vegan",
+            "Vegetarian",
+            "Adult (18 - 50 Years)",
+            "Kosher",
+            "Organic",
+            "Gluten Free",
+            "Dairy Free"
+          ]
+        }
+      }
+    },
+    "268493": {
+      "brand": "SR Sports Research",
+      "product_name": "Golden Milk",
+      "raw_ingredient_text": "Medium Chain Triglyceride",
+      "corrected_ingredient_text": "Organic MCT and acacia blend",
+      "raw_source_path": "ingredientRows[4]",
+      "correction_fields": [
+        "ingredient_text",
+        "category",
+        "ingredientGroup",
+        "forms",
+        "statements"
+      ],
+      "evidence": "ExactL600-V1-0919 prints9gMCT/acacia preparation; no individual MCT/acacia dose is established. Retain total as blend, expose source constituents without allocating quantities, no pure-MCT credit from9g. Coconut warning retained. Printed free-from list does not include tree nuts; remove API additions and invented facility adjectives while retaining cross-contact language.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/268493",
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/268493.pdf"
+      ],
+      "reviewer": "Codex independent exact-label content verification; no clinical scoring approval",
+      "review_date": "2026-10-25",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_source_correction_20261025_batch12",
+      "serving_basis_correction": {
+        "raw_source_sha256": "5aeec019758911f115a3dcd7f781655d6664a34481df870c847be647b22e03ff",
+        "serving_sizes": [
+          {
+            "order": 1,
+            "minQuantity": 10,
+            "maxQuantity": 10,
+            "minDailyServings": 1,
+            "maxDailyServings": 1,
+            "unit": "Gram(s)",
+            "notes": "1 scoop",
+            "inSFB": true
+          }
+        ],
+        "corrected_statements": [
+          {
+            "type": "Formula re: Contains",
+            "notes": "SR organic Golden Milk is a delicious, functional, non-dairy blend containing organic extracts of turmeric and ginger plus organic spices. Our unique formula is made with energy-dense coconut MCTs and prebiotic acacia-creating a rich, creamy beverage. SR Golden Milk is a great way to jump-start or end your day!"
+          },
+          {
+            "type": "Formulation re: Organic",
+            "notes": "SR organic Golden Milk is a delicious, functional, non-dairy blend containing organic extracts of turmeric and ginger plus organic spices.\nUSDA Organic"
+          },
+          {
+            "type": "Suggested/Recommended/Usage/Directions",
+            "notes": "Options to enjoy\nLatte\nStir in hot water, almond or coconut milk for a delicious latte and great start to your morning.\nShake\nGet your day moving and add a scoop to your shaker cup for an on-the-go boost. \nBlend\nMix in a blender with ice & water or almond milk for a refreshing beverage. Great any time of the day!"
+          },
+          {
+            "type": "General Statements: All Other Content",
+            "notes": "Quality Matters"
+          },
+          {
+            "type": "Seals/Symbols",
+            "notes": "Non GMO Project Verified nongmoproject.org\t\nUSDA Organic\nCertified Vegan Vegan.org\nThis Product Is Keto Certified ketocertified.com"
+          },
+          {
+            "type": "Formulation re: Vegetarian/Vegan",
+            "notes": "Certified Vegan Vegan.org"
+          },
+          {
+            "type": "Formula re: Type",
+            "notes": "This Product Is Keto Certified ketocertified.com\t"
+          },
+          {
+            "type": "Formulation re: Does NOT Contain",
+            "notes": "Non GMO Project Verified nongmoproject.org\nNon-dairy\nGluten free"
+          },
+          {
+            "type": "Suggested/Recommended/Usage/Directions",
+            "notes": "Note: Before each use, gently shake bottle with lid tightly sealed to aerate product. This oil-based powder is dense and settles quickly. Scooping packed powder will result in servings greater than 10 grams."
+          },
+          {
+            "type": "General Statements: All Other Content",
+            "notes": "Please recycle\nInstagram Facebook YouTube Snapchat Twitter @sportsresearch"
+          },
+          {
+            "type": "Formula re: Contains",
+            "notes": "With turmeric & ginger\nContains coconut MCTs"
+          },
+          {
+            "type": "Suggested/Recommended/Usage/Directions",
+            "notes": "Enjoy hot or cold"
+          },
+          {
+            "type": "FDA Statement of Identity",
+            "notes": "Dietary Supplement"
+          },
+          {
+            "type": "Suggested/Recommended/Usage/Directions",
+            "notes": "Suggested Use: As a dietary supplement, healthy adults combine one scoop into 6-8 oz of hot water and stir. In cold liquids, use a shaker cup or blender. For more options to enjoy, see left panel."
+          },
+          {
+            "type": "Precautions re: Allergies",
+            "notes": "Allergen Warning: Contains Tree Nuts (coconut)"
+          },
+          {
+            "type": "Formulation re: Does NOT Contain",
+            "notes": "Not Manufactured With: Milk, eggs, fish, crustacean shellfish, peanuts, wheat, soy or gluten."
+          },
+          {
+            "type": "Precautions re: Allergies",
+            "notes": "Not Manufactured With: Milk, eggs, fish, crustacean shellfish, peanuts, wheat, soy or gluten.\nProduced in a facility that may process other products that contain these allergens or ingredients."
+          },
+          {
+            "type": "Brand IP Statement(s) re: (c), (TM), (SM)",
+            "notes": "TURMIPURE GOLD is a registered trademark of Naturex, S.A\nPURGINGER is a registered trademark of Applied Food Sciences, Inc."
+          },
+          {
+            "type": "Precautions re: Children",
+            "notes": "Caution: Keep out of the reach of children and pets.\t"
+          },
+          {
+            "type": "Precautions re: Pregnant or Nursing or Prescription Medications",
+            "notes": "Consult with a qualified healthcare professional prior to using this product, especially if you are pregnant, nursing, have diagnosed medical conditions, or are taking prescription medications.\t"
+          },
+          {
+            "type": "Precautions re: All Other",
+            "notes": "Do not exceed recommended daily intake. Do not use if seal is damaged or missing.\t"
+          },
+          {
+            "type": "Storage",
+            "notes": "Storage Information: Store at room temperature, in a dry place. Protect product from excessive heat, freezing, humidity, and light."
+          },
+          {
+            "type": "General Statements: All Other Content",
+            "notes": "Note: ^10 grams per scoop is an average. Individual scooping technique may yield slightly less or slightly more than 10 grams.  \nPackaged by weight, not volume. The powder will settle after filling and cannot be avoided."
+          },
+          {
+            "type": "Formulation re: Other",
+            "notes": "Variations in aroma, color, taste and solubility may occur."
+          }
+        ]
+      },
+      "corrected_category": "blend",
+      "corrected_ingredient_group": "Blend",
+      "raw_forms": [
+        {
+          "order": 1,
+          "ingredientId": 285851,
+          "prefix": null,
+          "percent": null,
+          "name": "Acacia",
+          "category": "botanical",
+          "ingredientGroup": "Acacia",
+          "uniiCode": "5C5403N26O"
+        },
+        {
+          "order": 2,
+          "ingredientId": 306166,
+          "prefix": null,
+          "percent": null,
+          "name": "Coconut Oil",
+          "category": "fat",
+          "ingredientGroup": "coconut oil",
+          "uniiCode": "Q9L0O73W7L"
+        }
+      ],
+      "raw_quantity_value": 9,
+      "raw_quantity_unit": "Gram(s)",
+      "raw_unii_code": "C9H2L21V7U",
+      "corrected_unii_code": null,
+      "corrected_child_row_refs": [
+        {
+          "raw_source_path": "ingredientRows[4].forms[0]",
+          "raw_parent_source_path": "ingredientRows[4]",
+          "raw_ingredient_text": "Acacia",
+          "raw_child_names": [],
+          "raw_quantities": null
+        },
+        {
+          "raw_source_path": "ingredientRows[4].forms[1]",
+          "raw_parent_source_path": "ingredientRows[4]",
+          "raw_ingredient_text": "Coconut Oil",
+          "raw_child_names": [],
+          "raw_quantities": null
+        }
+      ],
+      "additional_row_corrections": [
+        {
+          "raw_source_path": "ingredientRows[4].forms[0]",
+          "raw_ingredient_text": "Acacia",
+          "corrected_ingredient_text": "Acacia",
+          "raw_unii_code": "5C5403N26O",
+          "corrected_unii_code": null
+        },
+        {
+          "raw_source_path": "ingredientRows[4].forms[1]",
+          "raw_ingredient_text": "Coconut Oil",
+          "corrected_ingredient_text": "Medium Chain Triglycerides",
+          "raw_unii_code": "Q9L0O73W7L",
+          "corrected_unii_code": null
+        }
+      ]
     }
   }
 }

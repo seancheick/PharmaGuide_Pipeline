@@ -5695,6 +5695,7 @@ class EnhancedDSLDNormalizer:
                     if path:
                         by_path[path] = (row, rows)
                     index_rows(row.get("nestedRows") or [])
+                    index_rows(row.get("forms") or [])
             index_rows(ingredient_rows)
             for entry in note_entries:
                 row = by_path.get(entry.get("raw_source_path"), (None, None))[0]
@@ -5726,10 +5727,30 @@ class EnhancedDSLDNormalizer:
                             or child.get("name") != spec.get("raw_ingredient_text")
                             or [x.get("name") for x in child.get("nestedRows") or []]
                             != spec.get("raw_child_names")
-                            or (container is not ingredient_rows and container is not parent.get("nestedRows"))):
+                            or (container is not ingredient_rows and container is not parent.get("nestedRows")
+                                and not (spec.get("raw_parent_source_path") in by_path
+                                         and (container is by_path[spec["raw_parent_source_path"]][0].get("nestedRows")
+                                              or container is by_path[spec["raw_parent_source_path"]][0].get("forms"))
+                                         and any(str(child_path).startswith(spec["raw_parent_source_path"] + "." + key + "[")
+                                                 for key in ("nestedRows", "forms"))
+                                         and child.get("quantity") == spec.get("raw_quantities")))):
                         raise ValueError(f"Reviewed hierarchy child changed for DSLD {product_id}: {child_path}")
                     claimed.add(child_path)
                     moves.append((parent, child, container, entry))
+            # Validate the final parent graph before any mutation: reviewed
+            # sibling moves must not introduce a cycle between moved groups.
+            parents = {path: re.sub(r"\.(?:nestedRows|forms)\[\d+\]$", "", path)
+                       if "." in path else None for path in by_path}
+            for parent, child, _, _ in moves:
+                parents[child["raw_source_path"]] = parent["raw_source_path"]
+            for start in parents:
+                seen = set()
+                current = start
+                while current is not None:
+                    if current in seen:
+                        raise ValueError("Reviewed hierarchy correction creates a cycle")
+                    seen.add(current)
+                    current = parents.get(current)
         for r in ingredient_rows:
             rewrite(r)
 
@@ -6084,7 +6105,32 @@ class EnhancedDSLDNormalizer:
                                           separators=(",", ":")).encode()).hexdigest()
         if digest != repair.get("raw_source_sha256"):
             raise ValueError(f"Reviewed serving source changed for DSLD {raw_data.get('id')}")
+        # Metadata repairs use the same exact-source authority, with explicit
+        # original values for fields outside the panel/statement digest.
+        original_fields = repair.get("raw_product_fields", {})
+        corrected_fields = repair.get("corrected_product_fields", {})
+        allowed = {"servingsPerContainer", "targetGroups"}
+        if (not isinstance(original_fields, dict) or not isinstance(corrected_fields, dict)
+                or set(original_fields) != set(corrected_fields)
+                or set(corrected_fields) - allowed
+                or any(raw_data.get(key) != value for key, value in original_fields.items())):
+            raise ValueError(f"Reviewed product metadata changed for DSLD {raw_data.get('id')}")
+        if "targetGroups" in corrected_fields and (
+                not isinstance(corrected_fields["targetGroups"], list)
+                or not all(isinstance(x, str) and x.strip() for x in corrected_fields["targetGroups"])):
+            raise ValueError("Reviewed target groups require explicit label text")
+        statements = repair.get("corrected_statements")
+        if statements is not None and (
+                not isinstance(statements, list)
+                or len(statements) != len(raw_data.get("statements") or [])
+                or not all(isinstance(x, dict) for x in statements)
+                or any(a.get("type") != b.get("type")
+                       for a, b in zip(raw_data["statements"], statements))):
+            raise ValueError("Reviewed statements must preserve source membership and types")
         working = deepcopy(raw_data)
+        working.update(deepcopy(corrected_fields))
+        if statements is not None:
+            working["statements"] = deepcopy(statements)
         servings = repair.get("serving_sizes")
         if not isinstance(servings, list) or not servings:
             raise ValueError("Reviewed serving correction requires serving rows")

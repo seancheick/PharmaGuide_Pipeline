@@ -1,10 +1,17 @@
 # PharmaGuide master completion plan
 
+### Batch12 — nine exact labels, October25
+
+- [x] Implement all9verified source corrections through existing owners, retaining source conflicts, unknown component quantities and scientific holds.359named tests,local546/24declaredskips+guardgreen,12raw replay and independent review complete. Corrected cranberry consumer wording has named export coverage; grades unchanged.
+- [ ] Finish exact-head CI and main integration, then continue the separately recorded clinical/citation/benchmark backlog. No corpus/import/release in this batch.
+
+Owner: existing reviewed source/hierarchy normalizer, product-label registry and IQMconsumer note — evidence: [per-case qualification](../../scripts/audits/literature_records_review_20261020/BRYAN_BATCH_RESPONSE_VERIFICATION_20261025.md). Will NOT create another authority or public contract.
+
 ### Batch11 exact-source continuation — October25
 
 - [x] Implement ten exact-label source-bound repairs and fractional daily counts; reconcile NR/devil-claw unsupported absorption fields through existing IQM, retaining grades/holds. Bounded18-label replay and352named owner/data tests verified; independent review found no production defect.
 - [x] Qualify/integrate Batch11 through PR248 at3506351fc: exact-headCI40233428775/all4shards+guards pass,343combined named tests andlocal546/24declared skips pass;18rebased scored artifacts match reviewed candidate.
-- [ ] Reconcile remaining later63-case/D-citation findings and required scientific decisions. Nine later exact-label source images are independently confirmed; implementation remains open. Full corpus/export/app verification remains pending; no pipeline rerun in this batch.
+- [ ] Reconcile remaining later63-case/D-citation findings and required scientific decisions. The nine later exact-label source corrections are implemented in the Batch12 checkpoint above; remaining scientific and citation decisions stay open. Full corpus/export/app verification remains pending; no pipeline rerun in this batch.
 
 Owner: existing normalizer, curated label/IQM/clinical/botanical owners — evidence: [consolidated verification](../../scripts/audits/literature_records_review_20261020/BRYAN_BATCH_RESPONSE_VERIFICATION_20261025.md). Will NOT create another scoring/completion system or approval.
 
