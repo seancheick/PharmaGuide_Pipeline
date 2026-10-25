@@ -7,7 +7,7 @@
     "review_policy": "Every product entry is keyed by dsld_id and must carry: brand, product_name (for human-readable audit trail), raw_ingredient_text (the source row being corrected), corrected_ingredient_text (the text the cleaner should see, unchanged for unit-only corrections), correction_fields, evidence (free-text rationale with regulatory citations), sources (authoritative URLs — FDA, NIH, DailyMed, etc.), reviewer, and review_date (ISO 8601 YYYY-MM-DD). A verified cross-row defect may add additional_row_corrections, which inherit the product-level evidence, sources, reviewer, review_date, scope, and provenance tag. Quantity changes require exact raw and corrected value/unit pairs and must be supported by the official manufacturer or label image. Restoring a quantity absent from a form row additionally requires raw_quantity_missing=true, a positive corrected value/unit, and exact same-record source text that states the dose; the applier refuses to overwrite any existing quantity representation. A reviewed Daily Value correction requires an exact raw_daily_value and corrected_daily_value from the same official label; it rewrites only matching source percentages, never derives a percentage or changes a different value. A reviewed unresolved_unit scoring_disposition preserves exact raw_quantity_value/raw_quantity_unit, makes no inferred unit correction, and marks dose and upper-limit assessment unresolved until independent exact-label evidence resolves the conflict. It applies only when the raw name, value and unit all match. Reviewed hierarchy corrections may supply corrected_child_row_refs with exact parent raw_source_path/name/value/unit and exact child source paths/names/raw_child_names. The existing applier validates the whole group before moving working rows; it preserves original API source references and quantities and fails closed on mismatch. A source_descriptor disposition with an authored raw value/unit applies only to that exact quantity edition. Exact-source corrected_notes repairs require raw source paths, names, notes and quantity pairs for the entire bundle; a mismatch fails closed before edits. Original working notes retain _pre_correction_notes, and source paths remain unchanged. A reviewed source quantity conflict may set corrected_quantity_operator to ambiguous or unknown only with raw_quantities matching the entire original quantity array exactly. It preserves every number, unit and serving basis, changes only the existing unresolved qualifier, and retains original quantities for audit; it does not invent a replacement amount. Reviewed serving_basis_correction binds the exact ingredientRows, servingSizes and statements content SHA256 before replacing serving metadata or assigning quantity variants to individually reviewed preparation columns. It preserves all alternative amounts and original source snapshots and fails closed on any changed binding. corrected_quantities requires the entire raw_quantities array and preserves column count; it restores only individually image-verified value/unit transcriptions.",
     "unmatched_drug_tokens_policy": "When a row's raw_ingredient_text matches a known regulated-drug name (e.g., 'Insulin', 'Acetaminophen', 'Ibuprofen') and there is NO matching override for the product, the row must NOT be silently mapped. The cleaner emits the row to a quarantine path with reason='requires_human_review_drug_token_in_supplement' and excludes the product from scoring. New occurrences enter the reviewer pipeline via the same schema.",
     "last_updated": "2026-10-25",
-    "total_entries": 102,
+    "total_entries": 112,
     "loaded_by": "scripts/enhanced_normalizer.py via _load_label_corrections (cached on first product)"
   },
   "corrections": {
@@ -6410,6 +6410,457 @@
           "ingredientGroup": "Vitamin A"
         }
       ]
+    },
+    "270233": {
+      "brand": "Doctor's Best",
+      "product_name": "Energy+",
+      "raw_ingredient_text": "Nicotinamide Adenine Dinucleotide",
+      "corrected_ingredient_text": "NADH",
+      "raw_source_path": "ingredientRows[2]",
+      "correction_fields": [
+        "ingredient_text",
+        "quantity.value",
+        "forms"
+      ],
+      "evidence": "Original NIH-hosted YDRB504 panel declares NADH 20 mg per capsule, from reduced beta-nicotinamide adenine dinucleotide disodium salt. The API 2 mg and Disodium Phosphate form are transcription errors. Preserve original API fields/provenance; no ENADA identity, chemical identifier, efficacy or absorption fraction is inferred.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/270233",
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/270233.pdf"
+      ],
+      "reviewer": "Codex independent source-content verification; no clinical scoring approval",
+      "review_date": "2026-10-25",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_source_correction_20261025",
+      "serving_basis_correction": {
+        "raw_source_sha256": "18ec1c006670acf16de4c8567ac608b872e62260459d87d3a0bde47cff450425",
+        "serving_sizes": [
+          {
+            "order": 1,
+            "minQuantity": 1,
+            "maxQuantity": 1,
+            "minDailyServings": 1,
+            "maxDailyServings": 1,
+            "unit": "Veggie Capsule(s)",
+            "notes": "",
+            "inSFB": true
+          }
+        ]
+      },
+      "raw_quantity_value": 2,
+      "raw_quantity_unit": "mg",
+      "corrected_quantity_value": 20,
+      "corrected_quantity_unit": "mg",
+      "raw_forms": [
+        {
+          "order": 1,
+          "ingredientId": 8964,
+          "prefix": "reduced form ",
+          "percent": null,
+          "name": "Disodium Phosphate",
+          "category": "other",
+          "ingredientGroup": "Sodium Phosphate",
+          "uniiCode": null
+        }
+      ],
+      "corrected_forms": [
+        {
+          "order": 1,
+          "prefix": "from",
+          "percent": null,
+          "name": "reduced beta-nicotinamide adenine dinucleotide disodium salt",
+          "category": "non-nutrient/non-botanical",
+          "ingredientGroup": "Nicotinamide Adenine Dinucleotide",
+          "uniiCode": null
+        }
+      ]
+    },
+    "62816": {
+      "brand": "Life Extension",
+      "product_name": "Natural Glucose",
+      "raw_ingredient_text": "Iodine",
+      "corrected_ingredient_text": "Iodine",
+      "raw_source_path": "ingredientRows[0]",
+      "correction_fields": [
+        "quantity.unit"
+      ],
+      "evidence": "Exact Q01471D image clearly prints iodine 25 mcg per capsule and up to two capsules daily, hence 25-50 mcg/day. API mg is a transcription error; this repair uses the image, not a Daily Value inversion. Other manufacturer-unit conflicts remain untouched.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/62816",
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/62816.pdf"
+      ],
+      "reviewer": "Codex independent source-content verification; no clinical scoring approval",
+      "review_date": "2026-10-25",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_source_correction_20261025",
+      "serving_basis_correction": {
+        "raw_source_sha256": "26032752619a0ba09ac324f52b20579c95730a4d6e99cfeb87058cb596b5e74e",
+        "serving_sizes": [
+          {
+            "order": 1,
+            "minQuantity": 1,
+            "maxQuantity": 1,
+            "minDailyServings": 1,
+            "maxDailyServings": 2,
+            "unit": "Vegetarian Capsule(s)",
+            "notes": "",
+            "inSFB": true
+          }
+        ]
+      },
+      "raw_quantity_value": 25,
+      "raw_quantity_unit": "mg",
+      "corrected_quantity_unit": "mcg"
+    },
+    "231826": {
+      "brand": "Life Extension",
+      "product_name": "Optimized African Mango Irvingia With Phase 3 Calorie Control Complex",
+      "raw_ingredient_text": "Calorie Control Complex",
+      "corrected_ingredient_text": "Calorie Control Complex",
+      "raw_source_path": "ingredientRows[3]",
+      "correction_fields": [
+        "quantity.source_owner"
+      ],
+      "evidence": "Exact L01492H panel prints an unquantified Calorie Control Complex heading and 125 mg on InSea2 itself. API attached that quantity one level too high. Swap the exact existing arrays: NP/zero remains the unquantified sentinel, not measured absence. Preserve both original arrays and source paths. Do not allocate 125 mg to individual seaweeds or polyphenols.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/231826",
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/231826.pdf"
+      ],
+      "reviewer": "Codex independent source-content verification; no clinical scoring approval",
+      "review_date": "2026-10-25",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_source_correction_20261025",
+      "serving_basis_correction": {
+        "raw_source_sha256": "0b7a4185b165f8f26a698555079a0b6f87e1bc9eb15dfd7940865cbb095dfdc2",
+        "serving_sizes": [
+          {
+            "order": 1,
+            "minQuantity": 2,
+            "maxQuantity": 2,
+            "minDailyServings": 2,
+            "maxDailyServings": 2,
+            "unit": "Vegetarian Capsule(s)",
+            "inSFB": true
+          }
+        ]
+      },
+      "raw_quantities": [
+        {
+          "servingSizeOrder": 1,
+          "servingSizeQuantity": 2,
+          "operator": "=",
+          "quantity": 125,
+          "unit": "mg",
+          "dailyValueTargetGroup": [
+            {
+              "name": "Adults and children 4 or more years of age",
+              "operator": null,
+              "percent": null,
+              "footnote": "Daily Value not established"
+            }
+          ],
+          "servingSizeUnit": "Vegetarian Capsule(s)"
+        }
+      ],
+      "corrected_quantities": [
+        {
+          "servingSizeOrder": 1,
+          "servingSizeQuantity": 2,
+          "operator": "=",
+          "quantity": 0,
+          "unit": "NP",
+          "dailyValueTargetGroup": [],
+          "servingSizeUnit": "Vegetarian Capsule(s)"
+        }
+      ],
+      "additional_row_corrections": [
+        {
+          "raw_ingredient_text": "InSea2",
+          "corrected_ingredient_text": "InSea2",
+          "raw_source_path": "ingredientRows[3].nestedRows[0]",
+          "raw_quantities": [
+            {
+              "servingSizeOrder": 1,
+              "servingSizeQuantity": 2,
+              "operator": "=",
+              "quantity": 0,
+              "unit": "NP",
+              "dailyValueTargetGroup": [],
+              "servingSizeUnit": "Vegetarian Capsule(s)"
+            }
+          ],
+          "corrected_quantities": [
+            {
+              "servingSizeOrder": 1,
+              "servingSizeQuantity": 2,
+              "operator": "=",
+              "quantity": 125,
+              "unit": "mg",
+              "dailyValueTargetGroup": [
+                {
+                  "name": "Adults and children 4 or more years of age",
+                  "operator": null,
+                  "percent": null,
+                  "footnote": "Daily Value not established"
+                }
+              ],
+              "servingSizeUnit": "Vegetarian Capsule(s)"
+            }
+          ]
+        }
+      ]
+    },
+    "315691": {
+      "brand": "Double Wood Supplements",
+      "product_name": "Potassium Iodide Tablets 130 mg",
+      "raw_ingredient_text": "Potassium Iodide",
+      "corrected_ingredient_text": "Potassium Iodide",
+      "raw_source_path": "ingredientRows[0]",
+      "correction_fields": [
+        "quantity.serving_basis"
+      ],
+      "evidence": "Original Double Wood Facts panel declares 130 mg potassium iodide per two tablets. API attaches 130 mg to one tablet despite the two-tablet header. Correct only the shared quantity basis to two; preserve age-specific statements and emergency-use, duration and consultation restrictions. This is compound mass, not elemental iodine or a routine nutritional benchmark.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/315691",
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/315691.pdf"
+      ],
+      "reviewer": "Codex independent source-content verification; no clinical scoring approval",
+      "review_date": "2026-10-25",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_source_correction_20261025",
+      "serving_basis_correction": {
+        "raw_source_sha256": "da79273d71d1d803c779c8a5b6fd33bfc50b925cd34fa763f9c8d97f332f57d6",
+        "serving_sizes": [
+          {
+            "order": 1,
+            "minQuantity": 2,
+            "maxQuantity": 2,
+            "minDailyServings": 1,
+            "maxDailyServings": 1,
+            "unit": "Tablet(s)",
+            "notes": "",
+            "inSFB": true
+          },
+          {
+            "order": 2,
+            "minQuantity": 1,
+            "maxQuantity": 1,
+            "minDailyServings": 1,
+            "maxDailyServings": 1,
+            "unit": "Tablet(s)",
+            "notes": "under 12-18 years old and under 150 pounds"
+          }
+        ],
+        "quantity_serving_basis": 2
+      }
+    },
+    "252842": {
+      "brand": "BulkSupplements.com",
+      "product_name": "Sodium Citrate",
+      "raw_ingredient_text": "Sodium",
+      "corrected_ingredient_text": "Sodium",
+      "raw_source_path": "ingredientRows[0]",
+      "correction_fields": [
+        "servingSizes.notes"
+      ],
+      "evidence": "This exact NIH-hosted label prints 3 grams (about 1/3 tbsp) once daily; the API serving note incorrectly says tsp. Correct the volume annotation only, retaining explicit 3 g and 600 mg elemental sodium. No density, hydration state, purity or citrate-moiety amount is inferred.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/252842",
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/252842.pdf"
+      ],
+      "reviewer": "Codex independent source-content verification; no clinical scoring approval",
+      "review_date": "2026-10-25",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_source_correction_20261025",
+      "serving_basis_correction": {
+        "raw_source_sha256": "7c5c57c05c0d0959199fffd80d5fadca27a11d731e5fd6eb4d363254bf6ad447",
+        "serving_sizes": [
+          {
+            "order": 1,
+            "minQuantity": 3,
+            "maxQuantity": 3,
+            "minDailyServings": 1,
+            "maxDailyServings": 1,
+            "unit": "Gram(s)",
+            "notes": "about 1/3 tbsp",
+            "inSFB": true
+          }
+        ]
+      }
+    },
+    "254473": {
+      "brand": "BulkSupplements.com",
+      "product_name": "Sodium Citrate",
+      "raw_ingredient_text": "Sodium",
+      "corrected_ingredient_text": "Sodium",
+      "raw_source_path": "ingredientRows[0]",
+      "correction_fields": [
+        "servingSizes.notes"
+      ],
+      "evidence": "This exact NIH-hosted label prints 3 grams (about 1/3 tbsp) once daily; the API serving note incorrectly says tsp. Correct the volume annotation only, retaining explicit 3 g and 600 mg elemental sodium. No density, hydration state, purity or citrate-moiety amount is inferred.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/254473",
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/254473.pdf"
+      ],
+      "reviewer": "Codex independent source-content verification; no clinical scoring approval",
+      "review_date": "2026-10-25",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_source_correction_20261025",
+      "serving_basis_correction": {
+        "raw_source_sha256": "505680fa66998f0f1634b65ee8284779f7d982864dfadf037a1d35b1304febca",
+        "serving_sizes": [
+          {
+            "order": 1,
+            "minQuantity": 3,
+            "maxQuantity": 3,
+            "minDailyServings": 1,
+            "maxDailyServings": 1,
+            "unit": "Gram(s)",
+            "notes": "about 1/3 tbsp",
+            "inSFB": true
+          }
+        ]
+      }
+    },
+    "254474": {
+      "brand": "BulkSupplements.com",
+      "product_name": "Sodium Citrate",
+      "raw_ingredient_text": "Sodium",
+      "corrected_ingredient_text": "Sodium",
+      "raw_source_path": "ingredientRows[0]",
+      "correction_fields": [
+        "servingSizes.notes"
+      ],
+      "evidence": "This exact NIH-hosted label prints 3 grams (about 1/3 tbsp) once daily; the API serving note incorrectly says tsp. Correct the volume annotation only, retaining explicit 3 g and 600 mg elemental sodium. No density, hydration state, purity or citrate-moiety amount is inferred.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/254474",
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/254474.pdf"
+      ],
+      "reviewer": "Codex independent source-content verification; no clinical scoring approval",
+      "review_date": "2026-10-25",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_source_correction_20261025",
+      "serving_basis_correction": {
+        "raw_source_sha256": "b7984024504d657c4e606f8c8199bb5f1915718c6c668bf59bd00a6a4f8d5613",
+        "serving_sizes": [
+          {
+            "order": 1,
+            "minQuantity": 3,
+            "maxQuantity": 3,
+            "minDailyServings": 1,
+            "maxDailyServings": 1,
+            "unit": "Gram(s)",
+            "notes": "about 1/3 tbsp",
+            "inSFB": true
+          }
+        ]
+      }
+    },
+    "254475": {
+      "brand": "BulkSupplements.com",
+      "product_name": "Sodium Citrate",
+      "raw_ingredient_text": "Sodium",
+      "corrected_ingredient_text": "Sodium",
+      "raw_source_path": "ingredientRows[0]",
+      "correction_fields": [
+        "servingSizes.notes"
+      ],
+      "evidence": "This exact NIH-hosted label prints 3 grams (about 1/3 tbsp) once daily; the API serving note incorrectly says tsp. Correct the volume annotation only, retaining explicit 3 g and 600 mg elemental sodium. No density, hydration state, purity or citrate-moiety amount is inferred.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/254475",
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/254475.pdf"
+      ],
+      "reviewer": "Codex independent source-content verification; no clinical scoring approval",
+      "review_date": "2026-10-25",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_source_correction_20261025",
+      "serving_basis_correction": {
+        "raw_source_sha256": "efbdf4fd75f72d6975770f8019a7eae7022965ecfc125065618f197494a36039",
+        "serving_sizes": [
+          {
+            "order": 1,
+            "minQuantity": 3,
+            "maxQuantity": 3,
+            "minDailyServings": 1,
+            "maxDailyServings": 1,
+            "unit": "Gram(s)",
+            "notes": "about 1/3 tbsp",
+            "inSFB": true
+          }
+        ]
+      }
+    },
+    "269689": {
+      "brand": "Doctor's Best",
+      "product_name": "High Absorption Magnesium Powder Sweet Peach",
+      "raw_ingredient_text": "Magnesium",
+      "corrected_ingredient_text": "Magnesium",
+      "raw_source_path": "ingredientRows[0]",
+      "correction_fields": [
+        "servingSizes.facts_basis",
+        "servingSizes.daily_range"
+      ],
+      "evidence": "YDRB518-1 prints 400 mg elemental magnesium per two scoops (~8 g); directions start at one scoop and increase to two daily. Normalize frequency against the printed two-scoop Facts basis: 0.5-1 Facts servings/day, hence 200-400 mg/day. Do not treat the 4000 mg chelate source as magnesium or infer component allocation. Keep the real 400 mg/day supplemental upper-limit comparison.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/269689",
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/269689.pdf"
+      ],
+      "reviewer": "Codex independent source-content verification; no clinical scoring approval",
+      "review_date": "2026-10-25",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_source_correction_20261025",
+      "serving_basis_correction": {
+        "raw_source_sha256": "c9f7a555933a9e34ec2f9b3a44a443e0e1cc7ff069178e02dcf9d2339b0f325b",
+        "serving_sizes": [
+          {
+            "order": 1,
+            "minQuantity": 2,
+            "maxQuantity": 2,
+            "minDailyServings": 0.5,
+            "maxDailyServings": 1,
+            "unit": "Scoop(s)",
+            "notes": "two-scoop Facts basis (~8 grams); directions start at one scoop (~4 grams) and increase to two daily",
+            "inSFB": true
+          }
+        ]
+      }
+    },
+    "287389": {
+      "brand": "Pure Encapsulations",
+      "product_name": "Brain Reset",
+      "raw_ingredient_text": "Virtiva",
+      "corrected_ingredient_text": "Virtiva",
+      "raw_source_path": "ingredientRows[3]",
+      "raw_quantity_value": 120,
+      "raw_quantity_unit": "mg",
+      "raw_notes": "standardized to contain 5% ginkgoflavonglucosides and 12% phosphatidylserine",
+      "corrected_notes": "Ginkgo biloba extract (leaf) and sunflower phospholipid complex; standardized to contain 5% ginkgoflavonglucosides and 12% phosphatidylserine",
+      "correction_fields": [
+        "notes.source_composition"
+      ],
+      "evidence": "Exact BRT6 V2 label prints the missing ginkgo-leaf/sunflower-phospholipid composition. Existing API standards are 5% and 12%, not 6%. Preserve the 120 mg complex and standards; do not infer 120 mg pure ginkgo or phosphatidylserine, component allocations, trial equivalence, efficacy or approval.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/287389",
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/287389.pdf"
+      ],
+      "reviewer": "Codex independent exact-label source verification; no clinical scoring approval",
+      "review_date": "2026-10-25",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_source_correction_20261025",
+      "serving_basis_correction": {
+        "raw_source_sha256": "c7520c148ac6b15af74cfe31055bd9bfdc2c6b81a83d7dca0e357aba329b783e",
+        "serving_sizes": [
+          {
+            "order": 1,
+            "minQuantity": 2,
+            "maxQuantity": 2,
+            "minDailyServings": 1,
+            "maxDailyServings": 1,
+            "unit": "Capsule(s)",
+            "notes": "",
+            "inSFB": true
+          }
+        ]
+      }
     }
   }
 }

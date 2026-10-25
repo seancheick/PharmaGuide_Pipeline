@@ -853,10 +853,10 @@
         "Focus & Mental Clarity",
         "Joint & Bone Health"
       ],
-      "notes": "Highly bioavailable curcumin formulation with explicit randomized evidence in knee osteoarthritis and age-associated memory endpoints. Cited studies enrolled 50 knee-OA patients, randomized 40 non-demented adults, and enrolled 50 mosaicplasty patients. Unique cohort overlap is unresolved; the mosaicplasty trial is not a memory-study follow-up and did not show between-group clinical symptom superiority.",
+      "notes": "Highly bioavailable curcumin formulation with explicit randomized evidence in knee osteoarthritis and age-associated memory endpoints. Cited studies enrolled 50 knee-OA patients, randomized 46 non-demented adults, of whom 40 entered the reported analysis, and enrolled 50 mosaicplasty patients. Unique cohort overlap is unresolved; the mosaicplasty trial is not a memory-study follow-up and did not show between-group clinical symptom superiority. The primary memory paper reports 180 mg active curcumin/day for 18 months. Selected nominal findings were positive; multiple comparisons were not adjusted and the 30-person PET substudy was exploratory. Main-paper access is resolved; supplement, original registration history and exact commercial-product correspondence remain separate review dependencies.",
       "study_type": "rct_multiple",
-      "last_updated": "2026-10-11",
-      "notable_studies": "PMID 25308211 enrolled 50 knee-OA patients; PMID 29246725 randomized 40 non-demented adults for 18 months. PMID 35494290 independently enrolled 50 patients after knee mosaicplasty for 12 months; between-group clinical symptom differences were nonsignificant. It is not follow-up of the memory cohort.",
+      "last_updated": "2026-10-25",
+      "notable_studies": "PMID 25308211 enrolled 50 knee-OA patients; PMID 29246725 randomized 46 non-demented adults, of whom 40 entered the reported analysis for 18 months. PMID 35494290 independently enrolled 50 patients after knee mosaicplasty for 12 months; between-group clinical symptom differences were nonsignificant. It is not follow-up of the memory cohort.",
       "references_structured": [
         {
           "type": "pubmed",
@@ -966,7 +966,7 @@
       "total_enrollment": null,
       "registry_completed_trials_count": 5,
       "effect_direction_confidence": "medium",
-      "effect_direction_rationale": "Cited studies enrolled 50 knee-OA patients, randomized 40 non-demented adults, and enrolled 50 mosaicplasty patients. Unique cohort overlap is unresolved; the mosaicplasty trial is not a memory-study follow-up and did not show between-group clinical symptom superiority.",
+      "effect_direction_rationale": "Cited studies enrolled 50 knee-OA patients, randomized 46 non-demented adults, of whom 40 entered the reported analysis, and enrolled 50 mosaicplasty patients. Unique cohort overlap is unresolved; the mosaicplasty trial is not a memory-study follow-up and did not show between-group clinical symptom superiority.",
       "endpoint_relevance_tags": [
         "focus_memory",
         "joint_pain"
