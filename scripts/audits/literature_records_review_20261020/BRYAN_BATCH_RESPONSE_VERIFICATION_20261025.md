@@ -1,6 +1,6 @@
-# Dr. Bryan responses — batches 1–5, independent verification
+# Dr. Bryan responses — batches 1–7, independent verification
 
-October 25, 2026. **Batch 1's supported decisions and remaining holds are approved by Sean. Batches 2–5 are reviewed below; no blanket scoring approval or rebuilt-product closure is recorded.** Attribution to Dr. Bryan comes from Sean. Receipt date is not an invented date of the original scientific review.
+October 25, 2026. **Batch 1's supported decisions and remaining holds are approved by Sean. Batches 2–7 are reviewed below; no blanket scoring approval or rebuilt-product closure is recorded.** Attribution to Dr. Bryan comes from Sean. Receipt date is not an invented date of the original scientific review.
 
 Owner Check: existing `clinical_review_holds.csv` and `benchmark_review_backlog.csv` are the execution reports; `clinical_applicability.py::assess_clinical_source_review` and `probiotic_measurements.py::context_accepted_for_scoring` remain runtime owners. Evidence: current owners, request sections, exact response keys and primary API/full-text sources inspected. Will NOT create another clinical authority, scorer, completion registry, grade, dose curve or approval timestamp.
 
@@ -105,12 +105,66 @@ A separately named and quantified material can be assessed as one disclosed prep
 
 PMID26395129 concerns shilajit, not black-seed oil, tuna oil, manuka honey or krill oil. Current IQM occurrences within those four subjects are in repeated historical audit notes that identify a shilajit/PK mismatch; they are not affirmative ingredient-specific efficacy references. Record the rejection of such transfer and preserve the history. These four citation flags are triaged; they do not create new publication holds, replacement approvals or reasons to delete the valid shilajit source. No entire ingredient or product assessment is closed by this triage.
 
+## Batch 6 — RAW Enzyme, A063 and Mineral2O
+
+The exact 275412 and 182990 NIH API records and PDFs were retrieved and visually checked. These access questions are resolved; they are not manufacturer nondisclosure.
+
+- **RAW 275412:** one-capsule Facts basis; RAW enzyme group 620 mg, separate probiotic group 31 mg, total cultures 500millionCFU. The printed CFU qualification is **at time of blending**. Named cultures are Bacillus coagulans and Saccharomyces boulardii, without separate strain identifiers or organism-specific CFU allocations. Enzyme activity declarations remain activity units, not inferred enzyme masses. Directions say one capsule three times daily with meals, with gradual increase up to nine capsules/day.
+- **Mineral2O 182990:** one scoop/day, about 1.8 g. Printed calcium 50 mg, magnesium 150 mg, chloride 245 mg, sodium 6 mg, potassium 50 mg and trace-mineral complex 700 mg must keep their own identities/bases. Typical constituent ranges on this exact panel are boron0.7–0.9 mg, iodine0.1–3.9 mcg, iron2.5–45.6 mcg, lithium1.0–1.2 mg, silicon5.7–12.3 mcg, vanadium0.4–2.7 mcg and zinc2.2–114.8 mcg. They are not exact batch assays. Do not substitute the45 mg-potassium brochure, collapse the matrix to elemental magnesium, add overlapping material masses, or replace ranges with midpoints.
+
+### A063 source correction and remaining holds
+
+The [author-uploaded original paper](https://www.researchgate.net/publication/375746407_Efficacy_of_digestive_enzyme_supplementation_in_functional_dyspepsia_A_monocentric_randomized_double-blind_placebo-controlled_clinical_trial), DOI10.1016/j.biopha.2023.115858, explicitly identifies **Poolzyme Multi**,200 mg per capsule at lunch and dinner. This resolves the prior named-preparation/timing questions; the worklist is corrected. The material is not RAW Enzymes and does not establish generic enzyme-mass equivalence.
+
+The [documented registry API](https://www.isrctn.com/api/trial/67691215/format/who) returns registrationJune28,2023 and actual enrolmentJune16,2023. Prospective registration is not established. Paper ethics references differ between sections; the registry supplies another reference. These may describe different approval stages: clarification is required, not an allegation of absent approval. Outcome-table and seven-product applicability review remain open.
+
+**Implementation boundary:** `backed_clinical_studies.json` still describes the preparation as unbranded in`INGR_DIGESTIVE_ENZYMES.notes/notable_studies`. That is a confirmed pending canonical-description correction, not a completed runtime repair. Keep source eligibility held; apply the correction with the combined owner/test/verification batch before the next candidate build.
+
+### Separate reproduced engineering issue
+
+A read-only probe of `EnhancedDSLDNormalizer.normalize_product` plus `serving_frequency.resolve_daily_serving_range` on275412 returns3–3 capsules/day, following API metadata, despite the exact label allowing gradual increase up to 9. This source/regimen discrepancy remains **open for the existing serving owner**, not for Dr.Bryan and not claimed fixed. No full pipeline or product artifacts were generated by the probe. Retain it as a pre-build engineering blocker alongside the canonical Poolzyme description correction.
+
+## Batch 7 — biotinate, Lustriva and magnesium preparations
+
+Live PubMed retrieval confirms34000342,40918053 and22909270, alongside37976892 from batch6. The [2019 magnesium-biotinate conference abstract](https://pmc.ncbi.nlm.nih.gov/articles/PMC6574044/) was read on official PMC: its open-label single-dose absorption findings do not establish comparative efficacy or a chronic human dose.34000342 is toxicology, not a human efficacy/safe-dose trial.
+
+The [original Lustriva report](https://www.longdom.org/open-access/a-randomized-doubleblind-evaluation-of-a-novel-biotin-and-silicon-ingredient-complex-on-the-hair-and-skin-of-healthy-women-61185.html) identifies an exploratory combination trial and its high-dose composition. Its component-specific attribution, protocol/prespecification and exact product correspondence require the stated limits; no universal160 mg benchmark or finished-product component allocation follows.
+
+### Exact label decisions independently checked
+
+Twelve new API/PDF editions across batches6/7 were retrieved and visually inspected.25501 reuses the independently verified same-day API/PDF receipt from the earlier signed-response batch; its failed retrieval by the reviewer does not reopen that source fact.
+
+| Item / edition | Verified facts and remaining boundary |
+|---|---|
+| C111 / 299744 | Biotin 10,000 mcg from magnesium biotinate; named Lustriva 160 mg with declared 10 mg silicon; one capsule daily with a meal. Combination identity resolved; individual compound masses/effects not inferred. |
+| C170 / 336100 | Biotin 10,000 mcg from Advanced Hair Complex 160 mg, with declared 10 mg silicon and Lustriva trademark attribution; one capsule/day. Do not turn160 mg into biotin or magnesium. |
+| C097 / 270235 |105 mg elemental magnesium from 1,050 mg lysinate–glycinate chelate per two-capsule daily serving. |
+| C112 / 302674 |200 mg elemental from 2,000 mg lysinate–glycinate chelate per two tablets, twice daily:400 mg elemental/day. |
+| C149 / 322515 | Same independently checked200 mg/two-tablet basis and twice-daily directions:400 mg/day; Albion/lysinate–glycinate identity printed. |
+| C150 / 323080 |40 mg magnesium per scoop from Albion/TRAACS lysinate–glycinate in an electrolyte formula. Do not infer isolated-form efficacy or a fixed daily frequency beyond the printed directions. |
+| C090 / 256962 |25 mg total magnesium from oxide **and** oxide chelate per two-tablet daily serving. Source proportions are not disclosed; the total is not unknown. |
+| C013 / 25501 | Prior same-day exact source confirms200 mg elemental per two tablets twice daily:400 mg/day. Mixed glycinate/lysinate is not plain bisglycinate. |
+| C042 / 203385 |200 mg magnesium from 1,112 mg **buffered magnesium bisglycinate chelate**, per three-capsule daily serving; other active ingredients remain separate. The buffer's composition/proportions are not disclosed; do not assume its identity. |
+| C095 / 269689 |400 mg magnesium from 4,000 mg lysinate–glycinate chelate per two scoops (~8g). Directions start with one scoop and gradually increase to two daily:200–400 mg/day, not a fixed400 mg minimum. |
+| C113 / 302675 |200 mg magnesium from 2,000 mg lysinate–glycinate chelate per one scoop (~2g), twice daily:400 mg/day. This edition is not the same scoop/direction basis as269689. |
+
+The 2019 [magnesium bioavailability paper](https://pmc.ncbi.nlm.nih.gov/articles/PMC6683096/) was retrieved via the full-text API. Table1 lists Doctor's Best as J for laboratory testing; human phases test A/Ultractive and O/B-magnum. It does not establish a human sixfold-absorption claim for the listed Doctor's Best editions.
+
+The40918053 full-text API copy confirms the narrow four-week bisglycinate sleep context,250 mg elemental/day and the small primary ISI finding. It does not become lysinate–glycinate, buffered-form, anxiety or universal-dose evidence.22909270 remains a separate pregnancy/cramp context, not sleep evidence; its full-paper API attempt failed, so its full appraisal is not claimed complete.
+
+### Safety boundaries retained
+
+The [FDA biotin warning](https://www.fda.gov/medical-devices/in-vitro-diagnostics/biotin-interference-troponin-lab-tests-assays-subject-biotin-interference) supports the assay-interference concern, including falsely low troponin.299744 prints an eight-hour interval; that manufacturer statement is not a guarantee for every assay or patient. Do not promise a universal interruption interval.
+
+[NIH ODS](https://ods.od.nih.gov/factsheets/Magnesium-HealthProfessional/) confirms the adult350 mg supplemental/medication magnesium UL, excluding food magnesium. The 400 mg/day regimens above exceed it; that is not automatically a toxicity diagnosis. Preserve kidney-function and medication-absorption precautions. No warning is cleared and no human safety ceiling is derived from animal toxicology.
+
 ## Closure and next actions
 
 - **Recorded:** Sean's batch1 approval of supported sub-decisions, subject to the stated holds; first-batch exact-label facts above; available API/full-text source facts for batches2/3; the newer Magtein correction and retrospective COLLinstant registration.
 - **Not repeated:** already completed source retrieval/correction work. None of these access gaps should be sent back as if the sources were still unobtainable.
 - **Batches4/5 additions:** source/access facts above and D043–D046 triage are recorded; retain the TGA avoid precaution and all stated preparation/applicability holds. No automatic acceptance of the proposed weaker warning.
+- **Batches6/7 additions:** exact-label/source facts above are checked; RAW daily-range and canonical Poolzyme description corrections remain engineering work for the combined implementation batch, not extra scientific sign-offs.
 - **Still needed:** applicable trial/preparation/product decisions and authentic review provenance through existing owners; unavailable full texts/tables only where still unavailable; PQQ corrected Table4; trial overlap/forest-input reconciliation; Magtein11-product and collagen24-product correspondence; generated A148 behavior; eventual rebuilt-corpus and app verification.
-- **Not done:** runtime context migration, new scoring eligibility, changed weights/grades/benchmarks, full pipeline, publication, or scientifically/rebuilt-closed status for A011/A135/A059/A148/A003/A029/B433.
+- **Not done:** runtime context migration, new scoring eligibility, changed weights/grades/benchmarks, full pipeline, publication, or scientifically/rebuilt-closed status for A011/A135/A059/A148/A003/A029/B433/A063/A090.
 
-Audit receipt hashes and exact retrieval outcomes are retained locally in `.claude/state/bryan_review_20261025/receipt.json`, with source bodies in the batch folders, with the batches 4/5 supplement in `.claude/state/bryan_batches_4_5_20261025/receipt.json`. The existing hold register records receipt/verification progress without changing frozen counts, production eligibility or closure fields.
+Audit receipt hashes and exact retrieval outcomes are retained locally in `.claude/state/bryan_review_20261025/receipt.json`, with source bodies in the batch folders, with the batches 4/5 supplement in `.claude/state/bryan_batches_4_5_20261025/receipt.json`. Batches6/7 source receipts are retained in `.claude/state/bryan_batches_6_7_20261025/`. The existing hold register records receipt/verification progress without changing frozen counts, production eligibility or closure fields.

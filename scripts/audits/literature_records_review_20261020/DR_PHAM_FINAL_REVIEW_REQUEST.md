@@ -914,7 +914,7 @@ Each item below still requires the decision in section 2. The current summaries 
 
 **Sources:** [PMID 37976892](https://pubmed.ncbi.nlm.nih.gov/37976892/)
 
-**Current statement to verify:** Placebo-controlled functional dyspepsia trial (PMID 37976892) evaluated an unbranded five-enzyme fungal fermentation formulation (amylase, protease, cellulase, lactase, lipase; 200 mg BID). Does not transfer to standalone protease, lipase, amylase, cellulase, or animal pancreatin. Retained-source scope and limitations: Dyspepsia quality-of-life, pain and sleep outcomes for a specific multi-enzyme combination; not measured nutrient absorption or isolated-enzyme efficacy (PMID: 37976892)
+**Current statement to verify:** Placebo-controlled functional dyspepsia trial (PMID 37976892) evaluated Poolzyme Multi, a named five-enzyme fungal fermentation formulation (amylase, protease, cellulase, lactase, lipase; 200 mg at lunch and 200 mg at dinner). Does not transfer to standalone protease, lipase, amylase, cellulase, or animal pancreatin. Retained-source scope and limitations: Dyspepsia quality-of-life, pain and sleep outcomes for a specific multi-enzyme combination; not measured nutrient absorption or isolated-enzyme efficacy (PMID: 37976892)
 
 **Source access — bodies retrieved / indexed unavailable / no PMC:** 0 / 0 / 1. Full review remains open.
 
@@ -3013,7 +3013,7 @@ This list uses the final bounded replay for the original238 products.171 still h
 
 | C012 [19598](https://api.ods.od.nih.gov/dsld/s3/pdf/19598.pdf) Trisynex | No remaining identity limitation in this replay. | Quantity/form/unit or component exposure remains unresolved; confirm only source-supported values. | Decision / missing fact: ____ |
 
-| C013 [25501](https://api.ods.od.nih.gov/dsld/s3/pdf/25501.pdf) High Absorption 100% Chelated Magnesium | Magnesium: magnesium glycinate/lysinate chelate | No remaining dose limitation in this replay. | Decision / missing fact: ____ |
+| C013 [25501](https://api.ods.od.nih.gov/dsld/s3/pdf/25501.pdf) High Absorption 100% Chelated Magnesium | Magnesium: magnesium glycinate/lysinate chelate | No remaining dose limitation in this replay. | Exact25501API/PDFalreadyindependentlyverified;200mgMg/two tablets twice daily=400mg/day. Mixedchelate qualification remains;do not repeat access request. Source facts only; not runtime/rebuilt clearance. |
 
 | C014 [25583](https://api.ods.od.nih.gov/dsld/s3/pdf/25583.pdf) Breakfast Squares Oatmeal Chocolate Chip | No remaining identity limitation in this replay. | Quantity/form/unit or component exposure remains unresolved; confirm only source-supported values. | Decision / missing fact: ____ |
 
@@ -3071,7 +3071,7 @@ This list uses the final bounded replay for the original238 products.171 still h
 
 | C041 [188790](https://api.ods.od.nih.gov/dsld/s3/pdf/188790.pdf) PureLean Pure Pack | Chromium: Zychrome Chromium Dinicocysteinate | No remaining dose limitation in this replay. | Decision / missing fact: ____ |
 
-| C042 [203385](https://api.ods.od.nih.gov/dsld/s3/pdf/203385.pdf) CoQ10 L-Carnitine Magnesium | Magnesium Bisglycinate Chelate buffered: Magnesium Bisglycinate Chelate buffered | No remaining dose limitation in this replay. | Decision / missing fact: ____ |
+| C042 [203385](https://api.ods.od.nih.gov/dsld/s3/pdf/203385.pdf) CoQ10 L-Carnitine Magnesium | Magnesium Bisglycinate Chelate buffered: Magnesium Bisglycinate Chelate buffered | No remaining dose limitation in this replay. | Exact203385PDFverified:200mgMgfrom1112mgbufferedbisglycinateper3capsdaily. Buffer composition/allocation undisclosed; no assumedoxide identity. Source facts only; not runtime/rebuilt clearance. |
 
 | C043 [212398](https://api.ods.od.nih.gov/dsld/s3/pdf/212398.pdf) Colon Pure Unflavored | No remaining identity limitation in this replay. | Quantity/form/unit or component exposure remains unresolved; confirm only source-supported values. | Decision / missing fact: ____ |
 
@@ -3167,7 +3167,7 @@ This list uses the final bounded replay for the original238 products.171 still h
 
 | C089 [254487](https://api.ods.od.nih.gov/dsld/s3/pdf/254487.pdf) Sodium D-Aspartate | Source identity/preparation is not fully assessable; verify exact printed material. | No remaining dose limitation in this replay. | Decision / missing fact: ____ |
 
-| C090 [256962](https://api.ods.od.nih.gov/dsld/s3/pdf/256962.pdf) Centrum Men's Multi | Magnesium: Magnesium Oxide Chelate | No remaining dose limitation in this replay. | Decision / missing fact: ____ |
+| C090 [256962](https://api.ods.od.nih.gov/dsld/s3/pdf/256962.pdf) Centrum Men's Multi | Magnesium: Magnesium Oxide Chelate | No remaining dose limitation in this replay. | Exact256962PDFverified:25mgMgfromoxide ANDoxidechelate per2tabsdaily;sourceallocationnotdisclosed,totalnotunknown. Source facts only; not runtime/rebuilt clearance. |
 
 | C091 [259374](https://api.ods.od.nih.gov/dsld/s3/pdf/259374.pdf) Organic Hemp Powder Protein & Fiber | organic Hemp powder | No remaining dose limitation in this replay. | Decision / missing fact: ____ |
 
@@ -3177,11 +3177,11 @@ This list uses the final bounded replay for the original238 products.171 still h
 
 | C094 [268493](https://api.ods.od.nih.gov/dsld/s3/pdf/268493.pdf) Golden Milk | Medium Chain Triglyceride: Acacia | No remaining dose limitation in this replay. | Decision / missing fact: ____ |
 
-| C095 [269689](https://api.ods.od.nih.gov/dsld/s3/pdf/269689.pdf) High Absorption Magnesium Powder Sweet Peach | Magnesium Lysinate Glycinate Chelate: Magnesium Lysinate Glycinate Chelate | No remaining dose limitation in this replay. | Decision / missing fact: ____ |
+| C095 [269689](https://api.ods.od.nih.gov/dsld/s3/pdf/269689.pdf) High Absorption Magnesium Powder Sweet Peach | Magnesium Lysinate Glycinate Chelate: Magnesium Lysinate Glycinate Chelate | No remaining dose limitation in this replay. | Exact269689PDFverified:400mgMgper2scoops8g;start1scoop,increaseto2daily=>200–400mg/day. Preparationqualification remains. Source facts only; not runtime/rebuilt clearance. |
 
 | C096 [270233](https://api.ods.od.nih.gov/dsld/s3/pdf/270233.pdf) Energy+ | Nicotinamide Adenine Dinucleotide: Disodium Phosphate | No remaining dose limitation in this replay. | Decision / missing fact: ____ |
 
-| C097 [270235](https://api.ods.od.nih.gov/dsld/s3/pdf/270235.pdf) High Absorption Magnesium 105 mg | Magnesium Lysinate Glycinate Chelate: Magnesium Lysinate Glycinate Chelate | No remaining dose limitation in this replay. | Decision / missing fact: ____ |
+| C097 [270235](https://api.ods.od.nih.gov/dsld/s3/pdf/270235.pdf) High Absorption Magnesium 105 mg | Magnesium Lysinate Glycinate Chelate: Magnesium Lysinate Glycinate Chelate | No remaining dose limitation in this replay. | Exact270235PDFverified:105mgMgfrom1050mglysinate-glycinateper2capsdaily. No human6xabsorption approval. Source facts only; not runtime/rebuilt clearance. |
 
 | C098 [270737](https://api.ods.od.nih.gov/dsld/s3/pdf/270737.pdf) Sodium Chloride 1000 mg | Source identity/preparation is not fully assessable; verify exact printed material. | No remaining dose limitation in this replay. | Decision / missing fact: ____ |
 
@@ -3209,11 +3209,11 @@ This list uses the final bounded replay for the original238 products.171 still h
 
 | C110 [297638](https://api.ods.od.nih.gov/dsld/s3/pdf/297638.pdf) Raw Organic Fit Chocolate Flavor | Cystine | No remaining dose limitation in this replay. | Decision / missing fact: ____ |
 
-| C111 [299744](https://api.ods.od.nih.gov/dsld/s3/pdf/299744.pdf) Biotin Complex Hair & Skin | Source identity/preparation is not fully assessable; verify exact printed material. | No remaining dose limitation in this replay. | Decision / missing fact: ____ |
+| C111 [299744](https://api.ods.od.nih.gov/dsld/s3/pdf/299744.pdf) Biotin Complex Hair & Skin | Source identity/preparation is not fully assessable; verify exact printed material. | No remaining dose limitation in this replay. | Exact299744PDFverified:Lustriva160mg,biotin10000mcgfrommagnesiumbiotinate,declaredsilicon10mg,1capdaily. Componentmassesunallocated;whole-combination correspondence stillrequired. Source facts only; not runtime/rebuilt clearance. |
 
-| C112 [302674](https://api.ods.od.nih.gov/dsld/s3/pdf/302674.pdf) High Absorption Magnesium 100 mg | Magnesium Lysinate Glycinate Chelate: Magnesium Lysinate Glycinate Chelate | No remaining dose limitation in this replay. | Decision / missing fact: ____ |
+| C112 [302674](https://api.ods.od.nih.gov/dsld/s3/pdf/302674.pdf) High Absorption Magnesium 100 mg | Magnesium Lysinate Glycinate Chelate: Magnesium Lysinate Glycinate Chelate | No remaining dose limitation in this replay. | Exact302674PDFverified:200mgMgper2tabs,twice/day=>400mg/day;mixedlysinate-glycinateidentityknown,absorptionqualification remains. Source facts only; not runtime/rebuilt clearance. |
 
-| C113 [302675](https://api.ods.od.nih.gov/dsld/s3/pdf/302675.pdf) High Absorption Magnesium Powder | Magnesium Lysinate Glycinate Chelate: Magnesium Lysinate Glycinate Chelate | No remaining dose limitation in this replay. | Decision / missing fact: ____ |
+| C113 [302675](https://api.ods.od.nih.gov/dsld/s3/pdf/302675.pdf) High Absorption Magnesium Powder | Magnesium Lysinate Glycinate Chelate: Magnesium Lysinate Glycinate Chelate | No remaining dose limitation in this replay. | Exact302675PDFverified:200mgMgper1scoop2g,twice/day=>400mg/day. Independenteditionverified;no borrowed scoopbasis. Source facts only; not runtime/rebuilt clearance. |
 
 | C114 [302699](https://api.ods.od.nih.gov/dsld/s3/pdf/302699.pdf) PepZin GI | L-Carnosine: PepZin GI | No remaining dose limitation in this replay. | Decision / missing fact: ____ |
 
@@ -3285,9 +3285,9 @@ This list uses the final bounded replay for the original238 products.171 still h
 
 | C148 [315691](https://api.ods.od.nih.gov/dsld/s3/pdf/315691.pdf) Potassium Iodide Tablets 130 mg | No remaining identity limitation in this replay. | iodine / compound_mass_not_elemental / mg | Keep documented emergency-use/compound-mass limitation; already intentionally unassessable, not a new release hold. |
 
-| C149 [322515](https://api.ods.od.nih.gov/dsld/s3/pdf/322515.pdf) High Absorption Magnesium 200 mg | Albion Magnesium Lysinate Glycinate Chelate: Albion Magnesium Lysinate Glycinate Chelate | No remaining dose limitation in this replay. | Decision / missing fact: ____ |
+| C149 [322515](https://api.ods.od.nih.gov/dsld/s3/pdf/322515.pdf) High Absorption Magnesium 200 mg | Albion Magnesium Lysinate Glycinate Chelate: Albion Magnesium Lysinate Glycinate Chelate | No remaining dose limitation in this replay. | Exact322515PDFverified:200mgMgper2tabs,twice/day=>400mg/day;Albionmixedlysinate-glycinateidentityprinted. No plainbisglycinate transfer. Source facts only; not runtime/rebuilt clearance. |
 
-| C150 [323080](https://api.ods.od.nih.gov/dsld/s3/pdf/323080.pdf) Catalyte Lemon Lime Flavored Electrolytes | Magnesium: Albion Magnesium Lysinate Glycinate Chelate | No remaining dose limitation in this replay. | Decision / missing fact: ____ |
+| C150 [323080](https://api.ods.od.nih.gov/dsld/s3/pdf/323080.pdf) Catalyte Lemon Lime Flavored Electrolytes | Magnesium: Albion Magnesium Lysinate Glycinate Chelate | No remaining dose limitation in this replay. | Exact323080PDFverified:40mgMgperscoop,Albionlysinate-glycinate,withinelectrolyteformula;noisolated-form claim. Source facts only; not runtime/rebuilt clearance. |
 
 | C151 [328127](https://api.ods.od.nih.gov/dsld/s3/pdf/328127.pdf) Blood Sugar Manager | Vitamin A: Mixed Carotenoids | No remaining dose limitation in this replay. | Decision / missing fact: ____ |
 
@@ -3327,7 +3327,7 @@ This list uses the final bounded replay for the original238 products.171 still h
 
 | C169 [330886](https://api.ods.od.nih.gov/dsld/s3/pdf/330886.pdf) Waterex | Corn Silk, Powder: Zea mays, Powder | No remaining dose limitation in this replay. | Decision / missing fact: ____ |
 
-| C170 [336100](https://api.ods.od.nih.gov/dsld/s3/pdf/336100.pdf) Hair Growth | Biotin: Advanced Hair Complex | No remaining dose limitation in this replay. | Decision / missing fact: ____ |
+| C170 [336100](https://api.ods.od.nih.gov/dsld/s3/pdf/336100.pdf) Hair Growth | Biotin: Advanced Hair Complex | No remaining dose limitation in this replay. | Exact336100PDFverified:AdvancedHairComplex160mg,Lustrivaattribution,biotin10000mcg,declaredsilicon10mg,1capdaily;componentallocationundisclosed. Source facts only; not runtime/rebuilt clearance. |
 
 | C171 [337851](https://api.ods.od.nih.gov/dsld/s3/pdf/337851.pdf) Amino Complex Berry Flavored | L-Cystine | No remaining dose limitation in this replay. | Decision / missing fact: ____ |
 
