@@ -3,7 +3,8 @@
 ### Batch12 — nine exact labels, October25
 
 - [x] Implement all9verified source corrections through existing owners, retaining source conflicts, unknown component quantities and scientific holds.359named tests,local546/24declaredskips+guardgreen,12raw replay and independent review complete. Corrected cranberry consumer wording has named export coverage; grades unchanged.
-- [ ] Finish exact-head CI and main integration, then continue the separately recorded clinical/citation/benchmark backlog. No corpus/import/release in this batch.
+- [x] Exact-headCI40239901450/all4shards+guards passes; PR249merged406cd6ff8 with verifiedmainancestry. Final12committedreplays retain all scoredhashes afterwording;3controls unchanged.
+- [ ] Continue the separately recorded scientific/citation/benchmark backlog and eventual rebuilt-corpus/app qualification. No corpus/import/release in this batch.
 
 Owner: existing reviewed source/hierarchy normalizer, product-label registry and IQMconsumer note — evidence: [per-case qualification](../../scripts/audits/literature_records_review_20261020/BRYAN_BATCH_RESPONSE_VERIFICATION_20261025.md). Will NOT create another authority or public contract.
 
