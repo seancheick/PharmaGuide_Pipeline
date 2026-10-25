@@ -1,6 +1,6 @@
-# Dr. Bryan responses — batches 1–7, independent verification
+# Dr. Bryan responses — batches 1–8, independent verification
 
-October 25, 2026. **Batch 1's supported decisions and remaining holds are approved by Sean. Batches 2–7 are reviewed below; no blanket scoring approval or rebuilt-product closure is recorded.** Attribution to Dr. Bryan comes from Sean. Receipt date is not an invented date of the original scientific review.
+October 25, 2026. **Batch 1's supported decisions and remaining holds are approved by Sean. Batches 2–8 are reviewed below; no blanket scoring approval or rebuilt-product closure is recorded.** Attribution to Dr. Bryan comes from Sean. Receipt date is not an invented date of the original scientific review.
 
 Owner Check: existing `clinical_review_holds.csv` and `benchmark_review_backlog.csv` are the execution reports; `clinical_applicability.py::assess_clinical_source_review` and `probiotic_measurements.py::context_accepted_for_scoring` remain runtime owners. Evidence: current owners, request sections, exact response keys and primary API/full-text sources inspected. Will NOT create another clinical authority, scorer, completion registry, grade, dose curve or approval timestamp.
 
@@ -157,6 +157,32 @@ The40918053 full-text API copy confirms the narrow four-week bisglycinate sleep 
 The [FDA biotin warning](https://www.fda.gov/medical-devices/in-vitro-diagnostics/biotin-interference-troponin-lab-tests-assays-subject-biotin-interference) supports the assay-interference concern, including falsely low troponin.299744 prints an eight-hour interval; that manufacturer statement is not a guarantee for every assay or patient. Do not promise a universal interruption interval.
 
 [NIH ODS](https://ods.od.nih.gov/factsheets/Magnesium-HealthProfessional/) confirms the adult350 mg supplemental/medication magnesium UL, excluding food magnesium. The 400 mg/day regimens above exceed it; that is not automatically a toxicity diagnosis. Preserve kidney-function and medication-absorption precautions. No warning is cleared and no human safety ceiling is derived from animal toxicology.
+
+## Batch 8 — molybdenum and vitamin unit conflicts
+
+October 25: all nine exact NIH API records and PDFs retrieved successfully. Each live PDF is byte-identical to the saved final-completion-campaign PDF; each saved rendering was independently inspected. Retrieval and visual confirmation are separate: 27807 remains unreadable for the specific unit. Source bodies, SHA-256 hashes and the unchanged returned response are retained in `.claude/state/bryan_batch_8_20261025/`.
+
+Owner Check: existing C-product request/report owns returned dispositions; `enhanced_normalizer.py` and `enrich_supplements_v3.py` retain label-conflict handling, and `dose_assessment.py` retains dose assessment semantics. Evidence: exact C rows and `rg label_unit_conflict scripts` inspected. Will NOT create a replacement dose, approval authority, new status or source-correction registry. This batch changes reports only, not those runtime owners.
+
+| Item / exact edition | Independent result | Disposition and remaining action |
+|---|---|---|
+| C001 / [801](https://api.ods.od.nih.gov/dsld/s3/pdf/801.pdf) | Printed molybdenum 75 mg as sodium molybdate, 100% DV; two level scoops (34 g) daily. Di-arginine malate and whey protein concentrate appear in the arginine source description. | Confirm the printed conflict; no mg-to-mcg substitution or DV-derived amount. Manufacturer clarification must identify this edition/formula. Arginine preparation/component applicability remains separate. |
+| C002 / [802](https://api.ods.od.nih.gov/dsld/s3/pdf/802.pdf) | Independently printed 75 mg molybdenum, 100% DV; two level scoops (34 g) daily. | Same conflict class established on its own source. No corrected exposure or whole-product clearance. |
+| C023 / [31063](https://api.ods.od.nih.gov/dsld/s3/pdf/31063.pdf) | Independently printed 75 mg molybdenum, 100% DV; two level scoops (34 g) daily. Arginine source also names di-arginine malate and whey protein concentrate. | Preserve conflict and separate preparation applicability; obtain edition-specific clarification. |
+| C016 / [27807](https://api.ods.od.nih.gov/dsld/s3/pdf/27807.pdf) | Live API repeats 75 mg, but the exact image remains too blurred for independent unit confirmation. | Preserve existing conflict finding and image-confirmation hold. Require a legible exact original or edition-specific clarification; another flavor cannot substitute. |
+| C052 / [231334](https://api.ods.od.nih.gov/dsld/s3/pdf/231334.pdf) | Printed vitamin A 6,000 mcg DFE, 100% beta-carotene, 667% DV; two tablets daily. | Identity is disclosed; activity/quantity basis is defective. Do not substitute RAE, IU or beta-carotene mass, or reverse-engineer from DV. |
+| C053 / [231335](https://api.ods.od.nih.gov/dsld/s3/pdf/231335.pdf) | Same declarations independently confirmed on this exact edition. | Require intended quantity and activity-versus-mass basis tied to this edition. |
+| C093 / [263865](https://api.ods.od.nih.gov/dsld/s3/pdf/263865.pdf) | Same declarations independently confirmed on this exact edition. | Preserve unresolved activity; no automatic corrected exposure. |
+| C050 / [223563](https://api.ods.od.nih.gov/dsld/s3/pdf/223563.pdf) | Exact PDF independently confirms vitamin A “900 RAE mg” from beta-carotene, 60% DV; vitamin D3 100 mg, 660% DV; two tablets daily. API represents A as 900 mg RAE. | The returned response's access gap is now resolved. Actual intended amounts remain unresolved; require manufacturer clarification, not an assumed microgram correction. |
+| C051 / [223572](https://api.ods.od.nih.gov/dsld/s3/pdf/223572.pdf) | Exact PDF independently confirms vitamin A “900 RAE mg” from beta-carotene, 60% DV; vitamin D3 50 mg, 330% DV; two tablets daily. API represents A as 900 mg RAE. | Independently resolved source access, not exposure. Preserve the unit conflict and obtain this edition's intended quantity/basis. |
+
+The proposed limitation explanations are supported: preserve what the label says while explaining that actual exposure cannot reliably be determined. None proves laboratory-measured excessive contents, establishes a benefit rejection, or completes the entire product assessment. The manufacturer clarification is an exposure-resolution dependency; it is not a request for Dr. Bryan to guess a corrected unit.
+
+[NIH molybdenum guidance](https://ods.od.nih.gov/factsheets/Molybdenum-HealthProfessional/) lists an adult UL of 2,000 mcg/day. Conditional arithmetic is correct: the printed 75 mg equals 75,000 mcg, or 37.5 times that UL; this is not a measured product exposure. [Folate guidance](https://ods.od.nih.gov/factsheets/Folate-HealthProfessional/) defines DFE for folate, while [vitamin A guidance](https://ods.od.nih.gov/factsheets/VitaminA-HealthProfessional/) uses RAE. Do not convert the defective vitamin-A DFE declarations or apply a preformed-retinol toxicity calculation to beta-carotene. Preserve the separate high-dose supplemental beta-carotene concerns in smokers and asbestos-exposed populations; these labels do not establish their beta-carotene exposure.
+
+[NIH vitamin D guidance](https://ods.od.nih.gov/factsheets/VitaminD-HealthProfessional/) confirms 1 mcg = 40 IU and the adult 100 mcg/day UL, including pregnancy/lactation. Literal 50/100 mg would be 50,000/100,000 mcg; this conditional comparison explains why silent correction is unacceptable. It does not confirm actual contents or a toxicity diagnosis.
+
+**Closure:** nine returned C dispositions recorded; eight exact printed-conflict observations independently confirmed, one image-specific verification hold retained. The two previously unavailable prenatal/postnatal PDFs are now verified. Frozen findings, counts, product identities, source eligibility, approval/closure states and all runtime data remain unchanged. No manufacturer clarification, corrected dose, corpus rebuild or app verification is claimed. The two engineering blockers from batches 6/7 remain open.
 
 ## Closure and next actions
 

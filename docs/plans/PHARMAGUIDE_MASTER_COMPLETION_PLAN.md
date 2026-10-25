@@ -1637,3 +1637,12 @@ Confirmedengineeringworknotclosed:
 - [ ] ProductionINGR_DIGESTIVE_ENZYMESnotes/notable_studiesstillsayunbranded;applyverifiedPoolzymenamed-preparationcorrectionthroughcanonicalownerwithcombinedqualification.
 
 2clinicalreceiptrowsand11Cworklistrepliesupdated, frozen/runtimeeligibility/closurefieldsunchanged. No genericA053/A089/A102approvalfromonematrix;noA063/A090wholeclearanceorprepgradeinvented. Existingreportextendedto1–7. Full diff/source/reference/CSVinvariantchecks andgitdiffcheck;no tests/CIforreport-onlychanges. No corpus/pipeline/appimport/publication. [Consolidated report](../../scripts/audits/literature_records_review_20261020/BRYAN_BATCH_RESPONSE_VERIFICATION_20261025.md). Sourcebodies/hashes: .claude/state/bryan_batches_6_7_20261025/receipt.json.
+
+
+## October 25 — Dr. Bryan batch 8: exact label unit conflicts
+
+Documentation/report-only. Owner: existing C-product request and Bryan verification report; runtime label-conflict handling remains in enhanced_normalizer/enrich_supplements_v3/dose_assessment. Evidence: nine exact C rows, source PDFs/API and `rg label_unit_conflict scripts`. Will NOT create a corrected dose, new approval authority or registry.
+
+All nine live NIH API records and PDFs retrieved; all PDFs match the saved copies by bytes/SHA-256. Independently inspected eight readable unit conflicts: 801/802/31063 molybdenum, 231334/231335/263865 vitamin A DFE, 223563/223572 vitamin A/D. The last two access gaps are closed; actual intended exposure still requires edition-specific manufacturer clarification. Exact 27807 remains image-unreadable for the unit; retain that independent verification hold. No DV-derived correction, inferred microgram substitution, preformed-retinol attribution to beta-carotene, measured-content claim or whole-product clearance.
+
+Current NIH molybdenum/vitamin A/folate/vitamin D guidance checked. Nine final-request response cells updated; original frozen columns and all runtime data/eligibility/closure states unchanged. Source hashes/bodies: `.claude/state/bryan_batch_8_20261025/`. The batch 6/7 serving-range and canonical Poolzyme-description engineering blockers remain open. No pipeline/app import/release. Validation: full diff/source/reference review, nine-cell/frozen-column invariant and `git diff --check`; no tests/CI checkpoint for documentation-only changes.

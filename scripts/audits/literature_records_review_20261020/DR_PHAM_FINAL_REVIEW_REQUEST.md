@@ -2989,9 +2989,9 @@ This list uses the final bounded replay for the original238 products.171 still h
 | Item / exact label | Remaining identity/preparation question | Remaining dose question | Required disposition |
 |---|---|---|---|
 
-| C001 [801](https://api.ods.od.nih.gov/dsld/s3/pdf/801.pdf) Maximum Nutrition Vanilla Bean | L-Arginine: Di-Arginine Malate | molybdenum / label_unit_conflict / mg | Decision / missing fact: ____ |
+| C001 [801](https://api.ods.od.nih.gov/dsld/s3/pdf/801.pdf) Maximum Nutrition Vanilla Bean | L-Arginine: Di-Arginine Malate | molybdenum / label_unit_conflict / mg | Exact 801 API/PDF verified: 75 mg molybdenum and 100% DV per 34 g daily. Confirm conflict only; no inferred mcg correction. Edition-specific manufacturer clarification needed; arginine applicability remains separate. Source finding only; not whole-product or rebuilt clearance. |
 
-| C002 [802](https://api.ods.od.nih.gov/dsld/s3/pdf/802.pdf) Maximum Nutrition Vanilla Creme | No remaining identity limitation in this replay. | molybdenum / label_unit_conflict / mg | Decision / missing fact: ____ |
+| C002 [802](https://api.ods.od.nih.gov/dsld/s3/pdf/802.pdf) Maximum Nutrition Vanilla Creme | No remaining identity limitation in this replay. | molybdenum / label_unit_conflict / mg | Exact 802 API/PDF independently verified: 75 mg molybdenum and 100% DV per 34 g daily. Confirm label limitation; intended exposure needs edition-specific manufacturer clarification. Source finding only; not whole-product or rebuilt clearance. |
 
 | C003 [855](https://api.ods.od.nih.gov/dsld/s3/pdf/855.pdf) Oil Of Oregano | No remaining identity limitation in this replay. | Quantity/form/unit or component exposure remains unresolved; confirm only source-supported values. | Decision / missing fact: ____ |
 
@@ -3019,7 +3019,7 @@ This list uses the final bounded replay for the original238 products.171 still h
 
 | C015 [27203](https://api.ods.od.nih.gov/dsld/s3/pdf/27203.pdf) Maximum Nutrition Berry | Silica: Silicon Hydrolyzed Vegetable Protein | No remaining dose limitation in this replay. | Decision / missing fact: ____ |
 
-| C016 [27807](https://api.ods.od.nih.gov/dsld/s3/pdf/27807.pdf) Maximum Nutrition Milk Chocolate | No remaining identity limitation in this replay. | molybdenum / label_unit_conflict / mg | Decision / missing fact: ____ |
+| C016 [27807](https://api.ods.od.nih.gov/dsld/s3/pdf/27807.pdf) Maximum Nutrition Milk Chocolate | No remaining identity limitation in this replay. | molybdenum / label_unit_conflict / mg | Exact 27807 API/PDF retrieved; API repeats 75 mg, image still too blurred to confirm unit independently. Preserve existing limitation and legible-original/manufacturer-clarification requirement. Source finding only; not whole-product or rebuilt clearance. |
 
 | C017 [27808](https://api.ods.od.nih.gov/dsld/s3/pdf/27808.pdf) Amplified Stamina Lemon Tea | L-Arginine: L-Arginine, OT2 | No remaining dose limitation in this replay. | Decision / missing fact: ____ |
 
@@ -3033,7 +3033,7 @@ This list uses the final bounded replay for the original238 products.171 still h
 
 | C022 [29066](https://api.ods.od.nih.gov/dsld/s3/pdf/29066.pdf) Amplified Ripped Watermelon | L-Arginine: L-Arginine, OT2 | No remaining dose limitation in this replay. | Decision / missing fact: ____ |
 
-| C023 [31063](https://api.ods.od.nih.gov/dsld/s3/pdf/31063.pdf) Maximum Nutrition Milk Chocolate | L-Arginine: Di-Arginine Malate | molybdenum / label_unit_conflict / mg | Decision / missing fact: ____ |
+| C023 [31063](https://api.ods.od.nih.gov/dsld/s3/pdf/31063.pdf) Maximum Nutrition Milk Chocolate | L-Arginine: Di-Arginine Malate | molybdenum / label_unit_conflict / mg | Exact 31063 API/PDF independently verified: 75 mg molybdenum and 100% DV per 34 g daily. Preserve conflict and di-arginine-malate applicability boundary; no corrected dose. Source finding only; not whole-product or rebuilt clearance. |
 
 | C024 [33361](https://api.ods.od.nih.gov/dsld/s3/pdf/33361.pdf) Legiox Norethandriol | 17a-Ethyl-Estr-5(6)-Ene-3B-Diol | Quantity/form/unit or component exposure remains unresolved; confirm only source-supported values. | Decision / missing fact: ____ |
 
@@ -3087,13 +3087,13 @@ This list uses the final bounded replay for the original238 products.171 still h
 
 | C049 [220021](https://api.ods.od.nih.gov/dsld/s3/pdf/220021.pdf) Vegetarian Multiple | Calcium: Calcium Pantothenate Glycinate Amino Acid Chelate | No remaining dose limitation in this replay. | Decision / missing fact: ____ |
 
-| C050 [223563](https://api.ods.od.nih.gov/dsld/s3/pdf/223563.pdf) Postnatal Multivitamin | No remaining identity limitation in this replay. | vitamin_a / label_unit_conflict / mg RAE; vitamin_d / label_unit_conflict / mg | Decision / missing fact: ____ |
+| C050 [223563](https://api.ods.od.nih.gov/dsld/s3/pdf/223563.pdf) Postnatal Multivitamin | No remaining identity limitation in this replay. | vitamin_a / label_unit_conflict / mg RAE; vitamin_d / label_unit_conflict / mg | Exact 223563 API/PDF now independently verified: A printed 900 RAE mg (beta-carotene), D3 100 mg, per two tablets daily. Access gap closed; unit conflict and manufacturer clarification remain. No assumed correction. Source finding only; not whole-product or rebuilt clearance. |
 
-| C051 [223572](https://api.ods.od.nih.gov/dsld/s3/pdf/223572.pdf) Prenatal Multivitamin | No remaining identity limitation in this replay. | vitamin_a / label_unit_conflict / mg RAE; vitamin_d / label_unit_conflict / mg | Decision / missing fact: ____ |
+| C051 [223572](https://api.ods.od.nih.gov/dsld/s3/pdf/223572.pdf) Prenatal Multivitamin | No remaining identity limitation in this replay. | vitamin_a / label_unit_conflict / mg RAE; vitamin_d / label_unit_conflict / mg | Exact 223572 API/PDF now independently verified: A printed 900 RAE mg (beta-carotene), D3 50 mg, per two tablets daily. Access gap closed; unit conflict and manufacturer clarification remain. No assumed correction. Source finding only; not whole-product or rebuilt clearance. |
 
-| C052 [231334](https://api.ods.od.nih.gov/dsld/s3/pdf/231334.pdf) Formula VM-2000 | No remaining identity limitation in this replay. | vitamin_a / conversion_failed / mcg DFE | Decision / missing fact: ____ |
+| C052 [231334](https://api.ods.od.nih.gov/dsld/s3/pdf/231334.pdf) Formula VM-2000 | No remaining identity limitation in this replay. | vitamin_a / conversion_failed / mcg DFE | Exact 231334 API/PDF verified: vitamin A 6000 mcg DFE, 100% beta-carotene, 667% DV per two tablets daily. Identity known, activity unresolved; require intended activity/mass basis, no DV-derived correction. Source finding only; not whole-product or rebuilt clearance. |
 
-| C053 [231335](https://api.ods.od.nih.gov/dsld/s3/pdf/231335.pdf) Formula VM-2000 | No remaining identity limitation in this replay. | vitamin_a / conversion_failed / mcg DFE | Decision / missing fact: ____ |
+| C053 [231335](https://api.ods.od.nih.gov/dsld/s3/pdf/231335.pdf) Formula VM-2000 | No remaining identity limitation in this replay. | vitamin_a / conversion_failed / mcg DFE | Exact 231335 API/PDF independently verified: vitamin A 6000 mcg DFE, 100% beta-carotene, 667% DV per two tablets daily. Preserve defective-unit limitation; no corrected RAE exposure. Source finding only; not whole-product or rebuilt clearance. |
 
 | C054 [231826](https://api.ods.od.nih.gov/dsld/s3/pdf/231826.pdf) Optimized African Mango Irvingia With Phase 3 Calorie Control Complex | Chromium: Chromium GlycoProtein Matrix | No remaining dose limitation in this replay. | Decision / missing fact: ____ |
 
@@ -3173,7 +3173,7 @@ This list uses the final bounded replay for the original238 products.171 still h
 
 | C092 [260262](https://api.ods.od.nih.gov/dsld/s3/pdf/260262.pdf) Fish Oil Lemon | Source identity/preparation is not fully assessable; verify exact printed material. | No remaining dose limitation in this replay. | Decision / missing fact: ____ |
 
-| C093 [263865](https://api.ods.od.nih.gov/dsld/s3/pdf/263865.pdf) Formula VM-2000 | No remaining identity limitation in this replay. | vitamin_a / conversion_failed / mcg DFE | Decision / missing fact: ____ |
+| C093 [263865](https://api.ods.od.nih.gov/dsld/s3/pdf/263865.pdf) Formula VM-2000 | No remaining identity limitation in this replay. | vitamin_a / conversion_failed / mcg DFE | Exact 263865 API/PDF independently verified: vitamin A 6000 mcg DFE, 100% beta-carotene, 667% DV per two tablets daily. Manufacturer clarification of intended quantity/basis remains. Source finding only; not whole-product or rebuilt clearance. |
 
 | C094 [268493](https://api.ods.od.nih.gov/dsld/s3/pdf/268493.pdf) Golden Milk | Medium Chain Triglyceride: Acacia | No remaining dose limitation in this replay. | Decision / missing fact: ____ |
 
