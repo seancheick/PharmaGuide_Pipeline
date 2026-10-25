@@ -215,6 +215,7 @@ publication is complete.
   `LOW_COVERAGE_TRUST_FLOOR` [V], and `app:lib/core/components/pg_hero_section.dart::heroScoreDisplayFor`
   hides a pipeline score when coverage is low [V]. Separating them moves verdicts, so it goes
   through `/pg-scoring-change`. New export field: Sean + ADR.
+  - October 25 detail repair removes proprietary-blend disclosure from the app's global coverage card: undisclosed component amounts remain a local ingredient/score limitation, while global partial coverage now requires an actual mapping or ledger gap. This reuses the existing coverage contract and adds no field or calculator. Exact-head CI and rebuilt-catalog/device acceptance remain before closing 1.3.
 - [ ] **1.4 Three-part result header and page order.** Identity → critical status → personal card →
   PG Score → coverage → ingredients → interactions → evidence → verification and label history.
   The app already has the compact six-bar card (`app:lib/core/components/pg_score_breakdown_card.dart`)
@@ -230,6 +231,7 @@ publication is complete.
   found within reviewed coverage"). Remove the unused /20 arithmetic (`scoreFit20`, `e2cPenalty`,
   `maxPossible` in `app:lib/services/fit_score/`), which no screen reads [V], after the dead-code
   proof AGENTS.md requires. "Works against your goal" needs pipeline-authored data first.
+  - October 25 detail repair makes clean `No known concerns` a compact expandable row and keeps warning/danger rows expanded. Good-to-Know and prominent score layouts are compacted through their shared components; exact-head CI and connected-device acceptance remain before closing 1.5.
 
 October15 receipt checkpoint: pipeline PR145 merged c72607e09 with the verified PR142/144 source and receipt work; app PR122 is integrated57ab077b. Six pillar receipts reconcile and render, including real-product narrow-width/text-scale checks. This implements the receipt portion of1.6; remaining provenance/presentation requirements and final rebuilt-catalog acceptance keep the full box open. Step4 scoring consolidation remains partial; next are production missing-data/completion and bound-aware consumers, then the remaining approved ownership/config and probiotic copy changes. Sean authorized source integration/branch cleanup, while rebuild and release remain held.
 
