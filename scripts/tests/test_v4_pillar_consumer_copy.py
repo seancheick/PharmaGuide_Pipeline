@@ -445,6 +445,62 @@ def test_high_formulation_with_a_real_penalty_remains_a_tradeoff_drag() -> None:
     ]
 
 
+def test_favorable_human_evidence_is_not_exported_as_a_tradeoff_drag() -> None:
+    from build_final_db import _build_v4_score_explanation
+
+    explanation = _build_v4_score_explanation({
+        "evidence": {
+            "score": 16.7,
+            "max": 20,
+            "reason": "Backed by strong human research.",
+            "evidence_result_state": "evaluated_applicable",
+            "display_state": "assessed",
+        },
+        "transparency": {
+            "score": 15,
+            "max": 15,
+            "reason": "The active ingredients are fully disclosed.",
+        },
+    })
+
+    assert explanation["drags"] == []
+
+
+def test_neutral_verification_with_a_quality_violation_remains_a_drag() -> None:
+    from build_final_db import _build_v4_score_explanation
+
+    explanation = _build_v4_score_explanation({
+        "verification": {
+            "score": 2,
+            "max": 15,
+            "reason": (
+                "Unknown: no independent verification on file; it gets neutral "
+                "credit, not a penalty; the maker has an open quality-system violation."
+            ),
+            "components": {
+                "fail_open_neutral": True,
+                "quality_system_violation_penalty": 4,
+            },
+        },
+    })
+
+    assert [row["pillar"] for row in explanation["drags"]] == ["verification"]
+
+
+def test_high_formulation_with_an_authored_limitation_remains_a_drag() -> None:
+    from build_final_db import _build_v4_score_explanation
+
+    explanation = _build_v4_score_explanation({
+        "formulation": {
+            "score": 17,
+            "max": 20,
+            "reason": "Molecular form is not disclosed on the label.",
+        },
+    }, {"dimensions": {"formulation": {"penalties": {}}}})
+
+    assert [row["pillar"] for row in explanation["drags"]] == ["formulation"]
+
+
 def test_certification_detail_gmp_carries_the_pillar_audited_decision() -> None:
     from build_final_db import _certification_gmp_detail
 

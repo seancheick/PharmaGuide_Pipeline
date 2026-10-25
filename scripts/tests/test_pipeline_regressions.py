@@ -4113,6 +4113,28 @@ def test_generic_coating_expansion_handles_nested_child_annotations():
     ]
 
 
+def test_single_child_structural_wrapper_expands_without_splitting_annotations():
+    normalizer = EnhancedDSLDNormalizer()
+    assert normalizer._expand_inactive_disclosure(
+        "capsule shell (hypromellose)"
+    ) == ["hypromellose"]
+
+
+def test_structural_wrapper_inside_an_inactive_header_form_expands():
+    normalizer = EnhancedDSLDNormalizer()
+    expanded = normalizer._expand_header_forms_for_processing(
+        {
+            "name": "Less than 2% of:",
+            "forms": [{"name": "Color (Annatto Extract [seed])"}],
+        },
+        source_path="inactiveIngredients[0]",
+    )
+    assert [row["name"] for row in expanded] == ["Annatto Extract [seed]"]
+    assert normalizer._display_ingredients_buffer[-1]["children"] == [
+        "Annatto Extract [seed]"
+    ]
+
+
 @pytest.mark.parametrize(
     "semantic_parenthetical",
     [

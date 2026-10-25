@@ -112,7 +112,7 @@ from scoring_v4.modules.fiber_digestive_helpers import (
     total_fiber_grams as _total_fiber_goal_grams,
 )
 from scoring_v4.modules.generic_formulation import _dietary_sugar_penalty_detail
-from scoring_v4.quality_score import shipped_whole_score
+from scoring_v4.quality_score import _reason_formulation, shipped_whole_score
 from score_supplements_v4 import SCORING_ENGINE_VERSION
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
@@ -6101,12 +6101,16 @@ def _build_v4_score_explanation(pillars: Any, module_breakdown: Any = None, pena
         # A completed nutrition-authority disposition is earned Evidence, not
         # a product drawback. Its exact scope remains visible in the pillar.
         if name == "evidence" and p.get("evidence_result_state") in {
-                "evaluated_authority", "authority_supported"}:
+                "evaluated_applicable", "evaluated_authority", "authority_supported"}:
             continue
         # Fail-open Verification is explicitly neutral by policy. Calling it a
         # drag contradicts both the score and the consumer reason.
-        if name == "verification" and safe_dict(p.get("components")).get(
-                "fail_open_neutral") is True:
+        verification_components = safe_dict(p.get("components"))
+        if (name == "verification"
+                and verification_components.get("fail_open_neutral") is True
+                and safe_float(
+                    verification_components.get("quality_system_violation_penalty"), 0
+                ) <= 0):
             continue
         if (name == "dose"
                 and safe_dict(safe_dict(p.get("explanation")).get("dose_receipt")).get("upper_reference")
@@ -6119,8 +6123,7 @@ def _build_v4_score_explanation(pillars: Any, module_breakdown: Any = None, pena
         # real module penalty as a consideration; otherwise the pillar detail
         # already explains the earned credit without mislabeling it a drag.
         if (name == "formulation"
-                and float(p.get("max") or 0) > 0
-                and float(p.get("score") or 0) / float(p.get("max")) >= 0.8
+                and p.get("reason") == _reason_formulation("high")
                 and not any(
                     safe_float(value, 0) < 0
                     for value in safe_dict(dim.get("penalties")).values()
