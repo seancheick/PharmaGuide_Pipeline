@@ -972,3 +972,14 @@ Public-paper summaries and source URLs are review evidence, not approved claims.
 - Local `measurement.json` SHA-256 `83892842db6ad4f82e017b9c16886fc60d2f84c76a8d43674429d36f4cad0970`.
 - Candidate source-vector SHA-256 `c13a189f8f5b4618a7433110c60a109ea3cd49181e68b317c026a6170f21dd12`;443runtime files rechecked against current source, zero differences. Capture meta retains baselineHEAD because capture preceded commits; file-content vector binds actual candidate.
 - Superseded305raw captures were byte-checked against final350capture and removed as exact duplicates; final capture, frozen manifests, baseline/candidate records, research and unique inputs retained. Private submissions and unrelatedSupabase work untouched.
+
+
+## October25 — returned A001–A148 response verification
+
+Original response is explicitly AI-assisted research, not an attributable Dr.Pham acceptance. All148rows checked against the original request/records and retained primary evidence; no comprehensive new148-paper full-text review claimed. [Per-item findings and corrected end blocks](A_RESPONSE_VERIFICATION_20261025.md).148unique numbers,146exactkeys plus2recovered; no2020–2026-only inclusionrule in request/owners.38age-restricted dispositions were not imported; A122availability is separate. Existing147sourceownerchecks still0complete andallcontextsmissing.
+
+A011: complete official PMC indexed correctionbody now inspected despite directopen challenge. Retrospective2024-04-15registration ISRCTN14728094, author-statedunchangedprotocol andAIDPcommission/funding/patent/paidrelationship disclosures confirmed. This supersedes only the old correction-content accessgap, not studyqualification/approval. [Primary correction](https://pmc.ncbi.nlm.nih.gov/articles/PMC12190206/).
+
+A090: primary22909270confirmsbisglycinate identity. Additional2025sleep source40918053/PMC12412596 identified; source methods, endpoints, relevantresults, funding/disclosures inspected. Report records a small subjective sleep finding with exact magnesium/glycine co-exposure; no efficacy threshold, exactproductapproval or registrychange. [Primary study](https://pmc.ncbi.nlm.nih.gov/articles/PMC12412596/). A063abstract supports2caps/day400mgformula, not verifiedBIDtiming. PQQactualcorrectedTable4remainsunread. A146–A148full original sourceblocks existed allalong and are restored in the shortreport.
+
+Three independent research slices cover50+50+48items; parent verified new substantive assertions and reconciliation. NCCIH/ODS generalcautions checked directly; CDCfolicacidguidancechecked, directACOGaccessunavailable/notmisattributed. ExistingCSV155rows/frozenIDs preserved; addedresponse receipt fields andpartialMagteincorrectioninspection only. No approval/completenessfields changed. Documentation/reportonly: no pytest/CI or pipeline rerun. Raw signedattachmentURLs notcommitted; original unchanged andhashbound.

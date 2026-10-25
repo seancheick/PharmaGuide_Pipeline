@@ -68,7 +68,9 @@ inventory-only clinical records were read; still-applicable prior bound packets 
 Of the 349 clinical publications, 181 have PMC identifiers; 157 full-text bodies were retrieved,
 24 indexed bodies unavailable, 168 have no PMC identifier. Retrieval is not full-text assessment,
 risk-of-bias review or trial-family deduplication. Publisher access is not exhausted. Magtein
-correction 40567408 and PQQ corrected Table 4 remain explicit content gaps. The 5-MTHF correction
+correction40567408 content was independently inspected on October25; its registration and
+competing-interest disclosure gap is closed. PQQ correctedTable4 remains an explicit content gap.
+Neither finding completes the missing source contexts or product applicability. The 5-MTHF correction
 39083531 changes red-cell to whole-blood folate; current registry has no conflicting numeric RBC
 claim. Inositol correction 39208274 adds dataset attribution. No replacement benefit grade follows.
 
@@ -126,3 +128,7 @@ The standalone Dr.Pham message also includes all146existing generic citation fla
 Final independent bounded technical review of the completed runtime found no concrete remaining blocker. All443capture source bindings match;19suppressed controls retain release treatment. The final forwardable document coverage is148Aitems/506Bsubjects/171Csamplecases/146Dsource flags,36NCTidentifiers; source decisions and actual-use triage remain explicitly separate.
 
 Integration verified: `d7e8e6954` and qualified candidate `3b9a3f37ed9a37f051cc0dedf05f278d0b77aad7` are contained in fetched `origin/main`. Main source/data/tests match the green checkpoint; intervening changes are review documents only. Whole-fastCI40119008766 passed23,844tests/192declaredskips; local546/24declaredskips passed. No duplicate checkpoint is required for this documentation-only integration note. Scientific pre-rebuild and post-rebuild release gates remain BLOCKED. Unrelated concurrent private-submission and submission-import-test working edits were preserved and not included in this verified batch.
+
+## October25 returned A-response verification
+
+[Complete148-item independent check](A_RESPONSE_VERIFICATION_20261025.md):148responses received,146keys matched directly and2missingkeys recovered;A146–A148originalsourceblocks restored. A011correction-content inspection closed only;A090historicalbisglycinate identity confirmed, with additional2025sleep source40918053 supplied for scoped review—not activated.38unsupported date-restricted dispositions not adopted.19limited-support rows do not establish product/source approval. Current147ownerchecks remain0complete/missingcontexts147. ExistingCSV records response receipt and narrow source verification without changing clinical closure/approval fields. No code, curatedruntime data, scoring, pipeline, release or publication change. B/C/Dandfullcorpus/app gates unchanged.
