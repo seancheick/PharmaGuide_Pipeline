@@ -2995,7 +2995,7 @@ This list uses the final bounded replay for the original238 products.171 still h
 
 | C003 [855](https://api.ods.od.nih.gov/dsld/s3/pdf/855.pdf) Oil Of Oregano | No remaining identity limitation in this replay. | Quantity/form/unit or component exposure remains unresolved; confirm only source-supported values. | Decision / missing fact: ____ |
 
-| C004 [8958](https://api.ods.od.nih.gov/dsld/s3/pdf/8958.pdf) Vitamin E 800 IU Supplement | No remaining identity limitation in this replay. | vitamin_e / unknown_vitamin_form / IU | Decision / missing fact: ____ |
+| C004 [8958](https://api.ods.od.nih.gov/dsld/s3/pdf/8958.pdf) Vitamin E 800 IU Supplement | No remaining identity limitation in this replay. | vitamin_e / unknown_vitamin_form / IU | Batch 9: exact source reconfirmed; natural d-alpha form and 536–1072 mg/day already implemented. Owner/export regression passed; over-UL caution retained, no new efficacy approval. Source/replay finding; no rebuilt-product closure. |
 
 | C005 [12144](https://api.ods.od.nih.gov/dsld/s3/pdf/12144.pdf) TripleFlex | Source identity/preparation is not fully assessable; verify exact printed material. | No remaining dose limitation in this replay. | Decision / missing fact: ____ |
 
@@ -3059,13 +3059,13 @@ This list uses the final bounded replay for the original238 products.171 still h
 
 | C035 [66513](https://api.ods.od.nih.gov/dsld/s3/pdf/66513.pdf) Completia Prenatal Multi-Vitamin | Manganese: Manganese Bisglycinate Sulfate Chelate | No remaining dose limitation in this replay. | Decision / missing fact: ____ |
 
-| C036 [66984](https://api.ods.od.nih.gov/dsld/s3/pdf/66984.pdf) Bulk 1340 Vanilla | No remaining identity limitation in this replay. | vitamin_a / unknown_vitamin_form / IU | Decision / missing fact: ____ |
+| C036 [66984](https://api.ods.od.nih.gov/dsld/s3/pdf/66984.pdf) Bulk 1340 Vanilla | No remaining identity limitation in this replay. | vitamin_a / unknown_vitamin_form / IU | Exact 66984 image names natural beta-carotene; powder 5000 IU vs milk 6390, one or two 360 g servings/day. Current A selection correct. Legacy RAE/source-allocation limitation remains; source description needs reconciliation. Source/replay finding; no rebuilt-product closure. |
 
-| C037 [67030](https://api.ods.od.nih.gov/dsld/s3/pdf/67030.pdf) Ultra Mega Green Men's Energy & Metabolism | No remaining identity limitation in this replay. | vitamin_a / unknown_vitamin_form / UI | Decision / missing fact: ____ |
+| C037 [67030](https://api.ods.od.nih.gov/dsld/s3/pdf/67030.pdf) Ultra Mega Green Men's Energy & Metabolism | No remaining identity limitation in this replay. | vitamin_a / unknown_vitamin_form / UI | Exact 67030 prints 5000 IU (API UI) and beta-carotene/vitamin A palmitate. Unit/source-class correction supported; one full pack/day, multivitamin portion two light-green caplets. Shares/conversion unresolved; runtime correction pending. Source/replay finding; no rebuilt-product closure. |
 
-| C038 [69584](https://api.ods.od.nih.gov/dsld/s3/pdf/69584.pdf) Bulk 1340 Strawberries & Cream | No remaining identity limitation in this replay. | vitamin_a / unknown_vitamin_form / IU | Decision / missing fact: ____ |
+| C038 [69584](https://api.ods.od.nih.gov/dsld/s3/pdf/69584.pdf) Bulk 1340 Strawberries & Cream | No remaining identity limitation in this replay. | vitamin_a / unknown_vitamin_form / IU | Exact 69584: powder 5000 IU vs milk 6390, one or two 360 g servings/day; natural beta-carotene named. Runtime selects milk value: correction pending. Legacy conversion/allocation remains unresolved. Source/replay finding; no rebuilt-product closure. |
 
-| C039 [69613](https://api.ods.od.nih.gov/dsld/s3/pdf/69613.pdf) Bulk 1340 Double Chocolate | No remaining identity limitation in this replay. | vitamin_a / unknown_vitamin_form / IU | Decision / missing fact: ____ |
+| C039 [69613](https://api.ods.od.nih.gov/dsld/s3/pdf/69613.pdf) Bulk 1340 Double Chocolate | No remaining identity limitation in this replay. | vitamin_a / unknown_vitamin_form / IU | Exact 69613 independently confirms powder 5000 IU vs milk 6390, one or two 360 g servings/day; natural beta-carotene named. Runtime selects milk value; retain specific legacy conversion/allocation limit. Source/replay finding; no rebuilt-product closure. |
 
 | C040 [78327](https://api.ods.od.nih.gov/dsld/s3/pdf/78327.pdf) Ultra Mega Green Active Berry | N-Acetyl-L-Cystine | No remaining dose limitation in this replay. | Decision / missing fact: ____ |
 
@@ -3101,11 +3101,11 @@ This list uses the final bounded replay for the original238 products.171 still h
 
 | C056 [241290](https://api.ods.od.nih.gov/dsld/s3/pdf/241290.pdf) Lovely Legs | Diosmin: Citrus Bioflavonoid Complex | No remaining dose limitation in this replay. | Decision / missing fact: ____ |
 
-| C057 [243776](https://api.ods.od.nih.gov/dsld/s3/pdf/243776.pdf) Bulk 1340 Vanilla Ice Cream | No remaining identity limitation in this replay. | vitamin_a / unknown_vitamin_form / IU | Decision / missing fact: ____ |
+| C057 [243776](https://api.ods.od.nih.gov/dsld/s3/pdf/243776.pdf) Bulk 1340 Vanilla Ice Cream | No remaining identity limitation in this replay. | vitamin_a / unknown_vitamin_form / IU | Exact 243776 independently confirms powder 5000 IU vs milk 6390, one or two 360 g servings/day; natural beta-carotene named. Runtime column correction pending; no invented RAE/preformed amount. Source/replay finding; no rebuilt-product closure. |
 
-| C058 [243812](https://api.ods.od.nih.gov/dsld/s3/pdf/243812.pdf) Bulk 1340 Double Chocolate | No remaining identity limitation in this replay. | vitamin_a / mixed_vitamin_a_preformed_fraction_unknown / mcg | Decision / missing fact: ____ |
+| C058 [243812](https://api.ods.od.nih.gov/dsld/s3/pdf/243812.pdf) Bulk 1340 Double Chocolate | No remaining identity limitation in this replay. | vitamin_a / mixed_vitamin_a_preformed_fraction_unknown / mcg | Exact 243812: modern powder 3000 mcg activity vs milk 3417, one or two servings/day =3000–6000 mcg RAE/day. Total usable; preformed share unknown. Runtime selects milk value; correction pending. Source/replay finding; no rebuilt-product closure. |
 
-| C059 [243815](https://api.ods.od.nih.gov/dsld/s3/pdf/243815.pdf) Bulk 1340 Vanilla Ice Cream | No remaining identity limitation in this replay. | vitamin_a / mixed_vitamin_a_preformed_fraction_unknown / mcg | Decision / missing fact: ____ |
+| C059 [243815](https://api.ods.od.nih.gov/dsld/s3/pdf/243815.pdf) Bulk 1340 Vanilla Ice Cream | No remaining identity limitation in this replay. | vitamin_a / mixed_vitamin_a_preformed_fraction_unknown / mcg | Exact 243815: powder 3000 mcg activity vs milk 3417, one or two servings/day. Runtime selects milk value and falls back to one daily; both corrections pending. No guessed preformed share. Source/replay finding; no rebuilt-product closure. |
 
 | C060 [246350](https://api.ods.od.nih.gov/dsld/s3/pdf/246350.pdf) Metabolic Xtra | Zychrome Chromium: Chromium Dinicocysteinate | No remaining dose limitation in this replay. | Decision / missing fact: ____ |
 
@@ -3193,7 +3193,7 @@ This list uses the final bounded replay for the original238 products.171 still h
 
 | C102 [287389](https://api.ods.od.nih.gov/dsld/s3/pdf/287389.pdf) Brain Reset | Virtiva: Ginkgo-Phosphatidylserine Phytosome; Butcher's Broom Root Extract: Ruscus aculeatus Root Extract | No remaining dose limitation in this replay. | Decision / missing fact: ____ |
 
-| C103 [293269](https://api.ods.od.nih.gov/dsld/s3/pdf/293269.pdf) CoQ10 100 mg | Vitamin A: Mixed Carotenoids | No remaining dose limitation in this replay. | Decision / missing fact: ____ |
+| C103 [293269](https://api.ods.od.nih.gov/dsld/s3/pdf/293269.pdf) CoQ10 100 mg | Vitamin A: Mixed Carotenoids | No remaining dose limitation in this replay. | Exact 293269: beta-carotene as mixed carotenoids, 700 mcg activity per daily softgel. Runtime daily total correct; other carotenoid shares/masses remain unknown, no added efficacy approval. Source/replay finding; no rebuilt-product closure. |
 
 | C104 [294296](https://api.ods.od.nih.gov/dsld/s3/pdf/294296.pdf) Wild Cherry Extract | Wild Cherry Fruit Extract, Powder: Prunus avium Fruit Extract, Powder | No remaining dose limitation in this replay. | Decision / missing fact: ____ |
 
@@ -3221,7 +3221,7 @@ This list uses the final bounded replay for the original238 products.171 still h
 
 | C116 [306350](https://api.ods.od.nih.gov/dsld/s3/pdf/306350.pdf) Marine Collagen Unflavored | Source identity/preparation is not fully assessable; verify exact printed material. | No remaining dose limitation in this replay. | Decision / missing fact: ____ |
 
-| C117 [308692](https://api.ods.od.nih.gov/dsld/s3/pdf/308692.pdf) Bulk 1340 Cookies & Cream | No remaining identity limitation in this replay. | vitamin_a / unknown_vitamin_form / mcg RAE | Decision / missing fact: ____ |
+| C117 [308692](https://api.ods.od.nih.gov/dsld/s3/pdf/308692.pdf) Bulk 1340 Cookies & Cream | No remaining identity limitation in this replay. | vitamin_a / unknown_vitamin_form / mcg RAE | Exact 308692: powder 1500 mcg RAE vs milk 1708, six scoops/360 g, one or two daily. Runtime selects milk value; correction pending. Preserve known total separately from unknown preformed contribution. Source/replay finding; no rebuilt-product closure. |
 
 | C118 [311132](https://api.ods.od.nih.gov/dsld/s3/pdf/311132.pdf) Oat Straw Extract (Avena Sativa) | Oat Straw Extract: Oat Seed Extract | No remaining dose limitation in this replay. | Decision / missing fact: ____ |
 
@@ -3279,7 +3279,7 @@ This list uses the final bounded replay for the original238 products.171 still h
 
 | C145 [312947](https://api.ods.od.nih.gov/dsld/s3/pdf/312947.pdf) Psyllium Husk 1400 mg Veg Capsules | Psyllium: Plantago Asiatica | No remaining dose limitation in this replay. | Decision / missing fact: ____ |
 
-| C146 [315322](https://api.ods.od.nih.gov/dsld/s3/pdf/315322.pdf) Bulk 1340 Cookies & Cream | No remaining identity limitation in this replay. | vitamin_a / unknown_vitamin_form / mcg RAE | Decision / missing fact: ____ |
+| C146 [315322](https://api.ods.od.nih.gov/dsld/s3/pdf/315322.pdf) Bulk 1340 Cookies & Cream | No remaining identity limitation in this replay. | vitamin_a / unknown_vitamin_form / mcg RAE | Exact 315322: powder 1500 mcg RAE vs milk 1708, six scoops/360 g, one or two daily. Runtime A total/range correct; source explanation must retain printed beta-carotene without invented allocation. Source/replay finding; no rebuilt-product closure. |
 
 | C147 [315586](https://api.ods.od.nih.gov/dsld/s3/pdf/315586.pdf) Adrenal Support | Source identity/preparation is not fully assessable; verify exact printed material. | No remaining dose limitation in this replay. | Decision / missing fact: ____ |
 
@@ -3289,17 +3289,17 @@ This list uses the final bounded replay for the original238 products.171 still h
 
 | C150 [323080](https://api.ods.od.nih.gov/dsld/s3/pdf/323080.pdf) Catalyte Lemon Lime Flavored Electrolytes | Magnesium: Albion Magnesium Lysinate Glycinate Chelate | No remaining dose limitation in this replay. | Exact323080PDFverified:40mgMgperscoop,Albionlysinate-glycinate,withinelectrolyteformula;noisolated-form claim. Source facts only; not runtime/rebuilt clearance. |
 
-| C151 [328127](https://api.ods.od.nih.gov/dsld/s3/pdf/328127.pdf) Blood Sugar Manager | Vitamin A: Mixed Carotenoids | No remaining dose limitation in this replay. | Decision / missing fact: ____ |
+| C151 [328127](https://api.ods.od.nih.gov/dsld/s3/pdf/328127.pdf) Blood Sugar Manager | Vitamin A: Mixed Carotenoids | No remaining dose limitation in this replay. | Exact 328127: 450 mcg vitamin A per three capsules twice daily =900 mcg RAE/day, beta-carotene from mixed carotenoids. Runtime cadence/total correct; retain label exclusions and glucose monitoring. Source/replay finding; no rebuilt-product closure. |
 
 | C152 [328434](https://api.ods.od.nih.gov/dsld/s3/pdf/328434.pdf) Dopa-Mind | Neuravena: Wild Green Oat Aerial Parts Extract | No remaining dose limitation in this replay. | Decision / missing fact: ____ |
 
 | C153 [328465](https://api.ods.od.nih.gov/dsld/s3/pdf/328465.pdf) Ginseng Energy Boost | GS15-4: Asian Ginseng Root Extract, Fermented | No remaining dose limitation in this replay. | Decision / missing fact: ____ |
 
-| C154 [328639](https://api.ods.od.nih.gov/dsld/s3/pdf/328639.pdf) Plant-Based Multivitamin | Vitamin A: Mixed Carotenoids | No remaining dose limitation in this replay. | Decision / missing fact: ____ |
+| C154 [328639](https://api.ods.od.nih.gov/dsld/s3/pdf/328639.pdf) Plant-Based Multivitamin | Vitamin A: Mixed Carotenoids | No remaining dose limitation in this replay. | Exact 328639: palm fruit mixed carotenoids plus beta-carotene, declared RAE basis, 900 mcg/day. Runtime total usable; Food Complex 1400 mg not carotenoid dose; no invented source shares or exact retinol. Source/replay finding; no rebuilt-product closure. |
 
 | C155 [328649](https://api.ods.od.nih.gov/dsld/s3/pdf/328649.pdf) Reishi Extract Mushroom Complex | Reishi Mushroom, Shell-Broken: Ganoderma lucidum, Shell-Broken | No remaining dose limitation in this replay. | Decision / missing fact: ____ |
 
-| C156 [328753](https://api.ods.od.nih.gov/dsld/s3/pdf/328753.pdf) Two-Per-Day Capsules | No remaining identity limitation in this replay. | vitamin_a / mixed_vitamin_a_preformed_fraction_unknown / mcg RAE | Decision / missing fact: ____ |
+| C156 [328753](https://api.ods.od.nih.gov/dsld/s3/pdf/328753.pdf) Two-Per-Day Capsules | No remaining identity limitation in this replay. | vitamin_a / mixed_vitamin_a_preformed_fraction_unknown / mcg RAE | Exact 328753 two-capsule panel/daily directions support 1500 mcg RAE/day. API one-capsule basis doubles current owner result to3000. All27 active-row bases require reconciliation; acetate fraction remains undisclosed. Runtime correction pending. Source/replay finding; no rebuilt-product closure. |
 
 | C157 [328818](https://api.ods.od.nih.gov/dsld/s3/pdf/328818.pdf) Amino Complex Berry Flavored | L-Cystine | No remaining dose limitation in this replay. | Decision / missing fact: ____ |
 
