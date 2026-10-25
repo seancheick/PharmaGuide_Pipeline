@@ -56,7 +56,7 @@
     },
     "v6_migration_status": "PHASE 1: contract metadata + green_coffee_bean tutorial entry landed 2026-05-22. green_coffee_bean is the first entry annotated with the new schema fields; plain aliases retained for runtime matching while the meets_threshold gate continues to govern bonus eligibility. Remaining priority entries per audit: bladderwrack/brown_kelp, boswellia, bilberry, ginger_extract, nettle, rhodiola, grape_seed, cordyceps, turkey_tail, sea_buckthorn, turmeric. Each ships as its own 1-entry batch with shadow-score comparison.",
     "schema_version": "5.0.1",
-    "last_updated": "2026-10-19",
+    "last_updated": "2026-10-25",
     "total_entries": 180,
     "scoring_rule": "Botanicals with min_threshold are scored higher when meeting standardization requirements. Priority level affects matching weight. After v6 migration: only entries with bonus_eligible=true (and a valid standardization_basis) are intended to trigger the A5b bonus; the runtime meets_threshold gate is the authoritative enforcement.",
     "required_fields": [
@@ -5630,7 +5630,7 @@
         "ferric pyrophosphate"
       ],
       "priority": "medium",
-      "last_updated": "2026-05-22",
+      "last_updated": "2026-10-25",
       "id": "sunactive_iron",
       "notes": "SunActive Iron is a branded micronized ferric-pyrophosphate preparation, dosed by elemental iron mass. PMID 19674817 is unrelated and cannot establish improved absorption or tolerability. Comparative preparation-specific claims remain unresolved.",
       "category": "mineral",
@@ -5650,7 +5650,7 @@
       ],
       "bonus_rationale": "Preparation-specific source content does not yet establish the asserted standardization guarantee; bonus eligibility held. Brand/ingredient identity retained, with independently verified IQM form evidence assessed by its own owner.",
       "sources": [
-        "https://pubmed.ncbi.nlm.nih.gov/19674817/",
+        "Rejected attribution: https://pubmed.ncbi.nlm.nih.gov/19674817/ (synthetic-compound mouse CNS study; not SunActive iron bioavailability).",
         "https://www.taiyokagaku.com/en/"
       ]
     },

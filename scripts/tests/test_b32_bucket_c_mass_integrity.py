@@ -80,7 +80,9 @@ def test_b32_value_in_band(iqm, pid, fname, vmin, vmax, basis):
     form = iqm[pid]['forms'].get(fname)
     assert form is not None, f'{pid}::{fname} missing'
     reviewed_unknown = {'l-theanine (unspecified)': ['34562208', 'mouse pharmacokinetics'],
-     'coq10 (unspecified)': ['carrier preparation are unspecified']}
+     'coq10 (unspecified)': ['carrier preparation are unspecified'],
+     # Source-content review: class assignment was not a human measurement.
+     "devil's claw (unspecified)": ['not an established human measurement', 'absolute absorption remains unknown']}
     if fname in reviewed_unknown:
         assert form['absorption_structured'] == dict(value=None, range_low=None, range_high=None, quality='unknown')
         for source_limit in reviewed_unknown[fname]:

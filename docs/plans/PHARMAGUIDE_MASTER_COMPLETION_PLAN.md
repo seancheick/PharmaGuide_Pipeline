@@ -1,5 +1,12 @@
 # PharmaGuide master completion plan
 
+### Batch11 exact-source continuation — October25
+
+- [x] Implement ten exact-label source-bound repairs and fractional daily counts; reconcile NR/devil-claw unsupported absorption fields through existing IQM, retaining grades/holds. Bounded18-label replay and352named owner/data tests verified; independent review found no production defect.
+- [ ] Complete local/exact-source CI qualification and coordinated main integration; reconcile remaining later63-case/D-citation findings and required scientific decisions. Full corpus/export/app verification remains pending; no pipeline rerun in this batch.
+
+Owner: existing normalizer, curated label/IQM/clinical/botanical owners — evidence: [consolidated verification](../../scripts/audits/literature_records_review_20261020/BRYAN_BATCH_RESPONSE_VERIFICATION_20261025.md). Will NOT create another scoring/completion system or approval.
+
 ### Branded preparation integrity — October 24
 
 - [x] Source-review all165priority records/163products and group all2,839flagged products/5,796saved blend records, with unchanged content manifests.

@@ -4,7 +4,43 @@ October 25, 2026. **Batch 1's supported decisions and remaining holds are approv
 
 Owner Check: existing `clinical_review_holds.csv` and `benchmark_review_backlog.csv` are the execution reports; `clinical_applicability.py::assess_clinical_source_review` and `probiotic_measurements.py::context_accepted_for_scoring` remain runtime owners. Evidence: current owners, request sections, exact response keys and primary API/full-text sources inspected. Will NOT create another clinical authority, scorer, completion registry, grade, dose curve or approval timestamp.
 
-This is documentation/report work only. No curated runtime clinical facts, eligibility flags, source contexts, scores or public fields changed. Frozen register fields and closure states remain intact. Source facts checked below are not automatically product-level clearances.
+The original review sections were documentation/report work only. Later runtime implementation checkpoints are identified separately below; source dispositions alone do not establish rebuilt closure. Frozen register fields and closure states remain intact. Source facts checked below are not automatically product-level clearances.
+
+
+## Batch 11 source corrections and later-report intake — October 25
+
+**Implemented and bounded-verified; integration and rebuilt closure pending.** Baseline `585d19f7ff50bf54a94eeb9d95996c6bfe74235a`; isolated branch `codex/batch11-source-corrections`. The new summary attachment is an intake report, not proof that all its later findings exist in current runtime or that the full171C/146D review is closed. It is pinned to older `ebc792e8`; previously integrated batches must not be counted as newly unfixed.
+
+Owner: `enhanced_normalizer.py::_apply_label_corrections/_process_serving_sizes`, existing product-label corrections, IQM absorption fields, and canonical clinical/botanical registries — evidence: exact source image/API receipts, ten source-content bindings, named regressions and18 frozen raw Clean→Enrich→Score→blob replays. Will NOT create another normalizer, registry, scorer, approval, public field or clinical policy.
+
+| Exact source / record | Implemented disposition |
+|---|---|
+|270233 NADH|20mg reduced NADH disodium-salt source replaces erroneous2mg/disodium-phosphate transcription; no invented identifier or ENADA equivalence.|
+|62816 iodine|Image-bound25mcg correction with25–50mcg/day preserved. Baseline already numerically corrected by existing generic owner; this is explicit source provenance.|
+|231826 InSea2|125mg belongs to named preparation; heading remains unquantified. No invented species/polyphenol allocation.|
+|315691 potassium iodide|130mg compound per two tablets; preserve emergency/age/duration/consultation restrictions, no nutritional benchmark.|
+|252842/254473/254474/254475 citrate|1/3tbsp annotation,3g and600mg elemental sodium unchanged.|
+|269689 magnesium|Two-scoop Facts basis,0.5–1 Facts servings/day yields200–400mg/day. Fractional daily counts survive cleaning.|
+|287389 Virtiva|Restore literal ginkgo-leaf/sunflower-phospholipid composition. Original BRT6 V2 prints5%ginkgoflavonglucosides and12%PS: nominal6mg/14.4mg within120mg complex. Latest summary's6% is rejected. No component allocation or preparation approval; remains not_scored.|
+|Niagen/unspecified NR, three devil's-claw forms|Remove unsupported human absolute absorption percentages/ranges using existing unknown/null convention; preserve all bio_score values. Correct Trammell attribution to27721479 and qualify Loew11372004 marker PK. EMA report supports traditional use, not claimed well-established efficacy.|
+|Theracurmin|46randomized/40analyzed body distinction; no new enrollment aggregate, grade or approval. Main-paper access resolved, remaining appraisal/product correspondence held.|
+|SunActive|Bare wrong-topic19674817 explicitly marked rejected provenance; bonus remains excluded.|
+
+Fail-first evidence: original source nodes8failed/2passed; fractional count failed separately; later Virtiva composition failed; seven IQM regressions failed before the corresponding changes. Final named owner/data slice352passed; additional magnesium safety-ceiling assertion passes. A self-review also reproduced and fixed non-finite daily-count leakage introduced by the fractional helper (two failing cases before repair); final32-node defect file passes. All10label,2IQM,1clinical and1botanical entry sets pass `data_batch.py check` without extra changes.
+
+Live changed-entry verifier:27721479/11372004 match;19674817 still correctly mismatches SunActive. Existing unchanged citation backlog identifies that rejected reference. Baseline-aware result:0new mismatches/0unresolved,1known mismatch. This is not approval of SunActive efficacy or a claim that every citation in the corpus passes.
+
+Eighteen frozen raw replays: NADH270233 becomes scored76.1 after its false identity limitation resolves. Three initial controls188790/25501/66513 unchanged; all six later scored artifacts are semantically identical (Niagen182475/182477, devil's-claw213485/251548/210639, Virtiva287389). No product safety-status change or observed lost clinical warning. Magnesium269689 changes minimum dose400→200mg, minimum UL exceedance becomes false, and dose treatment becomes deduction2 instead of cap10; maximum400mg, over-UL flag and caution remain. NADH exposure2→20mg is an intentional source correction. These changes must not be summarized as every safety-related field unchanged.
+
+Independent fresh-context read-only review found no production defect and requested the added magnesium ceiling/caution assertions. Local passes546/24declared opt-in skips (skip guard green). First isolated local attempt failed missing-artifact skip guard; existing preserved paths were exposed,100affected checks passed, then the combined local checkpoint passed. CI40228636370 failed two historical numerical expectations (B32/B34), reproduced as2failures; exact reviewed-unknown expectations were corrected without changing runtime data back to fabricated fractions.79affected tests pass. Replacement whole-fast CI and integration remain pending; no full corpus, app import or publication. Original receipt baseline/candidate hashes and full records are retained in `.claude/state/bryan_batch_11_20261025/` in the primary checkout; current derived deltas in the isolated handoff directory.
+
+### What the latest summary does not close
+
+- Later exact-label findings312832,330191,330664,328649,43662,277705,312947,285637,268493 and other63-case entries require per-entry current-owner/source verification and implementation as applicable. Known totals must remain usable; unknown fractions must not be invented.
+- D031/D035, remaining additive study-type/substance/mixture explanations, D144 attribution and omega3/niacin eligibility/floors require their actual owner correction and consumer measurements. No automatic replacement dose threshold or new eligibility field is authorized.
+- D011/D139 source-access completion is reported externally; retain appraisal boundaries until source bodies/receipts are independently inspected. D135 quantitative context and corrected PQQTable4 remain unavailable here.
+- All genuine manufacturer unit/activity conflicts, archived preparation correspondence and specifically required approval holds remain explicit. Populated response cells are not equivalent to scientific or rebuilt closure.
+- The complete marked171C/146D report was located via its Library link but could not be retrieved through the unauthenticated browser. This pasted summary does not contain the full case rows or63hashed receipt pairs; their reconciliation is not certified.
 
 ## Runtime correction batch — implemented October 25
 
@@ -327,3 +363,7 @@ Final five-label capture source fingerprints exactly match the committed runtime
 Authoritative retained receipts: `.claude/state/bryan_batch_10_20261025/` source bodies/hash receipts,frozenmanifest,baselinecapture,final_qualified_candidate/meta/records,final_qualified_delta,final_qualified_movement_summary,final_committed_binding,final_safety_target_parity,final_local.log,final_ci_watch.log. Superseded reproducible archive and duplicate intermediate capture removed after hash equivalence checks; unique source inputs retained. This final receipt changes documentation only relative to the green source. Main integration is authorized; no duplicate CI wait is required for identical runtime plus this receipt.
 
 Source findings are verified and confirmed engineering corrections are implemented/qualified. This is not scientific approval of unresolved preparation grades, whole-corpus rebuilt closure or actual Flutter rendering. No full pipeline, app import or release ran. Those existing downstream/source-review gates remain explicit.
+
+### Later exact-label receipt collection
+
+Nine additional exact NIH API/PDF pairs are independently gathered and visually inspected by receipt agents:312832,330191,330664,328649,43662,277705,312947,285637,268493. Their unchanged originals, hashes, individual findings and image paths are retained under the existing Batch11 receipt root in `batch12_sources_a/` and `batch12_sources_b/`. These are source hypotheses pending main-model inspection and implementation, not closed products. Two existing-owner limitations are identified: source-bound statement replacement and reviewed cross-parent movement of nested rows. Preserve source conflicts and all safety warnings; do not invent missing component amounts or make modern editions repair archived ones.

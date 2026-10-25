@@ -10092,6 +10092,14 @@ class EnhancedDSLDNormalizer:
     def _process_serving_sizes(self, serving_sizes: List[Dict]) -> List[Dict]:
         """Process serving size information"""
         processed = []
+
+        def daily_count(value):
+            # A half Facts serving per day is a real regimen, not zero.
+            # Keep integer representations stable for existing whole counts.
+            number = self._safe_float(value)
+            if not math.isfinite(number):
+                return 0
+            return int(number) if number.is_integer() else number
         
         for serving in serving_sizes:
             raw_min_qty = serving.get("minQuantity")
@@ -10113,9 +10121,9 @@ class EnhancedDSLDNormalizer:
                 "unit": serving.get("unit", "serving"),
                 "notes": serving.get("notes", ""),
                 "minDailyServings": (None if raw_min_daily is None and daily_from_label else
-                                     self._safe_int(raw_min_daily if raw_min_daily is not None else DEFAULT_DAILY_SERVINGS)),
+                                     daily_count(raw_min_daily if raw_min_daily is not None else DEFAULT_DAILY_SERVINGS)),
                 "maxDailyServings": (None if raw_max_daily is None and daily_from_label else
-                                     self._safe_int(raw_max_daily if raw_max_daily is not None else DEFAULT_DAILY_SERVINGS)),
+                                     daily_count(raw_max_daily if raw_max_daily is not None else DEFAULT_DAILY_SERVINGS)),
                 "normalizedServing": max_qty,  # Use max as normalized
                 "servingQuantitySource": "label" if qty_from_label else "default",
                 "dailyServingsSource": "label" if daily_from_label else "default",

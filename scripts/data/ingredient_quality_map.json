@@ -53,7 +53,7 @@
       "vitamins": 25
     },
     "schema_version": "5.6.1",
-    "last_updated": "2026-10-24",
+    "last_updated": "2026-10-25",
     "pipeline_integration": "Used by enrichment to assign form quality (bio_score) to matched ingredient forms. Match ingredient name against forms aliases (case-insensitive).",
     "matching_notes": [
       "Match ingredient name + forms text against aliases array (case-insensitive)",
@@ -39504,13 +39504,13 @@
     "forms": {
       "niagen (nicotinamide riboside chloride)": {
         "bio_score": 13,
-        "absorption": "excellent (85-90%)",
+        "absorption": "unknown",
         "consumer_note": "Niagen is a branded nicotinamide riboside chloride ingredient. It is a niacin-related compound distinct from nicotinamide and nicotinic acid.",
         "consumer_note_review": {
           "by": "Product owner approval",
           "date": "2026-08-08"
         },
-        "notes": "Patented, highly pure form of nicotinamide riboside chloride by ChromaDex (TruNiagen). The most clinically studied NR form with multiple human trials showing dose-dependent NAD+ elevation. Trammell 2016 (PMID:27720903) demonstrated 142% NAD+ increase at 1000 mg. However, like all oral NR, most is converted to nicotinic acid by gut microbiota before contributing to NAD+ synthesis via Preiss-Handler pathway (Science Advances 2024). High inter-individual variability in NR blood levels (PMC5718430).",
+        "notes": "Branded nicotinamide riboside chloride. Trammell 2016 (PMID 27721479; PMC5062546) reports human blood NAD+ metabolome responses to single oral doses of 100, 300 and 1000 mg, not an absolute human absorption percentage or a general clinical-benefit threshold. The previously linked erythroblast paper is unrelated to this claim. PMC5718430 reports variable responses in a small open-label dose-escalation study. These findings do not establish the previously claimed absorption fraction or fixed percentage increase. Human absolute absorption remains unestablished here; no clinical approval or form-quality grade is changed by this source repair.",
         "aliases": [
           "nr",
           "niagen",
@@ -39531,10 +39531,10 @@
         ],
         "dosage_importance": 0.5,
         "absorption_structured": {
-          "value": 0.5,
-          "range_low": 0.35,
-          "range_high": 0.65,
-          "quality": "variable"
+          "value": null,
+          "range_low": null,
+          "range_high": null,
+          "quality": "unknown"
         }
       },
       "nicotinamide riboside (unspecified)": {
@@ -39545,17 +39545,17 @@
           "by": "Product owner approval",
           "date": "2026-08-08"
         },
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability. B34 audit 2026-04-25: bulk class-application (unknown w/ bio=5 → low) — mechanical mapping from absorption + bio_score.",
+        "notes": "Salt, brand and delivery formulation are unspecified. Human absolute absorption fraction is not established by the retained sources. The previous numeric class estimate was not a measured human result; retain unknown absorption without inventing a replacement value.",
         "aliases": [
           "nicotinamide riboside",
           "niagen generic"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": 0.2,
-          "range_low": 0.1,
-          "range_high": 0.3,
-          "quality": "low"
+          "value": null,
+          "range_low": null,
+          "range_high": null,
+          "quality": "unknown"
         }
       }
     },
@@ -57717,13 +57717,13 @@
     "forms": {
       "devil's claw extract": {
         "bio_score": 7,
-        "absorption": "moderate (~45%)",
+        "absorption": "unknown",
         "consumer_note": "Devil's claw extract is prepared from Harpagophytum root or tuber material. A stated harpagoside percentage is a common marker used to characterize the extract.",
         "consumer_note_review": {
           "by": "Product owner approval",
           "date": "2026-08-08"
         },
-        "notes": "Harpagophytum procumbens root extract standardized to harpagosides (typically 2-5%). Anti-inflammatory via COX-2 and TNF-alpha inhibition. Clinical RCTs support efficacy for low back pain and osteoarthritis at 50-100 mg harpagoside/day. European Medicines Agency well-established use for joint pain.",
+        "notes": "Harpagophytum root extract; exact species, preparation and marker content matter. EMA/HMPC/627058/2015 supports traditional use and considers the clinical data insufficient for well-established use. This regulatory conclusion is not proof that every preparation lacks benefit. Loew 2001 (PMID 11372004) reports WS1531 harpagoside marker pharmacokinetics and ex vivo observations, not a whole-extract human absolute absorption fraction. No universal efficacy dose or replacement absorption percentage is established here.",
         "aliases": [
           "devils claw extract",
           "devil's claw root extract",
@@ -57737,21 +57737,21 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": 0.45,
-          "range_low": 0.35,
-          "range_high": 0.55,
-          "quality": "moderate"
+          "value": null,
+          "range_low": null,
+          "range_high": null,
+          "quality": "unknown"
         }
       },
       "devil's claw (unspecified)": {
         "bio_score": 6,
-        "absorption": "low-moderate (harpagoside class baseline)",
+        "absorption": "unknown",
         "consumer_note": "This label names devil’s claw without identifying root material, powder versus extract, or harpagoside standardization.",
         "consumer_note_review": {
           "by": "Product owner approval",
           "date": "2026-08-08"
         },
-        "notes": "Harpagophytum procumbens tuber; contains harpagoside (iridoid glycoside). Evidence for low back pain and osteoarthritis (ESCOP monograph). Anti-inflammatory via COX-2 and NF-kB. Form unspecified. B32 audit 2026-04-25: harpagoside class.",
+        "notes": "Harpagophytum preparation with unspecified form. Marker composition, extract correspondence and clinical applicability require their own assessment. The previous numeric absorption estimate was not an established human measurement; absolute absorption remains unknown.",
         "aliases": [
           "devil's claw",
           "devils claw",
@@ -57764,21 +57764,21 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": 0.35,
-          "range_low": 0.25,
-          "range_high": 0.5,
-          "quality": "moderate"
+          "value": null,
+          "range_low": null,
+          "range_high": null,
+          "quality": "unknown"
         }
       },
       "devil's claw standardized (harpagoside)": {
         "bio_score": 9,
-        "absorption": "~28% oral F in humans (PMID 11054882)",
+        "absorption": "unknown",
         "consumer_note": "This is a devil's claw extract standardized to harpagoside, a characteristic constituent of Harpagophytum. The harpagoside percentage identifies the composition of this specific extract.",
         "consumer_note_review": {
           "by": "Product owner approval",
           "date": "2026-08-08"
         },
-        "notes": "Devil-claw extracts must be characterized by species, preparation and harpagoside content. The previously attributed vascular-imaging, antidepressant and glucosamine/chondroitin articles do not establish28%human F, a197-person WS1531 trial or rofecoxib equivalence. Genuine devil-claw clinical evidence is not negated, but these claims remain unsupported by those citations.",
+        "notes": "Devil-claw extracts must be characterized by species, preparation and harpagoside content. The previously attributed vascular-imaging, antidepressant and glucosamine/chondroitin articles do not establish human absolute absorption, a 197-person WS1531 trial or rofecoxib equivalence. Loew 2001 (PMID 11372004) reports marker pharmacokinetics and ex vivo leukotriene findings, not an absolute oral bioavailability measurement. Genuine clinical evidence is not negated; preparation applicability and existing clinical holds remain separate.",
         "aliases": [
           "harpagoside",
           "harpagophytum procumbens 2% harpagoside",
@@ -57789,10 +57789,10 @@
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
-          "value": 0.28,
-          "range_low": 0.24,
-          "range_high": 0.32,
-          "quality": "low"
+          "value": null,
+          "range_low": null,
+          "range_high": null,
+          "quality": "unknown"
         }
       }
     },

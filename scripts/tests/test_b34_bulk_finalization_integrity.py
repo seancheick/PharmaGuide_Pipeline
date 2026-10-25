@@ -301,6 +301,21 @@ def test_b34_no_residual_unintended_null(iqm):
      'pectinase': ['pectinase'],
      'hemicellulase': ['hemicellulase'],
      'beta_glucanase': ['beta-glucanase']}
+    # October25 source review rejects unsupported human absorption estimates;
+    # these exact forms are intentionally unknown, not missing data to fill.
+    expected.update({
+        'nicotinamide_riboside': [
+            'niagen (nicotinamide riboside chloride)',
+            'nicotinamide riboside (unspecified)'],
+        'devils_claw': [
+            "devil's claw extract", "devil's claw (unspecified)",
+            "devil's claw standardized (harpagoside)"],
+    })
+    for pid in ['nicotinamide_riboside', 'devils_claw']:
+        for name in expected[pid]:
+            assert iqm[pid]['forms'][name]['absorption_structured'] == {
+                'value': None, 'range_low': None, 'range_high': None,
+                'quality': 'unknown'}
     actual = {pid: [name for name, form in parent['forms'].items() if form.get('absorption_structured', {}).get('value') is None]
               for pid, parent in iqm.items() if parent.get('forms') and all(form.get('absorption_structured', {}).get('value') is None for form in parent['forms'].values())}
     assert actual == expected
