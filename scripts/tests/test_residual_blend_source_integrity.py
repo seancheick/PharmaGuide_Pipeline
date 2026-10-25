@@ -110,7 +110,7 @@ def test_reviewed_hierarchy_fails_closed_on_source_changes(change):
         raw['ingredientRows'][-1]['raw_source_path'] = 'ingredientRows[13]'
     else:
         raw['ingredientRows'][12]['name'] = 'Different Formula'
-    with pytest.raises(ValueError, match='hierarchy|source path|note attribution'):
+    with pytest.raises(ValueError, match='Reviewed serving source changed|hierarchy|source path|note attribution'):
         EnhancedDSLDNormalizer().normalize_product(raw)
 
 def test_unreviewed_product_cannot_borrow_hierarchy_correction():

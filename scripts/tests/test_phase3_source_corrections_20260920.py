@@ -161,7 +161,9 @@ def test_e2_insufficient_rows_never_get_a_plausibility_rewrite(corrections, dsld
 def test_bulk_1340_vitamin_a_form_is_provitamin_a_not_retinol(corrections, dsld_id):
     entry = corrections[dsld_id]
     assert entry["raw_ingredient_text"] == "Vitamin A"
-    assert entry["correction_fields"] == ["forms"]
+    assert entry["correction_fields"] == (["forms", "serving_basis"] if dsld_id in {"243812", "243815"} else ["forms"])
+    if dsld_id in {"243812", "243815"}:
+        assert len(entry["serving_basis_correction"]["raw_source_sha256"]) == 64
     forms = entry["corrected_forms"]
     assert len(forms) == 1
     names = " ".join(str(form.get("name", "")) for form in forms).lower()
@@ -227,7 +229,9 @@ def test_every_new_correction_carries_reviewer_provenance(corrections, dsld_id):
         "provenance_tag",
     ):
         assert entry.get(field), f"{dsld_id} missing {field!r}"
-    assert entry["review_date"] == ("2026-10-12" if dsld_id in {"223563", "223572"} else "2026-09-20")
+    expected_review_date = ("2026-10-25" if dsld_id in {"243812", "243815"} else
+                            "2026-10-12" if dsld_id in {"223563", "223572"} else "2026-09-20")
+    assert entry["review_date"] == expected_review_date
     assert entry["scope"] == "dsld_id_only"
     assert all(
         str(url).startswith("https://") for url in entry["sources"]

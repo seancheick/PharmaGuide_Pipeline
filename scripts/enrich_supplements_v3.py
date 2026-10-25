@@ -23053,7 +23053,13 @@ class SupplementEnricherV3:
                             )
 
                     if (self._normalize_text(unit) in {"iu", "ui", "u"}
-                            and (vitamin_a_preparation_columns or has_mixed_vitamin_a_forms)
+                            and (vitamin_a_preparation_columns or (
+                                has_mixed_vitamin_a_forms and any(
+                                    "cultured vitamins and minerals" in str(statement.get("notes") or "").lower()
+                                    for statement in product.get("statements") or []
+                                    if isinstance(statement, dict)
+                                )
+                            ))
                             and explicit_preformed_vitamin_a_fraction is None):
                         conversion = ConversionResult(
                             success=False, original_value=quantity_float, original_unit=unit,

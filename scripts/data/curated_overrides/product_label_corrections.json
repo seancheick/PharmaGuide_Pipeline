@@ -1162,7 +1162,8 @@
           "name": "Natural Beta-Carotene",
           "prefix": "as",
           "category": "vitamin",
-          "ingredientGroup": "Vitamin A"
+          "ingredientGroup": "Vitamin A",
+          "uniiCode": "01YAE03M7J"
         }
       ],
       "correction_fields": [
@@ -1636,7 +1637,8 @@
           "name": "Natural Beta-Carotene",
           "prefix": "as",
           "category": "vitamin",
-          "ingredientGroup": "Vitamin A"
+          "ingredientGroup": "Vitamin A",
+          "uniiCode": "01YAE03M7J"
         }
       ],
       "correction_fields": [

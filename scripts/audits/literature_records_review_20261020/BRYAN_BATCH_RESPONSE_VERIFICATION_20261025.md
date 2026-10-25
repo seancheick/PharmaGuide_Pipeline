@@ -259,3 +259,10 @@ These require fail-first regressions, affected-label/control measurements, appli
 - **Not done:** runtime context migration, new scoring eligibility, changed weights/grades/benchmarks, full pipeline, publication, or scientifically/rebuilt-closed status for A011/A135/A059/A148/A003/A029/B433/A063/A090.
 
 Audit receipt hashes and exact retrieval outcomes are retained locally in `.claude/state/bryan_review_20261025/receipt.json`, with source bodies in the batch folders, with the batches 4/5 supplement in `.claude/state/bryan_batches_4_5_20261025/receipt.json`. Batches6/7 source receipts are retained in `.claude/state/bryan_batches_6_7_20261025/`. The existing hold register records receipt/verification progress without changing frozen counts, production eligibility or closure fields.
+
+
+### Combined checkpoint correction — October25
+
+CI40220219109 on3b198e871 failed with three enumerated classes: one over-broad legacy-IU condition, four stale phase3 metadata pins, and five hierarchy rejection-message pins. The IU condition now limits the new source-preparation uncertainty to alternative preparation columns or the explicit cultured-vitamin/mineral context; ordinary mixed beta/retinyl behavior and its4500mcgRAE regression are preserved. The original beta-carotene UNII on243812/243815 is retained (live NIH source content names Beta-Carotene for01YAE03M7J). Strict metadata expectations were updated only for those two newly reviewed records, and all changed RAW hierarchy inputs still must raise; they now reject earlier at the SHA binding. No weakened safety exception or numerical policy change.
+
+Targeted combined files:212passed46.54s; remaining affected owner/guard slice126passed9.97s. Reviewer inspected just this delta and found no actionable issue. Fresh18-case qualified replay and local validation in progress; one combined whole-fast retry follows the finished corrections. Previous failed CI is not reported as passing. Ten actual staged serving-repair inputs were independently checked and all source bindings match. No full pipeline/app import/publication.
