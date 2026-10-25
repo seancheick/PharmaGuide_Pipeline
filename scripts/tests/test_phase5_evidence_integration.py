@@ -390,6 +390,8 @@ def test_fixture_d_named_child_with_disclosed_adequate_dose():
         "mapped": True,
     }
     prod = _wrap_product([blend_header, ashwagandha])
+    # The hypothetical applicability policy below is daily, not per capsule.
+    prod["serving_basis"] = {"min_servings_per_day": 1, "max_servings_per_day": 1}
     prod["evidence_data"] = {
         "clinical_matches": [{
             "id": "INGR_ASHWAGANDHA_STUDY",

@@ -771,6 +771,7 @@ def _urinary_enriched(*, ledger_rows, cluster_ingredients=None, scorable=True, r
         })
     enriched = {
         "fullName": "Urinary fixture",
+        "serving_basis": {"min_servings_per_day": 1, "max_servings_per_day": 1},
         "activeIngredients": [dict(row) for row in rows],
         "ingredient_quality_data": {
             "ingredients": rows,
@@ -857,6 +858,14 @@ def test_applicable_cranberry_below_the_reviewed_dose_is_underdosed(cranberry_do
         ledger_rows=[("Cranberry fruit concentrate", "cranberry_fruit", 10, "mg")],
         cluster_ingredients=[("cranberry", 10, True), ("vitamin c", 100, False)], scorable=False,
     )) == "underdosed"
+
+
+@pytest.mark.parametrize("frequency", [{}, {"minDailyServings": 1, "maxDailyServings": None}])
+def test_daily_urinary_goal_does_not_qualify_an_unknown_regimen(cranberry_dose_policy, frequency):
+    product = _urinary_enriched(ledger_rows=[("Cranberry Fruit Extract", "cranberry", 500, "mg")])
+    product.pop("serving_basis")
+    product["servingSizes"] = [{"quantity": 1, "unit": "capsule", **frequency}]
+    assert _urinary_result(product) == "none"
 
 
 @pytest.mark.parametrize(
