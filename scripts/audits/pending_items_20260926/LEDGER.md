@@ -3447,3 +3447,8 @@ Implemented: ten label corrections, fractional serving preservation, unsupported
 
 
 Batch11 checkpoint update: runtime8cb9d4cc0; local546passed/24declared opt-in skips and skipguard green after resolving isolated-checkout artifact visibility (first missing-artifact checkpoint is not a pass). CI40228636370 failed B32/B34 historical numeric population assertions for the newly documented unknown absorption fields. Both reproduced; exact unknown expectations updated,79affected tests pass. No production reversal or fabricated values. ReplacementCI/integration pending. Nine later exact-label source packets prepared, not implemented/closed; source images still require integrator review.
+
+
+### Batch11 main integration qualification — October25
+
+PR248 merged3506351fc; testedhead3efb50764 ancestry confirmed on origin/main. Rebase on qualifiedPR247 d10782497 preserved both ledger sections and left dirty primary copies untouched. CI40233428775:all4shards/all4skipguards pass. Combined343namedtests and local546/24declaredoptinskips+guardgreen pass.18raw-label replay rerun; all18candidate scoredhashes/totals/statuses exactlymatchpreviousreview. FirstCI40228636370 and initialmissing-artifact local attempt are failed historical checkpoints, not passes. This receipt is documentation-only relative to qualifiedruntime. Nine later source-image reviews confirmed by integrator but their corrections and remaining clinical/citation/eligibility decisions stay open. No pipeline/app import/release.

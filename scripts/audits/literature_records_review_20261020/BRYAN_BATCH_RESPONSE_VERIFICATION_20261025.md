@@ -9,7 +9,7 @@ The original review sections were documentation/report work only. Later runtime 
 
 ## Batch 11 source corrections and later-report intake — October 25
 
-**Implemented and bounded-verified; integration and rebuilt closure pending.** Baseline `585d19f7ff50bf54a94eeb9d95996c6bfe74235a`; isolated branch `codex/batch11-source-corrections`. The new summary attachment is an intake report, not proof that all its later findings exist in current runtime or that the full171C/146D review is closed. It is pinned to older `ebc792e8`; previously integrated batches must not be counted as newly unfixed.
+**Implemented, bounded-verified and integrated; scientific and rebuilt closure remain separate.** Baseline `585d19f7ff50bf54a94eeb9d95996c6bfe74235a`; isolated branch `codex/batch11-source-corrections`. The new summary attachment is an intake report, not proof that all its later findings exist in current runtime or that the full171C/146D review is closed. It is pinned to older `ebc792e8`; previously integrated batches must not be counted as newly unfixed.
 
 Owner: `enhanced_normalizer.py::_apply_label_corrections/_process_serving_sizes`, existing product-label corrections, IQM absorption fields, and canonical clinical/botanical registries — evidence: exact source image/API receipts, ten source-content bindings, named regressions and18 frozen raw Clean→Enrich→Score→blob replays. Will NOT create another normalizer, registry, scorer, approval, public field or clinical policy.
 
@@ -367,3 +367,13 @@ Source findings are verified and confirmed engineering corrections are implement
 ### Later exact-label receipt collection
 
 Nine additional exact NIH API/PDF pairs are independently gathered and visually inspected by receipt agents:312832,330191,330664,328649,43662,277705,312947,285637,268493. Their unchanged originals, hashes, individual findings and image paths are retained under the existing Batch11 receipt root in `batch12_sources_a/` and `batch12_sources_b/`. These are source hypotheses pending main-model inspection and implementation, not closed products. Two existing-owner limitations are identified: source-bound statement replacement and reviewed cross-parent movement of nested rows. Preserve source conflicts and all safety warnings; do not invent missing component amounts or make modern editions repair archived ones.
+
+## Batch11 final integration qualification — October25
+
+PR248 merged at `3506351fcb3c6232282486dac420f34e5b8d4108`; ancestry of exact tested head `3efb50764e78f950c9e5f2e9f2752a40d9b3c883` verified in origin/main. Rebased on the separately qualified product-detail merge `d107824976c8070c0482ef58768bf80d4e62babb`; the sole rebase conflict was additive ledger text and both records were preserved. Dirty primary-checkout copies were not imported, staged or removed.
+
+Whole-fast CI40233428775 passes all four shards and all four declared-skip guards. Combined named source/normalizer/export tests343passed79.08s; combined local546passed/24declared opt-in skips139.60s with skipguard green. Earlier CI40228636370 failed historical numerical expectations; it is not qualification. Earlier missing-artifact local checkpoint is also not a pass.
+
+The full18-label frozen raw replay was rerun against the merged product-detail source and this rebased candidate. Every candidate scored artifact hash, score and status matches its previously reviewed candidate. Intentional source corrections and safety-related exposure/ceiling movements are described above. No scoring weight, clinical approval, full corpus, catalog import or release was added. Existing18-record comparison receipts and immutable source inputs remain retained; integration captures are in the active source-review worktree's ignored `batch11_integration` directory.
+
+All nine later label images were also independently inspected by the integrator after receipt gathering. Their source findings are confirmed; they remain a separate unimplemented correction batch, requiring the existing statement/hierarchy owners and full consumer checks. No unknown mixture allocations, modern-to-archived substitutions or clinical clearances follow. The full marked171C/146D report remains unretrieved, and additional source/applicability/citation/eligibility decisions remain open. This qualification closes this engineering integration only.
