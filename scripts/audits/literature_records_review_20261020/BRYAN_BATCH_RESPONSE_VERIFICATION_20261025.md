@@ -1,6 +1,6 @@
-# Dr. Bryan responses — batches 1–3, independent verification
+# Dr. Bryan responses — batches 1–5, independent verification
 
-October 25, 2026. **Batch 1's supported decisions and remaining holds are approved by Sean. Batches 2 and 3 are reviewed below; no blanket scoring approval or rebuilt-product closure is recorded.** Attribution to Dr. Bryan comes from Sean. Receipt date is not an invented date of the original scientific review.
+October 25, 2026. **Batch 1's supported decisions and remaining holds are approved by Sean. Batches 2–5 are reviewed below; no blanket scoring approval or rebuilt-product closure is recorded.** Attribution to Dr. Bryan comes from Sean. Receipt date is not an invented date of the original scientific review.
 
 Owner Check: existing `clinical_review_holds.csv` and `benchmark_review_backlog.csv` are the execution reports; `clinical_applicability.py::assess_clinical_source_review` and `probiotic_measurements.py::context_accepted_for_scoring` remain runtime owners. Evidence: current owners, request sections, exact response keys and primary API/full-text sources inspected. Will NOT create another clinical authority, scorer, completion registry, grade, dose curve or approval timestamp.
 
@@ -62,11 +62,55 @@ The live [NCT05149053 registry API](https://clinicaltrials.gov/api/v2/studies/NC
 
 The [September 28, 2026 publisher article](https://onlinelibrary.wiley.com/doi/10.1111/jocd.71208), DOI10.1111/jocd.71208, exists and directly challenges earlier skin syntheses, including Pu et al. It supplies a supporting-data/code archive. It is not a retraction, correction notice or new randomized cohort. Its technical conclusions have not been independently reproduced here; retain it for appraisal rather than treating it as proof that every collagen product is ineffective.
 
+## Batch 4 — enhanced curcumin, with a safety-wording correction
+
+Scope: A003 `BRAND_BCM95`, A029 `BRAND_THERACURMIN`, and the proposed turmeric safety language. The five cited PMIDs resolve by live API to the stated studies. Complete XML bodies were retrieved for 30975196, 33516238, 25308211 and 35494290 and the material methods/results were checked. For 29246725, the abstract is checked; the publisher full-paper request returned HTTP 403, so the full appraisal remains held.
+
+| Context | Independent disposition |
+|---|---|
+| BCM-95/diclofenac — 30975196 | Active-comparator, open-label study; preserve the tested whole-complex regimen and comparative observations. Absence of a significant difference is not established equivalence or placebo superiority. |
+| BCM-95/paracetamol — 33516238 | Methods specify 500 mg complex twice daily; results confirm 193 randomized and 144 completers. Unblinding, attrition and non-inferiority margin/supplement questions remain. Do not turn the authors' active-comparator claim into general drug equivalence. |
+| Theracurmin OA — 25308211 | Methods confirm 180 mg/day curcumin delivered by six capsules in two administrations. One-sided testing and the restricted low-baseline-pain analysis need their limits; no unqualified overall pain/function superiority. |
+| Theracurmin memory — 29246725 | Abstract supports a small, outcome-specific 18-month study, not dementia prevention or immediate-focus claims. Retain full-paper/supplement/registry appraisal hold. |
+| Theracurmin postoperative — 35494290 | Separate surgical cohort, not memory-trial follow-up. Retain null clinical symptom results separately from selected arthroscopic surrogate findings. |
+
+The 12 BCM-95 and 4 Theracurmin saved editions were not independently label-matched in this batch. No study regimen is converted into a universal range or interchangeable formulation-mass reference.
+
+**Correction needed in the submitted warning:** the [TGA advisory](https://www.tga.gov.au/safety/safety-monitoring-and-information/safety-alerts/medicines-containing-turmeric-or-curcumin-risk-liver-injury) advises people with current or previous liver problems to avoid medicinal turmeric/curcumin products. The proposed consultation-only sentence softens that precaution and is not accepted as a replacement. Preserve immediate stopping and medical advice for suspected liver-injury symptoms. The advisory does not establish brand-specific comparative risk; its dietary-food distinction also remains. No runtime warning was rewritten by this report.
+
+## Batch 5 — PrimaVie/shilajit and B433
+
+The three cited PMIDs were independently retrieved in the same live eight-record request used for batches4/5. The hormone trial 26395129 was checked against the accessible full publisher article; the strength trial 30728074 has a retrieved complete XML body.35933897 is checked at abstract level only; its material equivalence, methods and bone-health application remain held.
+
+| Source | Independent disposition |
+|---|---|
+| PrimaVie — 26395129 | Publisher methods identify the named purified material and 500 mg/day regimen;96 randomized / 75 completed. Preserve preliminary hormone-biomarker observations and attrition/commercial limitations. No demonstrated symptomatic, fertility, muscle-growth or longevity benefit follows. |
+| PrimaVie — 30728074 | Results distinguish the full sample from median-split subgroups. The full-sample high-versus-low-dose contrast is not a general placebo-superiority finding; placebo-separated fatigue findings were in the stronger subgroup. No tendon-healing or recovery efficacy transfer. |
+| Shilajit — 35933897 | A separate 48-week osteopenia/BMD study, not a fracture-prevention trial or automatically matched to these retail preparations. Full-paper qualification remains open. |
+
+### Four exact B433 labels independently checked
+
+All four live NIH API records and PDFs were retrieved. Each PDF was visually inspected on its own; the two prior access failures are resolved.
+
+| Exact edition | Confirmed printed facts and disposition |
+|---|---|
+| [272454](https://api.ods.od.nih.gov/dsld/s3/pdf/272454.pdf) | Names PrimaVie and 500 mg shilajit per three-tablet daily serving, alongside other active preparations. It is a disclosed individual preparation within a multi-active product, not an inferred proprietary-blend allocation. The finished formula is not the single-material trial intervention. |
+| [323708](https://api.ods.od.nih.gov/dsld/s3/pdf/323708.pdf) | Nutricost: 1,000 mg extract per two capsules/day; 20:1 and 20% fulvic-acid label claims; separate calcium 30 mg and iron 3 mg. Does not name PrimaVie. Printed third-party-testing language is not an independently inspected test report. |
+| [315120](https://api.ods.od.nih.gov/dsld/s3/pdf/315120.pdf) | Double Wood: 1,000 mg shilajit extract per two-capsule daily serving, 10:1, 20% fulvic acid; no PrimaVie name. Exact edition's identity/amount/directions access question closed; no automatic PrimaVie equivalence. |
+| [315696](https://api.ods.od.nih.gov/dsld/s3/pdf/315696.pdf) | Independently inspected Double Wood edition: same printed 1,000 mg/two-capsule daily serving, 10:1, 20% fulvic acid; no PrimaVie name. Verified independently rather than copied from 315120. No automatic PrimaVie equivalence. |
+
+A separately named and quantified material can be assessed as one disclosed preparation without inventing internal constituent doses or awarding efficacy because it is patented. The response supplies a no-general-shilajit-threshold decision; no numeric curve is created. Preparation correspondence, applicable benefit and actual contaminant testing remain separate questions. No universal safe intake is inferred.
+
+### D043–D046 source-use triage
+
+PMID26395129 concerns shilajit, not black-seed oil, tuna oil, manuka honey or krill oil. Current IQM occurrences within those four subjects are in repeated historical audit notes that identify a shilajit/PK mismatch; they are not affirmative ingredient-specific efficacy references. Record the rejection of such transfer and preserve the history. These four citation flags are triaged; they do not create new publication holds, replacement approvals or reasons to delete the valid shilajit source. No entire ingredient or product assessment is closed by this triage.
+
 ## Closure and next actions
 
 - **Recorded:** Sean's batch1 approval of supported sub-decisions, subject to the stated holds; first-batch exact-label facts above; available API/full-text source facts for batches2/3; the newer Magtein correction and retrospective COLLinstant registration.
 - **Not repeated:** already completed source retrieval/correction work. None of these access gaps should be sent back as if the sources were still unobtainable.
+- **Batches4/5 additions:** source/access facts above and D043–D046 triage are recorded; retain the TGA avoid precaution and all stated preparation/applicability holds. No automatic acceptance of the proposed weaker warning.
 - **Still needed:** applicable trial/preparation/product decisions and authentic review provenance through existing owners; unavailable full texts/tables only where still unavailable; PQQ corrected Table4; trial overlap/forest-input reconciliation; Magtein11-product and collagen24-product correspondence; generated A148 behavior; eventual rebuilt-corpus and app verification.
-- **Not done:** runtime context migration, new scoring eligibility, changed weights/grades/benchmarks, full pipeline, publication, or scientifically/rebuilt-closed status for A011/A135/A059/A148.
+- **Not done:** runtime context migration, new scoring eligibility, changed weights/grades/benchmarks, full pipeline, publication, or scientifically/rebuilt-closed status for A011/A135/A059/A148/A003/A029/B433.
 
-Audit receipt hashes and exact retrieval outcomes are retained locally in`.claude/state/bryan_review_20261025/receipt.json`, with source bodies in the three batch folders. The existing hold register records receipt/verification progress without changing frozen counts, production eligibility or closure fields.
+Audit receipt hashes and exact retrieval outcomes are retained locally in `.claude/state/bryan_review_20261025/receipt.json`, with source bodies in the batch folders, with the batches 4/5 supplement in `.claude/state/bryan_batches_4_5_20261025/receipt.json`. The existing hold register records receipt/verification progress without changing frozen counts, production eligibility or closure fields.
