@@ -54,3 +54,40 @@ def test_threshold_key_is_stable_when_rule_arrays_reorder() -> None:
     }
 
     assert _threshold_key(**kwargs) == _threshold_key(**kwargs)
+
+
+def _ranged_facts_record(notes='1-2 scoops'):
+    return {'servingSizes': [{'order': 1, 'minQuantity': 5.55, 'maxQuantity': 11.1,
+        'unit': 'Gram(s)', 'notes': notes, 'minDailyServings': 1, 'maxDailyServings': 1}],
+        'activeIngredients': [{'raw_taxonomy': {'quantityVariants': [
+            {'serving_size_order': 1, 'serving_size_quantity': size,
+             'serving_size_unit': 'Gram(s)', 'selected_for_analysis': selected}
+            for size, selected in [(5.55, False), (11.1, True)]]}}]}
+
+
+def test_explicit_same_audience_scoop_range_preserves_minimum_intake():
+    from serving_frequency import resolve_facts_panel_serving_basis
+    basis = resolve_facts_panel_serving_basis(_ranged_facts_record())
+    assert basis['min_servings_per_day'] == 0.5
+    assert basis['max_servings_per_day'] == 1
+
+
+def test_audience_or_unsubstantiated_serving_range_keeps_selected_adult_column():
+    from serving_frequency import resolve_facts_panel_serving_basis
+    for notes in ['1-2 scoops for children and adults', '1 scoop', '1-3 scoops']:
+        basis = resolve_facts_panel_serving_basis(_ranged_facts_record(notes))
+        assert basis['min_servings_per_day'] == 1
+    record = _ranged_facts_record()
+    record['activeIngredients'][0]['raw_taxonomy']['quantityVariants'].pop(0)
+    assert resolve_facts_panel_serving_basis(record)['min_servings_per_day'] == 1
+
+
+def test_ranged_intake_does_not_borrow_another_audience_or_panel_basis():
+    from serving_frequency import resolve_facts_panel_serving_basis
+    for key, values in [('serving_size_order', [1, 2]),
+                        ('daily_value_target_group', ['children', 'adults'])]:
+        record = _ranged_facts_record()
+        variants = record['activeIngredients'][0]['raw_taxonomy']['quantityVariants']
+        for variant, value in zip(variants, values):
+            variant[key] = value
+        assert resolve_facts_panel_serving_basis(record)['min_servings_per_day'] == 1

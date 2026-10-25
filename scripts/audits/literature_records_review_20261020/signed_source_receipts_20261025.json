@@ -1,0 +1,184 @@
+{
+  "verified_at": "2026-10-25T15:41:30.851949+00:00",
+  "labels": {
+    "801": {
+      "api_status": "retrieved",
+      "api_url": "https://api.ods.od.nih.gov/dsld/v9/label/801",
+      "api_sha256": "ec1b6ea5290435164b770e9b1dc31588c77bde992b2911ae0ce8bcb70cc4da9f",
+      "pdf_status": "retrieved",
+      "pdf_url": "https://api.ods.od.nih.gov/dsld/s3/pdf/801.pdf",
+      "pdf_sha256": "61f4ef868c2434dbe42cf23f452b24f22af300f4d47b4f4546cae65496889e6a",
+      "pdf_bytes": 1650895,
+      "attempts": 1,
+      "same_as_previous_pdf": true
+    },
+    "802": {
+      "api_status": "retrieved",
+      "api_url": "https://api.ods.od.nih.gov/dsld/v9/label/802",
+      "api_sha256": "72bab96936161de89ca8fe5039bb53d63653148d1e15f0bc3c96966fafa3a9e5",
+      "pdf_status": "retrieved",
+      "pdf_url": "https://api.ods.od.nih.gov/dsld/s3/pdf/802.pdf",
+      "pdf_sha256": "741634770340e15ee7e4f64543018c2ddc9957d5e8f9ba735809ce8775bc21f7",
+      "pdf_bytes": 1083793,
+      "attempts": 1,
+      "same_as_previous_pdf": true
+    },
+    "855": {
+      "api_status": "retrieved",
+      "api_url": "https://api.ods.od.nih.gov/dsld/v9/label/855",
+      "api_sha256": "5b1087732b459ff8994f87dfea419d044e3ae4b656d11310f4b6ba8f2d5d11b4",
+      "pdf_status": "retrieved",
+      "pdf_url": "https://api.ods.od.nih.gov/dsld/s3/pdf/855.pdf",
+      "pdf_sha256": "6349dd2120c6546431719d20af176aa3845719aa61ab7cec7297ac51ee0cdb66",
+      "pdf_bytes": 420205,
+      "attempts": 1,
+      "same_as_previous_pdf": false
+    },
+    "8958": {
+      "api_status": "retrieved",
+      "api_url": "https://api.ods.od.nih.gov/dsld/v9/label/8958",
+      "api_sha256": "f3512b24626f6c6677cbeebb88cb4f7aa0ef942daa9a055cd9682a9ade85fe97",
+      "pdf_status": "retrieved",
+      "pdf_url": "https://api.ods.od.nih.gov/dsld/s3/pdf/8958.pdf",
+      "pdf_sha256": "01b7f3b6f4fb822767dae8a1b827bb2653ef9d6f99626993a185c0c4007dfca4",
+      "pdf_bytes": 85590,
+      "attempts": 1,
+      "same_as_previous_pdf": false
+    },
+    "12144": {
+      "api_status": "retrieved",
+      "api_url": "https://api.ods.od.nih.gov/dsld/v9/label/12144",
+      "api_sha256": "5cb4bad0daa24d6fa3bc75649b503860118b001b1fe0e59c57401f8495f87ef9",
+      "pdf_status": "retrieved",
+      "pdf_url": "https://api.ods.od.nih.gov/dsld/s3/pdf/12144.pdf",
+      "pdf_sha256": "65be04672b72b05e2316583adb5b00ab1cfe4cd01649e0e4b8bf09b8454e62e4",
+      "pdf_bytes": 232011,
+      "attempts": 1,
+      "same_as_previous_pdf": false
+    },
+    "12300": {
+      "api_status": "retrieved",
+      "api_url": "https://api.ods.od.nih.gov/dsld/v9/label/12300",
+      "api_sha256": "97439d9bbca4936012c9f13c9c4f0b4003c5fd55fec777839cad523cee222e0a",
+      "pdf_status": "retrieved",
+      "pdf_url": "https://api.ods.od.nih.gov/dsld/s3/pdf/12300.pdf",
+      "pdf_sha256": "df4efa58d81fa7e438c4b91813df52b165c673e18ec96a97aabd09ab06c0f51e",
+      "pdf_bytes": 98088,
+      "attempts": 1,
+      "same_as_previous_pdf": false
+    },
+    "18538": {
+      "api_status": "retrieved",
+      "api_url": "https://api.ods.od.nih.gov/dsld/v9/label/18538",
+      "api_sha256": "4ed88abac69799cfcb26c7a486ac8d8a4755e0d66145f1f955f04927167e620d",
+      "pdf_status": "retrieved",
+      "pdf_url": "https://api.ods.od.nih.gov/dsld/s3/pdf/18538.pdf",
+      "pdf_sha256": "980430d66378ef4c13ee21b4919544f72e70292f99cfc5d9d2192330d65a9c5b",
+      "pdf_bytes": 657295,
+      "attempts": 1,
+      "same_as_previous_pdf": false
+    },
+    "19598": {
+      "api_status": "retrieved",
+      "api_url": "https://api.ods.od.nih.gov/dsld/v9/label/19598",
+      "api_sha256": "0c65274c8b4521e86be5b42d84fafa0391be242d7f736a176a6dbdc97a062a81",
+      "pdf_status": "retrieved",
+      "pdf_url": "https://api.ods.od.nih.gov/dsld/s3/pdf/19598.pdf",
+      "pdf_sha256": "8a7ec6896b0928572d7dedc3ecadb73dd9a478801f5faa095f0618d66de2b568",
+      "pdf_bytes": 426173,
+      "attempts": 1,
+      "same_as_previous_pdf": false
+    },
+    "25501": {
+      "api_status": "retrieved",
+      "api_url": "https://api.ods.od.nih.gov/dsld/v9/label/25501",
+      "api_sha256": "01ef86c333e8fc69bd4f25d564f691270f7ba95ad251752633108e8b4c5de210",
+      "pdf_status": "retrieved",
+      "pdf_url": "https://api.ods.od.nih.gov/dsld/s3/pdf/25501.pdf",
+      "pdf_sha256": "f8a95499ab4711f675f1919e5de164394b325b0e3a12993770e4d05df2e27d26",
+      "pdf_bytes": 111052,
+      "attempts": 1,
+      "same_as_previous_pdf": false
+    },
+    "27203": {
+      "api_status": "retrieved",
+      "api_url": "https://api.ods.od.nih.gov/dsld/v9/label/27203",
+      "api_sha256": "c2abf2e902a5f8d8d610c7568aa6db07d8ddcd2450b6038e0c205d77276aaece",
+      "pdf_status": "retrieved",
+      "pdf_url": "https://api.ods.od.nih.gov/dsld/s3/pdf/27203.pdf",
+      "pdf_sha256": "0a20be9095c6bed43cbe87cda6d0409313bd3a240058db4bd769fad4ce9d95f7",
+      "pdf_bytes": 1451067,
+      "attempts": 1,
+      "same_as_previous_pdf": false
+    },
+    "27807": {
+      "api_status": "retrieved",
+      "api_url": "https://api.ods.od.nih.gov/dsld/v9/label/27807",
+      "api_sha256": "7a208626b8ff2f663b8e99d524a641040ed39102d62a07f299323f827f3ce3f9",
+      "pdf_status": "retrieved",
+      "pdf_url": "https://api.ods.od.nih.gov/dsld/s3/pdf/27807.pdf",
+      "pdf_sha256": "17d91ae96d0b4b53230e5ef12fea33471ffcf1c1fd754a417a49fd1876e60b9c",
+      "pdf_bytes": 689223,
+      "attempts": 1,
+      "same_as_previous_pdf": true
+    },
+    "27808": {
+      "api_status": "retrieved",
+      "api_url": "https://api.ods.od.nih.gov/dsld/v9/label/27808",
+      "api_sha256": "cf7b0423bac6c5ce6903d44bf0f3f4f8332942e185e280648b31aa02e7cabc38",
+      "pdf_status": "retrieved",
+      "pdf_url": "https://api.ods.od.nih.gov/dsld/s3/pdf/27808.pdf",
+      "pdf_sha256": "631d243d986502b9651893199ad53200946192714b4ab5fb266f518dbaa10134",
+      "pdf_bytes": 779302,
+      "attempts": 1,
+      "same_as_previous_pdf": false
+    },
+    "28963": {
+      "api_status": "retrieved",
+      "api_url": "https://api.ods.od.nih.gov/dsld/v9/label/28963",
+      "api_sha256": "484158b16ed54934d8d33ccc0079db64c1023f1e63b6302f8649b9210aa566c3",
+      "pdf_status": "retrieved",
+      "pdf_url": "https://api.ods.od.nih.gov/dsld/s3/pdf/28963.pdf",
+      "pdf_sha256": "2208cd5bf26acc4e895b1227d419d22001ba000204bf3d51390af082a71fe616",
+      "pdf_bytes": 1161409,
+      "attempts": 1,
+      "same_as_previous_pdf": false
+    },
+    "28993": {
+      "api_status": "retrieved",
+      "api_url": "https://api.ods.od.nih.gov/dsld/v9/label/28993",
+      "api_sha256": "d799104b4f1bf65353f3cb8bec042e52d2abb5b734ba8c2cad0f68f00abddd64",
+      "pdf_status": "retrieved",
+      "pdf_url": "https://api.ods.od.nih.gov/dsld/s3/pdf/28993.pdf",
+      "pdf_sha256": "481b1f708c57f0e068d7cf1bbdac01ffa93cf50bafcb491beda49d11f964eaf0",
+      "pdf_bytes": 497020,
+      "attempts": 1,
+      "same_as_previous_pdf": false
+    }
+  },
+  "pubmed": {
+    "status": "retrieved",
+    "requested": [
+      "40567408",
+      "39252819",
+      "22909270",
+      "40918053",
+      "37976892",
+      "35917215",
+      "34415830"
+    ],
+    "returned": [
+      "40567408",
+      "39252819",
+      "22909270",
+      "40918053",
+      "37976892",
+      "35917215",
+      "34415830"
+    ],
+    "xml_sha256": "4801ae7d0837660a989cd343eb21ca24f419c62995f1567a49e15f0d20ae902d",
+    "live_requests": 1,
+    "cache_hits": 0
+  },
+  "scope": "Independent source verification; not blanket clinical approval or rebuilt-corpus closure."
+}

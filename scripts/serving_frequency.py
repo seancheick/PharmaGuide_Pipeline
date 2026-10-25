@@ -119,6 +119,7 @@ def resolve_facts_panel_serving_basis(record: Dict[str, Any]) -> Optional[Dict[s
         return None
 
     facts_bases: set[float] = set()
+    ranged_basis_pairs: set[tuple[float, float]] = set()
     conflicting_basis = False
 
     def visit(rows: Any) -> None:
@@ -135,6 +136,19 @@ def resolve_facts_panel_serving_basis(record: Dict[str, Any]) -> Optional[Dict[s
                 else None
             )
             if isinstance(variants, list):
+                same_column_bases: Dict[tuple, set[float]] = {}
+                for variant in variants:
+                    if not isinstance(variant, dict):
+                        continue
+                    basis = _positive_float(variant.get("serving_size_quantity"))
+                    order = variant.get("serving_size_order")
+                    if (basis is not None and order is not None and order == serving.get("order")
+                            and _canonical_dosage_form(variant.get("serving_size_unit")) == serving_unit):
+                        audience = str(variant.get("daily_value_target_group") or "").strip().casefold()
+                        same_column_bases.setdefault((order, audience), set()).add(basis)
+                for bases in same_column_bases.values():
+                    if len(bases) == 2:
+                        ranged_basis_pairs.add(tuple(sorted(bases)))
                 selected = [v for v in variants if isinstance(v, dict) and v.get("selected_for_analysis") is True]
                 for variant in selected or variants:
                     if not isinstance(variant, dict):
@@ -156,7 +170,16 @@ def resolve_facts_panel_serving_basis(record: Dict[str, Any]) -> Optional[Dict[s
         return None
     facts_basis = next(iter(facts_bases))
     quantity_range = _ordered_pair(serving.get("minQuantity"), serving.get("maxQuantity"))
-    if facts_basis == serving_quantity:
+    notes = str(serving.get("notes") or "").strip().casefold()
+    ranged_intake = re.fullmatch(r"(\d+(?:\.\d+)?)\s*[-–]\s*(\d+(?:\.\d+)?)\s+scoops?", notes)
+    explicit_same_audience_range = bool(
+        ranged_intake and quantity_range and quantity_range[0] < quantity_range[1]
+        and quantity_range in ranged_basis_pairs
+        and float(ranged_intake[1]) > 0
+        and math.isclose(float(ranged_intake[2]) / float(ranged_intake[1]),
+                         quantity_range[1] / quantity_range[0])
+    )
+    if facts_basis == serving_quantity and not explicit_same_audience_range:
         # The canonical/highest Facts column already owns adult analysis.
         # A smaller raw range endpoint may be a child serving, not an adult
         # regimen minimum (DSLD12077/173920). Preserve that selected column.
@@ -169,7 +192,7 @@ def resolve_facts_panel_serving_basis(record: Dict[str, Any]) -> Optional[Dict[s
         quantity_range = quantity_range or (serving_quantity, serving_quantity)
         if not quantity_range[0] <= facts_basis <= quantity_range[1]:
             return None
-    else:
+    elif not explicit_same_audience_range:
         quantity_range = (serving_quantity, serving_quantity)
     # The facts-panel basis cannot exceed every physical unit the label allows
     # in a day. Larger values are known DSLD field defects (for example a

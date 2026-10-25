@@ -1,13 +1,13 @@
 {
   "_metadata": {
-    "schema_version": "1.6",
+    "schema_version": "1.7",
     "description": "Reviewer-signed product-row corrections and exact-match containment of reviewed label-unit conflicts.",
     "purpose": "Per-product source-row correction with provenance. Each entry targets one (dsld_id, raw_ingredient_text) pair before cleaner identity resolution and may correct label text, a misattributed UNII, a verified quantity value/unit, or a combination of those fields. Global aliases and global identifier suppression are not supported.",
     "scope": "Only fires for an exact (dsld_id, raw_ingredient_text) tuple match. Case-sensitive on raw_ingredient_text by design — manufacturers may print 'Insulin' in one product and 'INSULIN' in another, and each needs independent reviewer sign-off because the surrounding context (sibling ingredients, product category, regulatory status) must be re-evaluated per occurrence.",
-    "review_policy": "Every product entry is keyed by dsld_id and must carry: brand, product_name (for human-readable audit trail), raw_ingredient_text (the source row being corrected), corrected_ingredient_text (the text the cleaner should see, unchanged for unit-only corrections), correction_fields, evidence (free-text rationale with regulatory citations), sources (authoritative URLs — FDA, NIH, DailyMed, etc.), reviewer, and review_date (ISO 8601 YYYY-MM-DD). A verified cross-row defect may add additional_row_corrections, which inherit the product-level evidence, sources, reviewer, review_date, scope, and provenance tag. Quantity changes require exact raw and corrected value/unit pairs and must be supported by the official manufacturer or label image. Restoring a quantity absent from a form row additionally requires raw_quantity_missing=true, a positive corrected value/unit, and exact same-record source text that states the dose; the applier refuses to overwrite any existing quantity representation. A reviewed Daily Value correction requires an exact raw_daily_value and corrected_daily_value from the same official label; it rewrites only matching source percentages, never derives a percentage or changes a different value. A reviewed unresolved_unit scoring_disposition preserves exact raw_quantity_value/raw_quantity_unit, makes no inferred unit correction, and marks dose and upper-limit assessment unresolved until independent exact-label evidence resolves the conflict. It applies only when the raw name, value and unit all match. Reviewed hierarchy corrections may supply corrected_child_row_refs with exact parent raw_source_path/name/value/unit and exact child source paths/names/raw_child_names. The existing applier validates the whole group before moving working rows; it preserves original API source references and quantities and fails closed on mismatch. A source_descriptor disposition with an authored raw value/unit applies only to that exact quantity edition. Exact-source corrected_notes repairs require raw source paths, names, notes and quantity pairs for the entire bundle; a mismatch fails closed before edits. Original working notes retain _pre_correction_notes, and source paths remain unchanged.",
+    "review_policy": "Every product entry is keyed by dsld_id and must carry: brand, product_name (for human-readable audit trail), raw_ingredient_text (the source row being corrected), corrected_ingredient_text (the text the cleaner should see, unchanged for unit-only corrections), correction_fields, evidence (free-text rationale with regulatory citations), sources (authoritative URLs — FDA, NIH, DailyMed, etc.), reviewer, and review_date (ISO 8601 YYYY-MM-DD). A verified cross-row defect may add additional_row_corrections, which inherit the product-level evidence, sources, reviewer, review_date, scope, and provenance tag. Quantity changes require exact raw and corrected value/unit pairs and must be supported by the official manufacturer or label image. Restoring a quantity absent from a form row additionally requires raw_quantity_missing=true, a positive corrected value/unit, and exact same-record source text that states the dose; the applier refuses to overwrite any existing quantity representation. A reviewed Daily Value correction requires an exact raw_daily_value and corrected_daily_value from the same official label; it rewrites only matching source percentages, never derives a percentage or changes a different value. A reviewed unresolved_unit scoring_disposition preserves exact raw_quantity_value/raw_quantity_unit, makes no inferred unit correction, and marks dose and upper-limit assessment unresolved until independent exact-label evidence resolves the conflict. It applies only when the raw name, value and unit all match. Reviewed hierarchy corrections may supply corrected_child_row_refs with exact parent raw_source_path/name/value/unit and exact child source paths/names/raw_child_names. The existing applier validates the whole group before moving working rows; it preserves original API source references and quantities and fails closed on mismatch. A source_descriptor disposition with an authored raw value/unit applies only to that exact quantity edition. Exact-source corrected_notes repairs require raw source paths, names, notes and quantity pairs for the entire bundle; a mismatch fails closed before edits. Original working notes retain _pre_correction_notes, and source paths remain unchanged. A reviewed source quantity conflict may set corrected_quantity_operator to ambiguous or unknown only with raw_quantities matching the entire original quantity array exactly. It preserves every number, unit and serving basis, changes only the existing unresolved qualifier, and retains original quantities for audit; it does not invent a replacement amount.",
     "unmatched_drug_tokens_policy": "When a row's raw_ingredient_text matches a known regulated-drug name (e.g., 'Insulin', 'Acetaminophen', 'Ibuprofen') and there is NO matching override for the product, the row must NOT be silently mapped. The cleaner emits the row to a quarantine path with reason='requires_human_review_drug_token_in_supplement' and excludes the product from scoring. New occurrences enter the reviewer pipeline via the same schema.",
-    "last_updated": "2026-10-24",
-    "total_entries": 90,
+    "last_updated": "2026-10-25",
+    "total_entries": 93,
     "loaded_by": "scripts/enhanced_normalizer.py via _load_label_corrections (cached on first product)"
   },
   "corrections": {
@@ -2305,6 +2305,258 @@
       "review_date": "2026-10-24",
       "scope": "dsld_id_only",
       "provenance_tag": "official_label_category_correction"
+    },
+    "8958": {
+      "reviewer": "Codex independent NIH API/PDF source verification; no new clinical approval asserted",
+      "review_date": "2026-10-25",
+      "scope": "dsld_id_only",
+      "brand": "Nature Made",
+      "product_name": "Vitamin E 800 IU Supplement",
+      "raw_ingredient_text": "Vitamin E",
+      "corrected_ingredient_text": "Vitamin E",
+      "raw_source_path": "ingredientRows[0]",
+      "raw_quantity_value": 800,
+      "raw_quantity_unit": "IU",
+      "raw_forms": [],
+      "corrected_forms": [
+        {
+          "name": "d-alpha-tocopherol",
+          "prefix": "as",
+          "category": "vitamin",
+          "ingredientGroup": "Vitamin E"
+        }
+      ],
+      "correction_fields": [
+        "forms"
+      ],
+      "evidence": "Exact printed ingredient list names d-Alpha Tocopherol; front states100%Natural. Active API row omits its form while API otheringredients.ingredients[0] names D-Alpha-Tocopherol. Restore the disclosed natural RRR-alpha form without changing800IU per softgel or1-2daily directions. Do not infer synthetic dl-alpha or add an efficacy/safety approval. PDF SHA256 01b7f3b6f4fb822767dae8a1b827bb2653ef9d6f99626993a185c0c4007dfca4",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/8958",
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/8958.pdf",
+        "https://ods.od.nih.gov/factsheets/VitaminE-HealthProfessional/"
+      ],
+      "provenance_tag": "official_label_form_correction"
+    },
+    "27808": {
+      "reviewer": "Codex independent NIH API/PDF source verification; no new clinical approval asserted",
+      "review_date": "2026-10-25",
+      "scope": "dsld_id_only",
+      "brand": "GNC Pro Performance AMP",
+      "product_name": "Amplified Stamina Lemon Tea",
+      "raw_ingredient_text": "L-Arginine",
+      "corrected_ingredient_text": "L-Arginine",
+      "raw_source_path": "ingredientRows[10].nestedRows[0]",
+      "raw_quantity_value": 100,
+      "raw_quantity_unit": "mg",
+      "corrected_quantity_value": 500,
+      "corrected_quantity_unit": "mg",
+      "raw_forms": [
+        {
+          "order": 1,
+          "ingredientId": 285879,
+          "prefix": null,
+          "percent": null,
+          "name": "L-Arginine",
+          "category": "amino acid",
+          "ingredientGroup": "Arginine",
+          "uniiCode": "94ZLA3W45F"
+        },
+        {
+          "order": 2,
+          "ingredientId": 286585,
+          "prefix": null,
+          "percent": null,
+          "name": "L-Arginine, OT2",
+          "category": "amino acid",
+          "ingredientGroup": "Arginine",
+          "uniiCode": "94ZLA3W45F"
+        }
+      ],
+      "correction_fields": [
+        "quantity_value",
+        "ingredient_text"
+      ],
+      "evidence": "Exact LemonTea PDF independently prints L-Arginine500mg per1scoop5.55g and1000mg per2scoops11.1g. API incorrectly transcribes only the5.55g column as100mg. Correct that matching value only, retain1000mg and both serving bases/forms. This is not borrowed fromFruitBlast and does not allocate the total betweenOT2L-arginine andL-arginineHCl. PDF SHA256 631d243d986502b9651893199ad53200946192714b4ab5fb266f518dbaa10134 The same Lemon Tea PDF prints guarana-associated caffeine50mg per1scoop and100mg per2scoops; repair API child names150/300 and the erroneous second-column300mg quantity. Four sources100+40+50+10=200mg per scoop agree with printed total200mg. Do not transfer this correction to Fruit Blast28993, whose own PDF differs.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/27808",
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/27808.pdf"
+      ],
+      "provenance_tag": "official_label_quantity_correction",
+      "additional_row_corrections": [
+        {
+          "raw_ingredient_text": "150 mg Caffeine",
+          "corrected_ingredient_text": "50 mg Caffeine",
+          "raw_source_path": "ingredientRows[9].nestedRows[1].nestedRows[0]",
+          "raw_quantity_value": 50,
+          "raw_quantity_unit": "mg",
+          "raw_forms": []
+        },
+        {
+          "raw_ingredient_text": "300 mg Caffeine",
+          "corrected_ingredient_text": "100 mg Caffeine",
+          "raw_source_path": "ingredientRows[9].nestedRows[1].nestedRows[1]",
+          "raw_quantity_value": 300,
+          "raw_quantity_unit": "mg",
+          "corrected_quantity_value": 100,
+          "corrected_quantity_unit": "mg",
+          "raw_forms": []
+        }
+      ]
+    },
+    "28993": {
+      "raw_ingredient_text": "Caffeine Anhydrous",
+      "corrected_ingredient_text": "Caffeine Anhydrous",
+      "raw_source_path": "ingredientRows[8].nestedRows[3]",
+      "raw_forms": [],
+      "raw_quantities": [
+        {
+          "servingSizeOrder": 1,
+          "servingSizeQuantity": 10.2,
+          "operator": "=",
+          "quantity": 200,
+          "unit": "mg",
+          "dailyValueTargetGroup": [
+            {
+              "name": "Adults and children 4 or more years of age",
+              "operator": null,
+              "percent": null,
+              "footnote": "Daily Value not established"
+            }
+          ],
+          "servingSizeUnit": "Gram(s)"
+        },
+        {
+          "servingSizeOrder": 1,
+          "servingSizeQuantity": 5.1,
+          "operator": "=",
+          "quantity": 100,
+          "unit": "mg",
+          "dailyValueTargetGroup": [
+            {
+              "name": "Adults and children 4 or more years of age",
+              "operator": null,
+              "percent": null,
+              "footnote": "Daily Value not established"
+            }
+          ],
+          "servingSizeUnit": "Gram(s)"
+        }
+      ],
+      "corrected_quantity_operator": "ambiguous",
+      "corrected_notes": "Exact label caffeine components total 300 mg per scoop, while label total states 200 mg per scoop. Total and component attribution require source clarification; printed quantities are retained, not treated as exact assessable exposure.",
+      "additional_row_corrections": [
+        {
+          "raw_ingredient_text": "40 mg Caffeine",
+          "corrected_ingredient_text": "40 mg Caffeine",
+          "raw_source_path": "ingredientRows[9].nestedRows[0].nestedRows[0]",
+          "raw_forms": [],
+          "raw_quantities": [
+            {
+              "servingSizeOrder": 1,
+              "servingSizeQuantity": 10.2,
+              "operator": "=",
+              "quantity": 80,
+              "unit": "mg",
+              "dailyValueTargetGroup": [],
+              "servingSizeUnit": "Gram(s)"
+            },
+            {
+              "servingSizeOrder": 1,
+              "servingSizeQuantity": 5.1,
+              "operator": "=",
+              "quantity": 40,
+              "unit": "mg",
+              "dailyValueTargetGroup": [],
+              "servingSizeUnit": "Gram(s)"
+            }
+          ],
+          "corrected_quantity_operator": "ambiguous",
+          "corrected_notes": "Exact label caffeine components total 300 mg per scoop, while label total states 200 mg per scoop. Total and component attribution require source clarification; printed quantities are retained, not treated as exact assessable exposure.",
+          "raw_notes": null,
+          "raw_quantity_value": 80,
+          "raw_quantity_unit": "mg"
+        },
+        {
+          "raw_ingredient_text": "150 mg Caffeine",
+          "corrected_ingredient_text": "150 mg Caffeine",
+          "raw_source_path": "ingredientRows[9].nestedRows[1].nestedRows[0]",
+          "raw_forms": [],
+          "raw_quantities": [
+            {
+              "servingSizeOrder": 1,
+              "servingSizeQuantity": 10.2,
+              "operator": "=",
+              "quantity": 300,
+              "unit": "mg",
+              "dailyValueTargetGroup": [],
+              "servingSizeUnit": "Gram(s)"
+            },
+            {
+              "servingSizeOrder": 1,
+              "servingSizeQuantity": 5.1,
+              "operator": "=",
+              "quantity": 150,
+              "unit": "mg",
+              "dailyValueTargetGroup": [],
+              "servingSizeUnit": "Gram(s)"
+            }
+          ],
+          "corrected_quantity_operator": "ambiguous",
+          "corrected_notes": "Exact label caffeine components total 300 mg per scoop, while label total states 200 mg per scoop. Total and component attribution require source clarification; printed quantities are retained, not treated as exact assessable exposure.",
+          "raw_notes": null,
+          "raw_quantity_value": 300,
+          "raw_quantity_unit": "mg"
+        },
+        {
+          "raw_ingredient_text": "10 mg Caffeine",
+          "corrected_ingredient_text": "10 mg Caffeine",
+          "raw_source_path": "ingredientRows[9].nestedRows[2].nestedRows[0]",
+          "raw_forms": [],
+          "raw_quantities": [
+            {
+              "servingSizeOrder": 1,
+              "servingSizeQuantity": 10.2,
+              "operator": "=",
+              "quantity": 20,
+              "unit": "mg",
+              "dailyValueTargetGroup": [],
+              "servingSizeUnit": "Gram(s)"
+            },
+            {
+              "servingSizeOrder": 1,
+              "servingSizeQuantity": 5.1,
+              "operator": "=",
+              "quantity": 10,
+              "unit": "mg",
+              "dailyValueTargetGroup": [],
+              "servingSizeUnit": "Gram(s)"
+            }
+          ],
+          "corrected_quantity_operator": "ambiguous",
+          "corrected_notes": "Exact label caffeine components total 300 mg per scoop, while label total states 200 mg per scoop. Total and component attribution require source clarification; printed quantities are retained, not treated as exact assessable exposure.",
+          "raw_notes": null,
+          "raw_quantity_value": 20,
+          "raw_quantity_unit": "mg"
+        }
+      ],
+      "brand": "GNC Pro Performance AMP",
+      "product_name": "Amplified Stamina Fruit Blast",
+      "scope": "dsld_id_only",
+      "reviewer": "Codex independent NIH API/PDF source verification; no new clinical approval asserted",
+      "review_date": "2026-10-25",
+      "correction_fields": [
+        "quantity_operator",
+        "notes"
+      ],
+      "evidence": "Exact Fruit Blast PDF prints caffeine anhydrous100mg, yerba mate caffeine40mg, guarana caffeine150mg and black tea caffeine10mg per scoop, but also states total caffeine200mg per scoop. Components sum300mg. API preserves150/300 guarana values; do not borrow Lemon Tea50/100mg or invent a corrected total. Preserve all printed component amounts and flag exposure unresolved through existing quantity qualifier until exact-source clarification. PDF SHA256 481b1f708c57f0e068d7cf1bbdac01ffa93cf50bafcb491beda49d11f964eaf0",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/28993",
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/28993.pdf"
+      ],
+      "provenance_tag": "official_label_quantity_conflict",
+      "raw_notes": null,
+      "raw_quantity_value": 200,
+      "raw_quantity_unit": "mg"
     }
   }
 }

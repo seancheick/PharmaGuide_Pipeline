@@ -652,3 +652,145 @@ def test_reviewed_form_facts_survive_the_export_display_ledger(pid, source_ref, 
         assert 'cracked-wall' in ingredient['source_label_name'].casefold()
         assert ingredient['form_match_status'] != 'FORM_UNMAPPED'
         assert 'does not identify' not in str(ingredient.get('consumer_note') or '')
+
+
+def test_signed_source_vitamin_e_uses_printed_natural_form_and_resolves_conversion():
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    from enrich_supplements_v3 import SupplementEnricherV3
+    from scoring_v4.scored_artifact import build_scored_artifact
+
+    raw = json.loads((Path(__file__).parent / 'fixtures' / 'completion_source_8958_raw.json').read_text())
+    clean = EnhancedDSLDNormalizer().normalize_product(raw)
+    [vitamin] = [row for row in clean['activeIngredients'] if row.get('raw_source_path') == 'ingredientRows[0]']
+    assert any(form.get('name') == 'd-alpha-tocopherol' for form in vitamin.get('forms') or [])
+    assert vitamin['quantity'] == 800 and vitamin['unit'] == 'IU'
+    enriched, _ = SupplementEnricherV3().enrich_product(clean)
+    scored = build_scored_artifact(enriched)
+    assert scored['assessment_readiness']['dose']['readiness'] == 'complete'
+    [owner] = [row for row in enriched['ingredient_quality_data']['ingredients'] if row.get('canonical_id') == 'vitamin_e']
+    assert owner['matched_form'] == 'd-alpha-tocopherol'
+    [assessment] = enriched['rda_ul_data']['adequacy_results']
+    assert assessment['per_day_min'] == pytest.approx(536)
+    assert assessment['per_day_max'] == pytest.approx(1072)
+    assert assessment['over_ul'] is True
+    assert assessment['ul'] == 1000
+    assert scored['dose_safety_evaluation']['dose_ceiling']['minimum_exceeds'] is False
+    assert scored['dose_safety_evaluation']['dose_ceiling']['pct_ul'] == pytest.approx(107.2)
+    assert scored['product_safety_status'] == 'caution'
+    from build_final_db import build_detail_blob
+    blob = build_detail_blob(enriched, scored)
+    assert blob['product_safety_status'] == 'caution'
+    [printed] = [row for row in blob['display_ingredients'] if row.get('raw_source_path') == 'ingredientRows[0]']
+    assert printed['exact_dose_text'] == '800 IU'
+    assert printed['label_display_form'] == 'd-alpha-tocopherol'
+
+
+def test_signed_source_arginine_variant_uses_own_pdf_and_preserves_other_column():
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+
+    raw = json.loads((Path(__file__).parent / 'fixtures' / 'completion_source_27808_raw.json').read_text())
+    rows = raw['ingredientRows']
+    normalizer = EnhancedDSLDNormalizer()
+    normalizer._stamp_raw_source_paths(rows, 'ingredientRows')
+    normalizer._apply_label_corrections(rows, '27808')
+    arginine = rows[10]['nestedRows'][0]
+    assert {q['servingSizeQuantity']: q['quantity'] for q in arginine['quantity']} == {5.55: 500, 11.1: 1000}
+    assert {q['unit'] for q in arginine['quantity']} == {'mg'}
+    assert arginine['_pre_correction_quantity_value'] == 100
+    assert [form['name'] for form in arginine['forms']] == ['L-Arginine', 'L-Arginine, OT2']
+
+
+@pytest.mark.parametrize('changed', ['quantity', 'form'])
+def test_signed_source_vitamin_e_correction_does_not_override_a_changed_edition(changed):
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+
+    raw = json.loads((Path(__file__).parent / 'fixtures' / 'completion_source_8958_raw.json').read_text())
+    row = raw['ingredientRows'][0]
+    if changed == 'quantity':
+        row['quantity'][0]['quantity'] = 400
+    else:
+        row['forms'] = [{'name': 'dl-alpha-tocopherol'}]
+    normalizer = EnhancedDSLDNormalizer()
+    normalizer._stamp_raw_source_paths(raw['ingredientRows'], 'ingredientRows')
+    expected_forms = json.loads(json.dumps(row['forms']))
+    normalizer._apply_label_corrections(raw['ingredientRows'], '8958')
+    assert row['forms'] == expected_forms
+    assert not row.get('_label_correction_applied')
+
+
+@pytest.mark.parametrize('pid', ['8958', '27808'])
+def test_signed_source_correction_never_applies_to_another_label_id(pid):
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+
+    raw = json.loads((Path(__file__).parent / 'fixtures' / f'completion_source_{pid}_raw.json').read_text())
+    normalizer = EnhancedDSLDNormalizer()
+    normalizer._stamp_raw_source_paths(raw['ingredientRows'], 'ingredientRows')
+    normalizer._apply_label_corrections(raw['ingredientRows'], '999999999')
+    if pid == '8958':
+        assert raw['ingredientRows'][0]['forms'] == []
+    else:
+        assert {q['servingSizeQuantity']: q['quantity'] for q in raw['ingredientRows'][10]['nestedRows'][0]['quantity']} == {5.55: 100, 11.1: 1000}
+
+
+def test_signed_source_lemon_tea_caffeine_matches_own_printed_columns():
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    raw = json.loads((Path(__file__).parent / 'fixtures' / 'completion_source_27808_raw.json').read_text())
+    normalizer = EnhancedDSLDNormalizer()
+    normalizer._stamp_raw_source_paths(raw['ingredientRows'], 'ingredientRows')
+    normalizer._apply_label_corrections(raw['ingredientRows'], '27808')
+    rows = raw['ingredientRows'][9]['nestedRows'][1]['nestedRows']
+    assert [(r['name'], r['quantity'][0]['quantity']) for r in rows] == [('50 mg Caffeine', 50), ('100 mg Caffeine', 100)]
+
+
+def test_signed_source_fruit_blast_conflict_preserves_printed_numbers_without_exact_total():
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    from enrich_supplements_v3 import SupplementEnricherV3
+    from scoring_v4.dose_safety import _declared_daily_caffeine
+    from scoring_v4.scored_artifact import build_scored_artifact
+    raw = json.loads((Path(__file__).parent / 'fixtures' / 'completion_source_28993_raw.json').read_text())
+    clean = EnhancedDSLDNormalizer().normalize_product(raw)
+    enriched, _ = SupplementEnricherV3().enrich_product(clean)
+    caffeine = _declared_daily_caffeine(enriched)
+    assert caffeine['total_mg_day_min'] is None
+    assert caffeine['total_mg_day_max'] is None
+    assert caffeine['unknown_rows'] == 4
+    assert build_scored_artifact(enriched)['assessment_readiness']['dose']['readiness'] != 'complete'
+    [guarana] = [r for r in enriched['ingredient_quality_data']['ingredients']
+                  if r.get('raw_source_path') == 'ingredientRows[9].nestedRows[1].nestedRows[0]']
+    assert guarana['quantity'] == 300
+    assert {v['quantity'] for v in guarana['raw_taxonomy']['quantityVariants']} == {150, 300}
+
+
+def test_source_quantity_qualifier_is_exact_snapshot_bound_and_does_not_mutate_registry():
+    from copy import deepcopy
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    normalizer = EnhancedDSLDNormalizer()
+    raw_quantity = [{'quantity': 150, 'unit': 'mg', 'operator': '=', 'servingSizeQuantity': 5.1}]
+    entry = {'raw_ingredient_text': 'Caffeine', 'raw_source_path': 'ingredientRows[0]',
+             'raw_quantities': deepcopy(raw_quantity), 'corrected_quantity_operator': 'ambiguous'}
+    normalizer._label_corrections_by_dsld_id['test'] = entry
+    def apply(quantities):
+        rows = [{'name': 'Caffeine', 'raw_source_path': 'ingredientRows[0]', 'quantity': quantities}]
+        return normalizer._apply_label_corrections(rows, 'test')[0]
+    result = apply(deepcopy(raw_quantity))
+    assert result['quantity'][0]['operator'] == 'ambiguous'
+    assert result['quantity'][0]['quantity'] == 150
+    assert entry['raw_quantities'] == raw_quantity
+    changed = deepcopy(raw_quantity); changed[0]['quantity'] = 160
+    assert apply(changed)['quantity'][0]['operator'] == '='
+    changed = deepcopy(raw_quantity); changed[0]['servingSizeQuantity'] = 10.2
+    assert apply(changed)['quantity'][0]['operator'] == '='
+
+
+def test_lemon_tea_caffeine_daily_range_does_not_add_alternative_columns():
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    from enrich_supplements_v3 import SupplementEnricherV3
+    from scoring_v4.dose_safety import _declared_daily_caffeine
+    raw = json.loads((Path(__file__).parent / 'fixtures' / 'completion_source_27808_raw.json').read_text())
+    clean = EnhancedDSLDNormalizer().normalize_product(raw)
+    enriched, _ = SupplementEnricherV3().enrich_product(clean)
+    caffeine = _declared_daily_caffeine(enriched)
+    assert caffeine['rows'] == 4
+    assert caffeine['unknown_rows'] == 0
+    assert caffeine['total_mg_day_min'] == 200
+    assert caffeine['total_mg_day_max'] == 400

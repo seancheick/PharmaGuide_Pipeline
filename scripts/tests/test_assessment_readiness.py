@@ -1668,3 +1668,17 @@ def test_zero_completion_requires_source_and_typed_proof(change):
     else:
         typed["source_unit"] = "g"
     assert _dose_readiness(product, [{"material": False}], module="generic")["readiness"] == "incomplete"
+
+
+@pytest.mark.parametrize('operator', ['ambiguous', 'unknown'])
+def test_unresolved_source_quantity_cannot_be_waived_by_complete_typed_assessment(operator):
+    from assessment_readiness import _dose_readiness
+    row = _row('Caffeine', 'caffeine', quantity=300)
+    row['raw_taxonomy'] = {'quantityVariants': [{'quantity': 300, 'unit': 'mg',
+        'operator': operator, 'selected_for_analysis': True}]}
+    product = _product(row)
+    product['rda_ul_data']['dose_assessments'][0].update(source_value=300, source_unit='mg', readiness='complete')
+    result = _dose_readiness(product, [{'material': True, 'source_row_ref': 'ingredientRows[0]', 'quantity': 300, 'unit': 'mg'}], module='sports')
+    assert result['readiness'] == 'incomplete'
+    assert result['reason_code'] == 'unresolved_source_quantity'
+    assert result['incomplete_source_row_refs'] == ['ingredientRows[0]']

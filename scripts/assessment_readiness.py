@@ -14,6 +14,7 @@ import re
 from typing import Any, Dict, Iterable, List, Mapping
 
 from dose_assessment import CONVERSION_FAILED, NO_UL_APPLICABLE
+from scoring_v4.exposure import quantity_is_unresolved
 from probiotic_measurements import AFU_REVIEW_REASON, pending_afu_measurements, declared_total_cfu, unresolved_cfu_measurements, is_probiotic_source_identity
 from scoring_input_contract import (
     MATERIAL_ROLES,
@@ -922,6 +923,18 @@ def _dose_readiness(
     *,
     module: str,
 ) -> Dict[str, Any]:
+    # A typed assessment or a "no UL" finding cannot turn conflicting
+    # source quantities into completed dose work. Reuse the exposure owner's
+    # qualifier decision, before route/material projections can drop the row.
+    unresolved_source_refs = sorted({
+        _row_ref(row, index)
+        for index, row in enumerate(get_source_score_eligible_active_rows(product))
+        if quantity_is_unresolved(row)
+    })
+    if unresolved_source_refs:
+        return {"readiness": READINESS_INCOMPLETE, "collection_status": "incomplete",
+                "assessment_source": "source_quantities", "reason_code": "unresolved_source_quantity",
+                "incomplete_source_row_refs": unresolved_source_refs}
     # Measurement holds follow their source rows, regardless of product route.
     unresolved = unresolved_cfu_measurements(product)
     if unresolved:

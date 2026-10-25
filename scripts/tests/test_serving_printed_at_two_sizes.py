@@ -305,3 +305,41 @@ def test_merged_serving_blend_keeps_one_analysis_owner_through_scoring():
     assert transparency["penalties"]["B5_proprietary_blend_opacity"] == 0.0
     assert transparency["components"]["per_strain_cfu_on_label"] == 0.0
     assert transparency["components"]["aggregate_cfu_disclosure_proxy"] == 3.0
+
+
+def _amount_named_caffeine(amount, size, *, order=1, unii=None):
+    return {'name': f'{amount} mg Caffeine', 'ingredientGroup': 'Caffeine',
+            'category': 'non-nutrient/non-botanical', 'uniiCode': unii,
+            'forms': [], 'nestedRows': [], 'quantity': [
+                {'quantity': amount, 'unit': 'mg', 'servingSizeOrder': order,
+                 'servingSizeQuantity': size, 'servingSizeUnit': 'Gram(s)'}]}
+
+
+def test_amount_named_alternative_columns_merge_only_with_source_amount_agreement():
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    rows = [_amount_named_caffeine(40, 5.55), _amount_named_caffeine(80, 11.1)]
+    merged = EnhancedDSLDNormalizer._merge_alternate_serving_rows(rows)
+    assert len(merged) == 1
+    assert [q['quantity'] for q in merged[0]['quantity']] == [40, 80]
+
+
+@pytest.mark.parametrize('conflict', ['same_size', 'wrong_name', 'different_unii', 'form', 'missing_size', 'different_order'])
+def test_amount_named_alternates_keep_conflicting_or_independent_sources(conflict):
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    first, second = _amount_named_caffeine(40, 5.55), _amount_named_caffeine(80, 11.1)
+    if conflict == 'same_size': second['quantity'][0]['servingSizeQuantity'] = 5.55
+    if conflict == 'wrong_name': second['name'] = '150 mg Caffeine'
+    if conflict == 'different_unii': first['uniiCode'], second['uniiCode'] = 'A', 'B'
+    if conflict == 'form': second['forms'] = [{'name': 'Caffeine citrate'}]
+    if conflict == 'missing_size': second['quantity'][0]['servingSizeQuantity'] = None
+    if conflict == 'different_order': second['quantity'][0]['servingSizeOrder'] = 2
+    assert len(EnhancedDSLDNormalizer._merge_alternate_serving_rows([first, second])) == 2
+
+
+def test_amount_named_alternates_do_not_merge_across_different_carriers():
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    first = {'name': 'Yerba mate', 'nestedRows': [_amount_named_caffeine(40, 5.55)]}
+    second = {'name': 'Guarana', 'nestedRows': [_amount_named_caffeine(80, 11.1)]}
+    merged = EnhancedDSLDNormalizer._merge_alternate_serving_rows([first, second])
+    assert len(merged) == 2
+    assert all(len(r['nestedRows']) == 1 for r in merged)

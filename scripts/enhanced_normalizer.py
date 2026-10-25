@@ -4693,11 +4693,34 @@ class EnhancedDSLDNormalizer:
                 else:
                     owner_row.setdefault("nestedRows", []).append(child)
 
+        def amount_named_identity(row: Dict[str, Any]) -> Optional[tuple]:
+            # Some API leaf names repeat their amount ("40 mg Caffeine",
+            # "80 mg Caffeine"). Reconcile only sibling serving columns,
+            # never children of different carriers or names contradicting the
+            # quantity field. This is source structure, not identity inference.
+            quantities = quantity_rows(row)
+            if row.get("nestedRows") or row.get("forms") or len(quantities) != 1:
+                return None
+            quantity = quantities[0]
+            context = serving_context(quantity)
+            if (context is None or context[0] is None or not context[2]
+                    or isinstance(context[1], bool)
+                    or not isinstance(context[1], (int, float)) or context[1] <= 0):
+                return None
+            match = re.fullmatch(r"(\d+(?:\.\d+)?)\s+(mg|mcg|g)\s+(.+)", normalized_text(row.get("name")))
+            if (not match or match[3] != normalized_text(row.get("ingredientGroup"))
+                    or match[2] != normalized_text(quantity.get("unit"))
+                    or isinstance(quantity.get("quantity"), bool)
+                    or quantity.get("quantity") != float(match[1])):
+                return None
+            return ("amount_named", match[3], normalized_text(row.get("category")),
+                    normalized_text(row.get("uniiCode")), context[2])
+
         sizes: Dict[tuple, List[Dict[str, Any]]] = {}
         for row in ingredient_rows:
             if not isinstance(row, dict) or id(row) in merged_ids or not own_contexts(row):
                 continue
-            key = loose_identity(row)
+            key = amount_named_identity(row) or loose_identity(row)
             if key[0]:
                 sizes.setdefault(key, []).append(row)
 
@@ -4751,7 +4774,13 @@ class EnhancedDSLDNormalizer:
             )
             if not disjoint or not columns_are_alternatives(alternatives, columns):
                 continue
-            if not all(
+            amount_key = amount_named_identity(alternatives[0])
+            amount_named_alternatives = (
+                amount_key is not None
+                and all(amount_named_identity(row) == amount_key for row in alternatives)
+                and len({size for column in columns for _order, size, _unit in column}) == len(alternatives)
+            )
+            if not amount_named_alternatives and not all(
                 trees_compatible(alternatives[0], alternate, columns[0], column)
                 for alternate, column in zip(alternatives[1:], columns[1:])
             ):
@@ -5472,6 +5501,15 @@ class EnhancedDSLDNormalizer:
             entry = corrections_by_raw_text.get(name)
             if entry and entry.get("raw_source_path") and row.get("raw_source_path") != entry["raw_source_path"]:
                 entry = None
+            if entry and "corrected_quantity_operator" in entry:
+                # A verified contradiction may invalidate an exact amount while
+                # leaving every printed number intact. Bind the whole original
+                # quantity array, including serving contexts; a new edition
+                # must never inherit this decision by name alone.
+                if entry["corrected_quantity_operator"] not in {"ambiguous", "unknown"}:
+                    raise ValueError("Source conflict requires an unresolved quantity operator")
+                if not isinstance(entry.get("raw_quantities"), list) or row.get("quantity") != entry["raw_quantities"]:
+                    entry = None
             if entry and "raw_forms" in entry:
                 forms = row.get("forms")
                 source_forms = [
@@ -5525,6 +5563,11 @@ class EnhancedDSLDNormalizer:
                         f"{name!r}"
                     )
                 correction_applied = False
+                if "corrected_quantity_operator" in entry:
+                    row["_pre_correction_quantity"] = deepcopy(row["quantity"])
+                    for quantity in row["quantity"]:
+                        quantity["operator"] = entry["corrected_quantity_operator"]
+                    correction_applied = True
                 if corrected and corrected != name:
                     row["_pre_correction_name"] = name
                     row["name"] = corrected
