@@ -148,7 +148,9 @@ _DRI_DUAL_DECLARATION_CANONICALS = frozenset({
 })
 
 
-def mark_compound_duplicate_rows(rows: list[Any]) -> list[dict[str, Any]]:
+def mark_compound_duplicate_rows(
+    rows: list[Any], *, owners: dict[int, dict[str, Any]] | None = None,
+) -> list[dict[str, Any]]:
     """Mark dual-declaration compound rows with ``is_compound_duplicate=True``.
 
     Mineral labels frequently declare the same nutrient twice: once as the
@@ -174,7 +176,9 @@ def mark_compound_duplicate_rows(rows: list[Any]) -> list[dict[str, Any]]:
     Genuinely additive multi-form labels with no bare elemental row
     (e.g. beta-carotene + retinyl palmitate) are untouched.
 
-    Idempotent. Returns the rows that are marked.
+    Idempotent. Returns the rows that are marked. An optional process-local
+    owners map links each marked row's object identity to its declared nutrient
+    row, so exposure consumers reuse this decision without persisting a field.
     """
     groups: dict[str, list[dict[str, Any]]] = {}
     for row in rows:
@@ -217,4 +221,6 @@ def mark_compound_duplicate_rows(rows: list[Any]) -> list[dict[str, Any]]:
             if name != canonical_name:
                 row["is_compound_duplicate"] = True
                 marked.append(row)
+                if owners is not None:
+                    owners[id(row)] = bare_rows[0]
     return marked

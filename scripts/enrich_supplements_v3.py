@@ -20867,6 +20867,27 @@ class SupplementEnricherV3:
             label_rows = set()
 
         rows_to_clear = list(raw_ingredients) + list(raw_skipped) + list(ingredients)
+        compound_exposure_owners = {}
+        mark_compound_duplicate_rows(ingredients + skipped, owners=compound_exposure_owners)
+        # IQM rows distinguish nested forms/parent totals; the raw dose rows
+        # retain the declaration grouping used by the RDA owner. Carry that
+        # existing owner decision across the source-path seam rather than
+        # independently classifying nested source materials here.
+        dose_sources = self._dose_active_ingredients_for_enrichment(enriched)
+        source_owners = {}
+        mark_compound_duplicate_rows(dose_sources, owners=source_owners)
+        quality_by_key = {}
+        for row in ingredients + skipped:
+            quality_by_key.setdefault(self._interaction_row_key(row), {})[id(row)] = row
+        for source_row in dose_sources:
+            owner = source_owners.get(id(source_row))
+            source_candidates = quality_by_key.get(self._interaction_row_key(source_row), {})
+            owner_candidates = quality_by_key.get(self._interaction_row_key(owner), {}) if owner else {}
+            if len(source_candidates) == len(owner_candidates) == 1:
+                quality_row = next(iter(source_candidates.values()))
+                quality_owner = next(iter(owner_candidates.values()))
+                if quality_row is not quality_owner:
+                    compound_exposure_owners[id(quality_row)] = quality_owner
         for ingredient in rows_to_clear:
             if isinstance(ingredient, dict):
                 ingredient["safety_hits"] = []
@@ -20978,7 +20999,7 @@ class SupplementEnricherV3:
             # A blend header's amount is the blend's, never its named
             # substance's dose (D1c): its dose rules read "amount unknown", and
             # a marker it declares carries no amount.
-            dose_row = (
+            base_dose_row = (
                 {**ingredient, "quantity": None}
                 if ingredient.get("skip_reason") == SKIP_REASON_BLEND_HEADER_WITH_WEIGHT
                 else ingredient
@@ -21020,6 +21041,25 @@ class SupplementEnricherV3:
             for rule in matched_rules:
                 if not self._interaction_rule_applies(rule, scope_row):
                     continue
+                dose_row = base_dose_row
+                declared_owner = compound_exposure_owners.get(id(ingredient))
+                rule_subject = rule.get("subject_ref") or {}
+                if declared_owner is not None and (
+                    subject["db"] == "ingredient_quality_map"
+                    and
+                    self._normalize_interaction_db_key(rule_subject.get("db")) == subject["db"]
+                    and rule_subject.get("canonical_id") == subject["canonical_id"]
+                ):
+                    if self._interaction_rule_applies(rule, declared_owner):
+                        # The nutrient row already evaluates this same rule at
+                        # its elemental amount. Source-material grams are not
+                        # a second nutrient exposure. Other safety subjects on
+                        # this source row still run through their own rules.
+                        continue
+                    # A source-specific rule may still apply when the parent
+                    # cannot satisfy its form scope. Its elemental allocation
+                    # is unknown; retain the rule's amount-missing protection.
+                    dose_row = {**base_dose_row, "quantity": None}
 
                 condition_hits: List[Dict[str, Any]] = []
                 drug_hits: List[Dict[str, Any]] = []

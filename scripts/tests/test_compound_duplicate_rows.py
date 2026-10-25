@@ -30,6 +30,7 @@ commit 99fa09b): bare elemental row wins; compound siblings excluded.
 
 from __future__ import annotations
 
+import copy
 import sys
 from pathlib import Path
 
@@ -70,6 +71,13 @@ def enricher() -> SupplementEnricherV3:
 
 
 class TestMarkCompoundDuplicateRows:
+    def test_optional_owner_map_reuses_the_declared_nutrient_row(self) -> None:
+        rows = _mag_rows()
+        owners = {}
+        marked = mark_compound_duplicate_rows(rows, owners=owners)
+        assert marked == [rows[1]]
+        assert owners == {id(rows[1]): rows[0]}
+
     def test_marks_compound_row_when_bare_row_present(self) -> None:
         rows = _mag_rows()
         marked = mark_compound_duplicate_rows(rows)
@@ -213,6 +221,52 @@ class TestIsScorable:
         mark_compound_duplicate_rows(rows)
         assert is_scorable(rows[0]) is True
         assert is_scorable(rows[1]) is False
+
+
+@pytest.mark.parametrize("source_specific", [False, True])
+@pytest.mark.parametrize("repeated_path", [False, True])
+def test_duplicate_nutrient_rule_keeps_distinct_safety_subject_and_form_scope(
+    enricher, monkeypatch, source_specific, repeated_path,
+):
+    """Synthetic rule copies exercise the seam without authoring clinical data."""
+    rows = _mag_rows()
+    for index, row in enumerate(rows):
+        row.update(canonical_source_db="ingredient_quality_map", mapped=True,
+                   raw_source_path=f"ingredientRows[{index}]",
+                   cleaner_row_role="active_scorable", score_eligible_by_cleaner=True,
+                   source_section="active", form_match_status="mapped")
+    rows[0]["form_id"] = "magnesium (unspecified)"
+    rows[1]["form_id"] = "magnesium glycinate"
+    if repeated_path:
+        rows[1]["raw_source_path"] = rows[0]["raw_source_path"]
+    source_rows = copy.deepcopy(rows)
+    source_rows[1]["safety_flags"] = [{"source_db": "banned_recalled_ingredients", "entry_id": "TEST_SOURCE"}]
+    rule = copy.deepcopy(next(r for r in enricher.databases["ingredient_interaction_rules"]["interaction_rules"]
+                              if r.get("id") == "RULE_IQM_MAGNESIUM_HYPERTENSION"))
+    extra = copy.deepcopy(rule)
+    extra.update(id="TEST_DISTINCT_SOURCE_RULE", subject_ref={
+        "db": "banned_recalled_ingredients", "canonical_id": "TEST_SOURCE"})
+    if source_specific:
+        rule["form_scope"] = ["magnesium glycinate"]
+    monkeypatch.setitem(enricher.databases, "ingredient_interaction_rules", {"interaction_rules": [rule, extra]})
+    profile = enricher._collect_interaction_profile({
+        "activeIngredients": source_rows,
+        "ingredient_quality_data": {"ingredients": rows, "ingredients_scorable": rows},
+        "servingSizes": [{"quantity": 1, "unit": "capsule", "minDailyServings": 1, "maxDailyServings": 1}],
+    })
+    alerts = profile["ingredient_alerts"]
+    distinct = [a for a in alerts if a["rule_id"] == "TEST_DISTINCT_SOURCE_RULE"]
+    assert distinct  # a duplicate nutrient amount must not erase another hazard
+    assert any(h["dose_decision"].get("dose_evaluation", {}).get("daily_amount") == 400
+               for a in distinct for h in a["condition_hits"] if h["condition_id"] == "hypertension")
+    primary = [a for a in alerts if a["rule_id"] == rule["id"]]
+    assert primary
+    if source_specific:
+        hit = next(h for h in primary[0]["condition_hits"] if h["condition_id"] == "hypertension")
+        assert hit["dose_decision"]["evaluation_status"] == "amount_unknown"
+        assert hit["dose_decision"]["consumer_disposition"] == "review"
+    else:
+        assert {a["ingredient_name"] for a in primary} == {"Magnesium"}
 
 
 class TestRdaUlCollection:

@@ -70,3 +70,15 @@ def test_catalyte_keeps_scoop_amount_without_inventing_daily_maximum(assessments
     assert generate_dosing_summary(enriched)["dosing_summary"] == "See product label"
     assert cleaned["statements"] == source["statements"]
     assert build_scored_artifact(enriched)["quality_score_status"] == "not_scored"
+
+
+@pytest.mark.parametrize("pid,expected", [("203385", 200), ("322515", 400)])
+def test_interaction_thresholds_use_elemental_magnesium_not_source_material(assessments, pid, expected):
+    enriched = assessments[pid][2]
+    evaluations = [hit["dose_decision"]["dose_evaluation"]
+                   for alert in enriched["interaction_profile"]["ingredient_alerts"]
+                   if alert.get("standard_name") == "Magnesium"
+                   for hit in alert.get("condition_hits", [])
+                   if (hit.get("dose_decision") or {}).get("dose_evaluation")]
+    assert evaluations
+    assert {e["daily_amount"] for e in evaluations} == {expected}
