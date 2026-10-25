@@ -27,7 +27,7 @@ Every reviewed serving repair is bound to SHA-256 of its source panel, serving r
 
 Data landed check:12 exact label entries and one clinical-description entry,0 unexpected/missing changes. No citation IDs changed: citation-diff tools selected0 citations/rules, which is not a new content-verification pass. Retained source receipts remain applicable, and the original Poolzyme methods/name/timing were independently rechecked again. Read-only fresh-context reviewer found no actionable defect; limits were no live re-fetch, broad suite or app render by that reviewer.
 
-**Checkpoint pending:** local rung and exact-candidate whole-fast CI must pass before main integration. No pipeline rerun, import, release or public product publication. Remaining scientific approvals, manufacturer clarifications, corrected PQQ table/other source dependencies and rebuilt corpus/app verification are not bypassed.
+**Checkpoint passed:** local546passed/24declaredopt-in skips and [whole-fast CI40221374564](https://github.com/seancheick/PharmaGuide_Pipeline/actions/runs/40221374564) green on exact runtime source `a7c203160`. No pipeline rerun, import, release or public product publication. Remaining scientific approvals, manufacturer clarifications, corrected PQQ table/other source dependencies and rebuilt corpus/app verification are not bypassed.
 
 ## Batch 1 — approval recorded; source-access gaps reduced
 
@@ -266,3 +266,12 @@ Audit receipt hashes and exact retrieval outcomes are retained locally in `.clau
 CI40220219109 on3b198e871 failed with three enumerated classes: one over-broad legacy-IU condition, four stale phase3 metadata pins, and five hierarchy rejection-message pins. The IU condition now limits the new source-preparation uncertainty to alternative preparation columns or the explicit cultured-vitamin/mineral context; ordinary mixed beta/retinyl behavior and its4500mcgRAE regression are preserved. The original beta-carotene UNII on243812/243815 is retained (live NIH source content names Beta-Carotene for01YAE03M7J). Strict metadata expectations were updated only for those two newly reviewed records, and all changed RAW hierarchy inputs still must raise; they now reject earlier at the SHA binding. No weakened safety exception or numerical policy change.
 
 Targeted combined files:212passed46.54s; remaining affected owner/guard slice126passed9.97s. Reviewer inspected just this delta and found no actionable issue. Fresh18-case qualified replay and local validation in progress; one combined whole-fast retry follows the finished corrections. Previous failed CI is not reported as passing. Ten actual staged serving-repair inputs were independently checked and all source bindings match. No full pipeline/app import/publication.
+
+
+### Final runtime qualification — October25
+
+**Implemented and qualified for main integration:** exact runtime source `a7c203160cce07b00f0cb3f2fec57490ed70b046` passed [whole-fast CI40221374564](https://github.com/seancheick/PharmaGuide_Pipeline/actions/runs/40221374564), all4shards, including strict declared-skip guards. Final local rung:546passed/24declaredopt-in skips in135.96s. Targeted correction/consumer checks and fresh-context delta review passed as recorded above. First checkpoint40220219109 failed and was corrected; it is not counted as a pass.
+
+Latest bounded artifacts are `qualified_candidate.jsonl`, `qualified_candidate.jsonl.records/`, `qualified_delta.json` and `qualified_movement_summary.json` under `.claude/state/verified_runtime_batch_20261025/`, beside frozen raw manifest/baseline and source receipts.18products,12affected and6hash-identical controls; all18safety states unchanged. All10actual staged serving-repair sources match their content bindings. Superseded intermediate captures removed. The final integration receipt changes documentation only; runtime source is identical to the green candidate.
+
+Confirmed engineering corrections in this batch are no longer deferred. Genuine clinical/source/manufacturer limitations remain held; no whole-corpus/rebuilt closure, real Flutter rendering, pipeline rerun, app import or release is claimed. Remaining external/source decisions and post-rebuild corpus/app verification stay on the existing register.
