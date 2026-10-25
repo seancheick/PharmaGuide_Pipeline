@@ -21,7 +21,7 @@ def test_prepared_larger_total_does_not_clear_unknown_contribution_as_beta(enric
     assert not out['has_over_ul'] and not out['safety_flags']
     assert row['warnings']
 
-@pytest.mark.parametrize('quantity,variants,directions',[(3000,True,'Mix with water or milk.'),(3417,False,'Mix with water or milk.'),(3417,True,'Swallow with water.')])
+@pytest.mark.parametrize('quantity,variants,directions',[(3417,False,'Mix with water or milk.'),(3417,True,'Swallow with water.')])
 def test_pure_beta_and_unrelated_variant_contexts_keep_no_ul(enricher,quantity,variants,directions):
     row=_assess(enricher,_row(quantity,variants=variants),directions)['analyzed_ingredients'][0]
     assert row['skip_ul_reason']=='beta_carotene_no_established_ul'
@@ -44,3 +44,12 @@ def test_shared_serving_order_with_omitted_quantity_keeps_prepared_scope_unknown
     for variant in row['quantityVariants']:
         variant.pop('serving_size_quantity')
     assert _assess(enricher,row)['analyzed_ingredients'][0]['ul_assessment_status']=='indeterminate'
+
+
+def test_powder_total_does_not_prove_all_activity_is_added_beta_carotene(enricher):
+    # Batch9 exact Bulk panels identify an added source, not every source's
+    # share of the powder activity. Selecting water must not invent zero retinol.
+    row = _assess(enricher, _row(3000))['analyzed_ingredients'][0]
+    assert row['converted_quantity'] == 3000
+    assert row['skip_ul_reason'] == 'mixed_vitamin_a_preformed_fraction_unknown'
+    assert row['ul_assessment_status'] == 'indeterminate'

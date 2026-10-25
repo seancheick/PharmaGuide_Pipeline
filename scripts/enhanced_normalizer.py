@@ -4228,7 +4228,7 @@ class EnhancedDSLDNormalizer:
                     omission_reason="empty_source_text",
                 )
             if hasattr(self, "_display_source_rows"):
-                raw_quantities = row.get("quantity")
+                raw_quantities = row.get("_pre_correction_quantity", row.get("quantity"))
                 first_quantity = (
                     next(
                         (item for item in raw_quantities if isinstance(item, dict)),
@@ -4251,7 +4251,7 @@ class EnhancedDSLDNormalizer:
                     "nested_depth": depth,
                     "parent_label": parent_label,
                     "parent_source_path": parent_source_path,
-                    "exact_dose_text": self._exact_label_dose_text(row),
+                    "exact_dose_text": self._exact_label_dose_text({**row, "quantity": raw_quantities}),
                     "serving_size_order": first_quantity.get("servingSizeOrder"),
                     "serving_size_quantity": first_quantity.get("servingSizeQuantity"),
                     "serving_size_unit": self._normalize_label_unit(
@@ -5501,12 +5501,12 @@ class EnhancedDSLDNormalizer:
             entry = corrections_by_raw_text.get(name)
             if entry and entry.get("raw_source_path") and row.get("raw_source_path") != entry["raw_source_path"]:
                 entry = None
-            if entry and "corrected_quantity_operator" in entry:
+            if entry and ("corrected_quantity_operator" in entry or "corrected_quantities" in entry):
                 # A verified contradiction may invalidate an exact amount while
                 # leaving every printed number intact. Bind the whole original
                 # quantity array, including serving contexts; a new edition
                 # must never inherit this decision by name alone.
-                if entry["corrected_quantity_operator"] not in {"ambiguous", "unknown"}:
+                if "corrected_quantity_operator" in entry and entry["corrected_quantity_operator"] not in {"ambiguous", "unknown"}:
                     raise ValueError("Source conflict requires an unresolved quantity operator")
                 if not isinstance(entry.get("raw_quantities"), list) or row.get("quantity") != entry["raw_quantities"]:
                     entry = None
@@ -5563,6 +5563,12 @@ class EnhancedDSLDNormalizer:
                         f"{name!r}"
                     )
                 correction_applied = False
+                if "corrected_quantities" in entry:
+                    if not isinstance(entry["corrected_quantities"], list) or len(entry["corrected_quantities"]) != len(row["quantity"]):
+                        raise ValueError("Reviewed quantity correction must preserve all columns")
+                    row.setdefault("_pre_correction_quantity", deepcopy(row["quantity"]))
+                    row["quantity"] = deepcopy(entry["corrected_quantities"])
+                    correction_applied = True
                 if "corrected_quantity_operator" in entry:
                     row["_pre_correction_quantity"] = deepcopy(row["quantity"])
                     for quantity in row["quantity"]:
@@ -6045,11 +6051,68 @@ class EnhancedDSLDNormalizer:
                 h["canonical_id"] = "digestive_enzymes"
                 h["canonical_source_db"] = "ingredient_quality_map"
 
+    def _apply_reviewed_serving_basis(self, raw_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Apply an exact-source panel repair through the existing correction owner.
+
+        A reviewed preparation map assigns original columns to serving rows;
+        it never chooses a column from the nutrient magnitude. Changed source
+        content fails closed rather than inheriting an earlier edition's repair.
+        """
+        entry = self._label_corrections_by_dsld_id.get(str(raw_data.get("id"))) or {}
+        repair = entry.get("serving_basis_correction")
+        if not repair:
+            return raw_data
+        source = {key: raw_data.get(key) for key in ("ingredientRows", "servingSizes", "statements")}
+        digest = hashlib.sha256(json.dumps(source, sort_keys=True, ensure_ascii=False,
+                                          separators=(",", ":")).encode()).hexdigest()
+        if digest != repair.get("raw_source_sha256"):
+            raise ValueError(f"Reviewed serving source changed for DSLD {raw_data.get('id')}")
+        working = deepcopy(raw_data)
+        servings = repair.get("serving_sizes")
+        if not isinstance(servings, list) or not servings:
+            raise ValueError("Reviewed serving correction requires serving rows")
+        by_order = {s["order"]: s for s in servings}
+        columns = repair.get("quantity_column_orders") or {}
+        visited = set()
+
+        def visit(rows, prefix):
+            for index, row in enumerate(rows):
+                path = f"{prefix}[{index}]"
+                quantities = row.get("quantity")
+                orders = columns.get(path)
+                basis = repair.get("quantity_serving_basis")
+                if orders is not None or basis is not None:
+                    if not isinstance(quantities, list) or (orders is not None and len(orders) != len(quantities)):
+                        raise ValueError(f"Reviewed quantity columns changed: {path}")
+                    row["_pre_correction_quantity"] = deepcopy(quantities)
+                    for position, quantity in enumerate(quantities):
+                        if orders is not None:
+                            order = orders[position]
+                            serving = by_order.get(order)
+                            if serving is None:
+                                raise ValueError(f"Unknown reviewed serving column: {path}")
+                            quantity.update(servingSizeOrder=order,
+                                            servingSizeQuantity=serving["minQuantity"],
+                                            servingSizeUnit=serving["unit"])
+                        elif basis is not None:
+                            quantity["servingSizeQuantity"] = basis
+                    quantities.sort(key=lambda q: q.get("servingSizeOrder", 0))
+                    row["_label_correction_applied"] = True
+                    row["_label_correction_provenance"] = entry["provenance_tag"]
+                    visited.add(path)
+                visit(row.get("nestedRows") or [], path + ".nestedRows")
+        visit(working.get("ingredientRows") or [], "ingredientRows")
+        if set(columns) - visited:
+            raise ValueError("Reviewed quantity source path missing")
+        working["servingSizes"] = deepcopy(servings)
+        return working
+
     def normalize_product(self, raw_data: Dict[str, Any]) -> Dict[str, Any]:
         """
         Enhanced product normalization with improved ingredient mapping
         """
         try:
+            raw_data = self._apply_reviewed_serving_basis(raw_data)
             self._display_ingredients_buffer = []
             self._display_source_rows = []
             self._label_ledger_omissions = []
@@ -9865,6 +9928,7 @@ class EnhancedDSLDNormalizer:
             # quantified variant while preserving every original variant.
             if quantity_variants:
                 primary = quantity_variants[0]
+                matched_column = False
                 canonical_serving = getattr(self, "_canonical_serving_row", None)
                 if isinstance(canonical_serving, dict):
                     canonical_quantity = next(
@@ -9882,18 +9946,21 @@ class EnhancedDSLDNormalizer:
                         None,
                     )
                     if canonical_quantity and canonical_quantity > 0:
+                        matching_variants = [
+                            variant for variant in quantity_variants
+                            if self._safe_float(variant.get("serving_size_quantity")) == canonical_quantity
+                        ]
                         matching_variant = next(
                             (
                                 variant
-                                for variant in quantity_variants
-                                if self._safe_float(
-                                    variant.get("serving_size_quantity")
-                                ) == canonical_quantity
+                                for variant in matching_variants
+                                if variant.get("serving_size_order") == canonical_serving.get("order")
                             ),
-                            None,
+                            matching_variants[0] if matching_variants else None,
                         )
                         if matching_variant is not None:
                             primary = matching_variant
+                            matched_column = matching_variant.get("serving_size_order") == canonical_serving.get("order")
                 primary_unit = str(primary.get("unit") or "").strip().casefold()
                 if (
                     not primary.get("quantity_parsed", True)
@@ -9906,7 +9973,8 @@ class EnhancedDSLDNormalizer:
                     primary = next(
                         (
                             variant
-                            for variant in quantity_variants[1:]
+                            for variant in quantity_variants
+                            if not matched_column or variant.get("serving_size_order") == primary.get("serving_size_order")
                             if variant.get("quantity_parsed", True)
                             and variant.get("quantity", 0) > 0
                             and str(variant.get("unit") or "").strip().casefold()

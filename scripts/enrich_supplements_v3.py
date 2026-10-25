@@ -22952,6 +22952,26 @@ class SupplementEnricherV3:
                         and "vitamin_a_beta_carotene_supplement"
                         in disclosed_vitamin_a_rules
                     )
+                    vitamin_a_preparation_columns = bool(
+                        resolved_canonical_id == "vitamin_a"
+                        and "vitamin_a_retinol" not in disclosed_vitamin_a_rules
+                        and any(
+                            "water" in str(statement.get("notes") or "").lower()
+                            and "milk" in str(statement.get("notes") or "").lower()
+                            for statement in product.get("statements") or []
+                            if isinstance(statement, dict)
+                            and any(token in str(statement.get("type") or "").lower()
+                                    for token in ("directions", "suggested", "usage"))
+                        )
+                        and len(ingredient.get("quantityVariants") or
+                                (ingredient.get("raw_taxonomy") or {}).get("quantityVariants") or []) > 1
+                        and len({
+                            (v.get("serving_size_quantity"), v.get("serving_size_unit"))
+                            for v in (ingredient.get("quantityVariants") or
+                                      (ingredient.get("raw_taxonomy") or {}).get("quantityVariants") or [])
+                            if isinstance(v, dict)
+                        }) == 1
+                    )
                     explicit_preformed_vitamin_a_fraction = (
                         _explicit_mixed_vitamin_a_preformed_fraction(ingredient)
                         if has_mixed_vitamin_a_forms
@@ -23032,6 +23052,17 @@ class SupplementEnricherV3:
                                 error=f"conversion_exception: {conversion_error}",
                             )
 
+                    if (self._normalize_text(unit) in {"iu", "ui", "u"}
+                            and (vitamin_a_preparation_columns or has_mixed_vitamin_a_forms)
+                            and explicit_preformed_vitamin_a_fraction is None):
+                        conversion = ConversionResult(
+                            success=False, original_value=quantity_float, original_unit=unit,
+                            converted_value=None, converted_unit=None,
+                            conversion_rule_id="vitamin_a_unknown", conversion_factor=None,
+                            nutrient_detected=std_name, form_detected="source_allocation_unknown",
+                            form_detection_source="label_preparation_scope", confidence="unknown",
+                            error="Named vitamin A sources are disclosed, but the aggregate IU total lacks the preparation and activity allocation needed for exact RAE conversion.",
+                        )
                     reviewed_unit_conflict = bool(
                         dose_data_quality
                         and dose_data_quality.get("status") == "unresolved_unit"
@@ -23245,42 +23276,10 @@ class SupplementEnricherV3:
                             if _explicit_non_folic_folate
                             else "unknown_folate_form_lineage"
                         )
-                    elif (
-                        rule_id == "vitamin_a_beta_carotene_supplement"
-                        and resolved_canonical_id == "vitamin_a"
-                        and any(
-                            "water" in str(statement.get("notes") or "").lower()
-                            and "milk" in str(statement.get("notes") or "").lower()
-                            for statement in (product.get("statements") or [])
-                            if isinstance(statement, dict)
-                            and any(token in str(statement.get("type") or "").lower()
-                                    for token in ("directions", "suggested", "usage"))
-                        )
-                        and any(
-                            isinstance(variant, dict)
-                            and isinstance(variant.get("quantity"), (int, float))
-                            and 0 < variant["quantity"] < quantity_float
-                            and self._normalize_text(variant.get("unit") or "")
-                                in {"mcg", "mcg rae"}
-                            and self._normalize_text(unit) in {"mcg", "mcg rae"}
-                            and any(
-                                isinstance(selected, dict)
-                                and selected.get("quantity") == quantity_float
-                                and variant.get("serving_size_quantity") == selected.get("serving_size_quantity")
-                                and all(variant.get(key) == selected.get(key)
-                                        and variant.get(key) is not None
-                                        for key in ("serving_size_order", "serving_size_unit"))
-                                for selected in (ingredient.get("quantityVariants") or
-                                                 (ingredient.get("raw_taxonomy") or {}).get("quantityVariants") or [])
-                            )
-                            for variant in (ingredient.get("quantityVariants") or
-                                            (ingredient.get("raw_taxonomy") or {}).get("quantityVariants") or [])
-                        )
-                    ):
-                        # A larger prepared-serving total is not evidence that
-                        # its added activity has the powder's beta-carotene form.
-                        # Keep the selected total for adequacy; do not infer
-                        # either preformed excess or all-beta UL exclusion.
+                    elif vitamin_a_preparation_columns:
+                        # Both powder and milk totals may include activity from
+                        # multiple sources. Column order or a larger value is
+                        # not evidence of a known preformed fraction.
                         skip_ul_check = True
                         ul_only_skip = True
                         skip_ul_reason = "mixed_vitamin_a_preformed_fraction_unknown"

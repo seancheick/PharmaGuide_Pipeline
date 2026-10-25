@@ -3,7 +3,7 @@
     "description": "Ingredients backed by clinical research and studies - Enhanced for Section C v3.4.0",
     "purpose": "evidence_scoring",
     "schema_version": "5.6.4",
-    "last_updated": "2026-10-24",
+    "last_updated": "2026-10-25",
     "total_entries": 210,
     "changelog": [
       "2026-10-20: INGR_TART_CHERRY standard_name is Tart Cherry (\"tart cherry extract\" kept as an alias), the rename deferred from PR205. Its juice-only applicability (PR213) rejects every non-juice row the name now reaches; measured on all 552 cherry-mentioning labels: 0 score, pillar or blob changes.",
@@ -10409,10 +10409,10 @@
       "health_goals_supported": [
         "Digestive Health"
       ],
-      "notes": "Placebo-controlled functional dyspepsia trial (PMID 37976892) evaluated an unbranded five-enzyme fungal fermentation formulation (amylase, protease, cellulase, lactase, lipase; 200 mg BID). Does not transfer to standalone protease, lipase, amylase, cellulase, or animal pancreatin. Retained-source scope and limitations: Dyspepsia quality-of-life, pain and sleep outcomes for a specific multi-enzyme combination; not measured nutrient absorption or isolated-enzyme efficacy (PMID: 37976892)",
+      "notes": "Placebo-controlled functional dyspepsia trial (PMID 37976892) evaluated Poolzyme Multi, a named five-enzyme fungal fermentation preparation (amylase, protease, cellulase, lactase, lipase; 200 mg at lunch and 200 mg at dinner). Does not transfer to standalone protease, lipase, amylase, cellulase, or animal pancreatin. Retained-source scope and limitations: Dyspepsia quality-of-life, pain and sleep outcomes for a specific multi-enzyme combination; not measured nutrient absorption or isolated-enzyme efficacy (PMID: 37976892)",
       "study_type": "rct_single",
-      "last_updated": "2026-03-07",
-      "notable_studies": "One placebo-controlled dyspepsia trial (PMID 37976892) evaluated an unbranded five-enzyme fungal formulation in functional dyspepsia. Applicability requires matching multi-enzyme fungal formulation facts; standalone discrete enzymes do not inherit this evidence.",
+      "last_updated": "2026-10-25",
+      "notable_studies": "One placebo-controlled dyspepsia trial (PMID 37976892) evaluated Poolzyme Multi, a named five-enzyme fungal preparation in functional dyspepsia. Applicability requires matching multi-enzyme fungal formulation facts; standalone discrete enzymes do not inherit this evidence.",
       "references_structured": [
         {
           "type": "pubmed",

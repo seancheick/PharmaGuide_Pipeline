@@ -6,6 +6,29 @@ Owner Check: existing `clinical_review_holds.csv` and `benchmark_review_backlog.
 
 This is documentation/report work only. No curated runtime clinical facts, eligibility flags, source contexts, scores or public fields changed. Frozen register fields and closure states remain intact. Source facts checked below are not automatically product-level clearances.
 
+## Runtime correction batch — implemented October 25
+
+**Current status:** confirmed engineering findings from batches6–9 are now implemented in the existing owners. Earlier “not fixed” statements below describe the review-only checkpoints, not the current candidate. Full-corpus/rebuilt closure remains separate.
+
+Owner Check: `enhanced_normalizer.py::_apply_label_corrections/_process_quantity` and the existing product-label correction file own reviewed source repairs; its private `_apply_reviewed_serving_basis` extends that same mechanism. `serving_frequency.py` still owns cadence; corrected source metadata feeds it. `enrich_supplements_v3.py::_collect_rda_ul_data` owns vitamin activity/allocation decisions. `build_final_db.py::_fold_general_serving_variants` supplies the existing `serving_note`, already read by Flutter. `backed_clinical_studies/INGR_DIGESTIVE_ENZYMES` retains the clinical record. Evidence: matrix/glossary, callers, app reader and raw/source/output traces inspected. Will NOT create another registry, scorer, parser, approval, public field, source allocation or numerical policy.
+
+| Correction | Implementation and bounded result |
+|---|---|
+| RAW275412 | Corrected exact-label daily source metadata from3–3 to3–9; per-capsule activities/blend amounts/CFU qualification retained. |
+| Two-Per-Day328753 | Shared two-capsule basis corrected across27 top-level active rows and their quantity-bearing children; values preserved. Vitamin A now1,500mcgRAE/day, D50mcg/day, E67mg/day, Mg100mg/day, Zn25mg/day. Unknown acetate fraction remains unknown; existing conservative UL bounds may establish within-limit status without claiming an exact fraction. |
+| Eight Bulk editions66984/69584/69613/243776/243812/243815/308692/315322 | Individually reviewed maps identify powder/water versus milk columns across panel rows, including nested rows. No runtime minimum-amount inference. Both alternatives retained; export supplies their existing serving notes. 243815 restores1–2/day. |
+| Related transcriptions | Exact panels support iodine150mcg and sodium mg on69584/69613; water E30IU/Mg140mg/Zn15mg on243776; thiamin mg and1.505/1.615g ATP complex on315322;1.505g water ATP on308692;243812 milk sugars46g;243815 milk manganese2.6mg;69613 milk inositol200mg versus water250mg. These are image-supported API corrections, unlike the genuine manufacturer unit conflicts retained in batch8. |
+| Named vitamin A sources | 67030 UI→IU and beta-carotene/palmitate; Bulk printed natural beta-carotene;328639 palm fruit mixed carotenoids plus beta-carotene. Legacy aggregate IU/preparation uncertainty retained; modern activity remains usable independently of preformed shares. Selecting powder never invents analytical zero retinol. |
+| Poolzyme | Canonical notes and notable-study description now name Poolzyme Multi and200mg at lunch/dinner. Existing source-context review still incomplete; no efficacy approval or dose curve added. |
+
+Every reviewed serving repair is bound to SHA-256 of its source panel, serving rows and statements. Changed content fails closed for renewed verification. The original API records are frozen; working pre-correction quantities are preserved, all serving alternatives remain, and repairs do not mutate caller inputs. Unknown selected quantities cannot fall through into a different milk preparation. Ordinary untouched IDs bypass this repair with a constant-time registry lookup.
+
+**Verification:** fail-first regressions reproduced the defect classes, then targeted fixes passed. Combined owner/export/data slice:789 passed in60.98s. Additional export-note and clinical-hold checks:3 passed. Full18-case frozen raw replay completed through Clean/Enrich/Score/detail blob:12 affected records changed; six controls have identical cleaned/enriched/scored/blob hashes. All18 product safety statuses unchanged. Previously scored18299070.2,RAW27541266.2 and895884.1 unchanged.328753 and67030 become scoreable at80.4/62.0 through resolved source defects; evidence readiness was already complete before these repairs, not newly approved by this batch. Other unresolved products remain held. No full corpus run or real app render is claimed.
+
+Data landed check:12 exact label entries and one clinical-description entry,0 unexpected/missing changes. No citation IDs changed: citation-diff tools selected0 citations/rules, which is not a new content-verification pass. Retained source receipts remain applicable, and the original Poolzyme methods/name/timing were independently rechecked again. Read-only fresh-context reviewer found no actionable defect; limits were no live re-fetch, broad suite or app render by that reviewer.
+
+**Checkpoint pending:** local rung and exact-candidate whole-fast CI must pass before main integration. No pipeline rerun, import, release or public product publication. Remaining scientific approvals, manufacturer clarifications, corrected PQQ table/other source dependencies and rebuilt corpus/app verification are not bypassed.
+
 ## Batch 1 — approval recorded; source-access gaps reduced
 
 Sean approved accepting the narrow supported findings, preserving negative trials, preparation boundaries and unresolved holds. The request's first three priority subjects match this response. Neumentix and 299v are priority questions, not permission to approve generic A103 probiotics. B445 brewed spearmint tea remains separate from Neumentix cognition; B365 remains preparation-specific.

@@ -5030,6 +5030,15 @@ def _fold_general_serving_variants(
     groups: Dict[tuple, List[Dict[str, Any]]] = {}
     for row in output:
         if row.get("serving_variants"):
+            # Cleaner-owned alternatives already contain the selected amount;
+            # attach the same serving notes used for folded source rows so
+            # consumers can distinguish powder/water from milk preparation.
+            row["serving_variants"] = [
+                {**variant, "serving_note": variant.get("serving_note") or serving_notes.get(
+                    safe_float(variant.get("serving_size_order")), ""
+                )} if isinstance(variant, dict) else variant
+                for variant in row["serving_variants"]
+            ]
             continue
         serving_order = safe_float(row.get("serving_size_order"))
         label_name = safe_str(row.get("label_display_name")).casefold()

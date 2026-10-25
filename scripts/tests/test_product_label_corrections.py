@@ -794,3 +794,194 @@ def test_lemon_tea_caffeine_daily_range_does_not_add_alternative_columns():
     assert caffeine['unknown_rows'] == 0
     assert caffeine['total_mg_day_min'] == 200
     assert caffeine['total_mg_day_max'] == 400
+
+
+@pytest.fixture(scope="module")
+def preparation_source_records():
+    return json.loads((Path(__file__).parent / "fixtures" / "completion_source_preparation_columns_raw.json").read_text())
+
+
+@pytest.mark.parametrize("pid,expected_a,expected_calcium", [
+    ("66984", 5000, 800), ("69584", 5000, 800),
+    ("69613", 5000, 730), ("243776", 5000, 800),
+    ("243812", 3000, 730), ("243815", 3000, 800),
+    ("308692", 1500, 800), ("315322", 1500, 800),
+])
+def test_reviewed_powder_columns_keep_product_amounts_and_alternatives(preparation_source_records, pid, expected_a, expected_calcium):
+    from copy import deepcopy
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    raw = deepcopy(preparation_source_records[pid])
+    clean = EnhancedDSLDNormalizer().normalize_product(raw)
+    for name, expected in [("Vitamin A", expected_a), ("Calcium", expected_calcium)]:
+        [row] = [r for r in clean["activeIngredients"] if r["name"] == name]
+        assert row["quantity"] == expected
+        variants = row["raw_taxonomy"]["quantityVariants"]
+        assert {v["serving_size_order"] for v in variants} == {1, 2}
+        assert len(variants) == 2
+    assert "water" in clean["servingSizes"][0]["notes"].lower()
+    assert "milk" in clean["servingSizes"][1]["notes"].lower()
+
+
+@pytest.mark.parametrize("pid,expected", [("275412", (3, 9, False)), ("243815", (1, 2, False))])
+def test_reviewed_directed_daily_ranges_are_not_truncated(preparation_source_records, pid, expected):
+    from copy import deepcopy
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    from serving_frequency import resolve_daily_serving_range
+    clean = EnhancedDSLDNormalizer().normalize_product(deepcopy(preparation_source_records[pid]))
+    assert resolve_daily_serving_range(clean) == expected
+
+
+def test_reviewed_two_capsule_panel_fixes_shared_basis_not_amounts(preparation_source_records):
+    from copy import deepcopy
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    from enrich_supplements_v3 import SupplementEnricherV3
+    raw = deepcopy(preparation_source_records["328753"])
+    clean = EnhancedDSLDNormalizer().normalize_product(raw)
+    assert clean["servingSizes"][0]["minQuantity"] == 2
+    enriched, _ = SupplementEnricherV3().enrich_product(clean)
+    for nutrient, expected in [("vitamin_a", 1500), ("vitamin_d", 50), ("vitamin_e", 67), ("magnesium", 100), ("zinc", 25)]:
+        [row] = [a for a in enriched["rda_ul_data"]["adequacy_results"] if a.get("canonical_id") == nutrient and a.get("ul_status") != "skipped_compound_duplicate_row"]
+        assert row["per_day_min"] == pytest.approx(expected)
+        assert row["per_day_max"] == pytest.approx(expected)
+    [vitamin_a] = [a for a in enriched["rda_ul_data"]["adequacy_results"] if a.get("canonical_id") == "vitamin_a"]
+    assert vitamin_a["ul_status"] == "assessed_within_limit_worst_case_preformed_vitamin_a"
+    assert vitamin_a.get("preformed_vitamin_a_fraction") is None
+
+
+@pytest.mark.parametrize("changed", ["quantity", "directions", "serving", "forms"])
+def test_reviewed_preparation_binding_fails_closed_on_changed_source(preparation_source_records, changed):
+    from copy import deepcopy
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    raw = deepcopy(preparation_source_records["328753"])
+    if changed == "quantity":
+        raw["ingredientRows"][0]["quantity"][0]["quantity"] = 1499
+    elif changed == "directions":
+        raw["statements"].append({"type": "Suggested/Recommended/Usage/Directions", "notes": "Take one capsule daily."})
+    elif changed == "serving":
+        raw["servingSizes"][0]["minQuantity"] = 2
+    else:
+        raw["ingredientRows"][0]["forms"] = []
+    with pytest.raises(ValueError, match="Reviewed serving source changed"):
+        EnhancedDSLDNormalizer().normalize_product(raw)
+
+
+def test_reviewed_preparation_does_not_mutate_input_or_cross_product_ids(preparation_source_records):
+    from copy import deepcopy
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    raw = deepcopy(preparation_source_records["328753"])
+    original = deepcopy(raw)
+    normalizer = EnhancedDSLDNormalizer()
+    first = normalizer.normalize_product(raw)
+    second = normalizer.normalize_product(raw)
+    assert raw == original
+    assert first["servingSizes"] == second["servingSizes"]
+    raw["id"] = 999999999
+    clean = normalizer.normalize_product(raw)
+    assert clean["servingSizes"][0]["minQuantity"] == 1
+
+
+def test_reviewed_source_names_do_not_invent_legacy_rae_or_preformed_share(preparation_source_records):
+    from copy import deepcopy
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    from enrich_supplements_v3 import SupplementEnricherV3
+    normalizer, enricher = EnhancedDSLDNormalizer(), SupplementEnricherV3()
+    for pid in ["66984", "69584", "69613", "243776", "67030"]:
+        clean = normalizer.normalize_product(deepcopy(preparation_source_records[pid]))
+        [vitamin] = [r for r in clean["activeIngredients"] if r["name"] == "Vitamin A"]
+        assert any("carotene" in f.get("name", "").lower() for f in vitamin["forms"])
+        assert vitamin["unit"] == "IU"
+        enriched, _ = enricher.enrich_product(clean)
+        [assessment] = [r for r in enriched["rda_ul_data"]["adequacy_results"] if r.get("canonical_id") == "vitamin_a"]
+        assert assessment["scoring_eligible"] is False
+        assert assessment["conversion_applied"] is False
+        assert assessment["ul_status"].startswith(("indeterminate_", "assessed_within_limit_worst_case_"))
+        assert assessment.get("preformed_vitamin_a_fraction") is None
+        assert not assessment["over_ul"]
+
+
+def test_reviewed_modern_powder_activity_survives_unknown_preformed_allocation(preparation_source_records):
+    from copy import deepcopy
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    from enrich_supplements_v3 import SupplementEnricherV3
+    normalizer, enricher = EnhancedDSLDNormalizer(), SupplementEnricherV3()
+    for pid, low, high in [("243812", 3000, 6000), ("243815", 3000, 6000), ("308692", 1500, 3000), ("315322", 1500, 3000)]:
+        clean = normalizer.normalize_product(deepcopy(preparation_source_records[pid]))
+        enriched, _ = enricher.enrich_product(clean)
+        [a] = [r for r in enriched["rda_ul_data"]["adequacy_results"] if r.get("canonical_id") == "vitamin_a"]
+        assert a["scoring_eligible"] is True
+        assert a["per_day_min"] == low and a["per_day_max"] == high
+        assert "fraction_unknown" in a["ul_status"]
+
+
+def test_poolzyme_description_does_not_claim_unbranded_or_clear_review():
+    data = json.loads((Path(__file__).parent.parent / "data" / "backed_clinical_studies.json").read_text())
+    from data_batch import entries
+    [record] = [r for r in entries(data).values() if isinstance(r, dict) and r.get("id") == "INGR_DIGESTIVE_ENZYMES"]
+    assert "Poolzyme Multi" in record["notes"]
+    assert "unbranded" not in record["notes"] + record["notable_studies"]
+    assert not record.get("source_contexts")
+
+
+def test_canonical_quantity_column_does_not_fall_through_to_prepared_milk():
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    normalizer = EnhancedDSLDNormalizer()
+    normalizer._canonical_serving_row = {"order": 1, "minQuantity": 360, "unit": "Gram(s)"}
+    q = [{"quantity": 900, "unit": "mcg", "servingSizeQuantity": 360, "servingSizeOrder": 2},
+         {"quantity": 0, "unit": "NP", "servingSizeQuantity": 360, "servingSizeOrder": 1}]
+    value, unit, _, _ = normalizer._process_quantity(q)
+    assert value == 0 and unit == "NP"
+
+
+@pytest.mark.parametrize("pid,name,expected,unit", [
+    ("69584", "Iodine", 150, "mcg"), ("69613", "Iodine", 150, "mcg"),
+    ("69584", "Sodium", 400, "mg"), ("69613", "Sodium", 330, "mg"),
+    ("243776", "Magnesium", 140, "mg"), ("243776", "Zinc", 15, "mg"),
+    ("315322", "Thiamine", 4.8, "mg"),
+    ("308692", "Energizing ATP Complex", 1.505, "Gram(s)"),
+    ("315322", "Energizing ATP Complex", 1.505, "Gram(s)"),
+])
+def test_reviewed_column_transcriptions_match_printed_source(preparation_source_records, pid, name, expected, unit):
+    from copy import deepcopy
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    clean = EnhancedDSLDNormalizer().normalize_product(deepcopy(preparation_source_records[pid]))
+    if name == "Sodium":
+        row = clean["nutritionalInfo"]["sodium"]
+        assert row["amount"] == pytest.approx(expected)
+    else:
+        [row] = [r for r in clean["activeIngredients"] if r["name"] == name]
+        assert row["quantity"] == pytest.approx(expected)
+    assert row["unit"] == unit
+
+
+@pytest.mark.parametrize("pid,dose", [("243812", "3000 mcg"), ("328753", "1,500 mcg RAE")])
+def test_reviewed_serving_correction_reaches_exported_label_display(preparation_source_records, pid, dose):
+    from copy import deepcopy
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    from enrich_supplements_v3 import SupplementEnricherV3
+    from scoring_v4.scored_artifact import build_scored_artifact
+    from build_final_db import build_detail_blob
+    clean = EnhancedDSLDNormalizer().normalize_product(deepcopy(preparation_source_records[pid]))
+    enriched, _ = SupplementEnricherV3().enrich_product(clean)
+    scored = build_scored_artifact(enriched)
+    blob = build_detail_blob(enriched, scored)
+    ref = "ingredientRows[5]" if pid == "243812" else "ingredientRows[0]"
+    [row] = [r for r in blob["display_ingredients"] if r.get("raw_source_path") == ref]
+    assert row["exact_dose_text"] == dose
+    if pid == "243812":
+        variants = row["serving_variants"]
+        assert {v["exact_dose_text"] for v in variants} == {"3,000 mcg", "3,417 mcg"}
+        assert [v["exact_dose_text"] for v in variants if v["is_canonical"]] == ["3,000 mcg"]
+        assert "water" in variants[0]["serving_note"].lower()
+        assert "milk" in variants[1]["serving_note"].lower()
+    else:
+        assert blob["product_safety_status"] == "caution"
+
+
+def test_named_poolzyme_source_still_requires_source_context_review():
+    from clinical_applicability import assess_clinical_source_review
+    from data_batch import entries
+    data = json.loads((Path(__file__).parent.parent / "data" / "backed_clinical_studies.json").read_text())
+    record = next(r for r in entries(data).values() if isinstance(r, dict) and r.get("id") == "INGR_DIGESTIVE_ENZYMES")
+    review = assess_clinical_source_review(record)
+    assert not review["is_complete"]
+    assert "clinical_source_contexts_missing" in review["errors"]
