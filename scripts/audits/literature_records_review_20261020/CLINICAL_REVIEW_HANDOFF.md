@@ -1,5 +1,9 @@
 # Final pre-rebuild completion campaign — October 24, 2026
 
+## October 25 source-verification checkpoint
+
+Sean confirms Dr. Pham signed the bounded A/C responses. Independent live checks cover14APIrecords/14exactPDFs and7PubMedidentifiers; the A acknowledgment explicitly does not complete the scientific assessments, and C supplies14of171decisions. [Current verified decisions, corrections and remaining-work list](SIGNED_RESPONSE_VERIFICATION_20261025.md) supersedes the earlier lack-of-attribution finding. Source candidate129e291c8 qualifies:19-label raw diagnostic/owner-consumer checks, local546pass/24declaredskips and whole-fastCI40210617064 (23,868pass/192declaredskips) green. Natural vitamin E and Lemon Tea source errors corrected; Fruit Blast conflicting caffeine remains held. No full pipeline or app import. No scientific/rebuilt closure is implied. The updated single Dr.Pham request carries these facts forward so confirmed checks need not repeat.
+
 ## Decision
 
 **Pre-rebuild GO: BLOCKED. Post-rebuild release readiness: BLOCKED / not exercised.**

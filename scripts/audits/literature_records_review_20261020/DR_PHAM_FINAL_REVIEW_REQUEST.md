@@ -4,6 +4,12 @@ October 24, 2026
 
 Hi Dr. Pham,
 
+**October 25 update:** Thank you for the signed responses. I have retained them and independently checked all 14 returned product labels against the NIH API and their exact label images. You do not need to repeat those source checks. The A response acknowledges the earlier corrections but leaves the source-specific assessments unfinished. For C001, C002, C003, C004, C005, C006, C011, C012, C013, C015, C016, C017, C018 and C019, please address only the remaining scope questions; the other 157 C items still need a response. The original lists below remain the fixed reference so no items disappear or get renumbered.
+
+Please use these verified source facts going forward: vitamin E (8958) explicitly identifies natural d-alpha tocopherol; oregano (855) discloses carvacrol 60% / 3.2 mg, but not the oregano-oil amount; 18538 explicitly discloses 3 g arginine. Lemon Tea (27808) prints arginine 500/1,000 mg and guarana caffeine 50/100 mg at one/two scoops, giving total caffeine 200–400 mg/day. Fruit Blast (28993) is different: its printed caffeine components add to 300 mg/scoop while its total says 200 mg/scoop. We have preserved that conflict, not substituted Lemon Tea's amounts. Molybdenum (801/802) retains the 75 mg / 100% Daily Value conflict, and 27807 still needs a legible exact-source unit confirmation.
+
+The remaining questions are preparation and component identity where genuinely unresolved, source-specific study applicability, justified benchmarks or documented reasons no benchmark applies, the unread PQQ corrected Table 4, and the missing scope details already listed below. Please carry forward the decisions already supported, add only the missing conclusions and sources, and explicitly retain any unresolved hold. A signature by itself cannot supply missing study facts, but a complete negative or label-limited conclusion can close an assessment.
+
 I want to close the remaining PharmaGuide review in one coordinated batch. We have corrected verified source and label errors, tightened the checks, and preserved every required hold. I need your source-specific decisions on the items below so I can apply the answers together, rebuild once, and verify the complete product set and app.
 
 This is the complete consolidated request for the current frozen review scope. Please return **one marked-up copy of this document**. A completed negative finding, a finding that a study does not apply, or a confirmed label limitation is a valid answer. I am not asking for higher scores, blanket approval, guessed doses, or an exemption for branded ingredients.
@@ -100,7 +106,7 @@ Original39252819 restored;40567408 is a correction, not another trial.36558392 i
 
 ### PQQ
 
-The corrected Table4 for34415830 (notice35917215) remains a source-content gap. Please inspect the actual correction/table and state which findings remain usable; a valid citation alone is insufficient.
+The corrected Table 4 for34415830 (notice35917215) remains a source-content gap. Please inspect the actual correction/table and state which findings remain usable; a valid citation alone is insufficient.
 
 [PMID 34415830](https://pubmed.ncbi.nlm.nih.gov/34415830/), [PMID 35917215](https://pubmed.ncbi.nlm.nih.gov/35917215/), [PMID 38908296](https://pubmed.ncbi.nlm.nih.gov/38908296/)
 
@@ -136,7 +142,7 @@ Other corrected source summaries to verify within the item lists: Mitopure prima
 
 The two initial source lists contain476 distinct publication identifiers; these are not476independent trials. Among the349 papers in the first evidence worklist,181 have a PMC identifier:157 full-text bodies were retrieved,24 indexed bodies were unavailable, and168 have no PMC identifier. Retrieval is not full review. Publisher access has not been exhausted. An abstract-only check cannot be presented as a full-text assessment.
 
-Please identify the required full texts, inspect relevant corrections/retractions and resolve trial overlap, methods and outcome limitations before accepting a source. Where access remains unavailable, say exactly what cannot be confirmed and keep only that affected conclusion held. Magtein’s correction and PQQ’s correctedTable4 are known examples. Existing citation flags are not blanket clearance, even where the identifier or title matches.
+Please identify the required full texts, inspect relevant corrections/retractions and resolve trial overlap, methods and outcome limitations before accepting a source. Where access remains unavailable, say exactly what cannot be confirmed and keep only that affected conclusion held. Magtein’s correction and PQQ’s correctedTable 4 are known examples. Existing citation flags are not blanket clearance, even where the identifier or title matches.
 
 Two already-inspected corrections also need to remain accurately reflected in any accepted scope:5-MTHF31425504→39083531changes red-cell folate to whole-blood folate in an infant-formula study; it does not establish a general adult benefit. Inositol38163998→39208274adds dataset attribution. These notices must not be counted as independent efficacy trials.
 

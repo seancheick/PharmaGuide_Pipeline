@@ -2,6 +2,8 @@
 
 October 25, 2026
 
+**Attribution update:** Sean subsequently confirmed that Dr. Pham signed the bounded responses. That user attestation is accepted. The follow-up response explicitly acknowledges that the A assessments remain unfinished; missing scientific scope, rather than lack of attribution, remains the blocker. See the [subsequent independent API/PDF verification](SIGNED_RESPONSE_VERIFICATION_20261025.md). The original inspection findings below describe the evidence available at that checkpoint.
+
 **Decision: check off the verified source and retrieval subtasks below. Do not mark any of the 148 complete assessments cleared by this attachment.**
 
 The response explicitly identifies itself as AI-assisted research, with missing preparation/dose details and no attributable Dr. Pham acceptance. Many rows say to inspect a paper rather than supply its completed assessment. This is useful review material, but it does not finish the scientific source contexts or authorize scoring.
