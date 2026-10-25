@@ -3452,3 +3452,10 @@ Batch11 checkpoint update: runtime8cb9d4cc0; local546passed/24declared opt-in sk
 ### Batch11 main integration qualification — October25
 
 PR248 merged3506351fc; testedhead3efb50764 ancestry confirmed on origin/main. Rebase on qualifiedPR247 d10782497 preserved both ledger sections and left dirty primary copies untouched. CI40233428775:all4shards/all4skipguards pass. Combined343namedtests and local546/24declaredoptinskips+guardgreen pass.18raw-label replay rerun; all18candidate scoredhashes/totals/statuses exactlymatchpreviousreview. FirstCI40228636370 and initialmissing-artifact local attempt are failed historical checkpoints, not passes. This receipt is documentation-only relative to qualifiedruntime. Nine later source-image reviews confirmed by integrator but their corrections and remaining clinical/citation/eligibility decisions stay open. No pipeline/app import/release.
+
+
+## October25 — all nine Batch12 exact-source cases implemented
+
+Behavioral source/normalizer batch; baselinecc6a56b57. Owner: existing reviewed source/serving/hierarchy corrections, product-label registry, IQMcranberry fallback explanation. Evidence: nine individually inspected API/PDF pairs,19initial fail-first regressions, source binding/cycle/immutability tests,12raw baseline/candidate replays. Will NOT create another registry/scorer/policy/public field or approval. All9labels31283233019133066432864943662277705312947285637268493implemented; actual source conflicts, unknown allocations and required scientific holds remain. See consolidated Bryan report for per-entry details and deliberate psyllium alias-promotion rejection.
+
+359named owner/consumer tests andlocal546/24declaredopt-in skips+guardgreen pass; independent review found no blocker. Additional cranberry explanation contradiction reproduced through build_detail_blob and fixed without grade/clinical changes; named export test passes. Final display-only parity and whole-fastCI/integration pending.9label+1IQMparent landed checks clean; citation/rule diff selects0newclinicalIDs/rules. No corpus pipeline/import/release; app image-sizing complaint coordinated separately with existing app owner.

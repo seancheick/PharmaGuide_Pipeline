@@ -27852,10 +27852,10 @@
       "cranberry (unspecified)": {
         "bio_score": 4,
         "absorption": "very_low (PAC + anthocyanin class-poor; <1% intact F)",
-        "consumer_note": "This label names cranberry without identifying whole fruit, juice concentrate, extract, or PAC standardization.",
+        "consumer_note": "Cranberry identity alone does not establish a standardized PAC amount or the potency of this preparation.",
         "consumer_note_review": {
-          "by": "Product owner approval",
-          "date": "2026-08-08"
+          "by": "Codex source-grounded wording review; no grade or clinical approval change",
+          "date": "2026-10-25"
         },
         "notes": "Form not specified on the label. Cranberry products range from standardized PAC extracts (proanthocyanidins) to juice concentrates and whole fruit powders. PAC type (A-type vs B-type) and concentration determine anti-adhesion activity against urinary tract bacteria. Scored conservatively. B32 audit 2026-04-25: PAC/anthocyanin class-poor.",
         "aliases": [
