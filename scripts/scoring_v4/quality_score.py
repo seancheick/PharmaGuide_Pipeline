@@ -94,6 +94,74 @@ def _reason_formulation(band: str) -> str:
     }[band]
 
 
+def evidence_pillar_reason_is_affirmative(pillar: Dict[str, Any]) -> bool:
+    """Whether the scorer's Evidence headline is an earned positive result.
+
+    Result state alone is not enough: ``evaluated_applicable`` can describe
+    either strong support or genuinely limited evidence, and authority review
+    can earn zero points. Keep this decision beside the band/reason owner so
+    export consumers never infer sentiment from prose.
+    """
+    try:
+        score = float(pillar.get("score"))
+        maximum = float(pillar.get("max"))
+    except (TypeError, ValueError):
+        return False
+    state = str(pillar.get("evidence_result_state") or "").strip()
+    if state in {"evaluated_authority", "authority_supported"}:
+        return score > 0
+    return state == "evaluated_applicable" and _band(score, maximum) in {
+        "mid",
+        "high",
+    }
+
+
+def formulation_pillar_reason_is_affirmative(
+    pillar: Dict[str, Any],
+    dimension: Dict[str, Any],
+) -> bool:
+    """Whether the scorer-authored Formulation headline is wholly positive.
+
+    High generic and route credit is affirmative, but a high numeric score can
+    still carry a real omega/profile limitation. Use the same structured
+    metadata that authors the headline rather than matching consumer strings.
+    """
+    try:
+        score = float(pillar.get("score"))
+        maximum = float(pillar.get("max"))
+    except (TypeError, ValueError):
+        return False
+    if _band(score, maximum) != "high":
+        return False
+
+    components = pillar.get("components") or {}
+    archetype = str(components.get("archetype") or "").strip()
+    metadata = dimension.get("metadata") or {}
+    if archetype == "omega":
+        form_code = str(metadata.get("form_detected") or "").strip().lower()
+        concentration = metadata.get("epa_dha_concentration")
+        ratio = concentration.get("ratio") if isinstance(concentration, dict) else None
+        return (
+            form_code in _OMEGA_MOLECULAR_FORM_COPY
+            and isinstance(ratio, (int, float))
+            and not isinstance(ratio, bool)
+            and ratio >= 0
+        )
+
+    profile_reason = _profile_formulation_reason(metadata)
+    if profile_reason is not None:
+        lowered = profile_reason.lower()
+        return (
+            pillar.get("reason") == profile_reason
+            and "not credited:" not in lowered
+            and "no formulation credit" not in lowered
+        )
+
+    route_reason = _route_formulation_reason(dimension, "high")
+    expected_reason = route_reason or _reason_formulation("high")
+    return pillar.get("reason") == expected_reason
+
+
 _OMEGA_MOLECULAR_FORM_COPY = {
     "tg": "triglyceride",
     "rtg": "re-esterified triglyceride",

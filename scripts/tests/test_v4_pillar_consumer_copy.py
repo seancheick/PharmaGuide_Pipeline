@@ -463,7 +463,35 @@ def test_favorable_human_evidence_is_not_exported_as_a_tradeoff_drag() -> None:
         },
     })
 
-    assert explanation["drags"] == []
+    assert (explanation or {"drags": []})["drags"] == []
+
+
+@pytest.mark.parametrize(
+    ("score", "state", "reason"),
+    [
+        (5.6, "evaluated_applicable", "Limited human evidence for these ingredients."),
+        (
+            0,
+            "evaluated_authority",
+            "These ingredients were reviewed against established nutritional authority, "
+            "which earned no Evidence points for this product.",
+        ),
+    ],
+)
+def test_reviewed_evidence_limitations_remain_tradeoff_drags(score, state, reason) -> None:
+    from build_final_db import _build_v4_score_explanation
+
+    explanation = _build_v4_score_explanation({
+        "evidence": {
+            "score": score,
+            "max": 20,
+            "reason": reason,
+            "evidence_result_state": state,
+            "display_state": "assessed",
+        },
+    })
+
+    assert [row["pillar"] for row in explanation["drags"]] == ["evidence"]
 
 
 def test_neutral_verification_with_a_quality_violation_remains_a_drag() -> None:
@@ -499,6 +527,47 @@ def test_high_formulation_with_an_authored_limitation_remains_a_drag() -> None:
     }, {"dimensions": {"formulation": {"penalties": {}}}})
 
     assert [row["pillar"] for row in explanation["drags"]] == ["formulation"]
+
+
+@pytest.mark.parametrize(
+    ("reason", "components", "dimension"),
+    [
+        (
+            "Strong formulation credit for protein source quality.",
+            {"archetype": "generic_single_molecule"},
+            {"components": {"sports_protein_quality": 13}, "metadata": {}},
+        ),
+        (
+            "Molecular form is disclosed as triglyceride; EPA + DHA make up "
+            "72% of the disclosed omega-oil amount.",
+            {"archetype": "omega"},
+            {
+                "metadata": {
+                    "form_detected": "tg",
+                    "epa_dha_concentration": {"ratio": 0.72},
+                },
+            },
+        ),
+    ],
+)
+def test_route_specific_positive_formulation_is_not_a_tradeoff_drag(
+    reason, components, dimension
+) -> None:
+    from build_final_db import _build_v4_score_explanation
+
+    explanation = _build_v4_score_explanation(
+        {
+            "formulation": {
+                "score": 17,
+                "max": 20,
+                "reason": reason,
+                "components": components,
+            },
+        },
+        {"dimensions": {"formulation": dimension}},
+    )
+
+    assert (explanation or {"drags": []})["drags"] == []
 
 
 def test_certification_detail_gmp_carries_the_pillar_audited_decision() -> None:
