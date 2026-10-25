@@ -6098,12 +6098,34 @@ def _build_v4_score_explanation(pillars: Any, module_breakdown: Any = None, pena
         if name == "evidence" and p.get("display_state") in {
                 "not_yet_reviewed", "applicability_unestablished", "not_applicable"}:
             continue
+        # A completed nutrition-authority disposition is earned Evidence, not
+        # a product drawback. Its exact scope remains visible in the pillar.
+        if name == "evidence" and p.get("evidence_result_state") in {
+                "evaluated_authority", "authority_supported"}:
+            continue
+        # Fail-open Verification is explicitly neutral by policy. Calling it a
+        # drag contradicts both the score and the consumer reason.
+        if name == "verification" and safe_dict(p.get("components")).get(
+                "fail_open_neutral") is True:
+            continue
         if (name == "dose"
                 and safe_dict(safe_dict(p.get("explanation")).get("dose_receipt")).get("upper_reference")
                 and any(safe_dict(item).get("id") == "B7" for item in safe_list(penalties))):
             continue  # The qualified UL concern already appears in Tradeoffs.
         dim = safe_dict(safe_dict(safe_dict(module_breakdown).get("dimensions")).get(name))
         meta = safe_dict(dim.get("metadata"))
+        # Formulation's high band is affirmative earned credit even when the
+        # archetype normalization does not land at exactly 20/20. Retain a
+        # real module penalty as a consideration; otherwise the pillar detail
+        # already explains the earned credit without mislabeling it a drag.
+        if (name == "formulation"
+                and float(p.get("max") or 0) > 0
+                and float(p.get("score") or 0) / float(p.get("max")) >= 0.8
+                and not any(
+                    safe_float(value, 0) < 0
+                    for value in safe_dict(dim.get("penalties")).values()
+                )):
+            continue
         if (name == "formulation" and meta.get("iqm_form_quality_assessed_count") == 0
                 and not meta.get("botanical_profile_applied")
                 and not meta.get("collagen_profile_applied")

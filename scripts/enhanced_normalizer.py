@@ -534,6 +534,23 @@ STRUCTURAL_OTHER_FORM_CONTAINER_NAMES = frozenset({
     "isoflavones and saponins",
 })
 
+# Generic label wrappers whose parenthetical content names the actual inactive
+# ingredients. These are structural only when the parentheses contain at least
+# two top-level ingredient rows; one-item annotations such as
+# ``gelatin (capsule)`` remain attached to their ingredient identity.
+STRUCTURAL_PARENTHETICAL_CONTAINER_NAMES = frozenset({
+    "coating",
+    "aqueous coating",
+    "tablet coating",
+    "film coating",
+    "capsule shell",
+    "softgel shell",
+    "soft gel shell",
+    "glaze",
+    "color",
+    "coloring",
+})
+
 INACTIVE_CONTAINER_DESCRIPTOR_TOKENS = frozenset({
     "base",
     "bits",
@@ -8599,6 +8616,23 @@ class EnhancedDSLDNormalizer:
         lists its components explicitly; parentheses on an ordinary ingredient
         remain source/form details. Unknown conjunction halves stay unresolved.
         """
+        container = re.fullmatch(r"\s*([^()]+?)\s*\((.+)\)\.?\s*", name)
+        if container:
+            container_name = self.matcher.preprocess_text(container.group(1))
+            if container_name in STRUCTURAL_PARENTHETICAL_CONTAINER_NAMES:
+                try:
+                    rows = parse_other_ingredient_disclosure(container.group(2))
+                except ValueError:
+                    return [name]
+                if len(rows) > 1 and all(not row.get("forms") for row in rows):
+                    names = [
+                        part
+                        for row in rows
+                        for part in self._expand_inactive_disclosure(row["name"])
+                    ]
+                    if len(names) > 1:
+                        return names
+
         if self._has_curated_other_ingredient_identity(name):
             return [name]
         blend = re.fullmatch(r"((?:.*\s)?blend)\s*\((.+)\)\.?", name, re.IGNORECASE)

@@ -362,6 +362,89 @@ def test_score_explanation_never_lists_a_penalized_pillar_as_a_strength() -> Non
     ]
 
 
+def test_positive_and_neutral_pillar_results_are_not_exported_as_tradeoff_drags() -> None:
+    """Trader Joe's Vitamin C exposed three earned/neutral statements under
+    `What to consider`, where the app then called each one `Holds back`."""
+    from build_final_db import _build_v4_score_explanation
+
+    pillars = {
+        "formulation": {
+            "score": 17.4,
+            "max": 20,
+            "reason": "Well-formulated — uses high-quality, well-absorbed ingredient forms.",
+            "components": {"raw_formulation": 20.9, "reference": 24.0},
+        },
+        "evidence": {
+            "score": 11.1,
+            "max": 20,
+            "reason": (
+                "Established nutritional authority recognizes the physiological "
+                "necessity of these essential nutrients."
+            ),
+            "evidence_result_state": "evaluated_authority",
+            "display_state": "assessed",
+        },
+        "verification": {
+            "score": 6.0,
+            "max": 15,
+            "reason": (
+                "Unknown: no independent verification on file; it gets neutral "
+                "credit, not a penalty."
+            ),
+            "components": {"fail_open_neutral": True, "tier": "unknown"},
+        },
+        "safety_hygiene": {
+            "score": 9.0,
+            "max": 10,
+            "reason": "Safety concern: it contains additive concerns.",
+        },
+    }
+
+    explanation = _build_v4_score_explanation(pillars)
+
+    assert explanation["drags"] == [
+        {
+            "pillar": "safety_hygiene",
+            "reason": "Safety concern: it contains additive concerns.",
+        }
+    ]
+
+
+def test_high_formulation_with_a_real_penalty_remains_a_tradeoff_drag() -> None:
+    """The high-band presentation rule must not hide a sourced formulation
+    penalty merely because the final pillar still lands above 80 percent."""
+    from build_final_db import _build_v4_score_explanation
+
+    pillars = {
+        "formulation": {
+            "score": 17.0,
+            "max": 20,
+            "reason": "The formula includes a form-specific limitation.",
+        },
+        "transparency": {
+            "score": 15.0,
+            "max": 15,
+            "reason": "The active ingredients are fully disclosed.",
+        },
+    }
+    module_breakdown = {
+        "dimensions": {
+            "formulation": {
+                "penalties": {"form_specific_limit": -1.0},
+            },
+        },
+    }
+
+    explanation = _build_v4_score_explanation(pillars, module_breakdown)
+
+    assert explanation["drags"] == [
+        {
+            "pillar": "formulation",
+            "reason": "The formula includes a form-specific limitation.",
+        }
+    ]
+
+
 def test_certification_detail_gmp_carries_the_pillar_audited_decision() -> None:
     from build_final_db import _certification_gmp_detail
 
