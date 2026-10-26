@@ -1878,3 +1878,38 @@ def test_pending_import_retains_revision_and_manual_edit_fences(tmp_path, monkey
         attempted, message = second, 'manual label changed'
     with pytest.raises(importer.SubmissionImportError, match=message):
         importer.materialize_approved_submissions([attempted], output_dir=tmp_path, authoritative=True)
+
+@pytest.mark.parametrize('phase', ['before_label', 'after_label'])
+@pytest.mark.parametrize('tamper', [False, True])
+def test_cross_submission_pending_import_recovers_only_verified_owner_bytes(tmp_path, monkeypatch, phase, tamper):
+    import product_submission_import as importer
+    first = _export(kind='label_mismatch', normalized_upc=None, target_dsld_id='278454')
+    importer.materialize_approved_submissions([first], output_dir=tmp_path)
+    receipt_path = tmp_path / importer.RECEIPT_FILE
+    receipts = json.loads(receipt_path.read_text())
+    receipts['submissions'][first['submission_id']].update(promoted_catalog_version='old', promoted_approval_revision=1)
+    receipt_path.write_text(json.dumps(receipts))
+    payload = _payload()
+    payload['fullName'] = 'Replacement submission'
+    replacement = _export(payload, kind='label_mismatch', normalized_upc=None, target_dsld_id='278454', submission_id='028f4c79-7c7e-4c70-9d62-7fc3b9ce6a22')
+    output = tmp_path / '278454.json'
+    write = importer._atomic_write_text
+    def interrupt(path, content):
+        if path == output and phase == 'before_label':
+            raise RuntimeError('interrupted')
+        write(path, content)
+        if path == output:
+            raise RuntimeError('interrupted')
+    monkeypatch.setattr(importer, '_atomic_write_text', interrupt)
+    with pytest.raises(RuntimeError):
+        importer.materialize_approved_submissions([replacement], output_dir=tmp_path, authoritative=True)
+    monkeypatch.setattr(importer, '_atomic_write_text', write)
+    if tamper:
+        output.write_text('unexplained file change')
+        with pytest.raises(importer.SubmissionImportError, match='manual label changed'):
+            importer.materialize_approved_submissions([replacement], output_dir=tmp_path, authoritative=True)
+        return
+    importer.materialize_approved_submissions([replacement], output_dir=tmp_path, authoritative=True)
+    assert json.loads(output.read_text())['fullName'] == 'Replacement submission'
+    importer.materialize_approved_submissions([first], output_dir=tmp_path, authoritative=True)
+    assert json.loads(output.read_text())['fullName'] == 'Example Vitamin D3'
