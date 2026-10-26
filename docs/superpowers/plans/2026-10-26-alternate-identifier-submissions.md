@@ -16,9 +16,9 @@ Accepted spec: docs/superpowers/specs/2026-10-26-alternate-identifier-submission
 
 Files: pipeline scripts/contracts/source_of_truth_matrix.json, scripts/GLOSSARY.md, docs/adr/; app knowledge/architecture-decisions.md; accepted spec. Integrator owns these.
 
-- [ ] Publish one exact contributor identifier object and manual_label_v2 identity envelope to all implementers; retain legacy numeric manual_label_v1 compatibility.
-- [ ] Record immutable approval binding, private projection, reviewed GTIN null authority, stable PG_SUB lineage and activation lock in the canonical ownership/ADR owners.
-- [ ] Confirm complete conflict-set checks are independent of paginated suggestion UI; use unambiguous brand/name encoding.
+- [x] Publish one exact contributor identifier object and manual_label_v2 identity envelope to all implementers; retain legacy numeric manual_label_v1 compatibility.
+- [x] Record immutable approval binding, private projection, reviewed GTIN null authority, stable PG_SUB lineage and activation lock in the canonical ownership/ADR owners.
+- [x] Confirm complete conflict-set checks are independent of paginated suggestion UI; use unambiguous brand/name encoding.
 
 ## Task 2 — backend evidence, review and activation
 
@@ -35,23 +35,23 @@ Backend worker exclusively owns app supabase/migrations (new forward migration g
 
 App worker exclusively owns app lib/, test/ and relevant integration_test/ for new entry and lifecycle; no backend or authoritative docs edits.
 
-- [ ] Fail-first tests for X002FLZ3X7 preservation, no-code entry, numeric controls, manual paste and OCR letter boundaries; use actual screen handlers with a real memory catalog.
-- [ ] Extend existing identifier/capture/draft/intent models, entry UI, optional GTIN photo completeness and service serialization. No-GTIN status/history displays observed code/brand/name without claiming lookup resolution.
-- [ ] Carry identifier and submission UUID through sign-in, interrupted saves/uploads and requested retakes. Rejected no-GTIN resubmission opens a new linked UUID, preserving resubmissionOf.
-- [ ] Preserve all old numeric and installed-catalog guards. Never strip letters with digitsOnly before validation. Retakes use submission UUID/evidence revision rather than UPC.
+- [x] Fail-first tests for X002FLZ3X7 preservation, no-code entry, numeric controls, manual paste and OCR letter boundaries; use actual screen handlers with a real memory catalog.
+- [x] Extend existing identifier/capture/draft/intent models, entry UI, optional GTIN photo completeness and service serialization. No-GTIN status/history displays observed code/brand/name without claiming lookup resolution.
+- [x] Carry identifier and submission UUID through sign-in, interrupted saves/uploads and requested retakes. Rejected no-GTIN resubmission opens a new linked UUID, preserving resubmissionOf.
+- [x] Preserve all old numeric and installed-catalog guards. Never strip letters with digitsOnly before validation. Retakes use submission UUID/evidence revision rather than UPC.
 - [ ] Run make gen in prepared worktree, named capture/service/GTIN/intent/provider tests, make analyze, full make check once stable, and retained iOS26+ entry screenshots. Keep existing baseline goldens distinct.
-- [ ] Commit coherent Dart changes and report; no push/build release by worker.
+- [x] Commit coherent Dart changes and report; no push/build release by worker.
 
 ## Task 4 — importer, console and normalization
 
 Pipeline worker exclusively owns scripts/product_submission_import.py, scripts/build_final_db.py normalization seam, scripts/submission_review/ Python+static console, related tests and export schema docs only if directly required. Integrator owns matrix/glossary/ADRs/plan.
 
-- [ ] Fail-first normalization tests: X036000291452/trailing letters/OCR equivalents rejected; allowed formatting/leading zeros/checksum/UPC-E policy preserved. Reuse scripts/submission_review/gtin.py and app GtinIdentity policies; no new normalization brain.
-- [ ] Import manual_label_v2: verify whole canonical hash, validate exact envelope and decision/evidence/GTIN mirror, project label explicitly before existing label validation. Legacy missing-product null GTIN still fails. Null/null v2 succeeds; null/numeric/mismatch refuses.
-- [ ] Widen numeric/PG_SUB target validators,39-character bounds and lineage. B correcting A preserves A's product ID and pharmaguide_submission:A lineage; B remains current evidence provenance. Preserve journal, immutable artifact, revision/image/promotion fences.
-- [ ] Extend IdentityIndex and existing console identity workflow for name/brand candidate review with complete conflict-set binding, private observed identifier display, reviewed GTIN/association/label decision and rationale. Never infer no-match from an empty/truncated suggestion page. Coordinate exact request shape with backend owner.
-- [ ] Test actual JS handlers/selectors and Python service boundaries; raw identifier/URL/rationale must not enter public manual labels, DB/blobs or source artifacts except explicit regression fixtures.
-- [ ] Run scripts/test.sh fast with named owner/consumer files, bounded frozen normalization replay affected/controls and local once stable. Commit coherent changes; no push/publication by worker.
+- [x] Fail-first normalization tests: X036000291452/trailing letters/OCR equivalents rejected; allowed formatting/leading zeros/checksum/UPC-E policy preserved. Reuse scripts/submission_review/gtin.py and app GtinIdentity policies; no new normalization brain.
+- [x] Import manual_label_v2: verify whole canonical hash, validate exact envelope and decision/evidence/GTIN mirror, project label explicitly before existing label validation. Legacy missing-product null GTIN still fails. Null/null v2 succeeds; null/numeric/mismatch refuses.
+- [x] Widen numeric/PG_SUB target validators,39-character bounds and lineage. B correcting A preserves A's product ID and pharmaguide_submission:A lineage; B remains current evidence provenance. Preserve journal, immutable artifact, revision/image/promotion fences.
+- [x] Extend IdentityIndex and existing console identity workflow for name/brand candidate review with complete conflict-set binding, private observed identifier display, reviewed GTIN/association/label decision and rationale. Never infer no-match from an empty/truncated suggestion page. Coordinate exact request shape with backend owner.
+- [x] Test actual JS handlers/selectors and Python service boundaries; raw identifier/URL/rationale must not enter public manual labels, DB/blobs or source artifacts except explicit regression fixtures.
+- [x] Run scripts/test.sh fast with named owner/consumer files, bounded frozen normalization replay affected/controls and local once stable. Commit coherent changes; no push/publication by worker.
 
 ## Task 5 — end-to-end integration and review
 
@@ -68,3 +68,11 @@ Integrator owns cross-owner synthetic fixture and completion gates, not a second
 - [ ] Assemble canonical shared migration stream from pinned merged commits, verify SQL/config hashes and full disposable replay. Capture pre-change business/migration/schema receipts and dry-run intended forward changes only; confirm no active pipeline/release.
 - [ ] Under existing deployment authorization, deploy migration then affected Edge functions. Verify schema/grants/advisors/health/stale refusals and unchanged prior business hashes. No unrelated real approval reopened; no real contribution points awarded as smoke test.
 - [ ] Record tests, source SHAs/CI, measurements, review findings and limits in current handoff/this register. Distinguish source-qualified functionality from installed mobile delivery. Sean runs real pipeline/catalog publication later.
+
+### Current verification receipt (2026-10-26)
+
+Behavioral contract batch. App source through48c9697f/e0861b6a; pipeline throughf376bae42. Focused owner/consumer regressions and independent pipeline/app reviews passed. Full app check: analysis clean,4068 passed and8 failed; two new failures fixed with33/17 focused passing cases, remaining six golden failures have all24 PNGs byte-identical to the retained baseline. Native iOS26.5 fixture harness passed4 cases with final copy; this does not establish production installed delivery.
+
+Pipeline `scripts/test.sh local`:546 passed,24 declared opt-in skips, skip guard passed. Frozen synthetic3-label clean/enrich/score/blob replay against ed39341fc:zero changed records. Direct UPC-owner comparison rejects letter-containing/invalid-checksum inputs while preserving valid12/14digit controls. Private local evidence: `/Users/seancheick/.codex/alternate-identifier-normalization-replay/`. Synthetic fixtures do not assert Natgrown supplement contents. Actual service-export fixture traversed importer through Flutter SQLite name/brand search with no public observed code.
+
+Backend final accepted findings (OAuth reviewer guard, explicit no-GTIN duplicates, edition activation) remain in progress. Shared canonical replay, final backend adversarial approval, exact-candidate CI, PRs/merges and deployment receipts remain unchecked. No corpus/catalog publication performed.
