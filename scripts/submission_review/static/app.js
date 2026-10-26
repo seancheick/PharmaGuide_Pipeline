@@ -168,6 +168,12 @@ async function boot() {
   $('t-approve').addEventListener('click', approve);
   $('t-reject').addEventListener('click', reject);
   $('t-request-evidence').addEventListener('click', requestEvidence);
+  $('t-reopen-approval').addEventListener('click', () => {
+    $('reopen-approval-reason').value = '';
+    $('reopen-approval-dialog').showModal();
+  });
+  $('reopen-approval-confirm').addEventListener('click', reopenApproval);
+  $('reviewer-evidence-upload').addEventListener('click', uploadReviewerEvidence);
   $('t-duplicate').addEventListener('click', markDuplicate);
   $('catalog-go').addEventListener('click', catalogSearch);
   // Enter in the search box searches; it must not submit anything else.
@@ -2825,6 +2831,137 @@ function setApprovedReadOnly() {
   }
 }
 
+async function reopenApproval() {
+  const submission = state.selected;
+  const reason = $('reopen-approval-reason').value.trim();
+  if (!submission || submission.review_status !== 'approved') return;
+  if (reason.length < 5) return setStatus('Enter a specific correction reason.', true);
+  try {
+    $('reopen-approval-confirm').disabled = true;
+    const result = await edge({
+      action: 'reopen_approval',
+      submission_id: submission.id,
+      expected_approval_revision: submission.approval_revision,
+      expected_payload_sha256: submission.approval_payload_sha256,
+      reason,
+    });
+    if (!result.reopened) throw new Error('The approval was not reopened.');
+    $('reopen-approval-dialog').close();
+    setStatus('Approval reopened. Recheck every field before approving again.');
+    await loadQueue();
+    await refreshSelected();
+  } catch (error) {
+    setStatus(`Could not reopen: ${String(error.message ?? error)}`, true);
+  } finally {
+    $('reopen-approval-confirm').disabled = false;
+  }
+}
+
+async function fileSha256(file) {
+  const digest = await crypto.subtle.digest('SHA-256', await file.arrayBuffer());
+  return [...new Uint8Array(digest)].map(value => value.toString(16).padStart(2, '0')).join('');
+}
+
+function reviewerEvidenceAttempt(submissionId) {
+  const storageKey = `pg-reviewer-evidence-${submissionId}`;
+  try {
+    const existing = globalThis.sessionStorage?.getItem(storageKey);
+    if (existing) return JSON.parse(existing);
+    return null;
+  } catch (_) {
+    return null;
+  }
+}
+
+function saveReviewerEvidenceAttempt(submissionId, attempt) {
+  try {
+    globalThis.sessionStorage?.setItem(
+      `pg-reviewer-evidence-${submissionId}`,
+      JSON.stringify(attempt),
+    );
+  } catch (_) {}
+}
+
+function clearReviewerEvidenceAttempt(submissionId) {
+  try { globalThis.sessionStorage?.removeItem(`pg-reviewer-evidence-${submissionId}`); } catch (_) {}
+}
+
+async function uploadReviewerEvidence() {
+  const submission = state.selected;
+  const files = [...($('reviewer-evidence-files').files ?? [])];
+  const categoryGroups = $('reviewer-evidence-categories').value.split(';')
+    .map(group => group.split(',').map(value => value.trim()).filter(Boolean));
+  if (!submission || submission.review_status !== 'under_review') {
+    return setStatus('Reopen the approval before replacing evidence.', true);
+  }
+  if (!files.length) return setStatus('Choose replacement evidence photos first.', true);
+  if (categoryGroups.length !== files.length || categoryGroups.some(group => !group.length)) {
+    return setStatus('Describe each selected photo separately, in the same order, using semicolons between photos.', true);
+  }
+  try {
+    $('reviewer-evidence-upload').disabled = true;
+    setStatus('Preparing replacement evidence…');
+    const selected = await Promise.all(files.map(async (file, index) => ({
+      file_name: file.name,
+      seq: index + 1,
+      categories: categoryGroups[index],
+      content_type: file.type,
+      byte_size: file.size,
+      content_sha256: await fileSha256(file),
+    })));
+    const previousAttempt = reviewerEvidenceAttempt(submission.id);
+    let requestKey;
+    let photos;
+    if (previousAttempt) {
+      const comparable = previousAttempt.photos.map(({photo_id, ...photo}) => photo);
+      if (JSON.stringify(comparable) !== JSON.stringify(selected)) {
+        throw new Error('A replacement upload is already pending. Reselect the same files and panel descriptions to resume it.');
+      }
+      requestKey = previousAttempt.request_key;
+      photos = previousAttempt.photos.map(({file_name, ...photo}) => photo);
+    } else {
+      requestKey = crypto.randomUUID();
+      const storedPhotos = selected.map(photo => ({photo_id: crypto.randomUUID(), ...photo}));
+      saveReviewerEvidenceAttempt(submission.id, {request_key: requestKey, photos: storedPhotos});
+      photos = storedPhotos.map(({file_name, ...photo}) => photo);
+    }
+    const opened = await edge({
+      action: 'create_reviewer_evidence_uploads',
+      submission_id: submission.id,
+      expected_approval_revision: submission.approval_revision,
+      expected_payload_sha256: submission.approval_payload_sha256,
+      request_key: requestKey,
+      photos,
+    });
+    for (const upload of opened.uploads ?? []) {
+      const index = photos.findIndex(photo => photo.photo_id === upload.photo_id);
+      if (index < 0) throw new Error('The upload manifest changed.');
+      const { error } = await state.client.storage
+        .from('product-submission-photos')
+        .uploadToSignedUrl(upload.object_path, upload.token, files[index], {
+          contentType: files[index].type,
+          upsert: false,
+          metadata: { content_sha256: photos[index].content_sha256 },
+        });
+      if (error && error.statusCode !== '409' &&
+          !/already exists|duplicate/i.test(String(error.message ?? error))) throw error;
+    }
+    await edge({
+      action: 'finalize_reviewer_evidence_uploads',
+      submission_id: submission.id,
+      evidence_revision: opened.evidence_revision,
+    });
+    clearReviewerEvidenceAttempt(submission.id);
+    setStatus('Replacement evidence saved. Verify the full label again.');
+    await loadQueue();
+    await refreshSelected();
+  } catch (error) {
+    setStatus(`Replacement upload failed: ${String(error.message ?? error)}`, true);
+  } finally {
+    $('reviewer-evidence-upload').disabled = false;
+  }
+}
+
 async function chooseProductImage(picture) {
   const submission = state.selected;
   if (!submission || submission.review_status === 'approved') return;
@@ -3102,6 +3239,13 @@ function setDecisionAvailability() {
   $('t-request-evidence').disabled = terminal ||
     !['submitted', 'under_review'].includes(status) ||
     state.selected?.kind !== 'missing_product';
+  $('approved-correction-actions').hidden = status !== 'approved';
+  $('t-reopen-approval').disabled = status !== 'approved' ||
+    !Number.isSafeInteger(state.selected?.approval_revision) ||
+    !/^[0-9a-f]{64}$/.test(state.selected?.approval_payload_sha256 ?? '');
+  $('reviewer-evidence-replacement').hidden = status !== 'under_review' ||
+    !Number.isSafeInteger(state.selected?.approval_revision) ||
+    state.selected.approval_revision < 1;
   setApprovedReadOnly();
 }
 

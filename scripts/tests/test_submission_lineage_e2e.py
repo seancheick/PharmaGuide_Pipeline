@@ -84,6 +84,7 @@ def _payload() -> dict:
 def _export_row() -> dict:
     canonical = _canonical(_payload())
     return {
+        "approval_revision": 1,
         "approved_at": "2026-07-30T20:00:00Z",
         "approved_payload_canonical": canonical,
         "kind": "missing_product",
@@ -129,6 +130,8 @@ def test_submission_lineage_survives_clean_enrich_and_label_record():
     )
     assert contract["source_record_id"] == SUBMISSION_ID
     assert contract["lineage_key"] == f"pharmaguide_submission:{SUBMISSION_ID}"
+    assert contract["approval_revision"] == 1
+    assert contract["approval_payload_sha256"] == _export_row()["payload_sha256"]
 
 
 def test_promotion_verifier_accepts_the_pipeline_produced_label_record(
@@ -180,7 +183,9 @@ def test_promotion_verifier_accepts_the_pipeline_produced_label_record(
         (
             "mark_product_submission_promoted",
             {
+                "p_approval_revision": 1,
                 "p_catalog_version": "2026.08.30.000000",
+                "p_payload_sha256": _export_row()["payload_sha256"],
                 "p_resolved_dsld_id": PRODUCT_ID,
                 "p_submission_id": SUBMISSION_ID,
             },

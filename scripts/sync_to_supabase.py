@@ -39,8 +39,9 @@ import env_loader  # noqa: F401
 from supabase_client import CACHE_CONTROL_IMMUTABLE, STORAGE_BUCKET, core_db_remote_path
 from audit_source_of_truth_contract import check_v4_pillar_contract
 
-# Same-version corrections are supported, so version-stamped DB/index paths
-# can change. Only SHA-addressed detail blobs receive the immutable TTL.
+# A catalog version is single-use. Version-stamped objects are immutable once
+# present; retries may repair a missing object but never replace different
+# bytes beneath an existing URL.
 CATALOG_MUTABLE_CACHE_SECONDS = 60
 DETAIL_BLOB_STORAGE_PREFIX = "shared/details/sha256"
 SHARE_INDEX_DIRNAME = "share_index"
@@ -897,11 +898,17 @@ def load_product_image_index(build_dir):
     return None, None
 
 
-def _upload_image_task(client, upload_fn, bucket, local_path, remote_path, retries, base_delay):
+def _upload_image_task(client, upload_fn, bucket, local_path, remote_path, retries,
+                       base_delay, immutable=False):
     """Upload a single .webp image to Supabase Storage."""
     try:
         upload_with_retries(
-            lambda: upload_fn(client, bucket, remote_path, local_path, content_type="image/webp"),
+            lambda: upload_fn(
+                client, bucket, remote_path, local_path,
+                content_type="image/webp",
+                upsert=not immutable,
+                cache_control=CACHE_CONTROL_IMMUTABLE if immutable else None,
+            ),
             retries=retries,
             base_delay=base_delay,
         )
@@ -911,19 +918,37 @@ def _upload_image_task(client, upload_fn, bucket, local_path, remote_path, retri
 
 
 def _upload_image_task_with_factory(client_getter, upload_fn, bucket, local_path, remote_path,
-                                    retries, base_delay, download_fn=None, verify_existing=False):
+                                    retries, base_delay, download_fn=None,
+                                    remote_exists=False, immutable=False):
     client = client_getter()
-    if download_fn and verify_existing:
-        try:
-            remote_bytes = upload_with_retries(
-                lambda: download_fn(client, bucket, remote_path), retries, base_delay,
-            )
-            if hashlib.sha256(remote_bytes).hexdigest() == _compute_file_sha256(local_path):
-                return "skipped"
-        except Exception:
-            pass  # No identity proof: overwrite safely rather than skip.
+    if remote_exists:
+        if download_fn is None:
+            if immutable:
+                return {
+                    "remote_path": remote_path,
+                    "error": "Existing versioned image could not be identity-checked",
+                }
+        else:
+            try:
+                remote_bytes = upload_with_retries(
+                    lambda: download_fn(client, bucket, remote_path), retries, base_delay,
+                )
+                if hashlib.sha256(remote_bytes).hexdigest() == _compute_file_sha256(local_path):
+                    return "skipped"
+                if immutable:
+                    return {
+                        "remote_path": remote_path,
+                        "error": "Existing versioned image bytes differ",
+                    }
+            except Exception as exc:
+                if immutable:
+                    return {
+                        "remote_path": remote_path,
+                        "error": f"Existing versioned image could not be verified: {exc}",
+                    }
     return _upload_image_task(
         client, upload_fn, bucket, local_path, remote_path, retries, base_delay,
+        immutable=immutable,
     )
 
 
@@ -938,6 +963,7 @@ def upload_product_images(
     client_factory=None,
     dry_run=False,
     download_fn=None,
+    catalog_version=None,
 ):
     """Upload product_images/*.webp to Supabase Storage bucket.
 
@@ -959,16 +985,21 @@ def upload_product_images(
     # Discover existing remote images to skip re-uploads
     existing_sizes = {}
     try:
+        image_prefix = f"v{catalog_version}" if catalog_version is not None else ""
         page_size = 1000
         offset = 0
         while True:
-            page = list_fn(client, PRODUCT_IMAGE_BUCKET, "", limit=page_size, offset=offset)
+            page = list_fn(
+                client, PRODUCT_IMAGE_BUCKET, image_prefix,
+                limit=page_size, offset=offset,
+            )
             for item in page or []:
                 name = item.get("name", "")
                 metadata = item.get("metadata", {}) or {}
                 size = metadata.get("size") or metadata.get("contentLength") or 0
                 if name:
-                    existing_sizes[name] = int(size) if size else 0
+                    remote_name = f"{image_prefix}/{name}" if image_prefix else name
+                    existing_sizes[remote_name] = int(size) if size else 0
             if not page:
                 break
             offset += len(page)
@@ -982,13 +1013,30 @@ def upload_product_images(
     for dsld_id, entry in sorted(index.items()):
         filename = entry["filename"]
         local_path = os.path.join(image_dir, filename)
-        remote_path = filename  # flat: {dsld_id}.webp
+        declared_remote_path = entry.get("remote_path")
+        remote_path = declared_remote_path or filename
+        if catalog_version is not None and declared_remote_path is not None:
+            expected_prefix = f"v{catalog_version}/"
+            if (
+                not isinstance(remote_path, str)
+                or not remote_path.startswith(expected_prefix)
+                or os.path.basename(remote_path) != filename
+                or ".." in remote_path.split("/")
+            ):
+                errors.append({
+                    "remote_path": str(remote_path),
+                    "error": "Indexed product image is not version-bound",
+                })
+                continue
         if not os.path.isfile(local_path):
             errors.append({"remote_path": remote_path, "error": "Indexed local image is missing"})
             continue
         local_size = os.path.getsize(local_path)
-        uploads.append({"local_path": local_path, "remote_path": remote_path,
-                        "verify_existing": existing_sizes.get(filename) == local_size})
+        uploads.append({
+            "local_path": local_path,
+            "remote_path": remote_path,
+            "remote_exists": remote_path in existing_sizes,
+        })
 
     uploaded = 0
     start = time.time()
@@ -1003,7 +1051,7 @@ def upload_product_images(
             return _upload_image_task_with_factory(
                 client_getter, upload_fn, PRODUCT_IMAGE_BUCKET,
                 upload["local_path"], upload["remote_path"], retries, base_delay,
-                download_fn, upload["verify_existing"],
+                download_fn, upload["remote_exists"], catalog_version is not None,
             )
         for error in _bounded_results(executor, one, uploads, max_workers * 2):
             if error == "skipped":
@@ -1289,6 +1337,7 @@ def sync(
     max_workers=DEFAULT_MAX_WORKERS,
     retry_count=DEFAULT_UPLOAD_RETRIES,
     retry_base_delay=DEFAULT_RETRY_BASE_DELAY,
+    submission_output_dir=None,
 ):
     """Main sync workflow.
 
@@ -1363,8 +1412,23 @@ def sync(
         print("  No remote version found (first push)")
 
     catalog_changed = needs_update(local, remote, force=force)
+    same_catalog_identity = bool(
+        remote
+        and local["db_version"] == remote.get("db_version")
+        and local.get("checksum") == remote.get("checksum")
+    )
+    if (
+        remote
+        and local["db_version"] == remote.get("db_version")
+        and local.get("checksum") != remote.get("checksum")
+    ):
+        raise ValueError(
+            "Refusing to mutate the active catalog version; rebuild with a fresh db_version"
+        )
+    if same_catalog_identity:
+        catalog_changed = False
     remote_db_path = core_db_remote_path(version)
-    catalog_upload_needed = catalog_changed
+    catalog_upload_needed = catalog_changed or force
     if not catalog_changed:
         # The current manifest owns byte identity, but does not prove the object
         # survived storage deletion. Check its exact path without downloading DB.
@@ -1422,6 +1486,7 @@ def sync(
         client, bucket, uploads, list_storage_paths,
         max_workers=min(max_workers, DEFAULT_DISCOVERY_WORKERS),
         client_factory=get_supabase_client,
+        catalog_version=version,
     )
     discover_time = time.time() - start
     print(f"  Found {len(existing_remote_paths)} existing hashed blobs in {discover_time:.1f}s")
@@ -1457,6 +1522,7 @@ def sync(
         retries=retry_count,
         base_delay=retry_base_delay,
         client_factory=get_supabase_client,
+        catalog_version=version,
     )
 
     if image_result["failed"]:
@@ -1527,11 +1593,23 @@ def sync(
         detail_index_url=remote_detail_index_path,
     )
 
-    # Insert manifest (only if all blobs uploaded successfully AND registry
+    submission_approvals = []
+    if submission_output_dir:
+        from product_submission_import import build_release_activation_approvals
+        submission_approvals = build_release_activation_approvals(
+            output_dir=submission_output_dir,
+            catalog_db=db_path,
+            detail_blobs_dir=os.path.join(build_dir, "detail_blobs"),
+        )
+
+    # Insert manifest and stamp locally proven submission promotions in the
+    # same transaction (only after every immutable object is staged).
     # is at least VALIDATING — see P3.6b above).
     print(f"\nUpdating manifest (version {version})...")
     if catalog_changed:
-        insert_manifest(client, local)
+        insert_manifest(
+            client, local, submission_approvals=submission_approvals,
+        )
     print("  Done")
 
     # P3.6b Stage 2: bring catalog_releases to ACTIVE AFTER manifest flip.
@@ -1586,6 +1664,10 @@ def parse_args(argv=None):
                         help='Read-only credential/manifest/bucket access check; no catalog required')
     parser.add_argument("--dry-run", action="store_true", help="Show what would be uploaded without uploading")
     parser.add_argument("--force", action="store_true", help="Upload and rotate manifest even if version/checksum match")
+    parser.add_argument(
+        "--submission-output-dir",
+        help="Private approval receipt directory for atomic activation fencing",
+    )
     parser.add_argument("--max-workers", type=int, default=DEFAULT_MAX_WORKERS,
                         help=f"Max concurrent detail-blob uploads (default: {DEFAULT_MAX_WORKERS})")
     parser.add_argument("--retry-count", type=int, default=DEFAULT_UPLOAD_RETRIES,
@@ -1640,6 +1722,7 @@ def main(argv=None):
             max_workers=args.max_workers,
             retry_count=args.retry_count,
             retry_base_delay=args.retry_base_delay,
+            submission_output_dir=args.submission_output_dir,
         )
         if result["status"] == "partial_failure":
             sys.exit(2)
