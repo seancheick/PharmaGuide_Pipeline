@@ -206,16 +206,15 @@ BASELINE_SPECS: list[dict[str, Any]] = [
         "botanical_source_db": "botanical_ingredients",
         "marker": "resveratrol",
         "model": "standardization_required",
-        "min_standardization_pct_required": 1.0,
+        "min_standardization_pct_required": None,
+        "scoring_eligible": False,
         "standardization_keywords": ["resveratrol", "trans-resveratrol", "% resveratrol", "standardized to"],
         "pubmed_query": "Polygonum cuspidatum Japanese knotweed resveratrol content extraction",
         "expected_keywords": ["polygonum", "knotweed", "resveratrol"],
         "notes": (
-            "Polygonum cuspidatum (Japanese knotweed) is the commercial source of "
-            "resveratrol. Raw root contains 0.1-1.5% resveratrol; standardized extracts "
-            "are 50-98% pure. Credit only when the label declares a resveratrol "
-            "percentage of at least 1% (the same standard as grape); the identity stays "
-            "japanese_knotweed."
+            "D146: source-extraction evidence does not establish a clinical credit floor. "
+            "Preserve declared resveratrol composition and safety exposure; the relationship "
+            "remains excluded from affirmative credit until a qualifying scoped decision."
         ),
     },
     {
@@ -393,6 +392,7 @@ def build_standardization_required(spec: dict, pubmed_client: PubMedClient) -> B
         "fetched_at": datetime.now(timezone.utc).isoformat(),
         "standardization_keywords": spec["standardization_keywords"],
         "notes": spec["notes"],
+        **({"scoring_eligible": False} if spec.get("scoring_eligible") is False else {}),
     }
     return BuildResult(botanical_id, marker, "ok", f"PMID {pmid} ({cov:.2f} coverage)", payload)
 

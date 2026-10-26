@@ -3,7 +3,7 @@
     "description": "Ingredient synergy clusters for bonus scoring when complementary ingredients are combined",
     "purpose": "synergy_bonuses",
     "schema_version": "5.2.0",
-    "last_updated": "2026-10-11",
+    "last_updated": "2026-10-26",
     "total_entries": 58,
     "citation_fields": "note + sources (phase_3 curated_no_query_placeholders)",
     "citation_coverage": {
@@ -3457,8 +3457,7 @@
         "epa",
         "dha",
         "niacin",
-        "vitamin b3",
-        "niacinamide"
+        "vitamin b3"
       ],
       "canonical_ids": [
         "fish_oil",
@@ -3488,16 +3487,17 @@
           "url": "https://ods.od.nih.gov/factsheets/Omega3FattyAcids-HealthProfessional/"
         }
       ],
-      "evidence_note": "PMC10600480 is a narrative review, not a systematic review. Its cited PMID 25932792 studied56 metabolic-syndrome patients with prescription omega3 ethyl esters4 g/day and extended-release niacin2 g/day for16 weeks, measuring selected apolipoprotein outcomes. It does not establish generic overall lipid-panel/cardiovascular benefit, niacinamide equivalence, or1 g/500 mg dose floors.",
+      "evidence_note": "PMC10600480 is a narrative review, not a systematic review. Its cited PMID 25932792 studied56 metabolic-syndrome patients with prescription omega3 ethyl esters4 g/day and extended-release niacin2 g/day for16 weeks, measuring selected apolipoprotein outcomes. It does not establish generic overall lipid-panel/cardiovascular benefit, niacinamide equivalence, or1 g/500 mg dose floors. D145: this relationship is excluded from affirmative scoring and benefit qualification until a qualifying, scoped decision supports restoration; independent ingredient assessments and safety checks remain separate.",
       "synergy_benefit_short": "A specific prescription preparation combination had selected lipid-marker findings; generic matched products do not establish equivalent benefit.",
-      "allow_single_ingredient": true,
+      "allow_single_ingredient": false,
       "primary_ingredients": [
         "fish oil",
         "epa",
         "dha",
         "omega-3",
         "niacin"
-      ]
+      ],
+      "scoring_eligible": false
     }
   ]
 }

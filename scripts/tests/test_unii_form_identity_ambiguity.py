@@ -84,3 +84,16 @@ def test_isolated_marker_with_botanical_source_keeps_explicit_row_unii(normalize
     payload, method = normalizer._try_unii_match(row)
     assert method == "unii_exact_match"
     assert payload == normalizer._identity_unii_to_payload_lookup["MQE6XG29YI"]
+
+
+@pytest.mark.parametrize('missing', [None, '', '0'])
+@pytest.mark.parametrize('reverse', [False, True])
+def test_mixed_botanical_parts_cannot_take_one_forms_identifier(normalizer, missing, reverse):
+    forms = [{'name':'Vitis vinifera Seed Extract','category':'botanical','uniiCode':'C34U15ICXA'},
+             {'name':'Vitis vinifera Skin Extract','category':'botanical','uniiCode':missing}]
+    if reverse:
+        forms.reverse()
+    row = {'name':'Grape Extract','category':'botanical','ingredientGroup':'Grape',
+           'uniiCode':None,'forms':forms}
+    assert normalizer._try_unii_match(row) is None
+    assert normalizer._try_unii_match(dict(row, forms=[forms[0] if not reverse else forms[1]])) is not None

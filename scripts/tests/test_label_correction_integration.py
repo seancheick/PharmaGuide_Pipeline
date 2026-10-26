@@ -25,6 +25,7 @@ lives in a separate audit script.
 from __future__ import annotations
 
 import json
+from pathlib import Path
 import os
 import sys
 from typing import Any, Dict, List
@@ -1121,7 +1122,13 @@ def test_zero_dose_audit_official_label_quantities(normalizer, pid, name, value,
     raw["ingredientRows"] = [{**_make_ingredient_row(name, category="mineral"),
         "ingredientGroup": name, "quantity": [{"quantity": value, "unit": "mg"}],
         "nestedRows": [], "forms": []}]
-    active = normalizer.normalize_product(raw)["activeIngredients"][0]
+    if pid == 78327:
+        # This exact label now also has a source-bound cadence correction;
+        # exercise its real panel rather than a fabricated replacement panel.
+        raw = json.loads((Path(__file__).parent / "fixtures" /
+                          "returned_review_completion_raw.json").read_text())[str(pid)]
+    active = next(row for row in normalizer.normalize_product(raw)["activeIngredients"]
+                  if row["name"] == name)
     assert (active["quantity"], active["unit"]) == (expected, "mcg")
     assert active["source_correction"]["original_quantity_unit"] == "mg"
 

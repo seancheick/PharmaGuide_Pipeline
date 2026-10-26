@@ -1190,6 +1190,11 @@ def resolve_identity(
         (item.value for item in evidence if item.kind == "source_form"),
         None,
     )
+    if (row.get("canonical_source_db") == "botanical_ingredients"
+            and " and " in str(row.get("plantPart") or "")):
+        source_form = "; ".join(dict.fromkeys(
+            item.value for item in evidence if item.kind == "source_form"
+        )) or source_form
     display_name = normalize_label_display(source_name) or None
     display_form = normalize_label_display(source_form) or None
 

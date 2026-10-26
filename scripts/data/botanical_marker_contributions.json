@@ -7,7 +7,7 @@
       "USDA FoodData Central API (api.nal.usda.gov/fdc/v1)",
       "PubMed E-utilities (eutils.ncbi.nlm.nih.gov/entrez/eutils)"
     ],
-    "policy": "Identity vs Bioactivity Split — source botanicals only credit marker Section C evidence when (a) label explicitly declares standardization meeting min_standardization_pct_required, or (b) botanical has a default_contribution_mg_per_g with USDA FDC citation.",
+    "policy": "Identity vs Bioactivity Split — source botanicals only credit marker Section C evidence when (a) label explicitly declares standardization meeting min_standardization_pct_required, or (b) botanical has a default_contribution_mg_per_g with USDA FDC citation. An explicit scoring_eligible=false excludes that relationship from affirmative scoring and benefit qualification while retaining declared composition and safety exposure; restoration requires a qualifying scoped decision.",
     "total_entries": 12,
     "description": "Maps source-botanical canonicals to the bioactivity markers they may deliver. Used by enricher to compute delivers_markers[] per ingredient when label declares standardization or botanical has a USDA-cited default contribution. Architectural fix for the identity-vs-bioactivity split (canonical_id = label identity, delivers_markers[] = clinical contribution).",
     "purpose": "marker_contribution_reference"
@@ -224,7 +224,7 @@
         {
           "marker_canonical_id": "resveratrol",
           "model": "standardization_required",
-          "min_standardization_pct_required": 1.0,
+          "min_standardization_pct_required": null,
           "default_contribution_mg_per_g": null,
           "evidence_source": "PubMed PMID:34410415 — Response Surface Methodology to Optimize Supercritical Carbon Dioxide Extraction of Polygonum cuspidatum.",
           "evidence_url": "https://pubmed.ncbi.nlm.nih.gov/34410415/",
@@ -237,7 +237,8 @@
             "% resveratrol",
             "standardized to"
           ],
-          "notes": "Polygonum cuspidatum (Japanese knotweed) is the commercial source of resveratrol. Raw root contains 0.1-1.5% resveratrol; standardized extracts are 50-98% pure. Credit only when the label declares a resveratrol percentage of at least 1% (the same standard as grape); the identity stays japanese_knotweed."
+          "notes": "Polygonum cuspidatum contains resveratrol. PMID 34410415 reports optimized supercritical-carbon-dioxide extraction with ethanol and a resveratrol extraction yield of 2.564 +/- 0.121 mg/g under the studied conditions. This is not a generic root/extract percentage range, a clinical benefit/dose, or validation of the authored 1% eligibility floor. The no-default, label-standardization-required boundary is retained; generic floor calibration remains unresolved. D146: this relationship is excluded from affirmative scoring and benefit qualification. Declared percentages and calculated quantities remain factual exposure for safety checks; no numerical credit floor is established. Restore credit only after a qualifying, scoped decision supports it.",
+          "scoring_eligible": false
         }
       ],
       "source_db": "botanical_ingredients"

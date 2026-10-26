@@ -7,7 +7,7 @@
     "review_policy": "Every product entry is keyed by dsld_id and must carry: brand, product_name (for human-readable audit trail), raw_ingredient_text (the source row being corrected), corrected_ingredient_text (the text the cleaner should see, unchanged for unit-only corrections), correction_fields, evidence (free-text rationale with regulatory citations), sources (authoritative URLs — FDA, NIH, DailyMed, etc.), reviewer, and review_date (ISO 8601 YYYY-MM-DD). A verified cross-row defect may add additional_row_corrections, which inherit the product-level evidence, sources, reviewer, review_date, scope, and provenance tag. Quantity changes require exact raw and corrected value/unit pairs and must be supported by the official manufacturer or label image. Restoring a quantity absent from a form row additionally requires raw_quantity_missing=true, a positive corrected value/unit, and exact same-record source text that states the dose; the applier refuses to overwrite any existing quantity representation. A reviewed Daily Value correction requires an exact raw_daily_value and corrected_daily_value from the same official label; it rewrites only matching source percentages, never derives a percentage or changes a different value. A reviewed unresolved_unit scoring_disposition preserves exact raw_quantity_value/raw_quantity_unit, makes no inferred unit correction, and marks dose and upper-limit assessment unresolved until independent exact-label evidence resolves the conflict. It applies only when the raw name, value and unit all match. Reviewed hierarchy corrections may supply corrected_child_row_refs with exact parent raw_source_path/name/value/unit and exact child source paths/names/raw_child_names. The existing applier validates the whole group before moving working rows; it preserves original API source references and quantities and fails closed on mismatch. A source_descriptor disposition with an authored raw value/unit applies only to that exact quantity edition. Exact-source corrected_notes repairs require raw source paths, names, notes and quantity pairs for the entire bundle; a mismatch fails closed before edits. Original working notes retain _pre_correction_notes, and source paths remain unchanged. A reviewed source quantity conflict may set corrected_quantity_operator to ambiguous or unknown only with raw_quantities matching the entire original quantity array exactly. It preserves every number, unit and serving basis, changes only the existing unresolved qualifier, and retains original quantities for audit; it does not invent a replacement amount. Reviewed serving_basis_correction binds the exact ingredientRows, servingSizes and statements content SHA256 before replacing serving metadata or assigning quantity variants to individually reviewed preparation columns. It preserves all alternative amounts and original source snapshots and fails closed on any changed binding. corrected_quantities requires the entire raw_quantities array and preserves column count; it restores only individually image-verified value/unit transcriptions. Existing canonical PG_SUB_ product identities may use this same exact-product correction owner. Reviewed physicalState metadata binds its original object and permits only explicit name/langualCodeDescription strings; it does not rewrite an approval or infer a dosage form.",
     "unmatched_drug_tokens_policy": "When a row's raw_ingredient_text matches a known regulated-drug name (e.g., 'Insulin', 'Acetaminophen', 'Ibuprofen') and there is NO matching override for the product, the row must NOT be silently mapped. The cleaner emits the row to a quarantine path with reason='requires_human_review_drug_token_in_supplement' and excludes the product from scoring. New occurrences enter the reviewer pipeline via the same schema.",
     "last_updated": "2026-10-26",
-    "total_entries": 131,
+    "total_entries": 144,
     "loaded_by": "scripts/enhanced_normalizer.py via _load_label_corrections (cached on first product)"
   },
   "corrections": {
@@ -2633,9 +2633,10 @@
       "corrected_quantity_unit": "mcg",
       "correction_fields": [
         "quantity.value",
-        "quantity.unit"
+        "quantity.unit",
+        "servingSizes"
       ],
-      "evidence": "The exact historical NIH DSLD label PDF prints Iodine 150 mcg; the source JSON transcribes 18 mg. Original Supplement Facts panel visually checked on 2026-10-22. Correct only this exact product, row, amount and unit; do not infer units from Daily Value.",
+      "evidence": "The exact historical NIH DSLD label PDF prints Iodine 150 mcg; the source JSON transcribes 18 mg. Original Supplement Facts panel visually checked on 2026-10-22. Correct only this exact product, row, amount and unit; do not infer units from Daily Value. Independently verified October 26: numerical daily maximum is not printed; API daily endpoints are not label evidence.",
       "sources": [
         "https://api.ods.od.nih.gov/dsld/v9/label/78327",
         "https://api.ods.od.nih.gov/dsld/s3/pdf/78327.pdf"
@@ -2643,7 +2644,22 @@
       "reviewer": "Codex original-label data integrity review",
       "review_date": "2026-10-22",
       "scope": "dsld_id_only",
-      "provenance_tag": "official_label_quantity_correction"
+      "provenance_tag": "official_label_quantity_correction",
+      "serving_basis_correction": {
+        "raw_source_sha256": "e9f8b7d45df60f2521454b12e14b0b99ad106b3291447ace10f44f16c1686ecf",
+        "serving_sizes": [
+          {
+            "order": 1,
+            "minQuantity": 37,
+            "maxQuantity": 37,
+            "minDailyServings": null,
+            "maxDailyServings": null,
+            "unit": "Gram(s)",
+            "notes": "2 scoops",
+            "inSFB": true
+          }
+        ]
+      }
     },
     "33660": {
       "brand": "GNC",
@@ -7114,9 +7130,10 @@
       "corrected_ingredient_text": "FoodState Farm Fresh Fruit Phenolic Blend",
       "raw_source_path": "ingredientRows[5]",
       "correction_fields": [
-        "ingredientRows.hierarchy"
+        "ingredientRows.hierarchy",
+        "servingSizes"
       ],
-      "evidence": "Exact051494900048 image places orange/blueberry/cranberry under140mg fruit blend, separate from200mg Reishi. Move original rows without changing original source references or unknown NP amounts. No individual fruit allocation or preparation equivalence.",
+      "evidence": "Exact051494900048 image places orange/blueberry/cranberry under140mg fruit blend, separate from200mg Reishi. Move original rows without changing original source references or unknown NP amounts. No individual fruit allocation or preparation equivalence. Independently verified October 26: numerical daily maximum is not printed; API daily endpoints are not label evidence. Printed FoodState Farm Fresh Beet Root is retained without nitrate allocation.",
       "sources": [
         "https://api.ods.od.nih.gov/dsld/v9/label/43662",
         "https://api.ods.od.nih.gov/dsld/s3/pdf/43662.pdf"
@@ -7124,7 +7141,7 @@
       "reviewer": "Codex independent exact-label content verification; no clinical scoring approval",
       "review_date": "2026-10-25",
       "scope": "dsld_id_only",
-      "provenance_tag": "official_label_source_correction_20261025_batch12",
+      "provenance_tag": "official_source_identity_correction",
       "serving_basis_correction": {
         "raw_source_sha256": "5a685f1d82e1c428bb3a3d618955c5e2d4dd4fcec3cb448a2494862f3538efdc",
         "serving_sizes": [
@@ -7132,8 +7149,8 @@
             "order": 1,
             "minQuantity": 1.96,
             "maxQuantity": 1.96,
-            "minDailyServings": 1,
-            "maxDailyServings": 1,
+            "minDailyServings": null,
+            "maxDailyServings": null,
             "unit": "Gram(s)",
             "notes": "1 packet",
             "inSFB": true
@@ -7193,6 +7210,17 @@
               "servingSizeUnit": "Gram(s)"
             }
           ]
+        }
+      ],
+      "additional_row_corrections": [
+        {
+          "raw_ingredient_text": "FoodState(R) Farm Fresh Beet",
+          "corrected_ingredient_text": "FoodState(R) Farm Fresh Beet Root",
+          "raw_source_path": "ingredientRows[1]",
+          "correction_fields": [
+            "name"
+          ],
+          "provenance_tag": "official_source_identity_correction"
         }
       ]
     },
@@ -7350,9 +7378,10 @@
         "category",
         "ingredientGroup",
         "forms",
-        "statements"
+        "statements",
+        "servingSizes"
       ],
-      "evidence": "ExactL600-V1-0919 prints9gMCT/acacia preparation; no individual MCT/acacia dose is established. Retain total as blend, expose source constituents without allocating quantities, no pure-MCT credit from9g. Coconut warning retained. Printed free-from list does not include tree nuts; remove API additions and invented facility adjectives while retaining cross-contact language.",
+      "evidence": "ExactL600-V1-0919 prints9gMCT/acacia preparation; no individual MCT/acacia dose is established. Retain total as blend, expose source constituents without allocating quantities, no pure-MCT credit from9g. Coconut warning retained. Printed free-from list does not include tree nuts; remove API additions and invented facility adjectives while retaining cross-contact language. Independently verified October 26: numerical daily maximum is not printed; API daily endpoints are not label evidence.",
       "sources": [
         "https://api.ods.od.nih.gov/dsld/v9/label/268493",
         "https://api.ods.od.nih.gov/dsld/s3/pdf/268493.pdf"
@@ -7368,8 +7397,8 @@
             "order": 1,
             "minQuantity": 10,
             "maxQuantity": 10,
-            "minDailyServings": 1,
-            "maxDailyServings": 1,
+            "minDailyServings": null,
+            "maxDailyServings": null,
             "unit": "Gram(s)",
             "notes": "1 scoop",
             "inSFB": true
@@ -7969,6 +7998,590 @@
             "unit": "Veggie Capsules"
           }
         ]
+      }
+    },
+    "33361": {
+      "brand": "Legion",
+      "product_name": "Legiox Norethandriol",
+      "raw_ingredient_text": "17a-Ethyl-Estr-5(6)-Ene-3B-Diol",
+      "corrected_ingredient_text": "17α-ethyl-estr-5(6)-ene-3β,17β-diol",
+      "correction_fields": [
+        "name"
+      ],
+      "evidence": "Exact NIH PDF Supplement Facts prints 17α-ethyl-estr-5(6)-ene-3β,17β-diol, 7.5 mg per one capsule. Restore omitted 17β without chemical identifier inference. Retain designer-steroid blocking; daily cadence is not printed in this archived image.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/33361.pdf",
+        "https://api.ods.od.nih.gov/dsld/v9/label/33361"
+      ],
+      "reviewer": "Codex independent exact NIH PDF/API source verification; no clinical approval asserted",
+      "review_date": "2026-10-26",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_source_identity_correction",
+      "serving_basis_correction": {
+        "raw_source_sha256": "3f123533cc654a6a70763efd0da13bb7895a544321950d4f6acedcea7de5aceb",
+        "serving_sizes": [
+          {
+            "order": 1,
+            "minQuantity": 1,
+            "maxQuantity": 1,
+            "minDailyServings": null,
+            "maxDailyServings": null,
+            "unit": "Capsule(s)",
+            "notes": "",
+            "inSFB": true
+          }
+        ]
+      }
+    },
+    "259374": {
+      "brand": "Natures Way",
+      "product_name": "Organic Hemp Powder Protein & Fiber",
+      "raw_ingredient_text": "organic Hemp powder",
+      "corrected_ingredient_text": "Organic Hemp Powder (seed)",
+      "correction_fields": [
+        "name",
+        "notes"
+      ],
+      "evidence": "Exact NIH label prints Organic Hemp Powder (seed), 30 g per four tablespoons and describes it as cold milled and unrefined. Retain 11 g protein, 11 g fiber and unknown daily cadence. Essential Fatty Acids prints 1.7 g; the API note 2,000 mg is unsupported. No CBD/whole-plant evidence transfer.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/259374.pdf",
+        "https://api.ods.od.nih.gov/dsld/v9/label/259374"
+      ],
+      "reviewer": "Codex independent exact NIH PDF/API source verification; no clinical approval asserted",
+      "review_date": "2026-10-26",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_source_identity_correction",
+      "additional_row_corrections": [
+        {
+          "raw_ingredient_text": "Essential Fatty Acids",
+          "corrected_ingredient_text": "Essential Fatty Acids",
+          "raw_source_path": "ingredientRows[6].nestedRows[0]",
+          "raw_notes": "Essential Fatty Acids Note: 2,000 mg ",
+          "corrected_notes": "Essential Fatty Acids: 1.7 g",
+          "raw_quantity_value": 1.7,
+          "raw_quantity_unit": "Gram(s)",
+          "correction_fields": [
+            "notes"
+          ],
+          "provenance_tag": "official_source_identity_correction"
+        }
+      ],
+      "serving_basis_correction": {
+        "raw_source_sha256": "9ebe69d2c467f7087e5204e7d3eb74bc8801fecd04cb6a68d3049c0697feda8d",
+        "serving_sizes": [
+          {
+            "order": 1,
+            "minQuantity": 30,
+            "maxQuantity": 30,
+            "minDailyServings": 1,
+            "maxDailyServings": null,
+            "unit": "Gram(s)",
+            "notes": "4 Tablespoons",
+            "inSFB": true
+          }
+        ]
+      }
+    },
+    "306350": {
+      "brand": "Nutricost",
+      "product_name": "Marine Collagen Unflavored",
+      "raw_ingredient_text": "Sodium",
+      "corrected_ingredient_text": "Sodium",
+      "correction_fields": [
+        "quantity.unit"
+      ],
+      "evidence": "Exact NIH Nutrition Facts prints Sodium 0 mg. API stores 0 Gram(s). Correct unit only; zero numerical exposure remains zero. Separate printed protein 10 g and hydrolyzed fish cod collagen ingredient must not become a second measured collagen dose. Retain fish warning.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/306350.pdf",
+        "https://api.ods.od.nih.gov/dsld/v9/label/306350"
+      ],
+      "reviewer": "Codex independent exact NIH PDF/API source verification; no clinical approval asserted",
+      "review_date": "2026-10-26",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_source_correction",
+      "raw_quantity_value": 0,
+      "raw_quantity_unit": "Gram(s)",
+      "corrected_quantity_value": 0,
+      "corrected_quantity_unit": "mg",
+      "serving_basis_correction": {
+        "raw_source_sha256": "72f5a101bc4dc244710c7d64ece0c180d7fd1ee9701f49d89c70f34fa2a17cc8",
+        "serving_sizes": [
+          {
+            "order": 1,
+            "minQuantity": 10,
+            "maxQuantity": 10,
+            "minDailyServings": 1,
+            "maxDailyServings": 1,
+            "unit": "Gram(s)",
+            "notes": "1 Scoop (2 tbsp)",
+            "inSFB": true
+          }
+        ]
+      }
+    },
+    "315586": {
+      "brand": "Double Wood Supplements",
+      "product_name": "Adrenal Support",
+      "raw_ingredient_text": "Astragalus",
+      "corrected_ingredient_text": "Astragalus Root",
+      "correction_fields": [
+        "name"
+      ],
+      "evidence": "Exact NIH label names ten botanical parts within one Organic Proprietary Blend, 1 mL (30 drops) daily. Restore only literal parts. Individual quantities and extraction/marker specifications remain undisclosed; four-serving warning ceiling is not the instructed daily regimen. Preserve pregnancy/nursing/under-18 and machinery precautions.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/315586.pdf",
+        "https://api.ods.od.nih.gov/dsld/v9/label/315586"
+      ],
+      "reviewer": "Codex independent exact NIH PDF/API source verification; no clinical approval asserted",
+      "review_date": "2026-10-26",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_source_correction",
+      "additional_row_corrections": [
+        {
+          "raw_ingredient_text": "Wood Betony",
+          "corrected_ingredient_text": "Wood Betony Herb",
+          "correction_fields": [
+            "name"
+          ]
+        },
+        {
+          "raw_ingredient_text": "Ginkgo",
+          "corrected_ingredient_text": "Ginkgo Leaf",
+          "correction_fields": [
+            "name"
+          ]
+        },
+        {
+          "raw_ingredient_text": "Eleuthero",
+          "corrected_ingredient_text": "Eleuthero Root",
+          "correction_fields": [
+            "name"
+          ]
+        },
+        {
+          "raw_ingredient_text": "Gotu Kola",
+          "corrected_ingredient_text": "Gotu Kola Herb",
+          "correction_fields": [
+            "name"
+          ]
+        },
+        {
+          "raw_ingredient_text": "Rhodiola",
+          "corrected_ingredient_text": "Rhodiola Root",
+          "correction_fields": [
+            "name"
+          ]
+        },
+        {
+          "raw_ingredient_text": "Licorice",
+          "corrected_ingredient_text": "Licorice Root",
+          "correction_fields": [
+            "name"
+          ]
+        },
+        {
+          "raw_ingredient_text": "Lavender",
+          "corrected_ingredient_text": "Lavender Flower",
+          "correction_fields": [
+            "name"
+          ]
+        },
+        {
+          "raw_ingredient_text": "Spearmint",
+          "corrected_ingredient_text": "Spearmint Leaf",
+          "correction_fields": [
+            "name"
+          ]
+        },
+        {
+          "raw_ingredient_text": "Passionflower",
+          "corrected_ingredient_text": "Passionflower Leaf",
+          "correction_fields": [
+            "name"
+          ]
+        }
+      ],
+      "serving_basis_correction": {
+        "raw_source_sha256": "5092f25836fd318e79c3988657c5669ba702b6b22a815a9e2e46306c0c4f1b9b",
+        "serving_sizes": [
+          {
+            "order": 1,
+            "minQuantity": 1,
+            "maxQuantity": 1,
+            "minDailyServings": 1,
+            "maxDailyServings": 1,
+            "unit": "mL",
+            "notes": "30 Drops",
+            "inSFB": true
+          }
+        ]
+      }
+    },
+    "330806": {
+      "brand": "BulkSupplements",
+      "product_name": "EAA",
+      "raw_ingredient_text": "Essential Amino Acids",
+      "corrected_ingredient_text": "Essential Amino Acids",
+      "correction_fields": [
+        "hierarchy"
+      ],
+      "evidence": "Exact NIH Supplement Facts presents Essential Amino Acids 10 grams with a Proprietary Blend list of nine named amino acids. Join the existing undosed child group beneath its one declared total. Do not copy 10 g into children or the nested header; do not infer member ratios or free-base masses. Preserve all source row paths and physician/child precautions.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/330806.pdf",
+        "https://api.ods.od.nih.gov/dsld/v9/label/330806"
+      ],
+      "reviewer": "Codex independent exact NIH PDF/API source verification; no clinical approval asserted",
+      "review_date": "2026-10-26",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_hierarchy_correction",
+      "raw_source_path": "ingredientRows[0]",
+      "raw_quantity_value": 10,
+      "raw_quantity_unit": "Gram(s)",
+      "corrected_child_row_refs": [
+        {
+          "raw_source_path": "ingredientRows[1]",
+          "raw_ingredient_text": "Proprietary Blend",
+          "raw_child_names": [
+            "L-Leucine",
+            "L-Isoleucine",
+            "L-Valine",
+            "L-Lysine Hydrochloride",
+            "L-Threonine",
+            "L-Phenylalanine",
+            "L-Methionine",
+            "L-Histidine Hydrochloride",
+            "L-Tryptophan"
+          ]
+        }
+      ],
+      "serving_basis_correction": {
+        "raw_source_sha256": "ed2e2ed97021b1d8d205c469b0660b16f8ccdbd29ff4a991273c4f2f2b0b210b",
+        "serving_sizes": [
+          {
+            "order": 1,
+            "minQuantity": 10,
+            "maxQuantity": 10,
+            "minDailyServings": 1,
+            "maxDailyServings": 1,
+            "unit": "Gram(s)",
+            "notes": "about 1 1/3 tbsp",
+            "inSFB": true
+          }
+        ]
+      }
+    },
+    "25583": {
+      "brand": "GNC",
+      "product_name": "Breakfast Squares Oatmeal Chocolate Chip",
+      "raw_ingredient_text": "Calories",
+      "corrected_ingredient_text": "Calories",
+      "correction_fields": [
+        "servingSizes"
+      ],
+      "evidence": "Exact NIH image specifies an intake portion but no numerical daily maximum. Preserve one Facts-serving as a default assessment basis, not a manufacturer-confirmed daily regimen. Independently verified October 26: numerical daily maximum is not printed; API daily endpoints are not label evidence.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/25583.pdf",
+        "https://api.ods.od.nih.gov/dsld/v9/label/25583"
+      ],
+      "reviewer": "Codex independent exact NIH PDF/API source verification; no clinical approval asserted",
+      "review_date": "2026-10-26",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_source_correction",
+      "serving_basis_correction": {
+        "raw_source_sha256": "9bbc2af25fd8fd3f0ec3ff1bface7b5e193a6ccf319692ea61492b0a44cba4ad",
+        "serving_sizes": [
+          {
+            "order": 1,
+            "minQuantity": 50,
+            "maxQuantity": 50,
+            "minDailyServings": null,
+            "maxDailyServings": null,
+            "unit": "Gram(s)",
+            "notes": "1 bar",
+            "inSFB": true
+          }
+        ]
+      }
+    },
+    "29049": {
+      "brand": "GNC",
+      "product_name": "Breakfast Squares Iced Cinnamon Bun",
+      "raw_ingredient_text": "Calories",
+      "corrected_ingredient_text": "Calories",
+      "correction_fields": [
+        "servingSizes"
+      ],
+      "evidence": "Exact NIH image specifies an intake portion but no numerical daily maximum. Preserve one Facts-serving as a default assessment basis, not a manufacturer-confirmed daily regimen. Independently verified October 26: numerical daily maximum is not printed; API daily endpoints are not label evidence.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/29049.pdf",
+        "https://api.ods.od.nih.gov/dsld/v9/label/29049"
+      ],
+      "reviewer": "Codex independent exact NIH PDF/API source verification; no clinical approval asserted",
+      "review_date": "2026-10-26",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_source_correction",
+      "serving_basis_correction": {
+        "raw_source_sha256": "17a314e1c830c4db4f441b4fd173488dacb2909096e224a2e8e804808c118020",
+        "serving_sizes": [
+          {
+            "order": 1,
+            "minQuantity": 50,
+            "maxQuantity": 50,
+            "minDailyServings": null,
+            "maxDailyServings": null,
+            "unit": "Gram(s)",
+            "notes": "1 bar",
+            "inSFB": true
+          }
+        ]
+      }
+    },
+    "29054": {
+      "brand": "GNC",
+      "product_name": "Breakfast Squares Strawberries & Cream",
+      "raw_ingredient_text": "Calories",
+      "corrected_ingredient_text": "Calories",
+      "correction_fields": [
+        "servingSizes"
+      ],
+      "evidence": "Exact NIH image specifies an intake portion but no numerical daily maximum. Preserve one Facts-serving as a default assessment basis, not a manufacturer-confirmed daily regimen. Independently verified October 26: numerical daily maximum is not printed; API daily endpoints are not label evidence.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/29054.pdf",
+        "https://api.ods.od.nih.gov/dsld/v9/label/29054"
+      ],
+      "reviewer": "Codex independent exact NIH PDF/API source verification; no clinical approval asserted",
+      "review_date": "2026-10-26",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_source_correction",
+      "serving_basis_correction": {
+        "raw_source_sha256": "60643e52527829ae5e9cbd43b04add2be5964b41c568dc8a50bec0cfa60c2edd",
+        "serving_sizes": [
+          {
+            "order": 1,
+            "minQuantity": 50,
+            "maxQuantity": 50,
+            "minDailyServings": null,
+            "maxDailyServings": null,
+            "unit": "Gram(s)",
+            "notes": "1 bar",
+            "inSFB": true
+          }
+        ]
+      }
+    },
+    "43947": {
+      "brand": "MegaFood",
+      "product_name": "Daily Energy",
+      "raw_ingredient_text": "FoodState S. cerevisiae",
+      "corrected_ingredient_text": "FoodState S. cerevisiae",
+      "correction_fields": [
+        "servingSizes"
+      ],
+      "evidence": "Exact NIH image specifies an intake portion but no numerical daily maximum. Preserve one Facts-serving as a default assessment basis, not a manufacturer-confirmed daily regimen. Independently verified October 26: numerical daily maximum is not printed; API daily endpoints are not label evidence. Printed FoodState Farm Fresh Beet Root is retained without nitrate allocation.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/43947.pdf",
+        "https://api.ods.od.nih.gov/dsld/v9/label/43947"
+      ],
+      "reviewer": "Codex independent exact NIH PDF/API source verification; no clinical approval asserted",
+      "review_date": "2026-10-26",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_source_identity_correction",
+      "serving_basis_correction": {
+        "raw_source_sha256": "213e6ccbf108279d08e7d21463fa84512b8ac7e233e686b087d550c331d6a62c",
+        "serving_sizes": [
+          {
+            "order": 1,
+            "minQuantity": 1.75,
+            "maxQuantity": 1.75,
+            "minDailyServings": null,
+            "maxDailyServings": null,
+            "unit": "Gram(s)",
+            "notes": "1 packet",
+            "inSFB": true
+          }
+        ]
+      },
+      "additional_row_corrections": [
+        {
+          "raw_ingredient_text": "FoodState(R) Farm Fresh Beet",
+          "corrected_ingredient_text": "FoodState(R) Farm Fresh Beet Root",
+          "raw_source_path": "ingredientRows[3]",
+          "correction_fields": [
+            "name"
+          ],
+          "provenance_tag": "official_source_identity_correction"
+        }
+      ]
+    },
+    "63330": {
+      "brand": "MegaFood",
+      "product_name": "Daily Purify",
+      "raw_ingredient_text": "Gentle Daily Detox Blend",
+      "corrected_ingredient_text": "Gentle Daily Detox Blend",
+      "correction_fields": [
+        "servingSizes"
+      ],
+      "evidence": "Exact NIH image specifies an intake portion but no numerical daily maximum. Preserve one Facts-serving as a default assessment basis, not a manufacturer-confirmed daily regimen. Independently verified October 26: numerical daily maximum is not printed; API daily endpoints are not label evidence. Printed FoodState Farm Fresh Beet Root is retained without nitrate allocation.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/63330.pdf",
+        "https://api.ods.od.nih.gov/dsld/v9/label/63330"
+      ],
+      "reviewer": "Codex independent exact NIH PDF/API source verification; no clinical approval asserted",
+      "review_date": "2026-10-26",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_source_identity_correction",
+      "serving_basis_correction": {
+        "raw_source_sha256": "6eef91466114702f86903b8d3cd2641460d3182f80d3d5d2c1446f8ed7ddb6ff",
+        "serving_sizes": [
+          {
+            "order": 1,
+            "minQuantity": 1.96,
+            "maxQuantity": 1.96,
+            "minDailyServings": null,
+            "maxDailyServings": null,
+            "unit": "Gram(s)",
+            "notes": "1 scoop",
+            "inSFB": true
+          }
+        ]
+      },
+      "additional_row_corrections": [
+        {
+          "raw_ingredient_text": "FoodState farm fresh Beet",
+          "corrected_ingredient_text": "FoodState farm fresh Beet Root",
+          "raw_source_path": "ingredientRows[1]",
+          "correction_fields": [
+            "name"
+          ],
+          "provenance_tag": "official_source_identity_correction"
+        }
+      ]
+    },
+    "63463": {
+      "brand": "MegaFood",
+      "product_name": "Daily Energy Nutrient Booster Powder",
+      "raw_ingredient_text": "FoodState S. cerevisiae",
+      "corrected_ingredient_text": "FoodState S. cerevisiae",
+      "correction_fields": [
+        "servingSizes"
+      ],
+      "evidence": "Exact NIH image specifies an intake portion but no numerical daily maximum. Preserve one Facts-serving as a default assessment basis, not a manufacturer-confirmed daily regimen. Independently verified October 26: numerical daily maximum is not printed; API daily endpoints are not label evidence. Printed FoodState Farm Fresh Beet Root is retained without nitrate allocation.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/63463.pdf",
+        "https://api.ods.od.nih.gov/dsld/v9/label/63463"
+      ],
+      "reviewer": "Codex independent exact NIH PDF/API source verification; no clinical approval asserted",
+      "review_date": "2026-10-26",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_source_identity_correction",
+      "serving_basis_correction": {
+        "raw_source_sha256": "1f455b517d9fdc5dd3038ba8951bd5914611cbb7e320533d079080c725ccac87",
+        "serving_sizes": [
+          {
+            "order": 1,
+            "minQuantity": 1.75,
+            "maxQuantity": 1.75,
+            "minDailyServings": null,
+            "maxDailyServings": null,
+            "unit": "Gram(s)",
+            "notes": "1 packet",
+            "inSFB": true
+          }
+        ]
+      },
+      "additional_row_corrections": [
+        {
+          "raw_ingredient_text": "FoodState farm fresh Beet",
+          "corrected_ingredient_text": "FoodState farm fresh Beet Root",
+          "raw_source_path": "ingredientRows[3]",
+          "correction_fields": [
+            "name"
+          ],
+          "provenance_tag": "official_source_identity_correction"
+        }
+      ]
+    },
+    "63475": {
+      "brand": "MegaFood",
+      "product_name": "Daily Purify Nutrient Booster Powder",
+      "raw_ingredient_text": "Gentle Daily Detox Blend",
+      "corrected_ingredient_text": "Gentle Daily Detox Blend",
+      "correction_fields": [
+        "servingSizes"
+      ],
+      "evidence": "Exact NIH image specifies an intake portion but no numerical daily maximum. Preserve one Facts-serving as a default assessment basis, not a manufacturer-confirmed daily regimen. Independently verified October 26: numerical daily maximum is not printed; API daily endpoints are not label evidence. Printed FoodState Farm Fresh Beet Root is retained without nitrate allocation.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/63475.pdf",
+        "https://api.ods.od.nih.gov/dsld/v9/label/63475"
+      ],
+      "reviewer": "Codex independent exact NIH PDF/API source verification; no clinical approval asserted",
+      "review_date": "2026-10-26",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_source_identity_correction",
+      "serving_basis_correction": {
+        "raw_source_sha256": "593bd6b50a63902525487beb5f87476f7d1dc436cbd2c53a837a2248d862e2f0",
+        "serving_sizes": [
+          {
+            "order": 1,
+            "minQuantity": 1.96,
+            "maxQuantity": 1.96,
+            "minDailyServings": null,
+            "maxDailyServings": null,
+            "unit": "Gram(s)",
+            "notes": "1 packet",
+            "inSFB": true
+          }
+        ]
+      },
+      "additional_row_corrections": [
+        {
+          "raw_ingredient_text": "FoodState farm fresh Beet",
+          "corrected_ingredient_text": "FoodState farm fresh Beet Root",
+          "raw_source_path": "ingredientRows[1]",
+          "correction_fields": [
+            "name"
+          ],
+          "provenance_tag": "official_source_identity_correction"
+        }
+      ]
+    },
+    "254413": {
+      "brand": "BulkSupplements",
+      "product_name": "Vitamin B12 (Methylcobalamin)",
+      "raw_ingredient_text": "Vitamin B12",
+      "corrected_ingredient_text": "Vitamin B12",
+      "correction_fields": [
+        "upcSku"
+      ],
+      "evidence": "Exact NIH label barcode text is X001FYWVWV; API adds one zero. No dose implication; preserve professional-use caution and absent serving regimen.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/254413.pdf",
+        "https://api.ods.od.nih.gov/dsld/v9/label/254413"
+      ],
+      "reviewer": "Codex independent exact NIH PDF/API source verification; no clinical approval asserted",
+      "review_date": "2026-10-26",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_source_correction",
+      "serving_basis_correction": {
+        "raw_source_sha256": "77d189c9b845160b9d8be36b6f56d8817dceea2774b3deb85c17f2cb9aad5c0a",
+        "serving_sizes": [
+          {
+            "order": 1,
+            "minQuantity": 1,
+            "maxQuantity": 1,
+            "minDailyServings": 1,
+            "maxDailyServings": null,
+            "unit": "Not Present",
+            "notes": "",
+            "inSFB": true
+          }
+        ],
+        "raw_product_fields": {
+          "upcSku": "X0001FYWVWV"
+        },
+        "corrected_product_fields": {
+          "upcSku": "X001FYWVWV"
+        }
       }
     }
   }

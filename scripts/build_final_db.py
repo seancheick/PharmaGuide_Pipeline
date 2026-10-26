@@ -3484,6 +3484,18 @@ def _warning_only_identity_labels(
         and isinstance(row.get("raw_source_path"), str)
         and row["raw_source_path"] in paths
     }
+    # A source-bound transcription repair must retain the API inventory label
+    # even when the product is suppressed for a confirmed safety concern.
+    for row in rows:
+        if not isinstance(row, dict) or row.get("raw_source_path") not in labels:
+            continue
+        sources = [item for item in safe_list(enriched.get("label_source_rows"))
+                   if isinstance(item, dict)
+                   and item.get("raw_source_path") == row["raw_source_path"]]
+        if len(sources) == 1:
+            original = _verified_corrected_source_label(enriched, row, sources[0])
+            if original:
+                labels[row["raw_source_path"]] = original
     if not known_unscored and not is_confirmed_ban_or_recall(scored):
         return labels
 

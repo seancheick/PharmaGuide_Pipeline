@@ -1772,6 +1772,10 @@ class EnhancedDSLDNormalizer:
             # Exact row identifiers retain precedence above; otherwise resolve
             # the printed preparation through the canonical name owners.
             return None
+        if (str(ingredient_data.get("category") or "").lower() == "botanical"
+                and len(self._declared_botanical_parts(forms)) > 1):
+            # A member's identifier cannot establish a mixed-part preparation.
+            return None
         if isinstance(forms, list):
             for form in forms:
                 if not isinstance(form, dict):
@@ -5755,7 +5759,10 @@ class EnhancedDSLDNormalizer:
             rewrite(r)
 
         # Validate the entire reviewed group before mutating any membership.
-        def set_reviewed_depth(row, depth, provenance):
+        def set_reviewed_depth(row, depth, provenance, parent_row):
+            row["parentBlend"] = parent_row.get("name")
+            row["parent_source_path"] = parent_row.get("raw_source_path")
+            row["isNestedIngredient"] = True
             row["_label_correction_applied"] = True
             row["_label_correction_provenance"] = provenance
             previous = row.get("_raw_nested_depth", 0)
@@ -5763,14 +5770,14 @@ class EnhancedDSLDNormalizer:
                 row.setdefault("_pre_correction_nested_depth", previous)
                 row["_raw_nested_depth"] = depth
             for nested in row.get("nestedRows") or []:
-                set_reviewed_depth(nested, depth + 1, provenance)
+                set_reviewed_depth(nested, depth + 1, provenance, row)
         for parent, child, container, entry in moves:
             children = parent.setdefault("nestedRows", [])
             if container is not children:
                 container.remove(child)
                 children.append(child)
             set_reviewed_depth(child, parent.get("_raw_nested_depth", 0) + 1,
-                               entry.get("provenance_tag") or "official_label_hierarchy_correction")
+                               entry.get("provenance_tag") or "official_label_hierarchy_correction", parent)
             for row in (parent, child):
                 row["_label_correction_applied"] = True
                 row["_label_correction_provenance"] = entry.get("provenance_tag") or "official_label_hierarchy_correction"
@@ -6109,12 +6116,16 @@ class EnhancedDSLDNormalizer:
         # original values for fields outside the panel/statement digest.
         original_fields = repair.get("raw_product_fields", {})
         corrected_fields = repair.get("corrected_product_fields", {})
-        allowed = {"servingsPerContainer", "targetGroups", "physicalState"}
+        allowed = {"servingsPerContainer", "targetGroups", "physicalState", "upcSku"}
         if (not isinstance(original_fields, dict) or not isinstance(corrected_fields, dict)
                 or set(original_fields) != set(corrected_fields)
                 or set(corrected_fields) - allowed
                 or any(raw_data.get(key) != value for key, value in original_fields.items())):
             raise ValueError(f"Reviewed product metadata changed for DSLD {raw_data.get('id')}")
+        if "upcSku" in corrected_fields and (
+                not isinstance(corrected_fields["upcSku"], str)
+                or not re.fullmatch(r"[A-Za-z0-9 -]{1,128}", corrected_fields["upcSku"])):
+            raise ValueError("Reviewed barcode requires explicit label text")
         if "targetGroups" in corrected_fields and (
                 not isinstance(corrected_fields["targetGroups"], list)
                 or not all(isinstance(x, str) and x.strip() for x in corrected_fields["targetGroups"])):
@@ -7974,15 +7985,12 @@ class EnhancedDSLDNormalizer:
         # the DSLD form "bark powder"); names this pipeline adds later (IQM
         # forms, standard names) never are.
         if not botanical_details.get("plantPart"):
-            label_forms = [
-                f.get("name") for f in forms_structured
-                if isinstance(f, dict) and f.get("source") != "name_extraction"
-            ]
-            for text in [raw_name or name] + label_forms:
-                inferred_part = self._infer_plant_part_from_name(text or "")
-                if inferred_part:
-                    botanical_details["plantPart"] = inferred_part
-                    break
+            parts = self._declared_botanical_parts(forms_structured)
+            inferred_part = self._infer_plant_part_from_name(raw_name or name)
+            if inferred_part and inferred_part not in parts:
+                parts.append(inferred_part)
+            if parts:
+                botanical_details["plantPart"] = " and ".join(sorted(parts))
 
         # Attribute additive function only from declared names/aliases. Identity
         # variations may recognize a botanical but cannot turn its extract
@@ -8033,6 +8041,22 @@ class EnhancedDSLDNormalizer:
                         raw_name, standard_name
                     )
                 )
+        if (is_active and str(ing.get("category") or "").lower() == "botanical"
+                and len(self._declared_botanical_parts(forms_structured)) > 1):
+            # Name aliases can repeat the same narrowing as a partial form
+            # UNII. The existing broad botanical group owns the whole source.
+            group_id, group_db = self._resolve_canonical_identity(
+                ingredient_group, raw_name=ingredient_group,
+            )
+            if group_db == "botanical_ingredients" and group_id:
+                canonical_id, canonical_source_db = group_id, group_db
+                standard_name = self._canonical_identity_registry.standard_names.get(
+                    (group_db, group_id), name,
+                )
+                is_mapped = True
+            else:
+                canonical_id, canonical_source_db = None, "unmapped"
+                standard_name, is_mapped = name, False
         # A generated preparation alias cannot overrule a reviewed broader
         # label group. The shared registry requires literal declared specificity.
         if is_active and canonical_id:
@@ -10298,8 +10322,15 @@ class EnhancedDSLDNormalizer:
         "flower", "flowers", "fruit", "fruits", "berry", "berries",
         "stem", "stems", "needle", "needles", "hull", "hulls",
         "peel", "peels", "pod", "pods", "twig", "twigs", "sprout",
-        "bulb", "tuber", "resin", "wood", "whole", "herb",
+        "bulb", "tuber", "resin", "wood", "whole", "herb", "skin",
     )
+
+    def _declared_botanical_parts(self, forms: List[Any]) -> List[str]:
+        """Parts explicitly named by the label's botanical source forms."""
+        return sorted({part for form in forms or []
+                       if isinstance(form, dict)
+                       and form.get("category") in {None, "", "botanical"}
+                       and (part := self._infer_plant_part_from_name(form.get("name") or ""))})
 
     def _infer_plant_part_from_name(self, ingredient_name: str) -> Optional[str]:
         """
@@ -10321,7 +10352,7 @@ class EnhancedDSLDNormalizer:
         """
         if not ingredient_name:
             return None
-        normalized = ingredient_name.lower()
+        normalized = re.sub(r"\bwood\s+betony\b", "", ingredient_name.lower())
         for token in self._PLANT_PART_TOKENS:
             # Require word-boundary match so "root" inside "rooster"
             # doesn't match. "aerial parts" is matched as a phrase.
@@ -10670,6 +10701,9 @@ class EnhancedDSLDNormalizer:
                 "parent_label": source_row.get("parentBlend"),
                 "parent_source_path": source_row.get("parent_source_path"),
                 "exact_dose_text": self._exact_label_dose_text(source_row),
+                "_exact_dose_corrected": any(key in source_row for key in (
+                    "_pre_correction_quantity", "_pre_correction_quantity_unit",
+                    "_pre_correction_quantity_value")),
                 **({"dailyValue": daily_value} if daily_value is not None else {}),
                 **(
                     {"quantityVariants": quantity_variants}
@@ -10901,6 +10935,8 @@ class EnhancedDSLDNormalizer:
         for ingredients in (active_ingredients, inactive_ingredients):
             for ingredient in ingredients:
                 ingredient.pop("_label_forms_corrected", None)
+        hierarchy_corrected_paths = {candidate.get("raw_source_path") for candidate in candidates
+                                     if candidate.get("_hierarchy_corrected")}
         by_identity: Dict[str, Dict[str, Any]] = {}
         for candidate in candidates:
             if not isinstance(candidate, dict):
@@ -10909,7 +10945,7 @@ class EnhancedDSLDNormalizer:
             row = dict(candidate)
             for key, value in source.items():
                 if (row.get("_hierarchy_corrected")
-                        and key in {"nested_depth", "parent_label", "parent_source_path"}):
+                        and key in {"nested_depth", "parent_label", "parent_source_path", "children"}):
                     continue  # Retain reviewed geometry, not the API's bad flat grouping.
                 if row.get("_forms_corrected") and key in {"label_display_form", "children"}:
                     continue  # The reviewed form can replace or explicitly remove an API form.
@@ -11010,6 +11046,9 @@ class EnhancedDSLDNormalizer:
             if row.get("raw_source_path")
         }
         for row in display_rows:
+            if row.get("raw_source_path") in hierarchy_corrected_paths:
+                row["children"] = [child.get("label_display_name") for child in display_rows
+                                   if child.get("parent_source_path") == row.get("raw_source_path")]
             parent_row = rows_by_source_path.get(str(row.get("parent_source_path") or ""))
             corrected_parent = (
                 str(parent_row.get("label_display_name") or "").strip()

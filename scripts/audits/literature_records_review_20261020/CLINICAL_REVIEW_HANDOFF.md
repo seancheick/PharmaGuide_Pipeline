@@ -1,8 +1,10 @@
 # Assessment review handoff — October 26, 2026
 
-## Latest source-access reconciliation
+## Latest returned-source implementation
 
-D011 author-comment and D139 full-statement access gaps are now independently closed; see the dated closeout in BRYAN_BATCH_RESPONSE_VERIFICATION_20261025.md. HN019 context limitations are corrected without changing approval, doses, outcomes or eligibility. Scientific appraisal and rebuilt verification remain separate. The latest marked-up Markdown has now been recovered and all 171 C / 146 D worksheet response cells independently enumerated; no missing/duplicate IDs. The original PDF was the unanswered request. The current-owner comparison is now recorded per ID: 18 C cases retain source/owner work and 47 D items retain source corrections, reference clarifications or policy/applicability decisions. These are not completed implementations or independent literature-review counts. See the recovered-return section in the existing verification report.
+The bounded18C/47D engineering/source-correction batch is implemented. Every item has an individual disposition in the October26 section of BRYAN_BATCH_RESPONSE_VERIFICATION_20261025.md; C143 was already correct. Exact-label corrections, shared cadence/part/hierarchy/export owners and source attribution are fixed. Sean approved narrow enforceable relationship holds for omega3/niacin and knotweed markers; amounts, safety exposure and independent ingredient assessments remain intact. FloraGLO/Pycnogenol qualification stays held.
+
+This supersedes the earlier pending18C/47D source-work list. It does not close required scientific decisions or rebuilt assessments. Named tests575passed, bounded36-label full-stage/export replay completed without errors, ordinary app delivery is unverified. Exact candidate CI/local/integration results belong in the LEDGER. No corpus or publication was run. The single remaining list is at the end of the current verification section; do not reopen already implemented source corrections or imply every held relationship becomes eligible after any review.
 
 ## Current observed state
 

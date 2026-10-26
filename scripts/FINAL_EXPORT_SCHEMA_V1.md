@@ -681,6 +681,14 @@ other_ingredients (excipient match)     → severity_status="n/a",       is_safe
 
 **Active ingredient canonical_id + delivers_markers (also v1.6.1)**: every active ingredient blob entry now also carries `canonical_id` (stable string id — `"vitamin_a"`, `"turmeric"`, `"camu_camu"`) used by interaction rules / stack matching / evidence routing / biomarker scoring / dedup / analytics, plus `delivers_markers` (the marker-via-ingredient evidence routing payload: turmeric → curcumin + PubMed citation). Both fields are derived from the IQM match record in the enriched product. `canonical_id` is the enricher's decision for that row, including an unresolved row (empty, `is_mapped: false`); the cleaner's id never refills it (ADR-0005). The display ledger row (`display_ingredients[]`) keeps the printed identity in `canonical_id` and the enricher's in `analysis.canonical_id`.
 
+`delivers_markers[]` may carry the optional Boolean `scoring_eligible`. Explicit
+`false` excludes that source-to-marker relationship from affirmative evidence or
+benefit routing. It does not invalidate a declared percentage, calculated marker
+amount or applicable safety evaluation. Missing flags retain legacy behavior.
+Flutter's existing `markerCanonicalIdsFromDetailBlob` honors this flag for research
+routing; source identities and independently declared marker ingredients remain
+unchanged. The app never recalculates the pipeline score.
+
 ### Warning entry
 
 Each warning in the `warnings` array has a `type` field that determines which

@@ -97,3 +97,10 @@ class TestStructuredNotesStillWins:
         assert details["plantPart"] == "leaf"
         # Cleaner flow won't call the fallback in this case because
         # details.get("plantPart") is truthy.
+
+
+@pytest.mark.parametrize('name,expected', [('Wood Betony Herb','herb'),
+    ('Wood Betony Root','root'), ('Wood Betony',None), ('Wood Betony Wood','wood'),
+    ('Sandalwood Wood Extract','wood'), ('Vitis vinifera Skin Extract','skin')])
+def test_common_name_is_not_a_disclosed_tissue(normalizer, name, expected):
+    assert normalizer._infer_plant_part_from_name(name) == expected

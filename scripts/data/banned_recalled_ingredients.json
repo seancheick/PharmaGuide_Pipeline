@@ -3,7 +3,7 @@
     "description": "Banned and recalled ingredients database for regulatory compliance and safety (v3.0)",
     "purpose": "safety_disqualification_and_regulatory_compliance",
     "schema_version": "5.5.3",
-    "last_updated": "2026-10-20",
+    "last_updated": "2026-10-26",
     "total_entries": 189,
     "data_source_metadata": {
       "sources": [
@@ -9836,7 +9836,7 @@
           "supports_claims": [
             "clinical_outcomes"
           ],
-          "evidence_summary": "Side effects in about 5.5%, transient. Russian-language, sponsor-region literature."
+          "evidence_summary": "Russian-language review abstract reports 11 articles and 549 patients with asthenia, taking 200 mg/day for one month. Side effects averaged 5.5% and were transient. This does not establish long-term or healthy-user safety."
         },
         {
           "type": "pubmed",
@@ -14853,7 +14853,7 @@
         "fly agaric",
         "amanita muscaria extract"
       ],
-      "reason": "Amanita muscaria is a psychoactive mushroom containing muscimol and ibotenic acid. Eating it can cause confusion, agitation, hallucinations and deep sedation, and seizures have been reported. In 2024, Diamond Shruumz mushroom edibles (mainly chocolate bars) were linked to a multistate outbreak of 180 illnesses, 73 hospitalizations and two deaths; the products contained several psychoactive substances, and FDA found muscimol and ibotenic acid in a raw ingredient reportedly used in some of them. FDA issued urgent safety alerts and coordinated a Class I recall.",
+      "reason": "Amanita muscaria is a psychoactive mushroom containing muscimol and ibotenic acid. Eating it can cause confusion, agitation, hallucinations and deep sedation, and seizures have been reported. The national 2024 investigation identified 180 severe-illness cases after Diamond Shruumz or other mushroom-containing chocolate products, with 73 hospitalizations and two deaths. Multiple substances were detected; these totals cannot be attributed to one brand, Amanita or muscimol alone. FDA found muscimol and ibotenic acid in a raw ingredient reportedly used in some products. FDA issued urgent safety alerts and coordinated a Class I recall.",
       "status": "banned",
       "class_tags": [
         "schedule_I_psychoactives",
@@ -14914,10 +14914,10 @@
         },
         {
           "type": "other",
-          "title": "CDC: Muscimol poisoning outbreak (2024)",
+          "title": "CDC: severe illness associated with mushroom-containing chocolate products (2024 investigation)",
           "evidence_grade": "R",
           "supports_claims": [],
-          "evidence_summary": "CDC: Muscimol poisoning outbreak (2024)"
+          "evidence_summary": "CDC: severe illness associated with mushroom-containing chocolate products (2024 investigation)"
         },
         {
           "type": "pubmed",
@@ -14928,7 +14928,7 @@
             "clinical_outcomes",
             "clinical_risk"
           ],
-          "evidence_summary": "FDA testing found psilocin in some tested products."
+          "evidence_summary": "National 2024 investigation: 180 severe-illness cases following Diamond Shruumz or other mushroom-containing chocolate products, with 73 hospitalizations and two deaths. Multiple substances were detected; the totals do not establish one brand or compound as the sole cause."
         },
         {
           "type": "pubmed",
@@ -15019,7 +15019,7 @@
         "metabolites": []
       },
       "ban_context": "substance",
-      "safety_warning": "A psychoactive mushroom associated with a 2024 multi-state outbreak of serious illness. Linked to hallucinations and seizures. Stop and consult a doctor.",
+      "safety_warning": "A psychoactive mushroom that can cause serious poisoning. The 2024 mushroom-edible outbreak involved multiple brands and substances; its totals cannot establish Amanita as the sole cause. Hallucinations and seizures have been reported with Amanita poisoning. Stop and consult a doctor.",
       "safety_warning_one_liner": "Psychoactive mushroom linked to poisonings. Stop using and talk to your doctor.",
       "policy_verification_status": "verified",
       "policy_verified_at": "2026-10-02"
@@ -15564,7 +15564,8 @@
         "norethandriol",
         "17a-Ethyl-Estr-5(6)-Ene-3B-Diol",
         "17a-ethyl-estr-5(6)-ene-3b-diol",
-        "17alpha-ethyl-estr-5-ene-3beta,17beta-diol"
+        "17alpha-ethyl-estr-5-ene-3beta,17beta-diol",
+        "17α-ethyl-estr-5(6)-ene-3β,17β-diol"
       ],
       "reason": "Norethandriol (17alpha-ethyl-estr-5-ene-3beta,17beta-diol) is a synthetic anabolic steroid prohormone: the 17alpha-ethyl analog of 19-nor-5-androstenediol and a precursor of norethandrolone, both listed anabolic steroids (21 CFR 1300.01). It is not a dietary ingredient: FDA states that bodybuilding products labelled as dietary supplements illegally contain steroids and steroid-like substances, with risks including serious liver injury, heart attack, stroke and blood clots. No FDA or DEA action names this compound itself, and PubChem holds no record of it.",
       "status": "banned",
