@@ -1342,3 +1342,14 @@ def test_stamp_manifest_refreshes_interaction_provenance_before_export_audit(tmp
     manifest = json.loads((dist / "export_manifest.json").read_text())
     assert manifest["interaction_db_checksum"] == "new-checksum"
     assert manifest["interaction_db_version"] == "1.0.10"
+
+
+def test_submission_identity_contracts_cannot_disappear_from_matrix(tmp_path):
+    for concept_id in ('submission_product_identity', 'approved_submission_label_contract'):
+        matrix = json.loads(MATRIX_PATH.read_text())
+        matrix['required_concepts'].remove(concept_id)
+        matrix['concepts'] = [c for c in matrix['concepts'] if c['concept_id'] != concept_id]
+        path = tmp_path / 'missing-submission-contract.json'
+        write_json(path, matrix)
+        findings = audit.audit_matrix(argparse.Namespace(matrix=str(path), strict_release=True))
+        assert any(f.code == 'MATRIX_REQUIRED_CONCEPTS' and concept_id in f.message for f in findings)

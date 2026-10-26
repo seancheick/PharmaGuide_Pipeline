@@ -2,7 +2,7 @@
   "_metadata": {
     "schema_version": "1.0.0",
     "contract_name": "Cleaner-First Source Of Truth Matrix",
-    "last_updated": "2026-10-19",
+    "last_updated": "2026-10-26",
     "owner": "scripts/audit_source_of_truth_contract.py",
     "summary": "Defines the single owner for clinical/data concepts so downstream pipeline stages consume contracts instead of re-deriving meaning."
   },
@@ -56,7 +56,9 @@
     "ingredient_form_quality",
     "probiotic_row_identity",
     "prebiotic_identity",
-    "certification_evidence"
+    "certification_evidence",
+    "submission_product_identity",
+    "approved_submission_label_contract"
   ],
   "concepts": [
     {
@@ -646,6 +648,62 @@
       "tests": [
         "scripts/tests/test_clinical_research_exposure.py",
         "scripts/tests/test_v4_pillar_explanations.py"
+      ],
+      "retirement_status": "active"
+    },
+    {
+      "concept_id": "submission_product_identity",
+      "owner": "Pharmaguide.ai Supabase submission review RPCs / product_submission_review_target_key",
+      "first_created_stage": "reviewed",
+      "field_kind": "persisted_contract",
+      "source_data_files": [
+        "docs/adr/0006-submission-identifier-contract.md"
+      ],
+      "consumers": [
+        "Pharmaguide.ai submission capture/review/retake services",
+        "scripts/submission_review/serve.py",
+        "scripts/product_submission_import.py",
+        "scripts/build_final_db.py"
+      ],
+      "forbidden_recomputation": [
+        "Observed codes are private evidence, never GTINs or public lookup keys; no-code products require evidence-bound label_review/new_product_verified.",
+        "Approval/reopen/identity edits and catalog activation/search-generation changes share the identity transaction lock; revalidate complete released/pending conflicts, not paginated suggestions.",
+        "Numeric and PG_SUB association targets keep existing fields; preserve original stable product ID/lineage when a later submission supplies correction evidence."
+      ],
+      "fallback_class": "old_batch_compatibility",
+      "release_gate": "scripts/audit_source_of_truth_contract.py matrix",
+      "tests": [
+        "scripts/tests/test_product_submission_import.py",
+        "scripts/tests/test_submission_review_server.py",
+        "scripts/tests/test_upc_width_contract.py"
+      ],
+      "retirement_status": "active"
+    },
+    {
+      "concept_id": "approved_submission_label_contract",
+      "owner": "scripts/product_submission_import.py build_manual_label",
+      "first_created_stage": "manual_label",
+      "field_kind": "persisted_contract",
+      "source_data_files": [
+        "docs/adr/0006-submission-identifier-contract.md"
+      ],
+      "consumers": [
+        "Pharmaguide.ai submission capture/review/retake services",
+        "scripts/submission_review/serve.py",
+        "scripts/product_submission_import.py",
+        "scripts/build_final_db.py"
+      ],
+      "forbidden_recomputation": [
+        "manual_label_v2 canonical hash binds label and frozen identity; importer projects label only before public materialization.",
+        "Frozen reviewed GTIN owns normalized_upc including null; mutable parent candidates never fill a null decision. Legacy v1 numeric contracts remain valid.",
+        "Private observed codes, URLs and rationale never enter public labels; existing hash-only approval provenance remains the release audit commitment."
+      ],
+      "fallback_class": "old_batch_compatibility",
+      "release_gate": "scripts/audit_source_of_truth_contract.py matrix",
+      "tests": [
+        "scripts/tests/test_product_submission_import.py",
+        "scripts/tests/test_submission_review_server.py",
+        "scripts/tests/test_upc_width_contract.py"
       ],
       "retirement_status": "active"
     }
