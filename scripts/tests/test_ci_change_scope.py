@@ -115,7 +115,8 @@ def test_required_merge_job_rejects_failure_cancellation_and_missing_scope():
         assert (result.returncode != 0) == bool(expected)
 
 
-def test_branch_push_cannot_hide_untested_code_behind_docs(repo, tmp_path):
+@pytest.mark.parametrize("missing_previous_tip", [False, True])
+def test_branch_push_cannot_hide_untested_code_behind_docs(repo, tmp_path, missing_previous_tip):
     import yaml
     base = git(repo, 'rev-parse', 'HEAD')
     git(repo, 'update-ref', 'refs/remotes/origin/main', base)
@@ -128,7 +129,7 @@ def test_branch_push_cannot_hide_untested_code_behind_docs(repo, tmp_path):
     git(repo, 'remote', 'add', 'origin', str(repo))
     selection = script.split('kind=$(')[0]
     result = subprocess.check_output(['bash', '-e', '-c', selection + '\nprintf "%s" "$BASE_SHA"'],
-        cwd=repo, env={**os.environ, 'BASE_SHA': code, 'HEAD_SHA': head,
+        cwd=repo, env={**os.environ, 'BASE_SHA': ('f' * 40 if missing_previous_tip else code), 'HEAD_SHA': head,
             'GITHUB_EVENT_NAME': 'push', 'GITHUB_REF': 'refs/heads/codex/example'}, text=True)
     assert result == base
     assert scope.classify(repo, result, head) == 'full'
