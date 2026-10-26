@@ -1250,7 +1250,8 @@ def _pillar_dose(dim: Dict[str, Any], weight: float, archetype: str,
 
 
 def _pillar_verification(module_bd: Dict[str, Any], weight: float,
-                         cfg: Dict[str, Any]) -> Dict[str, Any]:
+                         cfg: Dict[str, Any],
+                         assessment: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
     """Verification / quality pillar (/15). Hard third-party signals SATURATE the
     cap (over-provisioned, clamps) so a subset maxes it. Self-asserted cGMP is table
     stakes. FAIL OPEN: no verification data = unknown → neutral baseline (not 0).
@@ -1367,7 +1368,20 @@ def _pillar_verification(module_bd: Dict[str, Any], weight: float,
     else:
         # Missing independent verification is not a failed product test.
         # Keep baseline arithmetic in the existing audit-only fact below.
-        reason = "Independent testing or certification: unconfirmed."
+        assessment = assessment if isinstance(assessment, dict) else {}
+        if assessment.get("state") == "not_evaluated" or assessment.get("readiness") == "incomplete":
+            reason = "Verification assessment is incomplete."
+        elif (assessment.get("state") == "verified_absent"
+              and assessment.get("readiness") == "complete"
+              and assessment.get("reason_code") == "registry_evaluated_no_match"
+              and _num(assessment.get("registry_source_count")) > 0
+              and not assessment.get("migration_inference")):
+            # This is the existing collector's completed registry finding,
+            # not a claim that all independent test reports were searched.
+            reason = "No third-party product certification found in the reviewed registries."
+        else:
+            # Missing or migration-inferred results cannot establish a search finding.
+            reason = "Independent testing or certification: unconfirmed."
         verification_facts.append(audit_fact(
             "verification_neutral_baseline", "Neutral value",
             f"Neutral {_g(sub['neutral_baseline'])} of {_g(cap)}; "
@@ -1757,7 +1771,8 @@ def _attach_score_receipts(pillars: Dict[str, Any], module_bd: Dict[str, Any],
 def _build_pillars(module_bd: Dict[str, Any], cfg: Dict[str, Any],
                    module: Optional[str],
                    clean_label_penalty: float = 0.0,
-                   catalog_caution: bool = False) -> Dict[str, Any]:
+                   catalog_caution: bool = False,
+                   verification_assessment: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
     dims = module_bd.get("dimensions") or {}
     archetype = _archetype(module, module_bd)
     pillars: Dict[str, Any] = {}
@@ -1765,7 +1780,7 @@ def _build_pillars(module_bd: Dict[str, Any], cfg: Dict[str, Any],
         weight = spec["weight"]
         assembler = spec.get("assembler")
         if assembler == "verification":
-            pillars[name] = _pillar_verification(module_bd, weight, cfg)
+            pillars[name] = _pillar_verification(module_bd, weight, cfg, verification_assessment)
         elif assembler == "safety_hygiene":
             pillars[name] = _pillar_safety_hygiene(module_bd, weight, cfg,
                                                    clean_label_penalty, catalog_caution)
@@ -1805,6 +1820,7 @@ def assemble_quality_score(result: Dict[str, Any]) -> Dict[str, Any]:
     module = result.get("v4_module")
     breakdown = result.get("v4_breakdown") or {}
     module_bd = breakdown.get("module") or {}
+    verification_assessment = (breakdown.get("assessment_readiness") or {}).get("verification")
     supp = cfg["suppression"]
     blocking_reason = (breakdown.get("safety_gate") or {}).get("blocking_reason")
 
@@ -1822,7 +1838,7 @@ def assemble_quality_score(result: Dict[str, Any]) -> Dict[str, Any]:
     # Suppress the public number; keep pillars if a breakdown exists (audit trail).
     if verdict in supp["suppressed_safety_verdicts"]:
         result["quality_score_v4_100"] = None
-        result["quality_pillars_v4"] = _build_pillars(module_bd, cfg, module) if module_bd.get("dimensions") else None
+        result["quality_pillars_v4"] = _build_pillars(module_bd, cfg, module, verification_assessment=verification_assessment) if module_bd.get("dimensions") else None
         result["quality_tier"] = None
         result["quality_score_status"] = "suppressed_safety"
         result["quality_score_suppressed_reason"] = blocking_reason or verdict
@@ -1838,7 +1854,8 @@ def assemble_quality_score(result: Dict[str, Any]) -> Dict[str, Any]:
         return result
 
     pillars = _build_pillars(module_bd, cfg, module, clean_label_penalty=cl_penalty,
-                             catalog_caution=verdict == "CAUTION")
+                             catalog_caution=verdict == "CAUTION",
+                             verification_assessment=verification_assessment)
     # The public total is the literal sum of the six published pillars. No
     # post-sum cap, clamp or category adjustment may change it; a category
     # concern belongs in its owning pillar or the safety gate.

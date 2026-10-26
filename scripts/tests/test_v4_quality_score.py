@@ -1042,3 +1042,56 @@ def test_unresolved_botanical_benchmark_is_explained_as_incomplete_review():
     out = assemble_quality_score(_shadow(module="generic", bd=bd))["quality_pillars_v4"]["dose"]
     assert "review" in out["reason"].lower()
     assert "unavailable" not in out["reason"].lower()
+
+
+@pytest.mark.parametrize("assessment,expected", [
+    ({"state": "verified_absent", "readiness": "complete",
+      "reason_code": "registry_evaluated_no_match", "registry_source_count": 9},
+     "No third-party product certification found in the reviewed registries."),
+    ({"state": "not_evaluated", "readiness": "incomplete",
+      "reason_code": "cert_registry_sources_unavailable"},
+     "Verification assessment is incomplete."),
+    ({"state": "verified_absent", "readiness": "complete",
+      "reason_code": "legacy_registry_evaluated_no_match", "migration_inference": True},
+     "Independent testing or certification: unconfirmed."),
+    ({"state": "verified_absent", "readiness": "complete",
+      "reason_code": "registry_evaluated_no_match", "registry_source_count": 0},
+     "Independent testing or certification: unconfirmed."),
+    ({"state": "not_evaluated", "readiness": "incomplete",
+      "reason_code": "cert_registry_sources_not_current"},
+     "Verification assessment is incomplete."),
+    ({}, "Independent testing or certification: unconfirmed."),
+])
+@pytest.mark.parametrize("verdict", ["SAFE", "BLOCKED"])
+def test_verification_reason_projects_existing_review_result(assessment, expected, verdict):
+    from scoring_v4.quality_score import assemble_quality_score
+    baseline = assemble_quality_score(_shadow(verdict=verdict))
+    candidate = _shadow(verdict=verdict)
+    candidate["v4_breakdown"]["assessment_readiness"] = {"verification": assessment}
+    result = assemble_quality_score(candidate)
+    before = baseline["quality_pillars_v4"]["verification"]
+    after = result["quality_pillars_v4"]["verification"]
+    assert after["reason"] == expected
+    assert {k: v for k, v in after.items() if k != "reason"} == {
+        k: v for k, v in before.items() if k != "reason"}
+    assert result["quality_score_v4_100"] == baseline["quality_score_v4_100"]
+    assert result["quality_score_status"] == baseline["quality_score_status"]
+
+
+def test_reviewed_verification_absence_keeps_a_real_quality_violation():
+    from scoring_v4.quality_score import assemble_quality_score
+    from build_final_db import _build_v4_score_explanation
+    candidate = _shadow(bd=_module_bd(violation=4.0))
+    baseline = assemble_quality_score(_shadow(bd=_module_bd(violation=4.0)))
+    candidate["v4_breakdown"]["assessment_readiness"] = {"verification": {
+        "state": "verified_absent", "readiness": "complete",
+        "reason_code": "registry_evaluated_no_match", "registry_source_count": 9,
+    }}
+    result = assemble_quality_score(candidate)
+    verification = result["quality_pillars_v4"]["verification"]
+    assert verification["score"] == baseline["quality_pillars_v4"]["verification"]["score"]
+    assert verification["score"] < 6
+    assert "reviewed registries" in verification["reason"]
+    assert "open quality-system violation" in verification["reason"]
+    explanation = _build_v4_score_explanation(result["quality_pillars_v4"])
+    assert any(row["pillar"] == "verification" for row in explanation["drags"])

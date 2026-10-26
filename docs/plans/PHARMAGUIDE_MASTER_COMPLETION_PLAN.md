@@ -1738,3 +1738,9 @@ Final five-label capture source fingerprints exactly match the committed runtime
 Authoritative retained receipts: `.claude/state/bryan_batch_10_20261025/` source bodies/hash receipts,frozenmanifest,baselinecapture,final_qualified_candidate/meta/records,final_qualified_delta,final_qualified_movement_summary,final_committed_binding,final_safety_target_parity,final_local.log,final_ci_watch.log. Superseded reproducible archive and duplicate intermediate capture removed after hash equivalence checks; unique source inputs retained. This final receipt changes documentation only relative to the green source. Main integration is authorized; no duplicate CI wait is required for identical runtime plus this receipt.
 
 Source findings are verified and confirmed engineering corrections are implemented/qualified. This is not scientific approval of unresolved preparation grades, whole-corpus rebuilt closure or actual Flutter rendering. No full pipeline, app import or release ran. Those existing downstream/source-review gates remain explicit.
+
+
+## October26 — review-aware verification explanation
+
+- [x] Existing reviewed-negative/incomplete/migration states projected into Verification copy without changing scores, eligibility, matching or clinical holds.455pipeline tests across the owner slice and final penalty regression,10Flutter consumer tests,14real-label raw/scored/blob comparison (reason-only changes) support this bounded implementation. Both caffeine editions remain78/100. Owner/receipts/validation class: existing LEDGER2026-10-26 verification-finding entry.
+- [ ] Delivery acceptance: rebuilt corpus, exported/imported data/cache and visible affected-product verification. Live API295048 still serves catalog2026.10.22.012241 with old wording. No corpus or release ran; do not mark the user-facing issue closed from these tests.
