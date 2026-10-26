@@ -1744,3 +1744,9 @@ Source findings are verified and confirmed engineering corrections are implement
 
 - [x] Existing reviewed-negative/incomplete/migration states projected into Verification copy without changing scores, eligibility, matching or clinical holds.455pipeline tests across the owner slice and final penalty regression,10Flutter consumer tests,14real-label raw/scored/blob comparison (reason-only changes) support this bounded implementation. Both caffeine editions remain78/100. Owner/receipts/validation class: existing LEDGER2026-10-26 verification-finding entry.
 - [ ] Delivery acceptance: rebuilt corpus, exported/imported data/cache and visible affected-product verification. Live API295048 still serves catalog2026.10.22.012241 with old wording. No corpus or release ran; do not mark the user-facing issue closed from these tests.
+
+
+## October26 — submission intake startup repair
+
+- [x] Reproduced immutable-approval conflict for4pending records; audited all25receipts and restored10raw source originals while relocating existing reviewed corrections through the canonical owner.310focused tests, local546/24declared skips,10label replay (all scored hashes identical), all25receipt bindings and10entry landed check pass. Owner/evidence/limits in existing LEDGER; full qualification/integration pending CI.
+- [ ] Green exact-candidate whole-fast CI, merge to main, fresh live intake and publication preflight. Final full-corpus/scientific/output/app release gates are not cleared by this startup repair; no corpus/publication run by agent.

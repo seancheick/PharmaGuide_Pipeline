@@ -4,10 +4,10 @@
     "description": "Reviewer-signed product-row corrections and exact-match containment of reviewed label-unit conflicts.",
     "purpose": "Per-product source-row correction with provenance. Each entry targets one (dsld_id, raw_ingredient_text) pair before cleaner identity resolution and may correct label text, a misattributed UNII, a verified quantity value/unit, or a combination of those fields. Global aliases and global identifier suppression are not supported.",
     "scope": "Only fires for an exact (dsld_id, raw_ingredient_text) tuple match. Case-sensitive on raw_ingredient_text by design — manufacturers may print 'Insulin' in one product and 'INSULIN' in another, and each needs independent reviewer sign-off because the surrounding context (sibling ingredients, product category, regulatory status) must be re-evaluated per occurrence.",
-    "review_policy": "Every product entry is keyed by dsld_id and must carry: brand, product_name (for human-readable audit trail), raw_ingredient_text (the source row being corrected), corrected_ingredient_text (the text the cleaner should see, unchanged for unit-only corrections), correction_fields, evidence (free-text rationale with regulatory citations), sources (authoritative URLs — FDA, NIH, DailyMed, etc.), reviewer, and review_date (ISO 8601 YYYY-MM-DD). A verified cross-row defect may add additional_row_corrections, which inherit the product-level evidence, sources, reviewer, review_date, scope, and provenance tag. Quantity changes require exact raw and corrected value/unit pairs and must be supported by the official manufacturer or label image. Restoring a quantity absent from a form row additionally requires raw_quantity_missing=true, a positive corrected value/unit, and exact same-record source text that states the dose; the applier refuses to overwrite any existing quantity representation. A reviewed Daily Value correction requires an exact raw_daily_value and corrected_daily_value from the same official label; it rewrites only matching source percentages, never derives a percentage or changes a different value. A reviewed unresolved_unit scoring_disposition preserves exact raw_quantity_value/raw_quantity_unit, makes no inferred unit correction, and marks dose and upper-limit assessment unresolved until independent exact-label evidence resolves the conflict. It applies only when the raw name, value and unit all match. Reviewed hierarchy corrections may supply corrected_child_row_refs with exact parent raw_source_path/name/value/unit and exact child source paths/names/raw_child_names. The existing applier validates the whole group before moving working rows; it preserves original API source references and quantities and fails closed on mismatch. A source_descriptor disposition with an authored raw value/unit applies only to that exact quantity edition. Exact-source corrected_notes repairs require raw source paths, names, notes and quantity pairs for the entire bundle; a mismatch fails closed before edits. Original working notes retain _pre_correction_notes, and source paths remain unchanged. A reviewed source quantity conflict may set corrected_quantity_operator to ambiguous or unknown only with raw_quantities matching the entire original quantity array exactly. It preserves every number, unit and serving basis, changes only the existing unresolved qualifier, and retains original quantities for audit; it does not invent a replacement amount. Reviewed serving_basis_correction binds the exact ingredientRows, servingSizes and statements content SHA256 before replacing serving metadata or assigning quantity variants to individually reviewed preparation columns. It preserves all alternative amounts and original source snapshots and fails closed on any changed binding. corrected_quantities requires the entire raw_quantities array and preserves column count; it restores only individually image-verified value/unit transcriptions.",
+    "review_policy": "Every product entry is keyed by dsld_id and must carry: brand, product_name (for human-readable audit trail), raw_ingredient_text (the source row being corrected), corrected_ingredient_text (the text the cleaner should see, unchanged for unit-only corrections), correction_fields, evidence (free-text rationale with regulatory citations), sources (authoritative URLs — FDA, NIH, DailyMed, etc.), reviewer, and review_date (ISO 8601 YYYY-MM-DD). A verified cross-row defect may add additional_row_corrections, which inherit the product-level evidence, sources, reviewer, review_date, scope, and provenance tag. Quantity changes require exact raw and corrected value/unit pairs and must be supported by the official manufacturer or label image. Restoring a quantity absent from a form row additionally requires raw_quantity_missing=true, a positive corrected value/unit, and exact same-record source text that states the dose; the applier refuses to overwrite any existing quantity representation. A reviewed Daily Value correction requires an exact raw_daily_value and corrected_daily_value from the same official label; it rewrites only matching source percentages, never derives a percentage or changes a different value. A reviewed unresolved_unit scoring_disposition preserves exact raw_quantity_value/raw_quantity_unit, makes no inferred unit correction, and marks dose and upper-limit assessment unresolved until independent exact-label evidence resolves the conflict. It applies only when the raw name, value and unit all match. Reviewed hierarchy corrections may supply corrected_child_row_refs with exact parent raw_source_path/name/value/unit and exact child source paths/names/raw_child_names. The existing applier validates the whole group before moving working rows; it preserves original API source references and quantities and fails closed on mismatch. A source_descriptor disposition with an authored raw value/unit applies only to that exact quantity edition. Exact-source corrected_notes repairs require raw source paths, names, notes and quantity pairs for the entire bundle; a mismatch fails closed before edits. Original working notes retain _pre_correction_notes, and source paths remain unchanged. A reviewed source quantity conflict may set corrected_quantity_operator to ambiguous or unknown only with raw_quantities matching the entire original quantity array exactly. It preserves every number, unit and serving basis, changes only the existing unresolved qualifier, and retains original quantities for audit; it does not invent a replacement amount. Reviewed serving_basis_correction binds the exact ingredientRows, servingSizes and statements content SHA256 before replacing serving metadata or assigning quantity variants to individually reviewed preparation columns. It preserves all alternative amounts and original source snapshots and fails closed on any changed binding. corrected_quantities requires the entire raw_quantities array and preserves column count; it restores only individually image-verified value/unit transcriptions. Existing canonical PG_SUB_ product identities may use this same exact-product correction owner. Reviewed physicalState metadata binds its original object and permits only explicit name/langualCodeDescription strings; it does not rewrite an approval or infer a dosage form.",
     "unmatched_drug_tokens_policy": "When a row's raw_ingredient_text matches a known regulated-drug name (e.g., 'Insulin', 'Acetaminophen', 'Ibuprofen') and there is NO matching override for the product, the row must NOT be silently mapped. The cleaner emits the row to a quarantine path with reason='requires_human_review_drug_token_in_supplement' and excludes the product from scoring. New occurrences enter the reviewer pipeline via the same schema.",
-    "last_updated": "2026-10-25",
-    "total_entries": 121,
+    "last_updated": "2026-10-26",
+    "total_entries": 131,
     "loaded_by": "scripts/enhanced_normalizer.py via _load_label_corrections (cached on first product)"
   },
   "corrections": {
@@ -7534,6 +7534,442 @@
           "corrected_unii_code": null
         }
       ]
+    },
+    "PG_SUB_1A28723DBDAF4AC1897AA5FF156FACA1": {
+      "brand": "Trader Joe's",
+      "product_name": "Advanced Strength Probiotic",
+      "raw_ingredient_text": "Proprietary Probiotic Blend",
+      "corrected_ingredient_text": "Proprietary Probiotic Blend",
+      "correction_fields": [
+        "ingredientRows",
+        "physicalState"
+      ],
+      "evidence": "Relocates unchanged photo-verified label corrections committed by SeanB in 6ad8a9046. Raw approved import bytes and their receipts remain immutable; this entry preserves the previously reviewed display notes, serving cadence, dosage form and printed trademark spelling. No new dose, evidence grade or clinical approval is asserted.",
+      "sources": [
+        "https://github.com/seancheick/PharmaGuide_Pipeline/blob/6ad8a9046bd0d55274eb75d0c7af5004b7ca803f/manual_labels/product_submissions/PG_SUB_1A28723DBDAF4AC1897AA5FF156FACA1.json"
+      ],
+      "reviewer": "Engineering relocation of the existing SeanB source corrections in commit 6ad8a9046",
+      "review_date": "2026-10-26",
+      "scope": "dsld_id_only",
+      "provenance_tag": "reviewed_submission_label_correction",
+      "raw_source_path": "ingredientRows[0]",
+      "raw_notes": "30 Billion CFUs** total; minimum at time of manufacture.",
+      "corrected_notes": "30 Billion CFUs** total; minimum at time of manufacture. Daily Value not established.",
+      "raw_quantity_value": 335,
+      "raw_quantity_unit": "mg",
+      "serving_basis_correction": {
+        "raw_source_sha256": "d95c88066bea1a33ee3307cbb59aff89d7d548e7d6d2f1450a408b44781f2eb4",
+        "serving_sizes": [
+          {
+            "maxDailyServings": 1,
+            "maxQuantity": 1,
+            "minDailyServings": 1,
+            "minQuantity": 1,
+            "order": 1,
+            "unit": "capsule"
+          }
+        ],
+        "raw_product_fields": {
+          "physicalState": {
+            "name": "Capsule"
+          }
+        },
+        "corrected_product_fields": {
+          "physicalState": {
+            "langualCodeDescription": "Capsule",
+            "name": "Capsule"
+          }
+        }
+      }
+    },
+    "PG_SUB_21B7F5A0D3414040948D242FB03DD01B": {
+      "brand": "Trader Joe's",
+      "product_name": "Chewable Melatonin Peppermint Flavor 3 mg",
+      "raw_ingredient_text": "Melatonin",
+      "corrected_ingredient_text": "Melatonin",
+      "correction_fields": [
+        "ingredientRows",
+        "physicalState"
+      ],
+      "evidence": "Relocates unchanged photo-verified label corrections committed by SeanB in 6ad8a9046. Raw approved import bytes and their receipts remain immutable; this entry preserves the previously reviewed display notes, serving cadence, dosage form and printed trademark spelling. No new dose, evidence grade or clinical approval is asserted.",
+      "sources": [
+        "https://github.com/seancheick/PharmaGuide_Pipeline/blob/6ad8a9046bd0d55274eb75d0c7af5004b7ca803f/manual_labels/product_submissions/PG_SUB_21B7F5A0D3414040948D242FB03DD01B.json"
+      ],
+      "reviewer": "Engineering relocation of the existing SeanB source corrections in commit 6ad8a9046",
+      "review_date": "2026-10-26",
+      "scope": "dsld_id_only",
+      "provenance_tag": "reviewed_submission_label_correction",
+      "raw_source_path": "ingredientRows[0]",
+      "raw_notes": null,
+      "corrected_notes": "Daily Value not established",
+      "raw_quantity_value": 3,
+      "raw_quantity_unit": "mg",
+      "serving_basis_correction": {
+        "raw_source_sha256": "9333fe6096cad10d7051f443d132d27b28fb0f1c528144867419d1bb61f53048",
+        "serving_sizes": [
+          {
+            "maxDailyServings": 1,
+            "maxQuantity": 1,
+            "minDailyServings": 1,
+            "minQuantity": 1,
+            "order": 1,
+            "unit": "tablet"
+          }
+        ],
+        "raw_product_fields": {
+          "physicalState": {
+            "name": "Tablet"
+          }
+        },
+        "corrected_product_fields": {
+          "physicalState": {
+            "langualCodeDescription": "Tablet or Pill",
+            "name": "Tablet or Pill"
+          }
+        }
+      }
+    },
+    "PG_SUB_2E7000A890174F10BAA7870FE5EAD7F3": {
+      "brand": "Nutricost",
+      "product_name": "KSM-66® Ashwagandha Root Extract",
+      "raw_ingredient_text": "Organic KSM-66® Ashwagandha Extract (Withania somnifera)(root) (min. 5% total withanolides) (<0.1% Withaferin A)",
+      "corrected_ingredient_text": "Organic KSM-66® Ashwagandha Extract (Withania somnifera)(root) (min. 5% total withanolides) (<0.1% Withaferin A)",
+      "correction_fields": [
+        "ingredientRows"
+      ],
+      "evidence": "Relocates unchanged photo-verified label corrections committed by SeanB in 6ad8a9046. Raw approved import bytes and their receipts remain immutable; this entry preserves the previously reviewed display notes, serving cadence, dosage form and printed trademark spelling. No new dose, evidence grade or clinical approval is asserted.",
+      "sources": [
+        "https://github.com/seancheick/PharmaGuide_Pipeline/blob/6ad8a9046bd0d55274eb75d0c7af5004b7ca803f/manual_labels/product_submissions/PG_SUB_2E7000A890174F10BAA7870FE5EAD7F3.json"
+      ],
+      "reviewer": "Engineering relocation of the existing SeanB source corrections in commit 6ad8a9046",
+      "review_date": "2026-10-26",
+      "scope": "dsld_id_only",
+      "provenance_tag": "reviewed_submission_label_correction",
+      "raw_source_path": "ingredientRows[0]",
+      "raw_notes": null,
+      "corrected_notes": "Daily Value not established",
+      "raw_quantity_value": 600,
+      "raw_quantity_unit": "mg",
+      "additional_row_corrections": [
+        {
+          "raw_ingredient_text": "BioPerine® Black Pepper Extract (Piper nigrum)(fruit)(min. 95% Piperine)",
+          "corrected_ingredient_text": "BioPerine® Black Pepper Extract (Piper nigrum)(fruit)(min. 95% Piperine)",
+          "raw_source_path": "ingredientRows[1]",
+          "raw_notes": null,
+          "corrected_notes": "Daily Value not established",
+          "raw_quantity_value": 5,
+          "raw_quantity_unit": "mg"
+        }
+      ],
+      "serving_basis_correction": {
+        "raw_source_sha256": "860e8382d442e36745aa2fa58da903c6c257f8d09278b41d414f2a927a94b75e",
+        "serving_sizes": [
+          {
+            "maxDailyServings": 1,
+            "maxQuantity": 1,
+            "minDailyServings": 1,
+            "minQuantity": 1,
+            "order": 1,
+            "unit": "Capsule"
+          }
+        ]
+      }
+    },
+    "PG_SUB_3D5877FE66FA423F9AC3C90EE52EF8CA": {
+      "brand": "Trader Joe's",
+      "product_name": "Vitamin C 1000 mg",
+      "raw_ingredient_text": "Vitamin C",
+      "corrected_ingredient_text": "Vitamin C",
+      "correction_fields": [
+        "physicalState"
+      ],
+      "evidence": "Relocates unchanged photo-verified label corrections committed by SeanB in 6ad8a9046. Raw approved import bytes and their receipts remain immutable; this entry preserves the previously reviewed display notes, serving cadence, dosage form and printed trademark spelling. No new dose, evidence grade or clinical approval is asserted.",
+      "sources": [
+        "https://github.com/seancheick/PharmaGuide_Pipeline/blob/6ad8a9046bd0d55274eb75d0c7af5004b7ca803f/manual_labels/product_submissions/PG_SUB_3D5877FE66FA423F9AC3C90EE52EF8CA.json"
+      ],
+      "reviewer": "Engineering relocation of the existing SeanB source corrections in commit 6ad8a9046",
+      "review_date": "2026-10-26",
+      "scope": "dsld_id_only",
+      "provenance_tag": "reviewed_submission_label_correction",
+      "serving_basis_correction": {
+        "raw_source_sha256": "226800e60f66c0aabd74cc4f4e77c023b74947f011ddb89a2e38bafa24d54cdb",
+        "serving_sizes": [
+          {
+            "inSFB": true,
+            "maxDailyServings": 1,
+            "maxQuantity": 1,
+            "minDailyServings": 1,
+            "minQuantity": 1,
+            "order": 1,
+            "unit": "Tablet(s)"
+          }
+        ],
+        "raw_product_fields": {
+          "physicalState": {
+            "name": "Tablet(s)"
+          }
+        },
+        "corrected_product_fields": {
+          "physicalState": {
+            "langualCodeDescription": "Tablet or Pill",
+            "name": "Tablet or Pill"
+          }
+        }
+      }
+    },
+    "PG_SUB_4ACB39B94D394C19815F63B0A783EF08": {
+      "brand": "Align",
+      "product_name": "Women's Dual Action",
+      "raw_ingredient_text": "Bifidobacterium longum subsp. longum 35624",
+      "corrected_ingredient_text": "Bifidobacterium longum subsp. longum 35624™",
+      "correction_fields": [
+        "ingredientRows",
+        "physicalState",
+        "servingSizes"
+      ],
+      "evidence": "Relocates unchanged photo-verified label corrections committed by SeanB in 6ad8a9046. Raw approved import bytes and their receipts remain immutable; this entry preserves the previously reviewed display notes, serving cadence, dosage form and printed trademark spelling. No new dose, evidence grade or clinical approval is asserted.",
+      "sources": [
+        "https://github.com/seancheick/PharmaGuide_Pipeline/blob/6ad8a9046bd0d55274eb75d0c7af5004b7ca803f/manual_labels/product_submissions/PG_SUB_4ACB39B94D394C19815F63B0A783EF08.json"
+      ],
+      "reviewer": "Engineering relocation of the existing SeanB source corrections in commit 6ad8a9046",
+      "review_date": "2026-10-26",
+      "scope": "dsld_id_only",
+      "provenance_tag": "reviewed_submission_label_correction",
+      "raw_source_path": "ingredientRows[0]",
+      "additional_row_corrections": [
+        {
+          "raw_ingredient_text": "Lactobacillus acidophilus La-14",
+          "corrected_ingredient_text": "Lactobacillus acidophilus La-14®",
+          "raw_source_path": "ingredientRows[1].nestedRows[0]"
+        },
+        {
+          "raw_ingredient_text": "Lacticaseibacillus rhamnosus HN001",
+          "corrected_ingredient_text": "Lacticaseibacillus rhamnosus HN001™",
+          "raw_source_path": "ingredientRows[1].nestedRows[1]"
+        }
+      ],
+      "serving_basis_correction": {
+        "raw_source_sha256": "e08e18f8ca85d397145c369a1ad83d113bf9b9cd42b7585ed15fa7af4d608b49",
+        "serving_sizes": [
+          {
+            "inSFB": true,
+            "maxDailyServings": 1,
+            "maxQuantity": 1,
+            "minDailyServings": 1,
+            "minQuantity": 1,
+            "order": 1,
+            "unit": "Capsule(s)"
+          }
+        ],
+        "raw_product_fields": {
+          "physicalState": {
+            "name": "Capsule(s)"
+          }
+        },
+        "corrected_product_fields": {
+          "physicalState": {
+            "langualCodeDescription": "Capsule",
+            "name": "Capsule"
+          }
+        }
+      }
+    },
+    "PG_SUB_4D246163F6CD468CA82B5E023468B9C1": {
+      "brand": "Dr Juan Santo Remedio",
+      "product_name": "Nopal",
+      "raw_ingredient_text": "Nopal Cactus Stem Powder (Opuntia ficus-indica)",
+      "corrected_ingredient_text": "Nopal Cactus Stem Powder (Opuntia ficus-indica)",
+      "correction_fields": [
+        "ingredientRows"
+      ],
+      "evidence": "Relocates unchanged photo-verified label corrections committed by SeanB in 6ad8a9046. Raw approved import bytes and their receipts remain immutable; this entry preserves the previously reviewed display notes, serving cadence, dosage form and printed trademark spelling. No new dose, evidence grade or clinical approval is asserted.",
+      "sources": [
+        "https://github.com/seancheick/PharmaGuide_Pipeline/blob/6ad8a9046bd0d55274eb75d0c7af5004b7ca803f/manual_labels/product_submissions/PG_SUB_4D246163F6CD468CA82B5E023468B9C1.json"
+      ],
+      "reviewer": "Engineering relocation of the existing SeanB source corrections in commit 6ad8a9046",
+      "review_date": "2026-10-26",
+      "scope": "dsld_id_only",
+      "provenance_tag": "reviewed_submission_label_correction",
+      "raw_source_path": "ingredientRows[0]",
+      "raw_notes": null,
+      "corrected_notes": "Daily Value not established",
+      "raw_quantity_value": 700,
+      "raw_quantity_unit": "mg",
+      "serving_basis_correction": {
+        "raw_source_sha256": "d2956dfdd129ffa027e04c21acf1c40a8999706d8bafd623d35739c2aff856c8",
+        "serving_sizes": [
+          {
+            "maxDailyServings": 1,
+            "maxQuantity": 2,
+            "minDailyServings": 1,
+            "minQuantity": 2,
+            "order": 1,
+            "unit": "Capsules"
+          }
+        ]
+      }
+    },
+    "PG_SUB_5E4D136A84A8485F98E1F3C0BCF49A73": {
+      "brand": "Just Ingredients",
+      "product_name": "Adrenal Complex",
+      "raw_ingredient_text": "Organic Ashwagandha (Withania somnifera) Root and Stem Extract 1.5%",
+      "corrected_ingredient_text": "Organic Ashwagandha (Withania somnifera) Root and Stem Extract 1.5%",
+      "correction_fields": [
+        "physicalState",
+        "servingSizes"
+      ],
+      "evidence": "Relocates unchanged photo-verified label corrections committed by SeanB in 6ad8a9046. Raw approved import bytes and their receipts remain immutable; this entry preserves the previously reviewed display notes, serving cadence, dosage form and printed trademark spelling. No new dose, evidence grade or clinical approval is asserted.",
+      "sources": [
+        "https://github.com/seancheick/PharmaGuide_Pipeline/blob/6ad8a9046bd0d55274eb75d0c7af5004b7ca803f/manual_labels/product_submissions/PG_SUB_5E4D136A84A8485F98E1F3C0BCF49A73.json"
+      ],
+      "reviewer": "Engineering relocation of the existing SeanB source corrections in commit 6ad8a9046",
+      "review_date": "2026-10-26",
+      "scope": "dsld_id_only",
+      "provenance_tag": "reviewed_submission_label_correction",
+      "serving_basis_correction": {
+        "raw_source_sha256": "82684f79fb5a2ebe8fef72bf3e22217e3320398e5bc4c2b591488038920a3f8a",
+        "serving_sizes": [
+          {
+            "inSFB": true,
+            "maxDailyServings": 1,
+            "maxQuantity": 2,
+            "minDailyServings": 1,
+            "minQuantity": 2,
+            "order": 1,
+            "unit": "Capsule(s)"
+          }
+        ],
+        "raw_product_fields": {
+          "physicalState": {
+            "name": "Capsule(s)"
+          }
+        },
+        "corrected_product_fields": {
+          "physicalState": {
+            "langualCodeDescription": "Capsule",
+            "name": "Capsule"
+          }
+        }
+      }
+    },
+    "PG_SUB_5EB9F9D6F38C4648A6560B489E0E4916": {
+      "brand": "Trader Joe's",
+      "product_name": "Vitamin D3 125 mcg (5000 IU)",
+      "raw_ingredient_text": "Vitamin D3",
+      "corrected_ingredient_text": "Vitamin D3",
+      "correction_fields": [
+        "physicalState"
+      ],
+      "evidence": "Relocates unchanged photo-verified label corrections committed by SeanB in 6ad8a9046. Raw approved import bytes and their receipts remain immutable; this entry preserves the previously reviewed display notes, serving cadence, dosage form and printed trademark spelling. No new dose, evidence grade or clinical approval is asserted.",
+      "sources": [
+        "https://github.com/seancheick/PharmaGuide_Pipeline/blob/6ad8a9046bd0d55274eb75d0c7af5004b7ca803f/manual_labels/product_submissions/PG_SUB_5EB9F9D6F38C4648A6560B489E0E4916.json"
+      ],
+      "reviewer": "Engineering relocation of the existing SeanB source corrections in commit 6ad8a9046",
+      "review_date": "2026-10-26",
+      "scope": "dsld_id_only",
+      "provenance_tag": "reviewed_submission_label_correction",
+      "serving_basis_correction": {
+        "raw_source_sha256": "ba63e5da6f2442d091e5b34685dccd916c01bd81dd6d8fb57786482b57c41044",
+        "serving_sizes": [
+          {
+            "inSFB": true,
+            "maxDailyServings": 1,
+            "maxQuantity": 1,
+            "minDailyServings": 1,
+            "minQuantity": 1,
+            "order": 1,
+            "unit": "Softgel(s)"
+          }
+        ],
+        "raw_product_fields": {
+          "physicalState": {
+            "name": "Softgel(s)"
+          }
+        },
+        "corrected_product_fields": {
+          "physicalState": {
+            "langualCodeDescription": "Softgel Capsule",
+            "name": "Softgel Capsule"
+          }
+        }
+      }
+    },
+    "PG_SUB_6AFDA9855BFA449BB235FCFE6ECBAF96": {
+      "brand": "Pure Encapsulations",
+      "product_name": "Vitamin D3 & K2",
+      "raw_ingredient_text": "Vitamin D",
+      "corrected_ingredient_text": "Vitamin D",
+      "correction_fields": [
+        "physicalState"
+      ],
+      "evidence": "Relocates unchanged photo-verified label corrections committed by SeanB in 6ad8a9046. Raw approved import bytes and their receipts remain immutable; this entry preserves the previously reviewed display notes, serving cadence, dosage form and printed trademark spelling. No new dose, evidence grade or clinical approval is asserted.",
+      "sources": [
+        "https://github.com/seancheick/PharmaGuide_Pipeline/blob/6ad8a9046bd0d55274eb75d0c7af5004b7ca803f/manual_labels/product_submissions/PG_SUB_6AFDA9855BFA449BB235FCFE6ECBAF96.json"
+      ],
+      "reviewer": "Engineering relocation of the existing SeanB source corrections in commit 6ad8a9046",
+      "review_date": "2026-10-26",
+      "scope": "dsld_id_only",
+      "provenance_tag": "reviewed_submission_label_correction",
+      "serving_basis_correction": {
+        "raw_source_sha256": "c63100eded0fd19248f85532080592f8e8531821f587c5f7f204bbfdcc4a11d0",
+        "serving_sizes": [
+          {
+            "inSFB": true,
+            "maxDailyServings": 1,
+            "maxQuantity": 1,
+            "minDailyServings": 1,
+            "minQuantity": 1,
+            "order": 1,
+            "unit": "Capsule(s)"
+          }
+        ],
+        "raw_product_fields": {
+          "physicalState": {
+            "name": "Capsule"
+          }
+        },
+        "corrected_product_fields": {
+          "physicalState": {
+            "langualCodeDescription": "Capsule",
+            "name": "Capsule"
+          }
+        }
+      }
+    },
+    "PG_SUB_8F025E8FFB164793B3B68B15EED2CD31": {
+      "brand": "Sports Research",
+      "product_name": "Magnesium Glycinate Chelated",
+      "raw_ingredient_text": "Magnesium (from 1441 mg chelated magnesium glycinate)",
+      "corrected_ingredient_text": "Magnesium (from 1441 mg chelated magnesium glycinate)",
+      "correction_fields": [
+        "ingredientRows"
+      ],
+      "evidence": "Relocates unchanged photo-verified label corrections committed by SeanB in 6ad8a9046. Raw approved import bytes and their receipts remain immutable; this entry preserves the previously reviewed display notes, serving cadence, dosage form and printed trademark spelling. No new dose, evidence grade or clinical approval is asserted.",
+      "sources": [
+        "https://github.com/seancheick/PharmaGuide_Pipeline/blob/6ad8a9046bd0d55274eb75d0c7af5004b7ca803f/manual_labels/product_submissions/PG_SUB_8F025E8FFB164793B3B68B15EED2CD31.json"
+      ],
+      "reviewer": "Engineering relocation of the existing SeanB source corrections in commit 6ad8a9046",
+      "review_date": "2026-10-26",
+      "scope": "dsld_id_only",
+      "provenance_tag": "reviewed_submission_label_correction",
+      "raw_source_path": "ingredientRows[0]",
+      "raw_notes": null,
+      "corrected_notes": "38% Daily Value",
+      "raw_quantity_value": 160,
+      "raw_quantity_unit": "mg",
+      "serving_basis_correction": {
+        "raw_source_sha256": "57a85be45543f1f7cb0fc860ec9a945217ea27b7f9d10be10e33bbceff5ccac9",
+        "serving_sizes": [
+          {
+            "maxDailyServings": 2,
+            "maxQuantity": 2,
+            "minDailyServings": 1,
+            "minQuantity": 2,
+            "order": 1,
+            "unit": "Veggie Capsules"
+          }
+        ]
+      }
     }
   }
 }

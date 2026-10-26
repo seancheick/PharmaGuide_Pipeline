@@ -106,9 +106,10 @@ def test_corrections_is_keyed_by_dsld_id(overrides):
     corrections = overrides.get("corrections") or {}
     assert corrections, "corrections payload must not be empty"
     for key in corrections.keys():
-        # DSLD IDs are integer-strings (e.g., "69734")
-        assert key.isdigit(), (
-            f"correction key {key!r} must be a DSLD id integer-string"
+        # Existing product identities are numeric DSLD IDs or canonical manual-label IDs.
+        assert key.isdigit() or (key.startswith("PG_SUB_") and len(key) == 39
+                                and all(c in "0123456789ABCDEF" for c in key[7:])), (
+            f"correction key {key!r} must be an existing DSLD or canonical PG_SUB product id"
         )
 
 

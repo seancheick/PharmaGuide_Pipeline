@@ -6109,7 +6109,7 @@ class EnhancedDSLDNormalizer:
         # original values for fields outside the panel/statement digest.
         original_fields = repair.get("raw_product_fields", {})
         corrected_fields = repair.get("corrected_product_fields", {})
-        allowed = {"servingsPerContainer", "targetGroups"}
+        allowed = {"servingsPerContainer", "targetGroups", "physicalState"}
         if (not isinstance(original_fields, dict) or not isinstance(corrected_fields, dict)
                 or set(original_fields) != set(corrected_fields)
                 or set(corrected_fields) - allowed
@@ -6119,6 +6119,12 @@ class EnhancedDSLDNormalizer:
                 not isinstance(corrected_fields["targetGroups"], list)
                 or not all(isinstance(x, str) and x.strip() for x in corrected_fields["targetGroups"])):
             raise ValueError("Reviewed target groups require explicit label text")
+        if "physicalState" in corrected_fields:
+            state = corrected_fields["physicalState"]
+            if (not isinstance(state, dict)
+                    or set(state) != {"name", "langualCodeDescription"}
+                    or not all(isinstance(value, str) and value.strip() for value in state.values())):
+                raise ValueError("Reviewed physical state requires explicit label form strings")
         statements = repair.get("corrected_statements")
         if statements is not None and (
                 not isinstance(statements, list)
