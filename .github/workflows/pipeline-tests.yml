@@ -1,4 +1,5 @@
-# Fast test rung on every push, so agents stop running it on the laptop.
+# Candidate checks run once per PR, plus main after integration. Branch pushes
+# do not duplicate the required context; open a PR to qualify a candidate.
 #
 # CI is a clean checkout: no 11 GB product corpus, no built exports. Tests that
 # need them are declared in scripts/test_profiles.py LOCAL_ONLY_TEST_FILES and
@@ -8,7 +9,7 @@ name: pipeline-tests
 
 on:
   push:
-    branches: [main, "claude/**", "codex/**"]
+    branches: [main]
   pull_request:
     branches: [main]
   workflow_dispatch:
@@ -28,18 +29,14 @@ jobs:
       kind: ${{ steps.scope.outputs.kind }}
     steps:
       - uses: actions/checkout@v7.0.1
-        with:
-          fetch-depth: 0
       - name: Classify committed change
         id: scope
         env:
           BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
           HEAD_SHA: ${{ github.sha }}
         run: |
-          if [[ "$GITHUB_EVENT_NAME" == push && "$GITHUB_REF" != refs/heads/main ]]; then
-            BASE_SHA=$(git merge-base origin/main "$HEAD_SHA")
-          elif [[ "$BASE_SHA" =~ ^[0-9a-f]{40}$ && ! "$BASE_SHA" =~ ^0+$ ]]; then
-            git fetch --no-tags origin "$BASE_SHA"
+          if [[ "$BASE_SHA" =~ ^[0-9a-f]{40}$ && ! "$BASE_SHA" =~ ^0+$ ]]; then
+            git fetch --no-tags --depth=1 origin "$BASE_SHA"
           fi
           kind=$(python scripts/ci_change_scope.py --repo . --base "$BASE_SHA" --head "$HEAD_SHA")
           echo "kind=$kind" >> "$GITHUB_OUTPUT"

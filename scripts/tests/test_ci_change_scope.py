@@ -115,21 +115,9 @@ def test_required_merge_job_rejects_failure_cancellation_and_missing_scope():
         assert (result.returncode != 0) == bool(expected)
 
 
-@pytest.mark.parametrize("missing_previous_tip", [False, True])
-def test_branch_push_cannot_hide_untested_code_behind_docs(repo, tmp_path, missing_previous_tip):
+def test_candidate_checks_have_one_required_pr_event():
     import yaml
-    base = git(repo, 'rev-parse', 'HEAD')
-    git(repo, 'update-ref', 'refs/remotes/origin/main', base)
-    code = commit(repo, 'source.py', 'value = 1\n')
-    head = commit(repo, 'docs/change.md')
-    assert scope.classify(repo, code, head) == 'docs'
-    workflow = yaml.safe_load((Path(__file__).resolve().parents[2] / '.github/workflows/pipeline-tests.yml').read_text())
-    script = workflow['jobs']['scope']['steps'][-1]['run']
-    # Exercise real fetching too: a shallow fetch can hide the common ancestor.
-    git(repo, 'remote', 'add', 'origin', str(repo))
-    selection = script.split('kind=$(')[0]
-    result = subprocess.check_output(['bash', '-e', '-c', selection + '\nprintf "%s" "$BASE_SHA"'],
-        cwd=repo, env={**os.environ, 'BASE_SHA': ('f' * 40 if missing_previous_tip else code), 'HEAD_SHA': head,
-            'GITHUB_EVENT_NAME': 'push', 'GITHUB_REF': 'refs/heads/codex/example'}, text=True)
-    assert result == base
-    assert scope.classify(repo, result, head) == 'full'
+    workflow = yaml.load((Path(__file__).resolve().parents[2] / '.github/workflows/pipeline-tests.yml').read_text(), Loader=yaml.BaseLoader)
+    assert workflow['on']['push']['branches'] == ['main']
+    assert workflow['on']['pull_request']['branches'] == ['main']
+    assert 'workflow_dispatch' in workflow['on']

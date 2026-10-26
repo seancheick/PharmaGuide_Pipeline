@@ -50,14 +50,14 @@ Raw `python3 -m pytest` picks macOS Python 3.9 and runs every heavy test (~1 h).
 scripts/test.sh fast scripts/tests/test_<topic>.py::test_<case>  # one failure / one edit
 scripts/test.sh fast scripts/tests/test_<topic>.py -k <kw>      # affected defect class
 scripts/test.sh local          # behavioral pipeline/data batch: corpus checks CI cannot run (~2 min)
-scripts/test.sh fast           # whole suite: CI runs it on every push; locally only if CI is down
+scripts/test.sh fast           # whole suite: CI runs on PRs/main; locally only if CI is down
 scripts/test.sh release        # release gates before a ship
 scripts/test.sh full           # post-pipeline backstop, never alongside a pipeline run
 ```
 
 - Pick validation by the affected behavior below, not file count, line count or whether the file
-  is called a scorer. GitHub Actions `pipeline-tests` still runs automatically on branch/main
-  pushes; all executable/test/config/data batches must pass it before merging.
+  is called a scorer. GitHub Actions `pipeline-tests` runs on PR updates and main pushes; open a PR to qualify a
+  branch. All executable/test/config/data batches must pass it before merging.
 - CI has no product corpus, builds or raw DSLD datasets; it checks out the app repo for cross-repo tests (FLUTTER_REPO). A test that needs them goes in `LOCAL_ONLY_TEST_FILES`
   (`scripts/test_profiles.py`); `scripts/ci_skip_guard.py` fails CI on any other skip reason; the local rung rejects missing corpus/build skips.
 - `scripts/test.sh` holds a machine-wide lock: one full/release/slow suite at a time, alone;
@@ -202,7 +202,7 @@ bug-fix notes are history, not specifications.
   history. Most "forks" already have a doctrinal answer — apply it, measure, record it in the handoff.
 - **Sean decides only:** a new semantic owner (new persisted or public/export field, new status or
   verdict meaning, new scoring/clinical policy or owner, new registry), deleting curated clinical
-  data, pushes to `main`, releases. Pushing a `claude/*` or `codex/*` branch for CI is routine.
+  data, pushes to `main`, releases. Pushing a `claude/*` or `codex/*` branch and opening its qualification PR is routine.
 - Private helpers, local names, test utilities and internal files need no approval once the
   Owner Check passes.
 
