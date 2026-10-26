@@ -117,6 +117,13 @@ def require_publication_contract():
         raise ValueError("Deployed publication contract arguments do not match this publisher")
 
 
+def fetch_manifest_version(client, db_version):
+    """Look up any published version, including inactive release history."""
+    response = (client.table("export_manifest").select("*")
+                .eq("db_version", db_version).limit(1).execute())
+    return parse_manifest_response({"data": response.data})
+
+
 def insert_manifest(client, manifest_data, submission_approvals=None):
     """Atomically insert a new manifest and mark previous as not current.
 
@@ -169,11 +176,22 @@ def upload_file(client, bucket, remote_path, local_path,
     if cache_control is not None:
         file_options["cache-control"] = str(cache_control)
     with open(local_path, "rb") as f:
-        return client.storage.from_(bucket).upload(
-            path=remote_path,
-            file=f,
-            file_options=file_options,
-        )
+        try:
+            return client.storage.from_(bucket).upload(
+                path=remote_path,
+                file=f,
+                file_options=file_options,
+            )
+        except Exception:
+            if upsert:
+                raise
+            # Create-only is atomic at Storage. A collision or a lost success
+            # response is retryable only when the stored bytes are identical.
+            remote_bytes = download_file(client, bucket, remote_path)
+            f.seek(0)
+            if remote_bytes != f.read():
+                raise ValueError(f"immutable Storage object differs: {remote_path}")
+            return None
 
 
 def download_file(client, bucket, remote_path):

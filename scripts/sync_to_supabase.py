@@ -1354,6 +1354,7 @@ def sync(
         download_file,
         get_supabase_client,
         fetch_current_manifest,
+        fetch_manifest_version,
         insert_manifest,
         list_storage_paths,
         upload_file,
@@ -1411,6 +1412,10 @@ def sync(
     else:
         print("  No remote version found (first push)")
 
+    historical = fetch_manifest_version(client, version)
+    if historical and historical.get("checksum") != checksum:
+        raise ValueError("Refusing to mutate a published catalog version")
+
     catalog_changed = needs_update(local, remote, force=force)
     same_catalog_identity = bool(
         remote
@@ -1436,25 +1441,43 @@ def sync(
             client, bucket, f"v{version}", {remote_db_path}, list_storage_paths, 1000,
         )
         catalog_upload_needed = remote_db_path not in present
+    # Validate every existing versioned artifact before the first Storage write.
+    # Listing errors fail closed; existence never establishes byte identity.
+    versioned_files = {
+        remote_db_path: build_stats["db_path"],
+        f"v{version}/detail_index.json": build_stats["detail_index_path"],
+        **{f"v{version}/{SHARE_INDEX_DIRNAME}/{shard}.json":
+           os.path.join(share_index_dir, f"{shard}.json")
+           for shard in SHARE_INDEX_SHARDS},
+    }
+    for directory in (f"v{version}", f"v{version}/{SHARE_INDEX_DIRNAME}"):
+        expected = {path for path in versioned_files if path.rsplit("/", 1)[0] == directory}
+        present = _discover_existing_remote_paths_for_directory(
+            client, bucket, directory, expected, list_storage_paths, 1000,
+        )
+        for path in present:
+            if hashlib.sha256(download_file(client, bucket, path)).hexdigest() != _compute_file_sha256(versioned_files[path]):
+                raise ValueError(f"Refusing to mutate immutable catalog object: {path}")
     if catalog_upload_needed:
         validate_bucket_upload_capacity(
             client, bucket=bucket,
             object_size_bytes=os.path.getsize(build_stats["db_path"]),
         )
 
-    def sync_mutable(remote_path, local_path, content_type="application/json"):
-        # These paths are mutable, so neither existence nor size proves identity.
-        # A failed read never authorizes a skip; upload with the same retry policy.
+    def sync_versioned(remote_path, local_path, content_type="application/json"):
+        # Compare bytes for interrupted-upload retries. The create-only uploader
+        # below rejects a race that creates different bytes after preflight.
         try:
             remote_bytes = download_file(client, bucket, remote_path)
             unchanged = hashlib.sha256(remote_bytes).hexdigest() == _compute_file_sha256(local_path)
         except Exception:
             unchanged = False
-        if unchanged and not force:
+        if unchanged:
             return
         upload_with_retries(
             lambda: upload_file(
                 client, bucket, remote_path, local_path, content_type=content_type,
+                upsert=False,
                 cache_control=CATALOG_MUTABLE_CACHE_SECONDS,
             ), retry_count, retry_base_delay,
         )
@@ -1467,6 +1490,7 @@ def sync(
     if catalog_upload_needed:
         upload_with_retries(
             lambda: upload_file(client, bucket, remote_db_path, db_path,
+                                upsert=False,
                                 cache_control=CATALOG_MUTABLE_CACHE_SECONDS),
             retry_count, retry_base_delay,
         )
@@ -1486,7 +1510,6 @@ def sync(
         client, bucket, uploads, list_storage_paths,
         max_workers=min(max_workers, DEFAULT_DISCOVERY_WORKERS),
         client_factory=get_supabase_client,
-        catalog_version=version,
     )
     discover_time = time.time() - start
     print(f"  Found {len(existing_remote_paths)} existing hashed blobs in {discover_time:.1f}s")
@@ -1550,20 +1573,20 @@ def sync(
             "time_seconds": round(time.monotonic() - sync_started_at, 1),
         }
 
-    # Publish mutable indexes only once their referenced detail/image objects
+    # Publish immutable indexes only once their referenced detail/image objects
     # succeeded, including same-version repairs of an already visible catalog.
     detail_index_path = build_stats["detail_index_path"]
     remote_detail_index_path = f"v{version}/detail_index.json"
     print(f"\nUploading {remote_detail_index_path}...")
     start = time.time()
-    sync_mutable(remote_detail_index_path, detail_index_path)
+    sync_versioned(remote_detail_index_path, detail_index_path)
     detail_index_time = time.time() - start
     print(f"  Done ({detail_index_time:.1f}s)")
 
     print(f"\nUploading canonical share-index shards for {version}...")
     start = time.time()
     for shard in SHARE_INDEX_SHARDS:
-        sync_mutable(
+        sync_versioned(
             f"v{version}/{SHARE_INDEX_DIRNAME}/{shard}.json",
             os.path.join(build_stats["share_index_dir"], f"{shard}.json"),
         )
