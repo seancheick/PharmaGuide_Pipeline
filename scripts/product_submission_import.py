@@ -784,6 +784,8 @@ def _freeze_promoted_label(
     destination: Path,
     submission_id: str,
     receipt: dict[str, Any],
+    *,
+    prior_payload: bytes | None = None,
 ) -> None:
     """Retain the exact promoted input before a newer approval replaces it."""
     current_revision = int(receipt.get("approval_revision") or 0)
@@ -804,9 +806,11 @@ def _freeze_promoted_label(
     frozen = destination / relative
     if frozen.is_file():
         source = frozen
-    if not source.is_file() or not isinstance(label_hash, str):
+        label_hash = receipt.get("promoted_label_sha256") or label_hash
+        prior_payload = None
+    if (not source.is_file() and prior_payload is None) or not isinstance(label_hash, str):
         raise SubmissionImportError("promoted manual label is unavailable")
-    payload = source.read_bytes()
+    payload = prior_payload if prior_payload is not None else source.read_bytes()
     if hashlib.sha256(payload).hexdigest() != label_hash:
         raise SubmissionImportError("promoted manual label changed after import")
     relative = Path(PROMOTED_HISTORY_DIR) / submission_id / f"{promoted_revision}.json"
@@ -1054,6 +1058,17 @@ def materialize_approved_submissions(
                 and existing_receipt.get("output_file") == output_path.name
                 and existing_receipt.get("product_id") == product_id
             ):
+                # The privacy-only serializer transition still replaces promoted
+                # input bytes. Freeze the verified historical serializer before
+                # journaling, including recovery of pre-journal interrupted work.
+                previous_label = legacy_label
+                if existing_receipt["label_sha256"] != legacy_hash:
+                    previous_label = json.loads(json.dumps(pre_revision_label))
+                    if existing_receipt["label_sha256"] == pre_revision_hash:
+                        previous_label["manual_product_provenance"].pop("reviewer_record_id", None)
+                prior_payload = (json.dumps(previous_label, ensure_ascii=False, indent=2) + "\n").encode("utf-8")
+                _freeze_promoted_label(destination, submission_id, existing_receipt,
+                                       prior_payload=prior_payload)
                 prepared.append((submission_id, approval_revision, approval_payload_sha256,
                                  label, serialized, output_path))
                 continue

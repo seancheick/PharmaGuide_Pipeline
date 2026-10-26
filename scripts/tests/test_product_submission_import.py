@@ -1913,3 +1913,42 @@ def test_cross_submission_pending_import_recovers_only_verified_owner_bytes(tmp_
     assert json.loads(output.read_text())['fullName'] == 'Replacement submission'
     importer.materialize_approved_submissions([first], output_dir=tmp_path, authoritative=True)
     assert json.loads(output.read_text())['fullName'] == 'Example Vitamin D3'
+
+
+def test_promoted_legacy_privacy_rewrite_freezes_before_label_receipt_crash(tmp_path, monkeypatch):
+    import product_submission_import as importer
+    original = importer.build_manual_label
+    def legacy(row):
+        label = original(row)
+        label['manual_product_provenance']['reviewer_record_id'] = row['reviewer_id']
+        return label
+    row = _export()
+    monkeypatch.setattr(importer, 'build_manual_label', legacy)
+    result = importer.materialize_approved_submissions([row], output_dir=tmp_path)
+    output = result.output_paths[0]
+    old_bytes = output.read_bytes()
+    receipt_path = tmp_path / importer.RECEIPT_FILE
+    receipts = json.loads(receipt_path.read_text())
+    receipts['submissions'][row['submission_id']].update(promoted_catalog_version='old', promoted_approval_revision=1)
+    receipt_path.write_text(json.dumps(receipts))
+    monkeypatch.setattr(importer, 'build_manual_label', original)
+    write = importer._atomic_write_text
+    def interrupt(path, content):
+        write(path, content)
+        if path == output:
+            raise RuntimeError('crash after label')
+    monkeypatch.setattr(importer, '_atomic_write_text', interrupt)
+    with pytest.raises(RuntimeError):
+        importer.materialize_approved_submissions([row], output_dir=tmp_path)
+    frozen = tmp_path / importer.PROMOTED_HISTORY_DIR / row['submission_id'] / '1.json'
+    assert frozen.read_bytes() == old_bytes
+    monkeypatch.setattr(importer, '_atomic_write_text', write)
+    importer.materialize_approved_submissions([row], output_dir=tmp_path)
+    assert row['reviewer_id'] not in output.read_text()
+
+    corrected = _payload()
+    corrected['fullName'] = 'Later correction'
+    importer.materialize_approved_submissions([_export(corrected, approval_revision=2)], output_dir=tmp_path, authoritative=True)
+    assert frozen.read_bytes() == old_bytes
+    importer.materialize_approved_submissions([], output_dir=tmp_path, authoritative=True)
+    assert output.read_bytes() == old_bytes
