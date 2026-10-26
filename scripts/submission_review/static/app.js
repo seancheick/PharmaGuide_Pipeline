@@ -45,6 +45,7 @@ const state = {
   reviewReadyFor: null,
   reviewSaveTimer: null,
   reviewSaveRequest: 0,
+  reviewSavePromise: Promise.resolve(),
   reviewLoadRequest: 0,
   reviewVerifyRequest: 0,
   batchStates: new Map(),
@@ -865,6 +866,12 @@ async function recordMatch(outcome, options = {}) {
   const selectedId = state.selected?.id;
   const binding = selectedEvidenceBinding();
   const decisionBinding = identityDecisionBinding();
+  if (state.selected?.identifier || state.identityLookup?.identity_method === 'label_review') {
+    clearTimeout(state.reviewSaveTimer);
+    if (!(await saveReview()) || decisionBinding !== identityDecisionBinding()) {
+      throw new Error('Save the current label draft before recording its identity decision.');
+    }
+  }
   const lookup = await requireCurrentIdentity();
   if (decisionBinding !== identityDecisionBinding()) throw new Error('Identity review changed. Record a fresh decision.');
   if (lookup.identity_method === 'label_review' && (lookup.complete !== true || new Set(lookup.matches.map(match => match.dsld_id)).size > 100)) {
@@ -1891,6 +1898,14 @@ function isBlankLabel(value) {
 }
 
 async function saveReview() {
+  // Drain older saves first: a delayed old request must not overwrite the
+  // draft after a match receipt binds its exact current label hash.
+  const pending = state.reviewSavePromise.then(() => saveReviewOnce());
+  state.reviewSavePromise = pending.catch(() => false);
+  return pending;
+}
+
+async function saveReviewOnce() {
   const submission = state.selected;
   if (!submission || !state.session || submission.review_status === 'approved') return;
   if (!state.payloadSha || state.reviewInvalidated) return;
@@ -1922,9 +1937,11 @@ async function saveReview() {
       state.selected?.evidence_revision !== boundRevision ||
       state.selected?.evidence_manifest_sha256 !== boundManifest ||
       state.payloadSha !== boundSha) return;
+  if (review?.draft?.payload_sha256 !== boundSha) return false;
   hydrateReview(review);
   renderReviewBanner();
   setDecisionAvailability();
+  return true;
 }
 
 /** Persist one tick, and take it back if the server refuses. */
@@ -2897,6 +2914,9 @@ async function updateShaPreview() {
     // Unchanged refreshes preserve checks. Edits revoke them synchronously,
     // before WebCrypto yields, and old promises cannot restore stale hashes.
     if (canonical === state.payloadCanonical && state.payloadSha) return;
+    if (state.payloadCanonical && (state.selected?.identifier || state.identityLookup?.identity_method === 'label_review')) {
+      invalidateReviewedIdentity();
+    }
     if (typeof SoloReview !== 'undefined') SoloReview.changed();
     state.payloadCanonical = canonical;
     state.payloadSha = null;
