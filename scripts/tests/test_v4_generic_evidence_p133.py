@@ -1494,3 +1494,25 @@ def test_zero_negative_evidence_has_no_positive_record_dependencies():
     payload = score_evidence(_product(matches=[_match(id='NEGATIVE_SYNTHETIC', effect_direction='negative')]))
     assert payload['score'] == 0
     assert payload['metadata']['contributing_record_assessments'] == []
+
+
+def test_recovered_collagen_receipt_uses_the_canonical_review_owner(monkeypatch):
+    import clinical_applicability
+    from scoring_v4.modules.generic_evidence import score_evidence
+    product = _product(ingredients=[_ingredient(
+        name="Collagen Peptides", standard_name="Collagen", canonical_id="collagen",
+        quantity=20, unit="Gram(s)")], matches=[])
+    seen = []
+    def source_review(entry):
+        seen.append(entry["id"])
+        return {"is_complete": False, "errors": ["fixture_required_review_missing"], "context_ids": []}
+    monkeypatch.setattr(clinical_applicability, "assess_clinical_source_review", source_review)
+    payload = score_evidence(product, apply_primary_floor=True)
+    assert payload["score"] == 14.0
+    assert payload["metadata"]["recovered_matches"] == ["RECOVERED_COLLAGEN_PEPTIDES_V1"]
+    receipts = payload["metadata"]["contributing_record_assessments"]
+    assert [r["id"] for r in receipts] == ["INGR_COLLAGEN_PEPTIDES"]
+    assert seen == ["INGR_COLLAGEN_PEPTIDES"]
+    assert receipts[0]["source_review"]["is_complete"] is False
+    source = clinical_applicability.reviewed_entries()["INGR_COLLAGEN_PEPTIDES"]
+    assert receipts[0]["source_references"] == (source.get("references_structured") or source.get("references") or [])

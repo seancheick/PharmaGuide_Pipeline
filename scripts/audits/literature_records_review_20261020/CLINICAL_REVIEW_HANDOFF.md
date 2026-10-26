@@ -1,5 +1,15 @@
 # Final pre-rebuild completion campaign — October 24, 2026
 
+## October 26 rebuilt-corpus gate failure
+
+The operator completed Clean → Enrich → Score at main bbaf3a7d. All 114 stage manifests were current at the failure. The pre-snapshot completeness gate correctly stopped publication: 10,509 of 15,437 products blocked; 4,928 complete. Blocker families overlap: contributing-source review 5,972, applicability 5,237, Evidence 3,314, botanical benchmark 3,238, probiotic Evidence 320, omega Evidence 140, identity 127, dose 51 and unread amount 5. 6,538 blocked products have positive Evidence points. These are not independent literature-review counts.
+
+Source dependencies reference 147 record IDs; 146 already occur in the existing 155-row clinical_review_holds.csv register. The remaining synthetic collagen ID points to the existing canonical collagen record. Reconcile existing signed decisions and source packets; do not invent approvals or treat all dependencies as new research.
+
+Owner: `scripts/scoring_v4/modules/generic_evidence.py::score_evidence` — evidence: fail-first recovered-collagen receipt test and 25 fresh enriched-product replays. Will NOT create: another clinical record, matcher, review authority or release gate. The correction resolves the recovery source pointer for dependency review only; diagnostic IDs, scores, pillars and safety remain unchanged. All 25 required holds remain. This is implemented, not scientifically closed or release-validated.
+
+Behavioral validation: failing regression reproduced, then 295 named owner/consumer tests passed; local 546 passed with 24 declared optional skips and passing skip guard. Whole-fast CI and integration pending. Private audit evidence is retained under .claude/state/rebuilt_assessment_audit_20261026, including every blocked product, source groups, original-20 checks and targeted collagen replay. No pipeline rerun or publication performed by the agent. Do not rerun until shared review/benchmark corrections are ready and stage fingerprints select the necessary rebuild.
+
 ## October 25 source-verification checkpoint
 
 Sean confirms Dr. Pham signed the bounded A/C responses. Independent live checks cover14APIrecords/14exactPDFs and7PubMedidentifiers; the A acknowledgment explicitly does not complete the scientific assessments, and C supplies14of171decisions. [Current verified decisions, corrections and remaining-work list](SIGNED_RESPONSE_VERIFICATION_20261025.md) supersedes the earlier lack-of-attribution finding. Source candidate129e291c8 qualifies:19-label raw diagnostic/owner-consumer checks, local546pass/24declaredskips and whole-fastCI40210617064 (23,868pass/192declaredskips) green. Natural vitamin E and Lemon Tea source errors corrected; Fruit Blast conflicting caffeine remains held. No full pipeline or app import. No scientific/rebuilt closure is implied. The updated single Dr.Pham request carries these facts forward so confirmed checks need not repeat.
