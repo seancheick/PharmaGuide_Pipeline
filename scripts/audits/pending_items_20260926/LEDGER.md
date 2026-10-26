@@ -3464,3 +3464,10 @@ Behavioral source/normalizer batch; baselinecc6a56b57. Owner: existing reviewed 
 ### Batch12 integrated and qualified — October25
 
 All9sourcecases integratedPR249/406cd6ff8;exact10098f1a0 passedCI40239901450all4shards+all4guards. Main ancestryverified.359owner/consumer checks+addedexportregression pass;local546/24declaredoptinskips+guardgreen pass;independentreviewsno blocker. Final12committedreplay:all12scored hashes unchangedbylatercranberrywording,3controlsall4layerhashesunchanged,all safety statuses retained. Archivedpsyllium120servings consumerverified;P.asiaticahold/CBDblockedstate and existingOyster/cranberryreleaseholds preserved. No inventedconstituentdoses,formgradesorclinicalapprovals. Broader scientific/citation/benchmark work and rebuilt closure remainopen;no pipeline/import/release. This qualification follow-up is documentationonly relative togreenruntime.
+
+
+### 2026-10-26 — primary checkout preservation and alignment
+
+Documentation/operations only; runtime source unchanged from qualified main `622883e55`. User authorized preserving local work and aligning the primary checkout. All 14 uncommitted files were copied and checksum-verified in private `.claude/state/checkout_preservation_20261026/`; older Batch11 source/test copies additionally retained in a named Git stash. Private submissions/Supabase files remain untracked and in place. No corpus, import or release was started.
+
+Owner: `scripts/pipeline_freshness.py::stage_manifest_issue` — evidence: read-only check of all 114 current stage manifests. Will NOT create: another freshness owner or release path. All 38 Clean, 38 Enrich and 38 Score manifests are stale against current main. Existing outputs cannot qualify the latest fixes. Targeted Batch11/Batch12/pillar-consumer suite passed **125 tests** on aligned main; prior exact-runtime CI qualification remains applicable. Rebuilt corpus, actual exported/app parity and release gates remain open. Required clinical holds are unchanged.
