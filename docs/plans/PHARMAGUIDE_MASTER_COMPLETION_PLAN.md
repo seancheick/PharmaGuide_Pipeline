@@ -1748,5 +1748,6 @@ Source findings are verified and confirmed engineering corrections are implement
 
 ## October26 — submission intake startup repair
 
-- [x] Reproduced immutable-approval conflict for4pending records; audited all25receipts and restored10raw source originals while relocating existing reviewed corrections through the canonical owner.310focused tests, local546/24declared skips,10label replay (all scored hashes identical), all25receipt bindings and10entry landed check pass. Owner/evidence/limits in existing LEDGER; full qualification/integration pending CI.
-- [ ] Green exact-candidate whole-fast CI, merge to main, fresh live intake and publication preflight. Final full-corpus/scientific/output/app release gates are not cleared by this startup repair; no corpus/publication run by agent.
+- [x] Reproduced immutable-approval conflict for4pending records; audited all25receipts and restored10raw source originals while relocating existing reviewed corrections through the canonical owner.310focused tests, local546/24declared skips,10label replay (all scored hashes identical), all25receipt bindings and10entry landed check pass. Owner/evidence/limits in existing LEDGER; qualified runtime425c1712passed CI40283504587(all4shards/skipguards); PR250merged to main686d9653d. Twelve unaffected controls remain identical across all captured stages.
+- [x] Green exact-candidate whole-fast CI, main integration, fresh live intake(10reused/0imported) and publication preflight passed. Startup blockers are corrected.
+- [ ] Final full-corpus/scientific/output/app release gates; these are not cleared by this startup repair. User will start full publication; no corpus/publication run by agent.
