@@ -2909,7 +2909,24 @@ async function uploadReviewerEvidence() {
       byte_size: file.size,
       content_sha256: await fileSha256(file),
     })));
-    const previousAttempt = reviewerEvidenceAttempt(submission.id);
+    // Read server state before abandoning a saved key. The selected row can
+    // still say ready after an interrupted create response opened an upload.
+    const { submissions } = await edge({action: 'list', submission_id: submission.id, limit: 1});
+    const current = submissions?.find(row => row.id === submission.id);
+    if (!current || current.review_status !== 'under_review') {
+      throw new Error('Reload this submission before replacing evidence.');
+    }
+    let previousAttempt = reviewerEvidenceAttempt(submission.id);
+    if (previousAttempt && current.upload_state === 'ready') {
+      // No live upload remains: cleanup may have restored its prior revision,
+      // or finalization may have succeeded before its response was lost.
+      clearReviewerEvidenceAttempt(submission.id);
+      previousAttempt = null;
+    }
+    if (previousAttempt?.evidence_revision != null &&
+        current.evidence_revision !== previousAttempt.evidence_revision) {
+      throw new Error('The pending evidence revision changed. Reload this submission.');
+    }
     let requestKey;
     let photos;
     if (previousAttempt) {
@@ -2922,7 +2939,10 @@ async function uploadReviewerEvidence() {
     } else {
       requestKey = crypto.randomUUID();
       const storedPhotos = selected.map(photo => ({photo_id: crypto.randomUUID(), ...photo}));
-      saveReviewerEvidenceAttempt(submission.id, {request_key: requestKey, photos: storedPhotos});
+      saveReviewerEvidenceAttempt(submission.id, {
+        request_key: requestKey, photos: storedPhotos,
+        base_evidence_revision: current.evidence_revision,
+      });
       photos = storedPhotos.map(({file_name, ...photo}) => photo);
     }
     const opened = await edge({
@@ -2933,6 +2953,12 @@ async function uploadReviewerEvidence() {
       request_key: requestKey,
       photos,
     });
+    const activeAttempt = reviewerEvidenceAttempt(submission.id);
+    if (activeAttempt?.request_key === requestKey) {
+      saveReviewerEvidenceAttempt(submission.id, {
+        ...activeAttempt, evidence_revision: opened.evidence_revision,
+      });
+    }
     for (const upload of opened.uploads ?? []) {
       const index = photos.findIndex(photo => photo.photo_id === upload.photo_id);
       if (index < 0) throw new Error('The upload manifest changed.');

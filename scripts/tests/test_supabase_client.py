@@ -173,3 +173,73 @@ def test_storage_bucket_is_declared_once():
         if count:
             found[rel] = count
     assert found == allowed
+
+@pytest.mark.parametrize('remote', [b'old', b'new'])
+def test_create_only_upload_retry_never_overwrites(tmp_path, remote):
+    from types import SimpleNamespace
+    from supabase_client import upload_file
+    path = tmp_path / 'catalog.db'
+    path.write_bytes(b'new')
+    writes = []
+    class Storage:
+        def upload(self, **kwargs):
+            writes.append(kwargs['file_options']['upsert'])
+            raise RuntimeError('object already exists')
+        def download(self, path):
+            return remote
+    client = SimpleNamespace(storage=SimpleNamespace(from_=lambda bucket: Storage()))
+    if remote == b'new':
+        upload_file(client, 'bucket', 'vold/pharmaguide_core.db', path, upsert=False)
+    else:
+        with pytest.raises(ValueError, match='immutable'):
+            upload_file(client, 'bucket', 'vold/pharmaguide_core.db', path, upsert=False)
+    assert writes == ['false']
+
+@pytest.mark.parametrize('same_bytes', [False, True])
+def test_concurrent_create_only_uploads_preserve_winning_bytes(tmp_path, same_bytes):
+    from concurrent.futures import ThreadPoolExecutor
+    from threading import Barrier, Lock
+    from types import SimpleNamespace
+    from supabase_client import upload_file
+    files = [tmp_path / 'one', tmp_path / 'two']
+    files[0].write_bytes(b'one')
+    files[1].write_bytes(b'one' if same_bytes else b'two')
+    barrier, lock = Barrier(2), Lock()
+    objects = {}
+    class Storage:
+        def upload(self, path, file, file_options):
+            assert file_options['upsert'] == 'false'
+            barrier.wait(timeout=5)
+            with lock:
+                if path in objects:
+                    raise RuntimeError('collision')
+                objects[path] = file.read()
+        def download(self, path):
+            return objects[path]
+    client = SimpleNamespace(storage=SimpleNamespace(from_=lambda bucket: Storage()))
+    with ThreadPoolExecutor(max_workers=2) as pool:
+        futures = [pool.submit(upload_file, client, 'bucket', 'vold/catalog.db', path, upsert=False) for path in files]
+    errors = [future.exception() for future in futures]
+    assert sum(error is not None for error in errors) == (0 if same_bytes else 1)
+    if not same_bytes:
+        assert any(isinstance(error, ValueError) for error in errors)
+    assert objects['vold/catalog.db'] in {path.read_bytes() for path in files}
+
+
+def test_fetch_manifest_version_includes_inactive_history():
+    from types import SimpleNamespace
+    from supabase_client import fetch_manifest_version
+    calls = []
+    class Query:
+        def select(self, columns):
+            return self
+        def eq(self, column, value):
+            calls.append((column, value))
+            return self
+        def limit(self, count):
+            return self
+        def execute(self):
+            return SimpleNamespace(data=[{'db_version': 'old', 'is_current': False}])
+    client = SimpleNamespace(table=lambda name: Query())
+    assert fetch_manifest_version(client, 'old')['is_current'] is False
+    assert calls == [('db_version', 'old')]
