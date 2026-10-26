@@ -80,6 +80,16 @@ def test_b31_value_in_band(iqm, pid, fname, vmin, vmax, basis):
         for source_limit in reviewed_unknown[fname]:
             assert source_limit in form['notes']
         return
+    if pid == 'cascara_sagrada':
+        assert form['absorption_structured'] == dict(
+            value=None, range_low=None, range_high=None, quality='unknown')
+        assert 'human' in form['notes']
+        if fname == 'cascara sagrada bark extract':
+            assert '22982073' in form['notes']
+            assert 'Caco-2' in form['notes']
+        else:
+            assert 'do not establish' in form['notes']
+        return
     val = (form.get('absorption_structured') or {}).get('value')
     assert val is not None, f'{pid}::{fname} struct.value should be populated'
     assert vmin <= val <= vmax, (

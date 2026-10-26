@@ -9,6 +9,7 @@ identity comes from the same pair the router uses: protein title intent
 """
 
 import sys
+import json
 from pathlib import Path
 
 import pytest
@@ -124,9 +125,15 @@ def test_panel_protein_without_protein_title_intent_does_not_retype(pipeline):
      [_row(1, "Bovine Collagen Peptides", "protein", "Collagen", 10, "g")], "collagen"),
 ])
 def test_declared_protein_never_overrides_another_identity(pipeline, label_id, title, protein_g, rows, expected):
-    taxonomy = pipeline(_label(label_id, title,
-                               [_row(0, "Protein", "protein", "Protein (unspecified)", protein_g, "g")] + rows,
-                               product_type="Other"))
+    raw = _label(label_id, title,
+                 [_row(0, "Protein", "protein", "Protein (unspecified)", protein_g, "g")] + rows,
+                 product_type="Other")
+    if label_id == "259374":
+        # Exact label now has a content-bound correction. Keep the real panel
+        # and its seed identity rather than fabricating a conflicting source.
+        raw = json.loads((Path(__file__).parent / "fixtures" /
+                          "returned_review_completion_raw.json").read_text())[str(label_id)]
+    taxonomy = pipeline(raw)
     assert taxonomy["primary_type"] != "protein_powder", taxonomy["classification_reasons"]
     assert "declared_nutrition_protein_product" not in taxonomy["classification_reason_codes"]
     if expected:

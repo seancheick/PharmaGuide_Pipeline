@@ -5619,7 +5619,7 @@
       },
       "cui": "C0982350",
       "safety_summary": "An emulsifier used for texture and stability. The cited gut-effects experiment studied other emulsifiers in mice, not E475.",
-      "safety_summary_one_liner": "Emulsifier; cited mouse findings are not E475-specific.",
+      "safety_summary_one_liner": "Emulsifier. cited mouse findings are not E475-specific.",
       "functional_roles": [
         "emulsifier",
         "surfactant"
@@ -10534,7 +10534,7 @@
         "metabolites": []
       },
       "safety_summary": "A synthetic azo dye. Hypersensitivity reactions can occur in sensitive people. The cited behavioral evidence comes from food-color and sodium-benzoate mixtures, rather than an isolated Red 40 trial.",
-      "safety_summary_one_liner": "Synthetic red dye; behavioral evidence comes from mixtures.",
+      "safety_summary_one_liner": "Synthetic red dye. behavioral evidence comes from mixtures.",
       "functional_roles": [
         "colorant_artificial"
       ]
@@ -15804,8 +15804,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "safety_summary": "A synthetic azo dye (Tartrazine / E102). Hypersensitivity reactions can occur in sensitive people. Behavioral evidence comes from food-color and sodium-benzoate mixtures containing tartrazine, rather than an isolated-dye trial.",
-      "safety_summary_one_liner": "Synthetic yellow dye; behavioral evidence comes from mixtures.",
+      "safety_summary": "Tartrazine (E102) can cause hypersensitivity in sensitive people. Behavioral findings concern food-color and sodium-benzoate mixtures, not an isolated-dye trial.",
+      "safety_summary_one_liner": "Synthetic yellow dye. behavioral evidence comes from mixtures.",
       "functional_roles": [
         "colorant_artificial"
       ]

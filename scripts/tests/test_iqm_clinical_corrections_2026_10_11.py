@@ -180,7 +180,9 @@ def test_sage_description_does_not_restore_disclaimed_aromatherapy_evidence():
     description = _data()['sage']['description']
     assert 'Multiple RCTs support cognitive performance enhancement in healthy adults' not in description
     assert 'mixed aromatherapy' in description
-    assert 'unresolved' in description
+    assert 'Foreword' in description
+    assert 'full body was not obtained' in description
+    assert 'no oral sage/Cognivia efficacy credit' in description
 
 
 @pytest.mark.parametrize("name", ["Hemp Oil (aerial plant parts) extract", "Hemp Oil extract", "Hemp oil", "Beta-Caryophyllene, Phytocannabinoids, Terpenes"])
