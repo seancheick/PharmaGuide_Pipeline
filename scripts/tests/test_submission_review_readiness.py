@@ -676,3 +676,51 @@ def test_comparison_preserves_blend_members_repeated_rows_and_all_amounts():
     assert len(changed) == 3
     assert any('Herb' in row[0] for row in changed)
     assert any('forms' in row[0].lower() for row in changed)
+
+@pytest.mark.parametrize('cleanup', [False, True])
+@pytest.mark.parametrize('changed_files', [False, True])
+def test_reviewer_upload_attempt_recovers_cleanup_without_discarding_live_resume(cleanup, changed_files):
+    result = _exercise(r"""
+    (async()=>{
+    const memory=new Map();
+    globalThis.sessionStorage={getItem:k=>memory.get(k),setItem:(k,v)=>memory.set(k,v),removeItem:k=>memory.delete(k)};
+    let serial=0, first=true;
+    globalThis.crypto={randomUUID:()=>`uuid-${++serial}`,subtle:{digest:async()=>new Uint8Array(32).buffer}};
+    const file=name=>({name,type:'image/jpeg',size:3,arrayBuffer:async()=>new Uint8Array([1,2,3]).buffer});
+    $('reviewer-evidence-files').files=[file('original.jpg')];
+    $('reviewer-evidence-categories').value='front_identity,supplement_facts';
+    state.selected={id:'s1',review_status:'under_review',approval_revision:1,approval_payload_sha256:'a'.repeat(64),evidence_revision:1,upload_state:'ready'};
+    let remote={...state.selected};
+    const keys=[];
+    state.client={storage:{from:()=>({uploadToSignedUrl:async()=>{
+      if(first){first=false;return {error:{message:'network interrupted'}};}return {error:null};
+    }})}};
+    edge=async body=>{
+      if(body.action==='list') return {submissions:[remote]};
+      if(body.action==='create_reviewer_evidence_uploads'){
+        keys.push(body.request_key);remote={...remote,evidence_revision:2,upload_state:'pending'};
+        return {evidence_revision:2,uploads:body.photos.map(photo=>({photo_id:photo.photo_id,object_path:'path',token:'token'}))};
+      }
+      return {finalized:true};
+    };
+    loadQueue=async()=>{};refreshSelected=async()=>{};
+    await uploadReviewerEvidence();
+    out.firstAttempt=JSON.parse(memory.get('pg-reviewer-evidence-s1'));
+    """ + ("remote={...remote,evidence_revision:1,upload_state:'ready'};" if cleanup else "")
+        + ("$('reviewer-evidence-files').files=[file('changed.jpg')];" if changed_files else "")
+        + r"""
+    await uploadReviewerEvidence();
+    out.keys=keys;out.remaining=memory.has('pg-reviewer-evidence-s1');
+    })()
+    """)
+    if cleanup:
+        assert len(result['keys']) == 2
+        assert result['keys'][0] != result['keys'][1]
+        assert not result['remaining']
+    elif changed_files:
+        assert len(result['keys']) == 1
+        assert result['remaining']
+    else:
+        assert len(result['keys']) == 2
+        assert result['keys'][0] == result['keys'][1]
+        assert not result['remaining']
