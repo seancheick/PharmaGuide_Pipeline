@@ -395,6 +395,19 @@ def load_products_from_db(db_path: str) -> list[tuple[str, str]]:
             if re.fullmatch(r"[0-9]+", str(product_id))]
 
 
+def catalog_image_prefix(db_path: str) -> str:
+    manifest_path = os.path.join(
+        os.path.dirname(os.path.abspath(db_path)), "export_manifest.json"
+    )
+    if not os.path.exists(manifest_path):
+        return ""
+    with open(manifest_path, "r", encoding="utf-8") as handle:
+        version = str(json.load(handle).get("db_version") or "").strip()
+    if not version or "/" in version or ".." in version:
+        raise ValueError("export manifest has an invalid db_version")
+    return f"v{version}/"
+
+
 def needs_image_extraction(db_path: str, image_dir: str) -> bool:
     """Check the exact same DSLD targets the extractor will process.
 
@@ -402,6 +415,7 @@ def needs_image_extraction(db_path: str, image_dir: str) -> bool:
     thumbnail. Submission IDs with stale synthetic PDF URLs are never targets.
     """
     targets = load_products_from_db(db_path)
+    image_prefix = catalog_image_prefix(db_path)
     with sqlite3.connect(db_path) as conn:
         thumbnails = dict(conn.execute(
             "SELECT dsld_id, image_thumbnail_url FROM products_core"
@@ -409,7 +423,7 @@ def needs_image_extraction(db_path: str, image_dir: str) -> bool:
     for product_id, _ in targets:
         filename = f"{product_id}.webp"
         path = os.path.join(image_dir, filename)
-        if (thumbnails.get(product_id) != f"product-images/{filename}"
+        if (thumbnails.get(product_id) != f"product-images/{image_prefix}{filename}"
                 or not os.path.isfile(path) or os.path.getsize(path) == 0):
             return True
     return False
@@ -520,6 +534,10 @@ def run_extraction(
                 processed, total, downloaded, skipped, failed, elapsed,
             )
 
+    image_prefix = catalog_image_prefix(db_path)
+    for entry in index.values():
+        entry["remote_path"] = f"{image_prefix}{entry['filename']}"
+
     # Write index
     index_path = os.path.join(output_dir, "product_image_index.json")
     with open(index_path, "w", encoding="utf-8") as f:
@@ -587,7 +605,7 @@ def backfill_image_thumbnail_urls(db_path: str, image_dir: str, index: dict) -> 
                 continue
             conn.execute(
                 "UPDATE products_core SET image_thumbnail_url = ? WHERE dsld_id = ?",
-                (f"product-images/{filename}", str(dsld_id)),
+                (f"product-images/{entry.get('remote_path') or filename}", str(dsld_id)),
             )
             updated += 1
         conn.commit()

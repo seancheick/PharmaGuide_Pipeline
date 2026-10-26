@@ -82,7 +82,7 @@ def fetch_current_manifest(client):
     return parse_manifest_response({"data": response.data, "count": None})
 
 
-def insert_manifest(client, manifest_data):
+def insert_manifest(client, manifest_data, submission_approvals=None):
     """Atomically insert a new manifest and mark previous as not current.
 
     Uses the rotate_manifest RPC function so manifest rotation stays inside a
@@ -91,7 +91,7 @@ def insert_manifest(client, manifest_data):
 
     Raises RuntimeError if the RPC returns an error or unexpected response.
     """
-    response = client.rpc("rotate_manifest", {
+    response = client.rpc("rotate_manifest_with_submission_approvals", {
         "p_db_version": manifest_data["db_version"],
         "p_pipeline_version": manifest_data["pipeline_version"],
         "p_scoring_version": manifest_data["scoring_version"],
@@ -100,13 +100,14 @@ def insert_manifest(client, manifest_data):
         "p_checksum": manifest_data["checksum"],
         "p_generated_at": manifest_data["generated_at"],
         "p_min_app_version": manifest_data.get("min_app_version", "1.0.0"),
+        "p_submission_approvals": submission_approvals or [],
     }).execute()
 
     # The RPC returns the new manifest UUID on success.
     # Validate that we got a non-empty result back.
     if response.data is None:
         raise RuntimeError(
-            "rotate_manifest RPC returned None — manifest rotation may have failed. "
+            "catalog activation RPC returned None — manifest rotation may have failed. "
             "Check Supabase logs for constraint violations or permission errors."
         )
 
