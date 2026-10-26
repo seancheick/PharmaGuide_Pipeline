@@ -65,7 +65,7 @@
           "quantity": []
         }
       ],
-      "notes": "30 Billion CFUs** total; minimum at time of manufacture. Daily Value not established.",
+      "notes": "30 Billion CFUs** total; minimum at time of manufacture.",
       "order": 1,
       "quantity": [
         {
@@ -97,7 +97,6 @@
   },
   "otherIngredientsDisclosure": "present",
   "physicalState": {
-    "langualCodeDescription": "Capsule",
     "name": "Capsule"
   },
   "servingSizes": [

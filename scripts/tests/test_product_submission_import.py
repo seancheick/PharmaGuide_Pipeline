@@ -282,6 +282,18 @@ def test_october_submitted_labels_preserve_photo_verified_details():
         for key, product_id in ids.items()
     }
 
+    # Raw imported files remain immutable approval bytes. The existing correction
+    # owner supplies the reviewed view consumed by Clean.
+    from copy import deepcopy
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    normalizer = EnhancedDSLDNormalizer()
+    for key, raw in labels.items():
+        reviewed = deepcopy(normalizer._apply_reviewed_serving_basis(raw))
+        normalizer._stamp_raw_source_paths(reviewed["ingredientRows"], "ingredientRows")
+        reviewed["ingredientRows"] = normalizer._apply_label_corrections(
+            reviewed["ingredientRows"], reviewed["id"])
+        labels[key] = reviewed
+
     expected_forms = {
         "align": "Capsule",
         "trader_joes_vitamin_c": "Tablet or Pill",
@@ -1503,3 +1515,44 @@ def test_an_unrelated_second_product_on_a_barcode_is_still_a_collision(tmp_path)
         materialize_approved_submissions(
             [_export(submission_id=_CORRECTION_ID)], output_dir=tmp_path,
         )
+
+
+def test_reviewed_submission_sources_stay_byte_bound_to_approval():
+    approved_hashes = {
+        "PG_SUB_1A28723DBDAF4AC1897AA5FF156FACA1": "a5f5803ccdce0518c9c3be40f5234e766a3aaf80b5c76d61f96bf193e1f539ad",
+        "PG_SUB_21B7F5A0D3414040948D242FB03DD01B": "644e4f8abcf31d8b8473094ace96c38b5d757b4de850375e189360deb9ff7f8a",
+        "PG_SUB_2E7000A890174F10BAA7870FE5EAD7F3": "02ca54f4cd042622fa461bbd0d671b207338d1f1f705edb75dd7ed7613375d60",
+        "PG_SUB_3D5877FE66FA423F9AC3C90EE52EF8CA": "69135753f77609739f74b4a7cc49401dc19187320fc28cd0af86f6b597abb45d",
+        "PG_SUB_4ACB39B94D394C19815F63B0A783EF08": "1772953c57fe21532d6cefdf87ca2e6a2a0a4a4b41b3a8ee05ace61d27c902d4",
+        "PG_SUB_4D246163F6CD468CA82B5E023468B9C1": "3d9b34abecea2f0f581eea8c2e3b0a79ac129aaaacab2edc7c11994c1aef2c96",
+        "PG_SUB_5E4D136A84A8485F98E1F3C0BCF49A73": "175287980db228bccace2f32bc44b6ab7f32a484ffc1917bba6b86f4299a061d",
+        "PG_SUB_5EB9F9D6F38C4648A6560B489E0E4916": "e4ab80f78cb72f5e5bb9a121758dc6be951cec977e7f405ecf7e66e3bc095e4c",
+        "PG_SUB_6AFDA9855BFA449BB235FCFE6ECBAF96": "28e223146e594b8beaaa959d1bd4199b419897df4c980397786d16707461b066",
+        "PG_SUB_8F025E8FFB164793B3B68B15EED2CD31": "9f266cc250fbc5ba2d0c6549f5a6957b7042bd5efeafc41246e71cc7df7e8ee0"
+    }
+    root = Path(__file__).resolve().parents[2] / "manual_labels/product_submissions"
+    for product_id, expected in approved_hashes.items():
+        assert hashlib.sha256((root / f"{product_id}.json").read_bytes()).hexdigest() == expected, product_id
+
+
+def test_reviewed_physical_state_preserves_approved_source_and_fails_closed():
+    from copy import deepcopy
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    raw = {"id": "fixture", "ingredientRows": [], "statements": [],
+           "servingSizes": [{"order": 1, "minQuantity": 1, "maxQuantity": 1, "unit": "tablet"}],
+           "physicalState": {"name": "Tablet"}}
+    original = deepcopy(raw)
+    source = {k: raw.get(k) for k in ("ingredientRows", "servingSizes", "statements")}
+    digest = hashlib.sha256(json.dumps(source,sort_keys=True,ensure_ascii=False,separators=(",", ":")).encode()).hexdigest()
+    normalizer = EnhancedDSLDNormalizer()
+    normalizer._label_corrections_by_dsld_id["fixture"] = {"serving_basis_correction": {
+        "raw_source_sha256": digest, "serving_sizes": deepcopy(raw["servingSizes"]),
+        "raw_product_fields": {"physicalState": {"name": "Tablet"}},
+        "corrected_product_fields": {"physicalState": {"name": "Tablet or Pill", "langualCodeDescription": "Tablet or Pill"}},
+    }}
+    result = normalizer._apply_reviewed_serving_basis(raw)
+    assert result["physicalState"]["langualCodeDescription"] == "Tablet or Pill"
+    assert raw == original
+    raw["physicalState"]["name"] = "Liquid"
+    with pytest.raises(ValueError, match="metadata changed"):
+        normalizer._apply_reviewed_serving_basis(raw)

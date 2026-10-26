@@ -8,7 +8,6 @@
       "ingredientGroup": "Melatonin",
       "name": "Melatonin",
       "nestedRows": [],
-      "notes": "Daily Value not established",
       "order": 1,
       "quantity": [
         {
@@ -39,8 +38,7 @@
   },
   "otherIngredientsDisclosure": "present",
   "physicalState": {
-    "langualCodeDescription": "Tablet or Pill",
-    "name": "Tablet or Pill"
+    "name": "Tablet"
   },
   "servingSizes": [
     {
