@@ -5,7 +5,7 @@
 - [x] Verify existing guards and current harness execution; reuse native verification and review owners.
 - [x] Add pinned correctness lint with exact debt baseline; evaluate clone detection without imposing an unsupported gate.
 - [x] Implement SHA-bound documentation/full CI selection and candidate-bound review/report guidance.
-- [ ] Verify exact CI, enable/read back required main checks, merge, and demonstrate the lightweight documentation path.
+- [x] Verify exact CI, enable/read back required main checks, merge, and demonstrate the lightweight documentation path. Pipeline6ef87374 passed whole-fast40382278926 and merged PR255 at350966763; appa2147707 passed40374718366 and merged PR152. App documentation-only PR153 passed40377702038 in18seconds with full tests intentionally skipped.
 
 Owner: existing CI workflows and test profiles, review/release/native skills; evidence and limits in the existing LEDGER. Will NOT create a second constitution or clinical authority. No corpus or publication required by this infrastructure batch.
 
