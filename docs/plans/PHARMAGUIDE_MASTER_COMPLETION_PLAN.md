@@ -1,12 +1,21 @@
 # PharmaGuide master completion plan
 
+### Bounded engineering enforcement — October26
+
+- [x] Verify existing guards and current harness execution; reuse native verification and review owners.
+- [x] Add pinned correctness lint with exact debt baseline; evaluate clone detection without imposing an unsupported gate.
+- [x] Implement SHA-bound documentation/full CI selection and candidate-bound review/report guidance.
+- [ ] Verify exact CI, enable/read back required main checks, merge, and demonstrate the lightweight documentation path.
+
+Owner: existing CI workflows and test profiles, review/release/native skills; evidence and limits in the existing LEDGER. Will NOT create a second constitution or clinical authority. No corpus or publication required by this infrastructure batch.
+
 ### Assessment failure and verification closeout — October26
 
 - [x] Reconcile current contributing and botanical blockers with existing frozen registers; distinguish signed bounded responses, absent full response artifact and genuinely unresolved applicability.
 - [x] Implement source-bound early completeness, read-only deployed publishing contract check and truthful partial-release failure reporting. Focused regressions and independent review complete.
 - [x] Correct verified Magtein source notes and collagen dependency attribution without changing scored outcomes or holds.
-- [ ] Qualify combined pipeline/app candidate with stable local and exact whole-fast CI; integrate under existing authorization.
-- [ ] Demonstrate normal native app verification and preserve installed catalog/product/detail identity; distinguish old installed content from source fixes.
+- [x] Qualify combined pipeline/app candidate with stable local and exact whole-fast CI; integrate under existing authorization. Pipeline243c58f7 CI40367581635/local546 passed; PR253 merged. App571fdf90 CI40367579800 passed; PR150 approved for integration. This does not establish new catalog delivery.
+- [x] Demonstrate normal native app verification and preserve installed catalog/product/detail identity; distinguish old installed content from source fixes.
 - [ ] Resolve only the exact residual scientific/provenance questions, then select one necessary rebuild from current fingerprints and validate corpus/export/app. Publication remains blocked.
 
 Owner: existing stage manifests/preflight, publishing client/release script, clinical applicability/evidence resolver, review registers and Flutter importer/readers. Evidence: current section in [review reconciliation](../../scripts/audits/literature_records_review_20261020/BRYAN_BATCH_RESPONSE_VERIFICATION_20261025.md) and [ledger](../../scripts/audits/pending_items_20260926/LEDGER.md). Will NOT create a parallel scorer, clinical authority or release system.

@@ -1,0 +1,77 @@
+{
+  "ruff_version": "0.14.0",
+  "findings": [
+    {
+      "path": "scripts/cert_resolver.py",
+      "code": "F821",
+      "message": "Undefined name `datetime`",
+      "source": "def _parse_iso_date(value: str | None) -> \"datetime | None\":"
+    },
+    {
+      "path": "scripts/scoring_input_contract.py",
+      "code": "F821",
+      "message": "Undefined name `Iterable`",
+      "source": "def _route_has_material_protein_row(rows: Iterable[Dict[str, Any]]) -> bool:"
+    },
+    {
+      "path": "scripts/scoring_input_contract.py",
+      "code": "F821",
+      "message": "Undefined name `Set`",
+      "source": "dropped: Set[int] = set()"
+    },
+    {
+      "path": "scripts/scoring_input_contract.py",
+      "code": "F821",
+      "message": "Undefined name `Set`",
+      "source": "claim_categories: Set[str] = set()"
+    },
+    {
+      "path": "scripts/scoring_v4/dose_safety.py",
+      "code": "F821",
+      "message": "Undefined name `Tuple`",
+      "source": "parsed: List[Tuple[str, str, float, bool, bool]] = []"
+    },
+    {
+      "path": "scripts/scoring_v4/dose_safety.py",
+      "code": "F821",
+      "message": "Undefined name `Tuple`",
+      "source": "def _is_daily_value_total(row: Tuple[str, str, float, bool, bool]) -> bool:"
+    },
+    {
+      "path": "scripts/scoring_v4/dose_safety.py",
+      "code": "F821",
+      "message": "Undefined name `Tuple`",
+      "source": "form_rows: List[Tuple[str, str, float]] = ["
+    },
+    {
+      "path": "scripts/scoring_v4/route_features.py",
+      "code": "F821",
+      "message": "Undefined name `Dict`",
+      "source": "def _phgg_signal_text(row: Dict[str, Any]) -> str:"
+    },
+    {
+      "path": "scripts/scoring_v4/route_features.py",
+      "code": "F821",
+      "message": "Undefined name `Dict`",
+      "source": "def is_hydrolyzed_guar_fiber_row(row: Dict[str, Any]) -> bool:"
+    },
+    {
+      "path": "scripts/tests/test_release_safety_gates.py",
+      "code": "F821",
+      "message": "Undefined name `AuditLog`",
+      "source": "def _make_test_audit_log(tmp_path: Path, name: str = \"audit\") -> \"AuditLog\":"
+    },
+    {
+      "path": "scripts/tests/test_release_safety_index_validator.py",
+      "code": "F821",
+      "message": "Undefined name `Path`",
+      "source": "def _write_index(tmp_path, payload: dict) -> \"Path\":"
+    },
+    {
+      "path": "scripts/tests/test_v4_probiotic_final_assembly_p26.py",
+      "code": "F823",
+      "message": "Local variable `pytest` referenced before assignment",
+      "source": "pytest.skip("
+    }
+  ]
+}

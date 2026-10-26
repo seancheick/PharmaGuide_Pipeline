@@ -36,7 +36,8 @@ approval. Investigate safety changes, lost warnings and unsupported clinical cre
 AGENTS.md Development workflow; do not expand a bounded batch into hypothetical audits.
 
 **Validation scope:** use AGENTS.md’s correctness-risk table. Editing explanation text in a
-scoring module alone does not require scoring-batch CI/local gates; prove underlying decisions
+scoring module alone does not require additional scoring-batch local gates; required CI still
+applies to executable changes. Prove underlying decisions
 unchanged with the prescribed focused checks. Clinical meaning and safety advice remain behavioral.
 
 **Changing a score:** follow the `/pg-scoring-change` skill. It covers the Owner Check, the

@@ -4,6 +4,14 @@ Shared by Claude, Codex and every other agent; Claude loads it through `@AGENTS.
 Kept short on purpose: path-specific rules live in `.claude/rules/`, procedures in skills, rationale
 in `docs/adr/`, ownership in `scripts/contracts/source_of_truth_matrix.json`.
 
+## First decisions
+
+Identify the canonical owner and current artifact before editing. Classify the change using the
+validation table below, preserve valid prior evidence, and verify the affected consumer before
+claiming delivery. Start from the current handoff; use the matrix for ownership and the existing
+skills for procedures. Instructions guide judgment; executable tests and required GitHub checks
+are separate enforcement and must be verified, not assumed.
+
 ## North star — Sean, October 10, 2026 (sharpened October 11)
 
 **Anyone who scans a supplement gets a straight, verified answer: what the product is, whether it
@@ -42,14 +50,14 @@ Raw `python3 -m pytest` picks macOS Python 3.9 and runs every heavy test (~1 h).
 scripts/test.sh fast scripts/tests/test_<topic>.py::test_<case>  # one failure / one edit
 scripts/test.sh fast scripts/tests/test_<topic>.py -k <kw>      # affected defect class
 scripts/test.sh local          # behavioral pipeline/data batch: corpus checks CI cannot run (~2 min)
-scripts/test.sh fast           # whole suite: CI runs it on every push; locally only if CI is down
+scripts/test.sh fast           # whole suite: CI runs on PRs/main; locally only if CI is down
 scripts/test.sh release        # release gates before a ship
 scripts/test.sh full           # post-pipeline backstop, never alongside a pipeline run
 ```
 
 - Pick validation by the affected behavior below, not file count, line count or whether the file
-  is called a scorer. GitHub Actions `pipeline-tests` still runs automatically on branch/main
-  pushes; only behavioral batches must wait for it before merging.
+  is called a scorer. GitHub Actions `pipeline-tests` runs on PR updates and main pushes; open a PR to qualify a
+  branch. All executable/test/config/data batches must pass it before merging.
 - CI has no product corpus, builds or raw DSLD datasets; it checks out the app repo for cross-repo tests (FLUTTER_REPO). A test that needs them goes in `LOCAL_ONLY_TEST_FILES`
   (`scripts/test_profiles.py`); `scripts/ci_skip_guard.py` fails CI on any other skip reason; the local rung rejects missing corpus/build skips.
 - `scripts/test.sh` holds a machine-wide lock: one full/release/slow suite at a time, alone;
@@ -61,9 +69,9 @@ rule files and skills refer here rather than defining another merge gate.
 
 | Change class | Required before merge to main |
 |---|---|
-| Documentation/process only; no executable/config/data change | Read the full diff, check affected references and contradictory instructions, `git diff --check`. No pytest, corpus run or CI wait. |
-| Display-only wording/formatting of an existing assessment | Diff proves no calculation, identity, source selection, state, contract or eligibility change. Run named owner/consumer tests and compare a representative real product before/after: underlying scores, amounts, roles, Evidence determination, status and safety stay unchanged. Verify factual wording against the existing source. Merge after those checks; no broad local suite or pre-merge CI wait. |
-| Tests only, with production behavior unchanged | Run the added/changed tests and the affected defect-class cases. Show assertions still enforce the source-grounded behavior; no weakened guard or unexplained fixture update. No broad local suite or pre-merge CI wait. |
+| Documentation/process only; no executable/config/data change | Read the full diff, check affected references and contradictory instructions, `git diff --check`. No pytest or corpus run; require only the lightweight documentation CI check. |
+| Display-only wording/formatting of an existing assessment | Diff proves no calculation, identity, source selection, state, contract or eligibility change. Run named owner/consumer tests and compare a representative real product before/after: underlying scores, amounts, roles, Evidence determination, status and safety stay unchanged. Verify factual wording against the existing source. No broad local suite; green whole-fast CI is required before merge. |
+| Tests only, with production behavior unchanged | Run the added/changed tests and the affected defect-class cases. Show assertions still enforce the source-grounded behavior; no weakened guard or unexplained fixture update. No broad local suite; green whole-fast CI is required before merge. |
 | Behavioral code/data/config, clinical facts, safety instructions, public contracts, or test/CI infrastructure | Fail-first defect regression, relevant owner/consumer tests, required source verification and bounded measurements/review. One green whole-fast CI checkpoint on the completed candidate before merge; also `local` for behavioral pipeline/data changes. Infrastructure needs its harness/config checks and CI; local corpus checks only if its affected behavior needs them. |
 
 A display edit may clarify a recorded conclusion; it cannot change clinical meaning, add an
@@ -72,8 +80,8 @@ applicability, review states and publication rules are behavioral even in a stri
 config. Mixed batches use the highest applicable class. If classification or impact is uncertain,
 inspect the owner and affected consumers; use the behavioral gate if the uncertainty remains.
 Record the class, checks/results and limits in the existing handoff/LEDGER. Do not mark CI green
-while it is pending. For a targeted merge, automatic CI continues after the push; record its run
-or pending status and inspect available results when resuming. Independent development can proceed
+while it is pending. For every executable, test, configuration or data change, wait for green CI on the candidate
+before merging (Sean, October26). Documentation-only changes use the lightweight CI path. Independent development can proceed
 while CI runs. Investigate and fix failures promptly; they block release and work that relies on
 the failing behavior until resolved. A skipped or cancelled run is not a pass. New policy and
 publication still require Sean; this table is not release approval.
@@ -194,7 +202,7 @@ bug-fix notes are history, not specifications.
   history. Most "forks" already have a doctrinal answer — apply it, measure, record it in the handoff.
 - **Sean decides only:** a new semantic owner (new persisted or public/export field, new status or
   verdict meaning, new scoring/clinical policy or owner, new registry), deleting curated clinical
-  data, pushes to `main`, releases. Pushing a `claude/*` or `codex/*` branch for CI is routine.
+  data, pushes to `main`, releases. Pushing a `claude/*` or `codex/*` branch and opening its qualification PR is routine.
 - Private helpers, local names, test utilities and internal files need no approval once the
   Owner Check passes.
 
@@ -338,4 +346,4 @@ bug-fix notes are history, not specifications.
   `git rev-parse HEAD`, and verify with `rg`/Read when they differ.
 - New terms go into `scripts/GLOSSARY.md` first. Deeper references: `scripts/SCORING_ENGINE_SPEC.md`,
   `scripts/PIPELINE_ARCHITECTURE.md`, `docs/runbooks/verification-gates.md` (audit and API verifiers).
-- API keys load via `scripts/env_loader.py` from `.env`. No linter: follow the existing style.
+- API keys load via `scripts/env_loader.py` from `.env`. Python correctness: `scripts/check_python_correctness.py` uses pinned Ruff and a reviewed exact-finding baseline. Follow existing style; no automatic formatting or baseline expansion.
