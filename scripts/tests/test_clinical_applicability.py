@@ -1148,3 +1148,59 @@ def test_glucosamine_not_excluded_does_not_establish_completed_clinical_review(f
     result = assess_clinical_applicability({'activeIngredients': [row]}, entry, assess_amount=False)
     assert result['status'] != 'not_applicable'
     assert assess_clinical_source_review(entry)['is_complete'] is False
+
+
+@pytest.mark.parametrize('source_case,expected', [
+    ('unrelated', False), ('excluded_only', False), ('retracted_only', False),
+    ('concern_only', False), ('missing_sources', False), ('eligible', True),
+    ('trial_with_correction', True), ('legacy_published', True),
+    ('legacy_explicit_exclusion', False), ('record_hold', False),
+])
+def test_source_context_must_be_attributable_to_eligible_record_source(monkeypatch, source_case, expected):
+    import clinical_applicability
+    from test_assessment_readiness import _install_completed_release_context
+    context = _install_completed_release_context(monkeypatch)
+    pmid = context['source_pmids'][0]
+    reference = {'pmid': pmid}
+    record = {'id': 'used', 'study_contexts': [context], 'references_structured': [reference]}
+    if source_case == 'unrelated':
+        reference['pmid'] = '99999999'
+    elif source_case in {'excluded_only', 'legacy_explicit_exclusion'}:
+        reference['scoring_eligible'] = False
+        if source_case == 'legacy_explicit_exclusion':
+            record['published_studies'] = [pmid]
+    elif source_case == 'retracted_only':
+        reference['retracted'] = True
+    elif source_case == 'concern_only':
+        reference['expression_of_concern'] = True
+    elif source_case == 'missing_sources':
+        record.pop('references_structured')
+    elif source_case == 'legacy_published':
+        record.pop('references_structured')
+        record['published_studies'] = [pmid]
+    elif source_case == 'record_hold':
+        record['scoring_eligible'] = False
+    elif source_case == 'trial_with_correction':
+        context['source_pmids'].append('99999999')
+        record['references_structured'].append({'pmid': '99999999', 'scoring_eligible': False})
+    monkeypatch.setattr(clinical_applicability, 'reviewed_entries', lambda: {'used': record})
+    result = clinical_applicability.assess_clinical_source_review({'id': 'used'})
+    assert result['is_complete'] is expected
+    if not expected:
+        assert any('source' in error for error in result['errors'])
+
+
+@pytest.mark.parametrize('field', ['references_structured', 'published_studies'])
+@pytest.mark.parametrize('malformed', [None, 123, '11106141', {'pmid': '11106141'}, [None]])
+def test_source_context_malformed_record_sources_fail_closed(monkeypatch, field, malformed):
+    import clinical_applicability
+    from test_assessment_readiness import _install_completed_release_context
+    context = _install_completed_release_context(monkeypatch)
+    pmid = context['source_pmids'][0]
+    record = {'id': 'used', 'study_contexts': [context],
+              'references_structured': [{'pmid': pmid}], 'published_studies': [pmid]}
+    record[field] = malformed
+    monkeypatch.setattr(clinical_applicability, 'reviewed_entries', lambda: {'used': record})
+    result = clinical_applicability.assess_clinical_source_review({'id': 'used'})
+    assert result['is_complete'] is False
+    assert 'clinical_source_references_invalid' in result['errors']

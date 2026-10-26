@@ -168,6 +168,29 @@ warn()  { printf '\033[33m[release] WARN:\033[0m %s\n' "$*"; }
 err()   { printf '\033[31m[release] ERROR:\033[0m %s\n' "$*" >&2; }
 skip()  { printf '\033[2m[release] —\033[0m %s\n' "$*"; }
 
+# A local failure cannot roll back an already activated remote catalog. Track
+# only what this invocation established; a failed sync has an unknown outcome.
+REMOTE_CATALOG_STATE=not_attempted
+RELEASE_PHASE="release prerequisites and artifact validation"
+report_incomplete_release() {
+  local status="$1"
+  (( status == 0 )) && return 0
+  err "Release incomplete during $RELEASE_PHASE (exit $status)."
+  case "$REMOTE_CATALOG_STATE" in
+    confirmed_current)
+      err "Supabase catalog sync completed successfully (published or already current) before this failure."
+      err "The remaining local/reconciliation work is incomplete; this failure does not undo cloud publication."
+      ;;
+    unknown)
+      err "Supabase sync was attempted; activation outcome is unknown. Verify the remote manifest before retrying."
+      ;;
+    not_attempted)
+      err "Supabase catalog publication was not attempted by this run."
+      ;;
+  esac
+}
+trap 'report_incomplete_release "$?"' EXIT
+
 DIST_DIR="$REPO_ROOT/scripts/dist"
 FINAL_DB_DIR="$REPO_ROOT/scripts/final_db_output"
 ASSETS_DIR="$FLUTTER_REPO/assets/db"
@@ -788,8 +811,11 @@ if (( SKIP_SUPABASE == 0 )); then
     "$PG_PYTHON" "$CATALOG_STATE_SCRIPT" --check-input-binding "$CATALOG_INPUT_BINDING"
     info "Step 5/8: Syncing dist/ to Supabase (upload only; cleanup deferred)..."
     # Storage inventory/deletion runs separately after publication.
+    RELEASE_PHASE="Supabase catalog sync"
+    REMOTE_CATALOG_STATE=unknown
     "$PG_PYTHON" scripts/sync_to_supabase.py "$DIST_DIR" \
       --submission-output-dir "$SUBMISSION_OUTPUT_DIR"
+    REMOTE_CATALOG_STATE=confirmed_current
   fi
   ok "Supabase step done (uploaded if changed; up-to-date otherwise)"
 else
@@ -803,6 +829,8 @@ fi
 # catalog AND interaction manifests. This avoids a 22 MB LFS upload on
 # every release when nothing actually changed.
 # ---------------------------------------------------------------------------
+
+RELEASE_PHASE="Flutter bundle import and validation"
 
 step6_needs_run() {
   (( FORCE == 1 )) && return 0
@@ -860,6 +888,7 @@ fi
 # (No-op when none exist — always safe to attempt.)
 # ---------------------------------------------------------------------------
 
+RELEASE_PHASE="Flutter bundle backup cleanup"
 if (( SKIP_FLUTTER == 0 )); then
   shopt -s nullglob
   PREVS=("$ASSETS_DIR"/*.previous)
@@ -890,6 +919,7 @@ INTERACTION_VERSION="$("$PG_PYTHON" -c "import json,sys; print(json.load(open(sy
 # Commit locally (push stays manual). Report the exact branch for separately
 # gated orphan maintenance, whose alignment check needs the committed bundle.
 # ---------------------------------------------------------------------------
+RELEASE_PHASE="Flutter bundle commit"
 if (( SKIP_FLUTTER == 0 && SKIP_SUPABASE == 0 && SUPABASE_DRY_RUN == 0 )); then
   if git -C "$FLUTTER_REPO" rev-parse --is-inside-work-tree >/dev/null 2>&1; then
     FLUTTER_RELEASE_BRANCH="$(git -C "$FLUTTER_REPO" branch --show-current)"
@@ -904,7 +934,7 @@ if (( SKIP_FLUTTER == 0 && SKIP_SUPABASE == 0 && SUPABASE_DRY_RUN == 0 )); then
       if git -C "$FLUTTER_REPO" commit -q -m "chore(catalog): bundle catalog v${CATALOG_VERSION} + interaction v${INTERACTION_VERSION}"; then
         ok "Flutter bundle committed locally (push remains manual)"
       else
-        err "Flutter bundle commit failed — release is incomplete; cloud publication may already be live."
+        err "Flutter bundle commit failed — release is incomplete."
         err "Review and commit the staged app bundle locally before pushing. No submission receipts were closed."
         exit 1
       fi
@@ -941,6 +971,7 @@ fi
 # present in the released catalog database. The adapter verifies that fact
 # before calling the immutable promotion RPC; unprocessed or failed products
 # remain approved-but-unpromoted for the next release.
+RELEASE_PHASE="submission promotion receipt reconciliation"
 if (( SKIP_FLUTTER == 0 && SKIP_SUPABASE == 0 && SUPABASE_DRY_RUN == 0 )) \
     && [[ -f "$SUBMISSION_RECEIPTS" ]]; then
   info "Closing approved product-submission receipts against the released catalog..."

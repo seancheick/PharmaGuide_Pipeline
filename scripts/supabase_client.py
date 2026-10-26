@@ -82,16 +82,51 @@ def fetch_current_manifest(client):
     return parse_manifest_response({"data": response.data, "count": None})
 
 
+PUBLICATION_RPC = "rotate_manifest_with_submission_approvals"
+
+
+def require_publication_contract():
+    """Verify the service-role-visible RPC contract without activating anything.
+
+    PostgREST's role-filtered OpenAPI schema checks the deployed operation and
+    its arguments. This proves availability, not successful future activation.
+    """
+    import requests
+    _load_env()
+    url = os.environ["SUPABASE_URL"].rstrip("/")
+    key = os.environ["SUPABASE_SERVICE_ROLE_KEY"]
+    response = requests.get(url + "/rest/v1/", headers={
+        "apikey": key, "Authorization": "Bearer " + key,
+        "Accept": "application/openapi+json",
+    }, timeout=20)
+    response.raise_for_status()
+    operation = response.json().get("paths", {}).get("/rpc/" + PUBLICATION_RPC, {}).get("post", {})
+    bodies = [p.get("schema", {}) for p in operation.get("parameters", []) if p.get("in") == "body"]
+    expected = {
+        "p_db_version": "text", "p_pipeline_version": "text",
+        "p_scoring_version": "text", "p_schema_version": "text",
+        "p_product_count": "integer", "p_checksum": "text",
+        "p_generated_at": "timestamp with time zone", "p_min_app_version": "text",
+        "p_submission_approvals": "jsonb",
+    }
+    if len(bodies) != 1:
+        raise ValueError("Deployed publication contract is unavailable to the publishing role")
+    schema = bodies[0]
+    if (any(schema.get("properties", {}).get(k, {}).get("format") != v for k, v in expected.items())
+            or not set(schema.get("required", [])).issubset(expected)):
+        raise ValueError("Deployed publication contract arguments do not match this publisher")
+
+
 def insert_manifest(client, manifest_data, submission_approvals=None):
     """Atomically insert a new manifest and mark previous as not current.
 
-    Uses the rotate_manifest RPC function so manifest rotation stays inside a
+    Uses the approval-aware publication RPC so manifest rotation stays inside a
     single database transaction. The SQL function owns the exact update/insert
     order; callers should treat it as atomic.
 
     Raises RuntimeError if the RPC returns an error or unexpected response.
     """
-    response = client.rpc("rotate_manifest_with_submission_approvals", {
+    response = client.rpc(PUBLICATION_RPC, {
         "p_db_version": manifest_data["db_version"],
         "p_pipeline_version": manifest_data["pipeline_version"],
         "p_scoring_version": manifest_data["scoring_version"],

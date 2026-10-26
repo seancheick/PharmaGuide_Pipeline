@@ -25,8 +25,9 @@ def test_remote_preflight_checks_access_without_catalog_or_mutations(monkeypatch
         storage = Storage()
     monkeypatch.setattr(supabase_client, 'get_supabase_client', lambda: Client())
     monkeypatch.setattr(supabase_client, 'fetch_current_manifest', lambda client: calls.append(('manifest', None)))
+    monkeypatch.setattr(supabase_client, 'require_publication_contract', lambda: calls.append(('publication_contract', None)))
     assert syncer.main(['--preflight-only']) == 0
-    assert calls == [('manifest', None), ('bucket', supabase_client.STORAGE_BUCKET)]
+    assert calls == [('manifest', None), ('bucket', supabase_client.STORAGE_BUCKET), ('publication_contract', None)]
 
 
 def test_remote_preflight_failure_is_not_success(monkeypatch):

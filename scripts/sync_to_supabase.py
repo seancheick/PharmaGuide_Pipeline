@@ -1699,15 +1699,16 @@ def main(argv=None):
     args = parse_args(argv)
 
     if args.preflight_only:
-        from supabase_client import get_supabase_client, fetch_current_manifest
+        from supabase_client import get_supabase_client, fetch_current_manifest, require_publication_contract
         try:
             client = get_supabase_client()
             fetch_current_manifest(client)
             client.storage.get_bucket(STORAGE_BUCKET)
+            require_publication_contract()
         except Exception:
-            print('Error: Supabase preflight could not read manifest/bucket; check credentials, network and access', file=sys.stderr)
+            print('Error: Supabase preflight could not verify manifest/bucket or publication RPC contract; check deployed migration, credentials, network and access', file=sys.stderr)
             raise SystemExit(1)
-        print('Supabase manifest/bucket read access passed; no uploads or writes attempted')
+        print('Supabase manifest/bucket access and publication RPC contract passed; no uploads or writes attempted')
         return 0
 
     if not os.path.isdir(args.build_dir):

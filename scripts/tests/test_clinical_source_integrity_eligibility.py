@@ -234,6 +234,16 @@ def test_magtein_trial_and_correction_have_distinct_source_roles():
     text = row['notes'] + row['notable_studies']
     assert 'phosphatidylserine' in text and 'objective sleep outcomes' in text
     assert 'must not be counted as another trial' in text
+    assert 'vitamin B6' in text
+    assert 'retrospectively registered on April 15, 2024' in text
+    assert 'AIDP commissioned and funded' in text
+    assert 'paid relationships' in text
+    for stale in ('correction content still requires verification',
+                  'Full correction content remains unverified',
+                  'requires content review'):
+        assert stale not in str(row)
+    from clinical_applicability import assess_clinical_source_review
+    assert assess_clinical_source_review(row)['is_complete'] is False
 
 
 @pytest.mark.parametrize('record_id,required', [

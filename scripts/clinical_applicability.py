@@ -432,10 +432,33 @@ def assess_clinical_source_review(entry: Mapping) -> dict:
     contributing = [context for context in contexts if isinstance(context, Mapping)
                     and context.get("scoring_eligible") is not False
                     and context.get("review_status") != "rejected_source"]
+    from evidence_resolver import clinical_record_sources_eligible
+    references = reference.get("references_structured", [])
+    published = reference.get("published_studies", [])
+    if (not isinstance(references, list) or any(not isinstance(ref, Mapping) for ref in references)
+            or not isinstance(published, list)
+            or any(not isinstance(pmid, (str, int)) or isinstance(pmid, bool) for pmid in published)):
+        return {"is_complete": False, "errors": ["clinical_source_references_invalid"], "context_ids": []}
+    declared_pmids = {str(ref["pmid"]) for ref in references if ref.get("pmid")}
+    declared_pmids.update(str(pmid) for pmid in published
+                          if re.fullmatch(r"[1-9][0-9]*", str(pmid)))
+    excluded_pmids = {str(ref["pmid"]) for ref in references if ref.get("pmid")
+                      and not clinical_record_sources_eligible({"references_structured": [ref]})}
+    eligible_pmids = declared_pmids - excluded_pmids
     errors = []
     if not contributing:
         errors.append("clinical_contributing_contexts_missing")
     for context in contributing:
+        context_sources = context.get("source_pmids")
+        context_pmids = {str(pmid) for pmid in context_sources} if isinstance(context_sources, list) else set()
+        prefix = str(context.get("context_id") or "unknown") + ":"
+        if context_pmids - declared_pmids:
+            errors.append(prefix + "clinical_context_source_not_in_record")
+        # Excluded notices may document a trial's provenance, but cannot be
+        # its sole affirmative source. Explicit exclusions also win over a
+        # duplicate legacy published_studies pointer.
+        if not clinical_record_sources_eligible(reference) or not (context_pmids & eligible_pmids):
+            errors.append(prefix + "clinical_context_eligible_source_missing")
         errors.extend(str(context.get("context_id") or "unknown") + ":" + error
                       for error in validate_ingredient_context(context, require_complete_review=True))
     return {"is_complete": not errors, "errors": errors,

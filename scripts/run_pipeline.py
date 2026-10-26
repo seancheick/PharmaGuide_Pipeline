@@ -45,7 +45,8 @@ from stage_manifest import (
     select_stage_input_files,
     write_stage_manifest_from_directory,
 )
-from pipeline_freshness import CODE_FINGERPRINT_KEY, STAGES, stage_input_fingerprints
+from pipeline_freshness import (CODE_FINGERPRINT_KEY, DATA_FINGERPRINT_KEY, STAGES,
+                                stage_data_files, stage_data_fingerprint, stage_input_fingerprints)
 from run_artifacts import ensure_run_id
 
 # Setup logging
@@ -187,10 +188,12 @@ class PipelineRunner:
             **_stage_scripts_and_configs(),
         }
 
-    def _stage_inputs(self, stage: str) -> Optional[Dict[str, str]]:
+    def _stage_inputs(self, stage: str, input_dir: Path = None) -> Optional[Dict[str, str]]:
         """Fingerprint a stage's reference data and code, or log why not."""
         try:
             inputs = stage_input_fingerprints(self.script_dir.parent, stage)
+            if input_dir is not None:
+                inputs[DATA_FINGERPRINT_KEY] = stage_data_fingerprint(stage_data_files(input_dir))
         except (OSError, ValueError, SyntaxError) as exc:
             logger.error("Could not fingerprint %s inputs: %s", stage, exc)
             return None
@@ -207,13 +210,14 @@ class PipelineRunner:
         directory: Path,
         inputs: Dict[str, str],
         run_id: str,
+        input_dir: Path = None,
     ) -> bool:
         """Record a stage's outputs, but only if its inputs held still.
 
         Reference data or code edited while the stage ran would make the
         manifest describe a mix of revisions, so the stage fails instead.
         """
-        current = self._stage_inputs(stage)
+        current = self._stage_inputs(stage, input_dir)
         if current is None:
             return False
         if current != inputs:
@@ -753,7 +757,7 @@ class PipelineRunner:
                     logger.error("Cleaning ownership manifest failed: %s", exc)
                     return results
             if not dry_run:
-                enrich_inputs = self._stage_inputs("enrich")
+                enrich_inputs = self._stage_inputs("enrich", Path(enrich_input))
                 if enrich_inputs is None:
                     results["stages_failed"].append("enrich")
                     logger.error("Pipeline stopped: could not fingerprint enrichment inputs")
@@ -767,7 +771,7 @@ class PipelineRunner:
             )
             if success and not dry_run:
                 success = self._publish_stage_manifest(
-                    "enrich", Path(enriched_dir), enrich_inputs, effective_run_id
+                    "enrich", Path(enriched_dir), enrich_inputs, effective_run_id, Path(enrich_input)
                 )
             if success:
                 results["stages_completed"].append("enrich")
@@ -834,7 +838,7 @@ class PipelineRunner:
                     return results
             scored_output_dir = Path(scored_dir) / "scored"
             if not dry_run:
-                score_inputs = self._stage_inputs("score")
+                score_inputs = self._stage_inputs("score", Path(score_input))
                 if score_inputs is None:
                     results["stages_failed"].append("score")
                     logger.error("Pipeline stopped: could not fingerprint scoring inputs")
@@ -848,7 +852,7 @@ class PipelineRunner:
             )
             if success and not dry_run:
                 success = self._publish_stage_manifest(
-                    "score", scored_output_dir, score_inputs, effective_run_id
+                    "score", scored_output_dir, score_inputs, effective_run_id, Path(score_input)
                 )
             if success:
                 results["stages_completed"].append("score")

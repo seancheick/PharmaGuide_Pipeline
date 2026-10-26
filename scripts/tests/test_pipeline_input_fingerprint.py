@@ -217,7 +217,8 @@ def test_pipeline_stamps_input_fingerprints_after_each_stage(
 
     assert result["success"] is True
     assert captured["stage"] == stage
-    assert captured["input_fingerprints"] == dict(expected, stage=stage)
+    assert captured["input_fingerprints"] == dict(expected, stage=stage,
+        stage_data_sha256_v1="e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855")
 
 
 def test_custom_stage_scripts_leave_the_code_unproven() -> None:
@@ -418,3 +419,19 @@ def test_identifier_audit_cache_is_not_a_pipeline_reference_input(tmp_path: Path
     (repo / "scripts/data/reference.json").write_text('{"value": 2}')
     assert reference_data_fingerprint(repo) != before
     assert len(stage_freshness_issues(repo)) == 3
+
+
+def test_downstream_manifest_rejects_upstream_content_change(tmp_path, monkeypatch):
+    runner = PipelineRunner()
+    upstream = tmp_path / 'cleaned'
+    upstream.mkdir()
+    source = upstream / 'cleaned_batch_1.json'
+    source.write_text('[{"id":"1"}]')
+    started = runner._stage_inputs('enrich', upstream)
+    stamp = source.stat()
+    source.write_text('[{"id":"2"}]')
+    os.utime(source, ns=(stamp.st_atime_ns, stamp.st_mtime_ns))
+    def unexpected_write(*args, **kwargs):
+        pytest.fail('Changed inputs must not receive a successful manifest')
+    monkeypatch.setattr(pipeline_module, 'write_stage_manifest_from_directory', unexpected_write)
+    assert not runner._publish_stage_manifest('enrich', tmp_path / 'out', started, 'test', upstream)

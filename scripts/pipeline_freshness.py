@@ -22,6 +22,7 @@ from stage_manifest import MANIFEST_NAME
 
 REFERENCE_FINGERPRINT_KEY = "reference_data_sha256_v1"
 CODE_FINGERPRINT_KEY = "stage_code_sha256_v1"
+DATA_FINGERPRINT_KEY = "stage_data_sha256_v1"
 
 #: Per stage: the script run_pipeline runs, the JSON config it reads outside
 #: scripts/data (relative to scripts/), and its outputs (relative to
@@ -89,6 +90,22 @@ def _content_set_fingerprint(
         # Fixed-width digest marks the file boundary unambiguously.
         digest.update(file_digest(path))
     return digest.hexdigest()
+
+
+def stage_data_fingerprint(paths: Iterable[Path]) -> str:
+    """Bind the actual flat input file inventory and full bytes, never mtimes."""
+    paths = [Path(path).resolve() for path in paths]
+    parents = {path.parent for path in paths}
+    if len(parents) > 1:
+        raise ValueError("Stage inputs must share one directory")
+    return _content_set_fingerprint(paths, root=next(iter(parents), Path.cwd()))
+
+
+def stage_data_files(directory: Path) -> list[Path]:
+    """Stage data excludes manifests and other hidden operational files."""
+    return sorted(path for pattern in ("*.json", "*.jsonl")
+                  for path in Path(directory).glob(pattern)
+                  if path.is_file() and not path.name.startswith("."))
 
 
 def reference_data_fingerprint(repo_root: Path) -> str:

@@ -173,3 +173,31 @@ def test_storage_bucket_is_declared_once():
         if count:
             found[rel] = count
     assert found == allowed
+
+@pytest.mark.parametrize('defect', [None, 'missing_rpc', 'missing_approvals', 'wrong_count_type', 'new_required_argument'])
+def test_publication_preflight_rejects_incompatible_live_contract(monkeypatch, defect):
+    import requests
+    from types import SimpleNamespace
+    from supabase_client import require_publication_contract
+    properties = {k: {'format': v} for k, v in {
+        'p_db_version': 'text', 'p_pipeline_version': 'text',
+        'p_scoring_version': 'text', 'p_schema_version': 'text',
+        'p_product_count': 'integer', 'p_checksum': 'text',
+        'p_generated_at': 'timestamp with time zone', 'p_min_app_version': 'text',
+        'p_submission_approvals': 'jsonb'}.items()}
+    schema = {'properties': properties, 'required': ['p_db_version']}
+    paths = {'/rpc/rotate_manifest_with_submission_approvals': {
+        'post': {'parameters': [{'in': 'body', 'schema': schema}]}}}
+    if defect == 'missing_rpc': paths.clear()
+    if defect == 'missing_approvals': properties.pop('p_submission_approvals')
+    if defect == 'wrong_count_type': properties['p_product_count']['format'] = 'text'
+    if defect == 'new_required_argument': schema['required'].append('new_required')
+    monkeypatch.setenv('SUPABASE_URL', 'https://example.invalid')
+    monkeypatch.setenv('SUPABASE_SERVICE_ROLE_KEY', 'test-only-secret')
+    monkeypatch.setattr(requests, 'get', lambda *a, **k: SimpleNamespace(
+        raise_for_status=lambda: None, json=lambda: {'paths': paths}))
+    if defect is None:
+        require_publication_contract()
+    else:
+        with pytest.raises(ValueError, match='publication contract'):
+            require_publication_contract()
