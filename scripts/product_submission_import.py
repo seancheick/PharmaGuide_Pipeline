@@ -610,11 +610,24 @@ def _validate_identity_envelope(value: object, row: dict[str, Any]) -> object:
             raise SubmissionImportError("invalid identity association")
         if key != "matched_dsld_id" and target != row.get(key):
             raise SubmissionImportError("identity association contradicts export")
-    relation_target = row.get("correction_target_dsld_id") or row.get("edition_of_dsld_id") or row.get("target_dsld_id")
-    if relation_target is not None and identity["matched_dsld_id"] != relation_target:
-        raise SubmissionImportError("matched identity contradicts correction or edition target")
-    if identity["outcome"] == "new_product_verified" and identity["matched_dsld_id"] is not None:
-        raise SubmissionImportError("new product decision cannot select an existing identity")
+    relation = _catalog_relation(row)
+    relation_target = relation[1] if relation else row.get("target_dsld_id")
+    outcome = identity["outcome"]
+    matched = identity["matched_dsld_id"]
+    # Matching a reference row is not an approval of a new product. Every
+    # approved association must explicitly select its correction/edition owner;
+    # otherwise a catalog match could silently manufacture a second PG_SUB.
+    if outcome == "dsld_match":
+        raise SubmissionImportError("DSLD match does not authorize label import")
+    if outcome == "catalog_match":
+        if matched is None or relation_target is None or matched != relation_target:
+            raise SubmissionImportError("catalog match requires its explicit reviewed association")
+    else:
+        expected_method = "gtin" if outcome == "no_match_verified" else "label_review"
+        if method != expected_method or matched is not None or relation_target is not None or (outcome == "new_product_verified" and verified is not None):
+            raise SubmissionImportError("new product identity contradicts method or association")
+    if row["kind"] == "label_mismatch" and (outcome != "catalog_match" or matched != row.get("target_dsld_id") or relation is not None):
+        raise SubmissionImportError("label mismatch requires the matched correction target")
     observed = identity["observed"]
     if observed is not None:
         fields = {"observed_code", "code_type", "issuer", "brandName", "fullName", "listing_url", "no_code"}

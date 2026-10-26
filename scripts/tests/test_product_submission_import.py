@@ -2049,3 +2049,63 @@ def test_no_gtin_label_traverses_real_clean_enrich_score_and_public_export():
     assert 'X002FLZ3X7' not in public
     assert 'Complete package photographs' not in public
     assert blob['label_record']['approval_payload_sha256'] == source['payload_sha256']
+
+
+@pytest.mark.parametrize('method,outcome,matched,relation,kind', [
+    ('label_review', 'catalog_match', None, None, 'missing_product'),
+    ('label_review', 'catalog_match', '123', None, 'missing_product'),
+    ('label_review', 'dsld_match', '123', None, 'missing_product'),
+    ('label_review', 'dsld_match', '123', '123', 'missing_product'),
+    ('gtin', 'new_product_verified', None, None, 'missing_product'),
+    ('label_review', 'no_match_verified', None, None, 'missing_product'),
+    ('gtin', 'no_match_verified', '123', None, 'missing_product'),
+    ('gtin', 'no_match_verified', '123', '123', 'missing_product'),
+    ('label_review', 'new_product_verified', None, None, 'label_mismatch'),
+    ('gtin', 'no_match_verified', None, None, 'label_mismatch'),
+])
+def test_v2_rejects_contradictory_identity_decision_table(method, outcome, matched, relation, kind):
+    from product_submission_import import build_manual_label, SubmissionImportError
+    row = _v2_export(kind=kind)
+    value = json.loads(row['approved_payload_canonical'])
+    identity = value['identity']
+    identity.update(identity_method=method, outcome=outcome, matched_dsld_id=matched)
+    if relation:
+        row['correction_target_dsld_id'] = relation
+        identity['correction_target_dsld_id'] = relation
+    if kind == 'label_mismatch': row['target_dsld_id'] = '123'
+    if method == 'gtin' or outcome == 'no_match_verified':
+        row['normalized_upc'] = '050428381397'
+        identity['decision']['verified_gtin'] = row['normalized_upc']
+    row['approved_payload_canonical'] = _canonical(value)
+    row['payload_sha256'] = hashlib.sha256(row['approved_payload_canonical'].encode()).hexdigest()
+    with pytest.raises(SubmissionImportError): build_manual_label(row)
+
+
+@pytest.mark.parametrize('kind,relation', [('missing_product', 'correction_target_dsld_id'), ('missing_product', 'edition_of_dsld_id'), ('label_mismatch', 'target_dsld_id')])
+def test_v2_explicit_catalog_associations_preserve_the_selected_product(kind, relation):
+    from product_submission_import import build_manual_label
+    target = 'PG_SUB_11111111222243338444555555555555'
+    row = _v2_export(kind=kind, **{relation: target})
+    value = json.loads(row['approved_payload_canonical'])
+    identity = value['identity']
+    identity.update(outcome='catalog_match', matched_dsld_id=target)
+    if relation != 'target_dsld_id': identity[relation] = target
+    row['approved_payload_canonical'] = _canonical(value)
+    row['payload_sha256'] = hashlib.sha256(row['approved_payload_canonical'].encode()).hexdigest()
+    label = build_manual_label(row)
+    if relation == 'edition_of_dsld_id':
+        assert label['id'] != target
+        assert label['label_record_metadata']['edition_of_dsld_id'] == target
+    else:
+        assert label['id'] == target
+        assert label['label_record_metadata']['lineage_key'] == 'pharmaguide_submission:11111111-2222-4333-8444-555555555555'
+
+
+def test_v2_new_product_without_gtin_decision_cannot_skip_exact_check_after_learning_gtin():
+    from product_submission_import import build_manual_label, SubmissionImportError
+    row = _v2_export()
+    value = json.loads(row['approved_payload_canonical'])
+    row['normalized_upc'] = value['identity']['decision']['verified_gtin'] = '050428381397'
+    row['approved_payload_canonical'] = _canonical(value)
+    row['payload_sha256'] = hashlib.sha256(row['approved_payload_canonical'].encode()).hexdigest()
+    with pytest.raises(SubmissionImportError): build_manual_label(row)
