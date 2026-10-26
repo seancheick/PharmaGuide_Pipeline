@@ -155,7 +155,8 @@ def test_cloud_only_publication_has_its_own_source_freeze_check():
     source = RELEASE_SCRIPT.read_text()
     step5 = source[source.index('if (( SKIP_SUPABASE == 0 )); then', source.index('# Step 5:')):]
     check = step5.index('--check-input-binding "$CATALOG_INPUT_BINDING"')
-    upload = step5.index('scripts/sync_to_supabase.py "$DIST_DIR"\n')
+    upload_only = step5.index('Step 5/8: Syncing dist/ to Supabase (upload only; cleanup deferred)')
+    upload = step5.index('scripts/sync_to_supabase.py "$DIST_DIR"', upload_only)
     assert check < upload
     assert 'SKIP_FLUTTER' not in step5[:upload]
 
