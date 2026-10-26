@@ -3,7 +3,7 @@
     "description": "Clinically relevant probiotic strains and prebiotic compounds",
     "purpose": "probiotic_strain_validation",
     "schema_version": "5.1.1",
-    "last_updated": "2026-10-23",
+    "last_updated": "2026-10-26",
     "total_entries": 132,
     "data_source": null,
     "version": "2.4.1",
@@ -3573,7 +3573,7 @@
           "limitations": [
             "Median fever duration 3 vs 5 days (adjusted RR 0.64); 0.5 mL daily of a three-strain mixture, CFU not stated in the abstract; full-text Methods specifies 1 billion CFU of each strain daily.",
             "Combination evidence; nothing here attributes the effect to any single strain.",
-            "Published correction PMID 40327349 states the trial was registered after completion and refers to an author Comment about methods and additional limitations; Comment details remain unresolved. This is combination evidence, not an independent or individual-strain result."
+            "Correction PMID 40327349 links the author response of April 15, 2025 at https://jamanetwork.com/journals/jamanetworkopen/fullarticle/2831509. The response is accessible: authors acknowledge registration after study completion, an interim analysis, nonstandardized antipyretic use, inclusion of pre-enrollment fever, and 58% dropout in the probiotic arm. They describe additional post-enrollment and baseline-adjusted analyses in eTables 4 and 5; independent protocol/supplement appraisal remains required. These author explanations do not remove the methodological limitations. This is combination evidence, not an independent or individual-strain result."
           ],
           "review_status": "clinician_approved",
           "study_design": "rct",

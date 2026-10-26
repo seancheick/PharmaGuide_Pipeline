@@ -304,3 +304,18 @@ def test_hyaluronic_retained_skin_sources_do_not_award_joint_or_longevity_scope(
     assert not any('joint' in endpoint.lower() for endpoint in row['key_endpoints'])
     assert 'no joint research exists elsewhere' in row['notes']
     assert 'registry_completed_trials_count' not in row
+
+
+def test_hn019_author_comment_access_keeps_combination_and_method_limits():
+    import json
+    rows = json.loads((Path(__file__).parents[1] / 'data/clinically_relevant_strains.json').read_text())['clinically_relevant_strains']
+    row = next(r for r in rows if r['id'] == 'STRAIN_LACTIS_HN019')
+    context = next(c for c in row['study_contexts'] if '40085083' in c['source_pmids'])
+    text = ' '.join(context['limitations'])
+    assert 'Comment details remain unresolved' not in text
+    for fact in ('April 15, 2025', '58%', 'antipyretic', 'pre-enrollment', 'eTables 4 and 5'):
+        assert fact in text
+    assert 'not an independent or individual-strain result' in text
+    assert context['trial_family'] == 'milan_pediatric_urti_probiotic_40085083'
+    assert len(context['dose']['component_doses']) == 3
+    assert context['clinical_review']['reviewed_at'] == '2026-09-14T22:23:43Z'
