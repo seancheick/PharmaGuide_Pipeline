@@ -172,3 +172,32 @@ def test_the_barcode_panel_is_part_of_the_identity_step():
         assert f'id="{element_id}"' in html
     step = html[html.index('id="identity-check"'):html.index('id="identity-status-card"')]
     assert 'id="barcode-panel"' in step
+
+
+def test_label_review_requires_explicit_complete_evidence_bound_decision():
+    node = shutil.which('node')
+    assert node
+    program = r"""
+const fs=require('fs'),vm=require('vm');const elements=new Map(),calls=[];
+function el(){return {value:'',textContent:'',hidden:false,disabled:false,style:{},classList:{add(){},remove(){}},append(){},setAttribute(){},addEventListener(){}}}
+const ctx=vm.createContext({URLSearchParams,Date,Set,Number,encodeURIComponent,
+ document:{getElementById(id){if(!elements.has(id))elements.set(id,el());return elements.get(id)},createElement:el},
+ fetch:async(url,options)=>{if(options?.method==='POST'){calls.push(JSON.parse(options.body));return {ok:true,json:async()=>({})}}
+ return {ok:true,json:async()=>lookup}}});
+const lookup={identity_method:'label_review',canonical_gtin14:null,brandName:'Example Labs',fullName:'Vitamin D3',index_built_at:new Date().toISOString(),index_revision:'current',freshness:'fresh',complete:true,matches:[]};
+ctx.lookup=lookup;ctx.calls=calls;
+vm.runInContext(fs.readFileSync(process.argv[1],'utf8')+`\nfunction boot(){} function renderIdentityCheck(){} function setStatus(){}\n`,ctx);
+(async()=>{
+vm.runInContext(`state.session={access_token:'test'};state.selected={id:'submission',kind:'missing_product',normalized_upc:null,identifier:{brandName:'Example Labs',fullName:'Vitamin D3'},evidence_revision:2,evidence_manifest_sha256:'a'.repeat(64)};state.payload={brandName:'Example Labs',fullName:'Vitamin D3'};state.identityLookup=lookup`,ctx);
+elements.set('identifier-type',{value:'amazon_fnsku'});elements.set('identifier-issuer',{value:'Amazon'});elements.set('identifier-package',{value:'60 capsules'});elements.set('identifier-reason',{value:'Verified package and complete candidate list'});
+await vm.runInContext('checkIdentity({record:true})',ctx);
+if(calls.length)throw Error('empty search auto-verified a new product');
+await vm.runInContext("recordMatch('new_product_verified')",ctx);
+const body=calls[0];if(body.identity_method!=='label_review'||body.candidate_review_complete!==true||body.canonical_gtin14!==null||body.identifier_decision.package!=='60 capsules')throw Error(JSON.stringify(body));
+lookup.complete=false;let refused=false;try{await vm.runInContext("recordMatch('new_product_verified')",ctx)}catch{refused=true}if(!refused||calls.length!==1)throw Error('incomplete candidate set accepted');
+console.log('ok');
+})().catch(e=>{console.error(e);process.exitCode=1});
+"""
+    result = subprocess.run([node, '-e', program, str(REVIEW_DIR / 'static/app.js')], capture_output=True, text=True)
+    assert result.returncode == 0, result.stderr
+    assert result.stdout.strip() == 'ok'

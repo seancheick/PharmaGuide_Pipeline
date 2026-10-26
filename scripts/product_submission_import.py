@@ -543,8 +543,8 @@ def _catalog_relation(export_row: dict[str, Any]) -> tuple[str, str] | None:
             "a submission is either a correction or a separate edition"
         )
     field, value = present[0]
-    catalog_id = _required_string(value, field, max_length=30)
-    if not catalog_id.isdigit():
+    catalog_id = _required_string(value, field, max_length=39)
+    if not re.fullmatch(r"(?:[0-9]{1,30}|PG_SUB_[0-9A-F]{32})", catalog_id):
         raise SubmissionImportError(f"{field} must be a catalog id")
     return field, catalog_id
 
@@ -552,6 +552,92 @@ def _catalog_relation(export_row: dict[str, Any]) -> tuple[str, str] | None:
 def _edition_of(export_row: dict[str, Any]) -> str | None:
     relation = _catalog_relation(export_row)
     return relation[1] if relation and relation[0] == "edition_of_dsld_id" else None
+
+
+def _catalog_lineage(product_id: str) -> str:
+    if product_id.startswith("PG_SUB_"):
+        return f"pharmaguide_submission:{str(UUID(product_id[7:]))}"
+    return f"dsld:{product_id}"
+
+
+def _validate_identity_envelope(value: object, row: dict[str, Any]) -> object:
+    """Validate the frozen private commitment, returning only its public label."""
+    if not isinstance(value, dict) or set(value) != {"label", "identity"}:
+        raise SubmissionImportError("invalid v2 envelope")
+    identity = value["identity"]
+    keys = {"observed", "decision", "identity_method", "outcome", "matched_dsld_id",
+            "correction_target_dsld_id", "edition_of_dsld_id", "evidence_revision",
+            "evidence_manifest_sha256", "match_check_id"}
+    if not isinstance(identity, dict) or set(identity) != keys:
+        raise SubmissionImportError("invalid v2 identity")
+    method = identity["identity_method"]
+    if not isinstance(method, str) or method not in {"gtin", "label_review"}:
+        raise SubmissionImportError("invalid identity method")
+    decision = identity["decision"]
+    if not isinstance(decision, dict) or set(decision) != {"code_type", "issuer", "verified_gtin", "package", "reason"}:
+        raise SubmissionImportError("invalid reviewed identifier decision")
+    types = {"other", "amazon_fnsku", "amazon_asin", "manufacturer_sku", "retailer_sku", "lot", "none"}
+    if not isinstance(decision["code_type"], str) or decision["code_type"] not in types:
+        raise SubmissionImportError("invalid reviewed code type")
+    for key, maximum in (("issuer", 200), ("package", 300), ("reason", 2000)):
+        text = decision[key]
+        if text is not None and (not isinstance(text, str) or len(text) > maximum or any(ord(c) < 32 or 127 <= ord(c) <= 159 for c in text)):
+            raise SubmissionImportError(f"invalid decision {key}")
+    if method == "label_review" and (not decision["package"] or not decision["package"].strip() or not decision["reason"] or len(decision["reason"].strip()) < 5):
+        raise SubmissionImportError("label review requires package and rationale")
+    verified = decision["verified_gtin"]
+    exported = row["normalized_upc"]
+    if (verified is None) != (exported is None) or (verified is not None and (
+        canonical_normalized_gtin14(verified) is None or
+        canonical_normalized_gtin14(verified) != canonical_normalized_gtin14(exported)
+    )):
+        raise SubmissionImportError("verified GTIN contradicts normalized_upc")
+    if method == "gtin" and verified is None:
+        raise SubmissionImportError("GTIN review requires verified GTIN")
+    outcomes = {"no_match_verified", "new_product_verified", "catalog_match", "dsld_match"}
+    if not isinstance(identity["outcome"], str) or identity["outcome"] not in outcomes or (verified is None and identity["outcome"] == "no_match_verified"):
+        raise SubmissionImportError("unresolved identity cannot import")
+    revision = identity["evidence_revision"]
+    if isinstance(revision, bool) or not isinstance(revision, int) or revision < 1:
+        raise SubmissionImportError("invalid evidence revision")
+    if not isinstance(identity["evidence_manifest_sha256"], str) or not re.fullmatch(r"[0-9a-f]{64}", identity["evidence_manifest_sha256"]):
+        raise SubmissionImportError("invalid evidence manifest")
+    if isinstance(identity["match_check_id"], bool) or not isinstance(identity["match_check_id"], int) or identity["match_check_id"] < 1:
+        raise SubmissionImportError("invalid match check id")
+    for key in ("matched_dsld_id", "correction_target_dsld_id", "edition_of_dsld_id"):
+        target = identity[key]
+        if target is not None and (not isinstance(target, str) or not re.fullmatch(r"(?:[0-9]{1,30}|PG_SUB_[0-9A-F]{32})", target)):
+            raise SubmissionImportError("invalid identity association")
+        if key != "matched_dsld_id" and target != row.get(key):
+            raise SubmissionImportError("identity association contradicts export")
+    relation_target = row.get("correction_target_dsld_id") or row.get("edition_of_dsld_id") or row.get("target_dsld_id")
+    if relation_target is not None and identity["matched_dsld_id"] != relation_target:
+        raise SubmissionImportError("matched identity contradicts correction or edition target")
+    if identity["outcome"] == "new_product_verified" and identity["matched_dsld_id"] is not None:
+        raise SubmissionImportError("new product decision cannot select an existing identity")
+    observed = identity["observed"]
+    if observed is not None:
+        fields = {"observed_code", "code_type", "issuer", "brandName", "fullName", "listing_url", "no_code"}
+        if not isinstance(observed, dict) or set(observed) != fields or not isinstance(observed["code_type"], str) or observed["code_type"] not in types or not isinstance(observed["no_code"], bool):
+            raise SubmissionImportError("invalid observed identifier")
+        for key, limit in (("observed_code", 128), ("issuer", 200), ("brandName", 300), ("fullName", 300), ("listing_url", 2048)):
+            text = observed[key]
+            if text is not None and (not isinstance(text, str) or len(text) > limit or any(ord(c) < 32 or 127 <= ord(c) <= 159 for c in text)):
+                raise SubmissionImportError("invalid observed identifier text")
+        if not observed["brandName"] or not observed["brandName"].strip() or not observed["fullName"] or not observed["fullName"].strip():
+            raise SubmissionImportError("identifier brand/name required")
+        if observed["no_code"]:
+            if observed["observed_code"] is not None or observed["code_type"] != "none":
+                raise SubmissionImportError("contradictory no-code declaration")
+        elif not observed["observed_code"] or observed["code_type"] == "none":
+            raise SubmissionImportError("observed code required")
+        if observed["listing_url"] is not None:
+            parsed = urllib.parse.urlparse(observed["listing_url"])
+            if parsed.scheme not in {"https", "http"} or not parsed.netloc:
+                raise SubmissionImportError("invalid listing URL")
+    elif method == "label_review" and verified is None:
+        raise SubmissionImportError("no-GTIN review requires frozen observed identity")
+    return value["label"]
 
 
 def build_manual_label(export_row: object) -> dict[str, Any]:
@@ -598,7 +684,7 @@ def build_manual_label(export_row: object) -> dict[str, Any]:
     kind = _required_string(export_row["kind"], "kind", max_length=30)
     if kind not in _ALLOWED_KINDS:
         raise SubmissionImportError("kind is unsupported")
-    if export_row["schema_version"] != SCHEMA_VERSION:
+    if export_row["schema_version"] not in {SCHEMA_VERSION, "manual_label_v2"}:
         raise SubmissionImportError("schema_version is unsupported")
 
     raw_upc = export_row["normalized_upc"]
@@ -607,7 +693,7 @@ def build_manual_label(export_row: object) -> dict[str, Any]:
         if not _is_valid_gtin(upc):
             raise SubmissionImportError("normalized_upc is not a valid GTIN")
     else:
-        if kind == "missing_product":
+        if kind == "missing_product" and export_row["schema_version"] == SCHEMA_VERSION:
             raise SubmissionImportError("normalized_upc is required")
         upc = ""
 
@@ -632,6 +718,8 @@ def build_manual_label(export_row: object) -> dict[str, Any]:
         raise SubmissionImportError("approved payload is not JSON") from exc
     if _canonical_json(decoded_payload) != canonical:
         raise SubmissionImportError("approved payload is not canonical JSON")
+    if export_row["schema_version"] == "manual_label_v2":
+        decoded_payload = _validate_identity_envelope(decoded_payload, export_row)
     payload = _validate_label_payload(decoded_payload)
     pipeline_payload = dict(payload)
     pipeline_payload["otherIngredients"] = {
@@ -645,12 +733,12 @@ def build_manual_label(export_row: object) -> dict[str, Any]:
         target_id = _required_string(
             export_row.get("target_dsld_id"),
             "target_dsld_id",
-            max_length=30,
+            max_length=39,
         )
-        if not target_id.isdigit():
+        if not re.fullmatch(r"(?:[0-9]{1,30}|PG_SUB_[0-9A-F]{32})", target_id):
             raise SubmissionImportError("target_dsld_id must be numeric")
         product_id = target_id
-        lineage_key = f"dsld:{target_id}"
+        lineage_key = _catalog_lineage(target_id)
         if _catalog_relation(export_row) is not None:
             raise SubmissionImportError(
                 "a correction cannot also carry a catalog relation"
@@ -666,7 +754,7 @@ def build_manual_label(export_row: object) -> dict[str, Any]:
             # transcribed wrongly, so it is rewritten in place and keeps its
             # id: anyone who already has it in a stack keeps the same product.
             product_id = relation[1]
-            lineage_key = f"dsld:{product_id}"
+            lineage_key = _catalog_lineage(product_id)
         else:
             product_id = "PG_SUB_" + submission_id.replace("-", "").upper()
             lineage_key = f"pharmaguide_submission:{submission_id}"

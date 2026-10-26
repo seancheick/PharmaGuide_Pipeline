@@ -261,20 +261,16 @@ def safe_str(value: Any, default: str = "") -> str:
 def normalize_upc(value: Any) -> str:
     """Normalize a UPC/EAN barcode to digits-only.
 
-    Returns empty string for missing, garbage, or invalid-length barcodes.
+    Returns empty string for missing, unsupported formatting, width or checksum.
     Accepts the four GTIN widths (EAN-8, UPC-A, EAN-13, GTIN-14) and
     preserves the digits verbatim — no leading-zero canonicalization, which
     would silently merge distinct valid GTIN representations. Lookup
     equivalence (zero-padding) is the reader's job, mirrored between the
     Flutter findAllByUpc candidate set and the pad-to-14 collision report.
     """
-    if value is None:
-        return ""
-    import re
-    digits = re.sub(r"[^0-9]", "", str(value))
-    if len(digits) not in (8, 12, 13, 14):
-        return ""
-    return digits
+    from submission_review.gtin import normalize_formatted_gtin
+    return normalize_formatted_gtin(value)
+
 
 
 def safe_list(value: Any) -> list:

@@ -596,3 +596,23 @@ def test_console_offers_a_typed_product_identity_mismatch_rejection():
 
     assert 'value="product_identity_mismatch"' in index_html
     assert "Photos don’t match scanned product" in index_html
+
+
+def test_name_index_keeps_null_gtin_records_and_complete_conflict_bucket(tmp_path, monkeypatch):
+    catalog = tmp_path / "catalog.db"
+    with sqlite3.connect(catalog) as conn:
+        conn.execute("create table products_core (dsld_id text, product_name text, brand_name text, upc_sku text)")
+        conn.executemany("insert into products_core values (?, ?, ?, ?)", [
+            (str(i), "Vitamin D3", "Example Labs", None) for i in range(75)
+        ])
+    products = tmp_path / "products"
+    products.mkdir()
+    monkeypatch.setattr(serve, "_iter_enriched_products", lambda path: iter([{
+        "dsld_id": "PG_SUB_" + "A" * 32, "fullName": "Vitamin D3",
+        "brandName": "Example Labs", "upcSku": "",
+    }]))
+    index = serve.build_identity_index(catalog, products)
+    hits = index.lookup_label(" EXAMPLE  LABS ", "Vitamin D3")
+    assert len(hits) == 76
+    assert any(hit.dsld_id.startswith("PG_SUB_") for hit in hits)
+    assert len(index.search_names("example", "vitamin")) == 76

@@ -17,6 +17,14 @@ def is_valid_gtin(value: str) -> bool:
     return (10 - weighted_sum % 10) % 10 == int(value[-1])
 
 
+def normalize_formatted_gtin(value: object) -> str:
+    """Preserve established GTIN width after validating supported formatting."""
+    if not isinstance(value, str) or not GTIN_INPUT_PATTERN.fullmatch(value):
+        return ""
+    digits = re.sub(r"[\s-]", "", value)
+    return digits if is_valid_gtin(digits) else ""
+
+
 def canonical_normalized_gtin14(value: object) -> str | None:
     """Canonicalize one established GTIN without inferring UPC-E identity.
 
