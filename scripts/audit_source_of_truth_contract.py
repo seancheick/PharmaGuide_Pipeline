@@ -116,6 +116,8 @@ REQUIRED_CONCEPTS = {
     "probiotic_row_identity",
     "prebiotic_identity",
     "certification_evidence",
+    "submission_product_identity",
+    "approved_submission_label_contract",
 }
 
 SCORABLE_BLOCKED_ROLES = CLEANER_NON_SCORABLE_ROLES

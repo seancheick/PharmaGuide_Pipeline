@@ -58,7 +58,7 @@ def test_previously_accepted_widths_are_unchanged():
     # Full-corpus safety: for every input the OLD rule accepted (12/13
     # digits), the widened rule returns byte-identical output, so no
     # existing product's stored upc_sku can change on rebuild.
-    for raw in ("016000275447", "0016000275447", "12 3456-78901.2"):
+    for raw in ("016000275447", "0016000275447", "0160 0027-5447"):
         digits = "".join(ch for ch in str(raw) if ch.isdigit())
         if len(digits) in (12, 13):
             assert normalize_upc(raw) == digits
@@ -94,3 +94,9 @@ def test_padding_equivalence_collisions_are_reported_not_merged():
         )
     }
     assert kept == dict(rows)
+
+
+def test_export_rejects_alphanumeric_and_checksum_without_lossy_digit_salvage():
+    for raw in ('X036000291452', '036000291452X', '036000291453', '12 3456-78901.2', '٠٣٦٠٠٠٢٩١٤٥٢'):
+        assert normalize_upc(raw) == ''
+    assert normalize_upc('0360-0029 1452') == '036000291452'

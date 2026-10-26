@@ -1952,3 +1952,213 @@ def test_promoted_legacy_privacy_rewrite_freezes_before_label_receipt_crash(tmp_
     assert frozen.read_bytes() == old_bytes
     importer.materialize_approved_submissions([], output_dir=tmp_path, authoritative=True)
     assert output.read_bytes() == old_bytes
+
+
+def _v2_export(**overrides):
+    identity = {
+        'observed': {'observed_code': 'X002FLZ3X7', 'code_type': 'other',
+                     'issuer': None, 'brandName': 'Example Labs',
+                     'fullName': 'Example Vitamin D3', 'listing_url': None, 'no_code': False},
+        'decision': {'code_type': 'amazon_fnsku', 'issuer': 'Amazon',
+                     'verified_gtin': None, 'package': '60 capsules',
+                     'reason': 'Complete package photographs checked against current candidates.'},
+        'identity_method': 'label_review', 'outcome': 'new_product_verified',
+        'matched_dsld_id': None, 'correction_target_dsld_id': None,
+        'edition_of_dsld_id': None, 'evidence_revision': 1,
+        'evidence_manifest_sha256': 'a' * 64,
+        'match_check_id': 42,
+    }
+    return _export({'label': _payload(), 'identity': identity},
+                   schema_version='manual_label_v2', normalized_upc=None, **overrides)
+
+
+def test_v2_private_identity_is_validated_then_excluded_from_public_label():
+    from product_submission_import import build_manual_label
+    label = build_manual_label(_v2_export())
+    assert label['upcSku'] == ''
+    assert label['id'].startswith('PG_SUB_')
+    public = json.dumps(label)
+    for private in ('X002FLZ3X7', 'amazon_fnsku', 'Complete package photographs', 'identity_method'):
+        assert private not in public
+
+
+def test_v2_verified_gtin_cannot_contradict_export_null():
+    from product_submission_import import build_manual_label, SubmissionImportError
+    row = _v2_export()
+    envelope = json.loads(row['approved_payload_canonical'])
+    envelope['identity']['decision']['verified_gtin'] = '050428381397'
+    row['approved_payload_canonical'] = _canonical(envelope)
+    row['payload_sha256'] = hashlib.sha256(row['approved_payload_canonical'].encode()).hexdigest()
+    with pytest.raises(SubmissionImportError):
+        build_manual_label(row)
+
+
+def test_existing_submission_correction_preserves_original_lineage():
+    from product_submission_import import build_manual_label
+    target = 'PG_SUB_11111111222233334444555555555555'
+    label = build_manual_label(_export(correction_target_dsld_id=target))
+    assert label['id'] == target
+    assert label['label_record_metadata']['lineage_key'] == 'pharmaguide_submission:11111111-2222-3333-4444-555555555555'
+
+
+def test_v2_two_unrelated_null_gtin_submissions_have_no_blank_collision(tmp_path):
+    from product_submission_import import materialize_approved_submissions
+    first = _v2_export()
+    second = _v2_export(submission_id='11111111-2222-4333-8444-555555555555')
+    materialize_approved_submissions([first, second], output_dir=tmp_path)
+    labels = list(tmp_path.glob('PG_SUB_*.json'))
+    assert len(labels) == 2
+    assert all(json.loads(path.read_text())['upcSku'] == '' for path in labels)
+
+
+@pytest.mark.parametrize('change', ['extra_private', 'observed_contradiction', 'bad_match', 'bad_url', 'unresolved'])
+def test_v2_rejects_malformed_private_identity(change):
+    from product_submission_import import build_manual_label, SubmissionImportError
+    row = _v2_export()
+    envelope = json.loads(row['approved_payload_canonical'])
+    identity = envelope['identity']
+    if change == 'extra_private': envelope['private'] = 'leak'
+    elif change == 'observed_contradiction': identity['observed']['no_code'] = True
+    elif change == 'bad_match': identity['match_check_id'] = True
+    elif change == 'bad_url': identity['observed']['listing_url'] = 'file:///etc/passwd'
+    elif change == 'unresolved': identity['outcome'] = 'identity_ambiguous'
+    row['approved_payload_canonical'] = _canonical(envelope)
+    row['payload_sha256'] = hashlib.sha256(row['approved_payload_canonical'].encode()).hexdigest()
+    with pytest.raises(SubmissionImportError): build_manual_label(row)
+
+
+def test_no_gtin_label_traverses_real_clean_enrich_score_and_public_export():
+    from product_submission_import import build_manual_label
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    from enrich_supplements_v3 import SupplementEnricherV3
+    from score_supplements_v4 import score_product_v4
+    from build_final_db import build_core_row, build_detail_blob, PRODUCTS_CORE_COLUMNS
+    source = _v2_export()
+    label = build_manual_label(source)
+    cleaned = EnhancedDSLDNormalizer().normalize_product(label)
+    enriched, _ = SupplementEnricherV3(config_path=str(Path(__file__).parents[1] / 'config/enrichment_config.json')).enrich_product(cleaned)
+    enriched['dsld_id'] = label['id']
+    scored = score_product_v4(enriched)
+    blob = build_detail_blob(enriched, scored)
+    core = dict(zip(PRODUCTS_CORE_COLUMNS, build_core_row(enriched, scored, '2026-10-26T00:00:00Z', detail_blob=blob)))
+    assert core['dsld_id'] == label['id']
+    assert not core['upc_sku']
+    assert core['product_name'] == 'Example Vitamin D3'
+    assert core['brand_name'] == 'Example Labs'
+    public = json.dumps({'core': core, 'blob': blob})
+    assert 'X002FLZ3X7' not in public
+    assert 'Complete package photographs' not in public
+    assert blob['label_record']['approval_payload_sha256'] == source['payload_sha256']
+
+
+@pytest.mark.parametrize('method,outcome,matched,relation,kind', [
+    ('label_review', 'catalog_match', None, None, 'missing_product'),
+    ('label_review', 'catalog_match', '123', None, 'missing_product'),
+    ('label_review', 'dsld_match', '123', None, 'missing_product'),
+    ('label_review', 'dsld_match', '123', '123', 'missing_product'),
+    ('gtin', 'new_product_verified', None, None, 'missing_product'),
+    ('label_review', 'no_match_verified', None, None, 'missing_product'),
+    ('gtin', 'no_match_verified', '123', None, 'missing_product'),
+    ('gtin', 'no_match_verified', '123', '123', 'missing_product'),
+    ('label_review', 'new_product_verified', None, None, 'label_mismatch'),
+    ('gtin', 'no_match_verified', None, None, 'label_mismatch'),
+])
+def test_v2_rejects_contradictory_identity_decision_table(method, outcome, matched, relation, kind):
+    from product_submission_import import build_manual_label, SubmissionImportError
+    row = _v2_export(kind=kind)
+    value = json.loads(row['approved_payload_canonical'])
+    identity = value['identity']
+    identity.update(identity_method=method, outcome=outcome, matched_dsld_id=matched)
+    if relation:
+        row['correction_target_dsld_id'] = relation
+        identity['correction_target_dsld_id'] = relation
+    if kind == 'label_mismatch': row['target_dsld_id'] = '123'
+    if method == 'gtin' or outcome == 'no_match_verified':
+        row['normalized_upc'] = '050428381397'
+        identity['decision']['verified_gtin'] = row['normalized_upc']
+    row['approved_payload_canonical'] = _canonical(value)
+    row['payload_sha256'] = hashlib.sha256(row['approved_payload_canonical'].encode()).hexdigest()
+    with pytest.raises(SubmissionImportError): build_manual_label(row)
+
+
+@pytest.mark.parametrize('kind,relation', [('missing_product', 'correction_target_dsld_id'), ('missing_product', 'edition_of_dsld_id'), ('label_mismatch', 'target_dsld_id')])
+def test_v2_explicit_catalog_associations_preserve_the_selected_product(kind, relation):
+    from product_submission_import import build_manual_label
+    target = 'PG_SUB_11111111222243338444555555555555'
+    row = _v2_export(kind=kind, **{relation: target})
+    value = json.loads(row['approved_payload_canonical'])
+    identity = value['identity']
+    identity.update(outcome='catalog_match', matched_dsld_id=target)
+    if relation != 'target_dsld_id': identity[relation] = target
+    row['approved_payload_canonical'] = _canonical(value)
+    row['payload_sha256'] = hashlib.sha256(row['approved_payload_canonical'].encode()).hexdigest()
+    label = build_manual_label(row)
+    if relation == 'edition_of_dsld_id':
+        assert label['id'] != target
+        assert label['label_record_metadata']['edition_of_dsld_id'] == target
+    else:
+        assert label['id'] == target
+        assert label['label_record_metadata']['lineage_key'] == 'pharmaguide_submission:11111111-2222-4333-8444-555555555555'
+
+
+def test_v2_new_product_without_gtin_decision_cannot_skip_exact_check_after_learning_gtin():
+    from product_submission_import import build_manual_label, SubmissionImportError
+    row = _v2_export()
+    value = json.loads(row['approved_payload_canonical'])
+    row['normalized_upc'] = value['identity']['decision']['verified_gtin'] = '050428381397'
+    row['approved_payload_canonical'] = _canonical(value)
+    row['payload_sha256'] = hashlib.sha256(row['approved_payload_canonical'].encode()).hexdigest()
+    with pytest.raises(SubmissionImportError): build_manual_label(row)
+
+
+@pytest.mark.parametrize('section,field', [
+    ('observed', 'observed_code'), ('observed', 'issuer'),
+    ('observed', 'brandName'), ('observed', 'fullName'), ('observed', 'listing_url'),
+    ('decision', 'issuer'), ('decision', 'package'), ('decision', 'reason'),
+])
+def test_v2_private_identity_rejects_every_c0_and_c1_control(section, field):
+    from product_submission_import import build_manual_label, SubmissionImportError
+    for codepoint in (*range(32), *range(127, 160)):
+        row = _v2_export()
+        value = json.loads(row['approved_payload_canonical'])
+        value['identity'][section][field] = 'X' + chr(codepoint) + 'Y'
+        row['approved_payload_canonical'] = _canonical(value)
+        row['payload_sha256'] = hashlib.sha256(row['approved_payload_canonical'].encode()).hexdigest()
+        with pytest.raises(SubmissionImportError): build_manual_label(row)
+
+
+@pytest.mark.parametrize('section,field', [('observed', 'issuer'), ('observed', 'listing_url'), ('decision', 'issuer')])
+@pytest.mark.parametrize('blank', ['', ' ', '\u00a0'])
+def test_v2_frozen_optional_identity_metadata_requires_canonical_null(section, field, blank):
+    from product_submission_import import build_manual_label, SubmissionImportError
+    row = _v2_export()
+    value = json.loads(row['approved_payload_canonical'])
+    value['identity'][section][field] = blank
+    row['approved_payload_canonical'] = _canonical(value)
+    row['payload_sha256'] = hashlib.sha256(row['approved_payload_canonical'].encode()).hexdigest()
+    with pytest.raises(SubmissionImportError): build_manual_label(row)
+
+
+@pytest.mark.parametrize('reason', [None, '', 'four'])
+def test_v2_gtin_decision_requires_substantive_reviewed_reason(reason):
+    from product_submission_import import build_manual_label, SubmissionImportError
+    row = _v2_export()
+    value = json.loads(row['approved_payload_canonical'])
+    value['identity'].update(identity_method='gtin', outcome='no_match_verified')
+    value['identity']['decision'].update(verified_gtin='050428381397', package=None, reason=reason)
+    row['normalized_upc'] = '050428381397'
+    row['approved_payload_canonical'] = _canonical(value)
+    row['payload_sha256'] = hashlib.sha256(row['approved_payload_canonical'].encode()).hexdigest()
+    with pytest.raises(SubmissionImportError): build_manual_label(row)
+
+
+def test_v2_gtin_review_accepts_reviewed_reason_without_package():
+    from product_submission_import import build_manual_label
+    row = _v2_export()
+    value = json.loads(row['approved_payload_canonical'])
+    value['identity'].update(identity_method='gtin', outcome='no_match_verified')
+    value['identity']['decision'].update(verified_gtin='050428381397', package=None, reason='Reviewer checked the manufacturer barcode and current exact candidates.')
+    row['normalized_upc'] = '050428381397'
+    row['approved_payload_canonical'] = _canonical(value)
+    row['payload_sha256'] = hashlib.sha256(row['approved_payload_canonical'].encode()).hexdigest()
+    assert build_manual_label(row)['upcSku'] == '050428381397'

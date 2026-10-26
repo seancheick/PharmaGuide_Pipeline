@@ -34,6 +34,7 @@ import re
 import sqlite3
 import subprocess
 import sys
+import unicodedata
 import urllib.error
 import urllib.request
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
@@ -115,11 +116,29 @@ class IdentityIndex:
     catalog_db: Path
     products_dir: Path
     source_revision: str
+    candidates: tuple[IdentityCandidate, ...] = ()
 
     def lookup(self, canonical_gtin14: str) -> list[IdentityCandidate]:
         if not _is_valid_gtin(canonical_gtin14) or len(canonical_gtin14) != 14:
             return []
         return list(self.matches.get(canonical_gtin14, ()))
+
+    def lookup_label(self, brand: str, name: str) -> list[IdentityCandidate]:
+        """Complete coarse coordination bucket, never a paginated suggestion list."""
+        key = (_label_text(brand), _label_text(name))
+        return [row for row in self.candidates
+                if (_label_text(row.brand_name), _label_text(row.product_name)) == key]
+
+    def search_names(self, brand: str, name: str) -> list[IdentityCandidate]:
+        """All name/brand suggestions; absence never establishes identity."""
+        brand_tokens, name_tokens = _label_text(brand).split(), _label_text(name).split()
+        return [row for row in self.candidates
+                if all(token in _label_text(row.brand_name) for token in brand_tokens)
+                and all(token in _label_text(row.product_name) for token in name_tokens)]
+
+
+def _label_text(value: str) -> str:
+    return " ".join(unicodedata.normalize("NFC", value).lower().split())
 
 
 def _verify_gtin_fixture() -> None:
@@ -276,8 +295,10 @@ def build_identity_index(
     source_revision = identity_source_revision(catalog_db, products_dir)
     _verify_gtin_fixture()
     by_gtin: dict[str, dict[tuple[str, str], IdentityCandidate]] = {}
+    all_candidates: dict[tuple[str, str], IdentityCandidate] = {}
 
     def add(candidate: IdentityCandidate) -> None:
+        all_candidates[(candidate.source, candidate.dsld_id)] = candidate
         for gtin14 in canonical_gtin14_candidates(candidate.upc_sku):
             by_gtin.setdefault(gtin14, {})[(candidate.source, candidate.dsld_id)] = (
                 candidate
@@ -288,7 +309,7 @@ def build_identity_index(
             built_at = _catalog_generated_at(connection, catalog_db)
         for row in connection.execute(
             "select dsld_id, product_name, brand_name, upc_sku "
-            "from products_core where upc_sku is not null and trim(upc_sku) <> ''"
+            "from products_core"
         ):
             add(
                 IdentityCandidate(
@@ -337,6 +358,7 @@ def build_identity_index(
     return IdentityIndex(
         built_at=built_at, matches=frozen, catalog_db=catalog_db,
         products_dir=products_dir, source_revision=source_revision,
+        candidates=tuple(all_candidates.values()),
     )
 
 
@@ -350,7 +372,8 @@ def search_catalog(catalog_db: Path, query: str) -> list[dict[str, str]]:
     text = query.strip()
     if not text:
         return []
-    digits = "".join(ch for ch in text if ch.isdigit())
+    from submission_review.gtin import normalize_formatted_gtin
+    digits = normalize_formatted_gtin(text)
     like = f"%{text}%"
     with sqlite3.connect(f"file:{catalog_db}?mode=ro", uri=True) as conn:
         rows = conn.execute(
@@ -450,8 +473,11 @@ class ReviewerHandler(SimpleHTTPRequestHandler):
         if self.path.startswith("/api/identity_lookup"):
             from urllib.parse import parse_qs, urlparse
 
-            gtin14 = parse_qs(urlparse(self.path).query).get("gtin14", [""])[0]
-            if len(gtin14) != 14 or not _is_valid_gtin(gtin14):
+            query = parse_qs(urlparse(self.path).query)
+            gtin14 = query.get("gtin14", [""])[0]
+            brand, name = query.get("brand", [""])[0], query.get("name", [""])[0]
+            label_review = bool(brand.strip() and name.strip() and not gtin14)
+            if (not label_review and (len(gtin14) != 14 or not _is_valid_gtin(gtin14))) or max(len(brand), len(name)) > 300:
                 self._json({"error": "exact canonical GTIN-14 required"}, 400)
                 return
             try:
@@ -460,7 +486,12 @@ class ReviewerHandler(SimpleHTTPRequestHandler):
                 self._json({"error": "identity index unavailable"}, 503)
                 return
             self._json({
-                "canonical_gtin14": gtin14,
+                "canonical_gtin14": gtin14 or None,
+                "identity_method": "label_review" if label_review else "gtin",
+                "brandName": brand if label_review else None,
+                "fullName": name if label_review else None,
+                "complete": True,
+                "conflict_dsld_ids": sorted({row.dsld_id for row in index.lookup_label(brand, name)}) if label_review else [],
                 "index_built_at": index.built_at.isoformat(),
                 "index_revision": index.source_revision,
                 "freshness": identity_index_freshness(
@@ -468,7 +499,7 @@ class ReviewerHandler(SimpleHTTPRequestHandler):
                 ),
                 "matches": [
                     asdict(candidate)
-                    for candidate in index.lookup(gtin14)
+                    for candidate in (index.search_names(brand, name) if label_review else index.lookup(gtin14))
                 ],
             })
             return

@@ -172,3 +172,71 @@ def test_the_barcode_panel_is_part_of_the_identity_step():
         assert f'id="{element_id}"' in html
     step = html[html.index('id="identity-check"'):html.index('id="identity-status-card"')]
     assert 'id="barcode-panel"' in step
+
+
+def test_label_review_requires_explicit_complete_evidence_bound_decision():
+    node = shutil.which('node')
+    assert node
+    program = r"""
+const fs=require('fs'),vm=require('vm');const elements=new Map(),calls=[],candidateState={complete:true,pending:[],conflicts:[]};
+function el(){return {value:'',textContent:'',hidden:false,disabled:false,style:{},classList:{add(){},remove(){}},append(){},setAttribute(){},addEventListener(){}}}
+const ctx=vm.createContext({URLSearchParams,Date,Set,Number,encodeURIComponent,clearTimeout,
+ document:{getElementById(id){if(!elements.has(id))elements.set(id,el());return elements.get(id)},createElement:el},
+ fetch:async(url,options)=>{if(options?.method==='POST'){const body=JSON.parse(options.body);if(body.action==='save_review'){ctx.savedPayload=body.payload;if(ctx.deferSave)return new Promise(resolve=>ctx.resolveSave=resolve);return {ok:true,json:async()=>({review:{draft:{payload_sha256:'test-label-sha'}}})}};if(body.action==='load_review')return {ok:true,json:async()=>({review:{identity_candidates:candidateState}})};calls.push(body);if(ctx.deferMatch)return new Promise(resolve=>ctx.resolveMatch=resolve);return {ok:true,json:async()=>({})}}
+ return {ok:true,json:async()=>lookup}}});
+const lookup={identity_method:'label_review',canonical_gtin14:null,brandName:'Example Labs',fullName:'Vitamin D3',index_built_at:new Date().toISOString(),index_revision:'current',freshness:'fresh',complete:true,matches:[]};
+ctx.lookup=lookup;ctx.calls=calls;
+vm.runInContext(fs.readFileSync(process.argv[1],'utf8')+`\nfunction boot(){} function renderIdentityCheck(){} function setStatus(){} function hydrateReview(review){state.review=review} function renderReviewBanner(){} function setDecisionAvailability(){} async function loadQueue(){} async function refreshSelected(){}\n`,ctx);
+(async()=>{
+vm.runInContext(`state.session={access_token:'test'};state.selected={id:'submission',kind:'missing_product',normalized_upc:null,identifier:{brandName:'Example Labs',fullName:'Vitamin D3'},evidence_revision:2,evidence_manifest_sha256:'a'.repeat(64)};state.payload={brandName:'Example Labs',fullName:'Vitamin D3'};state.payloadSha='test-label-sha';state.reviewReadyFor='submission:2';state.identityLookup=lookup`,ctx);
+elements.set('identifier-type',{value:'amazon_fnsku'});elements.set('identifier-issuer',{value:'Amazon'});elements.set('identifier-package',{value:'60 capsules'});elements.set('identifier-reason',{value:'Verified package and complete candidate list'});
+await vm.runInContext('checkIdentity({record:true})',ctx);
+if(calls.length)throw Error('empty search auto-verified a new product');
+await vm.runInContext("recordMatch('new_product_verified')",ctx);
+if(!ctx.savedPayload)throw Error('identity decision not preceded by saved label draft');
+const body=calls[0];if(body.identity_method!=='label_review'||body.candidate_review_complete!==true||body.canonical_gtin14!==null||body.identifier_decision.package!=='60 capsules')throw Error(JSON.stringify(body));
+ctx.deferMatch=true;
+const waiting=vm.runInContext("recordMatch('new_product_verified')",ctx);
+while(!ctx.resolveMatch)await new Promise(setImmediate);
+elements.get('identifier-reason').value='A changed reviewer rationale';
+vm.runInContext('state.identityRecorded=null',ctx);
+ctx.resolveMatch({ok:true,json:async()=>({})});
+let staleDecision=false;try{await waiting}catch{staleDecision=true}
+if(!staleDecision||vm.runInContext('state.identityRecorded',ctx)!==null)throw Error('late match response restored edited decision');
+if(!vm.runInContext("approvalBlockers().some(check=>check.todo.includes('Run the barcode check'))",ctx))throw Error('edited decision did not block approval');
+ctx.deferMatch=false;
+ctx.deferSave=true;
+const saving=vm.runInContext("recordMatch('new_product_verified')",ctx);
+while(!ctx.resolveSave)await new Promise(setImmediate);
+vm.runInContext("state.payload.fullName='Changed label while saving';state.identityRecorded=null",ctx);
+ctx.resolveSave({ok:true,json:async()=>({review:{draft:{payload_sha256:'test-label-sha'}}})});
+let staleSave=false;try{await saving}catch{staleSave=true}
+if(!staleSave||calls.length!==2)throw Error('stale saved draft authorized match RPC');
+ctx.deferSave=false;
+vm.runInContext("state.payload.fullName='Vitamin D3'",ctx);
+candidateState.conflicts.push({source:'pending',id:'other',revision:1});let stale=false;try{await vm.runInContext('requireCurrentIdentity()',ctx)}catch{stale=true}if(!stale)throw Error('new pending approval did not invalidate receipt');
+vm.runInContext('state.identityLookup=lookup',ctx);lookup.complete=false;let refused=false;try{await vm.runInContext("recordMatch('new_product_verified')",ctx)}catch{refused=true}if(!refused||calls.length!==2)throw Error('incomplete candidate set accepted');
+lookup.identity_method='gtin';lookup.canonical_gtin14='00050428381397';lookup.complete=true;
+vm.runInContext("state.selected.normalized_upc='050428381397';state.identityLookup=lookup",ctx);
+await vm.runInContext('checkIdentity({record:true})',ctx);
+if(calls.length!==2)throw Error('v2 GTIN automatically invented reviewer decision');
+elements.get('identifier-reason').value='';let noReason=false;
+try{await vm.runInContext("recordMatch('no_match_verified')",ctx)}catch{noReason=true}
+if(!noReason||calls.length!==2)throw Error('v2 GTIN accepted missing reviewer rationale');
+lookup.identity_method='label_review';lookup.canonical_gtin14=null;lookup.complete=true;
+elements.get('identifier-reason').value='Compared package photographs and verified duplicate';
+vm.runInContext("state.selected.normalized_upc=null",ctx);
+candidateState.pending=[{submission_id:'11111111-2222-4333-8444-555555555555',dsld_id:'PG_SUB_11111111222243338444555555555555',brandName:'Example Labs',fullName:'Vitamin D3',approval_revision:1}];
+await vm.runInContext('checkIdentity()',ctx);
+await vm.runInContext("resolvePendingDuplicate('11111111-2222-4333-8444-555555555555')",ctx);
+const ambiguity=calls[2],duplicate=calls[3];
+if(ambiguity?.outcome!=='identity_ambiguous'||ambiguity.candidate_dsld_ids.length!==1||ambiguity.matched_dsld_id!=null)throw Error('pending duplicate invented a new product or catalog match');
+if(duplicate?.to_status!=='duplicate'||duplicate.resolution_code!=='duplicate_submission'||duplicate.duplicate_of!=='11111111-2222-4333-8444-555555555555')throw Error('pending duplicate target not preserved');
+if(duplicate.review_notes!=='Compared package photographs and verified duplicate')throw Error('reviewed duplicate rationale was dropped');
+if(vm.runInContext('state.identityRecorded',ctx)!=='identity_ambiguous'||!vm.runInContext("approvalBlockers().some(check=>check.todo.includes('Run the barcode check'))",ctx))throw Error('ambiguity receipt became approval-ready');
+console.log('ok');
+})().catch(e=>{console.error(e);process.exitCode=1});
+"""
+    result = subprocess.run([node, '-e', program, str(REVIEW_DIR / 'static/app.js')], capture_output=True, text=True)
+    assert result.returncode == 0, result.stderr
+    assert result.stdout.strip() == 'ok'
