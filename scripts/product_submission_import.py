@@ -800,6 +800,10 @@ def _freeze_promoted_label(
     if not isinstance(output_name, str) or Path(output_name).name != output_name:
         raise SubmissionImportError("promoted import receipt output is malformed")
     source = destination / output_name
+    relative = Path(PROMOTED_HISTORY_DIR) / submission_id / f"{promoted_revision}.json"
+    frozen = destination / relative
+    if frozen.is_file():
+        source = frozen
     if not source.is_file() or not isinstance(label_hash, str):
         raise SubmissionImportError("promoted manual label is unavailable")
     payload = source.read_bytes()
@@ -1015,12 +1019,15 @@ def materialize_approved_submissions(
                 existing_receipt.get("promoted_approval_revision")
                 or (1 if existing_receipt.get("promoted_catalog_version") else 0)
             )
-            if promoted_revision < receipt_revision:
+            if promoted_revision < receipt_revision and not authoritative:
                 raise SubmissionImportError(
                     "refusing to replace an unpromoted approval revision"
                 )
+            if existing_hash not in {existing_receipt.get("label_sha256"), label_hash}:
+                raise SubmissionImportError("manual label changed after import")
             _freeze_promoted_label(destination, submission_id, existing_receipt)
-            fallback_promoted_owners[submission_id] = submission_id
+            if promoted_revision:
+                fallback_promoted_owners[submission_id] = submission_id
             # The new bytes with the old receipt also recover a crash between
             # the two atomic replacements. Preserve promotion state below.
             prepared.append((submission_id, approval_revision, approval_payload_sha256,

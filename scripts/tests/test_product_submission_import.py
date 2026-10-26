@@ -1766,3 +1766,54 @@ def test_reviewed_physical_state_preserves_approved_source_and_fails_closed():
     raw["physicalState"]["name"] = "Liquid"
     with pytest.raises(ValueError, match="metadata changed"):
         normalizer._apply_reviewed_serving_basis(raw)
+
+@pytest.mark.parametrize('promoted', [False, True])
+def test_authoritative_revision_supersedes_unpublished_and_recovers_receipt(tmp_path, monkeypatch, promoted):
+    import product_submission_import as importer
+    row = _export()
+    result = importer.materialize_approved_submissions([row], output_dir=tmp_path)
+    receipt_path = tmp_path / importer.RECEIPT_FILE
+    if promoted:
+        receipts = json.loads(receipt_path.read_text())
+        receipts['submissions'][row['submission_id']].update(promoted_catalog_version='old', promoted_approval_revision=1)
+        receipt_path.write_text(json.dumps(receipts))
+    payload = _payload()
+    payload['fullName'] = 'Revision two'
+    newer = _export(payload, approval_revision=2)
+    old_write = importer._atomic_write_text
+    def crash(path, content):
+        if path == receipt_path:
+            raise RuntimeError('receipt crash')
+        old_write(path, content)
+    monkeypatch.setattr(importer, '_atomic_write_text', crash)
+    with pytest.raises(RuntimeError, match='receipt crash'):
+        importer.materialize_approved_submissions([newer], output_dir=tmp_path, authoritative=True)
+    monkeypatch.setattr(importer, '_atomic_write_text', old_write)
+    importer.materialize_approved_submissions([newer], output_dir=tmp_path, authoritative=True)
+    assert json.loads(result.output_paths[0].read_text())['fullName'] == 'Revision two'
+    if promoted:
+        importer.materialize_approved_submissions([], output_dir=tmp_path, authoritative=True)
+        assert json.loads(result.output_paths[0].read_text())['fullName'] == 'Example Vitamin D3'
+
+
+def test_authoritative_supersession_preserves_promoted_label_through_three_revisions(tmp_path):
+    import product_submission_import as importer
+    first = _export()
+    result = importer.materialize_approved_submissions([first], output_dir=tmp_path)
+    receipt_path = tmp_path / importer.RECEIPT_FILE
+    receipts = json.loads(receipt_path.read_text())
+    receipts['submissions'][first['submission_id']].update(promoted_catalog_version='old', promoted_approval_revision=1)
+    receipt_path.write_text(json.dumps(receipts))
+    for revision in (2, 3):
+        payload = _payload()
+        payload['fullName'] = f'Revision {revision}'
+        importer.materialize_approved_submissions([_export(payload, approval_revision=revision)], output_dir=tmp_path, authoritative=True)
+    with pytest.raises(importer.SubmissionImportError, match='older approval'):
+        importer.materialize_approved_submissions([first], output_dir=tmp_path, authoritative=True)
+    changed = _payload()
+    changed['fullName'] = 'same revision mutation'
+    with pytest.raises(importer.SubmissionImportError, match='same approval revision'):
+        importer.materialize_approved_submissions([_export(changed, approval_revision=3)], output_dir=tmp_path, authoritative=True)
+    result.output_paths[0].write_text('manual mutation')
+    with pytest.raises(importer.SubmissionImportError, match='manual label changed'):
+        importer.materialize_approved_submissions([_export(changed, approval_revision=4)], output_dir=tmp_path, authoritative=True)
