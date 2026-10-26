@@ -2823,6 +2823,8 @@ async function refreshReviewerPictureUrls() {
 function setApprovedReadOnly() {
   const approved = state.selected?.review_status === 'approved';
   for (const node of document.querySelectorAll?.('#detail-panel input, #detail-panel textarea, #detail-panel select, #detail-panel button') ?? []) {
+    // Decision availability owns this binding-dependent action.
+    if (node.id === 't-reopen-approval') continue;
     // Development notes and evidence access cannot alter the approved label.
     if (node.dataset.soloReadOnly === 'true') { node.disabled = false; continue; }
     if (node.id === 'raw-json') { node.readOnly = approved; continue; }
@@ -3268,6 +3270,7 @@ function setDecisionAvailability() {
   $('approved-correction-actions').hidden = status !== 'approved';
   $('t-reopen-approval').disabled = status !== 'approved' ||
     !Number.isSafeInteger(state.selected?.approval_revision) ||
+    state.selected.approval_revision < 1 ||
     !/^[0-9a-f]{64}$/.test(state.selected?.approval_payload_sha256 ?? '');
   $('reviewer-evidence-replacement').hidden = status !== 'under_review' ||
     !Number.isSafeInteger(state.selected?.approval_revision) ||

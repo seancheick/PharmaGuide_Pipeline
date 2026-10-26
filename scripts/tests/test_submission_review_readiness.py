@@ -724,3 +724,31 @@ def test_reviewer_upload_attempt_recovers_cleanup_without_discarding_live_resume
         assert len(result['keys']) == 2
         assert result['keys'][0] == result['keys'][1]
         assert not result['remaining']
+
+
+@pytest.mark.parametrize('revision,payload_hash,expected_disabled', [
+    (1, 'a' * 64, False),
+    (None, 'a' * 64, True),
+    (0, 'a' * 64, True),
+    (-1, 'a' * 64, True),
+    (1, None, True),
+    (1, 'bad-hash', True),
+])
+def test_reopen_binding_survives_read_only_controls(revision, payload_hash, expected_disabled):
+    out = _exercise(f'''(() => {{
+      const button=document.getElementById('t-reopen-approval');
+      button.dataset={{soloReadOnly:'true'}};
+      const editor=document.getElementById('brand-name');
+      editor.dataset={{}};
+      document.querySelectorAll=selector=>{{out.selector=selector;return [button,editor];}};
+      state.selected={{...state.selected,review_status:'approved',
+        approval_revision:{json.dumps(revision)},approval_payload_sha256:{json.dumps(payload_hash)}}};
+      setDecisionAvailability();
+      // Other renderers also apply editability after decisions were calculated.
+      setApprovedReadOnly();
+      out.disabled=button.disabled;
+      out.editorDisabled=editor.disabled;
+    }})()''')
+    assert out['disabled'] is expected_disabled
+    assert out['editorDisabled'] is True
+    assert '#detail-panel button' in out['selector']
