@@ -688,7 +688,8 @@ async function withPendingIdentityCandidates(lookup, submissionId) {
   }
   const pending = candidates.pending.map(row => ({source: 'pending', dsld_id: row.dsld_id,
     brand_name: row.brandName, product_name: row.fullName, upc_sku: '',
-    approval_revision: row.approval_revision}));
+    approval_revision: row.approval_revision, submission_id: row.submission_id,
+    package: row.package ?? null, issuer: row.issuer ?? null}));
   return {...lookup, matches: [...lookup.matches, ...pending], pending_conflicts: candidates.conflicts,
     pending_revision: JSON.stringify(candidates.conflicts)};
 }
@@ -1276,6 +1277,7 @@ function renderIdentityCheck() {
   for (const match of lookup.matches) {
     const item = document.createElement('li');
     item.textContent = `${match.brand_name} ${match.product_name}`.trim();
+    if (match.source === 'pending') item.textContent += ` · Package: ${match.package ?? 'not recorded'} · Issuer: ${match.issuer ?? 'not recorded'}`;
     const source = document.createElement('span');
     source.className = 'match-source';
     source.textContent = `${match.source === 'catalog' ? 'In app catalog' : match.source === 'pending' ? 'Pending approved submission' : 'DSLD reference'} · ID ${match.dsld_id}`;
@@ -1289,12 +1291,18 @@ function renderIdentityCheck() {
       .map((match) => match.dsld_id),
   )];
   if (lookup.identity_method === 'label_review') {
-    if (lookup.matches.some(match => match.source === 'pending')) {
-      show('blocked', 'Pending approved identity needs resolution', `Review the pending candidates above before another approval. ${indexNote}`);
-      return;
-    }
     if (lookup.freshness === 'blocked' || lookup.complete !== true || ids.length > 100) {
       show('blocked', 'Identity review blocked', `A fresh complete candidate set is required. ${indexNote}`);
+      return;
+    }
+    const pending = lookup.matches.filter(match => match.source === 'pending');
+    if (pending.length) {
+      show('blocked', 'Pending approved identity needs resolution', `Review package and label evidence before marking a duplicate. Another product approval remains blocked. ${indexNote}`);
+      for (const candidate of pending) {
+        if (candidate.submission_id) {
+          actions.append(identityButton(`Verified duplicate of pending submission ${candidate.submission_id}`, () => resolvePendingDuplicate(candidate.submission_id)));
+        }
+      }
       return;
     }
     if (state.identityRecorded === 'new_product_verified' || activeCatalogRelation()) {
@@ -3525,6 +3533,20 @@ function reject() {
   const fields = { to_status: 'rejected', resolution_code: code };
   if (detail) fields.resolution_detail = detail;
   return transition(fields);
+}
+
+async function resolvePendingDuplicate(submissionId) {
+  const candidate = state.identityLookup?.matches?.find(match =>
+    match.source === 'pending' && match.submission_id === submissionId);
+  if (!candidate || !/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(submissionId)) {
+    throw new Error('Refresh and review the current pending submission candidates.');
+  }
+  // A pending product is neither a released catalog match nor a new product.
+  // Keep that truthful receipt, then resolve through the existing duplicate owner.
+  await recordMatch('identity_ambiguous');
+  $('dup-code').value = 'duplicate_submission';
+  $('dup-target').value = submissionId;
+  return markDuplicate();
 }
 
 function markDuplicate() {

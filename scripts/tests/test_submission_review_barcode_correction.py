@@ -186,7 +186,7 @@ const ctx=vm.createContext({URLSearchParams,Date,Set,Number,encodeURIComponent,c
  return {ok:true,json:async()=>lookup}}});
 const lookup={identity_method:'label_review',canonical_gtin14:null,brandName:'Example Labs',fullName:'Vitamin D3',index_built_at:new Date().toISOString(),index_revision:'current',freshness:'fresh',complete:true,matches:[]};
 ctx.lookup=lookup;ctx.calls=calls;
-vm.runInContext(fs.readFileSync(process.argv[1],'utf8')+`\nfunction boot(){} function renderIdentityCheck(){} function setStatus(){} function hydrateReview(review){state.review=review} function renderReviewBanner(){} function setDecisionAvailability(){}\n`,ctx);
+vm.runInContext(fs.readFileSync(process.argv[1],'utf8')+`\nfunction boot(){} function renderIdentityCheck(){} function setStatus(){} function hydrateReview(review){state.review=review} function renderReviewBanner(){} function setDecisionAvailability(){} async function loadQueue(){} async function refreshSelected(){}\n`,ctx);
 (async()=>{
 vm.runInContext(`state.session={access_token:'test'};state.selected={id:'submission',kind:'missing_product',normalized_upc:null,identifier:{brandName:'Example Labs',fullName:'Vitamin D3'},evidence_revision:2,evidence_manifest_sha256:'a'.repeat(64)};state.payload={brandName:'Example Labs',fullName:'Vitamin D3'};state.payloadSha='test-label-sha';state.reviewReadyFor='submission:2';state.identityLookup=lookup`,ctx);
 elements.set('identifier-type',{value:'amazon_fnsku'});elements.set('identifier-issuer',{value:'Amazon'});elements.set('identifier-package',{value:'60 capsules'});elements.set('identifier-reason',{value:'Verified package and complete candidate list'});
@@ -223,6 +223,16 @@ if(calls.length!==2)throw Error('v2 GTIN automatically invented reviewer decisio
 elements.get('identifier-reason').value='';let noReason=false;
 try{await vm.runInContext("recordMatch('no_match_verified')",ctx)}catch{noReason=true}
 if(!noReason||calls.length!==2)throw Error('v2 GTIN accepted missing reviewer rationale');
+lookup.identity_method='label_review';lookup.canonical_gtin14=null;lookup.complete=true;
+elements.get('identifier-reason').value='Compared package photographs and verified duplicate';
+vm.runInContext("state.selected.normalized_upc=null",ctx);
+candidateState.pending=[{submission_id:'11111111-2222-4333-8444-555555555555',dsld_id:'PG_SUB_11111111222243338444555555555555',brandName:'Example Labs',fullName:'Vitamin D3',approval_revision:1}];
+await vm.runInContext('checkIdentity()',ctx);
+await vm.runInContext("resolvePendingDuplicate('11111111-2222-4333-8444-555555555555')",ctx);
+const ambiguity=calls[2],duplicate=calls[3];
+if(ambiguity?.outcome!=='identity_ambiguous'||ambiguity.candidate_dsld_ids.length!==1||ambiguity.matched_dsld_id!=null)throw Error('pending duplicate invented a new product or catalog match');
+if(duplicate?.to_status!=='duplicate'||duplicate.resolution_code!=='duplicate_submission'||duplicate.duplicate_of!=='11111111-2222-4333-8444-555555555555')throw Error('pending duplicate target not preserved');
+if(vm.runInContext('state.identityRecorded',ctx)!=='identity_ambiguous'||!vm.runInContext("approvalBlockers().some(check=>check.todo.includes('Run the barcode check'))",ctx))throw Error('ambiguity receipt became approval-ready');
 console.log('ok');
 })().catch(e=>{console.error(e);process.exitCode=1});
 """
