@@ -1365,9 +1365,10 @@ def _pillar_verification(module_bd: Dict[str, Any], weight: float,
         detail = ", ".join(signals) if signals else "established manufacturer"
         reason = "Quality signals on file, not independently verified — " + detail + "."
     else:
-        # Fail-open: no verification data on file. Say it's unknown, not that the
-        # product failed — and make clear it isn't penalized for the gap.
-        reason = "Unknown: no independent verification on file; it gets neutral credit, not a penalty."
+        # Missing independent verification is not a failed product test.
+        # Keep baseline arithmetic in the existing audit-only fact below.
+        reason = ("Independent product verification is not on file. "
+                  "This does not mean testing failed.")
         verification_facts.append(audit_fact(
             "verification_neutral_baseline", "Neutral value",
             f"Neutral {_g(sub['neutral_baseline'])} of {_g(cap)}; "

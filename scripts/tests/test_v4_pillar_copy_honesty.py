@@ -128,11 +128,12 @@ def _module_bd(state_counts=None, b7=0.0, base_passed=True):
     }
 
 
-def test_unknown_verification_states_its_neutral_baseline():
+def test_unknown_verification_explains_missing_records_without_failed_testing():
     pillar = qs._pillar_verification(_module_bd(), 15, _cfg())
     assert pillar["score"] == 6.0
     assert pillar["reason"] == (
-        "Unknown: no independent verification on file; it gets neutral credit, not a penalty.")
+        "Independent product verification is not on file. "
+        "This does not mean testing failed.")
     # The baseline arithmetic is kept for audits, never shown in the reason.
     assert pillar["explanation"]["facts"] == [{
         "id": "verification_neutral_baseline", "label": "Neutral value", "audience": "audit",
