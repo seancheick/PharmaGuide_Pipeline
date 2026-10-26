@@ -1537,7 +1537,9 @@ def _install_completed_release_context(monkeypatch, dose_status='verified'):
     context['dose']['administration_frequency'] = 'once_daily'
     if dose_status == 'source_not_reported':
         context['dose'].update(values=[], dose_basis='not_applicable', basis='unresolved')
-    monkeypatch.setattr(clinical_applicability, 'reviewed_entries', lambda: {'used': {'id': 'used', 'study_contexts': [context]}})
+    synthetic_references = [{'pmid': pmid} for pmid in context['source_pmids']]
+    monkeypatch.setattr(clinical_applicability, 'reviewed_entries', lambda: {'used': {'id': 'used', 'study_contexts': [context],
+        'references_structured': synthetic_references}})
     return context
 
 

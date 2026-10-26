@@ -217,3 +217,88 @@ run_strict_gate() {
     assert source.index('run_strict_gate "scoring assessment readiness"') > build
     assert source.index('run_strict_gate "active identity integrity"') > build
     assert source.index('run_strict_gate "raw-to-final line integrity"') > build
+
+
+def _run_publication_failure_boundary(tmp_path, *, sync_exit=0, import_exit=23,
+                                      before_sync_exit=0, skip_cloud=0, dry_run=0):
+    import shlex
+    source = RELEASE_SCRIPT.read_text()
+    # Execute real release state handling and the real sync/import boundary.
+    helpers = source[source.index('info()'):source.index('DIST_DIR="$REPO_ROOT/scripts/dist"')]
+    boundary = source[source.index('# Step 5: Sync to Supabase'):source.index('# Step 7: Prune')]
+    app = tmp_path / 'app'
+    (app / 'scripts').mkdir(parents=True)
+    importer = app / 'scripts/import_catalog_artifact.sh'
+    importer.write_text(f'#!/bin/bash\nprintf "IMPORT_ATTEMPTED\\n"\nexit {import_exit}\n')
+    importer.chmod(0o755)
+    setup = f'''set -Eeuo pipefail
+SKIP_SUPABASE={skip_cloud}
+SUPABASE_DRY_RUN={dry_run}
+SKIP_FLUTTER=0
+FORCE=1
+FLUTTER_REPO={shlex.quote(str(app))}
+DIST_DIR=dist
+ASSETS_DIR=assets
+SUBMISSION_RECEIPTS=absent
+SUBMISSION_OUTPUT_DIR=submissions
+SOURCE_OF_TRUTH_AUDIT=audit
+CATALOG_STATE_SCRIPT=state
+CATALOG_INPUT_BINDING=binding
+PG_PYTHON=python_gate
+python_gate() {{
+  if [[ "$1" == state ]]; then return {before_sync_exit}; fi
+  if [[ "$1" == scripts/sync_to_supabase.py ]]; then
+    printf 'SYNC_ATTEMPTED\\n'
+    return {sync_exit}
+  fi
+  return 0
+}}
+run_strict_gate() {{ return 0; }}
+'''
+    return subprocess.run(['bash', '-c', setup + helpers + boundary + '\necho RELEASE_FINISHED\n'],
+                          text=True, capture_output=True)
+
+
+def test_failed_flutter_import_reports_confirmed_cloud_state(tmp_path):
+    result = _run_publication_failure_boundary(tmp_path)
+    assert result.returncode == 23
+    assert 'SYNC_ATTEMPTED' in result.stdout and 'IMPORT_ATTEMPTED' in result.stdout
+    assert 'Supabase catalog sync completed successfully' in result.stderr
+    assert 'Flutter bundle' in result.stderr
+    assert 'RELEASE_FINISHED' not in result.stdout
+
+
+def test_failed_sync_does_not_claim_activation_failed_or_succeeded(tmp_path):
+    result = _run_publication_failure_boundary(tmp_path, sync_exit=37)
+    assert result.returncode == 37
+    assert 'activation outcome is unknown' in result.stderr
+    assert 'IMPORT_ATTEMPTED' not in result.stdout
+    assert 'sync completed successfully' not in result.stderr
+
+
+def test_pre_sync_failure_reports_publication_not_attempted(tmp_path):
+    result = _run_publication_failure_boundary(tmp_path, before_sync_exit=29)
+    assert result.returncode == 29
+    assert 'catalog publication was not attempted' in result.stderr
+    assert 'SYNC_ATTEMPTED' not in result.stdout
+
+
+def test_local_import_failure_after_dry_run_does_not_claim_publication(tmp_path):
+    result = _run_publication_failure_boundary(tmp_path, dry_run=1)
+    assert result.returncode == 23
+    assert 'catalog publication was not attempted' in result.stderr
+    assert 'sync completed successfully' not in result.stderr
+
+
+def test_local_import_failure_with_cloud_skipped_does_not_claim_publication(tmp_path):
+    result = _run_publication_failure_boundary(tmp_path, skip_cloud=1)
+    assert result.returncode == 23
+    assert 'catalog publication was not attempted' in result.stderr
+    assert 'SYNC_ATTEMPTED' not in result.stdout
+
+
+def test_successful_publication_boundary_has_no_failure_report(tmp_path):
+    result = _run_publication_failure_boundary(tmp_path, import_exit=0)
+    assert result.returncode == 0
+    assert 'RELEASE_FINISHED' in result.stdout
+    assert 'Release incomplete' not in result.stderr

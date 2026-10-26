@@ -338,6 +338,15 @@ if ! "$PYTHON" preflight.py --quick "${RAW_LABEL_ARGS[@]}" 2>&1 | tee -a "$SUMMA
     exit 1
 fi
 
+# Reuse current completion facts only when content provenance proves they still
+# apply. Stale or missing facts allow the corrective rebuild, not publication.
+if [ "$PIPELINE_ONLY" != "1" ] && [ "${SKIP_SNAPSHOT:-0}" != "1" ]; then
+    if ! "$PYTHON" preflight.py --release-readiness --raw-root "$DATASET_ROOT" 2>&1 | tee -a "$SUMMARY_FILE"; then
+        echo "STOP: current assessments block publication before corpus work."
+        exit 1
+    fi
+fi
+
 # Aggregate source/live/canary preparation is optional. Publication still runs
 # its own mandatory output-dependent gates, regardless of this flag.
 if [ "$PRE_CHECK" = "1" ]; then

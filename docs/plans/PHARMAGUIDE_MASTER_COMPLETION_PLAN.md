@@ -1,5 +1,16 @@
 # PharmaGuide master completion plan
 
+### Assessment failure and verification closeout — October26
+
+- [x] Reconcile current contributing and botanical blockers with existing frozen registers; distinguish signed bounded responses, absent full response artifact and genuinely unresolved applicability.
+- [x] Implement source-bound early completeness, read-only deployed publishing contract check and truthful partial-release failure reporting. Focused regressions and independent review complete.
+- [x] Correct verified Magtein source notes and collagen dependency attribution without changing scored outcomes or holds.
+- [ ] Qualify combined pipeline/app candidate with stable local and exact whole-fast CI; integrate under existing authorization.
+- [ ] Demonstrate normal native app verification and preserve installed catalog/product/detail identity; distinguish old installed content from source fixes.
+- [ ] Resolve only the exact residual scientific/provenance questions, then select one necessary rebuild from current fingerprints and validate corpus/export/app. Publication remains blocked.
+
+Owner: existing stage manifests/preflight, publishing client/release script, clinical applicability/evidence resolver, review registers and Flutter importer/readers. Evidence: current section in [review reconciliation](../../scripts/audits/literature_records_review_20261020/BRYAN_BATCH_RESPONSE_VERIFICATION_20261025.md) and [ledger](../../scripts/audits/pending_items_20260926/LEDGER.md). Will NOT create a parallel scorer, clinical authority or release system.
+
 ### Batch12 — nine exact labels, October25
 
 - [x] Implement all9verified source corrections through existing owners, retaining source conflicts, unknown component quantities and scientific holds.359named tests,local546/24declaredskips+guardgreen,12raw replay and independent review complete. Corrected cranberry consumer wording has named export coverage; grades unchanged.

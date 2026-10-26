@@ -7,6 +7,52 @@ Owner Check: existing `clinical_review_holds.csv` and `benchmark_review_backlog.
 The original review sections were documentation/report work only. Later runtime implementation checkpoints are identified separately below; source dispositions alone do not establish rebuilt closure. Frozen register fields and closure states remain intact. Source facts checked below are not automatically product-level clearances.
 
 
+## October 26 reconciliation against the completed corpus
+
+The operator's scored corpus at `bbaf3a7d` contains 15,437 products; 10,509 have at least one release-completeness blocker and 4,928 pass. This is a frozen observed result, not a claim that the current source candidate has been rebuilt. The source-attribution correction and later source-note correction below retain their genuine holds.
+
+Owner: `clinical_applicability.py::assess_clinical_source_review` and the existing clinical/benchmark CSV registers — evidence: every current contributing dependency joined to canonical `reviewed_entries`, all 155 register rows checked, every 3,238 botanical-blocked product traced through the existing botanical/purpose owner. Will NOT create: another review authority, blanket approval, new clinical registry or replacement benchmark.
+
+### Counts describe different units
+
+| Unit | Reconciled finding |
+|---|---|
+| Returned A items | 148 individually enumerated in the original response: 147 curated records plus generated collagen. The response expressly leaves source/preparation assessments incomplete; the follow-up withdraws age-only exclusions. |
+| Existing clinical register | 155 rows: the 147 A-linked records plus eight additional historical records. Frozen IDs/counts remain unchanged. |
+| Current contributing-source IDs | 147 raw IDs, collapsing to 146 canonical records after the generated collagen pointer resolves to INGR_COLLAGEN_PEPTIDES. These affect 5,972 distinct products, with overlap between records. |
+| Register rows outside that blocker set | Nine: INGR_BENFOTIAMINE, INGR_BIFIDOBACTERIUM_BIFIDUM, INGR_GLYCINE, INGR_MOLYBDENUM, INGR_PROPOLIS, INGR_SAME, INGR_SLIPPERY_ELM, INGR_VITAMIN_E and PRECLIN_BETAINE_HCL. Their historical review rows alone do not create a publication blocker. Other product-level gates remain independent. |
+| Botanical benchmark groups | All 3,238 affected products map to 374 canonical subject groups: 366 already in the frozen 506-row backlog and eight newly observed subjects. The 140 remaining frozen subjects have no current botanical benchmark block. Each group's exact preparations still matter; these are not 374 independent literature reviews. |
+| Additional material-evidence work | The existing readiness rows identify 463 canonical subjects across 3,515 products with at least one not-yet-evaluated ingredient; this overlaps the other blocker families and is not added to their totals. |
+| C-label / D-citation responses | The latest returned summary (`f32df139-89c6-41d8-b910-1cb4811949fa`) reports all 171 C and 146 D cells populated and describes remaining limitations. The complete updated per-ID document is not among the located attachments/files. These totals are attributed to that summary, not independently recounted as completed assessments. Source dispositions do not by themselves close the A/B applicability work. |
+
+The eight current-only botanical subjects are american_ginseng, cinnamon, gentian, green_bell_pepper, green_cabbage, joint_comfort_proprietary_blend, nha_cranberry_extract and raspberry_unspecified. They are appended to the existing benchmark register with frozen count zero; no historical row or count was replaced.
+
+### What was actually supplied, and what was not applied
+
+The 147 linked A rows now acknowledge Sean's attestation that Dr. Pham signed the bounded responses. Older cells saying attribution was absent were stale. This correction recognizes the supplied signature without expanding its scope or inventing its date. Later Bryan responses are linked separately for the eight affected existing records, with source-access questions already resolved removed from their current action text.
+
+Every current canonical clinical record lacks `study_contexts`: 210/210 at historical `e7e1c4a`, failure baseline `bbaf3a7d`, and the inspected current source. Thus this structure gap predates the latest enhancement. It does not prove that no human review happened. The original A response and follow-up explicitly retain substantive preparation/regimen/outcome gaps; the richer later batches close some facts but also name particular residual questions. The CSV now carries each returned row's original disposition, exact remaining question, response provenance, and current affected product IDs. Age-only restrictions are marked withdrawn. A146/A147 block-retrieval omissions are marked already recovered.
+
+The approval validator `probiotic_measurements.py::clinical_review_provenance_valid` requires an attributable reviewer, an actual timezone-qualified review timestamp and scope `identity_dose_outcome_applicability`. That is an existing runtime requirement. A receipt/download time cannot substitute for the original approval time. More importantly, a signature on a response that expressly leaves a source question unanswered cannot fill that substantive field. Requests must name the missing scope or provenance; do not request a blanket repeat of already signed work.
+
+### Confirmed unapplied Magtein source facts corrected
+
+`BRAND_MAGTEIN` still called correction PMID40567408 unverified even though its full official body had already been inspected. The source note also omitted the vitamin B6 co-active in the MagteinPS methods. Live PubMed confirmed all three identifiers (36558392,39252819,40567408), and official PMC bodies were rechecked on October26. The existing record and reference notes now reflect the available correction and full-formula identity. Clinical applicability, numerical grades and holds remain unchanged. Sources: [correction](https://pmc.ncbi.nlm.nih.gov/articles/PMC12190206/), [formula methods](https://pmc.ncbi.nlm.nih.gov/articles/PMC9786204/).
+
+The owner regression failed first, then passed. `test_clinical_source_integrity_eligibility.py` plus `test_clinical_applicability.py`: 290 passed. `data_batch.py check ... --since HEAD --expect backed_clinical_studies/BRAND_MAGTEIN` reported one expected changed record and no unexpected entries. Citation-diff tools selected zero new identifiers/rules; that result is not represented as source verification. The independent live API/full-body checks above supply the source evidence. Fourteen real enriched-product Score replays (all eleven current Magtein contributors plus three controls) preserve every compared score, pillar, status, safety field and readiness result. No corpus run, export or app delivery is claimed.
+
+### Structured-context migration boundary
+
+A controlled synthetic probe demonstrates that `assess_clinical_source_review` currently validates supplied contexts without establishing coverage of every source listed on the record: one approved synthetic context plus a second unrepresented reference still returns complete. This is a coverage question, not evidence that every historical reference contributes. A single partial real context was therefore not inserted as though it represented a whole multi-source record. Before migration, establish the actual contributing-source set and cover its required decisions through the existing owner; exclude correction notices and unused references for their documented reasons. Do not introduce a universal all-historical-citations approval rule.
+
+The narrower source-attribution defect is now fixed at `assess_clinical_source_review`: every supplied context source must belong to the canonical record, and at least one must remain eligible under the existing `clinical_record_sources_eligible` owner. An excluded correction notice may accompany an eligible trial as provenance but cannot supply affirmative support alone. Malformed reference containers fail closed with a recorded error rather than crashing or silently discarding data. Seven attribution cases and ten malformed-container cases failed before their fixes; the twenty-case regression/control slice passes. The earlier 443-case owner/consumer slice passed before the container hardening. All 210 real canonical records retain the exact missing-context result, so no assessment is newly cleared. Complete contributing-reference coverage remains the separate migration boundary above; this fix does not invent that mapping.
+
+### Evidence and remaining closure
+
+Private evidence retained in `.claude/state/rebuilt_assessment_audit_20261026/`: `dependency_reconciliation.json` attributes all 3,238 botanical cases and material-evidence subjects; `findings.json` retains all blocked IDs; `contributing_source_groups.csv` retains the contributing-record join; `magtein_live_pubmed.xml` (SHA256 `669fff299b01ddbb011b5369c8390ffd52000d9f3d1de3f7d47f93ccc5046166`), frozen Magtein replay inputs and before/after summaries, and `context_coverage_probe.json`. All original 155 clinical and 506 benchmark frozen IDs/counts were compared to HEAD and are unchanged.
+
+This reconciliation closes the known attribution-metadata error and the unapplied Magtein facts. It does not close all scientific assessments. Remaining work is precisely scoped in the existing registers: complete source-specific applicability decisions where the responses retain questions, recover the full latest C/D cells rather than request duplicate reviews, verify necessary multi-source coverage, and select regeneration from the final fingerprints. Full-corpus/export/native-app proof remains the integration owner's responsibility.
+
 ## Batch 11 source corrections and later-report intake — October 25
 
 **Implemented, bounded-verified and integrated; scientific and rebuilt closure remain separate.** Baseline `585d19f7ff50bf54a94eeb9d95996c6bfe74235a`; isolated branch `codex/batch11-source-corrections`. The new summary attachment is an intake report, not proof that all its later findings exist in current runtime or that the full171C/146D review is closed. It is pinned to older `ebc792e8`; previously integrated batches must not be counted as newly unfixed.

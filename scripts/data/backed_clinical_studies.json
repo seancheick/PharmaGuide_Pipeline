@@ -3,7 +3,7 @@
     "description": "Ingredients backed by clinical research and studies - Enhanced for Section C v3.4.0",
     "purpose": "evidence_scoring",
     "schema_version": "5.6.4",
-    "last_updated": "2026-10-25",
+    "last_updated": "2026-10-26",
     "total_entries": 210,
     "changelog": [
       "2026-10-20: INGR_TART_CHERRY standard_name is Tart Cherry (\"tart cherry extract\" kept as an alias), the rename deferred from PR205. Its juice-only applicability (PR213) rejects every non-juice row the name now reaches; measured on all 552 cherry-mentioning labels: 0 score, pillar or blob changes.",
@@ -15701,8 +15701,8 @@
         "Sleep Quality",
         "Healthy Aging/Longevity"
       ],
-      "notes": "The cited evidence includes different preparations and outcomes. PMID 36558392 tested MagteinPS, a combination of magnesium L-threonate, phosphatidylserine and vitamins C and D, not isolated Magtein. PMID 41601871 found benefits on selected cognition and subjective sleep-related impairment outcomes, but no between-group differences in objective sleep outcomes or several other sleep measures. The 21-day sleep trial is PMID 39252819; PMID 40567408 is its linked corrigendum, not an independent trial. Selected questionnaire and wearable outcomes improved, while many measures did not differ from placebo. The original sleep paper reports AIDP funding; the correction content still requires verification. None of these facts supplies clinician approval or a universal dose threshold.",
-      "last_updated": "2026-10-24",
+      "notes": "The cited evidence includes different preparations and outcomes. PMID 36558392 tested MagteinPS, a combination of magnesium L-threonate, phosphatidylserine, vitamins C and D, and vitamin B6, not isolated Magtein. PMID 41601871 found benefits on selected cognition and subjective sleep-related impairment outcomes, but no between-group differences in objective sleep outcomes or several other sleep measures. The 21-day sleep trial is PMID 39252819; PMID 40567408 is its linked corrigendum, not an independent trial. Selected questionnaire and wearable outcomes improved, while many measures did not differ from placebo. The correction reports that the sleep trial was retrospectively registered on April 15, 2024; AIDP commissioned and funded the study, owns patents, and disclosed paid relationships with three authors. The authors state that the protocol was unchanged. Correction-content access is resolved; preparation-specific applicability and product review remain held. None of these facts supplies clinician approval or a universal dose threshold.",
+      "last_updated": "2026-10-26",
       "notable_studies": "PMID 36558392 randomized 109 healthy Chinese adults to a 2 g/day MagteinPS combination or placebo for 30 days. PMID 41601871 randomized 100 adults aged 18-45 with dissatisfied sleep to 2 g/day Magtein or placebo for six weeks; NIH composite cognition and some subjective outcomes improved, but Raven performance and objective sleep outcomes did not. PMID 39252819 randomized 80 adults aged 35-55 with sleep problems to 1 g/day Magtein or placebo for 21 days; selected subjective and wearable measures improved. PMID 40567408 corrects that article and must not be counted as another trial.",
       "references_structured": [
         {
@@ -15774,7 +15774,7 @@
           "supports_claims": [],
           "verification_source": "pubmed_eutils",
           "scoring_eligible": false,
-          "note": "Linked correction notice for original trial PMID39252819; not an independent clinical trial. Full correction content remains unverified; retain clinical qualification hold."
+          "note": "Linked correction notice for original trial PMID39252819; not an independent clinical trial. Full correction content was inspected: retrospective registration and funding/patent/paid-author disclosures are recorded in notes. Retain clinical qualification hold."
         },
         {
           "type": "pubmed",
@@ -15789,7 +15789,7 @@
           ],
           "retracted": false,
           "verification_source": "pubmed_eutils",
-          "note": "Original21day sleep trial; correctionPMID40567408 remains linked and requires content review. This bibliographic/source correction is not clinical approval."
+          "note": "Original21day sleep trial; linked correctionPMID40567408 content was inspected. This source correction does not establish clinical approval or product applicability."
         }
       ],
       "external_ids": {

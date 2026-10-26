@@ -85,7 +85,8 @@ def test_worker_timeout_contains_pathological_file(monkeypatch):
     assert "timed out" in (result.error or "").lower()
 
 
-def test_resume_does_not_skip_remaining_files(tmp_path, monkeypatch):
+@pytest.mark.parametrize("source_changed", [False, True], ids=["unchanged", "same_timestamp_content_changed"])
+def test_resume_does_not_skip_remaining_files(tmp_path, monkeypatch, source_changed):
     cfg = _make_config(tmp_path)
     processor = BatchProcessor(cfg)
 
@@ -95,6 +96,8 @@ def test_resume_does_not_skip_remaining_files(tmp_path, monkeypatch):
         path.write_text(json.dumps({"id": i, "ingredientRows": [{"name": "Vitamin C"}]}), encoding="utf-8")
         files.append(path)
 
+    # Match process_all_files: bind the selected inputs before saving state.
+    processor._source_files = tuple(files)
     processed = [str(p) for p in files[:20]]
     state = BatchState(
         started="2026-03-08T00:00:00Z",
@@ -110,6 +113,14 @@ def test_resume_does_not_skip_remaining_files(tmp_path, monkeypatch):
         processed_file_paths=processed,
     )
     processor.save_state(state)
+
+    if source_changed:
+        original = files[0].stat()
+        files[0].write_text(files[0].read_text().replace("Vitamin C", "Vitamin D"))
+        os.utime(files[0], ns=(original.st_atime_ns, original.st_mtime_ns))
+        assert files[0].stat().st_size == original.st_size
+        assert files[0].stat().st_mtime_ns == original.st_mtime_ns
+        assert processor._get_file_manifest_checksum(files) == state.file_manifest_checksum
 
     observed = []
 
@@ -137,7 +148,8 @@ def test_resume_does_not_skip_remaining_files(tmp_path, monkeypatch):
     processor.process_all_files(files, resume=True)
 
     assert observed
-    assert observed[0][0] == "020.json"
+    expected = files if source_changed else files[20:]
+    assert [name for batch in observed for name in batch] == [p.name for p in expected]
 
 
 def test_unmapped_tracker_save_receives_real_processed_file_count(tmp_path, monkeypatch):

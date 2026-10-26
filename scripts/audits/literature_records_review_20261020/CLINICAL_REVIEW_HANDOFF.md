@@ -1,4 +1,39 @@
-# Final pre-rebuild completion campaign — October 24, 2026
+# Assessment review handoff — October 26, 2026
+
+## Current observed state
+
+The operator completed Clean → Enrich → Score at main `bbaf3a7d`. All 114 stage manifests passed the code/reference freshness check at that failure; this did not establish legacy artifact-content bindings. The completeness gate stopped publication: 10,509 of 15,437 products blocked; 4,928 complete. Blocker families overlap. This frozen result does not include the later candidate corrections and must not be called current-candidate verification.
+
+The current source-dependency reconciliation resolves 147 raw IDs into **146 canonical records affecting 5,972 distinct products**. Generated collagen points to `INGR_COLLAGEN_PEPTIDES`; it is not another scientific authority. Of the 155 historical clinical-register rows, nine are outside the current contributing-source blocker set. The 3,238 botanical-benchmark blocked products trace to **374 canonical subjects**: 366 existing frozen rows plus eight newly observed subjects. The original 506-row benchmark snapshot remains intact; 140 of its subjects have no current botanical benchmark block. These groups overlap, and canonical grouping does not prove identical preparation or imply one new review per product.
+
+## One execution register and one forwardable request
+
+The existing [clinical register](clinical_review_holds.csv) and [benchmark register](benchmark_review_backlog.csv) remain the execution registers. Their `reconciled_*` columns carry current scope, affected IDs, original/later responses and exact residual questions. [The current reconciliation and verification record](BRYAN_BATCH_RESPONSE_VERIFICATION_20261025.md#october-26-reconciliation-against-the-completed-corpus) explains the joins and retained evidence. Do not duplicate these rows into a competing tracker.
+
+[Sean's single message to Dr. Pham](DR_PHAM_FINAL_REVIEW_REQUEST.md) now requests only:
+
+1. The full latest document behind the reported 171 C / 146 D dispositions; its summary is available, but its complete updated cells were not located. Do not equate missing local evidence with absence of human review.
+2. Actual scope and original approval provenance where absent; a transmitted-file timestamp is not a review date. Recognize the signed bounded responses and do not repeat them wholesale.
+3. The precise retained source/preparation/regimen/population/outcome questions in the current evidence register.
+4. The current preparation and benchmark decisions in the benchmark register, allowing documented negative conclusions and genuine label limitations.
+
+The forwardable document embeds all 146 current evidence records and 374 current preparation subjects, with carried-forward conclusions, exact remaining questions and affected counts; repository/CSV access is not required. The original detailed A/B/C/D sections remain unchanged as a historical reference appendix. Old blank answer slots and blanket requests are superseded, not new obligations. Existing decisions remain in force within their recorded scope. No promise of a completion date or blanket scientific clearance is made.
+
+## Engineering work and remaining proof
+
+Owner: `clinical_applicability.py::assess_clinical_source_review` — evidence: fail-first attribution and malformed-source regressions, existing `evidence_resolver.py::clinical_record_sources_eligible`, and exact current-record probes. Will NOT create: a second review authority, new clinical policy, blanket all-citations approval rule or invented approval.
+
+The source join now rejects unrelated context citations and support based solely on explicitly excluded sources; an excluded correction may remain provenance beside an eligible trial. Invalid reference containers fail closed. All 210 current canonical records retain their exact missing-context result. This closes a technical attribution hole, not their scientific assessments. The exact source set supporting a retained record-level grade still needs to be established through the existing owner before contexts can establish completion; that engineering mapping is not a request for Dr. Pham to debug the product.
+
+Magtein's verified correction-content and vitamin B6 facts are now recorded; actual grades, eligibility and holds are unchanged. Current evidence: 14-product unchanged score/safety/readiness replay; 443 named owner/consumer tests before container hardening and 20 attribution/container cases afterward. The combined candidate is `746cfa78`; whole-fast CI/integration status belongs to the active main handoff and must not be inferred from this document. No later full-corpus run, app import, native rendering or publication is claimed here.
+
+Remaining closure: retrieve and reconcile the latest full response, resolve only genuine required scientific/benchmark gaps, complete source-attribution migration safely, qualify the combined source candidate, select the earliest necessary rebuild from its fingerprints, then verify every product and the app. Required holds and banned/recalled discoverability remain intact. Do not start another corpus run merely to test whether an unresolved gate disappears.
+
+---
+
+## Historical checkpoints — superseded as current work requests
+
+The following dated notes preserve earlier evidence and integration history. Their old counts, pending statuses and blanket review requests are historical; use the current reconciliation above and the active main handoff for present status.
 
 ## October 25 source-verification checkpoint
 

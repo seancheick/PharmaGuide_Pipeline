@@ -419,6 +419,15 @@ def score_evidence(product: Dict[str, Any], *, apply_primary_floor: bool = False
     from clinical_applicability import assess_clinical_applicability, assess_clinical_source_review, reviewed_entries
     receipts = []
     for entry in {_entry_id(entry): entry for entry in dependencies}.values():
+        # Recovery IDs describe the numerical diagnostic path, not a second
+        # clinical record. Resolve its existing source pointer for dependency
+        # review only; the selected points and recovered-match IDs stay intact.
+        source = str(entry.get("source_data") or "")
+        if (entry.get("evidence_origin") == "scoring_contract_recovery"
+                and source.startswith("backed_clinical_studies:")):
+            source_id = source.split(":", 1)[1]
+            if source_id in reviewed_entries():
+                entry = {**entry, "id": source_id}
         decision = assess_clinical_applicability(product, entry, assess_amount=False)
         if (entry.get("evidence_origin") == "verified_formula_contract"
                 and entry.get("applicability_assessment", {}).get("status") == "assessed_studied_formula"):

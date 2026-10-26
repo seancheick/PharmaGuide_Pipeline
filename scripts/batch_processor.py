@@ -27,7 +27,7 @@ from constants import (
     VALID_INPUT_EXTENSIONS,
     VALIDATION_THRESHOLDS
 )
-from pipeline_freshness import stage_input_fingerprints
+from pipeline_freshness import DATA_FINGERPRINT_KEY, stage_data_fingerprint, stage_input_fingerprints
 from stage_manifest import StageManifestError, write_stage_manifest
 import traceback
 import os
@@ -253,10 +253,19 @@ class BatchProcessor:
         owned_paths = sorted(cleaned_dir.glob("cleaned_batch_*.json"))
         owned_paths.extend(sorted(cleaned_dir.glob("cleaned_batch_*.jsonl")))
         current = stage_input_fingerprints(REPO_ROOT, "clean")
+        if getattr(self, "_source_inventory", None) is not None:
+            inventory = tuple(self.get_input_files(str(self._source_directory)))
+            if inventory != self._source_inventory:
+                raise StageManifestError(
+                    "Cleaning source inventory changed during the run; "
+                    "refusing to publish a mixed manifest"
+                )
+        if hasattr(self, "_source_files"):
+            current[DATA_FINGERPRINT_KEY] = stage_data_fingerprint(self._source_files)
         started = getattr(self, "_stage_inputs", None)
         if started is not None and current != started:
             raise StageManifestError(
-                "Cleaning code or reference data changed during the run; "
+                "Cleaning code, reference data or source content changed during the run; "
                 "refusing to publish a mixed manifest"
             )
         return write_stage_manifest(
@@ -594,6 +603,8 @@ class BatchProcessor:
         """Reference data and cleaning code this run started with."""
         if getattr(self, "_stage_inputs", None) is None:
             self._stage_inputs = stage_input_fingerprints(REPO_ROOT, "clean")
+            if hasattr(self, "_source_files"):
+                self._stage_inputs[DATA_FINGERPRINT_KEY] = stage_data_fingerprint(self._source_files)
         return self._stage_inputs
 
     def _get_config_checksum(self) -> str:
@@ -708,6 +719,11 @@ class BatchProcessor:
         logger.info("Preparing processing state for %d files", len(files))
         # Pin the code and reference data this run starts with; the manifest
         # re-checks them at the end.
+        self._source_files = tuple(files)
+        self._source_inventory = None
+        if files:
+            self._source_directory = Path(files[0]).resolve().parent
+            self._source_inventory = tuple(self.get_input_files(str(self._source_directory)))
         self._stage_inputs = None
         self._clean_stage_inputs()
 

@@ -53,6 +53,9 @@ def _install_batch_dependencies(tmp_path):
         "if sys.argv[1] == '--quick':\n"
         "    assert sys.argv[2] == '--raw-root' and len(sys.argv) >= 4\n"
         "    print('essential-preflight-reached')\n"
+        "elif sys.argv[1] == '--release-readiness':\n"
+        "    assert sys.argv[2] == '--raw-root' and len(sys.argv) == 4\n"
+        "    print('assessment-readiness-reached')\n"
         "else:\n"
         "    assert sys.argv[1:3] == ['--prepare', '--raw-root']\n"
         "    assert len(sys.argv) == 4\n"
@@ -386,7 +389,8 @@ def test_default_batch_intake_precedes_validation_and_reaches_flutter_commit(tmp
          "(raw/'approved.json').write_text('{}')\n"))
     (scripts / 'preflight.py').write_text(event_code +
         f"assert Path({str(submissions / 'approved.json')!r}).exists(), 'intake must precede preparation'\n"
-        "with p.open('a') as out: out.write('preparation\\n')\n")
+        "import sys\nkind='readiness' if '--release-readiness' in sys.argv else 'preparation'\n"
+        "with p.open('a') as out: out.write(kind+'\\n')\n")
     (scripts / 'run_pipeline.py').write_text(event_code +
         "import sys\nkind='submissions' if 'products/output_Product_Submissions' in sys.argv else 'brand'\n"
         "with p.open('a') as out: out.write(kind+'\\n')\n")
@@ -414,7 +418,7 @@ printf 'supabase\\nflutter-import\\nflutter-commit\\n' >> '{events}'
         assert actual == ['prerequisites', 'intake']
     else:
         assert result.returncode == 0, result.stdout + result.stderr
-        assert actual == ['prerequisites', 'intake', 'preparation', 'brand',
+        assert actual == ['prerequisites', 'intake', 'preparation', 'readiness', 'brand',
                           'submissions', 'snapshot', 'supabase', 'flutter-import', 'flutter-commit']
 
 
@@ -498,3 +502,20 @@ def test_batch_runner_refuses_an_empty_target_instead_of_running_every_brand(tmp
     assert result.returncode != 0, combined
     assert f"--targets {targets!r} contains an empty entry" in combined
     assert "clean-reached" not in combined and "essential-preflight-reached" not in combined
+
+
+def test_known_assessment_blocker_stops_before_brand_processing(tmp_path):
+    dataset = tmp_path / 'raw/Test'
+    dataset.mkdir(parents=True)
+    (dataset / 'one.json').write_text('{}')
+    _install_batch_dependencies(tmp_path)
+    preflight = tmp_path / 'scripts/preflight.py'
+    preflight.write_text(preflight.read_text().replace("print('assessment-readiness-reached')", "print('assessment-readiness-reached'); sys.exit(1)"))
+    (tmp_path / 'scripts/run_pipeline.py').write_text("raise AssertionError('must not run corpus')")
+    runner = tmp_path / 'batch_run_all_datasets.sh'
+    runner.write_text(SCRIPT_PATH.read_text())
+    result = subprocess.run(['bash', str(runner), '--root', str(dataset.parent)],
+                            env={**os.environ}, text=True, capture_output=True)
+    assert result.returncode == 1
+    assert 'current assessments block publication before corpus work' in result.stdout
+    assert 'must not run corpus' not in result.stderr

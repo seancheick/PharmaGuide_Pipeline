@@ -219,3 +219,56 @@ def test_required_manifest_cannot_be_missing(tmp_path: Path) -> None:
         assert "missing" in str(exc).lower()
     else:
         raise AssertionError("strict stage input must require a manifest")
+
+
+def test_clean_manifest_rejects_same_timestamp_raw_content_change(tmp_path):
+    import os
+    processor = BatchProcessor(_config(tmp_path))
+    raw = tmp_path / 'raw.json'
+    raw.write_text('{"id":"1"}')
+    processor._source_files = (raw,)
+    processor._clean_stage_inputs()
+    stamp = raw.stat()
+    raw.write_text('{"id":"2"}')
+    os.utime(raw, ns=(stamp.st_atime_ns, stamp.st_mtime_ns))
+    (processor.output_dir / 'cleaned/cleaned_batch_1.json').write_text('[]')
+    with pytest.raises(StageManifestError, match='source content changed'):
+        processor._write_stage_manifest({'processing_complete': True})
+
+
+@pytest.mark.parametrize('change', ['add', 'remove'])
+def test_clean_manifest_rejects_raw_inventory_change(tmp_path, change):
+    processor = BatchProcessor(_config(tmp_path))
+    raw = tmp_path / 'raw'
+    raw.mkdir()
+    one = raw / '1.json'
+    one.write_text('{"id":"1"}')
+    processor._source_files = (one,)
+    processor._source_directory = raw
+    processor._source_inventory = tuple(processor.get_input_files(str(raw)))
+    processor._clean_stage_inputs()
+    (processor.output_dir / 'cleaned/cleaned_batch_1.json').write_text('[]')
+    if change == 'add':
+        (raw / '2.json').write_text('{"id":"2"}')
+    else:
+        one.unlink()
+    with pytest.raises(StageManifestError, match='source inventory changed'):
+        processor._write_stage_manifest({'processing_complete': True})
+
+
+def test_clean_subset_binding_does_not_claim_unprocessed_raw_file(tmp_path):
+    from pipeline_freshness import DATA_FINGERPRINT_KEY, stage_data_fingerprint
+    processor = BatchProcessor(_config(tmp_path))
+    raw = tmp_path / 'raw'
+    raw.mkdir()
+    for name in ('1', '2'):
+        (raw / (name + '.json')).write_text(json.dumps({'id': name}))
+    processor._source_files = (raw / '1.json',)
+    processor._source_directory = raw
+    processor._source_inventory = tuple(processor.get_input_files(str(raw)))
+    processor._clean_stage_inputs()
+    (processor.output_dir / 'cleaned/cleaned_batch_1.json').write_text('[]')
+    path = processor._write_stage_manifest({'processing_complete': True})
+    binding = json.loads(path.read_text())['input_fingerprints'][DATA_FINGERPRINT_KEY]
+    assert binding == stage_data_fingerprint([raw / '1.json'])
+    assert binding != stage_data_fingerprint(processor.get_input_files(str(raw)))

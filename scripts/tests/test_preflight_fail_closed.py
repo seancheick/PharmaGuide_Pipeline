@@ -1185,3 +1185,93 @@ def test_run_pipeline_refuses_missing_raw_labels_before_clean(tmp_path, monkeypa
         stages=["clean"], raw_dir=str(raw_dir), output_prefix=str(tmp_path / "out"))
     assert results["stages_failed"] == ["raw_labels"]
     assert calls == []
+
+
+def _readiness_corpus(tmp_path, *, complete=True):
+    from pipeline_freshness import STAGES, stage_input_fingerprints
+    from stage_manifest import write_stage_manifest
+    repo = tmp_path / 'repo'
+    scripts = repo / 'scripts'
+    scripts.mkdir(parents=True)
+    for spec in STAGES.values():
+        (scripts / spec['entry']).write_text('VALUE = 1\n')
+    raw = tmp_path / 'raw'
+    (raw / 'Test').mkdir(parents=True)
+    (raw / 'Test/1.json').write_text('{"id":"1"}')
+    upstream = raw / 'Test'
+    outputs = {}
+    for stage, suffix, child in [('clean', '', 'cleaned'), ('enrich', '_enriched', 'enriched'), ('score', '_scored', 'scored')]:
+        path = scripts / f'products/output_Test{suffix}/{child}/{child}_batch_1.json'
+        path.parent.mkdir(parents=True)
+        path.write_text(json.dumps([{'id': '1', 'assessment_readiness': {'release_assessment': {
+            'is_complete': complete, 'blockers': [] if complete else ['required_review'],
+            'unfinished_source_assessment': None}}}]))
+        # Local fixture implements the content digest independently of preflight.
+        import hashlib
+        digest = hashlib.sha256()
+        for source in sorted(upstream.glob('*.json')):
+            if source.name.startswith('.'):
+                continue
+            relative = source.name.encode()
+            digest.update(len(relative).to_bytes(8, 'big')); digest.update(relative)
+            digest.update(hashlib.sha256(source.read_bytes()).digest())
+        inputs = {**stage_input_fingerprints(repo, stage), 'stage_data_sha256_v1': digest.hexdigest()}
+        write_stage_manifest(path.parent, stage, [path], input_fingerprints=inputs)
+        outputs[stage] = path
+        upstream = path.parent
+    return repo, raw, outputs
+
+
+def test_early_readiness_current_blocker_stops_publication_preparation(tmp_path):
+    repo, raw, _ = _readiness_corpus(tmp_path, complete=False)
+    result = preflight.release_assessment_preflight(repo, raw)
+    assert result['status'] == 'blocked'
+    assert result['allow_regeneration'] is False
+    assert result['finding_count'] == 1
+    assert result['publication_ready'] is False
+
+
+def test_early_readiness_pass_does_not_grant_publication(tmp_path):
+    repo, raw, _ = _readiness_corpus(tmp_path)
+    result = preflight.release_assessment_preflight(repo, raw)
+    assert result['status'] == 'passed'
+    assert result['allow_regeneration'] is True
+    assert result['publication_ready'] is False
+
+
+@pytest.mark.parametrize('complete', [True, False])
+@pytest.mark.parametrize('change,earliest', [('source', 'clean'), ('raw', 'clean'), ('missing', 'score'), ('partial', 'score'), ('new_brand', 'clean'), ('legacy', 'clean'), ('raw_added', 'clean'), ('raw_deleted', 'clean'), ('output_corrupt', 'score'), ('manual_new', 'clean')])
+def test_early_readiness_stale_or_missing_output_allows_corrective_rebuild(tmp_path, change, earliest, complete):
+    import os
+    from stage_manifest import MANIFEST_NAME
+    repo, raw, outputs = _readiness_corpus(tmp_path, complete=complete)
+    if change == 'source':
+        (repo / 'scripts/clean_dsld_data.py').write_text('VALUE = 2\n')
+    elif change == 'raw':
+        path = raw / 'Test/1.json'; stamp = path.stat()
+        path.write_text('{"id":"2"}'); os.utime(path, ns=(stamp.st_atime_ns, stamp.st_mtime_ns))
+    elif change == 'raw_added':
+        (raw / 'Test/2.json').write_text('{"id":"2"}')
+    elif change == 'raw_deleted':
+        (raw / 'Test/1.json').unlink()
+    elif change == 'output_corrupt':
+        outputs['score'].write_text('[]')
+    elif change == 'manual_new':
+        manual = repo / 'manual_labels/product_submissions'
+        manual.mkdir(parents=True)
+        (manual / 'new.json').write_text('{}')
+    elif change == 'missing':
+        outputs['score'].unlink()
+    elif change == 'new_brand':
+        (raw / 'New').mkdir(); (raw / 'New/2.json').write_text('{}')
+    else:
+        path = outputs['score' if change == 'partial' else 'clean'].parent / MANIFEST_NAME
+        record = json.loads(path.read_text())
+        if change == 'partial': record['processing_complete'] = False
+        else: record['input_fingerprints'].pop('stage_data_sha256_v1')
+        path.write_text(json.dumps(record))
+    result = preflight.release_assessment_preflight(repo, raw)
+    assert result['status'] == 'unverified'
+    assert result['allow_regeneration'] is True
+    assert result['earliest_stage'] == earliest
+    assert result['publication_ready'] is False

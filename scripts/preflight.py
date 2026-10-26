@@ -1268,6 +1268,73 @@ def run_preparation(repo_root, raw_root, *, checks=None, runner=None, report_pat
     return result
 
 
+def release_assessment_preflight(repo_root: Path, raw_root: Path) -> dict:
+    """Check current assessment facts before a publication-oriented corpus run.
+
+    Unknown/stale provenance permits corrective computation, never publication.
+    Completion decisions come from the same scored-artifact audit used finally.
+    """
+    from pipeline_freshness import (STAGES, RERUN_STAGES, DATA_FINGERPRINT_KEY,
+                                    stage_freshness_issues, stage_data_files,
+                                    stage_data_fingerprint)
+    from stage_manifest import MANIFEST_NAME, StageManifestError, select_stage_input_files
+    from audit_source_of_truth_contract import audit_scoring
+    repo_root, raw_root = Path(repo_root).resolve(), Path(raw_root).resolve()
+    products = repo_root / 'scripts/products'
+    result = {'status': 'unverified', 'allow_regeneration': True,
+              'publication_ready': False, 'earliest_stage': None,
+              'stages': None, 'issues': [], 'finding_count': 0, 'findings': []}
+    issues = result['issues']
+    try:
+        issues.extend(stage_freshness_issues(repo_root))
+        brands = {path.name for path in raw_root.iterdir()
+                  if path.is_dir() and stage_data_files(path)}
+        for directory in products.glob('output_*'):
+            if directory.is_dir():
+                name = directory.name.removeprefix('output_')
+                brands.add(name.removesuffix('_enriched').removesuffix('_scored'))
+        submissions = repo_root / 'manual_labels/product_submissions'
+        if stage_data_files(submissions):
+            brands.add('Product_Submissions')
+        if not brands:
+            issues.append('clean: no source datasets found')
+        scored_files = []
+        for brand in sorted(brands):
+            upstream = submissions if brand == 'Product_Submissions' else raw_root / brand
+            for stage, suffix, leaf in [('clean', '', 'cleaned'), ('enrich', '_enriched', 'enriched'), ('score', '_scored', 'scored')]:
+                directory = products / f'output_{brand}{suffix}' / leaf
+                manifest_path = directory / MANIFEST_NAME
+                try:
+                    manifest = json.loads(manifest_path.read_text())
+                    binding = manifest.get('input_fingerprints', {}).get(DATA_FINGERPRINT_KEY)
+                    if not binding:
+                        raise StageManifestError('source content binding missing; existing output is unverified')
+                    inputs = stage_data_files(upstream)
+                    if not inputs or binding != stage_data_fingerprint(inputs):
+                        raise StageManifestError('source input content/inventory changed or missing')
+                    owned = select_stage_input_files(directory, stage, require_manifest=True,
+                                                     patterns=('*.json', '*.jsonl'))
+                    if stage == 'score':
+                        scored_files.extend(owned)
+                except (OSError, ValueError, TypeError, AttributeError) as exc:
+                    issues.append(f'{stage}: {brand}: {exc}')
+                upstream = directory
+        if not issues:
+            findings = audit_scoring(argparse.Namespace(product_file=scored_files,
+                                    completion_only=True, strict_release=True))
+            result['finding_count'] = len(findings)
+            result['findings'] = [finding.render() for finding in findings]
+            result['status'] = 'blocked' if findings else 'passed'
+            result['allow_regeneration'] = not findings
+    except (OSError, ValueError, TypeError, AttributeError) as exc:
+        issues.append(f'clean: readiness provenance unavailable: {exc}')
+    if issues:
+        earliest = next((stage for stage in STAGES
+                         if any(issue.startswith(stage + ':') for issue in issues)), 'clean')
+        result.update(earliest_stage=earliest, stages=RERUN_STAGES[earliest])
+    return result
+
+
 def main():
     parser = argparse.ArgumentParser(
         description='DSLD Pipeline Preflight Validator',
@@ -1295,6 +1362,8 @@ Exit codes:
         help='Output as JSON for CI integration'
     )
 
+    parser.add_argument('--release-readiness', action='store_true',
+                        help='Check current assessment completion before publication preparation; stale/missing outputs permit regeneration')
     parser.add_argument('--prepare', action='store_true', help='Aggregate read-only source readiness before regeneration')
     parser.add_argument('--include-source-tests', action='store_true',
                         help='With --prepare, explicitly repeat the full developer source-test suite')
@@ -1306,6 +1375,24 @@ Exit codes:
                         help='With --raw-root, also require raw labels for every DSLD brand assembled from here')
     parser.add_argument('--report', type=Path, default=SCRIPTS_DIR / 'reports/pipeline_preparation.json')
     args = parser.parse_args()
+    if args.release_readiness:
+        if args.raw_root is None:
+            parser.error('--release-readiness requires --raw-root')
+        results = release_assessment_preflight(SCRIPTS_DIR.parent, args.raw_root)
+        if args.json:
+            print(json.dumps(results, indent=2))
+        elif results['status'] == 'blocked':
+            print(f"BLOCKED: {results['finding_count']} current assessment finding(s); publication preparation stopped.")
+            for finding in results['findings'][:20]:
+                print(finding)
+            print('Resolve the existing review dependencies before publication; final release gates remain required.')
+        elif results['status'] == 'unverified':
+            print(f"UNVERIFIED: assessment outputs require regeneration from {results['earliest_stage']}; computation may proceed, publication is not approved.")
+            for issue in results['issues'][:20]:
+                print(issue)
+        else:
+            print('PASSED: current assessment completeness only; final artifact, live-state and consumer release gates remain required.')
+        sys.exit(0 if results['allow_regeneration'] else 1)
     if args.include_source_tests and not args.prepare:
         parser.error('--include-source-tests requires --prepare')
     if args.prepare:
