@@ -1,5 +1,9 @@
 # Assessment review handoff — October 26, 2026
 
+## Latest source-access reconciliation
+
+D011 author-comment and D139 full-statement access gaps are now independently closed; see the dated closeout in BRYAN_BATCH_RESPONSE_VERIFICATION_20261025.md. HN019 context limitations are corrected without changing approval, doses, outcomes or eligibility. Scientific appraisal and rebuilt verification remain separate. The local evidence_review.pdf is the original unanswered request, not the missing latest171C/146D return.
+
 ## Current observed state
 
 The operator completed Clean → Enrich → Score at main `bbaf3a7d`. All 114 stage manifests passed the code/reference freshness check at that failure; this did not establish legacy artifact-content bindings. The completeness gate stopped publication: 10,509 of 15,437 products blocked; 4,928 complete. Blocker families overlap. This frozen result does not include the later candidate corrections and must not be called current-candidate verification.

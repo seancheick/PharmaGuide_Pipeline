@@ -7,6 +7,19 @@ Owner Check: existing `clinical_review_holds.csv` and `benchmark_review_backlog.
 The original review sections were documentation/report work only. Later runtime implementation checkpoints are identified separately below; source dispositions alone do not establish rebuilt closure. Frozen register fields and closure states remain intact. Source facts checked below are not automatically product-level clearances.
 
 
+## October 26 returned-source access closeout
+
+The engineering checkpoint remains closed. A bounded reconciliation recovered two specifically reported source-access dependencies; it does not approve the other A/B/C/D decisions or regenerate products.
+
+| Item | Independently established | Remaining boundary |
+|---|---|---|
+| D011 / STRAIN_LACTIS_HN019 | The [April15 author response](https://jamanetwork.com/journals/jamanetworkopen/fullarticle/2831509) is readable, separately from correction PMID40327349. Its access gap is closed. The canonical context now records the methodological qualifications rather than saying the comment is unavailable. | Protocol/supplement appraisal and exact combination applicability remain separate; no individual-strain inference or new approval. |
+| D139 / BANNED_ADD_SYNTHETIC_ESTROGENS | The [official150-page statement](https://endocrinenews.endocrine.org/wp-content/uploads/EDC-2-Scientific-Statement-2.pdf) is retrieved. PageE8 specifically discusses prenatal DES exposure and subsequent human outcomes; this is relevant context, not a wrong-topic citation merely because the title omits the ingredient. | Selected-section inspection, not full scientific closure. Do not generalize DES findings to every alias/exposure, or use this scientific statement as a legal-status authority. Existing warning remains unchanged. |
+
+Owner: existing strain context limitations and existing review report/request. Evidence: live primary sources above, source hashes in `.claude/state/review_dependency_closeout_20261026/`, fail-first HN019 regression. Will NOT create another authority, approval, grade, benchmark or registry.
+
+The latest full171C/146D return remains unidentified. Search of supplied attachment text found no complete per-ID return; the local `Downloads/evidence_review.pdf` is the October24 request with blank response slots, not the completed document. The missing artifact is specifically the updated marked-up file described by attachmentf32df139, including its Batch12 remaining-boundary index and corrected C102. Existing partial responses remain usable; this is not a request to redo all reviews.
+
 ## October 26 reconciliation against the completed corpus
 
 The operator's scored corpus at `bbaf3a7d` contains 15,437 products; 10,509 have at least one release-completeness blocker and 4,928 pass. This is a frozen observed result, not a claim that the current source candidate has been rebuilt. The source-attribution correction and later source-note correction below retain their genuine holds.
