@@ -124,10 +124,9 @@ def test_branch_push_cannot_hide_untested_code_behind_docs(repo, tmp_path):
     assert scope.classify(repo, code, head) == 'docs'
     workflow = yaml.safe_load((Path(__file__).resolve().parents[2] / '.github/workflows/pipeline-tests.yml').read_text())
     script = workflow['jobs']['scope']['steps'][-1]['run']
-    # Exercise the workflow's branch base selection; remote fetching is setup,
-    # and classification itself uses the real committed repository below.
+    # Exercise real fetching too: a shallow fetch can hide the common ancestor.
+    git(repo, 'remote', 'add', 'origin', str(repo))
     selection = script.split('kind=$(')[0]
-    selection = '\n'.join(':' if 'git fetch ' in line else line for line in selection.splitlines())
     result = subprocess.check_output(['bash', '-e', '-c', selection + '\nprintf "%s" "$BASE_SHA"'],
         cwd=repo, env={**os.environ, 'BASE_SHA': code, 'HEAD_SHA': head,
             'GITHUB_EVENT_NAME': 'push', 'GITHUB_REF': 'refs/heads/codex/example'}, text=True)
