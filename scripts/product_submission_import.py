@@ -869,6 +869,38 @@ def materialize_approved_submissions(
         and json.loads(receipt_path.read_text(encoding="utf-8")).get("schema_version") == 1
     )
     receipt_rows: dict[str, dict[str, Any]] = receipts["submissions"]
+    pending_fences: dict[str, dict[str, Any]] = {}
+    for submission_id, receipt in list(receipt_rows.items()):
+        if not isinstance(receipt, dict) or "pending_import" not in receipt:
+            continue
+        pending = receipt["pending_import"]
+        if (
+            not isinstance(pending, dict)
+            or not isinstance(pending.get("approval_revision"), int)
+            or pending["approval_revision"] < 1
+            or not isinstance(pending.get("output_file"), str)
+            or Path(pending["output_file"]).name != pending["output_file"]
+            or any(not isinstance(pending.get(key), str)
+                   or not re.fullmatch(r"[0-9a-f]{64}", pending[key])
+                   for key in ("label_sha256", "approval_payload_sha256"))
+        ):
+            raise SubmissionImportError("pending import receipt is malformed")
+        pending_fences[submission_id] = pending
+        output_path = destination / pending["output_file"]
+        actual_hash = (hashlib.sha256(output_path.read_bytes()).hexdigest()
+                       if output_path.is_file() else None)
+        if actual_hash == pending["label_sha256"]:
+            # The durable intent proves which authoritative bytes replaced the
+            # label, even if the server has approved another revision meanwhile.
+            _freeze_promoted_label(destination, submission_id, receipt)
+            receipt_rows[submission_id] = pending
+        elif actual_hash == receipt.get("label_sha256"):
+            receipt.pop("pending_import")
+            if not receipt:
+                del receipt_rows[submission_id]
+        else:
+            raise SubmissionImportError("manual label changed during pending import")
+        receipt_needs_schema_write = True
 
     prepared: list[tuple[str, int, str, dict[str, Any], str, Path]] = []
     fallback_promoted_owners: dict[str, str] = {}
@@ -928,6 +960,15 @@ def materialize_approved_submissions(
         serialized = json.dumps(label, ensure_ascii=False, indent=2) + "\n"
         label_hash = hashlib.sha256(serialized.encode("utf-8")).hexdigest()
         output_path = destination / f"{product_id}.json"
+        pending = pending_fences.get(submission_id)
+        if pending:
+            if approval_revision < pending["approval_revision"]:
+                raise SubmissionImportError("an older approval revision cannot replace the pending one")
+            if approval_revision == pending["approval_revision"] and (
+                approval_payload_sha256 != pending["approval_payload_sha256"]
+                or label_hash != pending["label_sha256"]
+            ):
+                raise SubmissionImportError("same approval revision changed after approval")
         existing_receipt = receipt_rows.get(submission_id)
         if existing_receipt is not None:
             receipt_revision = int(existing_receipt.get("approval_revision") or 1)
@@ -1157,9 +1198,8 @@ def materialize_approved_submissions(
     output_paths: list[Path] = []
     for (submission_id, approval_revision, approval_payload_sha256,
          label, serialized, output_path) in prepared:
-        _atomic_write_text(output_path, serialized)
         label_hash = hashlib.sha256(serialized.encode("utf-8")).hexdigest()
-        receipt_rows[submission_id] = {
+        candidate_receipt = {
             **receipt_rows.get(submission_id, {}),
             "label_sha256": label_hash,
             "approval_revision": approval_revision,
@@ -1173,9 +1213,15 @@ def materialize_approved_submissions(
         }
         fallback_owner = fallback_promoted_owners.get(submission_id)
         if fallback_owner:
-            receipt_rows[submission_id][
-                "fallback_promoted_submission_id"
-            ] = fallback_owner
+            candidate_receipt["fallback_promoted_submission_id"] = fallback_owner
+        candidate_receipt.pop("pending_import", None)
+        # Journal the complete candidate in the existing receipt owner before
+        # replacing the label. The final receipt commit clears this intent.
+        prior_receipt = receipt_rows.get(submission_id, {})
+        receipt_rows[submission_id] = {**prior_receipt, "pending_import": candidate_receipt}
+        _atomic_write_text(receipt_path, json.dumps(receipts, indent=2, sort_keys=True) + "\n")
+        _atomic_write_text(output_path, serialized)
+        receipt_rows[submission_id] = candidate_receipt
         imported.append(submission_id)
         output_paths.append(output_path)
 

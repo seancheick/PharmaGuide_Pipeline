@@ -1817,3 +1817,64 @@ def test_authoritative_supersession_preserves_promoted_label_through_three_revis
     result.output_paths[0].write_text('manual mutation')
     with pytest.raises(importer.SubmissionImportError, match='manual label changed'):
         importer.materialize_approved_submissions([_export(changed, approval_revision=4)], output_dir=tmp_path, authoritative=True)
+
+@pytest.mark.parametrize('promoted', [False, True])
+def test_interrupted_revision_can_be_superseded_by_later_authoritative_approval(tmp_path, monkeypatch, promoted):
+    import product_submission_import as importer
+    first = _export()
+    result = importer.materialize_approved_submissions([first], output_dir=tmp_path)
+    receipt_path = tmp_path / importer.RECEIPT_FILE
+    if promoted:
+        receipts = json.loads(receipt_path.read_text())
+        receipts['submissions'][first['submission_id']].update(promoted_catalog_version='old', promoted_approval_revision=1)
+        receipt_path.write_text(json.dumps(receipts))
+    payload = _payload()
+    payload['fullName'] = 'Interrupted revision two'
+    second = _export(payload, approval_revision=2)
+    write = importer._atomic_write_text
+    def interrupt_after_label(path, content):
+        write(path, content)
+        if path == result.output_paths[0]:
+            raise RuntimeError('crash after label')
+    monkeypatch.setattr(importer, '_atomic_write_text', interrupt_after_label)
+    with pytest.raises(RuntimeError, match='crash after label'):
+        importer.materialize_approved_submissions([second], output_dir=tmp_path, authoritative=True)
+    monkeypatch.setattr(importer, '_atomic_write_text', write)
+    payload['fullName'] = 'Latest revision three'
+    importer.materialize_approved_submissions([_export(payload, approval_revision=3)], output_dir=tmp_path, authoritative=True)
+    assert json.loads(result.output_paths[0].read_text())['fullName'] == 'Latest revision three'
+    if promoted:
+        importer.materialize_approved_submissions([], output_dir=tmp_path, authoritative=True)
+        assert json.loads(result.output_paths[0].read_text())['fullName'] == 'Example Vitamin D3'
+
+@pytest.mark.parametrize('phase', ['before_label', 'after_label'])
+@pytest.mark.parametrize('change', ['rollback', 'same_revision', 'manual'])
+def test_pending_import_retains_revision_and_manual_edit_fences(tmp_path, monkeypatch, phase, change):
+    import product_submission_import as importer
+    first = _export()
+    result = importer.materialize_approved_submissions([first], output_dir=tmp_path)
+    output = result.output_paths[0]
+    payload = _payload()
+    payload['fullName'] = 'Second approved name'
+    second = _export(payload, approval_revision=2)
+    write = importer._atomic_write_text
+    def interrupt(path, content):
+        if path == output and phase == 'before_label':
+            raise RuntimeError('interrupted')
+        write(path, content)
+        if path == output:
+            raise RuntimeError('interrupted')
+    monkeypatch.setattr(importer, '_atomic_write_text', interrupt)
+    with pytest.raises(RuntimeError):
+        importer.materialize_approved_submissions([second], output_dir=tmp_path, authoritative=True)
+    monkeypatch.setattr(importer, '_atomic_write_text', write)
+    if change == 'rollback':
+        attempted, message = first, 'older approval revision'
+    elif change == 'same_revision':
+        payload['fullName'] = 'Mutated same approval'
+        attempted, message = _export(payload, approval_revision=2), 'same approval revision'
+    else:
+        output.write_text('unexplained manual file change')
+        attempted, message = second, 'manual label changed'
+    with pytest.raises(importer.SubmissionImportError, match=message):
+        importer.materialize_approved_submissions([attempted], output_dir=tmp_path, authoritative=True)
