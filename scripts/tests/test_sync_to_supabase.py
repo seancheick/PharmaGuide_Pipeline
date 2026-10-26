@@ -1239,7 +1239,8 @@ def test_detail_upload_queue_is_bounded(monkeypatch):
     assert (errors, uploaded, skipped) == ([], 100, 0)
 
 
-def test_complete_sync_uses_real_discovery_and_create_only_versioned_paths(tmp_path, monkeypatch):
+@pytest.mark.parametrize('force_retry', [False, True])
+def test_complete_sync_uses_real_discovery_and_create_only_versioned_paths(tmp_path, monkeypatch, force_retry):
     from types import SimpleNamespace
     import sync_to_supabase as syncer
     import supabase_client
@@ -1276,6 +1277,11 @@ def test_complete_sync_uses_real_discovery_and_create_only_versioned_paths(tmp_p
     assert result['status'] == 'synced'
     assert activated == [True]
     assert all(upsert == 'false' for path, upsert in calls if path.startswith('v'))
+    if force_retry:
+        calls.clear()
+        assert syncer.sync(str(tmp_path), max_workers=1, retry_count=0, force=True)['status'] == 'synced'
+        assert not any(path.endswith('.json') for path, _ in calls)
+
 
 @pytest.mark.parametrize('collision', ['manifest', 'database', 'detail_index', 'share_index'])
 def test_historical_version_collision_refused_before_any_storage_write(tmp_path, monkeypatch, collision):

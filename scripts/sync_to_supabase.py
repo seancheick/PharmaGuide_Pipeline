@@ -1472,7 +1472,7 @@ def sync(
             unchanged = hashlib.sha256(remote_bytes).hexdigest() == _compute_file_sha256(local_path)
         except Exception:
             unchanged = False
-        if unchanged and not force:
+        if unchanged:
             return
         upload_with_retries(
             lambda: upload_file(
