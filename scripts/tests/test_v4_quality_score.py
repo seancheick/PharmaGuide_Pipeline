@@ -765,7 +765,8 @@ def test_fail_open_neutral_when_only_label_gmp_wording() -> None:
     assert v["score"] == 6.0
     assert v["components"]["gmp"] == 0.0
     assert v["components"]["tier"] == "unknown"
-    assert "unknown" in v["reason"].lower()
+    assert v["reason"] == "Independent testing or certification: unconfirmed."
+    assert v["components"]["fail_open_neutral"] is True
 
 
 def test_brand_only_verified_cert_lifts_above_unknown_without_b4a_credit() -> None:
