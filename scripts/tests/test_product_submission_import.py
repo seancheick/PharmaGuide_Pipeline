@@ -58,6 +58,7 @@ def _payload() -> dict:
 def _export(payload: dict | None = None, **overrides: object) -> dict:
     canonical = _canonical(payload or _payload())
     row = {
+        "approval_revision": 1,
         "approved_at": "2026-07-30T20:00:00Z",
         "approved_payload_canonical": canonical,
         "kind": "missing_product",
@@ -71,6 +72,171 @@ def _export(payload: dict | None = None, **overrides: object) -> dict:
     return row
 
 
+def test_newer_approval_revision_replaces_promoted_revision_and_rejects_mutation(
+    tmp_path: Path,
+):
+    from product_submission_import import SubmissionImportError, materialize_approved_submissions
+
+    first = _export()
+    materialize_approved_submissions([first], output_dir=tmp_path)
+    receipt_path = tmp_path / ".product_submission_import_receipts"
+    receipts = json.loads(receipt_path.read_text())
+    receipt = receipts["submissions"][first["submission_id"]]
+    receipt["promoted_catalog_version"] = "release-1"
+    receipt["promoted_approval_revision"] = 1
+    receipt_path.write_text(json.dumps(receipts))
+
+    corrected_payload = _payload()
+    corrected_payload["fullName"] = "Corrected Example Vitamin D3"
+    corrected = _export(corrected_payload, approval_revision=2)
+    result = materialize_approved_submissions([corrected], output_dir=tmp_path)
+    assert result.imported_submission_ids == [first["submission_id"]]
+    current = json.loads(result.output_paths[0].read_text())
+    assert current["fullName"] == "Corrected Example Vitamin D3"
+    updated = json.loads(receipt_path.read_text())
+    current_receipt = updated["submissions"][first["submission_id"]]
+    assert current_receipt["approval_revision"] == 2
+    assert current_receipt["promoted_approval_revision"] == 1
+
+    materialize_approved_submissions([], output_dir=tmp_path, authoritative=True)
+    restored = json.loads(result.output_paths[0].read_text())
+    assert restored["fullName"] == "Example Vitamin D3"
+    restored_receipt = json.loads(receipt_path.read_text())["submissions"][
+        first["submission_id"]
+    ]
+    assert restored_receipt["approval_revision"] == 1
+    assert restored_receipt["promoted_approval_revision"] == 1
+
+    materialize_approved_submissions([corrected], output_dir=tmp_path)
+
+    mutated_payload = _payload()
+    mutated_payload["fullName"] = "Same revision changed"
+    with pytest.raises(SubmissionImportError, match="same approval revision changed"):
+        materialize_approved_submissions(
+            [_export(mutated_payload, approval_revision=2)], output_dir=tmp_path
+        )
+
+
+def test_withdrawn_cross_submission_replacement_restores_promoted_owner(tmp_path: Path):
+    from product_submission_import import materialize_approved_submissions
+
+    first = _export(
+        kind="label_mismatch", normalized_upc=None, target_dsld_id="278454"
+    )
+    materialize_approved_submissions([first], output_dir=tmp_path)
+    receipt_path = tmp_path / ".product_submission_import_receipts"
+    receipts = json.loads(receipt_path.read_text())
+    owner = receipts["submissions"][first["submission_id"]]
+    owner["promoted_catalog_version"] = "release-1"
+    owner["promoted_approval_revision"] = 1
+    receipt_path.write_text(json.dumps(receipts))
+
+    replacement_payload = _payload()
+    replacement_payload["fullName"] = "Replacement submission"
+    replacement = _export(
+        replacement_payload,
+        kind="label_mismatch",
+        normalized_upc=None,
+        target_dsld_id="278454",
+        submission_id="028f4c79-7c7e-4c70-9d62-7fc3b9ce6a22",
+    )
+    materialize_approved_submissions([replacement], output_dir=tmp_path)
+    shared = tmp_path / "278454.json"
+    assert json.loads(shared.read_text())["fullName"] == "Replacement submission"
+
+    materialize_approved_submissions([first], output_dir=tmp_path, authoritative=True)
+    assert json.loads(shared.read_text())["fullName"] == "Example Vitamin D3"
+    final_receipts = json.loads(receipt_path.read_text())["submissions"]
+    assert replacement["submission_id"] not in final_receipts
+    assert first["submission_id"] in final_receipts
+
+
+def test_schema_one_receipt_migrates_exact_approval_without_reimport(tmp_path: Path):
+    from product_submission_import import build_manual_label, materialize_approved_submissions
+
+    row = _export()
+    label = build_manual_label(row)
+    label["manual_product_provenance"].pop("approval_revision")
+    label["manual_product_provenance"].pop("approval_payload_sha256")
+    label["label_record_metadata"].pop("approval_revision")
+    label["label_record_metadata"].pop("approval_payload_sha256")
+    serialized = json.dumps(label, ensure_ascii=False, indent=2) + "\n"
+    output = tmp_path / f"{label['id']}.json"
+    output.write_text(serialized)
+    (tmp_path / ".product_submission_import_receipts").write_text(json.dumps({
+        "schema_version": 1,
+        "submissions": {
+            row["submission_id"]: {
+                "label_sha256": hashlib.sha256(serialized.encode()).hexdigest(),
+                "output_file": output.name,
+                "product_id": label["id"],
+                "upc": label["upcSku"],
+                "promoted_catalog_version": "release-1",
+            },
+        },
+    }))
+
+    result = materialize_approved_submissions([row], output_dir=tmp_path)
+    assert result.imported_submission_ids == [row["submission_id"]]
+    receipt = json.loads((tmp_path / ".product_submission_import_receipts").read_text())
+    assert receipt["schema_version"] == 2
+    assert receipt["submissions"][row["submission_id"]]["approval_payload_sha256"] == row["payload_sha256"]
+
+
+def test_authoritative_export_removes_withdrawn_unpromoted_but_retains_promoted(
+    tmp_path: Path,
+):
+    from product_submission_import import materialize_approved_submissions
+
+    unpromoted = _export()
+    promoted = _export(
+        submission_id="028f4c79-7c7e-4c70-9d62-7fc3b9ce6a22",
+        normalized_upc="01234565",
+    )
+    materialize_approved_submissions([unpromoted, promoted], output_dir=tmp_path)
+    receipt_path = tmp_path / ".product_submission_import_receipts"
+    receipts = json.loads(receipt_path.read_text())
+    promoted_receipt = receipts["submissions"][promoted["submission_id"]]
+    promoted_receipt["promoted_catalog_version"] = "release-1"
+    promoted_receipt["promoted_approval_revision"] = 1
+    receipt_path.write_text(json.dumps(receipts))
+
+    materialize_approved_submissions([], output_dir=tmp_path, authoritative=True)
+    current = json.loads(receipt_path.read_text())
+    assert unpromoted["submission_id"] not in current["submissions"]
+    assert promoted["submission_id"] in current["submissions"]
+    assert not (tmp_path / "PG_SUB_018F4C797C7E4C709D627FC3B9CE6A11.json").exists()
+    assert (tmp_path / "PG_SUB_028F4C797C7E4C709D627FC3B9CE6A22.json").exists()
+
+
+def test_final_release_fence_checks_exact_unpromoted_revision(tmp_path: Path):
+    from product_submission_import import materialize_approved_submissions, verify_current_approval_revisions
+
+    row = _export()
+    materialize_approved_submissions([row], output_dir=tmp_path)
+    calls = []
+    assert verify_current_approval_revisions(
+        output_dir=tmp_path,
+        rpc=lambda name, payload: calls.append((name, payload)) or True,
+    ) == 1
+    assert calls == [(
+        "assert_product_submission_approval_revision",
+        {
+            "p_submission_id": row["submission_id"],
+            "p_approval_revision": 1,
+            "p_payload_sha256": row["payload_sha256"],
+        },
+    )]
+
+
+def test_release_checks_exact_submission_revision_before_cloud_sync():
+    release = Path("scripts/release_full.sh").read_text()
+    fence = release.index("product_submission_import.py --verify-current-approvals")
+    cloud_sync = release.index("scripts/sync_to_supabase.py \"$DIST_DIR\"")
+    assert fence < cloud_sync
+    assert '--submission-output-dir "$SUBMISSION_OUTPUT_DIR"' in release
+
+
 def test_builds_pipeline_owned_identity_and_honest_private_provenance():
     from product_submission_import import build_manual_label
 
@@ -81,6 +247,8 @@ def test_builds_pipeline_owned_identity_and_honest_private_provenance():
     assert label["source_type"] == "external_manual"
     assert label["src"].endswith(label["id"])
     assert label["manual_product_provenance"] == {
+        "approval_revision": 1,
+        "approval_payload_sha256": _export()["payload_sha256"],
         "label_verified_at": "2026-07-30",
         "review_status": "verified",
         "reviewer": "PharmaGuide Clinical Team",
@@ -1071,6 +1239,9 @@ def test_approved_product_picture_is_webp_indexed_and_bound_to_catalog(
             "insert into products_core values (?, null)",
             (product_id,),
         )
+    (tmp_path / "export_manifest.json").write_text(json.dumps({
+        "db_version": "release-2",
+    }))
     image_dir = tmp_path / "product_images"
     image_dir.mkdir()
     (image_dir / "product_image_index.json").write_text("{}\n")
@@ -1097,7 +1268,11 @@ def test_approved_product_picture_is_webp_indexed_and_bound_to_catalog(
     assert result == {"copied": 1, "failed": 0, "skipped": 0}
     assert calls == [(
         "get_approved_product_submission_image",
-        {"p_submission_id": row["submission_id"]},
+        {
+            "p_submission_id": row["submission_id"],
+            "p_approval_revision": 1,
+            "p_payload_sha256": row["payload_sha256"],
+        },
     )]
     webp_path = image_dir / f"{product_id}.webp"
     assert webp_path.is_file()
@@ -1106,6 +1281,7 @@ def test_approved_product_picture_is_webp_indexed_and_bound_to_catalog(
         assert rendered.size == (900, 600)
     index = json.loads((image_dir / "product_image_index.json").read_text())
     assert index[product_id]["filename"] == f"{product_id}.webp"
+    assert index[product_id]["remote_path"] == f"vrelease-2/{product_id}.webp"
     assert index[product_id]["sha256"] == hashlib.sha256(
         webp_path.read_bytes()
     ).hexdigest()
@@ -1113,7 +1289,7 @@ def test_approved_product_picture_is_webp_indexed_and_bound_to_catalog(
         assert connection.execute(
             "select image_thumbnail_url from products_core where dsld_id = ?",
             (product_id,),
-        ).fetchone() == (f"product-images/{product_id}.webp",)
+        ).fetchone() == (f"product-images/vrelease-2/{product_id}.webp",)
 
 
 def test_label_mismatch_preserves_existing_dsld_identity():
@@ -1198,6 +1374,8 @@ def test_marks_promoted_only_after_product_exists_in_released_catalog(
             "label_record": {
                 "source_record_id": row["submission_id"],
                 "lineage_key": "pharmaguide_submission:" + row["submission_id"],
+                "approval_revision": 1,
+                "approval_payload_sha256": row["payload_sha256"],
             }
         }
     ).encode()
@@ -1222,6 +1400,8 @@ def test_marks_promoted_only_after_product_exists_in_released_catalog(
                 "p_catalog_version": "2026.07.30.220000",
                 "p_resolved_dsld_id": product_id,
                 "p_submission_id": row["submission_id"],
+                "p_approval_revision": 1,
+                "p_payload_sha256": row["payload_sha256"],
             },
         )
     ]
@@ -1232,6 +1412,36 @@ def test_marks_promoted_only_after_product_exists_in_released_catalog(
         receipts["submissions"][row["submission_id"]]["promoted_catalog_version"]
         == "2026.07.30.220000"
     )
+    assert receipts["submissions"][row["submission_id"]]["promoted_approval_revision"] == 1
+
+    corrected_payload = _payload()
+    corrected_payload["fullName"] = "Corrected after release"
+    corrected = _export(corrected_payload, approval_revision=2)
+    materialize_approved_submissions([corrected], output_dir=manual_dir)
+    corrected_bytes = json.dumps(
+        {
+            "label_record": {
+                "source_record_id": row["submission_id"],
+                "lineage_key": "pharmaguide_submission:" + row["submission_id"],
+                "approval_revision": 2,
+                "approval_payload_sha256": corrected["payload_sha256"],
+            }
+        }
+    ).encode()
+    (detail_blobs / f"{product_id}.json").write_bytes(corrected_bytes)
+    with sqlite3.connect(catalog) as connection:
+        connection.execute(
+            "update products_core set detail_blob_sha256 = ? where dsld_id = ?",
+            (hashlib.sha256(corrected_bytes).hexdigest(), product_id),
+        )
+    assert mark_released_submissions_promoted(
+        output_dir=manual_dir,
+        catalog_db=catalog,
+        detail_blobs_dir=detail_blobs,
+        rpc=lambda name, payload: calls.append((name, payload)) or True,
+    ) == [row["submission_id"]]
+    assert calls[-1][1]["p_approval_revision"] == 2
+    assert calls[-1][1]["p_payload_sha256"] == corrected["payload_sha256"]
 
 
 def test_existing_dsld_identity_does_not_falsely_prove_correction_release(

@@ -423,6 +423,32 @@ def build_label_record_contract(
     if lineage_key is None and source_record_id and is_dsld_catalog_source:
         lineage_key = f"dsld:{source_record_id}"
 
+    approval_revision = metadata.get("approval_revision")
+    approval_payload_sha256 = metadata.get("approval_payload_sha256")
+    if (approval_revision is None) != (approval_payload_sha256 is None):
+        raise ValueError(
+            "label_record submission approval revision and payload hash must travel together"
+        )
+    approval_fields: dict[str, Any] = {}
+    if approval_revision is not None:
+        if (
+            isinstance(approval_revision, bool)
+            or not isinstance(approval_revision, int)
+            or approval_revision < 1
+        ):
+            raise ValueError("label_record approval_revision must be a positive integer")
+        if (
+            not isinstance(approval_payload_sha256, str)
+            or not re.fullmatch(r"[0-9a-f]{64}", approval_payload_sha256)
+        ):
+            raise ValueError(
+                "label_record approval_payload_sha256 must be a lowercase sha256"
+            )
+        approval_fields = {
+            "approval_revision": approval_revision,
+            "approval_payload_sha256": approval_payload_sha256,
+        }
+
     fingerprint = formula_fingerprint(display_ingredients)
     formula_history = _history_entries(
         enriched.get("label_record_snapshots"),
@@ -455,6 +481,7 @@ def build_label_record_contract(
 
     return {
         **fields,
+        **approval_fields,
         "metadata_status": metadata_status,
         "metadata_issues": [
             f"unavailable:{field}"

@@ -38,6 +38,8 @@ from submission_review.gtin import (
 
 SCHEMA_VERSION = "manual_label_v1"
 RECEIPT_FILE = ".product_submission_import_receipts"
+RECEIPT_SCHEMA_VERSION = 2
+PROMOTED_HISTORY_DIR = ".product_submission_promoted"
 REVIEWER_DISPLAY_NAME = "PharmaGuide Clinical Team"
 MAX_CANONICAL_BYTES = 512 * 1024
 MAX_EXPORT_PAGES = 1000
@@ -557,6 +559,7 @@ def build_manual_label(export_row: object) -> dict[str, Any]:
     if not isinstance(export_row, dict):
         raise SubmissionImportError("approved export row must be an object")
     required_export_fields = {
+        "approval_revision",
         "approved_at",
         "approved_payload_canonical",
         "kind",
@@ -581,6 +584,13 @@ def build_manual_label(export_row: object) -> dict[str, Any]:
         )
 
     submission_id = _required_uuid(export_row["submission_id"], "submission_id")
+    approval_revision = export_row["approval_revision"]
+    if (
+        isinstance(approval_revision, bool)
+        or not isinstance(approval_revision, int)
+        or approval_revision < 1
+    ):
+        raise SubmissionImportError("approval_revision must be a positive integer")
     # An approval must name a real reviewer, so the id is still required and
     # validated — it just does not travel into the label. Nothing downstream
     # reads it, and the shipped catalog and this repository are public.
@@ -668,6 +678,8 @@ def build_manual_label(export_row: object) -> dict[str, Any]:
         "src": f"local/manual_labels/product_submissions/{product_id}",
         "source_type": "external_manual",
         "manual_product_provenance": {
+            "approval_revision": approval_revision,
+            "approval_payload_sha256": payload_hash,
             "source_kind": "private_product_submission",
             "source_record_id": submission_id,
             "label_verified_at": verified_date,
@@ -675,6 +687,8 @@ def build_manual_label(export_row: object) -> dict[str, Any]:
             "reviewer": REVIEWER_DISPLAY_NAME,
         },
         "label_record_metadata": {
+            "approval_revision": approval_revision,
+            "approval_payload_sha256": payload_hash,
             "source_name": "PharmaGuide verified product submission",
             # The reviewed submission is the source record for both new
             # products and corrections. Existing-product identity remains in
@@ -703,17 +717,27 @@ def build_manual_label(export_row: object) -> dict[str, Any]:
 
 def _read_receipts(path: Path) -> dict[str, Any]:
     if not path.exists():
-        return {"schema_version": 1, "submissions": {}}
+        return {"schema_version": RECEIPT_SCHEMA_VERSION, "submissions": {}}
     try:
         value = json.loads(path.read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError) as exc:
         raise SubmissionImportError("import receipt file is unreadable") from exc
     if (
         not isinstance(value, dict)
-        or value.get("schema_version") != 1
+        or value.get("schema_version") not in {1, RECEIPT_SCHEMA_VERSION}
         or not isinstance(value.get("submissions"), dict)
     ):
         raise SubmissionImportError("import receipt file has an unknown schema")
+    if value["schema_version"] == 1:
+        for receipt in value["submissions"].values():
+            if not isinstance(receipt, dict):
+                continue
+            receipt.setdefault("approval_revision", 1)
+            receipt.setdefault(
+                "promoted_approval_revision",
+                1 if receipt.get("promoted_catalog_version") else 0,
+            )
+        value["schema_version"] = RECEIPT_SCHEMA_VERSION
     return value
 
 
@@ -756,21 +780,98 @@ def _atomic_write_bytes(path: Path, content: bytes) -> None:
             temporary_path.unlink()
 
 
+def _freeze_promoted_label(
+    destination: Path,
+    submission_id: str,
+    receipt: dict[str, Any],
+) -> None:
+    """Retain the exact promoted input before a newer approval replaces it."""
+    current_revision = int(receipt.get("approval_revision") or 0)
+    promoted_revision = int(
+        receipt.get("promoted_approval_revision")
+        or (current_revision if receipt.get("promoted_catalog_version") else 0)
+    )
+    if promoted_revision > 0:
+        receipt["promoted_approval_revision"] = promoted_revision
+    if promoted_revision <= 0 or promoted_revision != current_revision:
+        return
+    output_name = receipt.get("output_file")
+    label_hash = receipt.get("label_sha256")
+    if not isinstance(output_name, str) or Path(output_name).name != output_name:
+        raise SubmissionImportError("promoted import receipt output is malformed")
+    source = destination / output_name
+    if not source.is_file() or not isinstance(label_hash, str):
+        raise SubmissionImportError("promoted manual label is unavailable")
+    payload = source.read_bytes()
+    if hashlib.sha256(payload).hexdigest() != label_hash:
+        raise SubmissionImportError("promoted manual label changed after import")
+    relative = Path(PROMOTED_HISTORY_DIR) / submission_id / f"{promoted_revision}.json"
+    frozen = destination / relative
+    if frozen.exists() and frozen.read_bytes() != payload:
+        raise SubmissionImportError("promoted approval artifact changed")
+    if not frozen.exists():
+        _atomic_write_bytes(frozen, payload)
+    receipt.update({
+        "promoted_label_artifact": relative.as_posix(),
+        "promoted_label_sha256": label_hash,
+        "promoted_approval_payload_sha256": receipt.get(
+            "approval_payload_sha256"
+        ),
+        "promoted_product_id": receipt.get("product_id"),
+        "promoted_output_file": output_name,
+    })
+
+
+def _restore_promoted_label(
+    destination: Path,
+    receipt_rows: dict[str, dict[str, Any]],
+    receipt: dict[str, Any],
+) -> str | None:
+    owner_id = str(receipt.get("fallback_promoted_submission_id") or "")
+    owner = receipt_rows.get(owner_id) if owner_id else receipt
+    if not isinstance(owner, dict):
+        return None
+    relative = owner.get("promoted_label_artifact")
+    expected_hash = owner.get("promoted_label_sha256")
+    output_name = receipt.get("output_file") or owner.get("promoted_output_file")
+    if not isinstance(relative, str) or Path(relative).is_absolute():
+        return None
+    if not isinstance(output_name, str) or Path(output_name).name != output_name:
+        raise SubmissionImportError("promoted restore output is malformed")
+    artifact = destination / relative
+    if not artifact.is_file() or not isinstance(expected_hash, str):
+        raise SubmissionImportError("promoted approval artifact is unavailable")
+    payload = artifact.read_bytes()
+    if hashlib.sha256(payload).hexdigest() != expected_hash:
+        raise SubmissionImportError("promoted approval artifact changed")
+    _atomic_write_bytes(destination / output_name, payload)
+    return owner_id or next(
+        (key for key, value in receipt_rows.items() if value is owner), ""
+    )
+
+
 def materialize_approved_submissions(
     export_rows: Iterable[object],
     *,
     output_dir: str | Path,
+    authoritative: bool = False,
 ) -> ImportResult:
     """Atomically materialize validated labels and immutable import receipts."""
     destination = Path(output_dir)
     receipt_path = destination / RECEIPT_FILE
     receipts = _read_receipts(receipt_path)
+    receipt_needs_schema_write = (
+        receipt_path.exists()
+        and json.loads(receipt_path.read_text(encoding="utf-8")).get("schema_version") == 1
+    )
     receipt_rows: dict[str, dict[str, Any]] = receipts["submissions"]
 
-    prepared: list[tuple[str, dict[str, Any], str, Path]] = []
+    prepared: list[tuple[str, int, str, dict[str, Any], str, Path]] = []
+    fallback_promoted_owners: dict[str, str] = {}
     seen_submission_ids: set[str] = set()
     seen_product_ids: set[str] = set()
     upc_owners: dict[str, set[tuple[str, str]]] = {}
+    removed_unpromoted = False
     for submission_id, value in receipt_rows.items():
         if not isinstance(value, dict):
             continue
@@ -785,6 +886,8 @@ def materialize_approved_submissions(
         label = build_manual_label(raw_row)
         assert isinstance(raw_row, dict)  # Established by build_manual_label.
         submission_id = str(raw_row["submission_id"]).lower()
+        approval_revision = int(raw_row["approval_revision"])
+        approval_payload_sha256 = str(raw_row["payload_sha256"]).lower()
         if submission_id in seen_submission_ids:
             raise SubmissionImportError("duplicate submission_id in export")
         seen_submission_ids.add(submission_id)
@@ -823,10 +926,19 @@ def materialize_approved_submissions(
         output_path = destination / f"{product_id}.json"
         existing_receipt = receipt_rows.get(submission_id)
         if existing_receipt is not None:
+            receipt_revision = int(existing_receipt.get("approval_revision") or 1)
+            if approval_revision < receipt_revision:
+                raise SubmissionImportError("an older approval revision cannot replace the current one")
             existing_hash = (
                 hashlib.sha256(output_path.read_bytes()).hexdigest()
                 if output_path.exists() else None
             )
+            if (
+                approval_revision == receipt_revision
+                and existing_receipt.get("approval_payload_sha256", approval_payload_sha256)
+                != approval_payload_sha256
+            ):
+                raise SubmissionImportError("same approval revision changed after approval")
             if existing_receipt.get("label_sha256") == label_hash and existing_hash == label_hash:
                 already_imported.append(submission_id)
                 continue
@@ -843,18 +955,76 @@ def materialize_approved_submissions(
             legacy_hash = hashlib.sha256(
                 (json.dumps(legacy_label, ensure_ascii=False, indent=2) + "\n").encode("utf-8")
             ).hexdigest()
-            if not (
-                existing_receipt.get("label_sha256") == legacy_hash
-                and existing_hash in {legacy_hash, label_hash}
+            pre_revision_label = json.loads(json.dumps(label))
+            pre_revision_label["manual_product_provenance"].pop(
+                "approval_revision", None
+            )
+            pre_revision_label["manual_product_provenance"].pop(
+                "approval_payload_sha256", None
+            )
+            pre_revision_label["label_record_metadata"].pop(
+                "approval_revision", None
+            )
+            pre_revision_label["label_record_metadata"].pop(
+                "approval_payload_sha256", None
+            )
+            pre_revision_hash = hashlib.sha256(
+                (json.dumps(pre_revision_label, ensure_ascii=False, indent=2) + "\n")
+                .encode("utf-8")
+            ).hexdigest()
+            pre_revision_label["manual_product_provenance"][
+                "reviewer_record_id"
+            ] = _required_uuid(raw_row["reviewer_id"], "reviewer_id")
+            pre_revision_private_hash = hashlib.sha256(
+                (json.dumps(pre_revision_label, ensure_ascii=False, indent=2) + "\n")
+                .encode("utf-8")
+            ).hexdigest()
+            if (
+                approval_revision == receipt_revision
+                and existing_receipt.get("label_sha256") in {
+                    legacy_hash, pre_revision_hash, pre_revision_private_hash
+                }
+                and existing_hash in {
+                    legacy_hash, pre_revision_hash, pre_revision_private_hash,
+                    label_hash,
+                }
                 and existing_receipt.get("output_file") == output_path.name
                 and existing_receipt.get("product_id") == product_id
             ):
+                prepared.append((submission_id, approval_revision, approval_payload_sha256,
+                                 label, serialized, output_path))
+                continue
+            if approval_revision == receipt_revision:
+                displacing = [
+                    row
+                    for owner_id, row in receipt_rows.items()
+                    if owner_id != submission_id
+                    and isinstance(row, dict)
+                    and row.get("label_sha256") == existing_hash
+                    and row.get("fallback_promoted_submission_id")
+                        == submission_id
+                ]
+                if authoritative and len(displacing) == 1:
+                    _restore_promoted_label(
+                        destination, receipt_rows, displacing[0]
+                    )
+                    already_imported.append(submission_id)
+                    continue
+                raise SubmissionImportError("same approval revision changed after approval")
+            promoted_revision = int(
+                existing_receipt.get("promoted_approval_revision")
+                or (1 if existing_receipt.get("promoted_catalog_version") else 0)
+            )
+            if promoted_revision < receipt_revision:
                 raise SubmissionImportError(
-                    "an imported submission changed after approval"
+                    "refusing to replace an unpromoted approval revision"
                 )
+            _freeze_promoted_label(destination, submission_id, existing_receipt)
+            fallback_promoted_owners[submission_id] = submission_id
             # The new bytes with the old receipt also recover a crash between
             # the two atomic replacements. Preserve promotion state below.
-            prepared.append((submission_id, label, serialized, output_path))
+            prepared.append((submission_id, approval_revision, approval_payload_sha256,
+                             label, serialized, output_path))
             continue
         if output_path.exists():
             try:
@@ -886,29 +1056,128 @@ def materialize_approved_submissions(
                         "refusing to replace an unpromoted manual label "
                         f"{output_path.name}"
                     )
+                exact_promoted_owners = [
+                    (owner_id, owner)
+                    for owner_id, owner in receipt_rows.items()
+                    if isinstance(owner, dict)
+                    and owner.get("product_id") == product_id
+                    and owner.get("output_file") == output_path.name
+                    and owner.get("label_sha256") == existing_label_hash
+                    and int(
+                        owner.get("promoted_approval_revision")
+                        or (owner.get("approval_revision")
+                            if owner.get("promoted_catalog_version") else 0)
+                    )
+                        == int(owner.get("approval_revision") or 0)
+                    and bool(owner.get("promoted_catalog_version"))
+                ]
+                if len(exact_promoted_owners) != 1:
+                    raise SubmissionImportError(
+                        "promoted replacement owner is ambiguous"
+                    )
+                owner_id, owner = exact_promoted_owners[0]
+                _freeze_promoted_label(destination, owner_id, owner)
+                fallback_promoted_owners[submission_id] = owner_id
             # A crash can occur after the atomic label replace but before the
             # receipt replace. Exact bytes prove this is the same approval, so
             # safely recreate the receipt and refresh mtime for the pipeline.
             # A later correction may also replace the current bytes, but only
             # after the receipt owning those exact bytes was promoted.
-        prepared.append((submission_id, label, serialized, output_path))
+        prepared.append((submission_id, approval_revision, approval_payload_sha256,
+                         label, serialized, output_path))
+
+    # The service export is authoritative for approvals that have never
+    # shipped. A reopened approval disappears immediately; remove only the
+    # unpromoted materialization. The last promoted revision remains the
+    # catalog source while its correction is reviewed.
+    for submission_id in sorted(
+        set(receipt_rows) - seen_submission_ids if authoritative else ()
+    ):
+        receipt = receipt_rows[submission_id]
+        if not isinstance(receipt, dict):
+            continue
+        output_file = receipt.get("output_file")
+        label_sha256 = receipt.get("label_sha256")
+        if (
+            not isinstance(output_file, str)
+            or Path(output_file).name != output_file
+            or not output_file.endswith(".json")
+            or not isinstance(label_sha256, str)
+            or not re.fullmatch(r"[0-9a-f]{64}", label_sha256)
+        ):
+            raise SubmissionImportError("unpromoted import receipt is malformed")
+        output_path = destination / output_file
+        promoted_revision = int(
+            receipt.get("promoted_approval_revision")
+            or (receipt.get("approval_revision")
+                if receipt.get("promoted_catalog_version") else 0)
+        )
+        current_revision = int(receipt.get("approval_revision") or 0)
+        restored_owner = None
+        if current_revision > promoted_revision:
+            restored_owner = _restore_promoted_label(
+                destination, receipt_rows, receipt
+            )
+        if restored_owner:
+            if restored_owner == submission_id:
+                receipt.update({
+                    "approval_revision": promoted_revision,
+                    "approval_payload_sha256": receipt.get(
+                        "promoted_approval_payload_sha256"
+                    ),
+                    "label_sha256": receipt.get("promoted_label_sha256"),
+                    "product_id": receipt.get("promoted_product_id"),
+                    "output_file": receipt.get("promoted_output_file"),
+                })
+                receipt.pop("fallback_promoted_submission_id", None)
+            else:
+                del receipt_rows[submission_id]
+            removed_unpromoted = True
+            continue
+        if promoted_revision > 0:
+            continue
+        if output_path.is_file():
+            current_hash = hashlib.sha256(output_path.read_bytes()).hexdigest()
+            if current_hash != label_sha256:
+                raise SubmissionImportError(
+                    "withdrawn unpromoted label changed after import"
+                )
+            output_path.unlink()
+        del receipt_rows[submission_id]
+        removed_unpromoted = True
 
     imported: list[str] = []
     output_paths: list[Path] = []
-    for submission_id, label, serialized, output_path in prepared:
+    for (submission_id, approval_revision, approval_payload_sha256,
+         label, serialized, output_path) in prepared:
         _atomic_write_text(output_path, serialized)
         label_hash = hashlib.sha256(serialized.encode("utf-8")).hexdigest()
         receipt_rows[submission_id] = {
             **receipt_rows.get(submission_id, {}),
             "label_sha256": label_hash,
+            "approval_revision": approval_revision,
+            "approval_payload_sha256": approval_payload_sha256,
+            "promoted_approval_revision": int(
+                receipt_rows.get(submission_id, {}).get("promoted_approval_revision") or 0
+            ),
             "output_file": output_path.name,
             "product_id": label["id"],
             "upc": label["upcSku"],
         }
+        fallback_owner = fallback_promoted_owners.get(submission_id)
+        if fallback_owner:
+            receipt_rows[submission_id][
+                "fallback_promoted_submission_id"
+            ] = fallback_owner
         imported.append(submission_id)
         output_paths.append(output_path)
 
-    if prepared or not receipt_path.exists():
+    if (
+        prepared
+        or removed_unpromoted
+        or receipt_needs_schema_write
+        or not receipt_path.exists()
+    ):
         receipt_content = json.dumps(receipts, indent=2, sort_keys=True) + "\n"
         _atomic_write_text(receipt_path, receipt_content)
     return ImportResult(imported, already_imported, output_paths)
@@ -1197,7 +1466,9 @@ def copy_approved_product_images(
     eligible for a later release retry until the submission evidence retention
     window closes.
     """
-    receipts = _read_receipts(Path(output_dir) / RECEIPT_FILE)["submissions"]
+    receipt_path = Path(output_dir) / RECEIPT_FILE
+    receipt_document = _read_receipts(receipt_path)
+    receipts = receipt_document["submissions"]
     image_dir = Path(product_images_dir)
     index_path = image_dir / "product_image_index.json"
     image_index = _load_product_image_index(index_path)
@@ -1205,6 +1476,7 @@ def copy_approved_product_images(
     if not catalog_path.is_file():
         raise SubmissionImportError("catalog database is missing")
     manifest = _load_catalog_manifest(catalog_path) or {}
+    catalog_version = str(manifest.get("db_version") or "").strip()
     excluded = manifest.get("excluded_by_gate") or []
     held_ids = {
         row.get("dsld_id") for row in excluded
@@ -1231,7 +1503,10 @@ def copy_approved_product_images(
                 continue
             filename = f"{product_id}.webp"
             webp_path = image_dir / filename
-            expected_url = f"product-images/{filename}"
+            remote_path = (
+                f"v{catalog_version}/{filename}" if catalog_version else filename
+            )
+            expected_url = f"product-images/{remote_path}"
             existing = connection.execute(
                 "select image_thumbnail_url from products_core where dsld_id = ?",
                 (product_id,),
@@ -1254,16 +1529,23 @@ def copy_approved_product_images(
                 existing[0] == expected_url
                 and isinstance(indexed, dict)
                 and indexed.get("filename") == filename
+                and indexed.get("remote_path") == remote_path
                 and webp_path.is_file()
                 and indexed.get("sha256")
                 == hashlib.sha256(webp_path.read_bytes()).hexdigest()
+                and receipt.get("image_approval_revision")
+                == receipt.get("approval_revision")
             ):
                 skipped += 1
                 continue
             try:
                 response = rpc(
                     "get_approved_product_submission_image",
-                    {"p_submission_id": submission_id},
+                    {
+                        "p_submission_id": submission_id,
+                        "p_approval_revision": int(receipt["approval_revision"]),
+                        "p_payload_sha256": str(receipt["approval_payload_sha256"]),
+                    },
                 )
                 if (
                     not isinstance(response, list)
@@ -1316,9 +1598,14 @@ def copy_approved_product_images(
                     )
                 image_index[product_id] = {
                     "filename": filename,
+                    "remote_path": remote_path,
                     "size_bytes": len(webp_bytes),
                     "sha256": webp_hash,
                 }
+                receipt["image_approval_revision"] = int(
+                    receipt["approval_revision"]
+                )
+                receipt["image_source_sha256"] = expected_hash
                 copied += 1
             except (OSError, sqlite3.Error, SubmissionImportError) as exc:
                 failed += 1
@@ -1336,24 +1623,28 @@ def copy_approved_product_images(
             json.dumps(image_index, ensure_ascii=False, indent=2, sort_keys=True)
             + "\n",
         )
+        _atomic_write_text(
+            receipt_path,
+            json.dumps(receipt_document, indent=2, sort_keys=True) + "\n",
+        )
     if copied or skipped:
         _refresh_catalog_manifest_checksum(catalog_path)
     return {"copied": copied, "failed": failed, "skipped": skipped}
 
 
-def mark_released_submissions_promoted(
+def build_release_activation_approvals(
     *,
     output_dir: str | Path,
     catalog_db: str | Path,
     detail_blobs_dir: str | Path,
-    rpc: Callable[[str, dict[str, object]], object] = _service_rpc,
-) -> list[str]:
-    """Mark only receipts proven to own the released catalog representation.
+)-> list[dict[str, object]]:
+    """Prove exact approvals and identify which ones this catalog represents.
 
     Product-ID presence alone is insufficient for a label correction because
     its numeric DSLD identity already existed before the correction. The core
     row's pinned detail-blob hash and the blob's submission lineage jointly
-    prove that the reviewed label, rather than the prior catalog row, shipped.
+    prove that the reviewed label, rather than the prior catalog row, ships.
+    Rows absent from the catalog remain exact assertions without a promotion.
     """
     destination = Path(output_dir)
     receipt_path = destination / RECEIPT_FILE
@@ -1387,13 +1678,20 @@ def mark_released_submissions_promoted(
     catalog_version = version_row[0].strip()
 
     detail_root = Path(detail_blobs_dir)
-    promoted: list[str] = []
+    approvals: list[dict[str, object]] = []
     for submission_id in sorted(receipt_rows):
         receipt = receipt_rows[submission_id]
-        if receipt.get("promoted_catalog_version"):
+        approval_revision = int(receipt.get("approval_revision") or 0)
+        if int(receipt.get("promoted_approval_revision") or 0) >= approval_revision:
             continue
         product_id = str(receipt.get("product_id") or "")
+        candidate: dict[str, object] = {
+            "submission_id": submission_id,
+            "approval_revision": approval_revision,
+            "payload_sha256": str(receipt.get("approval_payload_sha256") or ""),
+        }
         if product_id not in released_products:
+            approvals.append(candidate)
             continue
         expected_blob_hash = released_products[product_id]
         if not re.fullmatch(r"[0-9a-f]{64}", expected_blob_hash):
@@ -1420,11 +1718,57 @@ def mark_released_submissions_promoted(
         if (
             not isinstance(label_record, dict)
             or label_record.get("source_record_id") != submission_id
+            or label_record.get("approval_revision")
+            != int(receipt.get("approval_revision") or 0)
+            or label_record.get("approval_payload_sha256")
+            != receipt.get("approval_payload_sha256")
         ):
             raise SubmissionImportError(
                 f"released product {product_id} does not carry submission "
                 f"lineage {submission_id}"
             )
+        candidate["resolved_dsld_id"] = product_id
+        approvals.append(candidate)
+    return approvals
+
+
+def mark_released_submissions_promoted(
+    *,
+    output_dir: str | Path,
+    catalog_db: str | Path,
+    detail_blobs_dir: str | Path,
+    rpc: Callable[[str, dict[str, object]], object] = _service_rpc,
+) -> list[str]:
+    """Reconcile local receipts after atomic catalog activation.
+
+    The activation transaction has already validated every exact approval and
+    stamped represented rows. This idempotent call verifies the same local
+    artifact proof and records the result in the private import receipt.
+    """
+    destination = Path(output_dir)
+    receipt_path = destination / RECEIPT_FILE
+    receipts = _read_receipts(receipt_path)
+    receipt_rows: dict[str, dict[str, Any]] = receipts["submissions"]
+    catalog_path = Path(catalog_db)
+    with sqlite3.connect(f"file:{catalog_path}?mode=ro", uri=True) as connection:
+        version_row = connection.execute(
+            "select value from export_manifest where key = 'db_version'"
+        ).fetchone()
+    if not version_row or not str(version_row[0] or "").strip():
+        raise SubmissionImportError("released catalog version is unavailable")
+    catalog_version = str(version_row[0]).strip()
+    candidates = build_release_activation_approvals(
+        output_dir=output_dir,
+        catalog_db=catalog_db,
+        detail_blobs_dir=detail_blobs_dir,
+    )
+    promoted: list[str] = []
+    for candidate in candidates:
+        product_id = candidate.get("resolved_dsld_id")
+        if not isinstance(product_id, str):
+            continue
+        submission_id = str(candidate["submission_id"])
+        receipt = receipt_rows[submission_id]
         response = rpc(
             "mark_product_submission_promoted",
             {
@@ -1434,6 +1778,8 @@ def mark_released_submissions_promoted(
                 # duplicates, giving submitters a product to open.
                 "p_resolved_dsld_id": product_id,
                 "p_submission_id": submission_id,
+                "p_approval_revision": int(candidate["approval_revision"]),
+                "p_payload_sha256": str(candidate["payload_sha256"]),
             },
         )
         if response is not True:
@@ -1441,6 +1787,9 @@ def mark_released_submissions_promoted(
                 f"promotion RPC did not confirm {submission_id}"
             )
         receipt["promoted_catalog_version"] = catalog_version
+        receipt["promoted_approval_revision"] = int(receipt["approval_revision"])
+        _freeze_promoted_label(destination, submission_id, receipt)
+        receipt.pop("fallback_promoted_submission_id", None)
         promoted.append(submission_id)
 
     if promoted:
@@ -1449,6 +1798,37 @@ def mark_released_submissions_promoted(
             json.dumps(receipts, indent=2, sort_keys=True) + "\n",
         )
     return promoted
+
+
+def verify_current_approval_revisions(
+    *,
+    output_dir: str | Path,
+    rpc: Callable[[str, dict[str, object]], object] = _service_rpc,
+) -> int:
+    """Fence publication against approvals reopened after the pipeline run."""
+    receipts = _read_receipts(Path(output_dir) / RECEIPT_FILE)["submissions"]
+    checked = 0
+    for submission_id, receipt in sorted(receipts.items()):
+        if not isinstance(receipt, dict):
+            raise SubmissionImportError("import receipt row is malformed")
+        revision = int(receipt.get("approval_revision") or 0)
+        promoted_revision = int(receipt.get("promoted_approval_revision") or 0)
+        if promoted_revision >= revision:
+            continue
+        response = rpc(
+            "assert_product_submission_approval_revision",
+            {
+                "p_submission_id": submission_id,
+                "p_approval_revision": revision,
+                "p_payload_sha256": str(receipt.get("approval_payload_sha256") or ""),
+            },
+        )
+        if response is not True:
+            raise SubmissionImportError(
+                f"approval revision changed before release: {submission_id}"
+            )
+        checked += 1
+    return checked
 
 
 def _load_export_file(path: Path) -> list[dict[str, Any]]:
@@ -1470,6 +1850,7 @@ def main(argv: list[str] | None = None) -> int:
     source.add_argument("--input", type=Path)
     source.add_argument("--copy-images", action="store_true")
     source.add_argument("--mark-promoted", action="store_true")
+    source.add_argument("--verify-current-approvals", action="store_true")
     parser.add_argument(
         "--output-dir",
         type=Path,
@@ -1494,6 +1875,10 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
 
     try:
+        if args.verify_current_approvals:
+            checked = verify_current_approval_revisions(output_dir=args.output_dir)
+            print(json.dumps({"verified": checked}, sort_keys=True))
+            return 0
         if args.mark_promoted:
             promoted = mark_released_submissions_promoted(
                 output_dir=args.output_dir,
@@ -1523,7 +1908,9 @@ def main(argv: list[str] | None = None) -> int:
             if args.fetch
             else _load_export_file(args.input)
         )
-        result = materialize_approved_submissions(rows, output_dir=args.output_dir)
+        result = materialize_approved_submissions(
+            rows, output_dir=args.output_dir, authoritative=True
+        )
     except SubmissionImportError as exc:
         parser.error(str(exc))
     print(

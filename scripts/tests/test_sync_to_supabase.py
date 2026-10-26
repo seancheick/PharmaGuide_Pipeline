@@ -338,34 +338,44 @@ def test_sync_skips_bucket_capacity_check_when_catalog_is_already_current(
     assert all(0 <= int(ttl) <= 60 for ttl in uploaded_cache_controls)
 
 
-@pytest.mark.parametrize("already_published", [False, True])
-def test_sync_bounds_mutable_release_cache_but_keeps_hashed_blobs_immutable(
-    tmp_path, monkeypatch, already_published,
+def test_sync_bounds_release_cache_but_keeps_hashed_blobs_immutable(
+    tmp_path, monkeypatch,
 ):
-    """New and same-version uploads must both permit later corrections."""
+    """A fresh immutable version stages its objects before activation."""
     import supabase_client
     import sync_to_supabase as sync
+    import product_submission_import
 
     _make_build_output(str(tmp_path), product_count=2)
     local = sync.load_local_manifest(str(tmp_path))
     client = object()
     uploads = {}
     manifests = []
+    approvals = [{"submission_id": "018f4c79-7c7e-4c70-9d62-7fc3b9ce6a11"}]
     monkeypatch.setattr(supabase_client, "get_supabase_client", lambda: client)
-    monkeypatch.setattr(supabase_client, "fetch_current_manifest", lambda _client: (
-        {"db_version": local["db_version"], "checksum": "previous"} if already_published else None
-    ))
+    monkeypatch.setattr(supabase_client, "fetch_current_manifest", lambda _client: None)
     monkeypatch.setattr(supabase_client, "upload_file", lambda _c, _b, path, _file, **kw: uploads.update({path: kw}))
-    monkeypatch.setattr(supabase_client, "insert_manifest", lambda _c, manifest: manifests.append(manifest))
+    monkeypatch.setattr(
+        supabase_client,
+        "insert_manifest",
+        lambda _c, manifest, **kw: manifests.append((manifest, kw)),
+    )
+    monkeypatch.setattr(
+        product_submission_import,
+        "build_release_activation_approvals",
+        lambda **_kw: approvals,
+    )
     monkeypatch.setattr(sync, "validate_bucket_upload_capacity", lambda *_a, **_kw: None)
     monkeypatch.setattr(sync, "discover_existing_remote_blob_paths", lambda *_a, **_kw: set())
     monkeypatch.setattr(sync, "_publish_catalog_search_step", lambda *_a, **_kw: None)
     monkeypatch.setattr(sync, "_ensure_registry_validating", lambda *_a, **_kw: None)
     monkeypatch.setattr(sync, "_promote_registry_release", lambda *_a, **_kw: None)
 
-    result = sync.sync(str(tmp_path), max_workers=1)
+    result = sync.sync(
+        str(tmp_path), max_workers=1, submission_output_dir=str(tmp_path)
+    )
     assert result["status"] == "synced"
-    assert manifests == [local]
+    assert manifests == [(local, {"submission_approvals": approvals})]
     prefix = f"v{local['db_version']}/"
     mutable = {path: opts for path, opts in uploads.items() if path.startswith(prefix)}
     assert set(mutable) == {
@@ -376,6 +386,21 @@ def test_sync_bounds_mutable_release_cache_but_keeps_hashed_blobs_immutable(
     hashed = {path: opts for path, opts in uploads.items() if path.startswith("shared/details/sha256/")}
     assert len(hashed) == 2
     assert all(opts["cache_control"] == supabase_client.CACHE_CONTROL_IMMUTABLE for opts in hashed.values())
+
+
+def test_sync_refuses_changed_bytes_under_the_active_version(tmp_path, monkeypatch):
+    import supabase_client
+    import sync_to_supabase as sync
+
+    _make_build_output(str(tmp_path), product_count=1)
+    local = sync.load_local_manifest(str(tmp_path))
+    monkeypatch.setattr(supabase_client, "get_supabase_client", lambda: object())
+    monkeypatch.setattr(supabase_client, "fetch_current_manifest", lambda _client: {
+        "db_version": local["db_version"],
+        "checksum": "sha256:different",
+    })
+    with pytest.raises(ValueError, match="fresh db_version"):
+        sync.sync(str(tmp_path), max_workers=1)
 
 
 def test_collect_detail_blobs():
@@ -1053,6 +1078,7 @@ def test_sync_elapsed_time_includes_images_and_publication(tmp_path, monkeypatch
             raise RuntimeError("simulated detail upload failure")
 
     def images(**_kwargs):
+        assert _kwargs["catalog_version"] == syncer.load_local_manifest(str(tmp_path))["db_version"]
         clock["now"] += 60.0
         return {"uploaded": 1, "skipped": 0, "failed": 0}
 
@@ -1090,6 +1116,47 @@ def test_images_missing_local_file_is_failure(tmp_path):
     result = upload_product_images(object(), str(tmp_path), lambda *a, **kw: None,
                                    lambda *a, **kw: [], max_workers=1, retries=0)
     assert result['failed'] == 1
+
+
+def test_release_images_are_staged_under_the_immutable_catalog_version(tmp_path):
+    from sync_to_supabase import upload_product_images
+    (tmp_path / 'image.webp').write_bytes(b'new')
+    (tmp_path / 'product_image_index.json').write_text(json.dumps({
+        '1': {
+            'filename': 'image.webp',
+            'remote_path': 'vrelease-2/image.webp',
+            'size_bytes': 3,
+        },
+    }))
+    uploaded = []
+    result = upload_product_images(
+        object(), str(tmp_path), lambda *a, **kw: uploaded.append(a[2]),
+        lambda *a, **kw: [], max_workers=1, retries=0,
+        catalog_version='release-2',
+    )
+    assert result['failed'] == 0
+    assert uploaded == ['vrelease-2/image.webp']
+
+
+def test_release_images_refuse_different_bytes_at_an_existing_versioned_path(tmp_path):
+    from sync_to_supabase import upload_product_images
+    (tmp_path / 'image.webp').write_bytes(b'new')
+    (tmp_path / 'product_image_index.json').write_text(json.dumps({
+        '1': {
+            'filename': 'image.webp',
+            'remote_path': 'vrelease-2/image.webp',
+            'size_bytes': 3,
+        },
+    }))
+    uploaded = []
+    result = upload_product_images(
+        object(), str(tmp_path), lambda *a, **kw: uploaded.append(a[2]),
+        lambda *a, **kw: [{'name': 'image.webp', 'metadata': {'size': 3}}]
+        if kw['offset'] == 0 else [], max_workers=1, retries=0,
+        download_fn=lambda *_a: b'old', catalog_version='release-2',
+    )
+    assert uploaded == []
+    assert result == {'uploaded': 0, 'skipped': 0, 'failed': 1}
 
 
 @pytest.mark.parametrize('same_catalog,image_failed,core_missing', [

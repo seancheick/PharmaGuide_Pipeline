@@ -768,6 +768,17 @@ fi
 # 0 with status="up_to_date" when nothing changed.
 # ---------------------------------------------------------------------------
 
+# Fail early before expensive uploads if a reviewer reopened an approval while
+# the pipeline ran. The authoritative fence still occurs inside the atomic
+# manifest-activation transaction below; this precheck is only an early exit.
+if (( SKIP_SUPABASE == 0 && SUPABASE_DRY_RUN == 0 )) \
+    && [[ -f "$SUBMISSION_RECEIPTS" ]]; then
+  info "Product submissions: verifying exact approval revisions before publication..."
+  "$PG_PYTHON" scripts/product_submission_import.py --verify-current-approvals \
+    --output-dir "$SUBMISSION_OUTPUT_DIR"
+  ok "Product submissions: exact approval revisions confirmed"
+fi
+
 if (( SKIP_SUPABASE == 0 )); then
   if (( SUPABASE_DRY_RUN == 1 )); then
     info "Step 5/8: Syncing dist/ to Supabase (DRY-RUN)..."
@@ -777,7 +788,8 @@ if (( SKIP_SUPABASE == 0 )); then
     "$PG_PYTHON" "$CATALOG_STATE_SCRIPT" --check-input-binding "$CATALOG_INPUT_BINDING"
     info "Step 5/8: Syncing dist/ to Supabase (upload only; cleanup deferred)..."
     # Storage inventory/deletion runs separately after publication.
-    "$PG_PYTHON" scripts/sync_to_supabase.py "$DIST_DIR"
+    "$PG_PYTHON" scripts/sync_to_supabase.py "$DIST_DIR" \
+      --submission-output-dir "$SUBMISSION_OUTPUT_DIR"
   fi
   ok "Supabase step done (uploaded if changed; up-to-date otherwise)"
 else

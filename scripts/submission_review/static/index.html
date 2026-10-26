@@ -311,6 +311,11 @@
         <p class="step-hint">Approve only when every check below is green. The other outcomes are always available while the submission is open.</p>
       </div>
       <p id="review-banner" class="review-banner" hidden></p>
+      <div id="approved-correction-actions" class="actions" hidden>
+        <button id="t-reopen-approval" type="button" data-solo-read-only="true">
+          Reopen for correction
+        </button>
+      </div>
       <section id="label-diagnostics" class="diagnostics" aria-live="polite" hidden></section>
       <section id="readiness" aria-live="polite">
         <div class="row readiness-head">
@@ -349,6 +354,12 @@
             </div>
             <button id="t-request-evidence" type="button">Ask for new photos</button>
           </div>
+          <div class="row" id="reviewer-evidence-replacement">
+            <input id="reviewer-evidence-files" type="file" accept="image/jpeg,image/png,image/webp" multiple aria-label="Replacement evidence photos">
+            <input id="reviewer-evidence-categories" class="grow" placeholder="One group per photo: front_identity; supplement_facts,ingredient_disclosure" aria-label="Evidence categories for each replacement photo, separated by semicolons">
+            <button id="reviewer-evidence-upload" type="button">Upload replacement evidence</button>
+          </div>
+          <p class="muted">Describe only what each photo actually shows. Separate photos with a semicolon; use commas when one photo shows more than one panel.</p>
         </div>
 
         <div class="decision-option">
@@ -404,6 +415,20 @@
     </button>
   </div>
   <div id="help-body"></div>
+</dialog>
+
+<dialog id="reopen-approval-dialog">
+  <form method="dialog">
+    <h2>Reopen approved submission?</h2>
+    <p>The existing approval stays in the audit history. Editing remains locked until the reopen succeeds.</p>
+    <label>Reason for correction
+      <textarea id="reopen-approval-reason" required maxlength="1000" placeholder="Describe the transcription, identity, or evidence mistake."></textarea>
+    </label>
+    <div class="actions">
+      <button value="cancel" type="submit" class="ghost">Cancel</button>
+      <button id="reopen-approval-confirm" value="default" type="button" class="danger">Reopen</button>
+    </div>
+  </form>
 </dialog>
 
 <dialog id="photo-lightbox">

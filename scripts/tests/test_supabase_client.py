@@ -105,13 +105,15 @@ def test_insert_manifest_coerces_types():
         "generated_at": "2026-03-27T12:00:00Z",
     }
 
-    insert_manifest(MockClient(), manifest_data)
+    approvals = [{"submission_id": "018f4c79-7c7e-4c70-9d62-7fc3b9ce6a11"}]
+    insert_manifest(MockClient(), manifest_data, submission_approvals=approvals)
 
-    assert captured["name"] == "rotate_manifest"
+    assert captured["name"] == "rotate_manifest_with_submission_approvals"
     assert captured["params"]["p_schema_version"] == "5"  # str coercion
     assert captured["params"]["p_product_count"] == 50000  # int coercion
     assert captured["params"]["p_db_version"] == "2026.03.27.5"
     assert captured["params"]["p_min_app_version"] == "1.0.0"  # default
+    assert captured["params"]["p_submission_approvals"] == approvals
 
 
 def test_list_storage_paths_delegates_with_prefix_and_options():

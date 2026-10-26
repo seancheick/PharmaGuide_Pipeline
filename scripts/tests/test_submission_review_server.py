@@ -565,6 +565,32 @@ def test_console_editor_picture_and_terminal_state_contracts():
     assert "photo-lightbox" in styles
 
 
+def test_console_reopens_approved_revision_and_reuses_evidence_upload_owner():
+    index_html = (REVIEW_DIR / "static" / "index.html").read_text()
+    app_js = (REVIEW_DIR / "static" / "app.js").read_text()
+
+    for element_id in (
+        "t-reopen-approval",
+        "reopen-approval-dialog",
+        "reopen-approval-reason",
+        "reviewer-evidence-files",
+        "reviewer-evidence-upload",
+    ):
+        assert f'id="{element_id}"' in index_html
+    assert "action: 'reopen_approval'" in app_js
+    assert "expected_approval_revision" in app_js
+    assert "expected_payload_sha256" in app_js
+    assert "action: 'create_reviewer_evidence_uploads'" in app_js
+    assert "action: 'finalize_reviewer_evidence_uploads'" in app_js
+    assert ".from('product-submission-photos')" in app_js
+    assert "split(';')" in app_js
+    assert "categoryGroups.length !== files.length" in app_js
+    assert "JSON.stringify(attempt)" in app_js
+    assert "clearReviewerEvidenceAttempt(submission.id)" in app_js
+    assert "clearReviewerEvidenceRequestKey" not in app_js
+    assert "value=\"front_identity,supplement_facts" not in index_html
+
+
 def test_console_offers_a_typed_product_identity_mismatch_rejection():
     index_html = (REVIEW_DIR / "static" / "index.html").read_text()
 
