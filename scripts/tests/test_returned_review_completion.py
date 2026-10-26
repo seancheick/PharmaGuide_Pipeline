@@ -165,3 +165,13 @@ def test_default_daily_explanation_does_not_deny_printed_qualitative_directions(
     assert 'no daily directions' not in text
     assert 'no daily amount' in text
     assert scored['quality_pillars_v4']['dose']['score'] == 2.4
+
+def test_existing_fruit_hierarchy_survives_the_display_source_overlay(products):
+    rows = {r['raw_source_path']: r for r in products['43662']['display_ingredients']}
+    members = [r for k, r in rows.items() if k.startswith('ingredientRows[3].nestedRows')]
+    assert len(members) == 3
+    assert all(r['parent_source_path'] == 'ingredientRows[5]' and r['nested_depth'] == 1
+               for r in members)
+    assert len(rows['ingredientRows[5]']['children']) == 3
+    assert not set(rows['ingredientRows[3]'].get('children', [])) & {r['label_display_name'] for r in members}
+    assert all(r['exact_dose_text'] == '' for r in members)

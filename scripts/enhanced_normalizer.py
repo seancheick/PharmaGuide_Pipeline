@@ -5778,7 +5778,13 @@ class EnhancedDSLDNormalizer:
                 children.append(child)
             set_reviewed_depth(child, parent.get("_raw_nested_depth", 0) + 1,
                                entry.get("provenance_tag") or "official_label_hierarchy_correction", parent)
-            for row in (parent, child):
+            original_parent_path = re.sub(
+                r"\.(?:nestedRows|forms)\[\d+\]$", "", child["raw_source_path"],
+            )
+            old_parent = by_path.get(original_parent_path, (None, None))[0]
+            for row in (parent, child, old_parent):
+                if row is None:
+                    continue
                 row["_label_correction_applied"] = True
                 row["_label_correction_provenance"] = entry.get("provenance_tag") or "official_label_hierarchy_correction"
         return ingredient_rows

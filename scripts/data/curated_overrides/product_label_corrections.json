@@ -7141,7 +7141,7 @@
       "reviewer": "Codex independent exact-label content verification; no clinical scoring approval",
       "review_date": "2026-10-25",
       "scope": "dsld_id_only",
-      "provenance_tag": "official_source_identity_correction",
+      "provenance_tag": "official_label_hierarchy_correction",
       "serving_basis_correction": {
         "raw_source_sha256": "5a685f1d82e1c428bb3a3d618955c5e2d4dd4fcec3cb448a2494862f3538efdc",
         "serving_sizes": [
