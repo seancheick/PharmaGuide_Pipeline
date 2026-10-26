@@ -3587,3 +3587,21 @@ Fail-first regression reproduced wrong display parent. Existing43662 hierarchy p
 ### Concurrent-main integration
 
 Hierarchy candidate d826eaec77110eea99b3456287c7c1e2a6501624 passed all four full shards/skip guards and Merge readiness in CI40412535170; both verified review threads are resolved. While it ran, independent submission-identifier PR259 merged to main da80f7481. Strict protection correctly requires an up-to-date combined candidate. Preserved that work via clean merge9437ab5b0; no overwrite or bypass. Shared export diff only routes normalize_upc through the canonical formatted-GTIN/checksum owner. Combined exact-label/importer/GTIN/ownership slice261passed. Appmain remainsaea9eadc. User-authorized coordination with the other active chat requested a temporary main integration lane to avoid further concurrent checkpoint restarts. Combined local and exact whole-fast CI are required; earlier green source is not presented as proof of this composition.
+
+
+## Final qualification and integration — October 26, 2026
+
+The full18C/47D bounded correction batch is qualified and integrated. Exact combined candidate `e9734f756b5724baabc48c4b2e093398032420c8` passed all four whole-fast shards, every declared-skip guard, Validation scope and Merge readiness in [CI40414536231](https://github.com/seancheick/PharmaGuide_Pipeline/actions/runs/40414536231). Normal protected [PR258](https://github.com/seancheick/PharmaGuide_Pipeline/pull/258) merged at `31b3e7878a915e2a96dad37cc60d779bed32f029`; fetched ancestor check confirms the tested source is on origin/main. Concurrent identifier work from PR259 is preserved in that composition. Both corrected review conversations are resolved. No administrator bypass or force push. Completed local/remote source branch removed; primary checkout aligned with main.
+
+Final combined local checkpoint:546passed/24declaredskips with strict skip guard. Combined owner/importer/export slice261passed; hierarchy141passed;33rawcanaries passed. Full36-label paired replay plus scoped final copy/hierarchy captures preserve the measured results and safety states described above. Real exported knotweed hold remains false while its declared75mg marker exposure survives. App candidatea8aa15ff passed full CI40405374984 and integrated through PR154; appmain source is unchanged by documentation-only PR155. Ordinary rebuilt-catalog delivery and native app rendering remain unverified.
+
+No full corpus, export/import campaign, cloud data write or publication was performed. Six untracked user submissions and local supabase work were preserved. Source corrections are implemented, measured, reviewed and integrated; they are not marked rebuilt-closed. Required scientific approvals and exact source/preparation gaps remain in the existing registers and the active remaining list. In particular, the documented citation heuristic mismatch is not represented as an automated pass or scientific clearance.
+
+Read-only startup and producer/app compatibility checks pass. Actual stage fingerprints select Clean as earliest required stage (114stale manifests before rebuilding). Operator command from the primary checkout:
+
+```bash
+source scripts/python_env.sh
+PYTHON="$PG_PYTHON" bash batch_run_all_datasets.sh --pipeline-only
+```
+
+This computes Clean→Enrich→Score and stops. Publication remains separately gated by source-bound assessment completeness. Next proof is the rebuilt full-corpus invariant, identities/amounts/warnings/held states, exports and ordinary Flutter delivery including the original20examples. No further source edit is planned for this batch.
