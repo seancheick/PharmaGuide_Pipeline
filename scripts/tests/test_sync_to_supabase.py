@@ -13,6 +13,14 @@ if _scripts_dir not in sys.path:
     sys.path.insert(0, os.path.abspath(_scripts_dir))
 
 
+@pytest.fixture(autouse=True)
+def simulated_historical_manifest(monkeypatch):
+    # Individual sync tests opt into explicit historical rows as needed.
+    import supabase_client
+    monkeypatch.setattr(supabase_client, "fetch_manifest_version", lambda *a: None)
+    monkeypatch.setattr(supabase_client, "list_storage_paths", lambda *a, **k: [])
+
+
 def test_remote_preflight_checks_access_without_catalog_or_mutations(monkeypatch):
     import sync_to_supabase as syncer
     import supabase_client
@@ -319,6 +327,8 @@ def test_sync_skips_bucket_capacity_check_when_catalog_is_already_current(
     monkeypatch.setattr(sync_to_supabase, "upload_detail_blobs",
                         lambda **kw: (0, [], 0, 3))
     def download(_c, _b, path):
+        if path.endswith("/pharmaguide_core.db"):
+            return (tmp_path / "pharmaguide_core.db").read_bytes()
         if path.endswith("/detail_index.json"):
             return (tmp_path / "detail_index.json").read_bytes()
         raise FileNotFoundError(path)
@@ -1170,7 +1180,7 @@ def test_sync_repairs_independent_phases_before_activation(tmp_path, monkeypatch
     blob_paths = [entry['storage_path'] for entry in detail_index.values()]
     writes, events = [], []
     monkeypatch.setattr(supabase_client, 'list_storage_paths', lambda *a, **kw:
-                        [] if core_missing else [{'name': 'pharmaguide_core.db'}])
+                        [] if core_missing or kw.get('offset', 0) or a[2].endswith('/share_index') else [{'name': 'pharmaguide_core.db'}])
     monkeypatch.setattr(supabase_client, 'get_supabase_client', lambda: object())
     remote = dict(local) if same_catalog else {**local, 'db_version': 'older'}
     monkeypatch.setattr(supabase_client, 'fetch_current_manifest', lambda _c: remote)
@@ -1227,3 +1237,65 @@ def test_detail_upload_queue_is_bounded(monkeypatch):
     _, errors, uploaded, skipped = syncer.upload_detail_blobs(
         None, 'bucket', uploads, lambda *a, **kw: None, 4, 0, 0)
     assert (errors, uploaded, skipped) == ([], 100, 0)
+
+
+def test_complete_sync_uses_real_discovery_and_create_only_versioned_paths(tmp_path, monkeypatch):
+    from types import SimpleNamespace
+    import sync_to_supabase as syncer
+    import supabase_client
+    _make_build_output(str(tmp_path), product_count=1)
+    objects = {}
+    calls = []
+    class Storage:
+        def list(self, path, options):
+            prefix = path.rstrip('/') + '/'
+            return [{'name': key[len(prefix):]} for key in objects
+                    if key.startswith(prefix) and '/' not in key[len(prefix):]]
+        def download(self, path):
+            if path not in objects:
+                raise FileNotFoundError(path)
+            return objects[path]
+        def upload(self, path, file, file_options):
+            calls.append((path, file_options['upsert']))
+            if path in objects:
+                raise RuntimeError('already exists')
+            objects[path] = file.read()
+    client = SimpleNamespace(storage=SimpleNamespace(from_=lambda bucket: Storage()))
+    monkeypatch.setattr(supabase_client, 'list_storage_paths',
+                        lambda client, bucket, prefix, limit=1000, offset=0:
+                        Storage().list(prefix, {'limit': limit, 'offset': offset}))
+    monkeypatch.setattr(supabase_client, 'get_supabase_client', lambda: client)
+    monkeypatch.setattr(supabase_client, 'fetch_current_manifest', lambda client: None)
+    monkeypatch.setattr(syncer, 'validate_bucket_upload_capacity', lambda *a, **k: None)
+    monkeypatch.setattr(syncer, '_publish_catalog_search_step', lambda *a, **k: None)
+    monkeypatch.setattr(syncer, '_ensure_registry_validating', lambda *a, **k: None)
+    monkeypatch.setattr(syncer, '_promote_registry_release', lambda *a, **k: None)
+    activated = []
+    monkeypatch.setattr(supabase_client, 'insert_manifest', lambda *a, **k: activated.append(True))
+    result = syncer.sync(str(tmp_path), max_workers=1, retry_count=0)
+    assert result['status'] == 'synced'
+    assert activated == [True]
+    assert all(upsert == 'false' for path, upsert in calls if path.startswith('v'))
+
+@pytest.mark.parametrize('collision', ['manifest', 'database', 'detail_index', 'share_index'])
+def test_historical_version_collision_refused_before_any_storage_write(tmp_path, monkeypatch, collision):
+    import supabase_client
+    import sync_to_supabase as syncer
+    _make_build_output(str(tmp_path), product_count=1)
+    local = syncer.load_local_manifest(str(tmp_path))
+    monkeypatch.setattr(supabase_client, 'get_supabase_client', lambda: object())
+    monkeypatch.setattr(supabase_client, 'fetch_current_manifest', lambda c: {'db_version': 'newer', 'checksum': 'newer'})
+    monkeypatch.setattr(supabase_client, 'fetch_manifest_version', lambda c, v:
+                        {'checksum': 'old'} if collision == 'manifest' else None)
+    suffix = {'database': 'pharmaguide_core.db', 'detail_index': 'detail_index.json',
+              'share_index': 'share_index/00.json', 'manifest': 'none'}[collision]
+    remote_path = f"v{local['db_version']}/{suffix}"
+    def listing(c, b, prefix, limit=1000, offset=0):
+        return [{'name': remote_path.rsplit('/', 1)[1]}] if remote_path.rsplit('/', 1)[0] == prefix and offset == 0 else []
+    monkeypatch.setattr(supabase_client, 'list_storage_paths', listing)
+    monkeypatch.setattr(supabase_client, 'download_file', lambda *a: b'old different bytes')
+    writes = []
+    monkeypatch.setattr(supabase_client, 'upload_file', lambda *a, **k: writes.append(a))
+    with pytest.raises(ValueError, match='mutate'):
+        syncer.sync(str(tmp_path), max_workers=1, retry_count=0)
+    assert writes == []
