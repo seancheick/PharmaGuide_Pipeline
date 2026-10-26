@@ -27,6 +27,7 @@ const state = {
   catalogRelation: null,
   comparisonTarget: null,
   identityCheckRequest: 0,
+  identityDecisionGeneration: 0,
   rawJsonRendered: null,
   reviewerImages: [],
   productImage: null,
@@ -44,6 +45,7 @@ const state = {
   reviewReadyFor: null,
   reviewSaveTimer: null,
   reviewSaveRequest: 0,
+  reviewSavePromise: Promise.resolve(),
   reviewLoadRequest: 0,
   reviewVerifyRequest: 0,
   batchStates: new Map(),
@@ -185,6 +187,9 @@ async function boot() {
   });
   $('identity-run').addEventListener('click', () => checkIdentity({ record: true }));
   $('barcode-save').addEventListener('click', () => void correctBarcode());
+  for (const id of ['identifier-type', 'identifier-issuer', 'identifier-package', 'identifier-reason']) {
+    $(id).addEventListener('input', invalidateReviewedIdentity);
+  }
   $('other-disclosure').addEventListener('change', syncDisclosureFields);
   $('other-ingredients').addEventListener('input', syncDisclosureFields);
   $('reviewer-image-upload').addEventListener('click', uploadReplacementImage);
@@ -665,6 +670,58 @@ function canonicalSubmissionGtin14() {
     : null;
 }
 
+function identityLookupUrl() {
+  const gtin14 = canonicalSubmissionGtin14();
+  if (gtin14) return `/api/identity_lookup?gtin14=${encodeURIComponent(gtin14)}`;
+  const brand = state.payload?.brandName || state.selected?.identifier?.brandName || '';
+  const name = state.payload?.fullName || state.selected?.identifier?.fullName || '';
+  if (!brand.trim() || !name.trim()) throw new Error('Enter the label brand and full product name before checking identity.');
+  return `/api/identity_lookup?brand=${encodeURIComponent(brand)}&name=${encodeURIComponent(name)}`;
+}
+
+async function withPendingIdentityCandidates(lookup, submissionId) {
+  if (lookup.identity_method !== 'label_review') return lookup;
+  const {review} = await edge({action: 'load_review', submission_id: submissionId});
+  const candidates = review?.identity_candidates;
+  if (candidates?.complete !== true || !Array.isArray(candidates.pending) || !Array.isArray(candidates.conflicts)) {
+    throw new Error('Pending product identity candidates are unavailable. Refresh the review before deciding.');
+  }
+  const pending = candidates.pending.map(row => ({source: 'pending', dsld_id: row.dsld_id,
+    brand_name: row.brandName, product_name: row.fullName, upc_sku: '',
+    approval_revision: row.approval_revision, submission_id: row.submission_id,
+    package: row.package ?? null, issuer: row.issuer ?? null}));
+  return {...lookup, matches: [...lookup.matches, ...pending], pending_conflicts: candidates.conflicts,
+    pending_revision: JSON.stringify(candidates.conflicts)};
+}
+
+function invalidateReviewedIdentity() {
+  state.identityDecisionGeneration += 1;
+  state.identityRecorded = null;
+  state.catalogRelation = null;
+  state.verified = new Set();
+  state.verifiedKey = null;
+  if (state.review) state.review.identity_check = null;
+  renderIdentityCheck();
+  renderVerifyChecklist();
+}
+
+function identityDecisionBinding() {
+  return JSON.stringify({generation: state.identityDecisionGeneration,
+    selection: state.selected?.id, evidence: state.selected?.evidence_revision,
+    manifest: state.selected?.evidence_manifest_sha256, gtin: state.selected?.normalized_upc,
+    payload: state.payload, payloadGeneration: state.payloadHashRequest, relation: state.catalogRelation, lookupGeneration: state.identityCheckRequest,
+    lookup: state.identityLookup,
+    fields: ['identifier-type', 'identifier-issuer', 'identifier-package', 'identifier-reason'].map(id => $(id)?.value)});
+}
+
+function reviewedIdentifierDecision() {
+  const decision = {code_type: $('identifier-type').value,
+    issuer: $('identifier-issuer').value.trim() || null, verified_gtin: state.selected?.normalized_upc ?? null,
+    package: $('identifier-package').value.trim() || null, reason: $('identifier-reason').value.trim()};
+  if ((!canonicalSubmissionGtin14() && !decision.package) || decision.reason.length < 5) throw new Error('Enter the reviewed package and a substantive identity rationale.');
+  return decision;
+}
+
 async function checkIdentity({ record = false } = {}) {
   if (state.selected?.kind !== 'missing_product') return;
   const selection = state.selected;
@@ -674,22 +731,26 @@ async function checkIdentity({ record = false } = {}) {
     state.selected?.evidence_revision === selection.evidence_revision &&
     state.selected?.evidence_manifest_sha256 === selection.evidence_manifest_sha256;
   const gtin14 = canonicalSubmissionGtin14();
-  if (!gtin14) return setStatus('This submission has no valid barcode identity.', true);
+
   try {
     setStatus('Checking the released catalog and full DSLD corpus…');
     setIdentityCardState('checking');
     $('identity-state-text').textContent = 'Checking…';
     $('identity-run').disabled = true;
     const response = await fetch(
-      `/api/identity_lookup?gtin14=${encodeURIComponent(gtin14)}`,
+      identityLookupUrl(),
     );
-    const payload = await response.json();
+    let payload = await response.json();
+    if (!stillCurrent()) return;
+    if (response.ok) payload = await withPendingIdentityCandidates(payload, selection.id);
     if (!stillCurrent()) return;
     if (!response.ok) throw new Error(payload.error ?? 'identity lookup failed');
     if (payload.canonical_gtin14 !== gtin14) throw new Error('Barcode lookup returned a different identity.');
     const unchanged = payload.index_revision &&
       payload.index_revision === state.identityLookup?.index_revision &&
+      payload.pending_revision === state.identityLookup?.pending_revision &&
       payload.canonical_gtin14 === state.identityLookup?.canonical_gtin14 &&
+      payload.brandName === state.identityLookup?.brandName && payload.fullName === state.identityLookup?.fullName &&
       payload.freshness !== 'blocked';
     const previousLookup = state.identityLookup;
     state.identityLookup = payload;
@@ -701,7 +762,7 @@ async function checkIdentity({ record = false } = {}) {
     }
     restoreRecordedIdentity();
     renderIdentityCheck();
-    if (record && (payload.matches ?? []).length === 0 &&
+    if (gtin14 && !selection.identifier && record && (payload.matches ?? []).length === 0 &&
         ['fresh', 'warning'].includes(payload.freshness) &&
         state.identityRecorded !== 'no_match_verified' &&
         ['submitted', 'under_review'].includes(state.selected?.review_status)) {
@@ -761,19 +822,22 @@ async function requireCurrentIdentity() {
   let current = null;
   try {
     const response = await fetch(
-      `/api/identity_lookup?gtin14=${encodeURIComponent(lookup.canonical_gtin14)}`,
+      identityLookupUrl(),
       { cache: 'no-store' },
     );
-    const payload = await response.json();
+    let payload = await response.json();
     if (!response.ok) throw new Error(payload.error ?? 'Identity check unavailable.');
+    payload = await withPendingIdentityCandidates(payload, submissionId);
     if (state.selected?.id !== submissionId) {
       throw new Error('The selected submission changed. Run its identity check.');
     }
     current = payload;
     if (
       !lookup.index_revision || current.index_revision !== lookup.index_revision ||
+      current.pending_revision !== lookup.pending_revision ||
       current.canonical_gtin14 !== canonicalSubmissionGtin14() ||
-      current.freshness === 'blocked'
+      current.freshness === 'blocked' ||
+      (lookup.identity_method === 'label_review' && (current.brandName !== lookup.brandName || current.fullName !== lookup.fullName || current.complete !== true))
     ) {
       throw new Error('Identity sources changed or expired. Review the current matches and record a new check.');
     }
@@ -802,7 +866,18 @@ function selectedEvidenceBinding() {
 async function recordMatch(outcome, options = {}) {
   const selectedId = state.selected?.id;
   const binding = selectedEvidenceBinding();
+  const decisionBinding = identityDecisionBinding();
+  if (state.selected?.identifier || state.identityLookup?.identity_method === 'label_review') {
+    clearTimeout(state.reviewSaveTimer);
+    if (!(await saveReview()) || decisionBinding !== identityDecisionBinding()) {
+      throw new Error('Save the current label draft before recording its identity decision.');
+    }
+  }
   const lookup = await requireCurrentIdentity();
+  if (decisionBinding !== identityDecisionBinding()) throw new Error('Identity review changed. Record a fresh decision.');
+  if (lookup.identity_method === 'label_review' && (lookup.complete !== true || new Set(lookup.matches.map(match => match.dsld_id)).size > 100)) {
+    throw new Error('Complete candidate review is unavailable or exceeds the review limit. Resolve the index before approving.');
+  }
   const result = await edge({
     action: 'record_match',
     submission_id: selectedId,
@@ -810,9 +885,14 @@ async function recordMatch(outcome, options = {}) {
     outcome,
     canonical_gtin14: lookup.canonical_gtin14,
     index_built_at: lookup.index_built_at,
+    ...((lookup.identity_method === 'label_review' || state.selected?.identifier) ? {
+      identity_method: lookup.identity_method ?? 'gtin', identifier_decision: reviewedIdentifierDecision(),
+      candidate_dsld_ids: [...new Set(lookup.matches.map(match => match.dsld_id))],
+      candidate_review_complete: true, index_revision: lookup.index_revision,
+    } : {}),
     ...options,
   });
-  if (state.selected?.id !== selectedId || state.selected.evidence_revision !== binding.expected_evidence_revision) {
+  if (state.selected?.id !== selectedId || state.selected.evidence_revision !== binding.expected_evidence_revision || decisionBinding !== identityDecisionBinding()) {
     throw new Error('The selected submission changed. Review its current evidence.');
   }
   state.identityRecorded = outcome;
@@ -1071,6 +1151,21 @@ function renderBarcodePanel() {
   const selected = state.selected;
   const digits = String(selected?.normalized_upc ?? '');
   $('barcode-current').textContent = digits || 'none';
+  const identifier = selected?.identifier;
+  const labelPanel = $('label-identity-panel');
+  if (labelPanel) labelPanel.hidden = !identifier;
+  if (labelPanel && labelPanel.identitySubmissionId !== selected?.id) {
+    labelPanel.identitySubmissionId = selected?.id;
+    const decision = state.review?.identity_check?.identifier_decision;
+    $('identifier-type').value = decision?.code_type ?? identifier?.code_type ?? 'other';
+    $('identifier-issuer').value = decision?.issuer ?? identifier?.issuer ?? '';
+    $('identifier-package').value = decision?.package ?? '';
+    $('identifier-reason').value = decision?.reason ?? '';
+  }
+  const observed = $('observed-identifier');
+  if (observed) observed.textContent = identifier ?
+    `Observed code: ${identifier.observed_code ?? 'No code declared'} · Contributor classification: ${identifier.code_type} · ${identifier.brandName} ${identifier.fullName} · Issuer: ${identifier.issuer ?? 'unknown'}${identifier.listing_url ? ` · Untrusted listing: ${identifier.listing_url}` : ''}` : '';
+
   const history = $('barcode-history');
   history.textContent = '';
   const corrections = state.review?.barcode_corrections ?? [];
@@ -1182,9 +1277,10 @@ function renderIdentityCheck() {
   for (const match of lookup.matches) {
     const item = document.createElement('li');
     item.textContent = `${match.brand_name} ${match.product_name}`.trim();
+    if (match.source === 'pending') item.textContent += ` · Package: ${match.package ?? 'not recorded'} · Issuer: ${match.issuer ?? 'not recorded'}`;
     const source = document.createElement('span');
     source.className = 'match-source';
-    source.textContent = `${match.source === 'catalog' ? 'In app catalog' : 'DSLD reference'} · ID ${match.dsld_id}`;
+    source.textContent = `${match.source === 'catalog' ? 'In app catalog' : match.source === 'pending' ? 'Pending approved submission' : 'DSLD reference'} · ID ${match.dsld_id}`;
     item.append(source);
     results.append(item);
   }
@@ -1194,6 +1290,41 @@ function renderIdentityCheck() {
     lookup.matches.filter((match) => match.source === 'catalog')
       .map((match) => match.dsld_id),
   )];
+  if (lookup.identity_method === 'label_review') {
+    if (lookup.freshness === 'blocked' || lookup.complete !== true || ids.length > 100) {
+      show('blocked', 'Identity review blocked', `A fresh complete candidate set is required. ${indexNote}`);
+      return;
+    }
+    const pending = lookup.matches.filter(match => match.source === 'pending');
+    if (pending.length) {
+      show('blocked', 'Pending approved identity needs resolution', `Review package and label evidence before marking a duplicate. Another product approval remains blocked. ${indexNote}`);
+      for (const candidate of pending) {
+        if (candidate.submission_id) {
+          actions.append(identityButton(`Verified duplicate of pending submission ${candidate.submission_id}`, () => resolvePendingDuplicate(candidate.submission_id)));
+        }
+      }
+      return;
+    }
+    if (state.identityRecorded === 'new_product_verified' || activeCatalogRelation()) {
+      show('recorded', 'Label identity verified', `Recorded against these evidence and source revisions. ${indexNote}`);
+      return;
+    }
+    show('match', 'Review label and package identity', `${ids.length} candidates. Read all relevant labels and package differences. ${indexNote}`);
+    actions.append(identityButton('I verified this is a distinct new product', async () => {
+      await recordMatch('new_product_verified');
+      setStatus('Reviewed identity recorded. Complete label verification before approval.');
+    }, 'primary'));
+    for (const id of ids) {
+      for (const kind of ['correction', 'edition']) {
+        actions.append(identityButton(`${kind === 'correction' ? 'Verified correction of' : 'Verified separate edition of'} ${id}`, async () => {
+          await recordMatch('catalog_match', {matched_dsld_id: id});
+          renderLabelComparison(id);
+          chooseCatalogRelation(kind, id);
+        }));
+      }
+    }
+    return;
+  }
   if (ids.length === 0) {
     if (lookup.freshness === 'blocked') {
       show('blocked', 'Index out of date',
@@ -1208,6 +1339,13 @@ function renderIdentityCheck() {
     // Reached when a lookup found nothing but no current record exists: the
     // record failed, or the page was reopened after the index moved. The one
     // action is the same check again, which records what it finds.
+    if (state.selected?.identifier) {
+      show('no_match', 'Review the verified GTIN decision', `Enter your identity rationale, then explicitly record this exact check. ${indexNote}`);
+      actions.append(identityButton('Record reviewed GTIN no-match', async () => {
+        await recordMatch('no_match_verified');
+      }, 'primary'));
+      return;
+    }
     show('no_match', 'No matching barcode found',
       `Nothing in the catalog or DSLD uses this barcode, but that is not recorded yet. Check again to record it. ${indexNote}`);
     runButton.className = 'primary';
@@ -1585,7 +1723,7 @@ function readinessChecks() {
   if (submission.kind === 'missing_product') {
     const relation = activeCatalogRelation();
     checks.push({
-      done: state.identityRecorded === 'no_match_verified' || Boolean(relation),
+      done: ['no_match_verified', 'new_product_verified'].includes(state.identityRecorded) || Boolean(relation),
       todo: state.identityRecorded === 'catalog_match'
         ? 'This barcode is already in the catalog. Compare the two labels and '
           + 'say whether this corrects that record or is a separate edition.'
@@ -1768,6 +1906,14 @@ function isBlankLabel(value) {
 }
 
 async function saveReview() {
+  // Drain older saves first: a delayed old request must not overwrite the
+  // draft after a match receipt binds its exact current label hash.
+  const pending = state.reviewSavePromise.then(() => saveReviewOnce());
+  state.reviewSavePromise = pending.catch(() => false);
+  return pending;
+}
+
+async function saveReviewOnce() {
   const submission = state.selected;
   if (!submission || !state.session || submission.review_status === 'approved') return;
   if (!state.payloadSha || state.reviewInvalidated) return;
@@ -1799,9 +1945,11 @@ async function saveReview() {
       state.selected?.evidence_revision !== boundRevision ||
       state.selected?.evidence_manifest_sha256 !== boundManifest ||
       state.payloadSha !== boundSha) return;
+  if (review?.draft?.payload_sha256 !== boundSha) return false;
   hydrateReview(review);
   renderReviewBanner();
   setDecisionAvailability();
+  return true;
 }
 
 /** Persist one tick, and take it back if the server refuses. */
@@ -2774,6 +2922,9 @@ async function updateShaPreview() {
     // Unchanged refreshes preserve checks. Edits revoke them synchronously,
     // before WebCrypto yields, and old promises cannot restore stale hashes.
     if (canonical === state.payloadCanonical && state.payloadSha) return;
+    if (state.payloadCanonical && (state.selected?.identifier || state.identityLookup?.identity_method === 'label_review')) {
+      invalidateReviewedIdentity();
+    }
     if (typeof SoloReview !== 'undefined') SoloReview.changed();
     state.payloadCanonical = canonical;
     state.payloadSha = null;
@@ -3311,7 +3462,7 @@ async function approve() {
   if (state.reviewInvalidated) return setStatus('Review the updated evidence before deciding.', true);
   if (
     state.selected?.kind === 'missing_product' &&
-    state.identityRecorded !== 'no_match_verified' &&
+    !['no_match_verified', 'new_product_verified'].includes(state.identityRecorded) &&
     !activeCatalogRelation()
   ) {
     return setStatus('Record a fresh verified no-match identity check first.', true);
@@ -3334,7 +3485,7 @@ async function approve() {
   // after the reviewer attests to its exact digest (e.g. serving ranges).
   const fields = {
     to_status: 'approved',
-    approved_schema_version: 'manual_label_v1',
+    approved_schema_version: state.selected?.identifier ? 'manual_label_v2' : 'manual_label_v1',
     approved_payload: state.payload,
   };
   const relation = activeCatalogRelation();
@@ -3384,11 +3535,27 @@ function reject() {
   return transition(fields);
 }
 
-function markDuplicate() {
+async function resolvePendingDuplicate(submissionId) {
+  const candidate = state.identityLookup?.matches?.find(match =>
+    match.source === 'pending' && match.submission_id === submissionId);
+  if (!candidate || !/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(submissionId)) {
+    throw new Error('Refresh and review the current pending submission candidates.');
+  }
+  // A pending product is neither a released catalog match nor a new product.
+  // Keep that truthful receipt, then resolve through the existing duplicate owner.
+  const reviewNotes = reviewedIdentifierDecision().reason;
+  await recordMatch('identity_ambiguous');
+  $('dup-code').value = 'duplicate_submission';
+  $('dup-target').value = submissionId;
+  return markDuplicate({reviewNotes});
+}
+
+function markDuplicate({reviewNotes = null} = {}) {
   const code = $('dup-code').value;
   const target = $('dup-target').value.trim();
   if (!target) return setStatus('Duplicate needs a target id.', true);
   const fields = { to_status: 'duplicate', resolution_code: code };
+  if (reviewNotes) fields.review_notes = reviewNotes;
   if (code === 'already_in_catalog') {
     fields.resolved_dsld_id = target;
   } else {

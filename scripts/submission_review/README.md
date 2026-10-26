@@ -176,3 +176,22 @@ backend before expecting row evidence; it makes no approval-policy changes.
   doses and units exactly as printed; blend headers and nested rows follow
   the `manual_label_v1` conventions (see
   `scripts/product_submission_import.py`).
+
+### Alternate or absent printed codes
+
+Submissions with private `identifier` evidence and no validated GTIN use the same
+review page. Read the exact contributor code and classification as unverified
+hints, check the label brand/name against the complete released/corpus candidates,
+and review any pending approved conflict. Empty name results never automatically
+verify a new product. Record reviewed classification, issuer, package and rationale
+before explicitly verifying a new product or choosing correction/separate edition.
+An unavailable, stale, incomplete or over-limit candidate set blocks the decision.
+A newly pending approval invalidates a prior check.
+
+The console submits `manual_label_v2` with the ordinary label payload; the server
+constructs the frozen private identity envelope and its canonical approval hash.
+The importer verifies the whole commitment and extracts only the label. Observed
+codes, listing URLs and identity rationale never enter public manual labels or
+catalog fields. A verified numeric GTIN can be recorded through the existing
+barcode-correction action, then requires a fresh exact check. Existing
+`manual_label_v1` numeric approvals remain supported.

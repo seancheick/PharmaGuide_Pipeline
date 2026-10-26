@@ -233,6 +233,16 @@ provenance. Hosted adapters must not author their own label-field vocabulary.
 | **Extraction budget reservation** | An atomic allowance held before a provider call, identified by job and fencing token. Known cost settles it; unknown cost retains the hold until explicitly reconciled. Monthly and pilot caps share one database calculation. |
 | **Unknown completion** | A write whose acknowledgement was lost. It is neither a confirmed draft nor a confirmed lease loss; the worker stops until the persisted outcome can be checked. |
 
+## Submission identifier contracts
+
+| Term | Meaning |
+|---|---|
+| **Observed identifier** | Exact private package code and contributor hint; not a verified GTIN, catalog association or public lookup key. |
+| **No-code declaration** | Revision-bound explicit absence of a printed code. Waives only code-photo completeness, not other label evidence. |
+| **Label identity review** | Existing reviewer match-check owner resolves a no-GTIN label against full relevant released/pending candidates; new_product_verified requires a substantive reason and complete current evidence. |
+| **Identity coordination bucket** | Unambiguously encoded normalized brand/name pair used to hold conflicting review proposals; never an automatic product merge. |
+| **manual_label_v2** | Private canonical approved label+identity envelope, hashed by the existing approval owner. Importer validates it and explicitly projects public label fields. Frozen reviewed GTIN controls export, including null. |
+
 ## Versions and tests
 
 | Contract | Canonical producer (read the value there) |

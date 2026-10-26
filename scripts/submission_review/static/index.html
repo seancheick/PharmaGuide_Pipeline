@@ -91,7 +91,7 @@
          difference. -->
     <section id="identity-check" class="step">
       <div class="step-head">
-        <h2>Is this barcode already in the catalog?</h2>
+        <h2>Verify the product identity</h2>
         <p class="step-hint">Required before a new product can be approved. Same barcode does not always mean same label.</p>
       </div>
       <!-- The barcode the check runs against. It is what the owner filed, and
@@ -113,6 +113,18 @@
           </label>
           <button id="barcode-save" type="button" class="primary">Correct barcode</button>
         </details>
+      </div>
+      <div id="label-identity-panel" hidden>
+        <p id="observed-identifier" class="muted"></p>
+        <label>Reviewed code classification <select id="identifier-type">
+          <option value="other">Other / not sure</option><option value="amazon_fnsku">Amazon FNSKU</option>
+          <option value="amazon_asin">Amazon ASIN</option><option value="manufacturer_sku">Manufacturer SKU</option>
+          <option value="retailer_sku">Retailer SKU</option><option value="lot">Lot</option><option value="none">No code</option>
+        </select></label>
+        <label>Reviewed issuer / scope <input id="identifier-issuer" maxlength="200"></label>
+        <label>Reviewed package / size (required without GTIN) <input id="identifier-package" maxlength="300"></label>
+        <label>Identity rationale <textarea id="identifier-reason" minlength="5" maxlength="2000"></textarea></label>
+        <p class="muted">Review the complete candidate list and package evidence. Name search alone never proves the product is absent. To verify a manufacturer GTIN, use Correct barcode above and check again.</p>
       </div>
       <div id="identity-status-card" class="identity-status" data-state="unchecked">
         <span class="identity-icon" aria-hidden="true"></span>
