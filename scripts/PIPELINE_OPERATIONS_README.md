@@ -310,7 +310,8 @@ The downstream steps are:
 6. atomically import and verify Flutter bundle
 7. prune `.previous` Flutter DB backups
 8. locally commit the Flutter bundle and print separate storage-maintenance
-   commands; push remains manual. Version and orphan cleanup do not run during
+   commands; integration remains manual through a temporary branch, required CI and PR merge.
+   Do not push a new local bundle commit directly to protected main. Version and orphan cleanup do not run during
    release. Run the printed gated commands separately when convenient.
 
 Release progress is unbuffered when saved to a log. Sync elapsed time includes

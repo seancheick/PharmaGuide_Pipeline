@@ -97,6 +97,11 @@ with `$PG_PYTHON scripts/release_interaction_artifact.py --output-dir scripts/di
   groups; never forge approver/date/reason or erase the original baseline. The report carries
   baseline and candidate hashes. Comparison success does not authorize external publication.
 
+After the local bundle commit, use a temporary `codex/*` branch and PR. Required Merge readiness
+must pass before integration; direct pushes of unvalidated new commits to main are rejected.
+Return the checkout to main and fast-forward after merge. This integrates the bundle commit;
+it does not retroactively prove any earlier cloud activation or the installed app's data.
+
 ## 5. Report
 
 State plainly: gates green/red (with output), catalog + interaction versions shipped,

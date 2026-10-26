@@ -302,3 +302,12 @@ def test_successful_publication_boundary_has_no_failure_report(tmp_path):
     assert result.returncode == 0
     assert 'RELEASE_FINISHED' in result.stdout
     assert 'Release incomplete' not in result.stderr
+
+
+def test_release_handoff_respects_required_main_checks():
+    source = RELEASE_SCRIPT.read_text()
+    handoff = source[source.index('info "Next steps'):]
+    assert 'git push origin main' not in handoff
+    assert 'git push -u origin HEAD' in handoff
+    assert 'Merge readiness' in handoff
+    assert 'gh pr create --base main' in handoff
