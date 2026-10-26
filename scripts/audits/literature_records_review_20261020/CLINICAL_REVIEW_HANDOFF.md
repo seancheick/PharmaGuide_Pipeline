@@ -2,7 +2,7 @@
 
 ## Latest source-access reconciliation
 
-D011 author-comment and D139 full-statement access gaps are now independently closed; see the dated closeout in BRYAN_BATCH_RESPONSE_VERIFICATION_20261025.md. HN019 context limitations are corrected without changing approval, doses, outcomes or eligibility. Scientific appraisal and rebuilt verification remain separate. The local evidence_review.pdf is the original unanswered request, not the missing latest171C/146D return.
+D011 author-comment and D139 full-statement access gaps are now independently closed; see the dated closeout in BRYAN_BATCH_RESPONSE_VERIFICATION_20261025.md. HN019 context limitations are corrected without changing approval, doses, outcomes or eligibility. Scientific appraisal and rebuilt verification remain separate. The latest marked-up Markdown has now been recovered and all 171 C / 146 D worksheet response cells independently enumerated; no missing/duplicate IDs. The original PDF was the unanswered request. The current-owner comparison is now recorded per ID: 18 C cases retain source/owner work and 47 D items retain source corrections, reference clarifications or policy/applicability decisions. These are not completed implementations or independent literature-review counts. See the recovered-return section in the existing verification report.
 
 ## Current observed state
 
@@ -16,7 +16,7 @@ The existing [clinical register](clinical_review_holds.csv) and [benchmark regis
 
 [Sean's single message to Dr. Pham](DR_PHAM_FINAL_REVIEW_REQUEST.md) now requests only:
 
-1. The full latest document behind the reported 171 C / 146 D dispositions; its summary is available, but its complete updated cells were not located. Do not equate missing local evidence with absence of human review.
+1. The full latest 171 C / 146 D return is now recovered; no repeated document request is needed. Reconcile its source dispositions with current owners and already-integrated fixes.
 2. Actual scope and original approval provenance where absent; a transmitted-file timestamp is not a review date. Recognize the signed bounded responses and do not repeat them wholesale.
 3. The precise retained source/preparation/regimen/population/outcome questions in the current evidence register.
 4. The current preparation and benchmark decisions in the benchmark register, allowing documented negative conclusions and genuine label limitations.
@@ -31,7 +31,7 @@ The source join now rejects unrelated context citations and support based solely
 
 Magtein's verified correction-content and vitamin B6 facts are now recorded; actual grades, eligibility and holds are unchanged. Current evidence: 14-product unchanged score/safety/readiness replay; 443 named owner/consumer tests before container hardening and 20 attribution/container cases afterward. The combined candidate is `746cfa78`; whole-fast CI/integration status belongs to the active main handoff and must not be inferred from this document. No later full-corpus run, app import, native rendering or publication is claimed here.
 
-Remaining closure: retrieve and reconcile the latest full response, resolve only genuine required scientific/benchmark gaps, complete source-attribution migration safely, qualify the combined source candidate, select the earliest necessary rebuild from its fingerprints, then verify every product and the app. Required holds and banned/recalled discoverability remain intact. Do not start another corpus run merely to test whether an unresolved gate disappears.
+Remaining closure: implement and verify the remaining supported corrections from the recovered response, resolve only genuine required scientific/benchmark gaps, complete source-attribution migration safely, qualify the combined source candidate, select the earliest necessary rebuild from its fingerprints, then verify every product and the app. Required holds and banned/recalled discoverability remain intact. Do not start another corpus run merely to test whether an unresolved gate disappears.
 
 ---
 
