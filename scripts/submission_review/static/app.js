@@ -27,6 +27,7 @@ const state = {
   catalogRelation: null,
   comparisonTarget: null,
   identityCheckRequest: 0,
+  identityDecisionGeneration: 0,
   rawJsonRendered: null,
   reviewerImages: [],
   productImage: null,
@@ -186,15 +187,7 @@ async function boot() {
   $('identity-run').addEventListener('click', () => checkIdentity({ record: true }));
   $('barcode-save').addEventListener('click', () => void correctBarcode());
   for (const id of ['identifier-type', 'identifier-issuer', 'identifier-package', 'identifier-reason']) {
-    $(id).addEventListener('input', () => {
-      state.identityRecorded = null;
-      state.catalogRelation = null;
-      state.verified = new Set();
-      state.verifiedKey = null;
-      if (state.review) state.review.identity_check = null;
-      renderIdentityCheck();
-      renderVerifyChecklist();
-    });
+    $(id).addEventListener('input', invalidateReviewedIdentity);
   }
   $('other-disclosure').addEventListener('change', syncDisclosureFields);
   $('other-ingredients').addEventListener('input', syncDisclosureFields);
@@ -699,11 +692,31 @@ async function withPendingIdentityCandidates(lookup, submissionId) {
     pending_revision: JSON.stringify(candidates.conflicts)};
 }
 
+function invalidateReviewedIdentity() {
+  state.identityDecisionGeneration += 1;
+  state.identityRecorded = null;
+  state.catalogRelation = null;
+  state.verified = new Set();
+  state.verifiedKey = null;
+  if (state.review) state.review.identity_check = null;
+  renderIdentityCheck();
+  renderVerifyChecklist();
+}
+
+function identityDecisionBinding() {
+  return JSON.stringify({generation: state.identityDecisionGeneration,
+    selection: state.selected?.id, evidence: state.selected?.evidence_revision,
+    manifest: state.selected?.evidence_manifest_sha256, gtin: state.selected?.normalized_upc,
+    payload: state.payload, payloadGeneration: state.payloadHashRequest, relation: state.catalogRelation, lookupGeneration: state.identityCheckRequest,
+    lookup: state.identityLookup,
+    fields: ['identifier-type', 'identifier-issuer', 'identifier-package', 'identifier-reason'].map(id => $(id)?.value)});
+}
+
 function reviewedIdentifierDecision() {
   const decision = {code_type: $('identifier-type').value,
-    issuer: $('identifier-issuer').value.trim() || null, verified_gtin: null,
-    package: $('identifier-package').value.trim(), reason: $('identifier-reason').value.trim()};
-  if (!decision.package || decision.reason.length < 5) throw new Error('Enter the reviewed package and a substantive identity rationale.');
+    issuer: $('identifier-issuer').value.trim() || null, verified_gtin: state.selected?.normalized_upc ?? null,
+    package: $('identifier-package').value.trim() || null, reason: $('identifier-reason').value.trim()};
+  if ((!canonicalSubmissionGtin14() && !decision.package) || decision.reason.length < 5) throw new Error('Enter the reviewed package and a substantive identity rationale.');
   return decision;
 }
 
@@ -747,7 +760,7 @@ async function checkIdentity({ record = false } = {}) {
     }
     restoreRecordedIdentity();
     renderIdentityCheck();
-    if (gtin14 && record && (payload.matches ?? []).length === 0 &&
+    if (gtin14 && !selection.identifier && record && (payload.matches ?? []).length === 0 &&
         ['fresh', 'warning'].includes(payload.freshness) &&
         state.identityRecorded !== 'no_match_verified' &&
         ['submitted', 'under_review'].includes(state.selected?.review_status)) {
@@ -851,7 +864,9 @@ function selectedEvidenceBinding() {
 async function recordMatch(outcome, options = {}) {
   const selectedId = state.selected?.id;
   const binding = selectedEvidenceBinding();
+  const decisionBinding = identityDecisionBinding();
   const lookup = await requireCurrentIdentity();
+  if (decisionBinding !== identityDecisionBinding()) throw new Error('Identity review changed. Record a fresh decision.');
   if (lookup.identity_method === 'label_review' && (lookup.complete !== true || new Set(lookup.matches.map(match => match.dsld_id)).size > 100)) {
     throw new Error('Complete candidate review is unavailable or exceeds the review limit. Resolve the index before approving.');
   }
@@ -862,14 +877,14 @@ async function recordMatch(outcome, options = {}) {
     outcome,
     canonical_gtin14: lookup.canonical_gtin14,
     index_built_at: lookup.index_built_at,
-    ...(lookup.identity_method === 'label_review' ? {
-      identity_method: 'label_review', identifier_decision: reviewedIdentifierDecision(),
+    ...((lookup.identity_method === 'label_review' || state.selected?.identifier) ? {
+      identity_method: lookup.identity_method ?? 'gtin', identifier_decision: reviewedIdentifierDecision(),
       candidate_dsld_ids: [...new Set(lookup.matches.map(match => match.dsld_id))],
       candidate_review_complete: true, index_revision: lookup.index_revision,
     } : {}),
     ...options,
   });
-  if (state.selected?.id !== selectedId || state.selected.evidence_revision !== binding.expected_evidence_revision) {
+  if (state.selected?.id !== selectedId || state.selected.evidence_revision !== binding.expected_evidence_revision || decisionBinding !== identityDecisionBinding()) {
     throw new Error('The selected submission changed. Review its current evidence.');
   }
   state.identityRecorded = outcome;
@@ -1130,7 +1145,7 @@ function renderBarcodePanel() {
   $('barcode-current').textContent = digits || 'none';
   const identifier = selected?.identifier;
   const labelPanel = $('label-identity-panel');
-  if (labelPanel) labelPanel.hidden = Boolean(digits || !identifier);
+  if (labelPanel) labelPanel.hidden = !identifier;
   if (labelPanel && labelPanel.identitySubmissionId !== selected?.id) {
     labelPanel.identitySubmissionId = selected?.id;
     const decision = state.review?.identity_check?.identifier_decision;
@@ -1309,6 +1324,13 @@ function renderIdentityCheck() {
     // Reached when a lookup found nothing but no current record exists: the
     // record failed, or the page was reopened after the index moved. The one
     // action is the same check again, which records what it finds.
+    if (state.selected?.identifier) {
+      show('no_match', 'Review the verified GTIN decision', `Enter your identity rationale, then explicitly record this exact check. ${indexNote}`);
+      actions.append(identityButton('Record reviewed GTIN no-match', async () => {
+        await recordMatch('no_match_verified');
+      }, 'primary'));
+      return;
+    }
     show('no_match', 'No matching barcode found',
       `Nothing in the catalog or DSLD uses this barcode, but that is not recorded yet. Check again to record it. ${indexNote}`);
     runButton.className = 'primary';

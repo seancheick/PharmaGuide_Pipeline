@@ -2137,3 +2137,28 @@ def test_v2_frozen_optional_identity_metadata_requires_canonical_null(section, f
     row['approved_payload_canonical'] = _canonical(value)
     row['payload_sha256'] = hashlib.sha256(row['approved_payload_canonical'].encode()).hexdigest()
     with pytest.raises(SubmissionImportError): build_manual_label(row)
+
+
+@pytest.mark.parametrize('reason', [None, '', 'four'])
+def test_v2_gtin_decision_requires_substantive_reviewed_reason(reason):
+    from product_submission_import import build_manual_label, SubmissionImportError
+    row = _v2_export()
+    value = json.loads(row['approved_payload_canonical'])
+    value['identity'].update(identity_method='gtin', outcome='no_match_verified')
+    value['identity']['decision'].update(verified_gtin='050428381397', package=None, reason=reason)
+    row['normalized_upc'] = '050428381397'
+    row['approved_payload_canonical'] = _canonical(value)
+    row['payload_sha256'] = hashlib.sha256(row['approved_payload_canonical'].encode()).hexdigest()
+    with pytest.raises(SubmissionImportError): build_manual_label(row)
+
+
+def test_v2_gtin_review_accepts_reviewed_reason_without_package():
+    from product_submission_import import build_manual_label
+    row = _v2_export()
+    value = json.loads(row['approved_payload_canonical'])
+    value['identity'].update(identity_method='gtin', outcome='no_match_verified')
+    value['identity']['decision'].update(verified_gtin='050428381397', package=None, reason='Reviewer checked the manufacturer barcode and current exact candidates.')
+    row['normalized_upc'] = '050428381397'
+    row['approved_payload_canonical'] = _canonical(value)
+    row['payload_sha256'] = hashlib.sha256(row['approved_payload_canonical'].encode()).hexdigest()
+    assert build_manual_label(row)['upcSku'] == '050428381397'

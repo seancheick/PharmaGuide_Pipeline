@@ -585,6 +585,8 @@ def _validate_identity_envelope(value: object, row: dict[str, Any]) -> object:
             raise SubmissionImportError(f"invalid decision {key}")
     if decision["issuer"] is not None and not decision["issuer"].strip():
         raise SubmissionImportError("optional decision issuer must be canonical null when empty")
+    if not isinstance(decision["reason"], str) or len(decision["reason"].strip()) < 5:
+        raise SubmissionImportError("v2 identity requires a substantive reviewed rationale")
     if method == "label_review" and (not decision["package"] or not decision["package"].strip() or not decision["reason"] or len(decision["reason"].strip()) < 5):
         raise SubmissionImportError("label review requires package and rationale")
     verified = decision["verified_gtin"]

@@ -182,7 +182,7 @@ const fs=require('fs'),vm=require('vm');const elements=new Map(),calls=[],candid
 function el(){return {value:'',textContent:'',hidden:false,disabled:false,style:{},classList:{add(){},remove(){}},append(){},setAttribute(){},addEventListener(){}}}
 const ctx=vm.createContext({URLSearchParams,Date,Set,Number,encodeURIComponent,
  document:{getElementById(id){if(!elements.has(id))elements.set(id,el());return elements.get(id)},createElement:el},
- fetch:async(url,options)=>{if(options?.method==='POST'){const body=JSON.parse(options.body);if(body.action==='load_review')return {ok:true,json:async()=>({review:{identity_candidates:candidateState}})};calls.push(body);return {ok:true,json:async()=>({})}}
+ fetch:async(url,options)=>{if(options?.method==='POST'){const body=JSON.parse(options.body);if(body.action==='load_review')return {ok:true,json:async()=>({review:{identity_candidates:candidateState}})};calls.push(body);if(ctx.deferMatch)return new Promise(resolve=>ctx.resolveMatch=resolve);return {ok:true,json:async()=>({})}}
  return {ok:true,json:async()=>lookup}}});
 const lookup={identity_method:'label_review',canonical_gtin14:null,brandName:'Example Labs',fullName:'Vitamin D3',index_built_at:new Date().toISOString(),index_revision:'current',freshness:'fresh',complete:true,matches:[]};
 ctx.lookup=lookup;ctx.calls=calls;
@@ -194,8 +194,25 @@ await vm.runInContext('checkIdentity({record:true})',ctx);
 if(calls.length)throw Error('empty search auto-verified a new product');
 await vm.runInContext("recordMatch('new_product_verified')",ctx);
 const body=calls[0];if(body.identity_method!=='label_review'||body.candidate_review_complete!==true||body.canonical_gtin14!==null||body.identifier_decision.package!=='60 capsules')throw Error(JSON.stringify(body));
+ctx.deferMatch=true;
+const waiting=vm.runInContext("recordMatch('new_product_verified')",ctx);
+while(!ctx.resolveMatch)await new Promise(setImmediate);
+elements.get('identifier-reason').value='A changed reviewer rationale';
+vm.runInContext('state.identityRecorded=null',ctx);
+ctx.resolveMatch({ok:true,json:async()=>({})});
+let staleDecision=false;try{await waiting}catch{staleDecision=true}
+if(!staleDecision||vm.runInContext('state.identityRecorded',ctx)!==null)throw Error('late match response restored edited decision');
+if(!vm.runInContext("approvalBlockers().some(check=>check.todo.includes('Run the barcode check'))",ctx))throw Error('edited decision did not block approval');
+ctx.deferMatch=false;
 candidateState.conflicts.push({source:'pending',id:'other',revision:1});let stale=false;try{await vm.runInContext('requireCurrentIdentity()',ctx)}catch{stale=true}if(!stale)throw Error('new pending approval did not invalidate receipt');
-vm.runInContext('state.identityLookup=lookup',ctx);lookup.complete=false;let refused=false;try{await vm.runInContext("recordMatch('new_product_verified')",ctx)}catch{refused=true}if(!refused||calls.length!==1)throw Error('incomplete candidate set accepted');
+vm.runInContext('state.identityLookup=lookup',ctx);lookup.complete=false;let refused=false;try{await vm.runInContext("recordMatch('new_product_verified')",ctx)}catch{refused=true}if(!refused||calls.length!==2)throw Error('incomplete candidate set accepted');
+lookup.identity_method='gtin';lookup.canonical_gtin14='00050428381397';lookup.complete=true;
+vm.runInContext("state.selected.normalized_upc='050428381397';state.identityLookup=lookup",ctx);
+await vm.runInContext('checkIdentity({record:true})',ctx);
+if(calls.length!==2)throw Error('v2 GTIN automatically invented reviewer decision');
+elements.get('identifier-reason').value='';let noReason=false;
+try{await vm.runInContext("recordMatch('no_match_verified')",ctx)}catch{noReason=true}
+if(!noReason||calls.length!==2)throw Error('v2 GTIN accepted missing reviewer rationale');
 console.log('ok');
 })().catch(e=>{console.error(e);process.exitCode=1});
 """
