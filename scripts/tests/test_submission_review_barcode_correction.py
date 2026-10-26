@@ -232,6 +232,7 @@ await vm.runInContext("resolvePendingDuplicate('11111111-2222-4333-8444-55555555
 const ambiguity=calls[2],duplicate=calls[3];
 if(ambiguity?.outcome!=='identity_ambiguous'||ambiguity.candidate_dsld_ids.length!==1||ambiguity.matched_dsld_id!=null)throw Error('pending duplicate invented a new product or catalog match');
 if(duplicate?.to_status!=='duplicate'||duplicate.resolution_code!=='duplicate_submission'||duplicate.duplicate_of!=='11111111-2222-4333-8444-555555555555')throw Error('pending duplicate target not preserved');
+if(duplicate.review_notes!=='Compared package photographs and verified duplicate')throw Error('reviewed duplicate rationale was dropped');
 if(vm.runInContext('state.identityRecorded',ctx)!=='identity_ambiguous'||!vm.runInContext("approvalBlockers().some(check=>check.todo.includes('Run the barcode check'))",ctx))throw Error('ambiguity receipt became approval-ready');
 console.log('ok');
 })().catch(e=>{console.error(e);process.exitCode=1});

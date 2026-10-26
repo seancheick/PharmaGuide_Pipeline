@@ -3543,17 +3543,19 @@ async function resolvePendingDuplicate(submissionId) {
   }
   // A pending product is neither a released catalog match nor a new product.
   // Keep that truthful receipt, then resolve through the existing duplicate owner.
+  const reviewNotes = reviewedIdentifierDecision().reason;
   await recordMatch('identity_ambiguous');
   $('dup-code').value = 'duplicate_submission';
   $('dup-target').value = submissionId;
-  return markDuplicate();
+  return markDuplicate({reviewNotes});
 }
 
-function markDuplicate() {
+function markDuplicate({reviewNotes = null} = {}) {
   const code = $('dup-code').value;
   const target = $('dup-target').value.trim();
   if (!target) return setStatus('Duplicate needs a target id.', true);
   const fields = { to_status: 'duplicate', resolution_code: code };
+  if (reviewNotes) fields.review_notes = reviewNotes;
   if (code === 'already_in_catalog') {
     fields.resolved_dsld_id = target;
   } else {
