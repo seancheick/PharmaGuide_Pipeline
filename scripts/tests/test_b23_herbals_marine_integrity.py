@@ -101,7 +101,8 @@ def test_b23_value_in_band(iqm, pid, fname, vmin, vmax, basis):
     """Each form's struct.value must sit in evidence band."""
     form = iqm[pid]['forms'].get(fname)
     assert form is not None, f'{pid}::{fname} missing'
-    reviewed_unknown = {'calanus oil': ['27604086', 'incremental AUC']}
+    reviewed_unknown = {'calanus oil': ['27604086', 'incremental AUC'],
+                        'perilla seed oil': ['12323085', 'not perilla-product bioequivalence', 'whole-oil absolute absorption']}
     if fname in reviewed_unknown:
         assert form['absorption_structured'] == dict(value=None, range_low=None, range_high=None, quality='unknown')
         for source_limit in reviewed_unknown[fname]:

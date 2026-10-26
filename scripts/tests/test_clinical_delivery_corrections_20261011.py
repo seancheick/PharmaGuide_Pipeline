@@ -41,3 +41,16 @@ def test_study_preparation_does_not_become_generic_botanical_dose():
         assert r[id]['reference_semantics']['curve'] == 'completed_no_benchmark_neutral'
     assert r['l_theanine']['typical_dosing_range']=='100.6'
     assert 'Suntheanine' in r['l_theanine']['upper_limit_notes']
+
+
+@pytest.mark.parametrize('ingredients', [
+    [('Fish Oil', 1000, 'mg')], [('Niacinamide', 500, 'mg')],
+    [('Fish Oil', 1000, 'mg'), ('Niacin', 500, 'mg')],
+    [('Fish Oil', 1000, 'mg'), ('Niacinamide', 500, 'mg')],
+])
+def test_held_omega_niacin_relationship_emits_no_benefit_qualification(ingredients):
+    from enrich_supplements_v3 import SupplementEnricherV3
+    e = SupplementEnricherV3()
+    product = {'name': 'Source-review control', 'activeIngredients': [
+        {'name': n, 'standardName': n, 'quantity': q, 'unit': u} for n, q, u in ingredients]}
+    assert not any(c['cluster_id'] == 'omega3_niacin_lipid' for c in e._collect_synergy_data(product))

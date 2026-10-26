@@ -95,3 +95,92 @@ def test_magnesium_stearate_efsa_reference_is_fatty_acid_salts_not_pest_report()
     eu = [r for r in entry["jurisdictional_statuses"] if r["jurisdiction"] == "EU"]
     assert eu[0]["source_ref"] == refs[0]["url"]
     assert entry["severity_level"] == "low"
+
+
+def test_returned_review_classifies_trial_and_opinions_without_changing_dye_identity():
+    rows = _entries_by_id()
+    for key in ['ADD_BLUE1', 'ADD_BLUE2']:
+        ref = rows[key]['references_structured'][1]
+        assert ref['type'] == 'clinical_trial'
+        assert 'mixture' in ref['title'].lower()
+        assert 'NOT included' in rows[key]['notes']
+    for key, index in [('ADD_CALCIUM_ALUMINUM_PHOSPHATE', 1), ('ADD_PALM_OIL', 0),
+                       ('ADD_SODIUM_TRIPOLYPHOSPHATE', 0)]:
+        assert rows[key]['references_structured'][index]['type'] == 'efsa_opinion'
+    assert rows['ADD_CALCIUM_ALUMINUM_PHOSPHATE']['references_structured'][1]['published_date'] == '2008-07-15'
+
+
+def test_dye_mixture_evidence_does_not_become_isolated_dye_causation():
+    for key in ['ADD_RED40', 'ADD_YELLOW5']:
+        row = _entries_by_id()[key]
+        assert 'mixture' in row['mechanism_of_harm'].lower()
+        assert 'mixture' in row['safety_summary'].lower()
+        assert 'mixture' in row['safety_summary_one_liner'].lower()
+        assert 'hypersensitivity' in row['safety_summary'].lower()
+
+
+def test_aluminium_opinion_does_not_invent_compound_absorption_or_one_endpoint():
+    row = _entries_by_id()['ADD_CALCIUM_ALUMINUM_PHOSPHATE']
+    assert 'combined' in row['mechanism_of_harm'].lower()
+    assert 'developmental neurotoxicity as the critical endpoint' not in row['mechanism_of_harm']
+    assert 'not established' in row['safety_summary'].lower()
+    assert row['dose_thresholds'][0]['amount'] == 1
+    assert any('renal impairment' in warning for warning in row['population_warnings'])
+
+
+def test_corn_oil_carrier_is_not_a_proven_inflammatory_ratio_hazard():
+    row = _entries_by_id()['ADD_CORN_OIL']
+    text = ' '.join(row[k] for k in ['notes', 'mechanism_of_harm', 'safety_summary'])
+    assert 'pro-inflammatory eicosanoid production' not in text
+    assert 'can skew' not in text
+    assert 'does not establish inflammatory harm' in text
+    assert row['severity_level'] == 'low'
+
+
+def test_caramel_animal_endpoint_is_not_liver_thyroid_tumors_or_human_trial():
+    row = _entries_by_id()['ADD_CARAMEL_COLOR']
+    assert 'lung, liver, and thyroid tumors' not in row['mechanism_of_harm']
+    assert 'mice' in row['mechanism_of_harm']
+    assert row['references_structured'][1]['type'] == 'primary_study'
+    assert '4-methylimidazole' in row['safety_summary']
+
+
+def test_unknown_colorant_keeps_identity_limit_without_borrowing_carmine_harm():
+    row = _entries_by_id()['ADD_UNSPECIFIED_COLORS']
+    assert not any('hyperactivity concern applies' in x for x in row['population_warnings'])
+    assert 'Carmine-specific' in row['notes']
+    assert '4288' in row['references_structured'][0]['url']
+
+
+def test_e475_cannot_inherit_cmc_p80_mouse_effects():
+    row = _entries_by_id()['ADD_FATTY_ACID_POLYGLYCEROL_ESTERS']
+    assert 'not E475' in row['safety_summary']
+    assert 'not E475-specific' in row['safety_summary_one_liner']
+    assert 'not direct E475 evidence' in row['scientific_references'][0]
+    assert not any('emulsifier class linked' in x for x in row['population_warnings'])
+    assert 'background only' in _entries_by_id()['ADD_SOY_MONOGLYCERIDES']['scientific_references'][0]
+
+
+def test_palm_source_identifies_2018_assessment_and_unmeasured_product_exposure():
+    text = _entries_by_id()['ADD_PALM_OIL']['mechanism_of_harm']
+    assert '2018 identified glycidyl esters' not in text
+    assert '2016' in text
+    assert 'does not establish contamination levels' in text
+
+
+def test_phosphate_bioaccessibility_is_not_specific_absorption_or_product_safe_dose():
+    rows = _entries_by_id()
+    row = rows['ADD_SODIUM_HEXAMETAPHOSPHATE']
+    assert 'absorbed at 90-100%' not in row['mechanism_of_harm']
+    assert 'bioaccessible' in row['mechanism_of_harm']
+    assert 'renal impairment' in row['dose_thresholds']['source']
+    assert row['dose_thresholds']['value'] == 40
+    row = rows['ADD_SODIUM_TRIPOLYPHOSPHATE']
+    assert 'generally safe' not in row['notes']
+    assert 'kidney function' in row['notes']
+
+
+def test_folate_biomarker_reference_does_not_claim_all_synthetic_forms_are_harmful():
+    text = _entries_by_id()['ADD_SYNTHETIC_B_VITAMINS']['scientific_references'][0]
+    assert 'Synthetic vs natural forms' not in text
+    assert 'biomarker study' in text

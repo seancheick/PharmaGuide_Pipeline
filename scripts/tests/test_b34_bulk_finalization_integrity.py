@@ -133,7 +133,9 @@ def test_b34_classifier_examples():
 
 def test_b34_no_residual_unintended_null(iqm):
     """Pin explicit source-reviewed unknown/local-action forms instead of requiring made-up F."""
-    expected = {'slippery_elm': ['inner bark powder',
+    expected = {'perilla_oil': ['perilla seed oil'],
+     'cascara_sagrada': ['cascara sagrada bark extract', 'cascara sagrada bark powder'],
+     'slippery_elm': ['inner bark powder',
                       'standardized extract (mucilage)',
                       'bark powder (unspecified)',
                       'outer bark powder'],

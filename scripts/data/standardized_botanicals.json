@@ -56,7 +56,7 @@
     },
     "v6_migration_status": "PHASE 1: contract metadata + green_coffee_bean tutorial entry landed 2026-05-22. green_coffee_bean is the first entry annotated with the new schema fields; plain aliases retained for runtime matching while the meets_threshold gate continues to govern bonus eligibility. Remaining priority entries per audit: bladderwrack/brown_kelp, boswellia, bilberry, ginger_extract, nettle, rhodiola, grape_seed, cordyceps, turkey_tail, sea_buckthorn, turmeric. Each ships as its own 1-entry batch with shadow-score comparison.",
     "schema_version": "5.0.1",
-    "last_updated": "2026-10-25",
+    "last_updated": "2026-10-26",
     "total_entries": 180,
     "scoring_rule": "Botanicals with min_threshold are scored higher when meeting standardization requirements. Priority level affects matching weight. After v6 migration: only entries with bonus_eligible=true (and a valid standardization_basis) are intended to trigger the A5b bonus; the runtime meets_threshold gate is the authoritative enforcement.",
     "required_fields": [
@@ -2586,18 +2586,19 @@
         "metabolites": []
       },
       "branded_form": true,
-      "bonus_eligible": true,
+      "bonus_eligible": false,
       "standardization_basis": "branded_extract",
       "marker_compounds": [
         "lutein",
         "zeaxanthin",
         "carotenoids"
       ],
-      "bonus_rationale": "FloraGLO® (Kemin Industries) is the original commercial lutein extract from Tagetes erecta marigold, standardized to >5% lutein (free form). Used in AREDS2 macular-degeneration trial as the lutein source. branded_extract basis: bonus is granted when the label names the FloraGLO® brand. Runtime gate: meets_threshold + has_standardized_botanical.",
+      "bonus_rationale": "FloraGLO is a named lutein preparation. AREDS2 (PMID 23644932) tested lutein 10 mg plus zeaxanthin 2 mg added to an AREDS formulation in adults at elevated AMD risk. The primary add-on comparison was not statistically significant (HR 0.90; P=.12); subgroup and substitution findings are distinct. Original methods name DSM-supplied carotenoids, with the FloraGLO supplier link documented separately. This trial does not establish a universal >5% grade, brand-only award or general efficacy. Exact preparation-grade support remains unresolved.",
       "sources": [
         "https://pubmed.ncbi.nlm.nih.gov/23644932/",
         "https://www.nei.nih.gov/research/clinical-trials/age-related-eye-disease-study-2-areds2"
-      ]
+      ],
+      "data_quality": "requires_verification"
     },
     {
       "standard_name": "Flowens",
@@ -3755,7 +3756,7 @@
       ],
       "bonus_rationale": "Preparation-specific source content does not yet establish the asserted standardization guarantee; bonus eligibility held. Brand/ingredient identity retained, with independently verified IQM form evidence assessed by its own owner.",
       "sources": [
-        "https://pubmed.ncbi.nlm.nih.gov/18689548/",
+        "Rejected attribution (wrong topic/preparation; retained provenance): https://pubmed.ncbi.nlm.nih.gov/18689548/ Actual source: Immunoassay for human serum hepcidin.",
         "https://www.dsm.com/human-nutrition/en/products/life-s-dha.html"
       ]
     },
@@ -3789,8 +3790,8 @@
       ],
       "bonus_rationale": "Preparation-specific source content does not yet establish the asserted standardization guarantee; bonus eligibility held. Brand/ingredient identity retained, with independently verified IQM form evidence assessed by its own owner.",
       "sources": [
-        "https://pubmed.ncbi.nlm.nih.gov/28494836/",
-        "https://pubmed.ncbi.nlm.nih.gov/29144655/"
+        "Rejected attribution (wrong topic/preparation; retained provenance): https://pubmed.ncbi.nlm.nih.gov/28494836/ Actual source: Pulmonary Toxicity in Rats Caused by Exposure to Intratracheal Instillation of SiO2 Nanoparticles.",
+        "Rejected attribution (wrong topic/preparation; retained provenance): https://pubmed.ncbi.nlm.nih.gov/29144655/ Actual source: Dulaglutide (Addendum to Commission A15-07)"
       ],
       "data_quality": "requires_verification"
     },
@@ -3992,7 +3993,7 @@
       ],
       "bonus_rationale": "Preparation-specific source content does not yet establish the asserted standardization guarantee; bonus eligibility held. Brand/ingredient identity retained, with independently verified IQM form evidence assessed by its own owner.",
       "sources": [
-        "https://pubmed.ncbi.nlm.nih.gov/27535533/",
+        "Rejected attribution (wrong topic/preparation; retained provenance): https://pubmed.ncbi.nlm.nih.gov/27535533/ Actual source: Analysis of protein-coding genetic variation in 60,706 humans.",
         "https://www.bioactives.com/"
       ]
     },
@@ -4200,8 +4201,8 @@
       "bonus_rationale": "Label marker composition and clinical applicability are separate assessments. Urtica dioica root and leaf are distinct preparations with different constituents. PMID 19140159 is in-vitro mechanistic work, not an allergic-rhinitis randomized trial; PMID 15211420 is unrelated. A single 1% gate does not verify both part-specific pathways. Authored generic floor calibration remains unresolved; no universal efficacy claim follows from matching it.",
       "sources": [
         "NCCIH Nettle overview: https://www.nccih.nih.gov/health/stinging-nettle",
-        "Schneider & Rubben 2004 long-term nettle root for BPH (PMID 15211420) — beta-sitosterol pathway",
-        "Roschek et al. 2009 randomized double-blind trial of nettle leaf for allergic rhinitis (PMID 19140159) — leaf pathway",
+        "Rejected attribution (wrong topic/preparation; retained provenance): Schneider & Rubben 2004 long-term nettle root for BPH (PMID 15211420) — beta-sitosterol pathway Actual source: Ethical listening as therapy.",
+        "Roschek et al. 2009 nettle extract inhibition of allergic-rhinitis receptors and enzymes (PMID 19140159): in-vitro mechanism, not a randomized clinical trial or preparation-specific efficacy result.",
         "ESCOP Nettle Root / Nettle Leaf monographs (separate plant-part standardization criteria)"
       ],
       "priority": "medium",
@@ -4256,7 +4257,7 @@
       ],
       "bonus_rationale": "Preparation-specific source content does not yet establish the asserted standardization guarantee; bonus eligibility held. Brand/ingredient identity retained, with independently verified IQM form evidence assessed by its own owner.",
       "sources": [
-        "https://pubmed.ncbi.nlm.nih.gov/24013626/",
+        "Rejected attribution (wrong topic/preparation; retained provenance): https://pubmed.ncbi.nlm.nih.gov/24013626/ Actual source: Role for cis-acting RNA sequences in the temperature-dependent expression of the multiadhesive lig proteins in Leptospira interrogans.",
         "https://www.futureceuticals.com/neurofactor"
       ],
       "data_quality": "requires_verification"
@@ -4351,8 +4352,8 @@
       ],
       "bonus_rationale": "Preparation-specific source content does not yet establish the asserted standardization guarantee; bonus eligibility held. Brand/ingredient identity retained, with independently verified IQM form evidence assessed by its own owner.",
       "sources": [
-        "https://pubmed.ncbi.nlm.nih.gov/15050362/",
-        "https://pubmed.ncbi.nlm.nih.gov/16219800/"
+        "Rejected attribution (wrong topic/preparation; retained provenance): https://pubmed.ncbi.nlm.nih.gov/15050362/ Actual source: Measurements of 60Co in spoons activated by neutrons during the JCO criticality accident at Tokai-mura in 1999.",
+        "Rejected attribution (wrong topic/preparation; retained provenance): https://pubmed.ncbi.nlm.nih.gov/16219800/ Actual source: Stem cell transplantation with reduced-intensity conditioning for hemophagocytic lymphohistiocytosis."
       ],
       "data_quality": "requires_verification"
     },
@@ -4384,7 +4385,7 @@
       "bonus_rationale": "Preparation-specific source content does not yet establish the asserted standardization guarantee; bonus eligibility held. Brand/ingredient identity retained, with independently verified IQM form evidence assessed by its own owner.",
       "sources": [
         "https://www.nccih.nih.gov/health/cranberry",
-        "https://pubmed.ncbi.nlm.nih.gov/27013539/"
+        "Rejected attribution (wrong topic/preparation; retained provenance): https://pubmed.ncbi.nlm.nih.gov/27013539/ Actual source: Subtype-Specific Interactions and Prognosis in Cardiac Amyloidosis."
       ],
       "data_quality": "requires_verification"
     },
@@ -4730,7 +4731,7 @@
         "metabolites": []
       },
       "cui": "C0072642",
-      "bonus_eligible": true,
+      "bonus_eligible": false,
       "standardization_basis": "branded_extract",
       "marker_compounds": [
         "procyanidins (OPCs)",
@@ -4738,12 +4739,13 @@
         "bioflavonoids",
         "phenolic acids"
       ],
-      "bonus_rationale": "Pycnogenol® (Horphag Research) is a clinically-studied French maritime pine bark extract (Pinus pinaster) standardized to 65-75% procyanidins (OPCs). Hundreds of clinical trials covering circulation / endothelial function / inflammation / skin / cognition. branded_extract basis: bonus is granted when the label names the Pycnogenol® brand. Plain pine bark identity (unstandardized) lives in botanical_ingredients.pine_bark_extract (no bonus). Runtime gate: meets_threshold + has_standardized_botanical.",
+      "bonus_rationale": "Pycnogenol is a named French maritime pine-bark preparation. PMID 22260513 reviews nitric-oxide-related exercise supplements, including grape-seed plus arginine combinations, not Pycnogenol specification or its broad clinical claims. This source does not establish a 65-75% procyanidin specification, a universal clinical benefit or a brand-only standardization award. Preparation-specific specification evidence remains unresolved.",
       "sources": [
-        "https://pubmed.ncbi.nlm.nih.gov/22260513/",
+        "Rejected attribution (wrong topic/preparation; retained provenance): https://pubmed.ncbi.nlm.nih.gov/22260513/ Actual source: The effect of nitric-oxide-related supplements on human performance.",
         "https://www.nccih.nih.gov/health/pycnogenol",
         "https://www.horphag.com/Brand/Pycnogenol"
-      ]
+      ],
+      "data_quality": "requires_verification"
     },
     {
       "standard_name": "Pygeum",
@@ -5254,8 +5256,8 @@
       ],
       "bonus_rationale": "Label marker composition and clinical applicability are separate assessments. Hippophae rhamnoides fruit/pulp oil, distinct from seed oil. Supplied PMIDs 20429767 and 24787677 are unrelated; the authored 3% palmitoleic-acid floor has unresolved primary specification support. Authored generic floor calibration remains unresolved; no universal efficacy claim follows from matching it.",
       "sources": [
-        "https://pubmed.ncbi.nlm.nih.gov/20429767/",
-        "https://pubmed.ncbi.nlm.nih.gov/24787677/",
+        "Rejected attribution (wrong topic/preparation; retained provenance): https://pubmed.ncbi.nlm.nih.gov/20429767/ Actual source: Breast plasmacytoma.",
+        "Rejected attribution (wrong topic/preparation; retained provenance): https://pubmed.ncbi.nlm.nih.gov/24787677/ Actual source: A Methodological Approach to Quantifying Plyometric Intensity.",
         "https://www.nccih.nih.gov/health/sea-buckthorn"
       ]
     },
@@ -5296,8 +5298,8 @@
       ],
       "bonus_rationale": "Label marker composition and clinical applicability are separate assessments. Hippophae rhamnoides seed oil, distinct from fruit/pulp oil. Supplied PMIDs 19883366 and 18689548 are unrelated; the authored 30% combined fatty-acid floor has unresolved primary specification support. Authored generic floor calibration remains unresolved; no universal efficacy claim follows from matching it.",
       "sources": [
-        "https://pubmed.ncbi.nlm.nih.gov/19883366/",
-        "https://pubmed.ncbi.nlm.nih.gov/18689548/",
+        "Rejected attribution (wrong topic/preparation; retained provenance): https://pubmed.ncbi.nlm.nih.gov/19883366/ Actual source: Bone modeling and remodeling.",
+        "Rejected attribution (wrong topic/preparation; retained provenance): https://pubmed.ncbi.nlm.nih.gov/18689548/ Actual source: Immunoassay for human serum hepcidin.",
         "https://www.nccih.nih.gov/health/sea-buckthorn"
       ]
     },
@@ -5347,7 +5349,7 @@
       ],
       "bonus_rationale": "Brand identity is retained. Supplied citations do not establish the asserted preparation-specific standardization or comparative clinical claims; bonus eligibility is held pending primary specification/content verification.",
       "sources": [
-        "https://pubmed.ncbi.nlm.nih.gov/24345046/",
+        "Rejected attribution (wrong topic/preparation; retained provenance): https://pubmed.ncbi.nlm.nih.gov/24345046/ Actual source: Resveratrol in peanuts.",
         "https://www.lipogen.com/"
       ],
       "data_quality": "requires_verification"
@@ -5707,7 +5709,7 @@
       ],
       "bonus_rationale": "Brand identity is retained. Supplied citations do not establish the asserted preparation-specific standardization or comparative clinical claims; bonus eligibility is held pending primary specification/content verification.",
       "sources": [
-        "https://pubmed.ncbi.nlm.nih.gov/18046594/"
+        "Rejected attribution (wrong topic/preparation; retained provenance): https://pubmed.ncbi.nlm.nih.gov/18046594/ Actual source: Comparison of low fat and low carbohydrate diets on circulating fatty acid composition and markers of inflammation."
       ]
     },
     {
@@ -5882,7 +5884,7 @@
       ],
       "bonus_rationale": "Label marker composition and clinical applicability are separate assessments. Trametes versicolor preparations differ by whole mushroom, PSK and PSP fractions. A generic 30% polysaccharide threshold does not establish fraction equivalence or oncology-adjunct efficacy. PMID 22972503 is unrelated. Authored generic floor calibration remains unresolved; no universal efficacy claim follows from matching it.",
       "sources": [
-        "https://pubmed.ncbi.nlm.nih.gov/22972503/",
+        "Rejected attribution (wrong topic/preparation; retained provenance): https://pubmed.ncbi.nlm.nih.gov/22972503/ Actual source: Expression of the molecular chaperone αB-crystallin in infiltrating ductal breast carcinomas and the significance thereof: an immunohistochemical and proteomics-based strategy.",
         "https://www.cancer.gov/about-cancer/treatment/cam/hp/mushrooms-pdq",
         "https://www.nccih.nih.gov/health/mushrooms-medicinal"
       ]
@@ -5972,7 +5974,7 @@
       ],
       "bonus_rationale": "Brand identity is retained. Supplied citations do not establish the asserted preparation-specific standardization or comparative clinical claims; bonus eligibility is held pending primary specification/content verification.",
       "sources": [
-        "https://pubmed.ncbi.nlm.nih.gov/31935893/",
+        "Rejected attribution (wrong topic/preparation; retained provenance): https://pubmed.ncbi.nlm.nih.gov/31935893/ Actual source: A Wrapper Feature Selection Algorithm: An Emotional Assessment Using Physiological Recordings from Wearable Sensors.",
         "https://www.givaudan.com/taste-wellbeing"
       ],
       "data_quality": "requires_verification"
@@ -6005,7 +6007,7 @@
       ],
       "bonus_rationale": "Brand identity is retained. Supplied citations do not establish the asserted preparation-specific standardization or comparative clinical claims; bonus eligibility is held pending primary specification/content verification.",
       "sources": [
-        "https://pubmed.ncbi.nlm.nih.gov/19185917/",
+        "Rejected attribution (wrong topic/preparation; retained provenance): https://pubmed.ncbi.nlm.nih.gov/19185917/ Actual source: Impact on survival of different treatments for myelodysplastic syndromes (MDS).",
         "https://www.lonza.com/products/uc-ii"
       ]
     },

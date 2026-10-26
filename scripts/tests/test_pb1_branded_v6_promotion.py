@@ -1,9 +1,8 @@
 """PB-1: first PROMOTE_V6_BRANDED batch.
 
 8 well-known commercial branded extracts get the v6 contract.
-These STAY in standardized_botanicals.json — they are bonus-eligible
-by design (the brand owner has clinical literature + a defined
-standardization spec).
+These STAY in standardized_botanicals.json. Eligibility follows each
+current source review; retained identity does not establish bonus eligibility.
 
 Each promoted entry gets:
   - external_ids.unii filled (where missing) via FDA UNII cache
@@ -100,9 +99,13 @@ def test_entry_has_unii(std_doc, entry):
 @pytest.mark.parametrize("entry", PB1_ENTRIES, ids=[e["id"] for e in PB1_ENTRIES])
 def test_entry_has_v6_contract(std_doc, entry):
     e = _find(std_doc.get("standardized_botanicals", []), entry["id"])
-    held = entry["id"] in {"pacran", "cran_max", "lutemax_2020", "cognigrape", "optiberry"}
+    held = entry["id"] in {"pacran", "cran_max", "lutemax_2020", "cognigrape", "optiberry", "floraglo", "pycnogenol"}
     assert e.get("bonus_eligible") is (not held)
-    if held:
+    if entry["id"] in {"floraglo", "pycnogenol"}:
+        assert e["data_quality"] == "requires_verification"
+        assert "unresolved" in e["bonus_rationale"].lower()
+        assert "preparation" in e["bonus_rationale"].lower()
+    elif held:
         assert "held" in e["bonus_rationale"].lower()
         assert "preparation" in e["bonus_rationale"].lower()
     assert e.get("standardization_basis") == "branded_extract", (

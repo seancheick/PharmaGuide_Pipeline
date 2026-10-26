@@ -2268,6 +2268,12 @@ class SupplementEnricherV3:
             )
         source_id, _source_db, _source_name = source_identity
         resolved_id = match_result.get("canonical_id")
+        if (ingredient.get("canonical_source_db") == "botanical_ingredients"
+                and " and " in str(ingredient.get("plantPart") or "")
+                and resolved_id != source_id):
+            # A reviewed parent-to-part relationship cannot narrow a source
+            # that explicitly combines multiple plant parts.
+            return True
         canonical_source_id, canonical_source_db = (
             self._current_canonical_identity_registry().canonicalize(
                 source_id,
@@ -3683,6 +3689,7 @@ class SupplementEnricherV3:
                 "estimation_method": "none",
                 "confidence_scale": 0.0,
                 "basis": "",
+                **({"scoring_eligible": False} if contrib.get("scoring_eligible") is False else {}),
             }
             has_std, pct = self._scan_label_for_standardization(label_text, keywords)
             if model == "standardization_required":
@@ -11960,6 +11967,8 @@ class SupplementEnricherV3:
         matched_clusters = []
 
         for cluster in clusters:
+            if cluster.get('scoring_eligible') is False:
+                continue
             cluster_ingredients = cluster.get('ingredients', [])
             min_doses = cluster.get('min_effective_doses', {})
 
@@ -16437,8 +16446,23 @@ class SupplementEnricherV3:
                     for field in optional_fields:
                         if field in study and study.get(field) is not None:
                             match_payload[field] = study.get(field)
+                    if marker_entry.get("scoring_eligible") is False:
+                        match_payload["scoring_eligible"] = False
+                        match_payload["notes"] = (
+                            str(match_payload.get("notes") or "")
+                            + " Marker relationship excluded from affirmative credit: "
+                            + str(marker_entry.get("evidence_id") or "")
+                        ).strip()
+                    if match_payload.get("scoring_eligible") is not False:
+                        # A held relationship cannot consume another source's
+                        # independently eligible match for the same study.
+                        matches = [m for m in matches if not (
+                            (m.get("study_id") or m.get("id")) == study_id
+                            and m.get("marker_via_ingredient")
+                            and m.get("scoring_eligible") is False
+                        )]
+                        existing_study_ids.add(study_id)
                     matches.append(match_payload)
-                    existing_study_ids.add(study_id)
 
         # Check for unsubstantiated claims
         all_text = self._get_all_product_text(product)
@@ -18934,9 +18958,11 @@ class SupplementEnricherV3:
                 # Extract daily servings if provided by DSLD
                 min_servings_per_day = (
                     primary_serving.get('minDailyServings')
+                    if primary_serving.get('dailyServingsSource') != 'default' else None
                 )
                 max_servings_per_day = (
                     primary_serving.get('maxDailyServings')
+                    if primary_serving.get('dailyServingsSource') != 'default' else None
                 )
                 if min_servings_per_day is not None or max_servings_per_day is not None:
                     servings_per_day_source = "servingSizes"

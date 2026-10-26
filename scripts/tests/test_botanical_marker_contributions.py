@@ -114,9 +114,12 @@ def test_model_consistency(data, botanical_id):
             )
         else:  # standardization_required
             pct = contribution.get("min_standardization_pct_required")
-            assert pct is not None and pct >= 0, (
-                f"{botanical_id} standardization_required must have a nonnegative min_standardization_pct_required"
-            )
+            if contribution.get("scoring_eligible") is False:
+                assert pct is None or pct >= 0
+            else:
+                assert pct is not None and pct >= 0, (
+                    f"{botanical_id} eligible standardization requires a nonnegative floor"
+                )
             assert PMID_PATTERN.match(contribution["evidence_id"]), (
                 f"{botanical_id} standardization_required must cite PubMed PMID"
             )

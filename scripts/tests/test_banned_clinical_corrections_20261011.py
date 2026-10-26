@@ -334,3 +334,23 @@ def test_hydroxy_laxogenin_acetate_does_not_inherit_free_compound_identity():
     assert row['external_ids']['unii'] == '844KE20WT5'
     assert row['clinical_risk_enum'] == 'high'
     assert 'not' in row['notes'].lower() and 'safety' in row['notes'].lower()
+
+
+def test_mushroom_outbreak_totals_are_not_one_brand_or_one_compound_causation():
+    row = entries()['SCHED_AMANITA_MUSCARIA']
+    assert 'other mushroom-containing chocolate products' in row['reason']
+    assert 'cannot be attributed' in row['reason']
+    ref = next(r for r in row['references_structured'] if '41955162' in r.get('url', ''))
+    assert '180' in ref['evidence_summary']
+    assert 'multiple substances' in ref['evidence_summary'].lower()
+    assert row['safety_warning'].endswith('Stop and consult a doctor.')
+    assert row['clinical_risk_enum'] == 'critical'
+
+
+def test_fonturacetam_abstract_does_not_invent_sponsorship_or_long_term_safety():
+    row = entries()['NOOTROPIC_PHENYLPIRACETAM']
+    ref = next(r for r in row['references_structured'] if '40047835' in r.get('url', ''))
+    assert 'sponsor-region' not in ref['evidence_summary']
+    assert '549' in ref['evidence_summary']
+    assert 'one month' in ref['evidence_summary']
+    assert row['safety_warning'].endswith('Stop and consult a doctor.')

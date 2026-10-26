@@ -3,7 +3,7 @@
     "description": "Comprehensive database of harmful additives, contaminants, and concerning ingredients found in dietary supplements. Used for scoring penalties and consumer warnings.",
     "purpose": "penalty_scoring",
     "schema_version": "5.4.0",
-    "last_updated": "2026-10-22",
+    "last_updated": "2026-10-26",
     "total_entries": 115,
     "functional_roles_field": {
       "added_in": "5.2.0",
@@ -1405,10 +1405,10 @@
           "supports_claims": []
         },
         {
-          "type": "systematic_review",
+          "type": "clinical_trial",
           "authority": "OTHER",
-          "title": "DOI: 10.1016/S0140-6736(07)61306-3 - McCann et al. Southampton study on food colors and hyperactivity",
-          "citation": "DOI: 10.1016/S0140-6736(07)61306-3 - McCann et al. Southampton study on food colors and hyperactivity",
+          "title": "McCann et al. 2007: randomized, double-blind, placebo-controlled crossover trial of food-color and sodium-benzoate mixtures; not Blue 1 or Blue 2",
+          "citation": "McCann et al. 2007: randomized, double-blind, placebo-controlled crossover trial of food-color and sodium-benzoate mixtures; not Blue 1 or Blue 2",
           "url": "https://doi.org/10.1016/S0140-6736(07)61306-3",
           "published_date": "2007-11-03",
           "evidence_grade": "A",
@@ -1640,10 +1640,10 @@
           "supports_claims": []
         },
         {
-          "type": "systematic_review",
+          "type": "clinical_trial",
           "authority": "OTHER",
-          "title": "DOI: 10.1016/S0140-6736(07)61306-3 - McCann et al. Southampton study on food colors and hyperactivity",
-          "citation": "DOI: 10.1016/S0140-6736(07)61306-3 - McCann et al. Southampton study on food colors and hyperactivity",
+          "title": "McCann et al. 2007: randomized, double-blind, placebo-controlled crossover trial of food-color and sodium-benzoate mixtures; not Blue 1 or Blue 2",
+          "citation": "McCann et al. 2007: randomized, double-blind, placebo-controlled crossover trial of food-color and sodium-benzoate mixtures; not Blue 1 or Blue 2",
           "url": "https://doi.org/10.1016/S0140-6736(07)61306-3",
           "published_date": "2007-11-03",
           "evidence_grade": "A",
@@ -1776,9 +1776,9 @@
         "CAS 34767-10-7"
       ],
       "category": "processing_aid",
-      "notes": "A leavening and anti-caking agent that contains bioavailable aluminum. Contributes to total aluminum body burden. EFSA established a tolerable weekly intake (TWI) of 1 mg Al/kg body weight due to neurotoxicity concerns with chronic exposure. Used in supplement tablet manufacturing.",
+      "notes": "An aluminium-containing leavening and anti-caking agent. EFSA established a tolerable weekly intake of 1 mg aluminium/kg body weight from all dietary sources. The opinion does not establish the absorption of this compound or exposure from a particular supplement.",
       "last_updated": "2026-02-26",
-      "mechanism_of_harm": "Releases bioavailable aluminum ions (Al³⁺) during digestion. Aluminum accumulates in bone and brain tissue with chronic exposure. EFSA identified developmental neurotoxicity as the critical endpoint for aluminum compounds, establishing a TWI of 1 mg/kg bw/week. Animal studies show aluminum-induced oxidative stress, mitochondrial dysfunction, and interference with calcium/iron homeostasis.",
+      "mechanism_of_harm": "Absorbed aluminium can persist and accumulate, particularly in bone; renal clearance matters. EFSA established a TWI of 1 mg aluminium/kg body weight/week using combined animal evidence across several endpoints, rather than one critical endpoint. The assessment concerns total dietary aluminium, not measured absorption or exposure from calcium aluminium phosphate in a particular supplement.",
       "regulatory_status": {
         "US": "FDA: No specific CFR section for calcium aluminum phosphate. The related compound sodium aluminum phosphate is GRAS under 21 CFR 182.1781. Calcium aluminum phosphate monitored under general aluminum TWI framework.",
         "EU": "No dedicated E-number for calcium aluminum phosphate (E544 is calcium polyphosphates, not this compound; E541 is sodium aluminium phosphate). EFSA TWI for aluminum from all dietary sources: 1 mg/kg bw/week (2008, reconfirmed 2011)."
@@ -1786,7 +1786,7 @@
       "population_warnings": [
         "People with renal impairment — reduced aluminum clearance increases accumulation risk",
         "Children — developing nervous system more vulnerable to aluminum neurotoxicity; higher intake per kg body weight",
-        "Elderly — chronic aluminum exposure studied as potential Alzheimer’s disease cofactor (inconclusive but under active investigation)"
+        "Older adults — total aluminium exposure and kidney function matter; dietary aluminium has not been established as a cause of Alzheimer's disease."
       ],
       "scientific_references": [
         "DOI: 10.2903/j.efsa.2008.754 - EFSA 2008 safety of aluminium from dietary intake (TWI 1 mg/kg/week)",
@@ -1810,12 +1810,12 @@
           "supports_claims": []
         },
         {
-          "type": "systematic_review",
+          "type": "efsa_opinion",
           "authority": "EFSA",
           "title": "EFSA 2008 - Safety of aluminium from dietary intake, TWI 1 mg/kg bw/week",
           "citation": "EFSA 2008 - Safety of aluminium from dietary intake, TWI 1 mg/kg bw/week",
           "url": "https://doi.org/10.2903/j.efsa.2008.754",
-          "published_date": "2008-07-22",
+          "published_date": "2008-07-15",
           "evidence_grade": "A",
           "supports_claims": []
         }
@@ -1934,7 +1934,7 @@
       ],
       "severity_level": "moderate",
       "cui": "C0256439",
-      "safety_summary": "Releases bioavailable aluminum during digestion. Aluminum accumulates in bone and brain tissue over time — worth choosing products without aluminum-phosphate processing aids.",
+      "safety_summary": "Contains aluminium. The cited assessment concerns total dietary aluminium exposure; absorption and exposure from this product are not established.",
       "safety_summary_one_liner": "Aluminum source — accumulation concern.",
       "functional_roles": [
         "processing_aid",
@@ -3097,7 +3097,7 @@
         "Carmel color"
       ],
       "category": "colorant_artificial",
-      "mechanism_of_harm": "Class III (E150c) and Class IV (E150d) caramel colors are produced with ammonia and may contain 4-methylimidazole (4-MEI), a potential carcinogen. 4-MEI has been shown to cause lung, liver, and thyroid tumors in animal studies. May also contain other contaminants from manufacturing process.",
+      "mechanism_of_harm": "Class III (E150c) and Class IV (E150d) caramel colors are produced with ammonia and may contain 4-methylimidazole (4-MEI), a potential carcinogen. 4-MEI has been shown to cause lung tumors in male and female mice in a two-year feeding study. May also contain other contaminants from manufacturing process.",
       "regulatory_status": {
         "US": "FDA approved; California Prop 65 limits 4-MEI to 29 mcg/day",
         "EU": "E150a-d approved with purity criteria",
@@ -3132,9 +3132,9 @@
           "supports_claims": []
         },
         {
-          "type": "clinical_study",
+          "type": "primary_study",
           "authority": "NTP",
-          "title": "NTP TR-535: Toxicology and carcinogenesis studies of 4-methylimidazole (2007)",
+          "title": "NTP TR-535: two-year animal toxicology and carcinogenesis study of 4-methylimidazole in rats and mice (2007)",
           "citation": "NTP Technical Report 535 - 4-methylimidazole carcinogenesis in F344/N rats and B6C3F1 mice",
           "url": "https://ntp.niehs.nih.gov/sites/default/files/ntp/htdocs/lt_rpts/tr535.pdf",
           "published_date": "2007-01-01",
@@ -3981,9 +3981,9 @@
         "corn oil refined"
       ],
       "category": "excipient",
-      "notes": "Refined corn oil used as a carrier/filler in supplements. High omega-6 linoleic acid content (~55-60%) may contribute to pro-inflammatory eicosanoid production when omega-6/omega-3 ratio is elevated, but no direct toxicological mechanism at supplement carrier oil quantities. FDA GRAS (21 CFR 184.1245). Severity is low — this is a quality/formulation signal rather than a safety hazard.",
+      "notes": "Refined corn oil used as a carrier or filler in supplements. It contains linoleic acid. The cited EFSA dietary-reference opinion does not establish inflammatory harm from supplement carrier quantities or a harmful omega-6/omega-3 ratio. Existing low-severity formulation treatment is separate from a demonstrated clinical hazard.",
       "last_updated": "2026-03-24",
-      "mechanism_of_harm": "High omega-6 linoleic acid content (~55-60%) contributes to pro-inflammatory eicosanoid production when dietary omega-6/omega-3 ratio is already elevated. Refining process may generate trace lipid oxidation products. No direct toxicological mechanism at supplement carrier oil quantities. Quality/formulation signal rather than acute hazard.",
+      "mechanism_of_harm": "Corn oil is a linoleic-acid-containing carrier oil. The cited EFSA opinion sets dietary reference values and does not establish inflammatory harm from supplement carrier quantities or a harmful omega-6/omega-3 ratio.",
       "regulatory_status": {
         "US": "FDA GRAS (21 CFR 184.1245). Generally recognized as safe as salad/cooking oil and food-grade carrier.",
         "EU": "Permitted vegetable oil under general food law. No specific restriction under Regulation (EC) No 1333/2008 or Directive 2002/46/EC on food supplements.",
@@ -4122,7 +4122,7 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "safety_summary": "Refined corn oil is high in omega-6 linoleic acid, which can skew the omega-6/omega-3 balance. Low overall concern at supplement levels.",
+      "safety_summary": "A refined carrier oil containing linoleic acid. The cited dietary-reference opinion does not establish inflammatory harm at supplement carrier quantities.",
       "safety_summary_one_liner": "Refined oil — omega-6-heavy.",
       "functional_roles": [
         "carrier_oil"
@@ -5494,19 +5494,19 @@
         "E475"
       ],
       "category": "emulsifier",
-      "mechanism_of_harm": "Synthetic emulsifier class implicated in gut microbiota disruption and intestinal barrier permeability in animal models. Evidence is extrapolated from studies on related emulsifiers (CMC, polysorbate 80) which promoted low-grade inflammation and metabolic syndrome in mice. Direct human data on polyglycerol esters specifically is limited.",
+      "mechanism_of_harm": "The cited mouse study tested carboxymethylcellulose (CMC) and polysorbate 80, not polyglycerol esters of fatty acids (E475); it provides background only. Its findings do not establish E475-specific gut-barrier effects in people.",
       "regulatory_status": {
         "US": "FDA: permitted as GRAS emulsifier in food. 21 CFR 172.854 (polyglycerol esters of fatty acids).",
         "EU": "E475 authorized as food additive. EFSA 2017 re-evaluation (EFSA Journal 2017;15(12):5089) found no safety concern at the reported uses and no need for a numerical ADI (the SCF had endorsed JECFA's 25 mg/kg bw/day ADI in 1978).",
         "WHO": "JECFA ADI 0-25 mg/kg bw/day (49th meeting, 1997)."
       },
       "population_warnings": [
-        "IBD/IBS — emulsifier class linked to gut barrier disruption in animal models (Chassaing et al. 2015, Nature)",
+        "IBD/IBS — the cited gut-barrier experiment studied other emulsifiers in mice, not E475; individual tolerability requires product-specific assessment.",
         "Digestive sensitivity — may cause GI discomfort at high intake levels"
       ],
       "notes": "Polyglycerol esters of fatty acids (E475) are synthetic emulsifiers used in supplements for texture and stability. The 2015 Nature study (Chassaing et al.) showed dietary emulsifiers CMC and P80 promoted colitis and metabolic syndrome in mice, but direct evidence for polyglycerol esters is limited. EFSA's 2017 re-evaluation found no safety concern at the reported uses and set no numerical ADI. Note: polyglycerol polyricinoleate (E476) is a distinct substance with its own CAS and regulatory status.",
       "scientific_references": [
-        "PMID 25731162 — Chassaing et al., Nature 2015: dietary emulsifiers promote colitis and metabolic syndrome in mice (CMC/P80 studied, class-level evidence)",
+        "PMID 25731162 — Chassaing et al., Nature 2015: dietary emulsifiers promote colitis and metabolic syndrome in mice (CMC/P80 studied, other-emulsifier background; not direct E475 evidence)",
         "DOI: 10.2903/j.efsa.2017.5089 — EFSA 2017 re-evaluation of E475: no safety concern at reported uses, no numerical ADI needed"
       ],
       "last_updated": "2026-03-27",
@@ -5618,8 +5618,8 @@
         "source": "JECFA ADI"
       },
       "cui": "C0982350",
-      "safety_summary": "A synthetic emulsifier class. Animal studies raise gut-microbiome and barrier-function concerns — worth noting for products taken daily.",
-      "safety_summary_one_liner": "Synthetic emulsifier class with gut signals.",
+      "safety_summary": "An emulsifier used for texture and stability. The cited gut-effects experiment studied other emulsifiers in mice, not E475.",
+      "safety_summary_one_liner": "Emulsifier. cited mouse findings are not E475-specific.",
       "functional_roles": [
         "emulsifier",
         "surfactant"
@@ -8537,7 +8537,7 @@
         "palm oil, hydrogenated"
       ],
       "category": "excipient",
-      "mechanism_of_harm": "High in saturated fat (~50% palmitic acid) which may raise LDL cholesterol. Refined palm oil can contain 3-MCPD and glycidyl ester contaminants formed during high-temperature processing. EFSA 2018 identified glycidyl esters as genotoxic and carcinogenic. In supplement context, amounts are small (capsule coatings, softgel fill) but flagged as quality signal.",
+      "mechanism_of_harm": "High in saturated fat (~50% palmitic acid) which may raise LDL cholesterol. Refined palm oil can contain 3-MCPD and glycidyl ester contaminants formed during high-temperature processing. EFSA's 2018 opinion updates the assessment of 3-MCPD and its fatty-acid esters and discusses the earlier 2016 assessment that also covered glycidyl esters. The source does not establish contamination levels in this supplement. In supplement context, amounts are small (capsule coatings, softgel fill) but flagged as quality signal.",
       "regulatory_status": {
         "US": "FDA GRAS. No specific CFR listing (common food ingredient).",
         "EU": "Permitted. EFSA 2018 opinion on process contaminants in refined palm oil (3-MCPD, glycidyl esters) — EFSA Journal 2018;16(1):5083.",
@@ -8561,7 +8561,7 @@
       },
       "references_structured": [
         {
-          "type": "regulatory_action",
+          "type": "efsa_opinion",
           "authority": "EFSA",
           "title": "DOI: 10.2903/j.efsa.2018.5083 - EFSA 3-MCPD assessment",
           "citation": "DOI: 10.2903/j.efsa.2018.5083 - EFSA 3-MCPD assessment",
@@ -10367,7 +10367,7 @@
         "FD&C Red No 40 Aluminum Lake"
       ],
       "category": "colorant_artificial",
-      "mechanism_of_harm": "Synthetic azo dye used only for coloration. Reported concerns include hypersensitivity reactions in susceptible individuals and possible behavioral effects in some children; no nutritional benefit.",
+      "mechanism_of_harm": "Synthetic azo dye used for coloration. Hypersensitivity reactions can occur in susceptible individuals. McCann 2007 tested food-color and sodium-benzoate mixtures containing Red 40 in one mixture; it did not isolate the effect of Red 40.",
       "regulatory_status": {
         "US": "FDA approved color additive (21 CFR 74.340). HHS/FDA announced April 22, 2025: voluntary phase-out of FD&C Red No. 40 from the US food supply targeted by end of 2026, as part of initiative to phase out all remaining petroleum-based synthetic dyes. California school ban effective December 31, 2027 (California AB418, 2023).",
         "EU": "Authorized as E129. ADI: 7 mg/kg bw/day per EFSA 2009 re-evaluation (EFSA Journal 2009:1329) — EFSA maintained ADI unchanged, did NOT reduce it. EU requires hyperactivity warning label: 'may have an adverse effect on activity and attention in children' (Regulation (EC) No 1333/2008, Annex V). NOTE: There is NO 2023 EFSA re-evaluation of Red 40. Any reference to a 2023 EFSA ADI change is incorrect.",
@@ -10533,8 +10533,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "safety_summary": "A synthetic azo dye. Associated with hyperactivity signals in children and hypersensitivity reactions — worth noting, especially for kids.",
-      "safety_summary_one_liner": "Synthetic red dye linked to hyperactivity in children.",
+      "safety_summary": "A synthetic azo dye. Hypersensitivity reactions can occur in sensitive people. The cited behavioral evidence comes from food-color and sodium-benzoate mixtures, rather than an isolated Red 40 trial.",
+      "safety_summary_one_liner": "Synthetic red dye. behavioral evidence comes from mixtures.",
       "functional_roles": [
         "colorant_artificial"
       ]
@@ -11829,7 +11829,7 @@
         "hexametaphosphate"
       ],
       "category": "emulsifier",
-      "mechanism_of_harm": "Polyphosphate salt contributing highly bioavailable inorganic phosphorus, absorbed at 90-100% efficiency (vs 40-60% for natural food phosphorus). EFSA 2019 re-evaluation established a group ADI of 40 mg phosphorus/kg bw/day, which is already exceeded in infants, toddlers, and children at mean intake levels. Elevated serum phosphorus is associated with vascular calcification and accelerated renal decline even within the 'normal' lab range. Population-specific guidance is carried in population_warnings.",
+      "mechanism_of_harm": "Inorganic phosphate additives can be highly bioaccessible; the cited review gives source-class estimates, not a measured sodium-hexametaphosphate absorption percentage. EFSA 2019 re-evaluation established a group ADI of 40 mg phosphorus/kg bw/day, which is already exceeded in infants, toddlers, and children at mean intake levels. Elevated serum phosphorus is associated with vascular calcification and accelerated renal decline even within the 'normal' lab range. Population-specific guidance is carried in population_warnings.",
       "regulatory_status": {
         "US": "FDA GRAS as sequestrant when used per good manufacturing practice (21 CFR 182).",
         "EU": "E452i approved. EFSA 2019 re-evaluation set group ADI of 40 mg P/kg bw/day for all phosphate additives (E 338-452). ADI already exceeded in children.",
@@ -11937,10 +11937,10 @@
       "dose_thresholds": {
         "value": 40,
         "unit": "mg P/kg/day",
-        "source": "EFSA group ADI for phosphate additives (2019)"
+        "source": "EFSA 2019 group ADI expressed as phosphorus, including natural and additive sources; not applicable to moderate/severe renal impairment."
       },
       "cui": "C0074759",
-      "safety_summary": "A polyphosphate emulsifier contributing highly absorbable inorganic phosphorus. High intake can disrupt mineral balance — worth noting for long-term daily use.",
+      "safety_summary": "A polyphosphate additive contributing inorganic phosphorus. Total intake and kidney function matter; source-class bioaccessibility estimates do not establish this product's absorbed dose.",
       "safety_summary_one_liner": "Phosphate emulsifier — mineral-balance concern.",
       "functional_roles": [
         "emulsifier",
@@ -12549,7 +12549,7 @@
         "CKD/kidney disease — impaired phosphorus excretion",
         "Cardiovascular disease — excess inorganic phosphate linked to vascular calcification"
       ],
-      "notes": "LOW RISK: Used as emulsifier, texturizer, and moisture-retention agent. Common in processed foods. Concern is cumulative phosphate intake from multiple sources. Occasional supplement use is generally safe, but indicates processed formulation.",
+      "notes": "LOW RISK: Used as emulsifier, texturizer, and moisture-retention agent. Common in processed foods. Concern is cumulative phosphate intake from multiple sources. Risk depends on total phosphorus intake and kidney function; this assessment does not establish a safe dose for a particular product.",
       "scientific_references": [],
       "last_updated": "2026-03-28",
       "match_rules": {
@@ -12560,7 +12560,7 @@
       },
       "references_structured": [
         {
-          "type": "regulatory_action",
+          "type": "efsa_opinion",
           "authority": "EFSA",
           "title": "EFSA 2019 re-evaluation of phosphate food additives",
           "citation": "EFSA 2019 re-evaluation of phosphate food additives",
@@ -13208,7 +13208,7 @@
       ],
       "notes": "Source-specific soy-derived monoglycerides should be distinguished from generic mono- and diglycerides. Allergen assessment requires the specific source and retained protein, not the generic emulsifier name.",
       "scientific_references": [
-        "DOI: 10.1038/nature14232 - Emulsifiers impact on gut microbiota and inflammation"
+        "DOI: 10.1038/nature14232 - Emulsifiers impact on gut microbiota and inflammation; CMC/P80 mouse study, background only, not monoglyceride or soy-protein evidence."
       ],
       "last_updated": "2026-03-28",
       "match_rules": {
@@ -14124,7 +14124,7 @@
       ],
       "notes": "Do not penalize nutrient identities like cyanocobalamin/pyridoxine by default. Cyanocobalamin is a common supplemental B12 form; this record now only matches explicit synthetic-blend labeling.",
       "scientific_references": [
-        "PMID: 22529856 (Tam/O'Connor/Koren 2012 Obstet Gynecol Int) - Unmetabolized folic acid: folate status and supplementation effects - Synthetic vs natural forms",
+        "PMID: 22529856 (Tam/O'Connor/Koren 2012 Obstet Gynecol Int) - Unmetabolized folic acid: folate status and supplementation effects - Folic-acid supplementation and circulating unmetabolized folic acid in women of reproductive age; biomarker study, not clinical toxicity or a comparison of all B-vitamin forms",
         "PMID: 25820384 (Obeid/Fedosov/Nexo 2015 Mol Nutr Food Res) - Cobalamin coenzyme forms not superior to cyano/hydroxocobalamin - Bioavailability comparison",
         "CDC MTHFR Gene Variant and Folic Acid Facts: https://www.cdc.gov/folic-acid/data-research/mthfr/index.html",
         "NIH ODS Folate Health Professional Fact Sheet: https://ods.od.nih.gov/factsheets/Folate-HealthProfessional/"
@@ -15359,9 +15359,9 @@
       },
       "population_warnings": [
         "Dye-sensitive individuals — cannot assess risk without knowing which colorant is used",
-        "Children — if undisclosed colorant is an azo dye, hyperactivity concern applies"
+        "Children — an undisclosed colorant cannot be assessed without its identity."
       ],
-      "notes": "Low-severity flag for unspecified color listings. Penalize lightly unless explicit dye tokens indicate artificial colorants.",
+      "notes": "Low-severity flag for unspecified color listings. Penalize lightly unless explicit dye tokens indicate artificial colorants. Carmine-specific context in the cited E120 opinion does not identify an undisclosed colorant or establish its toxicological effects.",
       "scientific_references": [],
       "last_updated": "2026-03-28",
       "match_rules": {
@@ -15626,7 +15626,7 @@
         "Yellow #5 Aluminum Lake"
       ],
       "category": "colorant_artificial",
-      "mechanism_of_harm": "Azo dye metabolized to aromatic amines in the GI tract. Associated with hyperactivity in children (McCann et al. 2007 Southampton study, Lancet). Cross-reactivity with aspirin in aspirin-sensitive individuals (urticaria, bronchospasm). Trace benzidine (IARC Group 1 carcinogen) present as manufacturing impurity in azo dyes; modern manufacturing limits this substantially. Some in vitro genotoxicity signals reported; EFSA 2009 re-evaluation found no confirmed in vivo genotoxicity at authorized food use levels. EFSA requested further Comet assay studies for sulfonated mono-azo dyes as a class.",
+      "mechanism_of_harm": "Azo dye metabolized to aromatic amines in the GI tract. McCann et al. 2007 tested food-color and sodium-benzoate mixtures containing tartrazine; the trial did not isolate tartrazine as the cause of behavioral effects. Cross-reactivity with aspirin in aspirin-sensitive individuals (urticaria, bronchospasm). Trace benzidine (IARC Group 1 carcinogen) present as manufacturing impurity in azo dyes; modern manufacturing limits this substantially. Some in vitro genotoxicity signals reported; EFSA 2009 re-evaluation found no confirmed in vivo genotoxicity at authorized food use levels. EFSA requested further Comet assay studies for sulfonated mono-azo dyes as a class.",
       "regulatory_status": {
         "US": "FDA approved as FD&C Yellow No. 5 (Tartrazine) — 21 CFR 74.705. Requires specific labeling on all products containing it (FALCPA). NOTE: E102 is the EU code — in the US this dye is designated FD&C Yellow No. 5, not E102. HHS/FDA April 2025 announced voluntary phase-out of all petroleum-based synthetic dyes by 2026.",
         "EU": "Authorized as E102. ADI: 7.5 mg/kg bw/day (EFSA 2009 re-evaluation kept the SCF/JECFA ADI). EU Regulation 1333/2008 Annex V requires hyperactivity warning label on foods containing E102: 'may have an adverse effect on activity and attention in children.'",
@@ -15804,8 +15804,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "safety_summary": "A synthetic azo dye (Tartrazine / E102). Associated with hyperactivity in children and hypersensitivity reactions — worth noting, especially for kids.",
-      "safety_summary_one_liner": "Synthetic yellow dye linked to hyperactivity in children.",
+      "safety_summary": "Tartrazine (E102) can cause hypersensitivity in sensitive people. Behavioral findings concern food-color and sodium-benzoate mixtures, not an isolated-dye trial.",
+      "safety_summary_one_liner": "Synthetic yellow dye. behavioral evidence comes from mixtures.",
       "functional_roles": [
         "colorant_artificial"
       ]

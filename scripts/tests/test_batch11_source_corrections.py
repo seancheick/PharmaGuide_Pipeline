@@ -184,3 +184,34 @@ def test_fractional_daily_count_does_not_introduce_nonfinite_json(value):
         "minQuantity": 1, "maxQuantity": 1, "unit": "Capsule(s)",
         "minDailyServings": value, "maxDailyServings": 1}])
     assert row["minDailyServings"] == 0
+
+
+def test_returned_iqm_sources_keep_the_studied_endpoint_and_preparation():
+    rows = json.loads((DATA / 'ingredient_quality_map.json').read_text())
+    for parent in ['sea_buckthorn', 'fenugreek']:
+        assert 'rutin systemic 1-5%' not in json.dumps(rows[parent])
+    assert 'intact systemic bioavailability' in rows['sea_buckthorn']['forms']['sea buckthorn seed oil']['notes']
+    assert 'single 500 mg trans-resveratrol tablet' in rows['red_wine_extract']['forms']['standardized red wine extract']['notes']
+    assert 'not 500 mg isolated diosgenin' in rows['diosgenin']['forms']['diosgenin (unspecified)']['notes']
+    assert 'six young men' in rows['perilla_oil']['forms']['perilla seed oil']['notes']
+    assert 'Foreword' in rows['sage']['forms']['cognivia sage extract']['notes']
+    assert 'preclinical in-vitro rat-platelet experiment' in rows['cayenne_pepper']['forms']['cayenne pepper (unspecified)']['notes']
+    assert '~50% inactive L-βHB enantiomer' not in rows['inositol']['forms']['d-chiro-inositol']['notes']
+
+
+@pytest.mark.parametrize('form', ['cascara sagrada bark extract', 'cascara sagrada bark powder'])
+def test_cascara_cell_experiments_do_not_supply_human_absolute_absorption(form):
+    rows = json.loads((DATA / 'ingredient_quality_map.json').read_text())
+    record = rows['cascara_sagrada']['forms'][form]
+    assert record['absorption'] == 'unknown'
+    assert record['absorption_structured'] == {
+        'value': None, 'range_low': None, 'range_high': None, 'quality': 'unknown'}
+    assert 'human absolute absorption' in record['notes']
+
+
+def test_ala_tracer_does_not_supply_whole_perilla_oil_absolute_absorption():
+    record = json.loads((DATA / 'ingredient_quality_map.json').read_text())['perilla_oil']['forms']['perilla seed oil']
+    assert record['absorption'] == 'unknown'
+    assert record['absorption_structured'] == {
+        'value': None, 'range_low': None, 'range_high': None, 'quality': 'unknown'}
+    assert record['bio_score'] == 10

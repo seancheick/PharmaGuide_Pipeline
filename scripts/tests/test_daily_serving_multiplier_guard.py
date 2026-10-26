@@ -544,3 +544,28 @@ def test_selected_adult_facts_column_does_not_borrow_child_minimum(low, high, un
         ]}}],
     }
     assert resolve_daily_serving_range(product) == (daily, daily, False)
+
+
+@pytest.mark.parametrize('container', [{}, {'serving_basis': {
+    'min_servings_per_day': 1, 'max_servings_per_day': 1,
+    'servings_per_day_source': 'default'}}, {'serving_basis': {
+    'min_servings_per_day': 1, 'max_servings_per_day': 1,
+    'servings_per_day_source': 'servingSizes'}}])
+def test_default_serving_row_cannot_establish_a_declared_daily_maximum(container):
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    from serving_frequency import resolve_daily_serving_range
+    serving = EnhancedDSLDNormalizer()._process_serving_sizes([
+        {'minQuantity': 1, 'maxQuantity': 1, 'unit': 'Scoop(s)',
+         'minDailyServings': None, 'maxDailyServings': None}])
+    assert resolve_daily_serving_range({'servingSizes': serving, **container}) == (1, 1, True)
+
+
+def test_real_direction_cadence_can_override_a_default_serving_row():
+    from serving_frequency import resolve_daily_serving_range
+    product = {'servingSizes': [{'minQuantity': 1, 'maxQuantity': 1, 'unit': 'Capsule(s)',
+        'minDailyServings': 1, 'maxDailyServings': 1, 'dailyServingsSource': 'default'}],
+        'serving_basis': {'min_servings_per_day': 2, 'max_servings_per_day': 3,
+                          'servings_per_day_source': 'directions'}}
+    assert resolve_daily_serving_range(product) == (2, 3, False)
+    product['servingSizes'][0].update(dailyServingsSource='label', minDailyServings=4, maxDailyServings=4)
+    assert resolve_daily_serving_range(product) == (4, 4, False)

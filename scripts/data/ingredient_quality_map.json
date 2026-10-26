@@ -53,7 +53,7 @@
       "vitamins": 25
     },
     "schema_version": "5.6.1",
-    "last_updated": "2026-10-25",
+    "last_updated": "2026-10-26",
     "pipeline_integration": "Used by enrichment to assign form quality (bio_score) to matched ingredient forms. Match ingredient name against forms aliases (case-insensitive).",
     "matching_notes": [
       "Match ingredient name + forms text against aliases array (case-insensitive)",
@@ -1287,7 +1287,7 @@
           },
           {
             "location": "bioflavonoids::citrus complex",
-            "flag": "Research agent recommends bio_score 11 → 8 downgrade. Class-poor F confirmed: hesperidin urinary 4-8% (PMID:12571654); rutin systemic 1-5% (PMID:7491892). Concentration ≠ F. Needs Dr Pham clinical signoff."
+            "flag": "Research agent recommends bio_score 11 → 8 downgrade. Class-poor F confirmed: hesperidin urinary 4-8% (PMID:12571654); rutin intestinal disappearance 17 +/- 15% in ileostomy volunteers (PMID:7491892), not intact systemic bioavailability. Concentration ≠ F. Needs Dr Pham clinical signoff."
           },
           {
             "location": "bioflavonoids::hesperidin-rich",
@@ -1537,7 +1537,7 @@
           "TUDCA human oral F": "NO robust human PK PMID exists"
         },
         "category_error_third_confirmation": "Prebiotics (inulin, larch arabinogalactan) join manuka (Batch 18) and organ extracts (Batch 20) as forms where the IQM \"absorption\" framework does not apply. Holscher 2017 (PMID:28165863) and Roberfroid 2005 (PMID:15877886) explicit: prebiotics are non-digestible by human enzymes; activity is via colonic fermentation to SCFAs, not classical absorption. Schema-level `fermented_substrate=true` flag recommended.",
-        "bhb_salt_vs_ester_finding": "BHB salts (Na/Ca/Mg) ≠ creatine salts pattern (Batch 14). Stubbs 2017 (PMID:29163194) directly compares: KE Cmax 2.8 mM vs KS 1.0 mM at equimolar dose. BHB salts deliver ~50% inactive L-βHB enantiomer; ester delivers pure D-βHB. Different bioactive entities. Salts F=0.85, ester F=0.95.",
+        "bhb_salt_vs_ester_finding": "BHB salts (Na/Ca/Mg) ≠ creatine salts pattern (Batch 14). Stubbs 2017 (PMID:29163194) directly compares: KE Cmax 2.8 mM vs KS 1.0 mM at equimolar dose. BHB salts deliver a substantial L-βHB fraction in the tested preparation (not established as inactive or universal to all salts); ester delivers pure D-βHB. Different bioactive entities. Salts F=0.85, ester F=0.95.",
         "forms_updated": [
           "5_htp::5-htp (unspecified) (value None → 0.7)",
           "tudca::tudca (standard) (value None → 0.4)",
@@ -1558,7 +1558,7 @@
           },
           {
             "location": "d_beta_hydroxybutyrate_bhb::d beta hydroxybutyrate bhb (standard)",
-            "flag": "BHB salts ≠ creatine salts pattern. Salts deliver ~50% inactive L-βHB enantiomer (Stubbs 2017 PMID:29163194). Should create separate ester entry at F=0.95 if products contain BHB esters. Needs Dr Pham clinical signoff."
+            "flag": "BHB salts ≠ creatine salts pattern. Salts deliver a substantial L-βHB fraction in the tested preparation (not established as inactive or universal to all salts) (Stubbs 2017 PMID:29163194). Should create separate ester entry at F=0.95 if products contain BHB esters. Needs Dr Pham clinical signoff."
           },
           {
             "location": "larch_arabinogalactan::larch arabinogalactan powder",
@@ -14695,7 +14695,7 @@
           "by": "Product owner approval",
           "date": "2026-08-08"
         },
-        "notes": "The less common inositol isomer, found naturally in buckwheat and carob. D-chiro-inositol (DCI) is the downstream metabolite your body converts from myo-inositol via an epimerase enzyme. It directly enhances insulin-stimulated glycogen synthesis in muscle tissue. Used at 50–600 mg/day for insulin resistance and PCOS, typically combined with myo-inositol in a 40:1 ratio. Higher score reflects stronger insulin-sensitizing action per milligram. Evidence update 2026-04-25 (Batch 22): Mixed-cluster audit — 7 PMIDs WebFetch-verified. FOUR major findings: (1) Prebiotics inulin + larch AG CATEGORY ERROR (3rd confirmation after manuka Batch 18 + organ extracts Batch 20) — Holscher 2017 (PMID:28165863) explicit on non-digestibility. (2) BHB salts ≠ creatine salts pattern: Stubbs 2017 (PMID:29163194) shows salts deliver ~50% inactive L-βHB enantiomer, ester delivers pure D-βHB. (3) BCAA peptides confirm Silk pattern (Batch 20): kinetic faster but extent same ~90%. (4) D-chiro-inositol = myo-inositol class-equivalent (Lepore 2021 PMID:34202683). 5 ghost references caught: Stubbs PMID:28261556 (actually Korean diet paper), DPA PMID:29618497 (SCFA letter), \"Crittenden 2007 inulin\" NOT FOUND, \"Larrosa 2010 inulin\" NOT FOUND, TUDCA human oral F NOT FOUND.",
+        "notes": "The less common inositol isomer, found naturally in buckwheat and carob. D-chiro-inositol (DCI) is the downstream metabolite your body converts from myo-inositol via an epimerase enzyme. It directly enhances insulin-stimulated glycogen synthesis in muscle tissue. Used at 50–600 mg/day for insulin resistance and PCOS, typically combined with myo-inositol in a 40:1 ratio. Higher score reflects stronger insulin-sensitizing action per milligram. Evidence update 2026-04-25 (Batch 22): Mixed-cluster audit — 7 PMIDs WebFetch-verified. FOUR major findings: (1) Prebiotics inulin + larch AG CATEGORY ERROR (3rd confirmation after manuka Batch 18 + organ extracts Batch 20) — Holscher 2017 (PMID:28165863) explicit on non-digestibility. (2) BHB salts ≠ creatine salts pattern: Stubbs 2017 (PMID:29163194) tested ketone salts containing a substantial L-βHB fraction and a D-βHB ester; this is preparation-specific ketone metabolism context, not proof that L-βHB is inactive or that all ketone salts are equivalent. (3) BCAA peptides confirm Silk pattern (Batch 20): kinetic faster but extent same ~90%. (4) D-chiro-inositol = myo-inositol class-equivalent (Lepore 2021 PMID:34202683). 5 ghost references caught: Stubbs PMID:28261556 (actually Korean diet paper), DPA PMID:29618497 (SCFA letter), \"Crittenden 2007 inulin\" NOT FOUND, \"Larrosa 2010 inulin\" NOT FOUND, TUDCA human oral F NOT FOUND.",
         "aliases": [
           "DCI",
           "chiro-inositol",
@@ -26564,7 +26564,7 @@
           "by": "Product owner approval",
           "date": "2026-08-08"
         },
-        "notes": "Red wine polyphenol extract (60-80% proanthocyanidins, <1% resveratrol). Free trans-resveratrol F <1% — absorption is ~70% but rapid sulfation/glucuronidation (PMID:15333514, Walle 2004). At 500mg: free resveratrol Cmax only 71 ng/mL while metabolites are 20-60x higher (PMID:26889234). Proanthocyanidin absorption same limitations as grape seed — only monomers absorbed.",
+        "notes": "Red-wine polyphenol extracts are mixtures whose composition and absorption require preparation-specific evidence. PMID 15333514 describes trans-resveratrol metabolism, and PMID 26889234 tested a single 500 mg trans-resveratrol tablet in 15 healthy fasting volunteers. The latter reported free-resveratrol Cmax of 71.2 ng/mL; conjugated-metabolite exposure is a different endpoint. These are component-specific background, not measurements of whole red-wine extract or proanthocyanidin absorption, and do not establish a commercial extract match or clinical benefit.",
         "aliases": [
           "wine extract standardized",
           "red wine antioxidants",
@@ -34231,7 +34231,7 @@
           "by": "Product owner approval",
           "date": "2026-08-08"
         },
-        "notes": "Steroidal sapogenin used industrially as precursor for progesterone synthesis, but human body cannot convert diosgenin to hormones in vivo (no CYP side-chain cleavage). Rat PK: ~9% oral F (PMID 33995027). Fenugreek diosgenin 500 mg/day showed modest testosterone support in resistance-trained men (PMID 21116018). Low bio_score reflects poor absorption and lack of direct hormonal conversion.",
+        "notes": "Steroidal sapogenin used industrially as precursor for progesterone synthesis, but human body cannot convert diosgenin to hormones in vivo (no CYP side-chain cleavage). Rat PK: ~9% oral F (PMID 33995027). PMID 21116018 tested 500 mg/day of Trigonella foenum-graecum standardized for Grecunin from Indus Biotech for eight weeks in resistance-trained men, not 500 mg isolated diosgenin. Its results do not establish a diosgenin component dose, generic fenugreek equivalence or an isolated-diosgenin efficacy benchmark. Low bio_score reflects poor absorption and lack of direct hormonal conversion.",
         "aliases": [
           "diosgenin",
           "diosgenin saponin",
@@ -41030,7 +41030,7 @@
           "by": "Product owner approval",
           "date": "2026-08-08"
         },
-        "notes": "Essential amino acid required for protein synthesis and methylation processes. Important for liver health, detoxification, and S-adenosylmethionine (SAMe) production. Evidence update 2026-04-25 (Batch 22): Mixed-cluster audit — 7 PMIDs WebFetch-verified. FOUR major findings: (1) Prebiotics inulin + larch AG CATEGORY ERROR (3rd confirmation after manuka Batch 18 + organ extracts Batch 20) — Holscher 2017 (PMID:28165863) explicit on non-digestibility. (2) BHB salts ≠ creatine salts pattern: Stubbs 2017 (PMID:29163194) shows salts deliver ~50% inactive L-βHB enantiomer, ester delivers pure D-βHB. (3) BCAA peptides confirm Silk pattern (Batch 20): kinetic faster but extent same ~90%. (4) D-chiro-inositol = myo-inositol class-equivalent (Lepore 2021 PMID:34202683). 5 ghost references caught: Stubbs PMID:28261556 (actually Korean diet paper), DPA PMID:29618497 (SCFA letter), \"Crittenden 2007 inulin\" NOT FOUND, \"Larrosa 2010 inulin\" NOT FOUND, TUDCA human oral F NOT FOUND.",
+        "notes": "Essential amino acid required for protein synthesis and methylation processes. Important for liver health, detoxification, and S-adenosylmethionine (SAMe) production. Evidence update 2026-04-25 (Batch 22): Mixed-cluster audit — 7 PMIDs WebFetch-verified. FOUR major findings: (1) Prebiotics inulin + larch AG CATEGORY ERROR (3rd confirmation after manuka Batch 18 + organ extracts Batch 20) — Holscher 2017 (PMID:28165863) explicit on non-digestibility. (2) BHB salts ≠ creatine salts pattern: Stubbs 2017 (PMID:29163194) shows salts deliver a substantial L-βHB fraction in the tested preparation (not established as inactive or universal to all salts), ester delivers pure D-βHB. (3) BCAA peptides confirm Silk pattern (Batch 20): kinetic faster but extent same ~90%. (4) D-chiro-inositol = myo-inositol class-equivalent (Lepore 2021 PMID:34202683). 5 ghost references caught: Stubbs PMID:28261556 (actually Korean diet paper), DPA PMID:29618497 (SCFA letter), \"Crittenden 2007 inulin\" NOT FOUND, \"Larrosa 2010 inulin\" NOT FOUND, TUDCA human oral F NOT FOUND.",
         "aliases": [
           "methionine",
           "methionine amino acid",
@@ -45384,7 +45384,7 @@
           "by": "Product owner approval",
           "date": "2026-08-08"
         },
-        "notes": "Supplemental fluoride (typically as sodium fluoride). Supports dental enamel mineralization and reduces dental caries. Present in fluoridated water at ~0.7 ppm. Supplementation primarily for children in non-fluoridated water areas. Narrow therapeutic window — excess causes fluorosis. Evidence update 2026-04-25 (Batch 22): Mixed-cluster audit — 7 PMIDs WebFetch-verified. FOUR major findings: (1) Prebiotics inulin + larch AG CATEGORY ERROR (3rd confirmation after manuka Batch 18 + organ extracts Batch 20) — Holscher 2017 (PMID:28165863) explicit on non-digestibility. (2) BHB salts ≠ creatine salts pattern: Stubbs 2017 (PMID:29163194) shows salts deliver ~50% inactive L-βHB enantiomer, ester delivers pure D-βHB. (3) BCAA peptides confirm Silk pattern (Batch 20): kinetic faster but extent same ~90%. (4) D-chiro-inositol = myo-inositol class-equivalent (Lepore 2021 PMID:34202683). 5 ghost references caught: Stubbs PMID:28261556 (actually Korean diet paper), DPA PMID:29618497 (SCFA letter), \"Crittenden 2007 inulin\" NOT FOUND, \"Larrosa 2010 inulin\" NOT FOUND, TUDCA human oral F NOT FOUND.",
+        "notes": "Supplemental fluoride (typically as sodium fluoride). Supports dental enamel mineralization and reduces dental caries. Present in fluoridated water at ~0.7 ppm. Supplementation primarily for children in non-fluoridated water areas. Narrow therapeutic window — excess causes fluorosis. Evidence update 2026-04-25 (Batch 22): Mixed-cluster audit — 7 PMIDs WebFetch-verified. FOUR major findings: (1) Prebiotics inulin + larch AG CATEGORY ERROR (3rd confirmation after manuka Batch 18 + organ extracts Batch 20) — Holscher 2017 (PMID:28165863) explicit on non-digestibility. (2) BHB salts ≠ creatine salts pattern: Stubbs 2017 (PMID:29163194) shows salts deliver a substantial L-βHB fraction in the tested preparation (not established as inactive or universal to all salts), ester delivers pure D-βHB. (3) BCAA peptides confirm Silk pattern (Batch 20): kinetic faster but extent same ~90%. (4) D-chiro-inositol = myo-inositol class-equivalent (Lepore 2021 PMID:34202683). 5 ghost references caught: Stubbs PMID:28261556 (actually Korean diet paper), DPA PMID:29618497 (SCFA letter), \"Crittenden 2007 inulin\" NOT FOUND, \"Larrosa 2010 inulin\" NOT FOUND, TUDCA human oral F NOT FOUND.",
         "aliases": [
           "fluoride",
           "sodium fluoride",
@@ -45714,7 +45714,7 @@
           "by": "Product owner approval",
           "date": "2026-08-08"
         },
-        "notes": "Generic BCAA supplement (leucine, isoleucine, valine). Ratio and form unspecified. BCAAs are rapidly absorbed (~90-95% oral F) via active amino acid transport. Support muscle protein synthesis, exercise recovery, and fatigue reduction. Scored one below the lowest disclosed BCAA form (IQM unknown-form rule). Evidence update 2026-04-25 (Batch 22): Mixed-cluster audit — 7 PMIDs WebFetch-verified. FOUR major findings: (1) Prebiotics inulin + larch AG CATEGORY ERROR (3rd confirmation after manuka Batch 18 + organ extracts Batch 20) — Holscher 2017 (PMID:28165863) explicit on non-digestibility. (2) BHB salts ≠ creatine salts pattern: Stubbs 2017 (PMID:29163194) shows salts deliver ~50% inactive L-βHB enantiomer, ester delivers pure D-βHB. (3) BCAA peptides confirm Silk pattern (Batch 20): kinetic faster but extent same ~90%. (4) D-chiro-inositol = myo-inositol class-equivalent (Lepore 2021 PMID:34202683). 5 ghost references caught: Stubbs PMID:28261556 (actually Korean diet paper), DPA PMID:29618497 (SCFA letter), \"Crittenden 2007 inulin\" NOT FOUND, \"Larrosa 2010 inulin\" NOT FOUND, TUDCA human oral F NOT FOUND.",
+        "notes": "Generic BCAA supplement (leucine, isoleucine, valine). Ratio and form unspecified. BCAAs are rapidly absorbed (~90-95% oral F) via active amino acid transport. Support muscle protein synthesis, exercise recovery, and fatigue reduction. Scored one below the lowest disclosed BCAA form (IQM unknown-form rule). Evidence update 2026-04-25 (Batch 22): Mixed-cluster audit — 7 PMIDs WebFetch-verified. FOUR major findings: (1) Prebiotics inulin + larch AG CATEGORY ERROR (3rd confirmation after manuka Batch 18 + organ extracts Batch 20) — Holscher 2017 (PMID:28165863) explicit on non-digestibility. (2) BHB salts ≠ creatine salts pattern: Stubbs 2017 (PMID:29163194) shows salts deliver a substantial L-βHB fraction in the tested preparation (not established as inactive or universal to all salts), ester delivers pure D-βHB. (3) BCAA peptides confirm Silk pattern (Batch 20): kinetic faster but extent same ~90%. (4) D-chiro-inositol = myo-inositol class-equivalent (Lepore 2021 PMID:34202683). 5 ghost references caught: Stubbs PMID:28261556 (actually Korean diet paper), DPA PMID:29618497 (SCFA letter), \"Crittenden 2007 inulin\" NOT FOUND, \"Larrosa 2010 inulin\" NOT FOUND, TUDCA human oral F NOT FOUND.",
         "aliases": [
           "Branch Chain Amino Acids",
           "Branched Chain Amino Acids",
@@ -45822,7 +45822,7 @@
           "by": "Product owner approval",
           "date": "2026-08-08"
         },
-        "notes": "Docosapentaenoic acid (DPA, 22:5 n-3) — an intermediate omega-3 between EPA and DHA. Found naturally in seal oil and human breast milk. Emerging evidence for anti-inflammatory, antithrombotic, and endothelial protection distinct from EPA/DHA. Limited supplemental form availability. Evidence update 2026-04-25 (Batch 22): Mixed-cluster audit — 7 PMIDs WebFetch-verified. FOUR major findings: (1) Prebiotics inulin + larch AG CATEGORY ERROR (3rd confirmation after manuka Batch 18 + organ extracts Batch 20) — Holscher 2017 (PMID:28165863) explicit on non-digestibility. (2) BHB salts ≠ creatine salts pattern: Stubbs 2017 (PMID:29163194) shows salts deliver ~50% inactive L-βHB enantiomer, ester delivers pure D-βHB. (3) BCAA peptides confirm Silk pattern (Batch 20): kinetic faster but extent same ~90%. (4) D-chiro-inositol = myo-inositol class-equivalent (Lepore 2021 PMID:34202683). 5 ghost references caught: Stubbs PMID:28261556 (actually Korean diet paper), DPA PMID:29618497 (SCFA letter), \"Crittenden 2007 inulin\" NOT FOUND, \"Larrosa 2010 inulin\" NOT FOUND, TUDCA human oral F NOT FOUND.",
+        "notes": "Docosapentaenoic acid (DPA, 22:5 n-3) — an intermediate omega-3 between EPA and DHA. Found naturally in seal oil and human breast milk. Emerging evidence for anti-inflammatory, antithrombotic, and endothelial protection distinct from EPA/DHA. Limited supplemental form availability. Evidence update 2026-04-25 (Batch 22): Mixed-cluster audit — 7 PMIDs WebFetch-verified. FOUR major findings: (1) Prebiotics inulin + larch AG CATEGORY ERROR (3rd confirmation after manuka Batch 18 + organ extracts Batch 20) — Holscher 2017 (PMID:28165863) explicit on non-digestibility. (2) BHB salts ≠ creatine salts pattern: Stubbs 2017 (PMID:29163194) shows salts deliver a substantial L-βHB fraction in the tested preparation (not established as inactive or universal to all salts), ester delivers pure D-βHB. (3) BCAA peptides confirm Silk pattern (Batch 20): kinetic faster but extent same ~90%. (4) D-chiro-inositol = myo-inositol class-equivalent (Lepore 2021 PMID:34202683). 5 ghost references caught: Stubbs PMID:28261556 (actually Korean diet paper), DPA PMID:29618497 (SCFA letter), \"Crittenden 2007 inulin\" NOT FOUND, \"Larrosa 2010 inulin\" NOT FOUND, TUDCA human oral F NOT FOUND.",
         "aliases": [
           "Docosapentaenoic Acid",
           "DPA"
@@ -46175,7 +46175,7 @@
           "by": "Product owner approval",
           "date": "2026-08-08"
         },
-        "notes": "Tauroursodeoxycholic acid — a water-soluble bile acid conjugate. Cytoprotective via unfolded protein response modulation and anti-apoptotic pathways. Clinical evidence for liver protection (cholestasis), neuroprotection, and endoplasmic reticulum stress reduction. 250-1000 mg/day. Well-absorbed orally. Evidence update 2026-04-25 (Batch 22): Mixed-cluster audit — 7 PMIDs WebFetch-verified. FOUR major findings: (1) Prebiotics inulin + larch AG CATEGORY ERROR (3rd confirmation after manuka Batch 18 + organ extracts Batch 20) — Holscher 2017 (PMID:28165863) explicit on non-digestibility. (2) BHB salts ≠ creatine salts pattern: Stubbs 2017 (PMID:29163194) shows salts deliver ~50% inactive L-βHB enantiomer, ester delivers pure D-βHB. (3) BCAA peptides confirm Silk pattern (Batch 20): kinetic faster but extent same ~90%. (4) D-chiro-inositol = myo-inositol class-equivalent (Lepore 2021 PMID:34202683). 5 ghost references caught: Stubbs PMID:28261556 (actually Korean diet paper), DPA PMID:29618497 (SCFA letter), \"Crittenden 2007 inulin\" NOT FOUND, \"Larrosa 2010 inulin\" NOT FOUND, TUDCA human oral F NOT FOUND.",
+        "notes": "Tauroursodeoxycholic acid — a water-soluble bile acid conjugate. Cytoprotective via unfolded protein response modulation and anti-apoptotic pathways. Clinical evidence for liver protection (cholestasis), neuroprotection, and endoplasmic reticulum stress reduction. 250-1000 mg/day. Well-absorbed orally. Evidence update 2026-04-25 (Batch 22): Mixed-cluster audit — 7 PMIDs WebFetch-verified. FOUR major findings: (1) Prebiotics inulin + larch AG CATEGORY ERROR (3rd confirmation after manuka Batch 18 + organ extracts Batch 20) — Holscher 2017 (PMID:28165863) explicit on non-digestibility. (2) BHB salts ≠ creatine salts pattern: Stubbs 2017 (PMID:29163194) shows salts deliver a substantial L-βHB fraction in the tested preparation (not established as inactive or universal to all salts), ester delivers pure D-βHB. (3) BCAA peptides confirm Silk pattern (Batch 20): kinetic faster but extent same ~90%. (4) D-chiro-inositol = myo-inositol class-equivalent (Lepore 2021 PMID:34202683). 5 ghost references caught: Stubbs PMID:28261556 (actually Korean diet paper), DPA PMID:29618497 (SCFA letter), \"Crittenden 2007 inulin\" NOT FOUND, \"Larrosa 2010 inulin\" NOT FOUND, TUDCA human oral F NOT FOUND.",
         "aliases": [
           "TUDCA",
           "Tauroursodeoxycholic Acid"
@@ -46696,7 +46696,7 @@
           "by": "Product owner approval",
           "date": "2026-08-08"
         },
-        "notes": "Cold-pressed oil from Hippophae rhamnoides seeds. Rich in ALA (omega-3), linoleic acid (omega-6), and vitamin E. Unlike berry oil, seed oil does NOT contain palmitoleic acid (omega-7). Supports skin health, mucosal integrity, and cardiovascular function. Sibu and SeabuckWonders are leading brands. Evidence update 2026-04-25 (Batch 19): Fenugreek/SB/hemp/bioflavonoid audit — 10 PMIDs WebFetch-verified. CLASS FINDINGS: (1) Fenugreek saponin F is class-poor (~1-5%); testofen bio=14 was Crominex-pattern (clinical, not PK). (2) Sea buckthorn berry oil palmitoleic content does NOT translate to plasma palmitoleic delivery — Johansson 2000 (PMID:11120446) explicitly shows plasma FA UNCHANGED at 5g/4wk. (3) Bioflavonoids class-poor F: hesperidin 4-8% urinary (Manach 2003 PMID:12571654), rutin systemic 1-5% (Hollman 1995 PMID:7491892). (4) Hemp organic ≡ cold-pressed (same TG chemistry); refined retains TG/F structure. EMIQ exists as separately-absorbed bioflavonoid form (SGLT1-mediated) — should be added as separate parent if not already.",
+        "notes": "Cold-pressed oil from Hippophae rhamnoides seeds. Rich in ALA (omega-3), linoleic acid (omega-6), and vitamin E. Unlike berry oil, seed oil does NOT contain palmitoleic acid (omega-7). Supports skin health, mucosal integrity, and cardiovascular function. Sibu and SeabuckWonders are leading brands. Evidence update 2026-04-25 (Batch 19): Fenugreek/SB/hemp/bioflavonoid audit — 10 PMIDs WebFetch-verified. CLASS FINDINGS: (1) Fenugreek saponin F is class-poor (~1-5%); testofen bio=14 was Crominex-pattern (clinical, not PK). (2) Sea buckthorn berry oil palmitoleic content does NOT translate to plasma palmitoleic delivery — Johansson 2000 (PMID:11120446) explicitly shows plasma FA UNCHANGED at 5g/4wk. (3) Bioflavonoids class-poor F: hesperidin 4-8% urinary (Manach 2003 PMID:12571654), rutin intestinal disappearance 17 +/- 15% in nine ileostomy volunteers (Hollman 1995 PMID:7491892), not intact systemic bioavailability. (4) Hemp organic ≡ cold-pressed (same TG chemistry); refined retains TG/F structure. EMIQ exists as separately-absorbed bioflavonoid form (SGLT1-mediated) — should be added as separate parent if not already.",
         "aliases": [
           "sea buckthorn oil",
           "hippophae oil",
@@ -46726,7 +46726,7 @@
           "by": "Product owner approval",
           "date": "2026-08-08"
         },
-        "notes": "Oil from sea buckthorn fruit pulp/peel. Uniquely rich in palmitoleic acid (omega-7, 30-40%) and carotenoids (giving orange color). Supports mucosal membranes (vaginal dryness, dry eye), skin health, and cardiovascular function. Different fatty acid profile from seed oil. Evidence update 2026-04-25 (Batch 19): Fenugreek/SB/hemp/bioflavonoid audit — 10 PMIDs WebFetch-verified. CLASS FINDINGS: (1) Fenugreek saponin F is class-poor (~1-5%); testofen bio=14 was Crominex-pattern (clinical, not PK). (2) Sea buckthorn berry oil palmitoleic content does NOT translate to plasma palmitoleic delivery — Johansson 2000 (PMID:11120446) explicitly shows plasma FA UNCHANGED at 5g/4wk. (3) Bioflavonoids class-poor F: hesperidin 4-8% urinary (Manach 2003 PMID:12571654), rutin systemic 1-5% (Hollman 1995 PMID:7491892). (4) Hemp organic ≡ cold-pressed (same TG chemistry); refined retains TG/F structure. EMIQ exists as separately-absorbed bioflavonoid form (SGLT1-mediated) — should be added as separate parent if not already.",
+        "notes": "Oil from sea buckthorn fruit pulp/peel. Uniquely rich in palmitoleic acid (omega-7, 30-40%) and carotenoids (giving orange color). Supports mucosal membranes (vaginal dryness, dry eye), skin health, and cardiovascular function. Different fatty acid profile from seed oil. Evidence update 2026-04-25 (Batch 19): Fenugreek/SB/hemp/bioflavonoid audit — 10 PMIDs WebFetch-verified. CLASS FINDINGS: (1) Fenugreek saponin F is class-poor (~1-5%); testofen bio=14 was Crominex-pattern (clinical, not PK). (2) Sea buckthorn berry oil palmitoleic content does NOT translate to plasma palmitoleic delivery — Johansson 2000 (PMID:11120446) explicitly shows plasma FA UNCHANGED at 5g/4wk. (3) Bioflavonoids class-poor F: hesperidin 4-8% urinary (Manach 2003 PMID:12571654), rutin intestinal disappearance 17 +/- 15% in nine ileostomy volunteers (Hollman 1995 PMID:7491892), not intact systemic bioavailability. (4) Hemp organic ≡ cold-pressed (same TG chemistry); refined retains TG/F structure. EMIQ exists as separately-absorbed bioflavonoid form (SGLT1-mediated) — should be added as separate parent if not already.",
         "aliases": [
           "sea buckthorn fruit oil",
           "seaberry oil"
@@ -46747,7 +46747,7 @@
           "by": "Product owner approval",
           "date": "2026-08-08"
         },
-        "notes": "Concentrated extract from sea buckthorn berries. Contains flavonoids (isorhamnetin, quercetin), carotenoids, and vitamin C. Antioxidant and anti-inflammatory. Less studied than the oil forms but provides polyphenol benefits not present in pure oil. Evidence update 2026-04-25 (Batch 19): Fenugreek/SB/hemp/bioflavonoid audit — 10 PMIDs WebFetch-verified. CLASS FINDINGS: (1) Fenugreek saponin F is class-poor (~1-5%); testofen bio=14 was Crominex-pattern (clinical, not PK). (2) Sea buckthorn berry oil palmitoleic content does NOT translate to plasma palmitoleic delivery — Johansson 2000 (PMID:11120446) explicitly shows plasma FA UNCHANGED at 5g/4wk. (3) Bioflavonoids class-poor F: hesperidin 4-8% urinary (Manach 2003 PMID:12571654), rutin systemic 1-5% (Hollman 1995 PMID:7491892). (4) Hemp organic ≡ cold-pressed (same TG chemistry); refined retains TG/F structure. EMIQ exists as separately-absorbed bioflavonoid form (SGLT1-mediated) — should be added as separate parent if not already.",
+        "notes": "Concentrated extract from sea buckthorn berries. Contains flavonoids (isorhamnetin, quercetin), carotenoids, and vitamin C. Antioxidant and anti-inflammatory. Less studied than the oil forms but provides polyphenol benefits not present in pure oil. Evidence update 2026-04-25 (Batch 19): Fenugreek/SB/hemp/bioflavonoid audit — 10 PMIDs WebFetch-verified. CLASS FINDINGS: (1) Fenugreek saponin F is class-poor (~1-5%); testofen bio=14 was Crominex-pattern (clinical, not PK). (2) Sea buckthorn berry oil palmitoleic content does NOT translate to plasma palmitoleic delivery — Johansson 2000 (PMID:11120446) explicitly shows plasma FA UNCHANGED at 5g/4wk. (3) Bioflavonoids class-poor F: hesperidin 4-8% urinary (Manach 2003 PMID:12571654), rutin intestinal disappearance 17 +/- 15% in nine ileostomy volunteers (Hollman 1995 PMID:7491892), not intact systemic bioavailability. (4) Hemp organic ≡ cold-pressed (same TG chemistry); refined retains TG/F structure. EMIQ exists as separately-absorbed bioflavonoid form (SGLT1-mediated) — should be added as separate parent if not already.",
         "aliases": [
           "seaberry extract",
           "hippophae rhamnoides extract"
@@ -46768,7 +46768,7 @@
           "by": "Product owner approval",
           "date": "2026-08-08"
         },
-        "notes": "Dried sea buckthorn berry/leaf powder. Contains fiber, vitamin C, and polyphenols but lower concentration of fatty acids than oil forms. Provides broader nutrient profile including minerals. Used in smoothies and traditional preparations. Evidence update 2026-04-25 (Batch 19): Fenugreek/SB/hemp/bioflavonoid audit — 10 PMIDs WebFetch-verified. CLASS FINDINGS: (1) Fenugreek saponin F is class-poor (~1-5%); testofen bio=14 was Crominex-pattern (clinical, not PK). (2) Sea buckthorn berry oil palmitoleic content does NOT translate to plasma palmitoleic delivery — Johansson 2000 (PMID:11120446) explicitly shows plasma FA UNCHANGED at 5g/4wk. (3) Bioflavonoids class-poor F: hesperidin 4-8% urinary (Manach 2003 PMID:12571654), rutin systemic 1-5% (Hollman 1995 PMID:7491892). (4) Hemp organic ≡ cold-pressed (same TG chemistry); refined retains TG/F structure. EMIQ exists as separately-absorbed bioflavonoid form (SGLT1-mediated) — should be added as separate parent if not already.",
+        "notes": "Dried sea buckthorn berry/leaf powder. Contains fiber, vitamin C, and polyphenols but lower concentration of fatty acids than oil forms. Provides broader nutrient profile including minerals. Used in smoothies and traditional preparations. Evidence update 2026-04-25 (Batch 19): Fenugreek/SB/hemp/bioflavonoid audit — 10 PMIDs WebFetch-verified. CLASS FINDINGS: (1) Fenugreek saponin F is class-poor (~1-5%); testofen bio=14 was Crominex-pattern (clinical, not PK). (2) Sea buckthorn berry oil palmitoleic content does NOT translate to plasma palmitoleic delivery — Johansson 2000 (PMID:11120446) explicitly shows plasma FA UNCHANGED at 5g/4wk. (3) Bioflavonoids class-poor F: hesperidin 4-8% urinary (Manach 2003 PMID:12571654), rutin intestinal disappearance 17 +/- 15% in nine ileostomy volunteers (Hollman 1995 PMID:7491892), not intact systemic bioavailability. (4) Hemp organic ≡ cold-pressed (same TG chemistry); refined retains TG/F structure. EMIQ exists as separately-absorbed bioflavonoid form (SGLT1-mediated) — should be added as separate parent if not already.",
         "aliases": [
           "seaberry powder",
           "sea buckthorn berry powder",
@@ -46790,7 +46790,7 @@
           "by": "Product owner approval",
           "date": "2026-08-08"
         },
-        "notes": "Hippophae rhamnoides berry/seed oil; rich in palmitoleic acid (omega-7), flavonoids, and vitamins C/E. Traditional Tibetan/Ayurvedic medicine. Form unspecified. Evidence update 2026-04-25 (Batch 19): Fenugreek/SB/hemp/bioflavonoid audit — 10 PMIDs WebFetch-verified. CLASS FINDINGS: (1) Fenugreek saponin F is class-poor (~1-5%); testofen bio=14 was Crominex-pattern (clinical, not PK). (2) Sea buckthorn berry oil palmitoleic content does NOT translate to plasma palmitoleic delivery — Johansson 2000 (PMID:11120446) explicitly shows plasma FA UNCHANGED at 5g/4wk. (3) Bioflavonoids class-poor F: hesperidin 4-8% urinary (Manach 2003 PMID:12571654), rutin systemic 1-5% (Hollman 1995 PMID:7491892). (4) Hemp organic ≡ cold-pressed (same TG chemistry); refined retains TG/F structure. EMIQ exists as separately-absorbed bioflavonoid form (SGLT1-mediated) — should be added as separate parent if not already.",
+        "notes": "Hippophae rhamnoides berry/seed oil; rich in palmitoleic acid (omega-7), flavonoids, and vitamins C/E. Traditional Tibetan/Ayurvedic medicine. Form unspecified. Evidence update 2026-04-25 (Batch 19): Fenugreek/SB/hemp/bioflavonoid audit — 10 PMIDs WebFetch-verified. CLASS FINDINGS: (1) Fenugreek saponin F is class-poor (~1-5%); testofen bio=14 was Crominex-pattern (clinical, not PK). (2) Sea buckthorn berry oil palmitoleic content does NOT translate to plasma palmitoleic delivery — Johansson 2000 (PMID:11120446) explicitly shows plasma FA UNCHANGED at 5g/4wk. (3) Bioflavonoids class-poor F: hesperidin 4-8% urinary (Manach 2003 PMID:12571654), rutin intestinal disappearance 17 +/- 15% in nine ileostomy volunteers (Hollman 1995 PMID:7491892), not intact systemic bioavailability. (4) Hemp organic ≡ cold-pressed (same TG chemistry); refined retains TG/F structure. EMIQ exists as separately-absorbed bioflavonoid form (SGLT1-mediated) — should be added as separate parent if not already.",
         "aliases": [
           "sea buckthorn",
           "seaberry",
@@ -47017,7 +47017,7 @@
           "by": "Product owner approval",
           "date": "2026-08-08"
         },
-        "notes": "Patented fenugreek extract (Gencor) standardized to 50% Fenuside (furostanol saponins). Multiple RCTs show testosterone support, libido improvement, and body composition benefits in men at 600 mg/day. FDA GRAS. The most clinically studied fenugreek extract for male health. Evidence update 2026-04-25 (Batch 19): Fenugreek/SB/hemp/bioflavonoid audit — 10 PMIDs WebFetch-verified. CLASS FINDINGS: (1) Fenugreek saponin F is class-poor (~1-5%); testofen bio=14 was Crominex-pattern (clinical, not PK). (2) Sea buckthorn berry oil palmitoleic content does NOT translate to plasma palmitoleic delivery — Johansson 2000 (PMID:11120446) explicitly shows plasma FA UNCHANGED at 5g/4wk. (3) Bioflavonoids class-poor F: hesperidin 4-8% urinary (Manach 2003 PMID:12571654), rutin systemic 1-5% (Hollman 1995 PMID:7491892). (4) Hemp organic ≡ cold-pressed (same TG chemistry); refined retains TG/F structure. EMIQ exists as separately-absorbed bioflavonoid form (SGLT1-mediated) — should be added as separate parent if not already. Dr Pham C3 sign-off: bio_score 14 → 7. Crominex pattern.",
+        "notes": "Patented fenugreek extract (Gencor) standardized to 50% Fenuside (furostanol saponins). Multiple RCTs show testosterone support, libido improvement, and body composition benefits in men at 600 mg/day. FDA GRAS. The most clinically studied fenugreek extract for male health. Evidence update 2026-04-25 (Batch 19): Fenugreek/SB/hemp/bioflavonoid audit — 10 PMIDs WebFetch-verified. CLASS FINDINGS: (1) Fenugreek saponin F is class-poor (~1-5%); testofen bio=14 was Crominex-pattern (clinical, not PK). (2) Sea buckthorn berry oil palmitoleic content does NOT translate to plasma palmitoleic delivery — Johansson 2000 (PMID:11120446) explicitly shows plasma FA UNCHANGED at 5g/4wk. (3) Bioflavonoids class-poor F: hesperidin 4-8% urinary (Manach 2003 PMID:12571654), rutin intestinal disappearance 17 +/- 15% in nine ileostomy volunteers (Hollman 1995 PMID:7491892), not intact systemic bioavailability. (4) Hemp organic ≡ cold-pressed (same TG chemistry); refined retains TG/F structure. EMIQ exists as separately-absorbed bioflavonoid form (SGLT1-mediated) — should be added as separate parent if not already. Dr Pham C3 sign-off: bio_score 14 → 7. Crominex pattern.",
         "aliases": [
           "testofen fenugreek",
           "fenuside 50%",
@@ -47041,7 +47041,7 @@
           "by": "Product owner approval",
           "date": "2026-08-08"
         },
-        "notes": "Fenugreek (Trigonella foenum-graecum) seed extract standardized to saponins or 4-hydroxyisoleucine. Clinical evidence for glycemic control (insulin sensitization), lactation support, and testosterone modulation. 500-1000 mg/day typical dose. Multiple branded extracts (Testofen, Fenulife). Evidence update 2026-04-25 (Batch 19): Fenugreek/SB/hemp/bioflavonoid audit — 10 PMIDs WebFetch-verified. CLASS FINDINGS: (1) Fenugreek saponin F is class-poor (~1-5%); testofen bio=14 was Crominex-pattern (clinical, not PK). (2) Sea buckthorn berry oil palmitoleic content does NOT translate to plasma palmitoleic delivery — Johansson 2000 (PMID:11120446) explicitly shows plasma FA UNCHANGED at 5g/4wk. (3) Bioflavonoids class-poor F: hesperidin 4-8% urinary (Manach 2003 PMID:12571654), rutin systemic 1-5% (Hollman 1995 PMID:7491892). (4) Hemp organic ≡ cold-pressed (same TG chemistry); refined retains TG/F structure. EMIQ exists as separately-absorbed bioflavonoid form (SGLT1-mediated) — should be added as separate parent if not already.",
+        "notes": "Fenugreek (Trigonella foenum-graecum) seed extract standardized to saponins or 4-hydroxyisoleucine. Clinical evidence for glycemic control (insulin sensitization), lactation support, and testosterone modulation. 500-1000 mg/day typical dose. Multiple branded extracts (Testofen, Fenulife). Evidence update 2026-04-25 (Batch 19): Fenugreek/SB/hemp/bioflavonoid audit — 10 PMIDs WebFetch-verified. CLASS FINDINGS: (1) Fenugreek saponin F is class-poor (~1-5%); testofen bio=14 was Crominex-pattern (clinical, not PK). (2) Sea buckthorn berry oil palmitoleic content does NOT translate to plasma palmitoleic delivery — Johansson 2000 (PMID:11120446) explicitly shows plasma FA UNCHANGED at 5g/4wk. (3) Bioflavonoids class-poor F: hesperidin 4-8% urinary (Manach 2003 PMID:12571654), rutin intestinal disappearance 17 +/- 15% in nine ileostomy volunteers (Hollman 1995 PMID:7491892), not intact systemic bioavailability. (4) Hemp organic ≡ cold-pressed (same TG chemistry); refined retains TG/F structure. EMIQ exists as separately-absorbed bioflavonoid form (SGLT1-mediated) — should be added as separate parent if not already.",
         "aliases": [
           "fenugreek extract",
           "trigonella foenum-graecum extract",
@@ -47064,7 +47064,7 @@
           "by": "Product owner approval",
           "date": "2026-08-08"
         },
-        "notes": "Ground whole fenugreek seeds. Contains galactomannan fiber, saponins, and 4-hydroxyisoleucine at lower concentrations than extracts. Traditional use as spice and galactagogue. Higher doses needed (2-5 g/day) vs extracts. Fiber content may support glycemic control independently. Evidence update 2026-04-25 (Batch 19): Fenugreek/SB/hemp/bioflavonoid audit — 10 PMIDs WebFetch-verified. CLASS FINDINGS: (1) Fenugreek saponin F is class-poor (~1-5%); testofen bio=14 was Crominex-pattern (clinical, not PK). (2) Sea buckthorn berry oil palmitoleic content does NOT translate to plasma palmitoleic delivery — Johansson 2000 (PMID:11120446) explicitly shows plasma FA UNCHANGED at 5g/4wk. (3) Bioflavonoids class-poor F: hesperidin 4-8% urinary (Manach 2003 PMID:12571654), rutin systemic 1-5% (Hollman 1995 PMID:7491892). (4) Hemp organic ≡ cold-pressed (same TG chemistry); refined retains TG/F structure. EMIQ exists as separately-absorbed bioflavonoid form (SGLT1-mediated) — should be added as separate parent if not already.",
+        "notes": "Ground whole fenugreek seeds. Contains galactomannan fiber, saponins, and 4-hydroxyisoleucine at lower concentrations than extracts. Traditional use as spice and galactagogue. Higher doses needed (2-5 g/day) vs extracts. Fiber content may support glycemic control independently. Evidence update 2026-04-25 (Batch 19): Fenugreek/SB/hemp/bioflavonoid audit — 10 PMIDs WebFetch-verified. CLASS FINDINGS: (1) Fenugreek saponin F is class-poor (~1-5%); testofen bio=14 was Crominex-pattern (clinical, not PK). (2) Sea buckthorn berry oil palmitoleic content does NOT translate to plasma palmitoleic delivery — Johansson 2000 (PMID:11120446) explicitly shows plasma FA UNCHANGED at 5g/4wk. (3) Bioflavonoids class-poor F: hesperidin 4-8% urinary (Manach 2003 PMID:12571654), rutin intestinal disappearance 17 +/- 15% in nine ileostomy volunteers (Hollman 1995 PMID:7491892), not intact systemic bioavailability. (4) Hemp organic ≡ cold-pressed (same TG chemistry); refined retains TG/F structure. EMIQ exists as separately-absorbed bioflavonoid form (SGLT1-mediated) — should be added as separate parent if not already.",
         "aliases": [
           "fenugreek powder",
           "methi powder",
@@ -47086,7 +47086,7 @@
           "by": "Product owner approval",
           "date": "2026-08-08"
         },
-        "notes": "Trigonella foenum-graecum seed containing furostanol saponins (protodioscin), galactomannan fiber, and 4-hydroxyisoleucine. Supports glycemic control and testosterone. Form unspecified. Evidence update 2026-04-25 (Batch 19): Fenugreek/SB/hemp/bioflavonoid audit — 10 PMIDs WebFetch-verified. CLASS FINDINGS: (1) Fenugreek saponin F is class-poor (~1-5%); testofen bio=14 was Crominex-pattern (clinical, not PK). (2) Sea buckthorn berry oil palmitoleic content does NOT translate to plasma palmitoleic delivery — Johansson 2000 (PMID:11120446) explicitly shows plasma FA UNCHANGED at 5g/4wk. (3) Bioflavonoids class-poor F: hesperidin 4-8% urinary (Manach 2003 PMID:12571654), rutin systemic 1-5% (Hollman 1995 PMID:7491892). (4) Hemp organic ≡ cold-pressed (same TG chemistry); refined retains TG/F structure. EMIQ exists as separately-absorbed bioflavonoid form (SGLT1-mediated) — should be added as separate parent if not already.",
+        "notes": "Trigonella foenum-graecum seed containing furostanol saponins (protodioscin), galactomannan fiber, and 4-hydroxyisoleucine. Supports glycemic control and testosterone. Form unspecified. Evidence update 2026-04-25 (Batch 19): Fenugreek/SB/hemp/bioflavonoid audit — 10 PMIDs WebFetch-verified. CLASS FINDINGS: (1) Fenugreek saponin F is class-poor (~1-5%); testofen bio=14 was Crominex-pattern (clinical, not PK). (2) Sea buckthorn berry oil palmitoleic content does NOT translate to plasma palmitoleic delivery — Johansson 2000 (PMID:11120446) explicitly shows plasma FA UNCHANGED at 5g/4wk. (3) Bioflavonoids class-poor F: hesperidin 4-8% urinary (Manach 2003 PMID:12571654), rutin intestinal disappearance 17 +/- 15% in nine ileostomy volunteers (Hollman 1995 PMID:7491892), not intact systemic bioavailability. (4) Hemp organic ≡ cold-pressed (same TG chemistry); refined retains TG/F structure. EMIQ exists as separately-absorbed bioflavonoid form (SGLT1-mediated) — should be added as separate parent if not already.",
         "aliases": [
           "fenugreek",
           "trigonella",
@@ -47111,7 +47111,7 @@
           "by": "Product owner approval",
           "date": "2026-08-08"
         },
-        "notes": "Branded fenugreek extract with enhanced saponins standardization. Clinically studied for testosterone support and male health. Evidence update 2026-04-25 (Batch 19): Fenugreek/SB/hemp/bioflavonoid audit — 10 PMIDs WebFetch-verified. CLASS FINDINGS: (1) Fenugreek saponin F is class-poor (~1-5%); testofen bio=14 was Crominex-pattern (clinical, not PK). (2) Sea buckthorn berry oil palmitoleic content does NOT translate to plasma palmitoleic delivery — Johansson 2000 (PMID:11120446) explicitly shows plasma FA UNCHANGED at 5g/4wk. (3) Bioflavonoids class-poor F: hesperidin 4-8% urinary (Manach 2003 PMID:12571654), rutin systemic 1-5% (Hollman 1995 PMID:7491892). (4) Hemp organic ≡ cold-pressed (same TG chemistry); refined retains TG/F structure. EMIQ exists as separately-absorbed bioflavonoid form (SGLT1-mediated) — should be added as separate parent if not already.",
+        "notes": "Branded fenugreek extract with enhanced saponins standardization. Clinically studied for testosterone support and male health. Evidence update 2026-04-25 (Batch 19): Fenugreek/SB/hemp/bioflavonoid audit — 10 PMIDs WebFetch-verified. CLASS FINDINGS: (1) Fenugreek saponin F is class-poor (~1-5%); testofen bio=14 was Crominex-pattern (clinical, not PK). (2) Sea buckthorn berry oil palmitoleic content does NOT translate to plasma palmitoleic delivery — Johansson 2000 (PMID:11120446) explicitly shows plasma FA UNCHANGED at 5g/4wk. (3) Bioflavonoids class-poor F: hesperidin 4-8% urinary (Manach 2003 PMID:12571654), rutin intestinal disappearance 17 +/- 15% in nine ileostomy volunteers (Hollman 1995 PMID:7491892), not intact systemic bioavailability. (4) Hemp organic ≡ cold-pressed (same TG chemistry); refined retains TG/F structure. EMIQ exists as separately-absorbed bioflavonoid form (SGLT1-mediated) — should be added as separate parent if not already.",
         "aliases": [
           "testosurge",
           "testo surge",
@@ -53473,13 +53473,13 @@
     "forms": {
       "perilla seed oil": {
         "bio_score": 10,
-        "absorption": "good (TG-bound ALA; conversion to EPA/DHA limited)",
+        "absorption": "unknown",
         "consumer_note": "Perilla seed oil is pressed from Perilla frutescens seeds. It is an oil form carrying the seed's fatty-acid components, rather than an isolated fatty-acid ingredient.",
         "consumer_note_review": {
           "by": "Product owner approval",
           "date": "2026-08-08"
         },
-        "notes": "Richest plant source of alpha-linolenic acid (ALA, 54-64%). Cold-pressed from Perilla frutescens seeds. Traditional East Asian botanical. B23 audit 2026-04-25: ALA absorption robust (PMID:12591004) but conversion to EPA/DHA limited (PMID:12323085). Class-equivalent to flaxseed ALA TG framework.",
+        "notes": "Perilla frutescens seed oil contains alpha-linolenic acid (ALA). PMID 12323085 administered isotope-labelled ALA with a mixed meal to six young men; EPA and DPA appeared in circulation, while labelled DHA enrichment was not apparent under the study conditions. This is bounded ALA-metabolism context, not perilla-product bioequivalence, whole-oil absolute absorption, a form grade or proof of absent conversion in every population. The separate PMID 12591004 attribution and authored oil absorption calibration are not validated by this source check.",
         "aliases": [
           "perilla oil",
           "perilla extract",
@@ -53493,10 +53493,10 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": 0.8,
-          "range_low": 0.7,
-          "range_high": 0.85,
-          "quality": "very_good"
+          "value": null,
+          "range_low": null,
+          "range_high": null,
+          "quality": "unknown"
         },
         "source_form_aliases": [
           "perilla frutescens seed extract"
@@ -64753,7 +64753,7 @@
     "category_enum": "herbs",
     "source": "botanical_extract",
     "priority": "medium",
-    "description": "Salvia officinalis (Common Sage). Evidence depends on the specific preparation, route and population. PMID 20377818 studied mixed aromatherapy in elderly dementia patients, not oral sage or Cognivia in healthy adults. PMID 16205659 content remains unresolved; these references do not establish healthy-adult efficacy for this parent or branded form.",
+    "description": "Salvia officinalis (Common Sage). Evidence depends on the specific preparation, route and population. PMID 20377818 studied mixed aromatherapy in elderly dementia patients, not oral sage or Cognivia in healthy adults. PMID 16205659 maps through DOI 10.1038/sj.ijo.0801322 to the Foreword by Van Gaal and Scheen, International Journal of Obesity 24 supplement 1, S1 (2000), associated with the 10th European Congress on Obesity. Publisher and repository metadata identify the source; its full body was not obtained. It supplies no oral sage/Cognivia efficacy credit and no absence-of-trials conclusion.",
     "dosage_importance": 0.1,
     "cui": "C3265310",
     "cui_note": "",
@@ -64767,7 +64767,7 @@
           "by": "Product owner approval",
           "date": "2026-08-08"
         },
-        "notes": "Cognivia is a branded sage preparation. PMID20377818 studies mixed rosemary/lemon/lavender/orange aromatherapy in28 elderly dementia patients, not oral Cognivia in healthy adults. PMID16205659 content was unavailable and remains unresolved; no absence-of-trials conclusion follows.",
+        "notes": "Cognivia is a branded sage preparation. PMID20377818 studies mixed rosemary/lemon/lavender/orange aromatherapy in28 elderly dementia patients, not oral Cognivia in healthy adults. PMID 16205659 maps through DOI 10.1038/sj.ijo.0801322 to the Foreword by Van Gaal and Scheen, International Journal of Obesity 24 supplement 1, S1 (2000), associated with the 10th European Congress on Obesity. Publisher and repository metadata identify the source; its full body was not obtained. It supplies no oral sage/Cognivia efficacy credit and no absence-of-trials conclusion.",
         "aliases": [
           "cognivia sage (leaf) extract",
           "organic cognivia sage (leaf) extract",
@@ -68595,13 +68595,13 @@
     "forms": {
       "cascara sagrada bark extract": {
         "bio_score": 6,
-        "absorption": "low-moderate (cascarosides → anthrones colonic hydrolysis)",
+        "absorption": "unknown",
         "consumer_note": "Cascara sagrada extract is prepared from the bark of Rhamnus purshiana. A label may state an extract ratio or characteristic anthraquinone-glycoside content to describe the material.",
         "consumer_note_review": {
           "by": "Product owner approval",
           "date": "2026-08-08"
         },
-        "notes": "Cascara Sagrada (Frangula purshiana bark). Contains cascarosides A-F (anthraquinone glycosides). Stimulant laxative acting on colonic smooth muscle. FDA's 2002 final rule (67 FR 31125) deemed cascara not generally recognized as safe and effective (category II) for OTC laxative drug products after requested carcinogenicity data were not submitted; the rule does not address dietary supplements. UNII 4VBP01X99F, CAS 8015-89-2. B31 audit 2026-04-25: pre-absorption hydrolysis (PMID:30321134, PMID:22982073). Active at colonic lumen; systemic F low.",
+        "notes": "Cascara Sagrada (Frangula purshiana bark). Contains cascarosides A-F (anthraquinone glycosides). Stimulant laxative acting on colonic smooth muscle. FDA's 2002 final rule (67 FR 31125) deemed cascara not generally recognized as safe and effective (category II) for OTC laxative drug products after requested carcinogenicity data were not submitted; the rule does not address dietary supplements. UNII 4VBP01X99F, CAS 8015-89-2. PMID 22982073 studies isolated emodin glucuronidation and efflux in Caco-2 monolayers; PMID 30321134 studies cascara cascarosides/anthranoids in cell-line cytotoxicity and apoptosis experiments. Neither establishes a whole-cascara human absolute absorption fraction or a numeric range. Preparation-specific human absorption remains unknown.",
         "aliases": [
           "cascara sagrada extract",
           "cascara sagrada bark",
@@ -68612,21 +68612,21 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": 0.3,
-          "range_low": 0.2,
-          "range_high": 0.4,
-          "quality": "moderate"
+          "value": null,
+          "range_low": null,
+          "range_high": null,
+          "quality": "unknown"
         }
       },
       "cascara sagrada bark powder": {
         "bio_score": 4,
-        "absorption": "low (whole bark; cascarosides released by colonic bacteria)",
+        "absorption": "unknown",
         "consumer_note": "Cascara sagrada bark powder is dried, ground Rhamnus purshiana bark. It is a whole-bark material rather than a concentrated extract.",
         "consumer_note_review": {
           "by": "Product owner approval",
           "date": "2026-08-08"
         },
-        "notes": "Whole Cascara Sagrada bark powder. Lower potency than standardized extract; cascarosides A-F not concentrated. D2.9.2 (2026-04-20): added to prevent 'Cascara Sagrada bark powder' labels falling to extract form, which overstates absorption. B31 audit 2026-04-25: cascara class baseline.",
+        "notes": "Whole Cascara Sagrada bark powder. Lower potency than standardized extract; cascarosides A-F not concentrated. D2.9.2 (2026-04-20): added to prevent 'Cascara Sagrada bark powder' labels falling to extract form, which overstates absorption. B31 audit 2026-04-25: cascara class baseline. The cited cell experiments do not establish a whole-preparation human absolute absorption fraction for bark powder.",
         "aliases": [
           "cascara sagrada powder",
           "cascara sagrada bark powder",
@@ -68637,10 +68637,10 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": 0.25,
-          "range_low": 0.15,
-          "range_high": 0.35,
-          "quality": "low"
+          "value": null,
+          "range_low": null,
+          "range_high": null,
+          "quality": "unknown"
         }
       }
     },
@@ -71693,7 +71693,7 @@
           "by": "Product owner approval",
           "date": "2026-08-08"
         },
-        "notes": "Capsicum annuum (Solanaceae) whole-fruit powder. Contains capsaicin (8-methyl-N-vanillyl-6-nonenamide) at 0.1-1% by mass — a 450-500 mg cayenne supplement provides ~0.5-5 mg capsaicin. FDA GRAS spice/seasoning under 21 CFR 182.10 [primary_regulatory — identity/safety context only, NOT clinical-efficacy evidence]. Capsicum/capsaicinoid context (NOT cayenne-specific): NIH ODS Weight Loss factsheet notes 'Supplementation with 4 mg/day capsaicinoids can cause gastrointestinal distress'; capsaicinoid dose range across studies 0.2-33 mg/day [clinical_review, capsicum-class context]. Sci Rep 2020 Capsicum annuum meta-analysis (11 RCTs, n=609) showed significant LDL-C reduction (SMD -0.39); only 3/11 trials used pepper powder/juice at ~1.25 g/day — whole-cayenne 450-500 mg dose is NOT directly evaluated in high-quality RCTs [clinical_review, limited applicability]. Safety: GI irritation at supplement doses (NIH ODS); antiplatelet activity is THEORETICAL — preclinical platelet inhibition (PMID 6528310, 1786800) but clinical significance of warfarin/aspirin interaction is unknown/limited per Tan 2021 BJCP systematic review of herb-warfarin interactions [tertiary_not_used_for_scoring for clinical magnitude; case_report for mechanism]. Conservative scoring reflects limited whole-cayenne-oral RCT base. NCCIH does NOT maintain a cayenne-specific oral-supplement monograph (only chronic-pain digest addressing TOPICAL capsicum). Distinct from capsaicin IQM parent which scores standardized capsaicinoid extracts (Capsimax, etc.).",
+        "notes": "Capsicum annuum (Solanaceae) whole-fruit powder. Contains capsaicin (8-methyl-N-vanillyl-6-nonenamide) at 0.1-1% by mass — a 450-500 mg cayenne supplement provides ~0.5-5 mg capsaicin. FDA GRAS spice/seasoning under 21 CFR 182.10 [primary_regulatory — identity/safety context only, NOT clinical-efficacy evidence]. Capsicum/capsaicinoid context (NOT cayenne-specific): NIH ODS Weight Loss factsheet notes 'Supplementation with 4 mg/day capsaicinoids can cause gastrointestinal distress'; capsaicinoid dose range across studies 0.2-33 mg/day [clinical_review, capsicum-class context]. Sci Rep 2020 Capsicum annuum meta-analysis (11 RCTs, n=609) showed significant LDL-C reduction (SMD -0.39); only 3/11 trials used pepper powder/juice at ~1.25 g/day — whole-cayenne 450-500 mg dose is NOT directly evaluated in high-quality RCTs [clinical_review, limited applicability]. Safety: GI irritation at supplement doses (NIH ODS); antiplatelet activity is THEORETICAL — preclinical platelet inhibition (PMID 6528310, 1786800) but clinical significance of warfarin/aspirin interaction is unknown/limited per Tan 2021 BJCP systematic review of herb-warfarin interactions [tertiary_not_used_for_scoring for clinical magnitude; preclinical in-vitro rat-platelet experiment for PMID 6528310; not a clinical case report]. Conservative scoring reflects limited whole-cayenne-oral RCT base. NCCIH does NOT maintain a cayenne-specific oral-supplement monograph (only chronic-pain digest addressing TOPICAL capsicum). Distinct from capsaicin IQM parent which scores standardized capsaicinoid extracts (Capsimax, etc.).",
         "aliases": [
           "cayenne",
           "cayenne pepper",

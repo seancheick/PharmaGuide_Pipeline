@@ -115,8 +115,9 @@ def resolve_facts_panel_serving_basis(record: Dict[str, Any]) -> Optional[Dict[s
         serving.get("minDailyServings"),
         serving.get("maxDailyServings"),
     )
-    if any(_positive_float(serving.get(key)) is None
-           for key in ("minDailyServings", "maxDailyServings")):
+    if (serving.get("dailyServingsSource") == "default"
+            or any(_positive_float(serving.get(key)) is None
+                   for key in ("minDailyServings", "maxDailyServings"))):
         # A Facts amount basis cannot complete a missing daily regimen bound.
         daily_range = None
     if serving_quantity is None or not serving_unit:
@@ -327,7 +328,7 @@ def _label_declared_daily_range(record: Dict[str, Any]) -> Optional[Tuple[float,
         return None
 
     entry = select_canonical_serving(serving_sizes)
-    if entry is None:
+    if entry is None or entry.get("dailyServingsSource") == "default":
         return None
     return _ordered_pair(
         entry.get("minDailyServings"),
@@ -378,7 +379,9 @@ def resolve_daily_serving_range(record: Dict[str, Any]) -> Tuple[float, float, b
     pair = _ordered_pair(
         record.get("servings_per_day_min"), record.get("servings_per_day_max")
     )
-    if pair is not None:
+    if pair is not None and not (
+            isinstance(serving, dict) and serving.get("dailyServingsSource") == "default"
+            and record.get("servings_per_day_source") != SOURCE_DIRECTIONS):
         return pair[0], pair[1], False
 
     # serving_basis on enriched records; serving_info on shipped detail blobs.
@@ -393,6 +396,10 @@ def resolve_daily_serving_range(record: Dict[str, Any]) -> Tuple[float, float, b
         if pair is None:
             continue
         source = str(container.get("servings_per_day_source") or "").strip().lower()
+        if source == "default" or (
+                source != SOURCE_DIRECTIONS and isinstance(serving, dict)
+                and serving.get("dailyServingsSource") == "default"):
+            continue
         if pair[1] < 1.0 and source != SOURCE_DIRECTIONS:
             continue
         return pair[0], pair[1], False

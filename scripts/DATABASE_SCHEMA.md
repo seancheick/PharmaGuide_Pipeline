@@ -770,6 +770,7 @@ Primary key: `synergy_clusters` (array)
 | `ingredients` | string[] | YES | Required ingredient set |
 | `min_effective_doses` | object | YES | Minimum doses per ingredient |
 | `evidence_tier` | int | YES | Evidence strength tier (`1`, `2`, or `3`) |
+| `scoring_eligible` | boolean | NO | Explicit false withholds this relationship from affirmative scoring and benefit qualification; absence retains legacy behavior. |
 | `synergy_mechanism` | string/null | NO | Mechanism summary |
 | `note` | string | YES | User-facing explanation |
 | `sources` | object[] | YES | Evidence links |
@@ -932,3 +933,14 @@ membership. `MedicationClassBridge` reads them to prevent RxClass fallback from
 reintroducing a rejected class; unknown identities retain fallback. Exclusions
 never imply general medication safety. Aspirin dose/route/use exceptions belong
 to `medication_profile_gate_rules.json`, not the class-membership bridge.
+
+
+Relationship eligibility (Sean approved October 26, D145/D146): the existing Boolean
+`scoring_eligible=false` also applies to a synergy cluster and a botanical
+marker-contribution record. The existing enricher owners enforce it. Marker facts
+(`declared_standardization_pct`, `estimated_dose_mg`, identity and provenance) remain
+available for safety; the flag excludes affirmative evidence/benefit qualification.
+A separately eligible marker study cannot clear the relationship hold. Independent
+ingredient assessments remain independent. A held standardization relationship may
+have a null credit floor because declared percentages are facts, not approved credit
+thresholds. Completing a review does not automatically restore eligibility.
