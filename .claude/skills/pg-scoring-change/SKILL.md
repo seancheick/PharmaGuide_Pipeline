@@ -14,7 +14,8 @@ Before using the steps, classify the diff using **AGENTS.md → Validation by co
 A display-only explanation in a scoring file does not automatically become a scoring change:
 use the targeted display checks there when all underlying decisions remain unchanged. Clinical
 meaning, safety advice and any numerical/identity/applicability change still require this procedure.
-Do not add a separate CI or corpus requirement for a verified display-only edit.
+Do not add a separate local or corpus requirement for a verified display-only edit.
+All executable changes still need the required green CI checkpoint in AGENTS.md.
 
 ## Steps
 
@@ -78,6 +79,12 @@ Do not add a separate CI or corpus requirement for a verified display-only edit.
    reviewer only the requirement, the matrix owner, the diff and
    the measured deltas. It must answer: does the diff add a new name? Does a near-name already exist
    (`rg` the stem in `scripts/` and `/Users/seancheick/PharmaGuide ai/lib`)?
+   Bind the review to the candidate commit (or retained diff hash) and measured artifacts.
+   Each substantive finding must name the owner, affected behavior, and a reproducible failure or
+   counterexample; style labels alone do not justify rewrites. Before final batch verification,
+   remove proven redundant decisions and unnecessary scaffolding while retaining scientific
+   rationale, diagnostics, and compatibility for named consumers. Re-review changed behavior
+   after a material correction; reuse review of unchanged parts.
 8. **Tests.** Follow the targeted fix loop in `AGENTS.md`: explicit failing node first, then its
    defect-class edge cases and relevant owner/consumer files. Never collect the whole suite for
    one edit or restart it after each failure fix. The integrator runs one combined fast checkpoint

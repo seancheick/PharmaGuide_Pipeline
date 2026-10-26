@@ -1,0 +1,6 @@
+# Correctness only. Existing findings are enumerated by the checker's baseline.
+required-version = "==0.14.0"
+target-version = "py313"
+
+[lint]
+select = ["F821", "F823", "F631", "F634"]

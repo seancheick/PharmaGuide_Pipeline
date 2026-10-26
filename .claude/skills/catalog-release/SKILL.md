@@ -101,4 +101,10 @@ with `$PG_PYTHON scripts/release_interaction_artifact.py --output-dir scripts/di
 
 State plainly: gates green/red (with output), catalog + interaction versions shipped,
 which files the bundle commit touched, and anything skipped. Never claim a release is
-done without `make verify-bundle` output.
+done without `make verify-bundle` output. Separate implementation, main integration, publication,
+and installed-app verification. Record exact source commits, catalog version and detail hashes.
+A completed import or source test does not establish visible delivery: use the app's
+`verify-pharmaguide` skill to open an affected exact label through normal navigation, compare its
+loaded assessment and warnings with the intended export, and retain the result. A stale installed
+catalog is a delivery finding, not a reason to rewrite the scorer. Reuse only receipts whose
+source, artifacts and applicable freshness still match; report missing evidence explicitly.
