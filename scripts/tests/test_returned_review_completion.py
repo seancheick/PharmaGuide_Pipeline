@@ -155,3 +155,13 @@ def test_mixed_grape_parts_survive_enrichment_and_export(products):
     mixed = next(r for r in blob['ingredients'] if r.get('raw_source_path') == 'ingredientRows[2]')
     assert mixed['canonical_id'] == 'grape'
     assert 'Skin' in mixed['source_label_form'] and 'Seed' in mixed['source_label_form']
+
+def test_default_daily_explanation_does_not_deny_printed_qualitative_directions(products):
+    from enrich_supplements_v3 import SupplementEnricherV3
+    from scoring_v4.scored_artifact import build_scored_artifact
+    enriched, _ = SupplementEnricherV3().enrich_product(deepcopy(products['268493']))
+    scored = build_scored_artifact(enriched)
+    text = json.dumps(scored['quality_pillars_v4']['dose'])
+    assert 'no daily directions' not in text
+    assert 'no daily amount' in text
+    assert scored['quality_pillars_v4']['dose']['score'] == 2.4

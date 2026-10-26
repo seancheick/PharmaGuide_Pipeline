@@ -581,7 +581,7 @@ def attach_pillar_explanations(
                     "id": "dose_reference_method", "label": "Dose assessment basis",
                     "value_display": (
                         "Dose uses recorded nutrient references and applicable preparation benchmarks. "
-                        + ("The label gives no daily directions, so one serving a day is assessed. "
+                        + ("The label gives no daily amount, so one serving a day is assessed. "
                            if daily_use.get("defaulted") else
                            "Adequacy uses the lowest directed daily use; upper-limit checks use the highest. ")
                         + "These are catalog assessments, not a personal dose recommendation."),

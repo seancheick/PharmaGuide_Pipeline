@@ -405,7 +405,7 @@ def _over_limit_dose_reason(dim: Dict[str, Any]) -> Optional[str]:
                    if ceiling.get("deduction_public") is not None else
                    "so Dose credit is withheld" if cap == 0 else "so Dose credit is limited")
         if ceiling.get("kind") == "caffeine_daily_total":
-            use = ("at one serving a day (the label gives no daily directions)" if ceiling.get("frequency_defaulted")
+            use = ("at one serving a day (the label gives no daily amount)" if ceiling.get("frequency_defaulted")
                    else "even at the lowest directed daily use" if ceiling.get("minimum_exceeds")
                    else "at the highest directed daily use")
             qualifier = {">=": "at least ", ">": "more than "}.get(ceiling.get("quantity_operator"), "")
@@ -413,7 +413,7 @@ def _over_limit_dose_reason(dim: Dict[str, Any]) -> Optional[str]:
                     f"above the {_num(ceiling.get('exceeds_above_mg_day')):.0f} mg/day that FDA describes as generally "
                     f"not associated with negative effects for most adults, {outcome}.")
         if ceiling.get("frequency_defaulted"):
-            exposure = (f"The label gives no daily directions; at one serving a day {nutrient} exceeds its "
+            exposure = (f"The label gives no daily amount; at one serving a day {nutrient} exceeds its "
                         "established upper limit")
         elif ceiling.get("minimum_exceeds"):
             exposure = (f"Even the lowest directed daily use of {nutrient} exceeds its established "

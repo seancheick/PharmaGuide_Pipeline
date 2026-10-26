@@ -240,6 +240,6 @@ def test_over_ul_b_complex_takes_the_dose_ceiling_and_keeps_the_safety_concern()
     # B6 at 588% of its UL sets Dose to 0 (Dose V4.1 §2.4); the total stays
     # below "Very good".
     assert scored["quality_pillars_v4"]["dose"]["score"] == 0.0
-    assert "no daily directions" in scored["quality_pillars_v4"]["dose"]["reason"]
+    assert "no daily amount" in scored["quality_pillars_v4"]["dose"]["reason"]
     assert "B1_harmful_additives" not in scored["v4_breakdown"]["module"]["dimensions"]["formulation"]["penalties"]
     assert scored["quality_score_v4_100"] < 80.0
