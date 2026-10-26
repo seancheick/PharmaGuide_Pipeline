@@ -2109,3 +2109,31 @@ def test_v2_new_product_without_gtin_decision_cannot_skip_exact_check_after_lear
     row['approved_payload_canonical'] = _canonical(value)
     row['payload_sha256'] = hashlib.sha256(row['approved_payload_canonical'].encode()).hexdigest()
     with pytest.raises(SubmissionImportError): build_manual_label(row)
+
+
+@pytest.mark.parametrize('section,field', [
+    ('observed', 'observed_code'), ('observed', 'issuer'),
+    ('observed', 'brandName'), ('observed', 'fullName'), ('observed', 'listing_url'),
+    ('decision', 'issuer'), ('decision', 'package'), ('decision', 'reason'),
+])
+def test_v2_private_identity_rejects_every_c0_and_c1_control(section, field):
+    from product_submission_import import build_manual_label, SubmissionImportError
+    for codepoint in (*range(32), *range(127, 160)):
+        row = _v2_export()
+        value = json.loads(row['approved_payload_canonical'])
+        value['identity'][section][field] = 'X' + chr(codepoint) + 'Y'
+        row['approved_payload_canonical'] = _canonical(value)
+        row['payload_sha256'] = hashlib.sha256(row['approved_payload_canonical'].encode()).hexdigest()
+        with pytest.raises(SubmissionImportError): build_manual_label(row)
+
+
+@pytest.mark.parametrize('section,field', [('observed', 'issuer'), ('observed', 'listing_url'), ('decision', 'issuer')])
+@pytest.mark.parametrize('blank', ['', ' ', '\u00a0'])
+def test_v2_frozen_optional_identity_metadata_requires_canonical_null(section, field, blank):
+    from product_submission_import import build_manual_label, SubmissionImportError
+    row = _v2_export()
+    value = json.loads(row['approved_payload_canonical'])
+    value['identity'][section][field] = blank
+    row['approved_payload_canonical'] = _canonical(value)
+    row['payload_sha256'] = hashlib.sha256(row['approved_payload_canonical'].encode()).hexdigest()
+    with pytest.raises(SubmissionImportError): build_manual_label(row)

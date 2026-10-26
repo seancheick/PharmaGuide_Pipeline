@@ -583,6 +583,8 @@ def _validate_identity_envelope(value: object, row: dict[str, Any]) -> object:
         text = decision[key]
         if text is not None and (not isinstance(text, str) or len(text) > maximum or any(ord(c) < 32 or 127 <= ord(c) <= 159 for c in text)):
             raise SubmissionImportError(f"invalid decision {key}")
+    if decision["issuer"] is not None and not decision["issuer"].strip():
+        raise SubmissionImportError("optional decision issuer must be canonical null when empty")
     if method == "label_review" and (not decision["package"] or not decision["package"].strip() or not decision["reason"] or len(decision["reason"].strip()) < 5):
         raise SubmissionImportError("label review requires package and rationale")
     verified = decision["verified_gtin"]
@@ -637,6 +639,9 @@ def _validate_identity_envelope(value: object, row: dict[str, Any]) -> object:
             text = observed[key]
             if text is not None and (not isinstance(text, str) or len(text) > limit or any(ord(c) < 32 or 127 <= ord(c) <= 159 for c in text)):
                 raise SubmissionImportError("invalid observed identifier text")
+        for key in ("issuer", "listing_url"):
+            if observed[key] is not None and not observed[key].strip():
+                raise SubmissionImportError(f"optional observed {key} must be canonical null when empty")
         if not observed["brandName"] or not observed["brandName"].strip() or not observed["fullName"] or not observed["fullName"].strip():
             raise SubmissionImportError("identifier brand/name required")
         if observed["no_code"]:
