@@ -189,7 +189,7 @@ def test_botanical_formulation_reason_is_one_sentence_with_same_credits():
 
 def test_verification_fail_open_reason_has_no_point_numbers():
     reason = qs._pillar_verification({}, 15, qs._config())
-    assert reason["reason"].startswith("Independent product verification is not on file.")
+    assert reason["reason"].startswith("Independent testing or certification: unconfirmed.")
     assert not _POINTS.search(reason["reason"]), reason["reason"]
     facts = {f["id"]: f for f in reason["explanation"]["facts"]}
     assert facts["verification_neutral_baseline"]["audience"] == "audit"

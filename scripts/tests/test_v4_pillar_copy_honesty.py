@@ -132,8 +132,7 @@ def test_unknown_verification_explains_missing_records_without_failed_testing():
     pillar = qs._pillar_verification(_module_bd(), 15, _cfg())
     assert pillar["score"] == 6.0
     assert pillar["reason"] == (
-        "Independent product verification is not on file. "
-        "This does not mean testing failed.")
+        "Independent testing or certification: unconfirmed.")
     # The baseline arithmetic is kept for audits, never shown in the reason.
     assert pillar["explanation"]["facts"] == [{
         "id": "verification_neutral_baseline", "label": "Neutral value", "audience": "audit",

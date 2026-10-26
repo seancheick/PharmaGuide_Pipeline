@@ -1367,8 +1367,7 @@ def _pillar_verification(module_bd: Dict[str, Any], weight: float,
     else:
         # Missing independent verification is not a failed product test.
         # Keep baseline arithmetic in the existing audit-only fact below.
-        reason = ("Independent product verification is not on file. "
-                  "This does not mean testing failed.")
+        reason = "Independent testing or certification: unconfirmed."
         verification_facts.append(audit_fact(
             "verification_neutral_baseline", "Neutral value",
             f"Neutral {_g(sub['neutral_baseline'])} of {_g(cap)}; "
