@@ -9,7 +9,7 @@ GTIN_INPUT_PATTERN = re.compile(r"^[0-9\s-]+$")
 
 
 def is_valid_gtin(value: str) -> bool:
-    if len(value) not in {8, 12, 13, 14} or not value.isdigit():
+    if len(value) not in {8, 12, 13, 14} or not re.fullmatch(r"[0-9]+", value):
         return False
     weighted_sum = 0
     for position_from_right, digit in enumerate(reversed(value[:-1]), start=1):

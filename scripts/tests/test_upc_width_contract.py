@@ -97,6 +97,6 @@ def test_padding_equivalence_collisions_are_reported_not_merged():
 
 
 def test_export_rejects_alphanumeric_and_checksum_without_lossy_digit_salvage():
-    for raw in ('X036000291452', '036000291452X', '036000291453', '12 3456-78901.2'):
+    for raw in ('X036000291452', '036000291452X', '036000291453', '12 3456-78901.2', '٠٣٦٠٠٠٢٩١٤٥٢'):
         assert normalize_upc(raw) == ''
     assert normalize_upc('0360-0029 1452') == '036000291452'

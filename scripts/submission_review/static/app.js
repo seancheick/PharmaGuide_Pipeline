@@ -685,6 +685,20 @@ function identityLookupUrl() {
   return `/api/identity_lookup?brand=${encodeURIComponent(brand)}&name=${encodeURIComponent(name)}`;
 }
 
+async function withPendingIdentityCandidates(lookup, submissionId) {
+  if (lookup.identity_method !== 'label_review') return lookup;
+  const {review} = await edge({action: 'load_review', submission_id: submissionId});
+  const candidates = review?.identity_candidates;
+  if (candidates?.complete !== true || !Array.isArray(candidates.pending) || !Array.isArray(candidates.conflicts)) {
+    throw new Error('Pending product identity candidates are unavailable. Refresh the review before deciding.');
+  }
+  const pending = candidates.pending.map(row => ({source: 'pending', dsld_id: row.dsld_id,
+    brand_name: row.brandName, product_name: row.fullName, upc_sku: '',
+    approval_revision: row.approval_revision}));
+  return {...lookup, matches: [...lookup.matches, ...pending], pending_conflicts: candidates.conflicts,
+    pending_revision: JSON.stringify(candidates.conflicts)};
+}
+
 function reviewedIdentifierDecision() {
   const decision = {code_type: $('identifier-type').value,
     issuer: $('identifier-issuer').value.trim() || null, verified_gtin: null,
@@ -711,12 +725,15 @@ async function checkIdentity({ record = false } = {}) {
     const response = await fetch(
       identityLookupUrl(),
     );
-    const payload = await response.json();
+    let payload = await response.json();
+    if (!stillCurrent()) return;
+    if (response.ok) payload = await withPendingIdentityCandidates(payload, selection.id);
     if (!stillCurrent()) return;
     if (!response.ok) throw new Error(payload.error ?? 'identity lookup failed');
     if (payload.canonical_gtin14 !== gtin14) throw new Error('Barcode lookup returned a different identity.');
     const unchanged = payload.index_revision &&
       payload.index_revision === state.identityLookup?.index_revision &&
+      payload.pending_revision === state.identityLookup?.pending_revision &&
       payload.canonical_gtin14 === state.identityLookup?.canonical_gtin14 &&
       payload.brandName === state.identityLookup?.brandName && payload.fullName === state.identityLookup?.fullName &&
       payload.freshness !== 'blocked';
@@ -793,14 +810,16 @@ async function requireCurrentIdentity() {
       identityLookupUrl(),
       { cache: 'no-store' },
     );
-    const payload = await response.json();
+    let payload = await response.json();
     if (!response.ok) throw new Error(payload.error ?? 'Identity check unavailable.');
+    payload = await withPendingIdentityCandidates(payload, submissionId);
     if (state.selected?.id !== submissionId) {
       throw new Error('The selected submission changed. Run its identity check.');
     }
     current = payload;
     if (
       !lookup.index_revision || current.index_revision !== lookup.index_revision ||
+      current.pending_revision !== lookup.pending_revision ||
       current.canonical_gtin14 !== canonicalSubmissionGtin14() ||
       current.freshness === 'blocked' ||
       (lookup.identity_method === 'label_review' && (current.brandName !== lookup.brandName || current.fullName !== lookup.fullName || current.complete !== true))
@@ -1112,6 +1131,14 @@ function renderBarcodePanel() {
   const identifier = selected?.identifier;
   const labelPanel = $('label-identity-panel');
   if (labelPanel) labelPanel.hidden = Boolean(digits || !identifier);
+  if (labelPanel && labelPanel.identitySubmissionId !== selected?.id) {
+    labelPanel.identitySubmissionId = selected?.id;
+    const decision = state.review?.identity_check?.identifier_decision;
+    $('identifier-type').value = decision?.code_type ?? identifier?.code_type ?? 'other';
+    $('identifier-issuer').value = decision?.issuer ?? identifier?.issuer ?? '';
+    $('identifier-package').value = decision?.package ?? '';
+    $('identifier-reason').value = decision?.reason ?? '';
+  }
   const observed = $('observed-identifier');
   if (observed) observed.textContent = identifier ?
     `Observed code: ${identifier.observed_code ?? 'No code declared'} · Contributor classification: ${identifier.code_type} · ${identifier.brandName} ${identifier.fullName} · Issuer: ${identifier.issuer ?? 'unknown'}${identifier.listing_url ? ` · Untrusted listing: ${identifier.listing_url}` : ''}` : '';
@@ -1229,7 +1256,7 @@ function renderIdentityCheck() {
     item.textContent = `${match.brand_name} ${match.product_name}`.trim();
     const source = document.createElement('span');
     source.className = 'match-source';
-    source.textContent = `${match.source === 'catalog' ? 'In app catalog' : 'DSLD reference'} · ID ${match.dsld_id}`;
+    source.textContent = `${match.source === 'catalog' ? 'In app catalog' : match.source === 'pending' ? 'Pending approved submission' : 'DSLD reference'} · ID ${match.dsld_id}`;
     item.append(source);
     results.append(item);
   }
@@ -1240,6 +1267,10 @@ function renderIdentityCheck() {
       .map((match) => match.dsld_id),
   )];
   if (lookup.identity_method === 'label_review') {
+    if (lookup.matches.some(match => match.source === 'pending')) {
+      show('blocked', 'Pending approved identity needs resolution', `Review the pending candidates above before another approval. ${indexNote}`);
+      return;
+    }
     if (lookup.freshness === 'blocked' || lookup.complete !== true || ids.length > 100) {
       show('blocked', 'Identity review blocked', `A fresh complete candidate set is required. ${indexNote}`);
       return;

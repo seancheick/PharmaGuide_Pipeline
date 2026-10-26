@@ -178,11 +178,11 @@ def test_label_review_requires_explicit_complete_evidence_bound_decision():
     node = shutil.which('node')
     assert node
     program = r"""
-const fs=require('fs'),vm=require('vm');const elements=new Map(),calls=[];
+const fs=require('fs'),vm=require('vm');const elements=new Map(),calls=[],candidateState={complete:true,pending:[],conflicts:[]};
 function el(){return {value:'',textContent:'',hidden:false,disabled:false,style:{},classList:{add(){},remove(){}},append(){},setAttribute(){},addEventListener(){}}}
 const ctx=vm.createContext({URLSearchParams,Date,Set,Number,encodeURIComponent,
  document:{getElementById(id){if(!elements.has(id))elements.set(id,el());return elements.get(id)},createElement:el},
- fetch:async(url,options)=>{if(options?.method==='POST'){calls.push(JSON.parse(options.body));return {ok:true,json:async()=>({})}}
+ fetch:async(url,options)=>{if(options?.method==='POST'){const body=JSON.parse(options.body);if(body.action==='load_review')return {ok:true,json:async()=>({review:{identity_candidates:candidateState}})};calls.push(body);return {ok:true,json:async()=>({})}}
  return {ok:true,json:async()=>lookup}}});
 const lookup={identity_method:'label_review',canonical_gtin14:null,brandName:'Example Labs',fullName:'Vitamin D3',index_built_at:new Date().toISOString(),index_revision:'current',freshness:'fresh',complete:true,matches:[]};
 ctx.lookup=lookup;ctx.calls=calls;
@@ -194,7 +194,8 @@ await vm.runInContext('checkIdentity({record:true})',ctx);
 if(calls.length)throw Error('empty search auto-verified a new product');
 await vm.runInContext("recordMatch('new_product_verified')",ctx);
 const body=calls[0];if(body.identity_method!=='label_review'||body.candidate_review_complete!==true||body.canonical_gtin14!==null||body.identifier_decision.package!=='60 capsules')throw Error(JSON.stringify(body));
-lookup.complete=false;let refused=false;try{await vm.runInContext("recordMatch('new_product_verified')",ctx)}catch{refused=true}if(!refused||calls.length!==1)throw Error('incomplete candidate set accepted');
+candidateState.conflicts.push({source:'pending',id:'other',revision:1});let stale=false;try{await vm.runInContext('requireCurrentIdentity()',ctx)}catch{stale=true}if(!stale)throw Error('new pending approval did not invalidate receipt');
+vm.runInContext('state.identityLookup=lookup',ctx);lookup.complete=false;let refused=false;try{await vm.runInContext("recordMatch('new_product_verified')",ctx)}catch{refused=true}if(!refused||calls.length!==1)throw Error('incomplete candidate set accepted');
 console.log('ok');
 })().catch(e=>{console.error(e);process.exitCode=1});
 """
