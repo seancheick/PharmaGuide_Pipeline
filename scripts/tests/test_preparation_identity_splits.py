@@ -1187,13 +1187,67 @@ def test_mixed_botanical_parts_cannot_inherit_unknown_or_nonbotanical_group(pipe
     assert row['quantity'] == 100
 
 
-def test_mixed_parts_from_different_botanicals_cannot_borrow_iqm_group(pipeline):
+@pytest.mark.parametrize("source_category", ["botanical", None, ""])
+def test_mixed_parts_from_different_botanicals_cannot_borrow_iqm_group(pipeline, source_category):
     raw = _raw_product(991028, [_raw_row(
         1, 'Ginseng root and Ashwagandha leaf extract', 'Ginseng', quantity=100, unit='mg',
         forms=('Panax ginseng Root Extract', 'Ashwagandha leaf extract'),
     )])
+    raw["ingredientRows"][0]["forms"][1]["category"] = source_category
     enriched = pipeline(raw)
     row = enriched['ingredient_quality_data']['ingredients'][0]
     assert row.get('scoreable_identity') is False
     assert row.get('canonical_id') is None
     assert row['quantity'] == 100
+
+
+@pytest.mark.parametrize("source_name", ["Panax ginseng Aerial Parts Extract", "aerial parts"])
+@pytest.mark.parametrize("source_category", [None, ""])
+def test_mixed_ginseng_untyped_source_or_part_keeps_same_parent(pipeline, source_name, source_category):
+    raw = _raw_product(991029, [_raw_row(
+        1, "Asian Ginseng Aerial Parts and Root Extract", "Panax Ginseng",
+        quantity=100, unit="mg", forms=("Panax ginseng Root Extract", source_name),
+    )])
+    raw["ingredientRows"][0]["forms"][1]["category"] = source_category
+    enriched = pipeline(raw)
+    row = enriched["ingredient_quality_data"]["ingredients"][0]
+    assert row["canonical_id"] == "ginseng"
+    assert row["scoreable_identity"] is True
+    assert row["quantity"] == 100
+    assert row["matched_form"] == "ginseng (unspecified)"
+    assert len(enriched["activeIngredients"]) == 1
+
+
+@pytest.mark.parametrize("source_category", ["botanical", None, ""])
+def test_mixed_species_cannot_borrow_botanical_registry_parent(pipeline, source_category):
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+
+    normalizer = EnhancedDSLDNormalizer()
+    assert normalizer._resolve_canonical_identity("Yarrow Aerial Parts", raw_name="Yarrow Aerial Parts") == (
+        "yarrow_aerial_parts", "botanical_ingredients",
+    )
+    raw = _raw_product(991030, [_raw_row(
+        1, "Yarrow flowers and Ashwagandha root", "Yarrow Aerial Parts", quantity=100, unit="mg",
+        forms=("Yarrow Flowers", "Ashwagandha Root"),
+    )])
+    raw["ingredientRows"][0]["forms"][1]["category"] = source_category
+    enriched = pipeline(raw)
+    row = enriched["ingredient_quality_data"]["ingredients"][0]
+    assert row.get("scoreable_identity") is False
+    assert row.get("canonical_id") is None
+    assert row["quantity"] == 100
+
+
+@pytest.mark.parametrize("source_name", ["Achillea millefolium aerial parts", "aerial parts"])
+@pytest.mark.parametrize("source_category", ["botanical", None, ""])
+def test_same_species_botanical_registry_parts_retain_their_parent(pipeline, source_name, source_category):
+    raw = _raw_product(991031, [_raw_row(
+        1, "Yarrow flowers and aerial parts", "Yarrow Aerial Parts",
+        quantity=100, unit="mg", forms=("Yarrow Flowers", source_name),
+    )])
+    raw["ingredientRows"][0]["forms"][1]["category"] = source_category
+    enriched = pipeline(raw)
+    row = enriched["ingredient_quality_data"]["ingredients"][0]
+    assert row["canonical_id"] == "yarrow_aerial_parts"
+    assert row["quantity"] == 100
+    assert len(enriched["activeIngredients"]) == 1

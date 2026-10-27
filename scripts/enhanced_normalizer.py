@@ -8056,22 +8056,24 @@ class EnhancedDSLDNormalizer:
             )
             group_parent = self.ingredient_map.get(group_id, {})
             declared_sources = [form for form in forms_structured
-                                if form.get("category") == "botanical"]
+                                if form.get("category") in {None, "", "botanical"}
+                                and str(form.get("name") or "").strip().lower()
+                                not in self._PLANT_PART_TOKENS]
             source_aliases = {
                 norm_module.make_normalized_key(alias)
                 for form in (group_parent.get("forms") or {}).values()
                 for alias in form.get("source_form_aliases") or []
             }
-            group_is_botanical = group_db == "botanical_ingredients" or (
-                group_db == "ingredient_quality_map"
-                and str(group_parent.get("category") or "").lower()
-                in {"herbs", "herb", "botanical", "botanicals"}
-                and bool(declared_sources)
-                and all(
-                    self._resolve_canonical_identity("", raw_name=form.get("name"))[0] == group_id
-                    or norm_module.make_normalized_key(form.get("name")) in source_aliases
-                    for form in declared_sources
+            group_is_botanical = (
+                group_db == "botanical_ingredients" or (
+                    group_db == "ingredient_quality_map"
+                    and str(group_parent.get("category") or "").lower()
+                    in {"herbs", "herb", "botanical", "botanicals"}
                 )
+            ) and bool(declared_sources) and all(
+                self._resolve_canonical_identity("", raw_name=form.get("name"))[0] == group_id
+                or norm_module.make_normalized_key(form.get("name")) in source_aliases
+                for form in declared_sources
             )
             if group_is_botanical and group_id:
                 canonical_id, canonical_source_db = group_id, group_db
