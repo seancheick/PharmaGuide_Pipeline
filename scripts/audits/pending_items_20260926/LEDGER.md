@@ -1,5 +1,12 @@
 ## Current execution — assessment integrity, October 23 (Codex)
 
+## Corrected final identity checkpoint — October 27
+
+CI40451307407 failed two valid grape consumer tests; the other three shards passed. The new exact-canonical comparison overrestricted same-organism preparations. This was an implementation regression, not a stale-test expectation. A cheap affected-cohort census should have preceded that checkpoint.
+
+The existing source-consistency guard now uses reviewed parent ancestry and complete registered organism names with bounded part/preparation qualifiers; it does not create a general identity resolver, global alias, clinical qualification or new field. Foreign species and unknown material tails remain rejected. Both existing grape tests are unchanged and pass.256 named owner/consumer tests and11 independent adversarial tests pass. All14 affected real-label Clean/Enrich/Score outputs, amounts, identities, warnings, scores and holds are preserved under normalized comparison. Blood-orange334591/334592 remain complete; barberry benchmark holds remain. The final read-only census covers15,437 inputs/136,448 rows/138 mixed-part candidates and finds zero unintended parent-decision changes. Combined local546passed/24declared skips in131.33seconds; skip guard green. Final whole-fast and integration remain pending. No pipeline or publication.
+
+
 ## October 27 — bounded source reconciliation follow-up (qualification pending)
 
 Owner: existing clinical/source/readiness/identity owners; evidence: PR262, source receipts and real-label replays. Will NOT create another scorer, review registry, approval or dose threshold.

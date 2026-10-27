@@ -1251,3 +1251,52 @@ def test_same_species_botanical_registry_parts_retain_their_parent(pipeline, sou
     assert row["canonical_id"] == "yarrow_aerial_parts"
     assert row["quantity"] == 100
     assert len(enriched["activeIngredients"]) == 1
+
+
+@pytest.mark.parametrize("name,group,forms,parent", [
+    ("Barberry Bark, Root Extract", "Barberry", ("Berberis vulgaris Bark Extract", "Berberis vulgaris Root Extract"), "barberry_root"),
+    ("Grape Extract", "Grape", ("Vitis vinifera Seed Extract", "Vitis vinifera Skin Extract"), "grape"),
+    ("Sicilian Blood Orange Fruit, Peel Extract", "Sweet Orange", ("Citrus sinensis var. Moro Fruit Extract", "Citrus sinensis var. Moro Peel Extract"), "sweet_orange"),
+    ("Bayberry Extract", "Bayberry", ("Bayberry bark extract", "Bayberry Leaf Extract"), "bayberry"),
+    ("Cauliflower Flower, Stem Juice", "Cauliflower", ("Cauliflower Flower Juice", "Cauliflower Stem Juice"), "cauliflower"),
+    ("Asparagus Flower, Stem Juice", "Asparagus", ("Asparagus Flower Juice", "Asparagus Stem Juice"), "asparagus"),
+])
+def test_registered_same_organism_mixed_parts_keep_whole_parent(pipeline, name, group, forms, parent):
+    raw = _raw_product(991032, [_raw_row(
+        1, name, group, quantity=100, unit="mg", forms=forms,
+    )])
+    enriched = pipeline(raw)
+    row = enriched["activeIngredients"][0]
+    assert row["canonical_id"] == parent
+    assert row["canonical_source_db"] == "botanical_ingredients"
+    assert row["quantity"] == 100
+    assert [form["name"] for form in row["forms"]] == list(forms)
+    assert len(enriched["activeIngredients"]) == 1
+
+
+@pytest.mark.parametrize("foreign", [
+    "Yarrow Flowers and Ashwagandha Root",
+    "Achillea nobilis Root Extract",
+    "Achillea millefolium Root Unknownmaterial",
+    "Achillea millefolium Root with Caffeine",
+])
+def test_registered_organism_source_validation_rejects_unaccounted_material(pipeline, foreign):
+    raw = _raw_product(991033, [_raw_row(
+        1, "Yarrow flowers and other root", "Yarrow Aerial Parts", quantity=100, unit="mg",
+        forms=("Yarrow Flowers", foreign),
+    )])
+    raw["ingredientRows"][0]["forms"][1]["category"] = None
+    enriched = pipeline(raw)
+    row = enriched["activeIngredients"][0]
+    assert row.get("canonical_id") is None
+    assert row["quantity"] == 100
+
+
+def test_all_bare_parts_do_not_invent_an_iqm_source_organism(pipeline):
+    raw = _raw_product(991034, [_raw_row(
+        1, "Asian Ginseng Root and Aerial Parts Extract", "Panax Ginseng", quantity=100, unit="mg",
+        forms=("root", "aerial parts"),
+    )])
+    row = pipeline(raw)["activeIngredients"][0]
+    assert row.get("canonical_id") is None
+    assert row["quantity"] == 100

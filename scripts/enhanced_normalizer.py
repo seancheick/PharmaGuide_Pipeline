@@ -8071,8 +8071,12 @@ class EnhancedDSLDNormalizer:
                     in {"herbs", "herb", "botanical", "botanicals"}
                 )
             ) and bool(declared_sources) and all(
-                self._resolve_canonical_identity("", raw_name=form.get("name"))[0] == group_id
+                (form_id := self._resolve_canonical_identity("", raw_name=form.get("name"))[0]) == group_id
+                or (group_id, form_id) in self._canonical_parent_relationships
                 or norm_module.make_normalized_key(form.get("name")) in source_aliases
+                or (group_db == "botanical_ingredients" and self._mixed_source_names_registered_organism(
+                    form.get("name"), group_id,
+                ))
                 for form in declared_sources
             )
             if group_is_botanical and group_id:
@@ -10351,6 +10355,29 @@ class EnhancedDSLDNormalizer:
         "peel", "peels", "pod", "pods", "twig", "twigs", "sprout",
         "bulb", "tuber", "resin", "wood", "whole", "herb", "skin",
     )
+
+    def _mixed_source_names_registered_organism(self, name: Any, parent_id: str) -> bool:
+        """Validate a mixed source's organism, without resolving its preparation."""
+        parent = next((entry for entry in self.botanical_ingredients.get("botanical_ingredients", [])
+                       if entry.get("id") == parent_id), {})
+        literal = norm_module.make_normalized_key(name).replace("_", " ")
+        qualifiers = {token for part in self._PLANT_PART_TOKENS for token in part.split()}
+        qualifiers.update({"extract", "powder", "juice", "concentrate"})
+        for registered in (parent.get("standard_name"), parent.get("latin_name"), *(parent.get("aliases") or [])):
+            organism = norm_module.make_normalized_key(registered).replace("_", " ")
+            if not organism:
+                continue
+            match = re.fullmatch(r"(.*?)\b" + re.escape(organism) + r"\b(.*)", literal)
+            if not match:
+                continue
+            before, after = match.groups()
+            # A printed variety refines the registered species; it does not
+            # qualify a branded preparation or transfer clinical evidence.
+            after = re.sub(r"^\s+var(?:iety)?\s+[a-z]+(?=\s|$)", " ", after)
+            remainder = (before + " " + after).split()
+            if remainder and all(token in qualifiers for token in remainder):
+                return True
+        return False
 
     def _declared_botanical_parts(self, forms: List[Any]) -> List[str]:
         """Parts explicitly named by the label's botanical source forms."""
