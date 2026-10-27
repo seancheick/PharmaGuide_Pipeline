@@ -582,12 +582,30 @@ def test_depth_bonus_ignores_registry_completed_trials() -> None:
     assert payload["components"]["depth_bonus"] == 0.0
 
 
-def test_collagen_primary_recovers_verified_evidence_when_enrichment_dropped_match() -> None:
-    """Garden-of-Life collagen canary: the enriched product can carry a
-    canonical collagen active/product-level evidence row while
-    evidence_data.clinical_matches is empty. v4 should recover the verified
-    collagen-peptides evidence instead of assigning Evidence=0.
+def _use_synthetic_eligible_collagen_source(monkeypatch):
+    """Exercise recovery mechanics without asserting real collagen efficacy."""
+    import clinical_applicability
+    import evidence_resolver
+    from scoring_v4.modules import generic_evidence
+
+    source = _match(
+        id="INGR_COLLAGEN_PEPTIDES", ingredient="collagen",
+        standard_name="Collagen Peptides", total_enrollment=73,
+        scoring_eligible=True, references_structured=[],
+    )
+    monkeypatch.setattr(clinical_applicability, "reviewed_entries", lambda: {source["id"]: source})
+    monkeypatch.setattr(generic_evidence, "_verified_ingredient_human_evidence_entries", lambda: (source,))
+    monkeypatch.setattr(evidence_resolver, "_backed_studies_index", lambda: {"collagen": [source]})
+    return source
+
+
+def test_collagen_primary_recovers_verified_evidence_when_enrichment_dropped_match(monkeypatch) -> None:
+    """An eligible canonical source survives a dropped enrichment match.
+
+    The fixture is explicitly synthetic; the real source's hold is tested in
+    test_returned_collagen_contexts rather than bypassed by recovery.
     """
+    _use_synthetic_eligible_collagen_source(monkeypatch)
     from scoring_v4.modules.generic_evidence import score_evidence
 
     product = _product(
@@ -612,15 +630,11 @@ def test_collagen_primary_recovers_verified_evidence_when_enrichment_dropped_mat
 
     payload = score_evidence(product, apply_primary_floor=True)
 
-    # 3-lane model (2026-06-06): recovered collagen evidence is generic
-    # (ingredient-human, not brand-specific), so it floors to the non-branded
-    # strong tier (14), not 18. Collagen products get their real score from the
-    # collagen_profile module; this is a dropped-evidence fallback. (Collagen is
-    # a candidate for the consensus allowlist — broad generic evidence, 26 studies
-    # — but is left off pending review since peptide MW/profile is form-sensitive.)
+    # The synthetic strong generic-human source reaches the existing 14 floor;
+    # this is not a clinical conclusion about the held production record.
     assert payload["score"] == 14.0
     assert payload["components"]["primary_evidence_floor"] == 14.0
-    assert payload["metadata"]["primary_evidence_floor_canonical"] == "collagen"
+    assert payload["metadata"]["primary_evidence_floor_canonical"] == "collagen peptides"
     assert payload["metadata"]["recovered_matches"] == ["RECOVERED_COLLAGEN_PEPTIDES_V1"]
 
 
@@ -1498,6 +1512,7 @@ def test_zero_negative_evidence_has_no_positive_record_dependencies():
 
 def test_recovered_collagen_receipt_uses_the_canonical_review_owner(monkeypatch):
     import clinical_applicability
+    _use_synthetic_eligible_collagen_source(monkeypatch)
     from scoring_v4.modules.generic_evidence import score_evidence
     product = _product(ingredients=[_ingredient(
         name="Collagen Peptides", standard_name="Collagen", canonical_id="collagen",
