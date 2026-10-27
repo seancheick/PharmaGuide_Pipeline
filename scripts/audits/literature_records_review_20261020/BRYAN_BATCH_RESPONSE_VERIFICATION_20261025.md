@@ -1,5 +1,14 @@
 # Dr. Bryan responses — batches 1–9, independent verification
 
+## Verified source and integration record — October 27, 2026
+
+Runtime source `12847f5a4fb38ed4896663ef6d3d67d008437b01` passed all four whole-fast shards and merge readiness in [CI 40453577726](https://github.com/seancheick/PharmaGuide_Pipeline/actions/runs/40453577726). Final local validation passed 546 tests with 24 declared skips and a green skip guard. All 33 final raw canaries were unchanged. The corrected same-plant guard passed 256 owner/consumer tests and independent review; all 14 affected real labels retained their identities, amounts, scores, warnings and holds. The complete input census found no unintended parent-decision changes.
+
+[PR 262](https://github.com/seancheick/PharmaGuide_Pipeline/pull/262) is the integration record. Its Checks tab identifies the final documentation head and required checks; its merged state records integration to main. Subsequent corrections to this report and the request are documentation only. No pipeline, app-data update or publication was performed.
+
+Remaining work: 140 source records lack completed structured contexts; collagen, Theracurmin and Poolzyme retain their specific acceptance holds. There are 74 unactivated drafts across 49 subjects. The observed dose/preparation backlog groups into 374 shared subjects; this is not a count of new literature reviews. One private submission retains an unresolved identity finding. Finish the source preparation and reconcile retained decisions before the final rebuild, full-corpus verification and app checks. Recorded signatures are retained without requesting them again.
+
+
 ## Corrected final identity checkpoint — October 27
 
 CI40451307407 failed two valid grape consumer tests; the other three shards passed. The new exact-canonical comparison overrestricted same-organism preparations. This was an implementation regression, not a stale-test expectation. A cheap affected-cohort census should have preceded that checkpoint.
@@ -11,7 +20,7 @@ The existing source-consistency guard now uses reviewed parent ancestry and comp
 
 Core whole-fast CI [40447938661](https://github.com/seancheick/PharmaGuide_Pipeline/actions/runs/40447938661) passed all four shards and merge readiness on `dd0b7254ea201821c914cc2d223eadda4193cd65`. The first run failed three stale tests; the correction uses synthetic eligible collagen evidence for recovery mechanics and retains the real-source holds. Its 182 affected tests passed; no production guard was weakened.
 
-A subsequent source-only correction fixes the author of PMID18971870 from Moyad to Pancorbo. Exact NIH authors are Dario Pancorbo, Carlos Vazquez and Mary Ann Fletcher. The regression failed before correction; 104 owner-file tests passed afterward. Two affected labels269374/299750 and creatine270330 control retained all scores, amounts, identities, roles, status, eligibility and safety. Only the two affected enriched/detail citation strings changed substantively. Replay hashes normalize routine generation timestamps; literal raw JSON bytes are not claimed identical. The final candidate including this correction still requires green CI before merge.
+A subsequent source-only correction fixes the author of PMID18971870 from Moyad to Pancorbo. The PubMed-listed authors are Dario Pancorbo, Carlos Vazquez and Mary Ann Fletcher. The regression failed before correction; 104 owner-file tests passed afterward. Two affected labels269374/299750 and creatine270330 control retained all scores, amounts, identities, roles, status, eligibility and safety. Only the two affected enriched/detail citation strings changed substantively. Replay hashes normalize routine generation timestamps; literal raw JSON bytes are not claimed identical. The final candidate including this correction still requires green CI before merge.
 
 Final PR feedback reproduced two identity boundaries: untyped mixed-species source forms could borrow a parent, and a generic high-polyphenol spearmint alias could inherit the exact Neumentix decision. The existing mixed-source guard now validates named forms across both botanical and IQM parents; bare descriptors do not introduce another species. The generic alias moved to the existing generic extract. An additional failing test showed explicit identity rejection could fall through a known-name fallback; one shared veto now protects botanical recognition and benchmark classification while preserving legacy missing-flag behavior. No second matcher or new status was added.
 
