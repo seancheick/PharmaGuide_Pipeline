@@ -1,10 +1,12 @@
 # Assessment review handoff — October 26, 2026
 
-## Current signed-return reconciliation — October26
+## Current scoped closeout — October 27
 
-Approval attribution and date are accepted: Dr. Pham,2026-10-26, only the returned explicit scopes. No clock time or repeated blanket signature is needed. All146 rebuilt source subjects match the existing register; nine unused historical rows remain nonblocking. Three canonical source checks now complete, three qualification holds are enforced, and140 still need actual structured source mapping/research rather than a signature placeholder. See the current section in [the qualification report](BRYAN_BATCH_RESPONSE_VERIFICATION_20261025.md) and each row's precise remaining question in [the existing register](clinical_review_holds.csv).
+Candidate runtime `67226a660` is under qualification in PR263. Of the 146 observed source dependencies, fourteen now pass the existing scoped source-review owner and 132 remain incomplete. The frozen 155-row register and original product dependencies remain intact; nine unused historical records remain nonblocking. Signed attribution/date remain Dr. Pham, October26, exact returned scopes only.
 
-Identity/benchmark and canonical evidence-recovery fixes are implemented,242-label measured and independently reviewed; CI/integration pending. Four newly complete products are277387,304331,315301,232839. Current held sources cannot regain credit through stale recovery; aggregate module projections cannot falsely imply finished assessment. No corpus rerun/export/publication/app update is claimed. The older dated sections below remain evidence of their stated snapshots, not current missing-date requests.
+This batch applies fourteen corrected source records, eight literature/reference records (seven usable neutral-reference conclusions; flaxseed retains an unread-erratum integrity hold), and manufacturer-hidden-quantity completion through existing owners. Reference-only honey/NAC/ALA/alpha-GPC/PEA conclusions cannot supply generic positive credit. PEA's disease-scope leak was reproduced independently and excluded. Approved claim exclusions reject adult-sleep review transfer to jet lag/shift work without reading warnings as product claims. Invalid applicability remains unfinished.
+
+Named final owner/consumer tests:597 passed. Changed-source strict citation check:109 claims passed; no title mismatch, drift, ghost suspicion or unresolved identifier. Final bounded measurements, local checkpoint and whole-fast CI must be recorded below when complete. No whole-corpus pipeline, app update or publication performed. See the current qualification report and the existing row-specific registers; unfinished source extraction is not disguised as a request for a blanket signature.
 
 ## Latest returned-source implementation
 

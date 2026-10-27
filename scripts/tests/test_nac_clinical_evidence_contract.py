@@ -17,12 +17,11 @@ def _entry() -> dict:
 def test_nac_consumer_goal_is_limited_to_supported_outcomes() -> None:
     entry = _entry()
 
-    assert entry["health_goals_supported"] == ["Immune Support"]
+    assert entry["health_goals_supported"] == []
+    assert entry["study_type"] == entry["evidence_level"] == "reference"
     consumer_claim_surface = json.dumps({
         "goals": entry["health_goals_supported"],
         "endpoints": entry["key_endpoints"],
-        "notes": entry["notes"],
-        "notable_studies": entry["notable_studies"],
     }).lower()
     assert "longevity" not in consumer_claim_surface
 
@@ -41,9 +40,7 @@ def test_nac_removes_untraceable_aggregate_counts_and_stale_tags() -> None:
     assert "registry_completed_trials_count" not in entry
     assert entry["published_rct_count"] == 1
     assert entry["published_meta_review_count"] == 3
-    assert set(entry["endpoint_relevance_tags"]) == {
-        "immune_support", "muscle_recovery", "stress_mood"
-    }
+    assert set(entry["endpoint_relevance_tags"]) == {"muscle_recovery"}
     rationale = entry["effect_direction_rationale"].lower()
     assert "367" not in rationale and "2810" not in rationale
     assert "no longevity outcome" in rationale
@@ -61,9 +58,8 @@ def test_each_nac_reference_declares_its_narrow_supported_claims() -> None:
         "not_infection_prevention",
     }
     assert claims["39632267"] == {
-        "glutathione",
-        "oxidative_stress_biomarkers",
-        "exercise_recovery_biomarkers",
+        "exercise_induced_muscle_soreness_oral_subset",
+        "not_general_immune_or_respiratory_claims",
     }
     assert claims["31107966"] == {"chronic_bronchitis_copd_mucolytic_outcomes"}
     assert claims["29457216"] == {"condition_specific_psychiatric_adjunct_outcomes"}

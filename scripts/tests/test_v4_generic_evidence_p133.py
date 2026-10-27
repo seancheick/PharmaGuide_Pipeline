@@ -784,45 +784,24 @@ def test_branded_recovery_does_not_borrow_relora_for_generic_magnolia_blend() ->
     assert payload["metadata"]["recovered_matches"] == []
 
 
-def test_exact_single_active_recovers_verified_ingredient_human_evidence() -> None:
-    """Exact, dose-bearing single actives should recover their verified
-    ingredient-human backed entries when enrichment omitted the match.
+def test_exact_nac_respects_returned_reference_only_scope() -> None:
+    """A precise identity and dose cannot restore unsupported purpose credit.
 
-    This must stay exact and primary-active gated; generic ingredient recovery
-    is not fuzzy text matching and must not borrow evidence for trace add-ons.
+    Positive exact-ingredient recovery remains independently covered below.
+    The returned NAC review supports an exercise-specific finding, not a
+    generic indication on an otherwise unpositioned NAC capsule.
     """
     from scoring_v4.modules.generic_evidence import score_evidence
 
-    product = _product(
-        ingredients=[
-            _ingredient(
-                name="NAC 600 mg",
-                standard_name="N-Acetylcysteine",
-                canonical_id="nac",
-                quantity=600,
-                unit="mg",
-            )
-        ],
-        matches=[],
-    )
-
+    product = _product(ingredients=[_ingredient(
+        name="NAC 600 mg", standard_name="N-Acetylcysteine",
+        canonical_id="nac", quantity=600, unit="mg")], matches=[])
     payload = score_evidence(product, apply_primary_floor=True)
-
-    assert payload["metadata"]["recovered_matches"] == ["INGR_NAC"]
-    assert payload["metadata"]["matched_entries"] == 1
-    # The NAC record no longer carries the untraceable 2,810-participant
-    # aggregate that incorrectly triggered the enrollment multiplier.
-    assert payload["components"]["clinical_evidence_pipeline"] == 3.24
-    assert payload["metadata"]["primary_evidence_floor_canonical"] == "n acetylcysteine"
-    # The floor value is incidental to what this test is about (recovery), so
-    # derive it from the owners rather than pinning a literal that a policy
-    # change has to chase. INGR_NAC is mixed, and direction_ceiling caps a
-    # non-strong direction at the MODERATE base weighted by its multiplier.
-    from scoring_v4.modules.generic_evidence import (
-        EFFECT_DIRECTION_MULTIPLIERS, PRIMARY_FLOOR_MODERATE)
-    ceiling = round(PRIMARY_FLOOR_MODERATE * EFFECT_DIRECTION_MULTIPLIERS["mixed"], 4)
-    assert payload["components"]["primary_evidence_floor"] == ceiling
-    assert payload["score"] == ceiling
+    assert payload["metadata"]["recovered_matches"] == []
+    assert payload["metadata"]["matched_entries"] == 0
+    assert payload["components"]["clinical_evidence_pipeline"] == 0.0
+    assert payload["components"].get("primary_evidence_floor", 0.0) == 0.0
+    assert payload["score"] == 0.0
 
 
 def test_non_nac_primary_active_recovers_verified_ingredient_human_evidence() -> None:

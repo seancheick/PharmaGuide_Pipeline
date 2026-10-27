@@ -25,6 +25,8 @@ def test_wave2_contexts_rerun_verifies_patched_rows_without_writing():
 
 
 @pytest.mark.parametrize('context_id,field,bad_value', [
+    ('bc30_functional_gi_complaints_40707016', 'population', {'age_group': 'child', 'description': 'Children'}),
+    ('bc30_functional_gi_complaints_40707016', 'dose', {'unit': 'mg', 'values': [2000]}),
     ('lp299v_ibs_meta_37541528', 'limitations', ['High certainty; independent replication established.']),
     ('is2_moderate_covid19_adjunct_39866999', 'population', {'age_group': 'adult', 'description': 'B. coagulans UBBC-07'}),
     ('mtcc5856_healthy_microbiome_37335737', 'blinding', 'unreported'),

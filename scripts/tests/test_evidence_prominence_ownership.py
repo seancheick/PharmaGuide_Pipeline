@@ -229,17 +229,21 @@ def test_authority_floor_does_not_borrow_the_blend_total_as_zinc_amount():
 
 # --- recovery ----------------------------------------------------------------
 
-@pytest.mark.parametrize("nac_mg", [400, 600])
-def test_ingredient_recovery_is_independent_of_relative_mass(nac_mg):
+@pytest.mark.parametrize("thistle_mg", [400, 600])
+def test_ingredient_recovery_is_independent_of_relative_mass(thistle_mg):
+    # The returned NAC review is exercise-only/reference for these claims.
+    # Keep testing mass-independent recovery using the still-eligible sibling.
     product = _product(
-        product_name="NAC with Milk Thistle",
-        ingredients=[_row("N-Acetyl Cysteine", "nac", nac_mg, path="ingredientRows[0]",
-                          standard_name="N-Acetylcysteine"),
-                     _row("Milk Thistle", "milk_thistle", 1000, path="ingredientRows[1]")],
+        product_name="Milk Thistle with NAC",
+        ingredients=[_row("Milk Thistle", "milk_thistle", thistle_mg, path="ingredientRows[0]"),
+                     _row("N-Acetyl Cysteine", "nac", 1000, path="ingredientRows[1]",
+                          standard_name="N-Acetylcysteine")],
         matches=[],
     )
 
-    assert "INGR_NAC" in _scored(product)["metadata"]["recovered_matches"]
+    recovered = _scored(product)["metadata"]["recovered_matches"]
+    assert "INGR_MILK_THISTLE" in recovered
+    assert "INGR_NAC" not in recovered
 
 
 def test_ingredient_recovery_never_serves_a_co_active_the_label_does_not_declare():

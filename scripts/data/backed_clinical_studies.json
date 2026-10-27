@@ -8049,11 +8049,8 @@
       ],
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "glutathione ↑",
-        "influenza-like symptom burden ↓ (not infection prevention)",
-        "chronic bronchitis/COPD mucolytic outcomes ↑",
-        "exercise oxidative-stress biomarkers ↓",
-        "condition-specific psychiatric adjunct outcomes: mixed"
+        "Muscle soreness24h afterexercise:review-reported MD−0.84,95%CI−1.35to−0.34,P=.001,I2=52% (oral exercise subset, PMID39632267)",
+        "Muscle soreness immediately afterexercise:MD0.02,95%CI−0.36to0.39,P=.93 (oral exercise subset, PMID39632267)"
       ],
       "health_goals_supported": [],
       "notes": "Human evidence supports NAC as a glutathione precursor that measurably lowers oxidative-stress markers, and a randomized trial supports attenuation of influenza-like illness in older adults. Respiratory (mucolytic) and psychiatric-adjunct evidence is real but condition-specific and more heterogeneous. Signed A094 accepts limited oral exercise-soreness findings only. Current38label cohort contains immune,respiratory,liver,antioxidant/glutathione,or dose-only positioning;none claims postexercise soreness ormuscle recovery in retainedsource text. The exercise research is retained as nonaffirmative reference for those currentcatalog purposes.24h soreness benefit is separate from immediate null and adverse functional-recovery findings;less soreness isnot proven bettertrainingadaptation. No universalNACdosecurve or blanketinefficacy conclusion is created.",
@@ -8207,9 +8204,8 @@
           "evidence_grade": "systematic_review",
           "retracted": false,
           "supports_claims": [
-            "glutathione",
-            "oxidative_stress_biomarkers",
-            "exercise_recovery_biomarkers"
+            "exercise_induced_muscle_soreness_oral_subset",
+            "not_general_immune_or_respiratory_claims"
           ],
           "verification_source": "pubmed_eutils"
         }
@@ -8218,11 +8214,10 @@
         "unii": "WYQ7N0BPYC"
       },
       "effect_direction": "mixed",
-      "primary_outcome": "Exercise-induced muscle soreness,source-specific reference only",
       "published_rct_count": 1,
       "published_meta_review_count": 3,
       "effect_direction_confidence": "medium",
-      "effect_direction_rationale": "Classified mixed because content-verified human evidence supports a narrow influenza-like symptom and cellular-immunity signal, respiratory mucolytic outcomes, and several exercise oxidative-stress biomarkers, while psychiatric-adjunct findings are condition-specific and heterogeneous. None of the cited studies measured a longevity endpoint, so no longevity outcome or consumer route is claimed.",
+      "effect_direction_rationale": "Reference-only for current catalog purposes. The approved oral exercise subset reports a 24-hour soreness benefit, an immediate null finding and limitations including functional-recovery findings. It does not qualify immune, respiratory or psychiatric retail claims. No longevity outcome or generic disease benefit is inferred. Historical distinct-indication sources remain retained but ineligible for this limited approval.",
       "endpoint_relevance_tags": [
         "muscle_recovery"
       ],
@@ -11564,7 +11559,6 @@
         "unii": "73Y7P0K73Y"
       },
       "effect_direction": "positive_weak",
-      "primary_outcome": "Disease-context diabetic neuropathy; reference only",
       "total_enrollment": null,
       "registry_completed_trials_count": 144,
       "effect_direction_confidence": "medium",
@@ -21659,7 +21653,6 @@
         "unii": "6R8T1UDM3V"
       },
       "effect_direction": "positive_strong",
-      "primary_outcome": "Diabetic neuropathic pain in the exact studied preparation",
       "total_enrollment": null,
       "registry_completed_trials_count": 25,
       "effect_direction_confidence": "high",
@@ -23424,7 +23417,6 @@
         }
       ],
       "effect_direction": "positive_strong",
-      "primary_outcome": "Disease-context cognitive outcomes; reference only",
       "total_enrollment": null,
       "registry_completed_trials_count": 2,
       "effect_direction_confidence": "medium",
