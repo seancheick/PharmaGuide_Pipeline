@@ -141,6 +141,8 @@
   "src": "local/manual_labels/product_submissions/PG_SUB_2E7000A890174F10BAA7870FE5EAD7F3",
   "source_type": "external_manual",
   "manual_product_provenance": {
+    "approval_revision": 1,
+    "approval_payload_sha256": "4eb80c07bb63d86db610862ed0b62ab2027c3a16d8303c81e858ece1fb7a67ac",
     "source_kind": "private_product_submission",
     "source_record_id": "2e7000a8-9017-4f10-baa7-870fe5ead7f3",
     "label_verified_at": "2026-10-22",
@@ -148,6 +150,8 @@
     "reviewer": "PharmaGuide Clinical Team"
   },
   "label_record_metadata": {
+    "approval_revision": 1,
+    "approval_payload_sha256": "4eb80c07bb63d86db610862ed0b62ab2027c3a16d8303c81e858ece1fb7a67ac",
     "source_name": "PharmaGuide verified product submission",
     "source_record_id": "2e7000a8-9017-4f10-baa7-870fe5ead7f3",
     "source_date": "2026-10-22",
