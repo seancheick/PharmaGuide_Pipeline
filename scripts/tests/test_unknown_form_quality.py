@@ -1269,5 +1269,35 @@ def test_neumentix_notes_keep_source_scope_without_general_onset_or_superiority(
     assert '5 clinical trials' not in notes
     assert 'onset at 7 days' not in notes
     assert 'Superior to standard spearmint extract' not in notes
-    assert 'immediate' in notes.lower()
+    assert 'do not establish an immediate focus benefit' in notes.lower()
+    assert 'Kemin funded the study' not in notes
+    assert 'received research funding from or are employees of Kemin Foods, LC' in notes
     assert 'age-associated memory impairment' in notes.lower()
+
+
+@pytest.mark.parametrize("label,exact", [
+    ("high-polyphenol spearmint extract", False),
+    ("Spearmint extract", False),
+    ("Spearmint powder", False),
+    ("Spearmint tea", False),
+    ("not Neumentix, spearmint extract", False),
+    ("Spearmint extract without Neumentix", False),
+    ("Spearmint extract (not Neumentix)", False),
+    ("Neumentix-free spearmint extract", False),
+    ("Neumentix Phenolic Complex K110-42", True),
+])
+def test_generic_spearmint_description_does_not_inherit_exact_preparation_review(enricher, label, exact):
+    from scoring_v4.modules.botanical_profile import _botanical_benchmark
+    match = enricher._match_quality_map(
+        label, "Spearmint", enricher.databases["ingredient_quality_map"],
+        cleaner_canonical_id="spearmint",
+    )
+    assert match is not None
+    row = {"canonical_id": "spearmint", "name": label, "standard_name": "Spearmint",
+           "matched_form": match["form_id"]}
+    if exact:
+        assert match["form_id"] == "neumentix spearmint extract"
+        assert _botanical_benchmark(row) == "absent"
+    else:
+        assert match["form_id"] != "neumentix spearmint extract"
+        assert _botanical_benchmark(row) == "unresolved"
