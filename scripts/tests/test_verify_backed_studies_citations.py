@@ -105,3 +105,26 @@ def test_every_citation_in_backed_studies_is_a_claim() -> None:
         cited = set(scan_citations(entry, HISTORY_KEYS)) | set(re.findall(r"PMID[:\s]+(\d+)", json.dumps(entry)))
         missing = {p for p in cited if (p, str(entry.get("id"))) not in claims}
         assert not missing, (entry.get("id"), sorted(missing))
+
+
+def test_topic_gate_reads_the_whole_abstract_without_waiving_wrong_topics(tmp_path, monkeypatch):
+    import verify_backed_studies_citations as owner
+    path = tmp_path / 'backed.json'
+    title = 'Mucolytic agents versus placebo for chronic bronchitis'
+    path.write_text(json.dumps({'backed_clinical_studies': [{
+        'id': 'TEST_NAC', 'standard_name': 'Acetylcysteine',
+        'references_structured': [{'pmid': '12345', 'title': title}],
+    }]}))
+    monkeypatch.setattr(owner, 'DATA', path)
+    monkeypatch.setattr(owner, '_canonical_registry', lambda: None)
+    monkeypatch.setattr(owner, '_acknowledged_ghosts', lambda: {})
+    monkeypatch.setattr(sys, 'argv', ['verify_backed_studies_citations.py', '--strict'])
+    for ending, expected in [('Oral acetylcysteine was included.', 0),
+                             ('Only magnesium was studied.', 1)]:
+        def fetch(ids, abstract_chars=800):
+            abstract = ('Background description. ' * 50) + ending
+            if abstract_chars is not None:
+                abstract = abstract[:abstract_chars]
+            return {'12345': {'title': title, 'abstract': abstract, 'mesh_terms': []}}
+        monkeypatch.setattr(owner, 'fetch_articles', fetch)
+        assert owner.main() == expected
