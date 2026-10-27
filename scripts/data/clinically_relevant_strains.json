@@ -3,7 +3,7 @@
     "description": "Clinically relevant probiotic strains and prebiotic compounds",
     "purpose": "probiotic_strain_validation",
     "schema_version": "5.1.1",
-    "last_updated": "2026-10-26",
+    "last_updated": "2026-10-27",
     "total_entries": 132,
     "data_source": null,
     "version": "2.4.1",
@@ -1343,7 +1343,7 @@
           ],
           "population": {
             "age_group": "adult",
-            "description": "111 healthy adults with functional gastrointestinal complaints"
+            "description": "111 healthy adults aged 18-65 living in China with functional GI complaints. Registry inclusion specifies irregular bowel movements, including fewer than four stools weekly or periodic loose stools; recent GI disease, antibiotics, probiotics/prebiotics, pregnancy/breastfeeding and specified diseases/medications were excluded."
           },
           "purpose": "treatment",
           "condition": "functional_gastrointestinal_complaints",
@@ -1351,18 +1351,32 @@
             "basis": "discrete_daily_arms",
             "unit": "CFU",
             "values": [
-              1000000000.0
+              1000000000
             ],
-            "dosage_forms": [],
+            "dosage_forms": [
+              "oral powder sachet"
+            ],
             "duration_days": 28,
-            "co_therapies": [],
+            "co_therapies": [
+              "Registered protocol excludes recent antibiotics, other probiotic/prebiotic products, and relevant supplements/drugs; placebo sachet contains maltodextrin. No assigned active co-therapy is reported."
+            ],
             "dose_status": "verified",
             "dose_basis": "per_strain_daily",
             "duration_basis": "fixed_protocol",
             "source_provenance": {
               "pmid": "40707016",
               "source_url": "https://pubmed.ncbi.nlm.nih.gov/40707016/",
-              "location": "abstract"
+              "location": "Original PubMed abstract reports strain, daily potency, population, duration and results. ClinicalTrials.gov NCT06644001 arms/interventions, outcomes and eligibility independently verify powder sachet, frequency and registered endpoint classification."
+            },
+            "measurement_type": "viable_count",
+            "administration_frequency": "One 2 g powder sachet daily before a meal.",
+            "reported_regimen": "One 2 g sachet containing 1 billion CFU of BC30 once daily before a meal for four weeks; the six-week observation includes a two-week run-in.",
+            "normalization": {
+              "basis": "Source-reported strain potency is 1 billion CFU/day. The 2 g sachet is carrier/product mass, not probiotic organism mass or an efficacy minimum."
+            },
+            "duration_as_printed": {
+              "value": 4,
+              "unit": "weeks"
             }
           },
           "outcomes": [
@@ -1387,7 +1401,9 @@
           ],
           "trial_family": "kerry_bc30_gi_40707016",
           "limitations": [
-            "Sponsor-run (Kerry); endpoint hierarchy not stated in the abstract."
+            "Sponsor-run (Kerry); endpoint hierarchy not stated in the abstract.",
+            "ClinicalTrials.gov NCT06644001 verifies one 2 g powder sachet containing 1 billion CFU daily before a meal for 28 days. The registration was retrospective (first posted in 2024 for a 2021 trial). Registered outcome labels do not establish the original paper's prespecified hierarchy.",
+            "The full original methods and outcome tables were inaccessible in this review; the original hierarchy stays unresolved, not not_reported or primary. This regimen correction alone does not close source qualification or change efficacy credit."
           ],
           "review_status": "clinician_approved",
           "study_design": "rct",

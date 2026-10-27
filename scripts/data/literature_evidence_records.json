@@ -3,7 +3,7 @@
     "description": "Phase 4 shadow literature resolution registry for high-impact canonical actives",
     "purpose": "literature_evidence_resolution",
     "schema_version": "5.0.0",
-    "last_updated": "2026-10-24",
+    "last_updated": "2026-10-27",
     "total_entries": 808,
     "verification_pipeline": "scripts/api_audit/verify_literature_records.py",
     "verified_studies_count": 279,
@@ -1078,6 +1078,24 @@
           "25740909"
         ],
         "reviewed_at": "2026-10-04"
+      },
+      "reference_semantics": {
+        "reference_type": "no_benchmark",
+        "scope": "General catalog Dose for this exact canonical identity: the named reviewed sources do not establish a universal numerical efficacy, optimum or safety curve. This is not an exhaustive absence-of-research claim, Evidence approval or preparation-equivalence decision.",
+        "preparation": "Linum usitatissimum ground whole seed",
+        "purpose": "General catalog Dose only; source-specific clinical endpoints remain separately assessed.",
+        "population": "Only the cohorts described in the named source papers; no personal suitability or extrapolated population benefit inferred.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "mg",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "PMID:24126178",
+          "PMID:25740909"
+        ],
+        "rationale": "Trial24126178 tested30g/day milled flaxseed in110 peripheral-artery-disease patients for6months; review25740909 pooled11studies/14trials with whole seed/oil/lignan/fiber preparations. These do not establish a universal supplement-mass minimum, optimum or safety ceiling. Source identifiers, intervention and result limitations content-verified against live PubMed XML on 2026-10-27. Clinical applicability and safety remain independent. This is factual application of the existing October 18 Dose V4.1 completed-neutral policy (docs/plans/DOSE_V41_REFERENCE_DECISIONS.md), not a newly attributed clinical approval or efficacy decision.",
+        "owner": "scripts/data/literature_evidence_records.json::flaxseed",
+        "review_date": "2026-10-27",
+        "approval_status": "approved_existing_neutral_dose_v41_source_review"
       }
     },
     {
@@ -1148,6 +1166,24 @@
         "verified_at": "2026-09-21T07:39:42.986936+00:00",
         "all_pmids_verified": true,
         "retractions_found": false
+      },
+      "reference_semantics": {
+        "reference_type": "no_benchmark",
+        "scope": "General catalog Dose for this exact canonical identity: the named reviewed sources do not establish a universal numerical efficacy, optimum or safety curve. This is not an exhaustive absence-of-research claim, Evidence approval or preparation-equivalence decision.",
+        "preparation": "Flaxseed lignan extract (Secoisolariciresinol diglucoside, SDG)",
+        "purpose": "General catalog Dose only; source-specific clinical endpoints remain separately assessed.",
+        "population": "Only the cohorts described in the named source papers; no personal suitability or extrapolated population benefit inferred.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "mg",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "PMID:17987126",
+          "PMID:32575611"
+        ],
+        "rationale": "Source17987126 used360mg/day flaxseed-derived lignans in type2diabetes;32575611 used50mg/day SDG in healthy adults with null bile-acid outcomes. Different populations/endpoints and discrete regimens cannot define one generic lignan quality curve. Source identifiers, intervention and result limitations content-verified against live PubMed XML on 2026-10-27. Clinical applicability and safety remain independent. This is factual application of the existing October 18 Dose V4.1 completed-neutral policy (docs/plans/DOSE_V41_REFERENCE_DECISIONS.md), not a newly attributed clinical approval or efficacy decision.",
+        "owner": "scripts/data/literature_evidence_records.json::lignans",
+        "review_date": "2026-10-27",
+        "approval_status": "approved_existing_neutral_dose_v41_source_review"
       }
     },
     {
@@ -3256,6 +3292,23 @@
         "verified_at": "2026-09-21T07:39:42.986936+00:00",
         "all_pmids_verified": true,
         "retractions_found": false
+      },
+      "reference_semantics": {
+        "reference_type": "no_benchmark",
+        "scope": "General catalog Dose for this exact canonical identity: the named reviewed sources do not establish a universal numerical efficacy, optimum or safety curve. This is not an exhaustive absence-of-research claim, Evidence approval or preparation-equivalence decision.",
+        "preparation": "Pygeum africanum bark extract preparations (alone or in combination)",
+        "purpose": "General catalog Dose only; source-specific clinical endpoints remain separately assessed.",
+        "population": "Only the cohorts described in the named source papers; no personal suitability or extrapolated population benefit inferred.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "mg",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "PMID:11869585"
+        ],
+        "rationale": "Cochrane11869585 includes18trials/1562men; it explicitly describes varied preparations/doses, short studies, inadequate reporting and allocation concealment in only one study. No one broad catalog-mass threshold is established. Source identifiers, intervention and result limitations content-verified against live PubMed XML on 2026-10-27. Clinical applicability and safety remain independent. This is factual application of the existing October 18 Dose V4.1 completed-neutral policy (docs/plans/DOSE_V41_REFERENCE_DECISIONS.md), not a newly attributed clinical approval or efficacy decision.",
+        "owner": "scripts/data/literature_evidence_records.json::pygeum",
+        "review_date": "2026-10-27",
+        "approval_status": "approved_existing_neutral_dose_v41_source_review"
       }
     },
     {
@@ -3855,6 +3908,23 @@
         "verified_at": "2026-09-21T07:39:42.986936+00:00",
         "all_pmids_verified": true,
         "retractions_found": false
+      },
+      "reference_semantics": {
+        "reference_type": "no_benchmark",
+        "scope": "General catalog Dose for this exact canonical identity: the named reviewed sources do not establish a universal numerical efficacy, optimum or safety curve. This is not an exhaustive absence-of-research claim, Evidence approval or preparation-equivalence decision.",
+        "preparation": "Aloe vera preparations (varied across 8 trials)",
+        "purpose": "General catalog Dose only; source-specific clinical endpoints remain separately assessed.",
+        "population": "Only the cohorts described in the named source papers; no personal suitability or extrapolated population benefit inferred.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "mg",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "PMID:27009750"
+        ],
+        "rationale": "27009750 pooled8trials/470prediabetes or type2diabetes patients and identified high heterogeneity, evidence limitations and a need for standardized preparations. It does not establish one general catalog amount curve across aloe preparations. Source identifiers, intervention and result limitations content-verified against live PubMed XML on 2026-10-27. Clinical applicability and safety remain independent. This is factual application of the existing October 18 Dose V4.1 completed-neutral policy (docs/plans/DOSE_V41_REFERENCE_DECISIONS.md), not a newly attributed clinical approval or efficacy decision.",
+        "owner": "scripts/data/literature_evidence_records.json::aloe_vera",
+        "review_date": "2026-10-27",
+        "approval_status": "approved_existing_neutral_dose_v41_source_review"
       }
     },
     {
@@ -11095,7 +11165,24 @@
         "all_pmids_verified": true,
         "retractions_found": false
       },
-      "verification_result": "authoritative_pubmed_verified"
+      "verification_result": "authoritative_pubmed_verified",
+      "reference_semantics": {
+        "reference_type": "no_benchmark",
+        "scope": "General catalog Dose for this exact canonical identity: the named reviewed sources do not establish a universal numerical efficacy, optimum or safety curve. This is not an exhaustive absence-of-research claim, Evidence approval or preparation-equivalence decision.",
+        "preparation": "Green tea beverages or green tea extracts",
+        "purpose": "General catalog Dose only; source-specific clinical endpoints remain separately assessed.",
+        "population": "Only the cohorts described in the named source papers; no personal suitability or extrapolated population benefit inferred.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "mg",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "PMID:21715508"
+        ],
+        "rationale": "21715508 pools14trials/1136subjects and reports lipid changes not modified by catechin dose. Beverage/extract exposures and catechin amounts do not establish an EGCG or generic leaf-mass threshold; safety references and clinical applicability remain independent. Source identifiers, intervention and result limitations content-verified against live PubMed XML on 2026-10-27. Clinical applicability and safety remain independent. This is factual application of the existing October 18 Dose V4.1 completed-neutral policy (docs/plans/DOSE_V41_REFERENCE_DECISIONS.md), not a newly attributed clinical approval or efficacy decision.",
+        "owner": "scripts/data/literature_evidence_records.json::green_tea_leaf",
+        "review_date": "2026-10-27",
+        "approval_status": "approved_existing_neutral_dose_v41_source_review"
+      }
     },
     {
       "canonical_id": "long_pepper",
@@ -25500,6 +25587,23 @@
         "verified_at": "2026-10-08T04:35:08.624987+00:00",
         "all_pmids_verified": true,
         "retractions_found": false
+      },
+      "reference_semantics": {
+        "reference_type": "no_benchmark",
+        "scope": "General catalog Dose for this exact species and material. Completed bounded source review found no qualifying standalone controlled oral intervention to establish a general numerical curve. This is not an exhaustive absence-of-research or null-efficacy claim.",
+        "preparation": "Salix babylonica bark / bark extract",
+        "purpose": "General catalog Dose only; do not award benefit evidence or infer safety from this finding.",
+        "population": "No qualifying source population establishes a general numerical supplement target in this bounded search.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "mg",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "https://pubmed.ncbi.nlm.nih.gov/?term=%28%22Salix%20babylonica%22%5Btiab%5D%20OR%20%22weeping%20willow%22%5Btiab%5D%29%20AND%20%28human%2A%5Btiab%5D%20OR%20humans%5Bmh%5D%20OR%20trial%5Btiab%5D%20OR%20clinical%5Btiab%5D%20OR%20random%2A%5Btiab%5D%29"
+        ],
+        "rationale": "No qualifying standalone oral Salix babylonica bark efficacy intervention was found among the screened records. Animal, leaf, allergen and other Salix species findings cannot supply this bark assessment. Existing separate safety precautions remain intact. This bounded PubMed review is not exhaustive across all databases and does not establish a universal absence or null effect. No clinical grade, efficacy-dose benchmark or safety conclusion is assigned. Existing authored bounded review independently refreshed on 2026-10-27: all 36 PubMed result titles and available abstracts inspected. No qualifying controlled standalone oral efficacy regimen identified. Do not transfer other species, tissues, isolated constituents, combinations or nonhuman doses. Existing neutral-Dose policy only; no numerical benchmark, grade, or clinical approval created. Factual application of the approved October 18 Dose V4.1 completed-neutral policy, not a new clinical approval, threshold or exhaustive absence claim.",
+        "owner": "scripts/data/literature_evidence_records.json::weeping_willow_bark",
+        "review_date": "2026-10-27",
+        "approval_status": "approved_existing_neutral_dose_v41_source_review"
       }
     },
     {
@@ -25613,6 +25717,23 @@
         "verified_at": "2026-10-08T04:35:08.624987+00:00",
         "all_pmids_verified": true,
         "retractions_found": false
+      },
+      "reference_semantics": {
+        "reference_type": "no_benchmark",
+        "scope": "General catalog Dose for this exact species and material. Completed bounded source review found no qualifying standalone controlled oral intervention to establish a general numerical curve. This is not an exhaustive absence-of-research or null-efficacy claim.",
+        "preparation": "Smilax china root extract",
+        "purpose": "General catalog Dose only; do not award benefit evidence or infer safety from this finding.",
+        "population": "No qualifying source population establishes a general numerical supplement target in this bounded search.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "mg",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "https://pubmed.ncbi.nlm.nih.gov/?term=%28%22Smilax%20china%22%5Btiab%5D%20OR%20chopchini%5Btiab%5D%29%20AND%20%28humans%5Bmh%5D%20OR%20clinical%5Btiab%5D%20OR%20trial%5Btiab%5D%20OR%20patient%2A%5Btiab%5D%29%20NOT%20%28animals%5Bmh%5D%20NOT%20humans%5Bmh%5D%29"
+        ],
+        "rationale": "No attributable controlled standalone oral Smilax china root-extract efficacy study was found. Multi-intervention case reports cannot establish isolated efficacy. Smilax ornata/officinalis sarsaparilla findings are not this species. This bounded PubMed review is not exhaustive across all databases and does not establish a universal absence or null effect. No clinical grade, efficacy-dose benchmark or safety conclusion is assigned. Existing authored bounded review independently refreshed on 2026-10-27: all 40 PubMed result titles and available abstracts inspected. No qualifying controlled standalone oral efficacy regimen identified. Do not transfer other species, tissues, isolated constituents, combinations or nonhuman doses. Existing neutral-Dose policy only; no numerical benchmark, grade, or clinical approval created. Factual application of the approved October 18 Dose V4.1 completed-neutral policy, not a new clinical approval, threshold or exhaustive absence claim.",
+        "owner": "scripts/data/literature_evidence_records.json::chopchini",
+        "review_date": "2026-10-27",
+        "approval_status": "approved_existing_neutral_dose_v41_source_review"
       }
     },
     {
@@ -25635,6 +25756,23 @@
         "verified_at": "2026-10-08T04:35:08.624987+00:00",
         "all_pmids_verified": true,
         "retractions_found": false
+      },
+      "reference_semantics": {
+        "reference_type": "no_benchmark",
+        "scope": "General catalog Dose for this exact species and material. Completed bounded source review found no qualifying standalone controlled oral intervention to establish a general numerical curve. This is not an exhaustive absence-of-research or null-efficacy claim.",
+        "preparation": "Bixa orellana leaf extract",
+        "purpose": "General catalog Dose only; do not award benefit evidence or infer safety from this finding.",
+        "population": "No qualifying source population establishes a general numerical supplement target in this bounded search.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "mg",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "https://pubmed.ncbi.nlm.nih.gov/?term=%28%22Bixa%20orellana%22%5Btiab%5D%20OR%20achiote%5Btiab%5D%20OR%20annatto%5Btiab%5D%29%20AND%20%28leaf%5Btiab%5D%20OR%20leaves%5Btiab%5D%29%20AND%20%28humans%5Bmh%5D%20OR%20clinical%5Btiab%5D%20OR%20trial%5Btiab%5D%20OR%20patient%2A%5Btiab%5D%29%20NOT%20%28animals%5Bmh%5D%20NOT%20humans%5Bmh%5D%29"
+        ],
+        "rationale": "No qualifying controlled oral leaf-extract efficacy intervention was found. Review PMID24357022 discusses leaf-powder safety, not efficacy of a 4:1 leaf extract; no safety conclusion is transferred. Annatto seed colorant and tocotrienol research are different materials. This bounded PubMed review is not exhaustive across all databases and does not establish a universal absence or null effect. No clinical grade, efficacy-dose benchmark or safety conclusion is assigned. Existing authored bounded review independently refreshed on 2026-10-27: all 10 PubMed result titles and available abstracts inspected. No qualifying controlled standalone oral efficacy regimen identified. Do not transfer other species, tissues, isolated constituents, combinations or nonhuman doses. Existing neutral-Dose policy only; no numerical benchmark, grade, or clinical approval created. Factual application of the approved October 18 Dose V4.1 completed-neutral policy, not a new clinical approval, threshold or exhaustive absence claim.",
+        "owner": "scripts/data/literature_evidence_records.json::achiote_leaf",
+        "review_date": "2026-10-27",
+        "approval_status": "approved_existing_neutral_dose_v41_source_review"
       }
     },
     {

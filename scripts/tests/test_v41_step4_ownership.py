@@ -193,3 +193,51 @@ def test_an_unreadable_profile_amount_is_unfinished_work_with_honest_copy():
                            "metadata": meta}, 20, "generic_botanical_branded", _config())
     assert pillar["reason"] == ("The printed amount could not be read yet, so its dose has not been "
                                 "assessed.")
+
+
+@pytest.mark.parametrize("legacy", [False, True])
+def test_source_owned_hidden_limit_is_not_an_unfinished_benchmark(legacy):
+    hidden = {"benchmark": "unresolved", "assessment_status": "complete",
+              "reason_code": "amount_not_declared"}
+    metadata = ({"botanical_dose": hidden, "botanical_dose_band": "blend_total_only"} if legacy else
+                {"specialized_purpose_assessments": [{"band": "blend_total_only", "metadata": hidden}]})
+    breakdown = {"module": "generic", "dimensions": {"dose": {"metadata": metadata}}}
+    assert unfinished_source_assessment({}, breakdown) is None
+
+
+def test_hidden_limit_does_not_clear_a_second_unresolved_disclosed_benchmark():
+    metadata = {"specialized_purpose_assessments": [
+        {"band": "blend_total_only", "metadata": {"benchmark": "unresolved",
+          "assessment_status": "complete", "reason_code": "amount_not_declared"}},
+        {"band": "disclosed_no_reference", "metadata": {"benchmark": "unresolved"}},
+    ]}
+    breakdown = {"module": "generic", "dimensions": {"dose": {"metadata": metadata}}}
+    assert unfinished_source_assessment({}, breakdown) == "dose_benchmark_identity_unresolved"
+
+
+@pytest.mark.parametrize("band,reason", [("disclosed_no_reference", "amount_not_declared"),
+                                        ("blend_total_only", "unreviewed_source")])
+def test_generic_complete_stamp_cannot_waive_unresolved_benchmark(band, reason):
+    metadata = {"specialized_purpose_assessments": [{"band": band, "metadata": {
+        "benchmark": "unresolved", "assessment_status": "complete", "reason_code": reason}}]}
+    breakdown = {"module": "generic", "dimensions": {"dose": {"metadata": metadata}}}
+    assert unfinished_source_assessment({}, breakdown) == "dose_benchmark_identity_unresolved"
+
+
+def test_mixed_purpose_hidden_limit_copy_reads_the_completed_owner_receipt():
+    from scoring_v4.quality_score import _undisclosed_component_dose_reason
+    dimension = {"metadata": {"specialized_purpose_assessments": [{
+        "band": "blend_total_only", "metadata": {"benchmark": "unresolved",
+        "assessment_status": "complete", "reason_code": "amount_not_declared"}}]}}
+    reason = _undisclosed_component_dose_reason(dimension)
+    assert reason == "Some blend ingredients do not have individual amounts listed."
+
+
+@pytest.mark.parametrize("status,reason", [("incomplete", "amount_not_declared"),
+                                          ("complete", "unreviewed_source")])
+def test_mixed_purpose_copy_does_not_reclassify_unfinished_work_as_label_hiding(status, reason):
+    from scoring_v4.quality_score import _undisclosed_component_dose_reason
+    dimension = {"metadata": {"specialized_purpose_assessments": [{
+        "band": "blend_total_only", "metadata": {"benchmark": "unresolved",
+        "assessment_status": status, "reason_code": reason}}]}}
+    assert _undisclosed_component_dose_reason(dimension) is None

@@ -1214,32 +1214,20 @@ def test_primary_floor_still_rejects_negative_effect() -> None:
 def test_joint_support_caps_branded_primary_evidence_floor() -> None:
     from scoring_v4.modules.generic_evidence import score_evidence
 
-    payload = score_evidence(
-        _product(
-            supplement_taxonomy={"primary_type": "joint_support"},
-            ingredients=[
-                _ingredient(
-                    name="OptiMSM",
-                    standard_name="MSM",
-                    canonical_id="msm",
-                    quantity=1500,
-                    unit="mg",
-                )
-            ],
-            matches=[
-                _match(
-                    id="BRAND_OPTIMSM",
-                    ingredient="OptiMSM",
-                    standard_name="OptiMSM",
-                    study_type="rct_multiple",
-                    evidence_level="branded-rct",
-                    effect_direction="positive_strong",
-                    total_enrollment=200,
-                )
-            ],
-        ),
-        apply_primary_floor=True,
-    )
+    ingredient = _ingredient(name="OptiMSM", standard_name="MSM",
+                             canonical_id="msm", quantity=2000, unit="mg")
+    ingredient.update(raw_source_text="OptiMSM", raw_source_path="ingredientRows[0]")
+    match = _match(id="BRAND_OPTIMSM", ingredient="OptiMSM", standard_name="OptiMSM",
+                   study_type="rct_multiple", evidence_level="branded-rct",
+                   effect_direction="positive_strong", total_enrollment=200)
+    match.update(matched_source_row_refs=["ingredientRows[0]"], matched_canonical_ids=["msm"])
+    product = _product(supplement_taxonomy={"primary_type": "joint_support"},
+                       ingredients=[ingredient], matches=[match])
+    product["activeIngredients"] = [dict(ingredient)]
+    product["physicalState"] = {"name": "Tablet"}
+    product["serving_basis"] = {"min_servings_per_day": 1, "max_servings_per_day": 1,
+                                "servings_per_day_source": "directions"}
+    payload = score_evidence(product, apply_primary_floor=True)
 
     assert payload["score"] == 14.0
     assert payload["components"]["joint_support_evidence_cap"] == 14.0

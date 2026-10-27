@@ -101,6 +101,7 @@ COMPONENT_REGISTRATION_STATUS = frozenset(
     {"fully_registered", "unregistered_components_present", "identity_uncertain"}
 )
 OUTCOME_KINDS = frozenset({"patient_important", "surrogate", "evidence_ranking"})
+OUTCOME_HIERARCHIES = frozenset({"primary", "secondary", "post_hoc", "guideline", "not_reported", "unresolved"})
 # One owner for what a study dose counts in: the runtime validator and the dose
 # classifier import this mapping rather than keeping their own copy.
 DOSE_MEASUREMENT_UNITS = {
@@ -274,13 +275,7 @@ def _outcome_errors(context: Mapping) -> list[str]:
             errors.append(f"{prefix}.name_required")
         if outcome.get("kind") not in OUTCOME_KINDS:
             errors.append(f"{prefix}.kind_invalid")
-        if outcome.get("hierarchy") not in {
-            "primary",
-            "secondary",
-            "post_hoc",
-            "guideline",
-            "unresolved",
-        }:
+        if outcome.get("hierarchy") not in OUTCOME_HIERARCHIES:
             errors.append(f"{prefix}.hierarchy_invalid")
         if outcome.get("direction") not in {
             "positive",

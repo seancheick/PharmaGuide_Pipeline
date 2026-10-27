@@ -909,6 +909,21 @@ def resolve_evidence_for_row(
         # Check study types, effect directions, and applicability
         valid_studies = [s for s in deduped_studies if clinical_record_sources_eligible(s)]
         if not valid_studies:
+            from clinical_applicability import assess_clinical_source_review
+            reviewed_references = all(
+                any(study.get(key) == "reference" for key in ("study_type", "evidence_level"))
+                and study.get("scoring_eligible") is not False
+                and assess_clinical_source_review(study)["is_complete"]
+                for study in deduped_studies
+            )
+            if reviewed_references:
+                return EvidenceResolution(
+                    canonical_id=canonical, ingredient_name=name,
+                    matched_owners=matched_owners,
+                    disposition=EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value,
+                    points_eligible=False, applicability_status="not_applicable",
+                    reason_code="reference_only_clinical_record", owner_facts=owner_facts,
+                )
             return EvidenceResolution(
                 canonical_id=canonical, ingredient_name=name,
                 matched_owners=matched_owners,

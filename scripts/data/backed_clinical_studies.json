@@ -109,8 +109,8 @@
       "health_goals_supported": [
         "Digestive Health"
       ],
-      "notes": "Evidence is for the whole 24-strain plus pomegranate formulation, not individual strains, skin, heart health or micronutrient synthesis. 350 is the baseline sample of the symptom trial, not a sum across studies. No CFU conversion is known or used. PMID 40944126 and 41750436 share protocol NCT04171466; both report 32 randomized, with 27 and 21 completing respectively. The registration reports 46 actual participants across four arms; unique cohort overlap is unresolved, so counts are not summed. Their microbiome/metabolite and barrier outcomes are not independent symptom replication or demonstrated prevention of antibiotic-associated diarrhea. Trial reports establish the named formula, strain list and total potency, not the commercial label's per-blend or individual-strain quantities. Commercial per-blend allocations remain label-identity constraints only.",
-      "last_updated": "2026-09-03",
+      "notes": "Evidence is for the whole 24-strain plus pomegranate formulation, not individual strains, skin, heart health or micronutrient synthesis. 350 is the baseline sample of the symptom trial, not a sum across studies. No CFU conversion is known or used. PMID 40944126 and 41750436 share protocol NCT04171466; both report 32 randomized, with 27 and 21 completing respectively. The registration reports 46 actual participants across four arms; unique cohort overlap is unresolved, so counts are not summed. Their microbiome/metabolite and barrier outcomes are not independent symptom replication or demonstrated prevention of antibiotic-associated diarrhea. Trial reports establish the named formula, strain list and total potency, not the commercial label's per-blend or individual-strain quantities. Commercial per-blend allocations remain label-identity constraints only. The signed A032 limited whole-formula decision, accepted by Dr. Pham on 2026-10-26 as attested by Sean, is now encoded for the six-week symptom trial only. Its initial three-day titration is not copied into the separate 91-day mechanistic regimens. Existing exact formula matching remains required; native AFU is not converted to CFU and individual strain effects are not inferred.",
+      "last_updated": "2026-10-27",
       "applicability": {
         "scope": "formula_context_only",
         "reason": "Requires complete formula_contract verification; name matching cannot award credit."
@@ -303,7 +303,9 @@
           "url": "https://pubmed.ncbi.nlm.nih.gov/40944126/",
           "supports_claims": [
             "Same complete formula and native AFU dose; small 91-day mechanistic study, not independent proof of individual-strain or disease-treatment efficacy."
-          ]
+          ],
+          "scoring_eligible": false,
+          "notes": "Retained complete-formula microbiome/metabolite research. The signed A032 decision keeps this mechanistic context separate from demonstrated clinical symptom efficacy. Shared registration does not establish independent replication."
         },
         {
           "pmid": "41750436",
@@ -318,7 +320,9 @@
           "randomized": 32,
           "completed": 21,
           "cohort_independence": "Shared master protocol with PMID 40944126; exact participant overlap unresolved.",
-          "funding_limitation": "Seed Health funding and author affiliations; not independent replication."
+          "funding_limitation": "Seed Health funding and author affiliations; not independent replication.",
+          "scoring_eligible": false,
+          "notes": "Retained complete-formula microbiome/metabolite research. The signed A032 decision keeps this mechanistic context separate from demonstrated clinical symptom efficacy. Shared registration does not establish independent replication."
         }
       ],
       "reference_semantics": {
@@ -339,7 +343,269 @@
         "owner": "scripts/data/backed_clinical_studies.json::FORMULA_SEED_DS01",
         "review_date": "2026-10-18",
         "approval_status": "approved_existing_policy_2026_10_18"
-      }
+      },
+      "study_contexts": [
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "seed_ds01_41599868",
+          "source_pmids": [
+            "41599868"
+          ],
+          "components": [
+            "FORMULA_SEED_DS01"
+          ],
+          "identity_scope": "combination",
+          "identity": {
+            "branded_material": "DS-01",
+            "manufacturer": "Seed Health",
+            "standardization": "Complete 24-strain ViaCap formulation supplying 53.6 billion AFU and 400 mg Indian pomegranate extract standardized to greater than 40% polyphenols at the full two-capsule daily regimen."
+          },
+          "exposure_basis": "supplement_dose",
+          "route": "oral",
+          "evidence_role": "direct_rct",
+          "component_registration_status": "fully_registered",
+          "condition": "gastrointestinal_function",
+          "purpose": "physiology",
+          "population": {
+            "age_group": "adult",
+            "description": "Generally healthy US adults with self-reported bloating/indigestion for at least three months and reduced bloating as their primary goal; 350 baseline participants and 219 with evaluable week-six data."
+          },
+          "study_design": "Randomized, double-blind, placebo-controlled, parallel-group trial; decentralized US symptom trial conducted by Radicle Science.",
+          "trial_family": "seed_ds01_symptoms_NCT06009614",
+          "review_status": "clinician_approved",
+          "human_status": "confirmed",
+          "source_integrity": "none",
+          "scoring_eligible": true,
+          "dose": {
+            "measurement_type": "afu",
+            "unit": "AFU",
+            "values": [
+              53600000000
+            ],
+            "dose_status": "verified",
+            "dose_basis": "nominal_assigned_arm",
+            "duration_basis": "fixed_protocol",
+            "duration_days": 42,
+            "administration_frequency": "One capsule daily for the first three days, then two capsules daily, once in the morning on an empty stomach immediately before breakfast.",
+            "dosage_forms": [
+              "oral capsule-in-capsule"
+            ],
+            "reported_regimen": "Six-week protocol: one capsule/day on the first three days, then two/day at the full 53.6 billion AFU plus 400 mg pomegranate regimen; not CFU.",
+            "normalization": {
+              "basis": "Source-reported complete formula potency in native AFU; pomegranate coingredient is separately reported as 400 mg at full daily serving. No AFU-to-CFU conversion or individual-strain allocation inferred."
+            },
+            "source_provenance": {
+              "pmid": "41599868",
+              "location": "Original full text Methods 2.1-2.5 and Results 3.1-3.7.",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/41599868/"
+            },
+            "co_therapies": [
+              "Maintain usual diet; pregnancy/breastfeeding and specified interacting medications were excluded. Study did not assign an antibiotic co-therapy."
+            ]
+          },
+          "outcomes": [
+            {
+              "name": "Digestion-associated Quality-of-Life Questionnaire at week six: median 0.80 versus 1.20, p<0.05.",
+              "hierarchy": "primary",
+              "kind": "patient_important",
+              "direction": "positive",
+              "outcome_role": "direct_between_group_effect"
+            },
+            {
+              "name": "Week-six PROMIS bloating/gas and abdominal pain/discomfort: between-group improvements.",
+              "hierarchy": "secondary",
+              "kind": "patient_important",
+              "direction": "positive",
+              "outcome_role": "direct_between_group_effect"
+            },
+            {
+              "name": "Anxiety, depression and libido in the overall population.",
+              "hierarchy": "secondary",
+              "kind": "patient_important",
+              "direction": "null",
+              "outcome_role": "direct_between_group_effect"
+            }
+          ],
+          "limitations": [
+            "Substantial attrition: 350 baseline participants and 219 with evaluable week-six data; analysis required at least one adherent post-baseline week and used last observation carried forward only for the final two time points.",
+            "Self-reported symptoms and high placebo response; the trial does not establish diagnosis-specific treatment, pregnancy or pediatric benefit.",
+            "Seed Health employees/shareholders and advisors participated as authors; clinical operations were conducted by Radicle Science.",
+            "Only the complete tested 24-strain/pomegranate formula is supported. No effect or amount is attributed to individual strains; no AFU-to-CFU conversion is established.",
+            "Related 91-day mechanistic reports are not independent symptom-endpoint replication. They share NCT04171466 and unique cohort overlap remains unresolved; their enrollments are not summed."
+          ],
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-10-26",
+            "scope": "identity_dose_outcome_applicability"
+          }
+        },
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "seed_ds01_40944126",
+          "source_pmids": [
+            "40944126"
+          ],
+          "components": [
+            "FORMULA_SEED_DS01"
+          ],
+          "identity_scope": "combination",
+          "identity": {
+            "branded_material": "DS-01",
+            "manufacturer": "Seed Health",
+            "standardization": "Complete 24-strain ViaCap formulation supplying 53.6 billion AFU and 400 mg Indian pomegranate extract standardized to greater than 40% polyphenols at the full two-capsule daily regimen."
+          },
+          "exposure_basis": "supplement_dose",
+          "route": "oral",
+          "evidence_role": "direct_rct",
+          "component_registration_status": "fully_registered",
+          "condition": "gastrointestinal_function",
+          "purpose": "physiology",
+          "population": {
+            "age_group": "adult",
+            "description": "Healthy adults in Canada; 32 randomized and 27 completers analyzed after 91 days. This report did not include the antibiotic challenge."
+          },
+          "study_design": "Randomized, double-blind, placebo-controlled, parallel-group trial; single-site healthy-adult mechanistic study conducted by KGK Science in Canada.",
+          "trial_family": "seed_ds01_mechanistic_NCT04171466",
+          "review_status": "clinician_approved",
+          "human_status": "confirmed",
+          "source_integrity": "none",
+          "scoring_eligible": false,
+          "dose": {
+            "measurement_type": "afu",
+            "unit": "AFU",
+            "values": [
+              53600000000
+            ],
+            "dose_status": "verified",
+            "dose_basis": "nominal_assigned_arm",
+            "duration_basis": "fixed_protocol",
+            "duration_days": 91,
+            "administration_frequency": "Two capsules once daily in the morning, immediately before breakfast on an empty stomach, throughout the 91-day study.",
+            "dosage_forms": [
+              "oral capsule-in-capsule"
+            ],
+            "reported_regimen": "Two ViaCap capsules daily supplying 53.6 billion AFU and 400 mg pomegranate extract for 91 days; not CFU.",
+            "normalization": {
+              "basis": "Source-reported complete formula potency in native AFU; pomegranate coingredient is separately reported as 400 mg at full daily serving. No AFU-to-CFU conversion or individual-strain allocation inferred."
+            },
+            "source_provenance": {
+              "pmid": "40944126",
+              "location": "Original full text Methods 2.1-2.4 and Results; IRB and registration statement.",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/40944126/"
+            },
+            "co_therapies": [
+              "Participants avoided probiotics, prebiotics and specified live-culture foods/beverages; no antibiotic challenge assigned in this report."
+            ]
+          },
+          "outcomes": [
+            {
+              "name": "Microbiota composition at day91",
+              "hierarchy": "primary",
+              "kind": "surrogate",
+              "direction": "positive",
+              "outcome_role": "surrogate"
+            },
+            {
+              "name": "Butyrate,UroA and CRP",
+              "hierarchy": "secondary",
+              "kind": "surrogate",
+              "direction": "positive",
+              "outcome_role": "surrogate"
+            }
+          ],
+          "limitations": [
+            "Mechanistic surrogate outcomes do not establish clinical disease prevention, individual-strain efficacy or independent replication of the six-week symptom finding.",
+            "The two mechanistic reports share NCT04171466. Exact cohort overlap remains unresolved; counts are not summed.",
+            "Seed Health funding/author relationships limit independence; clinical operations were conducted by KGK Science.",
+            "Only the complete 24-strain/pomegranate formulation and native AFU potency were studied; no AFU-to-CFU conversion or individual-strain dose allocation is established."
+          ],
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-10-26",
+            "scope": "identity_dose_outcome_applicability"
+          }
+        },
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "seed_ds01_41750436",
+          "source_pmids": [
+            "41750436"
+          ],
+          "components": [
+            "FORMULA_SEED_DS01"
+          ],
+          "identity_scope": "combination",
+          "identity": {
+            "branded_material": "DS-01",
+            "manufacturer": "Seed Health",
+            "standardization": "Complete 24-strain ViaCap formulation supplying 53.6 billion AFU and 400 mg Indian pomegranate extract standardized to greater than 40% polyphenols at the full two-capsule daily regimen."
+          },
+          "exposure_basis": "supplement_dose",
+          "route": "oral",
+          "evidence_role": "direct_rct",
+          "component_registration_status": "fully_registered",
+          "condition": "gastrointestinal_function",
+          "purpose": "physiology",
+          "population": {
+            "age_group": "adult",
+            "description": "Healthy adults aged 18-55 in Canada undergoing a standardized seven-day antibiotic challenge; 32 randomized and 21 completers analyzed after 91 days."
+          },
+          "study_design": "Randomized, double-blind, placebo-controlled, parallel-group trial; single-site healthy-adult mechanistic study conducted by KGK Science in Canada.",
+          "trial_family": "seed_ds01_mechanistic_NCT04171466",
+          "review_status": "clinician_approved",
+          "human_status": "confirmed",
+          "source_integrity": "none",
+          "scoring_eligible": false,
+          "dose": {
+            "measurement_type": "afu",
+            "unit": "AFU",
+            "values": [
+              53600000000
+            ],
+            "dose_status": "verified",
+            "dose_basis": "nominal_assigned_arm",
+            "duration_basis": "fixed_protocol",
+            "duration_days": 91,
+            "administration_frequency": "Two capsules once daily in the morning, immediately before breakfast on an empty stomach, throughout the 91-day study.",
+            "dosage_forms": [
+              "oral capsule-in-capsule"
+            ],
+            "reported_regimen": "Two ViaCap capsules daily supplying 53.6 billion AFU and 400 mg pomegranate extract for 91 days; not CFU.",
+            "normalization": {
+              "basis": "Source-reported complete formula potency in native AFU; pomegranate coingredient is separately reported as 400 mg at full daily serving. No AFU-to-CFU conversion or individual-strain allocation inferred."
+            },
+            "source_provenance": {
+              "pmid": "41750436",
+              "location": "Original full text Materials and Methods 4.1-4.4, Results and participant-flow diagram.",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/41750436/"
+            },
+            "co_therapies": [
+              "Ciprofloxacin 500 mg orally twice daily and metronidazole 500 mg orally three times daily for the first seven days. Participants avoided other probiotics, fermented foods, NSAIDs and specified drugs/supplements."
+            ]
+          },
+          "outcomes": [
+            {
+              "name": "Microbiome recovery/metabolites/barrier",
+              "hierarchy": "unresolved",
+              "kind": "surrogate",
+              "direction": "positive",
+              "outcome_role": "surrogate"
+            }
+          ],
+          "limitations": [
+            "Mechanistic surrogate outcomes do not establish clinical disease prevention, individual-strain efficacy or independent replication of the six-week symptom finding.",
+            "The two mechanistic reports share NCT04171466. Exact cohort overlap remains unresolved; counts are not summed.",
+            "Seed Health funding/author relationships limit independence; clinical operations were conducted by KGK Science.",
+            "Only the complete 24-strain/pomegranate formulation and native AFU potency were studied; no AFU-to-CFU conversion or individual-strain dose allocation is established.",
+            "The paper lists microbiome, metabolite and gut-barrier endpoints without establishing a single prespecified primary clinical symptom endpoint. No antibiotic-associated-diarrhea prevention conclusion follows."
+          ],
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-10-26",
+            "scope": "identity_dose_outcome_applicability"
+          }
+        }
+      ]
     },
     {
       "id": "BRAND_MERIVA",
@@ -2378,10 +2644,10 @@
         "homocysteine ↓"
       ],
       "health_goals_supported": [],
-      "notes": "Quatrefolic is the glucosamine salt of 5-MTHF with explicit EFSA-reviewed human bioavailability evidence. Most support is PK and biomarker based rather than disease-endpoint RCTs. PMID 23698160 randomized 149 and is authored by Zappacosta, not Venn. The EFSA DFE opinion is not a therapeutic efficacy RCT; generic 5-MTHF evidence does not independently verify the exact glucosamine salt in every trial.",
+      "notes": "Quatrefolic is the glucosamine salt of 5-MTHF with explicit EFSA-reviewed human bioavailability evidence. Most support is PK and biomarker based rather than disease-endpoint RCTs. PMID 23698160 is authored by Zappacosta, not Venn; Methods report 158 agreed to participate and 149 completed, the randomized total is not established. The EFSA DFE opinion is not a therapeutic efficacy RCT; generic 5-MTHF evidence does not independently verify the exact glucosamine salt in every trial.",
       "study_type": "rct_multiple",
-      "last_updated": "2026-10-11",
-      "notable_studies": "EFSA PMID 36034319 evaluates dietary folate equivalents for specified 5-MTHF salts, not therapeutic efficacy. Zappacosta et al. (2013, PMID 23698160) randomized 149 adults with moderate hyperhomocysteinemia to diet, 5-MTHF, folic acid or placebo; exact Quatrefolic preparation cannot be inferred from a generic 5-MTHF label.",
+      "last_updated": "2026-10-27",
+      "notable_studies": "EFSA PMID 36034319 evaluates dietary folate equivalents for specified 5-MTHF salts, not therapeutic efficacy. Zappacosta et al. (2013, PMID 23698160) reports 149 adults completing diet, 5-MTHF, folic acid or placebo groups after 158 agreed to participate; the total randomized count is not established by the inspected methods; exact Quatrefolic preparation cannot be inferred from a generic 5-MTHF label.",
       "references_structured": [
         {
           "type": "pubmed",
@@ -2400,7 +2666,9 @@
           "evidence_grade": "journal_article",
           "retracted": false,
           "supports_claims": [],
-          "verification_source": "pubmed_eutils"
+          "verification_source": "pubmed_eutils",
+          "scoring_eligible": false,
+          "notes": "EFSA dietary-folate-equivalent conversion/bioavailability opinion for specified 5-MTHF salts, not a therapeutic clinical-outcome RCT or proof of neural-tube-defect-prevention efficacy for this branded supplement. Identity/nutrient conversion facts remain retained."
         },
         {
           "type": "pubmed",
@@ -2439,7 +2707,9 @@
           "evidence_grade": "rct",
           "retracted": false,
           "supports_claims": [],
-          "verification_source": "pubmed_eutils"
+          "verification_source": "pubmed_eutils",
+          "scoring_eligible": false,
+          "notes": "Preparation-specific attribution is unresolved: Methods 2.4 report Merck Eprova [6S]-5-MTHF material, not verified Quatrefolic glucosamine salt. Methods 2.1 report 158 agreed to participate and 149 completed; the total randomized count is not established here. Retained for generic folate biomarker context, not affirmative branded clinical credit."
         }
       ],
       "external_ids": {
@@ -2450,7 +2720,7 @@
       "total_enrollment": null,
       "registry_completed_trials_count": 1,
       "effect_direction_confidence": "medium",
-      "effect_direction_rationale": "PMID 23698160 randomized 149 and is authored by Zappacosta, not Venn. The EFSA DFE opinion is not a therapeutic efficacy RCT; generic 5-MTHF evidence does not independently verify the exact glucosamine salt in every trial.",
+      "effect_direction_rationale": "PMID 23698160 is authored by Zappacosta, not Venn; 149 completed after 158 agreed to participate, and an exact total randomized count is not established. The EFSA DFE opinion is not a therapeutic efficacy RCT; generic 5-MTHF evidence does not independently verify the exact glucosamine salt in every trial.",
       "endpoint_relevance_tags": []
     },
     {
@@ -4013,9 +4283,9 @@
       "health_goals_supported": [
         "Joint & Bone Health"
       ],
-      "notes": "Distilled MSM with explicit randomized human evidence in knee pain and osteoarthritis; newer mild-knee-pain data extend support but remain ingredient-like rather than uniquely product-specific. Studied doses: 6 g/day (PMID 16309928, MSM 3 g twice daily; source not named in the abstract) and 2 g/day (PMID 37447322, ten 200 mg OptiMSM tablets). Generic MSM draws on INGR_MSM, not on this brand record. Cited studies randomized 50 OA and 88 mild-knee-discomfort participants. Selected pain/function findings at 6 g/day and JKOM findings at 2 g/day must remain dose-specific. Exact branded preparation and unique aggregate require methods-level verification. Retained-source scope and limitations: Knee osteoarthritis pain/function in a small pilot (PMID: 16309928) Mild knee-pain JKOM outcomes; not exercise-recovery or measured anti-inflammatory efficacy (PMID: 37447322)",
+      "notes": "Distilled MSM with explicit randomized human evidence in knee pain and osteoarthritis; newer mild-knee-pain data extend support but remain ingredient-like rather than uniquely product-specific. Studied doses: 6 g/day (PMID 16309928, MSM 3 g twice daily; source not named in the abstract) and 2 g/day (PMID 37447322, ten 200 mg OptiMSM tablets). Generic MSM draws on INGR_MSM, not on this brand record. Cited studies randomized 50 OA and 88 mild-knee-discomfort participants. Selected pain/function findings at 6 g/day and JKOM findings at 2 g/day must remain dose-specific. Exact branded preparation and unique aggregate require methods-level verification. Retained-source scope and limitations: Knee osteoarthritis pain/function in a small pilot (PMID: 16309928) Mild knee-pain JKOM outcomes; not exercise-recovery or measured anti-inflammatory efficacy (PMID: 37447322) Source context 37447322 is now encoded under the signed limited A015/A093 decisions, with the exact OptiMSM identity confirmed in Methods 2.3. This same trial is shared by BRAND_OPTIMSM and INGR_MSM, not independent replication. The 6 g/day osteoarthritis pilot remains historical context and cannot broaden the accepted preparation, dose or outcome. Exact product correspondence remains independently checked.",
       "study_type": "rct_multiple",
-      "last_updated": "2026-10-11",
+      "last_updated": "2026-10-27",
       "notable_studies": "Kim et al. (2006, PMID 16309928) placebo-controlled osteoarthritis trial found improved pain and physical function with MSM. More recent randomized knee-pain data include Toguchi et al. (2023, PMID 37447322), which showed improved quality-of-life measures after 12 weeks of MSM intake.",
       "references_structured": [
         {
@@ -4055,7 +4325,9 @@
           "evidence_grade": "rct",
           "retracted": false,
           "supports_claims": [],
-          "verification_source": "pubmed_eutils"
+          "verification_source": "pubmed_eutils",
+          "scoring_eligible": false,
+          "notes": "Retained historical pilot; separate 6 g/day osteoarthritis context is not covered by the accepted 2 g/day mild-knee-pain decision. No scoring transfer until a qualifying scoped assessment supports it."
         },
         {
           "type": "pubmed",
@@ -4091,11 +4363,11 @@
       "external_ids": {
         "unii": "9H4PO4Z4FT"
       },
-      "effect_direction": "positive_strong",
+      "effect_direction": "mixed",
       "primary_outcome": "Joint & Bone Health",
       "total_enrollment": null,
       "effect_direction_confidence": "medium",
-      "effect_direction_rationale": "Source-content attribution reconciled against retained primary references on2026-10-23. Current descriptive direction: positive_strong. Actual measured outcomes and source limitations are recorded separately. This is not attributable clinician approval; existing clinical context holds remain.",
+      "effect_direction_rationale": "Scoped A015/A093 accepted by Dr. Pham on 2026-10-26, as attested by Sean: one exact OptiMSM trial, borderline primary JKOM benefit with null JOA and inflammatory outcomes. The retained score_contribution grade is not a new grade decision. No energy, recovery, inflammation or longevity transfer; exact preparation and discrete regimen applicability enforced separately.",
       "endpoint_relevance_tags": [
         "joint_pain"
       ],
@@ -4119,6 +4391,118 @@
         "owner": "scripts/data/backed_clinical_studies.json::BRAND_OPTIMSM",
         "review_date": "2026-10-18",
         "approval_status": "approved_existing_neutral_2026_10_18"
+      },
+      "study_contexts": [
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "brand_optimsm_mild_knee_pain_37447322",
+          "source_pmids": [
+            "37447322"
+          ],
+          "components": [
+            "BRAND_OPTIMSM"
+          ],
+          "identity_scope": "branded_material",
+          "identity": {
+            "branded_material": "OptiMSM",
+            "manufacturer": "Bergstrom Nutrition"
+          },
+          "exposure_basis": "supplement_dose",
+          "route": "oral",
+          "evidence_role": "direct_rct",
+          "component_registration_status": "fully_registered",
+          "condition": "mild_knee_discomfort",
+          "purpose": "treatment",
+          "population": {
+            "age_group": "adult",
+            "description": "Healthy Japanese adults aged at least 20 with mild knee pain and Kellgren-Lawrence grade 0 or 1; 88 randomized, 80 per-protocol efficacy analyses and 88 safety analyses. Participants undergoing knee-disease treatment or using medicines/supplements were excluded."
+          },
+          "study_design": "Randomized, double-blind, placebo-controlled parallel-group trial; 44 assigned to each arm; lactose placebo; per-protocol primary analysis.",
+          "trial_family": "optimsm_mild_knee_pain_37447322",
+          "review_status": "clinician_approved",
+          "human_status": "confirmed",
+          "source_integrity": "none",
+          "scoring_eligible": true,
+          "dose": {
+            "measurement_type": "mass",
+            "unit": "mg",
+            "values": [
+              2000
+            ],
+            "dose_status": "verified",
+            "dose_basis": "nominal_assigned_arm",
+            "duration_basis": "fixed_protocol",
+            "duration_days": 84,
+            "administration_frequency": "Five 200 mg tablets at breakfast and five at dinner daily.",
+            "dosage_forms": [
+              "oral tablet"
+            ],
+            "reported_regimen": "Ten tablets containing 200 mg MSM each daily, as five at breakfast and five at dinner, for 12 weeks.",
+            "normalization": {
+              "basis": "Ten tablets times 200 mg MSM equals 2,000 mg/day of the studied OptiMSM material; one discrete tested regimen, not an efficacy minimum or an interpolated 2-6 g/day range."
+            },
+            "source_provenance": {
+              "pmid": "37447322",
+              "location": "Retained full text: Methods 2.2-2.5, Results 3.1-3.2 and Table 2; OptiMSM named in Methods 2.3.",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/37447322/"
+            },
+            "duration_as_printed": {
+              "value": 12,
+              "unit": "weeks"
+            },
+            "co_therapies": [
+              "Participants currently using medicines, including herbal medicines, cold patches and topical medication, or supplements were excluded (Methods 2.2). No background co-therapy was assigned by the trial."
+            ]
+          },
+          "outcomes": [
+            {
+              "name": "JKOM total score at 12 weeks: MSM 8.1 versus placebo 10.9; between-group difference -2.8 (95% CI -5.5 to -0.1), p=0.046.",
+              "hierarchy": "primary",
+              "kind": "patient_important",
+              "direction": "positive",
+              "outcome_role": "direct_between_group_effect"
+            },
+            {
+              "name": "JOA score and IL-1 beta, IL-6 and hs-CRP inflammatory markers.",
+              "hierarchy": "secondary",
+              "kind": "surrogate",
+              "direction": "null",
+              "outcome_role": "direct_between_group_effect"
+            }
+          ],
+          "limitations": [
+            "Small study with a borderline primary result and per-protocol analysis; 80 of 88 randomized participants contributed to efficacy analysis.",
+            "The participant-flow text reports one withdrawal plus five and three low-compliance exclusions, while the reported efficacy population is 80; preserve the published counts rather than infer a corrected flow.",
+            "JKOM is self-reported knee-related quality of life; physiological inflammatory markers did not improve. This finding does not establish general anti-inflammatory, energy, recovery, osteoarthritis-prevention or longevity efficacy.",
+            "The article declares funding by Chlorella Industry, and three authors are affiliated with its research and development department; the authors declare no conflict of interest.",
+            "The signed A015/A093 responses accept only this narrow mild-knee-pain finding. This is one shared trial, not independent replication in the branded and generic registry records.",
+            "The trial material is OptiMSM. It does not by itself establish every retail MSM product, formulation, daily amount or purpose as applicable. The older 6 g/day knee-osteoarthritis pilot is a separate context."
+          ],
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-10-26",
+            "scope": "identity_dose_outcome_applicability"
+          }
+        }
+      ],
+      "applicability": {
+        "scope": "ingredient",
+        "require_source_label_form": true,
+        "required_form_terms": [
+          "OptiMSM"
+        ],
+        "minimum_daily_dose": 2000,
+        "maximum_daily_dose": 2000,
+        "dose_unit": "mg",
+        "source_pmids": [
+          "37447322"
+        ],
+        "supported_outcomes": [
+          "Joint & Bone Health"
+        ],
+        "studied_population": "Adults with mild knee discomfort, Kellgren-Lawrence grade 0 or 1; not established knee-osteoarthritis treatment or prevention.",
+        "reviewed_at": "2026-10-26",
+        "reason": "Signed A015/A093 accepts only the exact OptiMSM 2,000 mg/day, 12-week mild-knee-pain finding. Equal dose bounds establish correspondence to this discrete tested regimen, not an efficacy minimum, optimal intake, safety ceiling or continuous 2-6 g range. Other preparations and the historical 6 g/day pilot remain separate; general catalog Dose retains its completed-neutral reference."
       }
     },
     {
@@ -4141,10 +4525,10 @@
         "knee quality of life (JKOM total score) improved at 2 g/day for 12 weeks in mild knee pain"
       ],
       "health_goals_supported": [
-        "Healthy Aging/Longevity"
+        "Joint & Bone Health"
       ],
-      "notes": "Ingredient-level record for methylsulfonylmethane. Two small randomized, double-blind, placebo-controlled trials: knee osteoarthritis, 50 adults, MSM 3 g twice daily (6 g/day) for 12 weeks, lower WOMAC pain and physical-function impairment, no change in stiffness or total symptoms (PMID 16309928, a pilot); mild knee pain, 88 adults, 2 g/day (OptiMSM) for 12 weeks, primary JKOM total score better than placebo (p = 0.046) (PMID 37447322). These discrete regimens do not establish a general 2 g/day efficacy minimum. Not evidence for energy, recovery or general inflammation claims.",
-      "last_updated": "2026-09-29",
+      "notes": "Ingredient-level record for methylsulfonylmethane. Two small randomized, double-blind, placebo-controlled trials: knee osteoarthritis, 50 adults, MSM 3 g twice daily (6 g/day) for 12 weeks, lower WOMAC pain and physical-function impairment, no change in stiffness or total symptoms (PMID 16309928, a pilot); mild knee pain, 88 adults, 2 g/day (OptiMSM) for 12 weeks, primary JKOM total score better than placebo (p = 0.046) (PMID 37447322). These discrete regimens do not establish a general 2 g/day efficacy minimum. Not evidence for energy, recovery or general inflammation claims. Source context 37447322 is now encoded under the signed limited A015/A093 decisions, with the exact OptiMSM identity confirmed in Methods 2.3. This same trial is shared by BRAND_OPTIMSM and INGR_MSM, not independent replication. The 6 g/day osteoarthritis pilot remains historical context and cannot broaden the accepted preparation, dose or outcome. Exact product correspondence remains independently checked.",
+      "last_updated": "2026-10-27",
       "notable_studies": "Kim et al. (2006, PMID 16309928): 6 g/day MSM improved WOMAC pain and physical function in knee osteoarthritis over 12 weeks (pilot, n=50). Toguchi et al. (2023, PMID 37447322): 2 g/day MSM improved the JKOM total score in adults with mild knee pain over 12 weeks (n=88).",
       "references_structured": [
         {
@@ -4184,7 +4568,9 @@
           "evidence_grade": "rct",
           "retracted": false,
           "supports_claims": [],
-          "verification_source": "pubmed_eutils"
+          "verification_source": "pubmed_eutils",
+          "scoring_eligible": false,
+          "notes": "Retained historical pilot; separate 6 g/day osteoarthritis context is not covered by the accepted 2 g/day mild-knee-pain decision. No scoring transfer until a qualifying scoped assessment supports it."
         },
         {
           "type": "pubmed",
@@ -4220,11 +4606,11 @@
       "external_ids": {
         "unii": "9H4PO4Z4FT"
       },
-      "effect_direction": "positive_weak",
-      "primary_outcome": "Healthy Aging/Longevity",
+      "effect_direction": "mixed",
+      "primary_outcome": "Joint & Bone Health",
       "total_enrollment": 138,
       "effect_direction_confidence": "low",
-      "effect_direction_rationale": "Two small positive RCTs (a 50-person pilot at 6 g/day; 88 people at 2 g/day with p = 0.046 on the primary outcome); no replication at lower doses.",
+      "effect_direction_rationale": "Scoped A015/A093 accepted by Dr. Pham on 2026-10-26, as attested by Sean: one exact OptiMSM trial, borderline primary JKOM benefit with null JOA and inflammatory outcomes. The retained score_contribution grade is not a new grade decision. No energy, recovery, inflammation or longevity transfer; exact preparation and discrete regimen applicability enforced separately.",
       "endpoint_relevance_tags": [
         "joint_pain"
       ],
@@ -4248,6 +4634,118 @@
         "owner": "scripts/data/backed_clinical_studies.json::INGR_MSM",
         "review_date": "2026-10-18",
         "approval_status": "approved_existing_neutral_2026_10_18"
+      },
+      "study_contexts": [
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "ingr_msm_mild_knee_pain_37447322",
+          "source_pmids": [
+            "37447322"
+          ],
+          "components": [
+            "INGR_MSM"
+          ],
+          "identity_scope": "branded_material",
+          "identity": {
+            "branded_material": "OptiMSM",
+            "manufacturer": "Bergstrom Nutrition"
+          },
+          "exposure_basis": "supplement_dose",
+          "route": "oral",
+          "evidence_role": "direct_rct",
+          "component_registration_status": "fully_registered",
+          "condition": "mild_knee_discomfort",
+          "purpose": "treatment",
+          "population": {
+            "age_group": "adult",
+            "description": "Healthy Japanese adults aged at least 20 with mild knee pain and Kellgren-Lawrence grade 0 or 1; 88 randomized, 80 per-protocol efficacy analyses and 88 safety analyses. Participants undergoing knee-disease treatment or using medicines/supplements were excluded."
+          },
+          "study_design": "Randomized, double-blind, placebo-controlled parallel-group trial; 44 assigned to each arm; lactose placebo; per-protocol primary analysis.",
+          "trial_family": "optimsm_mild_knee_pain_37447322",
+          "review_status": "clinician_approved",
+          "human_status": "confirmed",
+          "source_integrity": "none",
+          "scoring_eligible": true,
+          "dose": {
+            "measurement_type": "mass",
+            "unit": "mg",
+            "values": [
+              2000
+            ],
+            "dose_status": "verified",
+            "dose_basis": "nominal_assigned_arm",
+            "duration_basis": "fixed_protocol",
+            "duration_days": 84,
+            "administration_frequency": "Five 200 mg tablets at breakfast and five at dinner daily.",
+            "dosage_forms": [
+              "oral tablet"
+            ],
+            "reported_regimen": "Ten tablets containing 200 mg MSM each daily, as five at breakfast and five at dinner, for 12 weeks.",
+            "normalization": {
+              "basis": "Ten tablets times 200 mg MSM equals 2,000 mg/day of the studied OptiMSM material; one discrete tested regimen, not an efficacy minimum or an interpolated 2-6 g/day range."
+            },
+            "source_provenance": {
+              "pmid": "37447322",
+              "location": "Retained full text: Methods 2.2-2.5, Results 3.1-3.2 and Table 2; OptiMSM named in Methods 2.3.",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/37447322/"
+            },
+            "duration_as_printed": {
+              "value": 12,
+              "unit": "weeks"
+            },
+            "co_therapies": [
+              "Participants currently using medicines, including herbal medicines, cold patches and topical medication, or supplements were excluded (Methods 2.2). No background co-therapy was assigned by the trial."
+            ]
+          },
+          "outcomes": [
+            {
+              "name": "JKOM total score at 12 weeks: MSM 8.1 versus placebo 10.9; between-group difference -2.8 (95% CI -5.5 to -0.1), p=0.046.",
+              "hierarchy": "primary",
+              "kind": "patient_important",
+              "direction": "positive",
+              "outcome_role": "direct_between_group_effect"
+            },
+            {
+              "name": "JOA score and IL-1 beta, IL-6 and hs-CRP inflammatory markers.",
+              "hierarchy": "secondary",
+              "kind": "surrogate",
+              "direction": "null",
+              "outcome_role": "direct_between_group_effect"
+            }
+          ],
+          "limitations": [
+            "Small study with a borderline primary result and per-protocol analysis; 80 of 88 randomized participants contributed to efficacy analysis.",
+            "The participant-flow text reports one withdrawal plus five and three low-compliance exclusions, while the reported efficacy population is 80; preserve the published counts rather than infer a corrected flow.",
+            "JKOM is self-reported knee-related quality of life; physiological inflammatory markers did not improve. This finding does not establish general anti-inflammatory, energy, recovery, osteoarthritis-prevention or longevity efficacy.",
+            "The article declares funding by Chlorella Industry, and three authors are affiliated with its research and development department; the authors declare no conflict of interest.",
+            "The signed A015/A093 responses accept only this narrow mild-knee-pain finding. This is one shared trial, not independent replication in the branded and generic registry records.",
+            "The trial material is OptiMSM. It does not by itself establish every retail MSM product, formulation, daily amount or purpose as applicable. The older 6 g/day knee-osteoarthritis pilot is a separate context."
+          ],
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-10-26",
+            "scope": "identity_dose_outcome_applicability"
+          }
+        }
+      ],
+      "applicability": {
+        "scope": "ingredient",
+        "require_source_label_form": true,
+        "required_form_terms": [
+          "OptiMSM"
+        ],
+        "minimum_daily_dose": 2000,
+        "maximum_daily_dose": 2000,
+        "dose_unit": "mg",
+        "source_pmids": [
+          "37447322"
+        ],
+        "supported_outcomes": [
+          "Joint & Bone Health"
+        ],
+        "studied_population": "Adults with mild knee discomfort, Kellgren-Lawrence grade 0 or 1; not established knee-osteoarthritis treatment or prevention.",
+        "reviewed_at": "2026-10-26",
+        "reason": "Signed A015/A093 accepts only the exact OptiMSM 2,000 mg/day, 12-week mild-knee-pain finding. Equal dose bounds establish correspondence to this discrete tested regimen, not an efficacy minimum, optimal intake, safety ceiling or continuous 2-6 g range. Other preparations and the historical 6 g/day pilot remain separate; general catalog Dose retains its completed-neutral reference."
       }
     },
     {
@@ -6160,7 +6658,7 @@
       ],
       "notes": "The three retained references assess oral hyaluronic acid for skin hydration, elasticity and wrinkle outcomes, not osteoarthritis or joint-lubrication efficacy. PMID 28761365 and PMID 34203487 used specific 120 mg/day preparations for 12 weeks in selected adult skin populations. PMID 40911749 pools seven skin trials; hydration, elasticity and wrinkle depth improved, while firmness, wrinkle volume and transepidermal water loss did not differ significantly. Source preparation, molecular weight and clinical applicability remain distinct; this review does not establish that no joint research exists elsewhere.",
       "study_type": "systematic_review_meta",
-      "last_updated": "2026-10-24",
+      "last_updated": "2026-10-27",
       "notable_studies": "PMID 28761365 randomized 60 adults with crow-feet wrinkles to two molecular-weight hyaluronan preparations or placebo for12weeks. PMID 34203487 randomized 40 adults to120mg/day hyaluronan or placebo for12weeks for skin outcomes. PMID 40911749 is a seven-RCT skin meta-analysis with heterogeneous and partly null outcomes. None of these retained references studies OA symptoms.",
       "references_structured": [
         {
@@ -6180,7 +6678,9 @@
           "evidence_grade": "journal_article",
           "retracted": false,
           "supports_claims": [],
-          "verification_source": "pubmed_eutils"
+          "verification_source": "pubmed_eutils",
+          "scoring_eligible": false,
+          "notes": "Retained separate preparation/review context; not the accepted exact 34203487 Hyabest (S) LF-P source relationship. Do not transfer molecular-weight-specific or heterogeneous pooled outcomes without its own qualifying scoped assessment."
         },
         {
           "type": "pubmed",
@@ -6245,16 +6745,190 @@
           "evidence_grade": "meta_analysis",
           "retracted": false,
           "supports_claims": [],
-          "verification_source": "pubmed_eutils"
+          "verification_source": "pubmed_eutils",
+          "scoring_eligible": false,
+          "notes": "Retained separate preparation/review context; not the accepted exact 34203487 Hyabest (S) LF-P source relationship. Do not transfer molecular-weight-specific or heterogeneous pooled outcomes without its own qualifying scoped assessment."
         }
       ],
-      "effect_direction": "positive_strong",
+      "effect_direction": "mixed",
       "primary_outcome": "Skin, Hair & Nails",
       "effect_direction_confidence": "high",
-      "effect_direction_rationale": "Existing positive_strong classification retained pending attributable clinical synthesis; no new grade is assigned. The retained sources evaluate skin outcomes with preparation, molecular-weight, population and study-heterogeneity limits. They do not establish joint or longevity efficacy, and no verified aggregate enrollment or completed-registry count is supplied.",
+      "effect_direction_rationale": "Accepted limited A077 skin source scope; selected positive and null measures coexist. Retained grade is not a new grade decision. No generic joint, longevity or preparation-wide inference.",
       "endpoint_relevance_tags": [
         "skin_health"
-      ]
+      ],
+      "study_contexts": [
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "ingr_hyaluronic_acid_28761365",
+          "components": [
+            "INGR_HYALURONIC_ACID"
+          ],
+          "source_pmids": [
+            "28761365"
+          ],
+          "identity_scope": "branded_material",
+          "identity": {
+            "branded_material": "Hyabest A/Hyabest S LF-P",
+            "standardization": "Kewpie95%HA;distinct2k/300kmolecularweightarms"
+          },
+          "exposure_basis": "supplement_dose",
+          "route": "oral",
+          "evidence_role": "direct_rct",
+          "component_registration_status": "fully_registered",
+          "condition": "cosmetic_skin_wrinkles",
+          "purpose": "source_specific_assessment",
+          "review_status": "source_verified_pending_clinical_review",
+          "scoring_eligible": false,
+          "human_status": "confirmed",
+          "source_integrity": "none",
+          "trial_family": "ingr_hyaluronic_acid_28761365",
+          "population": {
+            "description": "60healthyJapanese22–59withcrowfeet;55questionnairecompleters"
+          },
+          "study_design": "randomized double-blind placebo-controlled trial",
+          "outcomes": [
+            {
+              "name": "Wrinklevolumeratioat8weeks:300kMWP=.046;2kP=.052;allgroupssubjectiveluster/supplenessbaselinechanges",
+              "hierarchy": "unresolved",
+              "kind": "surrogate",
+              "direction": "mixed",
+              "outcome_role": "direct_between_group_effect"
+            }
+          ],
+          "limitations": [
+            "Noexplicituniqueprimaryendpointidentifiedinextractedsource;do notmanufacturehierarchy.",
+            "Exactpreparation/population/endpoints;notgenericbenefitorminimumeffectivedose.",
+            "Emptyco-therapieslistmeansnotextracted,notproofnoneused.",
+            "Privatependingdraft;noapproval,retailmatchingorsource-setclearance."
+          ],
+          "dose": {
+            "measurement_type": "mass",
+            "unit": "mg",
+            "values": [
+              120
+            ],
+            "dose_status": "verified",
+            "dose_basis": "nominal_assigned_arm",
+            "duration_basis": "fixed_protocol",
+            "duration_days": 84,
+            "administration_frequency": "two60mgHAcapsulesdaily;within-daytimingnotreportedintheextractedMethods",
+            "dosage_forms": [
+              "capsule"
+            ],
+            "co_therapies": [],
+            "reported_regimen": "120mg/dayofspecifiedassignedmaterial",
+            "normalization": {
+              "basis": "Whole assigned material daily mass from primary Methods; not a marker or active-equivalent conversion."
+            },
+            "source_provenance": {
+              "pmid": "28761365",
+              "location": "PrimaryfulltextMethodsinterventionandResults",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/28761365/"
+            }
+          }
+        },
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "ingr_hyaluronic_acid_34203487",
+          "components": [
+            "INGR_HYALURONIC_ACID"
+          ],
+          "source_pmids": [
+            "34203487"
+          ],
+          "identity_scope": "branded_material",
+          "identity": {
+            "branded_material": "Hyabest (S) LF-P",
+            "standardization": "95% hyaluronan purity by HPLC; no unreported molecular-weight equivalence inferred.",
+            "manufacturer": "Kewpie Corporation"
+          },
+          "exposure_basis": "supplement_dose",
+          "route": "oral",
+          "evidence_role": "direct_rct",
+          "component_registration_status": "fully_registered",
+          "condition": "cosmetic_skin_parameters",
+          "purpose": "source_specific_assessment",
+          "review_status": "clinician_approved",
+          "scoring_eligible": true,
+          "human_status": "confirmed",
+          "source_integrity": "none",
+          "trial_family": "ingr_hyaluronic_acid_34203487",
+          "population": {
+            "description": "40randomizedhealthyTaiwaneseadults35–64,20/arm"
+          },
+          "study_design": "randomized double-blind placebo-controlled trial",
+          "outcomes": [
+            {
+              "name": "Facial hydration and TEWL at 12 weeks; selected Cutometer and wrinkle outcomes favor treatment, while nonfacial raw hydration, Reviscometer elasticity and other skin-structure comparisons did not consistently separate from placebo. No unique primary endpoint is specified.",
+              "hierarchy": "not_reported",
+              "kind": "surrogate",
+              "direction": "mixed",
+              "outcome_role": "direct_between_group_effect"
+            }
+          ],
+          "limitations": [
+            "The fully inspected paper does not identify its primary outcome variable despite discussing sample-size power. This is a documented reporting limitation, not a manufactured primary endpoint.",
+            "Forty randomized participants, multiple measures and time points; selected positive comparisons cannot establish universal skin benefit.",
+            "Kewpie funded the study and employed three authors.",
+            "Signed A077 accepts limited skin findings only. No joint, longevity, generic-preparation equivalence, minimum effective dose or retail-batch purity claim."
+          ],
+          "dose": {
+            "measurement_type": "mass",
+            "unit": "mg",
+            "values": [
+              120
+            ],
+            "dose_status": "verified",
+            "dose_basis": "nominal_assigned_arm",
+            "duration_basis": "fixed_protocol",
+            "duration_days": 84,
+            "administration_frequency": "One capsule containing 120 mg hyaluronan daily for 12 weeks; within-day timing not reported.",
+            "dosage_forms": [
+              "capsule"
+            ],
+            "co_therapies": [
+              "Skin supplements and prescribed skin treatment were excluded; ordinary cleanser, toner and moisturizer were permitted."
+            ],
+            "reported_regimen": "120mg/dayofspecifiedassignedmaterial",
+            "normalization": {
+              "basis": "Whole assigned material daily mass from primary Methods; not a marker or active-equivalent conversion."
+            },
+            "source_provenance": {
+              "pmid": "34203487",
+              "location": "Original full text Methods 2.1-2.9 and Results 3.1-3.7; no uniquely named primary endpoint.",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/34203487/"
+            }
+          },
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-10-26",
+            "scope": "identity_dose_outcome_applicability"
+          }
+        }
+      ],
+      "applicability": {
+        "scope": "ingredient",
+        "require_source_label_form": true,
+        "required_form_terms": [
+          "Hyabest S LF-P"
+        ],
+        "minimum_daily_dose": 120,
+        "maximum_daily_dose": 120,
+        "dose_unit": "mg",
+        "dosage_forms": [
+          "capsule"
+        ],
+        "source_pmids": [
+          "34203487"
+        ],
+        "studied_population": "Healthy Taiwanese adults aged 35-64; selected cosmetic skin outcomes over 12 weeks.",
+        "supported_outcomes": [
+          "Skin, Hair & Nails"
+        ],
+        "reviewed_at": "2026-10-26",
+        "reason": "Signed A077 limited source interpretation for the exact Hyabest (S) LF-P oral material. Equal bounds describe correspondence to one tested 120 mg/day regimen, not a universal efficacy minimum, optimal dose or safety ceiling. Unspecified oral HA and different molecular-weight preparations are not assumed equivalent."
+      }
     },
     {
       "id": "INGR_GARLIC",
@@ -17761,7 +18435,7 @@
       "notes": "The cited carotenoid trials use materially different preparations. PMID 28661438 studied a lutein/zeaxanthin/mesozeaxanthin mixture in high-screen-time adults. PMID 25251377 instead studied EyePromise Zeaxanthin (20 mg/day zeaxanthin) and EyePromise vizual EDGE (26 mg zeaxanthin, 8 mg lutein and 190 mg mixed omega-3 fatty acids/day); it does not establish the same mesozeaxanthin-containing or Lutemax preparation. PMID 38890092 studied another three-carotenoid mixture and reported inflammatory and oxidized-LDL biomarkers, not clinical cardiovascular event prevention. Exact branded correspondence and preparation-specific applicability remain required.",
       "notable_studies": "PMID 28661438 studied 48 healthy young adults with substantial screen exposure for six months. PMID 25251377 used four-month zeaxanthin-only or zeaxanthin/lutein/omega-3 formulations with a small placebo group; supplementation arms were considered together for reported processing-speed effects. PMID 38890092 used lutein 10 mg, mesozeaxanthin 10 mg and zeaxanthin 2 mg over six months and assessed inflammatory/oxidation biomarkers. These studies cannot be pooled as identical branded-formula replications.",
       "study_type": "rct_multiple",
-      "last_updated": "2026-10-24",
+      "last_updated": "2026-10-27",
       "references_structured": [
         {
           "type": "pubmed",
@@ -17816,7 +18490,9 @@
           "evidence_grade": "rct",
           "retracted": false,
           "supports_claims": [],
-          "verification_source": "pubmed_eutils"
+          "verification_source": "pubmed_eutils",
+          "scoring_eligible": false,
+          "notes": "Retained as comparison/audit context only for this Lutemax record: full Methods specify EyePromise Zeaxanthin (20 mg zeaxanthin/day) or EyePromise vizual EDGE (26 mg zeaxanthin, 8 mg lutein and 190 mg mixed omega-3/day), not the mesozeaxanthin-containing Lutemax 2020 formulation. No branded-material efficacy transfer is established."
         },
         {
           "type": "pubmed",
@@ -20603,18 +21279,15 @@
       ],
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "muscle strength ↑",
-        "lean mass ↑",
-        "high-intensity performance ↑",
-        "fatigue resistance ↑"
+        "Lean body mass with resistance training (primary; PMID 39074168)",
+        "Body fat percentage and mass with resistance training (secondary; PMID 39074168)"
       ],
       "health_goals_supported": [
-        "Muscle Growth & Recovery",
-        "Increase Energy"
+        "Muscle Growth & Recovery"
       ],
-      "notes": "Extensive human evidence supports creatine monohydrate for strength, lean mass, and high-intensity performance. Evidence is strongest when paired with resistance training and adequate dosing.",
-      "last_updated": "2026-10-07",
-      "notable_studies": "Recent 2024 meta-analyses show improved strength and body-composition outcomes when creatine is paired with resistance training (PMIDs: 39519498, 39074168).",
+      "notes": "The accepted A062 finding concerns creatine monohydrate with full-body resistance training and body-composition outcomes in the studied populations (PMID 39074168). The pooled strength review 39519498 includes other creatine forms and is retained as noncontributing context, not exact-monohydrate qualification. Trial regimens, populations and source reporting discrepancies are retained in the source context; no universal regimen or minimum is inferred. Sean attests Dr. Pham signed the explicit limited A062 decision on 2026-10-26; source acceptance does not establish every retail product or purpose.",
+      "last_updated": "2026-10-27",
+      "notable_studies": "PMID39074168:monohydrate plus full-body resistance training,12trials;lean-body-mass increase1.14kg(95%CI0.69–1.59) with preparation,population,bias and heterogeneous-regimen limits. PMID39519498:contextual strength synthesis with mixed creatine forms;not independent exact-monohydrate qualification.",
       "references_structured": [
         {
           "type": "pubmed",
@@ -20647,7 +21320,9 @@
           "evidence_grade": "systematic_review",
           "retracted": false,
           "supports_claims": [],
-          "verification_source": "pubmed_eutils"
+          "verification_source": "pubmed_eutils",
+          "scoring_eligible": false,
+          "notes": "Retained contextual strength synthesis. Fulltext Table3/ref22 includes creatine ethyl ester and other mixed-form/athlete contexts;pooled effect cannot establish exact monohydrate correspondence. Monohydrate body-composition source39074168 assessed separately. No new negative claim about monohydrate or another form."
         },
         {
           "type": "pubmed",
@@ -20684,12 +21359,11 @@
       },
       "effect_direction": "positive_strong",
       "primary_outcome": "Muscle Growth & Recovery",
-      "total_enrollment": 220,
+      "total_enrollment": null,
       "registry_completed_trials_count": 190,
       "effect_direction_confidence": "high",
-      "effect_direction_rationale": "Retained positive_strong classification; study_type=systematic_review_meta; evidence_level=ingredient-human; primary_outcome=Muscle Growth & Recovery; published_tags=RCT,systematic_review,meta-analysis; registry_completed_trials_count=190; total_enrollment=220; endpoint_tags=stress_mood,muscle_recovery; notes/citations contain no automated downgrade signals.",
+      "effect_direction_rationale": "Retained existing descriptive classification for the scoped resistance-training source. The body-composition synthesis reports a positive primary lean-body-mass result, with limits including hydration, study overlap, heterogeneity and inconsistent participant totals. The previous record-level enrollment 220 is not supported by the verified retained source set and is unset rather than replaced by an invented aggregate. Mixed-form strength results do not contribute.",
       "endpoint_relevance_tags": [
-        "stress_mood",
         "muscle_recovery"
       ],
       "applicability": {
@@ -20702,7 +21376,6 @@
         ],
         "reviewed_at": "2026-10-07",
         "source_pmids": [
-          "39519498",
           "39074168"
         ],
         "reason": "This existing record describes creatine monohydrate. The source label must identify that preparation; a shared creatine canonical, an enrichment-derived default form, or Con-Cret/creatine hydrochloride wording does not establish correspondence. This form scope adds no dose threshold or grade and does not conclude that hydrochloride, another salt or an unspecified preparation is ineffective. PMID 39519498 discusses monohydrate but uses broadly worded inclusion criteria; it is not evidence of universal equivalence among forms. Existing curated source aliases Creatin Monohydrate and Creapure identify monohydrate; the Creapure manufacturer independently confirms that preparation. This identity correspondence adds no branded efficacy or safety claim.",
@@ -20710,8 +21383,124 @@
           "creatine hydrochloride",
           "creatine HCl",
           "Con-Cret"
-        ]
-      }
+        ],
+        "supported_outcomes": [
+          "Muscle Growth & Recovery"
+        ],
+        "studied_population": "Apparently healthy participants undertaking full-body resistance training; review intended ages 18-50, with one included report recruiting ages 19-55. Not a disease-treatment or universal-age conclusion."
+      },
+      "study_contexts": [
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "creatine_monohydrate_resistance_training_body_composition_39074168",
+          "components": [
+            "INGR_CREATINE_MONOHYDRATE"
+          ],
+          "source_pmids": [
+            "39074168"
+          ],
+          "identity_scope": "exact_form",
+          "identity": {
+            "chemical_form": "creatine monohydrate"
+          },
+          "exposure_basis": "supplement_dose",
+          "route": "oral",
+          "evidence_role": "meta_analysis",
+          "component_registration_status": "fully_registered",
+          "condition": "resistance_training_body_composition",
+          "purpose": "source_specific_assessment",
+          "review_status": "clinician_approved",
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-10-26",
+            "scope": "identity_dose_outcome_applicability"
+          },
+          "scoring_eligible": true,
+          "human_status": "confirmed",
+          "source_integrity": "none",
+          "trial_family": "desai_2024_creatine_resistance_training_review",
+          "population": {
+            "description": "Review intended apparently healthy adults aged18–50 undertaking full-body resistance training, trained and untrained; predominantly men. Included Burke2003 report itself recruited19–55, so the stated under50 criterion must not be presented as verified for every participant."
+          },
+          "study_design": "systematic review and random-effects meta-analysis of12 randomized trials; carbohydrate coadministration permitted; no other additional nutritional interventions intended",
+          "included_study_pmids": [
+            "11735088",
+            "14600563",
+            "17277594",
+            "17194243",
+            "17136944",
+            "32916658",
+            "20026378",
+            "24149869",
+            "14685870",
+            "29214923",
+            "19228401"
+          ],
+          "outcomes": [
+            {
+              "name": "Lean body mass,11studies264participants: additional1.14kg versus control with same resistance training;95%CI0.69–1.59",
+              "hierarchy": "primary",
+              "kind": "surrogate",
+              "direction": "positive",
+              "outcome_role": "direct_between_group_effect"
+            },
+            {
+              "name": "Body-fat percentage,9studies215participants:−0.88percentage points;95%CI−1.66to−0.11;prediction interval crosses zero",
+              "hierarchy": "secondary",
+              "kind": "surrogate",
+              "direction": "positive",
+              "outcome_role": "direct_between_group_effect"
+            },
+            {
+              "name": "Body-fat mass,7studies133participants:−0.73kg;95%CI−1.34to−0.11;prediction interval crosses zero",
+              "hierarchy": "secondary",
+              "kind": "surrogate",
+              "direction": "positive",
+              "outcome_role": "direct_between_group_effect"
+            },
+            {
+              "name": "Between-study carbohydrate subgroup analysis did not establish added lean-mass benefit;not randomized head-to-head carbohydrate efficacy",
+              "hierarchy": "secondary",
+              "kind": "surrogate",
+              "direction": "null",
+              "outcome_role": "direct_between_group_effect"
+            }
+          ],
+          "dose": {
+            "measurement_type": "mass",
+            "unit": "g",
+            "values": [],
+            "dose_status": "verified",
+            "dose_basis": "not_applicable",
+            "duration_basis": "not_recorded",
+            "duration_days": null,
+            "administration_frequency": "Study-specific oral schedules; several loading/maintenance regimens. Pooled review has no single administration frequency.",
+            "dosage_forms": [
+              "oral creatine monohydrate supplement"
+            ],
+            "co_therapies": [
+              "structured full-body resistance training",
+              "carbohydrate coadministration in a subset of trials"
+            ],
+            "reported_regimen": "Different trial regimens: fixed maintenance3,5,10or10.5g/day; other arms use body-mass or lean-body-mass based doses, some after loading. SupplementTable2 gives4–11week training programs and loading/maintenance schedules with internal timing discrepancies. No scalar pooled dose or duration is recorded in this context.",
+            "source_provenance": {
+              "pmid": "39074168",
+              "location": "Fulltext Eligibility Criteria,Outcomes,Results;original Supplemental Digital Content1 Tables1–2",
+              "source_url": "https://www.ovid.com/jnls/nsca-jscr/fulltext/10.1519/jsc.0000000000004862~the-effect-of-creatine-supplementation-on-resistance"
+            }
+          },
+          "limitations": [
+            "Signed A062 supports limited resistance-training findings, not all clinical populations, other creatine forms, universal energy or longevity claims. This encodes source scope only; actual product dose and preparation correspondence remain independent.",
+            "No universal minimum,continuous dose interval or optimal regimen is established by the pooled recommendation7g/day or0.3g/kg/day. Dose values are empty because synthesis has no single nominal assigned arm;not because source failed to report trial doses. Duration is not recorded as a scalar because trial programs differ;the actual trial schedules are retained in the extraction receipt.",
+            "The12studies overlap other creatine syntheses and must not be counted as independent replications of another review. Burke vegetarian/nonvegetarian comparisons are one source family.",
+            "Included-study PMIDs cover11NIH-indexed trial reports,verified against liveAPI. Andre2016 is identified by exact journal/title in the original supplement; no PMID is invented. Full12trial map is retained in extraction receipt.",
+            "Publisher Results reference numbering conflicts with its supplemental Table1:references12,15,38 are other syntheses rather than corresponding listed trials. Use actual Table1study identities,not erroneous numbering.",
+            "Publisher overall participant count362 conflicts with listed sex counts48+329=377. Outcome-specific denominators are reported separately rather than repairing the total without evidence.",
+            "SupplementTable2 timings can conflict with training duration (e.g.Andre5weeks but7+35days;Volek4weeks but7+35days). Preserve source values; do not convert into a universal exact duration.",
+            "Lean-body-mass changes measured by DXA can include water;not necessarily pure muscle hypertrophy. Publication asymmetry for lean mass,high heterogeneity for adiposity outcomes,imputed pre/post correlations,limited female evidence and no sex subgroup estimates constrain interpretation."
+          ]
+        }
+      ]
     },
     {
       "id": "INGR_PEPPERMINT_OIL",
@@ -22056,8 +22845,8 @@
         "choline alphoscerate"
       ],
       "category": "cognitive_neurological",
-      "evidence_level": "ingredient-human",
-      "study_type": "systematic_review_meta",
+      "evidence_level": "reference",
+      "study_type": "reference",
       "published_studies": [
         "RCT",
         "systematic_review",
@@ -22065,17 +22854,12 @@
       ],
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "cognitive function scores ↑ (selected populations)",
-        "attention/processing outcomes ↑ (subset)",
-        "functional outcomes ↑ (combination contexts)"
+        "Alzheimer-dementia monotherapy subset; not healthy-adult enhancement"
       ],
-      "health_goals_supported": [
-        "Focus & Mental Clarity",
-        "Healthy Aging/Longevity"
-      ],
-      "notes": "Alpha-GPC has multiple human trials and meta-analytic coverage, with strongest effects in cognitive-impairment and combination-therapy contexts; healthy-adult evidence is emerging.",
-      "last_updated": "2026-02-20",
-      "notable_studies": "Systematic review/meta-analysis on adult-onset cognitive dysfunctions reported significant benefits in cognition and function outcomes across included trials (PMID: 36683513).",
+      "health_goals_supported": [],
+      "notes": "Limited disease-context monotherapy and add-on research,nothealthyadultcognitiveenhancement.Four ASCOMALVA publications are overlapping trial-familyreports,notfourindependentRCTs.Moreno2003monotherapyRCT is separate;no universal nootropicdose. Signed A035 accepts only a limited disease-context finding. This catalog record is reference-only to prevent that finding from becoming healthy-person focus credit. Explicit source contexts and overlap limitations remain traceable; reference classification does not mean the ingredient has no disease-context research.",
+      "last_updated": "2026-10-27",
+      "notable_studies": "PMID 36683513 includes Moreno 2003 (PMID 12637119) monotherapy and overlapping ASCOMALVA add-on publications. These are not four independent confirmatory trials. The exact accepted subset and reporting limitations are retained in study_contexts.",
       "references_structured": [
         {
           "type": "pubmed",
@@ -22108,13 +22892,94 @@
         }
       ],
       "effect_direction": "positive_strong",
-      "primary_outcome": "Focus & Mental Clarity",
+      "primary_outcome": "Disease-context cognitive outcomes; reference only",
       "total_enrollment": 60,
       "registry_completed_trials_count": 2,
       "effect_direction_confidence": "medium",
       "effect_direction_rationale": "Retained positive_strong classification; study_type=systematic_review_meta; evidence_level=ingredient-human; primary_outcome=Focus & Mental Clarity; published_tags=RCT,systematic_review,meta-analysis; registry_completed_trials_count=2; total_enrollment=60; endpoint_tags=focus_memory; notes/citations contain no automated downgrade signals.",
       "endpoint_relevance_tags": [
         "focus_memory"
+      ],
+      "study_contexts": [
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "alpha_gpc_alzheimer_monotherapy_subset_36683513",
+          "components": [
+            "INGR_ALPHA_GPC"
+          ],
+          "source_pmids": [
+            "36683513"
+          ],
+          "identity_scope": "exact_form",
+          "identity": {
+            "chemical_form": "choline alphoscerate (L-alpha glycerylphosphorylcholine)"
+          },
+          "exposure_basis": "supplement_dose",
+          "route": "oral",
+          "evidence_role": "systematic_review",
+          "component_registration_status": "fully_registered",
+          "condition": "alzheimer_dementia",
+          "purpose": "treatment",
+          "review_status": "clinician_approved",
+          "scoring_eligible": true,
+          "human_status": "confirmed",
+          "source_integrity": "none",
+          "trial_family": "moreno_2003_alzheimer_monotherapy",
+          "population": {
+            "description": "261patients aged60–80withmild-to-moderateAlzheimer-type dementia,132active129placebo;nothealthyadultscognitiveenhancement."
+          },
+          "study_design": "Source review reports one180day placebo-controlled monotherapyRCT;underlyingprimary12637119liveabstractalsoverified. This is not the pooleddonepeziladd-onanalysis.",
+          "included_study_pmids": [
+            "12637119"
+          ],
+          "outcomes": [
+            {
+              "name": "ADAS-Cog day180:meanchange−3.20active,+2.90placebo;between-treatmentdifference significant;review subsetMD−6.10,95%CI−7.51to−4.69. Prespecified primarydesignation notestablished byinspectedreview/primaryabstract.",
+              "hierarchy": "not_reported",
+              "direction": "positive",
+              "kind": "patient_important",
+              "outcome_role": "direct_between_group_effect"
+            }
+          ],
+          "limitations": [
+            "SignedA035 limited disease-context scope;nothealthyfocus,cognitionoruniversalnootropicdose.",
+            "The review pools fourdonepezilreports fromthe sameASCOMALVAtrialfamily;notfourindependentreplications. Theirpoolingmustnotbeusedasindependentconfirmatoryweight ormonotherapybenefit.",
+            "SourceTable1 classifiesSelezneva2020asAlzheimerdisease,butcitedtitle concernsrelativesofADpatients/prevention;thatcohort isnotusedhere.",
+            "Monotherapy subset separatedfromdonepezil/nimodipineadd-onandacetyl-L-carnitineactivecomparatorstudies.",
+            "Source-reported primary/secondary outcome hierarchy was notestablished from inspectedreview/primaryabstract;recordednot_reported under userapproveddistinction. No primary-outcomecredit may follow thisunrankedpositivefinding.",
+            "Individualclinicaldiseasecontext andsmallhistoricalevidencebase do not establishcurrentretailsupplementquality,purityorpersonal suitability."
+          ],
+          "dose": {
+            "measurement_type": "mass",
+            "unit": "mg",
+            "values": [
+              1200
+            ],
+            "dose_status": "verified",
+            "dose_basis": "nominal_assigned_arm",
+            "duration_basis": "fixed_protocol",
+            "duration_days": 180,
+            "administration_frequency": "400mg capsule three times daily",
+            "dosage_forms": [
+              "capsule"
+            ],
+            "co_therapies": [],
+            "reported_regimen": "1200mg/daycholinealfoscerate as400mgcapsuleTIDfor180days",
+            "normalization": {
+              "basis": "Three400mgcapsules/day;noactives-equivalentconversion."
+            },
+            "source_provenance": {
+              "pmid": "36683513",
+              "location": "Table1Moreno2003row;Effects on cognition singleRCTADAS-Cogparagraph;underlyingprimary12637119Methodsabstract",
+              "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10041421/"
+            }
+          },
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-10-26",
+            "scope": "identity_dose_outcome_applicability"
+          }
+        }
       ]
     },
     {

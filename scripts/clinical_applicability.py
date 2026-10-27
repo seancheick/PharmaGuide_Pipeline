@@ -445,6 +445,7 @@ def assess_clinical_source_review(entry: Mapping) -> dict:
     excluded_pmids = {str(ref["pmid"]) for ref in references if ref.get("pmid")
                       and not clinical_record_sources_eligible({"references_structured": [ref]})}
     eligible_pmids = declared_pmids - excluded_pmids
+    reference_only = any(reference.get(key) == "reference" for key in ("study_type", "evidence_level"))
     errors = []
     if not contributing:
         errors.append("clinical_contributing_contexts_missing")
@@ -457,7 +458,12 @@ def assess_clinical_source_review(entry: Mapping) -> dict:
         # Excluded notices may document a trial's provenance, but cannot be
         # its sole affirmative source. Explicit exclusions also win over a
         # duplicate legacy published_studies pointer.
-        if not clinical_record_sources_eligible(reference) or not (context_pmids & eligible_pmids):
+        # Reference-only is a reviewed non-affirmative scope, not missing
+        # source review. It still needs an eligible source and full approval;
+        # an explicit eligibility hold cannot be cleared by that classification.
+        if ((not reference_only and not clinical_record_sources_eligible(reference))
+                or reference.get("scoring_eligible") is False
+                or not (context_pmids & eligible_pmids)):
             errors.append(prefix + "clinical_context_eligible_source_missing")
         errors.extend(str(context.get("context_id") or "unknown") + ":" + error
                       for error in validate_ingredient_context(context, require_complete_review=True))

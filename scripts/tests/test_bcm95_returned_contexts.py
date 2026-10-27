@@ -98,3 +98,209 @@ def test_scoped_approvals_do_not_validate_provisional_record_grades_or_claim_no_
         assert "does not validate" in rationale
         assert "This is not attributable clinician approval" not in rationale
         assert "None of these facts supplies clinician approval" not in record["notes"]
+
+
+def test_optimsm_return_closes_exact_trial_source_without_double_counting():
+    records = reviewed_entries()
+    contexts = []
+    for key in ('BRAND_OPTIMSM', 'INGR_MSM'):
+        record = records[key]
+        source = record.get('study_contexts', [])
+        assert source, f'{key}: returned A015/A093 source has not been applied'
+        context = next(c for c in source if c['source_pmids'] == ['37447322'])
+        assert validate_ingredient_context(context, require_complete_review=True) == []
+        assert context['identity']['branded_material'] == 'OptiMSM'
+        assert context['dose']['values'] == [2000]
+        assert context['dose']['duration_days'] == 84
+        assert context['outcomes'][0]['hierarchy'] == 'primary'
+        assert context['outcomes'][0]['direction'] == 'positive'
+        assert context['outcomes'][1]['direction'] == 'null'
+        assert assess_clinical_source_review(record)['is_complete'] is True
+        assert record['health_goals_supported'] == ['Joint & Bone Health']
+        assert record['reference_semantics']['curve'] == 'completed_no_benchmark_neutral'
+        contexts.append(context)
+    assert contexts[0]['trial_family'] == contexts[1]['trial_family']
+
+
+def test_optimsm_trial_does_not_credit_generic_material_or_other_daily_regimens():
+    from clinical_applicability import assess_clinical_applicability
+    for key in ('BRAND_OPTIMSM', 'INGR_MSM'):
+        for name, amount, expected in (
+            ('OptiMSM', 2000, 'applicable'),
+            ('MSM', 2000, 'not_applicable'),
+            ('OptiMSM', 1000, 'not_applicable'),
+            ('OptiMSM', 6000, 'not_applicable'),
+        ):
+            row = {'name': name, 'raw_source_text': name,
+                   'canonical_id': 'msm', 'mapped': True, 'quantity': amount,
+                   'unit': 'mg', 'raw_source_path': 'ingredientRows[0]'}
+            product = {'serving_basis': {'min_servings_per_day': 1, 'max_servings_per_day': 1, 'servings_per_day_source': 'directions'},
+                       'form_factor_canonical': 'tablet', 'activeIngredients': [row],
+                       'ingredient_quality_data': {'ingredients_scorable': [row]}}
+            entry = {'id': key, 'matched_canonical_ids': ['msm'],
+                     'matched_source_row_refs': ['ingredientRows[0]']}
+            assert assess_clinical_applicability(product, entry)['status'] == expected
+
+
+def test_named_source_reviews_complete_only_general_dose_benchmark():
+    from evidence_resolver import _load_literature_evidence
+    from scoring_v4.modules.botanical_profile import _botanical_benchmark
+    for canonical in ('aloe_vera', 'flaxseed', 'green_tea_leaf', 'lignans', 'pygeum', 'weeping_willow_bark', 'chopchini', 'achiote_leaf'):
+        record = _load_literature_evidence()[canonical]
+        semantics = record.get('reference_semantics') or {}
+        assert semantics.get('reference_type') == 'no_benchmark'
+        assert semantics.get('curve') == 'completed_no_benchmark_neutral'
+        assert semantics['approval_status'] == 'approved_existing_neutral_dose_v41_source_review'
+        assert semantics['source_ids']
+        assert 'not an exhaustive' in semantics['scope']
+        assert _botanical_benchmark({'canonical_id': canonical}) == 'absent'
+        # A completed dose search cannot override an actual identity rejection.
+        assert _botanical_benchmark({'canonical_id': canonical,
+                                    'scoreable_identity': False}) == 'unresolved'
+    # A preparation not reviewed in this batch retains its existing hold.
+    assert _botanical_benchmark({'canonical_id': 'unreviewed_botanical_test_only'}) == 'unresolved'
+
+
+def test_creatine_limited_source_scope_does_not_use_mixed_form_strength_pool():
+    record = reviewed_entries()['INGR_CREATINE_MONOHYDRATE']
+    contexts = record.get('study_contexts', [])
+    assert contexts, 'The signed A062 limited source interpretation is not encoded'
+    assert len(contexts) == 1
+    c = contexts[0]
+    assert c['source_pmids'] == ['39074168']
+    assert validate_ingredient_context(c, require_complete_review=True) == []
+    assert c['identity']['chemical_form'] == 'creatine monohydrate'
+    assert len(c['included_study_pmids']) == 11
+    assert c['dose']['values'] == []  # no scalar pooled regimen invented
+    assert c['dose']['dose_basis'] == 'not_applicable'
+    assert c['dose']['duration_days'] is None
+    assert 'Andre2016' in ' '.join(c['limitations'])
+    mixed = next(r for r in record['references_structured'] if r['pmid'] == '39519498')
+    assert mixed['scoring_eligible'] is False
+    assert 'ethyl ester' in mixed['notes']
+    assert assess_clinical_source_review(record)['is_complete'] is True
+    assert 'minimum_daily_dose' not in record['applicability']
+
+
+def test_seed_return_keeps_symptom_trial_separate_from_mechanistic_reports():
+    record = reviewed_entries()['FORMULA_SEED_DS01']
+    contexts = record.get('study_contexts', [])
+    assert len(contexts) == 3
+    symptom = next(c for c in contexts if c['source_pmids'] == ['41599868'])
+    assert validate_ingredient_context(symptom, require_complete_review=True) == []
+    assert symptom['dose']['unit'] == 'AFU'
+    assert symptom['dose']['values'] == [53_600_000_000]
+    assert symptom['dose']['duration_days'] == 42
+    assert 'first three days' in symptom['dose']['administration_frequency']
+    mechanism = [c for c in contexts if c is not symptom]
+    assert all(c['scoring_eligible'] is False for c in mechanism)
+    assert len({c['trial_family'] for c in mechanism}) == 1
+    assert mechanism[0]['trial_family'] != symptom['trial_family']
+    assert all(c['dose']['duration_days'] == 91 for c in mechanism)
+    assert all('first three days' not in c['dose']['administration_frequency'] for c in mechanism)
+    assert assess_clinical_source_review(record)['is_complete'] is True
+
+
+def test_preparation_mismatch_sources_are_retained_without_brand_credit():
+    lutemax = reviewed_entries()['BRAND_LUTEMAX_2020']
+    wrong = next(r for r in lutemax['references_structured'] if r['pmid'] == '25251377')
+    assert wrong.get('scoring_eligible') is False
+    assert 'EyePromise' in wrong['notes']
+    quatrefolic = reviewed_entries()['BRAND_QUATREFOLIC']
+    wrong = next(r for r in quatrefolic['references_structured'] if r['pmid'] == '23698160')
+    assert wrong.get('scoring_eligible') is False
+    assert 'Merck' in wrong['notes']
+    assert '149 randomized' not in quatrefolic['notes']
+    assert '149 randomized' not in quatrefolic['notable_studies']
+    assert '149 completed' in quatrefolic['notes']
+
+
+def test_hyaluronan_source_limitation_is_complete_without_generic_material_transfer():
+    from clinical_applicability import assess_clinical_applicability
+    record = reviewed_entries()['INGR_HYALURONIC_ACID']
+    contexts = record.get('study_contexts', [])
+    assert contexts
+    c = next(c for c in contexts if c['source_pmids'] == ['34203487'])
+    assert c['outcomes'][0]['hierarchy'] == 'not_reported'
+    assert validate_ingredient_context(c, require_complete_review=True) == []
+    assert c['dose']['values'] == [120]
+    assert c['dose']['duration_days'] == 84
+    assert c['identity']['branded_material'] == 'Hyabest (S) LF-P'
+    assert assess_clinical_source_review(record)['is_complete'] is True
+    for name, amount, expected in [('Hyaluronic acid', 120, 'not_applicable'),
+                                   ('Hyabest S LF-P Hyaluronic Acid', 120, 'applicable'),
+                                   ('Hyabest S LF-P Hyaluronic Acid', 60, 'not_applicable')]:
+        row = {'name': name, 'raw_source_text': name, 'canonical_id': 'hyaluronic_acid',
+               'quantity': amount, 'unit': 'mg', 'raw_source_path': 'ingredientRows[0]'}
+        product = {'activeIngredients': [row], 'physicalState': {'name': 'Capsule'},
+                   'serving_basis': {'min_servings_per_day': 1, 'max_servings_per_day': 1,
+                                     'servings_per_day_source': 'directions'},
+                   'ingredient_quality_data': {'ingredients_scorable': [row]}}
+        assert assess_clinical_applicability(product, {'id': record['id'],
+            'matched_source_row_refs': ['ingredientRows[0]'],
+            'matched_canonical_ids': ['hyaluronic_acid']})['status'] == expected
+
+
+def test_reviewed_disease_only_reference_is_complete_but_never_healthy_focus_credit():
+    from evidence_resolver import resolve_evidence_for_row
+    from assessment_readiness import _resolved_evidence_assessment
+    record = reviewed_entries()['INGR_ALPHA_GPC']
+    assert record['study_type'] == 'reference'
+    assert assess_clinical_source_review(record)['is_complete'] is True
+    row = {'name': 'Alpha GPC', 'canonical_id': 'alpha_gpc', 'quantity': 600, 'unit': 'mg'}
+    resolution = resolve_evidence_for_row(row)
+    assert resolution.points_eligible is False
+    assert resolution.reason_code == 'reference_only_clinical_record'
+    assert not resolution.blocking_reasons
+    status, reason, _ = _resolved_evidence_assessment(resolution)
+    assert status == 'evaluated_limited_or_negative'
+    assert reason == 'reference_only_clinical_record'
+
+
+def test_reference_label_alone_cannot_close_unfinished_or_ineligible_sources(monkeypatch):
+    from copy import deepcopy
+    import clinical_applicability
+    record = deepcopy(reviewed_entries()['INGR_ALPHA_GPC'])
+    assert record.get('study_contexts')
+    for c in record['study_contexts']:
+        c['review_status'] = 'source_verified_pending_clinical_review'
+    monkeypatch.setattr(clinical_applicability, 'reviewed_entries', lambda: {record['id']: record})
+    assert assess_clinical_source_review(record)['is_complete'] is False
+
+
+def test_reviewed_reference_scope_cannot_override_missing_or_held_source_proof(monkeypatch):
+    from copy import deepcopy
+    import clinical_applicability
+    original = deepcopy(reviewed_entries()['INGR_ALPHA_GPC'])
+    for mutation in ('pending', 'missing', 'record_hold', 'references_held', 'retracted', 'unrelated', 'future'):
+        record = deepcopy(original)
+        if mutation == 'pending':
+            record['study_contexts'][0]['review_status'] = 'source_verified_pending_clinical_review'
+        elif mutation == 'missing':
+            record['study_contexts'] = []
+        elif mutation == 'record_hold':
+            record['scoring_eligible'] = False
+        elif mutation in ('references_held', 'retracted'):
+            for reference in record['references_structured']:
+                reference['scoring_eligible' if mutation == 'references_held' else 'retracted'] = False if mutation == 'references_held' else True
+        elif mutation == 'unrelated':
+            record['study_contexts'][0]['source_pmids'] = ['12345678']
+        else:
+            record['study_contexts'][0]['clinical_review']['reviewed_at'] = '2099-01-01'
+        monkeypatch.setattr(clinical_applicability, 'reviewed_entries', lambda record=record: {record['id']: record})
+        assert clinical_applicability.assess_clinical_source_review(record)['is_complete'] is False, mutation
+
+
+def test_bc30_registry_regimen_does_not_invent_unavailable_paper_hierarchy():
+    data = json.loads((Path(__file__).resolve().parents[1] / 'data' / 'clinically_relevant_strains.json').read_text())
+    entry = next(e for e in data['clinically_relevant_strains'] if e['id'] == 'STRAIN_COAGULANS_GBI30')
+    c = next(c for c in entry['study_contexts'] if c['context_id'] == 'bc30_functional_gi_complaints_40707016')
+    assert c['dose']['dosage_forms'] == ['oral powder sachet']
+    assert c['dose']['values'] == [1_000_000_000]
+    assert c['dose']['duration_days'] == 28
+    assert 'before a meal' in c['dose']['administration_frequency']
+    assert all(o['hierarchy'] == 'unresolved' for o in c['outcomes'])
+    assert 'retrospective' in ' '.join(c['limitations']).lower()
+    assert '40707016' in c['source_pmids']
+    # The original paper could not be inspected, so not_reported would also be false.
+    assert assess_clinical_source_review(reviewed_entries()['STRAIN_BC30'])['is_complete'] is False

@@ -350,6 +350,12 @@ def _undisclosed_component_dose_reason(dim: Dict[str, Any]) -> Optional[str]:
         return (
             "The blend total is disclosed, but individual ingredient amounts aren't."
         )
+    if any(isinstance(item, dict) and item.get("band") in {"blend_total_only", "primary_no_dose"}
+           and isinstance(item.get("metadata"), dict)
+           and item["metadata"].get("assessment_status") == "complete"
+           and item["metadata"].get("reason_code") == "amount_not_declared"
+           for item in metadata.get("specialized_purpose_assessments") or []):
+        return "Some blend ingredients do not have individual amounts listed."
     if metadata.get("not_evaluable_reason") == "opaque_primary_sports_blend":
         reason = "The main ingredient's amount is hidden in a proprietary blend, so its dose cannot be assessed"
         return reason + ("; Dose takes the neutral assessment value." if _num(dim.get("score"), 0) > 0 else ".")
