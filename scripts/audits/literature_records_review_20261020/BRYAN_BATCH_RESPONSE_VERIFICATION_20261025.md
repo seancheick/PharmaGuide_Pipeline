@@ -1,5 +1,56 @@
 # Dr. Bryan responses — batches 1–9, independent verification
 
+## Signed-return reconciliation and canonical eligibility — October 26, 2026
+
+**Implemented, measured and independently reviewed; CI qualification/integration pending.** Runtime fixes are committed through `7a98a60dc` (aggregate gate `f68645611`). No whole-corpus rerun, export, app-data update or publication was performed. Dr. Pham's supplied approval date is October26; exact returned scopes are retained without inventing a signing time or approving open questions.
+
+Owner: existing `clinical_applicability.py::assess_clinical_source_review`, `evidence_resolver.py::clinical_record_sources_eligible`, `generic_evidence.py` recovery, `assessment_readiness.py` and canonical identity/therapeutic owners. Evidence: returned source bodies, primary API/full-text receipts, fail-first tests and frozen real-label captures. Will NOT create another scorer, review registry, completion authority, dose threshold or efficacy grade.
+
+### Complete source-subject reconciliation
+
+All146 contributing subjects from the operator's rebuilt baseline join the existing155-row register. Nine unused historical rows do not create publication blockers. Frozen product IDs/counts in all155 clinical and514 benchmark rows remain unchanged. Current source-subject rows now reflect the rebuilt dependency set and actual canonical context counts; they are not treated as146 D-citation flags.
+
+- Three source checks are complete: BCM-95, Magtein and peppermint. Exact retail applicability/remaining benchmark and grade qualifications remain separate.
+- Three explicit general-qualification holds are enforced: collagen peptides, Theracurmin and digestive enzymes. Recorded contexts preserve the signed findings and the unresolved acceptance limits.
+- The other140 used records still lack completed structured source contexts. Source mapping/research and any genuinely new scoped decision remain work to finish; this is not a missing-date or blanket re-signing request. Populated C/D answers are not substituted for absent A/B decisions.
+
+| Owner | Applied scope and remaining limit |
+|---|---|
+|BCM95|Both retained active-comparator sources have distinct regimens and limitations. Descriptive direction is mixed; no placebo-superiority or broad tier1 validation is inferred.|
+|Magtein|Two isolated-material trial families, separate correction provenance and an excluded whole-formula context. Unsupported age-reversal/longevity qualification removed; elemental and complex masses stay distinct.|
+|Peppermint|Updated very-low-certainty pooling, distinct null trial arms and exact preparation distinctions preserved. No retail0.2mL-to-trial180mg conversion; IBgard transfer and saved-label benchmark questions remain held.|
+|Collagen|Four sources retained with funding, co-component and outcome limitations; unsupported generic credit/claims/counts withdrawn. Recovery now requires a real eligible canonical owner and cannot resurrect stale positive stamps or its own grade/enrollment/dose range.|
+|Poolzyme|Whole preparation400mg/day for60days,120participants; unsupported168/seven-trial claims corrected. Original outcome/ethics questions and final acceptance remain held; no RAW enzyme equivalence.|
+|Theracurmin|Three source contexts retain null/exploratory findings and held memory acceptance.18calendar months remains18months, not invented540days. Independent eligible UC-II/turmeric/whey evidence is preserved.|
+|299v native owner|Positive22912552, null25194614 and rejected affirmative Sen12452404 remain separate. Unknown within-day timing/co-therapies are explicit. Broad digestive-health label19067 retains zero Evidence and its applicability hold.|
+
+### Confirmed engineering defects and real outcomes
+
+The fruit-source regression on277387, mixed-part Panax routing on304331/315301 and the standardized-American-ginseng alias were repaired through existing owners. Exact Neumentix preparation now has its signed completed no-general-threshold disposition; generic spearmint/OA-tea scope stays open. No numerical dose window or new efficacy points were created.
+
+The canonical CFU predicate now governs the audit as well as scoring. Product222862 remains safety-blocked and unscored. Date-only approval precision is accepted honestly; named reviewer, explicit scope and future-date protections remain. Known printed calendar-month duration with unknown days is permitted only for nonaffirmative contexts; missing keys and eligible unknown-day cases still fail.
+
+A final real-label review reproduced four false completion flips after held credit was removed. The module projection ledger correctly excluded individual questions, but the release gate omitted the aggregate question. The shared canonical classification now blocks333715,327398,327399 and328400 while preserving completed negative/inapplicable findings, manufacturer limitations, intentional unassessable products and independent nutrition-authority ownership.
+
+| Product | Bounded result |
+|---|---|
+|277387|69.7/scored/complete restored; declared fruit provenance retained.|
+|304331 /315301|84.5/75.7 and complete; combined100mg is not split into invented component doses; existing caution retained.|
+|232839 Neumentix|49.7→61.1 solely existing11.4 neutral Dose credit; Evidence0, complete; no immediate-focus/capsule-to-beverage efficacy claim.|
+|327376 Andrographis|Parent identity restored;65.4/scored but Evidence remains incomplete.300mg leaf/stem,30mg marker and100mg herb preserved.|
+|299952 collagen|87.0→71.4, Evidence15.6→0; unresolved assessment remains held.|
+|19067 probiotic|57.9/Evidence0 unchanged; no IBS benefit transferred to generic digestive positioning.|
+
+### Qualification evidence and limits
+
+-242 distinct frozen labels replayed through actual Clean→Enrich→Score→detail-blob owners; includes the original20, affected clinical groups and96 public strict-identity cases. All captures exit0, source unchanged and checksums verified.127 score movements have shared-source causes; exactly four newly complete products, no lost completion and no safety-outcome changes. Warning ingredient labels/form context improve without losing advice or sources; warning bytes are not claimed identical.
+-One private strict-identity case remains an identical `UNRESOLVED_SCORE_ACTIVE` error on both baseline and candidate. It is a retained limitation, not a passing artifact or invented score.
+-Local rung:546passed/24declared skips, strict skip guard passed;33/33 raw canaries unchanged. Owner/consumer slices passed, including155 readiness and165 scored-artifact/audit/preflight/shadow checks; overlapping slices are not summed. Independent review identified and verified fixes for unsupported within-day timing, calendar-day conversion and the aggregate gate.
+-Changed-entry checks cover exactly six clinical records, one native strain, two IQM records and one preparation-only therapeutic entry; zero unexpected data changes. Python correctness:0new/12existing findings. Primary source/API receipts retain exact access limits; automated PubMed metadata checks are not represented as scientific approval.
+-Four preexisting generated approval-revision/hash metadata migrations match existing import receipts and preserve every label fact/approval. Sean explicitly authorized this metadata-only public commit; all ten reviewed sources remain byte-pinned. Six untracked submissions and local Supabase work remain untouched.
+
+Runtime fingerprint (sorted replay source-hash map): `3e03d7df4d787b7134405216ec7b7216de74a004b285a15eaa18d282b0f24b32`. Full private evidence is `.claude/state/assessment_review_reconciliation_20261026/`; per-source original/receipt evidence also remains under `post_rebuild_audit_20261026/` and the existing source review directories. These are bounded candidate proofs, not a new15,437-product catalog or installed-app validation. Do not request another identical corpus run to resolve absent source decisions. Select regeneration from actual final stage fingerprints only after output-changing work is complete.
+
 **Current status, October26:** the remaining18C/47D source-correction batch is implemented, verified and merged. [Final qualification](#final-qualification-and-integration--october-26-2026) records exact CI/integration. The active [remaining list](#one-remaining-list-before-final-delivery) separates required scientific decisions from rebuilt-corpus/app verification. Earlier pending-source lists below are historical and superseded. No publication or full corpus run occurred.
 
 October 25, 2026. **Batch 1's supported decisions and remaining holds are approved by Sean. Batches 2–9 are reviewed below; no blanket scoring approval or rebuilt-product closure is recorded.** Attribution to Dr. Bryan comes from Sean. Receipt date is not an invented date of the original scientific review.

@@ -3605,3 +3605,10 @@ PYTHON="$PG_PYTHON" bash batch_run_all_datasets.sh --pipeline-only
 ```
 
 This computes Clean→Enrich→Score and stops. Publication remains separately gated by source-bound assessment completeness. Next proof is the rebuilt full-corpus invariant, identities/amounts/warnings/held states, exports and ordinary Flutter delivery including the original20examples. No further source edit is planned for this batch.
+
+
+## October26 — signed-return source reconciliation / aggregate gate candidate
+
+Behavioral code/data/test batch through7a98a60dc (aggregate releasegate f68645611). Existing owners only; no scorer/registry/status/grade/dose threshold added. DrPham date2026-10-26 and explicit returned scopes applied; all146current source subjects reconciled, frozen155clinical/514benchmark rows preserved. Six clinical/source records,299v, ginseng and exactNeumentix dispositions applied; unused historical records do not block.140source-context mappings remain unfinished, distinct from signatures.
+
+242real-label full owner replays,127score movers,4newlycomplete (277387/304331/315301/232839),0lostcomplete,0safety-outcome movers; private manual strictcase unchangederror, notpass. New aggregate-check regression prevents4falsecompletions. Local546pass/24declaredskips+strictguard;33rawcanaries pass; independent review complete with all blocking findings fixed. Four receipt-bound metadata migrations explicitly authorized and committed; sixuntrackedsubmissions/Supabase preserved. Detailed source/access/provenance/qualification limits in current BRYAN report; CI qualification and integration pending. No fullcorpus, catalog or app delivery claim.
