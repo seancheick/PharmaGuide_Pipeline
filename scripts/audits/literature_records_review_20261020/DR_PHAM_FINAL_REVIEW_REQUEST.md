@@ -1,5 +1,7 @@
 # Remaining PharmaGuide confirmations — October 26, 2026
 
+October27 status: the verified corrections below are now on main through PR263 and passed the full checks. The final test-label comparison found68newly complete assessments without changing identities, amounts or safety warnings. That is a test sample, not clearance of the whole catalog. I am retaining the remaining specific questions and holds; no repeat signature is requested for the fourteen completed source findings or nine settled reference/label-limit questions.
+
 Current October 27 update: the fourteen source records below now have completed, scoped canonical source assessments. I am not asking you to sign those same findings again: BCM-95, Magtein, OptiMSM, MSM, Seed DS-01, alpha-GPC, alpha-lipoic acid, creatine monohydrate, honey, hyaluronic acid, melatonin, NAC, PEA and peppermint oil. Several are reference-only for current general product claims; that retains the supported finding without extending it to unrelated uses. Exact product qualification and rebuilt verification remain separate.
 
 The general numerical-reference question is also settled for aloe vera, green tea leaf, lignans, pygeum, weeping-willow bark, chopchini and achiote leaf through the existing neutral-reference policy. No invented effective-dose threshold is requested for them. Flaxseed remains held pending the full correction PMID26525908. Undisclosed green-bell-pepper and green-cabbage amounts in the inspected labels are documented manufacturer limitations, not missing numbers for you to create.
