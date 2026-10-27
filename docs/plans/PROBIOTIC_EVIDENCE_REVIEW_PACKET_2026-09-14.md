@@ -8,11 +8,11 @@
 
 ## Where we are
 
-No contexts require reviewer action in this snapshot. The registry currently contains 157 recorded approved contexts. The review protocol below is retained for provenance and for future reopened contexts.
+No contexts require reviewer action in this snapshot. The registry currently contains 158 recorded approved contexts. The review protocol below is retained for provenance and for future reopened contexts.
 
 - **Pending review:** 0
-- **Recorded approved:** 157
-- **Recorded rejected:** 0
+- **Recorded approved:** 158
+- **Recorded rejected:** 1
 - **Other registry states:** 0
 - **Contexts shown in this packet:** 0
 **Owning identities represented:** 0

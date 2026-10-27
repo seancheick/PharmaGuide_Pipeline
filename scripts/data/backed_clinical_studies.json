@@ -2634,18 +2634,18 @@
         "quatrefolic"
       ],
       "category": "vitamin_supplement",
-      "evidence_level": "branded-rct",
+      "evidence_level": "reference",
       "published_studies": [
         "RCT"
       ],
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "folate status ↑",
-        "homocysteine ↓"
+        "MerckEprova5MTHF208mcgmoiety13weeks loweredhomocysteine;RBCfolateplacebocomparisonnull. This is notexactQuatrefolicclinicaloutcome evidence.",
+        "EFSA36034319 concerns specifiedsalts/DFEconversion,not brandedtherapeuticRCT orNTDprevention efficacy."
       ],
       "health_goals_supported": [],
-      "notes": "Quatrefolic is the glucosamine salt of 5-MTHF with explicit EFSA-reviewed human bioavailability evidence. Most support is PK and biomarker based rather than disease-endpoint RCTs. PMID 23698160 is authored by Zappacosta, not Venn; Methods report 158 agreed to participate and 149 completed, the randomized total is not established. The EFSA DFE opinion is not a therapeutic efficacy RCT; generic 5-MTHF evidence does not independently verify the exact glucosamine salt in every trial.",
-      "study_type": "rct_multiple",
+      "notes": "Returned scopedrejectionofautomaticNTDprevention/brandedclinicalequivalence iscompletedagainstfull23698160MethodsandResults. It studiedMerckEprova5MTHF,notestablishedQuatrefolicglucosamine,208mcgmoiety454nmoldaily13weeks,149completers. Hcypositive,RBCfolatenullcomparedplacebo;pregnancy/plannedpregnancyexcluded. EFSA36034319conversionopinionandgenericfolatenutritionremainseparate. NoaffirmativeQuatrefolictherapeuticclaimisapproved;nofolatenutritionalconversionchanged.",
+      "study_type": "reference",
       "last_updated": "2026-10-27",
       "notable_studies": "EFSA PMID 36034319 evaluates dietary folate equivalents for specified 5-MTHF salts, not therapeutic efficacy. Zappacosta et al. (2013, PMID 23698160) reports 149 adults completing diet, 5-MTHF, folic acid or placebo groups after 158 agreed to participate; the total randomized count is not established by the inspected methods; exact Quatrefolic preparation cannot be inferred from a generic 5-MTHF label.",
       "references_structured": [
@@ -2708,20 +2708,106 @@
           "retracted": false,
           "supports_claims": [],
           "verification_source": "pubmed_eutils",
-          "scoring_eligible": false,
-          "notes": "Preparation-specific attribution is unresolved: Methods 2.4 report Merck Eprova [6S]-5-MTHF material, not verified Quatrefolic glucosamine salt. Methods 2.1 report 158 agreed to participate and 149 completed; the total randomized count is not established here. Retained for generic folate biomarker context, not affirmative branded clinical credit."
+          "scoring_eligible": true,
+          "notes": "Eligible onlyforcompletednonaffirmative referenceassessment:MerckEprova5MTHFnotexactQuatrefolic,surrogateHcypositive/RBCnull,notNTDprevention. No brandedclinicalcredit."
         }
       ],
       "external_ids": {
         "unii": "935E97BOY8"
       },
       "effect_direction": "positive_strong",
-      "primary_outcome": "Cardiovascular/Heart Health",
       "total_enrollment": null,
-      "registry_completed_trials_count": 1,
+      "registry_completed_trials_count": null,
       "effect_direction_confidence": "medium",
-      "effect_direction_rationale": "PMID 23698160 is authored by Zappacosta, not Venn; 149 completed after 158 agreed to participate, and an exact total randomized count is not established. The EFSA DFE opinion is not a therapeutic efficacy RCT; generic 5-MTHF evidence does not independently verify the exact glucosamine salt in every trial.",
-      "endpoint_relevance_tags": []
+      "effect_direction_rationale": "Existingpositive_strong metadata retainedhistorically;reference-onlyclassificationpreventsunsupportedbrandedclinicalcredit. This completednegative attribution decisiondoesnotdeclarefolateineffectiveorchangeRDA/UL,nutritionalconversion,safetyoridentity.",
+      "endpoint_relevance_tags": [],
+      "study_contexts": [
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "quatrefolic_nonqualifying_merck_folate_rct_23698160",
+          "source_pmids": [
+            "23698160"
+          ],
+          "components": [
+            "BRAND_QUATREFOLIC"
+          ],
+          "identity_scope": "exact_form",
+          "identity": {
+            "chemical_form": "[6S]-5-methyltetrahydrofolate moiety, Merck Eprova study material"
+          },
+          "exposure_basis": "supplement_dose",
+          "route": "oral",
+          "evidence_role": "direct_rct",
+          "component_registration_status": "fully_registered",
+          "condition": "hyperhomocysteinemia",
+          "purpose": "source_specific_assessment",
+          "population": {
+            "age_group": "adult",
+            "description": "Moderatehyperhomocysteinemiaadults18–60;158agreed149completed,pregnancyexcluded."
+          },
+          "study_design": "Thirteen-week randomized trial: dietary intervention open-label, folate supplement and placebo capsules double-blinded.",
+          "trial_family": "23698160",
+          "review_status": "clinician_approved",
+          "human_status": "confirmed",
+          "source_integrity": "none",
+          "scoring_eligible": true,
+          "dose": {
+            "measurement_type": "mass",
+            "unit": "mg",
+            "values": [
+              0.208
+            ],
+            "dose_status": "verified",
+            "dose_basis": "nominal_assigned_arm",
+            "duration_basis": "fixed_protocol",
+            "duration_days": 91,
+            "administration_frequency": "One assigned capsule daily alongside habitual diet for13weeks.",
+            "dosage_forms": [
+              "oral hard gelatin capsule"
+            ],
+            "reported_regimen": "[0.208] mg/day; 91 days; daily",
+            "normalization": {
+              "basis": "Reported study-material daily dose, not a universal threshold or equivalence to other preparation."
+            },
+            "source_provenance": {
+              "pmid": "23698160",
+              "location": "FullPMC3708334PatientsandMethods2.1–2.6andResultsTables3–5independentlyread27October2026; priorfulltextreceiptretained.",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/23698160/"
+            },
+            "co_therapies": [
+              "Habitual diet maintained; separate folate-rich dietary-intervention,folic-acid andplacebo arms. B-vitamin supplements andfolate-metabolism-interfering medicines excluded; participants advisednototakeotherfolate/vitamin supplements."
+            ]
+          },
+          "outcomes": [
+            {
+              "name": "Plasmahomocysteine reduction with208mcg5MTHFmoiety versusplacebo",
+              "hierarchy": "primary",
+              "kind": "surrogate",
+              "direction": "positive",
+              "outcome_role": "direct_between_group_effect"
+            },
+            {
+              "name": "RBCfolate change with5MTHFversusplacebo not significant(p=.24)",
+              "hierarchy": "primary",
+              "kind": "surrogate",
+              "direction": "null",
+              "outcome_role": "direct_between_group_effect"
+            }
+          ],
+          "limitations": [
+            "208mcg=0.208mgmoiety454nmol,notabstractrounded200mcg.",
+            "NoexactQuatrefolicglucosaminesaltorNTDpreventionapproval.",
+            "Source explicitly identifies primaryHcyandRBCfolate variables. Its salt is not established asQuatrefolicglucosamine; it is not a pregnancy/NTDoutcome trial.",
+            "149completed;158agreedtoparticipate; do notcall149randomized. No newfolateconversionratio or dosebenchmark."
+          ],
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-10-26",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Accepted returned A-scope rejects automatic branded clinical/NTD-prevention attribution. Agent source extraction27October2026 supports this exact nonaffirmative conclusion; no positive therapeutic approval."
+          }
+        }
+      ]
     },
     {
       "id": "BRAND_CIRCADIN",
@@ -3399,7 +3485,7 @@
         "phosphatidylserine"
       ],
       "category": "cognitive_neurological",
-      "evidence_level": "ingredient-human",
+      "evidence_level": "reference",
       "published_studies": [
         "RCT"
       ],
@@ -3411,10 +3497,10 @@
       "health_goals_supported": [
         "Focus & Mental Clarity"
       ],
-      "notes": "Human evidence supports phosphatidylserine as an ingredient, but the cited trials are on soy-derived PS products such as Sharp-PS and Soy-PS rather than on a clearly validated SerinAid-specific trial set. Cited trials randomized 157 to PS-DHA and 78 to soybean-derived PS. The preparations differ; the soybean trial had no overall cognitive-score separation and baseline-defined analyses must remain qualified. No unique aggregate is asserted. Retained-source scope and limitations: Exploratory memory findings from a PS-DHA combination; not isolated-PS stress/exercise recovery evidence (PMID: 20523044) Soy-PS study had overall test-score improvement in all groups, with subgroup/baseline memory findings requiring qualification (PMID: 21103034)",
-      "study_type": "rct_multiple",
-      "last_updated": "2026-10-11",
-      "notable_studies": "Vakhapova et al. (2010, PMID 20523044) placebo-controlled trial found PS-DHA improved memory measures in non-demented older adults with memory complaints. Kato-Kataoka et al. (2010, PMID 21103034) reported benefits in lower-baseline-memory subgroups taking soy-derived phosphatidylserine. The evidence is therefore ingredient-level rather than clearly SerinAid-brand-specific; the record was reclassified from a branded entry to ingredient-human on 2026-09-05 because neither cited trial studied SerinAid (PS-DHA and soybean-derived PS respectively).",
+      "notes": "PMID21103034 randomized84Japanese participants withmemorycomplaints tosoyPS100mg,300mgorplacebo for6calendar months,ninesoftgelsdaily(threeaftereachmeal). Published baselineanalysis table has73participants. Allarms sharephospholipid/MCT/vitaminEmatrix. OverallHDS-Rduringtreatment andRBMT showednogroupdifference; lowerbaseline/subgroup andposttreatmentdelayedrecall findings remainqualified. This supportscompletednonaffirmative scopeforgenericPS,notSerinAid/sunflowerPS/stress/exerciseendorsement. PMID20523044 PS-DHAcombination retainedhistory; notisolatedPS attribution.",
+      "study_type": "reference",
+      "last_updated": "2026-10-27",
+      "notable_studies": "21103034:overallcognitionnull withqualifiedsubgroup/postfollowupsignals inexactsoyPSmatrix.20523044:PS-DHAcombination,notvalidatedSerinAid trialset. No summedcohort or brandwidecredit.",
       "references_structured": [
         {
           "type": "pubmed",
@@ -3452,7 +3538,9 @@
           "evidence_grade": "rct",
           "retracted": false,
           "supports_claims": [],
-          "verification_source": "pubmed_eutils"
+          "verification_source": "pubmed_eutils",
+          "scoring_eligible": false,
+          "notes": "ReturnedA100 rejectsPS-DHA-to-isolatedPS/SerinAid attribution; retainedas sourcehistory,notcontributing tothisreference-onlygenericassessment."
         },
         {
           "type": "pubmed",
@@ -3477,11 +3565,108 @@
       "effect_direction": "mixed",
       "primary_outcome": "Focus & Mental Clarity",
       "total_enrollment": null,
-      "registry_completed_trials_count": 1,
       "effect_direction_confidence": "medium",
       "effect_direction_rationale": "Source-content attribution reconciled against retained primary references on2026-10-23. Current descriptive direction: mixed. Actual measured outcomes and source limitations are recorded separately. This is not attributable clinician approval; existing clinical context holds remain.",
       "endpoint_relevance_tags": [
         "focus_memory"
+      ],
+      "study_contexts": [
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "ingr_phosphatidylserine_21103034_reviewed_nonaffirmative",
+          "source_pmids": [
+            "21103034"
+          ],
+          "components": [
+            "INGR_PHOSPHATIDYLSERINE"
+          ],
+          "identity_scope": "exact_form",
+          "identity": {
+            "chemical_form": "Soybean-derived phosphatidylserine"
+          },
+          "exposure_basis": "supplement_dose",
+          "route": "oral",
+          "evidence_role": "direct_rct",
+          "component_registration_status": "fully_registered",
+          "condition": "age_related_memory_complaints",
+          "purpose": "treatment",
+          "population": {
+            "age_group": "adult",
+            "description": "84Japaneseolderadultswithmemorycomplaintsrandomized;73tableanalysis."
+          },
+          "study_design": "Randomized, double-blind, placebo-controlled three-arm parallel-group trial of soybean-derived PS within a shared phospholipid/MCT/vitamin E matrix.",
+          "trial_family": "21103034",
+          "review_status": "clinician_approved",
+          "human_status": "confirmed",
+          "source_integrity": "none",
+          "scoring_eligible": false,
+          "dose": {
+            "measurement_type": "mass",
+            "unit": "mg",
+            "values": [
+              100,
+              300
+            ],
+            "dose_status": "verified",
+            "dose_basis": "nominal_assigned_arm",
+            "duration_basis": "fixed_protocol",
+            "duration_days": null,
+            "administration_frequency": "three softgels after each meal; nine per day",
+            "dosage_forms": [
+              "oral softgel"
+            ],
+            "reported_regimen": "[100, 300] mg/day; 6 calendar months; three softgels after each meal; nine per day",
+            "normalization": {
+              "basis": "Reported study-material daily dose, not a universal threshold or equivalence to other preparation."
+            },
+            "source_provenance": {
+              "pmid": "21103034",
+              "location": "Retained primary fulltext methods/intervention and results; manual followup in remaining_b_research.jsonl",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/21103034/"
+            },
+            "duration_as_printed": {
+              "value": 6,
+              "unit": "months"
+            },
+            "co_therapies": [
+              "All arms received the same total phospholipid matrix, 702 mg medium-chain triglycerides and 135 mg vitamin E daily; non-PS phospholipid amount varied with PS substitution."
+            ]
+          },
+          "outcomes": [
+            {
+              "name": "Prespecified primary cognition:HDS-R total duringtreatment andRBMT overall:no between-group difference; no generalmemory benefit established.",
+              "hierarchy": "primary",
+              "kind": "patient_important",
+              "direction": "null",
+              "outcome_role": "direct_between_group_effect"
+            },
+            {
+              "name": "Lower-baseline-memory and delayedrecall findings,especially3months after6monthtreatment:qualified subgroup/post-treatment signals,not broad superiority.",
+              "hierarchy": "post_hoc",
+              "kind": "patient_important",
+              "direction": "positive",
+              "outcome_role": "post_hoc_subgroup"
+            },
+            {
+              "name": "Self-reported memory and mood",
+              "hierarchy": "secondary",
+              "kind": "patient_important",
+              "direction": "null",
+              "outcome_role": "direct_between_group_effect"
+            }
+          ],
+          "limitations": [
+            "Sharedphospholipid,MCT,vitaminEmatrix;calendar6monthsplus3monthofffollowup,notimmediatefocus.",
+            "No dementia-prevention outcome.",
+            "84randomized(28/arm);73in published baselineanalysis table. Sixcalendar months retained exactly; do not invent180days.",
+            "20523044 studiesPS-DHAcombination; historical citation kept but excluded from affirmative isolatedPS contribution; its fullcontext is not claimed complete."
+          ],
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-10-26",
+            "scope": "identity_dose_outcome_applicability"
+          }
+        }
       ]
     },
     {
@@ -6948,18 +7133,15 @@
       ],
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "blood pressure ↓",
-        "cholesterol ↓",
-        "immune function ↑"
+        "Systolic/diastolic blood pressure in hypertensive adults (surrogate risk-factor outcomes)"
       ],
       "health_goals_supported": [
-        "Cardiovascular/Heart Health",
-        "Immune Support"
+        "Cardiovascular/Heart Health"
       ],
-      "notes": "Meta-analytic human evidence supports garlic most clearly for blood-pressure lowering in hypertensive adults, with additional but smaller lipid-related benefits.",
+      "notes": "Retained review32010325 supports a qualified blood-pressure finding in hypertensive adults for specified garlic preparations. Its12trials/553participants are the SBP meta-analysis;8trials/374 contributed DBP. This is not cardiovascular-event prevention, normotensive benefit, immune efficacy or universal garlic-dose equivalence. Actual current labels use varied powders/oils/raw-equivalent concentrates/agedblack materials and combinations without established correspondence to TableI products. Retain preparation/regimen hold and current NCCIH bleeding/anticoagulant/aspirin/surgery/pregnancy-lactation qualifications.",
       "study_type": "systematic_review_meta",
-      "last_updated": "2026-03-06",
-      "notable_studies": "Ried (2020, PMID 32010325) reported clinically meaningful systolic and diastolic blood-pressure reductions with garlic in hypertensive participants.",
+      "last_updated": "2026-10-27",
+      "notable_studies": "Ried2020(PMID32010325),12RCT553hypertensive participants, preparation-specific BP effects. Review-selected single active arm/subgroup prevents duplicate controls; no pooled lipids/immune grade claimed.",
       "references_structured": [
         {
           "type": "pubmed",
@@ -6985,15 +7167,107 @@
         "unii": "V1V998DC17"
       },
       "effect_direction": "positive_weak",
-      "primary_outcome": "Cardiovascular/Heart Health",
-      "total_enrollment": 3411,
-      "registry_completed_trials_count": 65,
+      "total_enrollment": 553,
       "effect_direction_confidence": "medium",
-      "effect_direction_rationale": "Retained positive_weak classification; study_type=systematic_review_meta; evidence_level=ingredient-human; primary_outcome=Cardiovascular/Heart Health; published_tags=RCT,meta-analysis; registry_completed_trials_count=65; total_enrollment=3411; endpoint_tags=focus_memory,cardiovascular,digestive_health; notes/citations include weak-effect language.",
+      "effect_direction_rationale": "Signed limited source-specific findings retained; no universal preparation, population, purpose or regimen equivalence. scoring_eligible=false newly enforces unresolved current-product qualification; it adds no penalty, declares no inefficacy and does not override separate branded or safety holds.",
       "endpoint_relevance_tags": [
-        "focus_memory",
-        "cardiovascular",
-        "digestive_health"
+        "cardiovascular"
+      ],
+      "scoring_eligible": false,
+      "study_contexts": [
+        {
+          "context_schema_version": "1.1.0",
+          "components": [
+            "INGR_GARLIC"
+          ],
+          "source_pmids": [
+            "32010325"
+          ],
+          "identity_scope": "botanical_preparation",
+          "exposure_basis": "supplement_dose",
+          "route": "oral",
+          "evidence_role": "meta_analysis",
+          "component_registration_status": "fully_registered",
+          "condition": "hypertension",
+          "purpose": "treatment",
+          "review_status": "source_verified_pending_clinical_review",
+          "scoring_eligible": false,
+          "human_status": "confirmed",
+          "source_integrity": "none",
+          "population": {
+            "age_group": "adult",
+            "description": "Adults with uncontrolled hypertension, untreated or on an established antihypertensive regimen; normotensive arms and garlic-combination products excluded."
+          },
+          "study_design": "Systematic review and random-effects meta-analysis of randomized double-blind placebo-controlled trials; source TableI retained separately",
+          "outcomes": [
+            {
+              "name": "Pooled baseline-adjusted SBP difference:8.3+/-1.9mmHg reduction,12trials553hypertensive participants",
+              "hierarchy": "primary",
+              "kind": "surrogate",
+              "direction": "positive",
+              "outcome_role": "direct_between_group_effect"
+            },
+            {
+              "name": "Pooled baseline-adjusted DBP difference:5.5+/-1.9mmHg reduction,8trials374hypertensive participants",
+              "hierarchy": "primary",
+              "kind": "surrogate",
+              "direction": "positive",
+              "outcome_role": "direct_between_group_effect"
+            }
+          ],
+          "limitations": [
+            "Signed A069 supports only qualified hypertension-source finding; exact label preparation/regimen correspondence remains held.",
+            "Heterogeneous preparations,active-marker bases,doses,durations and background BP treatment; not generic garlic equivalence.",
+            "Attrition and risk-of-bias limitations vary across included trials. Review selected one active arm/subgroup to avoid duplicate controls; do not sum SBP and DBP populations.",
+            "Cardiovascular events were inferred from BP change,not measured event-prevention efficacy. No normotensive,immune or universal lipid conclusion imported.",
+            "Current NCCIH bleeding/anticoagulant/aspirin/surgery cautions remain controlling; review discussion cannot establish all garlic or Kyolic universally free of bleeding risk.",
+            "All12 source-table trial identities/citations retained in garlic_exact_trial_table.json and sourceXML. PrimaryPMIDs have not independently been content-verified for every old trial; extraction_pending is honest existing-schema locator and blocks complete-review qualification.",
+            "No new numerical grade or dose curve. Source-current context is authoring-valid only; product/source completeness is not claimed.",
+            "Wakunaga supported the symposium and author travel; source states sponsor did not design,collect,analyze or prepare the manuscript. Attrition unclear in2trials; other trials20%vs11% and27%vs0%;2trials lack BP-measurement details."
+          ],
+          "context_id": "garlic_hypertension_meta_32010325",
+          "trial_family": "garlic_hypertension_meta_32010325",
+          "identity": {
+            "botanical_species": "Allium sativum",
+            "plant_part": "bulb",
+            "preparation": "Source-specific mixture of garlic powders(Kwai,Allicor),agedgarlic(Kyolic HighPotency/Reserve),Japanese egg-yolk garlic powder; not one interchangeable preparation",
+            "standardization": "TableI uses alliin,allicin potential or SAC active bases; Japanese preparation marker not reported."
+          },
+          "dose": {
+            "measurement_type": "mass",
+            "unit": "mg",
+            "values": [
+              188,
+              480,
+              600,
+              900,
+              960,
+              1200,
+              2400
+            ],
+            "dose_status": "verified",
+            "dose_basis": "nominal_assigned_arm",
+            "duration_basis": "endpoint_followup_only",
+            "duration_days": null,
+            "administration_frequency": "Daily doses across distinct preparations; within-day schedules not consistently reported in TableI",
+            "dosage_forms": [
+              "oral supplement"
+            ],
+            "co_therapies": [
+              "Review allows untreated hypertension or established BP medication; individual drug regimen not specified in TableI"
+            ],
+            "reported_regimen": "TableI separate assignments:188,480,600,900,960,1200or2400mg/day;8–24weeks,mostly12weeks. These are not an effective range or interchangeable masses.",
+            "normalization": {
+              "basis": "Separate sourceTableI preparation-specific daily material assignments, not a universal curve, minimum, maximum or active-marker conversion."
+            },
+            "source_provenance": {
+              "pmid": "32010325",
+              "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6966103/",
+              "location": "Methods,TableI,Results,Figures2–3 and risk-of-bias discussion"
+            }
+          },
+          "included_study_pmids": "extraction_pending"
+        }
       ]
     },
     {
@@ -7971,21 +8245,20 @@
         "magnesium glycinate chelate"
       ],
       "category": "mineral_supplement",
-      "evidence_level": "ingredient-human",
+      "evidence_level": "reference",
       "published_studies": [
-        "RCT",
-        "systematic_review",
-        "meta-analysis"
+        "RCT"
       ],
       "score_contribution": "tier_2",
       "key_endpoints": [
-        "Pregnancy-related leg-cramp frequency and intensity (PMID: 22909270)"
+        "Pregnancy leg-cramp frequency response with300mg/day elemental bisglycinate; separate context PMID22909270.",
+        "Small subjective ISI benefit with250mg/day elemental bisglycinate plus glycine; secondary questionnaire outcomes null, PMID40918053."
       ],
       "health_goals_supported": [],
-      "notes": "The retained direct bisglycinate trial concerns pregnancy-related leg cramps, not sleep, anxiety or superior GI tolerance. Broader magnesium findings cannot establish exact-form sleep efficacy without separate applicable sources. Clinical source-context review remains incomplete. Retained-source scope and limitations: Reduced pregnancy-related leg-cramp frequency and intensity over 4 weeks with 300 mg/day magnesium bisglycinate; nausea and diarrhea did not differ from placebo (PMID: 22909270) In22909270,nausea and diarrhea did not differ from placebo; these adverse-event observations are not digestive benefit.",
-      "notable_studies": "Direct bisglycinate evidence includes the pregnancy leg-cramp trial indexed as PMID 22909270. Broader magnesium-sleep evidence is limited and not specific to the glycinate form.",
-      "study_type": "rct_single",
-      "last_updated": "2026-03-07",
+      "notes": "Two distinct exact-form contexts are now source-extracted and retain the returned limited approval. PMID22909270 Methods explicitly establishes300mg/day ELEMENTAL magnesium (100mg/tablet TID), resolving the abstract-only uncertainty. Pregnancy cramps are not ordinary adult cramp or sleep evidence. PMID40918053 studied250mg elemental magnesium plus1523mg reported glycine co-ligand daily for28days; the small ISI result cannot isolate either contribution or imply a general stress/anxiety benefit. Current saved labels182999/294032 combine citrate with a glycinate component,150mg total elemental magnesium per2caps and generic mild-cramp positioning; neither matches these standalone preparations/populations/claims. No glycinate-specific quantity is invented from the33%wording. The current general-catalog record is reference-only; retain generic magnesium DRI adequacy, declared total amounts, form identity and all independent safety evaluation. No transfer to buffered, lysinate-glycinate or other magnesium salts. The earlier250participant aggregate and11registry-trial count are not established by this source set. The sources support scoped findings, not universal inefficacy or a numerical adequacy/efficacy threshold. Existing clinical-record UNII I38ZP9992A resolves to elemental MAGNESIUM, not this salt. GSRS content verification confirms IFN18A4Y6B names MAGNESIUM BISGLYCINATE/DIGLYCINATE/GLYCINATE, matching the existing IQM exact-form owner. Only this clinical-record identifier is corrected; elemental magnesium and raw label parent identifiers remain unchanged.",
+      "notable_studies": "22909270: pregnancy-specific cramp trial, not sleep.40918053: small subjective sleep effect from bisglycinate with glycine, not other salts or generic all-population sleep efficacy.",
+      "study_type": "reference",
+      "last_updated": "2026-10-27",
       "references_structured": [
         {
           "type": "pubmed",
@@ -8020,17 +8293,206 @@
           "retracted": false,
           "supports_claims": [],
           "verification_source": "pubmed_eutils"
+        },
+        {
+          "type": "pubmed",
+          "authority": "NCBI PubMed",
+          "pmid": "40918053",
+          "doi": "10.2147/NSS.S524348",
+          "title": "Magnesium Bisglycinate Supplementation in Healthy Adults Reporting Poor Sleep: A Randomized, Placebo-Controlled Trial.",
+          "citation": "Nature and Science of Sleep (2025)",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/40918053/",
+          "evidence_grade": "rct",
+          "retracted": false,
+          "supports_claims": [
+            "small_subjective_insomnia_severity_effect_bisglycinate_plus_glycine"
+          ],
+          "verification_source": "pubmed_eutils"
         }
       ],
       "external_ids": {
-        "unii": "I38ZP9992A"
+        "unii": "IFN18A4Y6B"
       },
       "effect_direction": "positive_weak",
-      "total_enrollment": 250,
-      "registry_completed_trials_count": 11,
+      "total_enrollment": null,
       "effect_direction_confidence": "medium",
-      "effect_direction_rationale": "Source-content attribution reconciled against retained primary references on2026-10-23. Current descriptive direction: positive_weak. Actual measured outcomes and source limitations are recorded separately. This is not attributable clinician approval; existing clinical context holds remain.",
-      "endpoint_relevance_tags": []
+      "effect_direction_rationale": "Existing positive_weak direction retained descriptively for the limited findings. Reference-only current general-catalog classification withholds unsupported preparation/population/purpose transfer; no new grade, penalty or safety conclusion.",
+      "endpoint_relevance_tags": [],
+      "study_contexts": [
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "mag_bisglycinate_pregnancy_cramps_22909270",
+          "components": [
+            "INGR_MAG_GLYCINATE"
+          ],
+          "source_pmids": [
+            "22909270"
+          ],
+          "identity_scope": "exact_form",
+          "identity": {
+            "chemical_form": "Qualimed Chelated Magnesium: bisglycinate, 100mg elemental magnesium/tablet"
+          },
+          "exposure_basis": "supplement_dose",
+          "route": "oral",
+          "evidence_role": "direct_rct",
+          "component_registration_status": "fully_registered",
+          "condition": "pregnancy_associated_leg_cramps",
+          "purpose": "treatment",
+          "population": {
+            "age_group": "adult",
+            "description": "86 randomized pregnant women, gestational weeks14–34, leg cramps at least twice weekly;80completed;43/arm worst-case ITT."
+          },
+          "study_design": "Randomized, double-blind, parallel-group placebo-controlled trial",
+          "trial_family": "mag_bisglycinate_pregnancy_cramps_22909270",
+          "review_status": "clinician_approved",
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-10-26",
+            "scope": "identity_dose_outcome_applicability"
+          },
+          "scoring_eligible": true,
+          "human_status": "confirmed",
+          "source_integrity": "none",
+          "dose": {
+            "measurement_type": "mass",
+            "unit": "mg",
+            "values": [
+              300
+            ],
+            "dose_status": "verified",
+            "dose_basis": "nominal_assigned_arm",
+            "duration_basis": "fixed_protocol",
+            "duration_days": 28,
+            "administration_frequency": "One100mg-elemental tablet three times daily with meals for28days",
+            "dosage_forms": [
+              "oral tablet"
+            ],
+            "co_therapies": [
+              "Prenatal iron/multivitamin use and some calcium supplements recorded; other leg-cramp prescriptions excluded."
+            ],
+            "reported_regimen": "One100mg-elemental tablet three times daily with meals for28days",
+            "normalization": {
+              "basis": "Source-reported daily elemental magnesium, not magnesium-bisglycinate compound mass; no universal effective-dose curve."
+            },
+            "source_provenance": {
+              "pmid": "22909270",
+              "source_url": "https://onlinelibrary.wiley.com/doi/full/10.1111/j.1740-8709.2012.00440.x",
+              "location": "Methods/intervention, sample-size statement and Table2"
+            }
+          },
+          "outcomes": [
+            {
+              "name": "At least50%cramp-frequency reduction:37/43 versus26/43, P=.007",
+              "hierarchy": "primary",
+              "kind": "patient_important",
+              "direction": "positive",
+              "outcome_role": "direct_between_group_effect"
+            },
+            {
+              "name": "Cramp-intensity responder:30/43 versus21/43; abstract P=.048, Table2 rounded .04",
+              "hierarchy": "secondary",
+              "kind": "patient_important",
+              "direction": "positive",
+              "outcome_role": "direct_between_group_effect"
+            },
+            {
+              "name": "Absolute pain-intensity change, P=.16",
+              "hierarchy": "secondary",
+              "kind": "patient_important",
+              "direction": "null",
+              "outcome_role": "direct_between_group_effect"
+            }
+          ],
+          "limitations": [
+            "Post-completion registration; magnesium status unmeasured.",
+            "University-funded; no declared conflicts. Not sleep, absorption superiority or nonpregnant-cramp evidence."
+          ]
+        },
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "mag_bisglycinate_sleep_40918053",
+          "components": [
+            "INGR_MAG_GLYCINATE"
+          ],
+          "source_pmids": [
+            "40918053"
+          ],
+          "identity_scope": "exact_form",
+          "identity": {
+            "chemical_form": "Biogena magnesium bisglycinate: daily250mg elemental magnesium with reported1523mg glycine co-ligand"
+          },
+          "exposure_basis": "supplement_dose",
+          "route": "oral",
+          "evidence_role": "direct_rct",
+          "component_registration_status": "fully_registered",
+          "condition": "self_reported_insomnia_symptoms",
+          "purpose": "treatment",
+          "population": {
+            "age_group": "adult",
+            "description": "Healthy adults18–65 with poor sleep >4weeks and RIS>12;155randomized,153baseline/primary-analysis participants,134completed. Pregnancy/lactation, rotational shifts, treated sleep disorders and specified illness/medication use excluded."
+          },
+          "study_design": "Randomized, double-blind, parallel-group placebo-controlled trial",
+          "trial_family": "mag_bisglycinate_sleep_40918053",
+          "review_status": "clinician_approved",
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-10-26",
+            "scope": "identity_dose_outcome_applicability"
+          },
+          "scoring_eligible": true,
+          "human_status": "confirmed",
+          "source_integrity": "none",
+          "dose": {
+            "measurement_type": "mass",
+            "unit": "mg",
+            "values": [
+              250
+            ],
+            "dose_status": "verified",
+            "dose_basis": "nominal_assigned_arm",
+            "duration_basis": "fixed_protocol",
+            "duration_days": 28,
+            "administration_frequency": "Two capsules daily,30–60minutes before bedtime,28days; each125mg elemental magnesium and761.5mg reported glycine",
+            "dosage_forms": [
+              "oral capsule"
+            ],
+            "co_therapies": [
+              "Usual diet/lifestyle/activity maintained; other supplements stopped two weeks before intervention; sleep/mood medication use excluded."
+            ],
+            "reported_regimen": "Two capsules daily,30–60minutes before bedtime,28days; each125mg elemental magnesium and761.5mg reported glycine",
+            "normalization": {
+              "basis": "Source-reported daily elemental magnesium, not magnesium-bisglycinate compound mass; no universal effective-dose curve."
+            },
+            "source_provenance": {
+              "pmid": "40918053",
+              "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12412596/",
+              "location": "Materials and Methods/Intervention, Endpoints, Table2 and Results/Study Population"
+            }
+          },
+          "outcomes": [
+            {
+              "name": "ISI adjusted baseline-to-week4 change:−3.9 active versus−2.3 placebo; between-group1.6 (95%CI0.0–3.3), GLMM P=.049, Cohen d=.20",
+              "hierarchy": "primary",
+              "kind": "patient_important",
+              "direction": "positive",
+              "outcome_role": "direct_between_group_effect"
+            },
+            {
+              "name": "RIS,SQS,ESS,FSS,PSS,PANAS and PHQ4 time-by-group effects not significant",
+              "hierarchy": "secondary",
+              "kind": "patient_important",
+              "direction": "null",
+              "outcome_role": "direct_between_group_effect"
+            }
+          ],
+          "limitations": [
+            "Small borderline-significant subjective effect; no objective sleep measurement; magnesium and glycine contributions inseparable.",
+            "Dietary-magnesium association exploratory with unvalidated intake scale; no general stress/anxiety or all-salt equivalence.",
+            "Academic funding; Lopresti nutraceutical CRO/honoraria disclosed; Biogena manufactured the supplement.",
+            "Paper calls153-participant analysis ITT after155randomized;134completed. AE table note says no discontinuation despite text reporting two placebo GI withdrawals; retain discrepancy, no safety superiority claim."
+          ]
+        }
+      ]
     },
     {
       "id": "INGR_NAC",
@@ -9727,15 +10189,15 @@
       ],
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "Endurance and physiological biomarkers; inflammatory-marker findings were not significant (PMID: 41080184)"
+        "Acute endurance: 200 mg exact R. rosea extract (3% rosavin plus1% salidroside), one hour before exercise, improved time-to-exhaustion in24young healthy volunteers (PMID15256690).",
+        "Chronic200mg/day4weeks didnotchangemeasuredvariables in12volunteers(PMID15256690);600mg/day4weeks didnotimproveTTE/VO2peak in26healthy male students(PMID30450257).",
+        "Pooled41080184 includesmixedspecies,combinationproductsandisolatedmarkers;itcannotestablishgenericrosea preparationequivalence."
       ],
-      "health_goals_supported": [
-        "Increase Energy"
-      ],
-      "notes": "The retained source PMID 41080184 synthesizes 26 randomized trials in 668 healthy participants, with endurance-performance and physiological biomarker outcomes. Endurance measures and selected oxidative-stress/muscle-damage markers improved, but inflammatory-marker findings were not significant. This source does not establish mood or clinical stress-related fatigue benefit, equivalence among extracts, or a universal dosing threshold. Study heterogeneity and predominantly young healthy participants limit transfer.",
+      "health_goals_supported": [],
+      "notes": "The signed limited endurance scope is retained. PMID15256690 reports acute200mg Rhodiola rosea (3%rosavin/1%salidroside) one hour before exercise with a small positive time-to-exhaustion result in24volunteers; its chronic200mg/day four-week phase in12volunteers was null. Full PMID30450257 reports600mg/day for four weeks in26men, with no TTE/VO2peak benefit. Review41080184 pools other species, combination products and isolated salidroside; it is retained as noncontributing history rather than an exact generic-rosea qualification. Actual227946 has205mg/capsule with3%rosavins/1%salidroside and morning directions; exact acute regimen correspondence is unestablished. Product241941 has a different marker specification. Existing required_form_terms is OR and cannot prove both specifications simultaneously. Source-purpose/preparation/regimen qualification remains held; no new signature, efficacy threshold, global inefficacy finding or safety penalty is created.",
       "study_type": "systematic_review_meta",
-      "last_updated": "2026-10-24",
-      "notable_studies": "Recent endurance-performance meta-analysis PMID 41080184 found modest improvements in endurance-related outcomes and biomarkers, though trial quality and extract heterogeneity remain important limitations.",
+      "last_updated": "2026-10-27",
+      "notable_studies": "Acute exact-form endurance signal PMID15256690; chronic findings null in15256690 and30450257. Meta-analysis41080184 includes other species, combinations and isolated salidroside; no universal preparation or regimen equivalence.",
       "references_structured": [
         {
           "type": "pubmed",
@@ -9755,16 +10217,136 @@
           "evidence_grade": "systematic_review",
           "retracted": false,
           "supports_claims": [],
-          "verification_source": "pubmed_eutils"
+          "verification_source": "pubmed_eutils",
+          "scoring_eligible": false
+        },
+        {
+          "pmid": "15256690",
+          "doi": "10.1123/ijsnem.14.3.298",
+          "title": "Acute Rhodiola rosea intake can improve endurance exercise performance.",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/15256690/",
+          "type": "pubmed",
+          "scoring_eligible": false,
+          "notes": "Live NIH abstract content verified27October2026;acute200mg3%rosavin+1%salidroside1hpreexercise positive;chronic200mg4weeksnull. Productcorrespondence/regimenheld,notnegativeefficacyfinding."
         }
       ],
       "effect_direction": "positive_weak",
-      "primary_outcome": "Increase Energy",
-      "total_enrollment": 220,
-      "registry_completed_trials_count": 17,
+      "total_enrollment": null,
+      "registry_completed_trials_count": null,
       "effect_direction_confidence": "medium",
-      "effect_direction_rationale": "Source-content attribution reconciled against retained primary references on2026-10-23. Current descriptive direction: positive_weak. Actual measured outcomes and source limitations are recorded separately. This is not attributable clinician approval; existing clinical context holds remain.",
-      "endpoint_relevance_tags": []
+      "effect_direction_rationale": "Signed limited endurance finding retained; acute and chronic trial results differ. The mixed-species/combination review cannot qualify an exact current preparation. scoring_eligible=false withholds that unresolved relationship without adding a penalty or claiming inefficacy.",
+      "endpoint_relevance_tags": [],
+      "study_contexts": [
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "ingr_rhodiola_scoped_review_41080184",
+          "components": [
+            "INGR_RHODIOLA"
+          ],
+          "source_pmids": [
+            "41080184"
+          ],
+          "identity_scope": "ingredient_general",
+          "identity": {
+            "name": "Rhodiola Rosea"
+          },
+          "exposure_basis": "supplement_dose",
+          "route": "oral",
+          "evidence_role": "meta_analysis",
+          "component_registration_status": "fully_registered",
+          "condition": "endurance",
+          "purpose": "challenge",
+          "review_status": "clinician_approved",
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-10-26",
+            "scope": "identity_dose_outcome_applicability"
+          },
+          "scoring_eligible": false,
+          "human_status": "confirmed",
+          "source_integrity": "none",
+          "trial_family": "ingr_rhodiola_review_41080184",
+          "population": {
+            "age_group": "mixed",
+            "description": "Healthy exercise cohorts; review reports26trials668participants. Table2 includes adolescents/young adults and older trained adults, heterogeneous training status. Not patients selected for mood,stress-related fatigue or inflammatory disease."
+          },
+          "study_design": "Systematic review/meta-analysis; full Methods,Results,Tables and Discussion independently inspected2026-10-27.",
+          "outcomes": [
+            {
+              "name": "Time-trial performance,time to exhaustion and VO2max: pooled statistically significant small endurance effects.",
+              "hierarchy": "not_reported",
+              "kind": "patient_important",
+              "direction": "positive",
+              "outcome_role": "direct_between_group_effect"
+            },
+            {
+              "name": "IL6 and CRP: no statistically significant pooled reduction.",
+              "hierarchy": "not_reported",
+              "kind": "surrogate",
+              "direction": "null",
+              "outcome_role": "direct_between_group_effect"
+            }
+          ],
+          "limitations": [
+            "Table2 contains RR plus Cordyceps preparations,isolated salidroside/rhodioloside,decoctions and extracts; these cannot be treated as chemically equivalent single-ingredient standardized extracts.",
+            "Source Table1 adult18–50eligibility conflicts with included adolescent cohorts; record the inconsistency rather than rewriting the population.",
+            "Exploratory subgroup>600mg/day is not a minimum effective dose; Table4 has obvious unrelated LL-BFR/HLR caption and duplicated MDA subgroup labels. No quantitative benchmark extracted.",
+            "No mood,clinical stress-fatigue,longevity,cognitive-acuity or anti-inflammatory transfer.",
+            "Current labels227946and241941 explicitly claim physical endurance; cannot exclude the entire25label cohort as non-endurance. Their exact preparation/dose correspondence remains required,not resolved by a name match.",
+            "Included-study PMID list records only13 explicit PubMed IDs printed in source bibliography;13 other source-table reports use DOI,local journals or theses. This is not a claim of26independently verified PubMed trials. Repeated Noreen/Parisi reports require trial-family mapping before independent-count claims."
+          ],
+          "dose": {
+            "measurement_type": "mass",
+            "unit": "mg",
+            "values": [],
+            "dose_status": "verified",
+            "dose_basis": "not_applicable",
+            "duration_basis": "not_recorded",
+            "duration_days": null,
+            "administration_frequency": "Trial-specific daily or acute protocols; no common schedule assigned.",
+            "dosage_forms": [
+              "oral supplementation (trial-specific preparations)"
+            ],
+            "co_therapies": [
+              "Trial-specific background therapy/training and comparator; Table2 inspected; no common co-therapy assumed."
+            ],
+            "reported_regimen": "Table2 has acute3mg/kg regimens,170mg extract28days,600mg extract28–30days,RR+Cordyceps and other heterogeneous protocols. No single pooled regimen or equivalent marker dose is asserted.",
+            "source_provenance": {
+              "pmid": "41080184",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/41080184/",
+              "location": "Full Methods,Results,Tables1–3andDiscussion; exact trial-level restrictions retained."
+            }
+          },
+          "included_study_pmids": [
+            "39601362",
+            "38544753",
+            "25251930",
+            "15256690",
+            "30450257",
+            "20308973",
+            "24055627",
+            "15514725",
+            "11887898",
+            "33078636",
+            "31623349",
+            "23443221",
+            "19478343",
+            "28873320",
+            "19568709"
+          ]
+        }
+      ],
+      "applicability": {
+        "scope": "ingredient",
+        "source_pmids": [
+          "41080184"
+        ],
+        "studied_population": "Healthy exercise cohorts; review reports26trials668participants. Table2 includes adolescents/young adults and older trained adults, heterogeneous training status. Not patients selected for mood,stress-related fatigue or inflammatory disease.",
+        "supported_outcomes": [
+          "endurance"
+        ]
+      },
+      "scoring_eligible": false
     },
     {
       "id": "INGR_VITAMIN_B12",
@@ -10425,10 +11007,10 @@
       "health_goals_supported": [
         "Reduce Stress / Anxiety"
       ],
-      "notes": "Human evidence supports ashwagandha for stress and anxiety reduction, with moderate improvements in perceived-stress and cortisol outcomes across randomized trials. Effect sizes vary by extract, dose, and study duration. Limited short-term stress/anxiety support across heterogeneous materials and populations. PMID36017529 rates certainty low with substantial heterogeneity; exact-material results include positive and null outcomes. PMID39348746 abstract reports pooled stress/anxiety findings; its full included-study/preparation table has not been verified here. No universal root/leaf extract or dose equivalence. Retain existing pregnancy, liver, thyroid/autoimmune, interaction and long-term-safety qualifications through their existing safety owners.",
-      "notable_studies": "Recent meta-analyses include PMID 39348746 and PMID 36017529, both supporting lower perceived stress and cortisol with ashwagandha. Newer trials continue to be published, but heterogeneity across branded extracts means generic claims should stay moderate rather than absolute.",
+      "notes": "Limited short-term stress findings across heterogeneous preparations. Anxiety findings are mixed; PMID36017529 rates certainty low with substantial heterogeneity. Exact KSM-66/Shoden trial results cannot establish equivalence for generic1.5/2.5%-withanolide extracts,5:1 extracts or root powder. PMID39348746 full preparation table remains unverified and must not supply affirmative eligibility. Current generic-material correspondence is not established; retain branded source holds. Existing pregnancy, liver, thyroid/autoimmune, medication and long-term-safety qualifications remain controlling.",
+      "notable_studies": "PMID36017529 is low-certainty heterogeneous synthesis, not a universal dose authority. Primary KSM-66 trials23439798/32021735 and Shoden31517876 have exact-material, outcome-specific findings; branded decisions remain separate. PMID39348746 abstract only; no complete table appraisal claimed.",
       "study_type": "systematic_review_meta",
-      "last_updated": "2026-03-07",
+      "last_updated": "2026-10-27",
       "references_structured": [
         {
           "type": "pubmed",
@@ -10495,14 +11077,277 @@
         "unii": "V038D626IF"
       },
       "effect_direction": "positive_strong",
-      "primary_outcome": "Reduce Stress/Anxiety",
-      "total_enrollment": 60,
-      "registry_completed_trials_count": 1,
+      "total_enrollment": null,
       "effect_direction_confidence": "medium",
-      "effect_direction_rationale": "Retained positive_strong classification; study_type=systematic_review_meta; evidence_level=ingredient-human; primary_outcome=Reduce Stress/Anxiety; published_tags=RCT,meta-analysis,systematic_review; registry_completed_trials_count=1; total_enrollment=60; endpoint_tags=stress_mood,sleep; notes/citations contain no automated downgrade signals.",
+      "effect_direction_rationale": "Signed limited source-specific findings retained; no universal preparation, population, purpose or regimen equivalence. scoring_eligible=false newly enforces unresolved current-product qualification; it adds no penalty, declares no inefficacy and does not override separate branded or safety holds.",
       "endpoint_relevance_tags": [
-        "stress_mood",
-        "sleep"
+        "stress_mood"
+      ],
+      "scoring_eligible": false,
+      "study_contexts": [
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "ingr_ashwagandha_23439798_exact_material_pending",
+          "components": [
+            "INGR_ASHWAGANDHA"
+          ],
+          "source_pmids": [
+            "23439798"
+          ],
+          "identity_scope": "branded_material",
+          "identity": {
+            "branded_material": "KSM-66",
+            "standardization": "Withania somnifera root only; >=5% withanolides by HPLC"
+          },
+          "exposure_basis": "supplement_dose",
+          "route": "oral",
+          "evidence_role": "direct_rct",
+          "component_registration_status": "fully_registered",
+          "condition": "stress_anxiety",
+          "purpose": "assessment",
+          "review_status": "source_verified_pending_clinical_review",
+          "scoring_eligible": false,
+          "human_status": "confirmed",
+          "source_integrity": "none",
+          "trial_family": "ashwagandha_23439798",
+          "population": {
+            "description": "64 randomized adults18–54 with chronic stress, PSS>=14 and WHO-5<15;61 compliant efficacy analysis; major psychiatric/physical conditions and pregnancy/lactation excluded"
+          },
+          "study_design": "randomized double-blind placebo-controlled trial",
+          "outcomes": [
+            {
+              "name": "PSS reduction versus placebo, P<.0001",
+              "hierarchy": "not_reported",
+              "kind": "patient_important",
+              "direction": "positive",
+              "outcome_role": "direct_between_group_effect"
+            },
+            {
+              "name": "Serum cortisol reduction versus placebo, P=.002",
+              "hierarchy": "not_reported",
+              "kind": "surrogate",
+              "direction": "positive",
+              "outcome_role": "direct_between_group_effect"
+            }
+          ],
+          "limitations": [
+            "Formal primary-outcome hierarchy not established in extraction; not_reported preserves the source reporting limitation.",
+            "Small single-center trial; efficacy excludes3 noncompliant/lost subjects.",
+            "Product supplied by Ixoreal; primary report contains no declared conflict.",
+            "Meta-analysis Table2 eight-week duration is imprecise; exact primary protocol60days used.",
+            "Private extraction only; no eligibility, approval or product correspondence established.",
+            "Preserve existing KSM-66/Shoden preparation-specific holds; a generic ingredient match does not override them.",
+            "No universal extract-mass benchmark, minimum effective dose, upper limit or root/leaf equivalence inferred."
+          ],
+          "dose": {
+            "measurement_type": "mass",
+            "unit": "mg",
+            "values": [
+              600
+            ],
+            "dose_status": "verified",
+            "dose_basis": "nominal_assigned_arm",
+            "duration_basis": "fixed_protocol",
+            "duration_days": 60,
+            "administration_frequency": "300 mg twice daily after food with water for 60 days",
+            "dosage_forms": [
+              "capsule"
+            ],
+            "co_therapies": [],
+            "reported_regimen": "300 mg twice daily after food with water for 60 days",
+            "normalization": {
+              "basis": "Assigned daily whole-material mass from exact primary Methods; separate trial arms are not an established effective range."
+            },
+            "source_provenance": {
+              "pmid": "23439798",
+              "location": "Primary full text Methods and Results",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/23439798/"
+            }
+          }
+        },
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "ingr_ashwagandha_32021735_exact_material_pending",
+          "components": [
+            "INGR_ASHWAGANDHA"
+          ],
+          "source_pmids": [
+            "32021735"
+          ],
+          "identity_scope": "branded_material",
+          "identity": {
+            "branded_material": "KSM-66",
+            "standardization": "Withania somnifera root extract; Ixoreal Biomed supplied batch KSM/VG/18/1085"
+          },
+          "exposure_basis": "supplement_dose",
+          "route": "oral",
+          "evidence_role": "direct_rct",
+          "component_registration_status": "fully_registered",
+          "condition": "stress_anxiety",
+          "purpose": "assessment",
+          "review_status": "source_verified_pending_clinical_review",
+          "scoring_eligible": false,
+          "human_status": "confirmed",
+          "source_integrity": "none",
+          "trial_family": "ashwagandha_32021735",
+          "population": {
+            "description": "60 randomized adults18–55, otherwise healthy with stress PSS>=20;58 analyzed; other psychiatric/chronic illness and pregnancy/lactation excluded"
+          },
+          "study_design": "randomized double-blind placebo-controlled trial",
+          "outcomes": [
+            {
+              "name": "PSS improved versus placebo at250 and600mg/day",
+              "hierarchy": "not_reported",
+              "kind": "patient_important",
+              "direction": "positive",
+              "outcome_role": "direct_between_group_effect"
+            },
+            {
+              "name": "HAM-A250mg/day not significant;600mg/day improved versus placebo",
+              "hierarchy": "not_reported",
+              "kind": "patient_important",
+              "direction": "mixed",
+              "outcome_role": "direct_between_group_effect"
+            },
+            {
+              "name": "Cortisol reduced versus placebo in both active arms",
+              "hierarchy": "not_reported",
+              "kind": "surrogate",
+              "direction": "positive",
+              "outcome_role": "direct_between_group_effect"
+            }
+          ],
+          "limitations": [
+            "Do not pool two assigned arms into universal effective-dose range.",
+            "Formal primary-outcome hierarchy not established in extraction; not_reported preserves the source reporting limitation.",
+            "Small single-center study, supplied material, two withdrawals.",
+            "Sleep observations are outside the returned generic stress/anxiety decision and are not carried into generic goals.",
+            "Private extraction only; no eligibility, approval or product correspondence established.",
+            "Preserve existing KSM-66/Shoden preparation-specific holds; a generic ingredient match does not override them.",
+            "No universal extract-mass benchmark, minimum effective dose, upper limit or root/leaf equivalence inferred."
+          ],
+          "dose": {
+            "measurement_type": "mass",
+            "unit": "mg",
+            "values": [
+              250,
+              600
+            ],
+            "dose_status": "verified",
+            "dose_basis": "nominal_assigned_arm",
+            "duration_basis": "fixed_protocol",
+            "duration_days": 56,
+            "administration_frequency": "Separate arms:125 mg twice daily or300 mg twice daily after food with milk/water for8weeks",
+            "dosage_forms": [
+              "capsule"
+            ],
+            "co_therapies": [],
+            "reported_regimen": "Separate arms:125 mg twice daily or300 mg twice daily after food with milk/water for8weeks",
+            "normalization": {
+              "basis": "Assigned daily whole-material mass from exact primary Methods; separate trial arms are not an established effective range."
+            },
+            "source_provenance": {
+              "pmid": "32021735",
+              "location": "Primary full text Methods and Results",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/32021735/"
+            }
+          }
+        },
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "ingr_ashwagandha_31517876_exact_material_pending",
+          "components": [
+            "INGR_ASHWAGANDHA"
+          ],
+          "source_pmids": [
+            "31517876"
+          ],
+          "identity_scope": "branded_material",
+          "identity": {
+            "branded_material": "Shoden",
+            "standardization": "Withania somnifera extract;35% withanolide glycosides by HPLC; ethanol:water70:30 extraction"
+          },
+          "exposure_basis": "supplement_dose",
+          "route": "oral",
+          "evidence_role": "direct_rct",
+          "component_registration_status": "fully_registered",
+          "condition": "stress_anxiety",
+          "purpose": "assessment",
+          "review_status": "source_verified_pending_clinical_review",
+          "scoring_eligible": false,
+          "human_status": "confirmed",
+          "source_integrity": "none",
+          "trial_family": "ashwagandha_31517876",
+          "population": {
+            "description": "60 healthy adults18–65 with HAM-A6–17; excludes mental disorders/psychotropics and specified chronic illnesses; pregnancy/lactation excluded"
+          },
+          "study_design": "randomized double-blind placebo-controlled trial",
+          "outcomes": [
+            {
+              "name": "HAM-A between-group time interaction P=.040",
+              "hierarchy": "primary",
+              "kind": "patient_important",
+              "direction": "positive",
+              "outcome_role": "direct_between_group_effect"
+            },
+            {
+              "name": "DASS-21 between-group time interaction P=.096",
+              "hierarchy": "primary",
+              "kind": "patient_important",
+              "direction": "null",
+              "outcome_role": "direct_between_group_effect"
+            },
+            {
+              "name": "Morning cortisol between-group P<.001",
+              "hierarchy": "secondary",
+              "kind": "surrogate",
+              "direction": "positive",
+              "outcome_role": "direct_between_group_effect"
+            },
+            {
+              "name": "Testosterone between-group whole cohort P=.150",
+              "hierarchy": "secondary",
+              "kind": "surrogate",
+              "direction": "null",
+              "outcome_role": "direct_between_group_effect"
+            }
+          ],
+          "limitations": [
+            "HAM-A positive and co-primary DASS-21 null: do not describe all mood outcomes as established.",
+            "Paper calls material root extract, but Methods dried-plant description does not establish equivalence to every current root/leaf branded formulation.",
+            "Retrospective trial registration; small sample;60-day exposure.",
+            "Arjuna funded/supplied material; author discloses prior funding/presentation compensation.",
+            "Within-group testosterone increases are not a positive between-group efficacy result.",
+            "Private extraction only; no eligibility, approval or product correspondence established.",
+            "Preserve existing KSM-66/Shoden preparation-specific holds; a generic ingredient match does not override them.",
+            "No universal extract-mass benchmark, minimum effective dose, upper limit or root/leaf equivalence inferred."
+          ],
+          "dose": {
+            "measurement_type": "mass",
+            "unit": "mg",
+            "values": [
+              240
+            ],
+            "dose_status": "verified",
+            "dose_basis": "nominal_assigned_arm",
+            "duration_basis": "fixed_protocol",
+            "duration_days": 60,
+            "administration_frequency": "240mg once daily after dinner with250mLwater for60days",
+            "dosage_forms": [
+              "capsule"
+            ],
+            "co_therapies": [],
+            "reported_regimen": "240mg once daily after dinner with250mLwater for60days",
+            "normalization": {
+              "basis": "Assigned daily whole-material mass from exact primary Methods; separate trial arms are not an established effective range."
+            },
+            "source_provenance": {
+              "pmid": "31517876",
+              "location": "Primary full text Methods and Results",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/31517876/"
+            }
+          }
+        }
       ]
     },
     {
@@ -11976,9 +12821,9 @@
       "health_goals_supported": [
         "Urinary Tract Health"
       ],
-      "notes": "Family-level evidence concerns cranberry fruit products for prevention of recurrent UTIs in selected populations, not treatment of an existing infection or general immune support. Fruit juice, tablets and powders were studied; equivalence of preparations and PAC doses is uncertain, so this entry carries no dose policy and no universal total-mass threshold is justified. Total concentrate mass is not a PAC dose or a verified clinical minimum. Enrollment 8857 belongs only to the November 2023 Cochrane update (which supersedes the April 2023 version); participants from the overlapping 2021 review are not summed. No efficacy is inferred for cranberry seed oil or leaf extracts.",
+      "notes": "Family-level evidence concerns cranberry fruit products for prevention of recurrent UTIs in selected populations, not treatment of an existing infection or general immune support. Fruit juice, tablets and powders were studied; equivalence of preparations and PAC doses is uncertain, so this entry carries no dose policy and no universal total-mass threshold is justified. Total concentrate mass is not a PAC dose or a verified clinical minimum. Enrollment 8857 belongs only to the November 2023 Cochrane update (which supersedes the April 2023 version); participants from the overlapping 2021 review are not summed. No efficacy is inferred for cranberry seed oil or leaf extracts. Selectedaffirmativesource37947276isrepresentedbytheboundedrecurrent-UTIwomenreviewcontext;34473789remainsnoncontributinghistoryratherthanasecondindependentreplication. ExactPacranidentityisverifiedbyEFSA2025e9319;thatassessmentfoundinsufficientcausalsubstantiationandmethod/reportlimitations,whichmustnotberecastasprovenbrandbenefitorfailedproductquality. No genericdoseminimumorautomaticretailpreparationequivalencecreated. The signed limited recurrent-UTI prevention finding is retained. Current product qualification remains held where exact preparation, studied population and prevention purpose are not enforced; this is not a rejection of cranberry efficacy, treatment advice or an added penalty. EFSA2025 PMID40182009 does not establish the proposed exact Pacran causal claim despite confirming the named material. No universal PAC or product-mass dose follows.",
       "study_type": "systematic_review_meta",
-      "last_updated": "2026-09-07",
+      "last_updated": "2026-10-27",
       "applicability": {
         "scope": "ingredient",
         "require_source_label_form": true,
@@ -12036,7 +12881,8 @@
           "evidence_grade": "systematic_review",
           "retracted": false,
           "supports_claims": [],
-          "verification_source": "pubmed_eutils"
+          "verification_source": "pubmed_eutils",
+          "scoring_eligible": true
         },
         {
           "type": "pubmed",
@@ -12083,7 +12929,9 @@
           "evidence_grade": "systematic_review",
           "retracted": false,
           "supports_claims": [],
-          "verification_source": "pubmed_eutils"
+          "verification_source": "pubmed_eutils",
+          "scoring_eligible": false,
+          "notes": "Retainedsupportinghistoricalreview;overlapsupdated2023Cochraneprimaryset. Notselectedasindependentaffirmativescoringcontribution;noinefficacyorretractionclaim."
         }
       ],
       "external_ids": {
@@ -12096,7 +12944,102 @@
       "effect_direction_rationale": "Existing positive direction is restricted to prevention of recurrent UTIs in the responsive populations of the cited reviews. Cochrane reports moderate-certainty pooled benefit with heterogeneity; preparation and PAC-dose comparisons are uncertain. This is not universal benefit, treatment efficacy or product-specific dose equivalence.",
       "endpoint_relevance_tags": [
         "recurrent_uti_prevention"
-      ]
+      ],
+      "study_contexts": [
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "cranberry_fruit_recurrent_uti_prevention_37947276",
+          "source_pmids": [
+            "37947276"
+          ],
+          "components": [
+            "INGR_CRANBERRY"
+          ],
+          "identity_scope": "ingredient_general",
+          "identity": {
+            "botanical_species": "Vaccinium macrocarpon",
+            "standardization": "Cranberryfruitjuice,tabletsorpowderinheterogeneousstudies;noallproductorPACequivalence."
+          },
+          "exposure_basis": "supplement_dose",
+          "route": "oral",
+          "evidence_role": "systematic_review",
+          "component_registration_status": "fully_registered",
+          "condition": "recurrent_uti_prevention",
+          "purpose": "prevention",
+          "review_status": "clinician_approved",
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-10-26",
+            "scope": "identity_dose_outcome_applicability"
+          },
+          "scoring_eligible": true,
+          "human_status": "confirmed",
+          "source_integrity": "none",
+          "trial_family": "williams_2023_cranberry_review",
+          "population": {
+            "description": "AdultnonpregnantwomenwithhistoryofrecurrentUTI;usuallyatleasttwoUTIsinprevious12months. Notactiveinfectiontreatment,norinstitutionalelderly,incompletebladderemptyingorpregnancybenefit."
+          },
+          "study_design": "Cochrane50RCT8857total;thiscontextrestrictedtorecurrentUTIwomen8studies1555forprimarysymptomaticcultureverifiedUTI.",
+          "included_study_pmids": [
+            "21148516",
+            "11431298",
+            "27251185",
+            "22305026",
+            "12121581",
+            "22961092",
+            "26268913"
+          ],
+          "outcomes": [
+            {
+              "name": "SymptomaticcultureverifiedUTIinwomenwithrecurrentUTI:8studies1555participantsRR0.74,95%CI0.55–0.99,I²54%;moderatecertainty",
+              "hierarchy": "primary",
+              "kind": "patient_important",
+              "direction": "positive",
+              "outcome_role": "direct_between_group_effect"
+            },
+            {
+              "name": "Juice/syrupsubgroup6studies1322:RR0.84,95%CI0.63–1.10;tablets/powder3studies333RR0.45,95%CI0.28–0.72. Betweenpreparationcomparisonsuncertain,notinterchangeabilityproof.",
+              "hierarchy": "secondary",
+              "kind": "patient_important",
+              "direction": "mixed",
+              "outcome_role": "direct_between_group_effect"
+            }
+          ],
+          "dose": {
+            "measurement_type": "mass",
+            "unit": "mg",
+            "values": [],
+            "dose_status": "verified",
+            "dose_basis": "not_applicable",
+            "duration_basis": "not_recorded",
+            "duration_days": null,
+            "administration_frequency": "Study-specificdailyjuice/tablet/powderschedulesforatleastonemonth;nopooledfrequencyorPACminimum.",
+            "dosage_forms": [
+              "cranberryfruitjuice",
+              "oralcranberrytabletorpowder"
+            ],
+            "co_therapies": [
+              "Smallamountsofothernon-antibioticcompoundscouldbeincluded;e.g.lingonberryinKontiokari. Reviewdoesnotisolateeverycranberrycomponent."
+            ],
+            "reported_regimen": "Studiedregimensvary:Barbosa240mLtwicedaily;Stothers250mLjuicethreetimesdailyorconcentratetabletstwicedaily;Vostalova2x250mgcapsulesonceafterbreakfast6months(.56%PAC);Sengupta500/1000mgPS-WCP90days;nounequivocaluniversalPACorconcentratemassthreshold.",
+            "source_provenance": {
+              "pmid": "37947276",
+              "location": "IndexedfullPMCMethods/Results/Analysis1.1.1,2.1.1,3.1.1andindividualstudycharacteristics;durablereceiptscranberry_2023_methods_web_receipt.json andcranberry_2023_results_web_receipt.json.",
+              "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10636779/"
+            }
+          },
+          "limitations": [
+            "SignedA061limitedselectedpopulationpreventionfindingpreserved;notactiveinfectiontreatment,universalurinarybenefit,orpreparation/doseequivalence.",
+            "SevenindexedprimaryreportsplusunindexedSengupta2011;trialidentitiesmappedfromResults8of11studieswith3explicitnoncontributingexclusions(Bruyere,Stothers2016,Walker). NoPMIDinventedforSengupta.",
+            "Cranberry2021reviewoverlapnotindependentreplicationoradditiveenrollment.2023source8857totalnot1555adultwomenoutcome.",
+            "Differentpopulationresultsandnullpreparationcomparisonsmustremainvisible. Noeffectforspecificpreparationcannotberepairedwithgenericclassclaim.",
+            "EFSA2025PMID40182009confirmsPacranidentityforSengupta/Vostalova,butinsufficientcausalevidencesubstantiationandposthocmodel/exclusionlimitations. Thisnewexactbrandauthorityrequiresweighingagainstoriginalsignedfamilyreview;notautomaticgradeorpolicychange.",
+            "Vostalova500mgwholefruitpowderwith.56%PACdoesnotestablish50:1concentrateoranyfresh-fruitequivalentdoseasinterchangeable;knownmarkerfactsretained.",
+            "FullcurrentreviewaccessiblethroughindexedprimarysourcecontentdespiteXML500/directbrowserchallenge;sourceaccessnotuniversalholdanymore. Clinicalrecordpositiveonlywithinlistedlimitedreviewscope;actualproductcorrespondenceindependent."
+          ]
+        }
+      ],
+      "scoring_eligible": false
     },
     {
       "id": "INGR_CINNAMON_EXTRACT",
@@ -12219,9 +13162,9 @@
       "health_goals_supported": [
         "Digestive Health"
       ],
-      "notes": "Placebo-controlled functional dyspepsia trial (PMID 37976892) evaluated Poolzyme Multi, a named five-enzyme fungal fermentation preparation (amylase, protease, cellulase, lactase, lipase; 200 mg at lunch and 200 mg at dinner). Does not transfer to standalone protease, lipase, amylase, cellulase, or animal pancreatin. Retained-source scope and limitations: Dyspepsia quality-of-life, pain and sleep outcomes for a specific multi-enzyme combination; not measured nutrient absorption or isolated-enzyme efficacy (PMID: 37976892) Source context records the verified120participant trial, not the previous unsupported168aggregate or seven-trial count. ISRCTN67691215 documents retrospective registration relative to first enrolment. The signed returned decision retains source acceptance; no clinician-approved context is created. Exact RAW-product transfer is rejected, not inferred from shared enzyme names or mass. The existing scoring_eligible=false hold withholds affirmative scoring and benefit qualification until a qualifying exact-scope final decision resolves the signed source-acceptance hold. It adds no penalty, makes no unsafe-product claim and does not delete the trial or its reported findings.",
+      "notes": "Original full source37976892 recovered. Poolzyme Multi200mg before lunch and dinner for60days in120randomized adults with functional dyspepsia; primaryNDI-SF, secondarypainVAS andPSQI. Trial reported positive interactions on several domains, but NDI-SF6wasnull. Ethics protocol/date discrepancies, PSQImaximum22despite declared0–21scale, and baseline model/table differences remain specific source-acceptance limitations. Do not silently repair these or infer all participants completed fromn60tables. Preserve the signed formulation-specific limited finding and the unresolved source-acceptance hold. Generic enzyme products, RAW275412and undisclosed mixtures cannot inherit exactPoolzyme efficacy or invented individual enzyme quantities.",
       "study_type": "rct_single",
-      "last_updated": "2026-10-26",
+      "last_updated": "2026-10-27",
       "notable_studies": "One placebo-controlled dyspepsia trial (PMID 37976892) evaluated Poolzyme Multi, a named five-enzyme fungal preparation in functional dyspepsia. Applicability requires matching multi-enzyme fungal formulation facts; standalone discrete enzymes do not inherit this evidence.",
       "references_structured": [
         {
@@ -12308,11 +13251,13 @@
               "value": 60,
               "unit": "days"
             },
-            "administration_frequency": "One200mg capsule at lunch and one200mg capsule at dinner.",
+            "administration_frequency": "One200mg capsule beforelunch and one200mg capsule beforedinner.",
             "dosage_forms": [
               "capsule"
             ],
-            "co_therapies": [],
+            "co_therapies": [
+              "Maintainnormaldiet;noothersupplements;functional-dyspepsiatreatmentspermittedbutrequiredrecording;otherrecentGI-drugs/antibioticsrestricted."
+            ],
             "reported_regimen": "Two200mg whole-Poolzyme-Multi capsules daily for60days, lunch and dinner.",
             "normalization": {
               "basis": "Two capsules/day multiplied by200mg whole-enzyme preparation per capsule=400mg/day; this does not determine individual enzyme masses or activity equivalence."
@@ -12320,43 +13265,60 @@
             "source_provenance": {
               "pmid": "37976892",
               "source_url": "https://pubmed.ncbi.nlm.nih.gov/37976892/",
-              "location": "PubMed abstract intervention, outcomes and population; returned batch6 original-methods extraction; ISRCTN67691215 intervention60days"
+              "location": "Originalauthor-sharedfullpapersections2.1–2.3,3;Tables1–4;see poolzyme_original_methods_results_web_receipt.json. BeforemainmealtimingexplicitinDiscussionconclusion."
             }
           },
           "outcomes": [
             {
-              "name": "dyspepsia_related_quality_of_life_NDI_SF",
+              "name": "NDI-SF2–5dyspepsiaqualityoflife",
               "hierarchy": "primary",
               "kind": "patient_important",
-              "direction": "unresolved"
+              "direction": "positive",
+              "outcome_role": "direct_between_group_effect"
             },
             {
-              "name": "pain_severity_VAS",
-              "hierarchy": "secondary",
+              "name": "NDI-SF1upperGIsymptoms",
+              "hierarchy": "primary",
               "kind": "patient_important",
-              "direction": "unresolved"
+              "direction": "positive",
+              "outcome_role": "direct_between_group_effect"
             },
             {
-              "name": "sleep_quality_PSQI",
+              "name": "NDI-SF6importanceofsymptoms",
+              "hierarchy": "primary",
+              "kind": "patient_important",
+              "direction": "null",
+              "outcome_role": "direct_between_group_effect"
+            },
+            {
+              "name": "VASpain",
               "hierarchy": "secondary",
               "kind": "patient_important",
-              "direction": "unresolved"
+              "direction": "positive",
+              "outcome_role": "direct_between_group_effect"
+            },
+            {
+              "name": "PSQIsleepquality",
+              "hierarchy": "secondary",
+              "kind": "patient_important",
+              "direction": "positive",
+              "outcome_role": "direct_between_group_effect"
             }
           ],
           "limitations": [
-            "Returned signed decision accepts preparation naming and reported study exposure, but explicitly retains final source acceptance pending complete outcome-table, registration and ethics appraisal; no final clinical approval is inferred.",
-            "ISRCTN67691215 records first enrolment16June2023 and registration28June2023; do not describe the trial as prospectively registered. Registry ethics approval is7November2022, Comitato Etico Campania Centro, reference591. Conflicting dates/identifiers reported in paper sections still require the full original report or author clarification.",
-            "Primary abstract reports improvement, but complete between-group estimates, analyzed-population handling and outcome tables require original full-text appraisal before a definitive efficacy assessment.",
-            "Poolzyme Multi is not RAW Enzymes275412. Shared enzyme names, fungal origin or larger total mass do not establish the same preparation, enzyme activities, isolated-enzyme efficacy or equivalent potency.",
-            "No universal400mg/day enzyme efficacy threshold, nutrient-absorption claim or exact retail-formula efficacy is established.",
-            "No external funding and no competing interests were reported in the returned full-report review; Giellepi supplied samples. A short single-center trial with no post-treatment follow-up does not establish comprehensive safety.",
-            "Empty co_therapies records none extracted; registry permits recorded functional-dyspepsia medications. Their actual use must be checked before interpreting the trial as unconfounded standalone therapy."
+            "Signedreturnrequiresfinalsourceacceptance;thisfactualextractiondoesnotoverrideholdorcreateapproval.",
+            "Publicationethicsdatesconflict:methodsProtocol73,13February2023vsIRBstatementdeliberation156,12June2023;registrationretrospectivefromexistingofficialreceipt. No inventedreconciliation.",
+            "Table2reportsPSQImaximum22whilepaperdeclares0–21;modelbaselinecontrastalsodiffersfromrawgroupmeans. Source-specificreportingissuesretained,notcorrectedbyguess.",
+            "120randomized60/arm;descriptivetableslabel60/armthroughout,butCONSORTfigureandanalysis-populationdetailsnotvisuallyverifiedfromoriginalPDF. NoprovenITTornodropoutclaim.",
+            "Single-centre,60days,nofollowupafterstopping;nofromexactfive-enzymeformulatogenericenzyme/RAWorstandaloneenzymebenefittransfer.",
+            "NDI-SF6time×groupnull;otherprimaryandsecondaryfindingspositiveunderpublishedLMM. Noscalaruniversal400mgclinicalminimum;activityspecificationequivalenceindependent."
           ],
           "review_status": "source_verified_pending_clinical_review",
           "human_status": "confirmed",
           "source_integrity": "none",
           "study_design": "randomized double-blind placebo-controlled single-center trial",
-          "trial_family": "poolzyme_dyspepsia_37976892"
+          "trial_family": "poolzyme_dyspepsia_37976892",
+          "scoring_eligible": false
         }
       ],
       "scoring_eligible": false
@@ -12945,32 +13907,27 @@
         "passion flower"
       ],
       "category": "sleep_mood",
-      "evidence_level": "ingredient-human",
+      "evidence_level": "reference",
       "published_studies": [
         "RCT",
         "double-blind"
       ],
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "anxiety ↓",
-        "sleep quality ↑",
-        "GABA activity ↑"
+        "Limited short-term anxiety findings from heterogeneous procedural/GAD studies (PMID33352740); combination and tea sleep studies are separate."
       ],
-      "health_goals_supported": [
-        "Sleep Quality",
-        "Reduce Stress/Anxiety"
-      ],
-      "notes": "Human evidence for passionflower suggests anxiolytic and mild sleep-quality benefits, but the trial base is relatively small and methodologically heterogeneous.",
-      "study_type": "rct_multiple",
-      "last_updated": "2026-03-07",
-      "notable_studies": "The broad neuropsychiatric review is PMID 33352740, which concluded that most small trials reported reduced anxiety with Passiflora incarnata. Sleep-specific randomized evidence includes PMID 21294203, which found better subjective sleep quality with passionflower tea in healthy adults.",
+      "health_goals_supported": [],
+      "notes": "Full review33352740 and original trial identities inspected. Limited short-term anxiety findings are retained; benzodiazepine active-comparator null differences do not establish equivalence. NEURAPAS combination and2g/250mLtea sleep evidence are not isolated-extract anxiety qualification. Current six saved labels contain undisclosed blends or Bulk4:1aerial extracts without established trial-material correspondence. The current general-catalog record is reference-only, not a universal no-benefit conclusion. No universal500mg benchmark or volume-to-mass conversion. Preserve pregnancy, sedation, perioperative and other independent safety warnings; NCCIH April2025 guidance checked.",
+      "study_type": "reference",
+      "last_updated": "2026-10-27",
+      "notable_studies": "PMID33352740:9heterogeneous trials; limited scoped anxiety synthesis, not general focus, long-term anxiety treatment or exact extract equivalence. PMID21294203: separate tea sleep study, retained noncontributing history.",
       "references_structured": [
         {
           "type": "pubmed",
           "authority": "NCBI PubMed",
           "pmid": "33352740",
           "doi": "10.3390/nu12123894",
-          "title": "",
+          "title": "Passiflora incarnata in Neuropsychiatric Disorders-A Systematic Review.",
           "citation": "Nutrients (2020-12-19)",
           "url": "https://pubmed.ncbi.nlm.nih.gov/33352740/",
           "published_date": "2020-12-19",
@@ -13036,22 +13993,107 @@
           "evidence_grade": "rct",
           "retracted": false,
           "supports_claims": [],
-          "verification_source": "pubmed_eutils"
+          "verification_source": "pubmed_eutils",
+          "scoring_eligible": false,
+          "notes": "Separate2g/250mLtea sleep study; not selected for current extract/blend anxiety qualification."
         }
       ],
       "external_ids": {
         "unii": "CLF5YFS11O"
       },
       "effect_direction": "mixed",
-      "primary_outcome": "Sleep Quality",
-      "total_enrollment": 150,
-      "registry_completed_trials_count": 2,
+      "total_enrollment": null,
+      "registry_completed_trials_count": null,
       "effect_direction_confidence": "medium",
-      "effect_direction_rationale": "Retained mixed classification; study_type=rct_multiple; evidence_level=ingredient-human; primary_outcome=Sleep Quality; published_tags=RCT,double-blind; registry_completed_trials_count=2; total_enrollment=150; endpoint_tags=stress_mood,sleep,focus_memory; notes/citations include mixed-evidence language.",
-      "endpoint_relevance_tags": [
-        "stress_mood",
-        "sleep",
-        "focus_memory"
+      "effect_direction_rationale": "Signed limited short-term anxiety finding retained descriptively; reference-only current general-catalog classification prevents unsupported transfer to unmatched blends/extracts. No added penalty or safety clearance.",
+      "endpoint_relevance_tags": [],
+      "study_contexts": [
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "passionflower_short_term_anxiety_review_33352740",
+          "source_pmids": [
+            "33352740"
+          ],
+          "components": [
+            "INGR_PASSIONFLOWER"
+          ],
+          "identity_scope": "ingredient_general",
+          "identity": {
+            "botanical_name": "Passiflora incarnata",
+            "standardization": "Study-specific oral extracts; NEURAPAS multi-herb study excluded from isolated Passiflora attribution; tea sleep study separate.",
+            "botanical_species": "Passiflora incarnata"
+          },
+          "exposure_basis": "supplement_dose",
+          "route": "oral",
+          "evidence_role": "systematic_review",
+          "component_registration_status": "fully_registered",
+          "condition": "short_term_anxiety",
+          "purpose": "source_specific_assessment",
+          "review_status": "clinician_approved",
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-10-26",
+            "scope": "identity_dose_outcome_applicability"
+          },
+          "scoring_eligible": true,
+          "human_status": "confirmed",
+          "source_integrity": "none",
+          "trial_family": "janda_2020_passionflower_review",
+          "population": {
+            "description": "Adults in short procedural anxiety studies or one28daygeneralizedanxiety pilot; not chronic universal-use or long-term safety evidence."
+          },
+          "study_design": "Systematicreviewof9heterogeneoustrials; scopedanxietyassessment excludes isolated-component attribution fromNEURAPAScombination and separates tea sleep context.",
+          "included_study_pmids": [
+            "18499602",
+            "27918731",
+            "22048283",
+            "24724122",
+            "11679026",
+            "28920038"
+          ],
+          "outcomes": [
+            {
+              "name": "Short-term anxiety measures in specified procedural or anxiety-disorder settings; small heterogeneous trials, mixed activecomparators and placebo",
+              "hierarchy": "not_reported",
+              "kind": "patient_important",
+              "direction": "mixed",
+              "outcome_role": "direct_between_group_effect"
+            }
+          ],
+          "dose": {
+            "measurement_type": "mass",
+            "unit": "mg",
+            "values": [],
+            "dose_status": "verified",
+            "dose_basis": "not_applicable",
+            "duration_basis": "not_recorded",
+            "duration_days": null,
+            "administration_frequency": "Study-specific: acute perioperative dosing, dental protocols, or45dropsdailyfor28days; no single pooled frequency.",
+            "dosage_forms": [
+              "oral botanical extract",
+              "oral drops",
+              "oral syrup"
+            ],
+            "co_therapies": [
+              "Study-specific surgical/dental care and anesthesia; activecomparators oxazepam,midazolam,ormelatonininseparatetrials."
+            ],
+            "reported_regimen": "Table1:Passipay45drops/day28days; syrup700mg/5mLsingleprocedure;Passipy500mgacute;dental260mgacute;Passipay40drops/day2days;other1000mgpreoperative. Nouniversalthreshold,nointerchangeability,novolumetomassconversion.",
+            "source_provenance": {
+              "pmid": "33352740",
+              "location": "FreshfullXMLTables1–4andResults;author/titlemappingintobibliography;paperreference-numbermismatchespreservedinreceipt.",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/33352740/"
+            }
+          },
+          "limitations": [
+            "OriginalsignedA097supports limitedshort-termanxiety-relatedsignal;notchronic/anxiety-treatmentcertainty,longtermsafety,ADHD/focus,memory,oruniversal sleep efficacy.",
+            "No placebo-superiority ornoninferiorityisequivalenttofailuretodetectdifferenceversusbenzodiazepines;smallactivecomparisonscannotestablishequivalence.",
+            "SevenanxietystudiesincludeoneunindexedAzimaraghi2017DOI10.22159/ajpcr.2017.v10i8.18852;nopmidinvented. Reviewtabledcitationnumbersaremisalignedwithbibliography;author/titleused.",
+            "EightindexedPMIDsacrosswhole9trialreview;excludedNEURAPAS21810233iscombination,21294203is2g/250mLtea7nightsnotgenericextractsleep.",
+            "Actualproductpreparation,dose,delivery,purposematchingremainexistingownerresponsibility;thiscontextdoesnotestablishBulk4:1extractorundisclosedblendcorrespondence.",
+            "NCCIHApril2025livepageverified2026-10-27;pregnancyavoid,breastfeedinguncertain,perioperative/CNSinteractions,drowsiness/dizziness/confusionwarningspreserved.",
+            "The review does not consistently state plantpart/extractionspecification for every extract; this is an ingredient-general limited source assessment, not exactmaterialconfirmation."
+          ]
+        }
       ]
     },
     {
@@ -13198,21 +14240,21 @@
         "polyamine spermidine"
       ],
       "category": "aging_longevity",
-      "evidence_level": "ingredient-human",
+      "evidence_level": "reference",
       "score_contribution": "tier_2",
       "key_endpoints": [
         "Exploratory memory findings in a small plant-extract pilot (PMID: 30388439)",
         "No significant primary memory or secondary-outcome improvement in a larger wheat-germ-supplement trial (PMID: 35616942)"
       ],
       "health_goals_supported": [],
-      "notes": "Induces autophagy and extends lifespan in yeast, flies, and mice; mechanistic rationale for aging. Retained-source scope and limitations: Small plant-extract pilot reported exploratory memory findings in subjective cognitive decline (PMID: 30388439) Larger 12-month wheat-germ-supplement trial found no significant primary memory or secondary-outcome improvement; exploratory findings require confirmation (PMID: 35616942)",
-      "study_type": "rct_single",
+      "notes": "Induces autophagy and extends lifespan in yeast, flies, and mice; mechanistic rationale for aging. Retained-source scope and limitations: Small plant-extract pilot reported exploratory memory findings in subjective cognitive decline (PMID: 30388439) Larger 12-month wheat-germ-supplement trial found no significant primary memory or secondary-outcome improvement; exploratory findings require confirmation (PMID: 35616942) Completedsource-specificA140negativeassessment:largerSmartAgetrialdoesnotestablishmemoryorhumanlongevitybenefit;historicalpilotretainedasnoncontributinghistory. Twelve-monthcalendarintervention,exactwheatgermmatrixandprimarynullretained;nonewgradeordoseminimum.",
+      "study_type": "reference",
       "published_studies": [
         "mechanistic",
         "animal",
         "RCT"
       ],
-      "last_updated": "2026-03-01",
+      "last_updated": "2026-10-27",
       "notable_studies": "PMID 30388439: 30-person, 3-month plant-extract pilot; effect-size estimates were imprecise. PMID 35616942: 100 randomized, 89 completed, 0.9 mg spermidine/day from wheat germ for 12 months; primary mnemonic discrimination p=0.47 and secondary outcomes were not significantly improved. These are not human lifespan or autophagy efficacy trials.",
       "references_structured": [
         {
@@ -13249,7 +14291,9 @@
           "evidence_grade": "rct",
           "retracted": false,
           "supports_claims": [],
-          "verification_source": "pubmed_eutils"
+          "verification_source": "pubmed_eutils",
+          "scoring_eligible": false,
+          "notes": "Retainedhistoricalsmall30personpilot;notselectedindependentaffirmativememory/longevitycontribution. SignedA140rejectsconfirmedbenefit;largerSmartAgenullassessmentisselected."
         },
         {
           "type": "pubmed",
@@ -13295,6 +14339,97 @@
       "effect_direction_rationale": "Source-content attribution reconciled against retained primary references on2026-10-23. Current descriptive direction: mixed. Actual measured outcomes and source limitations are recorded separately. This is not attributable clinician approval; existing clinical context holds remain.",
       "endpoint_relevance_tags": [
         "focus_memory"
+      ],
+      "study_contexts": [
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "spermidine_wheatgerm_memory_null_35616942",
+          "source_pmids": [
+            "35616942"
+          ],
+          "components": [
+            "PRECLIN_SPERMIDINE"
+          ],
+          "identity_scope": "combination",
+          "identity": {
+            "chemical_form": "Spermidine-rich wheat-germ extract containing other polyamines; not isolated spermidine."
+          },
+          "exposure_basis": "supplement_dose",
+          "route": "oral",
+          "evidence_role": "direct_rct",
+          "component_registration_status": "unregistered_components_present",
+          "condition": "subjective_cognitive_decline",
+          "purpose": "source_specific_assessment",
+          "population": {
+            "age_group": "adult",
+            "description": "100subjectivecognitivedeclineadults60–90,89completed."
+          },
+          "study_design": "SmartAge: monocentre randomized, double-masked, placebo-controlled phase 2b trial of spermidine-rich wheat-germ extract.",
+          "trial_family": "35616942",
+          "review_status": "clinician_approved",
+          "human_status": "confirmed",
+          "source_integrity": "none",
+          "scoring_eligible": false,
+          "dose": {
+            "measurement_type": "mass",
+            "unit": "mg",
+            "values": [
+              0.9
+            ],
+            "dose_status": "verified",
+            "dose_basis": "nominal_assigned_arm",
+            "duration_basis": "fixed_protocol",
+            "duration_days": null,
+            "administration_frequency": "six125mgextractcapsulesdaily,total750mgextract",
+            "dosage_forms": [
+              "oral capsule"
+            ],
+            "reported_regimen": "[0.9] mg/day; 12 calendar months; six125mgextractcapsulesdaily,total750mgextract",
+            "normalization": {
+              "basis": "The six125mgcapsules contain750mgwholewheatgermextract;approximately.9mg/dayisthespermidineconstituent,notextractmass. Twelve calendar months preservedwithoutinventing365days."
+            },
+            "source_provenance": {
+              "pmid": "35616942",
+              "location": "FulloriginalMethods/StudyDesign/Outcomes/StatisticalAnalyses/EfficacyOutcomesandSafetyOutcomesre-read2026-10-27;PMC9136623.",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/35616942/"
+            },
+            "duration_as_printed": {
+              "value": 12,
+              "unit": "months"
+            },
+            "co_therapies": [
+              "Activeproduct750mgwheatgermextractalsoprovidesapproximately.5mgspermine,.2mgputrescine,<.004mgcadaverine,and.12mgL-ornithineperday;notisolatedspermidine. Placebo750mgmicrocrystallinecellulose."
+            ]
+          },
+          "outcomes": [
+            {
+              "name": "Mnemonic discrimination",
+              "hierarchy": "primary",
+              "kind": "patient_important",
+              "direction": "null",
+              "outcome_role": "direct_between_group_effect"
+            },
+            {
+              "name": "Additional cognitive/behavioral/physiological outcomes",
+              "hierarchy": "secondary",
+              "kind": "patient_important",
+              "direction": "null",
+              "outcome_role": "direct_between_group_effect"
+            }
+          ],
+          "limitations": [
+            "A140signednegativecurrentmemory/longevityrelationshipretained;primaryMSTITTp=.47,PPp=.25,PPplusp=.28;secondaryoutcomesnulloverall.",
+            "100randomized,89completed(42active47placebo);exploratorysubgroupsandtwoPPplussecondaryfindingsnotmultiplicityadjusted,includingoppositedirections,donotreverseprimarynull.",
+            "750mg/dayextractcontainsotherpolyamines;noisolatedspermidineorretailpreparationequivalence. TwelveCALENDARmonthsprotocol,notinvented365dayregimen.",
+            "19SAEs(7active12placebo)ratedunrelated;musculoskeletal/connectivetissueAEs11activevs4placebo. Noknownuniformsafetyorlongevityclaim."
+          ],
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-10-26",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "ReturnedA140rejectsconfirmedmemoryorhumanlongevitybenefit;completednegativeassessmentoflargerSmartAgetrial,noaffirmativebenefitapproval."
+          }
+        }
       ]
     },
     {
@@ -14346,21 +15481,21 @@
         "blueberry stilbene"
       ],
       "category": "cognitive_neurological",
-      "evidence_level": "ingredient-human",
+      "evidence_level": "reference",
       "score_contribution": "tier_2",
       "key_endpoints": [
         "Blood-pressure reductions and LDL increase with monotherapy in an 80-person trial (PMID: 25057276)",
         "Companion short-term safety-marker analysis from the same trial (PMID: 23431291)"
       ],
       "health_goals_supported": [],
-      "notes": "The two retained publications describe the same 80-person metabolic/safety program, not 120 independent participants. LDL increased with pterostilbene monotherapy. Retained sources do not establish cognitive or human longevity benefit; preparation, population and clinical applicability review remain required. Retained-source scope and limitations: Blood-pressure reductions and LDL increase with monotherapy in an 80-person metabolic trial (PMID: 25057276) Short-term safety-marker report from the same 80-person trial, not independent cognitive evidence (PMID: 23431291)",
-      "study_type": "rct_single",
+      "notes": "The two retained publications describe the same 80-person metabolic/safety program, not 120 independent participants. LDL increased with pterostilbene monotherapy. Retained sources do not establish cognitive or human longevity benefit; preparation, population and clinical applicability review remain required. Retained-source scope and limitations: Blood-pressure reductions and LDL increase with monotherapy in an 80-person metabolic trial (PMID: 25057276) Short-term safety-marker report from the same 80-person trial, not independent cognitive evidence (PMID: 23431291) ReturnedA136completedscopedassessment:currentcognitive/longevityrelationshipsarenotsupportedbythemetabolictrial. Retainbothhumanpublicationsasreference-only,one80-persontrialfamily. FullMethodsdeclarefastinglipidsprimaryandBP/weightsecondary;companionprimarysafetyALT/AST/creatinine/glucose. ActualLDLincreaseandselectedBPsignalretained;noaffirmativeclinicalcreditornewthreshold.",
+      "study_type": "reference",
       "published_studies": [
         "mechanistic",
         "rodent",
         "RCT"
       ],
-      "last_updated": "2026-08-18",
+      "last_updated": "2026-10-27",
       "notable_studies": "In a randomized placebo-controlled trial in hypercholesterolemic adults, pterostilbene lowered systolic and diastolic blood pressure in some analyses but increased LDL in the monotherapy arm (PMID 25057276). A companion safety analysis from the same clinical program found doses up to 250 mg/day generally well tolerated over 6-8 weeks (PMID 23431291).",
       "references_structured": [
         {
@@ -14412,6 +15547,187 @@
       "effect_direction_rationale": "Source-content attribution reconciled against retained primary references on2026-10-23. Current descriptive direction: mixed. Actual measured outcomes and source limitations are recorded separately. This is not attributable clinician approval; existing clinical context holds remain.",
       "endpoint_relevance_tags": [
         "cardiovascular"
+      ],
+      "study_contexts": [
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "pterostilbene_reference_metabolic_25057276",
+          "source_pmids": [
+            "25057276"
+          ],
+          "components": [
+            "PRECLIN_PTEROSTILBENE"
+          ],
+          "identity_scope": "exact_form",
+          "identity": {
+            "chemical_form": "pTeroPuregreaterthan99%all-transpterostilbene;100or250mg/daymonotherapyarmsonly."
+          },
+          "exposure_basis": "supplement_dose",
+          "route": "oral",
+          "evidence_role": "direct_rct",
+          "component_registration_status": "fully_registered",
+          "condition": "metabolic_parameters",
+          "purpose": "source_specific_assessment",
+          "population": {
+            "age_group": "adult",
+            "description": "Same80hypercholesterolemicparticipantsfour20personarms."
+          },
+          "study_design": "Prospective randomized, double-blind, placebo-controlled four-arm trial; report from the same 80-person program as PMID 23431291.",
+          "trial_family": "pterostilbene_hypercholesterolemia_80_person_program",
+          "review_status": "clinician_approved",
+          "human_status": "confirmed",
+          "source_integrity": "none",
+          "scoring_eligible": false,
+          "dose": {
+            "measurement_type": "mass",
+            "unit": "mg",
+            "values": [
+              100,
+              250
+            ],
+            "dose_status": "verified",
+            "dose_basis": "nominal_assigned_arm",
+            "duration_basis": "participant_specific",
+            "duration_days": null,
+            "administration_frequency": "50mg twice daily or125mg twice daily in separate monotherapy arms.",
+            "dosage_forms": [
+              "oral capsule"
+            ],
+            "reported_regimen": "Separate100or250mg/daypTeroPuremonotherapyarmsfor6–8weeks;flexiblefinalvisits,nofixeddaycount.",
+            "normalization": {
+              "basis": "Reported study-material daily dose, not a universal threshold or equivalence to other preparation."
+            },
+            "source_provenance": {
+              "pmid": "25057276",
+              "location": "RetainedoriginalfullXMLMethodsandStatisticsre-read2026-10-27;primaryandsecondaryhierarchiesexplicit,notsurmised.",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/25057276/"
+            },
+            "co_therapies": [
+              "Stablebaselinecholesterolmedicationwherepresent;identicalhealthylifestyleandmedication-adherencecounseling. Separatepterostilbene100mg+grapeextract200mg/daycombinationarmisexcludedfromthisisolated-materialcontext."
+            ]
+          },
+          "outcomes": [
+            {
+              "name": "Fastinglipids:LDLincreasewithpterostilbenemonotherapy",
+              "hierarchy": "primary",
+              "kind": "surrogate",
+              "direction": "negative",
+              "outcome_role": "direct_between_group_effect"
+            },
+            {
+              "name": "Bloodpressure:selectedhigh-dosemonotherapyreductions",
+              "hierarchy": "secondary",
+              "kind": "surrogate",
+              "direction": "positive",
+              "outcome_role": "direct_between_group_effect"
+            },
+            {
+              "name": "Bodyweight:selectedsubgroupanalyses",
+              "hierarchy": "secondary",
+              "kind": "surrogate",
+              "direction": "mixed",
+              "outcome_role": "post_hoc_subgroup"
+            }
+          ],
+          "limitations": [
+            "Bothpublicationsshareone80-persontrialprogram;donotsumenrollmentorcountindependentreplication.",
+            "The100mg/daypterostilbene+200mg/dayShanStargrapeextractcombinationarmremainsseparateanddoesnotestablishisolatedcomponentbenefit.",
+            "OriginalsignedA136rejectscognitive/longevityattribution;thisreference-onlyassessmentretainsactualmetabolic/safetyresultswithoutnewclinicalgradeorcredit.",
+            "Short6–8weekstudyinhypercholesterolemia;nohealthy-unselectedadult,longtermsafetyorlongevitytransfer;observedsafetyisnotuniversalassurance."
+          ],
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-10-26",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "ReturnedA136acceptedduplicate-cohortcorrection/rejectedcognitiveandlongevityattribution. Reference-onlycompletedassessment, notnewBP/lipidclinicalbenefitapproval."
+          }
+        },
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "pterostilbene_reference_metabolic_23431291",
+          "source_pmids": [
+            "23431291"
+          ],
+          "components": [
+            "PRECLIN_PTEROSTILBENE"
+          ],
+          "identity_scope": "exact_form",
+          "identity": {
+            "chemical_form": "pTeroPuregreaterthan99%all-transpterostilbene;100or250mg/daymonotherapyarmsonly."
+          },
+          "exposure_basis": "supplement_dose",
+          "route": "oral",
+          "evidence_role": "companion_analysis",
+          "component_registration_status": "fully_registered",
+          "condition": "metabolic_parameters",
+          "purpose": "source_specific_assessment",
+          "population": {
+            "age_group": "adult",
+            "description": "Same80hypercholesterolemicparticipantsfour20personarms."
+          },
+          "study_design": "Prospective randomized, double-blind, placebo-controlled four-arm trial; same 80-person program as PMID 25057276.",
+          "trial_family": "pterostilbene_hypercholesterolemia_80_person_program",
+          "review_status": "clinician_approved",
+          "human_status": "confirmed",
+          "source_integrity": "none",
+          "scoring_eligible": false,
+          "dose": {
+            "measurement_type": "mass",
+            "unit": "mg",
+            "values": [
+              100,
+              250
+            ],
+            "dose_status": "verified",
+            "dose_basis": "nominal_assigned_arm",
+            "duration_basis": "participant_specific",
+            "duration_days": null,
+            "administration_frequency": "50mg twice daily or125mg twice daily in separate monotherapy arms.",
+            "dosage_forms": [
+              "oral capsule"
+            ],
+            "reported_regimen": "Separate100or250mg/daypTeroPuremonotherapyarmsfor6–8weeks;flexiblefinalvisits,nofixeddaycount.",
+            "normalization": {
+              "basis": "Reported study-material daily dose, not a universal threshold or equivalence to other preparation."
+            },
+            "source_provenance": {
+              "pmid": "23431291",
+              "location": "RetainedoriginalfullXMLMethodsandStatisticsre-read2026-10-27;primaryandsecondaryhierarchiesexplicit,notsurmised.",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/23431291/"
+            },
+            "co_therapies": [
+              "Stablebaselinecholesterolmedicationwherepresent;identicalhealthylifestyleandmedication-adherencecounseling. Separatepterostilbene100mg+grapeextract200mg/daycombinationarmisexcludedfromthisisolated-materialcontext."
+            ]
+          },
+          "outcomes": [
+            {
+              "name": "ALT,AST,creatinineandbloodglucoseprimarysafetymeasures:nosignificantadversebetween-groupchange",
+              "hierarchy": "primary",
+              "kind": "surrogate",
+              "direction": "null",
+              "outcome_role": "direct_between_group_effect"
+            },
+            {
+              "name": "ElectrolytesandsubjectivereportedADRs:limitedshorttermsafetyfindings",
+              "hierarchy": "secondary",
+              "kind": "surrogate",
+              "direction": "mixed",
+              "outcome_role": "companion_reported_context"
+            }
+          ],
+          "limitations": [
+            "Bothpublicationsshareone80-persontrialprogram;donotsumenrollmentorcountindependentreplication.",
+            "The100mg/daypterostilbene+200mg/dayShanStargrapeextractcombinationarmremainsseparateanddoesnotestablishisolatedcomponentbenefit.",
+            "OriginalsignedA136rejectscognitive/longevityattribution;thisreference-onlyassessmentretainsactualmetabolic/safetyresultswithoutnewclinicalgradeorcredit.",
+            "Short6–8weekstudyinhypercholesterolemia;nohealthy-unselectedadult,longtermsafetyorlongevitytransfer;observedsafetyisnotuniversalassurance."
+          ],
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-10-26",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "ReturnedA136acceptedduplicate-cohortcorrection/rejectedcognitiveandlongevityattribution. Reference-onlycompletedassessment, notnewBP/lipidclinicalbenefitapproval."
+          }
+        }
       ]
     },
     {
@@ -16036,31 +17352,27 @@
       "id": "PRECLIN_NMN",
       "standard_name": "Nicotinamide Mononucleotide",
       "aliases": [
-        "nmn",
-        "nad precursor"
+        "nmn"
       ],
       "category": "aging_longevity",
-      "evidence_level": "ingredient-human",
+      "evidence_level": "reference",
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "NAD+ ↑",
-        "mitochondrial function ↑"
+        "Short-term pooled fasting glucose,insulin,HbA1c,HOMA-IR and lipids: no significant benefit in the eight-trial review(PMID39531138).",
+        "Blood NAD+increase is a biomarker in selected studies,not measured longevity/healthy-brain/general-energy benefit.",
+        "Primary sleep quality null; primary drowsiness mixed and secondary chair-stand findings not established placebo superiority in the four-arm250mg/12week study(PMID35215405).",
+        "Other retained older-adult trials have null prespecified primary physical-function outcomes,with selected secondary signals; their abstract-only source limits are explicit."
       ],
-      "health_goals_supported": [
-        "Healthy Aging/Longevity",
-        "Increase Energy"
-      ],
-      "notes": "Human evidence for NMN is real but still early. Meta-analyses confirm that oral NMN reliably increases circulating NAD-related markers, while most clinical outcomes remain small, heterogeneous, or not clearly different from placebo across short trials (PMID 39116016, PMID 39531138, PMID 39185644).",
-      "study_type": "rct_multiple",
+      "health_goals_supported": [],
+      "notes": "Existing NMN source history retained. Full39531138 Methods/Table1 and35215405 Methods/Results independently verified2026-10-27. Current15retained labels claim generic NMN/NAD+,healthy aging,energy/brain,DNArepair or broad metabolic functions,not the exact older-adult physical-function contexts. These sources do not qualify affirmative general-catalog credit for those claims. This is not proof NMN is ineffective for every purpose. No universal dose,minimal effective amount,safety ceiling,human-longevity or preparation-equivalence claim follows. The ambiguous functional term NAD precursor is not a specific chemical identity alias; NR and other compounds also meet that description.",
+      "study_type": "reference",
       "published_studies": [
-        "mechanistic",
-        "animal",
         "RCT",
         "systematic_review",
         "meta-analysis"
       ],
-      "last_updated": "2026-03-07",
-      "notable_studies": "Meta-analyses of randomized trials conclude that NMN elevates blood NAD levels but does not consistently improve glucose or lipid endpoints (PMID 39116016; PMID 39531138). A 12-week placebo-controlled study in older adults reported higher NAD, maintained walking speed, and better sleep-quality subscales (PMID 38789831), while other randomized trials have shown mixed or null functional findings, including in older adults with diabetes (PMID 36443648) and in a separate 12-week older-adult study (PMID 35215405).",
+      "last_updated": "2026-10-27",
+      "notable_studies": "PMID39531138: eight metabolic RCTs/342reportedparticipants,Table1 trial-specific250–2000mg/day14days–12weeks,pooled fasting glucose/lipids null. PMID35215405:108older adults,250mg/day12weeks,primary sleep/fatigue,secondary physical tests,mixed timing/within-group signals. PMID38789831:60older adults,250mg/day12weeks,primary stepping null,secondarywalk/sleep signals; PMID36443648:14older diabetic men,250mg/day24weeks,primary grip/walk null; both retained from inspected abstracts with original-method limitations. PMID39116016:12studies/513participants,mostly null metabolic markers; PMID39185644:9studies/412participants and inconsistently labeled SMDunits; neither counted as independent replication or fully qualified here. Trial lists are not assumed identical; missing full texts are not converted into invented methods.",
       "references_structured": [
         {
           "type": "pubmed",
@@ -16091,7 +17403,9 @@
           "evidence_grade": "systematic_review",
           "retracted": false,
           "supports_claims": [],
-          "verification_source": "pubmed_eutils"
+          "verification_source": "pubmed_eutils",
+          "scoring_eligible": false,
+          "notes": "Retained noncontributing history: NIH abstract describes12studies/513participants,bloodNAD+rise,mostly null clinical markers and risk-of-bias concerns. Included-trial map/full methods not obtained; not counted as independent replication."
         },
         {
           "type": "pubmed",
@@ -16122,7 +17436,9 @@
           "evidence_grade": "systematic_review",
           "retracted": false,
           "supports_claims": [],
-          "verification_source": "pubmed_eutils"
+          "verification_source": "pubmed_eutils",
+          "scoring_eligible": true,
+          "notes": "Full Methods/Table1/Results inspected; qualifies the scoped negative fasting-marker review,not universal NMN inefficacy or a dose curve."
         },
         {
           "type": "pubmed",
@@ -16154,7 +17470,9 @@
           "evidence_grade": "rct",
           "retracted": false,
           "supports_claims": [],
-          "verification_source": "pubmed_eutils"
+          "verification_source": "pubmed_eutils",
+          "scoring_eligible": false,
+          "notes": "Retained noncontributing history: NIH abstract verifies250mg/day12weeks,primary stepping null,secondary4mwalk/PSQI positive. Original full body/methods not obtained; physical form/co-therapies not invented."
         },
         {
           "type": "pubmed",
@@ -16185,7 +17503,9 @@
           "evidence_grade": "rct",
           "retracted": false,
           "supports_claims": [],
-          "verification_source": "pubmed_eutils"
+          "verification_source": "pubmed_eutils",
+          "scoring_eligible": false,
+          "notes": "Retained noncontributing history: NIH abstract verifies250mg/day24weeks in14older diabetic men,primary grip/walk null. Full original methods not obtained; no product-preparation equivalence inferred."
         },
         {
           "type": "pubmed",
@@ -16213,23 +17533,248 @@
           "evidence_grade": "rct",
           "retracted": false,
           "supports_claims": [],
-          "verification_source": "pubmed_eutils"
+          "verification_source": "pubmed_eutils",
+          "scoring_eligible": true,
+          "notes": "Full Methods explicitly state primary sleep/fatigue and secondary physical endpoints. Mixed timing/within-group findings do not establish generic retail benefit; no NAD+measurement."
+        },
+        {
+          "type": "pubmed",
+          "authority": "NCBI PubMed",
+          "pmid": "39185644",
+          "doi": "10.2174/0113892010306242240808094303",
+          "title": "Effects of Nicotinamide Mononucleotide Supplementation on Muscle and Liver Functions Among the Middle-aged and Elderly: A Systematic Review and Meta-analysis of Randomized Controlled Trials.",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/39185644/",
+          "published_date": "2025-01-01",
+          "publication_types": [
+            "Journal Article",
+            "Systematic Review",
+            "Meta-Analysis"
+          ],
+          "mesh_terms": [
+            "Humans",
+            "Randomized Controlled Trials as Topic",
+            "Nicotinamide Mononucleotide",
+            "Aged",
+            "Liver",
+            "Middle Aged",
+            "Dietary Supplements",
+            "Muscle, Skeletal",
+            "Aging"
+          ],
+          "supplementary_concepts": [],
+          "evidence_grade": "systematic_review",
+          "retracted": false,
+          "scoring_eligible": false,
+          "verification_source": "pubmed_eutils",
+          "notes": "Retained noncontributing history: abstract labels gait-speed SMD with m/s and ALT SMD with IU/L,although standardized mean differences are dimensionless. Do not silently convert these to raw mean differences or treat the conclusion as human-longevity evidence. Full methods/included-trial list not inspected."
         }
       ],
       "external_ids": {
         "unii": "2KG6QX4W0V"
       },
       "effect_direction": "mixed",
-      "primary_outcome": "Healthy Aging/Longevity",
-      "total_enrollment": 131,
-      "registry_completed_trials_count": 12,
+      "total_enrollment": null,
+      "registry_completed_trials_count": null,
       "effect_direction_confidence": "medium",
-      "effect_direction_rationale": "Retained mixed classification; study_type=rct_multiple; evidence_level=ingredient-human; primary_outcome=Healthy Aging/Longevity; published_tags=mechanistic,animal,RCT,systematic_review,meta-analysis; registry_completed_trials_count=12; total_enrollment=131; endpoint_tags=focus_memory,cardiovascular,glycemic_control,muscle_recovery; notes/citations include mixed-evidence language.",
+      "effect_direction_rationale": "Reference-only for current general-catalog purposes. The returned rejection of clinical-benefit/longevity inference from NAD+markers is supported; it is not a global NMN-inefficacy grade. Pooled fasting-marker nulls coexist with limited surrogate/secondary findings. Fully inspected35215405 explicitly names primary sleep/fatigue outcomes; their hierarchy is not invented or erased.",
       "endpoint_relevance_tags": [
-        "focus_memory",
-        "cardiovascular",
-        "glycemic_control",
-        "muscle_recovery"
+        "glycemic_control"
+      ],
+      "study_contexts": [
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "nmn_glucose_lipid_review_39531138",
+          "components": [
+            "PRECLIN_NMN"
+          ],
+          "source_pmids": [
+            "39531138"
+          ],
+          "identity_scope": "ingredient_general",
+          "identity": {
+            "name": "Nicotinamide mononucleotide; preparation correspondence remains trial-specific"
+          },
+          "exposure_basis": "supplement_dose",
+          "route": "oral",
+          "evidence_role": "meta_analysis",
+          "component_registration_status": "fully_registered",
+          "condition": "fasting_glucose_and_lipid_markers_in_adults",
+          "purpose": "source_specific_assessment",
+          "review_status": "clinician_approved",
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-10-26",
+            "scope": "identity_dose_outcome_applicability"
+          },
+          "scoring_eligible": true,
+          "human_status": "confirmed",
+          "source_integrity": "none",
+          "trial_family": "nmn_glucose_lipid_review_39531138",
+          "population": {
+            "age_group": "adult",
+            "description": "Eight small adult RCTs,342 reported participants,49%female; mainly relatively healthy middle-aged adults, with one prediabetic-women cohort and several older cohorts. The number is the review-reported set, not an aggregate across other reviews."
+          },
+          "study_design": "Registered systematic review/meta-analysis of eight double-blind oral NMN RCTs; studies published2021–2023, search through31May2023; placebo/no-intervention comparator.",
+          "outcomes": [
+            {
+              "name": "Fasting glucose,fasting insulin,HbA1c and HOMA-IR: no significant pooled benefit; HOMA-IR sensitivity analysis does not establish a positive effect.",
+              "hierarchy": "primary",
+              "kind": "surrogate",
+              "direction": "null",
+              "outcome_role": "direct_between_group_effect"
+            },
+            {
+              "name": "Total/LDL/HDL cholesterol and triglycerides: no significant pooled benefit.",
+              "hierarchy": "primary",
+              "kind": "surrogate",
+              "direction": "null",
+              "outcome_role": "direct_between_group_effect"
+            },
+            {
+              "name": "Five included reports describe increased blood NAD+; this is a biomarker,not a longevity or functional clinical outcome.",
+              "hierarchy": "not_reported",
+              "kind": "surrogate",
+              "direction": "positive",
+              "outcome_role": "direct_between_group_effect"
+            }
+          ],
+          "limitations": [
+            "Table1 identifies eight particular trials; it does not include35215405,36443648 or38789831. The2024trial38789831 postdates this review search. Other meta-analyses cannot be assumed to have identical cohorts or counted as independent replications.",
+            "Short duration,small studies and differing formulations/populations; no universal dose minimum,optimum,safety ceiling,formulation equivalence or human-longevity conclusion.",
+            "The nulls concern pooled fasting/metabolic markers; included Yoshino2021 PMID33888596 reports improved muscle insulin sensitivity in prediabetic women. This is not proof all metabolic effects are absent.",
+            "Narrative sample-range14–108 conflicts with Table1 descriptions; do not use the narrative or overlapping reviews to construct a unique aggregate enrollment.",
+            "Review declares one coauthor a Current Diabetes Reports section editor; institutional open-access support and no research grant reported. Original trial funding varies; no blanket independent-funding assertion.",
+            "This fully inspected source supports the accepted nonaffirmative current-catalog scope; it is not an affirmative general-aging/energy assessment."
+          ],
+          "dose": {
+            "measurement_type": "mass",
+            "unit": "mg",
+            "values": [],
+            "dose_status": "verified",
+            "dose_basis": "not_applicable",
+            "duration_basis": "not_recorded",
+            "duration_days": null,
+            "administration_frequency": "Trial-specific oral daily schedules in Table1; no single common administration regimen is asserted.",
+            "dosage_forms": [
+              "oral NMN supplementation (trial-specific preparations)"
+            ],
+            "co_therapies": [
+              "Background populations/protocols vary by trial; the synthesis does not define a common active co-therapy or universal preparation."
+            ],
+            "reported_regimen": "Table1 trial arms span250–2000mg/day for14days–12weeks, including ordinary oral NMN preparations and a unique-polymorph MIB-626 study. These are descriptive study regimens,not one continuous adequacy curve.",
+            "source_provenance": {
+              "pmid": "39531138",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/39531138/",
+              "location": "Full text Methods/Outcomes of Interest/Results,Table1,Discussion,Conclusions and declarations; eight included PMID identities independently verified live."
+            }
+          },
+          "included_study_pmids": [
+            "33888596",
+            "35182418",
+            "36482258",
+            "35927255",
+            "35821806",
+            "36797393",
+            "35479740",
+            "36002548"
+          ]
+        },
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "nmn_sleep_fatigue_timing_35215405",
+          "components": [
+            "PRECLIN_NMN"
+          ],
+          "source_pmids": [
+            "35215405"
+          ],
+          "identity_scope": "ingredient_general",
+          "identity": {
+            "name": "Nicotinamide mononucleotide; preparation correspondence remains trial-specific"
+          },
+          "exposure_basis": "supplement_dose",
+          "route": "oral",
+          "evidence_role": "direct_rct",
+          "component_registration_status": "fully_registered",
+          "condition": "subjective_sleep_fatigue_and_secondary_physical_function_in_older_adults",
+          "purpose": "source_specific_assessment",
+          "review_status": "clinician_approved",
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-10-26",
+            "scope": "identity_dose_outcome_applicability"
+          },
+          "scoring_eligible": true,
+          "human_status": "confirmed",
+          "source_integrity": "none",
+          "trial_family": "nmn_sleep_fatigue_timing_35215405",
+          "population": {
+            "age_group": "adult",
+            "description": "108community-dwelling Japanese adults aged65orolder, randomized to NMN_AM,NMN_PM,Placebo_AM,Placebo_PM; three withdrawals handled by baseline-observation-carried-forward ITT. Dementia/long-term-care need,regular hypnotic/antidepressant use,diagnosed sleep/mental disorders and NMN/niacin supplements were excluded as described in Methods."
+          },
+          "study_design": "Randomized double-blind placebo-controlled four-arm parallel trial, crossing NMN/placebo with morning/afternoon dosing windows.",
+          "outcomes": [
+            {
+              "name": "Primary subjective sleep quality/PSQI: no significant group×time interaction; time improvements and within-group effect sizes do not establish NMN superiority.",
+              "hierarchy": "primary",
+              "kind": "patient_important",
+              "direction": "null",
+              "outcome_role": "direct_between_group_effect"
+            },
+            {
+              "name": "Primary fatigue drowsiness domain: group×time interactionP=.02; reported post-hoc improvement occurred in both NMN_PM and Placebo_PM. This is a mixed timing result,not isolated placebo superiority.",
+              "hierarchy": "primary",
+              "kind": "patient_important",
+              "direction": "mixed",
+              "outcome_role": "direct_between_group_effect"
+            },
+            {
+              "name": "Secondary five-times-sit-to-stand: interactionP=.04,but all four groups improved from baseline; largest NMN_PM within-group effect size is not a demonstrated NMN-versus-placebo contrast.",
+              "hierarchy": "secondary",
+              "kind": "surrogate",
+              "direction": "mixed",
+              "outcome_role": "direct_between_group_effect"
+            }
+          ],
+          "limitations": [
+            "Methods2.2and2.7 explicitly designate sleep quality/fatigue primary and physical performance secondary. The returned statement that no primary outcome was designated is factually incorrect and is not adopted.",
+            "Four groups,multiple outcomes and timing comparisons; post-hoc within-group findings cannot be promoted to a prespecified placebo-superiority claim.",
+            "No blood NAD+ outcome was measured in this study. Do not transfer the biomarker result of other trials to it.",
+            "Mitsubishi Corporation Life Sciences supplied funds,supplements and APC; authors declare no conflicts. Retain both facts rather than calling the trial independently funded.",
+            "Short trial with subjective endpoints and selected secondary signals; no human-longevity,healthy-brain or general-energy conclusion. The current record remains reference-only."
+          ],
+          "dose": {
+            "measurement_type": "mass",
+            "unit": "mg",
+            "values": [
+              250
+            ],
+            "dose_status": "verified",
+            "dose_basis": "nominal_assigned_arm",
+            "duration_basis": "fixed_protocol",
+            "duration_days": 84,
+            "duration_as_printed": {
+              "value": 12,
+              "unit": "weeks"
+            },
+            "administration_frequency": "Six tablets once daily with water in assigned AM(waking–12:00)or PM(18:00–bedtime)window for12weeks.",
+            "dosage_forms": [
+              "tablet"
+            ],
+            "co_therapies": [
+              "No protocol-assigned active co-therapy; regular hypnotics/antidepressants and NMN/niacin supplements were excluded. Other baseline medicines are not assumed absent."
+            ],
+            "normalization": {
+              "basis": "Source Methods2.2 explicitly assigns250mg total NMN in six tablets per day; no active-equivalent or capsule-mass conversion."
+            },
+            "reported_regimen": "250mg NMN in six tablets daily for12weeks; tablet excipients maltitol,crystalline cellulose,silicon dioxide,magnesium stearate. Placebo matches excipients without NMN.",
+            "source_provenance": {
+              "pmid": "35215405",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/35215405/",
+              "location": "Original full text Methods2.1–2.7,Results3.2–3.4,Tables2–4,Funding/COI."
+            }
+          }
+        }
       ]
     },
     {
@@ -16242,24 +17787,17 @@
       "category": "mitochondrial_energy",
       "evidence_level": "ingredient-human",
       "score_contribution": "tier_2",
-      "key_endpoints": [
-        "mitochondrial biogenesis ↑",
-        "neuroprotection ↑"
-      ],
-      "health_goals_supported": [
-        "Focus & Mental Clarity",
-        "Healthy Aging/Longevity",
-        "Increase Energy"
-      ],
-      "notes": "Human evidence for PQQ is promising but still limited to small randomized trials and combination-formula studies. The strongest signal is in short-term cognition-related outcomes and exploratory brain-metabolism markers rather than large, independently replicated clinical endpoints (PMID 34415830, PMID 38908296).",
+      "key_endpoints": [],
+      "health_goals_supported": [],
+      "notes": "Returned review retained as a source-specific hold. The original PQQ disodium trial PMID34415830 has a published correction, PMID35917215 (DOI10.1080/27697061.2022.2099711), concerning Table4. The correction identity is verified, but the corrected table content was not retrieved; no assumption that its numbers or conclusions are unchanged. PMID38908296 evaluates a dihydrogen-plus-PQQ combination in older people with mild cognitive impairment, not isolated PQQ. It cannot establish standalone PQQ efficacy or a general healthy-person cognition claim. Preserve both original references and all factual exposure/safety evaluation. No affirmative benefit qualification until the corrected source and exact applicability are established.",
       "study_type": "rct_single",
       "published_studies": [
         "mechanistic",
         "animal",
         "RCT"
       ],
-      "last_updated": "2026-03-07",
-      "notable_studies": "A 12-week placebo-controlled trial in middle-aged and older adults reported improvements in several Cognitrax domains with 21.5 mg/day PQQ disodium salt (PMID 34415830). A later 6-week randomized trial in mild cognitive impairment found promising brain-metabolism and orientation changes with a dihydrogen-plus-PQQ mixture, but the design was small and combination-based rather than pure PQQ monotherapy (PMID 38908296).",
+      "last_updated": "2026-10-27",
+      "notable_studies": "PMID34415830: original12-week PQQ disodium cognition trial; correctedTable4 requires content verification (PMID35917215). PMID38908296: six-week dihydrogen-plus-PQQ combination, not isolated-component evidence.",
       "references_structured": [
         {
           "type": "pubmed",
@@ -16334,15 +17872,12 @@
         "unii": "3T006GV98U"
       },
       "effect_direction": "positive_strong",
-      "primary_outcome": "Focus & Mental Clarity",
-      "total_enrollment": 41,
-      "registry_completed_trials_count": 6,
+      "total_enrollment": null,
+      "registry_completed_trials_count": null,
       "effect_direction_confidence": "medium",
-      "effect_direction_rationale": "Retained positive_strong classification; study_type=rct_single; evidence_level=ingredient-human; primary_outcome=Focus & Mental Clarity; published_tags=mechanistic,animal,RCT; registry_completed_trials_count=6; total_enrollment=41; endpoint_tags=focus_memory,cardiovascular; notes/citations contain no automated downgrade signals.",
-      "endpoint_relevance_tags": [
-        "focus_memory",
-        "cardiovascular"
-      ]
+      "effect_direction_rationale": "Existing positive_strong value retained as historical descriptive metadata only; scoring_eligible=false enforces the returned unresolved corrected-source and combination-attribution hold. No penalty or inference of harm is introduced.",
+      "endpoint_relevance_tags": [],
+      "scoring_eligible": false
     },
     {
       "id": "PRECLIN_RESVERATROL",
@@ -20131,16 +21666,14 @@
       ],
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "migraine attack frequency ↓",
-        "mitochondrial metabolism support ↑"
+        "Migraine attack frequency and duration: pooled reductions with considerable heterogeneity.",
+        "Migraine severity: no significant pooled controlled improvement."
       ],
-      "health_goals_supported": [
-        "Focus & Mental Clarity"
-      ],
-      "notes": "Best human evidence for riboflavin is in migraine prevention, where high-dose protocols have repeated randomized support and recent meta-analyses. NIH ODS also supports riboflavin's essentiality and deficiency-correction role, but the supplementation signal is most specific to migraine rather than general neurological enhancement.",
-      "notable_studies": "NIH ODS Riboflavin covers the vitamin's essentiality and deficiency treatment. In migraine, the original placebo-controlled 400 mg/day trial showed superiority over placebo (PMID 9484373), and later pooled analyses confirmed reductions in migraine frequency, duration, and pain scores (PMID 33779525; PMID 41769676).",
+      "health_goals_supported": [],
+      "notes": "The signed limited migraine scope is retained. PMID9484373 reports55people with migraine,400mg/day riboflavin for three months, with positive attack-frequency/headache-day results. Full review41769676 reports12trials/749participants, mixed adult/pediatric and placebo/active/uncontrolled designs; frequency/duration signals are heterogeneous and severity pooled results null. Its Schoenen table count54 differs from original abstract55 and is not silently reconciled. Regimens50–400mg/day for12–16weeks are descriptive, not a new nutrient dose curve. Original methods for9484373 were not retrieved, so physical form and primary hierarchy are not invented. Current Migra-Eeze328579 has400mg B2 with butterbur/ginger but its saved native positioning does not establish the reviewed migraine purpose or whole-formula equivalence. Current ingredient applicability does not enforce its stored source-purpose constraint. Affirmative current-product qualification remains held until that relationship is enforced; no repeat signature is requested. Generic cognition claims and untraceable4000-person/193-trial aggregates are removed. Ordinary B2 RDA/UL and independent safety remain unchanged.",
+      "notable_studies": "PMID9484373: positive400mg/day three-month migraine trial,55randomized per original abstract. Review41769676: heterogeneous migraine frequency/duration findings, pooled severity null, mixed trial designs; its table lists54for the earlier trial. PMID33779525 retained as migraine review history, not another independent trial.",
       "study_type": "systematic_review_meta",
-      "last_updated": "2026-03-07",
+      "last_updated": "2026-10-27",
       "references_structured": [
         {
           "type": "pubmed",
@@ -20175,7 +21708,9 @@
           "evidence_grade": "rct",
           "retracted": false,
           "supports_claims": [],
-          "verification_source": "pubmed_eutils"
+          "verification_source": "pubmed_eutils",
+          "scoring_eligible": false,
+          "notes": "Retained history; live NIH abstract inspected,not an additional independently qualified context or independent replication. Scoped full-text review supplies current assessment."
         },
         {
           "type": "pubmed",
@@ -20203,7 +21738,9 @@
           "evidence_grade": "systematic_review",
           "retracted": false,
           "supports_claims": [],
-          "verification_source": "pubmed_eutils"
+          "verification_source": "pubmed_eutils",
+          "scoring_eligible": false,
+          "notes": "Retained history; live NIH abstract inspected,not an additional independently qualified context or independent replication. Scoped full-text review supplies current assessment."
         },
         {
           "type": "pubmed",
@@ -20223,22 +21760,117 @@
           "evidence_grade": "journal_article",
           "retracted": false,
           "supports_claims": [],
-          "verification_source": "pubmed_eutils"
+          "verification_source": "pubmed_eutils",
+          "scoring_eligible": true
         }
       ],
       "external_ids": {
         "unii": "TLM2976OFR"
       },
       "effect_direction": "positive_strong",
-      "primary_outcome": "Focus & Mental Clarity",
-      "total_enrollment": 4000,
-      "registry_completed_trials_count": 193,
+      "total_enrollment": null,
+      "registry_completed_trials_count": null,
       "effect_direction_confidence": "high",
-      "effect_direction_rationale": "Retained positive_strong classification; study_type=systematic_review_meta; evidence_level=ingredient-human; primary_outcome=Focus & Mental Clarity; published_tags=RCT,meta-analysis,guideline-supported; registry_completed_trials_count=193; total_enrollment=4000; endpoint_tags=immune_support,focus_memory; notes/citations contain no automated downgrade signals.",
-      "endpoint_relevance_tags": [
-        "immune_support",
-        "focus_memory"
-      ]
+      "effect_direction_rationale": "Existing positive_strong descriptive grade is restricted to the supported migraine findings, not cognition or immune benefit. Unsupported aggregate counts removed. scoring_eligible=false prevents unscoped current-product qualification pending enforcement of the existing source-purpose boundary; ordinary nutritional adequacy and safety remain independent.",
+      "endpoint_relevance_tags": [],
+      "study_contexts": [
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "ingr_riboflavin_b2_scoped_review_41769676",
+          "components": [
+            "INGR_RIBOFLAVIN_B2"
+          ],
+          "source_pmids": [
+            "41769676"
+          ],
+          "identity_scope": "ingredient_general",
+          "identity": {
+            "name": "Vitamin B2 (Riboflavin)"
+          },
+          "exposure_basis": "supplement_dose",
+          "route": "oral",
+          "evidence_role": "meta_analysis",
+          "component_registration_status": "fully_registered",
+          "condition": "migraine",
+          "purpose": "treatment",
+          "review_status": "clinician_approved",
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-10-26",
+            "scope": "identity_dose_outcome_applicability"
+          },
+          "scoring_eligible": true,
+          "human_status": "confirmed",
+          "source_integrity": "none",
+          "trial_family": "ingr_riboflavin_b2_review_41769676",
+          "population": {
+            "age_group": "mixed",
+            "description": "Migraine patients;12reported trials749reported participants,children/adolescents and adults. This is not a general cognitive-performance population."
+          },
+          "study_design": "Systematic review/meta-analysis; full Methods,Results,Tables and Discussion independently inspected2026-10-27.",
+          "outcomes": [
+            {
+              "name": "Migraine attack frequency and duration: pooled reductions with considerable heterogeneity.",
+              "hierarchy": "not_reported",
+              "kind": "patient_important",
+              "direction": "positive",
+              "outcome_role": "direct_between_group_effect"
+            },
+            {
+              "name": "Migraine severity: no significant pooled controlled improvement.",
+              "hierarchy": "not_reported",
+              "kind": "patient_important",
+              "direction": "null",
+              "outcome_role": "direct_between_group_effect"
+            }
+          ],
+          "limitations": [
+            "Full Methods/Results/Table2 inspect standalone riboflavin; two co-supplementation reports excluded. Comparators nevertheless include active drugs,no control and placebo. Do not describe the entire set as placeboRCTs.",
+            "Table2 doses50,100,200or400mg/day,12or16weeks; pediatric and adult findings differ. No new continuous dose curve,minimal effective dose or default nutritional target follows.",
+            "Table2 Schoenen1998n54differs from original NIH abstractn55; retain source-specific counts,do not invent a reconciled population. Review749is reported enrollment,not an independently deduplicated count.",
+            "No general focus,mentalclarity or neurological-enhancement conclusion; ordinary nutrient RDA/UL adequacy owner remains unchanged.",
+            "Migra-Eeze328579has400mg B2plus butterbur/ginger,but native retained positioning says onlyMigra-Eeze andscanforinfo. A brand-name inference is not an affirmative migraine claim under existing matcher. It is not a studied whole formula.",
+            "Other400mg retail labels are dose matches only,not purpose/population/formulation proof.",
+            "Only originalSchoenen1998PMID9484373has live identity confirmation here; remaining11included trial identities are exactly printed inTable2but not falsely converted to guessed PMIDs. No extra independent replication count is asserted."
+          ],
+          "dose": {
+            "measurement_type": "mass",
+            "unit": "mg",
+            "values": [],
+            "dose_status": "verified",
+            "dose_basis": "not_applicable",
+            "duration_basis": "not_recorded",
+            "duration_days": null,
+            "administration_frequency": "Trial-specific daily or acute protocols; no common schedule assigned.",
+            "dosage_forms": [
+              "oral supplementation (trial-specific preparations)"
+            ],
+            "co_therapies": [
+              "Trial-specific background therapy/training and comparator; Table2 inspected; no common co-therapy assumed."
+            ],
+            "reported_regimen": "Table2 standalone oral riboflavin50–400mg/day,12–16weeks; comparator varies by trial. This describes studied regimens,not a new dose benchmark.",
+            "source_provenance": {
+              "pmid": "41769676",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/41769676/",
+              "location": "Full Methods,Results,Tables1–3andDiscussion; exact trial-level restrictions retained."
+            }
+          },
+          "included_study_pmids": [
+            "9484373"
+          ]
+        }
+      ],
+      "applicability": {
+        "scope": "ingredient",
+        "source_pmids": [
+          "41769676"
+        ],
+        "studied_population": "Migraine patients;12reported trials749reported participants,children/adolescents and adults. This is not a general cognitive-performance population.",
+        "supported_outcomes": [
+          "migraine"
+        ]
+      },
+      "scoring_eligible": false
     },
     {
       "id": "INGR_POTASSIUM",
@@ -22835,8 +24467,8 @@
         "dr10"
       ],
       "category": "probiotics",
-      "evidence_level": "strain-clinical",
-      "study_type": "clinical_strain",
+      "evidence_level": "reference",
+      "study_type": "reference",
       "published_studies": [
         "RCT"
       ],
@@ -22848,8 +24480,8 @@
       "health_goals_supported": [
         "Digestive Health"
       ],
-      "notes": "HN019 has a strain-specific randomized constipation trial, but its prespecified primary and secondary comparisons were not significant. A favorable bowel-frequency result came from a post-hoc subgroup analysis and should not be presented as a confirmed overall benefit.",
-      "last_updated": "2026-08-18",
+      "notes": "HN019 has a strain-specific randomized constipation trial, but its prespecified primary and secondary comparisons were not significant. A favorable bowel-frequency result came from a post-hoc subgroup analysis and should not be presented as a confirmed overall benefit. ReturnedA145completednegativeassessment:29227175primaryCTTandprespecifiedITTsecondaryoutcomesdidnotshowbenefit;posthoclow-frequencyfindingsretainedasexploratory. Notconfirmedoverallconstipationefficacy;nootherHN019sourceorstrainassessmentisoverridden.",
+      "last_updated": "2026-10-27",
       "notable_studies": "The dose-ranging placebo-controlled trial (PMID 29227175) found no significant differences on its prespecified primary or secondary outcomes; the favorable bowel-frequency signal was post-hoc.",
       "references_structured": [
         {
@@ -22903,6 +24535,109 @@
       "endpoint_relevance_tags": [
         "immune_support",
         "digestive_health"
+      ],
+      "study_contexts": [
+        {
+          "context_id": "hn019_reference_constipation_null_29227175",
+          "source_pmids": [
+            "29227175"
+          ],
+          "identity_scope": "branded_material",
+          "components": [
+            "STRAIN_HN019"
+          ],
+          "population": {
+            "age_group": "adult",
+            "description": "Adults18–70RomeIIIfunctionalconstipation;pregnancy,lactation,organicGIdiseaseanddairycontraindicationsexcluded."
+          },
+          "purpose": "source_specific_assessment",
+          "condition": "functional_constipation",
+          "dose": {
+            "measurement_type": "viable_count",
+            "unit": "CFU",
+            "values": [
+              1000000000.0,
+              10000000000.0
+            ],
+            "dose_status": "verified",
+            "dose_basis": "nominal_assigned_arm",
+            "duration_basis": "fixed_protocol",
+            "duration_days": 28,
+            "administration_frequency": "Onecapsuleopenedandentirecontentsmixedinto100gprovidedGervaisMaxidairyvehicleoncesdaily.",
+            "dosage_forms": [
+              "openedoralcapsulemixedindairyfood"
+            ],
+            "co_therapies": [
+              "Maintainusualdiet/exercise;otherprobiotics/prebiotics/fermenteddairyrestricted;rescuelaxativespermittedforintolerablesymptomsbutnoneusedduringintervention."
+            ],
+            "reported_regimen": "Separate1billionor10billionCFU/dayHN019arms,28days;capsulecontentsin100gprovidedlowmicrobialdairyvehicle;notinventedCFU/massconversion.",
+            "normalization": {
+              "basis": "Assignedstrain-specificdailyCFUperactivecapsule;providedfoodvehicleisnotstrainmass."
+            },
+            "source_provenance": {
+              "pmid": "29227175",
+              "location": "RetainedfullMethods/Interventions/Primaryandsecondaryoutcomes;Results/Colonictransittime/PAC-SYM/diaries;PMC6219592.xml.",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/29227175/"
+            }
+          },
+          "outcomes": [
+            {
+              "name": "ColonictransittimeinITTandlow-frequencygroup",
+              "hierarchy": "primary",
+              "kind": "surrogate",
+              "direction": "null",
+              "outcome_role": "direct_between_group_effect"
+            },
+            {
+              "name": "Prespecifiedconstipationsymptoms,qualityoflife,bowelfunctionanddiariesinITT",
+              "hierarchy": "secondary",
+              "kind": "patient_important",
+              "direction": "null",
+              "outcome_role": "direct_between_group_effect"
+            },
+            {
+              "name": "Posthocoligodefecationlow-frequencygroupbowelfrequency/strainingselectedsignals",
+              "hierarchy": "post_hoc",
+              "kind": "patient_important",
+              "direction": "positive",
+              "outcome_role": "post_hoc_subgroup"
+            }
+          ],
+          "trial_family": "hn019_dose_ranging_constipation_NCT02189707",
+          "limitations": [
+            "SignedA145rejectsconfirmedoverallconstipationbenefit;primarynullandITTsecondarynullcannotbereplacedbyposthocsubgroupfindings.",
+            "DuPontsponsored,singlecentre,28daysonly;fooddeliveryfixedlowmicrobialdairyvehicle;nootherstrainorretailcapsuleequivalencepresumed.",
+            "Lowfrequencyanalysis65participantswasposthoc;pooledactivegroupsBMFsignalnotindividualdoseprimarysuccess. No1e9–1e10continuousdosecurve.",
+            "ExistingnativeSTRAIN_LACTIS_HN019contextsalreadyretainnullandposthocfindings;thisfillsbackedrecordmissingcompletednegativecontextwithoutclearingunrelatednativeholds."
+          ],
+          "review_status": "clinician_approved",
+          "study_design": "28daythree-armdoubleblindplacebocontrolledrandomizedtrial,14dayplaceborunin,228ITTadults76/arm;DuPontsponsored.",
+          "sample_size": 228,
+          "blinding": "double",
+          "funding": "industry",
+          "source_tier": "C",
+          "trial_registration": null,
+          "authored_on": "2026-09-13",
+          "authoring_method": "PubMed title/abstract read; Wave 1 bounded search (guidelines, meta-analyses, RCTs)",
+          "context_schema_version": "1.1.0",
+          "evidence_role": "direct_rct",
+          "component_registration_status": "fully_registered",
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-10-26",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "ReturnedA145rejectsconfirmedoverallconstipationbenefit;publication-age-onlyholdwithdrawn. Completednegativecontext,notnewclinicalcredit."
+          },
+          "scoring_eligible": false,
+          "identity": {
+            "branded_material": "HN019",
+            "standardization": "ExactBifidobacteriumanimalissubsp.lactisHN019;nototherlactisstrains."
+          },
+          "exposure_basis": "food_matrix",
+          "route": "oral",
+          "human_status": "confirmed",
+          "source_integrity": "none"
+        }
       ]
     },
     {
@@ -23532,8 +25267,8 @@
       "health_goals_supported": [
         "Digestive Health"
       ],
-      "notes": "One strain-specific randomized trial in healthy adults with functional gastrointestinal complaints reported improvements in bowel frequency, stool consistency, and constipation prevalence. The finding should not be generalized to other B. coagulans strains.",
-      "last_updated": "2026-08-18",
+      "notes": "One exact-BC30-strain randomized trial in111Chinese adults with irregular bowel movements reported improvements in stoolfrequency,consistency,andconstipation overfourweeks. Publishedmethodsidentifytheseasprimaryoutcomes;secondaryQoLandsafetyremainseparate. Upper-GISODAoutcomes,reflux,indigestion,diarrhoeaanddefecationeffortdidnotshowbetween-groupbenefit. Retrospectiveregistration,single-site/sponsorlimitationsandpublishedscreeningcountdiscrepancyremainexplicit. No otherstrain,diseasepopulation,deliveryorexposureequivalenceisinferred.",
+      "last_updated": "2026-10-27",
       "notable_studies": "A four-week double-blind randomized trial of BC30 at 1 billion CFU/day in 111 adults reported improved functional GI outcomes versus placebo (PMID 40707016).",
       "references_structured": [
         {
@@ -23575,6 +25310,136 @@
       "effect_direction_rationale": "A single exact-strain randomized trial reported positive GI outcomes; one trial is supportive but not enough for a broad strong-effect claim.",
       "endpoint_relevance_tags": [
         "digestive_health"
+      ],
+      "study_contexts": [
+        {
+          "context_id": "bc30_functional_gi_complaints_source_40707016",
+          "source_pmids": [
+            "40707016"
+          ],
+          "identity_scope": "branded_material",
+          "components": [
+            "STRAIN_BC30"
+          ],
+          "population": {
+            "age_group": "adult",
+            "description": "111 healthy adults aged 18-65 living in China with functional GI complaints. Registry inclusion specifies irregular bowel movements, including fewer than four stools weekly or periodic loose stools; recent GI disease, antibiotics, probiotics/prebiotics, pregnancy/breastfeeding and specified diseases/medications were excluded."
+          },
+          "purpose": "treatment",
+          "condition": "functional_gastrointestinal_complaints",
+          "dose": {
+            "basis": "discrete_daily_arms",
+            "unit": "CFU",
+            "values": [
+              1000000000
+            ],
+            "dosage_forms": [
+              "oral powder sachet"
+            ],
+            "duration_days": 28,
+            "co_therapies": [
+              "Registered protocol excludes recent antibiotics, other probiotic/prebiotic products, and relevant supplements/drugs; placebo sachet contains maltodextrin. No assigned active co-therapy is reported."
+            ],
+            "dose_status": "verified",
+            "dose_basis": "per_strain_daily",
+            "duration_basis": "fixed_protocol",
+            "source_provenance": {
+              "pmid": "40707016",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/40707016/",
+              "location": "Publisher full text accessed through indexed search2026-10-27:Materialsandmethods/Studydesign/Studyintervention/Primaryoutcomes/Results; retained raw toolreceipt bc30_publisher_web_receipt.json. NCT06644001 independently supplies before-meal timing."
+            },
+            "measurement_type": "viable_count",
+            "administration_frequency": "One 2 g powder sachet daily before a meal.",
+            "reported_regimen": "One 2 g sachet containing 1 billion CFU of BC30 once daily before a meal for four weeks; the six-week observation includes a two-week run-in.",
+            "normalization": {
+              "basis": "Source-reported strain potency is 1 billion CFU/day. The 2 g sachet is carrier/product mass, not probiotic organism mass or an efficacy minimum."
+            },
+            "duration_as_printed": {
+              "value": 4,
+              "unit": "weeks"
+            }
+          },
+          "outcomes": [
+            {
+              "name": "stool_frequency",
+              "hierarchy": "primary",
+              "kind": "patient_important",
+              "direction": "positive",
+              "outcome_role": "direct_between_group_effect"
+            },
+            {
+              "name": "stool_consistency",
+              "hierarchy": "primary",
+              "kind": "patient_important",
+              "direction": "positive",
+              "outcome_role": "direct_between_group_effect"
+            },
+            {
+              "name": "constipation_proportion",
+              "hierarchy": "primary",
+              "kind": "patient_important",
+              "direction": "positive",
+              "outcome_role": "direct_between_group_effect"
+            },
+            {
+              "name": "defecation_effort",
+              "hierarchy": "primary",
+              "kind": "patient_important",
+              "direction": "null",
+              "outcome_role": "direct_between_group_effect"
+            },
+            {
+              "name": "upper_gi_dyspepsia_heartburn_reflux_nausea_SODA",
+              "hierarchy": "primary",
+              "kind": "patient_important",
+              "direction": "null",
+              "outcome_role": "direct_between_group_effect"
+            },
+            {
+              "name": "GSRS_reflux_indigestion_diarrhoea_between_groups",
+              "hierarchy": "primary",
+              "kind": "patient_important",
+              "direction": "null",
+              "outcome_role": "direct_between_group_effect"
+            }
+          ],
+          "trial_family": "kerry_bc30_gi_40707016",
+          "limitations": [
+            "Kerryfunding;severalauthorsindustryemployeesandpaidconsultant. Trial2021 retrospectivelyregisteredOctober16,2024; paperstatedhierarchyisverifiedbutprospectiveprespecificationnotestablished.",
+            "Publisherreports111randomized(56BC30,55placebo),0%attrition;122screenedand10ineligiblearithmeticdoesnotaccountforoneperson. Preservepublishednumberswithoutinventingexplanation.",
+            "SeveralprimaryGI/microbiomecomparisons;no multiplicitycorrectionestablishedbytheaccessedtext. Outcome-specificpositiveandnullfindingsretained;noallGIbenefitclaim.",
+            "Fourweeksonly,morewomenthanmen,oneChinesesite,heterogeneousfunctionalcomplaints;nostudyfollowupafterdiscontinuation.",
+            "Reflux,indigestion,diarrhoeaGSRSdomainsnotbetweengroupsignificant;SODAupperGIallnullanddefecationeffortnull. Do nottransfertoIBSdisease,upperGIorotherstrains/formulations.",
+            "Originalsourcepotency1e9spores/dayin2gsachet(1.93gmaltodextrin+.07gBC30),coldwater;carriergramsmustnotbeorganismdoseorminimum. PriorprotocolbeforemealtimingretainedfromNCT,notfalselyattributedtopaper."
+          ],
+          "review_status": "clinician_approved",
+          "study_design": "randomizeddoubleblindplacebocontrolledparalleltrial;oneChinesesite;14dayrunin,28daytreatment;retrospectiveNCTregistration",
+          "sample_size": 111,
+          "blinding": "double",
+          "funding": "industry",
+          "source_tier": "C",
+          "trial_registration": "NCT06644001",
+          "authored_on": "2026-09-14",
+          "authoring_method": "PubMed title/abstract read; Wave 2 bounded search (guidelines, meta-analyses, RCTs)",
+          "context_schema_version": "1.1.0",
+          "evidence_role": "direct_rct",
+          "component_registration_status": "fully_registered",
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-10-26",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "ReturnedA144limitedfunctional-GIfinding; originalsource-specificscopepreserved. Fullpublishermethodsfactualextraction2026-10-27, no newgrade,dosethresholdorpopulation."
+          },
+          "scoring_eligible": true,
+          "identity": {
+            "branded_material": "BC30",
+            "standardization": "Heyndrickxia(Bacillus)coagulansGBI-30,6086; exactstrain; nototherB.coagulansstrains."
+          },
+          "exposure_basis": "supplement_dose",
+          "route": "oral",
+          "human_status": "confirmed",
+          "source_integrity": "none"
+        }
       ]
     },
     {
@@ -24069,8 +25934,8 @@
         "saw palmetto berry"
       ],
       "category": "urinary_genitourinary",
-      "evidence_level": "ingredient-human",
-      "study_type": "rct_multiple",
+      "evidence_level": "reference",
+      "study_type": "reference",
       "published_studies": [
         "RCT"
       ],
@@ -24086,9 +25951,9 @@
       "health_goals_supported": [
         "Urinary Tract Health"
       ],
-      "notes": "Liposterolic extract of Serenoa repens berries (ChEMBL CHEMBL2108769, max_phase=3). This entry holds the GENERIC saw palmetto extract evidence only, and it is null: the CAMUS trial (NCT00603304, n=369, NIDDK/NCCIH Phase 3) found no significant AUA symptom score improvement vs placebo at escalating doses up to 960 mg/day over 72 weeks, and NCT00037154 (n=224, Phase 3) tested 160 mg twice daily in moderate-to-severe BPH. Scope repair 2026-09-18: evidence specific to the hexanic extract Permixon - the PERLES trial (NCT02121613) and the Permixon-only meta-analysis PMID 29694707, whose methods state that 'Articles studying S. repens extracts other than Permixon were excluded' and which reports favourable nocturia and Qmax results - was removed from this entry because it is material-specific and does not transfer to the unspecified or liposterolic extracts covered here. PMID 12006122 was removed for the same reason plus indication: it is an androgenetic-alopecia (hair loss) trial of a botanical 5-alpha-reductase blend of LSESr and beta-sitosterol with 10 actively treated subjects, not saw palmetto monotherapy on this entry's urinary endpoints.",
-      "last_updated": "2026-09-18",
-      "notable_studies": "NCT00603304 (CAMUS, n=369, Phase 3, NIDDK/NCCIH): multisite double-blind RCT of saw palmetto extract at escalating doses (320-960 mg/day) for BPH over 72 weeks - no significant AUA symptom score improvement vs placebo (published JAMA 2011). NCT00037154 (n=224, Phase 3, NIDDK/NCCIH): saw palmetto 160 mg twice daily in moderate-to-severe BPH. Hexanic-extract (Permixon) evidence is favourable but material-specific and is deliberately not curated on this generic entry; a Permixon-scoped record would need its own review.",
+      "notes": "CAMUS PMID21954478 studied PROSTA-URGENIN UNO lipidic ethanolic ripe-berry extract,85–95%fatty acids,369randomized357mITT men>=45withLUTS. Sequential320/640/960mgdaily for24weeks each(72weeks total) did not improve primaryAUASI or secondary urinary outcomes versus placebo. Corrected JAMA2012 values retained. Generic record is completed nonaffirmative reference scope; no Permixon or botanical-combination transfer, no universal efficacy threshold. Historical STEP registry and ChEMBL history remain contextual,not proof of efficacy.",
+      "last_updated": "2026-10-27",
+      "notable_studies": "CAMUS21954478,DOI10.1001/jama.2011.1364;correction10.1001/jama.2012.5393. Exact lipidic ethanolic preparation,72weeks;primary and secondary null. STEP registry history does not substitute for primary preparation review.",
       "references_structured": [
         {
           "type": "clinical_trial",
@@ -24113,17 +25978,115 @@
           "authority": "EMBL-EBI ChEMBL",
           "chembl_id": "CHEMBL2108769",
           "max_phase": 3
+        },
+        {
+          "type": "pubmed",
+          "authority": "NCBI PubMed",
+          "pmid": "21954478",
+          "doi": "10.1001/jama.2011.1364",
+          "title": "Effect of increasing doses of saw palmetto extract on lower urinary tract symptoms: a randomized trial.",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/21954478/",
+          "retracted": false,
+          "verification_source": "pubmed_eutils",
+          "notes": "Source corrected by10.1001/jama.2012.5393; exact negative CAMUS context."
         }
       ],
       "effect_direction": "null",
       "primary_outcome": "Urinary Tract Health",
       "total_enrollment": 369,
-      "published_studies_count": 21,
-      "registry_completed_trials_count": 19,
       "effect_direction_confidence": "medium",
       "effect_direction_rationale": "Null retained and now sourced to matching material and indication: both remaining trials are placebo-controlled RCTs of non-branded saw palmetto extract for BPH/LUTS and neither showed a significant symptom benefit. study_type=rct_multiple; evidence_level=ingredient-human; total_enrollment=369 (CAMUS, the largest remaining trial; it was 833 from the Permixon PERLES trial before the 2026-09-18 scope repair). Permixon-specific and androgenetic-alopecia citations were removed so the direction describes only what this entry actually covers.",
       "endpoint_relevance_tags": [
         "luts_bph"
+      ],
+      "study_contexts": [
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "ingr_saw_palmetto_21954478_reviewed_nonaffirmative",
+          "source_pmids": [
+            "21954478"
+          ],
+          "components": [
+            "INGR_SAW_PALMETTO"
+          ],
+          "identity_scope": "branded_material",
+          "identity": {
+            "branded_material": "PROSTA-URGENIN UNO",
+            "manufacturer": "Rottapharm/Madaus",
+            "standardization": "Lipidic ethanolic ripe saw palmetto berry extract85–95%fattyacids"
+          },
+          "exposure_basis": "supplement_dose",
+          "route": "oral",
+          "evidence_role": "direct_rct",
+          "component_registration_status": "fully_registered",
+          "condition": "lower_urinary_tract_symptoms",
+          "purpose": "treatment",
+          "population": {
+            "age_group": "adult",
+            "description": "369men>=45randomized357mITTwithLUTSattributedBPH."
+          },
+          "study_design": "CAMUS: randomized double-blind placebo-controlled multicenter72week trial, dose escalation24week phases; current primaryMethods/Results and2012correction inspected.",
+          "trial_family": "21954478",
+          "review_status": "clinician_approved",
+          "human_status": "confirmed",
+          "source_integrity": "corrected",
+          "scoring_eligible": false,
+          "dose": {
+            "measurement_type": "mass",
+            "unit": "mg",
+            "values": [
+              320,
+              640,
+              960
+            ],
+            "dose_status": "verified",
+            "dose_basis": "nominal_assigned_arm",
+            "duration_basis": "fixed_protocol",
+            "duration_days": 504,
+            "administration_frequency": "daily,together;doseescalatesaftereach24weeks",
+            "dosage_forms": [
+              "oral gelcap"
+            ],
+            "reported_regimen": "[320, 640, 960] mg/day; 504 days; daily,together;doseescalatesaftereach24weeks",
+            "normalization": {
+              "basis": "Reported study-material daily dose, not a universal threshold or equivalence to other preparation."
+            },
+            "source_provenance": {
+              "pmid": "21954478",
+              "location": "JAMA primaryMethods Interventions,primaryOutcome,Results;2012correction overrides stale figures",
+              "source_url": "https://jamanetwork.com/journals/jama/fullarticle/1104439"
+            },
+            "co_therapies": [
+              "Recent alpha-blocker,5-alpha-reductase inhibitor,phytotherapy and other LUTS-affecting therapy excluded by protocol; not add-on efficacy with these treatments."
+            ]
+          },
+          "outcomes": [
+            {
+              "name": "AUASI baseline-to72week change: no benefit versus placebo; corrected activeCI[-3.04,-1.36]; corrected repeated-measuresP=.65",
+              "hierarchy": "primary",
+              "kind": "patient_important",
+              "direction": "null",
+              "outcome_role": "direct_between_group_effect"
+            },
+            {
+              "name": "Secondary urinary outcomes no superiority; corrected3point responder48.9%vs52.5%,P=.79",
+              "hierarchy": "secondary",
+              "kind": "patient_important",
+              "direction": "null",
+              "outcome_role": "direct_between_group_effect"
+            }
+          ],
+          "limitations": [
+            "Use2012correction10.1001/jama.2012.5393overstaleHTMLvalues.",
+            "NoPermixontransfer;nullspecificextractnotallpossiblepreparations.",
+            "NIH-funded; selected extract and LUTS population only. Null outcome is completed evidence,not allpossible sawpalmetto preparations ineffective."
+          ],
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-10-26",
+            "scope": "identity_dose_outcome_applicability"
+          }
+        }
       ]
     },
     {

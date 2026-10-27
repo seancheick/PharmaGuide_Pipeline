@@ -1,3 +1,9 @@
+## October 27 — returned-review reconciliation (current candidate)
+
+Goal: finish supported returned findings through existing owners without another blanket review request. Owner: clinical_applicability::assess_clinical_source_review, clinical_evidence_schema complete-review validation, existing backed/strain/literature records and audit registers. Will NOT create another scorer, approval, registry, grade, threshold or public field.
+
+Behavioral code/data batch. Seventeen backed subjects +BC30native strain reconciled; approvednegative reference-only source completion separated from scoring eligibility; original approvals/record holds/source integrity remain enforced. Live NIH strict112claims pass (111direct +one correction-link heuristic falsepositive, explicitly acknowledged as provenance only).709owner/consumer tests pass; Python0new/12existing. Frozen155/514register denominators/IDs unchanged. Six broken questions repaired; twelve existing-neutral questions +flax dependency removed from current ask. Current source owner24complete/122incomplete;352carried-forward preparation groups. Full corpus/app/publication not performed. Final local/CI/integration pending; earlier entries below are historical exact-source receipts.
+
 ## Current execution — assessment integrity, October 23 (Codex)
 
 ## Corrected final identity checkpoint — October 27

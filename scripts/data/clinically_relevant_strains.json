@@ -1366,7 +1366,7 @@
             "source_provenance": {
               "pmid": "40707016",
               "source_url": "https://pubmed.ncbi.nlm.nih.gov/40707016/",
-              "location": "Original PubMed abstract reports strain, daily potency, population, duration and results. ClinicalTrials.gov NCT06644001 arms/interventions, outcomes and eligibility independently verify powder sachet, frequency and registered endpoint classification."
+              "location": "Publisher full text accessed through indexed search2026-10-27:Materialsandmethods/Studydesign/Studyintervention/Primaryoutcomes/Results; retained raw toolreceipt bc30_publisher_web_receipt.json. NCT06644001 independently supplies before-meal timing."
             },
             "measurement_type": "viable_count",
             "administration_frequency": "One 2 g powder sachet daily before a meal.",
@@ -1382,33 +1382,60 @@
           "outcomes": [
             {
               "name": "stool_frequency",
-              "hierarchy": "unresolved",
+              "hierarchy": "primary",
               "kind": "patient_important",
-              "direction": "positive"
+              "direction": "positive",
+              "outcome_role": "direct_between_group_effect"
             },
             {
               "name": "stool_consistency",
-              "hierarchy": "unresolved",
+              "hierarchy": "primary",
               "kind": "patient_important",
-              "direction": "positive"
+              "direction": "positive",
+              "outcome_role": "direct_between_group_effect"
             },
             {
               "name": "constipation_proportion",
-              "hierarchy": "unresolved",
+              "hierarchy": "primary",
               "kind": "patient_important",
-              "direction": "positive"
+              "direction": "positive",
+              "outcome_role": "direct_between_group_effect"
+            },
+            {
+              "name": "defecation_effort",
+              "hierarchy": "primary",
+              "kind": "patient_important",
+              "direction": "null",
+              "outcome_role": "direct_between_group_effect"
+            },
+            {
+              "name": "upper_gi_dyspepsia_heartburn_reflux_nausea_SODA",
+              "hierarchy": "primary",
+              "kind": "patient_important",
+              "direction": "null",
+              "outcome_role": "direct_between_group_effect"
+            },
+            {
+              "name": "GSRS_reflux_indigestion_diarrhoea_between_groups",
+              "hierarchy": "primary",
+              "kind": "patient_important",
+              "direction": "null",
+              "outcome_role": "direct_between_group_effect"
             }
           ],
           "trial_family": "kerry_bc30_gi_40707016",
           "limitations": [
-            "Sponsor-run (Kerry); endpoint hierarchy not stated in the abstract.",
-            "ClinicalTrials.gov NCT06644001 verifies one 2 g powder sachet containing 1 billion CFU daily before a meal for 28 days. The registration was retrospective (first posted in 2024 for a 2021 trial). Registered outcome labels do not establish the original paper's prespecified hierarchy.",
-            "The full original methods and outcome tables were inaccessible in this review; the original hierarchy stays unresolved, not not_reported or primary. This regimen correction alone does not close source qualification or change efficacy credit."
+            "Kerryfunding;severalauthorsindustryemployeesandpaidconsultant. Trial2021 retrospectivelyregisteredOctober16,2024; paperstatedhierarchyisverifiedbutprospectiveprespecificationnotestablished.",
+            "Publisherreports111randomized(56BC30,55placebo),0%attrition;122screenedand10ineligiblearithmeticdoesnotaccountforoneperson. Preservepublishednumberswithoutinventingexplanation.",
+            "SeveralprimaryGI/microbiomecomparisons;no multiplicitycorrectionestablishedbytheaccessedtext. Outcome-specificpositiveandnullfindingsretained;noallGIbenefitclaim.",
+            "Fourweeksonly,morewomenthanmen,oneChinesesite,heterogeneousfunctionalcomplaints;nostudyfollowupafterdiscontinuation.",
+            "Reflux,indigestion,diarrhoeaGSRSdomainsnotbetweengroupsignificant;SODAupperGIallnullanddefecationeffortnull. Do nottransfertoIBSdisease,upperGIorotherstrains/formulations.",
+            "Originalsourcepotency1e9spores/dayin2gsachet(1.93gmaltodextrin+.07gBC30),coldwater;carriergramsmustnotbeorganismdoseorminimum. PriorprotocolbeforemealtimingretainedfromNCT,notfalselyattributedtopaper."
           ],
           "review_status": "clinician_approved",
           "study_design": "rct",
           "sample_size": 111,
-          "blinding": "unreported",
+          "blinding": "double",
           "funding": "industry",
           "source_tier": "C",
           "trial_registration": "NCT06644001",
