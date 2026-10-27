@@ -956,3 +956,13 @@ A separately eligible marker study cannot clear the relationship hold. Independe
 ingredient assessments remain independent. A held standardization relationship may
 have a null credit floor because declared percentages are facts, not approved credit
 thresholds. Completing a review does not automatically restore eligibility.
+
+Outcome hierarchy uses the shared `clinical_evidence_schema.OUTCOME_HIERARCHIES` vocabulary. `not_reported` records a fully inspected source that does not state an outcome hierarchy; `unresolved` means the hierarchy review is unfinished. Sean approved this narrow distinction on October 27, 2026. A documented absence does not create a primary endpoint, bypass required review, or authorize primary-outcome credit. Attribution, source locators, population, preparation, regimen and other applicability requirements remain independent.
+
+The existing backed-clinical `applicability` object optionally accepts
+`excluded_claim_terms` (a list of nonblank strings), approved by Sean on October 27,
+2026. These are source-reviewed exclusions, matched only against affirmative native
+product positioning and directions. Negated claims, brand/serving metadata and
+precaution-only mentions do not establish an excluded purpose. A malformed list is
+an unresolved contract, never a completed negative assessment. This internal scope
+constraint creates no public product field, efficacy threshold or independent scorer.

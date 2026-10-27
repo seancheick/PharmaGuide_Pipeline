@@ -36,7 +36,7 @@ from typing import Any, Dict, List, Optional
 
 _DATA_DIR = Path(__file__).resolve().parents[2] / "data"
 
-from scoring_input_contract import dose_disclosure_status, _positive_quantity
+from scoring_input_contract import dose_disclosure_status, is_lent_blend_mass, _positive_quantity
 from scoring_v4.modules.generic_helpers import bio_score_of
 from scoring_v4.quality_score_config import block as _cfg_block
 
@@ -424,7 +424,9 @@ def _explicit_botanical_identity_rejection(row: Dict[str, Any]) -> bool:
             or row.get("identity_disposition") == "identity_conflict")
 
 
-def _recognized_botanical_identity(row: Dict[str, Any]) -> bool:
+def _recognized_botanical_identity(
+    row: Dict[str, Any], *, allow_taxonomy_fallback: bool = True,
+) -> bool:
     from evidence_resolver import is_reviewed_branded_material
 
     if _explicit_botanical_identity_rejection(row):
@@ -444,7 +446,7 @@ def _recognized_botanical_identity(row: Dict[str, Any]) -> bool:
     return bool(keys & _known_botanical_identity_set()) or is_reviewed_branded_material(
         row.get("canonical_id"), row.get("name")
     ) or (
-        bool(_norm(row.get("canonical_id"))) and _norm(
+        allow_taxonomy_fallback and bool(_norm(row.get("canonical_id"))) and _norm(
             (row.get("raw_taxonomy") or {}).get("category")) == "botanical"
         and not str(row.get("canonical_id")).startswith("blend")
     )
@@ -775,23 +777,33 @@ def _is_named_standardized_botanical_complex(product: Dict[str, Any], row: Dict[
     return _standardized_match(product, row) or _branded_studied_row(product, row)
 
 
-# Without an approved numerical benchmark, recognized disclosed amounts use
-# the shared neutral; missing amounts retain their existing disclosure holds.
+# Completed no-benchmark reviews and source-confirmed hidden shares use the
+# shared neutral; unresolved identity or unread source amounts remain gaps.
 BOTANICAL_DOSE_NO_ACTIVE = _FVM["botanical_dose_no_active"]
 
 
-def unassessed_amount_band(band: str, benchmark: str, label_hidden: bool = True) -> Dict[str, Any]:
+def unassessed_amount_band(
+    band: str, benchmark: str, label_hidden: bool = True, *,
+    reviewed_label_limitation: bool = False,
+) -> Dict[str, Any]:
     """Keep completed no-reference and hidden-label states distinct from gaps."""
     from scoring_v4.modules.generic_helpers import unbenchmarked_dose_credit
 
     # Missing capture cannot become neutral merely because no benchmark was
     # found. A valid disclosed amount with a completed no-reference conclusion,
     # or positive label-hiding evidence, takes neutral (Dose V4.1 section 2.3).
-    # An unresolved benchmark identity stays unfinished (0, reported partial).
-    neutral = (benchmark != "unresolved"
-               and (band == "disclosed_no_reference" or label_hidden))
+    # A recognized ingredient with a source-owned hidden share has a completed
+    # label limitation, independently of a general benchmark review. Keep that
+    # unresolved research fact rather than claiming an absent benchmark.
+    completed_limit = (reviewed_label_limitation and label_hidden
+                       and band in {"blend_total_only", "primary_no_dose"})
+    neutral = (completed_limit or (benchmark != "unresolved"
+               and (band == "disclosed_no_reference" or label_hidden)))
+    metadata = {"benchmark": benchmark}
+    if completed_limit:
+        metadata.update(assessment_status="complete", reason_code="amount_not_declared")
     return {"score": unbenchmarked_dose_credit() if neutral else 0.0, "band": band,
-            "metadata": {"benchmark": benchmark}}
+            "metadata": metadata}
 
 
 def score_botanical_dose(product: Dict[str, Any]) -> Dict[str, Any]:
@@ -810,10 +822,20 @@ def score_botanical_purpose_dose(
         return None
 
     benchmark = _botanical_benchmark(row)
+    disclosure = dose_disclosure_status(row)
+    # The strict input owner's lent-mass classification proves that the label
+    # gives a total but not this child's share. A bare aggregate flag or broad
+    # botanical taxonomy cannot supply that proof or establish identity.
+    reviewed_hidden = (
+        _recognized_botanical_identity(row, allow_taxonomy_fallback=False)
+        and (is_lent_blend_mass(row) or disclosure == "not_disclosed_blend")
+    )
     if row.get("is_blend_header") or row.get("blend_total_weight_only"):
-        return unassessed_amount_band("blend_total_only", benchmark)
+        return unassessed_amount_band("blend_total_only", benchmark,
+                                      reviewed_label_limitation=reviewed_hidden)
     if row.get("is_parent_total") and not _is_named_standardized_botanical_complex(product, row):
-        return unassessed_amount_band("blend_total_only", benchmark)
+        return unassessed_amount_band("blend_total_only", benchmark,
+                                      reviewed_label_limitation=reviewed_hidden)
 
     # P6 review (P2#3): an anchor / product-level-evidence mass is a blend/product
     # TOTAL, not a verified per-ingredient dose. It must not earn within-range
@@ -821,15 +843,16 @@ def score_botanical_purpose_dose(
     # over-credit opaque blends. Score it like a blend total.
     if (row.get("scoring_input_kind") == "product_level_evidence"
             or row.get("evidence_type") == "blend_anchor_mass"):
-        return unassessed_amount_band("blend_total_only", benchmark)
+        return unassessed_amount_band("blend_total_only", benchmark,
+                                      reviewed_label_limitation=reviewed_hidden)
 
     # No numerical benchmark is being compared here. A printed volume is a
     # disclosed amount even when no mass conversion is available; the shared
     # disclosure owner also keeps missing/hidden source amounts distinct.
-    disclosure = dose_disclosure_status(row)
     if disclosure != "disclosed" or _positive_quantity(row) is None:
         return unassessed_amount_band("primary_no_dose", benchmark,
-                                      label_hidden=disclosure == "not_disclosed_blend")
+                                      label_hidden=disclosure == "not_disclosed_blend",
+                                      reviewed_label_limitation=reviewed_hidden)
     # Reviewed source regimens remain descriptive. None of these broad
     # preparation records establishes an approved general minimum/window.
     return unassessed_amount_band("disclosed_no_reference", benchmark)

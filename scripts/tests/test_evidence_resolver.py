@@ -53,8 +53,10 @@ def test_ala_has_verified_mixed_determination_without_marine_credit():
 def test_flax_oil_does_not_inherit_ground_seed_research():
     oil = er.resolve_evidence_for_canonical("flaxseed", name="Flaxseed Oil", matched_form="oil")
     seed = er.resolve_evidence_for_canonical("flaxseed", name="Ground Flaxseed", matched_form="ground whole seed")
-    assert oil.disposition == EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value
-    assert seed.disposition == EvidenceDisposition.RESOLVED_BY_REVIEWED_CLINICAL_EVIDENCE.value
+    # Unread correction PMID26525908 holds the source, for both preparations.
+    assert oil.disposition == EvidenceDisposition.LITERATURE_RESOLUTION_REQUIRED.value
+    assert seed.disposition == EvidenceDisposition.LITERATURE_RESOLUTION_REQUIRED.value
+    assert not oil.points_eligible and not seed.points_eligible
 
 
 @pytest.mark.parametrize("canonical", ["nha_fos", "bacteriophages"])

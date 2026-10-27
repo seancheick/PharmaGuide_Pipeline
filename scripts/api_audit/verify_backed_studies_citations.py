@@ -238,7 +238,7 @@ def main() -> int:
         f"PMID-entry claims: {len(claims)}\n"
     )
     print(f"Fetching {len(pmids)} PMIDs live from PubMed efetch...\n")
-    arts = fetch_articles(pmids)
+    arts = fetch_articles(pmids, abstract_chars=None)
 
     ok, ghosts, mismatches, drifts, notfound = 0, [], [], [], []
     for (p, _entry_id), c in sorted(claims.items()):

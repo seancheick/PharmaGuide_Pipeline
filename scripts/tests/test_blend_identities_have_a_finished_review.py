@@ -24,7 +24,7 @@ PRODUCTS = ["1179", "14168", "315089", "243271", "282638", "299755", "54775", "2
 # again. Methionine also has only an empty automated verification stamp; neither
 # unfinished individual review is completed by the blend owners.
 # Whole turmeric cannot inherit Curcumin trials from an INGR_ key suffix.
-_REVIEW_PRODUCTS = [pid for pid in PRODUCTS if pid not in {"1179", "243271", "282638"}]
+_REVIEW_PRODUCTS = [pid for pid in PRODUCTS if pid not in {"1179", "243271", "282638", "299755"}]
 
 
 @pytest.fixture(scope="module")
@@ -296,4 +296,16 @@ def test_finished_blend_does_not_finish_empty_alfalfa_source_review(enriched):
                if row.disposition == "literature_resolution_required"]
     assert pending == [("alfalfa", ["literature_verification_pending"])]
     evidence = build_scored_artifact(product)["quality_pillars_v4"]["evidence"]
+    assert evidence["display_state"] == "not_yet_reviewed"
+
+
+def test_flaxseed_blend_keeps_the_unread_erratum_hold(enriched):
+    from evidence_resolver import resolve_product_evidence
+    from scoring_v4.scored_artifact import build_scored_artifact
+    resolution = resolve_product_evidence(enriched["299755"], owner_scoped=True)
+    flax = next(row for row in resolution.resolutions if row.canonical_id == "flaxseed")
+    assert flax.disposition == "literature_resolution_required"
+    assert flax.points_eligible is False
+    assert not resolution.is_assessment_complete
+    evidence = build_scored_artifact(enriched["299755"])["quality_pillars_v4"]["evidence"]
     assert evidence["display_state"] == "not_yet_reviewed"

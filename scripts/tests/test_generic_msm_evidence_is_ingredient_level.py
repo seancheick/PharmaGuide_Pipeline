@@ -8,9 +8,10 @@ at 6 g/day (PMID 16309928, 3 g twice daily) and 2 g/day (PMID 37447322, ten
 500 mg MSM/day at minimum use and read Evidence 15.6/20 "evaluated_applicable"
 after MSM became title-named (review, 2026-09-29).
 
-Now OptiMSM keeps only its brand name, INGR_MSM holds the ingredient-level
-record, and both carry the studied range (2-6 g/day), so 500 mg/day is below
-every studied dose.
+The returned A015/A093 decisions accept one exact OptiMSM mild-knee-pain
+trial, not every generic MSM preparation. The 2 g and historical 6 g amounts
+remain discrete source facts, not a continuous efficacy range or minimum.
+General Dose uses the separately accepted neutral policy.
 """
 import json
 import logging
@@ -36,7 +37,7 @@ def test_optimsm_is_the_brand_only_and_msm_is_ingredient_level():
         assert {r["pmid"] for r in entry["references_structured"]} == {"16309928", "37447322"}
 
 
-def test_500_mg_msm_is_below_the_studied_dose_and_not_branded():
+def test_generic_msm_cannot_inherit_the_exact_optimsm_trial():
     from enhanced_normalizer import EnhancedDSLDNormalizer
     from enrich_supplements_v3 import SupplementEnricherV3
     from scoring_v4.scored_artifact import build_scored_artifact
@@ -45,7 +46,7 @@ def test_500_mg_msm_is_below_the_studied_dose_and_not_branded():
     raw = json.loads((FIXTURES / "title_short_name_182940_raw.json").read_text())
     enriched, _ = SupplementEnricherV3().enrich_product(EnhancedDSLDNormalizer().normalize_product(raw))
     matches = {m.get("id") for m in (enriched.get("evidence_data") or {}).get("clinical_matches") or []}
-    assert "INGR_MSM" in matches and "BRAND_OPTIMSM" not in matches
+    assert "INGR_MSM" not in matches and "BRAND_OPTIMSM" not in matches
     artifact = build_scored_artifact(enriched)
     evidence = artifact["_v4_module_breakdown"]["dimensions"]["evidence"]
     dose = artifact["_v4_module_breakdown"]["dimensions"]["dose"]

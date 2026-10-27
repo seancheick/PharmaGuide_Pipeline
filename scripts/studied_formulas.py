@@ -14,6 +14,7 @@ from functools import lru_cache
 from pathlib import Path
 
 from clinical_applicability import reviewed_entries, assess_native_claimed_purpose
+from clinical_evidence_schema import OUTCOME_HIERARCHIES
 from identity_integrity import has_nonlive_microbial_derivative_evidence
 from normalization import normalize_text
 from serving_frequency import resolve_daily_serving_range
@@ -1083,7 +1084,7 @@ def valid_native_study_context(context: Mapping, reference_id: str) -> bool:
         return False
     return all(isinstance(outcome, Mapping)
         and isinstance(outcome.get("name"), str) and outcome["name"].strip()
-        and outcome.get("hierarchy") in ("primary", "secondary", "post_hoc", "guideline", "unresolved")
+        and outcome.get("hierarchy") in OUTCOME_HIERARCHIES
         and outcome.get("kind") in ("patient_important", "surrogate", "evidence_ranking")
         and outcome.get("direction") in ("positive", "mixed", "null", "negative", "unresolved")
         for outcome in outcomes)

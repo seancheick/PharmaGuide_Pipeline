@@ -123,6 +123,11 @@ def test_semantic_owner_symbols_exist():
         assert separator and symbol, (name, record['owner'])
         source = SCRIPTS.parent / path
         if source.suffix == '.json':
+            if source.name == 'literature_evidence_records.json':
+                # This existing registry is keyed by canonical_id, not id.
+                entries = json.loads(source.read_text())['literature_evidence_records']
+                assert sum(row.get('canonical_id') == symbol for row in entries) == 1, (name, record['owner'])
+                continue
             def ids(value):
                 if isinstance(value, dict):
                     yield value.get('id')

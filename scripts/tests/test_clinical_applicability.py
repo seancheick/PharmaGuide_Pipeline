@@ -340,7 +340,7 @@ def test_dose_policy_leaves_non_mass_units_unresolved():
     product = zinc_product("zinc acetate", 80, "lozenge")
     product["ingredient_quality_data"]["ingredients_scorable"][0]["unit"] = "IU"
     verdict = assess_clinical_applicability(product, scoped_entry({"scope":"ingredient", "minimum_daily_dose":80, "dose_unit":"mg"}))
-    assert verdict["status"] == "not_applicable"
+    assert verdict["status"] == "unresolved"
     assert verdict["reason_code"] == "clinical_dose_unresolved"
 
 
@@ -405,7 +405,7 @@ def test_source_required_scope_still_refuses_enrichment_resolved_forms():
     decision = assess_clinical_applicability(
         butterbur_product(), butterbur_entry(require_source_label_form=True))
 
-    assert decision["status"] == "not_applicable"
+    assert decision["status"] == "unresolved"
 
 
 def test_unspecified_material_stays_out_even_when_the_dose_matches():
@@ -437,7 +437,7 @@ def test_two_rows_matching_the_same_scope_remain_unresolved():
 
     decision = assess_clinical_applicability(butterbur_product(twin), butterbur_entry())
 
-    assert decision["status"] == "not_applicable"
+    assert decision["status"] == "unresolved"
     assert decision["reason_code"] == "clinical_source_row_unresolved"
 
 
@@ -451,7 +451,7 @@ def test_multiple_owned_rows_without_a_discriminating_scope_stay_unresolved():
 
     decision = assess_clinical_applicability(butterbur_product(second), entry)
 
-    assert decision["status"] == "not_applicable"
+    assert decision["status"] == "unresolved"
     assert decision["reason_code"] == "clinical_source_row_unresolved"
 
 

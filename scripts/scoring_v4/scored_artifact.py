@@ -148,11 +148,16 @@ def unfinished_source_assessment(enriched_product: Dict[str, Any],
     if (dose_meta.get("assessment_status") == "incomplete"
             and dose_meta.get("reason_code") == "unresolved_source_quantity"):
         return "dose_amount_unread"
-    assessments = [_safe_dict(dose_meta.get("botanical_dose"))] + [
-        _safe_dict(_safe_dict(item).get("metadata"))
+    assessments = [(dose_meta.get("botanical_dose_band"),
+                    _safe_dict(dose_meta.get("botanical_dose")))] + [
+        (_safe_dict(item).get("band"), _safe_dict(_safe_dict(item).get("metadata")))
         for item in dose_meta.get("specialized_purpose_assessments") or []
     ]
-    if any(item.get("benchmark") == "unresolved" for item in assessments):
+    if any(item.get("benchmark") == "unresolved" and not (
+            band in {"blend_total_only", "primary_no_dose"}
+            and item.get("assessment_status") == "complete"
+            and item.get("reason_code") == "amount_not_declared")
+           for band, item in assessments):
         return "dose_benchmark_identity_unresolved"
     # A printed botanical/collagen amount the exposure owner could not read.
     bands = {dose_meta.get("botanical_dose_band"), dose_meta.get("collagen_dose_band")} | {

@@ -182,3 +182,36 @@ def test_affirmative_context_cannot_use_unknown_days_for_fixed_protocol():
         context['dose'].update(duration_basis='fixed_protocol', duration_days=None,
                                duration_as_printed={'value': 18, 'unit': 'months'})
         assert 'dose.fixed_protocol_duration_required' in validate_ingredient_context(context)
+
+
+def test_reported_absence_of_outcome_hierarchy_is_a_completed_source_limitation():
+    from copy import deepcopy
+    from probiotic_measurements import derived_context_evidence
+
+    context = _context(review_status='clinician_approved', study_design='rct',
+                       clinical_review={'reviewer': 'Synthetic test reviewer',
+                                        'reviewed_at': '2026-01-01',
+                                        'scope': 'identity_dose_outcome_applicability'})
+    context['dose'].update(administration_frequency='one single oral dose',
+                           dosage_forms=['oral supplement'])
+    context['outcomes'][0]['hierarchy'] = 'not_reported'
+    context['limitations'].append('The inspected source does not report an outcome hierarchy; not a prespecified primary result.')
+    assert validate_ingredient_context(context, require_complete_review=True) == []
+
+    unfinished = deepcopy(context)
+    unfinished['outcomes'][0]['hierarchy'] = 'unresolved'
+    assert 'outcomes.review_incomplete' in validate_ingredient_context(unfinished, require_complete_review=True)
+    pending = deepcopy(context)
+    pending['review_status'] = 'source_verified_pending_clinical_review'
+    assert 'review.approval_required' in validate_ingredient_context(pending, require_complete_review=True)
+
+    # Completed reporting limitation does not invent a positive primary outcome.
+    native = deepcopy(context)
+    native['identity_scope'] = 'exact_strain'
+    from studied_formulas import _clinical_strain_registry
+    owner = next(iter(_clinical_strain_registry()))
+    native['components'] = [owner]
+    native['dose'].update(measurement_type='viable_count', unit='CFU', values=[1_000_000], dose_basis='per_strain_daily')
+    evidence = derived_context_evidence({'id': owner, 'study_contexts': [native]})
+    assert evidence['effect_direction'] == 'unresolved'
+    assert evidence['evidence_strength'] == 'weak'

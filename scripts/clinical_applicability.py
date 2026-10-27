@@ -16,7 +16,7 @@ from pathlib import Path
 from typing import Any
 
 from constants import DELIVERY_SOURCE_STATEMENT_TYPES
-from normalization import canonicalize_mass_unit, find_affirmative_label_match
+from normalization import canonicalize_mass_unit, find_affirmative_label_match, normalize_text
 from serving_frequency import resolve_daily_serving_range
 
 
@@ -125,13 +125,13 @@ def _valid_policy(policy: Any) -> bool:
     if "studied_population" in policy and not isinstance(policy["studied_population"], str):
         return False
     for field in ("dosage_forms", "required_form_terms", "supported_outcomes", "source_pmids",
-                  "excluded_canonical_ids", "excluded_form_terms"):
+                  "excluded_canonical_ids", "excluded_form_terms", "excluded_claim_terms"):
         if field in policy and (
             not isinstance(policy[field], list)
             or any(not isinstance(value, str) or not value.strip() for value in policy[field])
         ):
             return False
-        if field in {"excluded_canonical_ids", "excluded_form_terms"} and any(
+        if field in {"excluded_canonical_ids", "excluded_form_terms", "excluded_claim_terms"} and any(
             not _key(value) for value in policy.get(field, [])
         ):
             return False
@@ -445,6 +445,7 @@ def assess_clinical_source_review(entry: Mapping) -> dict:
     excluded_pmids = {str(ref["pmid"]) for ref in references if ref.get("pmid")
                       and not clinical_record_sources_eligible({"references_structured": [ref]})}
     eligible_pmids = declared_pmids - excluded_pmids
+    reference_only = any(reference.get(key) == "reference" for key in ("study_type", "evidence_level"))
     errors = []
     if not contributing:
         errors.append("clinical_contributing_contexts_missing")
@@ -457,7 +458,12 @@ def assess_clinical_source_review(entry: Mapping) -> dict:
         # Excluded notices may document a trial's provenance, but cannot be
         # its sole affirmative source. Explicit exclusions also win over a
         # duplicate legacy published_studies pointer.
-        if not clinical_record_sources_eligible(reference) or not (context_pmids & eligible_pmids):
+        # Reference-only is a reviewed non-affirmative scope, not missing
+        # source review. It still needs an eligible source and full approval;
+        # an explicit eligibility hold cannot be cleared by that classification.
+        if ((not reference_only and not clinical_record_sources_eligible(reference))
+                or reference.get("scoring_eligible") is False
+                or not (context_pmids & eligible_pmids)):
             errors.append(prefix + "clinical_context_eligible_source_missing")
         errors.extend(str(context.get("context_id") or "unknown") + ":" + error
                       for error in validate_ingredient_context(context, require_complete_review=True))
@@ -491,6 +497,28 @@ def assess_clinical_applicability(product: Mapping, entry: Mapping, *, assess_am
         return {"status": "not_applicable", "reason_code": "formula_reference_not_individual_evidence"}
     if policy.get("scope") != "ingredient":
         return {"status": "unresolved", "reason_code": "unsupported_applicability_scope"}
+    # Only affirmative native positioning can establish an excluded purpose.
+    # Precaution blocks and brand/serving metadata cannot supply that claim.
+    excluded_metadata = {str(product.get("brand_name") or ""),
+                         str(product.get("serving_description") or "")}
+    for term in policy.get("excluded_claim_terms", []):
+        pattern = re.compile(r"(?<!\w)" + r"[\s_-]+".join(
+            re.escape(word) for word in _key(term).split()) + r"(?!\w)", re.I)
+        if any(text and text not in excluded_metadata and find_affirmative_label_match(pattern, text)
+               for text in native_product_positioning_texts(product)):
+            return {"status": "not_applicable", "reason_code": "label_purpose_evidence_mismatch"}
+    from probiotic_measurements import context_accepted_for_scoring
+    from rda_ul_calculator import label_is_for_children
+    source_pmids = {str(pmid) for pmid in policy.get("source_pmids") or []}
+    population_groups = {
+        (context.get("population") or {}).get("age_group")
+        for context in reference.get("study_contexts") or []
+        if isinstance(context, Mapping) and context_accepted_for_scoring(context)
+        and (not source_pmids or source_pmids.intersection(str(pmid) for pmid in context.get("source_pmids") or []))
+        and isinstance(context.get("population"), Mapping)
+    }
+    if population_groups == {"adult"} and label_is_for_children(dict(product)):
+        return {"status": "not_applicable", "reason_code": "clinical_population_mismatch"}
     physical = product.get("physicalState") or {}
     if isinstance(physical, Mapping):
         physical = physical.get("name")
@@ -541,7 +569,13 @@ def assess_clinical_applicability(product: Mapping, entry: Mapping, *, assess_am
             reasons.append("clinical_form_excluded")
             continue
         forms = policy.get("required_form_terms") or []
-        if forms and not any(" " + _key(form) + " " in text for form in forms):
+        literal_source = normalize_text(_row_text(row, source_only=source_only, preserve_punctuation=True))
+        if forms and not any(
+            find_affirmative_label_match(
+                re.compile(r"(?<!\w)" + re.escape(normalize_text(form)) + r"(?!\w)", re.I), literal_source
+            ) if "+" in form else " " + _key(form) + " " in text
+            for form in forms
+        ):
             reasons.append("clinical_form_mismatch")
             continue
         amount = _number(row.get("quantity"))
@@ -587,7 +621,11 @@ def assess_clinical_applicability(product: Mapping, entry: Mapping, *, assess_am
                 "supported_outcomes": policy.get("supported_outcomes", []),
                 "studied_population": policy.get("studied_population"),
                 "scope": "ingredient"}
-    return {"status": "not_applicable", "reason_code": reasons[0] if reasons else "clinical_source_row_unresolved"}
+    reason = reasons[0] if reasons else "clinical_source_row_unresolved"
+    status = ("unresolved" if reason in {
+        "clinical_source_row_unresolved", "clinical_source_label_unresolved", "clinical_dose_unresolved",
+    } else "not_applicable")
+    return {"status": status, "reason_code": reason}
 
 
 def filter_clinical_matches(product: Mapping, matches: list[dict], *, assess_amount: bool = True) -> tuple[list[dict], list[dict]]:

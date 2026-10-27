@@ -1250,7 +1250,7 @@ def test_verification_explicit_state_readiness_must_agree(state, readiness):
     assert result['reason_code'] == 'invalid_verification_assessment_contract'
 
 
-def test_readiness_includes_owner_recovery_alongside_existing_matches():
+def test_readiness_retains_reviewed_reference_conclusion_alongside_incidental_matches():
     from assessment_readiness import evaluate_evidence_assessment
     from scoring_v4.modules.generic_evidence import resolved_clinical_matches
 
@@ -1260,9 +1260,12 @@ def test_readiness_includes_owner_recovery_alongside_existing_matches():
                   'standard_name': 'Calcium', 'study_type': 'rct_single'}],
     )
     _, recovered = resolved_clinical_matches(product, owner_scoped=True)
-    assert any(match['id'] == 'INGR_NAC' for match in recovered)
+    # Returned exercise-only NAC review is retained as reference, not recovered as affirmative credit.
+    assert not any(match['id'] == 'INGR_NAC' for match in recovered)
     assessment = evaluate_evidence_assessment(product, module='generic')
-    assert 'INGR_NAC' in assessment['ingredient_assessments'][0]['evidence_ids']
+    assert assessment['ingredient_assessments'][0]['reason_code'] == 'reference_only_clinical_record'
+    assert assessment['ingredient_assessments'][0]['state'] == 'evaluated_limited_or_negative'
+    assert assessment['readiness'] == 'complete'
 
 @pytest.mark.parametrize(
     "disposition,owners,reason,expected",

@@ -4,8 +4,8 @@ Botanicals stop being scored like vitamins. V4.1 Step 4: the formulation
 adapter gives a recognized identity the neutral baseline and earns extract and
 marker-standardization quality (plant part and amount are Transparency facts,
 a brand name is an Evidence fact); the dose adapter grades the daily amount
-against clinical therapeutic ranges (rda_therapeutic_dosing.json), and an
-unassessed amount earns the shared neutral only when no benchmark exists.
+against reviewed source references; completed no-benchmark conclusions and
+recognized ingredients with source-confirmed hidden amounts use the shared neutral.
 
 Spec: docs/superpowers/specs/2026-06-01-v4-botanical-profile-design.md
 """
@@ -586,10 +586,12 @@ def test_top_level_proprietary_botanical_blend_total_gets_conservative_profile()
     assert is_botanical_product(product) is True
     dose = score_botanical_dose(product)
     assert dose["band"] == "blend_total_only"
-    # Hidden component amounts remain a label limitation, while the missing
-    # benchmark review is independently PharmaGuide's unfinished work.
+    # The input owner confirms the known milk-thistle identity and hidden
+    # component share. No numerical benchmark is applied to the blend total.
     assert dose["metadata"]["benchmark"] == "unresolved"
-    assert dose["score"] == 0
+    assert dose["metadata"]["assessment_status"] == "complete"
+    assert dose["metadata"]["reason_code"] == "amount_not_declared"
+    assert dose["score"] == _neutral()
 
     result = score_generic(product)
     formulation = result.dimensions["formulation"]
@@ -597,7 +599,7 @@ def test_top_level_proprietary_botanical_blend_total_gets_conservative_profile()
     assert result.dimensions["dose"].metadata["botanical_dose_band"] == "blend_total_only"
     assert result.dimensions["evidence"].metadata["primary_evidence_floor"] == 0.0
     assert result.dimensions["formulation"].score > 0
-    assert result.dimensions["dose"].score == 0
+    assert result.dimensions["dose"].score == _neutral()
 
 
 def test_top_level_food_matrix_blend_does_not_create_botanical_profile():
@@ -822,3 +824,47 @@ def test_known_botanical_fallback_respects_explicit_identity_veto(flags, expecte
     from scoring_v4.modules.botanical_profile import _recognized_botanical_identity
     row = {"canonical_id": "rosemary", "name": "Rosemary", **flags}
     assert _recognized_botanical_identity(row) is expected
+
+
+@pytest.mark.parametrize("shape", ["nested_hidden", "source_owned_lent_mass"])
+def test_known_botanical_hidden_amount_completes_without_claiming_benchmark(shape):
+    row = _botanical_ingredient(name="Green Bell Pepper", standard_name="Green Bell Pepper",
+                                canonical_id="green_bell_pepper", form="Green Bell Pepper",
+                                quantity=0, unit="NP", isNestedIngredient=True)
+    if shape == "source_owned_lent_mass":
+        row.update(quantity=1660, unit="mg", isNestedIngredient=False,
+                   scoring_input_kind="product_level_evidence", evidence_type="blend_anchor_mass",
+                   reason="identity_bearing_blend_header_mass_from_nested_child")
+    result = score_botanical_dose(_botanical_product(ingredient=row, standardized=False))
+    assert result["score"] == _neutral()
+    assert result["metadata"]["benchmark"] == "unresolved"
+    assert result["metadata"]["assessment_status"] == "complete"
+    assert result["metadata"]["reason_code"] == "amount_not_declared"
+
+
+@pytest.mark.parametrize("change", ["unknown_identity", "identity_rejected", "identity_conflict",
+                                    "capture_missing", "unproved_projection", "disclosed"])
+def test_hidden_amount_completion_does_not_waive_owner_gaps(change):
+    row = _botanical_ingredient(name="Green Bell Pepper", standard_name="Green Bell Pepper",
+                                canonical_id="green_bell_pepper", form="Green Bell Pepper",
+                                quantity=0, unit="NP", isNestedIngredient=True)
+    if change == "unknown_identity":
+        row.update(name="Unreviewed Novel Herb", standard_name="Unreviewed Novel Herb",
+                   canonical_id="unreviewed_novel_herb", matched_form="Unreviewed Novel Herb",
+                   raw_taxonomy={"category": "botanical", "forms": []})
+    elif change == "identity_rejected":
+        row["scoreable_identity"] = False
+    elif change == "identity_conflict":
+        row["identity_disposition"] = "identity_conflict"
+    elif change == "capture_missing":
+        row["isNestedIngredient"] = False
+    elif change == "unproved_projection":
+        row.update(quantity=1660, unit="mg", isNestedIngredient=False,
+                   scoring_input_kind="product_level_evidence", evidence_type="blend_anchor_mass",
+                   reason="identity_bearing_active_anchor_mass")
+    else:
+        row.update(quantity=100, unit="mg", isNestedIngredient=False)
+    result = score_botanical_dose(_botanical_product(ingredient=row, standardized=False))
+    assert result["score"] == 0
+    assert result["metadata"]["benchmark"] == "unresolved"
+    assert result["metadata"].get("assessment_status") != "complete"

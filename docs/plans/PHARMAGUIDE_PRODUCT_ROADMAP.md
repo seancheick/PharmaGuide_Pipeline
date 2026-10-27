@@ -1,5 +1,7 @@
 # PharmaGuide product roadmap
 
+October27 scoped assessment candidate67226a660/PR263: fourteen source dependencies now pass the existing review owner;132remain incomplete, with exact agent work versus retained source/decision limits in the existing register.136frozen-label checks show68new complete assessments, no lost complete assessments or changed safety/warning projections. Required CI/integration pending; this is not full-corpus or app-release clearance. No pipeline rerun.
+
 October23 MCP usability deployed: existing catalog search prefers full-text matches before fuzzy fallback; shared disabled-personal copy and canonical connection guide are live. PR243pipeline/134app merged with approval. Both exact-source CIs passed (pipeline40008017706/app40008166478); production15HTTP checks and6actualCodex calls passed. Details and migration/function versions are in the existing LEDGER. ClaudeCode testing deferred by Sean due token exhaustion; personal access stays disabled. No catalog rebuild or clinical changes in this batch.
 
 October23 release performance batch is implemented and independently reviewed on `codex/release-performance`: bounded upload queues,
