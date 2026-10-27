@@ -1,5 +1,18 @@
 # Dr. Bryan responses — batches 1–9, independent verification
 
+## Final material-admission checkpoint — October 27, 2026
+
+This checkpoint supersedes the earlier mixed-form-only checks. Registered botanical material is now checked at the final canonical-admission seam across zero, one and multiple forms. Explicit primary-label and parsed-note part claims constrain the decision. Botanical `category` remains a classification, not an exhaustive material definition. The existing declaration owner preserves qualified and compound terms and covers accepted blend-part metadata. An unreviewed root cannot inherit an aerial-parts identity by omitting punctuation or using a single form.
+
+The code and reference data are frozen. The normalizer SHA-256 is `07658be43887f9bf292f68d33b2de539137fefe719ec6f447dddbb0aeb2d5105`; botanical reference data is `0a767e39b513c7d6b0c3a7d57c4729e03194c1b3f46c5c4062cc5fdecdb9379d`. Named validation passed 349 material-owner/consumer tests and 47 identity-alias tests. Independent review passed ten direct normalization probes. Combined local validation passed 546 tests with 24 declared skips in 126.58 seconds; the skip guard passed. Python correctness found zero new findings and 12 existing findings.
+
+A census covered all 15,437 stored products and 9,837 botanical rows across zero, one and multiple forms. Fifty-seven real-label replays against preserved baselines showed no score, amount, safety-warning, interaction or completion changes. Forty scored artifacts were unchanged; other differences are explicit preparation/readiness findings. Nineteen source/material findings remain, all in products already held. They comprise seven barberry bark/root, three Schisandra species, three Cassia preparation names, two Boswellia wood/resin, two apple fruit/skin, one yarrow leaf/flower and one passion-fruit seed/marker case. They are not newly blocked products or nineteen additional independent review requests.
+
+Two existing botanical records gained verified identity aliases. FDA fruit identity B423VGH5S9 supports the exact Malus pumila fruit names; it does not establish marker content, clinical benefit or isolated-skin equivalence. FDA root identity 5EF0HWI5WU supports the exact Wild Indigo root spelling correspondence. NIH labels 293272 and 293273 actually print “Baptista”; raw labels remain unchanged. No generic-genus alias, clinical approval, numerical threshold or scoring weight was added. Five false source-name holds were recovered while all clinical and dose holds remained.
+
+As of this implementation commit, PR 262 is open. Final required CI must pass before merge; earlier green checks do not qualify these later source changes. No corpus pipeline, app-data update or publication was performed. The evidence and scientific preparation backlog remains explicitly open; recorded signatures are retained without requesting them again.
+
+
 ## Verified source and integration record — October 27, 2026
 
 Runtime source `12847f5a4fb38ed4896663ef6d3d67d008437b01` passed all four whole-fast shards and merge readiness in [CI 40453577726](https://github.com/seancheick/PharmaGuide_Pipeline/actions/runs/40453577726). Final local validation passed 546 tests with 24 declared skips and a green skip guard. All 33 final raw canaries were unchanged. The corrected same-plant guard passed 256 owner/consumer tests and independent review; all 14 affected real labels retained their identities, amounts, scores, warnings and holds. The complete input census found no unintended parent-decision changes.
