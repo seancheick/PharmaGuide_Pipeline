@@ -1254,24 +1254,28 @@ def test_same_species_botanical_registry_parts_retain_their_parent(pipeline, sou
 
 
 @pytest.mark.parametrize("name,group,forms,parent", [
-    ("Barberry Bark, Root Extract", "Barberry", ("Berberis vulgaris Bark Extract", "Berberis vulgaris Root Extract"), "barberry_root"),
+    ("Barberry Bark, Root Extract", "Barberry", ("Berberis vulgaris Bark Extract", "Berberis vulgaris Root Extract"), None),
     ("Grape Extract", "Grape", ("Vitis vinifera Seed Extract", "Vitis vinifera Skin Extract"), "grape"),
     ("Sicilian Blood Orange Fruit, Peel Extract", "Sweet Orange", ("Citrus sinensis var. Moro Fruit Extract", "Citrus sinensis var. Moro Peel Extract"), "sweet_orange"),
     ("Bayberry Extract", "Bayberry", ("Bayberry bark extract", "Bayberry Leaf Extract"), "bayberry"),
     ("Cauliflower Flower, Stem Juice", "Cauliflower", ("Cauliflower Flower Juice", "Cauliflower Stem Juice"), "cauliflower"),
     ("Asparagus Flower, Stem Juice", "Asparagus", ("Asparagus Flower Juice", "Asparagus Stem Juice"), "asparagus"),
 ])
-def test_registered_same_organism_mixed_parts_keep_whole_parent(pipeline, name, group, forms, parent):
+def test_registered_mixed_parts_keep_only_compatible_parent_scope(pipeline, name, group, forms, parent):
     raw = _raw_product(991032, [_raw_row(
         1, name, group, quantity=100, unit="mg", forms=forms,
     )])
     enriched = pipeline(raw)
     row = enriched["activeIngredients"][0]
     assert row["canonical_id"] == parent
-    assert row["canonical_source_db"] == "botanical_ingredients"
+    assert row["canonical_source_db"] == ("botanical_ingredients" if parent else "unmapped")
     assert row["quantity"] == 100
     assert [form["name"] for form in row["forms"]] == list(forms)
     assert len(enriched["activeIngredients"]) == 1
+    if parent is None:
+        quality = enriched["ingredient_quality_data"]["ingredients"][0]
+        assert quality["scoreable_identity"] is False
+        assert quality["quantity"] == 100
 
 
 @pytest.mark.parametrize("foreign", [
@@ -1299,4 +1303,104 @@ def test_all_bare_parts_do_not_invent_an_iqm_source_organism(pipeline):
     )])
     row = pipeline(raw)["activeIngredients"][0]
     assert row.get("canonical_id") is None
+    assert row["quantity"] == 100
+
+
+@pytest.mark.parametrize("root_name", ["Yarrow Root", "root"])
+def test_registered_aerial_parent_cannot_own_same_species_root_mix(pipeline, root_name):
+    raw = _raw_product(991035, [_raw_row(
+        1, "Yarrow Root and Flowers", "Yarrow Aerial Parts", quantity=100, unit="mg",
+        forms=(root_name, "Yarrow Flowers"),
+    )])
+    enriched = pipeline(raw)
+    row = enriched["activeIngredients"][0]
+    assert row.get("canonical_id") is None
+    assert row["quantity"] == 100
+
+
+@pytest.mark.parametrize("forms,blend_root", [
+    (("Yarrow Aerial Parts, Root Extract", "Yarrow Flowers"), False),
+    (("Yarrow Flowers", "root"), True),
+    (("Yarrow Aerial Parts, Root Extract",), False),
+])
+def test_all_declared_source_parts_limit_registered_parent(pipeline, forms, blend_root):
+    raw = _raw_product(991036, [_raw_row(
+        1, "Yarrow mixed material", "Yarrow Aerial Parts", quantity=100, unit="mg", forms=forms,
+    )])
+    if blend_root:
+        raw["ingredientRows"][0]["forms"][1].update({
+            "category": "blend", "ingredientGroup": "Blend (Herb/Botanical)",
+        })
+    enriched = pipeline(raw)
+    row = enriched["activeIngredients"][0]
+    assert row.get("canonical_id") is None
+    assert "root" in row["plantPart"].split(" and ")
+    assert row["quantity"] == 100
+    assert [form["name"] for form in row["forms"]] == list(forms)
+
+
+@pytest.mark.parametrize("name,expected", [
+    ("Yarrow Aerial Parts, Root Extract", ["aerial parts", "root"]),
+    ("Ashwagandha Leaf, Root Extract", ["leaf", "root"]),
+    ("Yarrow Aerial Parts and Root Extract", ["aerial parts", "root"]),
+    ("Yarrow Aerial Parts plus Root Extract", ["aerial parts", "root"]),
+    ("dried whole Coffee fruit concentrate", ["fruit"]),
+    ("Maqui Berry Fruit Extract", ["fruit"]),
+    ("Root and Rhizome Extract", ["root and rhizome"]),
+    ("Leaf and Stem Powder", ["leaf and stem"]),
+    ("Wood Betony Root", ["root"]),
+    ("Wood Betony", []),
+])
+def test_declared_parts_preserve_complete_clauses_and_bound_qualifiers(name, expected):
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+
+    normalizer = EnhancedDSLDNormalizer.__new__(EnhancedDSLDNormalizer)
+    assert normalizer._declared_botanical_parts([{ "name": name, "category": "botanical" }]) == expected
+
+
+def test_unpunctuated_unknown_root_cannot_borrow_aerial_parent(pipeline):
+    raw = _raw_product(991037, [_raw_row(
+        1, "Yarrow mixed material", "Yarrow Aerial Parts", quantity=100, unit="mg",
+        forms=("Yarrow Aerial Parts Root Extract", "Yarrow Flowers"),
+    )])
+    row = pipeline(raw)["activeIngredients"][0]
+    assert row.get("canonical_id") is None
+    assert row["quantity"] == 100
+    assert row["forms"][0]["name"] == "Yarrow Aerial Parts Root Extract"
+
+
+@pytest.mark.parametrize("row_name", ["Yarrow Aerial Parts Root Extract", "Yarrow mixed material"])
+def test_single_source_must_fit_chosen_botanical_material(pipeline, row_name):
+    raw = _raw_product(991038, [_raw_row(
+        1, row_name, "Yarrow Aerial Parts", quantity=100, unit="mg",
+        forms=("Yarrow Aerial Parts Root Extract",),
+    )])
+    row = pipeline(raw)["activeIngredients"][0]
+    assert row.get("canonical_id") is None
+    assert row["quantity"] == 100
+    assert row["forms"][0]["name"] == "Yarrow Aerial Parts Root Extract"
+
+
+@pytest.mark.parametrize("row_name,forms,notes", [
+    ("Yarrow Root", (), ""),
+    ("Yarrow Root", ("Yarrow Flowers",), ""),
+    ("Yarrow", ("Yarrow Flowers",), "PlantPart: root"),
+])
+def test_chosen_material_respects_primary_and_structured_part_claims(pipeline, row_name, forms, notes):
+    raw = _raw_product(991039, [_raw_row(
+        1, row_name, "Yarrow Aerial Parts", quantity=100, unit="mg", forms=forms,
+    )])
+    raw["ingredientRows"][0]["notes"] = notes
+    row = pipeline(raw)["activeIngredients"][0]
+    assert row.get("canonical_id") is None
+    assert row["quantity"] == 100
+
+
+def test_root_bark_primary_phrase_keeps_existing_bound_material(pipeline):
+    raw = _raw_product(991040, [_raw_row(
+        1, "Barberry root bark powder", "Barberry", quantity=100, unit="mg",
+    )])
+    row = pipeline(raw)["activeIngredients"][0]
+    assert row["canonical_id"] == "barberry_root"
+    assert row["plantPart"] == "root"
     assert row["quantity"] == 100
