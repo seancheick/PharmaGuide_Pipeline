@@ -293,7 +293,9 @@ def test_missing_fiber_capture_is_not_a_completed_zero_or_neutral(facts_amount):
     else:
         # A valid Nutrition Facts total owns aggregate fiber independently of
         # an unquantified ingredient source. Never discard that declaration.
-        assert artifact["quality_assessment_status"] == "complete"
+        # This synthetic Dose fixture lacks independent completed source reviews.
+        assert artifact["quality_assessment_status"] == "partial"
+        assert artifact["assessment_readiness"]["release_assessment"]["is_complete"] is False
         assert artifact["quality_pillars_v4"]["dose"]["score"] == 11.4
 
 
@@ -317,7 +319,9 @@ def test_fiber_aggregate_and_named_nutrient_each_keep_one_public_purpose_vote(fi
     from scoring_v4.scored_artifact import build_scored_artifact
 
     artifact = build_scored_artifact(_fiber_with_named_vitamin(fiber_rows=fibers))
-    assert artifact["quality_assessment_status"] == "complete"
+    # This synthetic Dose fixture lacks independent completed source reviews.
+    assert artifact["quality_assessment_status"] == "partial"
+    assert artifact["assessment_readiness"]["release_assessment"]["is_complete"] is False
     dose = artifact["quality_pillars_v4"]["dose"]
     assert dose["score"] == 15.7
     receipt = dose["explanation"]["dose_receipt"]
@@ -353,7 +357,9 @@ def test_fiber_keeps_each_declared_unbenchmarked_or_hidden_peer_at_neutral(hidde
     product = _fiber_product([_row("psyllium", 8), peer], name="Psyllium + L-Theanine")
     artifact = build_scored_artifact(product)
     if not hidden:
-        assert artifact["quality_assessment_status"] == "complete"
+        # This synthetic Dose fixture lacks independent completed source reviews.
+        assert artifact["quality_assessment_status"] == "partial"
+        assert artifact["assessment_readiness"]["release_assessment"]["is_complete"] is False
     # This compatibility fixture has no typed source-dose collection. Keep its
     # independent readiness result while checking the completed Dose vote.
     module_dose = artifact["_v4_module_breakdown"]["dimensions"]["dose"]

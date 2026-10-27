@@ -774,10 +774,7 @@ def _dosing_entry_for(row: Dict[str, Any]) -> Optional[Dict[str, Any]]:
     # product title, a linked parent or an enrichment-only matched form.
     from dose_assessment import _row_names, verified_reference_citations
     from evidence_resolver import _backed_studies_index
-    source_row = {"canonical_id": row.get("canonical_id"),
-                  "name": row.get("raw_source_text") or row.get("name"),
-                  "standard_name": row.get("source_label_name") or row.get("name")}
-    for key in sorted(_row_names(source_row)):
+    for key in sorted(_row_names(row, source_only=True)):
         for entry in _backed_studies_index().get(key, []):
             semantics = entry.get("reference_semantics") or {}
             if (semantics.get("reference_type") in {"no_benchmark", "discrete_studied_regimen"}

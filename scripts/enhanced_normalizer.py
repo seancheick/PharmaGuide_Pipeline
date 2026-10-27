@@ -1816,6 +1816,14 @@ class EnhancedDSLDNormalizer:
         normalized_group = norm_module.normalize_text(ingredient_group)
         if not normalized_group:
             return {"type": "none", "mapped": False}
+        legacy = self._group_exact_lookup.get(normalized_group, {"type": "none", "mapped": False})
+        shadow = self.other_ingredients_exact_lookup.get(
+            str(legacy.get("standard_name") or "").strip().lower(), {})
+        # Override only the two broad material classes shown to shadow a
+        # more specific identity. Other preparation-specific matches retain
+        # their existing oil, extract and whole-part safeguards.
+        if shadow.get("id") not in {"NHA_FRUIT_VEG_POWDERS", "NHA_MUSHROOM_EXTRACTS"}:
+            return legacy
         # The canonical registry retains authored botanical identity when the
         # older flattened alias index offers an umbrella food/material class.
         exact = self._canonical_identity_registry.resolve_verified_preferred(ingredient_group)

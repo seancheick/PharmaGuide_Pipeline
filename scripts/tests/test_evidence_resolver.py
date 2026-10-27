@@ -593,7 +593,11 @@ def test_literature_registry_has_no_legacy_no_qualifying_evidence_token():
 
     assert leaked == []
     assert registry["_metadata"]["total_entries"] == len(records)
-    assert registry["_metadata"]["verified_records_count"] == len(records)
+    # This is the last full verifier's coverage, not approval of later
+    # Dose-only additions. Do not restamp it to claim all new rows verified.
+    assert 0 <= registry["_metadata"]["verified_records_count"] <= len(records)
+    assert any(record.get("verification_result") == "verification_failure_unresolved"
+               for record in records)
 
 
 def test_phase4_batch4_null_unfavorable_canaries():

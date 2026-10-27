@@ -319,8 +319,13 @@ def assemble_scored_artifact(
         enriched_product, assessment_readiness, _safe_dict(module_breakdown),
         unfinished_source=unfinished,
     )}
+    # The release owner distinguishes a completed negative answer from an
+    # unresolved source review. A provisional calculation must render the
+    # same completeness conclusion without recomputing that policy here.
+    release_complete = assessment_readiness["release_assessment"]["is_complete"]
     quality_assessment_status = _quality_assessment_status(
-        status, dose_safety, v4.get("quality_pillars_v4"), unfinished
+        status, dose_safety, v4.get("quality_pillars_v4"),
+        unfinished or (None if release_complete else "release_assessment_incomplete"),
     )
     quality_score = v4.get("quality_score_v4_100")
     verdict = _public_verdict(v4)

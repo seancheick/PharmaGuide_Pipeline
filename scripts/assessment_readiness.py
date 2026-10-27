@@ -383,7 +383,7 @@ def _resolved_evidence_assessment(resolution: Any) -> tuple[str, str, str | None
     if (disposition == EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value
             and (("backed_clinical_studies" in resolution.matched_owners
                   and resolution.reason_code in completed_scope_reasons | {
-                      "reference_only_clinical_record", "literature_applicability_unestablished",
+                      "reference_only_clinical_record",
                       "dose_below_studied_range", "form_mismatch_with_clinical_trials",
                   })
                  or ("literature_evidence" in resolution.owner_facts

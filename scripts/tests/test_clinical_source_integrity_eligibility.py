@@ -111,7 +111,8 @@ def test_backed_records_do_not_transfer_generic_or_combination_or_protocol_resul
     assert records["PRECLIN_APIGENIN"]["published_studies"] == ["19593179"]
     assert records["PRECLIN_LUTEOLIN"]["published_studies"] == ["35450527"]
     fisetin = records["PRECLIN_FISETIN"]
-    assert fisetin["study_type"] == "observational"
+    assert fisetin["study_type"] == "reference"
+    assert not er.clinical_record_sources_eligible(fisetin)
     assert fisetin["total_enrollment"] == 10
     assert fisetin["registry_completed_trials_count"] is None
     assert fisetin["effect_direction"] == "mixed"

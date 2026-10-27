@@ -137,7 +137,8 @@ def test_build_scored_artifact_is_v4_native(monkeypatch: pytest.MonkeyPatch) -> 
     assert artifact["quality_score_confidence"] == "high"
     assert artifact["score_unavailable_reason"] is None
     assert artifact["product_safety_status"] == "no_known_catalog_concern"
-    assert artifact["quality_assessment_status"] == "complete"
+    assert artifact["quality_assessment_status"] == "partial"
+    assert artifact["assessment_readiness"]["release_assessment"]["is_complete"] is False
     assert artifact["assessment_readiness"]["is_live_ready"] is True
     assert artifact["quality_pillars_v4"]
     assert artifact["mapped_coverage"] == 1.0
@@ -406,7 +407,8 @@ def test_low_coverage_is_reported_without_manufacturing_a_safety_caution(
     assert "low_mapped_coverage" not in artifact.get("safety_signals", [])
     assert artifact["safety_signal_reason"] is None
     assert artifact["product_safety_status"] == "no_known_catalog_concern"
-    assert artifact["quality_assessment_status"] == "complete"
+    assert artifact["quality_assessment_status"] == "partial"
+    assert artifact["assessment_readiness"]["release_assessment"]["is_complete"] is False
 
 
 @pytest.mark.parametrize(
@@ -462,7 +464,7 @@ def test_missing_safety_gate_is_not_reported_as_no_known_concern() -> None:
 @pytest.mark.parametrize(
     ("quality_status", "expected"),
     [
-        ("scored", "complete"),
+        ("scored", "partial"),
         ("suppressed_safety", "complete"),
         ("not_scored", "partial"),
         ("unexpected", "failed"),
@@ -604,3 +606,14 @@ def test_scored_artifact_persists_unfinished_source_for_release_without_changing
     assert receipt['unfinished_source_assessment'] == 'dose_amount_unread'
     assert 'dose_amount_unread' in receipt['blockers']
     assert receipt['is_complete'] is False
+
+
+@pytest.mark.parametrize("is_complete,expected", [(True, "complete"), (False, "partial")])
+def test_scored_completeness_consumes_existing_release_owner(monkeypatch, is_complete, expected):
+    import assessment_readiness
+    monkeypatch.setattr(assessment_readiness, "evaluate_release_assessment",
+                        lambda *args, **kwargs: {"is_complete": is_complete})
+    artifact = scored_artifact.assemble_scored_artifact(_product(), _canned_v4())
+    assert artifact["quality_assessment_status"] == expected
+    assert artifact["quality_score_v4_100"] == 82.0
+    assert artifact["product_safety_status"] == "no_known_catalog_concern"

@@ -294,7 +294,13 @@ def _record_names(record: Dict[str, Any]) -> set[str]:
     }
 
 
-def _row_names(row: Dict[str, Any]) -> set[str]:
+def _row_names(row: Dict[str, Any], *, source_only: bool = False) -> set[str]:
+    if source_only:
+        # Preparation binding uses printed source identity, not an enriched
+        # matched form or a parent/product name that could lend a brand.
+        row = {"canonical_id": row.get("canonical_id"),
+               "name": row.get("raw_source_text") or row.get("name"),
+               "standard_name": row.get("source_label_name") or row.get("name")}
     return {
         text for text in (
             _identity_text(row.get("canonical_id")),

@@ -2836,7 +2836,9 @@ def test_material_protein_source_joins_actual_facts_without_a_protein_title(sour
     artifact = build_scored_artifact(product)
     dose = artifact["_v4_module_breakdown"]["dimensions"]["dose"]["metadata"]
     assert artifact["_v4_module"] == "sports"
-    assert artifact["quality_assessment_status"] == "complete"
+    # This synthetic Dose fixture lacks independent completed source reviews.
+    assert artifact["quality_assessment_status"] == "partial"
+    assert artifact["assessment_readiness"]["release_assessment"]["is_complete"] is False
     assert artifact["_v4_module_breakdown"]["dimensions"]["dose"]["score"] == 19.0
     protein, = [r for r in dose["dose_contributions"] if r["ingredient"] == "protein"]
     assert protein["amount_per_serving"] == 19.0

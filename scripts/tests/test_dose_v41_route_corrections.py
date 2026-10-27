@@ -239,7 +239,9 @@ def test_sports_adult_targets_require_the_whole_label_population(identity, amoun
     product['targetGroups'] = groups
     artifact = build_scored_artifact(product)
     assert artifact['quality_pillars_v4']['dose']['score'] == expected
-    assert artifact['quality_assessment_status'] == 'complete'
+    # This synthetic Dose fixture lacks independent completed source reviews.
+    assert artifact['quality_assessment_status'] == 'partial'
+    assert artifact["assessment_readiness"]["release_assessment"]["is_complete"] is False
     entry = artifact['_v4_module_breakdown']['dimensions']['dose']['metadata']['dose_contributions'][0]
     assert entry['assessment'].endswith('_contribution_policy') is (expected == 20)
     assert artifact['quality_pillars_v4']['dose']['explanation']['dose_receipt']['reconciles'] is True

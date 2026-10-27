@@ -133,7 +133,7 @@ def test_receipt_records_existing_unassessed_primary_constraint():
     assert not any('l_leucine' in row['value_display'] for row in _dose_receipt_facts(receipt))
 
 
-def test_undosed_blend_with_unfinished_benchmark_is_not_presented_as_a_clinical_dose():
+def test_undosed_blend_with_reviewed_neutral_reference_is_not_presented_as_a_clinical_dose():
     """A disclosed total proves neither member dose nor completed benchmark review."""
     import copy
     from scoring_v4.modules.generic_evidence import score_evidence
@@ -153,12 +153,12 @@ def test_undosed_blend_with_unfinished_benchmark_is_not_presented_as_a_clinical_
     assert item["assessment"] == "botanical_profile"
     assert item["reference_kind"] == "pharmaguide_policy"
     assert "individual amounts unknown" in item["reference"]
-    # Identity recognition no longer completes the scientific benchmark review.
-    # This real blend has an unresolved review, so zero cannot imply neutral credit.
+    # Reviewed general Dose neutrality does not identify member quantities
+    # or create a clinical regimen comparison for this real blend.
     metadata = artifact["_v4_module_breakdown"]["dimensions"]["dose"]["metadata"]
-    assert metadata["botanical_dose"]["benchmark"] == "unresolved"
-    assert dose["score"] == 0
-    assert dose["receipt"]["entries"] == []
+    assert metadata["botanical_dose"]["benchmark"] == "absent"
+    assert dose["score"] == 11.4
+    assert round(sum(entry["points"] for entry in dose["receipt"]["entries"]), 1) == dose["score"]
     assert "amount_at_minimum" not in item
     assert "reference_value" not in item
     assert dose["explanation"]["dose_receipt"]["reference_assessments"] == []
