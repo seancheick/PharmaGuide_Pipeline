@@ -3,7 +3,7 @@
     "description": "Ingredients backed by clinical research and studies - Enhanced for Section C v3.4.0",
     "purpose": "evidence_scoring",
     "schema_version": "5.6.4",
-    "last_updated": "2026-10-26",
+    "last_updated": "2026-10-27",
     "total_entries": 210,
     "changelog": [
       "2026-10-20: INGR_TART_CHERRY standard_name is Tart Cherry (\"tart cherry extract\" kept as an alias), the rename deferred from PR205. Its juice-only applicability (PR213) rejects every non-juice row the name now reaches; measured on all 552 cherry-mentioning labels: 0 score, pillar or blob changes.",
@@ -18023,7 +18023,7 @@
         "Skin, Hair & Nails"
       ],
       "notes": "Comparative human pharmacokinetic evidence suggests faster uptake and higher short-term serum retention than some standard vitamin C forms, but the evidence base is still small and focused on surrogate biomarkers.",
-      "notable_studies": "Moyad et al. (2008, PMID 18971870) reported higher short-term serum vitamin C levels and lower oxidized LDL and CRP after PureWay-C versus comparator vitamin C forms in healthy volunteers. Supporting mechanistic work includes the cellular uptake study indexed as PMID 17901843, but clinical endpoint data remain limited.",
+      "notable_studies": "Pancorbo et al. (2008, PMID 18971870) reported higher short-term serum vitamin C levels and lower oxidized LDL and CRP after PureWay-C versus comparator vitamin C forms in healthy volunteers. Supporting mechanistic work includes the cellular uptake study indexed as PMID 17901843, but clinical endpoint data remain limited.",
       "study_type": "rct_single",
       "last_updated": "2026-03-06",
       "references_structured": [

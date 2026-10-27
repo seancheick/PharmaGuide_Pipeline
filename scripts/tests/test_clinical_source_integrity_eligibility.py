@@ -325,3 +325,17 @@ def test_hn019_author_comment_access_keeps_combination_and_method_limits():
     assert context['trial_family'] == 'milan_pediatric_urti_probiotic_40085083'
     assert len(context['dose']['component_doses']) == 3
     assert context['clinical_review']['reviewed_at'] == '2026-09-14T22:23:43Z'
+
+
+def test_pureway_human_pk_citation_names_actual_pubmed_authors():
+    """PMID 18971870 is Pancorbo et al.; the cell source stays distinct."""
+    import json
+
+    data = json.loads((Path(__file__).resolve().parents[1] / "data" / "backed_clinical_studies.json").read_text())
+    record = next(row for row in data["backed_clinical_studies"] if row["id"] == "BRAND_PUREWAY_C")
+    citation = record["notable_studies"]
+    assert "Pancorbo et al. (2008, PMID 18971870)" in citation
+    assert "Moyad" not in citation
+    assert "mechanistic" in citation and "cellular" in citation
+    assert "PMID 17901843" in citation
+    assert "clinical endpoint data remain limited" in citation

@@ -1,5 +1,16 @@
 ## Current execution — assessment integrity, October 23 (Codex)
 
+## October 27 — bounded source reconciliation follow-up (qualification pending)
+
+Owner: existing clinical/source/readiness/identity owners; evidence: PR262, source receipts and real-label replays. Will NOT create another scorer, review registry, approval or dose threshold.
+
+- Core candidate `dd0b7254e`: whole-fast40447938661 green on all four shards and merge readiness. Three historical test expectations corrected without weakening held-source protection;182 affected checks pass.
+- Additional display-only source attribution: PMID18971870 is Pancorbo, not Moyad. Fail-first regression,104 owner checks and two affected real labels plus unchanged control; no substantive score/amount/identity/status/eligibility/safety movement. Final CI/integration pending.
+- All146 current subjects reconciled; existing155-row register updated for140 source-preparation items with no new rows, approval/eligibility changes or altered frozen dependencies.74 private pending drafts across49subjects do not close source reviews. Source access gaps and our remaining extraction/mapping are separately recorded.
+- Blanket140-record ineligibility experiment rejected after17 controls exposed loss of a pending formula hold. No production change; no speculative bug fix. Exact preview and evidence preserved before archiving the isolated checkout.
+- Earlier242 behavioral captures/local546passes remain source-scoped; later citation-only delta has separate three-label evidence. No corpus pipeline/export/publication/app update. Required source/benchmark decisions, final corpus/app verification and release authorization remain separate gates.
+
+
 ### Rebuilt corpus verification — October 23, after user run
 
 Owner: assessment_readiness::evaluate_release_assessment and scored_artifact::unfinished_source_assessment; existing stage_manifest, snapshot/export and Flutter pillar/research consumers. Evidence: current manifest hashes, persisted scored receipts, strict gate logs and 23-record consumer harness. Will NOT create a scorer, clinical approval authority, registry or public field. This handoff changes documentation only; no source/clinical policy changed.

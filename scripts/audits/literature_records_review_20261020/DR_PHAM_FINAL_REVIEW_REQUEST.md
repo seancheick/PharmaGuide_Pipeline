@@ -30,7 +30,7 @@ Decision and exact preparation / daily regimen / population / outcome:
 Main limitations or reason the source does not apply:
 Dose-reference or label-limitation conclusion, where relevant:
 What remains missing, if anything:
-Reviewed by / actual review date and time with time zone, or not recorded:
+Reviewed by / actual review date; time and time zone only if recorded:
 ```
 
 **My responsibility is to make the product follow those decisions.** I will connect each accepted source to the right record, fix any mapping or explanation defect, preserve rejected sources and warnings, and prove the result in rebuilt outputs and the app. A check now prevents an unrelated or explicitly excluded source from clearing an assessment. Establishing which sources support the retained grade and correctly transferring your decisions into the system remains my engineering responsibility. You do not need to debug our software or approve its implementation.
@@ -47,6 +47,8 @@ These tables retain the reconciled source questions; they are not a request for 
 ### Current evidence records — 146 canonical records
 
 All 146 have been reconciled to the returned responses. BCM-95, Magtein and peppermint now have structured source records matching the accepted scopes; their remaining product/claim qualifications are separate. Collagen, Theracurmin and Poolzyme retain explicit qualification holds rather than unsupported positive credit. The other 140 lack complete source-specific context decisions in the current records; this is not a request to sign blank fields or repeat a settled answer. I must finish the source mapping and research before presenting any genuinely new decision.
+
+Source preparation advanced on October27: I have74 draft source contexts for49 of the140 outstanding subjects. These are not additional approvals and have not changed the assessment records. The updated supporting register distinguishes papers already inspected, specific missing source details, and the source mapping I still need to finish. Please do not repeat those inspections or sign unfinished extraction. I will present only a genuinely unresolved decision after that preparation is complete. A blanket exclusion was tested and rejected because it could hide an unfinished formula review. Existing holds remain.
 
 The generated collagen assessment is included once under `INGR_COLLAGEN_PEPTIDES`. Original A numbers and source material remain in the historical appendix below. The current remaining question controls wherever an earlier blank or request conflicts with a returned decision.
 

@@ -1,5 +1,17 @@
 # Dr. Bryan responses — batches 1–9, independent verification
 
+## Final source follow-up — October 27, 2026
+
+Core whole-fast CI [40447938661](https://github.com/seancheick/PharmaGuide_Pipeline/actions/runs/40447938661) passed all four shards and merge readiness on `dd0b7254ea201821c914cc2d223eadda4193cd65`. The first run failed three stale tests; the correction uses synthetic eligible collagen evidence for recovery mechanics and retains the real-source holds. Its 182 affected tests passed; no production guard was weakened.
+
+A subsequent source-only correction fixes the author of PMID18971870 from Moyad to Pancorbo. Exact NIH authors are Dario Pancorbo, Carlos Vazquez and Mary Ann Fletcher. The regression failed before correction; 104 owner-file tests passed afterward. Two affected labels269374/299750 and creatine270330 control retained all scores, amounts, identities, roles, status, eligibility and safety. Only the two affected enriched/detail citation strings changed substantively. Replay hashes normalize routine generation timestamps; literal raw JSON bytes are not claimed identical. The final candidate including this correction still requires green CI before merge.
+
+The existing155-row register now records per-source progress for all140 outstanding subjects, preserving IDs, frozen counts, approvals, eligibility, runtime context counts and closure protections. Seventy-four unactivated source-context drafts cover49 subjects (29/19 in the first research lane and45/30 in the second). They are preparation for review, not signed source decisions or applied runtime contexts. Source-specific missing fields and access limitations remain explicit; completed source-body inspection is not confused with full record acceptance. Remaining included-trial mapping and protocol extraction are our work, not a request for a blanket signature.
+
+A private counterfactual holding all140 records was rejected. Seventeen bounded controls showed independent nutrient-authority completion for vitamin D and magnesium, but also a formula whose unfinished source-review hold disappeared after its points were removed. No current held formula reproduces that preview-only case; no speculative production fix or blanket hold was applied. The10,060 source-reference inventories scanned are not10,060 positive clinical contributors. A full paired corpus scoring pass was deliberately not run. The isolated checkout was archived after preserving its exact differences and evidence.
+
+Private source packets, per-ID remaining work and receipts reside in `.claude/state/assessment_review_reconciliation_20261026/`. Existing public registers remain the execution list; no parallel review authority was created. The242 earlier behavioral replays and local546-pass checkpoint remain scoped to their runtime fingerprint; the later author-only delta has its separate three-label proof. No whole-corpus pipeline, export, app update or publication occurred. Clinical and benchmark holds remain; pipeline/publication clearance is not established.
+
 ## Signed-return reconciliation and canonical eligibility — October 26, 2026
 
 **Implemented, measured and independently reviewed; CI qualification/integration pending.** Runtime fixes are committed through `7a98a60dc` (aggregate gate `f68645611`). No whole-corpus rerun, export, app-data update or publication was performed. Dr. Pham's supplied approval date is October26; exact returned scopes are retained without inventing a signing time or approving open questions.
