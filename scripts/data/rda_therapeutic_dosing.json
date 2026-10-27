@@ -3,8 +3,8 @@
     "description": "Therapeutic dosing ranges for clinical efficacy validation",
     "purpose": "Provide therapeutic dosing ranges for dietary supplement ingredients not covered by traditional RDA/UL standards.",
     "schema_version": "5.0.1",
-    "last_updated": "2026-10-19",
-    "total_entries": 43,
+    "last_updated": "2026-10-26",
+    "total_entries": 44,
     "data_source": "Clinical research, meta-analyses, standard therapeutic guidelines"
   },
   "therapeutic_dosing": [
@@ -1671,6 +1671,36 @@
         "owner": "scripts/data/rda_therapeutic_dosing.json::holy_basil_tulsi",
         "review_date": "2026-10-18",
         "approval_status": "approved_existing_neutral_2026_10_18"
+      }
+    },
+    {
+      "id": "neumentix_spearmint_extract",
+      "standard_name": "Neumentix Spearmint Extract",
+      "aliases": [
+        "neumentix",
+        "neumentix phenolic complex k110-42"
+      ],
+      "unit": "mg",
+      "common_use": "Source-specific working-memory findings after sustained use in older adults with age-associated memory impairment; not immediate focus",
+      "references": [
+        "29314866"
+      ],
+      "reference_semantics": {
+        "reference_type": "no_benchmark",
+        "scope": "Completed general Dose threshold decision for the named Neumentix preparation only. No numerical minimum, optimum, general range or safety ceiling is established; clinical applicability remains separate.",
+        "preparation": "Proprietary dried aqueous Mentha spicata aerial-parts extract, at least 14.5%rosmarinic acid and 24%total polyphenols; studied as two capsules with breakfast,600 or 900 mg/day for 90 days. A named hot-water label is not assumed bioequivalent to trial capsules.",
+        "purpose": "Selected working-memory outcomes; no immediate-focus benefit or brewed-spearmint osteoarthritis transfer",
+        "population": "Adults aged 50–70 with age-associated memory impairment in PMID 29314866; no general-population efficacy extrapolation",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "mg",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "https://pubmed.ncbi.nlm.nih.gov/29314866/"
+        ],
+        "rationale": "Returned signed Batch 1 decision accepts 900 mg/day for 90 days as a tested preparation/population-specific regimen, explicitly not a minimum effective dose, optimum or general dose range. Encode the completed no-general-threshold conclusion under the existing neutral Dose policy; this is not a positive efficacy grade, beverage/capsule equivalence, daily-direction inference or safety upper limit. Preserve separate B445 brewed-tea review and source-specific limitations, including multiple comparisons and commercial funding. Sean reconfirmed Dr.Pham approval of the explicit returned decisions on 2026-10-26.",
+        "owner": "scripts/data/rda_therapeutic_dosing.json::neumentix_spearmint_extract",
+        "review_date": "2026-10-26",
+        "approval_status": "approved_existing_neutral_2026_10_26"
       }
     }
   ]

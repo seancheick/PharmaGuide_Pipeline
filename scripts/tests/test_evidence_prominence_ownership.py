@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import json
 import logging
+from copy import deepcopy
 from pathlib import Path
 
 import pytest
@@ -17,6 +18,34 @@ from tests.test_v4_generic_evidence_p133 import _ingredient, _match, _product
 
 
 FIXTURES = Path(__file__).parent / "fixtures"
+
+
+@pytest.fixture
+def eligible_collagen_source(monkeypatch):
+    """Isolate eligible role/lineage behavior from the real collagen hold.
+
+    This synthetic owner fixture is not clinical approval. Production-source
+    exclusions and stale positive matches are checked independently in
+    test_returned_collagen_contexts.
+    """
+    import clinical_applicability as applicability
+    import evidence_resolver
+    from scoring_v4.modules import generic_evidence
+
+    current = applicability.reviewed_entries()
+    source = deepcopy(current["INGR_COLLAGEN_PEPTIDES"])
+    source.update(scoring_eligible=True, effect_direction="positive_strong",
+                  total_enrollment=250, primary_outcome="Skin, Hair & Nails")
+    verified = generic_evidence._verified_ingredient_human_evidence_entries()
+    index = evidence_resolver._backed_studies_index()
+    monkeypatch.setattr(applicability, "reviewed_entries", lambda: {**current, source["id"]: source})
+    monkeypatch.setattr(generic_evidence, "_verified_ingredient_human_evidence_entries",
+                        lambda: tuple(row for row in verified if row["id"] != source["id"]) + (source,))
+    monkeypatch.setattr(evidence_resolver, "_backed_studies_index", lambda: {
+        key: [source if row.get("id") == source["id"] else row for row in rows]
+        for key, rows in index.items()
+    })
+    return source
 
 
 def _raw(fixture: str) -> dict:
@@ -225,7 +254,7 @@ def test_ingredient_recovery_never_serves_a_co_active_the_label_does_not_declare
     assert "INGR_NAC" not in _scored(product)["metadata"]["recovered_matches"]
 
 
-def test_collagen_recovery_follows_prominence():
+def test_collagen_recovery_follows_prominence(eligible_collagen_source):
     collagen = _row("Collagen Peptides", "collagen", 20, unit="Gram(s)", path="ingredientRows[0]",
                     standard_name="Collagen")
     declared = _product(product_name="Collagen Peptides", ingredients=[collagen], matches=[])
@@ -241,7 +270,7 @@ def test_collagen_recovery_follows_prominence():
     assert "RECOVERED_COLLAGEN_PEPTIDES_V1" not in _scored(token)["metadata"]["recovered_matches"]
 
 
-def test_collagen_recovery_uses_exact_preparation_not_relative_mass():
+def test_collagen_recovery_uses_exact_preparation_not_relative_mass(eligible_collagen_source):
     product = _product(
         product_name="Collagen Complex",
         ingredients=[
@@ -537,7 +566,8 @@ def test_a_named_whole_preparation_is_not_its_mapped_component(pid):
 
 
 @pytest.mark.parametrize("peptide_quantity,peptide_unit", [(2, "g"), (2000, "mg")])
-def test_recovered_peptide_amount_is_judged_by_dose_not_evidence(peptide_quantity, peptide_unit):
+def test_recovered_peptide_amount_is_judged_by_dose_not_evidence(
+        peptide_quantity, peptide_unit, eligible_collagen_source):
     from scoring_v4.modules.generic_dose import score_dose
 
     product = _product(
@@ -568,7 +598,7 @@ def test_recovered_peptide_amount_is_judged_by_dose_not_evidence(peptide_quantit
 
 
 @pytest.mark.parametrize("reverse_rows", [False, True])
-def test_recovered_peptide_match_preserves_its_actual_source_row(reverse_rows):
+def test_recovered_peptide_match_preserves_its_actual_source_row(reverse_rows, eligible_collagen_source):
     from scoring_v4.modules.generic_evidence import resolved_clinical_matches
     rows = [
         _row("Bovine Hide Collagen", "collagen", 5, unit="g", path="ingredientRows[0]", standard_name="Collagen"),
@@ -596,7 +626,7 @@ def test_ambiguous_unreferenced_peptide_recovery_cannot_borrow_a_shared_name(pep
 
 
 @pytest.mark.parametrize("reverse_rows", [False, True])
-def test_equal_peptide_amounts_prefer_available_source_lineage(reverse_rows):
+def test_equal_peptide_amounts_prefer_available_source_lineage(reverse_rows, eligible_collagen_source):
     from scoring_v4.modules.generic_evidence import resolved_clinical_matches
     rows = [
         _row("Collagen", "collagen", 3, unit="g", collagen_subtype="peptides_i_iii"),
@@ -612,7 +642,7 @@ def test_equal_peptide_amounts_prefer_available_source_lineage(reverse_rows):
     assert _evidence(product)["score"] > 0
 
 
-def test_same_named_peptide_preparation_links_its_separate_declarations():
+def test_same_named_peptide_preparation_links_its_separate_declarations(eligible_collagen_source):
     from scoring_v4.modules.generic_evidence import resolved_clinical_matches
     rows = [
         _row("Hydrolyzed Collagen Type 1 & 3", "collagen", 6, unit="g",
@@ -723,7 +753,7 @@ def test_parent_tier_requires_canonical_lineage_or_a_linked_lent_member(monkeypa
 
 
 @pytest.mark.parametrize('purpose,accepted', [('skin hydration', True), ('testosterone', False), ('energy', False)])
-def test_collagen_recovery_retains_canonical_endpoint_scope(purpose, accepted):
+def test_collagen_recovery_retains_canonical_endpoint_scope(purpose, accepted, eligible_collagen_source):
     from scoring_v4.modules.generic_evidence import resolved_clinical_matches
     product = _product(product_name='Collagen Peptides', ingredients=[
         _row('Hydrolyzed Collagen Peptides', 'collagen', 5, unit='g',

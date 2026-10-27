@@ -679,9 +679,14 @@ def audit_enrichment(args: argparse.Namespace) -> list[Finding]:
                     if missing:
                         findings.append(Finding("ENRICHMENT_PRODUCT_EVIDENCE_FIELD_MISSING", f"{pid}: scoreable product evidence missing {missing}", str(file_path)))
                     if evidence.get("evidence_type") == "probiotic_cfu":
-                        taxonomy_primary_type = str(_safe_dict(product.get("supplement_taxonomy")).get("primary_type") or "").lower()
-                        if taxonomy_primary_type != "probiotic":
-                            findings.append(Finding("ENRICHMENT_PRODUCT_CFU_FALSE_POSITIVE", f"{pid}: scoreable probiotic_cfu evidence on non-probiotic taxonomy {taxonomy_primary_type!r}", str(file_path)))
+                        from scoring_input_contract import derive_product_scoring_evidence
+
+                        canonical_cfu = [
+                            row for row in derive_product_scoring_evidence(product)
+                            if row.get("evidence_type") == "probiotic_cfu"
+                        ]
+                        if not canonical_cfu:
+                            findings.append(Finding("ENRICHMENT_PRODUCT_CFU_FALSE_POSITIVE", f"{pid}: scoreable probiotic_cfu evidence lacks canonical identity/provenance qualification", str(file_path)))
                 elif evidence.get("evidence_type") == "probiotic_cfu" and not evidence.get("rejection_reason"):
                     findings.append(Finding("ENRICHMENT_PRODUCT_CFU_REJECTION_REASON_MISSING", f"{pid}: rejected probiotic_cfu evidence lacks rejection_reason", str(file_path)))
 

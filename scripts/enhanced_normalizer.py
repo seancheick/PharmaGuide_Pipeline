@@ -8054,7 +8054,26 @@ class EnhancedDSLDNormalizer:
             group_id, group_db = self._resolve_canonical_identity(
                 ingredient_group, raw_name=ingredient_group,
             )
-            if group_db == "botanical_ingredients" and group_id:
+            group_parent = self.ingredient_map.get(group_id, {})
+            declared_sources = [form for form in forms_structured
+                                if form.get("category") == "botanical"]
+            source_aliases = {
+                norm_module.make_normalized_key(alias)
+                for form in (group_parent.get("forms") or {}).values()
+                for alias in form.get("source_form_aliases") or []
+            }
+            group_is_botanical = group_db == "botanical_ingredients" or (
+                group_db == "ingredient_quality_map"
+                and str(group_parent.get("category") or "").lower()
+                in {"herbs", "herb", "botanical", "botanicals"}
+                and bool(declared_sources)
+                and all(
+                    self._resolve_canonical_identity("", raw_name=form.get("name"))[0] == group_id
+                    or norm_module.make_normalized_key(form.get("name")) in source_aliases
+                    for form in declared_sources
+                )
+            )
+            if group_is_botanical and group_id:
                 canonical_id, canonical_source_db = group_id, group_db
                 standard_name = self._canonical_identity_registry.standard_names.get(
                     (group_db, group_id), name,
@@ -10335,7 +10354,11 @@ class EnhancedDSLDNormalizer:
         """Parts explicitly named by the label's botanical source forms."""
         return sorted({part for form in forms or []
                        if isinstance(form, dict)
-                       and form.get("category") in {None, "", "botanical"}
+                       and (form.get("category") in {None, "", "botanical"}
+                            or (form.get("category") == "blend"
+                                and form.get("ingredientGroup") == "Blend (Herb/Botanical)"
+                                and str(form.get("name") or "").strip().lower()
+                                in self._PLANT_PART_TOKENS))
                        and (part := self._infer_plant_part_from_name(form.get("name") or ""))})
 
     def _infer_plant_part_from_name(self, ingredient_name: str) -> Optional[str]:

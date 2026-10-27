@@ -10,7 +10,7 @@ from __future__ import annotations
 import math
 import re
 from collections.abc import Mapping
-from datetime import datetime, timedelta
+from datetime import date, datetime, timedelta
 from decimal import Decimal, InvalidOperation
 from functools import lru_cache
 
@@ -632,6 +632,11 @@ def clinical_review_provenance_valid(context) -> bool:
         return False
     if not isinstance(reviewed_at, str) or not reviewed_at.strip():
         return False
+    if re.fullmatch(r"\d{4}-\d{2}-\d{2}", reviewed_at.strip()):
+        try:
+            return date.fromisoformat(reviewed_at.strip()) <= date.today()
+        except ValueError:
+            return False
     try:
         parsed = datetime.fromisoformat(reviewed_at.strip().replace("Z", "+00:00"))
     except ValueError:

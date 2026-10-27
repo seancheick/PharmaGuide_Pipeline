@@ -187,15 +187,6 @@ _VITAMIN_D_IU_PER_MCG = 40.0
 _RECOVERED_COLLAGEN_PEPTIDES_MATCH = {
     "id": "RECOVERED_COLLAGEN_PEPTIDES_V1",
     "ingredient": "collagen",
-    "standard_name": "Collagen",
-    "study_type": "systematic_review_meta",
-    "evidence_level": "ingredient-human",
-    "effect_direction": "positive_strong",
-    "total_enrollment": 250,
-    "published_studies_count": 26,
-    "min_clinical_dose": 2500,
-    "max_studied_clinical_dose": 20000,
-    "dose_unit": "mg",
     "evidence_origin": "scoring_contract_recovery",
     "source_data": "backed_clinical_studies:INGR_COLLAGEN_PEPTIDES",
 }
@@ -422,12 +413,9 @@ def score_evidence(product: Dict[str, Any], *, apply_primary_floor: bool = False
         # Recovery IDs describe the numerical diagnostic path, not a second
         # clinical record. Resolve its existing source pointer for dependency
         # review only; the selected points and recovered-match IDs stay intact.
-        source = str(entry.get("source_data") or "")
-        if (entry.get("evidence_origin") == "scoring_contract_recovery"
-                and source.startswith("backed_clinical_studies:")):
-            source_id = source.split(":", 1)[1]
-            if source_id in reviewed_entries():
-                entry = {**entry, "id": source_id}
+        source_id = _clinical_source_id(entry)
+        if source_id in reviewed_entries():
+            entry = {**entry, "id": source_id}
         decision = assess_clinical_applicability(product, entry, assess_amount=False)
         if (entry.get("evidence_origin") == "verified_formula_contract"
                 and entry.get("applicability_assessment", {}).get("status") == "assessed_studied_formula"):
@@ -717,11 +705,16 @@ def resolved_clinical_matches(
         matches = [entry for entry in matches if _entry_id(entry) != formula["id"]]
         matches.append(formula)
     from evidence_resolver import clinical_record_sources_eligible
+    from clinical_applicability import reviewed_entries
     # Reference-only context remains visible in provenance; its existing
     # point/floor guards still award zero. Explicit clinical holds are removed.
     matches = [
         entry for entry in matches
-        if clinical_record_sources_eligible(entry)
+        if ((_clinical_source_id(entry) == _entry_id(entry)
+             or _clinical_source_id(entry) in reviewed_entries())
+            and clinical_record_sources_eligible(
+                reviewed_entries().get(_clinical_source_id(entry), entry))
+            and clinical_record_sources_eligible(entry))
         or (_norm_text(entry.get("study_type")) == "reference"
             and entry.get("scoring_eligible") is not False)
     ]
@@ -768,17 +761,12 @@ def _recover_contract_evidence_matches(
         peptide_row is not None
         and not _has_match_for_identity(matches, "collagen")
         and is_collagen_product(product)
+        and (source := next((row for row in _verified_ingredient_human_evidence_entries()
+                             if _entry_id(row) == _RECOVERED_COLLAGEN_PEPTIDES_MATCH["source_data"].split(":", 1)[1]), None))
     ):
-        entry = dict(_RECOVERED_COLLAGEN_PEPTIDES_MATCH)
+        entry = {**source, **_RECOVERED_COLLAGEN_PEPTIDES_MATCH}
         # Recovery keeps its existing identity/dose contract, but the cited
         # registry remains the owner of supported purposes and applicability.
-        source_id = entry["source_data"].split(":", 1)[1]
-        source = next((row for row in _verified_ingredient_human_evidence_entries()
-                       if _entry_id(row) == source_id), {})
-        for key in ("primary_outcome", "health_goals_supported", "endpoint_relevance_tags",
-                    "key_endpoints", "applicability"):
-            if key in source:
-                entry[key] = source[key]
         entry["matched_term"] = peptide_row.get("name") or peptide_row.get("standard_name")
         entry["matched_canonical_id"] = peptide_row.get("canonical_id")
         _stamp_recovery_source_ref(entry, peptide_row)
@@ -1821,6 +1809,14 @@ def _entry_id(entry: Dict[str, Any]) -> str:
             _norm_text(entry.get("evidence_level")),
         ]
     )
+
+
+def _clinical_source_id(entry: Dict[str, Any]) -> str:
+    source = str(entry.get("source_data") or "")
+    if (entry.get("evidence_origin") == "scoring_contract_recovery"
+            and source.startswith("backed_clinical_studies:")):
+        return source.split(":", 1)[1]
+    return _entry_id(entry)
 
 
 def _canonical_from_entry(entry: Dict[str, Any]) -> str:

@@ -780,3 +780,22 @@ def test_recognized_identity_without_benchmark_review_stays_unfinished(monkeypat
     assert score_botanical_dose(product)["metadata"]["benchmark"] == "unresolved"
     assert artifact["quality_pillars_v4"]["dose"]["score"] == 0
     assert artifact["quality_assessment_status"] == "partial"
+
+
+def test_neumentix_review_completes_general_threshold_without_borrowing_spearmint_tea():
+    from scoring_v4.modules.botanical_profile import _botanical_benchmark, _dosing_entry_for
+    row = {'canonical_id': 'spearmint', 'standard_name': 'Spearmint',
+           'name': 'Neumentix Phenolic Complex K110-42', 'matched_form': 'neumentix spearmint extract'}
+    entry = _dosing_entry_for(row)
+    assert entry is not None
+    assert entry['id'] == 'neumentix_spearmint_extract'
+    assert entry['reference_semantics']['reference_type'] == 'no_benchmark'
+    assert entry['references'] == ['29314866']
+    assert _botanical_benchmark(row) == 'absent'
+    assert not entry.get('typical_dosing_range')
+    assert not entry.get('upper_limit')
+    for generic in [
+        {'canonical_id': 'spearmint', 'name': 'Spearmint tea', 'matched_form': 'spearmint (unspecified)'},
+        {'canonical_id': 'spearmint', 'name': 'Spearmint extract', 'matched_form': 'spearmint extract'},
+    ]:
+        assert _botanical_benchmark(generic) == 'unresolved'

@@ -265,3 +265,12 @@ def test_finished_individual_review_preserves_combination_research(registry, rec
                 else "no_qualifying_human_evidence")
     assert evidence["metadata"]["evidence_result_state"] == expected
     assert studied_formulas.assess_probiotic_component_disposition(product)["disposition_state"] == expected
+
+
+@pytest.mark.parametrize("value,accepted", [("2026-09-13", True), ("2999-01-01", False), ("2026-02-30", False)])
+def test_dated_approval_preserves_supplied_date_precision(value, accepted):
+    row = positive_rct(approved=True)
+    row["clinical_review"]["reviewed_at"] = value
+    assert pm.context_accepted_for_scoring(row) is accepted
+    row["scoring_eligible"] = False
+    assert pm.context_accepted_for_scoring(row) is False

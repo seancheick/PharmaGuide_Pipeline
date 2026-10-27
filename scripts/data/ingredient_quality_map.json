@@ -26965,7 +26965,8 @@
           "cereboost american ginseng (panax quinquefolius) extract",
           "cereboost american ginseng extract",
           "cereboost",
-          "american ginseng root extract"
+          "american ginseng root extract",
+          "standardized american ginseng extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -26997,7 +26998,6 @@
           "red chinese ginseng",
           "american white ginseng",
           "panax ginseng leaf, stem extract",
-          "standardized american ginseng extract",
           "Asian Ginseng (4:1) - Manchurian"
         ],
         "dosage_importance": 1.0,
@@ -64355,7 +64355,7 @@
           "by": "Product owner approval",
           "date": "2026-08-08"
         },
-        "notes": "Neumentix® by Kemin Industries. Proprietary high-polyphenol spearmint bred for elevated rosmarinic acid and 50+ phenolic compounds. 5 clinical trials support cognitive performance, reaction time, and working memory at 900mg/day x 90 days; onset at 7 days (PMID 29314866, 30802720). Superior to standard spearmint extract. B28 audit 2026-04-25: Neumentix Crominex pattern; rosmarinic acid class-poor.",
+        "notes": "Neumentix is a proprietary dried aqueous Mentha spicata aerial-parts extract. PMID 29314866 studied 600 or 900 mg/day in capsules for 90 days in 90 adults aged 50–70 with age-associated memory impairment; 900 mg/day improved selected working-memory outcomes versus placebo. Analyses were not adjusted for multiple comparisons, and Kemin funded the study. PMID 30802720 reports a separate 142-participant trial in healthy recreationally active adults using 900 mg/day for 90 days: selected sustained-attention outcomes favored extract at days 30/90 and a complex-attention difference was reported at day 7; mood, sleep and quality of life did not differ. These source-specific findings do not establish an immediate focus benefit, a general onset time, superiority to standard spearmint extract, a minimum effective dose or equivalence to a hot-water beverage. The tested 900 mg/day regimen remains descriptive, not a universal dosing target.",
         "aliases": [
           "neumentix",
           "neumentix spearmint",

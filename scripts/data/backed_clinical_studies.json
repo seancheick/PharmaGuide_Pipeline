@@ -743,9 +743,9 @@
       "health_goals_supported": [
         "Joint & Bone Health"
       ],
-      "notes": "Curcumin-turmeric-oil formulation with explicit branded randomized evidence in knee osteoarthritis; broader mood and inflammatory support exists, but much of that literature is curcumin-level rather than uniquely BCM-95-specific. Cited active-comparator studies report 139 randomized and 144 completers, respectively. Enrollment and completion are distinct; no unique aggregate is asserted. The diclofenac study was open-label and the paracetamol study assessed non-inferiority, not placebo superiority. Retained-source scope and limitations: Knee osteoarthritis pain/function in an open-label active-comparator trial, not placebo-controlled depression evidence (PMID: 30975196) Knee osteoarthritis active-comparator non-inferiority outcomes; not proof of general equivalence or depression benefit (PMID: 33516238)",
+      "notes": "Curcumin-turmeric-oil formulation with explicit branded randomized evidence in knee osteoarthritis; broader mood and inflammatory support exists, but much of that literature is curcumin-level rather than uniquely BCM-95-specific. Full results of the active-comparator studies report 149 enrolled and 139 analyzed in the diclofenac study, and 193 randomized and 144 completers in the paracetamol study. Enrollment and completion are distinct; no unique aggregate is asserted. The diclofenac study was open-label and the paracetamol study assessed non-inferiority, not placebo superiority. Retained-source scope and limitations: Knee osteoarthritis pain/function in an open-label active-comparator trial, not placebo-controlled depression evidence (PMID: 30975196) Knee osteoarthritis active-comparator non-inferiority outcomes; not proof of general equivalence or depression benefit (PMID: 33516238) Source-specific contexts extracted from the signed bounded A003 return. Sean attests Dr. Pham approved those explicit dispositions on 2026-10-26; clock time was not supplied. Approval concerns the recorded source relationships only; exact retail-product applicability and stronger non-inferiority interpretations remain separately unresolved.",
       "study_type": "rct_multiple",
-      "last_updated": "2026-10-11",
+      "last_updated": "2026-10-26",
       "notable_studies": "Shep et al. (2019, PMID 30975196) compared BCM-95 against diclofenac in knee osteoarthritis and reported similar symptom improvement with fewer GI complaints. Singhal et al. (2021, PMID 33516238) also tested BCM-95 against paracetamol in knee osteoarthritis. Depression evidence exists for curcumin more broadly, but the clearest directly indexed BCM-95 anchors are musculoskeletal.",
       "references_structured": [
         {
@@ -821,14 +821,189 @@
       "external_ids": {
         "unii": "IT942ZTH98"
       },
-      "effect_direction": "positive_strong",
+      "effect_direction": "mixed",
       "primary_outcome": "Joint & Bone Health",
       "total_enrollment": null,
       "registry_completed_trials_count": 4,
       "effect_direction_confidence": "medium",
-      "effect_direction_rationale": "Source-content attribution reconciled against retained primary references on2026-10-23. Current descriptive direction: positive_strong. Actual measured outcomes and source limitations are recorded separately. This is not attributable clinician approval; existing clinical context holds remain.",
+      "effect_direction_rationale": "The 2026-10-23 source-attribution screen was not approval. Dr. Pham's scoped 2026-10-26 acceptance, attested by Sean, now covers the two recorded active-comparator source contexts only. The descriptive direction is mixed under the scoped source decisions; the retained tier_1 grade is provisional: this source-context acceptance does not validate that broad grade, placebo superiority or general drug equivalence. Exact retail-product applicability and any stronger non-inferiority interpretation remain unresolved.",
       "endpoint_relevance_tags": [
         "joint_pain"
+      ],
+      "study_contexts": [
+        {
+          "context_schema_version": "1.1.0",
+          "components": [
+            "BRAND_BCM95"
+          ],
+          "identity_scope": "branded_material",
+          "identity": {
+            "branded_material": "BCM-95/Curcugreen",
+            "manufacturer": "Arjuna Natural Ltd., Kerala, India",
+            "standardization": "Curcuminoids and turmeric essential-oil complex at least 95%; curcuminoids at least 88%; curcumin at least 68%."
+          },
+          "exposure_basis": "supplement_dose",
+          "route": "oral",
+          "evidence_role": "direct_rct",
+          "component_registration_status": "fully_registered",
+          "condition": "knee_osteoarthritis",
+          "purpose": "treatment",
+          "review_status": "clinician_approved",
+          "human_status": "confirmed",
+          "source_integrity": "none",
+          "context_id": "bcm95_knee_oa_30975196",
+          "source_pmids": [
+            "30975196"
+          ],
+          "trial_family": "bcm95_knee_oa_30975196",
+          "population": {
+            "age_group": "adult",
+            "description": "Adults aged 38–65 with symptomatic radiographically confirmed knee osteoarthritis and moderate knee pain; full results report 149 enrolled and 139 analyzed."
+          },
+          "study_design": "randomized open-label parallel-group active-comparator trial versus diclofenac 50 mg twice daily",
+          "outcomes": [
+            {
+              "name": "VAS knee pain change versus diclofenac",
+              "hierarchy": "primary",
+              "kind": "patient_important",
+              "direction": "null",
+              "outcome_role": "direct_between_group_effect"
+            }
+          ],
+          "limitations": [
+            "Both groups improved from baseline; no significant between-group pain difference, not placebo superiority or established drug equivalence.",
+            "Open-label subjective outcomes, short follow-up, retrospective registration and no placebo arm.",
+            "Abstract/returned response calls 139 randomized; full Results reports 149 enrolled and 139 completed/analyzed. No unique enrollment aggregate is inferred.",
+            "Arjuna supplied capsules; no funding declared in the paper. Short-term tolerability does not establish long-term safety.",
+            "Exact retail-product matching remains separate; these source contexts do not approve product matching or establish a minimum effective dose."
+          ],
+          "dose": {
+            "measurement_type": "mass",
+            "unit": "mg",
+            "values": [
+              1500
+            ],
+            "dose_status": "verified",
+            "dose_basis": "nominal_assigned_arm",
+            "duration_basis": "fixed_protocol",
+            "duration_days": 28,
+            "duration_as_printed": {
+              "value": 28,
+              "unit": "days"
+            },
+            "administration_frequency": "three times daily",
+            "dosage_forms": [
+              "hard gelatin capsule"
+            ],
+            "co_therapies": [
+              "Paracetamol 500 mg as rescue medication",
+              "Ranitidine 150 mg as rescue medication"
+            ],
+            "reported_regimen": "500 mg BCM-95 capsule three times daily for 28 days",
+            "normalization": {
+              "basis": "500 mg of the complete branded curcuminoid/turmeric-oil complex per capsule multiplied by the reported daily administrations; not isolated curcumin mass."
+            },
+            "source_provenance": {
+              "pmid": "30975196",
+              "location": "Full text Methods: Interventions and dosage",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/30975196/"
+            }
+          },
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-10-26",
+            "scope": "identity_dose_outcome_applicability"
+          }
+        },
+        {
+          "context_schema_version": "1.1.0",
+          "components": [
+            "BRAND_BCM95"
+          ],
+          "identity_scope": "branded_material",
+          "identity": {
+            "branded_material": "BCM-95/Curcugreen",
+            "manufacturer": "Arjuna Natural Ltd., Kerala, India",
+            "standardization": "Curcuminoids and turmeric essential-oil complex at least 95%; curcuminoids at least 88%; curcumin at least 68%."
+          },
+          "exposure_basis": "supplement_dose",
+          "route": "oral",
+          "evidence_role": "direct_rct",
+          "component_registration_status": "fully_registered",
+          "condition": "knee_osteoarthritis",
+          "purpose": "treatment",
+          "review_status": "clinician_approved",
+          "human_status": "confirmed",
+          "source_integrity": "none",
+          "context_id": "bcm95_knee_oa_33516238",
+          "source_pmids": [
+            "33516238"
+          ],
+          "trial_family": "bcm95_knee_oa_33516238",
+          "population": {
+            "age_group": "adult",
+            "description": "Adults aged 40–80 with symptomatic radiographic knee osteoarthritis; 193 randomized and 144 completed (73 turmeric extract, 71 paracetamol)."
+          },
+          "study_design": "randomized active-controlled non-inferiority study versus paracetamol 650 mg three times daily",
+          "outcomes": [
+            {
+              "name": "WOMAC pain versus paracetamol under the reported non-inferiority margin",
+              "hierarchy": "primary",
+              "kind": "patient_important",
+              "direction": "mixed",
+              "outcome_role": "direct_between_group_effect"
+            },
+            {
+              "name": "TNF-alpha change adjusted for baseline versus paracetamol",
+              "hierarchy": "secondary",
+              "kind": "surrogate",
+              "direction": "positive",
+              "outcome_role": "surrogate"
+            }
+          ],
+          "limitations": [
+            "Authors report non-inferiority under their chosen margins; this is not placebo superiority or universal drug equivalence.",
+            "Baseline-adjusted WOMAC pain changes did not differ between groups (p=0.9293); CRP change was also not significantly different. Do not convert within-group improvement into superiority.",
+            "Patients and physicians were unblinded after allocation; 49 of 193 randomized participants did not complete.",
+            "Margin derivation, randomized-subject supplementary analysis and original registry history require separate appraisal before stronger non-inferiority claims.",
+            "No funding declared; Arjuna supplied capsules. A biomarker difference does not establish patient-important superiority.",
+            "Exact retail-product matching remains separate; these source contexts do not approve product matching or establish a minimum effective dose."
+          ],
+          "dose": {
+            "measurement_type": "mass",
+            "unit": "mg",
+            "values": [
+              1000
+            ],
+            "dose_status": "verified",
+            "dose_basis": "nominal_assigned_arm",
+            "duration_basis": "fixed_protocol",
+            "duration_days": 42,
+            "duration_as_printed": {
+              "value": 6,
+              "unit": "weeks"
+            },
+            "administration_frequency": "twice daily",
+            "dosage_forms": [
+              "hard gelatin capsule"
+            ],
+            "co_therapies": [],
+            "reported_regimen": "500 mg BCM-95 capsule twice daily for six weeks",
+            "normalization": {
+              "basis": "500 mg of the complete branded curcuminoid/turmeric-oil complex per capsule multiplied by the reported daily administrations; not isolated curcumin mass."
+            },
+            "source_provenance": {
+              "pmid": "33516238",
+              "location": "Full text Methods: Study intervention and Sequence generation, allocation concealment, and implementation",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/33516238/"
+            }
+          },
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-10-26",
+            "scope": "identity_dose_outcome_applicability"
+          }
+        }
       ]
     },
     {
@@ -853,9 +1028,9 @@
         "Focus & Mental Clarity",
         "Joint & Bone Health"
       ],
-      "notes": "Highly bioavailable curcumin formulation with explicit randomized evidence in knee osteoarthritis and age-associated memory endpoints. Cited studies enrolled 50 knee-OA patients, randomized 46 non-demented adults, of whom 40 entered the reported analysis, and enrolled 50 mosaicplasty patients. Unique cohort overlap is unresolved; the mosaicplasty trial is not a memory-study follow-up and did not show between-group clinical symptom superiority. The primary memory paper reports 180 mg active curcumin/day for 18 months. Selected nominal findings were positive; multiple comparisons were not adjusted and the 30-person PET substudy was exploratory. Main-paper access is resolved; supplement, original registration history and exact commercial-product correspondence remain separate review dependencies.",
+      "notes": "AFFIRMATIVE BRAND QUALIFICATION HELD under the signed scoped return: exact saved-edition correspondence and final memory acceptance are not established. Existing source facts and historical grade remain, but scoring_eligible=false prevents their unsupported use. Highly bioavailable curcumin formulation with explicit randomized evidence in knee osteoarthritis and age-associated memory endpoints. Cited studies enrolled 50 knee-OA patients, randomized 46 non-demented adults, of whom 40 entered the reported analysis, and enrolled 50 mosaicplasty patients. Unique cohort overlap is unresolved; the mosaicplasty trial is not a memory-study follow-up and did not show between-group clinical symptom superiority. The primary memory paper reports 180 mg active curcumin/day for 18 months. Selected nominal findings were positive; multiple comparisons were not adjusted and the 30-person PET substudy was exploratory. Main-paper access is resolved; supplement, original registration history and exact commercial-product correspondence remain separate review dependencies.",
       "study_type": "rct_multiple",
-      "last_updated": "2026-10-25",
+      "last_updated": "2026-10-26",
       "notable_studies": "PMID 25308211 enrolled 50 knee-OA patients; PMID 29246725 randomized 46 non-demented adults, of whom 40 entered the reported analysis for 18 months. PMID 35494290 independently enrolled 50 patients after knee mosaicplasty for 12 months; between-group clinical symptom differences were nonsignificant. It is not follow-up of the memory cohort.",
       "references_structured": [
         {
@@ -961,16 +1136,322 @@
       "external_ids": {
         "unii": "IT942ZTH98"
       },
-      "effect_direction": "positive_strong",
+      "effect_direction": "mixed",
       "primary_outcome": "Focus & Mental Clarity",
       "total_enrollment": null,
       "registry_completed_trials_count": 5,
       "effect_direction_confidence": "medium",
-      "effect_direction_rationale": "Cited studies enrolled 50 knee-OA patients, randomized 46 non-demented adults, of whom 40 entered the reported analysis, and enrolled 50 mosaicplasty patients. Unique cohort overlap is unresolved; the mosaicplasty trial is not a memory-study follow-up and did not show between-group clinical symptom superiority.",
+      "effect_direction_rationale": "Signed Batch 4 retains mixed, outcome-specific findings and explicitly holds all four saved-edition applications. OA has an overall null and restricted-analysis signal; postoperative clinical symptoms are null with selected surrogates. The memory source retains final affirmative acceptance pending the specific residual appraisal/product questions; source access is not approval. Existing historical tier is not validated by this migration. Memory trial randomized 46 non-demented adults;40 entered the reported analysis,37 completed and 30 entered paired PET. Source-specific denominators remain distinct, not a verified unique aggregate enrollment.",
       "endpoint_relevance_tags": [
         "focus_memory",
         "joint_pain"
-      ]
+      ],
+      "study_contexts": [
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "theracurmin_knee_oa_25308211",
+          "source_pmids": [
+            "25308211"
+          ],
+          "components": [
+            "BRAND_THERACURMIN"
+          ],
+          "identity_scope": "branded_material",
+          "identity": {
+            "branded_material": "Theracurmin",
+            "manufacturer": "Theravalues Corporation, Tokyo, Japan",
+            "standardization": "Surface-controlled water-dispersible curcumin preparation; the reported 180 mg/day is active curcumin, not total formulation mass."
+          },
+          "exposure_basis": "supplement_dose",
+          "route": "oral",
+          "evidence_role": "direct_rct",
+          "component_registration_status": "fully_registered",
+          "condition": "knee_osteoarthritis",
+          "purpose": "treatment",
+          "population": {
+            "age_group": "adult",
+            "description": "Adults over 40 with gradeII–III knee osteoarthritis;50 enrolled,41 analyzed(18 active/23 placebo)."
+          },
+          "study_design": "Randomized double-blind placebo-controlled pilot trial.",
+          "trial_family": "theracurmin_knee_oa_25308211",
+          "review_status": "clinician_approved",
+          "human_status": "confirmed",
+          "source_integrity": "none",
+          "scoring_eligible": false,
+          "dose": {
+            "measurement_type": "mass",
+            "unit": "mg",
+            "values": [
+              180
+            ],
+            "dose_status": "verified",
+            "dose_basis": "nominal_assigned_arm",
+            "duration_basis": "fixed_protocol",
+            "duration_days": 56,
+            "duration_as_printed": {
+              "value": 8,
+              "unit": "weeks"
+            },
+            "administration_frequency": "twice daily",
+            "dosage_forms": [
+              "oral capsule"
+            ],
+            "co_therapies": [
+              "Celecoxib and pain-relief patches permitted."
+            ],
+            "reported_regimen": "180 mg active curcumin/day in two administrations; 8 weeks",
+            "normalization": {
+              "basis": "Reported active curcumin daily exposure, not the total Theracurmin formulation or capsule mass; no preparation-equivalence multiplier or effective-dose threshold is inferred."
+            },
+            "source_provenance": {
+              "pmid": "25308211",
+              "location": "Original study intervention and reported outcomes; signed Batch4 source disposition and later Batch11 memory-paper appraisal where specified.",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/25308211/"
+            }
+          },
+          "limitations": [
+            "The signed return retains exact saved-label correspondence for 201110,205153,212953,259371; this context cannot authorize generic curcumin or a formulation-mass equivalence.",
+            "Source-specific acceptance does not establish a new efficacy grade, minimum effective dose, optimum or safety ceiling.",
+            "One-sided tests, small pilot, attrition and a restricted analysis whose prospective prespecification is not established; the favorable subset cannot replace the overall null.",
+            "Six capsules/day delivered 180 mg active curcumin, not 180 mg total formulation. Theravalues funded the study and company employees were authors; reported symptoms led to two active-arm discontinuations."
+          ],
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-10-26",
+            "scope": "identity_dose_outcome_applicability"
+          },
+          "outcomes": [
+            {
+              "name": "Overall analyzed VAS knee-pain change, p=.10",
+              "hierarchy": "unresolved",
+              "kind": "patient_important",
+              "direction": "null",
+              "outcome_role": "direct_between_group_effect"
+            },
+            {
+              "name": "Restricted baseline-pain VAS analysis, p=.023",
+              "hierarchy": "post_hoc",
+              "kind": "patient_important",
+              "direction": "positive",
+              "outcome_role": "post_hoc_subgroup"
+            },
+            {
+              "name": "JKOM and JOA knee-function outcomes",
+              "hierarchy": "unresolved",
+              "kind": "patient_important",
+              "direction": "null",
+              "outcome_role": "direct_between_group_effect"
+            }
+          ]
+        },
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "theracurmin_memory_29246725",
+          "source_pmids": [
+            "29246725"
+          ],
+          "components": [
+            "BRAND_THERACURMIN"
+          ],
+          "identity_scope": "branded_material",
+          "identity": {
+            "branded_material": "Theracurmin",
+            "manufacturer": "Theravalues Corporation, Tokyo, Japan",
+            "standardization": "Surface-controlled water-dispersible curcumin preparation; the reported 180 mg/day is active curcumin, not total formulation mass."
+          },
+          "exposure_basis": "supplement_dose",
+          "route": "oral",
+          "evidence_role": "direct_rct",
+          "component_registration_status": "fully_registered",
+          "condition": "age_associated_memory_complaints",
+          "purpose": "treatment",
+          "population": {
+            "age_group": "adult",
+            "description": "Selected non-demented middle-aged/older adults concerned about memory;46 randomized,40included in neuropsychological analyses,37 completed and 30 paired PET participants."
+          },
+          "study_design": "Randomized double-blind placebo-controlled 18-month pilot study.",
+          "trial_family": "theracurmin_memory_29246725",
+          "review_status": "source_verified_pending_clinical_review",
+          "human_status": "confirmed",
+          "source_integrity": "none",
+          "scoring_eligible": false,
+          "dose": {
+            "measurement_type": "mass",
+            "unit": "mg",
+            "values": [
+              180
+            ],
+            "dose_status": "verified",
+            "dose_basis": "nominal_assigned_arm",
+            "duration_basis": "fixed_protocol",
+            "duration_days": null,
+            "duration_as_printed": {
+              "value": 18,
+              "unit": "months"
+            },
+            "administration_frequency": "twice daily",
+            "dosage_forms": [
+              "oral capsule"
+            ],
+            "co_therapies": [
+              "No transfer to an unselected population or arbitrary concomitant-treatment regimen is established."
+            ],
+            "reported_regimen": "180 mg active curcumin/day in two administrations; 18 months",
+            "normalization": {
+              "basis": "Reported active curcumin daily exposure, not the total Theracurmin formulation or capsule mass; no preparation-equivalence multiplier or effective-dose threshold is inferred."
+            },
+            "source_provenance": {
+              "pmid": "29246725",
+              "location": "Original study intervention and reported outcomes; signed Batch4 source disposition and later Batch11 memory-paper appraisal where specified.",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/29246725/"
+            }
+          },
+          "limitations": [
+            "The signed return retains exact saved-label correspondence for 201110,205153,212953,259371; this context cannot authorize generic curcumin or a formulation-mass equivalence.",
+            "Source-specific acceptance does not establish a new efficacy grade, minimum effective dose, optimum or safety ceiling.",
+            "Final affirmative acceptance remains held as explicitly returned. Main-paper/current-registry/protocol access is resolved in Batch 11; journal supplement, original registration/amendment history and exact commercial-product correspondence remain open.",
+            "No multiplicity adjustment, selected small sample and exploratory PET. Do not substitute within-active changes for between-group effects or claim immediate focus, dementia prevention or proven amyloid/tau clearance.",
+            "Eighteen calendar months are preserved as printed; no 540-day conversion is invented. The primary abstract confirms 90 mg active curcumin twice daily; original-paper appraisal distinguishes 46 randomized from 40 analyzed.",
+            "The current registry and paper differ on some dates/adverse-event counts; retain the discrepancies. A renewed official-repository PDF request returned an empty response, not a new completed full-text retrieval."
+          ],
+          "outcomes": [
+            {
+              "name": "SRT consistent long-term retrieval between groups, nominal p=.05",
+              "hierarchy": "primary",
+              "kind": "patient_important",
+              "direction": "mixed",
+              "outcome_role": "direct_between_group_effect"
+            },
+            {
+              "name": "SRT total and BVMT-R recall/delay between groups",
+              "hierarchy": "primary",
+              "kind": "patient_important",
+              "direction": "null",
+              "outcome_role": "direct_between_group_effect"
+            },
+            {
+              "name": "Trail Making Test A attention, nominal p=.04",
+              "hierarchy": "secondary",
+              "kind": "patient_important",
+              "direction": "positive",
+              "outcome_role": "direct_between_group_effect"
+            },
+            {
+              "name": "BDI mood between groups",
+              "hierarchy": "secondary",
+              "kind": "patient_important",
+              "direction": "null",
+              "outcome_role": "direct_between_group_effect"
+            },
+            {
+              "name": "Exploratory FDDNP-PET regional tracer binding; amygdala between-group p=.07, hypothalamus p=.02",
+              "hierarchy": "unresolved",
+              "kind": "surrogate",
+              "direction": "mixed",
+              "outcome_role": "surrogate"
+            }
+          ]
+        },
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "theracurmin_post_mosaicplasty_35494290",
+          "source_pmids": [
+            "35494290"
+          ],
+          "components": [
+            "BRAND_THERACURMIN"
+          ],
+          "identity_scope": "branded_material",
+          "identity": {
+            "branded_material": "Theracurmin",
+            "manufacturer": "Theravalues Corporation, Tokyo, Japan",
+            "standardization": "Surface-controlled water-dispersible curcumin preparation; the reported 180 mg/day is active curcumin, not total formulation mass."
+          },
+          "exposure_basis": "supplement_dose",
+          "route": "oral",
+          "evidence_role": "direct_rct",
+          "component_registration_status": "fully_registered",
+          "condition": "post_mosaicplasty_knee_osteochondral_disease",
+          "purpose": "treatment",
+          "population": {
+            "age_group": "adult",
+            "description": "Adults over 20 after knee mosaicplasty;50 randomized,43 analyzed(23 active/20 placebo), often with additional surgery and rehabilitation."
+          },
+          "study_design": "Randomized double-blind placebo-controlled postoperative trial.",
+          "trial_family": "theracurmin_post_mosaicplasty_35494290",
+          "review_status": "clinician_approved",
+          "human_status": "confirmed",
+          "source_integrity": "none",
+          "scoring_eligible": false,
+          "dose": {
+            "measurement_type": "mass",
+            "unit": "mg",
+            "values": [
+              180
+            ],
+            "dose_status": "verified",
+            "dose_basis": "nominal_assigned_arm",
+            "duration_basis": "fixed_protocol",
+            "duration_days": 364,
+            "duration_as_printed": {
+              "value": 52,
+              "unit": "weeks"
+            },
+            "administration_frequency": "twice daily",
+            "dosage_forms": [
+              "oral capsule"
+            ],
+            "co_therapies": [
+              "Mosaicplasty, sometimes additional osteotomy, and postoperative rehabilitation."
+            ],
+            "reported_regimen": "180 mg active curcumin/day in two administrations; 52 weeks",
+            "normalization": {
+              "basis": "Reported active curcumin daily exposure, not the total Theracurmin formulation or capsule mass; no preparation-equivalence multiplier or effective-dose threshold is inferred."
+            },
+            "source_provenance": {
+              "pmid": "35494290",
+              "location": "Original study intervention and reported outcomes; signed Batch4 source disposition and later Batch11 memory-paper appraisal where specified.",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/35494290/"
+            }
+          },
+          "limitations": [
+            "The signed return retains exact saved-label correspondence for 201110,205153,212953,259371; this context cannot authorize generic curcumin or a formulation-mass equivalence.",
+            "Source-specific acceptance does not establish a new efficacy grade, minimum effective dose, optimum or safety ceiling.",
+            "No demonstrated symptom superiority; selected mechanical findings do not establish cartilage regeneration or general OA disease modification. This is a separate surgical cohort, not follow-up of the memory trial.",
+            "Small heterogeneous surgical population, multiple measurements and one-sided tests; clear prospective primary/secondary hierarchy not established in the reviewed report.",
+            "Theravalues funded the study. Serious events occurred in both groups and were judged unrelated by the study safety committee; this is not general long-term safety proof."
+          ],
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-10-26",
+            "scope": "identity_dose_outcome_applicability"
+          },
+          "outcomes": [
+            {
+              "name": "Between-group JOA, VAS and JKOM clinical symptoms",
+              "hierarchy": "unresolved",
+              "kind": "patient_important",
+              "direction": "null",
+              "outcome_role": "direct_between_group_effect"
+            },
+            {
+              "name": "MRI T2 mapping",
+              "hierarchy": "unresolved",
+              "kind": "surrogate",
+              "direction": "null",
+              "outcome_role": "surrogate"
+            },
+            {
+              "name": "Selected arthroscopic cartilage stiffness and surface roughness",
+              "hierarchy": "unresolved",
+              "kind": "surrogate",
+              "direction": "positive",
+              "outcome_role": "surrogate"
+            }
+          ]
+        }
+      ],
+      "scoring_eligible": false
     },
     {
       "id": "BRAND_FORCEVAL",
@@ -5189,21 +5670,17 @@
       ],
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "skin hydration ↑",
-        "skin elasticity ↑",
-        "wrinkles ↓",
-        "joint health ↑",
-        "collagen density ↑"
+        "Skin hydration and elasticity measurements (preparation-specific, limited)",
+        "Knee osteoarthritis pain/function (bias and comparator limitations)"
       ],
       "health_goals_supported": [
-        "Healthy Aging/Longevity",
         "Skin, Hair & Nails",
         "Joint & Bone Health"
       ],
-      "notes": "Collagen evidence is outcome- and preparation-specific. PMID 37432180 pooled 26 RCTs (1,721 participants) and reported hydration/elasticity benefits with identified study biases. PMID 40324552 pooled 23 RCTs (1,474 participants): overall skin results were favorable, but benefits were absent in non-pharmaceutical-funded and high-quality subgroups, and the authors did not support a current clinical skin-aging treatment claim. Knee-osteoarthritis evidence is separate: PMID 37717022 pooled four trials (507 participants), all rated high risk of bias, with heterogeneous pain benefit and uncertain adverse-event evidence. A specific 10 g hydrolyzed preparation in PMID 39839727 cannot establish universal equivalence or a dose threshold for all collagen products. Generated collagen recovery requires a traceable applicable source context and authentic approval; no clinical clearance is implied.",
-      "notable_studies": "PMID 37432180 and PMID 40324552 assess skin outcomes and reach materially different conclusions after study-quality and funding sensitivity analysis; their overlapping trial cohorts are not independent replication. PMID 37717022 assesses knee-OA pain and reports all included studies at high risk of bias. PMID 39839727 evaluates a specific hydrolyzed collagen preparation in grade II/III knee OA. Skin hydration/elasticity, OA pain and longevity are different outcomes and must not substitute for one another.",
+      "notes": "Signed A059/A148 review rejects affirmative generic-product qualification from these four sources without eligible preparation/dose/population/outcome correspondence. Favorable pooled skin measurements are retained with co-active, quality and funding limitations; OA pooling has an unresolved active-comparator/repeated-outcome problem; COLLinstant is a collagen-plus-calcium-ascorbate formula, not monotherapy. This is a scoped eligibility hold, not a penalty or a claim that all collagen is ineffective. Source-specific reviewed limitations are recorded separately from unresolved applicability/full-text questions. Dr.Pham signed the returned decisions; approval date2026-10-26 supplied by the operator.",
+      "notable_studies": "37432180: favorable pooled skin measurements with heterogeneous/co-active preparations and bias concerns.40324552: overall favorable estimates but no significant benefit in non-pharmaceutical-funded and high-quality subgroups; full methods/supplement still inaccessible.37717022: all included trials rated high risk of bias; limited OA pain signal, Trc active comparator and repeated forest-input issues prevent an uncontested placebo claim.39839727:10g collagen plus80mg calcium ascorbate daily formula for six months; retrospectively registered, industry-funded, exact formula applicability still held. These overlapping sources are not independent replication or a universal dose.",
       "study_type": "systematic_review_meta",
-      "last_updated": "2026-10-24",
+      "last_updated": "2026-10-26",
       "references_structured": [
         {
           "type": "pubmed",
@@ -5307,18 +5784,359 @@
           "verification_source": "pubmed_eutils"
         }
       ],
-      "effect_direction": "positive_strong",
-      "primary_outcome": "Healthy Aging/Longevity",
-      "total_enrollment": 250,
-      "registry_completed_trials_count": 13,
-      "effect_direction_confidence": "high",
-      "effect_direction_rationale": "Retained positive_strong classification; study_type=systematic_review_meta; evidence_level=ingredient-human; primary_outcome=Healthy Aging/Longevity; published_tags=RCT,meta-analysis,systematic_review; registry_completed_trials_count=13; total_enrollment=250; endpoint_tags=joint_health,cardiovascular,glycemic_control,muscle_recovery; notes/citations contain no automated downgrade signals.",
+      "total_enrollment": null,
+      "registry_completed_trials_count": null,
+      "effect_direction_rationale": "No aggregate affirmative direction is assigned while generic-product qualification is held. Preserve each reported favorable, null, sensitivity and combination finding without inventing a replacement efficacy grade.",
       "endpoint_relevance_tags": [
-        "joint_health",
-        "cardiovascular",
-        "glycemic_control",
-        "muscle_recovery"
-      ]
+        "skin_health",
+        "joint_pain"
+      ],
+      "study_contexts": [
+        {
+          "context_schema_version": "1.1.0",
+          "components": [
+            "INGR_COLLAGEN_PEPTIDES"
+          ],
+          "identity_scope": "ingredient_general",
+          "identity": {
+            "chemical_form": "Hydrolyzed collagen preparations differ across source studies."
+          },
+          "exposure_basis": "supplement_dose",
+          "route": "oral",
+          "evidence_role": "meta_analysis",
+          "component_registration_status": "fully_registered",
+          "purpose": "treatment",
+          "review_status": "clinician_approved",
+          "human_status": "confirmed",
+          "source_integrity": "none",
+          "scoring_eligible": false,
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-10-26",
+            "scope": "identity_dose_outcome_applicability"
+          },
+          "context_id": "collagen_skin_37432180",
+          "source_pmids": [
+            "37432180"
+          ],
+          "trial_family": "collagen_skin_meta_pu_2023",
+          "condition": "skin_hydration_elasticity",
+          "population": {
+            "age_group": "adult",
+            "description": "Review reports 26 randomized trials and1721 participants; preparations, populations, doses and duration differ."
+          },
+          "study_design": "Systematic review and meta-analysis of oral hydrolyzed preparations; outcomes and some co-active formulations differ.",
+          "included_study_pmids": [
+            "23949208",
+            "31627309",
+            "26362110",
+            "30513923",
+            "24131075",
+            "32195722",
+            "26840887",
+            "31221944",
+            "32009486",
+            "24401291",
+            "24955642",
+            "25732262",
+            "28528342",
+            "30122200",
+            "29949889",
+            "32120787",
+            "32017646",
+            "32530124",
+            "32799362",
+            "33521019",
+            "33774639",
+            "34959923",
+            "35342502"
+          ],
+          "outcomes": [
+            {
+              "name": "Reported pooled skin hydration and elasticity measurements",
+              "hierarchy": "primary",
+              "kind": "surrogate",
+              "direction": "positive",
+              "outcome_role": "direct_between_group_effect"
+            }
+          ],
+          "limitations": [
+            "The signed return rejects unqualified generic-product efficacy; a source-specific favorable finding does not establish equivalence of retail preparations.",
+            "No transfer to BioCell, UC-II, cartilage regeneration, exercise recovery or longevity, and no universal collagen efficacy dose.",
+            "Original saved-label preparation, component dose, regimen and outcome correspondence remain separately required.",
+            "Favorable pooled measurements do not establish visible rejuvenation or every product. Missing-data, deviations and reporting-bias concerns remain.",
+            "The Methods say combination supplements were excluded, but included Table1 references include astaxanthin, vitamins, coenzymeQ10, ornithine or other active formulations; isolated-collagen attribution is not established.",
+            "Some included references have no verified PMID; no identifier is invented. Review reports hospital funding and no conflicts, which does not establish independence of its underlying trials.",
+            "The later funding/quality-sensitive review and DOI10.1111/jocd.71208 methodological challenge must not be omitted; that critique is not a formal retraction and its reanalysis is not independently reproduced here."
+          ],
+          "dose": {
+            "measurement_type": "mass",
+            "unit": "g",
+            "values": [],
+            "dose_status": "source_not_reported",
+            "dose_basis": "not_applicable",
+            "duration_basis": "not_recorded",
+            "administration_frequency": "Varies across included preparations; no single pooled regimen.",
+            "dosage_forms": [
+              "Different oral hydrolyzed preparations, including distinct combination products"
+            ],
+            "co_therapies": [
+              "Additional active ingredients vary by study; no common monotherapy regimen is established."
+            ],
+            "source_provenance": {
+              "pmid": "37432180",
+              "location": "Full text Methods, Table1, risk-of-bias assessment and Discussion.",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/37432180/"
+            }
+          }
+        },
+        {
+          "context_schema_version": "1.1.0",
+          "components": [
+            "INGR_COLLAGEN_PEPTIDES"
+          ],
+          "identity_scope": "ingredient_general",
+          "identity": {
+            "chemical_form": "Hydrolyzed collagen preparations differ across source studies."
+          },
+          "exposure_basis": "supplement_dose",
+          "route": "oral",
+          "evidence_role": "meta_analysis",
+          "component_registration_status": "fully_registered",
+          "purpose": "treatment",
+          "review_status": "clinician_approved",
+          "human_status": "confirmed",
+          "source_integrity": "none",
+          "scoring_eligible": false,
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-10-26",
+            "scope": "identity_dose_outcome_applicability"
+          },
+          "context_id": "collagen_skin_funding_40324552",
+          "source_pmids": [
+            "40324552"
+          ],
+          "trial_family": "collagen_skin_meta_myung_2025",
+          "condition": "skin_aging",
+          "population": {
+            "age_group": "adult",
+            "description": "Abstract reports23 randomized trials and1474 participants; exact subgroup assignments require full methods/supplement."
+          },
+          "study_design": "Systematic review/meta-analysis with funding and study-quality subgroup sensitivity analyses; abstract and publisher disclosures reviewed.",
+          "included_study_pmids": "extraction_pending",
+          "outcomes": [
+            {
+              "name": "Overall pooled hydration, elasticity and wrinkle measurements",
+              "hierarchy": "primary",
+              "kind": "surrogate",
+              "direction": "positive",
+              "outcome_role": "direct_between_group_effect"
+            },
+            {
+              "name": "Non-pharmaceutical-funded and high-quality subgroups",
+              "hierarchy": "secondary",
+              "kind": "surrogate",
+              "direction": "null",
+              "outcome_role": "direct_between_group_effect"
+            }
+          ],
+          "limitations": [
+            "The signed return rejects unqualified generic-product efficacy; a source-specific favorable finding does not establish equivalence of retail preparations.",
+            "No transfer to BioCell, UC-II, cartilage regeneration, exercise recovery or longevity, and no universal collagen efficacy dose.",
+            "Original saved-label preparation, component dose, regimen and outcome correspondence remain separately required.",
+            "The signed decision rejects an unqualified general skin-aging claim because benefits were absent in non-pharmaceutical-funded and high-quality subgroups.",
+            "Funding sensitivity does not prove that each industry-funded study is false or every preparation ineffective.",
+            "Original full methods, tables and supplement were not accessible; subgroup definitions, trial allocation, estimates and overlap remain unresolved. This is not a completed full-text appraisal."
+          ],
+          "dose": {
+            "measurement_type": "mass",
+            "unit": "g",
+            "values": [],
+            "dose_status": "source_not_reported",
+            "dose_basis": "not_applicable",
+            "duration_basis": "not_recorded",
+            "administration_frequency": "Varies across included preparations; no single pooled regimen.",
+            "dosage_forms": [
+              "Different oral hydrolyzed preparations, including distinct combination products"
+            ],
+            "co_therapies": [
+              "Additional active ingredients vary by study; no common monotherapy regimen is established."
+            ],
+            "source_provenance": {
+              "pmid": "40324552",
+              "location": "Original abstract Results/Conclusions and publisher disclosures; no numerical dose accepted.",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/40324552/"
+            }
+          }
+        },
+        {
+          "context_schema_version": "1.1.0",
+          "components": [
+            "INGR_COLLAGEN_PEPTIDES"
+          ],
+          "identity_scope": "ingredient_general",
+          "identity": {
+            "chemical_form": "Hydrolyzed collagen preparations differ across source studies."
+          },
+          "exposure_basis": "supplement_dose",
+          "route": "oral",
+          "evidence_role": "meta_analysis",
+          "component_registration_status": "fully_registered",
+          "purpose": "treatment",
+          "review_status": "clinician_approved",
+          "human_status": "confirmed",
+          "source_integrity": "none",
+          "scoring_eligible": false,
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-10-26",
+            "scope": "identity_dose_outcome_applicability"
+          },
+          "context_id": "collagen_knee_meta_37717022",
+          "source_pmids": [
+            "37717022"
+          ],
+          "trial_family": "collagen_knee_meta_2023",
+          "condition": "knee_osteoarthritis",
+          "population": {
+            "age_group": "adult",
+            "description": "Review reports four studies/507 participants, with main pain analysis of three studies/375 participants; knee-OA grades and preparations differ."
+          },
+          "study_design": "Meta-analysis of randomized knee-OA studies, including an active-comparator trial and a combination arm.",
+          "included_study_pmids": [
+            "19212858",
+            "20401752"
+          ],
+          "outcomes": [
+            {
+              "name": "Reported pooled knee pain signal",
+              "hierarchy": "primary",
+              "kind": "patient_important",
+              "direction": "positive",
+              "outcome_role": "direct_between_group_effect"
+            }
+          ],
+          "limitations": [
+            "The signed return rejects unqualified generic-product efficacy; a source-specific favorable finding does not establish equivalence of retail preparations.",
+            "No transfer to BioCell, UC-II, cartilage regeneration, exercise recovery or longevity, and no universal collagen efficacy dose.",
+            "Original saved-label preparation, component dose, regimen and outcome correspondence remain separately required.",
+            "All included studies were rated high risk of bias; heterogeneity and uncertain adverse-event evidence remain.",
+            "Table1 identifies Trc2011 control as1.5g/day glucosamine sulfate, not placebo, despite the review labeling its pooled contrast placebo-controlled.",
+            "Post-hoc pooling repeats pain measures from the same cohort. Original-trial/forest-input reconciliation is still unresolved; no numerical pooled placebo-superiority claim is accepted.",
+            "A nonsignificant adverse-event contrast does not establish equal safety."
+          ],
+          "dose": {
+            "measurement_type": "mass",
+            "unit": "g",
+            "values": [],
+            "dose_status": "source_not_reported",
+            "dose_basis": "not_applicable",
+            "duration_basis": "not_recorded",
+            "administration_frequency": "Varies across included preparations; no single pooled regimen.",
+            "dosage_forms": [
+              "Different oral hydrolyzed preparations, including distinct combination products"
+            ],
+            "co_therapies": [
+              "Additional active ingredients vary by study; no common monotherapy regimen is established."
+            ],
+            "source_provenance": {
+              "pmid": "37717022",
+              "location": "Full text Tables1–3, pain forest plots and post-hoc analysis.",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/37717022/"
+            }
+          }
+        },
+        {
+          "context_schema_version": "1.1.0",
+          "components": [
+            "INGR_COLLAGEN_PEPTIDES",
+            "calcium_ascorbate"
+          ],
+          "identity_scope": "combination",
+          "identity": {
+            "branded_material": "COLLinstant",
+            "manufacturer": "NutraResearch SL, Barcelona, Spain; COLLinstant material from Viscofan DE GmbH, Weinheim, Germany.",
+            "standardization": "Bovine hydrolyzed typeI/III collagen, reported average molecular weight1–3kDa, with calcium ascorbate."
+          },
+          "exposure_basis": "supplement_dose",
+          "route": "oral",
+          "evidence_role": "direct_rct",
+          "component_registration_status": "unregistered_components_present",
+          "purpose": "treatment",
+          "review_status": "clinician_approved",
+          "human_status": "confirmed",
+          "source_integrity": "none",
+          "scoring_eligible": false,
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-10-26",
+            "scope": "identity_dose_outcome_applicability"
+          },
+          "context_id": "collinstant_formula_39839727",
+          "source_pmids": [
+            "39839727"
+          ],
+          "trial_family": "collinstant_NCT05149053",
+          "condition": "knee_osteoarthritis",
+          "population": {
+            "age_group": "adult",
+            "description": "Adults at least30 years with symptomatic Kellgren-Lawrence gradeII–III kneeOA; paper reports120 randomized and120 completers with substantial medical/treatment exclusions."
+          },
+          "study_design": "Randomized double-blind placebo-controlled single-centre six-month whole-formula trial; registry retrospectively posted.",
+          "outcomes": [
+            {
+              "name": "Pain and functional limitation after six months",
+              "hierarchy": "primary",
+              "kind": "patient_important",
+              "direction": "positive",
+              "outcome_role": "direct_between_group_effect"
+            }
+          ],
+          "limitations": [
+            "The signed return rejects unqualified generic-product efficacy; a source-specific favorable finding does not establish equivalence of retail preparations.",
+            "No transfer to BioCell, UC-II, cartilage regeneration, exercise recovery or longevity, and no universal collagen efficacy dose.",
+            "Original saved-label preparation, component dose, regimen and outcome correspondence remain separately required.",
+            "Whole formula supplies10g collagen plus80mg calcium ascorbate per daily sachet; not collagen monotherapy. No conversion of calcium-ascorbate compound mass into vitaminC mass.",
+            "Funding from Nutraresearch andViscofan; reported complete follow-up and no adverse events do not prove comprehensive ascertainment or general safety.",
+            "NCT05149053 first submitted after study completion; registry-listed endpoints are not evidence of prospective registration.",
+            "Final whole-formula acceptance and exact-product correspondence remain held. The tested recipe cannot establish a universal10g collagen threshold.",
+            "The paper reports10.728g whole-sachet powder including excipients; the recorded10000mg exposure is explicitly the collagen component, not total sachet mass."
+          ],
+          "dose": {
+            "measurement_type": "mass",
+            "unit": "mg",
+            "values": [
+              10000
+            ],
+            "dose_status": "verified",
+            "dose_basis": "nominal_assigned_arm",
+            "duration_basis": "fixed_protocol",
+            "duration_days": null,
+            "duration_as_printed": {
+              "value": 6,
+              "unit": "months"
+            },
+            "administration_frequency": "once daily, preferably in the morning",
+            "dosage_forms": [
+              "Sachet dissolved in approximately200mL liquid"
+            ],
+            "co_therapies": [
+              "80mg calcium ascorbate in the same study sachet; this is an active co-component."
+            ],
+            "reported_regimen": "One daily sachet containing10g hydrolyzed collagen plus80mg calcium ascorbate for six months.",
+            "normalization": {
+              "basis": "10000mg is the reported collagen component within the complete assigned formula, not the whole-sachet mass or isolated-collagen efficacy dose; no vitaminC mass conversion. The source reports six calendar months; no exact day count is inferred."
+            },
+            "source_provenance": {
+              "pmid": "39839727",
+              "location": "Full text Materials andMethods sections2.2–2.4, Results and funding disclosures; NCT05149053 registrydates independently checked.",
+              "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11745964/"
+            }
+          }
+        }
+      ],
+      "scoring_eligible": false
     },
     {
       "id": "INGR_HYALURONIC_ACID",
@@ -10409,9 +11227,9 @@
       "health_goals_supported": [
         "Digestive Health"
       ],
-      "notes": "Placebo-controlled functional dyspepsia trial (PMID 37976892) evaluated Poolzyme Multi, a named five-enzyme fungal fermentation preparation (amylase, protease, cellulase, lactase, lipase; 200 mg at lunch and 200 mg at dinner). Does not transfer to standalone protease, lipase, amylase, cellulase, or animal pancreatin. Retained-source scope and limitations: Dyspepsia quality-of-life, pain and sleep outcomes for a specific multi-enzyme combination; not measured nutrient absorption or isolated-enzyme efficacy (PMID: 37976892)",
+      "notes": "Placebo-controlled functional dyspepsia trial (PMID 37976892) evaluated Poolzyme Multi, a named five-enzyme fungal fermentation preparation (amylase, protease, cellulase, lactase, lipase; 200 mg at lunch and 200 mg at dinner). Does not transfer to standalone protease, lipase, amylase, cellulase, or animal pancreatin. Retained-source scope and limitations: Dyspepsia quality-of-life, pain and sleep outcomes for a specific multi-enzyme combination; not measured nutrient absorption or isolated-enzyme efficacy (PMID: 37976892) Source context records the verified120participant trial, not the previous unsupported168aggregate or seven-trial count. ISRCTN67691215 documents retrospective registration relative to first enrolment. The signed returned decision retains source acceptance; no clinician-approved context is created. Exact RAW-product transfer is rejected, not inferred from shared enzyme names or mass. The existing scoring_eligible=false hold withholds affirmative scoring and benefit qualification until a qualifying exact-scope final decision resolves the signed source-acceptance hold. It adds no penalty, makes no unsafe-product claim and does not delete the trial or its reported findings.",
       "study_type": "rct_single",
-      "last_updated": "2026-10-25",
+      "last_updated": "2026-10-26",
       "notable_studies": "One placebo-controlled dyspepsia trial (PMID 37976892) evaluated Poolzyme Multi, a named five-enzyme fungal preparation in functional dyspepsia. Applicability requires matching multi-enzyme fungal formulation facts; standalone discrete enzymes do not inherit this evidence.",
       "references_structured": [
         {
@@ -10452,13 +11270,104 @@
       ],
       "effect_direction": "positive_strong",
       "primary_outcome": "Digestive Health",
-      "total_enrollment": 168,
-      "registry_completed_trials_count": 7,
+      "total_enrollment": 120,
+      "registry_completed_trials_count": null,
       "effect_direction_confidence": "medium",
-      "effect_direction_rationale": "Source-content attribution reconciled against retained primary references on2026-10-23. Current descriptive direction: positive_strong. Actual measured outcomes and source limitations are recorded separately. This is not attributable clinician approval; existing clinical context holds remain.",
+      "effect_direction_rationale": "The retained positive_strong/tier_2 classification is provisional, not validated by the pending source context. The signed return confirms a named Poolzyme Multi preparation and reported trial exposure but explicitly retains final acceptance until outcome tables, registration timing and ethics documentation are reconciled. This is not final source approval or exact retail-formula efficacy.",
       "endpoint_relevance_tags": [
         "digestive_health"
-      ]
+      ],
+      "study_contexts": [
+        {
+          "context_id": "poolzyme_multi_dyspepsia_37976892",
+          "context_schema_version": "1.1.0",
+          "source_pmids": [
+            "37976892"
+          ],
+          "components": [
+            "INGR_DIGESTIVE_ENZYMES"
+          ],
+          "identity_scope": "branded_material",
+          "identity": {
+            "branded_material": "Poolzyme Multi",
+            "standardization": "Five-enzyme fungal fermentation preparation containing amylase, protease, lactase, cellulase and lipase; samples supplied by Giellepi. Exact activity specifications remain a preparation-correspondence requirement."
+          },
+          "exposure_basis": "supplement_dose",
+          "route": "oral",
+          "evidence_role": "direct_rct",
+          "component_registration_status": "fully_registered",
+          "condition": "functional_dyspepsia",
+          "purpose": "treatment",
+          "population": {
+            "age_group": "adult",
+            "description": "120 adults aged18–59 with functional dyspepsia (63men,57women), randomized1:1; registry specifies RomeIV diagnosis."
+          },
+          "dose": {
+            "measurement_type": "mass",
+            "unit": "mg",
+            "values": [
+              400
+            ],
+            "dose_status": "verified",
+            "dose_basis": "nominal_assigned_arm",
+            "duration_basis": "fixed_protocol",
+            "duration_days": 60,
+            "duration_as_printed": {
+              "value": 60,
+              "unit": "days"
+            },
+            "administration_frequency": "One200mg capsule at lunch and one200mg capsule at dinner.",
+            "dosage_forms": [
+              "capsule"
+            ],
+            "co_therapies": [],
+            "reported_regimen": "Two200mg whole-Poolzyme-Multi capsules daily for60days, lunch and dinner.",
+            "normalization": {
+              "basis": "Two capsules/day multiplied by200mg whole-enzyme preparation per capsule=400mg/day; this does not determine individual enzyme masses or activity equivalence."
+            },
+            "source_provenance": {
+              "pmid": "37976892",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/37976892/",
+              "location": "PubMed abstract intervention, outcomes and population; returned batch6 original-methods extraction; ISRCTN67691215 intervention60days"
+            }
+          },
+          "outcomes": [
+            {
+              "name": "dyspepsia_related_quality_of_life_NDI_SF",
+              "hierarchy": "primary",
+              "kind": "patient_important",
+              "direction": "unresolved"
+            },
+            {
+              "name": "pain_severity_VAS",
+              "hierarchy": "secondary",
+              "kind": "patient_important",
+              "direction": "unresolved"
+            },
+            {
+              "name": "sleep_quality_PSQI",
+              "hierarchy": "secondary",
+              "kind": "patient_important",
+              "direction": "unresolved"
+            }
+          ],
+          "limitations": [
+            "Returned signed decision accepts preparation naming and reported study exposure, but explicitly retains final source acceptance pending complete outcome-table, registration and ethics appraisal; no final clinical approval is inferred.",
+            "ISRCTN67691215 records first enrolment16June2023 and registration28June2023; do not describe the trial as prospectively registered. Registry ethics approval is7November2022, Comitato Etico Campania Centro, reference591. Conflicting dates/identifiers reported in paper sections still require the full original report or author clarification.",
+            "Primary abstract reports improvement, but complete between-group estimates, analyzed-population handling and outcome tables require original full-text appraisal before a definitive efficacy assessment.",
+            "Poolzyme Multi is not RAW Enzymes275412. Shared enzyme names, fungal origin or larger total mass do not establish the same preparation, enzyme activities, isolated-enzyme efficacy or equivalent potency.",
+            "No universal400mg/day enzyme efficacy threshold, nutrient-absorption claim or exact retail-formula efficacy is established.",
+            "No external funding and no competing interests were reported in the returned full-report review; Giellepi supplied samples. A short single-center trial with no post-treatment follow-up does not establish comprehensive safety.",
+            "Empty co_therapies records none extracted; registry permits recorded functional-dyspepsia medications. Their actual use must be checked before interpreting the trial as unconfounded standalone therapy."
+          ],
+          "review_status": "source_verified_pending_clinical_review",
+          "human_status": "confirmed",
+          "source_integrity": "none",
+          "study_design": "randomized double-blind placebo-controlled single-center trial",
+          "trial_family": "poolzyme_dyspepsia_37976892"
+        }
+      ],
+      "scoring_eligible": false
     },
     {
       "id": "INGR_INULIN",
@@ -15691,17 +16600,15 @@
       ],
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "memory ↑",
-        "cognition ↑",
-        "sleep quality ↑",
-        "cognitive age ↓"
+        "Preliminary cognitive-test outcomes in selected adults (PMID41601871)",
+        "Mixed sleep-related outcomes with important null results (PMID39252819)",
+        "MagteinPS whole-formula memory outcomes, not isolated-Magtein replication (PMID36558392)"
       ],
       "health_goals_supported": [
         "Focus & Mental Clarity",
-        "Sleep Quality",
-        "Healthy Aging/Longevity"
+        "Sleep Quality"
       ],
-      "notes": "The cited evidence includes different preparations and outcomes. PMID 36558392 tested MagteinPS, a combination of magnesium L-threonate, phosphatidylserine, vitamins C and D, and vitamin B6, not isolated Magtein. PMID 41601871 found benefits on selected cognition and subjective sleep-related impairment outcomes, but no between-group differences in objective sleep outcomes or several other sleep measures. The 21-day sleep trial is PMID 39252819; PMID 40567408 is its linked corrigendum, not an independent trial. Selected questionnaire and wearable outcomes improved, while many measures did not differ from placebo. The correction reports that the sleep trial was retrospectively registered on April 15, 2024; AIDP commissioned and funded the study, owns patents, and disclosed paid relationships with three authors. The authors state that the protocol was unchanged. Correction-content access is resolved; preparation-specific applicability and product review remain held. None of these facts supplies clinician approval or a universal dose threshold.",
+      "notes": "The cited evidence includes different preparations and outcomes. PMID 36558392 tested MagteinPS, a combination of magnesium L-threonate, phosphatidylserine, vitamins C and D, and vitamin B6, not isolated Magtein. PMID 41601871 found benefits on selected cognition and subjective sleep-related impairment outcomes, but no between-group differences in objective sleep outcomes or several other sleep measures. The 21-day sleep trial is PMID 39252819; PMID 40567408 is its linked corrigendum, not an independent trial. Selected questionnaire and wearable outcomes improved, while many measures did not differ from placebo. The correction reports that the sleep trial was retrospectively registered on April 15, 2024; AIDP commissioned and funded the study, owns patents, and disclosed paid relationships with three authors. The authors state that the protocol was unchanged. Correction-content access is resolved; preparation-specific applicability and product review remain held. The earlier source-verification facts alone did not establish approval or a universal dose threshold; the subsequent scoped signed decisions are recorded below. Signed A011 source-context decisions are recorded with Dr.Pham approval dated2026-10-26 as attested by Sean; no clock time was supplied. PMID41601871 publisher correction DOI10.3389/fnut.2026.2010644 supersedes stale one-tailed wording: analyses were two-tailed, reported results unchanged. Exact retail-label correspondence remains separate; no biological age reversal, longevity benefit or general effective dose range follows.",
       "last_updated": "2026-10-26",
       "notable_studies": "PMID 36558392 randomized 109 healthy Chinese adults to a 2 g/day MagteinPS combination or placebo for 30 days. PMID 41601871 randomized 100 adults aged 18-45 with dissatisfied sleep to 2 g/day Magtein or placebo for six weeks; NIH composite cognition and some subjective outcomes improved, but Raven performance and objective sleep outcomes did not. PMID 39252819 randomized 80 adults aged 35-55 with sleep problems to 1 g/day Magtein or placebo for 21 days; selected subjective and wearable measures improved. PMID 40567408 corrects that article and must not be counted as another trial.",
       "references_structured": [
@@ -15733,7 +16640,9 @@
           "evidence_grade": "rct",
           "retracted": false,
           "supports_claims": [],
-          "verification_source": "pubmed_eutils"
+          "verification_source": "pubmed_eutils",
+          "scoring_eligible": false,
+          "note": "Signed A011 decision: retain the MagteinPS combination as formula context only; not independent isolated-Magtein efficacy or component attribution."
         },
         {
           "type": "pubmed",
@@ -15795,12 +16704,275 @@
       "external_ids": {
         "unii": "I38ZP9992A"
       },
-      "effect_direction": "positive_strong",
+      "effect_direction": "mixed",
       "primary_outcome": "Focus & Mental Clarity",
       "effect_direction_confidence": "medium",
-      "effect_direction_rationale": "Existing positive_strong classification retained pending attributable clinical synthesis; no new grade is assigned. The cited sources differ in formulation, endpoints and trial family. A correction notice is not an independent trial; combination-formula findings cannot establish isolated Magtein efficacy. Historical automated enrollment/count summaries do not establish evidence strength.",
+      "effect_direction_rationale": "Dr. Pham's scoped 2026-10-26 acceptance, attested by Sean, covers the recorded preliminary mixed sleep and selected cognitive-test relationships, with the MagteinPS combination excluded from isolated-Magtein credit. The descriptive direction is mixed under the scoped source decisions; the retained tier_1 grade is provisional: source-context acceptance does not validate a broad strong grade, uniform sleep improvement, biological age reversal or longevity benefit. Exact retail-product correspondence remains separately unresolved; correction notices are provenance, not independent trials.",
       "endpoint_relevance_tags": [
         "focus_memory"
+      ],
+      "study_contexts": [
+        {
+          "context_schema_version": "1.1.0",
+          "components": [
+            "BRAND_MAGTEIN"
+          ],
+          "identity_scope": "branded_material",
+          "identity": {
+            "branded_material": "Magtein magnesium L-threonate",
+            "manufacturer": "Threotech LLC"
+          },
+          "exposure_basis": "supplement_dose",
+          "route": "oral",
+          "evidence_role": "direct_rct",
+          "component_registration_status": "fully_registered",
+          "purpose": "physiology",
+          "review_status": "clinician_approved",
+          "human_status": "confirmed",
+          "source_integrity": "corrected",
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-10-26",
+            "scope": "identity_dose_outcome_applicability"
+          },
+          "context_id": "magtein_39252819",
+          "source_pmids": [
+            "39252819",
+            "40567408"
+          ],
+          "trial_family": "magtein_39252819",
+          "condition": "self_reported_sleep_problems",
+          "population": {
+            "age_group": "adult",
+            "description": "Adults aged 35–55 with self-reported poor sleep; 80 randomized, 76 analyzed. Sleep disorders, relevant medications, pregnancy and breastfeeding were excluded."
+          },
+          "study_design": "randomized double-blind placebo-controlled parallel-group trial",
+          "outcomes": [
+            {
+              "name": "Insomnia Severity Index treatment-by-time interaction",
+              "hierarchy": "primary",
+              "kind": "patient_important",
+              "direction": "null",
+              "outcome_role": "direct_between_group_effect"
+            },
+            {
+              "name": "Leeds sleep quality and getting-to-sleep subscales",
+              "hierarchy": "primary",
+              "kind": "patient_important",
+              "direction": "null",
+              "outcome_role": "direct_between_group_effect"
+            },
+            {
+              "name": "Behavior following awakening and selected questionnaire/wearable-score findings",
+              "hierarchy": "primary",
+              "kind": "patient_important",
+              "direction": "mixed",
+              "outcome_role": "direct_between_group_effect"
+            }
+          ],
+          "limitations": [
+            "Mixed results: ISI interaction p=0.390, LSEQ sleep quality p=0.810, getting to sleep p=0.250 and total restorative sleep p=0.134 were null; selected findings do not establish proven insomnia treatment.",
+            "Short duration, 76 analyzed completers and numerous outcomes limit confidence; wearable scores are not equivalent to measured sleep minutes or clinical insomnia remission.",
+            "Correction40567408 records retrospective registration on April15,2024 and omitted funding/patent/paid-author disclosures; authors declaration of unchanged protocol is not independent verification.",
+            "AIDP commissioned/funded the study, owns patents and disclosed paid relationships; correction is provenance, not another trial.",
+            "1000mg/day is compound mass, approximately75mg elemental magnesium, not an effective minimum or personal recommendation; exact-label correspondence remains separate."
+          ],
+          "dose": {
+            "measurement_type": "mass",
+            "unit": "mg",
+            "values": [
+              1000
+            ],
+            "dose_status": "verified",
+            "dose_basis": "nominal_assigned_arm",
+            "duration_basis": "fixed_protocol",
+            "duration_days": 21,
+            "administration_frequency": "once daily, approximately two hours before bedtime",
+            "dosage_forms": [
+              "capsule"
+            ],
+            "co_therapies": [],
+            "reported_regimen": "Two500mg capsules together before bedtime for21days",
+            "normalization": {
+              "basis": "Reported complete Magtein magnesium L-threonate mass per capsule times daily capsule count; elemental exposure is described separately."
+            },
+            "source_provenance": {
+              "pmid": "39252819",
+              "location": "Full text Methods: Study design, recruitment and intervention",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/39252819/"
+            }
+          }
+        },
+        {
+          "context_schema_version": "1.1.0",
+          "components": [
+            "BRAND_MAGTEIN"
+          ],
+          "identity_scope": "branded_material",
+          "identity": {
+            "branded_material": "Magtein magnesium L-threonate",
+            "manufacturer": "Threotech LLC"
+          },
+          "exposure_basis": "supplement_dose",
+          "route": "oral",
+          "evidence_role": "direct_rct",
+          "component_registration_status": "fully_registered",
+          "purpose": "physiology",
+          "review_status": "clinician_approved",
+          "human_status": "confirmed",
+          "source_integrity": "corrected",
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-10-26",
+            "scope": "identity_dose_outcome_applicability"
+          },
+          "context_id": "magtein_41601871",
+          "source_pmids": [
+            "41601871"
+          ],
+          "trial_family": "magtein_41601871",
+          "condition": "dissatisfied_sleep",
+          "population": {
+            "age_group": "adult",
+            "description": "One hundred randomized adults aged18–45 with dissatisfied sleep, selected by substantial medical/medication exclusions; full analysis set50 per arm."
+          },
+          "study_design": "randomized double-blind placebo-controlled parallel-group trial",
+          "outcomes": [
+            {
+              "name": "NIH Toolbox Total Cognition Composite",
+              "hierarchy": "primary",
+              "kind": "patient_important",
+              "direction": "positive",
+              "outcome_role": "direct_between_group_effect"
+            },
+            {
+              "name": "Subjective sleep-related impairment",
+              "hierarchy": "secondary",
+              "kind": "patient_important",
+              "direction": "positive",
+              "outcome_role": "direct_between_group_effect"
+            },
+            {
+              "name": "Raven reasoning, overall sleep disturbance, restorative sleep and wearable sleep outcomes",
+              "hierarchy": "secondary",
+              "kind": "patient_important",
+              "direction": "null",
+              "outcome_role": "direct_between_group_effect"
+            }
+          ],
+          "limitations": [
+            "NIH composite and subjective sleep-related impairment p=0.043; Raven reasoning p=0.953 and objective sleep measures did not separate from placebo. Preliminary cognitive-test findings do not establish objective-sleep improvement.",
+            "October15,2026 publisher correction DOI10.3389/fnut.2026.2010644 states analyses were two-tailed and results unchanged; stale PMC wording must not be used to double p-values or impose a one-tailed penalty.",
+            "Short trial in a selected young-adult population; exploratory score-derived cognitive-age estimate is not biological rejuvenation, durable functional benefit, dementia prevention or longevity evidence.",
+            "Threotech funded/supplied the study and participated in conceptualization. Retail-label preparation, dosing schedule and additional actives require independent correspondence checks.",
+            "2000mg/day is compound mass supplying145mg elemental magnesium. Do not combine with the21day sleep trial to create a universal effective dose range."
+          ],
+          "dose": {
+            "measurement_type": "mass",
+            "unit": "mg",
+            "values": [
+              2000
+            ],
+            "dose_status": "verified",
+            "dose_basis": "nominal_assigned_arm",
+            "duration_basis": "fixed_protocol",
+            "duration_days": 42,
+            "administration_frequency": "twice daily: morning and evening, with evening approximately two hours before bedtime",
+            "dosage_forms": [
+              "capsule"
+            ],
+            "co_therapies": [],
+            "reported_regimen": "One1g capsule morning and one1g capsule evening for six weeks",
+            "normalization": {
+              "basis": "Reported complete Magtein magnesium L-threonate mass per capsule times daily capsule count; elemental exposure is described separately."
+            },
+            "source_provenance": {
+              "pmid": "41601871",
+              "location": "Full text Methods: Interventions",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/41601871/"
+            }
+          }
+        },
+        {
+          "context_schema_version": "1.1.0",
+          "components": [
+            "BRAND_MAGTEIN",
+            "INGR_PHOSPHATIDYLSERINE",
+            "INGR_VITAMIN_C",
+            "INGR_VITAMIN_D3",
+            "INGR_VITAMIN_B6"
+          ],
+          "identity_scope": "combination",
+          "identity": {
+            "branded_material": "MagteinPS whole formula",
+            "manufacturer": "Wu-xi Magtein Bioscience",
+            "standardization": "Daily four capsules provide1600mg Magtein,200mg phosphatidylserine,48mg vitaminC,320IU vitaminD3 and16mg vitaminB6."
+          },
+          "exposure_basis": "supplement_dose",
+          "route": "oral",
+          "evidence_role": "direct_rct",
+          "component_registration_status": "fully_registered",
+          "purpose": "physiology",
+          "review_status": "clinician_approved",
+          "human_status": "confirmed",
+          "source_integrity": "none",
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-10-26",
+            "scope": "identity_dose_outcome_applicability"
+          },
+          "context_id": "magteinps_formula_36558392",
+          "source_pmids": [
+            "36558392"
+          ],
+          "trial_family": "magteinps_36558392",
+          "condition": "healthy_adult_memory",
+          "scoring_eligible": false,
+          "population": {
+            "age_group": "adult",
+            "description": "109 randomized healthy Chinese adults aged18–65;102 completed."
+          },
+          "study_design": "randomized double-blind placebo-controlled combination-formula trial",
+          "outcomes": [
+            {
+              "name": "Clinical Memory Test and memory quotient",
+              "hierarchy": "unresolved",
+              "kind": "patient_important",
+              "direction": "positive",
+              "outcome_role": "direct_between_group_effect"
+            }
+          ],
+          "limitations": [
+            "Whole-formula context only. No component-isolation design establishes an independent Magtein contribution or synergy; cannot supply isolated-Magtein evidence credit.",
+            "A single prospectively registered primary endpoint was not established in the inspected paper;30day duration and commercial funding limit inference.",
+            "Wu-xi Magtein Bioscience funded the trial. The reported2g/day formula is not2g/day isolated Magtein; vitaminB6 is present alongside the other co-actives."
+          ],
+          "dose": {
+            "measurement_type": "mass",
+            "unit": "mg",
+            "values": [
+              2000
+            ],
+            "dose_status": "combination_total_only",
+            "dose_basis": "combination_total_daily",
+            "duration_basis": "fixed_protocol",
+            "duration_days": 30,
+            "administration_frequency": "two capsules morning and two capsules evening before sleep",
+            "dosage_forms": [
+              "capsule"
+            ],
+            "co_therapies": [],
+            "reported_regimen": "Reported2g/day MagteinPS whole formula, four capsules daily, not2g/day Magtein.",
+            "normalization": {
+              "basis": "Paper reports nominal2g/person/day formula; four capsules supply1600mg Magtein plus the specified co-actives, not isolated Magtein mass."
+            },
+            "source_provenance": {
+              "pmid": "36558392",
+              "location": "Full text Methods: Study design and MagteinPS composition",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/36558392/"
+            }
+          }
+        }
       ]
     },
     {
@@ -19565,9 +20737,9 @@
       "health_goals_supported": [
         "Digestive Health"
       ],
-      "notes": "Preparation-specific IBS research concerns enteric-coated or small-intestinal-release peppermint oil. Pooled benefit is uncertain and adverse events were more frequent; extract, uncoated oil and ileocolonic formulations cannot inherit that finding.",
-      "last_updated": "2026-10-14",
-      "notable_studies": "PMID 35942669 pooled 10 RCTs (1030 patients), finding benefit for global IBS symptoms and abdominal pain but very low-quality evidence and more adverse events. PMID 31470006 randomized 190 patients (189 intention-to-treat, 178 completed); neither small-intestinal nor ileocolonic release significantly improved either primary endpoint. Small-intestinal release improved secondary pain/discomfort/severity outcomes; this is not confirmation of primary-endpoint efficacy. The pooled total is not added to its constituent trial enrollment.",
+      "notes": "Preparation-specific IBS research concerns enteric-coated or small-intestinal-release peppermint oil. Updated pooled benefit is very-low-certainty and adverse events were more frequent; modern Pepogest and Tempocol primary outcomes were null. The signed return does not establish exact saved-label-to-trial correspondence, a universal dose benchmark or any mL-to-mg conversion. Extract, uncoated oil and ileocolonic formulations cannot inherit a positive small-intestinal-release finding. Historical 2014 pooling and independently unqualified IBgard trial are retained as non-contributing sources, not erased.",
+      "last_updated": "2026-10-26",
+      "notable_studies": "PMID35942669: ten trials/1030 patients, heterogeneous products and dosing, very-low-certainty pooled IBS symptom/pain benefit with more adverse events. PMID34319275: enteric peppermint oil180mg three times daily for six weeks, no primary IBS-SSS superiority over placebo (p=.97); Table2 of PMID35942669 identifies Pepogest. PMID31470006: separate small-intestinal/ileocolonic182mg three times daily arms for eight weeks, both primary/co-primary endpoints null; only selected small-intestinal secondary measures improved. Pooled and constituent enrollment must not be added.",
       "references_structured": [
         {
           "type": "pubmed",
@@ -19641,7 +20813,9 @@
           "evidence_grade": "rct",
           "retracted": false,
           "supports_claims": [],
-          "verification_source": "pubmed_eutils"
+          "verification_source": "pubmed_eutils",
+          "scoring_eligible": false,
+          "notes": "PERSUADE primary/co-primary outcomes were null for both release systems. Qualified secondary small-intestinal results remain documented in separate contexts; no affirmative general-product qualification from this direct trial while exact retail preparation matching and full-method limitations remain unresolved."
         },
         {
           "type": "pubmed",
@@ -19651,7 +20825,9 @@
           "doi": "10.1097/MCG.0b013e3182a88357",
           "url": "https://pubmed.ncbi.nlm.nih.gov/24100754/",
           "verification_source": "Europe PMC core API and primary text, 2026-10-14",
-          "retracted": false
+          "retracted": false,
+          "scoring_eligible": false,
+          "notes": "Retained historical class-level meta-analysis from the signed return; superseded for affirmative pooled attribution by updated PMID35942669. Abstract-only access does not establish exact preparation or regimen equivalence."
         },
         {
           "type": "pubmed",
@@ -19661,7 +20837,21 @@
           "doi": "10.1007/s10620-015-3858-7",
           "url": "https://pubmed.ncbi.nlm.nih.gov/26319955/",
           "verification_source": "Europe PMC core API and primary text, 2026-10-14",
-          "retracted": false
+          "retracted": false,
+          "scoring_eligible": false,
+          "notes": "IBgard-specific trial retained for source history. The signed return rejects transfer to exact Pepogest and leaves its independent efficacy appraisal incomplete; no affirmative product qualification from this reference."
+        },
+        {
+          "type": "pubmed",
+          "authority": "NCBI PubMed",
+          "pmid": "34319275",
+          "doi": "10.14309/ajg.0000000000001395",
+          "title": "Peppermint Oil Treatment for Irritable Bowel Syndrome: A Randomized Placebo-Controlled Trial.",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/34319275/",
+          "verification_source": "NCBI PubMed abstract and Europe PMC core API; PMID35942669 accepted manuscript Table 2",
+          "retracted": false,
+          "scoring_eligible": false,
+          "notes": "Negative Pepogest-associated trial retained explicitly; primary IBS-SSS comparison p=.97, no affirmative efficacy credit. Detailed original full-text preparation and method limitations remain documented."
         }
       ],
       "external_ids": {
@@ -19707,7 +20897,360 @@
         "dosage_forms": [
           "enteric-coated"
         ]
-      }
+      },
+      "study_contexts": [
+        {
+          "context_schema_version": "1.1.0",
+          "components": [
+            "INGR_PEPPERMINT_OIL"
+          ],
+          "identity_scope": "ingredient_general",
+          "exposure_basis": "supplement_dose",
+          "route": "oral",
+          "evidence_role": "meta_analysis",
+          "component_registration_status": "fully_registered",
+          "condition": "irritable_bowel_syndrome",
+          "purpose": "treatment",
+          "review_status": "clinician_approved",
+          "human_status": "confirmed",
+          "source_integrity": "none",
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-10-26",
+            "scope": "identity_dose_outcome_applicability"
+          },
+          "context_id": "peppermint_ibs_meta_35942669",
+          "source_pmids": [
+            "35942669"
+          ],
+          "trial_family": "peppermint_ibs_meta_2022",
+          "identity": {
+            "chemical_form": "Peppermint oil in distinct trial-specific oral preparations; not a single interchangeable product."
+          },
+          "included_study_pmids": [
+            "3061106",
+            "9430014",
+            "17420159",
+            "19507027",
+            "23416804",
+            "26319955",
+            "27815079",
+            "31470006",
+            "34319275"
+          ],
+          "population": {
+            "age_group": "adult",
+            "description": "1030 patients with IBS across ten randomized trials, with varying diagnostic criteria and IBS subtypes."
+          },
+          "study_design": "Systematic review and random-effects meta-analysis of ten randomized placebo-controlled trials; search through 2 April 2022.",
+          "outcomes": [
+            {
+              "name": "Pooled non-improvement in global IBS symptoms and abdominal pain",
+              "hierarchy": "primary",
+              "kind": "patient_important",
+              "direction": "positive",
+              "outcome_role": "direct_between_group_effect"
+            },
+            {
+              "name": "Any adverse event and gastro-oesophageal reflux",
+              "hierarchy": "secondary",
+              "kind": "patient_important",
+              "direction": "negative",
+              "outcome_role": "direct_between_group_effect"
+            }
+          ],
+          "limitations": [
+            "Exact saved-label preparation matching remains separate; no mL-to-mg conversion or equivalence to tea, leaf powder or uncoated oil is established.",
+            "The signed return accepts only the stated preparation-population-outcome findings; no minimum effective dose or general efficacy threshold follows.",
+            "Pooled efficacy signal has very low certainty, moderate-to-high heterogeneity, potential small-study/publication bias, few low-risk-of-bias trials and wide NNT confidence intervals.",
+            "Adverse events were more frequent; two recent larger studies had null primary findings. Positive pooling does not make each preparation effective.",
+            "Table 2 distinguishes Pepogest, IBgard, Tempocol, Mintoil and Colpermin; doses and release systems cannot be collapsed. Regimens span 4–12 weeks; no single pooled daily dose is reported.",
+            "Ten included studies are identified in Table 2. Nine verified PubMed IDs are listed; Capanni 2005, Gazzetta Medica Italiana 164:119–126, has no verified PMID and no identifier is invented.",
+            "The anise-oil trial PMID27815079 contributed its peppermint comparator versus placebo; its anise result is not credited to peppermint."
+          ],
+          "dose": {
+            "measurement_type": "mass",
+            "unit": "mg",
+            "values": [],
+            "dose_status": "source_not_reported",
+            "dose_basis": "not_applicable",
+            "duration_basis": "not_recorded",
+            "administration_frequency": "Varies by trial; no single pooled regimen.",
+            "dosage_forms": [
+              "Distinct oral peppermint-oil formulations with trial-specific release profiles"
+            ],
+            "co_therapies": [
+              "Background treatments vary by trial; no common co-therapy regimen is established."
+            ],
+            "reported_regimen": "Table 2 reports distinct trial regimens over 4–12 weeks; no single common dose or duration is estimated.",
+            "source_provenance": {
+              "pmid": "35942669",
+              "location": "Accepted manuscript Methods/Results/Discussion and Table 2, pages 27–29: trial-specific products, regimens and durations.",
+              "source_url": "https://eprints.whiterose.ac.uk/190294/3/APT-1040-2022R1%20CLEAN.pdf"
+            }
+          }
+        },
+        {
+          "context_schema_version": "1.1.0",
+          "components": [
+            "INGR_PEPPERMINT_OIL"
+          ],
+          "identity_scope": "exact_form",
+          "exposure_basis": "supplement_dose",
+          "route": "oral",
+          "evidence_role": "direct_rct",
+          "component_registration_status": "fully_registered",
+          "condition": "irritable_bowel_syndrome",
+          "purpose": "treatment",
+          "review_status": "clinician_approved",
+          "human_status": "confirmed",
+          "source_integrity": "none",
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-10-26",
+            "scope": "identity_dose_outcome_applicability"
+          },
+          "context_id": "peppermint_persuade_small_intestinal_31470006",
+          "source_pmids": [
+            "31470006"
+          ],
+          "trial_family": "persuade_NCT02716285",
+          "identity": {
+            "chemical_form": "small-intestinal-release peppermint oil (Tempocol)"
+          },
+          "population": {
+            "age_group": "adult",
+            "description": "Rome IV IBS at four Dutch hospitals; 190 randomized, 189 intention-to-treat, 178 completed; mean age 34 years, 77.8% female."
+          },
+          "study_design": "Randomized double-blind three-arm placebo-controlled trial.",
+          "outcomes": [
+            {
+              "name": "FDA abdominal-pain responder and EMA overall-relief endpoints",
+              "hierarchy": "primary",
+              "kind": "patient_important",
+              "direction": "null",
+              "outcome_role": "direct_between_group_effect"
+            },
+            {
+              "name": "Secondary pain, discomfort and IBS severity measures",
+              "hierarchy": "secondary",
+              "kind": "patient_important",
+              "direction": "positive",
+              "outcome_role": "direct_between_group_effect"
+            }
+          ],
+          "limitations": [
+            "Exact saved-label preparation matching remains separate; no mL-to-mg conversion or equivalence to tea, leaf powder or uncoated oil is established.",
+            "The signed return accepts only the stated preparation-population-outcome findings; no minimum effective dose or general efficacy threshold follows.",
+            "Neither release system met the prespecified primary/co-primary endpoints. Selected secondary findings do not reverse the primary nulls.",
+            "Release systems were separate randomized arms and are not interchangeable; adverse events were more common with peppermint oil.",
+            "Dose frequency and commercial preparation corroborated by PMID35942669 Table 2. Full original methods, exclusions and concomitant-treatment details have not been independently completed in this migration."
+          ],
+          "dose": {
+            "measurement_type": "mass",
+            "unit": "mg",
+            "values": [
+              546
+            ],
+            "dose_status": "verified",
+            "dose_basis": "nominal_assigned_arm",
+            "duration_basis": "fixed_protocol",
+            "duration_days": 56,
+            "duration_as_printed": {
+              "value": 8,
+              "unit": "weeks"
+            },
+            "administration_frequency": "three times daily",
+            "dosage_forms": [
+              "small-intestinal-release capsule"
+            ],
+            "co_therapies": [
+              "Concomitant-treatment restrictions are not established by the reviewed abstract; no absence of concomitant medicines is inferred."
+            ],
+            "reported_regimen": "182 mg three times daily for eight weeks",
+            "normalization": {
+              "basis": "Complete peppermint-oil mass per administration multiplied by three daily administrations; no conversion from retail label volume."
+            },
+            "source_provenance": {
+              "pmid": "31470006",
+              "location": "Original trial abstract intervention and outcomes; daily frequency and product corroborated by PMID35942669 Table 2.",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/31470006/"
+            }
+          },
+          "scoring_eligible": false
+        },
+        {
+          "context_schema_version": "1.1.0",
+          "components": [
+            "INGR_PEPPERMINT_OIL"
+          ],
+          "identity_scope": "exact_form",
+          "exposure_basis": "supplement_dose",
+          "route": "oral",
+          "evidence_role": "direct_rct",
+          "component_registration_status": "fully_registered",
+          "condition": "irritable_bowel_syndrome",
+          "purpose": "treatment",
+          "review_status": "clinician_approved",
+          "human_status": "confirmed",
+          "source_integrity": "none",
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-10-26",
+            "scope": "identity_dose_outcome_applicability"
+          },
+          "context_id": "peppermint_persuade_ileocolonic_31470006",
+          "source_pmids": [
+            "31470006"
+          ],
+          "trial_family": "persuade_NCT02716285",
+          "identity": {
+            "chemical_form": "ileocolonic-release peppermint oil (Tempocol)"
+          },
+          "population": {
+            "age_group": "adult",
+            "description": "Rome IV IBS at four Dutch hospitals; 190 randomized, 189 intention-to-treat, 178 completed; mean age 34 years, 77.8% female."
+          },
+          "study_design": "Randomized double-blind three-arm placebo-controlled trial.",
+          "outcomes": [
+            {
+              "name": "FDA abdominal-pain responder and EMA overall-relief endpoints",
+              "hierarchy": "primary",
+              "kind": "patient_important",
+              "direction": "null",
+              "outcome_role": "direct_between_group_effect"
+            }
+          ],
+          "limitations": [
+            "Exact saved-label preparation matching remains separate; no mL-to-mg conversion or equivalence to tea, leaf powder or uncoated oil is established.",
+            "The signed return accepts only the stated preparation-population-outcome findings; no minimum effective dose or general efficacy threshold follows.",
+            "Neither release system met the prespecified primary/co-primary endpoints. Selected secondary findings do not reverse the primary nulls.",
+            "Release systems were separate randomized arms and are not interchangeable; adverse events were more common with peppermint oil.",
+            "Dose frequency and commercial preparation corroborated by PMID35942669 Table 2. Full original methods, exclusions and concomitant-treatment details have not been independently completed in this migration."
+          ],
+          "dose": {
+            "measurement_type": "mass",
+            "unit": "mg",
+            "values": [
+              546
+            ],
+            "dose_status": "verified",
+            "dose_basis": "nominal_assigned_arm",
+            "duration_basis": "fixed_protocol",
+            "duration_days": 56,
+            "duration_as_printed": {
+              "value": 8,
+              "unit": "weeks"
+            },
+            "administration_frequency": "three times daily",
+            "dosage_forms": [
+              "ileocolonic-release capsule"
+            ],
+            "co_therapies": [
+              "Concomitant-treatment restrictions are not established by the reviewed abstract; no absence of concomitant medicines is inferred."
+            ],
+            "reported_regimen": "182 mg three times daily for eight weeks",
+            "normalization": {
+              "basis": "Complete peppermint-oil mass per administration multiplied by three daily administrations; no conversion from retail label volume."
+            },
+            "source_provenance": {
+              "pmid": "31470006",
+              "location": "Original trial abstract intervention and outcomes; daily frequency and product corroborated by PMID35942669 Table 2.",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/31470006/"
+            }
+          },
+          "scoring_eligible": false
+        },
+        {
+          "context_schema_version": "1.1.0",
+          "components": [
+            "INGR_PEPPERMINT_OIL"
+          ],
+          "identity_scope": "exact_form",
+          "exposure_basis": "supplement_dose",
+          "route": "oral",
+          "evidence_role": "direct_rct",
+          "component_registration_status": "fully_registered",
+          "condition": "irritable_bowel_syndrome",
+          "purpose": "treatment",
+          "review_status": "clinician_approved",
+          "human_status": "confirmed",
+          "source_integrity": "none",
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-10-26",
+            "scope": "identity_dose_outcome_applicability"
+          },
+          "context_id": "peppermint_nee_34319275",
+          "source_pmids": [
+            "34319275"
+          ],
+          "trial_family": "peppermint_nee_2021",
+          "identity": {
+            "chemical_form": "Enteric-coated peppermint oil; 2022 review Table 2 identifies Pepogest."
+          },
+          "population": {
+            "age_group": "adult",
+            "description": "Adults with Rome IV IBS and moderate-to-severe symptoms (IBS-SSS at least 175) at a United States academic centre; review Table 2 reports 133 participants."
+          },
+          "study_design": "Six-week randomized double-blind placebo-controlled trial; peppermint:placebo allocation 1:2.",
+          "outcomes": [
+            {
+              "name": "Between-group change in IBS Severity Scoring System at six weeks",
+              "hierarchy": "primary",
+              "kind": "patient_important",
+              "direction": "null",
+              "outcome_role": "direct_between_group_effect"
+            },
+            {
+              "name": "Reported secondary symptom outcomes",
+              "hierarchy": "secondary",
+              "kind": "patient_important",
+              "direction": "null",
+              "outcome_role": "direct_between_group_effect"
+            }
+          ],
+          "limitations": [
+            "Exact saved-label preparation matching remains separate; no mL-to-mg conversion or equivalence to tea, leaf powder or uncoated oil is established.",
+            "The signed return accepts only the stated preparation-population-outcome findings; no minimum effective dose or general efficacy threshold follows.",
+            "The primary between-group comparison was null (p=.97); within-group improvements are not evidence of efficacy.",
+            "Original abstract and accepted 2022 review preparation table verified. Detailed original composition, exclusions, missing-data handling and funding remain full-text limitations; this context cannot supply affirmative efficacy credit.",
+            "The 180 mg trial exposure does not establish equivalence to a saved 0.2 mL retail label."
+          ],
+          "dose": {
+            "measurement_type": "mass",
+            "unit": "mg",
+            "values": [
+              540
+            ],
+            "dose_status": "verified",
+            "dose_basis": "nominal_assigned_arm",
+            "duration_basis": "fixed_protocol",
+            "duration_days": 42,
+            "duration_as_printed": {
+              "value": 6,
+              "unit": "weeks"
+            },
+            "administration_frequency": "three times daily",
+            "dosage_forms": [
+              "enteric-coated capsule"
+            ],
+            "co_therapies": [
+              "Concomitant-treatment restrictions are not established by the reviewed abstract; no absence of concomitant medicines is inferred."
+            ],
+            "reported_regimen": "180 mg three times daily for six weeks",
+            "normalization": {
+              "basis": "Complete peppermint-oil mass per administration multiplied by three daily administrations; no conversion from retail label volume."
+            },
+            "source_provenance": {
+              "pmid": "34319275",
+              "location": "Original trial abstract Methods/Results; commercial preparation separately identified by PMID35942669 Table 2.",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/34319275/"
+            }
+          },
+          "scoring_eligible": false
+        }
+      ]
     },
     {
       "id": "STRAIN_LGG",

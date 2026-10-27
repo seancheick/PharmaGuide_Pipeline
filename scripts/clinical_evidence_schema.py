@@ -220,11 +220,22 @@ def _dose_errors(context: Mapping, known_component_ids: Set[str] | None) -> list
         if not _text_list(dose.get("co_therapies"), allow_empty=False):
             errors.append("dose.co_therapies_required_for_tied_to_cotherapy")
 
+    as_printed = dose.get("duration_as_printed")
     if dose.get("duration_basis") == "fixed_protocol":
         has_days = _positive_number(dose.get("duration_days"))
-        if not has_days:
+        # Preserve a held calendar-month regimen without inventing a fixed
+        # number of days. Affirmative contexts still need numerical duration;
+        # an omitted duration_days key is not an explicit unknown.
+        held_calendar_duration = (
+            context.get("scoring_eligible") is False
+            and "duration_days" in dose
+            and dose["duration_days"] is None
+            and isinstance(as_printed, Mapping)
+            and as_printed.get("unit") == "months"
+            and _positive_number(as_printed.get("value"))
+        )
+        if not has_days and not held_calendar_duration:
             errors.append("dose.fixed_protocol_duration_required")
-    as_printed = dose.get("duration_as_printed")
     if as_printed is not None:
         if not isinstance(as_printed, Mapping):
             errors.append("dose.duration_as_printed_invalid")

@@ -243,7 +243,13 @@ def test_magtein_trial_and_correction_have_distinct_source_roles():
                   'requires content review'):
         assert stale not in str(row)
     from clinical_applicability import assess_clinical_source_review
-    assert assess_clinical_source_review(row)['is_complete'] is False
+    review = assess_clinical_source_review(row)
+    assert review['is_complete'] is True
+    assert set(review['context_ids']) == {'magtein_39252819', 'magtein_41601871'}
+    assert refs['36558392']['scoring_eligible'] is False  # Whole formula cannot replicate isolated material.
+    contexts = row['study_contexts']
+    assert next(c for c in contexts if '40567408' in c['source_pmids'])['source_pmids'] == ['39252819', '40567408']
+    assert next(c for c in contexts if c['source_pmids'] == ['36558392'])['scoring_eligible'] is False
 
 
 @pytest.mark.parametrize('record_id,required', [

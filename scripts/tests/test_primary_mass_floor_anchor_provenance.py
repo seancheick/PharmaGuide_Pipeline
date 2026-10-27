@@ -13,11 +13,9 @@ collagen match. It is decisive for 24 products, and it carries
 `source_data: backed_clinical_studies:INGR_COLLAGEN_PEPTIDES` — a CLAIM of
 reviewed provenance.
 
-These tests make the claim checkable. The literal may keep dose metadata the
-registry record does not carry, but on the three fields that decide what a floor
-is allowed to say — direction, study type, evidence level — it must agree with
-the reviewed record it cites. If someone edits either side, this fails instead of
-quietly promoting 24 products on evidence the registry no longer supports.
+These tests make the claim checkable. The recovery descriptor carries routing
+only. Clinical facts must come from the current eligible registry record, and
+a held source cannot be replaced with a literal grade or dose range.
 
 No second registry, no per-product exception: the reviewed registry stays the
 owner and this only holds the copy to it.
@@ -52,18 +50,12 @@ def test_the_recovered_collagen_anchor_cites_a_real_reviewed_record():
         "record. An anchor may not invent its own evidence.")
 
 
-def test_the_recovered_anchor_agrees_with_the_record_it_cites():
+def test_the_recovered_descriptor_cannot_supply_its_own_clinical_facts():
     literal = ge._RECOVERED_COLLAGEN_PEPTIDES_MATCH
-    reviewed = ca.reviewed_entries()[_cited_record(literal)]
-
-    mismatches = {
-        field: (literal.get(field), reviewed.get(field))
-        for field in ANCHORING_FIELDS
-        if literal.get(field) != reviewed.get(field)
-    }
-    assert not mismatches, (
-        "the recovered anchor has drifted from the reviewed record it cites "
-        f"(literal, reviewed): {mismatches}")
+    assert _cited_record(literal) in ca.reviewed_entries()
+    assert not set(ANCHORING_FIELDS) & literal.keys()
+    assert not {"total_enrollment", "published_studies_count", "min_clinical_dose",
+                "max_studied_clinical_dose", "dose_unit"} & literal.keys()
 
 
 def test_a_direction_that_cannot_anchor_stays_unable_to_anchor():

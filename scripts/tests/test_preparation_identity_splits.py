@@ -1154,3 +1154,46 @@ def test_iodine_kelp_extract_keeps_unfinished_preparation_hold(pipeline):
     assessments = artifact['assessment_readiness']['evidence']['ingredient_assessments']
     kelp = next(row for row in assessments if row['canonical_id'] == 'kombu')
     assert kelp['state'] == 'not_yet_evaluated'
+
+
+@pytest.mark.parametrize("name,form", [
+    ('Asian Ginseng Aerial Part & Root Extract', 'Panax ginseng Aerial Part Extract'),
+    ('Asian Ginseng Aerial Parts, Root Extract', 'Panax ginseng Aerial Parts Extract'),
+])
+def test_mixed_ginseng_parts_keep_existing_iqm_parent_without_component_allocation(pipeline, name, form):
+    raw = _raw_product(991026, [_raw_row(1, name, 'Panax Ginseng', quantity=100, unit='mg', forms=(form, 'Panax ginseng Root Extract'))])
+    enriched = pipeline(raw)
+    row = enriched['ingredient_quality_data']['ingredients'][0]
+    assert row['canonical_id'] == 'ginseng'
+    assert row['scoreable_identity'] is True
+    assert row['quantity'] == 100
+    assert row['unit'] == 'mg'
+    assert row['matched_form'] == 'ginseng (unspecified)'
+    assert len(enriched['activeIngredients']) == 1
+    assert enriched['activeIngredients'][0]['raw_source_text'] == name
+    assert enriched['activeIngredients'][0]['forms'][0]['name'] == form
+
+
+@pytest.mark.parametrize("group", ['Unidentified Herb', 'Vitamin C'])
+def test_mixed_botanical_parts_cannot_inherit_unknown_or_nonbotanical_group(pipeline, group):
+    raw = _raw_product(991027, [_raw_row(
+        1, 'Unidentified aerial parts and root extract', group, quantity=100, unit='mg',
+        forms=('Unidentified aerial parts extract', 'Unidentified root extract'),
+    )])
+    enriched = pipeline(raw)
+    row = enriched['ingredient_quality_data']['ingredients'][0]
+    assert row.get('scoreable_identity') is False
+    assert row.get('canonical_id') is None
+    assert row['quantity'] == 100
+
+
+def test_mixed_parts_from_different_botanicals_cannot_borrow_iqm_group(pipeline):
+    raw = _raw_product(991028, [_raw_row(
+        1, 'Ginseng root and Ashwagandha leaf extract', 'Ginseng', quantity=100, unit='mg',
+        forms=('Panax ginseng Root Extract', 'Ashwagandha leaf extract'),
+    )])
+    enriched = pipeline(raw)
+    row = enriched['ingredient_quality_data']['ingredients'][0]
+    assert row.get('scoreable_identity') is False
+    assert row.get('canonical_id') is None
+    assert row['quantity'] == 100

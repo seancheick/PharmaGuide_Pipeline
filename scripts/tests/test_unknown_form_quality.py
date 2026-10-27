@@ -1238,3 +1238,36 @@ def test_shilajit_geography_and_generic_extract_do_not_claim_purification(
                           if r['canonical_id'] == 'shilajit')
         assert assessment['source_row_ref'] == 'ingredientRows[0]'
         assert 'BRAND_PRIMAVIE_SHILAJIT' in assessment['evidence_ids']
+
+
+@pytest.mark.parametrize("label", ["standardized American Ginseng extract"])
+def test_standardization_prefix_does_not_hide_declared_ginseng_species(enricher, label):
+    match = enricher._match_quality_map(
+        label, 'Ginseng', enricher.databases['ingredient_quality_map'],
+        cleaner_canonical_id='ginseng',
+    )
+    assert match['canonical_id'] == 'ginseng'
+    assert match['form_id'] == 'american ginseng (panax quinquefolius)'
+
+
+@pytest.mark.parametrize("label,expected", [
+    ('American Ginseng extract', 'american ginseng (panax quinquefolius)'),
+    ('Ginseng', 'ginseng (unspecified)'),
+    ('fermented red ginseng', 'fermented red ginseng'),
+])
+def test_ginseng_species_prefix_fix_preserves_existing_form_controls(enricher, label, expected):
+    match = enricher._match_quality_map(
+        label, 'Ginseng', enricher.databases['ingredient_quality_map'],
+        cleaner_canonical_id='ginseng',
+    )
+    assert match['form_id'] == expected
+
+
+def test_neumentix_notes_keep_source_scope_without_general_onset_or_superiority():
+    notes = IQM['spearmint']['forms']['neumentix spearmint extract']['notes']
+    assert '29314866' in notes and '30802720' in notes
+    assert '5 clinical trials' not in notes
+    assert 'onset at 7 days' not in notes
+    assert 'Superior to standard spearmint extract' not in notes
+    assert 'immediate' in notes.lower()
+    assert 'age-associated memory impairment' in notes.lower()

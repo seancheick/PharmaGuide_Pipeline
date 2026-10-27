@@ -148,3 +148,37 @@ def test_reported_regimen_is_kept_beside_any_normalized_daily_value():
     assert validate_ingredient_context(_context(dose={
         **_context()["dose"], "values": [1429], "reported_regimen": "10,000 IU once weekly",
         "normalization": {"basis": "weekly_to_daily", "note": "10000 IU / 7 days"}})) == []
+
+
+def test_held_calendar_month_protocol_keeps_printed_duration_without_invented_days():
+    from copy import deepcopy
+    context = _context(scoring_eligible=False)
+    context['dose'].update(duration_basis='fixed_protocol', duration_days=None,
+                           duration_as_printed={'value': 18, 'unit': 'months'})
+    before = deepcopy(context)
+    assert validate_ingredient_context(context) == []
+    assert context == before
+    assert context['dose']['duration_days'] is None
+
+
+def test_calendar_month_exception_does_not_supply_missing_duration_days_key():
+    context = _context(scoring_eligible=False)
+    context['dose'].update(duration_basis='fixed_protocol', duration_as_printed={'value': 18, 'unit': 'months'})
+    context['dose'].pop('duration_days', None)
+    assert 'dose.fixed_protocol_duration_required' in validate_ingredient_context(context)
+
+
+def test_calendar_month_exception_rejects_invalid_printed_duration():
+    for value in [None, 0, -1, True, 'unresolved']:
+        context = _context(scoring_eligible=False)
+        context['dose'].update(duration_basis='fixed_protocol', duration_days=None,
+                               duration_as_printed={'value': value, 'unit': 'months'})
+        assert 'dose.fixed_protocol_duration_required' in validate_ingredient_context(context)
+
+
+def test_affirmative_context_cannot_use_unknown_days_for_fixed_protocol():
+    for eligible in [True, None, 'false', 0]:
+        context = _context(scoring_eligible=eligible)
+        context['dose'].update(duration_basis='fixed_protocol', duration_days=None,
+                               duration_as_printed={'value': 18, 'unit': 'months'})
+        assert 'dose.fixed_protocol_duration_required' in validate_ingredient_context(context)
