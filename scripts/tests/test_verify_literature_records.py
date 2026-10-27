@@ -156,3 +156,146 @@ def test_source_notices_require_review(audit_source, monkeypatch, flag):
               'mesh_terms': ['Humans'], flag: True}})
     report = verifier.verify_literature_file(record_ids={'melon'})
     assert any(f['error'] == flag + '_requires_review' for f in report['failures'])
+
+
+@pytest.mark.parametrize('case', ['missing', 'retracted', 'correction'])
+def test_dose_reference_citations_are_read_without_promoting_them_to_clinical_evidence(audit_source, monkeypatch, case):
+    data = json.loads(audit_source.read_text())
+    data['literature_evidence_records'] = data['literature_evidence_records'][:1]
+    data['literature_evidence_records'][0]['reference_semantics'] = {'source_ids': ['PMID:9999']}
+    audit_source.write_text(json.dumps(data))
+    seen = []
+    def fetch(ids, **kwargs):
+        seen.extend(ids)
+        articles = {'1': {'title': 'melon clinical outcomes', 'abstract': 'Melon intervention.',
+                          'mesh_terms': ['Humans']}}
+        if case != 'missing':
+            articles['9999'] = {'title': 'Melon related preparation study', 'abstract': 'Melon exposure.',
+                                'retracted': case == 'retracted', 'has_erratum': case == 'correction'}
+        return articles
+    monkeypatch.setattr(verifier, 'fetch_articles', fetch)
+    before = audit_source.read_bytes()
+    result = verifier.verify_literature_file()
+    assert '9999' in seen
+    assert result['verification_failures_count'] or result['retractions_count']
+    assert result['studies_checked'] == 1
+    from dose_assessment import verified_reference_citations
+    assert not verified_reference_citations(result['records'][0])
+    assert result['clinical_applicability_verified'] is False
+    assert audit_source.read_bytes() == before
+
+
+def test_dose_source_proof_is_bound_and_independent_of_empty_trials(audit_source, monkeypatch):
+    from dose_assessment import verified_reference_citations
+    data = json.loads(audit_source.read_text())
+    record = data['literature_evidence_records'][0]
+    record['qualifying_human_studies'] = []
+    record['reference_semantics'] = {'source_ids': ['PMID:9999'], 'preparation': 'melon'}
+    audit_source.write_text(json.dumps(data))
+    monkeypatch.setattr(verifier, 'fetch_articles', lambda *a, **kw: {
+        '9999': {'title': 'Melon preparation', 'abstract': 'Melon exposure.'}})
+    result = verifier.verify_literature_file(record_ids={'melon'})['records'][0]
+    assert verified_reference_citations(result)
+    assert result['verification_result'] == 'verification_failure_unresolved'
+    result['reference_semantics']['preparation'] = 'different preparation'
+    assert not verified_reference_citations(result)
+    result['verification_provenance'].pop('reference_citations')
+    assert not verified_reference_citations(result)
+
+
+@pytest.mark.parametrize('mutation', ['future', 'missing_result', 'wrong_source', 'changed_binding',
+                                      'missing_hash', 'retracted', 'expression_of_concern', 'has_erratum'])
+def test_reference_proof_rejects_incomplete_or_stale_dependencies(mutation):
+    from dose_assessment import verified_reference_citations
+    record = {'canonical_id': 'melon', 'reference_semantics': {'source_ids': ['PMID:9999']}}
+    proof = verifier.verify_reference_citations(record, {
+        '9999': {'title': 'Melon preparation', 'abstract': 'Melon source.'}}, '2026-01-01T00:00:00+00:00')
+    record['verification_provenance'] = {'reference_citations': proof}
+    assert verified_reference_citations(record)
+    if mutation == 'future': proof['verified_at'] = '2999-01-01T00:00:00+00:00'
+    elif mutation == 'missing_result': proof['results'] = []
+    elif mutation == 'wrong_source': proof['results'][0]['source_id'] = 'PMID:8888'
+    elif mutation == 'changed_binding': record['reference_semantics']['notes'] = 'Changed source interpretation'
+    elif mutation == 'missing_hash': proof['results'][0].pop('content_sha256')
+    else: proof['results'][0][mutation] = True
+    assert not verified_reference_citations(record)
+
+
+def test_reference_proof_accepts_exact_article_url_but_not_search_url():
+    article = {'1': {'title': 'Melon preparation', 'abstract': 'Melon source.'}}
+    now = '2026-01-01T00:00:00+00:00'
+    exact = {'canonical_id': 'melon', 'reference_semantics': {'source_ids': ['https://pubmed.ncbi.nlm.nih.gov/1/']}}
+    assert verifier.verify_reference_citations(exact, article, now)['is_complete']
+    exact['reference_semantics']['source_ids'] = ['https://pubmed.ncbi.nlm.nih.gov/?term=melon']
+    assert not verifier.verify_reference_citations(exact, article, now)['is_complete']
+
+
+def test_reference_recheck_preserves_reviewed_scope_only_for_identical_source():
+    article = {'1': {'title': 'A specific related preparation', 'abstract': 'No general numerical curve.'}}
+    record = {'canonical_id': 'melon', 'reference_semantics': {'source_ids': ['PMID:1']}}
+    proof = verifier.verify_reference_citations(record, article, '2026-01-01T00:00:00+00:00')
+    assert not proof['is_complete']  # keyword screening cannot establish this relation
+    proof['results'][0].update(verified=True, notes='Source content reviewed: nontransferable preparation; Dose only.')
+    proof['is_complete'] = True
+    record['verification_provenance'] = {'reference_citations': proof}
+    assert verifier.verify_reference_citations(record, article, '2026-01-02T00:00:00+00:00')['is_complete']
+    article['1']['abstract'] = 'Changed source content.'
+    assert not verifier.verify_reference_citations(record, article, '2026-01-02T00:00:00+00:00')['is_complete']
+
+
+def test_reviewed_correction_is_source_bound_and_never_clears_retraction():
+    from dose_assessment import verified_reference_citations
+    source = {'1': {'title': 'Melon study', 'has_erratum': True}}
+    record = {'canonical_id': 'melon', 'reference_semantics': {'source_ids': ['PMID:1']}}
+    proof = verifier.verify_reference_citations(record, source, '2026-01-01T00:00:00+00:00')
+    record['verification_provenance'] = {'reference_citations': proof}
+    assert not verified_reference_citations(record)
+    result = proof['results'][0]
+    result.update(verified=True, correction_review={
+        'source_sha256': result['content_sha256'], 'source_ids': ['PMID:2'],
+        'verified_at': '2026-01-01T00:00:00+00:00', 'reviewed_by': 'Test source reviewer',
+        'is_complete': True, 'notes': 'Full notice reviewed: affiliation only; Dose source only.'})
+    proof['is_complete'] = True
+    assert verified_reference_citations(record)
+    assert verifier.verify_reference_citations(record, source, '2026-01-02T00:00:00+00:00')['is_complete']
+    result['retracted'] = True
+    assert not verified_reference_citations(record)
+    result['retracted'] = False
+    result['correction_review']['source_sha256'] = '0' * 64
+    assert not verified_reference_citations(record)
+
+
+def test_invalidated_reference_receipt_cannot_self_approve_on_retry():
+    from dose_assessment import verified_reference_citations
+    article = {'1': {'title': 'Melon study', 'abstract': 'Melon source.'}}
+    record = {'canonical_id': 'melon', 'reference_semantics': {'source_ids': ['PMID:1']}}
+    record['verification_provenance'] = {'reference_citations': verifier.verify_reference_citations(record, article, '2026-01-01T00:00:00+00:00')}
+    assert verified_reference_citations(record)
+    article['1']['abstract'] = 'Changed melon source.'
+    for _ in range(3):
+        record['verification_provenance']['reference_citations'] = verifier.verify_reference_citations(record, article, '2026-01-02T00:00:00+00:00')
+        assert not verified_reference_citations(record)
+
+
+def test_generic_preparation_words_cannot_verify_a_different_ingredient():
+    record = {'canonical_id': 'garlic', 'reference_semantics': {
+        'source_ids': ['PMID:1'], 'preparation': 'garlic root powder'}}
+    proof = verifier.verify_reference_citations(record, {'1': {
+        'title': 'Ginger root powder in adults', 'abstract': 'Ginger root supplementation.'}},
+        '2026-01-01T00:00:00+00:00')
+    assert not proof['is_complete']
+
+
+@pytest.mark.parametrize('canonical,title', [('red_clover', 'Red wine polyphenols in adults'),
+                                             ('black_cohosh', 'Black tea consumption in adults')])
+def test_partial_identity_token_cannot_verify_a_different_ingredient(canonical, title):
+    record = {'canonical_id': canonical, 'reference_semantics': {'source_ids': ['PMID:1']}}
+    assert not verifier.verify_reference_citations(record, {'1': {'title': title}},
+                                                   '2026-01-01T00:00:00+00:00')['is_complete']
+
+
+def test_malformed_prior_results_return_incomplete_proof():
+    record = {'canonical_id': 'melon', 'reference_semantics': {'source_ids': ['PMID:1']},
+              'verification_provenance': {'reference_citations': {'results': None}}}
+    assert not verifier.verify_reference_citations(record, {'1': {'title': 'Melon study'}},
+                                                   '2026-01-01T00:00:00+00:00')['is_complete']

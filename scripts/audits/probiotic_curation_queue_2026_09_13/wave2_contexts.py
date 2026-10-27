@@ -130,6 +130,117 @@ def _declared_disposition_patches():
    'The full original methods and outcome tables were inaccessible in this review; the original '
    'hierarchy stays unresolved, not not_reported or primary. This regimen correction alone does '
    'not close source qualification or change efficacy credit.'])])
+    # October27 LP299v source corrections: full articles and registered
+    # outcomes establish these exact facts, without a new review attribution.
+    patches.setdefault('lp299v_iron_absorption_meta_31816981', []).extend([('population',
+  {'age_group': 'adult',
+   'description': 'Review of 15 studies in 12 articles, 950 participants overall; the '
+                  'eight-study LP299v iron-absorption meta-analysis included 122 '
+                  'participants.'}),
+ ('outcomes',
+  [{'name': 'iron_absorption',
+    'hierarchy': 'not_reported',
+    'kind': 'surrogate',
+    'direction': 'positive'},
+   {'name': 'iron_status_markers',
+    'hierarchy': 'not_reported',
+    'kind': 'surrogate',
+    'direction': 'null'}]),
+ ('limitations',
+  ['Absorption (SMD 0.55) is an acute surrogate; the longer iron-status studies were mostly '
+   'unchanged.',
+   'Full text describes comprehensive review as its primary purpose and the absorption '
+   'meta-analysis as a secondary purpose, without designating these as primary or secondary '
+   'trial outcomes. The 950 total must not be assigned to the 122-participant absorption '
+   'analysis.'])])
+    patches.setdefault('lp299v_female_athletes_iron_32365981', []).extend([('outcomes',
+  [{'name': 'serum_ferritin',
+    'hierarchy': 'not_reported',
+    'kind': 'surrogate',
+    'direction': 'null'},
+   {'name': 'reticulocyte_hemoglobin',
+    'hierarchy': 'not_reported',
+    'kind': 'surrogate',
+    'direction': 'null'},
+   {'name': 'poms_vigor',
+    'hierarchy': 'not_reported',
+    'kind': 'patient_important',
+    'direction': 'positive'},
+   {'name': 'exercise_performance',
+    'hierarchy': 'unresolved',
+    'kind': 'patient_important',
+    'direction': 'unresolved'}]),
+ ('limitations',
+  ['Ferritin (p=0.056) and reticulocyte hemoglobin (p=0.083) missed significance; performance '
+   "inconclusive; industry involvement (Probi/Nature's Bounty).",
+   'Variable 4-12 week duration; dose not stated in the abstract.',
+   'Full text gives no outcome hierarchy. Registered primary outcome is metabolic response at '
+   'standardized workloads during ergometer cycling, not POMS vigor. The broad '
+   'exercise-performance field is not promoted to primary without an exact measurement '
+   'mapping.']),
+ ('trial_registration', 'NCT03259997')])
+    patches.setdefault('lp299v_cancer_home_enteral_nutrition_33015813', []).extend([('dose',
+  {'basis': 'discrete_daily_arms',
+   'unit': 'CFU',
+   'values': [20000000000.0],
+   'dosage_forms': ['capsule', 'capsule powder in 20 mL water or saline via feeding tube'],
+   'duration_days': 28,
+   'co_therapies': ['Home enteral nutrition in cancer patients; this is not a healthy-adult '
+                    'population.'],
+   'dose_status': 'verified',
+   'dose_basis': 'per_strain_daily',
+   'duration_basis': 'fixed_protocol',
+   'source_provenance': {'pmid': '33015813',
+                         'source_url': 'https://pubmed.ncbi.nlm.nih.gov/33015813/',
+                         'location': 'Primary full text: intervention and Outcomes sections; '
+                                     'oral capsules or feeding-tube powder alternative.'},
+   'administration_frequency': 'One capsule after breakfast and one after dinner, for four '
+                               'weeks.'}),
+ ('outcomes',
+  [{'name': 'serum_albumin',
+    'hierarchy': 'not_reported',
+    'kind': 'surrogate',
+    'direction': 'positive'},
+   {'name': 'vomiting',
+    'hierarchy': 'secondary',
+    'kind': 'patient_important',
+    'direction': 'positive',
+    'outcome_role': 'within_group_change'},
+   {'name': 'flatulence',
+    'hierarchy': 'secondary',
+    'kind': 'patient_important',
+    'direction': 'positive',
+    'outcome_role': 'within_group_change'},
+   {'name': 'overall_nutritional_status',
+    'hierarchy': 'primary',
+    'kind': 'patient_important',
+    'direction': 'null'},
+   {'name': 'quality_of_life',
+    'hierarchy': 'secondary',
+    'kind': 'patient_important',
+    'direction': 'null'}]),
+ ('limitations',
+  ['Small (n=35); overall nutritional status and between-group quality of life unchanged.',
+   'Primary outcome was overall nutritional status (null); EN tolerance and quality of life '
+   'were secondary. Vomiting and flatulence findings remain within-group changes, not '
+   'demonstrated between-group superiority. Albumin was not independently designated a primary '
+   'endpoint.']),
+ ('trial_registration', 'NCT03940768')])
+    patches.setdefault('lp299v_exam_stress_cortisol_28101105', []).extend([('outcomes',
+  [{'name': 'salivary_cortisol_rise_prevention',
+    'hierarchy': 'primary',
+    'kind': 'surrogate',
+    'direction': 'positive'},
+   {'name': 'salivary_iga',
+    'hierarchy': 'not_reported',
+    'kind': 'surrogate',
+    'direction': 'null'}]),
+ ('limitations',
+  ['Salivary cortisol is a stress surrogate; no clinical anxiety or mood endpoint; dose not '
+   'stated in the abstract.',
+   'ClinicalTrials.gov NCT02974894 designates stress-induced salivary cortisol as primary. It '
+   'remains a surrogate; no primary patient-important anxiety or mood benefit is inferred. IgA '
+   'hierarchy is not reported as a registered secondary outcome.'])])
     return patches
 
 

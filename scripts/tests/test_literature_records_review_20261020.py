@@ -421,7 +421,9 @@ def test_african_mango_daily_exposure_is_not_a_threshold_or_single_dose(records)
     assert 'minimum' in record['applicability_decision']
     assert '>=' not in record['applicability_decision']
     assert '150 mg twice daily' in record['applicability_decision']
-    assert record.get('reference_semantics', {}).get('curve') != 'completed_no_benchmark_neutral'
+    assert record['reference_semantics']['curve'] == 'completed_no_benchmark_neutral'
+    assert record['reference_semantics']['reference_type'] == 'no_benchmark'
+    assert record['reference_semantics']['source_ids'] == ['PMID:19254366']
 
 
 @pytest.mark.parametrize('cid', ['theobromine', 'white_willow_bark', 'l_ornithine', 'maqui', 'royal_jelly', 'caralluma', 'ashwagandha_root'])
@@ -481,7 +483,15 @@ def test_related_human_sources_replace_false_absence_without_clinical_clearance(
     assert pmids <= {str(study['pmid']) for study in record['qualifying_human_studies']}
     assert all(study['scoring_eligible'] is False for study in record['qualifying_human_studies'])
     assert record['studied_dose_exposure'] == {}
-    assert not record.get('reference_semantics')
+    dose_reviewed = {'skullcap', 'noni', 'corn_silk', 'yarrow_aerial_parts', 'korean_pine',
+                     'tremella_fuciformis', 'cistanche', 'french_oak', 'shatavari', 'black_rice',
+                     'juniper', 'theacrine', 'kawaratake'}
+    if canonical in dose_reviewed:
+        from dose_assessment import verified_reference_citations
+        assert record['reference_semantics']['curve'] == 'completed_no_benchmark_neutral'
+        assert verified_reference_citations(record)
+    else:
+        assert not record.get('reference_semantics')
     result = resolve_evidence_for_canonical(canonical)
     assert result.disposition == EvidenceDisposition.LITERATURE_RESOLUTION_REQUIRED.value
     assert result.points_eligible is False

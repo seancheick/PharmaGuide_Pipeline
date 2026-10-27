@@ -553,3 +553,94 @@ def test_specific_35624_clinical_lock_survives_source_extraction():
                if c["context_id"] == "b35624_ibs_women_dose_ranging_16863564")
     assert pm.context_accepted_for_scoring(ctx) is False
     assert {o["direction"] for o in ctx["outcomes"]} == {"positive", "null"}
+
+
+@pytest.mark.parametrize('case,expected', [
+    ('broad_claim', 'not_applicable'), ('exact_condition', 'applicable'),
+    ('no_claim', 'unresolved'), ('warning_only', 'unresolved'),
+    ('negated_claim', 'unresolved'), ('foreign_source', 'unresolved'),
+    ('unsigned', 'unresolved'), ('unsupported_constraint', 'unresolved'),
+])
+def test_reviewed_native_claim_exclusion_is_source_bound_and_condition_specific(case, expected):
+    from clinical_applicability import assess_native_claimed_purpose
+    row = deepcopy(next(c for c in studied_formulas._clinical_strain_registry()[
+        'STRAIN_PLANTARUM_299V']['study_contexts'] if c['source_pmids'] == ['22912552']))
+    row['applicability'] = {'scope': 'ingredient', 'source_pmids': ['22912552'],
+                            'excluded_claim_terms': ['digestive balance', 'digestive health']}
+    product = {'product_name': 'Digestive health probiotic'}
+    if case == 'exact_condition':
+        product['product_name'] = 'Irritable bowel syndrome and digestive health'
+    elif case == 'no_claim':
+        product['product_name'] = 'Probiotic'
+    elif case == 'warning_only':
+        product = {'product_name': 'Probiotic', 'warnings': 'Digestive health'}
+    elif case == 'negated_claim':
+        product['product_name'] = 'Not for digestive health'
+    elif case == 'foreign_source':
+        row['applicability']['source_pmids'] = ['25194614']
+    elif case == 'unsigned':
+        row.pop('clinical_review')
+    elif case == 'unsupported_constraint':
+        row['applicability']['minimum_daily_dose'] = 1
+        row['applicability']['dose_unit'] = 'mg'
+    result = assess_native_claimed_purpose(product, row)
+    assert result['status'] == expected
+    if case == 'broad_claim':
+        assert result['reason_code'] == 'label_purpose_evidence_mismatch'
+
+
+def test_native_validator_rejects_unbound_or_unimplemented_applicability_fields():
+    row = deepcopy(next(c for c in studied_formulas._clinical_strain_registry()[
+        'STRAIN_PLANTARUM_299V']['study_contexts'] if c['source_pmids'] == ['22912552']))
+    row['applicability'] = {'scope': 'ingredient', 'source_pmids': ['25194614'],
+                            'excluded_claim_terms': ['digestive health']}
+    assert not studied_formulas.valid_native_study_context(row, 'STRAIN_PLANTARUM_299V')
+
+
+@pytest.mark.parametrize('case,complete', [('reviewed_exclusions', True), ('unscoped_sibling', False),
+                                          ('pending_sibling', False), ('unsigned', False)])
+def test_native_completed_zero_needs_every_used_scope_reviewed(monkeypatch, case, complete):
+    from test_probiotic_applicability_rubric import strain_product
+    from scoring_v4.modules.probiotic_evidence import score_evidence
+    registry = deepcopy(studied_formulas._clinical_strain_registry())
+    key = 'STRAIN_PLANTARUM_299V'
+    contexts = [c for c in registry[key]['study_contexts']
+                if c['source_pmids'] in (['22912552'], ['25194614'])]
+    for c in contexts:
+        c['applicability'] = {'scope': 'ingredient', 'source_pmids': c['source_pmids'],
+                              'excluded_claim_terms': ['digestive health']}
+    if case == 'unscoped_sibling':
+        contexts[1].pop('applicability')
+    elif case == 'pending_sibling':
+        contexts[1]['review_status'] = 'source_verified_pending_clinical_review'
+        contexts[1]['scoring_eligible'] = False
+    elif case == 'unsigned':
+        contexts[1].pop('clinical_review')
+    registry[key]['study_contexts'] = contexts
+    monkeypatch.setattr(studied_formulas, '_clinical_strain_registry', lambda: registry)
+    product = strain_product(clinical_id=key, name='Lactobacillus plantarum 299v', dose=1e10)
+    product['product_name'] = 'Digestive health probiotic'
+    result = score_evidence(product)
+    assert result['score'] == 0
+    assert (result['metadata']['evidence_result_state'] == 'no_qualifying_human_evidence') is complete
+
+
+def test_pending_source_bibliographies_do_not_claim_all_citations_are_included_trials():
+    import json
+    from pathlib import Path
+    rows = json.loads((Path(__file__).parents[1] / 'data/backed_clinical_studies.json').read_text())['backed_clinical_studies']
+    for rid, pmid in [('INGR_GLUCOSAMINE_SULFATE', '40005447'), ('INGR_L_THEANINE', '40314930')]:
+        context = next(c for r in rows if r['id'] == rid for c in r['study_contexts'] if pmid in c['source_pmids'])
+        assert 'included_study_pmids' not in context
+        assert any('bibliograph' in note.lower() for note in context['limitations'])
+        assert context['scoring_eligible'] is False
+
+
+def test_pending_bibliography_sentinel_is_not_expanded_into_invented_pmids():
+    import json
+    from pathlib import Path
+    rows = json.loads((Path(__file__).parents[1] / 'data/backed_clinical_studies.json').read_text())['backed_clinical_studies']
+    for record in rows:
+        for context in record.get('study_contexts', []):
+            for limitation in context.get('limitations', []):
+                assert 'e, x, t, r, a, c, t, i, o, n' not in limitation

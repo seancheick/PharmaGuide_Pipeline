@@ -662,6 +662,10 @@ def context_accepted_for_scoring(context) -> bool:
     """Only an attributable clinician approval can authorize clinical scoring."""
     if not isinstance(context, Mapping):
         return False
+    # This descriptive role is intentionally non-scoring, including legacy
+    # contexts that predate the frozen schema. Approval cannot override it.
+    if context.get("evidence_role") == "uncontrolled_intervention":
+        return False
     # A clinician approval records review provenance; it does not override an
     # explicit scope decision that this context is not eligible for scoring
     # (for example, a class-level or ranking-only record). Only an absent flag

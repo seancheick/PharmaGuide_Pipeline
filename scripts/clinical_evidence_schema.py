@@ -56,6 +56,7 @@ EVIDENCE_ROLE = frozenset(
         "guideline",
         "companion_analysis",
         "observational_study",
+        "uncontrolled_intervention",
         "mechanistic_study",
     }
 )
@@ -334,6 +335,9 @@ def validate_frozen_context(
         errors.append("context.evidence_role_invalid")
     if context.get("component_registration_status") not in COMPONENT_REGISTRATION_STATUS:
         errors.append("context.component_registration_status_invalid")
+    if (context.get("evidence_role") == "uncontrolled_intervention"
+            and context.get("scoring_eligible") is not False):
+        errors.append("context.uncontrolled_intervention_must_not_be_scoring_eligible")
     if "scoring_eligible" in context and not isinstance(context.get("scoring_eligible"), bool):
         errors.append("context.scoring_eligible_invalid")
     errors.extend(_dose_errors(context, known_component_ids))
@@ -401,6 +405,37 @@ def validate_ingredient_context(
 
     if not isinstance(context, Mapping):
         return ["context.invalid"]
+    if context.get("review_status") == "rejected_source":
+        # A scoped source rejection does not assert a clinical trial regimen.
+        # It needs its own traceable source and decision, never invented arms.
+        from probiotic_measurements import clinical_review_provenance_valid
+        errors = []
+        sources = context.get("source_pmids")
+        if not _text_list(context.get("components")):
+            errors.append("context.components_invalid")
+        elif known_component_ids is not None and set(context["components"]) - known_component_ids:
+            errors.append("context.components_unknown")
+        if not _text_list(sources) or any(
+                not pmid.isascii() or not pmid.isdecimal() or pmid.startswith("0") for pmid in sources):
+            errors.append("context.source_pmids_invalid")
+        if not _nonempty_text(context.get("context_id")):
+            errors.append("context_id.required_for_complete_review")
+        if context.get("scoring_eligible") is not False:
+            errors.append("review.rejected_source_must_not_be_scoring_eligible")
+        if not clinical_review_provenance_valid(context):
+            errors.append("review.approval_required")
+        dose = context.get("dose")
+        provenance = dose.get("source_provenance") if isinstance(dose, Mapping) else None
+        if (not isinstance(provenance, Mapping)
+                or str(provenance.get("pmid") or "") not in (sources or [])
+                or not _nonempty_text(provenance.get("location"))
+                or not _nonempty_text(provenance.get("source_url"))):
+            errors.append("dose.source_provenance_required")
+        if not _text_list(context.get("limitations")):
+            errors.append("limitations.required_for_complete_review")
+        if authoring:
+            errors.append("review_status.pending_required_for_authoring")
+        return errors
     errors = list(validate_frozen_context(context, known_component_ids=known_component_ids,
                                          require_complete_review=require_complete_review))
 

@@ -1233,3 +1233,106 @@ def test_completed_negative_calendar_review_is_separate_from_scoring_eligibility
     monkeypatch.setattr(owner, 'reviewed_entries', lambda:{'used':record})
     assert owner.assess_clinical_source_review(record)['is_complete'] is expected
     assert context_accepted_for_scoring(context) is False
+
+
+@pytest.mark.parametrize('case,expected', [
+    ('reviewed_exclusion', True), ('missing_review', False), ('foreign_source', False),
+    ('missing_locator', False), ('missing_reason', False), ('missing_identity', False),
+    ('unreviewed_reference', False), ('record_hold', False), ('affirmative', False),
+    ('pending_context', False),
+])
+def test_reference_source_rejection_can_complete_without_invented_trial_facts(monkeypatch, case, expected):
+    import clinical_applicability as owner
+    from probiotic_measurements import context_accepted_for_scoring
+
+    context = {'context_id': 'used_rejection', 'components': ['used'],
+               'source_pmids': ['39269340'], 'review_status': 'rejected_source',
+               'scoring_eligible': False,
+               'clinical_review': {'reviewer': 'Dr Pham', 'reviewed_at': '2026-10-26',
+                   'scope': 'identity_dose_outcome_applicability'},
+               'dose': {'source_provenance': {'pmid': '39269340',
+                   'source_url': 'https://pubmed.ncbi.nlm.nih.gov/39269340/',
+                   'location': 'Primary abstract: uncontrolled pilot design and results'}},
+               'limitations': ['Uncontrolled pilot does not establish causal benefit.']}
+    record = {'id': 'used', 'study_type': 'reference', 'evidence_level': 'reference',
+              'references_structured': [{'pmid': '39269340', 'scoring_eligible': False}],
+              'study_contexts': [context]}
+    if case == 'missing_review':
+        context.pop('clinical_review')
+    elif case == 'foreign_source':
+        context['source_pmids'] = ['12345678']
+    elif case == 'missing_locator':
+        context['dose']['source_provenance'].pop('location')
+    elif case == 'missing_reason':
+        context['limitations'] = []
+    elif case == 'missing_identity':
+        context['components'] = ['different_record']
+    elif case == 'unreviewed_reference':
+        record['references_structured'].append({'pmid': '12345678'})
+    elif case == 'record_hold':
+        record['scoring_eligible'] = False
+    elif case == 'affirmative':
+        record.update(study_type='rct', evidence_level='ingredient-human')
+    elif case == 'pending_context':
+        record['study_contexts'].append({**context, 'review_status': 'source_verified_pending_clinical_review'})
+    monkeypatch.setattr(owner, 'reviewed_entries', lambda: {'used': record})
+    assert owner.assess_clinical_source_review({'id': 'used'})['is_complete'] is expected
+    assert context_accepted_for_scoring(context) is False
+
+
+@pytest.mark.parametrize('record_id', ['PRECLIN_FISETIN', 'INGR_PROBIOTICS'])
+def test_returned_scoped_source_rejections_finish_review_without_earning_credit(record_id):
+    from probiotic_measurements import context_accepted_for_scoring
+    record = reviewed_entries()[record_id]
+    assert record['study_type'] == 'reference'
+    assert record['evidence_level'] == 'reference'
+    assert all(ref['scoring_eligible'] is False for ref in record['references_structured'])
+    assert all(not context_accepted_for_scoring(c) for c in record['study_contexts'])
+    assert assess_clinical_applicability({}, {'id': record_id}) == {
+        'status': 'not_applicable', 'reason_code': 'reference_only_clinical_record'}
+    from clinical_applicability import assess_clinical_source_review
+    assert assess_clinical_source_review({'id': record_id})['is_complete'] is True
+
+
+def test_contributing_exact_strain_context_uses_existing_native_validator(monkeypatch):
+    import clinical_applicability as owner
+    from copy import deepcopy
+    from test_assessment_readiness import _install_completed_release_context
+    context = deepcopy(_install_completed_release_context(monkeypatch))
+    key = 'STRAIN_LGG'
+    context.update(identity_scope='exact_strain', components=[key], purpose='treatment')
+    context['population']['age_group'] = 'adult'
+    context['dose'].update(measurement_type='viable_count', unit='CFU', values=[1e9],
+                           dose_basis='per_strain_daily')
+    record = {'id': key, 'study_contexts': [context],
+              'references_structured': [{'pmid': context['source_pmids'][0]}]}
+    monkeypatch.setattr(owner, 'reviewed_entries', lambda: {key: record})
+    result = owner.assess_clinical_source_review({'id': key})
+    assert result['is_complete'], result['errors']
+    context['components'] = ['UNREGISTERED_STRAIN']
+    assert not owner.assess_clinical_source_review({'id': key})['is_complete']
+
+
+@pytest.mark.parametrize('record_id,held_pmid,independent_pmid', [
+    ('INGR_INOSITOL', '36703143', '38163998'),
+    ('INGR_LACTOFERRIN', '35276902', '19639462'),
+])
+def test_affected_pooled_source_is_held_without_declaring_its_independent_sources_retracted(record_id, held_pmid, independent_pmid):
+    from evidence_resolver import clinical_record_sources_eligible
+    record = reviewed_entries()[record_id]
+    refs = {r['pmid']: r for r in record['references_structured']}
+    assert refs[held_pmid]['scoring_eligible'] is False
+    assert not refs[held_pmid].get('retracted')
+    assert not clinical_record_sources_eligible({'references_structured': [refs[held_pmid]]})
+    assert refs[independent_pmid].get('scoring_eligible') is not False
+    assert clinical_record_sources_eligible({'references_structured': [refs[independent_pmid]]})
+
+
+def test_native_exclusion_extension_cannot_silently_cover_other_purpose_types():
+    from clinical_applicability import _valid_native_claim_scope
+    row = {'purpose': 'physiology', 'source_pmids': ['22912552'],
+           'applicability': {'scope': 'ingredient', 'source_pmids': ['22912552'],
+                             'excluded_claim_terms': ['digestive health']}}
+    assert not _valid_native_claim_scope(row)
+    row['purpose'] = 'treatment'
+    assert _valid_native_claim_scope(row)

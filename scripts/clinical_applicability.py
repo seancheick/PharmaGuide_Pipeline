@@ -392,6 +392,34 @@ def native_product_positioning_texts(product: Mapping) -> list[str]:
     return parts
 
 
+
+def _excluded_claim_matches(product: Mapping, policy: Mapping) -> bool:
+    """Match only affirmative label positioning, never warnings or metadata."""
+    excluded = {str(product.get("brand_name") or ""), str(product.get("serving_description") or "")}
+    for term in policy.get("excluded_claim_terms", []):
+        pattern = re.compile(r"(?<!\w)" + r"[\s_-]+".join(
+            re.escape(word) for word in _key(term).split()) + r"(?!\w)", re.I)
+        if any(text and text not in excluded and find_affirmative_label_match(pattern, text)
+               for text in native_product_positioning_texts(product)):
+            return True
+    return False
+
+
+def _valid_native_claim_scope(context: Mapping) -> bool:
+    """The approved native extension carries exclusions, not new dose rules."""
+    policy = context.get("applicability")
+    sources = context.get("source_pmids")
+    return bool(
+        _valid_policy(policy) and policy.get("scope") == "ingredient"
+        and context.get("purpose") in {"treatment", "challenge"}
+        and set(policy) <= {"scope", "source_pmids", "excluded_claim_terms"}
+        and policy.get("excluded_claim_terms") and policy.get("source_pmids")
+        and isinstance(sources, list)
+        and all(isinstance(source, str) for source in sources)
+        and set(policy["source_pmids"]) <= set(sources)
+    )
+
+
 def assess_native_claimed_purpose(product: Mapping, context: Mapping) -> dict:
     """Match a treatment/challenge study to an affirmative *claimed* purpose.
 
@@ -399,6 +427,10 @@ def assess_native_claimed_purpose(product: Mapping, context: Mapping) -> dict:
     Broad indication categories and unreviewed aliases cannot establish the
     source's exact condition. Population/preparation checks remain independent.
     """
+    if "applicability" in context:
+        from probiotic_measurements import context_accepted_for_scoring
+        if not _valid_native_claim_scope(context) or not context_accepted_for_scoring(context):
+            return {"status": "unresolved", "reason_code": "invalid_applicability_contract"}
     if context.get("purpose") not in {"treatment", "challenge"}:
         return {"status": "applicable", "reason_code": "no_condition_specific_claim_required"}
     condition = _key(context.get("condition"))
@@ -412,6 +444,9 @@ def assess_native_claimed_purpose(product: Mapping, context: Mapping) -> dict:
             if text and text not in excluded and find_affirmative_label_match(pattern, text):
                 return {"status": "applicable", "reason_code": "affirmative_exact_source_condition_claim",
                         "condition": context.get("condition")}
+    if "applicability" in context and _excluded_claim_matches(product, context["applicability"]):
+        return {"status": "not_applicable", "reason_code": "label_purpose_evidence_mismatch",
+                "condition": context.get("condition")}
     return {"status": "unresolved", "reason_code": "source_condition_claim_unestablished",
             "condition": context.get("condition")}
 
@@ -453,6 +488,27 @@ def assess_clinical_source_review(entry: Mapping) -> dict:
                       and not clinical_record_sources_eligible({"references_structured": [ref]})}
     eligible_pmids = declared_pmids - excluded_pmids
     errors = []
+    if reference_only and not contributing:
+        # A source-transfer rejection is a completed non-affirmative decision,
+        # not an affirmative trial with an invented regimen or primary outcome.
+        # Every declared source must be covered by an attributable exclusion;
+        # a pending sibling context or explicit record hold still blocks.
+        rejected_sources = set()
+        for context in contexts:
+            prefix = str(context.get("context_id") or "unknown") + ":"
+            sources = context.get("source_pmids")
+            sources = {str(pmid) for pmid in sources} if isinstance(sources, list) else set()
+            if context.get("review_status") != "rejected_source" or sources - declared_pmids:
+                errors.append(prefix + "clinical_source_rejection_incomplete")
+            errors.extend(prefix + error for error in validate_ingredient_context(
+                context, known_component_ids={reference.get("id")}, require_complete_review=True))
+            rejected_sources.update(sources)
+        if not declared_pmids or declared_pmids - rejected_sources:
+            errors.append("clinical_source_rejection_coverage_incomplete")
+        if reference.get("scoring_eligible") is False:
+            errors.append("clinical_context_eligible_source_missing")
+        return {"is_complete": not errors, "errors": errors,
+                "context_ids": [context.get("context_id") for context in contexts]}
     if not contributing:
         errors.append("clinical_contributing_contexts_missing")
     for context in contributing:
@@ -471,8 +527,16 @@ def assess_clinical_source_review(entry: Mapping) -> dict:
                 or reference.get("scoring_eligible") is False
                 or not (context_pmids & eligible_pmids)):
             errors.append(prefix + "clinical_context_eligible_source_missing")
+        if context.get("identity_scope") in {"exact_strain", "species_general"}:
+            from clinical_evidence_schema import validate_frozen_context
+            from studied_formulas import valid_native_study_context
+            context_errors = validate_frozen_context(context, require_complete_review=True)
+            if not valid_native_study_context(context, reference.get("id")):
+                context_errors.append("clinical_native_context_invalid")
+        else:
+            context_errors = validate_ingredient_context(context, require_complete_review=True)
         errors.extend(str(context.get("context_id") or "unknown") + ":" + error
-                      for error in validate_ingredient_context(context, require_complete_review=True))
+                      for error in context_errors)
     return {"is_complete": not errors, "errors": errors,
             "context_ids": [context.get("context_id") for context in contributing]}
 
@@ -503,16 +567,8 @@ def assess_clinical_applicability(product: Mapping, entry: Mapping, *, assess_am
         return {"status": "not_applicable", "reason_code": "formula_reference_not_individual_evidence"}
     if policy.get("scope") != "ingredient":
         return {"status": "unresolved", "reason_code": "unsupported_applicability_scope"}
-    # Only affirmative native positioning can establish an excluded purpose.
-    # Precaution blocks and brand/serving metadata cannot supply that claim.
-    excluded_metadata = {str(product.get("brand_name") or ""),
-                         str(product.get("serving_description") or "")}
-    for term in policy.get("excluded_claim_terms", []):
-        pattern = re.compile(r"(?<!\w)" + r"[\s_-]+".join(
-            re.escape(word) for word in _key(term).split()) + r"(?!\w)", re.I)
-        if any(text and text not in excluded_metadata and find_affirmative_label_match(pattern, text)
-               for text in native_product_positioning_texts(product)):
-            return {"status": "not_applicable", "reason_code": "label_purpose_evidence_mismatch"}
+    if _excluded_claim_matches(product, policy):
+        return {"status": "not_applicable", "reason_code": "label_purpose_evidence_mismatch"}
     from probiotic_measurements import context_accepted_for_scoring
     from rda_ul_calculator import label_is_for_children
     source_pmids = {str(pmid) for pmid in policy.get("source_pmids") or []}

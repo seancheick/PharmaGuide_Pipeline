@@ -790,3 +790,49 @@ def test_collagen_recovery_retains_canonical_endpoint_scope(purpose, accepted, e
         for key in ('primary_outcome', 'health_goals_supported', 'endpoint_relevance_tags', 'key_endpoints', 'applicability'):
             assert recovered.get(key) == source.get(key)
         assert recovered['matched_source_row_refs'] == ['ingredientRows[0]']
+
+
+def test_sole_known_volume_active_owns_evidence_without_title_or_mass():
+    from evidence_resolver import evidence_prominent_row_keys, evidence_row_key
+
+    row = _row("Peppermint Aerial Parts Oil", "peppermint", 0.2, "mL",
+               path="ingredientRows[0]", scoreable_identity=True)
+    product = _product(product_name="Pepogest", ingredients=[row], matches=[])
+    assert evidence_prominent_row_keys(product) == {evidence_row_key(row)}
+
+
+@pytest.mark.parametrize("shape", ["two_actives", "unknown_identity", "blend_total"])
+def test_sole_active_fallback_does_not_promote_unknown_or_structural_rows(shape):
+    from evidence_resolver import evidence_prominent_row_keys
+
+    row = _row("Unnamed oil", "peppermint", 0.2, "mL", path="ingredientRows[0]")
+    if shape == "unknown_identity":
+        row.update(canonical_id="unknown_oil", scoreable_identity=False,
+                   identity_disposition="identity_conflict")
+    elif shape == "blend_total":
+        row.update(is_blend_header=True, blend_total_weight_only=True)
+    rows = [row]
+    if shape == "two_actives":
+        rows.append(_row("Another oil", "unknown_oil", 0.2, "mL", path="ingredientRows[1]"))
+    product = _product(product_name="Example", ingredients=rows, matches=[])
+    assert evidence_prominent_row_keys(product) == set()
+
+
+@pytest.mark.parametrize("claim,accepted", [
+    ("Soothes occasional digestive discomfort. Enteric coating withstands stomach acid.", True),
+    ("Soothes occasional digestive discomfort. Not enteric coated.", False),
+    ("Soothes occasional upset stomach and nausea.", False),
+])
+def test_reviewed_peppermint_oil_volume_recovers_evidence_only_with_source_delivery(claim, accepted):
+    # DSLD328014: exact oil and printed0.2mL; no oil-density conversion.
+    row = _row("Peppermint Aerial Parts Oil", "peppermint", 0.2, "mL",
+               path="ingredientRows[0]", scoreable_identity=True,
+               raw_source_text="Peppermint Aerial Parts Oil")
+    product = _product(product_name="Pepogest", ingredients=[row], matches=[],
+                       statements=[{"type": "Formulation re: Other", "notes": claim}],
+                       activeIngredients=[row], servings_per_day=3,
+                       delivery_data={"systems": [{"canonical_name": "enteric-coated",
+                           "match_source": "statements[0]", "raw_source_text": claim}]})
+    result = _scored(product)
+    assert (result["score"] > 0) is accepted
+    assert row["quantity"] == 0.2 and row["unit"] == "mL"

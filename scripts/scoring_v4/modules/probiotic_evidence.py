@@ -137,6 +137,8 @@ def score_evidence(product: Any) -> Dict[str, Any]:
         state = "evaluated_null"
     elif components["product_applicability"] > 0:
         state = "evaluated_applicable"
+    elif score == 0 and reviewed_strains_without_qualifying_evidence(assessment["strain_assessments"]):
+        state = "no_qualifying_human_evidence"
     elif research_score > 0 or any(
             reviewed_native_context_present(row)
             for row in assessment["strain_assessments"]):
@@ -145,8 +147,6 @@ def score_evidence(product: Any) -> Dict[str, Any]:
              for row in assessment["strain_assessments"]
              if row.get("research_accepted") and row.get("human_evidence") is not True):
         state = "human_clinical_evidence_unestablished"
-    elif reviewed_strains_without_qualifying_evidence(assessment["strain_assessments"]):
-        state = "no_qualifying_human_evidence"
     elif assessment["strain_assessments"]:
         # A zero-credit reviewed identity still needs applicable primary
         # research. A matching amount cannot establish Evidence applicability.

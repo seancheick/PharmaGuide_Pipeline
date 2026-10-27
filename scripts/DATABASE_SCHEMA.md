@@ -966,3 +966,22 @@ product positioning and directions. Negated claims, brand/serving metadata and
 precaution-only mentions do not establish an excluded purpose. A malformed list is
 an unresolved contract, never a completed negative assessment. This internal scope
 constraint creates no public product field, efficacy threshold or independent scorer.
+
+### Internal Dose reference source verification
+
+The existing literature verifier produces `verification_provenance.reference_citations`
+for reviewed `reference_semantics`, independently of qualifying-study verification.
+The existing Dose contract validates the complete semantics SHA256, exact source IDs,
+UTC verification time, complete per-source content hashes/titles and integrity flags.
+Only exact PubMed article references qualify; search URLs are retained as search
+history, never treated as article verification or proof of absent research.
+
+Changed or malformed receipts stay incomplete across retries until reviewed again.
+A reviewed correction must bind to the same source content, name its correction
+source and retain attribution, date and scope; it cannot waive a retraction or
+expression of concern. Source verification grants no clinical approval, Evidence
+eligibility, efficacy grade, quantity, numerical benchmark or safety clearance.
+An empty qualifying-study list remains independently unverified. Existing freshness
+owners retain their policies; this internal proof is not a public product field.
+The existing botanical Dose consumer uses the proof for source-owned general-neutral
+literature/backed decisions while preserving independent identity, amount and safety gates.

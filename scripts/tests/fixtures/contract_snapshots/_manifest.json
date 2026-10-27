@@ -207,6 +207,16 @@
   ],
   "changelog": [
     {
+      "date": "2026-10-27",
+      "phase": "Shared-source completion and stale-canary reconciliation",
+      "source_commit": "47999e557c5acb0dce9185cae00c0e02dedbf0a9 plus qualified shared-completion batch",
+      "products_updated": [
+        204571,
+        336337
+      ],
+      "notes": "Complete33raw-canary check found exactly2drifts. Paired raw snapshots on clean origin/main47999 and candidate prove204571 is already45.6/Evidence0 on unchanged main (stale61.2 fixture); ingredient identities, amounts, source safety and candidate score unchanged. The existing exact source/applicability holds are retained; no production change made to recover old credit.336337 green-tea preparation now has a reviewed, content-bound general-no-benchmark Dose reference under approvedOctober18policy: Dose0->11.4,total67.4->78.8; Evidence10.4 unchanged, no new efficacy grade/safety claim. Both fixtures refreshed individually from raw after comparison; other31canaries unchanged. Final full raw check and corpus/app qualification recorded separately."
+    },
+    {
       "date": "2026-10-23",
       "phase": "Assessment completeness: unresolved botanical benchmarks",
       "source_commit": "7e87f062313486c91235f017b2945bbeb7ebba91",

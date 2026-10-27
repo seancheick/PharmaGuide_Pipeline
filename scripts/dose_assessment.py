@@ -8,6 +8,8 @@ free-text skip reasons.
 from __future__ import annotations
 
 import math
+import hashlib
+from datetime import datetime, timezone
 import json
 from dataclasses import asdict, dataclass
 from functools import lru_cache
@@ -16,6 +18,69 @@ from typing import Any, Dict, Iterable, Optional
 
 from normalization import canonicalize_mass_unit
 from scoring_v4.exposure import row_exposure
+
+
+def reference_semantics_sha256(semantics: dict) -> str:
+    """Bind Dose source verification to the complete reviewed reference."""
+    return hashlib.sha256(json.dumps(semantics, sort_keys=True, separators=(",", ":"),
+                                     ensure_ascii=False).encode("utf-8")).hexdigest()
+
+
+def _reviewed_reference_correction(result: dict) -> bool:
+    review = result.get("correction_review")
+    if not isinstance(review, dict):
+        return False
+    try:
+        reviewed = datetime.fromisoformat(review.get("verified_at", ""))
+        if reviewed.tzinfo is None or reviewed > datetime.now(timezone.utc):
+            return False
+    except (ValueError, TypeError):
+        return False
+    return (review.get("source_sha256") == result.get("content_sha256")
+            and review.get("is_complete") is True
+            and bool(review.get("source_ids"))
+            and isinstance(review.get("source_ids"), list)
+            and all(isinstance(source, str) and source.strip() for source in review["source_ids"])
+            and bool(review.get("reviewed_by")) and bool(review.get("notes")))
+
+
+def verified_reference_citations(record: dict) -> bool:
+    """Check source proof only; this never establishes Evidence approval."""
+    semantics = record.get("reference_semantics")
+    provenance = record.get("verification_provenance") or {}
+    if not isinstance(provenance, dict):
+        return False
+    proof = provenance.get("reference_citations")
+    if not isinstance(semantics, dict) or not isinstance(proof, dict):
+        return False
+    sources = semantics.get("source_ids")
+    if (not isinstance(sources, list) or not sources
+            or any(not isinstance(source, str) or not source.strip() for source in sources)
+            or len(set(sources)) != len(sources)
+            or proof.get("source_ids") != sources
+            or proof.get("is_complete") is not True
+            or proof.get("source_sha256") != reference_semantics_sha256(semantics)):
+        return False
+    try:
+        verified = datetime.fromisoformat(proof.get("verified_at", ""))
+        if verified.tzinfo is None or verified > datetime.now(timezone.utc):
+            return False
+    except (ValueError, TypeError):
+        return False
+    results = proof.get("results")
+    if not isinstance(results, list) or len(results) != len(sources):
+        return False
+    return all(isinstance(result, dict) and result.get("source_id") == source
+               and result.get("verified") is True
+               and isinstance(result.get("content_sha256"), str)
+               and len(result["content_sha256"]) == 64
+               and all(char in "0123456789abcdef" for char in result["content_sha256"])
+               and bool(result.get("article_title"))
+               and all(result.get(flag) is False for flag in
+                       ("retracted", "expression_of_concern"))
+               and (result.get("has_erratum") is False
+                    or (result.get("has_erratum") is True and _reviewed_reference_correction(result)))
+               for source, result in zip(sources, results))
 
 
 ASSESSED_WITHIN_LIMIT = "assessed_within_limit"

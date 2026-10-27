@@ -39,8 +39,9 @@ if _env.exists():
             k, _, v = line.partition("=")
             os.environ.setdefault(k.strip(), v.strip())
 
-from verify_all_citations_content import fetch_articles
+from verify_all_citations_content import fetch_articles, scan_citations, HISTORY_KEYS
 from pubmed_xml import clean_text
+from dose_assessment import reference_semantics_sha256, verified_reference_citations
 
 
 LITERATURE_RECORDS_PATH = SCRIPTS_ROOT / "data" / "literature_evidence_records.json"
@@ -73,6 +74,85 @@ def title_overlap(a: str, b: str) -> float:
     return len(wa & wb) / len(wa | wb)
 
 
+def _article_is_retracted(article: Dict[str, Any]) -> bool:
+    return (
+        article.get("retracted") is True
+        or "retracted publication" in [value.lower() for value in article.get("publication_types", [])]
+        or any(value.get("type") == "RetractionIn" for value in article.get("comments_corrections", []))
+        or "retracted publication" in [value.lower() for value in article.get("mesh_terms", [])]
+        or "retraction of" in article.get("title", "").lower()
+        or "retraction:" in article.get("title", "").lower()
+    )
+
+
+def verify_reference_citations(record: dict, articles: dict, now_iso: str) -> dict:
+    """Produce source-only proof; never infer Evidence approval from Dose references."""
+    semantics = record.get("reference_semantics") or {}
+    if not isinstance(semantics, dict):
+        return {}
+    sources = semantics.get("source_ids") or []
+    if not isinstance(sources, list):
+        sources = []
+    source_results = []
+    provenance = record.get("verification_provenance") or {}
+    prior_present = isinstance(provenance, dict) and "reference_citations" in provenance
+    prior_proof = (provenance.get("reference_citations") or {}) if isinstance(provenance, dict) else {}
+    prior_valid = verified_reference_citations(record)
+    prior_items = prior_proof.get("results") if isinstance(prior_proof, dict) else None
+    prior_results = {item["source_id"]: item for item in prior_items
+                     if isinstance(item, dict) and isinstance(item.get("source_id"), str)} if isinstance(prior_items, list) else {}
+    for source in sources:
+        match = re.fullmatch(r"(?:(?:PMID:)?([0-9]+)|https://pubmed\.ncbi\.nlm\.nih\.gov/([0-9]+)/?)", str(source).strip())
+        article = articles.get(match.group(1) or match.group(2)) if match else None
+        text = " ".join([article.get("title") or "", article.get("abstract") or "",
+                         *(article.get("mesh_terms") or [])]).lower() if article else ""
+        # Source identity needs the complete canonical phrase. Shared parts,
+        # colours or preparation words cannot establish a botanical identity.
+        identity = re.sub(r"[^a-z0-9]+", " ", str(record.get("canonical_id") or record.get("id") or "").lower()).strip()
+        identity = re.sub(r"^(?:ingr|brand|preclin|strain) ", "", identity)
+        topic_match = bool(identity and re.search(
+            r"(?<!\w)" + r"[\s_-]+".join(re.escape(term) for term in identity.split()) + r"(?!\w)", text))
+        verified = bool(article and article.get("title") and text and topic_match
+                        and not _article_is_retracted(article)
+                        and not article.get("expression_of_concern")
+                        and not article.get("has_erratum"))
+        source_content = {**article, "mesh_terms": [str(term).lower() for term in article.get("mesh_terms", [])]} if article else None
+        source_results.append({
+            "source_id": source, "verified": verified,
+            "retracted": _article_is_retracted(article) if article else None,
+            "expression_of_concern": bool(article.get("expression_of_concern")) if article else None,
+            "has_erratum": bool(article.get("has_erratum")) if article else None,
+            "article_title": article.get("title") if article else None,
+            "content_sha256": hashlib.sha256(json.dumps(source_content, sort_keys=True,
+                ensure_ascii=False, separators=(",", ":")).encode("utf-8")).hexdigest() if article else None,
+        })
+        prior = prior_results.get(source)
+        result = source_results[-1]
+        if prior_present and not prior_valid:
+            result["verified"] = False
+        if prior_valid and prior:
+            unchanged = prior.get("content_sha256") == result["content_sha256"]
+            result["verified"] = bool(unchanged and article
+                and not result["retracted"] and not result["expression_of_concern"]
+                and (not result["has_erratum"] or bool(prior.get("correction_review"))))
+            if unchanged and prior.get("correction_review"):
+                result["correction_review"] = prior["correction_review"]
+            if unchanged and prior.get("notes"):
+                result["notes"] = prior["notes"]
+    if semantics:
+        proof = {
+            "source_sha256": reference_semantics_sha256(semantics),
+            "source_ids": sources, "verified_at": now_iso,
+            "is_complete": bool(sources) and all(item["verified"] for item in source_results),
+            "results": source_results,
+        }
+        if not verified_reference_citations({"reference_semantics": semantics,
+                "verification_provenance": {"reference_citations": proof}}):
+            proof["is_complete"] = False
+        return proof
+    return {}
+
+
 def verify_literature_file(apply_fixes: bool = False, record_ids: Set[str] | None = None) -> Dict[str, Any]:
     if not LITERATURE_RECORDS_PATH.exists():
         raise FileNotFoundError(f"Missing {LITERATURE_RECORDS_PATH}")
@@ -89,6 +169,7 @@ def verify_literature_file(apply_fixes: bool = False, record_ids: Set[str] | Non
 
     all_pmids: Set[str] = set()
     for r in records:
+        all_pmids.update(scan_citations(r.get("reference_semantics") or {}, HISTORY_KEYS))
         for s in r.get("qualifying_human_studies", []):
             p = str(s.get("pmid") or "").strip()
             if p:
@@ -103,6 +184,7 @@ def verify_literature_file(apply_fixes: bool = False, record_ids: Set[str] | Non
     failures = []
     corrections = []
     retractions = []
+    reference_citation_results = []
 
     now_iso = datetime.datetime.now(datetime.timezone.utc).isoformat()
 
@@ -187,14 +269,7 @@ def verify_literature_file(apply_fixes: bool = False, record_ids: Set[str] | Non
                     evidence_quote = clean_text(sentences[-1])
 
             # Check retraction
-            is_retracted = (
-                art.get("retracted") is True
-                or "retracted publication" in [m.lower() for m in art.get("publication_types", [])]
-                or any(c.get("type") == "RetractionIn" for c in art.get("comments_corrections", []))
-                or "retracted publication" in [m.lower() for m in mesh_terms]
-                or "retraction of" in live_title.lower()
-                or "retraction:" in live_title.lower()
-            )
+            is_retracted = _article_is_retracted(art)
             if is_retracted:
                 retractions.append({
                     "canonical_id": cid,
@@ -219,6 +294,41 @@ def verify_literature_file(apply_fixes: bool = False, record_ids: Set[str] | Non
                 "verified_at": now_iso,
                 "abstract_evidence_quote": evidence_quote,
             }
+
+        # Dose-reference citations are source dependencies too. They are not
+        # qualifying human studies and must never silently become such studies.
+        study_pmids = {str(study.get("pmid") or "") for study in studies}
+        for citation in sorted(set(scan_citations(r.get("reference_semantics") or {}, HISTORY_KEYS)) - study_pmids):
+            article = fetched_articles.get(citation)
+            result = {"canonical_id": cid, "citation": citation,
+                      "article_title": article.get("title") if article else None}
+            reference_citation_results.append(result)
+            if not article:
+                failures.append({"canonical_id": cid, "pmid": citation,
+                                 "error": "reference_citation_not_found"})
+                record_provenance["all_pmids_verified"] = False
+                continue
+            title = article.get("title") or ""
+            text = " ".join([title, article.get("abstract") or "", *(article.get("mesh_terms") or [])]).lower()
+            semantics = r.get("reference_semantics") or {}
+            topic = words(cid.replace("_", " "), r.get("material_form", ""), semantics.get("preparation", ""))
+            found_topic = any(re.search(r"\b" + re.escape(word) + r"\b", text) for word in topic)
+            result["topic_match_verified"] = found_topic
+            if not found_topic:
+                failures.append({"canonical_id": cid, "pmid": citation,
+                                 "error": "reference_topic_match_not_verified"})
+                record_provenance["all_pmids_verified"] = False
+            if _article_is_retracted(article):
+                retractions.append({"canonical_id": cid, "pmid": citation, "title": title})
+                record_provenance["retractions_found"] = True
+            for flag in ("expression_of_concern", "has_erratum"):
+                if article.get(flag):
+                    failures.append({"canonical_id": cid, "pmid": citation,
+                                     "error": flag + "_requires_review"})
+                    record_provenance["all_pmids_verified"] = False
+
+        if r.get("reference_semantics"):
+            record_provenance["reference_citations"] = verify_reference_citations(r, fetched_articles, now_iso)
 
         if not studies:
             record_provenance["all_pmids_verified"] = False
@@ -250,6 +360,8 @@ def verify_literature_file(apply_fixes: bool = False, record_ids: Set[str] | Non
         "records": records,
         "records_checked": total_records,
         "studies_checked": total_studies,
+        "reference_citations_checked": len(reference_citation_results),
+        "reference_citation_results": reference_citation_results,
         "verification_failures_count": len(failures),
         "failures": failures,
         "corrections_count": len(corrections),

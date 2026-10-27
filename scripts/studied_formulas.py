@@ -823,8 +823,32 @@ def species_with_clinical_strain_evidence() -> frozenset[str]:
 
 def reviewed_strains_without_qualifying_evidence(strain_assessments) -> bool:
     """Every assessed strain's literature review is finished and none qualifies."""
-    return bool(strain_assessments) and all(
-        row.get("status") == "strain_reviewed_no_qualifying_human_evidence" for row in strain_assessments)
+    def completed(row):
+        if row.get("status") == "strain_reviewed_no_qualifying_human_evidence":
+            return True
+        if row.get("research_accepted") is not True or row.get("status") in {
+                "strain_identity_mismatch", "strain_context_mismatch", "strain_context_unresolved",
+                "strain_identity_or_review_unresolved", "strain_reference_unreviewed"}:
+            return False
+        contexts = row.get("study_contexts") or []
+        reviewed_exclusion = False
+        for context in contexts:
+            if (context.get("status") != "source_context_recorded"
+                    or not valid_native_study_context(context, row.get("clinical_id"))):
+                return False
+            if (context.get("review_status") == "rejected_source"
+                    and context.get("scoring_eligible") is False
+                    and clinical_review_provenance_valid(context)):
+                continue
+            from clinical_applicability import _valid_native_claim_scope
+            if (not context_accepted_for_scoring(context)
+                    or not _valid_native_claim_scope(context)
+                    or context.get("claimed_purpose_assessment", {}).get("status") != "not_applicable"):
+                return False
+            reviewed_exclusion = True
+        return reviewed_exclusion
+
+    return bool(strain_assessments) and all(completed(row) for row in strain_assessments)
 
 
 def assess_probiotic_component_disposition(product: Mapping) -> dict:
@@ -1034,6 +1058,10 @@ def valid_native_study_context(context: Mapping, reference_id: str) -> bool:
             context,
             known_component_ids=set(_clinical_strain_registry()),
         ):
+            return False
+    if "applicability" in context:
+        from clinical_applicability import _valid_native_claim_scope
+        if not _valid_native_claim_scope(context):
             return False
     eligible = context.get("scoring_eligible")
     if eligible is not None and not isinstance(eligible, bool):

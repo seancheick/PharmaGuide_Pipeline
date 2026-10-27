@@ -412,7 +412,19 @@ def _primary_botanical_active(product: Dict[str, Any]) -> Optional[Dict[str, Any
 
 
 def _explicit_botanical_identity_rejection(row: Dict[str, Any]) -> bool:
-    return (row.get("scoreable_identity") is False
+    # The input owner excludes some known identities from dose-bearing rows
+    # solely because the manufacturer withholds their individual quantities.
+    # That exclusion cannot turn a resolved identity into an unknown botanical.
+    known_without_dose = (
+        row.get("identity_decision_reason") == "no_dose_evidence"
+        and row.get("mapped_identity") is True
+        and row.get("identity_disposition") == "clean"
+        and row.get("identity_taxonomy_coherent") is True
+        and row.get("cleaner_row_role") == "active_scorable"
+        and row.get("score_eligible_by_cleaner") is True
+        and row.get("score_exclusion_reason") == "recognized_non_scorable"
+    )
+    return ((row.get("scoreable_identity") is False and not known_without_dose)
             or row.get("identity_disposition") == "identity_conflict")
 
 
@@ -429,7 +441,9 @@ def _recognized_botanical_identity(
     # A broad category alone is not a verified identity or a clinical claim.
     if (row.get("scoreable_identity") is True
             and row.get("scoring_input_kind") != "product_level_evidence"
-            and row.get("evidence_type") != "blend_anchor_mass"
+            and not is_lent_blend_mass(row)
+            and (row.get("evidence_type") != "blend_anchor_mass"
+                 or row.get("scoring_input_kind") == "label_active_projection")
             and bool(_norm(row.get("canonical_id")))
             and not _norm(row.get("canonical_id")).startswith("blend")
             and _classification_profile_eligible(row, "botanical") is True):
@@ -755,6 +769,23 @@ def _dosing_entry_for(row: Dict[str, Any]) -> Optional[Dict[str, Any]]:
                 # treating it as an ineffective dose.
                 continue
             return entry
+    # Approved general Dose conclusions also live with their existing
+    # clinical preparation owner. Read its exact row identity, never the
+    # product title, a linked parent or an enrichment-only matched form.
+    from dose_assessment import _row_names, verified_reference_citations
+    from evidence_resolver import _backed_studies_index
+    source_row = {"canonical_id": row.get("canonical_id"),
+                  "name": row.get("raw_source_text") or row.get("name"),
+                  "standard_name": row.get("source_label_name") or row.get("name")}
+    for key in sorted(_row_names(source_row)):
+        for entry in _backed_studies_index().get(key, []):
+            semantics = entry.get("reference_semantics") or {}
+            if (semantics.get("reference_type") in {"no_benchmark", "discrete_studied_regimen"}
+                    and semantics.get("curve") == "completed_no_benchmark_neutral"
+                    and str(semantics.get("approval_status") or "").startswith("approved_existing_neutral_")
+                    and semantics.get("source_ids")):
+                # A broken exact owner cannot fall through to a weaker source.
+                return entry if verified_reference_citations(entry) else {}
     return None
 
 
@@ -834,7 +865,9 @@ def score_botanical_purpose_dose(
     # credit — otherwise removing the botanical-anchor CAUTION ceiling would
     # over-credit opaque blends. Score it like a blend total.
     if (row.get("scoring_input_kind") == "product_level_evidence"
-            or row.get("evidence_type") == "blend_anchor_mass"):
+            or is_lent_blend_mass(row)
+            or (row.get("evidence_type") == "blend_anchor_mass"
+                and row.get("scoring_input_kind") != "label_active_projection")):
         return unassessed_amount_band("blend_total_only", benchmark,
                                       reviewed_label_limitation=reviewed_hidden)
 
@@ -857,6 +890,10 @@ def _botanical_benchmark(row: Dict[str, Any]) -> str:
     entry = _dosing_entry_for(row)
     if entry is not None:
         semantics = entry.get("reference_semantics") or {}
+        if str(semantics.get("owner") or "").startswith("scripts/data/backed_clinical_studies.json::"):
+            from dose_assessment import verified_reference_citations
+            if not verified_reference_citations(entry):
+                return "unresolved"
         if (semantics.get("curve") == "completed_no_benchmark_neutral"
                 and str(semantics.get("approval_status") or "").startswith("approved_existing_neutral_")):
             return "absent"
@@ -871,11 +908,10 @@ def _botanical_benchmark(row: Dict[str, Any]) -> str:
 
     record = _load_literature_evidence().get(_norm(row.get("canonical_id"))) or {}
     semantics = record.get("reference_semantics") or {}
-    provenance = record.get("verification_provenance") or {}
+    from dose_assessment import verified_reference_citations
+
     if (
-        record.get("verification_result") == "authoritative_pubmed_verified"
-        and provenance.get("all_pmids_verified") is True
-        and not provenance.get("retractions_found")
+        verified_reference_citations(record)
         and semantics.get("reference_type") == "no_benchmark"
         and semantics.get("curve") == "completed_no_benchmark_neutral"
         and str(semantics.get("approval_status") or "").startswith("approved_existing_neutral_")
