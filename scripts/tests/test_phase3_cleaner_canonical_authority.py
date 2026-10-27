@@ -434,3 +434,70 @@ class TestLegacyBehaviorPreserved:
         assert result is not None
         assert "cleaner_canonical_enforced" not in result
         assert "cleaner_canonical_fallback" not in result
+
+
+@pytest.fixture(scope="module")
+def material_alias_normalizer():
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+
+    return EnhancedDSLDNormalizer()
+
+
+def _material_alias_label(name, group, form, *, nested=False):
+    row = {
+        "order": 1, "ingredientId": 995001, "name": name, "category": "botanical",
+        "ingredientGroup": group, "nestedRows": [], "alternateNames": [],
+        "forms": [{"order": 1, "name": form, "category": "botanical", "ingredientGroup": group}],
+        "quantity": [{"servingSizeOrder": 1, "servingSizeQuantity": 1, "operator": "=",
+                      "quantity": 0 if nested else 100, "unit": "NP" if nested else "mg",
+                      "dailyValueTargetGroup": [], "servingSizeUnit": "Capsule(s)"}],
+    }
+    rows = [row]
+    if nested:
+        rows = [{"order": 1, "name": "Botanical Extract Blend", "category": "blend",
+                 "ingredientGroup": "Blend (Herb/Botanical)", "nestedRows": [row], "forms": [],
+                 "quantity": [{"servingSizeOrder": 1, "quantity": 19.2, "unit": "mg"}]}]
+    return {"id": 995001, "fullName": "Material identity probe", "brandName": "Test",
+            "ingredientRows": rows, "otheringredients": {"text": None, "ingredients": []},
+            "servingSizes": [{"order": 1, "minQuantity": 1, "maxQuantity": 1,
+                              "minDailyServings": 1, "maxDailyServings": 1, "unit": "Capsule(s)"}]}
+
+
+def _material_alias_row(normalizer, raw, name):
+    cleaned = normalizer.normalize_product(raw)
+    return next(row for row in cleaned["activeIngredients"] if row["name"] == name)
+
+
+@pytest.mark.parametrize("name,group,form,expected,nested", [
+    ("Apple Fruit Extract", "Apple", "Malus pumila Fruit Extract", "apple_fruit", False),
+    ("Apple Whole Fruit Extract", "Apple", "Malus pumila Whole Fruit Extract", "apple_fruit", False),
+    ("Wild Indigo Root Extract", "Wild Indigo", "Baptista tinctoria Root Extract", "wild_indigo_root", True),
+])
+def test_verified_material_names_keep_exact_fruit_or_root_identity(
+    material_alias_normalizer, name, group, form, expected, nested,
+):
+    row = _material_alias_row(material_alias_normalizer,
+                              _material_alias_label(name, group, form, nested=nested), name)
+    assert row.get("canonical_id") == expected
+    assert row["forms"][0]["name"] == form
+    if nested:
+        assert row.get("quantity") in (None, 0)
+    else:
+        assert row["quantity"] == 100
+
+
+@pytest.mark.parametrize("name,group,form,blocked", [
+    ("Apple Fruit Extract", "Apple", "Malus pumila Root Extract", "apple_fruit"),
+    ("Apple Fruit Extract", "Apple", "Malus pumila Leaf Extract", "apple_fruit"),
+    ("Apple Fruit Extract", "Apple", "Malva sylvestris Fruit Extract", "apple_fruit"),
+    ("Wild Indigo Root Extract", "Wild Indigo", "Baptista tinctoria Leaf Extract", "wild_indigo_root"),
+    ("Wild Indigo Root Extract", "Wild Indigo", "Baptisia australis Root Extract", "wild_indigo_root"),
+])
+def test_verified_material_aliases_do_not_admit_wrong_parts_or_other_organisms(
+    material_alias_normalizer, name, group, form, blocked,
+):
+    row = _material_alias_row(material_alias_normalizer,
+                              _material_alias_label(name, group, form), name)
+    assert row.get("canonical_id") != blocked
+    assert row["quantity"] == 100
+    assert row["forms"][0]["name"] == form

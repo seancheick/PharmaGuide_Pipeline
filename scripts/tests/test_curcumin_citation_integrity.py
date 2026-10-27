@@ -196,3 +196,59 @@ def test_novasol_pmid_attribution_correct(iqm):
             f'PMID:24402825 (Mol Nutr Food Res), not 28204880 (which is '
             f'Purpura 2018 on CurcuWIN-area material)'
         )
+
+
+def _theracurmin_record():
+    data = json.loads((IQM_PATH.parent / 'backed_clinical_studies.json').read_text())
+    return next(record for record in data['backed_clinical_studies'] if record['id'] == 'BRAND_THERACURMIN')
+
+
+def test_theracurmin_explicit_product_hold_withholds_affirmative_brand_qualification():
+    from evidence_resolver import clinical_record_sources_eligible
+    record = _theracurmin_record()
+    assert record.get('scoring_eligible') is False
+    assert not clinical_record_sources_eligible(record)
+    assert record['effect_direction'] == 'mixed'
+    assert {ref['pmid'] for ref in record['references_structured']} == {'25308211', '29246725', '35494290'}
+
+
+def test_theracurmin_signed_source_contexts_keep_nulls_and_pending_memory_acceptance():
+    from clinical_evidence_schema import validate_ingredient_context
+    from probiotic_measurements import context_accepted_for_scoring
+    contexts = _theracurmin_record().get('study_contexts', [])
+    assert len(contexts) == 3
+    by_pmid = {context['source_pmids'][0]: context for context in contexts}
+    for context in contexts:
+        assert validate_ingredient_context(context) == []
+        assert context['dose']['values'] == [180]
+        assert 'active curcumin' in context['dose']['normalization']['basis']
+        assert context['scoring_eligible'] is False
+        assert not context_accepted_for_scoring(context)
+    oa = by_pmid['25308211']
+    assert oa['outcomes'][0]['direction'] == 'null'
+    assert any(o['outcome_role'] == 'post_hoc_subgroup' for o in oa['outcomes'])
+    assert oa['clinical_review']['reviewer'] == 'Dr. Pham'
+    memory = by_pmid['29246725']
+    assert memory['review_status'] == 'source_verified_pending_clinical_review'
+    assert 'clinical_review' not in memory
+    assert 'supplement' in ' '.join(memory['limitations']).lower()
+    assert 'registration' in ' '.join(memory['limitations']).lower()
+    assert any(o['direction'] == 'null' for o in memory['outcomes'])
+    postoperative = by_pmid['35494290']
+    assert postoperative['outcomes'][0]['direction'] == 'null'
+    assert postoperative['outcomes'][1]['kind'] == 'surrogate'
+    assert postoperative['dose']['duration_days'] == 364
+    assert postoperative['clinical_review']['reviewer'] == 'Dr. Pham'
+
+
+def test_theracurmin_held_sources_cannot_reenter_canonical_evidence_resolution():
+    from evidence_resolver import resolve_evidence_for_canonical
+    resolution = resolve_evidence_for_canonical(
+        'curcumin', name='Theracurmin', dose_value=180, dose_unit='mg', matched_form='theracurmin',
+    )
+    sources = resolution.owner_facts.get('backed_clinical_studies', {}).get('pmids', [])
+    assert set(sources).isdisjoint({'25308211', '29246725', '35494290'})
+    # Historical sources remain inspectable on their held canonical record.
+    assert {r['pmid'] for r in _theracurmin_record()['references_structured']} == {
+        '25308211', '29246725', '35494290',
+    }

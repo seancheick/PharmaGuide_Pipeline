@@ -3936,7 +3936,7 @@
         "iron absorption",
         "gut health"
       ],
-      "notable_studies": "Multiple RCTs for IBS symptoms",
+      "notable_studies": "Exact299v IBS trials include positive22912552 at10billionCFU/day for4weeks and null25194614 at the same daily CFU for8weeks.12452404 does not support affirmative symptom benefit; exact exposure remains unresolved. These findings cannot establish uniform efficacy for broad digestive-health claims.",
       "cfu_thresholds": {
         "indication_primary": "relief of irritable bowel syndrome symptoms",
         "tiers_cfu_per_day": {
@@ -4666,7 +4666,8 @@
             "Analysis excluded 10 randomized participants.",
             "Four-point symptom-frequency scale; unusually low placebo global response.",
             "Supported by Rosell-Lallemand and Probi AB; products supplied by Rosell-Lallemand.",
-            "Global efficacy rating hierarchy not explicitly designated."
+            "Global efficacy rating hierarchy not explicitly designated.",
+            "Signed October26 review accepts this exact positive IBS trial context alongside the negative matching-dose25194614 trial; no general digestive-health or universal10billionCFU efficacy threshold follows. Earlier2026-09-22 metadata recorded delegated source research, not an independent clinical sign-off."
           ],
           "review_status": "clinician_approved",
           "study_design": "rct",
@@ -4683,12 +4684,163 @@
           "component_registration_status": "fully_registered",
           "scoring_eligible": true,
           "clinical_review": {
-            "reviewer": "Claude Opus 5 research review (Codex audit response, 2026-09-22), delegated by Sean B (engineering owner); not a clinician sign-off",
-            "reviewed_at": "2026-09-22T15:34:46Z",
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-10-26",
             "scope": "identity_dose_outcome_applicability",
-            "basis": "scripts/audits/closure_20260921/CODEX_AUDIT_RESPONSE_20260922.json",
-            "decision": "approve"
+            "basis": "Signed returned batch1 source decision, as attested by Sean; exact review date supplied2026-10-26, no clock time supplied.",
+            "decision": "approve_with_limits"
           }
+        },
+        {
+          "context_id": "p299v_ibs_rome2_25194614",
+          "context_schema_version": "1.1.0",
+          "source_pmids": [
+            "25194614"
+          ],
+          "identity_scope": "exact_strain",
+          "components": [
+            "STRAIN_PLANTARUM_299V"
+          ],
+          "component_registration_status": "fully_registered",
+          "population": {
+            "age_group": "adult",
+            "description": "Adults with RomeII irritable bowel syndrome treated at a referral hospital."
+          },
+          "purpose": "treatment",
+          "condition": "irritable_bowel_syndrome",
+          "dose": {
+            "basis": "discrete_daily_arms",
+            "measurement_type": "viable_count",
+            "unit": "CFU",
+            "values": [
+              10000000000
+            ],
+            "dosage_forms": [
+              "capsule"
+            ],
+            "duration_days": 56,
+            "co_therapies": [],
+            "dose_status": "verified",
+            "dose_basis": "per_strain_daily",
+            "duration_basis": "fixed_protocol",
+            "administration_frequency": "Two capsules daily; within-day timing not reported in the abstract.",
+            "reported_regimen": "Two capsules each containing5billionCFU daily for eight weeks.",
+            "normalization": {
+              "basis": "Two capsules/day multiplied by5x10^9CFU per capsule=10^10CFU/day;8weeks=56days."
+            },
+            "source_provenance": {
+              "pmid": "25194614",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/25194614/",
+              "location": "PubMed abstract: randomized intervention dosage, duration and between-group results"
+            }
+          },
+          "outcomes": [
+            {
+              "name": "abdominal_pain_relief",
+              "hierarchy": "primary",
+              "kind": "patient_important",
+              "direction": "null",
+              "outcome_role": "direct_between_group_effect"
+            },
+            {
+              "name": "ibs_quality_of_life",
+              "hierarchy": "secondary",
+              "kind": "patient_important",
+              "direction": "null",
+              "outcome_role": "direct_between_group_effect"
+            }
+          ],
+          "evidence_role": "direct_rct",
+          "trial_family": "p299v_ibs_25194614",
+          "limitations": [
+            "No between-group abdominal-pain relief(p=0.800) or IBS-quality-of-life(p=0.687); within-group improvement is not probiotic efficacy.",
+            "Eight-week RomeII IBS treatment study; not a broad digestive-health prevention study or evidence that a matching dose is reliably effective.",
+            "Signed returned review supplies its bounded null-trial decision; no numerical efficacy minimum, optimum or safety ceiling is created.",
+            "Co-therapies were not established by the inspected abstract; the empty co_therapies list records no extracted co-therapy, not proof that none were used. Within-day capsule timing requires the original methods; two capsules daily does not establish a simultaneous once-daily administration."
+          ],
+          "review_status": "clinician_approved",
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-10-26",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Signed returned batch1 source decision, as attested by Sean; exact review date supplied2026-10-26, no clock time supplied.",
+            "decision": "approve_with_limits"
+          },
+          "study_design": "rct",
+          "scoring_eligible": true,
+          "authored_on": "2026-10-26",
+          "authoring_method": "Signed batch1 negative matching-dose decision reconciled with live PubMed XML; source regimen and null comparisons content-verified."
+        },
+        {
+          "context_id": "p299v_ibs_sen_12452404",
+          "context_schema_version": "1.1.0",
+          "source_pmids": [
+            "12452404"
+          ],
+          "identity_scope": "exact_strain",
+          "components": [
+            "STRAIN_PLANTARUM_299V"
+          ],
+          "component_registration_status": "fully_registered",
+          "population": {
+            "age_group": "adult",
+            "description": "Twelve previously untreated adults with irritable bowel syndrome in a double-blind placebo-controlled crossover trial."
+          },
+          "purpose": "treatment",
+          "condition": "irritable_bowel_syndrome",
+          "dose": {
+            "basis": "unresolved",
+            "measurement_type": "viable_count",
+            "unit": "CFU",
+            "values": [],
+            "dosage_forms": [],
+            "duration_days": null,
+            "co_therapies": [],
+            "dose_status": "extraction_pending",
+            "dose_basis": "not_applicable",
+            "duration_basis": "extraction_pending"
+          },
+          "outcomes": [
+            {
+              "name": "ibs_symptom_score",
+              "hierarchy": "unresolved",
+              "kind": "patient_important",
+              "direction": "null",
+              "outcome_role": "direct_between_group_effect"
+            },
+            {
+              "name": "colonic_fermentation",
+              "hierarchy": "unresolved",
+              "kind": "surrogate",
+              "direction": "null",
+              "outcome_role": "direct_between_group_effect"
+            },
+            {
+              "name": "breath_hydrogen_after_lactulose",
+              "hierarchy": "unresolved",
+              "kind": "surrogate",
+              "direction": "positive",
+              "outcome_role": "direct_between_group_effect"
+            }
+          ],
+          "evidence_role": "direct_rct",
+          "trial_family": "p299v_ibs_sen_12452404",
+          "limitations": [
+            "Signed returned review rejects affirmative IBS symptom-benefit use. The abstract reports no symptom or overall-fermentation difference; reduced breath hydrogen after lactulose is not symptom benefit.",
+            "ExactCFU dose, delivery matrix and crossover timing still require original methods; four-week overall trial wording does not establish per-arm exposure duration. Do not invent a dose or transfer the other10billionCFU regimens."
+          ],
+          "review_status": "rejected_source",
+          "scoring_eligible": false,
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-10-26",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Signed returned batch1 source decision, as attested by Sean; exact review date supplied2026-10-26, no clock time supplied.",
+            "decision": "reject_affirmative_symptom_benefit"
+          },
+          "study_design": "crossover_rct",
+          "authored_on": "2026-10-26",
+          "authoring_method": "Signed batch1 rejection reconciled with live PubMed XML abstract; unreported exposure remains unresolved."
         }
       ],
       "reference_semantics": {

@@ -1,5 +1,26 @@
 ## Current execution — assessment integrity, October 23 (Codex)
 
+## Corrected final identity checkpoint — October 27
+
+CI40451307407 failed two valid grape consumer tests; the other three shards passed. The new exact-canonical comparison overrestricted same-organism preparations. This was an implementation regression, not a stale-test expectation. A cheap affected-cohort census should have preceded that checkpoint.
+
+The existing source-consistency guard now uses reviewed parent ancestry and complete registered organism names with bounded part/preparation qualifiers; it does not create a general identity resolver, global alias, clinical qualification or new field. Foreign species and unknown material tails remain rejected. Both existing grape tests are unchanged and pass.256 named owner/consumer tests and11 independent adversarial tests pass. All14 affected real-label Clean/Enrich/Score outputs, amounts, identities, warnings, scores and holds are preserved under normalized comparison. Blood-orange334591/334592 remain complete; barberry benchmark holds remain. The final read-only census covers15,437 inputs/136,448 rows/138 mixed-part candidates and finds zero unintended parent-decision changes. Combined local546passed/24declared skips in131.33seconds; skip guard green. Final whole-fast and integration remain pending. No pipeline or publication.
+
+
+## October 27 — bounded source reconciliation follow-up (qualification pending)
+
+Owner: existing clinical/source/readiness/identity owners; evidence: PR262, source receipts and real-label replays. Will NOT create another scorer, review registry, approval or dose threshold.
+
+- Core candidate `dd0b7254e`: whole-fast40447938661 green on all four shards and merge readiness. Three historical test expectations corrected without weakening held-source protection;182 affected checks pass.
+- Additional display-only source attribution: PMID18971870 is Pancorbo, not Moyad. Fail-first regression,104 owner checks and two affected real labels plus unchanged control; no substantive score/amount/identity/status/eligibility/safety movement. Final CI/integration pending.
+- Final review corrections: same-parent source validation covers untyped forms and both registry owners; a generic spearmint alias stays generic; explicit identity rejection cannot regain recognition or completed benchmark status through fallback. Source funding wording and the negative immediate-focus assertion are precise.752 owner/consumer checks,26 final mixed-source cases and31 independent adversarial checks pass; real controls retain substantive scores/amounts/identities/safety. Combined local546passed/24declared skips in128.58s; skip guard green.
+- Final33/33 raw canaries unchanged; fixtures were not rewritten.
+- CI40449561840 on superseded34ef3c92c cancelled, not passed. Final review candidate needs green whole-fast before merge. The earlier242 captures stay source-scoped; targeted newer proofs are separate. No full-corpus rerun.
+- All146 current subjects reconciled; existing155-row register updated for140 source-preparation items with no new rows, approval/eligibility changes or altered frozen dependencies.74 private pending drafts across49subjects do not close source reviews. Source access gaps and our remaining extraction/mapping are separately recorded.
+- Blanket140-record ineligibility experiment rejected after17 controls exposed loss of a pending formula hold. No production change; no speculative bug fix. Exact preview and evidence preserved before archiving the isolated checkout.
+- Earlier242 behavioral captures/local546passes remain source-scoped; later citation-only delta has separate three-label evidence. No corpus pipeline/export/publication/app update. Required source/benchmark decisions, final corpus/app verification and release authorization remain separate gates.
+
+
 ### Rebuilt corpus verification — October 23, after user run
 
 Owner: assessment_readiness::evaluate_release_assessment and scored_artifact::unfinished_source_assessment; existing stage_manifest, snapshot/export and Flutter pillar/research consumers. Evidence: current manifest hashes, persisted scored receipts, strict gate logs and 23-record consumer harness. Will NOT create a scorer, clinical approval authority, registry or public field. This handoff changes documentation only; no source/clinical policy changed.
@@ -3605,3 +3626,10 @@ PYTHON="$PG_PYTHON" bash batch_run_all_datasets.sh --pipeline-only
 ```
 
 This computes Clean→Enrich→Score and stops. Publication remains separately gated by source-bound assessment completeness. Next proof is the rebuilt full-corpus invariant, identities/amounts/warnings/held states, exports and ordinary Flutter delivery including the original20examples. No further source edit is planned for this batch.
+
+
+## October26 — signed-return source reconciliation / aggregate gate candidate
+
+Behavioral code/data/test batch through7a98a60dc (aggregate releasegate f68645611). Existing owners only; no scorer/registry/status/grade/dose threshold added. DrPham date2026-10-26 and explicit returned scopes applied; all146current source subjects reconciled, frozen155clinical/514benchmark rows preserved. Six clinical/source records,299v, ginseng and exactNeumentix dispositions applied; unused historical records do not block.140source-context mappings remain unfinished, distinct from signatures.
+
+242real-label full owner replays,127score movers,4newlycomplete (277387/304331/315301/232839),0lostcomplete,0safety-outcome movers; private manual strictcase unchangederror, notpass. New aggregate-check regression prevents4falsecompletions. Local546pass/24declaredskips+strictguard;33rawcanaries pass; independent review complete with all blocking findings fixed. Four receipt-bound metadata migrations explicitly authorized and committed; sixuntrackedsubmissions/Supabase preserved. Detailed source/access/provenance/qualification limits in current BRYAN report; CI qualification and integration pending. No fullcorpus, catalog or app delivery claim.

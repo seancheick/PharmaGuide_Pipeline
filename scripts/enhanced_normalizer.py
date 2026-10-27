@@ -8054,7 +8054,36 @@ class EnhancedDSLDNormalizer:
             group_id, group_db = self._resolve_canonical_identity(
                 ingredient_group, raw_name=ingredient_group,
             )
-            if group_db == "botanical_ingredients" and group_id:
+            group_parent = self.ingredient_map.get(group_id, {})
+            declared_sources = [form for form in forms_structured
+                                if form.get("category") in {None, "", "botanical"}
+                                and str(form.get("name") or "").strip().lower()
+                                not in self._PLANT_PART_TOKENS]
+            source_aliases = {
+                norm_module.make_normalized_key(alias)
+                for form in (group_parent.get("forms") or {}).values()
+                for alias in form.get("source_form_aliases") or []
+            }
+            group_is_botanical = (
+                group_db == "botanical_ingredients" or (
+                    group_db == "ingredient_quality_map"
+                    and str(group_parent.get("category") or "").lower()
+                    in {"herbs", "herb", "botanical", "botanicals"}
+                )
+            ) and bool(declared_sources) and all(
+                (form_id := self._resolve_canonical_identity("", raw_name=form.get("name"))[0]) == group_id
+                or (group_id, form_id) in self._canonical_parent_relationships
+                or norm_module.make_normalized_key(form.get("name")) in source_aliases
+                or (group_db == "botanical_ingredients" and self._mixed_source_names_registered_organism(
+                    form.get("name"), group_id,
+                ))
+                for form in declared_sources
+            )
+            if group_db == "botanical_ingredients":
+                group_is_botanical = group_is_botanical and self._mixed_source_parts_match_parent(
+                    forms_structured, group_id,
+                )
+            if group_is_botanical and group_id:
                 canonical_id, canonical_source_db = group_id, group_db
                 standard_name = self._canonical_identity_registry.standard_names.get(
                     (group_db, group_id), name,
@@ -8160,6 +8189,26 @@ class EnhancedDSLDNormalizer:
             standard_name = self._canonical_identity_registry.standard_names.get(
                 (canonical_source_db, canonical_id), standard_name
             )
+
+        # Material admission constrains the final chosen botanical identity,
+        # regardless of whether zero, one or multiple parts were inferred.
+        if is_active and canonical_id and canonical_source_db == "botanical_ingredients":
+            material_declarations = list(forms_structured)
+            material_declarations.extend(
+                {"name": part} for part in self._declared_botanical_parts([
+                    {"name": botanical_details.get("plantPart")},
+                ])
+            )
+            if not self._mixed_source_parts_match_parent(
+                    material_declarations, canonical_id, primary_claims=[raw_name or name],
+            ):
+                canonical_id, canonical_source_db = None, "unmapped"
+                standard_name, is_mapped = name, False
+                self._record_unmapped_ingredient(
+                    name, forms, is_active=True,
+                    cleaner_row_role=unmapped_cleaner_row_role,
+                    score_exclusion_reason=unmapped_cleaner_row_role,
+                )
 
         # D2.1 CONTRACT (protocol rule #4): is_mapped ⇒ canonical_id.
         # Two directions handled atomically:
@@ -10331,12 +10380,111 @@ class EnhancedDSLDNormalizer:
         "bulb", "tuber", "resin", "wood", "whole", "herb", "skin",
     )
 
+    def _mixed_source_parts_match_parent(
+        self, forms: List[Any], parent_id: str, primary_claims: Optional[List[str]] = None,
+    ) -> bool:
+        """A known organism cannot widen a registry's explicit material scope."""
+        parent = next((entry for entry in self.botanical_ingredients.get("botanical_ingredients", [])
+                       if entry.get("id") == parent_id), {})
+        parent_parts = self._declared_botanical_parts([{"name": parent.get("standard_name")}])
+        if not parent_parts:
+            return True
+        reviewed_parts = set(parent_parts)
+        reviewed_parts.update(self._declared_botanical_parts([
+            {"name": alias} for alias in parent.get("aliases") or []
+        ]))
+        if not set(self._declared_botanical_parts(forms)) <= reviewed_parts:
+            return False
+        for claim in primary_claims or []:
+            if (not set(self._declared_botanical_parts([{"name": claim}])) <= reviewed_parts
+                    or (not self._canonical_identity_registry.literal_identity_matches(claim, parent_id)
+                        and not self._mixed_source_names_registered_organism(
+                            claim, parent_id, reviewed_parts, material_only=True,
+                        ))):
+                return False
+        # Exact curated identities retain their reviewed source scopes. For an
+        # unregistered source spelling, every qualifier must fit this scope,
+        # including a second part printed without a clause separator.
+        return all(
+            not self._declared_botanical_parts([form])
+            or str(form.get("name") or "").strip().lower() in self._PLANT_PART_TOKENS
+            or self._resolve_canonical_identity("", raw_name=form.get("name"))[0] is not None
+            or self._mixed_source_names_registered_organism(form.get("name"), parent_id, reviewed_parts)
+            for form in forms if isinstance(form, dict)
+        )
+
+    def _mixed_source_names_registered_organism(
+        self, name: Any, parent_id: str, reviewed_parts: Optional[set[str]] = None,
+        *, material_only: bool = False,
+    ) -> bool:
+        """Validate a mixed source's organism, without resolving its preparation."""
+        parent = next((entry for entry in self.botanical_ingredients.get("botanical_ingredients", [])
+                       if entry.get("id") == parent_id), {})
+        literal = norm_module.make_normalized_key(name).replace("_", " ")
+        qualifiers = {token for part in self._PLANT_PART_TOKENS for token in part.split()}
+        if reviewed_parts is not None:
+            qualifiers = {
+                word for token in self._PLANT_PART_TOKENS
+                if self._infer_plant_part_from_name(token) in reviewed_parts
+                for word in token.split()
+            }
+            qualifiers.update({"and", "plus", "whole"})
+        qualifiers.update({"extract", "powder", "juice", "concentrate"})
+        if material_only:
+            remaining = literal
+            # Keep the declaration owner's established qualifier binding;
+            # these printed phrases are not independent tissue inventories.
+            for phrase in ("whole fruit", "berry fruit", "root bark"):
+                if self._infer_plant_part_from_name(phrase) in (reviewed_parts or set()):
+                    remaining = re.sub(r"\b" + re.escape(phrase) + r"\b", " ", remaining)
+            for token in self._PLANT_PART_TOKENS:
+                if self._infer_plant_part_from_name(token) in (reviewed_parts or set()):
+                    remaining = re.sub(r"\b" + re.escape(token) + r"\b", " ", remaining)
+            return not any(
+                token not in {"whole"}
+                and re.search(r"\b" + re.escape(token) + r"\b", remaining)
+                for token in self._PLANT_PART_TOKENS
+            )
+        for registered in (parent.get("standard_name"), parent.get("latin_name"), *(parent.get("aliases") or [])):
+            organism = norm_module.make_normalized_key(registered).replace("_", " ")
+            if not organism:
+                continue
+            match = re.fullmatch(r"(.*?)\b" + re.escape(organism) + r"\b(.*)", literal)
+            if not match:
+                continue
+            before, after = match.groups()
+            # A printed variety refines the registered species; it does not
+            # qualify a branded preparation or transfer clinical evidence.
+            after = re.sub(r"^\s+var(?:iety)?\s+[a-z]+(?=\s|$)", " ", after)
+            remainder = (before + " " + after).split()
+            if remainder and all(token in qualifiers for token in remainder):
+                return True
+        return False
+
     def _declared_botanical_parts(self, forms: List[Any]) -> List[str]:
-        """Parts explicitly named by the label's botanical source forms."""
-        return sorted({part for form in forms or []
-                       if isinstance(form, dict)
-                       and form.get("category") in {None, "", "botanical"}
-                       and (part := self._infer_plant_part_from_name(form.get("name") or ""))})
+        """All parts explicitly named by accepted botanical source forms."""
+        parts = set()
+        for form in forms or []:
+            if not isinstance(form, dict):
+                continue
+            name = str(form.get("name") or "").strip().lower()
+            if not (form.get("category") in {None, "", "botanical"}
+                    or (form.get("category") == "blend"
+                        and form.get("ingredientGroup") == "Blend (Herb/Botanical)"
+                        and name in self._PLANT_PART_TOKENS)):
+                continue
+            # Preserve the existing compound-part meanings before separating
+            # independently listed material clauses. "Whole fruit" and "berry
+            # fruit" remain one declaration under the existing inference owner.
+            separated = name
+            for compound in (token for token in self._PLANT_PART_TOKENS if " and " in token):
+                separated = re.sub(r"\b" + re.escape(compound) + r"\b",
+                                   lambda match: match.group().replace(" and ", " \x00 "), separated)
+            for declaration in re.split(r"[,;&+]|\b(?:and|plus)\b", separated):
+                part = self._infer_plant_part_from_name(declaration.replace("\x00", "and"))
+                if part:
+                    parts.add(part)
+        return sorted(parts)
 
     def _infer_plant_part_from_name(self, ingredient_name: str) -> Optional[str]:
         """

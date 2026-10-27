@@ -985,4 +985,7 @@ def test_named_poolzyme_source_still_requires_source_context_review():
     record = next(r for r in entries(data).values() if isinstance(r, dict) and r.get("id") == "INGR_DIGESTIVE_ENZYMES")
     review = assess_clinical_source_review(record)
     assert not review["is_complete"]
-    assert "clinical_source_contexts_missing" in review["errors"]
+    assert len(record["study_contexts"]) == 1
+    assert record["scoring_eligible"] is False
+    assert any(error.endswith(":review.approval_required") for error in review["errors"])
+    assert any(error.endswith(":outcomes.review_incomplete") for error in review["errors"])

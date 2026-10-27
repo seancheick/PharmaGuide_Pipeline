@@ -1353,3 +1353,34 @@ def test_submission_identity_contracts_cannot_disappear_from_matrix(tmp_path):
         write_json(path, matrix)
         findings = audit.audit_matrix(argparse.Namespace(matrix=str(path), strict_release=True))
         assert any(f.code == 'MATRIX_REQUIRED_CONCEPTS' and concept_id in f.message for f in findings)
+
+
+def test_enrichment_cfu_audit_uses_canonical_fallback_and_provenance(tmp_path):
+    from scoring_input_contract import derive_product_scoring_evidence
+    import copy
+
+    product = {
+        "id": "lagging-probiotic",
+        "supplement_taxonomy": {"primary_type": "general_supplement"},
+        "probiotic_data": {
+            "is_probiotic_product": True, "total_cfu": 50_000_000_000,
+            "total_strain_count": 10, "probiotic_blends": [{"name": "Probiotic Blend"}],
+            "cfu_source": "statements", "cfu_raw_source_path": "statements[0]",
+            "cfu_evidence_scope": "product_level", "cfu_linked_rows": ["statements[0]"],
+        },
+        "ingredient_quality_data": {"ingredients_scorable": [],
+            "ingredients_recognized_non_scorable": [], "ingredients_skipped": []},
+    }
+    product["product_scoring_evidence"] = derive_product_scoring_evidence(product)
+    assert any(row.get("evidence_type") == "probiotic_cfu" for row in product["product_scoring_evidence"])
+    invalid = copy.deepcopy(product)
+    invalid["id"] = "missing-provenance"
+    invalid["probiotic_data"]["cfu_raw_source_path"] = None
+    product_file = tmp_path / "products.json"
+    write_json(product_file, [product, invalid])
+    args = argparse.Namespace(enriched_file=[], enriched_dir=[], product_file=[str(product_file)],
+                              products_dir=None, dist_dir=None)
+    findings = audit.audit_enrichment(args)
+    cfu = [finding for finding in findings if finding.code == "ENRICHMENT_PRODUCT_CFU_FALSE_POSITIVE"]
+    assert len(cfu) == 1
+    assert "missing-provenance" in cfu[0].message

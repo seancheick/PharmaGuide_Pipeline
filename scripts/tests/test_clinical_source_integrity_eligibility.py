@@ -243,7 +243,13 @@ def test_magtein_trial_and_correction_have_distinct_source_roles():
                   'requires content review'):
         assert stale not in str(row)
     from clinical_applicability import assess_clinical_source_review
-    assert assess_clinical_source_review(row)['is_complete'] is False
+    review = assess_clinical_source_review(row)
+    assert review['is_complete'] is True
+    assert set(review['context_ids']) == {'magtein_39252819', 'magtein_41601871'}
+    assert refs['36558392']['scoring_eligible'] is False  # Whole formula cannot replicate isolated material.
+    contexts = row['study_contexts']
+    assert next(c for c in contexts if '40567408' in c['source_pmids'])['source_pmids'] == ['39252819', '40567408']
+    assert next(c for c in contexts if c['source_pmids'] == ['36558392'])['scoring_eligible'] is False
 
 
 @pytest.mark.parametrize('record_id,required', [
@@ -319,3 +325,17 @@ def test_hn019_author_comment_access_keeps_combination_and_method_limits():
     assert context['trial_family'] == 'milan_pediatric_urti_probiotic_40085083'
     assert len(context['dose']['component_doses']) == 3
     assert context['clinical_review']['reviewed_at'] == '2026-09-14T22:23:43Z'
+
+
+def test_pureway_human_pk_citation_names_actual_pubmed_authors():
+    """PMID 18971870 is Pancorbo et al.; the cell source stays distinct."""
+    import json
+
+    data = json.loads((Path(__file__).resolve().parents[1] / "data" / "backed_clinical_studies.json").read_text())
+    record = next(row for row in data["backed_clinical_studies"] if row["id"] == "BRAND_PUREWAY_C")
+    citation = record["notable_studies"]
+    assert "Pancorbo et al. (2008, PMID 18971870)" in citation
+    assert "Moyad" not in citation
+    assert "mechanistic" in citation and "cellular" in citation
+    assert "PMID 17901843" in citation
+    assert "clinical endpoint data remain limited" in citation

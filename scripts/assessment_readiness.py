@@ -356,6 +356,36 @@ def _probiotic_native_evidence_state(product: Mapping[str, Any], row: Mapping[st
     return EVIDENCE_NOT_YET_EVALUATED
 
 
+def _resolved_evidence_assessment(resolution: Any) -> tuple[str, str, str | None]:
+    """Project the canonical resolution into the existing readiness vocabulary."""
+    from evidence_resolver import EvidenceDisposition
+
+    disposition = resolution.disposition
+    if (disposition == EvidenceDisposition.RESOLVED_BY_AUTHORITY.value
+            and resolution.owner_facts.get("nutrition_authority", {}).get("is_essential") is True):
+        return EVIDENCE_EVALUATED_SUPPORTED, resolution.reason_code, EVIDENCE_APPLICABILITY_NUTRITION_AUTHORITY
+    if (disposition in {
+            EvidenceDisposition.NO_QUALIFYING_HUMAN_EVIDENCE.value,
+            EvidenceDisposition.REVIEWED_NULL_UNFAVORABLE.value,
+        } and "literature_evidence" in resolution.owner_facts):
+        return EVIDENCE_EVALUATED_LIMITED_OR_NEGATIVE, resolution.reason_code, None
+    if (disposition == EvidenceDisposition.RESOLVED_BY_REVIEWED_CLINICAL_EVIDENCE.value
+            and "literature_evidence" in resolution.owner_facts):
+        state = (EVIDENCE_EVALUATED_SUPPORTED if resolution.points_eligible
+                 else EVIDENCE_EVALUATED_LIMITED_OR_NEGATIVE)
+        return state, resolution.reason_code, None
+    if (disposition == EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value
+            and "backed_clinical_studies" in resolution.matched_owners
+            and resolution.reason_code != "clinical_sources_ineligible"):
+        # Reviewed non-applicability is a conclusion; a held source is not.
+        return EVIDENCE_EVALUATED_LIMITED_OR_NEGATIVE, resolution.reason_code, None
+    if disposition == EvidenceDisposition.NOT_EFFICACY_RELEVANT.value:
+        return EVIDENCE_NOT_APPLICABLE, resolution.reason_code, EVIDENCE_APPLICABILITY_NOT_APPLICABLE
+    reason = (resolution.reason_code if resolution.reason_code == "clinical_sources_ineligible"
+              else "no_reviewed_evidence_assessment")
+    return EVIDENCE_NOT_YET_EVALUATED, reason, None
+
+
 def evaluate_evidence_assessment(
     product: Mapping[str, Any],
     *,
@@ -435,42 +465,11 @@ def evaluate_evidence_assessment(
         else:
             # The canonical resolver owns completed negative and inapplicable
             # reviews too. Missing positive credit is not a missing review.
-            from evidence_resolver import EvidenceDisposition, resolve_evidence_for_row
+            from evidence_resolver import resolve_evidence_for_row
             resolution = resolve_evidence_for_row(row, product=product)
-            disposition = resolution.disposition
-            if (disposition == EvidenceDisposition.RESOLVED_BY_AUTHORITY.value
-                    and resolution.owner_facts.get("nutrition_authority", {}).get("is_essential") is True):
-                applicability = EVIDENCE_APPLICABILITY_NUTRITION_AUTHORITY
-                state = EVIDENCE_EVALUATED_SUPPORTED
-                reason = resolution.reason_code
-            elif (disposition in {
-                EvidenceDisposition.NO_QUALIFYING_HUMAN_EVIDENCE.value,
-                EvidenceDisposition.REVIEWED_NULL_UNFAVORABLE.value,
-            } and "literature_evidence" in resolution.owner_facts):
-                state = EVIDENCE_EVALUATED_LIMITED_OR_NEGATIVE
-                reason = resolution.reason_code
-            elif (disposition == EvidenceDisposition.RESOLVED_BY_REVIEWED_CLINICAL_EVIDENCE.value
-                  and "literature_evidence" in resolution.owner_facts):
-                state = (EVIDENCE_EVALUATED_SUPPORTED if resolution.points_eligible
-                         else EVIDENCE_EVALUATED_LIMITED_OR_NEGATIVE)
-                reason = resolution.reason_code
-            elif (disposition == EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value
-                  and "backed_clinical_studies" in resolution.matched_owners
-                  and resolution.reason_code != "clinical_sources_ineligible"):
-                # Verified literature has been reviewed, even when it cannot
-                # apply here. An unresolved source hold is not a completed
-                # negative review. Species/stub and pending native reviews stay open.
-                state = EVIDENCE_EVALUATED_LIMITED_OR_NEGATIVE
-                reason = resolution.reason_code
-            elif disposition == EvidenceDisposition.NOT_EFFICACY_RELEVANT.value:
-                applicability = EVIDENCE_APPLICABILITY_NOT_APPLICABLE
-                state = EVIDENCE_NOT_APPLICABLE
-                reason = resolution.reason_code
-            else:
-                state = EVIDENCE_NOT_YET_EVALUATED
-                reason = (resolution.reason_code
-                          if resolution.reason_code == "clinical_sources_ineligible"
-                          else "no_reviewed_evidence_assessment")
+            state, reason, resolved_applicability = _resolved_evidence_assessment(resolution)
+            if resolved_applicability is not None:
+                applicability = resolved_applicability
 
         if (
             applicability == EVIDENCE_APPLICABILITY_INDIVIDUAL
@@ -1483,6 +1482,22 @@ def evaluate_release_assessment(
         # The scoring owner records only records used by the winning generic
         # path. Missing applicability cannot publish provisional legacy credit.
         if module in {"generic", "sports", "fiber_digestive"}:
+            if any(isinstance(row, Mapping)
+                   and row.get("scoring_input_kind") == "product_level_evidence"
+                   and row.get("evidence_applicability") == EVIDENCE_APPLICABILITY_MODULE_AGGREGATE
+                   for row in _safe_list(_safe_dict(readiness.get("evidence")).get("ingredient_assessments"))):
+                from evidence_resolver import EvidenceDisposition, resolve_product_evidence
+                from scoring_v4.modules.generic_evidence import evidence_completeness_gap
+
+                aggregate = resolve_product_evidence(dict(product), owner_scoped=True, module=module)
+                gap = evidence_completeness_gap(dict(product), aggregate, owner_scoped=True)
+                pending_applicability = any(
+                    resolution.disposition == EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value
+                    and _resolved_evidence_assessment(resolution)[0] == EVIDENCE_NOT_YET_EVALUATED
+                    for resolution in aggregate.resolutions
+                )
+                if gap or pending_applicability:
+                    blockers.append("evidence_assessment_incomplete")
             receipts = evidence_meta.get("contributing_record_assessments")
             if receipts is None:
                 # Category modules may embed the generic owner's receipt.

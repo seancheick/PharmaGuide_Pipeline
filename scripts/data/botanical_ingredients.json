@@ -3,7 +3,7 @@
     "description": "Non-standardized whole herb powders and simple botanical extracts without guaranteed marker compounds. Used for basic ingredient mapping. For premium standardized extracts with marker compounds, see standardized_botanicals.json.",
     "purpose": "ingredient_mapping",
     "schema_version": "5.2.0",
-    "last_updated": "2026-10-23",
+    "last_updated": "2026-10-27",
     "total_entries": 559,
     "functional_roles_field": {
       "added_in": "5.1.0",
@@ -14539,10 +14539,11 @@
       "latin_name": "Baptisia tinctoria",
       "aliases": [
         "wild indigo",
-        "baptisia tinctoria"
+        "baptisia tinctoria",
+        "baptista tinctoria root extract"
       ],
       "category": "root",
-      "notes": "Baptisia tinctoria (Fabaceae) root. Contains isoflavones and polysaccharides. Traditional Eclectic immune stimulant. Component of Esberitox® with Echinacea and Thuja. Botanical root form.",
+      "notes": "Baptisia tinctoria (Fabaceae) root. Contains isoflavones and polysaccharides. Traditional Eclectic immune stimulant. Component of Esberitox® with Echinacea and Thuja. Botanical root form. Label-specific root spelling: NIH DSLD labels 293272 and 293273 print Wild Indigo (Baptista tinctoria) root, and their API forms preserve Baptista tinctoria Root Extract. The corresponding existing identity is corroborated by the Wild Indigo common name and root part and FDA GSRS 5EF0HWI5WU (Baptisia tinctoria root; https://precision.fda.gov/ginas/app/api/v1/substances/5EF0HWI5WU). Retain the printed raw spelling; this exact root-extract alias is not a generic Baptista genus synonym and adds no clinical, dose or safety approval.",
       "last_updated": "2026-03-01",
       "external_ids": {
         "unii": "5EF0HWI5WU"
@@ -16467,10 +16468,13 @@
         "apple fruit",
         "apple extract",
         "apple fruit extract",
-        "apple whole fruit extract"
+        "apple whole fruit extract",
+        "malus pumila fruit",
+        "malus pumila fruit extract",
+        "malus pumila whole fruit extract"
       ],
       "category": "fruit",
-      "notes": "Malus domestica whole-fruit source identity. Whole-fruit or generic extract mass is not treated as a declared apple-polyphenol dose.",
+      "notes": "Malus domestica whole-fruit source identity. Whole-fruit or generic extract mass is not treated as a declared apple-polyphenol dose. Identity-name correspondence verified against FDA GSRS fruit record B423VGH5S9 (https://precision.fda.gov/ginas/app/api/v1/substances/B423VGH5S9), whose names include Malus domestica fruit and Malus pumila fruit. These aliases apply to fruit only, not root, leaf, seed or isolated skin; they do not establish extract-marker composition, a clinical benefit or a dose benchmark.",
       "last_updated": "2026-07-16",
       "external_ids": {},
       "functional_roles": [],

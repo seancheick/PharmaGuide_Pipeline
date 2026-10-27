@@ -385,3 +385,36 @@ def test_repeated_plant_part_is_source_context_through_normalize_enrich(pipeline
     row['notes'] = 'PlantPart: seed'
     _, _, different, _ = _run(pipeline, _label(277388, [row]))
     assert different['Citrus Bioflavonoids']['form_match_status'] == 'unmapped'
+
+
+def test_literal_fruit_form_without_notes_preserves_277387_source_context(pipeline):
+    row = _row(1, 'Citrus Bioflavonoids', 'Flavonoid (mixture)',
+               'non-nutrient/non-botanical', ['Fruit'])
+    row['quantity'][0]['quantity'] = 50
+    row['forms'][0].update(category='blend', ingredientGroup='Blend (Herb/Botanical)')
+    raw = _label(277387, [row])
+    assert row['notes'] == ''
+    enriched, readiness, rows, queue = _run(pipeline, raw)
+    source = enriched['activeIngredients'][0]
+    assert source['plantPart'] == 'fruit'
+    assert source['quantity'] == 50 and source['unit'] == 'mg'
+    assert source['raw_source_path'] == 'ingredientRows[0]'
+    assert rows['Citrus Bioflavonoids']['canonical_id'] == 'citrus_bioflavonoids'
+    assert rows['Citrus Bioflavonoids']['form_match_status'] != 'unmapped'
+    assert readiness['identity']['blocking_contract_findings'] == []
+    assert not any(token == 'Fruit' for _, token, _ in queue)
+
+
+@pytest.mark.parametrize('category,group,name,expected', [
+    ('blend', 'Blend (Herb/Botanical)', 'Fruit', ['fruit']),
+    ('blend', 'Blend (Herb/Botanical)', 'Seed', ['seed']),
+    ('blend', 'Proprietary Blend', 'Fruit', []),
+    ('blend', 'Blend (Herb/Botanical)', 'Fruit Complex', []),
+    ('fat', 'Fatty Acids', 'Seed', []),
+])
+def test_blend_plant_part_metadata_requires_exact_part_and_source_group(
+        pipeline, category, group, name, expected):
+    normalizer, _ = pipeline
+    assert normalizer._declared_botanical_parts([
+        {'category': category, 'ingredientGroup': group, 'name': name}
+    ]) == expected

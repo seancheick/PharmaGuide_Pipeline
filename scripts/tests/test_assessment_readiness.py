@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import json
 import sys
 from pathlib import Path
 
@@ -1684,3 +1685,124 @@ def test_unresolved_source_quantity_cannot_be_waived_by_complete_typed_assessmen
     assert result['readiness'] == 'incomplete'
     assert result['reason_code'] == 'unresolved_source_quantity'
     assert result['incomplete_source_row_refs'] == ['ingredientRows[0]']
+
+
+@pytest.mark.parametrize("case", json.loads((Path(__file__).parent / "fixtures" /
+    "module_aggregate_release_cases.json").read_text()), ids=lambda case: case["id"])
+def test_rebuilt_module_projections_do_not_complete_unresolved_aggregate_review(case):
+    """Minimized final-150 records retain their actual canonical resolutions."""
+    from copy import deepcopy
+    from assessment_readiness import evaluate_release_assessment
+    from evidence_resolver import resolve_product_evidence
+
+    before = deepcopy(case["readiness"])
+    resolution = resolve_product_evidence(case["product"], owner_scoped=True, module=case["module"])
+    assert resolution.overall_disposition == case["expected_overall"]
+    assert sorted(resolution.unresolved_blockers) == case["expected_blockers"]
+    assert any(row["evidence_applicability"] == "module_aggregate"
+               and row["state"] == "not_applicable"
+               for row in before["evidence"]["ingredient_assessments"])
+    result = evaluate_release_assessment(case["product"], case["readiness"],
+        case["module_breakdown"], unfinished_source=None)
+    assert result["is_complete"] is False
+    assert "evidence_assessment_incomplete" in result["blockers"]
+    assert case["readiness"] == before  # No duplicate individual review ledger.
+
+
+def _aggregate_release_inputs():
+    readiness = {name: {"readiness": "complete"} for name in
+                 ("identity", "dose", "evidence", "verification", "route")}
+    readiness["evidence"]["ingredient_assessments"] = [{
+        "evidence_applicability": "module_aggregate", "state": "not_applicable",
+        "reason_code": "module_scoped_product_projection",
+        "scoring_input_kind": "product_level_evidence",
+    }]
+    module = {"module": "generic", "dimensions": {"evidence": {"score": 0,
+        "metadata": {"contributing_record_assessments": []}}}}
+    return readiness, module
+
+
+@pytest.mark.parametrize("disposition,reason,owners,facts", [
+    ("no_qualifying_human_evidence", "bounded_search_no_qualifying_trials",
+     ["literature_evidence"], {"literature_evidence": {}}),
+    ("reviewed_null_unfavorable", "reviewed_null_finding",
+     ["literature_evidence"], {"literature_evidence": {}}),
+    ("research_present_applicability_unestablished", "dose_below_studied_range",
+     ["backed_clinical_studies"], {}),
+    ("research_present_applicability_unestablished", "form_mismatch_with_clinical_trials",
+     ["backed_clinical_studies"], {}),
+    ("not_efficacy_relevant", "whole_food_matrix_not_efficacy_relevant", [], {}),
+])
+def test_completed_aggregate_negative_or_inapplicable_review_can_release(
+        monkeypatch, disposition, reason, owners, facts):
+    import evidence_resolver
+    from assessment_readiness import evaluate_release_assessment
+
+    row = evidence_resolver.EvidenceResolution("fixture", "Fixture", owners,
+        disposition, False, "assessed", reason, owner_facts=facts)
+    resolution = evidence_resolver.ProductEvidenceResolution("fixture", "Fixture", 1,
+        [row], disposition, True, [], {})
+    monkeypatch.setattr(evidence_resolver, "resolve_product_evidence",
+                        lambda product, **kwargs: resolution)
+    readiness, module = _aggregate_release_inputs()
+    assert evaluate_release_assessment({}, readiness, module,
+        unfinished_source=None)["is_complete"] is True
+
+
+def test_aggregate_review_keeps_a_documented_manufacturer_amount_limitation(monkeypatch):
+    import evidence_resolver
+    from assessment_readiness import evaluate_release_assessment
+
+    resolution = evidence_resolver.ProductEvidenceResolution("fixture", "Fixture", 0,
+        [], "not_efficacy_relevant", True, [], {})
+    monkeypatch.setattr(evidence_resolver, "resolve_product_evidence",
+                        lambda product, **kwargs: resolution)
+    readiness, module = _aggregate_release_inputs()
+    readiness["dose"] = {"readiness": "incomplete", "incomplete_source_row_refs": ["row1"]}
+    product = {"rda_ul_data": {"dose_assessments": [{"source_path": "row1",
+        "reason_code": "amount_not_declared", "source_value": None}]}}
+    assert evaluate_release_assessment(product, readiness, module,
+        unfinished_source=None)["is_complete"] is True
+
+
+def test_aggregate_review_does_not_reassess_intentionally_unscoreable_product(monkeypatch):
+    import evidence_resolver
+    from assessment_readiness import evaluate_release_assessment
+
+    def forbidden(*args, **kwargs):
+        raise AssertionError("An intentionally unscoreable product has no affirmative aggregate review.")
+
+    monkeypatch.setattr(evidence_resolver, "resolve_product_evidence", forbidden)
+    readiness, module = _aggregate_release_inputs()
+    readiness["catalog_disposition"] = {"disposition": "intentional_non_scoreable"}
+    for name in ("identity", "dose", "route"):
+        readiness[name]["readiness"] = "incomplete"
+    assert evaluate_release_assessment({}, readiness, module,
+        unfinished_source=None)["is_complete"] is True
+
+
+def test_aggregate_review_respects_the_nutrition_owner_and_unused_adjunct():
+    from assessment_readiness import evaluate_release_assessment
+    from evidence_resolver import resolve_product_evidence
+
+    nutrient = _row("Vitamin C", "vitamin_c", quantity=1000)
+    adjunct = _row("Unreviewed Botanical", "unreviewed_botanical", quantity=1)
+    adjunct.update(raw_source_path="ingredientRows[1]", source_row_ref="ingredientRows[1]")
+    product = _product(nutrient, title="Vitamin C 1000 mg")
+    product["ingredient_quality_data"]["ingredients"].append(adjunct)
+    product["ingredient_quality_data"]["ingredients_scorable"].append(adjunct)
+    product["activeIngredients"] = [nutrient, adjunct]
+    assert resolve_product_evidence(product, module="generic").is_assessment_complete is False
+    owned = resolve_product_evidence(product, owner_scoped=True, module="generic")
+    assert owned.is_assessment_complete is True
+    assert [row.canonical_id for row in owned.resolutions] == ["vitamin_c"]
+    readiness, module = _aggregate_release_inputs()
+    module["dimensions"]["evidence"].update(score=20, metadata={
+        "contributing_record_assessments": [],
+        "selected_nutrition_authority": "vitamin_c",
+        "nutrition_authority_floor_applied": True,
+        "primary_evidence_floor_decisive": True,
+        "nutrition_authority_canonical": "vitamin_c",
+    })
+    assert evaluate_release_assessment(product, readiness, module,
+        unfinished_source=None)["is_complete"] is True

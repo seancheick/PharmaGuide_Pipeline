@@ -780,3 +780,45 @@ def test_recognized_identity_without_benchmark_review_stays_unfinished(monkeypat
     assert score_botanical_dose(product)["metadata"]["benchmark"] == "unresolved"
     assert artifact["quality_pillars_v4"]["dose"]["score"] == 0
     assert artifact["quality_assessment_status"] == "partial"
+
+
+def test_neumentix_review_completes_general_threshold_without_borrowing_spearmint_tea():
+    from scoring_v4.modules.botanical_profile import _botanical_benchmark, _dosing_entry_for
+    row = {'canonical_id': 'spearmint', 'standard_name': 'Spearmint',
+           'name': 'Neumentix Phenolic Complex K110-42', 'matched_form': 'neumentix spearmint extract'}
+    entry = _dosing_entry_for(row)
+    assert entry is not None
+    assert entry['id'] == 'neumentix_spearmint_extract'
+    assert entry['reference_semantics']['reference_type'] == 'no_benchmark'
+    assert entry['references'] == ['29314866']
+    assert _botanical_benchmark(row) == 'absent'
+    assert not entry.get('typical_dosing_range')
+    assert not entry.get('upper_limit')
+    for generic in [
+        {'canonical_id': 'spearmint', 'name': 'Spearmint tea', 'matched_form': 'spearmint (unspecified)'},
+        {'canonical_id': 'spearmint', 'name': 'Spearmint extract', 'matched_form': 'spearmint extract'},
+    ]:
+        assert _botanical_benchmark(generic) == 'unresolved'
+
+
+def test_exact_preparation_review_does_not_override_conflicting_botanical_identity():
+    row = _botanical_ingredient(
+        name="Neumentix Phenolic Complex K110-42", standard_name="Rosemary",
+        canonical_id="rosemary", quantity=900, matched_form="neumentix spearmint extract",
+        scoreable_identity=False, identity_disposition="identity_conflict",
+    )
+    from scoring_v4.modules.botanical_profile import _recognized_botanical_identity
+    assert _recognized_botanical_identity(row) is False
+    assert score_botanical_dose(_botanical_product(row))["score"] == 0
+
+
+@pytest.mark.parametrize("flags,expected", [
+    ({"scoreable_identity": False}, False),
+    ({"scoreable_identity": True, "identity_disposition": "identity_conflict"}, False),
+    ({"identity_disposition": "identity_conflict"}, False),
+    ({}, True),
+])
+def test_known_botanical_fallback_respects_explicit_identity_veto(flags, expected):
+    from scoring_v4.modules.botanical_profile import _recognized_botanical_identity
+    row = {"canonical_id": "rosemary", "name": "Rosemary", **flags}
+    assert _recognized_botanical_identity(row) is expected

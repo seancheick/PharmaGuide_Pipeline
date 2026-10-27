@@ -1,5 +1,11 @@
 # Assessment review handoff — October 26, 2026
 
+## Current signed-return reconciliation — October26
+
+Approval attribution and date are accepted: Dr. Pham,2026-10-26, only the returned explicit scopes. No clock time or repeated blanket signature is needed. All146 rebuilt source subjects match the existing register; nine unused historical rows remain nonblocking. Three canonical source checks now complete, three qualification holds are enforced, and140 still need actual structured source mapping/research rather than a signature placeholder. See the current section in [the qualification report](BRYAN_BATCH_RESPONSE_VERIFICATION_20261025.md) and each row's precise remaining question in [the existing register](clinical_review_holds.csv).
+
+Identity/benchmark and canonical evidence-recovery fixes are implemented,242-label measured and independently reviewed; CI/integration pending. Four newly complete products are277387,304331,315301,232839. Current held sources cannot regain credit through stale recovery; aggregate module projections cannot falsely imply finished assessment. No corpus rerun/export/publication/app update is claimed. The older dated sections below remain evidence of their stated snapshots, not current missing-date requests.
+
 ## Latest returned-source implementation
 
 The bounded18C/47D engineering/source-correction batch is implemented. Every item has an individual disposition in the October26 section of BRYAN_BATCH_RESPONSE_VERIFICATION_20261025.md; C143 was already correct. Exact-label corrections, shared cadence/part/hierarchy/export owners and source attribution are fixed. Sean approved narrow enforceable relationship holds for omega3/niacin and knotweed markers; amounts, safety exposure and independent ingredient assessments remain intact. FloraGLO/Pycnogenol qualification stays held.

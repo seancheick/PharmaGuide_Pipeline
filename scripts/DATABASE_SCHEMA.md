@@ -323,6 +323,11 @@ Primary keys: `clinically_relevant_strains` (array), `prebiotics` (object)
 | `notable_studies` | string | NO | Key research citations (internal; not exported) |
 | `study_contexts` | object[] | NO | Source-verified outcome contexts; `review_status` records approval, and approval never implies efficacy (the outcomes' direction decides credit) |
 
+Attributable `clinical_review.reviewed_at` preserves the supplied precision: an ISO
+calendar date when only the signing date is known, or a timezone-qualified timestamp
+when its time is known. Future dates and naive timestamps are rejected. Neither format
+substitutes for the named reviewer and explicit identity/dose/outcome/applicability scope.
+
 `cfu_thresholds.indication_primary` is the text the app prints beside a strain
 ("`<support>` support · `<indication>`"). The enricher prints no indication for a
 strain without qualifying reviewed evidence, and adds the result when the
@@ -737,6 +742,13 @@ Primary key: `therapeutic_dosing` (array)
 | `upper_limit_notes` | string | NO | Caution / interaction notes |
 | `evidence_tier` | int | YES | Evidence strength (1 = strongest) |
 | `references` | string[] | NO | Bare PMID strings (content-verified via `verify_all_citations_content.py`) |
+
+For a reviewed `reference_semantics.reference_type = "no_benchmark"` record with
+`curve = "completed_no_benchmark_neutral"`, the legacy numerical fields
+`typical_dosing_range`, `common_serving_size`, `upper_limit` and `evidence_tier`
+may be absent. Its scoped, source-attributed reference decision owns completeness;
+no numerical threshold, safety ceiling or efficacy grade should be invented to fill
+these fields. Exact-preparation aliases must not route generic ingredients into that decision.
 
 ---
 

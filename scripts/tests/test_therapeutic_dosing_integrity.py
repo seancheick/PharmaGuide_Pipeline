@@ -256,6 +256,7 @@ def test_current_therapeutic_entries_have_a_consuming_route(therapeutic):
     allowed_exceptions = {
         "probiotics_general",  # CFU unit — cannot fit the mg/g optimal-uls schema
         "lutein",              # marigold-routable: consumed via a marigold active's matched_form, not the entry name
+        "neumentix_spearmint_extract",  # exact spearmint matched_form; source-scoped no-threshold decision, not generic tea
     }
     for e in therapeutic["therapeutic_dosing"]:
         eid = e.get("id")
