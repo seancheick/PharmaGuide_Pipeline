@@ -153,7 +153,7 @@ def test_named_source_reviews_complete_only_general_dose_benchmark():
         assert semantics['approval_status'] == 'approved_existing_neutral_dose_v41_source_review'
         assert semantics['source_ids']
         assert 'not an exhaustive' in semantics['scope']
-        assert _botanical_benchmark({'canonical_id': canonical}) == 'absent'
+        assert _botanical_benchmark({'canonical_id': canonical}) == ('unresolved' if canonical == 'flaxseed' else 'absent')
         # A completed dose search cannot override an actual identity rejection.
         assert _botanical_benchmark({'canonical_id': canonical,
                                     'scoreable_identity': False}) == 'unresolved'
@@ -304,3 +304,141 @@ def test_bc30_registry_regimen_does_not_invent_unavailable_paper_hierarchy():
     assert '40707016' in c['source_pmids']
     # The original paper could not be inspected, so not_reported would also be false.
     assert assess_clinical_source_review(reviewed_entries()['STRAIN_BC30'])['is_complete'] is False
+
+
+def test_applied_source_scope_has_no_stale_positive_or_unverified_prose():
+    alpha = reviewed_entries()['INGR_ALPHA_GPC']
+    assert 'study_type=systematic_review_meta' not in alpha['effect_direction_rationale']
+    assert 'primary_outcome=Focus & Mental Clarity' not in alpha['effect_direction_rationale']
+    assert 'reference-only' in alpha['effect_direction_rationale'].lower()
+    for key in ('BRAND_OPTIMSM', 'INGR_MSM'):
+        record = reviewed_entries()[key]
+        assert record['total_enrollment'] == 88
+        assert 'Exact branded preparation and unique aggregate require methods-level verification' not in record['notes']
+
+
+def test_unread_flaxseed_correction_is_not_reported_as_verified_clinical_support():
+    from evidence_resolver import _load_literature_evidence, resolve_evidence_for_row
+    record = _load_literature_evidence()['flaxseed']
+    assert record['verification_result'] == 'verification_failure_unresolved'
+    assert record['verification_provenance']['all_pmids_verified'] is False
+    assert '26525908' in record['notes']
+    result = resolve_evidence_for_row({'name': 'Ground Flaxseed', 'canonical_id': 'flaxseed'})
+    assert result.points_eligible is False
+    assert result.blocking_reasons
+
+
+def test_an_adult_only_source_cannot_qualify_the_same_material_for_children():
+    from clinical_applicability import assess_clinical_applicability
+    row = {'name': 'OptiMSM', 'raw_source_text': 'OptiMSM', 'canonical_id': 'msm',
+           'quantity': 2000, 'unit': 'mg', 'raw_source_path': 'ingredientRows[0]'}
+    product = {'fullName': 'Kids Joint Comfort', 'targetGroups': [{'name': 'Children 4-12 years'}],
+               'activeIngredients': [row], 'ingredient_quality_data': {'ingredients_scorable': [row]},
+               'serving_basis': {'min_servings_per_day': 1, 'max_servings_per_day': 1,
+                                 'servings_per_day_source': 'directions'}}
+    entry = {'id': 'BRAND_OPTIMSM', 'matched_canonical_ids': ['msm'],
+             'matched_source_row_refs': ['ingredientRows[0]']}
+    decision = assess_clinical_applicability(product, entry)
+    assert decision['status'] == 'not_applicable'
+    assert decision['reason_code'] == 'clinical_population_mismatch'
+    product['fullName'] = 'Adult Joint Comfort'
+    product['targetGroups'] = [{'name': 'Adults'}]
+    assert assess_clinical_applicability(product, entry)['status'] == 'applicable'
+
+
+
+def test_preparation_plus_sign_is_not_erased_or_rescued_by_a_negated_name(monkeypatch):
+    import clinical_applicability
+    policy = {'id': 'TEST_PLUS_FORM', 'applicability': {'scope': 'ingredient',
+              'require_source_label_form': True, 'required_form_terms': ['Levagen+']}}
+    monkeypatch.setattr(clinical_applicability, 'reviewed_entries', lambda: {policy['id']: policy})
+    for name, expected in [('Levagen+', 'applicable'), ('Levagen®+', 'applicable'), ('Levagen', 'not_applicable'),
+                           ('not Levagen+', 'not_applicable')]:
+        row = {'name': name, 'raw_source_text': name, 'canonical_id': 'palmitoylethanolamide',
+               'quantity': 600, 'unit': 'mg', 'raw_source_path': 'ingredientRows[0]'}
+        product = {'activeIngredients': [row], 'ingredient_quality_data': {'ingredients_scorable': [row]}}
+        entry = {'id': policy['id'], 'matched_source_row_refs': ['ingredientRows[0]'],
+                 'matched_canonical_ids': ['palmitoylethanolamide']}
+        assert clinical_applicability.assess_clinical_applicability(product, entry)['status'] == expected
+
+
+def test_excluded_claim_terms_preserve_negation_and_warning_boundaries(monkeypatch):
+    import clinical_applicability as owner
+    record = {'id': 'SLEEP_SCOPE', 'applicability': {'scope': 'ingredient',
+              'excluded_claim_terms': ['jet lag', 'shift work']}}
+    monkeypatch.setattr(owner, 'reviewed_entries', lambda: {record['id']: record})
+    for text, expected in [('Supports ordinary adult sleep', 'not_curated'),
+                           ('Helps jet lag', 'not_applicable'),
+                           ('Supports sleep during shift work', 'not_applicable'),
+                           ('Not for jet lag', 'not_curated')]:
+        result = owner.assess_clinical_applicability({'product_name': text}, record)
+        # With no linked ingredient this fixture otherwise stays unresolved;
+        # it must never be rejected by a negated or absent excluded claim.
+        if expected == 'not_applicable':
+            assert result == {'status': 'not_applicable', 'reason_code': 'label_purpose_evidence_mismatch'}
+        else:
+            assert result.get('reason_code') != 'label_purpose_evidence_mismatch'
+    result = owner.assess_clinical_applicability({'product_name': 'Adult sleep',
+        'statements': [{'type': 'Precautions', 'notes': 'Do not use for jet lag'}]}, record)
+    assert result.get('reason_code') != 'label_purpose_evidence_mismatch'
+    for invalid in ('jet lag', [None], ['!!!']):
+        record['applicability']['excluded_claim_terms'] = invalid
+        assert owner.assess_clinical_applicability({}, record) == {
+            'status': 'unresolved', 'reason_code': 'invalid_applicability_contract'}
+
+
+def test_unresolved_scope_cannot_be_projected_as_completed_negative():
+    from assessment_readiness import _resolved_evidence_assessment, EVIDENCE_NOT_YET_EVALUATED
+    from evidence_resolver import EvidenceResolution, EvidenceDisposition
+    result = EvidenceResolution(canonical_id='melatonin', ingredient_name='Melatonin',
+        matched_owners=['backed_clinical_studies'],
+        disposition=EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value,
+        points_eligible=False, applicability_status='applicability_unestablished',
+        reason_code='invalid_applicability_contract')
+    assert _resolved_evidence_assessment(result)[0] == EVIDENCE_NOT_YET_EVALUATED
+
+
+def test_returned_continuation_uses_scoped_sources_without_general_claim_transfer():
+    records = reviewed_entries()
+    for key in ('INGR_HONEY', 'INGR_NAC', 'INGR_ALPHA_LIPOIC_ACID'):
+        assert records[key]['study_type'] == 'reference'
+        assert assess_clinical_source_review(records[key])['is_complete'] is True
+    sleep = records['INGR_MELATONIN']
+    assert sleep['applicability']['excluded_claim_terms']
+    assert 'minimum_daily_dose' not in sleep['applicability']
+    assert assess_clinical_source_review(sleep)['is_complete'] is True
+    pea = records['INGR_PEA']
+    assert pea['applicability']['required_form_terms'] == ['LipiSperse']
+    assert pea['applicability']['minimum_daily_dose'] == 600
+    assert assess_clinical_source_review(pea)['is_complete'] is True
+
+
+def test_resolver_preserves_unresolved_exclusion_contract(monkeypatch):
+    import clinical_applicability as owner
+    import evidence_resolver as resolver
+    record = {'id': 'TEST_EXCLUSION', 'study_type': 'rct_single',
+              'applicability': {'scope': 'ingredient', 'excluded_claim_terms': 'jet lag'}}
+    monkeypatch.setattr(owner, 'reviewed_entries', lambda: {record['id']: record})
+    monkeypatch.setattr(resolver, '_backed_studies_index', lambda: {'melatonin': [record]})
+    row = {'canonical_id': 'melatonin', 'name': 'Melatonin', 'quantity': 3,
+           'unit': 'mg', 'raw_source_path': 'ingredientRows[0]'}
+    product = {'product_name': 'Adult sleep', 'activeIngredients': [row],
+               'ingredient_quality_data': {'ingredients_scorable': [row]}}
+    result = resolver.resolve_evidence_for_row(row, product)
+    assert result.points_eligible is False
+    assert result.reason_code == 'invalid_applicability_contract'
+    assert result.applicability_status == 'applicability_unestablished'
+
+
+def test_pea_diabetic_neuropathy_reference_cannot_qualify_generic_joint_claim():
+    from evidence_resolver import resolve_evidence_for_row
+    row = {'canonical_id': 'palmitoylethanolamide', 'name': 'Palmitoylethanolamide',
+           'raw_source_text': 'Palmitoylethanolamide (LipiSperse)',
+           'raw_source_path': 'activeIngredients[0]', 'quantity': 600, 'unit': 'mg'}
+    product = {'product_name': 'Joint Comfort', 'physicalState': {'name': 'Capsule'},
+               'suggested_use': 'For joint comfort', 'activeIngredients': [row],
+               'ingredient_quality_data': {'ingredients_scorable': [row]}}
+    result = resolve_evidence_for_row(row, product)
+    assert result.points_eligible is False
+    assert result.reason_code == 'reference_only_clinical_record'
+    assert row['quantity'] == 600

@@ -1061,11 +1061,11 @@
         "basis": "ground_seed_daily"
       },
       "applicability_decision": "Reviewed ground-whole-seed research; oil is a different preparation and cannot inherit the ground-seed intervention. Trial 30 g/day is an exposure fact, not an Evidence amount gate or universal optimal-dose benchmark.",
-      "verification_result": "authoritative_pubmed_verified",
+      "verification_result": "verification_failure_unresolved",
       "verification_provenance": {
-        "verified_by": "scripts/api_audit/verify_literature_records.py",
-        "verified_at": "2026-09-21T07:39:42.986936+00:00",
-        "all_pmids_verified": true,
+        "verified_by": "Codex source-content review of PubMed correction links; original correction content unresolved",
+        "verified_at": "2026-10-27T15:14:19.654243+00:00",
+        "all_pmids_verified": false,
         "retractions_found": false
       },
       "applicability": {
@@ -1089,14 +1089,14 @@
         "units": "mg",
         "curve": "completed_no_benchmark_neutral",
         "source_ids": [
-          "PMID:24126178",
-          "PMID:25740909"
+          "PMID:24126178"
         ],
-        "rationale": "Trial24126178 tested30g/day milled flaxseed in110 peripheral-artery-disease patients for6months; review25740909 pooled11studies/14trials with whole seed/oil/lignan/fiber preparations. These do not establish a universal supplement-mass minimum, optimum or safety ceiling. Source identifiers, intervention and result limitations content-verified against live PubMed XML on 2026-10-27. Clinical applicability and safety remain independent. This is factual application of the existing October 18 Dose V4.1 completed-neutral policy (docs/plans/DOSE_V41_REFERENCE_DECISIONS.md), not a newly attributed clinical approval or efficacy decision.",
+        "rationale": "PMID 24126178 tested 30 g/day milled flaxseed in 110 peripheral-artery-disease patients for six months. That one population-specific food intervention does not establish a universal supplement-mass minimum, optimum or safety ceiling. This is the existing Dose V4.1 neutral-policy conclusion only. The review PMID 25740909 has an unread erratum (26525908), so its whole-record source-verification hold remains and is not cleared by this general-curve decision.",
         "owner": "scripts/data/literature_evidence_records.json::flaxseed",
         "review_date": "2026-10-27",
         "approval_status": "approved_existing_neutral_dose_v41_source_review"
-      }
+      },
+      "notes": "PubMed links the retained review PMID 25740909 to erratum PMID 26525908 (DOI 10.3945/jn.115.222232). The notice identity is verified, but its correction text was inaccessible through the publisher endpoints in the October 27 review. No assumption of an unchanged conclusion or reviewed correction is made. The existing source verification owner retains an unresolved hold; no new positive clinical approval. The separate 30 g/day ground-seed trial remains traceable, but does not establish a universal supplement-mass dose curve."
     },
     {
       "canonical_id": "lignans",

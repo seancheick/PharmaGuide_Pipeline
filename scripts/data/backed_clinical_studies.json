@@ -4283,7 +4283,7 @@
       "health_goals_supported": [
         "Joint & Bone Health"
       ],
-      "notes": "Distilled MSM with explicit randomized human evidence in knee pain and osteoarthritis; newer mild-knee-pain data extend support but remain ingredient-like rather than uniquely product-specific. Studied doses: 6 g/day (PMID 16309928, MSM 3 g twice daily; source not named in the abstract) and 2 g/day (PMID 37447322, ten 200 mg OptiMSM tablets). Generic MSM draws on INGR_MSM, not on this brand record. Cited studies randomized 50 OA and 88 mild-knee-discomfort participants. Selected pain/function findings at 6 g/day and JKOM findings at 2 g/day must remain dose-specific. Exact branded preparation and unique aggregate require methods-level verification. Retained-source scope and limitations: Knee osteoarthritis pain/function in a small pilot (PMID: 16309928) Mild knee-pain JKOM outcomes; not exercise-recovery or measured anti-inflammatory efficacy (PMID: 37447322) Source context 37447322 is now encoded under the signed limited A015/A093 decisions, with the exact OptiMSM identity confirmed in Methods 2.3. This same trial is shared by BRAND_OPTIMSM and INGR_MSM, not independent replication. The 6 g/day osteoarthritis pilot remains historical context and cannot broaden the accepted preparation, dose or outcome. Exact product correspondence remains independently checked.",
+      "notes": "Distilled MSM with explicit randomized human evidence in knee pain and osteoarthritis; newer mild-knee-pain data extend support but remain ingredient-like rather than uniquely product-specific. Studied doses: 6 g/day (PMID 16309928, MSM 3 g twice daily; source not named in the abstract) and 2 g/day (PMID 37447322, ten 200 mg OptiMSM tablets). Generic MSM draws on INGR_MSM, not on this brand record. Cited studies randomized 50 OA and 88 mild-knee-discomfort participants. Selected pain/function findings at 6 g/day and JKOM findings at 2 g/day must remain dose-specific. Methods 2.3 confirms OptiMSM for the 88-person mild-knee-pain trial. No unique aggregate with the separate historical pilot is asserted. Retained-source scope and limitations: Knee osteoarthritis pain/function in a small pilot (PMID: 16309928) Mild knee-pain JKOM outcomes; not exercise-recovery or measured anti-inflammatory efficacy (PMID: 37447322) Source context 37447322 is now encoded under the signed limited A015/A093 decisions, with the exact OptiMSM identity confirmed in Methods 2.3. This same trial is shared by BRAND_OPTIMSM and INGR_MSM, not independent replication. The 6 g/day osteoarthritis pilot remains historical context and cannot broaden the accepted preparation, dose or outcome. Exact product correspondence remains independently checked.",
       "study_type": "rct_multiple",
       "last_updated": "2026-10-27",
       "notable_studies": "Kim et al. (2006, PMID 16309928) placebo-controlled osteoarthritis trial found improved pain and physical function with MSM. More recent randomized knee-pain data include Toguchi et al. (2023, PMID 37447322), which showed improved quality-of-life measures after 12 weeks of MSM intake.",
@@ -4365,9 +4365,9 @@
       },
       "effect_direction": "mixed",
       "primary_outcome": "Joint & Bone Health",
-      "total_enrollment": null,
+      "total_enrollment": 88,
       "effect_direction_confidence": "medium",
-      "effect_direction_rationale": "Scoped A015/A093 accepted by Dr. Pham on 2026-10-26, as attested by Sean: one exact OptiMSM trial, borderline primary JKOM benefit with null JOA and inflammatory outcomes. The retained score_contribution grade is not a new grade decision. No energy, recovery, inflammation or longevity transfer; exact preparation and discrete regimen applicability enforced separately.",
+      "effect_direction_rationale": "Scoped A015/A093 accepted by Dr. Pham on 2026-10-26, as attested by Sean: one exact OptiMSM trial, borderline primary JKOM benefit with null JOA and inflammatory outcomes. The retained score_contribution grade is not a new grade decision. No energy, recovery, inflammation or longevity transfer; exact preparation and discrete regimen applicability enforced separately. Enrollment is the 88 randomized participants in this one accepted trial, not a sum with the excluded historical pilot or a second count for its mirrored registry record.",
       "endpoint_relevance_tags": [
         "joint_pain"
       ],
@@ -4608,9 +4608,9 @@
       },
       "effect_direction": "mixed",
       "primary_outcome": "Joint & Bone Health",
-      "total_enrollment": 138,
+      "total_enrollment": 88,
       "effect_direction_confidence": "low",
-      "effect_direction_rationale": "Scoped A015/A093 accepted by Dr. Pham on 2026-10-26, as attested by Sean: one exact OptiMSM trial, borderline primary JKOM benefit with null JOA and inflammatory outcomes. The retained score_contribution grade is not a new grade decision. No energy, recovery, inflammation or longevity transfer; exact preparation and discrete regimen applicability enforced separately.",
+      "effect_direction_rationale": "Scoped A015/A093 accepted by Dr. Pham on 2026-10-26, as attested by Sean: one exact OptiMSM trial, borderline primary JKOM benefit with null JOA and inflammatory outcomes. The retained score_contribution grade is not a new grade decision. No energy, recovery, inflammation or longevity transfer; exact preparation and discrete regimen applicability enforced separately. Enrollment is the 88 randomized participants in this one accepted trial, not a sum with the excluded historical pilot or a second count for its mirrored registry record.",
       "endpoint_relevance_tags": [
         "joint_pain"
       ],
@@ -8041,7 +8041,7 @@
         "N-Acetyl-L-Cysteine"
       ],
       "category": "antioxidant",
-      "evidence_level": "ingredient-human",
+      "evidence_level": "reference",
       "published_studies": [
         "RCT",
         "meta-analysis",
@@ -8055,12 +8055,10 @@
         "exercise oxidative-stress biomarkers ↓",
         "condition-specific psychiatric adjunct outcomes: mixed"
       ],
-      "health_goals_supported": [
-        "Immune Support"
-      ],
-      "notes": "Human evidence supports NAC as a glutathione precursor that measurably lowers oxidative-stress markers, and a randomized trial supports attenuation of influenza-like illness in older adults. Respiratory (mucolytic) and psychiatric-adjunct evidence is real but condition-specific and more heterogeneous.",
+      "health_goals_supported": [],
+      "notes": "Human evidence supports NAC as a glutathione precursor that measurably lowers oxidative-stress markers, and a randomized trial supports attenuation of influenza-like illness in older adults. Respiratory (mucolytic) and psychiatric-adjunct evidence is real but condition-specific and more heterogeneous. Signed A094 accepts limited oral exercise-soreness findings only. Current38label cohort contains immune,respiratory,liver,antioxidant/glutathione,or dose-only positioning;none claims postexercise soreness ormuscle recovery in retainedsource text. The exercise research is retained as nonaffirmative reference for those currentcatalog purposes.24h soreness benefit is separate from immediate null and adverse functional-recovery findings;less soreness isnot proven bettertrainingadaptation. No universalNACdosecurve or blanketinefficacy conclusion is created.",
       "notable_studies": "A 6-month randomized, double-blind, 20-centre trial (PMID 9230243, n=262, NAC 600 mg twice daily, 78% aged 65+) significantly reduced the frequency and severity of influenza-like episodes and shifted cell-mediated immunity from anergy toward normoergy; notably it did not prevent A/H1N1 infection, but only 25% of infected participants on NAC developed symptomatic illness versus 79% on placebo. A 2024 systematic review/meta-analysis of 20 supplementation studies (PMID 39632267) found significantly increased glutathione and reduced TBARS and IL-6, with no significant effect on TNF-alpha, creatine kinase or GSSG. A major review of mucolytic agents in chronic bronchitis/COPD (PMID 31107966) supports benefit in respiratory settings, and a 2018 systematic review/meta-analysis (PMID 29457216) found psychiatric-adjunct evidence that is promising but heterogeneous across diagnoses.",
-      "study_type": "systematic_review_meta",
+      "study_type": "reference",
       "last_updated": "2026-08-08",
       "references_structured": [
         {
@@ -8093,7 +8091,9 @@
           "supports_claims": [
             "chronic_bronchitis_copd_mucolytic_outcomes"
           ],
-          "verification_source": "pubmed_eutils"
+          "verification_source": "pubmed_eutils",
+          "scoring_eligible": false,
+          "notes": "Retained distinct historical indication;not qualified by signedexercise-onlyA094 decision. No age-only exclusion and no source deletion."
         },
         {
           "type": "pubmed",
@@ -8125,7 +8125,9 @@
           "supports_claims": [
             "condition_specific_psychiatric_adjunct_outcomes"
           ],
-          "verification_source": "pubmed_eutils"
+          "verification_source": "pubmed_eutils",
+          "scoring_eligible": false,
+          "notes": "Retained distinct historical indication;not qualified by signedexercise-onlyA094 decision. No age-only exclusion and no source deletion."
         },
         {
           "type": "pubmed",
@@ -8167,7 +8169,9 @@
             "cell_mediated_immunity",
             "not_infection_prevention"
           ],
-          "verification_source": "pubmed_eutils"
+          "verification_source": "pubmed_eutils",
+          "scoring_eligible": false,
+          "notes": "Retained distinct historical indication;not qualified by signedexercise-onlyA094 decision. No age-only exclusion and no source deletion."
         },
         {
           "type": "pubmed",
@@ -8214,15 +8218,109 @@
         "unii": "WYQ7N0BPYC"
       },
       "effect_direction": "mixed",
-      "primary_outcome": "Immune Support",
+      "primary_outcome": "Exercise-induced muscle soreness,source-specific reference only",
       "published_rct_count": 1,
       "published_meta_review_count": 3,
       "effect_direction_confidence": "medium",
       "effect_direction_rationale": "Classified mixed because content-verified human evidence supports a narrow influenza-like symptom and cellular-immunity signal, respiratory mucolytic outcomes, and several exercise oxidative-stress biomarkers, while psychiatric-adjunct findings are condition-specific and heterogeneous. None of the cited studies measured a longevity endpoint, so no longevity outcome or consumer route is claimed.",
       "endpoint_relevance_tags": [
-        "immune_support",
-        "muscle_recovery",
-        "stress_mood"
+        "muscle_recovery"
+      ],
+      "study_contexts": [
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "nac_oral_exercise_soreness_subset_39632267",
+          "components": [
+            "INGR_NAC"
+          ],
+          "source_pmids": [
+            "39632267"
+          ],
+          "identity_scope": "exact_form",
+          "identity": {
+            "chemical_form": "N-acetylcysteine;oral supplementation only,not intravenous infusion"
+          },
+          "exposure_basis": "supplement_dose",
+          "route": "oral",
+          "evidence_role": "meta_analysis",
+          "component_registration_status": "fully_registered",
+          "condition": "exercise_induced_muscle_soreness",
+          "purpose": "source_specific_assessment",
+          "review_status": "clinician_approved",
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-10-26",
+            "scope": "identity_dose_outcome_applicability"
+          },
+          "scoring_eligible": true,
+          "human_status": "confirmed",
+          "source_integrity": "none",
+          "trial_family": "nac_exercise_soreness_review2024_oral_subset",
+          "population": {
+            "description": "Six controlled oral-supplement reports in healthy active/recreationallytrained men or semielite male rugbyplayers undertaking damaging or repeatedexercise protocols;not infection,psychiatric or respiratorydisease cohorts."
+          },
+          "study_design": "Systematicreview/meta-analysis;oral muscle-soreness subset comprises sixreports including pairmatched and randomized/crossover designs,not six uniformly independentRCTs.",
+          "included_study_pmids": [
+            "18708687",
+            "22089305",
+            "27974950",
+            "19967420",
+            "23719546",
+            "29958049"
+          ],
+          "outcomes": [
+            {
+              "name": "Muscle soreness24h afterexercise:review-reported MD−0.84,95%CI−1.35to−0.34,P=.001,I2=52%",
+              "hierarchy": "not_reported",
+              "kind": "patient_important",
+              "direction": "positive",
+              "outcome_role": "direct_between_group_effect"
+            },
+            {
+              "name": "Muscle soreness immediately afterexercise:MD0.02,95%CI−0.36to0.39,P=.93",
+              "hierarchy": "not_reported",
+              "kind": "patient_important",
+              "direction": "null",
+              "outcome_role": "direct_between_group_effect"
+            }
+          ],
+          "limitations": [
+            "SignedA094 accepts limited exercise-context findings only. No influenza prevention,immune enhancement,psychiatric treatment,COPD/bronchitis efficacy or generalized athleticperformance inference follows from this source.",
+            "This context uses only the six soreness reports,which Table3 identifies as oral;the mixed-route biochemical pool is not transferred to oral products.",
+            "Source narrative says5oral/15IV,but its interventionTable3 mostly lists oral and its Ferreira protocols include differentroutes. This internal discrepancy is retained;no verified overall oral/IV count is claimed.",
+            "Heterogeneous fixed and weight-based regimens,durations,exerciseprotocols,small samples,and differing designs do not establish a universal dose,minimum,continuous efficacy range or optimal intake.",
+            "Sakelliou2016andMichailidis2013 share laboratory,10-man protocol and20mg/kg postexercise regimen;exact participantoverlap was not established. They are not claimed as proven independentreplications;the sourcepooledestimate is reported with this limitation,not re-meta-analyzed.",
+            "Primary23719546 found completefunctional recovery only in placebo and blunted repair signaling withNAC. Primary29958049 found lesssoreness afteronebout but greater soreness aftera secondbout,with mostlyunclearperformance effects. Less soreness cannot be equated with better recovery or trainingadaptation.",
+            "Primary22089305 reported highercreatinekinase and mild gastrointestinal effects despite intermittentperformance finding;not uniformly favorable exercise outcomes.",
+            "Unranked outcomes are recordednot_reported under the approveddistinction and cannot supplyprimary-outcomecredit.",
+            "Historical31107966,29457216and9230243 remain separate noncontributing sourcecontexts;their qualification is not completed by this exercise review."
+          ],
+          "dose": {
+            "measurement_type": "mass",
+            "unit": "mg",
+            "values": [],
+            "dose_status": "verified",
+            "dose_basis": "not_applicable",
+            "duration_basis": "not_recorded",
+            "duration_days": null,
+            "administration_frequency": "Study-specific oral regimens;no single pooled administrationfrequency.",
+            "dosage_forms": [
+              "oral supplement"
+            ],
+            "co_therapies": [
+              "study-specific damaging or repeatedexercise protocols"
+            ],
+            "reported_regimen": "SourceTable3:Silva10mg/kg/day21days;Cobley2x50mg/kg6days+preexercise;Sakelliou20mg/kg/day8days;Kerksick1800mg/day14days;Michailidis20mg/kg/dayduring7daysaftertraining(Table3),primaryassessments8days;Rhodes1000mg/day6days.",
+            "normalization": {
+              "basis": "No scalar pooled dose is derived;study-reported mass and bodyweightregimens retained without a universal conversion."
+            },
+            "source_provenance": {
+              "pmid": "39632267",
+              "location": "Tables1–3 and section4.6.5 Muscle soreness;individualNIHprimaryabstracts contentverified",
+              "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11617117/"
+            }
+          }
+        }
       ]
     },
     {
@@ -9271,16 +9369,13 @@
       ],
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "sleep onset ↑",
-        "jet lag ↓",
-        "sleep quality ↑",
-        "circadian rhythm ↑"
+        "Short-term sleep-onset latency and total sleep time in adults; dose/timing effects are modeled and context-specific."
       ],
       "health_goals_supported": [
         "Sleep Quality"
       ],
-      "notes": "Strong systematic-review evidence supports melatonin for sleep-onset latency and circadian-rhythm or jet-lag use cases, with the clearest benefits in people with sleep-initiation difficulty or misaligned timing.",
-      "notable_studies": "A recent dose-response meta-analysis is indexed as PMID 38888087 and found reduced sleep-onset latency with effects peaking around 4 mg/day. Earlier jet-lag and circadian-use evidence is summarized in classic systematic reviews such as PMID 12076414, and prolonged-release insomnia evidence is covered separately in the Circadin entry.",
+      "notes": "Signed A091 supports a qualified short-term adult sleep-promotion finding from the oral subset of PMID38888087. It does not establish universal dose/timing advice, chronic-insomnia treatment, circadian/jet-lag efficacy, pediatric benefit or long-term safety. The review combines immediate/fast-release and prolonged-release protocols; exact retail delivery remains separate.",
+      "notable_studies": "PMID38888087 reviews26reports/1689observations and models dose/timing associations;24oral reports contribute to dose-response analyses. The model peak near4mg/day and3hoursbeforebedtime is not a trial-proven universal optimum. PMID12076414 remains a separately held jet-lag context.",
       "study_type": "systematic_review_meta",
       "last_updated": "2026-03-07",
       "references_structured": [
@@ -9336,7 +9431,9 @@
           "evidence_grade": "systematic_review",
           "retracted": false,
           "supports_claims": [],
-          "verification_source": "pubmed_eutils"
+          "verification_source": "pubmed_eutils",
+          "scoring_eligible": false,
+          "notes": "Retained separate jet-lag review. Not part of signed A091 adult sleep-promotion scope; no jet-lag transfer from PMID38888087."
         }
       ],
       "external_ids": {
@@ -9344,15 +9441,162 @@
       },
       "effect_direction": "positive_strong",
       "primary_outcome": "Sleep Quality",
-      "total_enrollment": 194,
+      "total_enrollment": null,
       "registry_completed_trials_count": 340,
       "effect_direction_confidence": "high",
-      "effect_direction_rationale": "Retained positive_strong classification; study_type=systematic_review_meta; evidence_level=ingredient-human; primary_outcome=Sleep Quality; published_tags=RCT,meta-analysis,systematic_review; registry_completed_trials_count=340; total_enrollment=194; endpoint_tags=joint_pain,sleep,cardiovascular; notes/citations contain no automated downgrade signals.",
+      "effect_direction_rationale": "Signed A091 limited adult sleep-promotion scope only; no new numerical grade decision or general timing/dose benchmark is supplied. Do not use unrelated registry counts or observations as independent participant enrollment.",
       "endpoint_relevance_tags": [
-        "joint_pain",
-        "sleep",
-        "cardiovascular"
-      ]
+        "sleep"
+      ],
+      "study_contexts": [
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "melatonin_oral_sleep_promotion_subset_38888087",
+          "components": [
+            "INGR_MELATONIN"
+          ],
+          "source_pmids": [
+            "38888087"
+          ],
+          "identity_scope": "ingredient_general",
+          "identity": {
+            "chemical_form": "Exogenous melatonin in trial-specific immediate/fast-release and prolonged-release oral preparations; no non-oral equivalence."
+          },
+          "exposure_basis": "supplement_dose",
+          "route": "oral",
+          "evidence_role": "meta_analysis",
+          "component_registration_status": "fully_registered",
+          "condition": "adult_short_term_sleep_promotion",
+          "purpose": "source_specific_assessment",
+          "review_status": "clinician_approved",
+          "scoring_eligible": true,
+          "human_status": "confirmed",
+          "source_integrity": "none",
+          "trial_family": "melatonin_oral_sleep_promotion_subset_38888087",
+          "study_design": "Systematic review of26double-blindplacebo-controlledRCTreports; this context is the24oral-report dose-response subset,not the two non-oralreports or a reconstructed all-oral pooled estimate.",
+          "population": {
+            "age_group": "adult",
+            "description": "Adults over18, healthy volunteers or primary-insomnia participants. The26-report review describes1689observations, not a verified count of unique participants; this context uses its24oral-report dose-response subset. Pediatric participants, comorbid illness, shift work, circadian disorders and other sleep disorders were excluded by the review."
+          },
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-10-26",
+            "scope": "identity_dose_outcome_applicability"
+          },
+          "included_study_pmids": [
+            "8552931",
+            "8856838",
+            "11600532",
+            "12615559",
+            "12790159",
+            "17875243",
+            "33157425",
+            "9493923",
+            "8878099",
+            "25922426",
+            "9785269",
+            "8127888",
+            "8795804",
+            "9143072",
+            "9485533",
+            "3509066",
+            "2306332",
+            "19584739",
+            "7796857",
+            "11703562",
+            "15459246",
+            "15532202",
+            "7768078",
+            "8843534"
+          ],
+          "dose": {
+            "measurement_type": "mass",
+            "unit": "mg",
+            "values": [],
+            "dose_status": "verified",
+            "dose_basis": "not_applicable",
+            "duration_basis": "not_recorded",
+            "duration_days": null,
+            "administration_frequency": "Trial-specific oral schedules and timing relative to the sleep episode; no single common dose, frequency or duration for the review.",
+            "dosage_forms": [
+              "oral immediate/fast-release preparation",
+              "oral prolonged-release preparation"
+            ],
+            "co_therapies": [
+              "The review excluded combination with another sleep-disorder treatment. Several primary studies had separate experimental comparator conditions; only melatonin-versus-placebo comparisons are in this review context."
+            ],
+            "reported_regimen": "Table1 describes study-specific0.1-10mg/day regimens lasting1-28days and variable administration times. No scalar pooled dose/duration is encoded. Non-oral transdermal19606092 and transbuccal9850013 studies were excluded from the oral dose-response analysis.",
+            "normalization": {
+              "basis": "Literal study-assigned exposure or explicitly nonscalar review protocol; no universal efficacy threshold, safety ceiling or unreviewed preparation equivalence."
+            },
+            "source_provenance": {
+              "pmid": "38888087",
+              "location": "Original full publisher Methods2.1-2.5,Table1,Results3.1-3.2,Discussion and References28-38/46-60; exact included-report mapping verified by live PMID metadata.",
+              "source_url": "https://onlinelibrary.wiley.com/doi/full/10.1111/jpi.12985"
+            }
+          },
+          "outcomes": [
+            {
+              "name": "Sleep-onset latency: oral dose-response analysis supports a short-term sleep-promoting finding; the modeled dose/timing association is not an experimentally established universal optimum.",
+              "hierarchy": "primary",
+              "direction": "positive",
+              "kind": "patient_important",
+              "outcome_role": "direct_between_group_effect"
+            },
+            {
+              "name": "Total sleep time: oral dose-response analysis supports a short-term sleep-promoting finding; timing and formulation remain study-specific.",
+              "hierarchy": "primary",
+              "direction": "positive",
+              "kind": "patient_important",
+              "outcome_role": "direct_between_group_effect"
+            }
+          ],
+          "limitations": [
+            "The model-derived4mg/day and approximately3hours-before-bedtime peaks are not clinical minimums, optimal intakes, universal prescriptions or new Dose thresholds.",
+            "The overall pooled effect estimates combine oral and non-oral studies; no quantitative all-oral pooled effect is reconstructed here. Two oral studies9493923/8878099 were additionally excluded from timing meta-regression because a unique administration-to-sleep interval could not be identified.",
+            "Immediate/fast-release and prolonged-release protocols remain distinct; a nonsignificant formulation moderator does not establish preparation interchangeability or retail-product correspondence.",
+            "Some administration times were imputed from reported bedtime intervals or national average bedtimes; most studies did not measure individual circadian phase. Sleep-latency funnel asymmetry suggests possible publication bias.",
+            "This is not jet-lag, pediatric, shift-work, chronic-disease or long-term safety approval. The historical jet-lag review12076414 is outside this accepted scope.",
+            "Current NCCIH reference inspected: evidence is insufficient for routine chronic-insomnia treatment recommendations; long-term safety and pregnancy/breastfeeding evidence are limited, and epilepsy/blood-thinner users require medical supervision. Existing safety owners remain authoritative; no new warning thresholds or treatment advice is introduced.",
+            "Signed A091 accepts limited sleep-promotion support only. Existing numerical grade is not newly approved by this source-context extraction."
+          ]
+        }
+      ],
+      "applicability": {
+        "scope": "ingredient",
+        "dosage_forms": [
+          "capsule",
+          "tablet",
+          "softgel"
+        ],
+        "source_pmids": [
+          "38888087"
+        ],
+        "supported_outcomes": [
+          "adult_short_term_sleep_promotion"
+        ],
+        "excluded_claim_terms": [
+          "jet lag",
+          "jetlag",
+          "shift work",
+          "shiftwork",
+          "delayed sleep phase",
+          "non-24",
+          "sublingual",
+          "transbuccal",
+          "transdermal",
+          "intranasal",
+          "under the tongue"
+        ],
+        "excluded_form_terms": [
+          "sublingual",
+          "transbuccal",
+          "transdermal",
+          "intranasal"
+        ],
+        "studied_population": "Adults over 18: healthy volunteers or primary insomnia; no pediatric, comorbid or circadian-disorder transfer.",
+        "reason": "Oral sleep-promotion subset only; modeled dose-response peaks are not efficacy thresholds."
+      }
     },
     {
       "id": "INGR_GINSENG",
@@ -10180,17 +10424,13 @@
       ],
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "cortisol ↓ (significant)",
-        "anxiety ↓",
-        "stress ↓ (PSS)",
-        "HPA axis modulation ↑"
+        "Perceived stress and anxiety symptom scales; mixed study findings",
+        "Cortisol change (surrogate, not proof of mechanism or general benefit)"
       ],
       "health_goals_supported": [
-        "Reduce Stress/Anxiety",
-        "Sleep Quality",
-        "Focus & Mental Clarity"
+        "Reduce Stress / Anxiety"
       ],
-      "notes": "Human evidence supports ashwagandha for stress and anxiety reduction, with moderate improvements in perceived-stress and cortisol outcomes across randomized trials. Effect sizes vary by extract, dose, and study duration.",
+      "notes": "Human evidence supports ashwagandha for stress and anxiety reduction, with moderate improvements in perceived-stress and cortisol outcomes across randomized trials. Effect sizes vary by extract, dose, and study duration. Limited short-term stress/anxiety support across heterogeneous materials and populations. PMID36017529 rates certainty low with substantial heterogeneity; exact-material results include positive and null outcomes. PMID39348746 abstract reports pooled stress/anxiety findings; its full included-study/preparation table has not been verified here. No universal root/leaf extract or dose equivalence. Retain existing pregnancy, liver, thyroid/autoimmune, interaction and long-term-safety qualifications through their existing safety owners.",
       "notable_studies": "Recent meta-analyses include PMID 39348746 and PMID 36017529, both supporting lower perceived stress and cortisol with ashwagandha. Newer trials continue to be published, but heterogeneity across branded extracts means generic claims should stay moderate rather than absolute.",
       "study_type": "systematic_review_meta",
       "last_updated": "2026-03-07",
@@ -11234,29 +11474,23 @@
       "id": "INGR_ALPHA_LIPOIC_ACID",
       "standard_name": "Alpha-Lipoic Acid",
       "aliases": [
-        "ala",
         "thioctic acid"
       ],
       "category": "metabolic_blood_sugar",
-      "evidence_level": "ingredient-human",
+      "evidence_level": "reference",
       "published_studies": [
         "RCT",
         "meta-analysis"
       ],
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "blood glucose ↓",
-        "neuropathy ↓",
-        "oxidative stress ↓"
+        "Disease-context diabetic neuropathy symptom finding; reference only."
       ],
-      "health_goals_supported": [
-        "Blood Sugar Support",
-        "Healthy Aging/Longevity"
-      ],
-      "notes": "Human evidence for alpha-lipoic acid is strongest in diabetic-neuropathy symptom relief, with additional support for modest improvements in glucose-control and oxidative-stress markers.",
-      "study_type": "systematic_review_meta",
+      "health_goals_supported": [],
+      "notes": "Signed A036 supports limited diabetic-neuropathy symptom evidence only. Exact oral SYDNEY2 facts are retained as reference; no generic glucose-control, antioxidant, neurological-enhancement or longevity credit follows. Unqualified pooling of the2023review remains held because source route, duplicate-report and table discrepancies are verified. The ambiguous abbreviation ALA is not an identity lookup alias here: alpha-linolenic acid is a distinct substance. Use the full chemical name or thioctic acid; the abbreviation remains documented, not an independent identity proof.",
+      "study_type": "reference",
       "last_updated": "2026-03-23",
-      "notable_studies": "The core randomized-trial anchor remains the SYDNEY 2 trial (PMID 17065669), which found symptomatic improvement in diabetic polyneuropathy. Newer pooled evidence such as PMID 37630823 supports alpha-lipoic acid as a neuropathy-focused intervention rather than a broadly proven metabolic cure-all.",
+      "notable_studies": "SYDNEY2PMID17065669:181patients,three oral dose arms600/1200/1800mg once daily5weeks,positiveprimaryTSSwithdose-related nausea/vomiting/vertigo. The2023review37630823 cannot supply an unqualified oral pooled estimate until its route/duplicate/table conflicts are resolved.",
       "references_structured": [
         {
           "type": "pubmed",
@@ -11321,20 +11555,110 @@
           "evidence_grade": "systematic_review",
           "retracted": false,
           "supports_claims": [],
-          "verification_source": "pubmed_eutils"
+          "verification_source": "pubmed_eutils",
+          "scoring_eligible": false,
+          "notes": "Retained source audit context. Unqualified oral pooling held: IV SYDNEY source12610036 included despite oral-only criteria; Tang17495764 critically appraises the sameSYDNEY2trial; NATHAN1duration/enrollment table conflicts with primary21775755. The exact oral17065669 symptom context remains separate and reference-only for general catalog benefit."
         }
       ],
       "external_ids": {
         "unii": "73Y7P0K73Y"
       },
       "effect_direction": "positive_weak",
-      "primary_outcome": "Blood Sugar Support",
-      "total_enrollment": 430,
+      "primary_outcome": "Disease-context diabetic neuropathy; reference only",
+      "total_enrollment": null,
       "registry_completed_trials_count": 144,
       "effect_direction_confidence": "medium",
-      "effect_direction_rationale": "Retained positive_weak classification; study_type=systematic_review_meta; evidence_level=ingredient-human; primary_outcome=Blood Sugar Support; published_tags=RCT,meta-analysis; registry_completed_trials_count=144; total_enrollment=430; endpoint_tags=glycemic_control; notes/citations include weak-effect language.",
-      "endpoint_relevance_tags": [
-        "glycemic_control"
+      "effect_direction_rationale": "Signed A036 limited disease-context symptom interpretation only. Reference-only classification prevents general-wellness credit; retained source direction/grade is not a newly approved grade or corrected pooled estimate.",
+      "endpoint_relevance_tags": [],
+      "study_contexts": [
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "ala_sydney2_oral_symptom_reference_17065669",
+          "components": [
+            "INGR_ALPHA_LIPOIC_ACID"
+          ],
+          "source_pmids": [
+            "17065669"
+          ],
+          "identity_scope": "exact_form",
+          "identity": {
+            "chemical_form": "Oral alpha-lipoic/thioctic acid as reported in SYDNEY2; a specific R-enantiomer, salt or retail formulation is not established by the inspected abstract/registry."
+          },
+          "exposure_basis": "supplement_dose",
+          "route": "oral",
+          "evidence_role": "direct_rct",
+          "component_registration_status": "fully_registered",
+          "condition": "diabetic_distal_symmetric_polyneuropathy",
+          "purpose": "source_specific_assessment",
+          "review_status": "clinician_approved",
+          "scoring_eligible": true,
+          "human_status": "confirmed",
+          "source_integrity": "none",
+          "trial_family": "sydney2_17065669_NCT00328601",
+          "study_design": "Multicentre,randomized,double-blind,placebo-controlled,fourparallelgroups;fiveweekoralSYDNEY2trial afteroneweekplaceborun-in.",
+          "population": {
+            "age_group": "adult",
+            "description": "181patients with diabetes and symptomatic distal symmetric polyneuropathy in Russia/Israel;45,47,46 and43 in600mg,1200mg,1800mg andplacebo groups. Registry eligibility ages18-74,diabetes type1or2 and clinically established neuropathy; not healthy-adult wellness."
+          },
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-10-26",
+            "scope": "identity_dose_outcome_applicability"
+          },
+          "dose": {
+            "measurement_type": "mass",
+            "unit": "mg",
+            "values": [
+              600,
+              1200,
+              1800
+            ],
+            "dose_status": "verified",
+            "dose_basis": "nominal_assigned_arm",
+            "duration_basis": "fixed_protocol",
+            "duration_days": 35,
+            "administration_frequency": "Once daily for five weeks after a one-week placebo run-in.",
+            "dosage_forms": [
+              "oral tablet"
+            ],
+            "co_therapies": [
+              "Registry excludes specified antioxidant doses, recent thioctic-acid/gamma-linolenic-acid treatments and certain continued medications. The complete prohibited-medication section6.2.3 is not present in the public registry, and no absence of other medication is inferred."
+            ],
+            "reported_regimen": "Separate once-daily600,1200or1800mg oral arms for5weeks after1weekplaceborun-in; discrete study arms, not a continuous effective range or universal600mg minimum.",
+            "normalization": {
+              "basis": "Literal study-assigned exposure or explicitly nonscalar review protocol; no universal efficacy threshold, safety ceiling or unreviewed preparation equivalence."
+            },
+            "source_provenance": {
+              "pmid": "17065669",
+              "location": "Original PubMed abstract Methods/Results; oral tablet delivery and eligibility confirmed by official NCT00328601 public protocol. Exact full original methods remain inaccessible.",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/17065669/"
+            }
+          },
+          "outcomes": [
+            {
+              "name": "Change in Total Symptom Score: mean decrease4.9,4.5and4.7points in the600,1200and1800mg groups versus2.9placebo; each nominalp<0.05.",
+              "hierarchy": "primary",
+              "direction": "positive",
+              "kind": "patient_important",
+              "outcome_role": "direct_between_group_effect"
+            },
+            {
+              "name": "Dose-related nausea,vomiting andvertigo increased.",
+              "hierarchy": "secondary",
+              "direction": "negative",
+              "kind": "patient_important",
+              "outcome_role": "direct_between_group_effect"
+            }
+          ],
+          "limitations": [
+            "Signed A036 accepts limited diabetic-neuropathy symptom findings, not general glucose-control, oxidative-stress, neurological enhancement or longevity benefit. This catalog record is reference-only; no affirmative general-wellness scoring follows.",
+            "Original full methods/pharmaceutical formulation and complete prohibited-medication list were inaccessible. The source facts here are limited to the directly verified primary abstract and official registry, not a completed independent full-text risk-of-bias assessment.",
+            "PMID37630823 is retained with a source-integrity hold for unqualified pooled oral claims: its included Ametov2003 source12610036 uses intravenous infusions for14treatments; Tang2007source17495764 is a critical appraisal of SYDNEY2, not independent replication; and NATHAN1source21775755 reports4years/460randomized, unlike its review table104weeks/454. No corrected pooled estimate is invented.",
+            "The original abstract describes the secondary NIS change only as numerical; its exact between-group significance is not established here and no positive or null finding is manufactured.",
+            "The three SYDNEY2 dose arms belong to one181-person trial. The Tang appraisal is the same trial family and does not increase enrollment or replication.",
+            "Five-week symptom changes do not establish a universal efficacy minimum or long-term safety. No exact R-ALA/sodiumR-ALA preparation interchangeability is inferred."
+          ]
+        }
       ]
     },
     {
@@ -20791,7 +21115,7 @@
         "manuka honey"
       ],
       "category": "immune",
-      "evidence_level": "ingredient-human",
+      "evidence_level": "reference",
       "published_studies": [
         "RCT",
         "systematic_review",
@@ -20803,13 +21127,10 @@
         "symptom duration ↓",
         "sleep disturbance from cough ↓"
       ],
-      "health_goals_supported": [
-        "Immune Support",
-        "Sleep Quality"
-      ],
-      "notes": "Systematic-review-level evidence supports honey for acute upper-respiratory symptom relief, especially cough severity, cough frequency, and sleep disruption in children. The evidence is for short-term symptomatic relief and does not justify broader immune or anti-infective claims (PMID 32817011, PMID 22419319, PMID 22869830, PMID 36126325).",
+      "health_goals_supported": [],
+      "notes": "Systematic-review-level evidence supports honey for acute upper-respiratory symptom relief, especially cough severity, cough frequency, and sleep disruption in children. The evidence is for short-term symptomatic relief and does not justify broader immune or anti-infective claims (PMID 32817011, PMID 22419319, PMID 22869830, PMID 36126325). Limited pediatric short-term nocturnal cough findings are retained as reference. They do not qualify arbitrary adult or combination honey products for immune/infection benefit. Current293387and304687 age/preparation/regimens differ from verified single10g plainhoney trial. Existing infant-under-one and all productlabel warnings remain.",
       "notable_studies": "A BMJ systematic review and meta-analysis found honey superior to usual care for combined URTI symptoms, cough frequency, and cough severity (PMID 32817011). Cochrane review and pediatric randomized trials also support short-term nocturnal cough relief relative to no treatment or some comparators (PMID 22419319; PMID 22869830; PMID 36126325).",
-      "study_type": "systematic_review_meta",
+      "study_type": "reference",
       "last_updated": "2026-03-07",
       "references_structured": [
         {
@@ -20838,7 +21159,9 @@
           "evidence_grade": "systematic_review",
           "retracted": false,
           "supports_claims": [],
-          "verification_source": "pubmed_eutils"
+          "verification_source": "pubmed_eutils",
+          "scoring_eligible": false,
+          "notes": "Retained comparator-specific mixed-preparation synthesis;not a generic adult/honeyformula qualification."
         },
         {
           "type": "pubmed",
@@ -20869,7 +21192,9 @@
           "evidence_grade": "systematic_review",
           "retracted": false,
           "supports_claims": [],
-          "verification_source": "pubmed_eutils"
+          "verification_source": "pubmed_eutils",
+          "scoring_eligible": false,
+          "notes": "Retained historical overlapping pediatric synthesis;not an additional independent trial."
         },
         {
           "type": "pubmed",
@@ -20932,7 +21257,9 @@
           "evidence_grade": "rct",
           "retracted": false,
           "supports_claims": [],
-          "verification_source": "pubmed_eutils"
+          "verification_source": "pubmed_eutils",
+          "scoring_eligible": false,
+          "notes": "Retained diphenhydramine comparison;exactregimen remainsunverified from abstract-only publisherPDF."
         }
       ],
       "external_ids": {
@@ -20947,6 +21274,94 @@
       "endpoint_relevance_tags": [
         "cardiovascular",
         "glycemic_control"
+      ],
+      "study_contexts": [
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "honey_child_nocturnal_cough_22869830",
+          "components": [
+            "INGR_HONEY"
+          ],
+          "source_pmids": [
+            "22869830"
+          ],
+          "identity_scope": "ingredient_general",
+          "identity": {
+            "name": "Separate plain eucalyptus, citrus or labiatae honey arms; not an herbal combination cough syrup or wound dressing"
+          },
+          "exposure_basis": "food_matrix",
+          "route": "oral",
+          "evidence_role": "direct_rct",
+          "component_registration_status": "fully_registered",
+          "condition": "acute_childhood_urti_nocturnal_cough",
+          "purpose": "treatment",
+          "review_status": "clinician_approved",
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-10-26",
+            "scope": "identity_dose_outcome_applicability"
+          },
+          "scoring_eligible": true,
+          "human_status": "confirmed",
+          "source_integrity": "none",
+          "trial_family": "cohen_2012_honey_child_nocturnal_cough",
+          "population": {
+            "description": "300 children aged1–5 with URI, nocturnal cough and illness<=7days in six community pediatric clinics; asthma,pneumonia,laryngotracheobronchitis,sinusitis,allergicrhinitis and cough/coldmedication the precedingnight excluded."
+          },
+          "study_design": "randomized double-blind four-arm parallel placebo-controlled trial;three separate honey varieties versus silan date-extract placebo",
+          "outcomes": [
+            {
+              "name": "Parent-reported change in cough frequency between untreated baseline night and treatment night; each honey arm improved more than silan date-extract placebo",
+              "hierarchy": "primary",
+              "kind": "patient_important",
+              "direction": "positive",
+              "outcome_role": "direct_between_group_effect"
+            },
+            {
+              "name": "Cough severity,bothersome cough,and child/parent sleep difficulty favored honey over silan date-extract placebo",
+              "hierarchy": "secondary",
+              "kind": "patient_important",
+              "direction": "positive",
+              "outcome_role": "direct_between_group_effect"
+            }
+          ],
+          "limitations": [
+            "Signed A076 accepts limited symptomatic cough/URTI interpretation,not infection treatment,antibiotic replacement,general immune enhancement or general insomnia treatment.",
+            "Primary/secondary labels are reported in the primary registry;registration was first posted2012-04-12 after trialstart2009-01. Prospective prespecification is not inferred.",
+            "One treatment night,subjective parent assessments,three different honey varieties;not proof of durable outcomes or equivalence of arbitrary honey-containing combinations.",
+            "The original Pediatrics publisher PDF remains HTTP403. Source facts were verified against NIH primary abstract,live primaryregistryNCT01575821,and the original Oxfordauthors accepted review manuscript;no originalfulltext inspection is claimed.",
+            "The broader32817011review mixed honey with herbal syrups,coffee or milk:usualcare comparisons favored honey;pooledplacebo comparison was inconclusive(SMD−0.63,95%CI−1.44to0.18);adult-onlycoughfrequency comparison was also inconclusive(SMD−0.19,95%CI−0.47to0.09).",
+            "Historical22419319 review overlaps primarytrials,not independentreplication.36126325 compares honey withdiphenhydramine,not placebo;its publisherPDF containsabstractonly and exactdose remainsunverified.",
+            "Do not give honey to infants under one year. Existing safety authority and productlabel minimumages/warnings remain unchanged.",
+            "Currentlabels293387and304687 contain3.5or7g honey per dose withotheractiveingredients anddifferentage/dosing instructions;they do not reproduce this single10g plainhoney preschool regimen.10g is an observedprotocol,not a universalminimum.",
+            "An empty cotherapy list means no planned activecointervention in this verifiedprotocol,not proof of no backgroundmedication."
+          ],
+          "dose": {
+            "measurement_type": "mass",
+            "unit": "g",
+            "values": [
+              10
+            ],
+            "dose_status": "verified",
+            "dose_basis": "single_challenge",
+            "duration_basis": "fixed_protocol",
+            "duration_days": 1,
+            "administration_frequency": "Single10g oral dose within30minutes before bedtime;one interventionnight",
+            "dosage_forms": [
+              "oral honey"
+            ],
+            "co_therapies": [],
+            "reported_regimen": "10g of one assigned honeyvariety once beforebedtime",
+            "normalization": {
+              "basis": "Source-reported whole-honey mass;no volumeconversion or generalizeddailythreshold."
+            },
+            "source_provenance": {
+              "pmid": "22869830",
+              "location": "NIH primaryabstract Methods and liveNCT01575821 intervention/outcome/eligibility modules;Oxford accepted review32817011 Table1 and Honeyvsplacebo section",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/22869830/"
+            }
+          }
+        }
       ]
     },
     {
@@ -21194,23 +21609,19 @@
         "pea palmitoylethanolamide"
       ],
       "category": "anti_inflammatory",
-      "evidence_level": "ingredient-human",
+      "evidence_level": "reference",
       "published_studies": [
         "RCT",
         "systematic_review"
       ],
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "pain intensity ↓",
-        "inflammatory symptom burden ↓"
+        "Diabetic neuropathic pain severity/interference with exact Levagen+LipiSperse preparation; adjunctive disease-context trial."
       ],
-      "health_goals_supported": [
-        "Healthy Aging/Longevity",
-        "Joint & Bone Health"
-      ],
-      "notes": "Human RCTs and meta-analyses support pain-reduction outcomes; effect sizes vary by pain indication and study quality.",
-      "notable_studies": "2023 systematic review/meta-analysis of double-blind RCTs (PMID: 36986081) reported significant pain reduction versus comparators.",
-      "study_type": "systematic_review_meta",
+      "health_goals_supported": [],
+      "notes": "Signed A098 accepts qualified chronic-pain findings after exact-context matching. This record uses only the oral Levagen+LipiSperse diabetic-neuropathic-pain trial36057884 within review36986081. GenericPEA,plainLevagen,otherdeliveryforms,PEA/transpolydatin mixtures andlongevity claims are not qualified by this subset.600mgPEA/day is not700mgmatrix/day or auniversalminimum. Current general-catalog PEA classification is reference-only. The approved exact diabetic peripheral neuropathic pain finding is preserved, but LipiSperse identity and 600 mg alone cannot establish that condition-specific applicability. Generic joint comfort, healthy aging and plain PEA claims do not inherit this result. Restore affirmative qualification only through enforceable exact condition/preparation correspondence; no extra penalty, safety conclusion or invented dose is introduced.",
+      "notable_studies": "Review36986081 includes11heterogeneous chronic-pain reports. The accepted subset is Pickering2022PMID36057884:exactLevagen+LipiSperse,600mg/dayPEAin700mgmatrix,8weeks,diabeticneuropathicpainwithbackgroundmedication. Positiveprimarypain outcomes coexist withnull evokedpain/glucose/selectedmarkers andmildadverseevents.",
+      "study_type": "reference",
       "last_updated": "2026-02-17",
       "references_structured": [
         {
@@ -21248,17 +21659,138 @@
         "unii": "6R8T1UDM3V"
       },
       "effect_direction": "positive_strong",
-      "primary_outcome": "Healthy Aging/Longevity",
-      "total_enrollment": 120,
+      "primary_outcome": "Diabetic neuropathic pain in the exact studied preparation",
+      "total_enrollment": null,
       "registry_completed_trials_count": 25,
       "effect_direction_confidence": "high",
-      "effect_direction_rationale": "Retained positive_strong classification; study_type=systematic_review_meta; evidence_level=ingredient-human; primary_outcome=Healthy Aging/Longevity; published_tags=RCT,systematic_review; registry_completed_trials_count=25; total_enrollment=120; endpoint_tags=stress_mood,sleep,focus_memory,digestive_health; notes/citations contain no automated downgrade signals.",
-      "endpoint_relevance_tags": [
-        "stress_mood",
-        "sleep",
-        "focus_memory",
-        "digestive_health"
-      ]
+      "effect_direction_rationale": "Signed A098 limited exact-preparation disease-context finding only. No new numerical grade or universal PEA/pain/aging claim follows; mixed-route and coformulated review results are not independent exact-material replications.",
+      "endpoint_relevance_tags": [],
+      "study_contexts": [
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "pea_levagen_lipisperse_diabetic_pain_subset_36986081",
+          "components": [
+            "INGR_PEA"
+          ],
+          "source_pmids": [
+            "36986081"
+          ],
+          "identity_scope": "branded_material",
+          "identity": {
+            "branded_material": "Levagen+ with LipiSperse",
+            "manufacturer": "Gencor Pacific; formulated/manufactured by Pharmako Biotechnologies",
+            "standardization": "Each350mg proprietary formulation capsule provides at least300mg PEA; two capsules/day deliver600mg PEA in700mg total formulation."
+          },
+          "exposure_basis": "supplement_dose",
+          "route": "oral",
+          "evidence_role": "systematic_review",
+          "component_registration_status": "fully_registered",
+          "condition": "diabetic_peripheral_neuropathic_pain",
+          "purpose": "source_specific_assessment",
+          "review_status": "clinician_approved",
+          "scoring_eligible": true,
+          "human_status": "confirmed",
+          "source_integrity": "none",
+          "trial_family": "levagen_lipisperse_DPN_36057884_ACTRN12620001302943",
+          "study_design": "Selected single-centre,prospective,randomized,quadruple-blinded,placebo-controlled parallel-group trial within the cited systematicreview; not the unqualifiedheterogeneouspool.",
+          "population": {
+            "age_group": "adult",
+            "description": "70adults withdiabetes andphysician-diagnosed peripheral neuropathicpain enrolled;66analyzed(33pergroup),aged32-75in Brisbane. Participants continued prescribed antidiabeticmedication andoften analgesics; not generalhealthy-adult pain or longevity."
+          },
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-10-26",
+            "scope": "identity_dose_outcome_applicability"
+          },
+          "included_study_pmids": [
+            "36057884"
+          ],
+          "dose": {
+            "measurement_type": "mass",
+            "unit": "mg",
+            "values": [
+              600
+            ],
+            "dose_status": "verified",
+            "dose_basis": "nominal_assigned_arm",
+            "duration_basis": "fixed_protocol",
+            "duration_days": 56,
+            "administration_frequency": "One capsule twice daily for eight weeks.",
+            "dosage_forms": [
+              "oral capsule"
+            ],
+            "co_therapies": [
+              "Participants continued prescribed diabetes medication(including metformin and/or insulin);47%also used analgesics. Up to4g/day paracetamol was permitted as rescue under the trial protocol, not new consumer dosing advice."
+            ],
+            "reported_regimen": "Two350mg Levagen+matrixcapsules/day,eachproviding>=300mgPEA:600mg/dayPEAwith700mg/daytotalformulationfor8weeks; no micronized-PEA equivalent dose is inferred.",
+            "normalization": {
+              "basis": "Literal study-assigned exposure or explicitly nonscalar review protocol; no universal efficacy threshold, safety ceiling or unreviewed preparation equivalence."
+            },
+            "source_provenance": {
+              "pmid": "36986081",
+              "location": "ReviewTable3andTable4(Pickering2022),independently corroborated original36057884 fulltextMethods/Clinicalstudyoutcomes/Results/Funding.",
+              "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10053226/"
+            }
+          },
+          "outcomes": [
+            {
+              "name": "BPI-DPN overall neuropathic pain severity and concomitant pain interference: between-group improvement at eight weeks.",
+              "hierarchy": "primary",
+              "direction": "positive",
+              "kind": "patient_important",
+              "outcome_role": "direct_between_group_effect"
+            },
+            {
+              "name": "Evoked-pain subscore,fastingglucose,HbA1c,fibrinogen and whole-groupCRP did not significantly separate.",
+              "hierarchy": "secondary",
+              "direction": "null",
+              "kind": "patient_important",
+              "outcome_role": "direct_between_group_effect"
+            },
+            {
+              "name": "Mild adverse events included headaches,constipation andurticaria; no universal absence-of-harm conclusion.",
+              "hierarchy": "secondary",
+              "direction": "mixed",
+              "kind": "patient_important",
+              "outcome_role": "direct_between_group_effect"
+            }
+          ],
+          "limitations": [
+            "Signed A098 accepts limited chronic-pain evidence only after matching formulation and context; this context isolates the exact oral diabetic-neuropathic-pain trial from the heterogeneous review.",
+            "The primary trial is quadruple-blinded,placebo-controlled,single-centre,short-term;70enrolled66analyzed. GencorPacific was trial sponsor and monitored implementation.",
+            "The review combines PEA/transpolydatin formulas,several pain indications,sublingual andoral routes,andvariable dosages/durations. Its pooled1.68-point effect and highheterogeneity cannot be assigned to isolatedPEA or everylabel.",
+            "Primarysource36057884 reports mild adverseevents despite the review table simplifying this to noAEs; retain primarysource detail. No dose-equivalence to micronizedPEA is inferred from pharmacokinetics.",
+            "Known600mgPEAdose is distinct from700mg/day total proprietarymatrix. No universal efficacy minimum,continuous range,long-term safety,healthy-aging orgeneralanti-inflammatory benefit is established.",
+            "Exact label correspondence must prove LipiSperse or writtenLevagenplus preparation. Punctuation-stripped Levagen+ cannot be assumed equivalent to plainLevagen; generic PEA and other preparations remain outside this context.",
+            "Secondary sleep/mood findings are not accepted as standalone sleep,mood orcognitiveenhancement efficacy. Existing numeric grade is not newlyapproved by this extraction."
+          ]
+        }
+      ],
+      "applicability": {
+        "scope": "ingredient",
+        "require_source_label_form": true,
+        "required_form_terms": [
+          "LipiSperse"
+        ],
+        "excluded_form_terms": [
+          "transpolydatin"
+        ],
+        "dosage_forms": [
+          "capsule"
+        ],
+        "minimum_daily_dose": 600,
+        "maximum_daily_dose": 600,
+        "dose_unit": "mg",
+        "source_pmids": [
+          "36986081"
+        ],
+        "studied_population": "Adults with diabetes and peripheral neuropathic pain receiving prescribed diabetes medications,with orwithout analgesics;8week exactformulation study.",
+        "supported_outcomes": [
+          "diabetic_neuropathic_pain"
+        ],
+        "reviewed_at": "2026-10-26",
+        "reason": "Exact600mg/dayPEAregimen in Levagen+LipiSperse only; equalbounds describe one testedregimen,not aminimumeffective dose. The plus-sign identity is not broadened by punctuation normalization. GenericPEA/plainLevagen or differentmatrices are not equivalent. The retained source must establish LipiSperse; a brand-root or plus sign alone does not prove carrier correspondence."
+      }
     },
     {
       "id": "INGR_CREATINE_MONOHYDRATE",
@@ -21486,7 +22018,7 @@
             "source_provenance": {
               "pmid": "39074168",
               "location": "Fulltext Eligibility Criteria,Outcomes,Results;original Supplemental Digital Content1 Tables1–2",
-              "source_url": "https://www.ovid.com/jnls/nsca-jscr/fulltext/10.1519/jsc.0000000000004862~the-effect-of-creatine-supplementation-on-resistance"
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/39074168/"
             }
           },
           "limitations": [
@@ -22893,10 +23425,10 @@
       ],
       "effect_direction": "positive_strong",
       "primary_outcome": "Disease-context cognitive outcomes; reference only",
-      "total_enrollment": 60,
+      "total_enrollment": null,
       "registry_completed_trials_count": 2,
       "effect_direction_confidence": "medium",
-      "effect_direction_rationale": "Retained positive_strong classification; study_type=systematic_review_meta; evidence_level=ingredient-human; primary_outcome=Focus & Mental Clarity; published_tags=RCT,systematic_review,meta-analysis; registry_completed_trials_count=2; total_enrollment=60; endpoint_tags=focus_memory; notes/citations contain no automated downgrade signals.",
+      "effect_direction_rationale": "Reference-only catalog classification implements signed A035: limited disease-context research does not establish healthy-person focus benefit. The accepted monotherapy subset and overlapping ASCOMALVA report limitations are recorded in study_contexts. Historical direction/grade fields are not affirmative catalog credit; the former record-level enrollment 60 is not a verified unique aggregate for this source set and is unset. No healthy-adult, longevity or general nootropic inference.",
       "endpoint_relevance_tags": [
         "focus_memory"
       ],

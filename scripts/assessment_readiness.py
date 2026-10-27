@@ -376,7 +376,12 @@ def _resolved_evidence_assessment(resolution: Any) -> tuple[str, str, str | None
         return state, resolution.reason_code, None
     if (disposition == EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value
             and "backed_clinical_studies" in resolution.matched_owners
-            and resolution.reason_code != "clinical_sources_ineligible"):
+            and resolution.reason_code in {
+                "clinical_form_mismatch", "reference_only_clinical_record",
+                "label_purpose_evidence_mismatch", "clinical_population_mismatch",
+                "literature_applicability_unestablished", "dose_below_studied_range",
+                "form_mismatch_with_clinical_trials",
+            }):
         # Reviewed non-applicability is a conclusion; a held source is not.
         return EVIDENCE_EVALUATED_LIMITED_OR_NEGATIVE, resolution.reason_code, None
     if disposition == EvidenceDisposition.NOT_EFFICACY_RELEVANT.value:

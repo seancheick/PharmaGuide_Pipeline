@@ -559,6 +559,33 @@ def _load_literature_evidence() -> Dict[str, Dict[str, Any]]:
 # Universal Evidence Resolver Core
 # ============================================================================
 
+def _clinical_owner_facts(studies: list[dict]) -> dict:
+    """Retain eligible citation facts independently of affirmative qualification."""
+    excluded_pmids = {
+        str(ref.get("pmid")) for study in studies
+        for ref in study.get("references_structured", [])
+        if isinstance(ref, Mapping) and (
+            ref.get("retracted") or ref.get("expression_of_concern")
+            or ref.get("scoring_eligible") is False
+        )
+    }
+    return {
+        "study_count": len(studies),
+        "study_types": list({s.get("study_type") for s in studies}),
+        "effect_directions": list({s.get("effect_direction") for s in studies}),
+        "pmids": list(dict.fromkeys(
+            str(pmid) for study in studies
+            for pmid in [
+                *(ref.get("pmid") for ref in study.get("references_structured", [])
+                  if isinstance(ref, Mapping)),
+                *study.get("published_studies", []),
+            ]
+            if re.fullmatch(r"[1-9][0-9]*", str(pmid))
+            and str(pmid) not in excluded_pmids
+        )),
+    }
+
+
 def resolve_evidence_for_canonical(
     canonical_id: str,
     *,
@@ -917,6 +944,7 @@ def resolve_evidence_for_row(
                 for study in deduped_studies
             )
             if reviewed_references:
+                owner_facts["backed_clinical_studies"] = _clinical_owner_facts(deduped_studies)
                 return EvidenceResolution(
                     canonical_id=canonical, ingredient_name=name,
                     matched_owners=matched_owners,
@@ -944,29 +972,7 @@ def resolve_evidence_for_row(
                     reason_code="label_purpose_evidence_mismatch", owner_facts=owner_facts,
                     blocking_reasons=["label_purpose_evidence_mismatch"],
                 )
-        excluded_pmids = {
-            str(ref.get("pmid")) for study in valid_studies
-            for ref in study.get("references_structured", [])
-            if isinstance(ref, Mapping) and (
-                ref.get("retracted") or ref.get("expression_of_concern")
-                or ref.get("scoring_eligible") is False
-            )
-        }
-        owner_facts["backed_clinical_studies"] = {
-            "study_count": len(valid_studies),
-            "study_types": list({s.get("study_type") for s in valid_studies}),
-            "effect_directions": list({s.get("effect_direction") for s in valid_studies}),
-            "pmids": list(dict.fromkeys(
-                str(pmid) for study in valid_studies
-                for pmid in [
-                    *(ref.get("pmid") for ref in study.get("references_structured", [])
-                      if isinstance(ref, Mapping)),
-                    *study.get("published_studies", []),
-                ]
-                if re.fullmatch(r"[1-9][0-9]*", str(pmid))
-                and str(pmid) not in excluded_pmids
-            )),
-        }
+        owner_facts["backed_clinical_studies"] = _clinical_owner_facts(valid_studies)
 
         # Check applicability: preparation/form only. Amount adequacy is owned
         # by Dose; assessment readiness separately withholds a required missing
@@ -975,11 +981,16 @@ def resolve_evidence_for_row(
         scope_product = product or {"activeIngredients": [row_dict]}
         source_ref = row_dict.get("raw_source_path") or row_dict.get("source_row_ref")
         record_states = []
+        unresolved_reasons = []
         for study in valid_studies:
             scoped = {**study, "ingredient": name, "matched_canonical_ids": [canonical]}
             if source_ref:
                 scoped["matched_source_row_refs"] = [source_ref]
             decision = assess_clinical_applicability(scope_product, scoped, assess_amount=False)
+            if decision["status"] == "unresolved":
+                record_states.append("unresolved")
+                unresolved_reasons.append(decision["reason_code"])
+                continue
             if decision["status"] not in {"applicable", "not_curated"}:
                 record_states.append("form_mismatch")
                 continue
@@ -988,6 +999,16 @@ def resolve_evidence_for_row(
         # applicable record. The scorer assesses each clinical record too.
         has_applicable = "applicable" in record_states
         is_form_excluded = bool(record_states) and all(state == "form_mismatch" for state in record_states)
+
+        if not has_applicable and unresolved_reasons:
+            return EvidenceResolution(
+                canonical_id=canonical, ingredient_name=name,
+                matched_owners=matched_owners,
+                disposition=EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value,
+                points_eligible=False, applicability_status="applicability_unestablished",
+                reason_code=unresolved_reasons[0], owner_facts=owner_facts,
+                blocking_reasons=list(dict.fromkeys(unresolved_reasons)),
+            )
 
         if is_form_excluded:
             blocking_reasons.append("form_mismatch_with_clinical_trials")
