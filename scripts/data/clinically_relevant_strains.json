@@ -1440,18 +1440,19 @@
           "source_tier": "C",
           "trial_registration": "NCT06644001",
           "authored_on": "2026-09-14",
-          "authoring_method": "PubMed title/abstract read; Wave 2 bounded search (guidelines, meta-analyses, RCTs)",
+          "authoring_method": "October27originalpublisherMethods/Results verification within returnedA144limitedscope; prior engineering authoring history and independent regimen/product holds retained.",
           "context_schema_version": "1.1.0",
           "evidence_role": "direct_rct",
           "component_registration_status": "fully_registered",
           "clinical_review": {
-            "reviewer": "Sean B (engineering owner), approving the 2026-09-14 Claude Fable 5.1 research review",
-            "reviewed_at": "2026-09-14T22:23:43Z",
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-10-26",
             "scope": "identity_dose_outcome_applicability",
-            "basis": "docs/plans/PROBIOTIC_EVIDENCE_REVIEW_RESPONSE_2026-09-14.json",
+            "basis": "Signed returned A144 limited functional-GI finding, as attested by Sean; A_RESPONSE_VERIFICATION_20261025.md records the earlier pre-attestation state.",
             "decision": "approve_with_correction"
           },
-          "scoring_eligible": true
+          "scoring_eligible": true,
+          "notes": "Approval attribution: Dr. Pham signed the returned A144 limited functional-GI source finding; Sean supplied the October26date. October27source extraction transcribes paper-stated primary/secondary hierarchy and null-domain restrictions; it is not a new broad efficacy decision. Exact retail-product/preparation/regimen matching remains independently required. No other-strain, IBS, upper-GI or all-GI approval. Historical engineering approval retained: {\"basis\": \"docs/plans/PROBIOTIC_EVIDENCE_REVIEW_RESPONSE_2026-09-14.json\", \"decision\": \"approve_with_correction\", \"reviewed_at\": \"2026-09-14T22:23:43Z\", \"reviewer\": \"Sean B (engineering owner), approving the 2026-09-14 Claude Fable 5.1 research review\", \"scope\": \"identity_dose_outcome_applicability\"}"
         },
         {
           "context_id": "bc30_synbiotic_pasta_cardiometabolic_31162597",

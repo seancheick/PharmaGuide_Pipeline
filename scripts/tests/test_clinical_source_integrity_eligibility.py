@@ -439,3 +439,14 @@ def test_returned_reference_findings_complete_without_affirmative_credit(complet
         context = row['study_contexts'][0]
         assert context['dose']['duration_days'] is None
         assert context['dose']['duration_as_printed'] == {'value':12, 'unit':'months'}
+
+
+def test_bc30_revised_source_context_links_returned_scope_not_old_engineering_approval():
+    import json
+    data = json.loads((Path(__file__).parents[1] / 'data/clinically_relevant_strains.json').read_text())
+    row = next(r for r in data['clinically_relevant_strains'] if r['id'] == 'STRAIN_COAGULANS_GBI30')
+    context = next(c for c in row['study_contexts'] if c['context_id'] == 'bc30_functional_gi_complaints_40707016')
+    assert context['clinical_review']['reviewer'] == 'Dr. Pham'
+    assert context['clinical_review']['reviewed_at'] == '2026-10-26'
+    assert 'A144' in context['clinical_review']['basis']
+    assert '2026-09-14' in context['notes']
