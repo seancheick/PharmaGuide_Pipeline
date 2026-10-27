@@ -419,8 +419,16 @@ def _primary_botanical_active(product: Dict[str, Any]) -> Optional[Dict[str, Any
     ))
 
 
+def _explicit_botanical_identity_rejection(row: Dict[str, Any]) -> bool:
+    return (row.get("scoreable_identity") is False
+            or row.get("identity_disposition") == "identity_conflict")
+
+
 def _recognized_botanical_identity(row: Dict[str, Any]) -> bool:
     from evidence_resolver import is_reviewed_branded_material
+
+    if _explicit_botanical_identity_rejection(row):
+        return False
 
     # The strict input owner has already resolved identity and botanical
     # source evidence, including a botanical form beneath a raw blend parent.
@@ -829,6 +837,8 @@ def score_botanical_purpose_dose(
 
 def _botanical_benchmark(row: Dict[str, Any]) -> str:
     """Return a completed absent general benchmark or unresolved review."""
+    if _explicit_botanical_identity_rejection(row):
+        return "unresolved"
     entry = _dosing_entry_for(row)
     if entry is not None:
         semantics = entry.get("reference_semantics") or {}

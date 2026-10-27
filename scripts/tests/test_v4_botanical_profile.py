@@ -799,3 +799,26 @@ def test_neumentix_review_completes_general_threshold_without_borrowing_spearmin
         {'canonical_id': 'spearmint', 'name': 'Spearmint extract', 'matched_form': 'spearmint extract'},
     ]:
         assert _botanical_benchmark(generic) == 'unresolved'
+
+
+def test_exact_preparation_review_does_not_override_conflicting_botanical_identity():
+    row = _botanical_ingredient(
+        name="Neumentix Phenolic Complex K110-42", standard_name="Rosemary",
+        canonical_id="rosemary", quantity=900, matched_form="neumentix spearmint extract",
+        scoreable_identity=False, identity_disposition="identity_conflict",
+    )
+    from scoring_v4.modules.botanical_profile import _recognized_botanical_identity
+    assert _recognized_botanical_identity(row) is False
+    assert score_botanical_dose(_botanical_product(row))["score"] == 0
+
+
+@pytest.mark.parametrize("flags,expected", [
+    ({"scoreable_identity": False}, False),
+    ({"scoreable_identity": True, "identity_disposition": "identity_conflict"}, False),
+    ({"identity_disposition": "identity_conflict"}, False),
+    ({}, True),
+])
+def test_known_botanical_fallback_respects_explicit_identity_veto(flags, expected):
+    from scoring_v4.modules.botanical_profile import _recognized_botanical_identity
+    row = {"canonical_id": "rosemary", "name": "Rosemary", **flags}
+    assert _recognized_botanical_identity(row) is expected
