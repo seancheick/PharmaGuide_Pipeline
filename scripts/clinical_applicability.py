@@ -621,7 +621,11 @@ def assess_clinical_applicability(product: Mapping, entry: Mapping, *, assess_am
                 "supported_outcomes": policy.get("supported_outcomes", []),
                 "studied_population": policy.get("studied_population"),
                 "scope": "ingredient"}
-    return {"status": "not_applicable", "reason_code": reasons[0] if reasons else "clinical_source_row_unresolved"}
+    reason = reasons[0] if reasons else "clinical_source_row_unresolved"
+    status = ("unresolved" if reason in {
+        "clinical_source_row_unresolved", "clinical_source_label_unresolved", "clinical_dose_unresolved",
+    } else "not_applicable")
+    return {"status": status, "reason_code": reason}
 
 
 def filter_clinical_matches(product: Mapping, matches: list[dict], *, assess_amount: bool = True) -> tuple[list[dict], list[dict]]:

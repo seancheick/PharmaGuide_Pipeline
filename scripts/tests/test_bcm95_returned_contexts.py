@@ -304,6 +304,8 @@ def test_bc30_registry_regimen_does_not_invent_unavailable_paper_hierarchy():
     assert '40707016' in c['source_pmids']
     # The original paper could not be inspected, so not_reported would also be false.
     assert assess_clinical_source_review(reviewed_entries()['STRAIN_BC30'])['is_complete'] is False
+    from clinical_evidence_schema import validate_frozen_context
+    assert 'outcomes.review_incomplete' in validate_frozen_context(c, require_complete_review=True)
 
 
 def test_applied_source_scope_has_no_stale_positive_or_unverified_prose():
@@ -442,3 +444,50 @@ def test_pea_diabetic_neuropathy_reference_cannot_qualify_generic_joint_claim():
     assert result.points_eligible is False
     assert result.reason_code == 'reference_only_clinical_record'
     assert row['quantity'] == 600
+
+
+def test_reviewed_literature_exclusions_complete_but_missing_scope_stays_open():
+    from assessment_readiness import _resolved_evidence_assessment, EVIDENCE_NOT_YET_EVALUATED, EVIDENCE_EVALUATED_LIMITED_OR_NEGATIVE
+    from evidence_resolver import EvidenceResolution, EvidenceDisposition
+    for reason in ('clinical_delivery_mismatch', 'clinical_identity_excluded',
+                   'clinical_form_excluded', 'formula_reference_not_individual_evidence',
+                   'clinical_form_mismatch', 'clinical_source_label_unresolved',
+                   'clinical_source_row_unresolved', 'invalid_applicability_contract'):
+        resolution = EvidenceResolution('fixture', 'Fixture', ['literature_evidence'],
+            EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value,
+            False, 'applicability_unestablished', reason,
+            owner_facts={'literature_evidence': {'verification_result': 'authoritative_pubmed_verified'}})
+        expected = (EVIDENCE_NOT_YET_EVALUATED if reason in {
+            'clinical_source_label_unresolved', 'clinical_source_row_unresolved',
+            'invalid_applicability_contract'} else EVIDENCE_EVALUATED_LIMITED_OR_NEGATIVE)
+        assert _resolved_evidence_assessment(resolution)[0] == expected, reason
+
+
+def test_verified_matcha_powder_review_finishes_an_extract_mismatch_without_credit():
+    from evidence_resolver import resolve_evidence_for_row
+    from assessment_readiness import _resolved_evidence_assessment, EVIDENCE_EVALUATED_LIMITED_OR_NEGATIVE
+    row = {'canonical_id': 'matcha_tea_powder', 'name': 'Matcha Tea Extract',
+           'quantity': 100, 'unit': 'mg', 'raw_source_text': 'Matcha Tea Extract',
+           'raw_source_path': 'ingredientRows[0]'}
+    product = {'product_name': 'Matcha Tea Extract', 'activeIngredients': [row],
+               'ingredient_quality_data': {'ingredients_scorable': [row]},
+               'physicalState': {'name': 'Capsule'}}
+    result = resolve_evidence_for_row(row, product)
+    assert result.owner_facts['literature_evidence']['verification_result'] == 'authoritative_pubmed_verified'
+    assert result.reason_code == 'clinical_form_excluded'
+    assert result.points_eligible is False
+    assert _resolved_evidence_assessment(result)[0] == EVIDENCE_EVALUATED_LIMITED_OR_NEGATIVE
+    assert row['quantity'] == 100
+
+
+def test_missing_source_preparation_proof_cannot_be_completed_as_a_form_mismatch():
+    from evidence_resolver import resolve_evidence_for_row
+    from assessment_readiness import _resolved_evidence_assessment, EVIDENCE_NOT_YET_EVALUATED
+    row = {'canonical_id': 'msm', 'name': 'OptiMSM', 'quantity': 2000,
+           'unit': 'mg', 'raw_source_path': 'ingredientRows[0]'}
+    product = {'product_name': 'Adult Joint Comfort', 'activeIngredients': [row],
+               'ingredient_quality_data': {'ingredients_scorable': [row]}}
+    result = resolve_evidence_for_row(row, product)
+    assert result.points_eligible is False
+    assert result.reason_code == 'clinical_source_label_unresolved'
+    assert _resolved_evidence_assessment(result)[0] == EVIDENCE_NOT_YET_EVALUATED

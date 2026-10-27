@@ -1180,7 +1180,7 @@
           "PMID:17987126",
           "PMID:32575611"
         ],
-        "rationale": "Source17987126 used360mg/day flaxseed-derived lignans in type2diabetes;32575611 used50mg/day SDG in healthy adults with null bile-acid outcomes. Different populations/endpoints and discrete regimens cannot define one generic lignan quality curve. Source identifiers, intervention and result limitations content-verified against live PubMed XML on 2026-10-27. Clinical applicability and safety remain independent. This is factual application of the existing October 18 Dose V4.1 completed-neutral policy (docs/plans/DOSE_V41_REFERENCE_DECISIONS.md), not a newly attributed clinical approval or efficacy decision.",
+        "rationale": "Source 17987126 used 360 mg/day flaxseed-derived lignans in type 2 diabetes; 32575611 used 50 mg/day SDG in healthy adults with null bile-acid outcomes. Different populations/endpoints and discrete regimens cannot define one generic lignan quality curve. Source identifiers, intervention and result limitations content-verified against live PubMed XML on 2026-10-27. Clinical applicability and safety remain independent. This is factual application of the existing October 18 Dose V4.1 completed-neutral policy (docs/plans/DOSE_V41_REFERENCE_DECISIONS.md), not a newly attributed clinical approval or efficacy decision.",
         "owner": "scripts/data/literature_evidence_records.json::lignans",
         "review_date": "2026-10-27",
         "approval_status": "approved_existing_neutral_dose_v41_source_review"
@@ -3305,7 +3305,7 @@
         "source_ids": [
           "PMID:11869585"
         ],
-        "rationale": "Cochrane11869585 includes18trials/1562men; it explicitly describes varied preparations/doses, short studies, inadequate reporting and allocation concealment in only one study. No one broad catalog-mass threshold is established. Source identifiers, intervention and result limitations content-verified against live PubMed XML on 2026-10-27. Clinical applicability and safety remain independent. This is factual application of the existing October 18 Dose V4.1 completed-neutral policy (docs/plans/DOSE_V41_REFERENCE_DECISIONS.md), not a newly attributed clinical approval or efficacy decision.",
+        "rationale": "Cochrane review 11869585 includes 18 trials and 1,562 men; it explicitly describes varied preparations/doses, short studies, inadequate reporting and allocation concealment in only one study. No one broad catalog-mass threshold is established. Source identifiers, intervention and result limitations content-verified against live PubMed XML on 2026-10-27. Clinical applicability and safety remain independent. This is factual application of the existing October 18 Dose V4.1 completed-neutral policy (docs/plans/DOSE_V41_REFERENCE_DECISIONS.md), not a newly attributed clinical approval or efficacy decision.",
         "owner": "scripts/data/literature_evidence_records.json::pygeum",
         "review_date": "2026-10-27",
         "approval_status": "approved_existing_neutral_dose_v41_source_review"
@@ -3921,7 +3921,7 @@
         "source_ids": [
           "PMID:27009750"
         ],
-        "rationale": "27009750 pooled8trials/470prediabetes or type2diabetes patients and identified high heterogeneity, evidence limitations and a need for standardized preparations. It does not establish one general catalog amount curve across aloe preparations. Source identifiers, intervention and result limitations content-verified against live PubMed XML on 2026-10-27. Clinical applicability and safety remain independent. This is factual application of the existing October 18 Dose V4.1 completed-neutral policy (docs/plans/DOSE_V41_REFERENCE_DECISIONS.md), not a newly attributed clinical approval or efficacy decision.",
+        "rationale": "27009750 pooled 8 trials with 470 prediabetes or type 2 diabetes patients and identified high heterogeneity, evidence limitations and a need for standardized preparations. It does not establish one general catalog amount curve across aloe preparations. Source identifiers, intervention and result limitations content-verified against live PubMed XML on 2026-10-27. Clinical applicability and safety remain independent. This is factual application of the existing October 18 Dose V4.1 completed-neutral policy (docs/plans/DOSE_V41_REFERENCE_DECISIONS.md), not a newly attributed clinical approval or efficacy decision.",
         "owner": "scripts/data/literature_evidence_records.json::aloe_vera",
         "review_date": "2026-10-27",
         "approval_status": "approved_existing_neutral_dose_v41_source_review"
@@ -11178,7 +11178,7 @@
         "source_ids": [
           "PMID:21715508"
         ],
-        "rationale": "21715508 pools14trials/1136subjects and reports lipid changes not modified by catechin dose. Beverage/extract exposures and catechin amounts do not establish an EGCG or generic leaf-mass threshold; safety references and clinical applicability remain independent. Source identifiers, intervention and result limitations content-verified against live PubMed XML on 2026-10-27. Clinical applicability and safety remain independent. This is factual application of the existing October 18 Dose V4.1 completed-neutral policy (docs/plans/DOSE_V41_REFERENCE_DECISIONS.md), not a newly attributed clinical approval or efficacy decision.",
+        "rationale": "21715508 pools 14 trials with 1,136 subjects and reports lipid changes not modified by catechin dose. Beverage/extract exposures and catechin amounts do not establish an EGCG or generic leaf-mass threshold; safety references and clinical applicability remain independent. Source identifiers, intervention and result limitations content-verified against live PubMed XML on 2026-10-27. Clinical applicability and safety remain independent. This is factual application of the existing October 18 Dose V4.1 completed-neutral policy (docs/plans/DOSE_V41_REFERENCE_DECISIONS.md), not a newly attributed clinical approval or efficacy decision.",
         "owner": "scripts/data/literature_evidence_records.json::green_tea_leaf",
         "review_date": "2026-10-27",
         "approval_status": "approved_existing_neutral_dose_v41_source_review"

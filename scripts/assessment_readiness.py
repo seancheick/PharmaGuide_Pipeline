@@ -374,14 +374,20 @@ def _resolved_evidence_assessment(resolution: Any) -> tuple[str, str, str | None
         state = (EVIDENCE_EVALUATED_SUPPORTED if resolution.points_eligible
                  else EVIDENCE_EVALUATED_LIMITED_OR_NEGATIVE)
         return state, resolution.reason_code, None
+    completed_scope_reasons = {
+        "clinical_form_mismatch", "clinical_delivery_mismatch",
+        "clinical_identity_excluded", "clinical_form_excluded",
+        "formula_reference_not_individual_evidence", "clinical_population_mismatch",
+        "label_purpose_evidence_mismatch",
+    }
     if (disposition == EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value
-            and "backed_clinical_studies" in resolution.matched_owners
-            and resolution.reason_code in {
-                "clinical_form_mismatch", "reference_only_clinical_record",
-                "label_purpose_evidence_mismatch", "clinical_population_mismatch",
-                "literature_applicability_unestablished", "dose_below_studied_range",
-                "form_mismatch_with_clinical_trials",
-            }):
+            and (("backed_clinical_studies" in resolution.matched_owners
+                  and resolution.reason_code in completed_scope_reasons | {
+                      "reference_only_clinical_record", "literature_applicability_unestablished",
+                      "dose_below_studied_range", "form_mismatch_with_clinical_trials",
+                  })
+                 or ("literature_evidence" in resolution.owner_facts
+                     and resolution.reason_code in completed_scope_reasons))):
         # Reviewed non-applicability is a conclusion; a held source is not.
         return EVIDENCE_EVALUATED_LIMITED_OR_NEGATIVE, resolution.reason_code, None
     if disposition == EvidenceDisposition.NOT_EFFICACY_RELEVANT.value:
