@@ -233,14 +233,6 @@ def _branded_studied_row(product: Dict[str, Any], row: Dict[str, Any]) -> bool:
         )
         for names, tokens in _branded_studied_entries()
     )
-    for match in ((product.get("evidence_data") or {}).get("clinical_matches") or []):
-        if not isinstance(match, dict):
-            continue
-        level = _norm(match.get("evidence_level"))
-        branded = "branded" in level or _norm(match.get("id")).startswith("brand_")
-        if branded and level != "preclinical" and ref in (match.get("matched_source_row_refs") or []):
-            return True
-    return False
 
 
 # --- ingredient helpers ----------------------------------------------------
