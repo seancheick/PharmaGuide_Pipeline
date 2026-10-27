@@ -1,0 +1,1185 @@
+[
+  {
+    "id": "333715",
+    "module": "fiber_digestive",
+    "product": {
+      "product_scoring_evidence": [
+        {
+          "canonical_id": "protease",
+          "dose_unit": "HUT",
+          "dose_value": 41000.0,
+          "evidence_type": "enzyme_activity",
+          "name": "Protease I",
+          "raw_source_path": "ingredientRows[0].nestedRows[0]",
+          "raw_source_text": "Protease I",
+          "canonical_source_db": "ingredient_quality_map",
+          "clean_identity_id": "protease",
+          "confidence": "high",
+          "dose_class": "enzyme_activity",
+          "evidence_canonical_id": "protease",
+          "evidence_origin": "compatibility_derived",
+          "evidence_scope": "row_level",
+          "linked_rows": [
+            "ingredientRows[0].nestedRows[0]"
+          ],
+          "reason": "enzyme_activity_unit_from_label_notes",
+          "score_eligible_by_cleaner": true,
+          "scoreable": true,
+          "scoreable_identity": true,
+          "scoring_parent_id": "protease",
+          "source": "active"
+        },
+        {
+          "canonical_id": "protease",
+          "dose_unit": "HUT",
+          "dose_value": 41000.0,
+          "evidence_type": "enzyme_activity",
+          "name": "Protease II",
+          "raw_source_path": "ingredientRows[0].nestedRows[1]",
+          "raw_source_text": "Protease II",
+          "canonical_source_db": "ingredient_quality_map",
+          "clean_identity_id": "protease",
+          "confidence": "high",
+          "dose_class": "enzyme_activity",
+          "evidence_canonical_id": "protease",
+          "evidence_origin": "compatibility_derived",
+          "evidence_scope": "row_level",
+          "linked_rows": [
+            "ingredientRows[0].nestedRows[1]"
+          ],
+          "reason": "enzyme_activity_unit_from_label_notes",
+          "score_eligible_by_cleaner": true,
+          "scoreable": true,
+          "scoreable_identity": true,
+          "scoring_parent_id": "protease",
+          "source": "active"
+        },
+        {
+          "canonical_id": "protease",
+          "dose_unit": "HUT",
+          "dose_value": 41000.0,
+          "evidence_type": "enzyme_activity",
+          "name": "Protease III",
+          "raw_source_path": "ingredientRows[0].nestedRows[2]",
+          "raw_source_text": "Protease III",
+          "canonical_source_db": "ingredient_quality_map",
+          "clean_identity_id": "protease",
+          "confidence": "high",
+          "dose_class": "enzyme_activity",
+          "evidence_canonical_id": "protease",
+          "evidence_origin": "compatibility_derived",
+          "evidence_scope": "row_level",
+          "linked_rows": [
+            "ingredientRows[0].nestedRows[2]"
+          ],
+          "reason": "enzyme_activity_unit_from_label_notes",
+          "score_eligible_by_cleaner": true,
+          "scoreable": true,
+          "scoreable_identity": true,
+          "scoring_parent_id": "protease",
+          "source": "active"
+        },
+        {
+          "canonical_id": "digestive_enzymes",
+          "dose_unit": "HUT",
+          "dose_value": 41000.0,
+          "evidence_type": "enzyme_activity",
+          "name": "Protease IV",
+          "raw_source_path": "ingredientRows[0].nestedRows[3]",
+          "raw_source_text": "Protease IV",
+          "canonical_source_db": "unmapped",
+          "clean_identity_id": null,
+          "confidence": "high",
+          "dose_class": "enzyme_activity",
+          "evidence_canonical_id": "digestive_enzymes",
+          "evidence_origin": "compatibility_derived",
+          "evidence_scope": "row_level",
+          "linked_rows": [
+            "ingredientRows[0].nestedRows[3]"
+          ],
+          "reason": "enzyme_activity_unit_from_label_notes",
+          "score_eligible_by_cleaner": true,
+          "scoreable": true,
+          "scoreable_identity": true,
+          "scoring_parent_id": "digestive_enzymes",
+          "source": "active"
+        },
+        {
+          "canonical_id": "amylase",
+          "dose_unit": "DP",
+          "dose_value": 15966.0,
+          "evidence_type": "enzyme_activity",
+          "name": "Amylase",
+          "raw_source_path": "ingredientRows[0].nestedRows[4]",
+          "raw_source_text": "Amylase",
+          "canonical_source_db": "ingredient_quality_map",
+          "clean_identity_id": "amylase",
+          "confidence": "high",
+          "dose_class": "enzyme_activity",
+          "evidence_canonical_id": "amylase",
+          "evidence_origin": "compatibility_derived",
+          "evidence_scope": "row_level",
+          "linked_rows": [
+            "ingredientRows[0].nestedRows[4]"
+          ],
+          "reason": "enzyme_activity_unit_from_label_notes",
+          "score_eligible_by_cleaner": true,
+          "scoreable": true,
+          "scoreable_identity": true,
+          "scoring_parent_id": "amylase",
+          "source": "active"
+        },
+        {
+          "canonical_id": "lactase",
+          "dose_unit": "ALU",
+          "dose_value": 800.0,
+          "evidence_type": "enzyme_activity",
+          "name": "Lactase I",
+          "raw_source_path": "ingredientRows[0].nestedRows[5]",
+          "raw_source_text": "Lactase I",
+          "canonical_source_db": "ingredient_quality_map",
+          "clean_identity_id": "lactase",
+          "confidence": "high",
+          "dose_class": "enzyme_activity",
+          "evidence_canonical_id": "lactase",
+          "evidence_origin": "compatibility_derived",
+          "evidence_scope": "row_level",
+          "linked_rows": [
+            "ingredientRows[0].nestedRows[5]"
+          ],
+          "reason": "enzyme_activity_unit_from_label_notes",
+          "score_eligible_by_cleaner": true,
+          "scoreable": true,
+          "scoreable_identity": true,
+          "scoring_parent_id": "lactase",
+          "source": "active"
+        },
+        {
+          "canonical_id": "lactase",
+          "dose_unit": "ALU",
+          "dose_value": 800.0,
+          "evidence_type": "enzyme_activity",
+          "name": "Lactase II",
+          "raw_source_path": "ingredientRows[0].nestedRows[6]",
+          "raw_source_text": "Lactase II",
+          "canonical_source_db": "ingredient_quality_map",
+          "clean_identity_id": "lactase",
+          "confidence": "high",
+          "dose_class": "enzyme_activity",
+          "evidence_canonical_id": "lactase",
+          "evidence_origin": "compatibility_derived",
+          "evidence_scope": "row_level",
+          "linked_rows": [
+            "ingredientRows[0].nestedRows[6]"
+          ],
+          "reason": "enzyme_activity_unit_from_label_notes",
+          "score_eligible_by_cleaner": true,
+          "scoreable": true,
+          "scoreable_identity": true,
+          "scoring_parent_id": "lactase",
+          "source": "active"
+        },
+        {
+          "canonical_id": "lipase",
+          "dose_unit": "FIP",
+          "dose_value": 1100.0,
+          "evidence_type": "enzyme_activity",
+          "name": "Lipase I",
+          "raw_source_path": "ingredientRows[0].nestedRows[7]",
+          "raw_source_text": "Lipase I",
+          "canonical_source_db": "ingredient_quality_map",
+          "clean_identity_id": "lipase",
+          "confidence": "high",
+          "dose_class": "enzyme_activity",
+          "evidence_canonical_id": "lipase",
+          "evidence_origin": "compatibility_derived",
+          "evidence_scope": "row_level",
+          "linked_rows": [
+            "ingredientRows[0].nestedRows[7]"
+          ],
+          "reason": "enzyme_activity_unit_from_label_notes",
+          "score_eligible_by_cleaner": true,
+          "scoreable": true,
+          "scoreable_identity": true,
+          "scoring_parent_id": "lipase",
+          "source": "active"
+        },
+        {
+          "canonical_id": "lipase",
+          "dose_unit": "FIP",
+          "dose_value": 1100.0,
+          "evidence_type": "enzyme_activity",
+          "name": "Lipase II",
+          "raw_source_path": "ingredientRows[0].nestedRows[8]",
+          "raw_source_text": "Lipase II",
+          "canonical_source_db": "ingredient_quality_map",
+          "clean_identity_id": "lipase",
+          "confidence": "high",
+          "dose_class": "enzyme_activity",
+          "evidence_canonical_id": "lipase",
+          "evidence_origin": "compatibility_derived",
+          "evidence_scope": "row_level",
+          "linked_rows": [
+            "ingredientRows[0].nestedRows[8]"
+          ],
+          "reason": "enzyme_activity_unit_from_label_notes",
+          "score_eligible_by_cleaner": true,
+          "scoreable": true,
+          "scoreable_identity": true,
+          "scoring_parent_id": "lipase",
+          "source": "active"
+        },
+        {
+          "canonical_id": "cellulase",
+          "dose_unit": "CU",
+          "dose_value": 175.0,
+          "evidence_type": "enzyme_activity",
+          "name": "Cellulase I",
+          "raw_source_path": "ingredientRows[0].nestedRows[9]",
+          "raw_source_text": "Cellulase I",
+          "canonical_source_db": "ingredient_quality_map",
+          "clean_identity_id": "cellulase",
+          "confidence": "high",
+          "dose_class": "enzyme_activity",
+          "evidence_canonical_id": "cellulase",
+          "evidence_origin": "compatibility_derived",
+          "evidence_scope": "row_level",
+          "linked_rows": [
+            "ingredientRows[0].nestedRows[9]"
+          ],
+          "reason": "enzyme_activity_unit_from_label_notes",
+          "score_eligible_by_cleaner": true,
+          "scoreable": true,
+          "scoreable_identity": true,
+          "scoring_parent_id": "cellulase",
+          "source": "active"
+        },
+        {
+          "canonical_id": "cellulase",
+          "dose_unit": "CU",
+          "dose_value": 175.0,
+          "evidence_type": "enzyme_activity",
+          "name": "Cellulase II",
+          "raw_source_path": "ingredientRows[0].nestedRows[10]",
+          "raw_source_text": "Cellulase II",
+          "canonical_source_db": "ingredient_quality_map",
+          "clean_identity_id": "cellulase",
+          "confidence": "high",
+          "dose_class": "enzyme_activity",
+          "evidence_canonical_id": "cellulase",
+          "evidence_origin": "compatibility_derived",
+          "evidence_scope": "row_level",
+          "linked_rows": [
+            "ingredientRows[0].nestedRows[10]"
+          ],
+          "reason": "enzyme_activity_unit_from_label_notes",
+          "score_eligible_by_cleaner": true,
+          "scoreable": true,
+          "scoreable_identity": true,
+          "scoring_parent_id": "cellulase",
+          "source": "active"
+        },
+        {
+          "canonical_id": "invertase",
+          "dose_unit": "SU",
+          "dose_value": 468.0,
+          "evidence_type": "enzyme_activity",
+          "name": "Sucrase",
+          "raw_source_path": "ingredientRows[0].nestedRows[11]",
+          "raw_source_text": "Sucrase"
+        },
+        {
+          "canonical_id": "phytase",
+          "dose_unit": "FTU",
+          "dose_value": 0.85,
+          "evidence_type": "enzyme_activity",
+          "name": "Phytase",
+          "raw_source_path": "ingredientRows[0].nestedRows[12]",
+          "raw_source_text": "Phytase"
+        }
+      ]
+    },
+    "readiness": {
+      "identity": {
+        "readiness": "complete"
+      },
+      "dose": {
+        "readiness": "complete"
+      },
+      "verification": {
+        "readiness": "complete"
+      },
+      "route": {
+        "readiness": "complete"
+      },
+      "catalog_disposition": {
+        "disposition": "score_candidate",
+        "evidence_paths": [],
+        "reason_code": "strict_scoring_rows_present"
+      },
+      "evidence": {
+        "readiness": "complete",
+        "ingredient_assessments": [
+          {
+            "canonical_id": "protease",
+            "source_row_ref": "ingredientRows[0].nestedRows[0]",
+            "scoring_input_kind": "product_level_evidence",
+            "evidence_applicability": "module_aggregate",
+            "state": "not_applicable",
+            "reason_code": "module_scoped_product_projection"
+          },
+          {
+            "canonical_id": "protease",
+            "source_row_ref": "ingredientRows[0].nestedRows[1]",
+            "scoring_input_kind": "product_level_evidence",
+            "evidence_applicability": "module_aggregate",
+            "state": "not_applicable",
+            "reason_code": "module_scoped_product_projection"
+          },
+          {
+            "canonical_id": "protease",
+            "source_row_ref": "ingredientRows[0].nestedRows[2]",
+            "scoring_input_kind": "product_level_evidence",
+            "evidence_applicability": "module_aggregate",
+            "state": "not_applicable",
+            "reason_code": "module_scoped_product_projection"
+          },
+          {
+            "canonical_id": "digestive_enzymes",
+            "source_row_ref": "ingredientRows[0].nestedRows[3]",
+            "scoring_input_kind": "product_level_evidence",
+            "evidence_applicability": "module_aggregate",
+            "state": "not_applicable",
+            "reason_code": "module_scoped_product_projection"
+          },
+          {
+            "canonical_id": "amylase",
+            "source_row_ref": "ingredientRows[0].nestedRows[4]",
+            "scoring_input_kind": "product_level_evidence",
+            "evidence_applicability": "module_aggregate",
+            "state": "not_applicable",
+            "reason_code": "module_scoped_product_projection"
+          },
+          {
+            "canonical_id": "lactase",
+            "source_row_ref": "ingredientRows[0].nestedRows[5]",
+            "scoring_input_kind": "product_level_evidence",
+            "evidence_applicability": "module_aggregate",
+            "state": "not_applicable",
+            "reason_code": "module_scoped_product_projection"
+          },
+          {
+            "canonical_id": "lactase",
+            "source_row_ref": "ingredientRows[0].nestedRows[6]",
+            "scoring_input_kind": "product_level_evidence",
+            "evidence_applicability": "module_aggregate",
+            "state": "not_applicable",
+            "reason_code": "module_scoped_product_projection"
+          },
+          {
+            "canonical_id": "lipase",
+            "source_row_ref": "ingredientRows[0].nestedRows[7]",
+            "scoring_input_kind": "product_level_evidence",
+            "evidence_applicability": "module_aggregate",
+            "state": "not_applicable",
+            "reason_code": "module_scoped_product_projection"
+          },
+          {
+            "canonical_id": "lipase",
+            "source_row_ref": "ingredientRows[0].nestedRows[8]",
+            "scoring_input_kind": "product_level_evidence",
+            "evidence_applicability": "module_aggregate",
+            "state": "not_applicable",
+            "reason_code": "module_scoped_product_projection"
+          },
+          {
+            "canonical_id": "cellulase",
+            "source_row_ref": "ingredientRows[0].nestedRows[9]",
+            "scoring_input_kind": "product_level_evidence",
+            "evidence_applicability": "module_aggregate",
+            "state": "not_applicable",
+            "reason_code": "module_scoped_product_projection"
+          },
+          {
+            "canonical_id": "cellulase",
+            "source_row_ref": "ingredientRows[0].nestedRows[10]",
+            "scoring_input_kind": "product_level_evidence",
+            "evidence_applicability": "module_aggregate",
+            "state": "not_applicable",
+            "reason_code": "module_scoped_product_projection"
+          },
+          {
+            "canonical_id": "invertase",
+            "source_row_ref": "ingredientRows[0].nestedRows[11]",
+            "scoring_input_kind": "product_level_evidence",
+            "evidence_applicability": "not_applicable",
+            "state": "not_applicable",
+            "reason_code": "non_material_active"
+          },
+          {
+            "canonical_id": "phytase",
+            "source_row_ref": "ingredientRows[0].nestedRows[12]",
+            "scoring_input_kind": "product_level_evidence",
+            "evidence_applicability": "not_applicable",
+            "state": "not_applicable",
+            "reason_code": "non_material_active"
+          }
+        ]
+      }
+    },
+    "module_breakdown": {
+      "module": "fiber_digestive",
+      "dimensions": {
+        "evidence": {
+          "score": 0,
+          "metadata": {
+            "evidence_result_state": "clinical_review_not_covered",
+            "contributing_record_assessments": []
+          }
+        }
+      }
+    },
+    "expected_overall": "literature_resolution_required",
+    "expected_blockers": [
+      "literature_search_required_phase4",
+      "literature_verification_pending"
+    ]
+  },
+  {
+    "id": "327398",
+    "module": "generic",
+    "product": {
+      "display_ingredients": [
+        {
+          "raw_source_path": "ingredientRows[0]",
+          "raw_source_text": "Calories"
+        },
+        {
+          "raw_source_path": "ingredientRows[1]",
+          "raw_source_text": "Total Fat"
+        },
+        {
+          "raw_source_path": "ingredientRows[1].nestedRows[0]",
+          "raw_source_text": "Saturated Fat"
+        },
+        {
+          "raw_source_path": "ingredientRows[2]",
+          "raw_source_text": "Total Carbohydrates"
+        },
+        {
+          "canonical_id": "fiber",
+          "raw_source_path": "ingredientRows[2].nestedRows[0]",
+          "raw_source_text": "Dietary Fiber"
+        },
+        {
+          "raw_source_path": "ingredientRows[2].nestedRows[1]",
+          "raw_source_text": "Total Sugars"
+        },
+        {
+          "raw_source_path": "ingredientRows[2].nestedRows[1].nestedRows[0]",
+          "raw_source_text": "Added Sugars"
+        },
+        {
+          "canonical_id": "protein",
+          "raw_source_path": "ingredientRows[3]",
+          "raw_source_text": "Protein",
+          "display_type": "nutrition_fact",
+          "exact_dose_text": "20 g",
+          "source_section": "activeIngredients"
+        },
+        {
+          "raw_source_path": "ingredientRows[4]",
+          "raw_source_text": "Sodium"
+        },
+        {
+          "canonical_id": null,
+          "raw_source_path": "ingredientRows[5]",
+          "raw_source_text": "Super Seed Protein Blend"
+        },
+        {
+          "canonical_id": "collagen",
+          "raw_source_path": "ingredientRows[5].nestedRows[0]",
+          "raw_source_text": "Collagen Peptides"
+        },
+        {
+          "canonical_id": "PII_SUNFLOWER_SOURCE_DESCRIPTOR",
+          "raw_source_path": "ingredientRows[5].nestedRows[1]",
+          "raw_source_text": "Sunflower Seed Protein"
+        },
+        {
+          "canonical_id": "pumpkin",
+          "raw_source_path": "ingredientRows[5].nestedRows[2]",
+          "raw_source_text": "Pumpkin Seed Protein"
+        },
+        {
+          "canonical_id": "watermelon",
+          "raw_source_path": "ingredientRows[5].nestedRows[3]",
+          "raw_source_text": "Watermelon Seed Protein"
+        },
+        {
+          "canonical_id": "mct_oil",
+          "raw_source_path": "ingredientRows[6]",
+          "raw_source_text": "Medium Chain Triglyceride"
+        },
+        {
+          "canonical_id": "bacillus_coagulans",
+          "raw_source_path": "ingredientRows[7]",
+          "raw_source_text": "Bacillus coagulans SNZ-1969"
+        },
+        {
+          "canonical_id": "NHA_COCONUT_DERIVATIVES",
+          "raw_source_path": "otheringredients.ingredients[0]",
+          "raw_source_text": "Coconut Milk"
+        },
+        {
+          "canonical_id": "NHA_COCONUT_DERIVATIVES",
+          "raw_source_path": "otheringredients.ingredients[1]",
+          "raw_source_text": "Coconut Oil"
+        },
+        {
+          "canonical_id": "NHA_MALTODEXTRIN",
+          "raw_source_path": "otheringredients.ingredients[2]",
+          "raw_source_text": "Tapioca Maltodextrin"
+        },
+        {
+          "canonical_id": "NHA_ACACIA_GUM",
+          "raw_source_path": "otheringredients.ingredients[3]",
+          "raw_source_text": "Gum Acacia"
+        },
+        {
+          "canonical_id": "NHA_LECITHIN_SUNFLOWER",
+          "raw_source_path": "otheringredients.ingredients[4]",
+          "raw_source_text": "Sunflower Lecithin"
+        },
+        {
+          "canonical_id": "cocoa",
+          "raw_source_path": "otheringredients.ingredients[5]",
+          "raw_source_text": "Cacao"
+        },
+        {
+          "canonical_id": "NHA_CHOCOLATE_FLAVOR",
+          "raw_source_path": "otheringredients.ingredients[6]",
+          "raw_source_text": "Chocolate Flavor, Natural"
+        },
+        {
+          "canonical_id": "NHA_NATURAL_FLAVORS",
+          "raw_source_path": "otheringredients.ingredients[7]",
+          "raw_source_text": "Other Natural Flavors"
+        },
+        {
+          "canonical_id": "NHA_STEVIA",
+          "raw_source_path": "otheringredients.ingredients[8]",
+          "raw_source_text": "Stevia"
+        }
+      ],
+      "ingredient_quality_data": {
+        "ingredients": [
+          {
+            "canonical_id": "fiber",
+            "name": "Dietary Fiber",
+            "quantity": 1.0,
+            "raw_source_path": "ingredientRows[2].nestedRows[0]",
+            "raw_source_text": "Dietary Fiber",
+            "unit": "Gram(s)"
+          },
+          {
+            "canonical_id": "protein",
+            "name": "Protein",
+            "quantity": 20.0,
+            "raw_source_path": "ingredientRows[3]",
+            "raw_source_text": "Protein",
+            "unit": "Gram(s)"
+          },
+          {
+            "canonical_id": null,
+            "name": "Super Seed Protein Blend",
+            "quantity": 22.0,
+            "raw_source_path": "ingredientRows[5]",
+            "raw_source_text": "Super Seed Protein Blend",
+            "unit": "Gram(s)"
+          },
+          {
+            "canonical_id": "collagen",
+            "name": "Collagen Peptides",
+            "quantity": 0.0,
+            "raw_source_path": "ingredientRows[5].nestedRows[0]",
+            "raw_source_text": "Collagen Peptides",
+            "unit": "NP"
+          },
+          {
+            "canonical_id": "PII_SUNFLOWER_SOURCE_DESCRIPTOR",
+            "name": "Sunflower Seed Protein",
+            "quantity": 0.0,
+            "raw_source_path": "ingredientRows[5].nestedRows[1]",
+            "raw_source_text": "Sunflower Seed Protein",
+            "unit": "NP"
+          },
+          {
+            "canonical_id": "pumpkin",
+            "name": "Pumpkin Seed Protein",
+            "quantity": 0.0,
+            "raw_source_path": "ingredientRows[5].nestedRows[2]",
+            "raw_source_text": "Pumpkin Seed Protein",
+            "unit": "NP"
+          },
+          {
+            "canonical_id": "watermelon",
+            "name": "Watermelon Seed Protein",
+            "quantity": 0.0,
+            "raw_source_path": "ingredientRows[5].nestedRows[3]",
+            "raw_source_text": "Watermelon Seed Protein",
+            "unit": "NP"
+          },
+          {
+            "canonical_id": "mct_oil",
+            "name": "Medium Chain Triglyceride",
+            "quantity": 2.3,
+            "raw_source_path": "ingredientRows[6]",
+            "raw_source_text": "Medium Chain Triglyceride",
+            "unit": "Gram(s)"
+          },
+          {
+            "canonical_id": "bacillus_coagulans",
+            "name": "Bacillus coagulans SNZ-1969",
+            "quantity": 5.0,
+            "raw_source_path": "ingredientRows[7]",
+            "raw_source_text": "Bacillus coagulans SNZ-1969",
+            "unit": "mg"
+          }
+        ],
+        "ingredients_scorable": [
+          {
+            "canonical_id": "mct_oil",
+            "name": "Medium Chain Triglyceride",
+            "quantity": 2.3,
+            "raw_source_path": "ingredientRows[6]",
+            "raw_source_text": "Medium Chain Triglyceride",
+            "unit": "Gram(s)"
+          },
+          {
+            "canonical_id": "bacillus_coagulans",
+            "name": "Bacillus coagulans SNZ-1969",
+            "quantity": 5.0,
+            "raw_source_path": "ingredientRows[7]",
+            "raw_source_text": "Bacillus coagulans SNZ-1969",
+            "unit": "mg"
+          }
+        ]
+      },
+      "nutrition_summary": {
+        "calories_per_serving": 170.0,
+        "dietary_fiber_g": 1.0,
+        "dietary_fiber_source": {
+          "amount": 1.0,
+          "quantityVariants": [
+            {
+              "daily_value": 4.0,
+              "daily_value_target_group": "adult_4_plus",
+              "index": 0,
+              "operator": "=",
+              "quantity": 1.0,
+              "quantity_parsed": true,
+              "selected_for_analysis": true,
+              "serving_size_order": 1,
+              "serving_size_quantity": 42,
+              "serving_size_unit": "Gram(s)",
+              "unit": "Gram(s)"
+            }
+          ],
+          "raw_source_path": "ingredientRows[2].nestedRows[0]",
+          "unit": "Gram(s)"
+        },
+        "protein_g": 20.0,
+        "total_carbohydrates_g": 12.0,
+        "total_fat_g": 4.5,
+        "total_sugars_g": 3.0
+      },
+      "product_name": "Grass Fed Collagen Protein Fair Trade Chocolate"
+    },
+    "readiness": {
+      "identity": {
+        "readiness": "complete"
+      },
+      "dose": {
+        "readiness": "complete"
+      },
+      "verification": {
+        "readiness": "complete"
+      },
+      "route": {
+        "readiness": "complete"
+      },
+      "catalog_disposition": {
+        "disposition": "score_candidate",
+        "evidence_paths": [],
+        "reason_code": "strict_scoring_rows_present"
+      },
+      "evidence": {
+        "readiness": "complete",
+        "ingredient_assessments": [
+          {
+            "canonical_id": "mct_oil",
+            "source_row_ref": "ingredientRows[6]",
+            "scoring_input_kind": null,
+            "evidence_applicability": "not_applicable",
+            "state": "not_applicable",
+            "reason_code": "non_material_active"
+          },
+          {
+            "canonical_id": "bacillus_coagulans",
+            "source_row_ref": "ingredientRows[7]",
+            "scoring_input_kind": null,
+            "evidence_applicability": "not_applicable",
+            "state": "not_applicable",
+            "reason_code": "non_material_active"
+          },
+          {
+            "canonical_id": "protein",
+            "source_row_ref": "ingredientRows[3]",
+            "scoring_input_kind": "product_level_evidence",
+            "evidence_applicability": "module_aggregate",
+            "state": "not_applicable",
+            "reason_code": "module_scoped_product_projection"
+          },
+          {
+            "canonical_id": "collagen",
+            "source_row_ref": "ingredientRows[5]",
+            "scoring_input_kind": "product_level_evidence",
+            "evidence_applicability": "module_aggregate",
+            "state": "not_applicable",
+            "reason_code": "module_scoped_product_projection"
+          },
+          {
+            "canonical_id": "pumpkin",
+            "source_row_ref": "ingredientRows[5].nestedRows[2]",
+            "scoring_input_kind": null,
+            "evidence_applicability": "individual_ingredient",
+            "state": "evaluated_limited_or_negative",
+            "reason_code": "crude_seed_powder_cannot_inherit_purified_oil_trials"
+          },
+          {
+            "canonical_id": "watermelon",
+            "source_row_ref": "ingredientRows[5].nestedRows[3]",
+            "scoring_input_kind": null,
+            "evidence_applicability": "not_applicable",
+            "state": "not_applicable",
+            "reason_code": "whole_food_matrix_not_efficacy_relevant"
+          },
+          {
+            "canonical_id": "super_seed_protein_blend",
+            "source_row_ref": "ingredientRows[5]",
+            "scoring_input_kind": "product_level_evidence",
+            "evidence_applicability": "not_applicable",
+            "state": "not_applicable",
+            "reason_code": "structural_row_not_evidence_subject"
+          }
+        ]
+      }
+    },
+    "module_breakdown": {
+      "module": "generic",
+      "dimensions": {
+        "evidence": {
+          "score": 0,
+          "metadata": {
+            "evidence_result_state": "research_present_applicability_unestablished",
+            "contributing_record_assessments": []
+          }
+        }
+      }
+    },
+    "expected_overall": "research_present_applicability_unestablished",
+    "expected_blockers": [
+      "clinical_sources_ineligible",
+      "literature_applicability_unestablished"
+    ]
+  },
+  {
+    "id": "327399",
+    "module": "generic",
+    "product": {
+      "display_ingredients": [
+        {
+          "raw_source_path": "ingredientRows[0]",
+          "raw_source_text": "Calories"
+        },
+        {
+          "raw_source_path": "ingredientRows[1]",
+          "raw_source_text": "Total Fat"
+        },
+        {
+          "raw_source_path": "ingredientRows[1].nestedRows[0]",
+          "raw_source_text": "Saturated Fat"
+        },
+        {
+          "raw_source_path": "ingredientRows[2]",
+          "raw_source_text": "Total Carbohydrates"
+        },
+        {
+          "raw_source_path": "ingredientRows[2].nestedRows[0]",
+          "raw_source_text": "Total Sugars"
+        },
+        {
+          "raw_source_path": "ingredientRows[2].nestedRows[0].nestedRows[0]",
+          "raw_source_text": "Added Sugars"
+        },
+        {
+          "canonical_id": "protein",
+          "raw_source_path": "ingredientRows[3]",
+          "raw_source_text": "Protein",
+          "display_type": "nutrition_fact",
+          "exact_dose_text": "20 g",
+          "source_section": "activeIngredients"
+        },
+        {
+          "raw_source_path": "ingredientRows[4]",
+          "raw_source_text": "Sodium"
+        },
+        {
+          "canonical_id": null,
+          "raw_source_path": "ingredientRows[5]",
+          "raw_source_text": "Super Seed Protein Blend"
+        },
+        {
+          "canonical_id": "collagen",
+          "raw_source_path": "ingredientRows[5].nestedRows[0]",
+          "raw_source_text": "Collagen Peptides"
+        },
+        {
+          "canonical_id": "PII_SUNFLOWER_SOURCE_DESCRIPTOR",
+          "raw_source_path": "ingredientRows[5].nestedRows[1]",
+          "raw_source_text": "Sunflower Seed Protein"
+        },
+        {
+          "canonical_id": "pumpkin",
+          "raw_source_path": "ingredientRows[5].nestedRows[2]",
+          "raw_source_text": "Pumpkin Seed Protein"
+        },
+        {
+          "canonical_id": "watermelon",
+          "raw_source_path": "ingredientRows[5].nestedRows[3]",
+          "raw_source_text": "Watermelon Seed Protein"
+        },
+        {
+          "canonical_id": "mct_oil",
+          "raw_source_path": "ingredientRows[6]",
+          "raw_source_text": "Medium Chain Triglyceride"
+        },
+        {
+          "canonical_id": "bacillus_coagulans",
+          "raw_source_path": "ingredientRows[7]",
+          "raw_source_text": "Bacillus coagulans SNZ-1969"
+        },
+        {
+          "canonical_id": "NHA_COCONUT_DERIVATIVES",
+          "raw_source_path": "otheringredients.ingredients[0]",
+          "raw_source_text": "Coconut Milk"
+        },
+        {
+          "canonical_id": "NHA_COCONUT_DERIVATIVES",
+          "raw_source_path": "otheringredients.ingredients[1]",
+          "raw_source_text": "Coconut Oil"
+        },
+        {
+          "canonical_id": "NHA_MALTODEXTRIN",
+          "raw_source_path": "otheringredients.ingredients[2]",
+          "raw_source_text": "Tapioca Maltodextrin"
+        },
+        {
+          "canonical_id": "NHA_ACACIA_GUM",
+          "raw_source_path": "otheringredients.ingredients[3]",
+          "raw_source_text": "Gum Acacia"
+        },
+        {
+          "canonical_id": "NHA_LECITHIN_SUNFLOWER",
+          "raw_source_path": "otheringredients.ingredients[4]",
+          "raw_source_text": "Sunflower Lecithin"
+        },
+        {
+          "canonical_id": "OI_NATURAL_VANILLA_FLAVOR",
+          "raw_source_path": "otheringredients.ingredients[5]",
+          "raw_source_text": "natural Vanilla Flavor"
+        },
+        {
+          "canonical_id": "NHA_STEVIA",
+          "raw_source_path": "otheringredients.ingredients[6]",
+          "raw_source_text": "Stevia"
+        }
+      ],
+      "ingredient_quality_data": {
+        "ingredients": [
+          {
+            "canonical_id": "protein",
+            "name": "Protein",
+            "quantity": 20.0,
+            "raw_source_path": "ingredientRows[3]",
+            "raw_source_text": "Protein",
+            "unit": "Gram(s)"
+          },
+          {
+            "canonical_id": null,
+            "name": "Super Seed Protein Blend",
+            "quantity": 22.0,
+            "raw_source_path": "ingredientRows[5]",
+            "raw_source_text": "Super Seed Protein Blend",
+            "unit": "Gram(s)"
+          },
+          {
+            "canonical_id": "collagen",
+            "name": "Collagen Peptides",
+            "quantity": 0.0,
+            "raw_source_path": "ingredientRows[5].nestedRows[0]",
+            "raw_source_text": "Collagen Peptides",
+            "unit": "NP"
+          },
+          {
+            "canonical_id": "PII_SUNFLOWER_SOURCE_DESCRIPTOR",
+            "name": "Sunflower Seed Protein",
+            "quantity": 0.0,
+            "raw_source_path": "ingredientRows[5].nestedRows[1]",
+            "raw_source_text": "Sunflower Seed Protein",
+            "unit": "NP"
+          },
+          {
+            "canonical_id": "pumpkin",
+            "name": "Pumpkin Seed Protein",
+            "quantity": 0.0,
+            "raw_source_path": "ingredientRows[5].nestedRows[2]",
+            "raw_source_text": "Pumpkin Seed Protein",
+            "unit": "NP"
+          },
+          {
+            "canonical_id": "watermelon",
+            "name": "Watermelon Seed Protein",
+            "quantity": 0.0,
+            "raw_source_path": "ingredientRows[5].nestedRows[3]",
+            "raw_source_text": "Watermelon Seed Protein",
+            "unit": "NP"
+          },
+          {
+            "canonical_id": "mct_oil",
+            "name": "Medium Chain Triglyceride",
+            "quantity": 2.3,
+            "raw_source_path": "ingredientRows[6]",
+            "raw_source_text": "Medium Chain Triglyceride",
+            "unit": "Gram(s)"
+          },
+          {
+            "canonical_id": "bacillus_coagulans",
+            "name": "Bacillus coagulans SNZ-1969",
+            "quantity": 5.0,
+            "raw_source_path": "ingredientRows[7]",
+            "raw_source_text": "Bacillus coagulans SNZ-1969",
+            "unit": "mg"
+          }
+        ],
+        "ingredients_scorable": [
+          {
+            "canonical_id": "mct_oil",
+            "name": "Medium Chain Triglyceride",
+            "quantity": 2.3,
+            "raw_source_path": "ingredientRows[6]",
+            "raw_source_text": "Medium Chain Triglyceride",
+            "unit": "Gram(s)"
+          },
+          {
+            "canonical_id": "bacillus_coagulans",
+            "name": "Bacillus coagulans SNZ-1969",
+            "quantity": 5.0,
+            "raw_source_path": "ingredientRows[7]",
+            "raw_source_text": "Bacillus coagulans SNZ-1969",
+            "unit": "mg"
+          }
+        ]
+      },
+      "nutrition_summary": {
+        "calories_per_serving": 160.0,
+        "dietary_fiber_g": null,
+        "dietary_fiber_source": null,
+        "protein_g": 20.0,
+        "total_carbohydrates_g": 11.0,
+        "total_fat_g": 4.0,
+        "total_sugars_g": 3.0
+      },
+      "product_name": "Grass Fed Collagen Protein Vanilla Flavor"
+    },
+    "readiness": {
+      "identity": {
+        "readiness": "complete"
+      },
+      "dose": {
+        "readiness": "complete"
+      },
+      "verification": {
+        "readiness": "complete"
+      },
+      "route": {
+        "readiness": "complete"
+      },
+      "catalog_disposition": {
+        "disposition": "score_candidate",
+        "evidence_paths": [],
+        "reason_code": "strict_scoring_rows_present"
+      },
+      "evidence": {
+        "readiness": "complete",
+        "ingredient_assessments": [
+          {
+            "canonical_id": "mct_oil",
+            "source_row_ref": "ingredientRows[6]",
+            "scoring_input_kind": null,
+            "evidence_applicability": "not_applicable",
+            "state": "not_applicable",
+            "reason_code": "non_material_active"
+          },
+          {
+            "canonical_id": "bacillus_coagulans",
+            "source_row_ref": "ingredientRows[7]",
+            "scoring_input_kind": null,
+            "evidence_applicability": "not_applicable",
+            "state": "not_applicable",
+            "reason_code": "non_material_active"
+          },
+          {
+            "canonical_id": "protein",
+            "source_row_ref": "ingredientRows[3]",
+            "scoring_input_kind": "product_level_evidence",
+            "evidence_applicability": "module_aggregate",
+            "state": "not_applicable",
+            "reason_code": "module_scoped_product_projection"
+          },
+          {
+            "canonical_id": "collagen",
+            "source_row_ref": "ingredientRows[5]",
+            "scoring_input_kind": "product_level_evidence",
+            "evidence_applicability": "module_aggregate",
+            "state": "not_applicable",
+            "reason_code": "module_scoped_product_projection"
+          },
+          {
+            "canonical_id": "pumpkin",
+            "source_row_ref": "ingredientRows[5].nestedRows[2]",
+            "scoring_input_kind": null,
+            "evidence_applicability": "individual_ingredient",
+            "state": "evaluated_limited_or_negative",
+            "reason_code": "crude_seed_powder_cannot_inherit_purified_oil_trials"
+          },
+          {
+            "canonical_id": "watermelon",
+            "source_row_ref": "ingredientRows[5].nestedRows[3]",
+            "scoring_input_kind": null,
+            "evidence_applicability": "not_applicable",
+            "state": "not_applicable",
+            "reason_code": "whole_food_matrix_not_efficacy_relevant"
+          },
+          {
+            "canonical_id": "super_seed_protein_blend",
+            "source_row_ref": "ingredientRows[5]",
+            "scoring_input_kind": "product_level_evidence",
+            "evidence_applicability": "not_applicable",
+            "state": "not_applicable",
+            "reason_code": "structural_row_not_evidence_subject"
+          }
+        ]
+      }
+    },
+    "module_breakdown": {
+      "module": "generic",
+      "dimensions": {
+        "evidence": {
+          "score": 0,
+          "metadata": {
+            "evidence_result_state": "research_present_applicability_unestablished",
+            "contributing_record_assessments": []
+          }
+        }
+      }
+    },
+    "expected_overall": "research_present_applicability_unestablished",
+    "expected_blockers": [
+      "clinical_sources_ineligible",
+      "literature_applicability_unestablished"
+    ]
+  },
+  {
+    "id": "328400",
+    "module": "generic",
+    "product": {
+      "product_scoring_evidence": [
+        {
+          "canonical_id": "collagen",
+          "dose_unit": "Gram(s)",
+          "dose_value": 11.1,
+          "evidence_type": "blend_anchor_mass",
+          "name": "Collagen Peptide Complex, Hydrolyzed",
+          "raw_source_path": "ingredientRows[3]",
+          "raw_source_text": "Collagen Peptide Complex, Hydrolyzed",
+          "canonical_source_db": "ingredient_quality_map",
+          "clean_identity_id": "collagen",
+          "confidence": "medium",
+          "dose_class": "therapeutic_mass",
+          "evidence_canonical_id": "collagen",
+          "evidence_origin": "compatibility_derived",
+          "evidence_scope": "blend_level",
+          "linked_rows": [
+            "ingredientRows[3]"
+          ],
+          "reason": "identity_bearing_blend_header_mass",
+          "score_eligible_by_cleaner": true,
+          "scoreable": true,
+          "scoreable_identity": true,
+          "scoring_parent_id": "collagen",
+          "source": "active"
+        }
+      ]
+    },
+    "readiness": {
+      "identity": {
+        "readiness": "complete"
+      },
+      "dose": {
+        "readiness": "complete"
+      },
+      "verification": {
+        "readiness": "complete"
+      },
+      "route": {
+        "readiness": "complete"
+      },
+      "catalog_disposition": {
+        "disposition": "score_candidate",
+        "evidence_paths": [],
+        "reason_code": "strict_scoring_rows_present"
+      },
+      "evidence": {
+        "readiness": "complete",
+        "ingredient_assessments": [
+          {
+            "canonical_id": "collagen",
+            "source_row_ref": "ingredientRows[3]",
+            "scoring_input_kind": "product_level_evidence",
+            "evidence_applicability": "module_aggregate",
+            "state": "not_applicable",
+            "reason_code": "module_scoped_product_projection"
+          }
+        ]
+      }
+    },
+    "module_breakdown": {
+      "module": "generic",
+      "dimensions": {
+        "evidence": {
+          "score": 0,
+          "metadata": {
+            "evidence_result_state": "applicability_unestablished",
+            "contributing_record_assessments": []
+          }
+        }
+      }
+    },
+    "expected_overall": "research_present_applicability_unestablished",
+    "expected_blockers": [
+      "clinical_trials_registry_entry_pending"
+    ]
+  }
+]
