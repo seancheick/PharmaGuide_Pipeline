@@ -1,12 +1,14 @@
 # Assessment review handoff — October 26, 2026
 
-## Current scoped closeout — October 27
+## Current integrated closeout — October 27
 
-Candidate runtime `67226a660` is under qualification in PR263. Of the 146 observed source dependencies, fourteen now pass the existing scoped source-review owner and 132 remain incomplete. The frozen 155-row register and original product dependencies remain intact; nine unused historical records remain nonblocking. Signed attribution/date remain Dr. Pham, October26, exact returned scopes only.
+Runtime5cf3ca019 passed all four whole-fast shards, skip guards and Merge readiness in CI40546664703. Protected PR263 merged63e730693; fetched ancestry verified. Final local546pass/24declaredskips; owner/consumer600pass; strict source109claims and native6matches; Python0new/12existing. All three review findings resolved. No bypass, pipeline or publication.
 
-This batch applies fourteen corrected source records, eight literature/reference records (seven usable neutral-reference conclusions; flaxseed retains an unread-erratum integrity hold), and manufacturer-hidden-quantity completion through existing owners. Reference-only honey/NAC/ALA/alpha-GPC/PEA conclusions cannot supply generic positive credit. PEA's disease-scope leak was reproduced independently and excluded. Approved claim exclusions reject adult-sleep review transfer to jet lag/shift work without reading warnings as product claims. Invalid applicability remains unfinished.
+Of146observed source dependencies,14now pass the existing scoped source-review owner and132remain incomplete. Frozen155source/514benchmark rows retain their original dependencies and returned scopes;9unused historical source rows remain nonblocking. Accepted attribution/date stays DrPham, October26, exact returned scopes only. The current request removes completed questions rather than requesting those signatures again;365benchmark questions remain from the374-group frozen denominator. Counts overlap and are not a new corpus census.
 
-Named final owner/consumer tests:597 passed. Changed-source strict citation check:109 claims passed; no title mismatch, drift, ghost suspicion or unresolved identifier. Final bounded measurements, local checkpoint and whole-fast CI must be recorded below when complete. No whole-corpus pipeline, app update or publication performed. See the current qualification report and the existing row-specific registers; unfinished source extraction is not disguised as a request for a blanket signature.
+Final136unique frozen raw labels:102scoremovers,68newcomplete,0lostcomplete,0cleaned record,0identity/amount/role projection and0safety/warning changes. Manufacturer-hidden shares can complete Dose without invented quantities; invalid/missing source proof remains unfinished. Completed source-backed exclusions are zero-credit conclusions, not unfinished research. Reference-only honey/NAC/ALA/alphaGPC/PEA retain scoped findings without general-purpose transfer; the independently reproduced PEA disease-scope leak is excluded. Flaxseed correction26525908 remains unread/held. Source counts do not establish product or release completeness.
+
+No whole-corpus pipeline, app import/native rendering or cloud write/publication occurred. Exact remaining source extraction, source/manufacturer limitations and retained decision holds are in the existing registers/current report. Do not treat132as132new signature requests or rerun the pipeline merely to see whether known source gaps disappear. Final stage selection still requires actual fingerprints after necessary source work is integrated.
 
 ## Latest returned-source implementation
 
