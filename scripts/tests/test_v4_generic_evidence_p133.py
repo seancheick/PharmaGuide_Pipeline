@@ -804,8 +804,8 @@ def test_exact_nac_respects_returned_reference_only_scope() -> None:
     assert payload["score"] == 0.0
 
 
-def test_non_nac_primary_active_recovers_verified_ingredient_human_evidence() -> None:
-    """The recovery is a contract fix, not an NAC patch."""
+def test_held_ashwagandha_cannot_recover_affirmative_evidence() -> None:
+    """The real preparation hold beats a stale positive ingredient identity."""
     from scoring_v4.modules.generic_evidence import score_evidence
 
     product = _product(
@@ -823,9 +823,9 @@ def test_non_nac_primary_active_recovers_verified_ingredient_human_evidence() ->
 
     payload = score_evidence(product, apply_primary_floor=True)
 
-    assert payload["metadata"]["recovered_matches"] == ["INGR_ASHWAGANDHA"]
-    assert payload["components"]["primary_evidence_floor"] == 14.0
-    assert payload["score"] == 14.0
+    assert payload["metadata"]["recovered_matches"] == []
+    assert payload["metadata"]["primary_evidence_floor"] == 0.0
+    assert payload["score"] == 0.0
 
 
 def test_l_glycine_alias_cannot_bypass_source_review_hold() -> None:
@@ -1131,7 +1131,7 @@ def test_primary_floor_mirrors_mixed_effect_multiplier() -> None:
     payload = score_evidence(
         _product(
             ingredients=[_ingredient(name="Ashwagandha", canonical_id="ashwagandha", quantity=600)],
-            matches=[_match(id="INGR_ASHWAGANDHA", ingredient="Ashwagandha",
+            matches=[_match(id="TEST_ELIGIBLE_ASHWAGANDHA", ingredient="Ashwagandha",
                             standard_name="Ashwagandha", effect_direction="mixed")],
         ),
         apply_primary_floor=True,
@@ -1160,7 +1160,7 @@ def test_primary_floor_gives_a_null_primary_no_floor() -> None:
     payload = score_evidence(
         _product(
             ingredients=[_ingredient(name="Ashwagandha", canonical_id="ashwagandha", quantity=600)],
-            matches=[_match(id="INGR_ASHWAGANDHA", ingredient="Ashwagandha",
+            matches=[_match(id="TEST_ELIGIBLE_ASHWAGANDHA", ingredient="Ashwagandha",
                             standard_name="Ashwagandha", effect_direction="null")],
         ),
         apply_primary_floor=True,
@@ -1179,7 +1179,7 @@ def test_primary_floor_still_rejects_negative_effect() -> None:
     payload = score_evidence(
         _product(
             ingredients=[_ingredient(name="Ashwagandha", canonical_id="ashwagandha", quantity=600)],
-            matches=[_match(id="INGR_ASHWAGANDHA", ingredient="Ashwagandha",
+            matches=[_match(id="TEST_ELIGIBLE_ASHWAGANDHA", ingredient="Ashwagandha",
                             standard_name="Ashwagandha", effect_direction="negative")],
         ),
         apply_primary_floor=True,

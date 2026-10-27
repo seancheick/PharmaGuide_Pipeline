@@ -339,3 +339,114 @@ def test_pureway_human_pk_citation_names_actual_pubmed_authors():
     assert "mechanistic" in citation and "cellular" in citation
     assert "PMID 17901843" in citation
     assert "clinical endpoint data remain limited" in citation
+
+
+def test_returned_nmn_review_keeps_primary_null_and_secondary_scope(completion_source_records):
+    from clinical_applicability import assess_clinical_source_review
+    row = completion_source_records['PRECLIN_NMN']
+    assert row['study_type'] == 'reference'
+    assert not er.clinical_record_sources_eligible(row)
+    assert row['health_goals_supported'] == []
+    context = next(c for c in row['study_contexts'] if c['source_pmids'] == ['35215405'])
+    assert [o['hierarchy'] for o in context['outcomes']] == ['primary', 'primary', 'secondary']
+    assert context['dose']['values'] == [250]
+    assert context['dose']['duration_days'] == 84
+    assert context['outcomes'][0]['direction'] == 'null'
+    assert assess_clinical_source_review(row)['is_complete'] is True
+
+
+def test_returned_magnesium_review_preserves_elemental_basis_and_mixed_label_limit(completion_source_records):
+    from clinical_applicability import assess_clinical_source_review
+    row = completion_source_records['INGR_MAG_GLYCINATE']
+    assert row['external_ids']['unii'] == 'IFN18A4Y6B'
+    assert not er.clinical_record_sources_eligible(row)
+    contexts = {c['source_pmids'][0]: c for c in row['study_contexts']}
+    assert contexts['22909270']['dose']['values'] == [300]
+    assert contexts['40918053']['dose']['values'] == [250]
+    assert 'glycine' in str(contexts['40918053']).lower()
+    assert contexts['40918053']['outcomes'][1]['direction'] == 'null'
+    assert assess_clinical_source_review(row)['is_complete'] is True
+
+
+def test_pqq_unread_corrected_table_and_combination_do_not_supply_credit(completion_source_records):
+    row = completion_source_records['PRECLIN_PQQ']
+    assert row['scoring_eligible'] is False
+    assert not er.clinical_record_sources_eligible(row)
+    assert row['health_goals_supported'] == []
+    assert row['total_enrollment'] is None
+    assert '35917215' in row['notes']
+    assert 'combination' in row['notes'].lower()
+    assert {r['pmid'] for r in row['references_structured']} >= {'34415830', '38908296'}
+
+
+def test_flax_active_sources_exclude_unread_corrected_review_without_losing_history():
+    import json
+    data = json.loads((Path(__file__).parents[1] / 'data/literature_evidence_records.json').read_text())
+    row = next(r for r in data['literature_evidence_records'] if r['canonical_id'] == 'flaxseed')
+    assert {r['pmid'] for r in row['qualifying_human_studies']} == {'24126178', '26071633'}
+    assert row['verification_result'] == 'authoritative_pubmed_verified'
+    assert row['verification_provenance']['all_pmids_verified'] is True
+    assert '25740909' in row['notes'] and '26525908' in row['notes']
+    assert 'oil' in row['applicability']['excluded_form_terms']
+    assert row['reference_semantics']['curve'] == 'completed_no_benchmark_neutral'
+    assert 'min_effective_dose' not in row
+
+
+@pytest.mark.parametrize('rid,source', [('INGR_RHODIOLA','15256690'), ('INGR_RIBOFLAVIN_B2','9484373')])
+def test_limited_positive_review_cannot_become_unscoped_current_product_credit(completion_source_records,rid,source):
+    row = completion_source_records[rid]
+    assert row['scoring_eligible'] is False
+    assert row['total_enrollment'] is None
+    assert row['registry_completed_trials_count'] is None
+    assert row['health_goals_supported'] == []
+    assert source in str(row['references_structured'])
+    assert not er.clinical_record_sources_eligible(row)
+    assert row['study_contexts']  # Scoped positive findings retained, not declared ineffective.
+
+
+def test_recovered_bc30_methods_retain_null_domains_and_trial_family(completion_source_records):
+    from clinical_applicability import assess_clinical_source_review
+    row = completion_source_records['STRAIN_BC30']
+    context = next(c for c in row['study_contexts'] if '40707016' in c['source_pmids'])
+    assert not any(o['hierarchy'] == 'unresolved' for o in context['outcomes'])
+    assert any(o['direction'] == 'null' for o in context['outcomes'])
+    assert context['dose']['duration_days'] == 28
+    assert assess_clinical_source_review(row)['is_complete'] is True
+
+
+def test_recovered_poolzyme_methods_do_not_clear_source_acceptance_hold(completion_source_records):
+    row = completion_source_records['INGR_DIGESTIVE_ENZYMES']
+    assert row['scoring_eligible'] is False
+    context = next(c for c in row['study_contexts'] if '37976892' in c['source_pmids'])
+    assert context['scoring_eligible'] is False
+    assert any(o['hierarchy'] == 'primary' and 'NDI' in o['name'] for o in context['outcomes'])
+    assert 'ethics' in str(context).lower()
+    assert context['dose']['values'] == [400]
+
+
+@pytest.mark.parametrize('rid', ['BRAND_QUATREFOLIC','PRECLIN_PTEROSTILBENE','PRECLIN_SPERMIDINE','INGR_PHOSPHATIDYLSERINE','INGR_SAW_PALMETTO','STRAIN_HN019'])
+def test_returned_reference_findings_complete_without_affirmative_credit(completion_source_records,rid):
+    from clinical_applicability import assess_clinical_source_review
+    from probiotic_measurements import context_accepted_for_scoring
+    row = completion_source_records[rid]
+    assert row['study_type'] == 'reference'
+    assert assess_clinical_source_review(row)['is_complete'] is True
+    assert not er.clinical_record_sources_eligible(row)
+    for context in row['study_contexts']:
+        if context.get('scoring_eligible') is False:
+            assert not context_accepted_for_scoring(context)
+    if rid == 'PRECLIN_SPERMIDINE':
+        context = row['study_contexts'][0]
+        assert context['dose']['duration_days'] is None
+        assert context['dose']['duration_as_printed'] == {'value':12, 'unit':'months'}
+
+
+def test_bc30_revised_source_context_links_returned_scope_not_old_engineering_approval():
+    import json
+    data = json.loads((Path(__file__).parents[1] / 'data/clinically_relevant_strains.json').read_text())
+    row = next(r for r in data['clinically_relevant_strains'] if r['id'] == 'STRAIN_COAGULANS_GBI30')
+    context = next(c for c in row['study_contexts'] if c['context_id'] == 'bc30_functional_gi_complaints_40707016')
+    assert context['clinical_review']['reviewer'] == 'Dr. Pham'
+    assert context['clinical_review']['reviewed_at'] == '2026-10-26'
+    assert 'A144' in context['clinical_review']['basis']
+    assert '2026-09-14' in context['notes']

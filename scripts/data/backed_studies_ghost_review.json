@@ -3,8 +3,8 @@
     "purpose": "Reviewed GHOST-SUSPECT findings from verify_backed_studies_citations.py --strict",
     "description": "Reviewed GHOST-SUSPECT findings from verify_backed_studies_citations.py --strict. A suspect blocks the release gate until it is reviewed here with a rationale that states why the live PubMed record does support the entry. Removing an entry re-arms the gate for that citation.",
     "schema_version": "5.0.0",
-    "last_updated": "2026-10-12",
-    "total_entries": 3
+    "last_updated": "2026-10-27",
+    "total_entries": 4
   },
   "reviewed": [
     {
@@ -30,6 +30,14 @@
       "rationale": "Primary PubMed identifies this as the retraction of lutein/zeaxanthin adolescent-myopia review PMID41573009 (DOI10.18240/ijo.2026.02.21). The corrected entry cites the notice only to exclude that original from affirmative evidence. Remaining PMID28661438 concerns a macular-carotenoid combination in 48 young adults, not isolated lutein or adolescent myopia prevention. A generic notice title is a title-heuristic miss; no affirmative credit or whole-record clearance is granted.",
       "reviewed_by": "agent source-content review (not clinician-reviewed)",
       "reviewed_at": "2026-10-12"
+    },
+    {
+      "pmid": "35917215",
+      "entry_id": "PRECLIN_PQQ",
+      "live_title": "Notice of Correction.",
+      "rationale": "Provenance-only correction notice, not an efficacy source. Live NIH PubMed identifies35917215 as the ErratumFor34415830 PQQ disodium cognitive trial, DOI10.1080/27697061.2022.2099711. The generic title has no ingredient word, causing a title-overlap false positive. The PQQ record explicitly retains scoring_eligible=false because correctedTable4content remains unread; this acknowledgment verifies the correction link only and does not qualify original numbers, efficacy or safety.",
+      "reviewed_by": "Codex live NIH correction-link verification",
+      "reviewed_at": "2026-10-27"
     }
   ]
 }

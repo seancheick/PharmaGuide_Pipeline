@@ -224,8 +224,8 @@ def test_wasabi_label_keeps_its_plant(enrich):
     # Gamma-Carotene -> vitamin_a is a cleaner identity, not vitamin A evidence.
     (297685, "evidence", 16.7),
     # Restored Apple/coffeeberry flavor rows do not become title Evidence owners.
-    # 10.3 on main; 13.8 since "Fruit" no longer names Apple, so vitamin C (major) owns too.
-    (40089, "evidence", 13.8),
+    # Source-qualified cranberry hold removes unsupported Evidence; kept flavor rows stay excluded.
+    (40089, "evidence", 11.1),
     # "Raw organic Svetol" (green coffee) does not own Evidence through "Fit Coffee".
     (204521, "evidence", 10.0),
     # A 0.4 mg iron row kept for interactions feeds no Dose.
@@ -286,8 +286,8 @@ def _scoring_inputs(artifact):
     # A kept coffeeberry row is invisible to scoring, never re-matched as coffee.
     # Since "Fruit" no longer names Apple (title owner), vitamin C is a major owner and
     # the vitamins are the Dose panel (60.7 and [12.54] on main).
-    # Empty automated grape review remains unfinished; score/owners/dose are unchanged.
-    (40089, {"score": 66.6, "status": "partial",
+    # Grape remains unfinished; cranberry qualification hold lowers Evidence without changing roles or Dose.
+    (40089, {"score": 63.9, "status": "partial",
              "evidence_owners": ["bilberry", "blackberry", "blueberry", "carrot", "cranberry", "grape", "plum",
                                  "pomegranate", "spinach", "strawberry", "tart_cherry", "tomato", "vitamin_c"],
              "dose_credits": [12.83, 15.12, 17.46]}),

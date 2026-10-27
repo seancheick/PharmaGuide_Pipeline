@@ -153,7 +153,7 @@ def test_named_source_reviews_complete_only_general_dose_benchmark():
         assert semantics['approval_status'] == 'approved_existing_neutral_dose_v41_source_review'
         assert semantics['source_ids']
         assert 'not an exhaustive' in semantics['scope']
-        assert _botanical_benchmark({'canonical_id': canonical}) == ('unresolved' if canonical == 'flaxseed' else 'absent')
+        assert _botanical_benchmark({'canonical_id': canonical}) == 'absent'
         # A completed dose search cannot override an actual identity rejection.
         assert _botanical_benchmark({'canonical_id': canonical,
                                     'scoreable_identity': False}) == 'unresolved'
@@ -208,11 +208,15 @@ def test_preparation_mismatch_sources_are_retained_without_brand_credit():
     assert 'EyePromise' in wrong['notes']
     quatrefolic = reviewed_entries()['BRAND_QUATREFOLIC']
     wrong = next(r for r in quatrefolic['references_structured'] if r['pmid'] == '23698160')
-    assert wrong.get('scoring_eligible') is False
+    # This source supports the completed non-equivalence finding, not brand efficacy.
+    assert wrong.get('scoring_eligible') is True
+    from evidence_resolver import clinical_record_sources_eligible
+    assert not clinical_record_sources_eligible(quatrefolic)
+    assert assess_clinical_source_review(quatrefolic)['is_complete'] is True
     assert 'Merck' in wrong['notes']
     assert '149 randomized' not in quatrefolic['notes']
     assert '149 randomized' not in quatrefolic['notable_studies']
-    assert '149 completed' in quatrefolic['notes']
+    assert '149completers' in quatrefolic['notes']
 
 
 def test_hyaluronan_source_limitation_is_complete_without_generic_material_transfer():
@@ -291,7 +295,7 @@ def test_reviewed_reference_scope_cannot_override_missing_or_held_source_proof(m
         assert clinical_applicability.assess_clinical_source_review(record)['is_complete'] is False, mutation
 
 
-def test_bc30_registry_regimen_does_not_invent_unavailable_paper_hierarchy():
+def test_bc30_recovered_paper_hierarchy_preserves_retrospective_registration_limits():
     data = json.loads((Path(__file__).resolve().parents[1] / 'data' / 'clinically_relevant_strains.json').read_text())
     entry = next(e for e in data['clinically_relevant_strains'] if e['id'] == 'STRAIN_COAGULANS_GBI30')
     c = next(c for c in entry['study_contexts'] if c['context_id'] == 'bc30_functional_gi_complaints_40707016')
@@ -299,13 +303,15 @@ def test_bc30_registry_regimen_does_not_invent_unavailable_paper_hierarchy():
     assert c['dose']['values'] == [1_000_000_000]
     assert c['dose']['duration_days'] == 28
     assert 'before a meal' in c['dose']['administration_frequency']
-    assert all(o['hierarchy'] == 'unresolved' for o in c['outcomes'])
+    assert all(o['hierarchy'] in {'primary', 'secondary'} for o in c['outcomes'])
+    assert any(o['direction'] == 'null' for o in c['outcomes'])
     assert 'retrospective' in ' '.join(c['limitations']).lower()
     assert '40707016' in c['source_pmids']
-    # The original paper could not be inspected, so not_reported would also be false.
-    assert assess_clinical_source_review(reviewed_entries()['STRAIN_BC30'])['is_complete'] is False
+    # Paper-stated hierarchy is verified, not prospectively prespecified by assumption.
+    assert 'prospectiveprespecificationnotestablished' in ' '.join(c['limitations'])
+    assert assess_clinical_source_review(reviewed_entries()['STRAIN_BC30'])['is_complete'] is True
     from clinical_evidence_schema import validate_frozen_context
-    assert 'outcomes.review_incomplete' in validate_frozen_context(c, require_complete_review=True)
+    assert validate_frozen_context(c, require_complete_review=True) == []
 
 
 def test_applied_source_scope_has_no_stale_positive_or_unverified_prose():
@@ -319,13 +325,20 @@ def test_applied_source_scope_has_no_stale_positive_or_unverified_prose():
         assert 'Exact branded preparation and unique aggregate require methods-level verification' not in record['notes']
 
 
-def test_unread_flaxseed_correction_is_not_reported_as_verified_clinical_support():
-    from evidence_resolver import _load_literature_evidence, resolve_evidence_for_row
-    record = _load_literature_evidence()['flaxseed']
-    assert record['verification_result'] == 'verification_failure_unresolved'
-    assert record['verification_provenance']['all_pmids_verified'] is False
-    assert '26525908' in record['notes']
-    result = resolve_evidence_for_row({'name': 'Ground Flaxseed', 'canonical_id': 'flaxseed'})
+def test_unread_flaxseed_correction_is_not_an_active_supporting_source(monkeypatch):
+    from copy import deepcopy
+    import evidence_resolver as owner
+    record = owner._load_literature_evidence()['flaxseed']
+    assert record['verification_result'] == 'authoritative_pubmed_verified'
+    assert record['verification_provenance']['all_pmids_verified'] is True
+    assert '25740909' in record['notes'] and '26525908' in record['notes']
+    assert {s['pmid'] for s in record['qualifying_human_studies']} == {'24126178','26071633'}
+    assert record['applicability']['source_pmids'] == ['24126178','26071633']
+    # Retiring one unread source never allows an unverified replacement to qualify.
+    pending = deepcopy(record)
+    pending['verification_provenance']['all_pmids_verified'] = False
+    monkeypatch.setattr(owner, '_load_literature_evidence', lambda:{'flaxseed':pending})
+    result = owner.resolve_evidence_for_row({'name':'Ground Flaxseed','canonical_id':'flaxseed'})
     assert result.points_eligible is False
     assert result.blocking_reasons
 

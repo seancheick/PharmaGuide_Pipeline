@@ -143,7 +143,7 @@ def _floor_for(direction, score_evidence):
         "ingredient_quality_data": {"ingredients_scorable": [ingredient],
                                     "ingredients": [ingredient]},
         "evidence_data": {"clinical_matches": [{
-            "id": "INGR_ASHWAGANDHA", "ingredient": "Ashwagandha",
+            "id": "TEST_ELIGIBLE_ASHWAGANDHA", "ingredient": "Ashwagandha",
             "standard_name": "Ashwagandha", "canonical_id": "ashwagandha",
             "study_type": "rct_multiple", "evidence_level": "ingredient-human",
             "effect_direction": direction, "total_enrollment": 500,

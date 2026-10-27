@@ -237,7 +237,7 @@ def test_applicability_unestablished_semantics():
 # 6. Proprietary Blend Semantic Contract: Regression Fixtures A-E
 # ============================================================================
 
-def test_fixture_a_blend_header_named_children_no_doses():
+def test_fixture_a_blend_header_named_children_no_doses(monkeypatch):
     """Fixture A: blend header + named Ashwagandha + named Rhodiola, no child doses.
     -> header excluded
     -> children retained
@@ -246,6 +246,13 @@ def test_fixture_a_blend_header_named_children_no_doses():
     -> terminal Evidence assessment
     -> Dose remains unassessable from undisclosed child amounts
     """
+    import evidence_resolver as er
+    # This semantic fixture tests completed reference assessments, independently
+    # of the real ashwagandha preparation's qualification hold.
+    references = {canonical: [{"id": "TEST_REFERENCE_" + canonical,
+                              "study_type": "reference", "evidence_level": "reference"}]
+                  for canonical in ("ashwagandha", "rhodiola")}
+    monkeypatch.setattr(er, "_backed_studies_index", lambda: references)
     blend_header = {
         "name": "Proprietary Adaptogen Blend",
         "canonical_id": "blend_adaptogen",
@@ -286,7 +293,7 @@ def test_fixture_a_blend_header_named_children_no_doses():
     # 2. Terminal evidence assessment (is_assessment_complete is True)
     res = resolve_product_evidence(prod)
     assert res.is_assessment_complete is True
-    assert res.overall_disposition == EvidenceDisposition.RESOLVED_BY_REVIEWED_CLINICAL_EVIDENCE.value
+    assert res.overall_disposition == EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value
 
     # 3. Scorer output: zero credit, applicability_unestablished state, terminal display
     ev = score_evidence(prod)

@@ -1204,3 +1204,32 @@ def test_source_context_malformed_record_sources_fail_closed(monkeypatch, field,
     result = clinical_applicability.assess_clinical_source_review({'id': 'used'})
     assert result['is_complete'] is False
     assert 'clinical_source_references_invalid' in result['errors']
+
+
+@pytest.mark.parametrize('case,expected', [
+    ('completed_reference', True), ('ordinary_affirmative', False),
+    ('record_hold', False), ('pending_approval', False),
+    ('missing_provenance', False), ('retracted_source', False),
+    ('unfinished_outcome', False), ('excluded_source', False),
+])
+def test_completed_negative_calendar_review_is_separate_from_scoring_eligibility(monkeypatch,case,expected):
+    import clinical_applicability as owner
+    from test_assessment_readiness import _install_completed_release_context
+    from probiotic_measurements import context_accepted_for_scoring
+    context = _install_completed_release_context(monkeypatch)
+    context['scoring_eligible'] = False
+    context['dose'].update(duration_basis='fixed_protocol', duration_days=None,
+                           duration_as_printed={'value': 6, 'unit': 'months'})
+    context['outcomes'][0]['direction'] = 'null'
+    record = {'id': 'used', 'study_type': 'reference', 'evidence_level': 'reference',
+              'study_contexts': [context], 'references_structured': [{'pmid':context['source_pmids'][0]}]}
+    if case == 'ordinary_affirmative': record.update(study_type='rct_single', evidence_level='ingredient-human')
+    elif case == 'record_hold': record['scoring_eligible'] = False
+    elif case == 'pending_approval': context['review_status']='source_verified_pending_clinical_review'
+    elif case == 'missing_provenance': context.pop('clinical_review')
+    elif case == 'retracted_source': context['source_integrity']='retracted'
+    elif case == 'unfinished_outcome': context['outcomes'][0]['hierarchy']='unresolved'
+    elif case == 'excluded_source': record['references_structured'][0]['scoring_eligible']=False
+    monkeypatch.setattr(owner, 'reviewed_entries', lambda:{'used':record})
+    assert owner.assess_clinical_source_review(record)['is_complete'] is expected
+    assert context_accepted_for_scoring(context) is False

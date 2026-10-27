@@ -293,26 +293,27 @@ def test_collagen_recovery_uses_exact_preparation_not_relative_mass(eligible_col
 
 def test_real_218600_a_lineage_owned_complex_never_demotes_the_active_it_supplies():
     """Solgar 218600 prints Phosphatidylserine 200 mg with its 1,000 mg
-    supplying complex nested under it. The contract's competitor rule drops
-    that complex (same mass counted twice), so the role owner's mass ratio must
-    too (role test in test_v4_role_classification): PS stays the material
-    purpose and keeps its source-qualified floor. Mixed PS evidence does not
-    regain the former affirmative-direction floor merely through prominence."""
+    supplying complex nested under it. Its lineage still establishes the
+    active's material purpose, but the completed primary-null assessment must
+    not regain affirmative evidence through prominence."""
     from evidence_resolver import evidence_prominent_row_keys
 
     product = _enrich("prominence_lineage_218600_raw.json")
     assert ("ingredientRows[2]", "phosphatidylserine") in evidence_prominent_row_keys(product)
     evidence = _evidence(product)
-    assert evidence["metadata"]["primary_evidence_floor_canonical"] == "phosphatidylserine"
-    from scoring_v4.modules.generic_evidence import PRIMARY_FLOOR_MODERATE, _EFFECT_FLOOR_MULTIPLIER
-    matches = product["evidence_data"]["clinical_matches"]
-    ps = next(m for m in matches if m["id"] == "INGR_PHOSPHATIDYLSERINE")
-    assert ps["effect_direction"] == "mixed"
-    assert ps["matched_source_row_refs"] == ["ingredientRows[2]"]
+    # The source's primary null finding now makes PS reference-only. Source
+    # lineage remains real; prominence cannot manufacture clinical eligibility.
+    from clinical_applicability import reviewed_entries
+    from evidence_resolver import clinical_record_sources_eligible
+    source = reviewed_entries()["INGR_PHOSPHATIDYLSERINE"]
+    assert source["study_type"] == "reference"
+    assert not clinical_record_sources_eligible(source)
     assert evidence["metadata"]["evidence_owner_canonicals"] == ["phosphatidylserine"]
-    assert evidence["components"]["primary_evidence_floor"] == round(
-        PRIMARY_FLOOR_MODERATE * _EFFECT_FLOOR_MULTIPLIER["mixed"], 4)
-    assert evidence["components"]["primary_evidence_floor"] == 6.6
+    assert evidence["metadata"]["primary_evidence_floor_canonical"] is None
+    assert evidence["metadata"]["primary_evidence_floor"] == 0.0
+    from scoring_v4.modules.generic_evidence import resolved_clinical_matches
+    assert not any(m["id"] == source["id"] for m in
+                   resolved_clinical_matches(product, owner_scoped=True)[0])
 
 
 def test_real_210555_disclosed_members_of_the_title_named_blend_anchor_the_floor():
@@ -394,6 +395,21 @@ def test_real_recovery_never_restamps_a_record_onto_a_row_it_already_links(
     product = _enrich(fixture)
     matches, recovered = resolved_clinical_matches(product, owner_scoped=True)
     assert recovered == []
+    if record == "INGR_GARLIC":
+        from clinical_applicability import reviewed_entries
+        from evidence_resolver import clinical_record_sources_eligible
+        source = reviewed_entries()[record]
+        assert source["scoring_eligible"] is False
+        assert not clinical_record_sources_eligible(source)
+        assert not any(m.get("id") == record for m in matches)
+        retained = next(m for m in product["evidence_data"]["clinical_matches"]
+                        if m["id"] == record)
+        assert retained["matched_source_row_refs"] == [
+            "ingredientRows[0]", "ingredientRows[0].nestedRows[0]",
+            "ingredientRows[0].nestedRows[1]",
+        ]
+        assert _evidence(product)["metadata"]["primary_evidence_floor_canonical"] is None
+        return
     entry = next(m for m in matches if m.get("id") == record)
     if record == "INGR_OMEGA3":
         # Reviewed applicability may bind a valid marine row. Recovery must

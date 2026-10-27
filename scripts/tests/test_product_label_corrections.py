@@ -987,5 +987,9 @@ def test_named_poolzyme_source_still_requires_source_context_review():
     assert not review["is_complete"]
     assert len(record["study_contexts"]) == 1
     assert record["scoring_eligible"] is False
-    assert any(error.endswith(":review.approval_required") for error in review["errors"])
-    assert any(error.endswith(":outcomes.review_incomplete") for error in review["errors"])
+    assert "clinical_contributing_contexts_missing" in review["errors"]
+    context = record["study_contexts"][0]
+    assert context["review_status"] == "source_verified_pending_clinical_review"
+    assert context["scoring_eligible"] is False
+    assert all(o["hierarchy"] != "unresolved" for o in context["outcomes"])
+    assert "ethics" in str(context["limitations"]).lower()

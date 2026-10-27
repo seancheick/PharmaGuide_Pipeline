@@ -133,6 +133,82 @@ def _declared_disposition_patches():
     return patches
 
 
+def _reviewed_full_text_patches():
+    """Exact October 27 A144 source qualification, alongside the prior regimen state."""
+    return {"bc30_functional_gi_complaints_40707016": [('dose.source_provenance.location',
+  'Publisher full text accessed through indexed '
+  'search2026-10-27:Materialsandmethods/Studydesign/Studyintervention/Primaryoutcomes/Results; retained '
+  'raw toolreceipt bc30_publisher_web_receipt.json. NCT06644001 independently supplies before-meal '
+  'timing.'),
+ ('outcomes',
+  [{'name': 'stool_frequency',
+    'hierarchy': 'primary',
+    'kind': 'patient_important',
+    'direction': 'positive',
+    'outcome_role': 'direct_between_group_effect'},
+   {'name': 'stool_consistency',
+    'hierarchy': 'primary',
+    'kind': 'patient_important',
+    'direction': 'positive',
+    'outcome_role': 'direct_between_group_effect'},
+   {'name': 'constipation_proportion',
+    'hierarchy': 'primary',
+    'kind': 'patient_important',
+    'direction': 'positive',
+    'outcome_role': 'direct_between_group_effect'},
+   {'name': 'defecation_effort',
+    'hierarchy': 'primary',
+    'kind': 'patient_important',
+    'direction': 'null',
+    'outcome_role': 'direct_between_group_effect'},
+   {'name': 'upper_gi_dyspepsia_heartburn_reflux_nausea_SODA',
+    'hierarchy': 'primary',
+    'kind': 'patient_important',
+    'direction': 'null',
+    'outcome_role': 'direct_between_group_effect'},
+   {'name': 'GSRS_reflux_indigestion_diarrhoea_between_groups',
+    'hierarchy': 'primary',
+    'kind': 'patient_important',
+    'direction': 'null',
+    'outcome_role': 'direct_between_group_effect'}]),
+ ('limitations',
+  ['Kerryfunding;severalauthorsindustryemployeesandpaidconsultant. Trial2021 '
+   'retrospectivelyregisteredOctober16,2024; '
+   'paperstatedhierarchyisverifiedbutprospectiveprespecificationnotestablished.',
+   'Publisherreports111randomized(56BC30,55placebo),0%attrition;122screenedand10ineligiblearithmeticdoesnotaccountforoneperson. '
+   'Preservepublishednumberswithoutinventingexplanation.',
+   'SeveralprimaryGI/microbiomecomparisons;no multiplicitycorrectionestablishedbytheaccessedtext. '
+   'Outcome-specificpositiveandnullfindingsretained;noallGIbenefitclaim.',
+   'Fourweeksonly,morewomenthanmen,oneChinesesite,heterogeneousfunctionalcomplaints;nostudyfollowupafterdiscontinuation.',
+   'Reflux,indigestion,diarrhoeaGSRSdomainsnotbetweengroupsignificant;SODAupperGIallnullanddefecationeffortnull. '
+   'Do nottransfertoIBSdisease,upperGIorotherstrains/formulations.',
+   'Originalsourcepotency1e9spores/dayin2gsachet(1.93gmaltodextrin+.07gBC30),coldwater;carriergramsmustnotbeorganismdoseorminimum. '
+   'PriorprotocolbeforemealtimingretainedfromNCT,notfalselyattributedtopaper.']),
+ ('blinding', 'double'),
+ ('authoring_method',
+  'October27originalpublisherMethods/Results verification within returnedA144limitedscope; prior '
+  'engineering authoring history and independent regimen/product holds retained.'),
+ ('review_status', 'clinician_approved'),
+ ('clinical_review',
+  {'reviewer': 'Dr. Pham',
+   'reviewed_at': '2026-10-26',
+   'scope': 'identity_dose_outcome_applicability',
+   'basis': 'Signed returned A144 limited functional-GI finding, as attested by Sean; '
+            'A_RESPONSE_VERIFICATION_20261025.md records the earlier pre-attestation state.',
+   'decision': 'approve_with_correction'}),
+ ('scoring_eligible', True),
+ ('notes',
+  'Approval attribution: Dr. Pham signed the returned A144 limited functional-GI source finding; Sean '
+  'supplied the October26date. October27source extraction transcribes paper-stated primary/secondary '
+  'hierarchy and null-domain restrictions; it is not a new broad efficacy decision. Exact '
+  'retail-product/preparation/regimen matching remains independently required. No other-strain, IBS, '
+  'upper-GI or all-GI approval. Historical engineering approval retained: {"basis": '
+  '"docs/plans/PROBIOTIC_EVIDENCE_REVIEW_RESPONSE_2026-09-14.json", "decision": '
+  '"approve_with_correction", "reviewed_at": "2026-09-14T22:23:43Z", "reviewer": "Sean B (engineering '
+  'owner), approving the 2026-09-14 Claude Fable 5.1 research review", "scope": '
+  '"identity_dose_outcome_applicability"}')]}
+
+
 def _response_decisions():
     """{context_id: decision} from the applied 2026-09-14 review response."""
     if not RESPONSE.exists():
@@ -821,6 +897,7 @@ def main():
                   for c in e.get("study_contexts", []) if isinstance(c, dict)}
         patches = _declared_disposition_patches()
         decisions = _response_decisions()
+        full_text_patches = _reviewed_full_text_patches()
         for owner, row in CONTEXTS:
             expected = deepcopy(row)
             for field_path, new_value in patches.get(row["context_id"], []):
@@ -852,7 +929,10 @@ def main():
                     assert current.get("limitations", [])[:len(authored)] == authored, (
                         f"{row['context_id']}: authored limitations were altered by the hold")
                     expected["limitations"] = deepcopy(current["limitations"])
-            assert current in (row, expected), (
+            reviewed = deepcopy(expected)
+            for field_path, new_value in full_text_patches.get(row["context_id"], []):
+                _write_path_appending(reviewed, field_path, new_value)
+            assert current in (row, expected, reviewed), (
                 f"Wave 2 is marked applied but {row['context_id']} differs or is missing")
             assert owner in entries and row["context_id"] in {
                 c.get("context_id") for c in entries[owner].get("study_contexts", [])

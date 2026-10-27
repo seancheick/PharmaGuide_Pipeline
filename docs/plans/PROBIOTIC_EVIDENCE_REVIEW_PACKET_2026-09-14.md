@@ -1,6 +1,6 @@
 # Probiotic evidence review packet
 
-> Generated from `scripts/data/clinically_relevant_strains.json` on 2026-09-14.
+> Counts are generated from the current `scripts/data/clinically_relevant_strains.json`; the review protocol and historical API receipt below were prepared on 2026-09-14.
 > This packet is a research handoff. Reviewers supply source-backed recommendations; the registry and pipeline remain the source of truth.
 > The engineering owner verifies each recommendation against the cited source and the frozen schema, then applies the final registry status. Reviewers do not edit statuses or the registry.
 > Automated source check: [PubMed verification report](EVIDENCE_API_VERIFICATION_2026-09-14.json) — 182/182 citation references matched; 0 mismatches.
@@ -8,11 +8,11 @@
 
 ## Where we are
 
-No contexts require reviewer action in this snapshot. The registry currently contains 157 recorded approved contexts. The review protocol below is retained for provenance and for future reopened contexts.
+No contexts require reviewer action in this snapshot. The registry currently contains 158 recorded approved contexts. The review protocol below is retained for provenance and for future reopened contexts.
 
 - **Pending review:** 0
-- **Recorded approved:** 157
-- **Recorded rejected:** 0
+- **Recorded approved:** 158
+- **Recorded rejected:** 1
 - **Other registry states:** 0
 - **Contexts shown in this packet:** 0
 **Owning identities represented:** 0

@@ -53,10 +53,11 @@ def test_ala_has_verified_mixed_determination_without_marine_credit():
 def test_flax_oil_does_not_inherit_ground_seed_research():
     oil = er.resolve_evidence_for_canonical("flaxseed", name="Flaxseed Oil", matched_form="oil")
     seed = er.resolve_evidence_for_canonical("flaxseed", name="Ground Flaxseed", matched_form="ground whole seed")
-    # Unread correction PMID26525908 holds the source, for both preparations.
-    assert oil.disposition == EvidenceDisposition.LITERATURE_RESOLUTION_REQUIRED.value
-    assert seed.disposition == EvidenceDisposition.LITERATURE_RESOLUTION_REQUIRED.value
-    assert not oil.points_eligible and not seed.points_eligible
+    # Verified ground-seed sources are independent of the unread historical correction.
+    assert oil.disposition == EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value
+    assert not oil.points_eligible
+    assert seed.disposition == EvidenceDisposition.RESOLVED_BY_REVIEWED_CLINICAL_EVIDENCE.value
+    assert not seed.points_eligible  # completed source review is separate from numerical credit
 
 
 @pytest.mark.parametrize("canonical", ["nha_fos", "bacteriophages"])
@@ -164,8 +165,11 @@ def test_no_local_nutrient_whitelist_in_resolver():
     assert "vitamin_b6_pyridoxine" not in source
 
 
-def test_reviewed_clinical_study_resolution():
+def test_reviewed_clinical_study_resolution(monkeypatch):
     """Clinically-studied botanical/amino acid with qualifying trials resolves to RESOLVED_BY_REVIEWED_CLINICAL_EVIDENCE."""
+    fixture = {"id": "TEST_REVIEWED_BOTANICAL", "study_type": "rct_multiple",
+               "evidence_level": "ingredient-human", "effect_direction": "positive_weak"}
+    monkeypatch.setattr(er, "_backed_studies_index", lambda: {"ashwagandha": [fixture]})
     res = er.resolve_evidence_for_canonical("ashwagandha", dose_value=600.0, dose_unit="mg")
     assert res.disposition == EvidenceDisposition.RESOLVED_BY_REVIEWED_CLINICAL_EVIDENCE.value
     assert "backed_clinical_studies" in res.matched_owners
@@ -862,7 +866,14 @@ def test_real_disclosed_extract_and_theanine_are_not_missing_or_blend():
         if row.get('raw_source_path') in {'ingredientRows[0]', 'ingredientRows[1]'}:
             result = er.resolve_evidence_for_row(row, product)
             assert result.applicability_status not in {'blend_header_undisclosed', 'dose_undisclosed'}
-            assert result.disposition == EvidenceDisposition.RESOLVED_BY_REVIEWED_CLINICAL_EVIDENCE.value
+            # A disclosed dose does not clear the actual source/applicability hold.
+            if row["canonical_id"] == "ashwagandha":
+                assert result.disposition == EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value
+                assert result.points_eligible is False
+            else:
+                assert row["canonical_id"] == "l_theanine"
+                assert result.disposition == EvidenceDisposition.RESOLVED_BY_REVIEWED_CLINICAL_EVIDENCE.value
+                assert result.points_eligible is True
 
 
 @pytest.mark.parametrize('quantity,unit', [(200, 'mg'), (0.2, 'g'), (200000, 'mcg')])

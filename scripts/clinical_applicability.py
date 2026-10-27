@@ -429,9 +429,16 @@ def assess_clinical_source_review(entry: Mapping) -> dict:
         return {"is_complete": False, "errors": ["clinical_source_contexts_missing"], "context_ids": []}
     if any(not isinstance(context, Mapping) for context in contexts):
         return {"is_complete": False, "errors": ["clinical_source_context_invalid"], "context_ids": []}
+    reference_only = any(reference.get(key) == "reference" for key in ("study_type", "evidence_level"))
     contributing = [context for context in contexts if isinstance(context, Mapping)
                     and context.get("scoring_eligible") is not False
                     and context.get("review_status") != "rejected_source"]
+    if reference_only and not contributing:
+        # Completed negative reference findings need no point-eligible arm.
+        # Do not promote pending or rejected history to a completed review.
+        contributing = [context for context in contexts
+                        if context.get("scoring_eligible") is False
+                        and context.get("review_status") == "clinician_approved"]
     from evidence_resolver import clinical_record_sources_eligible
     references = reference.get("references_structured", [])
     published = reference.get("published_studies", [])
@@ -445,7 +452,6 @@ def assess_clinical_source_review(entry: Mapping) -> dict:
     excluded_pmids = {str(ref["pmid"]) for ref in references if ref.get("pmid")
                       and not clinical_record_sources_eligible({"references_structured": [ref]})}
     eligible_pmids = declared_pmids - excluded_pmids
-    reference_only = any(reference.get(key) == "reference" for key in ("study_type", "evidence_level"))
     errors = []
     if not contributing:
         errors.append("clinical_contributing_contexts_missing")

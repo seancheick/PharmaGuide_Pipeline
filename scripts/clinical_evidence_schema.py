@@ -339,8 +339,11 @@ def validate_frozen_context(
     errors.extend(_dose_errors(context, known_component_ids))
     errors.extend(_outcome_errors(context))
     if require_complete_review:
-        from probiotic_measurements import context_accepted_for_scoring
-        if not context_accepted_for_scoring(context):
+        from probiotic_measurements import clinical_review_provenance_valid
+        # A signed negative finding can be fully reviewed without being
+        # eligible for points. Consumers still enforce scoring eligibility.
+        if (context.get("review_status") != "clinician_approved"
+                or not clinical_review_provenance_valid(context)):
             errors.append("review.approval_required")
         for field in ("context_id", "condition", "purpose", "trial_family", "study_design"):
             if not _nonempty_text(context.get(field)):

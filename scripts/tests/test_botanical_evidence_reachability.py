@@ -14,6 +14,23 @@ def enricher():
     return SupplementEnricherV3()
 
 
+def _eligible_cranberry_fixture(monkeypatch, enricher):
+    """Exercise preparation/lineage with explicit eligibility, not the held registry."""
+    import clinical_applicability as ca
+    import scoring_v4.modules.generic_evidence as ge
+
+    owners = deepcopy(ca.reviewed_entries())
+    fixture = owners["INGR_CRANBERRY"]
+    assert fixture["scoring_eligible"] is False
+    fixture["scoring_eligible"] = True
+    monkeypatch.setattr(ca, "reviewed_entries", lambda: owners)
+    studies = deepcopy(enricher.databases["backed_clinical_studies"]["backed_clinical_studies"])
+    studies = [deepcopy(fixture) if row.get("id") == fixture["id"] else row for row in studies]
+    monkeypatch.setitem(enricher.databases["backed_clinical_studies"], "backed_clinical_studies", studies)
+    entries = tuple(deepcopy(row) for row in studies if ge._is_verified_ingredient_human_entry(row))
+    monkeypatch.setattr(ge, "_verified_ingredient_human_evidence_entries", lambda: entries)
+
+
 def _product(product_id, label, group, canonical, standard_name, quantity, source_ref):
     row = {
         "name": label, "raw_source_text": label, "standardName": standard_name,
@@ -41,9 +58,11 @@ def _product(product_id, label, group, canonical, standard_name, quantity, sourc
      "Cranberry Extract", 500.0, "ingredientRows[2]", "cranberry_fruit", "INGR_CRANBERRY"),
 ])
 def test_source_declared_preparation_reaches_its_existing_evidence(
-    enricher, product_id, label, group, canonical, standard_name, quantity,
+    enricher, monkeypatch, product_id, label, group, canonical, standard_name, quantity,
     source_ref, expected_id, study_id,
 ):
+    if study_id == "INGR_CRANBERRY":
+        _eligible_cranberry_fixture(monkeypatch, enricher)
     source = _product(product_id, label, group, canonical, standard_name, quantity, source_ref)
     product, issues = enricher.enrich_product(deepcopy(source))
     assert product.get("enrichment_status") != "validation_failed", issues
@@ -169,3 +188,13 @@ def test_whole_plant_identifier_is_not_a_boswellia_extract_identifier():
 @pytest.mark.parametrize("label", ["AKBA", "Boswellic Acids"])
 def test_isolated_constituent_does_not_identify_a_studied_whole_extract(enricher, label):
     assert enricher._clinical_study_match([label], reviewed_entries()["PRECLIN_BOSWELLIA"]) is None
+
+
+def test_current_cranberry_hold_is_not_cleared_by_preparation_recognition(enricher):
+    source = _product("held-cranberry", "Cranberry fruit concentrate", "Cranberry",
+                      "cranberry", "Cranberry Extract", 600.0, "ingredientRows[0]")
+    product, _ = enricher.enrich_product(deepcopy(source))
+    assert product["activeIngredients"][0]["canonical_id"] == "cranberry_fruit"
+    assert reviewed_entries()["INGR_CRANBERRY"]["scoring_eligible"] is False
+    matches, recovered = resolved_clinical_matches(product)
+    assert "INGR_CRANBERRY" not in {item["id"] for item in matches + recovered}

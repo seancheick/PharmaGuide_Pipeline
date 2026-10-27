@@ -1034,20 +1034,20 @@
           }
         },
         {
-          "pmid": "25740909",
-          "title": "Flaxseed consumption may reduce blood pressure: a systematic review and meta-analysis of controlled trials.",
+          "pmid": "26071633",
+          "title": "Effects of flaxseed supplements on blood pressure: A systematic review and meta-analysis of controlled clinical trial.",
           "design": "systematic_review_meta",
-          "primary_endpoint": "systolic and diastolic BP in hypertensive subjects",
-          "effect": "positive_strong",
+          "primary_endpoint": "Pooled systolic and diastolic blood pressure, with preparation-specific subgroup results",
+          "effect": "positive_weak",
           "verification_provenance": {
             "pmid_verified": true,
-            "authoritative_live_title": "Flaxseed consumption may reduce blood pressure: a systematic review and meta-analysis of controlled trials.",
+            "authoritative_live_title": "Effects of flaxseed supplements on blood pressure: A systematic review and meta-analysis of controlled clinical trial.",
             "human_subjects_verified": true,
             "topic_match_verified": true,
             "retracted": false,
-            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/25740909/",
-            "verified_at": "2026-09-21T07:39:42.986936+00:00",
-            "abstract_evidence_quote": "The purpose of this study was to clarify the effect of flaxseed consumption on blood pressure."
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/26071633/",
+            "verified_at": "2026-10-27T18:55:32.157328+00:00",
+            "abstract_evidence_quote": "15 trials (comprising 19 treatment arms) with 1302 participants"
           }
         }
       ],
@@ -1061,23 +1061,24 @@
         "basis": "ground_seed_daily"
       },
       "applicability_decision": "Reviewed ground-whole-seed research; oil is a different preparation and cannot inherit the ground-seed intervention. Trial 30 g/day is an exposure fact, not an Evidence amount gate or universal optimal-dose benchmark.",
-      "verification_result": "verification_failure_unresolved",
+      "verification_result": "authoritative_pubmed_verified",
       "verification_provenance": {
-        "verified_by": "Codex source-content review of PubMed correction links; original correction content unresolved",
-        "verified_at": "2026-10-27T15:14:19.654243+00:00",
-        "all_pmids_verified": false,
+        "verified_by": "Live NIH PubMed source-content verification of active24126178/26071633; retired25740909 correction remains unread in history",
+        "verified_at": "2026-10-27T18:55:32.157863+00:00",
+        "all_pmids_verified": true,
         "retractions_found": false
       },
       "applicability": {
         "scope": "ingredient",
         "excluded_form_terms": [
-          "oil"
+          "oil",
+          "lignan extract"
         ],
         "source_pmids": [
           "24126178",
-          "25740909"
+          "26071633"
         ],
-        "reviewed_at": "2026-10-04"
+        "reviewed_at": "2026-10-27"
       },
       "reference_semantics": {
         "reference_type": "no_benchmark",
@@ -1091,12 +1092,12 @@
         "source_ids": [
           "PMID:24126178"
         ],
-        "rationale": "PMID 24126178 tested 30 g/day milled flaxseed in 110 peripheral-artery-disease patients for six months. That one population-specific food intervention does not establish a universal supplement-mass minimum, optimum or safety ceiling. This is the existing Dose V4.1 neutral-policy conclusion only. The review PMID 25740909 has an unread erratum (26525908), so its whole-record source-verification hold remains and is not cleared by this general-curve decision.",
+        "rationale": "PMID24126178 tested30g/day milled flaxseed in110 peripheral-artery-disease patients for six months. That population-specific food intervention does not establish a universal supplement-mass minimum,optimum or safety ceiling. PMID26071633 independently supports preparation-specific BP findings but its full dose tables were not retrieved and are not used to invent a threshold. This remains the approved DoseV4.1 neutral-policy conclusion. Historical25740909/26525908 is not an active contributing source and its correction is not declared reviewed.",
         "owner": "scripts/data/literature_evidence_records.json::flaxseed",
         "review_date": "2026-10-27",
         "approval_status": "approved_existing_neutral_dose_v41_source_review"
       },
-      "notes": "PubMed links the retained review PMID 25740909 to erratum PMID 26525908 (DOI 10.3945/jn.115.222232). The notice identity is verified, but its correction text was inaccessible through the publisher endpoints in the October 27 review. No assumption of an unchanged conclusion or reviewed correction is made. The existing source verification owner retains an unresolved hold; no new positive clinical approval. The separate 30 g/day ground-seed trial remains traceable, but does not establish a universal supplement-mass dose curve."
+      "notes": "Historical noncontributing source: {\"pmid\": \"25740909\", \"title\": \"Flaxseed consumption may reduce blood pressure: a systematic review and meta-analysis of controlled trials.\", \"design\": \"systematic_review_meta\", \"primary_endpoint\": \"systolic and diastolic BP in hypertensive subjects\", \"effect\": \"positive_strong\", \"verification_provenance\": {\"pmid_verified\": true, \"authoritative_live_title\": \"Flaxseed consumption may reduce blood pressure: a systematic review and meta-analysis of controlled trials.\", \"human_subjects_verified\": true, \"topic_match_verified\": true, \"retracted\": false, \"verified_source\": \"https://pubmed.ncbi.nlm.nih.gov/25740909/\", \"verified_at\": \"2026-09-21T07:39:42.986936+00:00\", \"abstract_evidence_quote\": \"The purpose of this study was to clarify the effect of flaxseed consumption on blood pressure.\"}}. PubMed links this review to unread erratum26525908 (DOI10.3945/jn.115.222232); it is retired from qualifying_human_studies and applicability.source_pmids, not declared correction-cleared. Independently verified active sources are24126178 and26071633. Ursoniu2016 reports15trials/19arms/1302participants, with powder lowering pooled systolic/diastolic BP; oil only diastolic and lignan extracts neither. The >=12week systolic subgroup is not significant(P=.072); diastolic P=.003. Full included-dose tables were not retrieved, so no universal effective-dose threshold or source-independent replication count is asserted. The30g/day exposure belongs only to the ground-seed RCT24126178 in peripheral-artery-disease patients. Preserve preparation and population limits; no transfer to flax oil or isolated lignans."
     },
     {
       "canonical_id": "lignans",
