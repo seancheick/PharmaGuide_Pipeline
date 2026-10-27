@@ -19,7 +19,9 @@ from scoring_v4.modules.generic_evidence import (  # noqa: E402
 def _match(*, ingredient="Ashwagandha", standard_name=None, study_type="rct_multiple",
            effect_direction="positive_strong", evidence_level="ingredient-human",
            total_enrollment=500, **extra):
-    row = {"id": f"INGR_{ingredient.upper()}", "ingredient": ingredient,
+    # Explicit arithmetic fixture IDs cannot inherit a live ingredient hold.
+    # Real held-source behavior is covered by the owner/consumer regressions.
+    row = {"id": f"TEST_ELIGIBLE_{ingredient.upper()}", "ingredient": ingredient,
            "standard_name": standard_name or ingredient, "study_type": study_type,
            "evidence_level": evidence_level, "effect_direction": effect_direction,
            "total_enrollment": total_enrollment}

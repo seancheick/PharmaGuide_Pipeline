@@ -10,18 +10,17 @@ from scoring_input_contract import get_scoring_ingredients
 from scoring_v4.modules.generic_evidence import score_evidence
 
 
+def _synthetic_ps_evidence():
+    """Eligible arithmetic fixture, never a replacement clinical PS decision."""
+    return {"id": "TEST_ELIGIBLE_PS", "standard_name": "Phosphatidylserine",
+            "study_type": "rct_multiple", "evidence_level": "ingredient-human",
+            "effect_direction": "mixed", "total_enrollment": 500}
+
+
 def _ps_complex_product():
-    # DSLD 213475 declares 100 mg PS within a 500 mg SerinAid complex.
-    # Use the existing evidence record unchanged: this tests ownership, not
-    # its clinical classification, score magnitudes, or a new dose threshold.
-    registry = json.loads(
-        (Path(__file__).resolve().parents[1] / "data/backed_clinical_studies.json")
-        .read_text()
-    )
-    evidence = deepcopy(next(
-        entry for entry in registry["backed_clinical_studies"]
-        if entry["id"] == "INGR_PHOSPHATIDYLSERINE"
-    ))
+    # Real label lineage with deliberately synthetic eligible evidence: the
+    # production PS assessment is reference-only after its primary null result.
+    evidence = _synthetic_ps_evidence()
     child_ref = "ingredientRows[1].nestedRows[0]"
     evidence.update(
         ingredient="Phosphatidylserine",
@@ -296,14 +295,7 @@ def _synthetic_blend_projection(node: dict, index: int = 0) -> dict:
 
 
 def _ps_evidence(child_ref: str) -> dict:
-    registry = json.loads(
-        (Path(__file__).resolve().parents[1] / "data/backed_clinical_studies.json")
-        .read_text()
-    )
-    evidence = deepcopy(next(
-        entry for entry in registry["backed_clinical_studies"]
-        if entry["id"] == "INGR_PHOSPHATIDYLSERINE"
-    ))
+    evidence = _synthetic_ps_evidence()
     evidence.update(
         ingredient="Phosphatidylserine",
         matched_source_row_refs=[child_ref],

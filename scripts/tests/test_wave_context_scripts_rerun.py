@@ -27,6 +27,15 @@ def test_wave2_contexts_rerun_verifies_patched_rows_without_writing():
 @pytest.mark.parametrize('context_id,field,bad_value', [
     ('bc30_functional_gi_complaints_40707016', 'population', {'age_group': 'child', 'description': 'Children'}),
     ('bc30_functional_gi_complaints_40707016', 'dose', {'unit': 'mg', 'values': [2000]}),
+    ('bc30_functional_gi_complaints_40707016', 'clinical_review', {
+        'reviewer': 'Dr. Pham', 'reviewed_at': '2026-09-14',
+        'scope': 'identity_dose_outcome_applicability',
+    }),
+    ('bc30_functional_gi_complaints_40707016', 'outcomes', [
+        {'name': 'upper_gi_dyspepsia_heartburn_reflux_nausea_SODA',
+         'hierarchy': 'primary', 'kind': 'patient_important', 'direction': 'positive'},
+    ]),
+    ('bc30_functional_gi_complaints_40707016', 'notes', 'Broad approval for all gastrointestinal conditions.'),
     ('lp299v_ibs_meta_37541528', 'limitations', ['High certainty; independent replication established.']),
     ('is2_moderate_covid19_adjunct_39866999', 'population', {'age_group': 'adult', 'description': 'B. coagulans UBBC-07'}),
     ('mtcc5856_healthy_microbiome_37335737', 'blinding', 'unreported'),
@@ -75,6 +84,37 @@ def test_materialized_wave2_uses_read_only_verification_after_later_registry_ver
     monkeypatch.setattr(module, 'REG', scratch)
     def reject_write(*args, **kwargs):
         raise AssertionError('materialized Wave 2 must not write registry data')
+    monkeypatch.setattr(Path, 'write_text', reject_write)
+    module.main()
+    assert scratch.read_bytes() == before
+
+
+def test_wave2_rerun_retains_prior_bc30_regimen_disposition(tmp_path, monkeypatch):
+    import importlib.util
+    import json
+    from copy import deepcopy
+    spec = importlib.util.spec_from_file_location('wave2_prior_bc30_guard', SCRIPT)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    data = json.loads(REGISTRY.read_text())
+    context_id = 'bc30_functional_gi_complaints_40707016'
+    prior = deepcopy(next(row for owner, row in module.CONTEXTS if row['context_id'] == context_id))
+    for field_path, value in module._declared_disposition_patches()[context_id]:
+        module._write_path_appending(prior, field_path, value)
+    current = next(c for e in data['clinically_relevant_strains']
+                   for c in e.get('study_contexts', []) if c['context_id'] == context_id)
+    for field in module.OWNER_DECISION_FIELDS:
+        if field in current:
+            prior[field] = deepcopy(current[field])
+    for entry in data['clinically_relevant_strains']:
+        entry['study_contexts'] = [prior if c['context_id'] == context_id else c
+                                   for c in entry.get('study_contexts', [])]
+    scratch = tmp_path / 'registry.json'
+    scratch.write_text(json.dumps(data))
+    before = scratch.read_bytes()
+    monkeypatch.setattr(module, 'REG', scratch)
+    def reject_write(*args, **kwargs):
+        raise AssertionError('read-only rerun must preserve the prior disposition')
     monkeypatch.setattr(Path, 'write_text', reject_write)
     module.main()
     assert scratch.read_bytes() == before

@@ -17,15 +17,17 @@ def test_poolzyme_extraction_preserves_explicit_source_acceptance_hold():
     assert context['source_pmids'] == ['37976892']
     assert context['identity']['branded_material'] == 'Poolzyme Multi'
     assert context['dose']['values'] == [400]
-    assert context['dose']['administration_frequency'] == 'One200mg capsule at lunch and one200mg capsule at dinner.'
+    assert context['dose']['administration_frequency'] == 'One200mg capsule beforelunch and one200mg capsule beforedinner.'
     assert context['dose']['duration_days'] == 60
     assert context['population']['description'].startswith('120 adults')
     assert context['review_status'] == 'source_verified_pending_clinical_review'
-    assert all(o['direction'] == 'unresolved' and 'outcome_role' not in o for o in context['outcomes'])
+    assert any(o['hierarchy'] == 'primary' and 'NDI' in o['name'] for o in context['outcomes'])
+    assert any(o['direction'] == 'null' for o in context['outcomes'])
+    assert context['scoring_eligible'] is False
     assert 'clinical_review' not in context
     assert validate_ingredient_context(context, authoring=True) == []
     assert assess_clinical_source_review(record)['is_complete'] is False
-    assert any('review.approval_required' in e for e in assess_clinical_source_review(record)['errors'])
+    assert 'clinical_contributing_contexts_missing' in assess_clinical_source_review(record)['errors']
     limits = ' '.join(context['limitations'])
     assert 'RAW' in limits and 'ethics' in limits and 'registration' in limits
     assert record['total_enrollment'] == 120

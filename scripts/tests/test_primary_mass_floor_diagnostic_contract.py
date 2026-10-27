@@ -36,7 +36,7 @@ def _ashwagandha_with_a_floor():
     DRI nutrition-authority floor that would otherwise mask the toggle."""
     return _product(
         ingredients=[_ingredient(name="Ashwagandha", canonical_id="ashwagandha", quantity=600)],
-        matches=[_match(id="INGR_ASHWAGANDHA", ingredient="Ashwagandha",
+        matches=[_match(id="TEST_ELIGIBLE_ASHWAGANDHA", ingredient="Ashwagandha",
                         standard_name="Ashwagandha", effect_direction="mixed")],
     )
 

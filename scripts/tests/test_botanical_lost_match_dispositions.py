@@ -13,7 +13,7 @@ import pytest
 from clinical_applicability import filter_clinical_matches, reviewed_entries
 from enrich_supplements_v3 import SupplementEnricherV3
 from scoring_v4.modules.generic_evidence import resolved_clinical_matches
-from test_botanical_evidence_reachability import _product
+from test_botanical_evidence_reachability import _eligible_cranberry_fixture, _product
 
 
 @pytest.fixture(scope="module")
@@ -167,7 +167,8 @@ def test_misspelled_generic_cinnamon_label_keeps_family_evidence():
     ("184792", "PACRAN Cranberry (Vaccinium macrocarpon) powder", 300.0),
     ("74399", "Pacran Cranberry concentrate powder", 250.0),
 ])
-def test_scorer_recovery_carries_its_row_reference_through_a_source_required_scope(enricher, product_id, label, quantity):
+def test_scorer_recovery_carries_its_row_reference_through_a_source_required_scope(enricher, monkeypatch, product_id, label, quantity):
+    _eligible_cranberry_fixture(monkeypatch, enricher)
     # Old code credited these fruit powders through scoring-contract recovery.
     # The 5.3.11 source-required cranberry scope must evaluate the exact row
     # the recovery came from, not reject every recovered entry as unresolved.

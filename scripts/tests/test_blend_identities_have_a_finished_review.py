@@ -299,13 +299,20 @@ def test_finished_blend_does_not_finish_empty_alfalfa_source_review(enriched):
     assert evidence["display_state"] == "not_yet_reviewed"
 
 
-def test_flaxseed_blend_keeps_the_unread_erratum_hold(enriched):
+def test_flaxseed_blend_uses_independent_verified_sources_without_clearing_history(enriched):
     from evidence_resolver import resolve_product_evidence
     from scoring_v4.scored_artifact import build_scored_artifact
     resolution = resolve_product_evidence(enriched["299755"], owner_scoped=True)
     flax = next(row for row in resolution.resolutions if row.canonical_id == "flaxseed")
-    assert flax.disposition == "literature_resolution_required"
+    assert flax.disposition == "resolved_by_reviewed_clinical_evidence"
+    # Completing source review does not establish affirmative credit for this blend row.
     assert flax.points_eligible is False
-    assert not resolution.is_assessment_complete
+    data = json.loads((Path(__file__).parents[1] / "data/literature_evidence_records.json").read_text())
+    record = next(row for row in data["literature_evidence_records"] if row["canonical_id"] == "flaxseed")
+    active_pmids = {str(source["pmid"]) for source in record["qualifying_human_studies"]}
+    assert active_pmids == {"24126178", "26071633"}
+    assert "unread erratum26525908" in record["notes"]
+    assert "retired from qualifying_human_studies" in record["notes"]
+    # Verified research remains distinct from applicable positive credit.
     evidence = build_scored_artifact(enriched["299755"])["quality_pillars_v4"]["evidence"]
-    assert evidence["display_state"] == "not_yet_reviewed"
+    assert evidence["display_state"] == "applicability_unestablished"
