@@ -2,7 +2,7 @@
 
 Current handoff: the original Evidence takeover measurements below retain their exact source
 provenance. The subsequent Sean/team material ruling is implemented at runtime source `ae2fec36`
-with verifier-only follow-up `98af8d9e`; its bounded receipts appear at the end. Root owns combined
+with verifier-only follow-ups `98af8d9e` and `29c9d1aa`; its bounded receipts appear at the end. Root owns combined
 integration, CI/local qualification and final canaries. Earlier “final” captions identify those
 historical captures, not the current combined qualification state.
 
@@ -195,16 +195,19 @@ registry identity is accepted alongside its canonical IQM parent (actual Goli245
 
 Stable sourcebinding/runtime commit `ae2fec36e2c7063bd57ddac6e6b9a16f9d3b828a`:
 **502 named owner/consumer/data tests pass** (`material_sourcebinding_owner_slice5.log`).
-Verifier-only commit `98af8d9e`: **27 tests pass** (`material_verifier_owner_slice.log`), including
-actual PI2 content versus unrelated vitamin, generic protease/HIV and PI20 controls. Live PubMed
+Verifier-only commits `98af8d9e` and `29c9d1aa`: **27 tests pass**
+(`material_verifier_final_owner_slice.log`), including actual PI2 content versus unrelated vitamin,
+generic protease/HIV, PI20, PI2alpha and PI2A controls. The new nonhyphen marker identifier is
+bounded on both sides; existing hyphen-identifier compatibility remains unchanged. Live PubMed
 retrieval occurred in the initial verifier check; subsequent cached recheck gives1partial,
-0mismatch,0unresolved, CLIexit0 (`material_final_citations_verified.json/.log`). Manual full-text
+0mismatch,0unresolved, CLIexit0 (`material_final_citations_verified_boundary.json/.log`). Manual full-text
 methods independently establish the exact brand. Python correctness0new/11existing; diff check
 clean. `data_batch check` since07549: Testofen added +Slendesta changed,2entries0problems.
 Derived metadata counts now follow the existing data_batch owner instead of historical stale pins.
 Independent fresh pregnancy_check review of ae2fec passed8 named controls, the explicit legacy
 Torabolic/Testofen non-borrow probe and actual245156; no remaining runtime finding reported.
-Verifier-only final review is separately pending the integrator's checkpoint.
+Independent fresh pregnancy_check review of final verifier `29c9d1aa9661c02dd5eff08f0370d20f9266177e`
+passed all27 named tests and found no remaining issue; runtime source remains ae2fec.
 
 Measurement: preserve original source07549 baseline and intermediate2fab123-label captures;
 `material/candidate_qualified.jsonl.meta.json` truthfully attests2fab,123products,source_unchanged.
