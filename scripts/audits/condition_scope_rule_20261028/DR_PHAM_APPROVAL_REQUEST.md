@@ -2,7 +2,7 @@
 
 Status: **awaiting Dr Pham's signature, relayed by Sean.** No production code has changed.
 Prepared by an agent (Claude) from the code at `origin/main` `e6885790d` and the closure-batch
-records in `claude/held-source-closure` (not yet merged).
+records at `claude/held-source-closure` `a78f78bf9` (PR #273, not yet merged).
 
 ## The governing rule (Sean, October 28)
 
@@ -31,7 +31,8 @@ The one shared owner gives every matched record one of four states:
   PRECLIN_QUERCETIN_PHYTOSOME.
 - **Ungated records credit any matching preparation.** Only "not for children" is checked here:
   INGR_COQ10 (`heart_failure_adjunct` vs `chronic_heart_failure_adjunct`), INGR_BERBERINE_HCL
-  (`fasting_glucose` vs `type_2_diabetes`), INGR_POTASSIUM and INGR_MAGNESIUM_GENERIC
+  (`fasting_glucose` vs `type_2_diabetes`), PRECLIN_BERBERINE_GENERIC (`fasting_glucose` vs
+  `type_2_diabetes_glycemia`), INGR_POTASSIUM and INGR_MAGNESIUM_GENERIC
   (`cardiovascular` vs `blood_pressure`) and INGR_GARLIC (`cardiovascular` vs `hypertension`).
   Whether a record is gated depends on an accident of string spelling, not on clinical judgment.
 - **Probiotic and branded strain contexts** (`probiotic_evidence.py:398`) also require an affirmative
