@@ -115,3 +115,34 @@ def test_evidently_supplemental_magnesium_keeps_confirmed_exceedance(
     assert out["analyzed_ingredients"][0]["skip_ul_check"] is False
     assert [flag.pct_ul for flag in _confirmed(out)] == [pytest.approx(540 / 350 * 100)]
     assert not get_actionable_ul_review_signals(out)
+
+
+def _food_serving(enricher, quantity, serving):
+    product = {"activeIngredients": [_magnesium(quantity, ("Magnesium Amino Acid Chelate",))],
+               "inactiveIngredients": [], "statements": [], "servingSizes": [serving],
+               "nutritionalInfo": {"protein": {"amount": 5.0, "unit": "Gram(s)"}}}
+    return enricher._collect_rda_ul_data(product, min_servings_per_day=1, max_servings_per_day=1)
+
+
+def test_minimum_added_magnesium_above_ul_confirms_at_the_minimum(enricher):
+    # Garden of Life Raw Cleanse 273824: 800 mg in a 21 g serving. Even at
+    # 10 mg/g of food magnesium, at least 590 mg is added.
+    out = _food_serving(enricher, 800, {"minQuantity": 21, "maxQuantity": 21, "unit": "Gram(s)"})
+    assert [flag.pct_ul for flag in _confirmed(out)] == [pytest.approx(590 / 350 * 100)]
+    flag = out["safety_flags"][0]
+    assert flag["amount"] == pytest.approx(590)
+    assert "800 mg magnesium total includes at least 590 mg of supplemental" in flag["warning"]
+    adequacy = out["adequacy_results"][0]
+    assert adequacy["ul_assessment_basis"] == "minimum_added_magnesium_after_maximum_food_magnesium"
+    assert adequacy["warnings"] == [flag["warning"]]
+    assert not get_actionable_ul_review_signals(out)
+
+
+@pytest.mark.parametrize("serving", [
+    {"minQuantity": 255, "maxQuantity": 255, "unit": "Gram(s)"},  # food could hold it all
+    {"minQuantity": 2, "maxQuantity": 2, "unit": "Scoop(s)"},  # no mass to bound food
+])
+def test_unbounded_food_share_stays_unresolved(enricher, serving):
+    out = _food_serving(enricher, 800, serving)
+    assert not _confirmed(out)
+    assert get_actionable_ul_review_signals(out) == ["MAGNESIUM_UL_SOURCE_REVIEW"]

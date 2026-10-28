@@ -223,6 +223,11 @@ _FOLIC_ACID_UNII = "935E97BOY8"
 _VITAMIN_A_PREFORMED_ADULT_UL_MCG_RAE = 3000.0
 _VITAMIN_E_ADULT_UL_MG = 1000.0
 _VITAMIN_E_NATURAL_MG_PER_IU = 0.67
+# Upper bound on magnesium naturally present in food, per gram of serving.
+# The richest USDA SR Legacy foods are rice bran 781 mg/100 g (FDC 169713),
+# dried agar 770, dried basil 711 and hulled hemp seed 700; 10 mg/g exceeds
+# them all. Only bounds the food share of a mixed magnesium total.
+_MAX_FOOD_MAGNESIUM_MG_PER_G = 10.0
 
 # Units that quantify activity, viable-organism count, source volume, or a
 # source concentration rather than a mass exposure comparable with a nutrient
@@ -22762,8 +22767,12 @@ class SupplementEnricherV3:
         # A food-format serving whose Facts panel declares protein has a food
         # matrix, so a bare nutrient total on it can include intrinsic food
         # minerals. A tablet or capsule declaring a gram of protein does not.
-        serving_unit = self._normalize_serving_unit_label(
-            (self._select_canonical_serving(product.get("servingSizes") or [], []) or {}).get("unit")
+        serving = self._select_canonical_serving(product.get("servingSizes") or [], []) or {}
+        serving_unit = self._normalize_serving_unit_label(serving.get("unit"))
+        serving_mass_g = (
+            self._convert_mass(float(serving["maxQuantity"]),
+                               self._normalize_threshold_unit(serving.get("unit")), "g")
+            if isinstance(serving.get("maxQuantity"), (int, float)) else None
         )
         declares_food_matrix = bool(
             (self._collect_nutrition_summary(product).get("protein_g") or 0) > 0
@@ -23792,14 +23801,19 @@ class SupplementEnricherV3:
                             "worst_case_compound_mass_within_ul"
                         )
                     # The magnesium UL covers supplemental magnesium only. A
-                    # bare total on a food-matrix panel also counts intrinsic
-                    # food magnesium (Re-Built Mass XP 244288: 540 mg from whey,
-                    # grains, cocoa and a 2.5 g magnesium-creatine chelate), so
-                    # its supplemental share is unknown. A named source does not
-                    # partition it: the Facts amount is the total nutrient, food
-                    # magnesium included (Sean, 2026-10-28). The total bounds the
-                    # added share, so a total within the UL is assessed as usual.
+                    # total on a food-matrix panel also counts intrinsic food
+                    # magnesium (Re-Built Mass XP 244288: 540 mg from whey,
+                    # grains, cocoa and a 2.5 g magnesium-creatine chelate). A
+                    # named source does not partition it: the Facts amount is
+                    # the total nutrient, food magnesium included (Sean,
+                    # 2026-10-28). Bounds decide: the total caps the added share
+                    # (a total within the UL is assessed as usual); subtracting
+                    # the most magnesium the serving's food could hold gives
+                    # its minimum. Above the UL that minimum confirms the
+                    # exceedance, stated at the minimum, never at the total;
+                    # otherwise the share is unresolved.
                     magnesium_ul_screening = None
+                    magnesium_flag_warning = None
                     if (
                         not skip_ul_check
                         and safety_over_ul
@@ -23808,16 +23822,42 @@ class SupplementEnricherV3:
                         and _nutrient_record.get("ul_basis") == "supplemental_only"
                         and ul_exposure.get("ul_gate_eligible") is True
                     ):
-                        skip_ul_check = True
-                        ul_only_skip = True
-                        skip_ul_reason = "supplemental_magnesium_fraction_unknown"
-                        magnesium_ul_screening = {
-                            "screening_amount": ul_amount,
-                            "screening_unit": ul_unit,
-                            "screening_ul": safety_ul,
-                            "potential_pct_ul": safety_pct_ul,
-                            "screening_basis": "declared_total_including_food_magnesium",
-                        }
+                        minimum_added = (
+                            ul_amount - serving_mass_g * servings_max * _MAX_FOOD_MAGNESIUM_MG_PER_G
+                            if serving_mass_g and servings_max and _rda_mass_unit_key(ul_unit) == "mg"
+                            else None
+                        )
+                        if minimum_added is not None and minimum_added > safety_ul:
+                            magnesium_total = ul_amount
+                            ul_amount = minimum_added
+                            safety_pct_ul = minimum_added / safety_ul * 100.0
+                            safety_over_ul_amount = minimum_added - safety_ul
+                            magnesium_flag_warning = (
+                                f"{'At the assessed daily amount' if servings_estimated else 'At maximum directed daily use'}, "
+                                f"this label's {magnesium_total:.0f} mg magnesium total includes at least "
+                                f"{minimum_added:.0f} mg of supplemental magnesium, allowing for the most "
+                                f"its food ingredients could supply: {safety_pct_ul:.0f}% of the "
+                                f"{float(safety_ul):g} mg upper limit for supplemental magnesium."
+                            )
+                            safety_warnings = [magnesium_flag_warning]
+                            adequacy_dict.update({
+                                "pct_ul": safety_pct_ul,
+                                "over_ul_amount": safety_over_ul_amount,
+                                "warnings": safety_warnings,
+                                "safety_exposure": {"per_day": minimum_added, "unit": ul_unit},
+                                "ul_assessment_basis": "minimum_added_magnesium_after_maximum_food_magnesium",
+                            })
+                        else:
+                            skip_ul_check = True
+                            ul_only_skip = True
+                            skip_ul_reason = "supplemental_magnesium_fraction_unknown"
+                            magnesium_ul_screening = {
+                                "screening_amount": ul_amount,
+                                "screening_unit": ul_unit,
+                                "screening_ul": safety_ul,
+                                "potential_pct_ul": safety_pct_ul,
+                                "screening_basis": "declared_total_including_food_magnesium",
+                            }
                     if skip_ul_check and ul_only_skip:
                         potential_pct_ul = (
                             (folate_ul_screening or magnesium_ul_screening).get("potential_pct_ul")
@@ -24368,7 +24408,7 @@ class SupplementEnricherV3:
                                 "ul": safety_ul,
                                 "pct_ul": pct_ul_val,
                                 "over_amount": over_ul_amount,
-                                "warning": ul_exceedance_sentence(
+                                "warning": magnesium_flag_warning or ul_exceedance_sentence(
                                     float(ul_amount or 0.0), float(safety_ul or 0.0), str(ul_unit or ""),
                                     (safety_ul_population or {}).get("label") or "general adult",
                                     ul_basis=(adequacy_dict.get("reference") or {}).get("ul_basis"),
