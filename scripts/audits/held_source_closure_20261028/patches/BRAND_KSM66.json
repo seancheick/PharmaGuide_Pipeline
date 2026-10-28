@@ -22,8 +22,7 @@
     "testosterone",
     "fertility",
     "muscle growth",
-    "muscle mass",
-    "muscle strength"
+    "muscle mass"
    ]
   }
  },
@@ -228,6 +227,6 @@
   }
  ],
  "integration_notes": [
-  "2026-10-28 integrator (CI triage): bare 'muscle' replaced with claim phrases (product-line names contain 'muscle')."
+  "2026-10-28 integrator (CI triage): bare 'muscle' replaced with 'muscle growth' and 'muscle mass' (product-line names contain 'muscle')."
  ]
 }
