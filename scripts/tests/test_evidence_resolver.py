@@ -128,6 +128,18 @@ def test_matched_owner_not_equal_points_invariant():
     assert res.points_eligible is False  # Authority establishes necessity; does NOT award points directly
 
 
+def test_nutrition_authority_reports_the_one_upper_limit_owner():
+    """highest_ul is the adult maximum; life-stage ULs stay in data[].ul."""
+    import json
+    entries = json.loads((Path(__file__).parents[1] / "data/rda_optimal_uls.json")
+                         .read_text())["nutrient_recommendations"]
+    assert not [e["id"] for e in entries if "ul" in e or "unofficial_ul" in e]
+    facts = er.resolve_evidence_for_canonical("zinc", dose_value=15.0, dose_unit="mg") \
+        .owner_facts["nutrition_authority"]
+    assert facts["highest_ul"] == 40
+    assert "ul" not in facts and "category" not in facts
+
+
 def test_essential_nutrient_resolved_by_authority():
     """Essential dietary vitamins and minerals resolve to RESOLVED_BY_AUTHORITY."""
     for nutrient_id in ("vitamin_d", "zinc", "thiamin", "magnesium", "calcium"):

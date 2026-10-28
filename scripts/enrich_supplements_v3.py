@@ -21692,7 +21692,6 @@ class SupplementEnricherV3:
         )
         numeric_ul_values = [
             nutrient_reference.get("highest_ul"),
-            nutrient_reference.get("ul"),
             *[
                 group.get("ul")
                 for group in nutrient_reference.get("data") or []

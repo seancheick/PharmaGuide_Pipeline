@@ -873,9 +873,9 @@ def resolve_evidence_for_row(
         matched_owners.append("nutrition_authority")
         owner_facts["nutrition_authority"] = {
             "nutrient": nutr_entry.get("id") or nutr_entry.get("standard_name"),
-            "category": nutr_entry.get("category"),
             "is_essential": True,
-            "ul": nutr_entry.get("ul"),
+            # Adult maximum only; applicable life-stage ULs stay in data[].ul.
+            "highest_ul": nutr_entry.get("highest_ul"),
             "unit": nutr_entry.get("unit"),
         }
         # Established dietary necessity under National Academies DRI
