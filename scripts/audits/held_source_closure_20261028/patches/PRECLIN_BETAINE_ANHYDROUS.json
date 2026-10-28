@@ -1,0 +1,217 @@
+{
+ "record_id": "PRECLIN_BETAINE_ANHYDROUS",
+ "decision": "held: Dr. Pham's 2026-10-28 ruling asks for an outcome-scoped assessment of lower-body strength from the 2024 SR/MA, with no generic credit. That source, PMID 39514262 (Journal of Sports Sciences 2024, doi 10.1080/02640414.2024.2423578), is not in the record's references and has no legitimate free full text (OpenAlex closed, Semantic Scholar no openAccessPdf, Europe PMC subscription only). Its included trials, betaine doses, durations and dosage forms therefore cannot be verified, so no lower-body strength context can be approved and the PMID is not added to the record. The record is not downgraded to reference, so it is not marked as a categorical zero.",
+ "summary": "Existing human research is retained: limited positive exercise results (2024 SR/MA lower-body strength; female body-fat trial; CrossFit repetitions), with other exercise outcomes null; this is an unfinished outcome-scoped assessment, not a zero. The 2024 SR/MA abstract (39514262) reports 17 placebo-controlled studies, 317 healthy participants aged 15-60 (21% female), chronic betaine for at least 7 days: maximal strength SMD 0.47 (95% CI 0.04-0.89), lower-body strength SMD 0.49 (0.01-0.98), no significant effect on upper-body strength, cycling sprint power, bench-press throw power or muscular endurance, and vertical jump SMD 0.36 only after excluding a low-quality study. The two in-record trials are approved without credit with their true directions: 30064450 (body fat down, squat/bench 1RM null) and 37409757 (more CrossFit repetitions, Wingate and body composition null). Proposed conclusion once the full text is read: a possible limited, outcome-scoped credit for lower-body maximal strength only, at the regimens the review reports; no cardiovascular, homocysteine or energy credit.",
+ "record_updates": {},
+ "study_contexts": [
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "preclin_betaine_anhydrous_30064450",
+   "components": [
+    "PRECLIN_BETAINE_ANHYDROUS"
+   ],
+   "source_pmids": [
+    "30064450"
+   ],
+   "identity_scope": "branded_material",
+   "identity": {
+    "branded_material": "BetaPower",
+    "manufacturer": "Finnfeeds Oy",
+    "standardization": "Source Methods identifies Beta Power betaine; not betaine hydrochloride. No additional purity or chemical identifier inferred."
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "direct_rct",
+   "component_registration_status": "fully_registered",
+   "condition": "resistance_training_body_composition",
+   "purpose": "challenge",
+   "review_status": "clinician_approved",
+   "scoring_eligible": false,
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "trial_family": "preclin_betaine_anhydrous_30064450",
+   "population": {
+    "age_group": "adult",
+    "description": "23 young women (21.0 ± 1.4 y) without prior structured resistance training who completed the study (betaine n=11, placebo n=12); 13 dropouts/disqualifications reported."
+   },
+   "study_design": "Double-blind randomized placebo-controlled parallel trial; 1 week familiarization then 8 weeks supervised resistance training (3 sessions/week); groups matched for body composition and squat strength.",
+   "outcomes": [
+    {
+     "name": "Body fat percentage (a priori primary, power-calculated): greater decrease with betaine (-3.3 ± 1.7%) vs placebo (-1.7 ± 1.6%); fat mass -2.0 vs -0.8 kg (significant interactions)",
+     "hierarchy": "primary",
+     "kind": "surrogate",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "Lean mass, rectus femoris thickness, vertical jump, squat and bench 1RM: no significant group-by-time interactions; weekly training volume trend p=0.056",
+     "hierarchy": "secondary",
+     "kind": "patient_important",
+     "direction": "null",
+     "outcome_role": "direct_between_group_effect"
+    }
+   ],
+   "limitations": [
+    "Small sample of untrained young women during supervised resistance training; dietary intake suboptimal (Conclusions); no transfer to weight loss without training.",
+    "Betaine anhydrous (BetaPower); betaine HCl transfer rejected by Dr. Pham (A127).",
+    "Not scoring eligible on its own: the record's cardiovascular/homocysteine and energy claims are not measured, and generic credit is excluded by Dr. Pham's 2026-10-28 ruling. Outcome-scoped lower-body strength credit (2024 SR/MA, PMID 39514262) is still being assessed; this is not a categorical zero.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ],
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "mg",
+    "values": [
+     2500
+    ],
+    "dose_status": "verified",
+    "dose_basis": "nominal_assigned_arm",
+    "duration_basis": "fixed_protocol",
+    "duration_days": 63,
+    "administration_frequency": "Two 0.625 g capsules twice daily.",
+    "dosage_forms": [
+     "oral gelatin capsule"
+    ],
+    "co_therapies": [
+     "Supervised resistance training, 1 familiarization week plus 8 weeks, 3 sessions/week"
+    ],
+    "reported_regimen": "2 capsules x 0.625 g betaine twice daily = 2.5 g/day for 9 weeks (familiarization plus 8 training weeks).",
+    "normalization": {
+     "basis": "4 x 625 mg = 2,500 mg/day betaine (BetaPower) as assigned."
+    },
+    "source_provenance": {
+     "pmid": "30064450",
+     "location": "Abstract; Methods (power calculation naming body fat % primary; supplementation paragraph); Results (completers, dropouts); Conclusions",
+     "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6069865/"
+    },
+    "duration_as_printed": {
+     "value": 9,
+     "unit": "weeks"
+    }
+   },
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability"
+   }
+  },
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "preclin_betaine_anhydrous_37409757",
+   "components": [
+    "PRECLIN_BETAINE_ANHYDROUS"
+   ],
+   "source_pmids": [
+    "37409757"
+   ],
+   "identity_scope": "exact_form",
+   "identity": {
+    "chemical_form": "Betaine (BET) 500 mg cellulose capsules (Medicaline, Konrad Malitka, Poland)"
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "direct_rct",
+   "component_registration_status": "fully_registered",
+   "condition": "crossfit_exercise_performance",
+   "purpose": "challenge",
+   "review_status": "clinician_approved",
+   "scoring_eligible": false,
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "trial_family": "preclin_betaine_anhydrous_37409757",
+   "population": {
+    "age_group": "adult",
+    "description": "43 male recreational CrossFit practitioners aged 18-45 in Poznan, Poland who completed the protocol of 55 enrolled (2.5 g/d group n=24, 5.0 g/d group n=19)."
+   },
+   "study_design": "Double-blind randomized placebo-controlled crossover (3-week periods, washout) with two parallel dose groups (2.5 vs 5.0 g/d); NCT03702205.",
+   "outcomes": [
+    {
+     "name": "Fight Gone Bad total repetitions: +8.7 ± 13.6% after betaine (p<0.001) vs -0.4 ± 10.0% after placebo; no primary outcome designated",
+     "hierarchy": "not_reported",
+     "kind": "patient_important",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "Wingate power and body composition: no time-by-treatment effect",
+     "hierarchy": "not_reported",
+     "kind": "surrogate",
+     "direction": "null",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "Testosterone +7.0 ± 15.4% (treatment x time p=0.046); IGF-1 and cortisol unchanged; no dose or MTHFR interaction",
+     "hierarchy": "not_reported",
+     "kind": "surrogate",
+     "direction": "mixed",
+     "outcome_role": "direct_between_group_effect"
+    }
+   ],
+   "limitations": [
+    "No primary outcome designated in the article; outcome hierarchy not_reported, so it cannot supply primary-outcome credit.",
+    "Doses were not blinded between parallel groups; 3-week exposure; trained men only.",
+    "Not scoring eligible on its own: the record's cardiovascular/homocysteine and energy claims are not measured, and generic credit is excluded by Dr. Pham's 2026-10-28 ruling. Outcome-scoped lower-body strength credit (2024 SR/MA, PMID 39514262) is still being assessed; this is not a categorical zero.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ],
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "mg",
+    "values": [
+     2500,
+     5000
+    ],
+    "dose_status": "verified",
+    "dose_basis": "nominal_assigned_arm",
+    "duration_basis": "fixed_protocol",
+    "duration_days": 21,
+    "administration_frequency": "2.5 g/d: 3 capsules morning and 2 evening; 5.0 g/d: 4 morning, 3 afternoon, 3 evening (source Methods).",
+    "dosage_forms": [
+     "oral cellulose capsule"
+    ],
+    "co_therapies": [
+     "Habitual CrossFit training continued; diet recorded (Table 2), no assigned co-therapy."
+    ],
+    "reported_regimen": "500 mg betaine capsules: 2.5 g/day or 5.0 g/day for 3 weeks per crossover period.",
+    "normalization": {
+     "basis": "Capsule count x 500 mg betaine = 2,500 or 5,000 mg/day as assigned."
+    },
+    "source_provenance": {
+     "pmid": "37409757",
+     "location": "Abstract; Methods (design, participants, supplementation with Medicaline 500 mg capsules); Results Tables 3-5",
+     "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10327519/"
+    },
+    "duration_as_printed": {
+     "value": 3,
+     "unit": "weeks"
+    }
+   },
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability"
+   }
+  }
+ ],
+ "source_receipts": [
+  {
+   "pmid": "30064450",
+   "title_fetched": "The effects of chronic betaine supplementation on body composition and performance in collegiate females: a double-blind, randomized, placebo controlled trial.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/30064450/",
+   "full_text": true,
+   "sections_used": "Abstract; Methods; Results; Conclusions"
+  },
+  {
+   "pmid": "37409757",
+   "title_fetched": "Betaine supplementation improves CrossFit performance and increases testosterone levels, but has no influence on Wingate power: randomized crossover trial.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/37409757/",
+   "full_text": true,
+   "sections_used": "Abstract; Methods; Results Tables 2-5"
+  },
+  {
+   "pmid": "39514262",
+   "title_fetched": "Effects of chronic betaine supplementation on exercise performance: Systematic review and meta-analysis.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/39514262/",
+   "full_text": false,
+   "sections_used": "Abstract only; no legitimate OA copy found (OpenAlex closed; Semantic Scholar none; Europe PMC subscription)"
+  }
+ ]
+}

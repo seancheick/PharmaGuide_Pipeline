@@ -1,0 +1,265 @@
+{
+ "record_id": "INGR_L_CITRULLINE",
+ "decision": "closed_credit",
+ "summary": "Full text of the 2020 J Sport Health Sci meta-analysis (13 RCTs, 206 adults, acute citrulline malate 6-12 g or citrulline in watermelon juice) shows lower post-exercise RPE (ES 0.81, p=0.03) and 24-h soreness (ES 0.99, p=0.04), with no effect at 48-72 h or on lactate. It gets one eligible context under the record's Increase Energy/exercise-recovery claim. The BP meta-analysis (abstract only) is null and the erectile-function pilot is a citrulline+resveratrol combination, so neither gets credit. The new applicability block covers acute exercise exertion only, not Cardiovascular/Heart Health.",
+ "record_updates": {
+  "applicability": {
+   "scope": "ingredient",
+   "supported_outcomes": [
+    "exercise_recovery_soreness"
+   ],
+   "studied_population": "Healthy, mostly trained young adults given a single acute dose of citrulline malate (6-12 g) or citrulline in watermelon juice before exercise; post-exercise RPE and 24-h soreness fell, lactate did not.",
+   "source_pmids": [
+    "33308806"
+   ],
+   "reviewed_at": "2026-10-28"
+  }
+ },
+ "study_contexts": [
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "ingr_l_citrulline_33308806_rpe_soreness",
+   "source_pmids": [
+    "33308806"
+   ],
+   "components": [
+    "INGR_L_CITRULLINE"
+   ],
+   "identity_scope": "ingredient_general",
+   "identity": {
+    "preparation": "Acute citrulline malate (9 trials, mostly 8 g) or L-citrulline delivered in watermelon juice (4 trials, 1.17-6 g citrulline), within 2 h before exercise."
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "meta_analysis",
+   "component_registration_status": "fully_registered",
+   "condition": "post_exercise_perceived_exertion_and_soreness",
+   "purpose": "challenge",
+   "population": {
+    "age_group": "adult",
+    "description": "13 RCTs, 206 healthy adults (mostly resistance-trained or recreationally trained young men; some women; amateur runners), aged about 21-35."
+   },
+   "study_design": "Systematic review and random-effects meta-analysis of randomized (11 double-blind, 2 single-blind) placebo-controlled trials of acute citrulline within 2 h before exercise; primary outcomes RPE and muscle soreness, secondary blood lactate.",
+   "trial_family": "33308806",
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "scoring_eligible": true,
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "g",
+    "values": [],
+    "dose_status": "verified",
+    "dose_basis": "not_applicable",
+    "duration_basis": "endpoint_followup_only",
+    "administration_frequency": "Single acute dose 40 min to 2 h before exercise (Table 1).",
+    "dosage_forms": [
+     "oral supplementation (trial-specific preparations)",
+     "watermelon juice"
+    ],
+    "reported_regimen": "Citrulline malate 6-12 g (8 g in 9 trials) 40-60 min before exercise; L-citrulline 1.17-6 g in watermelon juice 1-2 h before exercise (Table 1). Single acute exposures; no chronic regimen.",
+    "co_therapies": [
+     "Participants generally avoided vigorous exercise, supplements, alcohol and caffeine before sessions; 2 studies allowed usual supplements. Malate is co-delivered in citrulline-malate arms; watermelon juice is a food matrix."
+    ],
+    "source_provenance": {
+     "pmid": "33308806",
+     "location": "Full text (PMC7749242): Methods (eligibility, extraction), Table 1 (13 studies, supplement protocol), Results risk of bias and meta-analysis paragraphs (Figs 2-4), Discussion; reference list 2-14.",
+     "source_url": "https://pubmed.ncbi.nlm.nih.gov/33308806/"
+    }
+   },
+   "outcomes": [
+    {
+     "name": "Post-exercise RPE (primary): effect size 0.81, p=0.03, 7 studies, I2 81.9%; still p=0.05 after removing an influential study.",
+     "hierarchy": "primary",
+     "kind": "patient_important",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "Muscle soreness (primary): 24 h effect size 0.99, p=0.04 (7 studies, I2 92.1%); 48 h p=0.25 (6 studies); 72 h p=0.62 (4 studies).",
+     "hierarchy": "primary",
+     "kind": "patient_important",
+     "direction": "mixed",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "Blood lactate (secondary): no significant reduction, p=0.17 (8 studies).",
+     "hierarchy": "secondary",
+     "kind": "surrogate",
+     "direction": "null",
+     "outcome_role": "direct_between_group_effect"
+    }
+   ],
+   "included_study_pmids": [
+    "30458655",
+    "30097067",
+    "26808848",
+    "29057836",
+    "29176388",
+    "26658899",
+    "29210953",
+    "28513179",
+    "20386132",
+    "23862566",
+    "25226311",
+    "25674699"
+   ],
+   "limitations": [
+    "Small trials (206 participants in 13 studies) with very high heterogeneity for RPE and 24-h soreness; soreness benefit did not persist at 48 or 72 h; none had prespecified protocols.",
+    "Most arms used citrulline malate (malate co-exposure; citrulline content per gram not standardized) and 4 used watermelon juice (food matrix); no chronic or capsule-specific regimen established. Dosage forms are not tabulated beyond the vehicle.",
+    "Included-study identity from the source reference list: 12 PMIDs; Martinez-Sanchez 2017 (Food Nutr Res) has no PMID in the source and none is invented.",
+    "Credit covers acute exercise perceived exertion and short-term soreness only; not nitric-oxide, blood-pressure or general energy claims. Returned A087 'source-content hold' is resolved for this source by full-text verification.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ],
+   "review_status": "clinician_approved",
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability"
+   }
+  },
+  {
+   "context_id": "ingr_l_citrulline_30284051_bp_null_abstract_only",
+   "components": [
+    "INGR_L_CITRULLINE"
+   ],
+   "source_pmids": [
+    "30284051"
+   ],
+   "review_status": "rejected_source",
+   "scoring_eligible": false,
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability",
+    "notes": "No credit for the cardiovascular claim: the abstract reports no significant blood-pressure effect, and the full text (not open access) was not retrieved to encode regimens or trials."
+   },
+   "dose": {
+    "source_provenance": {
+     "pmid": "30284051",
+     "location": "PubMed abstract (Curr Hypertens Rep 2018; not open access).",
+     "source_url": "https://pubmed.ncbi.nlm.nih.gov/30284051/"
+    }
+   },
+   "limitations": [
+    "Mirenayat 2018 abstract: 5 interventions; brachial SBP change 0.28 mmHg (-2.87 to 2.31), DBP -1.56 (-4.32 to 1.20), aortic SBP 0.22 and DBP 0.26, all non-significant; authors conclude no beneficial BP effect. This null finding argues against the record's Cardiovascular/Heart Health goal.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ]
+  },
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "ingr_l_citrulline_30150102_draft",
+   "source_pmids": [
+    "30150102"
+   ],
+   "components": [
+    "INGR_L_CITRULLINE",
+    "PRECLIN_RESVERATROL"
+   ],
+   "identity_scope": "combination",
+   "identity": {
+    "chemical_form": "Complete L-citrulline 800 mg plus transresveratrol 300 mg daily study supplement, during continued on-demand PDE5-inhibitor use."
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "direct_rct",
+   "component_registration_status": "fully_registered",
+   "condition": "erectile_dysfunction_adjunct",
+   "purpose": "treatment",
+   "population": {
+    "age_group": "adult",
+    "description": "20 menwith EDdespiteon-demand PDE5 i, 13 complete crossover."
+   },
+   "study_design": "Randomized, double-blind, placebo-controlled crossover pilot of L-citrulline plus transresveratrol during continued on-demand PDE5-inhibitor treatment; no washout before crossover.",
+   "trial_family": "30150102",
+   "review_status": "clinician_approved",
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "scoring_eligible": false,
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "mg",
+    "values": [
+     1100
+    ],
+    "dose_status": "combination_total_only",
+    "dose_basis": "combination_total_daily",
+    "duration_basis": "fixed_protocol",
+    "duration_days": 30,
+    "administration_frequency": "Once daily after a meal, one complex capsule.",
+    "dosage_forms": [
+     "oral HPMC capsule"
+    ],
+    "reported_regimen": "One daily complex capsule after a meal supplying 800 mg L-citrulline plus 300 mg transresveratrol; 1, 100 mg total study actives, not 1, 100 mg L-citrulline.",
+    "normalization": {
+     "basis": "Reported study-material daily dose, not a universal threshold or equivalence to other preparation."
+    },
+    "source_provenance": {
+     "pmid": "30150102",
+     "location": "Full text (PMC6302103): Methods (study design paragraph, Figure 1 protocol, Main Outcome Measure), Results, funding/COI.",
+     "source_url": "https://pubmed.ncbi.nlm.nih.gov/30150102/"
+    },
+    "duration_as_printed": {
+     "value": 30,
+     "unit": "days"
+    },
+    "co_therapies": [
+     "Patients continued on-demand PDE5 inhibitors; active study supplement also contained 300 mg/day transresveratrol."
+    ]
+   },
+   "outcomes": [
+    {
+     "name": "SHIM total: active 10.96 +/- 1.21 versus placebo 8.31 +/- 1.23 and baseline 8.32 (both P<.05).",
+     "hierarchy": "not_reported",
+     "kind": "patient_important",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "Erection Hardness Score 2.56 vs baseline 2.31 (P=.79) and AMS sexual domain: no significant difference.",
+     "hierarchy": "not_reported",
+     "kind": "patient_important",
+     "direction": "null",
+     "outcome_role": "direct_between_group_effect"
+    }
+   ],
+   "limitations": [
+    "Dose 800 mg is citrulline component of combination, not monotherapy effect.",
+    "One calendar month per period, no crossover washout, attrition/PDE5 i cotherapy.",
+    "The retained full article does not designate a primary outcome/endpoint; recorded hierarchy not_reported. This is a reporting limitation, not invented primary status or completion of any separate approval.",
+    "No credit: a two-ingredient capsule (L-citrulline 800 mg + trans-resveratrol 300 mg) added to on-demand PDE5 inhibitors; erectile function is not this record's claim, and 13 of 20 completed. Periods were 30 days (Figure 1) with no washout.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ],
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability"
+   }
+  }
+ ],
+ "source_receipts": [
+  {
+   "pmid": "33308806",
+   "title_fetched": "Effect of citrulline on post-exercise rating of perceived exertion, muscle soreness, and blood lactate levels: A systematic review and meta-analysis.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/33308806/",
+   "full_text": true,
+   "sections_used": "Methods, Table 1, Results, Discussion, references (BioC PMC7749242)"
+  },
+  {
+   "pmid": "30284051",
+   "title_fetched": "Effect of L-Citrulline Supplementation on Blood Pressure: a Systematic Review and Meta-Analysis of Clinical Trials.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/30284051/",
+   "full_text": false,
+   "sections_used": "PubMed abstract"
+  },
+  {
+   "pmid": "30150102",
+   "title_fetched": "Oral L-citrulline and Transresveratrol Supplementation Improves Erectile Function in Men With Phosphodiesterase 5 Inhibitors: A Randomized, Double-Blind, Placebo-Controlled Crossover Pilot Study.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/30150102/",
+   "full_text": true,
+   "sections_used": "Methods, Figure 1, outcome measures, Results, funding (BioC PMC6302103)"
+  }
+ ],
+ "integration_notes": [
+  "2026-10-28 integrator (independent review): supported_outcomes 'Increase Energy' replaced: the credited context is post-exercise perceived exertion and soreness, and an energy wording must not make it applicable."
+ ]
+}

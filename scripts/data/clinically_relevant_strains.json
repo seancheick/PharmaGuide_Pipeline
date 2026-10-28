@@ -3,7 +3,7 @@
     "description": "Clinically relevant probiotic strains and prebiotic compounds",
     "purpose": "probiotic_strain_validation",
     "schema_version": "5.1.1",
-    "last_updated": "2026-10-27",
+    "last_updated": "2026-10-28",
     "total_entries": 132,
     "data_source": null,
     "version": "2.4.1",
@@ -8352,7 +8352,10 @@
             "reviewed_at": "2026-09-22T15:34:46Z",
             "scope": "identity_dose_outcome_applicability",
             "basis": "scripts/audits/closure_20260921/CODEX_AUDIT_RESPONSE_20260922.json",
-            "decision": "approve"
+            "decision": "approve",
+            "countersigned_by": "Dr Pham (signed ruling relayed by Sean, 2026-10-28)",
+            "countersigned_at": "2026-10-28",
+            "countersign_note": "Infant colic in breastfed infants, exact BB-12 strain only; no transfer to general adult digestion."
           }
         },
         {
@@ -8438,7 +8441,10 @@
             "reviewed_at": "2026-09-22T15:34:46Z",
             "scope": "identity_dose_outcome_applicability",
             "basis": "scripts/audits/closure_20260921/CODEX_AUDIT_RESPONSE_20260922.json",
-            "decision": "approve"
+            "decision": "approve",
+            "countersigned_by": "Dr Pham (signed ruling relayed by Sean, 2026-10-28)",
+            "countersigned_at": "2026-10-28",
+            "countersign_note": "Infant colic in breastfed infants, exact BB-12 strain only; no transfer to general adult digestion."
           }
         }
       ],

@@ -1,0 +1,23 @@
+{
+ "record_id": "BRAND_SYTRINOL",
+ "decision": "held: neither trial has open full text. 17985810 combines two open-label studies with one double-blind study (n=120) of 270 mg citrus flavonoids + 30 mg tocotrienols for 4-12 weeks without a named primary outcome in the abstract, and the abstract does not name the product as Sytrinol; 25828621 (240 adults, 12 weeks) reports a null primary LDL-C result at lower doses, but the abstract does not confirm the material is Sytrinol. Product identity and regimens cannot be verified from abstracts. OA retry 2026-10-28: Europe PMC's 25828621 link returned a paywalled Nature landing page; 17985810 closed.",
+ "summary": "17985810 abstract reports 20-30% lower total cholesterol and 19-27% lower LDL; 25828621 found no LDL-C or hsCRP difference from placebo (all arms fell ~4-5%). The conflicting results, combined with unverifiable identity, keep the record held.",
+ "record_updates": {},
+ "study_contexts": [],
+ "source_receipts": [
+  {
+   "pmid": "17985810",
+   "title_fetched": "Effect of citrus flavonoids and tocotrienols on serum cholesterol levels in hypercholesterolemic subjects.",
+   "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=17985810&retmode=xml",
+   "full_text": false,
+   "sections_used": "PubMed abstract only"
+  },
+  {
+   "pmid": "25828621",
+   "title_fetched": "A combination of palm oil tocotrienols and citrus peel polymethoxylated flavones does not influence elevated LDL cholesterol and high-sensitivity C-reactive protein levels.",
+   "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=25828621&retmode=xml",
+   "full_text": false,
+   "sections_used": "PubMed abstract only"
+  }
+ ]
+}

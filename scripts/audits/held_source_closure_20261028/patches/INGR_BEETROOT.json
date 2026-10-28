@@ -1,0 +1,192 @@
+{
+ "record_id": "INGR_BEETROOT",
+ "decision": "closed_credit",
+ "summary": "34965876 (nitrate-rich beetroot subgroup of 53 cited reports, mostly beetroot juice at ~8.4 mmol nitrate/day vs nitrate-depleted juice) shows a small endurance benefit (g 0.15, 0.11-0.18), with no study at low risk of bias. Newer evidence adds a female power benefit (41010367, SMD 0.38) and some favourable results in elite athletes (42588174). Per Dr. Pham's fifth ruling the nitrate label gate is removed: Evidence credits the verified relationship and Dose handles nitrate exposure.",
+ "record_updates": {
+  "applicability": {
+   "scope": "ingredient",
+   "supported_outcomes": [
+    "endurance"
+   ],
+   "studied_population": "Recreationally active, mostly male adults taking nitrate-rich beetroot juice (about 8.4 mmol nitrate/day in trials) acutely or for several days; small endurance benefit. Dose cannot be assessed against a nitrate benchmark when the label does not state nitrate.",
+   "source_pmids": [
+    "34965876"
+   ],
+   "excluded_claim_terms": [
+    "blood pressure",
+    "heart health"
+   ],
+   "reviewed_at": "2026-10-28"
+  }
+ },
+ "study_contexts": [
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "ingr_beetroot_34965876_scoped_source",
+   "source_pmids": [
+    "34965876"
+   ],
+   "components": [
+    "INGR_BEETROOT"
+   ],
+   "identity_scope": "ingredient_general",
+   "identity": {
+    "preparation": "Nitrate-rich beetroot, predominantly beetroot juice or concentrated juice shots, versus nitrate-depleted beetroot juice; not beetroot powder of unstated nitrate content"
+   },
+   "exposure_basis": "food_matrix",
+   "route": "oral",
+   "evidence_role": "meta_analysis",
+   "component_registration_status": "fully_registered",
+   "condition": "endurance_exercise_performance",
+   "purpose": "physiology",
+   "review_status": "clinician_approved",
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability"
+   },
+   "scoring_eligible": true,
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "trial_family": "source_34965876",
+   "population": {
+    "age_group": "adult",
+    "description": "Nitrate-food trials within a 118-study review of 1872 participants (1482 male, 344 female; pooled mean age 27.8 years, VO2max 53.9 ml/kg/min); beetroot subgroup of 53 cited trial reports."
+   },
+   "study_design": "Systematic review and random-effects meta-analysis of randomised (mostly crossover) trials of food sources of nitrate, polyphenols and L-citrulline on endurance performance; Revised Cochrane RoB.",
+   "outcomes": [
+    {
+     "name": "Endurance performance, nitrate-rich beetroot vs control: Hedges' g 0.15 (95% CI 0.11-0.18), I2 6.2% (Figure 3): trivial benefit",
+     "hierarchy": "not_reported",
+     "kind": "patient_important",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "Subgroups in this review: no significant benefit in females or highly trained endurance athletes; red spinach and Swiss chard/rhubarb not significant",
+     "hierarchy": "not_reported",
+     "kind": "patient_important",
+     "direction": "null",
+     "outcome_role": "post_hoc_subgroup"
+    }
+   ],
+   "limitations": [
+    "The effect is trivial (g 0.15). No included study was at low risk of bias (66 high risk, 58 some concerns), and daily nitrate dose was not associated with effect size (meta-regression p=0.93).",
+    "Included-study identifiers are the beetroot subgroup of Figure 3 (reference 35 and references 45-96), mapped to PMIDs from the article reference list; Bernardi 2018 [49] and de Castro 2018 [59] have no printed PMID and are retained by citation only.",
+    "33554654 (dietary nitrate and muscular performance) has no open full text; abstract only, no context.",
+    "Foods and active constituents are not equivalent; female null findings may reflect sample-size limitations.",
+    "Results food-source analysis and Discussion explicitly identify beetroot juice as predominant delivery and commercial concentrated shots. Other nitrate foods are separate; no powder/capsule equivalence. Other included trials may not report a delivery form; this list does not establish one common preparation across all arms.",
+    "Dr. Pham fifth ruling (2026-10-28): Evidence recognizes the verified beetroot/nitrate performance relationship without a nitrate label gate; Dose stays unassessable against a nitrate benchmark when nitrate content is unknown, and beetroot powder mass does not establish nitrate exposure.",
+    "The effect is small (g 0.15). A 2025 female-specific meta-analysis (41010367; healthy women 18-30) found a significant small-to-moderate power improvement (SMD 0.38, 0.06-0.69) but no significant strength or sprint effect; a 2026 scoping review of 31 RCTs in highly trained and elite athletes (42588174; 4-19.5 mmol/day) reported some favourable results (time-trial, Yo-Yo, anaerobic power) with inconsistent endurance findings.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ],
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "mg",
+    "values": [],
+    "dose_status": "verified",
+    "dose_basis": "not_applicable",
+    "duration_basis": "participant_specific",
+    "duration_days": null,
+    "administration_frequency": "Acute (single pre-exercise dose) or multiple-day protocols; no difference between them (p=0.08)",
+    "dosage_forms": [
+     "beetroot juice",
+     "concentrated beetroot juice shot"
+    ],
+    "co_therapies": [],
+    "source_provenance": {
+     "pmid": "34965876",
+     "location": "Table 1 inclusion criteria (whole foods/juices/concentrates); Results population and dose paragraph (nitrate trials 8.4 +/- 3.3 mmol/day); risk of bias paragraph; Figure 3 beetroot subgroup (g 0.15, 0.11-0.18, I2 6.2%; refs 35 and 45-96); subgroup/meta-regression paragraph; Discussion (beetroot juice predominant; nitrate-depleted juice comparator)",
+     "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8715640/"
+    },
+    "reported_regimen": "Nitrate trials: mean 8.4 +/- 3.3 mmol nitrate per day (Results); dose in mmol nitrate, not beetroot mass",
+    "normalization": {
+     "basis": "Exposure is nitrate content; the schema's mass units cannot carry mmol, so no numeric value is recorded and no beetroot-mass conversion is made."
+    }
+   },
+   "included_study_pmids": [
+    "19661447",
+    "20702806",
+    "21071588",
+    "21471821",
+    "22248502",
+    "22526247",
+    "22709704",
+    "22805107",
+    "23020760",
+    "23370859",
+    "23475164",
+    "23580456",
+    "23640589",
+    "24085341",
+    "24089377",
+    "24389270",
+    "24481133",
+    "24781895",
+    "24951296",
+    "24967257",
+    "24978834",
+    "25009219",
+    "25154895",
+    "25202886",
+    "25811674",
+    "25858494",
+    "26028570",
+    "26614506",
+    "27736248",
+    "27777094",
+    "27834492",
+    "27909231",
+    "27997263",
+    "28165641",
+    "28182502",
+    "28243471",
+    "28251402",
+    "28783446",
+    "29252047",
+    "29357494",
+    "29444414",
+    "29494294",
+    "29986146",
+    "29995952",
+    "30427246",
+    "30685420",
+    "30747267",
+    "30849239",
+    "31084516",
+    "31323779",
+    "31350908"
+   ]
+  }
+ ],
+ "source_receipts": [
+  {
+   "pmid": "34965876",
+   "title_fetched": "Effect of food sources of nitrate, polyphenols, L-arginine and L-citrulline on endurance exercise performance: a systematic review and meta-analysis of randomised controlled trials.",
+   "url": "https://www.ncbi.nlm.nih.gov/research/bionlp/RESTful/pmcoa.cgi/BioC_json/34965876/unicode",
+   "full_text": true,
+   "sections_used": "Table 1 inclusion criteria (whole foods/juices/concentrates); Results population and dose paragraph (nitrate trials 8.4 +/- 3.3 mmol/day); risk of bias paragraph; Figure 3 beetroot subgroup (g 0.15, 0.11-0.18, I2 6.2%; refs 35 and 45-96); subgroup/meta-regression paragraph; Discussion (beetroot juice predominant; nitrate-depleted juice comparator); Figure 3 image https://cdn.ncbi.nlm.nih.gov/pmc/blobs/6498/8715640/4d0ac6f211c3/12970_2021_472_Fig3_HTML.jpg; reference PMIDs from PMC efetch XML"
+  },
+  {
+   "pmid": "33554654",
+   "title_fetched": "Effect of dietary nitrate ingestion on muscular performance: a systematic review and meta-analysis of randomized controlled trials.",
+   "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=33554654&retmode=xml",
+   "full_text": false,
+   "sections_used": "PubMed abstract only"
+  },
+  {
+   "pmid": "41010367",
+   "title_fetched": "Does Nitrate Supplementation Improve Muscle Strength, Power, and Sprint Performance in Females? A Systematic Review and Meta-Analysis.",
+   "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=41010367&retmode=xml",
+   "full_text": false,
+   "sections_used": "PubMed abstract; verification only"
+  },
+  {
+   "pmid": "42588174",
+   "title_fetched": "Effects of Beetroot-Derived Nitrate Supplementation in Highly Trained and Elite Athletes: A Scoping Review of Randomized Controlled Trials on Performance, Recovery, and Physiological Outcomes.",
+   "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=42588174&retmode=xml",
+   "full_text": false,
+   "sections_used": "PubMed abstract; verification only"
+  }
+ ]
+}

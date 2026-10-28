@@ -1,0 +1,16 @@
+{
+ "record_id": "INGR_FENUGREEK",
+ "decision": "held: source inaccessible. 32048383 (Phytother Res 2020) has no open-access full text, so the four included trials' extracts, doses, durations and populations cannot be verified as Dr. Pham requested; the abstract also gives no effect size.",
+ "summary": "The abstract states 4 RCTs of fenugreek glycoside extracts in men were pooled and total testosterone rose significantly, without reporting the effect size or doses. The record declares no health-goal claim, and Dr. Pham rejected glycemic/libido transfer. No context can be completed; the record stays held.",
+ "record_updates": {},
+ "study_contexts": [],
+ "source_receipts": [
+  {
+   "pmid": "32048383",
+   "title_fetched": "Effect of fenugreek extract supplement on testosterone levels in male: A meta-analysis of clinical trials.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/32048383/",
+   "full_text": false,
+   "sections_used": "Abstract only; subscription"
+  }
+ ]
+}

@@ -1,0 +1,271 @@
+{
+ "record_id": "BRAND_TESTOFEN",
+ "decision": "held: freshness search revises conclusion — the credited 'testosterone' supported outcome (26791805, abstract-only) is not reproduced by the same-preparation RCT 31828857 (Testofen 600 mg/day for 12 weeks in men aged 45-80: testosterone and free testosterone unchanged) and is rated very low certainty with no stable free-testosterone effect by 42688439 (2026 SR/MA, which rejects testosterone-boosting claims). Before any Testofen credit is kept, this must be reconciled against 31828857's full text and the 2020 Testofen exercise trial, including whether credit narrows to the AMS symptom outcome.",
+ "summary": "26791805 (120 healthy men aged 43-70, Testofen seed extract 600 mg/day for 12 weeks) met its primary outcome (lower Aging Male Symptom score) and improved sexual function and total/free testosterone versus placebo. 21312304 tested Testofen within a mineral formulation and is recorded without credit. Dr. Pham's date-restricted hold had its age-only exclusion withdrawn; credit is scoped to Testofen in healthy older men, with abstract-only verification noted. Fourth-ruling boundary applied: fertility, erectile, hypogonadism and muscle-growth positioning excluded. A 2026-10-28 freshness search found a second Testofen RCT with unchanged testosterone and a 2026 meta-analysis rating testosterone evidence very low certainty, so the credit decision is held for reconciliation.",
+ "record_updates": {
+  "applicability": {
+   "scope": "ingredient",
+   "required_form_terms": [
+    "testofen"
+   ],
+   "supported_outcomes": [
+    "testosterone"
+   ],
+   "studied_population": "Healthy men aged 43-70 taking Testofen 600 mg/day for 12 weeks; outcomes are age-related androgen-decline symptoms, sexual function and serum testosterone, not hypogonadism treatment.",
+   "source_pmids": [
+    "26791805"
+   ],
+   "reviewed_at": "2026-10-28",
+   "excluded_claim_terms": [
+    "fertility",
+    "sperm",
+    "erectile",
+    "hypogonadism",
+    "muscle growth"
+   ]
+  }
+ },
+ "study_contexts": [
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "brand_testofen_26791805",
+   "source_pmids": [
+    "26791805"
+   ],
+   "components": [
+    "BRAND_TESTOFEN"
+   ],
+   "identity_scope": "branded_material",
+   "identity": {
+    "branded_material": "Testofen",
+    "standardization": "Standardised Trigonella foenum-graecum (fenugreek) seed extract (abstract)"
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "direct_rct",
+   "component_registration_status": "fully_registered",
+   "condition": "age_related_androgen_decline_symptoms",
+   "purpose": "physiology",
+   "review_status": "clinician_approved",
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability"
+   },
+   "scoring_eligible": true,
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "trial_family": "brand_testofen_26791805",
+   "population": {
+    "age_group": "adult",
+    "description": "120 healthy men aged 43-70 years."
+   },
+   "study_design": "Double-blind, randomised, placebo-controlled trial, 12 weeks.",
+   "outcomes": [
+    {
+     "name": "Primary: Aging Male Symptom (AMS) questionnaire score decreased over time and versus placebo",
+     "hierarchy": "primary",
+     "kind": "patient_important",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "Secondary: sexual function (morning erections, frequency of sexual activity) improved; total and free serum testosterone increased versus placebo",
+     "hierarchy": "secondary",
+     "kind": "patient_important",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    }
+   ],
+   "limitations": [
+    "Full text not open access; PubMed abstract only. Dosage form, randomization details, effect sizes, adverse-event data and funding were not verifiable in this session.",
+    "Healthy middle-aged and older men only; not hypogonadism treatment, women or young athletes. The AMS is a symptom questionnaire, not a diagnosis of androgen deficiency.",
+    "Single trial of a branded extract; does not transfer to generic fenugreek.",
+    "Dr. Pham's fourth ruling set (2026-10-28) boundary: limited, outcome-specific credit for the exact branded formula; hormone biomarkers are not fertility, long-term health or disease prevention.",
+    "OpenAlex lists a bronze publisher copy (https://www.tandfonline.com/doi/pdf/10.3109/13685538.2015.1135323) but it is behind a bot-check page; the abstract states the primary outcome, dose and population explicitly.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ],
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "mg",
+    "values": [
+     600
+    ],
+    "dose_status": "verified",
+    "dose_basis": "nominal_assigned_arm",
+    "duration_basis": "fixed_protocol",
+    "duration_days": 84,
+    "administration_frequency": "600 mg per day (abstract; split not stated)",
+    "dosage_forms": [
+     "oral (physical form not stated in abstract)"
+    ],
+    "co_therapies": [],
+    "source_provenance": {
+     "pmid": "26791805",
+     "location": "PubMed abstract",
+     "source_url": "https://pubmed.ncbi.nlm.nih.gov/26791805/"
+    },
+    "duration_as_printed": {
+     "value": 12,
+     "unit": "weeks"
+    },
+    "reported_regimen": "Testofen 600 mg/day for 12 weeks",
+    "normalization": {
+     "basis": "Assigned branded-extract daily mass."
+    }
+   }
+  },
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "brand_testofen_21312304_mineral_formula",
+   "source_pmids": [
+    "21312304"
+   ],
+   "components": [
+    "BRAND_TESTOFEN"
+   ],
+   "identity_scope": "combination",
+   "identity": {
+    "branded_material": "Testofen fenugreek extract and mineral formulation",
+    "standardization": "Standardized Trigonella foenum-graecum extract plus minerals (abstract; mineral amounts not stated)"
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "direct_rct",
+   "component_registration_status": "fully_registered",
+   "condition": "male_libido",
+   "purpose": "physiology",
+   "review_status": "clinician_approved",
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability"
+   },
+   "scoring_eligible": false,
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "trial_family": "brand_testofen_21312304_mineral_formula",
+   "population": {
+    "age_group": "adult",
+    "description": "60 healthy men aged 25-52 without erectile dysfunction."
+   },
+   "study_design": "Double-blind, randomized, placebo-controlled trial, 6 weeks.",
+   "outcomes": [
+    {
+     "name": "Primary: DISF-SR (male) total and domain scores; overall positive effect, significant in sexual arousal and orgasm subdomains",
+     "hierarchy": "primary",
+     "kind": "patient_important",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "Secondary QOL: self-reported satisfaction with muscle strength, energy and well-being improved; mood and sleep unchanged; prolactin and testosterone stayed within reference range",
+     "hierarchy": "secondary",
+     "kind": "patient_important",
+     "direction": "mixed",
+     "outcome_role": "direct_between_group_effect"
+    }
+   ],
+   "limitations": [
+    "Full text not open access; PubMed abstract only. Dosage form, randomization details, effect sizes, adverse-event data and funding were not verifiable in this session.",
+    "Fenugreek extract was given in a mineral formulation; the fenugreek contribution cannot be isolated, so this context is not credit-bearing for the extract alone.",
+    "Muscle-strength satisfaction was self-reported, not measured strength.",
+    "Dr. Pham's fourth ruling set (2026-10-28) boundary: limited, outcome-specific credit for the exact branded formula; hormone biomarkers are not fertility, long-term health or disease prevention.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ],
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "mg",
+    "values": [
+     600
+    ],
+    "dose_status": "verified",
+    "dose_basis": "nominal_assigned_arm",
+    "duration_basis": "fixed_protocol",
+    "duration_days": 42,
+    "administration_frequency": "Two tablets per day",
+    "dosage_forms": [
+     "oral tablet"
+    ],
+    "co_therapies": [],
+    "source_provenance": {
+     "pmid": "21312304",
+     "location": "PubMed abstract",
+     "source_url": "https://pubmed.ncbi.nlm.nih.gov/21312304/"
+    },
+    "duration_as_printed": {
+     "value": 6,
+     "unit": "weeks"
+    },
+    "reported_regimen": "600 mg Testofen per day as two tablets for 6 weeks",
+    "normalization": {
+     "basis": "Labelled Testofen mass per day within a mineral formulation; minerals not quantified in abstract."
+    }
+   }
+  }
+ ],
+ "source_receipts": [
+  {
+   "pmid": "26791805",
+   "title_fetched": "Testofen, a specialised Trigonella foenum-graecum seed extract reduces age-related symptoms of androgen decrease, increases testosterone levels and improves sexual function in healthy aging males in a double-blind randomised clinical study.",
+   "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=26791805&retmode=xml",
+   "full_text": false,
+   "sections_used": "PubMed abstract"
+  },
+  {
+   "pmid": "21312304",
+   "title_fetched": "Physiological aspects of male libido enhanced by standardized Trigonella foenum-graecum extract and mineral formulation.",
+   "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=21312304&retmode=xml",
+   "full_text": false,
+   "sections_used": "PubMed abstract"
+  }
+ ],
+ "freshness_search": {
+  "date": "2026-10-28",
+  "database": "PubMed (NCBI E-utilities esearch, sort=pub_date, retmax=60; titles via esummary, abstracts via efetch)",
+  "query": "(fenugreek OR \"Trigonella foenum-graecum\" OR Testofen) AND (testosterone OR androgen OR \"aging male\" OR libido OR sexual) AND (meta-analysis[pt] OR systematic review[pt] OR randomized controlled trial[pt])",
+  "hits": 14,
+  "screened": 16,
+  "supplementary_queries": [
+   {
+    "query": "Testofen[tiab]",
+    "hits": 4
+   }
+  ],
+  "screening_rule": "Kept syntheses of fenugreek and testosterone or male symptoms, and RCTs in men. Excluded women-only and menopause trials, and combination drinks with PDE5 inhibitors. Testofen identity of 31828857 was taken from the study table of 42688439 (full text), because that trial's abstract does not name the brand.",
+  "read": [
+   {
+    "pmid": "42688439",
+    "title": "Effects of oral fenugreek-derived preparations on testosterone-related outcomes in adult men: a systematic review and meta-analysis of randomized placebo-controlled trials.",
+    "finding": "2026 SR/MA (searched to May 11, 2026; PMC full text read), 13 RCTs: total testosterone SMD 0.25 (0.02 to 0.48; 6 studies, I2 0%), free testosterone SMD 0.08 (-0.48 to 0.63; 5 studies, I2 66.7%). Certainty is very low for both, and no included study had low risk of bias. The review concludes the evidence does not support testosterone-boosting claims. Its study table lists 26791805 as the core Testofen study, plus two more Testofen RCTs: 31828857 (BPH) and Rao-Mallard-Grant 2020 (exercising men, high risk of bias)."
+   },
+   {
+    "pmid": "31828857",
+    "title": "The effect of Trigonella foenum-graecum extract on prostate-specific antigen, and prostate function in otherwise healthy men with benign prostate hyperplasia.",
+    "finding": "2020 RCT, 100 men aged 45-80 with BPH symptoms, 600 mg/day fenugreek extract (Testofen per 42688439 Table 1) for 12 weeks. IPSS (primary) did not improve. Testosterone, free testosterone, SHBG and PSA were unchanged."
+   },
+   {
+    "pmid": "39288153",
+    "title": "Effect of a plant extract of fenugreek (Trigonella foenum-graecum) on testosterone in blood plasma and saliva in a double blind randomized controlled intervention study.",
+    "finding": "2024 RCT of a different preparation (TrigozimR with nutrients), 95 men aged 40-80, 12 weeks: plasma total testosterone and free testosterone index did not rise vs placebo; saliva testosterone did. No subjective effects."
+   },
+   {
+    "pmid": "37253363",
+    "title": "The Anabolic Effect of Fenugreek: A Systematic Review with Meta-analysis.",
+    "finding": "2023 MA, 7 studies (449, mainly male athletes): total testosterone SMD 0.32 (0.09 to 0.55); free testosterone SMD 0.24 (-0.04 to 0.52), not significant."
+   },
+   {
+    "pmid": "32048383",
+    "title": "Effect of fenugreek extract supplement on testosterone levels in male: A meta-analysis of clinical trials.",
+    "finding": "2020 MA of 4 trials: fenugreek extract had a significant effect on total serum testosterone. The abstract gives no effect size."
+   },
+   {
+    "pmid": "32441668",
+    "title": "Efficacy of fenugreek seed extract on men's psychological and physical health: a randomized placebo-controlled double-blind clinical trial.",
+    "finding": "2020 RCT, 57 healthy men (mean age 26), fenugreek extract 400-500 mg/day (preparation not named) for 60 days: aging-male symptoms, anxiety, grip strength and HRQoL improved vs placebo. No hormone outcomes in the abstract."
+   }
+  ],
+  "conclusion": "revises: the newest and largest synthesis rates testosterone outcomes at very low certainty, with no stable free-testosterone benefit, and rejects testosterone-boosting claims. A second Testofen-specific RCT (31828857: 600 mg/day for 12 weeks in men aged 45-80) found testosterone and free testosterone unchanged. The credited 'testosterone' outcome rests on one industry-funded trial (26791805, abstract-only) that the same-preparation evidence does not reproduce. Its AMS symptom result is not directly contradicted.",
+  "prior_decision": "closed_credit"
+ }
+}

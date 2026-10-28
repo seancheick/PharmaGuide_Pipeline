@@ -1,0 +1,190 @@
+{
+ "record_id": "INGR_BETA_ALANINE",
+ "decision": "closed_credit",
+ "summary": "22270875 (15 double-blind placebo-controlled trials, 360 mostly young active adults, 2.4-6.4 g/day) found a positive overall effect on exercise measures (P=0.002), driven by exercise capacity and efforts of 60 s or longer, with no effect on performance tests or efforts under 60 s. Dr. Pham's hold was a date restriction whose age-only exclusion was withdrawn; the source meets the credit rules for an exercise-capacity scope. The newer 27797728 agrees (ES 0.18) but is abstract-only. Fourth-ruling boundary applied: repeated-use high-intensity exercise only, with a 2.4 g/day studied-range floor so single small servings do not inherit credit; outcome hierarchy not_reported.",
+ "record_updates": {
+  "applicability": {
+   "scope": "ingredient",
+   "supported_outcomes": [
+    "high_intensity_exercise_capacity"
+   ],
+   "studied_population": "Healthy, mostly young active adults taking 2.4-6.4 g/day beta-alanine daily for several weeks (repeated-use protocols); benefit is high-intensity exercise capacity, not a single pre-workout serving or general energy.",
+   "source_pmids": [
+    "22270875"
+   ],
+   "reviewed_at": "2026-10-28",
+   "minimum_daily_dose": 2400,
+   "dose_unit": "mg",
+   "reason": "2026-10-28 fourth-ruling boundary: credit only for repeated-use (weeks) protocols at studied daily amounts; the 2.4 g/day minimum is the lowest studied daily dose in 22270875 (correspondence to the tested range, not an efficacy threshold)."
+  }
+ },
+ "study_contexts": [
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "ingr_beta_alanine_22270875_scoped_source",
+   "source_pmids": [
+    "22270875"
+   ],
+   "components": [
+    "INGR_BETA_ALANINE"
+   ],
+   "identity_scope": "ingredient_general",
+   "identity": {
+    "preparation": "Chronic oral beta-alanine alone versus placebo (beta-alanine-only arms; co-supplement arms excluded)"
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "meta_analysis",
+   "component_registration_status": "fully_registered",
+   "condition": "high_intensity_exercise_capacity",
+   "purpose": "physiology",
+   "review_status": "clinician_approved",
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability"
+   },
+   "scoring_eligible": true,
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "trial_family": "source_22270875",
+   "population": {
+    "age_group": "adult",
+    "description": "15 placebo-controlled double-blind trials, 360 participants (174 beta-alanine, 186 placebo); 77.2% young healthy active males, 20.3% female, 7.2% aged 55-92."
+   },
+   "study_design": "Meta-analysis of double-blind placebo-controlled human trials with a beta-alanine-only arm; 57 effect sizes from 23 exercise tests; median effect sizes compared.",
+   "outcomes": [
+    {
+     "name": "All exercise measures: beta-alanine median ES 0.374 (IQR 0.140-0.747) vs placebo 0.108 (-0.019 to 0.487), P=0.002; median improvement 2.85%",
+     "hierarchy": "not_reported",
+     "kind": "patient_important",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "Exercise capacity improved (P=0.013); exercise performance not improved (P=0.204)",
+     "hierarchy": "secondary",
+     "kind": "patient_important",
+     "direction": "mixed",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "By duration: 60-240 s improved (P=0.001), >240 s improved (P=0.046), <60 s no benefit (P=0.312)",
+     "hierarchy": "secondary",
+     "kind": "patient_important",
+     "direction": "mixed",
+     "outcome_role": "direct_between_group_effect"
+    }
+   ],
+   "limitations": [
+    "Small trials (7-20 per group), mostly young active men; capacity tests benefited while time-trial performance did not; effects are modest (2.85% median).",
+    "Paraesthesia may unblind participants (Discussion). Five studies acknowledged commercial financial support; eight received donated supplement.",
+    "No dose-response relationship was found (P=0.337); 2.4-6.4 g/day is the studied range, not a minimum.",
+    "Declared 27797728 (40 studies, 1461 participants, overall ES 0.18, 95% CI 0.08-0.28; benefit concentrated in 0.5-10 min exercise capacity) has no open full text; inspected at abstract level and supplies no separate context.",
+    "Supports high-intensity exercise capacity/muscular endurance only; not general energy or fatigue outside exercise.",
+    "Historical bibliography census (not independent scoring sources; actual included-publication membership is separately bound to the inspected source table): 20671038, 17690198, 16868650, 20482881, 18175046, 21659893, 21407127, 19210788, 17194255, 17136505, 18992136, 19935102, 19276843, 20386120, 16953366. Each intervention and comparison requires its own applicability assessment; citation in this bibliography grants no credit.",
+    "Included-study PMID membership was extracted from source Table(s) Tab1. These are source membership identifiers, not independent efficacy approvals or automatic trial replications. Exact table/citation mapping and unindexed citations are retained in the source receipt.",
+    "Dr. Pham's fourth ruling set (2026-10-28) boundary: high-intensity exercise under repeated-use (weeks) protocols only; a single small pre-workout serving does not inherit this evidence. The meta-analysis designates no primary endpoint; hierarchy not_reported.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ],
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "mg",
+    "values": [
+     2400,
+     6400
+    ],
+    "dose_status": "verified",
+    "dose_basis": "not_applicable",
+    "duration_basis": "participant_specific",
+    "duration_days": null,
+    "administration_frequency": "Daily, usually split doses; individual doses 800-2000 mg (Results)",
+    "dosage_forms": [
+     "oral beta-alanine supplement (form varies by trial)"
+    ],
+    "co_therapies": [],
+    "source_provenance": {
+     "pmid": "22270875",
+     "location": "Methods inclusion/exclusion criteria; Results paragraphs on participants and supplementation protocols; Table 1; abstract",
+     "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3374095/"
+    },
+    "reported_regimen": "2.4 to 6.4 g/day; total 108.8 to 448 g; Table 1 protocols include 28 days, 49 days and 10 weeks",
+    "normalization": {
+     "basis": "Descriptive source range; median daily dose 5.12 g/day; no dose-response found."
+    }
+   },
+   "included_study_pmids": [
+    "20671038",
+    "17690198",
+    "16868650",
+    "20482881",
+    "18175046",
+    "21659893",
+    "21407127",
+    "19210788",
+    "17194255",
+    "17136505",
+    "18992136",
+    "19935102",
+    "19276843",
+    "20386120",
+    "16953366"
+   ]
+  }
+ ],
+ "source_receipts": [
+  {
+   "pmid": "22270875",
+   "title_fetched": "Effects of β-alanine supplementation on exercise performance: a meta-analysis.",
+   "url": "https://www.ncbi.nlm.nih.gov/research/bionlp/RESTful/pmcoa.cgi/BioC_json/22270875/unicode",
+   "full_text": true,
+   "sections_used": "Methods inclusion/exclusion criteria; Results paragraphs on participants and supplementation protocols; Table 1; abstract"
+  },
+  {
+   "pmid": "27797728",
+   "title_fetched": "β-alanine supplementation to improve exercise capacity and performance: a systematic review and meta-analysis.",
+   "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=27797728&retmode=xml",
+   "full_text": false,
+   "sections_used": "PubMed abstract only"
+  }
+ ],
+ "freshness_search": {
+  "date": "2026-10-28",
+  "database": "PubMed (NCBI E-utilities esearch, sort=pub_date, retmax=60; titles via esummary, abstracts via efetch)",
+  "query": "(\"beta-alanine\"[tiab] OR \"β-alanine\"[tiab]) AND (exercise OR performance OR capacity OR sport*) AND (meta-analysis[pt] OR systematic review[pt] OR meta-analysis[ti]) AND 2016:2026[dp]",
+  "hits": 46,
+  "screened": 46,
+  "screening_rule": "Restricted to syntheses, because beta-alanine has dozens of small RCTs that the syntheses pool. Kept syntheses of beta-alanine alone on exercise outcomes. Excluded co-supplementation-only, sport-specific multi-supplement network MAs without a beta-alanine-alone estimate, carnosine and cognition reviews, and protocols.",
+  "read": [
+   {
+    "pmid": "39032921",
+    "title": "Effect of Beta-Alanine Supplementation on Maximal Intensity Exercise in Trained Young Male Individuals: A Systematic Review and Meta-Analysis.",
+    "finding": "2024 SR/MA, 18 double-blind RCTs, 331 trained men aged 18-40, chronic dosing: maximal efforts of 0.5-10 min ES 0.39 (0.09 to 0.69); 4-10 min efforts ES 0.55; 5.6-6.4 g/day ES 0.35; significant from 4 weeks."
+   },
+   {
+    "pmid": "42370349",
+    "title": "Effects of beta-alanine supplementation on exercise performance and related physiological outcomes in women: a systematic review and meta-analysis.",
+    "finding": "2026 SR/MA in women, 11 RCTs (312): time to exhaustion SMD 0.49 (0.20 to 0.79). Other outcomes were imprecise, and certainty was very low."
+   },
+   {
+    "pmid": "41971372",
+    "title": "No ergogeniceffect of β-alanine on repeated sprint ability: a systematic review and multilevel meta-analysis of randomized controlled trials.",
+    "finding": "2026 multilevel MA, 17 RCTs (at least 2 weeks of dosing): no effect on mean or peak repeated-sprint performance or fatigue decrement, regardless of dose, duration or training status."
+   },
+   {
+    "pmid": "32824885",
+    "title": "Effects of Beta-Alanine Supplementation on Physical Performance in Aerobic-Anaerobic Transition Zones: A Systematic Review and Meta-Analysis.",
+    "finding": "2020 MA, 19 studies: small effects in aerobic-anaerobic transition zones. Only one acute-dosing study exists."
+   },
+   {
+    "pmid": "39724872",
+    "title": "Beta-Alanine for Improving Exercise Capacity, Muscle Strength, and Functional Performance of Older Adults: A Systematic Review.",
+    "finding": "2025 SR of 5 trials in older adults (163; 2.4-3.2 g/day for about 12 weeks): exercise capacity may improve; strength and functional performance do not."
+   }
+  ],
+  "conclusion": "confirms: newer syntheses agree with 22270875. The benefit is for sustained high-intensity efforts (about 0.5-10 min; time to exhaustion) after weeks of 2.4-6.4 g/day, with none for repeated short sprints or strength. The existing repeated-use, high-intensity-capacity scope and the 2.4 g/day floor fit this evidence."
+ },
+ "integration_notes": [
+  "2026-10-28 integrator: excluded_claim_terms ['energy','focus','pre-workout energy'] removed. _excluded_claim_matches scans the whole label, so a correctly dosed product (Tri-Phase, 3.2 g/day) lost credit over the phrase 'target the body's energy systems'. The ruling's single-serving boundary is enforced by the 2.4 g/day minimum."
+ ]
+}

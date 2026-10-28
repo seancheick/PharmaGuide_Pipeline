@@ -1,0 +1,23 @@
+{
+ "record_id": "INGR_TAURINE",
+ "decision": "held: source inaccessible. Both declared meta-analyses (32871172, Eur J Pharmacol 2020; 41275513, Nutr Rev 2026) are subscription-only with no PMC/Europe PMC full text, so included trials, doses, forms, populations and primary outcomes cannot be verified; Dr. Pham's source-content hold requires verified methods.",
+ "summary": "Only the abstracts are available, which is insufficient to verify regimens or outcome hierarchy for either synthesis. No context is written; the record stays held. Dr. Pham's rejection of human-longevity inference stands.",
+ "record_updates": {},
+ "study_contexts": [],
+ "source_receipts": [
+  {
+   "pmid": "32871172",
+   "title_fetched": "The effects of taurine supplementation on obesity, blood pressure and lipid profile: A meta-analysis of randomized controlled trials.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/32871172/",
+   "full_text": false,
+   "sections_used": "Abstract only; subscription"
+  },
+  {
+   "pmid": "41275513",
+   "title_fetched": "Effects of Oral Taurine Supplementation on Cardiometabolic Risk Factors: A Meta-analysis and Systematic Review of Randomized Clinical Trials.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/41275513/",
+   "full_text": false,
+   "sections_used": "Abstract only; subscription"
+  }
+ ]
+}

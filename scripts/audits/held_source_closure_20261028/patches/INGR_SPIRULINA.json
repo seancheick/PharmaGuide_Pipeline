@@ -1,0 +1,220 @@
+{
+ "record_id": "INGR_SPIRULINA",
+ "decision": "held: the sources that match the record's applicability outcome ('metabolic' lipid/glycemic) are the meta-analyses 37263369, 34538515 and 35988871 and the pediatric trial 12487756, none of which has open full text; their abstracts give no verifiable regimen or included-trial list (35988871 is a network meta-analysis, which cannot carry credit). The open-access trials (30544795 hypertension endothelial markers, n=16; 25057105 HIV antioxidant capacity) and 38401078 (dyspepsia) fall outside the 'metabolic' scope. Existing pending contexts left unchanged. OA retry 2026-10-28: 37263369 (gold) and 35988871 (hybrid CC-BY-NC-ND) are on ScienceDirect, which blocks automated and browser-pane access; 34538515, 12487756 closed.",
+ "summary": "37263369 abstract: 20 studies (23 arms, 1076 participants) with lower LDL-C, TC and TG and higher HDL-C; 34538515: seven clinical studies with lower FBS/TC/TG. These lipid signals cannot be dose-verified from accessible text. Off-scope trials: 30544795 (4.5 g/day for 12 weeks, 16 ACE-inhibitor-treated hypertensive patients), 25057105 (5 g/day for 3 months, 73 HIV-positive women, no immunological difference), 38401078 (1.6 g/day for 2 months, rebound dyspepsia RR 0.63, reflux null).",
+ "record_updates": {},
+ "study_contexts": [
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "ingr_spirulina_30544795_draft",
+   "source_pmids": [
+    "30544795"
+   ],
+   "components": [
+    "INGR_SPIRULINA"
+   ],
+   "identity_scope": "exact_form",
+   "identity": {
+    "chemical_form": "Spirulina maxima study powder"
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "direct_rct",
+   "component_registration_status": "fully_registered",
+   "condition": "hypertension_related_endothelial_markers",
+   "purpose": "treatment",
+   "population": {
+    "age_group": "adult",
+    "description": "16 stage 1/2 hypertensive patients with stable ACE inhibitor therapy."
+   },
+   "study_design": "Randomized, double-blind, placebo-controlled pilot trial in hypertensive patients receiving stable ACE-inhibitor treatment.",
+   "trial_family": "30544795",
+   "review_status": "source_verified_pending_clinical_review",
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "scoring_eligible": false,
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "g",
+    "values": [
+     4.5
+    ],
+    "dose_status": "verified",
+    "dose_basis": "nominal_assigned_arm",
+    "duration_basis": "fixed_protocol",
+    "duration_days": 84,
+    "administration_frequency": "daily",
+    "dosage_forms": [
+     "oral powder"
+    ],
+    "reported_regimen": "[4.5] g/day; 84 days; daily",
+    "normalization": {
+     "basis": "Reported study-material daily dose, not a universal threshold or equivalence to other preparation."
+    },
+    "source_provenance": {
+     "pmid": "30544795",
+     "location": "Retained primary fulltext methods/intervention and results; manual followup in remaining_b_research.jsonl",
+     "source_url": "https://pubmed.ncbi.nlm.nih.gov/30544795/"
+    },
+    "co_therapies": [
+     "Participants continued stable ACE-inhibitor therapy; findings are adjunctive and not untreated hypertension effects."
+    ]
+   },
+   "outcomes": [
+    {
+     "name": "Endothelial damage and oxidative biomarkers",
+     "hierarchy": "not_reported",
+     "kind": "surrogate",
+     "direction": "mixed",
+     "outcome_role": "surrogate"
+    },
+    {
+     "name": "Quality of life",
+     "hierarchy": "not_reported",
+     "kind": "patient_important",
+     "direction": "null",
+     "outcome_role": "direct_between_group_effect"
+    }
+   ],
+   "limitations": [
+    "Single blind pilot, ACE inhibitor adjunct; not CVD prevention or all Spirulina species.",
+    "The retained full article does not designate a primary outcome/endpoint; recorded hierarchy not_reported. This is a reporting limitation, not invented primary status or completion of any separate approval."
+   ]
+  },
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "ingr_spirulina_25057105_draft",
+   "source_pmids": [
+    "25057105"
+   ],
+   "components": [
+    "INGR_SPIRULINA"
+   ],
+   "identity_scope": "branded_material",
+   "identity": {
+    "branded_material": "EARTHRISE Arthrospira platensis powder",
+    "manufacturer": "EARTHRISE Nutritionals",
+    "standardization": "100% Arthrospira platensis powder 500 mg capsules"
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "direct_rct",
+   "component_registration_status": "fully_registered",
+   "condition": "hiv_related_immune_biomarkers",
+   "purpose": "treatment",
+   "population": {
+    "age_group": "adult",
+    "description": "73 HIV-infected women pre HAART recruited, 58 complete."
+   },
+   "study_design": "Three-month randomized, double-blind, placebo-controlled pilot trial in HIV-infected women before HAART.",
+   "trial_family": "25057105",
+   "review_status": "source_verified_pending_clinical_review",
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "scoring_eligible": false,
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "g",
+    "values": [
+     5
+    ],
+    "dose_status": "verified",
+    "dose_basis": "nominal_assigned_arm",
+    "duration_basis": "fixed_protocol",
+    "duration_days": null,
+    "administration_frequency": "ten 500 mg capsules per day",
+    "dosage_forms": [
+     "oral capsule"
+    ],
+    "reported_regimen": "[5] g/day; 3 calendar months; ten 500 mg capsules per day",
+    "normalization": {
+     "basis": "Reported study-material daily dose, not a universal threshold or equivalence to other preparation."
+    },
+    "source_provenance": {
+     "pmid": "25057105",
+     "location": "Retained primary fulltext methods/intervention and results; manual followup in remaining_b_research.jsonl",
+     "source_url": "https://pubmed.ncbi.nlm.nih.gov/25057105/"
+    },
+    "duration_as_printed": {
+     "value": 3,
+     "unit": "months"
+    },
+    "co_therapies": [
+     "Participants were HIV-infected HAART-naive women. Subjects who started HAART or required relevant infection medication were excluded from the evaluable study population. This is not evidence that antiretroviral treatment is unnecessary."
+    ]
+   },
+   "outcomes": [
+    {
+     "name": "CD 4 and viral load",
+     "hierarchy": "not_reported",
+     "kind": "surrogate",
+     "direction": "null",
+     "outcome_role": "surrogate"
+    },
+    {
+     "name": "Antioxidant status",
+     "hierarchy": "not_reported",
+     "kind": "surrogate",
+     "direction": "positive",
+     "outcome_role": "surrogate"
+    }
+   ],
+   "limitations": [
+    "Not ARTsubstitute; attrition/cohort limits; exploratory events not confirmed immune clinical benefit.",
+    "The retained full article does not designate a primary outcome/endpoint; recorded hierarchy not_reported. This is a reporting limitation, not invented primary status or completion of any separate approval.",
+    "The study did not establish antiretroviral activity; starting necessary HAART led to exclusions/dropout and limits interpretation. Antioxidant-surrogate findings are not clinical HIV treatment benefit."
+   ]
+  }
+ ],
+ "source_receipts": [
+  {
+   "pmid": "34538515",
+   "title_fetched": "Effect of Microalgae Arthrospira on Biomarkers of Glycemic Control and Glucose Metabolism: A Systematic Review and Meta-analysis.",
+   "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=34538515&retmode=xml",
+   "full_text": false,
+   "sections_used": "PubMed abstract"
+  },
+  {
+   "pmid": "30544795",
+   "title_fetched": "Spirulina maxima Decreases Endothelial Damage and Oxidative Stress Indicators in Patients with Systemic Arterial Hypertension: Results from Exploratory Controlled Clinical Trial.",
+   "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=30544795&retmode=xml",
+   "full_text": false,
+   "sections_used": "PubMed abstract"
+  },
+  {
+   "pmid": "25057105",
+   "title_fetched": "The effect of Arthrospira platensis capsules on CD4 T-cells and antioxidative capacity in a randomized pilot study of adult women infected with human immunodeficiency virus not under HAART in Yaoundé, Cameroon.",
+   "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=25057105&retmode=xml",
+   "full_text": false,
+   "sections_used": "PubMed abstract"
+  },
+  {
+   "pmid": "12487756",
+   "title_fetched": "Hypocholesterolemic effect of spirulina in patients with hyperlipidemic nephrotic syndrome.",
+   "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=12487756&retmode=xml",
+   "full_text": false,
+   "sections_used": "PubMed abstract"
+  },
+  {
+   "pmid": "35988871",
+   "title_fetched": "A network meta-analysis on the comparative effect of nutraceuticals on lipid profile in adults.",
+   "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=35988871&retmode=xml",
+   "full_text": false,
+   "sections_used": "PubMed abstract"
+  },
+  {
+   "pmid": "37263369",
+   "title_fetched": "The effect of Spirulina supplementation on lipid profile: GRADE-assessed systematic review and dose-response meta-analysis of data from randomized controlled trials.",
+   "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=37263369&retmode=xml",
+   "full_text": false,
+   "sections_used": "PubMed abstract"
+  },
+  {
+   "pmid": "38401078",
+   "title_fetched": "Spirulina Platensis Attenuates Rebound Dyspeptic Symptoms After Proton Pump Inhibitors' Discontinuation: Phase 2 Placebo-controlled Trial.",
+   "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=38401078&retmode=xml",
+   "full_text": false,
+   "sections_used": "PubMed abstract"
+  }
+ ]
+}

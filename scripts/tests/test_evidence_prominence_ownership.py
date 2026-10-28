@@ -114,8 +114,14 @@ def test_when_the_owner_names_no_purpose_evidence_does_not_choose_by_mass():
     assert resolved_clinical_matches(product, owner_scoped=True)[1] == []
     evidence = _evidence(product)
     assert evidence["metadata"]["nutrition_authority_canonical"] is None
-    assert evidence["metadata"]["primary_evidence_floor_canonical"] == "selenium"
-    assert evidence["components"]["primary_evidence_floor"] == 14.0
+    # Dr. Pham, 2026-10-28: selenium evidence concerns thyroid labs in
+    # Hashimoto's, which this label does not claim, so its record no longer
+    # applies. The floor falls to the next applicable record by evidence
+    # strength (iodine), not to the heaviest row.
+    rejected = {m.get("id"): m.get("reason_code") for m in product["evidence_data"]["rejected_clinical_matches"]}
+    assert rejected.get("INGR_SELENIUM") == "source_condition_claim_unestablished"
+    assert evidence["metadata"]["primary_evidence_floor_canonical"] == "iodine"
+    assert evidence["components"]["primary_evidence_floor"] == 9.35
 
 
 # --- the primary floor --------------------------------------------------------
@@ -229,20 +235,24 @@ def test_authority_floor_does_not_borrow_the_blend_total_as_zinc_amount():
 
 # --- recovery ----------------------------------------------------------------
 
-@pytest.mark.parametrize("thistle_mg", [400, 600])
-def test_ingredient_recovery_is_independent_of_relative_mass(thistle_mg):
-    # The returned NAC review is exercise-only/reference for these claims.
-    # Keep testing mass-independent recovery using the still-eligible sibling.
+@pytest.mark.parametrize("primary_mg", [400, 600])
+def test_ingredient_recovery_is_independent_of_relative_mass(primary_mg):
+    # The returned NAC review is exercise-only/reference for these claims, and
+    # milk thistle is a qualified zero on the reference path since Dr. Pham's
+    # 2026-10-28 ruling. Keep testing mass-independent recovery with a
+    # still-eligible, unscoped record (L-carnitine).
+    from clinical_applicability import reviewed_entries
+    assert reviewed_entries()["INGR_MILK_THISTLE"]["study_type"] == "reference"
     product = _product(
-        product_name="Milk Thistle with NAC",
-        ingredients=[_row("Milk Thistle", "milk_thistle", thistle_mg, path="ingredientRows[0]"),
+        product_name="L-Carnitine with NAC",
+        ingredients=[_row("L-Carnitine", "l_carnitine", primary_mg, path="ingredientRows[0]"),
                      _row("N-Acetyl Cysteine", "nac", 1000, path="ingredientRows[1]",
                           standard_name="N-Acetylcysteine")],
         matches=[],
     )
 
     recovered = _scored(product)["metadata"]["recovered_matches"]
-    assert "INGR_MILK_THISTLE" in recovered
+    assert "INGR_L_CARNITINE" in recovered
     assert "INGR_NAC" not in recovered
 
 
@@ -396,19 +406,24 @@ def test_real_recovery_never_restamps_a_record_onto_a_row_it_already_links(
     matches, recovered = resolved_clinical_matches(product, owner_scoped=True)
     assert recovered == []
     if record == "INGR_GARLIC":
-        from clinical_applicability import reviewed_entries
-        from evidence_resolver import clinical_record_sources_eligible
-        source = reviewed_entries()[record]
-        assert source["scoring_eligible"] is False
-        assert not clinical_record_sources_eligible(source)
+        # Dr. Pham, 2026-10-28: garlic credit is limited to the studied
+        # preparations (Kwai, Allicor, Kyolic). The real organic garlic powder
+        # label is rejected outright, and recovery cannot revive it.
+        rejected = {m.get("id"): m.get("reason_code") for m in product["evidence_data"]["rejected_clinical_matches"]}
+        assert rejected.get(record) == "clinical_form_mismatch"
         assert not any(m.get("id") == record for m in matches)
-        retained = next(m for m in product["evidence_data"]["clinical_matches"]
-                        if m["id"] == record)
-        assert retained["matched_source_row_refs"] == [
-            "ingredientRows[0]", "ingredientRows[0].nestedRows[0]",
-            "ingredientRows[0].nestedRows[1]",
-        ]
         assert _evidence(product)["metadata"]["primary_evidence_floor_canonical"] is None
+        # The same label naming a studied preparation: enrichment links the
+        # record, recovery still does not re-stamp it, and the binding is the
+        # 500 mg powder row, never the 1.5 mg Allicin marker.
+        raw = _raw(fixture)
+        raw["ingredientRows"][0]["name"] = "Kyolic aged Garlic extract"
+        product = _enrich(raw)
+        matches, recovered = resolved_clinical_matches(product, owner_scoped=True)
+        assert recovered == []
+        entry = next(m for m in matches if m.get("id") == record)
+        assert entry["matched_source_row_refs"] == ["ingredientRows[0]"]
+        assert _evidence(product)["metadata"]["primary_evidence_floor_canonical"] == floor_canonical
         return
     entry = next(m for m in matches if m.get("id") == record)
     if record == "INGR_OMEGA3":
@@ -555,10 +570,14 @@ def test_a_single_branded_intervention_nested_under_its_own_heading_keeps_its_fl
                   and row.get("evidence_type") == "blend_anchor_mass")
     assert not is_lent_blend_mass(header), "A constituent is not another blend member"
     evidence = _evidence(product)
-    # With the constituent, current enrichment links the records only to the
-    # marker's 1.25 mg row and the existing source guard grants no floor. Keep
-    # that baseline behavior; this correction must not invent another join.
-    assert evidence["metadata"]["primary_evidence_floor"] == (0.0 if with_constituent else 18.0)
+    # BRAND_SENSORIL now carries a reviewed applicability scope (Dr. Pham,
+    # 2026-10-28: stress only), which binds the match to the single Sensoril
+    # heading row. The 1.25 mg withanolide marker no longer withholds the
+    # floor; enrichment previously also linked the marker, and the source guard
+    # then granted none.
+    match = next(m for m in product["evidence_data"]["clinical_matches"] if m["id"] == "BRAND_SENSORIL")
+    assert match["matched_source_row_refs"] == ["ingredientRows[1]"]
+    assert evidence["metadata"]["primary_evidence_floor"] == 18.0
 
 
 def test_real_nested_enzyme_member_has_one_physical_source_link():

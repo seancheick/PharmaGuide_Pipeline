@@ -1,0 +1,110 @@
+{
+ "record_id": "INGR_RED_YEAST_RICE",
+ "decision": "closed_no_credit",
+ "summary": "The reviewed research does not establish a qualifying benefit for this product's assessed use. Existing human research is kept: Xuezhikang trials with lower mortality and MACE in 35264949; retail products vary widely in monacolin K content, so that evidence is not transferable. Full text of the 2022 Front Pharmacol meta-analysis shows lower mortality (RR 0.62) and MACE (RR 0.54) from 2-3 trials, chiefly the CCSPS post-MI trial, plus lipid and glucose changes. Nearly every trial used Xuezhikang, a characterized Chinese prescription extract, often added to conventional drugs, and the source gives no dose or monacolin content. Dr. Pham's A106 decision rejects transferring this to arbitrary retail products, so the record becomes reference-only, which removes red yeast rice Evidence points from dependent products (about 28 per the closure plan). Statin-like safety stays with its own owner.",
+ "record_updates": {
+  "study_type": "reference",
+  "evidence_level": "reference"
+ },
+ "study_contexts": [
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "ingr_red_yeast_rice_35264949_scoped_source",
+   "components": [
+    "INGR_RED_YEAST_RICE"
+   ],
+   "source_pmids": [
+    "35264949"
+   ],
+   "identity_scope": "ingredient_general",
+   "identity": {
+    "name": "Xuezhikang (a characterized red yeast rice extract prescribed in China) in nearly all included trials; not arbitrary retail red yeast rice products."
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "meta_analysis",
+   "component_registration_status": "fully_registered",
+   "condition": "metabolic_syndrome",
+   "purpose": "treatment",
+   "review_status": "clinician_approved",
+   "scoring_eligible": false,
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "trial_family": "source_35264949",
+   "population": {
+    "age_group": "adult",
+    "description": "30 RCTs in people meeting a metabolic-syndrome criterion (mostly type 2 diabetes with dyslipidaemia, hypertension or prior myocardial infarction); mortality from 2 trials (3,297 participants) and MACE from 3 trials (3,360), largely the China Coronary Secondary Prevention Study."
+   },
+   "study_design": "PROSPERO-registered (CRD42020209186) systematic review and fixed/random-effects meta-analysis of RCTs (English and Chinese databases to September 2020); RYR alone or added to conventional treatment versus conventional treatment, statins, other drugs or placebo; primary outcomes mortality and MACE.",
+   "outcomes": [
+    {
+     "name": "Primary: mortality RR 0.62 (95% CI 0.49-0.78; 2 trials) and MACE RR 0.54 (0.43-0.66; 3 trials) versus control, no heterogeneity.",
+     "hierarchy": "primary",
+     "kind": "patient_important",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "Secondary: TC -0.74, TG -0.45, LDL -0.42 mmol/L, HDL +0.14, FPG -0.46, HbA1c -0.49, MAP -3.79 mmHg; HOMA-IR not robust in sensitivity analysis.",
+     "hierarchy": "secondary",
+     "kind": "surrogate",
+     "direction": "mixed",
+     "outcome_role": "direct_between_group_effect"
+    }
+   ],
+   "limitations": [
+    "Clinical source findings cannot establish every retail product as effective or safe.",
+    "Preserve statin-like exposure, drug interactions, contamination and regulatory safety assessment independently.",
+    "Returned decision: Reject blanket efficacy/safety transfer to arbitrary retail products.",
+    "Historical bibliography census (not independent scoring sources; actual included-publication membership is separately bound to the inspected source table): 11225965, 19602720, 17312447. Each intervention and comparison requires its own applicability assessment; citation in this bibliography grants no credit.",
+    "Included-study PMID membership was extracted from source Table(s) T1. These are source membership identifiers, not independent efficacy approvals or automatic trial replications. Exact table/citation mapping and unindexed citations are retained in the source receipt. 26 source citations in this set lack a PMID in the primary source; their citation text is retained, no PMID is invented.",
+    "No credit: the evidence is for Xuezhikang, a characterized prescription extract, mostly in Chinese trials of low-to-moderate quality, often as add-on therapy or against statins; the source reports no daily dose or monacolin content, and the signed A106 decision rejects transfer to arbitrary retail red yeast rice products, whose monacolin content varies.",
+    "Mortality and MACE rest on two to three trials, chiefly CCSPS in post-MI patients.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ],
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "mg",
+    "values": [],
+    "dose_status": "source_not_reported",
+    "dose_basis": "not_applicable",
+    "duration_basis": "not_recorded",
+    "administration_frequency": "Daily Xuezhikang regimens by trial for 4 weeks to 4.5 years; daily amounts and monacolin content are not tabulated in the source.",
+    "dosage_forms": [
+     "Xuezhikang capsule (trial-specific)"
+    ],
+    "co_therapies": [
+     "Conventional risk-factor treatment and trial comparators vary; not treatment replacement."
+    ],
+    "reported_regimen": "Xuezhikang alone or added to routine treatment versus routine treatment, statins (simvastatin, atorvastatin, pravastatin), gemfibrozil, a Chinese herbal prescription or placebo; durations 4 weeks to 4.5 years (Table 1). No dose or monacolin content reported.",
+    "normalization": {
+     "basis": "A heterogeneous synthesis has no single assigned-arm dose. Descriptive regimens do not create an intake recommendation, equivalent preparation or efficacy threshold."
+    },
+    "source_provenance": {
+     "pmid": "35264949",
+     "location": "Full text (PMC8899821): Methods inclusion criteria; Results Table 1 (interventions, comparators, durations) and mortality/MACE paragraph; sensitivity analysis; Discussion limitations.",
+     "source_url": "https://pubmed.ncbi.nlm.nih.gov/35264949/"
+    }
+   },
+   "included_study_pmids": [
+    "19602720",
+    "17312447",
+    "11225965"
+   ],
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability"
+   }
+  }
+ ],
+ "source_receipts": [
+  {
+   "pmid": "35264949",
+   "title_fetched": "Red Yeast Rice Preparations Reduce Mortality, Major Cardiovascular Adverse Events, and Risk Factors for Metabolic Syndrome: A Systematic Review and Meta-analysis.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/35264949/",
+   "full_text": true,
+   "sections_used": "Methods, Results, Table 1, sensitivity analysis, Discussion (BioC PMC8899821)"
+  }
+ ]
+}

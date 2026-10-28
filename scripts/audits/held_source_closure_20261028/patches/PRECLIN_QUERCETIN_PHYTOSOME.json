@@ -1,0 +1,246 @@
+{
+ "record_id": "PRECLIN_QUERCETIN_PHYTOSOME",
+ "decision": "closed_credit",
+ "summary": "A free full text of the pollinosis RCT 35776034 was found on the publisher's site (via its DOI, after the OpenAlex lookup) and read: 66 Japanese adults with seasonal eye/nose symptoms took Quercetin Phytosome (200 mg quercetin/day) or placebo for 4 weeks; the primary JRQLQ showed lower total, QOL, sleep and physical scores with selected item improvements, without multiplicity adjustment and with Indena funding. This narrow allergy-symptom context is credited, gated to a label claim for seasonal allergy symptoms and to phytosome forms; antiviral and senolysis claims are excluded per Dr. Pham. The open-label COVID-19 trial (36712674) remains approved without credit, and 40037045 (pharmacokinetics; hybrid OA at ScienceDirect blocked by bot detection) gets no context because absorption cannot stand in for benefit.",
+ "record_updates": {
+  "applicability": {
+   "scope": "ingredient",
+   "required_form_terms": [
+    "phytosome"
+   ],
+   "supported_outcomes": [
+    "seasonal_allergy_symptoms"
+   ],
+   "studied_population": "Adults aged 22-78 with seasonal (pollinosis) eye and nose symptoms, taking Quercetin Phytosome providing 200 mg quercetin/day for 4 weeks.",
+   "source_pmids": [
+    "35776034"
+   ],
+   "reviewed_at": "2026-10-28",
+   "excluded_claim_terms": [
+    "antiviral",
+    "virus",
+    "senolytic",
+    "senolysis"
+   ]
+  }
+ },
+ "study_contexts": [
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "preclin_quercetin_phytosome_35776034",
+   "components": [
+    "PRECLIN_QUERCETIN_PHYTOSOME"
+   ],
+   "source_pmids": [
+    "35776034"
+   ],
+   "identity_scope": "branded_material",
+   "identity": {
+    "branded_material": "Quercetin Phytosome",
+    "manufacturer": "Indena S.p.A. (Milan)",
+    "standardization": "Lecithin-based phytosome delivery system; 50 mg quercetin per tablet"
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "direct_rct",
+   "component_registration_status": "fully_registered",
+   "condition": "seasonal_allergy_symptoms",
+   "purpose": "treatment",
+   "review_status": "clinician_approved",
+   "scoring_eligible": true,
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "trial_family": "35776034",
+   "population": {
+    "age_group": "adult",
+    "description": "66 Japanese adults aged 22-78 with relatively high JRQLQ nose/eye symptom scores during pollen season (pollinosis-type eye/nose discomfort), excluding people using anti-allergy drugs; 64 in safety set (32 per arm), 60 per protocol."
+   },
+   "study_design": "Randomized placebo-controlled double-blind parallel-group trial, 4 weeks, at a single clinic in Tokyo; vehicle placebo tablets.",
+   "outcomes": [
+    {
+     "name": "Primary JRQLQ: absolute total, QOL total, sleep and physical scores lower than placebo; change from baseline significant for sleep (4W -1.0 vs -0.1) and physical scores; selected items (sneezing, malaise, sleep disorder) significant",
+     "hierarchy": "primary",
+     "kind": "patient_important",
+     "direction": "mixed",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "Secondary allergic-rhinitis severity: sneezing, rhinorrhea and daily-living disturbance lower than placebo; nasal-discharge eosinophils lower at 2 weeks",
+     "hierarchy": "secondary",
+     "kind": "patient_important",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    }
+   ],
+   "limitations": [
+    "No adjustment for multiple items and time points; several JRQLQ domains did not differ; paper prints significance as 'p<0.05%'. Small 4-week trial.",
+    "Funded by Indena (Indena Japan and Indena S.p.A.), with an Indena Japan co-author and Indena-supported editorial assistance.",
+    "200 mg is the quercetin content (4 x 50 mg tablets), not the whole phytosome mass; exact Quercetin Phytosome only; no transfer to plain quercetin.",
+    "Allergy-symptom (pollinosis) context only; not immune, antiviral or senolytic evidence.",
+    "Dr. Pham's returned decision A137: absorption-to-general-benefit, antiviral and senolysis transfers rejected; narrower contexts only.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ],
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "mg",
+    "values": [
+     200
+    ],
+    "dose_status": "verified",
+    "dose_basis": "nominal_assigned_arm",
+    "duration_basis": "fixed_protocol",
+    "duration_days": 28,
+    "administration_frequency": "Two tablets with breakfast and two with supper, with water.",
+    "dosage_forms": [
+     "oral tablet"
+    ],
+    "co_therapies": [
+     "Anti-allergy drugs, antihistamines, steroids and vasoconstrictors were not allowed during the study (exclusion criteria)."
+    ],
+    "reported_regimen": "Four Quercetin Phytosome tablets daily (50 mg quercetin each; 200 mg quercetin/day) in two doses for 4 weeks.",
+    "normalization": {
+     "basis": "4 x 50 mg = 200 mg quercetin/day as supplied in phytosome tablets; whole phytosome mass not stated."
+    },
+    "source_provenance": {
+     "pmid": "35776034",
+     "location": "Subjects and Methods (inclusion/exclusion criteria, test food: 50 mg quercetin per tablet, four tablets/day in two doses; primary endpoint JRQLQ; statistics); Results (flow: 66 enrolled, 64 safety, 60 per protocol; Tables II-IV); conflict of interest",
+     "source_url": "https://www.europeanreview.org/wp/wp-content/uploads/4331-4345.pdf"
+    },
+    "duration_as_printed": {
+     "value": 4,
+     "unit": "weeks"
+    }
+   },
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability"
+   }
+  },
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "preclin_quercetin_phytosome_36712674_covid_combination",
+   "components": [
+    "PRECLIN_QUERCETIN_PHYTOSOME"
+   ],
+   "source_pmids": [
+    "36712674"
+   ],
+   "identity_scope": "branded_material",
+   "identity": {
+    "branded_material": "Quercetin Phytosome (Quevir tablets)",
+    "manufacturer": "Indena S.p.A. (phytosome); Pharmextracta S.p.A. (tablets)",
+    "standardization": "500 mg Quercetin Phytosome per tablet (lecithin-based quercetin delivery)"
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "direct_rct",
+   "component_registration_status": "fully_registered",
+   "condition": "early_stage_covid_19",
+   "purpose": "treatment",
+   "review_status": "clinician_approved",
+   "scoring_eligible": false,
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "trial_family": "36712674",
+   "population": {
+    "age_group": "adult",
+    "description": "Adults >=18 with RT-PCR-confirmed mild to moderate symptomatic COVID-19 at King Edward Medical University, Lahore; 108 randomized, 100 completed (50 per group)."
+   },
+   "study_design": "Single-centre open-label randomized controlled trial: standard of care plus Quercetin Phytosome vs standard of care alone; 2 weeks.",
+   "outcomes": [
+    {
+     "name": "Primary: RT-PCR negative at day 7, 34 vs 12 patients (p=0.0004); by week 2 most participants in both arms negative",
+     "hierarchy": "primary",
+     "kind": "patient_important",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "Primary: COVID-19 acute symptoms resolved by day 7, 26 vs 12 patients (p=0.0051)",
+     "hierarchy": "primary",
+     "kind": "patient_important",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "LDH fell significantly; CRP, ferritin and D-dimer improvements reported",
+     "hierarchy": "secondary",
+     "kind": "surrogate",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    }
+   ],
+   "limitations": [
+    "Open-label, standard-of-care control without placebo; single centre.",
+    "Not scoring eligible: antiviral transfer rejected by Dr. Pham; no infection treatment or prevention claim follows for supplements.",
+    "Returned decision A137: absorption-to-general-benefit, antiviral and senolysis transfers rejected; narrower contexts only.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ],
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "mg",
+    "values": [
+     1500,
+     1000
+    ],
+    "dose_status": "verified",
+    "dose_basis": "nominal_assigned_arm",
+    "duration_basis": "fixed_protocol",
+    "duration_days": 14,
+    "administration_frequency": "One 500 mg tablet three times daily in week 1, then twice daily in week 2.",
+    "dosage_forms": [
+     "oral tablet"
+    ],
+    "co_therapies": [
+     "Standard of care for COVID-19 in both arms."
+    ],
+    "reported_regimen": "Quercetin Phytosome 500 mg tablet TDS week 1 (1,500 mg/day), BDS week 2 (1,000 mg/day), added to standard of care.",
+    "normalization": {
+     "basis": "Whole Quercetin Phytosome tablet mass per day as assigned; not converted to pure quercetin."
+    },
+    "source_provenance": {
+     "pmid": "36712674",
+     "location": "Abstract; Methods (design, inclusion, treatment paragraph, primary outcomes); Results (flow, PCR, symptoms, Table 2)",
+     "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9880293/"
+    },
+    "duration_as_printed": {
+     "value": 2,
+     "unit": "weeks"
+    }
+   },
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability"
+   }
+  }
+ ],
+ "source_receipts": [
+  {
+   "pmid": "35776034",
+   "title_fetched": "Effects of repeated oral intake of a quercetin-containing supplement on allergic reaction: a randomized, placebo-controlled, double-blind parallel-group study.",
+   "url": "https://www.europeanreview.org/wp/wp-content/uploads/4331-4345.pdf",
+   "full_text": true,
+   "sections_used": "Full text (publisher open-access PDF): Subjects and Methods; Results; Tables I-IV; Discussion; conflict of interest"
+  },
+  {
+   "pmid": "36712674",
+   "title_fetched": "Quercetin as a possible complementary agent for early-stage COVID-19: Concluding results of a randomized clinical trial.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/36712674/",
+   "full_text": true,
+   "sections_used": "Abstract; Methods; Results"
+  },
+  {
+   "pmid": "40037045",
+   "title_fetched": "Improving quercetin bioavailability: A systematic review and meta-analysis of human intervention studies.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/40037045/",
+   "full_text": false,
+   "sections_used": "Abstract only; OpenAlex hybrid OA (https://doi.org/10.1016/j.foodchem.2025.143630) blocked by publisher bot check, not bypassed"
+  }
+ ],
+ "integration_notes": [
+  "2026-10-28 integrator: require_source_label_form removed; required_form_terms kept, matching the KSM-66/Tesnor precedent. Source-only matching rejected real labels whose ingredient row resolves through the enricher.",
+  "2026-10-28 integrator: condition gate kept (supported_outcomes ['seasonal_allergy_symptoms'] equals the context condition). Sean's decision is that a claim-free label may earn scoped condition credit, but today the population limits (e.g. men-only, pregnancy, children) are enforced only inside this gate, so ungating via data would drop those safeguards. Claim-free scoped credit waits for the shared applicability change (no claim / aligned claim / unrelated claim / population mismatch) under /pg-scoring-change."
+ ]
+}
