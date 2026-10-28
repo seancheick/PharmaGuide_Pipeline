@@ -1,0 +1,286 @@
+{
+ "record_id": "INGR_BILBERRY",
+ "decision": "closed_credit",
+ "summary": "Full texts were verified for all three trials. The Omnica SBE trial (32106548; 109 VDT workers, 240 mg/day, 12 weeks) improved its single stated evaluation outcome (ciliary accommodation HFC-1, between-group p=0.014-0.049) and gets the one eligible context, limited to VDT eye fatigue (Eye & Vision); it was maker-funded. The Wakasa trial's CFF effect was within-group only, and the 8-man glucose challenge is acute and off-claim, so neither gets credit. The record has no health_goals_supported; the new applicability block draws its outcome from the record's eye-fatigue key endpoints.",
+ "record_updates": {
+  "applicability": {
+   "scope": "ingredient",
+   "supported_outcomes": [
+    "Eye & Vision"
+   ],
+   "studied_population": "Healthy adults aged 20-60 doing VDT work with subjective ocular fatigue, given 240 mg/day of a 36% anthocyanin standardized bilberry extract for 12 weeks (PMID 32106548).",
+   "source_pmids": [
+    "32106548"
+   ],
+   "reviewed_at": "2026-10-28"
+  }
+ },
+ "study_contexts": [
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "ingr_bilberry_32106548",
+   "components": [
+    "INGR_BILBERRY"
+   ],
+   "source_pmids": [
+    "32106548"
+   ],
+   "identity_scope": "ingredient_general",
+   "identity": {
+    "standardization": "Omnica standardized bilberry extract (SBE) 240 mg; Vaccinium myrtillus anthocyanins 36.89% by HPLC (cyanidin-3-glucoside reference), 29.00% true total of 15 anthocyanins by absolute-purity method.",
+    "name": "Standardized bilberry extract SBE (Omnica Co., Ltd.)"
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "direct_rct",
+   "component_registration_status": "fully_registered",
+   "condition": "vdt_ocular_fatigue",
+   "purpose": "challenge",
+   "review_status": "clinician_approved",
+   "scoring_eligible": true,
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "trial_family": "ingr_bilberry_32106548",
+   "population": {
+    "age_group": "adult",
+    "description": "Healthy Japanese adults aged 20-60 whose jobs involved VDT work and who had subjective ocular fatigue; 120 eligible, 109 randomized and completed (55 SBE, 54 placebo), 97 analysed for HFC-1."
+   },
+   "study_design": "Randomized, double-blind, placebo-controlled parallel-group trial (CONSORT), 12 weeks; HFC-1 of accommodative microfluctuation before and after a 40-min smartphone VDT task at weeks 0, 4, 8, 12; ANCOVA; sample size powered on HFC.",
+   "outcomes": [
+    {
+     "name": "HFC-1 (the trial's evaluation outcome, sample size powered on it): post-load HFC-1 better with SBE than placebo at week 8 (p=0.014) and week 12 (p=0.017); load-induced change (covariate-adjusted) lower at week 4 (0.478 vs 1.296, p=0.018) and week 12 (0.053 vs 0.347, p=0.049).",
+     "hierarchy": "not_reported",
+     "kind": "surrogate",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    }
+   ],
+   "limitations": [
+    "Exact preparation/population/endpoints; not generic benefit or minimum effective dose.",
+    "Study uses a specified extract; generic canonical subject does not establish exact botanical/material correspondence for every retail label.",
+    "The paper names HFC-1 as 'the evaluation outcome' and powers the sample on it but does not formally designate a prespecified primary endpoint or control multiplicity; hierarchy recorded as not_reported per Dr. Pham's 2026-10-28 primary-endpoint rule.",
+    "Objective ciliary-accommodation surrogate after a laboratory VDT task; subjective eye-strain scores were not the outcome. Funded by Omnica, the extract maker, and two authors are Omnica employees.",
+    "Credit is limited to VDT-related eye fatigue/accommodation (Eye & Vision) with a 36% anthocyanin standardized extract at 240 mg/day; it does not establish retinal, night-vision, glycemic or lipid benefit or apply to unstandardized fruit powders.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ],
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "mg",
+    "values": [
+     240
+    ],
+    "dose_status": "verified",
+    "dose_basis": "nominal_assigned_arm",
+    "duration_basis": "fixed_protocol",
+    "duration_days": 84,
+    "administration_frequency": "One 240 mg hard capsule once daily.",
+    "dosage_forms": [
+     "oral hard capsule"
+    ],
+    "co_therapies": [
+     "No co-therapy assigned; placebo capsule contained caramel color (Table 1)."
+    ],
+    "reported_regimen": "240 mg/day of specified assigned material",
+    "normalization": {
+     "basis": "Whole assigned material daily mass from primary Methods; not a marker or active-equivalent conversion."
+    },
+    "source_provenance": {
+     "pmid": "32106548",
+     "location": "Full text (PMC7146147): Abstract; Methods 2.1-2.5 (subjects, sample size, test foods/Table 1, VDT protocol, HFC); Results 3.1-3.2 and Table 4; Funding and Conflicts of Interest.",
+     "source_url": "https://pubmed.ncbi.nlm.nih.gov/32106548/"
+    }
+   },
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability"
+   }
+  },
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "ingr_bilberry_25923485",
+   "components": [
+    "INGR_BILBERRY"
+   ],
+   "source_pmids": [
+    "25923485"
+   ],
+   "identity_scope": "ingredient_general",
+   "identity": {
+    "standardization": "Wakasa Seikatsu 160 mg extract/capsule; exact marker profile must remain separate from other SBEtrial",
+    "name": "Bilberry BE"
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "direct_rct",
+   "component_registration_status": "fully_registered",
+   "condition": "vdt_visual_fatigue",
+   "purpose": "challenge",
+   "review_status": "clinician_approved",
+   "scoring_eligible": false,
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "trial_family": "ingr_bilberry_25923485",
+   "population": {
+    "age_group": "adult",
+    "description": "Japanese office workers aged 20-40 with VDT-related eye fatigue and relatively low CFF/NPA at screening (281 screened, 88 randomized 44:44; 80 analysed: 37 placebo, 43 bilberry)."
+   },
+   "study_design": "Prospective, randomized, placebo-controlled parallel trial (UMIN000008766), 8 weeks, at two clinical service centres; within-group paired tests plus between-group unpaired tests of VDT-load-induced change.",
+   "outcomes": [
+    {
+     "name": "CFF: load-induced reduction smaller at week 8 versus baseline within the bilberry group (95% CI 0.10-1.60, p=0.023), but no significant difference between groups; NPA unchanged.",
+     "hierarchy": "not_reported",
+     "kind": "surrogate",
+     "direction": "null",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "Five of 18 subjective symptoms (ocular fatigue sensation, pain, heaviness, discomfort, foreign-body sensation) mitigated versus placebo at week 8 (p<0.05).",
+     "hierarchy": "not_reported",
+     "kind": "patient_important",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    }
+   ],
+   "limitations": [
+    "No explicit unique primary endpoint identified in extracted source; do not manufacture hierarchy.",
+    "Exact preparation/population/endpoints; not generic benefit or minimum effective dose.",
+    "Study uses a specified extract; generic canonical subject does not establish exact botanical/material correspondence for every retail label.",
+    "No credit: the headline CFF effect is within-group only (no significant between-group difference), no primary outcome was designated among 2 objective and 18 subjective measures, the design is described as placebo-controlled with look-alike masked capsules rather than explicitly double-blind, and placebo attrition was higher (7/44 vs 1/44).",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ],
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "mg",
+    "values": [
+     480
+    ],
+    "dose_status": "verified",
+    "dose_basis": "nominal_assigned_arm",
+    "duration_basis": "fixed_protocol",
+    "duration_days": 56,
+    "administration_frequency": "Three 160 mg capsules once daily after breakfast.",
+    "dosage_forms": [
+     "oral capsule"
+    ],
+    "co_therapies": [
+     "No co-therapy assigned; one placebo subject excluded for topical eye medicine use."
+    ],
+    "reported_regimen": "480 mg/day of specified assigned material",
+    "normalization": {
+     "basis": "Whole assigned material daily mass from primary Methods; not a marker or active-equivalent conversion."
+    },
+    "source_provenance": {
+     "pmid": "25923485",
+     "location": "Full text (PMC12877697): Methods study design, supplements, statistics; Results Table 1, Table 2 (CFF/NPA) and Table 3 subjective symptoms text.",
+     "source_url": "https://pubmed.ncbi.nlm.nih.gov/25923485/"
+    }
+   },
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability"
+   }
+  },
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "ingr_bilberry_25191571_postprandial_challenge",
+   "components": [
+    "INGR_BILBERRY"
+   ],
+   "source_pmids": [
+    "25191571"
+   ],
+   "identity_scope": "ingredient_general",
+   "identity": {
+    "name": "Standardized bilberry extract 36%anthocyanins; not arbitrary fresh-fruit or eye-health preparation."
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "direct_rct",
+   "component_registration_status": "fully_registered",
+   "condition": "postprandial_glucose_in_type_2_diabetes",
+   "purpose": "challenge",
+   "review_status": "clinician_approved",
+   "scoring_eligible": false,
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "trial_family": "source_25191571_postprandial_challenge",
+   "population": {
+    "description": "Eight men with type 2 diabetes controlled by diet/lifestyle; double-blind crossover with two-week washout."
+   },
+   "study_design": "Randomized, double-blind, placebo-controlled crossover with 2-week washout; single capsule before an oral glucose (polysaccharide) tolerance test.",
+   "outcomes": [
+    {
+     "name": "Plasma glucose incremental AUC 0-300 min 18% lower than control capsule (P=0.003); insulin AUCi also lower; gut hormones, inflammatory and antioxidant markers not significantly changed.",
+     "hierarchy": "not_reported",
+     "kind": "surrogate",
+     "direction": "mixed",
+     "outcome_role": "direct_between_group_effect"
+    }
+   ],
+   "limitations": [
+    "470 mg is the exact 0.47 g extract conversion, not anthocyanin mass.",
+    "Eight-person acute challenge does not establish long-term diabetes treatment or eye-health efficacy.",
+    "No new clinical approval, scoring credit or dose threshold. Existing reviewed exclusions remain.",
+    "No credit: single-dose challenge in 8 men; glycemic outcomes are not this record's eye-fatigue claim and do not show chronic benefit.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ],
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "mg",
+    "values": [
+     470
+    ],
+    "dose_status": "verified",
+    "dose_basis": "nominal_assigned_arm",
+    "duration_basis": "fixed_protocol",
+    "duration_days": 1,
+    "administration_frequency": "One capsule containing 0.47 g bilberry extract before a polysaccharide drink equivalent to 75 g glucose. No fresh-fruit or anthocyanin mass substitution is used.",
+    "dosage_forms": [
+     "capsule"
+    ],
+    "co_therapies": [
+     "75 g glucose-equivalent polysaccharide challenge; diabetes managed without glucose-lowering drugs in this cohort."
+    ],
+    "reported_regimen": "One capsule containing 0.47 g bilberry extract before a polysaccharide drink equivalent to 75 g glucose. No fresh-fruit or anthocyanin mass substitution is used.",
+    "normalization": {
+     "basis": "Preserve the specifically identified material or component quantity; no elemental/marker conversion or extrapolated daily dose."
+    },
+    "source_provenance": {
+     "pmid": "25191571",
+     "location": "Full text (PMC4153034): Abstract; Methods (subjects, design, capsules, OGTT); Results glucose and insulin AUCi paragraphs.",
+     "source_url": "https://pubmed.ncbi.nlm.nih.gov/25191571/"
+    }
+   },
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability"
+   }
+  }
+ ],
+ "source_receipts": [
+  {
+   "pmid": "32106548",
+   "title_fetched": "A 12-Week-Long Intake of Bilberry Extract (Vaccinium myrtillus L.) Improved Objective Findings of Ciliary Muscle Contraction of the Eye: A Randomized, Double-Blind, Placebo-Controlled, Parallel-Group Comparison Trial.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/32106548/",
+   "full_text": true,
+   "sections_used": "Methods, Results, Tables 1/3/4, funding/COI (BioC PMC7146147)"
+  },
+  {
+   "pmid": "25923485",
+   "title_fetched": "Bilberry extract supplementation for preventing eye fatigue in video display terminal workers.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/25923485/",
+   "full_text": true,
+   "sections_used": "Methods, Results Tables 1-3, Discussion (BioC)"
+  },
+  {
+   "pmid": "25191571",
+   "title_fetched": "A single supplement of a standardised bilberry (Vaccinium myrtillus L.) extract (36 % wet weight anthocyanins) modifies glycaemic response in individuals with type 2 diabetes controlled by diet and lifestyle.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/25191571/",
+   "full_text": true,
+   "sections_used": "Methods, Results (BioC PMC4153034)"
+  }
+ ]
+}

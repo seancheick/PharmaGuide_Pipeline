@@ -1,0 +1,106 @@
+{
+ "record_id": "STRAIN_LGG",
+ "decision": "closed_no_credit: The reviewed research does not establish a qualifying benefit for this product's assessed use. Single-owner ruling: LGG credit lives in the strain registry, not this backed record.",
+ "summary": "Dr. Pham's fifth ruling makes the strain registry the one scoring owner for LGG. This backed record moves to the reference path with the ESPGHAN recommendation (26756877, full text) recorded as research only; 26365389 remains abstract-only.",
+ "record_updates": {
+  "study_type": "reference",
+  "evidence_level": "reference",
+  "notes": "LGG is one of the most studied probiotic strains with strain-specific human outcomes, especially for antibiotic-associated diarrhea prevention contexts. 2026-10-28: per Dr. Pham's fifth ruling, the clinical-strain registry (STRAIN_LGG) is the single scoring owner; this backed record is research-only."
+ },
+ "study_contexts": [
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "strain_lgg_26756877_registry_owned",
+   "source_pmids": [
+    "26756877"
+   ],
+   "components": [
+    "STRAIN_LGG"
+   ],
+   "identity_scope": "branded_material",
+   "identity": {
+    "branded_material": "Lactobacillus rhamnosus GG (LGG)",
+    "standardization": "Strain-specified LGG as named in the ESPGHAN working-group review"
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "guideline",
+   "component_registration_status": "fully_registered",
+   "condition": "pediatric_antibiotic_associated_diarrhea_prevention",
+   "purpose": "prevention",
+   "review_status": "clinician_approved",
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability"
+   },
+   "scoring_eligible": false,
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "trial_family": "strain_lgg_26756877_registry_owned",
+   "population": {
+    "age_group": "child",
+    "description": "Children receiving antibiotics (ESPGHAN working-group systematic review of systematic reviews and later RCTs)."
+   },
+   "study_design": "ESPGHAN Working Group on Probiotics position paper with GRADE-based recommendations for AAD prevention in children.",
+   "outcomes": [
+    {
+     "name": "If probiotics are used to prevent AAD in children, LGG is recommended (moderate quality of evidence, strong recommendation)",
+     "hierarchy": "not_reported",
+     "kind": "patient_important",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "LGG had no effect on C difficile-associated diarrhea in children (RR 0.95, 0.06-14.85)",
+     "hierarchy": "not_reported",
+     "kind": "patient_important",
+     "direction": "null",
+     "outcome_role": "direct_between_group_effect"
+    }
+   ],
+   "limitations": [
+    "Research-only in this backed record: Dr. Pham's fifth ruling approves one scoring owner, the clinical-strain registry entry STRAIN_LGG (lgg_pediatric_aad_guideline_26756877). No points are awarded from this record.",
+    "Read from the Amsterdam UMC repository (submitted version); 26365389 (12 RCTs; significant in children, not adults overall) remains abstract-only.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ],
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "mg",
+    "values": [],
+    "dose_status": "source_not_reported",
+    "dose_basis": "not_applicable",
+    "duration_basis": "participant_specific",
+    "duration_days": null,
+    "administration_frequency": "Trial-specific; Table 2 includes about 1x10^9 to 5.2x10^9 CFU/day during antibiotic treatment",
+    "dosage_forms": [
+     "oral probiotic (form varies by trial)"
+    ],
+    "co_therapies": [
+     "Concurrent antibiotic therapy"
+    ],
+    "source_provenance": {
+     "pmid": "26756877",
+     "location": "LGG recommendation box (QoE moderate, strong recommendation); evidence summary (Hempel 2012 RR 0.58; children RR 0.55); Table 2 LGG trial doses; C difficile analysis",
+     "source_url": "https://pure.amsterdamumc.nl/ws/files/159981247/Probiotics-for-the-prevention-of-antibiotic-associated-diarrhea-in-children.pdf"
+    }
+   }
+  }
+ ],
+ "source_receipts": [
+  {
+   "pmid": "26365389",
+   "title_fetched": "Systematic review with meta-analysis: Lactobacillus rhamnosus GG in the prevention of antibiotic-associated diarrhoea in children and adults.",
+   "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=26365389&retmode=xml",
+   "full_text": false,
+   "sections_used": "PubMed abstract only"
+  },
+  {
+   "pmid": "26756877",
+   "title_fetched": "Probiotics for the Prevention of Antibiotic-Associated Diarrhea in Children.",
+   "url": "https://www.ncbi.nlm.nih.gov/research/bionlp/RESTful/pmcoa.cgi/BioC_json/26756877/unicode",
+   "full_text": true,
+   "sections_used": "LGG recommendation box (QoE moderate, strong recommendation); evidence summary (Hempel 2012 RR 0.58; children RR 0.55); Table 2 LGG trial doses; C difficile analysis"
+  }
+ ]
+}

@@ -1126,25 +1126,58 @@ def test_malformed_curated_context_cannot_silently_disappear(monkeypatch):
     assert not clinical_applicability.assess_clinical_source_review({'id': 'used'})['is_complete']
 
 
+def _scored_glucosamine_copy(monkeypatch, *, pending_contexts=False):
+    """A credit-path copy of the real glucosamine owner.
+
+    Dr. Pham's 2026-10-28 ruling made INGR_GLUCOSAMINE_SULFATE (with chondroitin)
+    a completed reference-only review, which short-circuits before the
+    hydrochloride exclusion. The copy keeps the real applicability scope and
+    contexts and restores the pre-ruling credit path so the exclusion itself
+    stays tested.
+    """
+    import clinical_applicability
+    owners = deepcopy(reviewed_entries())
+    record = owners['INGR_GLUCOSAMINE_SULFATE']
+    assert record['study_type'] == record['evidence_level'] == 'reference'
+    record.update(study_type='systematic_review_meta', evidence_level='ingredient-human')
+    if pending_contexts:
+        for context in record['study_contexts']:
+            context['review_status'] = 'source_verified_pending_clinical_review'
+    monkeypatch.setattr(clinical_applicability, 'reviewed_entries', lambda: owners)
+    return record
+
+
 @pytest.mark.parametrize('form', ['Glucosamine Hydrochloride', 'Glucosamine HCl'])
 @pytest.mark.parametrize('quantity', [None, 1500])
-def test_glucosamine_sulfate_sources_cannot_credit_hydrochloride(form, quantity):
+def test_glucosamine_sulfate_sources_cannot_credit_hydrochloride(monkeypatch, form, quantity):
     row = {'name': form, 'canonical_id': 'glucosamine', 'quantity': quantity, 'unit': 'mg',
            'raw_source_path': 'ingredientRows[0]'}
     entry = {**reviewed_entries()['INGR_GLUCOSAMINE_SULFATE'],
              'ingredient': form, 'matched_source_row_refs': ['ingredientRows[0]']}
+    # Real registry: a completed no-credit decision for every glucosamine form.
+    result = assess_clinical_applicability({'activeIngredients': [row]}, entry, assess_amount=False)
+    assert result == {'status': 'not_applicable', 'reason_code': 'reference_only_clinical_record'}
+    # The sulfate sources' own scope still rejects hydrochloride on a credit path.
+    _scored_glucosamine_copy(monkeypatch)
     result = assess_clinical_applicability({'activeIngredients': [row]}, entry, assess_amount=False)
     assert result['status'] == 'not_applicable'
     assert result['reason_code'] == 'clinical_form_excluded'
 
 
 @pytest.mark.parametrize('form', ['Glucosamine', 'Glucosamine sulfate 2KCl', 'Crystalline glucosamine sulfate'])
-def test_glucosamine_not_excluded_does_not_establish_completed_clinical_review(form):
+def test_glucosamine_not_excluded_does_not_establish_completed_clinical_review(monkeypatch, form):
     from clinical_applicability import assess_clinical_source_review
     row = {'name': form, 'canonical_id': 'glucosamine', 'quantity': 1500, 'unit': 'mg',
            'raw_source_path': 'ingredientRows[0]'}
     entry = {**reviewed_entries()['INGR_GLUCOSAMINE_SULFATE'],
              'ingredient': form, 'matched_source_row_refs': ['ingredientRows[0]']}
+    # Real registry: completion comes from Dr. Pham's signed ruling, and it is
+    # a no-credit decision, not credit earned by passing the exclusion.
+    result = assess_clinical_applicability({'activeIngredients': [row]}, entry, assess_amount=False)
+    assert result == {'status': 'not_applicable', 'reason_code': 'reference_only_clinical_record'}
+    assert assess_clinical_source_review(entry)['is_complete'] is True
+    # Passing the hydrochloride exclusion alone still completes nothing.
+    _scored_glucosamine_copy(monkeypatch, pending_contexts=True)
     result = assess_clinical_applicability({'activeIngredients': [row]}, entry, assess_amount=False)
     assert result['status'] != 'not_applicable'
     assert assess_clinical_source_review(entry)['is_complete'] is False
@@ -1313,8 +1346,31 @@ def test_contributing_exact_strain_context_uses_existing_native_validator(monkey
     assert not owner.assess_clinical_source_review({'id': key})['is_complete']
 
 
+def test_inositol_pooled_source_is_released_only_for_its_retraction_free_cycle_pool():
+    """Dr. Pham, 2026-10-28: the 36703143 hold is resolved by the retracted-trial
+    analysis (credited cycle pool excludes both retracted reports), with credit
+    confined to PCOS cycle regularity and no fertility/hormone claim."""
+    from evidence_resolver import clinical_record_sources_eligible
+    record = reviewed_entries()['INGR_INOSITOL']
+    refs = {r['pmid']: r for r in record['references_structured']}
+    assert not refs['36703143'].get('retracted')
+    assert not refs['38163998'].get('retracted')
+    assert clinical_record_sources_eligible({'references_structured': [refs['36703143']]})
+    assert record['applicability']['source_pmids'] == ['36703143']
+    # The outcome equals the credited context's condition, so the condition and
+    # population gate runs; a bare "cycle regularity" term was categorized as
+    # digestive and let men's multivitamins borrow PCOS evidence.
+    assert record['applicability']['supported_outcomes'] == ['pcos_menstrual_cycle_regularity']
+    assert {'fertility', 'ovulation', 'hormone balance'} <= set(record['applicability']['excluded_claim_terms'])
+    credited = [c for c in record['study_contexts'] if c.get('scoring_eligible') is True]
+    assert [c['source_pmids'] for c in credited] == [['36703143']]
+    assert [c['condition'] for c in credited] == record['applicability']['supported_outcomes']
+    limitations = ' '.join(credited[0]['limitations'])
+    assert '18074942' in limitations and '28980870' in limitations
+    assert 'Neither pooled cycle trial is among the retracted included reports' in limitations
+
+
 @pytest.mark.parametrize('record_id,held_pmid,independent_pmid', [
-    ('INGR_INOSITOL', '36703143', '38163998'),
     ('INGR_LACTOFERRIN', '35276902', '19639462'),
 ])
 def test_affected_pooled_source_is_held_without_declaring_its_independent_sources_retracted(record_id, held_pmid, independent_pmid):
@@ -1448,3 +1504,17 @@ def test_condition_scoped_policy_cannot_fall_back_when_review_context_is_lost(mo
     result = ca.assess_clinical_applicability(product, {'id': 'INGR_CRANBERRY',
         'ingredient': row['name'], 'matched_source_row_refs': ['ingredientRows[0]']}, assess_amount=False)
     assert result['status'] == 'unresolved'
+
+
+def test_a_reviewed_scope_keeps_every_legacy_excluded_form():
+    """clinical_applicability reads exclude_aliases only when a record has no
+    applicability policy. A new scope must carry those forms into
+    excluded_form_terms, or an excluded preparation (arginine AKG, label 269278)
+    loses its completed "different preparation" assessment (2026-10-28)."""
+    missing = {
+        record_id: sorted(set(record['exclude_aliases'])
+                          - set(record['applicability'].get('excluded_form_terms') or []))
+        for record_id, record in reviewed_entries().items()
+        if record.get('applicability') and record.get('exclude_aliases')
+    }
+    assert {record_id: forms for record_id, forms in missing.items() if forms} == {}

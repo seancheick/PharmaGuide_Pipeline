@@ -15,6 +15,8 @@ from __future__ import annotations
 import sys
 from pathlib import Path
 
+import pytest
+
 REPO_ROOT = Path(__file__).resolve().parents[2]
 SCRIPTS_ROOT = REPO_ROOT / "scripts"
 if str(SCRIPTS_ROOT) not in sys.path:
@@ -266,17 +268,25 @@ def test_stale_protein_match_bound_to_amino_acids_is_rebound_to_protein_owner() 
     assert payload["metadata"]["ingredient_points"]["protein"] == 6.48
 
 
-def test_exact_protein_projection_can_recover_category_evidence() -> None:
+@pytest.mark.parametrize("source_form, recovers", [
+    ("whey protein", True),
+    # Dr. Pham, 2026-10-28: INGR_WHEY_PROTEIN is whey-specific evidence; the
+    # mixed-protein review is not proof for casein, soy or pea protein.
+    ("pea protein", False),
+    ("casein", False),
+    ("soy protein", False),
+])
+def test_exact_protein_projection_can_recover_category_evidence(source_form, recovers) -> None:
     from scoring_v4.modules.generic_evidence import score_evidence
 
     protein = _ingredient(name="Protein", canonical_id="protein", quantity=25, unit="g")
     protein.update(
-        matched_form="pea protein",
+        matched_form=source_form,
         scoring_input_kind="label_active_projection",
         evidence_type="blend_anchor_mass",
     )
     product = _product(
-        product_name="Pea Protein Isolate",
+        product_name=f"{source_form.title()} Isolate",
         ingredients=[protein, _ingredient(name="Calcium", canonical_id="calcium", quantity=100)],
         matches=[_match(id="CAL", ingredient="Calcium", standard_name="Calcium")],
     )
@@ -284,8 +294,12 @@ def test_exact_protein_projection_can_recover_category_evidence() -> None:
     payload = score_evidence(product, owner_scoped=True)
 
     assert payload["metadata"]["evidence_owner_canonicals"] == ["protein"]
-    assert payload["metadata"]["recovered_matches"] == ["INGR_WHEY_PROTEIN"]
-    assert payload["metadata"]["ingredient_points"] == {"protein": 6.48}
+    if recovers:
+        assert payload["metadata"]["recovered_matches"] == ["INGR_WHEY_PROTEIN"]
+        assert payload["metadata"]["ingredient_points"] == {"protein": 6.48}
+    else:
+        assert payload["metadata"]["recovered_matches"] == []
+        assert payload["metadata"]["ingredient_points"] == {}
 
 
 def test_nested_creatine_identity_alone_cannot_claim_blend_dose() -> None:
@@ -711,6 +725,19 @@ def test_blend_anchor_brand_row_recovers_verified_product_level_evidence() -> No
 
     product = _product(ingredients=[], matches=[])
     product["product_name"] = "Relora"
+    # The anchor is derived from a printed label row. BRAND_RELORA now carries
+    # a reviewed applicability scope (Dr. Pham, 2026-10-28), which must bind
+    # its source row; a real label always has it.
+    label_row = {
+        "name": "Relora Patented Proprietary Blend",
+        "raw_source_text": "Relora Patented Proprietary Blend",
+        "canonical_id": "relora_patented_proprietary_blend",
+        "quantity": 250,
+        "unit": "mg",
+        "source_section": "active",
+        "raw_source_path": "ingredientRows[0]",
+        "score_eligible_by_cleaner": True,
+    }
     product["product_scoring_evidence"] = [
         {
             "name": "Relora Patented Proprietary Blend",
@@ -736,13 +763,19 @@ def test_blend_anchor_brand_row_recovers_verified_product_level_evidence() -> No
         }
     ]
 
+    # Without its label row the reviewed scope cannot bind a source: no credit.
+    unbound = score_evidence(product, apply_primary_floor=True)
+    assert unbound["metadata"]["recovered_matches"] == []
+    assert unbound["score"] == 0.0
+
+    product["activeIngredients"] = [label_row]
     payload = score_evidence(product, apply_primary_floor=True)
 
     assert payload["metadata"]["recovered_matches"] == ["BRAND_RELORA"]
     assert payload["metadata"]["matched_entries"] == 1
-    assert payload["components"]["primary_evidence_floor"] == 17.0
+    assert payload["components"]["primary_evidence_floor"] == 11.0
     assert payload["metadata"]["primary_evidence_floor_canonical"] == "relora"
-    assert payload["score"] == 17.0
+    assert payload["score"] == 11.0
 
 
 def test_branded_recovery_does_not_borrow_relora_for_generic_magnolia_blend() -> None:
@@ -934,7 +967,7 @@ def test_vitamin_d_iu_resolves_same_ingredient_evidence_as_equivalent_mcg() -> N
     iu_payload = score(1000, "IU")
     mcg_payload = score(25, "mcg")
 
-    assert iu_payload["score"] == mcg_payload["score"] == 18.0
+    assert iu_payload["score"] == mcg_payload["score"] == 14.0
     assert iu_payload["components"] == mcg_payload["components"]
     assert iu_payload["metadata"]["primary_evidence_floor_canonical"] == "vitamin d3"
     assert iu_payload["metadata"]["recovered_matches"] == []
@@ -978,7 +1011,7 @@ def test_vitamin_d_iu_and_mcg_have_amount_independent_evidence() -> None:
     iu_payload = score(1000, "IU")
     mcg_payload = score(25, "mcg")
 
-    assert iu_payload["score"] == mcg_payload["score"] == 18.0
+    assert iu_payload["score"] == mcg_payload["score"] == 14.0
     assert iu_payload["metadata"]["flags"] == mcg_payload["metadata"]["flags"]
     assert iu_payload["metadata"]["flags"] == []
     assert (
@@ -986,7 +1019,7 @@ def test_vitamin_d_iu_and_mcg_have_amount_independent_evidence() -> None:
         == mcg_payload["metadata"]["sub_clinical_canonicals"]
     )
     assert iu_payload["metadata"]["sub_clinical_canonicals"] == []
-    assert iu_payload["components"]["primary_evidence_floor"] == 18.0
+    assert iu_payload["components"]["primary_evidence_floor"] == 14.0
 
 
 def test_vitamin_d_iu_and_mcg_both_pass_at_clinical_threshold() -> None:
@@ -1002,10 +1035,10 @@ def test_vitamin_d_iu_and_mcg_both_pass_at_clinical_threshold() -> None:
     iu_payload = score(2000, "IU")
     mcg_payload = score(50, "mcg")
 
-    assert iu_payload["score"] == mcg_payload["score"] == 18.0
+    assert iu_payload["score"] == mcg_payload["score"] == 14.0
     assert iu_payload["metadata"]["flags"] == []
     assert iu_payload["metadata"]["sub_clinical_canonicals"] == []
-    assert iu_payload["components"]["primary_evidence_floor"] == 18.0
+    assert iu_payload["components"]["primary_evidence_floor"] == 14.0
 
 
 def test_non_vitamin_d_iu_is_not_given_a_generic_primary_sentinel() -> None:
@@ -1115,8 +1148,7 @@ def test_shadow_wires_evidence_dimension() -> None:
     evidence = out["v4_breakdown"]["module"]["dimensions"]["evidence"]
     # Phase 8: the generic module opts into the primary-ingredient floor. The
     # default product's mass-primary magnesium has a systematic_review_meta
-    # positive match -> floored to 14.0 (non-branded strong; 3-lane model 2026-06-06:
-    # magnesium is form-dependent, not a consensus gold-standard generic).
+    # positive match -> floored to 14.0 (the strong floor).
     assert evidence["score"] == 14.0
     assert evidence["metadata"]["primary_evidence_floor"] == 14.0
     assert evidence["max"] == 20.0
@@ -1190,7 +1222,7 @@ def test_primary_floor_still_rejects_negative_effect() -> None:
     assert payload["metadata"]["primary_evidence_floor"] == 0.0
 
 
-def test_joint_support_caps_branded_primary_evidence_floor() -> None:
+def test_joint_support_caps_branded_primary_evidence_floor(monkeypatch) -> None:
     from scoring_v4.modules.generic_evidence import score_evidence
 
     ingredient = _ingredient(name="OptiMSM", standard_name="MSM",
@@ -1200,6 +1232,10 @@ def test_joint_support_caps_branded_primary_evidence_floor() -> None:
                    study_type="rct_multiple", evidence_level="branded-rct",
                    effect_direction="positive_strong", total_enrollment=200)
     match.update(matched_source_row_refs=["ingredientRows[0]"], matched_canonical_ids=["msm"])
+    # This test owns the joint cap: raise the strong floor above the cap so
+    # there is something to cap (1.31.0 has no automatic floor above 14).
+    from scoring_v4.modules import generic_evidence
+    monkeypatch.setattr(generic_evidence, "PRIMARY_FLOOR_STRONG", 18.0)
     product = _product(supplement_taxonomy={"primary_type": "joint_support"},
                        ingredients=[ingredient], matches=[match])
     product["activeIngredients"] = [dict(ingredient)]

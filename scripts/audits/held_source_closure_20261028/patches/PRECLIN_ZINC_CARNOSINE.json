@@ -1,0 +1,351 @@
+{
+ "record_id": "PRECLIN_ZINC_CARNOSINE",
+ "decision": "closed_no_credit",
+ "summary": "The reviewed research does not establish a qualifying benefit for this product's assessed use. Existing human research is kept: polaprezinc as an adjunct to H. pylori triple therapy raises eradication rates (RCT +17-18 points; meta-analysis OR 2.01, very low quality). Full texts confirm polaprezinc raises H. pylori eradication when added to triple therapy (RCT +17-18 points; meta-analysis ITT OR 2.01, very low quality) and gives no significant between-group benefit in a 20-patient aspirin-injury pilot. The other two sources are a comparator ulcer trial (abstract only) and a rectal-enema colitis trial. These are drug-adjunct settings, and Dr. Pham rejected generic gut-barrier approval, so none supports the record's retail Digestive/Immune claim. The record becomes reference-only, which removes zinc-carnosine Evidence points from dependent products (about 2 per the closure plan).",
+ "record_updates": {
+  "study_type": "reference",
+  "evidence_level": "reference"
+ },
+ "study_contexts": [
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "preclin_zinc_carnosine_28407007_exact_source",
+   "components": [
+    "PRECLIN_ZINC_CARNOSINE"
+   ],
+   "source_pmids": [
+    "28407007"
+   ],
+   "identity_scope": "ingredient_general",
+   "identity": {
+    "preparation": "Polaprezinc zinc-L-carnosine complex added to triple therapy; not elemental zinc alone."
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "direct_rct",
+   "component_registration_status": "fully_registered",
+   "condition": "helicobacter_pylori_eradication",
+   "purpose": "treatment",
+   "review_status": "clinician_approved",
+   "scoring_eligible": false,
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "trial_family": "source_28407007",
+   "population": {
+    "age_group": "adult",
+    "description": "Adults with H. pylori-associated gastritis at multiple Chinese centres randomized 1:1:1 to polaprezinc 150 mg/d or 300 mg/d plus clarithromycin triple therapy, or triple therapy alone (ITT arms 107, 99, 103 for safety)."
+   },
+   "study_design": "Prospective, randomized, parallel-group, open-label, controlled multicentre trial; primary endpoint H. pylori eradication 4 weeks after treatment by urea breath test.",
+   "outcomes": [
+    {
+     "name": "Primary H. pylori eradication (ITT): 77.0% (150 mg/d) and 75.9% (300 mg/d) vs 58.6% triple therapy alone; +18.4% (95% CI 6.4-30.4) and +17.4% (5.2-29.6), P<0.01; no difference between doses (P=0.90).",
+     "direction": "positive",
+     "hierarchy": "primary",
+     "kind": "patient_important",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "Higher-dose adverse-event frequency exceeded standard dose and control; no universal safety equivalence.",
+     "direction": "mixed",
+     "hierarchy": "not_reported",
+     "kind": "patient_important",
+     "outcome_role": "direct_between_group_effect"
+    }
+   ],
+   "limitations": [
+    "Open-label adjunctive treatment; no generic gut-barrier or standalone eradication approval.",
+    "Dose is total polaprezinc complex, not elemental zinc; do not invent component allocations.",
+    "Returned decision: Reject generic “gut barrier” approval; source-content hold for specific adjunctive settings.",
+    "No credit: polaprezinc here is a drug adjunct to antibiotic eradication therapy or aspirin-injury treatment; Dr. Pham rejected generic gut-barrier approval, and these settings do not support the record's retail Digestive/Immune claim. Physical dosage form is not reported in the retained text.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ],
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "mg",
+    "values": [
+     150,
+     300
+    ],
+    "dose_status": "verified",
+    "dose_basis": "nominal_assigned_arm",
+    "duration_basis": "fixed_protocol",
+    "duration_days": 14,
+    "administration_frequency": "Polaprezinc 75 mg twice daily or 150 mg twice daily for 14 days; distinct total-complex exposures of 150 or 300 mg/day.",
+    "dosage_forms": [
+     "oral polaprezinc (physical form not reported in the retained text)"
+    ],
+    "co_therapies": [
+     "Omeprazole 20 mg, amoxicillin 1 g and clarithromycin 500 mg, each twice daily in all arms."
+    ],
+    "reported_regimen": "Polaprezinc 75 mg twice daily or 150 mg twice daily for 14 days; distinct total-complex exposures of 150 or 300 mg/day.",
+    "normalization": {
+     "basis": "Preserve the specifically identified material or component quantity; no elemental/marker conversion or extrapolated daily dose."
+    },
+    "source_provenance": {
+     "pmid": "28407007",
+     "location": "Full text (PMC5391070): Methods (design, randomization, primary endpoint, statistics), Results ITT/PP paragraphs and Table 2, adverse events.",
+     "source_url": "https://pubmed.ncbi.nlm.nih.gov/28407007/"
+    }
+   },
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability"
+   }
+  },
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "preclin_zinc_carnosine_23826914_exact_source",
+   "components": [
+    "PRECLIN_ZINC_CARNOSINE"
+   ],
+   "source_pmids": [
+    "23826914"
+   ],
+   "identity_scope": "ingredient_general",
+   "identity": {
+    "preparation": "Polaprezinc added to ongoing low-dose aspirin; control receives no polaprezinc."
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "direct_rct",
+   "component_registration_status": "fully_registered",
+   "condition": "aspirin_induced_small_bowel_injury",
+   "purpose": "treatment",
+   "review_status": "clinician_approved",
+   "scoring_eligible": false,
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "trial_family": "source_23826914",
+   "population": {
+    "age_group": "adult",
+    "description": "20 patients on long-term (>3 months) low-dose aspirin with capsule-endoscopy small-bowel injury, randomized 10 polaprezinc vs 10 control (Hiroshima University Hospital)."
+   },
+   "study_design": "Pilot randomized controlled study without placebo, 4 weeks, follow-up capsule endoscopy.",
+   "outcomes": [
+    {
+     "name": "Reddened lesions and erosions/ulcers decreased within the polaprezinc group (P<0.05) but did not differ significantly from control.",
+     "direction": "null",
+     "hierarchy": "not_reported",
+     "kind": "patient_important",
+     "outcome_role": "direct_between_group_effect"
+    }
+   ],
+   "limitations": [
+    "Small pilot with no placebo; separate within-group improvement from between-group comparison.",
+    "No general gut-permeability, healthy-adult or long-term clinical benefit inferred.",
+    "Returned decision: Reject generic “gut barrier” approval; source-content hold for specific adjunctive settings.",
+    "No credit: polaprezinc here is a drug adjunct to antibiotic eradication therapy or aspirin-injury treatment; Dr. Pham rejected generic gut-barrier approval, and these settings do not support the record's retail Digestive/Immune claim. Physical dosage form is not reported in the retained text.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ],
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "mg",
+    "values": [
+     150
+    ],
+    "dose_status": "verified",
+    "dose_basis": "nominal_assigned_arm",
+    "duration_basis": "fixed_protocol",
+    "duration_days": 28,
+    "administration_frequency": "Polaprezinc total complex 150 mg/day for four weeks; exact tablet frequency not established by the extracted passage.",
+    "dosage_forms": [
+     "oral polaprezinc (physical form not reported in the retained text)"
+    ],
+    "co_therapies": [
+     "Ongoing enteric-coated aspirin 100 mg/day; established exposure causing the injury, not an optional inert comparator."
+    ],
+    "reported_regimen": "Polaprezinc total complex 150 mg/day for four weeks; exact tablet frequency not established by the extracted passage.",
+    "normalization": {
+     "basis": "Preserve the specifically identified material or component quantity; no elemental/marker conversion or extrapolated daily dose."
+    },
+    "source_provenance": {
+     "pmid": "23826914",
+     "location": "Full text (PMC3704921): Abstract, Methods (patients, randomization, lesion classification), Results.",
+     "source_url": "https://pubmed.ncbi.nlm.nih.gov/23826914/"
+    }
+   },
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability"
+   }
+  },
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "preclin_zinc_carnosine_36235778_scoped_source",
+   "components": [
+    "PRECLIN_ZINC_CARNOSINE"
+   ],
+   "source_pmids": [
+    "36235778"
+   ],
+   "identity_scope": "ingredient_general",
+   "identity": {
+    "name": "Polaprezinc zinc-L-carnosine complex used as adjunct, not generic gut-barrier support."
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "meta_analysis",
+   "component_registration_status": "fully_registered",
+   "condition": "helicobacter_pylori_eradication",
+   "purpose": "treatment",
+   "review_status": "clinician_approved",
+   "scoring_eligible": false,
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "trial_family": "source_36235778",
+   "population": {
+    "age_group": "adult",
+    "description": "Patients with H. pylori infection in RCTs comparing polaprezinc 150 mg plus triple therapy (amoxicillin, clarithromycin, PPI) with triple therapy alone."
+   },
+   "study_design": "Systematic review and meta-analysis of RCTs; primary outcome H. pylori eradication (ITT and per-protocol).",
+   "outcomes": [
+    {
+     "name": "Eradication favored polaprezinc: ITT OR 2.01 (95% CI 1.27-3.21), p=0.003, I2 24%; per-protocol OR 2.65 (1.55-4.54); very-low-quality evidence.",
+     "direction": "positive",
+     "hierarchy": "primary",
+     "kind": "patient_important",
+     "outcome_role": "direct_between_group_effect"
+    }
+   ],
+   "limitations": [
+    "Do not double-count the underlying 28407007 trial as independent of this synthesis.",
+    "No generic healthy-adult gut benefit or replacement of antibiotic therapy inferred.",
+    "Returned decision: Reject generic “gut barrier” approval; source-content hold for specific adjunctive settings.",
+    "Historical bibliography census (not independent scoring sources; actual included-publication membership is separately bound to the inspected source table): 15786539, 10215732, 28407007. Each intervention and comparison requires its own applicability assessment; citation in this bibliography grants no credit.",
+    "Included-study PMID membership was extracted from source Table(s) nutrients-14-04126-t002. These are source membership identifiers, not independent efficacy approvals or automatic trial replications. Exact table/citation mapping and unindexed citations are retained in the source receipt.",
+    "PMID15786539 has three arms: triple therapy55, sofalcone54, polaprezinc56; this synthesis uses the legitimate111-participant polaprezinc-versus-triple-therapy comparison. Its title emphasizes sofalcone, but the polaprezinc arm exists and was not individually statistically superior. Do not reject it by title or transfer the sofalcone effect.",
+    "No credit: polaprezinc here is a drug adjunct to antibiotic eradication therapy or aspirin-injury treatment; Dr. Pham rejected generic gut-barrier approval, and these settings do not support the record's retail Digestive/Immune claim. Physical dosage form is not reported in the retained text.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ],
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "mg",
+    "values": [],
+    "dose_status": "verified",
+    "dose_basis": "not_applicable",
+    "duration_basis": "not_recorded",
+    "administration_frequency": "Retain trial-specific complex quantities and standard eradication regimens; no elemental-zinc allocation or monotherapy benchmark.",
+    "dosage_forms": [
+     "oral polaprezinc (trial-specific preparations)"
+    ],
+    "co_therapies": [
+     "Triple therapy is an essential active background treatment, not a placebo."
+    ],
+    "reported_regimen": "Polaprezinc 150 mg/day added to triple therapy per eligibility criteria; trial-specific durations.",
+    "normalization": {
+     "basis": "A heterogeneous synthesis has no single assigned-arm dose. Descriptive regimens do not create an intake recommendation, equivalent preparation or efficacy threshold."
+    },
+    "source_provenance": {
+     "pmid": "36235778",
+     "location": "Full text (PMC9573391): Methods PICO, Results 3.4.1-3.4.2.",
+     "source_url": "https://pubmed.ncbi.nlm.nih.gov/36235778/"
+    }
+   },
+   "included_study_pmids": [
+    "15786539",
+    "10215732",
+    "28407007"
+   ],
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability"
+   }
+  },
+  {
+   "context_id": "preclin_zinc_carnosine_35999163_gastric_ulcer_comparator",
+   "components": [
+    "PRECLIN_ZINC_CARNOSINE"
+   ],
+   "source_pmids": [
+    "35999163"
+   ],
+   "review_status": "rejected_source",
+   "scoring_eligible": false,
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability",
+    "notes": "No credit: active-comparator gastric-ulcer drug trial, abstract only; off the record's retail claim."
+   },
+   "dose": {
+    "source_provenance": {
+     "pmid": "35999163",
+     "location": "PubMed record (Med Eng Phys 2022); full text not open access.",
+     "source_url": "https://pubmed.ncbi.nlm.nih.gov/35999163/"
+    }
+   },
+   "limitations": [
+    "Abstract-level identity only: multicentre double-blind double-dummy positive-controlled polaprezinc trial in gastric ulcer; full text not retrieved, so regimen and results are not encoded.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ]
+  },
+  {
+   "context_id": "preclin_zinc_carnosine_24286534_enema_route",
+   "components": [
+    "PRECLIN_ZINC_CARNOSINE"
+   ],
+   "source_pmids": [
+    "24286534"
+   ],
+   "review_status": "rejected_source",
+   "scoring_eligible": false,
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability",
+    "notes": "No credit: polaprezinc given as enemas (rectal route) in ulcerative colitis, not an oral supplement."
+   },
+   "dose": {
+    "source_provenance": {
+     "pmid": "24286534",
+     "location": "PubMed abstract.",
+     "source_url": "https://pubmed.ncbi.nlm.nih.gov/24286534/"
+    }
+   },
+   "limitations": [
+    "Rectal enema administration in ulcerative colitis; route excludes it from oral supplement evidence. Abstract only.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ]
+  }
+ ],
+ "source_receipts": [
+  {
+   "pmid": "28407007",
+   "title_fetched": "Polaprezinc combined with clarithromycin-based triple therapy for Helicobacter pylori-associated gastritis: A prospective, multicenter, randomized clinical trial.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/28407007/",
+   "full_text": true,
+   "sections_used": "Methods, Results (BioC PMC5391070)"
+  },
+  {
+   "pmid": "23826914",
+   "title_fetched": "Effectiveness of polaprezinc for low-dose aspirin-induced small-bowel mucosal injuries as evaluated by capsule endoscopy: a pilot randomized controlled study.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/23826914/",
+   "full_text": true,
+   "sections_used": "Abstract, Methods, Results (BioC PMC3704921)"
+  },
+  {
+   "pmid": "36235778",
+   "title_fetched": "Efficacy and Safety of Polaprezinc-Based Therapy versus the Standard Triple Therapy for Helicobacter pylori Eradication: A Systematic Review and Meta-Analysis of Randomized Controlled Trials.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/36235778/",
+   "full_text": true,
+   "sections_used": "Methods, Results (BioC PMC9573391)"
+  },
+  {
+   "pmid": "35999163",
+   "title_fetched": "Efficacy and safety of polaprezinc in the treatment of gastric ulcer: A multicenter, randomized, double-blind, double-dummy, positive-controlled clinical trial.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/35999163/",
+   "full_text": false,
+   "sections_used": "PubMed record"
+  },
+  {
+   "pmid": "24286534",
+   "title_fetched": "Efficacy of zinc-carnosine chelate compound, Polaprezinc, enemas in patients with ulcerative colitis.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/24286534/",
+   "full_text": false,
+   "sections_used": "PubMed abstract"
+  }
+ ]
+}

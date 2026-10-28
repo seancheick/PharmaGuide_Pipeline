@@ -1,0 +1,206 @@
+{
+ "record_id": "BRAND_NIAGEN",
+ "decision": "closed_no_credit: The reviewed research does not establish a qualifying benefit for this product's assessed use.",
+ "summary": "The reviewed research does not establish a qualifying benefit for this product's assessed use. 29599478 (24 healthy adults aged 55-79, NIAGEN 1000 mg/day for 6 weeks) met its primary objective of raising PBMC NAD+ (~60%), which is verified target engagement, but blood-pressure and other physiological findings were exploratory and not significant after correction. 29992272 (40 obese men, 2000 mg/day for 12 weeks) found no improvement in insulin sensitivity, glucose metabolism or body composition. Under Dr. Pham's principle that a blood-marker-only result earns no clinical credit, the record becomes reference-only (completed, no applicable qualifying clinical support), which removes Evidence points from NIAGEN products.",
+ "record_updates": {
+  "study_type": "reference",
+  "evidence_level": "reference"
+ },
+ "study_contexts": [
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "brand_niagen_29599478",
+   "source_pmids": [
+    "29599478"
+   ],
+   "components": [
+    "BRAND_NIAGEN"
+   ],
+   "identity_scope": "branded_material",
+   "identity": {
+    "branded_material": "NIAGEN",
+    "manufacturer": "ChromaDex",
+    "standardization": "Nicotinamide riboside chloride"
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "direct_rct",
+   "component_registration_status": "fully_registered",
+   "condition": "nad_metabolism_healthy_older_adults",
+   "purpose": "physiology",
+   "review_status": "clinician_approved",
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability"
+   },
+   "scoring_eligible": false,
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "trial_family": "brand_niagen_29599478",
+   "population": {
+    "age_group": "adult",
+    "description": "30 healthy, lean (mean BMI 24) men and women aged 55-79 randomized; 24 completed both phases."
+   },
+   "study_design": "Randomized, double-blind, placebo-controlled 2x6-week crossover trial (NCT02921659); physiological outcomes prespecified as exploratory with one-sided tests and alpha 0.006.",
+   "outcomes": [
+    {
+     "name": "Primary objective: PBMC NAD+ rose ~60% versus placebo (mean change 6.2 pmol/mg protein; one-sided 95% CI 0.074 to infinity): verified target engagement",
+     "hierarchy": "primary",
+     "kind": "surrogate",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "Exploratory: systolic BP -3.9 mmHg and diastolic BP -2.0 mmHg, not significant after correction for multiple comparisons",
+     "hierarchy": "secondary",
+     "kind": "patient_important",
+     "direction": "null",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "Tolerability: no serious adverse events; 14 treatment-emergent adverse events in 7 of 30 participants",
+     "hierarchy": "secondary",
+     "kind": "patient_important",
+     "direction": "null",
+     "outcome_role": "direct_between_group_effect"
+    }
+   ],
+   "limitations": [
+    "Dr. Pham's principle (2026-10-28 rulings): a blood-marker-only result earns no clinical credit. The NAD+ rise is verified target engagement, not a demonstrated health benefit.",
+    "Small (24 completers), short (6 weeks per phase) crossover in healthy older adults; blood-pressure and arterial-stiffness signals are hypothesis-generating only.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ],
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "mg",
+    "values": [
+     1000
+    ],
+    "dose_status": "verified",
+    "dose_basis": "nominal_assigned_arm",
+    "duration_basis": "fixed_protocol",
+    "duration_days": 42,
+    "administration_frequency": "500 mg twice daily",
+    "dosage_forms": [
+     "oral capsule"
+    ],
+    "co_therapies": [],
+    "source_provenance": {
+     "pmid": "29599478",
+     "location": "Methods (2x6-week crossover; NIAGEN 500 mg twice daily; PBMC NAD+ assay); Results (enrolment, adherence, adverse events, primary NAD+ objective, exploratory physiology); Discussion limitations",
+     "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5876407/"
+    },
+    "duration_as_printed": {
+     "value": 6,
+     "unit": "weeks"
+    },
+    "reported_regimen": "NIAGEN 500 mg twice daily (1000 mg/day) for 6 weeks per crossover phase",
+    "normalization": {
+     "basis": "Assigned nicotinamide riboside chloride mass per day."
+    }
+   }
+  },
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "brand_niagen_29992272",
+   "source_pmids": [
+    "29992272"
+   ],
+   "components": [
+    "BRAND_NIAGEN"
+   ],
+   "identity_scope": "exact_form",
+   "identity": {
+    "chemical_form": "Nicotinamide riboside (brand not stated in abstract)"
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "direct_rct",
+   "component_registration_status": "fully_registered",
+   "condition": "insulin_resistance_obese_men",
+   "purpose": "physiology",
+   "review_status": "clinician_approved",
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability"
+   },
+   "scoring_eligible": false,
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "trial_family": "brand_niagen_29992272",
+   "population": {
+    "age_group": "adult",
+    "description": "40 healthy, sedentary men aged 40-70 with BMI >30 kg/m2 (obese, insulin-resistant)."
+   },
+   "study_design": "Investigator-initiated randomized, placebo-controlled, double-blind parallel-group trial (NCT02303483), 12 weeks; hyperinsulinemic euglycemic clamp, tracers, DXA, MRI/MRS.",
+   "outcomes": [
+    {
+     "name": "Insulin sensitivity, endogenous glucose production, glucose disposal and oxidation: not improved by NR",
+     "hierarchy": "not_reported",
+     "kind": "patient_important",
+     "direction": "null",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "Resting energy expenditure, lipolysis, lipid oxidation and body composition: no effect; no serious adverse events",
+     "hierarchy": "not_reported",
+     "kind": "patient_important",
+     "direction": "null",
+     "outcome_role": "direct_between_group_effect"
+    }
+   ],
+   "limitations": [
+    "Full text not open access to this session (publisher PDF blocked); abstract only. Primary-outcome designation and NAD+ measurements were not verifiable here.",
+    "Men only; obese and insulin-resistant population.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ],
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "mg",
+    "values": [
+     2000
+    ],
+    "dose_status": "verified",
+    "dose_basis": "nominal_assigned_arm",
+    "duration_basis": "fixed_protocol",
+    "duration_days": 84,
+    "administration_frequency": "1000 mg twice daily",
+    "dosage_forms": [
+     "oral (form not stated in abstract)"
+    ],
+    "co_therapies": [],
+    "source_provenance": {
+     "pmid": "29992272",
+     "location": "PubMed abstract (Design, Results)",
+     "source_url": "https://pubmed.ncbi.nlm.nih.gov/29992272/"
+    },
+    "duration_as_printed": {
+     "value": 12,
+     "unit": "weeks"
+    },
+    "reported_regimen": "NR 1000 mg twice daily for 12 weeks",
+    "normalization": {
+     "basis": "Assigned NR mass per day."
+    }
+   }
+  }
+ ],
+ "source_receipts": [
+  {
+   "pmid": "29599478",
+   "title_fetched": "Chronic nicotinamide riboside supplementation is well-tolerated and elevates NAD+ in healthy middle-aged and older adults.",
+   "url": "https://www.ncbi.nlm.nih.gov/research/bionlp/RESTful/pmcoa.cgi/BioC_json/29599478/unicode",
+   "full_text": true,
+   "sections_used": "Methods (2x6-week crossover; NIAGEN 500 mg twice daily; PBMC NAD+ assay); Results (enrolment, adherence, adverse events, primary NAD+ objective, exploratory physiology); Discussion limitations"
+  },
+  {
+   "pmid": "29992272",
+   "title_fetched": "A randomized placebo-controlled clinical trial of nicotinamide riboside in obese men: safety, insulin-sensitivity, and lipid-mobilizing effects.",
+   "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=29992272&retmode=xml",
+   "full_text": false,
+   "sections_used": "PubMed abstract (OpenAlex lists a bronze publisher PDF, https://www.sciencedirect.com/science/article/pii/S0002916522029409/pdf, which blocked automated access)"
+  }
+ ]
+}

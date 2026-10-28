@@ -1,0 +1,195 @@
+{
+ "record_id": "INGR_BIOTIN",
+ "decision": "closed_no_credit",
+ "summary": "The reviewed research does not establish a qualifying benefit for this product's assessed use. Existing human research is kept: one botanical-biotin RCT and one post-sleeve-gastrectomy observational study. Biotin nutrition credit stays on its separate pathway, and the existing laboratory-test interference warnings (safety owner) are unaffected; no beauty credit. Neither source supports credit for generic biotin. The only RCT (40896024) tested a botanical Sesbania extract (Orgen-Bio, 2.5 mg biotin/day) with mostly within-group, implausibly large effects and a maker-employed author, and the returned A046 decision rejects essentiality-to-beauty inference; 32762597 is uncontrolled observational data showing low efficacy (P=.2). The record becomes reference-only, which removes biotin Evidence points from dependent products (about 123 per the closure plan).",
+ "record_updates": {
+  "study_type": "reference",
+  "evidence_level": "reference"
+ },
+ "study_contexts": [
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "ingr_biotin_40896024_exact_source",
+   "components": [
+    "INGR_BIOTIN"
+   ],
+   "source_pmids": [
+    "40896024"
+   ],
+   "identity_scope": "branded_material",
+   "identity": {
+    "branded_material": "Orgen-Bio (Sesbania grandiflora extract)",
+    "manufacturer": "Orgenetics, Inc.",
+    "standardization": "Sesbania grandiflora extract standardized for 0.5% biotin; 250 mg extract equivalent to 1.25 mg biotin per capsule. Not isolated d-biotin."
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "direct_rct",
+   "component_registration_status": "fully_registered",
+   "condition": "cosmetic_hair_skin_nail_parameters",
+   "purpose": "physiology",
+   "review_status": "clinician_approved",
+   "scoring_eligible": false,
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "trial_family": "source_40896024",
+   "population": {
+    "age_group": "adult",
+    "description": "105 healthy adults aged 20-60 (non-pregnant, non-lactating) with complaints of hair fall, thin, dry and brittle hair and dry skin, randomized 1:1:1 to placebo, Orgen-Bio, or Orgen-Bio plus bamboo silica; 97 completed 90 days. Baseline biotin status was not measured."
+   },
+   "study_design": "Randomized (1:1:1, block), double-blind, placebo (maltodextrin)-controlled, single-center 90-day trial at a contract research site (NovoBliss, Ahmedabad); completers-only analysis; within-group paired tests and between-group t/Mann-Whitney tests.",
+   "outcomes": [
+    {
+     "name": "Primary hair fall (60-second combing), Orgen-Bio arm: 20.61 +/- 14.39 at day 90 (36.19% reduction from baseline, p<0.001); reported as a '162.24%' reduction versus placebo (p<0.001). Primary endpoints also included hair thickness, density, growth rate and PGA brittle-nail score, largely reported as within-group change.",
+     "hierarchy": "primary",
+     "kind": "surrogate",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "Secondary skin hydration, elasticity, wrinkles, texture and hair strength: reported within-group improvements; placebo hair-strength proportion also rose (63.64% to 96.97%).",
+     "hierarchy": "secondary",
+     "kind": "surrogate",
+     "direction": "mixed",
+     "outcome_role": "within_group_change"
+    }
+   ],
+   "limitations": [
+    "21.75 mg silica versus 10 mg Si is a substance-basis distinction, not necessarily a contradictory silica amount.",
+    "Botanical biotin and mixture findings do not establish essentiality-based cosmetic benefit for all biotin products.",
+    "Returned decision: Source-content hold; reject essentiality-to-beauty-benefit inference.",
+    "No credit: the intervention is a whole Sesbania grandiflora extract (0.5% biotin), not the isolated biotin this generic record represents, and the returned A046 decision rejects inferring cosmetic benefit from biotin's essentiality.",
+    "Low internal credibility: single-center contract-research study, completers-only analysis, many endpoints reported mostly as within-group change, implausible magnitudes (for example a '162.24%' reduction versus placebo), and an author employed by the ingredient maker (Orgenetics).",
+    "Participants were not shown to be biotin deficient; the trial does not establish benefit of biotin supplementation for hair, skin or nails in general.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ],
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "mg",
+    "values": [
+     2.5
+    ],
+    "dose_status": "verified",
+    "dose_basis": "nominal_assigned_arm",
+    "duration_basis": "fixed_protocol",
+    "duration_days": 90,
+    "administration_frequency": "One capsule two times a day after each meal (Table 'Mode of Usage').",
+    "dosage_forms": [
+     "oral capsule"
+    ],
+    "co_therapies": [
+     "Medicated/prescription and anti-thinning hair products (e.g., minoxidil) discontinued; participants used only the study treatments. Silica (Bambusa arundinacea, 21.75 mg silica = 10 mg Si per capsule) present only in the separate combination arm."
+    ],
+    "reported_regimen": "Orgen-Bio capsule: 250 mg Sesbania grandiflora extract equivalent to 1.25 mg biotin, one capsule two times daily after meals, 90 days.",
+    "normalization": {
+     "basis": "1.25 mg biotin per capsule x 2 capsules/day (Mode of Usage row applies to all test treatments) = 2.5 mg/day; the abstract's '1.25 mg' is the per-capsule amount."
+    },
+    "source_provenance": {
+     "pmid": "40896024",
+     "location": "Full text (PMC12397994): Methods study design paragraph, Table 2 (test treatments, dosage form, mode of usage, manufacturer), inclusion criteria, statistics; Results primary endpoints; conflicts of interest.",
+     "source_url": "https://pubmed.ncbi.nlm.nih.gov/40896024/"
+    },
+    "duration_as_printed": {
+     "value": 90,
+     "unit": "days"
+    }
+   },
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability"
+   }
+  },
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "ingr_biotin_32762597_post_sleeve_gastrectomy_observational",
+   "source_pmids": [
+    "32762597"
+   ],
+   "components": [
+    "INGR_BIOTIN"
+   ],
+   "identity_scope": "ingredient_general",
+   "identity": {
+    "preparation": "Biotin 1000 mcg/day (product and form not reported in the abstract)."
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "observational_study",
+   "component_registration_status": "fully_registered",
+   "condition": "post_bariatric_hair_loss",
+   "purpose": "treatment",
+   "population": {
+    "age_group": "adult",
+    "description": "156 women followed 1 year after laparoscopic sleeve gastrectomy; 112 (72%) had hair loss; 22 biotin-deficient patients were prescribed biotin and 29 took biotin on their own initiative despite optimal levels."
+   },
+   "study_design": "Single-center observational cohort with non-randomized biotin use; no placebo or randomized control.",
+   "trial_family": "32762597",
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "scoring_eligible": false,
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "mg",
+    "values": [
+     1
+    ],
+    "dose_status": "verified",
+    "dose_basis": "nominal_assigned_arm",
+    "duration_basis": "participant_specific",
+    "administration_frequency": "1000 mcg/day; 3 months for prescribed deficient patients, average 2.5 months for self-initiated users.",
+    "dosage_forms": [
+     "oral biotin supplement (physical form not reported in the abstract)"
+    ],
+    "co_therapies": [
+     "Postoperative vitamin-deficiency screening and care after sleeve gastrectomy; other supplements not reported in the abstract."
+    ],
+    "reported_regimen": "Biotin 1000 mcg/day for 3 months (prescribed) or about 2.5 months (self-initiated).",
+    "normalization": {
+     "basis": "1000 mcg = 1 mg/day as stated in the abstract."
+    },
+    "source_provenance": {
+     "pmid": "32762597",
+     "location": "PubMed abstract (Methods, Results); full text not open access.",
+     "source_url": "https://pubmed.ncbi.nlm.nih.gov/32762597/"
+    }
+   },
+   "outcomes": [
+    {
+     "name": "Self-reported remarkable decline in hair loss: 5/22 (23%) biotin-deficient prescribed users and 11/29 (38%) non-deficient self-users; no significant difference between groups (P=.2). Authors conclude biotin showed low efficacy.",
+     "hierarchy": "not_reported",
+     "kind": "patient_important",
+     "direction": "null",
+     "outcome_role": "within_group_change"
+    }
+   ],
+   "limitations": [
+    "Non-randomized, uncontrolled observational data with subjective hair-loss reporting; cannot carry efficacy credit.",
+    "Abstract only; dosage form and product not reported and not inferred.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ],
+   "review_status": "clinician_approved",
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability"
+   }
+  }
+ ],
+ "source_receipts": [
+  {
+   "pmid": "40896024",
+   "title_fetched": "The Role of Sesbania grandiflora-Derived Biotin and Bambusa arundinacea-Derived Silica Extracts in Promoting Hair, Skin, and Nail Health: A Randomized, Double-Blind, Placebo-Controlled Clinical Study.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/40896024/",
+   "full_text": true,
+   "sections_used": "Introduction objective, Methods, Table 2, statistics, Results, Discussion, conflicts (BioC PMC12397994)"
+  },
+  {
+   "pmid": "32762597",
+   "title_fetched": "Hair Loss After Sleeve Gastrectomy and Effect of Biotin Supplements.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/32762597/",
+   "full_text": false,
+   "sections_used": "PubMed abstract"
+  }
+ ]
+}

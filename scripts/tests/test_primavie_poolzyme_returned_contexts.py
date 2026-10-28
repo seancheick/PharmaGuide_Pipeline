@@ -10,26 +10,19 @@ from clinical_evidence_schema import validate_ingredient_context
 
 
 def test_poolzyme_extraction_preserves_explicit_source_acceptance_hold():
+    # Dr. Pham, 2026-10-28 (fifth ruling set): the trial names a fungal
+    # multi-enzyme blend, not unequivocally Poolzyme Multi; exact-brand credit
+    # needs the study material and its activities identified. The unverified
+    # draft extraction lives in the audit receipt (Sean, 2026-10-28: drafts are
+    # not production data), so no production context may assert that brand.
     record = reviewed_entries()['INGR_DIGESTIVE_ENZYMES']
     contexts = record.get('study_contexts', [])
-    assert len(contexts) == 1
-    [context] = contexts
-    assert context['source_pmids'] == ['37976892']
-    assert context['identity']['branded_material'] == 'Poolzyme Multi'
-    assert context['dose']['values'] == [400]
-    assert context['dose']['administration_frequency'] == 'One200mg capsule beforelunch and one200mg capsule beforedinner.'
-    assert context['dose']['duration_days'] == 60
-    assert context['population']['description'].startswith('120 adults')
-    assert context['review_status'] == 'source_verified_pending_clinical_review'
-    assert any(o['hierarchy'] == 'primary' and 'NDI' in o['name'] for o in context['outcomes'])
-    assert any(o['direction'] == 'null' for o in context['outcomes'])
-    assert context['scoring_eligible'] is False
-    assert 'clinical_review' not in context
-    assert validate_ingredient_context(context, authoring=True) == []
-    assert assess_clinical_source_review(record)['is_complete'] is False
-    assert 'clinical_contributing_contexts_missing' in assess_clinical_source_review(record)['errors']
-    limits = ' '.join(context['limitations'])
-    assert 'RAW' in limits and 'ethics' in limits and 'registration' in limits
+    assert contexts == []
+    assert 'Poolzyme Multi' not in json.dumps(contexts)
+    review = assess_clinical_source_review(record)
+    assert review['is_complete'] is False
+    assert 'clinical_source_contexts_missing' in review['errors']
+    assert record['scoring_eligible'] is False
     assert record['total_enrollment'] == 120
     assert record['registry_completed_trials_count'] is None
 
@@ -44,5 +37,5 @@ def test_explicit_poolzyme_source_hold_cannot_supply_affirmative_credit():
     assert not _is_verified_ingredient_human_entry(record)
     assert record['score_contribution'] == 'tier_2'
     assert record['effect_direction'] == 'positive_strong'  # retained provisionally, not activated
-    assert record['study_contexts'][0]['dose']['values'] == [400]
+    assert not record.get('study_contexts')
     assert record['references_structured'][0]['pmid'] == '37976892'

@@ -1,0 +1,343 @@
+{
+ "record_id": "PRECLIN_DGL",
+ "decision": "closed_credit",
+ "summary": "The only credited context is the GutGard reflux RCT (39929150; 200 adults, 150 mg/day for 28 days), where the primary GERD-HRQL improved after baseline adjustment (p=0.014) but not unadjusted (p=0.305), and heartburn and regurgitation resolved earlier. That is the context Dr. Pham's decision names, and credit is limited to GutGard-labeled products. The GutGard dyspepsia (21747893) and H. pylori (23606875) trials are approved without credit as outside that scope. The 1971 classic DGL duodenal-ulcer trial (4933135; 47 patients, no advantage over placebo) is abstract-only and gets no context, and generic ulcer-healing claims are excluded.",
+ "record_updates": {
+  "applicability": {
+   "scope": "ingredient",
+   "required_form_terms": [
+    "GutGard"
+   ],
+   "supported_outcomes": [
+    "digestive_health"
+   ],
+   "studied_population": "Adults 18-60 with mild-to-moderate gastroesophageal reflux symptoms, not on PPIs, taking GutGard 150 mg/day for 28 days.",
+   "source_pmids": [
+    "39929150"
+   ],
+   "reviewed_at": "2026-10-28",
+   "excluded_claim_terms": [
+    "ulcer",
+    "ulcers"
+   ]
+  }
+ },
+ "study_contexts": [
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "preclin_dgl_39929150_reflux",
+   "components": [
+    "PRECLIN_DGL"
+   ],
+   "source_pmids": [
+    "39929150"
+   ],
+   "identity_scope": "branded_material",
+   "identity": {
+    "branded_material": "GutGard",
+    "manufacturer": "Natural Remedies (Bangalore, India)",
+    "standardization": "Flavonoid-rich deglycyrrhizinated Glycyrrhiza glabra root extract: glabridin >=3.5% w/w, total flavonoids >=10% w/w, glycyrrhizin <=3.0% w/w"
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "direct_rct",
+   "component_registration_status": "fully_registered",
+   "condition": "gastroesophageal_reflux_symptoms",
+   "purpose": "treatment",
+   "review_status": "clinician_approved",
+   "scoring_eligible": true,
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "trial_family": "39929150",
+   "population": {
+    "age_group": "adult",
+    "description": "200 adults aged 18-60 (mean 36.9 y) with GER symptoms for at least 1 month and at least two symptomatic days in the prior week, not using PPIs, at one tertiary hospital in India; 100 per arm, 78 vs 87 analysed at day 28."
+   },
+   "study_design": "Phase III single-centre double-blind parallel-group placebo-controlled RCT (1:1), 28 days treatment plus day-35 follow-up; modified intention-to-treat.",
+   "outcomes": [
+    {
+     "name": "Primary GERD-HRQL total, baseline-adjusted change at day 28: significantly greater reduction with GutGard (p=0.014)",
+     "hierarchy": "primary",
+     "kind": "patient_important",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "Primary GERD-HRQL day-28 unadjusted score: not significantly different (3.83 vs 11.84, p=0.305; baseline p=0.104)",
+     "hierarchy": "primary",
+     "kind": "patient_important",
+     "direction": "null",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "Primary GSAS: earlier resolution of heartburn (p=0.017 day 14, p=0.005 day 28) and regurgitation (p=0.025-0.029 days 7-28) vs placebo",
+     "hierarchy": "primary",
+     "kind": "patient_important",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    }
+   ],
+   "limitations": [
+    "Primary GERD-HRQL benefit depends on baseline adjustment; the unadjusted day-28 comparison was not significant. Attrition about 17.5%; subjective scales; planned objective pH/LES measures not performed (COVID-19).",
+    "Exact GutGard material only; no transfer to classic chewable DGL or other licorice extracts; no ulcer-healing, H. pylori eradication or erosive oesophagitis conclusion.",
+    "Returned decision A131: generic ulcer-healing transfer rejected; the returned scope names the reflux context only.",
+    "Dr. Pham's fourth ruling set (2026-10-28): GutGard exact formula only (glabridin >=3.5%, total flavonoids >=10%, glycyrrhizin <=3.0%); not ordinary licorice root or classic chewable DGL.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ],
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "mg",
+    "values": [
+     150
+    ],
+    "dose_status": "verified",
+    "dose_basis": "nominal_assigned_arm",
+    "duration_basis": "fixed_protocol",
+    "duration_days": 28,
+    "administration_frequency": "One 75 mg capsule twice daily.",
+    "dosage_forms": [
+     "oral capsule"
+    ],
+    "co_therapies": [
+     "Source-reported concurrent-care/restriction context: Participant Eligibility Criteria Healthy adults aged 18–60 years, experiencing GER symptoms for at least 1 month, with a minimum of two symptomatic days in the week before randomization, confirmed by the treating physician to have GER-related symptoms, not using proton pump inhibitors and were willing to stop all other medications/supplements prescribed for GER were eligible.",
+     "Source-reported concurrent-care/restriction context: Rescue medication was Famotidine 20 mg orally, not exceeding two tablets every 12 h.",
+     "Source-reported concurrent-care/restriction context: After stopping the intervention on day 28, the participants were called back on day 35 to assess for rebound symptoms, GSAS, and number of rescue medications used."
+    ],
+    "reported_regimen": "GutGard 75 mg capsule twice daily (150 mg/day) for 28 days; famotidine 20 mg rescue allowed.",
+    "normalization": {
+     "basis": "2 x 75 mg = 150 mg/day GutGard extract as assigned."
+    },
+    "source_provenance": {
+     "pmid": "39929150",
+     "location": "Methods (design, participants, intervention capsule 75 mg twice daily, primary outcomes, mITT); Results (enrolment, Table 1 GERD-HRQL unadjusted and baseline-adjusted); Discussion limitations",
+     "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11892464/"
+    },
+    "duration_as_printed": {
+     "value": 28,
+     "unit": "days"
+    }
+   },
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability"
+   }
+  },
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "preclin_dgl_21747893_dyspepsia",
+   "components": [
+    "PRECLIN_DGL"
+   ],
+   "source_pmids": [
+    "21747893"
+   ],
+   "identity_scope": "branded_material",
+   "identity": {
+    "branded_material": "GutGard",
+    "manufacturer": "Natural Remedies (Bangalore, India)",
+    "standardization": "Flavonoid-rich deglycyrrhizinated Glycyrrhiza glabra root extract: glabridin >=3.5% w/w, total flavonoids >=10% w/w, glycyrrhizin <=3.0% w/w"
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "direct_rct",
+   "component_registration_status": "fully_registered",
+   "condition": "functional_dyspepsia",
+   "purpose": "treatment",
+   "review_status": "clinician_approved",
+   "scoring_eligible": false,
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "trial_family": "21747893",
+   "population": {
+    "age_group": "adult",
+    "description": "50 patients with functional (non-ulcer) dyspepsia by Rome III with at least 4 symptoms and total symptom score >=20 (25 per arm)."
+   },
+   "study_design": "Randomized double-blind placebo-controlled two-arm trial, 30 days.",
+   "outcomes": [
+    {
+     "name": "Primary: total symptom score significantly lower than placebo on days 15 and 30 (P<=.05) and better global assessment of efficacy",
+     "hierarchy": "primary",
+     "kind": "patient_important",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "Nepean Dyspepsia Index (quality of life) significantly improved vs placebo on days 15 and 30",
+     "hierarchy": "secondary",
+     "kind": "patient_important",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    }
+   ],
+   "limitations": [
+    "Small trial (n=50); exact GutGard material only.",
+    "Not scoring eligible: outside the reflux-only scope named in Dr. Pham's returned decision; it can be credited only if that scope is widened by her.",
+    "Returned decision A131: generic ulcer-healing transfer rejected; the returned scope names the reflux context only.",
+    "Dr. Pham's fourth ruling set (2026-10-28): GutGard exact formula only (glabridin >=3.5%, total flavonoids >=10%, glycyrrhizin <=3.0%); not ordinary licorice root or classic chewable DGL.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ],
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "mg",
+    "values": [
+     150
+    ],
+    "dose_status": "verified",
+    "dose_basis": "nominal_assigned_arm",
+    "duration_basis": "fixed_protocol",
+    "duration_days": 30,
+    "administration_frequency": "One 75 mg capsule morning and one at night after food.",
+    "dosage_forms": [
+     "oral capsule"
+    ],
+    "co_therapies": [
+     "No assigned co-therapy; placebo comparator."
+    ],
+    "reported_regimen": "GutGard 75 mg twice daily (150 mg/day) for 30 days.",
+    "normalization": {
+     "basis": "2 x 75 mg = 150 mg/day as assigned."
+    },
+    "source_provenance": {
+     "pmid": "21747893",
+     "location": "Methods (test substance, randomization, dosing, primary outcomes, Rome III inclusion table); Results",
+     "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3123991/"
+    },
+    "duration_as_printed": {
+     "value": 30,
+     "unit": "days"
+    }
+   },
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability"
+   }
+  },
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "preclin_dgl_23606875_hpylori",
+   "components": [
+    "PRECLIN_DGL"
+   ],
+   "source_pmids": [
+    "23606875"
+   ],
+   "identity_scope": "branded_material",
+   "identity": {
+    "branded_material": "GutGard",
+    "manufacturer": "Natural Remedies (Bangalore, India)",
+    "standardization": "Flavonoid-rich deglycyrrhizinated Glycyrrhiza glabra root extract: glabridin >=3.5% w/w, total flavonoids >=10% w/w, glycyrrhizin <=3.0% w/w"
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "direct_rct",
+   "component_registration_status": "fully_registered",
+   "condition": "helicobacter_pylori_infection",
+   "purpose": "treatment",
+   "review_status": "clinician_approved",
+   "scoring_eligible": false,
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "trial_family": "23606875",
+   "population": {
+    "age_group": "adult",
+    "description": "107 adults aged 18-45 positive on H. pylori stool antigen and 13C-urea breath tests (GutGard 55, placebo 52); 100 analysed per protocol after excluding 7 over age 45."
+   },
+   "study_design": "Randomized double-blind placebo-controlled trial, 60 days; repeated-measures ANOVA.",
+   "outcomes": [
+    {
+     "name": "13C-UBT delta-over-baseline: significant group-by-time interaction (P=0.00); UBT negative in 48% with GutGard at day 60",
+     "hierarchy": "primary",
+     "kind": "surrogate",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "Stool antigen negative at day 60: 56% GutGard vs 4% placebo",
+     "hierarchy": "primary",
+     "kind": "surrogate",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    }
+   ],
+   "limitations": [
+    "H. pylori test conversion is a surrogate, not eradication by standard therapy or ulcer healing; ulcer-related transfer rejected by Dr. Pham.",
+    "Per-protocol analysis; exact GutGard material only.",
+    "Not scoring eligible: outside the reflux-only returned scope.",
+    "Returned decision A131: generic ulcer-healing transfer rejected; the returned scope names the reflux context only.",
+    "Dr. Pham's fourth ruling set (2026-10-28): GutGard exact formula only (glabridin >=3.5%, total flavonoids >=10%, glycyrrhizin <=3.0%); not ordinary licorice root or classic chewable DGL.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ],
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "mg",
+    "values": [
+     150
+    ],
+    "dose_status": "verified",
+    "dose_basis": "nominal_assigned_arm",
+    "duration_basis": "fixed_protocol",
+    "duration_days": 60,
+    "administration_frequency": "One 150 mg capsule once daily before food in the morning.",
+    "dosage_forms": [
+     "oral capsule"
+    ],
+    "co_therapies": [
+     "No assigned co-therapy; placebo comparator."
+    ],
+    "reported_regimen": "GutGard 150 mg capsule once daily for 60 days.",
+    "normalization": {
+     "basis": "One 150 mg capsule per day as assigned."
+    },
+    "source_provenance": {
+     "pmid": "23606875",
+     "location": "Methods (subjects, capsule 150 mg actives, dosing); Results (enrolment, Table 1, UBT and HpSA outcomes)",
+     "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3623263/"
+    },
+    "duration_as_printed": {
+     "value": 60,
+     "unit": "days"
+    }
+   },
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability"
+   }
+  }
+ ],
+ "source_receipts": [
+  {
+   "pmid": "39929150",
+   "title_fetched": "Efficacy and Safety of GutGard® in Managing Gastroesophageal Reflux-Related Symptoms: A Phase III, Single-Centre, Double-Blind, Randomized Placebo-Controlled Trial.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/39929150/",
+   "full_text": true,
+   "sections_used": "Abstract; Methods; Results incl. Table 1; Discussion"
+  },
+  {
+   "pmid": "21747893",
+   "title_fetched": "An Extract of Glycyrrhiza glabra (GutGard) Alleviates Symptoms of Functional Dyspepsia: A Randomized, Double-Blind, Placebo-Controlled Study.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/21747893/",
+   "full_text": true,
+   "sections_used": "Abstract; Methods; Results"
+  },
+  {
+   "pmid": "23606875",
+   "title_fetched": "Effect of GutGard in the Management of Helicobacter pylori: A Randomized Double Blind Placebo Controlled Study.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/23606875/",
+   "full_text": true,
+   "sections_used": "Abstract; Methods; Results; Table 1"
+  },
+  {
+   "pmid": "4933135",
+   "title_fetched": "A trial of deglycyrrhizinated liquorice in the treatment of duodenal ulcer.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/4933135/",
+   "full_text": false,
+   "sections_used": "Abstract only; Europe PMC full text returned error"
+  }
+ ],
+ "integration_notes": [
+  "2026-10-28 integrator: require_source_label_form removed; required_form_terms kept, matching the KSM-66/Tesnor precedent. Source-only matching rejected real labels whose ingredient row resolves through the enricher."
+ ]
+}

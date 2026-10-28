@@ -116,43 +116,23 @@ DEPTH_BONUS_BANDS = tuple(tuple(b) for b in _EM["depth_bonus_bands"])
 # Amount adequacy is owned independently by Dose.
 PRIMARY_FLOOR_STRONG = _EM["primary_floor_strong"]     # systematic review / multi-RCT, positive, clinical dose
 PRIMARY_FLOOR_MODERATE = _EM["primary_floor_moderate"]   # single RCT / clinical strain, positive, clinical dose
-# v4.1 branded-RCT tier: a branded clinically-studied extract (Sensoril, KSM-66,
-# Meriva/BCM-95 — its OWN brand-specific RCT evidence, not a generic literature
-# match) earns a higher floor than a non-branded ingredient at the same study tier.
-# 18 (branded + meta/multi-RCT) / 17 (branded + single RCT). 19-20 stays reserved
-# for multi-active breadth, so a single extract can be "excellent" but not "perfect".
-PRIMARY_FLOOR_BRANDED_STRONG = _EM["primary_floor_branded_strong"]
-PRIMARY_FLOOR_BRANDED_MODERATE = _EM["primary_floor_branded_moderate"]
-_BRANDED_EVIDENCE_LEVELS = frozenset({"branded-rct", "branded_rct"})
-# 3-lane evidence floor (2026-06-06): a broad-consensus SIMPLE ingredient whose
-# GENERIC form IS the clinically-validated form earns the elevated (branded-tier)
-# floor even without a brand-specific RCT — but only via this explicit allowlist,
-# never from automatic generic literature. This keeps a generic ashwagandha BELOW
-# KSM-66 (14 vs 18) while letting gold-standard simple ingredients score like the
-# reference ingredients they are. Curated, conservative, broad-consensus only:
-#   - creatine_monohydrate: monohydrate IS the studied form (sports-routed; here for intent)
-#   - psyllium: FDA-recognized soluble-fiber cholesterol/laxation claim; generic husk is studied
-#   - vitamin_d: D3 cholecalciferol; overwhelming human evidence, generic form is the studied form
-#   - vitamin_b9_folate: folate/folic acid/methylfolate; NTD-prevention consensus
-#   - epa / dha: omega-3 actives (omega-routed; here for intent completeness)
-# Deliberately EXCLUDED (form-dependent or not consensus-generic): magnesium (oxide
-# vs glycinate), iron (form/context-dependent), zinc, generic botanicals.
-_CONSENSUS_GOLD_STANDARD = frozenset({
-    "creatine_monohydrate",
-    "psyllium",
-    "vitamin_d",
-    "vitamin_b9_folate",
-    "epa",
-    "dha",
-})
+# No automatic exceptional tier (Dr Pham framework, October 28, 2026). The
+# near-perfect floor (18 raw = 20/20 on the 18-point references) once followed a
+# brand marker (branded-rct level or a BRAND_ id) or an ingredient allowlist
+# (vitamin D, folate, psyllium, creatine, EPA/DHA), so one or two small
+# manufacturer-supplied trials reached it, and a branded single RCT reached
+# 17 raw (18.9/20). No registry records a reviewed certainty for a whole
+# evidence body, and a brand, an ingredient name, a trial count or a design is
+# not that judgement, so no automatic floor exceeds the strong base: one trial
+# is the moderate floor, a meta-analysis or multi-RCT record the strong floor.
 _STRONG_STUDY = frozenset({"systematic_review_meta", "rct_multiple"})
 _MODERATE_STUDY = frozenset({"rct_single", "clinical_strain"})
 # P5 nutrition-authority floor (2026-06): an ESSENTIAL vitamin/mineral with an
 # established DRI (RDA/AI) has evidence of *necessity* even without a
 # product-specific RCT — "no RCT in our data" must not mean "no evidence of
 # usefulness" for a nutrient the body provably requires (copper at evidence 0 was
-# the failure). The floor is 10 — deliberately BELOW the 14 non-branded clinical
-# floor and 18 branded/consensus tier (established necessity < RCT-proven effect).
+# the failure). The floor is 10 — deliberately BELOW the 14 strong clinical
+# floor (established necessity < RCT-proven effect).
 # Curated DRI-essentials only (mirrors the multi-panel canonicals); excludes
 # UL-only / non-essential bioactives (boron, CoQ10, etc.) so they stay evidence-
 # light, and excludes anything not in this set.
@@ -326,7 +306,7 @@ def score_evidence(product: Dict[str, Any], *, apply_primary_floor: bool = False
         # P5: DRI-essential nutrient authority floor. An essential vitamin/mineral
         # with established RDA/AI has evidence of necessity even without a strong
         # RCT match. Floor (never cap) — it only lifts, never lowers the clinical
-        # floor above it (e.g. a consensus/branded 18 stays 18).
+        # floor above it (e.g. a strong clinical 14 stays 14).
         explicit_purpose_canonicals = {canonical for _, canonical in prominent}
         if not explicit_purpose_canonicals:
             # A label with one assessable active still has an unambiguous
@@ -1544,7 +1524,7 @@ def _active_canonical_index(product: Dict[str, Any]) -> Dict[str, str]:
     """Map each active's normalized identity tokens -> its raw canonical_id. An
     evidence match resolves to a normalized standard-name (e.g. 'psyllium husk',
     'vitamin d3'); this lets it be tied back to the active's clean canonical_id
-    ('psyllium', 'vitamin_d') for the consensus gold-standard allowlist check.
+    ('psyllium', 'vitamin_d').
     Evidence subjects without a dose (a blend's disclosed members) are indexed
     too, from the same provider that chose the owners."""
     out: Dict[str, str] = {}
@@ -1707,7 +1687,6 @@ def _primary_mass_floor(
 
     if prominent is None:
         prominent = evidence_prominent_row_keys(product)
-    canon_index = _active_canonical_index(product)
     floor = 0.0
     floor_canon: Optional[str] = None
     for entry in matches:
@@ -1731,20 +1710,10 @@ def _primary_mass_floor(
                 if str(row.get("canonical_id") or "").strip().lower() in identities
             ]
         st = _norm_text(entry.get("study_type"))
-        branded = (
-            _norm_text(entry.get("evidence_level")) in _BRANDED_EVIDENCE_LEVELS
-            or _norm_text(entry.get("id")).startswith("brand_")
-        )
-        # 3-lane: brand-specific RCT OR a broad-consensus gold-standard generic
-        # both earn the elevated floor; a merely-strong generic literature match
-        # does not. Consensus is keyed on the matched ACTIVE's clean canonical_id
-        # (not the match's normalized standard-name), so 'psyllium husk' -> psyllium.
-        consensus = _matched_active_canonical(entry, canon_index) in _CONSENSUS_GOLD_STANDARD
-        elevated = branded or consensus
         if st in _STRONG_STUDY:
-            base = PRIMARY_FLOOR_BRANDED_STRONG if elevated else PRIMARY_FLOOR_STRONG
+            base = PRIMARY_FLOOR_STRONG
         elif st in _MODERATE_STUDY:
-            base = PRIMARY_FLOOR_BRANDED_MODERATE if elevated else PRIMARY_FLOOR_MODERATE
+            base = PRIMARY_FLOOR_MODERATE
         else:
             base = 0.0
         # Weight the floor by effect strength, mirroring the pipeline's own
@@ -1756,7 +1725,7 @@ def _primary_mass_floor(
         # positive_strong primary may anchor on a STRONG base; every weaker
         # direction is additionally capped at the MODERATE base weighted by the
         # same multiplier already applied above. positive_strong is deliberately
-        # excluded, so it keeps the strong/branded base unchanged.
+        # excluded, so it keeps the strong base unchanged.
         #
         # No new table: the cap reuses PRIMARY_FLOOR_MODERATE and the multiplier
         # this loop already read from EFFECT_DIRECTION_MULTIPLIERS.

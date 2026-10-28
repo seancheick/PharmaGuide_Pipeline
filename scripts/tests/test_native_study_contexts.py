@@ -637,11 +637,22 @@ def test_pending_source_bibliographies_do_not_claim_all_citations_are_included_t
         assert context['included_study_pmids']
         assert all(pmid.isdigit() for pmid in context['included_study_pmids'])
         assert any('included-study' in note.lower() for note in context['limitations'])
-        assert context['scoring_eligible'] is False
+        # Both contexts are now approved (Dr. Pham, 2026-10-28). Glucosamine is
+        # a completed no-credit decision; L-theanine credits only the reviewed
+        # pooled source, scoped to Focus & Mental Clarity. Neither approval
+        # makes the bibliography's included trials independent credit.
+        assert context['review_status'] == 'clinician_approved'
+        record = next(r for r in rows if r['id'] == rid)
         if rid == 'INGR_GLUCOSAMINE_SULFATE':
+            assert context['scoring_eligible'] is False
+            assert record['study_type'] == 'reference'
             assert '11789591' in context['included_study_pmids']
             assert any('SKI306X' in note and 'must not' in note for note in context['limitations'])
         else:
+            assert context['scoring_eligible'] is True
+            assert record['applicability']['source_pmids'] == [pmid]
+            assert record['applicability']['supported_outcomes'] == ['Focus & Mental Clarity']
+            assert not set(context['included_study_pmids']) & set(record['applicability']['source_pmids'])
             assert '33260552' in context['included_study_pmids']
             assert any('tea' in note.lower() and 'isolated' in note.lower() for note in context['limitations'])
 

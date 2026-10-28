@@ -1,0 +1,284 @@
+{
+ "record_id": "INGR_ACETYL_L_CARNITINE",
+ "decision": "closed_no_credit",
+ "summary": "The reviewed research does not establish a qualifying benefit for this product's assessed use. Existing human research is kept: neuropathy trials (pooled pain reduction 20.2% vs placebo in 31118753; very-low-certainty Cochrane evidence in diabetic neuropathy) and the MCI/early Alzheimer meta-analysis. The record claims Focus & Mental Clarity. The only source in cognitively healthy people (Cochrane 2017) found no usable evidence, the Cochrane dementia review found no objective cognitive benefit, and the one positive MCI/AD meta-analysis (2003) is abstract-only in a disease population. The neuropathy sources (one verified in full text, pain -20.2% vs placebo) are off-claim and partly intramuscular. No source meets the credit rule, so the record becomes reference-only, which removes ALCAR Evidence points from dependent products (about 40 per the closure plan).",
+ "record_updates": {
+  "study_type": "reference",
+  "evidence_level": "reference"
+ },
+ "study_contexts": [
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "ingr_acetyl_l_carnitine_31118753_exact_source",
+   "components": [
+    "INGR_ACETYL_L_CARNITINE"
+   ],
+   "source_pmids": [
+    "31118753"
+   ],
+   "identity_scope": "ingredient_general",
+   "identity": {
+    "preparation": "Acetyl-L-carnitine; intramuscular and oral phases differ and are not automatically equivalent."
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "other",
+   "evidence_role": "systematic_review",
+   "component_registration_status": "fully_registered",
+   "condition": "painful_peripheral_neuropathy",
+   "purpose": "treatment",
+   "review_status": "clinician_approved",
+   "scoring_eligible": false,
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "trial_family": "source_31118753",
+   "population": {
+    "age_group": "adult",
+    "description": "Adults with painful peripheral neuropathy (diabetic, antiretroviral-toxic, chemotherapy-induced, carpal tunnel); 14 clinical trials reviewed; pooled pain analysis of 4 placebo-controlled RCTs in diabetic and antiretroviral neuropathy (Sima 2005 two cohorts, De Grandis 2002, Youle 2007)."
+   },
+   "study_design": "PRISMA systematic review (to April 2018) of trials with >=10 neuropathy patients, AAN evidence classes, and random-effects meta-analysis of 4 placebo-controlled RCTs on 10-cm VAS pain.",
+   "outcomes": [
+    {
+     "name": "Pooled pain reduction versus placebo 20.2% of baseline VAS (95% CI 8.3-32.1%), P<0.0001, I2 62.8%; diabetic subgroup 24.6%.",
+     "hierarchy": "not_reported",
+     "kind": "patient_important",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    }
+   ],
+   "limitations": [
+    "Do not transfer intramuscular findings or uncontrolled regeneration measures into generic oral efficacy.",
+    "Cancer-treatment neuropathy prevention and possible harm must be evaluated separately; no broad neuroprotection approval.",
+    "Returned decision: Date-restricted hold. Publication-age-only exclusions were withdrawn and are not adopted.",
+    "The pooled pain contribution is four RCTs represented by three primary papers: Sima reports two trial cohorts. Wider uncontrolled and animal citations are not included as affirmative pooled trial dependencies.",
+    "Historical bibliography census (not independent scoring sources; actual included-publication membership is separately bound to the inspected source table): 15616239, 12455197, 17461852. Each intervention and comparison requires its own applicability assessment; citation in this bibliography grants no credit.",
+    "Included-study identifiers are now bound to this source's actual included-study rows/explicit inclusion references (Table1 author/year rows mapped to bibliography15,24–26,28–32,34–36,41; narrative negative chemotherapy-prevention studies37–39 included separately. Two Sima cohorts share one publication; no primary rat/mechanism papers borrowed. TableSheyu2016 corresponds to LiS/SheyuLi2016,232participants, as source26.), with live NIH title/content identity checks. They are publication pointers, not independent-cohort counts, per-primary-study scoring approvals, preparation equivalence or new efficacy evidence. Exact unindexed source citations remain retained; no missing PMID is invented.",
+    "No credit: painful neuropathy is not this record's Focus & Mental Clarity claim, two pooled trials used an intramuscular phase, and authors report Sigma-Tau/Alfasigma funding relationships.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ],
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "mg",
+    "values": [],
+    "dose_status": "verified",
+    "dose_basis": "not_applicable",
+    "duration_basis": "not_recorded",
+    "duration_days": null,
+    "administration_frequency": "Trial-specific: Sima 500 or 1,000 mg three times daily for 1 year; De Grandis 1,000 mg/day IM for 10 days then 2,000 mg/day orally; Youle 500 mg IM twice daily for 14 days then 1,000 mg oral sachets twice daily for 42 days (Results; Table 1).",
+    "dosage_forms": [
+     "intramuscular injection",
+     "oral sachet"
+    ],
+    "co_therapies": [
+     "Background diabetes, HIV/antiretroviral or cancer treatment differs by trial."
+    ],
+    "reported_regimen": "Pooled RCT regimens 1,000-3,000 mg/day ALC, oral or intramuscular-then-oral, 2 weeks to 13 months (Table 1; Results).",
+    "normalization": {
+     "basis": "Preserve the specifically identified material or component quantity; no elemental/marker conversion or extrapolated daily dose."
+    },
+    "source_provenance": {
+     "pmid": "31118753",
+     "location": "Full text (PMC6498091): Methods, Table 1 (trial regimens), Results diabetic/HIV/chemotherapy sections, meta-analysis paragraph and Table 2, Discussion, competing interests.",
+     "source_url": "https://pubmed.ncbi.nlm.nih.gov/31118753/"
+    }
+   },
+   "included_study_pmids": [
+    "29441455",
+    "15616239",
+    "12455197",
+    "27180954",
+    "17461852",
+    "15238773",
+    "19200173",
+    "16519785",
+    "10975731",
+    "28105133",
+    "15948540",
+    "16039110",
+    "27519331",
+    "23733756",
+    "24105751",
+    "25168296"
+   ],
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability"
+   }
+  },
+  {
+   "context_id": "ingr_acetyl_l_carnitine_28349514_healthy_cognition_insufficient",
+   "components": [
+    "INGR_ACETYL_L_CARNITINE"
+   ],
+   "source_pmids": [
+    "28349514"
+   ],
+   "review_status": "rejected_source",
+   "scoring_eligible": false,
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability",
+    "notes": "Directly addresses the record's Focus & Mental Clarity claim in cognitively healthy people and finds no usable evidence; supports no credit."
+   },
+   "dose": {
+    "source_provenance": {
+     "pmid": "28349514",
+     "location": "PubMed abstract (Main results, Authors' conclusions).",
+     "source_url": "https://pubmed.ncbi.nlm.nih.gov/28349514/"
+    }
+   },
+   "limitations": [
+    "Cochrane 2017: only 2 RCTs in young healthy adults; no effect of L-carnitine on reaction time, vigilance, immediate memory or delayed recall after 3 days (about 200 participants); very low quality; authors could draw no conclusion. Abstract only; full text not retrieved.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ]
+  },
+  {
+   "context_id": "ingr_acetyl_l_carnitine_12804452_dementia_no_objective_benefit",
+   "components": [
+    "INGR_ACETYL_L_CARNITINE"
+   ],
+   "source_pmids": [
+    "12804452"
+   ],
+   "review_status": "rejected_source",
+   "scoring_eligible": false,
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability",
+    "notes": "Dementia treatment is not the record's focus claim, and the Cochrane review found no objective cognitive benefit; supports no credit."
+   },
+   "dose": {
+    "source_provenance": {
+     "pmid": "12804452",
+     "location": "PubMed abstract (Main results).",
+     "source_url": "https://pubmed.ncbi.nlm.nih.gov/12804452/"
+    }
+   },
+   "limitations": [
+    "Cochrane 2003: 11 double-blind RCTs, all Alzheimer's disease; Clinical Global Impression improved at 12 and 24 weeks (OR 2.33 and 3.91) but not at 52 weeks, and no benefit on cognition, dementia severity, function or CGI as a continuous measure. Abstract only.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ]
+  },
+  {
+   "context_id": "ingr_acetyl_l_carnitine_12598816_mci_ad_abstract_only",
+   "components": [
+    "INGR_ACETYL_L_CARNITINE"
+   ],
+   "source_pmids": [
+    "12598816"
+   ],
+   "review_status": "rejected_source",
+   "scoring_eligible": false,
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability",
+    "notes": "Positive MCI/mild-AD meta-analysis, but abstract-only (route and included trials not verifiable), disease population rather than general focus, and contradicted on objective cognition by the later Cochrane review; no credit."
+   },
+   "dose": {
+    "source_provenance": {
+     "pmid": "12598816",
+     "location": "PubMed abstract.",
+     "source_url": "https://pubmed.ncbi.nlm.nih.gov/12598816/"
+    }
+   },
+   "limitations": [
+    "2003 meta-analysis: double-blind placebo-controlled trials >=3 months in MCI and mild AD, 1.5-3.0 g/day; integrated effect size 0.201 (95% CI 0.107-0.295) and CGI-CH 0.32 (0.18-0.47). Full text not retrieved.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ]
+  },
+  {
+   "context_id": "ingr_acetyl_l_carnitine_31201734_dpn_very_low_certainty",
+   "components": [
+    "INGR_ACETYL_L_CARNITINE"
+   ],
+   "source_pmids": [
+    "31201734"
+   ],
+   "review_status": "rejected_source",
+   "scoring_eligible": false,
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability",
+    "notes": "Diabetic neuropathy pain is off-claim and the Cochrane review rates it very low certainty; no credit."
+   },
+   "dose": {
+    "source_provenance": {
+     "pmid": "31201734",
+     "location": "PubMed abstract (Main results, Authors' conclusions).",
+     "source_url": "https://pubmed.ncbi.nlm.nih.gov/31201734/"
+    }
+   },
+   "limitations": [
+    "Cochrane 2019: 4 studies, 907 participants; pain VAS MD -9.16 mm (-16.76 to -1.57) versus placebo, very low certainty; no difference at <=1500 mg/day; safety could not be judged. Abstract only.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ]
+  }
+ ],
+ "source_receipts": [
+  {
+   "pmid": "31118753",
+   "title_fetched": "Acetyl-L-carnitine in painful peripheral neuropathy: a systematic review.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/31118753/",
+   "full_text": true,
+   "sections_used": "Methods, Table 1, Results, Table 2, Discussion, COI (BioC PMC6498091)"
+  },
+  {
+   "pmid": "28349514",
+   "title_fetched": "L-carnitine for cognitive enhancement in people without cognitive impairment.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/28349514/",
+   "full_text": false,
+   "sections_used": "PubMed abstract"
+  },
+  {
+   "pmid": "12804452",
+   "title_fetched": "Acetyl-L-carnitine for dementia.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/12804452/",
+   "full_text": false,
+   "sections_used": "PubMed abstract"
+  },
+  {
+   "pmid": "12598816",
+   "title_fetched": "Meta-analysis of double blind randomized controlled clinical trials of acetyl-L-carnitine versus placebo in the treatment of mild cognitive impairment and mild Alzheimer's disease.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/12598816/",
+   "full_text": false,
+   "sections_used": "PubMed abstract"
+  },
+  {
+   "pmid": "31201734",
+   "title_fetched": "Acetyl-L-carnitine for the treatment of diabetic peripheral neuropathy.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/31201734/",
+   "full_text": false,
+   "sections_used": "PubMed abstract"
+  }
+ ],
+ "freshness_search": {
+  "date": "2026-10-28",
+  "database": "PubMed (NCBI E-utilities esearch, sort=pub_date, retmax=60; titles via esummary, abstracts via efetch)",
+  "query": "(acetyl-L-carnitine[tiab] OR acetylcarnitine[tiab] OR \"acetyl carnitine\"[tiab] OR ALCAR[tiab]) AND (cognit* OR memory OR dementia OR Alzheimer* OR \"mild cognitive impairment\" OR attention OR fatigue OR depress*) AND (meta-analysis[pt] OR systematic review[pt] OR randomized controlled trial[pt]) AND 2015:2026[dp]",
+  "hits": 30,
+  "screened": 30,
+  "screening_rule": "Kept syntheses and RCTs of ALCAR alone on cognition, attention or mental energy. Excluded L-carnitine (non-acetyl) exercise trials, multi-ingredient formulations, metabolomics and psychiatric-guideline overviews. Depression and hepatic-encephalopathy reviews were read as off-claim context.",
+  "read": [
+   {
+    "pmid": "36043711",
+    "title": "Acetyl-L-carnitine Slows the Progression from Prefrailty to Frailty in Older Subjects: A Randomized Interventional Clinical Trial.",
+    "finding": "2022 RCT (the authors call it 'randomized, observational'), 92 pre-frail older adults, ALCAR 1.5 g twice daily for 3 months: MMSE and 6-min walk improved vs placebo. Single trial in a pre-frail elderly population."
+   },
+   {
+    "pmid": "29076953",
+    "title": "Acetyl-L-Carnitine Supplementation and the Treatment of Depressive Symptoms: A Systematic Review and Meta-Analysis.",
+    "finding": "2018 MA, 12 RCTs (791): depressive symptoms SMD -1.10 vs placebo (I2 86%). Depression is outside the record's claim."
+   },
+   {
+    "pmid": "30610762",
+    "title": "Acetyl-L-carnitine for patients with hepatic encephalopathy.",
+    "finding": "2019 Cochrane review of ALCAR for hepatic encephalopathy (5 RCTs). A disease population outside the claim."
+   }
+  ],
+  "conclusion": "confirms: no newer synthesis tests ALCAR for focus or cognition in cognitively healthy adults. The newer positive findings come from pre-frail elderly (one trial), depression or hepatic encephalopathy, all outside the Focus & Mental Clarity claim. No-credit stands."
+ }
+}

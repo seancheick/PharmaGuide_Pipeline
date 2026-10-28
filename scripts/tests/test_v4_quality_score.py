@@ -81,8 +81,8 @@ def test_pillars_use_six_pillar_weights() -> None:
 
 def test_evidence_strong_single_not_capped() -> None:
     from scoring_v4.quality_score import assemble_quality_score
-    # KSM-66/creatine-like: branded-RCT evidence 18 (the single-ingredient floor)
-    # -> full evidence credit against the generic engine's reachable 18.
+    # A raw 18 (the generic engine's reachable ceiling; since 1.31.0 no
+    # automatic single-ingredient floor reaches it) -> full credit against 18.
     out = assemble_quality_score(_shadow(module="generic", bd=_module_bd(evidence=18)))
     assert out["quality_pillars_v4"]["evidence"]["score"] >= 18.5
 

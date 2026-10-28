@@ -1,0 +1,150 @@
+{
+ "record_id": "INGR_VITAMIN_C",
+ "decision": "closed_credit",
+ "summary": "Hemilä 2023 (38082300; 15 comparisons from 10 randomized double-blind placebo-controlled trials, regular oral vitamin C >=1 g/day in healthy children, adolescents and adults) found colds were 15% less severe (95% CI 9-21%), robust to excluding the three largest trials, with benefit on severe but not mild symptom duration. Credit is limited to cold severity within that scope (supported outcome common_cold_severity; no assumed primary-endpoint superiority; nutrition stays on the nutrition pathway); the Cochrane reviews (23440782, 17636648) were abstract-only and get no context.",
+ "record_updates": {
+  "applicability": {
+   "scope": "ingredient",
+   "supported_outcomes": [
+    "common_cold_severity"
+   ],
+   "studied_population": "Children, adolescents and adults in good health taking regular oral vitamin C of at least 1 g/day, assessed for the severity of colds that occurred (15 comparisons from 10 RCTs).",
+   "source_pmids": [
+    "38082300"
+   ],
+   "reviewed_at": "2026-10-28",
+   "excluded_claim_terms": [
+    "prevents colds",
+    "cold prevention"
+   ]
+  }
+ },
+ "study_contexts": [
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "ingr_vitamin_c_38082300_scoped_source",
+   "components": [
+    "INGR_VITAMIN_C"
+   ],
+   "source_pmids": [
+    "38082300"
+   ],
+   "identity_scope": "exact_form",
+   "identity": {
+    "chemical_form": "Vitamin C (ascorbic acid), oral, >=1 g/day regular supplementation; trial-specific tablets"
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "meta_analysis",
+   "component_registration_status": "fully_registered",
+   "condition": "common_cold_severity",
+   "purpose": "prevention",
+   "review_status": "clinician_approved",
+   "scoring_eligible": true,
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "trial_family": "source_38082300",
+   "population": {
+    "age_group": "mixed",
+    "description": "15 comparisons from 10 randomized double-blind placebo-controlled trials in people in good health at baseline: schoolchildren (mean age 9-12), adolescent swimmers, marine recruits and adults (mean age up to 44); colds per comparison 20-1279 (Table 1)."
+   },
+   "study_design": "Meta-analysis (fixed-effect ratio of means) of placebo-controlled trials of regular oral vitamin C >=1 g/day that reported both total cold duration and a severity measure; all included trials randomized and double-blind.",
+   "outcomes": [
+    {
+     "name": "Common cold severity: vitamin C reduced severity by 15% (95% CI 9-21%) vs placebo across 15 comparisons; 19% (P=0.001) after excluding the three largest trials",
+     "hierarchy": "not_reported",
+     "kind": "patient_important",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "Direct mild vs severe comparison (5 comparisons): significant benefit on duration of severe symptoms; no significant effect on duration of mild symptoms",
+     "hierarchy": "not_reported",
+     "kind": "patient_important",
+     "direction": "mixed",
+     "outcome_role": "direct_between_group_effect"
+    }
+   ],
+   "limitations": [
+    "Effect on colds occurring during regular supplementation in healthy people; not treatment started after symptom onset (therapeutic trials were few) and not prevention of cold incidence in the general population.",
+    "Analysis restricted to trials reporting both duration and severity; control-group contamination (vitamin C intake in placebo arms) in six comparisons may bias toward null.",
+    "Trials date mainly from 1961-1981 plus 1998 and 2011; >=1 g/day is the inclusion criterion, not a validated minimum. Nutritional adequacy and the UL are assessed separately.",
+    "Includes children and adolescents (age_group mixed); not specific to any disease population.",
+    "Returned decision A119: source-content hold; methods now verified from full text. Cochrane 23440782 and 17636648 full texts not retrievable; no contexts for them.",
+    "Some included-study citations lack PubMed identifiers in the source XML; retain their exact citations rather than inventing identifiers.",
+    "Historical bibliography census (not independent scoring sources; actual included-publication membership is separately bound to the inspected source table): 765514, 4601508, 5057006, 4684621, 897573, 20689965, 368370, 7048833, 318715. Each intervention and comparison requires its own applicability assessment; citation in this bibliography grants no credit.",
+    "Included-study identifiers are now bound to this source's actual included-study rows/explicit inclusion references (Tables Tab1 explicit included-study row citations), with live NIH title/content identity checks. They are publication pointers, not independent-cohort counts, per-primary-study scoring approvals, preparation equivalence or new efficacy evidence. Exact unindexed source citations remain retained; no missing PMID is invented.",
+    "3 included source citations have no printed PubMed identifier in this primary source; their exact citations are retained in the source-table receipt. This is a documented identifier limitation, not a fabricated identifier or an extra independent trial.",
+    "Dr. Pham's fourth ruling set (2026-10-28): clinical credit only for common-cold severity within this review's scope (15 comparisons, 10 RCTs); the review designates no primary endpoint, so no prespecified, multiplicity-controlled superiority is assumed. Nutritional vitamin C adequacy stays on the nutrition pathway.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ],
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "mg",
+    "values": [],
+    "dose_status": "verified",
+    "dose_basis": "not_applicable",
+    "duration_basis": "participant_specific",
+    "duration_days": null,
+    "administration_frequency": "Regular daily dosing; 1 g/day in 11 comparisons, 2 g/day in 2, and 1 g/day increased to 4 g/day for the first 3 days of colds in 2 (Results).",
+    "dosage_forms": [
+     "oral vitamin C tablet (trial-specific; tablets named in contamination analysis)"
+    ],
+    "co_therapies": [
+     "Placebo comparator; no assigned co-therapy."
+    ],
+    "reported_regimen": "Table 1/Results: 1 g/day (11 comparisons), 2 g/day (2), 1 g/day plus 3 g/day extra during the first 3 days of colds (2); trial durations 2-5 months, two about one week.",
+    "normalization": {
+     "basis": "No scalar pooled dose; per-comparison g/day retained (1 g = 1,000 mg)."
+    },
+    "source_provenance": {
+     "pmid": "38082300",
+     "location": "Abstract; Methods (inclusion, ratio of means); Results (Table 1 trial characteristics, dose paragraph, risk of bias, contamination, Fig. 2 pooled severity, sensitivity analysis)",
+     "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10712193/"
+    }
+   },
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability"
+   },
+   "included_study_pmids": [
+    "897573",
+    "368370",
+    "5057006",
+    "4684621",
+    "4601508",
+    "7048833",
+    "318715",
+    "20689965",
+    "765514"
+   ]
+  }
+ ],
+ "source_receipts": [
+  {
+   "pmid": "38082300",
+   "title_fetched": "Vitamin C reduces the severity of common colds: a meta-analysis.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/38082300/",
+   "full_text": true,
+   "sections_used": "Abstract; Methods; Results incl. Table 1, Fig. 2, sensitivity analysis; Discussion"
+  },
+  {
+   "pmid": "23440782",
+   "title_fetched": "Vitamin C for preventing and treating the common cold.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/23440782/",
+   "full_text": false,
+   "sections_used": "Abstract only (Cochrane PMC copy not retrievable as full text)"
+  },
+  {
+   "pmid": "17636648",
+   "title_fetched": "Vitamin C for preventing and treating the common cold.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/17636648/",
+   "full_text": false,
+   "sections_used": "Abstract only"
+  }
+ ],
+ "integration_notes": [
+  "2026-10-28 integrator: condition gate kept (supported_outcomes ['common_cold_severity'] equals the context condition). Sean's decision is that a claim-free label may earn scoped condition credit, but today the population limits (e.g. men-only, pregnancy, children) are enforced only inside this gate, so ungating via data would drop those safeguards. Claim-free scoped credit waits for the shared applicability change (no claim / aligned claim / unrelated claim / population mismatch) under /pg-scoring-change."
+ ]
+}

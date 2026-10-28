@@ -1,0 +1,242 @@
+{
+ "record_id": "INGR_PANTETHINE",
+ "decision": "closed_credit",
+ "summary": "24600231 (32 statin-eligible low/moderate-risk adults on a TLC diet, pantethine 600 then 900 mg/day for 16 weeks) met its primary endpoint with lower LDL-C versus placebo (P=0.006 at week 16) plus lower total and non-HDL cholesterol. The larger companion trial 21925346 (n=120) agrees but is abstract-only and carries no credit. Credit is scoped to pantethine lipid outcomes, kept separate from pantothenic acid as Dr. Pham required. Fourth-ruling boundary applied: lipid outcome only; clinical-event prevention excluded.",
+ "record_updates": {
+  "applicability": {
+   "scope": "ingredient",
+   "excluded_form_terms": [
+    "pantothenic",
+    "pantothenate"
+   ],
+   "supported_outcomes": [
+    "lipid_profile"
+   ],
+   "studied_population": "Adults at low to moderate cardiovascular risk with raised LDL-C following a TLC diet, taking pantethine 600-900 mg/day for 16 weeks; not pantothenic acid and not a statin substitute.",
+   "source_pmids": [
+    "24600231"
+   ],
+   "reviewed_at": "2026-10-28",
+   "excluded_claim_terms": [
+    "heart disease",
+    "heart attack",
+    "stroke",
+    "pantothenic acid"
+   ]
+  }
+ },
+ "study_contexts": [
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "ingr_pantethine_24600231",
+   "source_pmids": [
+    "24600231"
+   ],
+   "components": [
+    "INGR_PANTETHINE"
+   ],
+   "identity_scope": "exact_form",
+   "identity": {
+    "chemical_form": "Pantethine (Pantesin HF55, pharmaceutical grade, 300 mg per tablet); not pantothenic acid"
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "direct_rct",
+   "component_registration_status": "fully_registered",
+   "condition": "hypercholesterolemia_low_moderate_cvd_risk",
+   "purpose": "treatment",
+   "review_status": "clinician_approved",
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability"
+   },
+   "scoring_eligible": true,
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "trial_family": "ingr_pantethine_24600231",
+   "population": {
+    "age_group": "adult",
+    "description": "32 adults aged >=21 at low to moderate CVD risk with LDL-C above TLC goal (statin-eligible by ATP-III), predominantly white women, randomized after a 4-week TLC diet; 24 completed."
+   },
+   "study_design": "Randomized, triple-blinded, placebo-controlled trial with diet control (TLC diet throughout), 16 weeks.",
+   "outcomes": [
+    {
+     "name": "Primary: change in fasting LDL-C over 16 weeks; lower versus placebo at week 8 (P=0.020) and week 16 (P=0.006)",
+     "hierarchy": "primary",
+     "kind": "surrogate",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "Total cholesterol lower at week 16 (P=0.040); non-HDL-C lower by week 16 (P=0.042); triglycerides not changed",
+     "hierarchy": "secondary",
+     "kind": "surrogate",
+     "direction": "mixed",
+     "outcome_role": "direct_between_group_effect"
+    }
+   ],
+   "limitations": [
+    "Very small (32 randomized, 24 completers) and short; lipid surrogate only, not a cardiovascular-event trial or a substitute for statins.",
+    "Authors include employees of Daiichi Fine Chemical (Pantesin maker) and Kyowa Hakko USA; conducted by a contract research organization.",
+    "Dr. Pham's returned decision requires keeping pantethine distinct from pantothenic acid (vitamin B5); this evidence does not transfer to calcium pantothenate or pantothenic acid.",
+    "The step-up from 600 to 900 mg/day gave no measurable extra benefit at week 12 (Discussion); no dose threshold is implied.",
+    "TLC diet four week run in continued throughout; not medication substitution or CVD event trial.",
+    "Dr. Pham's fourth ruling set (2026-10-28) boundary: tight lipid claim; LDL-C change is not prevention of clinical cardiovascular events (2026 ACC/AHA advises against relying on supplements for dyslipidemia).",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ],
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "mg",
+    "values": [
+     600,
+     900
+    ],
+    "dose_status": "verified",
+    "dose_basis": "nominal_assigned_arm",
+    "duration_basis": "fixed_protocol",
+    "duration_days": 112,
+    "administration_frequency": "Three tablets daily; weeks 1-8 two active plus one placebo tablet, weeks 9-16 three active tablets",
+    "dosage_forms": [
+     "oral tablet"
+    ],
+    "co_therapies": [
+     "Therapeutic Lifestyle Change (TLC) diet from 4-week lead-in throughout"
+    ],
+    "source_provenance": {
+     "pmid": "24600231",
+     "location": "Methods (eligibility, TLC diet, randomization, investigational product Pantesin HF55 300 mg tablets, primary end point); Results Table 1, Figure 1-2; author affiliations",
+     "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3942300/"
+    },
+    "duration_as_printed": {
+     "value": 16,
+     "unit": "weeks"
+    },
+    "reported_regimen": "600 mg/day weeks 1-8, then 900 mg/day weeks 9-16",
+    "normalization": {
+     "basis": "Assigned pantethine mass per day (300 mg tablets)."
+    }
+   }
+  },
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "ingr_pantethine_21925346",
+   "source_pmids": [
+    "21925346"
+   ],
+   "components": [
+    "INGR_PANTETHINE"
+   ],
+   "identity_scope": "exact_form",
+   "identity": {
+    "chemical_form": "Pantethine; not pantothenic acid"
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "direct_rct",
+   "component_registration_status": "fully_registered",
+   "condition": "hypercholesterolemia_low_moderate_cvd_risk",
+   "purpose": "treatment",
+   "review_status": "clinician_approved",
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability"
+   },
+   "scoring_eligible": false,
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "trial_family": "ingr_pantethine_21925346",
+   "population": {
+    "age_group": "adult",
+    "description": "120 North American adults at low to moderate CVD risk on a TLC diet (60 per group)."
+   },
+   "study_design": "Randomized, triple-blinded, placebo-controlled trial with 4-week TLC diet lead-in, 16 weeks.",
+   "outcomes": [
+    {
+     "name": "Total cholesterol and LDL-C lowered versus placebo (P<.005), sustained",
+     "hierarchy": "not_reported",
+     "kind": "surrogate",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    }
+   ],
+   "limitations": [
+    "Full text not open access; only the PubMed abstract was retrieved. Primary end point designation, completer numbers and effect sizes were not verifiable, so this context carries no credit.",
+    "Same research program and design as 24600231; not independent replication by a separate group.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ],
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "mg",
+    "values": [
+     600,
+     900
+    ],
+    "dose_status": "verified",
+    "dose_basis": "nominal_assigned_arm",
+    "duration_basis": "fixed_protocol",
+    "duration_days": 112,
+    "administration_frequency": "Daily (split not stated in abstract)",
+    "dosage_forms": [
+     "oral (form not stated in abstract)"
+    ],
+    "co_therapies": [
+     "TLC diet throughout"
+    ],
+    "source_provenance": {
+     "pmid": "21925346",
+     "location": "PubMed abstract",
+     "source_url": "https://pubmed.ncbi.nlm.nih.gov/21925346/"
+    },
+    "duration_as_printed": {
+     "value": 16,
+     "unit": "weeks"
+    },
+    "reported_regimen": "600 mg/day baseline to week 8, 900 mg/day weeks 9-16",
+    "normalization": {
+     "basis": "Assigned pantethine mass per day."
+    }
+   }
+  }
+ ],
+ "source_receipts": [
+  {
+   "pmid": "24600231",
+   "title_fetched": "Pantethine, a derivative of vitamin B5, favorably alters total, LDL and non-HDL cholesterol in low to moderate cardiovascular risk subjects eligible for statin therapy: a triple-blinded placebo and diet-controlled investigation.",
+   "url": "https://www.ncbi.nlm.nih.gov/research/bionlp/RESTful/pmcoa.cgi/BioC_json/24600231/unicode",
+   "full_text": true,
+   "sections_used": "Methods (eligibility, TLC diet, randomization, investigational product Pantesin HF55 300 mg tablets, primary end point); Results Table 1, Figure 1-2; author affiliations"
+  },
+  {
+   "pmid": "21925346",
+   "title_fetched": "Pantethine, a derivative of vitamin B(5) used as a nutritional supplement, favorably alters low-density lipoprotein cholesterol metabolism in low- to moderate-cardiovascular risk North American subjects: a triple-blinded placebo and diet-controlled investigation.",
+   "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=21925346&retmode=xml",
+   "full_text": false,
+   "sections_used": "PubMed abstract"
+  }
+ ],
+ "freshness_search": {
+  "date": "2026-10-28",
+  "database": "PubMed (NCBI E-utilities esearch, sort=pub_date, retmax=60; titles via esummary, abstracts via efetch)",
+  "query": "pantethine[tiab] AND (cholesterol OR lipid* OR LDL OR triglyceride* OR dyslipid* OR hyperlipid*) AND (meta-analysis[pt] OR systematic review[pt] OR randomized controlled trial[pt])",
+  "hits": 5,
+  "screened": 60,
+  "supplementary_queries": [
+   {
+    "query": "pantethine[tiab] AND (cholesterol OR lipid* OR LDL OR triglyceride* OR dyslipid*)",
+    "hits": 85,
+    "note": "unfiltered sensitivity check; newest 60 titles screened"
+   }
+  ],
+  "screening_rule": "Kept human placebo- or active-controlled pantethine lipid trials and syntheses newer than 24600231 (2014). The unfiltered titles were otherwise animal, mechanistic, neurodegeneration or pre-2014.",
+  "read": [
+   {
+    "pmid": "26350816",
+    "title": "Efficacy and tolerability of coenzyme A vs pantethine for the treatment of patients with hyperlipidemia: A randomized, double-blind, multicenter study.",
+    "finding": "2015 double-blind RCT, 216 Chinese adults with moderate dyslipidemia: CoA 400 U/d vs pantethine 600 U/d for 8 weeks, with no placebo arm. Pantethine lowered TG 16.5% from baseline and CoA was superior for TG. LDL-C did not differ between groups. Active comparator only."
+   }
+  ],
+  "conclusion": "confirms: no synthesis and no newer placebo-controlled pantethine trial exists after 24600231. The only newer trial is active-controlled and cannot test efficacy. Credit stays limited to LDL-C lowering in the studied population, with no clinical-event credit (fourth ruling)."
+ }
+}

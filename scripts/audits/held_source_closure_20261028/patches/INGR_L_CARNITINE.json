@@ -1,0 +1,132 @@
+{
+ "record_id": "INGR_L_CARNITINE",
+ "decision": "held: the two declared meta-analyses that could support credit (32154768 muscle damage, 32359762 body weight) have no open full text; their abstracts report no per-trial dose, form or included-trial list, so rule 2 dose verification is impossible. The accessible 32958033 is a mixed-design narrative review and is completed as a non-credit context. OA retry 2026-10-28: OpenAlex, Semantic Scholar and Europe PMC report no open copy of 32154768 or 32359762.",
+ "summary": "32958033 (11 studies, 1 to 4.5 g/day for 12-24 weeks, mixed designs) shows population-dependent effects and higher fasting TMAO; it cannot carry credit. 32154768 (7 RCTs, less soreness) and 32359762 (37 RCTs, -1.21 kg body weight) look favorable from their abstracts but cannot be verified for dose or included trials, so the record stays held rather than reference-only (no frozen dependants).",
+ "record_updates": {},
+ "study_contexts": [
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "ingr_l_carnitine_32958033_source_completion",
+   "source_pmids": [
+    "32958033"
+   ],
+   "components": [
+    "INGR_L_CARNITINE"
+   ],
+   "identity_scope": "ingredient_general",
+   "identity": {
+    "preparation": "Oral L-carnitine, mostly L-carnitine L-tartrate (LCLT); salt mass and carnitine base not equated"
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "systematic_review",
+   "component_registration_status": "fully_registered",
+   "condition": "muscle_metabolism_and_exercise",
+   "purpose": "physiology",
+   "review_status": "clinician_approved",
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability"
+   },
+   "scoring_eligible": false,
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "trial_family": "source_32958033",
+   "population": {
+    "description": "11 studies (2002-2020) in healthy humans, from young athletes to aged women and centenarians, supplemented >=12 weeks."
+   },
+   "study_design": "Systematic review without meta-analysis; PICOS admitted randomized controlled, non-randomized controlled and non-randomized non-controlled designs.",
+   "outcomes": [
+    {
+     "name": "Muscle carnitine, performance and body-composition effects vary by population and cointervention; 24 weeks did not change muscle strength in aged women; centenarian muscle mass and effort tolerance improved",
+     "hierarchy": "not_reported",
+     "kind": "patient_important",
+     "direction": "mixed",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "Fasting plasma TMAO increased, without change in measured inflammatory or oxidative-stress markers",
+     "hierarchy": "not_reported",
+     "kind": "surrogate",
+     "direction": "negative",
+     "outcome_role": "direct_between_group_effect"
+    }
+   ],
+   "limitations": [
+    "Mixed randomized and non-randomized designs; narrative synthesis only, not a pooled RCT estimate. Not credit-bearing.",
+    "Dose range is 1-4 g/day in the abstract but 1 to 4.5 g/day in Results; discrepancy retained.",
+    "Declared meta-analyses 32154768 (7 RCTs, exercise-induced muscle damage; soreness improved at 0-96 h) and 32359762 (37 RCTs, 2292 participants; body weight WMD -1.21 kg, -1.73 to -0.68) have no open full text; abstracts give no per-trial regimens, forms or included-trial lists, so no context could be completed for them.",
+    "Do not transfer centenarian findings to ordinary healthy adults or add overlapping older-women reports as independent cohorts.",
+    "Despite restrictive abstract wording, the source table includes carbohydrate and leucine cointerventions; these cannot be ignored.",
+    "Physical dosage form is not specified uniformly by the source table; no capsule assumption.",
+    "Included-study identifiers are now bound to this source's actual included-study rows/explicit inclusion references (Tables Tab1 explicit included-study row citations), with live NIH title/content identity checks. They are publication pointers, not independent-cohort counts, per-primary-study scoring approvals, preparation equivalence or new efficacy evidence. Exact unindexed source citations remain retained; no missing PMID is invented.",
+    "1 included source citations have no printed PubMed identifier in this primary source; their exact citations are retained in the source-table receipt. This is a documented identifier limitation, not a fabricated identifier or an extra independent trial.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ],
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "mg",
+    "values": [
+     1000,
+     4500
+    ],
+    "dose_status": "verified",
+    "dose_basis": "not_applicable",
+    "duration_basis": "participant_specific",
+    "duration_days": null,
+    "administration_frequency": "Daily, study-specific (Table 1)",
+    "dosage_forms": [
+     "oral L-carnitine (physical form not uniformly reported in Table 1)"
+    ],
+    "co_therapies": [
+     "Carbohydrate co-ingestion in three studies; leucine in one; exercise training varies"
+    ],
+    "source_provenance": {
+     "pmid": "32958033",
+     "location": "Methods PICOS; Results paragraph 1 and Table 1 (11 studies, design, dose, duration, cointerventions); abstract",
+     "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7507632/"
+    },
+    "reported_regimen": "1 to 4.5 g/day (abstract: 1-4 g/day), mostly LCLT, for 12 or 24 weeks",
+    "normalization": {
+     "basis": "Descriptive source range; LCLT salt mass not converted to carnitine base."
+    }
+   },
+   "included_study_pmids": [
+    "11880112",
+    "25612929",
+    "23818692",
+    "21224234",
+    "28345160",
+    "18065594",
+    "29473908",
+    "30485835",
+    "31636806",
+    "32033285"
+   ]
+  }
+ ],
+ "source_receipts": [
+  {
+   "pmid": "32958033",
+   "title_fetched": "The bright and the dark sides of L-carnitine supplementation: a systematic review.",
+   "url": "https://www.ncbi.nlm.nih.gov/research/bionlp/RESTful/pmcoa.cgi/BioC_json/32958033/unicode",
+   "full_text": true,
+   "sections_used": "Methods PICOS; Results paragraph 1 and Table 1 (11 studies, design, dose, duration, cointerventions); abstract"
+  },
+  {
+   "pmid": "32154768",
+   "title_fetched": "The Effect of L-Carnitine Supplementation on Exercise-Induced Muscle Damage: A Systematic Review and Meta-Analysis of Randomized Clinical Trials.",
+   "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=32154768&retmode=xml",
+   "full_text": false,
+   "sections_used": "PubMed abstract only"
+  },
+  {
+   "pmid": "32359762",
+   "title_fetched": "Effects of l-carnitine supplementation on weight loss and body composition: A systematic review and meta-analysis of 37 randomized controlled clinical trials with dose-response analysis.",
+   "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=32359762&retmode=xml",
+   "full_text": false,
+   "sections_used": "PubMed abstract only"
+  }
+ ]
+}

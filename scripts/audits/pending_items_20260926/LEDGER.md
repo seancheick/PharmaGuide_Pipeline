@@ -1,3 +1,45 @@
+## October 28 — held source closure under Dr Pham's signed rulings (claude/held-source-closure)
+
+Behavioral data batch (clinical facts). Owner: `scripts/clinical_applicability.py::assess_clinical_source_review`
+(completion) and `assess_clinical_applicability` (product scope) — evidence: `check_patch.py` per record and the
+completion audit below. Will NOT create: a new status, field, scorer or registry.
+
+- **Authority.** Dr Pham's five ruling sets relayed by Sean on 2026-10-28
+  (`scripts/audits/held_source_closure_20261028/DR_PHAM_RULINGS_20261028.md`) and her attested pre-approval of
+  fully source-verified agent contexts (reviewer "Dr. Pham", 2026-10-28, with an agent-authorship limitation).
+  Earlier signatures keep their own dates.
+- **Result (118 register items + hyaluronic acid).** 70 records complete: 43 with scoped credit, 27 no-credit on the
+  reference path with qualified wording. 49 stay held, each with one exact remaining item in
+  `clinical_review_holds.csv` and its patch receipt. Whole file: 98 of 210 records complete (from 28).
+- **No pending drafts in production data.** Every `source_verified_pending_clinical_review` context (128 on main) is
+  approved from a full text or moved to its patch receipt; `test_no_pending_clinical_review_in_data.py` fails on
+  main and passes here.
+- **Held for a stated reason, not closed:** omega-3 (closing zeroes EPA/DHA products on the generic route; waits for
+  the omega nutritional pathway — calibration session), vitamin D3 and Testofen (freshness searches revise the
+  conclusion), plant sterols (capsule/tablet full texts unread), cinnamon (expression of concern; weights and
+  exclusion sensitivity recorded), PQQ (corrected table unread), lactoferrin (retracted trial; proposed no credit),
+  collagen, digestive enzymes, green tea, S. boulardii and abstract-only sources.
+- **Measurement.** Frozen 1,111 real labels (prior 495-label cohort + up to six products per register item),
+  `~/pg_quality/held_closure_20261028/` (re-measured after merging main 2a55dbcee: `base2.jsonl` on main, `cand7.jsonl` on this
+  data, sha256 2dbfe515474b…). 227 Evidence decreases, 0 increases; 1 Formulation change (316118, LJ100 standardization credit
+  tied to the misattributed brand); 0 status, safety-gate or dose-safety changes. Drops follow rulings: reference-only
+  records (turmeric, milk thistle, HMB, valerian, echinacea…), narrowed scopes (CoQ10 heart failure, ginger nausea,
+  white kidney bean Phaseolean, beta-alanine ≥2.4 g/day), whey-only protein credit, one probiotic owner (LGG/BB-12).
+- **Integration fixes found while measuring:** source-only label gating rejected real branded labels; whey row-text
+  term rejected 100% whey; deleting lifted record holds disabled the lost-context guard (kept as `true`); beta-alanine
+  "energy" exclusion over a whole label; berberine credited undosed Oregon grape; inositol outcome term read as
+  digestive. All fixed and re-measured.
+- **Review.** Independent read-only review: 13 findings; fixed 1–3, 5, 6, 8, 12. Open by decision: condition credit
+  without a label claim (Sean decided; needs the shared applicability change, proposed as its own task, with Dr Pham's
+  approval of the clarification); population limits only inside the condition gate; held records with no
+  applicability still match on the legacy path (pre-existing); Formulation reading clinical status (316118).
+- **CI round 1 (a78f78bf9) failed** in files outside the local slice: 19 stale pins (fixed), a renamed test helper
+  (fixed), whole-label exclusions matching product names (BCAA, KSM-66: now claim phrases), and UC-II credit moved
+  off its brand heading by any applicability block (UC-II keeps main's unscoped policy; heading fix handed to the
+  claim-state applicability session).
+- **Validation.** After merging main (a51074c1b): clinical slice plus every CI-failed file 4,038 passed; landed
+  check 119 records, 0 problems. Python correctness 0 new.
+
 ## October 27 — returned-review closure candidate
 
 Behavioral source/data/code batch, baseline e8db3798f. Reconciled 49 backed records and 22 additional Dose-only proofs (343 valid total); signed lutein rejection and migraine-scoped B2 use complete two source assessments. Full required source state: 28/146 complete, 118 held. Fresh bounded raw diagnostics: 25/46 preparation groups complete/outside botanical Dose; 21 remain. All frozen rows and original decisions are preserved; these are not 118 new signature requests.
@@ -3759,3 +3801,11 @@ Open:
 - generic_evidence override, magnitude move and the line-718 predicate wait for claude/serene-dubinsky-479574 (folate allowlist already removed there, 37d74d5b1).
 - Before an app release, run sync_flutter_reference_data.py: the app's bundled rda_optimal_uls.json predates 720e95812.
 - Items 7–12 continue under Sean's October 28 rulings.
+
+## October28 — Evidence calibration (Dr Pham bands), measured candidate pending Sean
+
+Owner: scoring_v4/modules/generic_evidence.py::_primary_mass_floor; quality_score.json evidence_magnitudes.generic (1.31.0-evidence-no-automatic-exceptional, unreleased). Will NOT create a scorer, registry, field or status. Behavioral scoring class. Branch claude/serene-dubinsky-479574; qualification PR pending CI; no merge without Sean.
+
+Change: retired the brand-marker/BRAND_-id/ingredient-allowlist 18-raw floor (20/20; reached by one small manufacturer trial, e.g. BRAND_ASTAREAL with one PMID) and the branded single-RCT 17-raw floor (18.9/20). No automatic floor exceeds the strong base (14 raw = 15.6/20). The registry records no body-level certainty judgement, so a three-family count gate was built, reviewed twice and then removed per Sean. Proposed: a recorded clinician determination field for 19–20 (Sean's decision).
+
+Measured vs e6885790d: cohort 205 labels, 59 down, Evidence only; corpus scorer-only 803/15,149 down, 0 up, 0 other-pillar/status/safety/state changes, 344 tier changes (vitamin D3 454, creatine 133). Final code equals the measured outputs (the route never fired). Fail-first per rule; consumer slice 3,530 passed; raw canaries 33/33. Pre-existing and owner-assigned: 230149 stale since 49b61f37d (repinned); 10 stored-corpus preparation-artifact canaries and 7 preflight invariants vs the Oct18 baseline need the final rebuild/capture; 176872 lost a "Vitamin D / pregnancy" warning (safety owner); 17 magnesium supplemental-UL findings on undeclared food-matrix sources (Dose/safety owner). Proposals: INGR_FOLATE_MTHF biomarker-only (12.2 → 11.1 on 11 products); omega re-cite to EFSA 2010 plus disclosure rule (+84; review csv); app Evidence badge. Details: scripts/audits/evidence_calibration_20261028/PROPOSAL.md.
