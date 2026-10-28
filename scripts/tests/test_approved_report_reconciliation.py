@@ -92,25 +92,22 @@ def test_botanical_lions_mane_is_the_mushroom_not_the_jellyfish():
     assert entry["cui"] == "C6049163"  # C1001731 is Cyanea capillata
 
 
-def test_reviewed_literature_record_follows_exact_equivalence():
-    from evidence_resolver import _load_literature_evidence, literature_record_for
+def test_reviewed_literature_record_stays_bound_to_its_own_canonical():
+    # Approval scopes name their record ("identified lion_s_mane only"); an
+    # identity equivalence does not carry them to another canonical.
+    from evidence_resolver import _load_literature_evidence
 
-    assert "lions_mane" not in _load_literature_evidence()
-    assert literature_record_for("lions_mane")["canonical_id"] == "lion_s_mane"
-    # A record of its own wins; NHA_BLADDERWRACK's approved neutral is scoped
-    # to that record and no equivalence carries it to the botanical entry.
-    assert literature_record_for("bladderwrack")["canonical_id"] == "bladderwrack"
-    assert literature_record_for("lion_s_mane")["canonical_id"] == "lion_s_mane"
-    assert literature_record_for("no_such_canonical") == {}
+    index = _load_literature_evidence()
+    assert "lion_s_mane" in index and "lions_mane" not in index
 
 
 @pytest.mark.parametrize("pid", ["329997", "329993"])
-def test_lions_mane_keeps_its_approved_neutral_dose(materials, pid):
+def test_lions_mane_rows_are_scored_under_the_species(materials, pid):
     _, product = materials[pid]
     assert {r["canonical_id"] for r in get_scoring_ingredients(product).rows} == {"lions_mane"}
-    artifact = build_scored_artifact(product)
-    assert artifact["quality_score_status"] == "scored"
-    assert artifact["quality_pillars_v4"]["dose"]["score"] > 0
+    assert build_scored_artifact(product)["quality_score_status"] == "scored"
+    alerts = product["interaction_profile"]["ingredient_alerts"]
+    assert any(a.get("rule_id") == "RULE_IQM_LIONS_MANE_ANTICOAGULANTS" for a in alerts)
 
 
 def test_unreviewed_umbrella_recognition_keeps_its_scoped_dose_proof(materials):

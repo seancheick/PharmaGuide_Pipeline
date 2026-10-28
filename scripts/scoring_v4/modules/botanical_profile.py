@@ -901,9 +901,9 @@ def _botanical_benchmark(row: Dict[str, Any]) -> str:
     # only the exact canonical, verified record with the approved neutral
     # disposition completes this Dose assessment. Study exposures stay
     # descriptive and an unreadable amount still fails the strict input gate.
-    from evidence_resolver import literature_record_for
+    from evidence_resolver import _load_literature_evidence
 
-    record = literature_record_for(row.get("canonical_id"))
+    record = _load_literature_evidence().get(_norm(row.get("canonical_id"))) or {}
     semantics = record.get("reference_semantics") or {}
     from dose_assessment import verified_reference_citations
 
