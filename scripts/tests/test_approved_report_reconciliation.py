@@ -92,20 +92,26 @@ def test_botanical_lions_mane_is_the_mushroom_not_the_jellyfish():
     assert entry["cui"] == "C6049163"  # C1001731 is Cyanea capillata
 
 
-def test_reviewed_literature_record_stays_bound_to_its_own_canonical():
-    # Approval scopes name their record ("identified lion_s_mane only"); an
-    # identity equivalence does not carry them to another canonical.
+def test_lions_mane_literature_record_is_keyed_to_the_species_canonical():
+    # Dr Pham's approval covers lions_mane (Sean, 2026-10-28); the record was
+    # re-keyed rather than borrowed through an equivalence.
+    from dose_assessment import verified_reference_citations
     from evidence_resolver import _load_literature_evidence
 
     index = _load_literature_evidence()
-    assert "lion_s_mane" in index and "lions_mane" not in index
+    assert "lion_s_mane" not in index
+    record = index["lions_mane"]
+    assert verified_reference_citations(record)
+    assert record["reference_semantics"]["owner"].endswith("::lions_mane")
 
 
 @pytest.mark.parametrize("pid", ["329997", "329993"])
 def test_lions_mane_rows_are_scored_under_the_species(materials, pid):
     _, product = materials[pid]
     assert {r["canonical_id"] for r in get_scoring_ingredients(product).rows} == {"lions_mane"}
-    assert build_scored_artifact(product)["quality_score_status"] == "scored"
+    artifact = build_scored_artifact(product)
+    assert artifact["quality_score_status"] == "scored"
+    assert artifact["quality_pillars_v4"]["dose"]["score"] > 0
     alerts = product["interaction_profile"]["ingredient_alerts"]
     assert any(a.get("rule_id") == "RULE_IQM_LIONS_MANE_ANTICOAGULANTS" for a in alerts)
 

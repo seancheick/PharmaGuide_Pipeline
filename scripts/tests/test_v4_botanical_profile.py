@@ -918,7 +918,7 @@ def test_known_hidden_source_identity_is_not_rejected_for_missing_dose(change):
     'tribulus', 'olive_leaf_powder', 'licorice', 'gotu_kola',
     'rosemary', 'fennel', 'globe_artichoke', 'uva_ursi_leaf',
     'dong_quai', 'marshmallow_root', 'white_willow_bark', 'hawthorn',
-    'oat_straw', 'lion_s_mane', 'butterbur', 'red_clover',
+    'oat_straw', 'lions_mane', 'butterbur', 'red_clover',
     'blood_orange_extract', 'black_tea_leaf', 'siberian_ginseng', 'feverfew',
     'oregano', 'barberry_root', 'wild_yam_root', 'maitake',
     'hoodia_gordonii', 'butchers_broom_root', 'cranberry_fruit', 'chicory_root',
