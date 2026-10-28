@@ -1,0 +1,183 @@
+{
+ "record_id": "INGR_L_THEANINE",
+ "decision": "closed_credit",
+ "summary": "Full text of the 2025 Nutr Rev meta-analysis shows theanine alone (100-400 mg, acute) improved choice reaction time in the first hour (SMD -0.35, 95% CI -0.61 to -0.10) but not most other cognitive tasks, relaxation or sleep; combination effects are attributed to caffeine. It gets one eligible context with mixed results recorded, limited to Focus & Mental Clarity. The 2014 combination meta-analysis is abstract-only and gets no credit. The new applicability block does not include the record's stress claim, which the source does not support.",
+ "record_updates": {
+  "applicability": {
+   "scope": "ingredient",
+   "supported_outcomes": [
+    "Focus & Mental Clarity"
+   ],
+   "studied_population": "Healthy adults given acute L-theanine alone (100-400 mg) in laboratory crossover trials pooled by PMID 40314930; choice reaction time improved in the first hour, most other measures did not.",
+   "source_pmids": [
+    "40314930"
+   ],
+   "reviewed_at": "2026-10-28"
+  }
+ },
+ "study_contexts": [
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "ingr_l_theanine_40314930_scoped_source",
+   "components": [
+    "INGR_L_THEANINE"
+   ],
+   "source_pmids": [
+    "40314930"
+   ],
+   "identity_scope": "ingredient_general",
+   "identity": {
+    "preparation": "Theanine-alone arms (100-400 mg) versus placebo are the credited comparison; theanine-plus-caffeine and tea-beverage arms are separate exposures and carry no theanine credit."
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "meta_analysis",
+   "component_registration_status": "fully_registered",
+   "condition": "cognition_and_mood_in_healthy_adults",
+   "purpose": "challenge",
+   "review_status": "clinician_approved",
+   "scoring_eligible": true,
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "trial_family": "source_40314930",
+   "population": {
+    "age_group": "adult",
+    "description": "Healthy participants; 16 trials (15 references) in at least one meta-analysis, 484 participants (229 female), median n 27, weighted mean age 32; mostly laboratory crossover studies. Theanine-alone CR-time analysis pooled Kahathuduwa 2017, Dassanayake 2022, Haskell 2008 and Dodd 2015."
+   },
+   "study_design": "PROSPERO-registered (CRD42022351601) systematic review (49-50 RCTs) and random-effects SMD meta-analysis of acute cognition and mood outcomes at hour 1 and hour 2 after intake; sleep outcomes synthesized narratively.",
+   "outcomes": [
+    {
+     "name": "Theanine alone vs placebo, choice reaction time hour 1: SMD -0.35 (95% CI -0.61 to -0.10; P=0.02) using the 100 mg Dassanayake arm (about -18 ms); -0.32 (-0.64 to 0.01) with the 200 mg arm and -0.35 (-0.62 to -0.08) with 400 mg.",
+     "hierarchy": "not_reported",
+     "kind": "surrogate",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "Theanine alone vs placebo, other tasks: simple reaction time, CR accuracy, CR time hour 2, digit vigilance, RVIP hour 1 and serial subtractions showed no clear difference; RVIP hour 2 favored theanine only with the 400 mg arm.",
+     "hierarchy": "not_reported",
+     "kind": "surrogate",
+     "direction": "null",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "Relaxation (2 studies) CIs included no difference; sleep outcomes inconsistent (narrative).",
+     "hierarchy": "not_reported",
+     "kind": "patient_important",
+     "direction": "null",
+     "outcome_role": "direct_between_group_effect"
+    }
+   ],
+   "limitations": [
+    "No blanket sleep, cognition or mood claim from this heterogeneous evidence.",
+    "Do not attribute caffeine-combination benefit to theanine alone.",
+    "Historical bibliography census (not independent scoring sources; actual included-publication membership is separately bound to the inspected source table): 29420994, 21172396, 21040626, 20079786, 25034805, 28784536, 26869148, 36263942, 17891480, 33751906, 18006208, 25761837, 18681988, 32777998, 34067795, 31060476, 31623400, 22214254, 24051231, 28566632, 28753943, 30308973, 33260552. Each intervention and comparison requires its own applicability assessment; citation in this bibliography grants no credit.",
+    "Included-study identifiers are now bound to this source's actual included-study rows/explicit inclusion references (Tables nuaf054-T2 explicit included-study row citations), with live NIH title/content identity checks. They are publication pointers, not independent-cohort counts, per-primary-study scoring approvals, preparation equivalence or new efficacy evidence. Exact unindexed source citations remain retained; no missing PMID is invented.",
+    "Results Study Characteristics explicitly reports two black-tea studies, two green-tea studies and one tea intervention in capsule form; isolated-compound arms remain separate and their delivery is not inferred. Other included trials may not report a delivery form; this list does not establish one common preparation across all arms.",
+    "Credit is limited to a small acute choice-reaction-time benefit of theanine alone in healthy adults (Focus & Mental Clarity); most other theanine-alone cognitive measures were null. The source does not support the record's stress/anxiety claim (relaxation CIs included no difference).",
+    "Few, small, mostly industry-funded laboratory crossover studies; the source states CIs often could not rule out no difference. Theanine-arm delivery forms are not tabulated; recorded as trial-specific oral preparations.",
+    "Returned A088 'source-content hold' is resolved for this source by full-text verification, within the focus/attention scope only.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ],
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "mg",
+    "values": [],
+    "dose_status": "verified",
+    "dose_basis": "not_applicable",
+    "duration_basis": "not_recorded",
+    "administration_frequency": "Mostly single acute doses with testing in the first and second hour after intake (Table 2); a few multi-week studies in the narrative review.",
+    "dosage_forms": [
+     "oral supplementation (trial-specific preparations)"
+    ],
+    "co_therapies": [
+     "Caffeine is an active co-intervention in combination arms, which are excluded from this record's credit; tea beverages contain caffeine and polyphenols."
+    ],
+    "reported_regimen": "Theanine-only, low-caffeine or caffeine-free interventions: median theanine 200 mg (IQR 100.45-212.5); pooled theanine-alone arms include 100, 200 and 400 mg (Dassanayake 2022) and 100.6 mg (Baba 2021). Combination arms: median theanine 82 mg with median caffeine 88.74 mg (not credited).",
+    "normalization": {
+     "basis": "A heterogeneous synthesis has no single assigned-arm dose. Descriptive regimens do not create an intake recommendation, equivalent preparation or efficacy threshold."
+    },
+    "source_provenance": {
+     "pmid": "40314930",
+     "location": "Full text (PMC12422004): Methods (PICOS table, outcomes), Results study-selection paragraph (doses, vehicles, funding), Table 2 study summary, theanine-versus-placebo SMD table, Sleep and mood results, Discussion.",
+     "source_url": "https://pubmed.ncbi.nlm.nih.gov/40314930/"
+    },
+    "duration_days": null
+   },
+   "included_study_pmids": [
+    "33751906",
+    "34067795",
+    "32777998",
+    "36263942",
+    "21172396",
+    "28784536",
+    "25761837",
+    "20079786",
+    "21040626",
+    "31060476",
+    "18006208",
+    "31623400",
+    "26869148",
+    "29420994",
+    "22214254",
+    "18681988",
+    "17891480",
+    "24051231",
+    "28566632",
+    "28753943",
+    "30308973",
+    "25034805",
+    "33260552"
+   ],
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability"
+   }
+  },
+  {
+   "context_id": "ingr_l_theanine_24946991_combination_abstract_only",
+   "components": [
+    "INGR_L_THEANINE"
+   ],
+   "source_pmids": [
+    "24946991"
+   ],
+   "review_status": "rejected_source",
+   "scoring_eligible": false,
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability",
+    "notes": "No credit: abstract-only source whose positive findings are for caffeine plus L-theanine combinations, with moderator analysis pointing to caffeine dose; it cannot isolate theanine."
+   },
+   "dose": {
+    "source_provenance": {
+     "pmid": "24946991",
+     "location": "PubMed abstract (Nutr Rev 2014; full text not open access).",
+     "source_url": "https://pubmed.ncbi.nlm.nih.gov/24946991/"
+    }
+   },
+   "limitations": [
+    "Camfield 2014: 11 placebo-controlled acute studies of L-theanine and EGCG alone or with caffeine; moderate effects favored combined caffeine and L-theanine for alertness and attention switching in the first 2 hours, with effect size tracking caffeine more than theanine dose (abstract). Combination evidence is not theanine-alone evidence.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ]
+  }
+ ],
+ "source_receipts": [
+  {
+   "pmid": "40314930",
+   "title_fetched": "Effects of Tea (Camellia sinensis) or its Bioactive Compounds l-Theanine or l-Theanine plus Caffeine on Cognition, Sleep, and Mood in Healthy Participants: A Systematic Review and Meta-Analysis of Randomized Controlled Trials.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/40314930/",
+   "full_text": true,
+   "sections_used": "Methods, Results, Tables 1-3, sleep/mood results, Discussion (BioC PMC12422004)"
+  },
+  {
+   "pmid": "24946991",
+   "title_fetched": "Acute effects of tea constituents L-theanine, caffeine, and epigallocatechin gallate on cognitive function and mood: a systematic review and meta-analysis.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/24946991/",
+   "full_text": false,
+   "sections_used": "PubMed abstract"
+  }
+ ]
+}

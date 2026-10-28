@@ -1,0 +1,204 @@
+{
+ "record_id": "INGR_LION_MANE",
+ "decision": "held: the record's principal positive source, 18844328 (Mori 2009 MCI trial, Phytother Res), has no open full text; its abstract gives the design and regimen, but Dr. Pham explicitly requires verified methods for it. The two open acute trials are approved without credit (one mixed, one null on its primary composite).",
+ "summary": "18844328 abstract: 30 Japanese adults aged 50-80 with MCI, 4 x 250 mg tablets (96% Yamabushitake powder) three times daily for 16 weeks, HDS-R scores higher than placebo at weeks 8-16 and falling after stopping. 38140277 (40 healthy adults, single 1 g dose) showed selected task improvements, and 40276537 (18 healthy adults, single 3 g extract) found no effect on the primary global cognitive composite. Dementia-treatment and neurogenesis inference stays rejected; the record stays held.",
+ "record_updates": {},
+ "study_contexts": [
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "ingr_lion_mane_38140277",
+   "components": [
+    "INGR_LION_MANE"
+   ],
+   "source_pmids": [
+    "38140277"
+   ],
+   "identity_scope": "botanical_preparation",
+   "identity": {
+    "botanical_species": "Hericium erinaceus",
+    "plant_part": "fruiting body",
+    "preparation": "100% organic Nordic-grown lion's mane fruiting bodies, 1 g in two capsules"
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "direct_rct",
+   "component_registration_status": "fully_registered",
+   "condition": "acute_cognitive_tasks",
+   "purpose": "challenge",
+   "review_status": "clinician_approved",
+   "scoring_eligible": false,
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "trial_family": "38140277",
+   "population": {
+    "age_group": "adult",
+    "description": "40 healthy men and women aged 18-50 (BMI 18.5-39.9) with habitual caffeine intake <=240 mg/day who completed all visits."
+   },
+   "study_design": "Randomized double-blind placebo-controlled Latin-square crossover (placebo, 650 mg guayusa extract, 1 g lion's mane); tests at baseline, 1 h and 2 h after a single dose.",
+   "outcomes": [
+    {
+     "name": "Primary cognitive battery (Serial Sevens, N-Back, Go/No-go): lion's mane improved Serial 7s attempts, N-Back reaction time and Go reaction time; other task measures unchanged",
+     "hierarchy": "primary",
+     "kind": "patient_important",
+     "direction": "mixed",
+     "outcome_role": "direct_between_group_effect"
+    }
+   ],
+   "limitations": [
+    "Single acute dose in healthy adults; multiple tasks and timepoints without a single primary composite; not chronic supplementation.",
+    "The guayusa arm is a separate intervention and is not attributed to lion's mane.",
+    "Not scoring eligible while the record's principal source (18844328) is unverified; mixed acute findings alone do not carry the record's focus claim.",
+    "Returned decision A083: human-neurogenesis and dementia-treatment inference rejected without corresponding clinical evidence.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ],
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "mg",
+    "values": [
+     1000
+    ],
+    "dose_status": "verified",
+    "dose_basis": "single_challenge",
+    "duration_basis": "fixed_protocol",
+    "duration_days": 1,
+    "administration_frequency": "Single oral dose (two capsules) per test visit.",
+    "dosage_forms": [
+     "oral capsule"
+    ],
+    "co_therapies": [
+     "Habitual caffeine <=240 mg/day permitted; no assigned co-therapy."
+    ],
+    "reported_regimen": "Single 1 g dose of lion's mane fruiting body in two capsules; crossover visits.",
+    "normalization": {
+     "basis": "1 g whole fruiting-body material as assigned; single challenge."
+    },
+    "source_provenance": {
+     "pmid": "38140277",
+     "location": "Abstract; Methods (participants, supplementation paragraph, primary outcome measures); Results",
+     "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10745489/"
+    },
+    "duration_as_printed": {
+     "value": 1,
+     "unit": "days"
+    }
+   },
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability"
+   }
+  },
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "ingr_lion_mane_40276537",
+   "components": [
+    "INGR_LION_MANE"
+   ],
+   "source_pmids": [
+    "40276537"
+   ],
+   "identity_scope": "botanical_preparation",
+   "identity": {
+    "botanical_species": "Hericium erinaceus",
+    "plant_part": "fruiting body",
+    "preparation": "Water/ethanol (8:2) fruiting-body extract, 10:1, 95% extract with 5% maltodextrin (Cambridge Commodities Ltd.)"
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "direct_rct",
+   "component_registration_status": "fully_registered",
+   "condition": "acute_cognitive_tasks",
+   "purpose": "challenge",
+   "review_status": "clinician_approved",
+   "scoring_eligible": false,
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "trial_family": "40276537",
+   "population": {
+    "age_group": "adult",
+    "description": "18 healthy UK adults aged 18-35."
+   },
+   "study_design": "Acute randomized double-blind placebo-controlled crossover study with one-week washout; assessments at baseline and 90 minutes.",
+   "outcomes": [
+    {
+     "name": "Primary global cognitive composite (summed Z scores): no significant effect vs placebo",
+     "hierarchy": "primary",
+     "kind": "patient_important",
+     "direction": "null",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "Global mood composite not improved; pegboard test improved at 90 minutes (individual test)",
+     "hierarchy": "secondary",
+     "kind": "patient_important",
+     "direction": "mixed",
+     "outcome_role": "direct_between_group_effect"
+    }
+   ],
+   "limitations": [
+    "Very small acute crossover study; individual-test findings do not establish a global cognitive benefit.",
+    "Returned decision A083: human-neurogenesis and dementia-treatment inference rejected without corresponding clinical evidence.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ],
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "mg",
+    "values": [
+     3000
+    ],
+    "dose_status": "verified",
+    "dose_basis": "single_challenge",
+    "duration_basis": "fixed_protocol",
+    "duration_days": 1,
+    "administration_frequency": "Single oral dose per test day.",
+    "dosage_forms": [
+     "oral drink (extract mixed with 220 mL water and 30 mL lemon squash)"
+    ],
+    "co_therapies": [
+     "No assigned co-therapy."
+    ],
+    "reported_regimen": "Single 3 g dose of 10:1 fruiting-body extract in a 250 mL drink.",
+    "normalization": {
+     "basis": "3 g whole extract (95% extract, 5% maltodextrin) as assigned; single challenge."
+    },
+    "source_provenance": {
+     "pmid": "40276537",
+     "location": "Abstract; Methods (sample size, extract, drink preparation, washout, primary global composite); Results",
+     "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12018234/"
+    },
+    "duration_as_printed": {
+     "value": 1,
+     "unit": "days"
+    }
+   },
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability"
+   }
+  }
+ ],
+ "source_receipts": [
+  {
+   "pmid": "38140277",
+   "title_fetched": "Acute Effects of Naturally Occurring Guayusa Tea and Nordic Lion's Mane Extracts on Cognitive Performance.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/38140277/",
+   "full_text": true,
+   "sections_used": "Abstract; Methods; Results"
+  },
+  {
+   "pmid": "40276537",
+   "title_fetched": "Acute effects of a standardised extract of Hericium erinaceus (Lion's Mane mushroom) on cognition and mood in healthy younger adults: a double-blind randomised placebo-controlled study.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/40276537/",
+   "full_text": true,
+   "sections_used": "Abstract; Methods; Results"
+  },
+  {
+   "pmid": "18844328",
+   "title_fetched": "Improving effects of the mushroom Yamabushitake (Hericium erinaceus) on mild cognitive impairment: a double-blind placebo-controlled clinical trial.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/18844328/",
+   "full_text": false,
+   "sections_used": "Abstract only; subscription"
+  }
+ ]
+}

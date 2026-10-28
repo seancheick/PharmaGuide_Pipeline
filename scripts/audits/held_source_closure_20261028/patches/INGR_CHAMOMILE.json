@@ -1,0 +1,16 @@
+{
+ "record_id": "INGR_CHAMOMILE",
+ "decision": "held: the only source, 39106912 (Complement Ther Med 2024), has no open full text; its included trials, chamomile preparations, doses and the composition of the 5-study PSQI pool cannot be verified, so no context can be completed. OA retry 2026-10-28: 39106912 is gold CC-BY (https://doi.org/10.1016/j.ctim.2024.103071) but ScienceDirect refused both curl and the browser pane.",
+ "summary": "39106912 abstract: 10 clinical trials (772 adults); PSQI improved in a 5-study pool (WMD -1.88, -3.46 to -0.31, I2 88.4%); sleep duration, efficiency and daytime functioning did not improve; only one study checked blinding or product purity. The signal is limited and heterogeneous.",
+ "record_updates": {},
+ "study_contexts": [],
+ "source_receipts": [
+  {
+   "pmid": "39106912",
+   "title_fetched": "Effects of chamomile (Matricaria chamomilla L.) on sleep: A systematic review and meta-analysis of clinical trials.",
+   "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=39106912&retmode=xml",
+   "full_text": false,
+   "sections_used": "PubMed abstract only"
+  }
+ ]
+}

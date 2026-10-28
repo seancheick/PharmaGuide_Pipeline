@@ -1,0 +1,16 @@
+{
+ "record_id": "INGR_BROMELAIN",
+ "decision": "held: source inaccessible. 37157782 (Nutrition and Health 2023) has no open-access full text (no PMC copy; Europe PMC lists subscription only), so the included trials, oral doses, populations, dosage forms and the primary outcome cannot be verified beyond the abstract; Dr. Pham's source-content hold requires verified methods.",
+ "summary": "The abstract reports 54 studies (39 meta-analysed): oral bromelain slightly reduced pain versus controls (MD -0.27, 95% CI -0.45 to -0.08; n=9; I2 29%), may help sinusitis, was not effective for cardiovascular disease; topical bromelain shortened debridement time (separate route). Without the methods and study tables, no oral regimen, population or primary outcome can be verified, so no context is written and the record stays held.",
+ "record_updates": {},
+ "study_contexts": [],
+ "source_receipts": [
+  {
+   "pmid": "37157782",
+   "title_fetched": "Efficacy and safety of bromelain: A systematic review and meta-analysis.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/37157782/",
+   "full_text": false,
+   "sections_used": "Abstract only; full text not open access"
+  }
+ ]
+}

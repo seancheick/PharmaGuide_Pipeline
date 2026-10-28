@@ -1,0 +1,142 @@
+{
+ "record_id": "INGR_GREEN_TEA",
+ "decision": "held: Dr. Pham's fourth ruling keeps this clinical record's specific missing acceptance as a governance dependency (liver-safety warnings are already implemented through the safety owner, so safety is no longer the blocker). Sources retried: 38031409 full text now retrieved (Cambridge open copy listed by OpenAlex) but not yet re-extracted into the pending context; 19597519 has only a bot-protected publisher copy. Any decision must keep brewed tea and concentrated extract separate.",
+ "summary": "38031409 abstract: 59 RCTs, 3802 participants; green tea extract reduced body mass, BMI, body-fat percentage and MDA and raised adiponectin and TAC, with no effect on fat mass, leptin or ghrelin (certainty low to high). 19597519 abstract: 11 studies; catechins reduced or maintained body weight by about -1.31 kg, moderated by caffeine intake and ethnicity. Effects are small; safety and dose verification remain open.",
+ "record_updates": {},
+ "study_contexts": [
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "ingr_green_tea_38031409_source_completion",
+   "components": [
+    "INGR_GREEN_TEA"
+   ],
+   "source_pmids": [
+    "38031409"
+   ],
+   "identity_scope": "ingredient_general",
+   "identity": {
+    "preparation": "Heterogeneous green-tea preparations: caffeinated/decaffeinated extracts,isolatedEGCG,tea powder and mixtures; extract mass is not catechin or EGCG mass."
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "meta_analysis",
+   "component_registration_status": "fully_registered",
+   "condition": "body_composition",
+   "purpose": "source_specific_assessment",
+   "review_status": "source_verified_pending_clinical_review",
+   "scoring_eligible": false,
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "trial_family": "source_38031409",
+   "population": {
+    "description": "59 study reports/3802 adults; healthy,overweight/obese and clinical subgroups;5crossover and54parallel reports."
+   },
+   "study_design": "Systematic review and meta-analysis of randomized controlled trials; synthesis-level outcomes do not establish every preparation or product.",
+   "included_study_pmids": [
+    "20605696",
+    "10443337",
+    "15005829",
+    "16392704",
+    "16076989",
+    "16378915",
+    "16277999",
+    "17906193",
+    "17557985",
+    "18006026",
+    "18710606",
+    "17554248",
+    "18468736",
+    "19056646",
+    "19176733",
+    "19008868",
+    "18848434",
+    "21736785",
+    "21649457",
+    "22118751",
+    "22144918",
+    "22749178",
+    "22581111",
+    "22246619",
+    "23035743",
+    "25918808",
+    "24614112",
+    "24299662",
+    "28911467",
+    "25740906",
+    "26319566",
+    "27320846",
+    "26093535",
+    "26701796",
+    "26581683",
+    "27062963",
+    "26955458",
+    "27736246",
+    "29067068",
+    "29228755",
+    "28244612",
+    "27797683",
+    "30464771",
+    "30400924",
+    "31084381",
+    "31747468",
+    "32095935"
+   ],
+   "outcomes": [
+    {
+     "name": "Pooled body mass,BMI,body-fat percentage and selected oxidative markers improved; fat mass,leptin and ghrelin did not.",
+     "direction": "mixed",
+     "hierarchy": "not_reported",
+     "kind": "surrogate",
+     "outcome_role": "direct_between_group_effect"
+    }
+   ],
+   "limitations": [
+    "Outcome-specific certainty rangedlow–high; repeated reports may sharetrialfamilies. No cancer,CVD,liver-treatment or universal weight-loss claim follows.",
+    "Eligibility text says duration>2weeks; Table1/body include2week studies. No cutoff repair invented. Physical capsule/tablet forms are not established for every extract by Table1.",
+    "47included PMID mappings independently verified;12source citations retain exact bibliographic identity without inventedPMIDs. PMID19176733 has a historicalerratum whose complete content is not established by this extraction.",
+    "Known product preparation,EGCG/caffeine composition,population and purpose still require exact correspondence; no new efficacy grade or approval."
+   ],
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "mg",
+    "values": [],
+    "dose_status": "source_not_reported",
+    "dose_basis": "not_applicable",
+    "duration_basis": "participant_specific",
+    "administration_frequency": "Source Table1/body reports60–3000mg/day GTE over2–48weeks; trial-specific regimens and background interventions are not interchangeable.",
+    "dosage_forms": [
+     "powder",
+     "brewed tea"
+    ],
+    "co_therapies": [
+     "Diet and exercise protocols varied; Table1 includes matched training/diet cointerventions and caffeine-containing preparations."
+    ],
+    "reported_regimen": "Source Table1/body reports60–3000mg/day GTE over2–48weeks; trial-specific regimens and background interventions are not interchangeable.",
+    "normalization": {
+     "basis": "Heterogeneous trial-specific regimens; no single assigned-arm dose or universal efficacy threshold is inferred."
+    },
+    "source_provenance": {
+     "pmid": "38031409",
+     "location": "Publisher fullHTML DOI10.1017/S000711452300260X: Methods,StudySelection,Characteristics,Table1originalPNG and Results; source references23,28,49–105.",
+     "source_url": "https://pubmed.ncbi.nlm.nih.gov/38031409/"
+    }
+   }
+  }
+ ],
+ "source_receipts": [
+  {
+   "pmid": "19597519",
+   "title_fetched": "The effects of green tea on weight loss and weight maintenance: a meta-analysis.",
+   "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=19597519&retmode=xml",
+   "full_text": false,
+   "sections_used": "PubMed abstract only"
+  },
+  {
+   "pmid": "38031409",
+   "title_fetched": "The effects of green tea extract supplementation on body composition, obesity-related hormones and oxidative stress markers: a grade-assessed systematic review and dose-response meta-analysis of randomised controlled trials.",
+   "url": "https://www.ncbi.nlm.nih.gov/research/bionlp/RESTful/pmcoa.cgi/BioC_json/38031409/unicode",
+   "full_text": true,
+   "sections_used": "Full PDF via https://www.cambridge.org/core/services/aop-cambridge-core/content/view/5F7DCFF04BE51796D39A6CC5B0A3089A/S000711452300260Xa.pdf (OpenAlex best OA location); downloaded, not yet extracted into the context"
+  }
+ ]
+}

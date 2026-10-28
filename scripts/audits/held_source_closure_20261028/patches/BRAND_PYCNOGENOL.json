@@ -1,0 +1,30 @@
+{
+ "record_id": "BRAND_PYCNOGENOL",
+ "decision": "held: none of the three sources has open full text (no PMC records). The OA trial 18386255 abstract gives dose (100 mg/day capsules), duration (3 months) and arms (77 vs 79) but does not designate a primary outcome, comparator co-medication handling or randomization details, so rule 2's primary-outcome requirement cannot be verified; the two blood-pressure/cardiometabolic meta-analyses (31637782, 31585179) give no regimens or included-trial lists. No context can be completed without invention. OA retry 2026-10-28: only 31585179 has an open copy (figshare submitted version); 18386255 and 31637782 closed, so the OA trial cannot be completed.",
+ "summary": "18386255 (SVOS): 156 knee-OA patients, Pycnogenol 100 mg/day for 3 months; global WOMAC fell 56% versus 9.6% on placebo, walking distance and NSAID use improved. 31637782: 12 trials (922 participants), SBP -3.22 and DBP -1.91 mmHg, larger when combined with other treatments. 31585179: 24 RCTs (1594 participants), small improvements in glucose, HbA1c, BP, BMI, LDL and HDL. Effects are modest and the OA evidence rests on one trial.",
+ "record_updates": {},
+ "study_contexts": [],
+ "source_receipts": [
+  {
+   "pmid": "18386255",
+   "title_fetched": "Treatment of osteoarthritis with Pycnogenol. The SVOS (San Valentino Osteo-arthrosis Study). Evaluation of signs, symptoms, physical performance and vascular aspects.",
+   "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=18386255&retmode=xml",
+   "full_text": false,
+   "sections_used": "PubMed abstract only"
+  },
+  {
+   "pmid": "31637782",
+   "title_fetched": "Effect of pycnogenol supplementation on blood pressure: A systematic review and meta-analysis of clinical trials.",
+   "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=31637782&retmode=xml",
+   "full_text": false,
+   "sections_used": "PubMed abstract only"
+  },
+  {
+   "pmid": "31585179",
+   "title_fetched": "Effects of pycnogenol on cardiometabolic health: A systematic review and meta-analysis of randomized controlled trials.",
+   "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=31585179&retmode=xml",
+   "full_text": false,
+   "sections_used": "PubMed abstract only"
+  }
+ ]
+}

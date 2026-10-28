@@ -1,0 +1,228 @@
+{
+ "record_id": "BRAND_LACTOSPORE",
+ "decision": "closed_credit",
+ "summary": "Full texts of both LactoSpore (B. coagulans MTCC 5856, 2 x 10^9 spores/day, 90 days) pilots confirm placebo-controlled primary benefits: GI symptoms in 36 IBS-D patients on standard care, and depression scales plus IBS quality of life in 40 patients with major depression and IBS (maker-sponsored). Both get eligible contexts limited to IBS/digestive outcomes, with depression not credited. A new applicability block limits credit to digestive outcomes.",
+ "record_updates": {
+  "applicability": {
+   "scope": "ingredient",
+   "supported_outcomes": [
+    "digestive"
+   ],
+   "studied_population": "Adults with IBS (diarrhea-predominant on standard care, or IBS with major depression) taking LactoSpore B. coagulans MTCC 5856 2 x 10^9 spores/day for 90 days.",
+   "source_pmids": [
+    "26922379",
+    "29997457"
+   ],
+   "reviewed_at": "2026-10-28"
+  }
+ },
+ "study_contexts": [
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "brand_lactospore_26922379_draft",
+   "source_pmids": [
+    "26922379"
+   ],
+   "components": [
+    "BRAND_LACTOSPORE"
+   ],
+   "identity_scope": "branded_material",
+   "identity": {
+    "branded_material": "LactoSpore MTCC5856",
+    "manufacturer": "Sabinsa",
+    "standardization": "Bacillus coagulans MTCC 5856 viable spore tablet"
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "direct_rct",
+   "component_registration_status": "fully_registered",
+   "condition": "diarrhea_predominant_ibs",
+   "purpose": "treatment",
+   "population": {
+    "age_group": "adult",
+    "description": "36 newly diagnosed adults with diarrhea-predominant IBS at three Indian centres, 18 per arm, all on standard care (domperidone 30 mg, esomeprazole 40 mg, metronidazole 400 mg)."
+   },
+   "study_design": "Randomized, double-blind, parallel, placebo-controlled multicentre pilot, 90 days, add-on to standard care; primary efficacy GI discomfort questionnaire symptoms (bloating, vomiting, diarrhea, abdominal pain, stool frequency).",
+   "trial_family": "26922379",
+   "review_status": "clinician_approved",
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "scoring_eligible": true,
+   "dose": {
+    "measurement_type": "spores",
+    "unit": "CFU",
+    "values": [
+     2000000000.0
+    ],
+    "dose_status": "verified",
+    "dose_basis": "nominal_assigned_arm",
+    "duration_basis": "fixed_protocol",
+    "duration_days": 90,
+    "administration_frequency": "one tablet daily at least 4 hours apart from standard care",
+    "dosage_forms": [
+     "oral tablet"
+    ],
+    "reported_regimen": "[2000000000.0] CFU/day; 90 days; one tablet daily at least 4 hours apart from standard care",
+    "normalization": {
+     "basis": "Reported study-material daily dose, not a universal threshold or equivalence to other preparation."
+    },
+    "source_provenance": {
+     "pmid": "26922379",
+     "location": "Full text (PMC4769834): Methods (tablet formulation 2 billion spores supplied by Sabinsa, design, sample size, primary outcomes), Results Table 4 paragraph, Discussion (standard care), competing interests.",
+     "source_url": "https://pubmed.ncbi.nlm.nih.gov/26922379/"
+    },
+    "co_therapies": [
+     "Standard care in both arms: domperidone 30 mg, esomeprazole 40 mg, metronidazole 400 mg; study tablet taken at least 4 hours apart."
+    ]
+   },
+   "outcomes": [
+    {
+     "name": "Primary GI-discomfort symptoms (bloating, vomiting, diarrhea, abdominal pain, stool frequency) decreased significantly versus placebo from baseline to day 90 (Table 4); VAS abdominal pain, Bristol stool and physician global scores also improved.",
+     "hierarchy": "primary",
+     "kind": "patient_important",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    }
+   ],
+   "limitations": [
+    "Small adjunct pilot, not monotherapy or other strain; multiple endpoints.",
+    "Exact strain Bacillus coagulans MTCC 5856 (LactoSpore), 2 x 10^9 spores/day tablets for 90 days; small pilots. Returned A008 date-only restriction withdrawn; assessed on verified full text.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ],
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability"
+   }
+  },
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "brand_lactospore_29997457_draft",
+   "source_pmids": [
+    "29997457"
+   ],
+   "components": [
+    "BRAND_LACTOSPORE"
+   ],
+   "identity_scope": "branded_material",
+   "identity": {
+    "branded_material": "LactoSpore MTCC5856",
+    "manufacturer": "Sabinsa",
+    "standardization": "Bacillus coagulans MTCC 5856 viable spores"
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "direct_rct",
+   "component_registration_status": "fully_registered",
+   "condition": "mdd_with_ibs",
+   "purpose": "treatment",
+   "population": {
+    "age_group": "adult",
+    "description": "40 adults with major depressive disorder and IBS, newly diagnosed or untreated for 3 months, randomized 1:1 (20 per arm), multicentre."
+   },
+   "study_design": "Randomized, double-blind, placebo-controlled, multicentre pilot, 90 days; primary outcomes HAM-D, MADRS, CES-D and IBS-QOL change (ANCOVA).",
+   "trial_family": "29997457",
+   "review_status": "clinician_approved",
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "scoring_eligible": true,
+   "dose": {
+    "measurement_type": "spores",
+    "unit": "CFU",
+    "values": [
+     2000000000.0
+    ],
+    "dose_status": "verified",
+    "dose_basis": "nominal_assigned_arm",
+    "duration_basis": "fixed_protocol",
+    "duration_days": 90,
+    "administration_frequency": "one tablet at least 30 minutes before morning meal",
+    "dosage_forms": [
+     "oral tablet"
+    ],
+    "reported_regimen": "[2000000000.0] CFU/day; 90 days; one tablet at least 30 minutes before morning meal",
+    "normalization": {
+     "basis": "Reported study-material daily dose, not a universal threshold or equivalence to other preparation."
+    },
+    "source_provenance": {
+     "pmid": "29997457",
+     "location": "Full text (PMC6034030): Methods (600 mg tablets with 2 billion spores, eligibility, primary outcome), Results Table 3-4, Conflict of interest and funding.",
+     "source_url": "https://pubmed.ncbi.nlm.nih.gov/29997457/"
+    },
+    "co_therapies": [
+     "Source-reported concurrent-care/restriction context: Agree not to use any medication (prescription and over the counter), including vitamins and minerals, during the course of this study.",
+     "Source-reported concurrent-care/restriction context: Subject’s assurance that they have not taken antibiotics or other supplements whose primary site of action is in the gastrointestinal tract for a period up to 1 month prior to the start of the study."
+    ]
+   },
+   "outcomes": [
+    {
+     "name": "Primary: HAM-D (day 90 5.9 vs 12.5), MADRS, CES-D and IBS-QOL improved versus placebo (p<0.01).",
+     "hierarchy": "primary",
+     "kind": "patient_important",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "Secondary GI discomfort questionnaire, CGI-I/S and sleepiness improved versus placebo; serum myeloperoxidase fell (baseline imbalance 12.6 vs 9.8 ng/mL).",
+     "hierarchy": "secondary",
+     "kind": "patient_important",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    }
+   ],
+   "limitations": [
+    "Small pilot, multiple outcomes; MPO baseline imbalance; not general MDD or other strains.",
+    "Authors are employees of Sabinsa/Sami Labs and the study was sponsored by Sabinsa. Credit for this record covers the IBS (digestive) outcomes only; depression results do not establish treatment of major depression.",
+    "Exact strain Bacillus coagulans MTCC 5856 (LactoSpore), 2 x 10^9 spores/day tablets for 90 days; small pilots. Returned A008 date-only restriction withdrawn; assessed on verified full text.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ],
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability"
+   }
+  }
+ ],
+ "source_receipts": [
+  {
+   "pmid": "26922379",
+   "title_fetched": "Bacillus coagulans MTCC 5856 supplementation in the management of diarrhea predominant Irritable Bowel Syndrome: a double blind randomized placebo controlled pilot clinical study.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/26922379/",
+   "full_text": true,
+   "sections_used": "Methods, Results, Discussion, competing interests (BioC PMC4769834)"
+  },
+  {
+   "pmid": "29997457",
+   "title_fetched": "Bacillus coagulans MTCC 5856 for the management of major depression with irritable bowel syndrome: a randomised, double-blind, placebo controlled, multi-centre, pilot clinical study.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/29997457/",
+   "full_text": true,
+   "sections_used": "Methods, Results Tables 3-4, COI/funding (BioC PMC6034030)"
+  }
+ ],
+ "freshness_search": {
+  "date": "2026-10-28",
+  "database": "PubMed (NCBI E-utilities esearch, sort=pub_date, retmax=60; titles via esummary, abstracts via efetch)",
+  "query": "(\"MTCC 5856\" OR LactoSpore OR \"Bacillus coagulans\" OR \"Weizmannia coagulans\") AND (irritable bowel OR gastrointestinal OR digestive OR bloating OR diarrhea OR constipation OR dyspepsia) AND (meta-analysis[pt] OR systematic review[pt] OR randomized controlled trial[pt])",
+  "hits": 44,
+  "screened": 44,
+  "screening_rule": "Kept RCTs or syntheses of B. coagulans MTCC 5856 (LactoSpore) on digestive outcomes, and strain-level syntheses. Excluded other B. coagulans strains (GBI-30, Unique IS2, LBSC, BC99, SNZ 1969, BCP92), multi-strain products and animal studies.",
+  "read": [
+   {
+    "pmid": "36862903",
+    "title": "The effects of Bacillus coagulans MTCC 5856 on functional gas and bloating in adults: A randomized, double-blind, placebo-controlled study.",
+    "finding": "2023 multicenter RCT: 70 adults with functional gas and bloating, LactoSpore 2 billion spores/day vs placebo for 4 weeks (66 completed). The primary GSRS-indigestion score (8.91 to 3.06 vs 9.42 to 8.43) and the global evaluation improved vs placebo (P<.001)."
+   },
+   {
+    "pmid": "37686889",
+    "title": "Outcome-Specific Efficacy of Different Probiotic Strains and Mixtures in Irritable Bowel Syndrome: A Systematic Review and Network Meta-Analysis.",
+    "finding": "2023 network MA, 81 RCTs, 9,253 adults with IBS: B. coagulans MTCC 5856 ranked among the most effective strains for abdominal pain (SUCRA 96.9%) and for IBS-D Bristol stool form (SUCRA 99.6%). Authors say confirmation is needed. Likely includes the credited trials."
+   },
+   {
+    "pmid": "37335737",
+    "title": "Probiotic modulation of gut microbiota by Bacillus coagulans MTCC 5856 in healthy subjects: A randomized, double-blind, placebo-control study.",
+    "finding": "2023 RCT, 30 healthy adults, 28 days: safety and microbiome outcomes only; no clinical efficacy endpoint."
+   }
+  ],
+  "conclusion": "confirms: newer exact-strain evidence (a 2023 RCT in functional gas/bloating and a 2023 strain-level network MA) agrees with the credited digestive outcomes, and no newer synthesis is null for them. Neither is added to the record's references; the credit still rests on 26922379 and 29997457."
+ }
+}

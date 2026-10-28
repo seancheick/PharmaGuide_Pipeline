@@ -1,0 +1,173 @@
+{
+ "record_id": "PRECLIN_SULFORAPHANE",
+ "decision": "closed_no_credit",
+ "summary": "The reviewed research does not establish a qualifying benefit for this product's assessed use. Existing human research is kept: the 2025 prediabetes broccoli-sprout-extract RCT missed its prespecified primary target (observed -0.2 mmol/L), plus the former-smoker Ki-67 trial and the autism meta-analysis. None of the three sources measures the record's goals (Healthy Aging/Longevity, Immune Support). The prediabetes BSE trial missed its prespecified primary target (observed -0.2 mmol/L), the former-smoker trial reports only a bronchial Ki-67 biomarker, and the autism meta-analysis is off-claim. Dr. Pham also rejected primary-target success, cancer-prevention and preparation-wide claims. The record becomes reference-only, which removes sulforaphane Evidence points from dependent products (about 6 per the closure plan).",
+ "record_updates": {
+  "study_type": "reference",
+  "evidence_level": "reference"
+ },
+ "study_contexts": [
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "preclin_sulforaphane_39929977_exact_source",
+   "components": [
+    "PRECLIN_SULFORAPHANE"
+   ],
+   "source_pmids": [
+    "39929977"
+   ],
+   "identity_scope": "ingredient_general",
+   "identity": {
+    "preparation": "Broccoli sprout extract delivering sulforaphane; not arbitrary broccoli powder or unverified glucoraphanin conversion."
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "direct_rct",
+   "component_registration_status": "fully_registered",
+   "condition": "prediabetes",
+   "purpose": "treatment",
+   "review_status": "clinician_approved",
+   "scoring_eligible": false,
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "trial_family": "source_39929977",
+   "population": {
+    "age_group": "adult",
+    "description": "Drug-naive adults with prediabetes (mean age about 63; baseline fasting glucose 6.4 mmol/L); 89 randomized (44 BSE, 45 placebo), 74 with full follow-up (35 BSE, 39 placebo)."
+   },
+   "study_design": "Randomized, double-blind, placebo-controlled trial, 12 weeks; prespecified primary outcome a 0.3 mmol/L fasting-glucose reduction versus placebo.",
+   "outcomes": [
+    {
+     "name": "Prespecified fasting-glucose reduction target of 0.3 mmol/L versus placebo was not met.",
+     "direction": "null",
+     "hierarchy": "primary",
+     "kind": "patient_important",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "Observed overall fasting-glucose change -0.2 mmol/L (95% CI -0.44 to -0.01; P=0.04); HbA1c -0.3 mmol/mol (-1.3 to 0.6); responder and microbiome subgroups exploratory.",
+     "direction": "mixed",
+     "hierarchy": "post_hoc",
+     "kind": "patient_important",
+     "outcome_role": "post_hoc_subgroup"
+    }
+   ],
+   "limitations": [
+    "No cancer prevention, universal prediabetes treatment or product-wide benefit inferred.",
+    "Source reports molar exposure; no unsupported milligram value is created to fit mass-only dose vocabulary.",
+    "Returned decision: Reject primary-target success, cancer-prevention, and preparation-wide claims.",
+    "No credit: prediabetes glucose is not this record's Healthy Aging/Immune goal, the primary target was missed, and 15 participants were lost mainly to gastrointestinal side effects (9 BSE, 6 placebo).",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ],
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "mg",
+    "values": [],
+    "dose_status": "source_not_reported",
+    "dose_basis": "not_applicable",
+    "duration_basis": "fixed_protocol",
+    "duration_days": 84,
+    "administration_frequency": "150 micromol sulforaphane per dose once daily in the morning for 12 weeks; preparation suspended in approximately 1 dL water. No mass conversion invented.",
+    "dosage_forms": [
+     "broccoli sprout extract suspended in water"
+    ],
+    "co_therapies": [
+     "Participants were drug-naive; placebo and study conditions are retained separately."
+    ],
+    "reported_regimen": "150 micromol sulforaphane per dose once daily in the morning for 12 weeks; preparation suspended in approximately 1 dL water. No mass conversion invented.",
+    "normalization": {
+     "basis": "Preserve the specifically identified material or component quantity; no elemental/marker conversion or extrapolated daily dose."
+    },
+    "source_provenance": {
+     "pmid": "39929977",
+     "location": "Full text (PMC11879859): Results paragraph 1 (150 umol once daily, 12 weeks, dropouts), Table 1, Table 2 endpoints, Methods (dosing, Lantmannen BSE preparation).",
+     "source_url": "https://pubmed.ncbi.nlm.nih.gov/39929977/"
+    }
+   },
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability"
+   }
+  },
+  {
+   "context_id": "preclin_sulforaphane_40041932_lung_biomarker",
+   "components": [
+    "PRECLIN_SULFORAPHANE"
+   ],
+   "source_pmids": [
+    "40041932"
+   ],
+   "review_status": "rejected_source",
+   "scoring_eligible": false,
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability",
+    "notes": "Dr. Pham's returned decision rejects cancer-prevention claims; this bronchial Ki-67 biomarker trial in former smokers cannot support the record's Healthy Aging/Immune goals."
+   },
+   "dose": {
+    "source_provenance": {
+     "pmid": "40041932",
+     "location": "PubMed abstract.",
+     "source_url": "https://pubmed.ncbi.nlm.nih.gov/40041932/"
+    }
+   },
+   "limitations": [
+    "Abstract: 43 former smokers randomized to placebo or about 95 umol sulforaphane daily for 12 months; 37 completed; no effect on bronchial histopathology; Ki-67 index fell 20% versus a 65% rise with placebo (P=0.014). Biomarker only; full text not retrieved.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ]
+  },
+  {
+   "context_id": "preclin_sulforaphane_40458076_autism_off_claim",
+   "components": [
+    "PRECLIN_SULFORAPHANE"
+   ],
+   "source_pmids": [
+    "40458076"
+   ],
+   "review_status": "rejected_source",
+   "scoring_eligible": false,
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability",
+    "notes": "Autism symptom outcomes are outside the record's Healthy Aging/Immune goals, and Dr. Pham rejected preparation-wide claims; no credit."
+   },
+   "dose": {
+    "source_provenance": {
+     "pmid": "40458076",
+     "location": "Full text retrieved (PMC12127520); figures from the abstract; included-trial list not re-encoded.",
+     "source_url": "https://pubmed.ncbi.nlm.nih.gov/40458076/"
+    }
+   },
+   "limitations": [
+    "Meta-analysis (full text retrieved): 6 RCTs in autism spectrum disorder; total symptoms SMD -0.27 (-0.42 to -0.12), aberrant behavior -0.43, hyperactivity -0.58; irritability, anxiety and several social subscales not significant (abstract figures). Sulforaphane preparations and exposures differ.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ]
+  }
+ ],
+ "source_receipts": [
+  {
+   "pmid": "39929977",
+   "title_fetched": "Effect of broccoli sprout extract and baseline gut microbiota on fasting blood glucose in prediabetes: a randomized, placebo-controlled trial.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/39929977/",
+   "full_text": true,
+   "sections_used": "Results, Tables 1-2, Methods dosing/preparation (BioC PMC11879859)"
+  },
+  {
+   "pmid": "40041932",
+   "title_fetched": "Randomized Phase II Clinical Trial of Sulforaphane in Former Smokers at High Risk for Lung Cancer.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/40041932/",
+   "full_text": false,
+   "sections_used": "PubMed abstract"
+  },
+  {
+   "pmid": "40458076",
+   "title_fetched": "The effect of sulforaphane on autism spectrum disorder: systematic review and meta-analysis.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/40458076/",
+   "full_text": true,
+   "sections_used": "Abstract (full text retrieved, BioC PMC12127520)"
+  }
+ ]
+}

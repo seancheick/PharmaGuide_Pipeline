@@ -1,0 +1,296 @@
+{
+ "record_id": "INGR_MAGNESIUM_GENERIC",
+ "decision": "closed_credit",
+ "summary": "Full text of the 2025 Hypertension meta-analysis (38 RCTs, 2,709 adults, oral magnesium 82.3-637 mg/day) shows a modest pooled BP reduction (SBP -2.81, DBP -2.05 mm Hg) with high heterogeneity, concentrated in hypertensive and hypomagnesemic participants; this matches the record's Cardiovascular/Heart Health claim and gets one eligible context. The two migraine sources (oral RCT 8792038; IV/oral meta-analysis 26752497) fall outside that claim and get no credit. A new applicability block limits credit to cardiovascular (BP) outcomes.",
+ "record_updates": {
+  "applicability": {
+   "scope": "ingredient",
+   "supported_outcomes": [
+    "cardiovascular"
+   ],
+   "studied_population": "Adults aged 18-77 in 38 RCTs of oral magnesium (82.3-637 mg elemental/day); BP reductions were seen in hypertensive and hypomagnesemic participants, not in normotensive participants.",
+   "source_pmids": [
+    "41000008"
+   ],
+   "reviewed_at": "2026-10-28"
+  }
+ },
+ "study_contexts": [
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "ingr_magnesium_generic_41000008_scoped_synthesis",
+   "components": [
+    "INGR_MAGNESIUM_GENERIC"
+   ],
+   "source_pmids": [
+    "41000008"
+   ],
+   "identity_scope": "ingredient_general",
+   "identity": {
+    "preparation": "Elemental magnesium supplied through multiple separately named salts; not a single interchangeable preparation"
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "meta_analysis",
+   "component_registration_status": "fully_registered",
+   "condition": "blood_pressure",
+   "purpose": "physiology",
+   "review_status": "clinician_approved",
+   "scoring_eligible": true,
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "trial_family": "ingr_magnesium_generic_41000008_synthesis",
+   "population": {
+    "age_group": "adult",
+    "description": "38 RCTs, 2,709 adults aged 18-77 (1,448 magnesium, 1,392 placebo; 131 in 5 crossover trials); 17 trials in hypertension (6 on BP-lowering medication, 9 untreated), 8 in normotension, 8 in hypomagnesemia (serum Mg <=0.74 mmol/L). Pregnant participants and trials altering medication or diet during the intervention were excluded."
+   },
+   "study_design": "Systematic review and random-effects meta-analysis of randomized placebo/control-controlled trials of >=4 weeks (33 parallel, 5 crossover), with subgroup analyses, mixed-effects meta-regression and restricted-cubic-spline dose-response analysis; trials using other routes of magnesium administration were excluded at full-text review.",
+   "outcomes": [
+    {
+     "name": "Pooled change in systolic BP versus placebo: -2.81 mm Hg (95% CI -4.32 to -1.29), P<0.001; diastolic BP -2.05 mm Hg (-3.23 to -0.88), P<0.001; I2 78% (SBP) and 88% (DBP); 38 trials.",
+     "hierarchy": "not_reported",
+     "kind": "surrogate",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "Hypertension subgroup SBP -2.96 (-5.53 to -0.38) and DBP -2.10 (-3.44 to -0.77); hypertensive on BP-lowering medication SBP -7.68 (-12.67 to -2.69); untreated hypertensive SBP -0.90 (-3.94 to 2.14), P=0.56; hypomagnesemia SBP -5.97 (-8.52 to -3.41); no significant change in normotensive or normomagnesemic participants.",
+     "hierarchy": "not_reported",
+     "kind": "surrogate",
+     "direction": "mixed",
+     "outcome_role": "post_hoc_subgroup"
+    },
+    {
+     "name": "No linear or nonlinear dose-response relationship between elemental magnesium dose and BP change (all P>=0.20).",
+     "hierarchy": "not_reported",
+     "kind": "surrogate",
+     "direction": "null",
+     "outcome_role": "direct_between_group_effect"
+    }
+   ],
+   "limitations": [
+    "9 trials low bias, 25 some concern, 4 highrisk; most had incomplete randomization/concealment reporting.",
+    "Salt counts overlap conditions: chloride 7, citrate 4, oxide 8, aspartate hydrochloride 8, pidolate 4, chelate 2, lactate 4, hydroxide 2, sulphate 2, diclycine 1. Salt equivalence is not established; chloride/aspartate subgroup findings must retain their scope.",
+    "The review does not establish a universal nutrition, sleep, migraine or salt-specific effective-dose benchmark.",
+    "Primary study identifiers mapped from cited reference links: 38 cited studies, 37 Pub Med identifiers; missing identifiers not invented.",
+    "Supplement Table S 2 acquired via Europe PMC supplementary Files; exact study-specific salt, elemental dose, duration, population and background medication table retained in magnesium_supplement_tables.json. Main-body pooled ranges do not replace that table.",
+    "Historical bibliography census (not independent scoring sources; actual included-publication membership is separately bound to the inspected source table): 34859788, 3926135, 24984823, 27759579, 9632126, 6407598, 1477853, 15223977, 19020533, 21241290, 37010174, 19617879, 3092972, 9389897, 27053384, 19359148, 1930849, 29996476, 21205110, 1418829, 7786691, 24830937, 29793665, 12663588, 15571635, 9449404, 3415812, 36307427, 35253448, 24814039, 28297698, 11807965, 10594466, 1586398, 7913949, 8017327, 2181860. Each intervention and comparison requires its own applicability assessment; citation in this bibliography grants no credit.",
+    "Included-study identifiers are now bound to this source's actual included-study rows/explicit inclusion references (Retained primary supplementTableS2, source column explicitly numbers all38included articles29–66; repeated trial arms/cohorts are not new independent articles), with live NIH title/content identity checks. They are publication pointers, not independent-cohort counts, per-primary-study scoring approvals, preparation equivalence or new efficacy evidence. Exact unindexed source citations remain retained; no missing PMID is invented.",
+    "1 included source citations have no printed PubMed identifier in this primary source; their exact citations are retained in the source-table receipt. This is a documented identifier limitation, not a fabricated identifier or an extra independent trial.",
+    "The source designates no single primary outcome; pooled SBP/DBP change is the review's main analysis and is recorded with hierarchy not_reported rather than an invented primary label.",
+    "The main text names salt types but not the physical dosage form of each trial; dosage form is recorded as trial-specific oral preparations, not inferred.",
+    "Included reference 54 (Rylander 2004) delivered magnesium in mineral water and reference 61 (Walker 2002) was a hawthorn pilot with a magnesium arm; the review classed both as magnesium supplementation. Benefit concentrated in hypertensive participants on medication and in hypomagnesemia; untreated hypertensive and normotensive participants showed no significant SBP change. This is a modest surrogate BP effect, not cardiovascular event prevention.",
+    "Returned A089 'source-content hold' is resolved by this full-text verification; credit is limited to blood pressure within Cardiovascular/Heart Health.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ],
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "mg",
+    "values": [],
+    "dose_status": "verified",
+    "dose_basis": "not_applicable",
+    "duration_basis": "not_recorded",
+    "administration_frequency": "Trial-specific oral daily magnesium supplementation; no single pooled schedule (Results, Characteristics of Studies; Table S2).",
+    "dosage_forms": [
+     "oral supplementation (trial-specific preparations)"
+    ],
+    "co_therapies": [
+     "Stable medication and dietary intervention required; antihypertensive medication status was explicitly stratified."
+    ],
+    "reported_regimen": "82.3-637 mg elemental magnesium/day (median 365 mg) for 4-24 weeks (median 12), as chloride (7 trials), citrate (4), oxide (8), aspartate hydrochloride (8), pidolate (4), chelate (2), lactate (4), hydroxide (2), sulphate (2) or 'diclycine' as printed (1). No scalar pooled dose is encoded.",
+    "normalization": {
+     "basis": "No single common assigned-arm regimen exists across the pooled trials. Descriptive source ranges are not a continuous benchmark, minimum effective dose, intake recommendation or label-derived conversion."
+    },
+    "source_provenance": {
+     "pmid": "41000008",
+     "location": "Full text (PMC12529988): Methods (Study Selection, Data Extraction, Synthesis); Results 'Characteristics of Studies', 'BP Outcomes', hypertension/medication, magnesium-status and supplement-type subgroups, 'Study Heterogeneity', dose-response; reference list 29-66 (included trials).",
+     "source_url": "https://pubmed.ncbi.nlm.nih.gov/41000008/"
+    },
+    "duration_days": null
+   },
+   "included_study_pmids": [
+    "34859788",
+    "3926135",
+    "24984823",
+    "27759579",
+    "9632126",
+    "6407598",
+    "1477853",
+    "15223977",
+    "19020533",
+    "21241290",
+    "37010174",
+    "19617879",
+    "3092972",
+    "9389897",
+    "27053384",
+    "19359148",
+    "1930849",
+    "29996476",
+    "21205110",
+    "1418829",
+    "7786691",
+    "24830937",
+    "29793665",
+    "12663588",
+    "15571635",
+    "9449404",
+    "3415812",
+    "36307427",
+    "35253448",
+    "24814039",
+    "28297698",
+    "11807965",
+    "10594466",
+    "1586398",
+    "7913949",
+    "8017327",
+    "2181860"
+   ],
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability"
+   }
+  },
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "ingr_magnesium_generic_8792038_migraine_prophylaxis",
+   "source_pmids": [
+    "8792038"
+   ],
+   "components": [
+    "INGR_MAGNESIUM_GENERIC"
+   ],
+   "identity_scope": "exact_form",
+   "identity": {
+    "chemical_form": "trimagnesium dicitrate"
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "direct_rct",
+   "component_registration_status": "fully_registered",
+   "condition": "migraine",
+   "purpose": "prevention",
+   "population": {
+    "age_group": "adult",
+    "description": "81 patients aged 18-65 with IHS-defined migraine, mean attack frequency 3.6 per month, after a 4-week prospective baseline."
+   },
+   "study_design": "Prospective, multicenter, placebo-controlled, double-blind randomized trial; 12-week treatment after 4-week baseline.",
+   "trial_family": "8792038",
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "scoring_eligible": false,
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "mg",
+    "values": [
+     600
+    ],
+    "dose_status": "verified",
+    "dose_basis": "nominal_assigned_arm",
+    "duration_basis": "fixed_protocol",
+    "duration_days": 84,
+    "duration_as_printed": {
+     "value": 12,
+     "unit": "weeks"
+    },
+    "administration_frequency": "daily (abstract: 600 mg (24 mmol) magnesium daily; split schedule not reported in abstract)",
+    "dosage_forms": [
+     "oral trimagnesium dicitrate (physical form not reported in the abstract)"
+    ],
+    "co_therapies": [
+     "Symptomatic acute-migraine medication use recorded as an outcome; no assigned co-therapy reported in the abstract."
+    ],
+    "reported_regimen": "Oral 600 mg (24 mmol) magnesium as trimagnesium dicitrate daily for 12 weeks, or placebo.",
+    "normalization": {
+     "basis": "Abstract states 600 mg (24 mmol) magnesium daily; one tested regimen, not a benchmark."
+    },
+    "source_provenance": {
+     "pmid": "8792038",
+     "location": "PubMed abstract (full text not open access).",
+     "source_url": "https://pubmed.ncbi.nlm.nih.gov/8792038/"
+    }
+   },
+   "outcomes": [
+    {
+     "name": "Attack frequency weeks 9-12 versus baseline: -41.6% magnesium versus -15.8% placebo (p<0.05).",
+     "hierarchy": "not_reported",
+     "kind": "patient_important",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "Migraine days and symptomatic drug use per patient decreased significantly; attack duration, intensity and drug use per attack not significant. Diarrhea 18.6%, gastric irritation 4.7%.",
+     "hierarchy": "not_reported",
+     "kind": "patient_important",
+     "direction": "mixed",
+     "outcome_role": "direct_between_group_effect"
+    }
+   ],
+   "limitations": [
+    "Migraine prophylaxis is outside this record's claim (Cardiovascular/Heart Health), so this context carries no credit for the record.",
+    "Abstract only: primary-outcome designation, dosage form and split schedule are not reported there and are not inferred.",
+    "Single small 1996 trial of one salt (trimagnesium dicitrate); does not establish other salts or doses.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ],
+   "review_status": "clinician_approved",
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability"
+   }
+  },
+  {
+   "context_id": "ingr_magnesium_generic_26752497_out_of_scope_migraine",
+   "components": [
+    "INGR_MAGNESIUM_GENERIC"
+   ],
+   "source_pmids": [
+    "26752497"
+   ],
+   "review_status": "rejected_source",
+   "scoring_eligible": false,
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability",
+    "notes": "Scope reconciliation of declared source 26752497 (IV acute and oral prophylactic magnesium for migraine): outside this record's Cardiovascular/Heart Health claim, and its IV arm is not an oral supplement route. Transfer rejection only."
+   },
+   "dose": {
+    "source_provenance": {
+     "pmid": "26752497",
+     "location": "PubMed abstract; full text (Pain Physician) not retrieved.",
+     "source_url": "https://pubmed.ncbi.nlm.nih.gov/26752497/"
+    }
+   },
+   "limitations": [
+    "Chiu 2016: 21 RCTs, 11 of intravenous magnesium for acute migraine (948 participants) and 10 of oral magnesium for prophylaxis (789); oral magnesium reduced migraine frequency and intensity (ORs 0.20 and 0.27) (abstract). Not this record's cardiovascular claim; no regimen or included-study list encoded because full text was not retrieved. Not a finding that the source is invalid.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ]
+  }
+ ],
+ "source_receipts": [
+  {
+   "pmid": "41000008",
+   "title_fetched": "Magnesium Supplementation and Blood Pressure: A Systematic Review and Meta-Analysis of Randomized Controlled Trials.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/41000008/",
+   "full_text": true,
+   "sections_used": "Methods, Results (all subsections), reference list 29-66 (BioC PMC12529988)"
+  },
+  {
+   "pmid": "26752497",
+   "title_fetched": "Effects of Intravenous and Oral Magnesium on Reducing Migraine: A Meta-analysis of Randomized Controlled Trials.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/26752497/",
+   "full_text": false,
+   "sections_used": "PubMed abstract"
+  },
+  {
+   "pmid": "8792038",
+   "title_fetched": "Prophylaxis of migraine with oral magnesium: results from a prospective, multi-center, placebo-controlled and double-blind randomized study.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/8792038/",
+   "full_text": false,
+   "sections_used": "PubMed abstract"
+  }
+ ]
+}

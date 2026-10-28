@@ -1,0 +1,124 @@
+{
+ "record_id": "INGR_DIGESTIVE_ENZYMES",
+ "decision": "held: exact remaining item (Dr. Pham fifth ruling, 2026-10-28): the trial 37976892 names only 'a multi-enzyme blend obtained from fungal fermentation' (200 mg per capsule, 2 capsules/day, 2 months). Exact-brand credit requires identifying the study material and its enzyme activities, from the full paper's Methods/materials section or written manufacturer correspondence, and matching them to a retail formula. The brand 'Poolzyme Multi' from an earlier author-shared copy is not verified. The CC-BY full text (https://doi.org/10.1016/j.biopha.2023.115858) blocked automated access this session. Once identity and activities are verified, the encoding is: approve the context as scoring-eligible for functional dyspepsia; applicability {require_source_label_form true, required_form_terms [verified brand/formula name], supported_outcomes ['digestive'], source_pmids ['37976892']}; drop record-level scoring_eligible with a notes citation.",
+ "summary": "37976892 abstract: 120 adults aged 18-59 with functional dyspepsia randomized to 2 capsules/day of a 200 mg fungal multi-enzyme blend or placebo for 2 months; the primary outcome (NDI-SF quality of life) and secondary pain (VAS) and sleep (PSQI) scores improved without side effects. Credit is ruled for the exact formula only; isolated enzymes and absorption claims get none.",
+ "record_updates": {},
+ "study_contexts": [
+  {
+   "context_id": "poolzyme_multi_dyspepsia_37976892",
+   "context_schema_version": "1.1.0",
+   "source_pmids": [
+    "37976892"
+   ],
+   "components": [
+    "INGR_DIGESTIVE_ENZYMES"
+   ],
+   "identity_scope": "branded_material",
+   "identity": {
+    "branded_material": "Poolzyme Multi",
+    "standardization": "Five-enzyme fungal fermentation preparation containing amylase, protease, lactase, cellulase and lipase; samples supplied by Giellepi. Exact activity specifications remain a preparation-correspondence requirement."
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "direct_rct",
+   "component_registration_status": "fully_registered",
+   "condition": "functional_dyspepsia",
+   "purpose": "treatment",
+   "population": {
+    "age_group": "adult",
+    "description": "120 adults aged18–59 with functional dyspepsia (63men,57women), randomized1:1; registry specifies RomeIV diagnosis."
+   },
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "mg",
+    "values": [
+     400
+    ],
+    "dose_status": "verified",
+    "dose_basis": "nominal_assigned_arm",
+    "duration_basis": "fixed_protocol",
+    "duration_days": 60,
+    "duration_as_printed": {
+     "value": 60,
+     "unit": "days"
+    },
+    "administration_frequency": "One200mg capsule beforelunch and one200mg capsule beforedinner.",
+    "dosage_forms": [
+     "capsule"
+    ],
+    "co_therapies": [
+     "Maintainnormaldiet;noothersupplements;functional-dyspepsiatreatmentspermittedbutrequiredrecording;otherrecentGI-drugs/antibioticsrestricted."
+    ],
+    "reported_regimen": "Two200mg whole-Poolzyme-Multi capsules daily for60days, lunch and dinner.",
+    "normalization": {
+     "basis": "Two capsules/day multiplied by200mg whole-enzyme preparation per capsule=400mg/day; this does not determine individual enzyme masses or activity equivalence."
+    },
+    "source_provenance": {
+     "pmid": "37976892",
+     "source_url": "https://pubmed.ncbi.nlm.nih.gov/37976892/",
+     "location": "Originalauthor-sharedfullpapersections2.1–2.3,3;Tables1–4;see poolzyme_original_methods_results_web_receipt.json. BeforemainmealtimingexplicitinDiscussionconclusion."
+    }
+   },
+   "outcomes": [
+    {
+     "name": "NDI-SF2–5dyspepsiaqualityoflife",
+     "hierarchy": "primary",
+     "kind": "patient_important",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "NDI-SF1upperGIsymptoms",
+     "hierarchy": "primary",
+     "kind": "patient_important",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "NDI-SF6importanceofsymptoms",
+     "hierarchy": "primary",
+     "kind": "patient_important",
+     "direction": "null",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "VASpain",
+     "hierarchy": "secondary",
+     "kind": "patient_important",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "PSQIsleepquality",
+     "hierarchy": "secondary",
+     "kind": "patient_important",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    }
+   ],
+   "limitations": [
+    "Signedreturnrequiresfinalsourceacceptance;thisfactualextractiondoesnotoverrideholdorcreateapproval.",
+    "Publicationethicsdatesconflict:methodsProtocol73,13February2023vsIRBstatementdeliberation156,12June2023;registrationretrospectivefromexistingofficialreceipt. No inventedreconciliation.",
+    "Table2reportsPSQImaximum22whilepaperdeclares0–21;modelbaselinecontrastalsodiffersfromrawgroupmeans. Source-specificreportingissuesretained,notcorrectedbyguess.",
+    "120randomized60/arm;descriptivetableslabel60/armthroughout,butCONSORTfigureandanalysis-populationdetailsnotvisuallyverifiedfromoriginalPDF. NoprovenITTornodropoutclaim.",
+    "Single-centre,60days,nofollowupafterstopping;nofromexactfive-enzymeformulatogenericenzyme/RAWorstandaloneenzymebenefittransfer.",
+    "NDI-SF6time×groupnull;otherprimaryandsecondaryfindingspositiveunderpublishedLMM. Noscalaruniversal400mgclinicalminimum;activityspecificationequivalenceindependent."
+   ],
+   "review_status": "source_verified_pending_clinical_review",
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "study_design": "randomized double-blind placebo-controlled single-center trial",
+   "trial_family": "poolzyme_dyspepsia_37976892",
+   "scoring_eligible": false
+  }
+ ],
+ "source_receipts": [
+  {
+   "pmid": "37976892",
+   "title_fetched": "Efficacy of digestive enzyme supplementation in functional dyspepsia: A monocentric, randomized, double-blind, placebo-controlled, clinical trial.",
+   "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=37976892&retmode=xml",
+   "full_text": false,
+   "sections_used": "PubMed abstract; CC-BY full text at https://doi.org/10.1016/j.biopha.2023.115858 blocked automated access"
+  }
+ ]
+}

@@ -1,0 +1,386 @@
+{
+ "record_id": "INGR_INOSITOL",
+ "decision": "closed_credit",
+ "summary": "Per Dr. Pham's rulings, inositol receives at most low credit for limited cycle-regularity findings in women with PCOS: 36703143's primary outcome pooled 2 trials (118 women; RR 1.79, 1.13-2.85; very low certainty), and neither trial is one of the review's retracted reports. The guideline review 38163998 (limited, inconclusive) carries no credit. Fertility, pregnancy, live-birth, ovulation, ovarian and hormone-balance claims are excluded, and the record-level hold is lifted with a notes citation.",
+ "record_updates": {
+  "references_structured": [
+   {
+    "type": "pubmed",
+    "authority": "NCBI PubMed",
+    "pmid": "38163998",
+    "doi": "10.1210/clinem/dgad762",
+    "title": "Inositol for Polycystic Ovary Syndrome: A Systematic Review and Meta-analysis to Inform the 2023 Update of the International Evidence-based PCOS Guidelines.",
+    "citation": "The Journal of clinical endocrinology and metabolism (2024-05-17)",
+    "url": "https://pubmed.ncbi.nlm.nih.gov/38163998/",
+    "published_date": "2024-05-17",
+    "publication_types": [
+     "Journal Article",
+     "Systematic Review",
+     "Meta-Analysis",
+     "Research Support, Non-U.S. Gov't"
+    ],
+    "mesh_terms": [
+     "Polycystic Ovary Syndrome",
+     "Humans",
+     "Inositol",
+     "Female",
+     "Practice Guidelines as Topic",
+     "Insulin Resistance",
+     "Evidence-Based Medicine"
+    ],
+    "supplementary_concepts": [],
+    "evidence_grade": "systematic_review",
+    "retracted": false,
+    "supports_claims": [
+     "Limited and inconclusive PCOS evidence with possible benefits for selected outcomes"
+    ],
+    "verification_source": "pubmed_eutils"
+   },
+   {
+    "type": "pubmed",
+    "authority": "NCBI PubMed",
+    "pmid": "36703143",
+    "doi": "10.1186/s12958-023-01055-z",
+    "title": "Inositol is an effective and safe treatment in polycystic ovary syndrome: a systematic review and meta-analysis of randomized controlled trials.",
+    "citation": "Reproductive biology and endocrinology : RB&E (2023-01-26)",
+    "url": "https://pubmed.ncbi.nlm.nih.gov/36703143/",
+    "published_date": "2023-01-26",
+    "publication_types": [
+     "Meta-Analysis",
+     "Systematic Review",
+     "Journal Article"
+    ],
+    "mesh_terms": [
+     "Female",
+     "Humans",
+     "Polycystic Ovary Syndrome",
+     "Inositol",
+     "Hypoglycemic Agents",
+     "Randomized Controlled Trials as Topic",
+     "Metformin",
+     "Testosterone",
+     "Insulins"
+    ],
+    "supplementary_concepts": [],
+    "evidence_grade": "systematic_review",
+    "retracted": false,
+    "supports_claims": [
+     "Cycle regularity and selected metabolic or hormonal outcomes in PCOS"
+    ],
+    "verification_source": "pubmed_eutils",
+    "notes": "The retained positive review includes primary studies now carrying retractions or expressions of concern. Its affirmative cycle/metabolic aggregate is not revalidated by this batch; retain the paper as history and do not use its unqualified pooled conclusion as affirmative credit until a scoped analysis supports it. Underlying primary notices: PMID 18074942 -> PMID 37782148; PMID 20222840 -> PMID 42304764; PMID 28485095 -> PMID 36848124; PMID 28980870 -> PMID 33143512, PMID 38758364. Keep the separate limited/inconclusive38163998 and null/mixed35477841 source conclusions; do not infer every inositol outcome is ineffective. 2026-10-28 scoped analysis (agent review, Dr. Pham ruling of 2026-10-28): the only credited outcome, menstrual-cycle regularity (as reported) versus control, pools Pourghasem 2018 and Donne 2019 (Figure 2); neither is a flagged report (18074942, 20222840, 28485095, 28980870). Other pooled outcomes of this review remain uncredited."
+   },
+   {
+    "type": "pubmed",
+    "authority": "NCBI PubMed",
+    "pmid": "35477841",
+    "doi": "10.1007/s43032-022-00933-y",
+    "title": "Efficacy of Myo-inositol on Anthropometric, Metabolic, and Endocrine Outcomes in PCOS Patients: a Meta-analysis of Randomized Controlled Trial.",
+    "citation": "Reproductive sciences (Thousand Oaks, Calif.) (2022-08-01)",
+    "url": "https://pubmed.ncbi.nlm.nih.gov/35477841/",
+    "published_date": "2022-08-01",
+    "publication_types": [
+     "Journal Article",
+     "Meta-Analysis"
+    ],
+    "mesh_terms": [
+     "Female",
+     "Folic Acid",
+     "Humans",
+     "Inositol",
+     "Insulin",
+     "Insulin Resistance",
+     "Metformin",
+     "Polycystic Ovary Syndrome",
+     "Randomized Controlled Trials as Topic"
+    ],
+    "supplementary_concepts": [],
+    "evidence_grade": "meta_analysis",
+    "retracted": false,
+    "supports_claims": [
+     "No clinically significant improvement across most anthropometric, metabolic, and endocrine outcomes; high heterogeneity"
+    ],
+    "verification_source": "pubmed_eutils"
+   }
+  ],
+  "scoring_eligible": null,
+  "applicability": {
+   "scope": "ingredient",
+   "supported_outcomes": [
+    "pcos_menstrual_cycle_regularity"
+   ],
+   "studied_population": "Women with polycystic ovary syndrome; limited, very-low-certainty cycle-regularity findings only; not fertility, ovulation, pregnancy, live birth, ovarian or hormone-balance outcomes.",
+   "source_pmids": [
+    "36703143"
+   ],
+   "excluded_claim_terms": [
+    "fertility",
+    "infertility",
+    "ovulation",
+    "conception",
+    "pregnancy",
+    "live birth",
+    "ovarian",
+    "hormone balance",
+    "normalizes"
+   ],
+   "reviewed_at": "2026-10-28"
+  },
+  "notes": "Human evidence is condition-specific and conflicting. A 2023 review reported improvement in cycle regularity and selected metabolic outcomes, while a 2022 meta-analysis found no clinically significant improvement across most anthropometric, metabolic, and endocrine outcomes. The systematic review used for the 2023 international PCOS guideline update concluded that evidence was limited and inconclusive. This record is not broad proof for weight loss, fertility, or glucose control outside PCOS. Live included-study inspection of38163998 identifies retracted primary26507336/18462730;36703143 includes retracted18074942/28980870 (and prior related integrity notices). The parent reviews themselves are not declared retracted. No independently accepted current product/outcome scope is supplied by this source-extraction batch. Retain separate limited/inconclusive38163998 and null/mixed35477841 findings; withhold the unresolved affirmative relationship without inventing a recomputed pooled result, efficacy-negative judgment, dose penalty or safety warning. Dr. Pham's signed ruling of 2026-10-28 resolves the former record-level eligibility hold: at most low credit for limited cycle-regularity findings in women with PCOS only; no fertility, ovulation, ovarian or hormone-balance claim. The credited pool (Pourghasem 2018, Donne 2019; Figure 2 of 36703143) contains neither flagged retracted report."
+ },
+ "study_contexts": [
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "ingr_inositol_36703143_scoped_source",
+   "source_pmids": [
+    "36703143"
+   ],
+   "components": [
+    "INGR_INOSITOL"
+   ],
+   "identity_scope": "ingredient_general",
+   "identity": {
+    "preparation": "Myo-inositol and inositol combinations (Figure 2 'combined inositols' subgroup; Table 1 lists MI 4000 mg/day for both pooled trials); not a preferred form"
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "meta_analysis",
+   "component_registration_status": "fully_registered",
+   "condition": "pcos_menstrual_cycle_regularity",
+   "purpose": "treatment",
+   "review_status": "clinician_approved",
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability"
+   },
+   "scoring_eligible": true,
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "trial_family": "source_36703143",
+   "population": {
+    "age_group": "adult",
+    "description": "Women with PCOS; overall 26 RCTs and 1691 patients; the placebo cycle-regularity pool is 2 trials (Pourghasem 2018, Iran; Donne 2019, Italy) with 118 women, mostly in their 30s with mean BMI <30."
+   },
+   "study_design": "Systematic review and meta-analysis of RCTs comparing inositols with placebo or metformin; primary outcome changed (protocol deviation stated) to menstrual-cycle normalization.",
+   "outcomes": [
+    {
+     "name": "Primary: limited cycle-regularity findings versus placebo/control, RR 1.79 (95% CI 1.13-2.85), 2 trials, 118 women, I2 0%, GRADE very low (the source labels this outcome 'cycle normalization')",
+     "hierarchy": "primary",
+     "kind": "patient_important",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "Versus metformin: cycle regularity RR 1.42 (0.8-2.53), not significant; this is not proof of non-inferiority",
+     "hierarchy": "primary",
+     "kind": "patient_important",
+     "direction": "null",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "Secondary versus placebo: BMI MD -0.45, fasting glucose MD -3.14 mg/dl, total testosterone MD -20.39 ng/dl, SHBG higher",
+     "hierarchy": "secondary",
+     "kind": "surrogate",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    }
+   ],
+   "limitations": [
+    "Dr. Pham's 2026-10-28 ruling: at most limited, narrow PCOS credit for cycle regularity; no hormone-balance, ovarian or fertility claim; no preferred form or dose.",
+    "The credited estimate rests on 2 small trials (118 women) with very low certainty; Donne 2019's comparator is listed as diet in Table 1, and cycle-regularity definitions varied (Discussion).",
+    "Neither pooled cycle trial is among the retracted included reports (18074942, 28980870), which feed other outcomes of this review; those retractions remain flagged and other outcomes are not credited.",
+    "The guideline-informing review 38163998 judges inositol evidence for PCOS limited and inconclusive overall; this credit is confined to cycle regularity.",
+    "Historical bibliography census (not independent scoring sources; actual included-publication membership is separately bound to the inspected source table): 34665453, 34590929, 30608001, 30915778, 27493664, 24302192, 30787519, 19499845, 22223702, 27808588, 18335328, 18074942, 15251831, 28980870, 28485095, 10219066, 30847561, 20222840, 28092404. Each intervention and comparison requires its own applicability assessment; citation in this bibliography grants no credit.",
+    "Included-study identifiers are now bound to this source's actual included-study rows/explicit inclusion references (Tables Tab1 explicit included-study row citations), with live NIH title/content identity checks. They are publication pointers, not independent-cohort counts, per-primary-study scoring approvals, preparation equivalence or new efficacy evidence. Exact unindexed source citations remain retained; no missing PMID is invented.",
+    "7 included source citations have no printed PubMed identifier in this primary source; their exact citations are retained in the source-table receipt. This is a documented identifier limitation, not a fabricated identifier or an extra independent trial.",
+    "Live NIH API flags these included PRIMARY reports as retracted: 18074942 (notice 37782148), 28980870 (notice 33143512,38758364). This flag applies to the named underlying reports, not automatically to this parent synthesis. Their impact on the exact synthesis/outcome is not recomputed or deemed harmless here; existing non-scoring/pending source acceptance remains. Do not restore affirmative credit merely because table extraction is complete.",
+    "Dr. Pham fifth ruling (2026-10-28): at most low credit for verified PCOS cycle-regularity findings; never 'normalizes cycles'. No pregnancy, live-birth, infertility or hormone-balance credit.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ],
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "mg",
+    "values": [
+     4000
+    ],
+    "dose_status": "verified",
+    "dose_basis": "not_applicable",
+    "duration_basis": "participant_specific",
+    "duration_days": null,
+    "administration_frequency": "Daily; trial-specific schedules (Table 1)",
+    "dosage_forms": [
+     "powder",
+     "capsule (trial-specific; not uniformly reported)"
+    ],
+    "co_therapies": [
+     "Folic acid co-administration in some trials; diet comparator in Donne 2019"
+    ],
+    "source_provenance": {
+     "pmid": "36703143",
+     "location": "Methods (PROSPERO CRD42021283275; primary outcome reported as menstrual-cycle normalization (recorded here as cycle regularity); GRADE); Table 1; Results paragraph and Table 2 (cycle regularity 2 studies, 118 patients, very low); Figure 2 forest plot (Pourghasem 2018, Donne 2019); Discussion on heterogeneous cycle definitions",
+     "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9878965/"
+    },
+    "reported_regimen": "Pooled cycle trials: myo-inositol 4000 mg/day for 12 weeks (Table 1, Figure 2); across the review 1000-4000 mg/day for 12-24 weeks",
+    "normalization": {
+     "basis": "Studied regimen, not a preferred dose."
+    }
+   },
+   "included_study_pmids": [
+    "27493664",
+    "24302192",
+    "30787519",
+    "19499845",
+    "22223702",
+    "30915778",
+    "27808588",
+    "18335328",
+    "18074942",
+    "28980870",
+    "15251831",
+    "28485095",
+    "10219066",
+    "30847561",
+    "20222840",
+    "34590929",
+    "30608001",
+    "34665453",
+    "28092404"
+   ]
+  },
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "ingr_inositol_38163998_scoped_source",
+   "components": [
+    "INGR_INOSITOL"
+   ],
+   "source_pmids": [
+    "38163998"
+   ],
+   "identity_scope": "ingredient_general",
+   "identity": {
+    "preparation": "Myo-inositol, D-chiro-inositol and combinations; often with folate or fertility care."
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "meta_analysis",
+   "component_registration_status": "fully_registered",
+   "condition": "polycystic_ovary_syndrome",
+   "purpose": "treatment",
+   "review_status": "clinician_approved",
+   "scoring_eligible": false,
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "trial_family": "source_38163998",
+   "population": {
+    "description": "30 trials, 2230 women with PCOS; 19 trials pooled and 13 distinct comparisons."
+   },
+   "study_design": "Published systematic review or meta-analysis; individual trial correspondence remains source-specific.",
+   "outcomes": [
+    {
+     "name": "Some metabolic and ovulation signals; most comparisons limited or inconclusive. Metformin may improve waist-hip ratio and hirsutism more than inositol.",
+     "direction": "mixed",
+     "kind": "patient_important",
+     "hierarchy": "not_reported",
+     "outcome_role": "direct_between_group_effect"
+    }
+   ],
+   "limitations": [
+    "No definitive PCOS/fertility efficacy or metformin equivalence. Comparator, cointervention and clinical outcome must remain linked.",
+    "Returned decision: Reject definitive PCOS/fertility efficacy and metformin-equivalence wording.",
+    "Some included-study citations lack PubMed identifiers in the source XML; retain their exact citations rather than inventing identifiers.",
+    "Historical bibliography census (not independent scoring sources; actual included-publication membership is separately bound to the inspected source table): 30919036, 23336594, 34268040, 27493664, 19499845, 22223702, 27808588, 18335328, 15251831, 34624138, 30915778, 30880505, 10219066, 22774396, 31298405, 28277112, 26507336, 18462730, 30847561, 20222840, 34590929, 36557221, 34665453, 28092404, 21608442. Each intervention and comparison requires its own applicability assessment; citation in this bibliography grants no credit.",
+    "Included-study identifiers are now bound to this source's actual included-study rows/explicit inclusion references (Tables dgad762-T1 explicit included-study row citations), with live NIH title/content identity checks. They are publication pointers, not independent-cohort counts, per-primary-study scoring approvals, preparation equivalence or new efficacy evidence. Exact unindexed source citations remain retained; no missing PMID is invented.",
+    "6 included source citations have no printed PubMed identifier in this primary source; their exact citations are retained in the source-table receipt. This is a documented identifier limitation, not a fabricated identifier or an extra independent trial.",
+    "Live NIH API flags these included PRIMARY reports as retracted: 26507336 (notice 41626704), 18462730 (notice 39971415). This flag applies to the named underlying reports, not automatically to this parent synthesis. Their impact on the exact synthesis/outcome is not recomputed or deemed harmless here; existing non-scoring/pending source acceptance remains. Do not restore affirmative credit merely because table extraction is complete.",
+    "Guideline-informing synthesis: evidence for inositol in PCOS is limited and inconclusive; recorded without credit. Erratum noted in PubMed (J Clin Endocrinol Metab 2024;109(12):e2365); its content was not reviewed in this session.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ],
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "mg",
+    "values": [],
+    "dose_status": "source_not_reported",
+    "dose_basis": "not_applicable",
+    "duration_basis": "participant_specific",
+    "administration_frequency": "Table 1 distinguishes 4 g myo-inositol plus 400 mcg folate, 2 g/day schedules, D-chiro-inositol and other regimens. These are not interchangeable.",
+    "dosage_forms": [
+     "capsule",
+     "softgel",
+     "powder"
+    ],
+    "co_therapies": [
+     "Folate supplementation, IVF and metformin comparators vary by trial; retain exact Table 1 cointerventions."
+    ],
+    "reported_regimen": "Table 1 distinguishes 4 g myo-inositol plus 400 mcg folate, 2 g/day schedules, D-chiro-inositol and other regimens. These are not interchangeable.",
+    "normalization": {
+     "basis": "A heterogeneous synthesis has no single assigned-arm dose. Descriptive regimens do not create an intake recommendation, equivalent preparation or efficacy threshold."
+    },
+    "source_provenance": {
+     "pmid": "38163998",
+     "location": "Primary article abstract and source-specific Methods/Results/study tables; exact section/table extraction retained privately.; source-field completion from Tables dgad762-T1 explicit included-study row citations",
+     "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11099481/"
+    }
+   },
+   "included_study_pmids": [
+    "30919036",
+    "23336594",
+    "34268040",
+    "27493664",
+    "19499845",
+    "22223702",
+    "27808588",
+    "18335328",
+    "15251831",
+    "34624138",
+    "30915778",
+    "30880505",
+    "10219066",
+    "22774396",
+    "31298405",
+    "28277112",
+    "26507336",
+    "18462730",
+    "30847561",
+    "20222840",
+    "34590929",
+    "36557221",
+    "34665453",
+    "28092404",
+    "21608442"
+   ],
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability"
+   }
+  }
+ ],
+ "source_receipts": [
+  {
+   "pmid": "36703143",
+   "title_fetched": "Inositol is an effective and safe treatment in polycystic ovary syndrome: a systematic review and meta-analysis of randomized controlled trials.",
+   "url": "https://www.ncbi.nlm.nih.gov/research/bionlp/RESTful/pmcoa.cgi/BioC_json/36703143/unicode",
+   "full_text": true,
+   "sections_used": "Methods (PROSPERO CRD42021283275; primary outcome reported as menstrual-cycle normalization (recorded here as cycle regularity); GRADE); Table 1; Results paragraph and Table 2 (cycle regularity 2 studies, 118 patients, very low); Figure 2 forest plot (Pourghasem 2018, Donne 2019); Discussion on heterogeneous cycle definitions; Figure 2 read at https://pmc.ncbi.nlm.nih.gov/articles/PMC9878965/figure/Fig2/"
+  },
+  {
+   "pmid": "38163998",
+   "title_fetched": "Inositol for Polycystic Ovary Syndrome: A Systematic Review and Meta-analysis to Inform the 2023 Update of the International Evidence-based PCOS Guidelines.",
+   "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=38163998&retmode=xml",
+   "full_text": false,
+   "sections_used": "PubMed abstract; prior-session table extraction retained"
+  },
+  {
+   "pmid": "35477841",
+   "title_fetched": "Efficacy of Myo-inositol on Anthropometric, Metabolic, and Endocrine Outcomes in PCOS Patients: a Meta-analysis of Randomized Controlled Trial.",
+   "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=35477841&retmode=xml",
+   "full_text": false,
+   "sections_used": "PubMed abstract (no open copy found)"
+  }
+ ],
+ "integration_notes": [
+  "2026-10-28 integrator (independent review): supported_outcomes set to the context condition 'pcos_menstrual_cycle_regularity' so the condition and population gate runs; 'menstrual_cycle_regularity' was categorized as digestive and credited men's multis.",
+  "2026-10-28 integrator: condition gate kept (supported_outcomes ['pcos_menstrual_cycle_regularity'] equals the context condition). Sean's decision is that a claim-free label may earn scoped condition credit, but today the population limits (e.g. men-only, pregnancy, children) are enforced only inside this gate, so ungating via data would drop those safeguards. Claim-free scoped credit waits for the shared applicability change (no claim / aligned claim / unrelated claim / population mismatch) under /pg-scoring-change."
+ ]
+}

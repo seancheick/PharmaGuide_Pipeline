@@ -1,0 +1,118 @@
+{
+ "record_id": "BRAND_BIOCELL",
+ "decision": "held: the two randomized trials (22486722 OA, J Agric Food Chem 2012; 31221944 facial skin, Altern Ther Health Med 2019) have no open full text, so their methods, regimens and primary outcomes cannot be verified as Dr. Pham requested; the only open source (22956862) is an uncontrolled open-label pilot, approved without credit.",
+ "summary": "22956862: 29 women enrolled, 26 completed an open-label 12-week pilot of BioCell Collagen 1 g/day (two 500 mg capsules, each 300 mg hydrolyzed collagen II, 100 mg chondroitin sulfate, 50 mg hyaluronic acid), with within-group skin dryness and wrinkle improvements; it cannot establish efficacy. The OA and controlled skin RCTs are paywalled, so the record stays held. Isolated-component attribution remains rejected.",
+ "record_updates": {},
+ "study_contexts": [
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "brand_biocell_22956862_draft",
+   "source_pmids": [
+    "22956862"
+   ],
+   "components": [
+    "BRAND_BIOCELL"
+   ],
+   "identity_scope": "branded_material",
+   "identity": {
+    "branded_material": "BioCell Collagen",
+    "standardization": "Each 500 mg capsule: hydrolyzed collagen type II 300 mg, depolymerized chondroitin sulfate 100 mg, hyaluronic acid 50 mg, remaining 50 mg other natural components",
+    "manufacturer": "BioCell Technology (study material BCC)"
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "uncontrolled_intervention",
+   "component_registration_status": "fully_registered",
+   "condition": "cosmetic_skin_parameters",
+   "purpose": "physiology",
+   "population": {
+    "age_group": "adult",
+    "description": "29 women enrolled and 26 completed the uncontrolled open-label skin-aging pilot."
+   },
+   "study_design": "Prospective uncontrolled, single-arm, open-label pilot intervention; 29 enrolled and 26 completed; before/after observations without randomization or placebo.",
+   "trial_family": "22956862",
+   "review_status": "clinician_approved",
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "scoring_eligible": false,
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "mg",
+    "values": [
+     1000
+    ],
+    "dose_status": "verified",
+    "dose_basis": "nominal_assigned_arm",
+    "duration_basis": "fixed_protocol",
+    "duration_days": 84,
+    "administration_frequency": "One 500 mg capsule in the morning and one in the evening.",
+    "dosage_forms": [
+     "oral capsule"
+    ],
+    "reported_regimen": "1000 mg total BioCell Collagen per day for 84 days; no isolated-component efficacy attribution.",
+    "normalization": {
+     "basis": "Reported study-material daily dose, not a universal threshold or equivalence to other preparation."
+    },
+    "source_provenance": {
+     "pmid": "22956862",
+     "location": "Methods (study design: 29 enrolled, 26 completed; visits 0, 6, 12 weeks; Camay soap run-in; supplement composition 500 mg capsule); Results",
+     "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3426261/"
+    },
+    "co_therapies": [
+     "No skin-active topical/systemic antiaging treatments during the trial; cleanser Camay use remains a cointervention/confound."
+    ]
+   },
+   "outcomes": [
+    {
+     "name": "Dryness and wrinkle changes from baseline",
+     "hierarchy": "not_reported",
+     "kind": "patient_important",
+     "direction": "positive",
+     "outcome_role": "within_group_change"
+    },
+    {
+     "name": "Collagen content at 12 weeks",
+     "hierarchy": "not_reported",
+     "kind": "surrogate",
+     "direction": "null",
+     "outcome_role": "within_group_change"
+    }
+   ],
+   "limitations": [
+    "Uncontrolledopenlabelpilot;nocausalplaceboeffectestablished.",
+    "The retained full article does not designate a primary outcome/endpoint; recorded hierarchy not_reported. This is a reporting limitation, not invented primary status or completion of any separate approval.",
+    "Uncontrolled intervention: within-group observations cannot establish placebo-controlled efficacy; scoring eligibility remains false and all other scope/review holds remain.",
+    "Returned decision A004: isolated-component attribution (collagen, chondroitin or hyaluronic acid alone) rejected.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ],
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability"
+   }
+  }
+ ],
+ "source_receipts": [
+  {
+   "pmid": "22956862",
+   "title_fetched": "Ingestion of BioCell Collagen(®), a novel hydrolyzed chicken sternal cartilage extract; enhanced blood microcirculation and reduced facial aging signs.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/22956862/",
+   "full_text": true,
+   "sections_used": "Abstract; Methods; Results"
+  },
+  {
+   "pmid": "22486722",
+   "title_fetched": "Effect of the novel low molecular weight hydrolyzed chicken sternal cartilage extract, BioCell Collagen, on improving osteoarthritis-related symptoms: a randomized, double-blind, placebo-controlled trial.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/22486722/",
+   "full_text": false,
+   "sections_used": "PubMed record only; subscription"
+  },
+  {
+   "pmid": "31221944",
+   "title_fetched": "Novel Hydrolyzed Chicken Sternal Cartilage Extract Improves Facial Epidermis and Connective Tissue in Healthy Adult Females: A Randomized, Double-Blind, Placebo-Controlled Trial.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/31221944/",
+   "full_text": false,
+   "sections_used": "PubMed record only; subscription"
+  }
+ ]
+}

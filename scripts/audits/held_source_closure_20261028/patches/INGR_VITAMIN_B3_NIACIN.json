@@ -1,0 +1,37 @@
+{
+ "record_id": "INGR_VITAMIN_B3_NIACIN",
+ "decision": "held: none of the four declared sources (11498460, 15642562, 9732910, 25141367) has retrievable full text (no PMC copy), and none of the abstracts states the niacin dose, form or course, so no context can be fully verified. On abstract evidence 11498460 (simvastatin+niacin) and 25141367 (uncontrolled red-yeast-rice-led multi-ingredient pilot) are combinations that cannot isolate niacin, 15642562 is a Coronary Drug Project glycemic-status analysis, and 9732910 reports surrogate fibrinogen/LDL in peripheral vascular disease; Dr. Pham's decision requires separate nutritional and pharmacologic contexts, which cannot be built without the doses.",
+ "summary": "Abstracts fetched this session: CDP (15642562) — niacin was the only one of 5 lipid agents that reduced cardiovascular events (mean 6.2 years) and total mortality with 9 years extra follow-up in 8,341 men post-MI, reported by glycemic status; 9732910 — niacin lowered fibrinogen and LDL in peripheral vascular disease; 11498460 — simvastatin-niacin raised HDL, blunted by antioxidants, in 153 CAD patients; 25141367 — uncontrolled multi-ingredient pilot. Pharmacologic-dose findings cannot be transferred to supplement-dose products, and no dose is verifiable, so no context is written; the record stays held.",
+ "record_updates": {},
+ "study_contexts": [],
+ "source_receipts": [
+  {
+   "pmid": "11498460",
+   "title_fetched": "Antioxidant supplements block the response of HDL to simvastatin-niacin therapy in patients with coronary artery disease and low HDL.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/11498460/",
+   "full_text": false,
+   "sections_used": "Abstract only; no open-access full text"
+  },
+  {
+   "pmid": "15642562",
+   "title_fetched": "Benefits of niacin by glycemic status in patients with healed myocardial infarction (from the Coronary Drug Project).",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/15642562/",
+   "full_text": false,
+   "sections_used": "Abstract only; no open-access full text"
+  },
+  {
+   "pmid": "9732910",
+   "title_fetched": "Effect of niacin supplementation on fibrinogen levels in patients with peripheral vascular disease.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/9732910/",
+   "full_text": false,
+   "sections_used": "Abstract only; no open-access full text"
+  },
+  {
+   "pmid": "25141367",
+   "title_fetched": "A novel, multi-ingredient supplement to manage elevated blood lipids in patients with no evidence of cardiovascular disease: a pilot study.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/25141367/",
+   "full_text": false,
+   "sections_used": "Abstract only; no open-access full text"
+  }
+ ]
+}

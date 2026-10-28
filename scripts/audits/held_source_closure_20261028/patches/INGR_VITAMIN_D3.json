@@ -1,0 +1,246 @@
+{
+ "record_id": "INGR_VITAMIN_D3",
+ "decision": "held: freshness search revises conclusion — the credit-bearing context for 28202713 (acute respiratory infection, OR 0.88) is superseded by the larger 2025 update from the same collaboration, 39993397 (40 RCTs, 61,589 participants: OR 0.94, 0.88-1.00, p=0.057; no effect modification by dosing frequency), and by 38787821 (older adults RR 0.99, moderate certainty). Under the null-primary correction this context would become non-eligible (reference path). A narrower daily-dosing subgroup scope would be a new clinical decision for Dr. Pham.",
+ "summary": "The Martineau 2017 BMJ IPD meta-analysis (25 RCTs, 10,933 participants) found that all included trials gave oral vitamin D3 and that it reduced the odds of at least one acute respiratory infection (adjusted OR 0.88, 0.81-0.96); the benefit came from daily or weekly dosing, not boluses. That meets the credit rule for the record's immune/respiratory-infection outcomes. Bolland 2018 (musculoskeletal, null) is outside the claim and is recorded as a scope rejection without credit. The applicability source list is narrowed to 28202713. A 2026-10-28 freshness search found that the 2025 update of the same meta-analysis (61,589 participants) is no longer significant, so the credit decision is held.",
+ "record_updates": {
+  "applicability": {
+   "scope": "ingredient",
+   "supported_outcomes": [
+    "immune_support",
+    "respiratory_infection_risk"
+   ],
+   "studied_population": "Infants to adults aged 0-95 in 25 placebo-controlled trials of oral vitamin D3 pooled by PMID 28202713; protection was seen with daily or weekly dosing without boluses and was greatest with baseline 25(OH)D <25 nmol/L.",
+   "reviewed_at": "2026-10-28",
+   "source_pmids": [
+    "28202713"
+   ]
+  }
+ },
+ "study_contexts": [
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "ingr_vitamin_d3_28202713_scoped_source",
+   "components": [
+    "INGR_VITAMIN_D3"
+   ],
+   "source_pmids": [
+    "28202713"
+   ],
+   "identity_scope": "exact_form",
+   "identity": {
+    "chemical_form": "cholecalciferol (vitamin D3)",
+    "preparation": "Oral vitamin D3 in all 25 included trials (daily, weekly, bolus or bolus-plus-daily regimens); the eligibility criteria allowed D2 but no included trial used it."
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "meta_analysis",
+   "component_registration_status": "fully_registered",
+   "condition": "acute_respiratory_infection",
+   "purpose": "prevention",
+   "review_status": "clinician_approved",
+   "scoring_eligible": true,
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "trial_family": "source_28202713",
+   "population": {
+    "age_group": "mixed",
+    "description": "25 randomised, double-blind, placebo-controlled trials in 14 countries; 11,321 randomised participants aged 0 to 95 years; individual participant data for 10,933 (96.6%). Populations ranged from healthy adults, schoolchildren and infants to adults with COPD or asthma and care-home residents; mean baseline 25(OH)D 18.9-88.9 nmol/L in the 19 trials that measured it."
+   },
+   "study_design": "Systematic review and one-step individual participant data meta-analysis of randomised, double-blind, placebo-controlled trials of vitamin D supplementation with prospectively collected, prespecified acute respiratory infection outcomes (PROSPERO CRD42014013953); searches to December 2015.",
+   "outcomes": [
+    {
+     "name": "Proportion with at least one acute respiratory tract infection (primary): adjusted OR 0.88 (95% CI 0.81 to 0.96), P=0.003, P for heterogeneity <0.001; NNT 33; 10,933 participants in 25 studies.",
+     "hierarchy": "primary",
+     "kind": "patient_important",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "Dosing-frequency subgroup: daily or weekly without bolus doses adjusted OR 0.81 (0.72 to 0.91); one or more bolus doses adjusted OR 0.97 (0.86 to 1.10); P for interaction 0.05. Within daily/weekly, baseline 25(OH)D <25 nmol/L OR 0.30 (0.17 to 0.53) versus >=25 nmol/L OR 0.75 (0.60 to 0.95).",
+     "hierarchy": "secondary",
+     "kind": "patient_important",
+     "direction": "mixed",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "Time to first acute respiratory tract infection: adjusted HR 0.95 (0.89 to 1.01), P=0.09; 9,108 participants in 18 studies. ARI rate IRR 0.96 (0.92 to 0.997), P=0.04.",
+     "hierarchy": "secondary",
+     "kind": "patient_important",
+     "direction": "mixed",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "Secondary outcomes (URTI, LRTI, ARI hospital admission or emergency attendance, antimicrobial courses, work/school absence): no statistically significant effect overall (Table 4).",
+     "hierarchy": "secondary",
+     "kind": "patient_important",
+     "direction": "null",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "At least one serious adverse event: adjusted OR 0.98 (0.80 to 1.20), P=0.83.",
+     "hierarchy": "secondary",
+     "kind": "patient_important",
+     "direction": "null",
+     "outcome_role": "direct_between_group_effect"
+    }
+   ],
+   "limitations": [
+    "Severe baseline deficiency and dosing schedule modified findings; most infections were not microbiologically confirmed.",
+    "Not a universal vitamin D3 disease-prevention or product claim. Nutritional adequacy and upper-limit assessment are separate.",
+    "Returned decision: Date-restricted efficacy hold; nutritional guidance remains separate. Publication-age-only exclusions were withdrawn and are not adopted.",
+    "No new scoring grade, dose threshold, product approval or clinical signature is assigned by this factual extraction.",
+    "Some included-study citations lack PubMed identifiers in the source XML; retain their exact citations rather than inventing identifiers.",
+    "Historical bibliography census (not independent scoring sources; actual included-publication membership is separately bound to the inspected source table): 22250141, 25476069, 22908115, 23032549, 24014734, 26841365, 24108783, 25088394, 20219962, 22494826, 25050610, 20632889, 19296870, 20723187, 21315433, 21628364, 23242238, 23694840, 24885201, 25283480, 25724847, 26063508, 26540136, 27861708. Each intervention and comparison requires its own applicability assessment; citation in this bibliography grants no credit.",
+    "Included-study PMID membership was extracted from source Table(s) tbl1. These are source membership identifiers, not independent efficacy approvals or automatic trial replications. Exact table/citation mapping and unindexed citations are retained in the source receipt. 1 source citations in this set lack a PMID in the primary source; their citation text is retained, no PMID is invented.",
+    "The full text reports only that all trials gave oral vitamin D3; it does not report the physical dosage form (capsule, tablet, drops, oil) per trial. Dosage form is recorded as trial-specific oral preparations, not inferred.",
+    "Benefit was confined to daily or weekly regimens without bolus doses and was largest in those with baseline 25(OH)D <25 nmol/L; bolus regimens showed no protection. High statistical heterogeneity overall.",
+    "Included-study identity verified from the source reference list: 24 PMIDs; Simpson 2015 (BMC Nutrition) has no PMID in the source and none is invented.",
+    "Date-only restriction in the returned A120 answer was withdrawn (A_RESPONSE_VERIFICATION_20261025); credit rests on the source meeting the RCT/meta-analysis, oral, dose, population and primary-outcome rules, within the immune/respiratory-infection scope only.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ],
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "mg",
+    "values": [],
+    "dose_status": "verified",
+    "dose_basis": "not_applicable",
+    "duration_basis": "not_recorded",
+    "administration_frequency": "Trial-specific oral vitamin D3 schedules: daily in 12 trials, weekly in 3, bolus every 1-3 months in 7, and bolus plus daily in 3 (Results; Table 1). No single pooled frequency.",
+    "dosage_forms": [
+     "oral supplementation (trial-specific preparations)"
+    ],
+    "co_therapies": [
+     "Some trials had factorial or other co-interventions (for example Goodall 2014 factorial with gargling; ViDiFlu and Ginde 2016 gave daily vitamin D to both arms on top of the bolus comparison) (Table 1). No common co-therapy assumed."
+    ],
+    "reported_regimen": "Table 1 'Oral dose of vitamin D3': daily 7.5-100 micrograms; weekly 35 micrograms to 0.5 mg; boluses 0.75-5 mg every 1-3 months; durations 7 weeks to 1.5 years. No scalar pooled dose is encoded.",
+    "normalization": {
+     "basis": "A heterogeneous IPD synthesis has no single assigned-arm dose; regimens are descriptive, not an intake recommendation, efficacy threshold or preparation equivalence."
+    },
+    "source_provenance": {
+     "pmid": "28202713",
+     "location": "Full text (PMC5310969): Abstract; Methods eligibility; Results paragraph 'Table 1 presents...', Table 1 (Oral dose of vitamin D3 column), Table 2 results paragraph, Table 4 secondary outcomes paragraph; reference list 15-53 for included-study PMIDs.",
+     "source_url": "https://pubmed.ncbi.nlm.nih.gov/28202713/"
+    },
+    "duration_days": null
+   },
+   "included_study_pmids": [
+    "19296870",
+    "20219962",
+    "20723187",
+    "20632889",
+    "21315433",
+    "21628364",
+    "22250141",
+    "22494826",
+    "22908115",
+    "23032549",
+    "23242238",
+    "23694840",
+    "24014734",
+    "24108783",
+    "24885201",
+    "25088394",
+    "25283480",
+    "25476069",
+    "25724847",
+    "26063508",
+    "25050610",
+    "26540136",
+    "26841365",
+    "27861708"
+   ],
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability"
+   }
+  },
+  {
+   "context_id": "ingr_vitamin_d3_30293909_out_of_scope_musculoskeletal",
+   "components": [
+    "INGR_VITAMIN_D3"
+   ],
+   "source_pmids": [
+    "30293909"
+   ],
+   "review_status": "rejected_source",
+   "scoring_eligible": false,
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability",
+    "notes": "Scope reconciliation of declared source 30293909: a musculoskeletal meta-analysis (fracture, falls, BMD) cannot support this record's immune/respiratory-infection claim. Transfer rejection only; no regimen or efficacy context is asserted."
+   },
+   "dose": {
+    "source_provenance": {
+     "pmid": "30293909",
+     "location": "PubMed abstract (Background, Methods, Findings, Interpretation); full text not open access and not retrieved.",
+     "source_url": "https://pubmed.ncbi.nlm.nih.gov/30293909/"
+    }
+   },
+   "limitations": [
+    "Bolland 2018: 81 RCTs (n=53,537) in adults; vitamin D had no effect on total fracture (RR 1.00, 0.93-1.07), hip fracture (RR 1.11, 0.97-1.26) or falls (RR 0.97, 0.93-1.02), and no clinically relevant BMD differences (abstract). These outcomes are outside this record's supported immune/respiratory outcomes, and the record's notes already removed the bone goal on this basis.",
+    "Full text was not retrieved, so no regimen, dosage form or included-study list is encoded. This is not a finding that the source is invalid.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ]
+  }
+ ],
+ "source_receipts": [
+  {
+   "pmid": "28202713",
+   "title_fetched": "Vitamin D supplementation to prevent acute respiratory tract infections: systematic review and meta-analysis of individual participant data.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/28202713/",
+   "full_text": true,
+   "sections_used": "Abstract, Methods, Results, Table 1, Table 2/4 results text, Discussion, funding, reference list (BioC PMC5310969)"
+  },
+  {
+   "pmid": "30293909",
+   "title_fetched": "Effects of vitamin D supplementation on musculoskeletal health: a systematic review, meta-analysis, and trial sequential analysis.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/30293909/",
+   "full_text": false,
+   "sections_used": "PubMed abstract only"
+  }
+ ],
+ "freshness_search": {
+  "date": "2026-10-28",
+  "database": "PubMed (NCBI E-utilities esearch, sort=pub_date, retmax=60; titles via esummary, abstracts via efetch)",
+  "query": "(\"vitamin D\"[ti] OR cholecalciferol[ti] OR \"vitamin D3\"[ti]) AND (\"respiratory tract infection\"[tiab] OR \"respiratory tract infections\"[tiab] OR \"respiratory infection\"[tiab] OR \"respiratory infections\"[tiab]) AND (meta-analysis[pt] OR systematic review[pt]) AND 2018:2026[dp]",
+  "hits": 44,
+  "screened": 44,
+  "screening_rule": "Restricted to syntheses, because the credited source is itself a meta-analysis and newer RCTs are pooled by the updates. Kept syntheses of vitamin D supplementation RCTs on acute respiratory infection incidence. Excluded COVID-19 treatment, observational, asthma/allergy, maternal-only and retracted reviews.",
+  "read": [
+   {
+    "pmid": "39993397",
+    "title": "Vitamin D supplementation to prevent acute respiratory infections: systematic review and meta-analysis of stratified aggregate data.",
+    "finding": "2025 update by the same collaboration (Lancet Diabetes Endocrinol), 40 RCTs and 61,589 participants, including a 15,804-person trial. Any vitamin D vs placebo: OR 0.94 (0.88 to 1.00), p=0.057, not significant. No effect modification by age, baseline 25(OH)D, dosing frequency or dose size. Funnel asymmetry, Egger p=0.0020."
+   },
+   {
+    "pmid": "33798465",
+    "title": "Vitamin D supplementation to prevent acute respiratory infections: a systematic review and meta-analysis of aggregate data from randomised controlled trials.",
+    "finding": "2021 update, 43 RCTs (48,488 participants with primary-outcome data): OR 0.92 (0.86 to 0.99) across 37 studies. No subgroup effect by baseline 25(OH)D; protective effects in trials of daily dosing."
+   },
+   {
+    "pmid": "39808630",
+    "title": "Vitamin D, acute respiratory infections, and Covid-19: The curse of small-size randomised trials. A critical review with meta-analysis of randomised trials.",
+    "finding": "2025 critical re-analysis of the 37 ARI trials: OR 0.69 (0.57 to 0.83) in trials below the median size vs 0.98 (0.94 to 1.03) in trials of 248 to 16,000 participants (interaction p=0.0001). After trim-and-fill the OR was 0.96 (0.88 to 1.05); strong small-study bias."
+   },
+   {
+    "pmid": "38787821",
+    "title": "Vitamin D supplementation for prevention of acute respiratory infections in older adults: A systematic review and meta-analysis.",
+    "finding": "2024 SR/MA in older adults, 12 RCTs, 41,552 participants: RR 0.99 (0.97 to 1.02), moderate certainty, with no subgroup effect."
+   },
+   {
+    "pmid": "39143549",
+    "title": "Optimal methods of vitamin D supplementation to prevent acute respiratory infections: a systematic review, dose-response and pairwise meta-analysis of randomized controlled trials.",
+    "finding": "2024 MA, 43 RCTs and 49,320 participants: overall RR 0.99 (0.97 to 1.01). The daily-dosing subgroup gave RR 0.92 (0.85 to 0.99)."
+   },
+   {
+    "pmid": "42037591",
+    "title": "Vitamin D for preventing acute respiratory infections in children up to five years of age.",
+    "finding": "2026 Cochrane review, 107 RCTs (children up to 5 years): may slightly reduce the proportion with ARI-related healthcare visits, RR 0.95 (0.91 to 1.00), low certainty."
+   }
+  ],
+  "conclusion": "revises: the credited result in 28202713 (OR 0.88, with benefit from daily or weekly dosing) is superseded by the 2025 update from the same collaboration (39993397). With 61,589 participants that update is no longer statistically significant and finds no effect modification by dosing frequency. The 2024 older-adult synthesis is null at moderate certainty, and large trials show no effect. A demonstrated immune or respiratory-infection outcome is not supported by current evidence.",
+  "prior_decision": "closed_credit"
+ }
+}

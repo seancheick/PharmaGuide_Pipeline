@@ -1,0 +1,180 @@
+{
+ "record_id": "BRAND_ASTAREAL",
+ "decision": "held: conditional per Dr. Pham's fifth ruling; exact material verified (both studies in 22428137 used AstaREAL Oil 50F, Fuji Chemical Industry, 3 mg astaxanthin per softgel) but independent support is missing: the record's only source was written entirely by Fuji Chemical staff and no independent AstaReal skin trial is among its references",
+ "summary": "The publisher PDF (CC-BY-SA) was read in full and confirms both studies used AstaREAL Oil 50F softgels. Credit is conditional on the exact material and independent support; the material holds, but all authors are Fuji Chemical staff and the record has no independent AstaReal trial, so it stays held. On the evidence itself, the women's study is open-label and uncontrolled with topical co-treatment, and the men's 18-vs-18 study designates no primary endpoint and reports selected wrinkle, elasticity and TEWL changes. Both contexts are approved as non-crediting; no record-level change is made. The earlier citation correction (31221944 excluded) is retained.",
+ "record_updates": {},
+ "study_contexts": [
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "astareal_skin_men_22428137",
+   "components": [
+    "BRAND_ASTAREAL"
+   ],
+   "source_pmids": [
+    "22428137"
+   ],
+   "identity_scope": "branded_material",
+   "identity": {
+    "branded_material": "AstaREAL Oil50F",
+    "manufacturer": "FujiChemicalIndustry",
+    "standardization": "5%w/wastaxanthin Haematococcus pluvialis extract in canola oil; 3 mg active astaxanthin/capsule"
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "direct_rct",
+   "component_registration_status": "fully_registered",
+   "condition": "cosmetic_skin_parameters",
+   "purpose": "cosmetic_skin_assessment",
+   "review_status": "clinician_approved",
+   "scoring_eligible": false,
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "trial_family": "astareal_skin_men_22428137",
+   "population": {
+    "description": "36 healthy Japanese men 20–60, 18/arm, randomized double blind placebo"
+   },
+   "study_design": "randomized double-blind placebo-controlled parallel oral astaxanthin trial in 36 men",
+   "outcomes": [
+    {
+     "name": "Selected wrinkle/elasticity/TEWL positives; other wrinkle parameters/moisture/sebum not uniformly positive",
+     "hierarchy": "not_reported",
+     "kind": "surrogate",
+     "direction": "mixed",
+     "outcome_role": "direct_between_group_effect"
+    }
+   ],
+   "limitations": [
+    "Prespecified primary endpoint not identified in paper; multiple cosmetic parameters.",
+    "Men Fig 9–12 show between-group change-ratio comparison; women uncontrolled and topical cointervention cannot isolate oral effect.",
+    "All authors manufacturer-affiliated; small historical study; no atopic dermatitis inference from healthy TEWL.",
+    "Publisher full Methods/Results inspected 27 October 2026: no unique primary outcome designated. AstaREAL Oil 50 F 5%H. pluvialis extract in canola oil softgel 3 mg astaxanthin each. Women combined oral+topical uncontrolled; no isolated oral causality inferred.",
+    "No credit: 36 men (18 per arm) for 6 weeks with no designated primary endpoint; the text reports improvements 'compared to the start' while Figures 9-12 cite unpaired t-tests, so a placebo-separated effect is not clearly established; only 2 of 6 wrinkle parameters, elasticity and TEWL improved. All authors are affiliated with Fuji Chemical Industry, the maker.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28.",
+    "No credit: 36 men (18 per arm) for 6 weeks with no designated primary endpoint; the text reports improvements 'compared to the start' while Figures 9-12 cite unpaired t-tests, so a placebo-separated effect is not clearly established; only 2 of 6 wrinkle parameters, elasticity and TEWL improved. All authors are affiliated with Fuji Chemical Industry, the maker."
+   ],
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "mg",
+    "values": [
+     6
+    ],
+    "dose_status": "verified",
+    "dose_basis": "nominal_assigned_arm",
+    "duration_basis": "fixed_protocol",
+    "duration_days": 42,
+    "administration_frequency": "one 3 mg active astaxanthin softgel after breakfast and one after dinner",
+    "dosage_forms": [
+     "softgel"
+    ],
+    "co_therapies": [
+     "Eight-week astaxanthin washout before trial; oral astaxanthin compared with canola-oil placebo. No separately required concurrent treatment is reported; other medication use is not established as absent."
+    ],
+    "reported_regimen": "6 mg ACTIVE astaxanthin/day not whole oil mass",
+    "normalization": {
+     "basis": "3 mg active astaxanthin/capsule×two/day; not 120 mg whole oil assumption"
+    },
+    "source_provenance": {
+     "pmid": "22428137",
+     "location": "Full publisher PDF (Acta Biochim Pol 59:43-47; CC-BY-SA via frontierspartnerships.org): Materials and Methods (Study-1 open-label women, Study-2 double-blind men 18 vs 18, AstaREAL Oil 50F softgels 3 mg), Results Figures 1-12, Discussion.",
+     "source_url": "https://pubmed.ncbi.nlm.nih.gov/22428137/"
+    }
+   },
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability"
+   }
+  },
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "astareal_skin_women_22428137",
+   "components": [
+    "BRAND_ASTAREAL"
+   ],
+   "source_pmids": [
+    "22428137"
+   ],
+   "identity_scope": "branded_material",
+   "identity": {
+    "branded_material": "AstaREAL Oil50F",
+    "manufacturer": "FujiChemicalIndustry",
+    "standardization": "5%w/wastaxanthinHaematococcuspluvialisextractincanolaoil;3mgactiveastaxanthin/capsule"
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "uncontrolled_intervention",
+   "component_registration_status": "fully_registered",
+   "condition": "cosmetic_skin_parameters",
+   "purpose": "physiology",
+   "review_status": "clinician_approved",
+   "scoring_eligible": false,
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "trial_family": "astareal_skin_women_22428137",
+   "population": {
+    "description": "Thirty healthy Japanese women aged 20–55 years in an open-label, uncontrolled oral-plus-topical study."
+   },
+   "study_design": "open-label uncontrolled prospective oral-plus-topical astaxanthin study in30women",
+   "outcomes": [
+    {
+     "name": "Selected within-group wrinkle, age-spot, texture and elasticity changes; combined oral-plus-topical treatment.",
+     "hierarchy": "not_reported",
+     "kind": "surrogate",
+     "direction": "mixed",
+     "outcome_role": "within_group_change"
+    }
+   ],
+   "limitations": [
+    "Prespecifiedprimaryendpointnotidentifiedinpaper;multiplecosmeticparameters.",
+    "MenFig9–12showbetween-groupchange-ratiocomparison;womenuncontrolledandtopicalcointerventioncannotisolateoraleffect.",
+    "Allauthorsmanufacturer-affiliated;smallhistoricalstudy;noatopicdermatitisinferencefromhealthyTEWL.",
+    "Publisher fullMethods/Results inspected27October2026: no unique primary outcome designated. AstaREALOil50F5%H.pluvialis extract in canolaoil softgel3mgastaxanthin each. Women combined oral+topical uncontrolled; no isolatedoralcausality inferred.",
+    "Uncontrolled intervention: within-group observations cannot establish placebo-controlled efficacy; scoring eligibility remains false and all other scope/review holds remain.",
+    "No credit: open-label, uncontrolled oral-plus-topical study in 30 women; the oral effect cannot be isolated.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28.",
+    "No credit: open-label, uncontrolled oral-plus-topical study in 30 women; the oral effect cannot be isolated."
+   ],
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "mg",
+    "values": [
+     6
+    ],
+    "dose_status": "verified",
+    "dose_basis": "nominal_assigned_arm",
+    "duration_basis": "fixed_protocol",
+    "duration_days": 56,
+    "administration_frequency": "one3mgactiveastaxanthinsoftgelafterbreakfastandoneafterdinner",
+    "dosage_forms": [
+     "softgel"
+    ],
+    "co_therapies": [
+     "TopicalAstaTROL-Hp78.9micromol/Lsolution1mLmorning+1mLevening"
+    ],
+    "reported_regimen": "6 mg active astaxanthin per day for 56 days, plus topical AstaTROL-Hp 78.9 micromol/L solution, 1 mL morning and evening; oral-only effect cannot be isolated.",
+    "normalization": {
+     "basis": "3mgactiveastaxanthin/capsule×two/day;not120mgwholeoilassumption"
+    },
+    "source_provenance": {
+     "pmid": "22428137",
+     "location": "Full publisher PDF (Acta Biochim Pol 59:43-47; CC-BY-SA via frontierspartnerships.org): Materials and Methods (Study-1 open-label women, Study-2 double-blind men 18 vs 18, AstaREAL Oil 50F softgels 3 mg), Results Figures 1-12, Discussion.",
+     "source_url": "https://pubmed.ncbi.nlm.nih.gov/22428137/"
+    }
+   },
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability"
+   }
+  }
+ ],
+ "source_receipts": [
+  {
+   "pmid": "22428137",
+   "title_fetched": "Cosmetic benefits of astaxanthin on humans subjects.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/22428137/",
+   "full_text": true,
+   "sections_used": "Full publisher PDF via DOI (frontierspartnerships.org): Methods, Results, Figures 1-12, Discussion"
+  }
+ ]
+}

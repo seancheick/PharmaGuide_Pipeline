@@ -1,0 +1,144 @@
+{
+ "record_id": "INGR_TURMERIC",
+ "decision": "closed_no_credit: The reviewed research does not establish a qualifying benefit for this product's assessed use.",
+ "summary": "The reviewed research does not establish a qualifying benefit for this product's assessed use. The only full-text source (40615851, 21 RCTs, 1705 knee-OA patients) shows lower CRP and TNF-alpha but no change in ESR, IL-1beta, IL-6 or PGE2, with mixed curcumin products, multi-herb formulas and active comparators; it does not measure OA pain or function. The two umbrella reviews (38576215, 38945354) are abstract-only, pool overlapping meta-analyses and report no preparation or dose. With Dr. Pham's rejection of preparation-wide approval for this generic turmeric/curcuminoid record, no source supports credit; reference-only removes Evidence points from its products.",
+ "record_updates": {
+  "study_type": "reference",
+  "evidence_level": "reference"
+ },
+ "study_contexts": [
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "ingr_turmeric_40615851_scoped_source",
+   "source_pmids": [
+    "40615851"
+   ],
+   "components": [
+    "INGR_TURMERIC"
+   ],
+   "identity_scope": "ingredient_general",
+   "identity": {
+    "preparation": "Curcumin-based medications (13 trials), multi-ingredient curcumin formulas (6: Acujoint, Instaflex, CartiJoint Forte, RA-11, NXT15906F6) and curcumin plus NSAID (2); not turmeric root powder"
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "meta_analysis",
+   "component_registration_status": "fully_registered",
+   "condition": "knee_osteoarthritis_inflammatory_biomarkers",
+   "purpose": "treatment",
+   "review_status": "clinician_approved",
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability"
+   },
+   "scoring_eligible": false,
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "trial_family": "source_40615851",
+   "population": {
+    "age_group": "adult",
+    "description": "21 RCTs, 1705 knee-osteoarthritis patients (852 intervention, 853 control), mean ages 48-71 years, seven countries."
+   },
+   "study_design": "Systematic review and meta-analysis of RCTs; controls were placebo (11), NSAIDs (7), paracetamol (1) or glucosamine plus chondroitin (2).",
+   "outcomes": [
+    {
+     "name": "CRP SMD -0.906 (95% CI -1.543 to -0.269), p=0.005 (GRADE low); TNF-alpha SMD -0.921 (-1.817 to -0.026), p=0.044",
+     "hierarchy": "not_reported",
+     "kind": "surrogate",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "ESR, IL-1beta, IL-6 and PGE2: no significant difference versus control",
+     "hierarchy": "not_reported",
+     "kind": "surrogate",
+     "direction": "null",
+     "outcome_role": "direct_between_group_effect"
+    }
+   ],
+   "limitations": [
+    "Surrogate inflammatory biomarkers only; this source does not assess osteoarthritis pain or function, the record's Joint & Bone Health claim.",
+    "Mixed preparations including multi-herb formulas and curcumin-plus-NSAID arms, and active comparators; cannot isolate a turmeric/curcumin preparation. Dr. Pham's returned decision rejects broad preparation-wide approval.",
+    "Declared umbrella reviews 38576215 (11 meta-analyses, OA VAS/WOMAC improved) and 38945354 (21 meta-analyses, biomarkers) were inspected at abstract level only (no open full text); they report no regimens and pool overlapping meta-analyses, so they supply no verified dose, preparation or included-trial list and no credit-bearing context.",
+    "Curcumin 80-1500 mg/day for 1 week to 4 months; no root-to-extract or bioavailability conversion.",
+    "Historical bibliography census (not independent scoring sources; actual included-publication membership is separately bound to the inspected source table): 32540725, 25050518, 17043520, 24274358, 27761693, 26937646, 29316908, 30498758, 31239749, 30975196, 32180294, 32311961, 33516238, 35096104, 37351019, 36610110, 39882178, 33210408. Each intervention and comparison requires its own applicability assessment; citation in this bibliography grants no credit.",
+    "Included-study identifiers are now bound to this source's actual included-study rows/explicit inclusion references (Tables Tab1 explicit included-study row citations), with live NIH title/content identity checks. They are publication pointers, not independent-cohort counts, per-primary-study scoring approvals, preparation equivalence or new efficacy evidence. Exact unindexed source citations remain retained; no missing PMID is invented.",
+    "3 included source citations have no printed PubMed identifier in this primary source; their exact citations are retained in the source-table receipt. This is a documented identifier limitation, not a fabricated identifier or an extra independent trial.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ],
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "mg",
+    "values": [
+     80,
+     1500
+    ],
+    "dose_status": "verified",
+    "dose_basis": "not_applicable",
+    "duration_basis": "participant_specific",
+    "duration_days": null,
+    "administration_frequency": "Trial-specific (Table 1)",
+    "dosage_forms": [
+     "capsule",
+     "tablet"
+    ],
+    "co_therapies": [
+     "NSAIDs in two curcumin-plus-NSAID trials; background OA therapy varies by trial"
+    ],
+    "source_provenance": {
+     "pmid": "40615851",
+     "location": "Results study-characteristics paragraph; Table 1 (formulation, dose, duration); GRADE table; abstract Results",
+     "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12231615/"
+    },
+    "reported_regimen": "Curcumin 80-1500 mg/day; 1 week to 4 months (Results)",
+    "normalization": {
+     "basis": "Descriptive source range; no pooled dose."
+    }
+   },
+   "included_study_pmids": [
+    "17043520",
+    "24274358",
+    "25050518",
+    "27761693",
+    "26937646",
+    "29316908",
+    "30498758",
+    "31239749",
+    "30975196",
+    "32540725",
+    "32180294",
+    "32311961",
+    "33516238",
+    "33210408",
+    "35096104",
+    "36610110",
+    "37351019",
+    "39882178"
+   ]
+  }
+ ],
+ "source_receipts": [
+  {
+   "pmid": "40615851",
+   "title_fetched": "Effects of curcumin on serum inflammatory biomarkers in patients with knee osteoarthritis: a systematic review and meta-analysis of randomized controlled trials.",
+   "url": "https://www.ncbi.nlm.nih.gov/research/bionlp/RESTful/pmcoa.cgi/BioC_json/40615851/unicode",
+   "full_text": true,
+   "sections_used": "Results study-characteristics paragraph; Table 1 (formulation, dose, duration); GRADE table; abstract Results"
+  },
+  {
+   "pmid": "38576215",
+   "title_fetched": "The efficacy of curcumin in relieving osteoarthritis: A meta-analysis of meta-analyses.",
+   "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=38576215&retmode=xml",
+   "full_text": false,
+   "sections_used": "PubMed abstract only"
+  },
+  {
+   "pmid": "38945354",
+   "title_fetched": "The effects of curcumin supplementation on biomarkers of inflammation, oxidative stress, and endothelial function: A meta-analysis of meta-analyses.",
+   "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=38945354&retmode=xml",
+   "full_text": false,
+   "sections_used": "PubMed abstract only"
+  }
+ ]
+}

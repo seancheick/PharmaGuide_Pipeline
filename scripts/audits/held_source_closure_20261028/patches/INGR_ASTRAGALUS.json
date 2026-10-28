@@ -1,0 +1,16 @@
+{
+ "record_id": "INGR_ASTRAGALUS",
+ "decision": "held: the only source, 37952511 (Complement Med Res 2023), has no open full text; its included studies, designs (abstract says 'studies', not RCTs), preparations and doses cannot be verified, so no context can be completed. Even from the abstract it reports only surrogate immune markers, so it could at most support a no-credit context; Dr. Pham rejects generic immune-protection approval. OA retry 2026-10-28: no open copy of 37952511.",
+ "summary": "37952511 abstract: 19 human studies (1094 participants) with lower pro-inflammatory cytokines (pooled SMD -2.88) and higher CD3 and CD4/CD8 (SMD 2.46), with substantial heterogeneity. These are surrogate markers from mixed study types, not clinical immune outcomes; the very large SMDs and pooling of different cytokines limit interpretation. The record would likely close as no-credit if the full text became available.",
+ "record_updates": {},
+ "study_contexts": [],
+ "source_receipts": [
+  {
+   "pmid": "37952511",
+   "title_fetched": "The Effect of Astragalus on Humoral and Cellular Immune Response: A Systematic Review and Meta-Analysis of Human Studies.",
+   "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=37952511&retmode=xml",
+   "full_text": false,
+   "sections_used": "PubMed abstract only"
+  }
+ ]
+}

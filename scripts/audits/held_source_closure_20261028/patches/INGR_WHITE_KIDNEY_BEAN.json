@@ -1,0 +1,139 @@
+{
+ "record_id": "INGR_WHITE_KIDNEY_BEAN",
+ "decision": "closed_credit",
+ "summary": "The open-access Phaseolean RCT (39170208; 66 adults with BMI 25-35, 1500 or 3000 mg/day for 45 days) reduced body weight by about 2 kg versus 0.13 kg on placebo, plus BMI and circumferences, in a small sponsor-funded trial. The 2026 meta-analysis (42066439) is abstract-only. Credit is narrowed to Phaseolean-labeled products for weight and body composition in adults with overweight or obesity, within Dr. Pham's 'confirm exact contexts, no blanket approval' instruction. Fourth-ruling boundary applied: limited credit, glycemic/carb-blocker positioning excluded.",
+ "record_updates": {
+  "applicability": {
+   "scope": "ingredient",
+   "supported_outcomes": [
+    "body_weight",
+    "body_composition"
+   ],
+   "studied_population": "Adults aged 18-50 with BMI 25-35 taking Phaseolean 1500-3000 mg/day before meals for 45 days; not people at a healthy weight or other white kidney bean extracts.",
+   "reviewed_at": "2026-10-28",
+   "source_pmids": [
+    "39170208"
+   ],
+   "reason": "Reviewed preparation, population and purpose scope remains independent of amount. Dose reports descriptive research-exposure correspondence; it does not create a positive adequacy benchmark or Safety determination. 2026-10-28 agent review: only the open-access Phaseolean RCT was verifiable; credit narrowed to Phaseolean-labeled products. The 2026 meta-analysis remains unverified.",
+   "required_form_terms": [
+    "phaseolean"
+   ],
+   "excluded_claim_terms": [
+    "blood sugar",
+    "glucose",
+    "carb blocker"
+   ]
+  }
+ },
+ "study_contexts": [
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "ingr_white_kidney_bean_39170208_draft",
+   "source_pmids": [
+    "39170208"
+   ],
+   "components": [
+    "INGR_WHITE_KIDNEY_BEAN"
+   ],
+   "identity_scope": "branded_material",
+   "identity": {
+    "branded_material": "Phaseolean",
+    "standardization": "Standardized water extract of Phaseolus vulgaris (white kidney bean) with alpha-amylase inhibitory activity; activity units not verified in this session"
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "direct_rct",
+   "component_registration_status": "fully_registered",
+   "condition": "overweight_obesity_weight_management",
+   "purpose": "treatment",
+   "review_status": "clinician_approved",
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability"
+   },
+   "scoring_eligible": true,
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "trial_family": "39170208",
+   "population": {
+    "age_group": "adult",
+    "description": "66 adults aged 18-50 with BMI 25-35 kg/m2 (22 per arm), non-pregnant/non-lactating, willing to reduce weight; 62 completed."
+   },
+   "study_design": "Randomized, double-blind, placebo-controlled, single-centre three-arm trial (CTRI/2023/02/049440); dietary habits and physical activity maintained.",
+   "outcomes": [
+    {
+     "name": "Body weight change at 45 days: -2.10 kg (1500 mg/day) and -1.94 kg (3000 mg/day) versus -0.13 kg placebo, p<0.01",
+     "hierarchy": "not_reported",
+     "kind": "patient_important",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "BMI, body fat, skinfold thickness and waist/hip/thigh circumference reduced in both Phaseolean arms versus placebo (p<0.01)",
+     "hierarchy": "not_reported",
+     "kind": "surrogate",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    }
+   ],
+   "limitations": [
+    "Small (62 completers), short (45 days), single-centre trial funded by Ambe Phytoextracts; three authors are employed by the sponsor. No primary endpoint is designated in the article.",
+    "The lower dose outperformed the higher dose, so no dose-response or minimum effective dose is established.",
+    "Results apply to the Phaseolean extract only; generic white kidney bean powder or extracts without matching alpha-amylase activity are not equivalent.",
+    "Declared meta-analysis 42066439 (8 RCTs, 543 adults; weight MD -1.62 kg) has no open full text and supplies no verified context.",
+    "Exact extract activity not generic powder; table denominator inconsistency 18 vs 19 high-dose (prior extraction, retained).",
+    "Dr. Pham's fourth ruling set (2026-10-28) boundary: limited credit for the studied standardized Phaseolean extract and regimen only (66 enrolled, 45 days, manufacturer-employed investigators); the brand name alone is not maximum credit, and no glycemic benefit was shown.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ],
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "mg",
+    "values": [
+     1500,
+     3000
+    ],
+    "dose_status": "verified",
+    "dose_basis": "nominal_assigned_arm",
+    "duration_basis": "fixed_protocol",
+    "duration_days": 45,
+    "administration_frequency": "Two capsules three times daily before meals (500 or 1000 mg per meal)",
+    "dosage_forms": [
+     "oral capsule"
+    ],
+    "co_therapies": [
+     "Usual dietary habits and physical activity maintained"
+    ],
+    "source_provenance": {
+     "pmid": "39170208",
+     "location": "Abstract; Introduction objective; Tables 1-2 (inclusion/exclusion); Methods intervention (two capsules three times daily before meals; resistant-maltodextrin placebo); Results; Funding and competing-interest statements",
+     "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11336451/"
+    },
+    "duration_as_printed": {
+     "value": 45,
+     "unit": "days"
+    },
+    "reported_regimen": "1500 mg/day (250 mg capsules) or 3000 mg/day (500 mg capsules), two capsules before each of three meals, 45 days",
+    "normalization": {
+     "basis": "Assigned Phaseolean extract mass per day; not a generic white-kidney-bean benchmark."
+    }
+   }
+  }
+ ],
+ "source_receipts": [
+  {
+   "pmid": "39170208",
+   "title_fetched": "A randomized, double-blinded, placebo-controlled, single-center, comparative study evaluating Phaseolean® safety and efficacy in overweight/obese participants.",
+   "url": "https://www.ncbi.nlm.nih.gov/research/bionlp/RESTful/pmcoa.cgi/BioC_json/39170208/unicode",
+   "full_text": true,
+   "sections_used": "Abstract; Introduction objective; Tables 1-2 (inclusion/exclusion); Methods intervention (two capsules three times daily before meals; resistant-maltodextrin placebo); Results; Funding and competing-interest statements"
+  },
+  {
+   "pmid": "42066439",
+   "title_fetched": "White kidney bean extract reduces body weight and adiposity with acceptable safety in adults with overweight and obese: a systematic review and meta-analysis.",
+   "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=42066439&retmode=xml",
+   "full_text": false,
+   "sections_used": "PubMed abstract only"
+  }
+ ]
+}

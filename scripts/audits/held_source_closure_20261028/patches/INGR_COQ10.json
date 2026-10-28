@@ -1,0 +1,352 @@
+{
+ "record_id": "INGR_COQ10",
+ "decision": "closed_credit",
+ "summary": "Q-SYMBIO (25282031; 420 patients, oral CoQ10 300 mg/day for 2 years, adjunct to standard therapy) halved the primary long-term MACE composite (HR 0.50) while 16-week co-primary endpoints were null. The 2024 meta-analysis (39462324; 32 RCTs) found lower all-cause mortality (RR 0.64) and HF hospitalization (RR 0.50) in oral trials, with largely unclear risk of bias. Credit is scoped to adjunctive chronic heart failure (Dr. Pham's held scope); statin-myopathy and energy claims are excluded. Fourth-ruling boundary applied: supported outcome narrowed to adjunctive heart failure; energy, statin, muscle-pain and healthy-adult heart-health positioning excluded.",
+ "record_updates": {
+  "applicability": {
+   "scope": "ingredient",
+   "supported_outcomes": [
+    "heart_failure_adjunct"
+   ],
+   "studied_population": "Adults with chronic heart failure taking CoQ10 as an adjunct to conventional heart-failure therapy. Not energy, statin-myopathy relief, or cardiovascular prevention in healthy adults.",
+   "source_pmids": [
+    "25282031",
+    "39462324"
+   ],
+   "excluded_claim_terms": [
+    "energy",
+    "statin",
+    "muscle pain",
+    "stamina",
+    "heart health",
+    "cardiovascular health"
+   ],
+   "reviewed_at": "2026-10-28"
+  }
+ },
+ "study_contexts": [
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "ingr_coq10_39462324_oral_primary_outcomes",
+   "source_pmids": [
+    "39462324"
+   ],
+   "components": [
+    "INGR_COQ10"
+   ],
+   "identity_scope": "ingredient_general",
+   "identity": {
+    "preparation": "Oral CoQ10 (ubiquinone; one ubiquinol trial) adjunct to conventional heart-failure therapy; the single nasal-drop trial (Mareev 2017) did not report mortality or hospitalization"
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "meta_analysis",
+   "component_registration_status": "fully_registered",
+   "condition": "chronic_heart_failure_adjunct",
+   "purpose": "treatment",
+   "review_status": "clinician_approved",
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability"
+   },
+   "scoring_eligible": true,
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "trial_family": "source_39462324",
+   "population": {
+    "age_group": "adult",
+    "description": "32 RCTs, 3763 heart-failure patients (1898 CoQ10, 1845 control) on conventional therapy; 22 trials in Asia; placebo used in 12 trials, conventional therapy alone in the rest. Abstract states 33 studies."
+   },
+   "study_design": "Systematic review and meta-analysis of RCTs (PROSPERO CRD42023493184); primary outcomes all-cause mortality and HF hospitalization.",
+   "outcomes": [
+    {
+     "name": "All-cause mortality (11 trials, 2070 participants): RR 0.64 (95% CI 0.48-0.85), p=0.002, I2=0%; GRADE moderate",
+     "hierarchy": "primary",
+     "kind": "patient_important",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "Hospitalization for heart failure (3 trials, 1034 participants): RR 0.50 (0.37-0.67), p<0.00001, I2=0%; GRADE moderate",
+     "hierarchy": "primary",
+     "kind": "patient_important",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "LVEF MD 0.51, 6MWT MD 31.70 m, NYHA MD -0.29, BNP MD -91.97 (GRADE low to moderate)",
+     "hierarchy": "secondary",
+     "kind": "surrogate",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    }
+   ],
+   "limitations": [
+    "Only 6 of 32 trials reported randomization methods and 3 allocation concealment; most were open-label versus conventional therapy alone (placebo in 12). Risk of bias largely unclear.",
+    "Abstract states 33 studies; body and Table 1 enumerate 32 RCTs/3763 patients. Discrepancy retained, not reconciled.",
+    "Oral regimens in Table 1 range from 30 mg/day (10 mg three times daily) to 400 mg/day ubiquinol; heterogeneous durations (3 weeks to 26.5 months). No pooled dose threshold.",
+    "Adjunctive heart-failure context only; no statin-myopathy, general energy or healthy-adult transfer (returned decision).",
+    "The mortality and hospitalization pools include Q-SYMBIO (25282031); this context and the Q-SYMBIO context are not independent replications.",
+    "Historical bibliography census (not independent scoring sources; actual included-publication membership is separately bound to the inspected source table): 8241697, 19096110, 25919281, 25282031, 9420639, 10416042, 10766682. Each intervention and comparison requires its own applicability assessment; citation in this bibliography grants no credit.",
+    "Included-study IDs extracted from All-cause mortality11source citations and hospitalization3source citations; union12reports; excludednasalref39notinthisendpointset. These represent exact source membership, not independent approvals or a universal dose. Exact unindexed citations remain in the receipt; no PMID invented.",
+    "Dr. Pham's fourth ruling set (2026-10-28) boundary: conditional credit for adjunctive heart-failure outcomes only; energy, statin-myopathy relief and cardiovascular prevention in healthy adults are excluded.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ],
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "mg",
+    "values": [
+     30,
+     400
+    ],
+    "dose_status": "verified",
+    "dose_basis": "not_applicable",
+    "duration_basis": "participant_specific",
+    "duration_days": null,
+    "administration_frequency": "Trial-specific: once to three times daily (Table 1)",
+    "dosage_forms": [
+     "oral CoQ10 (tablet/capsule detail not uniformly reported)"
+    ],
+    "co_therapies": [
+     "Conventional heart-failure therapy in both arms"
+    ],
+    "source_provenance": {
+     "pmid": "39462324",
+     "location": "Methods Outcomes; Results study characteristics paragraph and Table 1; Results All-cause mortality and Hospitalization sections; Discussion",
+     "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11515203/"
+    },
+    "reported_regimen": "Oral 30-400 mg/day across trials (Table 1); intervention 3 weeks to 26.5 months",
+    "normalization": {
+     "basis": "Descriptive range of trial regimens, not a pooled or minimum dose."
+    }
+   },
+   "included_study_pmids": [
+    "8241697",
+    "7752827",
+    "19096110",
+    "25919281",
+    "30880321",
+    "31713723",
+    "34826125",
+    "25282031",
+    "9420639",
+    "10416042",
+    "10334422",
+    "10766682",
+    "16882678",
+    "18705154",
+    "1464342"
+   ]
+  },
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "ingr_coq10_qsymbio_25282031",
+   "source_pmids": [
+    "25282031"
+   ],
+   "components": [
+    "INGR_COQ10"
+   ],
+   "identity_scope": "ingredient_general",
+   "identity": {
+    "preparation": "Oral coenzyme Q10 100 mg three times daily (form/brand not stated in abstract)"
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "direct_rct",
+   "component_registration_status": "fully_registered",
+   "condition": "chronic_heart_failure_adjunct",
+   "purpose": "treatment",
+   "review_status": "clinician_approved",
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability"
+   },
+   "scoring_eligible": true,
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "trial_family": "ingr_coq10_qsymbio_25282031",
+   "population": {
+    "age_group": "adult",
+    "description": "420 patients with moderate to severe chronic heart failure on standard therapy (abstract)."
+   },
+   "study_design": "Q-SYMBIO: randomized, double-blind, placebo-controlled, multicenter 2-year trial (ISRCTN94506234); intention-to-treat analysis.",
+   "outcomes": [
+    {
+     "name": "Primary long-term composite MACE (time to first event) at 2 years: 15% CoQ10 vs 26% placebo, HR 0.50 (95% CI 0.32-0.80), p=0.003",
+     "hierarchy": "primary",
+     "kind": "patient_important",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "Primary short-term endpoints at 16 weeks (NYHA class, 6-minute walk, NT-proBNP): no significant changes",
+     "hierarchy": "primary",
+     "kind": "patient_important",
+     "direction": "null",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "Cardiovascular mortality 9% vs 16% (p=0.026), all-cause mortality 10% vs 18% (p=0.018), HF hospital stays lower (p=0.033); NYHA improved at 2 years (p=0.028)",
+     "hierarchy": "secondary",
+     "kind": "patient_important",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    }
+   ],
+   "limitations": [
+    "Full text is not open access; only the PubMed abstract was retrieved in this session. Dose, duration, n and endpoints are from the abstract; physical dosage form and exact NYHA entry criteria were not verifiable here.",
+    "Adjunctive to standard heart-failure therapy only; does not establish CoQ10 as replacement therapy, nor statin-myopathy, general energy or healthy-adult cardiovascular benefit (Dr. Pham's returned decision rejects statin-myopathy and universal-energy transfers).",
+    "Co-primary short-term endpoints were null; the positive finding is the long-term composite. Phase II single trial; replication of hard outcomes rests on small pooled trials.",
+    "300 mg/day is the tested regimen, not a minimum effective dose.",
+    "Dr. Pham's fourth ruling set (2026-10-28) boundary: conditional credit for adjunctive heart-failure outcomes only; energy, statin-myopathy relief and cardiovascular prevention in healthy adults are excluded.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ],
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "mg",
+    "values": [
+     300
+    ],
+    "dose_status": "verified",
+    "dose_basis": "nominal_assigned_arm",
+    "duration_basis": "fixed_protocol",
+    "duration_days": 730,
+    "administration_frequency": "100 mg three times daily",
+    "dosage_forms": [
+     "oral (physical form not stated in abstract)"
+    ],
+    "co_therapies": [
+     "Standard heart-failure therapy in both arms"
+    ],
+    "source_provenance": {
+     "pmid": "25282031",
+     "location": "PubMed abstract: Methods and Results",
+     "source_url": "https://pubmed.ncbi.nlm.nih.gov/25282031/"
+    },
+    "duration_as_printed": {
+     "value": 24,
+     "unit": "months"
+    },
+    "reported_regimen": "CoQ10 100 mg three times daily for 2 years",
+    "normalization": {
+     "basis": "3 x 100 mg = 300 mg/day nominal assigned dose."
+    }
+   }
+  },
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "ingr_coq10_39462324_scoped_source",
+   "source_pmids": [
+    "39462324"
+   ],
+   "components": [
+    "INGR_COQ10"
+   ],
+   "identity_scope": "ingredient_general",
+   "identity": {
+    "preparation": "CoQ10 all routes as pooled: oral ubiquinone, ubiquinol and one nasal-drop trial"
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "other",
+   "evidence_role": "meta_analysis",
+   "component_registration_status": "fully_registered",
+   "condition": "heart_failure_surrogates_mixed_route",
+   "purpose": "treatment",
+   "review_status": "clinician_approved",
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability"
+   },
+   "scoring_eligible": false,
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "trial_family": "source_39462324",
+   "population": {
+    "age_group": "adult",
+    "description": "32 RCTs, 3763 heart-failure patients (1898 CoQ10, 1845 control) on conventional therapy; 22 trials in Asia; placebo used in 12 trials, conventional therapy alone in the rest. Abstract states 33 studies."
+   },
+   "study_design": "Same systematic review; secondary surrogate pools that include the nasal-drop trial.",
+   "outcomes": [
+    {
+     "name": "LVEF MD 0.51 (0.31-0.71), GRADE low; BNP MD -91.97 (-103.11 to -80.83), GRADE low; pools may include the nasal-drop trial",
+     "hierarchy": "secondary",
+     "kind": "surrogate",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    }
+   ],
+   "limitations": [
+    "Mixed-route surrogate pools; nasal drops (90 mg/day) are not oral supplement exposure and the source's nasal-to-tablet equivalence is not adopted.",
+    "Surrogate outcomes only; credit is carried by the oral primary-outcome context, not this one.",
+    "Dr. Pham's fourth ruling set (2026-10-28) boundary: conditional credit for adjunctive heart-failure outcomes only; energy, statin-myopathy relief and cardiovascular prevention in healthy adults are excluded.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ],
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "mg",
+    "values": [
+     30,
+     400
+    ],
+    "dose_status": "verified",
+    "dose_basis": "not_applicable",
+    "duration_basis": "participant_specific",
+    "duration_days": null,
+    "administration_frequency": "Trial-specific (Table 1)",
+    "dosage_forms": [
+     "oral CoQ10",
+     "nasal drops"
+    ],
+    "co_therapies": [
+     "Conventional heart-failure therapy in both arms"
+    ],
+    "source_provenance": {
+     "pmid": "39462324",
+     "location": "Methods Outcomes; Results study characteristics paragraph and Table 1; Results All-cause mortality and Hospitalization sections; Discussion",
+     "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11515203/"
+    },
+    "reported_regimen": "Oral 30-400 mg/day plus one nasal-drop arm 90 mg/day (Table 1)",
+    "normalization": {
+     "basis": "Descriptive only."
+    }
+   },
+   "included_study_pmids": [
+    "8241697",
+    "7752827",
+    "19096110",
+    "25919281",
+    "30880321",
+    "31713723",
+    "34826125",
+    "25282031",
+    "9420639",
+    "10416042",
+    "10334422",
+    "10766682",
+    "16882678",
+    "18705154",
+    "1464342"
+   ]
+  }
+ ],
+ "source_receipts": [
+  {
+   "pmid": "25282031",
+   "title_fetched": "The effect of coenzyme Q10 on morbidity and mortality in chronic heart failure: results from Q-SYMBIO: a randomized double-blind trial.",
+   "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=25282031&retmode=xml",
+   "full_text": false,
+   "sections_used": "PubMed abstract (Methods, Results)"
+  },
+  {
+   "pmid": "39462324",
+   "title_fetched": "Efficacy and safety of coenzyme Q10 in heart failure: a meta-analysis of randomized controlled trials.",
+   "url": "https://www.ncbi.nlm.nih.gov/research/bionlp/RESTful/pmcoa.cgi/BioC_json/39462324/unicode",
+   "full_text": true,
+   "sections_used": "Methods Outcomes; Results study characteristics paragraph and Table 1; Results All-cause mortality and Hospitalization sections; Discussion"
+  }
+ ]
+}

@@ -1,0 +1,23 @@
+{
+ "record_id": "INGR_BACOPA",
+ "decision": "held: neither source has open full text (24252493 J Ethnopharmacol 2014; 27912958 Complement Ther Med 2016; no PMC records), so extract standardization, doses and included trials cannot be verified; 27912958 is a pediatric systematic review without design restrictions and cannot carry adult credit. OA retry 2026-10-28: no open copy of 24252493 or 27912958.",
+ "summary": "24252493 abstract: 9 placebo-controlled trials (518 subjects) of standardized Bacopa extracts for >=12 weeks; Trail B shortened (-17.9 ms) and choice reaction time decreased, suggesting faster attention. 27912958: 5 pediatric studies with small-to-medium effects (mean d=0.42) and a call for replication.",
+ "record_updates": {},
+ "study_contexts": [],
+ "source_receipts": [
+  {
+   "pmid": "24252493",
+   "title_fetched": "Meta-analysis of randomized controlled trials on cognitive effects of Bacopa monnieri extract.",
+   "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=24252493&retmode=xml",
+   "full_text": false,
+   "sections_used": "PubMed abstract only"
+  },
+  {
+   "pmid": "27912958",
+   "title_fetched": "A systematic review of the Ayurvedic medicinal herb Bacopa monnieri in child and adolescent populations.",
+   "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=27912958&retmode=xml",
+   "full_text": false,
+   "sections_used": "PubMed abstract only"
+  }
+ ]
+}

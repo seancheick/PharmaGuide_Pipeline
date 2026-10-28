@@ -1,0 +1,282 @@
+{
+ "record_id": "BRAND_ZYNAMITE",
+ "decision": "closed_credit",
+ "summary": "Full text of the isolated-Zynamite crossover (70 healthy adults, single 300 mg dose; sponsor Nektium, with employee and consultant authors) shows better global task accuracy versus placebo (p<0.001), with no mood effect, in an explicitly exploratory study with no pre-defined primary outcome. Under Dr. Pham's primary-endpoint rule it may contribute without prespecified certainty, so it is the one eligible context, limited to acute Focus & Mental Clarity. The two exercise trials combine Zynamite with luteolin or quercetin and get no credit under her consistency rule.",
+ "record_updates": {
+  "applicability": {
+   "scope": "ingredient",
+   "supported_outcomes": [
+    "Focus & Mental Clarity"
+   ],
+   "studied_population": "Healthy adults aged 18-45 given a single 300 mg Zynamite dose (PMID 32717999); exploratory acute accuracy/attention findings only.",
+   "source_pmids": [
+    "32717999"
+   ],
+   "reviewed_at": "2026-10-28"
+  }
+ },
+ "study_contexts": [
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "brand_zynamite_32717999",
+   "components": [
+    "BRAND_ZYNAMITE"
+   ],
+   "source_pmids": [
+    "32717999"
+   ],
+   "identity_scope": "branded_material",
+   "identity": {
+    "branded_material": "Zynamite",
+    "manufacturer": "Nektium Pharma",
+    "standardization": "Mangifera indica leaf extract: mangiferin 60-65%, homomangiferin 3-5%"
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "direct_rct",
+   "component_registration_status": "fully_registered",
+   "condition": "acute_cognitive_task_performance",
+   "purpose": "assessment",
+   "review_status": "clinician_approved",
+   "scoring_eligible": true,
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "trial_family": "brand_zynamite_32717999",
+   "population": {
+    "age_group": "adult",
+    "description": "70 healthy young adults in the per-protocol sample (37 women, 33 men; mean age 26.9, range 18-45)."
+   },
+   "study_design": "Randomized, double-blind, placebo (maltodextrin)-controlled crossover, single dose, washout >=7 days; COMPASS and CDB tasks and POMS at 30 min, 3 h and 5 h; linear mixed models with Bonferroni-adjusted planned comparisons; explicitly no pre-defined primary outcome subset.",
+   "outcomes": [
+    {
+     "name": "Global accuracy of performance improved versus placebo (main effect F(1,335)=22.8, p<0.001; 30 min p=0.03, 3 h p=0.02, 5 h p=0.009), with improvements in CDB attention tasks.",
+     "hierarchy": "not_reported",
+     "kind": "patient_important",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "Mood (POMS): no interpretable treatment effect.",
+     "hierarchy": "not_reported",
+     "kind": "patient_important",
+     "direction": "null",
+     "outcome_role": "direct_between_group_effect"
+    }
+   ],
+   "limitations": [
+    "All task findings exploratory; paper explicitly did not prespecify small primary outcome subset.",
+    "Per-protocol exclusions, task-level data removal and multiple outcomes.",
+    "Sponsored by Nektium, with employee/consultant authors.",
+    "Exercise combination trials are separate and do not establish isolated material exercise efficacy.",
+    "Per Dr. Pham's 2026-10-28 primary-endpoint rule this exploratory, non-prespecified finding may contribute but carries no prespecified-primary certainty; single acute dose in healthy young adults, not sustained benefit. Credit limited to acute attention/accuracy (Focus & Mental Clarity).",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ],
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "mg",
+    "values": [
+     300
+    ],
+    "dose_status": "verified",
+    "dose_basis": "nominal_assigned_arm",
+    "duration_basis": "fixed_protocol",
+    "duration_days": 1,
+    "administration_frequency": "single dose; assessments 30 minutes, 3 hours, 5 hours",
+    "dosage_forms": [
+     "methylcellulose capsule"
+    ],
+    "co_therapies": [],
+    "reported_regimen": "300 mg assigned material/day; see source-specific frequency",
+    "normalization": {
+     "basis": "Whole assigned material daily mass from primary Methods; not a marker or active-equivalent conversion."
+    },
+    "source_provenance": {
+     "pmid": "32717999",
+     "location": "Full text (PMC7468873): Abstract; Methods 2.1-2.3 (participants, Zynamite composition, 300 mg methylcellulose capsules), 2.6 statistics (no pre-defined primary subset); Results COMPASS paragraph; Funding and COI.",
+     "source_url": "https://pubmed.ncbi.nlm.nih.gov/32717999/"
+    }
+   },
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability"
+   }
+  },
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "brand_zynamite_30736383_luteolin_combination",
+   "components": [
+    "BRAND_ZYNAMITE"
+   ],
+   "source_pmids": [
+    "30736383"
+   ],
+   "identity_scope": "ingredient_general",
+   "identity": {
+    "name": "Zynamite mango leaf extract combined with peanut-husk luteolin extract; not isolated Zynamite."
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "direct_rct",
+   "component_registration_status": "fully_registered",
+   "condition": "repeated_sprint_performance",
+   "purpose": "challenge",
+   "review_status": "clinician_approved",
+   "scoring_eligible": false,
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "trial_family": "source_30736383_luteolin_combination",
+   "population": {
+    "description": "Twelve physically active men; double-blind crossover with low/high-dose subgroups and 3–4-week washout."
+   },
+   "study_design": "Source-specific randomized controlled intervention.",
+   "outcomes": [
+    {
+     "name": "Selected sprint performance and oxygen-extraction findings favored the combinations; dose equivalence and isolated-mango effects not established.",
+     "direction": "mixed",
+     "hierarchy": "not_reported",
+     "kind": "patient_important",
+     "outcome_role": "direct_between_group_effect"
+    }
+   ],
+   "limitations": [
+    "Low/high cohorts are very small.",
+    "Retain combination identity and acute/prolonged conditions; no generic cognition or all-purpose branded efficacy transfer.",
+    "No credit: Zynamite combined with peanut-husk luteolin; per Dr. Pham's consistency rule a combination study does not qualify the isolated branded ingredient.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ],
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "mg",
+    "values": [
+     140,
+     420
+    ],
+    "dose_status": "verified",
+    "dose_basis": "nominal_assigned_arm",
+    "duration_basis": "fixed_protocol",
+    "duration_days": 15,
+    "administration_frequency": "Source daily totals:140 mg mango extract plus 50 mg peanut-husk extract, or 420 mg mango plus 100 mg peanut-husk extract; supplements every eight hours over 15 days, with assessments at 48 hours and 15 days. Do not invent a per-capsule allocation.",
+    "dosage_forms": [
+     "capsule"
+    ],
+    "co_therapies": [
+     "Luteolin-containing peanut-husk extract is active cointervention. Exercise/fasting restrictions maintained."
+    ],
+    "reported_regimen": "Source daily totals:140 mg mango extract plus 50 mg peanut-husk extract, or 420 mg mango plus 100 mg peanut-husk extract; supplements every eight hours over 15 days, with assessments at 48 hours and 15 days. Do not invent a per-capsule allocation.",
+    "normalization": {
+     "basis": "Preserve the specifically identified material or component quantity; no elemental/marker conversion or extrapolated daily dose."
+    },
+    "source_provenance": {
+     "pmid": "30736383",
+     "location": "Full text (PMC6412949): Methods, Results.",
+     "source_url": "https://pubmed.ncbi.nlm.nih.gov/30736383/"
+    }
+   },
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability"
+   }
+  },
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "brand_zynamite_31661850_quercetin_combination",
+   "components": [
+    "BRAND_ZYNAMITE"
+   ],
+   "source_pmids": [
+    "31661850"
+   ],
+   "identity_scope": "ingredient_general",
+   "identity": {
+    "name": "Zynamite 140 mg plus quercetin 140 mg, with or without sunflower lecithin 420 mg."
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "direct_rct",
+   "component_registration_status": "fully_registered",
+   "condition": "repeated_sprint_performance",
+   "purpose": "challenge",
+   "review_status": "clinician_approved",
+   "scoring_eligible": false,
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "trial_family": "source_31661850_quercetin_combination",
+   "population": {
+    "description": "Forty physically active adults,20 men and 20 women; randomized crossover of three treatments."
+   },
+   "study_design": "Source-specific randomized controlled intervention.",
+   "outcomes": [
+    {
+     "name": "Repeated-sprint peak power increased in active combinations; no added lecithin advantage was demonstrated.",
+     "direction": "mixed",
+     "hierarchy": "not_reported",
+     "kind": "patient_important",
+     "outcome_role": "direct_between_group_effect"
+    }
+   ],
+   "limitations": [
+    "No isolated-Zynamite replication or proof of ingredient equivalence.",
+    "Single acute task context, not sustained everyday cognitive benefit.",
+    "No credit: Zynamite combined with quercetin (with or without lecithin); per Dr. Pham's consistency rule a combination study does not qualify the isolated branded ingredient.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ],
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "mg",
+    "values": [
+     140
+    ],
+    "dose_status": "verified",
+    "dose_basis": "nominal_assigned_arm",
+    "duration_basis": "fixed_protocol",
+    "duration_days": 1,
+    "administration_frequency": "Single dose one hour before repeated-sprint testing. Arms differ in lecithin and maltodextrin;140 mg is mango-extract quantity, not total formula mass.",
+    "dosage_forms": [
+     "capsule"
+    ],
+    "co_therapies": [
+     "Quercetin 140 mg in both active arms; sunflower lecithin 420 mg in one arm. Matched study restrictions and placebo retained."
+    ],
+    "reported_regimen": "Single dose one hour before repeated-sprint testing. Arms differ in lecithin and maltodextrin;140 mg is mango-extract quantity, not total formula mass.",
+    "normalization": {
+     "basis": "Preserve the specifically identified material or component quantity; no elemental/marker conversion or extrapolated daily dose."
+    },
+    "source_provenance": {
+     "pmid": "31661850",
+     "location": "Full text (PMC6893764): Methods, Results.",
+     "source_url": "https://pubmed.ncbi.nlm.nih.gov/31661850/"
+    }
+   },
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability"
+   }
+  }
+ ],
+ "source_receipts": [
+  {
+   "pmid": "32717999",
+   "title_fetched": "Acute Effects of a Polyphenol-Rich Leaf Extract of Mangifera indica L. (Zynamite) on Cognitive Function in Healthy Adults: A Double-Blind, Placebo-Controlled Crossover Study.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/32717999/",
+   "full_text": true,
+   "sections_used": "Methods, Results, funding/COI (BioC PMC7468873)"
+  },
+  {
+   "pmid": "30736383",
+   "title_fetched": "Enhancement of Exercise Performance by 48 Hours, and 15-Day Supplementation with Mangiferin and Luteolin in Men.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/30736383/",
+   "full_text": true,
+   "sections_used": "Retrieved (BioC PMC6412949); combination identity checked against existing context"
+  },
+  {
+   "pmid": "31661850",
+   "title_fetched": "A Single Dose of The Mango Leaf Extract Zynamite® in Combination with Quercetin Enhances Peak Power Output During Repeated Sprint Exercise in Men and Women.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/31661850/",
+   "full_text": true,
+   "sections_used": "Retrieved (BioC PMC6893764); combination identity checked against existing context"
+  }
+ ]
+}

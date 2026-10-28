@@ -1,0 +1,328 @@
+{
+ "record_id": "INGR_CERAMIDES",
+ "decision": "closed_credit",
+ "summary": "Two eligible contexts: the CERAMINOL wine-lees ceramide RCT (38999848; 29 adults with dry skin, 100 mg/day for 12 weeks) lowered the primary TEWL versus placebo at 12 weeks (p=0.04) with null secondary outcomes, and the ceramide subgroup of a 66-RCT meta-analysis (35719159) showed improved skin hydration (SMD 0.40, 7 studies) and TEWL (7 trials) for single-preparation ceramides at 0.4-30 mg/day. The open-label rice-ceramide study (35807914) is approved without credit. 33055441 (acetic acid bacteria, 0.8 mg dihydroceramide) is abstract-only and gets no context.",
+ "record_updates": {
+  "applicability": {
+   "scope": "ingredient",
+   "supported_outcomes": [
+    "skin_hydration"
+   ],
+   "studied_population": "Healthy adults, including adults with self-reported dry skin, taking oral ceramide supplements (0.4-30 mg/day ceramides) for 6-20 weeks.",
+   "source_pmids": [
+    "38999848",
+    "35719159"
+   ],
+   "reviewed_at": "2026-10-28",
+   "excluded_claim_terms": [
+    "hair",
+    "nail",
+    "nails"
+   ]
+  }
+ },
+ "study_contexts": [
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "ingr_ceramides_38999848",
+   "components": [
+    "INGR_CERAMIDES"
+   ],
+   "source_pmids": [
+    "38999848"
+   ],
+   "identity_scope": "branded_material",
+   "identity": {
+    "branded_material": "CERAMINOL",
+    "manufacturer": "Pharmafoods International Co., Ltd. (Kyoto)",
+    "standardization": "Wine lees extract with cyclodextrin; 100 mg/day provides >=2 mg ceramides and glucosylceramides (HPLC)"
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "direct_rct",
+   "component_registration_status": "fully_registered",
+   "condition": "dry_skin_barrier",
+   "purpose": "treatment",
+   "review_status": "clinician_approved",
+   "scoring_eligible": true,
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "trial_family": "ingr_ceramides_38999848",
+   "population": {
+    "age_group": "adult",
+    "description": "30 healthy Japanese adults aged 20-64 with self-reported dry skin, stratified by sex, age and baseline TEWL; 29 analysed (test 14, placebo 15)."
+   },
+   "study_design": "Randomized double-blind placebo-controlled parallel trial, 12 weeks (UMIN000050422).",
+   "outcomes": [
+    {
+     "name": "Primary TEWL (forearm): significantly lower than placebo at 12 weeks (p=0.04); trend at 8 weeks (p=0.07)",
+     "hierarchy": "primary",
+     "kind": "surrogate",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "Skin hydration, itching VAS and Skindex-29: no significant between-group differences",
+     "hierarchy": "secondary",
+     "kind": "patient_important",
+     "direction": "null",
+     "outcome_role": "direct_between_group_effect"
+    }
+   ],
+   "limitations": [
+    "Small trial (29 analysed); only the 12-week primary timepoint was significant; secondary hydration and symptom outcomes null.",
+    "Exact wine-lees ceramide material; no equivalence to wheat, rice, konjac or bacterial ceramides or to a total-mass threshold.",
+    "Earlier note that four-week text values are internally inconsistent is retained; no corrected values derived.",
+    "Returned decision A054: source-content hold; methods now verified from full text.",
+    "Dr. Pham's fourth ruling set (2026-10-28): applicable skin hydration/barrier outcomes only; no hair, nail or anti-ageing transfer.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ],
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "mg",
+    "values": [
+     100
+    ],
+    "dose_status": "verified",
+    "dose_basis": "nominal_assigned_arm",
+    "duration_basis": "fixed_protocol",
+    "duration_days": 84,
+    "administration_frequency": "One 100 mg capsule orally after dinner daily.",
+    "dosage_forms": [
+     "oral cellulose capsule"
+    ],
+    "co_therapies": [
+     "Habitual lifestyle maintained; no assigned co-therapy."
+    ],
+    "reported_regimen": "CERAMINOL 100 mg capsule once daily (>=2 mg ceramides/glucosylceramides) for 12 weeks.",
+    "normalization": {
+     "basis": "One 100 mg capsule of assigned material per day; the ceramide content (>=2 mg) is a minimum specification, not a converted dose."
+    },
+    "source_provenance": {
+     "pmid": "38999848",
+     "location": "Methods 2.1 (test supplement, capsules, dosing), 2.2-2.3 (design, inclusion); Results (participants, TEWL and secondary outcomes)",
+     "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11243426/"
+    },
+    "duration_as_printed": {
+     "value": 12,
+     "unit": "weeks"
+    }
+   },
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability"
+   }
+  },
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "ingr_ceramides_35719159_ceramide_subgroup",
+   "components": [
+    "INGR_CERAMIDES"
+   ],
+   "source_pmids": [
+    "35719159"
+   ],
+   "identity_scope": "ingredient_general",
+   "identity": {
+    "chemical_form": "Oral ceramides from wheat or rice polar lipids, vegetable sources, acetic acid bacteria or soy sauce lees (single preparations)"
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "meta_analysis",
+   "component_registration_status": "fully_registered",
+   "condition": "skin_hydration",
+   "purpose": "physiology",
+   "review_status": "clinician_approved",
+   "scoring_eligible": true,
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "trial_family": "source_35719159_ceramide_subgroup",
+   "population": {
+    "age_group": "adult",
+    "description": "Ceramide subset of a 66-RCT review: 11 studies (601 participants) in healthy adults over 6-20 weeks; 7 single-preparation studies (426) pooled for hydration and 7 for TEWL."
+   },
+   "study_design": "Systematic review and meta-analysis of RCTs of oral skin supplements (PROSPERO CRD42021290818); ingredient-specific ceramide subgroup, single versus combination preparations analysed separately.",
+   "outcomes": [
+    {
+     "name": "Stratum corneum water content, single-preparation ceramides vs placebo: SMD 0.40 (95% CI 0.04-0.76), p=0.03, 7 studies, n=426",
+     "hierarchy": "not_reported",
+     "kind": "surrogate",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "TEWL, single-preparation ceramides: effect -0.29 (95% CI -0.49 to -0.10), p=0.003, 7 trials",
+     "hierarchy": "not_reported",
+     "kind": "surrogate",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "Combination preparations with ceramides (2 studies, n=53): hydration SMD 0.63 (-0.67 to 1.94), p=0.34",
+     "hierarchy": "not_reported",
+     "kind": "surrogate",
+     "direction": "null",
+     "outcome_role": "direct_between_group_effect"
+    }
+   ],
+   "limitations": [
+    "Different ceramide sources pooled; no wheat/rice/bacterial equivalence. Doses 0.4-30 mg/day ceramides in eight studies; no threshold.",
+    "Physical dosage forms not reported in the review text; recorded as not reported.",
+    "Healthy adults; cosmetic skin-moisture surrogates only.",
+    "These are live-verified indexed primary references within the broader eleven-study ceramide subgroup; additional source citations are unindexed and are not assigned invented PMIDs. Combination and safety-study references are not automatically part of the single-preparation efficacy pool.",
+    "Historical bibliography census (not independent scoring sources; actual included-publication membership is separately bound to the inspected source table): 18492188, 31033133, 20646083, 33658470, 27312122. Each intervention and comparison requires its own applicability assessment; citation in this bibliography grants no credit.",
+    "Included-study PMID membership was extracted from the source Results included-study enumeration. These are source membership identifiers, not independent efficacy approvals or automatic trial replications. Exact table/citation mapping and unindexed citations are retained in the source receipt. Only the nine single-preparation ceramide source citations (39–47) are included; the two combination-preparation citations36/48 are excluded. 6 source citations in this set lack a PMID in the primary source; their citation text is retained, no PMID is invented.",
+    "Dr. Pham's fourth ruling set (2026-10-28): applicable skin hydration/barrier outcomes only; no hair, nail or anti-ageing transfer.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ],
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "mg",
+    "values": [],
+    "dose_status": "verified",
+    "dose_basis": "not_applicable",
+    "duration_basis": "participant_specific",
+    "duration_days": null,
+    "administration_frequency": "Daily oral intake per trial; not pooled.",
+    "dosage_forms": [
+     "not reported by source: trial-specific oral ceramide supplements"
+    ],
+    "co_therapies": [
+     "Placebo comparators; no assigned co-therapy."
+    ],
+    "reported_regimen": "Results (Ceramides): 11 studies, 6-20 weeks; daily ceramide dosages reported in eight studies ranged 0.4-30 mg.",
+    "normalization": {
+     "basis": "No scalar pooled dose; reported ceramide mg/day range retained."
+    },
+    "source_provenance": {
+     "pmid": "35719159",
+     "location": "Results 'Ceramides' subsection (study count, sources, dose range), Figure 4 and Supplementary Figure S3 summaries; Abstract",
+     "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9201759/"
+    }
+   },
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability"
+   },
+   "included_study_pmids": [
+    "31033133",
+    "20646083",
+    "33658470"
+   ]
+  },
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "ingr_ceramides_35807914_rice_uncontrolled",
+   "components": [
+    "INGR_CERAMIDES"
+   ],
+   "source_pmids": [
+    "35807914"
+   ],
+   "identity_scope": "exact_form",
+   "identity": {
+    "chemical_form": "Rice (Oryza sativa) ceramide, KOMECERA (Nexus Wise, Malaysia), 40 mg per capsule"
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "uncontrolled_intervention",
+   "component_registration_status": "fully_registered",
+   "condition": "cosmetic_skin_parameters",
+   "purpose": "physiology",
+   "review_status": "clinician_approved",
+   "scoring_eligible": false,
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "trial_family": "source_35807914_rice_uncontrolled",
+   "population": {
+    "description": "Fifty voluntary participants; open-label single-arm prospective supplementation, no placebo."
+   },
+   "study_design": "Open-label uncontrolled prospective intervention.",
+   "outcomes": [
+    {
+     "name": "Within-group skin hydration, elasticity,TEWL and pigmentation changes; no placebo-controlled efficacy established.",
+     "direction": "mixed",
+     "hierarchy": "not_reported",
+     "kind": "surrogate",
+     "outcome_role": "within_group_change"
+    }
+   ],
+   "limitations": [
+    "Uncontrolled-intervention role is user-approved only with mandatory false scoring eligibility.",
+    "No pure-active ceramide conversion or preparation-wide clinical approval.",
+    "No new clinical approval, scoring credit or dose threshold. Existing reviewed exclusions remain.",
+    "Open-label single-arm study: within-group changes only; cannot establish placebo-controlled efficacy.",
+    "Dr. Pham's fourth ruling set (2026-10-28): applicable skin hydration/barrier outcomes only; no hair, nail or anti-ageing transfer.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ],
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "mg",
+    "values": [
+     40
+    ],
+    "dose_status": "verified",
+    "dose_basis": "nominal_assigned_arm",
+    "duration_basis": "fixed_protocol",
+    "duration_days": null,
+    "administration_frequency": "One 40 mg capsule daily for three calendar months; do not assume 40 mg pure ceramide or fabricate a fixed 90-day exposure.",
+    "dosage_forms": [
+     "oral capsule"
+    ],
+    "co_therapies": [
+     "Habitual/other skincare and environmental factors remain relevant; no placebo control."
+    ],
+    "reported_regimen": "One 40 mg capsule daily for three calendar months; do not assume 40 mg pure ceramide or fabricate a fixed 90-day exposure.",
+    "normalization": {
+     "basis": "Preserve the specifically identified material or component quantity; no elemental/marker conversion or extrapolated daily dose."
+    },
+    "source_provenance": {
+     "pmid": "35807914",
+     "location": "Methods (three-month KOMECERA capsule, 40 mg once daily); Results (within-group TEWL, hydration, sebum changes)",
+     "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9268538/"
+    },
+    "duration_as_printed": {
+     "value": 3,
+     "unit": "months"
+    }
+   },
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability"
+   }
+  }
+ ],
+ "source_receipts": [
+  {
+   "pmid": "38999848",
+   "title_fetched": "Efficacy and Safety of Oral Administration of Wine Lees Extract (WLE)-Derived Ceramides and Glucosylceramides in Enhancing Skin Barrier Function: A Randomized, Double-Blind, Placebo-Controlled Study.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/38999848/",
+   "full_text": true,
+   "sections_used": "Abstract; Methods 2.1-2.3; Results"
+  },
+  {
+   "pmid": "35719159",
+   "title_fetched": "Effectiveness of Dietary Supplement for Skin Moisturizing in Healthy Adults: A Systematic Review and Meta-Analysis of Randomized Controlled Trials.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/35719159/",
+   "full_text": true,
+   "sections_used": "Abstract; Results Ceramides subsection"
+  },
+  {
+   "pmid": "35807914",
+   "title_fetched": "Effect of Rice (Oryza sativa L.) Ceramides Supplementation on Improving Skin Barrier Functions and Depigmentation: An Open-Label Prospective Study.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/35807914/",
+   "full_text": true,
+   "sections_used": "Methods intervention; Results"
+  },
+  {
+   "pmid": "33055441",
+   "title_fetched": "Safety and Efficacy of Oral Intake of Ceramide-Containing Acetic Acid Bacteria for Improving the Stratum Corneum Hydration: A Randomized, Double-Blind, Placebo-Controlled Study over 12 Weeks.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/33055441/",
+   "full_text": false,
+   "sections_used": "Abstract only; no PMC copy"
+  }
+ ]
+}

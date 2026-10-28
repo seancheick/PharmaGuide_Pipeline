@@ -1,0 +1,86 @@
+{
+ "record_id": "BRAND_PUREWAY_C",
+ "decision": "closed_no_credit: The reviewed research does not establish a qualifying benefit for this product's assessed use.",
+ "summary": "The reviewed research does not establish a qualifying benefit for this product's assessed use. Neither source tests a clinical outcome: 18971870 is a single-dose absorption comparison with short-term CRP/oxidized-LDL changes in healthy volunteers, and 17901843 is a cell-line and chemical-assay study. With Dr. Pham's rejection of absorption-to-benefit substitution, no source supports the record's Immune Support claim; both are recorded as rejected sources and the record becomes reference-only, removing Evidence points from PureWay-C products.",
+ "record_updates": {
+  "study_type": "reference",
+  "evidence_level": "reference"
+ },
+ "study_contexts": [
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "brand_pureway_c_18971870_rejected",
+   "source_pmids": [
+    "18971870"
+   ],
+   "components": [
+    "BRAND_PUREWAY_C"
+   ],
+   "review_status": "rejected_source",
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability"
+   },
+   "scoring_eligible": false,
+   "dose": {
+    "source_provenance": {
+     "pmid": "18971870",
+     "location": "PubMed abstract (Material/Methods, Results)",
+     "source_url": "https://pubmed.ncbi.nlm.nih.gov/18971870/"
+    }
+   },
+   "limitations": [
+    "Single 1000 mg oral dose pharmacokinetic comparison in healthy volunteers after a 14-day low-vitamin-C diet (abstract); measures serum vitamin C, CRP and oxidized LDL over hours, not a clinical immune outcome. Not identified as randomized in the abstract; full text not open access.",
+    "Higher serum vitamin C and short-term marker changes cannot substitute for immune or health benefit.",
+    "Dr. Pham's returned decision rejects absorption-to-benefit substitution.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ]
+  },
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "brand_pureway_c_17901843_rejected",
+   "source_pmids": [
+    "17901843"
+   ],
+   "components": [
+    "BRAND_PUREWAY_C"
+   ],
+   "review_status": "rejected_source",
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability"
+   },
+   "scoring_eligible": false,
+   "dose": {
+    "source_provenance": {
+     "pmid": "17901843",
+     "location": "PubMed abstract (Material/Methods, Results)",
+     "source_url": "https://pubmed.ncbi.nlm.nih.gov/17901843/"
+    }
+   },
+   "limitations": [
+    "In vitro study in a human lymphoblastic (H9 T-cell) line and chemical radical-scavenging assays; no human participants, so it cannot serve as clinical evidence.",
+    "Dr. Pham's returned decision rejects absorption-to-benefit substitution.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ]
+  }
+ ],
+ "source_receipts": [
+  {
+   "pmid": "18971870",
+   "title_fetched": "Vitamin C-lipid metabolites: uptake and retention and effect on plasma C-reactive protein and oxidized LDL levels in healthy volunteers.",
+   "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=18971870&retmode=xml",
+   "full_text": false,
+   "sections_used": "PubMed abstract"
+  },
+  {
+   "pmid": "17901843",
+   "title_fetched": "Absorption rates and free radical scavenging values of vitamin C-lipid metabolites in human lymphoblastic cells.",
+   "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=17901843&retmode=xml",
+   "full_text": false,
+   "sections_used": "PubMed abstract"
+  }
+ ]
+}

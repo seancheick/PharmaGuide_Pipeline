@@ -1,0 +1,297 @@
+{
+ "record_id": "INGR_CAFFEINE",
+ "decision": "closed_credit",
+ "summary": "Full text of the 2021 Nutrients meta-analysis (13 crossover RCTs in athletes, acute caffeine 1-9 mg/kg in capsules, drinks, gum, bars) shows better attention accuracy and speed in very small pooled analyses, with no effect on reaction time or inhibitory control; it gets one eligible context with mixed results recorded, for the record's Focus & Mental Clarity claim. The 3-km run RCT is abstract-only and gets no credit. The umbrella review and strength meta-analysis had no open full text, so they are recorded without credit.",
+ "record_updates": {
+  "applicability": {
+   "scope": "ingredient",
+   "supported_outcomes": [
+    "Focus & Mental Clarity"
+   ],
+   "studied_population": "Adult athletes given acute caffeine (mostly 1-6 mg/kg) before or during exercise in 13 randomized crossover studies; pooled attention accuracy and speed improved, reaction time and inhibitory control did not.",
+   "source_pmids": [
+    "33800853"
+   ],
+   "reviewed_at": "2026-10-28"
+  }
+ },
+ "study_contexts": [
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "ingr_caffeine_33800853_scoped_source",
+   "components": [
+    "INGR_CAFFEINE"
+   ],
+   "source_pmids": [
+    "33800853"
+   ],
+   "identity_scope": "ingredient_general",
+   "identity": {
+    "preparation": "Oral caffeine in drinks, capsules, bars or gum; some formulations include carbohydrate or other ingredients."
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "meta_analysis",
+   "component_registration_status": "fully_registered",
+   "condition": "cognitive_performance_during_exercise",
+   "purpose": "challenge",
+   "review_status": "clinician_approved",
+   "scoring_eligible": true,
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "trial_family": "source_33800853",
+   "population": {
+    "age_group": "adult",
+    "description": "13 randomized crossover studies in adult athletes (194 participants: 158 men, 36 women; professional to recreational rugby, soccer, cycling, golf, shooting, team-sport and resistance-trained subjects); 5 studies (18 trials) entered the meta-analysis. Ill, injured and non-adult participants excluded."
+   },
+   "study_design": "PRISMA systematic review and meta-analysis of double/single-blind randomized placebo-controlled crossover studies (August 1999-March 2020); Hedges' g/SMD pooling, mostly fixed-effect; only objective cognitive measures meta-analysed.",
+   "outcomes": [
+    {
+     "name": "Attention: accuracy SMD 1.07 (95% CI 0.16 to 1.98), p=0.02 (2 trials, 24 participants); response speed SMD -1.41 (-2.65 to -0.17), p=0.03 (2 trials).",
+     "hierarchy": "not_reported",
+     "kind": "surrogate",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "Simple reaction time SMD -0.05 (-0.59 to 0.49), p=0.86; choice reaction time SMD -0.69 (-1.15 to 0.17), p=0.12; inhibitory-control accuracy SMD 0.19 (-0.61 to 1.00), p=0.64 and speed SMD -0.31 (-1.12 to 0.50), p=0.45.",
+     "hierarchy": "not_reported",
+     "kind": "surrogate",
+     "direction": "null",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "Self-reported energy, focus, mood and RPE (narrative, Table 6): improvements in some studies, none in others.",
+     "hierarchy": "not_reported",
+     "kind": "patient_important",
+     "direction": "mixed",
+     "outcome_role": "within_group_change"
+    }
+   ],
+   "limitations": [
+    "Sports-cognition findings do not establish universal cognition or product benefit.",
+    "Do not attribute combination effects to caffeine alone or treat bodyweight-based doses as fixed capsule thresholds.",
+    "Historical bibliography census (not independent scoring sources; actual included-publication membership is separately bound to the inspected source table): 26045170, 10496113, 18799996, 30999897, 17240784, 26445565, 26285020, 28598402, 31660991, 30102874, 29210957, 19308789, 19827465. Each intervention and comparison requires its own applicability assessment; citation in this bibliography grants no credit.",
+    "Included-study PMID membership was extracted from source Table(s) nutrients-13-00868-t005, nutrients-13-00868-t006. These are source membership identifiers, not independent efficacy approvals or automatic trial replications. Exact table/citation mapping and unindexed citations are retained in the source receipt.",
+    "Returned A052 'source-content hold for each intended outcome' is resolved for this source by full-text verification; credit is limited to focus/attention during exercise in athletes.",
+    "Very small pooled analyses (2 trials, about 24 participants for attention); reaction time and inhibitory control did not improve; no primary outcome designated (hierarchy not_reported). One included study used a caffeine mouthwash (not ingestion) and several used carbohydrate co-exposure.",
+    "Findings are in young, mostly male athletes during exercise; they do not establish general cognitive enhancement or energy benefit in non-athletes.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ],
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "mg",
+    "values": [],
+    "dose_status": "verified",
+    "dose_basis": "not_applicable",
+    "duration_basis": "not_recorded",
+    "administration_frequency": "Acute single or repeated pre-/during-exercise doses, mostly 30-60 min before testing (range 5-90 min; some repeated every 13-55 min during exercise) (Results 3.3).",
+    "dosage_forms": [
+     "oral capsule",
+     "energy drink",
+     "oral tablet",
+     "chewing gum",
+     "caffeinated carbohydrate solution",
+     "carbohydrate energy bar",
+     "mouthwash"
+    ],
+    "co_therapies": [
+     "Carbohydrate co-exposure in some arms (carbohydrate solution, energy bar, 7% carbohydrate mouthwash); TeaCrine comparison arms in two studies were not part of the caffeine-versus-placebo contrast; exercise protocols differ."
+    ],
+    "reported_regimen": "Doses below 1 or above 9 mg/kg excluded; studies used <3 mg/kg (4), 3-6 mg/kg (8) or 2 and 4 mg/kg (1); examples 4.1 mg/kg gum, 5-6 mg/kg capsules, 275-300 mg capsules, 100 mg in a 45 g carbohydrate bar, 67 mg/25 mL mouthwash (Tables 5-6). No scalar pooled dose.",
+    "normalization": {
+     "basis": "A heterogeneous synthesis has no single assigned-arm dose. Descriptive regimens do not create an intake recommendation, equivalent preparation or efficacy threshold."
+    },
+    "source_provenance": {
+     "pmid": "33800853",
+     "location": "Full text (PMC8000732): Methods 2.1-2.5 (PICOS Table 1, exclusions), Results 3.3 (dose, vehicle, timing), 3.5 meta-analysis paragraphs, Tables 5-6, Discussion limitations, funding/COI.",
+     "source_url": "https://pubmed.ncbi.nlm.nih.gov/33800853/"
+    },
+    "duration_days": null
+   },
+   "included_study_pmids": [
+    "29210957",
+    "30102874",
+    "30999897",
+    "28598402",
+    "26045170",
+    "26445565",
+    "19308789",
+    "18799996",
+    "17240784",
+    "10496113",
+    "31660991",
+    "26285020",
+    "19827465"
+   ],
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability"
+   }
+  },
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "ingr_caffeine_34139220_3km_run",
+   "source_pmids": [
+    "34139220"
+   ],
+   "components": [
+    "INGR_CAFFEINE"
+   ],
+   "identity_scope": "ingredient_general",
+   "identity": {
+    "preparation": "Caffeine 3 mg/kg body mass (vehicle not reported in the abstract)."
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "direct_rct",
+   "component_registration_status": "fully_registered",
+   "condition": "endurance_running_performance",
+   "purpose": "challenge",
+   "population": {
+    "age_group": "adult",
+    "description": "13 young recreational runners."
+   },
+   "study_design": "Double-blind randomized crossover: placebo versus caffeine before a 3-km outdoor track run.",
+   "trial_family": "34139220",
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "scoring_eligible": false,
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "mg",
+    "values": [],
+    "dose_status": "verified",
+    "dose_basis": "single_challenge",
+    "duration_basis": "endpoint_followup_only",
+    "administration_frequency": "Single acute dose before the run.",
+    "dosage_forms": [
+     "oral caffeine (vehicle not reported in the abstract)"
+    ],
+    "co_therapies": [
+     "None reported in the abstract."
+    ],
+    "reported_regimen": "3 mg/kg body mass caffeine or placebo, single acute dose.",
+    "source_provenance": {
+     "pmid": "34139220",
+     "location": "PubMed abstract; full text not open access.",
+     "source_url": "https://pubmed.ncbi.nlm.nih.gov/34139220/"
+    }
+   },
+   "outcomes": [
+    {
+     "name": "3-km time improved 1.1% versus placebo (10.13 +/- 0.69 vs 10.25 +/- 0.72 min, p<0.001); attention +15.6% (p<0.001), reaction time +5.9% (p<0.05); feeling scale improved.",
+     "hierarchy": "not_reported",
+     "kind": "patient_important",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "Oxidative stress markers: no caffeine effect.",
+     "hierarchy": "not_reported",
+     "kind": "surrogate",
+     "direction": "null",
+     "outcome_role": "direct_between_group_effect"
+    }
+   ],
+   "limitations": [
+    "Abstract only: vehicle, timing, primary-outcome designation and methods could not be verified, so the context carries no credit.",
+    "Single small crossover (n=13); body-weight dose is not a fixed capsule amount.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ],
+   "review_status": "clinician_approved",
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability"
+   }
+  },
+  {
+   "context_id": "ingr_caffeine_30926628_umbrella_unverified_methods",
+   "components": [
+    "INGR_CAFFEINE"
+   ],
+   "source_pmids": [
+    "30926628"
+   ],
+   "review_status": "rejected_source",
+   "scoring_eligible": false,
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability",
+    "notes": "No credit transferred: full text not open access; methods, regimens and included studies could not be verified in this review. Not a finding that the source is invalid."
+   },
+   "dose": {
+    "source_provenance": {
+     "pmid": "30926628",
+     "location": "PubMed abstract only; full text (Br J Sports Med) not open access.",
+     "source_url": "https://pubmed.ncbi.nlm.nih.gov/30926628/"
+    }
+   },
+   "limitations": [
+    "Grgic 2020 umbrella review (11 reviews, 21 meta-analyses): abstract reports caffeine ergogenic for aerobic endurance, strength, muscle endurance, power, jumping and speed, mostly moderate-quality evidence, mainly in young men. Full text not retrieved; doses and included reviews not encoded.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ]
+  },
+  {
+   "context_id": "ingr_caffeine_32551869_strength_unverified_methods",
+   "components": [
+    "INGR_CAFFEINE"
+   ],
+   "source_pmids": [
+    "32551869"
+   ],
+   "review_status": "rejected_source",
+   "scoring_eligible": false,
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability",
+    "notes": "No credit transferred: full text not open access; methods, regimens and included studies could not be verified in this review. Not a finding that the source is invalid."
+   },
+   "dose": {
+    "source_provenance": {
+     "pmid": "32551869",
+     "location": "PubMed abstract only; full text (Crit Rev Food Sci Nutr) not open access.",
+     "source_url": "https://pubmed.ncbi.nlm.nih.gov/32551869/"
+    }
+   },
+   "limitations": [
+    "Abstract: 19 double-blind RCTs; bench press muscle endurance WMD 0.87 repetitions (0.33-1.41) and maximum strength WMD 2.01 kg (0.20-3.80) improved; leg press and RPE not significant. Full text not retrieved; doses and included trials not encoded.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ]
+  }
+ ],
+ "source_receipts": [
+  {
+   "pmid": "33800853",
+   "title_fetched": "Caffeine and Cognitive Functions in Sports: A Systematic Review and Meta-Analysis.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/33800853/",
+   "full_text": true,
+   "sections_used": "Methods, Results 3.3-3.5, Tables 1,5,6, Discussion, funding/COI, references (BioC PMC8000732)"
+  },
+  {
+   "pmid": "34139220",
+   "title_fetched": "Acute caffeine ingestion improves 3-km run performance, cognitive function, and psychological state of young recreational runners.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/34139220/",
+   "full_text": false,
+   "sections_used": "PubMed abstract"
+  },
+  {
+   "pmid": "30926628",
+   "title_fetched": "Wake up and smell the coffee: caffeine supplementation and exercise performance-an umbrella review of 21 published meta-analyses.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/30926628/",
+   "full_text": false,
+   "sections_used": "PubMed abstract"
+  },
+  {
+   "pmid": "32551869",
+   "title_fetched": "Effects of caffeine supplementation on muscle endurance, maximum strength, and perceived exertion in adults submitted to strength training: a systematic review and meta-analyses.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/32551869/",
+   "full_text": false,
+   "sections_used": "PubMed abstract"
+  }
+ ]
+}

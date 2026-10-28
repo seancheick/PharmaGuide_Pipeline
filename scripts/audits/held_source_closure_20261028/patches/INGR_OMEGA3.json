@@ -1,0 +1,228 @@
+{
+ "record_id": "INGR_OMEGA3",
+ "decision": "held: Dr. Pham approved removing routine retail heart-event credit but requires EPA/DHA nutritional credit to be preserved. Fish-oil products routed to the generic module (replay: 179650, 302769, 218681, 28639, 312984, 313534, 327995) earn Evidence only through this record's generic clinical path; closing it drops them to 0. Close only after the omega nutritional pathway (evidence_resolver.resolve_omega_evidence_standard / purpose_evidence) reaches EPA/DHA-disclosing generic products - handed to the Evidence calibration session.",
+ "summary": "31567003 found small reductions in MI and CHD/CVD death, but the 2026 update is mixed: VITAL missed its primary endpoint with lower secondary MI, STRENGTH was null, the Cochrane review found little or no effect on cardiovascular events, and benefit concentrates in prescription EPA. The reviewed research does not establish a qualifying benefit for this product's assessed use. The clinical-event record moves to the reference path; omega-module Evidence and EPA/DHA Dose are separate owners and are unchanged by this patch.",
+ "record_updates": {
+  "study_type": "reference",
+  "evidence_level": "reference"
+ },
+ "study_contexts": [
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "ingr_omega3_31567003_scoped_synthesis",
+   "source_pmids": [
+    "31567003"
+   ],
+   "components": [
+    "INGR_OMEGA3"
+   ],
+   "identity_scope": "ingredient_general",
+   "identity": {
+    "preparation": "Marine omega-3 (EPA+DHA or purified EPA ethyl ester) supplements in the 13 included trials; not plant ALA, and no krill- or algal-oil trial included"
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "meta_analysis",
+   "component_registration_status": "fully_registered",
+   "condition": "cardiovascular_disease_prevention",
+   "purpose": "prevention",
+   "review_status": "clinician_approved",
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability"
+   },
+   "scoring_eligible": false,
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "trial_family": "source_31567003",
+   "population": {
+    "age_group": "adult",
+    "description": "13 RCTs, 127477 participants (59.7% male, mean age 64.3 years, mean BMI 28), primary and secondary prevention populations including diabetes (ASCEND) and statin-treated hypertriglyceridemia (REDUCE-IT); mean treatment 5 years."
+   },
+   "study_design": "Study-level fixed-effect (Mantel-Haenszel) meta-analysis of RCTs versus placebo or open-label control, analyzed with and without REDUCE-IT; linear dose-response meta-regression.",
+   "outcomes": [
+    {
+     "name": "Excluding REDUCE-IT: myocardial infarction RR 0.92 (0.86-0.99), CHD death RR 0.92 (0.86-0.98), total CHD RR 0.95 (0.91-0.99), CVD death RR 0.93 (0.88-0.99), total CVD RR 0.97 (0.94-0.99)",
+     "hierarchy": "not_reported",
+     "kind": "patient_important",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "Total stroke RR 1.05 (0.98-1.14), not significant; major vascular events RR 0.97 (0.94-1.00), p=0.058",
+     "hierarchy": "not_reported",
+     "kind": "patient_important",
+     "direction": "null",
+     "outcome_role": "direct_between_group_effect"
+    }
+   ],
+   "limitations": [
+    "Absolute effects are small (rate ratios 0.92-0.97 excluding REDUCE-IT); stroke not reduced. Excluding open-label GISSI-P and JELIS attenuated CHD death to RR 0.94 (0.87-1.01).",
+    "REDUCE-IT tested 4000 mg/d purified EPA ethyl ester in statin-treated patients; including it strengthened estimates but added heterogeneity. Its result is not transferable to EPA+DHA fish oil at lower doses.",
+    "Dr. Pham's returned A095 decision rejects preparation-wide cardiovascular/mood approval: credit is limited to marine EPA/DHA preparations of the studied type for cardiovascular outcomes; krill and algal oils were not studied and mood/focus/stress claims receive nothing.",
+    "Fixed-effect study-level synthesis; separate analyses with/without REDUCE-IT and open-label/smaller trials.",
+    "No mood, stress, focus or general inflammation endpoint is assessed. These cannot inherit evidence from this cardiovascular review.",
+    "Exploratory regression is not an optimum dose or universal efficacy benchmark; actual EPA/DHA must be disclosed separately from carrier mass.",
+    "No single primary endpoint designated among the Methods outcomes of interest; hierarchy not_reported.",
+    "Primary study identifiers mapped from cited reference links: 13 cited studies, 13 Pub Med identifiers; missing identifiers not invented.",
+    "Historical bibliography census (not independent scoring sources; actual included-publication membership is separately bound to the inspected source table): 30146932, 30415637, 30415628, 20389249, 21115589, 20929341, 21060071, 10465168, 17398308, 22686415, 23656645, 24638908, 18757090. Each intervention and comparison requires its own applicability assessment; citation in this bibliography grants no credit.",
+    "Included-study identifiers are now bound to this source's actual included-study rows/explicit inclusion references (Table1 explicitly names13RCTs. JELIS printed superscript17 lacks an XMLxref; manually linked to exact source reference17. Main13trials, not whole bibliography or independent meta-analyses.), with live NIH title/content identity checks. They are publication pointers, not independent-cohort counts, per-primary-study scoring approvals, preparation equivalence or new efficacy evidence. Exact unindexed source citations remain retained; no missing PMID is invented.",
+    "2026-10-28 freshness search (Dr. Pham's date-restricted hold) does not confirm this conclusion for retail supplement doses: a formulation-stratified meta-analysis of 17 double-blind RCTs (32820013) found no association at <=1 g/day with futility boundaries crossed and only weak evidence at 2-4 g/day; benefit in newer syntheses is attributed mainly to prescription EPA ethyl ester (36103100, 38869144); a 2026 meta-analysis of combined EPA+DHA in 25 secondary-prevention RCTs (42144851) found no MACE reduction; the 2020 Cochrane review (32114706) found little or no effect on cardiovascular events (RR 0.96, high certainty) with a slight CHD-mortality reduction.",
+    "Dr. Pham fifth ruling (2026-10-28): routine retail heart-event-prevention credit removed. The literature is mixed: VITAL (30415637; 25,871 adults, 1 g/day) missed its primary major-cardiovascular-event endpoint (HR 0.92, 0.80-1.06) but secondary total MI was lower (HR 0.72, 0.59-0.90); STRENGTH (33190147; 13,078 statin-treated high-risk patients, 4 g/day omega-3 carboxylic acids) was stopped early with no MACE difference versus corn oil. Prescription EPA results are never transferred to retail supplements.",
+    "Atrial-fibrillation risk is dose- and population-specific: a 2026 meta-analysis of 35 RCTs (42517224; 114,592 participants, >=500 mg/day, >=12 months) found a significant increase only in high-cardiovascular-risk patients taking >1500 mg/day EPA/DHA (OR 1.43, 1.14-1.79; absolute difference 0.8%), not in the other dose/risk groups (OR 1.03-1.07).",
+    "EPA/DHA nutritional credit is a separate owner and is not removed by this record's reference status (see owner check in the decision).",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ],
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "mg",
+    "values": [
+     376,
+     4000
+    ],
+    "dose_status": "verified",
+    "dose_basis": "not_applicable",
+    "duration_basis": "participant_specific",
+    "duration_days": null,
+    "administration_frequency": "Daily, trial-specific (Table)",
+    "dosage_forms": [
+     "oral marine omega-3 capsule (formulation varies by trial)"
+    ],
+    "co_therapies": [
+     "Usual care including statins in several trials (e.g., all JELIS and REDUCE-IT participants)"
+    ],
+    "source_provenance": {
+     "pmid": "31567003",
+     "location": "Methods (inclusion: marine omega-3 vs placebo/open-label, n>=500, >=1 year; end points; fixed-effect and meta-regression); Results and Table (13 trials, doses 376-4000 mg/d); Figures 1-3; sensitivity analyses",
+     "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6806028/"
+    },
+    "reported_regimen": "376 mg/d (Alpha Omega) to 4000 mg/d (REDUCE-IT) EPA+DHA or EPA; mean follow-up 5 years",
+    "normalization": {
+     "basis": "Total EPA+DHA dose per Table; descriptive range, not a minimum."
+    }
+   },
+   "included_study_pmids": [
+    "10465168",
+    "17398308",
+    "18757090",
+    "20389249",
+    "21115589",
+    "20929341",
+    "21060071",
+    "22686415",
+    "23656645",
+    "24638908",
+    "30415637",
+    "30146932",
+    "30415628"
+   ]
+  }
+ ],
+ "source_receipts": [
+  {
+   "pmid": "31567003",
+   "title_fetched": "Marine Omega-3 Supplementation and Cardiovascular Disease: An Updated Meta-Analysis of 13 Randomized Controlled Trials Involving 127 477 Participants.",
+   "url": "https://www.ncbi.nlm.nih.gov/research/bionlp/RESTful/pmcoa.cgi/BioC_json/31567003/unicode",
+   "full_text": true,
+   "sections_used": "Methods (inclusion: marine omega-3 vs placebo/open-label, n>=500, >=1 year; end points; fixed-effect and meta-regression); Results and Table (13 trials, doses 376-4000 mg/d); Figures 1-3; sensitivity analyses"
+  },
+  {
+   "pmid": "32114706",
+   "title_fetched": "Omega-3 fatty acids for the primary and secondary prevention of cardiovascular disease.",
+   "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=32114706&retmode=xml",
+   "full_text": false,
+   "sections_used": "PubMed abstract (freshness search screening; not added to record references)"
+  },
+  {
+   "pmid": "32820013",
+   "title_fetched": "Omega-3 supplementation and cardiovascular disease: formulation-based systematic review and meta-analysis with trial sequential analysis.",
+   "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=32820013&retmode=xml",
+   "full_text": false,
+   "sections_used": "PubMed abstract (freshness search screening; not added to record references)"
+  },
+  {
+   "pmid": "36103100",
+   "title_fetched": "Efficacy and Safety of Omega-3 Fatty Acids in the Prevention of Cardiovascular Disease: A Systematic Review and Meta-analysis.",
+   "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=36103100&retmode=xml",
+   "full_text": false,
+   "sections_used": "PubMed abstract (freshness search screening; not added to record references)"
+  },
+  {
+   "pmid": "42144851",
+   "title_fetched": "Meta Analysis of DHA and EPA Supplementation on Cardiovascular Outcomes and Atrial Fibrillation Risk.",
+   "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=42144851&retmode=xml",
+   "full_text": false,
+   "sections_used": "PubMed abstract (freshness search screening; not added to record references)"
+  },
+  {
+   "pmid": "34612056",
+   "title_fetched": "Effect of Long-Term Marine ɷ-3 Fatty Acids Supplementation on the Risk of Atrial Fibrillation in Randomized Controlled Trials of Cardiovascular Outcomes: A Systematic Review and Meta-Analysis.",
+   "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=34612056&retmode=xml",
+   "full_text": false,
+   "sections_used": "PubMed abstract (freshness search screening; not added to record references)"
+  },
+  {
+   "pmid": "39639295",
+   "title_fetched": "The effect of omega-3 Polyunsaturated Fatty Acid (PUFA) prescription preparations on the prevention of clinical cardiovascular disease: a meta-analysis of RCTs.",
+   "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=39639295&retmode=xml",
+   "full_text": false,
+   "sections_used": "PubMed abstract (freshness search screening; not added to record references)"
+  },
+  {
+   "pmid": "38869144",
+   "title_fetched": "Effects of omega-3 fatty acids on coronary revascularization and cardiovascular events: a meta-analysis.",
+   "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=38869144&retmode=xml",
+   "full_text": false,
+   "sections_used": "PubMed abstract (freshness search screening; not added to record references)"
+  },
+  {
+   "pmid": "42517224",
+   "title_fetched": "Effects of Omega-3 Fatty Acid Treatment on Risk for Atrial Fibrillation: An Updated Meta-Analysis of 35 Trials including 114 592 Individuals.",
+   "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=42517224&retmode=xml",
+   "full_text": false,
+   "sections_used": "PubMed abstract (Methods, Results, Conclusions); verification only"
+  },
+  {
+   "pmid": "30415637",
+   "title_fetched": "Marine n-3 Fatty Acids and Prevention of Cardiovascular Disease and Cancer.",
+   "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=30415637&retmode=xml",
+   "full_text": false,
+   "sections_used": "PubMed abstract (Methods, Results); verification only"
+  },
+  {
+   "pmid": "33190147",
+   "title_fetched": "Effect of High-Dose Omega-3 Fatty Acids vs Corn Oil on Major Adverse Cardiovascular Events in Patients at High Cardiovascular Risk: The STRENGTH Randomized Clinical Trial.",
+   "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=33190147&retmode=xml",
+   "full_text": false,
+   "sections_used": "PubMed abstract (Interventions, Results, Conclusions); verification only"
+  }
+ ],
+ "freshness_search": {
+  "database": "PubMed (NCBI E-utilities esearch, sort=relevance, retmax=60)",
+  "date_run": "2026-10-28",
+  "query": "(\"omega-3 fatty acids\"[MeSH Terms] OR \"fish oils\"[MeSH Terms] OR \"marine omega-3\" OR \"eicosapentaenoic acid\" OR \"docosahexaenoic acid\") AND (\"cardiovascular diseases\"[MeSH Terms] OR \"myocardial infarction\" OR \"cardiovascular events\" OR \"cardiovascular outcomes\") AND (meta-analysis[pt]) AND (\"randomized controlled trials as topic\"[MeSH Terms] OR randomized) AND 2020/01/01:2026/10/28[dp]",
+  "hits": 67,
+  "screened_titles": 60,
+  "eligible_after_screening": [
+   "32114706",
+   "32820013",
+   "36103100",
+   "42144851",
+   "34612056",
+   "39639295",
+   "38869144"
+  ],
+  "screening_rule": "Kept syntheses of RCTs of marine EPA/DHA on cardiovascular events or AF; excluded ALA-only, observational/biomarker, lipid-only, disease-specific populations (dialysis, PAD, HIV, foot ulcers), protocols and non-CV topics. Abstracts of the 7 kept reviews were read.",
+  "findings": {
+   "32114706": "Cochrane 2020, 86 RCTs: CV events RR 0.96 (0.92-1.01, high certainty), CV mortality RR 0.92 (0.86-0.99, moderate), slight CHD-mortality reduction",
+   "32820013": "Heart 2021, 17 double-blind RCTs: <=1 g/day no association (futility crossed); 2 and >=3 g/day reduced cardiac death but evidence weak",
+   "36103100": "2024, 15 RCTs: MACE RR 0.95, MI 0.90, CV death 0.94; benefit mainly prescription EPA ethyl ester; AF RR 1.25",
+   "42144851": "2026, 25 RCTs EPA+DHA secondary prevention: no significant MACE reduction",
+   "34612056": "2021, 7 RCTs: AF HR 1.25, dose-dependent",
+   "39639295": "2024, 12 RCTs of prescription preparations: CV events RR 0.88",
+   "38869144": "2024, 18 RCTs: MI 0.89, CV death 0.92; EPA alone gave larger reductions than EPA+DHA"
+  }
+ },
+ "prior_decision": "closed_no_credit: The reviewed research does not establish a qualifying benefit for this product's assessed use. Dr. Pham's fifth ruling approves removing routine retail heart-event-prevention credit; the documented 2026-10-28 freshness search and VITAL/STRENGTH show mixed results. OWNER CHECK (rg, 2026-10-28): omega-route products earn Evidence through scripts/evidence_resolver.py::resolve_omega_evidence_standard (called by scoring_v4/modules/omega_evidence.py and omega_dose.py), which reads INGR_OMEGA3.purpose_evidence entries directly (omega_reviewed_weak 10.4, prenatal_dha_intake_authority 11.1 per scoring_v4/config/quality_score.json evidence_magnitudes.omega) and never reads study_type/evidence_level; EPA+DHA amount is judged by Dose (data/omega_rubric.json). This patch changes only study_type/evidence_level, so it does not zero omega-module Evidence or EPA/DHA nutrition Dose. It does remove generic clinical-path credit (assess_clinical_applicability returns reference_only_clinical_record) for any non-omega-route product matched to INGR_OMEGA3. FINDING for Sean: purpose_evidence.omega_reviewed_weak still awards 10.4 points citing the cardiovascular reviews 31567003/32951855; to match the ruling it should be re-based on the reviewed EPA/DHA nutritional-contribution policy. That is a scoring-config/owner change outside this lane and is not made here."
+}

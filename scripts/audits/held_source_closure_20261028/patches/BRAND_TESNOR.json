@@ -1,0 +1,228 @@
+{
+ "record_id": "BRAND_TESNOR",
+ "decision": "closed_credit",
+ "summary": "35928723 (120 men aged 36-55 with mild-to-moderate aging-male symptoms; LN18178 200 or 400 mg/day for 56 days) met its primary endpoint (lower AMS score vs placebo), and 35129040 (120 men aged 21-35) met its primary endpoint of higher free testosterone vs placebo at both doses. Dr. Pham's source-content hold is resolved for this exact branded blend; applicability stays limited to Tesnor/LN18178 and hormone-balance outcomes. Fourth-ruling boundary applied: fertility, erectile, hypogonadism and muscle-growth positioning excluded.",
+ "record_updates": {
+  "applicability": {
+   "scope": "ingredient",
+   "required_form_terms": [
+    "tesnor",
+    "ln18178"
+   ],
+   "supported_outcomes": [
+    "hormone_balance"
+   ],
+   "studied_population": "Healthy men aged 21-55 taking Tesnor (LN18178) 200-400 mg/day for 56 days; outcomes are aging-male symptom scores and serum testosterone, not hypogonadism treatment.",
+   "reviewed_at": "2026-10-28",
+   "source_pmids": [
+    "35129040",
+    "35928723"
+   ],
+   "excluded_claim_terms": [
+    "fertility",
+    "sperm",
+    "erectile",
+    "hypogonadism",
+    "muscle growth"
+   ]
+  }
+ },
+ "study_contexts": [
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "brand_tesnor_35928723_draft",
+   "source_pmids": [
+    "35928723"
+   ],
+   "components": [
+    "BRAND_TESNOR"
+   ],
+   "identity_scope": "branded_material",
+   "identity": {
+    "branded_material": "Tesnor (LN18178)",
+    "standardization": "Aqueous-ethanol extracts of Punica granatum fruit rind and Theobroma cocoa seed 4:1, 25% excipients, >=3.5% punicalagins and >=0.5% theobromine"
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "direct_rct",
+   "component_registration_status": "fully_registered",
+   "condition": "aging_male_symptoms",
+   "purpose": "physiology",
+   "review_status": "clinician_approved",
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability"
+   },
+   "scoring_eligible": true,
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "trial_family": "35928723",
+   "population": {
+    "age_group": "adult",
+    "description": "120 healthy men aged 36-55 (BMI 20-29) with Aging Males' Symptoms scores of 27-43; 40 per arm."
+   },
+   "study_design": "Randomized (computer-generated block), double-blind, placebo-controlled, three-arm trial (CTRI/2019/02/017506), 56 days; ANCOVA between groups.",
+   "outcomes": [
+    {
+     "name": "Primary: change in AMS score; both 200 and 400 mg/day reduced AMS significantly versus placebo by day 56 (400 mg from day 7)",
+     "hierarchy": "primary",
+     "kind": "patient_important",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "Secondary: free and total testosterone increased in both LN18178 groups (abstract reports versus baseline); hand-grip strength and PSS-10 improved",
+     "hierarchy": "secondary",
+     "kind": "surrogate",
+     "direction": "positive",
+     "outcome_role": "within_group_change"
+    }
+   ],
+   "limitations": [
+    "Single-country trial in men with mild-to-moderate AMS scores; 56 days only; not treatment of hypogonadism.",
+    "Whole-blend evidence: pomegranate and cocoa components cannot be credited separately; sponsor-developed patented blend.",
+    "The abstract reports testosterone change versus baseline; between-group testosterone statistics were not re-verified in this session.",
+    "Industry funded, not deficiency treatment; whole formula no individual component allocation.",
+    "Dr. Pham's fourth ruling set (2026-10-28) boundary: limited, outcome-specific credit for the exact branded formula; hormone biomarkers are not fertility, long-term health or disease prevention.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ],
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "mg",
+    "values": [
+     200,
+     400
+    ],
+    "dose_status": "verified",
+    "dose_basis": "nominal_assigned_arm",
+    "duration_basis": "fixed_protocol",
+    "duration_days": 56,
+    "administration_frequency": "One capsule daily after breakfast",
+    "dosage_forms": [
+     "oral capsule"
+    ],
+    "co_therapies": [
+     "Participants agreed to walk 30 minutes/day, five days/week, and not to start sexual-health therapies or certain supplements"
+    ],
+    "source_provenance": {
+     "pmid": "35928723",
+     "location": "Methods (LN18178 composition; participants; randomization; primary efficacy measure AMS; hormones); Results (one capsule after breakfast, 56 days; Table 3)",
+     "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9346391/"
+    },
+    "duration_as_printed": {
+     "value": 56,
+     "unit": "days"
+    },
+    "reported_regimen": "LN18178 200 or 400 mg once daily for 56 days",
+    "normalization": {
+     "basis": "Assigned whole-blend mass per day."
+    }
+   }
+  },
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "brand_tesnor_35129040",
+   "source_pmids": [
+    "35129040"
+   ],
+   "components": [
+    "BRAND_TESNOR"
+   ],
+   "identity_scope": "branded_material",
+   "identity": {
+    "branded_material": "Tesnor (LN18178)",
+    "standardization": "Proprietary blend of Punica granatum fruit rind and Theobroma cocoa seed extracts (abstract)"
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "direct_rct",
+   "component_registration_status": "fully_registered",
+   "condition": "serum_testosterone_young_men",
+   "purpose": "physiology",
+   "review_status": "clinician_approved",
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability"
+   },
+   "scoring_eligible": true,
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "trial_family": "35129040",
+   "population": {
+    "age_group": "adult",
+    "description": "120 healthy male volunteers aged 21-35; 40 per group."
+   },
+   "study_design": "Randomized, double-blind, placebo-controlled three-arm trial, 56 days.",
+   "outcomes": [
+    {
+     "name": "Primary: serum free testosterone increased with 200 mg (p=0.0268 vs placebo) and 400 mg (p<0.0001 vs placebo); total testosterone increased with 400 mg only (p=0.0184 vs placebo)",
+     "hierarchy": "primary",
+     "kind": "surrogate",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "Secondary: LH rose with 400 mg (p=0.0470 vs placebo); DHT, cortisol and estradiol unchanged; hand-grip and MUAC improved with 400 mg",
+     "hierarchy": "secondary",
+     "kind": "surrogate",
+     "direction": "mixed",
+     "outcome_role": "direct_between_group_effect"
+    }
+   ],
+   "limitations": [
+    "Full text not open access; PubMed abstract only. Dosage form, completer counts and funding were not verifiable.",
+    "Primary outcome is a hormone level in healthy young men, not a symptom or clinical outcome; no hypogonadism treatment claim.",
+    "Dr. Pham's fourth ruling set (2026-10-28) boundary: limited, outcome-specific credit for the exact branded formula; hormone biomarkers are not fertility, long-term health or disease prevention.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ],
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "mg",
+    "values": [
+     200,
+     400
+    ],
+    "dose_status": "verified",
+    "dose_basis": "nominal_assigned_arm",
+    "duration_basis": "fixed_protocol",
+    "duration_days": 56,
+    "administration_frequency": "Daily (abstract)",
+    "dosage_forms": [
+     "oral (form not stated in abstract)"
+    ],
+    "co_therapies": [],
+    "source_provenance": {
+     "pmid": "35129040",
+     "location": "PubMed abstract",
+     "source_url": "https://pubmed.ncbi.nlm.nih.gov/35129040/"
+    },
+    "duration_as_printed": {
+     "value": 56,
+     "unit": "days"
+    },
+    "reported_regimen": "LN18178 200 or 400 mg/day for 56 days",
+    "normalization": {
+     "basis": "Assigned whole-blend mass per day."
+    }
+   }
+  }
+ ],
+ "source_receipts": [
+  {
+   "pmid": "35928723",
+   "title_fetched": "A proprietary blend of standardized Punica granatum fruit rind and Theobroma cocoa seed extracts mitigates aging males' symptoms: A randomized, double-blind, placebo-controlled study.",
+   "url": "https://www.ncbi.nlm.nih.gov/research/bionlp/RESTful/pmcoa.cgi/BioC_json/35928723/unicode",
+   "full_text": true,
+   "sections_used": "Methods (LN18178 composition; participants; randomization; primary efficacy measure AMS; hormones); Results (one capsule after breakfast, 56 days; Table 3)"
+  },
+  {
+   "pmid": "35129040",
+   "title_fetched": "A Proprietary Herbal Blend Containing Extracts of Punica granatum Fruit Rind and Theobroma cocoa Seeds Increases Serum Testosterone Level in Healthy Young Males: A Randomized, Double-Blind Placebo-Controlled Study.",
+   "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=35129040&retmode=xml",
+   "full_text": false,
+   "sections_used": "PubMed abstract"
+  }
+ ]
+}

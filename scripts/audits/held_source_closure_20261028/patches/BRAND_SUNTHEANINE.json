@@ -1,0 +1,151 @@
+{
+ "record_id": "BRAND_SUNTHEANINE",
+ "decision": "closed_no_credit",
+ "summary": "Full text of the adult Suntheanine crossover (30 adults, 200 mg nightly, 4 weeks; maker-funded) shows the designated primary clinical outcomes were not better than placebo (SDS p=0.084, PSQI total p=0.073), with only three PSQI subscales separating near p=0.05. The reviewed research does not establish a qualifying benefit for this product's assessed use: the null designated primaries are kept, the verified sleep-subscale findings in 30 adults are recorded as limited findings whose possible points await the calibration batch, and the only other source (pediatric ADHD trial) is abstract-only with no verified positive primary. The record becomes reference-only, which removes Suntheanine Evidence points from dependent products.",
+ "record_updates": {
+  "study_type": "reference",
+  "evidence_level": "reference"
+ },
+ "study_contexts": [
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "brand_suntheanine_31623400",
+   "components": [
+    "BRAND_SUNTHEANINE"
+   ],
+   "source_pmids": [
+    "31623400"
+   ],
+   "identity_scope": "branded_material",
+   "identity": {
+    "branded_material": "Suntheanine",
+    "manufacturer": "Taiyo Kagaku Co., Ltd.",
+    "standardization": "Enzymatic synthetic L-theanine"
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "direct_rct",
+   "component_registration_status": "fully_registered",
+   "condition": "nonclinical_stress_sleep",
+   "purpose": "physiology",
+   "review_status": "clinician_approved",
+   "scoring_eligible": false,
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "trial_family": "brand_suntheanine_31623400",
+   "population": {
+    "age_group": "adult",
+    "description": "30 adults aged 20-69 (9 men, 21 women; mean 48.3) without major psychiatric illness, screened by a psychiatrist."
+   },
+   "study_design": "Randomized, double-blind, placebo-controlled crossover trial: two 4-week periods with a 2-week washout; clinical assessments (SDS, STAI, PSQI) designated primary; between-period changes compared by Mann-Whitney U.",
+   "outcomes": [
+    {
+     "name": "Primary stress measures, L-theanine versus placebo change: SDS p=0.084 (trend only); STAI-trait improved within the L-theanine period (p=0.006) but not shown superior to placebo.",
+     "hierarchy": "primary",
+     "kind": "patient_important",
+     "direction": "null",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "Primary sleep (PSQI): total change versus placebo p=0.073 (trend); subscales sleep latency (p=0.0499), sleep disturbance (p=0.046) and use of sleep medication (p=0.047) improved more than placebo.",
+     "hierarchy": "primary",
+     "kind": "patient_important",
+     "direction": "mixed",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "Verbal fluency and executive function improved within the L-theanine period; placebo separation only in the post hoc lower-baseline median-split subgroup (verbal fluency p=0.002).",
+     "hierarchy": "post_hoc",
+     "kind": "patient_important",
+     "direction": "mixed",
+     "outcome_role": "post_hoc_subgroup"
+    }
+   ],
+   "limitations": [
+    "The Methods designate clinical assessments as primary and laboratory tests as secondary. Selected subscales and posthoc subgroup findings must not be presented as universal primary-outcome superiority.",
+    "Exact preparation/population/endpoints; not generic benefit or minimum effective dose.",
+    "Small (n=30) crossover with largely within-period significance; primary stress scores were not superior to placebo and only three PSQI subscales separated at p just under 0.05 without multiplicity control.",
+    "Funded by Taiyo Kagaku, which supplied the tablets; two authors are Taiyo Kagaku employees.",
+    "No credit: the designated primary outcomes were not superior to placebo (SDS p=0.084; PSQI total p=0.073; only three PSQI subscales separated), so per the corrected brief this completed trial is non-crediting with its true directions. It does not show stress/anxiety reduction versus placebo. Returned A024 date-only restriction was withdrawn; this assessment rests on the verified full text.",
+    "Limited verified secondary finding (hierarchy kept; per Dr. Pham's fifth ruling): in 30 adults, PSQI sleep-latency (p=0.0499), sleep-disturbance (p=0.046) and sleep-medication (p=0.047) subscales improved more than with placebo. Whether limited points may rest on such findings awaits the calibration batch; they are never promoted to primary.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ],
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "mg",
+    "values": [
+     200
+    ],
+    "dose_status": "verified",
+    "dose_basis": "nominal_assigned_arm",
+    "duration_basis": "fixed_protocol",
+    "duration_days": 28,
+    "administration_frequency": "One 200 mg tablet orally before sleep each night for 4 weeks; 2-week washout between periods.",
+    "dosage_forms": [
+     "oral tablet"
+    ],
+    "co_therapies": [
+     "None assigned; compliance checked verbally."
+    ],
+    "reported_regimen": "200 mg/day of specified assigned material",
+    "normalization": {
+     "basis": "Whole assigned material daily mass from primary Methods; not a marker or active-equivalent conversion."
+    },
+    "source_provenance": {
+     "pmid": "31623400",
+     "location": "Full text (PMC6836118): Methods 2.1-2.5 (participants, intervention, primary clinical assessments, statistics), Results Table 2 paragraph, Table 3 and median-split table, Funding and Conflicts of Interest.",
+     "source_url": "https://pubmed.ncbi.nlm.nih.gov/31623400/"
+    }
+   },
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability"
+   }
+  },
+  {
+   "context_id": "brand_suntheanine_22214254_adhd_boys_abstract_only",
+   "components": [
+    "BRAND_SUNTHEANINE"
+   ],
+   "source_pmids": [
+    "22214254"
+   ],
+   "review_status": "rejected_source",
+   "scoring_eligible": false,
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability",
+    "notes": "No credit: abstract-only (Altern Med Rev 2011, no open full text) pediatric ADHD trial; primary endpoint and statistics cannot be verified, and the population (boys 8-12 with ADHD) does not transfer to adult products."
+   },
+   "dose": {
+    "source_provenance": {
+     "pmid": "22214254",
+     "location": "PubMed abstract.",
+     "source_url": "https://pubmed.ncbi.nlm.nih.gov/22214254/"
+    }
+   },
+   "limitations": [
+    "Abstract: 98 boys aged 8-12 with ADHD; two 100 mg Suntheanine chewable tablets twice daily (400 mg/day) or placebo for 6 weeks; actigraphy sleep percentage and efficiency higher than placebo, sleep latency unchanged; parent questionnaire did not track actigraphy.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ]
+  }
+ ],
+ "source_receipts": [
+  {
+   "pmid": "31623400",
+   "title_fetched": "Effects of L-Theanine Administration on Stress-Related Symptoms and Cognitive Functions in Healthy Adults: A Randomized Controlled Trial.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/31623400/",
+   "full_text": true,
+   "sections_used": "Methods, Results, Tables 2-3, funding/COI (BioC PMC6836118)"
+  },
+  {
+   "pmid": "22214254",
+   "title_fetched": "The effects of L-theanine (Suntheanine®) on objective sleep quality in boys with attention deficit hyperactivity disorder (ADHD): a randomized, double-blind, placebo-controlled clinical trial.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/22214254/",
+   "full_text": false,
+   "sections_used": "PubMed abstract"
+  }
+ ]
+}

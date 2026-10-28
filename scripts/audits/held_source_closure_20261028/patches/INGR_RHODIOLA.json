@@ -1,0 +1,265 @@
+{
+ "record_id": "INGR_RHODIOLA",
+ "decision": "closed_credit",
+ "summary": "Per Dr. Pham's 2026-10-28 ruling, endurance credit rests on the already-approved 41080184 meta-analysis context (VO2max ES 0.32, time to exhaustion ES 0.38, time-trial ES -0.40). Its 2026-10-26 clinical review is unchanged; only scoring_eligible is set true, with a limitation citing the ruling. The 15256690 acute trial was read as an abstract only and stays non-eligible. Applicability now points to 41080184, requires a rosavin-standardized label (per the fourth ruling set: credit only where the product matches the studied preparation), and excludes energy, mood and anti-inflammatory claims. The record-level hold is lifted with a notes sentence, and the 41080184 reference's scoring_eligible=false flag is removed.",
+ "record_updates": {
+  "scoring_eligible": true,
+  "notes": "The signed limited endurance scope is retained. PMID15256690 reports acute200mg Rhodiola rosea (3%rosavin/1%salidroside) one hour before exercise with a small positive time-to-exhaustion result in24volunteers; its chronic200mg/day four-week phase in12volunteers was null. Full PMID30450257 reports600mg/day for four weeks in26men, with no TTE/VO2peak benefit. Review41080184 pools other species, combination products and isolated salidroside; it is retained as noncontributing history rather than an exact generic-rosea qualification. Actual227946 has205mg/capsule with3%rosavins/1%salidroside and morning directions; exact acute regimen correspondence is unestablished. Product241941 has a different marker specification. Existing required_form_terms is OR and cannot prove both specifications simultaneously. Source-purpose/preparation/regimen qualification remains held; no new signature, efficacy threshold, global inefficacy finding or safety penalty is created. Dr. Pham's signed 2026-10-28 ruling grants moderate conditional endurance credit from the 41080184 synthesis (no energy, mood, anti-inflammatory or disease claims; only where the product matches the studied preparation) and resolves the former record-level scoring_eligible=false hold.",
+  "references_structured": [
+   {
+    "type": "pubmed",
+    "authority": "NCBI PubMed",
+    "pmid": "41080184",
+    "doi": "10.3389/fnut.2025.1645346",
+    "title": "The effect of Rhodiola rosea supplementation on endurance performance and related biomarkers: a systematic review and meta-analysis.",
+    "citation": "Frontiers in nutrition (2025-01-01)",
+    "url": "https://pubmed.ncbi.nlm.nih.gov/41080184/",
+    "published_date": "2025-01-01",
+    "publication_types": [
+     "Journal Article",
+     "Systematic Review"
+    ],
+    "mesh_terms": [],
+    "supplementary_concepts": [],
+    "evidence_grade": "systematic_review",
+    "retracted": false,
+    "supports_claims": [],
+    "verification_source": "pubmed_eutils",
+    "notes": " Scoring hold resolved by Dr. Pham's 2026-10-28 ruling (moderate conditional endurance credit from this synthesis)."
+   },
+   {
+    "pmid": "15256690",
+    "doi": "10.1123/ijsnem.14.3.298",
+    "title": "Acute Rhodiola rosea intake can improve endurance exercise performance.",
+    "url": "https://pubmed.ncbi.nlm.nih.gov/15256690/",
+    "type": "pubmed",
+    "scoring_eligible": false,
+    "notes": "Live NIH abstract content verified27October2026;acute200mg3%rosavin+1%salidroside1hpreexercise positive;chronic200mg4weeksnull. Productcorrespondence/regimenheld,notnegativeefficacyfinding."
+   }
+  ],
+  "applicability": {
+   "scope": "ingredient",
+   "source_pmids": [
+    "41080184"
+   ],
+   "studied_population": "Healthy exercise cohorts; review reports26trials668participants. Table2 includes adolescents/young adults and older trained adults, heterogeneous training status. Not patients selected for mood,stress-related fatigue or inflammatory disease.",
+   "supported_outcomes": [
+    "endurance"
+   ],
+   "reviewed_at": "2026-10-28",
+   "excluded_claim_terms": [
+    "energy",
+    "mood",
+    "anti-inflammatory",
+    "inflammation"
+   ],
+   "required_form_terms": [
+    "rosavin",
+    "rosavins"
+   ]
+  }
+ },
+ "study_contexts": [
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "ingr_rhodiola_scoped_review_41080184",
+   "components": [
+    "INGR_RHODIOLA"
+   ],
+   "source_pmids": [
+    "41080184"
+   ],
+   "identity_scope": "ingredient_general",
+   "identity": {
+    "name": "Rhodiola Rosea"
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "meta_analysis",
+   "component_registration_status": "fully_registered",
+   "condition": "endurance",
+   "purpose": "challenge",
+   "review_status": "clinician_approved",
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-26",
+    "scope": "identity_dose_outcome_applicability"
+   },
+   "scoring_eligible": true,
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "trial_family": "ingr_rhodiola_review_41080184",
+   "population": {
+    "age_group": "mixed",
+    "description": "Healthy exercise cohorts; review reports26trials668participants. Table2 includes adolescents/young adults and older trained adults, heterogeneous training status. Not patients selected for mood,stress-related fatigue or inflammatory disease."
+   },
+   "study_design": "Systematic review/meta-analysis; full Methods,Results,Tables and Discussion independently inspected2026-10-27.",
+   "outcomes": [
+    {
+     "name": "Time-trial performance,time to exhaustion and VO2max: pooled statistically significant small endurance effects.",
+     "hierarchy": "not_reported",
+     "kind": "patient_important",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "IL6 and CRP: no statistically significant pooled reduction.",
+     "hierarchy": "not_reported",
+     "kind": "surrogate",
+     "direction": "null",
+     "outcome_role": "direct_between_group_effect"
+    }
+   ],
+   "limitations": [
+    "Table2 contains RR plus Cordyceps preparations,isolated salidroside/rhodioloside,decoctions and extracts; these cannot be treated as chemically equivalent single-ingredient standardized extracts.",
+    "Source Table1 adult18–50eligibility conflicts with included adolescent cohorts; record the inconsistency rather than rewriting the population.",
+    "Exploratory subgroup>600mg/day is not a minimum effective dose; Table4 has obvious unrelated LL-BFR/HLR caption and duplicated MDA subgroup labels. No quantitative benchmark extracted.",
+    "No mood,clinical stress-fatigue,longevity,cognitive-acuity or anti-inflammatory transfer.",
+    "Current labels227946and241941 explicitly claim physical endurance; cannot exclude the entire25label cohort as non-endurance. Their exact preparation/dose correspondence remains required,not resolved by a name match.",
+    "Included-study PMID list records only13 explicit PubMed IDs printed in source bibliography;13 other source-table reports use DOI,local journals or theses. This is not a claim of26independently verified PubMed trials. Repeated Noreen/Parisi reports require trial-family mapping before independent-count claims.",
+    "Scoring eligibility set by Dr. Pham's signed 2026-10-28 ruling: moderate conditional endurance credit from this synthesis (VO2max ES 0.32, 95% CI 0.12-0.52; time to exhaustion ES 0.38, 0.07-0.69; time-trial ES -0.40, -0.78 to -0.01; Results, Table 3). Conditional on products matching the studied R. rosea preparation; no energy, mood, anti-inflammatory or disease claims. The mixed-species/combination limitations above still apply."
+   ],
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "mg",
+    "values": [],
+    "dose_status": "verified",
+    "dose_basis": "not_applicable",
+    "duration_basis": "not_recorded",
+    "duration_days": null,
+    "administration_frequency": "Trial-specific daily or acute protocols; no common schedule assigned.",
+    "dosage_forms": [
+     "oral supplementation (trial-specific preparations)"
+    ],
+    "co_therapies": [
+     "Trial-specific background therapy/training and comparator; Table2 inspected; no common co-therapy assumed."
+    ],
+    "reported_regimen": "Table2 has acute3mg/kg regimens,170mg extract28days,600mg extract28–30days,RR+Cordyceps and other heterogeneous protocols. No single pooled regimen or equivalent marker dose is asserted.",
+    "source_provenance": {
+     "pmid": "41080184",
+     "source_url": "https://pubmed.ncbi.nlm.nih.gov/41080184/",
+     "location": "Full Methods,Results,Tables1–3andDiscussion; exact trial-level restrictions retained."
+    }
+   },
+   "included_study_pmids": [
+    "39601362",
+    "38544753",
+    "25251930",
+    "15256690",
+    "30450257",
+    "20308973",
+    "24055627",
+    "15514725",
+    "11887898",
+    "33078636",
+    "31623349",
+    "23443221",
+    "19478343",
+    "28873320",
+    "19568709"
+   ]
+  },
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "ingr_rhodiola_15256690_acute_endurance",
+   "source_pmids": [
+    "15256690"
+   ],
+   "components": [
+    "INGR_RHODIOLA"
+   ],
+   "identity_scope": "ingredient_general",
+   "identity": {
+    "name": "Rhodiola rosea extract standardized to 3% rosavin + 1% salidroside, 200 mg (with 500 mg starch)"
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "direct_rct",
+   "component_registration_status": "fully_registered",
+   "condition": "endurance",
+   "purpose": "challenge",
+   "population": {
+    "age_group": "adult",
+    "description": "Young healthy volunteers: 24 in the Phase I acute crossover; 12 in the Phase II 4-week phase."
+   },
+   "study_design": "Phase I: double-blind, placebo-controlled randomized crossover, acute dose 1 hour before testing, 5-day washout. Phase II: double-blind placebo-controlled 4-week daily intake (n=12).",
+   "trial_family": "15256690",
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "scoring_eligible": false,
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "mg",
+    "values": [
+     200
+    ],
+    "dose_status": "verified",
+    "dose_basis": "single_challenge",
+    "duration_basis": "endpoint_followup_only",
+    "administration_frequency": "Single 200 mg extract dose 1 hour before testing (Phase I); 200 mg/day for 4 weeks in Phase II.",
+    "dosage_forms": [
+     "oral extract with starch (physical form not reported in the abstract)"
+    ],
+    "co_therapies": [
+     "Placebo was 700 mg starch; no co-therapy reported."
+    ],
+    "reported_regimen": "200 mg R. rosea extract (3% rosavin + 1% salidroside) plus 500 mg starch, acute 1 h pre-exercise; Phase II 200 mg/day for 4 weeks.",
+    "normalization": {
+     "basis": "Extract mass as stated in the abstract; no marker-equivalent conversion."
+    },
+    "source_provenance": {
+     "pmid": "15256690",
+     "location": "PubMed abstract only; no open full text found via PMC, Europe PMC, OpenAlex or Semantic Scholar.",
+     "source_url": "https://pubmed.ncbi.nlm.nih.gov/15256690/"
+    }
+   },
+   "outcomes": [
+    {
+     "name": "Phase I acute: time to exhaustion 17.2 vs 16.8 min with placebo (p<.05); VO2peak 52.9 vs 50.9 ml/min/kg (p<.05); other measures unchanged.",
+     "hierarchy": "not_reported",
+     "kind": "patient_important",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "Phase II: 4-week 200 mg/day intake did not alter any measured variable.",
+     "hierarchy": "not_reported",
+     "kind": "patient_important",
+     "direction": "null",
+     "outcome_role": "direct_between_group_effect"
+    }
+   ],
+   "limitations": [
+    "Abstract only, so no credit from this context: primary endpoint, physical dosage form and methods could not be verified.",
+    "Small effect (0.4 min) in 24 volunteers; chronic dosing was null. This trial is also included in the 41080184 synthesis, which carries the credit.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ],
+   "review_status": "clinician_approved",
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability"
+   }
+  }
+ ],
+ "source_receipts": [
+  {
+   "pmid": "41080184",
+   "title_fetched": "The effect of Rhodiola rosea supplementation on endurance performance and related biomarkers: a systematic review and meta-analysis.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/41080184/",
+   "full_text": true,
+   "sections_used": "Results overall-effects paragraph and Table 3 reference (BioC PMC12507841); existing approved context otherwise unchanged"
+  },
+  {
+   "pmid": "15256690",
+   "title_fetched": "Acute Rhodiola rosea intake can improve endurance exercise performance.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/15256690/",
+   "full_text": false,
+   "sections_used": "PubMed abstract"
+  }
+ ],
+ "integration_notes": [
+  "2026-10-28 integrator: require_source_label_form removed; required_form_terms kept, matching the KSM-66/Tesnor precedent. Source-only matching rejected real labels whose ingredient row resolves through the enricher.",
+  "2026-10-28 integrator: condition gate kept (supported_outcomes ['endurance'] equals the context condition). Sean's decision is that a claim-free label may earn scoped condition credit, but today the population limits (e.g. men-only, pregnancy, children) are enforced only inside this gate, so ungating via data would drop those safeguards. Claim-free scoped credit waits for the shared applicability change (no claim / aligned claim / unrelated claim / population mismatch) under /pg-scoring-change."
+ ]
+}

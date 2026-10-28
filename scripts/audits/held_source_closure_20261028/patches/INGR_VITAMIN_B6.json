@@ -1,0 +1,23 @@
+{
+ "record_id": "INGR_VITAMIN_B6",
+ "decision": "held: full text of both declared sources (36719452 Arch Gynecol Obstet 2023; 10334745 BMJ 1999) was not retrievable in this session (no open full text; PMC page behind a browser check), so doses, dosage forms and included trials cannot be verified; record also has no health_goals_supported to match outcomes against",
+ "summary": "Abstracts only: the 2023 NVP meta-analysis (18 studies) pooled pyridoxine alone with pyridoxine-plus-other-agent arms (Rhodes score SMD 0.78, PUQE 0.75) without doses in the abstract; the 1999 BMJ PMS review (9 trials, 940 women, OR 2.32 overall) states most trials were low quality and mentions doses 'up to 100 mg/day' only in general terms. Neither can be fully verified without full text, and Dr. Pham's A118 source-content hold stays. No contexts were authored.",
+ "record_updates": {},
+ "study_contexts": [],
+ "source_receipts": [
+  {
+   "pmid": "36719452",
+   "title_fetched": "The effects of pyridoxine (vitamin B6) supplementation in nausea and vomiting during pregnancy: a systematic review and meta-analysis.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/36719452/",
+   "full_text": false,
+   "sections_used": "PubMed abstract"
+  },
+  {
+   "pmid": "10334745",
+   "title_fetched": "Efficacy of vitamin B-6 in the treatment of premenstrual syndrome: systematic review.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/10334745/",
+   "full_text": false,
+   "sections_used": "PubMed abstract"
+  }
+ ]
+}

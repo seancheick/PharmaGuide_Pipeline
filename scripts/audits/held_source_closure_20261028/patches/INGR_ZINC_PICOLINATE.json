@@ -1,0 +1,257 @@
+{
+ "record_id": "INGR_ZINC_PICOLINATE",
+ "decision": "closed_credit",
+ "summary": "Full text of the 2017 JRSM Open meta-analysis (7 placebo-controlled trials, 575 adults, acetate or gluconate lozenges, 80-207 mg/day elemental zinc) shows colds 33% shorter (95% CI 21-45%), with no added benefit above 100 mg/day. It gets the one eligible context, inside the signed lozenge-only scope (Dr. Pham rejected bridging to picolinate or capsules). The symptom-level and IPD analyses re-use the same acetate trials and are recorded without separate credit. The applicability source list is narrowed to 28515951; its acetate/gluconate lozenge constraints stay.",
+ "record_updates": {
+  "applicability": {
+   "scope": "ingredient",
+   "required_form_terms": [
+    "zinc acetate",
+    "zinc gluconate"
+   ],
+   "dosage_forms": [
+    "lozenge",
+    "lozenges"
+   ],
+   "studied_population": "Adults with an acute common cold; early short-term treatment, not prevention",
+   "supported_outcomes": [
+    "common_cold_duration"
+   ],
+   "reviewed_at": "2026-10-28",
+   "source_pmids": [
+    "28515951"
+   ],
+   "reason": "Reviewed preparation, population and purpose scope remains independent of amount. Dose reports descriptive research-exposure correspondence; it does not create a positive adequacy benchmark or Safety determination."
+  }
+ },
+ "study_contexts": [
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "ingr_zinc_picolinate_25888289_scoped_source",
+   "components": [
+    "INGR_ZINC_PICOLINATE"
+   ],
+   "source_pmids": [
+    "25888289"
+   ],
+   "identity_scope": "ingredient_general",
+   "identity": {
+    "name": "Zinc acetate lozenges; the legacy record key does not turn this into picolinate-capsule evidence."
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "meta_analysis",
+   "component_registration_status": "fully_registered",
+   "condition": "acute_common_cold",
+   "purpose": "treatment",
+   "review_status": "clinician_approved",
+   "scoring_eligible": false,
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "trial_family": "source_25888289",
+   "population": {
+    "age_group": "adult",
+    "description": "Three randomized placebo-controlled zinc acetate lozenge trials in adults with natural colds (the acetate subset of 28515951)."
+   },
+   "study_design": "Meta-analysis of symptom-specific durations in three zinc acetate lozenge trials (80-92 mg/day).",
+   "outcomes": [
+    {
+     "name": "Nasal discharge -34%, congestion -37%, scratchy throat -33%, hoarseness -43%, cough -46%, muscle ache -54%; sneezing and sore throat CIs crossed zero; no difference for headache or fever.",
+     "hierarchy": "not_reported",
+     "kind": "patient_important",
+     "direction": "mixed",
+     "outcome_role": "direct_between_group_effect"
+    }
+   ],
+   "limitations": [
+    "No picolinate, swallowed-capsule or generic preventive transfer.",
+    "Preserve acute study exposure versus chronic upper-limit safety distinction.",
+    "Returned decision: Reject identity bridge; date-restricted evidence hold. Publication-age-only exclusions were withdrawn and are not adopted.",
+    "Historical bibliography census (not independent scoring sources; actual included-publication membership is separately bound to the inspected source table): 32287355, 10929163, 18279051. Each intervention and comparison requires its own applicability assessment; citation in this bibliography grants no credit.",
+    "Included-study PMID membership was extracted from source Table(s) Tab1. These are source membership identifiers, not independent efficacy approvals or automatic trial replications. Exact table/citation mapping and unindexed citations are retained in the source receipt.",
+    "No separate credit: these three trials are a subset of 28515951, which carries the credit; counting both would double-count.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ],
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "mg",
+    "values": [],
+    "dose_status": "verified",
+    "dose_basis": "not_applicable",
+    "duration_basis": "not_recorded",
+    "administration_frequency": "Zinc acetate lozenges 80-92 mg/day elemental zinc, started within 24 hours, for under two weeks.",
+    "dosage_forms": [
+     "lozenge"
+    ],
+    "co_therapies": [
+     "Lozenge formulation and local released-zinc context matter; retain trial-specific coingredients."
+    ],
+    "reported_regimen": "Approximately 80–92 mg elemental zinc/day, early short-term acute-cold treatment, not routine nutritional intake or prevention.",
+    "normalization": {
+     "basis": "A heterogeneous synthesis has no single assigned-arm dose. Descriptive regimens do not create an intake recommendation, equivalent preparation or efficacy threshold."
+    },
+    "source_provenance": {
+     "pmid": "25888289",
+     "location": "Full text (PMC4359576): Abstract, Methods, Results symptom pooling.",
+     "source_url": "https://pubmed.ncbi.nlm.nih.gov/25888289/"
+    },
+    "duration_days": null
+   },
+   "included_study_pmids": [
+    "32287355",
+    "10929163",
+    "18279051"
+   ],
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability"
+   }
+  },
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "ingr_zinc_picolinate_28515951_scoped_source",
+   "components": [
+    "INGR_ZINC_PICOLINATE"
+   ],
+   "source_pmids": [
+    "28515951"
+   ],
+   "identity_scope": "ingredient_general",
+   "identity": {
+    "name": "Zinc acetate or zinc gluconate lozenges, not picolinate capsules."
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "meta_analysis",
+   "component_registration_status": "fully_registered",
+   "condition": "acute_common_cold",
+   "purpose": "treatment",
+   "review_status": "clinician_approved",
+   "scoring_eligible": true,
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "trial_family": "source_28515951",
+   "population": {
+    "age_group": "adult",
+    "description": "Seven placebo-controlled randomized trials, 575 participants with naturally acquired common colds (3 zinc acetate, 4 zinc gluconate lozenge trials)."
+   },
+   "study_design": "Meta-analysis (inverse-variance random effects) of placebo-controlled zinc lozenge trials with >75 mg/day elemental zinc; main outcome common cold duration; salt and dose subgroups.",
+   "outcomes": [
+    {
+     "name": "Main outcome, common cold duration: 33% shorter (95% CI 21% to 45%) with zinc lozenges; acetate 40%, gluconate 28% (difference 12 points, 95% CI -12 to +36, not significant).",
+     "hierarchy": "primary",
+     "kind": "patient_important",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "Dose: 80-92 mg/day trials 33% versus 192-207 mg/day trials 35% (difference 2 points, -29 to +32); no evidence that >100 mg/day adds benefit.",
+     "hierarchy": "secondary",
+     "kind": "patient_important",
+     "direction": "null",
+     "outcome_role": "direct_between_group_effect"
+    }
+   ],
+   "limitations": [
+    "Participant totals are not additive across overlapping reviews.",
+    "Acute lozenge results do not establish routine-safe long-term exposure or other zinc delivery efficacy.",
+    "Returned decision: Reject identity bridge; date-restricted evidence hold. Publication-age-only exclusions were withdrawn and are not adopted.",
+    "Included-study PMID membership was extracted from the source Results included-study enumeration. These are source membership identifiers, not independent efficacy approvals or automatic trial replications. Exact table/citation mapping and unindexed citations are retained in the source receipt.",
+    "Credit is limited to early short-term treatment of acute colds with zinc acetate or gluconate lozenges; signed A123 rejects the identity bridge to picolinate or swallowed capsules, and the existing applicability form/dosage-form constraints enforce that. Date-only restriction withdrawn.",
+    "Included-study identity: 6 of 7 PMIDs re-matched to the source reference list this session (32287355 retained from the prior binding). 80-207 mg/day exceeds the chronic upper limit and is acute-use only; safety assessment stays separate.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ],
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "mg",
+    "values": [],
+    "dose_status": "verified",
+    "dose_basis": "not_applicable",
+    "duration_basis": "not_recorded",
+    "administration_frequency": "Trial-specific repeated lozenge dosing while awake during the cold; no single pooled schedule.",
+    "dosage_forms": [
+     "lozenge"
+    ],
+    "co_therapies": [
+     "Local lozenge composition and released-ion conditions are preparation-specific."
+    ],
+    "reported_regimen": "Elemental zinc 80-207 mg/day as acetate or gluconate lozenges in two clusters (80-92 and 192-207 mg/day) during acute colds.",
+    "normalization": {
+     "basis": "A heterogeneous synthesis has no single assigned-arm dose. Descriptive regimens do not create an intake recommendation, equivalent preparation or efficacy threshold."
+    },
+    "source_provenance": {
+     "pmid": "28515951",
+     "location": "Full text (PMC5418896): Abstract; Methods (eligibility >75 mg/day); Results (included trials, dose range, salt and dose comparisons, Figure on dosage); reference list.",
+     "source_url": "https://pubmed.ncbi.nlm.nih.gov/28515951/"
+    },
+    "duration_days": null
+   },
+   "included_study_pmids": [
+    "6367635",
+    "1397668",
+    "8678384",
+    "32287355",
+    "10929163",
+    "18279051",
+    "11073753"
+   ],
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability"
+   }
+  },
+  {
+   "context_id": "ingr_zinc_picolinate_27378206_ipd_overlap",
+   "components": [
+    "INGR_ZINC_PICOLINATE"
+   ],
+   "source_pmids": [
+    "27378206"
+   ],
+   "review_status": "rejected_source",
+   "scoring_eligible": false,
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability",
+    "notes": "No separate credit: individual-patient-data reanalysis of the same three zinc acetate trials already inside 28515951; full text not retrievable via API."
+   },
+   "dose": {
+    "source_provenance": {
+     "pmid": "27378206",
+     "location": "PubMed abstract.",
+     "source_url": "https://pubmed.ncbi.nlm.nih.gov/27378206/"
+    }
+   },
+   "limitations": [
+    "Abstract: IPD from 3 zinc acetate lozenge RCTs, 199 patients; colds 2.73 days (one-stage, 95% CI 1.8-3.3) or 2.94 days (two-stage) shorter versus about 7 days average; effect not modified by allergy, smoking, severity, age, sex or ethnicity. Overlapping trials, not independent replication.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ]
+  }
+ ],
+ "source_receipts": [
+  {
+   "pmid": "28515951",
+   "title_fetched": "Zinc lozenges and the common cold: a meta-analysis comparing zinc acetate and zinc gluconate, and the role of zinc dosage.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/28515951/",
+   "full_text": true,
+   "sections_used": "Abstract, Methods, Results, references (BioC PMC5418896)"
+  },
+  {
+   "pmid": "25888289",
+   "title_fetched": "The effectiveness of high dose zinc acetate lozenges on various common cold symptoms: a meta-analysis.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/25888289/",
+   "full_text": true,
+   "sections_used": "Abstract, Methods, Results (BioC PMC4359576)"
+  },
+  {
+   "pmid": "27378206",
+   "title_fetched": "Zinc acetate lozenges for treating the common cold: an individual patient data meta-analysis.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/27378206/",
+   "full_text": false,
+   "sections_used": "PubMed abstract"
+  }
+ ]
+}

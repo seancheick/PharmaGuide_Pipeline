@@ -1,0 +1,303 @@
+{
+ "record_id": "BRAND_LJ100",
+ "decision": "closed_no_credit",
+ "summary": "The reviewed research does not establish a qualifying benefit for this product's assessed use. Existing human research is retained under its actual material, Physta (Eurycoma longifolia): quality-of-life, sexual well-being and testosterone trials; none studied LJ100. All three declared trials studied Physta (Biotropics Malaysia), not LJ100, and none mentions LJ100: 23243445 (109 men, 300 mg/day, SF-36 physical functioning improved), 24550993 (Physta plus Polygonum minus combination, 26 completers) and 34262417 (105 men with low testosterone, 100-200 mg/day, total but not free testosterone increased). Because the intervention is not this record's branded ingredient, no context can credit LJ100, so the record becomes reference-only with approved no-credit contexts; this removes Evidence points from products matched to LJ100. These are real tongkat ali trials, not wrong-topic PMIDs, but the brand attribution is wrong.",
+ "record_updates": {
+  "study_type": "reference",
+  "evidence_level": "reference"
+ },
+ "study_contexts": [
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "brand_lj100_23243445_physta",
+   "components": [
+    "BRAND_LJ100"
+   ],
+   "source_pmids": [
+    "23243445"
+   ],
+   "identity_scope": "branded_material",
+   "identity": {
+    "branded_material": "Physta",
+    "manufacturer": "Biotropics Malaysia Berhad",
+    "standardization": "Freeze-dried water extract of Eurycoma longifolia root"
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "direct_rct",
+   "component_registration_status": "fully_registered",
+   "condition": "male_quality_of_life",
+   "purpose": "treatment",
+   "review_status": "clinician_approved",
+   "scoring_eligible": false,
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "trial_family": "23243445",
+   "population": {
+    "age_group": "adult",
+    "description": "109 men aged 30-55."
+   },
+   "study_design": "Randomized double-blind placebo-controlled parallel-group trial, 12 weeks; repeated-measures ANOVA.",
+   "outcomes": [
+    {
+     "name": "Primary SF-36: Physical Functioning domain improved vs placebo (P=0.006); other primary endpoints (IIEF, SHQ, semen analysis, fat mass) mixed",
+     "hierarchy": "primary",
+     "kind": "patient_important",
+     "direction": "mixed",
+     "outcome_role": "direct_between_group_effect"
+    }
+   ],
+   "limitations": [
+    "The reviewed research does not establish a qualifying benefit for this product's assessed use. Existing human research is retained under its actual material, Physta (Eurycoma longifolia): quality-of-life, sexual well-being and testosterone trials; none studied LJ100.",
+    "Studied material is Physta (Biotropics Malaysia), not LJ100; no source text mentions LJ100, so this cannot credit the LJ100 brand record. Record downgraded to reference; removes Evidence points from products matched to LJ100.",
+    "Multiple co-primary endpoints; selected domains significant.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ],
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "mg",
+    "values": [
+     300
+    ],
+    "dose_status": "verified",
+    "dose_basis": "nominal_assigned_arm",
+    "duration_basis": "fixed_protocol",
+    "duration_days": 84,
+    "administration_frequency": "Four capsules per day (75 mg Physta each).",
+    "dosage_forms": [
+     "oral capsule"
+    ],
+    "co_therapies": [
+     "No assigned co-therapy."
+    ],
+    "reported_regimen": "Physta 300 mg/day as four 75 mg capsules for 12 weeks.",
+    "normalization": {
+     "basis": "4 x 75 mg = 300 mg/day Physta."
+    },
+    "source_provenance": {
+     "pmid": "23243445",
+     "location": "Abstract; Methods (intervention: four capsules/day, 75 mg Physta each)",
+     "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3518798/"
+    },
+    "duration_as_printed": {
+     "value": 12,
+     "unit": "weeks"
+    }
+   },
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability"
+   }
+  },
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "brand_lj100_24550993_physta_polygonum",
+   "components": [
+    "BRAND_LJ100"
+   ],
+   "source_pmids": [
+    "24550993"
+   ],
+   "identity_scope": "combination",
+   "identity": {
+    "combination": "Physta Eurycoma longifolia root water extract (DER 1:25) plus Polygonum minus leaf water extract (DER 1:10), tablets by Biotropics Malaysia"
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "direct_rct",
+   "component_registration_status": "unregistered_components_present",
+   "condition": "male_sexual_wellbeing",
+   "purpose": "treatment",
+   "review_status": "clinician_approved",
+   "scoring_eligible": false,
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "trial_family": "24550993",
+   "population": {
+    "age_group": "adult",
+    "description": "Men aged 40-65; 26 completed (12 active, 14 placebo)."
+   },
+   "study_design": "Randomized double-blind placebo-controlled parallel-group trial, 12 weeks.",
+   "outcomes": [
+    {
+     "name": "Sexual Intercourse Attempt diary, Erection Hardness Scale and Sexual Health Inventory improved vs placebo",
+     "hierarchy": "primary",
+     "kind": "patient_important",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "Satisfaction with sexual performance not improved",
+     "hierarchy": "primary",
+     "kind": "patient_important",
+     "direction": "null",
+     "outcome_role": "direct_between_group_effect"
+    }
+   ],
+   "limitations": [
+    "The reviewed research does not establish a qualifying benefit for this product's assessed use. Existing human research is retained under its actual material, Physta (Eurycoma longifolia): quality-of-life, sexual well-being and testosterone trials; none studied LJ100.",
+    "Studied material is Physta (Biotropics Malaysia), not LJ100; no source text mentions LJ100, so this cannot credit the LJ100 brand record. Record downgraded to reference; removes Evidence points from products matched to LJ100.",
+    "Two-ingredient combination; the result cannot be attributed to Eurycoma alone. Very small completer sample.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ],
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "mg",
+    "values": [
+     300
+    ],
+    "dose_status": "combination_total_only",
+    "dose_basis": "combination_total_daily",
+    "duration_basis": "fixed_protocol",
+    "duration_days": 84,
+    "administration_frequency": "Daily tablet dosing totalling 300 mg of the combination.",
+    "dosage_forms": [
+     "oral tablet"
+    ],
+    "co_therapies": [
+     "Polygonum minus extract is part of the studied combination."
+    ],
+    "reported_regimen": "300 mg/day Physta plus Polygonum minus combination tablets for 12 weeks.",
+    "normalization": {
+     "basis": "300 mg is total combination mass, not Physta mass."
+    },
+    "source_provenance": {
+     "pmid": "24550993",
+     "location": "Abstract; Methods (study product composition and tablets); Discussion (300 mg daily)",
+     "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3914427/"
+    },
+    "duration_as_printed": {
+     "value": 12,
+     "unit": "weeks"
+    }
+   },
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability"
+   }
+  },
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "brand_lj100_34262417_physta",
+   "components": [
+    "BRAND_LJ100"
+   ],
+   "source_pmids": [
+    "34262417"
+   ],
+   "identity_scope": "branded_material",
+   "identity": {
+    "branded_material": "Physta",
+    "manufacturer": "Biotropics Malaysia Berhad",
+    "standardization": "Standardized aqueous Eurycoma longifolia root extract"
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "direct_rct",
+   "component_registration_status": "fully_registered",
+   "condition": "low_testosterone_age_associated_symptoms",
+   "purpose": "treatment",
+   "review_status": "clinician_approved",
+   "scoring_eligible": false,
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "trial_family": "34262417",
+   "population": {
+    "age_group": "adult",
+    "description": "105 men aged 50-70 with total testosterone <300 ng/dL and BMI 18-30."
+   },
+   "study_design": "Randomized double-blind placebo-controlled multicentre trial (100 mg, 200 mg, placebo), 12 weeks (CTRI/2019/03/017959).",
+   "outcomes": [
+    {
+     "name": "Primary total testosterone: increased vs placebo at week 12 (100 mg P<0.05; 200 mg P<0.001)",
+     "hierarchy": "primary",
+     "kind": "surrogate",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "Primary free testosterone: no significant between-group difference",
+     "hierarchy": "primary",
+     "kind": "surrogate",
+     "direction": "null",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "Ageing Male Symptoms and Fatigue Severity scores reduced within and between groups",
+     "hierarchy": "secondary",
+     "kind": "patient_important",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    }
+   ],
+   "limitations": [
+    "The reviewed research does not establish a qualifying benefit for this product's assessed use. Existing human research is retained under its actual material, Physta (Eurycoma longifolia): quality-of-life, sexual well-being and testosterone trials; none studied LJ100.",
+    "Studied material is Physta (Biotropics Malaysia), not LJ100; no source text mentions LJ100, so this cannot credit the LJ100 brand record. Record downgraded to reference; removes Evidence points from products matched to LJ100.",
+    "Men with low testosterone; not general energy, stress or longevity evidence.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ],
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "mg",
+    "values": [
+     100,
+     200
+    ],
+    "dose_status": "verified",
+    "dose_basis": "nominal_assigned_arm",
+    "duration_basis": "fixed_protocol",
+    "duration_days": 84,
+    "administration_frequency": "One capsule daily.",
+    "dosage_forms": [
+     "oral hard gelatin capsule"
+    ],
+    "co_therapies": [
+     "No assigned co-therapy."
+    ],
+    "reported_regimen": "Physta 100 mg or 200 mg daily in hard gelatin capsules (with maltodextrin) for 12 weeks.",
+    "normalization": {
+     "basis": "Capsule Physta content as assigned."
+    },
+    "source_provenance": {
+     "pmid": "34262417",
+     "location": "Abstract; Methods (investigational product capsules 100/200 mg Physta)",
+     "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8254464/"
+    },
+    "duration_as_printed": {
+     "value": 12,
+     "unit": "weeks"
+    }
+   },
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability"
+   }
+  }
+ ],
+ "source_receipts": [
+  {
+   "pmid": "23243445",
+   "title_fetched": "Randomized Clinical Trial on the Use of PHYSTA Freeze-Dried Water Extract of Eurycoma longifolia for the Improvement of Quality of Life and Sexual Well-Being in Men.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/23243445/",
+   "full_text": true,
+   "sections_used": "Abstract; Methods"
+  },
+  {
+   "pmid": "24550993",
+   "title_fetched": "Effects of a Proprietary Freeze-Dried Water Extract of Eurycoma longifolia (Physta) and Polygonum minus on Sexual Performance and Well-Being in Men: A Randomized, Double-Blind, Placebo-Controlled Study.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/24550993/",
+   "full_text": true,
+   "sections_used": "Abstract; Methods; Discussion"
+  },
+  {
+   "pmid": "34262417",
+   "title_fetched": "Effect of Eurycoma longifolia standardised aqueous root extract-Physta® on testosterone levels and quality of life in ageing male subjects: a randomised, double-blind, placebo-controlled multicentre study.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/34262417/",
+   "full_text": true,
+   "sections_used": "Abstract; Methods"
+  }
+ ]
+}

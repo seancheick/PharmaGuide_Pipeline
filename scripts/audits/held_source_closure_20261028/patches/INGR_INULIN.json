@@ -1,0 +1,189 @@
+{
+ "record_id": "INGR_INULIN",
+ "decision": "held: re-decided with the open 34555168 full text (PMC8970830) per Dr. Pham's fifth ruling; it is a non-pooled review whose bowel-function findings are mixed (transit time mostly unchanged, one positive scFOS trial; flatulence increased in 19 of 37 studies), so it cannot carry credit alone; the meta-analyses that could (35833477 Crit Rev Food Sci Nutr 2023, closed; 38309832 Am J Clin Nutr 2024, OpenAlex bronze copy but publisher returned only an HTML landing page) remain unread in full",
+ "summary": "The 2022 Adv Nutr review (full text) summarizes 78 healthy-adult trials at about 2.5-50 g/day with mixed, preparation-dependent laxation and microbiota results, but pools nothing; it is recorded as a completed no-credit context. The chicory-fructan meta-analysis (abstract: 50 studies, Bifidobacterium SMD 0.83, bowel-function benefit in healthy subjects) is the natural credit source but could not be verified from full text, so the record stays held under Dr. Pham's A079 source-content hold.",
+ "record_updates": {},
+ "study_contexts": [
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "ingr_inulin_34555168_scoped_source",
+   "components": [
+    "INGR_INULIN"
+   ],
+   "source_pmids": [
+    "34555168"
+   ],
+   "identity_scope": "ingredient_general",
+   "identity": {
+    "name": "Inulin, oligofructose and short-chain fructooligosaccharides; chemical chain length and food matrix differ."
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "systematic_review",
+   "component_registration_status": "fully_registered",
+   "condition": "gut_microbiota_and_intestinal_function",
+   "purpose": "physiology",
+   "review_status": "clinician_approved",
+   "scoring_eligible": false,
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "trial_family": "source_34555168",
+   "population": {
+    "age_group": "adult",
+    "description": "78 publications of human clinical trials in healthy adults (45 on fecal microbiota/metabolites plus laxation, glucose, lipid, mineral, satiety, inflammation and body-composition outcomes)."
+   },
+   "study_design": "Qualitative systematic review (searched February 2021) of human clinical trials of inulin-type fructans in healthy adults; no pooled meta-analysis.",
+   "outcomes": [
+    {
+     "name": "Some microbiota and intestinal-function changes reported; selected metabolic or absorption outcomes differ by trial.",
+     "direction": "mixed",
+     "hierarchy": "not_reported",
+     "kind": "patient_important",
+     "outcome_role": "direct_between_group_effect"
+    }
+   ],
+   "limitations": [
+    "Microbial abundance is not automatically a patient-important benefit.",
+    "Physicochemical characterization and direct chain-length comparisons are often lacking; do not manufacture material equivalence.",
+    "Returned decision: Source-content hold.",
+    "Included-study identifiers are now bound to this source's actual included-study rows/explicit inclusion references (Tables tbl1,tbl2,tbl3,tbl4,tbl5,tbl6,tbl7,tbl8 explicit included-study row citations), with live NIH title/content identity checks. They are publication pointers, not independent-cohort counts, per-primary-study scoring approvals, preparation equivalence or new efficacy evidence. Exact unindexed source citations remain retained; no missing PMID is invented.",
+    "3 included source citations have no printed PubMed identifier in this primary source; their exact citations are retained in the source-table receipt. This is a documented identifier limitation, not a fabricated identifier or an extra independent trial.",
+    "Full text re-read 2026-10-28 (PMC8970830): transit time showed no change versus control in most trials, with one scFOS trial (6.4 g/d) accelerating colonic transit; 19 of 37 studies reported increased flatulence; one inulin trial (11 g/d) lowered serum zonulin.",
+    "No credit from this source: it is a qualitative systematic review without pooled estimates, so it does not meet the RCT/meta-analysis rule; findings are mixed by chain length and preparation (the record notes eleven positive and nine null stool-frequency studies). Support from General Mills is disclosed.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ],
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "mg",
+    "values": [],
+    "dose_status": "verified",
+    "dose_basis": "not_applicable",
+    "duration_basis": "not_recorded",
+    "administration_frequency": "Trial-specific daily intake, often escalated over the first weeks (Tables 1-8).",
+    "dosage_forms": [
+     "oral supplementation and fortified foods (trial-specific preparations)"
+    ],
+    "co_therapies": [
+     "Food matrices, habitual diet and individual baseline microbiota differ."
+    ],
+    "reported_regimen": "Trial ITF dosages roughly 2.5-50 g/day (most 5-20 g/day; some escalation protocols) for 1-96 weeks across Tables 1-8; delivered as supplements or in foods such as cereal, bars, biscuits and yogurt.",
+    "normalization": {
+     "basis": "A heterogeneous synthesis has no single assigned-arm dose. Descriptive regimens do not create an intake recommendation, equivalent preparation or efficacy threshold."
+    },
+    "source_provenance": {
+     "pmid": "34555168",
+     "location": "Full text (PMC8970830): Methods (search, selection), Results (78 publications), Tables 1-8 (ITF type, DP, dosage g/d, duration, population).",
+     "source_url": "https://pubmed.ncbi.nlm.nih.gov/34555168/"
+    }
+   },
+   "included_study_pmids": [
+    "8813896",
+    "27477485",
+    "27680592",
+    "8844718",
+    "16569219",
+    "15585783",
+    "9915885",
+    "28611480",
+    "10509770",
+    "30995824",
+    "18466655",
+    "29307330",
+    "30971437",
+    "28954640",
+    "26987626",
+    "20591206",
+    "26706043",
+    "24715424",
+    "23135760",
+    "17403273",
+    "15158296",
+    "31108510",
+    "26203099",
+    "27747984",
+    "17445348",
+    "17268410",
+    "10673910",
+    "15479681",
+    "22244014",
+    "22743314",
+    "18590586",
+    "32320024",
+    "28730743",
+    "24969566",
+    "16768837",
+    "21773588",
+    "30048547",
+    "12368393",
+    "30940833",
+    "15066805",
+    "16365061",
+    "10048793",
+    "25164793",
+    "18608562",
+    "9924276",
+    "11472316",
+    "10395624",
+    "18781073",
+    "18377682",
+    "24664349",
+    "11101487",
+    "19386741",
+    "9301412",
+    "29490721",
+    "19931416",
+    "20938778",
+    "23244539",
+    "19776140",
+    "26571012",
+    "10655953",
+    "8644690",
+    "24919604",
+    "28424190",
+    "17618955",
+    "18853230",
+    "17884999",
+    "9192195",
+    "17298707",
+    "29676968",
+    "24453130",
+    "11697813",
+    "12540407",
+    "9497188",
+    "28229548",
+    "16340949",
+    "31467327",
+    "28747861",
+    "21679485"
+   ],
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability"
+   }
+  }
+ ],
+ "source_receipts": [
+  {
+   "pmid": "34555168",
+   "title_fetched": "The Prebiotic Potential of Inulin-Type Fructans: A Systematic Review.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/34555168/",
+   "full_text": true,
+   "sections_used": "Methods, Results, Tables 1-8 (BioC PMC8970830)"
+  },
+  {
+   "pmid": "35833477",
+   "title_fetched": "Effect of chicory-derived inulin-type fructans on abundance of Bifidobacterium and on bowel function: a systematic review with meta-analyses.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/35833477/",
+   "full_text": false,
+   "sections_used": "PubMed abstract"
+  },
+  {
+   "pmid": "38309832",
+   "title_fetched": "The effects of inulin-type fructans on cardiovascular disease risk factors: systematic review and meta-analysis of randomized controlled trials.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/38309832/",
+   "full_text": false,
+   "sections_used": "PubMed abstract"
+  }
+ ]
+}

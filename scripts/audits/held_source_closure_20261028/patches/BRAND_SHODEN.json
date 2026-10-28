@@ -1,0 +1,246 @@
+{
+ "record_id": "BRAND_SHODEN",
+ "decision": "closed_credit",
+ "summary": "Two placebo-controlled RCTs of Shoden (35% withanolide glycosides) support the stress/anxiety claim: 31517876 (60 mildly stressed adults, 240 mg/day for 60 days) improved the co-primary HAM-A (P=.040) but not DASS-21 (P=.096), and 39286132 (60 adults meeting GAD criteria, 60 or 120 mg/day for 60 days) improved the primary HAM-A by 59% versus placebo (p<0.0001). The sleep trial 32540634 (150 adults, 120 mg/day for 6 weeks) is abstract-only and gets no context, so sleep is not credited.",
+ "record_updates": {
+  "applicability": {
+   "scope": "ingredient",
+   "supported_outcomes": [
+    "stress_mood"
+   ],
+   "studied_population": "Adults 18-65 with self-reported mild stress (240 mg/day) or with high stress and anxiety meeting GAD criteria (60-120 mg/day), for 60 days.",
+   "source_pmids": [
+    "31517876",
+    "39286132"
+   ],
+   "reviewed_at": "2026-10-28"
+  }
+ },
+ "study_contexts": [
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "brand_shoden_31517876",
+   "components": [
+    "BRAND_SHODEN"
+   ],
+   "source_pmids": [
+    "31517876"
+   ],
+   "identity_scope": "branded_material",
+   "identity": {
+    "branded_material": "Shoden",
+    "manufacturer": "Arjuna Natural Ltd (Kerala, India)",
+    "standardization": "Withania somnifera extract, ethanol:water 70:30, standardized by HPLC to 35% withanolide glycosides (84 mg per 240 mg capsule)"
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "direct_rct",
+   "component_registration_status": "fully_registered",
+   "condition": "mild_stress_anxiety",
+   "purpose": "treatment",
+   "review_status": "clinician_approved",
+   "scoring_eligible": true,
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "trial_family": "31517876",
+   "population": {
+    "age_group": "adult",
+    "description": "60 healthy adults aged 18-65 with self-reported stress and HAM-A 6-17 at two centres in India; all completed."
+   },
+   "study_design": "60-day randomized double-blind placebo-controlled parallel trial (CTRI/2017/08/009449); co-primary HAM-A and DASS-21.",
+   "outcomes": [
+    {
+     "name": "Co-primary HAM-A: greater reduction than placebo (P=.040)",
+     "hierarchy": "primary",
+     "kind": "patient_important",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "Co-primary DASS-21: near-significant (P=.096)",
+     "hierarchy": "primary",
+     "kind": "patient_important",
+     "direction": "null",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "Morning cortisol (P<.001) and DHEA-S (P=.004) reduced vs placebo; testosterone change vs placebo not significant (P=.158)",
+     "hierarchy": "secondary",
+     "kind": "surrogate",
+     "direction": "mixed",
+     "outcome_role": "direct_between_group_effect"
+    }
+   ],
+   "limitations": [
+    "Mild stress population, not diagnosed anxiety disorder; one of two co-primary outcomes significant.",
+    "Material description differs between reports: 31517876 calls Shoden an ashwagandha root extract (70:30 ethanol:water, 35% withanolide glycosides), 39286132 a root-and-leaf extract; both are Shoden by Arjuna Natural standardized to 35% withanolide glycosides. Exact Shoden only; not KSM-66, Sensoril or other extracts.",
+    "Returned decision A022: source-content hold; methods verified.",
+    "Dr. Pham's fourth ruling set (2026-10-28): exact Shoden material (35% withanolide glycosides), studied stress/anxiety outcome and applicable population only; no transfer to other ashwagandha extracts.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ],
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "mg",
+    "values": [
+     240
+    ],
+    "dose_status": "verified",
+    "dose_basis": "nominal_assigned_arm",
+    "duration_basis": "fixed_protocol",
+    "duration_days": 60,
+    "administration_frequency": "One capsule once daily after dinner with 250 mL water.",
+    "dosage_forms": [
+     "oral capsule"
+    ],
+    "co_therapies": [
+     "No assigned co-therapy; placebo roasted rice powder."
+    ],
+    "reported_regimen": "Shoden 240 mg capsule once daily for 60 days.",
+    "normalization": {
+     "basis": "One 240 mg capsule of extract per day as assigned (84 mg withanolide glycosides)."
+    },
+    "source_provenance": {
+     "pmid": "31517876",
+     "location": "Methods (participants, eligibility HAM-A 6-17, intervention paragraph, primary outcomes 1-2); Results",
+     "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6750292/"
+    },
+    "duration_as_printed": {
+     "value": 60,
+     "unit": "days"
+    }
+   },
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability"
+   }
+  },
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "brand_shoden_39286132",
+   "components": [
+    "BRAND_SHODEN"
+   ],
+   "source_pmids": [
+    "39286132"
+   ],
+   "identity_scope": "branded_material",
+   "identity": {
+    "branded_material": "Shoden",
+    "manufacturer": "Arjuna Natural Pvt. Ltd (Kerala, India)",
+    "standardization": "Ashwagandha root and leaf extract standardized to 35% withanolide glycosides"
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "direct_rct",
+   "component_registration_status": "fully_registered",
+   "condition": "high_anxiety_stress",
+   "purpose": "treatment",
+   "review_status": "clinician_approved",
+   "scoring_eligible": true,
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "trial_family": "39286132",
+   "population": {
+    "age_group": "adult",
+    "description": "60 physically healthy adults meeting DSM-IV generalized anxiety disorder criteria with HAM-A >20 and morning serum cortisol >25 mcg/dL, without depressive symptoms (MADRS screen); single hospital in Jhansi, India; no dropouts."
+   },
+   "study_design": "Randomized double-blind placebo-controlled parallel three-arm trial (60 mg, 120 mg, placebo; 1:1:1) for 60 days (CTRI/2022/04/042133).",
+   "outcomes": [
+    {
+     "name": "Primary HAM-A change baseline to day 60: decreased 59% with both doses vs +0.83% with placebo (p<0.0001)",
+     "hierarchy": "primary",
+     "kind": "patient_important",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "Morning serum cortisol decreased 66-67% vs 2.22% (p<0.0001); PSS, CGI-S and PGIC improved vs placebo",
+     "hierarchy": "secondary",
+     "kind": "patient_important",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "Testosterone rose 22-33% in men vs 4% (p<0.0001); not significant in women",
+     "hierarchy": "secondary",
+     "kind": "surrogate",
+     "direction": "mixed",
+     "outcome_role": "direct_between_group_effect"
+    }
+   ],
+   "limitations": [
+    "Participants met GAD criteria; this is not evidence that a supplement treats anxiety disorders or replaces care.",
+    "No significant difference between 60 and 120 mg; no dose threshold implied. Single-site trial with very large effect sizes.",
+    "Material description differs between reports: 31517876 calls Shoden an ashwagandha root extract (70:30 ethanol:water, 35% withanolide glycosides), 39286132 a root-and-leaf extract; both are Shoden by Arjuna Natural standardized to 35% withanolide glycosides. Exact Shoden only; not KSM-66, Sensoril or other extracts.",
+    "Returned decision A022: source-content hold; methods verified.",
+    "Dr. Pham's fourth ruling set (2026-10-28): exact Shoden material (35% withanolide glycosides), studied stress/anxiety outcome and applicable population only; no transfer to other ashwagandha extracts.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ],
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "mg",
+    "values": [
+     60,
+     120
+    ],
+    "dose_status": "verified",
+    "dose_basis": "nominal_assigned_arm",
+    "duration_basis": "fixed_protocol",
+    "duration_days": 60,
+    "administration_frequency": "One capsule with or after breakfast with water, daily.",
+    "dosage_forms": [
+     "oral capsule"
+    ],
+    "co_therapies": [
+     "No assigned co-therapy; placebo microcrystalline cellulose 120 mg."
+    ],
+    "reported_regimen": "Shoden 60 mg or 120 mg capsule once daily for 60 days.",
+    "normalization": {
+     "basis": "One capsule per day containing the assigned 60 or 120 mg extract."
+    },
+    "source_provenance": {
+     "pmid": "39286132",
+     "location": "Abstract; Methods (design, eligibility, investigational products and dosing, primary outcome); Results (flow, no dropouts)",
+     "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11402924/"
+    },
+    "duration_as_printed": {
+     "value": 60,
+     "unit": "days"
+    }
+   },
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability"
+   }
+  }
+ ],
+ "source_receipts": [
+  {
+   "pmid": "31517876",
+   "title_fetched": "An investigation into the stress-relieving and pharmacological actions of an ashwagandha (Withania somnifera) extract: A randomized, double-blind, placebo-controlled study.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/31517876/",
+   "full_text": true,
+   "sections_used": "Abstract; Methods; Results"
+  },
+  {
+   "pmid": "39286132",
+   "title_fetched": "Shoden promotes Relief from stress and anxiety: A randomized, double-blind, placebo-controlled study on healthy subjects with high stress levels.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/39286132/",
+   "full_text": true,
+   "sections_used": "Abstract; Methods; Results"
+  },
+  {
+   "pmid": "32540634",
+   "title_fetched": "A randomized, double blind, placebo controlled study to evaluate the effects of ashwagandha (Withania somnifera) extract on sleep quality in healthy adults.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/32540634/",
+   "full_text": false,
+   "sections_used": "Abstract only; subscription"
+  }
+ ],
+ "integration_notes": [
+  "2026-10-28 integrator: require_source_label_form removed; required_form_terms kept, matching the KSM-66/Tesnor precedent. Source-only matching rejected real labels whose ingredient row resolves through the enricher.",
+  "2026-10-28 integrator: required_form_terms removed for this BRAND_ record; the enricher's brand gate already requires the brand on the label (product name or row), and a row-only term rejected product-name-branded labels."
+ ]
+}

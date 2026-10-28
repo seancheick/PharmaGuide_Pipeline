@@ -1,0 +1,59 @@
+{
+ "record_id": "INGR_SEA_BUCKTHORN",
+ "decision": "held: no declared source has open full text (20554904, 36043374, 23472020; no PMC records). 23472020 (broiler-chicken aflatoxin study) is now recorded only as explicitly labelled animal research (rejected_source), never human clinical evidence. Dr. Pham rejects cross-preparation/outcome transfer, and the dry-eye oil RCT and the metabolic meta-analysis cannot be dose- or preparation-verified from abstracts alone. OA retry 2026-10-28: 36043374 closed; 20554904 bronze copy blocked.",
+ "summary": "20554904 abstract: 100 adults with dry eye, 2 g/day sea buckthorn oil versus placebo oil for 3 months (86 completed); smaller rise in tear osmolarity (ITT P=0.04). 36043374 abstract: 15 RCTs; lower triglycerides, TC and LDL-C and higher HDL-C, only in people with abnormal lipids; no effect on glucose, BP or BMI. 23472020: chickens, not humans.",
+ "record_updates": {},
+ "study_contexts": [
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "ingr_sea_buckthorn_23472020_animal_research",
+   "source_pmids": [
+    "23472020"
+   ],
+   "components": [
+    "INGR_SEA_BUCKTHORN"
+   ],
+   "review_status": "rejected_source",
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability"
+   },
+   "scoring_eligible": false,
+   "dose": {
+    "source_provenance": {
+     "pmid": "23472020",
+     "location": "PubMed abstract",
+     "source_url": "https://pubmed.ncbi.nlm.nih.gov/23472020/"
+    }
+   },
+   "limitations": [
+    "Animal research: broiler chickens given aflatoxin B1 with or without sea buckthorn berry oil. Never human clinical evidence for this record (Dr. Pham third ruling set, 2026-10-28).",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ]
+  }
+ ],
+ "source_receipts": [
+  {
+   "pmid": "36043374",
+   "title_fetched": "Effects of sea buckthorn (Hippophae rhamnoides L.) on factors related to metabolic syndrome: A systematic review and meta-analysis of randomized controlled trial.",
+   "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=36043374&retmode=xml",
+   "full_text": false,
+   "sections_used": "PubMed abstract only"
+  },
+  {
+   "pmid": "23472020",
+   "title_fetched": "The hepatoprotective effect of sea buckthorn (Hippophae rhamnoides) berries on induced aflatoxin B1 poisoning in chickens 1.",
+   "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=23472020&retmode=xml",
+   "full_text": false,
+   "sections_used": "PubMed abstract only (nonhuman)"
+  },
+  {
+   "pmid": "20554904",
+   "title_fetched": "Oral sea buckthorn oil attenuates tear film osmolarity and symptoms in individuals with dry eye.",
+   "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=20554904&retmode=xml",
+   "full_text": false,
+   "sections_used": "PubMed abstract; OpenAlex bronze copy (https://www.sciencedirect.com/science/article/pii/S0022316622070304/pdf) blocked automated access"
+  }
+ ]
+}

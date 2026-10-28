@@ -1,0 +1,16 @@
+{
+ "record_id": "INGR_LEMON_BALM",
+ "decision": "held: source inaccessible. 34449930 (Phytother Res 2021) has no open-access full text, so included trials, preparations, doses, durations and populations cannot be verified as Dr. Pham's source-content hold requires.",
+ "summary": "The abstract reports pooled RCT improvements versus placebo in anxiety (SMD -0.98, 95% CI -1.63 to -0.33) and depression (SMD -0.47, -0.73 to -0.21), mostly in acute settings, with high heterogeneity and few trials. Without methods and trial tables no context can be completed; the record stays held.",
+ "record_updates": {},
+ "study_contexts": [],
+ "source_receipts": [
+  {
+   "pmid": "34449930",
+   "title_fetched": "The effects of lemon balm (Melissa officinalis L.) on depression and anxiety in clinical trials: A systematic review and meta-analysis.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/34449930/",
+   "full_text": false,
+   "sections_used": "Abstract only; subscription"
+  }
+ ]
+}

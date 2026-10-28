@@ -1,0 +1,222 @@
+{
+ "record_id": "INGR_LACTOFERRIN",
+ "decision": "held: per Dr. Pham's fifth ruling set, the retracted-trial analysis is finished and the surviving outcomes do not meet the credit rules. Rezk 2016 (PMID 26037728, retraction 37466255) is only in the haemoglobin pool (Figure 4, 14.9% weight; 11.80 g/L in Results and the forest plot, misprinted as g/dL in the abstract), which is not accepted. The serum iron (WMD 41.44 ug/dL, 7 rows) and ferritin (WMD 13.6 ng/mL, 6 rows) pools do not contain Rezk and survive as printed. They still fail the credit rules: 3 of their rows are non-randomized (Paesano 2014; Lepanto 2018 x2; Table S1), no lactoferrin dose or form is reported anywhere in the source including Table S1, the comparator is ferrous sulfate (active, not placebo), the outcomes are iron-status surrogates, and the only double-blind RCT (Nappi 2009) is null. Exact remaining item for Dr. Pham: context ingr_lactoferrin_35276902_exact_source; lactoferrin vs ferrous sulfate in women with ID/IDA, mostly pregnant; serum iron/ferritin superiority from mixed randomized and non-randomized rows with no reported dose. Proposed conclusion: no credit for the record's assessed use (it declares no health-goal claim; labels usually claim immune support). Lactoferrin nutrition and safety stay separate.",
+ "summary": "19639462 abstract: 100 pregnant women with iron-deficiency anaemia, bovine lactoferrin 100 mg twice daily vs ferrous sulfate, with comparable haematological improvement and fewer gastrointestinal effects; this is an active-comparator iron-status finding, not immune evidence. 35276902 (Nutrients 2022) is open access, but its retracted-input hold governs; the existing pending context is left unchanged. The record declares no health-goal claim and stays held.",
+ "record_updates": {},
+ "study_contexts": [
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "ingr_lactoferrin_35276902_exact_source",
+   "components": [
+    "INGR_LACTOFERRIN"
+   ],
+   "source_pmids": [
+    "35276902"
+   ],
+   "identity_scope": "ingredient_general",
+   "identity": {
+    "chemical_form": "Oral milk-derived (bovine) lactoferrin; trial-specific formulations"
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "meta_analysis",
+   "component_registration_status": "fully_registered",
+   "condition": "iron_deficiency_anemia",
+   "purpose": "treatment",
+   "review_status": "clinician_approved",
+   "scoring_eligible": false,
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "trial_family": "source_35276902",
+   "population": {
+    "age_group": "adult",
+    "description": "11 studies from 8 articles (9 randomized, 2 non-randomized); 8 in people with iron deficiency or iron-deficiency anaemia; 6 in pregnant and 4 in non-pregnant women (some with hereditary thrombophilia); 680 lactoferrin vs 582 ferrous sulfate participants (Results)."
+   },
+   "study_design": "Systematic review and random-effects meta-analysis of lactoferrin versus ferrous sulfate (active comparator, no placebo); primary outcomes serum iron, serum ferritin and haemoglobin.",
+   "outcomes": [
+    {
+     "name": "Serum iron vs ferrous sulfate: WMD 41.44 ug/dL (95% CI 26.29-56.59), 7 study rows in Figure 2 (text says 8), I2 98%; Rezk 2016 not in this pool; Nappi 2009 row null (-0.85)",
+     "hierarchy": "primary",
+     "kind": "surrogate",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "Serum ferritin: WMD 13.6 ng/mL (4.53-22.66), 6 rows (Figure 3), I2 99%; Rezk not in this pool; Nappi row null (0.40)",
+     "hierarchy": "primary",
+     "kind": "surrogate",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "Haemoglobin: WMD 11.80 g/L (8.19-15.41), I2 96% (Results and Figure 4, units g/L; the abstract misprints 11.80 g/dL); Figure 4 has 8 rows (text says 9) and includes the retracted Rezk 2016 trial (PMID 26037728; MD 11.50 g/L, weight 14.9%); not accepted as a pooled inference",
+     "hierarchy": "primary",
+     "kind": "surrogate",
+     "direction": "mixed",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "Fractional iron absorption lower with lactoferrin (WMD -2.08%); IL-6 lower (WMD -45.59 pg/mL)",
+     "hierarchy": "secondary",
+     "kind": "surrogate",
+     "direction": "mixed",
+     "outcome_role": "direct_between_group_effect"
+    }
+   ],
+   "limitations": [
+    "Haemoglobin unit discrepancy recorded: Results text and Figure 4 report 11.80 g/L; the abstract prints 11.80 g/dL (a tenfold error). The full-text/forest-plot basis (g/L) is used.",
+    "Retracted included trial: Rezk et al. 2016 (PMID 26037728; retraction notice 37466255) contributes only to the haemoglobin pool (Figure 4, 14.9% weight). Serum iron (Figure 2) and ferritin (Figure 3) pools do not include it and are reported as printed. The haemoglobin estimate is not recomputed here and is not accepted.",
+    "Study counts differ between text and forest plots (serum iron 8 vs 7 rows; haemoglobin 9 vs 8 rows); retained, not resolved.",
+    "Active-comparator (ferrous sulfate) surrogate outcomes in iron deficiency, mostly pregnancy; most pooled rows are from the Paesano/Lepanto groups with unclear or high risk-of-bias items; not immune or general-wellness evidence.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28.",
+    "Supplementary Table S1 (retrieved 2026-10-28 from the Europe PMC supplementary files) lists intervention only as 'lactoferrin; ferrous sulfate' with duration (28 days to 8 weeks, or until delivery) and gives no lactoferrin dose, form or iron content; dose is recorded as not reported by the source.",
+    "Surviving pools without Rezk: serum iron (Figure 2, 7 rows: Lepanto 2018 x2, Nappi 2009, Paesano 2006/2010-1/2010-2/2014) and ferritin (Figure 3, 6 rows) do not contain Rezk 2016, so their printed conclusions are unaffected by the retraction. However, Table S1 marks Paesano 2014 and both Lepanto 2018 cohorts as non-randomized (populations with hereditary thrombophilia), these carry high/unclear risk-of-bias items, most rows come from one research group, and the one double-blind RCT (Nappi 2009) is null on serum iron (-0.85) and ferritin (0.40). The pools are therefore not meta-analyses of RCTs only and do not meet the credit rules.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ],
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "mg",
+    "values": [],
+    "dose_status": "source_not_reported",
+    "dose_basis": "not_applicable",
+    "duration_basis": "participant_specific",
+    "duration_days": null,
+    "administration_frequency": "Not reported by source (Table S1 lists no regimen).",
+    "dosage_forms": [
+     "not reported in main text: oral lactoferrin preparations"
+    ],
+    "co_therapies": [
+     "Active comparator ferrous sulfate; no placebo."
+    ],
+    "reported_regimen": "Table S1: lactoferrin vs ferrous sulfate, 28-30 days (most), 8 weeks (Rezk), 90 days (Paesano 2010-2) or until delivery (Paesano 2014); no lactoferrin dose reported in the main text or Table S1.",
+    "normalization": {
+     "basis": "No scalar pooled dose."
+    },
+    "source_provenance": {
+     "pmid": "35276902",
+     "location": "Results 3.1-3.6; Figures 2-4 forest plots; Supplementary Table S1 (characteristics, design R/DB/non-randomized, durations; no doses)",
+     "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8838920/"
+    }
+   },
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability"
+   },
+   "included_study_pmids": [
+    "26037728",
+    "16936810",
+    "24590680",
+    "20646353",
+    "19639462",
+    "30298070",
+    "16469988",
+    "32886113"
+   ]
+  },
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "ingr_lactoferrin_19639462_pregnancy_ida",
+   "components": [
+    "INGR_LACTOFERRIN"
+   ],
+   "source_pmids": [
+    "19639462"
+   ],
+   "identity_scope": "exact_form",
+   "identity": {
+    "chemical_form": "Bovine lactoferrin, 100 mg capsule"
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "direct_rct",
+   "component_registration_status": "fully_registered",
+   "condition": "iron_deficiency_anemia_pregnancy",
+   "purpose": "treatment",
+   "review_status": "clinician_approved",
+   "scoring_eligible": false,
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "trial_family": "19639462",
+   "population": {
+    "age_group": "adult",
+    "description": "100 healthy pregnant women with iron-deficiency anaemia at a university obstetrics clinic (lactoferrin n=49, ferrous sulfate n=48 analysed)."
+   },
+   "study_design": "Prospective randomized controlled double-blind trial versus active comparator ferrous sulfate 520 mg once daily; 30 days.",
+   "outcomes": [
+    {
+     "name": "Main outcome haemoglobin: increased in both groups; no significant difference between lactoferrin and ferrous sulfate",
+     "hierarchy": "primary",
+     "kind": "patient_important",
+     "direction": "null",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "Serum ferritin and iron rose and TIBC fell in both groups without between-group difference; abdominal pain and constipation scores higher with ferrous sulfate",
+     "hierarchy": "secondary",
+     "kind": "patient_important",
+     "direction": "mixed",
+     "outcome_role": "direct_between_group_effect"
+    }
+   ],
+   "limitations": [
+    "Active-comparator equivalence-type result, not placebo-controlled efficacy; 30-day follow-up; pregnancy iron-deficiency anaemia only, not immune or general use.",
+    "Verified from the PubMed abstract only (full text subscription-only); the abstract states design, capsule strength, regimen, population and main outcome.",
+    "Not scoring eligible: no placebo-controlled benefit and the record declares no health-goal claim.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ],
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "mg",
+    "values": [
+     200
+    ],
+    "dose_status": "verified",
+    "dose_basis": "nominal_assigned_arm",
+    "duration_basis": "fixed_protocol",
+    "duration_days": 30,
+    "administration_frequency": "One 100 mg capsule twice daily.",
+    "dosage_forms": [
+     "oral capsule"
+    ],
+    "co_therapies": [
+     "Comparator arm received ferrous sulfate 520 mg once daily; no co-administration."
+    ],
+    "reported_regimen": "Bovine lactoferrin 100 mg capsule twice daily (200 mg/day) for 30 days.",
+    "normalization": {
+     "basis": "2 x 100 mg = 200 mg/day as assigned."
+    },
+    "source_provenance": {
+     "pmid": "19639462",
+     "location": "PubMed abstract: Design, Population, Methods, Main outcome measures, Results",
+     "source_url": "https://pubmed.ncbi.nlm.nih.gov/19639462/"
+    },
+    "duration_as_printed": {
+     "value": 30,
+     "unit": "days"
+    }
+   },
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability"
+   }
+  }
+ ],
+ "source_receipts": [
+  {
+   "pmid": "35276902",
+   "title_fetched": "Comparative Effects between Oral Lactoferrin and Ferrous Sulfate Supplementation on Iron-Deficiency Anemia: A Comprehensive Review and Meta-Analysis of Clinical Trials.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/35276902/",
+   "full_text": true,
+   "sections_used": "Full text PMC8838920: Methods; Results; Figures 2-4 forest plots (images); abstract unit misprint; reference 31 = Rezk 2016"
+  },
+  {
+   "pmid": "19639462",
+   "title_fetched": "Efficacy and tolerability of oral bovine lactoferrin compared to ferrous sulfate in pregnant women with iron deficiency anemia: a prospective controlled randomized study.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/19639462/",
+   "full_text": false,
+   "sections_used": "Abstract only; subscription"
+  }
+ ]
+}

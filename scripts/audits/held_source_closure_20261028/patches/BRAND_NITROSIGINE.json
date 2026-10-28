@@ -1,0 +1,313 @@
+{
+ "record_id": "BRAND_NITROSIGINE",
+ "decision": "closed_credit",
+ "summary": "Only 34959823 meets the eligibility rule: a randomized double-blind crossover in young healthy adults in which a single 1.5 g Nitrosigine dose improved total RBANS and immediate memory (the primary aim) but no other domains, with internal reporting discrepancies (16 vs 19 completers; 8 vs 12 g dextrose). It supports a narrow acute focus/memory credit. The FMD study (32093766) is a vascular surrogate and the TMT studies (27869715) report mostly within-group changes without a designated primary outcome; both are approved without credit.",
+ "record_updates": {
+  "applicability": {
+   "scope": "ingredient",
+   "supported_outcomes": [
+    "Focus & Mental Clarity"
+   ],
+   "studied_population": "Young healthy adults (about 18-28) taking a single 1.5 g dose of Nitrosigine before cognitive testing.",
+   "source_pmids": [
+    "34959823"
+   ],
+   "reviewed_at": "2026-10-28",
+   "excluded_claim_terms": [
+    "heart disease",
+    "cardiovascular disease"
+   ]
+  }
+ },
+ "study_contexts": [
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "brand_nitrosigine_34959823",
+   "components": [
+    "BRAND_NITROSIGINE"
+   ],
+   "source_pmids": [
+    "34959823"
+   ],
+   "identity_scope": "branded_material",
+   "identity": {
+    "branded_material": "Nitrosigine",
+    "manufacturer": "Nutrition21 LLC",
+    "standardization": "Inositol-stabilized arginine silicate (ASI); not isolated arginine"
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "direct_rct",
+   "component_registration_status": "fully_registered",
+   "condition": "acute_cognitive_tasks",
+   "purpose": "challenge",
+   "review_status": "clinician_approved",
+   "scoring_eligible": true,
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "trial_family": "34959823",
+   "population": {
+    "age_group": "adult",
+    "description": "Young healthy adults (University of Arkansas), mean age about 21 (range 18-28), 63% female; abstract reports 19 completed, Methods report 19 enrolled and 16 completed both trials."
+   },
+   "study_design": "Randomized double-blind placebo-controlled crossover; single dose, cognitive tests before and 60 minutes after; trials at least 7 days apart.",
+   "outcomes": [
+    {
+     "name": "Primary aim cognitive battery: total RBANS and immediate memory improved vs placebo (repeated-measures ANOVA, p<0.05)",
+     "hierarchy": "primary",
+     "kind": "patient_important",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "Other RBANS domains and digital cognitive assessments: no significant differences",
+     "hierarchy": "primary",
+     "kind": "patient_important",
+     "direction": "null",
+     "outcome_role": "direct_between_group_effect"
+    }
+   ],
+   "limitations": [
+    "Single acute 1.5 g dose in young healthy adults; no evidence for chronic use, older adults or sustained energy.",
+    "Reporting discrepancies retained: completers 19 (abstract) vs 16 of 19 (Methods); dextrose vehicle 12 g (abstract) vs 8 g (Methods), present in both arms.",
+    "Small, company-linked evidence base; exact Nitrosigine only.",
+    "Returned decision A014: source-content hold; methods now verified from full text.",
+    "Dr. Pham's fourth ruling set (2026-10-28): limited, outcome-specific acute cognition credit for the exact Nitrosigine formula only.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ],
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "mg",
+    "values": [
+     1500
+    ],
+    "dose_status": "verified",
+    "dose_basis": "single_challenge",
+    "duration_basis": "fixed_protocol",
+    "duration_days": 1,
+    "administration_frequency": "Single oral dose 60 minutes before testing.",
+    "dosage_forms": [
+     "not reported by source: oral ASI preparation with dextrose (physical form not specified in Methods)"
+    ],
+    "co_therapies": [
+     "Dextrose vehicle in both arms (8 g per Methods; 12 g per abstract)."
+    ],
+    "reported_regimen": "Single 1.5 g ASI dose with dextrose; placebo dextrose only; crossover at least 7 days apart.",
+    "normalization": {
+     "basis": "1.5 g ASI as assigned; single challenge."
+    },
+    "source_provenance": {
+     "pmid": "34959823",
+     "location": "Abstract; Methods (participants, protocol, RBANS); Discussion (primary aims)",
+     "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8703995/"
+    },
+    "duration_as_printed": {
+     "value": 1,
+     "unit": "days"
+    }
+   },
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability"
+   }
+  },
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "brand_nitrosigine_32093766",
+   "components": [
+    "BRAND_NITROSIGINE"
+   ],
+   "source_pmids": [
+    "32093766"
+   ],
+   "identity_scope": "branded_material",
+   "identity": {
+    "branded_material": "Nitrosigine",
+    "manufacturer": "Nutrition21 LLC",
+    "standardization": "Inositol-stabilized arginine silicate (ASI); not isolated arginine"
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "direct_rct",
+   "component_registration_status": "fully_registered",
+   "condition": "acute_vascular_response",
+   "purpose": "challenge",
+   "review_status": "clinician_approved",
+   "scoring_eligible": false,
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "trial_family": "32093766",
+   "population": {
+    "age_group": "adult",
+    "description": "Healthy normotensive physically active young adults: 16 men and 8 women (abstract)."
+   },
+   "study_design": "Randomized double-blind within-subject three-trial design (placebo, citrulline malate 8 g, Nitrosigine 1.5 g) with 7-day washouts; FMD before and 60 minutes after.",
+   "outcomes": [
+    {
+     "name": "Flow-mediated dilation (the study's purpose): supplement x time p<0.001; Nitrosigine +31% vs placebo -2%; allometric scaled +23% vs 0.60%",
+     "hierarchy": "not_reported",
+     "kind": "surrogate",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    }
+   ],
+   "limitations": [
+    "Acute endothelial surrogate in young active adults; not cardiovascular-health, blood-pressure or exercise-performance evidence; no designated primary outcome label.",
+    "Not scoring eligible for the record's energy, focus or heart-health claims.",
+    "Returned decision A014: source-content hold; methods verified.",
+    "Dr. Pham's fourth ruling set (2026-10-28): acute vascular (FMD) measures are not disease prevention or long-term cardiovascular health.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ],
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "mg",
+    "values": [
+     1500
+    ],
+    "dose_status": "verified",
+    "dose_basis": "single_challenge",
+    "duration_basis": "fixed_protocol",
+    "duration_days": 1,
+    "administration_frequency": "Single oral dose 60 minutes before FMD.",
+    "dosage_forms": [
+     "oral powder mixed in 16 oz flavored water"
+    ],
+    "co_therapies": [
+     "8 g dextrose added to every drink."
+    ],
+    "reported_regimen": "Single 1.5 g Nitrosigine powder with 8 g dextrose in 16 oz water.",
+    "normalization": {
+     "basis": "1.5 g as assigned; single challenge."
+    },
+    "source_provenance": {
+     "pmid": "32093766",
+     "location": "Abstract; Methods (supplements and preparation); Results",
+     "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7041093/"
+    },
+    "duration_as_printed": {
+     "value": 1,
+     "unit": "days"
+    }
+   },
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability"
+   }
+  },
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "brand_nitrosigine_27869715",
+   "components": [
+    "BRAND_NITROSIGINE"
+   ],
+   "source_pmids": [
+    "27869715"
+   ],
+   "identity_scope": "branded_material",
+   "identity": {
+    "branded_material": "Nitrosigine",
+    "manufacturer": "Nutrition21 LLC",
+    "standardization": "Inositol-stabilized arginine silicate (ASI); not isolated arginine"
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "direct_rct",
+   "component_registration_status": "fully_registered",
+   "condition": "executive_function_tasks",
+   "purpose": "challenge",
+   "review_status": "clinician_approved",
+   "scoring_eligible": false,
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "trial_family": "27869715",
+   "population": {
+    "age_group": "adult",
+    "description": "Healthy males: Study 1 n=11 with moderate exercise routines (14 days); Study 2 n=16 with limited exercise (3 days); BMI 19-29.9."
+   },
+   "study_design": "Two double-blind placebo-controlled crossover studies using the Trail Making Test (Parts A and B); IRB protocols N21-ARM-2014 and N21-SORE-2014.",
+   "outcomes": [
+    {
+     "name": "Study 1: TMT-B time decreased 28% from baseline after 14 days (p=0.045) - within-group",
+     "hierarchy": "not_reported",
+     "kind": "patient_important",
+     "direction": "mixed",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "Study 2: TMT-B 33% faster than placebo 10 minutes after dosing (p=0.024); 35% faster than baseline after 3 days (within-group)",
+     "hierarchy": "not_reported",
+     "kind": "patient_important",
+     "direction": "mixed",
+     "outcome_role": "direct_between_group_effect"
+    }
+   ],
+   "limitations": [
+    "No primary outcome designated; most findings are within-group changes; very small samples; sponsor-linked.",
+    "Not scoring eligible.",
+    "Returned decision A014: source-content hold; methods verified.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ],
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "mg",
+    "values": [
+     1500
+    ],
+    "dose_status": "verified",
+    "dose_basis": "nominal_assigned_arm",
+    "duration_basis": "fixed_protocol",
+    "duration_days": 14,
+    "administration_frequency": "1500 mg/day for 14 days (Study 1) or 3 days (Study 2).",
+    "dosage_forms": [
+     "not reported in retrieved full text: oral ASI preparation"
+    ],
+    "co_therapies": [
+     "No assigned co-therapy."
+    ],
+    "reported_regimen": "ASI 1500 mg/day for 14 days (Study 1, n=11) or 3 days (Study 2, n=16), crossover with placebo.",
+    "normalization": {
+     "basis": "1500 mg/day as assigned."
+    },
+    "source_provenance": {
+     "pmid": "27869715",
+     "location": "Abstract; Methods (subjects for Study 1 and Study 2, IRB protocols)",
+     "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5133120/"
+    },
+    "duration_as_printed": {
+     "value": 14,
+     "unit": "days"
+    }
+   },
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability"
+   }
+  }
+ ],
+ "source_receipts": [
+  {
+   "pmid": "34959823",
+   "title_fetched": "Acute Inositol-Stabilized Arginine Silicate Improves Cognitive Outcomes in Healthy Adults.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/34959823/",
+   "full_text": true,
+   "sections_used": "Abstract; Methods; Discussion"
+  },
+  {
+   "pmid": "32093766",
+   "title_fetched": "Acute effects of Nitrosigine® and citrulline malate on vasodilation in young adults.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/32093766/",
+   "full_text": true,
+   "sections_used": "Abstract; Methods; Results"
+  },
+  {
+   "pmid": "27869715",
+   "title_fetched": "Randomized Prospective Double-Blind Studies to Evaluate the Cognitive Effects of Inositol-Stabilized Arginine Silicate in Healthy Physically Active Adults.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/27869715/",
+   "full_text": true,
+   "sections_used": "Abstract; Methods"
+  }
+ ]
+}

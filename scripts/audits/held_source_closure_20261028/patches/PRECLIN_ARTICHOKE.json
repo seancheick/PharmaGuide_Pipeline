@@ -1,0 +1,44 @@
+{
+ "record_id": "PRECLIN_ARTICHOKE",
+ "decision": "held: source inaccessible. All five declared sources (14653829, 18424099, 22746542, 28609140, 34569671) are subscription-only with no PMC/Europe PMC full text, so preparations, doses, forms, populations and primary outcomes cannot be verified as Dr. Pham's source-content hold requires.",
+ "summary": "Titles and abstracts indicate a 247-patient functional-dyspepsia RCT of artichoke leaf extract, two placebo-controlled hypercholesterolaemia RCTs and two lipid meta-analyses, which fits Dr. Pham's instruction not to treat the record as preclinical-only. Without full methods no context can be completed; the record stays held.",
+ "record_updates": {},
+ "study_contexts": [],
+ "source_receipts": [
+  {
+   "pmid": "14653829",
+   "title_fetched": "Efficacy of artichoke leaf extract in the treatment of patients with functional dyspepsia: a six-week placebo-controlled, double-blind, multicentre trial.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/14653829/",
+   "full_text": false,
+   "sections_used": "PubMed record only; subscription"
+  },
+  {
+   "pmid": "18424099",
+   "title_fetched": "Artichoke leaf extract (Cynara scolymus) reduces plasma cholesterol in otherwise healthy hypercholesterolemic adults: a randomized, double blind placebo controlled trial.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/18424099/",
+   "full_text": false,
+   "sections_used": "PubMed record only; subscription"
+  },
+  {
+   "pmid": "22746542",
+   "title_fetched": "Beneficial effects of artichoke leaf extract supplementation on increasing HDL-cholesterol in subjects with primary mild hypercholesterolaemia: a double-blind, randomized, placebo-controlled trial.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/22746542/",
+   "full_text": false,
+   "sections_used": "PubMed record only; subscription"
+  },
+  {
+   "pmid": "28609140",
+   "title_fetched": "Lipid-lowering activity of artichoke extracts: A systematic review and meta-analysis.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/28609140/",
+   "full_text": false,
+   "sections_used": "PubMed record only; subscription"
+  },
+  {
+   "pmid": "34569671",
+   "title_fetched": "Effects of artichoke leaf extract supplementation or artichoke juice consumption on lipid profile: A systematic review and dose-response meta-analysis of randomized controlled trials.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/34569671/",
+   "full_text": false,
+   "sections_used": "PubMed record only; subscription"
+  }
+ ]
+}

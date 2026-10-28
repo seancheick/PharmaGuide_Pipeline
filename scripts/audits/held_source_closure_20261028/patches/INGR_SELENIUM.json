@@ -1,0 +1,412 @@
+{
+ "record_id": "INGR_SELENIUM",
+ "decision": "closed_credit",
+ "summary": "Per Dr. Pham's fifth ruling set, the retracted Sun 2021 trial (PMID 34745288; retraction notice 38125133) was traced through every pooled outcome in 38243784 (PMC10951571). It is absent from the primary TSH analysis in Hashimoto thyroiditis without thyroid hormone replacement (Figure 2: 7 cohorts, 869 participants, SMD -0.21, 95% CI -0.41 to -0.02, I2 0%), so that primary result survives and meets the credit rules. Credit is scoped to that thyroid-lab outcome in Hashimoto thyroiditis, label-gated to a Hashimoto claim, with symptom claims excluded. Pools containing Sun (all-patient TSH, TPOAb, TGAb, cytokines) are not credited. 37335715 (mostly uncontrolled) stays approved without credit; 20883174 and 27702392 have no open full text. The reference-level hold on 38243784 is lifted in record_updates with the disposition recorded. Selenium nutrition and safety stay separate.",
+ "record_updates": {
+  "references_structured": [
+   {
+    "type": "pubmed",
+    "authority": "NCBI PubMed",
+    "pmid": "38243784",
+    "doi": "10.1089/thy.2023.0556",
+    "title": "Selenium Supplementation in Patients with Hashimoto Thyroiditis: A Systematic Review and Meta-Analysis of Randomized Clinical Trials.",
+    "citation": "Thyroid : official journal of the American Thyroid Association (2024-03-01)",
+    "url": "https://pubmed.ncbi.nlm.nih.gov/38243784/",
+    "published_date": "2024-03-01",
+    "publication_types": [
+     "Journal Article",
+     "Meta-Analysis",
+     "Systematic Review"
+    ],
+    "mesh_terms": [
+     "Humans",
+     "Autoantibodies",
+     "Dietary Supplements",
+     "Hashimoto Disease",
+     "Randomized Controlled Trials as Topic",
+     "Selenium",
+     "Thyrotropin"
+    ],
+    "supplementary_concepts": [],
+    "evidence_grade": "systematic_review",
+    "retracted": false,
+    "supports_claims": [],
+    "verification_source": "pubmed_eutils",
+    "scoring_eligible": true,
+    "notes": "The2024thyroid synthesis includes Sun2021 PMID34745288, retractedDecember2023 (notice38125133). Its pooled findings cannot supply affirmative clinical credit without a qualifying disposition addressing the retracted input. The synthesis itself is not labeled retracted; independent selenium nutrient authority, other sources, quantities and safety remain intact. Disposition 2026-10-28 (Dr. Pham fifth ruling set): retracted Sun 2021 (PMID 34745288; notice 38125133) traced through every pool; it is absent from the primary TSH-without-THRT pool (Figure 2), which is the only finding credited; pools containing Sun (all-patient TSH, TPOAb, TGAb, cytokines) are not accepted."
+   },
+   {
+    "type": "pubmed",
+    "authority": "NCBI PubMed",
+    "pmid": "37335715",
+    "doi": "10.1097/MD.0000000000033791",
+    "title": "Clinical efficacy of selenium supplementation in patients with Hashimoto thyroiditis: A systematic review and meta-analysis.",
+    "citation": "Medicine (2023-05-19)",
+    "url": "https://pubmed.ncbi.nlm.nih.gov/37335715/",
+    "published_date": "2023-05-19",
+    "publication_types": [
+     "Meta-Analysis",
+     "Systematic Review",
+     "Journal Article"
+    ],
+    "mesh_terms": [
+     "Humans",
+     "Selenium",
+     "Dietary Supplements",
+     "Hashimoto Disease",
+     "Iodide Peroxidase",
+     "Thyroglobulin"
+    ],
+    "supplementary_concepts": [],
+    "evidence_grade": "systematic_review",
+    "retracted": false,
+    "supports_claims": [],
+    "verification_source": "pubmed_eutils"
+   },
+   {
+    "type": "pubmed",
+    "authority": "NCBI PubMed",
+    "pmid": "20883174",
+    "doi": "10.1089/thy.2009.0351",
+    "title": "Selenium supplementation in the treatment of Hashimoto's thyroiditis: a systematic review and a meta-analysis.",
+    "citation": "Thyroid : official journal of the American Thyroid Association (2010-10-01)",
+    "url": "https://pubmed.ncbi.nlm.nih.gov/20883174/",
+    "published_date": "2010-10-01",
+    "publication_types": [
+     "Journal Article",
+     "Meta-Analysis",
+     "Systematic Review"
+    ],
+    "mesh_terms": [
+     "Autoantibodies",
+     "Female",
+     "Hashimoto Disease",
+     "Humans",
+     "Iodide Peroxidase",
+     "Randomized Controlled Trials as Topic",
+     "Selenium"
+    ],
+    "supplementary_concepts": [],
+    "evidence_grade": "systematic_review",
+    "retracted": false,
+    "supports_claims": [],
+    "verification_source": "pubmed_eutils"
+   },
+   {
+    "type": "pubmed",
+    "authority": "NCBI PubMed",
+    "pmid": "27702392",
+    "doi": "10.1089/thy.2016.0256",
+    "title": "Selenium Supplementation Significantly Reduces Thyroid Autoantibody Levels in Patients with Chronic Autoimmune Thyroiditis: A Systematic Review and Meta-Analysis.",
+    "citation": "Thyroid : official journal of the American Thyroid Association (2016-12-01)",
+    "url": "https://pubmed.ncbi.nlm.nih.gov/27702392/",
+    "published_date": "2016-12-01",
+    "publication_types": [
+     "Journal Article",
+     "Meta-Analysis",
+     "Systematic Review"
+    ],
+    "mesh_terms": [
+     "Autoantibodies",
+     "Dietary Supplements",
+     "Humans",
+     "Iodide Peroxidase",
+     "Selenium",
+     "Thyroglobulin",
+     "Thyroid Gland",
+     "Thyroiditis, Autoimmune"
+    ],
+    "supplementary_concepts": [],
+    "evidence_grade": "systematic_review",
+    "retracted": false,
+    "supports_claims": [],
+    "verification_source": "pubmed_eutils"
+   }
+  ],
+  "applicability": {
+   "scope": "ingredient",
+   "supported_outcomes": [
+    "hashimoto_thyroiditis"
+   ],
+   "studied_population": "People with Hashimoto thyroiditis not on thyroid hormone replacement (euthyroid, subclinical or overt hypothyroid), mostly taking 200 μg/day selenium as selenomethionine, sodium selenite or selenium yeast for 3-12 months.",
+   "source_pmids": [
+    "38243784"
+   ],
+   "reviewed_at": "2026-10-28",
+   "excluded_claim_terms": [
+    "fatigue",
+    "energy",
+    "weight",
+    "mood",
+    "hair",
+    "fertility",
+    "cancer",
+    "immune"
+   ]
+  }
+ },
+ "study_contexts": [
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "ingr_selenium_38243784_scoped_source",
+   "components": [
+    "INGR_SELENIUM"
+   ],
+   "source_pmids": [
+    "38243784"
+   ],
+   "identity_scope": "ingredient_general",
+   "identity": {
+    "chemical_form": "Selenium as selenomethionine, sodium selenite or selenium yeast (trial-specific)"
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "meta_analysis",
+   "component_registration_status": "fully_registered",
+   "condition": "hashimoto_thyroiditis",
+   "purpose": "treatment",
+   "review_status": "clinician_approved",
+   "scoring_eligible": true,
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "trial_family": "source_38243784",
+   "population": {
+    "age_group": "mixed",
+    "description": "35 parallel RCTs (42 cohorts, 2002-2021) in Hashimoto thyroiditis, 31-364 participants each, including children/adolescents (2 studies) and pregnant women (3); primary analysis in patients without thyroid hormone replacement (7 cohorts, 869)."
+   },
+   "study_design": "Systematic review and random-effects meta-analysis of RCTs; primary outcome TSH; RoB 2 (61% high risk, 39% some concerns for TSH) and GRADE.",
+   "outcomes": [
+    {
+     "name": "Primary TSH in Hashimoto thyroiditis without THRT: SMD -0.21 (95% CI -0.41 to -0.02), 7 cohorts (Negro 2016, Eskes 2014, Hu 2021, Krysiak 2012, Pilli 2015, Pirola 2016, Wang 2018), 869 participants, I2 0% (Figure 2); Sun 2021 not in this pool; only Hu 2021 individually significant",
+     "hierarchy": "primary",
+     "kind": "surrogate",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "TSH all patients: SMD -0.21 (-0.43 to 0.01), 26 cohorts, moderate quality; with THRT -0.24 (-0.65 to 0.16)",
+     "hierarchy": "primary",
+     "kind": "surrogate",
+     "direction": "null",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "TPOAb: SMD -0.96 (-1.36 to -0.56), 29 cohorts, I2 90% (includes Sun 2021); TGAb, fT4, fT3 and thyroid volume not significant; MDA reduced",
+     "hierarchy": "secondary",
+     "kind": "surrogate",
+     "direction": "mixed",
+     "outcome_role": "direct_between_group_effect"
+    }
+   ],
+   "limitations": [
+    "Retracted included trial: Sun 2021 (PMID 34745288; retraction notice PMID 38125133, Evid Based Complement Alternat Med 2023;2023:9785017), 129 overt-hypothyroid patients on THRT, selenium yeast 100 μg/day for 3 months, open-label vs no treatment. Because it enrolled THRT users it does not contribute to the primary TSH-without-THRT pool (7 cohorts, 869 participants). It does contribute to the all-patient TSH analysis (TSH extracted from graphs, footnote d), the TPOAb replacement-therapy subgroup (Figure 3: SMD -0.54, -1.09 to 0.01; 65 vs 64) and the cytokine pools (IL-2, IL-10, TNF-alpha). Those pools are reported as printed but not accepted, since no recomputation without Sun is published.",
+    "Surrogate thyroid markers only; risk of bias high in 61% of TSH studies and only 6 studies prospectively registered; no symptom or disease-progression outcome.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28.",
+    "Sun 2021 traced through each pooled outcome: primary TSH without THRT - absent (Figure 2), so the primary result survives unchanged; TSH all patients and TSH with THRT - present (THRT user cohort, values extracted from graphs); fT4/fT3/T4/T3 - Sun reports T4 and T3 only, contribution to the T4/T3 pools not separately resolved; TPOAb - present in the replacement-therapy subgroup (Figure 3, SMD -0.54); TGAb and cytokines (IL-2, IL-10, TNF-alpha) - present. All pools containing Sun are not accepted for credit.",
+    "Credit scope (Dr. Pham's fifth ruling set): thyroid-laboratory outcome (TSH) in people with Hashimoto thyroiditis not on thyroid hormone replacement only. Small effect (SMD -0.21, upper CI -0.02); 61% of TSH studies high risk of bias. No symptom, energy, weight, mood, hair, fertility or cancer claim, and no credit for TPOAb or antibody reduction (that pool includes the retracted trial). Selenium nutrition, the upper limit (EFSA 255 μg/day cited in the source) and safety stay separate.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ],
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "mg",
+    "values": [
+     0.06,
+     0.08,
+     0.083,
+     0.1,
+     0.166,
+     0.2,
+     0.4
+    ],
+    "dose_status": "verified",
+    "dose_basis": "not_applicable",
+    "duration_basis": "participant_specific",
+    "duration_days": null,
+    "administration_frequency": "Daily oral dosing per trial.",
+    "dosage_forms": [
+     "not reported in main text: oral selenium supplements (selenomethionine, sodium selenite or selenium yeast)"
+    ],
+    "co_therapies": [
+     "Thyroid hormone replacement in some cohorts (analysed separately); one arm pair also received zinc 30 mg/day (footnote f)."
+    ],
+    "reported_regimen": "Table 1: mostly 200 μg/day as selenomethionine (9 cohorts), sodium selenite (7) or selenium yeast (6); others 60-166 μg/day and 400 μg/day; 3-12 months.",
+    "normalization": {
+     "basis": "μg/day converted to mg (200 μg = 0.2 mg); per-trial values, not a pooled threshold."
+    },
+    "source_provenance": {
+     "pmid": "38243784",
+     "location": "Methods; Results incl. Table 1 (study rows and footnotes a-g), Table 2 pooled estimates, Figure 3 TPOAb forest plot (viewed on PMC), risk of bias",
+     "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10951571/"
+    }
+   },
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability"
+   },
+   "included_study_pmids": [
+    "22356267",
+    "18565817",
+    "23565426",
+    "20526530",
+    "27730079",
+    "25894865",
+    "12656658",
+    "23844613",
+    "27572248",
+    "11932302",
+    "33650299",
+    "29456972",
+    "18302514",
+    "30182359",
+    "22918596",
+    "30306604",
+    "25758370",
+    "34909430",
+    "31129812",
+    "25524327",
+    "20039895",
+    "17284630",
+    "27493883",
+    "26835425",
+    "28042649",
+    "34745288",
+    "32676110",
+    "16837619",
+    "30398407",
+    "28534148",
+    "23158484"
+   ]
+  },
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "ingr_selenium_37335715_scoped_source",
+   "components": [
+    "INGR_SELENIUM"
+   ],
+   "source_pmids": [
+    "37335715"
+   ],
+   "identity_scope": "ingredient_general",
+   "identity": {
+    "chemical_form": "Selenomethionine/L-selenomethionine (50-200 μg/day selenium); one arm combined with myo-inositol"
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "meta_analysis",
+   "component_registration_status": "fully_registered",
+   "condition": "hashimoto_thyroiditis",
+   "purpose": "treatment",
+   "review_status": "clinician_approved",
+   "scoring_eligible": false,
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "trial_family": "source_37335715",
+   "population": {
+    "age_group": "mixed",
+    "description": "7 controlled studies (as 7 datasets), 342 patients with Hashimoto thyroiditis in Poland, Italy, Turkey and Austria; mean age 12.3-48 years (one paediatric study); mostly women (Table 1)."
+   },
+   "study_design": "Systematic review and meta-analysis of 'controlled trials'; Table 1 shows only 2 placebo-controlled RCTs (Krysiak C 2012, Karanikas 2008) and 5 before-after comparisons versus pretreatment.",
+   "outcomes": [
+    {
+     "name": "TPOAb at 3 months: WMD -124.28 (95% CI -631.08 to 382.52), P=.631, I2 94.5%",
+     "hierarchy": "not_reported",
+     "kind": "surrogate",
+     "direction": "null",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "TPOAb at 6 months: WMD -284.00 (-553.41 to -14.60), I2 93.9%; TgAb at 6 months WMD -159.86 (-293.48 to -26.24), I2 85.3%",
+     "hierarchy": "not_reported",
+     "kind": "surrogate",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    }
+   ],
+   "limitations": [
+    "Not a meta-analysis of RCTs: 5 of 7 included comparisons are uncontrolled before-after versus pretreatment, and one arm adds myo-inositol 600 mg/day; not scoring eligible.",
+    "Antibody surrogates only; no symptom, quality-of-life or disease-progression outcome (Conclusions).",
+    "Returned decision A111: essentiality-to-universal-prevention inference rejected; no transfer outside Hashimoto thyroiditis.",
+    "Historical bibliography census (not independent scoring sources; actual included-publication membership is separately bound to the inspected source table): 30818086, 30354702, 28724185, 28293260, 22918596, 23155687, 18302514. Each intervention and comparison requires its own applicability assessment; citation in this bibliography grants no credit.",
+    "Included-study PMID membership was extracted from source Table(s) T1. These are source membership identifiers, not independent efficacy approvals or automatic trial replications. Exact table/citation mapping and unindexed citations are retained in the source receipt.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ],
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "mg",
+    "values": [
+     0.05,
+     0.083,
+     0.2
+    ],
+    "dose_status": "verified",
+    "dose_basis": "not_applicable",
+    "duration_basis": "participant_specific",
+    "duration_days": null,
+    "administration_frequency": "Daily oral dosing per study; within-day schedule not reported.",
+    "dosage_forms": [
+     "not reported by source: oral selenomethionine supplements"
+    ],
+    "co_therapies": [
+     "Background thyroid management varied; one arm combined selenium with myo-inositol 600 mg/day (Nordio B)."
+    ],
+    "reported_regimen": "Table 1: selenomethionine 200 μg/day (Krysiak A, B, C; Karanikas), L-selenomethionine 83 μg/day (Nordio A) or with myo-inositol 600 mg/day (Nordio B), L-selenomethionine 50 μg/day (Onal); 3-6 months.",
+    "normalization": {
+     "basis": "Selenium μg/day converted to mg (50 μg = 0.05 mg, 83 μg = 0.083 mg, 200 μg = 0.2 mg); per-study values, not a pooled threshold."
+    },
+    "source_provenance": {
+     "pmid": "37335715",
+     "location": "Abstract; Results (study characteristics, Table 1 design and doses; pooled TPOAb/TgAb by duration)",
+     "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10194801/"
+    }
+   },
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability"
+   },
+   "included_study_pmids": [
+    "30818086",
+    "30354702",
+    "28724185",
+    "28293260",
+    "22918596",
+    "23155687",
+    "18302514"
+   ]
+  }
+ ],
+ "source_receipts": [
+  {
+   "pmid": "38243784",
+   "title_fetched": "Selenium Supplementation in Patients with Hashimoto Thyroiditis: A Systematic Review and Meta-Analysis of Randomized Clinical Trials.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/38243784/",
+   "full_text": true,
+   "sections_used": "Abstract; Methods eligibility; Results risk of bias (TSH primary outcome); Table 1 (inspected, context not re-approved)"
+  },
+  {
+   "pmid": "37335715",
+   "title_fetched": "Clinical efficacy of selenium supplementation in patients with Hashimoto thyroiditis: A systematic review and meta-analysis.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/37335715/",
+   "full_text": true,
+   "sections_used": "Abstract; Results; Table 1"
+  },
+  {
+   "pmid": "20883174",
+   "title_fetched": "Selenium supplementation in the treatment of Hashimoto's thyroiditis: a systematic review and a meta-analysis.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/20883174/",
+   "full_text": false,
+   "sections_used": "Not fetched beyond abstract; subscription"
+  },
+  {
+   "pmid": "27702392",
+   "title_fetched": "Selenium Supplementation Significantly Reduces Thyroid Autoantibody Levels in Patients with Chronic Autoimmune Thyroiditis: A Systematic Review and Meta-Analysis.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/27702392/",
+   "full_text": false,
+   "sections_used": "Not fetched beyond abstract; subscription"
+  }
+ ],
+ "integration_notes": [
+  "2026-10-28 integrator: condition gate kept (supported_outcomes ['hashimoto_thyroiditis'] equals the context condition). Sean's decision is that a claim-free label may earn scoped condition credit, but today the population limits (e.g. men-only, pregnancy, children) are enforced only inside this gate, so ungating via data would drop those safeguards. Claim-free scoped credit waits for the shared applicability change (no claim / aligned claim / unrelated claim / population mismatch) under /pg-scoring-change."
+ ]
+}

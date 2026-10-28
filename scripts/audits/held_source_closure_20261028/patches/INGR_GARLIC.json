@@ -1,0 +1,154 @@
+{
+ "record_id": "INGR_GARLIC",
+ "decision": "closed_credit",
+ "summary": "Per Dr. Pham's signed 2026-10-28 ruling, the record gets partial, preparation-specific credit for blood pressure in hypertensive adults. Ried 2020 (32010325; 12 RCTs, 553 hypertensive adults) found SBP -8.3±1.9 mmHg and DBP -5.5±1.9 mmHg (8 trials, 374) with Kwai/Allicor/Japanese garlic powders (600-900 mg/day) or Kyolic aged garlic extract (about 1,200 mg/day), median 12 weeks (Results; Table I). Applicability requires a label naming Kwai, Allicor or Kyolic, and the limitation that no single effect size or dose fits every extract is kept. The record-level hold is lifted (scoring_eligible set to null; the integrator should delete the key).",
+ "record_updates": {
+  "scoring_eligible": null,
+  "effect_direction_rationale": "Signed limited source-specific findings retained; no universal preparation, population, purpose or regimen equivalence. scoring_eligible=false newly enforces unresolved current-product qualification; it adds no penalty, declares no inefficacy and does not override separate branded or safety holds. Superseded 2026-10-28: the record-level scoring_eligible=false is lifted by Dr. Pham's signed ruling; credit is limited to the named preparations through applicability.",
+  "notes": "Retained review32010325 supports a qualified blood-pressure finding in hypertensive adults for specified garlic preparations. Its12trials/553participants are the SBP meta-analysis;8trials/374 contributed DBP. This is not cardiovascular-event prevention, normotensive benefit, immune efficacy or universal garlic-dose equivalence. Actual current labels use varied powders/oils/raw-equivalent concentrates/agedblack materials and combinations without established correspondence to TableI products. Retain preparation/regimen hold and current NCCIH bleeding/anticoagulant/aspirin/surgery/pregnancy-lactation qualifications. Dr. Pham's signed ruling of 2026-10-28 grants partial, preparation-specific blood-pressure credit in hypertensive adults for the preparations named in PMID 32010325 (Kwai, Allicor, Kyolic), with no single effect size or dose for every extract; this resolves the record-level scoring hold.",
+  "applicability": {
+   "scope": "ingredient",
+   "required_form_terms": [
+    "Kwai",
+    "Allicor",
+    "Kyolic"
+   ],
+   "supported_outcomes": [
+    "cardiovascular"
+   ],
+   "studied_population": "Adults with hypertension, untreated or on established antihypertensive medication, taking Kwai or Allicor garlic powder or Kyolic aged garlic extract for 8-24 weeks.",
+   "source_pmids": [
+    "32010325"
+   ],
+   "reviewed_at": "2026-10-28"
+  }
+ },
+ "study_contexts": [
+  {
+   "context_schema_version": "1.1.0",
+   "components": [
+    "INGR_GARLIC"
+   ],
+   "source_pmids": [
+    "32010325"
+   ],
+   "identity_scope": "botanical_preparation",
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "meta_analysis",
+   "component_registration_status": "fully_registered",
+   "condition": "hypertension",
+   "purpose": "treatment",
+   "review_status": "clinician_approved",
+   "scoring_eligible": true,
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "population": {
+    "age_group": "adult",
+    "description": "Adults with hypertension (12 trials, 553 participants for SBP; 8 trials, 374 for DBP), untreated or on established antihypertensive treatment; hypertensive subgroups only and one main arm per trial (Results; Table I)."
+   },
+   "study_design": "Systematic review and random-effects meta-analysis of randomized double-blind placebo-controlled trials; source TableI retained separately",
+   "outcomes": [
+    {
+     "name": "Pooled baseline-adjusted SBP difference:8.3+/-1.9mmHg reduction,12trials553hypertensive participants",
+     "hierarchy": "primary",
+     "kind": "surrogate",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "Pooled baseline-adjusted DBP difference:5.5+/-1.9mmHg reduction,8trials374hypertensive participants",
+     "hierarchy": "primary",
+     "kind": "surrogate",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    }
+   ],
+   "limitations": [
+    "Heterogeneous preparations,active-marker bases,doses,durations and background BP treatment; not generic garlic equivalence.",
+    "Attrition and risk-of-bias limitations vary across included trials. Review selected one active arm/subgroup to avoid duplicate controls; do not sum SBP and DBP populations.",
+    "Cardiovascular events were inferred from BP change,not measured event-prevention efficacy. No normotensive,immune or universal lipid conclusion imported.",
+    "Current NCCIH bleeding/anticoagulant/aspirin/surgery cautions remain controlling; review discussion cannot establish all garlic or Kyolic universally free of bleeding risk.",
+    "All12 source-table trial identities/citations retained in garlic_exact_trial_table.json and sourceXML. PrimaryPMIDs have not independently been content-verified for every old trial; extraction_pending is honest existing-schema locator and blocks complete-review qualification.",
+    "No new numerical grade or dose curve. Source-current context is authoring-valid only; product/source completeness is not claimed.",
+    "Wakunaga supported the symposium and author travel; source states sponsor did not design,collect,analyze or prepare the manuscript. Attrition unclear in2trials; other trials20%vs11% and27%vs0%;2trials lack BP-measurement details.",
+    "Included-study identifiers are now bound to this source's actual included-study rows/explicit inclusion references (Tables tI-etm-0-0-8374 explicit included-study row citations), with live NIH title/content identity checks. They are publication pointers, not independent-cohort counts, per-primary-study scoring approvals, preparation equivalence or new efficacy evidence. Exact unindexed source citations remain retained; no missing PMID is invented.",
+    "2 included source citations have no printed PubMed identifier in this primary source; their exact citations are retained in the source-table receipt. This is a documented identifier limitation, not a fabricated identifier or an extra independent trial.",
+    "Dr. Pham's signed ruling of 2026-10-28: partial, preparation-specific BP credit, modest; there is no single effect size or dose that applies to every garlic extract. Credit applies only to the preparations named in the source (Kwai and Allicor garlic powders, Kyolic aged garlic extract); the Japanese egg-yolk garlic powder has no brand name in the source and cannot be matched to labels.",
+    "Blood-pressure (surrogate) credit in hypertensive adults only; no normotensive, cardiovascular-event, cholesterol or immune credit.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ],
+   "context_id": "garlic_hypertension_meta_32010325",
+   "trial_family": "garlic_hypertension_meta_32010325",
+   "identity": {
+    "botanical_species": "Allium sativum",
+    "plant_part": "bulb",
+    "preparation": "Source-specific mixture of garlic powders(Kwai,Allicor),agedgarlic(Kyolic HighPotency/Reserve),Japanese egg-yolk garlic powder; not one interchangeable preparation",
+    "standardization": "TableI uses alliin,allicin potential or SAC active bases; Japanese preparation marker not reported."
+   },
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "mg",
+    "values": [
+     188,
+     480,
+     600,
+     900,
+     960,
+     1200,
+     2400
+    ],
+    "dose_status": "verified",
+    "dose_basis": "nominal_assigned_arm",
+    "duration_basis": "endpoint_followup_only",
+    "duration_days": null,
+    "administration_frequency": "Daily doses across distinct preparations; within-day schedules not consistently reported in TableI",
+    "dosage_forms": [
+     "oral garlic powder preparations (Kwai, Allicor, Japanese egg-yolk garlic powder; physical form not stated in Table I)",
+     "oral aged garlic extract capsules (Kyolic High Potency 240 mg or Kyolic Reserve 600 mg per capsule)"
+    ],
+    "co_therapies": [
+     "Review allows untreated hypertension or established BP medication; individual drug regimen not specified in TableI"
+    ],
+    "reported_regimen": "TableI separate assignments:188,480,600,900,960,1200or2400mg/day;8–24weeks,mostly12weeks. These are not an effective range or interchangeable masses.",
+    "normalization": {
+     "basis": "Separate sourceTableI preparation-specific daily material assignments, not a universal curve, minimum, maximum or active-marker conversion."
+    },
+    "source_provenance": {
+     "pmid": "32010325",
+     "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6966103/",
+     "location": "Methods,TableI,Results,Figures2–3 and risk-of-bias discussion; source-field completion from Tables tI-etm-0-0-8374 explicit included-study row citations"
+    }
+   },
+   "included_study_pmids": [
+    "2083170",
+    "2083173",
+    "1288512",
+    "19060427",
+    "19390538",
+    "20594781",
+    "23169470",
+    "23404465",
+    "26869811",
+    "30619868"
+   ],
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability"
+   }
+  }
+ ],
+ "source_receipts": [
+  {
+   "pmid": "32010325",
+   "title_fetched": "Garlic lowers blood pressure in hypertensive subjects, improves arterial stiffness and gut microbiota: A review and meta-analysis.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/32010325/",
+   "full_text": true,
+   "sections_used": "Abstract; Results (trial selection, preparations, dose paragraph); Table I and footnote"
+  }
+ ],
+ "integration_notes": [
+  "2026-10-28 integrator: require_source_label_form removed; required_form_terms kept, matching the KSM-66/Tesnor precedent. Source-only matching rejected real labels whose ingredient row resolves through the enricher."
+ ]
+}

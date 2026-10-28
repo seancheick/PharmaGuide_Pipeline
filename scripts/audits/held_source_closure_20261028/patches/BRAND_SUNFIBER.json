@@ -1,0 +1,229 @@
+{
+ "record_id": "BRAND_SUNFIBER",
+ "decision": "closed_credit",
+ "summary": "Full texts confirm both trials used Sunfiber PHGG from Taiyo Kagaku. In IBS (121 randomized, 6 g/day for 12 weeks) bloating and bloating+gas improved versus placebo, but overall severity, quality of life, pain and stool frequency did not, with heavy differential attrition. In healthy adults with loose stools (5 g/day) stool form improved at weeks 7 and 11, with no change in frequency (maker-funded). Both get eligible contexts with those mixed directions recorded; the existing Sunfiber-only digestive applicability is unchanged.",
+ "record_updates": {},
+ "study_contexts": [
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "brand_sunfiber_31509971_draft",
+   "source_pmids": [
+    "31509971"
+   ],
+   "components": [
+    "BRAND_SUNFIBER"
+   ],
+   "identity_scope": "branded_material",
+   "identity": {
+    "branded_material": "Sunfiber (partially hydrolyzed guar gum)",
+    "manufacturer": "Taiyo Kagaku Co., Ltd."
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "direct_rct",
+   "component_registration_status": "fully_registered",
+   "condition": "loose_stool_consistency",
+   "purpose": "treatment",
+   "population": {
+    "age_group": "adult",
+    "description": "44 healthy Japanese adults aged 20-49 with loose stools (diagnosed IBS excluded), selected from 88 screened; 22 per arm after a 4-week run-in."
+   },
+   "study_design": "Randomized, double-blind, placebo-controlled, parallel-group single-centre trial, 12 weeks plus follow-up; primary endpoints stool form (Bristol) and frequency; conducted by a CRO on consignment from Taiyo Kagaku.",
+   "trial_family": "31509971",
+   "review_status": "clinician_approved",
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "scoring_eligible": true,
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "g",
+    "values": [
+     5
+    ],
+    "dose_status": "verified",
+    "dose_basis": "nominal_assigned_arm",
+    "duration_basis": "fixed_protocol",
+    "duration_days": 84,
+    "administration_frequency": "One 5 g sachet daily for 12 weeks.",
+    "dosage_forms": [
+     "oral powder sachet"
+    ],
+    "reported_regimen": "[5] g/day; 84 days; daily",
+    "normalization": {
+     "basis": "Reported study-material daily dose, not a universal threshold or equivalence to other preparation."
+    },
+    "source_provenance": {
+     "pmid": "31509971",
+     "location": "Full text (PMC6769658): Methods (design, Sunfiber provided by Taiyo Kagaku, 5 g/day dose rationale, participants, endpoints), Results stool form paragraph, Funding and Conflicts of Interest.",
+     "source_url": "https://pubmed.ncbi.nlm.nih.gov/31509971/"
+    },
+    "co_therapies": [
+     "None assigned."
+    ]
+   },
+   "outcomes": [
+    {
+     "name": "Primary stool form: Bristol score lower than placebo at weeks 7 and 11 (p<0.05) with significant time-by-treatment interaction (p<0.05).",
+     "hierarchy": "primary",
+     "kind": "patient_important",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "Primary stool frequency: no change.",
+     "hierarchy": "primary",
+     "kind": "patient_important",
+     "direction": "null",
+     "outcome_role": "direct_between_group_effect"
+    }
+   ],
+   "limitations": [
+    "Small, single dose; 5 g PHGGnot 5 g dietary fiber; brand correspondence mustbeverified.",
+    "Microbiome-mediated causality unproven.",
+    "Funded by Taiyo Kagaku; three authors are Taiyo Kagaku employees. Stool-form benefit was intermittent (weeks 7 and 11) with modest power.",
+    "Returned A023 date-only restriction withdrawn; assessed on verified full text. Credit limited to selective digestive outcomes under the existing Sunfiber-only applicability.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ],
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability"
+   }
+  },
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "brand_sunfiber_26855665_draft",
+   "source_pmids": [
+    "26855665"
+   ],
+   "components": [
+    "BRAND_SUNFIBER"
+   ],
+   "identity_scope": "branded_material",
+   "identity": {
+    "branded_material": "Sunfiber",
+    "manufacturer": "Taiyo Kagaku",
+    "standardization": "Partially hydrolyzed guar gum"
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "direct_rct",
+   "component_registration_status": "fully_registered",
+   "condition": "ibs_bloating",
+   "purpose": "treatment",
+   "population": {
+    "age_group": "adult",
+    "description": "121 adults with Rome III IBS (all subtypes) randomized at two Israeli centres; 108 in the reported intention-to-treat analysis (49 PHGG, 59 placebo); dropout 22.45% PHGG vs 49.15% placebo."
+   },
+   "study_design": "Randomized, double-blind, placebo (maltodextrin)-controlled trial: 2-week run-in, 12 weeks treatment, 4 weeks follow-up; primary endpoints changes in journal symptom scores, Francis severity and IBS-QOL.",
+   "trial_family": "26855665",
+   "review_status": "clinician_approved",
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "scoring_eligible": true,
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "g",
+    "values": [
+     6
+    ],
+    "dose_status": "verified",
+    "dose_basis": "nominal_assigned_arm",
+    "duration_basis": "fixed_protocol",
+    "duration_days": 84,
+    "administration_frequency": "One sachet dissolved in a glass of water daily: 3 g/day for 7 days, then 6 g/day for 11 weeks.",
+    "dosage_forms": [
+     "oral powder sachet"
+    ],
+    "reported_regimen": "3 g/day for the first seven days, then 6 g/day for eleven weeks; one titrated active regimen over twelve weeks, not two independent arms.",
+    "normalization": {
+     "basis": "Reported study-material daily dose, not a universal threshold or equivalence to other preparation."
+    },
+    "source_provenance": {
+     "pmid": "26855665",
+     "location": "Full text (PMC4744437): Methods (design paragraph naming Sunfiber by Taiyo Kagaku, dosing, outcomes, statistics), Results Table 2 paragraphs, competing interests.",
+     "source_url": "https://pubmed.ncbi.nlm.nih.gov/26855665/"
+    },
+    "co_therapies": [
+     "Usual diet continued; probiotics and prebiotics not allowed."
+    ]
+   },
+   "outcomes": [
+    {
+     "name": "Primary journal bloating score improved vs placebo (-4.1 vs -1.2, P=0.03) and bloating+gas (-4.3 vs -1.12, P=0.035), lasting 4 weeks after stopping.",
+     "hierarchy": "primary",
+     "kind": "patient_important",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "Primary Francis IBS severity and quality of life, abdominal pain and stool frequency: no effect.",
+     "hierarchy": "primary",
+     "kind": "patient_important",
+     "direction": "null",
+     "outcome_role": "direct_between_group_effect"
+    }
+   ],
+   "limitations": [
+    "Titratedregimen, not 6 g throughout; noall IBS symptom benefit.",
+    "The 3 g lead-in is titration within the 6 g/day protocol, not evidence for a separate 3 g efficacy arm.",
+    "Substantial differential attrition and baseline severity imbalance (PHGG group more severe). Benefit is selective for bloating/gas.",
+    "Returned A023 date-only restriction withdrawn; assessed on verified full text. Credit limited to selective digestive outcomes under the existing Sunfiber-only applicability.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ],
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability"
+   }
+  }
+ ],
+ "source_receipts": [
+  {
+   "pmid": "31509971",
+   "title_fetched": "Effect of Repeated Consumption of Partially Hydrolyzed Guar Gum on Fecal Characteristics and Gut Microbiota: A Randomized, Double-Blind, Placebo-Controlled, and Parallel-Group Clinical Trial.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/31509971/",
+   "full_text": true,
+   "sections_used": "Methods, Results, funding/COI (BioC PMC6769658)"
+  },
+  {
+   "pmid": "26855665",
+   "title_fetched": "Randomized clinical study: Partially hydrolyzed guar gum (PHGG) versus placebo in the treatment of patients with irritable bowel syndrome.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/26855665/",
+   "full_text": true,
+   "sections_used": "Methods, Results, competing interests (BioC PMC4744437)"
+  }
+ ],
+ "freshness_search": {
+  "date": "2026-10-28",
+  "database": "PubMed (NCBI E-utilities esearch, sort=pub_date, retmax=60; titles via esummary, abstracts via efetch)",
+  "query": "(\"partially hydrolyzed guar gum\" OR \"partially hydrolysed guar gum\" OR PHGG OR Sunfiber) AND (irritable bowel OR bowel OR stool OR constipation OR diarrhea OR bloating OR gastrointestinal) AND (meta-analysis[pt] OR systematic review[pt] OR randomized controlled trial[pt])",
+  "hits": 23,
+  "screened": 29,
+  "supplementary_queries": [
+   {
+    "query": "(guar[tiab]) AND (irritable bowel OR constipation OR stool OR bowel) AND (meta-analysis[pt] OR systematic review[pt] OR meta-analysis[ti])",
+    "hits": 6
+   }
+  ],
+  "screening_rule": "Kept oral PHGG RCTs or syntheses newer than the credited trials (2016, 2019) on bowel/IBS outcomes. Excluded enteral-nutrition, oral-rehydration and post-surgical formula studies and other gums.",
+  "read": [
+   {
+    "pmid": "42718813",
+    "title": "Natural products for the management of diarrhea: a systematic review of clinical efficacy, safety, and certainty of evidence.",
+    "finding": "2026 SR, 10 studies including PHGG: most reported improvements in diarrhea outcomes, but GRADE certainty was low to very low. No pooled PHGG estimate."
+   },
+   {
+    "pmid": "35297467",
+    "title": "Effectiveness of Partially Hydrolyzed Guar Gum in Reducing Constipation in Long Term Care Facility Residents: A Randomized Single-Blinded Placebo-Controlled Trial.",
+    "finding": "2022 single-blind RCT, 52 long-term-care residents (mean age 83.9) with chronic constipation, PHGG 5 g/day vs water for 4 weeks: no difference in bowel frequency or Bristol stool form; less laxative use in weeks 3-4. The abstract does not name the product brand."
+   },
+   {
+    "pmid": "38165420",
+    "title": "Effects of a prebiotic formulation on the composition of the faecal microbiota of people with functional constipation.",
+    "finding": "2024 exploratory analysis of a 21-day RCT (61 adults, functional constipation) of a PHGG + acacia gum formulation: microbiome outcomes only. Multi-ingredient, so not applicable."
+   }
+  ],
+  "conclusion": "confirms: no newer synthesis pools PHGG for the credited outcomes. The newer trials are in a different population (frail constipated elderly, null for stool form) or test a multi-ingredient product, at low certainty. The mixed directions already recorded for 26855665 and 31509971 stand."
+ }
+}

@@ -1,0 +1,110 @@
+{
+ "record_id": "BRAND_SETRIA",
+ "decision": "held: the record's main source for its glutathione-stores/immune claim (24791752, Eur J Nutr 2015) has no open full text, so the material (Setria or not), dosage form and outcome details cannot be verified beyond the abstract; the only full-text source (28490897) measures skin, not the record's goals, and is closed without credit",
+ "summary": "Abstract of 24791752: 54 adults, 250 or 1,000 mg/day oral GSH for 6 months raised blood and cell glutathione 17-35% (260% buccal at high dose), and NK cytotoxicity rose over twofold at 3 months in the high-dose group; the abstract does not name Setria or the dosage form. Full text of 28490897 confirms Setria 250 mg/day capsules in 60 Thai women, with a primary melanin-index result that was not significant; that context is approved without credit. The record stays held until 24791752 can be verified.",
+ "record_updates": {},
+ "study_contexts": [
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "brand_setria_28490897",
+   "components": [
+    "BRAND_SETRIA"
+   ],
+   "source_pmids": [
+    "28490897"
+   ],
+   "identity_scope": "branded_material",
+   "identity": {
+    "branded_material": "Setria (reduced glutathione)",
+    "manufacturer": "Kyowa Hakko Bio Co., Ltd."
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "direct_rct",
+   "component_registration_status": "fully_registered",
+   "condition": "cosmetic_skin_parameters",
+   "purpose": "physiology",
+   "review_status": "clinician_approved",
+   "scoring_eligible": false,
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "trial_family": "brand_setria_28490897",
+   "population": {
+    "age_group": "adult",
+    "description": "60 healthy Thai women aged 20-50 recruited in Bangkok, randomized equally to Setria GSH 250 mg/d, GSSG 250 mg/d or placebo; 3 withdrew (two for raised liver tests, one for starting oral contraception)."
+   },
+   "study_design": "Randomized, double-blind, placebo-controlled, parallel three-arm trial, 12 weeks; primary outcome melanin index (Mexameter) at six sites; GEE analysis.",
+   "outcomes": [
+    {
+     "name": "Primary melanin index and UV spots at all sites: lower than placebo only as a non-significant trend (P>0.05); forearm melanin lower in a post hoc >40-year subgroup (GSH n=7 vs placebo n=10, P=0.031).",
+     "hierarchy": "primary",
+     "kind": "surrogate",
+     "direction": "null",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "Wrinkles reduced at some sites and elasticity trended higher with GSH; skin water content at one site was lower with GSH than placebo (P=0.031).",
+     "hierarchy": "secondary",
+     "kind": "surrogate",
+     "direction": "mixed",
+     "outcome_role": "direct_between_group_effect"
+    }
+   ],
+   "limitations": [
+    "Separate GSSG arm cannot be credited as independent Setria replication.",
+    "Two withdrew for elevated LFTs; causality not established; no blanketnosafetyissue.",
+    "The source-specific outcome hierarchy is recorded above. No clinical approval, product correspondence or release completion is inferred from this factual extraction.",
+    "No credit: the primary skin outcome was not significant and skin lightening is not this record's Immune Support or Healthy Aging goal; product supplied by the Setria maker.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ],
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "mg",
+    "values": [
+     250
+    ],
+    "dose_status": "verified",
+    "dose_basis": "nominal_assigned_arm",
+    "duration_basis": "fixed_protocol",
+    "duration_days": 84,
+    "administration_frequency": "once before bedtime",
+    "dosage_forms": [
+     "oral capsule"
+    ],
+    "co_therapies": [
+     "None assigned."
+    ],
+    "reported_regimen": "[250]mg/day assigned material; once before bedtime",
+    "normalization": {
+     "basis": "Assigned material mass in mg from source; not marker conversion or universal benchmark."
+    },
+    "source_provenance": {
+     "pmid": "28490897",
+     "location": "Full text (PMC5413479): Methods (participants, Setria/AquaGluta capsules from Kyowa Hakko Bio, primary outcome), Results melanin/TEWL/wrinkle paragraphs and Table 2.",
+     "source_url": "https://pubmed.ncbi.nlm.nih.gov/28490897/"
+    }
+   },
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability"
+   }
+  }
+ ],
+ "source_receipts": [
+  {
+   "pmid": "28490897",
+   "title_fetched": "Glutathione and its antiaging and antimelanogenic effects.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/28490897/",
+   "full_text": true,
+   "sections_used": "Methods, Results, Table 2 (BioC PMC5413479)"
+  },
+  {
+   "pmid": "24791752",
+   "title_fetched": "Randomized controlled trial of oral glutathione supplementation on body stores of glutathione.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/24791752/",
+   "full_text": false,
+   "sections_used": "PubMed abstract"
+  }
+ ]
+}

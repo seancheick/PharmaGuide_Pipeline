@@ -1,0 +1,128 @@
+{
+ "record_id": "INGR_GRAPE_SEED_EXTRACT",
+ "decision": "held: 34798267 (Pharmacol Res 2022 meta-analysis, 19 trials), the only pooled source for the cardiovascular claim, has no open-access full text, so included trials, doses and forms cannot be verified; the one verifiable RCT (33671310, Enovita) has a null primary outcome and is approved without credit. Downgrading to reference is not justified while the meta-analysis (DBP reduction in abstract) is unverified.",
+ "summary": "Enovita RCT (33671310): 80 adults with mildly elevated BP, 300 mg/day for 16 weeks, primary home SBP change not different from placebo (p=0.7197), DBP p=0.2001; positive only in a men-only analysis. The 2022 meta-analysis abstract reports DBP -2.20 mmHg and no significant SBP effect, but its methods cannot be verified. The record stays held; NCT registry entries are not PubMed sources and were not assessed.",
+ "record_updates": {},
+ "study_contexts": [
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "ingr_grape_seed_extract_33671310",
+   "components": [
+    "INGR_GRAPE_SEED_EXTRACT"
+   ],
+   "source_pmids": [
+    "33671310"
+   ],
+   "identity_scope": "branded_material",
+   "identity": {
+    "branded_material": "Enovita",
+    "manufacturer": "Indena",
+    "standardization": "White-wine grape seed water extract standardized to >=95.0% OPCs (spectrophotometry); 5-10% monomeric catechin/epicatechin"
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "direct_rct",
+   "component_registration_status": "fully_registered",
+   "condition": "mildly_elevated_blood_pressure",
+   "purpose": "treatment",
+   "review_status": "clinician_approved",
+   "scoring_eligible": false,
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "trial_family": "ingr_grape_seed_extract_33671310",
+   "population": {
+    "age_group": "adult",
+    "description": "80 healthy adults aged 40-70 (45 men, 35 postmenopausal women) with mildly elevated systolic BP 125-140 mmHg on 7-day run-in and no pharmacological treatment; 78 in ITT analysis."
+   },
+   "study_design": "Randomized, double-blind, placebo-controlled parallel-group trial (DRKS00011745), stratified by sex; separate in vitro HUVEC experiments not used.",
+   "outcomes": [
+    {
+     "name": "Primary: change in 7-day home mean systolic BP baseline to 16 weeks, GSEe vs placebo: no significant difference (p=0.7197)",
+     "hierarchy": "primary",
+     "kind": "surrogate",
+     "direction": "null",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "Diastolic BP vs placebo: no significant difference (p=0.2001)",
+     "hierarchy": "secondary",
+     "kind": "surrogate",
+     "direction": "null",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "Men-only post hoc after a gender-by-product interaction: SBP -4.6 mmHg (95% CI -6.9 to -2.3), DBP -3.2 mmHg (-5.1 to -1.4) at 16 weeks",
+     "hierarchy": "post_hoc",
+     "kind": "surrogate",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "Perceived stress (PSQ) worries domain reduced in GSEe group (p=0.0199); additional objective",
+     "hierarchy": "secondary",
+     "kind": "patient_important",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    }
+   ],
+   "limitations": [
+    "Whole-cohort primary and secondary BP results were null; the positive men-only analysis followed an interaction finding and cannot replace the primary result.",
+    "Exact Enovita material only; not transferable to all grape seed extracts.",
+    "No assigned co-therapy; pharmacological BP treatment excluded at entry.",
+    "Not scoring eligible: a single branded null-primary trial cannot carry the generic record's cardiovascular claim while the pooled meta-analysis (34798267) remains unverified.",
+    "Returned decision A073: source-content hold; methods now verified for 33671310 only.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ],
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "mg",
+    "values": [
+     300
+    ],
+    "dose_status": "verified",
+    "dose_basis": "nominal_assigned_arm",
+    "duration_basis": "fixed_protocol",
+    "duration_days": 112,
+    "administration_frequency": "One 150 mg tablet 5-10 min before breakfast and one 5-10 min before lunch, daily.",
+    "dosage_forms": [
+     "oral film-coated tablet"
+    ],
+    "co_therapies": [],
+    "reported_regimen": "Two 150 mg GSEe film-coated tablets daily (300 mg/day) for 16 weeks; matching placebo tablets.",
+    "normalization": {
+     "basis": "Two tablets x 150 mg Enovita extract = 300 mg/day of assigned material; not a marker conversion."
+    },
+    "source_provenance": {
+     "pmid": "33671310",
+     "location": "Methods 2.1 (extract), 2.2 (tablets), 2.4 study design, population, intervention and objectives; Results 3.2 (flow, primary endpoint p=0.7197, gender analysis), Table 3",
+     "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7922661/"
+    },
+    "duration_as_printed": {
+     "value": 16,
+     "unit": "weeks"
+    }
+   },
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability"
+   }
+  }
+ ],
+ "source_receipts": [
+  {
+   "pmid": "33671310",
+   "title_fetched": "Grape Seed Extract Positively Modulates Blood Pressure and Perceived Stress: A Randomized, Double-Blind, Placebo-Controlled Study in Healthy Volunteers.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/33671310/",
+   "full_text": true,
+   "sections_used": "Abstract; Methods 2.1-2.4; Results; Table 3; Discussion"
+  },
+  {
+   "pmid": "34798267",
+   "title_fetched": "The effect of grape (Vitis vinifera) seed extract supplementation on flow-mediated dilation, blood pressure, and heart rate: A systematic review and meta-analysis of controlled trials with duration- and dose-response analysis.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/34798267/",
+   "full_text": false,
+   "sections_used": "Abstract only; full text not open access"
+  }
+ ]
+}

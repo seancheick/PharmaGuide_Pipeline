@@ -1,0 +1,156 @@
+{
+ "record_id": "INGR_ECHINACEA",
+ "decision": "closed_no_credit",
+ "summary": "The reviewed research does not establish a qualifying benefit for this product's assessed use. Existing human research is retained: 24 cold RCTs with individually non-significant prevention comparisons and a possible weak benefit for particular preparations. Per Dr. Pham's signed 2026-10-28 ruling, generic Echinacea gets no general prevention or treatment credit and stays on the reference path, while a weak benefit for particular preparations remains possible. The 2014 Cochrane review (24554461; 24 double-blind RCTs, 4,631 participants, 33 comparisons of heterogeneous species, parts and preparations) did not pool its main analysis because of clinical heterogeneity: each of the 12 prevention comparisons was individually non-significant though trends were consistently positive (a post hoc pooling suggested a 10-20% relative risk reduction), and 1 of 7 treatment trials shortened cold duration. The existing approved non-transfer context (2026-10-28 approval) is kept unchanged. The reference downgrade removes Evidence points from generic Echinacea products; it is not a finding that Echinacea is ineffective.",
+ "record_updates": {
+  "study_type": "reference",
+  "evidence_level": "reference",
+  "notes": "Evidence suggests modest, formulation-dependent effects for common-cold outcomes; heterogeneity across preparations is substantial. The 2014 Cochrane review pooled 24 trials across Echinacea species and plant parts, including seven trials of Echinacea purpurea aerial-part preparations, so the registry-projected aerial, herb and purpurea root-extract preparation names are family-level joins. Species and plant part do not establish a studied dose or a product-specific effect. Dr. Pham's signed ruling of 2026-10-28: no general Echinacea prevention or treatment credit; a weak benefit from particular preparations remains possible and is not excluded. In the 2014 Cochrane review the 12 prevention comparisons were each non-significant (individual trials showed consistently positive but non-significant trends; a post hoc pooling suggested a 10-20% relative risk reduction), and 1 of 7 treatment trials shortened colds; this is not uniformly negative evidence.",
+  "effect_direction_rationale": "Retained positive_weak classification; study_type=systematic_review_meta; evidence_level=ingredient-human; primary_outcome=Immune Support; published_tags=RCT,meta-analysis,systematic_review; registry_completed_trials_count=30; total_enrollment=719; endpoint_tags=immune_support,stress_mood,cardiovascular,muscle_recovery; notes/citations include weak-effect language. Superseded 2026-10-28: reference-only per Dr. Pham's ruling (no general prevention/treatment credit; possible weak benefit for particular preparations remains open)."
+ },
+ "study_contexts": [
+  {
+   "context_schema_version": "1.1.0",
+   "review_status": "clinician_approved",
+   "scoring_eligible": false,
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "context_id": "ingr_echinacea_24554461_review_preparation_specific",
+   "components": [
+    "INGR_ECHINACEA"
+   ],
+   "source_pmids": [
+    "24554461"
+   ],
+   "identity_scope": "ingredient_general",
+   "identity": {
+    "standardization": "Multiple Echinacea species, plant parts, pressed juices, alcohol tinctures and dried-extract tablets; not biochemically equivalent."
+   },
+   "evidence_role": "systematic_review",
+   "component_registration_status": "fully_registered",
+   "condition": "common_cold_prevention_and_treatment",
+   "purpose": "prevention",
+   "trial_family": "echinacea_cold_cochrane_24554461",
+   "population": {
+    "description": "24 double-blind trials with 4,631 participants and 33 preparation-versus-placebo comparisons; naturally acquired colds or induced rhinovirus, heterogeneous populations."
+   },
+   "study_design": "systematic review of randomized double-blind placebo-controlled trials",
+   "included_study_pmids": [
+    "10228604",
+    "10230741",
+    "10817735",
+    "11505787",
+    "12484708",
+    "14657066",
+    "14748902",
+    "15156472",
+    "15197051",
+    "16049208",
+    "16177972",
+    "17436202",
+    "21173411",
+    "9821828"
+   ],
+   "outcomes": [
+    {
+     "name": "Prevention: participants with at least one cold; none of 12 individual comparisons significant.",
+     "hierarchy": "primary",
+     "kind": "patient_important",
+     "direction": "null",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "Treatment: cold duration;one of seven trials significant.",
+     "hierarchy": "primary",
+     "kind": "patient_important",
+     "direction": "mixed",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "Posthoc pooling suggests 10–20% relative risk reduction; preparations heterogeneous.",
+     "hierarchy": "post_hoc",
+     "kind": "patient_important",
+     "direction": "positive",
+     "outcome_role": "post_hoc_subgroup"
+    }
+   ],
+   "limitations": [
+    "The reviewed research does not establish a qualifying benefit for this product's assessed use. Existing human research is retained: 24 cold RCTs with individually non-significant prevention comparisons and a possible weak benefit for particular preparations.",
+    "No single aggregate regimen is reported because these are heterogeneous study arms; source_not_reported applies only to the nonexistent review-wide regimen, not undisclosed constituent trial doses. Exact table rows retained. Included-study membership is not every bibliography citation; unindexed/ambiguous primary references remain source-labelled in private inventory.",
+    "Goel 2005 (PMID 16177972) is preparation-linked companion immune-marker followup referring to previous Echinilin trial; retained publication membership is not independent efficacy replication.",
+    "The review reports a trend toward more adverse-event dropouts in prevention studies; nonsignificant group differences do not establish personal safety.",
+    "Reviewed non-transfer conclusion: this aggregate or combined intervention cannot provide affirmative generic-ingredient credit. Exact preparation-specific qualification and other recorded source limits remain separate."
+   ],
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "mg",
+    "values": [],
+    "dose_status": "source_not_reported",
+    "dose_basis": "not_applicable",
+    "duration_basis": "participant_specific",
+    "administration_frequency": "Study-specific frequency as printed in full included-study characteristics; no single review-wide assigned regimen.",
+    "dosage_forms": [
+     "pressed juice",
+     "tincture",
+     "tablet",
+     "capsule"
+    ],
+    "co_therapies": [],
+    "reported_regimen": "No single review-wide assigned dose; all 24 included-study preparation/regimen rows transcribed in missing31_exact_included_tables_and_regimens.json. Source Methods/Results include heterogeneous species,plant parts and preparations.",
+    "source_provenance": {
+     "pmid": "24554461",
+     "location": "Full body Methods/Results and Characteristics of included studies T2",
+     "source_url": "https://pubmed.ncbi.nlm.nih.gov/24554461/"
+    }
+   },
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability",
+    "basis": "Sean confirmed approval of the October 28 research response, exact preparation/non-transfer conclusion only. Positive preparation-specific qualification and other retained source holds are not approved by this disposition. Report SHA256 db68aa1e8ab3b0b428886391e4611e04390635533a9986d26a425fc034c117e2."
+   }
+  }
+ ],
+ "source_receipts": [
+  {
+   "pmid": "24554461",
+   "title_fetched": "Echinacea for preventing and treating the common cold.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/24554461/",
+   "full_text": false,
+   "sections_used": "Abstract (Main results, Authors conclusions) fetched 2026-10-28; existing approved context retained unchanged from earlier full-text extraction"
+  }
+ ],
+ "freshness_search": {
+  "date": "2026-10-28",
+  "database": "PubMed (NCBI E-utilities esearch, sort=pub_date, retmax=60; titles via esummary, abstracts via efetch)",
+  "query": "(echinacea[tiab] OR Echinaforce[tiab]) AND (cold OR \"respiratory tract infection*\" OR \"respiratory infection*\" OR influenza OR URTI) AND (meta-analysis[pt] OR systematic review[pt] OR randomized controlled trial[pt]) AND 2014:2026[dp]",
+  "hits": 15,
+  "screened": 15,
+  "screening_rule": "Kept syntheses and RCTs of echinacea preparations on URTI or influenza prevention and treatment newer than the 2014 Cochrane review. Excluded fixed combinations with other herbs, COVID-19 syrup, the retracted vitamin C MA and general herbal overviews.",
+  "read": [
+   {
+    "pmid": "31126553",
+    "title": "Echinacea for the prevention and treatment of upper respiratory tract infections: A systematic review and meta-analysis.",
+    "finding": "2019 SR/MA of double-blind RCTs, heterogeneous preparations: prevention RR 0.78 (0.68 to 0.88); no effect on duration (MD -0.45 days, CI crossing 0); risk of selective reporting. Authors say users should not be confident commercial remedies prevent or shorten URTI."
+   },
+   {
+    "pmid": "40311928",
+    "title": "Efficacy and safety of Echinacea purpurea in treating upper respiratory infections and complications of otitis media in children: Systematic review and meta-analysis.",
+    "finding": "2025 SR/MA, 9 pediatric RCTs of diverse E. purpurea products: URTI incidence RR 0.81 (0.75 to 0.87) and duration SMD -0.19. Adverse events were moderately increased (RR 1.38), with funnel-plot bias."
+   },
+   {
+    "pmid": "33832544",
+    "title": "Echinacea reduces antibiotic usage in children through respiratory tract infection prevention: a randomized, blinded, controlled clinical trial.",
+    "finding": "2021 RCT, 203 children aged 4-12, Echinaforce Junior 400 mg three times daily vs a vitamin C 50 mg control (not placebo) for 2 x 2 months: RTI episodes OR 0.52 (0.30 to 0.91) and fewer antibiotic courses. A single particular preparation."
+   },
+   {
+    "pmid": "34544670",
+    "title": "Interventions for preventing influenza: An overview of Cochrane systematic reviews and a Bayesian network meta-analysis.",
+    "finding": "2021 overview of Cochrane reviews: echinacea was rated 'probably beneficial' for influenza prevention, not high-quality evidence."
+   }
+  ],
+  "conclusion": "confirms: Dr. Pham's qualified conclusion holds. Newer pooled analyses across heterogeneous preparations suggest a modest prevention signal (2019 RR 0.78; 2025 pediatric E. purpurea RR 0.81), limited by heterogeneity and selective reporting, with no adult duration benefit. The 2019 authors advise against confidence in commercial remedies. One particular preparation (Echinaforce Junior, vs a vitamin C control) is the open 'particular preparations' question, not generic credit."
+ }
+}

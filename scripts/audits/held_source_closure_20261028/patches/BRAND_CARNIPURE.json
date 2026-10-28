@@ -1,0 +1,23 @@
+{
+ "record_id": "BRAND_CARNIPURE",
+ "decision": "held: neither trial has open full text and the abstracts do not name a primary outcome: 11788381 is a 10-man crossover (2 g L-carnitine/day as LCLT for 3 weeks) on biochemical and MRI muscle-disruption markers; 20045157 is an 18-person crossover in middle-aged adults with Carnipure tartrate (2 g/day L-carnitine). Small crossover biomarker studies with unverifiable primary endpoints cannot be completed to the credit standard. Dr. Pham's active-amount correction (2 g L-carnitine, not 2 g tartrate) is retained in the summary. OA retry 2026-10-28: no open copy of 11788381 or 20045157.",
+ "summary": "11788381: LCLT attenuated exercise-induced purine-catabolism markers, myoglobin, FABP, CK and MDA and reduced MRI-assessed muscle disruption. 20045157: Carnipure tartrate improved biochemical recovery markers after resistance exercise in middle-aged men and women. Both are surrogate recovery markers from very small samples.",
+ "record_updates": {},
+ "study_contexts": [],
+ "source_receipts": [
+  {
+   "pmid": "11788381",
+   "title_fetched": "L-Carnitine L-tartrate supplementation favorably affects markers of recovery from exercise stress.",
+   "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=11788381&retmode=xml",
+   "full_text": false,
+   "sections_used": "PubMed abstract only"
+  },
+  {
+   "pmid": "20045157",
+   "title_fetched": "l-Carnitine l-tartrate supplementation favorably affects biochemical markers of recovery from physical exertion in middle-aged men and women.",
+   "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=20045157&retmode=xml",
+   "full_text": false,
+   "sections_used": "PubMed abstract only"
+  }
+ ]
+}

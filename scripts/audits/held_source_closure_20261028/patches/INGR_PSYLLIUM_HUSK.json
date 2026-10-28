@@ -1,0 +1,23 @@
+{
+ "record_id": "INGR_PSYLLIUM_HUSK",
+ "decision": "held: both declared lipid meta-analyses (30239559 AJCN 2018; 18985059 EJCN 2009) have no open full text (no PMC record). Their abstracts give dose (median ~10.2 g; 3.0-20.4 g/day) and positive LDL outcomes, but the included-trial lists required for a review-role context, dosage forms and comparator details could not be retrieved, so no context can be completed without invention. OA retry 2026-10-28: OpenAlex lists a bronze copy of 30239559 (https://www.sciencedirect.com/science/article/pii/S0002916522030076/pdf) that blocks automated access; Europe PMC's 18985059 link (https://www.nature.com/articles/ejcn200849.pdf) returned a paywalled landing page.",
+ "summary": "30239559: 28 RCTs (n=1924), ~10.2 g/day psyllium lowered LDL-C by 0.33 mmol/L, non-HDL-C by 0.39 mmol/L and apoB by 0.05 g/L (moderate/high GRADE). 18985059: 21 placebo-controlled trials (1030 psyllium, 687 placebo) in mild-to-moderate hypercholesterolemia, 3.0-20.4 g/day, lowered total cholesterol 0.375 and LDL-C 0.278 mmol/L with dose- and time-dependence. These support a lipid (cardiovascular) scope only; Dr. Pham's rejection of bowel/glycemia attribution stands. Credit would be justified if full texts become available.",
+ "record_updates": {},
+ "study_contexts": [],
+ "source_receipts": [
+  {
+   "pmid": "30239559",
+   "title_fetched": "Effect of psyllium (Plantago ovata) fiber on LDL cholesterol and alternative lipid targets, non-HDL cholesterol and apolipoprotein B: a systematic review and meta-analysis of randomized controlled trials.",
+   "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=30239559&retmode=xml",
+   "full_text": false,
+   "sections_used": "PubMed abstract only"
+  },
+  {
+   "pmid": "18985059",
+   "title_fetched": "Time- and dose-dependent effect of psyllium on serum lipids in mild-to-moderate hypercholesterolemia: a meta-analysis of controlled clinical trials.",
+   "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=18985059&retmode=xml",
+   "full_text": false,
+   "sections_used": "PubMed abstract only"
+  }
+ ]
+}

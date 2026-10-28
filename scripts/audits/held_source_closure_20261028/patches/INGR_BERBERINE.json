@@ -1,0 +1,23 @@
+{
+ "record_id": "INGR_BERBERINE",
+ "decision": "held: Dr. Pham's returned decision requires coordination with A043/A126 without automatic merging, which is a cross-record decision outside this lane. On its own sources the record has no credit-eligible context: 18442638 is a small pilot whose randomized arm compares berberine with metformin (no placebo; similar effect) plus an uncontrolled add-on cohort, and 27157250 synthesizes a six-ingredient nutraceutical combination. Placebo-controlled berberine glycemic evidence sits in PRECLIN_BERBERINE_GENERIC (34956436) and was not merged here. OA retry 2026-10-28: 18442638 is open (PMC2410097) but the cross-record coordination item remains; 27157250 closed.",
+ "summary": "18442638 abstract: study A randomized 36 adults with new T2DM to berberine or metformin 0.5 g three times daily for 3 months, with similar glucose lowering (berberine HbA1c 9.5% to 7.5%); study B added berberine in 48 poorly controlled patients without a randomized control. 27157250: 14 trials of a red yeast rice/berberine/policosanol/astaxanthin/CoQ10/folic acid combination; effects cannot be attributed to berberine.",
+ "record_updates": {},
+ "study_contexts": [],
+ "source_receipts": [
+  {
+   "pmid": "18442638",
+   "title_fetched": "Efficacy of berberine in patients with type 2 diabetes mellitus.",
+   "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=18442638&retmode=xml",
+   "full_text": false,
+   "sections_used": "PubMed abstract"
+  },
+  {
+   "pmid": "27157250",
+   "title_fetched": "The effects of a nutraceutical combination on plasma lipids and glucose: A systematic review and meta-analysis of randomized controlled trials.",
+   "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=27157250&retmode=xml",
+   "full_text": false,
+   "sections_used": "PubMed abstract"
+  }
+ ]
+}

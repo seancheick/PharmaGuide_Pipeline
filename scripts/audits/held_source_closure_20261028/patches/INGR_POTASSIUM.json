@@ -1,0 +1,130 @@
+{
+ "record_id": "INGR_POTASSIUM",
+ "decision": "closed_credit",
+ "summary": "Full text of the 2025 Clin Kidney J dose-response meta-analysis (10 randomized potassium-supplementation trials, 684 adults) shows a significant SBP reduction in hypertensive participants (-5.3 mmHg per +50 mmol/day urinary potassium, P=.02) and none in normotensive participants. Per Dr. Pham's revised 2026-10-28 ruling, urinary potassium as the exposure indicator limits dose equivalence but does not erase the BP finding, so the context is eligible for blood pressure in hypertensive adults only; Dose stays a separate judgment. A new applicability block records that population limit.",
+ "record_updates": {
+  "applicability": {
+   "scope": "ingredient",
+   "supported_outcomes": [
+    "cardiovascular"
+   ],
+   "studied_population": "Adults with hypertension in randomized potassium-supplementation trials (6 of 10 trials in PMID 40612568); BP benefit was not significant in normotensive adults, and exposure was measured as urinary potassium, so no supplement-dose equivalence is implied.",
+   "source_pmids": [
+    "40612568"
+   ],
+   "reviewed_at": "2026-10-28"
+  }
+ },
+ "study_contexts": [
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "ingr_potassium_40612568_scoped_source",
+   "components": [
+    "INGR_POTASSIUM"
+   ],
+   "source_pmids": [
+    "40612568"
+   ],
+   "identity_scope": "ingredient_general",
+   "identity": {
+    "preparation": "Potassium interventions assessed through change in 24-hour urinary potassium excretion, not simply prescribed capsule mass."
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "meta_analysis",
+   "component_registration_status": "fully_registered",
+   "condition": "blood_pressure",
+   "purpose": "physiology",
+   "review_status": "clinician_approved",
+   "scoring_eligible": true,
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "trial_family": "source_40612568",
+   "population": {
+    "age_group": "adult",
+    "description": "10 RCTs published 2000-2024, 684 adults (342 high-potassium, 342 control), mean age 26-66, mean BMI 22-31; 6 trials in people with hypertension and 4 without; UK, USA, Italy, China, Netherlands, Denmark. Pediatric populations excluded."
+   },
+   "study_design": "Systematic review and dose-response meta-analysis (linear, quadratic and cubic-spline models) of RCTs (9 crossover, 1 parallel; 1-6 weeks) that measured potassium intake change by 24-h urinary potassium excretion; sodium-plus-potassium interventions (salt substitutes, combined diets) excluded.",
+   "outcomes": [
+    {
+     "name": "Hypertensive subjects (6 trials): significant negative linear relation between urinary potassium increase and SBP (P=.02); per +50 mmol/day, SBP -5.31 mmHg (95% CI -9.85 to -0.77) and DBP -3.62 mmHg (-9.19 to 1.95, CI crosses zero).",
+     "hierarchy": "not_reported",
+     "kind": "surrogate",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "Normotensive subjects (4 trials): slight non-significant linear relation (P=.48); per +50 mmol/day, SBP -0.54 (-2.03 to 0.96), DBP -0.12 (-1.47 to 1.22).",
+     "hierarchy": "not_reported",
+     "kind": "surrogate",
+     "direction": "null",
+     "outcome_role": "direct_between_group_effect"
+    }
+   ],
+   "limitations": [
+    "A 50 mmol urinary response is not an ingestion recommendation, minimum dose or label benchmark.",
+    "Preserve renal, medication and hyperkalemia safety assessment independently.",
+    "Historical bibliography census (not independent scoring sources; actual included-publication membership is separately bound to the inspected source table): 20673378, 33280043, 15740932, 25673113, 24048291, 20083724, 27867157, 22149452, 34064968, 27448942. Each intervention and comparison requires its own applicability assessment; citation in this bibliography grants no credit.",
+    "Included-study identifiers are now bound to this source's actual included-study rows/explicit inclusion references (Tables tbl1 explicit included-study row citations), with live NIH title/content identity checks. They are publication pointers, not independent-cohort counts, per-primary-study scoring approvals, preparation equivalence or new efficacy evidence. Exact unindexed source citations remain retained; no missing PMID is invented.",
+    "Results Intervention Characteristics: high-potassium supplements were administered as potassium tablets or slow-released potassium tablets. This does not create a salt/mass or diet equivalence. Other included trials may not report a delivery form; this list does not establish one common preparation across all arms.",
+    "Dr. Pham revised ruling (fourth set, 2026-10-28): 40612568 pools randomized potassium-supplementation trials with urinary potassium as the exposure indicator; that limits dose equivalence but does not erase the BP findings. Evidence credit is for blood pressure in hypertensive adults only; Dose is a separate judgment; no cardiovascular-event credit; nutrition credit stays on its own pathway.",
+    "Small evidence base (10 short trials, 1-6 weeks), no pooled overall effect estimate; benefit seen only in hypertensive participants, with the DBP interval crossing zero. Not evidence for cardiovascular events.",
+    "Ingested supplement doses are not reported in the source; exposure is urinary potassium excretion difference. Berry 2010 included a fruit/vegetable arm and Stone 2021 a potato arm, so exposure is not exclusively supplemental.",
+    "Potassium supplements carry hyperkalemia risk in kidney disease and with ACE inhibitors, ARBs or potassium-sparing diuretics; this review did not assess safety, which stays with its own owner.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ],
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "mg",
+    "values": [],
+    "dose_status": "verified",
+    "dose_basis": "not_applicable",
+    "duration_basis": "not_recorded",
+    "administration_frequency": "Trial-specific daily oral potassium supplementation for 1-6 weeks; no single pooled schedule (Table 1; Results 'Description of potassium intake modification').",
+    "dosage_forms": [
+     "potassium tablet",
+     "slow-release potassium tablet"
+    ],
+    "co_therapies": [
+     "Participants generally kept usual diet and activity; some trials had run-in and washout periods. Vongpatanasin 2016 used potassium magnesium citrate (magnesium co-exposure). Medication eligibility varied by trial."
+    ],
+    "reported_regimen": "Potassium chloride, aspartate or bicarbonate supplements given as tablets or slow-release tablets (one trial also used potassium-rich fruit/vegetables or potato). Exposure is the between-arm difference in 24-h urinary potassium excretion: 12.5-92 mmol/day overall (30-92 without hypertension, 12.5-45 with hypertension). Ingested supplement amounts are not tabulated in the source.",
+    "normalization": {
+     "basis": "Source exposure metric is measured urinary potassium excretion difference, not ingested mass; no conversion to a label dose, minimum or benchmark is made."
+    },
+    "source_provenance": {
+     "pmid": "40612568",
+     "location": "Full text (PMC12223369): Methods eligibility and statistics; Results Table 1 (trial characteristics), 'Description of potassium intake modification', urinary excretion range paragraph, dose-response paragraph and Table 2; reference list 49-58.",
+     "source_url": "https://pubmed.ncbi.nlm.nih.gov/40612568/"
+    },
+    "duration_days": null
+   },
+   "included_study_pmids": [
+    "20673378",
+    "33280043",
+    "15740932",
+    "25673113",
+    "24048291",
+    "20083724",
+    "27867157",
+    "22149452",
+    "34064968",
+    "27448942"
+   ],
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability"
+   }
+  }
+ ],
+ "source_receipts": [
+  {
+   "pmid": "40612568",
+   "title_fetched": "Effect of changes in potassium intake on blood pressure: a dose-response meta-analysis of randomized clinical trials (2000-2024).",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/40612568/",
+   "full_text": true,
+   "sections_used": "Methods, Results (Table 1, Table 2, intervention description), Discussion, conflict statement, references (BioC PMC12223369)"
+  }
+ ]
+}

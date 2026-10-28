@@ -1,0 +1,144 @@
+{
+ "record_id": "PRECLIN_ASTAXANTHIN_GENERIC",
+ "decision": "held: three of the four declared syntheses (38243785 fatigue/cognition, 35091276 oxidative/inflammatory markers, 32755613 cardiometabolic markers) are subscription-only with no open full text, so their doses, populations and outcomes cannot be verified; the one open source (34578794, skin) pools oral arms with co-interventions and is approved without credit. The record also declares no health-goal claim to match.",
+ "summary": "34578794 (8 pooled oral RCTs, astaxanthin 2-12 mg/day for 4-16 weeks in healthy adults) showed better skin moisture and elasticity but no wrinkle-depth change; the pool includes tocotrienol and collagen co-interventions and commercially linked trials, so it cannot credit astaxanthin alone. The other three meta-analyses are abstract-only. Dr. Pham's rejection of brand-wide transfer is retained; the record stays held.",
+ "record_updates": {},
+ "study_contexts": [
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "preclin_astaxanthin_generic_34578794_scoped_source",
+   "components": [
+    "PRECLIN_ASTAXANTHIN_GENERIC"
+   ],
+   "source_pmids": [
+    "34578794"
+   ],
+   "identity_scope": "botanical_preparation",
+   "identity": {
+    "botanical_species": "Haematococcus pluvialis (microalga)",
+    "plant_part": "algal biomass extract (astaxanthin in oil)",
+    "preparation": "Oral astaxanthin capsules/softgels in canola, rice bran or MCT oil; some arms combined with tocotrienol or collagen hydrolysate"
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "meta_analysis",
+   "component_registration_status": "fully_registered",
+   "condition": "cosmetic_skin_parameters",
+   "purpose": "physiology",
+   "review_status": "clinician_approved",
+   "scoring_eligible": false,
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "trial_family": "source_34578794",
+   "population": {
+    "age_group": "adult",
+    "description": "Healthy adults aged 20-65 in Japan, US, South Korea and Thailand, mostly women, some with dry skin or facial wrinkles; 8 oral RCTs pooled (Table 1)."
+   },
+   "study_design": "Systematic review and meta-analysis of 9 randomized controlled oral studies (8 pooled; 6 double-blind placebo-controlled) plus 2-3 open-label topical/oral-topical studies analysed separately; values digitized from figures.",
+   "outcomes": [
+    {
+     "name": "Oral ASX vs placebo: skin moisture SMD 0.53 (95% CI 0.05-1.01), I2 52%",
+     "hierarchy": "not_reported",
+     "kind": "surrogate",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "Skin elasticity SMD 0.77 (0.19-1.35), I2 75%",
+     "hierarchy": "not_reported",
+     "kind": "surrogate",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "Wrinkle depth SMD -0.26 (-0.58 to 0.06), p=0.11",
+     "hierarchy": "not_reported",
+     "kind": "surrogate",
+     "direction": "null",
+     "outcome_role": "direct_between_group_effect"
+    }
+   ],
+   "limitations": [
+    "Pooled oral arms include co-interventions (astaxanthin with tocotrienol in Yamashita 2002, with collagen hydrolysate in Yoon 2014) and active rose-hip comparators; the pool cannot be attributed to astaxanthin alone, so it is not scoring eligible.",
+    "Several trials were conducted or funded by commercial entities (Risk of bias section); data extracted with GetData Graph Digitizer; small samples.",
+    "Topical and oral-plus-topical open-label studies excluded from this oral context.",
+    "Cosmetic skin parameters only; the record declares no health-goal claim and no disease or longevity inference follows.",
+    "Returned decision: Source-content hold; reject both brand-wide transfer and “preclinical only” classification by key.",
+    "Some included-study citations lack PubMed identifiers in the source XML; retain their exact citations rather than inventing identifiers.",
+    "Historical bibliography census (not independent scoring sources; actual included-publication membership is separately bound to the inspected source table): 24955642, 28751807, 20205737, 22428137, 29246280, 26604725, 29941810. Each intervention and comparison requires its own applicability assessment; citation in this bibliography grants no credit.",
+    "Included-study identifiers are now bound to this source's actual included-study rows/explicit inclusion references (Tables nutrients-13-02917-t001 explicit included-study row citations), with live NIH title/content identity checks. They are publication pointers, not independent-cohort counts, per-primary-study scoring approvals, preparation equivalence or new efficacy evidence. Exact unindexed source citations remain retained; no missing PMID is invented.",
+    "4 included source citations have no printed PubMed identifier in this primary source; their exact citations are retained in the source-table receipt. This is a documented identifier limitation, not a fabricated identifier or an extra independent trial.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ],
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "mg",
+    "values": [],
+    "dose_status": "verified",
+    "dose_basis": "not_applicable",
+    "duration_basis": "participant_specific",
+    "duration_days": null,
+    "administration_frequency": "Daily oral dosing per trial.",
+    "dosage_forms": [
+     "oral softgel/capsule (astaxanthin in oil)"
+    ],
+    "co_therapies": [
+     "Some arms co-administered tocotrienol (40 mg/d) or collagen hydrolysate (3,000 mg/d); placebo oils."
+    ],
+    "reported_regimen": "Table 1: astaxanthin 2-12 mg/day for 4-16 weeks (e.g. 2 mg/d plus tocotrienol 4 wk; 4 mg/d 6 wk; 6 mg/d 6 wk; 2 mg/d plus collagen 3 g 12 wk; 4 mg/d 8 wk; 6 or 12 mg/d 16 wk).",
+    "normalization": {
+     "basis": "No scalar pooled dose; per-trial astaxanthin mg/day retained."
+    },
+    "source_provenance": {
+     "pmid": "34578794",
+     "location": "Abstract; Methods (data extraction, RoB); Results 3.1 study characteristics, Table 1, pooled moisture/elasticity/wrinkle analyses, 3.6 Risk of bias",
+     "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8472736/"
+    }
+   },
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability"
+   },
+   "included_study_pmids": [
+    "22428137",
+    "24955642",
+    "26604725",
+    "28751807",
+    "29941810",
+    "20205737",
+    "29246280"
+   ]
+  }
+ ],
+ "source_receipts": [
+  {
+   "pmid": "34578794",
+   "title_fetched": "Systematic Review and Meta-Analysis on the Effects of Astaxanthin on Human Skin Ageing.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/34578794/",
+   "full_text": true,
+   "sections_used": "Abstract; Methods; Results incl. Table 1 and RoB; Discussion"
+  },
+  {
+   "pmid": "38243785",
+   "title_fetched": "Effects of Astaxanthin Supplementation on Fatigue, Motor Function and Cognition: A Meta-Analysis of Randomized Controlled Trials.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/38243785/",
+   "full_text": false,
+   "sections_used": "Abstract only"
+  },
+  {
+   "pmid": "35091276",
+   "title_fetched": "Astaxanthin supplementation mildly reduced oxidative stress and inflammation biomarkers: a systematic review and meta-analysis of randomized controlled trials.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/35091276/",
+   "full_text": false,
+   "sections_used": "Abstract only"
+  },
+  {
+   "pmid": "32755613",
+   "title_fetched": "The effects of astaxanthin supplementation on obesity, blood pressure, CRP, glycemic biomarkers, and lipid profile: A meta-analysis of randomized controlled trials.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/32755613/",
+   "full_text": false,
+   "sections_used": "Abstract only"
+  }
+ ]
+}

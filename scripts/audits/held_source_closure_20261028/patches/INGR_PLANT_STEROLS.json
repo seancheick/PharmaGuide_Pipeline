@@ -1,0 +1,425 @@
+{
+ "record_id": "INGR_PLANT_STEROLS",
+ "decision": "held: Dr. Pham's fifth ruling reopens capsule/tablet-specific LDL credit, but the deciding sources could not be read in full: 24144075 (J Acad Nutr Diet 2013, 8 capsule/tablet trials) is closed access with no open copy, and 24287284 (softgel RCT) has an open CC-BY-NC-ND publisher PDF per OpenAlex that returned HTTP 403; per the abstract rule neither abstract can qualify credit",
+ "summary": "Abstracts show supplement-format sterols/stanols lower LDL: 24144075 pooled 8 trials (1-3 g/day, 4-6 weeks) at -0.31 mmol/L (I2 0%), equal to fortified foods; 24287284 found -4.3% placebo-adjusted LDL with 1.8 g/day esterified sterol/stanol softgels in 30 adults; 37739728 is a non-pooled review agreeing directionally. A limited capsule/tablet LDL-biomarker credit (no cardiovascular-event credit, weighed against 2026 ACC/AHA advice not to rely on supplements) looks supportable, but it needs the 24144075 full text to verify included trials and bias. The record stays held; the verified PMIDs are added to its references; the food-matrix 19109655 context stays approved and non-crediting.",
+ "record_updates": {
+  "references_structured": [
+   {
+    "type": "pubmed",
+    "authority": "NCBI PubMed",
+    "pmid": "19109655",
+    "doi": "10.3402/fnr.v52i0.1811",
+    "title": "Plant sterols/stanols as cholesterol lowering agents: A meta-analysis of randomized controlled trials.",
+    "citation": "Food & nutrition research (2008-01-01)",
+    "url": "https://pubmed.ncbi.nlm.nih.gov/19109655/",
+    "published_date": "2008-01-01",
+    "publication_types": [
+     "Journal Article"
+    ],
+    "mesh_terms": [],
+    "supplementary_concepts": [],
+    "evidence_grade": "journal_article",
+    "retracted": false,
+    "supports_claims": [],
+    "verification_source": "pubmed_eutils"
+   },
+   {
+    "type": "pubmed",
+    "authority": "NCBI PubMed",
+    "pmid": "24144075",
+    "title": "Cholesterol-lowering efficacy of plant sterols/stanols provided in capsule and tablet formats: results of a systematic review and meta-analysis.",
+    "url": "https://pubmed.ncbi.nlm.nih.gov/24144075/",
+    "publication_types": [
+     "Comparative Study",
+     "Journal Article",
+     "Meta-Analysis",
+     "Systematic Review"
+    ],
+    "verification_source": "pubmed_eutils",
+    "retracted": false,
+    "notes": "Added 2026-10-28 under Dr. Pham's fifth ruling (capsule/tablet evidence must be assessed); PubMed metadata and abstract verified; full text not obtained, so not yet credit-bearing."
+   },
+   {
+    "type": "pubmed",
+    "authority": "NCBI PubMed",
+    "pmid": "24287284",
+    "title": "A softgel dietary supplement containing esterified plant sterols and stanols improves the blood lipid profile of adults with primary hypercholesterolemia: a randomized, double-blind, placebo-controlled replication study.",
+    "url": "https://pubmed.ncbi.nlm.nih.gov/24287284/",
+    "publication_types": [
+     "Journal Article",
+     "Randomized Controlled Trial",
+     "Research Support, Non-U.S. Gov't"
+    ],
+    "verification_source": "pubmed_eutils",
+    "retracted": false,
+    "notes": "Added 2026-10-28 under Dr. Pham's fifth ruling (capsule/tablet evidence must be assessed); PubMed metadata and abstract verified; full text not obtained, so not yet credit-bearing."
+   },
+   {
+    "type": "pubmed",
+    "authority": "NCBI PubMed",
+    "pmid": "37739728",
+    "title": "Phytosterol supplementation in capsules or tablets as adjunctive treatment for hypercholesterolemia: A systematic review of randomized controlled trials.",
+    "url": "https://pubmed.ncbi.nlm.nih.gov/37739728/",
+    "publication_types": [
+     "Systematic Review",
+     "Journal Article"
+    ],
+    "verification_source": "pubmed_eutils",
+    "retracted": false,
+    "notes": "Added 2026-10-28 under Dr. Pham's fifth ruling (capsule/tablet evidence must be assessed); PubMed metadata and abstract verified; full text not obtained, so not yet credit-bearing."
+   }
+  ]
+ },
+ "study_contexts": [
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "ingr_plant_sterols_19109655_scoped_source",
+   "components": [
+    "INGR_PLANT_STEROLS"
+   ],
+   "source_pmids": [
+    "19109655"
+   ],
+   "identity_scope": "ingredient_general",
+   "identity": {
+    "preparation": "Plant sterols in distinct food carriers; not automatically equivalent to an unspecified capsule."
+   },
+   "exposure_basis": "fortification",
+   "route": "oral",
+   "evidence_role": "meta_analysis",
+   "component_registration_status": "fully_registered",
+   "condition": "elevated_ldl_cholesterol",
+   "purpose": "physiology",
+   "review_status": "clinician_approved",
+   "scoring_eligible": false,
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "trial_family": "source_19109655",
+   "population": {
+    "age_group": "adult",
+    "description": "59 randomized placebo-controlled trials (95 strata, >4,500 adults; 29 crossover, 30 parallel; n 8-185) with normal to high baseline LDL; children, sitosterolemia and prior cardiovascular disease excluded."
+   },
+   "study_design": "Meta-analysis of randomized placebo-controlled trials (Jadad >=3, >=2 weeks) of plant sterols/stanols incorporated into food matrices; trials delivering sterols as capsules or tablets were explicitly excluded.",
+   "outcomes": [
+    {
+     "name": "LDL cholesterol -0.31 mmol/L (95% CI -0.35 to -0.27), P<0.0001, with significant heterogeneity; larger with higher baseline LDL.",
+     "hierarchy": "not_reported",
+     "kind": "surrogate",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "Dose subgroups: <1.5 g/d -0.25, 1.5-2.0 g/d -0.29, 2.1-2.5 g/d -0.32, >2.5 g/d -0.42 mmol/L; single morning intake not significant; 2-3 times/day -0.34; once with lunch/main meal -0.30.",
+     "hierarchy": "not_reported",
+     "kind": "surrogate",
+     "direction": "mixed",
+     "outcome_role": "post_hoc_subgroup"
+    }
+   ],
+   "limitations": [
+    "Food matrix and intake schedule modify findings; do not infer cardiovascular event prevention or product approval from an LDL surrogate.",
+    "Returned decision: Date-restricted evidence hold; reject product-approval implications. Publication-age-only exclusions were withdrawn and are not adopted.",
+    "Some included-study citations lack PubMed identifiers in the source XML; retain their exact citations rather than inventing identifiers.",
+    "Historical bibliography census (not independent scoring sources; actual included-publication membership is separately bound to the inspected source table): 9630383, 10075323, 10334658, 15164106, 15316827, 11502237, 16234829, 11755939, 14519792, 17023701, 14764424, 16391591, 12728215, 12730296, 11506058, 11002377, 16549466, 12081816, 15766477, 11833047, 12949359, 11451715, 12468602, 12356387, 14505991, 8003098, 12425728, 17081832, 16721398, 10787430, 12450893, 10357732, 16546486, 10654588, 15992512, 11518201, 12548313, 7988779, 10337856, 11002384, 12771969, 16162943, 11876261, 15941886, 12638032, 12771320, 11395029, 10593347, 11522112, 11756063, 10580176, 16459230, 10655976, 12003257, 8228636, 7859805, 11101479, 11368702. Each intervention and comparison requires its own applicability assessment; citation in this bibliography grants no credit.",
+    "Included-study PMID membership was extracted from source Table(s) T0002. These are source membership identifiers, not independent efficacy approvals or automatic trial replications. Exact table/citation mapping and unindexed citations are retained in the source receipt. 2 source citations in this set lack a PMID in the primary source; their citation text is retained, no PMID is invented.",
+    "No credit for this supplement record: the review excluded trials that delivered plant sterols/stanols as capsules or tablets and covers only fortified foods (spreads, dressings, dairy, juices, bars). The authors also note pure crystalline sterols are not consistently effective unless adequately formulated, so the food-matrix effect cannot be transferred to capsule or tablet supplements.",
+    "Included-study membership retained from the prior Table 2 binding; 56 of the 57 PMIDs were re-matched to the source reference list in this session (15992512 has no PMID tag in the source reference XML). Two cited trials lack PMIDs.",
+    "Dr. Pham ruling 2026-10-28: a generic capsule does not inherit food-matrix evidence; reference-only for retail supplements unless the source shows capsule/tablet trials. Checked: Methods state trials incorporating sterols/stanols as capsules or tablets were excluded, so no capsule/tablet format can be credited from this source.",
+    "LDL is a surrogate; this does not show cardiovascular event reduction. A future trial or synthesis of capsule/softgel sterol supplements would be needed to restore credit.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28.",
+    "Capsule/tablet evidence identified 2026-10-28 (24144075 meta-analysis of 8 supplement trials; 24287284 softgel RCT; 37739728 systematic review) is recorded in separate pending contexts until full texts are verified."
+   ],
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "mg",
+    "values": [],
+    "dose_status": "verified",
+    "dose_basis": "not_applicable",
+    "duration_basis": "not_recorded",
+    "administration_frequency": "Once daily (morning, lunch or main meal) or 2-3 times daily with food, by trial (Results; Tables 2-3).",
+    "dosage_forms": [
+     "fat spread",
+     "mayonnaise",
+     "salad dressing",
+     "milk",
+     "yogurt",
+     "croissant",
+     "muffin",
+     "orange juice",
+     "beverage",
+     "cereal bar",
+     "chocolate"
+    ],
+    "co_therapies": [
+     "Food carriers include spreads, mayonnaise, dairy and other matrices with different results."
+    ],
+    "reported_regimen": "Plant sterol/stanol intakes grouped as <1.5, 1.5-2.0, 2.1-2.5 and >2.5 g/day (as free sterol) in fortified foods; minimum trial duration 2 weeks.",
+    "normalization": {
+     "basis": "A heterogeneous synthesis has no single assigned-arm dose. Descriptive regimens do not create an intake recommendation, equivalent preparation or efficacy threshold."
+    },
+    "source_provenance": {
+     "pmid": "19109655",
+     "location": "Full text (PMC2596710): Methods eligibility (capsule/tablet exclusion), Results (Tables 2-3, pooled LDL, dose, carrier and frequency subgroups), Discussion.",
+     "source_url": "https://pubmed.ncbi.nlm.nih.gov/19109655/"
+    },
+    "duration_days": null
+   },
+   "included_study_pmids": [
+    "16549466",
+    "15766477",
+    "16546486",
+    "10654588",
+    "15992512",
+    "11518201",
+    "12548313",
+    "11506058",
+    "12425728",
+    "17023701",
+    "14764424",
+    "16234829",
+    "7988779",
+    "10337856",
+    "10075323",
+    "11002384",
+    "10334658",
+    "12771969",
+    "16162943",
+    "10357732",
+    "10787430",
+    "12730296",
+    "11876261",
+    "16721398",
+    "15941886",
+    "12638032",
+    "12771320",
+    "11451715",
+    "12081816",
+    "11755939",
+    "8003098",
+    "11833047",
+    "12949359",
+    "11395029",
+    "10593347",
+    "11522112",
+    "11756063",
+    "15316827",
+    "12468602",
+    "10580176",
+    "11002377",
+    "17081832",
+    "14519792",
+    "16459230",
+    "14505991",
+    "10655976",
+    "12356387",
+    "12728215",
+    "12003257",
+    "15164106",
+    "8228636",
+    "7859805",
+    "12450893",
+    "11101479",
+    "11502237",
+    "9630383",
+    "16391591"
+   ],
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability"
+   }
+  },
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "ingr_plant_sterols_24144075_capsule_tablet_meta",
+   "source_pmids": [
+    "24144075"
+   ],
+   "components": [
+    "INGR_PLANT_STEROLS"
+   ],
+   "identity_scope": "ingredient_general",
+   "identity": {
+    "preparation": "Plant sterols/stanols as capsule, tablet or softgel supplements."
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "meta_analysis",
+   "component_registration_status": "fully_registered",
+   "condition": "elevated_ldl_cholesterol",
+   "purpose": "treatment",
+   "population": {
+    "age_group": "adult",
+    "description": "Adults in 8 trials of 4-6 weeks; population details not in the abstract."
+   },
+   "study_design": "Systematic review and random-effects meta-analysis of 8 trials (1992-April 2013) of plant sterol/stanol supplements (capsules/tablets) versus placebo.",
+   "trial_family": "24144075",
+   "review_status": "source_verified_pending_clinical_review",
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "scoring_eligible": false,
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "g",
+    "values": [],
+    "dose_status": "verified",
+    "dose_basis": "not_applicable",
+    "duration_basis": "not_recorded",
+    "duration_days": null,
+    "administration_frequency": "Mainly with main meals, 2-3 times/day (abstract).",
+    "reported_regimen": "1.0-3.0 g/day for 4-6 weeks (abstract).",
+    "dosage_forms": [
+     "capsule or tablet supplements (trial-specific)"
+    ],
+    "co_therapies": [
+     "Background diet (therapeutic lifestyle diet in 24287284) as reported in the abstract."
+    ],
+    "source_provenance": {
+     "pmid": "24144075",
+     "location": "PubMed abstract only; full text not obtained.",
+     "source_url": "https://pubmed.ncbi.nlm.nih.gov/24144075/"
+    }
+   },
+   "outcomes": [
+    {
+     "name": "LDL-C -12 mg/dL (-0.31 mmol/L; 95% CI -0.39 to -0.23) versus placebo; I2 0%; no difference from sterol-enriched foods (abstract).",
+     "hierarchy": "not_reported",
+     "kind": "surrogate",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    }
+   ],
+   "limitations": [
+    "Pending: the full text (J Acad Nutr Diet 2013;113:1494-1503, closed access) is needed to verify the 8 included trials, their risk of bias and preparation identity; per Dr. Pham's abstract rule an abstract cannot qualify this positive synthesis.",
+    "LDL is a biomarker; 2026 ACC/AHA guidance advises against relying on supplements for dyslipidemia, and no cardiovascular-event credit is possible."
+   ],
+   "included_study_pmids": "extraction_pending"
+  },
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "ingr_plant_sterols_24287284_softgel_rct",
+   "source_pmids": [
+    "24287284"
+   ],
+   "components": [
+    "INGR_PLANT_STEROLS"
+   ],
+   "identity_scope": "ingredient_general",
+   "identity": {
+    "preparation": "Plant sterols/stanols as capsule, tablet or softgel supplements."
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "direct_rct",
+   "component_registration_status": "fully_registered",
+   "condition": "elevated_ldl_cholesterol",
+   "purpose": "treatment",
+   "population": {
+    "age_group": "adult",
+    "description": "30 adults (8 men, 22 women) with primary hypercholesterolemia (LDL-C 130-<220 mg/dL) on the NCEP Therapeutic Lifestyle Changes diet; all completed."
+   },
+   "study_design": "Randomized, double-blind, placebo-controlled crossover replication trial (July 2011-January 2012).",
+   "trial_family": "24287284",
+   "review_status": "source_verified_pending_clinical_review",
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "scoring_eligible": false,
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "g",
+    "values": [
+     1.8
+    ],
+    "dose_status": "verified",
+    "dose_basis": "nominal_assigned_arm",
+    "duration_basis": "extraction_pending",
+    "administration_frequency": "Daily (schedule not in the abstract).",
+    "reported_regimen": "1.8 g/day esterified plant sterols and stanols in softgels.",
+    "normalization": {
+     "basis": "Abstract states 1.8 g/day esterified sterols/stanols."
+    },
+    "dosage_forms": [
+     "oral softgel"
+    ],
+    "co_therapies": [
+     "Background diet (therapeutic lifestyle diet in 24287284) as reported in the abstract."
+    ],
+    "source_provenance": {
+     "pmid": "24287284",
+     "location": "PubMed abstract only; full text not obtained.",
+     "source_url": "https://pubmed.ncbi.nlm.nih.gov/24287284/"
+    }
+   },
+   "outcomes": [
+    {
+     "name": "Placebo-adjusted LDL-C -4.3%, non-HDL-C -4.1%, total cholesterol -3.5% (P<0.01); triglycerides and HDL-C unchanged (abstract).",
+     "hierarchy": "not_reported",
+     "kind": "surrogate",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    }
+   ],
+   "limitations": [
+    "Pending: publisher full text (open CC-BY-NC-ND per OpenAlex, jandonline.org) returned HTTP 403; period length, primary endpoint and sponsor need verification. Single 30-person crossover; small LDL effect."
+   ]
+  },
+  {
+   "context_id": "ingr_plant_sterols_37739728_capsule_sr",
+   "source_pmids": [
+    "37739728"
+   ],
+   "components": [
+    "INGR_PLANT_STEROLS"
+   ],
+   "review_status": "rejected_source",
+   "scoring_eligible": false,
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability",
+    "notes": "Qualitative systematic review without pooling (abstract only); supportive context, not a credit source."
+   },
+   "dose": {
+    "source_provenance": {
+     "pmid": "37739728",
+     "location": "PubMed abstract.",
+     "source_url": "https://pubmed.ncbi.nlm.nih.gov/37739728/"
+    }
+   },
+   "limitations": [
+    "PROSPERO CRD42021249539 systematic review of 10 RCTs of phytosterol capsules/tablets in hypercholesterolemic adults; most showed LDL reduction over short durations; no meta-analysis (abstract).",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ]
+  }
+ ],
+ "source_receipts": [
+  {
+   "pmid": "19109655",
+   "title_fetched": "Plant sterols/stanols as cholesterol lowering agents: A meta-analysis of randomized controlled trials.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/19109655/",
+   "full_text": true,
+   "sections_used": "Methods, Results, Tables 2-3 (BioC PMC2596710)"
+  },
+  {
+   "pmid": "24144075",
+   "title_fetched": "Cholesterol-lowering efficacy of plant sterols/stanols provided in capsule and tablet formats: results of a systematic review and meta-analysis.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/24144075/",
+   "full_text": false,
+   "sections_used": "PubMed abstract"
+  },
+  {
+   "pmid": "24287284",
+   "title_fetched": "A softgel dietary supplement containing esterified plant sterols and stanols improves the blood lipid profile of adults with primary hypercholesterolemia: a randomized, double-blind, placebo-controlled replication study.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/24287284/",
+   "full_text": false,
+   "sections_used": "PubMed abstract"
+  },
+  {
+   "pmid": "37739728",
+   "title_fetched": "Phytosterol supplementation in capsules or tablets as adjunctive treatment for hypercholesterolemia: A systematic review of randomized controlled trials.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/37739728/",
+   "full_text": false,
+   "sections_used": "PubMed abstract"
+  }
+ ]
+}
