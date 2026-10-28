@@ -1,0 +1,114 @@
+{
+ "record_id": "INGR_CALCIUM",
+ "decision": "held: 17720017 (Tang 2007 Lancet) is the only declared source that pools calcium monotherapy, but its full text is subscription-only and not retrievable; the calcium-alone subgroup, included-trial dose range and dosage forms cannot be verified from the abstract, and its pooled estimate mixes calcium-alone and calcium+vitamin D trials. 26510847 is a calcium+vitamin D combination meta-analysis (not this ingredient alone) whose erratum 27401092 could not be retrieved.",
+ "summary": "26510847 (NOF 2016) pools 8 RCTs of calcium plus vitamin D (calcium 500-1200 mg/day with vitamin D 400-800 IU/day, Table 1): total fracture SRRE 0.85 and hip fracture 0.70; it is combination evidence and cannot credit calcium alone, and its erratum text was not retrievable. 17720017 (29 RCTs, n=63,897, people >=50) supports calcium or calcium+D for fracture (RR 0.88) and bone loss, but only the abstract is accessible, so the calcium-alone result, dose range and forms cannot be verified. The record's bone-health claim is not refuted, so it is not downgraded to reference; it stays held.",
+ "record_updates": {},
+ "study_contexts": [
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "ingr_calcium_26510847_scoped_source",
+   "components": [
+    "INGR_CALCIUM"
+   ],
+   "source_pmids": [
+    "26510847"
+   ],
+   "identity_scope": "ingredient_general",
+   "identity": {
+    "preparation": "Calcium plus vitamin D; not calcium monotherapy."
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "meta_analysis",
+   "component_registration_status": "fully_registered",
+   "condition": "fracture_prevention",
+   "purpose": "prevention",
+   "review_status": "source_verified_pending_clinical_review",
+   "scoring_eligible": false,
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "trial_family": "source_26510847",
+   "population": {
+    "description": "Eight trials; 30,970 middle-aged or older adults, community-dwelling and institutionalized populations."
+   },
+   "study_design": "Published systematic review or meta-analysis; individual trial correspondence remains source-specific.",
+   "outcomes": [
+    {
+     "name": "Total fractures SRRE 0.85 (0.73–0.98); hip fractures 0.70 (0.56–0.87).",
+     "direction": "positive",
+     "kind": "patient_important",
+     "hierarchy": "not_reported",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "Community-dwelling total-fracture subgroup RR 0.95 (0.85–1.06), not significant; institutionalized subgroup 0.67 (0.52–0.88).",
+     "direction": "mixed",
+     "kind": "patient_important",
+     "hierarchy": "not_reported",
+     "outcome_role": "direct_between_group_effect"
+    }
+   ],
+   "limitations": [
+    "WHI adherence/no-personal-supplement subgroup selection affects pooled estimates.",
+    "Do not attribute combination findings to calcium alone or turn subgroup comparisons into a causal dose threshold. Nutritional calcium guidance remains independent.",
+    "Returned decision: Date-restricted efficacy hold; nutritional guidance is a separate context. Publication-age-only exclusions were withdrawn and are not adopted.",
+    "No new scoring grade, dose threshold, product approval or clinical signature is assigned by this factual extraction.",
+    "Historical bibliography census (not independent scoring sources; actual included-publication membership is separately bound to the inspected source table): 23208074, 25321423, 24395288, 22644348, 22151975, 23332626, 21455716, 22316322. Each intervention and comparison requires its own applicability assessment; citation in this bibliography grants no credit.",
+    "Included-study PMID membership was extracted from source Table(s) Tab1. These are source membership identifiers, not independent efficacy approvals or automatic trial replications. Exact table/citation mapping and unindexed citations are retained in the source receipt.",
+    "Physical dosage form (e.g. carbonate/citrate, tablet/chewable) is not reported in the meta-analysis text or Table 1 (fetched 2026-10-28); recorded as not reported, no form inferred.",
+    "Calcium plus vitamin D combination only (Table 1: calcium 500-1200 mg/day with vitamin D 400-800 IU/day); cannot be credited to calcium monotherapy.",
+    "Published erratum with additional analyses (PMID 27401092, Osteoporos Int 2016;27:2643-2646) exists and its text could not be retrieved in this session (PMC/Europe PMC full text unavailable); context stays pending until the erratum is inspected."
+   ],
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "mg",
+    "values": [],
+    "dose_status": "source_not_reported",
+    "dose_basis": "not_applicable",
+    "duration_basis": "participant_specific",
+    "administration_frequency": "Calcium 500–1200 mg/day plus vitamin D 400–800 IU/day; trial-specific regimens over 1–7 years. These are separate combination protocols, not an interchangeable continuous dose benchmark.",
+    "dosage_forms": [
+     "not reported by source: trial-specific oral calcium plus vitamin D preparations"
+    ],
+    "co_therapies": [
+     "Vitamin D is part of the studied active combination. Trial comparators and personal supplementation differ."
+    ],
+    "reported_regimen": "Calcium 500–1200 mg/day plus vitamin D 400–800 IU/day; trial-specific regimens over 1–7 years. These are separate combination protocols, not an interchangeable continuous dose benchmark.",
+    "normalization": {
+     "basis": "A heterogeneous synthesis has no single assigned-arm dose. Descriptive regimens do not create an intake recommendation, equivalent preparation or efficacy threshold."
+    },
+    "source_provenance": {
+     "pmid": "26510847",
+     "location": "Table 1 (per-trial vitamin D IU/day, calcium mg/day, setting, fracture events); Methods Data extraction; Results; Discussion (WHI Prentice subset).",
+     "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4715837/"
+    }
+   },
+   "included_study_pmids": [
+    "25321423",
+    "24395288",
+    "22644348",
+    "22151975",
+    "23208074",
+    "23332626",
+    "21455716",
+    "22316322"
+   ]
+  }
+ ],
+ "source_receipts": [
+  {
+   "pmid": "26510847",
+   "title_fetched": "Calcium plus vitamin D supplementation and risk of fractures: an updated meta-analysis from the National Osteoporosis Foundation.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/26510847/",
+   "full_text": true,
+   "sections_used": "Abstract; Methods Data extraction; Results; Table 1; Discussion"
+  },
+  {
+   "pmid": "17720017",
+   "title_fetched": "Use of calcium or calcium in combination with vitamin D supplementation to prevent fractures and bone loss in people aged 50 years and older: a meta-analysis.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/17720017/",
+   "full_text": false,
+   "sections_used": "Abstract only (full text subscription-only); erratum Lancet 2012;380:806 noted, not inspected"
+  }
+ ]
+}

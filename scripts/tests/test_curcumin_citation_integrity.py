@@ -215,8 +215,16 @@ def test_theracurmin_explicit_product_hold_withholds_affirmative_brand_qualifica
 def test_theracurmin_signed_source_contexts_keep_nulls_and_pending_memory_acceptance():
     from clinical_evidence_schema import validate_ingredient_context
     from probiotic_measurements import context_accepted_for_scoring
-    contexts = _theracurmin_record().get('study_contexts', [])
-    assert len(contexts) == 3
+    record = _theracurmin_record()
+    contexts = record.get('study_contexts', [])
+    # Drafts live in audit receipts, not production data (Sean, 2026-10-28).
+    # The memory acceptance (29246725) is still outstanding (Dr. Pham,
+    # 2026-10-28: "Held"), so it has no production context and the record
+    # stays held while its source remains declared.
+    assert len(contexts) == 2
+    assert record.get('scoring_eligible') is False
+    assert '29246725' in {ref['pmid'] for ref in record['references_structured']}
+    assert not any('29246725' in context['source_pmids'] for context in contexts)
     by_pmid = {context['source_pmids'][0]: context for context in contexts}
     for context in contexts:
         assert validate_ingredient_context(context) == []
@@ -228,12 +236,9 @@ def test_theracurmin_signed_source_contexts_keep_nulls_and_pending_memory_accept
     assert oa['outcomes'][0]['direction'] == 'null'
     assert any(o['outcome_role'] == 'post_hoc_subgroup' for o in oa['outcomes'])
     assert oa['clinical_review']['reviewer'] == 'Dr. Pham'
-    memory = by_pmid['29246725']
-    assert memory['review_status'] == 'source_verified_pending_clinical_review'
-    assert 'clinical_review' not in memory
-    assert 'supplement' in ' '.join(memory['limitations']).lower()
-    assert 'registration' in ' '.join(memory['limitations']).lower()
-    assert any(o['direction'] == 'null' for o in memory['outcomes'])
+    # The memory study's open dependencies stay named on the held record.
+    assert 'supplement' in record['notes'] and 'registration' in record['notes']
+    assert 'multiple comparisons were not adjusted' in record['notes']
     postoperative = by_pmid['35494290']
     assert postoperative['outcomes'][0]['direction'] == 'null'
     assert postoperative['outcomes'][1]['kind'] == 'surrogate'

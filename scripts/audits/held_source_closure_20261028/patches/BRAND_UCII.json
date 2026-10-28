@@ -1,0 +1,265 @@
+{
+ "record_id": "BRAND_UCII",
+ "decision": "closed_credit",
+ "summary": "Two randomized double-blind trials of the exact UC-II material at 40 mg/day: 26822714 (191 knee-OA adults, 180 days) improved the primary total WOMAC versus placebo (p=0.002) and versus glucosamine+chondroitin (p=0.04); 24153020 (55 healthy adults with exertional knee discomfort, 120 days) improved the primary knee-extension range of motion versus placebo (p=0.011). Both are industry-sponsored; credit is limited to UC-II, and hydrolyzed-collagen substitution is excluded per Dr. Pham.",
+ "record_updates": {},
+ "study_contexts": [
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "brand_ucii_26822714_knee_oa",
+   "components": [
+    "BRAND_UCII"
+   ],
+   "source_pmids": [
+    "26822714"
+   ],
+   "identity_scope": "branded_material",
+   "identity": {
+    "branded_material": "UC-II",
+    "manufacturer": "Chick Cart Inc. (study sponsor InterHealth Nutraceuticals)",
+    "standardization": "Undenatured type II collagen from chicken sternum, patented low-temperature process preserving native structure (Lot 1204004)"
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "direct_rct",
+   "component_registration_status": "fully_registered",
+   "condition": "knee_osteoarthritis",
+   "purpose": "treatment",
+   "review_status": "clinician_approved",
+   "scoring_eligible": true,
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "trial_family": "26822714",
+   "population": {
+    "age_group": "adult",
+    "description": "191 adults aged 40-75 (BMI 18-30) with moderate-to-severe knee osteoarthritis randomized in India; mITT 186 (UC-II 63, glucosamine+chondroitin 65, placebo 58), mean age about 53."
+   },
+   "study_design": "Multicentre randomized double-blind placebo- and active-controlled (glucosamine HCl 1500 mg + chondroitin sulfate 1200 mg) three-arm trial, 180 days; mITT ANCOVA/MMRM (CTRI/2013/05/003663; CTRI/2013/02/003348).",
+   "outcomes": [
+    {
+     "name": "Primary: change in total WOMAC baseline to day 180, UC-II vs placebo significant (p=0.002) and vs glucosamine+chondroitin (p=0.04)",
+     "hierarchy": "primary",
+     "kind": "patient_important",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "WOMAC pain (p=0.0003), stiffness (p=0.004) and physical function (p=0.007) vs placebo",
+     "hierarchy": "secondary",
+     "kind": "patient_important",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    }
+   ],
+   "limitations": [
+    "Sponsored by InterHealth Nutraceuticals with employee authors; run by a CRO in India.",
+    "Material mass (40 mg UC-II), not a verified active native-collagen mass; not interchangeable with other collagen products.",
+    "Returned decision A030: hydrolyzed-collagen substitution rejected; exact UC-II undenatured chicken-sternum material only.",
+    "Dr. Pham's fourth ruling set (2026-10-28): exact undenatured type II collagen (UC-II) and knee outcomes only. 40 mg/day is UC-II ingredient mass, not native collagen content; this paper does not report native type II content, and the 2013 paper's lot gave 10.4 mg native type II per 40 mg, so the two are not interchangeable.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ],
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "mg",
+    "values": [
+     40
+    ],
+    "dose_status": "verified",
+    "dose_basis": "nominal_assigned_arm",
+    "duration_basis": "fixed_protocol",
+    "duration_days": 180,
+    "administration_frequency": "Two 20 mg UC-II capsules before bedtime (plus two placebo capsules with breakfast for blinding).",
+    "dosage_forms": [
+     "oral capsule"
+    ],
+    "co_therapies": [
+     "Glucosamine hydrochloride plus chondroitin sulfate was a separate comparator arm, not coadministered with UC-II."
+    ],
+    "reported_regimen": "UC-II 40 mg/day as two 20 mg evening capsules for 180 days.",
+    "normalization": {
+     "basis": "2 x 20 mg = 40 mg/day UC-II material as assigned."
+    },
+    "source_provenance": {
+     "pmid": "26822714",
+     "location": "Methods (study product; inclusion criteria table; dosing paragraph; primary endpoint; mITT); Results (Table 2 baseline; WOMAC outcomes); declarations",
+     "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4731911/"
+    },
+    "duration_as_printed": {
+     "value": 180,
+     "unit": "days"
+    }
+   },
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability"
+   }
+  },
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "brand_ucii_24153020_exertional_knee",
+   "components": [
+    "BRAND_UCII"
+   ],
+   "source_pmids": [
+    "24153020"
+   ],
+   "identity_scope": "branded_material",
+   "identity": {
+    "branded_material": "UC-II",
+    "manufacturer": "InterHealth Nutraceuticals",
+    "standardization": "40 mg UC-II material (Lot 1109006) providing 10.4 ± 1.3 mg native type II collagen"
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "direct_rct",
+   "component_registration_status": "fully_registered",
+   "condition": "exercise_related_knee_discomfort",
+   "purpose": "treatment",
+   "review_status": "clinician_approved",
+   "scoring_eligible": true,
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "trial_family": "24153020",
+   "population": {
+    "age_group": "adult",
+    "description": "55 healthy adults aged 30-65 (BMI 18-35) without arthritis or knee pain at rest who developed knee discomfort (>=5/10) on a standardized stepmill test; placebo 28, UC-II 27."
+   },
+   "study_design": "Randomized double-blind placebo-controlled trial, 120 days, single US site.",
+   "outcomes": [
+    {
+     "name": "Primary efficacy variable knee range of motion: knee extension improved vs placebo at day 120 (81.0 ± 1.3° vs 74.0 ± 2.2°, p=0.011)",
+     "hierarchy": "primary",
+     "kind": "patient_important",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "Time to initial joint discomfort on stepmill: longer at day 120 vs baseline in UC-II group only (within-group, 2.8 vs 1.4 min); not a between-group comparison",
+     "hierarchy": "secondary",
+     "kind": "patient_important",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    }
+   ],
+   "limitations": [
+    "Small industry-sponsored trial; pain-free exertion findings are within-group, not placebo-adjusted.",
+    "Healthy exertional knee discomfort only; no arthritis or inflammation efficacy inferred.",
+    "Returned decision A030: hydrolyzed-collagen substitution rejected; exact UC-II undenatured chicken-sternum material only.",
+    "Dr. Pham's fourth ruling set (2026-10-28): exact UC-II material and knee outcome only; 40 mg UC-II material provided 10.4 ± 1.3 mg native type II collagen (ingredient mass vs native content kept distinct).",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ],
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "mg",
+    "values": [
+     40
+    ],
+    "dose_status": "verified",
+    "dose_basis": "nominal_assigned_arm",
+    "duration_basis": "fixed_protocol",
+    "duration_days": 120,
+    "administration_frequency": "One capsule daily.",
+    "dosage_forms": [
+     "oral capsule"
+    ],
+    "co_therapies": [
+     "Source-reported concurrent-care/restriction context: Rescue medication No rescue medications were allowed during the course of the study.",
+     "Source-reported concurrent-care/restriction context: At all study visits, subjects were given a list of the 43 prohibited medications and supplements (Table 3 ).",
+     "Source-reported concurrent-care/restriction context: Table 3 Representative list of prohibited medications* by category Category Medications Joint supplements (Omega-3, Omega-6 plus others) Alpha-Linolenic acid Docosapentaenoic acid Docosahexaenoic acid Eicosatrienoic acid Eicosatetraenoic acid Eicosapentaenoic acid Hexadecatrienoic acid Heneicosapentaenoic acid Stearidonic acid Tetracosapentaenoic acid Tetracosahexaenoic acid Glucosamine (all forms) Chondroitin (all forms) Other herbal ingredients NSAIDs (OTC and prescription) Aspirin Diflunisal Diclofenac Celecoxib Etodolac Fenoprofen Flurbiprofen Ibuprofen Indomethacin Ketoprofen Meclofenamate Mefenamic acid Meloxicam Nabumetone Naproxen Oxaprozin Piroxicam Rofecoxib Sulindac Tolmetin Valdecoxib *Selected from a list of 43 prohibited medications and supplements."
+    ],
+    "reported_regimen": "UC-II 40 mg capsule daily for 120 days.",
+    "normalization": {
+     "basis": "One 40 mg UC-II capsule per day as assigned."
+    },
+    "source_provenance": {
+     "pmid": "24153020",
+     "location": "Introduction (primary efficacy variable ROM); Methods (study product, inclusion table, design, prohibited medications Table 3); Results",
+     "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4015808/"
+    },
+    "duration_as_printed": {
+     "value": 120,
+     "unit": "days"
+    }
+   },
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability"
+   }
+  }
+ ],
+ "source_receipts": [
+  {
+   "pmid": "26822714",
+   "title_fetched": "Efficacy and tolerability of an undenatured type II collagen supplement in modulating knee osteoarthritis symptoms: a multicenter randomized, double-blind, placebo-controlled study.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/26822714/",
+   "full_text": true,
+   "sections_used": "Abstract; Methods; Results; declarations"
+  },
+  {
+   "pmid": "24153020",
+   "title_fetched": "Undenatured type II collagen (UC-II®) for joint support: a randomized, double-blind, placebo-controlled study in healthy volunteers.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/24153020/",
+   "full_text": true,
+   "sections_used": "Abstract; Introduction; Methods; Results"
+  }
+ ],
+ "freshness_search": {
+  "date": "2026-10-28",
+  "database": "PubMed (NCBI E-utilities esearch, sort=pub_date, retmax=60; titles via esummary, abstracts via efetch)",
+  "query": "(\"undenatured type II collagen\" OR \"undenatured collagen\" OR \"UC-II\" OR \"native type II collagen\" OR \"undenatured type 2 collagen\") AND (meta-analysis[pt] OR systematic review[pt] OR randomized controlled trial[pt])",
+  "hits": 17,
+  "screened": 19,
+  "supplementary_queries": [
+   {
+    "query": "(undenatured[tiab] AND collagen[tiab]) AND (meta-analysis[tiab] OR systematic review[tiab])",
+    "hits": 5
+   }
+  ],
+  "screening_rule": "Kept human RCTs of undenatured type II collagen and syntheses on joint outcomes. Excluded dog studies and an unrelated smoking trial. Other undenatured products (NEXT-II, CN2) and multi-ingredient combinations (Artneo, a Boswellia/MSM combination) were read as context only, not as UC-II.",
+  "read": [
+   {
+    "pmid": "35377244",
+    "title": "UC-II Undenatured Type II Collagen for Knee Joint Flexibility: A Multicenter, Randomized, Double-Blind, Placebo-Controlled Clinical Study.",
+    "finding": "2022 exact-material RCT: 96 healthy adults aged 20-55 with activity-related knee discomfort, UC-II 40 mg/day for 24 weeks. Knee flexion range of motion improved vs placebo (3.23 vs 0.21 degrees, p=0.025)."
+   },
+   {
+    "pmid": "37854210",
+    "title": "Efficacy of undenatured collagen in knee osteoarthritis: review of the literature with limited meta-analysis.",
+    "finding": "2023 review with limited MA of 8 RCTs in early knee OA (243 on UC-II): WOMAC and VAS were better with UC-II than placebo. Authors note limited literature."
+   },
+   {
+    "pmid": "40425393",
+    "title": "Effects of dietary supplements on patients with osteoarthritis: A systematic review and network meta-analysis.",
+    "finding": "2025 network MA, 23 RCTs covering 21 supplements (2,455 OA patients): undenatured type II collagen ranked third for WOMAC pain (SUCRA 87%), with GRADE caveats."
+   },
+   {
+    "pmid": "40253594",
+    "title": "Undenatured type II collagen for knee osteoarthritis.",
+    "finding": "2025 qualitative SR of 8 clinical studies: UC-II 40 mg/day was safe and efficacious in the short and mid term. Authors call for larger, longer trials."
+   },
+   {
+    "pmid": "41787523",
+    "title": "Efficacy and tolerability of native (undenatured) type II collagen supplementation for joint health in healthy volunteers: a randomized double-blind placebo-controlled study.",
+    "finding": "2026 RCT of CN2 native type II collagen 40 mg/day for 180 days in 74 healthy adults with exercise-related joint discomfort: KOOS improved in both groups. Between-group differences appeared only in subgroups and in recovery time. The product is not identified as UC-II."
+   },
+   {
+    "pmid": "35512781",
+    "title": "Efficacy and Safety of Dietary Undenatured Type II Collagen on Joint and Motor Function in Healthy Volunteers: A Randomized, Double-Blind, Placebo-Controlled, Parallel-Group Study.",
+    "finding": "2023 RCT of NEXT-II (a different undenatured collagen, 3.2 mg/day) in 64 healthy Japanese adults for 12 weeks: the primary outcome, knee range of motion, improved. Different product."
+   },
+   {
+    "pmid": "38829812",
+    "title": "[Efficacy and safety of undenatured type II collagen in patients with knee osteoarthritis: a multicenter, prospective, double-blind, placebo-controlled, randomized trial].",
+    "finding": "2024 RCT, 212 knee-OA patients, Artneo (a combination containing undenatured chicken type II collagen) for 180 days: superior to placebo on all parameters. Multi-ingredient, so not UC-II alone."
+   }
+  ],
+  "conclusion": "confirms: a newer exact-material RCT (35377244) and newer syntheses (37854210, 40425393, 40253594) favour UC-II for knee outcomes, and none is null. Other undenatured products and multi-ingredient combinations are not UC-II and are not used. Credit stays limited to UC-II 40 mg/day knee outcomes, with hydrolyzed collagen excluded."
+ },
+ "integration_notes": [
+  "2026-10-28 integrator: require_source_label_form removed; required_form_terms kept, matching the KSM-66/Tesnor precedent. Source-only matching rejected real labels whose ingredient row resolves through the enricher.",
+  "2026-10-28 integrator: required_form_terms removed for this BRAND_ record; the enricher's brand gate already requires the brand on the label (product name or row), and a row-only term rejected product-name-branded labels.",
+  "2026-10-28 integrator (CI triage B2): applicability block withheld for this BRAND_ record. Any applicability policy makes clinical_applicability bind credit to the row its own linkage finds, which moved real UC-II labels (321604) from the brand-named heading to an undosed collagen row and lost the floor (14.0 -> 5.0). The enricher's brand gate still requires UC-II on the label; approved contexts and the native-collagen limitation stay. Heading-binding fix handed to the claim-state applicability session (moves scores; needs measurement)."
+ ]
+}

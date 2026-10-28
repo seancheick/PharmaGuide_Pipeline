@@ -1,0 +1,371 @@
+{
+ "record_id": "INGR_FOLATE_MTHF",
+ "decision": "closed_no_credit",
+ "summary": "The reviewed research does not establish a qualifying benefit for this product's assessed use. The verified 5-MTHF intervention studies are folate-status, absorption-kinetic and infant-formula growth-equivalence studies (lactation RBC folate at least as high as folic acid; equivalent infant weight gain with lower unmetabolized folic acid), none measuring the record's cardiovascular, hormone or cognitive goals. Per Dr. Pham's 2026-10-28 ruling, 25943647 (folic acid vs B-complex) and 25733468 (NHANES survey) are background only and are removed from every 5-MTHF context; folic acid, not 5-MTHF, is the form shown to prevent neural-tube defects. The record is reference-only for this clinical claim; folate nutrition stays on its separate pathway.",
+ "record_updates": {
+  "study_type": "reference",
+  "evidence_level": "reference",
+  "references_structured": [
+   {
+    "type": "pubmed",
+    "authority": "NCBI PubMed",
+    "pmid": "31425504",
+    "doi": "10.1371/journal.pone.0216790",
+    "title": "Suitability and safety of L-5-methyltetrahydrofolate as a folate source in infant formula: A randomized-controlled trial.",
+    "citation": "PloS one (2019-01-01)",
+    "url": "https://pubmed.ncbi.nlm.nih.gov/31425504/",
+    "published_date": "2019-01-01",
+    "publication_types": [
+     "Journal Article",
+     "Randomized Controlled Trial"
+    ],
+    "mesh_terms": [
+     "Breast Feeding",
+     "Double-Blind Method",
+     "Female",
+     "Folic Acid",
+     "Genotype",
+     "Germany",
+     "Humans",
+     "Infant",
+     "Infant Formula",
+     "Infant Nutritional Physiological Phenomena",
+     "Infant, Newborn",
+     "Male",
+     "Methylenetetrahydrofolate Reductase (NADPH2)",
+     "Milk, Human",
+     "Polymorphism, Single Nucleotide",
+     "Tetrahydrofolates",
+     "Weight Gain"
+    ],
+    "supplementary_concepts": [],
+    "evidence_grade": "rct",
+    "retracted": false,
+    "supports_claims": [],
+    "verification_source": "pubmed_eutils"
+   },
+   {
+    "type": "pubmed",
+    "authority": "NCBI PubMed",
+    "pmid": "16600937",
+    "doi": "10.1093/ajcn/83.4.842",
+    "title": "[6S]-5-Methyltetrahydrofolate is at least as effective as folic acid in preventing a decline in blood folate concentrations during lactation.",
+    "citation": "The American journal of clinical nutrition (2006-04-01)",
+    "url": "https://pubmed.ncbi.nlm.nih.gov/16600937/",
+    "published_date": "2006-04-01",
+    "publication_types": [
+     "Journal Article",
+     "Randomized Controlled Trial",
+     "Research Support, Non-U.S. Gov't"
+    ],
+    "mesh_terms": [
+     "Adult",
+     "Biological Availability",
+     "Blood Chemical Analysis",
+     "Dietary Supplements",
+     "Double-Blind Method",
+     "Erythrocytes",
+     "Female",
+     "Folic Acid",
+     "Folic Acid Deficiency",
+     "Humans",
+     "Lactation",
+     "Placebos",
+     "Pregnancy",
+     "Tetrahydrofolates",
+     "Treatment Outcome",
+     "Vitamin B Complex"
+    ],
+    "supplementary_concepts": [],
+    "evidence_grade": "rct",
+    "retracted": false,
+    "supports_claims": [],
+    "verification_source": "pubmed_eutils"
+   },
+   {
+    "type": "pubmed",
+    "authority": "NCBI PubMed",
+    "pmid": "16151461",
+    "doi": "10.1038/sj.ejcn.1602254",
+    "title": "[6S]5-methyltetrahydrofolate or folic acid supplementation and absorption and initial elimination of folate in young and middle-aged adults.",
+    "citation": "European journal of clinical nutrition (2005-12-01)",
+    "url": "https://pubmed.ncbi.nlm.nih.gov/16151461/",
+    "published_date": "2005-12-01",
+    "publication_types": [
+     "Journal Article",
+     "Randomized Controlled Trial"
+    ],
+    "mesh_terms": [
+     "Adult",
+     "Aging",
+     "Area Under Curve",
+     "Cross-Over Studies",
+     "Dietary Supplements",
+     "Double-Blind Method",
+     "Female",
+     "Folic Acid",
+     "Homocysteine",
+     "Humans",
+     "Intestinal Absorption",
+     "Male",
+     "Middle Aged",
+     "Tetrahydrofolates"
+    ],
+    "supplementary_concepts": [],
+    "evidence_grade": "rct",
+    "retracted": false,
+    "supports_claims": [],
+    "verification_source": "pubmed_eutils"
+   },
+   {
+    "type": "pubmed",
+    "authority": "NCBI PubMed",
+    "pmid": "25943647",
+    "doi": "10.1007/s00394-015-0916-z",
+    "title": "Folic acid causes higher prevalence of detectable unmetabolized folic acid in serum than B-complex: a randomized trial.",
+    "citation": "European journal of nutrition (2016-04-01)",
+    "url": "https://pubmed.ncbi.nlm.nih.gov/25943647/",
+    "published_date": "2016-04-01",
+    "publication_types": [
+     "Journal Article",
+     "Randomized Controlled Trial"
+    ],
+    "mesh_terms": [
+     "Aged",
+     "Aged, 80 and over",
+     "Biomarkers",
+     "Cystathionine",
+     "Dietary Supplements",
+     "Dose-Response Relationship, Drug",
+     "Female",
+     "Folic Acid",
+     "Humans",
+     "Male",
+     "Sample Size",
+     "Single-Blind Method",
+     "Treatment Outcome",
+     "Vitamin B Complex"
+    ],
+    "supplementary_concepts": [],
+    "evidence_grade": "rct",
+    "retracted": false,
+    "supports_claims": [],
+    "verification_source": "pubmed_eutils",
+    "scoring_eligible": false,
+    "notes": " Background only (Dr. Pham, 2026-10-28): no 5-MTHF intervention (folic acid vs B-complex trial); removed from every 5-MTHF intervention context."
+   },
+   {
+    "type": "pubmed",
+    "authority": "NCBI PubMed",
+    "pmid": "25733468",
+    "doi": "10.3945/jn.114.201210",
+    "title": "Unmetabolized folic acid is detected in nearly all serum samples from US children, adolescents, and adults.",
+    "citation": "The Journal of nutrition (2015-03-01)",
+    "url": "https://pubmed.ncbi.nlm.nih.gov/25733468/",
+    "published_date": "2015-03-01",
+    "publication_types": [
+     "Journal Article"
+    ],
+    "mesh_terms": [
+     "Adolescent",
+     "Adult",
+     "Biomarkers",
+     "Child",
+     "Child, Preschool",
+     "Cross-Sectional Studies",
+     "Dietary Supplements",
+     "Female",
+     "Folic Acid",
+     "Food, Fortified",
+     "Humans",
+     "Infant",
+     "Logistic Models",
+     "Male",
+     "Middle Aged",
+     "Multivariate Analysis",
+     "Nutrition Surveys",
+     "Tandem Mass Spectrometry",
+     "Tetrahydrofolates",
+     "United States",
+     "Young Adult"
+    ],
+    "supplementary_concepts": [],
+    "evidence_grade": "journal_article",
+    "retracted": false,
+    "supports_claims": [],
+    "verification_source": "pubmed_eutils",
+    "scoring_eligible": false,
+    "notes": " Background only (Dr. Pham, 2026-10-28): no 5-MTHF intervention (cross-sectional NHANES serum survey); removed from every 5-MTHF intervention context."
+   }
+  ]
+ },
+ "study_contexts": [
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "mthf_infant_formula_31425504",
+   "components": [
+    "INGR_FOLATE_MTHF"
+   ],
+   "source_pmids": [
+    "31425504"
+   ],
+   "identity_scope": "exact_form",
+   "identity": {
+    "chemical_form": "Calcium L-5-methyltetrahydrofolate(Metafolin, Merck&Cie)"
+   },
+   "exposure_basis": "fortification",
+   "route": "oral",
+   "evidence_role": "direct_rct",
+   "component_registration_status": "fully_registered",
+   "condition": "infant_formula_growth_tolerance",
+   "purpose": "nutritional_folate_source_equivalence",
+   "review_status": "clinician_approved",
+   "scoring_eligible": false,
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "trial_family": "mthf_infant_formula_31425504",
+   "population": {
+    "description": "240 healthy term infants randomized formula; 120 breastfed reference NOT randomized. Enrollment age 1–27 days; followupage 112±3 days."
+   },
+   "study_design": "randomized double-blind active-comparator parallel infant-formula equivalence trial; separate nonrandomized breastfed reference group",
+   "outcomes": [
+    {
+     "name": "Primary daily weight gain equivalence within prespecified±3.5 g/day mar g in",
+     "hierarchy": "primary",
+     "direction": "positive",
+     "kind": "surrogate",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "Lower UMFA/higher red cell folate biomarkers",
+     "hierarchy": "secondary",
+     "direction": "positive",
+     "kind": "surrogate",
+     "outcome_role": "direct_between_group_effect"
+    }
+   ],
+   "limitations": [
+    "Equivalenceisnutrition/formula-specific, not superior adult benefit.",
+    "Actual daily exposure varies with formula volume; no fixed assigned mg/day.",
+    "Days until followup vary with baseline age; do not invent 112 day exposure.",
+    "Verified this session (PLoS One full text): formula with L-5-MTHF 10.4 ug/100 mL versus folic acid 10.0 ug/100 mL, 120 infants each; primary weight gain equivalent (95% CI -2.11 to 1.68 g/d); lower plasma unmetabolized folic acid with L-5-MTHF.",
+    "No credit: infant-formula growth equivalence and folate biomarkers do not test this record's cardiovascular, hormone or cognitive goals; signed A067 rejects hard-endpoint superiority and automatic neural-tube-defect substitution.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28.",
+    "Verified this session (PLoS One full text): formula with L-5-MTHF 10.4 ug/100 mL versus folic acid 10.0 ug/100 mL, 120 infants each; primary weight gain equivalent (95% CI -2.11 to 1.68 g/d); lower plasma unmetabolized folic acid with L-5-MTHF.",
+    "Folic acid, not 5-MTHF, is the form shown to prevent neural-tube defects; that outcome is never transferred to 5-MTHF (Dr. Pham, 2026-10-28). Folate nutrition is assessed on its separate nutrition pathway.",
+    "No credit: infant-formula growth equivalence and folate biomarkers do not test this record's cardiovascular, hormone or cognitive goals; signed A067 rejects hard-endpoint superiority and automatic neural-tube-defect substitution."
+   ],
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "mg",
+    "values": [],
+    "dose_status": "source_not_reported",
+    "dose_basis": "not_applicable",
+    "duration_basis": "endpoint_followup_only",
+    "duration_days": null,
+    "administration_frequency": "Formula feeding; volume recorded by parents, not a fixed supplement frequency",
+    "dosage_forms": [
+     "reconstituted infant formula"
+    ],
+    "co_therapies": [
+     "Complete infant formula nutrients"
+    ],
+    "reported_regimen": "10.4 microgram L 5 MTHF/100 m L(11.3 microgram calcium salt)versus 10 microgram FA/100 m L; not fixed mg/day",
+    "normalization": {
+     "basis": "Whole assigned material daily mass from primary Methods; not a marker or active-equivalent conversion."
+    },
+    "source_provenance": {
+     "pmid": "31425504",
+     "location": "Full text retrieved (PMC6699731); figures taken from the Abstract and checked against the retrieved text.",
+     "source_url": "https://pubmed.ncbi.nlm.nih.gov/31425504/"
+    }
+   },
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability"
+   }
+  },
+  {
+   "context_id": "ingr_folate_mthf_16600937_lactation_folate_status",
+   "components": [
+    "INGR_FOLATE_MTHF"
+   ],
+   "source_pmids": [
+    "16600937"
+   ],
+   "review_status": "rejected_source",
+   "scoring_eligible": false,
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability",
+    "notes": "No credit: folate-status biomarker equivalence during lactation, not a cardiovascular, hormone or cognitive outcome; abstract only."
+   },
+   "dose": {
+    "source_provenance": {
+     "pmid": "16600937",
+     "location": "PubMed abstract (full text not open access).",
+     "source_url": "https://pubmed.ncbi.nlm.nih.gov/16600937/"
+    }
+   },
+   "limitations": [
+    "Folic acid, not 5-MTHF, is the form shown to prevent neural-tube defects; never transferred to 5-MTHF.",
+    "72 women enrolled at 36 weeks' gestation; postpartum [6S]-5-methylTHF 416 ug/d versus placebo, with a folic acid 400 ug/d reference group (assigned, not randomized), 16 weeks. RBC folate at 16 weeks 2178 vs 1967 (folic acid, P<0.05) vs 1390 nmol/L (placebo).",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ]
+  },
+  {
+   "context_id": "ingr_folate_mthf_16151461_absorption_kinetics",
+   "components": [
+    "INGR_FOLATE_MTHF"
+   ],
+   "source_pmids": [
+    "16151461"
+   ],
+   "review_status": "rejected_source",
+   "scoring_eligible": false,
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability",
+    "notes": "No credit: isotope-kinetic absorption study, not a clinical outcome; abstract only."
+   },
+   "dose": {
+    "source_provenance": {
+     "pmid": "16151461",
+     "location": "PubMed abstract (full text not open access).",
+     "source_url": "https://pubmed.ncbi.nlm.nih.gov/16151461/"
+    }
+   },
+   "limitations": [
+    "Folic acid, not 5-MTHF, is the form shown to prevent neural-tube defects; never transferred to 5-MTHF.",
+    "24 healthy adults (12 young, 12 middle-aged); 400 ug folic acid or equimolar [6S]5-methylTHF daily for 5 weeks; folic acid test-dose absorption fell 22% after 5-methylTHF and rose 21% after folic acid in young adults (P=0.02); no change in middle-aged adults.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ]
+  }
+ ],
+ "source_receipts": [
+  {
+   "pmid": "31425504",
+   "title_fetched": "Suitability and safety of L-5-methyltetrahydrofolate as a folate source in infant formula: A randomized-controlled trial.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/31425504/",
+   "full_text": true,
+   "sections_used": "Abstract, Methods, Results (BioC PMC6699731)"
+  },
+  {
+   "pmid": "16600937",
+   "title_fetched": "[6S]-5-Methyltetrahydrofolate is at least as effective as folic acid in preventing a decline in blood folate concentrations during lactation.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/16600937/",
+   "full_text": false,
+   "sections_used": "PubMed abstract"
+  },
+  {
+   "pmid": "16151461",
+   "title_fetched": "[6S]5-methyltetrahydrofolate or folic acid supplementation and absorption and initial elimination of folate in young and middle-aged adults.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/16151461/",
+   "full_text": false,
+   "sections_used": "PubMed abstract"
+  }
+ ]
+}

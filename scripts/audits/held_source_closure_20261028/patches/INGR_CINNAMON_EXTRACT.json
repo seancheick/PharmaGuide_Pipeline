@@ -1,0 +1,114 @@
+{
+ "record_id": "INGR_CINNAMON_EXTRACT",
+ "decision": "held: integrity hold retained per Dr. Pham's 2026-10-28 ruling; the expression of concern (PMID 40834253) remains unresolved by the publisher, and the reconciliation shows the 24019277 fasting-glucose and lipid results depend materially on the questioned Khan 2003 arms",
+ "summary": "Both items Dr. Pham named are now read. The publisher PDF of 24019277 shows Khan 2003's three arms carry about 25% of the fasting-glucose weight with the largest effects, and the source reports no analysis without them. Per-study weights are recorded, and an exclusion sensitivity analysis (agent recomputation that reproduces the published pooled estimates exactly) shows that without Khan 2003 fasting glucose is no longer significant (-12.63 mg/dL, CI -26.09 to 0.84), total and LDL cholesterol become null, triglycerides keep a smaller reduction (-8.69 mg/dL, CI -15.43 to -1.95), and HbA1c stays null. The ADA expression of concern lists randomization, variability and reporting problems and says the authors could not be reached. The context is updated but not approved, since its FPG direction is unresolved; the record stays held with no credit and no categorical zero.",
+ "record_updates": {},
+ "study_contexts": [
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "ingr_cinnamon_extract_24019277_source_completion",
+   "components": [
+    "INGR_CINNAMON_EXTRACT"
+   ],
+   "source_pmids": [
+    "24019277"
+   ],
+   "identity_scope": "ingredient_general",
+   "identity": {
+    "preparation": "Cinnamon aqueous extracts/raw powders, differing species and one mineral-containing combination; no all-extract equivalence."
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "meta_analysis",
+   "component_registration_status": "fully_registered",
+   "condition": "type_2_diabetes",
+   "purpose": "treatment",
+   "review_status": "source_verified_pending_clinical_review",
+   "scoring_eligible": false,
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "trial_family": "source_24019277",
+   "population": {
+    "age_group": "adult",
+    "description": "10 RCTs, 543 patients with type 2 diabetes (postmenopausal women, otherwise healthy adults, adults with hyperlipidemia or obesity), some on hypoglycemic drugs."
+   },
+   "study_design": "Systematic review and random-effects meta-analysis of RCTs of cinnamon versus control in type 2 diabetes, 4-18 weeks; Khan 2003's three dose arms entered as separate comparisons.",
+   "included_study_pmids": [
+    "14633804",
+    "16634838",
+    "17718288",
+    "16549460",
+    "17563345",
+    "19734396",
+    "20854384",
+    "21861719",
+    "22749176"
+   ],
+   "outcomes": [
+    {
+     "name": "HbA1c WMD -0.16% (95% CI -0.39 to 0.06), not significant, I2 66.5%; Khan 2003 did not contribute to this analysis.",
+     "hierarchy": "not_reported",
+     "kind": "surrogate",
+     "direction": "null",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "Fasting plasma glucose WMD -24.59 mg/dL (-40.52 to -8.67), I2 91.98%, Egger P=.004; Khan 2003's three arms carry about 25% of the weight and the largest effects (-41 to -70 mg/dL). TC -15.60, LDL-C -9.42, TG -29.59, HDL-C +1.66 mg/dL. Not reliable while the Khan 2003 expression of concern stands.",
+     "hierarchy": "not_reported",
+     "kind": "surrogate",
+     "direction": "unresolved",
+     "outcome_role": "direct_between_group_effect"
+    }
+   ],
+   "limitations": [
+    "Included Khan2003 PMID14633804 has a2025expression of concern (notice40834253); its3dose comparisons materially influence this older synthesis. Retain source-scoped integrity/reanalysis hold; do not affirm the original pooled result by filling metadata.",
+    "Nine included reports have verifiedPMIDs; one source citation remains unindexed. Source abstract/results also print differing HbA1c interval endpoints; no replacement numbers invented.",
+    "Reconciliation (2026-10-28): the 2025 Diabetes Care expression of concern (PMID 40834253, read in full) reports baseline imbalances inconsistent with proper randomization, unclear randomization and blinding, implausibly low variability (possible SD/SE misreporting), no dose-response tests or multiplicity control, and no loss to follow-up, and the authors could not be reached for data. Because Khan 2003 contributes three of twelve FPG comparisons (about 25% weight) and three of the four largest effects, the FPG and lipid pooled results cannot be relied on; the source reports no sensitivity analysis excluding it. HbA1c, which excludes Khan 2003, is null.",
+    "Per Dr. Pham's 2026-10-28 ruling the integrity hold is retained and no categorical zero is recorded across outcomes.",
+    "Per-study FPG weights read from Figure 2B (random effects): Khan 2003 arms 8.37%, 8.92%, 8.12% (25.41% combined); Mang 2006 9.34%; Suppapitiporn 2006 9.15%; Vanschoonbeck 2006 7.90%; Blevins 2007 9.86%; Akilen 2010 8.91%; Khan 2010 4.44%; Wainstein 2011 8.31%; Lu 2012 arms 7.89% and 8.80%. Khan 2003 also carries 27.81% (TC), 33.33% (LDL-C) and 30.00% (TG); it is absent from the HbA1c and HDL analyses.",
+    "Exclusion sensitivity analysis (agent recomputation, not reported by the source): DerSimonian-Laird random effects on the published per-study differences and 95% CIs, which reproduces every published pooled estimate exactly (FPG -24.59 [-40.52, -8.67]; TC -15.60; LDL -9.42; TG -29.59; HDL +1.66; HbA1c -0.16/-0.17). Without the three Khan 2003 arms: FPG -12.63 mg/dL (-26.09 to 0.84; I2 85%; k=9, not significant); TC -0.31 (-4.98 to 4.37); LDL-C -2.27 (-6.68 to 2.14); TG -8.69 (-15.43 to -1.95; I2 0%); HDL and HbA1c unchanged (Khan 2003 not included). SEs were back-calculated from printed 95% CIs, so results are approximate."
+   ],
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "mg",
+    "values": [],
+    "dose_status": "verified",
+    "dose_basis": "not_applicable",
+    "duration_basis": "not_recorded",
+    "administration_frequency": "Trial-specific, taken in relation to food; 120 mg/day to 6 g/day for 4-18 weeks.",
+    "dosage_forms": [
+     "oral capsule",
+     "cinnamon powder"
+    ],
+    "co_therapies": [
+     "Some trials required oral glucose-lowering medicines; background treatment is trial-specific."
+    ],
+    "reported_regimen": "120 mg/day to 6 g/day aqueous extract or raw powder (C. cassia capsule or powder in 6 trials, one cassia combination with zinc gluconate and tricalcium phosphate, one C. aromaticum, two unspecified), 4-18 weeks.",
+    "normalization": {
+     "basis": "Heterogeneous trial-specific regimens; no single assigned-arm dose or universal efficacy threshold is inferred."
+    },
+    "source_provenance": {
+     "pmid": "24019277",
+     "location": "Full publisher PDF (Ann Fam Med 11:452): Abstract, Methods, Results (study characteristics, Figure 2A/2B forest plots, dosage-form subgroups), Discussion (publication bias attributed to Khan 2003 arms).",
+     "source_url": "https://pubmed.ncbi.nlm.nih.gov/24019277/"
+    }
+   }
+  }
+ ],
+ "source_receipts": [
+  {
+   "pmid": "24019277",
+   "title_fetched": "Cinnamon use in type 2 diabetes: an updated systematic review and meta-analysis.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/24019277/",
+   "full_text": true,
+   "sections_used": "Full publisher PDF via OpenAlex OA location (annfammed.org): Abstract, Methods, Results, Figure 2, Discussion"
+  },
+  {
+   "pmid": "40834253",
+   "title_fetched": "Expression of Concern. ... Cinnamon Improves Glucose and Lipids of People With Type 2 Diabetes. Diabetes Care 2003;26:3215-3218.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/40834253/",
+   "full_text": true,
+   "sections_used": "Full notice text (integrity evidence; not a record reference)"
+  }
+ ]
+}

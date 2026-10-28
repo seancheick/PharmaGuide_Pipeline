@@ -253,20 +253,31 @@ def test_magtein_trial_and_correction_have_distinct_source_roles():
     assert next(c for c in contexts if c['source_pmids'] == ['36558392'])['scoring_eligible'] is False
 
 
-@pytest.mark.parametrize('record_id,required', [
-    ('BRAND_MITOPURE', ['primary endpoint', 'within-group', '0.058']),
-    ('BRAND_LUTEMAX_2020', ['EyePromise', 'omega-3', 'mesozeaxanthin']),
-    ('PRECLIN_SULFORAPHANE', ['did not meet', '0.3 mmol/L', 'exploratory']),
-    ('INGR_COLLAGEN_PEPTIDES', ['non-pharmaceutical-funded', 'high-quality', 'high risk of bias']),
+# Dr. Pham, 2026-10-28: Mitopure (hierarchy kept) and sulforaphane are
+# completed qualified zeros on the reference path; Lutemax 2020 is closed with
+# eye-outcome credit for the exact formula; the collagen hold stands.
+@pytest.mark.parametrize('record_id,required,complete,reference_only', [
+    ('BRAND_MITOPURE', ['primary endpoint', 'within-group', '0.058'], True, True),
+    ('BRAND_LUTEMAX_2020', ['EyePromise', 'omega-3', 'mesozeaxanthin'], True, False),
+    ('PRECLIN_SULFORAPHANE', ['did not meet', '0.3 mmol/L', 'exploratory'], True, True),
+    ('INGR_COLLAGEN_PEPTIDES', ['non-pharmaceutical-funded', 'high-quality', 'high risk of bias'], False, False),
 ])
-def test_source_summaries_keep_null_endpoints_and_preparation_limits(record_id, required):
+def test_source_summaries_keep_null_endpoints_and_preparation_limits(record_id, required, complete, reference_only):
     import json
     from clinical_applicability import assess_clinical_source_review
     records = json.loads((Path(__file__).parents[1] / 'data/backed_clinical_studies.json').read_text())['backed_clinical_studies']
     row = next(r for r in records if r['id'] == record_id)
     text = row['notes'] + row['notable_studies']
     assert all(fragment in text for fragment in required)
-    assert assess_clinical_source_review(row)['is_complete'] is False
+    assert assess_clinical_source_review(row)['is_complete'] is complete
+    assert (row['study_type'] == row['evidence_level'] == 'reference') is reference_only
+    if record_id == 'BRAND_LUTEMAX_2020':
+        # Credit is the exact Lutemax 2020 trial only, scoped to eye outcomes;
+        # the EyePromise combination is not Lutemax and carries none.
+        assert row['applicability']['source_pmids'] == ['28661438']
+        assert row['applicability']['supported_outcomes'] == ['Eye & Vision']
+        eligible = [c['source_pmids'] for c in row['study_contexts'] if c.get('scoring_eligible') is True]
+        assert eligible == [['28661438']]
 
 
 def test_berberine_registered_dose_conflict_is_not_a_single_daily_regimen():
@@ -396,13 +407,19 @@ def test_flax_active_sources_exclude_unread_corrected_review_without_losing_hist
 @pytest.mark.parametrize('rid,source', [('INGR_RHODIOLA','15256690')])
 def test_limited_positive_review_cannot_become_unscoped_current_product_credit(completion_source_records,rid,source):
     row = completion_source_records[rid]
-    assert row['scoring_eligible'] is False
+    # Dr. Pham, 2026-10-28: the record hold is lifted for endurance-only credit
+    # from the current review; the older limited review stays non-crediting.
+    assert row['scoring_eligible'] is True
+    assert row['applicability']['supported_outcomes'] == ['endurance']
+    assert {'energy', 'mood', 'anti-inflammatory'} <= set(row['applicability']['excluded_claim_terms'])
+    assert source not in row['applicability']['source_pmids']
     assert row['total_enrollment'] is None
     assert row['registry_completed_trials_count'] is None
     assert row['health_goals_supported'] == []
-    assert source in str(row['references_structured'])
-    assert not er.clinical_record_sources_eligible(row)
-    assert row['study_contexts']  # Scoped positive findings retained, not declared ineffective.
+    ref = next(r for r in row['references_structured'] if r.get('pmid') == source)
+    assert not er.clinical_record_sources_eligible({'references_structured': [ref]})
+    limited = [c for c in row['study_contexts'] if source in c['source_pmids']]
+    assert limited and all(c['scoring_eligible'] is False for c in limited)  # Retained, not declared ineffective.
 
 
 def test_recovered_bc30_methods_retain_null_domains_and_trial_family(completion_source_records):
@@ -416,13 +433,19 @@ def test_recovered_bc30_methods_retain_null_domains_and_trial_family(completion_
 
 
 def test_recovered_poolzyme_methods_do_not_clear_source_acceptance_hold(completion_source_records):
+    from clinical_applicability import assess_clinical_source_review
     row = completion_source_records['INGR_DIGESTIVE_ENZYMES']
+    # Dr. Pham, 2026-10-28: exact-brand credit needs the study material and its
+    # activities identified; "Poolzyme Multi" is unverified. The unverified
+    # draft context lives in the audit receipt, not production data, so the
+    # record-level hold remains the only state and the review stays open.
     assert row['scoring_eligible'] is False
-    context = next(c for c in row['study_contexts'] if '37976892' in c['source_pmids'])
-    assert context['scoring_eligible'] is False
-    assert any(o['hierarchy'] == 'primary' and 'NDI' in o['name'] for o in context['outcomes'])
-    assert 'ethics' in str(context).lower()
-    assert context['dose']['values'] == [400]
+    assert not er.clinical_record_sources_eligible(row)
+    assert '37976892' in {r['pmid'] for r in row['references_structured']}
+    assert not any('37976892' in c['source_pmids'] for c in row.get('study_contexts', []))
+    review = assess_clinical_source_review(row)
+    assert review['is_complete'] is False
+    assert 'clinical_source_contexts_missing' in review['errors']
 
 
 @pytest.mark.parametrize('rid', ['BRAND_QUATREFOLIC','PRECLIN_PTEROSTILBENE','PRECLIN_SPERMIDINE','INGR_PHOSPHATIDYLSERINE','INGR_SAW_PALMETTO','STRAIN_HN019'])
@@ -492,8 +515,10 @@ def test_theracurmin_reported_hierarchy_limit_does_not_invent_primary_credit(com
         assert context['scoring_eligible'] is False
         assert not validate_ingredient_context(context, require_complete_review=True)
         assert not any(outcome['hierarchy'] in {'primary', 'unresolved'} for outcome in context['outcomes'])
-    assert any(context['review_status'] != 'clinician_approved'
-               for context in contexts if '29246725' in context['source_pmids'])
+    # The memory acceptance (29246725) is still outstanding: no approved (or
+    # any) production context may exist for it, and the record stays held.
+    assert not any('29246725' in context['source_pmids'] for context in contexts)
+    assert completion_source_records['BRAND_THERACURMIN']['scoring_eligible'] is False
 
 
 @pytest.mark.parametrize('rid,pmid', [('PRECLIN_CORDYCEPS','27408987'),
@@ -505,9 +530,17 @@ def test_retrieved_full_reports_have_factual_contexts_without_invented_approval(
     assert context is not None
     assert context['scoring_eligible'] is False
     if rid == 'INGR_CHONDROITIN_SULFATE':
-        assert context['review_status'] == 'source_verified_pending_clinical_review'
-        assert 'clinical_review' not in context
-        assert validate_ingredient_context(context, require_complete_review=True) == ['review.approval_required']
+        # Dr. Pham, 2026-10-28 (third ruling set): one shared no-credit OA
+        # standard for chondroitin and glucosamine; approval is a completed
+        # no-credit decision with the existing human research retained.
+        assert context['review_status'] == 'clinician_approved'
+        assert context['clinical_review']['reviewer'] == 'Dr. Pham'
+        assert context['clinical_review']['reviewed_at'] == '2026-10-28'
+        assert validate_ingredient_context(context, require_complete_review=True) == []
+        assert record['study_type'] == record['evidence_level'] == 'reference'
+        assert any(note.startswith('The reviewed research does not establish a qualifying benefit')
+                   for note in context['limitations'])
+        assert any('ACR 2026' in note for note in context['limitations'])
     else:
         # Dr Pham approved these non-transfer conclusions on 2026-10-28
         # (attested by Sean); approval does not make them scoring-eligible.
@@ -526,4 +559,10 @@ def test_retrieved_full_reports_have_factual_contexts_without_invented_approval(
         assert context['dose']['values'] == []
         assert context['dose']['dose_basis'] == 'not_applicable'
         assert context['included_study_pmids']
-        assert any('single aggregate regimen' in note for note in context['limitations'])
+        if rid == 'INGR_CHONDROITIN_SULFATE':
+            # The re-extracted context states the same limit in its own words.
+            assert any('Pooled heterogeneous study regimens' in note
+                       and 'not a validated efficacy minimum' in note
+                       for note in context['limitations'])
+        else:
+            assert any('single aggregate regimen' in note for note in context['limitations'])

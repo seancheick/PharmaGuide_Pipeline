@@ -1,0 +1,148 @@
+{
+ "record_id": "INGR_QUERCETIN",
+ "decision": "closed_credit",
+ "summary": "Serban 2016 (27405810; 7 RCTs, 9 arms, 587 adults, quercetin 100-1000 mg/day for 4-10 weeks) found small reductions in SBP (-3.04 mmHg) and DBP (-2.63 mmHg), which were lost when one trial was removed; the 2022 meta-analysis abstract (35948195, 10 RCTs) points the same way. This is credited only for blood-pressure support, the scope of Dr. Pham's decision, and immune/antiviral claims are excluded.",
+ "record_updates": {
+  "applicability": {
+   "scope": "ingredient",
+   "supported_outcomes": [
+    "blood_pressure"
+   ],
+   "studied_population": "Adults, mostly normotensive (one prehypertension/stage 1 trial), taking 100-1000 mg/day oral quercetin for 4-10 weeks.",
+   "source_pmids": [
+    "27405810"
+   ],
+   "reviewed_at": "2026-10-28",
+   "excluded_claim_terms": [
+    "immune",
+    "immunity",
+    "antiviral",
+    "viral",
+    "virus",
+    "heart disease",
+    "cardiovascular disease"
+   ]
+  }
+ },
+ "study_contexts": [
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "ingr_quercetin_27405810_scoped_source",
+   "components": [
+    "INGR_QUERCETIN"
+   ],
+   "source_pmids": [
+    "27405810"
+   ],
+   "identity_scope": "ingredient_general",
+   "identity": {
+    "chemical_form": "Quercetin (oral, trial-specific preparations; aglycone/formulation not uniformly reported)"
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "meta_analysis",
+   "component_registration_status": "fully_registered",
+   "condition": "blood_pressure",
+   "purpose": "physiology",
+   "review_status": "clinician_approved",
+   "scoring_eligible": true,
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "trial_family": "source_27405810",
+   "population": {
+    "age_group": "adult",
+    "description": "7 placebo-controlled RCTs (9 arms), 587 adults (299 quercetin, 288 control): women with or without type 2 diabetes, healthy adults, prehypertension/stage 1 hypertension (1 trial), metabolic syndrome traits, male smokers and APOE-genotyped men; all but one trial in people without hypertension."
+   },
+   "study_design": "Systematic review and meta-analysis of placebo-controlled RCTs (5 parallel, 2 crossover) of oral quercetin; BP (SBP, DBP) was the review outcome; fixed or random effects by I2.",
+   "outcomes": [
+    {
+     "name": "Systolic BP WMD -3.04 mmHg (95% CI -5.75 to -0.33), P=0.028; nonsignificant (-1.78, -4.07 to 0.52) after removing Zahedi et al",
+     "hierarchy": "primary",
+     "kind": "surrogate",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "Diastolic BP WMD -2.63 mmHg (95% CI -3.26 to -2.01), P<0.001; nonsignificant (-0.98, -2.44 to 0.49) after removing Zahedi et al",
+     "hierarchy": "primary",
+     "kind": "surrogate",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "Dose subgroups: >=500 mg/day significant, <500 mg/day not, but indirect comparison showed no significant between-dose difference",
+     "hierarchy": "secondary",
+     "kind": "surrogate",
+     "direction": "mixed",
+     "outcome_role": "direct_between_group_effect"
+    }
+   ],
+   "limitations": [
+    "Pooled BP effects depend on a single trial (Zahedi et al); sensitivity analysis removing it made both SBP and DBP nonsignificant (Results).",
+    "Mostly normotensive populations; BP was a prespecified primary endpoint in only some trials (Table 1). Not hypertension treatment or cardiovascular-event evidence.",
+    "Do not turn the >=500 mg/day subgroup into a proven threshold; indirect between-dose comparison was not significant.",
+    "Returned decision A105: immune/antiviral transfer rejected; scope is blood-pressure support only.",
+    "35948195 (2022, 10 RCTs, 841 participants) abstract reports SBP -2.38 mmHg and consistent direction; full text not accessible, so it is not a context source.",
+    "Historical bibliography census (not independent scoring sources; actual included-publication membership is separately bound to the inspected source table): 24829713, 24049596, 9482769, 17951477, 19402938, 21487493, 22118955. Each intervention and comparison requires its own applicability assessment; citation in this bibliography grants no credit.",
+    "Included-study identifiers are now bound to this source's actual included-study rows/explicit inclusion references (Tables jah31607-tbl-0001 explicit included-study row citations), with live NIH title/content identity checks. They are publication pointers, not independent-cohort counts, per-primary-study scoring approvals, preparation equivalence or new efficacy evidence. Exact unindexed source citations remain retained; no missing PMID is invented.",
+    "Dr. Pham's fourth ruling set (2026-10-28): tight claim; small blood-pressure reductions (100-1000 mg/day, 4-10 weeks, mostly normotensive adults) are not prevention of clinical cardiovascular events.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ],
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "mg",
+    "values": [],
+    "dose_status": "verified",
+    "dose_basis": "not_applicable",
+    "duration_basis": "participant_specific",
+    "duration_days": null,
+    "administration_frequency": "Daily oral dosing per trial; within-day schedule not reported in Table 1.",
+    "dosage_forms": [
+     "not reported by source: oral quercetin supplements (Table 1 route 'Oral')"
+    ],
+    "co_therapies": [
+     "Some trials required unchanged background medications (Table 1 inclusion criteria); no assigned co-therapy."
+    ],
+    "reported_regimen": "Table 1: 500, 500, 1000, 730, 150, 100 and 150 mg/day; durations 4-10 weeks (Results: doses 100-1000 mg/day, 4-10 weeks).",
+    "normalization": {
+     "basis": "No scalar pooled dose; per-trial reported mg/day retained."
+    },
+    "source_provenance": {
+     "pmid": "27405810",
+     "location": "Abstract; Methods (data abstraction, indirect comparison, meta-regression); Results (study characteristics, Table 1, SBP/DBP pooled and sensitivity analyses, Figure 2)",
+     "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5015358/"
+    }
+   },
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability"
+   },
+   "included_study_pmids": [
+    "24829713",
+    "24049596",
+    "9482769",
+    "17951477",
+    "19402938",
+    "21487493",
+    "22118955"
+   ]
+  }
+ ],
+ "source_receipts": [
+  {
+   "pmid": "27405810",
+   "title_fetched": "Effects of Quercetin on Blood Pressure: A Systematic Review and Meta-Analysis of Randomized Controlled Trials.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/27405810/",
+   "full_text": true,
+   "sections_used": "Abstract; Methods; Results incl. Table 1 and sensitivity analyses"
+  },
+  {
+   "pmid": "35948195",
+   "title_fetched": "The Effects of Quercetin Supplementation on Blood Pressure - Meta-Analysis.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/35948195/",
+   "full_text": false,
+   "sections_used": "Abstract only; consistency check, not a context source"
+  }
+ ]
+}

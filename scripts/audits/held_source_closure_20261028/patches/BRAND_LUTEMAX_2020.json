@@ -1,0 +1,253 @@
+{
+ "record_id": "BRAND_LUTEMAX_2020",
+ "decision": "closed_credit",
+ "summary": "Full text confirms that 28661438 tested the complete Lutemax 2020 formulation (24 mg lutein/zeaxanthin/meso-zeaxanthin 83:10:7, one softgel daily for 6 months) in 48 young high-screen-time adults: MPOD, flicker fusion, contrast sensitivity, glare recovery, eye strain and fatigue improved versus placebo, though with no designated primary endpoint and 35:13 allocation. It gets one eligible context for Eye & Vision. The EyePromise trial and the different-ratio inflammation trial are not Lutemax and get no credit. A new applicability block limits credit to eye outcomes.",
+ "record_updates": {
+  "applicability": {
+   "scope": "ingredient",
+   "supported_outcomes": [
+    "Eye & Vision"
+   ],
+   "studied_population": "Healthy young adults (18-25) with at least 6 h/day of screen use taking one 24 mg Lutemax 2020 softgel daily for 6 months (PMID 28661438).",
+   "source_pmids": [
+    "28661438"
+   ],
+   "reviewed_at": "2026-10-28"
+  }
+ },
+ "study_contexts": [
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "brand_lutemax_2020_28661438_draft",
+   "source_pmids": [
+    "28661438"
+   ],
+   "components": [
+    "BRAND_LUTEMAX_2020"
+   ],
+   "identity_scope": "combination",
+   "identity": {
+    "branded_material": "Lutemax 2020 study formulation",
+    "standardization": "24 mg/day total lutein, zeaxanthin and mesozeaxanthin in an 83: 10: 7 ratio, suspended in safflower oil."
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "direct_rct",
+   "component_registration_status": "fully_registered",
+   "condition": "screen_related_visual_symptoms",
+   "purpose": "treatment",
+   "population": {
+    "age_group": "adult",
+    "description": "48 healthy non-smoking students aged 18-25 (mean 21.2; 25 women) with BMI <27 and at least 6 h/day of near-field screen use, University of Georgia; randomized 35 active, 13 placebo."
+   },
+   "study_design": "6-month double-blind, randomized, placebo-controlled trial (unequal 35:13 allocation); repeated-measures ANOVA versus placebo at 3 and 6 months; no primary endpoint designated.",
+   "trial_family": "28661438",
+   "review_status": "clinician_approved",
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "scoring_eligible": true,
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "mg",
+    "values": [
+     24
+    ],
+    "dose_status": "combination_total_only",
+    "dose_basis": "combination_total_daily",
+    "duration_basis": "fixed_protocol",
+    "duration_days": 182,
+    "administration_frequency": "One softgel daily with a meal, preferably lunch or dinner.",
+    "dosage_forms": [
+     "oral softgel"
+    ],
+    "reported_regimen": "[24] mg/day; 6 calendar months; daily",
+    "normalization": {
+     "basis": "Reported study-material daily dose, not a universal threshold or equivalence to other preparation."
+    },
+    "source_provenance": {
+     "pmid": "28661438",
+     "location": "Full text (PMC5532554): Methods 2 and 2.1 (participants, Lutemax 2020 formulation 24 mg L:Z:MZ 83:10:7 in safflower oil, softgel, dosing), statistics, Results paragraph and Table 1, Conflicts of Interest.",
+     "source_url": "https://pubmed.ncbi.nlm.nih.gov/28661438/"
+    },
+    "duration_as_printed": {
+     "value": 6,
+     "unit": "months"
+    },
+    "co_therapies": [
+     "Source-reported concurrent-care/restriction context: Subjects were instructed to maintain their current diet;"
+    ]
+   },
+   "outcomes": [
+    {
+     "name": "Visual performance versus placebo at 6 months: MPOD (p=0.015), critical flicker fusion (p<0.001), contrast sensitivity (p=0.002), disability glare (p=0.021) and photostress recovery (p=0.011) improved.",
+     "hierarchy": "not_reported",
+     "kind": "patient_important",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "Symptoms at 6 months: sleep quality (p=0.01), headache frequency (p=0.029), eye strain (p=0.046) and eye fatigue (p=0.016) improved; blurry vision and neck strain did not change.",
+     "hierarchy": "not_reported",
+     "kind": "patient_important",
+     "direction": "mixed",
+     "outcome_role": "direct_between_group_effect"
+    }
+   ],
+   "limitations": [
+    "Whole mixture, not isolated lutein; multiple outcomes, small trial; exact label ratios required.",
+    "The retained full article does not designate a primary outcome/endpoint; recorded hierarchy not_reported. This is a reporting limitation, not invented primary status or completion of any separate approval.",
+    "Duration printed as 6 months; duration_days 182 is the 26-week calendar approximation required by the schema, not a source-stated day count.",
+    "Small (n=48) trial with 35:13 allocation, many outcomes and no designated primary endpoint; one author consults for the funding sponsor.",
+    "This is the complete Lutemax 2020 formulation, matching this branded record; signed A010 rejects attributing the result to isolated lutein. Credit is limited to visual performance and screen-related eye symptoms (Eye & Vision) in young high-screen-time adults.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ],
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability"
+   }
+  },
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "brand_lutemax_2020_25251377_draft",
+   "source_pmids": [
+    "25251377"
+   ],
+   "components": [
+    "BRAND_LUTEMAX_2020"
+   ],
+   "identity_scope": "branded_material",
+   "identity": {
+    "branded_material": "EyePromise Zeaxanthin / EyePromise vizual EDGE",
+    "manufacturer": "ZeaVision",
+    "standardization": "20 mg Zalone or 26 mg Z+8 mg L+190 mg mixed omega 3"
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "direct_rct",
+   "component_registration_status": "fully_registered",
+   "condition": "visual_processing",
+   "purpose": "treatment",
+   "population": {
+    "age_group": "adult",
+    "description": "92 baseline young adults 18–32, 64 intervention completers."
+   },
+   "study_design": "Double-blind, placebo-controlled trial with separate zeaxanthin-only and zeaxanthin/lutein/omega-3 arms; reported processing-speed analyses pooled the active arms.",
+   "trial_family": "25251377",
+   "review_status": "clinician_approved",
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "scoring_eligible": false,
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "mg",
+    "values": [
+     20,
+     34
+    ],
+    "dose_status": "verified",
+    "dose_basis": "nominal_assigned_arm",
+    "duration_basis": "fixed_protocol",
+    "duration_days": null,
+    "administration_frequency": "Daily with a meal for four calendar months; the two active formulations remain separate.",
+    "dosage_forms": [
+     "oral supplement"
+    ],
+    "reported_regimen": "[20, 34] mg/day; 4 calendar months; daily",
+    "normalization": {
+     "basis": "Reported study-material daily dose, not a universal threshold or equivalence to other preparation."
+    },
+    "source_provenance": {
+     "pmid": "25251377",
+     "location": "Full text (PMC4176961): Methods intervention paragraph, Results Table 3, Discussion (primary outcome MPOD).",
+     "source_url": "https://pubmed.ncbi.nlm.nih.gov/25251377/"
+    },
+    "duration_as_printed": {
+     "value": 4,
+     "unit": "months"
+    },
+    "co_therapies": [
+     "Maintain diet without substantial changes; lutein/zeaxanthin supplementation within preceding six months excluded. Study products taken with meals."
+    ]
+   },
+   "outcomes": [
+    {
+     "name": "Macular pigment optical density",
+     "hierarchy": "primary",
+     "kind": "surrogate",
+     "direction": "positive",
+     "outcome_role": "surrogate"
+    },
+    {
+     "name": "CFF and visual motor reaction",
+     "hierarchy": "secondary",
+     "kind": "patient_important",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    }
+   ],
+   "limitations": [
+    "Not Lutemax preparation; active arms pooled, 28 excluded/lost, omega 3 combination.",
+    "34 mg is declared 26+8 carotenoid total, not all formulation mass; no MZ reported.",
+    "No credit: EyePromise Zeaxanthin (20 mg zeaxanthin) and vizual EDGE (zeaxanthin, lutein, omega-3) are not the Lutemax 2020 formulation; the reference is already marked scoring_eligible=false. Primary outcome MPOD (Discussion).",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ],
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability"
+   }
+  },
+  {
+   "context_id": "brand_lutemax_2020_38890092_different_formula_biomarkers",
+   "components": [
+    "BRAND_LUTEMAX_2020"
+   ],
+   "source_pmids": [
+    "38890092"
+   ],
+   "review_status": "rejected_source",
+   "scoring_eligible": false,
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability",
+    "notes": "No credit: the abstract describes L 10 mg + MZ 10 mg + Z 2 mg, not the Lutemax 2020 83:10:7 formulation, and reports inflammatory and oxidized-LDL biomarkers rather than this record's eye or focus goals; full text not retrieved."
+   },
+   "dose": {
+    "source_provenance": {
+     "pmid": "38890092",
+     "location": "PubMed abstract.",
+     "source_url": "https://pubmed.ncbi.nlm.nih.gov/38890092/"
+    }
+   },
+   "limitations": [
+    "Abstract: 6-month double-blind placebo-controlled trial; versus placebo, IL-1beta (p<0.001), TNF-alpha (p=0.003) and oxLDL fell. Biomarkers only; not cardiovascular event evidence.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ]
+  }
+ ],
+ "source_receipts": [
+  {
+   "pmid": "28661438",
+   "title_fetched": "Macular Carotenoid Supplementation Improves Visual Performance, Sleep Quality, and Adverse Physical Symptoms in Those with High Screen Time Exposure.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/28661438/",
+   "full_text": true,
+   "sections_used": "Methods, Results, Table 1, COI (BioC PMC5532554)"
+  },
+  {
+   "pmid": "25251377",
+   "title_fetched": "A double-blind, placebo-controlled study on the effects of lutein and zeaxanthin on neural processing speed and efficiency.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/25251377/",
+   "full_text": true,
+   "sections_used": "Methods, Results, Discussion (BioC PMC4176961)"
+  },
+  {
+   "pmid": "38890092",
+   "title_fetched": "Lutein, zeaxanthin, and meso-zeaxanthin supplementation attenuates inflammatory cytokines and markers of oxidative cardiovascular processes in humans.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/38890092/",
+   "full_text": false,
+   "sections_used": "PubMed abstract"
+  }
+ ]
+}

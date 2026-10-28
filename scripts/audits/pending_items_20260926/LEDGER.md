@@ -1,3 +1,45 @@
+## October 28 — held source closure under Dr Pham's signed rulings (claude/held-source-closure)
+
+Behavioral data batch (clinical facts). Owner: `scripts/clinical_applicability.py::assess_clinical_source_review`
+(completion) and `assess_clinical_applicability` (product scope) — evidence: `check_patch.py` per record and the
+completion audit below. Will NOT create: a new status, field, scorer or registry.
+
+- **Authority.** Dr Pham's five ruling sets relayed by Sean on 2026-10-28
+  (`scripts/audits/held_source_closure_20261028/DR_PHAM_RULINGS_20261028.md`) and her attested pre-approval of
+  fully source-verified agent contexts (reviewer "Dr. Pham", 2026-10-28, with an agent-authorship limitation).
+  Earlier signatures keep their own dates.
+- **Result (118 register items + hyaluronic acid).** 70 records complete: 43 with scoped credit, 27 no-credit on the
+  reference path with qualified wording. 49 stay held, each with one exact remaining item in
+  `clinical_review_holds.csv` and its patch receipt. Whole file: 98 of 210 records complete (from 28).
+- **No pending drafts in production data.** Every `source_verified_pending_clinical_review` context (128 on main) is
+  approved from a full text or moved to its patch receipt; `test_no_pending_clinical_review_in_data.py` fails on
+  main and passes here.
+- **Held for a stated reason, not closed:** omega-3 (closing zeroes EPA/DHA products on the generic route; waits for
+  the omega nutritional pathway — calibration session), vitamin D3 and Testofen (freshness searches revise the
+  conclusion), plant sterols (capsule/tablet full texts unread), cinnamon (expression of concern; weights and
+  exclusion sensitivity recorded), PQQ (corrected table unread), lactoferrin (retracted trial; proposed no credit),
+  collagen, digestive enzymes, green tea, S. boulardii and abstract-only sources.
+- **Measurement.** Frozen 1,111 real labels (prior 495-label cohort + up to six products per register item),
+  `~/pg_quality/held_closure_20261028/` (re-measured after merging main 2a55dbcee: `base2.jsonl` on main, `cand7.jsonl` on this
+  data, sha256 2dbfe515474b…). 227 Evidence decreases, 0 increases; 1 Formulation change (316118, LJ100 standardization credit
+  tied to the misattributed brand); 0 status, safety-gate or dose-safety changes. Drops follow rulings: reference-only
+  records (turmeric, milk thistle, HMB, valerian, echinacea…), narrowed scopes (CoQ10 heart failure, ginger nausea,
+  white kidney bean Phaseolean, beta-alanine ≥2.4 g/day), whey-only protein credit, one probiotic owner (LGG/BB-12).
+- **Integration fixes found while measuring:** source-only label gating rejected real branded labels; whey row-text
+  term rejected 100% whey; deleting lifted record holds disabled the lost-context guard (kept as `true`); beta-alanine
+  "energy" exclusion over a whole label; berberine credited undosed Oregon grape; inositol outcome term read as
+  digestive. All fixed and re-measured.
+- **Review.** Independent read-only review: 13 findings; fixed 1–3, 5, 6, 8, 12. Open by decision: condition credit
+  without a label claim (Sean decided; needs the shared applicability change, proposed as its own task, with Dr Pham's
+  approval of the clarification); population limits only inside the condition gate; held records with no
+  applicability still match on the legacy path (pre-existing); Formulation reading clinical status (316118).
+- **CI round 1 (a78f78bf9) failed** in files outside the local slice: 19 stale pins (fixed), a renamed test helper
+  (fixed), whole-label exclusions matching product names (BCAA, KSM-66: now claim phrases), and UC-II credit moved
+  off its brand heading by any applicability block (UC-II keeps main's unscoped policy; heading fix handed to the
+  claim-state applicability session).
+- **Validation.** After merging main (a51074c1b): clinical slice plus every CI-failed file 4,038 passed; landed
+  check 119 records, 0 problems. Python correctness 0 new.
+
 ## October 27 — returned-review closure candidate
 
 Behavioral source/data/code batch, baseline e8db3798f. Reconciled 49 backed records and 22 additional Dose-only proofs (343 valid total); signed lutein rejection and migraine-scoped B2 use complete two source assessments. Full required source state: 28/146 complete, 118 held. Fresh bounded raw diagnostics: 25/46 preparation groups complete/outside botanical Dose; 21 remain. All frozen rows and original decisions are preserved; these are not 118 new signature requests.

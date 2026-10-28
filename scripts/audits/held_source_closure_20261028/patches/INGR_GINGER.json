@@ -1,0 +1,253 @@
+{
+ "record_id": "INGR_GINGER",
+ "decision": "closed_credit",
+ "summary": "Ryan 2012 (21818642), a 744-patient double-blind RCT, found that a ginger-root extract (0.5-1.5 g root equivalent/day) added to 5-HT3 antagonist plus dexamethasone reduced acute Day-1 chemotherapy nausea (primary, p=0.003), with no clear effect on delayed nausea, vomiting or quality of life. Viljoen 2014 (24642205), 12 RCTs and 1278 pregnant women, found improved nausea versus placebo (MD 1.20, from 2 trials, low quality) but no significant effect on vomiting. Both nausea contexts are credited only for those conditions; Dr. Pham's rejection of digestive/joint/inflammation/longevity transfer is encoded as excluded claims. 31937153 is abstract-only (dose not verifiable) and gets no context.",
+ "record_updates": {
+  "applicability": {
+   "scope": "ingredient",
+   "supported_outcomes": [
+    "acute_chemotherapy_nausea",
+    "nausea_vomiting_of_pregnancy"
+   ],
+   "studied_population": "Adult cancer patients on 5-HT3 antagonist plus dexamethasone chemotherapy antiemesis, or pregnant women with nausea and vomiting of pregnancy.",
+   "source_pmids": [
+    "21818642",
+    "24642205"
+   ],
+   "reviewed_at": "2026-10-28",
+   "excluded_claim_terms": [
+    "joint",
+    "arthritis",
+    "inflammation",
+    "anti-inflammatory",
+    "longevity"
+   ]
+  }
+ },
+ "study_contexts": [
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "ingr_ginger_21818642_acute_cin",
+   "components": [
+    "INGR_GINGER"
+   ],
+   "source_pmids": [
+    "21818642"
+   ],
+   "identity_scope": "branded_material",
+   "identity": {
+    "branded_material": "Aphios purified ginger-root liquid extract",
+    "manufacturer": "Aphios Corporation",
+    "standardization": "Per capsule 8.5 mgcombinedgingerols/zingerone/shogaolequivalent 250 mgroot"
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "direct_rct",
+   "component_registration_status": "fully_registered",
+   "condition": "acute_chemotherapy_nausea",
+   "purpose": "treatment",
+   "review_status": "clinician_approved",
+   "scoring_eligible": true,
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "trial_family": "21818642",
+   "population": {
+    "age_group": "adult",
+    "description": "744 adult cancer patients randomized in 23 community oncology practices (URCC CCOP) receiving chemotherapy with 5-HT3 antagonist plus dexamethasone on Day 1; 576 evaluable (91% female, mean age 53)."
+   },
+   "study_design": "Phase II/III multicenter randomized double-blind placebo-controlled four-arm trial (placebo, 0.5, 1.0, 1.5 g ginger root equivalent/day); intent-to-treat mixed-model analysis.",
+   "outcomes": [
+    {
+     "name": "Acute nausea severity on Day 1 of chemotherapy (average and maximum, 7-point scale), all ginger doses vs placebo across cycles 2-3: significant reduction (p=0.013 average, p=0.003 maximum); largest with 0.5 g and 1.0 g/day",
+     "hierarchy": "primary",
+     "kind": "patient_important",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "Delayed (Days 2-3) and follow-up (Day 4) nausea: significance weakened; vomiting and FACIT-G quality of life: no significant differences",
+     "hierarchy": "secondary",
+     "kind": "patient_important",
+     "direction": "null",
+     "outcome_role": "direct_between_group_effect"
+    }
+   ],
+   "limitations": [
+    "Adjunct to standard 5-HT3 antagonist plus dexamethasone antiemesis; not stand-alone antiemetic efficacy, delayed-nausea benefit or general digestive benefit.",
+    "Dose values are ginger-root equivalents (each capsule 8.5 mg combined gingerols/zingerone/shogaol, equivalent to 250 mg root, in olive oil); not extract mass or interchangeable with other preparations. No dose-response: 1.5 g was not better than 0.5-1.0 g.",
+    "Chemotherapy emetogenicity and baseline nausea severity were not controlled (Discussion); 744 randomized, 576 analysed.",
+    "Returned decision A070: general digestive, joint, inflammation and longevity transfer rejected; this context is limited to acute chemotherapy-associated nausea.",
+    "Dr. Pham's fourth ruling set (2026-10-28): credit only for the studied nausea context; no digestive, joint, inflammation or longevity transfer.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ],
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "mg",
+    "values": [
+     500,
+     1000,
+     1500
+    ],
+    "dose_status": "verified",
+    "dose_basis": "nominal_assigned_arm",
+    "duration_basis": "tied_to_cotherapy",
+    "duration_days": null,
+    "administration_frequency": "Three capsules (or placebo) twice daily for 6 days, starting 3 days before chemotherapy, in study cycles 2 and 3.",
+    "dosage_forms": [
+     "oral capsule (purified liquid ginger-root extract in extra virgin olive oil)"
+    ],
+    "co_therapies": [
+     "5-HT3 receptor antagonist antiemetic plus dexamethasone on Day 1 of every chemotherapy cycle; ginger pulses tied to chemotherapy cycles 2 and 3."
+    ],
+    "reported_regimen": "Placebo, 0.5 g, 1.0 g or 1.5 g ginger-root equivalent per day as capsules of 250 mg root equivalent taken twice daily for 6 days starting 3 days before chemotherapy, cycles 2 and 3.",
+    "normalization": {
+     "basis": "Arm daily doses in ginger-root equivalent as reported by the source (250 mg root equivalent per capsule); not a universal threshold."
+    },
+    "source_provenance": {
+     "pmid": "21818642",
+     "location": "Abstract Methods; Methods (study design, study medication by Aphios, days -3 to 4 schedule, statistics); Results (primary and secondary objectives, Table 2)",
+     "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3361530/"
+    }
+   },
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability"
+   }
+  },
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "ingr_ginger_24642205_nvp_meta",
+   "components": [
+    "INGR_GINGER"
+   ],
+   "source_pmids": [
+    "24642205"
+   ],
+   "identity_scope": "ingredient_general",
+   "identity": {
+    "chemical_form": "Orally administered Zingiber officinale (powder capsules, extract or essence capsules, syrup, biscuits) in trial-specific preparations"
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "meta_analysis",
+   "component_registration_status": "fully_registered",
+   "condition": "nausea_vomiting_of_pregnancy",
+   "purpose": "treatment",
+   "review_status": "clinician_approved",
+   "scoring_eligible": true,
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "trial_family": "viljoen_2014_ginger_nvp",
+   "population": {
+    "age_group": "adult",
+    "description": "Pregnant women with nausea and vomiting of pregnancy at any stage; 12 RCTs, 1278 participants (seven placebo-controlled; others vitamin B6, dimenhydrinate or metoclopramide comparators)."
+   },
+   "study_design": "Systematic review and meta-analysis of RCTs of oral ginger for NVP (PROSPERO CRD42011001237); primary objective effectiveness on NVP; separate analyses by comparator.",
+   "outcomes": [
+    {
+     "name": "Nausea symptoms (change in VAS) vs placebo: MD 1.20 (95% CI 0.56-1.84), p=0.0002, I2 0%; pooled from 2 of 7 placebo trials",
+     "hierarchy": "primary",
+     "kind": "patient_important",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "Number of vomiting episodes vs placebo: MD 0.72 (95% CI -0.03 to 1.46), p=0.06, I2 71%",
+     "hierarchy": "primary",
+     "kind": "patient_important",
+     "direction": "null",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "Nausea vs vitamin B6: no significant difference",
+     "hierarchy": "secondary",
+     "kind": "patient_important",
+     "direction": "null",
+     "outcome_role": "direct_between_group_effect"
+    }
+   ],
+   "limitations": [
+    "Pooled placebo nausea estimate rests on only 2 studies; most trials high risk of bias, variable outcome reporting and low-quality evidence (Abstract; Conclusions).",
+    "Doses 600-2500 mg ginger/day for 3-21 days, most 1000 mg/day powder for 4 days (Table 1; Discussion); dose subgroups are exploratory and do not set a threshold.",
+    "Short-term treatment of NVP only; spontaneous abortion RR 3.14 (0.65-15.11) vs placebo was not significant but rests on 2 studies; not a pregnancy safety determination, which stays with the safety owner.",
+    "Returned decision A070: general digestive, joint, inflammation and longevity transfer rejected; this context is limited to nausea of pregnancy.",
+    "Included-study PMIDs are taken from the source reference list (PMC BioC reference identifiers) for the 12 Table 1 trials; Basirat 2009 has no printed PubMed identifier and none is invented. These are membership pointers, not independent approvals.",
+    "Dr. Pham's fourth ruling set (2026-10-28): credit only for the studied nausea context; no digestive, joint, inflammation or longevity transfer.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ],
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "mg",
+    "values": [],
+    "dose_status": "verified",
+    "dose_basis": "not_applicable",
+    "duration_basis": "participant_specific",
+    "duration_days": null,
+    "administration_frequency": "Trial-specific divided daily doses (2-5 times daily).",
+    "dosage_forms": [
+     "oral ginger powder capsule",
+     "oral ginger extract or essence capsule",
+     "oral ginger syrup",
+     "ginger biscuit"
+    ],
+    "co_therapies": [
+     "None assigned in placebo-controlled trials; active comparators (vitamin B6, dimenhydrinate, metoclopramide) analysed separately."
+    ],
+    "reported_regimen": "Table 1: Basirat biscuits 2500 mg/day 4 d; Chittumma capsules 1950 mg/day 4 d; Ensiyeh 1000 mg/day 4 d; Fischer-Rasmussen 1000 mg/day 4 d; Keating syrup 1000 mg/day 14 d; Mohammadbeigi essence 600 mg/day 5 d; Ozgoli 1000 mg/day 4 d; Pongrojpaw 1000 mg/day 7 d; Smith 1050 mg/day 21 d; Sripramote 1500 mg/day 3 d; Vutyavanich 1000 mg/day 4 d; Willetts extract 1000 mg/day 4 d.",
+    "normalization": {
+     "basis": "No scalar pooled dose; per-trial reported ginger mg/day retained."
+    },
+    "source_provenance": {
+     "pmid": "24642205",
+     "location": "Abstract; Methods (eligibility, subgroup plan); Results (Table 1 study characteristics; ginger vs placebo nausea and vomiting, Figure 3); Discussion; Conclusions",
+     "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3995184/"
+    }
+   },
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability"
+   },
+   "included_study_pmids": [
+    "17621727",
+    "18272271",
+    "1988321",
+    "12233808",
+    "22545357",
+    "19250006",
+    "17957907",
+    "15051552",
+    "14649969",
+    "11275030",
+    "14712970"
+   ]
+  }
+ ],
+ "source_receipts": [
+  {
+   "pmid": "21818642",
+   "title_fetched": "Ginger (Zingiber officinale) reduces acute chemotherapy-induced nausea: a URCC CCOP study of 576 patients.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/21818642/",
+   "full_text": true,
+   "sections_used": "Abstract; Methods; Results primary and secondary objectives; Discussion"
+  },
+  {
+   "pmid": "24642205",
+   "title_fetched": "A systematic review and meta-analysis of the effect and safety of ginger in the treatment of pregnancy-associated nausea and vomiting.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/24642205/",
+   "full_text": true,
+   "sections_used": "Abstract; Methods; Results incl. Table 1; Discussion; Conclusions"
+  },
+  {
+   "pmid": "31937153",
+   "title_fetched": "Effect of ginger in the treatment of nausea and vomiting compared with vitamin B6 and placebo during pregnancy: a meta-analysis.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/31937153/",
+   "full_text": false,
+   "sections_used": "Abstract only (full text not open access); not used for a context"
+  }
+ ],
+ "integration_notes": [
+  "2026-10-28 integrator: condition gate kept (supported_outcomes ['acute_chemotherapy_nausea', 'nausea_vomiting_of_pregnancy'] equals the context condition). Sean's decision is that a claim-free label may earn scoped condition credit, but today the population limits (e.g. men-only, pregnancy, children) are enforced only inside this gate, so ungating via data would drop those safeguards. Claim-free scoped credit waits for the shared applicability change (no claim / aligned claim / unrelated claim / population mismatch) under /pg-scoring-change."
+ ]
+}

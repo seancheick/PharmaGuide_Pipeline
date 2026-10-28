@@ -1,0 +1,174 @@
+{
+ "record_id": "INGR_CHONDROITIN_SULFATE",
+ "decision": "closed_no_credit",
+ "summary": "The reviewed research does not establish a qualifying benefit for this product's assessed use. Existing human research is retained: small short-term osteoarthritis pain benefits in mostly low-quality trials, with the ACR 2026 recommendation against and the VA/DoD 2026 insufficient-evidence finding. Per Dr. Pham's 2026-10-28 rulings and the shared OA supplement standard (OA_SUPPLEMENT_STANDARD.md; ACR Sept 2026 strongly against; VA/DoD May 2026 insufficient evidence for or against), this is a completed no-credit on the reference path, reversing the earlier draft credit. The 2015 Cochrane review (43 RCTs, 9,110 participants, oral chondroitin in mostly knee osteoarthritis) found a small short-term pain benefit versus placebo at >=800 mg/day (MD -10.1/100, low quality) plus positive Lequesne, WOMAC MCII and joint-space outcomes, with uncertain long-term pain benefit and loss of significance in some sensitivity analyses. The context keeps these true directions (short-term pain positive, long-term pain mixed) with scoring_eligible false; the record becomes reference-only, which removes Evidence points from chondroitin products.",
+ "record_updates": {
+  "study_type": "reference",
+  "evidence_level": "reference",
+  "effect_direction_rationale": "Shared OA supplement standard (2026-10-28): the ACR 2026 guideline strongly recommends against glucosamine, chondroitin and their combination for knee, hip and hand OA (certainty low for glucosamine alone, moderate for the combination), and the VA/DoD 2026 guideline (Recommendation 30) finds insufficient evidence for or against them (very low confidence; effects likely below a clinically meaningful difference). Per Dr. Pham's 2026-10-28 ruling, glucosamine and chondroitin records use one standard: completed no-credit on the reference path with true source directions retained; exact-preparation findings are recorded but do not create retail-supplement credit."
+ },
+ "study_contexts": [
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "ingr_chondroitin_25629804_osteoarthritis_review",
+   "components": [
+    "INGR_CHONDROITIN_SULFATE"
+   ],
+   "source_pmids": [
+    "25629804"
+   ],
+   "identity_scope": "ingredient_general",
+   "identity": {
+    "chemical_form": "chondroitin sulfate; monotherapy and combinations kept separate in source analyses"
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "meta_analysis",
+   "component_registration_status": "fully_registered",
+   "condition": "osteoarthritis_symptoms",
+   "purpose": "treatment",
+   "review_status": "clinician_approved",
+   "scoring_eligible": false,
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "trial_family": "cochrane_chondroitin_25629804",
+   "population": {
+    "age_group": "adult",
+    "description": "Adults with osteoarthritis, mostly knee, with few hip and hand trials; 43 randomized trials, 4,962 chondroitin and 4,148 control participants; trial duration 1 month to 3 years (Abstract; Results)."
+   },
+   "study_design": "Cochrane systematic review and meta-analysis of randomized or quasi-randomized trials of oral chondroitin versus placebo or active comparator; this context uses the chondroitin-versus-placebo summary-of-findings analyses restricted to doses of at least 800 mg/day.",
+   "outcomes": [
+    {
+     "name": "Pain 0-100, short-term (<6 months), chondroitin >=800 mg/d vs placebo: MD -10.14 (95% CI -14.58 to -5.71), 8 studies, 1077 participants; low-quality evidence, I2 70%",
+     "hierarchy": "primary",
+     "kind": "patient_important",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "Pain 0-100, long-term (>=6 months): MD -9.01 (95% CI -17.68 to -0.34), 6 studies, 989 participants; low quality; authors uncertain whether pain is reduced",
+     "hierarchy": "primary",
+     "kind": "patient_important",
+     "direction": "mixed",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "WOMAC MCII pain response (>=20% reduction), long-term: RR 1.12 (1.01-1.24), 2 studies, 1253 participants; high quality",
+     "hierarchy": "secondary",
+     "kind": "patient_important",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "Lequesne index, short-term: SMD -0.57 (-0.84 to -0.30), 7 studies, 903 participants; moderate quality",
+     "hierarchy": "secondary",
+     "kind": "patient_important",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "Minimum joint space width loss, long-term: 4.7% less relative to placebo (1.6%-7.8%), 2 studies",
+     "hierarchy": "secondary",
+     "kind": "surrogate",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    }
+   ],
+   "limitations": [
+    "The reviewed research does not establish a qualifying benefit for this product's assessed use. Existing human research is retained: small short-term osteoarthritis pain benefits in mostly low-quality trials, with the ACR 2026 recommendation against and the VA/DoD 2026 insufficient-evidence finding.",
+    "Shared OA supplement standard (2026-10-28): the ACR 2026 guideline strongly recommends against glucosamine, chondroitin and their combination for knee, hip and hand OA (certainty low for glucosamine alone, moderate for the combination), and the VA/DoD 2026 guideline (Recommendation 30) finds insufficient evidence for or against them (very low confidence; effects likely below a clinically meaningful difference). Per Dr. Pham's 2026-10-28 ruling, glucosamine and chondroitin records use one standard: completed no-credit on the reference path with true source directions retained; exact-preparation findings are recorded but do not create retail-supplement credit.",
+    "Exact-preparation evidence: the Cochrane benefit was uncertain when restricted to studies without pharmaceutical funding, with adequate allocation concealment or with >200 participants (Abstract); trial chondroitin preparations (e.g. pharmaceutical products such as Structum and Chondrosulf) cannot be equated with retail supplements.",
+    "Benefit was uncertain when analyses were limited to adequate allocation concealment, large samples (>200) or no pharmaceutical funding (Abstract Main results); mostly low-quality, highly heterogeneous short-term trials.",
+    "Pooled heterogeneous study regimens; >=800 mg/day is the summary-of-findings analysis stratum, not a validated efficacy minimum or optimum.",
+    "Combination (chondroitin plus glucosamine or other supplement) analyses are kept separate and not credited to chondroitin alone; combination function was null.",
+    "Osteoarthritis symptom evidence only; no transfer to general joint health, longevity or prevention in people without osteoarthritis.",
+    "Earlier returned decision: date-restricted hold (publication-age-only exclusions withdrawn); superseded for credit by the 2026-10-28 ruling.",
+    "Topical multi-ingredient cream; source Results explicitly excludes cream from oral analyses. Identity verified; not an oral chondroitin intervention.",
+    "Source discrepancy unresolved: NIH abstract: 57 patients and daily intravenous glucosamine plus 800 mg chondroitin versus review table: 56 patients and 800–1,600 mg weight-based combination. Translated title alone is not sufficient to clear dose/route correspondence.",
+    "Source Characteristics explicitly follow-up of Wildi 2011; same trial family,4yearobservationalextension. Not independent randomized replication.",
+    "GAIT 24-month ancillary structural report shares parent randomized cohort with Clegg 2006. Not independent replication.",
+    "GAIT 24-month ancillary clinical report shares parent randomized cohort with Clegg 2006; not independent replication.",
+    "Topical cream outside oral qualification; source explicitly excludes from oral meta; indexed erratum content also not established.",
+    "Dose/route/population conflict between review table and liveNIHabstract; retain exact source label, no oral qualification.",
+    "ErratumIn ClinRheumatol2010;29(7):819–20 indexed; correction content not established, source acceptance held.",
+    "ErratumIn ClinRheumatol2014;33(10):1527 indexed; correction content not established, source acceptance held.",
+    "Follow-up of Wildi 2011, same cohort; retain publication membership, no independent replication count.",
+    "GAIT ancillary structural report, shares the Clegg 2006 parent cohort; retain membership, no independent count.",
+    "GAIT ancillary clinical report, shares the Clegg 2006 parent cohort; retain membership, no independent count.",
+    "PMID 15023378 has an explicitly indexed author-name-only erratum; no outcome correction inferred. Four indexed erratum flags are individually retained in the live API receipt; no parent review is labelled retracted.",
+    "Live NIH abstract is an overview of chondroprotective drugs and contains no matching primary randomized Conrozier 1998 trial methods; retain source-table label but withhold this PMID correspondence from oral primary-trial qualification.",
+    "Excluded oral-qualification mappings remain auditable: PMID 12610812 topical combination cream; PMID 10883158 unresolved route/dose/population correspondence; PMIDs 20179981 and 22729470 unread indexed corrections; PMID 9856136 general drug overview rather than the source-labelled Conrozier primary trial. No missing mapping is invented.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ],
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "mg",
+    "values": [],
+    "dose_status": "verified",
+    "dose_basis": "not_applicable",
+    "duration_basis": "participant_specific",
+    "duration_days": null,
+    "administration_frequency": "Study-specific daily oral regimens (e.g. 400 mg three times daily, 500 mg twice daily); no single pooled frequency.",
+    "dosage_forms": [
+     "oral capsule, tablet or sachet (trial-specific preparations)"
+    ],
+    "co_therapies": [
+     "Trial-specific rescue analgesics/NSAIDs permitted in some trials; no assigned co-therapy in placebo comparisons."
+    ],
+    "reported_regimen": "Results: most studies gave oral chondroitin 800 mg/day or higher, with exceptions below 800 mg/day; summary-of-findings chondroitin-vs-placebo analyses restricted to >=800 mg/day; example arms Structum 500 mg twice daily and Chondrosulf 400 mg three times daily; one topical cream trial excluded from analyses.",
+    "normalization": {
+     "basis": "No scalar pooled dose; >=800 mg/day is the review's analysis stratum, not a universal threshold."
+    },
+    "source_provenance": {
+     "pmid": "25629804",
+     "location": "Summary of findings table 1 (chondroitin vs placebo, dose >=800 mg/d); Methods Major outcomes; Results Included studies (dose paragraph); Abstract Main results",
+     "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4881293/"
+    }
+   },
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability"
+   },
+   "included_study_pmids": [
+    "10399232",
+    "10966840",
+    "11806217",
+    "11842864",
+    "12013151",
+    "12111630",
+    "1485136",
+    "15023378",
+    "15134386",
+    "15751094",
+    "16404866",
+    "16495392",
+    "17561418",
+    "18821708",
+    "19180484",
+    "20525840",
+    "21367761",
+    "21898340",
+    "22977594",
+    "23493263",
+    "26069668",
+    "8856618",
+    "9743816",
+    "9743817",
+    "9743819"
+   ]
+  }
+ ],
+ "source_receipts": [
+  {
+   "pmid": "25629804",
+   "title_fetched": "Chondroitin for osteoarthritis.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/25629804/",
+   "full_text": true,
+   "sections_used": "Abstract; Methods Major outcomes; Results Included studies dose paragraph; Summary of findings table 1; Authors conclusions"
+  }
+ ],
+ "integration_notes": [
+  "2026-10-28 integrator: effect_direction_rationale set to the shared OA standard text, identical in both records (third ruling)."
+ ]
+}

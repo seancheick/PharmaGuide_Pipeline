@@ -140,10 +140,15 @@ def test_alpha_linolenic_ala_does_not_borrow_alpha_lipoic_evidence(enricher):
 
 
 def test_row_level_active_projection_reaches_exact_generic_evidence(enricher):
-    """Mapped label actives must not disappear behind a synthetic row type."""
+    """Mapped label actives must not disappear behind a synthetic row type.
+
+    INGR_GARLIC credit is limited to the studied preparations (Kwai, Allicor,
+    Kyolic; Dr. Pham, 2026-10-28), so the projected row names one of them and
+    a generic garlic extract control must be rejected by that scope.
+    """
     garlic = {
-        "name": "Garlic extract",
-        "raw_source_text": "Garlic extract",
+        "name": "Kyolic Aged Garlic Extract",
+        "raw_source_text": "Kyolic Aged Garlic Extract",
         "standardName": "Garlic",
         "canonical_id": "garlic",
         "canonical_source_db": "ingredient_quality_map",
@@ -162,7 +167,7 @@ def test_row_level_active_projection_reaches_exact_generic_evidence(enricher):
     }
     product = {
         "id": "garlic-row-level-projection",
-        "fullName": "Garlic 1200 mg",
+        "fullName": "Kyolic Aged Garlic Extract 1200 mg",
         "activeIngredients": [garlic],
         "ingredient_quality_data": {
             "ingredients_scorable": [],
@@ -178,6 +183,19 @@ def test_row_level_active_projection_reaches_exact_generic_evidence(enricher):
 
     assert "INGR_GARLIC" in matches
     assert matches["INGR_GARLIC"]["matched_canonical_ids"] == ["garlic"]
+
+    generic = dict(garlic, name="Garlic extract", raw_source_text="Garlic extract")
+    product = {
+        "id": "garlic-row-level-projection-generic",
+        "fullName": "Garlic 1200 mg",
+        "activeIngredients": [generic],
+        "ingredient_quality_data": {"ingredients_scorable": [], "ingredients": [generic]},
+    }
+    evidence = enricher._collect_evidence_data(product)
+    assert "INGR_GARLIC" not in {m.get("id") for m in evidence["clinical_matches"]}
+    assert ("INGR_GARLIC", "clinical_form_mismatch") in {
+        (m.get("id"), m.get("reason_code")) for m in evidence["rejected_clinical_matches"]
+    }
 
 
 @pytest.mark.parametrize("product_id", ["299952", "222864"])
@@ -195,7 +213,10 @@ def test_incidental_protein_does_not_inherit_resistance_training_evidence(enrich
     assert "INGR_WHEY_PROTEIN" not in {m["id"] for m in matches}
 
 
-def test_disclosed_pea_protein_blend_keeps_source_evidence_without_individual_dose(enricher):
+def test_disclosed_pea_protein_blend_gets_no_whey_evidence_or_individual_dose(enricher):
+    """Dr. Pham, 2026-10-28: INGR_WHEY_PROTEIN is whey-specific; a pea protein
+    blend member no longer links to it, and its lent container mass is never an
+    individual pea dose."""
     import json
     from pathlib import Path
     from enhanced_normalizer import EnhancedDSLDNormalizer
@@ -205,10 +226,9 @@ def test_disclosed_pea_protein_blend_keeps_source_evidence_without_individual_do
     raw = json.loads((Path(__file__).parent / "fixtures" /
                       "protein_evidence_204521_raw.json").read_text())
     product, _ = enricher.enrich_product(EnhancedDSLDNormalizer().normalize_product(raw))
-    match = next(m for m in product["evidence_data"]["clinical_matches"]
-                 if m["id"] == "INGR_WHEY_PROTEIN")
-    assert match["matched_canonical_ids"] == ["pea_protein"]
-    assert match["matched_source_row_refs"] == ["ingredientRows[15]"]
+    assert "INGR_WHEY_PROTEIN" not in {
+        m["id"] for m in product["evidence_data"]["clinical_matches"]
+    }
     pea = next(r for r in product["product_scoring_evidence"]
                if r.get("canonical_id") == "pea_protein")
     assert is_lent_blend_mass(pea)
@@ -217,13 +237,24 @@ def test_disclosed_pea_protein_blend_keeps_source_evidence_without_individual_do
     artifact = build_scored_artifact(product)
     metadata = artifact["_v4_module_breakdown"]["dimensions"]["evidence"]["metadata"]
     assert not metadata.get("primary_evidence_floor")
+    assert "INGR_WHEY_PROTEIN" not in metadata.get("recovered_matches", [])
 
 
-@pytest.mark.parametrize("term", ["whey protein", "casein", "soy protein", "pea protein"])
-def test_identified_protein_source_keeps_training_evidence(enricher, term):
+@pytest.mark.parametrize("term, matches", [
+    ("whey protein", True),
+    ("whey protein isolate", True),
+    ("whey protein concentrate", True),
+    # Dr. Pham, 2026-10-28: the mixed-protein review is not whey-specific proof,
+    # and the whey record does not transfer to other protein sources.
+    ("casein", False),
+    ("soy protein", False),
+    ("pea protein", False),
+    ("milk protein", False),
+])
+def test_identified_protein_source_keeps_training_evidence(enricher, term, matches):
     study = next(e for e in enricher.databases["backed_clinical_studies"]["backed_clinical_studies"]
                  if e["id"] == "INGR_WHEY_PROTEIN")
-    assert enricher._clinical_study_match([term], study) is not None
+    assert (enricher._clinical_study_match([term], study) is not None) is matches
 
 
 def test_real_protein_source_in_ingredient_list_keeps_evidence(enricher):

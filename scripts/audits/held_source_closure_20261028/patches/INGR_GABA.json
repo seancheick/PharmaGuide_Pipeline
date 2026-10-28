@@ -1,0 +1,121 @@
+{
+ "record_id": "INGR_GABA",
+ "decision": "closed_no_credit: The reviewed research does not establish a qualifying benefit for this product's assessed use.",
+ "summary": "The reviewed research does not establish a qualifying benefit for this product's assessed use. Completed limited assessment (Dr. Pham rulings 2026-10-28): human research exists and shows preliminary, mixed stress findings. The only source (33041752) reviews 14 small, mostly single-dose placebo-controlled studies: limited evidence for stress (some acute stress-marker changes at 2.01-100 mg) and very limited evidence for sleep. Very limited possible stress credit is noted for the separate point-band calibration batch because the current scorer cannot express it; no points now, sleep excluded. Reference path, which removes Evidence points from GABA products until that calibration.",
+ "record_updates": {
+  "study_type": "reference",
+  "evidence_level": "reference"
+ },
+ "study_contexts": [
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "ingr_gaba_33041752_scoped_source",
+   "source_pmids": [
+    "33041752"
+   ],
+   "components": [
+    "INGR_GABA"
+   ],
+   "identity_scope": "ingredient_general",
+   "identity": {
+    "preparation": "Natural GABA in foods (GABA oolong tea, GABA-enriched rice) and biosynthetic fermentation GABA; mostly single-dose challenges"
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "systematic_review",
+   "component_registration_status": "fully_registered",
+   "condition": "stress_and_sleep",
+   "purpose": "physiology",
+   "review_status": "clinician_approved",
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability"
+   },
+   "scoring_eligible": false,
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "trial_family": "source_33041752",
+   "population": {
+    "description": "14 placebo-controlled human studies, mostly small samples of healthy adults or adults with poor sleep (PSQI >5 or >6)."
+   },
+   "study_design": "Systematic review (PubMed only, to February 2020) of placebo-controlled randomized and quasi-experimental trials; no meta-analysis; most studies unclear risk of selection bias.",
+   "outcomes": [
+    {
+     "name": "Stress: limited evidence; acute stress markers changed in some single-dose studies (2.01-100 mg), often without between-group differences",
+     "hierarchy": "not_reported",
+     "kind": "surrogate",
+     "direction": "mixed",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "Sleep: very limited evidence from small 1-8 week studies (100-300 mg biosynthetic GABA; GABA rice)",
+     "hierarchy": "not_reported",
+     "kind": "patient_important",
+     "direction": "mixed",
+     "outcome_role": "direct_between_group_effect"
+    }
+   ],
+   "limitations": [
+    "Narrative review only, mostly acute single-dose and very small trials; the authors state more studies are needed before inferences can be made.",
+    "Dr. Pham 2026-10-28: very limited possible stress credit, little or no sleep credit. This is a limited assessment, not an absence of evidence; stress is noted for the point-band calibration batch and sleep is excluded.",
+    "Dr. Pham's returned decision rejects high-certainty stress/sleep language.",
+    "Food-matrix GABA (tea, rice, coffee) is not equivalent to a GABA capsule.",
+    "Do not represent peripheral biomarker changes as proof of brain uptake or high-certainty clinical benefit.",
+    "Historical bibliography census (not independent scoring sources; actual included-publication membership is separately bound to the inspected source table): 16971751, 29856155, 30972340, 21512285, 19462324, 19483370, 26052150, 30263304, 22203366. Each intervention and comparison requires its own applicability assessment; citation in this bibliography grants no credit.",
+    "Included-study PMID membership was extracted from source Table(s) T1. These are source membership identifiers, not independent efficacy approvals or automatic trial replications. Exact table/citation mapping and unindexed citations are retained in the source receipt. 4 source citations in this set lack a PMID in the primary source; their citation text is retained, no PMID is invented.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ],
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "mg",
+    "values": [
+     2.01,
+     300
+    ],
+    "dose_status": "verified",
+    "dose_basis": "not_applicable",
+    "duration_basis": "participant_specific",
+    "duration_days": null,
+    "administration_frequency": "Single acute doses in most stress studies; daily for 1-8 weeks in sleep studies",
+    "dosage_forms": [
+     "GABA-enriched tea",
+     "GABA-enriched rice",
+     "biosynthetic GABA supplement"
+    ],
+    "co_therapies": [
+     "Food matrices (oolong tea, coffee, rice) in several studies"
+    ],
+    "source_provenance": {
+     "pmid": "33041752",
+     "location": "Methods (design: randomized and quasi-experimental trials); Results risk of bias; Tables 1-2; Results stress and sleep sections; Discussion dose summary",
+     "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7527439/"
+    },
+    "reported_regimen": "2.01 to 100 mg for stress outcomes; 100 to 300 mg biosynthetic GABA for sleep (Discussion)",
+    "normalization": {
+     "basis": "Descriptive source range only."
+    }
+   },
+   "included_study_pmids": [
+    "30972340",
+    "26052150",
+    "21512285",
+    "19462324",
+    "19483370",
+    "30263304",
+    "22203366",
+    "16971751",
+    "29856155"
+   ]
+  }
+ ],
+ "source_receipts": [
+  {
+   "pmid": "33041752",
+   "title_fetched": "Effects of Oral Gamma-Aminobutyric Acid (GABA) Administration on Stress and Sleep in Humans: A Systematic Review.",
+   "url": "https://www.ncbi.nlm.nih.gov/research/bionlp/RESTful/pmcoa.cgi/BioC_json/33041752/unicode",
+   "full_text": true,
+   "sections_used": "Methods (design: randomized and quasi-experimental trials); Results risk of bias; Tables 1-2; Results stress and sleep sections; Discussion dose summary"
+  }
+ ]
+}

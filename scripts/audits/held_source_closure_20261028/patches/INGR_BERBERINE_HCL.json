@@ -1,0 +1,141 @@
+{
+ "record_id": "INGR_BERBERINE_HCL",
+ "decision": "closed_credit",
+ "summary": "Zhao 2021 (34956436; 46 RCTs, 4,158 adults with type 2 diabetes) found berberine used alone lowered the primary glycaemic outcomes (HbA1c -0.38%, FPG -0.58, 2hPG -1.48) versus control and was not different from Western antidiabetic drugs; added to drugs it lowered HbA1c by 0.91%. Trials were mostly Chinese and open-label with high heterogeneity. Credit is limited to glycaemic support in type 2 diabetes; the 2023 umbrella review (36999891) is abstract-only.",
+ "record_updates": {
+  "applicability": {
+   "scope": "ingredient",
+   "supported_outcomes": [
+    "fasting_glucose"
+   ],
+   "studied_population": "Adults with type 2 diabetes, mostly in China, taking berberine about 0.9-1.5 g/day for 4 weeks to 6 months.",
+   "source_pmids": [
+    "34956436"
+   ],
+   "reviewed_at": "2026-10-28",
+   "excluded_claim_terms": [
+    "prevents heart disease",
+    "prevent diabetes"
+   ]
+  }
+ },
+ "study_contexts": [
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "ingr_berberine_hcl_34956436_scoped_source",
+   "components": [
+    "INGR_BERBERINE_HCL"
+   ],
+   "source_pmids": [
+    "34956436"
+   ],
+   "identity_scope": "ingredient_general",
+   "identity": {
+    "chemical_form": "Berberine (oral; Chinese trials, predominantly berberine tablets); salt form not uniformly stated per trial"
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "meta_analysis",
+   "component_registration_status": "fully_registered",
+   "condition": "type_2_diabetes",
+   "purpose": "treatment",
+   "review_status": "clinician_approved",
+   "scoring_eligible": true,
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "trial_family": "source_34956436",
+   "population": {
+    "age_group": "adult",
+    "description": "46 RCTs, 4,158 adults with type 2 diabetes (2,063 berberine, 2,095 control), mostly Chinese patients; sample size >=60 and duration >=4 weeks per trial."
+   },
+   "study_design": "Systematic review and meta-analysis of RCTs (single-blind and open-label allowed) of berberine alone or with standard antidiabetic therapy vs placebo/none, lifestyle or active drugs; primary outcomes HbA1c, FPG and 2hPG; subgroup by treatment method.",
+   "outcomes": [
+    {
+     "name": "Primary (berberine used alone subgroup): HbA1c MD -0.38 (95% CI -0.49 to -0.27), FPG MD -0.58 (-0.81 to -0.35), 2hPG MD -1.48 (-2.16 to -0.79)",
+     "hierarchy": "primary",
+     "kind": "surrogate",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "Berberine alone vs Western antidiabetic medicine: no significant difference in HbA1c, FPG or 2hPG",
+     "hierarchy": "primary",
+     "kind": "surrogate",
+     "direction": "null",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "Berberine added to antidiabetic agents: HbA1c MD -0.91 (-1.25 to -0.56), FPG -1.06, 2hPG -1.34; overall pooled HbA1c -0.73",
+     "hierarchy": "secondary",
+     "kind": "surrogate",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    }
+   ],
+   "limitations": [
+    "Most trials Chinese, many open-label or single-blind; only 5 reported allocation concealment/outcome-assessor blinding; high heterogeneity driven by different interventions (Results; Discussion).",
+    "Credit applies to the berberine-alone glycaemic subgroup in type 2 diabetes; adjunct-to-drug results are reported but not transferred to standalone supplement use. Not a replacement for diabetes treatment and no weight-loss or prevention claim.",
+    "Doses were mostly 0.3-0.5 g three times daily (about 0.9-1.5 g/day); outlying entries (30 mg tid to 3 g tid) are transcribed as printed and not interpreted as a threshold.",
+    "Returned decision A043: source-content hold; methods now verified from the full text. Umbrella review 36999891 is abstract-only and gets no context.",
+    "Some included-study citations lack PubMed identifiers in the source XML; retain their exact citations rather than inventing identifiers.",
+    "Historical bibliography census (not independent scoring sources; actual included-publication membership is separately bound to the inspected source table): 33024120, 32550158, 30541217, 18397984. Each intervention and comparison requires its own applicability assessment; citation in this bibliography grants no credit.",
+    "Included-study identifiers are now bound to this source's actual included-study rows/explicit inclusion references (Tables tab1 explicit included-study row citations), with live NIH title/content identity checks. They are publication pointers, not independent-cohort counts, per-primary-study scoring approvals, preparation equivalence or new efficacy evidence. Exact unindexed source citations remain retained; no missing PMID is invented.",
+    "42 included source citations have no printed PubMed identifier in this primary source; their exact citations are retained in the source-table receipt. This is a documented identifier limitation, not a fabricated identifier or an extra independent trial.",
+    "Dr. Pham's fourth ruling set (2026-10-28): tight claim; form, dose and population kept (berberine about 0.9-1.5 g/day in adults with type 2 diabetes). Glycaemic or lipid changes are not prevention of clinical events (the ruling cites 2026 ACC/AHA advice against relying on supplements for dyslipidaemia). Preparation-specific consistency rule applied: all Table 1 arms are berberine; salt form not uniformly stated.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ],
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "mg",
+    "values": [],
+    "dose_status": "verified",
+    "dose_basis": "not_applicable",
+    "duration_basis": "participant_specific",
+    "duration_days": null,
+    "administration_frequency": "Mostly three times daily (some twice daily) per Table 1.",
+    "dosage_forms": [
+     "oral berberine tablet (trial-specific; not stated for every trial)"
+    ],
+    "co_therapies": [
+     "Background or comparator antidiabetic agents (metformin, sulfonylureas, sitagliptin, etc.) and lifestyle interventions in many comparisons; berberine-alone subgroup analysed separately."
+    ],
+    "reported_regimen": "Table 1: most commonly berberine 0.5 g tid (11 arms) or 0.3 g tid (8 arms), also 500 mg tid, 300 mg tid, 0.5 g bid, 0.6 g/d, 0.2 g tid, 0.3-0.5 g tid; outliers printed as 30 mg tid, 100 mg tid and 3 g tid; durations 4 weeks to 6 months.",
+    "normalization": {
+     "basis": "No scalar pooled dose; per-trial regimens retained as printed."
+    },
+    "source_provenance": {
+     "pmid": "34956436",
+     "location": "Methods (eligibility, primary outcomes); Results 3.1 (participants, Table 1, subgroup by treatment method, Figures 3-5); Discussion limitations",
+     "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8696197/"
+    }
+   },
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability"
+   },
+   "included_study_pmids": [
+    "33024120",
+    "32550158",
+    "30541217",
+    "18397984"
+   ]
+  }
+ ],
+ "source_receipts": [
+  {
+   "pmid": "34956436",
+   "title_fetched": "The Effect of Berberine on Metabolic Profiles in Type 2 Diabetic Patients: A Systematic Review and Meta-Analysis of Randomized Controlled Trials.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/34956436/",
+   "full_text": true,
+   "sections_used": "Abstract; Methods; Results 3.1 incl. Table 1 and subgroup analyses; Discussion"
+  },
+  {
+   "pmid": "36999891",
+   "title_fetched": "Berberine and health outcomes: An umbrella review.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/36999891/",
+   "full_text": false,
+   "sections_used": "Abstract only; subscription"
+  }
+ ]
+}

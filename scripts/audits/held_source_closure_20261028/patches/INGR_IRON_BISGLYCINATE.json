@@ -1,0 +1,16 @@
+{
+ "record_id": "INGR_IRON_BISGLYCINATE",
+ "decision": "held: the only source, 36728680 (Nutr Rev 2023, PMC10331582), is not downloadable: PMC returns a publisher-permission stub and the BioC/Europe PMC full-text services fail, so doses, included trials and comparators cannot be verified. From the abstract the comparative benefit (Hb SMD 0.54, fewer GI events) is confined to pregnant women, which Dr. Pham separates from this record, with null results in children; it would not support the record's 'Increase Energy' claim, so the likely closure is no-credit once the full text is available. OA retry 2026-10-28: OpenAlex bronze copy (https://academic.oup.com/nutritionreviews/advance-article-pdf/doi/10.1093/nutrit/nuac106/49057965/nuac106.pdf) is behind a Cloudflare bot check; not bypassed.",
+ "summary": "36728680 abstract: 17 RCTs comparing ferrous bisglycinate with other iron supplements for 4-20 weeks; higher hemoglobin (SMD 0.54 g/dL, 0.15-0.94) and fewer GI adverse events (IRR 0.36) in pregnant women; non-significant ferritin trend; no difference in children; other populations only qualitative.",
+ "record_updates": {},
+ "study_contexts": [],
+ "source_receipts": [
+  {
+   "pmid": "36728680",
+   "title_fetched": "The effects of oral ferrous bisglycinate supplementation on hemoglobin and ferritin concentrations in adults and children: a systematic review and meta-analysis of randomized controlled trials.",
+   "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=36728680&retmode=xml",
+   "full_text": false,
+   "sections_used": "PubMed abstract only (PMC full text blocked by publisher permission)"
+  }
+ ]
+}

@@ -1,0 +1,291 @@
+{
+ "record_id": "PRECLIN_CORDYCEPS",
+ "decision": "closed_no_credit",
+ "summary": "The reviewed research does not establish a qualifying benefit for this product's assessed use. Existing human research is kept: Cs-4 (exploratory threshold signals after a null overall comparison) and PeakO2 (multi-mushroom, exploratory 3-week extension), plus the 2024 muscle-tissue study in 14 adults (not endurance, strength or meaningful recovery). Per Dr. Pham's 2026-10-28 ruling (no generic stamina credit, not 'all trials null'), the two approved non-scoring contexts (Cs-4 20804368; PeakO2 27408987) stay unchanged. The 2024 study 38501161 (abstract only; the CC-BY publisher PDF returned HTTP 403) gave 14 young adults a single 1 g Cordyceps sinensis dose before interval exercise and reports earlier muscle stem-cell recruitment: a tissue-biomarker finding with no performance outcome, approved without credit. The record becomes reference-only, which removes Cordyceps Evidence points from dependent products, and its notes now describe 38501161 instead of listing it as a pending task.",
+ "record_updates": {
+  "study_type": "reference",
+  "evidence_level": "reference",
+  "notes": "Cs-4 PMID20804368 has an overall null between-group comparison; favorable threshold changes are exploratory within-group findings. PeakO2 PMID27408987 is a six-mushroom preparation, with a one-week null comparison and exploratory extension. PMID38501161 (2024, 14 adults, single 1 g Cordyceps sinensis dose) reports earlier muscle stem-cell recruitment and attenuated necrotic infiltration after exercise: tissue biomarkers only, no performance outcome. These sources do not establish generic Cordyceps efficacy, a shared dose threshold or functional recovery. Per Dr. Pham's 2026-10-28 ruling: no generic stamina credit; the evidence is not uniformly null (Cs-4 exploratory signals, PeakO2 multi-mushroom extension, 2024 biomarker study)."
+ },
+ "study_contexts": [
+  {
+   "context_schema_version": "1.1.0",
+   "review_status": "clinician_approved",
+   "scoring_eligible": false,
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "context_id": "preclin_cordyceps_27408987_peako2_combination",
+   "components": [
+    "PRECLIN_CORDYCEPS"
+   ],
+   "source_pmids": [
+    "27408987"
+   ],
+   "identity_scope": "combination",
+   "identity": {
+    "branded_material": "PeakO2",
+    "manufacturer": "Compound Solutions, Inc.",
+    "standardization": "Six-mushroom blend: Cordyceps militaris, Ganoderma lucidum, Pleurotus eryngii, Lentinula edodes, Hericium erinaceus, Trametes versicolor. Source Table3 supplies no individual masses."
+   },
+   "evidence_role": "direct_rct",
+   "component_registration_status": "unregistered_components_present",
+   "condition": "high_intensity_exercise_performance",
+   "purpose": "challenge",
+   "trial_family": "peako2_NCT02075892",
+   "population": {
+    "description": "Recreationally active adults aged 18–35; 30 randomized, 28 completed seven days; 10 volunteered for the exploratory 21-day extension."
+   },
+   "study_design": "randomized double-blind placebo-controlled parallel trial; exploratory volunteer extension",
+   "outcomes": [
+    {
+     "name": "VO2max, ventilatory threshold and time to exhaustion after one week: no significant treatment-by-time interaction.",
+     "hierarchy": "primary",
+     "kind": "surrogate",
+     "direction": "null",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "Relative peak power, average power and percent power drop after one week: no significant treatment-by-time interaction.",
+     "hierarchy": "secondary",
+     "kind": "surrogate",
+     "direction": "null",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "Three-week exploratory extension: VO2max treatment interaction p=.042; only 10 volunteers.",
+     "hierarchy": "not_reported",
+     "kind": "surrogate",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    }
+   ],
+   "limitations": [
+    "Total 4 g/day is the six-mushroom preparation, not a known isolated Cordyceps militaris dose.",
+    "Methods rounds 1.3 g three times daily to 4 g daily; preserve source rounding.",
+    "The three-week extension is exploratory and self-selected; no general isolated-material or guaranteed performance claim.",
+    "Reviewed non-transfer conclusion: this aggregate or combined intervention cannot provide affirmative generic-ingredient credit. Exact preparation-specific qualification and other recorded source limits remain separate."
+   ],
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "mg",
+    "values": [
+     4000
+    ],
+    "dose_status": "combination_total_only",
+    "dose_basis": "combination_total_daily",
+    "duration_basis": "fixed_protocol",
+    "duration_days": 7,
+    "administration_frequency": "two capsules three times daily",
+    "dosage_forms": [
+     "capsule"
+    ],
+    "co_therapies": [],
+    "reported_regimen": "4 g/day PeakO2 blend for seven days; a 10-volunteer subset continued for 21 days.",
+    "normalization": {
+     "basis": "Source total blend 4 g/day converted to 4,000 mg/day; individual component doses unknown."
+    },
+    "source_provenance": {
+     "pmid": "27408987",
+     "location": "Full body Methods Experimental Design, Subjects, Supplementation; Table3; Introduction stated primary/secondary/exploratory aims; Results",
+     "source_url": "https://pubmed.ncbi.nlm.nih.gov/27408987/"
+    }
+   },
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability",
+    "basis": "Sean confirmed approval of the October 28 research response, exact preparation/non-transfer conclusion only. Positive preparation-specific qualification and other retained source holds are not approved by this disposition. Report SHA256 db68aa1e8ab3b0b428886391e4611e04390635533a9986d26a425fc034c117e2."
+   }
+  },
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "preclin_cordyceps_20804368_cs4_nonaffirmative",
+   "components": [
+    "PRECLIN_CORDYCEPS"
+   ],
+   "source_pmids": [
+    "20804368"
+   ],
+   "identity_scope": "branded_material",
+   "identity": {
+    "branded_material": "Cs-4 (CordyMax)",
+    "manufacturer": "Jiangxi GuoYao Company; supplied by Pharmanex",
+    "standardization": "Cultured fermentation preparation; not wild Cordyceps or PeakO2."
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "direct_rct",
+   "component_registration_status": "fully_registered",
+   "condition": "exercise_performance_in_healthy_older_adults",
+   "purpose": "challenge",
+   "review_status": "clinician_approved",
+   "scoring_eligible": false,
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability",
+    "basis": "Sean confirmed Dr Pham approval of the October 28 research response, section Cordyceps/Cs-4. Approval covers the scoped nonaffirmative comparison, not general efficacy; report SHA256 db68aa1e8ab3b0b428886391e4611e04390635533a9986d26a425fc034c117e2."
+   },
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "trial_family": "cs4_chen_2010_20804368",
+   "population": {
+    "age_group": "adult",
+    "description": "Healthy adults aged 50–75; 20 randomized, 15 completed (8 Cs-4, 7 placebo)."
+   },
+   "study_design": "Randomized double-blind placebo-controlled 12-week pilot.",
+   "outcomes": [
+    {
+     "name": "Overall multivariable comparison: no between-group difference after treatment.",
+     "hierarchy": "not_reported",
+     "kind": "surrogate",
+     "direction": "null",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "Exploratory metabolic and ventilatory thresholds improved relative to baseline; not demonstrated placebo superiority.",
+     "hierarchy": "post_hoc",
+     "kind": "surrogate",
+     "direction": "positive",
+     "outcome_role": "within_group_change"
+    },
+    {
+     "name": "VO2max did not change significantly.",
+     "hierarchy": "not_reported",
+     "kind": "surrogate",
+     "direction": "null",
+     "outcome_role": "within_group_change"
+    }
+   ],
+   "limitations": [
+    "The approved report supports a nonaffirmative scoped conclusion, not a generic efficacy rejection.",
+    "Source reports small exploratory analysis after the overall null comparison; no functional recovery or generic preparation transfer."
+   ],
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "mg",
+    "values": [
+     2997
+    ],
+    "dose_status": "verified",
+    "dose_basis": "nominal_assigned_arm",
+    "duration_basis": "fixed_protocol",
+    "duration_days": 84,
+    "administration_frequency": "three 333 mg capsules three times daily",
+    "dosage_forms": [
+     "capsule"
+    ],
+    "co_therapies": [],
+    "reported_regimen": "Nine 333 mg capsules/day for 12 weeks; 2,997 mg/day, approximately 3 g/day.",
+    "normalization": {
+     "basis": "3 capsules × 333 mg × 3 times/day; 12 weeks × 7 days. Full Methods resolves compressed abstract wording."
+    },
+    "source_provenance": {
+     "pmid": "20804368",
+     "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3110835/",
+     "location": "Methods Supplementation; Statistical analysis; Results; Discussion."
+    }
+   }
+  },
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "preclin_cordyceps_38501161_muscle_stem_cell_biomarkers",
+   "source_pmids": [
+    "38501161"
+   ],
+   "components": [
+    "PRECLIN_CORDYCEPS"
+   ],
+   "identity_scope": "ingredient_general",
+   "identity": {
+    "preparation": "Cordyceps sinensis 1 g (preparation, manufacturer and standardization not stated in the abstract)."
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "direct_rct",
+   "component_registration_status": "fully_registered",
+   "condition": "exercise_induced_muscle_damage_biomarkers",
+   "purpose": "challenge",
+   "population": {
+    "age_group": "adult",
+    "description": "14 young adults (age 24 +/- 0.8 years)."
+   },
+   "study_design": "Randomized, double-blind, placebo-controlled crossover; single dose before high-intensity interval cycling at 120% maximal aerobic power, with serial vastus lateralis biopsies.",
+   "trial_family": "38501161",
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "scoring_eligible": false,
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "g",
+    "values": [
+     1
+    ],
+    "dose_status": "verified",
+    "dose_basis": "single_challenge",
+    "duration_basis": "endpoint_followup_only",
+    "administration_frequency": "Single 1 g dose before exercise (placebo 1 g cornstarch).",
+    "dosage_forms": [
+     "oral Cordyceps sinensis preparation (vehicle not reported in the abstract)"
+    ],
+    "co_therapies": [
+     "High-intensity interval exercise challenge in both conditions."
+    ],
+    "reported_regimen": "1 g Cordyceps sinensis or 1 g cornstarch placebo before exercise, crossover.",
+    "normalization": {
+     "basis": "Stated single-dose mass; no chronic dose implied."
+    },
+    "source_provenance": {
+     "pmid": "38501161",
+     "location": "PubMed abstract; OpenAlex lists a CC-BY publisher PDF (pubs.rsc.org) but it returned HTTP 403 to this session, and there is no PMC copy.",
+     "source_url": "https://pubmed.ncbi.nlm.nih.gov/38501161/"
+    }
+   },
+   "outcomes": [
+    {
+     "name": "Muscle biopsy markers: necrotic cell infiltration at 3 h after exercise (+284% without Cordyceps) attenuated; CD34+ cell rise accelerated to 3 h (+51%, P=0.002); four-fold Pax7+ expansion (P=0.01).",
+     "hierarchy": "not_reported",
+     "kind": "surrogate",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    }
+   ],
+   "limitations": [
+    "Tissue biomarker study in 14 people after one dose; no performance, stamina, energy or functional-recovery outcome was measured, so it cannot support the record's Increase Energy claim.",
+    "Abstract only: primary endpoint, preparation identity and vehicle are not stated there and are not inferred.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ],
+   "review_status": "clinician_approved",
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability"
+   }
+  }
+ ],
+ "source_receipts": [
+  {
+   "pmid": "38501161",
+   "title_fetched": "Cordyceps sinensis accelerates stem cell recruitment to human skeletal muscle after exercise.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/38501161/",
+   "full_text": false,
+   "sections_used": "PubMed abstract"
+  },
+  {
+   "pmid": "20804368",
+   "title_fetched": "Effect of Cs-4 (Cordyceps sinensis) on exercise performance in healthy older subjects: a double-blind, placebo-controlled trial.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/20804368/",
+   "full_text": false,
+   "sections_used": "Identity re-check only; approved context unchanged"
+  },
+  {
+   "pmid": "27408987",
+   "title_fetched": "Cordyceps militaris Improves Tolerance to High-Intensity Exercise After Acute and Chronic Supplementation.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/27408987/",
+   "full_text": false,
+   "sections_used": "Identity re-check only; approved context unchanged"
+  }
+ ]
+}

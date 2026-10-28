@@ -1,0 +1,225 @@
+{
+ "record_id": "PRECLIN_CURCUMIN_GENERIC",
+ "decision": "closed_no_credit",
+ "summary": "The reviewed research does not establish a qualifying benefit for this product's assessed use. Existing human research is kept: specific curcumin preparations (for example BCM-95, C3 complex with piperine) show knee-OA and biomarker findings, which belong to formulation-specific records. Dr. Pham's A130 decision rejects broad and generic curcumin benefit language and keeps only a formulation- and indication-specific hold, while this record claims generic Healthy Aging/Longevity. The verified knee-OA biomarker meta-analysis (21 RCTs) pools multi-ingredient products and NSAID add-on arms and reports only surrogate CRP/TNF-alpha changes; the three umbrella syntheses are generic or OA-specific and abstract-only. No credit is possible for this generic claim, so the record becomes reference-only, which removes generic-curcumin Evidence points from dependent products (about 19 per the closure plan). Formulation-specific records (e.g., branded curcumin) are unaffected.",
+ "record_updates": {
+  "study_type": "reference",
+  "evidence_level": "reference"
+ },
+ "study_contexts": [
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "preclin_curcumin_generic_40615851_scoped_source",
+   "components": [
+    "PRECLIN_CURCUMIN_GENERIC"
+   ],
+   "source_pmids": [
+    "40615851"
+   ],
+   "identity_scope": "ingredient_general",
+   "identity": {
+    "preparation": "Different curcumin preparations and delivery systems in disease-specific trials."
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "meta_analysis",
+   "component_registration_status": "fully_registered",
+   "condition": "knee_osteoarthritis_inflammatory_biomarkers",
+   "purpose": "treatment",
+   "review_status": "clinician_approved",
+   "scoring_eligible": false,
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "trial_family": "source_40615851",
+   "population": {
+    "age_group": "adult",
+    "description": "21 RCTs (2004-2025), 1,705 patients with knee osteoarthritis in seven countries; sample sizes 24-160."
+   },
+   "study_design": "Systematic review and meta-analysis of RCTs of curcumin for knee OA (search to March 28, 2025) pooling pre-post changes in serum inflammatory biomarkers as SMDs.",
+   "outcomes": [
+    {
+     "name": "CRP SMD -0.906 (95% CI -1.543 to -0.269), P=0.005; TNF-alpha SMD -0.921 (-1.817 to -0.026), P=0.044; ESR, IL-1beta, IL-6 and PGE2 not significantly different.",
+     "hierarchy": "not_reported",
+     "kind": "surrogate",
+     "direction": "mixed",
+     "outcome_role": "direct_between_group_effect"
+    }
+   ],
+   "limitations": [
+    "Serum biomarkers do not establish cartilage restoration, cancer prevention or universal anti-inflammatory benefit.",
+    "TNF-alpha sensitivity and formulation heterogeneity limit inference; preserve enhanced-formulation safety concerns.",
+    "Returned decision: Reject broad superiority and generic benefit language; retain formulation/indication-specific hold.",
+    "Some included-study citations lack PubMed identifiers in the source XML; retain their exact citations rather than inventing identifiers.",
+    "Historical bibliography census (not independent scoring sources; actual included-publication membership is separately bound to the inspected source table): 32540725, 25050518, 17043520, 24274358, 27761693, 26937646, 29316908, 30498758, 31239749, 30975196, 32180294, 32311961, 33516238, 35096104, 37351019, 36610110, 39882178, 33210408. Each intervention and comparison requires its own applicability assessment; citation in this bibliography grants no credit.",
+    "Included-study identifiers are now bound to this source's actual included-study rows/explicit inclusion references (Tables Tab1 explicit included-study row citations), with live NIH title/content identity checks. They are publication pointers, not independent-cohort counts, per-primary-study scoring approvals, preparation equivalence or new efficacy evidence. Exact unindexed source citations remain retained; no missing PMID is invented.",
+    "3 included source citations have no printed PubMed identifier in this primary source; their exact citations are retained in the source-table receipt. This is a documented identifier limitation, not a fabricated identifier or an extra independent trial.",
+    "No credit: knee-OA surrogate biomarkers with multi-ingredient products and NSAID add-on arms in the pool; signed A130 rejects generic benefit language and keeps a formulation/indication-specific hold, and this record claims generic Healthy Aging/Longevity.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ],
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "mg",
+    "values": [],
+    "dose_status": "verified",
+    "dose_basis": "not_applicable",
+    "duration_basis": "not_recorded",
+    "administration_frequency": "Trial-specific daily regimens (Table 1).",
+    "dosage_forms": [
+     "oral capsule",
+     "oral tablet"
+    ],
+    "co_therapies": [
+     "OA care and comparison treatments vary; retain exact background therapy."
+    ],
+    "reported_regimen": "Table 1 formulations range from curcumin 80 mg capsules and BCM-95 500 mg up to 1,500 mg/day curcuminoids with piperine, and include multi-ingredient products (RA-11, Instaflex, CartiJoint Forte, Acujoint with Boswellia, curcumin-gingerol-piperine) and add-on use with diclofenac; comparators include placebo, diclofenac, ibuprofen and glucosamine-chondroitin.",
+    "normalization": {
+     "basis": "A heterogeneous synthesis has no single assigned-arm dose. Descriptive regimens do not create an intake recommendation, equivalent preparation or efficacy threshold."
+    },
+    "source_provenance": {
+     "pmid": "40615851",
+     "location": "Full text (PMC12231615): Methods (eligibility, statistics), Results Table 1 (formulation, dose, comparator), CRP/ESR and cytokine meta-analysis paragraphs.",
+     "source_url": "https://pubmed.ncbi.nlm.nih.gov/40615851/"
+    }
+   },
+   "included_study_pmids": [
+    "17043520",
+    "24274358",
+    "25050518",
+    "27761693",
+    "26937646",
+    "29316908",
+    "30498758",
+    "31239749",
+    "30975196",
+    "32540725",
+    "32180294",
+    "32311961",
+    "33516238",
+    "33210408",
+    "35096104",
+    "36610110",
+    "37351019",
+    "39882178"
+   ],
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability"
+   }
+  },
+  {
+   "context_id": "preclin_curcumin_generic_39478418_generic_umbrella",
+   "components": [
+    "PRECLIN_CURCUMIN_GENERIC"
+   ],
+   "source_pmids": [
+    "39478418"
+   ],
+   "review_status": "rejected_source",
+   "scoring_eligible": false,
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability",
+    "notes": "Signed A130 rejects broad superiority and generic benefit language for curcumin; this generic multi-outcome synthesis cannot carry credit for the record's generic Healthy Aging claim. Full text not open access; no regimen encoded."
+   },
+   "dose": {
+    "source_provenance": {
+     "pmid": "39478418",
+     "location": "PubMed abstract only; full text not open access.",
+     "source_url": "https://pubmed.ncbi.nlm.nih.gov/39478418/"
+    }
+   },
+   "limitations": [
+    "103 placebo-controlled RCTs across 42 outcomes (7,216 participants); 23 outcomes significant; high-credibility evidence only for FBS, CRP, HDL and weight; many outcomes low or very low certainty (abstract). Generic multi-outcome synthesis without formulation scope.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ]
+  },
+  {
+   "context_id": "preclin_curcumin_generic_38945354_biomarker_umbrella",
+   "components": [
+    "PRECLIN_CURCUMIN_GENERIC"
+   ],
+   "source_pmids": [
+    "38945354"
+   ],
+   "review_status": "rejected_source",
+   "scoring_eligible": false,
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability",
+    "notes": "Signed A130 rejects broad superiority and generic benefit language for curcumin; this generic multi-outcome synthesis cannot carry credit for the record's generic Healthy Aging claim. Full text not open access; no regimen encoded."
+   },
+   "dose": {
+    "source_provenance": {
+     "pmid": "38945354",
+     "location": "PubMed abstract only; full text not open access.",
+     "source_url": "https://pubmed.ncbi.nlm.nih.gov/38945354/"
+    }
+   },
+   "limitations": [
+    "Meta-analysis of 21 meta-analyses: CRP WMD -0.87, TNF-alpha -2.72, IL-6 -0.97, MDA ES -0.81, FMD +1.64, with TAC not significant (abstract). Surrogate biomarkers pooled across conditions and formulations.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ]
+  },
+  {
+   "context_id": "preclin_curcumin_generic_38576215_oa_umbrella",
+   "components": [
+    "PRECLIN_CURCUMIN_GENERIC"
+   ],
+   "source_pmids": [
+    "38576215"
+   ],
+   "review_status": "rejected_source",
+   "scoring_eligible": false,
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability",
+    "notes": "Signed A130 rejects broad superiority and generic benefit language for curcumin; this generic multi-outcome synthesis cannot carry credit for the record's generic Healthy Aging claim. Full text not open access; no regimen encoded."
+   },
+   "dose": {
+    "source_provenance": {
+     "pmid": "38576215",
+     "location": "PubMed abstract only; full text not open access.",
+     "source_url": "https://pubmed.ncbi.nlm.nih.gov/38576215/"
+    }
+   },
+   "limitations": [
+    "Umbrella of 11 meta-analyses in knee OA: VAS and WOMAC total, function, pain and stiffness improved (abstract). Indication-specific OA evidence held by A130 and not this record's generic claim; trial-level formulations unverified.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ]
+  }
+ ],
+ "source_receipts": [
+  {
+   "pmid": "40615851",
+   "title_fetched": "Effects of curcumin on serum inflammatory biomarkers in patients with knee osteoarthritis: a systematic review and meta-analysis of randomized controlled trials.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/40615851/",
+   "full_text": true,
+   "sections_used": "Methods, Results, Table 1 (BioC PMC12231615)"
+  },
+  {
+   "pmid": "39478418",
+   "title_fetched": "Curcumin on Human Health: A Comprehensive Systematic Review and Meta-Analysis of 103 Randomized Controlled Trials.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/39478418/",
+   "full_text": false,
+   "sections_used": "PubMed abstract"
+  },
+  {
+   "pmid": "38945354",
+   "title_fetched": "The effects of curcumin supplementation on biomarkers of inflammation, oxidative stress, and endothelial function: A meta-analysis of meta-analyses.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/38945354/",
+   "full_text": false,
+   "sections_used": "PubMed abstract"
+  },
+  {
+   "pmid": "38576215",
+   "title_fetched": "The efficacy of curcumin in relieving osteoarthritis: A meta-analysis of meta-analyses.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/38576215/",
+   "full_text": false,
+   "sections_used": "PubMed abstract"
+  }
+ ]
+}

@@ -1,0 +1,16 @@
+{
+ "record_id": "INGR_BITTER_MELON",
+ "decision": "held: source inaccessible. 30385422 (J Ethnopharmacol 2019) has no open-access full text (no PMC copy), so the ten trials' preparations, doses, forms and populations cannot be verified as Dr. Pham requested.",
+ "summary": "The abstract reports 10 T2DM trials (n=1045, 4-16 weeks, moderate-high risk of bias): monoherbal M. charantia vs placebo lowered FPG (-0.72 mmol/L), PPG (-1.43 mmol/L) and HbA1c (-0.26%), with low to very low quality evidence for the primary outcomes. Without the methods and trial table no context can be completed; the record stays held.",
+ "record_updates": {},
+ "study_contexts": [],
+ "source_receipts": [
+  {
+   "pmid": "30385422",
+   "title_fetched": "Momordica charantia L. lowers elevated glycaemia in type 2 diabetes mellitus patients: Systematic review and meta-analysis.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/30385422/",
+   "full_text": false,
+   "sections_used": "Abstract only; subscription"
+  }
+ ]
+}
