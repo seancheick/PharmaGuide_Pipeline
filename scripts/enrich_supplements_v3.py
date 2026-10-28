@@ -20465,12 +20465,15 @@ class SupplementEnricherV3:
             )
             if ul_bounds is not None:
                 # An outcome every possible form agrees on is not uncertain;
-                # only a range straddling the threshold is form_unknown.
+                # only a range straddling the threshold is form_unknown. The
+                # exported amount is the proven minimum: stack totals sum it
+                # across products, so a bound must never stand in for exposure.
                 low, high = ul_bounds
                 if self._compare_threshold(
                     low, comparator, threshold_value
                 ) == self._compare_threshold(high, comparator, threshold_value):
-                    converted_amount, conversion_method = high, "ul_exposure_bound"
+                    converted_amount = low
+                    conversion_method = "ul_exposure_bound" if low != high else "ul_exposure"
                 else:
                     convert_reason = "form_unknown"
             elif converted_amount is None:

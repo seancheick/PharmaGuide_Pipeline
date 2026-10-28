@@ -485,6 +485,45 @@ def test_vitamin_e_pregnancy_ul_compares_ul_exposure_bounds(
     assert decision["release_blocking"] is False
 
 
+@pytest.mark.parametrize(
+    ("decide", "expected_amount", "method"),
+    [
+        # Unknown 3,000 IU vitamin E: at least 2,010 mg (natural), not 2,700.
+        (lambda: _vitamin_e_pregnancy_ul_decision({"quantity": 3000, "unit": "IU"}), 2010.0, "ul_exposure_bound"),
+        # Synthetic 1,500 IU has one UL mass: 1,350 mg.
+        (
+            lambda: _vitamin_e_pregnancy_ul_decision(
+                {"quantity": 1500, "unit": "IU", "matched_form": "dl-alpha-tocopheryl acetate"}
+            ),
+            1350.0, "ul_exposure",
+        ),
+    ],
+)
+def test_exported_amount_is_the_proven_minimum(decide, expected_amount, method):
+    """build_final_db exports converted_amount as evaluated_daily_amount and the
+    app's stack summer adds it across products, so a form range exports only
+    what every form guarantees."""
+    _selected, decision = decide()
+
+    assert decision["dose_evaluation"]["converted_amount"] == pytest.approx(expected_amount)
+    assert decision["dose_evaluation"]["conversion_method"] == method
+
+
+def test_unspecified_vitamin_a_exports_no_preformed_amount():
+    _selected, decision = SupplementEnricherV3()._evaluate_dose_thresholds_for_target(
+        _rule("RULE_IQM_VITAMIN_A_PREGNANCY_DOSE")["dose_thresholds"],
+        "condition",
+        "pregnancy",
+        {"name": "Vitamin A", "standard_name": "Vitamin A", "quantity": 2000, "unit": "mcg"},
+        1.0,
+        "caution",
+    )
+
+    assert decision["evaluation_status"] == "below_threshold"
+    # The stack summer skips a zero, so it never sums this row as retinol.
+    assert decision["dose_evaluation"]["converted_amount"] == 0.0
+
+
 def test_vitamin_e_pregnancy_ul_uses_the_directed_daily_exposure():
     # Two 800 IU servings: 1,072 to 1,440 mg/day, above the UL in every form.
     selected, decision = _vitamin_e_pregnancy_ul_decision(
