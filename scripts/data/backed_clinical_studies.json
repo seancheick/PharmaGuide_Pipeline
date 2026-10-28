@@ -1548,6 +1548,7 @@
           "condition": "knee_osteoarthritis",
           "purpose": "treatment",
           "review_status": "clinician_approved",
+          "scoring_eligible": true,
           "human_status": "confirmed",
           "source_integrity": "none",
           "context_id": "bcm95_knee_oa_30975196",
@@ -1632,6 +1633,7 @@
           "condition": "knee_osteoarthritis",
           "purpose": "treatment",
           "review_status": "clinician_approved",
+          "scoring_eligible": true,
           "human_status": "confirmed",
           "source_integrity": "none",
           "context_id": "bcm95_knee_oa_33516238",
@@ -30498,6 +30500,7 @@
           "component_registration_status": "fully_registered",
           "purpose": "physiology",
           "review_status": "clinician_approved",
+          "scoring_eligible": true,
           "human_status": "confirmed",
           "source_integrity": "corrected",
           "clinical_review": {
@@ -30589,6 +30592,7 @@
           "component_registration_status": "fully_registered",
           "purpose": "physiology",
           "review_status": "clinician_approved",
+          "scoring_eligible": true,
           "human_status": "confirmed",
           "source_integrity": "corrected",
           "clinical_review": {
@@ -37188,6 +37192,7 @@
           "condition": "irritable_bowel_syndrome",
           "purpose": "treatment",
           "review_status": "clinician_approved",
+          "scoring_eligible": true,
           "human_status": "confirmed",
           "source_integrity": "none",
           "clinical_review": {

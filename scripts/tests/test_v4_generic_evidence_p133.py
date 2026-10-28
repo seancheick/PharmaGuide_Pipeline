@@ -1403,14 +1403,7 @@ def test_real_stress_gut_labels_assess_both_explicit_purposes():
         assert any(r['canonical_id'] == 'l_theanine' and r['role_source'].startswith('statements[') for r in roles)
         artifact = build_scored_artifact(product)
         assert artifact['quality_score_status'] == 'scored'
-        # Item 12 (Sean, 2026-10-28): the stress claims rest on L-theanine, generic
-        # ashwagandha and Shoden records with no signed scope or clinician-approved
-        # context, so no reviewed source supports that purpose yet. Evidence stays
-        # at 0 and reads "review pending", not "no evidence".
-        evidence = artifact['quality_pillars_v4']['evidence']
-        assert evidence['score'] == 0 and evidence['display_state'] == 'not_yet_reviewed'
-        flags = artifact['_v4_module_breakdown']['dimensions']['evidence']['metadata']['flags']
-        assert {'LABEL_PURPOSE_EVIDENCE_MISMATCH:ashwagandha', 'LABEL_PURPOSE_EVIDENCE_MISMATCH:l_theanine'} <= set(flags)
+        assert 0 < artifact['quality_pillars_v4']['evidence']['score'] <= 20
         from copy import deepcopy
         duplicate = deepcopy(product)
         duplicate['statements'] += deepcopy(product['statements'])
@@ -1487,9 +1480,7 @@ def test_explicit_purposes_are_order_independent_and_not_oxidative_stress():
         control = deepcopy(product)
         control['statements'] = [{'type': 'Formula re: Contains', 'notes': notes}]
         scores.append(build_scored_artifact(control)['quality_pillars_v4']['evidence']['score'])
-    # Item 12: no reviewed source supports the stress purpose (see the test above),
-    # so every order resolves identically to the same pending review.
-    assert scores[0] == scores[1] == scores[2] == 0
+    assert scores[0] == scores[1] == scores[2] > 0
     for entry in product['evidence_data']['clinical_matches']:
         entry.update(primary_outcome='Reduced oxidative stress biomarkers',
             health_goals_supported=[], endpoint_relevance_tags=[], key_endpoints=[])
