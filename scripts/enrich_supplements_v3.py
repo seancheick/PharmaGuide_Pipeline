@@ -19011,6 +19011,7 @@ class SupplementEnricherV3:
         parsed_from_directions = False
 
         # First check labelText.parsed.directions
+        directions_text = ""
         label_text = product.get('labelText', {})
         if isinstance(label_text, dict):
             parsed = label_text.get('parsed', {})
@@ -19040,6 +19041,46 @@ class SupplementEnricherV3:
                         parsed_from_directions = True
                         break
 
+        if min_servings_per_day is None and max_servings_per_day is None:
+            # "Consume one serving daily" already counts servings; dividing
+            # by the serving size (as for tablet counts) would misread it.
+            # Only one stated regimen is used: separate age-group regimens
+            # ("4-8 years, one serving; 9-12 years, two") are not one range.
+            serving_count_directions = [directions_text] if directions_text else [
+                statement.get('text') or statement.get('notes') or ''
+                for statement in statements
+                if isinstance(statement, dict)
+                and 'direction' in str(statement.get('type') or '').lower()
+            ]
+            serving_counts = [
+                regimen for text in serving_count_directions
+                for regimen in self._parse_serving_counts_from_directions(text)
+            ]
+            if serving_counts:
+                # A second age regimen may count tablets rather than
+                # servings. Compare those explicit daily counts on the same
+                # Facts basis before accepting one serving frequency.
+                for text in serving_count_directions:
+                    for clause in re.split(r"(?<=[.!?;])\s+|[\r\n]+", str(text)):
+                        if re.search(r"\bservings?\b", clause, re.IGNORECASE):
+                            continue
+                        if not re.search(r"\b(?:daily|per day|a day|each day)\b", clause, re.IGNORECASE):
+                            continue
+                        dose = self._parse_dosage_from_directions(clause)
+                        if dose:
+                            low = self._serving_units_to_servings(dose.get("min"), basis_count)
+                            high = self._serving_units_to_servings(dose.get("max"), basis_count)
+                            if low is not None and high is not None:
+                                serving_counts.append((low, high))
+            serving_counts = list(dict.fromkeys(serving_counts))
+            if len(serving_counts) == 1:
+                min_servings_per_day, max_servings_per_day = serving_counts[0]
+                servings_per_day_source = "directions"
+            elif len(serving_counts) > 1:
+                # Age-specific regimens cannot become one tablet-count
+                # frequency. Keep the existing unknown/default daily use.
+                min_recommended = max_recommended = None
+                parsed_from_directions = False
         if min_servings_per_day is None and max_servings_per_day is None and parsed_from_directions:
             if min_recommended is not None or max_recommended is not None:
                 min_servings_per_day = self._serving_units_to_servings(
@@ -19146,6 +19187,34 @@ class SupplementEnricherV3:
         'one': 1, 'two': 2, 'three': 3, 'four': 4, 'five': 5,
         'six': 6, 'seven': 7, 'eight': 8, 'nine': 9, 'ten': 10
     }
+
+    def _parse_serving_counts_from_directions(self, text: str) -> List[Tuple[float, float]]:
+        """Daily regimens stated as servings: "Consume 1-2 servings per day" -> (1, 2).
+
+        One (min, max) pair per stated regimen. Ceilings and conditional
+        clauses ("Do not exceed 3 servings daily", "up to 2 servings per day",
+        "consult your physician before taking 2 servings daily") are not a
+        directed regimen and are dropped. Fractions and decimals are left to
+        the existing paths rather than misread ("1/2" is not 2).
+        """
+        number = r"(?<![\d./])(\d+|" + "|".join(self.WORD_TO_NUM) + r")(?![\d./])"
+        pattern = re.compile(
+            rf"\b{number}(?:\s*(?:-|to|or)\s*{number})?\s+servings?\s+"
+            r"(?:daily|per day|a day|each day)\b"
+        )
+        ceiling = re.compile(
+            r"\b(?:exceed|more than|up to|limit|maximum|before (?:taking|using|consuming))\b"
+        )
+        regimens: List[Tuple[float, float]] = []
+        for clause in re.split(r"(?<=[.!?;])\s+|[\r\n]+", str(text).lower()):
+            if ceiling.search(clause):
+                continue
+            for match in pattern.finditer(clause):
+                low, high = (float(self.WORD_TO_NUM.get(value, value))
+                             for value in (match.group(1), match.group(2) or match.group(1)))
+                if 0 < low <= high:
+                    regimens.append((low, high))
+        return regimens
 
     def _parse_dosage_from_directions(self, text: str) -> Optional[Dict]:
         """Parse min/max dosage from directions text.
@@ -22758,6 +22827,7 @@ class SupplementEnricherV3:
         shown_amount: Optional[float] = None,
         shown_unit: Optional[str] = None,
         unresolved_reason: Optional[str] = None,
+        food_matrix: bool = False,
     ) -> Optional[Dict[str, Any]]:
         """One child upper-limit note for a label that names children, or None.
 
@@ -22779,6 +22849,10 @@ class SupplementEnricherV3:
             return None
         note = {"nutrient": label_name, "reference_nutrient": nutrient,
                 "canonical_id": canonical_id, "ul_population": scope}
+        if food_matrix and canonical_id == "magnesium" and record.get("ul_basis") == "supplemental_only":
+            child_amount = self._convert_mass(float(amount), unit, record.get("unit")) if amount is not None and unit else None
+            if child_amount is not None and child_ul is not None and child_amount > child_ul:
+                unresolved_reason = "supplemental_magnesium_fraction_unknown"
         if unresolved_reason is not None or amount is None or not unit:
             return {**note, "status": "not_assessable",
                     "reason": unresolved_reason or "ul_exposure_unresolved"}
@@ -22827,6 +22901,21 @@ class SupplementEnricherV3:
         """
         active_ingredients = self._dose_active_ingredients_for_enrichment(product)
         special_use_flags = self._collect_special_use_flags(active_ingredients)
+        # A food-format serving whose Facts panel declares protein has a food
+        # matrix, so a bare nutrient total on it can include intrinsic food
+        # minerals. A tablet or capsule declaring a gram of protein does not.
+        serving = self._select_canonical_serving(product.get("servingSizes") or [], []) or {}
+        serving_unit = self._normalize_serving_unit_label(serving.get("unit"))
+        physical_state = self._physical_state_description(product)
+        dosage_forms = {
+            serving_unit,
+            self._normalize_form_factor(physical_state) if physical_state else None,
+        }
+        declares_food_matrix = bool(
+            (self._collect_nutrition_summary(product).get("protein_g") or 0) > 0
+            and not dosage_forms & {
+                "tablet", "caplet", "capsule", "softgel", "gummy", "chewable", "lozenge"}
+        )
         ul_population = self._ul_screening_population(product)
         pediatric_age_groups = self._ul_screening_pediatric_age_groups(product)
         quality_identity_rows = [
@@ -23848,10 +23937,37 @@ class SupplementEnricherV3:
                         skip_ul_reason = (
                             "worst_case_compound_mass_within_ul"
                         )
+                    # The magnesium UL covers supplemental magnesium only. A
+                    # total on a food-matrix panel also counts intrinsic food
+                    # magnesium (Re-Built Mass XP 244288: 540 mg from whey,
+                    # grains, cocoa and a 2.5 g magnesium-creatine chelate). A
+                    # named source does not partition it: the Facts amount is
+                    # the total nutrient, food magnesium included. A total at
+                    # or below the UL bounds the added share; above it, without
+                    # a proven partition the supplemental exposure is unresolved.
+                    magnesium_ul_screening = None
+                    if (
+                        not skip_ul_check
+                        and safety_over_ul
+                        and declares_food_matrix
+                        and resolved_canonical_id == "magnesium"
+                        and _nutrient_record.get("ul_basis") == "supplemental_only"
+                        and ul_exposure.get("ul_gate_eligible") is True
+                    ):
+                        skip_ul_check = True
+                        ul_only_skip = True
+                        skip_ul_reason = "supplemental_magnesium_fraction_unknown"
+                        magnesium_ul_screening = {
+                            "screening_amount": ul_amount,
+                            "screening_unit": ul_unit,
+                            "screening_ul": safety_ul,
+                            "potential_pct_ul": safety_pct_ul,
+                            "screening_basis": "declared_total_including_food_magnesium",
+                        }
                     if skip_ul_check and ul_only_skip:
                         potential_pct_ul = (
-                            folate_ul_screening.get("potential_pct_ul")
-                            if folate_ul_screening
+                            (folate_ul_screening or magnesium_ul_screening).get("potential_pct_ul")
+                            if folate_ul_screening or magnesium_ul_screening
                             else None
                         )
                         potential_ul_concern = bool(
@@ -24022,8 +24138,10 @@ class SupplementEnricherV3:
                         is_indeterminate_folate = (
                             skip_ul_reason == "unknown_folate_form_lineage"
                         )
+                        is_indeterminate_magnesium = magnesium_ul_screening is not None
                         is_indeterminate_ul = (
                             is_indeterminate_folate
+                            or is_indeterminate_magnesium
                             or skip_ul_reason == "unknown_vitamin_form"
                             or skip_ul_reason
                             == "mixed_vitamin_a_preformed_fraction_unknown"
@@ -24151,6 +24269,15 @@ class SupplementEnricherV3:
                                         "the synthetic folic-acid contribution is not identified."
                                     ]
                                     if is_indeterminate_folate
+                                    else [
+                                        f"The {float(magnesium_ul_screening['screening_ul']):g} "
+                                        f"{magnesium_ul_screening['screening_unit']} magnesium upper "
+                                        "limit applies to supplemental magnesium only. This label's "
+                                        "magnesium total may include magnesium from food ingredients "
+                                        "and does not state the supplemental amount, so supplemental "
+                                        "magnesium could exceed that limit; this is not confirmed."
+                                    ]
+                                    if is_indeterminate_magnesium
                                     else []
                                 ),
                                 "skip_ul_check": True,
@@ -24227,6 +24354,14 @@ class SupplementEnricherV3:
                                 "assessment_status": "indeterminate",
                                 "reason": skip_ul_reason,
                                 **folate_ul_screening,
+                                "review_required": True,
+                            })
+                        if is_indeterminate_magnesium:
+                            ul_review_flags.append({
+                                "nutrient": "Magnesium",
+                                "assessment_status": "indeterminate",
+                                "reason": skip_ul_reason,
+                                **magnesium_ul_screening,
                                 "review_required": True,
                             })
                     elif skip_ul_check:
@@ -24418,6 +24553,7 @@ class SupplementEnricherV3:
                             amount=amount_for_ul if _child_resolved else None,
                             unit=converted_unit, form_name=matched_form,
                             shown_amount=ul_amount, shown_unit=ul_unit,
+                            food_matrix=declares_food_matrix,
                             unresolved_reason=None if _child_resolved else (
                                 skip_ul_reason
                                 or ul_exposure.get("ul_gate_ineligible_reason")
@@ -24700,6 +24836,29 @@ class SupplementEnricherV3:
                                     "warnings": [],
                                 })
 
+                    if (
+                        agg_adequacy.over_ul
+                        and cid == "magnesium"
+                        and declares_food_matrix
+                        and (agg_adequacy.reference or {}).get("ul_basis") == "supplemental_only"
+                        and all(row.get("ul_gate_eligible") is True for row in group["rows"])
+                    ):
+                        # Each total may be below the UL while their sum is
+                        # above it. Summing does not establish a supplemental
+                        # partition any more than a single food-matrix row.
+                        ul_review_flags.append({
+                            "nutrient": "Magnesium",
+                            "assessment_status": "indeterminate",
+                            "reason": "supplemental_magnesium_fraction_unknown",
+                            "screening_amount": group["total_amount"],
+                            "screening_unit": group["unit"],
+                            "screening_ul": agg_adequacy.ul,
+                            "potential_pct_ul": agg_adequacy.pct_ul,
+                            "screening_basis": "declared_total_including_food_magnesium",
+                            "review_required": True,
+                        })
+                        continue
+
                     if agg_adequacy.over_ul:
                         pct_ul_val = agg_adequacy.pct_ul or 0.0
                         over_ul_amount = agg_adequacy.over_ul_amount or 0.0
@@ -24785,9 +24944,11 @@ class SupplementEnricherV3:
                             group["std_name"], group["std_name"], cid, pediatric_age_groups,
                             amount=None if unresolved else group["total_amount"], unit=group["unit"],
                             form_name=group["form_name"], unresolved_reason=unresolved,
+                            food_matrix=declares_food_matrix,
                         )
                         # An unresolved sum cannot erase a known row exceedance.
-                        if summed is None or summed.get("status") == "over_limit":
+                        if (summed is None or summed.get("status") == "over_limit"
+                                or summed.get("reason") == "supplemental_magnesium_fraction_unknown"):
                             _child_summed.add(cid)
                         if summed:
                             if summed.get("warning"):
