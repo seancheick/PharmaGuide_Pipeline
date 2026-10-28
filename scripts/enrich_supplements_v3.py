@@ -20740,6 +20740,7 @@ class SupplementEnricherV3:
         ingredient: Dict[str, Any],
         servings_per_day_max: float,
         clinical_severity: str,
+        materiality: Optional[str] = None,
     ) -> Optional[Dict[str, Any]]:
         """Return the three-axis consumer decision for an authored dose floor.
 
@@ -20750,6 +20751,12 @@ class SupplementEnricherV3:
         per-serving exposure without inventing a conversion.
         """
         if not isinstance(min_effective_dose, dict) or not min_effective_dose:
+            if (str(materiality or "").strip().lower() == "presence"
+                    and str(clinical_severity or "").strip().lower() in {"avoid", "contraindicated"}):
+                # Presence establishes the precaution, not a numeric comparison.
+                return {"evaluated": False, "evaluation_status": None,
+                        "clinical_severity": clinical_severity, "consumer_disposition": "block",
+                        "release_blocking": False, "dose_evaluation": None, "decision_rule": None}
             return None
 
         severity = str(clinical_severity or "").strip().lower()
@@ -21235,6 +21242,7 @@ class SupplementEnricherV3:
                         dose_row,
                         servings_per_day_max,
                         severity,
+                        materiality=cond_rule.get("materiality"),
                     )
                     sources = [str(s).strip() for s in (cond_rule.get("sources") or []) if str(s).strip()]
                     for src in sources:
@@ -21316,6 +21324,9 @@ class SupplementEnricherV3:
                             }
                             condition_hits.append({
                                 "condition_id": cond_key,
+                                "dose_decision": self._evaluate_min_effective_dose_decision(
+                                    None, dose_row, servings_per_day_max, severity,
+                                    materiality=pregnancy_block.get("materiality")),
                                 "severity": severity,
                                 "evidence_level": str(pregnancy_block.get("evidence_level") or "").strip().lower() or None,
                                 "mechanism": target_reason,
@@ -21363,6 +21374,7 @@ class SupplementEnricherV3:
                         dose_row,
                         servings_per_day_max,
                         severity,
+                        materiality=drug_rule.get("materiality"),
                     )
                     sources = [str(s).strip() for s in (drug_rule.get("sources") or []) if str(s).strip()]
                     for src in sources:

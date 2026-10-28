@@ -3,7 +3,7 @@
     "description": "Deterministic ingredient-level interaction rules keyed by canonical database identity",
     "purpose": "interaction_alert_rules",
     "schema_version": "6.3.0",
-    "last_updated": "2026-10-21",
+    "last_updated": "2026-10-28",
     "total_entries": 154,
     "structure_note": "One entry per ingredient (or per form-scoped variant). All conditions, drug classes, and dose thresholds for that ingredient are in one object. As of v6.0.0, every sub-rule (condition_rules[], drug_class_rules[], dose_thresholds[], pregnancy_lactation block) carries an explicit profile_gate predicate that consumers MUST evaluate against the user profile before firing the alert.",
     "total_rules": 154,
@@ -126,7 +126,7 @@
     "reviewed_by": "Lead Clinician (PharmaGuide)",
     "reviewed_date": "2026-04-18",
     "review_round": "full_authoring_pass_v1",
-    "rules_with_dose_thresholds": 22,
+    "rules_with_dose_thresholds": 21,
     "pregnancy_lactation_evidence_levels": [
       "no_data",
       "limited",
@@ -480,13 +480,13 @@
         }
       ],
       "pregnancy_lactation": {
-        "pregnancy_category": "contraindicated",
+        "pregnancy_category": "avoid",
         "lactation_category": "avoid",
         "evidence_level": "moderate",
-        "notes": "Banned/recalled or high-risk substance — avoid in pregnancy regardless of underlying mechanism.",
-        "alert_headline": "Do not use in pregnancy",
-        "alert_body": "This substance is banned, recalled, or high-risk and should not be used during pregnancy or breastfeeding under any circumstances.",
-        "informational_note": "Banned/recalled or high-risk substance — pregnancy default is contraindicated.",
+        "notes": "NCCIH advises pregnancy and breastfeeding caution. Sean approved an avoid precaution at all supplement doses on 2026-10-28; the sources do not establish a 3 mg/day pregnancy severity cutoff.",
+        "alert_headline": "Avoid during pregnancy or breastfeeding",
+        "alert_body": "Avoid bitter-orange supplements during pregnancy or breastfeeding. Safety is uncertain, and the synephrine amount may be unknown or differ from the label.",
+        "informational_note": "Pregnancy and breastfeeding precaution applies regardless of disclosed synephrine amount.",
         "profile_gate": {
           "gate_type": "profile_flag",
           "requires": {
@@ -512,8 +512,8 @@
           "https://www.nccih.nih.gov/health/bitter-orange"
         ]
       },
-      "last_reviewed": "2026-03-18",
-      "review_owner": "pharmaguide_clinical_team",
+      "last_reviewed": "2026-10-28",
+      "review_owner": "Sean (policy ruling); Codex (source verification)",
       "dose_thresholds": []
     },
     {
@@ -21897,53 +21897,15 @@
         }
       ],
       "drug_class_rules": [],
-      "dose_thresholds": [
-        {
-          "scope": "condition",
-          "target_id": "pregnancy",
-          "comparator": ">=",
-          "value": 3,
-          "unit": "mg synephrine",
-          "basis": "per_day",
-          "severity_if_met": "contraindicated",
-          "severity_if_not_met": "avoid",
-          "consumer_disposition_if_met": "block",
-          "consumer_disposition_if_not_met": "block",
-          "profile_gate": {
-            "gate_type": "combination",
-            "requires": {
-              "conditions_any": [],
-              "drug_classes_any": [],
-              "profile_flags_any": [
-                "pregnant"
-              ]
-            },
-            "excludes": {
-              "conditions_any": [],
-              "drug_classes_any": [],
-              "profile_flags_any": [],
-              "product_forms_any": [],
-              "nutrient_forms_any": []
-            },
-            "dose": {
-              "basis": "per_day",
-              "comparator": ">=",
-              "value": 3,
-              "unit": "mg synephrine",
-              "severity_if_met": "contraindicated",
-              "severity_if_not_met": "avoid"
-            }
-          }
-        }
-      ],
+      "dose_thresholds": [],
       "pregnancy_lactation": {
-        "pregnancy_category": "contraindicated",
+        "pregnancy_category": "avoid",
         "lactation_category": "avoid",
         "evidence_level": "moderate",
-        "notes": "Banned/recalled or high-risk substance — avoid in pregnancy regardless of underlying mechanism.",
-        "alert_headline": "Do not use in pregnancy",
-        "alert_body": "This substance is banned, recalled, or high-risk and should not be used during pregnancy or breastfeeding under any circumstances.",
-        "informational_note": "Banned/recalled or high-risk substance — pregnancy default is contraindicated.",
+        "notes": "NCCIH advises pregnancy and breastfeeding caution. Sean approved an avoid precaution at all supplement doses on 2026-10-28; the sources do not establish a 3 mg/day pregnancy severity cutoff.",
+        "alert_headline": "Avoid during pregnancy or breastfeeding",
+        "alert_body": "Avoid bitter-orange supplements during pregnancy or breastfeeding. Safety is uncertain, and the synephrine amount may be unknown or differ from the label.",
+        "informational_note": "Pregnancy and breastfeeding precaution applies regardless of disclosed synephrine amount.",
         "profile_gate": {
           "gate_type": "profile_flag",
           "requires": {
@@ -21970,8 +21932,8 @@
           "https://www.canada.ca/en/health-canada/services/drugs-health-products/natural-non-prescription/regulation/about-products/synephrine.html"
         ]
       },
-      "last_reviewed": "2026-04-26",
-      "review_owner": "pharmaguide_clinical_team"
+      "last_reviewed": "2026-10-28",
+      "review_owner": "Sean (policy ruling); Codex (source verification)"
     },
     {
       "id": "RULE_BOTAN_GINKGO_PREGNANCY",

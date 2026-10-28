@@ -632,52 +632,67 @@ def _bitter_orange_pregnancy_decision(ingredient: dict):
     )
 
 
-def test_bitter_orange_extract_mass_is_not_a_synephrine_dose():
-    """200 mg of extract is not 200 mg of synephrine (NCCIH: labeled synephrine
-    content is often inaccurate). The 3 mg threshold needs a disclosed
-    synephrine amount; without one the pregnancy warning stays hard (avoid,
-    block) and is not reported as a confirmed exceedance."""
-    selected, decision = _bitter_orange_pregnancy_decision({"quantity": 200, "unit": "mg"})
-
-    assert decision["evaluation_status"] == "amount_unknown"
-    assert decision["matched_threshold"] is not True
-    assert selected == "avoid"
-    assert decision["consumer_disposition"] == "block"
-
-
-@pytest.mark.parametrize(
-    ("ingredient", "status", "severity"),
-    [
-        # 6% synephrine standardization of 200 mg: 12 mg, over the threshold.
-        (
-            {"quantity": 200, "unit": "mg", "delivers_markers": [{
-                "marker_canonical_id": "synephrine",
-                "estimation_method": "standardization_pct",
-                "estimated_dose_mg": 12.0,
-            }]},
-            "above_threshold", "contraindicated",
-        ),
-        # A label row that is synephrine itself is explicit exposure.
-        ({"quantity": 3, "unit": "mg", "canonical_id": "synephrine"}, "above_threshold", "contraindicated"),
-        ({"quantity": 2, "unit": "mg", "canonical_id": "synephrine"}, "below_threshold", "avoid"),
-    ],
-)
-def test_bitter_orange_disclosed_synephrine_meets_the_threshold(ingredient, status, severity):
+@pytest.mark.parametrize("amount", [2, 3, 4, None])
+def test_bitter_orange_pregnancy_precaution_has_no_numeric_severity_split(amount):
+    ingredient = {"quantity": amount, "unit": "mg", "canonical_id": "synephrine"}
     selected, decision = _bitter_orange_pregnancy_decision(ingredient)
+    assert selected == "avoid"
+    assert decision is None  # no invented clinical dose comparison
+    rule = _rule("RULE_BANNED_BITTER_ORANGE_PREGNANCY")
+    assert not rule.get("dose_thresholds")
+    assert rule["condition_rules"][0]["materiality"] == "presence"
 
-    assert decision["evaluation_status"] == status
-    assert selected == severity
+
+@pytest.mark.parametrize("amount", [2.0, 3.0, 4.0, None])
+def test_bitter_orange_precaution_preserves_marker_exposure_diagnostics(amount):
+    enricher = SupplementEnricherV3()
+    ingredient = {"name": "Bitter Orange", "quantity": 200, "unit": "mg", "delivers_markers": [{
+        "marker_canonical_id": "synephrine", "estimation_method": "standardization_pct",
+        "declared_standardization_pct": 6, "estimated_dose_mg": amount,
+    }]}
+    marker = enricher._derived_marker_interaction_rows(ingredient)[0]
+    assert marker["quantity"] == amount
+    assert marker["dose_source"] == "label_standardization"
+    assert marker["marker_derivation"]["estimation_method"] == "standardization_pct"
+    assert enricher._derived_marker_interaction_rows({"name": "Bitter Orange", "quantity": 200, "unit": "mg"}) == []
+
+
+@pytest.mark.parametrize("amount", [2, 3, 4, None])
+@pytest.mark.parametrize("subject", ["BANNED_BITTER_ORANGE", "RISK_BITTER_ORANGE"])
+def test_bitter_orange_presence_emits_literal_block_without_dose_comparison(amount, subject):
+    from build_final_db import compact_dose_decision
+    row = {"canonical_id": subject, "canonical_source_db": "banned_recalled_ingredients",
+           "name": "Bitter Orange", "standard_name": "Bitter Orange", "quantity": amount,
+           "unit": "mg", "raw_source_path": "ingredientRows[0]"}
+    profile = SupplementEnricherV3()._collect_interaction_profile({
+        "activeIngredients": [row], "ingredient_quality_data": {"ingredients": [row]}})
+    hit = next(h for a in profile["ingredient_alerts"] for h in a["condition_hits"]
+               if h["condition_id"] == "pregnancy")
+    assert hit["severity"] == "avoid"
+    assert hit.get("dose_threshold_evaluation") is None
+    decision = hit["dose_decision"]
+    assert decision is not None
+    assert decision["evaluated"] is False
+    assert decision["evaluation_status"] is None
     assert decision["consumer_disposition"] == "block"
+    assert decision["dose_evaluation"] is None
+    assert decision["decision_rule"] is None
+    exported = compact_dose_decision(decision)
+    assert exported["consumer_disposition"] == "block"
+    assert exported["threshold"] is None
+    assert exported["evaluated_daily_amount"] is None
 
 
 def test_both_bitter_orange_pregnancy_rules_stay_hard():
-    """The second rule's shared fallback must not be what keeps a pregnant user
-    warned: each rule's own pregnancy outcome is hard on its own."""
-    fallback = _rule("RULE_BANNED_BITTER_ORANGE_HYPERTENSION")["pregnancy_lactation"]
-    explicit = _rule("RULE_BANNED_BITTER_ORANGE_PREGNANCY")["condition_rules"][0]
-
-    assert fallback["pregnancy_category"] in {"avoid", "contraindicated"}
-    assert explicit["severity"] in {"avoid", "contraindicated"}
+    for rule_id in ("RULE_BANNED_BITTER_ORANGE_HYPERTENSION", "RULE_BANNED_BITTER_ORANGE_PREGNANCY"):
+        fallback = _rule(rule_id)["pregnancy_lactation"]
+        assert fallback["pregnancy_category"] == "avoid"
+        assert fallback["lactation_category"] == "avoid"
+        assert "https://www.nccih.nih.gov/health/bitter-orange" in fallback["sources"]
+        assert "banned, recalled" not in fallback["alert_body"]
+    hypertension = _rule("RULE_BANNED_BITTER_ORANGE_HYPERTENSION")
+    assert hypertension["condition_rules"][0]["severity"] == "avoid"
+    assert hypertension["drug_class_rules"][0]["severity"] == "avoid"
 
 
 def test_vitamin_e_ul_exposure_amount_is_the_upper_bound():
@@ -987,3 +1002,26 @@ def test_unknown_vitamin_a_boundary_never_assumes_a_retinol_fraction(amount, sta
     )
     assert decision["evaluation_status"] == status
     assert decision["consumer_disposition"] == disposition
+
+
+@pytest.mark.parametrize("severity,materiality", [("avoid", None), ("avoid", "dose_dependent"), ("caution", "presence"), ("monitor", "presence")])
+def test_presence_projection_does_not_change_nonpresence_or_soft_warnings(severity, materiality):
+    assert SupplementEnricherV3()._evaluate_min_effective_dose_decision(
+        None, {}, 1.0, severity, materiality=materiality) is None
+
+
+def test_shared_bitter_orange_serialized_presence_warnings_match_producer():
+    import json
+    from build_final_db import compact_dose_decision
+    cases = json.loads((Path(__file__).parents[1] / "data/profile_gate_test_cases.json").read_text())["test_cases"]
+    enricher = SupplementEnricherV3()
+    for case in cases:
+        if not case["name"].startswith("gold_bitter_orange"):
+            continue
+        row = {"canonical_id": "BANNED_BITTER_ORANGE", "canonical_source_db": "banned_recalled_ingredients",
+               "name": "Bitter Orange", "quantity": case["product_context"]["dose_per_day"],
+               "unit": "mg", "raw_source_path": "ingredientRows[0]"}
+        profile = enricher._collect_interaction_profile({"activeIngredients": [row], "ingredient_quality_data": {"ingredients": [row]}})
+        hit = next(h for a in profile["ingredient_alerts"] for h in a["condition_hits"] if h["condition_id"] == "pregnancy")
+        assert case["warning"]["dose_decision"] == compact_dose_decision(hit["dose_decision"])
+        assert case["warning"]["severity"] == hit["severity"]
