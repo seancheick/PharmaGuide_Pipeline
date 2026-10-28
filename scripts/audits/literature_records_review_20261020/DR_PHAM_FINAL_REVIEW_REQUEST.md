@@ -6,7 +6,9 @@ Thank you for the returned answers. We have retained your earlier decisions and 
 
 A product can be fully assessed and score poorly. A known ingredient with a manufacturer-hidden amount remains identified; we do not invent its quantity. Study doses do not automatically become minimum effective amounts. Safety concerns remain visible regardless of quality points.
 
-We have now bound 321 general Dose decisions to their reviewed sources. In the frozen preparation audit, 306 of 352 groups have a completed general Dose disposition or are outside that winning owner; 46 retain a specific unresolved dependency. Separately, 120 of the original 146 contributing source subjects still fail at least one required source or assessment check. These are overlapping source groups, not new missing returned reviews or a product count.
+October 27 reconciliation: 343 general Dose decisions now have source-bound proofs. The frozen source owner reports 28 of 146 subjects complete and 118 held; lutein and the signed migraine-only riboflavin relationship no longer request another decision. Of the latest 46 preparation groups, 21 complete their Dose determination on retained owner inputs; exact avocado, keratin and phytosterol producer corrections also require current raw/rebuilt verification. These are source groups, not product counts or 118 requests for another signature.
+
+This is a working source packet, not a request to repeat returned answers. Remaining retrieval, included-study extraction, reporting-field completion and product mapping are our work. Only the precise unresolved acceptance or unavailable source facts stated in a returned decision may require a reply. The executable registers identify those separately; new factual extraction never substitutes for an exact signed acceptance.
 
 Please do not give a blanket approval. For a prepared assessment, confirm the exact preparation, delivery, regimen, people, outcome and limitations that the returned answer supports, or state the narrower rejection. If a paper, corrected table, composition or label fact is missing, that is a request for that source—not permission to guess. A completed negative decision is acceptable. No full-catalog rebuild or release has been performed for this batch.
 
@@ -526,7 +528,7 @@ The entries below carry forward the returned answer. Newly extracted study facts
 
 **Returned answer retained:** Source-content hold; reject absorption-only efficacy approval.
 **Sources:** [PMID 25308211](https://pubmed.ncbi.nlm.nih.gov/25308211/), [PMID 29246725](https://pubmed.ncbi.nlm.nih.gov/29246725/), [PMID 35494290](https://pubmed.ncbi.nlm.nih.gov/35494290/)
-**Remaining:** Retain returned decision: Source-content hold; reject absorption-only efficacy approval. Confirm exact pending preparation/regimen/population/outcome contexts within the returned scope; no blanket approval. No new Evidence eligibility or numerical benchmark inferred.
+**Remaining:** Source-owned fields still unresolved: theracurmin_memory_29246725 [outcomes.review_incomplete]. Complete extraction from retained sources or explicitly document reporting limits through the existing schema; this is not a request for another signature. Retain the returned signed applicability/source limitations and existing scoring eligibility holds. A factual extraction patch does not replace final acceptance of the exact relationship.
 
 **Prepared source assessment theracurmin_memory_29246725:**
 - Source: 29246725
@@ -624,7 +626,7 @@ The entries below carry forward the returned answer. Newly extracted study facts
 
 **Returned answer retained:** Date-restricted hold. Publication-age-only exclusions were withdrawn and are not adopted.
 **Sources:** [PMID 12598816](https://pubmed.ncbi.nlm.nih.gov/12598816/), [PMID 12804452](https://pubmed.ncbi.nlm.nih.gov/12804452/), [PMID 28349514](https://pubmed.ncbi.nlm.nih.gov/28349514/), [PMID 31118753](https://pubmed.ncbi.nlm.nih.gov/31118753/), [PMID 31201734](https://pubmed.ncbi.nlm.nih.gov/31201734/)
-**Remaining:** Retain returned decision: Date-restricted hold. Publication-age-only exclusions were withdrawn and are not adopted. Supply verified methods for source IDs 12598816,12804452,28349514,31201734. Confirm exact pending preparation/regimen/population/outcome contexts within the returned scope; no blanket approval. No new Evidence eligibility or numerical benchmark inferred.
+**Remaining:** Potentially eligible declared sources lack native contexts: 12598816,12804452,28349514,31201734. Inspect these sources and reconcile their scope; source presence alone does not authorize credit. Retain the returned signed applicability/source limitations and existing scoring eligibility holds. A factual extraction patch does not replace final acceptance of the exact relationship.
 
 **Prepared source assessment ingr_acetyl_l_carnitine_31118753_exact_source:**
 - Source: 31118753
@@ -713,7 +715,7 @@ The entries below carry forward the returned answer. Newly extracted study facts
 
 **Returned answer retained:** Source-content hold.
 **Sources:** [PMID 33554654](https://pubmed.ncbi.nlm.nih.gov/33554654/), [PMID 34965876](https://pubmed.ncbi.nlm.nih.gov/34965876/)
-**Remaining:** Retain returned decision: Source-content hold. Supply verified methods for source IDs 33554654. Confirm exact pending preparation/regimen/population/outcome contexts within the returned scope; no blanket approval. No new Evidence eligibility or numerical benchmark inferred.
+**Remaining:** Source-owned fields still unresolved: ingr_beetroot_34965876_scoped_source [included_studies.required_for_review_roles]. Complete extraction from retained sources or explicitly document reporting limits through the existing schema; this is not a request for another signature. Potentially eligible declared sources lack native contexts: 33554654. Inspect these sources and reconcile their scope; source presence alone does not authorize credit. Retain the returned signed applicability/source limitations and existing scoring eligibility holds. A factual extraction patch does not replace final acceptance of the exact relationship.
 
 **Prepared source assessment ingr_beetroot_34965876_scoped_source:**
 - Source: 34965876
@@ -740,7 +742,7 @@ The entries below carry forward the returned answer. Newly extracted study facts
 
 **Returned answer retained:** Source-content hold.
 **Sources:** [PMID 34956436](https://pubmed.ncbi.nlm.nih.gov/34956436/), [PMID 36999891](https://pubmed.ncbi.nlm.nih.gov/36999891/)
-**Remaining:** Retain returned decision: Source-content hold. Supply verified methods for source IDs 36999891. Confirm exact pending preparation/regimen/population/outcome contexts within the returned scope; no blanket approval. No new Evidence eligibility or numerical benchmark inferred.
+**Remaining:** Potentially eligible declared sources lack native contexts: 36999891. Inspect these sources and reconcile their scope; source presence alone does not authorize credit. Retain the returned signed applicability/source limitations and existing scoring eligibility holds. A factual extraction patch does not replace final acceptance of the exact relationship.
 
 **Prepared source assessment ingr_berberine_hcl_34956436_scoped_source:**
 - Source: 34956436
@@ -759,7 +761,7 @@ The entries below carry forward the returned answer. Newly extracted study facts
 
 **Returned answer retained:** Date-restricted hold. Publication-age-only exclusions were withdrawn and are not adopted.
 **Sources:** [PMID 22270875](https://pubmed.ncbi.nlm.nih.gov/22270875/), [PMID 27797728](https://pubmed.ncbi.nlm.nih.gov/27797728/)
-**Remaining:** Retain returned decision: Date-restricted hold. Publication-age-only exclusions were withdrawn and are not adopted. Supply verified methods for source IDs 27797728. Confirm exact pending preparation/regimen/population/outcome contexts within the returned scope; no blanket approval. No new Evidence eligibility or numerical benchmark inferred.
+**Remaining:** Source-owned fields still unresolved: ingr_beta_alanine_22270875_scoped_source [dose.delivery_required_for_complete_review]. Complete extraction from retained sources or explicitly document reporting limits through the existing schema; this is not a request for another signature. Potentially eligible declared sources lack native contexts: 27797728. Inspect these sources and reconcile their scope; source presence alone does not authorize credit. Retain the returned signed applicability/source limitations and existing scoring eligibility holds. A factual extraction patch does not replace final acceptance of the exact relationship.
 
 **Prepared source assessment ingr_beta_alanine_22270875_scoped_source:**
 - Source: 22270875
@@ -868,7 +870,7 @@ The entries below carry forward the returned answer. Newly extracted study facts
 
 **Returned answer retained:** Source-content hold.
 **Sources:** [PMID 36235655](https://pubmed.ncbi.nlm.nih.gov/36235655/), [PMID 38241335](https://pubmed.ncbi.nlm.nih.gov/38241335/), [PMID 38625669](https://pubmed.ncbi.nlm.nih.gov/38625669/)
-**Remaining:** Retain returned decision: Source-content hold. Supply verified methods for source IDs 38241335. Confirm exact pending preparation/regimen/population/outcome contexts within the returned scope; no blanket approval. No new Evidence eligibility or numerical benchmark inferred.
+**Remaining:** Potentially eligible declared sources lack native contexts: 38241335. Inspect these sources and reconcile their scope; source presence alone does not authorize credit. Retain the returned signed applicability/source limitations and existing scoring eligibility holds. A factual extraction patch does not replace final acceptance of the exact relationship.
 
 **Prepared source assessment ingr_branched_chain_amino_acids_38625669_scoped_source:**
 - Source: 38625669
@@ -907,7 +909,7 @@ The entries below carry forward the returned answer. Newly extracted study facts
 
 **Returned answer retained:** Source-content hold for each intended outcome.
 **Sources:** [PMID 30926628](https://pubmed.ncbi.nlm.nih.gov/30926628/), [PMID 32551869](https://pubmed.ncbi.nlm.nih.gov/32551869/), [PMID 33800853](https://pubmed.ncbi.nlm.nih.gov/33800853/), [PMID 34139220](https://pubmed.ncbi.nlm.nih.gov/34139220/)
-**Remaining:** Retain returned decision: Source-content hold for each intended outcome. Supply verified methods for source IDs 30926628,32551869,34139220. Confirm exact pending preparation/regimen/population/outcome contexts within the returned scope; no blanket approval. No new Evidence eligibility or numerical benchmark inferred.
+**Remaining:** Potentially eligible declared sources lack native contexts: 30926628,32551869,34139220. Inspect these sources and reconcile their scope; source presence alone does not authorize credit. Retain the returned signed applicability/source limitations and existing scoring eligibility holds. A factual extraction patch does not replace final acceptance of the exact relationship.
 
 **Prepared source assessment ingr_caffeine_33800853_scoped_source:**
 - Source: 33800853
@@ -925,7 +927,7 @@ The entries below carry forward the returned answer. Newly extracted study facts
 
 **Returned answer retained:** Date-restricted efficacy hold; nutritional guidance is a separate context. Publication-age-only exclusions were withdrawn and are not adopted.
 **Sources:** [PMID 17720017](https://pubmed.ncbi.nlm.nih.gov/17720017/), [PMID 26510847](https://pubmed.ncbi.nlm.nih.gov/26510847/)
-**Remaining:** Retain returned decision: Date-restricted efficacy hold; nutritional guidance is a separate context. Publication-age-only exclusions were withdrawn and are not adopted. Supply verified methods for source IDs 17720017. Confirm exact pending preparation/regimen/population/outcome contexts within the returned scope; no blanket approval. No new Evidence eligibility or numerical benchmark inferred.
+**Remaining:** Source-owned fields still unresolved: ingr_calcium_26510847_scoped_source [dose.delivery_required_for_complete_review]. Complete extraction from retained sources or explicitly document reporting limits through the existing schema; this is not a request for another signature. Potentially eligible declared sources lack native contexts: 17720017. Inspect these sources and reconcile their scope; source presence alone does not authorize credit. Retain the returned signed applicability/source limitations and existing scoring eligibility holds. A factual extraction patch does not replace final acceptance of the exact relationship.
 
 **Prepared source assessment ingr_calcium_26510847_scoped_source:**
 - Source: 26510847
@@ -945,7 +947,7 @@ The entries below carry forward the returned answer. Newly extracted study facts
 
 **Returned answer retained:** Source-content hold.
 **Sources:** [PMID 33055441](https://pubmed.ncbi.nlm.nih.gov/33055441/), [PMID 35719159](https://pubmed.ncbi.nlm.nih.gov/35719159/), [PMID 35807914](https://pubmed.ncbi.nlm.nih.gov/35807914/), [PMID 38999848](https://pubmed.ncbi.nlm.nih.gov/38999848/)
-**Remaining:** Retain returned decision: Source-content hold. Supply verified methods for source IDs 33055441. Confirm exact pending preparation/regimen/population/outcome contexts within the returned scope; no blanket approval. No new Evidence eligibility or numerical benchmark inferred.
+**Remaining:** Source-owned fields still unresolved: ingr_ceramides_35719159_ceramide_subgroup [dose.delivery_required_for_complete_review]. Complete extraction from retained sources or explicitly document reporting limits through the existing schema; this is not a request for another signature. Potentially eligible declared sources lack native contexts: 33055441. Inspect these sources and reconcile their scope; source presence alone does not authorize credit. Retain the returned signed applicability/source limitations and existing scoring eligibility holds. A factual extraction patch does not replace final acceptance of the exact relationship.
 
 **Prepared source assessment ingr_ceramides_38999848:**
 - Source: 38999848
@@ -1007,7 +1009,7 @@ The entries below carry forward the returned answer. Newly extracted study facts
 
 **Returned answer retained:** Date-restricted hold. Publication-age-only exclusions were withdrawn and are not adopted.
 **Sources:** [PMID 24019277](https://pubmed.ncbi.nlm.nih.gov/24019277/)
-**Remaining:** Retain returned decision: Date-restricted hold. Publication-age-only exclusions were withdrawn and are not adopted. Supply verified methods for source IDs 24019277. No new Evidence eligibility or numerical benchmark inferred.
+**Remaining:** Retain the returned signed applicability/source limitations and existing scoring eligibility holds. A factual extraction patch does not replace final acceptance of the exact relationship.
 **Reply:** supported exact scope, completed rejection, or the specific missing source/fact. Retain every other existing hold.
 
 ### A059 — Hydrolyzed Collagen Peptides (INGR_COLLAGEN_PEPTIDES)
@@ -1021,7 +1023,7 @@ The entries below carry forward the returned answer. Newly extracted study facts
 
 **Returned answer retained:** Reject statin-myopathy and universal-energy transfers; source-content hold for adjunctive heart-failure support.
 **Sources:** [PMID 25282031](https://pubmed.ncbi.nlm.nih.gov/25282031/), [PMID 39462324](https://pubmed.ncbi.nlm.nih.gov/39462324/)
-**Remaining:** Retain returned decision: Reject statin-myopathy and universal-energy transfers; source-content hold for adjunctive heart-failure support. Supply verified methods for source IDs 25282031. Confirm exact pending preparation/regimen/population/outcome contexts within the returned scope; no blanket approval. No new Evidence eligibility or numerical benchmark inferred.
+**Remaining:** Source-owned fields still unresolved: ingr_coq10_39462324_oral_primary_outcomes [dose.delivery_required_for_complete_review]. Complete extraction from retained sources or explicitly document reporting limits through the existing schema; this is not a request for another signature. Potentially eligible declared sources lack native contexts: 25282031. Inspect these sources and reconcile their scope; source presence alone does not authorize credit. Retain the returned signed applicability/source limitations and existing scoring eligibility holds. A factual extraction patch does not replace final acceptance of the exact relationship.
 
 **Prepared source assessment ingr_coq10_39462324_scoped_source:**
 - Source: 39462324
@@ -1053,7 +1055,7 @@ The entries below carry forward the returned answer. Newly extracted study facts
 
 **Returned answer retained:** Limited support for prevention in selected populations; reject treatment and universal-dose claims.
 **Sources:** [PMID 34473789](https://pubmed.ncbi.nlm.nih.gov/34473789/), [PMID 37947276](https://pubmed.ncbi.nlm.nih.gov/37947276/)
-**Remaining:** Retain returned decision: Limited support for prevention in selected populations; reject treatment and universal-dose claims. Supply verified methods for source IDs 34473789. No new Evidence eligibility or numerical benchmark inferred.
+**Remaining:** Existing signed prevention context is present. Finish enforcing exact preparation, population and recurrent-UTI prevention purpose through the existing consumer; current source owner rejects its held reference. Do not request a duplicate signature or transfer to treatment claims.
 **Reply:** supported exact scope, completed rejection, or the specific missing source/fact. Retain every other existing hold.
 
 ### A063 — Digestive Enzyme Complex (INGR_DIGESTIVE_ENZYMES)
@@ -1091,7 +1093,7 @@ The entries below carry forward the returned answer. Newly extracted study facts
 
 **Returned answer retained:** Reject strong antiviral and oseltamivir-equivalence claims; narrower source-content hold.
 **Sources:** [PMID 30670267](https://pubmed.ncbi.nlm.nih.gov/30670267/), [PMID 33827515](https://pubmed.ncbi.nlm.nih.gov/33827515/)
-**Remaining:** Retain returned decision: Reject strong antiviral and oseltamivir-equivalence claims; narrower source-content hold. Supply verified methods for source IDs 30670267. Confirm exact pending preparation/regimen/population/outcome contexts within the returned scope; no blanket approval. No new Evidence eligibility or numerical benchmark inferred.
+**Remaining:** Potentially eligible declared sources lack native contexts: 30670267. Inspect these sources and reconcile their scope; source presence alone does not authorize credit. Retain the returned signed applicability/source limitations and existing scoring eligibility holds. A factual extraction patch does not replace final acceptance of the exact relationship.
 
 **Prepared source assessment ingr_elderberry_33827515_scoped_source:**
 - Source: 33827515
@@ -1137,7 +1139,7 @@ The entries below carry forward the returned answer. Newly extracted study facts
 
 **Returned answer retained:** Source-content hold; reject high-certainty stress/sleep language.
 **Sources:** [PMID 33041752](https://pubmed.ncbi.nlm.nih.gov/33041752/)
-**Remaining:** Retain returned decision: Source-content hold; reject high-certainty stress/sleep language. Confirm exact pending preparation/regimen/population/outcome contexts within the returned scope; no blanket approval. No new Evidence eligibility or numerical benchmark inferred.
+**Remaining:** Retain the returned signed applicability/source limitations and existing scoring eligibility holds. A factual extraction patch does not replace final acceptance of the exact relationship.
 
 **Prepared source assessment ingr_gaba_33041752_scoped_source:**
 - Source: 33041752
@@ -1156,7 +1158,7 @@ The entries below carry forward the returned answer. Newly extracted study facts
 
 **Returned answer retained:** Narrow hypertension-context finding only; regimen/preparation hold.
 **Sources:** [PMID 32010325](https://pubmed.ncbi.nlm.nih.gov/32010325/)
-**Remaining:** Retain returned decision: Narrow hypertension-context finding only; regimen/preparation hold. Confirm exact pending preparation/regimen/population/outcome contexts within the returned scope; no blanket approval. No new Evidence eligibility or numerical benchmark inferred.
+**Remaining:** Retain the returned signed applicability/source limitations and existing scoring eligibility holds. A factual extraction patch does not replace final acceptance of the exact relationship.
 
 **Prepared source assessment garlic_hypertension_meta_32010325:**
 - Source: 32010325
@@ -1196,7 +1198,7 @@ The entries below carry forward the returned answer. Newly extracted study facts
 
 **Returned answer retained:** Source-content hold.
 **Sources:** [PMID 29624410](https://pubmed.ncbi.nlm.nih.gov/29624410/), [PMID 35509826](https://pubmed.ncbi.nlm.nih.gov/35509826/), [PMID 35776997](https://pubmed.ncbi.nlm.nih.gov/35776997/)
-**Remaining:** Retain returned decision: Source-content hold. Supply verified methods for source IDs 29624410. Confirm exact pending preparation/regimen/population/outcome contexts within the returned scope; no blanket approval. No new Evidence eligibility or numerical benchmark inferred.
+**Remaining:** Source-owned fields still unresolved: ingr_ginseng_35509826_scoped_source [dose.delivery_required_for_complete_review]; ingr_ginseng_35776997_scoped_source [dose.delivery_required_for_complete_review]. Complete extraction from retained sources or explicitly document reporting limits through the existing schema; this is not a request for another signature. Potentially eligible declared sources lack native contexts: 29624410. Inspect these sources and reconcile their scope; source presence alone does not authorize credit. Retain the returned signed applicability/source limitations and existing scoring eligibility holds. A factual extraction patch does not replace final acceptance of the exact relationship.
 
 **Prepared source assessment ingr_ginseng_35509826_scoped_source:**
 - Source: 35509826
@@ -1228,7 +1230,7 @@ The entries below carry forward the returned answer. Newly extracted study facts
 
 **Returned answer retained:** Source-content hold.
 **Sources:** [PMID 33488785](https://pubmed.ncbi.nlm.nih.gov/33488785/), [PMID 40005447](https://pubmed.ncbi.nlm.nih.gov/40005447/)
-**Remaining:** Retain returned decision: Source-content hold. Confirm exact pending preparation/regimen/population/outcome contexts within the returned scope; no blanket approval. No new Evidence eligibility or numerical benchmark inferred.
+**Remaining:** Source-owned fields still unresolved: ingr_glucosamine_sulfate_33488785_scoped_source [dose.delivery_required_for_complete_review]; ingr_glucosamine_sulfate_40005447_scoped_source [dose.delivery_required_for_complete_review]. Complete extraction from retained sources or explicitly document reporting limits through the existing schema; this is not a request for another signature. Retain the returned signed applicability/source limitations and existing scoring eligibility holds. A factual extraction patch does not replace final acceptance of the exact relationship.
 
 **Prepared source assessment ingr_glucosamine_sulfate_33488785_scoped_source:**
 - Source: 33488785
@@ -1279,7 +1281,7 @@ The entries below carry forward the returned answer. Newly extracted study facts
 
 **Returned answer retained:** Source-content hold; safety confirmation outstanding.
 **Sources:** [PMID 19597519](https://pubmed.ncbi.nlm.nih.gov/19597519/), [PMID 38031409](https://pubmed.ncbi.nlm.nih.gov/38031409/)
-**Remaining:** Retain returned decision: Source-content hold; safety confirmation outstanding. Supply verified methods for source IDs 19597519,38031409. No new Evidence eligibility or numerical benchmark inferred.
+**Remaining:** Potentially eligible declared sources lack native contexts: 19597519. Inspect these sources and reconcile their scope; source presence alone does not authorize credit. Retain the returned signed applicability/source limitations and existing scoring eligibility holds. A factual extraction patch does not replace final acceptance of the exact relationship.
 **Reply:** supported exact scope, completed rejection, or the specific missing source/fact. Retain every other existing hold.
 
 ### A075 — HMB (Beta-Hydroxy Beta-Methylbutyrate) (INGR_HMB)
@@ -1303,7 +1305,7 @@ The entries below carry forward the returned answer. Newly extracted study facts
 
 **Returned answer retained:** Reject definitive PCOS/fertility efficacy and metformin-equivalence wording.
 **Sources:** [PMID 35477841](https://pubmed.ncbi.nlm.nih.gov/35477841/), [PMID 36703143](https://pubmed.ncbi.nlm.nih.gov/36703143/), [PMID 38163998](https://pubmed.ncbi.nlm.nih.gov/38163998/)
-**Remaining:** Retain returned decision: Reject definitive PCOS/fertility efficacy and metformin-equivalence wording. Supply verified methods for source IDs 35477841. Confirm exact pending preparation/regimen/population/outcome contexts within the returned scope; no blanket approval. No new Evidence eligibility or numerical benchmark inferred.
+**Remaining:** Potentially eligible declared sources lack native contexts: 35477841. Inspect these sources and reconcile their scope; source presence alone does not authorize credit. Retain the returned signed applicability/source limitations and existing scoring eligibility holds. A factual extraction patch does not replace final acceptance of the exact relationship.
 
 **Prepared source assessment ingr_inositol_38163998_scoped_source:**
 - Source: 38163998
@@ -1333,7 +1335,7 @@ The entries below carry forward the returned answer. Newly extracted study facts
 
 **Returned answer retained:** Source-content hold.
 **Sources:** [PMID 34555168](https://pubmed.ncbi.nlm.nih.gov/34555168/), [PMID 35833477](https://pubmed.ncbi.nlm.nih.gov/35833477/), [PMID 38309832](https://pubmed.ncbi.nlm.nih.gov/38309832/)
-**Remaining:** Retain returned decision: Source-content hold. Supply verified methods for source IDs 35833477,38309832. Confirm exact pending preparation/regimen/population/outcome contexts within the returned scope; no blanket approval. No new Evidence eligibility or numerical benchmark inferred.
+**Remaining:** Source-owned fields still unresolved: ingr_inulin_34555168_scoped_source [dose.delivery_required_for_complete_review]. Complete extraction from retained sources or explicitly document reporting limits through the existing schema; this is not a request for another signature. Potentially eligible declared sources lack native contexts: 35833477,38309832. Inspect these sources and reconcile their scope; source presence alone does not authorize credit. Retain the returned signed applicability/source limitations and existing scoring eligibility holds. A factual extraction patch does not replace final acceptance of the exact relationship.
 
 **Prepared source assessment ingr_inulin_34555168_scoped_source:**
 - Source: 34555168
@@ -1360,7 +1362,7 @@ The entries below carry forward the returned answer. Newly extracted study facts
 
 **Returned answer retained:** Source-content hold.
 **Sources:** [PMID 19639462](https://pubmed.ncbi.nlm.nih.gov/19639462/), [PMID 35276902](https://pubmed.ncbi.nlm.nih.gov/35276902/)
-**Remaining:** Retain returned decision: Source-content hold. Supply verified methods for source IDs 19639462. Confirm exact pending preparation/regimen/population/outcome contexts within the returned scope; no blanket approval. No new Evidence eligibility or numerical benchmark inferred.
+**Remaining:** Source-owned fields still unresolved: ingr_lactoferrin_35276902_exact_source [dose.delivery_required_for_complete_review]. Complete extraction from retained sources or explicitly document reporting limits through the existing schema; this is not a request for another signature. Potentially eligible declared sources lack native contexts: 19639462. Inspect these sources and reconcile their scope; source presence alone does not authorize credit. Retain the returned signed applicability/source limitations and existing scoring eligibility holds. A factual extraction patch does not replace final acceptance of the exact relationship.
 
 **Prepared source assessment ingr_lactoferrin_35276902_exact_source:**
 - Source: 35276902
@@ -1415,26 +1417,13 @@ The entries below carry forward the returned answer. Newly extracted study facts
 
 ### A084 — Lutein (INGR_LUTEIN)
 
-**Returned answer retained:** Reject positive credit from the review flagged as retracted; reject combination-to-isolated-lutein transfer.
-**Sources:** [PMID 28661438](https://pubmed.ncbi.nlm.nih.gov/28661438/), [PMID 41573009](https://pubmed.ncbi.nlm.nih.gov/41573009/)
-**Remaining:** Retain returned decision: Reject positive credit from the review flagged as retracted; reject combination-to-isolated-lutein transfer. Supply verified methods for source IDs 41573009. Confirm exact pending preparation/regimen/population/outcome contexts within the returned scope; no blanket approval. No new Evidence eligibility or numerical benchmark inferred.
-
-**Prepared source assessment ingr_lutein_28661438_draft:**
-- Source: 28661438
-- Preparation: branded material: Lutemax 2020 study formulation; standardization: 24 mg/day total lutein, zeaxanthin and mesozeaxanthin in an 83: 10: 7 ratio, suspended in safflower oil.
-- People: 48 healthy 18–25 high screen exposure adults.
-- Regimen: [24] mg/day; 6 calendar months; daily
-- Outcome: Visual performance measures; not_reported; positive.
-- Outcome: Sleep/eye symptoms; not_reported; positive.
-- Limit: Whole mixture, not isolated lutein; multiple outcomes, small trial; exact label ratios required.
-- Limit: The retained full article does not designate a primary outcome/endpoint; recorded hierarchy not_reported. This is a reporting limitation, not invented primary status or completion of any separate approval.
-**Reply:** supported exact scope, completed rejection, or the specific missing source/fact. Retain every other existing hold.
+Closed through the existing source owner within the returned scope. No repeat answer requested. Rebuilt-product verification remains separate.
 
 ### A085 — L-Arginine (INGR_L_ARGININE)
 
 **Returned answer retained:** Source-content hold.
 **Sources:** [PMID 22137067](https://pubmed.ncbi.nlm.nih.gov/22137067/), [PMID 32370176](https://pubmed.ncbi.nlm.nih.gov/32370176/), [PMID 34967840](https://pubmed.ncbi.nlm.nih.gov/34967840/)
-**Remaining:** Retain returned decision: Source-content hold. Supply verified methods for source IDs 22137067,34967840. Confirm exact pending preparation/regimen/population/outcome contexts within the returned scope; no blanket approval. No new Evidence eligibility or numerical benchmark inferred.
+**Remaining:** Source-owned fields still unresolved: ingr_l_arginine_32370176_scoped_source [dose.delivery_required_for_complete_review]. Complete extraction from retained sources or explicitly document reporting limits through the existing schema; this is not a request for another signature. Potentially eligible declared sources lack native contexts: 22137067,34967840. Inspect these sources and reconcile their scope; source presence alone does not authorize credit. Retain the returned signed applicability/source limitations and existing scoring eligibility holds. A factual extraction patch does not replace final acceptance of the exact relationship.
 
 **Prepared source assessment ingr_l_arginine_32370176_scoped_source:**
 - Source: 32370176
@@ -1453,7 +1442,7 @@ The entries below carry forward the returned answer. Newly extracted study facts
 
 **Returned answer retained:** Source-content hold.
 **Sources:** [PMID 32154768](https://pubmed.ncbi.nlm.nih.gov/32154768/), [PMID 32359762](https://pubmed.ncbi.nlm.nih.gov/32359762/), [PMID 32958033](https://pubmed.ncbi.nlm.nih.gov/32958033/)
-**Remaining:** Retain returned decision: Source-content hold. Supply verified methods for source IDs 32154768,32359762. Confirm exact pending preparation/regimen/population/outcome contexts within the returned scope; no blanket approval. No new Evidence eligibility or numerical benchmark inferred.
+**Remaining:** Source-owned fields still unresolved: ingr_l_carnitine_32958033_source_completion [dose.delivery_required_for_complete_review]. Complete extraction from retained sources or explicitly document reporting limits through the existing schema; this is not a request for another signature. Potentially eligible declared sources lack native contexts: 32154768,32359762. Inspect these sources and reconcile their scope; source presence alone does not authorize credit. Retain the returned signed applicability/source limitations and existing scoring eligibility holds. A factual extraction patch does not replace final acceptance of the exact relationship.
 
 **Prepared source assessment ingr_l_carnitine_32958033_source_completion:**
 - Source: 32958033
@@ -1491,7 +1480,7 @@ The entries below carry forward the returned answer. Newly extracted study facts
 
 **Returned answer retained:** Source-content hold.
 **Sources:** [PMID 24946991](https://pubmed.ncbi.nlm.nih.gov/24946991/), [PMID 40314930](https://pubmed.ncbi.nlm.nih.gov/40314930/)
-**Remaining:** Retain returned decision: Source-content hold. Supply verified methods for source IDs 24946991. Confirm exact pending preparation/regimen/population/outcome contexts within the returned scope; no blanket approval. No new Evidence eligibility or numerical benchmark inferred.
+**Remaining:** Potentially eligible declared sources lack native contexts: 24946991. Inspect these sources and reconcile their scope; source presence alone does not authorize credit. Retain the returned signed applicability/source limitations and existing scoring eligibility holds. A factual extraction patch does not replace final acceptance of the exact relationship.
 
 **Prepared source assessment ingr_l_theanine_40314930_scoped_source:**
 - Source: 40314930
@@ -1510,7 +1499,7 @@ The entries below carry forward the returned answer. Newly extracted study facts
 
 **Returned answer retained:** Source-content hold.
 **Sources:** [PMID 26752497](https://pubmed.ncbi.nlm.nih.gov/26752497/), [PMID 41000008](https://pubmed.ncbi.nlm.nih.gov/41000008/), [PMID 8792038](https://pubmed.ncbi.nlm.nih.gov/8792038/)
-**Remaining:** Retain returned decision: Source-content hold. Supply verified methods for source IDs 26752497,8792038. Confirm exact pending preparation/regimen/population/outcome contexts within the returned scope; no blanket approval. No new Evidence eligibility or numerical benchmark inferred.
+**Remaining:** Potentially eligible declared sources lack native contexts: 26752497,8792038. Inspect these sources and reconcile their scope; source presence alone does not authorize credit. Retain the returned signed applicability/source limitations and existing scoring eligibility holds. A factual extraction patch does not replace final acceptance of the exact relationship.
 
 **Prepared source assessment ingr_magnesium_generic_41000008_scoped_synthesis:**
 - Source: 41000008
@@ -1540,7 +1529,7 @@ The entries below carry forward the returned answer. Newly extracted study facts
 
 **Returned answer retained:** Date-restricted hold; reject preparation-wide cardiovascular/mood approval. Publication-age-only exclusions were withdrawn and are not adopted.
 **Sources:** [PMID 31567003](https://pubmed.ncbi.nlm.nih.gov/31567003/)
-**Remaining:** Retain returned decision: Date-restricted hold; reject preparation-wide cardiovascular/mood approval. Publication-age-only exclusions were withdrawn and are not adopted. Confirm exact pending preparation/regimen/population/outcome contexts within the returned scope; no blanket approval. No new Evidence eligibility or numerical benchmark inferred.
+**Remaining:** Retain the returned signed applicability/source limitations and existing scoring eligibility holds. A factual extraction patch does not replace final acceptance of the exact relationship.
 
 **Prepared source assessment ingr_omega3_31567003_scoped_synthesis:**
 - Source: 31567003
@@ -1580,7 +1569,7 @@ The entries below carry forward the returned answer. Newly extracted study facts
 
 **Returned answer retained:** Date-restricted evidence hold; reject product-approval implications. Publication-age-only exclusions were withdrawn and are not adopted.
 **Sources:** [PMID 19109655](https://pubmed.ncbi.nlm.nih.gov/19109655/)
-**Remaining:** Retain returned decision: Date-restricted evidence hold; reject product-approval implications. Publication-age-only exclusions were withdrawn and are not adopted. Confirm exact pending preparation/regimen/population/outcome contexts within the returned scope; no blanket approval. No new Evidence eligibility or numerical benchmark inferred.
+**Remaining:** Retain the returned signed applicability/source limitations and existing scoring eligibility holds. A factual extraction patch does not replace final acceptance of the exact relationship.
 
 **Prepared source assessment ingr_plant_sterols_19109655_scoped_source:**
 - Source: 19109655
@@ -1598,7 +1587,7 @@ The entries below carry forward the returned answer. Newly extracted study facts
 
 **Returned answer retained:** Source-content hold for the blood-pressure relationship.
 **Sources:** [PMID 40612568](https://pubmed.ncbi.nlm.nih.gov/40612568/)
-**Remaining:** Retain returned decision: Source-content hold for the blood-pressure relationship. Confirm exact pending preparation/regimen/population/outcome contexts within the returned scope; no blanket approval. No new Evidence eligibility or numerical benchmark inferred.
+**Remaining:** Retain the returned signed applicability/source limitations and existing scoring eligibility holds. A factual extraction patch does not replace final acceptance of the exact relationship.
 
 **Prepared source assessment ingr_potassium_40612568_scoped_source:**
 - Source: 40612568
@@ -1624,7 +1613,7 @@ The entries below carry forward the returned answer. Newly extracted study facts
 
 **Returned answer retained:** Reject immune/antiviral transfer; source-content hold for blood-pressure support.
 **Sources:** [PMID 27405810](https://pubmed.ncbi.nlm.nih.gov/27405810/), [PMID 35948195](https://pubmed.ncbi.nlm.nih.gov/35948195/)
-**Remaining:** Retain returned decision: Reject immune/antiviral transfer; source-content hold for blood-pressure support. Supply verified methods for source IDs 35948195. Confirm exact pending preparation/regimen/population/outcome contexts within the returned scope; no blanket approval. No new Evidence eligibility or numerical benchmark inferred.
+**Remaining:** Source-owned fields still unresolved: ingr_quercetin_27405810_scoped_source [dose.delivery_required_for_complete_review]. Complete extraction from retained sources or explicitly document reporting limits through the existing schema; this is not a request for another signature. Potentially eligible declared sources lack native contexts: 35948195. Inspect these sources and reconcile their scope; source presence alone does not authorize credit. Retain the returned signed applicability/source limitations and existing scoring eligibility holds. A factual extraction patch does not replace final acceptance of the exact relationship.
 
 **Prepared source assessment ingr_quercetin_27405810_scoped_source:**
 - Source: 27405810
@@ -1643,7 +1632,7 @@ The entries below carry forward the returned answer. Newly extracted study facts
 
 **Returned answer retained:** Reject blanket efficacy/safety transfer to arbitrary retail products.
 **Sources:** [PMID 35264949](https://pubmed.ncbi.nlm.nih.gov/35264949/)
-**Remaining:** Retain returned decision: Reject blanket efficacy/safety transfer to arbitrary retail products. Confirm exact pending preparation/regimen/population/outcome contexts within the returned scope; no blanket approval. No new Evidence eligibility or numerical benchmark inferred.
+**Remaining:** Source-owned fields still unresolved: ingr_red_yeast_rice_35264949_scoped_source [dose.delivery_required_for_complete_review]. Complete extraction from retained sources or explicitly document reporting limits through the existing schema; this is not a request for another signature. Retain the returned signed applicability/source limitations and existing scoring eligibility holds. A factual extraction patch does not replace final acceptance of the exact relationship.
 
 **Prepared source assessment ingr_red_yeast_rice_35264949_scoped_source:**
 - Source: 35264949
@@ -1668,10 +1657,7 @@ The entries below carry forward the returned answer. Newly extracted study facts
 
 ### A108 — Vitamin B2 (Riboflavin) (INGR_RIBOFLAVIN_B2)
 
-**Returned answer retained:** Limited migraine-prevention support; reject general neurological enhancement.
-**Sources:** [PMID 33779525](https://pubmed.ncbi.nlm.nih.gov/33779525/), [PMID 41769676](https://pubmed.ncbi.nlm.nih.gov/41769676/), [PMID 9484373](https://pubmed.ncbi.nlm.nih.gov/9484373/)
-**Remaining:** Retain returned decision: Limited migraine-prevention support; reject general neurological enhancement. Supply verified methods for source IDs 33779525,9484373. No new Evidence eligibility or numerical benchmark inferred.
-**Reply:** supported exact scope, completed rejection, or the specific missing source/fact. Retain every other existing hold.
+Closed through the existing source owner within the returned scope. No repeat answer requested. Rebuilt-product verification remains separate.
 
 ### A110 — Sea Buckthorn (INGR_SEA_BUCKTHORN)
 
@@ -1684,7 +1670,7 @@ The entries below carry forward the returned answer. Newly extracted study facts
 
 **Returned answer retained:** Source-content hold; reject essentiality-to-universal-prevention inference.
 **Sources:** [PMID 20883174](https://pubmed.ncbi.nlm.nih.gov/20883174/), [PMID 27702392](https://pubmed.ncbi.nlm.nih.gov/27702392/), [PMID 37335715](https://pubmed.ncbi.nlm.nih.gov/37335715/), [PMID 38243784](https://pubmed.ncbi.nlm.nih.gov/38243784/)
-**Remaining:** Retain returned decision: Source-content hold; reject essentiality-to-universal-prevention inference. Supply verified methods for source IDs 20883174,27702392. Confirm exact pending preparation/regimen/population/outcome contexts within the returned scope; no blanket approval. No new Evidence eligibility or numerical benchmark inferred.
+**Remaining:** Source-owned fields still unresolved: ingr_selenium_38243784_scoped_source [dose.delivery_required_for_complete_review]; ingr_selenium_37335715_scoped_source [dose.delivery_required_for_complete_review]. Complete extraction from retained sources or explicitly document reporting limits through the existing schema; this is not a request for another signature. Potentially eligible declared sources lack native contexts: 20883174,27702392. Inspect these sources and reconcile their scope; source presence alone does not authorize credit. Retain the returned signed applicability/source limitations and existing scoring eligibility holds. A factual extraction patch does not replace final acceptance of the exact relationship.
 
 **Prepared source assessment ingr_selenium_38243784_scoped_source:**
 - Source: 38243784
@@ -1759,7 +1745,7 @@ The entries below carry forward the returned answer. Newly extracted study facts
 
 **Returned answer retained:** Reject broad preparation-wide approval; indication/formulation review remains held.
 **Sources:** [PMID 38576215](https://pubmed.ncbi.nlm.nih.gov/38576215/), [PMID 38945354](https://pubmed.ncbi.nlm.nih.gov/38945354/), [PMID 40615851](https://pubmed.ncbi.nlm.nih.gov/40615851/)
-**Remaining:** Retain returned decision: Reject broad preparation-wide approval; indication/formulation review remains held. Supply verified methods for source IDs 38576215,38945354. Confirm exact pending preparation/regimen/population/outcome contexts within the returned scope; no blanket approval. No new Evidence eligibility or numerical benchmark inferred.
+**Remaining:** Potentially eligible declared sources lack native contexts: 38576215,38945354. Inspect these sources and reconcile their scope; source presence alone does not authorize credit. Retain the returned signed applicability/source limitations and existing scoring eligibility holds. A factual extraction patch does not replace final acceptance of the exact relationship.
 
 **Prepared source assessment ingr_turmeric_40615851_scoped_source:**
 - Source: 40615851
@@ -1778,7 +1764,7 @@ The entries below carry forward the returned answer. Newly extracted study facts
 
 **Returned answer retained:** Source-content hold.
 **Sources:** [PMID 33086877](https://pubmed.ncbi.nlm.nih.gov/33086877/)
-**Remaining:** Retain returned decision: Source-content hold. Confirm exact pending preparation/regimen/population/outcome contexts within the returned scope; no blanket approval. No new Evidence eligibility or numerical benchmark inferred.
+**Remaining:** Source-owned fields still unresolved: ingr_valerian_33086877_scoped_source [dose.delivery_required_for_complete_review]. Complete extraction from retained sources or explicitly document reporting limits through the existing schema; this is not a request for another signature. Retain the returned signed applicability/source limitations and existing scoring eligibility holds. A factual extraction patch does not replace final acceptance of the exact relationship.
 
 **Prepared source assessment ingr_valerian_33086877_scoped_source:**
 - Source: 33086877
@@ -1812,7 +1798,7 @@ The entries below carry forward the returned answer. Newly extracted study facts
 
 **Returned answer retained:** Source-content hold.
 **Sources:** [PMID 17636648](https://pubmed.ncbi.nlm.nih.gov/17636648/), [PMID 23440782](https://pubmed.ncbi.nlm.nih.gov/23440782/), [PMID 38082300](https://pubmed.ncbi.nlm.nih.gov/38082300/)
-**Remaining:** Retain returned decision: Source-content hold. Supply verified methods for source IDs 17636648,23440782. Confirm exact pending preparation/regimen/population/outcome contexts within the returned scope; no blanket approval. No new Evidence eligibility or numerical benchmark inferred.
+**Remaining:** Potentially eligible declared sources lack native contexts: 17636648,23440782. Inspect these sources and reconcile their scope; source presence alone does not authorize credit. Retain the returned signed applicability/source limitations and existing scoring eligibility holds. A factual extraction patch does not replace final acceptance of the exact relationship.
 
 **Prepared source assessment ingr_vitamin_c_38082300_scoped_source:**
 - Source: 38082300
@@ -1832,7 +1818,7 @@ The entries below carry forward the returned answer. Newly extracted study facts
 
 **Returned answer retained:** Date-restricted efficacy hold; nutritional guidance remains separate. Publication-age-only exclusions were withdrawn and are not adopted.
 **Sources:** [PMID 28202713](https://pubmed.ncbi.nlm.nih.gov/28202713/), [PMID 30293909](https://pubmed.ncbi.nlm.nih.gov/30293909/)
-**Remaining:** Retain returned decision: Date-restricted efficacy hold; nutritional guidance remains separate. Publication-age-only exclusions were withdrawn and are not adopted. Supply verified methods for source IDs 30293909. Confirm exact pending preparation/regimen/population/outcome contexts within the returned scope; no blanket approval. No new Evidence eligibility or numerical benchmark inferred.
+**Remaining:** Source-owned fields still unresolved: ingr_vitamin_d3_28202713_scoped_source [dose.delivery_required_for_complete_review]. Complete extraction from retained sources or explicitly document reporting limits through the existing schema; this is not a request for another signature. Potentially eligible declared sources lack native contexts: 30293909. Inspect these sources and reconcile their scope; source presence alone does not authorize credit. Retain the returned signed applicability/source limitations and existing scoring eligibility holds. A factual extraction patch does not replace final acceptance of the exact relationship.
 
 **Prepared source assessment ingr_vitamin_d3_28202713_scoped_source:**
 - Source: 28202713
@@ -1853,7 +1839,7 @@ The entries below carry forward the returned answer. Newly extracted study facts
 
 **Returned answer retained:** Source-content hold; reject preparation-wide transfer from an ingredient-family label.
 **Sources:** [PMID 28698222](https://pubmed.ncbi.nlm.nih.gov/28698222/), [PMID 39303495](https://pubmed.ncbi.nlm.nih.gov/39303495/)
-**Remaining:** Retain returned decision: Source-content hold; reject preparation-wide transfer from an ingredient-family label. Supply verified methods for source IDs 39303495. Confirm exact pending preparation/regimen/population/outcome contexts within the returned scope; no blanket approval. No new Evidence eligibility or numerical benchmark inferred.
+**Remaining:** Potentially eligible declared sources lack native contexts: 39303495. Inspect these sources and reconcile their scope; source presence alone does not authorize credit. Retain the returned signed applicability/source limitations and existing scoring eligibility holds. A factual extraction patch does not replace final acceptance of the exact relationship.
 
 **Prepared source assessment ingr_whey_protein_28698222_scoped_synthesis:**
 - Source: 28698222
@@ -1891,7 +1877,7 @@ The entries below carry forward the returned answer. Newly extracted study facts
 
 **Returned answer retained:** Reject identity bridge; date-restricted evidence hold. Publication-age-only exclusions were withdrawn and are not adopted.
 **Sources:** [PMID 25888289](https://pubmed.ncbi.nlm.nih.gov/25888289/), [PMID 27378206](https://pubmed.ncbi.nlm.nih.gov/27378206/), [PMID 28515951](https://pubmed.ncbi.nlm.nih.gov/28515951/)
-**Remaining:** Retain returned decision: Reject identity bridge; date-restricted evidence hold. Publication-age-only exclusions were withdrawn and are not adopted. Supply verified methods for source IDs 27378206. Confirm exact pending preparation/regimen/population/outcome contexts within the returned scope; no blanket approval. No new Evidence eligibility or numerical benchmark inferred.
+**Remaining:** Potentially eligible declared sources lack native contexts: 27378206. Inspect these sources and reconcile their scope; source presence alone does not authorize credit. Retain the returned signed applicability/source limitations and existing scoring eligibility holds. A factual extraction patch does not replace final acceptance of the exact relationship.
 
 **Prepared source assessment ingr_zinc_picolinate_25888289_scoped_source:**
 - Source: 25888289
@@ -1928,7 +1914,7 @@ The entries below carry forward the returned answer. Newly extracted study facts
 
 **Returned answer retained:** Source-content hold; reject both brand-wide transfer and “preclinical only” classification by key.
 **Sources:** [PMID 32755613](https://pubmed.ncbi.nlm.nih.gov/32755613/), [PMID 34578794](https://pubmed.ncbi.nlm.nih.gov/34578794/), [PMID 35091276](https://pubmed.ncbi.nlm.nih.gov/35091276/), [PMID 38243785](https://pubmed.ncbi.nlm.nih.gov/38243785/)
-**Remaining:** Retain returned decision: Source-content hold; reject both brand-wide transfer and “preclinical only” classification by key. Supply verified methods for source IDs 32755613,35091276,38243785. Confirm exact pending preparation/regimen/population/outcome contexts within the returned scope; no blanket approval. No new Evidence eligibility or numerical benchmark inferred.
+**Remaining:** Potentially eligible declared sources lack native contexts: 32755613,35091276,38243785. Inspect these sources and reconcile their scope; source presence alone does not authorize credit. Retain the returned signed applicability/source limitations and existing scoring eligibility holds. A factual extraction patch does not replace final acceptance of the exact relationship.
 
 **Prepared source assessment preclin_astaxanthin_generic_34578794_scoped_source:**
 - Source: 34578794
@@ -1947,7 +1933,7 @@ The entries below carry forward the returned answer. Newly extracted study facts
 
 **Returned answer retained:** Source-content hold; coordinate duplicate-source accounting with A042/A043.
 **Sources:** [PMID 34956436](https://pubmed.ncbi.nlm.nih.gov/34956436/), [PMID 36467075](https://pubmed.ncbi.nlm.nih.gov/36467075/), [PMID 36941490](https://pubmed.ncbi.nlm.nih.gov/36941490/), [PMID 37598753](https://pubmed.ncbi.nlm.nih.gov/37598753/)
-**Remaining:** Retain returned decision: Source-content hold; coordinate duplicate-source accounting with A042/A043. Supply verified methods for source IDs 36941490,37598753. Confirm exact pending preparation/regimen/population/outcome contexts within the returned scope; no blanket approval. No new Evidence eligibility or numerical benchmark inferred.
+**Remaining:** Source-owned fields still unresolved: preclin_berberine_generic_36467075_scoped_source [dose.delivery_required_for_complete_review]. Complete extraction from retained sources or explicitly document reporting limits through the existing schema; this is not a request for another signature. Potentially eligible declared sources lack native contexts: 36941490,37598753. Inspect these sources and reconcile their scope; source presence alone does not authorize credit. Retain the returned signed applicability/source limitations and existing scoring eligibility holds. A factual extraction patch does not replace final acceptance of the exact relationship.
 
 **Prepared source assessment preclin_berberine_generic_34956436_scoped_source:**
 - Source: 34956436
@@ -2033,7 +2019,7 @@ The entries below carry forward the returned answer. Newly extracted study facts
 
 **Returned answer retained:** Reject broad superiority and generic benefit language; retain formulation/indication-specific hold.
 **Sources:** [PMID 38576215](https://pubmed.ncbi.nlm.nih.gov/38576215/), [PMID 38945354](https://pubmed.ncbi.nlm.nih.gov/38945354/), [PMID 39478418](https://pubmed.ncbi.nlm.nih.gov/39478418/), [PMID 40615851](https://pubmed.ncbi.nlm.nih.gov/40615851/)
-**Remaining:** Retain returned decision: Reject broad superiority and generic benefit language; retain formulation/indication-specific hold. Supply verified methods for source IDs 38576215,38945354,39478418. Confirm exact pending preparation/regimen/population/outcome contexts within the returned scope; no blanket approval. No new Evidence eligibility or numerical benchmark inferred.
+**Remaining:** Potentially eligible declared sources lack native contexts: 38576215,38945354,39478418. Inspect these sources and reconcile their scope; source presence alone does not authorize credit. Retain the returned signed applicability/source limitations and existing scoring eligibility holds. A factual extraction patch does not replace final acceptance of the exact relationship.
 
 **Prepared source assessment preclin_curcumin_generic_40615851_scoped_source:**
 - Source: 40615851
@@ -2087,7 +2073,7 @@ The entries below carry forward the returned answer. Newly extracted study facts
 
 **Returned answer retained:** Date-restricted hold; preserve historical primary-endpoint and bias qualifications. Publication-age-only exclusions were withdrawn and are not adopted.
 **Sources:** [PMID 21502597](https://pubmed.ncbi.nlm.nih.gov/21502597/), [PMID 24086396](https://pubmed.ncbi.nlm.nih.gov/24086396/), [PMID 24639880](https://pubmed.ncbi.nlm.nih.gov/24639880/), [PMID 30989926](https://pubmed.ncbi.nlm.nih.gov/30989926/)
-**Remaining:** Retain returned decision: Date-restricted hold; preserve historical primary-endpoint and bias qualifications. Publication-age-only exclusions were withdrawn and are not adopted. Supply verified methods for source IDs 21502597,30989926. Confirm exact pending preparation/regimen/population/outcome contexts within the returned scope; no blanket approval. No new Evidence eligibility or numerical benchmark inferred.
+**Remaining:** Source-owned fields still unresolved: preclin_huperzine_a_24086396_scoped_source [dose.delivery_required_for_complete_review]; preclin_huperzine_a_24639880_scoped_source [dose.delivery_required_for_complete_review]. Complete extraction from retained sources or explicitly document reporting limits through the existing schema; this is not a request for another signature. Potentially eligible declared sources lack native contexts: 21502597,30989926. Inspect these sources and reconcile their scope; source presence alone does not authorize credit. Retain the returned signed applicability/source limitations and existing scoring eligibility holds. A factual extraction patch does not replace final acceptance of the exact relationship.
 
 **Prepared source assessment preclin_huperzine_a_24086396_scoped_source:**
 - Source: 24086396
@@ -2167,7 +2153,7 @@ The entries below carry forward the returned answer. Newly extracted study facts
 
 **Returned answer retained:** Reject human-longevity and broad clinical-benefit claims; source-context hold for selected markers.
 **Sources:** [PMID 24111838](https://pubmed.ncbi.nlm.nih.gov/24111838/), [PMID 29305228](https://pubmed.ncbi.nlm.nih.gov/29305228/), [PMID 35905799](https://pubmed.ncbi.nlm.nih.gov/35905799/), [PMID 36145131](https://pubmed.ncbi.nlm.nih.gov/36145131/), [PMID 39255906](https://pubmed.ncbi.nlm.nih.gov/39255906/), [PMID 39872318](https://pubmed.ncbi.nlm.nih.gov/39872318/)
-**Remaining:** Retain returned decision: Reject human-longevity and broad clinical-benefit claims; source-context hold for selected markers. Supply verified methods for source IDs 24111838,29305228,35905799,39255906. Confirm exact pending preparation/regimen/population/outcome contexts within the returned scope; no blanket approval. No new Evidence eligibility or numerical benchmark inferred.
+**Remaining:** Source-owned fields still unresolved: preclin_resveratrol_39872318_scoped_source [dose.delivery_required_for_complete_review]; preclin_resveratrol_36145131_scoped_source [dose.delivery_required_for_complete_review]. Complete extraction from retained sources or explicitly document reporting limits through the existing schema; this is not a request for another signature. Potentially eligible declared sources lack native contexts: 24111838,29305228,35905799,39255906. Inspect these sources and reconcile their scope; source presence alone does not authorize credit. Retain the returned signed applicability/source limitations and existing scoring eligibility holds. A factual extraction patch does not replace final acceptance of the exact relationship.
 
 **Prepared source assessment preclin_resveratrol_39872318_scoped_source:**
 - Source: 39872318
@@ -2205,7 +2191,7 @@ The entries below carry forward the returned answer. Newly extracted study facts
 
 **Returned answer retained:** Reject primary-target success, cancer-prevention, and preparation-wide claims.
 **Sources:** [PMID 39929977](https://pubmed.ncbi.nlm.nih.gov/39929977/), [PMID 40041932](https://pubmed.ncbi.nlm.nih.gov/40041932/), [PMID 40458076](https://pubmed.ncbi.nlm.nih.gov/40458076/)
-**Remaining:** Retain returned decision: Reject primary-target success, cancer-prevention, and preparation-wide claims. Supply verified methods for source IDs 40041932. Confirm exact pending preparation/regimen/population/outcome contexts within the returned scope; no blanket approval. No new Evidence eligibility or numerical benchmark inferred.
+**Remaining:** Source-owned fields still unresolved: preclin_sulforaphane_40458076_scoped_source [dose.delivery_required_for_complete_review]. Complete extraction from retained sources or explicitly document reporting limits through the existing schema; this is not a request for another signature. Potentially eligible declared sources lack native contexts: 40041932. Inspect these sources and reconcile their scope; source presence alone does not authorize credit. Retain the returned signed applicability/source limitations and existing scoring eligibility holds. A factual extraction patch does not replace final acceptance of the exact relationship.
 
 **Prepared source assessment preclin_sulforaphane_39929977_exact_source:**
 - Source: 39929977
@@ -2237,7 +2223,7 @@ The entries below carry forward the returned answer. Newly extracted study facts
 
 **Returned answer retained:** Reject generic “gut barrier” approval; source-content hold for specific adjunctive settings.
 **Sources:** [PMID 23826914](https://pubmed.ncbi.nlm.nih.gov/23826914/), [PMID 24286534](https://pubmed.ncbi.nlm.nih.gov/24286534/), [PMID 28407007](https://pubmed.ncbi.nlm.nih.gov/28407007/), [PMID 35999163](https://pubmed.ncbi.nlm.nih.gov/35999163/), [PMID 36235778](https://pubmed.ncbi.nlm.nih.gov/36235778/)
-**Remaining:** Retain returned decision: Reject generic “gut barrier” approval; source-content hold for specific adjunctive settings. Supply verified methods for source IDs 24286534,35999163. Confirm exact pending preparation/regimen/population/outcome contexts within the returned scope; no blanket approval. No new Evidence eligibility or numerical benchmark inferred.
+**Remaining:** Source-owned fields still unresolved: preclin_zinc_carnosine_28407007_exact_source [dose.delivery_required_for_complete_review]; preclin_zinc_carnosine_23826914_exact_source [dose.delivery_required_for_complete_review]; preclin_zinc_carnosine_36235778_scoped_source [dose.delivery_required_for_complete_review]. Complete extraction from retained sources or explicitly document reporting limits through the existing schema; this is not a request for another signature. Potentially eligible declared sources lack native contexts: 24286534,35999163. Inspect these sources and reconcile their scope; source presence alone does not authorize credit. Retain the returned signed applicability/source limitations and existing scoring eligibility holds. A factual extraction patch does not replace final acceptance of the exact relationship.
 
 **Prepared source assessment preclin_zinc_carnosine_28407007_exact_source:**
 - Source: 28407007
@@ -2510,7 +2496,7 @@ Resolve exact preparation and source applicability through existing botanical/do
 ## Source-specific matters already identified
 
 - PQQ: the corrected Table 4 content remains required; a correction link alone cannot verify the corrected numbers.
-- Poolzyme Multi: retain the source ethics-date, endpoint and noninferiority-reporting limitations; do not transfer the finished preparation study to arbitrary enzyme mixtures.
+- Poolzyme Multi: retain the documented ethics-date, endpoint, analysis-population and reporting limitations; do not transfer the finished preparation study to arbitrary enzyme mixtures.
 - Watermelon/juice concentrates: the older paper’s correction is still unreconciled; other beverage studies do not establish a retail powder conversion.
 - Manufacturer label limits remain limits: hidden quantities, water-versus-milk alternatives, missing constituent allocations and unresolved units are not repaired by guessing.
 
