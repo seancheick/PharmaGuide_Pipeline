@@ -128,6 +128,31 @@ def test_matched_owner_not_equal_points_invariant():
     assert res.points_eligible is False  # Authority establishes necessity; does NOT award points directly
 
 
+def test_clinical_passthrough_and_owner_facts_name_only_curated_fields():
+    """A field no curated record carries is a dead alias, not a public contract."""
+    import json
+    from enrich_supplements_v3 import _CLINICAL_MATCH_PASSTHROUGH_FIELDS
+    records = json.loads((Path(__file__).parents[1] / "data/backed_clinical_studies.json")
+                         .read_text())["backed_clinical_studies"]
+    carried = {key for record in records for key in record}
+    assert set(_CLINICAL_MATCH_PASSTHROUGH_FIELDS) <= carried
+    dose_facts = {fact for fact in OWNER_CAPABILITY_MAP["backed_clinical_studies"].facts_owned
+                  if "dose" in fact}
+    assert dose_facts <= carried
+
+
+def test_nutrition_authority_reports_the_one_upper_limit_owner():
+    """highest_ul is the adult maximum; life-stage ULs stay in data[].ul."""
+    import json
+    entries = json.loads((Path(__file__).parents[1] / "data/rda_optimal_uls.json")
+                         .read_text())["nutrient_recommendations"]
+    assert not [e["id"] for e in entries if "ul" in e or "unofficial_ul" in e]
+    facts = er.resolve_evidence_for_canonical("zinc", dose_value=15.0, dose_unit="mg") \
+        .owner_facts["nutrition_authority"]
+    assert facts["highest_ul"] == 40
+    assert "ul" not in facts and "category" not in facts
+
+
 def test_essential_nutrient_resolved_by_authority():
     """Essential dietary vitamins and minerals resolve to RESOLVED_BY_AUTHORITY."""
     for nutrient_id in ("vitamin_d", "zinc", "thiamin", "magnesium", "calcium"):

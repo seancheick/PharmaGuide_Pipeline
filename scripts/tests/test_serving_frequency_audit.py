@@ -91,3 +91,54 @@ def test_ranged_intake_does_not_borrow_another_audience_or_panel_basis():
         for variant, value in zip(variants, values):
             variant[key] = value
         assert resolve_facts_panel_serving_basis(record)['min_servings_per_day'] == 1
+
+
+def test_secondary_dosage_frequency_keeps_real_pantethine_label_range():
+    from dosage_normalizer import DosageNormalizer
+    from serving_frequency import resolve_daily_serving_range
+    # Structured label regimen from Thorne Pantethine182289:250mg per capsule,
+    # two to three occasions daily. Per-serving conversion remains250mg.
+    product = {'id': '182289', 'servingSizes': [
+        {'minQuantity': 1, 'maxQuantity': 1, 'unit': 'Capsule(s)',
+         'minDailyServings': 2, 'maxDailyServings': 3}],
+        'activeIngredients': [{'name': 'Pantethine', 'quantity': 250, 'unit': 'mg'}]}
+    result = DosageNormalizer().normalize_product_dosages(product)
+    assert result.success
+    basis = result.serving_basis
+    assert (basis.servings_per_day_min, basis.servings_per_day_max) == resolve_daily_serving_range(product)[:2]
+    assert (basis.servings_per_day_min, basis.servings_per_day_max, basis.servings_per_day_used) == (2, 3, 2)
+    row = result.normalized_ingredients[0]
+    assert (row.normalized_amount, row.normalized_unit) == (250, 'mg')
+    assert (row.per_day_min, row.per_day_max) == (500, 750)
+    assert row.conversion_evidence['success'] is True
+
+
+def test_secondary_dosage_selects_the_canonical_adult_facts_column():
+    from dosage_normalizer import DosageNormalizer
+    from serving_frequency import select_canonical_serving
+    product = {'servingSizes': [
+        {'quantity': 1, 'unit': 'Capsule(s)', 'minDailyServings': 1, 'maxDailyServings': 1},
+        {'quantity': 2, 'unit': 'Capsule(s)', 'minDailyServings': 3, 'maxDailyServings': 2}]}
+    selected = select_canonical_serving(product['servingSizes'])
+    basis = DosageNormalizer()._extract_serving_basis(product)
+    assert basis.quantity == selected['quantity'] == 2
+    assert (basis.servings_per_day_min, basis.servings_per_day_max) == (2, 3)
+
+
+def test_secondary_dosage_preserves_fractional_frequency_and_default_uncertainty():
+    from dosage_normalizer import DosageNormalizer
+    from serving_frequency import resolve_daily_serving_range
+    normalizer = DosageNormalizer()
+    directed = {'servingSizes': [{'quantity': 1, 'unit': 'Capsule(s)'}],
+                'serving_basis': {'min_servings_per_day': 0.5, 'max_servings_per_day': 0.5,
+                                  'servings_per_day_source': 'directions'}}
+    defaulted = {'servingSizes': [{'quantity': 1, 'unit': 'Capsule(s)',
+                                  'minDailyServings': 1, 'maxDailyServings': 1,
+                                  'dailyServingsSource': 'default'}]}
+    for product in (directed, defaulted):
+        low, high, was_defaulted = resolve_daily_serving_range(product)
+        basis = normalizer._extract_serving_basis(product)
+        assert (basis.servings_per_day_min, basis.servings_per_day_max) == (low, high)
+        assert ('default' in ' '.join(basis.notes).lower()) == was_defaulted
+        if was_defaulted:
+            assert basis.confidence != 'high'

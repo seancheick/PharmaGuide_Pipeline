@@ -22,6 +22,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Sequence, Tuple
 
+from clinical_evidence_schema import REFERENCE_CLASSIFICATION_FIELDS
 from evidence_resolver import clinical_record_sources_eligible
 
 from scoring_reference_resolver import (
@@ -665,6 +666,12 @@ def check_clinical_db(findings: List[Finding], data: Dict[str, Any], file: str) 
         _check_enum(findings, file, e, i, "study_type", valid_study_types)
         _check_enum(findings, file, e, i, "evidence_level", valid_evidence_levels)
         _check_enum(findings, file, e, i, "score_contribution", valid_score_contribution)
+        reference_flags = {str(e.get(key) or "").strip().lower() == "reference"
+                           for key in REFERENCE_CLASSIFICATION_FIELDS}
+        if len(reference_flags) > 1:
+            findings.append(Finding("error", file, f"[{i}].study_type", "reference_classification_conflict",
+                                    "study_type and evidence_level both reference or neither",
+                                    f"{e.get('study_type')}/{e.get('evidence_level')}"))
         if "category" in e and valid_clinical_indication:
             _check_enum(findings, file, e, i, "category", valid_clinical_indication)
         if "effect_direction" in e and valid_effect_direction:
@@ -841,6 +848,16 @@ def check_iqm(findings: List[Finding], data: Dict[str, Any], file: str) -> None:
 
 
 def check_allergens(findings: List[Finding], data: Dict[str, Any], file: str) -> None:
+    metadata = data.get("_metadata")
+    scoring = metadata.get("scoring_system") if isinstance(metadata, dict) else None
+    if isinstance(scoring, dict):
+        for key in ("allergen_free_bonus", "severity_penalties"):
+            if key in scoring:
+                findings.append(Finding(
+                    "error", file, f"_metadata.scoring_system.{key}",
+                    "retired_scoring_field", "absent (allergens are flag_only)",
+                    repr(scoring[key]),
+                ))
     raw = data.get("allergens")
     if not isinstance(raw, list):
         findings.append(Finding("error", file, "allergens", "missing_or_non_list", "list", _type_name(raw)))
@@ -1002,6 +1019,11 @@ def check_rda_optimal_uls(findings: List[Finding], data: Dict[str, Any], file: s
         _check_references_shape(findings, file, e, i)
 
 
+RETIRED_THERAPEUTIC_FIELDS = frozenset({
+    "upper_limit", "upper_limit_notes", "typical_dosing_range", "common_serving_size", "evidence_tier",
+})
+
+
 def check_rda_therapeutic(findings: List[Finding], data: Dict[str, Any], file: str) -> None:
     raw = data.get("therapeutic_dosing")
     if not isinstance(raw, list):
@@ -1014,6 +1036,12 @@ def check_rda_therapeutic(findings: List[Finding], data: Dict[str, Any], file: s
             continue
         _check_required(findings, file, e, i, [("standard_name", str)])
         _check_references_shape(findings, file, e, i)
+        # Retired October 28, 2026: generic dose ranges, servings, efficacy grades and
+        # safety ceilings no reviewed reference_semantics establishes. ULs live in
+        # rda_optimal_uls.json; studied regimens stay in reference_semantics.
+        for key in sorted(RETIRED_THERAPEUTIC_FIELDS & set(e)):
+            findings.append(Finding("error", file, f"[{i}].{key}", "retired_field_present",
+                                    "absent", _type_name(e.get(key))))
 
 
 def check_unit_conversions(findings: List[Finding], data: Dict[str, Any], file: str) -> None:
@@ -1216,6 +1244,12 @@ def check_functional_ingredient_groupings(findings: List[Finding], data: Dict[st
 
 
 def check_manufacture_deduction_expl(findings: List[Finding], data: Dict[str, Any], file: str) -> None:
+    modifiers = data.get("modifiers")
+    if isinstance(modifiers, dict) and "PEDIATRIC_SUPPLEMENT" in modifiers:
+        findings.append(Finding(
+            "error", file, "modifiers.PEDIATRIC_SUPPLEMENT", "retired_modifier",
+            "absent (Sean retired the dormant modifier on 2026-10-28)", "present",
+        ))
     cap = data.get("total_deduction_cap")
     if not isinstance(cap, (int, float)):
         findings.append(Finding("error", file, "total_deduction_cap", "missing_or_wrong_type", "number", _type_name(cap)))

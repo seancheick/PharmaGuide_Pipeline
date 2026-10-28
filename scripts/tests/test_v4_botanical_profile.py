@@ -318,7 +318,7 @@ def test_dose_exact_target_reference_counts_within_range():
     assert out["score"] == _neutral()
     from scoring_v4.modules.botanical_profile import _dosing_entry_for
     assert _dosing_entry_for(ing)["id"] == "saw_palmetto_extract"
-    assert _dosing_entry_for(ing)["typical_dosing_range"] == "320"
+    assert _dosing_entry_for(ing)["reference_semantics"]["reference_type"] == "discrete_studied_regimen"
 
 
 def test_below_studied_regimen_remains_neutral():
@@ -355,7 +355,7 @@ def test_dose_grape_seed_matches_clinical_range_by_canonical_id():
     assert out["score"] == _neutral()
     from scoring_v4.modules.botanical_profile import _dosing_entry_for
     assert _dosing_entry_for(ing)["id"] == "grape_seed_extract"
-    assert _dosing_entry_for(ing)["typical_dosing_range"] == "100-800"
+    assert _dosing_entry_for(ing)["reference_semantics"]["reference_type"] == "no_benchmark"
 
 
 def test_primary_botanical_no_dose_floors_low_not_excluded():

@@ -24,10 +24,10 @@
         {
           "pmid": "27840359",
           "title": "The Risk Factors of Prostate Cancer and Its Prevention: A Literature Review.",
-          "design": "narrative_review",
+          "study_type": "narrative_review",
           "sample_size": null,
           "primary_endpoint": "Narrative prevention context; no qualifying intervention estimate",
-          "effect": "null",
+          "effect_direction": "null",
           "verification_provenance": {
             "pmid_verified": true,
             "authoritative_live_title": "The Risk Factors of Prostate Cancer and Its Prevention: A Literature Review.",
@@ -43,10 +43,10 @@
         {
           "pmid": "36422550",
           "title": "Lycopene Modulates Oxidative Stress and Inflammation in Hypercholesterolemic Rats.",
-          "design": "animal_experiment",
+          "study_type": "animal_experiment",
           "sample_size": null,
           "primary_endpoint": "Rat biochemical and tissue endpoints; not human efficacy",
-          "effect": "positive_weak",
+          "effect_direction": "positive_weak",
           "verification_provenance": {
             "pmid_verified": true,
             "authoritative_live_title": "Lycopene Modulates Oxidative Stress and Inflammation in Hypercholesterolemic Rats.",
@@ -91,10 +91,10 @@
         {
           "pmid": "23644932",
           "title": "Lutein + zeaxanthin and omega-3 fatty acids for age-related macular degeneration: the Age-Related Eye Disease Study 2 (AREDS2) randomized clinical trial.",
-          "design": "rct",
+          "study_type": "rct",
           "sample_size": 4203,
           "primary_endpoint": "progression to advanced AMD",
-          "effect": "null",
+          "effect_direction": "null",
           "verification_provenance": {
             "pmid_verified": true,
             "authoritative_live_title": "Lutein + zeaxanthin and omega-3 fatty acids for age-related macular degeneration: the Age-Related Eye Disease Study 2 (AREDS2) randomized clinical trial.",
@@ -109,10 +109,10 @@
         {
           "pmid": "23644932",
           "title": "Lutein + zeaxanthin and omega-3 fatty acids for age-related macular degeneration: the Age-Related Eye Disease Study 2 (AREDS2) randomized clinical trial.",
-          "design": "rct",
+          "study_type": "rct",
           "sample_size": 4203,
           "primary_endpoint": "Secondary dietary-intake subgroup analysis from the same AREDS2 trial; primary hierarchy not established",
-          "effect": "positive_strong",
+          "effect_direction": "positive_strong",
           "verification_provenance": {
             "pmid_verified": true,
             "authoritative_live_title": "Lutein + zeaxanthin and omega-3 fatty acids for age-related macular degeneration: the Age-Related Eye Disease Study 2 (AREDS2) randomized clinical trial.",
@@ -157,9 +157,9 @@
         {
           "pmid": "16507602",
           "title": "A high proportion of leucine is required for optimal stimulation of the rate of muscle protein synthesis by essential amino acids in the elderly.",
-          "design": "rct",
+          "study_type": "rct",
           "primary_endpoint": "fractional synthetic rate of muscle protein",
-          "effect": "positive_strong",
+          "effect_direction": "positive_strong",
           "verification_provenance": {
             "pmid_verified": true,
             "authoritative_live_title": "A high proportion of leucine is required for optimal stimulation of the rate of muscle protein synthesis by essential amino acids in the elderly.",
@@ -174,10 +174,10 @@
         {
           "pmid": "24284442",
           "title": "Leucine supplementation of a low-protein mixed macronutrient beverage enhances myofibrillar protein synthesis in young men: a double-blind, randomized trial.",
-          "design": "rct",
+          "study_type": "rct",
           "sample_size": 40,
           "primary_endpoint": "postprandial myofibrillar MPS",
-          "effect": "positive_strong",
+          "effect_direction": "positive_strong",
           "verification_provenance": {
             "pmid_verified": true,
             "authoritative_live_title": "Leucine supplementation of a low-protein mixed macronutrient beverage enhances myofibrillar protein synthesis in young men: a double-blind, randomized trial.",
@@ -192,9 +192,9 @@
         {
           "pmid": "32483625",
           "title": "Nutritional interventions to improve muscle mass, muscle strength, and physical performance in older people: an umbrella review of systematic reviews and meta-analyses.",
-          "design": "systematic_review_meta",
+          "study_type": "systematic_review_meta",
           "primary_endpoint": "lean muscle mass and grip strength",
-          "effect": "mixed",
+          "effect_direction": "mixed",
           "verification_provenance": {
             "pmid_verified": true,
             "authoritative_live_title": "Nutritional interventions to improve muscle mass, muscle strength, and physical performance in older people: an umbrella review of systematic reviews and meta-analyses.",
@@ -661,9 +661,9 @@
         {
           "pmid": "26424423",
           "title": "Effect of tyrosine supplementation on clinical and healthy populations under stress or cognitive demands--A review.",
-          "design": "narrative_review",
+          "study_type": "narrative_review",
           "primary_endpoint": "working memory and cognitive flexibility under acute stress",
-          "effect": "positive_weak",
+          "effect_direction": "positive_weak",
           "verification_provenance": {
             "pmid_verified": true,
             "authoritative_live_title": "Effect of tyrosine supplementation on clinical and healthy populations under stress or cognitive demands--A review.",
@@ -678,10 +678,10 @@
         {
           "pmid": "10230711",
           "title": "Tyrosine improves cognitive performance and reduces blood pressure in cadets after one week of a combat training course.",
-          "design": "rct",
+          "study_type": "rct",
           "sample_size": 21,
           "primary_endpoint": "memory and tracking task performance and blood pressure during a combat training course",
-          "effect": "positive_strong",
+          "effect_direction": "positive_strong",
           "verification_provenance": {
             "pmid_verified": true,
             "authoritative_live_title": "Tyrosine improves cognitive performance and reduces blood pressure in cadets after one week of a combat training course.",
@@ -835,9 +835,9 @@
         {
           "pmid": "38410857",
           "title": "The effects of pomegranate consumption on blood pressure in adults: A systematic review and meta-analysis.",
-          "design": "systematic_review_meta",
+          "study_type": "systematic_review_meta",
           "primary_endpoint": "systolic and diastolic blood pressure",
-          "effect": "positive_weak",
+          "effect_direction": "positive_weak",
           "verification_provenance": {
             "pmid_verified": true,
             "authoritative_live_title": "The effects of pomegranate consumption on blood pressure in adults: A systematic review and meta-analysis.",
@@ -911,10 +911,10 @@
         {
           "pmid": "3115841",
           "title": "Success of L-lysine therapy in frequently recurrent herpes simplex infection. Treatment and prophylaxis.",
-          "design": "rct",
+          "study_type": "rct",
           "sample_size": 52,
           "primary_endpoint": "frequency and severity of HSV recurrence",
-          "effect": "positive_weak",
+          "effect_direction": "positive_weak",
           "verification_provenance": {
             "pmid_verified": true,
             "authoritative_live_title": "Success of L-lysine therapy in frequently recurrent herpes simplex infection. Treatment and prophylaxis.",
@@ -929,10 +929,10 @@
         {
           "pmid": "26252373",
           "title": "Interventions for prevention of herpes simplex labialis (cold sores on the lips).",
-          "design": "systematic_review_meta",
+          "study_type": "systematic_review_meta",
           "sample_size": 2640,
           "primary_endpoint": "HSL incidence and adverse effects across 32 prevention RCTs; the review found no evidence of efficacy for lysine",
-          "effect": "null",
+          "effect_direction": "null",
           "verification_provenance": {
             "pmid_verified": true,
             "authoritative_live_title": "Interventions for prevention of herpes simplex labialis (cold sores on the lips).",
@@ -1024,9 +1024,9 @@
         {
           "pmid": "21328257",
           "title": "Herbal therapy for treating rheumatoid arthritis.",
-          "design": "systematic_review_meta",
+          "study_type": "systematic_review_meta",
           "primary_endpoint": "pain and morning stiffness in RA",
-          "effect": "positive_weak",
+          "effect_direction": "positive_weak",
           "verification_provenance": {
             "pmid_verified": true,
             "authoritative_live_title": "Herbal therapy for treating rheumatoid arthritis.",
@@ -1041,10 +1041,10 @@
         {
           "pmid": "23633319",
           "title": "Oral evening primrose oil and borage oil for eczema.",
-          "design": "systematic_review_meta",
+          "study_type": "systematic_review_meta",
           "sample_size": 1596,
           "primary_endpoint": "eczema symptom score",
-          "effect": "null",
+          "effect_direction": "null",
           "verification_provenance": {
             "pmid_verified": true,
             "authoritative_live_title": "Oral evening primrose oil and borage oil for eczema.",
@@ -1147,10 +1147,10 @@
         {
           "pmid": "24791752",
           "title": "Randomized controlled trial of oral glutathione supplementation on body stores of glutathione.",
-          "design": "rct",
+          "study_type": "rct",
           "sample_size": 54,
           "primary_endpoint": "blood and buccal mucosal cellular glutathione concentrations",
-          "effect": "positive_strong",
+          "effect_direction": "positive_strong",
           "verification_provenance": {
             "pmid_verified": true,
             "authoritative_live_title": "Randomized controlled trial of oral glutathione supplementation on body stores of glutathione.",
@@ -1195,9 +1195,9 @@
         {
           "pmid": "30999017",
           "title": "The effect of blueberry interventions on cognitive performance and mood: A systematic review of randomized controlled trials.",
-          "design": "systematic_review",
+          "study_type": "systematic_review",
           "primary_endpoint": "cognitive performance (memory) and mood",
-          "effect": "positive_weak",
+          "effect_direction": "positive_weak",
           "verification_provenance": {
             "pmid_verified": true,
             "authoritative_live_title": "The effect of blueberry interventions on cognitive performance and mood: A systematic review of randomized controlled trials.",
@@ -1271,10 +1271,10 @@
         {
           "pmid": "24126178",
           "title": "Potent antihypertensive action of dietary flaxseed in hypertensive patients.",
-          "design": "rct",
+          "study_type": "rct",
           "sample_size": 110,
           "primary_endpoint": "systolic and diastolic blood pressure reduction",
-          "effect": "positive_strong",
+          "effect_direction": "positive_strong",
           "verification_provenance": {
             "pmid_verified": true,
             "authoritative_live_title": "Potent antihypertensive action of dietary flaxseed in hypertensive patients.",
@@ -1289,9 +1289,9 @@
         {
           "pmid": "26071633",
           "title": "Effects of flaxseed supplements on blood pressure: A systematic review and meta-analysis of controlled clinical trial.",
-          "design": "systematic_review_meta",
+          "study_type": "systematic_review_meta",
           "primary_endpoint": "Pooled systolic and diastolic blood pressure, with preparation-specific subgroup results",
-          "effect": "positive_weak",
+          "effect_direction": "positive_weak",
           "verification_provenance": {
             "pmid_verified": true,
             "authoritative_live_title": "Effects of flaxseed supplements on blood pressure: A systematic review and meta-analysis of controlled clinical trial.",
@@ -1551,10 +1551,10 @@
         {
           "pmid": "9820262",
           "title": "Garcinia cambogia (hydroxycitric acid) as a potential antiobesity agent: a randomized controlled trial.",
-          "design": "rct",
+          "study_type": "rct",
           "sample_size": 135,
           "primary_endpoint": "body weight loss and fat mass reduction over 12 weeks",
-          "effect": "null",
+          "effect_direction": "null",
           "verification_provenance": {
             "pmid_verified": true,
             "authoritative_live_title": "Garcinia cambogia (hydroxycitric acid) as a potential antiobesity agent: a randomized controlled trial.",
@@ -1569,9 +1569,9 @@
         {
           "pmid": "21197150",
           "title": "The Use of Garcinia Extract (Hydroxycitric Acid) as a Weight loss Supplement: A Systematic Review and Meta-Analysis of Randomised Clinical Trials.",
-          "design": "systematic_review_meta",
+          "study_type": "systematic_review_meta",
           "primary_endpoint": "body weight loss compared to placebo",
-          "effect": "positive_weak",
+          "effect_direction": "positive_weak",
           "verification_provenance": {
             "pmid_verified": true,
             "authoritative_live_title": "The Use of Garcinia Extract (Hydroxycitric Acid) as a Weight loss Supplement: A Systematic Review and Meta-Analysis of Randomised Clinical Trials.",
@@ -1663,9 +1663,9 @@
         {
           "pmid": "20871849",
           "title": "The use of green coffee extract as a weight loss supplement: a systematic review and meta-analysis of randomised clinical trials.",
-          "design": "systematic_review_meta",
+          "study_type": "systematic_review_meta",
           "primary_endpoint": "body weight reduction",
-          "effect": "mixed",
+          "effect_direction": "mixed",
           "verification_provenance": {
             "pmid_verified": true,
             "authoritative_live_title": "The use of green coffee extract as a weight loss supplement: a systematic review and meta-analysis of randomised clinical trials.",
@@ -1680,10 +1680,10 @@
         {
           "pmid": "16820341",
           "title": "The blood pressure-lowering effect and safety of chlorogenic acid from green coffee bean extract in essential hypertension.",
-          "design": "rct",
+          "study_type": "rct",
           "sample_size": 28,
           "primary_endpoint": "systolic and diastolic blood pressure reduction",
-          "effect": "positive_weak",
+          "effect_direction": "positive_weak",
           "verification_provenance": {
             "pmid_verified": true,
             "authoritative_live_title": "The blood pressure-lowering effect and safety of chlorogenic acid from green coffee bean extract in essential hypertension.",
@@ -1774,10 +1774,10 @@
         {
           "pmid": "41443401",
           "title": "Both a single dose and a 4-week daily regimen of medium-chain triglycerides boost certain aspects of cognitive function in young adults: A randomized controlled trial.",
-          "design": "rct",
+          "study_type": "rct",
           "sample_size": 36,
           "primary_endpoint": "inhibitory control after a single dose and working memory after the 4-week daily regimen",
-          "effect": "positive_weak",
+          "effect_direction": "positive_weak",
           "verification_provenance": {
             "pmid_verified": true,
             "authoritative_live_title": "Both a single dose and a 4-week daily regimen of medium-chain triglycerides boost certain aspects of cognitive function in young adults: A randomized controlled trial.",
@@ -1794,10 +1794,10 @@
         {
           "pmid": "25636220",
           "title": "Effects of medium-chain triglycerides on weight loss and body composition: a meta-analysis of randomized controlled trials.",
-          "design": "systematic_review_meta",
+          "study_type": "systematic_review_meta",
           "sample_size": 749,
           "primary_endpoint": "body weight and waist circumference reduction",
-          "effect": "positive_weak",
+          "effect_direction": "positive_weak",
           "verification_provenance": {
             "pmid_verified": true,
             "authoritative_live_title": "Effects of medium-chain triglycerides on weight loss and body composition: a meta-analysis of randomized controlled trials.",
@@ -1888,10 +1888,10 @@
         {
           "pmid": "23386268",
           "title": "Use of dietary linoleic acid for secondary prevention of coronary heart disease and death: evaluation of recovered data from the Sydney Diet Heart Study and updated meta-analysis.",
-          "design": "rct",
+          "study_type": "rct",
           "sample_size": 458,
           "primary_endpoint": "all-cause and cardiovascular mortality (higher in the linoleic acid group)",
-          "effect": "negative",
+          "effect_direction": "negative",
           "verification_provenance": {
             "pmid_verified": true,
             "authoritative_live_title": "Use of dietary linoleic acid for secondary prevention of coronary heart disease and death: evaluation of recovered data from the Sydney Diet Heart Study and updated meta-analysis.",
@@ -1906,10 +1906,10 @@
         {
           "pmid": "27071971",
           "title": "Re-evaluation of the traditional diet-heart hypothesis: analysis of recovered data from Minnesota Coronary Experiment (1968-73).",
-          "design": "rct",
+          "study_type": "rct",
           "sample_size": 9423,
           "primary_endpoint": "serum cholesterol vs mortality",
-          "effect": "null",
+          "effect_direction": "null",
           "verification_provenance": {
             "pmid_verified": true,
             "authoritative_live_title": "Re-evaluation of the traditional diet-heart hypothesis: analysis of recovered data from Minnesota Coronary Experiment (1968-73).",
@@ -4007,7 +4007,7 @@
         {
           "pmid": "32981268",
           "title": "Urtica Dioica Root Extract on Clinical and Biochemical Parameters in Patients with Benign Prostatic Hyperplasia, Randomized Controlled Trial.",
-          "design": "randomized_controlled_trial",
+          "study_type": "randomized_controlled_trial",
           "notes": "60 men with BPH, 450 mg/day studied root extract for 12 weeks; IPSS symptom endpoint. Preparation equivalence to unspecified retail extract is unestablished; no general efficacy or dose benchmark.",
           "verification_provenance": {
             "pmid_verified": true,
@@ -28679,8 +28679,8 @@
         {
           "pmid": "30157383",
           "title": "Bacteriophage for Gastrointestinal Health (PHAGE) Study: Evaluating the Safety and Tolerability of Supplemental Bacteriophage Consumption.",
-          "design": "rct",
-          "effect": "applicability_unestablished",
+          "study_type": "rct",
+          "effect_direction": "applicability_unestablished",
           "primary_endpoint": "Comprehensive metabolic panel and GI health questionnaire (tolerability study)",
           "notes": "PHAGE tolerability report:43 enrolled,32 completed both arms; symptom improvement in treatment and placebo and carryover effects.",
           "verification_provenance": {
@@ -28694,8 +28694,8 @@
         {
           "pmid": "30897686",
           "title": "PHAGE Study: Effects of Supplemental Bacteriophage Intake on Inflammation and Gut Microbiota in Healthy Adults.",
-          "design": "rct",
-          "effect": "applicability_unestablished",
+          "study_type": "rct",
+          "effect_direction": "applicability_unestablished",
           "primary_endpoint": "Secondary microbiome/inflammation report of the PHAGE trial",
           "notes": "Microbiome/inflammation report of the same PHAGE trial, not independent replication; selected microbial changes, global diversity largely unchanged.",
           "verification_provenance": {
@@ -28709,8 +28709,8 @@
         {
           "pmid": "32824480",
           "title": "PHAGE-2 Study: Supplemental Bacteriophages Extend Bifidobacterium animalis subsp. lactis BL04 Benefits on Gut Health and Microbiota in Healthy Adults.",
-          "design": "rct",
-          "effect": "applicability_unestablished",
+          "study_type": "rct",
+          "effect_direction": "applicability_unestablished",
           "primary_endpoint": "GI and microbiome measures; powered Bifidobacterium outcome, combination intervention",
           "notes": "PHAGE2 combination trial: BL04 plus PreforPro, BL04 alone and placebo; no phage-only arm. Reported within-group symptom improvements do not establish between-group clinical superiority.",
           "verification_provenance": {
@@ -28866,10 +28866,10 @@
         {
           "pmid": "20391953",
           "title": "The effect of oral supplementation with Lactobacillus reuteri or tilactase in lactose intolerant patients: randomized trial.",
-          "design": "randomized_controlled_trial",
+          "study_type": "randomized_controlled_trial",
           "sample_size": 60,
           "primary_endpoint": "hydrogen breath excretion and gastrointestinal symptom score",
-          "effect": "positive_moderate",
+          "effect_direction": "positive_moderate",
           "dose": "tilactase 15 minutes before a lactose breath test (amount not given in the abstract)",
           "duration": "acute / with meals",
           "outcome": "higher breath-test normalization and lower peak hydrogen and symptom scores than placebo; tilactase more effective than L. reuteri",
@@ -28912,10 +28912,10 @@
         {
           "pmid": "10761967",
           "title": "American ginseng (Panax quinquefolius L) reduces postprandial glycemia in nondiabetic subjects and subjects with type 2 diabetes mellitus.",
-          "design": "randomized_controlled_trial",
+          "study_type": "randomized_controlled_trial",
           "sample_size": 19,
           "primary_endpoint": "postprandial area under the glycemic curve",
-          "effect": "positive_moderate",
+          "effect_direction": "positive_moderate",
           "dose": "3000 mg once, 40 minutes before or together with a 25 g oral glucose challenge",
           "duration": "acute / postprandial",
           "outcome": "Postprandial glycemia was reduced in timing-dependent glucose-challenge comparisons; simultaneous ginseng did not differ from placebo in the nondiabetic group.",
@@ -29000,9 +29000,9 @@
         {
           "pmid": "23380245",
           "title": "Serratiopeptidase: a systematic review of the existing evidence.",
-          "design": "systematic_review",
+          "study_type": "systematic_review",
           "primary_endpoint": "therapeutic efficacy vs placebo",
-          "effect": "null",
+          "effect_direction": "null",
           "outcome": "evidence from 24 studies is of poor methodology and insufficient to support analgesic or supplement use; safety data lacking",
           "verification_provenance": {
             "pmid_verified": true,
@@ -32289,8 +32289,8 @@
         {
           "pmid": "16569219",
           "title": "The capacity of short-chain fructo-oligosaccharides to stimulate faecal bifidobacteria: a dose-response relationship study in healthy humans.",
-          "design": "rct",
-          "effect": "applicability_unestablished",
+          "study_type": "rct",
+          "effect_direction": "applicability_unestablished",
           "primary_endpoint": "Fecal bifidobacteria (surrogate); not clinical symptom benefit",
           "notes": "Forty healthy adults, five randomized arms, seven days; microbiome surrogate benefit, no between-group digestive symptom benefit. Subset report of PMID15585783, not independent replication. Actilight scFOS composition was 44% GF2, 46% GF3 and 10% GF4. Bloating intensity was higher at 2.5 and 5 g/day although digestive symptom frequency was unchanged; this does not establish universal tolerability or clinical efficacy.",
           "verification_provenance": {
@@ -32642,10 +32642,10 @@
         {
           "pmid": "23035701",
           "title": "Efficacy of phosphatidic acid ingestion on lean body mass, muscle thickness and strength gains in resistance-trained men.",
-          "design": "randomized_controlled_trial",
+          "study_type": "randomized_controlled_trial",
           "sample_size": 16,
           "primary_endpoint": "lean body mass, 1RM squat and bench press strength",
-          "effect": "positive_moderate",
+          "effect_direction": "positive_moderate",
           "dose": "750 mg/day",
           "duration": "8 weeks",
           "outcome": "Parametric analyses found no significant between-group differences. Exploratory magnitude-based inferences suggested likely benefit for squat strength and very likely benefit for lean body mass; these are not statistically significant between-group findings.",
@@ -32754,10 +32754,10 @@
         {
           "pmid": "11481402",
           "title": "Long-term ingestion of a fermented soybean-derived Touchi-extract with alpha-glucosidase inhibitory activity is safe and effective in humans with borderline and mild type-2 diabetes.",
-          "design": "randomized_controlled_trial",
+          "study_type": "randomized_controlled_trial",
           "sample_size": 36,
           "primary_endpoint": "fasting blood glucose and HbA1c",
-          "effect": "positive_moderate",
+          "effect_direction": "positive_moderate",
           "dose": "900 mg/day: 300 mg Touchi extract in Houji-tea before each of three meals",
           "duration": "3 months",
           "outcome": "Fasting blood glucose and HbA1c decreased in the Touchi-extract tea group during the three-month trial; the source does not establish a general minimum effective dose.",
@@ -33339,10 +33339,10 @@
         {
           "pmid": "32114706",
           "title": "Omega-3 fatty acids for the primary and secondary prevention of cardiovascular disease.",
-          "design": "systematic_review_meta",
+          "study_type": "systematic_review_meta",
           "sample_size": 19327,
           "primary_endpoint": "ALA-specific mortality, cardiovascular events and arrhythmia",
-          "effect": "mixed",
+          "effect_direction": "mixed",
           "notes": "ALA-specific subgroup, not the total162796 participant marine+plant review. Mortality/CHD null or little effect; possible small cardiovascular-event and arrhythmia signals; enriched foods/advice, not blanket supplement efficacy.",
           "verification_provenance": {
             "pmid_verified": true,
@@ -33355,10 +33355,10 @@
         {
           "pmid": "32643951",
           "title": "Effects of α-linolenic acid intake on blood lipid profiles：a systematic review and meta-analysis of randomized controlled trials.",
-          "design": "systematic_review_meta",
+          "study_type": "systematic_review_meta",
           "sample_size": 2630,
           "primary_endpoint": "Blood lipid biomarkers",
-          "effect": "positive_weak",
+          "effect_direction": "positive_weak",
           "notes": "47 studies,1305 intervention+1325 control. Modest TG/TC/LDL changes; no significant HDL effect; heterogeneous dietary ALA preparations. Lipids are surrogates, not event-prevention proof.",
           "verification_provenance": {
             "pmid_verified": true,
@@ -33371,10 +33371,10 @@
         {
           "pmid": "37778442",
           "title": "Effect of Alpha-Linolenic Acid Supplementation on Cardiovascular Disease Risk Profile in Individuals with Obesity or Overweight: A Systematic Review and Meta-Analysis of Randomized Controlled Trials.",
-          "design": "systematic_review_meta",
+          "study_type": "systematic_review_meta",
           "sample_size": 1183,
           "primary_endpoint": "Cardiovascular risk biomarkers in adults with overweight or obesity",
-          "effect": "mixed",
+          "effect_direction": "mixed",
           "notes": "19RCTs with foods/oils/mixed vegetable sources. CRP/TNF/TG/SBP improvement alongside LDL increase; no significant IL6/DBP/TC/HDL improvement. Cannot transfer all groundseed/fiber/lignan contributions to isolatedALA or everyoil; subgroups >=3g/day>=12weeks are observations, not universal minimum-dose gates.",
           "verification_provenance": {
             "pmid_verified": true,
@@ -33387,10 +33387,10 @@
         {
           "pmid": "20929341",
           "title": "n-3 fatty acids and cardiovascular events after myocardial infarction.",
-          "design": "rct",
+          "study_type": "rct",
           "sample_size": 4837,
           "primary_endpoint": "Major cardiovascular events",
-          "effect": "null",
+          "effect_direction": "null",
           "notes": "Post-MI older adults; ALA enriched margarine factorial trial ~1.9g/day 40months. Overall major events not significantly reduced; female prespecified subgroup P=.07 cannot become a positive overall endpoint. Overlaps Cochrane; do not sum enrollment.",
           "verification_provenance": {
             "pmid_verified": true,
@@ -35858,7 +35858,7 @@
         {
           "pmid": "38635826",
           "title": "Effects of Cucurbita Moschata squash (Butternut) seed paste in improving zinc and iron status in children attending Early Childhood Development centres in Limpopo province, South Africa.",
-          "design": "cluster_randomized_trial",
+          "study_type": "cluster_randomized_trial",
           "notes": "Seed paste in preschool children; not oil. No paste-to-oil or nutrient-to-oil efficacy transfer.",
           "verification_provenance": {
             "pmid_verified": true,
@@ -35991,7 +35991,7 @@
         {
           "pmid": "31949453",
           "title": "Standardized Lycium chinense fruit extract enhances attention and cognitive function in healthy young people by a double-blind, randomized, placebo-controlled, crossover trial.",
-          "design": "randomized_crossover_trial",
+          "study_type": "randomized_crossover_trial",
           "notes": "Standardized dried water extract; 74 randomized and 43 analyzed. Full text PMC6950474 identifies 384 mg extract per 600 mg capsule, six capsules daily; reporting/attrition limits and powder equivalence remain unestablished.",
           "verification_provenance": {
             "pmid_verified": true,
@@ -36006,7 +36006,7 @@
         {
           "pmid": "36629892",
           "title": "Lycium chinense Miller fruit extract lowers liver enzyme levels in subjects with mild hepatic dysfunction: a randomized, double-blind, placebo-controlled clinical trial.",
-          "design": "randomized_controlled_trial",
+          "study_type": "randomized_controlled_trial",
           "notes": "Fruit-extract capsules in adults with mild hepatic dysfunction; ALT/GGT surrogate endpoints. No whole-powder transfer.",
           "verification_provenance": {
             "pmid_verified": true,
@@ -36091,7 +36091,7 @@
         {
           "pmid": "32981268",
           "title": "Urtica Dioica Root Extract on Clinical and Biochemical Parameters in Patients with Benign Prostatic Hyperplasia, Randomized Controlled Trial.",
-          "design": "randomized_controlled_trial",
+          "study_type": "randomized_controlled_trial",
           "notes": "60 men with BPH, 450 mg/day studied root extract for 12 weeks; IPSS symptom endpoint. Preparation equivalence to unspecified retail extract is unestablished; no general efficacy or dose benchmark.",
           "verification_provenance": {
             "pmid_verified": true,
@@ -36305,7 +36305,7 @@
         {
           "pmid": "40732054",
           "title": "Gut Microbiome Modulation and Health Benefits of a Novel Fucoidan Extract from Saccharina latissima: A Double-Blind, Placebo-Controlled Trial.",
-          "design": "randomized_controlled_trial",
+          "study_type": "randomized_controlled_trial",
           "notes": "91 healthy adults, proprietary fucoidan-rich extract for four weeks; microbiome composition/pathway endpoints, not whole kelp-powder efficacy.",
           "verification_provenance": {
             "pmid_verified": true,

@@ -3743,3 +3743,60 @@ Stale local-only tests repaired: INGR_NAC/INGR_MAG_GLYCINATE are reviewed refere
 Lion's mane literature record re-keyed: Sean confirmed 2026-10-28 that Dr Pham's lion_s_mane approval covers the lions_mane species canonical. The record (PMID18844328, approved neutral Dose) is now canonical_id lions_mane with its scope and owner updated; its source proof was rebuilt from a live PubMed fetch with the article content hash unchanged, and verified_reference_citations passes. Approvals remain keyed per canonical; no equivalence-following lookup.
 
 Measurement: 495 frozen raw labels (143 mushroom-identity, 250 sampled enricher-class, 100 controls, report labels), main f14c799 vs final candidate: 7 movers, all up — lion's mane extract ×3 and reishi 45.7→57.1, acerola 47.7→61.1 and 58.8→64.5, mushroom+vitamin C blend 243141 55.8→80.0 (now generic_iqm, dose judged on vitamin C); 0 down. 0 scored-status changes; 3 partial→complete, 0 lost complete (the 17 lion's mane products, including powders 329997-99, keep their main scores and completion); 0 safety-status, warning or interaction-hit losses of 15,664; 4 products gain species alerts (lion's mane anticoagulant/pregnancy/lactation, reishi autoimmune/immunosuppressant). Tests: owner/consumer slice 4,206 pass; after the withdrawal and re-key 1,235 affected-owner tests pass; local 546/24 declared skips; Python 0 new/12 existing; data_batch checks exact. Citation verifier: 0 mismatch/not-found; 3 pre-existing ghost suspects in untouched records (glucosamine 11789591, inulin 28229548, L-theanine 33260552). The 2026-10-28 corpus artifacts predate these source edits: Clean is the earliest invalidated stage. No corpus run, export, publication or app import.
+
+
+### October28 — accepted scoring/safety integrity findings, bounded remediation
+
+Owner: `StackInteractionChecker.checkMedicationPairInteractions` (app authored pair scope); IQM mushroom `forms[].aliases`; `serving_frequency.resolve_daily_serving_range` / `select_canonical_serving`; `cert_resolver.resolve` / `cert_evidence`; existing allergen/manufacturer schema and omega trust cap. Evidence: `git diff e6885790d..481f72067`, fail-first owner tests and external cause-bound receipts. Will NOT create another scorer, registry, normalizer, clinical relationship, persisted/public field, status or execution register. Behavioral code/data batch under existing correctness-risk policy; no weights/active cap changed. App baseline4b7224d8c, pipeline baselinee6885790d. Active FieldOneBrainPR272, held-sourcePR273 and Evidence-calibrationPR274 remain separate; their plan/handoffs were read before shared-owner changes.
+
+Implemented: SAF-01 Quick Check delegates exact medication-pair eligibility to Stack; SYS-01 unsupported keyword clinical warnings and internal-only report bucket/helpers removed, actual authored rules and nutrient totals retained; ID-01 seven generic mushroom aliases move to existing unspecified forms, keeping species identity and explicit fruiting-body9; SV-01 brand context retains source/record/brand/snapshot/recency proof and cannot survive invalid evidence; ID-02 secondary dosage frequency consumes the canonical owner and preserves per-serving conversions; SAF-02 four unused allergen numerical leaves retired with all17clinical records unchanged; SV-02 unread omega cap key/binding/pins retired while live cap15 remains; SV-03 dormant pediatric-3modifier retired after Sean explicitly said “Retire it; supersede the old policy” onOctober28. May14approval and the superseding decision remain in existing version history; current tracked FDA instructions and the ignored local skill mirror no longer demand it. No-3activation or clinical-record deletion.
+
+Fail-first evidence:10identity/frequency regressions failed before fixes;4retired-key/schema cases and2pediatric cases failed; resolver/public and malformed-proof cases failed; actual bundled clopidogrel32968+pantoprazole40790 wrongly matched the specific omeprazole rule before repair, and both pre-add/aggregate providers produced unsupported flag-only alerts. Focused owner/consumer slices now pass:759identity/frequency tests,660certification tests,58/66retirement slices; counts overlap and initial isolated-worktree artifact skips are not qualification. App196interaction/provider/nutrient and176report/signal/UI/AI tests pass; independent reviews49pipeline and16app cases pass. Raw canaries33/33unchanged. Python correctness0new/12existing.
+
+Measurement at committed clean pipeline481f720671d9c899cfa4f54bd653e5c1d13c7c1a:51frozen real raw labels through fullClean/Enrich/Score/blob on both arms, source fingerprints unchanged during each capture.13mushroom rows across12products correct form/bio9→8. Only243141decimal total80.0→79.7 (Formulation16.2→15.9); canonical shipped whole score80and tierVery good remain unchanged. All1,943warnings, safety, assessment readiness, species IDs, ingredient quantities/units, per-serving conversion/provenance and other five pillars unchanged.11fresh brand contexts gain source proof with their existing credit preserved. Separate same-input759-product dosage measurement:187internal frequency corrections,0canonical disagreements,0per-serving conversion/provenance differences. Candidate metadata/fingerprint changes are expected; no artifact restamped.
+
+App verification: analyzer clean; makecheck4075passed/6golden failures. The same6fail on unchanged main4b7224d8c; all24failure PNGs byte-identical. Existing CI excludes golden tags, and no image/guard was weakened. Existing local CI scope4043passed. Exact12d3f9fff89c7b8551cbf2fac421c727448c1a40 passed all required remote checks in40742903986; Sean approved integration and PR162 merged470be54182acf3cd199247a3bb20db7a2ea3dce9. Fetched ancestor check passed.
+
+Local checkpoint: first run465pass/105skip was refused for81missing canary/baseline reports in the isolated checkout, not counted as green. Existing generated reports were bound without rewriting them; all172affected cases then pass. Final local546passed/24declared opt-in skips with strict skip guard. Exact441e54c4636733a76932815c68ea8e099894e378 passed all four whole-fast shards, skip guards and Merge readiness in40744470265. Sean approved integration; PR275 merged54714d040314e30da47e7b6843dcbc898a5b3f5c, fetched ancestor check passed. Independent source reviews found no blocking issue. Earliest current fingerprint change isClean; the final corpus must wait for the integrated planned source candidate. Ordinary isolated native startup/Home/search/exact product295048/detail explanation passed on clean app12d3f9ff (runner exit0, three screenshots reviewed, no unexpected app errors). Installed/bundled catalog2026.10.22.012241, product detail hashb9b65c6cb43be0db5ddbbdabaa95cf0747b7706f53dd004c3d8b847f14cefa94 and expected version match. Interaction DB bootstrap succeeded; read-only service check HTTP200. This proves existing-bundle rendering parity only. Owned simulator87D69081-B4EE-4FE1-9610-C368DFC1C6D5 shut down; user devices untouched. Five temporary test symlinks removed, generated targets retained. No corpus, export promotion, upload, catalog import or new-data delivery. Other output-changing lanes remain open; final shared candidate requires Clean first, with all existing holds intact.
+
+Receipts: `/Users/seancheick/pg_quality/scoring_safety_remediation_20261028/` (per-finding red/green logs, heuristic-curated reconciliation for all20legacy terms/all131authored bundle rules, independent reviews, raw canaries, Python check, local logs, baseline golden byte comparison); `replay/CAUSE_REVIEW.md`, immutable raw manifest and full compressed stage records bind measurements. These are local development evidence, not scientific recertification or public release acceptance.
+
+## October28 — field one-brain consolidation, items 1–4 and therapeutic legacy fields (PR #272)
+
+Lane claude/xenodochial-matsumoto-ebd04b from e6885790d. Plan, Sean's rulings and per-item evidence: `docs/plans/FIELD_ONE_BRAIN_PLAN.md`. Behavioral code/data class.
+
+Owner: clinical_evidence_schema::is_reference_only (reference-only decision); rda_optimal_uls highest_ul + data[].ul (UL); enrich_supplements_v3::_CLINICAL_MATCH_PASSTHROUGH_FIELDS (clinical passthrough); literature qualifying_human_studies effect_direction/study_type; rda_therapeutic_dosing reference_semantics (dose meaning) + notes (cautions). Will NOT create a field, registry, vocabulary or scorer.
+
+Done:
+- One reference-only predicate for 5 call sites, plus integrity rejection of a study_type/evidence_level disagreement (0 today).
+- Removed the top-level ul/unofficial_ul (null on 76 nutrients; boron duplicated highest_ul 20).
+- Removed 6 passthrough keys that no record carries.
+- Renamed 39 literature effect and 45 design keys to effect_direction/study_type; primary_endpoint kept as a distinct fact.
+- Therapeutic: removed upper_limit, typical_dosing_range, common_serving_size and evidence_tier from 43 records. None of the 34 upper limits was an applicable UL.
+  - upper_limit_notes became notes: 29 unchanged, 12 edited, 2 dropped. 13 cautions are pinned.
+  - Receipt: `scripts/audits/field_one_brain_20261028/therapeutic_legacy_fields_receipt.json`.
+  - db_integrity rejects the retired keys: 215 findings on the old data, 0 on the candidate.
+
+Validation:
+- Fail-first tests for each class; owner/consumer slices green (834; 2,817; 1,709; 2,584).
+- Replay of 1,111 frozen raw products against main e6885790d: 0 differ for the items 1–4 candidate and 0 for the full candidate (b070650b0).
+- A fresh-context review found no defects.
+- `scripts/test.sh local` with the real corpus (main's scripts/products, scripts/dist and canary baseline linked; nine canaries rebuilt from candidate code): 536 passed, 24 declared opt-in skips, 10 failed.
+
+Final-commit qualification:
+- The replay at c20edc773 (the last source change: approved-purpose edits, schema 5.1.0, narrowed guard) changes 0 of 1,111 products (receipt `~/pg_quality/field_one_brain_20261028/cand_final.jsonl`, head-stamped).
+- pipeline-tests is green at 0d9649e40.
+- The approved-purpose edits for collagen peptides, gelatin and UC-II are editorial corrections. Sean accepted them on October 28. They carry no new approval; their dependency is the October 18 DOSE_V41 decision rows.
+- After merging main 54714d040 (#275), a replay of the merged head (bfeef14aa) against main 54714d040 shows 0 of 1,111 products differ. #276 (docs only) was merged after.
+- Canary drift is itemized in `scripts/audits/field_one_brain_20261028/canary_baseline_drift.md`. For example, Vitamin D pregnancy goes from two warnings to one: the monitor-severity duplicate is dropped and the informational one kept. The warning owner must confirm before the integrator refreshes the baseline.
+
+Finding (pre-existing on main, not this batch): all 10 failures are test_e1_2_2_preflight_invariant canaries (score_penalties/warnings/display_ingredients vs the 2026-10-18 baseline).
+- The nine canaries rebuilt from main e6885790d in a temporary checkout are identical to the candidate's, timestamps aside.
+- The main checkout's reports/canary_rebuild files date from 2026-10-18 (16:43), which is why the local rung passes there. It compares a stale rebuild to the baseline taken the same day.
+- The baseline needs a reviewed refresh by the integrator before release. It must not be restamped here.
+
+Open:
+- Item 5, the item 6 deletion (classification done: 104 unresolved placeholders, 7 less-specific) and item 11 wait for held-source-closure.
+- generic_evidence override, magnitude move and the line-718 predicate wait for claude/serene-dubinsky-479574 (folate allowlist already removed there, 37d74d5b1).
+- Before an app release, run sync_flutter_reference_data.py: the app's bundled rda_optimal_uls.json predates 720e95812.
+- Items 7–12 continue under Sean's October 28 rulings.

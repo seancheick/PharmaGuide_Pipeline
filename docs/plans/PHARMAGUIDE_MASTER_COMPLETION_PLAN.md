@@ -1,5 +1,14 @@
 # PharmaGuide master completion plan
 
+### Accepted scoring/safety audit remediation — October28
+
+- [x] Implement all eight bounded findings through existing owners, including Sean's explicit retirement of the historically approved dormant pediatric modifier. Preserve current species/clinical holds, source-backed interactions, public compatibility fields and active score magnitudes.
+- [x] Verify fail-first owner/consumer regressions, 51-label full raw/blob replay and independent source reviews. All1,943warnings/safety/amounts/readiness unchanged; one decimal Formulation correction leaves shipped score/tier unchanged.33/33rawcanaries pass.
+- [x] Qualify and integrate both candidates with Sean's approval: pipeline PR275 at54714d040 (exact441e54c46, CI40744470265, local546pass/24declared skips); app PR162 at470be541 (exact12d3f9ff, CI40742903986, local CI scope4043pass). Full app check retains six byte-identical baseline golden failures; no guard weakened. Ordinary native startup/search/exact-label/detail journey passes on the existing2026.10.22.012241bundle; this is rendering parity, not rebuilt delivery.
+- [ ] After all planned output-changing lanes integrate, inspect current fingerprints and perform the one necessary rebuild/export/app acceptance. Publication and genuine clinical/policy decisions remain with Sean; existing holds are retained.
+
+Owner: existing interaction, IQM form, certification, serving-frequency, flag-only schema and scoring-config owners — evidence and limits in the existing LEDGER October28 accepted-audit entry. Will NOT create another semantic owner, registry, scorer, public field or execution register. FieldOneBrain/Evidence/clinical closure stay in their assigned lanes.
+
 ### Bounded engineering enforcement — October26
 
 - [x] Verify existing guards and current harness execution; reuse native verification and review owners.

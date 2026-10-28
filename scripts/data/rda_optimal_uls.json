@@ -3,7 +3,7 @@
     "description": "RDA (Recommended Dietary Allowance), optimal dosing, and UL (Upper Limit) reference values for nutrient dosing validation",
     "purpose": "dosing_validation",
     "schema_version": "5.1.2",
-    "last_updated": "2026-10-19",
+    "last_updated": "2026-10-28",
     "reference_data_contract": {
       "contract_version": "1",
       "reference_version": "5.1.6-2026-10-19-folate-ul-label-units",
@@ -333,9 +333,7 @@
       "notes": null,
       "smoker_adjustment": null,
       "synthesis_precursors": null,
-      "ul": null,
       "ul_status": "established",
-      "unofficial_ul": null,
       "nutrient_class": "ceiling",
       "ul_basis": "total_intake",
       "reference_semantics": {
@@ -569,9 +567,7 @@
       "is_conditionally_essential": null,
       "notes": null,
       "synthesis_precursors": null,
-      "ul": null,
       "ul_status": "established",
-      "unofficial_ul": null,
       "nutrient_class": "ceiling",
       "ul_basis": "total_intake",
       "reference_semantics": {
@@ -804,9 +800,7 @@
       "notes": null,
       "smoker_adjustment": null,
       "synthesis_precursors": null,
-      "ul": null,
       "ul_status": "established",
-      "unofficial_ul": null,
       "nutrient_class": "ceiling",
       "ul_basis": "total_intake",
       "ul_applies_to_forms": [
@@ -1049,9 +1043,7 @@
       "notes": "NIH ODS/FNB establishes 15 mg/day alpha-tocopherol RDA at age 14+, 19 mg/day during lactation, and the separately recorded life-stage supplemental ULs. The reviewed source does not establish an unqualified 100–400 mg/day optimal supplementation range. Supplemental vitamin E may cause harm below its UL; a UL is not a recommended intake. Source: https://ods.od.nih.gov/factsheets/VitaminE-HealthProfessional/.",
       "smoker_adjustment": null,
       "synthesis_precursors": null,
-      "ul": null,
       "ul_status": "established",
-      "unofficial_ul": null,
       "nutrient_class": "ceiling",
       "ul_basis": "supplemental_only",
       "reference_semantics": {
@@ -1075,7 +1067,6 @@
     {
       "standard_name": "Vitamin K",
       "unit": "mcg",
-      "ul": null,
       "ul_note": "No UL established due to lack of observed adverse effects",
       "optimal_range": "90-200",
       "highest_ul": null,
@@ -1236,7 +1227,6 @@
       "notes": null,
       "smoker_adjustment": null,
       "synthesis_precursors": null,
-      "unofficial_ul": null,
       "nutrient_class": "floor",
       "ul_basis": "not_applicable",
       "aliases": [
@@ -1268,7 +1258,6 @@
     {
       "standard_name": "Thiamin",
       "unit": "mg",
-      "ul": null,
       "ul_note": "No UL established due to lack of observed adverse effects",
       "optimal_range": "1.2-100",
       "highest_ul": null,
@@ -1426,7 +1415,6 @@
       "notes": null,
       "smoker_adjustment": null,
       "synthesis_precursors": null,
-      "unofficial_ul": null,
       "nutrient_class": "floor",
       "ul_basis": "not_applicable",
       "aliases": [
@@ -1455,7 +1443,6 @@
     {
       "standard_name": "Riboflavin",
       "unit": "mg",
-      "ul": null,
       "ul_note": "No UL established due to lack of observed adverse effects",
       "optimal_range": "1.3-400",
       "highest_ul": null,
@@ -1612,7 +1599,6 @@
       "notes": null,
       "smoker_adjustment": null,
       "synthesis_precursors": null,
-      "unofficial_ul": null,
       "nutrient_class": "floor",
       "ul_basis": "not_applicable",
       "aliases": [
@@ -1856,9 +1842,7 @@
       "notes": null,
       "smoker_adjustment": null,
       "synthesis_precursors": null,
-      "ul": null,
       "ul_status": "established",
-      "unofficial_ul": null,
       "nutrient_class": "ceiling",
       "ul_basis": "supplemental_only",
       "aliases": [
@@ -2099,9 +2083,7 @@
       "notes": null,
       "smoker_adjustment": null,
       "synthesis_precursors": null,
-      "ul": null,
       "ul_status": "established",
-      "unofficial_ul": null,
       "nutrient_class": "ceiling",
       "ul_basis": "total_intake",
       "ul_applies_to_forms": [
@@ -2346,9 +2328,7 @@
       "is_conditionally_essential": null,
       "smoker_adjustment": null,
       "synthesis_precursors": null,
-      "ul": null,
       "ul_status": "established",
-      "unofficial_ul": null,
       "nutrient_class": "ceiling",
       "ul_basis": "synthetic_only",
       "ul_applies_to_forms": [
@@ -2382,7 +2362,6 @@
     {
       "standard_name": "Vitamin B12",
       "unit": "mcg",
-      "ul": null,
       "ul_note": "No UL established due to lack of observed adverse effects",
       "optimal_range": "2.4-1000",
       "highest_ul": null,
@@ -2544,7 +2523,6 @@
       "notes": null,
       "smoker_adjustment": null,
       "synthesis_precursors": null,
-      "unofficial_ul": null,
       "nutrient_class": "floor",
       "ul_basis": "not_applicable",
       "aliases": [
@@ -2574,7 +2552,6 @@
     {
       "standard_name": "Biotin",
       "unit": "mcg",
-      "ul": null,
       "ul_note": "No UL established due to lack of observed adverse effects",
       "optimal_range": "30-10000",
       "highest_ul": null,
@@ -2736,7 +2713,6 @@
       "notes": null,
       "smoker_adjustment": null,
       "synthesis_precursors": null,
-      "unofficial_ul": null,
       "nutrient_class": "floor",
       "ul_basis": "not_applicable",
       "aliases": [
@@ -2764,7 +2740,6 @@
     {
       "standard_name": "Pantothenic Acid",
       "unit": "mg",
-      "ul": null,
       "ul_note": "No UL established due to lack of observed adverse effects",
       "optimal_range": "5-100",
       "highest_ul": null,
@@ -2922,7 +2897,6 @@
       "notes": null,
       "smoker_adjustment": null,
       "synthesis_precursors": null,
-      "unofficial_ul": null,
       "nutrient_class": "floor",
       "ul_basis": "not_applicable",
       "aliases": [
@@ -3166,9 +3140,7 @@
       "interaction_warnings": null,
       "notes": null,
       "smoker_adjustment": null,
-      "ul": null,
       "ul_status": "established",
-      "unofficial_ul": null,
       "nutrient_class": "ceiling",
       "ul_basis": "total_intake",
       "reference_semantics": {
@@ -3192,7 +3164,6 @@
     {
       "standard_name": "Inositol",
       "unit": "mg",
-      "ul": null,
       "ul_note": "No toxicity UL; GI effects (nausea/diarrhea) reported only at >12,000 mg/day. Therapeutic 2-4 g/day well tolerated.",
       "optimal_range": "2000-4000",
       "highest_ul": null,
@@ -3355,7 +3326,6 @@
       "notes": null,
       "smoker_adjustment": null,
       "synthesis_precursors": null,
-      "unofficial_ul": null,
       "references": [
         "38163998",
         "29042448"
@@ -3593,9 +3563,7 @@
       "notes": null,
       "smoker_adjustment": null,
       "synthesis_precursors": null,
-      "ul": null,
       "ul_status": "established",
-      "unofficial_ul": null,
       "nutrient_class": "ceiling",
       "ul_basis": "total_intake",
       "reference_semantics": {
@@ -3828,9 +3796,7 @@
       "notes": null,
       "smoker_adjustment": null,
       "synthesis_precursors": null,
-      "ul": null,
       "ul_status": "established",
-      "unofficial_ul": null,
       "nutrient_class": "ceiling",
       "ul_basis": "supplemental_only",
       "reference_semantics": {
@@ -4065,9 +4031,7 @@
       "notes": null,
       "smoker_adjustment": null,
       "synthesis_precursors": null,
-      "ul": null,
       "ul_status": "established",
-      "unofficial_ul": null,
       "nutrient_class": "ceiling",
       "ul_basis": "total_intake",
       "reference_semantics": {
@@ -4300,9 +4264,7 @@
       "notes": null,
       "smoker_adjustment": null,
       "synthesis_precursors": null,
-      "ul": null,
       "ul_status": "established",
-      "unofficial_ul": null,
       "nutrient_class": "ceiling",
       "ul_basis": "total_intake",
       "reference_semantics": {
@@ -4535,9 +4497,7 @@
       "notes": null,
       "smoker_adjustment": null,
       "synthesis_precursors": null,
-      "ul": null,
       "ul_status": "established",
-      "unofficial_ul": null,
       "nutrient_class": "ceiling",
       "ul_basis": "total_intake",
       "reference_semantics": {
@@ -4770,9 +4730,7 @@
       "notes": null,
       "smoker_adjustment": null,
       "synthesis_precursors": null,
-      "ul": null,
       "ul_status": "established",
-      "unofficial_ul": null,
       "nutrient_class": "ceiling",
       "ul_basis": "total_intake",
       "reference_semantics": {
@@ -5006,9 +4964,7 @@
       "notes": null,
       "smoker_adjustment": null,
       "synthesis_precursors": null,
-      "ul": null,
       "ul_status": "established",
-      "unofficial_ul": null,
       "nutrient_class": "ceiling",
       "ul_basis": "total_intake",
       "reference_semantics": {
@@ -5032,7 +4988,6 @@
     {
       "standard_name": "Chromium",
       "unit": "mcg",
-      "ul": null,
       "ul_note": "No UL established due to lack of observed adverse effects",
       "optimal_range": "25-200",
       "highest_ul": null,
@@ -5195,7 +5150,6 @@
       "notes": null,
       "smoker_adjustment": null,
       "synthesis_precursors": null,
-      "unofficial_ul": null,
       "nutrient_class": "floor",
       "ul_basis": "not_applicable",
       "reference_semantics": {
@@ -5428,9 +5382,7 @@
       "notes": null,
       "smoker_adjustment": null,
       "synthesis_precursors": null,
-      "ul": null,
       "ul_status": "established",
-      "unofficial_ul": null,
       "nutrient_class": "ceiling",
       "ul_basis": "total_intake",
       "reference_semantics": {
@@ -5660,9 +5612,7 @@
       "notes": null,
       "smoker_adjustment": null,
       "synthesis_precursors": null,
-      "ul": null,
       "ul_status": "established",
-      "unofficial_ul": null,
       "nutrient_class": "ceiling",
       "ul_basis": "total_intake",
       "reference_semantics": {
@@ -5895,9 +5845,7 @@
       "notes": null,
       "smoker_adjustment": null,
       "synthesis_precursors": null,
-      "ul": null,
       "ul_status": "established",
-      "unofficial_ul": null,
       "nutrient_class": "ceiling",
       "ul_basis": "total_intake",
       "reference_semantics": {
@@ -5921,7 +5869,6 @@
     {
       "standard_name": "Potassium",
       "unit": "mg",
-      "ul": null,
       "ul_note": "No UL established due to lack of observed adverse effects from food sources",
       "optimal_range": "2600-3400",
       "highest_ul": null,
@@ -6083,7 +6030,6 @@
       "notes": null,
       "smoker_adjustment": null,
       "synthesis_precursors": null,
-      "unofficial_ul": null,
       "nutrient_class": "floor",
       "ul_basis": "not_applicable",
       "reference_semantics": {
@@ -6107,7 +6053,6 @@
     {
       "standard_name": "Sodium",
       "unit": "mg",
-      "ul": null,
       "ul_note": "No traditional UL established. CDRR (Chronic Disease Risk Reduction) of 2300mg/d introduced in 2019",
       "optimal_range": "1500-2300",
       "highest_ul": null,
@@ -6271,7 +6216,6 @@
       "notes": null,
       "smoker_adjustment": null,
       "synthesis_precursors": null,
-      "unofficial_ul": null,
       "nutrient_class": "floor",
       "ul_basis": "not_applicable",
       "reference_semantics": {
@@ -6503,9 +6447,7 @@
       "notes": null,
       "smoker_adjustment": null,
       "synthesis_precursors": null,
-      "ul": null,
       "ul_status": "established",
-      "unofficial_ul": null,
       "nutrient_class": "ceiling",
       "ul_basis": "total_intake",
       "reference_semantics": {
@@ -6732,9 +6674,7 @@
       "notes": null,
       "smoker_adjustment": null,
       "synthesis_precursors": null,
-      "ul": null,
       "ul_status": "established",
-      "unofficial_ul": null,
       "nutrient_class": "ceiling",
       "ul_basis": "total_intake",
       "reference_semantics": {
@@ -6758,7 +6698,6 @@
     {
       "standard_name": "Boron",
       "unit": "mg",
-      "ul": 20,
       "ul_note": "No official RDA established, UL based on reproductive effects",
       "optimal_range": "1-20",
       "highest_ul": 20,
@@ -6775,7 +6714,6 @@
         "Reproductive effects",
         "Kidney damage"
       ],
-      "unofficial_ul": 20,
       "data": [
         {
           "group": "Male",
@@ -6988,7 +6926,6 @@
     {
       "standard_name": "Vanadium",
       "unit": "mcg",
-      "ul": null,
       "ul_note": "NASEM 2001 established an adult (age 19+) UL of 1.8 mg/day elemental vanadium. No RDA or AI is established. No UL can be established for ages 0–18, pregnancy or lactation; intake in these groups should come from food (and formula for infants) only.",
       "optimal_range": "10-100",
       "highest_ul": 1800,
@@ -7005,7 +6942,6 @@
         "Kidney damage",
         "Nervous system effects"
       ],
-      "unofficial_ul": null,
       "data": [
         {
           "group": "Male",
@@ -7177,7 +7113,6 @@
         "18:3 n-3"
       ],
       "unit": "g",
-      "ul": null,
       "ul_note": "No UL established for alpha-linolenic acid (ALA)",
       "optimal_range": "",
       "highest_ul": null,
@@ -7331,7 +7266,6 @@
       "notes": null,
       "smoker_adjustment": null,
       "synthesis_precursors": null,
-      "unofficial_ul": null,
       "nutrient_class": "floor",
       "ul_basis": "not_applicable",
       "reference_semantics": {
@@ -7362,7 +7296,6 @@
         "18:3 n-6"
       ],
       "unit": "mg",
-      "ul": null,
       "ul_note": "No official UL established for gamma-linolenic acid.",
       "optimal_range": "120-480",
       "highest_ul": null,
@@ -7387,7 +7320,6 @@
       "dri_update": null,
       "notes": "Added from verified evening primrose oil / GLA clinical dosing sources. No official DRI; historical rda_ai amount for disclosed supplemental GLA is descriptive, not an established minimum. Anchor dose not established by the cited sources (PubMed review 2026-09-15); not used for graduated dose credit.",
       "smoker_adjustment": null,
-      "unofficial_ul": null,
       "references": [
         "9707349",
         "19052401",
@@ -7554,7 +7486,6 @@
         "EPO"
       ],
       "unit": "mg",
-      "ul": null,
       "ul_note": "No official UL established for evening primrose oil.",
       "optimal_range": "500-4000",
       "highest_ul": null,
@@ -7579,7 +7510,6 @@
       "dri_update": null,
       "notes": "Added from verified evening primrose oil clinical dosing sources. No official DRI; historical rda_ai oil amount is descriptive, not an established minimum. Anchor dose not established by the cited sources (PubMed review 2026-09-15); not used for graduated dose credit.",
       "smoker_adjustment": null,
-      "unofficial_ul": null,
       "references": [
         "19052401",
         "9707349",
@@ -7748,7 +7678,6 @@
         "sodium chlorophyllin"
       ],
       "unit": "mg",
-      "ul": null,
       "ul_note": "No supplement UL established; copper-containing forms may matter in Wilson disease or copper overload.",
       "optimal_range": "300",
       "highest_ul": null,
@@ -7773,7 +7702,6 @@
       "dri_update": null,
       "notes": "Added from content-verified chlorophyllin human intervention sources. No official DRI; rda_ai anchor is 100 mg three times daily from the aflatoxin-DNA adduct intervention. Anchor dose content-verified against PubMed on 2026-09-15.",
       "smoker_adjustment": null,
-      "unofficial_ul": null,
       "references": [
         "11724948"
       ],
@@ -7930,7 +7858,6 @@
     {
       "standard_name": "Coenzyme Q10",
       "unit": "mg",
-      "ul": null,
       "ul_note": "No official RDA or UL established; this does not establish individual safety.",
       "optimal_range": "100-300",
       "highest_ul": null,
@@ -8100,7 +8027,6 @@
       "dri_update": null,
       "notes": null,
       "smoker_adjustment": null,
-      "unofficial_ul": null,
       "nutrient_class": "floor",
       "ul_basis": "not_applicable",
       "reference_semantics": {
@@ -8122,7 +8048,6 @@
     {
       "standard_name": "Alpha-Lipoic Acid",
       "unit": "mg",
-      "ul": null,
       "ul_note": "No official RDA or UL established; this does not establish individual safety.",
       "optimal_range": "100-600",
       "highest_ul": null,
@@ -8290,7 +8215,6 @@
       "dri_update": null,
       "notes": null,
       "smoker_adjustment": null,
-      "unofficial_ul": null,
       "nutrient_class": "floor",
       "ul_basis": "not_applicable",
       "reference_semantics": {
@@ -8312,7 +8236,6 @@
     {
       "standard_name": "Taurine",
       "unit": "g",
-      "ul": null,
       "ul_note": "No official RDA or UL established; this does not establish individual safety.",
       "optimal_range": "1-3",
       "highest_ul": null,
@@ -8477,7 +8400,6 @@
       "interaction_warnings": null,
       "notes": null,
       "smoker_adjustment": null,
-      "unofficial_ul": null,
       "nutrient_class": "floor",
       "ul_basis": "not_applicable",
       "reference_semantics": {
@@ -8499,7 +8421,6 @@
     {
       "standard_name": "Lutein",
       "unit": "mg",
-      "ul": null,
       "ul_note": "No official RDA or UL established, GRAS status up to 20mg/day",
       "optimal_range": "6-20",
       "highest_ul": null,
@@ -8659,7 +8580,6 @@
       "notes": null,
       "smoker_adjustment": null,
       "synthesis_precursors": null,
-      "unofficial_ul": null,
       "nutrient_class": "floor",
       "ul_basis": "not_applicable",
       "reference_semantics": {
@@ -8681,7 +8601,6 @@
     {
       "standard_name": "Zeaxanthin",
       "unit": "mg",
-      "ul": null,
       "ul_note": "No official RDA or UL established, often combined with lutein",
       "optimal_range": "2-10",
       "highest_ul": null,
@@ -8842,7 +8761,6 @@
       "notes": null,
       "smoker_adjustment": null,
       "synthesis_precursors": null,
-      "unofficial_ul": null,
       "nutrient_class": "floor",
       "ul_basis": "not_applicable",
       "reference_semantics": {
@@ -8864,7 +8782,6 @@
     {
       "standard_name": "Lycopene",
       "unit": "mg",
-      "ul": null,
       "ul_note": "No official RDA or UL established, GRAS status",
       "optimal_range": "5-30",
       "highest_ul": null,
@@ -9025,7 +8942,6 @@
       "notes": null,
       "smoker_adjustment": null,
       "synthesis_precursors": null,
-      "unofficial_ul": null,
       "nutrient_class": "floor",
       "ul_basis": "not_applicable",
       "reference_semantics": {
@@ -9047,7 +8963,6 @@
     {
       "standard_name": "Creatine",
       "unit": "g",
-      "ul": null,
       "ul_note": "Conditionally essential nutrient, no official UL established",
       "optimal_range": "3-5",
       "highest_ul": null,
@@ -9219,7 +9134,6 @@
       "dri_update": null,
       "notes": null,
       "smoker_adjustment": null,
-      "unofficial_ul": null,
       "nutrient_class": "floor",
       "ul_basis": "not_applicable",
       "reference_semantics": {
@@ -9241,7 +9155,6 @@
     {
       "standard_name": "L-Carnitine",
       "unit": "g",
-      "ul": null,
       "ul_note": "Conditionally essential nutrient, no official UL established",
       "optimal_range": "0.5-2",
       "highest_ul": null,
@@ -9415,7 +9328,6 @@
       "dri_update": null,
       "notes": null,
       "smoker_adjustment": null,
-      "unofficial_ul": null,
       "nutrient_class": "floor",
       "ul_basis": "not_applicable",
       "reference_semantics": {
@@ -9437,7 +9349,6 @@
     {
       "standard_name": "Acetyl-L-Carnitine",
       "unit": "g",
-      "ul": null,
       "ul_note": "No official UL established",
       "optimal_range": "0.5-1.5",
       "highest_ul": null,
@@ -9603,7 +9514,6 @@
       "interaction_warnings": null,
       "notes": null,
       "smoker_adjustment": null,
-      "unofficial_ul": null,
       "nutrient_class": "floor",
       "ul_basis": "not_applicable",
       "reference_semantics": {
@@ -9625,7 +9535,6 @@
     {
       "standard_name": "Alpha-GPC",
       "unit": "mg",
-      "ul": null,
       "ul_note": "No official UL established",
       "optimal_range": "300-600",
       "highest_ul": null,
@@ -9790,7 +9699,6 @@
       "interaction_warnings": null,
       "notes": null,
       "smoker_adjustment": null,
-      "unofficial_ul": null,
       "nutrient_class": "floor",
       "ul_basis": "not_applicable",
       "reference_semantics": {
@@ -9812,7 +9720,6 @@
     {
       "standard_name": "Glutathione",
       "unit": "mg",
-      "ul": null,
       "ul_note": "No official UL established",
       "optimal_range": "250-500",
       "highest_ul": null,
@@ -9978,7 +9885,6 @@
       "interaction_warnings": null,
       "notes": null,
       "smoker_adjustment": null,
-      "unofficial_ul": null,
       "nutrient_class": "floor",
       "ul_basis": "not_applicable",
       "reference_semantics": {
@@ -10000,7 +9906,6 @@
     {
       "standard_name": "Nickel",
       "unit": "mg",
-      "ul": null,
       "ul_note": "NASEM 2001 established a 1.0 mg/day UL for nickel exposure as soluble nickel salts at age 14+, including pregnancy and lactation. This is not a nutritional requirement. People with nickel hypersensitivity or kidney dysfunction may not be protected by the general-population UL.",
       "optimal_range": "",
       "highest_ul": 1.0,
@@ -10205,7 +10110,6 @@
       "notes": "Source-content review 2026-10-18: NASEM 2001 nickel UL derivation and life-stage summaries (pp. 525-528) apply to soluble nickel salts, not all nickel forms. Existing age-14+ rows retain no RDA/AI and receive the sourced 1.0 mg/day upper reference. An unspecified nickel source cannot establish soluble-salt applicability.",
       "smoker_adjustment": null,
       "synthesis_precursors": null,
-      "unofficial_ul": null,
       "nutrient_class": "ceiling",
       "ul_basis": "total_intake",
       "ul_applies_to_forms": [
@@ -10235,7 +10139,6 @@
     {
       "standard_name": "Silicon",
       "unit": "mg",
-      "ul": null,
       "ul_note": "No UL established due to lack of observed adverse effects.",
       "optimal_range": "5-50",
       "highest_ul": null,
@@ -10393,7 +10296,6 @@
       "notes": null,
       "smoker_adjustment": null,
       "synthesis_precursors": null,
-      "unofficial_ul": null,
       "nutrient_class": "floor",
       "ul_basis": "not_applicable",
       "reference_semantics": {
@@ -10415,7 +10317,6 @@
     {
       "standard_name": "Sulfate",
       "unit": "mg",
-      "ul": null,
       "ul_note": "No UL established due to lack of adverse effects from food or water sources.",
       "optimal_range": "200-500",
       "highest_ul": null,
@@ -10570,7 +10471,6 @@
       "notes": null,
       "smoker_adjustment": null,
       "synthesis_precursors": null,
-      "unofficial_ul": null,
       "nutrient_class": "floor",
       "ul_basis": "not_applicable",
       "reference_semantics": {
@@ -10599,7 +10499,6 @@
         "betapure"
       ],
       "unit": "g",
-      "ul": null,
       "ul_note": "No official UL. Tolerability soft-cap ~6.4 g per single dose (harmless paresthesia), not a toxicity limit.",
       "optimal_range": "1.6-6.4",
       "highest_ul": null,
@@ -10621,7 +10520,6 @@
       "dri_update": null,
       "notes": "Migrated from rda_therapeutic_dosing.json (non-botanical bioactive); scored via the generic dose path. No official DRI — historical rda_ai amount is descriptive and does not establish a clinical minimum or continuous Dose curve. Anchor dose corrected from 3.2 g after content verification against PubMed on 2026-09-15.",
       "smoker_adjustment": null,
-      "unofficial_ul": null,
       "references": [
         "26175657",
         "22270875",
@@ -10790,7 +10688,6 @@
         "l-citrulline malate"
       ],
       "unit": "mg",
-      "ul": null,
       "ul_note": "No official UL; well tolerated. Mild GI distress only at very high intakes.",
       "optimal_range": "6000-8000",
       "highest_ul": null,
@@ -10812,7 +10709,6 @@
       "dri_update": null,
       "notes": "Migrated from rda_therapeutic_dosing.json (non-botanical bioactive); scored via the generic dose path. No official DRI — historical rda_ai amount is descriptive and does not establish a clinical minimum or continuous Dose curve. Anchor dose not established by the cited sources (PubMed review 2026-09-15); not used for graduated dose credit.",
       "smoker_adjustment": null,
-      "unofficial_ul": null,
       "references": [
         "20386132",
         "31977835"
@@ -10975,7 +10871,6 @@
         "pure citrulline"
       ],
       "unit": "mg",
-      "ul": null,
       "ul_note": "No official UL; well tolerated.",
       "optimal_range": "3000-6000",
       "highest_ul": null,
@@ -10997,7 +10892,6 @@
       "dri_update": null,
       "notes": "Migrated from rda_therapeutic_dosing.json (non-botanical bioactive); scored via the generic dose path. No official DRI — historical rda_ai amount is descriptive and does not establish a clinical minimum or continuous Dose curve. Anchor dose not established by the cited sources (PubMed review 2026-09-15); not used for graduated dose credit.",
       "smoker_adjustment": null,
-      "unofficial_ul": null,
       "references": [
         "31977835"
       ],
@@ -11162,7 +11056,6 @@
         "calcium hmb"
       ],
       "unit": "g",
-      "ul": null,
       "ul_note": "No official UL; safe at and beyond 3 g/day in trials. '6 g' is a tolerability soft-cap.",
       "optimal_range": "1.5-3",
       "highest_ul": null,
@@ -11184,7 +11077,6 @@
       "dri_update": null,
       "notes": "Migrated from rda_therapeutic_dosing.json (non-botanical bioactive); scored via the generic dose path. No official DRI — historical rda_ai amount is descriptive and does not establish a clinical minimum or continuous Dose curve. Anchor dose corrected from 3.0 g after content verification against PubMed on 2026-09-15.",
       "smoker_adjustment": null,
-      "unofficial_ul": null,
       "references": [
         "23374455",
         "41305674",
@@ -11352,7 +11244,6 @@
         "crystalline glucosamine sulfate"
       ],
       "unit": "mg",
-      "ul": null,
       "ul_note": "No official UL; well tolerated long-term at 1500 mg/day.",
       "optimal_range": "1500",
       "highest_ul": null,
@@ -11377,7 +11268,6 @@
       "dri_update": null,
       "notes": "Migrated from rda_therapeutic_dosing.json (non-botanical bioactive); scored via the generic dose path. No official DRI — historical rda_ai amount is descriptive and does not establish a clinical minimum or continuous Dose curve. Anchor dose content-verified against PubMed on 2026-09-15.",
       "smoker_adjustment": null,
-      "unofficial_ul": null,
       "references": [
         "30566740"
       ],
@@ -11542,7 +11432,6 @@
         "optimsm"
       ],
       "unit": "mg",
-      "ul": null,
       "ul_note": "No official UL; doses to 6 g/day well tolerated in trials.",
       "optimal_range": "2000-6000",
       "highest_ul": null,
@@ -11564,7 +11453,6 @@
       "dri_update": null,
       "notes": "Migrated from rda_therapeutic_dosing.json (non-botanical bioactive); scored via the generic dose path. No official DRI — historical rda_ai amount is descriptive and does not establish a clinical minimum or continuous Dose curve. Anchor dose corrected from 1500 mg after content verification against PubMed on 2026-09-15.",
       "smoker_adjustment": null,
-      "unofficial_ul": null,
       "references": [
         "16309928",
         "18417375",
@@ -11732,7 +11620,6 @@
         "hyaluronan"
       ],
       "unit": "mg",
-      "ul": null,
       "ul_note": "No official UL is established. Short-term tolerability in studied adults does not establish a safe upper limit or safety for other life stages.",
       "optimal_range": null,
       "highest_ul": null,
@@ -11754,7 +11641,6 @@
       "dri_update": null,
       "notes": "No official DRI. Anchor dose 120 mg, retained from the dated 2026-09-15 review, is an authored generic Dose anchor with unresolved preparation/outcome calibration, not a universal minimum effective dose. PMID41422283 studied 1.8 MDa sodium hyaluronate at 60 and 120 mg/day for 12 weeks in 150 healthy adults; both doses improved selected skin outcomes, with more modest effects at 60 mg. PMID34203487 and PMID25834304 studied 120 mg/day for skin outcomes; PMID23226979 studied 200 mg/day in a selected knee-osteoarthritis population with an exercise context. These studies do not establish one universal optimal range or pregnancy/adolescent dosing.",
       "smoker_adjustment": null,
-      "unofficial_ul": null,
       "references": [
         "34203487",
         "25834304",
@@ -11925,7 +11811,6 @@
         "pharmagaba"
       ],
       "unit": "mg",
-      "ul": null,
       "ul_note": "No official UL; studied to ~800 mg/day short-term. Evidence base is small-trial/thin.",
       "optimal_range": "100-200",
       "highest_ul": null,
@@ -11947,7 +11832,6 @@
       "dri_update": null,
       "notes": "Migrated from rda_therapeutic_dosing.json (non-botanical bioactive); scored via the generic dose path. No official DRI — historical rda_ai amount is descriptive and does not establish a clinical minimum or continuous Dose curve. Anchor dose content-verified against PubMed on 2026-09-15.",
       "smoker_adjustment": null,
-      "unofficial_ul": null,
       "references": [
         "16971751",
         "22203366"
@@ -12110,7 +11994,6 @@
         "n-acetyl-5-methoxytryptamine"
       ],
       "unit": "mg",
-      "ul": null,
       "ul_note": "No official UL. Source sleep regimens do not establish a universal optimal 0.5–5 mg interval or a safety upper limit; higher amounts may cause grogginess.",
       "optimal_range": "0.5-5",
       "highest_ul": null,
@@ -12133,7 +12016,6 @@
       "dri_update": null,
       "notes": "Migrated from rda_therapeutic_dosing.json (non-botanical bioactive); scored via the generic dose path. No official DRI — historical rda_ai amount is descriptive and does not establish a clinical minimum or continuous Dose curve. Anchor dose not established by the cited sources (PubMed review 2026-09-15); not used for graduated dose credit.",
       "smoker_adjustment": null,
-      "unofficial_ul": null,
       "references": [
         "38888087",
         "23691095"
@@ -12299,7 +12181,6 @@
         "n-acetyl-l-cysteine"
       ],
       "unit": "mg",
-      "ul": null,
       "ul_note": "No official UL; doses to 2400 mg/day used in trials.",
       "optimal_range": "600-2400",
       "highest_ul": null,
@@ -12324,7 +12205,6 @@
       "dri_update": null,
       "notes": "Migrated from rda_therapeutic_dosing.json (non-botanical bioactive); scored via the generic dose path. No official DRI — historical rda_ai amount is descriptive and does not establish a clinical minimum or continuous Dose curve. Anchor dose not established by the cited sources (PubMed review 2026-09-15); not used for graduated dose credit.",
       "smoker_adjustment": null,
-      "unofficial_ul": null,
       "references": [
         "25957927",
         "33354859"
@@ -12490,7 +12370,6 @@
         "kaneka qh"
       ],
       "unit": "mg",
-      "ul": null,
       "ul_note": "No official UL; observed-safe level for CoQ10 ~1200 mg/day.",
       "optimal_range": "100-200",
       "highest_ul": null,
@@ -12514,7 +12393,6 @@
       "dri_update": null,
       "notes": "Migrated from rda_therapeutic_dosing.json (non-botanical bioactive); scored via the generic dose path. No official DRI — historical rda_ai amount is descriptive and does not establish a clinical minimum or continuous Dose curve. Anchor dose content-verified against PubMed on 2026-09-15.",
       "smoker_adjustment": null,
-      "unofficial_ul": null,
       "references": [
         "32188111",
         "32326664"
@@ -12679,7 +12557,6 @@
         "l-tams"
       ],
       "unit": "mg",
-      "ul": null,
       "ul_note": "Dosed as the compound (~2000 mg delivers ~144 mg elemental Mg). Elemental Mg counts toward the 350 mg/day supplemental-Mg UL when stacked with other magnesium.",
       "optimal_range": "1000-2000",
       "highest_ul": null,
@@ -12702,7 +12579,6 @@
       "dri_update": null,
       "notes": "Migrated from rda_therapeutic_dosing.json (non-botanical bioactive); scored via the generic dose path. No official DRI — historical rda_ai amount is descriptive and does not establish a clinical minimum or continuous Dose curve. Anchor dose corrected from 1500 mg after content verification against PubMed on 2026-09-15.",
       "smoker_adjustment": null,
-      "unofficial_ul": null,
       "references": [
         "26519439",
         "39252819"
@@ -12867,7 +12743,6 @@
         "β-nicotinamide mononucleotide"
       ],
       "unit": "mg",
-      "ul": null,
       "ul_note": "No official UL; 250-900 mg/day safe in RCTs. FDA has contested NMN's supplement status (regulatory, not safety).",
       "optimal_range": "250-900",
       "highest_ul": null,
@@ -12889,7 +12764,6 @@
       "dri_update": null,
       "notes": "Migrated from rda_therapeutic_dosing.json (non-botanical bioactive); scored via the generic dose path. No official DRI — historical rda_ai amount is descriptive and does not establish a clinical minimum or continuous Dose curve. Anchor dose content-verified against PubMed on 2026-09-15.",
       "smoker_adjustment": null,
-      "unofficial_ul": null,
       "references": [
         "35479740",
         "36482258",
@@ -13056,7 +12930,6 @@
         "biopqq"
       ],
       "unit": "mg",
-      "ul": null,
       "ul_note": "No official UL; 20-40 mg/day used in human trials.",
       "optimal_range": "20-40",
       "highest_ul": null,
@@ -13078,7 +12951,6 @@
       "dri_update": null,
       "notes": "Migrated from rda_therapeutic_dosing.json (non-botanical bioactive); scored via the generic dose path. No official DRI — historical rda_ai amount is descriptive and does not establish a clinical minimum or continuous Dose curve. Anchor dose content-verified against PubMed on 2026-09-15.",
       "smoker_adjustment": null,
-      "unofficial_ul": null,
       "references": [
         "34415830",
         "31860387",
@@ -13247,7 +13119,6 @@
         "ademetionine"
       ],
       "unit": "mg",
-      "ul": null,
       "ul_note": "No official UL; doses to 1600 mg/day in depression trials. Take enteric-coated on empty stomach.",
       "optimal_range": "400-1600",
       "highest_ul": null,
@@ -13271,7 +13142,6 @@
       "dri_update": null,
       "notes": "Migrated from rda_therapeutic_dosing.json (non-botanical bioactive); scored via the generic dose path. No official DRI — historical rda_ai amount is descriptive and does not establish a clinical minimum or continuous Dose curve. Anchor dose not established by the cited sources (PubMed review 2026-09-15); not used for graduated dose credit.",
       "smoker_adjustment": null,
-      "unofficial_ul": null,
       "references": [
         "38199136",
         "27727432"
@@ -13435,7 +13305,6 @@
         "berberine hydrochloride"
       ],
       "unit": "mg",
-      "ul": null,
       "ul_note": "No official UL; GI tolerability limits higher doses. Typically divided 500 mg 2-3x/day.",
       "optimal_range": "900-1500",
       "highest_ul": null,
@@ -13460,7 +13329,6 @@
       "dri_update": null,
       "notes": "Migrated from rda_therapeutic_dosing.json (non-botanical bioactive); scored via the generic dose path. No official DRI — historical rda_ai amount is descriptive and does not establish a clinical minimum or continuous Dose curve. Anchor dose content-verified against PubMed on 2026-09-15.",
       "smoker_adjustment": null,
-      "unofficial_ul": null,
       "references": [
         "34956436",
         "36999891"
@@ -13624,7 +13492,6 @@
         "quercetin aglycone"
       ],
       "unit": "mg",
-      "ul": null,
       "ul_note": "No official UL; <=1000 mg/day well tolerated to ~12 weeks. Long-term high-dose safety not established.",
       "optimal_range": "500-1000",
       "highest_ul": null,
@@ -13648,7 +13515,6 @@
       "dri_update": null,
       "notes": "Migrated from rda_therapeutic_dosing.json (non-botanical bioactive); scored via the generic dose path. No official DRI — historical rda_ai amount is descriptive and does not establish a clinical minimum or continuous Dose curve. Anchor dose content-verified against PubMed on 2026-09-15.",
       "smoker_adjustment": null,
-      "unofficial_ul": null,
       "references": [
         "27405810",
         "35948195"
@@ -13813,7 +13679,6 @@
         "bioresponse-dim"
       ],
       "unit": "mg",
-      "ul": null,
       "ul_note": "No official UL; trials used ~100-150 mg BioResponse-DIM. High doses -> reversible headache/GI/transaminase changes.",
       "optimal_range": "100-200",
       "highest_ul": null,
@@ -13835,7 +13700,6 @@
       "dri_update": null,
       "notes": "Migrated from rda_therapeutic_dosing.json (non-botanical bioactive); scored via the generic dose path. No official DRI — historical rda_ai amount is descriptive and does not establish a clinical minimum or continuous Dose curve. Anchor dose supported only by uncontrolled evidence (PubMed review 2026-09-15); not used for graduated dose credit.",
       "smoker_adjustment": null,
-      "unofficial_ul": null,
       "references": [
         "32458980",
         "26501150"
@@ -13999,7 +13863,6 @@
         "oxitriptan"
       ],
       "unit": "mg",
-      "ul": null,
       "ul_note": "No official UL; doses to 300 mg/day in depression trials. Historical EMS concern tied to contaminated L-tryptophan (purity flag).",
       "optimal_range": "150-300",
       "highest_ul": null,
@@ -14023,7 +13886,6 @@
       "dri_update": null,
       "notes": "Migrated from rda_therapeutic_dosing.json (non-botanical bioactive); scored via the generic dose path. No official DRI — historical rda_ai amount is descriptive and does not establish a clinical minimum or continuous Dose curve. Anchor dose not established by the cited sources (PubMed review 2026-09-15); not used for graduated dose credit.",
       "smoker_adjustment": null,
-      "unofficial_ul": null,
       "references": [
         "31504850",
         "12169147"
@@ -14188,7 +14050,6 @@
         "cognizin"
       ],
       "unit": "mg",
-      "ul": null,
       "ul_note": "No official UL; well tolerated to 2000 mg/day in trials.",
       "optimal_range": "250-500",
       "highest_ul": null,
@@ -14212,7 +14073,6 @@
       "dri_update": null,
       "notes": "Added in dosing-overhaul Batch 7 (non-botanical bioactive); scored via the generic dose path. No official DRI — historical rda_ai amount is descriptive and does not establish a clinical minimum or continuous Dose curve. Anchor dose content-verified against PubMed on 2026-09-15.",
       "smoker_adjustment": null,
-      "unofficial_ul": null,
       "references": [
         "33978188",
         "26179181"
@@ -14378,7 +14238,6 @@
         "glycine betaine"
       ],
       "unit": "mg",
-      "ul": null,
       "ul_note": "No toxicity UL, but doses >=4000 mg/day raise total/LDL cholesterol (meta-analysis) — a cardiovascular caution. 2500 mg is the ergogenic dose; 3-6 g studied for homocysteine.",
       "optimal_range": "1500-6000",
       "highest_ul": null,
@@ -14400,7 +14259,6 @@
       "dri_update": null,
       "notes": "Added in dosing-overhaul Batch 7 (non-botanical bioactive); scored via the generic dose path. No official DRI — historical rda_ai amount is descriptive and does not establish a clinical minimum or continuous Dose curve. Anchor dose corrected from 2500 mg after content verification against PubMed on 2026-09-15.",
       "smoker_adjustment": null,
-      "unofficial_ul": null,
       "references": [
         "31809615",
         "36501070",
@@ -14569,7 +14427,6 @@
         "l-glycine"
       ],
       "unit": "mg",
-      "ul": null,
       "ul_note": "No established UL; very well tolerated; mild GI at high grams.",
       "optimal_range": "3000-15000",
       "highest_ul": null,
@@ -14593,7 +14450,6 @@
       "dri_update": null,
       "notes": "Added in dosing-overhaul Batch 7 (non-botanical bioactive); scored via the generic dose path. No official DRI — historical rda_ai amount is descriptive and does not establish a clinical minimum or continuous Dose curve. Anchor dose content-verified against PubMed on 2026-09-15.",
       "smoker_adjustment": null,
-      "unofficial_ul": null,
       "references": [
         "22529837"
       ],
@@ -14756,7 +14612,6 @@
         "leucine-enriched eaa"
       ],
       "unit": "mg",
-      "ul": null,
       "ul_note": "No UL; protein/amino-acid load — caution in renal impairment.",
       "optimal_range": "6000-15000",
       "highest_ul": null,
@@ -14778,7 +14633,6 @@
       "dri_update": null,
       "notes": "Added in dosing-overhaul Batch 7 (non-botanical bioactive); scored via the generic dose path. No official DRI — historical rda_ai amount is descriptive and does not establish a clinical minimum or continuous Dose curve. Anchor dose not established by the cited sources (PubMed review 2026-09-15); not used for graduated dose credit.",
       "smoker_adjustment": null,
-      "unofficial_ul": null,
       "references": [
         "29796648",
         "32806711"
@@ -14941,7 +14795,6 @@
         "bis-pantethine"
       ],
       "unit": "mg",
-      "ul": null,
       "ul_note": "No UL; well tolerated; mild GI. Lipid-lowering agent (favorable).",
       "optimal_range": "600-900",
       "highest_ul": null,
@@ -14963,7 +14816,6 @@
       "dri_update": null,
       "notes": "Added in dosing-overhaul Batch 7 (non-botanical bioactive); scored via the generic dose path. No official DRI — historical rda_ai amount is descriptive and does not establish a clinical minimum or continuous Dose curve. Anchor dose content-verified against PubMed on 2026-09-15.",
       "smoker_adjustment": null,
-      "unofficial_ul": null,
       "references": [
         "24600231",
         "21925346"
@@ -15128,7 +14980,6 @@
         "mitopure"
       ],
       "unit": "mg",
-      "ul": null,
       "ul_note": "No UL; GRAS-affirmed; well tolerated to 1000 mg/day in trials.",
       "optimal_range": "500-1000",
       "highest_ul": null,
@@ -15150,7 +15001,6 @@
       "dri_update": null,
       "notes": "Added in dosing-overhaul Batch 7 (non-botanical bioactive); scored via the generic dose path. No official DRI — historical rda_ai amount is descriptive and does not establish a clinical minimum or continuous Dose curve. Anchor dose content-verified against PubMed on 2026-09-15.",
       "smoker_adjustment": null,
-      "unofficial_ul": null,
       "references": [
         "35584623",
         "35050355"
@@ -15314,7 +15164,6 @@
         "first milk"
       ],
       "unit": "mg",
-      "ul": null,
       "ul_note": "No UL; contains lactose and milk proteins.",
       "optimal_range": "3200-60000",
       "highest_ul": null,
@@ -15336,7 +15185,6 @@
       "dri_update": null,
       "notes": "Added in dosing-overhaul Batch 7 (non-botanical bioactive); scored via the generic dose path. No official DRI — historical rda_ai amount is descriptive and does not establish a clinical minimum or continuous Dose curve. Anchor dose corrected from 10000 mg after content verification against PubMed on 2026-09-15.",
       "smoker_adjustment": null,
-      "unofficial_ul": null,
       "references": [
         "38361147",
         "27462401",
@@ -15505,7 +15353,6 @@
         "gln"
       ],
       "unit": "mg",
-      "ul": null,
       "ul_note": "No toxicity UL; tolerable to ~0.65 g/kg/day acutely.",
       "optimal_range": "5000-30000",
       "highest_ul": null,
@@ -15529,7 +15376,6 @@
       "dri_update": null,
       "notes": "Added in dosing-overhaul Batch 7 (non-botanical bioactive); scored via the generic dose path. No official DRI — historical rda_ai amount is descriptive and does not establish a clinical minimum or continuous Dose curve. Anchor dose not established by the cited sources (PubMed review 2026-09-15); not used for graduated dose credit.",
       "smoker_adjustment": null,
-      "unofficial_ul": null,
       "references": [
         "39397201"
       ],

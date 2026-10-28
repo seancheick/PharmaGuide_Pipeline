@@ -115,7 +115,7 @@ def _primary_type(product: Dict[str, Any]) -> str:
 
 @lru_cache(maxsize=1)
 def _dosing_index() -> Dict[str, Dict[str, Any]]:
-    """name/alias -> therapeutic dosing entry (typical_dosing_range etc.)."""
+    """name/alias -> therapeutic dosing entry (its reference_semantics decision)."""
     try:
         raw = json.loads((_DATA_DIR / "rda_therapeutic_dosing.json").read_text())
     except Exception:  # pragma: no cover

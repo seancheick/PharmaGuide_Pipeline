@@ -28,6 +28,7 @@ from scoring_v4.cert_evidence import (
     cert_entry_brand_matches_product,
     cert_program_key,
     facility_audit_programs,
+    is_verified_brand_cert_entry,
     is_verified_product_cert_entry,
     marine_cert_tokens,
 )
@@ -139,6 +140,9 @@ def _score_b4a(product: Dict[str, Any]) -> tuple[float, Dict[str, Any]]:
         if scope not in ("sku", "product_line", "label_asserted_product"):
             if scope in ("brand_only", "needs_review", "claimed_only"):
                 if entry.get("scoring_blocked_reason"):
+                    continue
+                if scope == "brand_only" and not is_verified_brand_cert_entry(product, entry):
+                    skipped_reasons["missing_or_stale_provenance"] += 1
                     continue
                 program = _norm_text(entry.get("program") or "")
                 if not program:
