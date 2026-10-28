@@ -1,5 +1,11 @@
 # Condition-scope rule — October 28, 2026
 
+Current handoff: the original Evidence takeover measurements below retain their exact source
+provenance. The subsequent Sean/team material ruling is implemented at runtime source `ae2fec36`
+with verifier-only follow-ups `98af8d9e` and `29c9d1aa`; its bounded receipts appear at the end. Root owns combined
+integration, CI/local qualification and final canaries. Earlier “final” captions identify those
+historical captures, not the current combined qualification state.
+
 ## Candidate and scope
 
 Behavioral scoring change. Codex continued PR280's existing branch after Sean authorized takeover;
@@ -135,3 +141,99 @@ Pooled probiotic `not_reported` clinical credit remains a named, separately meas
 Whole-fast CI on the exact final candidate and applicable local verification remain required before merge. The bounded capture compares scored pillars, routes, source fingerprints and safety-gate/Dose-safety
 projections; it does not establish whole exported-blob equality or a new-catalog app rendering check.
 No corpus build, export, release, upload, app import or publication was performed.
+
+
+## Sean/team material ruling — October 28, 2026
+
+Behavioral code/data batch. This is Sean/team's explicit product policy, not a new clinician
+attestation: **Formulation depends on verified material identity and standardization, never approved
+clinical benefit.** An exact, specified material keeps this trait when research is held, null or
+retracted. Generic/ambiguous identity or a studied but unstandardized brand cannot establish it.
+No new scoring magnitude, clinical approval, label percentage or batch Verification inference.
+
+Owner: `standardized_botanicals.json` → `SupplementEnricherV3::_collect_standardized_botanicals`
+→ `botanical_profile::_standardized_entries_for_row/_standardization_tier_credit`.
+Physical named-preparation identity reuses `evidence_resolver::is_reviewed_branded_material`
+(strict spelling option), separately from marker credit and clinical eligibility. Owner evidence:
+matrix `ingredient_identity_resolution`, GLOSSARY, searches for `standardization`, `material`,
+all old `_branded_studied_row` callers, `raw_source_path` and the existing export passthrough
+`build_final_db.py` standardization list. No new registry, public top-level field, status or scorer.
+The existing source-row reference now binds the nested standardization projection; legacy
+projections need exact same-material proof or unambiguous direct marker attribution.
+
+Verified sources: official DSLD304641 retained raw600mg Testofen per2caps/Gencor; ANVISA
+Parecer7/2022 process25351.711676/2019-91 p1 identifies the Indus/Gencor Testofen material and
+NLT50% saponin specification. Fenusides denotes a proprietary furostanol saponin glycoside matrix,
+not one molecule. Supplier specification is never copied into printed `percentage_found`.
+ANVISA mirror and official403 limitation, source URLs and hashes are recorded in the existing
+approval/ruling report. The portable raw304641 fixture hash is
+`4435a5bb34cca765f3447efe310a599ebb01024755ee9a85cf3574b8a36b87a9`.
+
+Slendesta generic potato/PI2 aliases falsely repaired full IQD identity to a proprietary material;
+removed those identity aliases, retaining marker descriptions. Explicit Slendesta still resolves its
+own verified material specification. Current manufacturer source:
+https://www.kemin.com/na/en-us/markets/human-nutrition/products/slendesta .
+The existing PMID28485429 citation is correct: RSC DOI10.1039/C6FO01803C, article p2
+Materials & methods → Test products explicitly names Slendesta/Kemin and HPLC-confirmed PI2.
+Primary authored full text retained from
+https://magistralbr.caldic.com/storage/product-files/1647169758.pdf ; SHA256
+`fc56d9f66c7a8fb4d79ccaa6ed0934f605ef7bc4a5a86681799ae966821750d2`.
+The abstract omits the brand. The existing citation verifier now recognizes intact marker phrases
+and bounded PI2, without restoring identity aliases or accepting generic inhibitor/protein words.
+This verifies content, not benefit eligibility. Existing citation retained; no clinical grade changed.
+
+Fail-first receipts: `material_fail_first.log`, `material_review_fail_first.log`,
+`material_secondary_fail_first.log`, `material_sourcebinding_fail_first.log`,
+`material_metadata_fail_first.log`, `material_verifier_fail_first.log` under
+`~/pg_quality/condition_scope_20261028/`. Controls cover real304641, approved/held/null/retracted
+clinical states, generic/ambiguous/unstandardized materials, specified material without eligible
+benefit, actual KSM306237, exact source forms, wrong canonical parent, generic mapped
+powder/oil/extract parents, generic potato full IQD identity, explicit Slendesta, sibling source
+borrowing and legacy different-brand borrowing. A clean canonical KSM resolution is not rejected
+merely for retaining weaker same-parent candidates in its audit history. The same standardized
+registry identity is accepted alongside its canonical IQM parent (actual Goli245156).
+
+Stable sourcebinding/runtime commit `ae2fec36e2c7063bd57ddac6e6b9a16f9d3b828a`:
+**502 named owner/consumer/data tests pass** (`material_sourcebinding_owner_slice5.log`).
+Verifier-only commits `98af8d9e` and `29c9d1aa`: **27 tests pass**
+(`material_verifier_final_owner_slice.log`), including actual PI2 content versus unrelated vitamin,
+generic protease/HIV, PI20, PI2alpha and PI2A controls. The new nonhyphen marker identifier is
+bounded on both sides; existing hyphen-identifier compatibility remains unchanged. Live PubMed
+retrieval occurred in the initial verifier check; subsequent cached recheck gives1partial,
+0mismatch,0unresolved, CLIexit0 (`material_final_citations_verified_boundary.json/.log`). Manual full-text
+methods independently establish the exact brand. Python correctness0new/11existing; diff check
+clean. `data_batch check` since07549: Testofen added +Slendesta changed,2entries0problems.
+Derived metadata counts now follow the existing data_batch owner instead of historical stale pins.
+Independent fresh pregnancy_check review of ae2fec passed8 named controls, the explicit legacy
+Torabolic/Testofen non-borrow probe and actual245156; no remaining runtime finding reported.
+Independent fresh pregnancy_check review of final verifier `29c9d1aa9661c02dd5eff08f0370d20f9266177e`
+passed all27 named tests and found no remaining issue; runtime source remains ae2fec.
+
+Measurement: preserve original source07549 baseline and intermediate2fab123-label captures;
+`material/candidate_qualified.jsonl.meta.json` truthfully attests2fab,123products,source_unchanged.
+Final bounded incremental capture `material/incremental/candidate.jsonl[.meta.json]` attests
+exactae2fec,61products,source_unchanged. Selected prior25 movers, all retained KSM/Testofen
+labels and unaffected module controls. `derivation_receipt.json` records original capture hash,
+selection, IDs and identical raw hashes. Comparisons use verified original capture rows filtered
+to the shared61 cohort; no copied/restamped capture metadata or final123 claim.
+
+Against2fab, only Goli245156 moves Formulation14.7→20 (correct same-registry identity); the
+other60 numerical controls stay. Against07549 on the same61 rows: **24 Formulation movers,
+1up/23down;37 numerical controls**. No Dose/Evidence/Verification/other-pillar score change,
+route/subroute/profile/status change, safety-gate/Dose-safety/readiness change or input hash change.
+Cause groups (`component_cause_groups.json`):19 remove unsupported marker credit alone;
+2 gain independent extract credit while losing unsupported marker credit;1 also releases an existing
+pillar bound;1 also loses extract credit;1 Testofen gains specification credit.
+The public Formulation receipt credits each characteristic once. Total/tier movements are retained
+in `delta_from_07549.txt/.json`; no safety meaning is assigned to tier movement.
+
+304641 Formulation14.7→20;30623720→20;22895712→12. All material-lane Dose/Evidence values
+are unchanged against its parent. This **does not establish a combined integration score70.8**:
+root's separate clinical-scope continuation removes generic fenugreek affirmative credit and
+qualifies the combined Evidence result. Testofen's explicit benefit hold remains intact.
+The intermediate raw33 check had only245156 drift (32unchanged/1failed); the reproduced bug is
+fixed and verified in the final61 capture. Root owns the final combined raw canary qualification.
+
+No branch push in this final material handoff: root requested one combined qualification PR.
+Whole-fast CI and applicable combined local checks remain root's final merge gate. No corpus,
+export, upload, release or app import occurred; no release qualification is claimed.

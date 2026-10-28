@@ -510,5 +510,7 @@ def test_standardized_botanical_marker_topic_is_not_a_proprietary_identity_alias
     assert 'PI2' not in entry['aliases']
     for wrong in [{'title': 'Protease inhibitors in HIV treatment', 'abstract': 'Generic enzyme inhibitor research.'},
                   {'title': 'PI20 protease inhibitors in HIV treatment', 'abstract': 'An unrelated numbered protein.'},
+                  {'title': 'PI2alpha protease inhibitor research', 'abstract': 'An unrelated extended identifier.'},
+                  {'title': 'PI2A protease inhibitor research', 'abstract': 'An unrelated extended identifier.'},
                   {'title': 'Vitamin D and skeletal outcomes', 'abstract': 'An unrelated nutrient trial.'}]:
         assert vac.content_matches(wrong, words)[0] == 'mismatch'
