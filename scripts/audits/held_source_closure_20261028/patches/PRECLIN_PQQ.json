@@ -1,0 +1,199 @@
+{
+ "record_id": "PRECLIN_PQQ",
+ "decision": "held: record-level scoring_eligible=false hold and Dr. Pham's 2026-10-28 correction hold; the correction notice for 34415830 (PMID 35917215, DOI 10.1080/27697061.2022.2099711, 'Notice of Correction', Table 4) is unreadable: its only open copy (tandfonline.com PDF, listed by OpenAlex/Crossref) returned HTTP 403, PubMed carries no abstract, and it is not in PMC/Europe PMC",
+ "summary": "The signed record-level scoring_eligible=false hold and Dr. Pham's A135 corrected-table hold both stay. The Alpha Hope trial (38908296) is now verified from full text: PQQ 20 mg with hydrogen-producing magnesium in 34 MCI adults; the primary BDNF interaction was not significant (P=0.14), with large baseline imbalance; approved as a no-credit combination context. The mnemoPQQ trial (34415830) is abstract-only and its Table 4 correction (35917215) could not be retrieved, so its context is written but left pending, with direction unresolved.",
+ "record_updates": {},
+ "study_contexts": [
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "preclin_pqq_38908296_exact_source",
+   "components": [
+    "PRECLIN_PQQ"
+   ],
+   "source_pmids": [
+    "38908296"
+   ],
+   "identity_scope": "combination",
+   "identity": {
+    "branded_material": "Alpha Hope (CalerieLife)",
+    "standardization": "PQQ 20 mg plus dihydrogen-producing elemental magnesium 80 mg per day"
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "direct_rct",
+   "component_registration_status": "fully_registered",
+   "condition": "mild_cognitive_impairment",
+   "purpose": "treatment",
+   "review_status": "clinician_approved",
+   "scoring_eligible": false,
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "trial_family": "source_38908296",
+   "population": {
+    "age_group": "adult",
+    "description": "34 adults aged >=65 with mild cognitive impairment (MMSE <=28; mean age 71.9, 28 women), 18 active and 16 placebo, all analysed."
+   },
+   "study_design": "Parallel-group, randomized, placebo-controlled, double-blind trial, 1:1, 6 weeks; placebo was non-hydrogen-producing magnesium bicarbonate with organic acids.",
+   "outcomes": [
+    {
+     "name": "Primary BDNF treatment-by-time interaction P=.14, not significant; within-group P=.01 does not establish placebo superiority.",
+     "direction": "null",
+     "hierarchy": "primary",
+     "kind": "surrogate",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "Secondary ADAS-Cog orientation interaction P=.03; not overall cognitive efficacy or isolated-PQQ evidence.",
+     "direction": "positive",
+     "hierarchy": "secondary",
+     "kind": "patient_important",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "MMSE improved in both groups; treatment-by-time interaction P=0.58. ADAS-Cog domains improved within both groups.",
+     "hierarchy": "secondary",
+     "kind": "patient_important",
+     "direction": "null",
+     "outcome_role": "direct_between_group_effect"
+    }
+   ],
+   "limitations": [
+    "The elemental magnesium/hydrogen component is part of the active intervention.",
+    "The separate corrected-table hold on PMID34415830 remains; this combination trial cannot resolve it.",
+    "Returned decision: Corrected-table hold remains; reject combination-to-isolated-PQQ transfer.",
+    "Baseline serum BDNF differed markedly between groups (20.9 vs 8.1 ng/mL), further limiting the primary-outcome comparison. Record-level scoring_eligible=false (signed) retained; combination evidence carries no PQQ credit.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ],
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "mg",
+    "values": [
+     20
+    ],
+    "dose_status": "verified",
+    "dose_basis": "nominal_assigned_arm",
+    "duration_basis": "fixed_protocol",
+    "duration_days": 42,
+    "administration_frequency": "Daily total PQQ 20 mg plus elemental magnesium 80 mg, divided before breakfast and dinner; dissolve each assigned tablet in 250 mL lukewarm water and consume immediately.",
+    "dosage_forms": [
+     "tablet dissolved in water"
+    ],
+    "co_therapies": [
+     "Daily elemental magnesium 80 mg is hydrogen-producing active cointervention."
+    ],
+    "reported_regimen": "Daily total PQQ 20 mg plus elemental magnesium 80 mg, divided before breakfast and dinner; dissolve each assigned tablet in 250 mL lukewarm water and consume immediately.",
+    "normalization": {
+     "basis": "Preserve the specifically identified material or component quantity; no elemental/marker conversion or extrapolated daily dose."
+    },
+    "source_provenance": {
+     "pmid": "38908296",
+     "location": "Full text (PMC12878601): Methods (design, eligibility, intervention paragraph, outcomes, statistics); Results Table 2 and cognition paragraph; Discussion.",
+     "source_url": "https://pubmed.ncbi.nlm.nih.gov/38908296/"
+    }
+   },
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability"
+   }
+  },
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "preclin_pqq_34415830_mnemopqq_cognition",
+   "source_pmids": [
+    "34415830"
+   ],
+   "components": [
+    "PRECLIN_PQQ"
+   ],
+   "identity_scope": "branded_material",
+   "identity": {
+    "branded_material": "mnemoPQQ",
+    "standardization": "PQQ disodium salt powder 21.5 mg/day"
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "direct_rct",
+   "component_registration_status": "fully_registered",
+   "condition": "age_related_forgetfulness",
+   "purpose": "physiology",
+   "population": {
+    "age_group": "adult",
+    "description": "64 healthy Japanese adults aged 40 to <80 who felt more forgetful with age; 58 completed (31 placebo, 27 PQQ)."
+   },
+   "study_design": "Randomized, double-blind, placebo-controlled, parallel-group trial, 12 weeks; primary endpoint Cognitrax cognitive battery.",
+   "trial_family": "34415830",
+   "human_status": "confirmed",
+   "source_integrity": "corrected",
+   "scoring_eligible": false,
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "mg",
+    "values": [
+     21.5
+    ],
+    "dose_status": "verified",
+    "dose_basis": "nominal_assigned_arm",
+    "duration_basis": "fixed_protocol",
+    "duration_days": 84,
+    "duration_as_printed": {
+     "value": 12,
+     "unit": "weeks"
+    },
+    "administration_frequency": "Daily (split schedule not stated in the abstract).",
+    "dosage_forms": [
+     "PQQ disodium salt powder product (delivery vehicle not reported in the abstract)"
+    ],
+    "co_therapies": [
+     "None reported in the abstract."
+    ],
+    "reported_regimen": "mnemoPQQ PQQ disodium salt 21.5 mg/day for 12 weeks versus placebo.",
+    "normalization": {
+     "basis": "Stated daily mass of PQQ disodium salt; no free-acid conversion."
+    },
+    "source_provenance": {
+     "pmid": "34415830",
+     "location": "PubMed abstract only; full text and the Table 4 correction (PMID 35917215) were not retrievable.",
+     "source_url": "https://pubmed.ncbi.nlm.nih.gov/34415830/"
+    }
+   },
+   "outcomes": [
+    {
+     "name": "Primary Cognitrax domains (composite memory, verbal memory, reaction time, complex attention, cognitive flexibility, executive function, motor speed) reported significantly improved versus placebo (abstract); effect sizes unverified and Table 4 later corrected.",
+     "hierarchy": "primary",
+     "kind": "patient_important",
+     "direction": "unresolved",
+     "outcome_role": "direct_between_group_effect"
+    }
+   ],
+   "limitations": [
+    "Corrected-table hold (signed A135): a published correction (PMID 35917215) concerns Table 4 and its content was not retrieved, so primary results cannot be confirmed; direction recorded as unresolved.",
+    "Abstract only; no credit. Record-level scoring_eligible=false retained."
+   ],
+   "review_status": "source_verified_pending_clinical_review"
+  }
+ ],
+ "source_receipts": [
+  {
+   "pmid": "38908296",
+   "title_fetched": "The impact of six-week dihydrogen-pyrroloquinoline quinone supplementation on mitochondrial biomarkers, brain metabolism, and cognition in elderly individuals with mild cognitive impairment: a randomized controlled trial.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/38908296/",
+   "full_text": true,
+   "sections_used": "Methods, Results, Table 2, Discussion (BioC PMC12878601)"
+  },
+  {
+   "pmid": "34415830",
+   "title_fetched": "Effect of Dietary Pyrroloquinoline Quinone Disodium Salt on Cognitive Function in Healthy Volunteers: A Randomized, Double-Blind, Placebo-Controlled, Parallel-Group Study.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/34415830/",
+   "full_text": false,
+   "sections_used": "PubMed abstract"
+  },
+  {
+   "pmid": "35917215",
+   "title_fetched": "Notice of Correction.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/35917215/",
+   "full_text": false,
+   "sections_used": "PubMed metadata only (correction content not retrievable)"
+  }
+ ]
+}

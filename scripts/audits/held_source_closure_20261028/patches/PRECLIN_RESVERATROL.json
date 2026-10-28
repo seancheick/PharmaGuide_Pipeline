@@ -1,0 +1,257 @@
+{
+ "record_id": "PRECLIN_RESVERATROL",
+ "decision": "closed_no_credit",
+ "summary": "The reviewed research does not establish a qualifying benefit for this product's assessed use. Existing human research is retained: inflammatory, oxidative and lipid biomarker meta-analyses with mixed results. All six declared sources are meta-analyses of surrogate biomarkers, with no cardiovascular clinical outcome. Full texts of 39872318 (6 RCTs, 533 T2DM patients: CRP and oxidative markers lower, IL-6/TNF null, low-very low certainty) and 36145131 (17 RCTs, 968 adults: modest TC/TG/LDL reductions, opposite LDL direction at >=500 mg/day) were verified; abstracts of 24111838 and 29305228 show no lipid effect and 39255906 judges reductions not clinically important. Dr. Pham rejected longevity and broad clinical-benefit claims, so the record becomes reference-only with approved no-credit contexts; this removes Evidence points from resveratrol products.",
+ "record_updates": {
+  "study_type": "reference",
+  "evidence_level": "reference"
+ },
+ "study_contexts": [
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "preclin_resveratrol_39872318_scoped_source",
+   "components": [
+    "PRECLIN_RESVERATROL"
+   ],
+   "source_pmids": [
+    "39872318"
+   ],
+   "identity_scope": "ingredient_general",
+   "identity": {
+    "preparation": "Resveratrol preparations studied in type 2 diabetes; not all botanical marker relationships."
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "meta_analysis",
+   "component_registration_status": "fully_registered",
+   "condition": "type_2_diabetes_inflammatory_biomarkers",
+   "purpose": "physiology",
+   "review_status": "clinician_approved",
+   "scoring_eligible": false,
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "trial_family": "source_39872318",
+   "population": {
+    "description": "Six trials, 533 patients with type 2 diabetes."
+   },
+   "study_design": "Published systematic review or meta-analysis; individual trial correspondence remains source-specific.",
+   "outcomes": [
+    {
+     "name": "CRP SMD -1.40 (95% CI -2.60 to -0.21), low certainty; lipid peroxides, 8-isoprostanes, oxidative stress score lower; GPx and catalase higher",
+     "hierarchy": "not_reported",
+     "kind": "surrogate",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "IL-6 (P=0.06, abstract CI internally discordant), TNF-alpha, SOD, TAC and MDA not significantly changed; very low certainty",
+     "hierarchy": "not_reported",
+     "kind": "surrogate",
+     "direction": "null",
+     "outcome_role": "direct_between_group_effect"
+    }
+   ],
+   "limitations": [
+    "The reviewed research does not establish a qualifying benefit for this product's assessed use. Existing human research is retained: inflammatory, oxidative and lipid biomarker meta-analyses with mixed results.",
+    "Abstract IL-6 confidence interval and P value are internally discordant; do not silently repair or use that result as confirmed.",
+    "No human longevity, global clinical benefit or disease-cure endpoint is established.",
+    "Returned decision: Reject human-longevity and broad clinical-benefit claims; source-context hold for selected markers.",
+    "No new scoring grade, dose threshold, product approval or clinical signature is assigned by this factual extraction.",
+    "Historical bibliography census (not independent scoring sources; actual included-publication membership is separately bound to the inspected source table): 27520400, 37108584, 31405706, 29914666, 35240291, 29357033. Each intervention and comparison requires its own applicability assessment; citation in this bibliography grants no credit.",
+    "Included-study identifiers are now bound to this source's actual included-study rows/explicit inclusion references (Table1 six named primary RCT reports (Bo2016;Garcia-Martinez2023;Javid2019;Khodabandehloo2018;Mahjabeen2022;Seyyedebrahimi2018) map exactly to references34–39. Multiple dose arms are not separate publications; cohort overlap of two2018reports remains unqualified.), with live NIH title/content identity checks. They are publication pointers, not independent-cohort counts, per-primary-study scoring approvals, preparation equivalence or new efficacy evidence. Exact unindexed source citations remain retained; no missing PMID is invented.",
+    "Surrogate inflammatory/oxidative biomarkers only, low to very low GRADE; no cardiovascular or clinical outcome measured. Dose subgroup (<500 vs >=500 mg) showed no difference (Table 3).",
+    "Record downgraded to reference: the declared sources are surrogate-biomarker syntheses with conflicting lipid findings (24111838 and 29305228 null; 39255906 says reductions are not clinically important) and Dr. Pham rejected broad clinical-benefit claims.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ],
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "mg",
+    "values": [],
+    "dose_status": "verified",
+    "dose_basis": "not_applicable",
+    "duration_basis": "participant_specific",
+    "administration_frequency": "Daily oral dosing; within-day schedule not reported in Table 1.",
+    "dosage_forms": [
+     "not reported by source tables: trial-specific oral resveratrol supplements"
+    ],
+    "co_therapies": [
+     "Diabetes care and trial-specific background treatments remain relevant."
+    ],
+    "reported_regimen": "Table 1: García-Martínez 2023 1000 or 500 mg 24 wk; Mahjabeen 2022 200 mg 24 wk; Khodabandehloo 2018 800 mg 12 wk; Seyyedebrahimi 2018 800 mg 8 wk; Javid 2019 480 mg 4 wk; Bo 2016 500 or 40 mg 24 wk (daily doses).",
+    "normalization": {
+     "basis": "A heterogeneous synthesis has no single assigned-arm dose. Descriptive regimens do not create an intake recommendation, equivalent preparation or efficacy threshold."
+    },
+    "source_provenance": {
+     "pmid": "39872318",
+     "location": "Table 1 (study characteristics, dose, duration); Results (six RCTs, 533 participants; dose subgroup Table 3); Abstract",
+     "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11771208/"
+    }
+   },
+   "included_study_pmids": [
+    "27520400",
+    "37108584",
+    "31405706",
+    "29914666",
+    "35240291",
+    "29357033"
+   ],
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability"
+   }
+  },
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "preclin_resveratrol_36145131_scoped_source",
+   "components": [
+    "PRECLIN_RESVERATROL"
+   ],
+   "source_pmids": [
+    "36145131"
+   ],
+   "identity_scope": "ingredient_general",
+   "identity": {
+    "name": "Resveratrol preparations; no unverified knotweed marker bridge or whole-botanical equivalence."
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "meta_analysis",
+   "component_registration_status": "fully_registered",
+   "condition": "blood_lipid_parameters",
+   "purpose": "physiology",
+   "review_status": "clinician_approved",
+   "scoring_eligible": false,
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "trial_family": "source_36145131",
+   "population": {
+    "age_group": "adult",
+    "description": "17 RCTs, 968 adults aged 18-85 with dyslipidemia, type 2 diabetes, coronary disease, overweight/obesity, stroke or other conditions (Table 1)."
+   },
+   "study_design": "Published systematic review or meta-analysis; individual trial correspondence remains source-specific.",
+   "outcomes": [
+    {
+     "name": "TC MD -10.28 mg/dL (95% CI -13.79 to -6.76), TG MD -8.56 (-12.37 to -4.75), LDL-C MD -5.69 (-11.07 to -0.31); HDL-C unchanged",
+     "hierarchy": "not_reported",
+     "kind": "surrogate",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "Dose subgroups: >=500 mg/day showed an opposite LDL-C effect size to low doses; nonlinear dose-response",
+     "hierarchy": "not_reported",
+     "kind": "surrogate",
+     "direction": "mixed",
+     "outcome_role": "direct_between_group_effect"
+    }
+   ],
+   "limitations": [
+    "The reviewed research does not establish a qualifying benefit for this product's assessed use. Existing human research is retained: inflammatory, oxidative and lipid biomarker meta-analyses with mixed results.",
+    "The abstract prints a suspicious triglyceride magnitude; do not copy or silently correct that number without tracing the source figure.",
+    "No cardiovascular event or human longevity endpoint is established by lipid-surrogate changes.",
+    "Returned decision: Reject human-longevity and broad clinical-benefit claims; source-context hold for selected markers.",
+    "No new efficacy grade, clinical approval, dose threshold or product equivalence is assigned.",
+    "Specific physical dosage forms are not established by this extraction. An oral route or an extract name is not silently converted into a capsule/tablet claim; applicability remains held.",
+    "Historical bibliography census (not independent scoring sources; actual included-publication membership is separately bound to the inspected source table): 30278430, 31486447, 25577300, 23918588, 22240353, 29914666, 29313746, 25137036, 24582567, 29743980, 29484808, 23193181, 24073011, 20534755, 28701674, 24899709. Each intervention and comparison requires its own applicability assessment; citation in this bibliography grants no credit.",
+    "Included-study identifiers are now bound to this source's actual included-study rows/explicit inclusion references (Tables nutrients-14-03755-t001 explicit included-study row citations), with live NIH title/content identity checks. They are publication pointers, not independent-cohort counts, per-primary-study scoring approvals, preparation equivalence or new efficacy evidence. Exact unindexed source citations remain retained; no missing PMID is invented.",
+    "1 included source citations have no printed PubMed identifier in this primary source; their exact citations are retained in the source-table receipt. This is a documented identifier limitation, not a fabricated identifier or an extra independent trial.",
+    "Lipid surrogate only; conflicts with 24111838 (7 RCTs, no significant lipid effect) and 29305228 (21 trials, no TC/LDL/HDL change) and with the 39255906 umbrella, which judged reductions not clinically important.",
+    "High-dose (>=500 mg/day) trials showed the opposite LDL-C direction (Discussion); no dose threshold is implied.",
+    "Record downgraded to reference: surrogate-only, conflicting evidence and Dr. Pham's rejection of broad clinical benefit; this removes Evidence points from resveratrol products.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ],
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "mg",
+    "values": [],
+    "dose_status": "verified",
+    "dose_basis": "not_applicable",
+    "duration_basis": "participant_specific",
+    "administration_frequency": "Daily oral dosing; within-day schedule not reported in Table 1.",
+    "dosage_forms": [
+     "not reported by source tables: trial-specific oral resveratrol supplements"
+    ],
+    "co_therapies": [
+     "Background diet and metabolic therapies differ by trial."
+    ],
+    "reported_regimen": "Results/Table 1: 17 studies, 968 subjects, 2010-2019; resveratrol 10-3000 mg/day for 4-48 weeks (e.g. Simental 100 mg 8 wk, Hoseini 500 mg 4 wk, Khodabandehloo 800 mg 8 wk, Kantartzis 150 mg 12 wk).",
+    "normalization": {
+     "basis": "A heterogeneous synthesis has no single assigned-arm dose. Descriptive regimens do not create an intake recommendation, equivalent preparation or efficacy threshold."
+    },
+    "source_provenance": {
+     "pmid": "36145131",
+     "location": "Results (17 studies, 968 subjects, dose 10-3000 mg/day, 4-48 weeks); Table 1; Table 2 subgroups; Discussion limitations",
+     "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9506025/"
+    }
+   },
+   "included_study_pmids": [
+    "30278430",
+    "31486447",
+    "29914666",
+    "29484808",
+    "29743980",
+    "29313746",
+    "25577300",
+    "25137036",
+    "24582567",
+    "23193181",
+    "24073011",
+    "22240353",
+    "20534755",
+    "28701674",
+    "24899709",
+    "23918588"
+   ],
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability"
+   }
+  }
+ ],
+ "source_receipts": [
+  {
+   "pmid": "39872318",
+   "title_fetched": "The efficacy of resveratrol supplementation on inflammation and oxidative stress in type-2 diabetes mellitus patients: randomized double-blind placebo meta-analysis.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/39872318/",
+   "full_text": true,
+   "sections_used": "Abstract; Results; Table 1; Table 3"
+  },
+  {
+   "pmid": "36145131",
+   "title_fetched": "The Effect of Resveratrol on Blood Lipid Profile: A Dose-Response Meta-Analysis of Randomized Controlled Trials.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/36145131/",
+   "full_text": true,
+   "sections_used": "Abstract; Results; Table 1; Table 2; Discussion"
+  },
+  {
+   "pmid": "35905799",
+   "title_fetched": "Anti-inflammatory effects of resveratrol in patients with cardiovascular disease: A systematic review and meta-analysis of randomized controlled trials.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/35905799/",
+   "full_text": false,
+   "sections_used": "Abstract only"
+  },
+  {
+   "pmid": "39255906",
+   "title_fetched": "Efficacy of resveratrol supplementation on lipid profile parameters: An umbrella of meta-analysis.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/39255906/",
+   "full_text": false,
+   "sections_used": "Abstract only"
+  },
+  {
+   "pmid": "29305228",
+   "title_fetched": "Effect of resveratrol on lipid profile: An updated systematic review and meta-analysis on randomized clinical trials.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/29305228/",
+   "full_text": false,
+   "sections_used": "Abstract only"
+  },
+  {
+   "pmid": "24111838",
+   "title_fetched": "Effects of resveratrol supplementation on plasma lipids: a systematic review and meta-analysis of randomized controlled trials.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/24111838/",
+   "full_text": false,
+   "sections_used": "Abstract only"
+  }
+ ]
+}

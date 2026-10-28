@@ -1,0 +1,273 @@
+{
+ "record_id": "PRECLIN_HUPERZINE_A",
+ "decision": "closed_no_credit",
+ "summary": "The reviewed research does not establish a qualifying benefit for this product's assessed use. Existing human research is retained: dementia (Alzheimer disease and vascular dementia) trials with cognitive and daily-function findings and high risk of bias; no healthy-adult focus or cognition benefit is shown. Re-extracted from the PMC full texts. 24086396 (PMC3781107): 20 RCTs, 1,823 Alzheimer patients, 0.2-0.8 mg/day for 8-36 weeks; MMSE, HDS, WMS and ADL favoured huperzine A at 8-16 weeks (moderate GRADE), no trial measured quality of life, and most trials were at moderate or poor methodological quality. 24639880 (PMC3930088): 8 AD trials and 2 vascular-dementia trials, 100-500 μg/day; MMSE WMD 2.79 and ADL -4.84 in AD, with heterogeneity and suspected publication bias. The U.S. phase II RCT (21502597) missed its primary ADAS-Cog endpoint at 200 μg twice daily. These are dementia populations, so per Dr. Pham's rulings there is no healthy-adult focus, cognition or longevity credit; the record is reference-only with approved no-credit contexts that keep their true directions.",
+ "record_updates": {
+  "study_type": "reference",
+  "evidence_level": "reference"
+ },
+ "study_contexts": [
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "preclin_huperzine_a_24086396_scoped_source",
+   "components": [
+    "PRECLIN_HUPERZINE_A"
+   ],
+   "source_pmids": [
+    "24086396"
+   ],
+   "identity_scope": "exact_form",
+   "identity": {
+    "chemical_form": "Huperzine A (Huperzia serrata alkaloid), oral, mostly tablets"
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "meta_analysis",
+   "component_registration_status": "fully_registered",
+   "condition": "alzheimers_disease",
+   "purpose": "treatment",
+   "review_status": "clinician_approved",
+   "scoring_eligible": false,
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "trial_family": "source_24086396",
+   "population": {
+    "age_group": "adult",
+    "description": "20 RCTs, 1,823 participants with Alzheimer disease aged 50-85; comparisons vs placebo (10 trials), no treatment (2), psychotherapy (1), conventional medicine (6) and Huperzine A plus Chinese herbal medicine vs herbal medicine (1)."
+   },
+   "study_design": "Systematic review and meta-analysis of RCTs (CRD42012003249); primary outcomes cognitive function and quality of life; Cochrane risk-of-bias tool and GRADE summary of findings.",
+   "outcomes": [
+    {
+     "name": "Primary cognitive function vs placebo (summary of findings): MMSE at 8 weeks +3.75 (2.06-5.43; 3 studies, 179), at 12 weeks +2.89 (1.74-4.04; 3 studies, 100); HDS at 8 weeks +3.18; WMS at 8 weeks +16.77; moderate GRADE; MMSE not significant at 24 weeks",
+     "hierarchy": "primary",
+     "kind": "patient_important",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "Primary quality of life: not measured in any trial; one trial (ADAS-Cog, ADCS-ADL) showed no significant change",
+     "hierarchy": "primary",
+     "kind": "patient_important",
+     "direction": "null",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "ADL at 12 weeks 8.82 lower (better) (2 studies, 70); CDR at 16 weeks 0.9 lower (1 study, 65; low GRADE)",
+     "hierarchy": "secondary",
+     "kind": "patient_important",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    }
+   ],
+   "limitations": [
+    "The reviewed research does not establish a qualifying benefit for this product's assessed use. Existing human research is retained: dementia (Alzheimer disease and vascular dementia) trials with cognitive and daily-function findings and high risk of bias; no healthy-adult focus or cognition benefit is shown.",
+    "Risk of bias: 75% of trials did not describe sequence generation, 95% did not report allocation concealment, 45% gave no blinding information, 95% unregistered; overall methodological quality moderate or poor (Results, risk of bias).",
+    "Included-trial characteristics are only in supplementary Table S1 (not retrieved); the main text gives the ranges used here.",
+    "No transfer to healthy adults: these are dementia (Alzheimer disease or vascular dementia) populations; Dr. Pham's 2026-10-28 rulings accept no credit for longevity or healthy-adult cognition or focus. Record is reference-only, which removes Evidence points from huperzine A products. This is not 'no human research': the dementia findings are recorded with their true directions.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ],
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "mg",
+    "values": [],
+    "dose_status": "verified",
+    "dose_basis": "not_applicable",
+    "duration_basis": "participant_specific",
+    "duration_days": null,
+    "administration_frequency": "Trial-specific daily dosing (e.g. up to 0.4 mg twice daily).",
+    "dosage_forms": [
+     "oral huperzine A tablet (trial-specific; tablets named in included-trial titles and NCT01282619)"
+    ],
+    "co_therapies": [
+     "Some comparisons used no treatment, psychotherapy, conventional medicine or Chinese herbal medicine as comparators or co-therapy."
+    ],
+    "reported_regimen": "Results: huperzine A 0.2-0.8 mg/day (mean about 0.37 mg/day) for 8-36 weeks (mean 14.7 weeks).",
+    "normalization": {
+     "basis": "No scalar pooled dose."
+    },
+    "source_provenance": {
+     "pmid": "24086396",
+     "location": "Methods (outcomes; RoB); Results (characteristics paragraph; comparison types; risk of bias); Table 1 summary of findings (PMC3781107)",
+     "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3781107/"
+    }
+   },
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability"
+   },
+   "included_study_pmids": [
+    "21502597",
+    "8701750",
+    "12181083"
+   ]
+  },
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "preclin_huperzine_a_24639880_scoped_source",
+   "components": [
+    "PRECLIN_HUPERZINE_A"
+   ],
+   "source_pmids": [
+    "24639880"
+   ],
+   "identity_scope": "exact_form",
+   "identity": {
+    "chemical_form": "Huperzine A tablets, oral"
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "meta_analysis",
+   "component_registration_status": "fully_registered",
+   "condition": "dementia",
+   "purpose": "treatment",
+   "review_status": "clinician_approved",
+   "scoring_eligible": false,
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "trial_family": "source_24639880",
+   "population": {
+    "age_group": "adult",
+    "description": "Placebo-controlled RCTs: 8 Alzheimer disease trials (733 participants; ages 40-92, MMSE about 10-26) and 2 vascular dementia trials (92 participants) (Table 1)."
+   },
+   "study_design": "Meta-analysis of placebo-controlled RCTs of huperzine A in AD and vascular dementia; primary outcomes MMSE and ADL; Jadad quality scores 3-5.",
+   "outcomes": [
+    {
+     "name": "AD primary MMSE change vs placebo: WMD 2.79 (1.83-3.74), I2 87%; subgroups at 6-16 weeks positive",
+     "hierarchy": "primary",
+     "kind": "patient_important",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "AD primary ADL change: WMD -4.84 (-7.27 to -2.42; negative = better); HDS +2.80 (1.12-4.49)",
+     "hierarchy": "primary",
+     "kind": "patient_important",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "Vascular dementia MMSE +4.92 (1.80-8.04) and ADL -10.24 (-16.66 to -3.83), I2 63-81%; funnel plots suggested strong publication bias for MMSE and ADL",
+     "hierarchy": "primary",
+     "kind": "patient_important",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "Adverse events vs placebo: no significant difference (RR 1.27, fixed effect)",
+     "hierarchy": "secondary",
+     "kind": "patient_important",
+     "direction": "null",
+     "outcome_role": "direct_between_group_effect"
+    }
+   ],
+   "limitations": [
+    "The reviewed research does not establish a qualifying benefit for this product's assessed use. Existing human research is retained: dementia (Alzheimer disease and vascular dementia) trials with cognitive and daily-function findings and high risk of bias; no healthy-adult focus or cognition benefit is shown.",
+    "Substantial heterogeneity and suspected publication bias (Results); small, mostly Chinese trials.",
+    "Table 1 lists Rafii et al. 2011 at 200 μg/day for 16 weeks, while the Rafii abstract (PMID 21502597) reports 200 μg twice daily, whose primary ADAS-Cog analysis was null; this discrepancy is retained.",
+    "No transfer to healthy adults: these are dementia (Alzheimer disease or vascular dementia) populations; Dr. Pham's 2026-10-28 rulings accept no credit for longevity or healthy-adult cognition or focus. Record is reference-only, which removes Evidence points from huperzine A products. This is not 'no human research': the dementia findings are recorded with their true directions.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ],
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "mg",
+    "values": [
+     0.1,
+     0.2,
+     0.3,
+     0.4,
+     0.5
+    ],
+    "dose_status": "verified",
+    "dose_basis": "not_applicable",
+    "duration_basis": "participant_specific",
+    "duration_days": null,
+    "administration_frequency": "Daily oral dosing per trial (Table 1).",
+    "dosage_forms": [
+     "oral huperzine A tablet; blank placebo tablets"
+    ],
+    "co_therapies": [
+     "One trial's control group received Salvia miltiorrhiza tablets (Methods)."
+    ],
+    "reported_regimen": "Table 1: AD trials 200-500 μg/day for 8-24 weeks (Shi 400 μg 12 wk; Rafii 200 μg 16 wk as printed; Zhang 2006 500 μg 24 wk; Yang 300 μg 16 wk; Zhang 2002 400 μg 12 wk; Chai 400 μg 8 wk; Xu 1995 400 μg 8 wk; Liu 200 μg 8 wk); VD trials Xu 2012 100 μg 12 wk, Zhou 300 μg 24 wk.",
+    "normalization": {
+     "basis": "Per-trial μg/day converted to mg (100 μg = 0.1 mg); not a pooled dose."
+    },
+    "source_provenance": {
+     "pmid": "24639880",
+     "location": "Methods (interventions, statistics); Table 1 included-study characteristics; Results (Figures 2-3, Table 2, Figure 5 and AE table) (PMC3930088)",
+     "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3930088/"
+    }
+   },
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability"
+   },
+   "included_study_pmids": [
+    "21502597",
+    "12181083",
+    "8701750",
+    "21833673"
+   ]
+  }
+ ],
+ "source_receipts": [
+  {
+   "pmid": "24086396",
+   "title_fetched": "Huperzine A for Alzheimer's disease: a systematic review and meta-analysis of randomized clinical trials.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/24086396/",
+   "full_text": true,
+   "sections_used": "Full text PMC3781107: Methods; Results incl. characteristics, comparisons, risk of bias; Table 1 summary of findings (Table S1 supplement not retrieved)"
+  },
+  {
+   "pmid": "24639880",
+   "title_fetched": "Huperzine a in the treatment of Alzheimer's disease and vascular dementia: a meta-analysis.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/24639880/",
+   "full_text": true,
+   "sections_used": "Full text PMC3930088: Methods; Table 1 included studies; Table 2; Results; AE table"
+  },
+  {
+   "pmid": "21502597",
+   "title_fetched": "A phase II trial of huperzine A in mild to moderate Alzheimer disease.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/21502597/",
+   "full_text": false,
+   "sections_used": "Abstract only (Europe PMC full text unavailable); primary ADAS-Cog null at 200 μg BID"
+  },
+  {
+   "pmid": "30989926",
+   "title_fetched": "[Efficacy and safety of huperzine A in treating patients with mild cognitive impairment: a systematic review and Meta-analysis].",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/30989926/",
+   "full_text": false,
+   "sections_used": "Abstract only; Chinese-language"
+  }
+ ],
+ "freshness_search": {
+  "date": "2026-10-28",
+  "database": "PubMed (NCBI E-utilities esearch, sort=pub_date, retmax=60; titles via esummary, abstracts via efetch)",
+  "query": "(\"huperzine A\"[tiab] OR huperzine[tiab]) AND (cognit* OR memory OR dementia OR Alzheimer* OR attention) AND (meta-analysis[pt] OR systematic review[pt] OR randomized controlled trial[pt]) AND 2013:2026[dp]",
+  "hits": 16,
+  "screened": 16,
+  "screening_rule": "Kept syntheses and RCTs of oral huperzine A on cognition newer than the record's sources. Excluded preclinical, drug-discovery and prodrug phase I records. The record already holds the MCI MA 30989926.",
+  "read": [
+   {
+    "pmid": "34924395",
+    "title": "The Efficacy and Safety of Alzheimer's Disease Therapies: An Updated Umbrella Review.",
+    "finding": "2022 umbrella review (16 reviews, 149 studies): AChE inhibitors, huperzine A among them, appeared beneficial for cognition, global performance and ADL in Alzheimer's disease."
+   },
+   {
+    "pmid": "39239652",
+    "title": "Pharmacological treatments for vascular dementia: a systematic review and Bayesian network meta-analysis.",
+    "finding": "2024 NMA, 194 RCTs in vascular dementia: huperzine A ranked second for MMSE and first for ADL among 21 drugs."
+   },
+   {
+    "pmid": "31638455",
+    "title": "Huperzine A for the treatment of cognitive, mood, and functional deficits after moderate and severe TBI (HUP-TBI): results of a Phase II randomized controlled pilot study: implications for understanding the placebo effect.",
+    "finding": "2020 phase II RCT in moderate-severe TBI, 12 weeks: no difference vs placebo in CVLT-II memory; placebo-group improvement."
+   }
+  ],
+  "conclusion": "confirms: newer syntheses support huperzine A only within Alzheimer's and vascular dementia. The one newer non-dementia RCT (TBI) was null, and no trial tests healthy adults. No healthy-adult focus or longevity credit."
+ }
+}

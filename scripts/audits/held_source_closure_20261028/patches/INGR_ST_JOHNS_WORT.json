@@ -1,0 +1,23 @@
+{
+ "record_id": "INGR_ST_JOHNS_WORT",
+ "decision": "held: no open full text for either declared source (28064110 J Affect Disord 2017; 18843608 Cochrane 2008, PMC record without body), so extracts, doses, dosage forms and included trials cannot be verified; the sources also address major/mild-to-moderate depression, not the record's Reduce Stress/Anxiety goal, and Dr. Pham's A113 efficacy hold with mandatory safety/interaction review stays",
+ "summary": "Abstracts only. The Cochrane review (29 double-blind RCTs, 5,489 patients with major depression) found response RR 1.28 (1.10-1.49) versus placebo in larger trials, with marked heterogeneity and more favorable results from German-speaking countries; the 2017 meta-analysis (27 trials vs SSRIs, 3,808 patients) found comparable response with fewer dropouts. Both concern depression treatment, not stress/anxiety, so even a verified context would not match the record's stated goal. No context is approved; CYP3A4/P-gp interaction safety is outside this efficacy review.",
+ "record_updates": {},
+ "study_contexts": [],
+ "source_receipts": [
+  {
+   "pmid": "28064110",
+   "title_fetched": "Clinical use of Hypericum perforatum (St John's wort) in depression: A meta-analysis.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/28064110/",
+   "full_text": false,
+   "sections_used": "PubMed abstract"
+  },
+  {
+   "pmid": "18843608",
+   "title_fetched": "St John's wort for major depression.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/18843608/",
+   "full_text": false,
+   "sections_used": "PubMed abstract"
+  }
+ ]
+}

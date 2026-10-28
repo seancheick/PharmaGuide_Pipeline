@@ -1,0 +1,386 @@
+{
+ "record_id": "INGR_COLLAGEN_PEPTIDES",
+ "decision": "held: one field blocks completion. The signed 2026-10-26 context collagen_skin_funding_40324552 records included_study_pmids='extraction_pending', and the Am J Med 2025 full text is closed (OpenAlex, Semantic Scholar and Europe PMC all report no open copy), so its included trials cannot be listed. Everything else is in place: reference path, record-level scoring_eligible dropped with a notes citation of the 2026-10-28 ruling, the other three signed contexts unchanged and valid. To finish, either retrieve the 40324552 included-trial list (library access) or have the coordinator authorize re-encoding that one context as rejected_source under the 2026-10-28 ruling, which would replace its 2026-10-26 signature.",
+ "summary": "Dr. Pham's 2026-10-28 ruling withholds skin-aging credit and makes knee pain an optional future qualification. The four existing signed contexts (all non-eligible) already match: 37432180 (26 RCTs, co-actives present), 40324552 (benefit absent in non-pharma-funded and high-quality subgroups), 37717022 (4 high-risk-of-bias knee trials), 39839727 (collagen-plus-calcium-ascorbate formula). Only the 40324552 included-study list is outstanding.",
+ "record_updates": {
+  "study_type": "reference",
+  "evidence_level": "reference",
+  "scoring_eligible": null,
+  "notes": "Signed A059/A148 review rejects affirmative generic-product qualification from these four sources without eligible preparation/dose/population/outcome correspondence. Favorable pooled skin measurements are retained with co-active, quality and funding limitations; OA pooling has an unresolved active-comparator/repeated-outcome problem; COLLinstant is a collagen-plus-calcium-ascorbate formula, not monotherapy. This is a scoped eligibility hold, not a penalty or a claim that all collagen is ineffective. Source-specific reviewed limitations are recorded separately from unresolved applicability/full-text questions. Dr.Pham signed the returned decisions; approval date2026-10-26 supplied by the operator. Dr. Pham's signed ruling of 2026-10-28 resolves the former record-level eligibility hold: skin-aging credit is withheld (completed no-credit, reference path). Knee-osteoarthritis pain credit is an optional future qualification requiring exact-source acceptance and does not block this completion."
+ },
+ "study_contexts": [
+  {
+   "context_schema_version": "1.1.0",
+   "components": [
+    "INGR_COLLAGEN_PEPTIDES"
+   ],
+   "identity_scope": "ingredient_general",
+   "identity": {
+    "chemical_form": "Hydrolyzed collagen preparations differ across source studies."
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "meta_analysis",
+   "component_registration_status": "fully_registered",
+   "purpose": "treatment",
+   "review_status": "clinician_approved",
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "scoring_eligible": false,
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-26",
+    "scope": "identity_dose_outcome_applicability"
+   },
+   "context_id": "collagen_skin_37432180",
+   "source_pmids": [
+    "37432180"
+   ],
+   "trial_family": "collagen_skin_meta_pu_2023",
+   "condition": "skin_hydration_elasticity",
+   "population": {
+    "age_group": "adult",
+    "description": "Review reports 26 randomized trials and1721 participants; preparations, populations, doses and duration differ."
+   },
+   "study_design": "Systematic review and meta-analysis of oral hydrolyzed preparations; outcomes and some co-active formulations differ.",
+   "included_study_pmids": [
+    "23949208",
+    "31627309",
+    "26362110",
+    "30513923",
+    "24131075",
+    "32195722",
+    "26840887",
+    "31221944",
+    "32009486",
+    "24401291",
+    "24955642",
+    "25732262",
+    "28528342",
+    "30122200",
+    "29949889",
+    "32120787",
+    "32017646",
+    "32530124",
+    "32799362",
+    "33521019",
+    "33774639",
+    "34959923",
+    "35342502"
+   ],
+   "outcomes": [
+    {
+     "name": "Reported pooled skin hydration and elasticity measurements",
+     "hierarchy": "primary",
+     "kind": "surrogate",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    }
+   ],
+   "limitations": [
+    "The signed return rejects unqualified generic-product efficacy; a source-specific favorable finding does not establish equivalence of retail preparations.",
+    "No transfer to BioCell, UC-II, cartilage regeneration, exercise recovery or longevity, and no universal collagen efficacy dose.",
+    "Original saved-label preparation, component dose, regimen and outcome correspondence remain separately required.",
+    "Favorable pooled measurements do not establish visible rejuvenation or every product. Missing-data, deviations and reporting-bias concerns remain.",
+    "The Methods say combination supplements were excluded, but included Table1 references include astaxanthin, vitamins, coenzymeQ10, ornithine or other active formulations; isolated-collagen attribution is not established.",
+    "Some included references have no verified PMID; no identifier is invented. Review reports hospital funding and no conflicts, which does not establish independence of its underlying trials.",
+    "The later funding/quality-sensitive review and DOI10.1111/jocd.71208 methodological challenge must not be omitted; that critique is not a formal retraction and its reanalysis is not independently reproduced here."
+   ],
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "g",
+    "values": [],
+    "dose_status": "source_not_reported",
+    "dose_basis": "not_applicable",
+    "duration_basis": "not_recorded",
+    "administration_frequency": "Varies across included preparations; no single pooled regimen.",
+    "dosage_forms": [
+     "Different oral hydrolyzed preparations, including distinct combination products"
+    ],
+    "co_therapies": [
+     "Additional active ingredients vary by study; no common monotherapy regimen is established."
+    ],
+    "source_provenance": {
+     "pmid": "37432180",
+     "location": "Full text Methods, Table1, risk-of-bias assessment and Discussion.",
+     "source_url": "https://pubmed.ncbi.nlm.nih.gov/37432180/"
+    }
+   }
+  },
+  {
+   "context_schema_version": "1.1.0",
+   "components": [
+    "INGR_COLLAGEN_PEPTIDES"
+   ],
+   "identity_scope": "ingredient_general",
+   "identity": {
+    "chemical_form": "Hydrolyzed collagen preparations differ across source studies."
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "meta_analysis",
+   "component_registration_status": "fully_registered",
+   "purpose": "treatment",
+   "review_status": "clinician_approved",
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "scoring_eligible": false,
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-26",
+    "scope": "identity_dose_outcome_applicability"
+   },
+   "context_id": "collagen_skin_funding_40324552",
+   "source_pmids": [
+    "40324552"
+   ],
+   "trial_family": "collagen_skin_meta_myung_2025",
+   "condition": "skin_aging",
+   "population": {
+    "age_group": "adult",
+    "description": "Abstract reports23 randomized trials and1474 participants; exact subgroup assignments require full methods/supplement."
+   },
+   "study_design": "Systematic review/meta-analysis with funding and study-quality subgroup sensitivity analyses; abstract and publisher disclosures reviewed.",
+   "included_study_pmids": "extraction_pending",
+   "outcomes": [
+    {
+     "name": "Overall pooled hydration, elasticity and wrinkle measurements",
+     "hierarchy": "primary",
+     "kind": "surrogate",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "Non-pharmaceutical-funded and high-quality subgroups",
+     "hierarchy": "secondary",
+     "kind": "surrogate",
+     "direction": "null",
+     "outcome_role": "direct_between_group_effect"
+    }
+   ],
+   "limitations": [
+    "The signed return rejects unqualified generic-product efficacy; a source-specific favorable finding does not establish equivalence of retail preparations.",
+    "No transfer to BioCell, UC-II, cartilage regeneration, exercise recovery or longevity, and no universal collagen efficacy dose.",
+    "Original saved-label preparation, component dose, regimen and outcome correspondence remain separately required.",
+    "The signed decision rejects an unqualified general skin-aging claim because benefits were absent in non-pharmaceutical-funded and high-quality subgroups.",
+    "Funding sensitivity does not prove that each industry-funded study is false or every preparation ineffective.",
+    "Original full methods, tables and supplement were not accessible; subgroup definitions, trial allocation, estimates and overlap remain unresolved. This is not a completed full-text appraisal."
+   ],
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "g",
+    "values": [],
+    "dose_status": "source_not_reported",
+    "dose_basis": "not_applicable",
+    "duration_basis": "not_recorded",
+    "administration_frequency": "Varies across included preparations; no single pooled regimen.",
+    "dosage_forms": [
+     "Different oral hydrolyzed preparations, including distinct combination products"
+    ],
+    "co_therapies": [
+     "Additional active ingredients vary by study; no common monotherapy regimen is established."
+    ],
+    "source_provenance": {
+     "pmid": "40324552",
+     "location": "Original abstract Results/Conclusions and publisher disclosures; no numerical dose accepted.",
+     "source_url": "https://pubmed.ncbi.nlm.nih.gov/40324552/"
+    }
+   }
+  },
+  {
+   "context_schema_version": "1.1.0",
+   "components": [
+    "INGR_COLLAGEN_PEPTIDES"
+   ],
+   "identity_scope": "ingredient_general",
+   "identity": {
+    "chemical_form": "Hydrolyzed collagen preparations differ across source studies."
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "meta_analysis",
+   "component_registration_status": "fully_registered",
+   "purpose": "treatment",
+   "review_status": "clinician_approved",
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "scoring_eligible": false,
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-26",
+    "scope": "identity_dose_outcome_applicability"
+   },
+   "context_id": "collagen_knee_meta_37717022",
+   "source_pmids": [
+    "37717022"
+   ],
+   "trial_family": "collagen_knee_meta_2023",
+   "condition": "knee_osteoarthritis",
+   "population": {
+    "age_group": "adult",
+    "description": "Review reports four studies/507 participants, with main pain analysis of three studies/375 participants; knee-OA grades and preparations differ."
+   },
+   "study_design": "Meta-analysis of randomized knee-OA studies, including an active-comparator trial and a combination arm.",
+   "included_study_pmids": [
+    "19212858",
+    "20401752"
+   ],
+   "outcomes": [
+    {
+     "name": "Reported pooled knee pain signal",
+     "hierarchy": "primary",
+     "kind": "patient_important",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    }
+   ],
+   "limitations": [
+    "The signed return rejects unqualified generic-product efficacy; a source-specific favorable finding does not establish equivalence of retail preparations.",
+    "No transfer to BioCell, UC-II, cartilage regeneration, exercise recovery or longevity, and no universal collagen efficacy dose.",
+    "Original saved-label preparation, component dose, regimen and outcome correspondence remain separately required.",
+    "All included studies were rated high risk of bias; heterogeneity and uncertain adverse-event evidence remain.",
+    "Table1 identifies Trc2011 control as1.5g/day glucosamine sulfate, not placebo, despite the review labeling its pooled contrast placebo-controlled.",
+    "The original Trc trial PMID20401752 Methods independently confirms 10 g/day Colatech versus 1.5 g/day glucosamine sulfate; comparator access/extraction is complete. Forest-input reconciliation and corrected pooled inference remain unresolved; no pooled placebo-superiority claim is accepted.",
+    "A nonsignificant adverse-event contrast does not establish equal safety."
+   ],
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "g",
+    "values": [],
+    "dose_status": "source_not_reported",
+    "dose_basis": "not_applicable",
+    "duration_basis": "not_recorded",
+    "administration_frequency": "Varies across included preparations; no single pooled regimen.",
+    "dosage_forms": [
+     "Different oral hydrolyzed preparations, including distinct combination products"
+    ],
+    "co_therapies": [
+     "Additional active ingredients vary by study; no common monotherapy regimen is established."
+    ],
+    "source_provenance": {
+     "pmid": "37717022",
+     "location": "Full text Tables1–3, pain forest plots and post-hoc analysis.",
+     "source_url": "https://pubmed.ncbi.nlm.nih.gov/37717022/"
+    }
+   }
+  },
+  {
+   "context_schema_version": "1.1.0",
+   "components": [
+    "INGR_COLLAGEN_PEPTIDES",
+    "calcium_ascorbate"
+   ],
+   "identity_scope": "combination",
+   "identity": {
+    "branded_material": "COLLinstant",
+    "manufacturer": "NutraResearch SL, Barcelona, Spain; COLLinstant material from Viscofan DE GmbH, Weinheim, Germany.",
+    "standardization": "Bovine hydrolyzed typeI/III collagen, reported average molecular weight1–3kDa, with calcium ascorbate."
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "direct_rct",
+   "component_registration_status": "unregistered_components_present",
+   "purpose": "treatment",
+   "review_status": "clinician_approved",
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "scoring_eligible": false,
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-26",
+    "scope": "identity_dose_outcome_applicability"
+   },
+   "context_id": "collinstant_formula_39839727",
+   "source_pmids": [
+    "39839727"
+   ],
+   "trial_family": "collinstant_NCT05149053",
+   "condition": "knee_osteoarthritis",
+   "population": {
+    "age_group": "adult",
+    "description": "Adults at least30 years with symptomatic Kellgren-Lawrence gradeII–III kneeOA; paper reports120 randomized and120 completers with substantial medical/treatment exclusions."
+   },
+   "study_design": "Randomized double-blind placebo-controlled single-centre six-month whole-formula trial; registry retrospectively posted.",
+   "outcomes": [
+    {
+     "name": "Pain and functional limitation after six months",
+     "hierarchy": "primary",
+     "kind": "patient_important",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    }
+   ],
+   "limitations": [
+    "The signed return rejects unqualified generic-product efficacy; a source-specific favorable finding does not establish equivalence of retail preparations.",
+    "No transfer to BioCell, UC-II, cartilage regeneration, exercise recovery or longevity, and no universal collagen efficacy dose.",
+    "Original saved-label preparation, component dose, regimen and outcome correspondence remain separately required.",
+    "Whole formula supplies10g collagen plus80mg calcium ascorbate per daily sachet; not collagen monotherapy. No conversion of calcium-ascorbate compound mass into vitaminC mass.",
+    "Funding from Nutraresearch andViscofan; reported complete follow-up and no adverse events do not prove comprehensive ascertainment or general safety.",
+    "NCT05149053 first submitted after study completion; registry-listed endpoints are not evidence of prospective registration.",
+    "Final whole-formula acceptance and exact-product correspondence remain held. The tested recipe cannot establish a universal10g collagen threshold.",
+    "The paper reports10.728g whole-sachet powder including excipients; the recorded10000mg exposure is explicitly the collagen component, not total sachet mass."
+   ],
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "mg",
+    "values": [
+     10000
+    ],
+    "dose_status": "verified",
+    "dose_basis": "nominal_assigned_arm",
+    "duration_basis": "fixed_protocol",
+    "duration_days": null,
+    "duration_as_printed": {
+     "value": 6,
+     "unit": "months"
+    },
+    "administration_frequency": "once daily, preferably in the morning",
+    "dosage_forms": [
+     "Sachet dissolved in approximately200mL liquid"
+    ],
+    "co_therapies": [
+     "80mg calcium ascorbate in the same study sachet; this is an active co-component."
+    ],
+    "reported_regimen": "One daily sachet containing10g hydrolyzed collagen plus80mg calcium ascorbate for six months.",
+    "normalization": {
+     "basis": "10000mg is the reported collagen component within the complete assigned formula, not the whole-sachet mass or isolated-collagen efficacy dose; no vitaminC mass conversion. The source reports six calendar months; no exact day count is inferred."
+    },
+    "source_provenance": {
+     "pmid": "39839727",
+     "location": "Full text Materials andMethods sections2.2–2.4, Results and funding disclosures; NCT05149053 registrydates independently checked.",
+     "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11745964/"
+    }
+   }
+  }
+ ],
+ "source_receipts": [
+  {
+   "pmid": "37432180",
+   "title_fetched": "Effects of Oral Collagen for Skin Anti-Aging: A Systematic Review and Meta-Analysis.",
+   "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=37432180&retmode=xml",
+   "full_text": false,
+   "sections_used": "PubMed abstract"
+  },
+  {
+   "pmid": "40324552",
+   "title_fetched": "Effects of Collagen Supplements on Skin Aging: A Systematic Review and Meta-Analysis of Randomized Controlled Trials.",
+   "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=40324552&retmode=xml",
+   "full_text": false,
+   "sections_used": "PubMed abstract (no open full text via OpenAlex, Semantic Scholar or Europe PMC)"
+  },
+  {
+   "pmid": "37717022",
+   "title_fetched": "Analgesic efficacy of collagen peptide in knee osteoarthritis: a meta-analysis of randomized controlled trials.",
+   "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=37717022&retmode=xml",
+   "full_text": false,
+   "sections_used": "PubMed abstract"
+  },
+  {
+   "pmid": "39839727",
+   "title_fetched": "Oral administration of hydrolyzed collagen alleviates pain and enhances functionality in knee osteoarthritis: Results from a randomized, double-blind, placebo-controlled study.",
+   "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=39839727&retmode=xml",
+   "full_text": false,
+   "sections_used": "PubMed abstract"
+  }
+ ]
+}

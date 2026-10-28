@@ -1,0 +1,407 @@
+{
+ "record_id": "INGR_WHEY_PROTEIN",
+ "decision": "closed_credit",
+ "summary": "42625626 (open full text; Bayesian NMA of 36 RCTs, 1552 adults with supervised resistance training) found whey increased lean body mass versus placebo by 1.24 kg (CrI 0.61-1.87; CINeMA moderate) and, as an exploratory secondary outcome, 1-RM strength by 5.8 kg. Credit is scoped to whey (label must say whey) for lean mass and strength alongside resistance training, smaller in adults 65+. The mixed-protein review stays non-crediting and the 30-35 g/day plateau is not a Dose benchmark.",
+ "record_updates": {
+  "references_structured": [
+   {
+    "type": "pubmed",
+    "authority": "NCBI PubMed",
+    "pmid": "28698222",
+    "doi": "10.1136/bjsports-2017-097608",
+    "title": "A systematic review, meta-analysis and meta-regression of the effect of protein supplementation on resistance training-induced gains in muscle mass and strength in healthy adults.",
+    "citation": "British journal of sports medicine (2018-03-01)",
+    "url": "https://pubmed.ncbi.nlm.nih.gov/28698222/",
+    "published_date": "2018-03-01",
+    "publication_types": [
+     "Journal Article",
+     "Meta-Analysis",
+     "Systematic Review"
+    ],
+    "mesh_terms": [
+     "Adult",
+     "Dietary Proteins",
+     "Dietary Supplements",
+     "Humans",
+     "Muscle Strength",
+     "Muscle, Skeletal",
+     "Randomized Controlled Trials as Topic",
+     "Regression Analysis",
+     "Resistance Training"
+    ],
+    "supplementary_concepts": [],
+    "evidence_grade": "systematic_review",
+    "retracted": false,
+    "supports_claims": [],
+    "verification_source": "pubmed_eutils"
+   },
+   {
+    "type": "pubmed",
+    "authority": "NCBI PubMed",
+    "pmid": "39303495",
+    "doi": "10.1016/j.clnu.2024.08.033",
+    "title": "Effectiveness of whey protein supplementation on muscle strength and physical performance of older adults: A systematic review and meta-analysis of randomized clinical trials.",
+    "citation": "Clinical nutrition (Edinburgh, Scotland) (2024-10-01)",
+    "url": "https://pubmed.ncbi.nlm.nih.gov/39303495/",
+    "published_date": "2024-10-01",
+    "publication_types": [
+     "Systematic Review",
+     "Journal Article",
+     "Meta-Analysis"
+    ],
+    "mesh_terms": [
+     "Aged",
+     "Female",
+     "Humans",
+     "Male",
+     "Middle Aged",
+     "Body Composition",
+     "Dietary Supplements",
+     "Muscle Strength",
+     "Muscle, Skeletal",
+     "Physical Functional Performance",
+     "Randomized Controlled Trials as Topic",
+     "Whey Proteins"
+    ],
+    "supplementary_concepts": [],
+    "evidence_grade": "systematic_review",
+    "retracted": false,
+    "supports_claims": [],
+    "verification_source": "pubmed_eutils"
+   },
+   {
+    "type": "pubmed",
+    "authority": "NCBI PubMed",
+    "pmid": "42625626",
+    "doi": "10.3389/fnut.2026.1860234",
+    "title": "Dose-structure-population interactions of protein supplementation combined with resistance training on body composition: a Bayesian network meta-analysis with dose-response modeling.",
+    "citation": "Frontiers in nutrition (2026)",
+    "url": "https://pubmed.ncbi.nlm.nih.gov/42625626/",
+    "publication_types": [
+     "Journal Article",
+     "Systematic Review"
+    ],
+    "evidence_grade": "meta_analysis",
+    "retracted": false,
+    "verification_source": "pubmed_eutils",
+    "notes": "Added 2026-10-28 (agent review) per Dr. Pham's fifth ruling: open full text PMC13490089; whey-specific lean-mass and strength estimates versus placebo."
+   }
+  ],
+  "applicability": {
+   "scope": "ingredient",
+   "supported_outcomes": [
+    "lean_mass"
+   ],
+   "studied_population": "Adults doing supervised resistance training (mostly young men; smaller benefit in adults 65+) taking whey protein, about 20-50 g/day in trials; not without training, and not other protein sources.",
+   "source_pmids": [
+    "42625626"
+   ],
+   "excluded_claim_terms": [
+    "weight loss",
+    "fat burning"
+   ],
+   "reviewed_at": "2026-10-28"
+  },
+  "aliases": [
+   "whey protein",
+   "whey protein isolate",
+   "whey isolate",
+   "whey protein concentrate",
+   "whey hydrolysate"
+  ],
+  "standard_name": "Whey Protein",
+  "notes": "Whey-specific evidence (Dr. Pham 2026-10-28): the network meta-analysis PMID 42625626 (36 RCTs) gives whey versus placebo lean mass +1.24 kg (moderate certainty) with exploratory strength gains, in adults doing supervised resistance training. Credit attaches only when every declared protein source is a whey form (aliases); casein, milk protein, soy, pea and mixed protein sources do not inherit it, and the earlier mixed-protein review (28698222) is not whey-specific proof. A generic Protein macro or unspecified blend does not identify whey. The exploratory 30-35 g/day plateau is not a Dose benchmark. No weight-loss or fat-burning credit."
+ },
+ "study_contexts": [
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "ingr_whey_protein_42625626_whey_vs_placebo",
+   "source_pmids": [
+    "42625626"
+   ],
+   "components": [
+    "INGR_WHEY_PROTEIN"
+   ],
+   "identity_scope": "exact_form",
+   "identity": {
+    "chemical_form": "Whey protein (isolate, concentrate, hydrolysate or native) as its own network node; not casein, soy, pea, rice, milk or blends"
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "network_meta_analysis",
+   "component_registration_status": "fully_registered",
+   "condition": "resistance_training_lean_mass_strength",
+   "purpose": "physiology",
+   "review_status": "clinician_approved",
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability"
+   },
+   "scoring_eligible": true,
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "trial_family": "source_42625626",
+   "population": {
+    "age_group": "adult",
+    "description": "36 RCTs, 1552 participants (89 arms), mostly young trained or untrained men; nine trials in adults aged >=65; supervised resistance training >=6 weeks, >=2 sessions/week."
+   },
+   "study_design": "Systematic review and Bayesian random-effects network meta-analysis (PROSPERO CRD420261340515) of protein supplements versus placebo during supervised resistance training; RoB 2 and CINeMA.",
+   "outcomes": [
+    {
+     "name": "Primary: lean body mass, whey vs placebo MD +1.24 kg (95% CrI 0.61-1.87; prediction interval -0.18 to 2.66); CINeMA moderate (downgraded for imprecision)",
+     "hierarchy": "primary",
+     "kind": "patient_important",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "Exploratory secondary: 1-RM strength, whey vs placebo MD +5.8 kg (95% CrI 1.9-9.7), 24 trials, high heterogeneity (tau 4.2 kg)",
+     "hierarchy": "secondary",
+     "kind": "patient_important",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    }
+   ],
+   "limitations": [
+    "Credit is whey-specific and applies only alongside resistance training; it does not transfer to casein, soy, pea, rice, milk or generic protein blends, and the mixed-protein review 28698222 remains rejected as whey-specific proof.",
+    "The 30-35 g/day whey plateau is an exploratory dose-response estimate, not a Dose benchmark (Dr. Pham fifth ruling).",
+    "Risk of bias: 15 of 36 trials low, 16 some concerns, 5 high. The prediction interval for lean mass crosses zero; strength pools different 1-RM exercises and is exploratory.",
+    "In adults >=65 the whey advantage narrowed (9 trials); the older-adult review 39303495 found lower-body strength gains only with resistance exercise and no handgrip, performance or body-composition benefit.",
+    "Included-study PMIDs listed are the whey-arm trials of Table 6 resolved by PubMed citation matching and title check (15 of 24); Volek 2013, Mobley 2017, Park 2019, Weinheimer 2012, Reidy 2016, Chale 2013 (ambiguous), Hamarsland 2017 (title mismatch), Nieman 2024 (mismatch) and Weisgarber 2012 (not found) are retained by citation only.",
+    "41454445 (2026, young adults, abstract only) found lean mass not significant but bench press +8.87 kg and squat +9.60 kg; 41635649 (2026 NMA) found whey strength SMD 0.15 and fat-free mass SMD 0.16; both are consistent but not used as credit sources here.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ],
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "g",
+    "values": [
+     20,
+     50
+    ],
+    "dose_status": "verified",
+    "dose_basis": "not_applicable",
+    "duration_basis": "participant_specific",
+    "duration_days": null,
+    "administration_frequency": "Daily, trial-specific (Table 6); some trials 1.5 g/kg/day",
+    "dosage_forms": [
+     "whey protein powder or beverage"
+    ],
+    "co_therapies": [
+     "Supervised resistance training >=6 weeks, >=2 sessions/week, in all arms"
+    ],
+    "source_provenance": {
+     "pmid": "42625626",
+     "location": "Methods (eligibility, outcomes: LBM primary, 1-RM exploratory secondary; RoB 2; CINeMA); Table 1 CINeMA (whey vs placebo moderate); Results 3.3 risk of bias; LBM results and Table 7; strength results 3.6; Table 6 (36 trials, whey-arm doses); limitations",
+     "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13490089/"
+    },
+    "reported_regimen": "Whey arms ~20 to 50 g/day (Table 6; one trial 1.5 g/kg/day); 6 weeks to 9 months",
+    "normalization": {
+     "basis": "Descriptive studied range only; the 30-35 g/day plateau is not a Dose benchmark."
+    }
+   },
+   "included_study_pmids": [
+    "26677350",
+    "30255024",
+    "31221297",
+    "16937979",
+    "17240782",
+    "16988909",
+    "10838463",
+    "24149728",
+    "16948480",
+    "25628520",
+    "30621129",
+    "23782948",
+    "33261645",
+    "17679046",
+    "24834017"
+   ]
+  },
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "ingr_whey_protein_28698222_scoped_synthesis",
+   "source_pmids": [
+    "28698222"
+   ],
+   "components": [
+    "INGR_WHEY_PROTEIN"
+   ],
+   "identity_scope": "ingredient_general",
+   "identity": {
+    "preparation": "Mixed dietary protein supplements and food matrices (whey, casein, soy, pea, milk, whole food, blends); not an exact whey formula"
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "meta_analysis",
+   "component_registration_status": "fully_registered",
+   "condition": "resistance_training_adaptation",
+   "purpose": "challenge",
+   "review_status": "clinician_approved",
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability"
+   },
+   "scoring_eligible": false,
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "trial_family": "ingr_whey_protein_28698222_synthesis",
+   "population": {
+    "description": "49 RCTs, 1863 healthy adults (mean±SD 35±20 years) performing resistance exercise training >=2 sessions/week for >=6 weeks; 10 studies in resistance-trained participants, 14 exclusively female study groups."
+   },
+   "study_design": "Systematic review, random-effects meta-analysis and meta-regression of RCTs combining resistance exercise training with dietary protein supplementation versus non-supplemented or placebo control with identical training.",
+   "outcomes": [
+    {
+     "name": "One-repetition-maximum strength MD +2.49 kg (95% CI 0.64 to 4.33), p=0.01; maximal voluntary contraction SMD 0.04 (-0.09 to 0.16), p=0.54",
+     "hierarchy": "primary",
+     "kind": "patient_important",
+     "direction": "mixed",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "Fat-free mass MD +0.30 kg (0.09 to 0.52), p=0.007; total body mass MD 0.11 kg (-0.23 to 0.46), p=0.52",
+     "hierarchy": "primary",
+     "kind": "surrogate",
+     "direction": "mixed",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "Muscle fibre CSA +310 µm2 (51 to 570), eliminated (153 µm2, -137 to 443, p=0.30) when one study was included in sensitivity analysis; mid-femur CSA +7.2 mm2 (0.20 to 14.30)",
+     "hierarchy": "primary",
+     "kind": "surrogate",
+     "direction": "mixed",
+     "outcome_role": "direct_between_group_effect"
+    }
+   ],
+   "limitations": [
+    "Mixed protein sources (Results: 23 whey, 3 casein, 6 soy, 1 pea, 10 milk/milk protein, 7 whole-food and 13 non-specific/blend conditions). Dr. Pham's returned A121 decision rejects preparation-wide transfer from an ingredient-family label; this pooled estimate cannot credit any single labeled protein source.",
+    "The 1.62 g/kg/day break point (95% CI 1.03 to 2.20, p=0.079) concerns total daily protein intake and was not statistically significant; it is not a supplemental minimum.",
+    "Age reduced and resistance-training experience increased the FFM effect; effect on strength (+2.49 kg) is small relative to the ~27 kg training-induced gain reported in the Discussion.",
+    "Declared companion source PMID 39303495 (whey protein in adults >=60, 30 studies, 2105 participants) was inspected at abstract level only (no open full text): no significant pooled effect on handgrip, 6MWT, gait speed, TUG, lean or fat mass; lower-body strength SMD 0.25 (0.05 to 0.45) only in resistance-exercise interventions. Its regimens and included-study list could not be retrieved, so it supplies no credit-bearing context.",
+    "Erratum recorded in PubMed (Br J Sports Med 2020;54(19):e7); erratum content was not retrieved in this session.",
+    "47 of 49 included references have primary PMIDs in the article XML; Arazi/Hakimi/Hoseini and Mielke/Housh/Malek references have no Pub Med identifier there. The retained source reference census preserves their exact titles; no PMID invented. Per-trial supplement table remains separately retained/access checked.",
+    "2 included source citations have no printed PubMed identifier in this primary source; their exact citations are retained in the source-table receipt. This is a documented identifier limitation, not a fabricated identifier or an extra independent trial.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ],
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "g",
+    "values": [],
+    "dose_status": "verified",
+    "dose_basis": "not_applicable",
+    "duration_basis": "participant_specific",
+    "duration_days": null,
+    "administration_frequency": "Study-specific; 4 to 106 g supplemental protein/day (36±30 g/day), 5 to 44 g postexercise on training days; 40 studies gave part or all of the supplement after training.",
+    "dosage_forms": [
+     "protein supplement",
+     "milk or milk protein",
+     "whole food"
+    ],
+    "co_therapies": [
+     "Identical resistance exercise training in intervention and control arms (>=2 sessions/week, >=6 weeks)."
+    ],
+    "source_provenance": {
+     "pmid": "28698222",
+     "location": "Methods (eligibility, data extraction); Results paragraph on supplementation details (supplementary table 2 referenced); Results meta-analysis and Table 1",
+     "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5867436/"
+    },
+    "reported_regimen": "4 to 106 g protein/day across trials (mean 36±30 g/day); trial-specific durations >=6 weeks. Protein mass, not powder weight.",
+    "normalization": {
+     "basis": "No scalar pooled dose; descriptive source range only, not a minimum or benchmark."
+    }
+   },
+   "included_study_pmids": [
+    "15690307",
+    "26500462",
+    "24834017",
+    "23486511",
+    "25057266",
+    "25628520",
+    "20126965",
+    "15588291",
+    "14978601",
+    "11591884",
+    "7611390",
+    "16948480",
+    "16767436",
+    "16236227",
+    "16686554",
+    "17277594",
+    "24477043",
+    "22066824",
+    "18309444",
+    "22460474",
+    "23647357",
+    "17684208",
+    "23442287",
+    "24149229",
+    "19478342",
+    "18661258",
+    "26677350",
+    "19299575",
+    "19214338",
+    "19997019",
+    "16937979",
+    "22968306",
+    "25610954",
+    "25093275",
+    "26341720",
+    "16581862",
+    "27258300",
+    "25133710",
+    "15310736",
+    "27466602",
+    "12094125",
+    "25926415",
+    "19106243",
+    "24015719",
+    "22806076",
+    "19403951",
+    "16988909"
+   ]
+  }
+ ],
+ "source_receipts": [
+  {
+   "pmid": "28698222",
+   "title_fetched": "A systematic review, meta-analysis and meta-regression of the effect of protein supplementation on resistance training-induced gains in muscle mass and strength in healthy adults.",
+   "url": "https://www.ncbi.nlm.nih.gov/research/bionlp/RESTful/pmcoa.cgi/BioC_json/28698222/unicode",
+   "full_text": true,
+   "sections_used": "Abstract; Methods; Results incl. supplementation details and Table 1; Discussion limitations"
+  },
+  {
+   "pmid": "39303495",
+   "title_fetched": "Effectiveness of whey protein supplementation on muscle strength and physical performance of older adults: A systematic review and meta-analysis of randomized clinical trials.",
+   "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=39303495&retmode=xml",
+   "full_text": false,
+   "sections_used": "PubMed abstract only"
+  },
+  {
+   "pmid": "41454445",
+   "title_fetched": "The Impact of Whey and Soy Protein Supplementation on Resistance Training in Young Adults: A Systematic Review and Meta-Analysis.",
+   "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=41454445&retmode=xml",
+   "full_text": false,
+   "sections_used": "PubMed abstract (2026 search: whey[tiab] AND meta-analysis AND strength/lean mass, 2025-06-01 to 2026-10-28, 15 hits)"
+  },
+  {
+   "pmid": "41635649",
+   "title_fetched": "Which Protein-Based Dietary Supplements Most Effectively Enhance Fat-Free Mass and Strength Gains in Healthy Adults Undergoing Resistance Training? A Network Meta-Analysis.",
+   "url": "https://www.ncbi.nlm.nih.gov/research/bionlp/RESTful/pmcoa.cgi/BioC_json/41635649/unicode",
+   "full_text": true,
+   "sections_used": "Abstract; Methods 2.9; Results 3.3, league results (whey vs placebo rows), 4.3 CINeMA; Discussion limitations; appendix not retrievable"
+  },
+  {
+   "pmid": "42625626",
+   "title_fetched": "Dose-structure-population interactions of protein supplementation combined with resistance training on body composition: a Bayesian network meta-analysis with dose-response modeling.",
+   "url": "https://www.ncbi.nlm.nih.gov/research/bionlp/RESTful/pmcoa.cgi/BioC_json/42625626/unicode",
+   "full_text": true,
+   "sections_used": "Methods (eligibility, outcomes: LBM primary, 1-RM exploratory secondary; RoB 2; CINeMA); Table 1 CINeMA (whey vs placebo moderate); Results 3.3 risk of bias; LBM results and Table 7; strength results 3.6; Table 6 (36 trials, whey-arm doses); limitations"
+  }
+ ],
+ "integration_notes": [
+  "2026-10-28 integrator: whey identity moved from applicability.required_form_terms to the record's aliases. The protein-macro recovery path binds the 'Protein' macro row (no 'whey' text) only when every declared protein source matches the record's aliases, so a row-text term rejected 100% whey labels. Casein, milk, soy and pea protein aliases are removed: Dr. Pham's consistency rule gives whey-specific credit only.",
+  "2026-10-28 integrator: standard_name and notes made whey-specific to match the aliases and ruling.",
+  "2026-10-28 integrator (independent review): 'strength' removed from supported_outcomes: it rests on an exploratory secondary estimate, and secondary-based credit waits for the calibration batch."
+ ]
+}

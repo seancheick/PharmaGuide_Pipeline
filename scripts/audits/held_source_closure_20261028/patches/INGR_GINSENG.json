@@ -1,0 +1,238 @@
+{
+ "record_id": "INGR_GINSENG",
+ "decision": "closed_no_credit",
+ "summary": "The reviewed research does not establish a qualifying benefit for this product's assessed use. Existing human research is retained: favourable pooled findings in some disease-related fatigue populations and metabolic surrogate changes; no healthy-adult energy benefit is shown. Human research exists and is partly favourable: the fatigue meta-analysis 35776997 (12 RCTs, 1,298 patients with disease-related fatigue, e.g. cancer and MS) found a favourable pooled effect (fixed-effect SMD 0.33), and the narrative review 29624410 reports modest evidence in chronic-illness fatigue. 35509826 (23 papers) shows favourable metabolic surrogate changes. The fatigue pool mixes American and Asian ginseng, several individual Panax ginseng trials were null between groups, and no source tests healthy adults, so per Dr. Pham's 2026-10-28 rulings there is no healthy-adult energy credit. The record becomes reference-only with approved no-credit contexts, which removes Evidence points from generic Panax ginseng products.",
+ "record_updates": {
+  "study_type": "reference",
+  "evidence_level": "reference"
+ },
+ "study_contexts": [
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "ingr_ginseng_35509826_scoped_source",
+   "components": [
+    "INGR_GINSENG"
+   ],
+   "source_pmids": [
+    "35509826"
+   ],
+   "identity_scope": "ingredient_general",
+   "identity": {
+    "preparation": "Panax ginseng, Korean red ginseng, fermented red ginseng, berry and distinct preparations in source Table 1."
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "meta_analysis",
+   "component_registration_status": "fully_registered",
+   "condition": "metabolic_parameters",
+   "purpose": "physiology",
+   "review_status": "clinician_approved",
+   "scoring_eligible": false,
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "trial_family": "source_35509826",
+   "population": {
+    "description": "23 papers, 27 datasets; healthy adults and people with diabetes, obesity, hypertension or dyslipidemia."
+   },
+   "study_design": "Published systematic review or meta-analysis; individual trial correspondence remains source-specific.",
+   "outcomes": [
+    {
+     "name": "Glucose and insulin AUC, % body fat, SBP, DBP, total cholesterol, triglycerides and LDL-C significantly reduced vs placebo",
+     "hierarchy": "not_reported",
+     "kind": "surrogate",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    }
+   ],
+   "limitations": [
+    "The reviewed research does not establish a qualifying benefit for this product's assessed use. Existing human research is retained: favourable pooled findings in some disease-related fatigue populations and metabolic surrogate changes; no healthy-adult energy benefit is shown.",
+    "Biomarker changes are not proof of prevention of diabetes or cardiovascular events.",
+    "Keep root, berry, fermented and standardized extracts distinct; pooled doses are not a continuous benchmark.",
+    "Returned decision: Source-content hold.",
+    "No new scoring grade, dose threshold, product approval or clinical signature is assigned by this factual extraction.",
+    "Some included-study citations lack PubMed identifiers in the source XML; retain their exact citations rather than inventing identifiers.",
+    "Historical bibliography census (not independent scoring sources; actual included-publication membership is separately bound to the inspected source table): 22805313, 19017419, 24456363, 29348727, 18355331, 25015735, 32470863, 32025522, 25379002, 21411505, 16860976, 24843582, 26843120, 21235416, 23945406, 24130946, 26860800, 22916320, 22027944. Each intervention and comparison requires its own applicability assessment; citation in this bibliography grants no credit.",
+    "Included-study identifiers are now bound to this source's actual included-study rows/explicit inclusion references (Tables tbl1 explicit included-study row citations), with live NIH title/content identity checks. They are publication pointers, not independent-cohort counts, per-primary-study scoring approvals, preparation equivalence or new efficacy evidence. Exact unindexed source citations remain retained; no missing PMID is invented.",
+    "4 included source citations have no printed PubMed identifier in this primary source; their exact citations are retained in the source-table receipt. This is a documented identifier limitation, not a fabricated identifier or an extra independent trial.",
+    "Metabolic surrogate markers do not match the record's 'Increase Energy' claim; not scoring eligible for it.",
+    "Record downgraded to reference; removes Evidence points from generic Panax ginseng products.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ],
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "mg",
+    "values": [],
+    "dose_status": "verified",
+    "dose_basis": "not_applicable",
+    "duration_basis": "participant_specific",
+    "administration_frequency": "Study-specific 200 mg–8 g exposures over 4–24 weeks; no family-wide material or dose equivalence.",
+    "dosage_forms": [
+     "not reported by source: trial-specific oral ginseng preparations"
+    ],
+    "co_therapies": [
+     "Background disease treatment and study-specific dietary context vary."
+    ],
+    "reported_regimen": "Study-specific 200 mg–8 g exposures over 4–24 weeks; no family-wide material or dose equivalence.",
+    "normalization": {
+     "basis": "A heterogeneous synthesis has no single assigned-arm dose. Descriptive regimens do not create an intake recommendation, equivalent preparation or efficacy threshold."
+    },
+    "source_provenance": {
+     "pmid": "35509826",
+     "location": "Abstract (23 papers, 27 datasets, dose 200 mg-8 g, 4-24 weeks); Methods; Results; Table 1",
+     "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9058846/"
+    }
+   },
+   "included_study_pmids": [
+    "22805313",
+    "19017419",
+    "24456363",
+    "29348727",
+    "18355331",
+    "25015735",
+    "32470863",
+    "32025522",
+    "25379002",
+    "21411505",
+    "16860976",
+    "24843582",
+    "26843120",
+    "21235416",
+    "23945406",
+    "24130946",
+    "26860800",
+    "22916320",
+    "22027944"
+   ],
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability"
+   }
+  },
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "ingr_ginseng_35776997_scoped_source",
+   "components": [
+    "INGR_GINSENG"
+   ],
+   "source_pmids": [
+    "35776997"
+   ],
+   "identity_scope": "ingredient_general",
+   "identity": {
+    "preparation": "Ginseng preparations used in disease-related fatigue; not every Panax species or product."
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "meta_analysis",
+   "component_registration_status": "fully_registered",
+   "condition": "disease_related_fatigue",
+   "purpose": "treatment",
+   "review_status": "clinician_approved",
+   "scoring_eligible": false,
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "trial_family": "source_35776997",
+   "population": {
+    "description": "12 randomized trials, 1298 patients with disease-related fatigue."
+   },
+   "study_design": "Published systematic review or meta-analysis; individual trial correspondence remains source-specific.",
+   "outcomes": [
+    {
+     "name": "Disease-related fatigue, fixed-effect pooled SMD 0.33 favoring ginseng (CI printed as 0.44-0.22); pools American (P. quinquefolius) and Asian (P. ginseng) preparations",
+     "hierarchy": "not_reported",
+     "kind": "patient_important",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "Individual Panax ginseng / Korean red ginseng trials in Table 2: several showed no significant between-group difference (Etemadifar, Braz, Hong)",
+     "hierarchy": "not_reported",
+     "kind": "patient_important",
+     "direction": "mixed",
+     "outcome_role": "direct_between_group_effect"
+    }
+   ],
+   "limitations": [
+    "The reviewed research does not establish a qualifying benefit for this product's assessed use. Existing human research is retained: favourable pooled findings in some disease-related fatigue populations and metabolic surrogate changes; no healthy-adult energy benefit is shown.",
+    "Disease-specific fatigue findings do not establish healthy-adult energy or athletic benefit.",
+    "Different materials and underlying illnesses prevent blanket transfer.",
+    "Returned decision: Source-content hold.",
+    "No new scoring grade, dose threshold, product approval or clinical signature is assigned by this factual extraction.",
+    "Historical bibliography census (not independent scoring sources; actual included-publication membership is separately bound to the inspected source table): 19415341, 21803872, 23853057, 23613825, 23301896, 23567596, 27616896, 28753932, 30774832, 28874596, 31987248, 32172198. Each intervention and comparison requires its own applicability assessment; citation in this bibliography grants no credit.",
+    "Included-study identifiers are now bound to this source's actual included-study rows/explicit inclusion references (Tables T1 explicit included-study row citations), with live NIH title/content identity checks. They are publication pointers, not independent-cohort counts, per-primary-study scoring approvals, preparation equivalence or new efficacy evidence. Exact unindexed source citations remain retained; no missing PMID is invented.",
+    "Pooled estimate mixes American and Asian ginseng; no species-specific pooled result for Panax ginseng (this record) is reported, so it cannot credit Panax ginseng specifically.",
+    "Fixed-effect model, only highest-dose arm per trial, two descriptive trials excluded from pooling; confidence interval printed in reversed order.",
+    "Disease-related fatigue (cancer, MS, fibromyalgia, NAFLD, chronic fatigue) does not establish healthy-adult energy.",
+    "Record downgraded to reference; removes Evidence points from generic Panax ginseng products.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ],
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "mg",
+    "values": [],
+    "dose_status": "verified",
+    "dose_basis": "not_applicable",
+    "duration_basis": "participant_specific",
+    "administration_frequency": "Trial-specific daily dosing (e.g. 400 mg twice daily); no pooled frequency.",
+    "dosage_forms": [
+     "not reported by source: trial-specific oral ginseng preparations"
+    ],
+    "co_therapies": [
+     "Underlying illness and conventional disease care vary across trials."
+    ],
+    "reported_regimen": "Results/Table 2: 100-3000 mg/day for 3-16 weeks; Wisconsin/American ginseng (Barton 2010 750-2000 mg/d; Kim 2011 100-400 mg/d; Barton 2013 2000 mg/d), Panax ginseng C.A. Meyer (Kim 2013 1000-2000 mg/d; Yennurajalingam 2018 400 mg twice daily), Korean/red ginseng (Etemadifar 250 mg/d; Hong 3000 mg/d; Hee 3000 mg/d), Panax ginseng (Braz 100 mg/d; Pourmohamadi 100 mg/d).",
+    "normalization": {
+     "basis": "A heterogeneous synthesis has no single assigned-arm dose. Descriptive regimens do not create an intake recommendation, equivalent preparation or efficacy threshold."
+    },
+    "source_provenance": {
+     "pmid": "35776997",
+     "location": "Results (12 RCTs, 1298 patients, dose 100-3000 mg/d, 3-16 weeks); Table 2 study characteristics; Results meta-analysis; Discussion",
+     "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9239648/"
+    }
+   },
+   "included_study_pmids": [
+    "19415341",
+    "21803872",
+    "23853057",
+    "23613825",
+    "23301896",
+    "23567596",
+    "27616896",
+    "28753932",
+    "30774832",
+    "28874596",
+    "31987248",
+    "32172198"
+   ],
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability"
+   }
+  }
+ ],
+ "source_receipts": [
+  {
+   "pmid": "35509826",
+   "title_fetched": "Effects of Panax ginseng on hyperglycemia, hypertension, and hyperlipidemia: A systematic review and meta-analysis.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/35509826/",
+   "full_text": true,
+   "sections_used": "Abstract; Methods; Results; Table 1"
+  },
+  {
+   "pmid": "35776997",
+   "title_fetched": "Efficacy of ginseng supplements on disease-related fatigue: A systematic review and meta-analysis.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/35776997/",
+   "full_text": true,
+   "sections_used": "Abstract; Methods; Results; Table 2; Discussion"
+  },
+  {
+   "pmid": "29624410",
+   "title_fetched": "Ginseng as a Treatment for Fatigue: A Systematic Review.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/29624410/",
+   "full_text": false,
+   "sections_used": "Abstract only; narrative review, no context"
+  }
+ ]
+}

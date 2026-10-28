@@ -15,6 +15,8 @@ from __future__ import annotations
 import sys
 from pathlib import Path
 
+import pytest
+
 REPO_ROOT = Path(__file__).resolve().parents[2]
 SCRIPTS_ROOT = REPO_ROOT / "scripts"
 if str(SCRIPTS_ROOT) not in sys.path:
@@ -266,17 +268,25 @@ def test_stale_protein_match_bound_to_amino_acids_is_rebound_to_protein_owner() 
     assert payload["metadata"]["ingredient_points"]["protein"] == 6.48
 
 
-def test_exact_protein_projection_can_recover_category_evidence() -> None:
+@pytest.mark.parametrize("source_form, recovers", [
+    ("whey protein", True),
+    # Dr. Pham, 2026-10-28: INGR_WHEY_PROTEIN is whey-specific evidence; the
+    # mixed-protein review is not proof for casein, soy or pea protein.
+    ("pea protein", False),
+    ("casein", False),
+    ("soy protein", False),
+])
+def test_exact_protein_projection_can_recover_category_evidence(source_form, recovers) -> None:
     from scoring_v4.modules.generic_evidence import score_evidence
 
     protein = _ingredient(name="Protein", canonical_id="protein", quantity=25, unit="g")
     protein.update(
-        matched_form="pea protein",
+        matched_form=source_form,
         scoring_input_kind="label_active_projection",
         evidence_type="blend_anchor_mass",
     )
     product = _product(
-        product_name="Pea Protein Isolate",
+        product_name=f"{source_form.title()} Isolate",
         ingredients=[protein, _ingredient(name="Calcium", canonical_id="calcium", quantity=100)],
         matches=[_match(id="CAL", ingredient="Calcium", standard_name="Calcium")],
     )
@@ -284,8 +294,12 @@ def test_exact_protein_projection_can_recover_category_evidence() -> None:
     payload = score_evidence(product, owner_scoped=True)
 
     assert payload["metadata"]["evidence_owner_canonicals"] == ["protein"]
-    assert payload["metadata"]["recovered_matches"] == ["INGR_WHEY_PROTEIN"]
-    assert payload["metadata"]["ingredient_points"] == {"protein": 6.48}
+    if recovers:
+        assert payload["metadata"]["recovered_matches"] == ["INGR_WHEY_PROTEIN"]
+        assert payload["metadata"]["ingredient_points"] == {"protein": 6.48}
+    else:
+        assert payload["metadata"]["recovered_matches"] == []
+        assert payload["metadata"]["ingredient_points"] == {}
 
 
 def test_nested_creatine_identity_alone_cannot_claim_blend_dose() -> None:
@@ -711,6 +725,19 @@ def test_blend_anchor_brand_row_recovers_verified_product_level_evidence() -> No
 
     product = _product(ingredients=[], matches=[])
     product["product_name"] = "Relora"
+    # The anchor is derived from a printed label row. BRAND_RELORA now carries
+    # a reviewed applicability scope (Dr. Pham, 2026-10-28), which must bind
+    # its source row; a real label always has it.
+    label_row = {
+        "name": "Relora Patented Proprietary Blend",
+        "raw_source_text": "Relora Patented Proprietary Blend",
+        "canonical_id": "relora_patented_proprietary_blend",
+        "quantity": 250,
+        "unit": "mg",
+        "source_section": "active",
+        "raw_source_path": "ingredientRows[0]",
+        "score_eligible_by_cleaner": True,
+    }
     product["product_scoring_evidence"] = [
         {
             "name": "Relora Patented Proprietary Blend",
@@ -736,6 +763,12 @@ def test_blend_anchor_brand_row_recovers_verified_product_level_evidence() -> No
         }
     ]
 
+    # Without its label row the reviewed scope cannot bind a source: no credit.
+    unbound = score_evidence(product, apply_primary_floor=True)
+    assert unbound["metadata"]["recovered_matches"] == []
+    assert unbound["score"] == 0.0
+
+    product["activeIngredients"] = [label_row]
     payload = score_evidence(product, apply_primary_floor=True)
 
     assert payload["metadata"]["recovered_matches"] == ["BRAND_RELORA"]

@@ -1,0 +1,154 @@
+{
+ "record_id": "BRAND_KANEKA_UBIQUINOL",
+ "decision": "closed_credit",
+ "summary": "Full text of the 2020 Nutrients RCT (51 dyslipidemic adults, Kaneka QH 100 or 200 mg/day, 8 weeks) shows its primary endpoint, brachial FMD, improved versus placebo (+1.3%, p<0.001). This is the narrower endothelial finding Dr. Pham held for source content, so it gets one eligible context; the PK/safety study gets no efficacy credit. A new applicability block limits credit to the cardiovascular (endothelial) surrogate and excludes energy and heart-failure claims, per her rejection of those transfers.",
+ "record_updates": {
+  "applicability": {
+   "scope": "ingredient",
+   "supported_outcomes": [
+    "cardiovascular"
+   ],
+   "studied_population": "Adults aged 35-65 with untreated mild-to-moderate dyslipidemia and moderate endothelial dysfunction, no cardiovascular disease, given Kaneka QH ubiquinol 100 or 200 mg/day for 8 weeks (PMID 32326664).",
+   "source_pmids": [
+    "32326664"
+   ],
+   "reviewed_at": "2026-10-28",
+   "excluded_claim_terms": [
+    "energy",
+    "heart failure"
+   ]
+  }
+ },
+ "study_contexts": [
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "brand_kaneka_ubiquinol_32326664_draft",
+   "source_pmids": [
+    "32326664"
+   ],
+   "components": [
+    "BRAND_KANEKA_UBIQUINOL"
+   ],
+   "identity_scope": "branded_material",
+   "identity": {
+    "branded_material": "Kaneka QH",
+    "manufacturer": "Kaneka Corporation"
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "direct_rct",
+   "component_registration_status": "fully_registered",
+   "condition": "dyslipidemia_related_endothelial_dysfunction",
+   "purpose": "treatment",
+   "population": {
+    "age_group": "adult",
+    "description": "51 men and post-menopausal women aged 35-65 with LDL-C 130-200 mg/dL, not on statins or other lipid-lowering therapy, moderate endothelial dysfunction (FMD 2.5-6.0%) and no clinical cardiovascular disease; 48 completed."
+   },
+   "study_design": "Randomized, double-blind, placebo-controlled, single-centre, three-arm parallel trial (ACTRN12619000436178), 8 weeks; primary endpoint FMD change at week 8.",
+   "trial_family": "32326664",
+   "review_status": "clinician_approved",
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "scoring_eligible": true,
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "mg",
+    "values": [
+     100,
+     200
+    ],
+    "dose_status": "verified",
+    "dose_basis": "nominal_assigned_arm",
+    "duration_basis": "fixed_protocol",
+    "duration_days": 56,
+    "administration_frequency": "One capsule in the morning and one in the evening with food, 8 weeks (100 or 200 mg/day).",
+    "dosage_forms": [
+     "oral softgel"
+    ],
+    "reported_regimen": "[100, 200] mg/day; 56 days; one capsule morning one evening with food",
+    "normalization": {
+     "basis": "Reported study-material daily dose, not a universal threshold or equivalence to other preparation."
+    },
+    "source_provenance": {
+     "pmid": "32326664",
+     "location": "Full text (PMC7231284): Methods 2.1-2.4 (participants, product Kaneka QH and dosing, endpoints, sample size), Results FMD/CoQ10/NOx/oxLDL paragraphs, Funding/COI.",
+     "source_url": "https://pubmed.ncbi.nlm.nih.gov/32326664/"
+    },
+    "co_therapies": [
+     "Statins and other lipid-lowering treatments excluded."
+    ]
+   },
+   "outcomes": [
+    {
+     "name": "Primary FMD at week 8 increased versus placebo with 200 mg/day (+1.28% +/- 0.90%) and 100 mg/day (+1.34% +/- 1.44%), p<0.001.",
+     "hierarchy": "primary",
+     "kind": "surrogate",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "Secondary: FMD at week 4 not different (p=0.648); serum NOx increased (p=0.016); LDL oxidation lag time improved with 200 mg/day (p=0.017); plasma oxLDL not different (p=0.905).",
+     "hierarchy": "secondary",
+     "kind": "surrogate",
+     "direction": "mixed",
+     "outcome_role": "direct_between_group_effect"
+    }
+   ],
+   "limitations": [
+    "No CVD/heart failure/statin myopathy clinical benefit proved; small population.",
+    "FMD is a surrogate; the trial does not show cardiovascular events, heart-failure, statin-myopathy or energy benefit. Signed A006 rejects clinical-outcome and general-energy transfers; credit is limited to this endothelial-function finding.",
+    "Small single-centre trial with per-protocol analysis (48 of 51); no FMD difference at week 4. Product supplied by Kaneka; funding from university and institute grants; authors declare no conflicts.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ],
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability"
+   }
+  },
+  {
+   "context_id": "brand_kaneka_ubiquinol_16919858_pk_safety_only",
+   "components": [
+    "BRAND_KANEKA_UBIQUINOL"
+   ],
+   "source_pmids": [
+    "16919858"
+   ],
+   "review_status": "rejected_source",
+   "scoring_eligible": false,
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability",
+    "notes": "No efficacy credit: single-blind pharmacokinetic and tolerability study in healthy volunteers, not an efficacy outcome; full text not open access."
+   },
+   "dose": {
+    "source_provenance": {
+     "pmid": "16919858",
+     "location": "PubMed abstract.",
+     "source_url": "https://pubmed.ncbi.nlm.nih.gov/16919858/"
+    }
+   },
+   "limitations": [
+    "Abstract: single doses of 150 or 300 mg and 4-week dosing of 90, 150 or 300 mg Kaneka QH in healthy volunteers; non-linear dose increases in plasma ubiquinol; no clinically relevant safety findings up to 300 mg. Absorption/safety data, not efficacy.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ]
+  }
+ ],
+ "source_receipts": [
+  {
+   "pmid": "32326664",
+   "title_fetched": "Ubiquinol Ameliorates Endothelial Dysfunction in Subjects with Mild-to-Moderate Dyslipidemia: A Randomized Clinical Trial.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/32326664/",
+   "full_text": true,
+   "sections_used": "Methods, Results, Funding/COI (BioC PMC7231284)"
+  },
+  {
+   "pmid": "16919858",
+   "title_fetched": "Study on safety and bioavailability of ubiquinol (Kaneka QH) after single and 4-week multiple oral administration to healthy volunteers.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/16919858/",
+   "full_text": false,
+   "sections_used": "PubMed abstract"
+  }
+ ]
+}

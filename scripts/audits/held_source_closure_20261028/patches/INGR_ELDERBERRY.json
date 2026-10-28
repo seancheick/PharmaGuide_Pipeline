@@ -1,0 +1,122 @@
+{
+ "record_id": "INGR_ELDERBERRY",
+ "decision": "held: the declared meta-analysis 30670267 (Complement Ther Med 2019) has no open full text; its abstract reports no dose, preparation or included trials, so it cannot be verified or excluded. The accessible systematic review 33827515 is completed as a non-credit context (GRADE low/very low). OA retry 2026-10-28: no open copy of 30670267 (OpenAlex, Semantic Scholar, Europe PMC).",
+ "summary": "33827515 (5 RCTs) finds elderberry may not prevent colds and may shorten cold or influenza illness with uncertain evidence; it supports no credit and its oseltamivir comparison used a combination product, consistent with Dr. Pham's rejection of strong antiviral claims. 30670267 reports a large symptom effect in 180 participants but is abstract-only, so the record remains held.",
+ "record_updates": {},
+ "study_contexts": [
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "ingr_elderberry_33827515_scoped_source",
+   "source_pmids": [
+    "33827515"
+   ],
+   "components": [
+    "INGR_ELDERBERRY"
+   ],
+   "identity_scope": "ingredient_general",
+   "identity": {
+    "preparation": "Proprietary elderberry extracts (capsule 300 mg, lozenge 175 mg, Sambucol syrup) and one echinacea-elderberry combination (Echinaforce Hotdrink)"
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "systematic_review",
+   "component_registration_status": "fully_registered",
+   "condition": "viral_respiratory_illness",
+   "purpose": "treatment",
+   "review_status": "clinician_approved",
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability"
+   },
+   "scoring_eligible": false,
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "trial_family": "source_33827515",
+   "population": {
+    "description": "Five randomized trials of prevention or treatment of viral respiratory illness (e.g., 312 air travellers in Tiralongo 2016; 87 participants across two Sambucol influenza trials; 420 in the oseltamivir comparison)."
+   },
+   "study_design": "Systematic review with GRADE (Cochrane risk-of-bias tools); outcomes new illnesses, severity and duration; three ex vivo cytokine studies summarized separately.",
+   "outcomes": [
+    {
+     "name": "Common cold: may not reduce incidence; may reduce duration and severity, evidence uncertain",
+     "hierarchy": "not_reported",
+     "kind": "patient_important",
+     "direction": "mixed",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "Influenza duration may be reduced versus placebo, very uncertain; echinacea-elderberry combination vs oseltamivir fewer recovered at day 1 (RR 0.36), little or no difference at days 5 and 10",
+     "hierarchy": "not_reported",
+     "kind": "patient_important",
+     "direction": "mixed",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "No clinical inflammatory-outcome studies; ex vivo cytokine effects only",
+     "hierarchy": "not_reported",
+     "kind": "surrogate",
+     "direction": "mixed",
+     "outcome_role": "direct_between_group_effect"
+    }
+   ],
+   "limitations": [
+    "Small trials with incomplete outcome data and selection concerns; all estimates low or very low certainty. No pooled RCT estimate supports credit.",
+    "Dr. Pham's returned decision rejects strong antiviral and oseltamivir-equivalence claims; the oseltamivir comparison used an echinacea-elderberry combination.",
+    "Evidence uncertainty is a reviewed limitation, not proof of no biological activity.",
+    "Historical bibliography census (not independent scoring sources; actual included-publication membership is separately bound to the inspected source table): 15080016, 26781385, 27023596, 9395631, 26265958, 19793846, 18225751. Each intervention and comparison requires its own applicability assessment; citation in this bibliography grants no credit.",
+    "Included-study PMID membership was extracted from source Table(s) Tab1. These are source membership identifiers, not independent efficacy approvals or automatic trial replications. Exact table/citation mapping and unindexed citations are retained in the source receipt. 1 source citations in this set lack a PMID in the primary source; their citation text is retained, no PMID is invented.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ],
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "mg",
+    "values": [],
+    "dose_status": "source_not_reported",
+    "dose_basis": "not_applicable",
+    "duration_basis": "participant_specific",
+    "duration_days": null,
+    "administration_frequency": "Trial-specific: capsule 2-3 times/day, lozenge 4 times/day, syrup 2-4 times/day (Table 1)",
+    "dosage_forms": [
+     "capsule",
+     "lozenge",
+     "syrup"
+    ],
+    "co_therapies": [
+     "Echinacea in the combination-product trial"
+    ],
+    "source_provenance": {
+     "pmid": "33827515",
+     "location": "Abstract; Table 1 (included trials, interventions); Results prevention/treatment sections and risk of bias; Table 2 (ex vivo); Discussion",
+     "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8026097/"
+    },
+    "reported_regimen": "Capsule 300 mg extract 2-3 times/day; lozenge 175 mg 4 times/day; 15 ml or 1 tablespoon Sambucol syrup 2-4 times/day (Table 1)",
+    "normalization": {
+     "basis": "Proprietary extract strengths are not standardized to berry or anthocyanin mass; no common daily dose."
+    }
+   },
+   "included_study_pmids": [
+    "27023596",
+    "15080016",
+    "9395631",
+    "26265958"
+   ]
+  }
+ ],
+ "source_receipts": [
+  {
+   "pmid": "33827515",
+   "title_fetched": "Elderberry for prevention and treatment of viral respiratory illnesses: a systematic review.",
+   "url": "https://www.ncbi.nlm.nih.gov/research/bionlp/RESTful/pmcoa.cgi/BioC_json/33827515/unicode",
+   "full_text": true,
+   "sections_used": "Abstract; Table 1 (included trials, interventions); Results prevention/treatment sections and risk of bias; Table 2 (ex vivo); Discussion"
+  },
+  {
+   "pmid": "30670267",
+   "title_fetched": "Black elderberry (Sambucus nigra) supplementation effectively treats upper respiratory symptoms: A meta-analysis of randomized, controlled clinical trials.",
+   "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=30670267&retmode=xml",
+   "full_text": false,
+   "sections_used": "PubMed abstract only"
+  }
+ ]
+}

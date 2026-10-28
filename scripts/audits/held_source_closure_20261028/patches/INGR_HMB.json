@@ -1,0 +1,389 @@
+{
+ "record_id": "INGR_HMB",
+ "decision": "closed_no_credit",
+ "summary": "The reviewed research does not establish a qualifying benefit for this product's assessed use. Human trials exist and some show limited effects: the 2025 older-adult synthesis found a borderline handgrip gain (SMD 0.24, CI to 0.00) and better SPPB (SMD 0.54) with resistance training, and the 2022 synthesis pooled HMB with protein or vitamin D products. The newest synthesis (Age Ageing, March 2026; 13 RCTs, 561 adults >=50) found no meaningful gain in fat mass, muscle mass or strength. The HMB-FA trial in trained men is deduplicated with its shared-placebo companion papers (NCT01508338), and a 2017 letter documents reporting discrepancies across them. The record is reference-only, which removes HMB Evidence points from dependent products; the new 2026 PMID is added to the references as verified.",
+ "record_updates": {
+  "study_type": "reference",
+  "evidence_level": "reference",
+  "references_structured": [
+   {
+    "type": "pubmed",
+    "authority": "NCBI PubMed",
+    "pmid": "24599749",
+    "doi": "10.1007/s00421-014-2854-5",
+    "title": "The effects of 12 weeks of beta-hydroxy-beta-methylbutyrate free acid supplementation on muscle mass, strength, and power in resistance-trained individuals: a randomized, double-blind, placebo-controlled study.",
+    "citation": "European journal of applied physiology (2014-06-01)",
+    "url": "https://pubmed.ncbi.nlm.nih.gov/24599749/",
+    "published_date": "2014-06-01",
+    "publication_types": [
+     "Journal Article",
+     "Randomized Controlled Trial",
+     "Research Support, Non-U.S. Gov't"
+    ],
+    "mesh_terms": [
+     "Dietary Supplements",
+     "Double-Blind Method",
+     "Humans",
+     "Male",
+     "Muscle Strength",
+     "Muscle, Skeletal",
+     "Resistance Training",
+     "Valerates",
+     "Young Adult"
+    ],
+    "supplementary_concepts": [],
+    "evidence_grade": "rct",
+    "retracted": false,
+    "supports_claims": [],
+    "verification_source": "pubmed_eutils"
+   },
+   {
+    "type": "pubmed",
+    "authority": "NCBI PubMed",
+    "pmid": "35911112",
+    "doi": "10.3389/fnut.2022.914866",
+    "title": "Effect of β-hydroxy-β-methylbutyrate (HMB) on the Muscle Strength in the Elderly Population: A Meta-Analysis.",
+    "citation": "Frontiers in nutrition (2022-01-01)",
+    "url": "https://pubmed.ncbi.nlm.nih.gov/35911112/",
+    "published_date": "2022-01-01",
+    "publication_types": [
+     "Systematic Review",
+     "Journal Article"
+    ],
+    "mesh_terms": [],
+    "supplementary_concepts": [],
+    "evidence_grade": "systematic_review",
+    "retracted": false,
+    "supports_claims": [],
+    "verification_source": "pubmed_eutils"
+   },
+   {
+    "type": "pubmed",
+    "authority": "NCBI PubMed",
+    "pmid": "41305674",
+    "doi": "10.3390/nu17223624",
+    "title": "The Role of HMB Supplementation in Enhancing the Effects of Resistance Training in Older Adults: A Systematic Review and Meta-Analysis on Muscle Quality, Body Composition, and Physical Function.",
+    "citation": "Nutrients (2025-11-20)",
+    "url": "https://pubmed.ncbi.nlm.nih.gov/41305674/",
+    "published_date": "2025-11-20",
+    "publication_types": [
+     "Journal Article",
+     "Systematic Review",
+     "Meta-Analysis"
+    ],
+    "mesh_terms": [
+     "Humans",
+     "Resistance Training",
+     "Valerates",
+     "Body Composition",
+     "Dietary Supplements",
+     "Aged",
+     "Muscle Strength",
+     "Muscle, Skeletal",
+     "Physical Functional Performance",
+     "Male",
+     "Female",
+     "Randomized Controlled Trials as Topic",
+     "Hand Strength"
+    ],
+    "supplementary_concepts": [],
+    "evidence_grade": "systematic_review",
+    "retracted": false,
+    "supports_claims": [],
+    "verification_source": "pubmed_eutils"
+   },
+   {
+    "type": "pubmed",
+    "authority": "NCBI PubMed",
+    "pmid": "25700845",
+    "doi": "10.1016/j.exger.2015.02.012",
+    "title": "β-Hydroxy-β-methylbutyrate (HMB) supplementation and resistance exercise significantly reduce abdominal adiposity in healthy elderly men.",
+    "citation": "Experimental gerontology (2015-04-01)",
+    "url": "https://pubmed.ncbi.nlm.nih.gov/25700845/",
+    "published_date": "2015-04-01",
+    "publication_types": [
+     "Journal Article",
+     "Randomized Controlled Trial",
+     "Research Support, Non-U.S. Gov't"
+    ],
+    "mesh_terms": [
+     "Abdominal Fat",
+     "Adiposity",
+     "Aged",
+     "Dietary Supplements",
+     "Double-Blind Method",
+     "Humans",
+     "Male",
+     "Resistance Training",
+     "Valerates"
+    ],
+    "supplementary_concepts": [],
+    "evidence_grade": "rct",
+    "retracted": false,
+    "supports_claims": [],
+    "verification_source": "pubmed_eutils"
+   },
+   {
+    "type": "pubmed",
+    "authority": "NCBI PubMed",
+    "pmid": "41934514",
+    "title": "Efficacy of HMB supplementation as an adjunct to resistance training in older adults: a comprehensive meta-analysis.",
+    "url": "https://pubmed.ncbi.nlm.nih.gov/41934514/",
+    "publication_types": [
+     "Journal Article",
+     "Meta-Analysis",
+     "Systematic Review"
+    ],
+    "verification_source": "pubmed_eutils",
+    "retracted": false,
+    "scoring_eligible": false,
+    "notes": "Added 2026-10-28 under Dr. Pham's fifth ruling: March 2026 Age Ageing meta-analysis (13 RCTs, 561 adults >=50) supporting the restrictive conclusion; abstract verified, full text closed."
+   }
+  ]
+ },
+ "study_contexts": [
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "ingr_hmb_24599749_draft",
+   "source_pmids": [
+    "24599749"
+   ],
+   "components": [
+    "INGR_HMB"
+   ],
+   "identity_scope": "exact_form",
+   "identity": {
+    "chemical_form": "beta-hydroxy-beta-methylbutyrate free acid"
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "direct_rct",
+   "component_registration_status": "fully_registered",
+   "condition": "resistance_training_adaptation",
+   "purpose": "treatment",
+   "population": {
+    "age_group": "adult",
+    "description": "24 resistance-trained men randomized (quartile-blocked by lean mass and strength); 20 completed (3 placebo and 1 HMB-FA dropouts in the first 4 weeks); mean age 21.6."
+   },
+   "study_design": "Randomized, double-blind, placebo-controlled parallel-group trial in resistance-trained men undertaking a 12-week periodized resistance-training protocol.",
+   "trial_family": "NCT01508338_hmbfa_atp_shared_placebo",
+   "review_status": "clinician_approved",
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "scoring_eligible": false,
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "g",
+    "values": [
+     3
+    ],
+    "dose_status": "verified",
+    "dose_basis": "nominal_assigned_arm",
+    "duration_basis": "fixed_protocol",
+    "duration_days": 84,
+    "administration_frequency": "one gram three times daily; training first dose 30 min before exercise, others meals",
+    "dosage_forms": [
+     "oral HMB-FA serving (1 g per serving)"
+    ],
+    "reported_regimen": "[3] g/day; 84 days; one gram three times daily; training first dose 30 min before exercise, others meals",
+    "normalization": {
+     "basis": "Reported study-material daily dose, not a universal threshold or equivalence to other preparation."
+    },
+    "source_provenance": {
+     "pmid": "24599749",
+     "location": "Full text (PMC4019830): Methods (subjects, supplementation, training phases, statistics naming strength/power as primary), Results, Discussion.",
+     "source_url": "https://pubmed.ncbi.nlm.nih.gov/24599749/"
+    },
+    "co_therapies": [
+     "Both groups followed the prescribed resistance-training/overreaching/taper protocol; performance-enhancing supplements and anti-inflammatory agents were excluded."
+    ]
+   },
+   "outcomes": [
+    {
+     "name": "Primary muscular strength and power: total strength gain 77.1 vs 25.3 kg (p<0.001); vertical jump power 991 vs 630 W (p<0.001).",
+     "hierarchy": "primary",
+     "kind": "patient_important",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "Lean body mass gain 7.4 vs 2.1 kg (p<0.001); CK and cortisol rises attenuated during overreaching.",
+     "hierarchy": "secondary",
+     "kind": "surrogate",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    }
+   ],
+   "limitations": [
+    "Small trial, industry funding/employed authors.",
+    "No credit: a published letter (Nutr Metab 2017, PMID 28680453, verified this session) documents that this paper and two companion papers from trial NCT01508338 share one placebo group with inconsistent placebo descriptions, shifting dropout counts and 'extraordinary homogeneity' of baseline data. The effect sizes (7.4 kg lean mass in 12 weeks in trained men) are far beyond other HMB trials. No formal expression of concern is linked in PubMed, so source_integrity stays 'none'.",
+    "HMB free acid, not the calcium salt used in most products.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28.",
+    "No credit: a published letter (Nutr Metab 2017, PMID 28680453, verified this session) documents that this paper and two companion papers from trial NCT01508338 share one placebo group with inconsistent placebo descriptions, shifting dropout counts and 'extraordinary homogeneity' of baseline data. The effect sizes (7.4 kg lean mass in 12 weeks in trained men) are far beyond other HMB trials. No formal expression of concern is linked in PubMed, so source_integrity stays 'none'.",
+    "HMB free acid, not the calcium salt used in most products.",
+    "Deduplicated trial family: 24599749 and its companion papers from NCT01508338 (HMB-FA and HMB-FA+ATP reports) share one placebo group, so they count as a single trial family, never as independent replications."
+   ],
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability"
+   }
+  },
+  {
+   "context_id": "ingr_hmb_41305674_rt_older_adults_mixed_products",
+   "components": [
+    "INGR_HMB"
+   ],
+   "source_pmids": [
+    "41305674"
+   ],
+   "review_status": "rejected_source",
+   "scoring_eligible": false,
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability",
+    "notes": "No credit: the pooled RT+HMB comparisons include multi-ingredient HMB products, and the benefit is borderline."
+   },
+   "dose": {
+    "source_provenance": {
+     "pmid": "41305674",
+     "location": "Full text (PMC12655442): Methods eligibility, Results participants/intervention paragraph and intervention table, pooled outcomes, risk of bias.",
+     "source_url": "https://pubmed.ncbi.nlm.nih.gov/41305674/"
+    }
+   },
+   "limitations": [
+    "2025 Nutrients meta-analysis (full text verified): 10 RCTs, 596 adults >=60 (weighted mean 71.2) comparing RT+HMB with RT; mostly HMB-Ca 3 g/day (one 1.5 g), but trial arms include HMB with vitamin D 2,000 IU, a protein/vitamin D/omega-3 nutrition sachet, and Abound (HMB-Ca with 7 g arginine and 7 g glutamine). Handgrip SMD 0.24 (0.00-0.48, p=0.05), SPPB SMD 0.54 (0.12-0.95); no effect on gait speed, appendicular lean mass, muscle quality, fat mass or weight; 5 of 10 trials at high risk of bias.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ]
+  },
+  {
+   "context_id": "ingr_hmb_35911112_elderly_strength_hmb_containing_supplements",
+   "components": [
+    "INGR_HMB"
+   ],
+   "source_pmids": [
+    "35911112"
+   ],
+   "review_status": "rejected_source",
+   "scoring_eligible": false,
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability",
+    "notes": "No credit: the source pools 'HMB and HMB-containing nutritional supplements', so the effect cannot be attributed to HMB alone."
+   },
+   "dose": {
+    "source_provenance": {
+     "pmid": "35911112",
+     "location": "Full text (PMC9326439): Abstract, study characteristics table, Discussion.",
+     "source_url": "https://pubmed.ncbi.nlm.nih.gov/35911112/"
+    }
+   },
+   "limitations": [
+    "2022 Front Nutr meta-analysis (full text verified): 9 RCTs, 896 older adults; muscle-strength SMD 0.41 (0.28-0.54). Included interventions include yogurt with 3 g HMB plus vitamins D and C, HMB 3 g with 36 g protein and vitamin D, and 1.5 g HMB with 18 g protein.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ]
+  },
+  {
+   "context_id": "ingr_hmb_25700845_abdominal_fat_abstract_only",
+   "components": [
+    "INGR_HMB"
+   ],
+   "source_pmids": [
+    "25700845"
+   ],
+   "review_status": "rejected_source",
+   "scoring_eligible": false,
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability",
+    "notes": "No credit: abstract-only factorial trial with an adiposity outcome that is not this record's claim."
+   },
+   "dose": {
+    "source_provenance": {
+     "pmid": "25700845",
+     "location": "PubMed abstract only.",
+     "source_url": "https://pubmed.ncbi.nlm.nih.gov/25700845/"
+    }
+   },
+   "limitations": [
+    "Abstract: 48 men aged 66-78 in a 2x2 design (HMB x resistance training) for 12 weeks; abdominal fat mass lower only with RT+HMB (ANCOVA p=0.013). HMB dose and form not stated in the abstract.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ]
+  },
+  {
+   "context_id": "ingr_hmb_41934514_age_ageing_2026_null_synthesis",
+   "components": [
+    "INGR_HMB"
+   ],
+   "source_pmids": [
+    "41934514"
+   ],
+   "review_status": "rejected_source",
+   "scoring_eligible": false,
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability",
+    "notes": "No credit: newest synthesis (March 2026) reports no meaningful benefit of HMB added to resistance training; it supports the restrictive conclusion. Abstract only (closed access); explicit null endpoints are the narrow fact recorded."
+   },
+   "dose": {
+    "source_provenance": {
+     "pmid": "41934514",
+     "location": "PubMed abstract (Age Ageing 2026; closed access).",
+     "source_url": "https://pubmed.ncbi.nlm.nih.gov/41934514/"
+    }
+   },
+   "limitations": [
+    "Age Ageing 2026 (abstract): 13 RCTs, 561 participants aged >=50 doing resistance training; HMB versus control fat mass SMD 0.24 (-0.01 to 0.49), muscle mass SMD 0.05 (-0.10 to 0.20), muscle strength SMD 0.04 (-0.72 to 0.63); high heterogeneity for strength; authors do not recommend HMB as a routine adjunct.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ]
+  }
+ ],
+ "source_receipts": [
+  {
+   "pmid": "24599749",
+   "title_fetched": "The effects of 12 weeks of beta-hydroxy-beta-methylbutyrate free acid supplementation on muscle mass, strength, and power in resistance-trained individuals: a randomized, double-blind, placebo-controlled study.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/24599749/",
+   "full_text": true,
+   "sections_used": "Methods, Results, Discussion (BioC PMC4019830)"
+  },
+  {
+   "pmid": "41305674",
+   "title_fetched": "The Role of HMB Supplementation in Enhancing the Effects of Resistance Training in Older Adults: A Systematic Review and Meta-Analysis on Muscle Quality, Body Composition, and Physical Function.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/41305674/",
+   "full_text": true,
+   "sections_used": "Methods, Results, intervention table (BioC PMC12655442)"
+  },
+  {
+   "pmid": "35911112",
+   "title_fetched": "Effect of β-hydroxy-β-methylbutyrate (HMB) on the Muscle Strength in the Elderly Population: A Meta-Analysis.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/35911112/",
+   "full_text": true,
+   "sections_used": "Abstract, study table, Discussion (BioC PMC9326439)"
+  },
+  {
+   "pmid": "25700845",
+   "title_fetched": "β-Hydroxy-β-methylbutyrate (HMB) supplementation and resistance exercise significantly reduce abdominal adiposity in healthy elderly men.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/25700845/",
+   "full_text": false,
+   "sections_used": "PubMed abstract"
+  },
+  {
+   "pmid": "28680453",
+   "title_fetched": "Discrepancies in publications related to HMB-FA and ATP supplementation.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/28680453/",
+   "full_text": true,
+   "sections_used": "Letter text (integrity evidence for 24599749; not added to record references)"
+  },
+  {
+   "pmid": "41934514",
+   "title_fetched": "Efficacy of HMB supplementation as an adjunct to resistance training in older adults: a comprehensive meta-analysis.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/41934514/",
+   "full_text": false,
+   "sections_used": "PubMed abstract"
+  }
+ ]
+}

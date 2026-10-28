@@ -1,0 +1,128 @@
+{
+ "record_id": "INGR_BLACK_SEED_OIL",
+ "decision": "held: three of the four declared sources (40210172 glycaemic meta-analysis, 37341696 blood-pressure meta-analysis, 21675032 seed-capsule diabetes trial) have no open full text, so the glycaemic/BP evidence behind the key endpoints cannot be verified; the one open source (34407441, open-label COVID-19 trial) is approved without credit.",
+ "summary": "34407441: open-label RCT in adults with mild COVID-19; Cuminmar Nigella sativa oil 500 mg twice daily for 10 days plus usual care improved 14-day symptom recovery (62% vs 36%), with an internal participant-count discrepancy (173 vs 183). The glycaemic and BP meta-analyses that would support the record's metabolic endpoints are abstract-only. The record declares no health-goal claim and stays held.",
+ "record_updates": {},
+ "study_contexts": [
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "ingr_black_seed_oil_34407441_draft",
+   "components": [
+    "INGR_BLACK_SEED_OIL"
+   ],
+   "source_pmids": [
+    "34407441"
+   ],
+   "identity_scope": "branded_material",
+   "identity": {
+    "branded_material": "Cuminmar Nigella sativa oil",
+    "manufacturer": "MARNYS"
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "direct_rct",
+   "component_registration_status": "fully_registered",
+   "condition": "mild_covid_symptom_recovery",
+   "purpose": "treatment",
+   "review_status": "clinician_approved",
+   "scoring_eligible": false,
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "trial_family": "34407441",
+   "population": {
+    "age_group": "adult",
+    "description": "Adults (>=18, mean age 36, 53% male) with mild PCR-confirmed COVID-19 at King Abdulaziz University Hospital, Jeddah, May-September 2020; abstract reports 173 enrolled (86 NSO, 87 control), the baseline table and results report 183 (91 vs 92)."
+   },
+   "study_design": "Open-label randomized controlled trial (1:1, centralized web randomization) of Nigella sativa oil plus standard of care vs standard of care alone; NCT04401202.",
+   "outcomes": [
+    {
+     "name": "Primary: recovery (symptom-free 3 days) within 14 days: 62% vs 36% in abstract (p=0.001); 63% vs 35% in Results",
+     "hierarchy": "primary",
+     "kind": "patient_important",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "Mean time to recovery shorter with NSO (10.7 ± 3.2 vs 12.3 ± 2.8 days)",
+     "hierarchy": "secondary",
+     "kind": "patient_important",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    }
+   ],
+   "limitations": [
+    "Open-label with usual-care control and telephone-reported subjective symptoms; authors call for placebo-controlled double-blind confirmation.",
+    "Abstract and full-text counts disagree (173 vs 183 participants; 54/86 vs 57/91 recovered); the discrepancy is retained, not resolved.",
+    "Not scoring eligible: unblinded acute-infection treatment trial; the record declares no health-goal claim and no infection treatment or prevention claim is supported for supplements.",
+    "Returned decision A049: source-content hold; methods verified for this source only.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ],
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "mg",
+    "values": [
+     1000
+    ],
+    "dose_status": "verified",
+    "dose_basis": "nominal_assigned_arm",
+    "duration_basis": "fixed_protocol",
+    "duration_days": 10,
+    "administration_frequency": "500 mg twice daily after meals.",
+    "dosage_forms": [
+     "not reported by source: oral Nigella sativa oil preparation (Cuminmar)"
+    ],
+    "co_therapies": [
+     "Standard of care for mild COVID-19 in both arms."
+    ],
+    "reported_regimen": "Nigella sativa oil 500 mg twice daily (1,000 mg/day) for 10 days plus standard of care.",
+    "normalization": {
+     "basis": "2 x 500 mg = 1,000 mg/day oil as assigned."
+    },
+    "source_provenance": {
+     "pmid": "34407441",
+     "location": "Abstract; Methods (participants, randomization, intervention, primary outcome); Results Tables 1-3",
+     "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8364675/"
+    },
+    "duration_as_printed": {
+     "value": 10,
+     "unit": "days"
+    }
+   },
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability"
+   }
+  }
+ ],
+ "source_receipts": [
+  {
+   "pmid": "34407441",
+   "title_fetched": "Nigella sativa for the treatment of COVID-19: An open-label randomized controlled clinical trial.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/34407441/",
+   "full_text": true,
+   "sections_used": "Abstract; Methods; Results Tables 1-3"
+  },
+  {
+   "pmid": "40210172",
+   "title_fetched": "Effects of black seed (Nigella sativa L.) on cardiometabolic indices in type 2 diabetic patients: A systematic review and meta-analysis of RCTs.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/40210172/",
+   "full_text": false,
+   "sections_used": "Not accessible beyond PubMed record"
+  },
+  {
+   "pmid": "37341696",
+   "title_fetched": "Antihypertensive effects of Nigella sativa supplementation: An updated systematic review and meta-analysis of randomized controlled trials.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/37341696/",
+   "full_text": false,
+   "sections_used": "Not accessible beyond PubMed record"
+  },
+  {
+   "pmid": "21675032",
+   "title_fetched": "Effect of Nigella sativa seeds on the glycemic control of patients with type 2 diabetes mellitus.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/21675032/",
+   "full_text": false,
+   "sections_used": "Not accessible beyond PubMed record"
+  }
+ ]
+}

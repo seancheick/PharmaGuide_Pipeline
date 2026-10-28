@@ -1,0 +1,232 @@
+{
+ "record_id": "BRAND_KSM66",
+ "decision": "closed_credit",
+ "summary": "Both trials used KSM-66 root extract from Ixoreal (named in Methods). 23439798 (64 stressed adults, 600 mg/day for 60 days) and 32021735 (60 stressed adults, 250 or 600 mg/day for 8 weeks) found lower perceived stress and cortisol versus placebo, with anxiety benefit only at 600 mg/day and sleep-scale benefit in the second trial. This resolves Dr. Pham's source-content hold for the exact stress-related relationship of this branded material; applicability stays limited to KSM-66 and stressed adults. Fourth-ruling boundary applied: supported outcome narrowed to stress (sleep removed); exact KSM-66 material required.",
+ "record_updates": {
+  "applicability": {
+   "scope": "ingredient",
+   "required_form_terms": [
+    "ksm-66",
+    "ksm66"
+   ],
+   "supported_outcomes": [
+    "stress_mood"
+   ],
+   "studied_population": "Adults aged 18-55 with elevated perceived stress taking KSM-66 root extract 250-600 mg/day for 8 weeks or 60 days; not diagnosed psychiatric disorders.",
+   "reviewed_at": "2026-10-28",
+   "source_pmids": [
+    "23439798",
+    "32021735"
+   ],
+   "excluded_claim_terms": [
+    "testosterone",
+    "fertility",
+    "muscle growth",
+    "muscle mass"
+   ]
+  }
+ },
+ "study_contexts": [
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "ksm66_23439798",
+   "components": [
+    "BRAND_KSM66"
+   ],
+   "source_pmids": [
+    "23439798"
+   ],
+   "identity_scope": "branded_material",
+   "identity": {
+    "branded_material": "KSM-66",
+    "manufacturer": "Ixoreal Biomed",
+    "standardization": "Root-only extract, at least 5%withanolides HPLC; no alcohol or synthetic solvents"
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "direct_rct",
+   "component_registration_status": "fully_registered",
+   "condition": "perceived_stress",
+   "purpose": "treatment",
+   "review_status": "clinician_approved",
+   "scoring_eligible": true,
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "trial_family": "ksm66_23439798",
+   "population": {
+    "age_group": "adult",
+    "description": "64 adults aged 18-54 with chronic stress (PSS >=14, WHO-5 <15), free of psychiatric conditions other than stress; 61 protocol-compliant in efficacy analysis; 41 men, 23 women."
+   },
+   "study_design": "single-center randomized double-blind placebo-controlled parallel trial",
+   "outcomes": [
+    {
+     "name": "PSS between-group reduction P<.0001",
+     "hierarchy": "not_reported",
+     "kind": "patient_important",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "Serum cortisol reduced versus placebo (P=0.0006); DASS and GHQ-28 scores also reduced",
+     "hierarchy": "not_reported",
+     "kind": "surrogate",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    }
+   ],
+   "limitations": [
+    "Outcome hierarchy not explicitly established by extracted paper sections; do not invent prespecified primary designation.",
+    "Different doses/outcomes not universal benchmark; study does not approve other ashwagandha materials.",
+    "Small short Indian adult trials; diagnosed psychiatric conditions not covered.",
+    "The primary objective was stress reduction, but no single primary scale is designated; PSS, DASS and GHQ-28 all favored KSM-66 (P<0.0001). Per-protocol efficacy analysis (61/64).",
+    "Mann-Whitney/t-test analysis of a 60-day single-centre trial; long-term effects not studied.",
+    "Dr. Pham's fourth ruling set (2026-10-28) boundary: exact KSM-66 standardized root extract, studied perceived-stress outcome, stressed-adult population only; sleep is not a separately credited outcome.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ],
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "mg",
+    "values": [
+     600
+    ],
+    "dose_status": "verified",
+    "dose_basis": "nominal_assigned_arm",
+    "duration_basis": "fixed_protocol",
+    "duration_days": 60,
+    "administration_frequency": "one 300 mg capsule twice a day for 60 days",
+    "dosage_forms": [
+     "capsule"
+    ],
+    "co_therapies": [],
+    "reported_regimen": "[600]mg/day root extract in assigned arms",
+    "normalization": {
+     "basis": "Whole assigned material daily mass from primary Methods; not a marker or active-equivalent conversion."
+    },
+    "source_provenance": {
+     "pmid": "23439798",
+     "location": "Abstract Materials and Methods; Methods (KSM-66 extract from Ixoreal, >=5% withanolides by HPLC; inclusion criteria); Results Tables 1-2",
+     "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3573577/"
+    }
+   },
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability"
+   }
+  },
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "ksm66_32021735",
+   "components": [
+    "BRAND_KSM66"
+   ],
+   "source_pmids": [
+    "32021735"
+   ],
+   "identity_scope": "branded_material",
+   "identity": {
+    "branded_material": "KSM-66",
+    "manufacturer": "Ixoreal Biomed",
+    "standardization": "Aqueous root extract, KSM-66 batch KSM/VG/18/1085; independent withanolide assay not established here"
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "direct_rct",
+   "component_registration_status": "fully_registered",
+   "condition": "perceived_stress",
+   "purpose": "treatment",
+   "review_status": "clinician_approved",
+   "scoring_eligible": true,
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "trial_family": "ksm66_32021735",
+   "population": {
+    "description": "60 enrolled 58 analyzed adults PSS>=20 without other psychiatric or chronic systemic disease"
+   },
+   "study_design": "randomized double-blind placebo-controlled three-arm parallel trial",
+   "outcomes": [
+    {
+     "name": "PSS both doses versus placebo",
+     "hierarchy": "not_reported",
+     "kind": "patient_important",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "HAM-A 250 mg null, 600 mg positive versus placebo",
+     "hierarchy": "not_reported",
+     "kind": "patient_important",
+     "direction": "mixed",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "Sleep quality both doses versus placebo",
+     "hierarchy": "not_reported",
+     "kind": "patient_important",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    }
+   ],
+   "limitations": [
+    "Outcome hierarchy not explicitly established by extracted paper sections; do not invent prespecified primary designation.",
+    "Different doses/outcomes not universal benchmark; study does not approve other ashwagandha materials.",
+    "Small short Indian adult trials; diagnosed psychiatric conditions not covered.",
+    "The retained full article does not designate a primary outcome/endpoint; recorded hierarchy not_reported. This is a reporting limitation, not invented primary status or completion of any separate approval.",
+    "Two of three arms showed PSS benefit; anxiety (HAM-A) benefit was significant at 600 mg/day but not 250 mg/day; sleep used a seven-point scale.",
+    "Product gifted by the manufacturer; 58 of 60 completed.",
+    "Dr. Pham's fourth ruling set (2026-10-28) boundary: exact KSM-66 standardized root extract, studied perceived-stress outcome, stressed-adult population only; sleep is not a separately credited outcome.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ],
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "mg",
+    "values": [
+     250,
+     600
+    ],
+    "dose_status": "verified",
+    "dose_basis": "nominal_assigned_arm",
+    "duration_basis": "fixed_protocol",
+    "duration_days": 56,
+    "administration_frequency": "one 125 mg or 300 mg capsule twice daily after food with milk or water",
+    "dosage_forms": [
+     "capsule"
+    ],
+    "co_therapies": [],
+    "reported_regimen": "[250, 600]mg/day root extract in assigned arms",
+    "normalization": {
+     "basis": "Whole assigned material daily mass from primary Methods; not a marker or active-equivalent conversion."
+    },
+    "source_provenance": {
+     "pmid": "32021735",
+     "location": "Methods (KSM-66 batch KSM/VG/18/1085 gifted by Ixoreal; capsules 125 or 300 mg twice daily, starch placebo; ages 18-55); Results PSS, HAM-A, cortisol and sleep",
+     "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6979308/"
+    }
+   },
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability"
+   }
+  }
+ ],
+ "source_receipts": [
+  {
+   "pmid": "23439798",
+   "title_fetched": "A prospective, randomized double-blind, placebo-controlled study of safety and efficacy of a high-concentration full-spectrum extract of ashwagandha root in reducing stress and anxiety in adults.",
+   "url": "https://www.ncbi.nlm.nih.gov/research/bionlp/RESTful/pmcoa.cgi/BioC_json/23439798/unicode",
+   "full_text": true,
+   "sections_used": "Abstract; Methods; Results Tables 1-2"
+  },
+  {
+   "pmid": "32021735",
+   "title_fetched": "Adaptogenic and Anxiolytic Effects of Ashwagandha Root Extract in Healthy Adults: A Double-blind, Randomized, Placebo-controlled Clinical Study.",
+   "url": "https://www.ncbi.nlm.nih.gov/research/bionlp/RESTful/pmcoa.cgi/BioC_json/32021735/unicode",
+   "full_text": true,
+   "sections_used": "Abstract; Methods; Results"
+  }
+ ],
+ "integration_notes": [
+  "2026-10-28 integrator (CI triage): bare 'muscle' replaced with 'muscle growth' and 'muscle mass' (product-line names contain 'muscle')."
+ ]
+}

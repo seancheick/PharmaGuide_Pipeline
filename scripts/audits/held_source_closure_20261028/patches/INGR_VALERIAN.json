@@ -1,0 +1,155 @@
+{
+ "record_id": "INGR_VALERIAN",
+ "decision": "closed_no_credit: The reviewed research does not establish a qualifying benefit for this product's assessed use.",
+ "summary": "The reviewed research does not establish a qualifying benefit for this product's assessed use. The only source (33086877) pooled 10 placebo-controlled RCTs of repeated valerian dosing and found no significant effect on subjective sleep quality (g 0.36, 95% CI -0.08 to 0.81; I2 85%, likely missing studies); only a 4-study whole-root subgroup reached significance. The evidence does not support the record's sleep claim at a credit-bearing level, so the record becomes reference-only, which removes Evidence points from valerian products.",
+ "record_updates": {
+  "study_type": "reference",
+  "evidence_level": "reference"
+ },
+ "study_contexts": [
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "ingr_valerian_33086877_scoped_source",
+   "source_pmids": [
+    "33086877"
+   ],
+   "components": [
+    "INGR_VALERIAN"
+   ],
+   "identity_scope": "botanical_preparation",
+   "identity": {
+    "botanical_species": "Valeriana officinalis",
+    "plant_part": "root/rhizome (whole herbal substance or hydroalcoholic/aqueous extracts)"
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "meta_analysis",
+   "component_registration_status": "fully_registered",
+   "condition": "subjective_sleep_quality",
+   "purpose": "treatment",
+   "review_status": "clinician_approved",
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability"
+   },
+   "scoring_eligible": false,
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "trial_family": "source_33086877",
+   "population": {
+    "description": "Review of 60 studies (n=6894; ages 7-80); sleep meta-analysis of 10 placebo-controlled RCTs with repeated dosing; populations not specified by the authors."
+   },
+   "study_design": "Systematic review with meta-analyses (Hedges' g) of placebo-controlled trials regardless of Jadad quality; includes observational studies and herbal combinations in the narrative review.",
+   "outcomes": [
+    {
+     "name": "Subjective sleep quality, 10 RCTs: pooled g 0.36 (95% CI -0.08 to 0.81), I2 85.33%, funnel plot suggests missing studies; not significant",
+     "hierarchy": "primary",
+     "kind": "patient_important",
+     "direction": "null",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "Subgroup: whole root/rhizome g 0.83 (0.03 to 1.62, 4 studies) versus extracts g 0.10 (-0.02 to 0.22, 6 studies)",
+     "hierarchy": "secondary",
+     "kind": "patient_important",
+     "direction": "mixed",
+     "outcome_role": "post_hoc_subgroup"
+    },
+    {
+     "name": "Anxiety: positive outcomes in 6 of 7 single-herb studies (narrative); preparations and doses vary",
+     "hierarchy": "secondary",
+     "kind": "patient_important",
+     "direction": "mixed",
+     "outcome_role": "direct_between_group_effect"
+    }
+   ],
+   "limitations": [
+    "The pooled sleep-quality effect is not statistically significant; the whole-root advantage comes from a 4-study subgroup and is hypothesis-generating. No credit follows.",
+    "Trials were pooled irrespective of quality, heterogeneity was high and publication bias is suggested; target populations were not specified (Discussion).",
+    "No serious adverse events in 60 studies is not proof of universal safety; paradoxical stimulation reported in a minority.",
+    "Do not grant the whole-root hypothesis or combination effects to every extract.",
+    "Included-study PMID membership was extracted from source Table(s) table1-2515690X20967323. These are source membership identifiers, not independent efficacy approvals or automatic trial replications. Exact table/citation mapping and unindexed citations are retained in the source receipt. This context records single-herb Table 1 membership only; herbal-combination Table 2 is excluded. The full single-herb table includes outcomes beyond sleep; not every listed study enters a sleep meta-analysis.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ],
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "mg",
+    "values": [],
+    "dose_status": "source_not_reported",
+    "dose_basis": "not_applicable",
+    "duration_basis": "participant_specific",
+    "duration_days": null,
+    "administration_frequency": "Trial-specific single or repeated daily doses (Table 1); no pooled regimen",
+    "dosage_forms": [
+     "capsule",
+     "tablet",
+     "whole root/rhizome preparation"
+    ],
+    "co_therapies": [],
+    "source_provenance": {
+     "pmid": "33086877",
+     "location": "Methods (meta-analysis inclusion irrespective of Jadad quality); Results Table 1 (single-herb studies), sleep-quality meta-analysis (Figures 2-3) and Anxiety section; adverse events; Discussion limitations",
+     "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7585905/"
+    },
+    "reported_regimen": "Table 1 single-herb regimens include e.g. 300 mg/day hydroalcoholic extract for 4 weeks and 530-1060 mg/day root/rhizome; sleep meta-analysis regimens not summarized as a range",
+    "normalization": {
+     "basis": "No pooled dose."
+    }
+   },
+   "included_study_pmids": [
+    "30632220",
+    "19114414",
+    "18482867",
+    "17940604",
+    "17486686",
+    "15551388",
+    "15328251",
+    "14696021",
+    "12568976",
+    "11731907",
+    "10761819",
+    "10599933",
+    "22718671",
+    "7972346",
+    "3936097",
+    "7122669",
+    "31158346",
+    "29035887",
+    "27419099",
+    "16010204",
+    "15900287",
+    "15159134",
+    "15022653",
+    "11807960",
+    "11536390",
+    "3244789",
+    "30591031",
+    "28478716",
+    "28278010",
+    "27110643",
+    "25173770",
+    "24741279",
+    "24250592",
+    "21959068",
+    "21775910",
+    "21399726",
+    "19284179",
+    "12826988",
+    "12120807",
+    "10975170",
+    "12410546",
+    "11999905"
+   ]
+  }
+ ],
+ "source_receipts": [
+  {
+   "pmid": "33086877",
+   "title_fetched": "Valerian Root in Treating Sleep Problems and Associated Disorders-A Systematic Review and Meta-Analysis.",
+   "url": "https://www.ncbi.nlm.nih.gov/research/bionlp/RESTful/pmcoa.cgi/BioC_json/33086877/unicode",
+   "full_text": true,
+   "sections_used": "Methods (meta-analysis inclusion irrespective of Jadad quality); Results Table 1 (single-herb studies), sleep-quality meta-analysis (Figures 2-3) and Anxiety section; adverse events; Discussion limitations"
+  }
+ ]
+}

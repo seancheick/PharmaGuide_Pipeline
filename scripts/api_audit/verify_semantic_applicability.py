@@ -96,13 +96,14 @@ def audit_semantic_applicability(records: List[Dict[str, Any]]) -> Dict[str, Any
         if eff in ("null", "negative"):
             if not studies:
                 record_issues.append(
-                    "VIOLATION: effect_direction is null/negative but qualifying_human_studies is empty. "
-                    "Must be no_qualifying_human_evidence."
+                    f"VIOLATION: effect_direction is {eff} but qualifying_human_studies is empty. "
+                    "Set effect_direction to JSON null (no effect was observed; the \"null\" effect category means "
+                    "an evaluated null outcome) and applicability_status to no_qualifying_human_evidence."
                 )
         if eff == "no_qualifying_human_evidence":
             if len(studies) > 0:
                 record_issues.append(
-                    f"VIOLATION: effect_direction is no_qualifying_human_evidence but carries {len(studies)} studies."
+                    f"VIOLATION: applicability_status is no_qualifying_human_evidence but carries {len(studies)} studies."
                 )
 
         # 2. Combination -> Standalone Efficacy Guard
@@ -142,7 +143,8 @@ def audit_semantic_applicability(records: List[Dict[str, Any]]) -> Dict[str, Any
         if record_issues:
             flagged_records.append({
                 "canonical_id": cid,
-                "effect_direction": eff,
+                "effect_direction": r.get("effect_direction"),
+                "applicability_status": r.get("applicability_status"),
                 "issues": record_issues,
             })
         else:
@@ -175,7 +177,8 @@ def main() -> int:
     if results["flagged_records"]:
         print("\nFlagged Violations:")
         for fr in results["flagged_records"]:
-            print(f"\n  [{fr['canonical_id']}] (effect_direction: {fr['effect_direction']})")
+            print(f"\n  [{fr['canonical_id']}] (effect_direction: {fr['effect_direction']}; "
+                  f"applicability_status: {fr['applicability_status']})")
             for iss in fr["issues"]:
                 print(f"    - {iss}")
         return 1

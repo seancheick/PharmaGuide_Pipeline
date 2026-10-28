@@ -519,7 +519,10 @@ def test_material_context_preserves_specific_disclosure():
     assert res_crude_broccoli.disposition == EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value
     assert res_crude_broccoli.applicability_status == "crude_whole_food_powder_blocked"
 
-    # 2. Standardized broccoli sprout extract with sulforaphane matches clinical extract
+    # 2. Standardized broccoli sprout extract with sulforaphane is not blocked
+    # as a crude food: it reaches the sulforaphane clinical record. That record
+    # is now a completed qualified zero on the reference path (Dr. Pham,
+    # 2026-10-28), so the reached record supplies research, not a resolution.
     res_std_broccoli = er.resolve_evidence_for_row({
         "canonical_id": "broccoli",
         "name": "Broccoli Sprout Extract",
@@ -527,7 +530,11 @@ def test_material_context_preserves_specific_disclosure():
         "amount": 500,
         "unit": "mg",
     })
-    assert res_std_broccoli.disposition == EvidenceDisposition.RESOLVED_BY_REVIEWED_CLINICAL_EVIDENCE.value
+    assert res_std_broccoli.applicability_status != "crude_whole_food_powder_blocked"
+    assert res_std_broccoli.disposition == EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value
+    assert res_std_broccoli.applicability_status == "not_applicable"
+    assert res_std_broccoli.points_eligible is False
+    assert "backed_clinical_studies" in res_std_broccoli.owner_facts
 
     # 3. Crude pumpkin seed powder blocked from purified seed oil trials
     res_crude_pumpkin = er.resolve_evidence_for_row({
@@ -900,13 +907,13 @@ def test_real_disclosed_extract_and_theanine_are_not_missing_or_blend():
                 assert result.disposition == EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value
                 assert result.points_eligible is False
             else:
+                # INGR_L_THEANINE credit is now scoped to Focus & Mental
+                # Clarity (Dr. Pham-approved closure, 2026-10-28); the source
+                # does not support this label's stress purpose.
                 assert row["canonical_id"] == "l_theanine"
-                # The label claims stress; INGR_L_THEANINE's only context is pending
-                # clinician review and it has no signed scope, so no reviewed source
-                # supports that purpose (item 12, Sean 2026-10-28).
                 assert result.disposition == EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value
-                assert result.reason_code == "label_purpose_evidence_mismatch"
                 assert result.points_eligible is False
+                assert result.blocking_reasons == ["label_purpose_evidence_mismatch"]
 
 
 @pytest.mark.parametrize('quantity,unit', [(200, 'mg'), (0.2, 'g'), (200000, 'mcg')])
@@ -1480,7 +1487,8 @@ def test_empty_machine_verification_stamp_cannot_complete_a_negative_search(monk
     import copy
     record = copy.deepcopy(er._load_literature_evidence()['cistanche'])
     record['qualifying_human_studies'] = []
-    record['effect_direction'] = 'no_qualifying_human_evidence'
+    record['effect_direction'] = None  # a review result, not an observed effect
+    record['applicability_status'] = 'no_qualifying_human_evidence'
     record['verification_result'] = 'authoritative_pubmed_verified'
     record['verification_provenance'] = {'all_pmids_verified': True, 'retractions_found': False,
                                          'verified_by': 'scripts/api_audit/verify_literature_records.py'}

@@ -71,7 +71,9 @@ def test_natural_trace_matrix_is_source_material_without_fabricated_elements(ass
     assert blob['proprietary_blend_detail']['has_proprietary_blends'] is False
     blockers = scored['assessment_readiness']['release_assessment']['blockers']
     assert 'clinical_applicability_unreviewed:INGR_CALCIUM' in blockers
-    assert 'clinical_applicability_unreviewed:INGR_MAGNESIUM_GENERIC' in blockers
+    # INGR_MAGNESIUM_GENERIC now has a reviewed applicability scope (Dr. Pham,
+    # 2026-10-28: blood pressure), so it is no longer an unreviewed blocker.
+    assert not any('INGR_MAGNESIUM_GENERIC' in blocker for blocker in blockers)
     text = json.dumps(enriched, ensure_ascii=False)
     assert '0.7 - 0.9 mg' in text and '1.0 - 1.2 mg' in text
 
