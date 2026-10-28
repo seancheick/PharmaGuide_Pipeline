@@ -770,7 +770,7 @@ def _urinary_enriched(*, ledger_rows, cluster_ingredients=None, scorable=True, r
             "scoreable_identity": True, "cleaner_row_role": role,
         })
     enriched = {
-        "fullName": "Urinary fixture",
+        "fullName": "Recurrent UTI prevention fixture",
         "serving_basis": {"min_servings_per_day": 1, "max_servings_per_day": 1},
         "activeIngredients": [dict(row) for row in rows],
         "ingredient_quality_data": {

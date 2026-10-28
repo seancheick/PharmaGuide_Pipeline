@@ -1823,7 +1823,7 @@
             },
             "source_provenance": {
               "pmid": "25308211",
-              "location": "Original study intervention and reported outcomes; signed Batch4 source disposition and later Batch11 memory-paper appraisal where specified.",
+              "location": "Original study intervention and reported outcomes; signed Batch4 source disposition and later Batch11 memory-paper appraisal where specified.; complete retained Methods/outcome/statistics text inspected for outcome hierarchy, none designated",
               "source_url": "https://pubmed.ncbi.nlm.nih.gov/25308211/"
             }
           },
@@ -1831,7 +1831,8 @@
             "The signed return retains exact saved-label correspondence for 201110,205153,212953,259371; this context cannot authorize generic curcumin or a formulation-mass equivalence.",
             "Source-specific acceptance does not establish a new efficacy grade, minimum effective dose, optimum or safety ceiling.",
             "One-sided tests, small pilot, attrition and a restricted analysis whose prospective prespecification is not established; the favorable subset cannot replace the overall null.",
-            "Six capsules/day delivered 180 mg active curcumin, not 180 mg total formulation. Theravalues funded the study and company employees were authors; reported symptoms led to two active-arm discontinuations."
+            "Six capsules/day delivered 180 mg active curcumin, not 180 mg total formulation. Theravalues funded the study and company employees were authors; reported symptoms led to two active-arm discontinuations.",
+            "Full retained primary Methods and outcome/statistical descriptions were inspected: the paper does not designate a primary-versus-secondary outcome hierarchy. not_reported records this source-reporting limitation; it supplies no primary-outcome credit and does not establish prospective prespecification of a restricted analysis. Existing source eligibility, negative findings, product-correspondence holds and all other review limits remain unchanged."
           ],
           "clinical_review": {
             "reviewer": "Dr. Pham",
@@ -1841,7 +1842,7 @@
           "outcomes": [
             {
               "name": "Overall analyzed VAS knee-pain change, p=.10",
-              "hierarchy": "unresolved",
+              "hierarchy": "not_reported",
               "kind": "patient_important",
               "direction": "null",
               "outcome_role": "direct_between_group_effect"
@@ -1855,7 +1856,7 @@
             },
             {
               "name": "JKOM and JOA knee-function outcomes",
-              "hierarchy": "unresolved",
+              "hierarchy": "not_reported",
               "kind": "patient_important",
               "direction": "null",
               "outcome_role": "direct_between_group_effect"
@@ -2028,7 +2029,7 @@
             },
             "source_provenance": {
               "pmid": "35494290",
-              "location": "Original study intervention and reported outcomes; signed Batch4 source disposition and later Batch11 memory-paper appraisal where specified.",
+              "location": "Original study intervention and reported outcomes; signed Batch4 source disposition and later Batch11 memory-paper appraisal where specified.; complete retained Methods/outcome/statistics text inspected for outcome hierarchy, none designated",
               "source_url": "https://pubmed.ncbi.nlm.nih.gov/35494290/"
             }
           },
@@ -2037,7 +2038,8 @@
             "Source-specific acceptance does not establish a new efficacy grade, minimum effective dose, optimum or safety ceiling.",
             "No demonstrated symptom superiority; selected mechanical findings do not establish cartilage regeneration or general OA disease modification. This is a separate surgical cohort, not follow-up of the memory trial.",
             "Small heterogeneous surgical population, multiple measurements and one-sided tests; clear prospective primary/secondary hierarchy not established in the reviewed report.",
-            "Theravalues funded the study. Serious events occurred in both groups and were judged unrelated by the study safety committee; this is not general long-term safety proof."
+            "Theravalues funded the study. Serious events occurred in both groups and were judged unrelated by the study safety committee; this is not general long-term safety proof.",
+            "Full retained primary Methods and outcome/statistical descriptions were inspected: the paper does not designate a primary-versus-secondary outcome hierarchy. not_reported records this source-reporting limitation; it supplies no primary-outcome credit and does not establish prospective prespecification of a restricted analysis. Existing source eligibility, negative findings, product-correspondence holds and all other review limits remain unchanged."
           ],
           "clinical_review": {
             "reviewer": "Dr. Pham",
@@ -2047,21 +2049,21 @@
           "outcomes": [
             {
               "name": "Between-group JOA, VAS and JKOM clinical symptoms",
-              "hierarchy": "unresolved",
+              "hierarchy": "not_reported",
               "kind": "patient_important",
               "direction": "null",
               "outcome_role": "direct_between_group_effect"
             },
             {
               "name": "MRI T2 mapping",
-              "hierarchy": "unresolved",
+              "hierarchy": "not_reported",
               "kind": "surrogate",
               "direction": "null",
               "outcome_role": "surrogate"
             },
             {
               "name": "Selected arthroscopic cartilage stiffness and surface roughness",
-              "hierarchy": "unresolved",
+              "hierarchy": "not_reported",
               "kind": "surrogate",
               "direction": "positive",
               "outcome_role": "surrogate"
@@ -3561,7 +3563,7 @@
         "Iron-deficiency anemia comparison in pregnant women (PMID: 19639462)"
       ],
       "health_goals_supported": [],
-      "notes": "Ingredient-level record (formerly BRAND_OPTIFERRIN, whose brand identity was never verified). Bovine lactoferrin 100 mg twice daily (200 mg/day) matched ferrous sulfate for hemoglobin, ferritin and serum iron in 100 pregnant women with iron-deficiency anemia, with fewer gastrointestinal effects (PMID 19639462); a meta-analysis of intervention studies found better serum iron, ferritin and hemoglobin than ferrous sulfate (PMID 35276902). Retained-source scope and limitations: Preparation/population-specific iron-status outcomes in an iron-deficiency-anemia synthesis (PMID: 35276902) Iron-deficiency anemia comparison in pregnant women; not general immune efficacy (PMID: 19639462)",
+      "notes": "Ingredient-level record (formerly BRAND_OPTIFERRIN, whose brand identity was never verified). Bovine lactoferrin 100 mg twice daily (200 mg/day) matched ferrous sulfate for hemoglobin, ferritin and serum iron in 100 pregnant women with iron-deficiency anemia, with fewer gastrointestinal effects (PMID 19639462); a meta-analysis of intervention studies found better serum iron, ferritin and hemoglobin than ferrous sulfate (PMID 35276902). Retained-source scope and limitations: Preparation/population-specific iron-status outcomes in an iron-deficiency-anemia synthesis (PMID: 35276902) Iron-deficiency anemia comparison in pregnant women; not general immune efficacy (PMID: 19639462) The35276902 synthesis includes retracted primary26037728. That synthesis is not itself declared retracted and its unaffected iron/ferritin pools are not recomputed here. The independent Nappi19639462 report remains intact, but no independently accepted exact current-product/preparation/population/outcome context exists in this record. Withhold the unqualified generic affirmative relationship pending scoped source acceptance; preserve Dose proof, quantities, identity, independent research and safety.",
       "study_type": "systematic_review_meta",
       "last_updated": "2026-09-29",
       "notable_studies": "Zhao et al. (2022, PMID 35276902) meta-analysis found oral lactoferrin improved ferritin and hemoglobin outcomes versus ferrous sulfate in iron-deficiency anemia trials. Nappi et al. (2009, PMID 19639462) randomized pregnant women with iron-deficiency anemia and reported better tolerability with bovine lactoferrin. No PubMed-indexed RCTs were found for an 'OptiFerrin' brand specifically.",
@@ -3706,8 +3708,10 @@
             "Returned decision: Source-content hold.",
             "Factual extraction assigns no new approval, clinical grade or universal dose threshold.",
             "Three included studies were not randomized; do not label every comparative result as randomized-trial evidence.",
-            "Physical dosage forms have not been fully extracted from the verified source tables in this bounded pass. No placeholder form or capsule assumption is treated as established; this scope remains held.",
-            "Source bibliography PMID pointers (not a verified list of included trials and not independent scoring sources): 26037728, 16936810, 24590680, 20646353, 19639462, 30298070, 16469988, 32886113. Each intervention and comparison requires its own applicability assessment; citation in this bibliography grants no credit."
+            "Primary SupplementaryTableS1 was retrieved and visually inspected in this follow-up. It reports source names, design, population, duration, intervention material names and participant numbers, but no assigned dose column or physical dosage-form column. Capsules/tablets cannot be inferred from that table. Exact primary-study delivery correspondence remains unavailable from this review; no dose, preparation equivalence or affirmative approval is invented.",
+            "Historical bibliography census (not independent scoring sources; actual included-publication membership is separately bound to the inspected source table): 26037728, 16936810, 24590680, 20646353, 19639462, 30298070, 16469988, 32886113. Each intervention and comparison requires its own applicability assessment; citation in this bibliography grants no credit.",
+            "Included-study identifiers are now bound to this source's actual included-study rows/explicit inclusion references (Results3.1 source inclusion paragraph: eight articles referenced31–38;11study/population arms are not11independentarticles), with live NIH title/content identity checks. They are publication pointers, not independent-cohort counts, per-primary-study scoring approvals, preparation equivalence or new efficacy evidence. Exact unindexed source citations remain retained; no missing PMID is invented.",
+            "Live NIH API flags these included PRIMARY reports as retracted: 26037728 (notice 37466255). This flag applies to the named underlying reports, not automatically to this parent synthesis. Their impact on the exact synthesis/outcome is not recomputed or deemed harmless here; existing non-scoring/pending source acceptance remains. Do not restore affirmative credit merely because table extraction is complete."
           ],
           "dose": {
             "measurement_type": "mass",
@@ -3728,10 +3732,20 @@
             },
             "source_provenance": {
               "pmid": "35276902",
-              "location": "Primary Methods, intervention and Results, with source-specific reporting limits retained.",
+              "location": "Primary Methods, intervention and Results, with source-specific reporting limits retained.; source-field completion from Results3.1 source inclusion paragraph: eight articles referenced31–38;11study/population arms are not11independentarticles",
               "source_url": "https://pubmed.ncbi.nlm.nih.gov/35276902/"
             }
-          }
+          },
+          "included_study_pmids": [
+            "26037728",
+            "16936810",
+            "24590680",
+            "20646353",
+            "19639462",
+            "30298070",
+            "16469988",
+            "32886113"
+          ]
         }
       ],
       "verification_provenance": {
@@ -3764,7 +3778,8 @@
             }
           ]
         }
-      }
+      },
+      "scoring_eligible": false
     },
     {
       "id": "BRAND_CARNIPURE",
@@ -4173,7 +4188,9 @@
             "Despite restrictive abstract wording, the source table includes carbohydrate and leucine cointerventions; these cannot be ignored.",
             "Physical dosage form is not specified uniformly by the source table; no capsule assumption.",
             "No new clinical approval, scoring eligibility, evidence grade, dose threshold or product correspondence is assigned.",
-            "Source bibliography extraction remains pending. No complete included-trial list or PMID mapping was established by this extraction; no evidence credit follows from missing bibliography data."
+            "Source bibliography extraction remains pending. No complete included-trial list or PMID mapping was established by this extraction; no evidence credit follows from missing bibliography data.",
+            "Included-study identifiers are now bound to this source's actual included-study rows/explicit inclusion references (Tables Tab1 explicit included-study row citations), with live NIH title/content identity checks. They are publication pointers, not independent-cohort counts, per-primary-study scoring approvals, preparation equivalence or new efficacy evidence. Exact unindexed source citations remain retained; no missing PMID is invented.",
+            "1 included source citations have no printed PubMed identifier in this primary source; their exact citations are retained in the source-table receipt. This is a documented identifier limitation, not a fabricated identifier or an extra independent trial."
           ],
           "dose": {
             "measurement_type": "mass",
@@ -4193,10 +4210,22 @@
             },
             "source_provenance": {
               "pmid": "32958033",
-              "location": "Verified primary source Methods, study tables and Results; explicit source limitations retained.",
+              "location": "Verified primary source Methods, study tables and Results; explicit source limitations retained.; source-field completion from Tables Tab1 explicit included-study row citations",
               "source_url": "https://pubmed.ncbi.nlm.nih.gov/32958033/"
             }
-          }
+          },
+          "included_study_pmids": [
+            "11880112",
+            "25612929",
+            "23818692",
+            "21224234",
+            "28345160",
+            "18065594",
+            "29473908",
+            "30485835",
+            "31636806",
+            "32033285"
+          ]
         }
       ],
       "verification_provenance": {
@@ -7964,7 +7993,8 @@
             "Returned decision: Date-restricted hold. Publication-age-only exclusions were withdrawn and are not adopted.",
             "No new scoring grade, dose threshold, product approval or clinical signature is assigned by this factual extraction.",
             "Physical dosage forms have not been fully extracted from the verified source tables in this bounded pass. No placeholder form or capsule assumption is treated as established; this scope remains held.",
-            "Source bibliography PMID pointers (not a verified list of included trials and not independent scoring sources): 20671038, 17690198, 16868650, 20482881, 18175046, 21659893, 21407127, 19210788, 17194255, 17136505, 18992136, 19935102, 19276843, 20386120, 16953366. Each intervention and comparison requires its own applicability assessment; citation in this bibliography grants no credit."
+            "Historical bibliography census (not independent scoring sources; actual included-publication membership is separately bound to the inspected source table): 20671038, 17690198, 16868650, 20482881, 18175046, 21659893, 21407127, 19210788, 17194255, 17136505, 18992136, 19935102, 19276843, 20386120, 16953366. Each intervention and comparison requires its own applicability assessment; citation in this bibliography grants no credit.",
+            "Included-study PMID membership was extracted from source Table(s) Tab1. These are source membership identifiers, not independent efficacy approvals or automatic trial replications. Exact table/citation mapping and unindexed citations are retained in the source receipt."
           ],
           "dose": {
             "measurement_type": "mass",
@@ -7987,7 +8017,24 @@
               "location": "Primary article abstract and source-specific Methods/Results/study tables; exact section/table extraction retained privately.",
               "source_url": "https://pubmed.ncbi.nlm.nih.gov/22270875/"
             }
-          }
+          },
+          "included_study_pmids": [
+            "20671038",
+            "17690198",
+            "16868650",
+            "20482881",
+            "18175046",
+            "21659893",
+            "21407127",
+            "19210788",
+            "17194255",
+            "17136505",
+            "18992136",
+            "19935102",
+            "19276843",
+            "20386120",
+            "16953366"
+          ]
         }
       ]
     },
@@ -9091,7 +9138,9 @@
             "Current NCCIH bleeding/anticoagulant/aspirin/surgery cautions remain controlling; review discussion cannot establish all garlic or Kyolic universally free of bleeding risk.",
             "All12 source-table trial identities/citations retained in garlic_exact_trial_table.json and sourceXML. PrimaryPMIDs have not independently been content-verified for every old trial; extraction_pending is honest existing-schema locator and blocks complete-review qualification.",
             "No new numerical grade or dose curve. Source-current context is authoring-valid only; product/source completeness is not claimed.",
-            "Wakunaga supported the symposium and author travel; source states sponsor did not design,collect,analyze or prepare the manuscript. Attrition unclear in2trials; other trials20%vs11% and27%vs0%;2trials lack BP-measurement details."
+            "Wakunaga supported the symposium and author travel; source states sponsor did not design,collect,analyze or prepare the manuscript. Attrition unclear in2trials; other trials20%vs11% and27%vs0%;2trials lack BP-measurement details.",
+            "Included-study identifiers are now bound to this source's actual included-study rows/explicit inclusion references (Tables tI-etm-0-0-8374 explicit included-study row citations), with live NIH title/content identity checks. They are publication pointers, not independent-cohort counts, per-primary-study scoring approvals, preparation equivalence or new efficacy evidence. Exact unindexed source citations remain retained; no missing PMID is invented.",
+            "2 included source citations have no printed PubMed identifier in this primary source; their exact citations are retained in the source-table receipt. This is a documented identifier limitation, not a fabricated identifier or an extra independent trial."
           ],
           "context_id": "garlic_hypertension_meta_32010325",
           "trial_family": "garlic_hypertension_meta_32010325",
@@ -9131,10 +9180,21 @@
             "source_provenance": {
               "pmid": "32010325",
               "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6966103/",
-              "location": "Methods,TableI,Results,Figures2–3 and risk-of-bias discussion"
+              "location": "Methods,TableI,Results,Figures2–3 and risk-of-bias discussion; source-field completion from Tables tI-etm-0-0-8374 explicit included-study row citations"
             }
           },
-          "included_study_pmids": "extraction_pending"
+          "included_study_pmids": [
+            "2083170",
+            "2083173",
+            "1288512",
+            "19060427",
+            "19390538",
+            "20594781",
+            "23169470",
+            "23404465",
+            "26869811",
+            "30619868"
+          ]
         }
       ],
       "reference_semantics": {
@@ -9376,7 +9436,9 @@
           "evidence_grade": "systematic_review",
           "retracted": false,
           "supports_claims": [],
-          "verification_source": "pubmed_eutils"
+          "verification_source": "pubmed_eutils",
+          "scoring_eligible": false,
+          "notes": "The2024thyroid synthesis includes Sun2021 PMID34745288, retractedDecember2023 (notice38125133). Its pooled findings cannot supply affirmative clinical credit without a qualifying disposition addressing the retracted input. The synthesis itself is not labeled retracted; independent selenium nutrient authority, other sources, quantities and safety remain intact."
         },
         {
           "type": "pubmed",
@@ -9527,7 +9589,9 @@
             "No new efficacy grade, clinical approval, dose threshold or product equivalence is assigned.",
             "Specific physical dosage forms are not established by this extraction. An oral route or an extract name is not silently converted into a capsule/tablet claim; applicability remains held.",
             "Live NIH primary integrity flag PMID34745288: RetractionIn notice PMID38125133. Do not infer the meta-analysis itself is retracted or blanket-reject unaffected outcome pools. Keep pending scope until contribution is resolved.",
-            "Source bibliography PMID pointers (not a verified list of included trials and not independent scoring sources): 20526530, 22918596, 27493883, 26835425, 30398407, 23158484, 30306604, 25524327, 31129812, 17284630, 27730079, 18302514, 22356267, 12656658, 11932302, 27572248, 20039895, 28042649, 16837619, 18565817, 23844613, 29456972, 25758370, 34909430, 30182359, 33650299, 34745288, 32676110, 28534148, 23565426, 25894865. Each intervention and comparison requires its own applicability assessment; citation in this bibliography grants no credit."
+            "Historical bibliography census (not independent scoring sources; actual included-publication membership is separately bound to the inspected source table): 20526530, 22918596, 27493883, 26835425, 30398407, 23158484, 30306604, 25524327, 31129812, 17284630, 27730079, 18302514, 22356267, 12656658, 11932302, 27572248, 20039895, 28042649, 16837619, 18565817, 23844613, 29456972, 25758370, 34909430, 30182359, 33650299, 34745288, 32676110, 28534148, 23565426, 25894865. Each intervention and comparison requires its own applicability assessment; citation in this bibliography grants no credit.",
+            "Included-study PMID membership was extracted from source Table(s) tb1. These are source membership identifiers, not independent efficacy approvals or automatic trial replications. Exact table/citation mapping and unindexed citations are retained in the source receipt. 4 source citations in this set lack a PMID in the primary source; their citation text is retained, no PMID is invented.",
+            "The source included Sun2021 PMID34745288, which PubMed flags as retracted (notice38125133,December2023). Its historical inclusion is recorded for traceability, not qualifying evidence. No acceptance of the pooled thyroid result or restoration of credit is inferred without a source-scoped integrity/reanalysis disposition."
           ],
           "dose": {
             "measurement_type": "mass",
@@ -9550,7 +9614,40 @@
               "location": "Primary source Methods, Results and trial-characteristic tables; source-specific reporting and study-design limits retained.",
               "source_url": "https://pubmed.ncbi.nlm.nih.gov/38243784/"
             }
-          }
+          },
+          "included_study_pmids": [
+            "22356267",
+            "18565817",
+            "23565426",
+            "20526530",
+            "27730079",
+            "25894865",
+            "12656658",
+            "23844613",
+            "27572248",
+            "11932302",
+            "33650299",
+            "29456972",
+            "18302514",
+            "30182359",
+            "22918596",
+            "30306604",
+            "25758370",
+            "34909430",
+            "31129812",
+            "25524327",
+            "20039895",
+            "17284630",
+            "27493883",
+            "26835425",
+            "28042649",
+            "34745288",
+            "32676110",
+            "16837619",
+            "30398407",
+            "28534148",
+            "23158484"
+          ]
         },
         {
           "context_schema_version": "1.1.0",
@@ -9595,7 +9692,8 @@
             "Returned decision: Source-content hold; reject essentiality-to-universal-prevention inference.",
             "No new efficacy grade, clinical approval, dose threshold or product equivalence is assigned.",
             "Specific physical dosage forms are not established by this extraction. An oral route or an extract name is not silently converted into a capsule/tablet claim; applicability remains held.",
-            "Source bibliography PMID pointers (not a verified list of included trials and not independent scoring sources): 30818086, 30354702, 28724185, 28293260, 22918596, 23155687, 18302514. Each intervention and comparison requires its own applicability assessment; citation in this bibliography grants no credit."
+            "Historical bibliography census (not independent scoring sources; actual included-publication membership is separately bound to the inspected source table): 30818086, 30354702, 28724185, 28293260, 22918596, 23155687, 18302514. Each intervention and comparison requires its own applicability assessment; citation in this bibliography grants no credit.",
+            "Included-study PMID membership was extracted from source Table(s) T1. These are source membership identifiers, not independent efficacy approvals or automatic trial replications. Exact table/citation mapping and unindexed citations are retained in the source receipt."
           ],
           "dose": {
             "measurement_type": "mass",
@@ -9618,7 +9716,16 @@
               "location": "Primary source Methods, Results and trial-characteristic tables; source-specific reporting and study-design limits retained.",
               "source_url": "https://pubmed.ncbi.nlm.nih.gov/37335715/"
             }
-          }
+          },
+          "included_study_pmids": [
+            "30818086",
+            "30354702",
+            "28724185",
+            "28293260",
+            "22918596",
+            "23155687",
+            "18302514"
+          ]
         }
       ]
     },
@@ -10043,7 +10150,8 @@
             "Do not attribute combination effects to caffeine alone or treat bodyweight-based doses as fixed capsule thresholds.",
             "Returned decision: Source-content hold for each intended outcome.",
             "No new scoring grade, dose threshold, product approval or clinical signature is assigned by this factual extraction.",
-            "Source bibliography PMID pointers (not a verified list of included trials and not independent scoring sources): 26045170, 10496113, 18799996, 30999897, 17240784, 26445565, 26285020, 28598402, 31660991, 30102874, 29210957, 19308789, 19827465. Each intervention and comparison requires its own applicability assessment; citation in this bibliography grants no credit."
+            "Historical bibliography census (not independent scoring sources; actual included-publication membership is separately bound to the inspected source table): 26045170, 10496113, 18799996, 30999897, 17240784, 26445565, 26285020, 28598402, 31660991, 30102874, 29210957, 19308789, 19827465. Each intervention and comparison requires its own applicability assessment; citation in this bibliography grants no credit.",
+            "Included-study PMID membership was extracted from source Table(s) nutrients-13-00868-t005, nutrients-13-00868-t006. These are source membership identifiers, not independent efficacy approvals or automatic trial replications. Exact table/citation mapping and unindexed citations are retained in the source receipt."
           ],
           "dose": {
             "measurement_type": "mass",
@@ -10071,7 +10179,22 @@
               "location": "Primary article abstract and source-specific Methods/Results/study tables; exact section/table extraction retained privately.",
               "source_url": "https://pubmed.ncbi.nlm.nih.gov/33800853/"
             }
-          }
+          },
+          "included_study_pmids": [
+            "29210957",
+            "30102874",
+            "30999897",
+            "28598402",
+            "26045170",
+            "26445565",
+            "19308789",
+            "18799996",
+            "17240784",
+            "10496113",
+            "31660991",
+            "26285020",
+            "19827465"
+          ]
         }
       ]
     },
@@ -10213,7 +10336,9 @@
             "Returned decision: Source-content hold.",
             "No new scoring grade, dose threshold, product approval or clinical signature is assigned by this factual extraction.",
             "Some included-study citations lack PubMed identifiers in the source XML; retain their exact citations rather than inventing identifiers.",
-            "Source bibliography PMID pointers (not a verified list of included trials and not independent scoring sources): 33024120, 32550158, 30541217, 18397984. Each intervention and comparison requires its own applicability assessment; citation in this bibliography grants no credit."
+            "Historical bibliography census (not independent scoring sources; actual included-publication membership is separately bound to the inspected source table): 33024120, 32550158, 30541217, 18397984. Each intervention and comparison requires its own applicability assessment; citation in this bibliography grants no credit.",
+            "Included-study identifiers are now bound to this source's actual included-study rows/explicit inclusion references (Tables tab1 explicit included-study row citations), with live NIH title/content identity checks. They are publication pointers, not independent-cohort counts, per-primary-study scoring approvals, preparation equivalence or new efficacy evidence. Exact unindexed source citations remain retained; no missing PMID is invented.",
+            "42 included source citations have no printed PubMed identifier in this primary source; their exact citations are retained in the source-table receipt. This is a documented identifier limitation, not a fabricated identifier or an extra independent trial."
           ],
           "dose": {
             "measurement_type": "mass",
@@ -10235,10 +10360,16 @@
             },
             "source_provenance": {
               "pmid": "34956436",
-              "location": "Primary article abstract and source-specific Methods/Results/study tables; exact section/table extraction retained privately.",
+              "location": "Primary article abstract and source-specific Methods/Results/study tables; exact section/table extraction retained privately.; source-field completion from Tables tab1 explicit included-study row citations",
               "source_url": "https://pubmed.ncbi.nlm.nih.gov/34956436/"
             }
-          }
+          },
+          "included_study_pmids": [
+            "33024120",
+            "32550158",
+            "30541217",
+            "18397984"
+          ]
         }
       ],
       "reference_semantics": {
@@ -11200,7 +11331,8 @@
             "Returned decision: Reject immune/antiviral transfer; source-content hold for blood-pressure support.",
             "No new scoring grade, dose threshold, product approval or clinical signature is assigned by this factual extraction.",
             "Physical dosage forms have not been fully extracted from the verified source tables in this bounded pass. No placeholder form or capsule assumption is treated as established; this scope remains held.",
-            "Source bibliography PMID pointers (not a verified list of included trials and not independent scoring sources): 24829713, 24049596, 9482769, 17951477, 19402938, 21487493, 22118955. Each intervention and comparison requires its own applicability assessment; citation in this bibliography grants no credit."
+            "Historical bibliography census (not independent scoring sources; actual included-publication membership is separately bound to the inspected source table): 24829713, 24049596, 9482769, 17951477, 19402938, 21487493, 22118955. Each intervention and comparison requires its own applicability assessment; citation in this bibliography grants no credit.",
+            "Included-study identifiers are now bound to this source's actual included-study rows/explicit inclusion references (Tables jah31607-tbl-0001 explicit included-study row citations), with live NIH title/content identity checks. They are publication pointers, not independent-cohort counts, per-primary-study scoring approvals, preparation equivalence or new efficacy evidence. Exact unindexed source citations remain retained; no missing PMID is invented."
           ],
           "dose": {
             "measurement_type": "mass",
@@ -11220,10 +11352,19 @@
             },
             "source_provenance": {
               "pmid": "27405810",
-              "location": "Primary article abstract and source-specific Methods/Results/study tables; exact section/table extraction retained privately.",
+              "location": "Primary article abstract and source-specific Methods/Results/study tables; exact section/table extraction retained privately.; source-field completion from Tables jah31607-tbl-0001 explicit included-study row citations",
               "source_url": "https://pubmed.ncbi.nlm.nih.gov/27405810/"
             }
-          }
+          },
+          "included_study_pmids": [
+            "24829713",
+            "24049596",
+            "9482769",
+            "17951477",
+            "19402938",
+            "21487493",
+            "22118955"
+          ]
         }
       ]
     },
@@ -11380,7 +11521,9 @@
             "Returned decision: Source-content hold.",
             "No new scoring grade, dose threshold, product approval or clinical signature is assigned by this factual extraction.",
             "Physical dosage forms have not been fully extracted from the verified source tables in this bounded pass. No placeholder form or capsule assumption is treated as established; this scope remains held.",
-            "Source bibliography PMID pointers (not a verified list of included trials and not independent scoring sources): 29420994, 21172396, 21040626, 20079786, 25034805, 28784536, 26869148, 36263942, 17891480, 33751906, 18006208, 25761837, 18681988, 32777998, 34067795, 31060476, 31623400, 22214254, 24051231, 28566632, 28753943, 30308973, 33260552. Each intervention and comparison requires its own applicability assessment; citation in this bibliography grants no credit."
+            "Historical bibliography census (not independent scoring sources; actual included-publication membership is separately bound to the inspected source table): 29420994, 21172396, 21040626, 20079786, 25034805, 28784536, 26869148, 36263942, 17891480, 33751906, 18006208, 25761837, 18681988, 32777998, 34067795, 31060476, 31623400, 22214254, 24051231, 28566632, 28753943, 30308973, 33260552. Each intervention and comparison requires its own applicability assessment; citation in this bibliography grants no credit.",
+            "Included-study identifiers are now bound to this source's actual included-study rows/explicit inclusion references (Tables nuaf054-T2 explicit included-study row citations), with live NIH title/content identity checks. They are publication pointers, not independent-cohort counts, per-primary-study scoring approvals, preparation equivalence or new efficacy evidence. Exact unindexed source citations remain retained; no missing PMID is invented.",
+            "Results Study Characteristics explicitly reports two black-tea studies, two green-tea studies and one tea intervention in capsule form; isolated-compound arms remain separate and their delivery is not inferred. Other included trials may not report a delivery form; this list does not establish one common preparation across all arms."
           ],
           "dose": {
             "measurement_type": "mass",
@@ -11390,7 +11533,11 @@
             "dose_basis": "not_applicable",
             "duration_basis": "participant_specific",
             "administration_frequency": "Retain separate theanine-only, caffeine-combination and beverage doses and hour-one/hour-two assessments; no interchangeable universal daily regimen.",
-            "dosage_forms": [],
+            "dosage_forms": [
+              "black tea beverage",
+              "green tea beverage",
+              "tea capsule"
+            ],
             "co_therapies": [
               "Caffeine is an active cointervention in combination trials; not an inert vehicle."
             ],
@@ -11400,10 +11547,35 @@
             },
             "source_provenance": {
               "pmid": "40314930",
-              "location": "Primary article abstract and source-specific Methods/Results/study tables; exact section/table extraction retained privately.",
+              "location": "Primary article abstract and source-specific Methods/Results/study tables; exact section/table extraction retained privately.; source-field completion from Tables nuaf054-T2 explicit included-study row citations",
               "source_url": "https://pubmed.ncbi.nlm.nih.gov/40314930/"
             }
-          }
+          },
+          "included_study_pmids": [
+            "33751906",
+            "34067795",
+            "32777998",
+            "36263942",
+            "21172396",
+            "28784536",
+            "25761837",
+            "20079786",
+            "21040626",
+            "31060476",
+            "18006208",
+            "31623400",
+            "26869148",
+            "29420994",
+            "22214254",
+            "18681988",
+            "17891480",
+            "24051231",
+            "28566632",
+            "28753943",
+            "30308973",
+            "25034805",
+            "33260552"
+          ]
         }
       ]
     },
@@ -11675,7 +11847,8 @@
             "No new scoring grade, dose threshold, product approval or clinical signature is assigned by this factual extraction.",
             "Some exact included-source citations lack primary PMIDs in the retained XML; source citations are preserved and missing IDs are not invented.",
             "Nasal drops are explicitly named in one trial; oral study forms are not assumed to be capsules/tablets merely from a nasal-to-tablet equivalence statement.",
-            "Source bibliography PMID pointers (not a verified list of included trials and not independent scoring sources): 8241697, 7752827, 19096110, 25919281, 30880321, 31713723, 34826125, 25282031, 9420639, 10416042, 10334422, 10766682, 16882678, 18705154, 1464342. Each intervention and comparison requires its own applicability assessment; citation in this bibliography grants no credit."
+            "Historical bibliography census (not independent scoring sources; actual included-publication membership is separately bound to the inspected source table): 8241697, 7752827, 19096110, 25919281, 30880321, 31713723, 34826125, 25282031, 9420639, 10416042, 10334422, 10766682, 16882678, 18705154, 1464342. Each intervention and comparison requires its own applicability assessment; citation in this bibliography grants no credit.",
+            "Included-study IDs extracted from Table1 and body included-study enumeration;32listed study reports versus33abstract. These represent exact source membership, not independent approvals or a universal dose. Exact unindexed citations remain in the receipt; no PMID invented."
           ],
           "dose": {
             "measurement_type": "mass",
@@ -11700,7 +11873,24 @@
               "location": "Primary article abstract and source-specific Methods/Results/study tables; exact section/table extraction retained privately.",
               "source_url": "https://pubmed.ncbi.nlm.nih.gov/39462324/"
             }
-          }
+          },
+          "included_study_pmids": [
+            "8241697",
+            "7752827",
+            "19096110",
+            "25919281",
+            "30880321",
+            "31713723",
+            "34826125",
+            "25282031",
+            "9420639",
+            "10416042",
+            "10334422",
+            "10766682",
+            "16882678",
+            "18705154",
+            "1464342"
+          ]
         },
         {
           "context_schema_version": "1.1.0",
@@ -11744,7 +11934,8 @@
             "Physical oral formulations remain source-specific and not uniformly reported; do not invent capsules/tablets.",
             "These are adjunctive heart-failure outcomes, not healthy-adult energy or statin-myopathy support.",
             "Abstract/body study-count and denominator differences remain; no new clinical approval or credit.",
-            "Source bibliography PMID pointers (not a verified list of included trials and not independent scoring sources): 8241697, 19096110, 25919281, 25282031, 9420639, 10416042, 10766682. Each intervention and comparison requires its own applicability assessment; citation in this bibliography grants no credit."
+            "Historical bibliography census (not independent scoring sources; actual included-publication membership is separately bound to the inspected source table): 8241697, 19096110, 25919281, 25282031, 9420639, 10416042, 10766682. Each intervention and comparison requires its own applicability assessment; citation in this bibliography grants no credit.",
+            "Included-study IDs extracted from All-cause mortality11source citations and hospitalization3source citations; union12reports; excludednasalref39notinthisendpointset. These represent exact source membership, not independent approvals or a universal dose. Exact unindexed citations remain in the receipt; no PMID invented."
           ],
           "dose": {
             "measurement_type": "mass",
@@ -11767,7 +11958,16 @@
               "location": "Primary article abstract and source-specific Methods/Results/study tables; exact section/table extraction retained privately.",
               "source_url": "https://pubmed.ncbi.nlm.nih.gov/39462324/"
             }
-          }
+          },
+          "included_study_pmids": [
+            "8241697",
+            "19096110",
+            "25919281",
+            "25282031",
+            "9420639",
+            "10416042",
+            "10766682"
+          ]
         }
       ]
     },
@@ -11998,7 +12198,8 @@
             "No single primary endpoint designated among the Methods outcomes of interest; hierarchy not_reported.",
             "Returned A 095 rejects preparation-wide cardiovascular/mood approval and retains specific source/application hold; date-only exclusions were separately withdrawn. No new grade/threshold/approval.",
             "Primary study identifiers mapped from cited reference links: 13 cited studies, 13 Pub Med identifiers; missing identifiers not invented.",
-            "Source bibliography PMID pointers (not a verified list of included trials and not independent scoring sources): 30146932, 30415637, 30415628, 20389249, 21115589, 20929341, 21060071, 10465168, 17398308, 22686415, 23656645, 24638908, 18757090. Each intervention and comparison requires its own applicability assessment; citation in this bibliography grants no credit."
+            "Historical bibliography census (not independent scoring sources; actual included-publication membership is separately bound to the inspected source table): 30146932, 30415637, 30415628, 20389249, 21115589, 20929341, 21060071, 10465168, 17398308, 22686415, 23656645, 24638908, 18757090. Each intervention and comparison requires its own applicability assessment; citation in this bibliography grants no credit.",
+            "Included-study identifiers are now bound to this source's actual included-study rows/explicit inclusion references (Table1 explicitly names13RCTs. JELIS printed superscript17 lacks an XMLxref; manually linked to exact source reference17. Main13trials, not whole bibliography or independent meta-analyses.), with live NIH title/content identity checks. They are publication pointers, not independent-cohort counts, per-primary-study scoring approvals, preparation equivalence or new efficacy evidence. Exact unindexed source citations remain retained; no missing PMID is invented."
           ],
           "dose": {
             "measurement_type": "mass",
@@ -12021,10 +12222,25 @@
             },
             "source_provenance": {
               "pmid": "31567003",
-              "location": "Full primary article Methods, Results and stated limitations; retained XML and extraction receipt in this private folder",
+              "location": "Full primary article Methods, Results and stated limitations; retained XML and extraction receipt in this private folder; source-field completion from Table1 explicitly names13RCTs. JELIS printed superscript17 lacks an XMLxref; manually linked to exact source reference17. Main13trials, not whole bibliography or independent meta-analyses.",
               "source_url": "https://pubmed.ncbi.nlm.nih.gov/31567003/"
             }
-          }
+          },
+          "included_study_pmids": [
+            "10465168",
+            "17398308",
+            "18757090",
+            "20389249",
+            "21115589",
+            "20929341",
+            "21060071",
+            "22686415",
+            "23656645",
+            "24638908",
+            "30415637",
+            "30146932",
+            "30415628"
+          ]
         }
       ]
     },
@@ -12191,7 +12407,8 @@
             "No new scoring grade, dose threshold, product approval or clinical signature is assigned by this factual extraction.",
             "Some included-study citations lack PubMed identifiers in the source XML; retain their exact citations rather than inventing identifiers.",
             "Physical dosage forms have not been fully extracted from the verified source tables in this bounded pass. No placeholder form or capsule assumption is treated as established; this scope remains held.",
-            "Source bibliography PMID pointers (not a verified list of included trials and not independent scoring sources): 22250141, 25476069, 22908115, 23032549, 24014734, 26841365, 24108783, 25088394, 20219962, 22494826, 25050610, 20632889, 19296870, 20723187, 21315433, 21628364, 23242238, 23694840, 24885201, 25283480, 25724847, 26063508, 26540136, 27861708. Each intervention and comparison requires its own applicability assessment; citation in this bibliography grants no credit."
+            "Historical bibliography census (not independent scoring sources; actual included-publication membership is separately bound to the inspected source table): 22250141, 25476069, 22908115, 23032549, 24014734, 26841365, 24108783, 25088394, 20219962, 22494826, 25050610, 20632889, 19296870, 20723187, 21315433, 21628364, 23242238, 23694840, 24885201, 25283480, 25724847, 26063508, 26540136, 27861708. Each intervention and comparison requires its own applicability assessment; citation in this bibliography grants no credit.",
+            "Included-study PMID membership was extracted from source Table(s) tbl1. These are source membership identifiers, not independent efficacy approvals or automatic trial replications. Exact table/citation mapping and unindexed citations are retained in the source receipt. 1 source citations in this set lack a PMID in the primary source; their citation text is retained, no PMID is invented."
           ],
           "dose": {
             "measurement_type": "mass",
@@ -12214,7 +12431,33 @@
               "location": "Primary article abstract and source-specific Methods/Results/study tables; exact section/table extraction retained privately.",
               "source_url": "https://pubmed.ncbi.nlm.nih.gov/28202713/"
             }
-          }
+          },
+          "included_study_pmids": [
+            "19296870",
+            "20219962",
+            "20723187",
+            "20632889",
+            "21315433",
+            "21628364",
+            "22250141",
+            "22494826",
+            "22908115",
+            "23032549",
+            "23242238",
+            "23694840",
+            "24014734",
+            "24108783",
+            "24885201",
+            "25088394",
+            "25283480",
+            "25476069",
+            "25724847",
+            "26063508",
+            "25050610",
+            "26540136",
+            "26841365",
+            "27861708"
+          ]
         }
       ]
     },
@@ -12417,7 +12660,8 @@
             "Preserve acute study exposure versus chronic upper-limit safety distinction.",
             "Returned decision: Reject identity bridge; date-restricted evidence hold. Publication-age-only exclusions were withdrawn and are not adopted.",
             "No new efficacy grade, clinical approval, dose threshold or product equivalence is assigned.",
-            "Source bibliography PMID pointers (not a verified list of included trials and not independent scoring sources): 32287355, 10929163, 18279051. Each intervention and comparison requires its own applicability assessment; citation in this bibliography grants no credit."
+            "Historical bibliography census (not independent scoring sources; actual included-publication membership is separately bound to the inspected source table): 32287355, 10929163, 18279051. Each intervention and comparison requires its own applicability assessment; citation in this bibliography grants no credit.",
+            "Included-study PMID membership was extracted from source Table(s) Tab1. These are source membership identifiers, not independent efficacy approvals or automatic trial replications. Exact table/citation mapping and unindexed citations are retained in the source receipt."
           ],
           "dose": {
             "measurement_type": "mass",
@@ -12442,7 +12686,12 @@
               "location": "Primary source Methods, Results and trial-characteristic tables; source-specific reporting and study-design limits retained.",
               "source_url": "https://pubmed.ncbi.nlm.nih.gov/25888289/"
             }
-          }
+          },
+          "included_study_pmids": [
+            "32287355",
+            "10929163",
+            "18279051"
+          ]
         },
         {
           "context_schema_version": "1.1.0",
@@ -12486,7 +12735,8 @@
             "Acute lozenge results do not establish routine-safe long-term exposure or other zinc delivery efficacy.",
             "Returned decision: Reject identity bridge; date-restricted evidence hold. Publication-age-only exclusions were withdrawn and are not adopted.",
             "No new efficacy grade, clinical approval, dose threshold or product equivalence is assigned.",
-            "Source bibliography extraction remains pending. No complete included-trial list or PMID mapping was established by this extraction; no evidence credit follows from missing bibliography data."
+            "Source bibliography extraction remains pending. No complete included-trial list or PMID mapping was established by this extraction; no evidence credit follows from missing bibliography data.",
+            "Included-study PMID membership was extracted from the source Results included-study enumeration. These are source membership identifiers, not independent efficacy approvals or automatic trial replications. Exact table/citation mapping and unindexed citations are retained in the source receipt."
           ],
           "dose": {
             "measurement_type": "mass",
@@ -12511,7 +12761,16 @@
               "location": "Primary source Methods, Results and trial-characteristic tables; source-specific reporting and study-design limits retained.",
               "source_url": "https://pubmed.ncbi.nlm.nih.gov/28515951/"
             }
-          }
+          },
+          "included_study_pmids": [
+            "6367635",
+            "1397668",
+            "8678384",
+            "32287355",
+            "10929163",
+            "18279051",
+            "11073753"
+          ]
         }
       ]
     },
@@ -12524,7 +12783,7 @@
         "floraglo"
       ],
       "category": "eye_health",
-      "evidence_level": "ingredient-human",
+      "evidence_level": "reference",
       "published_studies": [
         "RCT"
       ],
@@ -12534,8 +12793,8 @@
         "visual performance ↑"
       ],
       "health_goals_supported": [],
-      "notes": "Retraction notice PMID 42211211 excludes PMID 41573009 from affirmative evidence. Remaining human source PMID 28661438 concerns a macular-carotenoid combination, not isolated lutein. Enrollment48 is that retained trial, not AREDS2 or a registry aggregate.",
-      "study_type": "rct_single",
+      "notes": "Retraction notice PMID 42211211 excludes PMID 41573009 from affirmative evidence. Remaining human source PMID 28661438 concerns a macular-carotenoid combination, not isolated lutein. Enrollment48 is that retained trial, not AREDS2 or a registry aggregate. Signed A084 source-transfer disposition: the retained retracted review supplies no affirmative support, and the retained Lutemax2020 mixture cannot establish isolated-lutein efficacy. This curated record is reference-only for those rejected transfers. Exact branded/preparation-specific owners and independently supported literature remain available; no blanket ingredient-inefficacy finding, dose change or safety penalty is inferred.",
+      "study_type": "reference",
       "last_updated": "2026-10-11",
       "notable_studies": "PMID 41573009 was retracted by notice PMID 42211211 and is not usable affirmative evidence. PMID 28661438 studied 48 healthy young adults with high screen exposure, using a lutein, zeaxanthin and mesozeaxanthin combination for six months; selected visual and symptom outcomes improved versus placebo. This is not isolated lutein or adolescent myopia-prevention evidence.",
       "references_structured": [
@@ -12617,7 +12876,7 @@
           },
           "study_design": "Six-month double-blind, randomized, placebo-controlled trial of the complete Lutemax 2020 macular-carotenoid formulation.",
           "trial_family": "28661438",
-          "review_status": "source_verified_pending_clinical_review",
+          "review_status": "rejected_source",
           "human_status": "confirmed",
           "source_integrity": "none",
           "scoring_eligible": false,
@@ -12670,7 +12929,41 @@
           ],
           "limitations": [
             "Whole mixture, not isolated lutein; multiple outcomes, small trial; exact label ratios required.",
-            "The retained full article does not designate a primary outcome/endpoint; recorded hierarchy not_reported. This is a reporting limitation, not invented primary status or completion of any separate approval."
+            "The retained full article does not designate a primary outcome/endpoint; recorded hierarchy not_reported. This is a reporting limitation, not invented primary status or completion of any separate approval.",
+            "Signed A084: historical28661438 is combination-context evidence and cannot by itself establish isolated-lutein efficacy. This is not a global conclusion that every lutein preparation lacks benefit."
+          ],
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-10-26",
+            "scope": "identity_dose_outcome_applicability",
+            "notes": "Returned signed A084 explicitly rejects combination-context PMID28661438 as proof of isolated-lutein efficacy. This records that transfer rejection only; the source mixture and independent branded/preparation-specific owners remain unchanged. Existing supplied approval date retained; no new efficacy acceptance or signature inferred."
+          }
+        },
+        {
+          "context_id": "ingr_lutein_41573009_retracted_source_rejection",
+          "components": [
+            "INGR_LUTEIN"
+          ],
+          "source_pmids": [
+            "41573009"
+          ],
+          "review_status": "rejected_source",
+          "scoring_eligible": false,
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-10-26",
+            "scope": "identity_dose_outcome_applicability",
+            "notes": "Signed A084 rejects affirmative credit from41573009 while retaining audit linkage to notice42211211. The current canonical reference independently records retracted=true; no independent trial, dose or efficacy conclusion is invented."
+          },
+          "dose": {
+            "source_provenance": {
+              "pmid": "41573009",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/41573009/",
+              "location": "Existing verified canonical retraction linkage41573009/42211211 and exact returned A084 rejection"
+            }
+          },
+          "limitations": [
+            "Do not award affirmative support from the retracted review. Preserve citation/retraction history and independent eligible research. This exclusion does not imply that the product is unsafe or that every lutein preparation is ineffective."
           ]
         }
       ]
@@ -13251,7 +13544,9 @@
             "No new scoring grade, dose threshold, product approval or clinical signature is assigned by this factual extraction.",
             "Some included-study citations lack PubMed identifiers in the source XML; retain their exact citations rather than inventing identifiers.",
             "Physical dosage forms have not been fully extracted from the verified source tables in this bounded pass. No placeholder form or capsule assumption is treated as established; this scope remains held.",
-            "Source bibliography PMID pointers (not a verified list of included trials and not independent scoring sources): 22805313, 19017419, 24456363, 29348727, 18355331, 25015735, 32470863, 32025522, 25379002, 21411505, 16860976, 24843582, 26843120, 21235416, 23945406, 24130946, 26860800, 22916320, 22027944. Each intervention and comparison requires its own applicability assessment; citation in this bibliography grants no credit."
+            "Historical bibliography census (not independent scoring sources; actual included-publication membership is separately bound to the inspected source table): 22805313, 19017419, 24456363, 29348727, 18355331, 25015735, 32470863, 32025522, 25379002, 21411505, 16860976, 24843582, 26843120, 21235416, 23945406, 24130946, 26860800, 22916320, 22027944. Each intervention and comparison requires its own applicability assessment; citation in this bibliography grants no credit.",
+            "Included-study identifiers are now bound to this source's actual included-study rows/explicit inclusion references (Tables tbl1 explicit included-study row citations), with live NIH title/content identity checks. They are publication pointers, not independent-cohort counts, per-primary-study scoring approvals, preparation equivalence or new efficacy evidence. Exact unindexed source citations remain retained; no missing PMID is invented.",
+            "4 included source citations have no printed PubMed identifier in this primary source; their exact citations are retained in the source-table receipt. This is a documented identifier limitation, not a fabricated identifier or an extra independent trial."
           ],
           "dose": {
             "measurement_type": "mass",
@@ -13271,10 +13566,31 @@
             },
             "source_provenance": {
               "pmid": "35509826",
-              "location": "Primary article abstract and source-specific Methods/Results/study tables; exact section/table extraction retained privately.",
+              "location": "Primary article abstract and source-specific Methods/Results/study tables; exact section/table extraction retained privately.; source-field completion from Tables tbl1 explicit included-study row citations",
               "source_url": "https://pubmed.ncbi.nlm.nih.gov/35509826/"
             }
-          }
+          },
+          "included_study_pmids": [
+            "22805313",
+            "19017419",
+            "24456363",
+            "29348727",
+            "18355331",
+            "25015735",
+            "32470863",
+            "32025522",
+            "25379002",
+            "21411505",
+            "16860976",
+            "24843582",
+            "26843120",
+            "21235416",
+            "23945406",
+            "24130946",
+            "26860800",
+            "22916320",
+            "22027944"
+          ]
         },
         {
           "context_schema_version": "1.1.0",
@@ -13319,7 +13635,8 @@
             "Returned decision: Source-content hold.",
             "No new scoring grade, dose threshold, product approval or clinical signature is assigned by this factual extraction.",
             "Physical dosage forms have not been fully extracted from the verified source tables in this bounded pass. No placeholder form or capsule assumption is treated as established; this scope remains held.",
-            "Source bibliography PMID pointers (not a verified list of included trials and not independent scoring sources): 19415341, 21803872, 23853057, 23613825, 23301896, 23567596, 27616896, 28753932, 30774832, 28874596, 31987248, 32172198. Each intervention and comparison requires its own applicability assessment; citation in this bibliography grants no credit."
+            "Historical bibliography census (not independent scoring sources; actual included-publication membership is separately bound to the inspected source table): 19415341, 21803872, 23853057, 23613825, 23301896, 23567596, 27616896, 28753932, 30774832, 28874596, 31987248, 32172198. Each intervention and comparison requires its own applicability assessment; citation in this bibliography grants no credit.",
+            "Included-study identifiers are now bound to this source's actual included-study rows/explicit inclusion references (Tables T1 explicit included-study row citations), with live NIH title/content identity checks. They are publication pointers, not independent-cohort counts, per-primary-study scoring approvals, preparation equivalence or new efficacy evidence. Exact unindexed source citations remain retained; no missing PMID is invented."
           ],
           "dose": {
             "measurement_type": "mass",
@@ -13339,10 +13656,24 @@
             },
             "source_provenance": {
               "pmid": "35776997",
-              "location": "Primary article abstract and source-specific Methods/Results/study tables; exact section/table extraction retained privately.",
+              "location": "Primary article abstract and source-specific Methods/Results/study tables; exact section/table extraction retained privately.; source-field completion from Tables T1 explicit included-study row citations",
               "source_url": "https://pubmed.ncbi.nlm.nih.gov/35776997/"
             }
-          }
+          },
+          "included_study_pmids": [
+            "19415341",
+            "21803872",
+            "23853057",
+            "23613825",
+            "23301896",
+            "23567596",
+            "27616896",
+            "28753932",
+            "30774832",
+            "28874596",
+            "31987248",
+            "32172198"
+          ]
         }
       ],
       "reference_semantics": {
@@ -14064,7 +14395,9 @@
             "Returned decision: Reject broad preparation-wide approval; indication/formulation review remains held.",
             "No new scoring grade, dose threshold, product approval or clinical signature is assigned by this factual extraction.",
             "Some included-study citations lack PubMed identifiers in the source XML; retain their exact citations rather than inventing identifiers.",
-            "Source bibliography PMID pointers (not a verified list of included trials and not independent scoring sources): 32540725, 25050518, 17043520, 24274358, 27761693, 26937646, 29316908, 30498758, 31239749, 30975196, 32180294, 32311961, 33516238, 35096104, 37351019, 36610110, 39882178, 33210408. Each intervention and comparison requires its own applicability assessment; citation in this bibliography grants no credit."
+            "Historical bibliography census (not independent scoring sources; actual included-publication membership is separately bound to the inspected source table): 32540725, 25050518, 17043520, 24274358, 27761693, 26937646, 29316908, 30498758, 31239749, 30975196, 32180294, 32311961, 33516238, 35096104, 37351019, 36610110, 39882178, 33210408. Each intervention and comparison requires its own applicability assessment; citation in this bibliography grants no credit.",
+            "Included-study identifiers are now bound to this source's actual included-study rows/explicit inclusion references (Tables Tab1 explicit included-study row citations), with live NIH title/content identity checks. They are publication pointers, not independent-cohort counts, per-primary-study scoring approvals, preparation equivalence or new efficacy evidence. Exact unindexed source citations remain retained; no missing PMID is invented.",
+            "3 included source citations have no printed PubMed identifier in this primary source; their exact citations are retained in the source-table receipt. This is a documented identifier limitation, not a fabricated identifier or an extra independent trial."
           ],
           "dose": {
             "measurement_type": "mass",
@@ -14087,10 +14420,30 @@
             },
             "source_provenance": {
               "pmid": "40615851",
-              "location": "Primary article abstract and source-specific Methods/Results/study tables; exact section/table extraction retained privately.",
+              "location": "Primary article abstract and source-specific Methods/Results/study tables; exact section/table extraction retained privately.; source-field completion from Tables Tab1 explicit included-study row citations",
               "source_url": "https://pubmed.ncbi.nlm.nih.gov/40615851/"
             }
-          }
+          },
+          "included_study_pmids": [
+            "17043520",
+            "24274358",
+            "25050518",
+            "27761693",
+            "26937646",
+            "29316908",
+            "30498758",
+            "31239749",
+            "30975196",
+            "32540725",
+            "32180294",
+            "32311961",
+            "33516238",
+            "33210408",
+            "35096104",
+            "36610110",
+            "37351019",
+            "39882178"
+          ]
         }
       ],
       "reference_semantics": {
@@ -14334,7 +14687,10 @@
             "No new scoring grade, dose threshold, product approval or clinical signature is assigned by this factual extraction.",
             "Some included-study citations lack PubMed identifiers in the source XML; retain their exact citations rather than inventing identifiers.",
             "Physical dosage forms have not been fully extracted from the verified source tables in this bounded pass. No placeholder form or capsule assumption is treated as established; this scope remains held.",
-            "Source bibliography PMID pointers (not a verified list of included trials and not independent scoring sources): 765514, 4601508, 5057006, 4684621, 897573, 20689965, 368370, 7048833, 318715. Each intervention and comparison requires its own applicability assessment; citation in this bibliography grants no credit."
+            "Historical bibliography census (not independent scoring sources; actual included-publication membership is separately bound to the inspected source table): 765514, 4601508, 5057006, 4684621, 897573, 20689965, 368370, 7048833, 318715. Each intervention and comparison requires its own applicability assessment; citation in this bibliography grants no credit.",
+            "Included-study identifiers are now bound to this source's actual included-study rows/explicit inclusion references (Tables Tab1 explicit included-study row citations), with live NIH title/content identity checks. They are publication pointers, not independent-cohort counts, per-primary-study scoring approvals, preparation equivalence or new efficacy evidence. Exact unindexed source citations remain retained; no missing PMID is invented.",
+            "3 included source citations have no printed PubMed identifier in this primary source; their exact citations are retained in the source-table receipt. This is a documented identifier limitation, not a fabricated identifier or an extra independent trial.",
+            "Risk-of-bias/source contamination sections explicitly describe vitaminC/placebo tablets in included trials. The reference list is not used to infer delivery; no universal dose is established. Other included trials may not report a delivery form; this list does not establish one common preparation across all arms."
           ],
           "dose": {
             "measurement_type": "mass",
@@ -14344,7 +14700,9 @@
             "dose_basis": "not_applicable",
             "duration_basis": "participant_specific",
             "administration_frequency": "Study-specific oral exposures ≥1 g/day; severity and duration comparisons do not establish a universal prevention or routine-dose threshold.",
-            "dosage_forms": [],
+            "dosage_forms": [
+              "tablet"
+            ],
             "co_therapies": [
               "Placebo comparators; trial timing and participant context vary."
             ],
@@ -14354,10 +14712,21 @@
             },
             "source_provenance": {
               "pmid": "38082300",
-              "location": "Primary article abstract and source-specific Methods/Results/study tables; exact section/table extraction retained privately.",
+              "location": "Primary article abstract and source-specific Methods/Results/study tables; exact section/table extraction retained privately.; source-field completion from Tables Tab1 explicit included-study row citations",
               "source_url": "https://pubmed.ncbi.nlm.nih.gov/38082300/"
             }
-          }
+          },
+          "included_study_pmids": [
+            "897573",
+            "368370",
+            "5057006",
+            "4684621",
+            "4601508",
+            "7048833",
+            "318715",
+            "20689965",
+            "765514"
+          ]
         }
       ]
     },
@@ -15217,7 +15586,127 @@
             }
           ]
         }
-      }
+      },
+      "study_contexts": [
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "ingr_green_tea_38031409_source_completion",
+          "components": [
+            "INGR_GREEN_TEA"
+          ],
+          "source_pmids": [
+            "38031409"
+          ],
+          "identity_scope": "ingredient_general",
+          "identity": {
+            "preparation": "Heterogeneous green-tea preparations: caffeinated/decaffeinated extracts,isolatedEGCG,tea powder and mixtures; extract mass is not catechin or EGCG mass."
+          },
+          "exposure_basis": "supplement_dose",
+          "route": "oral",
+          "evidence_role": "meta_analysis",
+          "component_registration_status": "fully_registered",
+          "condition": "body_composition",
+          "purpose": "source_specific_assessment",
+          "review_status": "source_verified_pending_clinical_review",
+          "scoring_eligible": false,
+          "human_status": "confirmed",
+          "source_integrity": "none",
+          "trial_family": "source_38031409",
+          "population": {
+            "description": "59 study reports/3802 adults; healthy,overweight/obese and clinical subgroups;5crossover and54parallel reports."
+          },
+          "study_design": "Systematic review and meta-analysis of randomized controlled trials; synthesis-level outcomes do not establish every preparation or product.",
+          "included_study_pmids": [
+            "20605696",
+            "10443337",
+            "15005829",
+            "16392704",
+            "16076989",
+            "16378915",
+            "16277999",
+            "17906193",
+            "17557985",
+            "18006026",
+            "18710606",
+            "17554248",
+            "18468736",
+            "19056646",
+            "19176733",
+            "19008868",
+            "18848434",
+            "21736785",
+            "21649457",
+            "22118751",
+            "22144918",
+            "22749178",
+            "22581111",
+            "22246619",
+            "23035743",
+            "25918808",
+            "24614112",
+            "24299662",
+            "28911467",
+            "25740906",
+            "26319566",
+            "27320846",
+            "26093535",
+            "26701796",
+            "26581683",
+            "27062963",
+            "26955458",
+            "27736246",
+            "29067068",
+            "29228755",
+            "28244612",
+            "27797683",
+            "30464771",
+            "30400924",
+            "31084381",
+            "31747468",
+            "32095935"
+          ],
+          "outcomes": [
+            {
+              "name": "Pooled body mass,BMI,body-fat percentage and selected oxidative markers improved; fat mass,leptin and ghrelin did not.",
+              "direction": "mixed",
+              "hierarchy": "not_reported",
+              "kind": "surrogate",
+              "outcome_role": "direct_between_group_effect"
+            }
+          ],
+          "limitations": [
+            "Outcome-specific certainty rangedlow–high; repeated reports may sharetrialfamilies. No cancer,CVD,liver-treatment or universal weight-loss claim follows.",
+            "Eligibility text says duration>2weeks; Table1/body include2week studies. No cutoff repair invented. Physical capsule/tablet forms are not established for every extract by Table1.",
+            "47included PMID mappings independently verified;12source citations retain exact bibliographic identity without inventedPMIDs. PMID19176733 has a historicalerratum whose complete content is not established by this extraction.",
+            "Known product preparation,EGCG/caffeine composition,population and purpose still require exact correspondence; no new efficacy grade or approval."
+          ],
+          "dose": {
+            "measurement_type": "mass",
+            "unit": "mg",
+            "values": [],
+            "dose_status": "source_not_reported",
+            "dose_basis": "not_applicable",
+            "duration_basis": "participant_specific",
+            "administration_frequency": "Source Table1/body reports60–3000mg/day GTE over2–48weeks; trial-specific regimens and background interventions are not interchangeable.",
+            "dosage_forms": [
+              "powder",
+              "brewed tea"
+            ],
+            "co_therapies": [
+              "Diet and exercise protocols varied; Table1 includes matched training/diet cointerventions and caffeine-containing preparations."
+            ],
+            "reported_regimen": "Source Table1/body reports60–3000mg/day GTE over2–48weeks; trial-specific regimens and background interventions are not interchangeable.",
+            "normalization": {
+              "basis": "Heterogeneous trial-specific regimens; no single assigned-arm dose or universal efficacy threshold is inferred."
+            },
+            "source_provenance": {
+              "pmid": "38031409",
+              "location": "Publisher fullHTML DOI10.1017/S000711452300260X: Methods,StudySelection,Characteristics,Table1originalPNG and Results; source references23,28,49–105.",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/38031409/"
+            }
+          }
+        }
+      ]
     },
     {
       "id": "INGR_MILK_THISTLE",
@@ -16086,7 +16575,8 @@
             "Returned decision: Reject strong antiviral and oseltamivir-equivalence claims; narrower source-content hold.",
             "No new scoring grade, dose threshold, product approval or clinical signature is assigned by this factual extraction.",
             "Some included-study citations lack PubMed identifiers in the source XML; retain their exact citations rather than inventing identifiers.",
-            "Source bibliography PMID pointers (not a verified list of included trials and not independent scoring sources): 15080016, 26781385, 27023596, 9395631, 26265958, 19793846, 18225751. Each intervention and comparison requires its own applicability assessment; citation in this bibliography grants no credit."
+            "Historical bibliography census (not independent scoring sources; actual included-publication membership is separately bound to the inspected source table): 15080016, 26781385, 27023596, 9395631, 26265958, 19793846, 18225751. Each intervention and comparison requires its own applicability assessment; citation in this bibliography grants no credit.",
+            "Included-study PMID membership was extracted from source Table(s) Tab1. These are source membership identifiers, not independent efficacy approvals or automatic trial replications. Exact table/citation mapping and unindexed citations are retained in the source receipt. 1 source citations in this set lack a PMID in the primary source; their citation text is retained, no PMID is invented."
           ],
           "dose": {
             "measurement_type": "mass",
@@ -16113,7 +16603,13 @@
               "location": "Primary article abstract and source-specific Methods/Results/study tables; exact section/table extraction retained privately.",
               "source_url": "https://pubmed.ncbi.nlm.nih.gov/33827515/"
             }
-          }
+          },
+          "included_study_pmids": [
+            "27023596",
+            "15080016",
+            "9395631",
+            "26265958"
+          ]
         }
       ]
     },
@@ -16585,7 +17081,8 @@
             "Returned decision: Date-restricted evidence hold; reject product-approval implications. Publication-age-only exclusions were withdrawn and are not adopted.",
             "No new scoring grade, dose threshold, product approval or clinical signature is assigned by this factual extraction.",
             "Some included-study citations lack PubMed identifiers in the source XML; retain their exact citations rather than inventing identifiers.",
-            "Source bibliography PMID pointers (not a verified list of included trials and not independent scoring sources): 9630383, 10075323, 10334658, 15164106, 15316827, 11502237, 16234829, 11755939, 14519792, 17023701, 14764424, 16391591, 12728215, 12730296, 11506058, 11002377, 16549466, 12081816, 15766477, 11833047, 12949359, 11451715, 12468602, 12356387, 14505991, 8003098, 12425728, 17081832, 16721398, 10787430, 12450893, 10357732, 16546486, 10654588, 15992512, 11518201, 12548313, 7988779, 10337856, 11002384, 12771969, 16162943, 11876261, 15941886, 12638032, 12771320, 11395029, 10593347, 11522112, 11756063, 10580176, 16459230, 10655976, 12003257, 8228636, 7859805, 11101479, 11368702. Each intervention and comparison requires its own applicability assessment; citation in this bibliography grants no credit."
+            "Historical bibliography census (not independent scoring sources; actual included-publication membership is separately bound to the inspected source table): 9630383, 10075323, 10334658, 15164106, 15316827, 11502237, 16234829, 11755939, 14519792, 17023701, 14764424, 16391591, 12728215, 12730296, 11506058, 11002377, 16549466, 12081816, 15766477, 11833047, 12949359, 11451715, 12468602, 12356387, 14505991, 8003098, 12425728, 17081832, 16721398, 10787430, 12450893, 10357732, 16546486, 10654588, 15992512, 11518201, 12548313, 7988779, 10337856, 11002384, 12771969, 16162943, 11876261, 15941886, 12638032, 12771320, 11395029, 10593347, 11522112, 11756063, 10580176, 16459230, 10655976, 12003257, 8228636, 7859805, 11101479, 11368702. Each intervention and comparison requires its own applicability assessment; citation in this bibliography grants no credit.",
+            "Included-study PMID membership was extracted from source Table(s) T0002. These are source membership identifiers, not independent efficacy approvals or automatic trial replications. Exact table/citation mapping and unindexed citations are retained in the source receipt. 2 source citations in this set lack a PMID in the primary source; their citation text is retained, no PMID is invented."
           ],
           "dose": {
             "measurement_type": "mass",
@@ -16620,7 +17117,66 @@
               "location": "Primary article abstract and source-specific Methods/Results/study tables; exact section/table extraction retained privately.",
               "source_url": "https://pubmed.ncbi.nlm.nih.gov/19109655/"
             }
-          }
+          },
+          "included_study_pmids": [
+            "16549466",
+            "15766477",
+            "16546486",
+            "10654588",
+            "15992512",
+            "11518201",
+            "12548313",
+            "11506058",
+            "12425728",
+            "17023701",
+            "14764424",
+            "16234829",
+            "7988779",
+            "10337856",
+            "10075323",
+            "11002384",
+            "10334658",
+            "12771969",
+            "16162943",
+            "10357732",
+            "10787430",
+            "12730296",
+            "11876261",
+            "16721398",
+            "15941886",
+            "12638032",
+            "12771320",
+            "11451715",
+            "12081816",
+            "11755939",
+            "8003098",
+            "11833047",
+            "12949359",
+            "11395029",
+            "10593347",
+            "11522112",
+            "11756063",
+            "15316827",
+            "12468602",
+            "10580176",
+            "11002377",
+            "17081832",
+            "14519792",
+            "16459230",
+            "14505991",
+            "10655976",
+            "12356387",
+            "12728215",
+            "12003257",
+            "15164106",
+            "8228636",
+            "7859805",
+            "12450893",
+            "11101479",
+            "11502237",
+            "9630383",
+            "16391591"
+          ]
         }
       ]
     },
@@ -16735,7 +17291,8 @@
             "Returned decision: Reject blanket efficacy/safety transfer to arbitrary retail products.",
             "No new efficacy grade, clinical approval, dose threshold or product equivalence is assigned.",
             "Specific physical dosage forms are not established by this extraction. An oral route or an extract name is not silently converted into a capsule/tablet claim; applicability remains held.",
-            "Source bibliography PMID pointers (not a verified list of included trials and not independent scoring sources): 11225965, 19602720, 17312447. Each intervention and comparison requires its own applicability assessment; citation in this bibliography grants no credit."
+            "Historical bibliography census (not independent scoring sources; actual included-publication membership is separately bound to the inspected source table): 11225965, 19602720, 17312447. Each intervention and comparison requires its own applicability assessment; citation in this bibliography grants no credit.",
+            "Included-study PMID membership was extracted from source Table(s) T1. These are source membership identifiers, not independent efficacy approvals or automatic trial replications. Exact table/citation mapping and unindexed citations are retained in the source receipt. 26 source citations in this set lack a PMID in the primary source; their citation text is retained, no PMID is invented."
           ],
           "dose": {
             "measurement_type": "mass",
@@ -16758,7 +17315,12 @@
               "location": "Primary source Methods, Results and trial-characteristic tables; source-specific reporting and study-design limits retained.",
               "source_url": "https://pubmed.ncbi.nlm.nih.gov/35264949/"
             }
-          }
+          },
+          "included_study_pmids": [
+            "19602720",
+            "17312447",
+            "11225965"
+          ]
         }
       ],
       "reference_semantics": {
@@ -16946,7 +17508,8 @@
             "Returned decision: Source-content hold.",
             "No new efficacy grade, clinical approval, dose threshold or product equivalence is assigned.",
             "Specific physical dosage forms are not established by this extraction. An oral route or an extract name is not silently converted into a capsule/tablet claim; applicability remains held.",
-            "Source bibliography extraction remains pending. No complete included-trial list or PMID mapping was established by this extraction; no evidence credit follows from missing bibliography data."
+            "Source bibliography extraction remains pending. No complete included-trial list or PMID mapping was established by this extraction; no evidence credit follows from missing bibliography data.",
+            "Included-study PMID membership was extracted from source Table(s) table1-1759720X20975927, table3-1759720X20975927. These are source membership identifiers, not independent efficacy approvals or automatic trial replications. Exact table/citation mapping and unindexed citations are retained in the source receipt. This is an overview of systematic reviews: the listed studies are reviews, not independent primary RCTs; overlap must not be counted as replication."
           ],
           "dose": {
             "measurement_type": "mass",
@@ -16969,7 +17532,20 @@
               "location": "Primary source Methods, Results and trial-characteristic tables; source-specific reporting and study-design limits retained.",
               "source_url": "https://pubmed.ncbi.nlm.nih.gov/33488785/"
             }
-          }
+          },
+          "included_study_pmids": [
+            "21251987",
+            "24905534",
+            "24866892",
+            "30575881",
+            "31073924",
+            "30566740",
+            "19544061",
+            "29446485",
+            "12860572",
+            "29947998",
+            "23794557"
+          ]
         },
         {
           "context_schema_version": "1.1.0",
@@ -17014,7 +17590,9 @@
             "Returned decision: Source-content hold.",
             "No new efficacy grade, clinical approval, dose threshold or product equivalence is assigned.",
             "Specific physical dosage forms are not established by this extraction. An oral route or an extract name is not silently converted into a capsule/tablet claim; applicability remains held.",
-            "Source bibliography PMID pointers (not a verified list of included trials and not independent scoring sources): 26821189, 11789591, 28854768, 25096309, 39303963, 16495392, 24683229, 17265490, 15315266, 23242572, 11196521, 17204566, 20179981, 27809891, 22729470, 28533290, 31470599, 20082253, 15023378, 21367761. Each intervention and comparison requires its own applicability assessment; citation in this bibliography grants no credit."
+            "Historical bibliography census (not independent scoring sources; actual included-publication membership is separately bound to the inspected source table): 26821189, 11789591, 28854768, 25096309, 39303963, 16495392, 24683229, 17265490, 15315266, 23242572, 11196521, 17204566, 20179981, 27809891, 22729470, 28533290, 31470599, 20082253, 15023378, 21367761. Each intervention and comparison requires its own applicability assessment; citation in this bibliography grants no credit.",
+            "Included-study PMID membership was extracted from source Table(s) medicina-61-00331-t002. These are source membership identifiers, not independent efficacy approvals or automatic trial replications. Exact table/citation mapping and unindexed citations are retained in the source receipt. 1 source citations in this set lack a PMID in the primary source; their citation text is retained, no PMID is invented.",
+            "The source pools distinct SYSADOA interventions across21trials, including chondroitin sulfate and SKCPT/SKI306X. Overall pooled effects must not be attributed to glucosamine sulfate alone. Table3 identifies the GS subset at references38,42,43,45,53 and contains a Madhu-row printed1500mg versus2x700mg arithmetic inconsistency; no dose correction or efficacy threshold is inferred."
           ],
           "dose": {
             "measurement_type": "mass",
@@ -17037,7 +17615,29 @@
               "location": "Primary source Methods, Results and trial-characteristic tables; source-specific reporting and study-design limits retained.",
               "source_url": "https://pubmed.ncbi.nlm.nih.gov/40005447/"
             }
-          }
+          },
+          "included_study_pmids": [
+            "25096309",
+            "39303963",
+            "16495392",
+            "24683229",
+            "26821189",
+            "17265490",
+            "11789591",
+            "15315266",
+            "28854768",
+            "23242572",
+            "11196521",
+            "17204566",
+            "20179981",
+            "27809891",
+            "22729470",
+            "28533290",
+            "31470599",
+            "20082253",
+            "15023378",
+            "21367761"
+          ]
         }
       ]
     },
@@ -17114,6 +17714,111 @@
       "effect_direction_rationale": "Retained positive_weak classification; study_type=systematic_review_meta; evidence_level=ingredient-human; primary_outcome=Healthy Aging/Longevity; published_tags=RCT,meta-analysis; registry_completed_trials_count=93; total_enrollment=1583; endpoint_tags=joint_health; notes/citations include weak-effect language.",
       "endpoint_relevance_tags": [
         "joint_health"
+      ],
+      "study_contexts": [
+        {
+          "context_schema_version": "1.1.0",
+          "review_status": "source_verified_pending_clinical_review",
+          "scoring_eligible": false,
+          "human_status": "confirmed",
+          "source_integrity": "none",
+          "exposure_basis": "supplement_dose",
+          "route": "oral",
+          "context_id": "ingr_chondroitin_25629804_osteoarthritis_review",
+          "components": [
+            "INGR_CHONDROITIN_SULFATE"
+          ],
+          "source_pmids": [
+            "25629804"
+          ],
+          "identity_scope": "ingredient_general",
+          "identity": {
+            "chemical_form": "chondroitin sulfate; monotherapy and combinations kept separate in source analyses"
+          },
+          "evidence_role": "systematic_review",
+          "component_registration_status": "fully_registered",
+          "condition": "osteoarthritis_symptoms",
+          "purpose": "treatment",
+          "trial_family": "cochrane_chondroitin_25629804",
+          "population": {
+            "description": "43 randomized trials: 4,962 chondroitin participants and 4,148 controls; predominantly knee osteoarthritis, with some hand or hip osteoarthritis; one month to three years."
+          },
+          "study_design": "systematic review of randomized or quasi-randomized trials",
+          "included_study_pmids": [
+            "10399232",
+            "10966840",
+            "11806217",
+            "11842864",
+            "12013151",
+            "12111630",
+            "1485136",
+            "15023378",
+            "15134386",
+            "15751094",
+            "16404866",
+            "16495392",
+            "17561418",
+            "18821708",
+            "19180484",
+            "20525840",
+            "21367761",
+            "21898340",
+            "22977594",
+            "23493263",
+            "26069668",
+            "8856618",
+            "9743816",
+            "9743817",
+            "9743819"
+          ],
+          "outcomes": [
+            {
+              "name": "Osteoarthritis pain: small-to-moderate benefit in pooled low-quality short-term studies; allocation-concealment, large-study and non-industry sensitivity analyses uncertain.",
+              "hierarchy": "not_reported",
+              "kind": "patient_important",
+              "direction": "mixed",
+              "outcome_role": "direct_between_group_effect"
+            }
+          ],
+          "limitations": [
+            "No single aggregate regimen is reported because these are heterogeneous study arms; source_not_reported applies only to the nonexistent review-wide regimen, not undisclosed constituent trial doses. Exact table rows retained. Included-study membership is not every bibliography citation; unindexed/ambiguous primary references remain source-labelled in private inventory.",
+            "Topical multi-ingredient cream; source Results explicitly excludes cream from oral analyses. Identity verified; not an oral chondroitin intervention.",
+            "Source discrepancy unresolved: NIH abstract: 57 patients and daily intravenous glucosamine plus 800 mg chondroitin versus review table: 56 patients and 800–1,600 mg weight-based combination. Translated title alone is not sufficient to clear dose/route correspondence.",
+            "Source Characteristics explicitly follow-up of Wildi 2011; same trial family,4yearobservationalextension. Not independent randomized replication.",
+            "GAIT 24-month ancillary structural report shares parent randomized cohort with Clegg 2006. Not independent replication.",
+            "GAIT 24-month ancillary clinical report shares parent randomized cohort with Clegg 2006; not independent replication.",
+            "Topical cream outside oral qualification; source explicitly excludes from oral meta; indexed erratum content also not established.",
+            "Dose/route/population conflict between review table and liveNIHabstract; retain exact source label, no oral qualification.",
+            "ErratumIn ClinRheumatol2010;29(7):819–20 indexed; correction content not established, source acceptance held.",
+            "ErratumIn ClinRheumatol2014;33(10):1527 indexed; correction content not established, source acceptance held.",
+            "Follow-up of Wildi 2011, same cohort; retain publication membership, no independent replication count.",
+            "GAIT ancillary structural report, shares the Clegg 2006 parent cohort; retain membership, no independent count.",
+            "GAIT ancillary clinical report, shares the Clegg 2006 parent cohort; retain membership, no independent count.",
+            "PMID 15023378 has an explicitly indexed author-name-only erratum; no outcome correction inferred. Four indexed erratum flags are individually retained in the live API receipt; no parent review is labelled retracted.",
+            "Live NIH abstract is an overview of chondroprotective drugs and contains no matching primary randomized Conrozier 1998 trial methods; retain source-table label but withhold this PMID correspondence from oral primary-trial qualification.",
+            "Excluded oral-qualification mappings remain auditable: PMID 12610812 topical combination cream; PMID 10883158 unresolved route/dose/population correspondence; PMIDs 20179981 and 22729470 unread indexed corrections; PMID 9856136 general drug overview rather than the source-labelled Conrozier primary trial. No missing mapping is invented."
+          ],
+          "dose": {
+            "measurement_type": "mass",
+            "unit": "mg",
+            "values": [],
+            "dose_status": "source_not_reported",
+            "dose_basis": "not_applicable",
+            "duration_basis": "participant_specific",
+            "administration_frequency": "Study-specific frequency as printed in full included-study characteristics; no single review-wide assigned regimen.",
+            "dosage_forms": [
+              "capsule",
+              "tablet"
+            ],
+            "co_therapies": [],
+            "reported_regimen": "No single review-wide assigned dose; all 43 included-study preparation/regimen rows transcribed in missing31_exact_included_tables_and_regimens.json. Source Results most studies800 mg/day or higher with exceptions;1,000 mg/day (two 250 mg capsules twice daily) and1,200 mg/day arms are specific examples,not universal recommendations.",
+            "source_provenance": {
+              "pmid": "25629804",
+              "location": "Full body Methods/Results and Characteristics of included studies T7",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/25629804/"
+            }
+          }
+        }
       ]
     },
     {
@@ -17140,7 +17845,7 @@
       "health_goals_supported": [
         "Urinary Tract Health"
       ],
-      "notes": "Family-level evidence concerns cranberry fruit products for prevention of recurrent UTIs in selected populations, not treatment of an existing infection or general immune support. Fruit juice, tablets and powders were studied; equivalence of preparations and PAC doses is uncertain, so this entry carries no dose policy and no universal total-mass threshold is justified. Total concentrate mass is not a PAC dose or a verified clinical minimum. Enrollment 8857 belongs only to the November 2023 Cochrane update (which supersedes the April 2023 version); participants from the overlapping 2021 review are not summed. No efficacy is inferred for cranberry seed oil or leaf extracts. Selectedaffirmativesource37947276isrepresentedbytheboundedrecurrent-UTIwomenreviewcontext;34473789remainsnoncontributinghistoryratherthanasecondindependentreplication. ExactPacranidentityisverifiedbyEFSA2025e9319;thatassessmentfoundinsufficientcausalsubstantiationandmethod/reportlimitations,whichmustnotberecastasprovenbrandbenefitorfailedproductquality. No genericdoseminimumorautomaticretailpreparationequivalencecreated. The signed limited recurrent-UTI prevention finding is retained. Current product qualification remains held where exact preparation, studied population and prevention purpose are not enforced; this is not a rejection of cranberry efficacy, treatment advice or an added penalty. EFSA2025 PMID40182009 does not establish the proposed exact Pacran causal claim despite confirming the named material. No universal PAC or product-mass dose follows.",
+      "notes": "Family-level evidence concerns cranberry fruit products for prevention of recurrent UTIs in selected populations, not treatment of an existing infection or general immune support. Fruit juice, tablets and powders were studied; equivalence of preparations and PAC doses is uncertain, so this entry carries no dose policy and no universal total-mass threshold is justified. Total concentrate mass is not a PAC dose or a verified clinical minimum. Enrollment 8857 belongs only to the November 2023 Cochrane update (which supersedes the April 2023 version); participants from the overlapping 2021 review are not summed. No efficacy is inferred for cranberry seed oil or leaf extracts. Selectedaffirmativesource37947276isrepresentedbytheboundedrecurrent-UTIwomenreviewcontext;34473789remainsnoncontributinghistoryratherthanasecondindependentreplication. ExactPacranidentityisverifiedbyEFSA2025e9319;thatassessmentfoundinsufficientcausalsubstantiationandmethod/reportlimitations,whichmustnotberecastasprovenbrandbenefitorfailedproductquality. No genericdoseminimumorautomaticretailpreparationequivalencecreated. The signed limited recurrent-UTI prevention finding is retained. The generic consumer now enforces the signed condition, explicit population conflicts and source-form boundaries. The record-level hold still retains the independent exact Pacran source-acceptance/preparation question; this is not a rejection of cranberry efficacy, treatment advice or an added penalty. EFSA2025 PMID40182009 does not establish the proposed exact Pacran causal claim despite confirming the named material. No universal PAC or product-mass dose follows.",
       "study_type": "systematic_review_meta",
       "last_updated": "2026-10-27",
       "applicability": {
@@ -17160,7 +17865,7 @@
         "supported_outcomes": [
           "recurrent_uti_prevention"
         ],
-        "studied_population": "Selected UTI-susceptible populations, including women with recurrent UTIs, children and people following urinary interventions; not a treatment claim or evidence of benefit for pregnancy, institutionalized elderly people or incomplete bladder emptying.",
+        "studied_population": "Adult nonpregnant women with a history of recurrent urinary tract infections, usually at least two in the previous12months. This is not active-infection treatment or evidence for pregnancy, institutionalized elderly people or incomplete bladder emptying.",
         "source_pmids": [
           "37947276",
           "34473789"
@@ -17296,7 +18001,8 @@
           "source_integrity": "none",
           "trial_family": "williams_2023_cranberry_review",
           "population": {
-            "description": "AdultnonpregnantwomenwithhistoryofrecurrentUTI;usuallyatleasttwoUTIsinprevious12months. Notactiveinfectiontreatment,norinstitutionalelderly,incompletebladderemptyingorpregnancybenefit."
+            "age_group": "adult",
+            "description": "Adult nonpregnant women with a history of recurrent urinary tract infections, usually at least two in the previous12months. This is not active-infection treatment or evidence for pregnancy, institutionalized elderly people or incomplete bladder emptying."
           },
           "study_design": "Cochrane50RCT8857total;thiscontextrestrictedtorecurrentUTIwomen8studies1555forprimarysymptomaticcultureverifiedUTI.",
           "included_study_pmids": [
@@ -17492,7 +18198,9 @@
           "evidence_grade": "systematic_review",
           "retracted": false,
           "supports_claims": [],
-          "verification_source": "pubmed_eutils"
+          "verification_source": "pubmed_eutils",
+          "scoring_eligible": false,
+          "notes": "The2013pooled assessment includes Khan2003 PMID14633804, now subject to a2025ExpressionOfConcern (notice40834253). The source itself treats its3dose arms as separate comparisons and notes their influence on publicationbias. This relationship remains ineligible for affirmative clinical credit pending a qualifying source-specific integrity/reanalysis decision; the meta-analysis itself is not labeled retracted/EOC. Independent dose-source facts and other cinnamon sources remain separate."
         }
       ],
       "external_ids": {
@@ -17545,7 +18253,95 @@
             }
           ]
         }
-      }
+      },
+      "study_contexts": [
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "ingr_cinnamon_extract_24019277_source_completion",
+          "components": [
+            "INGR_CINNAMON_EXTRACT"
+          ],
+          "source_pmids": [
+            "24019277"
+          ],
+          "identity_scope": "ingredient_general",
+          "identity": {
+            "preparation": "Cinnamon aqueous extracts/raw powders, differing species and one mineral-containing combination; no all-extract equivalence."
+          },
+          "exposure_basis": "supplement_dose",
+          "route": "oral",
+          "evidence_role": "meta_analysis",
+          "component_registration_status": "fully_registered",
+          "condition": "type_2_diabetes",
+          "purpose": "treatment",
+          "review_status": "source_verified_pending_clinical_review",
+          "scoring_eligible": false,
+          "human_status": "confirmed",
+          "source_integrity": "none",
+          "trial_family": "source_24019277",
+          "population": {
+            "description": "10 RCTs, reported543 participants with type2diabetes; baseline therapy and comorbidities varied."
+          },
+          "study_design": "Systematic review and meta-analysis of randomized controlled trials; synthesis-level outcomes do not establish every preparation or product.",
+          "included_study_pmids": [
+            "14633804",
+            "16634838",
+            "17718288",
+            "16549460",
+            "17563345",
+            "19734396",
+            "20854384",
+            "21861719",
+            "22749176"
+          ],
+          "outcomes": [
+            {
+              "name": "Fasting glucose and lipid effects favored cinnamon in pooled estimates; marked heterogeneity limits transfer.",
+              "direction": "mixed",
+              "hierarchy": "not_reported",
+              "kind": "surrogate",
+              "outcome_role": "direct_between_group_effect"
+            },
+            {
+              "name": "No statistically significant overall HbA1c effect.",
+              "direction": "null",
+              "hierarchy": "not_reported",
+              "kind": "surrogate",
+              "outcome_role": "direct_between_group_effect"
+            }
+          ],
+          "limitations": [
+            "Preferred preparation,dose,duration and population remain unresolved; no generic retail product or disease-treatment claim is approved.",
+            "Included Khan2003 PMID14633804 has a2025expression of concern (notice40834253); its3dose comparisons materially influence this older synthesis. Retain source-scoped integrity/reanalysis hold; do not affirm the original pooled result by filling metadata.",
+            "Nine included reports have verifiedPMIDs; one source citation remains unindexed. Source abstract/results also print differing HbA1c interval endpoints; no replacement numbers invented."
+          ],
+          "dose": {
+            "measurement_type": "mass",
+            "unit": "mg",
+            "values": [],
+            "dose_status": "source_not_reported",
+            "dose_basis": "not_applicable",
+            "duration_basis": "participant_specific",
+            "administration_frequency": "Trial-specific120mg/day to6g/day over4–18weeks; one3dose trial supplies3comparisons, not3independent replications.",
+            "dosage_forms": [
+              "capsule",
+              "powder"
+            ],
+            "co_therapies": [
+              "Some trials required oral glucose-lowering medicines; background treatment is trial-specific."
+            ],
+            "reported_regimen": "Trial-specific120mg/day to6g/day over4–18weeks; one3dose trial supplies3comparisons, not3independent replications.",
+            "normalization": {
+              "basis": "Heterogeneous trial-specific regimens; no single assigned-arm dose or universal efficacy threshold is inferred."
+            },
+            "source_provenance": {
+              "pmid": "24019277",
+              "location": "Official fullPMC3767714 HTML: Methods, Study Characteristics, outcome-specific Results, References6–15; supplemental individual table not independently retrieved.",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/24019277/"
+            }
+          }
+        }
+      ]
     },
     {
       "id": "INGR_DIGESTIVE_ENZYMES",
@@ -17945,7 +18741,9 @@
             "Returned decision: Source-content hold.",
             "No new efficacy grade, clinical approval, dose threshold or product equivalence is assigned.",
             "Specific physical dosage forms are not established by this extraction. An oral route or an extract name is not silently converted into a capsule/tablet claim; applicability remains held.",
-            "Source bibliography extraction remains pending. No complete included-trial list or PMID mapping was established by this extraction; no evidence credit follows from missing bibliography data."
+            "Source bibliography extraction remains pending. No complete included-trial list or PMID mapping was established by this extraction; no evidence credit follows from missing bibliography data.",
+            "Included-study identifiers are now bound to this source's actual included-study rows/explicit inclusion references (Tables tbl1,tbl2,tbl3,tbl4,tbl5,tbl6,tbl7,tbl8 explicit included-study row citations), with live NIH title/content identity checks. They are publication pointers, not independent-cohort counts, per-primary-study scoring approvals, preparation equivalence or new efficacy evidence. Exact unindexed source citations remain retained; no missing PMID is invented.",
+            "3 included source citations have no printed PubMed identifier in this primary source; their exact citations are retained in the source-table receipt. This is a documented identifier limitation, not a fabricated identifier or an extra independent trial."
           ],
           "dose": {
             "measurement_type": "mass",
@@ -17965,10 +18763,90 @@
             },
             "source_provenance": {
               "pmid": "34555168",
-              "location": "Primary source Methods, Results and trial-characteristic tables; source-specific reporting and study-design limits retained.",
+              "location": "Primary source Methods, Results and trial-characteristic tables; source-specific reporting and study-design limits retained.; source-field completion from Tables tbl1,tbl2,tbl3,tbl4,tbl5,tbl6,tbl7,tbl8 explicit included-study row citations",
               "source_url": "https://pubmed.ncbi.nlm.nih.gov/34555168/"
             }
-          }
+          },
+          "included_study_pmids": [
+            "8813896",
+            "27477485",
+            "27680592",
+            "8844718",
+            "16569219",
+            "15585783",
+            "9915885",
+            "28611480",
+            "10509770",
+            "30995824",
+            "18466655",
+            "29307330",
+            "30971437",
+            "28954640",
+            "26987626",
+            "20591206",
+            "26706043",
+            "24715424",
+            "23135760",
+            "17403273",
+            "15158296",
+            "31108510",
+            "26203099",
+            "27747984",
+            "17445348",
+            "17268410",
+            "10673910",
+            "15479681",
+            "22244014",
+            "22743314",
+            "18590586",
+            "32320024",
+            "28730743",
+            "24969566",
+            "16768837",
+            "21773588",
+            "30048547",
+            "12368393",
+            "30940833",
+            "15066805",
+            "16365061",
+            "10048793",
+            "25164793",
+            "18608562",
+            "9924276",
+            "11472316",
+            "10395624",
+            "18781073",
+            "18377682",
+            "24664349",
+            "11101487",
+            "19386741",
+            "9301412",
+            "29490721",
+            "19931416",
+            "20938778",
+            "23244539",
+            "19776140",
+            "26571012",
+            "10655953",
+            "8644690",
+            "24919604",
+            "28424190",
+            "17618955",
+            "18853230",
+            "17884999",
+            "9192195",
+            "17298707",
+            "29676968",
+            "24453130",
+            "11697813",
+            "12540407",
+            "9497188",
+            "28229548",
+            "16340949",
+            "31467327",
+            "28747861",
+            "21679485"
+          ]
         }
       ]
     },
@@ -18496,7 +19374,8 @@
             "Returned decision: Source-content hold.",
             "No new efficacy grade, clinical approval, dose threshold or product equivalence is assigned.",
             "Specific physical dosage forms are not established by this extraction. An oral route or an extract name is not silently converted into a capsule/tablet claim; applicability remains held.",
-            "Source bibliography extraction remains pending. No complete included-trial list or PMID mapping was established by this extraction; no evidence credit follows from missing bibliography data."
+            "Source bibliography extraction remains pending. No complete included-trial list or PMID mapping was established by this extraction; no evidence credit follows from missing bibliography data.",
+            "Included-study PMID membership was extracted from source Table(s) table1-2515690X20967323. These are source membership identifiers, not independent efficacy approvals or automatic trial replications. Exact table/citation mapping and unindexed citations are retained in the source receipt. This context records single-herb Table 1 membership only; herbal-combination Table 2 is excluded. The full single-herb table includes outcomes beyond sleep; not every listed study enters a sleep meta-analysis."
           ],
           "dose": {
             "measurement_type": "mass",
@@ -18519,7 +19398,51 @@
               "location": "Primary source Methods, Results and trial-characteristic tables; source-specific reporting and study-design limits retained.",
               "source_url": "https://pubmed.ncbi.nlm.nih.gov/33086877/"
             }
-          }
+          },
+          "included_study_pmids": [
+            "30632220",
+            "19114414",
+            "18482867",
+            "17940604",
+            "17486686",
+            "15551388",
+            "15328251",
+            "14696021",
+            "12568976",
+            "11731907",
+            "10761819",
+            "10599933",
+            "22718671",
+            "7972346",
+            "3936097",
+            "7122669",
+            "31158346",
+            "29035887",
+            "27419099",
+            "16010204",
+            "15900287",
+            "15159134",
+            "15022653",
+            "11807960",
+            "11536390",
+            "3244789",
+            "30591031",
+            "28478716",
+            "28278010",
+            "27110643",
+            "25173770",
+            "24741279",
+            "24250592",
+            "21959068",
+            "21775910",
+            "21399726",
+            "19284179",
+            "12826988",
+            "12120807",
+            "10975170",
+            "12410546",
+            "11999905"
+          ]
         }
       ]
     },
@@ -20405,7 +21328,9 @@
             "Returned decision: Source-content hold; reject both brand-wide transfer and “preclinical only” classification by key.",
             "No new scoring grade, dose threshold, product approval or clinical signature is assigned by this factual extraction.",
             "Some included-study citations lack PubMed identifiers in the source XML; retain their exact citations rather than inventing identifiers.",
-            "Source bibliography PMID pointers (not a verified list of included trials and not independent scoring sources): 24955642, 28751807, 20205737, 22428137, 29246280, 26604725, 29941810. Each intervention and comparison requires its own applicability assessment; citation in this bibliography grants no credit."
+            "Historical bibliography census (not independent scoring sources; actual included-publication membership is separately bound to the inspected source table): 24955642, 28751807, 20205737, 22428137, 29246280, 26604725, 29941810. Each intervention and comparison requires its own applicability assessment; citation in this bibliography grants no credit.",
+            "Included-study identifiers are now bound to this source's actual included-study rows/explicit inclusion references (Tables nutrients-13-02917-t001 explicit included-study row citations), with live NIH title/content identity checks. They are publication pointers, not independent-cohort counts, per-primary-study scoring approvals, preparation equivalence or new efficacy evidence. Exact unindexed source citations remain retained; no missing PMID is invented.",
+            "4 included source citations have no printed PubMed identifier in this primary source; their exact citations are retained in the source-table receipt. This is a documented identifier limitation, not a fabricated identifier or an extra independent trial."
           ],
           "dose": {
             "measurement_type": "mass",
@@ -20429,10 +21354,19 @@
             },
             "source_provenance": {
               "pmid": "34578794",
-              "location": "Primary article abstract and source-specific Methods/Results/study tables; exact section/table extraction retained privately.",
+              "location": "Primary article abstract and source-specific Methods/Results/study tables; exact section/table extraction retained privately.; source-field completion from Tables nutrients-13-02917-t001 explicit included-study row citations",
               "source_url": "https://pubmed.ncbi.nlm.nih.gov/34578794/"
             }
-          }
+          },
+          "included_study_pmids": [
+            "22428137",
+            "24955642",
+            "26604725",
+            "28751807",
+            "29941810",
+            "20205737",
+            "29246280"
+          ]
         }
       ]
     },
@@ -20696,7 +21630,9 @@
             "Returned decision: Reject primary-target success, cancer-prevention, and preparation-wide claims.",
             "No new efficacy grade, clinical approval, dose threshold or product equivalence is assigned.",
             "Specific physical dosage forms are not established by this extraction. An oral route or an extract name is not silently converted into a capsule/tablet claim; applicability remains held.",
-            "Source bibliography extraction remains pending. No complete included-trial list or PMID mapping was established by this extraction; no evidence credit follows from missing bibliography data."
+            "Source bibliography extraction remains pending. No complete included-trial list or PMID mapping was established by this extraction; no evidence credit follows from missing bibliography data.",
+            "Included-study PMID membership was extracted from the source Results included-study enumeration. These are source membership identifiers, not independent efficacy approvals or automatic trial replications. Exact table/citation mapping and unindexed citations are retained in the source receipt.",
+            "Source reference38 is Politte2020 registered studyNCT02909959;PMID27071786 is a2016review, not that registered study result."
           ],
           "dose": {
             "measurement_type": "mass",
@@ -20719,7 +21655,14 @@
               "location": "Primary source Methods, Results and trial-characteristic tables; source-specific reporting and study-design limits retained.",
               "source_url": "https://pubmed.ncbi.nlm.nih.gov/40458076/"
             }
-          }
+          },
+          "included_study_pmids": [
+            "25313065",
+            "34034808",
+            "36771424",
+            "32347624",
+            "36427174"
+          ]
         }
       ]
     },
@@ -21999,7 +22942,9 @@
             "Returned decision: Reject generic “gut barrier” approval; source-content hold for specific adjunctive settings.",
             "No new efficacy grade, clinical approval, dose threshold or product equivalence is assigned.",
             "Specific physical dosage forms are not established by this extraction. An oral route or an extract name is not silently converted into a capsule/tablet claim; applicability remains held.",
-            "Source bibliography PMID pointers (not a verified list of included trials and not independent scoring sources): 15786539, 10215732, 28407007. Each intervention and comparison requires its own applicability assessment; citation in this bibliography grants no credit."
+            "Historical bibliography census (not independent scoring sources; actual included-publication membership is separately bound to the inspected source table): 15786539, 10215732, 28407007. Each intervention and comparison requires its own applicability assessment; citation in this bibliography grants no credit.",
+            "Included-study PMID membership was extracted from source Table(s) nutrients-14-04126-t002. These are source membership identifiers, not independent efficacy approvals or automatic trial replications. Exact table/citation mapping and unindexed citations are retained in the source receipt.",
+            "PMID15786539 has three arms: triple therapy55, sofalcone54, polaprezinc56; this synthesis uses the legitimate111-participant polaprezinc-versus-triple-therapy comparison. Its title emphasizes sofalcone, but the polaprezinc arm exists and was not individually statistically superior. Do not reject it by title or transfer the sofalcone effect."
           ],
           "dose": {
             "measurement_type": "mass",
@@ -22022,7 +22967,12 @@
               "location": "Primary source Methods, Results and trial-characteristic tables; source-specific reporting and study-design limits retained.",
               "source_url": "https://pubmed.ncbi.nlm.nih.gov/36235778/"
             }
-          }
+          },
+          "included_study_pmids": [
+            "15786539",
+            "10215732",
+            "28407007"
+          ]
         }
       ]
     },
@@ -22463,7 +23413,8 @@
             "Returned decision: Date-restricted hold; preserve historical primary-endpoint and bias qualifications. Publication-age-only exclusions were withdrawn and are not adopted.",
             "No new efficacy grade, clinical approval, dose threshold or product equivalence is assigned.",
             "Specific physical dosage forms are not established by this extraction. An oral route or an extract name is not silently converted into a capsule/tablet claim; applicability remains held.",
-            "Source bibliography extraction remains pending. No complete included-trial list or PMID mapping was established by this extraction; no evidence credit follows from missing bibliography data."
+            "Source bibliography extraction remains pending. No complete included-trial list or PMID mapping was established by this extraction; no evidence credit follows from missing bibliography data.",
+            "Included-study PMID membership was extracted from the source Results included-study enumeration. These are source membership identifiers, not independent efficacy approvals or automatic trial replications. Exact table/citation mapping and unindexed citations are retained in the source receipt. 17 source citations in this set lack a PMID in the primary source; their citation text is retained, no PMID is invented."
           ],
           "dose": {
             "measurement_type": "mass",
@@ -22486,7 +23437,12 @@
               "location": "Primary source Methods, Results and trial-characteristic tables; source-specific reporting and study-design limits retained.",
               "source_url": "https://pubmed.ncbi.nlm.nih.gov/24086396/"
             }
-          }
+          },
+          "included_study_pmids": [
+            "21502597",
+            "8701750",
+            "12181083"
+          ]
         },
         {
           "context_schema_version": "1.1.0",
@@ -22531,7 +23487,8 @@
             "Returned decision: Date-restricted hold; preserve historical primary-endpoint and bias qualifications. Publication-age-only exclusions were withdrawn and are not adopted.",
             "No new efficacy grade, clinical approval, dose threshold or product equivalence is assigned.",
             "Specific physical dosage forms are not established by this extraction. An oral route or an extract name is not silently converted into a capsule/tablet claim; applicability remains held.",
-            "Source bibliography PMID pointers (not a verified list of included trials and not independent scoring sources): 21833673, 8701750, 12181083, 21502597. Each intervention and comparison requires its own applicability assessment; citation in this bibliography grants no credit."
+            "Historical bibliography census (not independent scoring sources; actual included-publication membership is separately bound to the inspected source table): 21833673, 8701750, 12181083, 21502597. Each intervention and comparison requires its own applicability assessment; citation in this bibliography grants no credit.",
+            "Included-study PMID membership was extracted from source Table(s) tab1. These are source membership identifiers, not independent efficacy approvals or automatic trial replications. Exact table/citation mapping and unindexed citations are retained in the source receipt. 6 source citations in this set lack a PMID in the primary source; their citation text is retained, no PMID is invented."
           ],
           "dose": {
             "measurement_type": "mass",
@@ -22554,7 +23511,13 @@
               "location": "Primary source Methods, Results and trial-characteristic tables; source-specific reporting and study-design limits retained.",
               "source_url": "https://pubmed.ncbi.nlm.nih.gov/24639880/"
             }
-          }
+          },
+          "included_study_pmids": [
+            "21502597",
+            "12181083",
+            "8701750",
+            "21833673"
+          ]
         }
       ],
       "reference_semantics": {
@@ -22759,7 +23722,94 @@
       "registry_completed_trials_count": 3,
       "effect_direction_confidence": "medium",
       "effect_direction_rationale": "Source-content attribution reconciled against retained primary references on2026-10-23. Current descriptive direction: positive_weak. Actual measured outcomes and source limitations are recorded separately. This is not attributable clinician approval; existing clinical context holds remain.",
-      "endpoint_relevance_tags": []
+      "endpoint_relevance_tags": [],
+      "study_contexts": [
+        {
+          "context_schema_version": "1.1.0",
+          "review_status": "source_verified_pending_clinical_review",
+          "scoring_eligible": false,
+          "human_status": "confirmed",
+          "source_integrity": "none",
+          "exposure_basis": "supplement_dose",
+          "route": "oral",
+          "context_id": "preclin_cordyceps_27408987_peako2_combination",
+          "components": [
+            "PRECLIN_CORDYCEPS"
+          ],
+          "source_pmids": [
+            "27408987"
+          ],
+          "identity_scope": "combination",
+          "identity": {
+            "branded_material": "PeakO2",
+            "manufacturer": "Compound Solutions, Inc.",
+            "standardization": "Six-mushroom blend: Cordyceps militaris, Ganoderma lucidum, Pleurotus eryngii, Lentinula edodes, Hericium erinaceus, Trametes versicolor. Source Table3 supplies no individual masses."
+          },
+          "evidence_role": "direct_rct",
+          "component_registration_status": "unregistered_components_present",
+          "condition": "high_intensity_exercise_performance",
+          "purpose": "challenge",
+          "trial_family": "peako2_NCT02075892",
+          "population": {
+            "description": "Recreationally active adults aged 18–35; 30 randomized, 28 completed seven days; 10 volunteered for the exploratory 21-day extension."
+          },
+          "study_design": "randomized double-blind placebo-controlled parallel trial; exploratory volunteer extension",
+          "outcomes": [
+            {
+              "name": "VO2max, ventilatory threshold and time to exhaustion after one week: no significant treatment-by-time interaction.",
+              "hierarchy": "primary",
+              "kind": "surrogate",
+              "direction": "null",
+              "outcome_role": "direct_between_group_effect"
+            },
+            {
+              "name": "Relative peak power, average power and percent power drop after one week: no significant treatment-by-time interaction.",
+              "hierarchy": "secondary",
+              "kind": "surrogate",
+              "direction": "null",
+              "outcome_role": "direct_between_group_effect"
+            },
+            {
+              "name": "Three-week exploratory extension: VO2max treatment interaction p=.042; only 10 volunteers.",
+              "hierarchy": "not_reported",
+              "kind": "surrogate",
+              "direction": "positive",
+              "outcome_role": "direct_between_group_effect"
+            }
+          ],
+          "limitations": [
+            "Total 4 g/day is the six-mushroom preparation, not a known isolated Cordyceps militaris dose.",
+            "Methods rounds 1.3 g three times daily to 4 g daily; preserve source rounding.",
+            "The three-week extension is exploratory and self-selected; no general isolated-material or guaranteed performance claim.",
+            "Factual extraction only; existing signed source-content hold remains."
+          ],
+          "dose": {
+            "measurement_type": "mass",
+            "unit": "mg",
+            "values": [
+              4000
+            ],
+            "dose_status": "combination_total_only",
+            "dose_basis": "combination_total_daily",
+            "duration_basis": "fixed_protocol",
+            "duration_days": 7,
+            "administration_frequency": "two capsules three times daily",
+            "dosage_forms": [
+              "capsule"
+            ],
+            "co_therapies": [],
+            "reported_regimen": "4 g/day PeakO2 blend for seven days; a 10-volunteer subset continued for 21 days.",
+            "normalization": {
+              "basis": "Source total blend 4 g/day converted to 4,000 mg/day; individual component doses unknown."
+            },
+            "source_provenance": {
+              "pmid": "27408987",
+              "location": "Full body Methods Experimental Design, Subjects, Supplementation; Table3; Introduction stated primary/secondary/exploratory aims; Results",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/27408987/"
+            }
+          }
+        }
+      ]
     },
     {
       "id": "PRECLIN_BETAINE_HCL",
@@ -23381,7 +24431,8 @@
             "Returned decision: Date-restricted hold. Publication-age-only exclusions were withdrawn and are not adopted.",
             "Factual extraction assigns no new approval, clinical grade or universal dose threshold.",
             "The pooled pain contribution is four RCTs represented by three primary papers: Sima reports two trial cohorts. Wider uncontrolled and animal citations are not included as affirmative pooled trial dependencies.",
-            "Source bibliography PMID pointers (not a verified list of included trials and not independent scoring sources): 15616239, 12455197, 17461852. Each intervention and comparison requires its own applicability assessment; citation in this bibliography grants no credit."
+            "Historical bibliography census (not independent scoring sources; actual included-publication membership is separately bound to the inspected source table): 15616239, 12455197, 17461852. Each intervention and comparison requires its own applicability assessment; citation in this bibliography grants no credit.",
+            "Included-study identifiers are now bound to this source's actual included-study rows/explicit inclusion references (Table1 author/year rows mapped to bibliography15,24–26,28–32,34–36,41; narrative negative chemotherapy-prevention studies37–39 included separately. Two Sima cohorts share one publication; no primary rat/mechanism papers borrowed. TableSheyu2016 corresponds to LiS/SheyuLi2016,232participants, as source26.), with live NIH title/content identity checks. They are publication pointers, not independent-cohort counts, per-primary-study scoring approvals, preparation equivalence or new efficacy evidence. Exact unindexed source citations remain retained; no missing PMID is invented."
           ],
           "dose": {
             "measurement_type": "mass",
@@ -23405,10 +24456,28 @@
             },
             "source_provenance": {
               "pmid": "31118753",
-              "location": "Primary Methods, intervention and Results, with source-specific reporting limits retained.",
+              "location": "Primary Methods, intervention and Results, with source-specific reporting limits retained.; source-field completion from Table1 author/year rows mapped to bibliography15,24–26,28–32,34–36,41; narrative negative chemotherapy-prevention studies37–39 included separately. Two Sima cohorts share one publication; no primary rat/mechanism papers borrowed. TableSheyu2016 corresponds to LiS/SheyuLi2016,232participants, as source26.",
               "source_url": "https://pubmed.ncbi.nlm.nih.gov/31118753/"
             }
-          }
+          },
+          "included_study_pmids": [
+            "29441455",
+            "15616239",
+            "12455197",
+            "27180954",
+            "17461852",
+            "15238773",
+            "19200173",
+            "16519785",
+            "10975731",
+            "28105133",
+            "15948540",
+            "16039110",
+            "27519331",
+            "23733756",
+            "24105751",
+            "25168296"
+          ]
         }
       ],
       "verification_provenance": {
@@ -24309,7 +25378,8 @@
             "Returned decision: Reject human-longevity and broad clinical-benefit claims; source-context hold for selected markers.",
             "No new scoring grade, dose threshold, product approval or clinical signature is assigned by this factual extraction.",
             "Physical dosage forms have not been fully extracted from the verified source tables in this bounded pass. No placeholder form or capsule assumption is treated as established; this scope remains held.",
-            "Source bibliography PMID pointers (not a verified list of included trials and not independent scoring sources): 27520400, 37108584, 31405706, 29914666, 35240291, 29357033. Each intervention and comparison requires its own applicability assessment; citation in this bibliography grants no credit."
+            "Historical bibliography census (not independent scoring sources; actual included-publication membership is separately bound to the inspected source table): 27520400, 37108584, 31405706, 29914666, 35240291, 29357033. Each intervention and comparison requires its own applicability assessment; citation in this bibliography grants no credit.",
+            "Included-study identifiers are now bound to this source's actual included-study rows/explicit inclusion references (Table1 six named primary RCT reports (Bo2016;Garcia-Martinez2023;Javid2019;Khodabandehloo2018;Mahjabeen2022;Seyyedebrahimi2018) map exactly to references34–39. Multiple dose arms are not separate publications; cohort overlap of two2018reports remains unqualified.), with live NIH title/content identity checks. They are publication pointers, not independent-cohort counts, per-primary-study scoring approvals, preparation equivalence or new efficacy evidence. Exact unindexed source citations remain retained; no missing PMID is invented."
           ],
           "dose": {
             "measurement_type": "mass",
@@ -24329,10 +25399,18 @@
             },
             "source_provenance": {
               "pmid": "39872318",
-              "location": "Primary article abstract and source-specific Methods/Results/study tables; exact section/table extraction retained privately.",
+              "location": "Primary article abstract and source-specific Methods/Results/study tables; exact section/table extraction retained privately.; source-field completion from Table1 six named primary RCT reports (Bo2016;Garcia-Martinez2023;Javid2019;Khodabandehloo2018;Mahjabeen2022;Seyyedebrahimi2018) map exactly to references34–39. Multiple dose arms are not separate publications; cohort overlap of two2018reports remains unqualified.",
               "source_url": "https://pubmed.ncbi.nlm.nih.gov/39872318/"
             }
-          }
+          },
+          "included_study_pmids": [
+            "27520400",
+            "37108584",
+            "31405706",
+            "29914666",
+            "35240291",
+            "29357033"
+          ]
         },
         {
           "context_schema_version": "1.1.0",
@@ -24377,7 +25455,9 @@
             "Returned decision: Reject human-longevity and broad clinical-benefit claims; source-context hold for selected markers.",
             "No new efficacy grade, clinical approval, dose threshold or product equivalence is assigned.",
             "Specific physical dosage forms are not established by this extraction. An oral route or an extract name is not silently converted into a capsule/tablet claim; applicability remains held.",
-            "Source bibliography PMID pointers (not a verified list of included trials and not independent scoring sources): 30278430, 31486447, 25577300, 23918588, 22240353, 29914666, 29313746, 25137036, 24582567, 29743980, 29484808, 23193181, 24073011, 20534755, 28701674, 24899709. Each intervention and comparison requires its own applicability assessment; citation in this bibliography grants no credit."
+            "Historical bibliography census (not independent scoring sources; actual included-publication membership is separately bound to the inspected source table): 30278430, 31486447, 25577300, 23918588, 22240353, 29914666, 29313746, 25137036, 24582567, 29743980, 29484808, 23193181, 24073011, 20534755, 28701674, 24899709. Each intervention and comparison requires its own applicability assessment; citation in this bibliography grants no credit.",
+            "Included-study identifiers are now bound to this source's actual included-study rows/explicit inclusion references (Tables nutrients-14-03755-t001 explicit included-study row citations), with live NIH title/content identity checks. They are publication pointers, not independent-cohort counts, per-primary-study scoring approvals, preparation equivalence or new efficacy evidence. Exact unindexed source citations remain retained; no missing PMID is invented.",
+            "1 included source citations have no printed PubMed identifier in this primary source; their exact citations are retained in the source-table receipt. This is a documented identifier limitation, not a fabricated identifier or an extra independent trial."
           ],
           "dose": {
             "measurement_type": "mass",
@@ -24397,10 +25477,28 @@
             },
             "source_provenance": {
               "pmid": "36145131",
-              "location": "Primary source Methods, Results and trial-characteristic tables; source-specific reporting and study-design limits retained.",
+              "location": "Primary source Methods, Results and trial-characteristic tables; source-specific reporting and study-design limits retained.; source-field completion from Tables nutrients-14-03755-t001 explicit included-study row citations",
               "source_url": "https://pubmed.ncbi.nlm.nih.gov/36145131/"
             }
-          }
+          },
+          "included_study_pmids": [
+            "30278430",
+            "31486447",
+            "29914666",
+            "29484808",
+            "29743980",
+            "29313746",
+            "25577300",
+            "25137036",
+            "24582567",
+            "23193181",
+            "24073011",
+            "22240353",
+            "20534755",
+            "28701674",
+            "24899709",
+            "23918588"
+          ]
         }
       ]
     },
@@ -24604,7 +25702,9 @@
             "Returned decision: Reject broad superiority and generic benefit language; retain formulation/indication-specific hold.",
             "No new scoring grade, dose threshold, product approval or clinical signature is assigned by this factual extraction.",
             "Some included-study citations lack PubMed identifiers in the source XML; retain their exact citations rather than inventing identifiers.",
-            "Source bibliography PMID pointers (not a verified list of included trials and not independent scoring sources): 32540725, 25050518, 17043520, 24274358, 27761693, 26937646, 29316908, 30498758, 31239749, 30975196, 32180294, 32311961, 33516238, 35096104, 37351019, 36610110, 39882178, 33210408. Each intervention and comparison requires its own applicability assessment; citation in this bibliography grants no credit."
+            "Historical bibliography census (not independent scoring sources; actual included-publication membership is separately bound to the inspected source table): 32540725, 25050518, 17043520, 24274358, 27761693, 26937646, 29316908, 30498758, 31239749, 30975196, 32180294, 32311961, 33516238, 35096104, 37351019, 36610110, 39882178, 33210408. Each intervention and comparison requires its own applicability assessment; citation in this bibliography grants no credit.",
+            "Included-study identifiers are now bound to this source's actual included-study rows/explicit inclusion references (Tables Tab1 explicit included-study row citations), with live NIH title/content identity checks. They are publication pointers, not independent-cohort counts, per-primary-study scoring approvals, preparation equivalence or new efficacy evidence. Exact unindexed source citations remain retained; no missing PMID is invented.",
+            "3 included source citations have no printed PubMed identifier in this primary source; their exact citations are retained in the source-table receipt. This is a documented identifier limitation, not a fabricated identifier or an extra independent trial."
           ],
           "dose": {
             "measurement_type": "mass",
@@ -24627,10 +25727,30 @@
             },
             "source_provenance": {
               "pmid": "40615851",
-              "location": "Primary article abstract and source-specific Methods/Results/study tables; exact section/table extraction retained privately.",
+              "location": "Primary article abstract and source-specific Methods/Results/study tables; exact section/table extraction retained privately.; source-field completion from Tables Tab1 explicit included-study row citations",
               "source_url": "https://pubmed.ncbi.nlm.nih.gov/40615851/"
             }
-          }
+          },
+          "included_study_pmids": [
+            "17043520",
+            "24274358",
+            "25050518",
+            "27761693",
+            "26937646",
+            "29316908",
+            "30498758",
+            "31239749",
+            "30975196",
+            "32540725",
+            "32180294",
+            "32311961",
+            "33516238",
+            "33210408",
+            "35096104",
+            "36610110",
+            "37351019",
+            "39882178"
+          ]
         }
       ],
       "reference_semantics": {
@@ -24905,7 +26025,9 @@
             "Returned decision: Source-content hold; coordinate duplicate-source accounting with A042/A043.",
             "No new scoring grade, dose threshold, product approval or clinical signature is assigned by this factual extraction.",
             "Some included-study citations lack PubMed identifiers in the source XML; retain their exact citations rather than inventing identifiers.",
-            "Source bibliography PMID pointers (not a verified list of included trials and not independent scoring sources): 33024120, 32550158, 30541217, 18397984. Each intervention and comparison requires its own applicability assessment; citation in this bibliography grants no credit."
+            "Historical bibliography census (not independent scoring sources; actual included-publication membership is separately bound to the inspected source table): 33024120, 32550158, 30541217, 18397984. Each intervention and comparison requires its own applicability assessment; citation in this bibliography grants no credit.",
+            "Included-study identifiers are now bound to this source's actual included-study rows/explicit inclusion references (Tables tab1 explicit included-study row citations), with live NIH title/content identity checks. They are publication pointers, not independent-cohort counts, per-primary-study scoring approvals, preparation equivalence or new efficacy evidence. Exact unindexed source citations remain retained; no missing PMID is invented.",
+            "42 included source citations have no printed PubMed identifier in this primary source; their exact citations are retained in the source-table receipt. This is a documented identifier limitation, not a fabricated identifier or an extra independent trial."
           ],
           "dose": {
             "measurement_type": "mass",
@@ -24927,10 +26049,16 @@
             },
             "source_provenance": {
               "pmid": "34956436",
-              "location": "Primary article abstract and source-specific Methods/Results/study tables; exact section/table extraction retained privately.",
+              "location": "Primary article abstract and source-specific Methods/Results/study tables; exact section/table extraction retained privately.; source-field completion from Tables tab1 explicit included-study row citations",
               "source_url": "https://pubmed.ncbi.nlm.nih.gov/34956436/"
             }
-          }
+          },
+          "included_study_pmids": [
+            "33024120",
+            "32550158",
+            "30541217",
+            "18397984"
+          ]
         },
         {
           "context_schema_version": "1.1.0",
@@ -24976,7 +26104,9 @@
             "No new scoring grade, dose threshold, product approval or clinical signature is assigned by this factual extraction.",
             "Some included-study citations lack PubMed identifiers in the source XML; retain their exact citations rather than inventing identifiers.",
             "Physical dosage forms have not been fully extracted from the verified source tables in this bounded pass. No placeholder form or capsule assumption is treated as established; this scope remains held.",
-            "Source bibliography PMID pointers (not a verified list of included trials and not independent scoring sources): 20298851, 18956768, 18397984, 33164419. Each intervention and comparison requires its own applicability assessment; citation in this bibliography grants no credit."
+            "Historical bibliography census (not independent scoring sources; actual included-publication membership is separately bound to the inspected source table): 20298851, 18956768, 18397984, 33164419. Each intervention and comparison requires its own applicability assessment; citation in this bibliography grants no credit.",
+            "Included-study identifiers are now bound to this source's actual included-study rows/explicit inclusion references (Tables T3,T4 explicit included-study row citations), with live NIH title/content identity checks. They are publication pointers, not independent-cohort counts, per-primary-study scoring approvals, preparation equivalence or new efficacy evidence. Exact unindexed source citations remain retained; no missing PMID is invented.",
+            "36 included source citations have no printed PubMed identifier in this primary source; their exact citations are retained in the source-table receipt. This is a documented identifier limitation, not a fabricated identifier or an extra independent trial."
           ],
           "dose": {
             "measurement_type": "mass",
@@ -24996,10 +26126,16 @@
             },
             "source_provenance": {
               "pmid": "36467075",
-              "location": "Primary article abstract and source-specific Methods/Results/study tables; exact section/table extraction retained privately.",
+              "location": "Primary article abstract and source-specific Methods/Results/study tables; exact section/table extraction retained privately.; source-field completion from Tables T3,T4 explicit included-study row citations",
               "source_url": "https://pubmed.ncbi.nlm.nih.gov/36467075/"
             }
-          }
+          },
+          "included_study_pmids": [
+            "20298851",
+            "18397984",
+            "33164419",
+            "18956768"
+          ]
         }
       ],
       "reference_semantics": {
@@ -29672,7 +30808,9 @@
             "Source does not uniquely call one BP outcome primary; hierarchy recorded not_reported rather than invented.",
             "Primary study identifiers mapped from cited reference links: 38 cited studies, 37 Pub Med identifiers; missing identifiers not invented.",
             "Supplement Table S 2 acquired via Europe PMC supplementary Files; exact study-specific salt, elemental dose, duration, population and background medication table retained in magnesium_supplement_tables.json. Main-body pooled ranges do not replace that table.",
-            "Source bibliography PMID pointers (not a verified list of included trials and not independent scoring sources): 34859788, 3926135, 24984823, 27759579, 9632126, 6407598, 1477853, 15223977, 19020533, 21241290, 37010174, 19617879, 3092972, 9389897, 27053384, 19359148, 1930849, 29996476, 21205110, 1418829, 7786691, 24830937, 29793665, 12663588, 15571635, 9449404, 3415812, 36307427, 35253448, 24814039, 28297698, 11807965, 10594466, 1586398, 7913949, 8017327, 2181860. Each intervention and comparison requires its own applicability assessment; citation in this bibliography grants no credit."
+            "Historical bibliography census (not independent scoring sources; actual included-publication membership is separately bound to the inspected source table): 34859788, 3926135, 24984823, 27759579, 9632126, 6407598, 1477853, 15223977, 19020533, 21241290, 37010174, 19617879, 3092972, 9389897, 27053384, 19359148, 1930849, 29996476, 21205110, 1418829, 7786691, 24830937, 29793665, 12663588, 15571635, 9449404, 3415812, 36307427, 35253448, 24814039, 28297698, 11807965, 10594466, 1586398, 7913949, 8017327, 2181860. Each intervention and comparison requires its own applicability assessment; citation in this bibliography grants no credit.",
+            "Included-study identifiers are now bound to this source's actual included-study rows/explicit inclusion references (Retained primary supplementTableS2, source column explicitly numbers all38included articles29–66; repeated trial arms/cohorts are not new independent articles), with live NIH title/content identity checks. They are publication pointers, not independent-cohort counts, per-primary-study scoring approvals, preparation equivalence or new efficacy evidence. Exact unindexed source citations remain retained; no missing PMID is invented.",
+            "1 included source citations have no printed PubMed identifier in this primary source; their exact citations are retained in the source-table receipt. This is a documented identifier limitation, not a fabricated identifier or an extra independent trial."
           ],
           "dose": {
             "measurement_type": "mass",
@@ -29694,10 +30832,49 @@
             },
             "source_provenance": {
               "pmid": "41000008",
-              "location": "Full primary article Methods, Results and stated limitations; retained XML and extraction receipt in this private folder",
+              "location": "Full primary article Methods, Results and stated limitations; retained XML and extraction receipt in this private folder; source-field completion from Retained primary supplementTableS2, source column explicitly numbers all38included articles29–66; repeated trial arms/cohorts are not new independent articles",
               "source_url": "https://pubmed.ncbi.nlm.nih.gov/41000008/"
             }
-          }
+          },
+          "included_study_pmids": [
+            "34859788",
+            "3926135",
+            "24984823",
+            "27759579",
+            "9632126",
+            "6407598",
+            "1477853",
+            "15223977",
+            "19020533",
+            "21241290",
+            "37010174",
+            "19617879",
+            "3092972",
+            "9389897",
+            "27053384",
+            "19359148",
+            "1930849",
+            "29996476",
+            "21205110",
+            "1418829",
+            "7786691",
+            "24830937",
+            "29793665",
+            "12663588",
+            "15571635",
+            "9449404",
+            "3415812",
+            "36307427",
+            "35253448",
+            "24814039",
+            "28297698",
+            "11807965",
+            "10594466",
+            "1586398",
+            "7913949",
+            "8017327",
+            "2181860"
+          ]
         }
       ]
     },
@@ -29866,7 +31043,8 @@
             "Returned decision: Date-restricted efficacy hold; nutritional guidance is a separate context. Publication-age-only exclusions were withdrawn and are not adopted.",
             "No new scoring grade, dose threshold, product approval or clinical signature is assigned by this factual extraction.",
             "Physical dosage forms have not been fully extracted from the verified source tables in this bounded pass. No placeholder form or capsule assumption is treated as established; this scope remains held.",
-            "Source bibliography PMID pointers (not a verified list of included trials and not independent scoring sources): 23208074, 25321423, 24395288, 22644348, 22151975, 23332626, 21455716, 22316322. Each intervention and comparison requires its own applicability assessment; citation in this bibliography grants no credit."
+            "Historical bibliography census (not independent scoring sources; actual included-publication membership is separately bound to the inspected source table): 23208074, 25321423, 24395288, 22644348, 22151975, 23332626, 21455716, 22316322. Each intervention and comparison requires its own applicability assessment; citation in this bibliography grants no credit.",
+            "Included-study PMID membership was extracted from source Table(s) Tab1. These are source membership identifiers, not independent efficacy approvals or automatic trial replications. Exact table/citation mapping and unindexed citations are retained in the source receipt."
           ],
           "dose": {
             "measurement_type": "mass",
@@ -29889,7 +31067,17 @@
               "location": "Primary article abstract and source-specific Methods/Results/study tables; exact section/table extraction retained privately.",
               "source_url": "https://pubmed.ncbi.nlm.nih.gov/26510847/"
             }
-          }
+          },
+          "included_study_pmids": [
+            "25321423",
+            "24395288",
+            "22644348",
+            "22151975",
+            "23208074",
+            "23332626",
+            "21455716",
+            "22316322"
+          ]
         }
       ]
     },
@@ -30339,7 +31527,7 @@
         "Migraine severity: no significant pooled controlled improvement."
       ],
       "health_goals_supported": [],
-      "notes": "The signed limited migraine scope is retained. PMID9484373 reports55people with migraine,400mg/day riboflavin for three months, with positive attack-frequency/headache-day results. Full review41769676 reports12trials/749participants, mixed adult/pediatric and placebo/active/uncontrolled designs; frequency/duration signals are heterogeneous and severity pooled results null. Its Schoenen table count54 differs from original abstract55 and is not silently reconciled. Regimens50–400mg/day for12–16weeks are descriptive, not a new nutrient dose curve. Original methods for9484373 were not retrieved, so physical form and primary hierarchy are not invented. Current Migra-Eeze328579 has400mg B2 with butterbur/ginger but its saved native positioning does not establish the reviewed migraine purpose or whole-formula equivalence. Current ingredient applicability does not enforce its stored source-purpose constraint. Affirmative current-product qualification remains held until that relationship is enforced; no repeat signature is requested. Generic cognition claims and untraceable4000-person/193-trial aggregates are removed. Ordinary B2 RDA/UL and independent safety remain unchanged.",
+      "notes": "The signed limited migraine scope is retained. PMID9484373 reports55people with migraine,400mg/day riboflavin for three months, with positive attack-frequency/headache-day results. Full review41769676 reports12trials/749participants, mixed adult/pediatric and placebo/active/uncontrolled designs; frequency/duration signals are heterogeneous and severity pooled results null. Its Schoenen table count54 differs from original abstract55 and is not silently reconciled. Regimens50–400mg/day for12–16weeks are descriptive, not a new nutrient dose curve. Original methods for9484373 were not retrieved, so physical form and primary hierarchy are not invented. Current Migra-Eeze328579 has400mg B2 with butterbur/ginger but its saved native positioning does not establish the reviewed migraine purpose or whole-formula equivalence. The existing generic consumer now enforces the signed migraine condition through the shared clinical-purpose owner. Only the supported migraine scope may qualify; native warnings, generic cognition claims or dose matching alone do not establish it. No repeat signature or new efficacy grade is inferred. Generic cognition claims and untraceable4000-person/193-trial aggregates are removed. Ordinary B2 RDA/UL and independent safety remain unchanged.",
       "notable_studies": "PMID9484373: positive400mg/day three-month migraine trial,55randomized per original abstract. Review41769676: heterogeneous migraine frequency/duration findings, pooled severity null, mixed trial designs; its table lists54for the earlier trial. PMID33779525 retained as migraine review history, not another independent trial.",
       "study_type": "systematic_review_meta",
       "last_updated": "2026-10-27",
@@ -30440,7 +31628,7 @@
       "total_enrollment": null,
       "registry_completed_trials_count": null,
       "effect_direction_confidence": "high",
-      "effect_direction_rationale": "Existing positive_strong descriptive grade is restricted to the supported migraine findings, not cognition or immune benefit. Unsupported aggregate counts removed. scoring_eligible=false prevents unscoped current-product qualification pending enforcement of the existing source-purpose boundary; ordinary nutritional adequacy and safety remain independent.",
+      "effect_direction_rationale": "Existing positive_strong descriptive grade is restricted to the supported migraine findings, not cognition or immune benefit. Unsupported aggregate counts removed. The shared applicability owner enforces the existing source-purpose boundary; ordinary nutritional adequacy and safety remain independent.",
       "endpoint_relevance_tags": [],
       "study_contexts": [
         {
@@ -30539,7 +31727,7 @@
           "migraine"
         ]
       },
-      "scoring_eligible": false
+      "scoring_eligible": true
     },
     {
       "id": "INGR_POTASSIUM",
@@ -30649,7 +31837,9 @@
             "Returned decision: Source-content hold for the blood-pressure relationship.",
             "No new scoring grade, dose threshold, product approval or clinical signature is assigned by this factual extraction.",
             "Physical dosage forms have not been fully extracted from the verified source tables in this bounded pass. No placeholder form or capsule assumption is treated as established; this scope remains held.",
-            "Source bibliography PMID pointers (not a verified list of included trials and not independent scoring sources): 20673378, 33280043, 15740932, 25673113, 24048291, 20083724, 27867157, 22149452, 34064968, 27448942. Each intervention and comparison requires its own applicability assessment; citation in this bibliography grants no credit."
+            "Historical bibliography census (not independent scoring sources; actual included-publication membership is separately bound to the inspected source table): 20673378, 33280043, 15740932, 25673113, 24048291, 20083724, 27867157, 22149452, 34064968, 27448942. Each intervention and comparison requires its own applicability assessment; citation in this bibliography grants no credit.",
+            "Included-study identifiers are now bound to this source's actual included-study rows/explicit inclusion references (Tables tbl1 explicit included-study row citations), with live NIH title/content identity checks. They are publication pointers, not independent-cohort counts, per-primary-study scoring approvals, preparation equivalence or new efficacy evidence. Exact unindexed source citations remain retained; no missing PMID is invented.",
+            "Results Intervention Characteristics: high-potassium supplements were administered as potassium tablets or slow-released potassium tablets. This does not create a salt/mass or diet equivalence. Other included trials may not report a delivery form; this list does not establish one common preparation across all arms."
           ],
           "dose": {
             "measurement_type": "mass",
@@ -30659,7 +31849,10 @@
             "dose_basis": "not_applicable",
             "duration_basis": "participant_specific",
             "administration_frequency": "Study durations 1–6 weeks. Dose-response exposure is urinary excretion difference, approximately 12.5–92 mmol/day overall; this cannot be converted directly into assigned oral supplement dose.",
-            "dosage_forms": [],
+            "dosage_forms": [
+              "tablet",
+              "slow-release tablet"
+            ],
             "co_therapies": [
               "Baseline sodium/potassium intake and medication eligibility vary; source Table 1 retains intervention and population."
             ],
@@ -30669,10 +31862,22 @@
             },
             "source_provenance": {
               "pmid": "40612568",
-              "location": "Primary article abstract and source-specific Methods/Results/study tables; exact section/table extraction retained privately.",
+              "location": "Primary article abstract and source-specific Methods/Results/study tables; exact section/table extraction retained privately.; source-field completion from Tables tbl1 explicit included-study row citations",
               "source_url": "https://pubmed.ncbi.nlm.nih.gov/40612568/"
             }
-          }
+          },
+          "included_study_pmids": [
+            "20673378",
+            "33280043",
+            "15740932",
+            "25673113",
+            "24048291",
+            "20083724",
+            "27867157",
+            "22149452",
+            "34064968",
+            "27448942"
+          ]
         }
       ]
     },
@@ -31583,7 +32788,104 @@
             }
           ]
         }
-      }
+      },
+      "study_contexts": [
+        {
+          "context_schema_version": "1.1.0",
+          "review_status": "source_verified_pending_clinical_review",
+          "scoring_eligible": false,
+          "human_status": "confirmed",
+          "source_integrity": "none",
+          "exposure_basis": "supplement_dose",
+          "route": "oral",
+          "context_id": "ingr_echinacea_24554461_review_preparation_specific",
+          "components": [
+            "INGR_ECHINACEA"
+          ],
+          "source_pmids": [
+            "24554461"
+          ],
+          "identity_scope": "ingredient_general",
+          "identity": {
+            "standardization": "Multiple Echinacea species, plant parts, pressed juices, alcohol tinctures and dried-extract tablets; not biochemically equivalent."
+          },
+          "evidence_role": "systematic_review",
+          "component_registration_status": "fully_registered",
+          "condition": "common_cold_prevention_and_treatment",
+          "purpose": "prevention",
+          "trial_family": "echinacea_cold_cochrane_24554461",
+          "population": {
+            "description": "24 double-blind trials with 4,631 participants and 33 preparation-versus-placebo comparisons; naturally acquired colds or induced rhinovirus, heterogeneous populations."
+          },
+          "study_design": "systematic review of randomized double-blind placebo-controlled trials",
+          "included_study_pmids": [
+            "10228604",
+            "10230741",
+            "10817735",
+            "11505787",
+            "12484708",
+            "14657066",
+            "14748902",
+            "15156472",
+            "15197051",
+            "16049208",
+            "16177972",
+            "17436202",
+            "21173411",
+            "9821828"
+          ],
+          "outcomes": [
+            {
+              "name": "Prevention: participants with at least one cold; none of 12 individual comparisons significant.",
+              "hierarchy": "primary",
+              "kind": "patient_important",
+              "direction": "null",
+              "outcome_role": "direct_between_group_effect"
+            },
+            {
+              "name": "Treatment: cold duration;one of seven trials significant.",
+              "hierarchy": "primary",
+              "kind": "patient_important",
+              "direction": "mixed",
+              "outcome_role": "direct_between_group_effect"
+            },
+            {
+              "name": "Posthoc pooling suggests 10–20% relative risk reduction; preparations heterogeneous.",
+              "hierarchy": "post_hoc",
+              "kind": "patient_important",
+              "direction": "positive",
+              "outcome_role": "post_hoc_subgroup"
+            }
+          ],
+          "limitations": [
+            "No single aggregate regimen is reported because these are heterogeneous study arms; source_not_reported applies only to the nonexistent review-wide regimen, not undisclosed constituent trial doses. Exact table rows retained. Included-study membership is not every bibliography citation; unindexed/ambiguous primary references remain source-labelled in private inventory.",
+            "Goel 2005 (PMID 16177972) is preparation-linked companion immune-marker followup referring to previous Echinilin trial; retained publication membership is not independent efficacy replication.",
+            "The review reports a trend toward more adverse-event dropouts in prevention studies; nonsignificant group differences do not establish personal safety."
+          ],
+          "dose": {
+            "measurement_type": "mass",
+            "unit": "mg",
+            "values": [],
+            "dose_status": "source_not_reported",
+            "dose_basis": "not_applicable",
+            "duration_basis": "participant_specific",
+            "administration_frequency": "Study-specific frequency as printed in full included-study characteristics; no single review-wide assigned regimen.",
+            "dosage_forms": [
+              "pressed juice",
+              "tincture",
+              "tablet",
+              "capsule"
+            ],
+            "co_therapies": [],
+            "reported_regimen": "No single review-wide assigned dose; all 24 included-study preparation/regimen rows transcribed in missing31_exact_included_tables_and_regimens.json. Source Methods/Results include heterogeneous species,plant parts and preparations.",
+            "source_provenance": {
+              "pmid": "24554461",
+              "location": "Full body Methods/Results and Characteristics of included studies T2",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/24554461/"
+            }
+          }
+        }
+      ]
     },
     {
       "id": "INGR_HONEY",
@@ -33854,7 +35156,8 @@
             "Returned decision: Source-content hold; reject high-certainty stress/sleep language.",
             "No new scoring grade, dose threshold, product approval or clinical signature is assigned by this factual extraction.",
             "Some included-study citations lack PubMed identifiers in the source XML; retain their exact citations rather than inventing identifiers.",
-            "Source bibliography PMID pointers (not a verified list of included trials and not independent scoring sources): 16971751, 29856155, 30972340, 21512285, 19462324, 19483370, 26052150, 30263304, 22203366. Each intervention and comparison requires its own applicability assessment; citation in this bibliography grants no credit."
+            "Historical bibliography census (not independent scoring sources; actual included-publication membership is separately bound to the inspected source table): 16971751, 29856155, 30972340, 21512285, 19462324, 19483370, 26052150, 30263304, 22203366. Each intervention and comparison requires its own applicability assessment; citation in this bibliography grants no credit.",
+            "Included-study PMID membership was extracted from source Table(s) T1. These are source membership identifiers, not independent efficacy approvals or automatic trial replications. Exact table/citation mapping and unindexed citations are retained in the source receipt. 4 source citations in this set lack a PMID in the primary source; their citation text is retained, no PMID is invented."
           ],
           "dose": {
             "measurement_type": "mass",
@@ -33880,7 +35183,18 @@
               "location": "Primary article abstract and source-specific Methods/Results/study tables; exact section/table extraction retained privately.",
               "source_url": "https://pubmed.ncbi.nlm.nih.gov/33041752/"
             }
-          }
+          },
+          "included_study_pmids": [
+            "30972340",
+            "26052150",
+            "21512285",
+            "19462324",
+            "19483370",
+            "30263304",
+            "22203366",
+            "16971751",
+            "29856155"
+          ]
         }
       ]
     },
@@ -34136,7 +35450,8 @@
             "Returned decision: Source-content hold.",
             "No new efficacy grade, clinical approval, dose threshold or product equivalence is assigned.",
             "Specific physical dosage forms are not established by this extraction. An oral route or an extract name is not silently converted into a capsule/tablet claim; applicability remains held.",
-            "Source bibliography extraction remains pending. No complete included-trial list or PMID mapping was established by this extraction; no evidence credit follows from missing bibliography data."
+            "Source bibliography extraction remains pending. No complete included-trial list or PMID mapping was established by this extraction; no evidence credit follows from missing bibliography data.",
+            "Results food-source analysis and Discussion explicitly identify beetroot juice as predominant delivery and commercial concentrated shots. Other nitrate foods are separate; no powder/capsule equivalence. Other included trials may not report a delivery form; this list does not establish one common preparation across all arms."
           ],
           "dose": {
             "measurement_type": "mass",
@@ -34146,7 +35461,10 @@
             "dose_basis": "not_applicable",
             "duration_basis": "participant_specific",
             "administration_frequency": "Retain actual food, nitrate/polyphenol content and acute versus multiday schedules. No beetroot-mass to nitrate conversion or family-wide regimen.",
-            "dosage_forms": [],
+            "dosage_forms": [
+              "beetroot juice",
+              "concentrated beetroot juice shot"
+            ],
             "co_therapies": [
               "Dietary matrices and training protocols differ; no arginine food studies qualified in the review."
             ],
@@ -34156,7 +35474,7 @@
             },
             "source_provenance": {
               "pmid": "34965876",
-              "location": "Primary source Methods, Results and trial-characteristic tables; source-specific reporting and study-design limits retained.",
+              "location": "Primary source Methods, Results and trial-characteristic tables; source-specific reporting and study-design limits retained.; source-field completion from complete primary Results/Discussion delivery descriptions",
               "source_url": "https://pubmed.ncbi.nlm.nih.gov/34965876/"
             }
           }
@@ -34385,7 +35703,9 @@
             "Original returned A 121 source/preparation hold retained; no new positive grade or approval assigned.",
             "47 of 49 included references have primary PMIDs in the article XML; Arazi/Hakimi/Hoseini and Mielke/Housh/Malek references have no Pub Med identifier there. The retained source reference census preserves their exact titles; no PMID invented. Per-trial supplement table remains separately retained/access checked.",
             "Supplement Table 1 and Table 2 now retrieved; exact trial identity, protein source, quantity, timing, comparators and training details retained as PDF and extracted text. Some rows use high-protein diet, food matrices or combinations; no automatic preparation equivalence.",
-            "Source bibliography PMID pointers (not a verified list of included trials and not independent scoring sources): 15690307, 26500462, 24834017, 23486511, 25057266, 25628520, 20126965, 15588291, 14978601, 11591884, 7611390, 16948480, 16767436, 16236227, 16686554, 17277594, 24477043, 22066824, 18309444, 22460474, 23647357, 17684208, 23442287, 24149229, 19478342, 18661258, 26677350, 19299575, 19214338, 19997019, 16937979, 22968306, 25610954, 25093275, 26341720, 16581862, 27258300, 25133710, 15310736, 27466602, 12094125, 25926415, 19106243, 24015719, 22806076, 19403951, 16988909. Each intervention and comparison requires its own applicability assessment; citation in this bibliography grants no credit."
+            "Historical bibliography census (not independent scoring sources; actual included-publication membership is separately bound to the inspected source table): 15690307, 26500462, 24834017, 23486511, 25057266, 25628520, 20126965, 15588291, 14978601, 11591884, 7611390, 16948480, 16767436, 16236227, 16686554, 17277594, 24477043, 22066824, 18309444, 22460474, 23647357, 17684208, 23442287, 24149229, 19478342, 18661258, 26677350, 19299575, 19214338, 19997019, 16937979, 22968306, 25610954, 25093275, 26341720, 16581862, 27258300, 25133710, 15310736, 27466602, 12094125, 25926415, 19106243, 24015719, 22806076, 19403951, 16988909. Each intervention and comparison requires its own applicability assessment; citation in this bibliography grants no credit.",
+            "Included-study identifiers are now bound to this source's actual included-study rows/explicit inclusion references (Methods:49includedRCTs explicitly cited as refs16–64; retained SupplementTables1/2 provide exact source/regimen details), with live NIH title/content identity checks. They are publication pointers, not independent-cohort counts, per-primary-study scoring approvals, preparation equivalence or new efficacy evidence. Exact unindexed source citations remain retained; no missing PMID is invented.",
+            "2 included source citations have no printed PubMed identifier in this primary source; their exact citations are retained in the source-table receipt. This is a documented identifier limitation, not a fabricated identifier or an extra independent trial."
           ],
           "dose": {
             "measurement_type": "mass",
@@ -34410,10 +35730,59 @@
             },
             "source_provenance": {
               "pmid": "28698222",
-              "location": "Full primary article Methods, Results and stated limitations; retained XML and extraction receipt in this private folder",
+              "location": "Full primary article Methods, Results and stated limitations; retained XML and extraction receipt in this private folder; source-field completion from Methods:49includedRCTs explicitly cited as refs16–64; retained SupplementTables1/2 provide exact source/regimen details",
               "source_url": "https://pubmed.ncbi.nlm.nih.gov/28698222/"
             }
-          }
+          },
+          "included_study_pmids": [
+            "15690307",
+            "26500462",
+            "24834017",
+            "23486511",
+            "25057266",
+            "25628520",
+            "20126965",
+            "15588291",
+            "14978601",
+            "11591884",
+            "7611390",
+            "16948480",
+            "16767436",
+            "16236227",
+            "16686554",
+            "17277594",
+            "24477043",
+            "22066824",
+            "18309444",
+            "22460474",
+            "23647357",
+            "17684208",
+            "23442287",
+            "24149229",
+            "19478342",
+            "18661258",
+            "26677350",
+            "19299575",
+            "19214338",
+            "19997019",
+            "16937979",
+            "22968306",
+            "25610954",
+            "25093275",
+            "26341720",
+            "16581862",
+            "27258300",
+            "25133710",
+            "15310736",
+            "27466602",
+            "12094125",
+            "25926415",
+            "19106243",
+            "24015719",
+            "22806076",
+            "19403951",
+            "16988909"
+          ]
         }
       ]
     },
@@ -36887,7 +38256,9 @@
             "Returned decision: Source-content hold.",
             "No new scoring grade, dose threshold, product approval or clinical signature is assigned by this factual extraction.",
             "Some included-study citations lack PubMed identifiers in the source XML; retain their exact citations rather than inventing identifiers.",
-            "Source bibliography PMID pointers (not a verified list of included trials and not independent scoring sources): 20087302, 28944645, 30275356, 26853239, 18156664, 25202189, 20601741, 24477835, 22569039, 19997002, 25566428, 28177706. Each intervention and comparison requires its own applicability assessment; citation in this bibliography grants no credit."
+            "Historical bibliography census (not independent scoring sources; actual included-publication membership is separately bound to the inspected source table): 20087302, 28944645, 30275356, 26853239, 18156664, 25202189, 20601741, 24477835, 22569039, 19997002, 25566428, 28177706. Each intervention and comparison requires its own applicability assessment; citation in this bibliography grants no credit.",
+            "Included-study PMID membership was extracted from source Table(s) Tab2. These are source membership identifiers, not independent efficacy approvals or automatic trial replications. Exact table/citation mapping and unindexed citations are retained in the source receipt. 6 source citations in this set lack a PMID in the primary source; their citation text is retained, no PMID is invented.",
+            "Koba2005 conference citation/table16 men, parallel,5days is not verified as the12-runner crossover/3day trial indexed byPMID20087302; no automatic publication-family equivalence."
           ],
           "dose": {
             "measurement_type": "mass",
@@ -36912,7 +38283,20 @@
               "location": "Primary article abstract and source-specific Methods/Results/study tables; exact section/table extraction retained privately.",
               "source_url": "https://pubmed.ncbi.nlm.nih.gov/38625669/"
             }
-          }
+          },
+          "included_study_pmids": [
+            "24477835",
+            "26853239",
+            "18156664",
+            "22569039",
+            "19997002",
+            "25566428",
+            "25202189",
+            "28944645",
+            "20601741",
+            "30275356",
+            "28177706"
+          ]
         },
         {
           "context_schema_version": "1.1.0",
@@ -36957,7 +38341,8 @@
             "Returned decision: Source-content hold.",
             "No new scoring grade, dose threshold, product approval or clinical signature is assigned by this factual extraction.",
             "Some included-study citations lack PubMed identifiers in the source XML; retain their exact citations rather than inventing identifiers.",
-            "Source bibliography PMID pointers (not a verified list of included trials and not independent scoring sources): 8878139, 9124069, 24477835, 26733764, 26553453, 27053525, 27245337, 29244956, 26853239, 28177706, 30275356, 11985939, 10912884, 11310926, 30792920, 27913948. Each intervention and comparison requires its own applicability assessment; citation in this bibliography grants no credit."
+            "Historical bibliography census (not independent scoring sources; actual included-publication membership is separately bound to the inspected source table): 8878139, 9124069, 24477835, 26733764, 26553453, 27053525, 27245337, 29244956, 26853239, 28177706, 30275356, 11985939, 10912884, 11310926, 30792920, 27913948. Each intervention and comparison requires its own applicability assessment; citation in this bibliography grants no credit.",
+            "Included-study PMID membership was extracted from source Table(s) nutrients-14-04002-t001. These are source membership identifiers, not independent efficacy approvals or automatic trial replications. Exact table/citation mapping and unindexed citations are retained in the source receipt. 3 source citations in this set lack a PMID in the primary source; their citation text is retained, no PMID is invented."
           ],
           "dose": {
             "measurement_type": "mass",
@@ -36983,7 +38368,25 @@
               "location": "Primary article abstract and source-specific Methods/Results/study tables; exact section/table extraction retained privately.",
               "source_url": "https://pubmed.ncbi.nlm.nih.gov/36235655/"
             }
-          }
+          },
+          "included_study_pmids": [
+            "8878139",
+            "9124069",
+            "10912884",
+            "11310926",
+            "11985939",
+            "24477835",
+            "30792920",
+            "26733764",
+            "26853239",
+            "26553453",
+            "27053525",
+            "27245337",
+            "28177706",
+            "27913948",
+            "29244956",
+            "30275356"
+          ]
         }
       ],
       "verification_provenance": {
@@ -38293,7 +39696,8 @@
             "Exact physical dosage forms require trial-level source matching; no capsule assumption.",
             "No new clinical approval, scoring credit or dose threshold. Existing reviewed exclusions remain.",
             "These are live-verified indexed primary references within the broader eleven-study ceramide subgroup; additional source citations are unindexed and are not assigned invented PMIDs. Combination and safety-study references are not automatically part of the single-preparation efficacy pool.",
-            "Source bibliography PMID pointers (not a verified list of included trials and not independent scoring sources): 18492188, 31033133, 20646083, 33658470, 27312122. Each intervention and comparison requires its own applicability assessment; citation in this bibliography grants no credit."
+            "Historical bibliography census (not independent scoring sources; actual included-publication membership is separately bound to the inspected source table): 18492188, 31033133, 20646083, 33658470, 27312122. Each intervention and comparison requires its own applicability assessment; citation in this bibliography grants no credit.",
+            "Included-study PMID membership was extracted from the source Results included-study enumeration. These are source membership identifiers, not independent efficacy approvals or automatic trial replications. Exact table/citation mapping and unindexed citations are retained in the source receipt. Only the nine single-preparation ceramide source citations (39–47) are included; the two combination-preparation citations36/48 are excluded. 6 source citations in this set lack a PMID in the primary source; their citation text is retained, no PMID is invented."
           ],
           "dose": {
             "measurement_type": "mass",
@@ -38317,7 +39721,12 @@
               "location": "Primary Methods/intervention, Results and limitations, including source-specific arm and exposure basis.",
               "source_url": "https://pubmed.ncbi.nlm.nih.gov/35719159/"
             }
-          }
+          },
+          "included_study_pmids": [
+            "31033133",
+            "20646083",
+            "33658470"
+          ]
         }
       ]
     },
@@ -38358,7 +39767,7 @@
         "Hormone Balance",
         "Blood Sugar Support"
       ],
-      "notes": "Human evidence is condition-specific and conflicting. A 2023 review reported improvement in cycle regularity and selected metabolic outcomes, while a 2022 meta-analysis found no clinically significant improvement across most anthropometric, metabolic, and endocrine outcomes. The systematic review used for the 2023 international PCOS guideline update concluded that evidence was limited and inconclusive. This record is not broad proof for weight loss, fertility, or glucose control outside PCOS.",
+      "notes": "Human evidence is condition-specific and conflicting. A 2023 review reported improvement in cycle regularity and selected metabolic outcomes, while a 2022 meta-analysis found no clinically significant improvement across most anthropometric, metabolic, and endocrine outcomes. The systematic review used for the 2023 international PCOS guideline update concluded that evidence was limited and inconclusive. This record is not broad proof for weight loss, fertility, or glucose control outside PCOS. Live included-study inspection of38163998 identifies retracted primary26507336/18462730;36703143 includes retracted18074942/28980870 (and prior related integrity notices). The parent reviews themselves are not declared retracted. No independently accepted current product/outcome scope is supplied by this source-extraction batch. Retain separate limited/inconclusive38163998 and null/mixed35477841 findings; withhold the unresolved affirmative relationship without inventing a recomputed pooled result, efficacy-negative judgment, dose penalty or safety warning.",
       "last_updated": "2026-08-25",
       "notable_studies": "PMID 38163998 reviewed 30 trials (2,230 participants) for the international PCOS guideline update and concluded that evidence was limited and inconclusive. PMID 36703143 reviewed 26 RCTs (1,691 participants) and reported benefits for cycle regularity and selected metabolic or hormonal outcomes. PMID 35477841 reviewed 17 RCTs (1,083 participants), found no clinically significant improvement across most measured outcomes, and reported high heterogeneity.",
       "references_structured": [
@@ -38516,7 +39925,10 @@
             "Returned decision: Reject definitive PCOS/fertility efficacy and metformin-equivalence wording.",
             "No new scoring grade, dose threshold, product approval or clinical signature is assigned by this factual extraction.",
             "Some included-study citations lack PubMed identifiers in the source XML; retain their exact citations rather than inventing identifiers.",
-            "Source bibliography PMID pointers (not a verified list of included trials and not independent scoring sources): 30919036, 23336594, 34268040, 27493664, 19499845, 22223702, 27808588, 18335328, 15251831, 34624138, 30915778, 30880505, 10219066, 22774396, 31298405, 28277112, 26507336, 18462730, 30847561, 20222840, 34590929, 36557221, 34665453, 28092404, 21608442. Each intervention and comparison requires its own applicability assessment; citation in this bibliography grants no credit."
+            "Historical bibliography census (not independent scoring sources; actual included-publication membership is separately bound to the inspected source table): 30919036, 23336594, 34268040, 27493664, 19499845, 22223702, 27808588, 18335328, 15251831, 34624138, 30915778, 30880505, 10219066, 22774396, 31298405, 28277112, 26507336, 18462730, 30847561, 20222840, 34590929, 36557221, 34665453, 28092404, 21608442. Each intervention and comparison requires its own applicability assessment; citation in this bibliography grants no credit.",
+            "Included-study identifiers are now bound to this source's actual included-study rows/explicit inclusion references (Tables dgad762-T1 explicit included-study row citations), with live NIH title/content identity checks. They are publication pointers, not independent-cohort counts, per-primary-study scoring approvals, preparation equivalence or new efficacy evidence. Exact unindexed source citations remain retained; no missing PMID is invented.",
+            "6 included source citations have no printed PubMed identifier in this primary source; their exact citations are retained in the source-table receipt. This is a documented identifier limitation, not a fabricated identifier or an extra independent trial.",
+            "Live NIH API flags these included PRIMARY reports as retracted: 26507336 (notice 41626704), 18462730 (notice 39971415). This flag applies to the named underlying reports, not automatically to this parent synthesis. Their impact on the exact synthesis/outcome is not recomputed or deemed harmless here; existing non-scoring/pending source acceptance remains. Do not restore affirmative credit merely because table extraction is complete."
           ],
           "dose": {
             "measurement_type": "mass",
@@ -38540,10 +39952,37 @@
             },
             "source_provenance": {
               "pmid": "38163998",
-              "location": "Primary article abstract and source-specific Methods/Results/study tables; exact section/table extraction retained privately.",
+              "location": "Primary article abstract and source-specific Methods/Results/study tables; exact section/table extraction retained privately.; source-field completion from Tables dgad762-T1 explicit included-study row citations",
               "source_url": "https://pubmed.ncbi.nlm.nih.gov/38163998/"
             }
-          }
+          },
+          "included_study_pmids": [
+            "30919036",
+            "23336594",
+            "34268040",
+            "27493664",
+            "19499845",
+            "22223702",
+            "27808588",
+            "18335328",
+            "15251831",
+            "34624138",
+            "30915778",
+            "30880505",
+            "10219066",
+            "22774396",
+            "31298405",
+            "28277112",
+            "26507336",
+            "18462730",
+            "30847561",
+            "20222840",
+            "34590929",
+            "36557221",
+            "34665453",
+            "28092404",
+            "21608442"
+          ]
         },
         {
           "context_schema_version": "1.1.0",
@@ -38588,7 +40027,10 @@
             "Returned decision: Reject definitive PCOS/fertility efficacy and metformin-equivalence wording.",
             "No new scoring grade, dose threshold, product approval or clinical signature is assigned by this factual extraction.",
             "Some included-study citations lack PubMed identifiers in the source XML; retain their exact citations rather than inventing identifiers.",
-            "Source bibliography PMID pointers (not a verified list of included trials and not independent scoring sources): 34665453, 34590929, 30608001, 30915778, 27493664, 24302192, 30787519, 19499845, 22223702, 27808588, 18335328, 18074942, 15251831, 28980870, 28485095, 10219066, 30847561, 20222840, 28092404. Each intervention and comparison requires its own applicability assessment; citation in this bibliography grants no credit."
+            "Historical bibliography census (not independent scoring sources; actual included-publication membership is separately bound to the inspected source table): 34665453, 34590929, 30608001, 30915778, 27493664, 24302192, 30787519, 19499845, 22223702, 27808588, 18335328, 18074942, 15251831, 28980870, 28485095, 10219066, 30847561, 20222840, 28092404. Each intervention and comparison requires its own applicability assessment; citation in this bibliography grants no credit.",
+            "Included-study identifiers are now bound to this source's actual included-study rows/explicit inclusion references (Tables Tab1 explicit included-study row citations), with live NIH title/content identity checks. They are publication pointers, not independent-cohort counts, per-primary-study scoring approvals, preparation equivalence or new efficacy evidence. Exact unindexed source citations remain retained; no missing PMID is invented.",
+            "7 included source citations have no printed PubMed identifier in this primary source; their exact citations are retained in the source-table receipt. This is a documented identifier limitation, not a fabricated identifier or an extra independent trial.",
+            "Live NIH API flags these included PRIMARY reports as retracted: 18074942 (notice 37782148), 28980870 (notice 33143512,38758364). This flag applies to the named underlying reports, not automatically to this parent synthesis. Their impact on the exact synthesis/outcome is not recomputed or deemed harmless here; existing non-scoring/pending source acceptance remains. Do not restore affirmative credit merely because table extraction is complete."
           ],
           "dose": {
             "measurement_type": "mass",
@@ -38610,12 +40052,34 @@
             },
             "source_provenance": {
               "pmid": "36703143",
-              "location": "Primary article abstract and source-specific Methods/Results/study tables; exact section/table extraction retained privately.",
+              "location": "Primary article abstract and source-specific Methods/Results/study tables; exact section/table extraction retained privately.; source-field completion from Tables Tab1 explicit included-study row citations",
               "source_url": "https://pubmed.ncbi.nlm.nih.gov/36703143/"
             }
-          }
+          },
+          "included_study_pmids": [
+            "27493664",
+            "24302192",
+            "30787519",
+            "19499845",
+            "22223702",
+            "30915778",
+            "27808588",
+            "18335328",
+            "18074942",
+            "28980870",
+            "15251831",
+            "28485095",
+            "10219066",
+            "30847561",
+            "20222840",
+            "34590929",
+            "30608001",
+            "34665453",
+            "28092404"
+          ]
         }
-      ]
+      ],
+      "scoring_eligible": false
     },
     {
       "id": "INGR_L_ARGININE",
@@ -38860,7 +40324,9 @@
             "Returned decision: Source-content hold.",
             "No new efficacy grade, clinical approval, dose threshold or product equivalence is assigned.",
             "Specific physical dosage forms are not established by this extraction. An oral route or an extract name is not silently converted into a capsule/tablet claim; applicability remains held.",
-            "Source bibliography PMID pointers (not a verified list of included trials and not independent scoring sources): 30068354, 28120856, 25177096, 20386475, 16082501, 16928472, 23319437, 24418244, 26023227, 21399536, 27623757, 20308972, 18708287, 22251130, 15895316, 23423302, 24678288. Each intervention and comparison requires its own applicability assessment; citation in this bibliography grants no credit."
+            "Historical bibliography census (not independent scoring sources; actual included-publication membership is separately bound to the inspected source table): 30068354, 28120856, 25177096, 20386475, 16082501, 16928472, 23319437, 24418244, 26023227, 21399536, 27623757, 20308972, 18708287, 22251130, 15895316, 23423302, 24678288. Each intervention and comparison requires its own applicability assessment; citation in this bibliography grants no credit.",
+            "Included-study identifiers are now bound to this source's actual included-study rows/explicit inclusion references (Tables nutrients-12-01300-t001 explicit included-study row citations), with live NIH title/content identity checks. They are publication pointers, not independent-cohort counts, per-primary-study scoring approvals, preparation equivalence or new efficacy evidence. Exact unindexed source citations remain retained; no missing PMID is invented.",
+            "4 included source citations have no printed PubMed identifier in this primary source; their exact citations are retained in the source-table receipt. This is a documented identifier limitation, not a fabricated identifier or an extra independent trial."
           ],
           "dose": {
             "measurement_type": "mass",
@@ -38880,10 +40346,29 @@
             },
             "source_provenance": {
               "pmid": "32370176",
-              "location": "Primary source Methods, Results and trial-characteristic tables; source-specific reporting and study-design limits retained.",
+              "location": "Primary source Methods, Results and trial-characteristic tables; source-specific reporting and study-design limits retained.; source-field completion from Tables nutrients-12-01300-t001 explicit included-study row citations",
               "source_url": "https://pubmed.ncbi.nlm.nih.gov/32370176/"
             }
-          }
+          },
+          "included_study_pmids": [
+            "28120856",
+            "20386475",
+            "16928472",
+            "24418244",
+            "22251130",
+            "15895316",
+            "25177096",
+            "23319437",
+            "21399536",
+            "27623757",
+            "20308972",
+            "18708287",
+            "23423302",
+            "26023227",
+            "24678288",
+            "16082501",
+            "30068354"
+          ]
         }
       ],
       "verification_provenance": {

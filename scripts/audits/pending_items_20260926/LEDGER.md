@@ -1,3 +1,9 @@
+## October 27 — returned-review closure candidate
+
+Behavioral source/data/code batch, baseline e8db3798f. Reconciled 49 backed records and 22 additional Dose-only proofs (343 valid total); signed lutein rejection and migraine-scoped B2 use complete two source assessments. Full required source state: 28/146 complete, 118 held. Fresh bounded raw diagnostics: 25/46 preparation groups complete/outside botanical Dose; 21 remain. All frozen rows and original decisions are preserved; these are not 118 new signature requests.
+
+Owner Check, exact source exceptions, measurements and qualification: [current report](../literature_records_review_20261020/BRYAN_BATCH_RESPONSE_VERIFICATION_20261025.md#october-27--returned-review-closure-and-final-qualification-candidate). Final repair slice 817 passed; local 546 passed/24 declared skips; strict source gate resolves 1,067 PMIDs with no title mismatch/drift/unresolved retrieval. Independent review complete within its recorded scopes. Final whole-fast CI/integration pending. No whole pipeline, app import, publication or launch-box closure.
+
 ## October 27 — shared-cause source completion integrated
 
 Behavioral code/data/contract batch, baseline main47999e557. Existing owners extended; no scorer, registry, public product field, weights, efficacy grade or numerical benchmark added. Owner Check and exact retained holds: [current verification report](../literature_records_review_20261020/BRYAN_BATCH_RESPONSE_VERIFICATION_20261025.md#october-27--shared-cause-completion-candidate).

@@ -45,7 +45,7 @@ def _product(product_id, label, group, canonical, standard_name, quantity, sourc
         "dose_class": "therapeutic_mass", "source_section": "active",
         "nestedIngredients": [], "isNestedIngredient": False,
     }
-    return {"id": product_id, "fullName": label, "activeIngredients": [row],
+    return {"id": product_id, "fullName": (label + " — Recurrent UTI prevention" if "cranberry" in label.lower() else label), "activeIngredients": [row],
             "inactiveIngredients": []}
 
 

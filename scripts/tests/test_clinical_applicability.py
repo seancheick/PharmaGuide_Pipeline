@@ -1336,3 +1336,115 @@ def test_native_exclusion_extension_cannot_silently_cover_other_purpose_types():
     assert not _valid_native_claim_scope(row)
     row['purpose'] = 'treatment'
     assert _valid_native_claim_scope(row)
+
+
+@pytest.mark.parametrize('rid,claim,expected', [
+    ('INGR_RIBOFLAVIN_B2', 'Migraine support', 'applicable'),
+    ('INGR_RIBOFLAVIN_B2', 'Mental clarity support', 'unresolved'),
+    ('INGR_RIBOFLAVIN_B2', 'Not for migraine support', 'unresolved'),
+    ('INGR_CRANBERRY', 'Recurrent UTI prevention', 'applicable'),
+    ('INGR_CRANBERRY', 'Immune support', 'unresolved'),
+    ('INGR_CRANBERRY', 'Urinary tract support', 'unresolved'),
+])
+def test_signed_condition_scopes_are_enforced_by_the_generic_consumer(rid, claim, expected):
+    record = reviewed_entries()[rid]
+    canonical, name = ('riboflavin', 'Riboflavin') if rid.endswith('B2') else ('cranberry', 'Cranberry extract')
+    row = {'name': name, 'canonical_id': canonical, 'raw_source_text': name,
+           'quantity': 400, 'unit': 'mg', 'raw_source_path': 'ingredientRows[0]',
+           'mapped': True, 'score_eligible_by_cleaner': True, 'source_section': 'active'}
+    product = {'product_name': claim, 'ingredient_quality_data': {'ingredients_scorable': [row]}}
+    entry = {'id': rid, 'ingredient': name, 'matched_source_row_refs': ['ingredientRows[0]']}
+    result = assess_clinical_applicability(product, entry, assess_amount=False)
+    assert result['status'] == expected
+    assert record['study_contexts'][0]['clinical_review']['reviewer'] == 'Dr. Pham'
+
+
+def test_signed_prevention_scope_cannot_be_inferred_from_warnings():
+    row = {'name': 'Cranberry extract', 'raw_source_text': 'Cranberry extract', 'canonical_id': 'cranberry',
+           'quantity': 500, 'unit': 'mg', 'raw_source_path': 'ingredientRows[0]', 'mapped': True,
+           'score_eligible_by_cleaner': True, 'source_section': 'active'}
+    product = {'product_name': 'Cranberry', 'warnings': 'Ask about recurrent UTI prevention',
+               'ingredient_quality_data': {'ingredients_scorable': [row]}}
+    result = assess_clinical_applicability(product, {'id': 'INGR_CRANBERRY', 'ingredient': row['name'],
+        'matched_source_row_refs': ['ingredientRows[0]']}, assess_amount=False)
+    assert result['status'] == 'unresolved'
+
+
+@pytest.mark.parametrize('target,expected', [
+    ('Adults - Women ONLY', 'applicable'),
+    ('Adults - Men ONLY', 'not_applicable'),
+    ('Pregnant and lactating', 'not_applicable'),
+    ('Children (4-8 Years)', 'not_applicable'),
+])
+def test_signed_population_limits_survive_generic_prevention_matching(monkeypatch, target, expected):
+    import clinical_applicability as ca
+    row = {'name': 'Cranberry extract', 'raw_source_text': 'Cranberry extract', 'canonical_id': 'cranberry',
+           'quantity': 500, 'unit': 'mg', 'raw_source_path': 'ingredientRows[0]', 'mapped': True,
+           'score_eligible_by_cleaner': True, 'source_section': 'active'}
+    product = {'product_name': 'Recurrent UTI prevention', 'targetGroups': [target],
+               'ingredient_quality_data': {'ingredients_scorable': [row]}}
+    result = ca.assess_clinical_applicability(product, {'id': 'INGR_CRANBERRY', 'ingredient': row['name'],
+        'matched_source_row_refs': ['ingredientRows[0]']}, assess_amount=False)
+    assert result['status'] == expected
+
+
+@pytest.mark.parametrize('population', [None, 'adults', [], {'description': 123}, {'description': True}, {'description': []}, {'description': {}}])
+def test_malformed_condition_scope_population_fails_closed(monkeypatch, population):
+    import clinical_applicability as ca
+    records = deepcopy(reviewed_entries())
+    records['INGR_RIBOFLAVIN_B2']['study_contexts'][0]['population'] = population
+    monkeypatch.setattr(ca, 'reviewed_entries', lambda: records)
+    row = {'name': 'Riboflavin', 'canonical_id': 'riboflavin', 'quantity': 400, 'unit': 'mg',
+           'raw_source_path': 'ingredientRows[0]', 'mapped': True, 'score_eligible_by_cleaner': True}
+    result = ca.assess_clinical_applicability({'product_name': 'Migraine support',
+        'ingredient_quality_data': {'ingredients_scorable': [row]}},
+        {'id': 'INGR_RIBOFLAVIN_B2', 'ingredient': row['name'], 'matched_source_row_refs': ['ingredientRows[0]']},
+        assess_amount=False)
+    assert result['status'] == 'unresolved'
+
+
+@pytest.mark.parametrize('target', ['Adults - Men ONLY', 'Pregnant and lactating', 'Children (4-8 Years)'])
+def test_unmatched_condition_context_cannot_lend_population_scope(monkeypatch, target):
+    import clinical_applicability as ca
+    records = deepcopy(reviewed_entries())
+    record = records['INGR_CRANBERRY']
+    sibling = deepcopy(record['study_contexts'][0])
+    sibling['context_id'] = 'synthetic_unrelated_population_control'
+    sibling['condition'] = 'migraine'
+    sibling['population'] = {'age_group': 'mixed', 'description': 'Adults and children of either sex'}
+    record['study_contexts'].append(sibling)
+    record['applicability']['supported_outcomes'].append('migraine')
+    monkeypatch.setattr(ca, 'reviewed_entries', lambda: records)
+    row = {'name': 'Cranberry extract', 'raw_source_text': 'Cranberry extract', 'canonical_id': 'cranberry',
+           'quantity': 500, 'unit': 'mg', 'raw_source_path': 'ingredientRows[0]', 'mapped': True,
+           'score_eligible_by_cleaner': True, 'source_section': 'active'}
+    product = {'product_name': 'Recurrent UTI prevention', 'targetGroups': [target],
+               'ingredient_quality_data': {'ingredients_scorable': [row]}}
+    result = ca.assess_clinical_applicability(product, {'id': 'INGR_CRANBERRY', 'ingredient': row['name'],
+        'matched_source_row_refs': ['ingredientRows[0]']}, assess_amount=False)
+    assert result['status'] == 'not_applicable'
+
+
+@pytest.mark.parametrize('case', ['pending', 'source_mismatch', 'unsigned', 'missing_contexts'])
+def test_condition_scoped_policy_cannot_fall_back_when_review_context_is_lost(monkeypatch, case):
+    import clinical_applicability as ca
+    records = deepcopy(reviewed_entries())
+    record = records['INGR_CRANBERRY']
+    context = record['study_contexts'][0]
+    if case == 'pending':
+        context['review_status'] = 'source_verified_pending_clinical_review'
+        context['scoring_eligible'] = False
+    elif case == 'source_mismatch':
+        context['source_pmids'] = ['99999999']
+    elif case == 'unsigned':
+        context.pop('clinical_review')
+    else:
+        record['study_contexts'] = []
+    monkeypatch.setattr(ca, 'reviewed_entries', lambda: records)
+    row = {'name': 'Cranberry extract', 'raw_source_text': 'Cranberry extract', 'canonical_id': 'cranberry', 'quantity': 400, 'unit': 'mg',
+           'raw_source_path': 'ingredientRows[0]', 'mapped': True, 'score_eligible_by_cleaner': True, 'source_section': 'active'}
+    product = {'product_name': 'Recurrent UTI prevention', 'targetGroups': ['Adults - Men ONLY'],
+               'ingredient_quality_data': {'ingredients_scorable': [row]}}
+    result = ca.assess_clinical_applicability(product, {'id': 'INGR_CRANBERRY',
+        'ingredient': row['name'], 'matched_source_row_refs': ['ingredientRows[0]']}, assess_amount=False)
+    assert result['status'] == 'unresolved'

@@ -3905,6 +3905,7 @@ _CLASSIFICATION_DOMAIN_BY_CANONICAL = {
     "nattokinase": "enzyme",
 }
 _CLASSIFICATION_ISOLATED_BOTANICAL_MARKERS = {
+    "phytosterols",
     "activated_charcoal",
     "astaxanthin",
     "caffeine",
@@ -5069,7 +5070,6 @@ def _classification_row_text(row: Dict[str, Any]) -> str:
         row.get("raw_source_text"),
         row.get("category"),
         row.get("matched_form"),
-        row.get("canonical_source_db"),
     ]
     raw_taxonomy = _safe_dict(row.get("raw_taxonomy"))
     pieces.extend([raw_taxonomy.get("category"), raw_taxonomy.get("ingredientGroup")])

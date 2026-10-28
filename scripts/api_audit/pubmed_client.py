@@ -96,11 +96,11 @@ def parse_pubmed_article_xml(xml_text: str) -> list[dict[str, Any]]:
     articles: list[dict[str, Any]] = []
 
     for article in root.findall(".//PubmedArticle"):
-        pmid = _clean_text(article.findtext(".//MedlineCitation/PMID")) or _clean_text(
-            article.findtext(".//ArticleId[@IdType='pubmed']")
+        pmid = _clean_text(article.findtext("MedlineCitation/PMID")) or _clean_text(
+            article.findtext("PubmedData/ArticleIdList/ArticleId[@IdType='pubmed']")
         )
-        doi = _clean_text(article.findtext(".//ArticleId[@IdType='doi']")) or _clean_text(
-            article.findtext(".//ELocationID[@EIdType='doi']")
+        doi = _clean_text(article.findtext("PubmedData/ArticleIdList/ArticleId[@IdType='doi']")) or _clean_text(
+            article.findtext("MedlineCitation/Article/ELocationID[@EIdType='doi']")
         )
         publication_types = [
             _clean_text(node.text) for node in article.findall(".//PublicationType") if _clean_text(node.text)

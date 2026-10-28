@@ -115,10 +115,11 @@ def test_a_lent_blend_total_is_not_a_member_dose(enriched, pid, canonical):
     resolution = resolve_evidence_for_row(row, enriched[pid])
     assert resolution.applicability_status == (
         "unverified_literature_record" if canonical == "turmeric"
-        else "applicable_reviewed_trials"
+        else "applicability_unestablished"
     )
 
-    # Evidence now grades the applicable research without reading amount. Dose
+    # Cinnamon also retains its reviewed source-integrity hold; a lent mass
+    # cannot clear it. Dose
     # still refuses to borrow the blend total as this member's exposure.
     from dose_assessment import positive_clinical_benchmark
     assert positive_clinical_benchmark(enriched[pid], row) is None

@@ -631,9 +631,19 @@ def test_pending_source_bibliographies_do_not_claim_all_citations_are_included_t
     rows = json.loads((Path(__file__).parents[1] / 'data/backed_clinical_studies.json').read_text())['backed_clinical_studies']
     for rid, pmid in [('INGR_GLUCOSAMINE_SULFATE', '40005447'), ('INGR_L_THEANINE', '40314930')]:
         context = next(c for r in rows if r['id'] == rid for c in r['study_contexts'] if pmid in c['source_pmids'])
-        assert 'included_study_pmids' not in context
-        assert any('bibliograph' in note.lower() for note in context['limitations'])
+        # Actual source tables now establish publication membership. This
+        # never turns every included intervention into this ingredient or an
+        # independently approved cohort.
+        assert context['included_study_pmids']
+        assert all(pmid.isdigit() for pmid in context['included_study_pmids'])
+        assert any('included-study' in note.lower() for note in context['limitations'])
         assert context['scoring_eligible'] is False
+        if rid == 'INGR_GLUCOSAMINE_SULFATE':
+            assert '11789591' in context['included_study_pmids']
+            assert any('SKI306X' in note and 'must not' in note for note in context['limitations'])
+        else:
+            assert '33260552' in context['included_study_pmids']
+            assert any('tea' in note.lower() and 'isolated' in note.lower() for note in context['limitations'])
 
 
 def test_pending_bibliography_sentinel_is_not_expanded_into_invented_pmids():
