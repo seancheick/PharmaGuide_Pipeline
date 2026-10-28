@@ -957,6 +957,14 @@ def test_clinician_approved_scoring_context_establishes_its_studied_purpose():
     assert not purposes & er.evidence_indication_categories('joint pain bowel regularity')
 
 
+def test_enriched_match_cannot_stand_in_for_a_missing_curated_record():
+    """Sean, 2026-10-28: an enriched match carrying a registry id that the clinical
+    registry does not hold is an unresolved source, not its own authority."""
+    match = {'id': 'NOT_IN_REGISTRY', 'applicability': {'scope': 'ingredient',
+             'supported_outcomes': ['stress_mood']}}
+    assert er._evidence_entry_purposes(match) == set()
+
+
 def test_curated_record_owns_purpose_for_an_enriched_match():
     """Enriched clinical matches carry no study_contexts; the curated record decides."""
     from clinical_applicability import reviewed_entries

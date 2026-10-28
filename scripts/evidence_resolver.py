@@ -1526,7 +1526,14 @@ def _evidence_entry_purposes(entry: Mapping[str, Any]) -> Set[str]:
     judged by its curated record, which owns the contexts.
     """
     from clinical_applicability import reviewed_entries
-    record = reviewed_entries().get(str(entry.get("id") or entry.get("study_id") or "")) or entry
+    from scoring_v4.modules.generic_evidence import _clinical_source_id
+    registry_backed = bool(entry.get("id") or entry.get("study_id") or entry.get("source_data"))
+    # A registry-backed match (recovered matches included) is judged only by its
+    # curated record; a missing record is an unresolved source. A literature
+    # record is its own owner.
+    record = reviewed_entries().get(_clinical_source_id(dict(entry))) if registry_backed else entry
+    if record is None:
+        return set()
     scope = record.get("applicability") or {}
     outcomes = scope.get("supported_outcomes") if isinstance(scope, Mapping) else None
     if isinstance(outcomes, list) and outcomes:

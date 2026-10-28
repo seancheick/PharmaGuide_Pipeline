@@ -794,6 +794,9 @@ def test_parent_tier_requires_canonical_lineage_or_a_linked_lent_member(monkeypa
 @pytest.mark.parametrize('purpose,accepted', [('skin hydration', True), ('testosterone', False), ('energy', False)])
 def test_collagen_recovery_retains_canonical_endpoint_scope(purpose, accepted, eligible_collagen_source):
     from scoring_v4.modules.generic_evidence import resolved_clinical_matches
+    # Item 12: a supported purpose needs a reviewed source, never primary_outcome
+    # text; this synthetic scope stands in for one (not a clinical approval).
+    eligible_collagen_source["applicability"] = {"scope": "ingredient", "supported_outcomes": ["skin hydration"]}
     product = _product(product_name='Collagen Peptides', ingredients=[
         _row('Hydrolyzed Collagen Peptides', 'collagen', 5, unit='g',
              path='ingredientRows[0]', standard_name='Collagen'),

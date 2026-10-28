@@ -1481,10 +1481,13 @@ def test_explicit_purposes_are_order_independent_and_not_oxidative_stress():
         control['statements'] = [{'type': 'Formula re: Contains', 'notes': notes}]
         scores.append(build_scored_artifact(control)['quality_pillars_v4']['evidence']['score'])
     assert scores[0] == scores[1] == scores[2] > 0
+    # Item 12 (Sean, 2026-10-28): the curated record's reviewed scope owns the
+    # supported purpose. Rewriting an enriched match's descriptive text (here to
+    # an oxidative-stress biomarker) can neither add nor remove a purpose.
     for entry in product['evidence_data']['clinical_matches']:
         entry.update(primary_outcome='Reduced oxidative stress biomarkers',
             health_goals_supported=[], endpoint_relevance_tags=[], key_endpoints=[])
-    assert build_scored_artifact(product)['quality_pillars_v4']['evidence']['score'] == 0
+    assert build_scored_artifact(product)['quality_pillars_v4']['evidence']['score'] == scores[0]
 
 
 def test_contributing_receipt_follows_authority_floor_not_unused_legacy_match():
