@@ -3725,6 +3725,12 @@ Validation:
 - A fresh-context review found no defects.
 - `scripts/test.sh local` with the real corpus (main's scripts/products, scripts/dist and canary baseline linked; nine canaries rebuilt from candidate code): 536 passed, 24 declared opt-in skips, 10 failed.
 
+Final-commit qualification:
+- The replay at c20edc773 (the last source change: approved-purpose edits, schema 5.1.0, narrowed guard) changes 0 of 1,111 products (receipt `~/pg_quality/field_one_brain_20261028/cand_final.jsonl`, head-stamped).
+- pipeline-tests is green at 0d9649e40.
+- The approved-purpose edits for collagen peptides, gelatin and UC-II are editorial corrections. Sean accepted them on October 28. They carry no new approval; their dependency is the October 18 DOSE_V41 decision rows.
+- Canary drift is itemized in `scripts/audits/field_one_brain_20261028/canary_baseline_drift.md`. For example, Vitamin D pregnancy goes from two warnings to one: the monitor-severity duplicate is dropped and the informational one kept. The warning owner must confirm before the integrator refreshes the baseline.
+
 Finding (pre-existing on main, not this batch): all 10 failures are test_e1_2_2_preflight_invariant canaries (score_penalties/warnings/display_ingredients vs the 2026-10-18 baseline).
 - The nine canaries rebuilt from main e6885790d in a temporary checkout are identical to the candidate's, timestamps aside.
 - The main checkout's reports/canary_rebuild files date from 2026-10-18 (16:43), which is why the local rung passes there. It compares a stale rebuild to the baseline taken the same day.

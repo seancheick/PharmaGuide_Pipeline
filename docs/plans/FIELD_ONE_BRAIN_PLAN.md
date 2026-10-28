@@ -103,6 +103,9 @@ batch and handed both back to this lane, to do after its branch merges. Nothing 
   - The main checkout passes only because its `reports/canary_rebuild` files date from
     2026-10-18.
   - The baseline needs a reviewed refresh before release. LEDGER has the details.
+- Final source commit c20edc773: the replay changes 0 of 1,111 products. The collagen, gelatin and
+  UC-II approved-purpose edits are editorial corrections (Sean, October 28) with no new approval.
+  Canary drift is itemized in `scripts/audits/field_one_brain_20261028/canary_baseline_drift.md`.
 
 **Replay (items 1–4).**
 - Inputs: the 1,111-product frozen raw set at `~/pg_quality/held_closure_20261028/frozen`.
