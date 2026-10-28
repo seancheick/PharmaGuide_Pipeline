@@ -148,13 +148,18 @@ def _infant_product():
 
 def test_undosed_strain_receives_reviewed_family_credit_without_dose_points(registry_record_path_only):
     from scoring_v4.modules.probiotic_evidence import score_evidence
-    payload = score_evidence(registry_record_path_only(_product()))
+    from scoring_v4.modules.generic_evidence import resolved_clinical_matches
+    product = registry_record_path_only(_product())
+    resolved, rejected = resolved_clinical_matches(product, assess_amount=False)
+    assert not rejected
+    assert resolved[0]["study_type"] == "rct_single"
+    payload = score_evidence(product)
     assert payload["max"] == 20
-    # The explicit reviewed source earns the existing direct applicability
-    # weight with the generic identity discount; a claim adds no bonus.
-    assert payload["components"] == {"evidence_family_certainty": 6.6667,
+    # The canonical reviewed context establishes a single RCT, overriding the
+    # caller's unspecified clinical_strain type. A claim adds no bonus.
+    assert payload["components"] == {"evidence_family_certainty": 10.0,
         "product_applicability": 3.0, "independent_replication_consistency": 0.0}
-    assert payload["score"] == 9.6667
+    assert payload["score"] == 13.0
     assert "dose_applicability" not in payload["components"]
     assert payload["metadata"]["claim_alignment"]["level"] == "direct"
 
@@ -273,7 +278,7 @@ def test_research_that_does_not_apply_to_the_product_earns_no_evidence_points():
     assert direct["components"]["evidence_family_certainty"] > 0
 
 
-@pytest.mark.parametrize("direction,certainty,total", [("negative",0,0), ("null",0,0), ("mixed",4,7.0)])
+@pytest.mark.parametrize("direction,certainty,total", [("negative",0,0), ("null",0,0), ("mixed",6,9.0)])
 def test_independent_record_direction_is_not_replaced_by_strain_support(registry_record_path_only, direction, certainty, total):
     from scoring_v4.modules.probiotic_evidence import score_evidence
     payload = score_evidence(registry_record_path_only(_product(matches=[_match(effect_direction=direction)])))
