@@ -17,6 +17,35 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 from db_integrity_sanity_check import run_checks
 
 
+def test_flag_only_allergen_metadata_has_no_retired_score_magnitudes():
+    import json
+
+    path = Path(__file__).parent.parent / "data" / "allergens.json"
+    data = json.loads(path.read_text())
+    scoring = data["_metadata"]["scoring_system"]
+    assert not {"allergen_free_bonus", "severity_penalties"} & scoring.keys()
+    assert all(row["general_handling"] == "flag_only" for row in data["allergens"])
+
+
+@pytest.mark.parametrize("key,value", [
+    ("allergen_free_bonus", 2),
+    ("severity_penalties", {"low": -1, "moderate": -1.5, "high": -2}),
+])
+def test_allergen_validator_rejects_retired_score_magnitudes(key, value):
+    from db_integrity_sanity_check import check_allergens
+
+    findings = []
+    check_allergens(findings, {
+        "_metadata": {"scoring_system": {key: value}},
+        "allergens": [],
+    }, "allergens.json")
+    assert any(
+        finding.severity == "error"
+        and finding.path == f"_metadata.scoring_system.{key}"
+        for finding in findings
+    )
+
+
 class TestDBIntegrity:
     """All data JSON files must pass schema validation with zero errors."""
 

@@ -841,6 +841,16 @@ def check_iqm(findings: List[Finding], data: Dict[str, Any], file: str) -> None:
 
 
 def check_allergens(findings: List[Finding], data: Dict[str, Any], file: str) -> None:
+    metadata = data.get("_metadata")
+    scoring = metadata.get("scoring_system") if isinstance(metadata, dict) else None
+    if isinstance(scoring, dict):
+        for key in ("allergen_free_bonus", "severity_penalties"):
+            if key in scoring:
+                findings.append(Finding(
+                    "error", file, f"_metadata.scoring_system.{key}",
+                    "retired_scoring_field", "absent (allergens are flag_only)",
+                    repr(scoring[key]),
+                ))
     raw = data.get("allergens")
     if not isinstance(raw, list):
         findings.append(Finding("error", file, "allergens", "missing_or_non_list", "list", _type_name(raw)))
@@ -1216,6 +1226,12 @@ def check_functional_ingredient_groupings(findings: List[Finding], data: Dict[st
 
 
 def check_manufacture_deduction_expl(findings: List[Finding], data: Dict[str, Any], file: str) -> None:
+    modifiers = data.get("modifiers")
+    if isinstance(modifiers, dict) and "PEDIATRIC_SUPPLEMENT" in modifiers:
+        findings.append(Finding(
+            "error", file, "modifiers.PEDIATRIC_SUPPLEMENT", "retired_modifier",
+            "absent (Sean retired the dormant modifier on 2026-10-28)", "present",
+        ))
     cap = data.get("total_deduction_cap")
     if not isinstance(cap, (int, float)):
         findings.append(Finding("error", file, "total_deduction_cap", "missing_or_wrong_type", "number", _type_name(cap)))

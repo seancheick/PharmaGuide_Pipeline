@@ -946,9 +946,6 @@
     },
     "verification_bonus": {
       "cap": 8.0
-    },
-    "omega_trust": {
-      "cap_trust": 15.0
     }
   },
   "transparency_magnitudes": {
