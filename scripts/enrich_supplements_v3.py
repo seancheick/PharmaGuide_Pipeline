@@ -20934,6 +20934,33 @@ class SupplementEnricherV3:
             raw_ingredients = []
         if not isinstance(raw_skipped, list):
             raw_skipped = []
+
+        # A label row's banned/recalled safety matches are subjects too: a row
+        # with an IQM identity (7-keto DHEA, bitter orange citrus bioflavonoids)
+        # still meets the rules authored on its safety record.
+        safety_subjects_by_path: Dict[str, List[Tuple[str, str]]] = {}
+        label_rows_by_path: Dict[str, Dict] = {}
+        for section_key in ("activeIngredients", "inactiveIngredients"):
+            for label_row in enriched.get(section_key) or []:
+                if not isinstance(label_row, dict) or not label_row.get("raw_source_path"):
+                    continue
+                label_rows_by_path.setdefault(label_row["raw_source_path"], label_row)
+                for flag in label_row.get("safety_flags") or []:
+                    if isinstance(flag, dict) and flag.get("entry_id") and flag.get("source_db"):
+                        safety_subjects_by_path.setdefault(label_row["raw_source_path"], []).append(
+                            (self._normalize_interaction_db_key(flag["source_db"]), str(flag["entry_id"]))
+                        )
+
+        def interaction_subject(row: Dict) -> Optional[Dict[str, str]]:
+            # A row with no identity of its own (bitter orange nested in a
+            # non-therapeutic bitters blend, 285635) is still named by its
+            # label row's safety match, and meets that record's rules.
+            subject = self._derive_interaction_subject_ref(row)
+            refs = safety_subjects_by_path.get(row.get("raw_source_path"), [])
+            if subject or not refs:
+                return subject
+            return {"db": refs[0][0], "canonical_id": refs[0][1]}
+
         if isinstance(scorable, list):
             ingredients = [row for row in scorable if isinstance(row, dict)]
             # A rule written on a banned, botanical, additive or other-ingredient
@@ -20958,7 +20985,7 @@ class SupplementEnricherV3:
                 if not isinstance(row, dict) or id(row) in scanned:
                     continue
                 scanned.add(id(row))
-                subject_db = (self._derive_interaction_subject_ref(row) or {}).get("db")
+                subject_db = (interaction_subject(row) or {}).get("db")
                 if subject_db is None:
                     continue
                 if subject_db != "ingredient_quality_map":
@@ -20977,7 +21004,7 @@ class SupplementEnricherV3:
             skipped += deferred_headers
             label_rows = {
                 id(row) for row in skipped
-                if (self._derive_interaction_subject_ref(row) or {}).get("db") == "ingredient_quality_map"
+                if (interaction_subject(row) or {}).get("db") == "ingredient_quality_map"
             }
         else:
             ingredients = [row for row in raw_ingredients if isinstance(row, dict)]
@@ -21070,22 +21097,6 @@ class SupplementEnricherV3:
         highest_weight = -1.0
         highest_severity: Optional[str] = None
 
-        # A label row's banned/recalled safety matches are subjects too: a row
-        # with an IQM identity (7-keto DHEA, bitter orange citrus bioflavonoids)
-        # still meets the rules authored on its safety record.
-        safety_subjects_by_path: Dict[str, List[Tuple[str, str]]] = {}
-        label_rows_by_path: Dict[str, Dict] = {}
-        for section_key in ("activeIngredients", "inactiveIngredients"):
-            for label_row in enriched.get(section_key) or []:
-                if not isinstance(label_row, dict) or not label_row.get("raw_source_path"):
-                    continue
-                label_rows_by_path.setdefault(label_row["raw_source_path"], label_row)
-                for flag in label_row.get("safety_flags") or []:
-                    if isinstance(flag, dict) and flag.get("entry_id") and flag.get("source_db"):
-                        safety_subjects_by_path.setdefault(label_row["raw_source_path"], []).append(
-                            (self._normalize_interaction_db_key(flag["source_db"]), str(flag["entry_id"]))
-                        )
-
         all_ingredient_rows: List[Tuple[str, Dict]] = []
         for row in ingredients:
             if isinstance(row, dict):
@@ -21111,7 +21122,15 @@ class SupplementEnricherV3:
                         repeat_checked_rows.add(id(marker_row))
 
         for source_bucket, ingredient in all_ingredient_rows:
-            subject = self._derive_interaction_subject_ref(ingredient)
+            safety_refs = (
+                safety_subjects_by_path.get(ingredient.get("raw_source_path"), [])
+                if source_bucket != "derived_marker" else []
+            )
+            subject = (
+                self._derive_interaction_subject_ref(ingredient)
+                if source_bucket == "derived_marker"
+                else interaction_subject(ingredient)
+            )
             if not subject:
                 continue
             # A blend header's amount is the blend's, never its named
@@ -21128,10 +21147,6 @@ class SupplementEnricherV3:
             # -> garlic); each rule's own form_scope still decides.
             matched_rules = []
             seen_rule_ids: set = set()
-            safety_refs = (
-                safety_subjects_by_path.get(ingredient.get("raw_source_path"), [])
-                if source_bucket != "derived_marker" else []
-            )
             for subject_ref in [*interaction_subject_refs(subject["db"], subject["canonical_id"]), *safety_refs]:
                 for candidate in rule_index.get(subject_ref, []):
                     if id(candidate) not in seen_rule_ids:

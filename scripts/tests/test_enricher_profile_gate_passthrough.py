@@ -362,3 +362,53 @@ def test_licorice_breastfeeding_warning_does_not_reuse_fetal_reason(enricher):
     assert "placental" not in reason
     assert any("NBK501840" in source for source in lactation["sources"])
     assert lactation["profile_gate"]["requires"]["profile_flags_any"] == ["breastfeeding"]
+
+
+def _nested_bitters_row(safety_flags: list) -> dict:
+    """285635 (Liver Bitters Detox Spray): bitter orange nested under a
+    non-therapeutic blend has no identity of its own; only its label row's
+    banned/high-risk safety match names it."""
+    path = "ingredientRows[0].nestedRows[7]"
+    name = "organic Bitter Orange (fruit) extract"
+    return {
+        "activeIngredients": [{"name": name, "raw_source_path": path, "safety_flags": safety_flags}],
+        "ingredient_quality_data": {
+            # Production enrichment always carries the scorable list; its
+            # row selection is the path under test.
+            "ingredients_scorable": [],
+            "ingredients": [],
+            "ingredients_skipped": [{
+                "name": name, "raw_source_text": name, "standard_name": name,
+                "raw_source_path": path, "canonical_source_db": "unmapped",
+                "skip_reason": "nested_under_non_therapeutic_parent",
+            }],
+        },
+    }
+
+
+def test_row_known_only_by_its_safety_match_meets_that_records_rules(enricher):
+    enriched = _nested_bitters_row([{
+        "source_db": "banned_recalled_ingredients", "entry_id": "BANNED_BITTER_ORANGE",
+    }])
+
+    profile = enricher._collect_interaction_profile(enriched)
+
+    pregnancy = [
+        hit
+        for alert in profile["ingredient_alerts"]
+        if alert["rule_id"] == "RULE_BANNED_BITTER_ORANGE_PREGNANCY"
+        for hit in alert["condition_hits"]
+        if hit["condition_id"] == "pregnancy"
+    ]
+    assert len(pregnancy) == 1
+    assert pregnancy[0]["severity"] == "avoid"
+    # No disclosed synephrine: amount unknown, still a hard pregnancy warning.
+    assert pregnancy[0]["dose_decision"]["evaluation_status"] == "amount_unknown"
+    assert pregnancy[0]["dose_decision"]["consumer_disposition"] == "block"
+    assert "pregnancy" in profile["condition_summary"]
+
+
+def test_row_with_no_identity_and_no_safety_match_meets_no_rules(enricher):
+    profile = enricher._collect_interaction_profile(_nested_bitters_row([]))
+
+    assert profile["ingredient_alerts"] == []
