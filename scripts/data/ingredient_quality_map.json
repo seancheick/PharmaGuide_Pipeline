@@ -41890,10 +41890,10 @@
       "lion's mane (unspecified)": {
         "bio_score": 8,
         "absorption": "low/unspecified mushroom form quality; disclosed fruiting-body or standardized extract required for higher confidence",
-        "consumer_note": "This label names lion’s mane without identifying fruiting body, mycelium, powder, extract, or standardization.",
+        "consumer_note": "This label names lion’s mane, at most as a powder, without identifying fruiting body, mycelium, extract, or standardization.",
         "consumer_note_review": {
-          "by": "Product owner approval",
-          "date": "2026-08-08"
+          "by": "Claude source-grounded wording review (agent review); no grade or clinical approval change",
+          "date": "2026-10-28"
         },
         "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability. B32 audit 2026-04-25: mushroom class-poor (B1). B43 2026-06-06: unspecified mushroom form set below disclosed mushroom forms and natural bonus removed. For local/matrix fungal actives, bio_score is used as active-form quality/delivery-to-site confidence; unspecified labels should not outrank disclosed fruiting-body or standardized extracts.",
         "aliases": [
