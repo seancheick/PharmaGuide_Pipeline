@@ -1183,7 +1183,7 @@ def test_preparation_research_is_acknowledged_without_generic_clinical_credit(ca
     assert pmid in {s["pmid"] for s in record["qualifying_human_studies"]}
     assert record["studied_dose_exposure"] == {}
     assert "bounded" in record["applicability_decision"]
-    assert record["effect_direction"] == "applicability_unestablished"
+    assert record["applicability_status"] == "applicability_unestablished"
     assert all("effect" not in study and "effect_direction" not in study
                for study in record["qualifying_human_studies"])
     # These completions must join the actual source owners, not plausible spellings.
@@ -1232,7 +1232,7 @@ def test_human_oil_research_does_not_establish_oral_retail_preparation(canonical
     records = json.loads((SCRIPTS_ROOT / "data/literature_evidence_records.json").read_text())["literature_evidence_records"]
     record = next(r for r in records if r["canonical_id"] == canonical)
     assert record["studied_dose_exposure"] == {}
-    assert record["effect_direction"] == "applicability_unestablished"
+    assert record["applicability_status"] == "applicability_unestablished"
     assert "inhalation" in record["applicability_decision"]
     assert "oral" in record["applicability_decision"]
     assert "bounded" in record["applicability_decision"]
@@ -1267,7 +1267,7 @@ def test_chamomile_oil_research_keeps_leaf_oral_preparation_unestablished(name):
     records = json.loads((SCRIPTS_ROOT / "data/literature_evidence_records.json").read_text())["literature_evidence_records"]
     record = next(r for r in records if r["canonical_id"] == "chamomile_essential_oil")
     assert record["studied_dose_exposure"] == {}
-    assert record["effect_direction"] == "applicability_unestablished"
+    assert record["applicability_status"] == "applicability_unestablished"
     study = next(s for s in record["qualifying_human_studies"] if s["pmid"] == "37123948")
     assert "effect" not in study and "effect_direction" not in study
     assert study["verification_provenance"]["correction_pmid"] == "40535870"
@@ -1283,7 +1283,7 @@ def test_mushroom_formula_research_cannot_transfer_between_compositions():
     records = json.loads((SCRIPTS_ROOT / "data/literature_evidence_records.json").read_text())["literature_evidence_records"]
     record = next(r for r in records if r["canonical_id"] == "medicinal_mushroom_blend")
     assert record["studied_dose_exposure"] == {}
-    assert record["effect_direction"] == "applicability_unestablished"
+    assert record["applicability_status"] == "applicability_unestablished"
     study = record["qualifying_human_studies"][0]
     assert study["pmid"] == "41540766" and study["sample_size"] == 51
     assert "50 completed" in study["outcome"]
@@ -1309,7 +1309,7 @@ def test_exact_botanical_material_has_reviewed_literature_determination(canonica
     assert record["verification_result"] == "authoritative_pubmed_verified"
     assert record["search_query"] and record["search_date"]
     assert record["studied_dose_exposure"] == {}
-    assert record["effect_direction"] in {"applicability_unestablished", "no_qualifying_human_evidence"}
+    assert record["applicability_status"] in {"applicability_unestablished", "no_qualifying_human_evidence"}
     assert "bounded" in record["applicability_decision"].lower()
     assert "not exhaustive" in record["applicability_decision"].lower()
     for study in record["qualifying_human_studies"]:
@@ -1476,6 +1476,7 @@ def test_a_review_label_cannot_replace_missing_affirmative_studies(monkeypatch, 
     record['qualifying_human_studies'] = []
     record['verification_result'] = 'authoritative_pubmed_verified'
     record['effect_direction'] = direction
+    record.pop('applicability_status', None)  # an effect label, not a review result
     record['verification_provenance']['verified_by'] = 'synthetic manual-review label'
     monkeypatch.setattr(er, '_backed_studies_index', lambda: {})
     monkeypatch.setattr(er, '_load_literature_evidence', lambda: {'cistanche': record})
@@ -1489,7 +1490,7 @@ def _assert_incomplete_source_review(canonical):
     if record.get('qualifying_human_studies'):
         # Source existence was repaired, but preparation/outcome qualification is unfinished.
         assert record['verification_result'] == 'verification_failure_unresolved'
-        assert record['effect_direction'] == 'applicability_unestablished'
+        assert record['applicability_status'] == 'applicability_unestablished'
         assert all(study.get('scoring_eligible') is False for study in record['qualifying_human_studies'])
     else:
         assert record['verification_provenance']['verified_by'] == 'scripts/api_audit/verify_literature_records.py'

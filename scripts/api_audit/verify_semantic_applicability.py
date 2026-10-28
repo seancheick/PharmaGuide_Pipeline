@@ -27,6 +27,10 @@ SCRIPT_DIR = Path(__file__).resolve().parent
 REPO_ROOT = SCRIPT_DIR.parent.parent
 SCRIPTS_ROOT = REPO_ROOT / "scripts"
 LITERATURE_RECORDS_PATH = SCRIPTS_ROOT / "data" / "literature_evidence_records.json"
+if str(SCRIPTS_ROOT) not in sys.path:
+    sys.path.insert(0, str(SCRIPTS_ROOT))
+
+from evidence_resolver import literature_review_result  # noqa: E402
 
 
 COMBO_INDICATORS = [
@@ -83,7 +87,7 @@ def audit_semantic_applicability(records: List[Dict[str, Any]]) -> Dict[str, Any
 
     for r in records:
         cid = r.get("canonical_id", "")
-        eff = r.get("effect_direction", "")
+        eff = literature_review_result(r) or ""
         studies = r.get("qualifying_human_studies", [])
         app_dec = str(r.get("applicability_decision") or "").lower()
         record_issues: List[str] = []

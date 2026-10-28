@@ -30,6 +30,6 @@ def test_the_record_describes_the_juice_trial_it_cites():
 
 def test_juice_evidence_does_not_transfer_to_powder_or_extract():
     record = _record()
-    assert record["effect_direction"] == "applicability_unestablished"
+    assert record["applicability_status"] == "applicability_unestablished"
     assert "480" not in record["applicability_decision"]
     assert "bioequivalence" in record["applicability_decision"]
