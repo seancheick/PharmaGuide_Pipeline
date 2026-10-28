@@ -10,6 +10,9 @@ so the comparison is indeterminate and routes to review; it is neither a
 confirmed exceedance nor cleared. Labels whose magnesium is evidently
 supplemental (a declared form, or no food matrix) keep their findings.
 """
+import json
+from pathlib import Path
+
 import pytest
 
 from enrich_supplements_v3 import SupplementEnricherV3
@@ -124,18 +127,23 @@ def _food_serving(enricher, quantity, serving):
     return enricher._collect_rda_ul_data(product, min_servings_per_day=1, max_servings_per_day=1)
 
 
-def test_minimum_added_magnesium_above_ul_confirms_at_the_minimum(enricher):
-    # Garden of Life Raw Cleanse 273824: 800 mg in a 21 g serving. Even at
-    # 10 mg/g of food magnesium, at least 590 mg is added.
-    out = _food_serving(enricher, 800, {"minQuantity": 21, "maxQuantity": 21, "unit": "Gram(s)"})
-    assert [flag.pct_ul for flag in _confirmed(out)] == [pytest.approx(590 / 350 * 100)]
-    flag = out["safety_flags"][0]
-    assert flag["amount"] == pytest.approx(590)
-    assert "800 mg magnesium total includes at least 590 mg of supplemental" in flag["warning"]
-    adequacy = out["adequacy_results"][0]
-    assert adequacy["ul_assessment_basis"] == "minimum_added_magnesium_after_maximum_food_magnesium"
-    assert adequacy["warnings"] == [flag["warning"]]
-    assert not get_actionable_ul_review_signals(out)
+@pytest.mark.parametrize("label_id", ["273824", "321360"])
+def test_unproven_food_partition_stays_unresolved_even_in_small_serving(enricher, label_id):
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    from scoring_v4.scored_artifact import build_scored_artifact
+
+    raw = json.loads((Path(__file__).parent / "fixtures" / f"magnesium_food_{label_id}_raw.json").read_text())
+    enriched, _ = enricher.enrich_product(EnhancedDSLDNormalizer().normalize_product(raw))
+    out = enriched["rda_ul_data"]
+    assert not [flag for flag in _confirmed(out) if flag.nutrient == "Magnesium"]
+    assert not [flag for flag in out["safety_flags"] if flag["nutrient"] == "Magnesium"]
+    row = next(row for row in out["analyzed_ingredients"] if row["canonical_id"] == "magnesium")
+    assert row["ul_assessment_status"] == "indeterminate"
+    assert row["skip_ul_reason"] == "supplemental_magnesium_fraction_unknown"
+    assert "MAGNESIUM_UL_SOURCE_REVIEW" in get_actionable_ul_review_signals(out)
+    artifact = build_scored_artifact(enriched)
+    assert "MAGNESIUM_UL_SOURCE_REVIEW" in str(artifact)
+    assert "includes at least 590" not in str(artifact)
 
 
 @pytest.mark.parametrize("serving", [
