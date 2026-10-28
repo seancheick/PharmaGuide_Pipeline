@@ -114,14 +114,14 @@ def test_when_the_owner_names_no_purpose_evidence_does_not_choose_by_mass():
     assert resolved_clinical_matches(product, owner_scoped=True)[1] == []
     evidence = _evidence(product)
     assert evidence["metadata"]["nutrition_authority_canonical"] is None
-    # Dr. Pham, 2026-10-28: selenium evidence concerns thyroid labs in
-    # Hashimoto's, which this label does not claim, so its record no longer
-    # applies. The floor falls to the next applicable record by evidence
-    # strength (iodine), not to the heaviest row.
-    rejected = {m.get("id"): m.get("reason_code") for m in product["evidence_data"]["rejected_clinical_matches"]}
-    assert rejected.get("INGR_SELENIUM") == "source_condition_claim_unestablished"
-    assert evidence["metadata"]["primary_evidence_floor_canonical"] == "iodine"
-    assert evidence["components"]["primary_evidence_floor"] == 9.35
+    # Dr. Pham, 2026-10-28: selenium research concerns Hashimoto thyroiditis.
+    # No claim is required, so this claim-free label keeps that scoped record.
+    # The floor follows evidence strength: the selenium review on the lighter
+    # 55 mcg row, not the heavier 150 mcg iodine row.
+    accepted = {m.get("id"): m for m in product["evidence_data"]["clinical_matches"]}
+    assert accepted["INGR_SELENIUM"]["applicability_assessment"]["supported_outcomes"] == ["hashimoto_thyroiditis"]
+    assert evidence["metadata"]["primary_evidence_floor_canonical"] == "selenium"
+    assert evidence["components"]["primary_evidence_floor"] == 14.0
 
 
 # --- the primary floor --------------------------------------------------------
@@ -859,3 +859,14 @@ def test_reviewed_peppermint_oil_volume_recovers_evidence_only_with_source_deliv
     result = _scored(product)
     assert (result["score"] > 0) is accepted
     assert row["quantity"] == 0.2 and row["unit"] == "mL"
+
+
+def test_formula_level_marketing_is_not_attributed_to_each_branded_ingredient():
+    """Real 293928 ("Helps moderate carbohydrate intake and appetite") names
+    neither Sensoril nor Relora on a multi-ingredient formula. The phrase is not
+    attributable to those rows (Sean, PR #280), so their scoped stress records
+    stay accepted with no claim of their own."""
+    product = _enrich("prominence_branded_heading_293928_raw.json")
+    accepted = {m.get("id"): m for m in product["evidence_data"]["clinical_matches"]}
+    for record in ("BRAND_SENSORIL", "BRAND_RELORA"):
+        assert accepted[record]["applicability_assessment"]["claim_alignment"]["state"] == "absent"

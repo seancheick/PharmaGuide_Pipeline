@@ -4425,10 +4425,10 @@ class TestLiposomalPureWayCVitaminC:
         evidence_ids = {match["id"] for match in evidence["clinical_matches"]}
         rejected = {m.get("id"): m.get("reason_code") for m in evidence["rejected_clinical_matches"]}
         assert issues == []
-        # The generic record is reached; its clinical credit is now scoped to
-        # cold severity (Dr. Pham, 2026-10-28), which this label does not claim.
-        assert "INGR_VITAMIN_C" not in evidence_ids
-        assert rejected.get("INGR_VITAMIN_C") == "source_condition_claim_unestablished"
+        # The generic record is reached; its credit stays scoped to cold
+        # severity (Dr. Pham, 2026-10-28). No claim is required for that scope.
+        assert "INGR_VITAMIN_C" in evidence_ids
+        assert "INGR_VITAMIN_C" not in rejected
         assert "BRAND_PUREWAY_C" not in evidence_ids
         assert "BRAND_PUREWAY_C" not in rejected
 

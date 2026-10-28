@@ -6646,13 +6646,32 @@ def _role_function_claim_source(row: Dict[str, Any], ctx: Dict[str, Any]) -> Opt
              for key in ("name", "standard_name", "standardName")]
     if not any(re.search(r"\b" + re.escape(identity) + r"\b", name) for name in names):
         return None
+    from evidence_resolver import evidence_indication_categories
+    claims = [(source, evidence_indication_categories(text))
+              for source, text in ingredient_function_claims(ctx["statements"], canonical)]
+    claims = [(source, categories) for source, categories in claims if categories]
+    if claims:
+        return (";".join(dict.fromkeys(source for source, _ in claims)),
+                ",".join(sorted(set().union(*(categories for _, categories in claims)))))
+    return None
+
+
+def ingredient_function_claims(statements: Any, canonical: Any) -> List[Tuple[str, str]]:
+    """Affirmative formulation statements that name this identity and its function.
+
+    One recognizer for role promotion and clinical claim alignment; it returns
+    each claim's location and claimed object. A claimed object no indication
+    category recognizes is still a claim, not proof that the label makes none.
+    """
+    identity = re.sub(r"[^a-z0-9]+", " ", _norm(canonical)).strip()
+    if not identity:
+        return []
     pattern = re.compile(
         r"\b" + re.escape(identity)
         + r"\s+(?:helps?|supports?|promotes?|targets?|maintains?)\s+(.+)"
     )
-    claim_sources = []
-    claim_categories: Set[str] = set()
-    for index, statement in enumerate(ctx["statements"]):
+    claims: List[Tuple[str, str]] = []
+    for index, statement in enumerate(_safe_list(statements)):
         if not isinstance(statement, dict):
             continue
         if _norm(statement.get("type")) not in {
@@ -6660,7 +6679,6 @@ def _role_function_claim_source(row: Dict[str, Any], ctx: Dict[str, Any]) -> Opt
         }:
             continue
         text = str(statement.get("notes") or statement.get("text") or "")
-        from evidence_resolver import evidence_indication_categories
         for sentence_index, sentence in enumerate(re.split(r"[.!?;\r\n]+", text)):
             # Preserve governing negation across coordinated ingredient claims.
             if re.search(r"\b(?:not|no|never|without|may|might)\b", sentence, re.I):
@@ -6675,13 +6693,9 @@ def _role_function_claim_source(row: Dict[str, Any], ctx: Dict[str, Any]) -> Opt
             )
             for clause in clauses:
                 match = pattern.search(clause)
-                categories = evidence_indication_categories(match.group(1)) if match else set()
-                if categories:
-                    claim_categories.update(categories)
-                    claim_sources.append(f"statements[{index}].notes:sentence[{sentence_index}]")
-    if claim_categories:
-        return (";".join(dict.fromkeys(claim_sources)), ",".join(sorted(claim_categories)))
-    return None
+                if match:
+                    claims.append((f"statements[{index}].notes:sentence[{sentence_index}]", match.group(1)))
+    return claims
 
 
 def _role_context(

@@ -212,8 +212,7 @@ def score_evidence(product: Dict[str, Any], *, apply_primary_floor: bool = False
         accepted_ids = {_entry_id(entry) for entry in accepted_matches}
         matches = [entry for entry in matches if _entry_id(entry) in accepted_ids]
         recovered_matches = [entry for entry in recovered_matches if _entry_id(entry) in accepted_ids]
-    from evidence_resolver import evidence_owner_canonicals, _evidence_claim_purposes, _evidence_entry_purposes
-    claim_purposes = _evidence_claim_purposes(product) if owner_scoped else {}
+    from evidence_resolver import evidence_owner_canonicals, evidence_record_matches_declared_purpose
     owner_canonicals = (
         evidence_owner_canonicals(product)
         if owner_scoped
@@ -245,7 +244,8 @@ def score_evidence(product: Dict[str, Any], *, apply_primary_floor: bool = False
         )
         if owner_canonicals and matched_owner not in owner_canonicals:
             continue
-        if matched_owner in claim_purposes and not (claim_purposes[matched_owner] & _evidence_entry_purposes(entry)):
+        if owner_scoped and not evidence_record_matches_declared_purpose(
+                product, {"canonical_id": matched_owner}, entry):
             _append_once(flags, "LABEL_PURPOSE_EVIDENCE_MISMATCH:" + str(matched_owner))
             continue
 

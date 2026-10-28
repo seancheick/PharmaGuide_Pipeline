@@ -3809,3 +3809,51 @@ Owner: scoring_v4/modules/generic_evidence.py::_primary_mass_floor; quality_scor
 Change: retired the brand-marker/BRAND_-id/ingredient-allowlist 18-raw floor (20/20; reached by one small manufacturer trial, e.g. BRAND_ASTAREAL with one PMID) and the branded single-RCT 17-raw floor (18.9/20). No automatic floor exceeds the strong base (14 raw = 15.6/20). The registry records no body-level certainty judgement, so a three-family count gate was built, reviewed twice and then removed per Sean. Proposed: a recorded clinician determination field for 19–20 (Sean's decision).
 
 Measured vs e6885790d: cohort 205 labels, 59 down, Evidence only; corpus scorer-only 803/15,149 down, 0 up, 0 other-pillar/status/safety/state changes, 344 tier changes (vitamin D3 454, creatine 133). Final code equals the measured outputs (the route never fired). Fail-first per rule; consumer slice 3,530 passed; raw canaries 33/33. Pre-existing and owner-assigned: 230149 stale since 49b61f37d (repinned); 10 stored-corpus preparation-artifact canaries and 7 preflight invariants vs the Oct18 baseline need the final rebuild/capture; 176872 lost a "Vitamin D / pregnancy" warning (safety owner); 17 magnesium supplemental-UL findings on undeclared food-matrix sources (Dose/safety owner). Proposals: INGR_FOLATE_MTHF biomarker-only (12.2 → 11.1 on 11 products); omega re-cite to EFSA 2010 plus disclosure rule (+84; review csv); app Evidence badge. Details: scripts/audits/evidence_calibration_20261028/PROPOSAL.md.
+
+
+
+## October28 — condition-specific evidence: claim and population applicability
+
+**Status:** implemented and measured, not merged. Branch `claude/brave-fermi-d56dfd` (PR #280), rebased onto
+main `b1f44d3ee`.
+
+**Rulings:** Dr Pham's rulings were relayed by Sean, who attested them on October 28. Text and attestation are
+in `scripts/audits/condition_scope_rule_20261028/DR_PHAM_APPROVAL_REQUEST.md`.
+- No claim is required. Credit stays condition-scoped. An unrelated claim earns nothing.
+- A recognized but unclassifiable claim resolves conservatively.
+- Infant, pediatric, pregnancy and lactation research needs explicit targeting. Other populations fail only on
+  an explicit conflict.
+
+**Owner:** `clinical_applicability::assess_clinical_applicability`, using `_assess_condition_scopes`,
+`assess_claim_alignment`, `assess_context_population`, `assess_native_claimed_purpose`,
+`_excluded_claim_matches` and `preparation_verified_clinical_matches`.
+- `evidence_record_matches_declared_purpose` defers to the owner through `condition_scope_governs`.
+- The probiotic consumer reads the stamps from `studied_formulas`.
+- Formulation reads preparation-verified matches.
+- Shared vocabulary lives in `evidence_resolver.INDICATION_KEYWORDS` plus `_INDICATION_PHRASES`.
+- Data change: BRAND_UCII's reviewed scope is restored. `data_batch check` passed.
+
+**Tests:**
+- Fail-first logs (rounds 1–4) are in `~/pg_quality/condition_scope_20261028/`.
+- Focused slice of 76 owner/consumer files, the dead-code ratchet and #277's literature tests: 4,874 passed,
+  0 failed, on the main-rebased branch.
+- Outcome-level purposes per Sean's PR #278 ruling are included: qualifying outcomes only, and sleep apart
+  from stress.
+
+**Measurement** (replay, frozen raw labels, main `b1f44d3ee` vs this branch; identical to the `4bba11a51` pass):
+- Main cohort of 460: 48 moved (23 up, 25 down), all Evidence.
+- Gated single-ingredient cohort of 40: 20 moved (18 up). Cranberry, ginger, inositol, selenium and riboflavin
+  claim-free labels gained their scoped credit.
+- No Formulation, Dose, status or safety change in either cohort.
+- Causes are in `MEASUREMENT.md`.
+
+**Fresh-context review:** 10 findings. Fixed fail-first: affirmative pregnancy targeting, lactation, title
+exclusions, absence/precaution text, unclassified product claims, and exclusion sentences.
+
+**Open for Sean:**
+- The probiotic positioning weight pays 16 for an aligned claim and 13 for no claim (D3 vs D1).
+- A definition of "qualifying outcome" for pooled reviews: 21 of 61 approved scopes have no primary hierarchy.
+- Follow-ups: pre-workout focus/power positioning; record-level study strength (ginger); Evidence owners
+  (UC-II on TriFlex 76848, melatonin on 328650); probiotic credit for pooled not_reported outcomes.
+
+**Not run:** corpus replay, raw canaries, release rung.

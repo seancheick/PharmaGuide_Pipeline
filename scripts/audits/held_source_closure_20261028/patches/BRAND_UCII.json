@@ -2,7 +2,25 @@
  "record_id": "BRAND_UCII",
  "decision": "closed_credit",
  "summary": "Two randomized double-blind trials of the exact UC-II material at 40 mg/day: 26822714 (191 knee-OA adults, 180 days) improved the primary total WOMAC versus placebo (p=0.002) and versus glucosamine+chondroitin (p=0.04); 24153020 (55 healthy adults with exertional knee discomfort, 120 days) improved the primary knee-extension range of motion versus placebo (p=0.011). Both are industry-sponsored; credit is limited to UC-II, and hydrolyzed-collagen substitution is excluded per Dr. Pham.",
- "record_updates": {},
+ "record_updates": {
+  "applicability": {
+   "scope": "ingredient",
+   "supported_outcomes": [
+    "Joint & Bone Health"
+   ],
+   "excluded_form_terms": [
+    "hydrolyzed",
+    "hydrolysed",
+    "collagen peptides"
+   ],
+   "studied_population": "Adults 40-75 with knee osteoarthritis (180 days) or healthy adults 30-65 with exercise-related knee discomfort (120 days), taking 40 mg/day UC-II material.",
+   "source_pmids": [
+    "26822714",
+    "24153020"
+   ],
+   "reviewed_at": "2026-10-28"
+  }
+ },
  "study_contexts": [
   {
    "context_schema_version": "1.1.0",

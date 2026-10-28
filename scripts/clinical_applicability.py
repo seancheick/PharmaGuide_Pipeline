@@ -394,14 +394,31 @@ def native_product_positioning_texts(product: Mapping) -> list[str]:
 
 
 
+# A signed exclusion names a claim. In label statements a single word counts
+# only as a claimed object ("supports cellular energy"), not in a mechanism
+# sentence ("the heart's energy producing system"); a title keeps the exact
+# signed word. Precautions never count.
+_CLAIM_VERB = r"(?:supports?|promotes?|boosts?|helps?|enhances?|increases?|improves?|maintains?|for)"
+_CLAIM_NOUN = r"(?:support|formula|booster|boost|health)"
+_PRECAUTION_CLAUSE = re.compile(
+    r"\b(?:consult|ask (?:your|a)|talk (?:to|with)|if you (?:are|have)|warning|caution|keep out of reach)\b", re.I)
+
+
 def _excluded_claim_matches(product: Mapping, policy: Mapping) -> bool:
-    """Match only affirmative label positioning, never warnings or metadata."""
+    """Match only affirmative label claims, never warnings, precautions or metadata."""
     excluded = {str(product.get("brand_name") or ""), str(product.get("serving_description") or "")}
+    titles = {str(product.get(field) or "") for field in ("product_name", "fullName")} - {""}
+    clauses = [(text in titles, clause) for text in native_product_positioning_texts(product)
+               if text and text not in excluded
+               for clause in re.split(r"[.;!?\r\n]+", text) if not _PRECAUTION_CLAUSE.search(clause)]
     for term in policy.get("excluded_claim_terms", []):
-        pattern = re.compile(r"(?<!\w)" + r"[\s_-]+".join(
-            re.escape(word) for word in _key(term).split()) + r"(?!\w)", re.I)
-        if any(text and text not in excluded and find_affirmative_label_match(pattern, text)
-               for text in native_product_positioning_texts(product)):
+        words = _key(term).split()
+        exact = r"[\s_-]+".join(re.escape(word) for word in words)
+        claimed = (rf"(?:{_CLAIM_VERB}\b.*?(?<!\w){exact}|{exact}[\s_-]+{_CLAIM_NOUN})"
+                   if len(words) == 1 else exact)
+        patterns = {True: re.compile(r"(?<!\w)" + exact + r"(?!\w)", re.I),
+                    False: re.compile(r"(?<!\w)" + claimed + r"(?!\w)", re.I)}
+        if any(find_affirmative_label_match(patterns[title], clause) for title, clause in clauses):
             return True
     return False
 
@@ -421,60 +438,287 @@ def _valid_native_claim_scope(context: Mapping) -> bool:
     )
 
 
-def assess_native_claimed_purpose(product: Mapping, context: Mapping, *, require_condition: bool = False) -> dict:
-    """Match a treatment/challenge study to an affirmative *claimed* purpose.
+_CREDITABLE_CLAIM_STATES = {"absent", "aligned", "mixed"}
+# The shared affirmative matcher's rule: a negation earlier in the clause
+# negates what follows it ("Not for children", "free of soy").
+_POSITIONING_NEGATION = re.compile(
+    r"\b(?:no|not|without|avoid|never|won'?t|don'?t|doesn'?t|free\s+(?:of|from))\b", re.I)
 
-    This proves neither a user's diagnosis nor membership in the trial population.
-    Broad indication categories and unreviewed aliases cannot establish the
-    source's exact condition. Population/preparation checks remain independent.
+
+# Who a product is for is population targeting, judged against the studied
+# population; it is never a claimed outcome ("Baby Probiotic", "Women's Multi").
+_POPULATION_WORDS = re.compile(
+    r"\b(?:infants?|bab(?:y|ies)|pediatric|child(?:ren)?|kids?|toddlers?|preterm|neonat\w*|"
+    r"prenatal|pregnan\w*|maternal|postnatal|postpartum|wom[ae]n'?s?|female|men'?s?|male)\b", re.I)
+
+
+# A product-level function sentence ("Supports normal enzyme activity"). A
+# general wellness phrase names no specific purpose, so it is no such claim.
+_POSITIONING_FUNCTION = re.compile(r"\b(?:supports?|promotes?|helps?|maintains?)\s+[a-z]", re.I)
+_GENERAL_WELLNESS = re.compile(
+    r"\b(?:(?:overall|general|daily|good|optimal|total|everyday)\s+(?:health|wellness|well[- ]?being|nutrition)"
+    r"|well[- ]?being|wellness|nutritional support)\b", re.I)
+
+
+def _claimed_purposes(text: str) -> set[str]:
+    from evidence_resolver import evidence_indication_categories
+    return evidence_indication_categories(_POPULATION_WORDS.sub(" ", text))
+
+
+def native_product_positioning_categories(product: Mapping, *, purposes_only: bool = False) -> set[str]:
+    """Indication categories of the label's affirmative product positioning."""
+    return _positioning_claims(product, purposes_only=purposes_only)[0]
+
+
+def _positioning_claims(product: Mapping, *, purposes_only: bool = False) -> tuple[set[str], bool]:
+    """Positioning categories, and whether a function sentence no category places exists.
+
+    Brand and serving metadata, negated clauses and precaution blocks are not
+    a marketed purpose. Generic class words ("probiotic") are not a claim.
+    ``purposes_only`` drops population words, which describe targeting, and
+    the directions for use, which are not a marketed purpose.
+    """
+    from evidence_resolver import evidence_indication_categories
+    categorize = _claimed_purposes if purposes_only else evidence_indication_categories
+    excluded = {str(product.get("brand_name") or ""), str(product.get("serving_description") or "")}
+    if purposes_only:
+        excluded.add(str(product.get("suggested_use") or ""))
+    categories: set[str] = set()
+    unclassified = False
+    for text in native_product_positioning_texts(product):
+        if not text or text in excluded:
+            continue
+        for clause in re.split(r"[.;!?\r\n]+|\b(?:but|however)\b", text, flags=re.I):
+            if _PRECAUTION_CLAUSE.search(clause):
+                continue
+            negation = _POSITIONING_NEGATION.search(clause)
+            affirmative = clause[:negation.start()] if negation else clause
+            found = categorize(affirmative)
+            categories |= found
+            unclassified |= (not found and bool(_POSITIONING_FUNCTION.search(affirmative))
+                             and not _GENERAL_WELLNESS.search(affirmative))
+    categories.discard("probiotic")
+    return categories, unclassified
+
+
+# Outcomes that report no comparative efficacy for the product's user.
+NON_EFFICACY_OUTCOME_ROLES = {
+    "within_group_change", "post_hoc_subgroup",
+    "companion_reported_context", "network_ranking",
+}
+
+
+def qualifying_purpose_outcomes(context: Mapping) -> tuple[list, bool]:
+    """Outcomes that may name a purpose, and whether an unresolved one holds it.
+
+    Sean, October 28, 2026 (PR #278): a positive primary or pooled
+    (hierarchy not_reported) outcome qualifies; a surrogate names only itself.
+    Null, mixed or unfavorable results, secondaries, post-hoc, within-group,
+    companion and ranking-only outcomes never name a purpose.
+    """
+    if context.get("outcome_role") in NON_EFFICACY_OUTCOME_ROLES:
+        return [], False
+    outcomes = [row for row in context.get("outcomes") or [] if isinstance(row, Mapping)
+                and row.get("outcome_role") not in NON_EFFICACY_OUTCOME_ROLES]
+    reported = [row for row in outcomes if row.get("hierarchy") in {"primary", "not_reported"}]
+    qualifying = [row for row in reported if row.get("direction") == "positive"]
+    held = not qualifying and any(row.get("hierarchy") == "unresolved" or row.get("direction") == "unresolved"
+                                  for row in outcomes)
+    return qualifying, held
+
+
+def evaluated_purpose_outcomes(context: Mapping) -> list:
+    """Null, mixed or unfavorable primary findings of a context with no positive one.
+
+    They say what the research evaluated, so a matching claim reaches the
+    preserved finding (an evaluated null, never credit). Beside a positive
+    outcome they name nothing: a null sleep result cannot widen stress credit.
+    """
+    qualifying, held = qualifying_purpose_outcomes(context)
+    if qualifying or held or context.get("outcome_role") in NON_EFFICACY_OUTCOME_ROLES:
+        return []
+    return [row for row in context.get("outcomes") or [] if isinstance(row, Mapping)
+            and row.get("outcome_role") not in NON_EFFICACY_OUTCOME_ROLES
+            and row.get("hierarchy") in {"primary", "not_reported"}
+            and row.get("direction") in {"null", "mixed", "negative"}]
+
+
+def assess_claim_alignment(product: Mapping, context: Mapping, canonicals=(), *, supported_outcomes=(),
+                           formula_level: bool = False) -> dict:
+    """Compare the label's claims with one reviewed context's studied outcome.
+
+    ``absent``: no recognized claim. ``aligned``/``mixed``: at least one claim
+    shares the outcome's indication. ``unrelated``: every claim is elsewhere.
+    ``ambiguous``: a recognized claim no category places. Alignment never
+    earns more than absence; it only decides whether an unrelated claim
+    stops this context from crediting the product. The signed credit scope
+    (``supported_outcomes``) outranks a broader context condition.
+    """
+    from evidence_resolver import evidence_indication_categories
+    from scoring_input_contract import ingredient_function_claims
+    condition = _key(context.get("condition"))
+    if condition:
+        pattern = re.compile(r"(?<!\w)" + r"[\s_-]+".join(re.escape(word) for word in condition.split()) + r"(?!\w)", re.I)
+        # Names and warnings about a condition are not a claimed product purpose.
+        excluded = {str(product.get("brand_name") or ""), str(product.get("serving_description") or "")}
+        if any(text and text not in excluded and find_affirmative_label_match(pattern, text)
+               for text in native_product_positioning_texts(product)):
+            return {"state": "aligned", "sources": ["affirmative_exact_source_condition_claim"]}
+    named = [str(value) for value in supported_outcomes if _key(value) == condition]
+    outcome = evidence_indication_categories(" ".join(named or map(str, supported_outcomes)))
+    held = False
+    if not outcome:
+        # Without a signed scope, only qualifying outcomes name a purpose; the
+        # studied condition stands in when their names place no category.
+        qualifying, held = qualifying_purpose_outcomes(context)
+        named_outcomes = qualifying or evaluated_purpose_outcomes(context)
+        outcome = evidence_indication_categories(" ".join(str(row.get("name") or "") for row in named_outcomes))
+        if named_outcomes and not outcome:
+            outcome = evidence_indication_categories(condition)
+    # A purpose the label attributes to this ingredient governs; unattributed
+    # product positioning stands in only when the ingredient has no claim.
+    claims = [(source, _claimed_purposes(text)) for canonical in sorted(set(canonicals))
+              for source, text in ingredient_function_claims(product.get("statements"), canonical)]
+    positioning, unclassified = _positioning_claims(product, purposes_only=True)
+    if formula_level:
+        # Formula-level marketing that neither names this ingredient nor its
+        # studied outcome is attributable to other ingredients, not to it
+        # (Sean, October 28, PR #280): it is no unrelated claim of this one.
+        positioning = positioning if positioning & outcome else set()
+        unclassified = False
+    if not claims:
+        if positioning:
+            claims.append(("product_positioning", positioning))
+        if unclassified:
+            # A function sentence no category places is still a claim.
+            claims.append(("product_positioning_unclassified", set()))
+    if not claims:
+        return {"state": "absent", "sources": []}
+    if held:
+        # An unresolved outcome holds the purpose; it neither aligns nor rejects.
+        return {"state": "ambiguous", "sources": list(dict.fromkeys(source for source, _ in claims))}
+    aligned = [source for source, categories in claims if categories & outcome]
+    unclassified = [source for source, categories in claims if not categories]
+    if aligned:
+        return {"state": "aligned" if len(aligned) == len(claims) else "mixed",
+                "sources": list(dict.fromkeys(source for source, _ in claims))}
+    if unclassified:
+        return {"state": "ambiguous", "sources": list(dict.fromkeys(unclassified))}
+    return {"state": "unrelated", "sources": list(dict.fromkeys(source for source, _ in claims))}
+
+
+def assess_native_claimed_purpose(product: Mapping, context: Mapping, canonicals=()) -> dict:
+    """Decide whether a source context may credit this label's claimed purpose.
+
+    No claim is required. An unrelated claim, or a recognized claim that cannot
+    be classified, keeps the context from crediting the product. This proves
+    neither a user's diagnosis nor membership in the trial population.
     """
     if "applicability" in context:
         from probiotic_measurements import context_accepted_for_scoring
         if not _valid_native_claim_scope(context) or not context_accepted_for_scoring(context):
             return {"status": "unresolved", "reason_code": "invalid_applicability_contract"}
-    if context.get("purpose") not in {"treatment", "challenge"} and not require_condition:
-        return {"status": "applicable", "reason_code": "no_condition_specific_claim_required"}
-    condition = _key(context.get("condition"))
-    if condition:
-        pattern = re.compile(r"(?<!\w)" + r"[\s_-]+".join(re.escape(word) for word in condition.split()) + r"(?!\w)", re.I)
-        # Names and warnings about a condition are not a claimed product purpose.
-        # The existing native positioning source set excludes precaution blocks;
-        # brand/serving metadata are omitted from this narrower affirmative test.
-        excluded = {str(product.get("brand_name") or ""), str(product.get("serving_description") or "")}
-        for text in native_product_positioning_texts(product):
-            if text and text not in excluded and find_affirmative_label_match(pattern, text):
-                return {"status": "applicable", "reason_code": "affirmative_exact_source_condition_claim",
-                        "condition": context.get("condition")}
-    if "applicability" in context and _excluded_claim_matches(product, context["applicability"]):
+    alignment = assess_claim_alignment(product, context, canonicals)
+    exact = alignment["sources"] == ["affirmative_exact_source_condition_claim"]
+    if not exact and "applicability" in context and _excluded_claim_matches(product, context["applicability"]):
         return {"status": "not_applicable", "reason_code": "label_purpose_evidence_mismatch",
-                "condition": context.get("condition")}
-    return {"status": "unresolved", "reason_code": "source_condition_claim_unestablished",
-            "condition": context.get("condition")}
+                "condition": context.get("condition"), "claim_alignment": alignment}
+    if alignment["state"] in _CREDITABLE_CLAIM_STATES:
+        reason = ("affirmative_exact_source_condition_claim" if exact
+                  else "no_label_claim_required" if alignment["state"] == "absent"
+                  else "label_claim_aligned_with_studied_outcome")
+        return {"status": "applicable", "reason_code": reason,
+                "condition": context.get("condition"), "claim_alignment": alignment}
+    if alignment["state"] == "ambiguous":
+        return {"status": "unresolved", "reason_code": "label_claim_unclassified",
+                "condition": context.get("condition"), "claim_alignment": alignment}
+    return {"status": "not_applicable", "reason_code": "label_purpose_evidence_mismatch",
+            "condition": context.get("condition"), "claim_alignment": alignment}
 
 
-def _context_population_matches_label(product: Mapping, context: Mapping) -> bool | None:
-    """Reject explicit label conflicts within the purpose-matched source context.
+_PREGNANT_SUBJECTS = re.compile(
+    r"(?<![\w-])pregnant (?:women|adolescents|adults|participants)\b|\btrimester of pregnancy\b", re.I)
+_LACTATING_SUBJECTS = re.compile(r"\b(?:breastfeeding|lactating|nursing) (?:mothers|women)\b", re.I)
+_PREGNANT_TARGET = re.compile(r"\bpregnant\b", re.I)
+_LACTATING_TARGET = re.compile(r"\b(?:lactating|lactation|breastfeeding|nursing)\b", re.I)
+_MATERNAL_SUPPLEMENTATION = re.compile(r"\b(?:pregnan\w*|maternal|postpartum)\b", re.I)
+_INFANT_TARGET = re.compile(r"\b(?:infants?|bab(?:y|ies)|newborns?|neonat\w*)\b", re.I)
 
-    This does not infer an individual user's condition or study membership.
+
+def _studied_subjects(pattern: re.Pattern, description: str) -> bool:
+    """A subject phrase in a sentence that does not exclude or negate it."""
+    return any(pattern.search(sentence) and not re.search(r"\bexclu|\bnot\b|\bnon-?\w", sentence, re.I)
+               for sentence in re.split(r"[.;]", description))
+
+
+def _special_population(context: Mapping, description: str) -> str | None:
+    """Research done only in infants, children or pregnancy (structured age first)."""
+    age = context["population"].get("age_group")
+    if age in {"infant", "child"}:
+        # Offspring outcomes of maternal supplementation were studied by
+        # supplementing pregnant women, not by giving the infant the product.
+        if _MATERNAL_SUPPLEMENTATION.search(description):
+            return "pregnancy"
+        return "infant" if age == "infant" else "pediatric"
+    if age != "mixed" and (re.search(r"pregnan|gestation", _key(context.get("condition")))
+                           or _studied_subjects(_PREGNANT_SUBJECTS, description)):
+        return "pregnancy"
+    if age != "mixed" and _studied_subjects(_LACTATING_SUBJECTS, description):
+        return "lactation"
+    return None
+
+
+def assess_context_population(product: Mapping, context: Mapping) -> str:
+    """Compare a reviewed context's studied population with the label's targeting.
+
+    Infant, pediatric and pregnancy-only research applies only to a product
+    affirmatively labelled for that population (title or DSLD target groups,
+    never a precaution). Any other restriction fails only on an explicit label
+    conflict. This never infers an individual user's condition.
     """
-    from rda_ul_calculator import label_is_for_children, label_population_members, _target_group_text
+    from rda_ul_calculator import label_is_for_children, _target_group_text
+    from scoring_input_contract import _ROUTE_PRENATAL_KEYWORDS, _route_product_label_text
     population = context.get("population")
     if not isinstance(population, Mapping) or not isinstance(population.get("description"), str) or not population["description"].strip():
-        return None
-    if population.get("age_group") == "adult" and label_is_for_children(dict(product)):
-        return False
-    description = _key(population["description"])
-    if ("nonpregnant" in description.replace(" ", "")
-            and "pregnancy_lactation" in label_population_members(dict(product))):
-        return False
-    if re.search(r"\bwomen\b", description) and not re.search(r"\bmen\b", description):
-        male = re.compile(r"\b(?:men|male)\b", re.I)
-        female = re.compile(r"\b(?:women|female)\b", re.I)
-        if any(find_affirmative_label_match(male, _target_group_text(group))
-               and not find_affirmative_label_match(female, _target_group_text(group))
-               for group in product.get("targetGroups") or []):
-            return False
-    return True
+        return "unresolved"
+    description = population["description"]
+    title = _route_product_label_text(dict(product))
+    groups = product.get("targetGroups") or []
+    children = label_is_for_children(dict(product))
+    group_texts = [_target_group_text(group) for group in groups]
+    # Affirmative targeting only: "Not for use during pregnancy", "Women (not
+    # pregnant or lactating)" and post-pregnancy titles are not pregnancy labels.
+    prenatal_title = re.compile(r"(?<!post-)(?<!post )" + _ROUTE_PRENATAL_KEYWORDS.pattern, re.I)
+    pregnancy = (any(find_affirmative_label_match(_PREGNANT_TARGET, text) for text in group_texts)
+                 or bool(find_affirmative_label_match(prenatal_title, title)))
+    lactation = any(find_affirmative_label_match(_LACTATING_TARGET, text) for text in [*group_texts, title])
+    special = _special_population(context, description)
+    if special == "infant":
+        infant = children and bool(_INFANT_TARGET.search(" ".join([title, *map(_target_group_text, groups)])))
+        return "eligible" if infant else "special_targeting_absent"
+    if special == "pediatric":
+        return "eligible" if children else "special_targeting_absent"
+    if special == "pregnancy":
+        return "eligible" if pregnancy else "special_targeting_absent"
+    if special == "lactation":
+        return "eligible" if lactation else "special_targeting_absent"
+    if population.get("age_group") == "adult" and children:
+        return "explicit_conflict"
+    # Pregnant women are not interchangeable with a studied nonpregnant group.
+    if pregnancy and not _studied_subjects(_PREGNANT_SUBJECTS, description):
+        return "explicit_conflict"
+    key = _key(description)
+    men = re.compile(r"\b(?:men|male|males)\b", re.I)
+    women = re.compile(r"\b(?:women|female|females)\b", re.I)
+    # "Predominantly men" describes a sample, not a sex restriction.
+    qualified = re.search(r"\b(?:predominantly|mostly|mainly|primarily|majority)\b", key)
+    for studied, other in ((women, men), (men, women)):
+        if not qualified and re.search(studied, key) and not re.search(other, key) and any(
+                find_affirmative_label_match(other, _target_group_text(group))
+                and not find_affirmative_label_match(studied, _target_group_text(group))
+                for group in groups):
+            return "explicit_conflict"
+    return "eligible"
 
 
 def assess_clinical_source_review(entry: Mapping) -> dict:
@@ -567,6 +811,95 @@ def assess_clinical_source_review(entry: Mapping) -> dict:
             "context_ids": [context.get("context_id") for context in contributing]}
 
 
+def _accepted_condition_scopes(reference: Mapping, policy: Mapping) -> list:
+    from probiotic_measurements import context_accepted_for_scoring
+    source_pmids = {str(pmid) for pmid in policy.get("source_pmids") or []}
+    return [
+        context for context in reference.get("study_contexts") or []
+        if isinstance(context, Mapping) and context_accepted_for_scoring(context)
+        and (not source_pmids or source_pmids.intersection(str(pmid) for pmid in context.get("source_pmids") or []))
+    ]
+
+
+def condition_scope_governs(entry: Mapping) -> bool:
+    """Whether this record's label-purpose decision belongs to its condition scopes."""
+    reference = reviewed_entries().get(str(entry.get("id") or entry.get("study_id")), {})
+    policy = reference["applicability"] if "applicability" in reference else entry.get("applicability")
+    return bool(_valid_policy(policy) and policy.get("scope") == "ingredient"
+                and reference.get("study_type") != "reference" and reference.get("evidence_level") != "reference"
+                and _accepted_condition_scopes(reference, policy))
+
+
+def _positioning_is_formula_level(product: Mapping, canonicals: set) -> bool:
+    """Whether unattributed product positioning speaks for other ingredients too.
+
+    Positioning is this ingredient's own claim on a single-subject label or when
+    it names the ingredient; on a multi-ingredient formula that does not name
+    it, the phrase cannot be attributed to this source row.
+    """
+    from scoring_input_contract import get_evidence_subject_rows
+    subjects = {str(row.get("canonical_id")) for row in get_evidence_subject_rows(dict(product))
+                if row.get("canonical_id")}
+    if not subjects - set(canonicals):
+        return False
+    text = " " + _key(" ".join(text for text in native_product_positioning_texts(product) if text)) + " "
+    return not any(" " + _key(canonical) + " " in text for canonical in canonicals)
+
+
+def _assess_condition_scopes(product: Mapping, entry: Mapping, policy: Mapping, contexts: list) -> dict:
+    """Return a blocking decision, or the components a qualifying scope adds.
+
+    Population and claim are judged per context, so one applicable context
+    cannot lend its approval, population or outcome to another. Preparation
+    and amount checks still follow in the caller.
+    """
+    canonicals = {str(row.get("canonical_id")) for row in _linked_rows(product, entry, evidence_only=True)
+                  if row.get("canonical_id")}
+    formula_level = _positioning_is_formula_level(product, canonicals)
+    results = [(context, assess_context_population(product, context),
+                assess_claim_alignment(product, context, canonicals, formula_level=formula_level,
+                                       supported_outcomes=policy.get("supported_outcomes", [])))
+               for context in contexts]
+    qualifying = [(context, claim) for context, population, claim in results
+                  if population == "eligible" and claim["state"] in _CREDITABLE_CLAIM_STATES]
+    if not qualifying:
+        eligible = [claim for _, population, claim in results if population == "eligible"]
+        populations = {population for _, population, _ in results}
+        if eligible:
+            claim = next((claim for claim in eligible if claim["state"] == "ambiguous"), eligible[0])
+            return {"status": "unresolved" if claim["state"] == "ambiguous" else "not_applicable",
+                    "reason_code": ("label_claim_unclassified" if claim["state"] == "ambiguous"
+                                    else "label_purpose_evidence_mismatch"),
+                    "claim_alignment": claim, "population_applicability": {"state": "eligible"}}
+        state = next(state for state in ("unresolved", "explicit_conflict", "special_targeting_absent")
+                     if state in populations)
+        return {"status": "unresolved" if state == "unresolved" else "not_applicable",
+                "reason_code": {"unresolved": "invalid_applicability_contract",
+                                "explicit_conflict": "clinical_population_mismatch",
+                                "special_targeting_absent": "clinical_population_targeting_absent"}[state],
+                "population_applicability": {"state": state}}
+    rank = {"aligned": 0, "mixed": 1, "absent": 2}
+    components = {
+        "claim_alignment": min((claim for _, claim in qualifying), key=lambda claim: rank[claim["state"]]),
+        "population_applicability": {"state": "eligible",
+                                     "context_ids": [context.get("context_id") for context, _ in qualifying]},
+    }
+    if len(qualifying) < len(contexts):
+        conditions = {_key(context.get("condition")) for context, _ in qualifying}
+        components["supported_outcomes"] = ([value for value in policy.get("supported_outcomes", [])
+                                             if _key(value) in conditions]
+                                            or [context.get("condition") for context, _ in qualifying])
+        components["studied_population"] = "; ".join(context["population"]["description"]
+                                                     for context, _ in qualifying)
+        # The credit reflects the research that qualified, not a stronger body
+        # from a sibling context (Sean, October 28, PR #280): trials alone are
+        # scored as trials, never as the record's pooled review.
+        if all(context.get("evidence_role") == "direct_rct" for context, _ in qualifying):
+            families = {context.get("trial_family") or context.get("context_id") for context, _ in qualifying}
+            components["qualifying_study_type"] = "rct_single" if len(families) == 1 else "rct_multiple"
+    return components
+
+
 def assess_clinical_applicability(product: Mapping, entry: Mapping, *, assess_amount: bool = True) -> dict:
     reference = reviewed_entries().get(str(entry.get("id") or entry.get("study_id")), {})
     # The curated owner can retain research for context while withdrawing
@@ -595,22 +928,17 @@ def assess_clinical_applicability(product: Mapping, entry: Mapping, *, assess_am
         return {"status": "unresolved", "reason_code": "unsupported_applicability_scope"}
     if _excluded_claim_matches(product, policy):
         return {"status": "not_applicable", "reason_code": "label_purpose_evidence_mismatch"}
-    from probiotic_measurements import context_accepted_for_scoring
-    from rda_ul_calculator import label_is_for_children
-    source_pmids = {str(pmid) for pmid in policy.get("source_pmids") or []}
-    # An explicitly condition-scoped outcome is an existing reviewed constraint,
-    # not permission for every claim on a name-matched ingredient. Reuse the
-    # native purpose owner; native category callers keep their current rules.
+    # Every approved, source-bound context is a condition scope: no claim is
+    # required, but its population and the label's claims decide whether it
+    # may credit this product (October 28, 2026 rulings).
+    accepted_scopes = _accepted_condition_scopes(reference, policy)
     declared_condition_scopes = [
         context for context in reference.get("study_contexts") or []
         if isinstance(context, Mapping)
         and _key(context.get("condition")) in {_key(value) for value in policy.get("supported_outcomes", [])}
         and context.get("purpose") in {"treatment", "challenge", "prevention"}
     ]
-    condition_scopes = [context for context in declared_condition_scopes
-        if context_accepted_for_scoring(context)
-        and (not source_pmids or source_pmids.intersection(str(pmid) for pmid in context.get("source_pmids") or []))]
-    if ((declared_condition_scopes and not condition_scopes)
+    if ((declared_condition_scopes and not any(context in accepted_scopes for context in declared_condition_scopes))
             or (not reference.get("study_contexts")
                 and isinstance(reference.get("scoring_eligible"), bool)
                 and policy.get("supported_outcomes"))):
@@ -618,27 +946,9 @@ def assess_clinical_applicability(product: Mapping, entry: Mapping, *, assess_am
         # legacy unscoped path. Legacy records without an explicit eligibility
         # decision retain their existing preparation-only behavior.
         return {"status": "unresolved", "reason_code": "invalid_applicability_contract"}
-    if condition_scopes:
-        decisions = [assess_native_claimed_purpose(product, context, require_condition=True)
-                     for context in condition_scopes]
-        matched = [context for context, decision in zip(condition_scopes, decisions)
-                   if decision["status"] == "applicable"]
-        if not matched:
-            return next((decision for decision in decisions if decision["status"] == "unresolved"), decisions[0])
-        populations = [_context_population_matches_label(product, context) for context in matched]
-        if not any(result is True for result in populations):
-            return {"status": "unresolved" if None in populations else "not_applicable",
-                    "reason_code": "invalid_applicability_contract" if None in populations else "clinical_population_mismatch"}
-    else:
-        population_groups = {
-            (context.get("population") or {}).get("age_group")
-            for context in reference.get("study_contexts") or []
-            if isinstance(context, Mapping) and context_accepted_for_scoring(context)
-            and (not source_pmids or source_pmids.intersection(str(pmid) for pmid in context.get("source_pmids") or []))
-            and isinstance(context.get("population"), Mapping)
-        }
-        if population_groups == {"adult"} and label_is_for_children(dict(product)):
-            return {"status": "not_applicable", "reason_code": "clinical_population_mismatch"}
+    # A claim or population block is decided after preparation, so the
+    # rejection still records which label rows are the studied material.
+    scope = _assess_condition_scopes(product, entry, policy, accepted_scopes) if accepted_scopes else {}
     physical = product.get("physicalState") or {}
     if isinstance(physical, Mapping):
         physical = physical.get("name")
@@ -719,11 +1029,18 @@ def assess_clinical_applicability(product: Mapping, entry: Mapping, *, assess_am
         if exclusion_only:
             applicable_rows.append(row)
             continue
+        if scope.get("status"):
+            return {**scope, "matched_source_row_refs": [ref for ref in (
+                row.get("raw_source_path") or row.get("source_row_ref"),) if ref]}
         return {"status": "applicable", "reason_code": "reviewed_scope_match",
                 "source_row_ref": row.get("raw_source_path") or row.get("source_row_ref"),
                 "supported_outcomes": policy.get("supported_outcomes", []),
                 "studied_population": policy.get("studied_population"),
-                "scope": "ingredient"}
+                "scope": "ingredient", **scope}
+    if applicable_rows and scope.get("status"):
+        return {**scope, "matched_source_row_refs": list(dict.fromkeys(
+            row.get("raw_source_path") or row.get("source_row_ref") for row in applicable_rows
+            if row.get("raw_source_path") or row.get("source_row_ref")))}
     if applicable_rows:
         # Exclusion rejects identities/preparations, not legitimate siblings.
         # Preserve every passing row rather than making label order choose
@@ -740,12 +1057,29 @@ def assess_clinical_applicability(product: Mapping, entry: Mapping, *, assess_am
                 )),
                 "supported_outcomes": policy.get("supported_outcomes", []),
                 "studied_population": policy.get("studied_population"),
-                "scope": "ingredient"}
+                "scope": "ingredient", **scope}
     reason = reasons[0] if reasons else "clinical_source_row_unresolved"
     status = ("unresolved" if reason in {
         "clinical_source_row_unresolved", "clinical_source_label_unresolved", "clinical_dose_unresolved",
     } else "not_applicable")
     return {"status": status, "reason_code": reason}
+
+
+def preparation_verified_clinical_matches(product: Mapping) -> list[dict]:
+    """Matches whose identity and preparation fit the reviewed scope.
+
+    Accepted matches, plus rejections made only by a condition scope's claim or
+    population component: those prove the label carries the studied material
+    without making it Evidence for this label's purpose (Formulation reads this).
+    """
+    evidence = product.get("evidence_data") or {}
+    matches = [match for match in evidence.get("clinical_matches") or [] if isinstance(match, Mapping)]
+    for rejected in evidence.get("rejected_clinical_matches") or []:
+        if (isinstance(rejected, Mapping) and rejected.get("matched_source_row_refs")
+                and ("claim_alignment" in rejected or "population_applicability" in rejected)):
+            record = reviewed_entries().get(str(rejected.get("id")), {})
+            matches.append({**record, **rejected})
+    return matches
 
 
 def filter_clinical_matches(product: Mapping, matches: list[dict], *, assess_amount: bool = True) -> tuple[list[dict], list[dict]]:
@@ -759,6 +1093,26 @@ def filter_clinical_matches(product: Mapping, matches: list[dict], *, assess_amo
                 accepted.append(entry)
                 continue
             scoped_entry = {**entry, "applicability_assessment": decision}
+            if decision.get("qualifying_study_type"):
+                # Record-level enrollment describes the whole body, not this trial.
+                scoped_entry["study_type"] = decision["qualifying_study_type"]
+                scoped_entry.pop("total_enrollment", None)
+            # Only a product-level Evidence heading (a blend total the input
+            # contract projects as the studied material) keeps its binding; an
+            # ordinary parent row never lends its reference to a nested extract.
+            from scoring_input_contract import get_evidence_subject_rows
+            headings = {row.get("raw_source_path") for row in get_evidence_subject_rows(dict(product))
+                        if row.get("scoring_input_kind") == "product_level_evidence"}
+            anchors = [ref for ref in entry.get("matched_source_row_refs") or [] if isinstance(ref, str)]
+            passing = decision.get("matched_source_row_refs") or [decision.get("source_row_ref")]
+            if anchors and set(anchors) <= headings and all(
+                    isinstance(ref, str) and any(ref.startswith(anchor + ".") for anchor in anchors)
+                    for ref in passing):
+                # The scope verified the named child of the heading this match
+                # binds; the heading keeps its binding (a brand-named blend
+                # total is that studied material's amount).
+                accepted.append(scoped_entry)
+                continue
             if "matched_source_row_refs" in decision:
                 scoped_entry["matched_source_row_refs"] = decision["matched_source_row_refs"]
                 scoped_entry["matched_canonical_ids"] = decision["matched_canonical_ids"]

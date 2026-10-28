@@ -53,9 +53,11 @@ def test_approved_context_with_matching_dose_and_positive_primary_outcome_is_app
     registry["STRAIN_LGG"]["cfu_thresholds"]["evidence"]["evidence_strength"] = "high"
     registry["STRAIN_LGG"]["study_contexts"] = [approved(study_design="rct")]
     product = strain_product(dose=1e9)
-    # The approved synthetic source treats constipation; broad daily use is
-    # not evidence of that claimed purpose and must retain zero Evidence.
-    assert score_evidence(product)["score"] == 0
+    # The approved synthetic source treats constipation. A claim-free label
+    # earns the same scoped credit as a claimed one (no claim bonus, PR #280);
+    # an unrelated one earns none.
+    assert score_evidence(product)["score"] == 16.0
+    assert score_evidence({**product, "product_name": "Sleep support probiotic"})["score"] == 0
     product["statements"] = [{"type": "Formulation re: Other", "notes": "Support for constipation"}]
     row = assessment(product)
     assert row["status"] == "strain_dose_applicable"

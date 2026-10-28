@@ -1469,9 +1469,10 @@ def test_explicit_claim_cannot_borrow_evidence_for_another_purpose():
     assert build_scored_artifact(product)['quality_pillars_v4']['evidence']['score'] == 0
 
 
-def test_explicit_purposes_are_order_independent_and_not_oxidative_stress():
+def test_explicit_purposes_are_order_independent_and_not_oxidative_stress(monkeypatch):
     import json
     from copy import deepcopy
+    import clinical_applicability
     from scoring_v4.scored_artifact import build_scored_artifact
     product = json.loads((Path(__file__).parent / 'fixtures/stress_gut_evidence_enriched.json').read_text())[0]
     scores = []
@@ -1491,6 +1492,17 @@ def test_explicit_purposes_are_order_independent_and_not_oxidative_stress():
         entry.update(primary_outcome='Reduced oxidative stress biomarkers',
             health_goals_supported=[], endpoint_relevance_tags=[], key_endpoints=[])
     assert build_scored_artifact(product)['quality_pillars_v4']['evidence']['score'] == scores[0]
+    # Reviewed condition scopes own the purpose decision: restate them as an
+    # oxidative-stress outcome at that owner, not only on the enriched match.
+    records = deepcopy(clinical_applicability.reviewed_entries())
+    for entry in product['evidence_data']['clinical_matches']:
+        record = records.get(entry['id'])
+        if record and isinstance(record.get('applicability'), dict):
+            record['applicability']['supported_outcomes'] = ['reduced_oxidative_stress_biomarkers']
+            for context in record.get('study_contexts') or []:
+                context['condition'] = 'reduced_oxidative_stress_biomarkers'
+    monkeypatch.setattr(clinical_applicability, 'reviewed_entries', lambda: records)
+    assert build_scored_artifact(product)['quality_pillars_v4']['evidence']['score'] == 0
 
 
 def test_contributing_receipt_follows_authority_floor_not_unused_legacy_match():
