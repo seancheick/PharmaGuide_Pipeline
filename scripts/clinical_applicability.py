@@ -904,12 +904,11 @@ def _assess_condition_scopes(product: Mapping, entry: Mapping, policy: Mapping, 
                                             or [context.get("condition") for context, _ in qualifying])
         components["studied_population"] = "; ".join(context["population"]["description"]
                                                      for context, _ in qualifying)
-        # The credit reflects the research that qualified, not a stronger body
-        # from a sibling context (Sean, October 28, PR #280): trials alone are
-        # scored as trials, never as the record's pooled review.
-        if all(context.get("evidence_role") == "direct_rct" for context, _ in qualifying):
-            families = {context.get("trial_family") or context.get("context_id") for context, _ in qualifying}
-            components["qualifying_study_type"] = "rct_single" if len(families) == 1 else "rct_multiple"
+    # Derive design from the contexts that actually qualified, including when
+    # a held synthesis was removed before this function received the contexts.
+    if all(context.get("evidence_role") == "direct_rct" for context, _ in qualifying):
+        families = {context.get("trial_family") or context.get("context_id") for context, _ in qualifying}
+        components["qualifying_study_type"] = "rct_single" if len(families) == 1 else "rct_multiple"
     return components
 
 
@@ -1116,9 +1115,14 @@ def filter_clinical_matches(product: Mapping, matches: list[dict], *, assess_amo
                 continue
             scoped_entry = {**entry, "applicability_assessment": decision}
             if decision.get("qualifying_study_type"):
-                # Record-level enrollment describes the whole body, not this trial.
+                reference = reviewed_entries().get(str(entry.get("id") or entry.get("study_id")), {})
+                qualified_ids = decision.get("population_applicability", {}).get("context_ids", [])
+                if (scoped_entry.get("study_type") != decision["qualifying_study_type"]
+                        or len(qualified_ids) < len(reference.get("study_contexts") or [])):
+                    # A stronger record or excluded sibling cannot lend its
+                    # aggregate enrollment to the trial that actually qualified.
+                    scoped_entry.pop("total_enrollment", None)
                 scoped_entry["study_type"] = decision["qualifying_study_type"]
-                scoped_entry.pop("total_enrollment", None)
             # Only a product-level Evidence heading (a blend total the input
             # contract projects as the studied material) keeps its binding; an
             # ordinary parent row never lends its reference to a nested extract.

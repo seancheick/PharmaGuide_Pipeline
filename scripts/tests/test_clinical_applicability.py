@@ -2114,3 +2114,15 @@ def test_context_cannot_borrow_an_eligible_reference_from_its_sibling(monkeypatc
     # the trial; a held trial cannot borrow the pregnancy synthesis instead.
     if adult_eligible:
         assert clinical_record_sources_eligible(record)
+        accepted, _ = owner.filter_clinical_matches(product, product['evidence_data']['clinical_matches'], assess_amount=False)
+        assert accepted[0]['study_type'] == 'rct_single'
+        assert 'total_enrollment' not in accepted[0]
+
+
+def test_source_join_preserves_a_trial_beside_its_excluded_correction():
+    from evidence_resolver import clinical_record_sources_eligible
+    record = reviewed_entries()['BRAND_MAGTEIN']
+    context = next(c for c in record['study_contexts'] if c['context_id'] == 'magtein_39252819')
+    assert set(context['source_pmids']) == {'39252819', '40567408'}
+    assert clinical_record_sources_eligible(record, context=context)
+    assert not clinical_record_sources_eligible(record, context=context, source_pmids=['40567408'])
