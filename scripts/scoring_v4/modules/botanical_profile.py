@@ -212,10 +212,13 @@ def _branded_studied_row(product: Dict[str, Any], row: Dict[str, Any]) -> bool:
     label name. Remove this branch when the enricher records brand matches for
     those rows.
     """
+    from clinical_applicability import preparation_verified_clinical_matches
     from evidence_resolver import clinical_record_sources_eligible
 
     ref = row.get("raw_source_path")
-    for match in ((product.get("evidence_data") or {}).get("clinical_matches") or []):
+    # A studied branded material is a form-quality fact; whether its research
+    # fits this label's purpose or population is Evidence's decision.
+    for match in preparation_verified_clinical_matches(product):
         if not isinstance(match, dict) or not clinical_record_sources_eligible(match):
             continue
         level = _norm(match.get("evidence_level"))

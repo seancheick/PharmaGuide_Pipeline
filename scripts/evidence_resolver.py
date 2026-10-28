@@ -126,7 +126,7 @@ _INDICATION_PHRASES = (
     ("menstrual_cycle", r"\b(?:polycystic ovar(?:y|ian)|(?:menstrual|cycle) regularity)\b"),
     ("endurance", r"\bexercise capacity\b"),
     ("muscle_recovery", r"\bmuscle (?:damage|soreness|recovery)\b"),
-    ("muscle_strength_mass", r"\b(?:lean|muscle) mass\b|\bmuscle (?:growth|gains?|strength|performance|power|building)\b"
+    ("muscle_strength_mass", r"\b(?:lean|muscle) mass\b|\blean muscle\b|\bmuscle (?:growth|gains?|strength|performance|power|building)\b"
                              r"|\bbuild(?:s|ing)? muscle\b|\bmuscularity\b"),
 )
 
@@ -138,8 +138,9 @@ def evidence_indication_categories(text: str) -> Set[str]:
     # categorizer must not transfer antioxidant or manufacturing evidence to
     # a mood claim merely because both contain the word "stress".
     normalized = re.sub(r"\b(?:oxidative|cellular|mechanical|thermal|osmotic|endoplasmic reticulum) stress\b", " ", normalized)
-    # Packaging energy procurement is not a physiological product purpose.
-    normalized = re.sub(r"\brenewable energy\b", " ", normalized)
+    # Packaging energy procurement is not a physiological product purpose,
+    # and "sold by weight" is a fill statement, not a weight claim.
+    normalized = re.sub(r"\brenewable energy\b|\bsold by weight\b", " ", normalized)
     words = set(normalized.split())
     categories = {category for category, keywords in INDICATION_KEYWORDS.items() if words & keywords}
     categories.update(category for category, phrase in _INDICATION_PHRASES if re.search(phrase, normalized))

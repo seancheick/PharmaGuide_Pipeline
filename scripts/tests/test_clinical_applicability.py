@@ -1723,3 +1723,44 @@ def test_bb12_infant_colic_research_reaches_only_infant_products(product_name, t
             for pmid in strain.get('scoring_source_pmids') or []}
     assert bool(used & colic_pmids) is credited
     assert (evidence['score'] > 0) is credited
+
+
+def test_a_predominantly_male_sample_is_not_a_sex_restriction():
+    from clinical_applicability import assess_context_population
+    context = {'population': {'age_group': None, 'description': 'Healthy adults 18-50 in resistance training; predominantly men.'}}
+    women = {'product_name': 'Creatine', 'targetGroups': ['Women (not pregnant or lactating)']}
+    assert assess_context_population(women, context) == 'eligible'
+    context['population']['description'] = 'Healthy men aged 21-35.'
+    assert assess_context_population(women, context) == 'explicit_conflict'
+
+
+@pytest.mark.parametrize('text,category,present', [
+    ('Contents are sold by weight, not volume', 'metabolic', False),
+    ('Supports healthy body weight', 'metabolic', True),
+    ('Supports lean muscle recovery', 'muscle_strength_mass', True),
+])
+def test_fill_statements_and_lean_muscle_claims_are_read_by_phrase(text, category, present):
+    from evidence_resolver import evidence_indication_categories
+    assert (category in evidence_indication_categories(text)) is present
+
+
+def test_purpose_rejection_keeps_the_studied_branded_material_for_formulation():
+    from clinical_applicability import filter_clinical_matches, preparation_verified_clinical_matches
+    row = _row('ashwagandha', 'KSM-66 Ashwagandha root extract', quantity=600)
+    product = {'product_name': 'Energy Xtra', 'ingredient_quality_data': {'ingredients_scorable': [row]}}
+    entry = {'id': 'BRAND_KSM66', 'ingredient': row['name'], 'matched_source_row_refs': [row['raw_source_path']]}
+    accepted, rejected = filter_clinical_matches(product, [entry], assess_amount=False)
+    # Evidence: an energy label cannot borrow the stress research.
+    assert accepted == []
+    assert rejected[0]['reason_code'] == 'label_purpose_evidence_mismatch'
+    assert rejected[0]['matched_source_row_refs'] == ['ingredientRows[0]']
+    product['evidence_data'] = {'clinical_matches': accepted, 'rejected_clinical_matches': rejected}
+    # Formulation: the label still carries the studied KSM-66 preparation.
+    verified = preparation_verified_clinical_matches(product)
+    assert [match['id'] for match in verified] == ['BRAND_KSM66']
+    # A wrong preparation is never preparation-verified.
+    other = _row('ashwagandha', 'Ashwagandha root powder', quantity=600)
+    accepted, rejected = filter_clinical_matches({**product, 'ingredient_quality_data': {
+        'ingredients_scorable': [other]}}, [entry], assess_amount=False)
+    assert rejected[0]['reason_code'] == 'clinical_form_mismatch'
+    assert 'matched_source_row_refs' not in rejected[0]

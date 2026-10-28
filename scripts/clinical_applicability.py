@@ -589,8 +589,10 @@ def assess_context_population(product: Mapping, context: Mapping) -> str:
     key = _key(description)
     men = re.compile(r"\b(?:men|male|males)\b", re.I)
     women = re.compile(r"\b(?:women|female|females)\b", re.I)
+    # "Predominantly men" describes a sample, not a sex restriction.
+    qualified = re.search(r"\b(?:predominantly|mostly|mainly|primarily|majority)\b", key)
     for studied, other in ((women, men), (men, women)):
-        if re.search(studied, key) and not re.search(other, key) and any(
+        if not qualified and re.search(studied, key) and not re.search(other, key) and any(
                 find_affirmative_label_match(other, _target_group_text(group))
                 and not find_affirmative_label_match(studied, _target_group_text(group))
                 for group in groups):
@@ -800,9 +802,9 @@ def assess_clinical_applicability(product: Mapping, entry: Mapping, *, assess_am
         # legacy unscoped path. Legacy records without an explicit eligibility
         # decision retain their existing preparation-only behavior.
         return {"status": "unresolved", "reason_code": "invalid_applicability_contract"}
+    # A claim or population block is decided after preparation, so the
+    # rejection still records which label rows are the studied material.
     scope = _assess_condition_scopes(product, entry, policy, accepted_scopes) if accepted_scopes else {}
-    if scope.get("status"):
-        return scope
     physical = product.get("physicalState") or {}
     if isinstance(physical, Mapping):
         physical = physical.get("name")
@@ -883,11 +885,18 @@ def assess_clinical_applicability(product: Mapping, entry: Mapping, *, assess_am
         if exclusion_only:
             applicable_rows.append(row)
             continue
+        if scope.get("status"):
+            return {**scope, "matched_source_row_refs": [ref for ref in (
+                row.get("raw_source_path") or row.get("source_row_ref"),) if ref]}
         return {"status": "applicable", "reason_code": "reviewed_scope_match",
                 "source_row_ref": row.get("raw_source_path") or row.get("source_row_ref"),
                 "supported_outcomes": policy.get("supported_outcomes", []),
                 "studied_population": policy.get("studied_population"),
                 "scope": "ingredient", **scope}
+    if applicable_rows and scope.get("status"):
+        return {**scope, "matched_source_row_refs": list(dict.fromkeys(
+            row.get("raw_source_path") or row.get("source_row_ref") for row in applicable_rows
+            if row.get("raw_source_path") or row.get("source_row_ref")))}
     if applicable_rows:
         # Exclusion rejects identities/preparations, not legitimate siblings.
         # Preserve every passing row rather than making label order choose
@@ -910,6 +919,23 @@ def assess_clinical_applicability(product: Mapping, entry: Mapping, *, assess_am
         "clinical_source_row_unresolved", "clinical_source_label_unresolved", "clinical_dose_unresolved",
     } else "not_applicable")
     return {"status": status, "reason_code": reason}
+
+
+def preparation_verified_clinical_matches(product: Mapping) -> list[dict]:
+    """Matches whose identity and preparation fit the reviewed scope.
+
+    Accepted matches, plus rejections made only by a condition scope's claim or
+    population component: those prove the label carries the studied material
+    without making it Evidence for this label's purpose (Formulation reads this).
+    """
+    evidence = product.get("evidence_data") or {}
+    matches = [match for match in evidence.get("clinical_matches") or [] if isinstance(match, Mapping)]
+    for rejected in evidence.get("rejected_clinical_matches") or []:
+        if (isinstance(rejected, Mapping) and rejected.get("matched_source_row_refs")
+                and ("claim_alignment" in rejected or "population_applicability" in rejected)):
+            record = reviewed_entries().get(str(rejected.get("id")), {})
+            matches.append({**record, **rejected})
+    return matches
 
 
 def filter_clinical_matches(product: Mapping, matches: list[dict], *, assess_amount: bool = True) -> tuple[list[dict], list[dict]]:
