@@ -22714,6 +22714,11 @@ class SupplementEnricherV3:
         """
         active_ingredients = self._dose_active_ingredients_for_enrichment(product)
         special_use_flags = self._collect_special_use_flags(active_ingredients)
+        # A Facts panel that declares protein has a food matrix, so a bare
+        # nutrient total on it can include intrinsic food minerals.
+        declares_food_protein = bool(
+            (self._collect_nutrition_summary(product).get("protein_g") or 0) > 0
+        )
         ul_population = self._ul_screening_population(product)
         pediatric_age_groups = self._ul_screening_pediatric_age_groups(product)
         quality_identity_rows = [
@@ -23735,10 +23740,35 @@ class SupplementEnricherV3:
                         skip_ul_reason = (
                             "worst_case_compound_mass_within_ul"
                         )
+                    # The magnesium UL covers supplemental magnesium only. A
+                    # bare total on a food-matrix panel also counts intrinsic
+                    # food magnesium (Re-Built Mass XP 244288: 540 mg from whey,
+                    # grains, cocoa and a 2.5 g magnesium-creatine chelate), so
+                    # its supplemental share is unknown. Only a total above the
+                    # UL is affected: a total within it bounds the share.
+                    magnesium_ul_screening = None
+                    if (
+                        not skip_ul_check
+                        and safety_over_ul
+                        and declares_food_protein
+                        and resolved_canonical_id == "magnesium"
+                        and _nutrient_record.get("ul_basis") == "supplemental_only"
+                        and not ingredient.get("forms")
+                    ):
+                        skip_ul_check = True
+                        ul_only_skip = True
+                        skip_ul_reason = "supplemental_magnesium_fraction_unknown"
+                        magnesium_ul_screening = {
+                            "screening_amount": ul_amount,
+                            "screening_unit": ul_unit,
+                            "screening_ul": safety_ul,
+                            "potential_pct_ul": safety_pct_ul,
+                            "screening_basis": "declared_total_including_food_magnesium",
+                        }
                     if skip_ul_check and ul_only_skip:
                         potential_pct_ul = (
-                            folate_ul_screening.get("potential_pct_ul")
-                            if folate_ul_screening
+                            (folate_ul_screening or magnesium_ul_screening).get("potential_pct_ul")
+                            if folate_ul_screening or magnesium_ul_screening
                             else None
                         )
                         potential_ul_concern = bool(
@@ -23909,8 +23939,10 @@ class SupplementEnricherV3:
                         is_indeterminate_folate = (
                             skip_ul_reason == "unknown_folate_form_lineage"
                         )
+                        is_indeterminate_magnesium = magnesium_ul_screening is not None
                         is_indeterminate_ul = (
                             is_indeterminate_folate
+                            or is_indeterminate_magnesium
                             or skip_ul_reason == "unknown_vitamin_form"
                             or skip_ul_reason
                             == "mixed_vitamin_a_preformed_fraction_unknown"
@@ -24038,6 +24070,13 @@ class SupplementEnricherV3:
                                         "the synthetic folic-acid contribution is not identified."
                                     ]
                                     if is_indeterminate_folate
+                                    else [
+                                        "The magnesium upper limit applies to supplemental "
+                                        "magnesium only; this label's total may include "
+                                        "magnesium from food ingredients and does not "
+                                        "identify the supplemental amount."
+                                    ]
+                                    if is_indeterminate_magnesium
                                     else []
                                 ),
                                 "skip_ul_check": True,
@@ -24114,6 +24153,14 @@ class SupplementEnricherV3:
                                 "assessment_status": "indeterminate",
                                 "reason": skip_ul_reason,
                                 **folate_ul_screening,
+                                "review_required": True,
+                            })
+                        if is_indeterminate_magnesium:
+                            ul_review_flags.append({
+                                "nutrient": "Magnesium",
+                                "assessment_status": "indeterminate",
+                                "reason": skip_ul_reason,
+                                **magnesium_ul_screening,
                                 "review_required": True,
                             })
                     elif skip_ul_check:

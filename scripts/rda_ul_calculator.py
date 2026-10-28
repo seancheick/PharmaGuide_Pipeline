@@ -37,6 +37,11 @@ logger = logging.getLogger(__name__)
 
 
 UL_REVIEW_FOLATE_FORM = "FOLATE_UL_FORM_REVIEW"
+UL_REVIEW_MAGNESIUM_SOURCE = "MAGNESIUM_UL_SOURCE_REVIEW"
+_UL_REVIEW_SIGNALS = {
+    "unknown_folate_form_lineage": UL_REVIEW_FOLATE_FORM,
+    "supplemental_magnesium_fraction_unknown": UL_REVIEW_MAGNESIUM_SOURCE,
+}
 
 
 def get_actionable_ul_review_signals(rda_ul_data: Any) -> List[str]:
@@ -51,13 +56,9 @@ def get_actionable_ul_review_signals(rda_ul_data: Any) -> List[str]:
         if not isinstance(flag, dict) or flag.get("review_required") is not True:
             continue
         assessment = str(flag.get("assessment_status") or "").strip().lower()
-        reason = str(flag.get("reason") or "").strip().lower()
-        if (
-            assessment == "indeterminate"
-            and reason == "unknown_folate_form_lineage"
-            and UL_REVIEW_FOLATE_FORM not in signals
-        ):
-            signals.append(UL_REVIEW_FOLATE_FORM)
+        signal = _UL_REVIEW_SIGNALS.get(str(flag.get("reason") or "").strip().lower())
+        if assessment == "indeterminate" and signal and signal not in signals:
+            signals.append(signal)
     return signals
 
 
