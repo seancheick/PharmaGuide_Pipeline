@@ -19056,6 +19056,23 @@ class SupplementEnricherV3:
                 regimen for text in serving_count_directions
                 for regimen in self._parse_serving_counts_from_directions(text)
             ]
+            if serving_counts:
+                # A second age regimen may count tablets rather than
+                # servings. Compare those explicit daily counts on the same
+                # Facts basis before accepting one serving frequency.
+                for text in serving_count_directions:
+                    for clause in re.split(r"(?<=[.!?;])\s+|[\r\n]+", str(text)):
+                        if re.search(r"\bservings?\b", clause, re.IGNORECASE):
+                            continue
+                        if not re.search(r"\b(?:daily|per day|a day|each day)\b", clause, re.IGNORECASE):
+                            continue
+                        dose = self._parse_dosage_from_directions(clause)
+                        if dose:
+                            low = self._serving_units_to_servings(dose.get("min"), basis_count)
+                            high = self._serving_units_to_servings(dose.get("max"), basis_count)
+                            if low is not None and high is not None:
+                                serving_counts.append((low, high))
+            serving_counts = list(dict.fromkeys(serving_counts))
             if len(serving_counts) == 1:
                 min_servings_per_day, max_servings_per_day = serving_counts[0]
                 servings_per_day_source = "directions"

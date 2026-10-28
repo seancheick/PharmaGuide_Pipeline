@@ -98,3 +98,29 @@ def test_parsed_label_directions_share_serving_frequency_scope(enricher, directi
                "labelText": {"parsed": {"directions": directions}}}
     basis = enricher._collect_serving_basis_data(product)["serving_basis"]
     assert resolve_daily_serving_range({**product, "serving_basis": basis}) == expected
+
+
+@pytest.mark.parametrize("directions,expected", [
+    (["Take two servings daily.", "Take two servings daily."], (2.0, 2.0, False)),
+    (["Take one serving daily.", "Take two servings daily."], (1.0, 1.0, True)),
+])
+def test_duplicate_serving_regimens_do_not_create_ambiguity(enricher, directions, expected):
+    product = {"servingSizes": [{"minQuantity": 2, "maxQuantity": 2,
+                                "unit": "Tablet(s)", "dailyServingsSource": "default"}],
+               "statements": [{"type": "Directions", "notes": text} for text in directions]}
+    basis = enricher._collect_serving_basis_data(product)["serving_basis"]
+    assert resolve_daily_serving_range({**product, "serving_basis": basis}) == expected
+
+
+@pytest.mark.parametrize("tablets,expected", [
+    ("four", (1.0, 1.0, True)),
+    ("two", (1.0, 1.0, False)),
+])
+def test_mixed_serving_and_tablet_age_regimens_are_compared_on_same_basis(enricher, tablets, expected):
+    product = {"servingSizes": [{"minQuantity": 2, "maxQuantity": 2,
+                                "unit": "Chewable Tablet(s)", "dailyServingsSource": "default"}],
+               "statements": [{"type": "Directions", "notes":
+                   "For children 4-8 years of age, take one serving daily; "
+                   f"for children 9-12 years of age, take {tablets} chewable tablets daily."}]}
+    basis = enricher._collect_serving_basis_data(product)["serving_basis"]
+    assert resolve_daily_serving_range({**product, "serving_basis": basis}) == expected
