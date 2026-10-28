@@ -102,7 +102,9 @@ V4_CANARIES = {
         "confidence": "moderate",
         # Printed creatine5g and HMB1.5g: current shared contribution targets
         # award20 and10 raw Dose points; their co-primary average is15.
-        "score_range": (73.2, 73.2),
+        # Evidence 14 raw (1.31.0): creatine left the retired ingredient
+        # allowlist; no automatic floor exceeds the strong base.
+        "score_range": (69.2, 69.2),
         "raw_fixture": "evidence_readiness_325587_raw.json",
         "dose_raw": 15.0,
     },
@@ -154,10 +156,14 @@ V4_CANARIES = {
         "confidence": "high",
         # Freeze the actual label instead of a changing stored enriched batch.
         # Its native strain assessment and hidden-amount Dose remain separate.
-        "score_range": (68.5, 68.5),
+        # 49b61f37d (2026-10-23, exact claimed purpose for native treatment
+        # research credit): applicability 6 -> 3 (broad alignment), so
+        # Evidence 16 -> 13 and 68.5 -> 65.5. This slow-profile pin was stale
+        # since that commit (bisected 2026-10-28; passes at 35c306e85).
+        "score_range": (65.5, 65.5),
         "raw_fixture": "evidence_readiness_230149_raw.json",
         "dose_raw": 8.55,
-        "evidence_raw": 16.0,
+        "evidence_raw": 13.0,
         "no_independent_delivery": True,
     },
     # Fully ready verdict-diversity anchors. These replace products that are now
@@ -169,7 +175,9 @@ V4_CANARIES = {
         "confidence": "moderate",
         # Dose V4.1: raw Dose is adequacy only (11 -> 22) and the public
         # Dose ceiling caps it once (public Dose 10 unchanged).
-        "score_range": (78.3, 78.3),
+        # 1.31.0: the vitamin D ingredient allowlist is retired, so Evidence
+        # takes the strong floor (18 -> 14 raw): 78.3 -> 74.3.
+        "score_range": (74.3, 74.3),
         "safety_verdict": "CAUTION",
     },
     "206362": {

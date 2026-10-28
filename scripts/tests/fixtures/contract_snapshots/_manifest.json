@@ -207,6 +207,17 @@
   ],
   "changelog": [
     {
+      "date": "2026-10-28",
+      "phase": "Evidence calibration: no automatic generic floor above the strong base (config 1.31.0)",
+      "source_commit": "67119326f",
+      "products_updated": [
+        245156,
+        298102,
+        306237
+      ],
+      "notes": "Complete33raw-canary check on the candidate found exactly3drifts; unchanged main passes33/33. Each is one Evidence change 20.0->15.6 (18->14 raw): KSM-66 245156 and 306237 (two Ixoreal-supplied trials, 124 participants) and vitamin D 298102 (retired ingredient allowlist). The retired brand and allowlist floors no longer apply, so the strong floor applies. Totals -4.4; 298102 Exceptional->Excellent, 306237 Very good->Good. No identity, amount, Dose, Formulation, Transparency, Verification, safety or status change. Each fixture refreshed individually from raw; other30canaries unchanged."
+    },
+    {
       "date": "2026-10-27",
       "phase": "Public completeness consumes existing release assessment",
       "products_updated": [
