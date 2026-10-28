@@ -3,7 +3,7 @@
     "description": "Ingredients backed by clinical research and studies - Enhanced for Section C v3.4.0",
     "purpose": "evidence_scoring",
     "schema_version": "5.6.4",
-    "last_updated": "2026-10-27",
+    "last_updated": "2026-10-28",
     "total_entries": 210,
     "changelog": [
       "2026-10-20: INGR_TART_CHERRY standard_name is Tart Cherry (\"tart cherry extract\" kept as an alias), the rename deferred from PR205. Its juice-only applicability (PR213) rejects every non-juice row the name now reaches; measured on all 552 cherry-mentioning labels: 0 score, pillar or blob changes.",
@@ -8621,7 +8621,7 @@
             "Original saved-label preparation, component dose, regimen and outcome correspondence remain separately required.",
             "All included studies were rated high risk of bias; heterogeneity and uncertain adverse-event evidence remain.",
             "Table1 identifies Trc2011 control as1.5g/day glucosamine sulfate, not placebo, despite the review labeling its pooled contrast placebo-controlled.",
-            "Post-hoc pooling repeats pain measures from the same cohort. Original-trial/forest-input reconciliation is still unresolved; no numerical pooled placebo-superiority claim is accepted.",
+            "The original Trc trial PMID20401752 Methods independently confirms 10 g/day Colatech versus 1.5 g/day glucosamine sulfate; comparator access/extraction is complete. Forest-input reconciliation and corrected pooled inference remain unresolved; no pooled placebo-superiority claim is accepted.",
             "A nonsignificant adverse-event contrast does not establish equal safety."
           ],
           "dose": {
@@ -23610,7 +23610,7 @@
       "health_goals_supported": [
         "Increase Energy"
       ],
-      "notes": "Human evidence for Cordyceps is modest and mostly exercise-related. Small randomized trials suggest improvements in ventilatory or metabolic thresholds and high-intensity exercise tolerance, but they do not establish large or consistent VO2max gains across populations (PMID 20804368, PMID 27408987, PMID 38501161). Retained-source scope and limitations: ATP production ↑ oxygen utilization ↑",
+      "notes": "Cs-4 PMID20804368 has an overall null between-group comparison; favorable threshold changes are exploratory within-group findings. PeakO2 PMID27408987 is a six-mushroom preparation, with a one-week null comparison and exploratory extension. PMID38501161 remains a separate source-context task. These sources do not establish generic Cordyceps efficacy, a shared dose threshold or functional recovery.",
       "study_type": "rct_multiple",
       "published_studies": [
         "mechanistic",
@@ -23726,7 +23726,7 @@
       "study_contexts": [
         {
           "context_schema_version": "1.1.0",
-          "review_status": "source_verified_pending_clinical_review",
+          "review_status": "clinician_approved",
           "scoring_eligible": false,
           "human_status": "confirmed",
           "source_integrity": "none",
@@ -23781,7 +23781,7 @@
             "Total 4 g/day is the six-mushroom preparation, not a known isolated Cordyceps militaris dose.",
             "Methods rounds 1.3 g three times daily to 4 g daily; preserve source rounding.",
             "The three-week extension is exploratory and self-selected; no general isolated-material or guaranteed performance claim.",
-            "Factual extraction only; existing signed source-content hold remains."
+            "Reviewed non-transfer conclusion: this aggregate or combined intervention cannot provide affirmative generic-ingredient credit. Exact preparation-specific qualification and other recorded source limits remain separate."
           ],
           "dose": {
             "measurement_type": "mass",
@@ -23806,6 +23806,102 @@
               "pmid": "27408987",
               "location": "Full body Methods Experimental Design, Subjects, Supplementation; Table3; Introduction stated primary/secondary/exploratory aims; Results",
               "source_url": "https://pubmed.ncbi.nlm.nih.gov/27408987/"
+            }
+          },
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-10-28",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Sean confirmed approval of the October 28 research response, exact preparation/non-transfer conclusion only. Positive preparation-specific qualification and other retained source holds are not approved by this disposition. Report SHA256 db68aa1e8ab3b0b428886391e4611e04390635533a9986d26a425fc034c117e2."
+          }
+        },
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "preclin_cordyceps_20804368_cs4_nonaffirmative",
+          "components": [
+            "PRECLIN_CORDYCEPS"
+          ],
+          "source_pmids": [
+            "20804368"
+          ],
+          "identity_scope": "branded_material",
+          "identity": {
+            "branded_material": "Cs-4 (CordyMax)",
+            "manufacturer": "Jiangxi GuoYao Company; supplied by Pharmanex",
+            "standardization": "Cultured fermentation preparation; not wild Cordyceps or PeakO2."
+          },
+          "exposure_basis": "supplement_dose",
+          "route": "oral",
+          "evidence_role": "direct_rct",
+          "component_registration_status": "fully_registered",
+          "condition": "exercise_performance_in_healthy_older_adults",
+          "purpose": "challenge",
+          "review_status": "clinician_approved",
+          "scoring_eligible": false,
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-10-28",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Sean confirmed Dr Pham approval of the October 28 research response, section Cordyceps/Cs-4. Approval covers the scoped nonaffirmative comparison, not general efficacy; report SHA256 db68aa1e8ab3b0b428886391e4611e04390635533a9986d26a425fc034c117e2."
+          },
+          "human_status": "confirmed",
+          "source_integrity": "none",
+          "trial_family": "cs4_chen_2010_20804368",
+          "population": {
+            "age_group": "adult",
+            "description": "Healthy adults aged 50–75; 20 randomized, 15 completed (8 Cs-4, 7 placebo)."
+          },
+          "study_design": "Randomized double-blind placebo-controlled 12-week pilot.",
+          "outcomes": [
+            {
+              "name": "Overall multivariable comparison: no between-group difference after treatment.",
+              "hierarchy": "not_reported",
+              "kind": "surrogate",
+              "direction": "null",
+              "outcome_role": "direct_between_group_effect"
+            },
+            {
+              "name": "Exploratory metabolic and ventilatory thresholds improved relative to baseline; not demonstrated placebo superiority.",
+              "hierarchy": "post_hoc",
+              "kind": "surrogate",
+              "direction": "positive",
+              "outcome_role": "within_group_change"
+            },
+            {
+              "name": "VO2max did not change significantly.",
+              "hierarchy": "not_reported",
+              "kind": "surrogate",
+              "direction": "null",
+              "outcome_role": "within_group_change"
+            }
+          ],
+          "limitations": [
+            "The approved report supports a nonaffirmative scoped conclusion, not a generic efficacy rejection.",
+            "Source reports small exploratory analysis after the overall null comparison; no functional recovery or generic preparation transfer."
+          ],
+          "dose": {
+            "measurement_type": "mass",
+            "unit": "mg",
+            "values": [
+              2997
+            ],
+            "dose_status": "verified",
+            "dose_basis": "nominal_assigned_arm",
+            "duration_basis": "fixed_protocol",
+            "duration_days": 84,
+            "administration_frequency": "three 333 mg capsules three times daily",
+            "dosage_forms": [
+              "capsule"
+            ],
+            "co_therapies": [],
+            "reported_regimen": "Nine 333 mg capsules/day for 12 weeks; 2,997 mg/day, approximately 3 g/day.",
+            "normalization": {
+              "basis": "3 capsules × 333 mg × 3 times/day; 12 weeks × 7 days. Full Methods resolves compressed abstract wording."
+            },
+            "source_provenance": {
+              "pmid": "20804368",
+              "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3110835/",
+              "location": "Methods Supplementation; Statistical analysis; Results; Discussion."
             }
           }
         }
@@ -32792,7 +32888,7 @@
       "study_contexts": [
         {
           "context_schema_version": "1.1.0",
-          "review_status": "source_verified_pending_clinical_review",
+          "review_status": "clinician_approved",
           "scoring_eligible": false,
           "human_status": "confirmed",
           "source_integrity": "none",
@@ -32860,7 +32956,8 @@
           "limitations": [
             "No single aggregate regimen is reported because these are heterogeneous study arms; source_not_reported applies only to the nonexistent review-wide regimen, not undisclosed constituent trial doses. Exact table rows retained. Included-study membership is not every bibliography citation; unindexed/ambiguous primary references remain source-labelled in private inventory.",
             "Goel 2005 (PMID 16177972) is preparation-linked companion immune-marker followup referring to previous Echinilin trial; retained publication membership is not independent efficacy replication.",
-            "The review reports a trend toward more adverse-event dropouts in prevention studies; nonsignificant group differences do not establish personal safety."
+            "The review reports a trend toward more adverse-event dropouts in prevention studies; nonsignificant group differences do not establish personal safety.",
+            "Reviewed non-transfer conclusion: this aggregate or combined intervention cannot provide affirmative generic-ingredient credit. Exact preparation-specific qualification and other recorded source limits remain separate."
           ],
           "dose": {
             "measurement_type": "mass",
@@ -32883,6 +32980,12 @@
               "location": "Full body Methods/Results and Characteristics of included studies T2",
               "source_url": "https://pubmed.ncbi.nlm.nih.gov/24554461/"
             }
+          },
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-10-28",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Sean confirmed approval of the October 28 research response, exact preparation/non-transfer conclusion only. Positive preparation-specific qualification and other retained source holds are not approved by this disposition. Report SHA256 db68aa1e8ab3b0b428886391e4611e04390635533a9986d26a425fc034c117e2."
           }
         }
       ]

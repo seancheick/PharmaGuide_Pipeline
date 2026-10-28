@@ -4465,8 +4465,13 @@ class TestClinicalEvidenceUsesMatchedFormIdentity:
 
         evidence = enricher._collect_evidence_data(product)
         evidence_ids = {match.get("id") for match in evidence["clinical_matches"]}
+        rejected = {(m.get("id"), m.get("reason_code"))
+                    for m in evidence["rejected_clinical_matches"]}
 
-        assert "INGR_NAC" in evidence_ids
+        # INGR_NAC is a reviewed reference record (2026-10-27): the spelling
+        # must still reach it, and reference-only records never earn credit.
+        assert ("INGR_NAC", "reference_only_clinical_record") in rejected
+        assert "INGR_NAC" not in evidence_ids
 
     def test_ambiguous_cleaner_abbreviation_does_not_borrow_evidence(self, enricher):
         """DGL must not link D-glucuronolactone to licorice evidence."""
@@ -4519,7 +4524,17 @@ class TestClinicalEvidenceUsesMatchedFormIdentity:
             "inactiveIngredients": [],
         }
 
-        assert "INGR_MAG_GLYCINATE" in self._evidence_ids(enricher, product)
+        enriched, issues = enricher.enrich_product(product)
+        assert issues == []
+        evidence = enriched["evidence_data"]
+        # INGR_MAG_GLYCINATE is a reviewed reference record (2026-10-27): the
+        # chelate form must route to it, not to generic magnesium, and the
+        # reference-only record is withheld from clinical credit.
+        assert ("INGR_MAG_GLYCINATE", "reference_only_clinical_record") in {
+            (m.get("id"), m.get("reason_code"))
+            for m in evidence["rejected_clinical_matches"]}
+        assert "INGR_MAG_GLYCINATE" not in {
+            m.get("id") for m in evidence["clinical_matches"]}
 
     def test_iron_bisglycinate_chelate_routes_to_bisglycinate_evidence(self, enricher):
         product = {

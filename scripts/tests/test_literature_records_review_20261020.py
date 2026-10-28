@@ -398,7 +398,7 @@ def test_b0_capsaicin_source_does_not_assert_capsiate_equivalence(records):
 
 
 def test_b0_lions_mane_tablet_mass_is_not_an_exact_powder_or_part_claim(records):
-    record = records["lion_s_mane"]
+    record = records["lions_mane"]
     assert "plant part not specified in the abstract" in record["material_form"]
     assert "fruiting" not in record["material_form"]
     assert "96%" in _study(record, "18844328")["dose"]

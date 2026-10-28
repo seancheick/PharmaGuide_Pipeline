@@ -3,7 +3,7 @@
     "description": "Phase 4 shadow literature resolution registry for high-impact canonical actives",
     "purpose": "literature_evidence_resolution",
     "schema_version": "5.0.0",
-    "last_updated": "2026-10-27",
+    "last_updated": "2026-10-28",
     "total_entries": 816,
     "verification_pipeline": "scripts/api_audit/verify_literature_records.py",
     "verified_studies_count": 279,
@@ -5806,7 +5806,7 @@
       }
     },
     {
-      "canonical_id": "lion_s_mane",
+      "canonical_id": "lions_mane",
       "material_form": "Hericium erinaceus dry-powder tablets (96% powder; plant part not specified in the abstract)",
       "search_query": "Hericium erinaceus lion mane mild cognitive impairment double-blind clinical trial",
       "search_date": "2026-09-20",
@@ -5847,11 +5847,11 @@
         "all_pmids_verified": true,
         "retractions_found": false,
         "reference_citations": {
-          "source_sha256": "741d30aaccac7e9e7f22888f03ce182928255b679214be98ce52b5aa7b1e76d5",
+          "source_sha256": "d5e77cc009e54259cefd9cdd18a89eb15d21748d44c2d30fc21179cbb74bf7af",
           "source_ids": [
             "PMID:18844328"
           ],
-          "verified_at": "2026-10-27T22:38:13.265370+00:00",
+          "verified_at": "2026-10-28T06:35:20.068488+00:00",
           "is_complete": true,
           "results": [
             {
@@ -5868,7 +5868,7 @@
       },
       "reference_semantics": {
         "reference_type": "no_benchmark",
-        "scope": "General catalog Dose for identified lion_s_mane only. Existing source-specific exposures remain descriptive; no universal minimum, optimal interval, preparation conversion or safety ceiling is established by them. This is not absence of research or universal null efficacy.",
+        "scope": "General catalog Dose for identified lion's mane only: the lions_mane species canonical, of which botanical lion_s_mane is an exact equivalent. Existing source-specific exposures remain descriptive; no universal minimum, optimal interval, preparation conversion or safety ceiling is established by them. This is not absence of research or universal null efficacy.",
         "preparation": "Hericium erinaceus dry-powder tablets (96% powder; plant part not specified in the abstract)",
         "purpose": "General catalog Dose only; exact clinical purpose, Evidence determination and independent safety applicability remain with existing owners.",
         "population": "adults with mild cognitive decline",
@@ -5878,8 +5878,8 @@
         "source_ids": [
           "PMID:18844328"
         ],
-        "rationale": "Source-backed case finding: Four 250 mg tablets containing 96% Hericium erinaceus dry powder three times daily (3 g/day tablet mass) for 16 weeks improved HDS-R cognitive scores versus placebo in 30 adults aged 50-80 with MCI; scores fell after stopping. The abstract does not identify the mushroom part; tablet mass is not an exact dry-powder dose. Existing October18 approved DoseV4.1 policy makes other discrete-regimen extrapolations descriptive/general completed neutral unless a distinct accepted exact formula policy applies. A study assignment, isolated positive endpoint, null comparison, missing abstract quantity or non-equivalent preparation is not an approved general efficacy minimum, optimal range or UL. Existing source-specific amounts/outcomes remain factual; no clinical approval, Evidence grade or general safety conclusion is added.",
-        "owner": "scripts/data/literature_evidence_records.json::lion_s_mane",
+        "rationale": "Source-backed case finding: Four 250 mg tablets containing 96% Hericium erinaceus dry powder three times daily (3 g/day tablet mass) for 16 weeks improved HDS-R cognitive scores versus placebo in 30 adults aged 50-80 with MCI; scores fell after stopping. The abstract does not identify the mushroom part; tablet mass is not an exact dry-powder dose. Existing October18 approved DoseV4.1 policy makes other discrete-regimen extrapolations descriptive/general completed neutral unless a distinct accepted exact formula policy applies. A study assignment, isolated positive endpoint, null comparison, missing abstract quantity or non-equivalent preparation is not an approved general efficacy minimum, optimal range or UL. Existing source-specific amounts/outcomes remain factual; no clinical approval, Evidence grade or general safety conclusion is added. Re-keyed 2026-10-28 from lion_s_mane to the lions_mane species canonical after the two records were joined as exact equivalents; Sean confirmed Dr Pham's approval covers the lions_mane species canonical (2026-10-28, date only).",
+        "owner": "scripts/data/literature_evidence_records.json::lions_mane",
         "review_date": "2026-10-27",
         "approval_status": "approved_existing_neutral_dose_v41_source_review"
       }

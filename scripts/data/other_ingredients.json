@@ -3,7 +3,7 @@
     "description": "Other/inactive ingredients database for supplement excipients and additives",
     "purpose": "inactive_ingredient_classification",
     "schema_version": "5.4.3",
-    "last_updated": "2026-10-27",
+    "last_updated": "2026-10-28",
     "total_entries": 738,
     "functional_roles_field": {
       "added_in": "5.1.0",
@@ -11982,11 +11982,7 @@
       "standard_name": "Mushroom Extracts",
       "aliases": [
         "Black Fungus Mushroom",
-        "lion's mane extract",
-        "Lion's Mane Mushroom Fruiting Body Extract",
         "mushroom extract",
-        "reishi extract",
-        "Reishi Mushroom Fruiting Body Extract",
         "Royal Sun Mushroom",
         "White Button Mushroom"
       ],
@@ -11999,7 +11995,7 @@
         "cognitive support",
         "immune support"
       ],
-      "last_updated": "2025-12-04",
+      "last_updated": "2026-10-28",
       "external_ids": {},
       "cui": "C5891183",
       "functional_roles": [],

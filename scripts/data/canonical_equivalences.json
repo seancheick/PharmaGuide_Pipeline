@@ -3,11 +3,11 @@
     "description": "Reviewed identity equivalences and specificity relationships across pipeline registries.",
     "schema_version": "1.0.0",
     "version": "2026-07-13",
-    "total_entries": 8,
+    "total_entries": 10,
     "total_relationships": 9,
     "purpose": "Prevent cleaner/enricher identity drift using reviewed exact-identity and broad-to-specific contracts.",
     "policy": "Only exact same-substance records may be redirected. Parent, form, preparation, and context relationships require separate handling.",
-    "last_updated": "2026-10-20"
+    "last_updated": "2026-10-28"
   },
   "equivalences": [
     {
@@ -80,6 +80,24 @@
       "target_id": "tart_cherry",
       "relation": "exact_equivalent",
       "basis": "Shared FDA UNII 1L29G6428X (GSRS SOUR CHERRY, parent substance PRUNUS CERASUS WHOLE); both records are Prunus cerasus fruit, so one identity.",
+      "scope": "all_identity_contexts"
+    },
+    {
+      "source_db": "botanical_ingredients",
+      "source_id": "lion_s_mane",
+      "target_db": "ingredient_quality_map",
+      "target_id": "lions_mane",
+      "relation": "exact_equivalent",
+      "basis": "Both records are Hericium erinaceus (lion's mane mushroom): GSRS UNII Y62T8P9AAP (Hericium erinaceus whole) and UMLS CUI C6049163 (Lion's Mane Mushroom), verified 2026-10-28. The IQM canonical is used for active scoring.",
+      "scope": "all_identity_contexts"
+    },
+    {
+      "source_db": "botanical_ingredients",
+      "source_id": "reishi_mushroom",
+      "target_db": "ingredient_quality_map",
+      "target_id": "reishi",
+      "relation": "exact_equivalent",
+      "basis": "Shared FDA UNII TKD8LH0X2Z (GSRS REISHI) and UMLS CUI C0752326; both records are Ganoderma lucidum. The IQM canonical is used for active scoring.",
       "scope": "all_identity_contexts"
     }
   ],
