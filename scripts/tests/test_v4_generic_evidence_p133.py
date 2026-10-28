@@ -1211,9 +1211,10 @@ def test_joint_support_caps_branded_primary_evidence_floor(monkeypatch) -> None:
                    effect_direction="positive_strong", total_enrollment=200,
                    study_contexts=contexts)
     match.update(matched_source_row_refs=["ingredientRows[0]"], matched_canonical_ids=["msm"])
-    import clinical_applicability
-    registry = {**clinical_applicability.reviewed_entries(), match["id"]: match}
-    monkeypatch.setattr(clinical_applicability, "reviewed_entries", lambda: registry)
+    # This test owns the joint cap, not replication: joint conditions have no
+    # shared indication category yet, so force the replicated-body gate.
+    from scoring_v4.modules import generic_evidence
+    monkeypatch.setattr(generic_evidence, "_replicated_evidence_body", lambda *args: True)
     product = _product(supplement_taxonomy={"primary_type": "joint_support"},
                        ingredients=[ingredient], matches=[match])
     product["activeIngredients"] = [dict(ingredient)]

@@ -159,11 +159,11 @@ def test_ideal_fixtures_reach_their_evidence_reference(monkeypatch) -> None:
     record = case.product["evidence_data"]["clinical_matches"][0]
     review = {"reviewer": "Synthetic fixture", "reviewed_at": "2026-10-01",
               "scope": "identity_dose_outcome_applicability"}
-    registered = {**record, "study_contexts": [
-        {"context_id": family, "trial_family": family, "condition": "muscle_cramps",
+    registered = {**record, "primary_outcome": "Sleep Quality", "study_contexts": [
+        {"context_id": family, "trial_family": family, "condition": "self_reported_insomnia_symptoms",
          "evidence_role": "direct_rct", "identity_scope": "ingredient_general",
          "review_status": "clinician_approved", "scoring_eligible": True, "clinical_review": review,
-         "outcomes": [{"name": "Cramp frequency", "direction": "positive",
+         "outcomes": [{"name": "Sleep quality", "direction": "positive",
                        "hierarchy": "primary", "kind": "patient_important"}]}
         for family in ("a", "b", "c")]}
     registry = {**clinical_applicability.reviewed_entries(), record["id"]: registered}

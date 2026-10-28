@@ -133,7 +133,9 @@ _CONTEXT_ROLE_DESIGNS = {
     "systematic_review": "systematic_review",
 }
 # Directness: a combination formula's result, or a context with no stated
-# identity scope, is not evidence for this record's own ingredient.
+# identity scope, is not evidence for this record's own ingredient; the
+# assessed exact formula (studied_formulas) is the one owner of whole-formula
+# evidence, so only it reads combination contexts.
 _DIRECT_CONTEXT_SCOPES = frozenset({
     "ingredient_general", "branded_material", "exact_form", "botanical_preparation", "exact_strain",
 })
@@ -1723,9 +1725,9 @@ def _primary_mass_floor(
             ]
         st = _norm_text(entry.get("study_type"))
         if st in _STRONG_STUDY:
-            base = (PRIMARY_FLOOR_REPLICATED_STRONG
-                    if effect == "positive_strong" and _replicated_evidence_body(entry)
-                    else PRIMARY_FLOOR_STRONG)
+            replicated = effect == "positive_strong" and _replicated_evidence_body(
+                entry, product, {str(row.get("canonical_id") or "").strip().lower() for row in linked})
+            base = PRIMARY_FLOOR_REPLICATED_STRONG if replicated else PRIMARY_FLOOR_STRONG
         elif st in _MODERATE_STUDY:
             base = PRIMARY_FLOOR_MODERATE
         else:
@@ -1752,30 +1754,48 @@ def _primary_mass_floor(
     return floor, floor_canon
 
 
-def _replicated_evidence_body(entry: Dict[str, Any]) -> bool:
+def _replicated_evidence_body(entry: Dict[str, Any], product: Dict[str, Any],
+                              canonical_ids: set[str]) -> bool:
     """Whether the record's reviewed body shows full independent replication.
 
     Only the registry record's own clinician-approved, direct-scope contexts
     with primary patient-important outcomes count (context_accepted_for_scoring);
-    contexts carried on a match never broaden reviewed scope. The shared
-    consistency owner then
-    requires three consistent independent RCT families for one condition, with
-    no contradictory or unlinked pooled family. A brand, an ingredient name or
-    a study count never stands in for that body.
+    contexts carried on a match never broaden reviewed scope. A context counts
+    only for the purpose it studied: its condition must fall in a category the
+    label declares for this ingredient or, without a declared purpose, one the
+    record's reviewed outcomes support (evidence_indication_categories). A
+    condition the shared categorizer cannot place stays held. The shared
+    consistency owner then requires three consistent independent RCT families
+    for one condition, with no contradictory or unlinked pooled family. A brand,
+    an ingredient name or a study count never stands in for that body.
     """
     from clinical_applicability import reviewed_entries
+    from evidence_resolver import _evidence_claim_purposes, _evidence_entry_purposes, evidence_indication_categories
     from probiotic_measurements import context_accepted_for_scoring
     from scoring_v4.modules.probiotic_evidence import _consistency_from_contexts, _qualifying_outcomes
 
     record = reviewed_entries().get(_clinical_source_id(entry))
     if record is None:
         return False
+    claims = _evidence_claim_purposes(product)
+    declared = set().union(*(claims.get(canonical, set()) for canonical in canonical_ids)) if canonical_ids else set()
+    purposes = declared or _evidence_entry_purposes(record)
+    exact_formula = (entry.get("evidence_origin") == "verified_formula_contract"
+                     and _safe_dict(entry.get("applicability_assessment")).get("status") == "assessed_studied_formula")
+    scopes = _DIRECT_CONTEXT_SCOPES | ({"combination"} if exact_formula else set())
+
+    def studied_purposes(context: Dict[str, Any]) -> set[str]:
+        return evidence_indication_categories(" ".join(
+            [str(context.get("condition") or "").replace("_", " ")]
+            + [str(outcome.get("name") or "") for outcome in _qualifying_outcomes(context)]))
+
     contexts = [
         (str(record.get("id") or ""),
          {**context, "study_design": _CONTEXT_ROLE_DESIGNS.get(context.get("evidence_role"), "unreported")})
         for context in _safe_list(record.get("study_contexts"))
         if context_accepted_for_scoring(context) and _qualifying_outcomes(context)
-        and context.get("identity_scope") in _DIRECT_CONTEXT_SCOPES
+        and context.get("identity_scope") in scopes
+        and studied_purposes(context) & purposes
     ]
     return _consistency_from_contexts(contexts)["credit"] >= 1.0
 

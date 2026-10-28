@@ -128,11 +128,17 @@ def _replicated(*families, **kwargs):
     return [_context(family, **kwargs) for family in families or ("a", "b", "c")]
 
 
-def _registered(monkeypatch, *matches):
-    """Replication is read from the clinical registry, never from the match."""
+def _registered(monkeypatch, *matches, claims=None):
+    """Register SYNTHETIC records: replication is read from the registry, never
+    the match. Each record states a synthetic supported outcome (mood category);
+    ``claims`` sets the label's declared purposes per ingredient."""
     import clinical_applicability
-    registry = {**clinical_applicability.reviewed_entries(), **{m["id"]: m for m in matches}}
+    import evidence_resolver
+    registry = {**clinical_applicability.reviewed_entries(),
+                **{m["id"]: {"primary_outcome": "Reduce Stress/Anxiety", **m} for m in matches}}
     monkeypatch.setattr(clinical_applicability, "reviewed_entries", lambda: registry)
+    if claims is not None:
+        monkeypatch.setattr(evidence_resolver, "_evidence_claim_purposes", lambda product, module=None: claims)
     return list(matches)
 
 
@@ -196,6 +202,55 @@ def test_indirect_pooled_or_unapproved_contexts_are_not_replication(monkeypatch)
         p = _product([_ing()], _registered(monkeypatch, _match(study_type="systematic_review_meta",
                                                              study_contexts=contexts)))
         assert score_evidence(p, apply_primary_floor=True)["metadata"]["primary_evidence_floor"] == 14.0
+
+
+def test_replication_must_match_the_declared_purpose(monkeypatch):
+    """Per-context purpose: replicated stress trials support a mood purpose, not
+    a cognitive claim the same record also covers (supported outcomes mood and
+    cognition). Without a declared claim the record's reviewed outcomes decide."""
+    record = dict(study_type="rct_multiple", study_contexts=_replicated(),
+                  primary_outcome="Stress and memory", key_endpoints=["cognition"])
+    for claims, floor in (({"ashwagandha": {"mood"}}, 18.0),
+                          ({"ashwagandha": {"cognitive_neurological"}}, 14.0),
+                          ({}, 18.0)):
+        p = _product([_ing()], _registered(monkeypatch, _match(**record), claims=claims))
+        assert score_evidence(p, apply_primary_floor=True)["metadata"]["primary_evidence_floor"] == floor, claims
+
+
+def test_uncategorized_replicated_condition_is_held(monkeypatch):
+    """The shared categorizer has no joint category yet, so knee trials cannot
+    establish purpose-matched replication: held, never borrowed."""
+    contexts = _replicated(condition="knee_osteoarthritis")
+    for context in contexts:
+        context["outcomes"][0]["name"] = "WOMAC"
+    p = _product([_ing()], _registered(monkeypatch, _match(study_type="rct_multiple", study_contexts=contexts)))
+    assert score_evidence(p, apply_primary_floor=True)["metadata"]["primary_evidence_floor"] == 14.0
+
+
+def test_combination_contexts_count_only_for_the_assessed_exact_formula(monkeypatch):
+    """A whole-formula trial is direct evidence for that exact formula (studied
+    formula owner), never independent replication for one component."""
+    from scoring_v4.modules.generic_evidence import _replicated_evidence_body
+    record = _registered(monkeypatch, _match(study_contexts=_replicated(scope="combination")))[0]
+    exact = {**record, "evidence_origin": "verified_formula_contract",
+             "applicability_assessment": {"status": "assessed_studied_formula"}}
+    product = _product([_ing()], [record])
+    assert _replicated_evidence_body(exact, product, {"ashwagandha"}) is True
+    assert _replicated_evidence_body(record, product, {"ashwagandha"}) is False
+
+
+def test_real_registry_records_without_replicated_bodies_stay_below_exceptional():
+    """Real controls, each blocked for its own recorded reason: Magtein (mixed
+    and null trials plus a multi-active formula), creatine (one pooled
+    meta-analysis), magnesium bisglycinate (two approved trials for different
+    conditions) and OptiMSM/MSM (one shared trial family under two records)."""
+    from clinical_applicability import reviewed_entries
+    from scoring_v4.modules.generic_evidence import _replicated_evidence_body
+    registry = reviewed_entries()
+    product = _product([_ing()], [])
+    for record_id in ("BRAND_MAGTEIN", "INGR_CREATINE_MONOHYDRATE", "INGR_MAG_GLYCINATE",
+                      "BRAND_OPTIMSM", "INGR_MSM"):
+        assert _replicated_evidence_body(registry[record_id], product, set()) is False, record_id
 
 
 def test_unregistered_match_cannot_supply_its_own_replication():
