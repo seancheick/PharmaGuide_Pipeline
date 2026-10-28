@@ -20,7 +20,7 @@ def positive_rct(*, approved=False, **changes):
                   outcomes=[{"name": "symptom_score", "hierarchy": "primary",
                              "kind": "patient_important", "direction": "positive"}])
     if approved:
-        row.update(review_status="clinician_approved", clinical_review=deepcopy(REVIEW))
+        row.update(review_status="clinician_approved", clinical_review=deepcopy(REVIEW), scoring_eligible=True)
     row.update(changes)
     return row
 
@@ -204,12 +204,14 @@ def test_spores_dose_without_measurement_type_never_credits_an_identity(registry
     assert score_evidence(la14_product())["score"] == 0
 
 
-@pytest.mark.parametrize("value", [0, "false", "no", 1, "true"])
-def test_scoring_eligible_is_only_true_or_absent(value):
+@pytest.mark.parametrize("value", [None, False, 0, "false", "no", 1, "true"])
+def test_scoring_eligible_requires_explicit_boolean_true(value):
     row = positive_rct(approved=True, scoring_eligible=value)
     assert pm.context_accepted_for_scoring(row) is False
     assert pm.context_accepted_for_scoring(positive_rct(approved=True)) is True
     assert pm.context_accepted_for_scoring(positive_rct(approved=True, scoring_eligible=True)) is True
+    row.pop("scoring_eligible")
+    assert pm.context_accepted_for_scoring(row) is False
 
 
 def test_amount_cannot_make_unmatched_purpose_evidence_applicable(registry):
