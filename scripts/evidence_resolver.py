@@ -123,6 +123,7 @@ INDICATION_KEYWORDS: Dict[str, Set[str]] = {
 # Indications named only by a phrase: a bare word ("blood", "strength",
 # "regularity", "mass") states no purpose on its own.
 _INDICATION_PHRASES = (
+    ("eye_health", r"\b(?:visual (?:performance|acuity)|contrast sensitivity|disability glare)\b"),
     ("cardiovascular", r"\b(?:heart (?:health|function|failure)|healthy heart|blood pressure|blood flow)\b"),
     ("metabolic", r"\bblood sugar\b"),
     # "Gum" alone is a resin, thickener or chewing gum, not the gums.

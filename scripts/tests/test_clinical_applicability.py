@@ -674,9 +674,10 @@ def test_exclusion_only_scope_retains_every_valid_marine_row_independent_of_orde
         row = _ingredient(name=name, canonical_id=canonical, quantity=amount, unit="mg")
         row["raw_source_path"] = f"ingredientRows[{i}]"
         rows.append(row)
-    # Isolate the exclusion contract from the real omega clinical hold.
-    # This synthetic scope is never a clinical source or a scoring approval.
-    match = _match(id="SYNTHETIC_MARINE_SCOPE_CONTROL", ingredient="Omega-3 Fatty Acids",
+    # Use the fixture's canonical, explicitly approved test source so this
+    # exercises row exclusion rather than an unregistered-match rejection.
+    # The live omega benefit hold is asserted independently above.
+    match = _match(id="INGR_OMEGA3", ingredient="Omega-3 Fatty Acids",
                    standard_name="Omega-3 Fatty Acids",
                    applicability=deepcopy(reviewed_entries()['INGR_OMEGA3']['applicability']),
                    matched_canonical_ids=[r["canonical_id"] for r in rows],
@@ -1608,6 +1609,7 @@ def test_claim_free_coq10_keeps_heart_failure_scope():
     assert result['status'] == 'applicable'
     assert result['claim_alignment']['state'] == 'absent'
     assert result['supported_outcomes'] == ['heart_failure_adjunct']
+    assert result['studied_population'] == reviewed_entries()['INGR_COQ10']['applicability']['studied_population']
     assert 'heart failure' in result['studied_population'].lower()
 
 
@@ -1643,6 +1645,8 @@ def test_potassium_blood_pressure_claim_keeps_hypertensive_population_scope():
                      ('Potassium supports healthy blood pressure.',))
     assert result['status'] == 'applicable'
     assert result['claim_alignment']['state'] == 'aligned'
+    assert result['supported_outcomes'] == ['cardiovascular']
+    assert result['studied_population'] == reviewed_entries()['INGR_POTASSIUM']['applicability']['studied_population']
     assert 'hypertension' in result['studied_population'].lower()
     assert 'not significant in normotensive' in result['studied_population']
 
@@ -2240,3 +2244,122 @@ def test_source_join_preserves_a_trial_beside_its_excluded_correction():
     assert set(context['source_pmids']) == {'39252819', '40567408'}
     assert clinical_record_sources_eligible(record, context=context)
     assert not clinical_record_sources_eligible(record, context=context, source_pmids=['40567408'])
+
+
+@pytest.mark.parametrize('flag', ['missing', None, False, 0, 'true', True])
+def test_public_clinical_credit_requires_explicit_boolean_eligibility(monkeypatch, flag):
+    import clinical_applicability as owner
+    from test_evidence_resolver import _approved_test_source
+    from scoring_v4.scored_artifact import build_scored_artifact
+    source = _approved_test_source({'id': 'TEST_EXPLICIT_FLAG', 'study_type': 'rct_single',
+        'evidence_level': 'ingredient-human', 'effect_direction': 'positive_strong'}, name='Reviewed Test Material')
+    context = source['study_contexts'][0]
+    if flag == 'missing':
+        context.pop('scoring_eligible')
+    else:
+        context['scoring_eligible'] = flag
+    monkeypatch.setattr(owner, 'reviewed_entries', lambda: {source['id']: source})
+    row = _row('synthetic_material', 'Reviewed Test Material', quantity=400)
+    product = {'product_name': 'Reviewed Test Material', 'activeIngredients': [row],
+        'ingredient_quality_data': {'ingredients_scorable': [row]},
+        'evidence_data': {'clinical_matches': [{**source, 'matched_canonical_ids': ['synthetic_material'],
+            'matched_source_row_refs': ['ingredientRows[0]']}]}}
+    pillar = build_scored_artifact(product)['quality_pillars_v4']['evidence']
+    assert (pillar['score'] > 0) is (flag is True)
+
+
+@pytest.mark.parametrize('condition,signed', [
+    ('sleep_quality', []), ('perceived_stress', ['stress', 'sleep']),
+])
+def test_condition_and_signed_scope_cannot_promote_a_null_sleep_outcome(monkeypatch, condition, signed):
+    import clinical_applicability as owner
+    from test_evidence_resolver import _approved_test_source
+    from scoring_v4.scored_artifact import build_scored_artifact
+    source = _approved_test_source({'id': 'TEST_OUTCOME_SCOPE', 'study_type': 'rct_single',
+        'evidence_level': 'ingredient-human', 'effect_direction': 'positive_strong'}, name='Reviewed Test Material')
+    context = source['study_contexts'][0]
+    context['condition'] = condition
+    context['outcomes'].append({'name': 'sleep_quality', 'hierarchy': 'primary',
+        'kind': 'patient_important', 'direction': 'null'})
+    if signed:
+        source['applicability'] = {'scope': 'ingredient', 'supported_outcomes': signed,
+                                   'source_pmids': context['source_pmids']}
+    monkeypatch.setattr(owner, 'reviewed_entries', lambda: {source['id']: source})
+    row = _row('synthetic_material', 'Reviewed Test Material', quantity=400)
+    product = {'product_name': 'Supports sleep quality', 'activeIngredients': [row],
+        'ingredient_quality_data': {'ingredients_scorable': [row]},
+        'evidence_data': {'clinical_matches': [{**source, 'matched_canonical_ids': ['synthetic_material'],
+            'matched_source_row_refs': ['ingredientRows[0]']}]}}
+    assert build_scored_artifact(product)['quality_pillars_v4']['evidence']['score'] == 0
+    product['product_name'] = 'Supports stress relief'
+    assert build_scored_artifact(product)['quality_pillars_v4']['evidence']['score'] > 0
+
+
+def test_exact_unknown_category_condition_still_matches_its_positive_patient_outcome():
+    from clinical_applicability import assess_claim_alignment
+    context = _native_context(('nec_stage_2_or_higher', 'primary', 'patient_important', 'positive', {}),
+                              condition='necrotizing_enterocolitis')
+    assert assess_claim_alignment(_claim('Supports necrotizing enterocolitis prevention'), context)['state'] == 'aligned'
+
+
+def test_signed_scope_preserves_an_independently_positive_same_category_outcome():
+    from clinical_applicability import assess_claim_alignment
+    context = _native_context(('Perceived Stress Scale', 'primary', 'patient_important', 'positive', {}),
+                              ('Anxiety symptoms', 'primary', 'patient_important', 'null', {}),
+                              condition='perceived_stress')
+    before = deepcopy(context['outcomes'])
+    alignment = assess_claim_alignment(_claim('Supports stress relief'), context,
+                                      supported_outcomes=['stress_mood'])
+    assert alignment['state'] == 'aligned'
+    assert context['outcomes'] == before  # The null finding remains a contradiction.
+
+
+@pytest.mark.parametrize('context_id', ['ksm66_23439798', 'ksm66_32021735'])
+def test_signed_ksm_stress_mapping_survives_unclassified_pss_measurement(context_id):
+    from clinical_applicability import assess_claim_alignment
+    record = reviewed_entries()['BRAND_KSM66']
+    context = next(c for c in record['study_contexts'] if c['context_id'] == context_id)
+    alignment = assess_claim_alignment(_claim('Supports stress relief'), context,
+                                      supported_outcomes=record['applicability']['supported_outcomes'])
+    assert alignment['state'] == 'aligned'
+
+
+def test_signed_visual_scope_keeps_independently_positive_visual_performance():
+    from clinical_applicability import assess_claim_alignment
+    record = reviewed_entries()['BRAND_LUTEMAX_2020']
+    context = next(c for c in record['study_contexts']
+                   if c['context_id'] == 'brand_lutemax_2020_28661438_draft')
+    alignment = assess_claim_alignment(_claim('Supports eye and vision health'), context,
+                                      supported_outcomes=record['applicability']['supported_outcomes'])
+    assert alignment['state'] == 'aligned'
+
+
+@pytest.mark.parametrize('phrase', ['visual performance', 'visual acuity', 'contrast sensitivity', 'disability glare'])
+def test_precise_visual_endpoints_use_existing_eye_category(phrase):
+    from evidence_resolver import evidence_indication_categories
+    assert 'eye_health' in evidence_indication_categories(phrase)
+
+
+def test_stress_visual_analogue_scale_is_not_a_visual_health_endpoint():
+    from evidence_resolver import evidence_indication_categories
+    assert 'eye_health' not in evidence_indication_categories('Perceived stress visual analogue scale')
+
+
+def test_held_ginger_pregnancy_source_cannot_remain_in_adult_evidence_metadata(monkeypatch):
+    import clinical_applicability as owner
+    current = owner.reviewed_entries()
+    source = deepcopy(current['INGR_GINGER'])
+    for reference in source['references_structured']:
+        if reference.get('pmid') == '24642205':
+            reference['scoring_eligible'] = False
+    monkeypatch.setattr(owner, 'reviewed_entries', lambda: {**current, source['id']: source})
+    row = _row('ginger', 'Ginger Root', quantity=1000)
+    product = {'product_name': 'Ginger Root', 'ingredient_quality_data': {'ingredients_scorable': [row]}}
+    match = {**source, 'ingredient': row['name'], 'matched_source_row_refs': ['ingredientRows[0]']}
+    result = owner.assess_clinical_applicability(product, match, assess_amount=False)
+    assert result['status'] == 'applicable'
+    assert result['qualifying_study_type'] == 'rct_single'
+    assert result['supported_outcomes'] == ['acute_chemotherapy_nausea']
+    assert result['population_applicability']['context_ids'] == ['ingr_ginger_21818642_acute_cin']
+    assert 'pregnan' not in result['studied_population'].lower()
+    assert 'cancer' in result['studied_population'].lower()

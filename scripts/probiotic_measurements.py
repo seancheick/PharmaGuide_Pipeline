@@ -668,12 +668,13 @@ def context_accepted_for_scoring(context) -> bool:
         return False
     # A clinician approval records review provenance; it does not override an
     # explicit scope decision that this context is not eligible for scoring
-    # (for example, a class-level or ranking-only record). Only an absent flag
-    # or the boolean True is eligibility; 0, "false" and "no" are not.
+    # (for example, a class-level or ranking-only record). The approval must
+    # explicitly state boolean True; missing, null and truthy strings are not
+    # signed scoring decisions.
     eligible = context.get("scoring_eligible")
     return (
         context.get("review_status") == "clinician_approved"
-        and (eligible is None or eligible is True)
+        and eligible is True
         and clinical_review_provenance_valid(context)
     )
 

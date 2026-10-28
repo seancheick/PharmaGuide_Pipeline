@@ -249,12 +249,12 @@ def test_uncontrolled_intervention_is_described_without_authorizing_credit(eligi
 
 
 def test_an_approved_context_must_state_its_scoring_eligibility():
-    """Sean, 2026-10-28: a missing scoring_eligible is not a signed scoring decision.
-    context_accepted_for_scoring still reads None as eligible (legacy allowance), so
-    the validator requires the flag on every clinician-approved context."""
+    """A missing scoring_eligible is not a signed scoring decision at either seam."""
+    from probiotic_measurements import context_accepted_for_scoring
     approved = _context(review_status="clinician_approved")
     approved.pop("scoring_eligible", None)
     assert "review.approved_scoring_eligible_required" in validate_frozen_context(approved)
+    assert not context_accepted_for_scoring(approved)
     for flag in (True, False):
         assert "review.approved_scoring_eligible_required" not in validate_frozen_context(
             _context(review_status="clinician_approved", scoring_eligible=flag))

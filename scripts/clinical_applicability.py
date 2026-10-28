@@ -554,30 +554,51 @@ def assess_claim_alignment(product: Mapping, context: Mapping, canonicals=(), *,
     shares the outcome's indication. ``unrelated``: every claim is elsewhere.
     ``ambiguous``: a recognized claim no category places. Alignment never
     earns more than absence; it only decides whether an unrelated claim
-    stops this context from crediting the product. The signed credit scope
-    (``supported_outcomes``) outranks a broader context condition.
+    stops this context from crediting the product. Qualifying findings bound
+    the relationship; a signed scope may narrow it, never promote a null one.
     """
     from evidence_resolver import evidence_indication_categories
     from scoring_input_contract import ingredient_function_claims
     condition = _key(context.get("condition"))
-    if condition:
+    qualifying, held = qualifying_purpose_outcomes(context)
+    named_outcomes = qualifying or evaluated_purpose_outcomes(context)
+    outcome_categories = [evidence_indication_categories(str(row.get("name") or ""))
+                          for row in named_outcomes]
+    outcome = set().union(*outcome_categories) if outcome_categories else set()
+    named = [str(value) for value in supported_outcomes if _key(value) == condition]
+    signed = evidence_indication_categories(" ".join(named or map(str, supported_outcomes)))
+    condition_categories = evidence_indication_categories(condition)
+    if signed:
+        # Preserve the signed source mapping for a measurement name the
+        # category vocabulary cannot place in that scope (PSS, SBP or JKOM).
+        # Incidental source prose, such as urinary potassium exposure, is
+        # not a reason to discard that reviewed mapping.
+        outcome = signed
+        # A broad signed scope cannot promote its named null endpoint beside
+        # a positive endpoint. The positive result itself must name it.
+        nonpositive, _ = qualifying_purpose_outcomes(context, include_nonpositive=True)
+        excluded = evidence_indication_categories(" ".join(str(row.get("name") or "")
+            for row in nonpositive if row.get("direction") != "positive"))
+        positive_categories = set().union(*outcome_categories) if qualifying and outcome_categories else set()
+        outcome -= excluded - positive_categories if qualifying else set()
+    patient_relationship = bool(named_outcomes) and all(
+        row.get("kind") == "patient_important" for row in named_outcomes)
+    if not outcome and not any(outcome_categories) and patient_relationship and not signed:
+        # Patient-important scales can name an uncategorized measurement
+        # (JKOM, WOMAC or NEC stage). Preserve their reviewed condition link;
+        # a surrogate alone cannot broaden to the surrounding disease.
+        outcome = condition_categories
+    exact_relationship = bool(named_outcomes) and (
+        bool(condition_categories & outcome)
+        or (not condition_categories and patient_relationship)
+        or any(_key(row.get("name")) == condition for row in named_outcomes))
+    if condition and exact_relationship:
         pattern = re.compile(r"(?<!\w)" + r"[\s_-]+".join(re.escape(word) for word in condition.split()) + r"(?!\w)", re.I)
         # Names and warnings about a condition are not a claimed product purpose.
         excluded = {str(product.get("brand_name") or ""), str(product.get("serving_description") or "")}
         if any(text and text not in excluded and find_affirmative_label_match(pattern, text)
                for text in native_product_positioning_texts(product)):
             return {"state": "aligned", "sources": ["affirmative_exact_source_condition_claim"]}
-    named = [str(value) for value in supported_outcomes if _key(value) == condition]
-    outcome = evidence_indication_categories(" ".join(named or map(str, supported_outcomes)))
-    held = False
-    if not outcome:
-        # Without a signed scope, only qualifying outcomes name a purpose; the
-        # studied condition stands in when their names place no category.
-        qualifying, held = qualifying_purpose_outcomes(context)
-        named_outcomes = qualifying or evaluated_purpose_outcomes(context)
-        outcome = evidence_indication_categories(" ".join(str(row.get("name") or "") for row in named_outcomes))
-        if named_outcomes and not outcome:
-            outcome = evidence_indication_categories(condition)
     # A purpose the label attributes to this ingredient governs; unattributed
     # product positioning stands in only when the ingredient has no claim.
     claims = [(source, _claimed_purposes(text)) for canonical in sorted(set(canonicals))
@@ -857,7 +878,6 @@ def _assess_condition_scopes(product: Mapping, entry: Mapping, policy: Mapping, 
     # A signed context establishes a reviewed relationship, not affirmative
     # benefit for every recorded endpoint. Claim absence cannot promote a null
     # primary, exploratory secondary or unresolved outcome into credit.
-    context_count = len(contexts)
     positive_contexts = [context for context in contexts if qualifying_purpose_outcomes(context)[0]]
     evaluated_contexts = [context for context in contexts
                           if evaluated_purpose_outcomes(context)
@@ -913,13 +933,27 @@ def _assess_condition_scopes(product: Mapping, entry: Mapping, policy: Mapping, 
         "population_applicability": {"state": "eligible",
                                      "context_ids": [context.get("context_id") for context, _ in qualifying]},
     }
-    if len(qualifying) < context_count:
-        conditions = {_key(context.get("condition")) for context, _ in qualifying}
-        components["supported_outcomes"] = ([value for value in policy.get("supported_outcomes", [])
-                                             if _key(value) in conditions]
-                                            or [context.get("condition") for context, _ in qualifying])
-        components["studied_population"] = "; ".join(context["population"]["description"]
-                                                     for context, _ in qualifying)
+    # Source holds were removed before this function received the contexts.
+    # Compare canonical context/source coverage, never an already-filtered
+    # count. A fully retained signed scope may be narrower than its source
+    # population (for example hypertensive participants within a BP review).
+    from scoring_v4.modules.generic_evidence import _clinical_source_id
+    reference = reviewed_entries().get(_clinical_source_id(dict(entry)), entry)
+    original_ids = {context.get("context_id") for context in reference.get("study_contexts") or []
+                    if context.get("scoring_eligible") is True}
+    qualifying_ids = {context.get("context_id") for context, _ in qualifying}
+    qualifying_sources = {str(pmid) for context, _ in qualifying
+                          for pmid in context.get("source_pmids") or []}
+    full_scope = (bool(original_ids) and original_ids <= qualifying_ids
+                  and set(map(str, policy.get("source_pmids") or [])) <= qualifying_sources)
+    conditions = {_key(context.get("condition")) for context, _ in qualifying}
+    components["supported_outcomes"] = (policy["supported_outcomes"]
+        if full_scope and policy.get("supported_outcomes") else
+        [value for value in policy.get("supported_outcomes", []) if _key(value) in conditions]
+        or list(dict.fromkeys(context.get("condition") for context, _ in qualifying)))
+    components["studied_population"] = (policy["studied_population"]
+        if full_scope and policy.get("studied_population") else
+        "; ".join(dict.fromkeys(context["population"]["description"] for context, _ in qualifying)))
     # Derive design from the contexts that actually qualified, including when
     # a held synthesis was removed before this function received the contexts.
     if all(context.get("evidence_role") == "direct_rct" for context, _ in qualifying):
