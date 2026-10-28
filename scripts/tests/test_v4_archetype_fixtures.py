@@ -143,18 +143,33 @@ def test_failure_fixture_scores_below_its_ideal_pair(
     ]
 
 
-def test_ideal_fixtures_reach_their_evidence_reference() -> None:
+def test_ideal_fixtures_reach_their_evidence_reference(monkeypatch) -> None:
     """quality_score 1.1.3-achievable-ceilings: each archetype reference is the
     ceiling its engine can actually reach, so an ideal product scores 20/20.
     Before 2026-09-13 these references sat above the ceiling (generic 19 over
     an 18-point engine) and this test documented the mismatch instead of
-    fixing it."""
+    fixing it. Since 1.31.0 the generic ceiling needs a replicated reviewed
+    body in the clinical registry, so the synthetic record is registered with
+    three approved, consistent, independent trial families."""
+    import clinical_applicability
+
     validation = _validation_module()
     suite = validation.load_fixture_suite()
+    case = suite.by_id("generic_single_molecule__ideal")
+    record = case.product["evidence_data"]["clinical_matches"][0]
+    review = {"reviewer": "Synthetic fixture", "reviewed_at": "2026-10-01",
+              "scope": "identity_dose_outcome_applicability"}
+    registered = {**record, "study_contexts": [
+        {"context_id": family, "trial_family": family, "condition": "muscle_cramps",
+         "evidence_role": "direct_rct", "identity_scope": "ingredient_general",
+         "review_status": "clinician_approved", "scoring_eligible": True, "clinical_review": review,
+         "outcomes": [{"name": "Cramp frequency", "direction": "positive",
+                       "hierarchy": "primary", "kind": "patient_important"}]}
+        for family in ("a", "b", "c")]}
+    registry = {**clinical_applicability.reviewed_entries(), record["id"]: registered}
+    monkeypatch.setattr(clinical_applicability, "reviewed_entries", lambda: registry)
 
-    generic = validation.evaluate_fixture(
-        suite.by_id("generic_single_molecule__ideal")
-    ).actual
+    generic = validation.evaluate_fixture(case).actual
     b_complex = validation.evaluate_fixture(suite.by_id("b_complex__ideal")).actual
 
     assert generic["raw_dimensions"]["evidence"] == 18.0
@@ -296,8 +311,9 @@ def test_single_creatine_fixture_does_not_treat_derived_identity_as_source_form(
     assert actual["pillars"]["evidence"] == 0.0
     assert actual["raw_dimensions"]["evidence"] == 0.0
     ideal = validation.evaluate_fixture(suite.by_id("sports_single__ideal")).actual
-    assert ideal["pillars"]["evidence"] == 20.0
-    assert ideal["quality_score_v4_100"] == 100.0
+    # 1.31.0: no registered replicated body, so the strong floor (14 raw).
+    assert ideal["pillars"]["evidence"] == 15.6
+    assert ideal["quality_score_v4_100"] == 95.6
 
 
 def test_preworkout_formulation_pin_follows_corrected_citrulline_parent():
@@ -324,5 +340,5 @@ def test_protein_fixture_confidence_retains_unresolved_amino_acid_assessments():
                if row["state"] == "not_yet_evaluated"}
     assert pending == {"l_isoleucine", "l_valine"}
     assert artifact["quality_score_confidence"] == "moderate"
-    assert artifact["quality_score_v4_100"] == 100.0
+    assert artifact["quality_score_v4_100"] == 95.6
     assert artifact["assessment_readiness"]["release_assessment"]["is_complete"] is False
