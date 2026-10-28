@@ -31,6 +31,35 @@ def test_qualifying_studies_use_one_name_per_fact(records):
     assert not aliased
 
 
+OBSERVED_EFFECTS = {"positive_strong", "positive_moderate", "positive_weak", "mixed", "null", "negative"}
+# Recorded as published; its typed meaning is not yet set (Sean, October 28, 2026).
+RECORDED_EFFECT_EXCEPTIONS = {("l_glutamine", "32992440"): "neutral"}
+
+
+def test_effect_direction_holds_only_an_observed_effect(records):
+    """A review result (applicability unestablished, no qualifying evidence, not
+    efficacy-relevant, identity unresolved) lives in applicability_status, never
+    in effect_direction, at record and study level."""
+    import sys
+    sys.path.insert(0, str(DATA.parents[1] / "scripts"))
+    from evidence_resolver import LITERATURE_REVIEW_RESULTS
+    allowed_status = LITERATURE_REVIEW_RESULTS | {"applicable_reviewed_trials", "reviewed_null_evidence"}
+    for cid, record in records.items():
+        assert record["effect_direction"] in OBSERVED_EFFECTS | {None}, cid
+        assert record.get("applicability_status") in allowed_status | {None}, cid
+        if record["effect_direction"] is None:
+            assert record.get("applicability_status") in LITERATURE_REVIEW_RESULTS, cid
+        else:
+            assert record.get("applicability_status") not in LITERATURE_REVIEW_RESULTS, cid
+        for study in record["qualifying_human_studies"]:
+            effect = study.get("effect_direction")
+            if (cid, study.get("pmid")) in RECORDED_EFFECT_EXCEPTIONS:
+                assert effect == RECORDED_EFFECT_EXCEPTIONS[(cid, study["pmid"])]
+                continue
+            assert effect in OBSERVED_EFFECTS | {None}, (cid, study.get("pmid"), effect)
+            assert study.get("applicability_status") in LITERATURE_REVIEW_RESULTS | {None}, (cid, study.get("pmid"))
+
+
 # Rows whose PMID is a different paper (review, in-vitro or animal study) than the trial recorded.
 NO_VERIFIED_TRIAL = {
     "l_carnosine": "20091069",              # beta-alanine review
@@ -66,7 +95,7 @@ def test_broccoli_cites_the_sprout_trial_it_cannot_inherit(records):
     record = records["broccoli"]
     study, = record["qualifying_human_studies"]
     assert study["pmid"] == "24913818" and study["sample_size"] == 291
-    assert record["effect_direction"] == "applicability_unestablished"
+    assert record["applicability_status"] == "applicability_unestablished"
     assert "30372361" in record["applicability_decision"] and "cannot inherit" in record["applicability_decision"]
 
 
@@ -95,7 +124,7 @@ PREPARATION_MISMATCH = {
 @pytest.mark.parametrize("cid, studied", sorted(PREPARATION_MISMATCH.items()))
 def test_studied_preparation_does_not_transfer(records, cid, studied):
     record = records[cid]
-    assert record["effect_direction"] == "applicability_unestablished"
+    assert record["applicability_status"] == "applicability_unestablished"
     assert studied.lower() in record["applicability_decision"].lower()
 
 
@@ -251,7 +280,7 @@ def test_pomegranate_preserves_verified_extract_research(records):
 def test_fucoxanthin_preserves_component_surrogate_without_weight_loss_transfer(records):
     record = records["fucoxanthin"]
     study = _study(record, "19840063")
-    assert record["effect_direction"] == "applicability_unestablished"
+    assert record["applicability_status"] == "applicability_unestablished"
     assert record["studied_dose_exposure"] == {}
     assert "standalone fucoxanthin increased resting energy expenditure" in study["outcome"]
     assert "Combination reduced weight" in study["outcome"]
@@ -486,7 +515,7 @@ def test_tart_cherry_source_summary_retains_pre_event_and_race_day_regimen(recor
 def test_related_human_sources_replace_false_absence_without_clinical_clearance(records, canonical, pmids):
     from evidence_resolver import resolve_evidence_for_canonical, EvidenceDisposition
     record = records[canonical]
-    assert record['effect_direction'] == 'applicability_unestablished'
+    assert record['applicability_status'] == 'applicability_unestablished'
     assert record['verification_result'] == 'verification_failure_unresolved'
     assert pmids <= {str(study['pmid']) for study in record['qualifying_human_studies']}
     assert all(study['scoring_eligible'] is False for study in record['qualifying_human_studies'])

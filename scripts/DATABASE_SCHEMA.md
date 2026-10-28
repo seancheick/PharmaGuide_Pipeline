@@ -975,6 +975,23 @@ precaution-only mentions do not establish an excluded purpose. A malformed list 
 an unresolved contract, never a completed negative assessment. This internal scope
 constraint creates no public product field, efficacy threshold or independent scorer.
 
+### literature_evidence_records.json: effect versus review result
+
+Each record and each `qualifying_human_studies[]` entry keeps two different facts apart:
+
+- `effect_direction` is the observed effect only: `positive_strong`, `positive_moderate`,
+  `positive_weak`, `mixed`, `null` or `negative`, or `null` (JSON) when the review ended
+  without an applicable effect. `positive_moderate` is kept as recorded until its typed
+  meaning is set. One study (L-glutamine, PMID 32992440) keeps its recorded `neutral`.
+- `applicability_status` is the review result: `applicability_unestablished`,
+  `no_qualifying_human_evidence`, `not_efficacy_relevant`, `identity_material_unresolved`,
+  or, beside an effect, `applicable_reviewed_trials` / `reviewed_null_evidence`.
+- `reason_code` holds the finer reason (for example `crude_material_lacks_standardization`).
+
+`evidence_resolver.literature_review_result` is the one reader of the combined outcome. The
+October 28, 2026 split is recorded per record in
+`scripts/audits/field_one_brain_20261028/literature_effect_disposition_receipt.json`.
+
 ### Internal Dose reference source verification
 
 The existing literature verifier produces `verification_provenance.reference_citations`

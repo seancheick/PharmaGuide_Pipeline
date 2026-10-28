@@ -544,6 +544,22 @@ def _load_botanical_index() -> Dict[str, Dict[str, Any]]:
     return idx
 
 
+LITERATURE_REVIEW_RESULTS = frozenset({
+    "applicability_unestablished", "no_qualifying_human_evidence",
+    "not_efficacy_relevant", "identity_material_unresolved",
+})
+
+
+def literature_review_result(entry: Mapping[str, Any]) -> Any:
+    """A literature record's outcome: its review result, else its observed effect.
+
+    A review that ended without an applicable effect records that result in
+    applicability_status; effect_direction holds only an observed effect.
+    """
+    status = entry.get("applicability_status")
+    return status if status in LITERATURE_REVIEW_RESULTS else entry.get("effect_direction")
+
+
 @lru_cache(maxsize=1)
 def _load_literature_evidence() -> Dict[str, Dict[str, Any]]:
     """Index Phase 4 literature evidence records by canonical_id."""
@@ -1054,7 +1070,7 @@ def resolve_evidence_for_row(
             # so PubMed verification has nothing to verify. It may only conclude
             # "not an efficacy active" and may cite no studies.
             lit_entry.get("verification_result") == "identity_classification_no_literature_claim"
-            and lit_entry.get("effect_direction") == "not_efficacy_relevant"
+            and literature_review_result(lit_entry) == "not_efficacy_relevant"
             and not lit_entry.get("qualifying_human_studies")
         )
         if (is_verified
@@ -1063,7 +1079,7 @@ def resolve_evidence_for_row(
             # Bibliographic verification over an empty list establishes neither
             # a negative search nor affirmative research. Preserve authored
             # bounded nonpositive reviews and identity-only classifications.
-            direction = lit_entry.get("effect_direction")
+            direction = literature_review_result(lit_entry)
             reviewer = str(prov.get("verified_by") or "").strip()
             try:
                 date.fromisoformat(lit_entry.get("search_date"))
@@ -1108,6 +1124,7 @@ def resolve_evidence_for_row(
             "databases": lit_entry.get("databases_searched"),
             "records_screened": lit_entry.get("records_screened"),
             "effect_direction": lit_entry.get("effect_direction"),
+            "applicability_status": lit_entry.get("applicability_status"),
             "pmids": [s.get("pmid") for s in lit_entry.get("qualifying_human_studies", []) if s.get("pmid")],
             "studied_dose": lit_entry.get("studied_dose_exposure"),
             "material_form": lit_entry.get("material_form"),
@@ -1115,7 +1132,7 @@ def resolve_evidence_for_row(
         }
 
         # 7. Check if literature evidence established reviewed null/unfavorable or no studies
-        if lit_entry.get("effect_direction") in {"null", "negative", "reviewed_null_unfavorable", "no_qualifying_human_evidence"}:
+        if literature_review_result(lit_entry) in {"null", "negative", "reviewed_null_unfavorable", "no_qualifying_human_evidence"}:
             studies = lit_entry.get("qualifying_human_studies", [])
             if not studies:
                 # Absence of qualifying human studies cannot emit reviewed_null_unfavorable
@@ -1141,7 +1158,7 @@ def resolve_evidence_for_row(
             )
 
         # Check if food matrix / excipient is not efficacy relevant
-        if lit_entry.get("effect_direction") == "not_efficacy_relevant":
+        if literature_review_result(lit_entry) == "not_efficacy_relevant":
             material = _norm(lit_entry.get("material_form"))
             from clinical_applicability import _row_text
             declared = _row_text(row_dict, source_only=True) + _row_text(row_dict)
@@ -1173,7 +1190,7 @@ def resolve_evidence_for_row(
             )
 
         # Check if identity/material is unresolved (identity debt, analytical markers, excipient descriptors)
-        if lit_entry.get("effect_direction") in {"identity_material_unresolved", "identity_insufficient"}:
+        if literature_review_result(lit_entry) in {"identity_material_unresolved", "identity_insufficient"}:
             blocking_reasons.append("identity_material_unresolved")
             return EvidenceResolution(
                 canonical_id=canonical,
@@ -1265,7 +1282,7 @@ def resolve_evidence_for_row(
         if not material_form_matched:
             app_dec = str(lit_entry.get("applicability_decision") or "").lower()
             if (
-                lit_entry.get("effect_direction") == "applicability_unestablished"
+                literature_review_result(lit_entry) == "applicability_unestablished"
                 or "applicability unestablished" in app_dec
                 or "prohibited" in app_dec
                 or "blocked" in app_dec

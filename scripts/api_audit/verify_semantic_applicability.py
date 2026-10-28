@@ -27,6 +27,10 @@ SCRIPT_DIR = Path(__file__).resolve().parent
 REPO_ROOT = SCRIPT_DIR.parent.parent
 SCRIPTS_ROOT = REPO_ROOT / "scripts"
 LITERATURE_RECORDS_PATH = SCRIPTS_ROOT / "data" / "literature_evidence_records.json"
+if str(SCRIPTS_ROOT) not in sys.path:
+    sys.path.insert(0, str(SCRIPTS_ROOT))
+
+from evidence_resolver import literature_review_result  # noqa: E402
 
 
 COMBO_INDICATORS = [
@@ -83,7 +87,7 @@ def audit_semantic_applicability(records: List[Dict[str, Any]]) -> Dict[str, Any
 
     for r in records:
         cid = r.get("canonical_id", "")
-        eff = r.get("effect_direction", "")
+        eff = literature_review_result(r) or ""
         studies = r.get("qualifying_human_studies", [])
         app_dec = str(r.get("applicability_decision") or "").lower()
         record_issues: List[str] = []
@@ -92,13 +96,14 @@ def audit_semantic_applicability(records: List[Dict[str, Any]]) -> Dict[str, Any
         if eff in ("null", "negative"):
             if not studies:
                 record_issues.append(
-                    "VIOLATION: effect_direction is null/negative but qualifying_human_studies is empty. "
-                    "Must be no_qualifying_human_evidence."
+                    f"VIOLATION: effect_direction is {eff} but qualifying_human_studies is empty. "
+                    "Set effect_direction to JSON null (no effect was observed; the \"null\" effect category means "
+                    "an evaluated null outcome) and applicability_status to no_qualifying_human_evidence."
                 )
         if eff == "no_qualifying_human_evidence":
             if len(studies) > 0:
                 record_issues.append(
-                    f"VIOLATION: effect_direction is no_qualifying_human_evidence but carries {len(studies)} studies."
+                    f"VIOLATION: applicability_status is no_qualifying_human_evidence but carries {len(studies)} studies."
                 )
 
         # 2. Combination -> Standalone Efficacy Guard
@@ -138,7 +143,8 @@ def audit_semantic_applicability(records: List[Dict[str, Any]]) -> Dict[str, Any
         if record_issues:
             flagged_records.append({
                 "canonical_id": cid,
-                "effect_direction": eff,
+                "effect_direction": r.get("effect_direction"),
+                "applicability_status": r.get("applicability_status"),
                 "issues": record_issues,
             })
         else:
@@ -171,7 +177,8 @@ def main() -> int:
     if results["flagged_records"]:
         print("\nFlagged Violations:")
         for fr in results["flagged_records"]:
-            print(f"\n  [{fr['canonical_id']}] (effect_direction: {fr['effect_direction']})")
+            print(f"\n  [{fr['canonical_id']}] (effect_direction: {fr['effect_direction']}; "
+                  f"applicability_status: {fr['applicability_status']})")
             for iss in fr["issues"]:
                 print(f"    - {iss}")
         return 1
