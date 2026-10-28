@@ -3702,3 +3702,36 @@ Stale local-only tests repaired: INGR_NAC/INGR_MAG_GLYCINATE are reviewed refere
 Lion's mane literature record re-keyed: Sean confirmed 2026-10-28 that Dr Pham's lion_s_mane approval covers the lions_mane species canonical. The record (PMID18844328, approved neutral Dose) is now canonical_id lions_mane with its scope and owner updated; its source proof was rebuilt from a live PubMed fetch with the article content hash unchanged, and verified_reference_citations passes. Approvals remain keyed per canonical; no equivalence-following lookup.
 
 Measurement: 495 frozen raw labels (143 mushroom-identity, 250 sampled enricher-class, 100 controls, report labels), main f14c799 vs final candidate: 7 movers, all up — lion's mane extract ×3 and reishi 45.7→57.1, acerola 47.7→61.1 and 58.8→64.5, mushroom+vitamin C blend 243141 55.8→80.0 (now generic_iqm, dose judged on vitamin C); 0 down. 0 scored-status changes; 3 partial→complete, 0 lost complete (the 17 lion's mane products, including powders 329997-99, keep their main scores and completion); 0 safety-status, warning or interaction-hit losses of 15,664; 4 products gain species alerts (lion's mane anticoagulant/pregnancy/lactation, reishi autoimmune/immunosuppressant). Tests: owner/consumer slice 4,206 pass; after the withdrawal and re-key 1,235 affected-owner tests pass; local 546/24 declared skips; Python 0 new/12 existing; data_batch checks exact. Citation verifier: 0 mismatch/not-found; 3 pre-existing ghost suspects in untouched records (glucosamine 11789591, inulin 28229548, L-theanine 33260552). The 2026-10-28 corpus artifacts predate these source edits: Clean is the earliest invalidated stage. No corpus run, export, publication or app import.
+
+## October28 — field one-brain consolidation, items 1–4 and therapeutic legacy fields (PR #272)
+
+Lane claude/xenodochial-matsumoto-ebd04b from e6885790d. Plan, Sean's rulings and per-item evidence: `docs/plans/FIELD_ONE_BRAIN_PLAN.md`. Behavioral code/data class.
+
+Owner: clinical_evidence_schema::is_reference_only (reference-only decision); rda_optimal_uls highest_ul + data[].ul (UL); enrich_supplements_v3::_CLINICAL_MATCH_PASSTHROUGH_FIELDS (clinical passthrough); literature qualifying_human_studies effect_direction/study_type; rda_therapeutic_dosing reference_semantics (dose meaning) + notes (cautions). Will NOT create a field, registry, vocabulary or scorer.
+
+Done:
+- One reference-only predicate for 5 call sites, plus integrity rejection of a study_type/evidence_level disagreement (0 today).
+- Removed the top-level ul/unofficial_ul (null on 76 nutrients; boron duplicated highest_ul 20).
+- Removed 6 passthrough keys that no record carries.
+- Renamed 39 literature effect and 45 design keys to effect_direction/study_type; primary_endpoint kept as a distinct fact.
+- Therapeutic: removed upper_limit, typical_dosing_range, common_serving_size and evidence_tier from 43 records. None of the 34 upper limits was an applicable UL.
+  - upper_limit_notes became notes: 29 unchanged, 12 edited, 2 dropped. 13 cautions are pinned.
+  - Receipt: `scripts/audits/field_one_brain_20261028/therapeutic_legacy_fields_receipt.json`.
+  - db_integrity rejects the retired keys: 215 findings on the old data, 0 on the candidate.
+
+Validation:
+- Fail-first tests for each class; owner/consumer slices green (834; 2,817; 1,709; 2,584).
+- Replay of 1,111 frozen raw products against main e6885790d: 0 differ for the items 1–4 candidate and 0 for the full candidate (b070650b0).
+- A fresh-context review found no defects.
+- `scripts/test.sh local` with the real corpus (main's scripts/products, scripts/dist and canary baseline linked; nine canaries rebuilt from candidate code): 536 passed, 24 declared opt-in skips, 10 failed.
+
+Finding (pre-existing on main, not this batch): all 10 failures are test_e1_2_2_preflight_invariant canaries (score_penalties/warnings/display_ingredients vs the 2026-10-18 baseline).
+- The nine canaries rebuilt from main e6885790d in a temporary checkout are identical to the candidate's, timestamps aside.
+- The main checkout's reports/canary_rebuild files date from 2026-10-18 (16:43), which is why the local rung passes there. It compares a stale rebuild to the baseline taken the same day.
+- The baseline needs a reviewed refresh by the integrator before release. It must not be restamped here.
+
+Open:
+- Item 5, the item 6 deletion (classification done: 104 unresolved placeholders, 7 less-specific) and item 11 wait for held-source-closure.
+- generic_evidence override, magnitude move and the line-718 predicate wait for claude/serene-dubinsky-479574 (folate allowlist already removed there, 37d74d5b1).
+- Before an app release, run sync_flutter_reference_data.py: the app's bundled rda_optimal_uls.json predates 720e95812.
+- Items 7–12 continue under Sean's October 28 rulings.

@@ -94,6 +94,16 @@ batch and handed both back to this lane, to do after its branch merges. Nothing 
 - **Docs:** `DATABASE_SCHEMA.md` §27 and `_metadata` (schema 6.0.0) now describe the actual
   meaning.
 
+**Candidate checkpoint (b070650b0 plus records).**
+- Replay of 1,111 frozen products: 0 differ from main.
+- Local rung with the real corpus: 536 passed, 24 declared opt-in skips, and 10 failures in the
+  `e1_2_2` canaries against the 2026-10-18 baseline.
+  - The failures already exist on main. Fresh canary rebuilds from main e6885790d are identical
+    to the candidate's.
+  - The main checkout passes only because its `reports/canary_rebuild` files date from
+    2026-10-18.
+  - The baseline needs a reviewed refresh before release. LEDGER has the details.
+
 **Replay (items 1–4).**
 - Inputs: the 1,111-product frozen raw set at `~/pg_quality/held_closure_20261028/frozen`.
 - Baseline: main e6885790d (`base.jsonl` from the held-source session).
