@@ -23795,8 +23795,10 @@ class SupplementEnricherV3:
                     # bare total on a food-matrix panel also counts intrinsic
                     # food magnesium (Re-Built Mass XP 244288: 540 mg from whey,
                     # grains, cocoa and a 2.5 g magnesium-creatine chelate), so
-                    # its supplemental share is unknown. Only a row above the
-                    # UL is affected; a row naming a form keeps its finding.
+                    # its supplemental share is unknown. A named source does not
+                    # partition it: the Facts amount is the total nutrient, food
+                    # magnesium included (Sean, 2026-10-28). The total bounds the
+                    # added share, so a total within the UL is assessed as usual.
                     magnesium_ul_screening = None
                     if (
                         not skip_ul_check
@@ -23804,10 +23806,7 @@ class SupplementEnricherV3:
                         and declares_food_matrix
                         and resolved_canonical_id == "magnesium"
                         and _nutrient_record.get("ul_basis") == "supplemental_only"
-                        and not ingredient.get("forms")
-                        and self._normalize_text(
-                            ingredient.get("raw_source_text") or ingredient.get("name") or ""
-                        ) == "magnesium"
+                        and ul_exposure.get("ul_gate_eligible") is True
                     ):
                         skip_ul_check = True
                         ul_only_skip = True
@@ -24125,10 +24124,12 @@ class SupplementEnricherV3:
                                     ]
                                     if is_indeterminate_folate
                                     else [
-                                        "The magnesium upper limit applies to supplemental "
-                                        "magnesium only; this label's total may include "
-                                        "magnesium from food ingredients and does not "
-                                        "identify the supplemental amount."
+                                        f"The {float(magnesium_ul_screening['screening_ul']):g} "
+                                        f"{magnesium_ul_screening['screening_unit']} magnesium upper "
+                                        "limit applies to supplemental magnesium only. This label's "
+                                        "magnesium total may include magnesium from food ingredients "
+                                        "and does not state the supplemental amount, so supplemental "
+                                        "magnesium could exceed that limit; this is not confirmed."
                                     ]
                                     if is_indeterminate_magnesium
                                     else []
