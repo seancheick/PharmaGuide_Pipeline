@@ -610,21 +610,33 @@ class UnitConverter:
     ) -> Optional[float]:
         """Vitamin E UL mass, separate from label nutritional activity.
 
+        Unknown IU/parent-mg forms return the conservative (upper) bound only;
+        the caller must preserve indeterminate lineage unless that bound is low.
+        """
+        bounds = self._ul_exposure_bounds(conversion, measured_name=measured_name)
+        return bounds[1] if bounds else None
+
+    def _ul_exposure_bounds(
+        self, conversion: ConversionResult, *, measured_name: str,
+    ) -> Optional[Tuple[float, float]]:
+        """Lowest and highest Vitamin E UL mass (mg) the label can mean.
+
         NIH ODS: the UL counts all eight synthetic stereoisomers, whereas
         nutritional activity counts half of all-rac alpha-tocopherol mass.
-        Unknown IU/parent-mg forms return a conservative bound only; the
-        caller must preserve indeterminate lineage unless that bound is low.
-        Standalone compound masses are not FDA parent nutrient declarations.
+        A known form has one value; an undisclosed form spans natural (the
+        activity mass) to synthetic (twice it). Standalone compound masses
+        are not FDA parent nutrient declarations.
         https://ods.od.nih.gov/factsheets/VitaminE-HealthProfessional/
         """
         rule = conversion.conversion_rule_id
         parent = bool(re.match(r"^vitamin\s+e\b", measured_name, re.I))
         iu = canonicalize_mass_unit(conversion.original_unit) in {"iu", "u", "ui"}
         if rule == "vitamin_e_unknown" and iu:
-            synthetic = self.vitamin_conversions[
-                "vitamin_e_dl_alpha_tocopherol"
-            ]["conversions"]["iu_to_mg"]
-            return conversion.original_value * synthetic * 2.0
+            natural, synthetic = (
+                self.vitamin_conversions[form]["conversions"]["iu_to_mg"]
+                for form in ("vitamin_e_d_alpha_tocopherol", "vitamin_e_dl_alpha_tocopherol")
+            )
+            return conversion.original_value * natural, conversion.original_value * synthetic * 2.0
         amount = conversion.converted_value
         if amount is None:
             return None
@@ -632,12 +644,11 @@ class UnitConverter:
         if not mass.success or mass.converted_value is None:
             return None
         amount = mass.converted_value
-        if (
-            rule == "vitamin_e_dl_alpha_tocopherol" and (parent or iu)
-            or rule == "vitamin_e_label_mg_alpha_tocopherol" and parent
-        ):
-            return amount * 2.0
-        return amount
+        if rule == "vitamin_e_dl_alpha_tocopherol" and (parent or iu):
+            return amount * 2.0, amount * 2.0
+        if rule == "vitamin_e_label_mg_alpha_tocopherol" and parent:
+            return amount, amount * 2.0
+        return amount, amount
 
     def _find_conversion_rule(
         self,

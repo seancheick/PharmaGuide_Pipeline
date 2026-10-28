@@ -20150,6 +20150,77 @@ class SupplementEnricherV3:
             return None, "unit_not_comparable", None
         return None, "no_conversion_rule", None
 
+    def _ul_exposure_bounds_for_threshold(
+        self,
+        amount: float,
+        from_unit: str,
+        target_unit: str,
+        ingredient_name: str,
+        standard_name: str,
+    ) -> Optional[Tuple[float, float]]:
+        """UL-exposure range in a threshold's unit for a form-dependent row, or None.
+
+        Vitamin E: authored mass thresholds are exposure limits (the pregnancy
+        rule is the adult UL), so they compare the converter's UL mass, not
+        nutritional activity. Alpha-tocopherol IU and parent "Vitamin E" mg
+        rows span natural to synthetic; a family mass without established
+        activity (mixed tocopherols, tocotrienols) spans none of it to all of it.
+
+        Vitamin A of unspecified form: the only rules that reach it are
+        preformed-UL rules (test_unspecified_vitamin_a_reaches_only_preformed_rules),
+        and the preformed share is 0 to all of it. It is never assumed to be
+        retinol; only its upper bound can show it within a limit.
+        """
+        tgt = self._normalize_threshold_unit(target_unit)
+        if not self.unit_converter:
+            return None
+        conversion = self.unit_converter.convert_nutrient(
+            nutrient=standard_name or ingredient_name,
+            amount=amount,
+            from_unit=from_unit,
+            ingredient_name=ingredient_name,
+            measured_name=ingredient_name,
+        )
+        src = self._normalize_threshold_unit(from_unit)
+        if conversion.conversion_rule_id == "vitamin_a_unknown":
+            # A plain mass (1.5 mg) is the same quantity in mcg.
+            mcg = self._convert_mass(amount, src, "mcg") if src in {"mg", "g"} else None
+            as_retinol = self.unit_converter.convert_nutrient(
+                nutrient="Vitamin A",
+                amount=amount if mcg is None else mcg,
+                from_unit=from_unit if mcg is None else "mcg",
+                to_unit=target_unit,
+                ingredient_name="Vitamin A as retinol",
+            )
+            converted_unit = self._normalize_threshold_unit(as_retinol.converted_unit)
+            if not as_retinol.success or as_retinol.converted_value is None:
+                return None
+            if converted_unit != tgt:
+                return None
+            return 0.0, float(as_retinol.converted_value)
+        if not self._is_mass_unit(tgt):
+            return None
+        iu = src == "iu"
+        if conversion.conversion_rule_id == "vitamin_e_unknown" and not iu:
+            # A family mass (mixed tocopherols, tocotrienols) bounds its
+            # alpha-tocopherol from above; it may contain none.
+            mass = self._convert_mass(amount, src, tgt)
+            return None if mass is None else (0.0, mass)
+        if not (
+            conversion.has_established_vitamin_e_activity
+            or conversion.conversion_rule_id == "vitamin_e_unknown"
+        ):
+            return None
+        bounds = self.unit_converter._ul_exposure_bounds(
+            conversion, measured_name=ingredient_name
+        )
+        if bounds is None:
+            return None
+        low, high = (self._convert_mass(value, "mg", tgt) for value in bounds)
+        if low is None or high is None:
+            return None
+        return low, high
+
     @staticmethod
     def _conversion_form_context(ingredient: Dict[str, Any]) -> str:
         """Unit-conversion context for a row: its matched form, or, when the
@@ -20381,7 +20452,28 @@ class SupplementEnricherV3:
                 serving_multiplier,
             )
             convert_reason = None
-            if converted_amount is None:
+            ul_bounds = (
+                self._ul_exposure_bounds_for_threshold(
+                    amount=amount_basis,
+                    from_unit=unit,
+                    target_unit=threshold_unit,
+                    ingredient_name=conversion_name,
+                    standard_name=standard_name,
+                )
+                if converted_amount is None
+                else None
+            )
+            if ul_bounds is not None:
+                # An outcome every possible form agrees on is not uncertain;
+                # only a range straddling the threshold is form_unknown.
+                low, high = ul_bounds
+                if self._compare_threshold(
+                    low, comparator, threshold_value
+                ) == self._compare_threshold(high, comparator, threshold_value):
+                    converted_amount, conversion_method = high, "ul_exposure_bound"
+                else:
+                    convert_reason = "form_unknown"
+            elif converted_amount is None:
                 converted_amount, convert_reason, conversion_method = (
                     self._convert_amount_to_target_unit_with_evidence(
                         amount=amount_basis,

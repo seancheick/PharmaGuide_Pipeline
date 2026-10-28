@@ -390,7 +390,8 @@ def test_unknown_vitamin_e_form_is_clinical_uncertainty_not_converter_defect():
         "condition",
         "pregnancy",
         {
-            "quantity": 400,
+            # 1,200 IU is 804 mg natural or 1,080 mg all-rac: the form decides.
+            "quantity": 1200,
             "unit": "IU",
             "name": "Vitamin E",
             "standard_name": "Vitamin E",
@@ -402,6 +403,193 @@ def test_unknown_vitamin_e_form_is_clinical_uncertainty_not_converter_defect():
     assert decision["evaluation_status"] == "form_unknown"
     assert decision["consumer_disposition"] == "suppress"
     assert decision["release_blocking"] is False
+
+
+def _vitamin_e_pregnancy_ul_decision(ingredient: dict, servings: float = 1.0):
+    """The production pregnancy UL rule, not a test copy of its threshold."""
+    import json
+
+    rules_path = Path(__file__).parent.parent / "data" / "ingredient_interaction_rules.json"
+    rules = json.loads(rules_path.read_text())["interaction_rules"]
+    rule = next(r for r in rules if r["id"] == "RULE_IQM_VITAMIN_E_PREGNANCY_EXCESS")
+    return SupplementEnricherV3()._evaluate_dose_thresholds_for_target(
+        rule["dose_thresholds"],
+        "condition",
+        "pregnancy",
+        {"name": "Vitamin E", "standard_name": "Vitamin E", **ingredient},
+        servings,
+        "monitor",
+    )
+
+
+@pytest.mark.parametrize(
+    ("ingredient", "status", "severity", "disposition"),
+    [
+        # Above the UL in every form: 3,000 IU >= 2,010 mg (natural, the lowest).
+        ({"quantity": 3000, "unit": "IU"}, "above_threshold", "avoid", "block"),
+        # Within the UL in every form: 400 IU <= 360 mg (all-rac, the highest).
+        ({"quantity": 400, "unit": "IU"}, "below_threshold", "monitor", "suppress"),
+        # The UL counts all-rac mass: 1,500 IU synthetic is 1,350 mg, not 675.
+        (
+            {"quantity": 1500, "unit": "IU", "matched_form": "dl-alpha-tocopheryl acetate"},
+            "above_threshold", "avoid", "block",
+        ),
+        # Natural activity and UL mass coincide: 1,400 IU is 938 mg.
+        (
+            {"quantity": 1400, "unit": "IU", "matched_form": "d-alpha-tocopherol"},
+            "below_threshold", "monitor", "suppress",
+        ),
+        # Straddling the UL (871 to 1,170 mg) is unresolved: review, not silence.
+        ({"quantity": 1300, "unit": "IU"}, "form_unknown", "monitor", "review"),
+        # 1,800 IU exceeds both ODS equivalents (1,500 IU natural, 1,100 IU
+        # synthetic): 1,206 to 1,620 mg, above the UL whatever the form.
+        ({"quantity": 1800, "unit": "IU"}, "above_threshold", "avoid", "block"),
+        # A parent row in mg declares activity; its UL mass is 1x to 2x by form.
+        ({"quantity": 671, "unit": "mg"}, "form_unknown", "monitor", "review"),
+        ({"quantity": 1072, "unit": "mg"}, "above_threshold", "avoid", "block"),
+        ({"quantity": 400, "unit": "mg"}, "below_threshold", "monitor", "suppress"),
+        # A family mass bounds its alpha-tocopherol from above (it may hold none).
+        (
+            {"name": "Mixed Tocopherols", "quantity": 441, "unit": "mg", "matched_form": "mixed tocopherols"},
+            "below_threshold", "monitor", "suppress",
+        ),
+        (
+            {"name": "Mixed Tocopherols", "quantity": 1200, "unit": "mg", "matched_form": "mixed tocopherols"},
+            "form_unknown", "monitor", "review",
+        ),
+        # The authored comparator is ">": exactly the UL is within it.
+        (
+            {"quantity": 1000, "unit": "mg", "matched_form": "d-alpha-tocopherol"},
+            "below_threshold", "monitor", "suppress",
+        ),
+        (
+            {"quantity": 1001, "unit": "mg", "matched_form": "d-alpha-tocopherol"},
+            "above_threshold", "avoid", "block",
+        ),
+    ],
+)
+def test_vitamin_e_pregnancy_ul_compares_ul_exposure_bounds(
+    ingredient, status, severity, disposition
+):
+    """NIH ODS: the UL covers all eight stereoisomers (1,100 IU synthetic or
+    1,500 IU natural). An outcome every possible form agrees on is not
+    uncertain; only a range straddling the UL is form_unknown, which the rule
+    authors as review (Dr Pham, 2026-10-28).
+    https://ods.od.nih.gov/factsheets/VitaminE-HealthProfessional/
+    """
+    selected, decision = _vitamin_e_pregnancy_ul_decision(ingredient)
+
+    assert decision["evaluation_status"] == status
+    assert selected == severity
+    assert decision["consumer_disposition"] == disposition
+    assert decision["release_blocking"] is False
+
+
+def test_vitamin_e_pregnancy_ul_uses_the_directed_daily_exposure():
+    # Two 800 IU servings: 1,072 to 1,440 mg/day, above the UL in every form.
+    selected, decision = _vitamin_e_pregnancy_ul_decision(
+        {"quantity": 800, "unit": "IU"}, servings=2.0
+    )
+
+    assert decision["evaluation_status"] == "above_threshold"
+    assert selected == "avoid"
+    assert decision["consumer_disposition"] == "block"
+
+
+def _rule(rule_id: str) -> dict:
+    import json
+
+    rules_path = Path(__file__).parent.parent / "data" / "ingredient_interaction_rules.json"
+    rules = json.loads(rules_path.read_text())["interaction_rules"]
+    return next(r for r in rules if r["id"] == rule_id)
+
+
+@pytest.mark.parametrize(
+    ("target", "ingredient", "status", "severity", "disposition"),
+    [
+        # Unspecified form: the preformed share is unknown, never assumed 100%.
+        ("pregnancy", {"quantity": 9000, "unit": "mcg"}, "form_unknown", "caution", "review"),
+        ("pregnancy", {"quantity": 25000, "unit": "IU"}, "form_unknown", "caution", "review"),
+        ("ttc", {"quantity": 9000, "unit": "mcg"}, "form_unknown", "caution", "review"),
+        # Within the UL even if all of it were retinol (6,660 IU; 1.5 mg 4,995 IU).
+        ("pregnancy", {"quantity": 2000, "unit": "mcg"}, "below_threshold", "caution", "suppress"),
+        ("pregnancy", {"quantity": 1.5, "unit": "mg"}, "below_threshold", "caution", "suppress"),
+        # Confirmed preformed vitamin A keeps the authored serious warning.
+        (
+            "pregnancy",
+            {"quantity": 9000, "unit": "mcg", "matched_form": "retinyl palmitate"},
+            "above_threshold", "contraindicated", "block",
+        ),
+        # The authored comparator is ">": exactly 10,000 IU is within it.
+        (
+            "pregnancy",
+            {"quantity": 10000, "unit": "IU", "matched_form": "retinyl palmitate"},
+            "below_threshold", "caution", "suppress",
+        ),
+        (
+            "pregnancy",
+            {"quantity": 10001, "unit": "IU", "matched_form": "retinyl palmitate"},
+            "above_threshold", "contraindicated", "block",
+        ),
+    ],
+)
+def test_vitamin_a_pregnancy_ul_counts_only_preformed_vitamin_a(
+    target, ingredient, status, severity, disposition
+):
+    """NIH ODS: the 3,000 mcg RAE (10,000 IU) UL applies to preformed vitamin A
+    only. An unspecified form is unresolved (review, Dr Pham 2026-10-28), not
+    silence and not a confirmed retinol exceedance.
+    https://ods.od.nih.gov/factsheets/VitaminA-HealthProfessional/
+    """
+    selected, decision = SupplementEnricherV3()._evaluate_dose_thresholds_for_target(
+        _rule("RULE_IQM_VITAMIN_A_PREGNANCY_DOSE")["dose_thresholds"],
+        "condition",
+        target,
+        {"name": "Vitamin A", "standard_name": "Vitamin A", **ingredient},
+        1.0,
+        "caution",
+    )
+
+    assert decision["evaluation_status"] == status
+    assert selected == severity
+    assert decision["consumer_disposition"] == disposition
+
+
+def test_unspecified_vitamin_a_reaches_only_preformed_rules():
+    """The threshold evaluator bounds unspecified vitamin A as 0-100% preformed.
+    That is only right for preformed-UL rules: a rule on total vitamin A
+    activity or beta-carotene must not reach an unspecified row."""
+    import json
+
+    rules_path = Path(__file__).parent.parent / "data" / "ingredient_interaction_rules.json"
+    rules = json.loads(rules_path.read_text())["interaction_rules"]
+    enricher = SupplementEnricherV3()
+    unspecified = {"form_id": "vitamin a (unspecified)", "form_match_status": "mapped"}
+    reached = {
+        rule["id"]
+        for rule in rules
+        if (rule.get("subject_ref") or {}).get("canonical_id") == "vitamin_a"
+        and rule.get("dose_thresholds")
+        and enricher._interaction_rule_applies(rule, unspecified)
+    }
+
+    assert reached == {"RULE_IQM_VITAMIN_A_PREGNANCY_DOSE"}
+    beta_carotene = {"form_id": "beta-carotene synthetic", "form_match_status": "mapped"}
+    assert not enricher._interaction_rule_applies(
+        _rule("RULE_IQM_VITAMIN_A_PREGNANCY_DOSE"), beta_carotene
+    )
+
+
+def test_vitamin_e_ul_exposure_amount_is_the_upper_bound():
+    converter = UnitConverter()
+    unknown = converter.convert_nutrient("Vitamin E", 1000, "IU", ingredient_name="Vitamin E")
+    synthetic = converter.convert_nutrient(
+        "Vitamin E", 1000, "IU", ingredient_name="Vitamin E dl-alpha-tocopheryl acetate"
+    )
+
+    assert converter._ul_exposure_bounds(unknown, measured_name="Vitamin E") == pytest.approx((670.0, 900.0))
+    assert converter._ul_exposure_amount(unknown, measured_name="Vitamin E") == pytest.approx(900.0)
+    assert converter._ul_exposure_bounds(synthetic, measured_name="Vitamin E") == pytest.approx((900.0, 900.0))
 
 
 def test_vitamin_e_floor_uses_resolved_form_for_iu_conversion():
@@ -655,7 +843,10 @@ def test_nonalpha_physical_mass_cannot_meet_alpha_tocopherol_threshold(name, amo
          'quantity': amount, 'unit': unit, 'matched_form': 'mixed tocopherols'},
         1.0, 'monitor',
     )
-    assert decision['evaluation_status'] == 'form_unknown'
+    # The mass bounds alpha-tocopherol from above, never from below: within
+    # the limit it is assessed within it; above it the alpha share decides.
+    within = amount * {'mg': 1, 'g': 1000, 'mcg': 0.001}[unit] <= 1000
+    assert decision['evaluation_status'] == ('below_threshold' if within else 'form_unknown')
     assert decision['consumer_disposition'] == 'suppress'
     assert decision['matched_threshold'] is False
     assert decision['release_blocking'] is False
