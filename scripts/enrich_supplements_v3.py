@@ -19040,6 +19040,23 @@ class SupplementEnricherV3:
                         parsed_from_directions = True
                         break
 
+        if min_servings_per_day is None and max_servings_per_day is None:
+            # "Consume one serving daily" already counts servings; dividing
+            # by the serving size (as for tablet counts) would misread it.
+            # Only one stated regimen is used: separate age-group regimens
+            # ("4-8 years, one serving; 9-12 years, two") are not one range.
+            serving_counts = [
+                regimen
+                for statement in statements
+                if isinstance(statement, dict)
+                and 'direction' in str(statement.get('type') or '').lower()
+                for regimen in self._parse_serving_counts_from_directions(
+                    statement.get('text') or statement.get('notes') or ''
+                )
+            ]
+            if len(serving_counts) == 1:
+                min_servings_per_day, max_servings_per_day = serving_counts[0]
+                servings_per_day_source = "directions"
         if min_servings_per_day is None and max_servings_per_day is None and parsed_from_directions:
             if min_recommended is not None or max_recommended is not None:
                 min_servings_per_day = self._serving_units_to_servings(
@@ -19146,6 +19163,29 @@ class SupplementEnricherV3:
         'one': 1, 'two': 2, 'three': 3, 'four': 4, 'five': 5,
         'six': 6, 'seven': 7, 'eight': 8, 'nine': 9, 'ten': 10
     }
+
+    def _parse_serving_counts_from_directions(self, text: str) -> List[Tuple[float, float]]:
+        """Daily regimens stated as servings: "Consume 1-2 servings per day" -> (1, 2).
+
+        One (min, max) pair per stated regimen. Precaution ceilings ("Do not
+        exceed 3 servings daily") are dropped, as in
+        ``_parse_dosage_from_directions``.
+        """
+        number = r"(\d+|" + "|".join(self.WORD_TO_NUM) + r")"
+        pattern = re.compile(
+            rf"\b{number}(?:\s*(?:-|to|or)\s*{number})?\s+servings?\s+"
+            r"(?:daily|per day|a day|each day)\b"
+        )
+        regimens: List[Tuple[float, float]] = []
+        for clause in re.split(r"(?<=[.!?;])\s+|[\r\n]+", str(text).lower()):
+            if re.search(r"\b(?:(?:do|should|must)\s+not\s+exceed|not\s+to\s+exceed)\b", clause):
+                continue
+            for match in pattern.finditer(clause):
+                low, high = (float(self.WORD_TO_NUM.get(value, value))
+                             for value in (match.group(1), match.group(2) or match.group(1)))
+                if 0 < low <= high:
+                    regimens.append((low, high))
+        return regimens
 
     def _parse_dosage_from_directions(self, text: str) -> Optional[Dict]:
         """Parse min/max dosage from directions text.
