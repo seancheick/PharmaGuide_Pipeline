@@ -81,6 +81,10 @@ def test_retired_dose_and_ceiling_fields_stay_retired(therapeutic):
             assert not generic_ceiling.search(e.get(key) or ""), (e["id"], key)
     for rid, caution in RETAINED_CAUTIONS.items():
         assert caution in rows[rid]["notes"], rid
+    # The retired claims are gone from every free-text field, approved purpose included.
+    for rid, phrase in (("collagen_peptides", "2.5 g+"), ("collagen_peptides", "5-10 g"),
+                        ("gelatin", "LOWER bioavailability"), ("uc_ii_collagen", "gram range")):
+        assert phrase not in json.dumps(rows[rid]), (rid, phrase)
     planted = {"therapeutic_dosing": [{"standard_name": "X", "upper_limit": "100"}]}
     findings = []
     check_rda_therapeutic(findings, planted, "rda_therapeutic_dosing.json")

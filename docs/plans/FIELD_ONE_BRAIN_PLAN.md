@@ -291,10 +291,12 @@ weaker), **one policy, many consumers** (keep, share one result), **two policies
     record reaches.
   - Flutter `evidence_section.dart::_hasMetaAnalysisSignal` reads it as design text.
 - Class: one name, three meanings.
-- Owners: PMIDs → `references_structured[].pmid`; design → `references_structured[].evidence_grade`
-  and the record's `study_type`; count → `published_studies_count`.
+- Owners: PMIDs → `references_structured[].pmid`; publication design → the record's `study_type`
+  and each reference's PubMed `publication_types`; count → `published_studies_count`.
+  `evidence_grade` is certainty, not publication design (Sean's ruling).
 - Move: delete `published_studies` from the 210 records, the passthrough and the three pipeline
-  readers. In Flutter, derive the meta signal from `references_structured[].evidence_grade`.
+  readers. In Flutter, keep the meta-analysis badge on a publication-design source. Any change to
+  the 31 affected badge cases must be documented and validated before it ships.
 - Measurement: 31 records get their meta signal in Flutter only from `published_studies`. Before
   the change, check that those 31 reach the same Evidence-section tier from `evidence_grade`.
 - Risk: medium. It is a public blob field read by Flutter, so both repos change together.

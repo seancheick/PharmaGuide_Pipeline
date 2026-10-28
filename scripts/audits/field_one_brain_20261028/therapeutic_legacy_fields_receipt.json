@@ -240,7 +240,8 @@
         "common_serving_size": "5",
         "evidence_tier": 1,
         "upper_limit_notes": "Generally very safe. Skin benefit validated from 2.5 g (Verisol); joint/bone 5-10 g. Bioavailability varies with form.",
-        "common_use": "Skin/hair/nail (2.5 g+) and joint/bone (5-10 g) health; hydrolyzed Type I & III peptides incl. marine"
+        "common_use": "Skin/hair/nail (2.5 g+) and joint/bone (5-10 g) health; hydrolyzed Type I & III peptides incl. marine",
+        "reference_semantics.purpose": "Skin/hair/nail (2.5 g+) and joint/bone (5-10 g) health; hydrolyzed Type I & III peptides incl. marine"
       },
       "disposition": {
         "upper_limit": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
@@ -248,7 +249,8 @@
         "common_serving_size": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
         "evidence_tier": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
         "upper_limit_notes": "moved to notes: removed 'generally very safe' and the 2.5 g / 5-10 g validated-threshold claims (study regimens stay in reference_semantics)",
-        "common_use": "edited: removed '2.5 g+' and '5-10 g' universal dose thresholds"
+        "common_use": "edited: removed '2.5 g+' and '5-10 g' universal dose thresholds",
+        "reference_semantics.purpose": "edited to the corrected common_use text: the same dose-threshold or comparative-bioavailability claim; approval_status and review_date unchanged because the approved neutral no-benchmark decision is unchanged"
       },
       "ul_owner_status": "no_ul_owner_entry",
       "new_notes": "Bioavailability varies with form; preparations are not interchangeable."
@@ -263,7 +265,8 @@
         "common_serving_size": "40",
         "evidence_tier": 1,
         "upper_limit_notes": "Standard single validated dose 40 mg/day. Do NOT conflate with hydrolyzed Type II (BioCell).",
-        "common_use": "Knee osteoarthritis / joint; undenatured (native) Type II, oral-tolerance mechanism (low mg dose, NOT the hydrolyzed-peptide gram range)"
+        "common_use": "Knee osteoarthritis / joint; undenatured (native) Type II, oral-tolerance mechanism (low mg dose, NOT the hydrolyzed-peptide gram range)",
+        "reference_semantics.purpose": "Knee osteoarthritis / joint; undenatured (native) Type II, oral-tolerance mechanism (low mg dose, NOT the hydrolyzed-peptide gram range)"
       },
       "disposition": {
         "upper_limit": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
@@ -271,7 +274,8 @@
         "common_serving_size": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
         "evidence_tier": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
         "upper_limit_notes": "moved to notes: removed 'standard single validated dose 40 mg/day' (universal dose); kept non-equivalence caution",
-        "common_use": "edited: replaced a dose-range framing with the non-equivalence statement"
+        "common_use": "edited: replaced a dose-range framing with the non-equivalence statement",
+        "reference_semantics.purpose": "edited to the corrected common_use text: the same dose-threshold or comparative-bioavailability claim; approval_status and review_date unchanged because the approved neutral no-benchmark decision is unchanged"
       },
       "ul_owner_status": "no_ul_owner_entry",
       "new_notes": "Do NOT conflate with hydrolyzed Type II (BioCell)."
@@ -306,7 +310,8 @@
         "common_serving_size": "10",
         "evidence_tier": 3,
         "upper_limit_notes": "Mechanistic (collagen-synthesis-marker) evidence; intact denatured collagen, less bioavailable than pre-cleaved peptides.",
-        "common_use": "Connective-tissue / collagen synthesis; denatured collagen with LOWER bioavailability than hydrolyzed peptides"
+        "common_use": "Connective-tissue / collagen synthesis; denatured collagen with LOWER bioavailability than hydrolyzed peptides",
+        "reference_semantics.purpose": "Connective-tissue / collagen synthesis; denatured collagen with LOWER bioavailability than hydrolyzed peptides"
       },
       "disposition": {
         "upper_limit": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
@@ -314,7 +319,8 @@
         "common_serving_size": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
         "evidence_tier": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
         "upper_limit_notes": "moved to notes: removed unsourced comparative bioavailability claim",
-        "common_use": "edited: removed unsourced comparative bioavailability claim"
+        "common_use": "edited: removed unsourced comparative bioavailability claim",
+        "reference_semantics.purpose": "edited to the corrected common_use text: the same dose-threshold or comparative-bioavailability claim; approval_status and review_date unchanged because the approved neutral no-benchmark decision is unchanged"
       },
       "ul_owner_status": "no_ul_owner_entry",
       "new_notes": "Mechanistic (collagen-synthesis-marker) evidence only."
