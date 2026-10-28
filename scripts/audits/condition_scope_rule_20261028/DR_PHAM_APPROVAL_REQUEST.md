@@ -1,8 +1,21 @@
 # Condition-specific clinical evidence: approval request for Dr Pham (October 28, 2026)
 
-Status: **awaiting Dr Pham's signature, relayed by Sean.** No production code has changed.
-Prepared by an agent (Claude) from the code at `origin/main` `e6885790d` and the closure-batch
-records at `claude/held-source-closure` `a78f78bf9` (PR #273, not yet merged).
+Status: **Approved within the signed scope relayed by Sean on October 28.** The rulings and
+attestation below govern the implementation. The original proposal described `e6885790d` and
+`a78f78bf9`; those are historical baselines, not the current integration state.
+
+Sean's subsequent October 28 clarification, carried into the Codex takeover: no probiotic marketing
+claim bonus; the same eligible research earns identical credit with an aligned claim or no claim.
+An unrelated attributable claim, wrong population/preparation, held source or unqualified outcome
+cannot earn affirmative benefit credit. Formula-level positioning is attributed through the existing
+row/identity owner. Evidence strength follows the contexts that actually qualify (ginger uses its
+eligible direct trial, not a stronger inapplicable sibling synthesis). Preserve actual legacy approvals
+and independently established nutrition authority; a missing approval is never an invented negative.
+
+Omega's existing signed nutritional decision is separate: see
+`held_source_closure_20261028/DR_PHAM_RULINGS_20261028.md`, fifth ruling table, INGR_OMEGA3.
+It withdraws routine retail heart-event credit while preserving disclosed EPA/DHA nutritional
+contribution through the shared owner across routes. No new numerical magnitude is authorized here.
 
 ## The governing rule (Sean, October 28)
 

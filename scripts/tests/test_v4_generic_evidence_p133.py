@@ -953,8 +953,8 @@ def test_folate_mcg_dfe_gets_nutrition_authority_floor() -> None:
 def test_vitamin_d_iu_resolves_same_ingredient_evidence_as_equivalent_mcg() -> None:
     """Vitamin D evidence matching treats 1,000 IU as the supported 25 mcg.
 
-    This reconciles label-unit variants only. Both products use the same
-    ingredient-human evidence row; neither claims exact-product evidence.
+    The respiratory clinical contexts are held. Unit variants retain the
+    same independent nutrition authority and cannot revive clinical credit.
     """
     from scoring_v4.modules.generic_evidence import score_evidence
 
@@ -967,9 +967,9 @@ def test_vitamin_d_iu_resolves_same_ingredient_evidence_as_equivalent_mcg() -> N
     iu_payload = score(1000, "IU")
     mcg_payload = score(25, "mcg")
 
-    assert iu_payload["score"] == mcg_payload["score"] == 14.0
+    assert iu_payload["score"] == mcg_payload["score"] == 10.0
     assert iu_payload["components"] == mcg_payload["components"]
-    assert iu_payload["metadata"]["primary_evidence_floor_canonical"] == "vitamin d3"
+    assert iu_payload["metadata"]["primary_evidence_floor_canonical"] == "vitamin_d"
     assert iu_payload["metadata"]["recovered_matches"] == []
 
 
@@ -1011,7 +1011,7 @@ def test_vitamin_d_iu_and_mcg_have_amount_independent_evidence() -> None:
     iu_payload = score(1000, "IU")
     mcg_payload = score(25, "mcg")
 
-    assert iu_payload["score"] == mcg_payload["score"] == 14.0
+    assert iu_payload["score"] == mcg_payload["score"] == 10.0
     assert iu_payload["metadata"]["flags"] == mcg_payload["metadata"]["flags"]
     assert iu_payload["metadata"]["flags"] == []
     assert (
@@ -1019,11 +1019,11 @@ def test_vitamin_d_iu_and_mcg_have_amount_independent_evidence() -> None:
         == mcg_payload["metadata"]["sub_clinical_canonicals"]
     )
     assert iu_payload["metadata"]["sub_clinical_canonicals"] == []
-    assert iu_payload["components"]["primary_evidence_floor"] == 14.0
+    assert iu_payload["components"]["primary_evidence_floor"] == 10.0
 
 
 def test_vitamin_d_iu_and_mcg_both_pass_at_clinical_threshold() -> None:
-    """2,000 IU and 50 mcg both satisfy a 50 mcg evidence threshold."""
+    """Neither a studied amount nor an IU conversion overrides the clinical hold."""
     from scoring_v4.modules.generic_evidence import score_evidence
 
     def score(quantity: float, unit: str) -> dict:
@@ -1035,10 +1035,10 @@ def test_vitamin_d_iu_and_mcg_both_pass_at_clinical_threshold() -> None:
     iu_payload = score(2000, "IU")
     mcg_payload = score(50, "mcg")
 
-    assert iu_payload["score"] == mcg_payload["score"] == 14.0
+    assert iu_payload["score"] == mcg_payload["score"] == 10.0
     assert iu_payload["metadata"]["flags"] == []
     assert iu_payload["metadata"]["sub_clinical_canonicals"] == []
-    assert iu_payload["components"]["primary_evidence_floor"] == 14.0
+    assert iu_payload["components"]["primary_evidence_floor"] == 10.0
 
 
 def test_non_vitamin_d_iu_is_not_given_a_generic_primary_sentinel() -> None:

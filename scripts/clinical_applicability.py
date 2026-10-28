@@ -837,13 +837,16 @@ def _positioning_is_formula_level(product: Mapping, canonicals: set) -> bool:
     it names the ingredient; on a multi-ingredient formula that does not name
     it, the phrase cannot be attributed to this source row.
     """
-    from scoring_input_contract import get_evidence_subject_rows
-    subjects = {str(row.get("canonical_id")) for row in get_evidence_subject_rows(dict(product))
-                if row.get("canonical_id")}
+    from scoring_input_contract import get_evidence_subject_rows, _named_in_title
+    rows = get_evidence_subject_rows(dict(product))
+    subjects = {str(row.get("canonical_id")) for row in rows if row.get("canonical_id")}
     if not subjects - set(canonicals):
         return False
-    text = " " + _key(" ".join(text for text in native_product_positioning_texts(product) if text)) + " "
-    return not any(" " + _key(canonical) + " " in text for canonical in canonicals)
+    text = " ".join(text for text in native_product_positioning_texts(product) if text)
+    # Reuse the role owner's bounded identity/alias matching: a label can name
+    # creatine without printing its machine identity "creatine_monohydrate".
+    return not any(_named_in_title(row, text.lower()) for row in rows
+                   if str(row.get("canonical_id")) in canonicals)
 
 
 def _assess_condition_scopes(product: Mapping, entry: Mapping, policy: Mapping, contexts: list) -> dict:
@@ -853,6 +856,16 @@ def _assess_condition_scopes(product: Mapping, entry: Mapping, policy: Mapping, 
     cannot lend its approval, population or outcome to another. Preparation
     and amount checks still follow in the caller.
     """
+    # A signed context establishes a reviewed relationship, not affirmative
+    # benefit for every recorded endpoint. Claim absence cannot promote a null
+    # primary, exploratory secondary or unresolved outcome into credit.
+    context_count = len(contexts)
+    qualified_contexts = [context for context in contexts if qualifying_purpose_outcomes(context)[0]]
+    if not qualified_contexts:
+        held = any(qualifying_purpose_outcomes(context)[1] for context in contexts)
+        return {"status": "unresolved" if held else "not_applicable",
+                "reason_code": "invalid_applicability_contract" if held else "clinical_outcome_not_qualified"}
+    contexts = qualified_contexts
     canonicals = {str(row.get("canonical_id")) for row in _linked_rows(product, entry, evidence_only=True)
                   if row.get("canonical_id")}
     formula_level = _positioning_is_formula_level(product, canonicals)
@@ -884,7 +897,7 @@ def _assess_condition_scopes(product: Mapping, entry: Mapping, policy: Mapping, 
         "population_applicability": {"state": "eligible",
                                      "context_ids": [context.get("context_id") for context, _ in qualifying]},
     }
-    if len(qualifying) < len(contexts):
+    if len(qualifying) < context_count:
         conditions = {_key(context.get("condition")) for context, _ in qualifying}
         components["supported_outcomes"] = ([value for value in policy.get("supported_outcomes", [])
                                              if _key(value) in conditions]

@@ -430,6 +430,8 @@ def resolve_omega_evidence_standard(product: Mapping[str, Any]) -> Dict[str, Any
         "score": round(score, 4),
         "record_id": selected.get("id") if selected is not None else None,
         "record_source_pmids": list(selected.get("source_pmids") or []) if selected is not None else [],
+        "source_references": list(selected.get("references_structured") or []) if selected is not None else [],
+        "evidence_result_state": "evaluated_authority" if selected is not None else "applicability_unestablished",
         "minimum_daily_epa_dha_mg": round(minimum, 4),
         "maximum_daily_epa_dha_mg": round(maximum, 4),
         "minimum_daily_dha_mg": round(dha_minimum, 4),
@@ -455,6 +457,14 @@ def clinical_record_sources_eligible(entry: Mapping[str, Any]) -> bool:
         return False
     if is_reference_only(entry):
         return False
+    contexts = entry.get("study_contexts")
+    if contexts:
+        from probiotic_measurements import context_accepted_for_scoring
+        # Once review decisions exist, an absent record-level flag cannot
+        # resurrect held or rejected relationships through the legacy path.
+        # One independently approved context still survives pending siblings.
+        if not any(context_accepted_for_scoring(context) for context in contexts):
+            return False
     references = entry.get("references_structured")
     # Legacy records without structured references retain their existing
     # eligibility; this guard contains explicit holds, not a new review policy.

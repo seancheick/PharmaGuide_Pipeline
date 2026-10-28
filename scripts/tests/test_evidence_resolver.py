@@ -202,9 +202,17 @@ def test_reviewed_clinical_study_resolution(monkeypatch):
     assert res.reason_code == "reviewed_human_clinical_evidence_matched"
 
 
-def test_studied_amount_is_not_an_evidence_applicability_guard():
+def test_studied_amount_is_not_an_evidence_applicability_guard(monkeypatch):
     """Evidence resolves the reviewed preparation; Dose owns amount adequacy."""
-    # L-Carnitine minimum clinical dose in backed studies is 1000 mg
+    # Isolate legacy amount independence from L-carnitine's real non-credit
+    # contexts. The synthetic legacy source supplies no clinical conclusion.
+    from copy import deepcopy
+    index = deepcopy(er._backed_studies_index())
+    for rows in index.values():
+        for source in rows:
+            if source.get('id') == 'INGR_L_CARNITINE':
+                source['study_contexts'] = []
+    monkeypatch.setattr(er, '_backed_studies_index', lambda: index)
     res = er.resolve_evidence_for_canonical("l_carnitine", dose_value=50.0, dose_unit="mg")
     assert res.disposition == EvidenceDisposition.RESOLVED_BY_REVIEWED_CLINICAL_EVIDENCE.value
     assert "backed_clinical_studies" in res.matched_owners
@@ -1072,7 +1080,9 @@ def test_literal_inulin_fos_uses_existing_reviewed_family_scope():
     product = {'activeIngredients': [row], 'ingredient_quality_data': {'ingredients_scorable': [row]}}
     result = er.resolve_evidence_for_row(row, product)
     assert 'backed_clinical_studies' in result.matched_owners
-    assert result.applicability_status == 'applicable_reviewed_trials'
+    assert result.applicability_status == 'applicability_unestablished'
+    assert result.points_eligible is False
+    assert 'clinical_sources_ineligible' in result.blocking_reasons
     row['raw_source_text'] = 'XOS'
     assert er.resolve_evidence_for_row(row, product).points_eligible is False
 
@@ -1113,7 +1123,10 @@ def test_declared_chicory_root_fiber_retains_reviewed_inulin_family_not_raw_root
     row={'name':'Chicory root Fiber','raw_source_text':'Chicory root Fiber','canonical_id':'inulin',
          'raw_source_path':'ingredientRows[0]','source_section':'active'}
     product={'activeIngredients':[row],'ingredient_quality_data':{'ingredients_scorable':[row]}}
-    assert er.resolve_evidence_for_row(row,product).points_eligible is True
+    resolved = er.resolve_evidence_for_row(row,product)
+    assert 'backed_clinical_studies' in resolved.matched_owners
+    assert resolved.points_eligible is False  # existing clinical context is held
+    assert 'clinical_sources_ineligible' in resolved.blocking_reasons
     row['raw_source_text']='Chicory root powder';row['name']='Chicory root powder'
     assert er.resolve_evidence_for_row(row,product).points_eligible is False
 

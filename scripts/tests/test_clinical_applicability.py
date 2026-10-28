@@ -2014,6 +2014,8 @@ def test_a_general_ginger_label_is_scored_from_its_single_qualifying_trial():
     # A phrase that names the ingredient is attributable to it.
     ([('creatine_monohydrate', 'Creatine Monohydrate'), ('caffeine', 'Caffeine')],
      'Creatine Monohydrate for focus and alertness', 'unrelated', 'not_applicable'),
+    ([('creatine_monohydrate', 'Creatine Monohydrate'), ('caffeine', 'Caffeine')],
+     'Creatine for focus and alertness', 'unrelated', 'not_applicable'),
 ])
 def test_product_positioning_counts_against_an_ingredient_only_when_attributable(rows, product_name, state, status):
     scorable = [_row(canonical, name, quantity=3000 if canonical.startswith('creatine') else 200,
@@ -2025,3 +2027,61 @@ def test_product_positioning_counts_against_an_ingredient_only_when_attributable
     result = assess_clinical_applicability(product, entry, assess_amount=False)
     assert result.get('claim_alignment', {}).get('state') == state
     assert result['status'] == status
+
+
+@pytest.mark.parametrize('rid,canonical,name,quantity,unit,authority', [
+    ('INGR_VITAMIN_D3', 'vitamin_d', 'Vitamin D3', 25, 'mcg', 10.0),
+    ('BRAND_TESTOFEN', 'fenugreek', 'Testofen Fenugreek Extract', 600, 'mg', 0.0),
+    ('INGR_LACTOFERRIN', 'lactoferrin', 'Lactoferrin', 200, 'mg', 0.0),
+])
+def test_explicitly_ineligible_contexts_cannot_supply_legacy_clinical_credit(rid, canonical, name, quantity, unit, authority):
+    from scoring_v4.scored_artifact import build_scored_artifact
+    row = _row(canonical, name, quantity=quantity, unit=unit)
+    record = reviewed_entries()[rid]
+    assert record['study_contexts'] and all(c.get('scoring_eligible') is False for c in record['study_contexts'])
+    entry = {**record, 'ingredient': name, 'matched_canonical_ids': [canonical],
+             'matched_source_row_refs': ['ingredientRows[0]']}
+    product = {'product_name': name, 'ingredient_quality_data': {'ingredients_scorable': [row], 'ingredients': [row]},
+               'activeIngredients': [row], 'evidence_data': {'clinical_matches': [entry]}}
+    matches, _ = resolved_clinical_matches(product)
+    assert not matches
+    result = score_evidence(product, apply_primary_floor=True)
+    assert result['components']['clinical_evidence_pipeline'] == 0
+    assert result['score'] == authority
+    assert result['metadata']['contributing_record_assessments'] == []
+    scored = build_scored_artifact(product)
+    assert scored['_v4_module_breakdown']['dimensions']['evidence']['metadata'].get('matched_entries', 0) == 0
+
+
+def test_independent_approved_context_survives_held_sibling():
+    from evidence_resolver import clinical_record_sources_eligible
+    record = deepcopy(reviewed_entries()['INGR_GINGER'])
+    assert any(c.get('scoring_eligible') is True for c in record['study_contexts'])
+    assert clinical_record_sources_eligible(record)
+    for context in record['study_contexts']:
+        context['scoring_eligible'] = False
+    assert not clinical_record_sources_eligible(record)
+
+
+@pytest.mark.parametrize('outcomes', [
+    [{'name': 'Muscle strength', 'hierarchy': 'primary', 'direction': 'null', 'kind': 'patient_important'},
+     {'name': 'Muscle strength', 'hierarchy': 'secondary', 'direction': 'positive', 'kind': 'patient_important'}],
+    [{'name': 'Muscle strength', 'hierarchy': 'unresolved', 'direction': 'unresolved', 'kind': 'patient_important'}],
+])
+def test_claim_absence_does_not_turn_unqualified_outcomes_into_affirmative_credit(monkeypatch, outcomes):
+    import clinical_applicability as owner
+    from scoring_v4.scored_artifact import build_scored_artifact
+    current = owner.reviewed_entries()
+    record = deepcopy(current['INGR_CREATINE_MONOHYDRATE'])
+    context = next(c for c in record['study_contexts'] if c.get('scoring_eligible') is True)
+    context['outcomes'] = outcomes
+    record['study_contexts'] = [context]
+    monkeypatch.setattr(owner, 'reviewed_entries', lambda: {**current, record['id']: record})
+    row = _row('creatine_monohydrate', 'Creatine Monohydrate', quantity=3000)
+    product = {'product_name': 'Creatine Monohydrate',
+               'ingredient_quality_data': {'ingredients_scorable': [row], 'ingredients': [row]},
+               'activeIngredients': [row], 'evidence_data': {'clinical_matches': [{**record,
+                   'ingredient': row['name'], 'matched_source_row_refs': ['ingredientRows[0]']}]}}
+    assert score_evidence(product, apply_primary_floor=True)['score'] == 0
+    artifact = build_scored_artifact(product)
+    assert artifact['_v4_module_breakdown']['dimensions']['evidence']['score'] == 0
