@@ -319,7 +319,7 @@ def _():
 def _():
     from scoring_v4.modules import generic_evidence as ge
     expected = {"PRIMARY_FLOOR_STRONG": 14.0, "PRIMARY_FLOOR_MODERATE": 11.0,
-                "PRIMARY_FLOOR_BRANDED_STRONG": 18.0, "PRIMARY_FLOOR_BRANDED_MODERATE": 17.0,
+                # 1.31.0: the branded 18/17 tiers are retired (no automatic floor above 14).
                 "NUTRITION_AUTHORITY_FLOOR": 10.0}
     drifted = {k: getattr(ge, k, None) for k, v in expected.items() if getattr(ge, k, None) != v}
     return not drifted, f"drifted: {drifted}" if drifted else f"all held: {expected}"

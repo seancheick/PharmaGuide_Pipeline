@@ -773,9 +773,9 @@ def test_blend_anchor_brand_row_recovers_verified_product_level_evidence() -> No
 
     assert payload["metadata"]["recovered_matches"] == ["BRAND_RELORA"]
     assert payload["metadata"]["matched_entries"] == 1
-    assert payload["components"]["primary_evidence_floor"] == 17.0
+    assert payload["components"]["primary_evidence_floor"] == 11.0
     assert payload["metadata"]["primary_evidence_floor_canonical"] == "relora"
-    assert payload["score"] == 17.0
+    assert payload["score"] == 11.0
 
 
 def test_branded_recovery_does_not_borrow_relora_for_generic_magnolia_blend() -> None:
@@ -967,7 +967,7 @@ def test_vitamin_d_iu_resolves_same_ingredient_evidence_as_equivalent_mcg() -> N
     iu_payload = score(1000, "IU")
     mcg_payload = score(25, "mcg")
 
-    assert iu_payload["score"] == mcg_payload["score"] == 18.0
+    assert iu_payload["score"] == mcg_payload["score"] == 14.0
     assert iu_payload["components"] == mcg_payload["components"]
     assert iu_payload["metadata"]["primary_evidence_floor_canonical"] == "vitamin d3"
     assert iu_payload["metadata"]["recovered_matches"] == []
@@ -1011,7 +1011,7 @@ def test_vitamin_d_iu_and_mcg_have_amount_independent_evidence() -> None:
     iu_payload = score(1000, "IU")
     mcg_payload = score(25, "mcg")
 
-    assert iu_payload["score"] == mcg_payload["score"] == 18.0
+    assert iu_payload["score"] == mcg_payload["score"] == 14.0
     assert iu_payload["metadata"]["flags"] == mcg_payload["metadata"]["flags"]
     assert iu_payload["metadata"]["flags"] == []
     assert (
@@ -1019,7 +1019,7 @@ def test_vitamin_d_iu_and_mcg_have_amount_independent_evidence() -> None:
         == mcg_payload["metadata"]["sub_clinical_canonicals"]
     )
     assert iu_payload["metadata"]["sub_clinical_canonicals"] == []
-    assert iu_payload["components"]["primary_evidence_floor"] == 18.0
+    assert iu_payload["components"]["primary_evidence_floor"] == 14.0
 
 
 def test_vitamin_d_iu_and_mcg_both_pass_at_clinical_threshold() -> None:
@@ -1035,10 +1035,10 @@ def test_vitamin_d_iu_and_mcg_both_pass_at_clinical_threshold() -> None:
     iu_payload = score(2000, "IU")
     mcg_payload = score(50, "mcg")
 
-    assert iu_payload["score"] == mcg_payload["score"] == 18.0
+    assert iu_payload["score"] == mcg_payload["score"] == 14.0
     assert iu_payload["metadata"]["flags"] == []
     assert iu_payload["metadata"]["sub_clinical_canonicals"] == []
-    assert iu_payload["components"]["primary_evidence_floor"] == 18.0
+    assert iu_payload["components"]["primary_evidence_floor"] == 14.0
 
 
 def test_non_vitamin_d_iu_is_not_given_a_generic_primary_sentinel() -> None:
@@ -1148,8 +1148,7 @@ def test_shadow_wires_evidence_dimension() -> None:
     evidence = out["v4_breakdown"]["module"]["dimensions"]["evidence"]
     # Phase 8: the generic module opts into the primary-ingredient floor. The
     # default product's mass-primary magnesium has a systematic_review_meta
-    # positive match -> floored to 14.0 (non-branded strong; 3-lane model 2026-06-06:
-    # magnesium is form-dependent, not a consensus gold-standard generic).
+    # positive match -> floored to 14.0 (the strong floor).
     assert evidence["score"] == 14.0
     assert evidence["metadata"]["primary_evidence_floor"] == 14.0
     assert evidence["max"] == 20.0
@@ -1223,7 +1222,7 @@ def test_primary_floor_still_rejects_negative_effect() -> None:
     assert payload["metadata"]["primary_evidence_floor"] == 0.0
 
 
-def test_joint_support_caps_branded_primary_evidence_floor() -> None:
+def test_joint_support_caps_branded_primary_evidence_floor(monkeypatch) -> None:
     from scoring_v4.modules.generic_evidence import score_evidence
 
     ingredient = _ingredient(name="OptiMSM", standard_name="MSM",
@@ -1233,6 +1232,10 @@ def test_joint_support_caps_branded_primary_evidence_floor() -> None:
                    study_type="rct_multiple", evidence_level="branded-rct",
                    effect_direction="positive_strong", total_enrollment=200)
     match.update(matched_source_row_refs=["ingredientRows[0]"], matched_canonical_ids=["msm"])
+    # This test owns the joint cap: raise the strong floor above the cap so
+    # there is something to cap (1.31.0 has no automatic floor above 14).
+    from scoring_v4.modules import generic_evidence
+    monkeypatch.setattr(generic_evidence, "PRIMARY_FLOOR_STRONG", 18.0)
     product = _product(supplement_taxonomy={"primary_type": "joint_support"},
                        ingredients=[ingredient], matches=[match])
     product["activeIngredients"] = [dict(ingredient)]

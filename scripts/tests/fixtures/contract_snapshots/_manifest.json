@@ -207,6 +207,17 @@
   ],
   "changelog": [
     {
+      "date": "2026-10-28",
+      "phase": "Evidence calibration: no automatic generic floor above the strong base (config 1.31.0)",
+      "source_commit": "67119326f",
+      "products_updated": [
+        245156,
+        298102,
+        306237
+      ],
+      "notes": "Complete33raw-canary check on the candidate found exactly3drifts; unchanged main passes33/33. Each is one Evidence change 20.0->15.6 (18->14 raw): KSM-66 245156 and 306237 (two Ixoreal-supplied trials, 124 participants) and vitamin D 298102 (retired ingredient allowlist). The retired brand and allowlist floors no longer apply, so the strong floor applies. Totals -4.4; 298102 Exceptional->Excellent, 306237 Very good->Good. No identity, amount, Dose, Formulation, Transparency, Verification, safety or status change. Each fixture refreshed individually from raw; other30canaries unchanged."
+    },
+    {
       "date": "2026-10-27",
       "phase": "Public completeness consumes existing release assessment",
       "products_updated": [
@@ -1235,6 +1246,21 @@
       ],
       "source_commit": "ed39341fc98ee86465c6353517e3db6c9d171368",
       "notes": "Selective stale-expectation correction: current main and returned-review candidate independently replay the same frozen raw Wobenzym label to identical Clean/Enrich/Score/blob hashes, score71.2 and partial coverage; old fixture74.3/complete predates that baseline. This batch does not cause the movement. Both sources retain underlying label amounts, safety and remaining applicability limitations. Paired source-bound receipt: returned_batch_completion_20261026/canary_base and canary_candidate; zero changed paths. Only this one fixture refreshed; no corpus rebuild."
+    },
+    {
+      "date": "2026-10-28",
+      "dsld_ids": [
+        183275,
+        239741,
+        245156,
+        270256,
+        293943,
+        306237,
+        306381,
+        337853
+      ],
+      "source_commit": "b1f44d3ee (PR #273 held-source closure) plus the INGR_L_ARGININE/INGR_INOSITOL excluded-form fix on claude/canary-refresh-273",
+      "notes": "Expected movement from Dr Pham's 2026-10-28 rulings, verified per label against main before #273 (de25a5cf3: 33/33 unchanged) and after. Score moves: 183275 Silymarin 82.0->66.4 (INGR_MILK_THISTLE reference-only: no generic liver-protection credit); 239741 Korean Panax Ginseng 51.5->44.2 (INGR_GINSENG no healthy-adult energy credit); 293943 CoQ10 120 mg 77.4->61.8 (INGR_COQ10 credit limited to adjunctive heart failure; this label's claim is rejected as label_purpose_evidence_mismatch). Completion only, scores unchanged: 245156, 270256, 306237, 306381, 337853 partial->complete because their source records closed. 269278 Arginine AKG complete->partial was a defect, not refreshed: the new INGR_L_ARGININE scope stopped the legacy exclude_aliases check; fixed by carrying exclude_aliases into excluded_form_terms (also INGR_INOSITOL). Refreshed from raw with freeze_contract_snapshots.py --raw-root; safety, amounts and identities unchanged."
     }
   ]
 }

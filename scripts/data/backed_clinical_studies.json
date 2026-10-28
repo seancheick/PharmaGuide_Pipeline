@@ -43690,7 +43690,13 @@
           "hormone balance",
           "normalizes"
         ],
-        "reviewed_at": "2026-10-28"
+        "reviewed_at": "2026-10-28",
+        "excluded_form_terms": [
+          "inositol hexanicotinate",
+          "inositol hexaphosphate",
+          "inositol hexaphosphoric acid",
+          "ip6"
+        ]
       }
     },
     {
@@ -44162,7 +44168,26 @@
         "source_pmids": [
           "34967840"
         ],
-        "reviewed_at": "2026-10-28"
+        "reviewed_at": "2026-10-28",
+        "excluded_form_terms": [
+          "l-arginine akg",
+          "l arginine akg",
+          "arginine akg",
+          "aakg",
+          "arginine alpha-ketoglutarate",
+          "arginine alpha ketoglutarate",
+          "arginine nitrate",
+          "inositol-stabilized arginine silicate",
+          "inositol stabilized arginine silicate",
+          "arginine silicate",
+          "nitrosigine",
+          "l-arginine hcl",
+          "l arginine hcl",
+          "l-arginine hydrochloride",
+          "arginine hydrochloride",
+          "arginine aspartate",
+          "l-arginine aspartate"
+        ]
       }
     },
     {
