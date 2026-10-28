@@ -1445,7 +1445,8 @@ def test_empty_machine_verification_stamp_cannot_complete_a_negative_search(monk
     import copy
     record = copy.deepcopy(er._load_literature_evidence()['cistanche'])
     record['qualifying_human_studies'] = []
-    record['effect_direction'] = 'no_qualifying_human_evidence'
+    record['effect_direction'] = None  # a review result, not an observed effect
+    record['applicability_status'] = 'no_qualifying_human_evidence'
     record['verification_result'] = 'authoritative_pubmed_verified'
     record['verification_provenance'] = {'all_pmids_verified': True, 'retractions_found': False,
                                          'verified_by': 'scripts/api_audit/verify_literature_records.py'}
