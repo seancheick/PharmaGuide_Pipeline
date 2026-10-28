@@ -86,3 +86,21 @@ def test_evidently_supplemental_magnesium_keeps_confirmed_exceedance(enricher, f
     assert out["analyzed_ingredients"][0]["skip_ul_check"] is False
     assert [flag.pct_ul for flag in _confirmed(out)] == [pytest.approx(540 / 350 * 100)]
     assert not get_actionable_ul_review_signals(out)
+
+
+@pytest.mark.parametrize("change", [
+    {"servingSizes": [{"minQuantity": 2, "maxQuantity": 2, "unit": "Tablet(s)"}]},
+    {"raw_source_text": "Magnesium (as Magnesium Oxide)"},
+    {"name": "Magnesium Citrate", "raw_source_text": "Magnesium Citrate"},
+])
+def test_tablets_and_rows_naming_a_form_are_not_a_food_matrix_total(enricher, change):
+    # Protein on a tablet panel, or a form named only in the row text, still
+    # leaves the magnesium evidently supplemental.
+    row = _magnesium(540)
+    product = {"activeIngredients": [row], "inactiveIngredients": [], "statements": [],
+               "nutritionalInfo": {"protein": {"amount": 1.0, "unit": "Gram(s)"}}}
+    row.update({k: v for k, v in change.items() if k != "servingSizes"})
+    product.update({k: v for k, v in change.items() if k == "servingSizes"})
+    out = enricher._collect_rda_ul_data(product, min_servings_per_day=1, max_servings_per_day=1)
+    assert out["analyzed_ingredients"][0]["skip_ul_reason"] != "supplemental_magnesium_fraction_unknown"
+    assert not get_actionable_ul_review_signals(out)

@@ -19167,18 +19167,23 @@ class SupplementEnricherV3:
     def _parse_serving_counts_from_directions(self, text: str) -> List[Tuple[float, float]]:
         """Daily regimens stated as servings: "Consume 1-2 servings per day" -> (1, 2).
 
-        One (min, max) pair per stated regimen. Precaution ceilings ("Do not
-        exceed 3 servings daily") are dropped, as in
-        ``_parse_dosage_from_directions``.
+        One (min, max) pair per stated regimen. Ceilings and conditional
+        clauses ("Do not exceed 3 servings daily", "up to 2 servings per day",
+        "consult your physician before taking 2 servings daily") are not a
+        directed regimen and are dropped. Fractions and decimals are left to
+        the existing paths rather than misread ("1/2" is not 2).
         """
-        number = r"(\d+|" + "|".join(self.WORD_TO_NUM) + r")"
+        number = r"(?<![\d./])(\d+|" + "|".join(self.WORD_TO_NUM) + r")(?![\d./])"
         pattern = re.compile(
             rf"\b{number}(?:\s*(?:-|to|or)\s*{number})?\s+servings?\s+"
             r"(?:daily|per day|a day|each day)\b"
         )
+        ceiling = re.compile(
+            r"\b(?:exceed|more than|up to|limit|maximum|before (?:taking|using|consuming))\b"
+        )
         regimens: List[Tuple[float, float]] = []
         for clause in re.split(r"(?<=[.!?;])\s+|[\r\n]+", str(text).lower()):
-            if re.search(r"\b(?:(?:do|should|must)\s+not\s+exceed|not\s+to\s+exceed)\b", clause):
+            if ceiling.search(clause):
                 continue
             for match in pattern.finditer(clause):
                 low, high = (float(self.WORD_TO_NUM.get(value, value))
@@ -22754,10 +22759,16 @@ class SupplementEnricherV3:
         """
         active_ingredients = self._dose_active_ingredients_for_enrichment(product)
         special_use_flags = self._collect_special_use_flags(active_ingredients)
-        # A Facts panel that declares protein has a food matrix, so a bare
-        # nutrient total on it can include intrinsic food minerals.
-        declares_food_protein = bool(
+        # A food-format serving whose Facts panel declares protein has a food
+        # matrix, so a bare nutrient total on it can include intrinsic food
+        # minerals. A tablet or capsule declaring a gram of protein does not.
+        serving_unit = self._normalize_serving_unit_label(
+            (self._select_canonical_serving(product.get("servingSizes") or [], []) or {}).get("unit")
+        )
+        declares_food_matrix = bool(
             (self._collect_nutrition_summary(product).get("protein_g") or 0) > 0
+            and not any(token in serving_unit for token in (
+                "tablet", "caplet", "capsule", "softgel", "gumm", "lozenge", "chew", "wafer"))
         )
         ul_population = self._ul_screening_population(product)
         pediatric_age_groups = self._ul_screening_pediatric_age_groups(product)
@@ -23784,16 +23795,19 @@ class SupplementEnricherV3:
                     # bare total on a food-matrix panel also counts intrinsic
                     # food magnesium (Re-Built Mass XP 244288: 540 mg from whey,
                     # grains, cocoa and a 2.5 g magnesium-creatine chelate), so
-                    # its supplemental share is unknown. Only a total above the
-                    # UL is affected: a total within it bounds the share.
+                    # its supplemental share is unknown. Only a row above the
+                    # UL is affected; a row naming a form keeps its finding.
                     magnesium_ul_screening = None
                     if (
                         not skip_ul_check
                         and safety_over_ul
-                        and declares_food_protein
+                        and declares_food_matrix
                         and resolved_canonical_id == "magnesium"
                         and _nutrient_record.get("ul_basis") == "supplemental_only"
                         and not ingredient.get("forms")
+                        and self._normalize_text(
+                            ingredient.get("raw_source_text") or ingredient.get("name") or ""
+                        ) == "magnesium"
                     ):
                         skip_ul_check = True
                         ul_only_skip = True

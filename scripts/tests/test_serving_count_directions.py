@@ -53,3 +53,20 @@ def test_age_group_regimens_are_not_merged_into_one_range(enricher):
                                  "children 9-12 years of age, take two servings daily."}],
     })["serving_basis"]
     assert basis["max_servings_per_day"] != 2.0
+
+
+@pytest.mark.parametrize("directions", [
+    "Children over 4 years old may take 1/4 to 1/2 serving daily.",
+    "Take 1.5 servings daily.",
+    "Do not take more than 3 servings daily.",
+    "Consume up to 2 servings per day.",
+    "Limit to 2 servings daily.",
+    "Consult your physician before taking 2 servings daily.",
+])
+def test_fractions_and_ceilings_are_not_read_as_serving_regimens(enricher, directions):
+    assert enricher._parse_serving_counts_from_directions(directions) == []
+
+
+def test_physician_fallback_clause_keeps_the_regimen(enricher):
+    assert enricher._parse_serving_counts_from_directions(
+        "Take one serving daily or as directed by your physician.") == [(1.0, 1.0)]
