@@ -390,10 +390,6 @@ def score_evidence(product: Dict[str, Any], *, apply_primary_floor: bool = False
         ),
     )
 
-    if omega_authority and primary_floor_decisive:
-        # This completed nutrition assessment is independent of clinical holds.
-        evidence_result_state = omega_authority["evidence_result_state"]
-
     # Internal dependency receipts describe the selected numerical path only.
     # Audit-only generic matches in native modules never become their owners.
     dependencies = []

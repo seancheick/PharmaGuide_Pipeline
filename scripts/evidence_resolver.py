@@ -294,6 +294,13 @@ class ProductEvidenceResolution:
     owner_contributions: Dict[str, int]
 
 
+_OMEGA_EVIDENCE_CANONICALS = {
+    "epa", "dha", "epa_dha", "fish_oil", "fish_liver_oil", "cod_liver_oil",
+    "krill_oil", "algal_oil", "algae_oil", "omega3", "omega_3",
+    "omega_3_fatty_acids", "omega_fatty_acid_blend",
+}
+
+
 def resolve_omega_evidence_standard(product: Mapping[str, Any]) -> Dict[str, Any]:
     """Resolve the reviewed omega purpose record without judging its amount.
 
@@ -356,16 +363,11 @@ def resolve_omega_evidence_standard(product: Mapping[str, Any]) -> Dict[str, Any
         normalized_title,
     ))
 
-    omega_owner_ids = {
-        "epa", "dha", "epa_dha", "fish_oil", "fish_liver_oil", "cod_liver_oil",
-        "krill_oil", "algal_oil", "algae_oil", "omega3", "omega_3",
-        "omega_3_fatty_acids", "omega_fatty_acid_blend",
-    }
     try:
         owners = evidence_owner_canonicals(prod, module="omega")
     except (KeyError, TypeError, ValueError):
         owners = set()
-    mixed_purpose = bool(owners and any(owner not in omega_owner_ids for owner in owners))
+    mixed_purpose = bool(owners and any(owner not in _OMEGA_EVIDENCE_CANONICALS for owner in owners))
 
     claim_segments = [title] + [
         str(statement.get("notes") or statement.get("text") or "")
@@ -945,6 +947,24 @@ def resolve_evidence_for_row(
             )
 
     # 6. Check Nutrition Authority (DRI/RDA/AI benchmarks for essential nutrients)
+    if product and canonical in _OMEGA_EVIDENCE_CANONICALS:
+        omega = resolve_omega_evidence_standard(product)
+        if omega["applicability_qualified"]:
+            matched_owners.append("nutrition_authority")
+            owner_facts["nutrition_authority"] = {
+                "nutrient": canonical,
+                "authority": omega["record_id"],
+                "source_references": omega["source_references"],
+            }
+            return EvidenceResolution(
+                canonical_id=canonical, ingredient_name=name,
+                matched_owners=matched_owners,
+                disposition=EvidenceDisposition.RESOLVED_BY_AUTHORITY.value,
+                points_eligible=False,
+                applicability_status="applicable",
+                reason_code="dietary_reference_intake_authority_established",
+                owner_facts=owner_facts,
+            )
     nutr_entry = rda_ul_reference_entry(canonical_id=canonical, name=name)
     if nutr_entry and is_essential_dietary_nutrient(canonical, name, iqm_entry):
         matched_owners.append("nutrition_authority")

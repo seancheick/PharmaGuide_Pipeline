@@ -418,3 +418,32 @@ def test_public_omega_nutrition_keeps_population_preparation_and_identity_contro
     pillar = artifact["quality_pillars_v4"]["evidence"]
     assert pillar["score"] == 0
     assert pillar["evidence_result_state"] != "evaluated_authority"
+
+
+def test_omega_nutrition_authority_does_not_finish_an_unknown_companion_review():
+    from scoring_v4.modules.generic_evidence import score_evidence
+    from evidence_resolver import resolve_product_evidence
+    product = _epa_dha_product(name="Fish Oil Blend")
+    product["ingredient_quality_data"]["ingredients_scorable"].append({
+        "name": "Unreviewed active", "canonical_id": "unreviewed_test_active",
+        "quantity": 10, "unit": "mg", "mapped": True,
+    })
+    # A consumer assessing every subject must preserve its coverage gap, even
+    # when the shared omega owner establishes a separate nutrition floor.
+    payload = score_evidence(product, apply_primary_floor=True)
+    assert not resolve_product_evidence(product).is_assessment_complete
+    assert payload["score"] > 0
+    assert payload["metadata"]["evidence_result_state"] == "clinical_review_not_covered"
+
+
+def test_omega_nutrition_subjects_share_the_existing_authority_disposition():
+    from evidence_resolver import resolve_product_evidence, EvidenceDisposition
+    product = _epa_dha_product(name="Fish Oil")
+    product["ingredient_quality_data"]["ingredients_scorable"].append({
+        "name": "Fish Oil", "canonical_id": "fish_oil", "quantity": 1000, "unit": "mg",
+    })
+    result = resolve_product_evidence(product)
+    assert result.is_assessment_complete
+    assert {row.disposition for row in result.resolutions} == {EvidenceDisposition.RESOLVED_BY_AUTHORITY.value}
+    assert all(row.owner_facts["nutrition_authority"]["source_references"][0]["doi"] == "10.2903/j.efsa.2010.1461"
+               for row in result.resolutions)

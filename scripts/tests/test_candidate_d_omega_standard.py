@@ -69,7 +69,9 @@ def test_evidence_keeps_reviewed_weak_record_below_one_gram() -> None:
     assert payload["metadata"]["evidence_standard"] == "omega_reviewed_weak"
     assert payload["metadata"]["disclosed_epa_dha_clinical_floor_awarded"] is False
     assert payload["metadata"]["applicability_qualified"] is True
-    assert payload["metadata"]["evidence_result_state"] == "evaluated_applicable"
+    assert payload["metadata"]["evidence_result_state"] == "evaluated_authority"
+    assert payload["metadata"]["evidence_source_pmids"] == []
+    assert payload["metadata"]["source_references"][0]["doi"] == "10.2903/j.efsa.2010.1461"
 
 
 def test_evidence_does_not_use_the_reviewed_trial_amount_as_a_threshold() -> None:
