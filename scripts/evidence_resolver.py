@@ -158,7 +158,7 @@ OWNER_CAPABILITY_MAP: Dict[str, OwnerCapability] = {
     "backed_clinical_studies": OwnerCapability(
         owner_id="backed_clinical_studies",
         data_source="data/backed_clinical_studies.json",
-        facts_owned=("has_reviewed_studies", "study_count", "highest_study_type", "effect_directions", "pmids", "min_clinical_dose", "max_clinical_dose"),
+        facts_owned=("has_reviewed_studies", "study_count", "highest_study_type", "effect_directions", "pmids", "min_clinical_dose", "max_studied_clinical_dose"),
         capability_description="Reviewed human clinical trials, systematic reviews, and meta-analyses",
     ),
     "probiotic_strain_registry": OwnerCapability(

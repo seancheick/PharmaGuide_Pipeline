@@ -128,6 +128,19 @@ def test_matched_owner_not_equal_points_invariant():
     assert res.points_eligible is False  # Authority establishes necessity; does NOT award points directly
 
 
+def test_clinical_passthrough_and_owner_facts_name_only_curated_fields():
+    """A field no curated record carries is a dead alias, not a public contract."""
+    import json
+    from enrich_supplements_v3 import _CLINICAL_MATCH_PASSTHROUGH_FIELDS
+    records = json.loads((Path(__file__).parents[1] / "data/backed_clinical_studies.json")
+                         .read_text())["backed_clinical_studies"]
+    carried = {key for record in records for key in record}
+    assert set(_CLINICAL_MATCH_PASSTHROUGH_FIELDS) <= carried
+    dose_facts = {fact for fact in OWNER_CAPABILITY_MAP["backed_clinical_studies"].facts_owned
+                  if "dose" in fact}
+    assert dose_facts <= carried
+
+
 def test_nutrition_authority_reports_the_one_upper_limit_owner():
     """highest_ul is the adult maximum; life-stage ULs stay in data[].ul."""
     import json
