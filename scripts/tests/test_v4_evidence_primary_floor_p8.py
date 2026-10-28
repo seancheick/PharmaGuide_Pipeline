@@ -217,6 +217,35 @@ def test_replication_must_match_the_declared_purpose(monkeypatch):
         assert score_evidence(p, apply_primary_floor=True)["metadata"]["primary_evidence_floor"] == floor, claims
 
 
+def test_filtered_contradictory_family_still_blocks(monkeypatch):
+    """A null trial for the same condition blocks replication even when its own
+    outcome falls outside the declared purpose or its scope is combination or
+    unstated: the filters choose supporting trials, never hide contradictions."""
+    def null_family(**overrides):
+        context = _context("d", direction="null", condition="healthy_adults", **overrides)
+        context["outcomes"][0]["name"] = "PSQI global score"
+        return context
+    positives = _replicated(condition="healthy_adults")
+    for context in positives:
+        context["outcomes"][0]["name"] = "Sleep quality"
+    for contradiction in (null_family(), null_family(scope="combination"), null_family(scope=None)):
+        p = _product([_ing()], _registered(monkeypatch, _match(study_type="rct_multiple",
+                     study_contexts=positives + [contradiction]), claims={"ashwagandha": {"mood"}}))
+        assert score_evidence(p, apply_primary_floor=True)["metadata"]["primary_evidence_floor"] == 14.0
+
+
+def test_population_restricted_body_does_not_transfer(monkeypatch):
+    """Replicated trials restricted to pregnancy apply only to a prenatal label
+    (the shared native population restriction)."""
+    contexts = _replicated()
+    for context in contexts:
+        context["population"] = {"age_group": "adult", "description": "Pregnant women in the third trimester"}
+    general = _product([_ing()], _registered(monkeypatch, _match(study_type="rct_multiple", study_contexts=contexts)))
+    assert score_evidence(general, apply_primary_floor=True)["metadata"]["primary_evidence_floor"] == 14.0
+    prenatal = {**general, "product_name": "Prenatal Ashwagandha"}
+    assert score_evidence(prenatal, apply_primary_floor=True)["metadata"]["primary_evidence_floor"] == 18.0
+
+
 def test_uncategorized_replicated_condition_is_held(monkeypatch):
     """The shared categorizer has no joint category yet, so knee trials cannot
     establish purpose-matched replication: held, never borrowed."""

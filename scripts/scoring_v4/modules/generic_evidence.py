@@ -1763,16 +1763,22 @@ def _replicated_evidence_body(entry: Dict[str, Any], product: Dict[str, Any],
     contexts carried on a match never broaden reviewed scope. A context counts
     only for the purpose it studied: its condition must fall in a category the
     label declares for this ingredient or, without a declared purpose, one the
-    record's reviewed outcomes support (evidence_indication_categories). A
-    condition the shared categorizer cannot place stays held. The shared
-    consistency owner then requires three consistent independent RCT families
-    for one condition, with no contradictory or unlinked pooled family. A brand,
-    an ingredient name or a study count never stands in for that body.
+    record's reviewed outcomes support (evidence_indication_categories), and
+    a population restriction (pregnancy, women, infants) must fit the label
+    (the native population owner). A condition the shared categorizer cannot
+    place stays held. The shared consistency owner then requires three
+    consistent independent RCT families for one condition among those
+    supporting contexts, while any approved contradictory or unlinked pooled
+    family for that condition still blocks, whatever its scope or purpose. A
+    brand, an ingredient name or a study count never stands in for that body.
     """
     from clinical_applicability import reviewed_entries
     from evidence_resolver import _evidence_claim_purposes, _evidence_entry_purposes, evidence_indication_categories
     from probiotic_measurements import context_accepted_for_scoring
-    from scoring_v4.modules.probiotic_evidence import _consistency_from_contexts, _qualifying_outcomes
+    from scoring_v4.modules.probiotic_evidence import (
+        _consistency_from_contexts, _native_context_population_applies,
+        _product_positioning_categories, _qualifying_outcomes,
+    )
 
     record = reviewed_entries().get(_clinical_source_id(entry))
     if record is None:
@@ -1789,15 +1795,23 @@ def _replicated_evidence_body(entry: Dict[str, Any], product: Dict[str, Any],
             [str(context.get("condition") or "").replace("_", " ")]
             + [str(outcome.get("name") or "") for outcome in _qualifying_outcomes(context)]))
 
-    contexts = [
+    product_categories = _product_positioning_categories(product)
+    accepted = [
         (str(record.get("id") or ""),
          {**context, "study_design": _CONTEXT_ROLE_DESIGNS.get(context.get("evidence_role"), "unreported")})
         for context in _safe_list(record.get("study_contexts"))
         if context_accepted_for_scoring(context) and _qualifying_outcomes(context)
-        and context.get("identity_scope") in scopes
-        and studied_purposes(context) & purposes
     ]
-    return _consistency_from_contexts(contexts)["credit"] >= 1.0
+    supporting = [
+        (record_id, context) for record_id, context in accepted
+        if context.get("identity_scope") in scopes
+        and studied_purposes(context) & purposes
+        and _native_context_population_applies(context, product_categories)
+    ]
+    blocked = {row["condition"] for row in _consistency_from_contexts(accepted)["conditions"]
+               if row["contradictory_family_ids"] or row["pooled_family_ids"]}
+    return any(row["credit"] >= 1.0 and row["condition"] not in blocked
+               for row in _consistency_from_contexts(supporting)["conditions"])
 
 
 def _entry_raw_points(entry: Dict[str, Any]) -> float:
