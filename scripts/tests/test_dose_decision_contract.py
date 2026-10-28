@@ -324,7 +324,7 @@ def test_vitamin_a_reverse_conversion_preserves_rae_semantics_and_form():
     )
 
     assert result.success is True
-    assert result.converted_value == pytest.approx(9990.0)
+    assert result.converted_value == pytest.approx(10000.0)
     assert result.converted_unit == "IU"
     assert result.conversion_rule_id == "vitamin_a_retinol"
 
@@ -346,7 +346,7 @@ def test_preformed_vitamin_a_label_mcg_is_interpreted_as_rae():
     )
 
     assert result.success is True
-    assert result.converted_value == pytest.approx(9990.0)
+    assert result.converted_value == pytest.approx(10000.0)
     assert result.converted_unit == "IU"
     assert result.conversion_rule_id == "vitamin_a_retinol"
 
@@ -960,3 +960,30 @@ def test_declared_alpha_activity_retains_mass_threshold_comparison(name):
     )
     assert value == 1500
     assert reason is None
+
+
+@pytest.mark.parametrize("target", ["pregnancy", "ttc"])
+@pytest.mark.parametrize("amount,status", [(3000, "below_threshold"), (3001, "above_threshold"), (3003, "above_threshold")])
+def test_preformed_vitamin_a_threshold_preserves_exact_mcg_boundary(target, amount, status):
+    selected, decision = SupplementEnricherV3()._evaluate_dose_thresholds_for_target(
+        _rule("RULE_IQM_VITAMIN_A_PREGNANCY_DOSE")["dose_thresholds"],
+        "condition", target,
+        {"name": "Vitamin A", "standard_name": "Vitamin A", "quantity": amount,
+         "unit": "mcg", "matched_form": "retinyl palmitate"},
+        1.0, "caution",
+    )
+    assert decision["evaluation_status"] == status
+    assert decision["consumer_disposition"] == ("suppress" if amount == 3000 else "block")
+    assert selected == ("caution" if amount == 3000 else "contraindicated" if target == "pregnancy" else "avoid")
+
+
+@pytest.mark.parametrize("amount,status,disposition", [(3000, "below_threshold", "suppress"), (3001, "form_unknown", "review")])
+def test_unknown_vitamin_a_boundary_never_assumes_a_retinol_fraction(amount, status, disposition):
+    _selected, decision = SupplementEnricherV3()._evaluate_dose_thresholds_for_target(
+        _rule("RULE_IQM_VITAMIN_A_PREGNANCY_DOSE")["dose_thresholds"],
+        "condition", "pregnancy",
+        {"name": "Vitamin A", "standard_name": "Vitamin A", "quantity": amount, "unit": "mcg"},
+        1.0, "caution",
+    )
+    assert decision["evaluation_status"] == status
+    assert decision["consumer_disposition"] == disposition
