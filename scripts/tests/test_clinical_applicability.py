@@ -658,8 +658,10 @@ def test_marine_omega_identity_controls_retain_the_clinical_hold(canonical, name
     row.update(name=name, standard_name=name, canonical_id=canonical, quantity=1000)
     match = {"id": "INGR_OMEGA3", "ingredient": name, "matched_canonical_ids": [canonical],
              "matched_source_row_refs": ["ingredientRows[0]"]}
-    assert assess_clinical_applicability(product, match) == {
-        'status': 'unresolved', 'reason_code': 'clinical_sources_ineligible'}
+    decision = assess_clinical_applicability(product, match)
+    assert decision['status'] == 'unresolved'
+    assert decision['reason_code'] == 'clinical_sources_ineligible'
+    assert decision['matched_source_row_refs'] == ['ingredientRows[0]']
 
 
 @pytest.mark.parametrize("reverse", [False, True])

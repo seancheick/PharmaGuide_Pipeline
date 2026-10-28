@@ -1106,23 +1106,19 @@ def assess_clinical_applicability(product: Mapping, entry: Mapping, *, assess_am
         if exclusion_only:
             applicable_rows.append(row)
             continue
-        if scope.get("status"):
-            return {**scope, "matched_source_row_refs": [ref for ref in (
+        if source_block or scope.get("status"):
+            return {**(source_block or scope), "matched_source_row_refs": [ref for ref in (
                 row.get("raw_source_path") or row.get("source_row_ref"),) if ref]}
-        if source_block:
-            return source_block
         return {"status": "applicable", "reason_code": "reviewed_scope_match",
                 "source_row_ref": row.get("raw_source_path") or row.get("source_row_ref"),
                 "supported_outcomes": policy.get("supported_outcomes", []),
                 "studied_population": policy.get("studied_population"),
                 "scope": "ingredient", **scope}
-    if applicable_rows and scope.get("status"):
-        return {**scope, "matched_source_row_refs": list(dict.fromkeys(
+    if applicable_rows and (source_block or scope.get("status")):
+        return {**(source_block or scope), "matched_source_row_refs": list(dict.fromkeys(
             row.get("raw_source_path") or row.get("source_row_ref") for row in applicable_rows
             if row.get("raw_source_path") or row.get("source_row_ref")))}
     if applicable_rows:
-        if source_block:
-            return source_block
         # Exclusion rejects identities/preparations, not legitimate siblings.
         # Preserve every passing row rather than making label order choose
         # the numerator later consumed by Evidence and Dose. Scoped form/dose
