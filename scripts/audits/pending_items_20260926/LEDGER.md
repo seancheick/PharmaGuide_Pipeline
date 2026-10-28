@@ -3746,6 +3746,7 @@ Final-commit qualification:
 - The replay at c20edc773 (the last source change: approved-purpose edits, schema 5.1.0, narrowed guard) changes 0 of 1,111 products (receipt `~/pg_quality/field_one_brain_20261028/cand_final.jsonl`, head-stamped).
 - pipeline-tests is green at 0d9649e40.
 - The approved-purpose edits for collagen peptides, gelatin and UC-II are editorial corrections. Sean accepted them on October 28. They carry no new approval; their dependency is the October 18 DOSE_V41 decision rows.
+- After merging main 54714d040 (#275), a replay of the merged head (bfeef14aa) against main 54714d040 shows 0 of 1,111 products differ. #276 (docs only) was merged after.
 - Canary drift is itemized in `scripts/audits/field_one_brain_20261028/canary_baseline_drift.md`. For example, Vitamin D pregnancy goes from two warnings to one: the monitor-severity duplicate is dropped and the informational one kept. The warning owner must confirm before the integrator refreshes the baseline.
 
 Finding (pre-existing on main, not this batch): all 10 failures are test_e1_2_2_preflight_invariant canaries (score_penalties/warnings/display_ingredients vs the 2026-10-18 baseline).
