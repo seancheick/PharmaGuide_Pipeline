@@ -1764,3 +1764,20 @@ def test_purpose_rejection_keeps_the_studied_branded_material_for_formulation():
         'ingredients_scorable': [other]}}, [entry], assess_amount=False)
     assert rejected[0]['reason_code'] == 'clinical_form_mismatch'
     assert 'matched_source_row_refs' not in rejected[0]
+
+
+@pytest.mark.parametrize('product_name,statements,excluded', [
+    # Single signed words count only as claimed objects.
+    ('CoQ10 Energy Support', (), True),
+    ('CoQ10 100 mg', ('Supports cellular energy production.',), True),
+    ('Pro Energy Series CoQ10', (), False),
+    # A precaution naming a signed term is not a claim.
+    ('Inositol', ('Consult your doctor before use during pregnancy.',), False),
+    ('Inositol', ('Supports a healthy pregnancy.',), True),
+])
+def test_signed_exclusions_match_claims_not_product_lines_or_precautions(product_name, statements, excluded):
+    from clinical_applicability import _excluded_claim_matches
+    product = {'product_name': product_name,
+               'statements': [{'type': 'General Statements: All Other Content', 'notes': text} for text in statements]}
+    policy = {'excluded_claim_terms': ['energy', 'pregnancy', 'heart health']}
+    assert _excluded_claim_matches(product, policy) is excluded

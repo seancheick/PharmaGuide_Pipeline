@@ -2449,11 +2449,13 @@ def test_identity_bearing_preparation_keeps_its_printed_mass_without_a_blend_pro
     assert assessment["evidence_applicability"] == "individual_ingredient"
     assert assessment["state"] == "evaluated_supported"
     assert assessment["source_value"] == 300.0
-    # PRECLIN_QUERCETIN_PHYTOSOME is now scoped to seasonal allergy symptoms
-    # (Dr. Pham-approved closure, 2026-10-28); this label claims none.
-    assert set(assessment["evidence_ids"]) == {"INGR_QUERCETIN"}
-    rejected = {m.get("id"): m.get("reason_code") for m in product["evidence_data"]["rejected_clinical_matches"]}
-    assert rejected.get("PRECLIN_QUERCETIN_PHYTOSOME") == "source_condition_claim_unestablished"
+    # PRECLIN_QUERCETIN_PHYTOSOME is scoped to seasonal allergy symptoms
+    # (Dr. Pham-approved closure, 2026-10-28). No claim is required, so this
+    # claim-free phytosome label keeps that scoped record.
+    assert set(assessment["evidence_ids"]) == {"INGR_QUERCETIN", "PRECLIN_QUERCETIN_PHYTOSOME"}
+    accepted = {m.get("id"): m for m in product["evidence_data"]["clinical_matches"]}
+    assert accepted["PRECLIN_QUERCETIN_PHYTOSOME"]["applicability_assessment"]["supported_outcomes"] == [
+        "seasonal_allergy_symptoms"]
     assert out["v4_verdict"] != "NOT_SCORED"
     assert out["raw_score_v4_100"] is not None
     completeness = out["v4_breakdown"]["completeness_gate"]

@@ -394,14 +394,27 @@ def native_product_positioning_texts(product: Mapping) -> list[str]:
 
 
 
+# A signed exclusion names a claim. A single word counts only as a claimed
+# object ("supports cellular energy", "Energy Support"), never as a product
+# line ("Pro Performance", "Extra Strength") or inside a precaution.
+_CLAIM_VERB = r"(?:supports?|promotes?|boosts?|helps?|enhances?|increases?|improves?|maintains?|for)"
+_CLAIM_NOUN = r"(?:support|formula|booster|boost|health)"
+_PRECAUTION_CLAUSE = re.compile(
+    r"\b(?:consult|ask (?:your|a)|talk (?:to|with)|if you (?:are|have)|warning|caution|keep out of reach)\b", re.I)
+
+
 def _excluded_claim_matches(product: Mapping, policy: Mapping) -> bool:
-    """Match only affirmative label positioning, never warnings or metadata."""
+    """Match only affirmative label claims, never warnings, precautions or metadata."""
     excluded = {str(product.get("brand_name") or ""), str(product.get("serving_description") or "")}
+    clauses = [clause for text in native_product_positioning_texts(product) if text and text not in excluded
+               for clause in re.split(r"[.;!?\r\n]+", text) if not _PRECAUTION_CLAUSE.search(clause)]
     for term in policy.get("excluded_claim_terms", []):
-        pattern = re.compile(r"(?<!\w)" + r"[\s_-]+".join(
-            re.escape(word) for word in _key(term).split()) + r"(?!\w)", re.I)
-        if any(text and text not in excluded and find_affirmative_label_match(pattern, text)
-               for text in native_product_positioning_texts(product)):
+        words = _key(term).split()
+        body = r"[\s_-]+".join(re.escape(word) for word in words)
+        if len(words) == 1:
+            body = rf"(?:{_CLAIM_VERB}\s+(?:[\w'-]+\s+){{0,3}}{body}|{body}[\s_-]+{_CLAIM_NOUN})"
+        pattern = re.compile(r"(?<!\w)" + body + r"(?!\w)", re.I)
+        if any(find_affirmative_label_match(pattern, clause) for clause in clauses):
             return True
     return False
 
@@ -949,6 +962,15 @@ def filter_clinical_matches(product: Mapping, matches: list[dict], *, assess_amo
                 accepted.append(entry)
                 continue
             scoped_entry = {**entry, "applicability_assessment": decision}
+            anchors = [ref for ref in entry.get("matched_source_row_refs") or [] if isinstance(ref, str)]
+            passing = decision.get("matched_source_row_refs") or [decision.get("source_row_ref")]
+            if anchors and all(isinstance(ref, str) and any(ref.startswith(anchor + ".") for anchor in anchors)
+                               for ref in passing):
+                # The scope verified the named child of the heading this match
+                # binds; the heading keeps its binding (a brand-named blend
+                # total is that studied material's amount).
+                accepted.append(scoped_entry)
+                continue
             if "matched_source_row_refs" in decision:
                 scoped_entry["matched_source_row_refs"] = decision["matched_source_row_refs"]
                 scoped_entry["matched_canonical_ids"] = decision["matched_canonical_ids"]
