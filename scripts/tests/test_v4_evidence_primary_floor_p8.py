@@ -116,9 +116,9 @@ _REVIEW = {"reviewer": "Test clinician", "reviewed_at": "2026-10-01",
 
 
 def _context(family, *, direction="positive", condition="perceived_stress",
-             role="direct_rct", review_status="clinician_approved"):
+             role="direct_rct", review_status="clinician_approved", scope="branded_material"):
     return {"context_id": family, "trial_family": family, "condition": condition,
-            "evidence_role": role, "review_status": review_status,
+            "evidence_role": role, "review_status": review_status, "identity_scope": scope,
             "scoring_eligible": True, "clinical_review": dict(_REVIEW),
             "outcomes": [{"name": "Perceived stress", "direction": direction,
                           "hierarchy": "primary", "kind": "patient_important"}]}
@@ -126,6 +126,14 @@ def _context(family, *, direction="positive", condition="perceived_stress",
 
 def _replicated(*families, **kwargs):
     return [_context(family, **kwargs) for family in families or ("a", "b", "c")]
+
+
+def _registered(monkeypatch, *matches):
+    """Replication is read from the clinical registry, never from the match."""
+    import clinical_applicability
+    registry = {**clinical_applicability.reviewed_entries(), **{m["id"]: m for m in matches}}
+    monkeypatch.setattr(clinical_applicability, "reviewed_entries", lambda: registry)
+    return list(matches)
 
 
 def test_branded_record_without_replicated_body_is_strong_not_exceptional():
@@ -153,55 +161,64 @@ def test_brand_id_prefix_no_longer_elevates():
     assert out["metadata"]["primary_evidence_floor"] == 14.0
 
 
-def test_replicated_body_reaches_exceptional_floor():
-    p = _product([_ing()], [_match(study_type="rct_multiple", study_contexts=_replicated())])
+def test_replicated_body_reaches_exceptional_floor(monkeypatch):
+    p = _product([_ing()], _registered(monkeypatch, _match(study_type="rct_multiple",
+                                                         study_contexts=_replicated())))
     out = score_evidence(p, apply_primary_floor=True)
     assert out["metadata"]["primary_evidence_floor"] == PRIMARY_FLOOR_REPLICATED_STRONG == 18.0
 
 
-def test_replication_needs_three_families_for_one_condition():
+def test_replication_needs_three_families_for_one_condition(monkeypatch):
     two = _replicated("a", "b")
     split = [_context("a"), _context("b"), _context("c", condition="sleep")]
     for contexts in (two, split):
-        p = _product([_ing()], [_match(study_type="rct_multiple", study_contexts=contexts)])
+        p = _product([_ing()], _registered(monkeypatch, _match(study_type="rct_multiple",
+                                                             study_contexts=contexts)))
         assert score_evidence(p, apply_primary_floor=True)["metadata"]["primary_evidence_floor"] == 14.0
 
 
-def test_contradictory_family_blocks_exceptional_floor():
+def test_contradictory_family_blocks_exceptional_floor(monkeypatch):
     contexts = _replicated() + [_context("d", direction="null")]
-    p = _product([_ing()], [_match(study_type="rct_multiple", study_contexts=contexts)])
+    p = _product([_ing()], _registered(monkeypatch, _match(study_type="rct_multiple",
+                                                         study_contexts=contexts)))
     assert score_evidence(p, apply_primary_floor=True)["metadata"]["primary_evidence_floor"] == 14.0
 
 
-def test_pooled_or_unapproved_contexts_are_not_replication():
-    """A meta-analysis is not linked to its independent trials, and a context
-    still pending clinical review authorizes nothing (context_accepted_for_scoring)."""
+def test_indirect_pooled_or_unapproved_contexts_are_not_replication(monkeypatch):
+    """A meta-analysis is not linked to its independent trials, a context still
+    pending clinical review authorizes nothing (context_accepted_for_scoring),
+    and a combination formula's result is not this ingredient's (directness)."""
     pooled = _replicated("a", "b", "c", role="meta_analysis")
     pending = _replicated(review_status="source_verified_pending_clinical_review")
-    for contexts in (pooled, pending):
-        p = _product([_ing()], [_match(study_type="systematic_review_meta", study_contexts=contexts)])
+    combination = _replicated(scope="combination")
+    unscoped = _replicated(scope=None)
+    for contexts in (pooled, pending, combination, unscoped):
+        p = _product([_ing()], _registered(monkeypatch, _match(study_type="systematic_review_meta",
+                                                             study_contexts=contexts)))
         assert score_evidence(p, apply_primary_floor=True)["metadata"]["primary_evidence_floor"] == 14.0
 
 
-def test_replicated_single_rct_record_stays_moderate():
-    p = _product([_ing()], [_match(study_type="rct_single", study_contexts=_replicated())])
+def test_unregistered_match_cannot_supply_its_own_replication():
+    """Contexts carried on a match that is not a registry record (or that differ
+    from its record) never broaden reviewed scope."""
+    p = _product([_ing()], [_match(study_type="rct_multiple", study_contexts=_replicated())])
+    assert score_evidence(p, apply_primary_floor=True)["metadata"]["primary_evidence_floor"] == 14.0
+
+
+def test_replicated_single_rct_record_stays_moderate(monkeypatch):
+    p = _product([_ing()], _registered(monkeypatch, _match(study_type="rct_single",
+                                                         study_contexts=_replicated())))
     assert score_evidence(p, apply_primary_floor=True)["metadata"]["primary_evidence_floor"] == 11.0
 
 
-def test_weak_effect_cannot_ride_the_replicated_strong_base():
+def test_weak_effect_cannot_ride_the_replicated_strong_base(monkeypatch):
     """direction_ceiling (locked 2026-09-18): only positive_strong anchors a strong
     base; weaker directions cap at the MODERATE base times their multiplier."""
-    p = _product([_ing()], [_match(study_type="rct_multiple", effect_direction="positive_weak",
-                                   study_contexts=_replicated())])
+    p = _product([_ing()], _registered(monkeypatch, _match(
+        study_type="rct_multiple", effect_direction="positive_weak", study_contexts=_replicated())))
     out = score_evidence(p, apply_primary_floor=True)
     ceiling = round(PRIMARY_FLOOR_MODERATE * EFFECT_DIRECTION_MULTIPLIERS["positive_weak"], 4)
     assert out["metadata"]["primary_evidence_floor"] == ceiling
-
-
-def test_non_branded_strong_stays_14():
-    p = _product([_ing()], [_match(study_type="rct_multiple", evidence_level="ingredient-human")])
-    out = score_evidence(p, apply_primary_floor=True)
-    assert out["metadata"]["primary_evidence_floor"] == 14.0
 
 
 def test_retired_ingredient_allowlist_no_longer_elevates():
@@ -216,10 +233,10 @@ def test_retired_ingredient_allowlist_no_longer_elevates():
     assert out["metadata"]["primary_evidence_floor_canonical"] == "psyllium"
 
 
-def test_studied_amount_does_not_gate_evidence_floor():
+def test_studied_amount_does_not_gate_evidence_floor(monkeypatch):
     p = _product([_ing(quantity=50)],
-                 [_match(study_type="rct_multiple", min_clinical_dose=300.0,
-                         study_contexts=_replicated())])
+                 _registered(monkeypatch, _match(study_type="rct_multiple", min_clinical_dose=300.0,
+                                                 study_contexts=_replicated())))
     out = score_evidence(p, apply_primary_floor=True)
     assert out["metadata"]["primary_evidence_floor"] == 18.0
 

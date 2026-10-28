@@ -132,6 +132,11 @@ _CONTEXT_ROLE_DESIGNS = {
     "meta_analysis": "meta_analysis",
     "systematic_review": "systematic_review",
 }
+# Directness: a combination formula's result, or a context with no stated
+# identity scope, is not evidence for this record's own ingredient.
+_DIRECT_CONTEXT_SCOPES = frozenset({
+    "ingredient_general", "branded_material", "exact_form", "botanical_preparation", "exact_strain",
+})
 _STRONG_STUDY = frozenset({"systematic_review_meta", "rct_multiple"})
 _MODERATE_STUDY = frozenset({"rct_single", "clinical_strain"})
 # P5 nutrition-authority floor (2026-06): an ESSENTIAL vitamin/mineral with an
@@ -1750,8 +1755,10 @@ def _primary_mass_floor(
 def _replicated_evidence_body(entry: Dict[str, Any]) -> bool:
     """Whether the record's reviewed body shows full independent replication.
 
-    Only clinician-approved contexts with primary patient-important outcomes
-    count (context_accepted_for_scoring). The shared consistency owner then
+    Only the registry record's own clinician-approved, direct-scope contexts
+    with primary patient-important outcomes count (context_accepted_for_scoring);
+    contexts carried on a match never broaden reviewed scope. The shared
+    consistency owner then
     requires three consistent independent RCT families for one condition, with
     no contradictory or unlinked pooled family. A brand, an ingredient name or
     a study count never stands in for that body.
@@ -1760,12 +1767,15 @@ def _replicated_evidence_body(entry: Dict[str, Any]) -> bool:
     from probiotic_measurements import context_accepted_for_scoring
     from scoring_v4.modules.probiotic_evidence import _consistency_from_contexts, _qualifying_outcomes
 
-    record = reviewed_entries().get(_clinical_source_id(entry), entry)
+    record = reviewed_entries().get(_clinical_source_id(entry))
+    if record is None:
+        return False
     contexts = [
         (str(record.get("id") or ""),
          {**context, "study_design": _CONTEXT_ROLE_DESIGNS.get(context.get("evidence_role"), "unreported")})
         for context in _safe_list(record.get("study_contexts"))
         if context_accepted_for_scoring(context) and _qualifying_outcomes(context)
+        and context.get("identity_scope") in _DIRECT_CONTEXT_SCOPES
     ]
     return _consistency_from_contexts(contexts)["credit"] >= 1.0
 

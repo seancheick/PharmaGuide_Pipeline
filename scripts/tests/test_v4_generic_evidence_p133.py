@@ -1115,8 +1115,7 @@ def test_shadow_wires_evidence_dimension() -> None:
     evidence = out["v4_breakdown"]["module"]["dimensions"]["evidence"]
     # Phase 8: the generic module opts into the primary-ingredient floor. The
     # default product's mass-primary magnesium has a systematic_review_meta
-    # positive match -> floored to 14.0 (non-branded strong; 3-lane model 2026-06-06:
-    # magnesium is form-dependent, not a consensus gold-standard generic).
+    # positive match -> floored to 14.0 (strong; no replicated reviewed body).
     assert evidence["score"] == 14.0
     assert evidence["metadata"]["primary_evidence_floor"] == 14.0
     assert evidence["max"] == 20.0
@@ -1190,7 +1189,7 @@ def test_primary_floor_still_rejects_negative_effect() -> None:
     assert payload["metadata"]["primary_evidence_floor"] == 0.0
 
 
-def test_joint_support_caps_branded_primary_evidence_floor() -> None:
+def test_joint_support_caps_branded_primary_evidence_floor(monkeypatch) -> None:
     from scoring_v4.modules.generic_evidence import score_evidence
 
     ingredient = _ingredient(name="OptiMSM", standard_name="MSM",
@@ -1202,6 +1201,7 @@ def test_joint_support_caps_branded_primary_evidence_floor() -> None:
               "scope": "identity_dose_outcome_applicability"}
     contexts = [{"context_id": family, "trial_family": family, "condition": "knee_discomfort",
                  "evidence_role": "direct_rct", "review_status": "clinician_approved",
+                 "identity_scope": "branded_material",
                  "scoring_eligible": True, "clinical_review": review,
                  "outcomes": [{"name": "Knee pain", "direction": "positive",
                                "hierarchy": "primary", "kind": "patient_important"}]}
@@ -1211,6 +1211,9 @@ def test_joint_support_caps_branded_primary_evidence_floor() -> None:
                    effect_direction="positive_strong", total_enrollment=200,
                    study_contexts=contexts)
     match.update(matched_source_row_refs=["ingredientRows[0]"], matched_canonical_ids=["msm"])
+    import clinical_applicability
+    registry = {**clinical_applicability.reviewed_entries(), match["id"]: match}
+    monkeypatch.setattr(clinical_applicability, "reviewed_entries", lambda: registry)
     product = _product(supplement_taxonomy={"primary_type": "joint_support"},
                        ingredients=[ingredient], matches=[match])
     product["activeIngredients"] = [dict(ingredient)]
