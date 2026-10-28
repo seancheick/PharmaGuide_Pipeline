@@ -91,7 +91,7 @@ batch and handed both back to this lane, to do after its branch merges. Nothing 
     data it reports 215 findings; on the candidate, 0.
   - `test_retired_dose_and_ceiling_fields_stay_retired` also rejects generic safe-maximum and
     universal-dose wording.
-- **Docs:** `DATABASE_SCHEMA.md` §27 and `_metadata` (schema 6.0.0) now describe the actual
+- **Docs:** `DATABASE_SCHEMA.md` §27 and `_metadata` (schema 5.1.0) now describe the actual
   meaning.
 
 **Candidate checkpoint (b070650b0 plus records).**
