@@ -3814,8 +3814,8 @@ Measured vs e6885790d: cohort 205 labels, 59 down, Evidence only; corpus scorer-
 
 ## October28 — condition-specific evidence: claim and population applicability
 
-**Status:** implemented and measured, not merged. Branch `claude/brave-fermi-d56dfd` at `6a3b5cfeb` (PR #280),
-on #273 (`4bba11a51`).
+**Status:** implemented and measured, not merged. Branch `claude/brave-fermi-d56dfd` (PR #280), rebased onto
+main `b1f44d3ee`.
 
 **Rulings:** Dr Pham's rulings were relayed by Sean, who attested them on October 28. Text and attestation are
 in `scripts/audits/condition_scope_rule_20261028/DR_PHAM_APPROVAL_REQUEST.md`.
@@ -3835,12 +3835,12 @@ in `scripts/audits/condition_scope_rule_20261028/DR_PHAM_APPROVAL_REQUEST.md`.
 
 **Tests:**
 - Fail-first logs (rounds 1–4) are in `~/pg_quality/condition_scope_20261028/`.
-- Focused slice of 76 owner/consumer files plus the dead-code ratchet: 4,698 passed, 0 failed, on the final
-  code (`6a3b5cfeb`; receipt `slice_final.log`).
+- Focused slice of 76 owner/consumer files, the dead-code ratchet and #277's literature tests: 4,874 passed,
+  0 failed, on the main-rebased branch.
 - Outcome-level purposes per Sean's PR #278 ruling are included: qualifying outcomes only, and sleep apart
   from stress.
 
-**Measurement** (replay, frozen raw labels, `4bba11a51` vs `6a3b5cfeb`):
+**Measurement** (replay, frozen raw labels, main `b1f44d3ee` vs this branch; identical to the `4bba11a51` pass):
 - Main cohort of 460: 48 moved (23 up, 25 down), all Evidence.
 - Gated single-ingredient cohort of 40: 20 moved (18 up). Cranberry, ginger, inositol, selenium and riboflavin
   claim-free labels gained their scoped credit.

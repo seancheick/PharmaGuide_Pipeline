@@ -1,7 +1,8 @@
 # Condition-scope rule: measurement (October 28, 2026)
 
-- **Candidate:** `claude/brave-fermi-d56dfd` at `6a3b5cfeb`.
-- **Base:** `claude/held-source-closure` at `4bba11a51` (PR #273, unmerged, with main merged in).
+- **Candidate:** `claude/brave-fermi-d56dfd`, rebased onto main (code at `b4af90025`).
+- **Base:** `main` at `b1f44d3ee` (#273 and #277 merged). The result is identical, line for line, to the pass
+  against `4bba11a51`; receipts are `base_main.jsonl` and `cand_main.jsonl`.
 - **Earlier pass:** against `6256ce42e` / `37a52de5b`. It gave the same 47 movers with identical deltas after
   the rebase; the outcome-level commit `6a3b5cfeb` added one mover.
 - **Receipts:** `~/pg_quality/condition_scope_20261028/`. These cover the frozen raw labels, `base2.jsonl`,
