@@ -334,6 +334,23 @@ def score_evidence(product: Dict[str, Any], *, apply_primary_floor: bool = False
             if not floor_canonical:
                 floor_canonical = auth_canon
 
+    # The shared omega owner separates disclosed EPA/DHA nutrition from held
+    # heart-event research. Reuse its applicability and configured public score;
+    # this engine's raw units use the existing generic public-score reference.
+    omega_authority = None
+    if apply_primary_floor:
+        from evidence_resolver import resolve_omega_evidence_standard
+        from scoring_v4.quality_score_config import config
+        resolved_omega = resolve_omega_evidence_standard(product)
+        if resolved_omega["applicability_qualified"]:
+            cfg = config()
+            reference = cfg["evidence_subscale"]["archetype_reference"]["generic_single_molecule"]
+            authority_floor = resolved_omega["score"] * reference / cfg["pillars"]["evidence"]["weight"]
+            if authority_floor > primary_floor:
+                primary_floor = authority_floor
+                floor_canonical = nutrition_authority_canonical = "omega_3"
+                omega_authority = resolved_omega
+
     total = _clamp(0.0, CAP_TOTAL, max(pipeline_total + depth_bonus, primary_floor))
     immune_cap = immune_support_evidence_cap(product)
     immune_cap_applied = immune_cap is not None and total > immune_cap
@@ -372,6 +389,10 @@ def score_evidence(product: Dict[str, Any], *, apply_primary_floor: bool = False
             nutrition_authority_canonical and primary_floor_decisive
         ),
     )
+
+    if omega_authority and primary_floor_decisive:
+        # This completed nutrition assessment is independent of clinical holds.
+        evidence_result_state = omega_authority["evidence_result_state"]
 
     # Internal dependency receipts describe the selected numerical path only.
     # Audit-only generic matches in native modules never become their owners.
@@ -415,6 +436,8 @@ def score_evidence(product: Dict[str, Any], *, apply_primary_floor: bool = False
 
     metadata = {
         "contributing_record_assessments": receipts,
+        "source_references": (list(omega_authority.get("source_references") or [])
+            if omega_authority and primary_floor_decisive else []),
         "selected_nutrition_authority": (nutrition_authority_canonical
             if total > 0 and primary_floor_decisive else None),
         "phase": PHASE_MARKER,

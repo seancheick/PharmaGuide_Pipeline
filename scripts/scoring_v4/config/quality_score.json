@@ -857,7 +857,7 @@
     },
     "omega": {
       "cap_evidence": 20.0,
-      "_doc": "Editorial, amount-independent Evidence mapping. Clinical facts and source identifiers live in INGR_OMEGA3.purpose_evidence; omega amount is judged only by Dose. Ordinary adult explicit EPA+DHA receives 10.4, a label triglyceride-lowering claim retains 10.4 (purpose alone cannot establish treatment-evidence applicability), and prenatal DHA intake authority receives 11.1. Child/baby, DHA-only, uncertain identity, specialized preparation and unresolved mixed-purpose labels are held. No prescription-equivalence, universal cardiovascular protection or preterm-birth efficacy claim is made. Safety remains outside this pillar.",
+      "_doc": "Editorial, amount-independent Evidence mapping. Source facts and identifiers live in INGR_OMEGA3.purpose_evidence; omega amount is judged only by Dose. Ordinary adult explicit EPA+DHA receives 10.4 from nutritional intake authority, never retail heart-event-prevention research, a label triglyceride-lowering claim retains 10.4 (purpose alone cannot establish treatment-evidence applicability), and prenatal DHA intake authority receives 11.1. Child/baby, DHA-only, uncertain identity, specialized preparation and unresolved mixed-purpose labels are held. No prescription-equivalence, universal cardiovascular protection or preterm-birth efficacy claim is made. Safety remains outside this pillar.",
       "purpose_standards": {
         "omega_reviewed_weak": {
           "pillar_score": 10.4

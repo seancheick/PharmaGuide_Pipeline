@@ -96,7 +96,8 @@ def test_native_source_gap_does_not_silence_independent_backbone_match(monkeypat
     # ... so the independent-backbone path is exercised with a credit-path copy
     # of that same record (pre-ruling study_type/evidence_level restored).
     owners = deepcopy(reviewed_entries())
-    owners["STRAIN_LGG"].update(study_type="clinical_strain", evidence_level="strain-clinical")
+    owners["STRAIN_LGG"].update(study_type="clinical_strain", evidence_level="strain-clinical",
+                                study_contexts=[])  # isolated legacy backbone fixture, not the real held contexts
     monkeypatch.setattr(clinical_applicability, "reviewed_entries", lambda: owners)
     product = strain_product()
     product["evidence_data"] = {"clinical_matches": [deepcopy(owners["STRAIN_LGG"])]}

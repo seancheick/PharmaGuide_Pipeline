@@ -375,3 +375,46 @@ def test_evidence_weights_match_rubric_config() -> None:
     assert ev["registry_record_id"] == "INGR_OMEGA3"
     assert ev["retired_fields"]["disclosed_epa_dha_clinical_floor"]["score"] == 0
     assert ev["retired_fields"]["prenatal_indication_bonus"]["score"] == 0
+
+
+@pytest.mark.parametrize("carrier", ["Fish Oil", "Krill Oil", "Algal Oil"])
+@pytest.mark.parametrize("generic_route", [False, True])
+def test_public_disclosed_epa_dha_uses_nutrition_authority_on_both_routes(carrier, generic_route):
+    from scoring_v4.scored_artifact import build_scored_artifact
+    from evidence_resolver import resolve_omega_evidence_standard
+
+    product = _epa_dha_product(name=carrier + " Blend")
+    if generic_route:
+        # A broad fatty-acid panel keeps the real generic dispatch without
+        # turning companion ALA/GLA/linoleic acid into EPA/DHA exposure.
+        product["ingredient_quality_data"]["ingredients_scorable"].extend([
+            {"name": canonical.replace("_", " "), "canonical_id": canonical,
+             "quantity": 50, "unit": "mg", "mapped": True}
+            for canonical in ("linoleic_acid", "alpha_linolenic_acid", "gamma_linolenic_acid")
+        ])
+    artifact = build_scored_artifact(product)
+    pillar = artifact["quality_pillars_v4"]["evidence"]
+    assert pillar["components"]["archetype"] == ("generic_single_molecule" if generic_route else "omega")
+    assert pillar["score"] == 10.4
+    assert pillar["evidence_result_state"] == "evaluated_authority"
+    assert "nutritional" in pillar["reason"].lower()
+    resolved = resolve_omega_evidence_standard(product)
+    assert resolved["record_id"] == "omega_reviewed_weak"  # compatibility ID
+    assert resolved["record_source_pmids"] == []
+    assert any(ref.get("doi") == "10.2903/j.efsa.2010.1461" for ref in resolved["source_references"])
+    assert "31567003" not in json.dumps(resolved)
+    assert "32951855" not in json.dumps(resolved)
+
+
+@pytest.mark.parametrize("name,epa,dha", [
+    ("Children Fish Oil", 600, 300),
+    ("SPM Pro-resolving Marine Oil", 600, 300),
+    ("Fish Oil", 0, 0),
+    ("Algal DHA", 0, 300),
+])
+def test_public_omega_nutrition_keeps_population_preparation_and_identity_controls(name, epa, dha):
+    from scoring_v4.scored_artifact import build_scored_artifact
+    artifact = build_scored_artifact(_epa_dha_product(name=name, epa=epa, dha=dha))
+    pillar = artifact["quality_pillars_v4"]["evidence"]
+    assert pillar["score"] == 0
+    assert pillar["evidence_result_state"] != "evaluated_authority"
