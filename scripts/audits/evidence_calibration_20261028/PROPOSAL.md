@@ -16,9 +16,9 @@ Generic, sports and fiber Evidence: public = raw / 18 × 20 (immune reference 17
 | Single RCT / clinical strain, positive_strong | 11 → 12.2 | unchanged | Moderate band |
 | Essential-nutrient authority | 10 → 11.1 | unchanged | Nutrition band |
 | positive_weak / mixed | 10.4 / 7.3 | unchanged | Limited band |
-| Exceptional 19–20 | automatic | **no automatic route** | See below |
+| Exceptional 19–20 via a floor | automatic | **no automatic floor** | See below; the additive multi-ingredient sum is unchanged (decision 6) |
 
-**No automatic exceptional tier.** No registry records a reviewed certainty judgement for a whole evidence body (no certainty, grade, bias or independence fields; funding appears on 2 of 181 contexts). Any automatic 19–20 rule would therefore be a proxy. That includes the brand marker, the allowlist and a trial count: an earlier candidate on this branch used "three approved trial families", which Sean rejected. So no automatic floor exceeds the strong base. **Decision 1** below proposes how 19–20 can be earned.
+**No automatic exceptional floor.** No registry records a reviewed certainty judgement for a whole evidence body (no certainty, grade, bias or independence fields; funding appears on 2 of 181 contexts). Any automatic 19–20 rule would therefore be a proxy. That includes the brand marker, the allowlist and a trial count: an earlier candidate on this branch used "three approved trial families", which Sean rejected. So no automatic floor exceeds the strong base. **Decision 1** below proposes how 19–20 can be earned.
 
 Unchanged: Dose, the 11.4 Dose neutral, Transparency, Verification, safety, nutrition panels (multi/prenatal, B-complex) and probiotic/omega Evidence. Completed zeros and unfinished assessments keep their distinct `display_state`, and the app hides the number for unfinished states.
 
@@ -45,6 +45,7 @@ Unchanged: Dose, the 11.4 Dose neutral, Transparency, Verification, safety, nutr
 2. **5-MTHF record** → reference/biomarker-only (clinical lane), 12.2 → 11.1 on 11 products.
 3. **Magnesium supplemental-UL scope** → Dose/safety owner review of the 17 undeclared-source products.
 4. **Omega-3 (separate proposal; nothing implemented here).** Re-cite `omega_reviewed_weak` from the heart-outcome reviews to EFSA NDA (2010) *Dietary Reference Values for fats*, doi:10.2903/j.efsa.2010.1461. That is a dietary reference (AI 250 mg EPA+DHA/day for adults; +100–200 mg DHA in pregnancy and lactation), not a US RDA and not clinical-event evidence. The 10.4 itself is editorial policy in `quality_score.json`, not an EFSA number. Keeping 10.4 moves no scores. The disclosure rule (any trustworthy disclosed EPA and/or DHA amount) would lift 84 adult products from 0 to 10.4 (42 combined-only, 34 DHA-only, 8 EPA-only; no prenatal or child labels; 53 tier changes, all up). Each needs review for identity, population, quantity and nutritional-vs-clinical basis: `omega_84_review.csv`. Also review 82325 (phosphatidylserine + DHA). Triple Omega 179650/302769 disclose only a mixed 434 mg total omega-3 (including flaxseed ALA), so 0 stays correct.
+6. **Additive multi-ingredient sum (open).** Removing the floors leaves the existing additive pipeline unchanged: four accepted Evidence owners at the 7-point per-ingredient cap sum to 17.5 raw (19.4/20), plus up to 0.5 depth bonus (20/20), with no body-level determination. No product reaches 19–20 this way in the measured corpus. Capping it would be a new scoring policy, so it is Sean's decision; this PR documents the scope rather than enforcing a cap (raised by CodeRabbit on PR #274).
 5. **App Evidence badge** → app/integration owner (`lib/core/scoring/v4_pillars.dart::statusForPillar` shows "Strong" for nutrition-authority panels); note: `app_evidence_badge_handoff.md` in the shared notes folder.
 
 ## 5. Validation (final commit)
