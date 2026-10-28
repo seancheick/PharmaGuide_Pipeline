@@ -185,10 +185,13 @@ def _resolved_preparation_row(product: Dict[str, Any], row: Dict[str, Any]) -> b
     """
     if _explicit_botanical_identity_rejection(row, require_preparation=True):
         return False
+    from evidence_resolver import is_reviewed_branded_material
     return bool(
         (row.get("mapped") is True and row.get("matched_form")
-         and row.get("form_match_status") in {None, "mapped"})
-        or _standardized_match(product, row)
+         and row.get("form_match_status") in {None, "mapped"}
+         and is_reviewed_branded_material(row.get("canonical_id"), row.get("name"),
+                                          strict_material_spelling=True))
+        or _standardized_match(product, row, require_named_material=True)
     )
 
 
@@ -375,7 +378,8 @@ def _explicit_botanical_identity_rejection(row: Dict[str, Any], *, require_prepa
     )
     return ((row.get("scoreable_identity") is False and not known_without_dose)
             or row.get("identity_disposition") == "identity_conflict"
-            or (require_preparation and (bool(row.get("match_ambiguity_candidates"))
+            or (require_preparation and ((bool(row.get("match_ambiguity_candidates"))
+                and row.get("identity_disposition") != "clean")
                 or row.get("identity_disposition") in {"ambiguous", "unresolved"})))
 
 
@@ -607,13 +611,15 @@ def is_botanical_product(product: Dict[str, Any]) -> bool:
     return mass_says_botanical
 
 
-def _standardized_match(product: Dict[str, Any], row: Dict[str, Any]) -> bool:
+def _standardized_match(product: Dict[str, Any], row: Dict[str, Any], *, require_named_material: bool = False) -> bool:
     if _explicit_botanical_identity_rejection(row, require_preparation=True):
         return False
     sb = ((product.get("formulation_data") or {}).get("standardized_botanicals")) or []
     keys = set(_ingredient_identity_keys(row))
     for item in sb:
         if not isinstance(item, dict) or not item.get("meets_threshold"):
+            continue
+        if require_named_material and item.get("evidence_source") != "branded_form":
             continue
         item_keys = {_norm(item.get("name")), _norm(item.get("botanical_id")),
                      _norm(item.get("standard_name"))}

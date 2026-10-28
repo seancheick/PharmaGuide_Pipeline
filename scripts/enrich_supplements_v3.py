@@ -11446,7 +11446,8 @@ class SupplementEnricherV3:
                     if expected_parent and ingredient.get("canonical_id") and ingredient["canonical_id"] != expected_parent:
                         continue
                     if (ingredient.get("identity_disposition") == "ambiguous"
-                            or ingredient.get("match_ambiguity_candidates")):
+                            or (ingredient.get("match_ambiguity_candidates")
+                                and ingredient.get("identity_disposition") != "clean")):
                         continue
 
                 if (botanical.get("branded_form") and named_material(botanical)) or \

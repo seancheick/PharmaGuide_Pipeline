@@ -124,7 +124,7 @@ def test_valid_clinical_match_alone_does_not_establish_a_material_spec():
 
 @pytest.mark.parametrize('eligible', [False, True])
 def test_physical_preparation_identity_is_not_marker_or_clinical_eligibility(eligible):
-    row = {'name': 'Unstandardized prepared material', 'canonical_id': 'fenugreek',
+    row = {'name': 'Sytrinol', 'canonical_id': 'sytrinol',
            'matched_form': 'specific preparation', 'mapped': True, 'form_match_status': 'mapped'}
     product = {'evidence_data': {'clinical_matches': [{'id': 'BRAND_CONTROL', 'scoring_eligible': eligible}]}}
     assert bp._resolved_preparation_row(product, row)
@@ -218,7 +218,7 @@ def test_clinical_brand_and_generic_or_ambiguous_identity_do_not_prove_standardi
 
 @pytest.mark.parametrize('eligible', [False, True])
 def test_unstandardized_specific_material_keeps_primary_and_named_preparation_identity(eligible):
-    prepared = {'name': 'Specific material', 'canonical_id': 'fenugreek', 'standard_name': 'Fenugreek',
+    prepared = {'name': 'Sytrinol', 'canonical_id': 'sytrinol', 'standard_name': 'Fenugreek',
                 'matched_form': 'specific extract', 'mapped': True, 'form_match_status': 'mapped',
                 'quantity': 500, 'unit': 'mg', 'raw_source_path': 'ingredientRows[0]',
                 'raw_taxonomy': {'category': 'botanical'}}
@@ -297,3 +297,29 @@ def test_unrelated_product_brand_cannot_supply_a_generic_rows_material_proof(col
     found = collector._collect_standardized_botanicals({'product_name': 'Slendesta Testofen',
                                                        'activeIngredients': [row]})
     assert not any(x['evidence_source'] == 'branded_form' for x in found)
+
+
+
+def test_real_clean_ksm_identity_retains_standardization_despite_generic_candidate_history(collector):
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    from scoring_v4.scored_artifact import build_scored_artifact
+    raw = json.loads((Path(__file__).parent / 'fixtures/material_standardization_306237_raw.json').read_text())
+    product, errors = collector.enrich_product(EnhancedDSLDNormalizer().normalize_product(raw))
+    assert not errors
+    row = product['ingredient_quality_data']['ingredients_scorable'][0]
+    assert row['identity_disposition'] == 'clean' and row['match_ambiguity_candidates']
+    assert bp._standardization_tier_credit(product, row) == bp.STANDARDIZATION_TIER_FULL
+    artifact = build_scored_artifact(product)
+    assert artifact['quality_pillars_v4']['evidence']['score'] == 15.6
+    assert artifact['quality_pillars_v4']['dose']['score'] == 11.4
+
+
+@pytest.mark.parametrize('form', ['Fenugreek powder', 'Fenugreek oil', 'Fenugreek seed extract'])
+def test_generic_mapped_parent_form_is_not_a_named_defined_material(form):
+    row = {'name': 'Fenugreek', 'canonical_id': 'fenugreek', 'matched_form': form,
+           'mapped': True, 'form_match_status': 'mapped', 'identity_disposition': 'clean',
+           'is_parent_total': True, 'quantity': 500, 'unit': 'mg'}
+    assert not bp._is_named_botanical_preparation({}, row)
+    generic_marker = {'formulation_data': {'standardized_botanicals': [{
+        'name': 'Fenugreek', 'meets_threshold': True, 'evidence_source': 'percentage_local'}]}}
+    assert not bp._is_named_botanical_preparation(generic_marker, row)
