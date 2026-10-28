@@ -511,8 +511,10 @@ NON_EFFICACY_OUTCOME_ROLES = {
 def qualifying_purpose_outcomes(context: Mapping, *, include_nonpositive: bool = False) -> tuple[list, bool]:
     """Outcomes that may name a purpose, and whether an unresolved one holds it.
 
-    Sean, October 28, 2026 (PR #278): a positive primary or pooled
+    Sean, October 28, 2026 (PR #278): a positive primary or approved unranked
     (hierarchy not_reported) outcome qualifies; a surrogate names only itself.
+    A direct trial's known or unresolved primary cannot be bypassed by an
+    unranked positive endpoint. A pooled result may remain unranked.
     Null, mixed or unfavorable results, secondaries, post-hoc, within-group,
     companion and ranking-only outcomes never name a purpose.
     Evidence consistency consumers may include the corresponding nonpositive
@@ -523,10 +525,24 @@ def qualifying_purpose_outcomes(context: Mapping, *, include_nonpositive: bool =
     outcomes = [row for row in context.get("outcomes") or [] if isinstance(row, Mapping)
                 and row.get("outcome_role") not in NON_EFFICACY_OUTCOME_ROLES]
     reported = [row for row in outcomes if row.get("hierarchy") in {"primary", "not_reported"}]
+    unresolved_candidates = outcomes
+    if context.get("evidence_role") == "direct_rct":
+        primary = [row for row in outcomes if row.get("hierarchy") == "primary"]
+        if primary:
+            # An unranked positive cannot outrank a reported primary. Retain
+            # nonpositive findings for the consistency consumer.
+            reported = [row for row in reported
+                        if row.get("hierarchy") == "primary" or row.get("direction") != "positive"]
+            unresolved_candidates = primary
+        elif any(row.get("hierarchy") == "unresolved" for row in outcomes):
+            # Registered-primary uncertainty is stronger than an absent rank.
+            # 299v/32365981 records unranked positive vigor while the registered
+            # exercise endpoint still has no exact primary measurement mapping.
+            return [], True
     directions = {"positive", "null", "mixed", "negative"} if include_nonpositive else {"positive"}
     qualifying = [row for row in reported if row.get("direction") in directions]
     held = not qualifying and any(row.get("hierarchy") == "unresolved" or row.get("direction") == "unresolved"
-                                  for row in outcomes)
+                                  for row in unresolved_candidates)
     return qualifying, held
 
 

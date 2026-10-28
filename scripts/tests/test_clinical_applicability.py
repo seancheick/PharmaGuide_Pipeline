@@ -2363,3 +2363,59 @@ def test_held_ginger_pregnancy_source_cannot_remain_in_adult_evidence_metadata(m
     assert result['population_applicability']['context_ids'] == ['ingr_ginger_21818642_acute_cin']
     assert 'pregnan' not in result['studied_population'].lower()
     assert 'cancer' in result['studied_population'].lower()
+
+
+def test_registered_primary_uncertainty_cannot_be_bypassed_by_unranked_vigor():
+    import studied_formulas
+    from clinical_applicability import qualifying_purpose_outcomes
+    source = studied_formulas._clinical_strain_registry()['STRAIN_PLANTARUM_299V']
+    context = next(c for c in source['study_contexts']
+                   if c['context_id'] == 'lp299v_female_athletes_iron_32365981')
+    assert context['evidence_role'] == 'direct_rct'
+    assert any('Registered primary outcome' in note for note in context['limitations'])
+    for include_nonpositive in (False, True):
+        assert qualifying_purpose_outcomes(context, include_nonpositive=include_nonpositive) == ([], True)
+
+
+@pytest.mark.parametrize('evidence_role', ['meta_analysis', 'systematic_review'])
+def test_pooled_unranked_positive_outcome_survives_an_unresolved_companion(evidence_role):
+    from clinical_applicability import qualifying_purpose_outcomes
+    context = _native_context(('perceived_stress', 'not_reported', 'patient_important', 'positive', {}),
+                              ('sleep_quality', 'unresolved', 'patient_important', 'unresolved', {}))
+    context['evidence_role'] = evidence_role
+    outcomes, held = qualifying_purpose_outcomes(context)
+    assert [row['name'] for row in outcomes] == ['perceived_stress']
+    assert held is False
+
+
+def test_positive_primary_survives_an_unresolved_secondary_relationship():
+    from clinical_applicability import qualifying_purpose_outcomes
+    context = _native_context(('perceived_stress', 'primary', 'patient_important', 'positive', {}),
+                              ('sleep_quality', 'unresolved', 'patient_important', 'unresolved', {}))
+    context['evidence_role'] = 'direct_rct'
+    outcomes, held = qualifying_purpose_outcomes(context)
+    assert [row['name'] for row in outcomes] == ['perceived_stress']
+    assert held is False
+
+
+def test_unranked_positive_cannot_override_a_reported_null_primary():
+    from clinical_applicability import qualifying_purpose_outcomes
+    context = _native_context(('sleep_quality', 'primary', 'patient_important', 'null', {}),
+                              ('perceived_stress', 'not_reported', 'patient_important', 'positive', {}))
+    context['evidence_role'] = 'direct_rct'
+    assert qualifying_purpose_outcomes(context) == ([], False)
+    outcomes, held = qualifying_purpose_outcomes(context, include_nonpositive=True)
+    assert [(row['name'], row['direction']) for row in outcomes] == [('sleep_quality', 'null')]
+    assert held is False
+
+
+def test_known_null_primary_is_preserved_beside_unresolved_secondary_hierarchy():
+    from clinical_applicability import qualifying_purpose_outcomes, evaluated_purpose_outcomes
+    context = _native_context(('sleep_quality', 'primary', 'patient_important', 'null', {}),
+                              ('perceived_stress', 'unresolved', 'patient_important', 'unresolved', {}))
+    context['evidence_role'] = 'direct_rct'
+    assert qualifying_purpose_outcomes(context) == ([], False)
+    outcomes, held = qualifying_purpose_outcomes(context, include_nonpositive=True)
+    assert [(row['name'], row['direction']) for row in outcomes] == [('sleep_quality', 'null')]
+    assert held is False
+    assert evaluated_purpose_outcomes(context) == outcomes
