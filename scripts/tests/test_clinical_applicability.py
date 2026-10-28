@@ -1777,6 +1777,8 @@ def test_purpose_rejection_keeps_the_studied_branded_material_for_formulation():
     ('Pro Energy Series CoQ10', (), True),
     ('CoQ10 Energy + Heart Function', (), True),
     ('Statin Companion CoQ10', (), True),
+    # A claim verb anywhere earlier in the sentence makes the word claimed.
+    ('Re-Forge', ('Clinically studied ingredients help boost protein synthesis, metabolize fatty acids and cellular energy.',), True),
     # A mechanism sentence is not an energy claim.
     ('CoQ10 100 mg', ("It is an essential component of your heart's energy producing system.",), False),
     # A precaution naming a signed term is not a claim.

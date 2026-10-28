@@ -414,7 +414,7 @@ def _excluded_claim_matches(product: Mapping, policy: Mapping) -> bool:
     for term in policy.get("excluded_claim_terms", []):
         words = _key(term).split()
         exact = r"[\s_-]+".join(re.escape(word) for word in words)
-        claimed = (rf"(?:{_CLAIM_VERB}\s+(?:[\w'-]+\s+){{0,3}}{exact}|{exact}[\s_-]+{_CLAIM_NOUN})"
+        claimed = (rf"(?:{_CLAIM_VERB}\b.*?(?<!\w){exact}|{exact}[\s_-]+{_CLAIM_NOUN})"
                    if len(words) == 1 else exact)
         patterns = {True: re.compile(r"(?<!\w)" + exact + r"(?!\w)", re.I),
                     False: re.compile(r"(?<!\w)" + claimed + r"(?!\w)", re.I)}
