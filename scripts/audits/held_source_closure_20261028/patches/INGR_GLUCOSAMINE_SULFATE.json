@@ -1,0 +1,239 @@
+{
+ "record_id": "INGR_GLUCOSAMINE_SULFATE",
+ "decision": "closed_no_credit: The reviewed research does not establish a qualifying benefit for this product's assessed use.",
+ "summary": "The reviewed research does not establish a qualifying benefit for this product's assessed use. Per the shared OA supplement standard and Dr. Pham's 2026-10-28 ruling (ACR 2026 strongly against glucosamine and chondroitin; VA/DoD 2026 insufficient evidence), glucosamine sulfate closes as completed no-credit on the reference path, matching INGR_CHONDROITIN_SULFATE. True directions are kept: the umbrella review 33488785 found high-certainty Lequesne and joint-space benefits with prescription crystalline glucosamine sulphate 1500 mg/day and very-low-certainty pain benefit, and 40005447 pooled SYSADOAs; these exact-preparation findings do not create retail credit. The existing hydrochloride exclusion is unchanged and no new applicability is added. This removes Evidence points from glucosamine products.",
+ "record_updates": {
+  "study_type": "reference",
+  "evidence_level": "reference",
+  "effect_direction_rationale": "Shared OA supplement standard (2026-10-28): the ACR 2026 guideline strongly recommends against glucosamine, chondroitin and their combination for knee, hip and hand OA (certainty low for glucosamine alone, moderate for the combination), and the VA/DoD 2026 guideline (Recommendation 30) finds insufficient evidence for or against them (very low confidence; effects likely below a clinically meaningful difference). Per Dr. Pham's 2026-10-28 ruling, glucosamine and chondroitin records use one standard: completed no-credit on the reference path with true source directions retained; exact-preparation findings are recorded but do not create retail-supplement credit."
+ },
+ "study_contexts": [
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "ingr_glucosamine_sulfate_33488785_scoped_source",
+   "source_pmids": [
+    "33488785"
+   ],
+   "components": [
+    "INGR_GLUCOSAMINE_SULFATE"
+   ],
+   "identity_scope": "exact_form",
+   "identity": {
+    "chemical_form": "Glucosamine sulphate, mostly prescription crystalline glucosamine sulphate 1500 mg/day; not glucosamine hydrochloride"
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "meta_analysis",
+   "component_registration_status": "fully_registered",
+   "condition": "knee_osteoarthritis",
+   "purpose": "treatment",
+   "review_status": "clinician_approved",
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability"
+   },
+   "scoring_eligible": false,
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "trial_family": "source_33488785",
+   "population": {
+    "age_group": "adult",
+    "description": "11 systematic reviews covering 37 RCTs and 3949 participants, mostly knee OA (Kellgren-Lawrence grade 2-3 where reported); a few outcomes in general population, spine or TMJ OA."
+   },
+   "study_design": "Umbrella review of systematic reviews/meta-analyses of RCTs with re-pooled random-effects estimates and GRADE; 9 of 17 meta-analysed outcomes significant versus placebo.",
+   "outcomes": [
+    {
+     "name": "Lequesne Index SMD 0.363 (95% CI 0.202-0.524), 3 RCTs, 454 participants, GRADE high, favoring GS",
+     "hierarchy": "not_reported",
+     "kind": "patient_important",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "Joint space width at 3 years SMD 0.432 (0.235-0.628), JS narrowing SMD 0.41, OA progression OR 0.382 (0.216-0.677); 2 RCTs, 414 participants, GRADE high",
+     "hierarchy": "not_reported",
+     "kind": "surrogate",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "Pain SMD -0.646 (-0.91 to -0.382), 21 RCTs, 1772 participants, GRADE very low; after removing 10 high-risk RCTs SMD -0.298 (-0.546 to -0.05), I2 87%, prediction interval -0.84 to 0.28",
+     "hierarchy": "not_reported",
+     "kind": "patient_important",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    }
+   ],
+   "limitations": [
+    "Shared OA supplement standard (2026-10-28): the ACR 2026 guideline strongly recommends against glucosamine, chondroitin and their combination for knee, hip and hand OA (certainty low for glucosamine alone, moderate for the combination), and the VA/DoD 2026 guideline (Recommendation 30) finds insufficient evidence for or against them (very low confidence; effects likely below a clinically meaningful difference). Per Dr. Pham's 2026-10-28 ruling, glucosamine and chondroitin records use one standard: completed no-credit on the reference path with true source directions retained; exact-preparation findings are recorded but do not create retail-supplement credit.",
+    "No outcome had a 95% prediction interval excluding the null; pain evidence is very low certainty with high heterogeneity and small-study effects.",
+    "Effects come from prescription crystalline glucosamine sulphate at 1500 mg/day; the source distinguishes this proprietary stabilized product from OTC/nutraceutical glucosamine and hydrochloride. Retail sulfate equivalence is not established.",
+    "The structural outcomes rest on 2 RCTs (414 participants). The umbrella pools overlapping reviews; listed review identifiers are not independent replications.",
+    "Included-study PMID membership was extracted from source Table(s) table1-1759720X20975927, table3-1759720X20975927. These are source membership identifiers, not independent efficacy approvals or automatic trial replications. Exact table/citation mapping and unindexed citations are retained in the source receipt. This is an overview of systematic reviews: the listed studies are reviews, not independent primary RCTs; overlap must not be counted as replication.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ],
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "mg",
+    "values": [
+     1500
+    ],
+    "dose_status": "verified",
+    "dose_basis": "not_applicable",
+    "duration_basis": "participant_specific",
+    "duration_days": null,
+    "administration_frequency": "1500 mg daily in almost all trials; some lower doses >750 mg in one review (Table 1)",
+    "dosage_forms": [
+     "oral glucosamine sulphate (physical form not reported)"
+    ],
+    "co_therapies": [
+     "Knee-OA background care varies by underlying trial"
+    ],
+    "source_provenance": {
+     "pmid": "33488785",
+     "location": "Abstract; Introduction (GS vs HCl); Table 1 (review characteristics, mean GS dosage); Results paragraphs and Table 2 (GRADE); pain sensitivity analysis; Discussion",
+     "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7768322/"
+    },
+    "reported_regimen": "Almost all trials 1500 mg/day (abstract; Table 1); follow-up medians from 3 months to 3 years",
+    "normalization": {
+     "basis": "Dominant studied dose, not a minimum or retail-product benchmark."
+    }
+   },
+   "included_study_pmids": [
+    "21251987",
+    "24905534",
+    "24866892",
+    "30575881",
+    "31073924",
+    "30566740",
+    "19544061",
+    "29446485",
+    "12860572",
+    "29947998",
+    "23794557"
+   ]
+  },
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "ingr_glucosamine_sulfate_40005447_scoped_source",
+   "source_pmids": [
+    "40005447"
+   ],
+   "components": [
+    "INGR_GLUCOSAMINE_SULFATE"
+   ],
+   "identity_scope": "ingredient_general",
+   "identity": {
+    "preparation": "Pooled SYSADOAs: chondroitin sulfate, glucosamine sulfate and SKI306X/SKCPT herbal formulations; glucosamine hydrochloride excluded"
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "meta_analysis",
+   "component_registration_status": "fully_registered",
+   "condition": "knee_osteoarthritis",
+   "purpose": "treatment",
+   "review_status": "clinician_approved",
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability"
+   },
+   "scoring_eligible": false,
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "trial_family": "source_40005447",
+   "population": {
+    "age_group": "adult",
+    "description": "21 RCTs, 3923 knees with primary knee OA (no K-L grade 4); 11 trials evaluated chondroitin, a minority glucosamine sulfate."
+   },
+   "study_design": "Systematic review and meta-analysis of RCTs (PROSPERO CRD42024573081) versus placebo or active (NSAID/SYSADOA) comparators; primary outcome VAS pain.",
+   "outcomes": [
+    {
+     "name": "VAS pain versus placebo SMD 0.38 (0.18-0.57) within 3 months and 0.22 (0.03-0.42) after 3 months for pooled SYSADOAs; no difference versus active comparators",
+     "hierarchy": "primary",
+     "kind": "patient_important",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    }
+   ],
+   "limitations": [
+    "Shared OA supplement standard (2026-10-28): the ACR 2026 guideline strongly recommends against glucosamine, chondroitin and their combination for knee, hip and hand OA (certainty low for glucosamine alone, moderate for the combination), and the VA/DoD 2026 guideline (Recommendation 30) finds insufficient evidence for or against them (very low confidence; effects likely below a clinically meaningful difference). Per Dr. Pham's 2026-10-28 ruling, glucosamine and chondroitin records use one standard: completed no-credit on the reference path with true source directions retained; exact-preparation findings are recorded but do not create retail-supplement credit.",
+    "Agent-level pooling: the overall estimate is not attributable to glucosamine sulfate alone; not credit-bearing for this record.",
+    "No difference versus NSAIDs/active comparators is not proof of noninferiority.",
+    "Historical bibliography census (not independent scoring sources; actual included-publication membership is separately bound to the inspected source table): 26821189, 11789591, 28854768, 25096309, 39303963, 16495392, 24683229, 17265490, 15315266, 23242572, 11196521, 17204566, 20179981, 27809891, 22729470, 28533290, 31470599, 20082253, 15023378, 21367761. Each intervention and comparison requires its own applicability assessment; citation in this bibliography grants no credit.",
+    "Included-study PMID membership was extracted from source Table(s) medicina-61-00331-t002. These are source membership identifiers, not independent efficacy approvals or automatic trial replications. Exact table/citation mapping and unindexed citations are retained in the source receipt. 1 source citations in this set lack a PMID in the primary source; their citation text is retained, no PMID is invented.",
+    "The source pools distinct SYSADOA interventions across21trials, including chondroitin sulfate and SKCPT/SKI306X. Overall pooled effects must not be attributed to glucosamine sulfate alone. Table3 identifies the GS subset at references38,42,43,45,53 and contains a Madhu-row printed1500mg versus2x700mg arithmetic inconsistency; no dose correction or efficacy threshold is inferred.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ],
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "mg",
+    "values": [
+     1500
+    ],
+    "dose_status": "verified",
+    "dose_basis": "not_applicable",
+    "duration_basis": "participant_specific",
+    "duration_days": null,
+    "administration_frequency": "GS trials in Table 3 mostly 1 x 1500 mg daily",
+    "dosage_forms": [
+     "oral glucosamine sulfate (form not reported)"
+    ],
+    "co_therapies": [
+     "Rescue acetaminophen or NSAIDs allowed in several trials (Table 3)"
+    ],
+    "source_provenance": {
+     "pmid": "40005447",
+     "location": "Methods PICO table (primary outcome VAS pain); Results study characteristics; Table 3 (GS trials and doses); forest-plot legends",
+     "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11857085/"
+    },
+    "reported_regimen": "GS arms 1500 mg/day for 3-6 months (Table 3)",
+    "normalization": {
+     "basis": "GS arm dose only; pooled estimate covers other agents."
+    }
+   },
+   "included_study_pmids": [
+    "25096309",
+    "39303963",
+    "16495392",
+    "24683229",
+    "26821189",
+    "17265490",
+    "11789591",
+    "15315266",
+    "28854768",
+    "23242572",
+    "11196521",
+    "17204566",
+    "20179981",
+    "27809891",
+    "22729470",
+    "28533290",
+    "31470599",
+    "20082253",
+    "15023378",
+    "21367761"
+   ]
+  }
+ ],
+ "source_receipts": [
+  {
+   "pmid": "33488785",
+   "title_fetched": "Glucosamine sulphate: an umbrella review of health outcomes.",
+   "url": "https://www.ncbi.nlm.nih.gov/research/bionlp/RESTful/pmcoa.cgi/BioC_json/33488785/unicode",
+   "full_text": true,
+   "sections_used": "Abstract; Introduction (GS vs HCl); Table 1 (review characteristics, mean GS dosage); Results paragraphs and Table 2 (GRADE); pain sensitivity analysis; Discussion"
+  },
+  {
+   "pmid": "40005447",
+   "title_fetched": "Effectiveness and Safety of SYSADOAs Used in Eastern and Western Regions for the Treatment of Knee Osteoarthritis: A Systematic Review and Meta-Analysis of Randomized Controlled Trials-SYSADOAs Are Effective and Safe for Knee OA.",
+   "url": "https://www.ncbi.nlm.nih.gov/research/bionlp/RESTful/pmcoa.cgi/BioC_json/40005447/unicode",
+   "full_text": true,
+   "sections_used": "Methods PICO table (primary outcome VAS pain); Results study characteristics; Table 3 (GS trials and doses); forest-plot legends"
+  }
+ ],
+ "integration_notes": [
+  "2026-10-28 integrator: effect_direction_rationale set to the shared OA standard text, identical in both records (third ruling)."
+ ]
+}

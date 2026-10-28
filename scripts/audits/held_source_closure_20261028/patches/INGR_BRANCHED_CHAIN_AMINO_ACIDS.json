@@ -1,0 +1,259 @@
+{
+ "record_id": "INGR_BRANCHED_CHAIN_AMINO_ACIDS",
+ "decision": "closed_credit",
+ "summary": "38625669 (18 placebo-controlled RCTs, 331 healthy active adults, BCAA 3.15-29.3 g/day for 1-28 days) found large reductions in delayed-onset muscle soreness at 24-96 h after muscle-damaging exercise, mixed creatine-kinase effects and no LDH effect. Dr. Pham's decision is a source-content hold only, now resolved for this soreness-recovery scope; the overview and athlete review show no performance or body-composition benefit, which is recorded as a limitation. Fourth-ruling boundary applied: credit limited to exercise-related muscle soreness; strength, endurance, performance and muscle-growth positioning excluded; outcome hierarchy set to not_reported (no designated primary).",
+ "record_updates": {
+  "applicability": {
+   "scope": "ingredient",
+   "supported_outcomes": [
+    "exercise_muscle_soreness"
+   ],
+   "studied_population": "Healthy active adults, mostly young men, taking a complete BCAA mixture around muscle-damaging resistance or endurance exercise; the supported finding is less delayed-onset muscle soreness, not muscle growth or performance.",
+   "source_pmids": [
+    "38625669"
+   ],
+   "reviewed_at": "2026-10-28",
+   "excluded_claim_terms": [
+    "muscle growth",
+    "muscle building",
+    "builds muscle",
+    "muscle growth",
+    "increases strength",
+    "improves endurance",
+    "improves performance"
+   ]
+  }
+ },
+ "study_contexts": [
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "ingr_branched_chain_amino_acids_38625669_scoped_source",
+   "source_pmids": [
+    "38625669"
+   ],
+   "components": [
+    "INGR_BRANCHED_CHAIN_AMINO_ACIDS"
+   ],
+   "identity_scope": "ingredient_general",
+   "identity": {
+    "preparation": "Oral BCAA mixtures (leucine:isoleucine:valine, mostly 2:1:1 per Table 3) versus placebo"
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "meta_analysis",
+   "component_registration_status": "fully_registered",
+   "condition": "exercise_induced_muscle_damage",
+   "purpose": "challenge",
+   "review_status": "clinician_approved",
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability"
+   },
+   "scoring_eligible": true,
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "trial_family": "source_38625669",
+   "population": {
+    "age_group": "adult",
+    "description": "18 RCTs (6 crossover, 12 parallel), 331 healthy active participants (14 male-only, 2 female-only, 2 mixed studies) undergoing resistance (13) or endurance (5) muscle-damaging exercise."
+   },
+   "study_design": "Systematic review and random-effects meta-analysis with meta-regression of placebo-controlled RCTs; PICO outcomes CK, LDH and DOMS; 13 high- and 5 acceptable-quality studies (SIGN).",
+   "outcomes": [
+    {
+     "name": "Delayed-onset muscle soreness: no effect immediately (g -0.28, p=0.259); reduced at 24 h (g -1.34, 95% CI -1.93 to -0.74), 48 h (g -1.75), 72 h (g -1.82), all p<0.001, and 96 h (g -0.82, p=0.008); I2 62-85% except 96 h",
+     "hierarchy": "not_reported",
+     "kind": "patient_important",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "Creatine kinase lower immediately (g -0.44, p=0.006) and at 72 h (g -0.99, p=0.002); not at 24, 48 or 96 h",
+     "hierarchy": "not_reported",
+     "kind": "surrogate",
+     "direction": "mixed",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "Lactate dehydrogenase: no effect at any time point",
+     "hierarchy": "not_reported",
+     "kind": "surrogate",
+     "direction": "null",
+     "outcome_role": "direct_between_group_effect"
+    }
+   ],
+   "limitations": [
+    "Small trials (331 participants in total), mostly young men; DOMS heterogeneity moderate to high (I2 62-85% at 0-72 h).",
+    "Soreness and muscle-damage biomarkers are not evidence of muscle growth, strength, performance or body-composition benefit; declared reviews 38241335 (abstract only) and 36235655 report no effect on performance recovery and negligible performance/body-composition benefit.",
+    "Meta-regression associations of higher daily/total dose and longer supplementation with larger effects are observational across studies, not a randomized dose threshold; some daily doses were estimated from mean body mass (Table 3 footnote).",
+    "Applies to complete BCAA mixtures, not isolated leucine.",
+    "Some included-study citations lack PubMed identifiers in the source XML; retain their exact citations rather than inventing identifiers.",
+    "Historical bibliography census (not independent scoring sources; actual included-publication membership is separately bound to the inspected source table): 20087302, 28944645, 30275356, 26853239, 18156664, 25202189, 20601741, 24477835, 22569039, 19997002, 25566428, 28177706. Each intervention and comparison requires its own applicability assessment; citation in this bibliography grants no credit.",
+    "Included-study PMID membership was extracted from source Table(s) Tab2. These are source membership identifiers, not independent efficacy approvals or automatic trial replications. Exact table/citation mapping and unindexed citations are retained in the source receipt. 6 source citations in this set lack a PMID in the primary source; their citation text is retained, no PMID is invented.",
+    "Dr. Pham's fourth ruling set (2026-10-28) boundary: limited credit for exercise-related muscle soreness only; not strength, endurance or muscle growth. The review names CK, LDH and DOMS as PICO outcomes without designating a primary endpoint, so hierarchy is not_reported and the finding does not carry prespecified-endpoint certainty.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ],
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "mg",
+    "values": [
+     3150,
+     29300
+    ],
+    "dose_status": "verified",
+    "dose_basis": "not_applicable",
+    "duration_basis": "participant_specific",
+    "duration_days": null,
+    "administration_frequency": "Study-specific timing: pre-load, exercise day and/or follow-up (Table 3)",
+    "dosage_forms": [
+     "oral BCAA supplement (powder or drink as per trial)"
+    ],
+    "co_therapies": [],
+    "source_provenance": {
+     "pmid": "38625669",
+     "location": "Methods PICO table (outcomes CK, LDH, DOMS); Results study characteristics, Table 2 and Table 3 (BCAA strategies); Results CK, LDH and DOMS sections",
+     "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11021390/"
+    },
+    "reported_regimen": "3.15 to 29.3 g/day (0.08-0.54 g/kg/day) for 1 to 28 days (Results, Table 3)",
+    "normalization": {
+     "basis": "Descriptive source range converted g to mg; not a pooled or minimum dose."
+    }
+   },
+   "included_study_pmids": [
+    "24477835",
+    "26853239",
+    "18156664",
+    "22569039",
+    "19997002",
+    "25566428",
+    "25202189",
+    "28944645",
+    "20601741",
+    "30275356",
+    "28177706"
+   ]
+  },
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "ingr_branched_chain_amino_acids_36235655_scoped_source",
+   "source_pmids": [
+    "36235655"
+   ],
+   "components": [
+    "INGR_BRANCHED_CHAIN_AMINO_ACIDS"
+   ],
+   "identity_scope": "ingredient_general",
+   "identity": {
+    "preparation": "Oral BCAA mixtures with varied ratios and protocols"
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "systematic_review",
+   "component_registration_status": "fully_registered",
+   "condition": "athletic_performance_body_composition_recovery",
+   "purpose": "physiology",
+   "review_status": "clinician_approved",
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability"
+   },
+   "scoring_eligible": false,
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "trial_family": "source_36235655",
+   "population": {
+    "age_group": "adult",
+    "description": "Athletes and regularly training people; 24 studies met inclusion (abstract)."
+   },
+   "study_design": "Systematic review without meta-analysis; RoB 2.0 assessed.",
+   "outcomes": [
+    {
+     "name": "Performance and body composition: negligible benefit",
+     "hierarchy": "not_reported",
+     "kind": "patient_important",
+     "direction": "null",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "Muscle soreness attenuated in resistance-trained participants; inconsistent in endurance sports",
+     "hierarchy": "not_reported",
+     "kind": "patient_important",
+     "direction": "mixed",
+     "outcome_role": "direct_between_group_effect"
+    }
+   ],
+   "limitations": [
+    "Narrative synthesis only (no pooled estimate); protocols differed considerably and most studies did not report total daily protein intake (abstract).",
+    "Inspected at abstract level in this session; supplies context, not credit.",
+    "Some included-study citations lack PubMed identifiers in the source XML; retain their exact citations rather than inventing identifiers.",
+    "Historical bibliography census (not independent scoring sources; actual included-publication membership is separately bound to the inspected source table): 8878139, 9124069, 24477835, 26733764, 26553453, 27053525, 27245337, 29244956, 26853239, 28177706, 30275356, 11985939, 10912884, 11310926, 30792920, 27913948. Each intervention and comparison requires its own applicability assessment; citation in this bibliography grants no credit.",
+    "Included-study PMID membership was extracted from source Table(s) nutrients-14-04002-t001. These are source membership identifiers, not independent efficacy approvals or automatic trial replications. Exact table/citation mapping and unindexed citations are retained in the source receipt. 3 source citations in this set lack a PMID in the primary source; their citation text is retained, no PMID is invented.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ],
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "mg",
+    "values": [],
+    "dose_status": "source_not_reported",
+    "dose_basis": "not_applicable",
+    "duration_basis": "participant_specific",
+    "duration_days": null,
+    "administration_frequency": "Protocols differed considerably between studies (abstract)",
+    "dosage_forms": [
+     "oral BCAA supplement"
+    ],
+    "co_therapies": [],
+    "source_provenance": {
+     "pmid": "36235655",
+     "location": "PubMed abstract",
+     "source_url": "https://pubmed.ncbi.nlm.nih.gov/36235655/"
+    }
+   },
+   "included_study_pmids": [
+    "8878139",
+    "9124069",
+    "10912884",
+    "11310926",
+    "11985939",
+    "24477835",
+    "30792920",
+    "26733764",
+    "26853239",
+    "26553453",
+    "27053525",
+    "27245337",
+    "28177706",
+    "27913948",
+    "29244956",
+    "30275356"
+   ]
+  }
+ ],
+ "source_receipts": [
+  {
+   "pmid": "38625669",
+   "title_fetched": "Attenuating Muscle Damage Biomarkers and Muscle Soreness After an Exercise-Induced Muscle Damage with Branched-Chain Amino Acid (BCAA) Supplementation: A Systematic Review and Meta-analysis with Meta-regression.",
+   "url": "https://www.ncbi.nlm.nih.gov/research/bionlp/RESTful/pmcoa.cgi/BioC_json/38625669/unicode",
+   "full_text": true,
+   "sections_used": "Methods PICO table (outcomes CK, LDH, DOMS); Results study characteristics, Table 2 and Table 3 (BCAA strategies); Results CK, LDH and DOMS sections"
+  },
+  {
+   "pmid": "36235655",
+   "title_fetched": "Oral Branched-Chain Amino Acids Supplementation in Athletes: A Systematic Review.",
+   "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=36235655&retmode=xml",
+   "full_text": false,
+   "sections_used": "PubMed abstract"
+  },
+  {
+   "pmid": "38241335",
+   "title_fetched": "Branched-Chain Amino Acids Supplementation and Post-Exercise Recovery: An Overview of Systematic Reviews.",
+   "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=38241335&retmode=xml",
+   "full_text": false,
+   "sections_used": "PubMed abstract"
+  }
+ ],
+ "integration_notes": [
+  "2026-10-28 integrator (CI triage): bare 'strength', 'endurance' and 'performance' replaced with claim phrases: _excluded_claim_matches scans the whole label, and 'GNC Pro Performance' (220827) or 'Extra Strength' are product names, not claims."
+ ]
+}

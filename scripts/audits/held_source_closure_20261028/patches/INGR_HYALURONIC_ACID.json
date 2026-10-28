@@ -1,0 +1,181 @@
+{
+ "record_id": "INGR_HYALURONIC_ACID",
+ "decision": "closed_credit",
+ "summary": "Record was already complete (credit from the approved 34203487 context). The remaining pending sibling context 28761365 was verified against its PMC full text and approved without credit, so no pending-review context remains.",
+ "record_updates": {},
+ "study_contexts": [
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "ingr_hyaluronic_acid_28761365",
+   "components": [
+    "INGR_HYALURONIC_ACID"
+   ],
+   "source_pmids": [
+    "28761365"
+   ],
+   "identity_scope": "branded_material",
+   "identity": {
+    "branded_material": "Hyabest A/Hyabest S LF-P",
+    "standardization": "Kewpie95%HA;distinct2k/300kmolecularweightarms"
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "direct_rct",
+   "component_registration_status": "fully_registered",
+   "condition": "cosmetic_skin_wrinkles",
+   "purpose": "source_specific_assessment",
+   "review_status": "clinician_approved",
+   "scoring_eligible": false,
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "trial_family": "ingr_hyaluronic_acid_28761365",
+   "population": {
+    "description": "60healthyJapanese22–59withcrowfeet;55questionnairecompleters"
+   },
+   "study_design": "randomized double-blind placebo-controlled trial",
+   "outcomes": [
+    {
+     "name": "Wrinklevolumeratioat8weeks:300kMWP=.046;2kP=.052;allgroupssubjectiveluster/supplenessbaselinechanges",
+     "hierarchy": "not_reported",
+     "kind": "surrogate",
+     "direction": "mixed",
+     "outcome_role": "direct_between_group_effect"
+    }
+   ],
+   "limitations": [
+    "Noexplicituniqueprimaryendpointidentifiedinextractedsource;do notmanufacturehierarchy.",
+    "Exactpreparation/population/endpoints;notgenericbenefitorminimumeffectivedose.",
+    "Emptyco-therapieslistmeansnotextracted,notproofnoneused.",
+    "Privatependingdraft;noapproval,retailmatchingorsource-setclearance.",
+    "Context verified against the PMC full text (Methods; Results: 60 randomized, 55 questionnaire completers; wrinkle volume ratio vs placebo HA 300k p=0.046, HA 2k p=0.052) by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28. Not credit-bearing: no designated primary endpoint and a borderline single-arm result."
+   ],
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "mg",
+    "values": [
+     120
+    ],
+    "dose_status": "verified",
+    "dose_basis": "nominal_assigned_arm",
+    "duration_basis": "fixed_protocol",
+    "duration_days": 84,
+    "administration_frequency": "two60mgHAcapsulesdaily;within-daytimingnotreportedintheextractedMethods",
+    "dosage_forms": [
+     "capsule"
+    ],
+    "co_therapies": [],
+    "reported_regimen": "120mg/dayofspecifiedassignedmaterial",
+    "normalization": {
+     "basis": "Whole assigned material daily mass from primary Methods; not a marker or active-equivalent conversion."
+    },
+    "source_provenance": {
+     "pmid": "28761365",
+     "location": "PrimaryfulltextMethodsinterventionandResults",
+     "source_url": "https://pubmed.ncbi.nlm.nih.gov/28761365/"
+    }
+   },
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability"
+   }
+  },
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "ingr_hyaluronic_acid_34203487",
+   "components": [
+    "INGR_HYALURONIC_ACID"
+   ],
+   "source_pmids": [
+    "34203487"
+   ],
+   "identity_scope": "branded_material",
+   "identity": {
+    "branded_material": "Hyabest (S) LF-P",
+    "standardization": "95% hyaluronan purity by HPLC; no unreported molecular-weight equivalence inferred.",
+    "manufacturer": "Kewpie Corporation"
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "direct_rct",
+   "component_registration_status": "fully_registered",
+   "condition": "cosmetic_skin_parameters",
+   "purpose": "source_specific_assessment",
+   "review_status": "clinician_approved",
+   "scoring_eligible": true,
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "trial_family": "ingr_hyaluronic_acid_34203487",
+   "population": {
+    "description": "40randomizedhealthyTaiwaneseadults35–64,20/arm"
+   },
+   "study_design": "randomized double-blind placebo-controlled trial",
+   "outcomes": [
+    {
+     "name": "Facial hydration and TEWL at 12 weeks; selected Cutometer and wrinkle outcomes favor treatment, while nonfacial raw hydration, Reviscometer elasticity and other skin-structure comparisons did not consistently separate from placebo. No unique primary endpoint is specified.",
+     "hierarchy": "not_reported",
+     "kind": "surrogate",
+     "direction": "mixed",
+     "outcome_role": "direct_between_group_effect"
+    }
+   ],
+   "limitations": [
+    "The fully inspected paper does not identify its primary outcome variable despite discussing sample-size power. This is a documented reporting limitation, not a manufactured primary endpoint.",
+    "Forty randomized participants, multiple measures and time points; selected positive comparisons cannot establish universal skin benefit.",
+    "Kewpie funded the study and employed three authors.",
+    "Signed A077 accepts limited skin findings only. No joint, longevity, generic-preparation equivalence, minimum effective dose or retail-batch purity claim."
+   ],
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "mg",
+    "values": [
+     120
+    ],
+    "dose_status": "verified",
+    "dose_basis": "nominal_assigned_arm",
+    "duration_basis": "fixed_protocol",
+    "duration_days": 84,
+    "administration_frequency": "One capsule containing 120 mg hyaluronan daily for 12 weeks; within-day timing not reported.",
+    "dosage_forms": [
+     "capsule"
+    ],
+    "co_therapies": [
+     "Skin supplements and prescribed skin treatment were excluded; ordinary cleanser, toner and moisturizer were permitted."
+    ],
+    "reported_regimen": "120mg/dayofspecifiedassignedmaterial",
+    "normalization": {
+     "basis": "Whole assigned material daily mass from primary Methods; not a marker or active-equivalent conversion."
+    },
+    "source_provenance": {
+     "pmid": "34203487",
+     "location": "Original full text Methods 2.1-2.9 and Results 3.1-3.7; no uniquely named primary endpoint.",
+     "source_url": "https://pubmed.ncbi.nlm.nih.gov/34203487/"
+    }
+   },
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-26",
+    "scope": "identity_dose_outcome_applicability"
+   }
+  }
+ ],
+ "source_receipts": [
+  {
+   "pmid": "28761365",
+   "title_fetched": "Oral hyaluronan relieves wrinkles: a double-blinded, placebo-controlled study over a 12-week period",
+   "url": "https://www.ncbi.nlm.nih.gov/research/bionlp/RESTful/pmcoa.cgi/BioC_json/28761365/unicode",
+   "full_text": true,
+   "sections_used": "Methods (trial design, supplements and dosage); Results"
+  },
+  {
+   "pmid": "34203487",
+   "title_fetched": "existing approved context unchanged",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/34203487/",
+   "full_text": true,
+   "sections_used": "unchanged 2026-10-26 approval"
+  }
+ ],
+ "integration_notes": [
+  "2026-10-28 integrator (independent review): stale draft/no-approval limitation text removed from the approved 28761365 context."
+ ]
+}

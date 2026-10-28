@@ -1,0 +1,153 @@
+{
+ "record_id": "BRAND_MITOPURE",
+ "decision": "closed_no_credit",
+ "summary": "Full text of the ATLAS trial (88 overweight middle-aged adults, Mitopure 500 or 1,000 mg/day, 4 months; sponsor-run) shows its designated primary endpoint, peak power output, did not differ from placebo; hamstring strength improved at both doses as a secondary finding. The reviewed research does not establish a qualifying benefit for this product's assessed use: the null designated primary is kept, and the verified secondary strength gain is recorded as a limited finding whose possible points await the calibration batch. The phase 1 study is safety and biomarker only. The record becomes reference-only, which removes Mitopure Evidence points from dependent products; Dr. Pham's rejection of longevity inference is recorded.",
+ "record_updates": {
+  "study_type": "reference",
+  "evidence_level": "reference"
+ },
+ "study_contexts": [
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "brand_mitopure_35584623_draft",
+   "source_pmids": [
+    "35584623"
+   ],
+   "components": [
+    "BRAND_MITOPURE"
+   ],
+   "identity_scope": "branded_material",
+   "identity": {
+    "branded_material": "Mitopure",
+    "manufacturer": "Amazentis SA"
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "direct_rct",
+   "component_registration_status": "fully_registered",
+   "condition": "muscle_performance",
+   "purpose": "treatment",
+   "population": {
+    "age_group": "adult",
+    "description": "88 untrained, overweight middle-aged adults (aged 40-65 per Methods; above-normal BMI) randomized to Mitopure 500 mg (n=29), 1,000 mg (n=30) or placebo; single centre (KGK Science)."
+   },
+   "study_design": "ATLAS: single-centre, randomized, double-blind, placebo-controlled trial (NCT03464500), 4 months; prespecified primary endpoint peak power output.",
+   "trial_family": "35584623",
+   "review_status": "clinician_approved",
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "scoring_eligible": false,
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "mg",
+    "values": [
+     500,
+     1000
+    ],
+    "dose_status": "verified",
+    "dose_basis": "nominal_assigned_arm",
+    "duration_basis": "fixed_protocol",
+    "duration_days": 120,
+    "administration_frequency": "four softgels once daily before breakfast",
+    "dosage_forms": [
+     "oral softgel"
+    ],
+    "reported_regimen": "[500, 1000] mg/day; 120 days; four softgels once daily before breakfast",
+    "normalization": {
+     "basis": "Reported study-material daily dose, not a universal threshold or equivalence to other preparation."
+    },
+    "source_provenance": {
+     "pmid": "35584623",
+     "location": "Full text (PMC9133463): STAR Methods study design and investigational product, Results (strength, exercise performance, Figure 2 legends), Discussion limitation on primary endpoint, Declaration of interests.",
+     "source_url": "https://pubmed.ncbi.nlm.nih.gov/35584623/"
+    },
+    "co_therapies": [
+     "Source-reported concurrent-care/restriction context: No concomitant diets/medications were reported.",
+     "Source-reported concurrent-care/restriction context: Exclusion criteria included chronic smokers, history of alcohol abuse, those with chronic diseases that required medications (statins, blood thinners, steroid and thyroid medications), and participants who had either recently donated blood or did not like swallowing capsules."
+    ]
+   },
+   "outcomes": [
+    {
+     "name": "Primary peak power output: non-significant ~4% increases with 500 and 1,000 mg (not different from placebo).",
+     "hierarchy": "primary",
+     "kind": "patient_important",
+     "direction": "null",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "Hamstring muscle strength improved versus placebo at both doses (p=0.027 for 500 mg, p=0.029 for 1,000 mg); peak VO2 versus placebo not significant; 6MWT gain at 1,000 mg was within-group (p<=0.008).",
+     "hierarchy": "secondary",
+     "kind": "patient_important",
+     "direction": "mixed",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "Mitochondrial/CRP markers",
+     "hierarchy": "secondary",
+     "kind": "surrogate",
+     "direction": "positive",
+     "outcome_role": "surrogate"
+    }
+   ],
+   "limitations": [
+    "Do not replace null primary with selected secondary findings; multiple endpoints and dose-specific biomarker results.",
+    "No lifespan/disease prevention endpoint.",
+    "No credit: the designated primary endpoint (peak power output) was null, so per the corrected brief and Dr. Pham's primary-endpoint rule this completed trial is non-crediting; the secondary hamstring-strength gain is kept as context only. Sponsor Amazentis: six authors are employees and others board or advisory members; signed A012 rejects any human-longevity inference.",
+    "Returned A012 'source-content hold' resolved by full-text verification.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28.",
+    "No credit: the designated primary endpoint (peak power output) was null, so per the corrected brief and Dr. Pham's primary-endpoint rule this completed trial is non-crediting; the secondary hamstring-strength gain is kept as context only. Sponsor Amazentis: six authors are employees and others board or advisory members; signed A012 rejects any human-longevity inference.",
+    "Returned A012 'source-content hold' resolved by full-text verification.",
+    "Limited verified secondary finding (hierarchy kept as secondary, per Dr. Pham's fifth ruling): hamstring muscle strength improved versus placebo at 500 mg (p=0.027) and 1,000 mg (p=0.029). Whether limited points may rest on a verified secondary finding awaits the calibration batch; it is never promoted to primary."
+   ],
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability"
+   }
+  },
+  {
+   "context_id": "brand_mitopure_32694802_phase1_safety_biomarkers",
+   "components": [
+    "BRAND_MITOPURE"
+   ],
+   "source_pmids": [
+    "32694802"
+   ],
+   "review_status": "rejected_source",
+   "scoring_eligible": false,
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability",
+    "notes": "No efficacy credit: first-in-human safety and pharmacokinetic study with mitochondrial biomarker secondary outcomes; Dr. Pham rejected human-longevity inference. Full text not open access."
+   },
+   "dose": {
+    "source_provenance": {
+     "pmid": "32694802",
+     "location": "PubMed abstract.",
+     "source_url": "https://pubmed.ncbi.nlm.nih.gov/32694802/"
+    }
+   },
+   "limitations": [
+    "Abstract: single and 4-week multiple doses in healthy sedentary elderly; primary outcome safety (favourable); 500 and 1,000 mg modulated plasma acylcarnitines and muscle mitochondrial gene expression. Biomarkers, not clinical outcomes.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ]
+  }
+ ],
+ "source_receipts": [
+  {
+   "pmid": "35584623",
+   "title_fetched": "Urolithin A improves muscle strength, exercise performance, and biomarkers of mitochondrial health in a randomized trial in middle-aged adults.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/35584623/",
+   "full_text": true,
+   "sections_used": "STAR Methods, Results, Discussion, declaration of interests (BioC PMC9133463)"
+  },
+  {
+   "pmid": "32694802",
+   "title_fetched": "The mitophagy activator urolithin A is safe and induces a molecular signature of improved mitochondrial and cellular health in humans.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/32694802/",
+   "full_text": false,
+   "sections_used": "PubMed abstract"
+  }
+ ]
+}

@@ -34,7 +34,13 @@ def test_cs4_method_regimen_and_null_comparison_are_completed_without_credit(rec
                for o in context["outcomes"])
     assert all(o["outcome_role"] == "within_group_change"
                for o in context["outcomes"] if o["direction"] == "positive")
-    assert not assess_clinical_source_review(record)["is_complete"]
+    # Dr. Pham, 2026-10-28: no generic stamina credit; Cs-4 and the 38501161
+    # biomarker study are completed non-scoring contexts. The record is a
+    # completed reference-only review, not an open task and not credit.
+    assert record["study_type"] == "reference"
+    assert record["evidence_level"] == "reference"
+    assert assess_clinical_source_review(record)["is_complete"]
+    assert not any(context_accepted_for_scoring(c) for c in record["study_contexts"])
 
 
 @pytest.mark.parametrize("owner,pmid", [
@@ -46,7 +52,11 @@ def test_approved_nontransfer_review_does_not_enable_general_ingredient_credit(r
     assert context["clinical_review"]["reviewed_at"] == "2026-10-28"
     assert validate_ingredient_context(context, require_complete_review=True) == []
     assert not context_accepted_for_scoring(context)
-    assert records[owner]["study_type"] != "reference"
+    # Dr. Pham, 2026-10-28: both are no-credit decisions on the reference-only
+    # path; no sibling context may supply general ingredient credit either.
+    assert records[owner]["study_type"] == "reference"
+    assert records[owner]["evidence_level"] == "reference"
+    assert not any(context_accepted_for_scoring(c) for c in records[owner]["study_contexts"])
 
 
 def test_collagen_original_comparator_retrieval_does_not_clear_pooling_hold(records):

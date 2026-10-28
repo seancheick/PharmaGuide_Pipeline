@@ -1,0 +1,30 @@
+{
+ "record_id": "PRECLIN_SAFFRON",
+ "decision": "held: none of the three meta-analyses (31135916, 38913392, 41693488) has open full text, so saffron preparations, doses and included trials cannot be verified. From the abstracts, 41693488 (34 RCTs) finds only self-reported scales improved (BDI, BAI) with no clinician-rated benefit, 31135916 shows publication bias, and 38913392 compares with SSRIs (equivalence wording Dr. Pham rejected). OA retry 2026-10-28: 31135916 bronze copy is behind a Cloudflare bot check; 38913392 and 41693488 closed.",
+ "summary": "31135916: 23 RCTs, large effects versus placebo on depression (g 0.99) and anxiety (g 0.95) with publication bias. 38913392: 8 SSRI-comparator trials, no significant difference. 41693488: 34 RCTs (1769 participants); BDI WMD -4.39 and BAI -5.06 with I2 >92%, no effect on HDRS, HARS or POMS.",
+ "record_updates": {},
+ "study_contexts": [],
+ "source_receipts": [
+  {
+   "pmid": "31135916",
+   "title_fetched": "Effect of saffron supplementation on symptoms of depression and anxiety: a systematic review and meta-analysis.",
+   "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=31135916&retmode=xml",
+   "full_text": false,
+   "sections_used": "PubMed abstract only"
+  },
+  {
+   "pmid": "38913392",
+   "title_fetched": "Effect of Saffron Versus Selective Serotonin Reuptake Inhibitors (SSRIs) in Treatment of Depression and Anxiety: A Meta-analysis of Randomized Controlled Trials.",
+   "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=38913392&retmode=xml",
+   "full_text": false,
+   "sections_used": "PubMed abstract only"
+  },
+  {
+   "pmid": "41693488",
+   "title_fetched": "Effect of saffron on depression, anxiety and mood disorder: a GRADE assessed systematic review and meta-analysis of 34 randomized controlled trials.",
+   "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=41693488&retmode=xml",
+   "full_text": false,
+   "sections_used": "PubMed abstract only"
+  }
+ ]
+}

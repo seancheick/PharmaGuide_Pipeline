@@ -1,0 +1,23 @@
+{
+ "record_id": "INGR_5HTP",
+ "decision": "held: source inaccessible. Neither 12169147 (Aust N Z J Psychiatry 2002) nor 11869656 (Cochrane 2002) has retrievable full text, so trial doses, forms and methods cannot be verified as Dr. Pham requested. The abstracts already indicate the record's claim is not supported: both reviews include only two small trials (64 patients total; one 5-HTP, one L-tryptophan) in unipolar depression, pooled across the two substances (Peto OR 4.10, 95% CI 1.28-13.15) and judged insufficient in quality; nothing addresses stress/anxiety or weight management. A reference downgrade is recommended once a no-credit context can be verified or recorded as a source rejection.",
+ "summary": "Both sources pool one 5-HTP trial with one tryptophan trial in depression (64 patients) and call the evidence inconclusive; the Cochrane review also flags the unresolved eosinophilia-myalgia syndrome question. The record's stress/anxiety and weight claims are not tested. With no full text, no context can be completed, so the record stays held rather than closed.",
+ "record_updates": {},
+ "study_contexts": [],
+ "source_receipts": [
+  {
+   "pmid": "12169147",
+   "title_fetched": "Are tryptophan and 5-hydroxytryptophan effective treatments for depression? A meta-analysis.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/12169147/",
+   "full_text": false,
+   "sections_used": "Abstract only"
+  },
+  {
+   "pmid": "11869656",
+   "title_fetched": "Tryptophan and 5-hydroxytryptophan for depression.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/11869656/",
+   "full_text": false,
+   "sections_used": "Abstract only"
+  }
+ ]
+}

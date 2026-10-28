@@ -1,0 +1,300 @@
+{
+ "record_id": "BRAND_TAMAFLEX",
+ "decision": "closed_credit",
+ "summary": "Full texts of all three TamaFlex (NXT15906F6) RCTs confirm placebo-controlled benefits on their primary outcomes: six-minute walk in non-arthritic adults with exertional knee pain (250-400 mg/day, 90 days), and WOMAC in knee OA (250 mg/day, 56 and 30 days). All three get eligible contexts for Joint & Bone Health, as whole-formula evidence; they are small, short trials from one development programme. A new applicability block limits credit to knee joint pain and function.",
+ "record_updates": {
+  "applicability": {
+   "scope": "ingredient",
+   "supported_outcomes": [
+    "Joint & Bone Health"
+   ],
+   "studied_population": "Adults aged about 40-70 with mild-to-moderate knee osteoarthritis, or non-arthritic adults with exercise-related knee pain, taking TamaFlex 250-400 mg/day for 30-90 days.",
+   "source_pmids": [
+    "31337958",
+    "35096104",
+    "37351019"
+   ],
+   "reviewed_at": "2026-10-28"
+  }
+ },
+ "study_contexts": [
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "brand_tamaflex_31337958_draft",
+   "source_pmids": [
+    "31337958"
+   ],
+   "components": [
+    "BRAND_TAMAFLEX"
+   ],
+   "identity_scope": "branded_material",
+   "identity": {
+    "branded_material": "TamaFlex NXT15906F6",
+    "standardization": "Tamarind seed: turmeric rhizome: excipients 6: 3: 1,>=65%proanthocyanidins>=3%curcuminoids"
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "direct_rct",
+   "component_registration_status": "fully_registered",
+   "condition": "activity_related_knee_discomfort",
+   "purpose": "treatment",
+   "population": {
+    "age_group": "adult",
+    "description": "90 non-arthritic adults (15 men and 15 women per arm) with knee pain after physical exertion; 89 completed (one placebo dropout)."
+   },
+   "study_design": "Randomized, double-blind, placebo-controlled three-arm trial, 90 days; primary outcome six-minute walk distance; paracetamol up to 2,000 mg/day allowed as rescue.",
+   "trial_family": "31337958",
+   "review_status": "clinician_approved",
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "scoring_eligible": true,
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "mg",
+    "values": [
+     250,
+     400
+    ],
+    "dose_status": "verified",
+    "dose_basis": "nominal_assigned_arm",
+    "duration_basis": "fixed_protocol",
+    "duration_days": 90,
+    "administration_frequency": "125 or 200 mg capsule twice daily pre breakfast and pre dinner",
+    "dosage_forms": [
+     "oral capsule"
+    ],
+    "reported_regimen": "[250, 400] mg/day; 90 days; 125 or 200 mg capsule twice daily pre breakfast and pre dinner",
+    "normalization": {
+     "basis": "Reported study-material daily dose, not a universal threshold or equivalence to other preparation."
+    },
+    "source_provenance": {
+     "pmid": "31337958",
+     "location": "Full text (PMC6643110): Methods (design, groups and capsule dosing, outcomes, rescue medication, power), Results Table 3-5 paragraphs.",
+     "source_url": "https://pubmed.ncbi.nlm.nih.gov/31337958/"
+    },
+    "co_therapies": [
+     "Paracetamol up to 2,000 mg/day as rescue analgesia; no other pain-relieving interventions."
+    ]
+   },
+   "outcomes": [
+    {
+     "name": "Primary six-minute walk distance change vs placebo: +29.23 m (250 mg) and +41.83 m (400 mg) vs +5.55 m (p<0.001 and p<0.0001).",
+     "hierarchy": "primary",
+     "kind": "patient_important",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "Secondary stair-climb, VAS, WOMAC subscales and knee flexion improved vs placebo, some from day 14.",
+     "hierarchy": "secondary",
+     "kind": "patient_important",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    }
+   ],
+   "limitations": [
+    "Whole formula, not component amount/efficacy transfer; separate trials OApopulations.",
+    "Whole TamaFlex (NXT15906F6: tamarind seed and turmeric rhizome extracts) formula; not evidence for either component alone. Small, short Indian trials from one development programme. Returned A026 'source-content hold' resolved by full-text verification; credit limited to knee joint pain and function.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ],
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability"
+   }
+  },
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "brand_tamaflex_35096104_draft",
+   "source_pmids": [
+    "35096104"
+   ],
+   "components": [
+    "BRAND_TAMAFLEX"
+   ],
+   "identity_scope": "branded_material",
+   "identity": {
+    "branded_material": "TamaFlex NXT15906F6",
+    "manufacturer": "Laila Nutraceuticals",
+    "standardization": "6: 3: 1 formula>=65%PAC>=3%curcuminoids"
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "direct_rct",
+   "component_registration_status": "fully_registered",
+   "condition": "knee_osteoarthritis",
+   "purpose": "treatment",
+   "population": {
+    "age_group": "adult",
+    "description": "90 adults aged 40-70 with radiographic Kellgren-Lawrence grade II-III knee osteoarthritis, randomized 30 per arm (placebo, NXT15906F6 250 mg/day, NXT19185 300 mg/day)."
+   },
+   "study_design": "Randomized, double-blind, placebo-controlled three-arm trial, 56 days; primary outcome WOMAC versus placebo.",
+   "trial_family": "35096104",
+   "review_status": "clinician_approved",
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "scoring_eligible": true,
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "mg",
+    "values": [
+     250
+    ],
+    "dose_status": "verified",
+    "dose_basis": "nominal_assigned_arm",
+    "duration_basis": "fixed_protocol",
+    "duration_days": 56,
+    "administration_frequency": "One 250 mg capsule daily for 56 days.",
+    "dosage_forms": [
+     "oral capsule"
+    ],
+    "reported_regimen": "[250] mg/day; 56 days; one capsule after breakfast",
+    "normalization": {
+     "basis": "Reported study-material daily dose, not a universal threshold or equivalence to other preparation."
+    },
+    "source_provenance": {
+     "pmid": "35096104",
+     "location": "Full text (PMC8791717): Methods 2.1-2.4 (test items, capsules, randomization, primary outcome), Results WOMAC paragraph and Table 2, COI.",
+     "source_url": "https://pubmed.ncbi.nlm.nih.gov/35096104/"
+    },
+    "co_therapies": [
+     "Source-reported concurrent-care/restriction context: Subjects were excluded if they had a history of using or were currently using immunosuppressive drugs, corticosteroid or hyaluronic acid injections, glucosamine/chondroitin supplements or any analgesics or NSAIDs.",
+     "Source-reported concurrent-care/restriction context: The study participants also did not take acetaminophen/paracetamol, ibuprofen, aspirin, other NSAIDs, other analgesics (OTC or prescription), or any herbal products in the past seven days of the screening visit.",
+     "Source-reported concurrent-care/restriction context: Rescue Medication A daily dose of 2000 mg acetaminophen (four x 500 mg) was prescribed as the rescue medication in the study.",
+     "Source-reported concurrent-care/restriction context: However, the subjects were not allowed to take the medication at least two days before each evaluation.",
+     "Source-reported concurrent-care/restriction context: Use of the rescue medication by the individual participant during the trial was recorded appropriately in the study-related documents.",
+     "Source-reported concurrent-care/restriction context: Rescue Medication None of the participants consumed rescue medication during the study."
+    ]
+   },
+   "outcomes": [
+    {
+     "name": "Primary WOMAC total reduced 41.86% from baseline with NXT15906F6 (TamaFlex) and significantly versus placebo at day 56 (P<0.05).",
+     "hierarchy": "primary",
+     "kind": "patient_important",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    }
+   ],
+   "limitations": [
+    "NXT 19185 includes Garcinia different formula, not equivalence; small trial.",
+    "Only the NXT15906F6 (TamaFlex) arm applies to this record; the NXT19185 arm adds Garcinia mangostana and is a different formula.",
+    "Whole TamaFlex (NXT15906F6: tamarind seed and turmeric rhizome extracts) formula; not evidence for either component alone. Small, short Indian trials from one development programme. Returned A026 'source-content hold' resolved by full-text verification; credit limited to knee joint pain and function.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ],
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability"
+   }
+  },
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "brand_tamaflex_37351019_draft",
+   "source_pmids": [
+    "37351019"
+   ],
+   "components": [
+    "BRAND_TAMAFLEX"
+   ],
+   "identity_scope": "branded_material",
+   "identity": {
+    "branded_material": "TamaFlex NXT15906F6",
+    "standardization": "6: 3: 1 tamarind seed/turmeric rhizome/excipients"
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "direct_rct",
+   "component_registration_status": "fully_registered",
+   "condition": "knee_osteoarthritis",
+   "purpose": "treatment",
+   "population": {
+    "age_group": "adult",
+    "description": "150 adults aged 40-70 (BMI 20-29) with mild-to-moderate knee osteoarthritis randomized 50 per arm to placebo, NXT15906F6 250 mg or a curcumin-Boswellia blend (CLBS) 1,000 mg; 44/46/45 analysed."
+   },
+   "study_design": "Randomized, double-blind, placebo-controlled three-arm trial, 30 days, in India; primary outcome total WOMAC versus placebo (ANCOVA); paracetamol 2,000 mg/day rescue.",
+   "trial_family": "37351019",
+   "review_status": "clinician_approved",
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "scoring_eligible": true,
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "mg",
+    "values": [
+     250
+    ],
+    "dose_status": "verified",
+    "dose_basis": "nominal_assigned_arm",
+    "duration_basis": "fixed_protocol",
+    "duration_days": 30,
+    "administration_frequency": "250 mg NXT15906F6 daily after breakfast for 30 days.",
+    "dosage_forms": [
+     "oral capsule"
+    ],
+    "reported_regimen": "[250] mg/day; 30 days; two capsules after breakfast daily",
+    "normalization": {
+     "basis": "Reported study-material daily dose, not a universal threshold or equivalence to other preparation."
+    },
+    "source_provenance": {
+     "pmid": "37351019",
+     "location": "Full text (PMC10284097): Abstract, Methods (randomization, primary outcome, rescue medication, sample size), Results WOMAC paragraphs and Table, Conflict of interest and funding.",
+     "source_url": "https://pubmed.ncbi.nlm.nih.gov/37351019/"
+    },
+    "co_therapies": [
+     "Paracetamol 2,000 mg/day as rescue medication, recorded."
+    ]
+   },
+   "outcomes": [
+    {
+     "name": "Primary total WOMAC reduced versus placebo from day 5 through day 30 (P<0.001); WOMAC pain fell 19.79%, 31.86% and 38.11% from baseline on days 5, 14 and 30.",
+     "hierarchy": "primary",
+     "kind": "patient_important",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "VASday 5 between-group",
+     "hierarchy": "secondary",
+     "kind": "patient_important",
+     "direction": "null",
+     "outcome_role": "direct_between_group_effect"
+    }
+   ],
+   "limitations": [
+    "WOMAC early positive but VASday 5 p.318; no universal 5 day pain claim.",
+    "CLBS comparator 1000 mg different formula.",
+    "Funded by Bohan & Co. (Norway) and NXT USA, Inc.; authors declare no conflict.",
+    "Whole TamaFlex (NXT15906F6: tamarind seed and turmeric rhizome extracts) formula; not evidence for either component alone. Small, short Indian trials from one development programme. Returned A026 'source-content hold' resolved by full-text verification; credit limited to knee joint pain and function.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ],
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability"
+   }
+  }
+ ],
+ "source_receipts": [
+  {
+   "pmid": "31337958",
+   "title_fetched": "A Combination of Tamarindus indica seeds and Curcuma longa Rhizome Extracts Improves Knee Joint Function and Alleviates Pain in Non-Arthritic Adults Following Physical Activity.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/31337958/",
+   "full_text": true,
+   "sections_used": "Methods, Results (BioC PMC6643110)"
+  },
+  {
+   "pmid": "35096104",
+   "title_fetched": "Tamarindus indica Seed Extract-Based Botanical Compositions Alleviate Knee Pain and Improve Joint Function in Mild-to-Moderate Osteoarthritis: A Randomized, Double-Blind, Placebo-Controlled Clinical Study.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/35096104/",
+   "full_text": true,
+   "sections_used": "Methods, Results, COI (BioC PMC8791717)"
+  },
+  {
+   "pmid": "37351019",
+   "title_fetched": "Efficacy of a proprietary combination of Tamarindus indica seeds and Curcuma longa rhizome extracts in osteoarthritis: a clinical investigation.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/37351019/",
+   "full_text": true,
+   "sections_used": "Abstract, Methods, Results, funding (BioC PMC10284097)"
+  }
+ ]
+}

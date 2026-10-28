@@ -45,7 +45,7 @@ def test_public_evidence_preserves_matching_zinc_research_at_every_amount(amount
     ("INGR_D_ASPARTIC_ACID", "D-Aspartic Acid", "d_aspartic_acid", 4500, "between"),
     ("INGR_D_ASPARTIC_ACID", "D-Aspartic Acid", "d_aspartic_acid", 6000, "matches"),
     ("INGR_D_ASPARTIC_ACID", "D-Aspartic Acid", "d_aspartic_acid", 7000, "above"),
-    ("INGR_WHITE_KIDNEY_BEAN", "White Kidney Bean Extract", "common_bean_extract", 1500, "reference_uncertain"),
+    ("INGR_WHITE_KIDNEY_BEAN", "Phaseolean White Kidney Bean Extract", "common_bean_extract", 1500, "reference_uncertain"),
 ])
 def test_descriptive_regimen_boundaries(record, name, canonical, amount, status):
     from dose_assessment import clinical_research_exposure_assessments, positive_clinical_benchmark
@@ -63,11 +63,15 @@ def test_descriptive_regimen_boundaries(record, name, canonical, amount, status)
     control["rda_ul_data"].pop("clinical_exposure_assessments")
     assert a["quality_pillars_v4"]["dose"]["score"] == build_scored_artifact(control)["quality_pillars_v4"]["dose"]["score"]
 
+# Since Dr. Pham's 2026-10-28 ruling INGR_WHITE_KIDNEY_BEAN applies only to the
+# studied Phaseolean extract (required_form_terms ["phaseolean"]), so its
+# reviewed-scope cases use a Phaseolean-named label. A generic white kidney
+# bean label is covered by test_generic_white_kidney_bean_cannot_reach_phaseolean.
 @pytest.mark.parametrize("record,name,canonical", [
     ("INGR_ZINC_PICOLINATE", "Zinc", "zinc"),
     ("INGR_D_MANNOSE", "D-Mannose", "d_mannose"),
     ("INGR_D_ASPARTIC_ACID", "D-Aspartic Acid", "d_aspartic_acid"),
-    ("INGR_WHITE_KIDNEY_BEAN", "White Kidney Bean Extract", "common_bean_extract"),
+    ("INGR_WHITE_KIDNEY_BEAN", "Phaseolean White Kidney Bean Extract", "common_bean_extract"),
 ])
 def test_unknown_amount_preserves_review_and_reports_unavailable(record, name, canonical):
     from dose_assessment import clinical_research_exposure_assessments
@@ -153,7 +157,7 @@ def enricher():
 @pytest.mark.parametrize("record,name,canonical,amount", [
     ("INGR_D_MANNOSE", "D-Mannose", "d_mannose", 1000),
     ("INGR_D_ASPARTIC_ACID", "D-Aspartic Acid", "d_aspartic_acid", 3000),
-    ("INGR_WHITE_KIDNEY_BEAN", "White Kidney Bean Extract", "common_bean_extract", 1500),
+    ("INGR_WHITE_KIDNEY_BEAN", "Phaseolean White Kidney Bean Extract", "common_bean_extract", 1500),
 ])
 def test_enrichment_produces_the_assessment_consumed_by_public_score(enricher, record, name, canonical, amount):
     from test_green_tea_evidence_identity import _source_product
@@ -216,19 +220,38 @@ def test_exact_source_verified_phaseolean_regimens(amount, status):
     assert positive_clinical_benchmark(p, row) is None
 
 
-@pytest.mark.parametrize("source", [
-    "White Kidney Bean Extract 1500mg", "Phaseolean extract 1500mg",
-    "Phaseolean aqueous extract 20,000 AIU per serving DNS assay",
-    "Phaseolean aqueous extract 20,000 AIU/g starch assay",
-    "Phase2 aqueous extract 20,000 AIU/g DNS assay",
-    "Phaseolamin aqueous extract 20,000 AIU/g DNS assay",
+@pytest.mark.parametrize("source,named", [
+    ("White Kidney Bean Extract 1500mg", False), ("Phaseolean extract 1500mg", True),
+    ("Phaseolean aqueous extract 20,000 AIU per serving DNS assay", True),
+    ("Phaseolean aqueous extract 20,000 AIU/g starch assay", True),
+    ("Phase2 aqueous extract 20,000 AIU/g DNS assay", False),
+    ("Phaseolamin aqueous extract 20,000 AIU/g DNS assay", False),
 ])
-def test_unverified_preparation_cannot_borrow_phaseolean(source):
+def test_unverified_preparation_cannot_borrow_phaseolean(source, named):
+    from clinical_applicability import assess_clinical_applicability
     from dose_assessment import clinical_research_exposure_assessments
     p = product("INGR_WHITE_KIDNEY_BEAN", "White Kidney Bean Extract", "common_bean_extract", 1500)
     p["ingredient_quality_data"]["ingredients_scorable"][0]["raw_source_text"] = source
-    a, = clinical_research_exposure_assessments(p)
-    assert a["status"] == "reference_uncertain"
+    if named:
+        # Named Phaseolean without the exact source specification: research
+        # correspondence stays uncertain.
+        a, = clinical_research_exposure_assessments(p)
+        assert a["status"] == "reference_uncertain"
+    else:
+        # Other extracts cannot reach the Phaseolean record at all (Dr. Pham,
+        # 2026-10-28: the studied standardized Phaseolean extract only).
+        assert clinical_research_exposure_assessments(p) == []
+        match = p["evidence_data"]["clinical_matches"][0]
+        assert assess_clinical_applicability(p, match, assess_amount=False)["reason_code"] == "clinical_form_mismatch"
+
+
+@pytest.mark.parametrize("amount", [1500, None])
+def test_generic_white_kidney_bean_cannot_reach_phaseolean(amount):
+    from dose_assessment import clinical_research_exposure_assessments
+    from scoring_v4.modules.generic_evidence import resolved_clinical_matches
+    p = product("INGR_WHITE_KIDNEY_BEAN", "White Kidney Bean Extract", "common_bean_extract", amount)
+    assert clinical_research_exposure_assessments(p) == []
+    assert not any(m["id"] == "INGR_WHITE_KIDNEY_BEAN" for m in resolved_clinical_matches(p)[0])
 
 
 def test_derived_preparation_cannot_replace_exact_source_specification():

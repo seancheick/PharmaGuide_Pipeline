@@ -284,7 +284,10 @@ def _scoring_inputs(artifact):
 @pytest.mark.parametrize("dsld_id,expected", [
     # The Coptis owner stays; its reviewed general Dose adds11.4 without clinical credit.
     (252567, {"score": 57.1, "status": "partial", "evidence_owners": ["coptis_rhizome"], "dose_credits": [11.97]}),
-    (315814, {"score": 50.6, "status": "partial", "evidence_owners": ["gaba", "maca", "oat_straw", "yohimbe"],
+    # 50.6 before 2026-10-28: Dr. Pham's GABA ruling (very limited stress
+    # evidence, no points until the calibration batch) makes INGR_GABA
+    # reference-only. Owners and Dose are unchanged; only Evidence moves.
+    (315814, {"score": 43.3, "status": "partial", "evidence_owners": ["gaba", "maca", "oat_straw", "yohimbe"],
               "dose_credits": [12.54]}),
     # A kept coffeeberry row is invisible to scoring, never re-matched as coffee.
     # Since "Fruit" no longer names Apple (title owner), vitamin C is a major owner and

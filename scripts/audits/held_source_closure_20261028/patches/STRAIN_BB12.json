@@ -1,0 +1,117 @@
+{
+ "record_id": "STRAIN_BB12",
+ "decision": "closed_no_credit: The reviewed research does not establish a qualifying benefit for this product's assessed use. Single-owner ruling: BB-12 infant-colic credit lives in the strain registry (STRAIN_LACTIS_BB12), not this backed record.",
+ "summary": "Dr. Pham's fifth ruling makes the strain registry the one scoring owner. This backed record moves to the reference path with the verified 31797399 infant-colic trial recorded as research only. The September 2026 RCT 42775119 (78 completers) was checked: its product is a Bifidobacterium lactis plus FOS drop with no strain deposit or registration, so it is not an exact-strain replication and adds no points.",
+ "record_updates": {
+  "study_type": "reference",
+  "evidence_level": "reference",
+  "notes": "BB-12 has multiple human strain-specific trials with strongest consistency in selected GI and immune outcomes; effects vary by population and protocol. 2026-10-28: per Dr. Pham's fifth ruling, the clinical-strain registry (STRAIN_LACTIS_BB12) is the single scoring owner for BB-12; this backed record is research-only."
+ },
+ "study_contexts": [
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "strain_bb12_31797399_registry_owned",
+   "source_pmids": [
+    "31797399"
+   ],
+   "components": [
+    "STRAIN_BB12"
+   ],
+   "identity_scope": "branded_material",
+   "identity": {
+    "branded_material": "BB-12 (Bifidobacterium animalis subsp. lactis)",
+    "standardization": "Deposit DSM 15954; Bifidolactis Infant drops (Sofar SpA)"
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "direct_rct",
+   "component_registration_status": "fully_registered",
+   "condition": "infant_colic",
+   "purpose": "treatment",
+   "review_status": "clinician_approved",
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability"
+   },
+   "scoring_eligible": false,
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "trial_family": "strain_bb12_31797399_registry_owned",
+   "population": {
+    "age_group": "infant",
+    "description": "80 exclusively breastfed infants aged <=7 weeks with Rome III infant colic (40 per group)."
+   },
+   "study_design": "Randomized, double-blind, placebo-controlled trial; parental reassurance in both arms.",
+   "outcomes": [
+    {
+     "name": "Primary: >=50% reduction in daily crying at 28 days, 80.0% vs 32.5% (ITT), P<0.0001",
+     "hierarchy": "primary",
+     "kind": "patient_important",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    }
+   ],
+   "limitations": [
+    "Research-only in this backed record: Dr. Pham's fifth ruling (2026-10-28) approves one scoring owner, the clinical-strain registry entry STRAIN_LACTIS_BB12 (scripts/data/clinically_relevant_strains.json), which already credits infant colic for this trial and 34550055. No points are awarded from this record.",
+    "Signature bookkeeping: the registry colic contexts keep their historical 2026-09-22 note 'not a clinician sign-off'; Dr. Pham's 2026-10-28 rulings now cover their scope.",
+    "Inventory finding, 42775119 (Adv Biomed Res 2026; full text PMC13597045): 'BBcare' drops (Zist Takhmir, Iran) described as Bifidobacterium lactis at >=1x10^9 CFU per drop plus fructooligosaccharides, 5 drops/day for 6 weeks; 40 vs 38 completers; no strain deposit number, no trial registration and no designated primary endpoint; a synbiotic product, so it is not an exact-strain replication and adds no points.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ],
+   "dose": {
+    "measurement_type": "viable_count",
+    "unit": "CFU",
+    "values": [
+     1000000000.0
+    ],
+    "dose_status": "verified",
+    "dose_basis": "nominal_assigned_arm",
+    "duration_basis": "fixed_protocol",
+    "duration_days": 28,
+    "administration_frequency": "Six drops once daily",
+    "dosage_forms": [
+     "oral drops"
+    ],
+    "co_therapies": [
+     "Parental reassurance and education"
+    ],
+    "source_provenance": {
+     "pmid": "31797399",
+     "location": "Methods: eligibility (Rome III, exclusively breastfed, <=7 weeks), intervention (BB-12 DSM 15954, 1x10^9 CFU/day, six drops once daily, 28 days), primary outcome; Results Figure 2, Table 1",
+     "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6973258/"
+    },
+    "duration_as_printed": {
+     "value": 28,
+     "unit": "days"
+    },
+    "reported_regimen": "1x10^9 CFU/day for 28 days",
+    "normalization": {
+     "basis": "Nominal labelled viable count."
+    }
+   }
+  }
+ ],
+ "source_receipts": [
+  {
+   "pmid": "31797399",
+   "title_fetched": "The therapeutic efficacy of Bifidobacterium animalis subsp. lactis BB-12® in infant colic: A randomised, double blind, placebo-controlled trial.",
+   "url": "https://www.ncbi.nlm.nih.gov/research/bionlp/RESTful/pmcoa.cgi/BioC_json/31797399/unicode",
+   "full_text": true,
+   "sections_used": "Methods: eligibility (Rome III, exclusively breastfed, <=7 weeks), intervention (BB-12 DSM 15954, 1x10^9 CFU/day, six drops once daily, 28 days), primary outcome; Results Figure 2, Table 1"
+  },
+  {
+   "pmid": "32059116",
+   "title_fetched": "Health benefits of Lactobacillus rhamnosus GG and Bifidobacterium animalis subspecies lactis BB-12 in children.",
+   "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=32059116&retmode=xml",
+   "full_text": false,
+   "sections_used": "PubMed abstract"
+  },
+  {
+   "pmid": "42775119",
+   "title_fetched": "The Efficacy of the Administration of Bifidobacterium lactis for Treatment of Infantile Colic: A Double-Blind, Randomized, Placebo-Controlled Clinical Trial.",
+   "url": "https://www.ncbi.nlm.nih.gov/research/bionlp/RESTful/pmcoa.cgi/BioC_json/42775119/unicode",
+   "full_text": true,
+   "sections_used": "Full text PMC13597045: Methods (allocation, BBcare product composition, ethics), Results, Conflicts; inventory only"
+  }
+ ]
+}

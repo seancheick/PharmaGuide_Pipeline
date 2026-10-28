@@ -256,8 +256,11 @@ class TestProductLevelCompanionComposition:
             "mapped": True,
             "category": "probiotic",
         }
+        # A synthetic record keeps this a test of disposition preservation: the
+        # real INGR_VITAMIN_C credit is scoped to cold severity (2026-10-28) and
+        # no longer reaches a claim-free vitamin C row.
         match_c = _match(
-            id="INGR_VITAMIN_C",
+            id="SYNTHETIC_TIER1_VITAMIN_C_RECORD",
             canonical_ids=["vitamin_c"],
             score_contribution="tier_1",
             effect_direction="positive_strong",

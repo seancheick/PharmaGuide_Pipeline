@@ -1,0 +1,261 @@
+{
+ "record_id": "PRECLIN_BOSWELLIA",
+ "decision": "closed_credit",
+ "summary": "Full text of the Boswellin Super trial (105 knee-OA adults, 300 or 600 mg/day, 90 days) shows primary WOMAC total better than placebo at days 60 and 90 (p<0.0001); it is maker-sponsored and gets the record's one eligible context. The 2020 meta-analysis pools mostly combination products and active comparators, so it gets no credit; the Aflapin trial is abstract-only. The existing applicability source list is narrowed to 39092235; its outcome and form constraints stay.",
+ "record_updates": {
+  "applicability": {
+   "scope": "ingredient",
+   "require_source_label_form": true,
+   "required_form_terms": [
+    "boswellia serrata resin extract",
+    "boswellia serrata gum resin extract",
+    "boswellia serrata extract",
+    "boswellia extract",
+    "gum extract",
+    "standardized extract",
+    "aflapin",
+    "apresflex",
+    "apres flex",
+    "boswellin",
+    "5 loxin",
+    "casperome",
+    "frankincense phytosome"
+   ],
+   "excluded_form_terms": [
+    "essential oil",
+    "resin powder",
+    "leaf",
+    "leaves"
+   ],
+   "supported_outcomes": [
+    "osteoarthritis_pain_stiffness_function"
+   ],
+   "studied_population": "Adults with newly diagnosed mild-to-moderate degenerative knee OA given Boswellin Super 300 or 600 mg/day for 90 days (PMID 39092235); named standardized-extract evidence does not establish equivalence to every generic resin extract.",
+   "source_pmids": [
+    "39092235"
+   ],
+   "reviewed_at": "2026-10-28"
+  }
+ },
+ "study_contexts": [
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "preclin_boswellia_39092235_draft",
+   "source_pmids": [
+    "39092235"
+   ],
+   "components": [
+    "PRECLIN_BOSWELLIA"
+   ],
+   "identity_scope": "branded_material",
+   "identity": {
+    "branded_material": "Boswellin Super",
+    "manufacturer": "Sami-Sabinsa",
+    "standardization": ">=30%AKBBA, 50–55%beta-boswellic acids"
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "direct_rct",
+   "component_registration_status": "fully_registered",
+   "condition": "knee_osteoarthritis",
+   "purpose": "treatment",
+   "population": {
+    "age_group": "adult",
+    "description": "105 newly diagnosed adults with degenerative hypertrophic knee OA (Kellgren-Lawrence below grade III) randomized 35:35:35 at two Indian sites; 98 completed and were analysed."
+   },
+   "study_design": "Double-blind, randomized, three-arm, parallel-group, two-centre placebo-controlled trial (CTRI/2022/11/047397), 90 days; completers analysis with two-way ANOVA and Tukey post hoc comparisons.",
+   "trial_family": "39092235",
+   "review_status": "clinician_approved",
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "scoring_eligible": true,
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "mg",
+    "values": [
+     300,
+     600
+    ],
+    "dose_status": "verified",
+    "dose_basis": "nominal_assigned_arm",
+    "duration_basis": "fixed_protocol",
+    "duration_days": 90,
+    "administration_frequency": "One 150 mg or 300 mg tablet twice daily after breakfast and dinner.",
+    "dosage_forms": [
+     "oral tablet"
+    ],
+    "reported_regimen": "[300, 600] mg/day; 90 days; 150 or 300 mgtablet twice daily after breakfast and dinner",
+    "normalization": {
+     "basis": "Reported study-material daily dose, not a universal threshold or equivalence to other preparation."
+    },
+    "source_provenance": {
+     "pmid": "39092235",
+     "location": "Full text (PMC11291344): Methods (test material standardization, design, sample size, dosing, endpoints, statistics), Results Tables 2-3 between-group ANOVA and WOMAC paragraph, Conflict of interest.",
+     "source_url": "https://pubmed.ncbi.nlm.nih.gov/39092235/"
+    },
+    "co_therapies": [
+     "Celecoxib 200 mg/day permitted as rescue medication."
+    ]
+   },
+   "outcomes": [
+    {
+     "name": "Primary: modified WOMAC total and VAS change to days 30/60/90. WOMAC total differed from placebo at days 60 and 90 for both doses (p<0.0001); day-90 WOMAC total placebo 31.3, BSE-150 12.1, BSE-300 10.4. VAS separated from placebo by day 60-90 (e.g., day 90 female and male subsets p<=0.008).",
+     "hierarchy": "primary",
+     "kind": "patient_important",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "Secondary WOMAC subscales, Lequesne, EQ-5D and 6-minute walk improved; hs-CRP fell with BSE-300 (between-group p=0.018); day-5 changes are within-group onset findings only.",
+     "hierarchy": "secondary",
+     "kind": "patient_important",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    }
+   ],
+   "limitations": [
+    "Day-5 'onset' claims are within-group changes, not the primary comparative endpoint; small regional industry trial analysed in completers.",
+    "Funded/conducted with Sami-Sabinsa: five authors employed by Sami-Sabinsa Group or Sabinsa Corporation, the Boswellin Super maker.",
+    "Boswellin Super is standardized to >=30% AKBBA with 50-55% total beta-boswellic acids; results do not establish equivalence for unstandardized resin extracts or other branded extracts.",
+    "Returned A128 'source-content hold' is resolved for this trial by full-text verification within knee-OA pain, stiffness and function.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ],
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability"
+   }
+  },
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "preclin_boswellia_32680575_oa_meta_mixed_products",
+   "source_pmids": [
+    "32680575"
+   ],
+   "components": [
+    "PRECLIN_BOSWELLIA"
+   ],
+   "identity_scope": "ingredient_general",
+   "identity": {
+    "preparation": "Seven trials: Aflapin or 5-Loxin alone (3 trials) and Boswellia combinations with curcuminoids, Elaeagnus or MSM (4 trials)."
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "meta_analysis",
+   "component_registration_status": "fully_registered",
+   "condition": "osteoarthritis",
+   "purpose": "treatment",
+   "population": {
+    "age_group": "adult",
+    "description": "7 RCTs, 545 patients with knee osteoarthritis in India, Armenia, Iran and Italy; mean ages about 52-63."
+   },
+   "study_design": "Systematic review and meta-analysis of RCTs of Boswellia or its extract versus placebo or western medicine; primary outcomes VAS, WOMAC pain, stiffness, function and Lequesne index.",
+   "trial_family": "32680575",
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "scoring_eligible": false,
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "mg",
+    "values": [],
+    "dose_status": "verified",
+    "dose_basis": "not_applicable",
+    "duration_basis": "not_recorded",
+    "duration_days": null,
+    "administration_frequency": "Trial-specific daily regimens for 4-12 weeks (study characteristics tables).",
+    "dosage_forms": [
+     "oral supplementation (trial-specific preparations)"
+    ],
+    "reported_regimen": "Aflapin 100 mg, 5-Loxin 100 or 250 mg, boswellic acid 150 mg + curcuminoids 350 mg, Boswellia + Elaeagnus, boswellic acid 7.5-15 mg + MSM 5,000-10,000 mg (study characteristics table).",
+    "co_therapies": [
+     "Comparators were placebo in 5 trials, ibuprofen (Karimifar 2017) and glucosamine sulfate 3,000 mg (Notarnicola 2016)."
+    ],
+    "source_provenance": {
+     "pmid": "32680575",
+     "location": "Full text (PMC7368679): Methods, Results (study characteristics tables, risk of bias), pooled outcome tables, references 26/24/33-37.",
+     "source_url": "https://pubmed.ncbi.nlm.nih.gov/32680575/"
+    }
+   },
+   "outcomes": [
+    {
+     "name": "VAS WMD -8.33 (95% CI -11.19 to -5.46); WOMAC pain -14.22 (-22.34 to -6.09); stiffness -10.04 (-15.86 to -4.22); function -10.75 (-15.06 to -6.43); Lequesne -2.27 (-3.08 to -1.45); very high heterogeneity in time-point analyses.",
+     "hierarchy": "primary",
+     "kind": "patient_important",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    }
+   ],
+   "included_study_pmids": [
+    "22022214",
+    "18667054",
+    "21060724",
+    "29316908",
+    "28349271",
+    "26684635",
+    "21986780"
+   ],
+   "limitations": [
+    "No credit: four of seven pooled trials tested Boswellia combined with curcuminoids, Elaeagnus or high-dose MSM, and two used active comparators, so the pooled effect cannot be attributed to Boswellia alone.",
+    "Statisticians were unblinded in the three Aflapin/5-Loxin trials (rated high risk of bias).",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ],
+   "review_status": "clinician_approved",
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability"
+   }
+  },
+  {
+   "context_id": "preclin_boswellia_35512759_aflapin_abstract_only",
+   "components": [
+    "PRECLIN_BOSWELLIA"
+   ],
+   "source_pmids": [
+    "35512759"
+   ],
+   "review_status": "rejected_source",
+   "scoring_eligible": false,
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability",
+    "notes": "No credit transferred: full text not open access, so methods, primary endpoint and between-group statistics could not be verified."
+   },
+   "dose": {
+    "source_provenance": {
+     "pmid": "35512759",
+     "location": "PubMed abstract (J Am Nutr Assoc 2023; not open access).",
+     "source_url": "https://pubmed.ncbi.nlm.nih.gov/35512759/"
+    }
+   },
+   "limitations": [
+    "Abstract: 70 knee-OA subjects randomized to Aflapin 100 mg or placebo for 30 days; 67 completed; VAS, LFI and WOMAC fell 41-66% in the Aflapin group. Reported as within-group percentages; between-group results not verifiable from the abstract. Not a finding that the source is invalid.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ]
+  }
+ ],
+ "source_receipts": [
+  {
+   "pmid": "39092235",
+   "title_fetched": "A standardized Boswellia serrata extract shows improvements in knee osteoarthritis within five days-a double-blind, randomized, three-arm, parallel-group, multi-center, placebo-controlled trial.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/39092235/",
+   "full_text": true,
+   "sections_used": "Methods, Results, Tables 2-3, COI (BioC PMC11291344)"
+  },
+  {
+   "pmid": "32680575",
+   "title_fetched": "Effectiveness of Boswellia and Boswellia extract for osteoarthritis patients: a systematic review and meta-analysis.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/32680575/",
+   "full_text": true,
+   "sections_used": "Methods, Results, Tables 2-3 and outcome tables, references (BioC PMC7368679)"
+  },
+  {
+   "pmid": "35512759",
+   "title_fetched": "Efficacy and Safety of Aflapin®, a Novel Boswellia Serrata Extract, in the Treatment of Osteoarthritis of the Knee: A Short-Term 30-Day Randomized, Double-Blind, Placebo-Controlled Clinical Study.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/35512759/",
+   "full_text": false,
+   "sections_used": "PubMed abstract"
+  }
+ ]
+}

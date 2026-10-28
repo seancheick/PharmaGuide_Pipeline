@@ -1,0 +1,153 @@
+{
+ "record_id": "INGR_CRANBERRY",
+ "decision": "closed_credit",
+ "summary": "Dr. Pham's 2026-10-28 ruling resolves the record-level hold and grants conditional moderate credit for preventing recurrent UTIs in women with prior UTIs. The existing signed A061 context (Dr. Pham, 2026-10-26, unchanged) carries that credit: the Cochrane 2023 abstract fetched this session confirms women with recurrent UTI, 8 studies, 1555 participants, RR 0.74 (0.55-0.99), moderate certainty. The existing applicability (cranberry fruit forms; seed/leaf/oil excluded; nonpregnant adult women with recurrent UTI) is unchanged. The record-level scoring_eligible=false is dropped (set to null in record_updates; the integrator should delete the key).",
+ "record_updates": {
+  "scoring_eligible": null,
+  "notes": "Family-level evidence concerns cranberry fruit products for prevention of recurrent UTIs in selected populations, not treatment of an existing infection or general immune support. Fruit juice, tablets and powders were studied; equivalence of preparations and PAC doses is uncertain, so this entry carries no dose policy and no universal total-mass threshold is justified. Total concentrate mass is not a PAC dose or a verified clinical minimum. Enrollment 8857 belongs only to the November 2023 Cochrane update (which supersedes the April 2023 version); participants from the overlapping 2021 review are not summed. No efficacy is inferred for cranberry seed oil or leaf extracts. Selectedaffirmativesource37947276isrepresentedbytheboundedrecurrent-UTIwomenreviewcontext;34473789remainsnoncontributinghistoryratherthanasecondindependentreplication. ExactPacranidentityisverifiedbyEFSA2025e9319;thatassessmentfoundinsufficientcausalsubstantiationandmethod/reportlimitations,whichmustnotberecastasprovenbrandbenefitorfailedproductquality. No genericdoseminimumorautomaticretailpreparationequivalencecreated. The signed limited recurrent-UTI prevention finding is retained. The generic consumer now enforces the signed condition, explicit population conflicts and source-form boundaries. The record-level hold still retains the independent exact Pacran source-acceptance/preparation question; this is not a rejection of cranberry efficacy, treatment advice or an added penalty. EFSA2025 PMID40182009 does not establish the proposed exact Pacran causal claim despite confirming the named material. No universal PAC or product-mass dose follows. Dr. Pham's signed ruling of 2026-10-28 grants conditional moderate credit for recurrent-UTI prevention in women with prior UTIs only (no treatment, no other populations) and resolves the record-level scoring hold; credit stays inside the existing applicability (cranberry fruit forms). Fourth ruling set (2026-10-28): credit only where the product matches the studied cranberry source/preparation (existing required cranberry fruit forms), not every retail formulation; FDA qualified-health-claim criteria are not generalized to products.",
+  "applicability": {
+   "scope": "ingredient",
+   "require_source_label_form": true,
+   "required_form_terms": [
+    "cranberry",
+    "vaccinium macrocarpon"
+   ],
+   "excluded_form_terms": [
+    "seed",
+    "leaf",
+    "leaves",
+    "root",
+    "essential oil"
+   ],
+   "supported_outcomes": [
+    "recurrent_uti_prevention"
+   ],
+   "studied_population": "Adult nonpregnant women with a history of recurrent urinary tract infections, usually at least two in the previous12months. This is not active-infection treatment or evidence for pregnancy, institutionalized elderly people or incomplete bladder emptying.",
+   "source_pmids": [
+    "37947276",
+    "34473789"
+   ]
+  }
+ },
+ "study_contexts": [
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "cranberry_fruit_recurrent_uti_prevention_37947276",
+   "source_pmids": [
+    "37947276"
+   ],
+   "components": [
+    "INGR_CRANBERRY"
+   ],
+   "identity_scope": "ingredient_general",
+   "identity": {
+    "botanical_species": "Vaccinium macrocarpon",
+    "standardization": "Cranberryfruitjuice,tabletsorpowderinheterogeneousstudies;noallproductorPACequivalence."
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "systematic_review",
+   "component_registration_status": "fully_registered",
+   "condition": "recurrent_uti_prevention",
+   "purpose": "prevention",
+   "review_status": "clinician_approved",
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-26",
+    "scope": "identity_dose_outcome_applicability"
+   },
+   "scoring_eligible": true,
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "trial_family": "williams_2023_cranberry_review",
+   "population": {
+    "age_group": "adult",
+    "description": "Adult nonpregnant women with a history of recurrent urinary tract infections, usually at least two in the previous12months. This is not active-infection treatment or evidence for pregnancy, institutionalized elderly people or incomplete bladder emptying."
+   },
+   "study_design": "Cochrane50RCT8857total;thiscontextrestrictedtorecurrentUTIwomen8studies1555forprimarysymptomaticcultureverifiedUTI.",
+   "included_study_pmids": [
+    "21148516",
+    "11431298",
+    "27251185",
+    "22305026",
+    "12121581",
+    "22961092",
+    "26268913"
+   ],
+   "outcomes": [
+    {
+     "name": "SymptomaticcultureverifiedUTIinwomenwithrecurrentUTI:8studies1555participantsRR0.74,95%CI0.55–0.99,I²54%;moderatecertainty",
+     "hierarchy": "primary",
+     "kind": "patient_important",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "Juice/syrupsubgroup6studies1322:RR0.84,95%CI0.63–1.10;tablets/powder3studies333RR0.45,95%CI0.28–0.72. Betweenpreparationcomparisonsuncertain,notinterchangeabilityproof.",
+     "hierarchy": "secondary",
+     "kind": "patient_important",
+     "direction": "mixed",
+     "outcome_role": "direct_between_group_effect"
+    }
+   ],
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "mg",
+    "values": [],
+    "dose_status": "verified",
+    "dose_basis": "not_applicable",
+    "duration_basis": "not_recorded",
+    "duration_days": null,
+    "administration_frequency": "Study-specificdailyjuice/tablet/powderschedulesforatleastonemonth;nopooledfrequencyorPACminimum.",
+    "dosage_forms": [
+     "cranberryfruitjuice",
+     "oralcranberrytabletorpowder"
+    ],
+    "co_therapies": [
+     "Smallamountsofothernon-antibioticcompoundscouldbeincluded;e.g.lingonberryinKontiokari. Reviewdoesnotisolateeverycranberrycomponent."
+    ],
+    "reported_regimen": "Studiedregimensvary:Barbosa240mLtwicedaily;Stothers250mLjuicethreetimesdailyorconcentratetabletstwicedaily;Vostalova2x250mgcapsulesonceafterbreakfast6months(.56%PAC);Sengupta500/1000mgPS-WCP90days;nounequivocaluniversalPACorconcentratemassthreshold.",
+    "source_provenance": {
+     "pmid": "37947276",
+     "location": "IndexedfullPMCMethods/Results/Analysis1.1.1,2.1.1,3.1.1andindividualstudycharacteristics;durablereceiptscranberry_2023_methods_web_receipt.json andcranberry_2023_results_web_receipt.json.",
+     "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10636779/"
+    }
+   },
+   "limitations": [
+    "SignedA061limitedselectedpopulationpreventionfindingpreserved;notactiveinfectiontreatment,universalurinarybenefit,orpreparation/doseequivalence.",
+    "SevenindexedprimaryreportsplusunindexedSengupta2011;trialidentitiesmappedfromResults8of11studieswith3explicitnoncontributingexclusions(Bruyere,Stothers2016,Walker). NoPMIDinventedforSengupta.",
+    "Cranberry2021reviewoverlapnotindependentreplicationoradditiveenrollment.2023source8857totalnot1555adultwomenoutcome.",
+    "Differentpopulationresultsandnullpreparationcomparisonsmustremainvisible. Noeffectforspecificpreparationcannotberepairedwithgenericclassclaim.",
+    "EFSA2025PMID40182009confirmsPacranidentityforSengupta/Vostalova,butinsufficientcausalevidencesubstantiationandposthocmodel/exclusionlimitations. Thisnewexactbrandauthorityrequiresweighingagainstoriginalsignedfamilyreview;notautomaticgradeorpolicychange.",
+    "Vostalova500mgwholefruitpowderwith.56%PACdoesnotestablish50:1concentrateoranyfresh-fruitequivalentdoseasinterchangeable;knownmarkerfactsretained.",
+    "FullcurrentreviewaccessiblethroughindexedprimarysourcecontentdespiteXML500/directbrowserchallenge;sourceaccessnotuniversalholdanymore. Clinicalrecordpositiveonlywithinlistedlimitedreviewscope;actualproductcorrespondenceindependent."
+   ]
+  }
+ ],
+ "source_receipts": [
+  {
+   "pmid": "37947276",
+   "title_fetched": "Cranberries for preventing urinary tract infections.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/37947276/",
+   "full_text": false,
+   "sections_used": "Abstract (Main results, Authors conclusions); OpenAlex lists a PMC PDF (https://pmc.ncbi.nlm.nih.gov/articles/PMC10636779/pdf/CD001321.pdf) but it returned a bot-check page, not text"
+  },
+  {
+   "pmid": "34473789",
+   "title_fetched": "Consumption of cranberry as adjuvant therapy for urinary tract infections in susceptible populations: A systematic review and meta-analysis with trial sequential analysis.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/34473789/",
+   "full_text": true,
+   "sections_used": "Abstract; overlapping 2021 review, not a context source"
+  },
+  {
+   "pmid": "40182009",
+   "title_fetched": "Pacran®, a powder obtained from cranberries, and defence against bacterial pathogens in the lower urinary tract: Evaluation of a health claim pursuant to Article 13(5) of Regulation (EC) No 1924/2006.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/40182009/",
+   "full_text": true,
+   "sections_used": "Summary; Conclusions (Pacran claim not substantiated); not a record reference"
+  }
+ ],
+ "integration_notes": [
+  "2026-10-28 integrator: condition gate kept (supported_outcomes ['recurrent_uti_prevention'] equals the context condition). Sean's decision is that a claim-free label may earn scoped condition credit, but today the population limits (e.g. men-only, pregnancy, children) are enforced only inside this gate, so ungating via data would drop those safeguards. Claim-free scoped credit waits for the shared applicability change (no claim / aligned claim / unrelated claim / population mismatch) under /pg-scoring-change."
+ ]
+}

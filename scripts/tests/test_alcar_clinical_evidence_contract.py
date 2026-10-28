@@ -43,8 +43,14 @@ def enricher() -> SupplementEnricherV3:
 def test_alcar_record_is_mixed_condition_specific_human_evidence(
     alcar_entry: dict,
 ) -> None:
-    assert alcar_entry["evidence_level"] == "ingredient-human"
-    assert alcar_entry["study_type"] == "systematic_review_meta"
+    # Dr. Pham, 2026-10-28 (fifth ruling set): a qualified product-claim zero
+    # on the reference-only path; the wording keeps the existing human research.
+    assert alcar_entry["evidence_level"] == "reference"
+    assert alcar_entry["study_type"] == "reference"
+    assert not any(
+        context.get("scoring_eligible") is True
+        for context in alcar_entry.get("study_contexts") or []
+    )
     assert alcar_entry["effect_direction"] == "mixed"
     assert alcar_entry["score_contribution"] == "tier_2"
     assert alcar_entry["health_goals_supported"] == ["Focus & Mental Clarity"]
@@ -60,6 +66,7 @@ def test_alcar_record_is_mixed_condition_specific_human_evidence(
             "effect_direction_rationale",
         )
     ).lower()
+    assert "human evidence is real" in combined
     assert "very low certainty" in combined
     assert "healthy adults" in combined
     assert "condition-specific" in combined

@@ -1,0 +1,32 @@
+{
+ "record_id": "INGR_BLACK_COHOSH",
+ "decision": "held: no open full text for any declared PMID (15565808 Cancer Invest 2004; 16039414 Maturitas 2005; 17565936 Adv Ther 2007), so methods cannot be verified; the abstracts also show none is likely to qualify (uncontrolled pilot; primary ITT analysis not superior to placebo; fluoxetine comparator without placebo), and Dr. Pham's A048 efficacy hold stays",
+ "summary": "Abstracts only. 15565808 is a single-arm 4-week Remifemin pilot (21 completers); 16039414 (Cr 99 extract, 122 women, 12 weeks) found no superiority over placebo in its primary ITT analysis, only in a Kupperman >=20 subgroup; 17565936 compared black cohosh with fluoxetine (no placebo, 33% dropout per arm). No context is approved. The record's notes still asserted a 'consistently favorable' safety profile, which Dr. Pham rejected; record_updates replaces that sentence.",
+ "record_updates": {
+  "notes": "Black cohosh evidence is mixed. Several trials show meaningful hot flash reduction (PMID: 15565808, 16039414, 17565936), but best-controlled RCTs (PMID: 19609225) found no significant benefit vs placebo at 12 months. The Kupperman Index reduction was significant only in moderate-to-severe subgroup. Dr. Pham's returned A048 decision rejects describing the safety profile as consistently favorable; safety is assessed by its own owner. Typical dose is 40mg/day standardized extract."
+ },
+ "study_contexts": [],
+ "source_receipts": [
+  {
+   "pmid": "15565808",
+   "title_fetched": "Pilot evaluation of black cohosh for the treatment of hot flashes in women.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/15565808/",
+   "full_text": false,
+   "sections_used": "PubMed abstract"
+  },
+  {
+   "pmid": "16039414",
+   "title_fetched": "Cimicifuga racemosa dried ethanolic extract in menopausal disorders: a double-blind placebo-controlled clinical trial.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/16039414/",
+   "full_text": false,
+   "sections_used": "PubMed abstract"
+  },
+  {
+   "pmid": "17565936",
+   "title_fetched": "Black cohosh and fluoxetine in the treatment of postmenopausal symptoms: a prospective, randomized trial.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/17565936/",
+   "full_text": false,
+   "sections_used": "PubMed abstract"
+  }
+ ]
+}

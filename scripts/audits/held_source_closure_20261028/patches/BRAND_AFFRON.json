@@ -1,0 +1,30 @@
+{
+ "record_id": "BRAND_AFFRON",
+ "decision": "held: source inaccessible. Dr. Pham's returned decision requires verified methods for 28735826, 29510352 and 40414301, and none has open full text (no PMC or Europe PMC copy). The abstracts lack dosage forms for the adult trials and full outcome details, so no context can be fully verified.",
+ "summary": "The abstracts report: 28735826, 128 adults with self-reported low mood, affron 28 mg/day (but not 22 mg/day) improved the primary POMS total mood disturbance over 4 weeks (p<0.001); 29510352, 80 youths aged 12-16 (68 completed), 14 mg twice daily tablets for 8 weeks, youth-reported improvement only inconsistently corroborated by parents; 40414301, 202 adults with subclinical depressive symptoms, 28 mg/day for 12 weeks, primary DASS-21 depression improved (beta -2.92), secondary outcomes null, sleep benefit only exploratory. Blanket mood/sleep approval stays rejected; the record stays held until the methods are retrieved.",
+ "record_updates": {},
+ "study_contexts": [],
+ "source_receipts": [
+  {
+   "pmid": "28735826",
+   "title_fetched": "affron® a novel saffron extract (Crocus sativus L.) improves mood in healthy adults over 4 weeks in a double-blind, parallel, randomized, placebo-controlled clinical trial.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/28735826/",
+   "full_text": false,
+   "sections_used": "Abstract only; subscription"
+  },
+  {
+   "pmid": "29510352",
+   "title_fetched": "affron®, a standardised extract from saffron (Crocus sativus L.) for the treatment of youth anxiety and depressive symptoms: A randomised, double-blind, placebo-controlled study.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/29510352/",
+   "full_text": false,
+   "sections_used": "Abstract only; subscription"
+  },
+  {
+   "pmid": "40414301",
+   "title_fetched": "An Examination into the Effects of a Saffron Extract (Affron) on Mood and General Wellbeing in Adults Experiencing Low Mood: A Randomized, Double-Blind, Placebo-Controlled Trial.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/40414301/",
+   "full_text": false,
+   "sections_used": "Abstract only; subscription"
+  }
+ ]
+}

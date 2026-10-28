@@ -1,0 +1,30 @@
+{
+ "record_id": "INGR_CHLORELLA",
+ "decision": "held: no open full text for any declared PMID (29037431 Clin Nutr 2018; 35331862 Complement Ther Med 2022; 23234816 Hepatogastroenterology 2012), so meta-analysis doses, dosage forms and included trials cannot be verified; record claim is Healthy Aging/Longevity, which none of the abstracts measures directly",
+ "summary": "Abstracts only. The two meta-analyses report modest TC/LDL and SBP reductions (29037431: 19 RCTs, 797 subjects; 35331862: 10 RCTs, 539 adults, only 2 trials verified supplement content). The NAFLD trial (23234816) was open-label and confounded: the chlorella arm got 1200 mg/day extract with metformin 750 mg/day while controls got metformin 1250 mg/day. Without full text no complete context can be verified, so Dr. Pham's A056 source-content hold stays.",
+ "record_updates": {},
+ "study_contexts": [],
+ "source_receipts": [
+  {
+   "pmid": "29037431",
+   "title_fetched": "Effect of Chlorella supplementation on cardiovascular risk factors: A meta-analysis of randomized controlled trials.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/29037431/",
+   "full_text": false,
+   "sections_used": "PubMed abstract"
+  },
+  {
+   "pmid": "23234816",
+   "title_fetched": "Investigation of the effects of Chlorella vulgaris supplementation in patients with non-alcoholic fatty liver disease: a randomized clinical trial.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/23234816/",
+   "full_text": false,
+   "sections_used": "PubMed abstract"
+  },
+  {
+   "pmid": "35331862",
+   "title_fetched": "Effect of supplementation with Chlorella vulgaris on lipid profile in adults: A systematic review and dose-response meta-analysis of randomized controlled trials.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/35331862/",
+   "full_text": false,
+   "sections_used": "PubMed abstract"
+  }
+ ]
+}

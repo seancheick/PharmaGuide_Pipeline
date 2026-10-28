@@ -1,0 +1,337 @@
+{
+ "record_id": "BRAND_THERACURMIN",
+ "decision": "held: record-level scoring_eligible=false hold; Dr. Pham's 2026-10-28 ruling keeps narrow holds and names the remaining acceptance. Remaining item: context theracurmin_memory_29246725; source PMID 29246725 (Small et al., Am J Geriatr Psychiatry 2018); preparation Theracurmin (Theravalues Corporation) surface-controlled water-dispersible curcumin, 90 mg curcumin twice daily (180 mg/day active curcumin, not formulation mass) for 18 months; population non-demented adults aged 51-84 (40 analysed: 21 curcumin, 19 placebo); outcomes primary verbal (SRT) and visual (BVMT-R) memory, with between-group SRT consistent long-term retrieval p=0.05 and secondary attention (Trail Making A) p=0.04, plus an exploratory 15-vs-15 FDDNP-PET substudy; proposed conclusion: at most limited, preparation-specific memory support in non-demented adults, no credit until Dr. Pham accepts this exact context and exact saved-label correspondence (products 201110, 205153, 212953, 259371) is confirmed; limitations: small sample, no multiplicity adjustment, nominal p-values, exploratory PET, no dementia-treatment or absorption-to-benefit inference. The full text has an OpenAlex hybrid OA listing (http://www.ajgponline.org/article/S1064748117305110/pdf) but it returned a bot-check page and was not bypassed, so the context is not re-approved",
+ "summary": "Abstracts/full texts confirm: 25308211 knee OA (overall VAS null, p=.10; restricted analysis positive), 35494290 post-mosaicplasty (between-group clinical symptoms null), 29246725 memory (40 adults, 90 mg curcumin twice daily for 18 months; between-group SRT consistent long-term retrieval p=0.05 and attention p=0.04, with exploratory PET). The only change is fixing the PET outcome's unresolved hierarchy to secondary (exploratory). The record-level hold and the rejection of absorption-only efficacy remain.",
+ "record_updates": {},
+ "study_contexts": [
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "theracurmin_knee_oa_25308211",
+   "source_pmids": [
+    "25308211"
+   ],
+   "components": [
+    "BRAND_THERACURMIN"
+   ],
+   "identity_scope": "branded_material",
+   "identity": {
+    "branded_material": "Theracurmin",
+    "manufacturer": "Theravalues Corporation, Tokyo, Japan",
+    "standardization": "Surface-controlled water-dispersible curcumin preparation; the reported 180 mg/day is active curcumin, not total formulation mass."
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "direct_rct",
+   "component_registration_status": "fully_registered",
+   "condition": "knee_osteoarthritis",
+   "purpose": "treatment",
+   "population": {
+    "age_group": "adult",
+    "description": "Adults over 40 with gradeII–III knee osteoarthritis;50 enrolled,41 analyzed(18 active/23 placebo)."
+   },
+   "study_design": "Randomized double-blind placebo-controlled pilot trial.",
+   "trial_family": "theracurmin_knee_oa_25308211",
+   "review_status": "clinician_approved",
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "scoring_eligible": false,
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "mg",
+    "values": [
+     180
+    ],
+    "dose_status": "verified",
+    "dose_basis": "nominal_assigned_arm",
+    "duration_basis": "fixed_protocol",
+    "duration_days": 56,
+    "duration_as_printed": {
+     "value": 8,
+     "unit": "weeks"
+    },
+    "administration_frequency": "twice daily",
+    "dosage_forms": [
+     "oral capsule"
+    ],
+    "co_therapies": [
+     "Celecoxib and pain-relief patches permitted."
+    ],
+    "reported_regimen": "180 mg active curcumin/day in two administrations; 8 weeks",
+    "normalization": {
+     "basis": "Reported active curcumin daily exposure, not the total Theracurmin formulation or capsule mass; no preparation-equivalence multiplier or effective-dose threshold is inferred."
+    },
+    "source_provenance": {
+     "pmid": "25308211",
+     "location": "Original study intervention and reported outcomes; signed Batch4 source disposition and later Batch11 memory-paper appraisal where specified.; complete retained Methods/outcome/statistics text inspected for outcome hierarchy, none designated",
+     "source_url": "https://pubmed.ncbi.nlm.nih.gov/25308211/"
+    }
+   },
+   "limitations": [
+    "The signed return retains exact saved-label correspondence for 201110,205153,212953,259371; this context cannot authorize generic curcumin or a formulation-mass equivalence.",
+    "Source-specific acceptance does not establish a new efficacy grade, minimum effective dose, optimum or safety ceiling.",
+    "One-sided tests, small pilot, attrition and a restricted analysis whose prospective prespecification is not established; the favorable subset cannot replace the overall null.",
+    "Six capsules/day delivered 180 mg active curcumin, not 180 mg total formulation. Theravalues funded the study and company employees were authors; reported symptoms led to two active-arm discontinuations.",
+    "Full retained primary Methods and outcome/statistical descriptions were inspected: the paper does not designate a primary-versus-secondary outcome hierarchy. not_reported records this source-reporting limitation; it supplies no primary-outcome credit and does not establish prospective prespecification of a restricted analysis. Existing source eligibility, negative findings, product-correspondence holds and all other review limits remain unchanged."
+   ],
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-26",
+    "scope": "identity_dose_outcome_applicability"
+   },
+   "outcomes": [
+    {
+     "name": "Overall analyzed VAS knee-pain change, p=.10",
+     "hierarchy": "not_reported",
+     "kind": "patient_important",
+     "direction": "null",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "Restricted baseline-pain VAS analysis, p=.023",
+     "hierarchy": "post_hoc",
+     "kind": "patient_important",
+     "direction": "positive",
+     "outcome_role": "post_hoc_subgroup"
+    },
+    {
+     "name": "JKOM and JOA knee-function outcomes",
+     "hierarchy": "not_reported",
+     "kind": "patient_important",
+     "direction": "null",
+     "outcome_role": "direct_between_group_effect"
+    }
+   ]
+  },
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "theracurmin_memory_29246725",
+   "source_pmids": [
+    "29246725"
+   ],
+   "components": [
+    "BRAND_THERACURMIN"
+   ],
+   "identity_scope": "branded_material",
+   "identity": {
+    "branded_material": "Theracurmin",
+    "manufacturer": "Theravalues Corporation, Tokyo, Japan",
+    "standardization": "Surface-controlled water-dispersible curcumin preparation; the reported 180 mg/day is active curcumin, not total formulation mass."
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "direct_rct",
+   "component_registration_status": "fully_registered",
+   "condition": "age_associated_memory_complaints",
+   "purpose": "treatment",
+   "population": {
+    "age_group": "adult",
+    "description": "Selected non-demented middle-aged/older adults concerned about memory;46 randomized,40included in neuropsychological analyses,37 completed and 30 paired PET participants."
+   },
+   "study_design": "Randomized double-blind placebo-controlled 18-month pilot study.",
+   "trial_family": "theracurmin_memory_29246725",
+   "review_status": "source_verified_pending_clinical_review",
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "scoring_eligible": false,
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "mg",
+    "values": [
+     180
+    ],
+    "dose_status": "verified",
+    "dose_basis": "nominal_assigned_arm",
+    "duration_basis": "fixed_protocol",
+    "duration_days": null,
+    "duration_as_printed": {
+     "value": 18,
+     "unit": "months"
+    },
+    "administration_frequency": "twice daily",
+    "dosage_forms": [
+     "oral capsule"
+    ],
+    "co_therapies": [
+     "No transfer to an unselected population or arbitrary concomitant-treatment regimen is established."
+    ],
+    "reported_regimen": "180 mg active curcumin/day in two administrations; 18 months",
+    "normalization": {
+     "basis": "Reported active curcumin daily exposure, not the total Theracurmin formulation or capsule mass; no preparation-equivalence multiplier or effective-dose threshold is inferred."
+    },
+    "source_provenance": {
+     "pmid": "29246725",
+     "location": "Original study intervention and reported outcomes; signed Batch4 source disposition and later Batch11 memory-paper appraisal where specified.",
+     "source_url": "https://pubmed.ncbi.nlm.nih.gov/29246725/"
+    }
+   },
+   "limitations": [
+    "The signed return retains exact saved-label correspondence for 201110,205153,212953,259371; this context cannot authorize generic curcumin or a formulation-mass equivalence.",
+    "Source-specific acceptance does not establish a new efficacy grade, minimum effective dose, optimum or safety ceiling.",
+    "Final affirmative acceptance remains held as explicitly returned. Main-paper/current-registry/protocol access is resolved in Batch 11; journal supplement, original registration/amendment history and exact commercial-product correspondence remain open.",
+    "No multiplicity adjustment, selected small sample and exploratory PET. Do not substitute within-active changes for between-group effects or claim immediate focus, dementia prevention or proven amyloid/tau clearance.",
+    "Eighteen calendar months are preserved as printed; no 540-day conversion is invented. The primary abstract confirms 90 mg active curcumin twice daily; original-paper appraisal distinguishes 46 randomized from 40 analyzed.",
+    "The current registry and paper differ on some dates/adverse-event counts; retain the discrepancies. A renewed official-repository PDF request returned an empty response, not a new completed full-text retrieval.",
+    "PET outcome hierarchy set to secondary (exploratory 15 vs 15 FDDNP-PET substudy per abstract: 'explored its impact'); between-group amygdala p=0.07, hypothalamus p=0.02. Abstract fetched 2026-10-28 reports 40 randomized analysed (21 curcumin, 19 placebo), 90 mg curcumin twice daily for 18 months; the full text was not retrievable in this session, so dosage form was not re-verified and the context stays pending."
+   ],
+   "outcomes": [
+    {
+     "name": "SRT consistent long-term retrieval between groups, nominal p=.05",
+     "hierarchy": "primary",
+     "kind": "patient_important",
+     "direction": "mixed",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "SRT total and BVMT-R recall/delay between groups",
+     "hierarchy": "primary",
+     "kind": "patient_important",
+     "direction": "null",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "Trail Making Test A attention, nominal p=.04",
+     "hierarchy": "secondary",
+     "kind": "patient_important",
+     "direction": "positive",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "BDI mood between groups",
+     "hierarchy": "secondary",
+     "kind": "patient_important",
+     "direction": "null",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "Exploratory FDDNP-PET regional tracer binding; amygdala between-group p=.07, hypothalamus p=.02",
+     "hierarchy": "secondary",
+     "kind": "surrogate",
+     "direction": "mixed",
+     "outcome_role": "surrogate"
+    }
+   ]
+  },
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "theracurmin_post_mosaicplasty_35494290",
+   "source_pmids": [
+    "35494290"
+   ],
+   "components": [
+    "BRAND_THERACURMIN"
+   ],
+   "identity_scope": "branded_material",
+   "identity": {
+    "branded_material": "Theracurmin",
+    "manufacturer": "Theravalues Corporation, Tokyo, Japan",
+    "standardization": "Surface-controlled water-dispersible curcumin preparation; the reported 180 mg/day is active curcumin, not total formulation mass."
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "direct_rct",
+   "component_registration_status": "fully_registered",
+   "condition": "post_mosaicplasty_knee_osteochondral_disease",
+   "purpose": "treatment",
+   "population": {
+    "age_group": "adult",
+    "description": "Adults over 20 after knee mosaicplasty;50 randomized,43 analyzed(23 active/20 placebo), often with additional surgery and rehabilitation."
+   },
+   "study_design": "Randomized double-blind placebo-controlled postoperative trial.",
+   "trial_family": "theracurmin_post_mosaicplasty_35494290",
+   "review_status": "clinician_approved",
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "scoring_eligible": false,
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "mg",
+    "values": [
+     180
+    ],
+    "dose_status": "verified",
+    "dose_basis": "nominal_assigned_arm",
+    "duration_basis": "fixed_protocol",
+    "duration_days": 364,
+    "duration_as_printed": {
+     "value": 52,
+     "unit": "weeks"
+    },
+    "administration_frequency": "twice daily",
+    "dosage_forms": [
+     "oral capsule"
+    ],
+    "co_therapies": [
+     "Mosaicplasty, sometimes additional osteotomy, and postoperative rehabilitation."
+    ],
+    "reported_regimen": "180 mg active curcumin/day in two administrations; 52 weeks",
+    "normalization": {
+     "basis": "Reported active curcumin daily exposure, not the total Theracurmin formulation or capsule mass; no preparation-equivalence multiplier or effective-dose threshold is inferred."
+    },
+    "source_provenance": {
+     "pmid": "35494290",
+     "location": "Original study intervention and reported outcomes; signed Batch4 source disposition and later Batch11 memory-paper appraisal where specified.; complete retained Methods/outcome/statistics text inspected for outcome hierarchy, none designated",
+     "source_url": "https://pubmed.ncbi.nlm.nih.gov/35494290/"
+    }
+   },
+   "limitations": [
+    "The signed return retains exact saved-label correspondence for 201110,205153,212953,259371; this context cannot authorize generic curcumin or a formulation-mass equivalence.",
+    "Source-specific acceptance does not establish a new efficacy grade, minimum effective dose, optimum or safety ceiling.",
+    "No demonstrated symptom superiority; selected mechanical findings do not establish cartilage regeneration or general OA disease modification. This is a separate surgical cohort, not follow-up of the memory trial.",
+    "Small heterogeneous surgical population, multiple measurements and one-sided tests; clear prospective primary/secondary hierarchy not established in the reviewed report.",
+    "Theravalues funded the study. Serious events occurred in both groups and were judged unrelated by the study safety committee; this is not general long-term safety proof.",
+    "Full retained primary Methods and outcome/statistical descriptions were inspected: the paper does not designate a primary-versus-secondary outcome hierarchy. not_reported records this source-reporting limitation; it supplies no primary-outcome credit and does not establish prospective prespecification of a restricted analysis. Existing source eligibility, negative findings, product-correspondence holds and all other review limits remain unchanged."
+   ],
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-26",
+    "scope": "identity_dose_outcome_applicability"
+   },
+   "outcomes": [
+    {
+     "name": "Between-group JOA, VAS and JKOM clinical symptoms",
+     "hierarchy": "not_reported",
+     "kind": "patient_important",
+     "direction": "null",
+     "outcome_role": "direct_between_group_effect"
+    },
+    {
+     "name": "MRI T2 mapping",
+     "hierarchy": "not_reported",
+     "kind": "surrogate",
+     "direction": "null",
+     "outcome_role": "surrogate"
+    },
+    {
+     "name": "Selected arthroscopic cartilage stiffness and surface roughness",
+     "hierarchy": "not_reported",
+     "kind": "surrogate",
+     "direction": "positive",
+     "outcome_role": "surrogate"
+    }
+   ]
+  }
+ ],
+ "source_receipts": [
+  {
+   "pmid": "25308211",
+   "title_fetched": "Short-term effects of highly-bioavailable curcumin for treating knee osteoarthritis: a randomized, double-blind, placebo-controlled prospective study.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/25308211/",
+   "full_text": true,
+   "sections_used": "Abstract; existing approved context unchanged"
+  },
+  {
+   "pmid": "35494290",
+   "title_fetched": "The Oral Administration of Highly-Bioavailable Curcumin for One Year Has Clinical and Chondro-Protective Effects: A Randomized, Double-Blinded, Placebo-Controlled Prospective Study.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/35494290/",
+   "full_text": true,
+   "sections_used": "Abstract; existing approved context unchanged"
+  },
+  {
+   "pmid": "29246725",
+   "title_fetched": "Memory and Brain Amyloid and Tau Effects of a Bioavailable Form of Curcumin in Non-Demented Adults: A Double-Blind, Placebo-Controlled 18-Month Trial.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/29246725/",
+   "full_text": false,
+   "sections_used": "Abstract only; full text not open access"
+  }
+ ]
+}

@@ -1,0 +1,87 @@
+{
+ "record_id": "INGR_ASHWAGANDHA",
+ "decision": "closed_no_credit: The reviewed research does not establish a qualifying benefit for this product's assessed use.",
+ "summary": "The reviewed research does not establish a qualifying benefit for this product's assessed use. Per Dr. Pham's 2026-10-28 ruling, ashwagandha stress credit applies only to the exact standardized extracts studied, so the generic record is completed without credit on the reference path. Both declared meta-analyses pool different branded extracts (39348746: 9 RCTs; 36017529: 12 papers, I2 >80%) and are recorded as rejected sources for generic transfer; the KSM-66 contexts whose PMIDs are not this record's references were removed, and the record-level hold is lifted with a notes citation. This removes Evidence points from generic ashwagandha products.",
+ "record_updates": {
+  "study_type": "reference",
+  "evidence_level": "reference",
+  "scoring_eligible": null,
+  "notes": "Limited short-term stress findings across heterogeneous preparations. Anxiety findings are mixed; PMID36017529 rates certainty low with substantial heterogeneity. Exact KSM-66/Shoden trial results cannot establish equivalence for generic1.5/2.5%-withanolide extracts,5:1 extracts or root powder. PMID39348746 full preparation table remains unverified and must not supply affirmative eligibility. Current generic-material correspondence is not established; retain branded source holds. Existing pregnancy, liver, thyroid/autoimmune, medication and long-term-safety qualifications remain controlling. Dr. Pham's signed ruling of 2026-10-28 resolves the former record-level eligibility hold: the generic record is a completed no-credit reference (no transfer from standardized extracts); KSM-66, Sensoril and Shoden brand records carry stress credit. The KSM-66 trial contexts (23439798, 32021735, 31517876) were removed from this record because those PMIDs are not its references."
+ },
+ "study_contexts": [
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "ingr_ashwagandha_39348746_rejected_generic_transfer",
+   "source_pmids": [
+    "39348746"
+   ],
+   "components": [
+    "INGR_ASHWAGANDHA"
+   ],
+   "review_status": "rejected_source",
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability"
+   },
+   "scoring_eligible": false,
+   "dose": {
+    "source_provenance": {
+     "pmid": "39348746",
+     "location": "PubMed abstract (Methods, Results)",
+     "source_url": "https://pubmed.ncbi.nlm.nih.gov/39348746/"
+    }
+   },
+   "limitations": [
+    "9 RCTs (558 patients) of various ashwagandha formulations; pooled PSS MD -4.72, HAM-A MD -2.19 and cortisol MD -2.58 versus placebo (abstract). Pooling different standardized extracts cannot qualify a generic ashwagandha label.",
+    "Dr. Pham's 2026-10-28 ruling: stress credit only with the exact studied standardized extract (KSM-66, Sensoril root+leaf, Shoden); no transfer to generic ashwagandha powder or unspecified extracts. Brand records carry the credit.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ]
+  },
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "ingr_ashwagandha_36017529_rejected_generic_transfer",
+   "source_pmids": [
+    "36017529"
+   ],
+   "components": [
+    "INGR_ASHWAGANDHA"
+   ],
+   "review_status": "rejected_source",
+   "clinical_review": {
+    "reviewer": "Dr. Pham",
+    "reviewed_at": "2026-10-28",
+    "scope": "identity_dose_outcome_applicability"
+   },
+   "scoring_eligible": false,
+   "dose": {
+    "source_provenance": {
+     "pmid": "36017529",
+     "location": "PubMed abstract (Methods, Results)",
+     "source_url": "https://pubmed.ncbi.nlm.nih.gov/36017529/"
+    }
+   },
+   "limitations": [
+    "12 papers (1002 participants) of ashwagandha extracts; anxiety SMD -1.55 (I2 93.8%) and stress SMD -1.75 (I2 83.1%) versus placebo (abstract). Very high heterogeneity across distinct extracts; not transferable to generic material.",
+    "Dr. Pham's 2026-10-28 ruling: stress credit only with the exact studied standardized extract (KSM-66, Sensoril root+leaf, Shoden); no transfer to generic ashwagandha powder or unspecified extracts. Brand records carry the credit.",
+    "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+   ]
+  }
+ ],
+ "source_receipts": [
+  {
+   "pmid": "39348746",
+   "title_fetched": "Effects of Ashwagandha (Withania Somnifera) on stress and anxiety: A systematic review and meta-analysis.",
+   "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=39348746&retmode=xml",
+   "full_text": false,
+   "sections_used": "PubMed abstract (no open full text found via OpenAlex, Semantic Scholar or Europe PMC)"
+  },
+  {
+   "pmid": "36017529",
+   "title_fetched": "Does Ashwagandha supplementation have a beneficial effect on the management of anxiety and stress? A systematic review and meta-analysis of randomized controlled trials.",
+   "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=36017529&retmode=xml",
+   "full_text": false,
+   "sections_used": "PubMed abstract; OpenAlex lists a CC-BY submitted version at https://figshare.com/articles/journal_contribution/Does_Ashwagandha_supplementation_have_a_beneficial_effect_on_the_management_of_anxiety_and_stress_A_systematic_review_and_meta-analysis_of_randomized_controlled_trials/26199854 (not needed for a transfer rejection)"
+  }
+ ]
+}

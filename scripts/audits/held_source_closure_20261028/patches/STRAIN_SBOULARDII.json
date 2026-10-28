@@ -1,0 +1,94 @@
+{
+ "record_id": "STRAIN_SBOULARDII",
+ "decision": "held: Dr. Pham's returned A147 decision is 'Keep held: original item block is required'; that binding hold cannot be closed by agent extraction",
+ "summary": "The returned decision explicitly keeps this record held pending the original item block, so no context is approved and the existing pending context is left unchanged. Both declared sources were re-identified this session (26216624 AAD prevention meta-analysis; 40535538 CNCM I-745 pediatric acute diarrhea meta-analysis of Chinese trials).",
+ "record_updates": {},
+ "study_contexts": [
+  {
+   "context_schema_version": "1.1.0",
+   "context_id": "strain_sboulardii_40535538_source_completion",
+   "components": [
+    "STRAIN_SBOULARDII"
+   ],
+   "source_pmids": [
+    "40535538"
+   ],
+   "identity_scope": "ingredient_general",
+   "identity": {
+    "name": "Saccharomyces boulardii CNCM I-745 (Biocodex/Yihuo) sachet, not unspecified S. boulardii or a strain family."
+   },
+   "exposure_basis": "supplement_dose",
+   "route": "oral",
+   "evidence_role": "meta_analysis",
+   "component_registration_status": "fully_registered",
+   "condition": "pediatric_acute_gastroenteritis",
+   "purpose": "treatment",
+   "review_status": "source_verified_pending_clinical_review",
+   "scoring_eligible": false,
+   "human_status": "confirmed",
+   "source_integrity": "none",
+   "trial_family": "source_40535538",
+   "population": {
+    "description": "Ten Chinese randomized trials, 1125 children receiving conventional rehydration care; none of the primary trials was found in non-Chinese databases."
+   },
+   "study_design": "Published systematic review or meta-analysis; individual trial correspondence remains source-specific.",
+   "outcomes": [
+    {
+     "name": "Primary diarrhea resolution favored the strain in pooled analysis; duration, effectiveness and cure definitions differ.",
+     "direction": "positive",
+     "kind": "patient_important",
+     "hierarchy": "primary",
+     "outcome_role": "direct_between_group_effect"
+    }
+   ],
+   "limitations": [
+    "Original returned A146 says keep held pending original item block; do not erase that decision.",
+    "The source labels standardized mean differences with days; do not equate the standardized effect to an independently verified unstandardized number of days.",
+    "Source authors identify a very short diarrhea-duration trial that they could not confirm. Table 1 also prints 28/48 as 95.8%; preserve numerator/denominator discrepancy, not the erroneous percentage.",
+    "Primary trial citations are Chinese/unindexed; absence of primary PMIDs is not absence of trials, but no identifiers are invented.",
+    "No new clinical approval, scoring eligibility, evidence grade, dose threshold or product correspondence is assigned.",
+    "Source bibliography extraction remains pending. No complete included-trial list or PMID mapping was established by this extraction; no evidence credit follows from missing bibliography data."
+   ],
+   "dose": {
+    "measurement_type": "mass",
+    "unit": "mg",
+    "values": [],
+    "dose_status": "source_not_reported",
+    "dose_basis": "not_applicable",
+    "duration_basis": "participant_specific",
+    "administration_frequency": "Age-adjusted source amounts 125–500 mg/day, generally 3–7 days; one trial lacks dose and one lacks duration. No unsupported milligram-to-CFU conversion.",
+    "dosage_forms": [
+     "sachet"
+    ],
+    "co_therapies": [
+     "Oral or IV rehydration; anti-infectives and diet/electrolyte correction as needed."
+    ],
+    "reported_regimen": "Age-adjusted source amounts 125–500 mg/day, generally 3–7 days; one trial lacks dose and one lacks duration. No unsupported milligram-to-CFU conversion.",
+    "normalization": {
+     "basis": "A heterogeneous synthesis has no single assigned-arm dose. Descriptive regimens do not create an intake recommendation, equivalent preparation or efficacy threshold."
+    },
+    "source_provenance": {
+     "pmid": "40535538",
+     "location": "Verified primary source Methods, study tables and Results; explicit source limitations retained.",
+     "source_url": "https://pubmed.ncbi.nlm.nih.gov/40535538/"
+    }
+   }
+  }
+ ],
+ "source_receipts": [
+  {
+   "pmid": "26216624",
+   "title_fetched": "Systematic review with meta-analysis: Saccharomyces boulardii in the prevention of antibiotic-associated diarrhoea.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/26216624/",
+   "full_text": false,
+   "sections_used": "PubMed metadata (identity check only)"
+  },
+  {
+   "pmid": "40535538",
+   "title_fetched": "Efficacy and safety of Saccharomyces boulardii CNCM I-745 for the treatment of pediatric acute diarrhea in China: a systematic review and meta-analysis.",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/40535538/",
+   "full_text": false,
+   "sections_used": "PubMed metadata (identity check only)"
+  }
+ ]
+}
