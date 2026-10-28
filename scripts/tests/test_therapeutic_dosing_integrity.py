@@ -72,8 +72,10 @@ def test_retired_dose_and_ceiling_fields_stay_retired(therapeutic):
     findings = []
     check_rda_therapeutic(findings, therapeutic, "rda_therapeutic_dosing.json")
     assert not [f for f in findings if f.issue == "retired_field_present"]
-    generic_ceiling = re.compile(r"safe up to|safe for long-term|generally (very )?safe|well-tolerated"
-                                 r"|standard (single )?(validated )?dose|validated dose|>\s*\d+ ?mg", re.I)
+    # Unqualified universal safety or dose conclusions only. A source-qualified statement
+    # ("well tolerated at the tested dose in this six-week trial") is not banned.
+    generic_ceiling = re.compile(r"\bsafe up to\b|\bsafe for long-term use\b|\bgenerally (very )?safe\b"
+                                 r"|\bstandard (single )?(validated )?dose\b|\bvalidated dose\b", re.I)
     rows = {e["id"]: e for e in therapeutic["therapeutic_dosing"]}
     for e in rows.values():
         assert not RETIRED_THERAPEUTIC_FIELDS & set(e), e["id"]
@@ -83,7 +85,8 @@ def test_retired_dose_and_ceiling_fields_stay_retired(therapeutic):
         assert caution in rows[rid]["notes"], rid
     # The retired claims are gone from every free-text field, approved purpose included.
     for rid, phrase in (("collagen_peptides", "2.5 g+"), ("collagen_peptides", "5-10 g"),
-                        ("gelatin", "LOWER bioavailability"), ("uc_ii_collagen", "gram range")):
+                        ("gelatin", "LOWER bioavailability"), ("uc_ii_collagen", "gram range"),
+                        ("ginkgo_biloba_extract", ">240mg")):
         assert phrase not in json.dumps(rows[rid]), (rid, phrase)
     planted = {"therapeutic_dosing": [{"standard_name": "X", "upper_limit": "100"}]}
     findings = []

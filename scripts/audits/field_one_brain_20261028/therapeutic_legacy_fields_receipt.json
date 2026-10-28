@@ -4,7 +4,8 @@
     "source_file": "scripts/data/rda_therapeutic_dosing.json",
     "base_commit": "e6885790d",
     "ul_owner": "scripts/data/rda_optimal_uls.json",
-    "records": 44
+    "records": 44,
+    "editorial_corrections": "Edits to reference_semantics.purpose are editorial corrections to previously approved records. They carry no new reviewer approval; each record keeps its original approval status and review date because the approved Dose conclusion is unchanged."
   },
   "records": [
     {
@@ -250,7 +251,7 @@
         "evidence_tier": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
         "upper_limit_notes": "moved to notes: removed 'generally very safe' and the 2.5 g / 5-10 g validated-threshold claims (study regimens stay in reference_semantics)",
         "common_use": "edited: removed '2.5 g+' and '5-10 g' universal dose thresholds",
-        "reference_semantics.purpose": "edited to the corrected common_use text: the same dose-threshold or comparative-bioavailability claim; approval_status and review_date unchanged because the approved neutral no-benchmark decision is unchanged"
+        "reference_semantics.purpose": "editorial correction, not a new approval: text aligned with the corrected common_use. approval_status approved_existing_neutral_2026_10_18 continues to refer only to the unchanged no-general-benchmark Dose conclusion. Approval dependency checked: Sean approved the decision row collagen.collagen_peptides in docs/plans/DOSE_V41_REFERENCE_DECISIONS.md (October 18, 2026), which covers the conclusion and its context codes, not this purpose wording. The original text is retained in old."
       },
       "ul_owner_status": "no_ul_owner_entry",
       "new_notes": "Bioavailability varies with form; preparations are not interchangeable."
@@ -275,7 +276,7 @@
         "evidence_tier": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
         "upper_limit_notes": "moved to notes: removed 'standard single validated dose 40 mg/day' (universal dose); kept non-equivalence caution",
         "common_use": "edited: replaced a dose-range framing with the non-equivalence statement",
-        "reference_semantics.purpose": "edited to the corrected common_use text: the same dose-threshold or comparative-bioavailability claim; approval_status and review_date unchanged because the approved neutral no-benchmark decision is unchanged"
+        "reference_semantics.purpose": "editorial correction, not a new approval: text aligned with the corrected common_use. approval_status approved_existing_neutral_2026_10_18 continues to refer only to the unchanged no-general-benchmark Dose conclusion. Approval dependency checked: Sean approved the decision row collagen.uc_ii_collagen in docs/plans/DOSE_V41_REFERENCE_DECISIONS.md (October 18, 2026), which covers the conclusion and its context codes, not this purpose wording. The original text is retained in old."
       },
       "ul_owner_status": "no_ul_owner_entry",
       "new_notes": "Do NOT conflate with hydrolyzed Type II (BioCell)."
@@ -320,7 +321,7 @@
         "evidence_tier": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
         "upper_limit_notes": "moved to notes: removed unsourced comparative bioavailability claim",
         "common_use": "edited: removed unsourced comparative bioavailability claim",
-        "reference_semantics.purpose": "edited to the corrected common_use text: the same dose-threshold or comparative-bioavailability claim; approval_status and review_date unchanged because the approved neutral no-benchmark decision is unchanged"
+        "reference_semantics.purpose": "editorial correction, not a new approval: text aligned with the corrected common_use. approval_status approved_existing_neutral_2026_10_18 continues to refer only to the unchanged no-general-benchmark Dose conclusion. Approval dependency checked: Sean approved the decision row collagen.gelatin in docs/plans/DOSE_V41_REFERENCE_DECISIONS.md (October 18, 2026), which covers the conclusion and its context codes, not this purpose wording. The original text is retained in old."
       },
       "ul_owner_status": "no_ul_owner_entry",
       "new_notes": "Mechanistic (collagen-synthesis-marker) evidence only."
