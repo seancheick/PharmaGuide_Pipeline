@@ -495,3 +495,28 @@ def test_cache_persistence_prunes_expired_receipts(monkeypatch, tmp_path):
     client._cache_put('current', 'current source')
     assert 'expired' not in json.loads(path.read_text())
     assert client._cache_get('current') == 'current source'
+
+
+def test_parent_article_identifiers_never_come_from_its_bibliography():
+    from api_audit.pubmed_client import parse_pubmed_article_xml
+    xml = '''<PubmedArticleSet><PubmedArticle><MedlineCitation>
+      <Article><ArticleTitle>Parent source</ArticleTitle></Article></MedlineCitation>
+      <PubmedData><ReferenceList><Reference><ArticleIdList>
+      <ArticleId IdType="pubmed">222</ArticleId><ArticleId IdType="doi">10.cited/wrong</ArticleId>
+      </ArticleIdList></Reference></ReferenceList><ArticleIdList>
+      <ArticleId IdType="pubmed">111</ArticleId></ArticleIdList></PubmedData>
+      </PubmedArticle></PubmedArticleSet>'''
+    article = parse_pubmed_article_xml(xml)[0]
+    assert article['pmid'] == '111'
+    assert article['doi'] is None
+    assert article['title'] == 'Parent source'
+
+
+def test_parent_elocation_doi_is_not_shadowed_by_a_cited_doi():
+    from api_audit.pubmed_client import parse_pubmed_article_xml
+    xml = '''<PubmedArticleSet><PubmedArticle><MedlineCitation><PMID>111</PMID>
+      <Article><ELocationID EIdType="doi">10.parent/own</ELocationID></Article></MedlineCitation>
+      <PubmedData><ReferenceList><Reference><ArticleIdList>
+      <ArticleId IdType="doi">10.cited/wrong</ArticleId></ArticleIdList></Reference></ReferenceList>
+      </PubmedData></PubmedArticle></PubmedArticleSet>'''
+    assert parse_pubmed_article_xml(xml)[0]['doi'] == '10.parent/own'
