@@ -153,8 +153,9 @@ def test_brand_only_needs_review_and_claimed_only_score_zero() -> None:
 
     payload = score_trust(
         _product(
+            top_level={"brandName": "Thorne"},
             verified_cert_programs=[
-                _cert("NSF Sport", "brand_only"),
+                _cert("NSF Sport", "brand_only", matched_brand="Thorne"),
                 _cert("USP Verified", "needs_review"),
                 _cert("Informed Choice", "claimed_only"),
             ]
