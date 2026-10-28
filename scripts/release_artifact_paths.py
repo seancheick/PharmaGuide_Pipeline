@@ -31,4 +31,4 @@ def final_build_dir() -> Path:
 def canary_baseline_dir(repo_root: Path | None = None) -> Path:
     """The reviewed canary baseline shared by assertions and release readiness."""
     root = Path(repo_root) if repo_root is not None else REPO_ROOT
-    return root / "reports" / "baseline_pre_e1_2_2" / "dose_v41_approved_20261018"
+    return root / "reports" / "baseline_pre_e1_2_2" / "quality_source_reviewed_20261028"

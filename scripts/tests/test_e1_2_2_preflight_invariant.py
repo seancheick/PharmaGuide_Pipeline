@@ -16,14 +16,15 @@ that points to the exact dsld_id + field.
 
 Runs against the nine reviewed canary baseline blobs + their fresh rebuilds.
 
-The active baseline is the approved October18 Dose V4.1 capture. Original nine
-raw hashes are unchanged. Its manifest retains the source-qualified October17
-refresh (retired BioPerine delivery credit, printed sugar-unit formatting and
-reviewed display/warning text) and the approved ordinary-adult omega250mg
-reference:1002's600mgminimum now earns20Dose points instead of legacy11.2.
-All other pinned fields and all strict assertions remain unchanged. Historical
-baselines are retained. The shared artifact-path owner supplies the same dated
-baseline to these assertions and the release readiness check.
+The active dated baseline is the reviewed October28 source integration capture.
+All nine ORIGINAL raw hashes are unchanged. The preserved October18 baseline and
+new manifest retain source-qualified changes: canonical label allergens/inactives,
+material-only Formulation and opaque-complex disclosure, source-qualified Evidence,
+life-stage warning precedence and physical source-row standardization joins.
+No strict assertion or allowed field set changed. See the active baseline's
+SOURCE_REVIEW.md and hashes for per-product causes and independent review.
+The shared artifact-path owner supplies the same baseline to these assertions
+and release readiness; this baseline is not clinical or release approval.
 
 """
 
@@ -40,7 +41,7 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 # Keep historical snapshots unchanged; this dated baseline records the reviewed
-# native canary contract on main after the October 13-17 batches.
+# native canary contract after the reviewed October 19-28 source batches.
 from scripts.release_artifact_paths import canary_baseline_dir
 
 BASELINE_DIR = canary_baseline_dir(ROOT)
