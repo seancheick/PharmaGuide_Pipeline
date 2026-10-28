@@ -126,6 +126,7 @@ if str(SCRIPTS_ROOT) not in sys.path:
     sys.path.insert(0, str(SCRIPTS_ROOT))
 
 import env_loader  # noqa: F401
+from clinical_evidence_schema import is_reference_only
 from run_artifacts import atomic_write_json
 
 # ---------------------------------------------------------------------------
@@ -982,8 +983,7 @@ def backfill_auditability_metadata(
         entry for entry in entries
         if (not entry.get("effect_direction_rationale")
             or not entry.get("effect_direction_confidence"))
-        and str(entry.get("study_type", "")).lower() != "reference"
-        and str(entry.get("evidence_level", "")).lower() != "reference"
+        and not is_reference_only(entry)
     ]
     candidates.sort(key=_evidence_impact_score, reverse=True)
     selected = candidates[:limit]
