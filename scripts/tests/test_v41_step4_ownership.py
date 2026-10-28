@@ -51,7 +51,11 @@ def test_a_printed_nutrient_amount_we_could_not_read_holds_the_assessment(printe
     # A number printed without a readable unit is our parse gap; no number is
     # the label's limitation. Either way the score itself is still reported.
     assert artifact["quality_score_status"] == "scored"
-    assert artifact["quality_assessment_status"] == expected
+    unfinished = unfinished_source_assessment(product, artifact["_v4_module_breakdown"])
+    assert unfinished == ("nutrient_amount_unread" if expected == "partial" else None)
+    # This compatibility fixture independently retains migration-inference holds.
+    assert artifact["quality_assessment_status"] == "partial"
+    assert "verification_migration_inference" in artifact["assessment_readiness"]["release_assessment"]["blockers"]
 
 
 @pytest.mark.parametrize(("benchmark", "expected"), [

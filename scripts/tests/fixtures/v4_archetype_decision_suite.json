@@ -5,7 +5,7 @@
     "production_entry_point": "scoring_v4.scored_artifact.build_scored_artifact",
     "scoring_formulas_embedded": false,
     "external_identifiers": "none; FIXTURE_* and SYNTHETIC_* values are synthetic case labels, not clinical references",
-    "review_status": "Reviewed synthetic archetype decision set, reconciled 2026-10-18 with Sean-approved Dose V4.1 reference decisions. Historical reviews remain in git. Nutritional contribution plateaus before one final UL ceiling; prenatal coverage includes choline in its fixed critical budget. Unsupported general botanical, fiber, CFU, BCAA and citrulline curves take completed neutral. Magnesium fixtures retain only legacy percent summaries without a qualified applicable target and therefore take neutral. Sports creatine/beta-alanine use approved contribution targets. Ideal protein explicitly declares synthetic Nutrition Facts protein 27 g; the opaque failure retains its missing actual-protein capture hold. Only Dose, its normalization reference, total and derived tier expectations changed; existing route, score status, safety status and all other pillar expectations are retained. No synthetic fact is a manufacturer claim or clinical source."
+    "review_status": "Reviewed synthetic archetype decision set, reconciled 2026-10-18 with Sean-approved Dose V4.1 reference decisions. Historical reviews remain in git. Nutritional contribution plateaus before one final UL ceiling; prenatal coverage includes choline in its fixed critical budget. Unsupported general botanical, fiber, CFU, BCAA and citrulline curves take completed neutral. Magnesium fixtures retain only legacy percent summaries without a qualified applicable target and therefore take neutral. Sports creatine/beta-alanine use approved contribution targets. Ideal protein explicitly declares synthetic Nutrition Facts protein 27 g; the opaque failure retains its missing actual-protein capture hold. Only Dose, its normalization reference, total and derived tier expectations changed; existing route, score status, safety status and all other pillar expectations are retained. No synthetic fact is a manufacturer claim or clinical source. October 27 completeness correction: protein ideal confidence is moderate because standalone isoleucine/valine applicability remains unresolved; the historical owner name cannot complete those assessments. Synthetic score100, all pillar points, amounts and safety stay unchanged."
   },
   "fixtures": [
     {
@@ -1641,7 +1641,7 @@
         "product_safety_status": "no_known_catalog_concern",
         "quality_score_v4_100": 100.0,
         "quality_tier": "Exceptional",
-        "v4_confidence": "high",
+        "v4_confidence": "moderate",
         "normalization_references": {
           "formulation": 15.0,
           "dose": 20.0,
