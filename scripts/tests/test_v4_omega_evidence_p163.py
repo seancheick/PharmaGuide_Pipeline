@@ -447,3 +447,15 @@ def test_omega_nutrition_subjects_share_the_existing_authority_disposition():
     assert {row.disposition for row in result.resolutions} == {EvidenceDisposition.RESOLVED_BY_AUTHORITY.value}
     assert all(row.owner_facts["nutrition_authority"]["source_references"][0]["doi"] == "10.2903/j.efsa.2010.1461"
                for row in result.resolutions)
+
+
+def test_omega_nutrition_readiness_consumes_the_shared_authority_decision():
+    from assessment_readiness import evaluate_assessment_readiness
+    product = _epa_dha_product(name="Fish Oil")
+    product["ingredient_quality_data"]["ingredients_scorable"].append({
+        "name": "Fish Oil", "canonical_id": "fish_oil", "quantity": 1000, "unit": "mg",
+    })
+    evidence = evaluate_assessment_readiness(product, module="omega")["evidence"]
+    assert evidence["readiness"] == "complete"
+    assert all(row["state"] == "evaluated_supported" for row in evidence["ingredient_assessments"])
+    assert all(row["evidence_applicability"] == "nutrition_authority" for row in evidence["ingredient_assessments"])

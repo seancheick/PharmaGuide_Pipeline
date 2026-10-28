@@ -362,7 +362,9 @@ def _resolved_evidence_assessment(resolution: Any) -> tuple[str, str, str | None
 
     disposition = resolution.disposition
     if (disposition == EvidenceDisposition.RESOLVED_BY_AUTHORITY.value
-            and resolution.owner_facts.get("nutrition_authority", {}).get("is_essential") is True):
+            and "nutrition_authority" in resolution.owner_facts
+            and (resolution.owner_facts["nutrition_authority"].get("is_essential") is True
+                 or resolution.reason_code == "dietary_reference_intake_authority_established")):
         return EVIDENCE_EVALUATED_SUPPORTED, resolution.reason_code, EVIDENCE_APPLICABILITY_NUTRITION_AUTHORITY
     if (disposition in {
             EvidenceDisposition.NO_QUALIFYING_HUMAN_EVIDENCE.value,
