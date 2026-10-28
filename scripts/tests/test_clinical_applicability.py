@@ -1504,3 +1504,17 @@ def test_condition_scoped_policy_cannot_fall_back_when_review_context_is_lost(mo
     result = ca.assess_clinical_applicability(product, {'id': 'INGR_CRANBERRY',
         'ingredient': row['name'], 'matched_source_row_refs': ['ingredientRows[0]']}, assess_amount=False)
     assert result['status'] == 'unresolved'
+
+
+def test_a_reviewed_scope_keeps_every_legacy_excluded_form():
+    """clinical_applicability reads exclude_aliases only when a record has no
+    applicability policy. A new scope must carry those forms into
+    excluded_form_terms, or an excluded preparation (arginine AKG, label 269278)
+    loses its completed "different preparation" assessment (2026-10-28)."""
+    missing = {
+        record_id: sorted(set(record['exclude_aliases'])
+                          - set(record['applicability'].get('excluded_form_terms') or []))
+        for record_id, record in reviewed_entries().items()
+        if record.get('applicability') and record.get('exclude_aliases')
+    }
+    assert {record_id: forms for record_id, forms in missing.items() if forms} == {}

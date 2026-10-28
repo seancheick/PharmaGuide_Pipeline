@@ -145,21 +145,23 @@ def test_failure_fixture_scores_below_its_ideal_pair(
 
 def test_ideal_fixtures_reach_their_evidence_reference() -> None:
     """quality_score 1.1.3-achievable-ceilings: each archetype reference is the
-    ceiling its engine can actually reach, so an ideal product scores 20/20.
-    Before 2026-09-13 these references sat above the ceiling (generic 19 over
-    an 18-point engine) and this test documented the mismatch instead of
-    fixing it."""
+    ceiling its engine can actually reach. Before 2026-09-13 these references
+    sat above the ceiling (generic 19 over an 18-point engine). Since 1.31.0 no
+    automatic floor exceeds the strong base, so a focused single-molecule
+    product tops out at 14 raw (15.6/20); the 18 reference stays the generic
+    engine's arithmetic ceiling (per-ingredient cap x top-N weights + depth)."""
+    from scoring_v4.modules import generic_evidence as ge
+
     validation = _validation_module()
     suite = validation.load_fixture_suite()
-
-    generic = validation.evaluate_fixture(
-        suite.by_id("generic_single_molecule__ideal")
-    ).actual
+    case = suite.by_id("generic_single_molecule__ideal")
+    generic = validation.evaluate_fixture(case).actual
     b_complex = validation.evaluate_fixture(suite.by_id("b_complex__ideal")).actual
 
-    assert generic["raw_dimensions"]["evidence"] == 18.0
-    assert generic["normalization_references"]["evidence"] == 18.0
-    assert generic["pillars"]["evidence"] == 20.0
+    engine_ceiling = ge.CAP_PER_INGREDIENT * sum(ge.TOP_N_WEIGHTS) + max(v for _, v in ge.DEPTH_BONUS_BANDS)
+    assert engine_ceiling == generic["normalization_references"]["evidence"] == 18.0
+    assert generic["raw_dimensions"]["evidence"] == ge.PRIMARY_FLOOR_STRONG == 14.0
+    assert generic["pillars"]["evidence"] == 15.6
     # Complete B panels earn the native 20-point authority score; no
     # denominator compression is needed to manufacture attainability.
     assert b_complex["raw_dimensions"]["evidence"] == 20.0
@@ -296,8 +298,9 @@ def test_single_creatine_fixture_does_not_treat_derived_identity_as_source_form(
     assert actual["pillars"]["evidence"] == 0.0
     assert actual["raw_dimensions"]["evidence"] == 0.0
     ideal = validation.evaluate_fixture(suite.by_id("sports_single__ideal")).actual
-    assert ideal["pillars"]["evidence"] == 20.0
-    assert ideal["quality_score_v4_100"] == 100.0
+    # 1.31.0: no automatic floor above the strong base (14 raw).
+    assert ideal["pillars"]["evidence"] == 15.6
+    assert ideal["quality_score_v4_100"] == 95.6
 
 
 def test_preworkout_formulation_pin_follows_corrected_citrulline_parent():
@@ -324,5 +327,5 @@ def test_protein_fixture_confidence_retains_unresolved_amino_acid_assessments():
                if row["state"] == "not_yet_evaluated"}
     assert pending == {"l_isoleucine", "l_valine"}
     assert artifact["quality_score_confidence"] == "moderate"
-    assert artifact["quality_score_v4_100"] == 100.0
+    assert artifact["quality_score_v4_100"] == 95.6
     assert artifact["assessment_readiness"]["release_assessment"]["is_complete"] is False

@@ -27,7 +27,6 @@ EXPECTED = {
         "cap_total": 20.0, "cap_per_ingredient": 7.0,
         "enrollment_default_multiplier": 1.2,
         "primary_floor_strong": 14.0, "primary_floor_moderate": 11.0,
-        "primary_floor_branded_strong": 18.0, "primary_floor_branded_moderate": 17.0,
         "nutrition_authority_floor": 10.0,
         # ONE owner for what a direction is worth; generic_evidence reads this rather than
         # hard-coding it, and its primary-floor path reads the same map. null = 0.0 since
@@ -72,7 +71,8 @@ def test_config_matches_reviewed_evidence_magnitudes():
 
 def test_runtime_constants_read_from_config_no_drift():
     assert generic_evidence.CAP_TOTAL == 20.0
-    assert generic_evidence.PRIMARY_FLOOR_BRANDED_STRONG == 18.0
+    assert not hasattr(generic_evidence, "PRIMARY_FLOOR_REPLICATED_STRONG")
+    assert not hasattr(generic_evidence, "PRIMARY_FLOOR_BRANDED_MODERATE")
     # Below a study's dose the study does not apply: a gate, never a tunable gradient.
     assert not hasattr(generic_evidence, "SUB_CLINICAL_DOSE_GUARD_MULTIPLIER")
     assert "sub_clinical_dose_guard_multiplier" not in EM["generic"]
