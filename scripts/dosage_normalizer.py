@@ -21,9 +21,10 @@ Usage:
 import re
 import logging
 from dataclasses import dataclass, field
-from typing import Dict, List, Optional, Tuple, Any
+from typing import Dict, List, Optional, Any
 
 from unit_converter import UnitConverter
+from serving_frequency import resolve_daily_serving_range, select_canonical_serving
 
 logger = logging.getLogger(__name__)
 
@@ -34,9 +35,9 @@ class ServingBasis:
     quantity: float
     unit: str
     servings_per_container: Optional[float]
-    servings_per_day_min: int
-    servings_per_day_max: int
-    servings_per_day_used: int  # Policy: use minimum
+    servings_per_day_min: float
+    servings_per_day_max: float
+    servings_per_day_used: float  # Policy: use minimum
     source_field: str
     raw_text: str
     confidence: str  # "high", "medium", "low"
@@ -123,51 +124,6 @@ class DosageNormalizer:
         r'(\d+(?:\.\d+)?)\s*(capsule|softgel|tablet|gummy|gummies|lozenge|drop|spray|scoop|packet|stick)s?',
     ]
 
-    # Servings per day patterns
-    SERVINGS_PER_DAY_PATTERNS = [
-        # "Once daily", "Twice daily", "Three times daily"
-        r'(once|twice|one|two|three|four)\s*(times?\s*)?(daily|per\s*day|a\s*day)',
-        # "1-2 times daily"
-        r'(\d+)(?:\s*-\s*(\d+))?\s*times?\s*(daily|per\s*day|a\s*day)',
-        # "Take 2 capsules twice daily"
-        r'(\d+)\s*capsules?\s*(once|twice|three\s*times?)\s*(daily|per\s*day)',
-    ]
-
-    WORD_TO_NUMBER = {
-        'once': 1, 'one': 1, 'twice': 2, 'two': 2,
-        'three': 3, 'four': 4, 'five': 5
-    }
-
-    # Serving selection policy: preferred unit types in priority order
-    #
-    # RATIONALE (documented per code review requirement):
-    # When products list multiple serving options (e.g., "2 capsules OR 1 tablespoon"),
-    # we select the most commonly used supplement form for consistency in:
-    # - RDA/UL comparisons across products
-    # - Dosage scoring (per-serving amounts)
-    # - User-facing dose displays
-    #
-    # Priority order based on:
-    # 1. Precision: Solid forms (capsules/tablets) have fixed amounts per unit
-    # 2. Commonality: Most supplements use capsules/tablets as primary form
-    # 3. Parseability: Liquid measures are more prone to parsing errors
-    #
-    # NOTE: ~10% of products have multiple serving options (448 of 4586 in Gummies dataset)
-    # This policy may change dose calculations vs "always first" behavior.
-    # To audit impact, run: normalizer._select_best_serving(product['servingSizes'], 'test')
-    UNIT_PRIORITY = {
-        'capsule': 10, 'capsules': 10,
-        'tablet': 9, 'tablets': 9,
-        'softgel': 8, 'softgels': 8,
-        'gummy': 7, 'gummies': 7,
-        'lozenge': 6, 'lozenges': 6,
-        'drop': 5, 'drops': 5,
-        'spray': 4, 'sprays': 4,
-        'scoop': 3, 'scoops': 3,
-        'teaspoon': 2, 'tsp': 2,
-        'tablespoon': 1, 'tbsp': 1,
-        'serving': 0,
-    }
     NO_RULE_ERROR_PREFIX = "No conversion rule found for nutrient:"
 
     def __init__(self, unit_converter: Optional[UnitConverter] = None):
@@ -332,97 +288,38 @@ class DosageNormalizer:
             errors=errors
         )
 
-    def _select_best_serving(
-        self, servings: List[Any], source_name: str
-    ) -> Tuple[Any, str]:
-        """
-        Select the best serving from a list using defined policy.
-
-        Selection Policy (in priority order):
-        1. Completeness: Prefer servings with explicit quantity AND unit
-        2. Unit type: Prefer common dosage forms (capsules > tablets > etc.)
-        3. Stability: If tied, prefer first entry (preserves original order)
-
-        Args:
-            servings: List of serving entries (dicts or strings)
-            source_name: Name of the source field
-
-        Returns:
-            Tuple of (best_serving, selection_note)
-        """
-        if not servings:
-            return None, "No servings available"
-
-        if len(servings) == 1:
-            return servings[0], "Single serving option"
-
-        # Score each serving
-        scored = []
-        for i, serving in enumerate(servings):
-            score = 0
-            unit = None
-
-            if isinstance(serving, dict):
-                quantity = serving.get('quantity') or serving.get('amount')
-                unit = str(serving.get('unit') or serving.get('type') or '').lower()
-                # Completeness bonus
-                if quantity and unit:
-                    score += 100
-            elif isinstance(serving, str):
-                # Try to extract unit from string
-                for pattern in self.SERVING_PATTERNS:
-                    match = re.search(pattern, serving, re.IGNORECASE)
-                    if match:
-                        score += 50  # Parseable string
-                        groups = match.groups()
-                        unit = groups[-1].lower() if groups else None
-                        break
-
-            # Unit priority bonus
-            if unit:
-                score += self.UNIT_PRIORITY.get(unit, 0)
-
-            scored.append((i, score, serving))
-
-        # Sort by score (descending), then by original index (ascending)
-        scored.sort(key=lambda x: (-x[1], x[0]))
-
-        best_idx, best_score, best_serving = scored[0]
-        selection_note = f"Selected serving {best_idx + 1} of {len(servings)} (score: {best_score})"
-
-        return best_serving, selection_note
-
     def _extract_serving_basis(self, product: Dict) -> Optional[ServingBasis]:
-        """Extract serving basis from product using selection policy."""
-        # Try multiple sources
+        """Project the canonical serving selection and daily-frequency result."""
         sources = [
             ('servingSizes', product.get('servingSizes', [])),
             ('servingSize', [product.get('servingSize')] if product.get('servingSize') else []),
             ('labelText', self._extract_from_label_text(product.get('labelText', {}))),
         ]
-
         for source_name, serving_data in sources:
-            if not serving_data:
+            if not isinstance(serving_data, list) or not serving_data:
                 continue
-
-            # Handle list of serving sizes with selection policy
-            if isinstance(serving_data, list) and len(serving_data) > 0:
-                serving, selection_note = self._select_best_serving(serving_data, source_name)
-
-                if serving is None:
-                    continue
-
-                if isinstance(serving, dict):
-                    result = self._parse_serving_dict(serving, source_name)
-                    if result:
-                        result.notes.append(selection_note)
-                    return result
-                elif isinstance(serving, str):
-                    result = self._parse_serving_string(serving, source_name)
-                    if result:
-                        result.notes.append(selection_note)
-                    return result
-
+            serving = select_canonical_serving(serving_data)
+            if serving is None:
+                # Legacy string carriers provide physical quantity only; they
+                # cannot create a second daily-direction interpretation.
+                serving = next((entry for entry in serving_data if isinstance(entry, str)), None)
+            if isinstance(serving, dict):
+                result = self._parse_serving_dict(serving, source_name)
+            elif isinstance(serving, str):
+                result = self._parse_serving_string(serving, source_name)
+            else:
+                continue
+            if result is None:
+                continue
+            low, high, was_defaulted = resolve_daily_serving_range(product)
+            result.servings_per_day_min = low
+            result.servings_per_day_max = high
+            result.servings_per_day_used = low
+            result.notes.append('Daily frequency: serving_frequency owner')
+            if was_defaulted:
+                result.confidence = 'low'
+                result.notes.append('Daily frequency defaulted or incompletely declared')
+            return result
         return None
 
     def _extract_from_label_text(self, label_text: Dict) -> List[Dict]:
@@ -446,18 +343,12 @@ class DosageNormalizer:
 
     def _parse_serving_dict(self, serving: Dict, source: str) -> Optional[ServingBasis]:
         """Parse serving size from dictionary."""
-        quantity = serving.get('quantity') or serving.get('amount') or 1
+        quantity = next((serving.get(key) for key in (
+            'quantity', 'servingSizeQuantity', 'maxQuantity', 'minQuantity',
+            'normalizedServing', 'amount') if serving.get(key)), 1)
         unit = serving.get('unit') or serving.get('type') or 'serving'
         servings_per_container = serving.get('servingsPerContainer')
         raw_text = serving.get('description') or serving.get('raw_text') or ''
-
-        # Parse per-day info
-        per_day_min = 1
-        per_day_max = 1
-        per_day_text = serving.get('perDay') or serving.get('suggestedUse') or ''
-
-        if per_day_text:
-            per_day_min, per_day_max = self._parse_servings_per_day(per_day_text)
 
         # Try to parse quantity if string
         if isinstance(quantity, str):
@@ -475,9 +366,9 @@ class DosageNormalizer:
             quantity=float(quantity),
             unit=str(unit),
             servings_per_container=float(servings_per_container) if servings_per_container else None,
-            servings_per_day_min=per_day_min,
-            servings_per_day_max=per_day_max,
-            servings_per_day_used=per_day_min,  # Policy: use minimum
+            servings_per_day_min=1,
+            servings_per_day_max=1,
+            servings_per_day_used=1,  # Assigned by the canonical daily resolver
             source_field=source,
             raw_text=raw_text,
             confidence="high" if quantity and unit else "medium",
@@ -541,55 +432,6 @@ class DosageNormalizer:
             confidence="low",
             notes=["Could not parse - using defaults"]
         )
-
-    def _parse_servings_per_day(self, text: str) -> Tuple[int, int]:
-        """Parse servings per day from text.
-
-        Priority order:
-        1. Explicit numeric patterns ("1-2 times daily") - most specific
-        2. Word patterns with word boundaries ("twice daily") - fallback
-
-        Returns (min, max) servings per day.
-        """
-        text_lower = text.lower()
-
-        # FIRST: Check explicit numeric patterns (more specific, higher priority)
-        for pattern in self.SERVINGS_PER_DAY_PATTERNS:
-            match = re.search(pattern, text_lower)
-            if match:
-                groups = match.groups()
-                # Pattern 1: (word)(times?)(daily) - e.g., "twice daily"
-                # Pattern 2: (digit)(-digit)?(times)(daily) - e.g., "1-2 times daily"
-                # Pattern 3: (digit)(capsules)(word)(daily) - e.g., "2 capsules twice daily"
-
-                # Try to extract numeric value from first group
-                first_group = groups[0] if groups else ''
-
-                if first_group.isdigit():
-                    min_val = int(first_group)
-                    # Check for range (second group)
-                    max_val = int(groups[1]) if len(groups) > 1 and groups[1] and groups[1].isdigit() else min_val
-                    return min_val, max_val
-                elif first_group in self.WORD_TO_NUMBER:
-                    val = self.WORD_TO_NUMBER[first_group]
-                    return val, val
-
-        # SECOND: Fallback to word matching with WORD BOUNDARIES (avoid false positives)
-        # Use regex with \b to prevent "one" matching in "someone", "none", etc.
-        word_patterns = [
-            (r'\btwice\b', 2),
-            (r'\bthree\s+times?\b', 3),
-            (r'\bfour\s+times?\b', 4),
-            (r'\bonce\b', 1),
-            (r'\bone\s+time\b', 1),
-            (r'\btwo\s+times?\b', 2),
-        ]
-
-        for pattern, value in word_patterns:
-            if re.search(pattern, text_lower):
-                return value, value
-
-        return 1, 1
 
     def _normalize_ingredient(
         self,
