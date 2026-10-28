@@ -504,9 +504,19 @@ def test_retrieved_full_reports_have_factual_contexts_without_invented_approval(
     context = next((c for c in record.get('study_contexts', []) if pmid in c['source_pmids']), None)
     assert context is not None
     assert context['scoring_eligible'] is False
-    assert context['review_status'] == 'source_verified_pending_clinical_review'
-    assert 'clinical_review' not in context
-    assert validate_ingredient_context(context, require_complete_review=True) == ['review.approval_required']
+    if rid == 'INGR_CHONDROITIN_SULFATE':
+        assert context['review_status'] == 'source_verified_pending_clinical_review'
+        assert 'clinical_review' not in context
+        assert validate_ingredient_context(context, require_complete_review=True) == ['review.approval_required']
+    else:
+        # Dr Pham approved these non-transfer conclusions on 2026-10-28
+        # (attested by Sean); approval does not make them scoring-eligible.
+        assert context['review_status'] == 'clinician_approved'
+        assert context['clinical_review']['reviewer'] == 'Dr. Pham'
+        assert context['clinical_review']['reviewed_at'] == '2026-10-28'
+        assert validate_ingredient_context(context, require_complete_review=True) == []
+        assert any('cannot provide affirmative generic-ingredient credit' in note
+                   for note in context['limitations'])
     if rid == 'PRECLIN_CORDYCEPS':
         assert context['identity_scope'] == 'combination'
         assert context['dose']['dose_status'] == 'combination_total_only'
