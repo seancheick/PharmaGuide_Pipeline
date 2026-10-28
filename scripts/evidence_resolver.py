@@ -1582,14 +1582,15 @@ def _evidence_claim_purposes(product: Mapping[str, Any], module: Optional[str] =
 def _evidence_entry_purposes(entry: Mapping[str, Any]) -> Set[str]:
     """Purposes a clinical record supports, from reviewed sources only.
 
-    A signed applicability scope decides when present. Otherwise only
-    clinician-approved, scoring-eligible study contexts state a studied
-    condition and outcomes. Consumer goals, relevance tags, endpoint prose and
+    Approved, scoring-eligible contexts supply qualifying outcome names; a
+    signed applicability scope may narrow those names within its sources.
+    Consumer goals, relevance tags, endpoint prose and
     primary_outcome describe a record; they never establish a supported
     purpose on their own (Sean, 2026-10-28). An enriched clinical match is
     judged by its curated record, which owns the contexts.
     """
-    from clinical_applicability import reviewed_entries
+    from clinical_applicability import reviewed_entries, qualifying_purpose_outcomes
+    from probiotic_measurements import context_accepted_for_scoring
     from scoring_v4.modules.generic_evidence import _clinical_source_id
     registry_backed = bool(entry.get("id") or entry.get("study_id") or entry.get("source_data"))
     # A registry-backed match (recovered matches included) is judged only by its
@@ -1599,21 +1600,20 @@ def _evidence_entry_purposes(entry: Mapping[str, Any]) -> Set[str]:
     if record is None:
         return set()
     scope = record.get("applicability") or {}
-    outcomes = scope.get("supported_outcomes") if isinstance(scope, Mapping) else None
-    if isinstance(outcomes, list) and outcomes:
-        # A reviewed scope outranks prose that may describe null outcomes or
-        # special study populations. Those words are not supported purposes.
-        return evidence_indication_categories(" ".join(str(value) for value in outcomes))
-    reviewed = [
-        " ".join([str(context.get("condition") or "")] + [
-            str(outcome.get("name") or "") for outcome in context.get("outcomes") or []
-            if isinstance(outcome, Mapping)])
-        for context in record.get("study_contexts") or []
-        if isinstance(context, Mapping)
-        and context.get("review_status") == "clinician_approved"
-        and context.get("scoring_eligible") is True
-    ]
-    return evidence_indication_categories(" ".join(reviewed))
+    sources = set(map(str, scope.get("source_pmids") or [])) if isinstance(scope, Mapping) else set()
+    reviewed = []
+    for context in record.get("study_contexts") or []:
+        if not context_accepted_for_scoring(context):
+            continue
+        if sources and not sources.intersection(map(str, context.get("source_pmids") or [])):
+            continue
+        outcomes, _ = qualifying_purpose_outcomes(context)
+        reviewed.extend(str(outcome.get("name") or "") for outcome in outcomes)
+    purposes = evidence_indication_categories(" ".join(reviewed))
+    signed = scope.get("supported_outcomes") if isinstance(scope, Mapping) else None
+    if signed:
+        purposes &= evidence_indication_categories(" ".join(map(str, signed)))
+    return purposes
 
 
 def evidence_record_matches_declared_purpose(
@@ -1627,14 +1627,10 @@ def evidence_record_matches_declared_purpose(
     purpose, the record must support at least one of those same indication
     categories before Evidence or Dose may use it.
     """
-    from clinical_applicability import condition_scope_governs
-    if condition_scope_governs(entry):
-        # Its reviewed condition scopes already judged every recognized claim
-        # and the label positioning in clinical_applicability; one decision.
-        return True
-    canonical = _norm(row.get("canonical_id"))
-    claimed = _evidence_claim_purposes(product).get(canonical)
-    return not claimed or bool(claimed & _evidence_entry_purposes(entry))
+    from clinical_applicability import assess_clinical_applicability
+    # The applicability owner evaluates preparation, population and qualifying
+    # source outcomes together. A lack of label claims never waives review.
+    return assess_clinical_applicability(product, entry, assess_amount=False)["status"] == "applicable"
 
 
 def resolve_product_evidence(

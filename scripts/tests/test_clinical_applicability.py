@@ -224,10 +224,14 @@ def test_source_term_on_unrelated_row_does_not_complete_parent_form() -> None:
     assert resolved_clinical_matches(product)[0] == []
 
 
-def test_unreviewed_legacy_match_remains_accepted_without_claiming_review() -> None:
+def test_unreviewed_legacy_match_cannot_bypass_review_without_a_label_claim() -> None:
     entry = {"id": "TEST_UNREVIEWED", "ingredient": "Legacy ingredient"}
-    assert assess_clinical_applicability({}, entry)["status"] == "not_curated"
-    assert filter_clinical_matches({}, [entry]) == ([entry], [])
+    decision = assess_clinical_applicability({}, entry)
+    assert decision["status"] == "unresolved"
+    assert decision["reason_code"] == "clinical_source_contexts_missing"
+    accepted, rejected = filter_clinical_matches({}, [entry])
+    assert accepted == []
+    assert rejected[0]["id"] == entry["id"]
 
 
 def test_zinc_reference_contains_only_verified_cold_lozenge_scope() -> None:

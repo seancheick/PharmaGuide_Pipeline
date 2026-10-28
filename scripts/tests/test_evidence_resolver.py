@@ -948,13 +948,32 @@ def test_descriptive_goal_tag_and_endpoint_text_cannot_create_a_supported_purpos
 
 def test_clinician_approved_scoring_context_establishes_its_studied_purpose():
     approved = {'review_status': 'clinician_approved', 'scoring_eligible': True,
-                'condition': 'perceived_stress', 'outcomes': [{'name': 'Perceived Stress Scale'}]}
+                'clinical_review': {'reviewer': 'Synthetic test reviewer', 'reviewed_at': '2026-10-28',
+                                    'scope': 'identity_dose_outcome_applicability'},
+                'condition': 'perceived_stress', 'outcomes': [{'name': 'Perceived Stress Scale',
+                    'hierarchy': 'primary', 'direction': 'positive'}]}
     pending = {**approved, 'review_status': 'source_verified_pending_clinical_review',
                'condition': 'knee_joint_discomfort', 'outcomes': [{'name': 'joint pain'}]}
     held = {**approved, 'scoring_eligible': False, 'condition': 'bowel_regularity', 'outcomes': []}
     purposes = er._evidence_entry_purposes({'study_contexts': [approved, pending, held]})
     assert 'mood' in purposes
     assert not purposes & er.evidence_indication_categories('joint pain bowel regularity')
+
+
+@pytest.mark.parametrize('change', [
+    {'clinical_review': {}},
+    {'scoring_eligible': False},
+    {'outcomes': [{'name': 'Perceived Stress Scale', 'hierarchy': 'secondary', 'direction': 'positive'}]},
+    {'outcomes': [{'name': 'Perceived Stress Scale', 'hierarchy': 'primary', 'direction': 'null'}]},
+    {'outcomes': [{'name': 'Perceived Stress Scale', 'hierarchy': 'primary', 'direction': 'positive',
+                   'outcome_role': 'within_group_change'}]},
+])
+def test_purpose_extraction_cannot_bypass_qualifying_context(change):
+    context = {'review_status': 'clinician_approved', 'scoring_eligible': True,
+               'clinical_review': {'reviewer': 'Synthetic test reviewer', 'reviewed_at': '2026-10-28',
+                                   'scope': 'identity_dose_outcome_applicability'},
+               'outcomes': [{'name': 'Perceived Stress Scale', 'hierarchy': 'primary', 'direction': 'positive'}]}
+    assert er._evidence_entry_purposes({'study_contexts': [{**context, **change}]}) == set()
 
 
 def test_enriched_match_cannot_stand_in_for_a_missing_curated_record():

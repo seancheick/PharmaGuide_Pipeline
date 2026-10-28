@@ -919,7 +919,14 @@ def assess_clinical_applicability(product: Mapping, entry: Mapping, *, assess_am
             if all(any(_key(term) in _key(row.get("matched_form") or row.get("form"))
                        for term in excluded) for row in linked):
                 return {"status": "not_applicable", "reason_code": "clinical_preparation_mismatch"}
-        return {"status": "not_curated", "reason_code": "no_reviewed_scope_constraints"}
+        # A missing scope is not permission to score an unreviewed record.
+        # Legacy approved contexts use this same population/outcome owner;
+        # their missing policy cannot bypass it on a claim-free label.
+        if not reference.get("study_contexts"):
+            return {"status": "unresolved", "reason_code": "clinical_source_contexts_missing"}
+        if not _accepted_condition_scopes(reference, {}):
+            return {"status": "unresolved", "reason_code": "clinical_context_eligible_source_missing"}
+        policy = {"scope": "ingredient"}
     if not _valid_policy(policy):
         return {"status": "unresolved", "reason_code": "invalid_applicability_contract"}
     if policy.get("scope") == "formula_context_only":
@@ -1086,12 +1093,7 @@ def filter_clinical_matches(product: Mapping, matches: list[dict], *, assess_amo
     accepted, rejected = [], []
     for entry in matches:
         decision = assess_clinical_applicability(product, entry, assess_amount=assess_amount)
-        if decision["status"] in {"applicable", "not_curated"}:
-            # Preserve legacy shape for unreviewed records; never imply that a
-            # missing applicability policy is a completed scientific review.
-            if decision["status"] == "not_curated":
-                accepted.append(entry)
-                continue
+        if decision["status"] == "applicable":
             scoped_entry = {**entry, "applicability_assessment": decision}
             if decision.get("qualifying_study_type"):
                 # Record-level enrollment describes the whole body, not this trial.
