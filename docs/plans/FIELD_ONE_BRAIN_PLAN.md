@@ -1,7 +1,129 @@
 # Field one-brain plan: evidence and dose clinical data
 
-Status: Phase 1 census complete, read-only, October 28, 2026. Nothing has been edited. Waiting on
-Sean's decisions (marked **Sean**) before Phase 2.
+Status: Phase 1 census complete (October 28, 2026). Sean's rulings below replace the
+recommendations in the item text where they differ.
+
+## Sean's rulings, October 28
+
+- **Items 1–5 are approved conditionally.** Before removing anything, confirm the values and
+  every producer and consumer (fixtures included). Original signed records and approvals stay as
+  they are. No Evidence, Dose, safety, readiness or app output may change unless it is intended.
+  - Item 2: the predicate goes beside the clinical evidence schema. If the two fields disagree,
+    validation must fail rather than whichever field is checked first winning.
+  - Item 3: `highest_ul` stays distinct from the life-stage `data[].ul`. It must never stand in
+    for the applicable age or pregnancy UL.
+  - Item 4: rename only where the values state the same fact. The five records with both endpoint
+    fields are reviewed one by one.
+  - Item 5: normalize names without obscuring who signed what.
+- **Item 6 is held.** Classify the 111 disagreements first, show that `dose_basis` is
+  authoritative, and keep any provenance only `dose.basis` holds. Delete it only after that, with
+  regression proof.
+- **Item 7:** split the three meanings. `evidence_grade` is not publication design, so don't derive
+  the app's meta-analysis badge from it. The 31 app badge cases are preserved, or any change is
+  documented and validated. Pipeline and app change together.
+- **Item 8:** retire `score_contribution` after checking every consumer and keeping the export
+  versioned and compatible.
+- **Item 9:** migrate the numbers and keep their source. A verified studied regimen stays
+  attributed to its source and context. A studied amount never becomes a minimum effective dose.
+  Unsupported numbers leave scoring and the public contract only after their provenance is kept.
+- **Item 10:** separate the observed effect from the review result. The 46 `positive_moderate`
+  judgments are kept as recorded until their typed meaning and scoring treatment are set. No
+  Evidence eligibility may change unintentionally.
+- **Item 11:** merge only representations that are truly duplicates. Registry-wide certainty,
+  outcome-specific support and review status stay separate where they mean different things.
+  Settle the three conflicting records individually, and keep the app contract stable.
+- **Item 12: the merge into `health_goals_supported` is rejected.** Endpoints, studied
+  conditions, measured outcomes, product purpose and consumer goals are different facts.
+  - Reviewed contexts and signed applicability decisions are the scientific authority for
+    supported outcomes.
+  - Consumer goal categories come from an explicit, reviewed mapping.
+  - Prose and tags may inform the UI but must never create Evidence eligibility on their own.
+  - This is the highest-priority behavioral correction.
+- **Additional work:**
+  - Check the folate entry in the elevated-floor allowlist (folic-acid NTD evidence must not
+    transfer to 5-MTHF).
+  - Give `clinical_matches` an explicit, versioned export projection.
+  - Move hard-coded Evidence magnitudes into `quality_score.json`, with the evidence-calibration
+    session.
+  - Settle what the 43 therapeutic `upper_limit` values mean before anything moves.
+  - Re-verify the `study_design` and `evidence_level` overlaps against current main.
+- **Prevention:**
+  - Semantic field ownership in `source_of_truth_matrix.json`.
+  - Strict curated-data schemas and cross-field invariants.
+  - Export compatibility tests.
+  - A CI ratchet with exact, per-path exceptions.
+
+Lane boundaries: `generic_evidence.py` belongs to the evidence-calibration session (its branch is
+changing it). Nothing edits the BCS or strain files until `claude/held-source-closure` merges.
+
+## Progress, October 28 (branch `claude/xenodochial-matsumoto-ebd04b`)
+
+| Item | State | Commit |
+|---|---|---|
+| 2 | Done. `clinical_evidence_schema.is_reference_only` serves all four call sites; `db_integrity` fails a record whose two fields disagree (0 today). | 9d5871522 |
+| 3 | Done. Top-level `ul` and `unofficial_ul` removed from all 77 entries (76 nulls, plus boron's 20, which equals its `highest_ul`). The authority owner fact reports `highest_ul` as the adult maximum. The semantic fingerprint doesn't cover either key, and Flutter reads neither. | 720e95812 |
+| 1 | Pipeline side done. One passthrough constant without the six dead keys; `facts_owned` names `max_studied_clinical_dose`. The `generic_evidence` override and magnitudes are handed to evidence-calibration. | 0d0548199 |
+| 4 | Done for `effect` → `effect_direction` (39) and `design` → `study_type` (45), checked value for value, with a ratchet test. **Kept apart:** `primary_endpoint` names what was measured and `outcome` states what was found (the 5 records that hold both show this), so they are different facts. | 30d1f4a40 |
+| 5 | Waits for held-source-closure (BCS). | |
+
+**Replay (items 1–4).**
+- Inputs: the 1,111-product frozen raw set at `~/pg_quality/held_closure_20261028/frozen`.
+- Baseline: main e6885790d (`base.jsonl` from the held-source session).
+- Candidate: 30d1f4a40 (`~/pg_quality/field_one_brain_20261028/cand.jsonl`, run from clean through
+  enrich to score).
+- Result: 0 of 1,111 products differ in any captured field (total, pillars, status, route,
+  reasons, purpose), and `compare` returns an empty delta.
+- Fresh-context review of the four commits found no defects.
+- `scripts/test.sh local` had 0 failures (409 passed), but it refuses the run because this
+  worktree has no corpus or build (161 skips on missing local data). It must be re-run from a
+  checkout that has the corpus.
+- Release note: the app's bundled `assets/reference_data/rda_optimal_uls.json` still matches the
+  file before 720e95812. The reference-data sync (`scripts/sync_flutter_reference_data.py`,
+  checked by `preflight.py`) has to run before an app release.
+- Limit: the capture ran without `--full --blob`, so it doesn't prove byte equality of the enriched
+  record or the detail blob. No curated record carried the removed passthrough keys, and the
+  removed UL keys were never exported.
+
+**Item 6 classification (read-only; deletion still held).** All 160 legacy `dose.basis`
+contexts have `context_schema_version` 1.1.0, and `dose_basis` wins whenever both are present.
+The 111 disagreements fall into two groups:
+- **104 are `unresolved`.** That was the extraction-state placeholder before schema 1.1.0, and
+  `dose_status` now records the same state: source_not_reported 29, extraction_pending 37,
+  verified 30, combination_total_only 7, conflicting_source_values 1.
+- **7 are `discrete_daily_arms`.** In each, `dose_basis` is the more specific value
+  (`combination_total_daily` in 6 and `measured_viability` in 1).
+
+Neither group holds information the frozen fields lack. These contexts are clinician-signed and no
+hash binds them, so the proposal is: write the 160 `(context_id, dose.basis)` pairs to an audit
+receipt, then delete the field and the fallback. Sean approves before it lands.
+
+**Folate elevated floor: reproduced.** The `_CONSENSUS_GOLD_STANDARD` entry `vitamin_b9_folate`
+(justified by folic-acid NTD consensus) only ever reaches `INGR_FOLATE_MTHF`. That record is a
+biomarker/PK `rct_single`, and its single context is pending review. The entry lifts the floor
+from 11 to 17.
+- Live probe on main code: dsld 284181 "5-MTHF 1 mg" has a floor of 17.0.
+- 11 stored products carry it: Pure Encapsulations 184302, 184894, 184899, 246424, 293963,
+  293964 and 299031; Thorne 284181, 284182 and 337850; Life Extension 232417.
+- **Resolved on `claude/serene-dubinsky-479574` (evidence-calibration lane), commit 37d74d5b1.**
+  It deletes the whole allowlist, so an elevated floor now needs a replicated reviewed body.
+  Verified with `git grep _CONSENSUS_GOLD_STANDARD claude/serene-dubinsky-479574`. That lane
+  measured the 11 products dropping from 18.9 to 12.2 Evidence. Folate keeps only the 10-point
+  DRI nutrition-authority floor.
+- After that branch merges, this lane takes the `base_points`/`multiplier` override deletion and
+  the move of `STUDY_TYPE_BASE_POINTS`/`EVIDENCE_LEVEL_MULTIPLIERS` into config (rebase first;
+  lines 117–150 changed). `study_type_vocab.json` also carries `base_points`, pinned by
+  `test_study_type_vocab_contract`.
+
+**Therapeutic `upper_limit` (read-only).** Of 43 entries, 34 hold a value and 9 are null. None of
+the 34 is a sourced UL:
+- 15 equal the top of the typical range.
+- The rest are unsourced ceilings (for example ashwagandha 1000 and curcumin 8000).
+- The 9 nulls follow the reviewed pattern "A safety upper limit is not established by …".
+- Lutein contradicts the UL owner: 40 mg here, but `rda_optimal_uls` says
+  `not_established_insufficient_data`.
+
+Proposal for Sean: null the 34 the same way the 9 reviewed entries were, keep the
+caution text in `upper_limit_notes`, and leave ULs to the UL owner. Nothing changed yet.
 
 Scope: `backed_clinical_studies.json` (BCS, 210 records), `clinically_relevant_strains.json`
 (132), `literature_evidence_records.json` (816), `rda_therapeutic_dosing.json` (44),
