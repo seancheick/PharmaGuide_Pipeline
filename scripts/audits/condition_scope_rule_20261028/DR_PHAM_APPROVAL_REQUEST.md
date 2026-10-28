@@ -112,10 +112,10 @@ Dr Pham: approve D1 / D2-A or D2-B / D3 / D4 / D5, or amend: ________ (relayed b
 
 ## Rulings received (October 28, 2026)
 
-Received from Sean in chat as "Claim and Population Applicability: Final Rulings". The text is
-written in the first person and refers to Dr Pham in the third person. Sean must confirm that it
-carries Dr Pham's approval before merge. It authorizes implementing and measuring the change, not
-merging or publishing it.
+Received from Sean in chat as "Claim and Population Applicability: Final Rulings". **Attestation:**
+Sean confirmed on October 28, 2026, relayed by the closure session, that these rulings carry Dr
+Pham's approval. His words: "she already answered and sent her message to that agent". They
+authorize implementing and measuring the change. Merging waits for PR #273 and Sean's go-ahead.
 
 - **D1: approved.** One shared clinical decision across generic, branded, sports, probiotic and
   native-strain paths, covering prevention, physiology, treatment and challenge contexts. No claim
