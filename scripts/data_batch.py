@@ -196,6 +196,9 @@ DERIVED_COUNTS: dict[str, dict[tuple, Any]] = {
     "standardized_botanicals.json": {
         ("categories",): _tally("standardized_botanicals", "category"),
         ("statistics", "total_aliases"): lambda b: sum(len(r.get("aliases") or ()) for r in _records(b, "standardized_botanicals")),
+        ("statistics", "entries_with_threshold"): _where("standardized_botanicals", lambda r: r.get("min_threshold") is not None),
+        ("statistics", "high_priority"): _where("standardized_botanicals", lambda r: r.get("priority") == "high"),
+        ("statistics", "medium_priority"): _where("standardized_botanicals", lambda r: r.get("priority") == "medium"),
     },
     "ingredient_interaction_rules.json": {
         ("total_rules",): _size("interaction_rules"),

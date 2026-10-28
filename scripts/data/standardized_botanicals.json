@@ -103,10 +103,10 @@
       "vegetable_greens": 2
     },
     "statistics": {
-      "total_aliases": 852,
-      "entries_with_threshold": 108,
-      "high_priority": 68,
-      "medium_priority": 170
+      "total_aliases": 849,
+      "entries_with_threshold": 151,
+      "high_priority": 51,
+      "medium_priority": 129
     },
     "pipeline_integration": "Used by cleaning script to standardize botanical ingredient names and by enrichment script to identify quality markers",
     "sources": [
@@ -5475,17 +5475,14 @@
       "standard_name": "Slendesta",
       "id": "slendesta",
       "aliases": [
-        "slendesta",
-        "potato protein extract",
-        "proteinase inhibitor II",
-        "PI2"
+        "slendesta"
       ],
       "markers": [
         "proteinase inhibitor II"
       ],
       "category": "tuber",
       "priority": "medium",
-      "notes": "Patented potato protein extract that promotes satiety by triggering CCK release. [PB-2 2026-05-22] Promoted to v6 contract (branded_extract basis).",
+      "notes": "Patented potato protein extract that promotes satiety by triggering CCK release. [PB-2 2026-05-22] Promoted to v6 contract (branded_extract basis). [2026-10-28 material identity review] Generic potato protein extract, PI2 and proteinase inhibitor II describe source/constituent facts, not proof of the Slendesta proprietary material; retain them as marker descriptions, not identity aliases.",
       "last_updated": "2026-09-26",
       "external_ids": {
         "unii": "2A8I57T4MX"
@@ -5501,7 +5498,7 @@
       "bonus_rationale": "Slendesta® (Kemin Industries) is a potato protein extract (Solanum tuberosum) standardized to the PI2 (proteinase inhibitor II) bioactive fraction. Clinical literature on satiety / cholecystokinin elevation / appetite endpoints. branded_extract basis: bonus is granted when the label names the Slendesta® brand. Runtime gate: meets_threshold + has_standardized_botanical.",
       "sources": [
         "https://pubmed.ncbi.nlm.nih.gov/28485429/",
-        "https://www.kemin.com/na/en-us/markets/human/products/slendesta"
+        "https://www.kemin.com/na/en-us/markets/human-nutrition/products/slendesta"
       ]
     },
     {
