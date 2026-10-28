@@ -113,7 +113,7 @@ def test_held_clinical_match_cannot_provide_branded_standardization(source_hold)
     assert bp._standardization_tier_credit(product,row)==0
 
 
-def test_valid_clinical_match_retains_independent_branded_credit():
+def test_valid_clinical_match_alone_does_not_establish_a_material_spec():
     match={'id':'BRAND_VALID','evidence_level':'branded_rct',
            'matched_source_row_refs':['ingredientRows[0]'],'references_structured':[{'pmid':'28661438'}]}
     row={'name':'Valid','raw_source_path':'ingredientRows[0]'}
@@ -248,3 +248,52 @@ def test_exact_brand_name_cannot_override_a_conflicting_canonical_material(colle
            'quantity': 600, 'unit': 'mg'}
     found = collector._collect_standardized_botanicals({'activeIngredients': [row]})
     assert not any(item.get('botanical_id') == 'testofen' and item['meets_threshold'] for item in found)
+
+
+def test_exact_testofen_source_form_carries_material_spec_without_label_percent(collector):
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    from scoring_v4.scored_artifact import build_scored_artifact
+    raw = json.loads((Path(__file__).parent / 'fixtures/material_standardization_304641_raw.json').read_text())
+    raw['ingredientRows'][0]['name'] = 'Fenugreek'
+    raw['ingredientRows'][0]['forms'].append({'order': 2, 'name': 'Testofen',
+                                             'category': 'botanical', 'ingredientGroup': 'Fenugreek'})
+    product, errors = collector.enrich_product(EnhancedDSLDNormalizer().normalize_product(raw))
+    assert not errors
+    owner = next(row for row in product['ingredient_quality_data']['ingredients_scorable']
+                 if row['raw_source_path'] == 'ingredientRows[0]')
+    assert owner['matched_form'] == 'testofen'
+    assert bp._standardization_tier_credit(product, owner) == bp.STANDARDIZATION_TIER_FULL
+    item = next(x for x in product['formulation_data']['standardized_botanicals'] if x['botanical_id'] == 'testofen')
+    assert item['percentage_found'] == 0 and item['percentage_source'] is None
+    assert build_scored_artifact(product)['quality_pillars_v4']['evidence']['score'] == 10.4
+
+
+def test_generic_slendesta_alias_cannot_claim_the_proprietary_material_spec(collector):
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    from scoring_v4.scored_artifact import build_scored_artifact
+    raw = json.loads((Path(__file__).parent / 'fixtures/material_standardization_304641_raw.json').read_text())
+    raw['ingredientRows'] = raw['ingredientRows'][:1]
+    raw['ingredientRows'][0].update(name='Potato protein extract', ingredientGroup='Potato', forms=[])
+    product, errors = collector.enrich_product(EnhancedDSLDNormalizer().normalize_product(raw))
+    assert not errors
+    assert not any(x['evidence_source'] == 'branded_form' and x['meets_threshold']
+                   for x in product['formulation_data']['standardized_botanicals'])
+    assert bp.score_botanical_formulation(product)['components'].get('marker_standardization_declared', 0) == 0
+    build_scored_artifact(product)
+
+
+@pytest.mark.parametrize('name', ['KSM-66', 'KSM-66 Ashwagandha'])
+def test_existing_short_brand_identity_keeps_verified_spec_without_clinical_credit(collector, name):
+    row = {'name': name, 'canonical_id': 'ashwagandha', 'quantity': 600, 'unit': 'mg'}
+    found = collector._collect_standardized_botanicals({'activeIngredients': [row],
+                                                      'evidence_data': {'clinical_matches': []}})
+    item = next(x for x in found if x['botanical_id'] == 'ksm_66_ashwagandha')
+    assert item['tier'] == 'full' and item['evidence_source'] == 'branded_form'
+    assert item['percentage_found'] == 0 and item['percentage_source'] is None
+
+
+def test_unrelated_product_brand_cannot_supply_a_generic_rows_material_proof(collector):
+    row = {'name': 'Potato protein extract', 'quantity': 600, 'unit': 'mg'}
+    found = collector._collect_standardized_botanicals({'product_name': 'Slendesta Testofen',
+                                                       'activeIngredients': [row]})
+    assert not any(x['evidence_source'] == 'branded_form' for x in found)

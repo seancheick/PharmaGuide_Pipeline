@@ -166,3 +166,27 @@ Implementation requirements from the ruling:
   absent. Reuse the existing affirmative label-positioning source.
 - Preserve `_excluded_claim_matches`.
 - Report before/after separately for claim-free, explicit-claim and population-targeted products.
+
+
+## Sean/team material-standardization ruling — October 28, 2026
+
+This is Sean's explicit product-policy ruling, not an additional clinician attestation:
+“Formulation depends verified material identity + standardization, NEVER approved clinical benefit.”
+Clinical study eligibility does not establish, invalidate or substitute for a material specification.
+An exact standardized material retains that Formulation trait when clinical benefit is held, null or
+retracted, unless its material proof is independently invalid. A studied but unstandardized material
+receives no automatic marker credit. Physical preparation identity/selection is distinct from marker
+standardization and continues through the existing IQM/input-contract owner for Dose-related callers.
+
+Testofen was independently checked against retained official DSLD raw304641: 600mg per two capsules,
+Gencor trademark, seed extract. ANVISA Parecer7/2022 process25351.711676/2019-91, first page, records
+supplier specification NLT50%saponins and identifies Fenusides as a proprietary glycoside matrix,
+not a single chemical. Mirror content retrieved2026-10-28; official ANVISA URL returned403. PDF SHA256:
+56bce88e2b0dda1ee5ed450350f88a34159babfdde03755dd3e90a5e99eeecc5.
+https://anexosportal.datalegis.net/arquivos/1876554.pdf
+
+The existing standardized_botanicals registry now owns that exact specification; IQMfenugreek::testofen
+retains its existing identity/bio_score. No specification percentage is inserted into label-derived
+percentage_found, no Verification/batch certificate is inferred, and no clinical hold is activated.
+No new magnitude, registry, public field/status or scorer is introduced. Final bounded replay must
+confirm the repair changes Formulation traits only, not Dose/Evidence/Verification/safety decisions.
