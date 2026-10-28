@@ -32,7 +32,7 @@
     "statistics": {
       "total_parents": 655,
       "total_forms": 1475,
-      "total_form_aliases": 12286,
+      "total_form_aliases": 12291,
       "parents_with_parent_aliases": 150,
       "parents_with_contains_aliases": 0,
       "parents_with_pattern_aliases": 0
@@ -53,7 +53,7 @@
       "vitamins": 25
     },
     "schema_version": "5.6.1",
-    "last_updated": "2026-10-26",
+    "last_updated": "2026-10-28",
     "pipeline_integration": "Used by enrichment to assign form quality (bio_score) to matched ingredient forms. Match ingredient name against forms aliases (case-insensitive).",
     "matching_notes": [
       "Match ingredient name + forms text against aliases array (case-insensitive)",
@@ -4251,7 +4251,8 @@
           "notes": "Chemical identity established; human pharmacokinetic equivalence and numerical form quality are not established.",
           "value": null
         },
-        "form_evidence_axis": "systemic_bioavailability"
+        "form_evidence_axis": "systemic_bioavailability",
+        "dosage_importance": 1.0
       }
     },
     "match_rules": {
@@ -41896,7 +41897,11 @@
         },
         "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability. B32 audit 2026-04-25: mushroom class-poor (B1). B43 2026-06-06: unspecified mushroom form set below disclosed mushroom forms and natural bonus removed. For local/matrix fungal actives, bio_score is used as active-form quality/delivery-to-site confidence; unspecified labels should not outrank disclosed fruiting-body or standardized extracts.",
         "aliases": [
-          "lion's mane"
+          "lion's mane",
+          "Hericium erinaceus, Powder",
+          "hericium erinaceus powder",
+          "lion's mane mushroom powder",
+          "lion's mane powder"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -41923,7 +41928,9 @@
       "last_reviewed_at": "2026-02-28",
       "research_status": "validated"
     },
-    "external_ids": {},
+    "external_ids": {
+      "unii": "Y62T8P9AAP"
+    },
     "aliases": [],
     "source_origin": "fungal",
     "ingredient_domain": "fungal_mushroom",
@@ -42082,7 +42089,8 @@
           "ganoderma lucidum",
           "reishi powder",
           "lingzhi",
-          "Ganoderma lucidum Fruiting Body Extract"
+          "Ganoderma lucidum Fruiting Body Extract",
+          "Reishi Mushroom Fruiting Body Extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {

@@ -6258,6 +6258,23 @@ class SupplementEnricherV3:
                 source_id, source_db, source_name = declared_source
                 recognition = {**recognition, "recognition_source": source_db,
                                "matched_entry_id": source_id, "matched_entry_name": source_name}
+        elif (recognition.get("recognition_source") == "other_ingredients"
+                and is_identity_scoreable(decision.disposition)
+                and self._current_canonical_identity_registry().canonicalize(
+                    str(recognition.get("matched_entry_id") or ""), "other_ingredients",
+                )[0] == decision.canonical_id_after):
+            # A duplicate other-ingredient record that canonical_equivalences
+            # joins to the verified botanical decision (NHA_WEST_INDIAN_CHERRY
+            # for acerola extract) must not overwrite that decision. Records
+            # not reviewed as the same identity keep their own recognition.
+            declared_source = self._botanical_source_identity({
+                **ingredient, "canonical_id": decision.canonical_id_after,
+                "canonical_source_db": row.get("canonical_source_db"),
+            })
+            if declared_source and declared_source[0] == decision.canonical_id_after:
+                source_id, source_db, source_name = declared_source
+                recognition = {**recognition, "recognition_source": source_db,
+                               "matched_entry_id": source_id, "matched_entry_name": source_name}
 
         recognition_source = recognition.get("recognition_source")
         recognition_reason = (

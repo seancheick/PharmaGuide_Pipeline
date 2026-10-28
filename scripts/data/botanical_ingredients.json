@@ -3,7 +3,7 @@
     "description": "Non-standardized whole herb powders and simple botanical extracts without guaranteed marker compounds. Used for basic ingredient mapping. For premium standardized extracts with marker compounds, see standardized_botanicals.json.",
     "purpose": "ingredient_mapping",
     "schema_version": "5.2.0",
-    "last_updated": "2026-10-27",
+    "last_updated": "2026-10-28",
     "total_entries": 559,
     "functional_roles_field": {
       "added_in": "5.1.0",
@@ -8143,12 +8143,12 @@
         "lions mane mushroom"
       ],
       "category": "mushroom",
-      "notes": "Hericium erinaceus mushroom. Hericenones and erinacines are small molecules studied in relation to nerve-growth-factor pathways; they are not nerve growth factors. Beta-glucan percentage alone does not establish human cognitive benefit.",
-      "last_updated": "2026-05-22",
+      "notes": "Hericium erinaceus mushroom. Hericenones and erinacines are small molecules studied in relation to nerve-growth-factor pathways; they are not nerve growth factors. Beta-glucan percentage alone does not establish human cognitive benefit. CUI corrected 2026-10-28 from C1001731 (Cyanea capillata, the lion's mane jellyfish) to C6049163 (Lion's Mane Mushroom), UMLS-verified.",
+      "last_updated": "2026-10-28",
       "external_ids": {
         "unii": "Y62T8P9AAP"
       },
-      "cui": "C1001731",
+      "cui": "C6049163",
       "functional_roles": [],
       "attributes": {
         "source_origin": "fungal",

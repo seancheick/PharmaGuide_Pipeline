@@ -1,0 +1,1278 @@
+{
+  "329993": {
+    "id": 329993,
+    "fullName": "Organic Lion's Mane Mushroom Extract Powder 1000 mg",
+    "brandName": "BulkSupplements.com",
+    "ingredientRows": [
+      {
+        "order": 1,
+        "ingredientId": 311753,
+        "description": "",
+        "notes": "20:1, organic",
+        "quantity": [
+          {
+            "servingSizeOrder": 1,
+            "servingSizeQuantity": 1000,
+            "operator": "=",
+            "quantity": 1000,
+            "unit": "mg",
+            "dailyValueTargetGroup": [
+              {
+                "name": "Adults and children 4 or more years of age",
+                "operator": null,
+                "percent": null,
+                "footnote": "Daily Value not established"
+              }
+            ],
+            "servingSizeUnit": "Milligram(s)"
+          }
+        ],
+        "nestedRows": [],
+        "name": "Lion's Mane Mushroom Fruiting Body Extract",
+        "category": "botanical",
+        "ingredientGroup": "Hericium mushroom",
+        "uniiCode": null,
+        "alternateNames": [],
+        "forms": []
+      }
+    ],
+    "servingSizes": [
+      {
+        "order": 1,
+        "minQuantity": 1000,
+        "maxQuantity": 1000,
+        "minDailyServings": 1,
+        "maxDailyServings": 1,
+        "unit": "Milligram(s)",
+        "notes": "About 2/5 Tsp",
+        "inSFB": true
+      }
+    ],
+    "physicalState": {
+      "langualCode": "E0162",
+      "langualCodeDescription": "Powder"
+    },
+    "productType": {
+      "langualCode": "A1306",
+      "langualCodeDescription": "Botanical"
+    },
+    "statements": [
+      {
+        "type": "Formula re: Contains",
+        "notes": "Organic Lion's Mane Mushroom Extract Powder 1000 mg per serving\r\nOrganic Lion's Mane Mushroom Extract "
+      },
+      {
+        "type": "Seals/Symbols",
+        "notes": "USDA Organic"
+      },
+      {
+        "type": "Formulation re: Organic",
+        "notes": "USDA Organic\r\nCertified Organic by: Organic Certifiers, INC."
+      },
+      {
+        "type": "Brand IP Statement(s) re: (c), (TM), (SM)",
+        "notes": "BulkSupplements.com\r\nClean & Pure Bulk Supplements"
+      },
+      {
+        "type": "Formulation re: Other",
+        "notes": "Color may vary"
+      },
+      {
+        "type": "FDA Disclaimer Statement",
+        "notes": "Warning: This product is not intended to diagnose, treat, cure, or prevent any disease."
+      },
+      {
+        "type": "Precautions re: All Other",
+        "notes": "Always consult a physician before taking any dietary supplement."
+      },
+      {
+        "type": "Precautions re: Children",
+        "notes": "Keep out of reach of children."
+      },
+      {
+        "type": "Formulation re: Does NOT Contain",
+        "notes": "Free of: added sugar, soy, dairy, yeast, gluten"
+      },
+      {
+        "type": "Suggested/Recommended/Usage/Directions",
+        "notes": "Suggested use: As a dietary supplement, take 1000 mg (about 2/5 tsp) once daily, or as directed by a physician."
+      },
+      {
+        "type": "General Statements: All Other Content",
+        "notes": "Use an accurate milligram scale.\r\nNew"
+      },
+      {
+        "type": "Storage",
+        "notes": "Contents are sold by weight, not volume. Settling may occur.\r\nStore in a dry, cool place"
+      }
+    ],
+    "targetGroups": [
+      "Adult (18 - 50 Years)",
+      "Organic",
+      "Gluten Free",
+      "Dairy Free"
+    ]
+  },
+  "245957": {
+    "id": 245957,
+    "fullName": "Acerola/Flavonoid",
+    "brandName": "Pure Encapsulations",
+    "ingredientRows": [
+      {
+        "order": 1,
+        "ingredientId": 278591,
+        "description": "",
+        "notes": "",
+        "quantity": [
+          {
+            "servingSizeOrder": 1,
+            "servingSizeQuantity": 2,
+            "operator": "=",
+            "quantity": 300,
+            "unit": "mg",
+            "dailyValueTargetGroup": [
+              {
+                "name": "Adults and children 4 or more years of age",
+                "operator": "=",
+                "percent": 333,
+                "footnote": null
+              }
+            ],
+            "servingSizeUnit": "Capsule(s)"
+          }
+        ],
+        "nestedRows": [
+          {
+            "order": 2,
+            "ingredientId": 204414,
+            "description": null,
+            "notes": null,
+            "quantity": [
+              {
+                "servingSizeOrder": 1,
+                "servingSizeQuantity": 2,
+                "operator": "=",
+                "quantity": 938,
+                "unit": "mg",
+                "dailyValueTargetGroup": [],
+                "servingSizeUnit": "Capsule(s)"
+              }
+            ],
+            "nestedRows": [],
+            "name": "Acerola (Malpighia glabra) extract",
+            "category": "botanical",
+            "ingredientGroup": "Acerola",
+            "uniiCode": null,
+            "alternateNames": [],
+            "forms": []
+          }
+        ],
+        "name": "Vitamin C",
+        "category": "vitamin",
+        "ingredientGroup": "Vitamin C",
+        "uniiCode": "PQ6CK8PD0R",
+        "alternateNames": [],
+        "forms": []
+      },
+      {
+        "order": 3,
+        "ingredientId": 25941,
+        "description": null,
+        "notes": null,
+        "quantity": [
+          {
+            "servingSizeOrder": 1,
+            "servingSizeQuantity": 2,
+            "operator": "=",
+            "quantity": 50,
+            "unit": "mg",
+            "dailyValueTargetGroup": [
+              {
+                "name": "Adults and children 4 or more years of age",
+                "operator": null,
+                "percent": null,
+                "footnote": "Daily Value (DV) Not Established"
+              }
+            ],
+            "servingSizeUnit": "Capsule(s)"
+          }
+        ],
+        "nestedRows": [],
+        "name": "Hesperidin Methyl Chalcone",
+        "category": "non-nutrient/non-botanical",
+        "ingredientGroup": "Hesperidin",
+        "uniiCode": null,
+        "alternateNames": [],
+        "forms": []
+      },
+      {
+        "order": 4,
+        "ingredientId": 14662,
+        "description": null,
+        "notes": null,
+        "quantity": [
+          {
+            "servingSizeOrder": 1,
+            "servingSizeQuantity": 2,
+            "operator": "=",
+            "quantity": 50,
+            "unit": "mg",
+            "dailyValueTargetGroup": [
+              {
+                "name": "Adults and children 4 or more years of age",
+                "operator": null,
+                "percent": null,
+                "footnote": "Daily Value (DV) Not Established"
+              }
+            ],
+            "servingSizeUnit": "Capsule(s)"
+          }
+        ],
+        "nestedRows": [],
+        "name": "Naringin",
+        "category": "non-nutrient/non-botanical",
+        "ingredientGroup": "Naringenin",
+        "uniiCode": null,
+        "alternateNames": [],
+        "forms": []
+      },
+      {
+        "order": 5,
+        "ingredientId": 3784,
+        "description": null,
+        "notes": null,
+        "quantity": [
+          {
+            "servingSizeOrder": 1,
+            "servingSizeQuantity": 2,
+            "operator": "=",
+            "quantity": 50,
+            "unit": "mg",
+            "dailyValueTargetGroup": [
+              {
+                "name": "Adults and children 4 or more years of age",
+                "operator": null,
+                "percent": null,
+                "footnote": "Daily Value (DV) Not Established"
+              }
+            ],
+            "servingSizeUnit": "Capsule(s)"
+          }
+        ],
+        "nestedRows": [],
+        "name": "Rutin",
+        "category": "non-nutrient/non-botanical",
+        "ingredientGroup": "Rutin",
+        "uniiCode": null,
+        "alternateNames": [],
+        "forms": []
+      }
+    ],
+    "servingSizes": [
+      {
+        "order": 1,
+        "minQuantity": 2,
+        "maxQuantity": 2,
+        "minDailyServings": 1,
+        "maxDailyServings": 4,
+        "unit": "Capsule(s)",
+        "notes": "",
+        "inSFB": true
+      }
+    ],
+    "physicalState": {
+      "langualCode": "E0159",
+      "langualCodeDescription": "Capsule"
+    },
+    "productType": {
+      "langualCode": "A1325",
+      "langualCodeDescription": "Other Combinations"
+    },
+    "statements": [
+      {
+        "type": "Storage",
+        "notes": "Store in a cool, dry place."
+      },
+      {
+        "type": "Suggested/Recommended/Usage/Directions",
+        "notes": "Recommendations: As a dietary supplement, take 2 capsules, 1-4 times daily, with or between meals."
+      },
+      {
+        "type": "Precautions re: Pregnant or Nursing or Prescription Medications",
+        "notes": "Warning: If you are pregnant or lactating, have any health condition or are taking any medication, consult your health professional before use."
+      },
+      {
+        "type": "Precautions re: Children",
+        "notes": "Keep out of the reach of children."
+      },
+      {
+        "type": "Precautions re: All Other",
+        "notes": "Use only if safety seal is intact."
+      },
+      {
+        "type": "General Statements: All Other Content",
+        "notes": "Contents may not fill package in order to accommodate required labeling. Please reply on stated quantity."
+      },
+      {
+        "type": "Formulation re: Does NOT Contain",
+        "notes": "Certified Gluten-Free by the Gluten-Free Certification Organization, www.gluten.org"
+      },
+      {
+        "type": "General Statements: All Other Content",
+        "notes": "Scan to learn about our hypoallergenic supplements"
+      },
+      {
+        "type": "Formula re: Contains",
+        "notes": "Corn-free plant-based Vitamin C and Bioflavonoids; Provides antioxidant support"
+      },
+      {
+        "type": "Formulation re: Does NOT Contain",
+        "notes": "Corn-free plant-based Vitamin C and Bioflavonoids; Provides antioxidant support\nGluten-free, Non-GMO & Hypoallergenic"
+      },
+      {
+        "type": "Formulation re: Other",
+        "notes": "Gluten-free, Non-GMO & Hypoallergenic"
+      },
+      {
+        "type": "FDA Statement of Identity",
+        "notes": "Dietary Supplement"
+      },
+      {
+        "type": "Seals/Symbols",
+        "notes": "GF"
+      },
+      {
+        "type": "FDA Disclaimer Statement",
+        "notes": "This statement has not been evaluated by the Food and Drug Administration. This product is not intended to diagnose, treat, cure, or prevent any disease."
+      }
+    ],
+    "targetGroups": [
+      "Adult (18 - 50 Years)",
+      "Gluten Free"
+    ]
+  },
+  "216622": {
+    "id": 216622,
+    "fullName": "American Ginseng Root Extract",
+    "brandName": "Solgar",
+    "ingredientRows": [
+      {
+        "order": 1,
+        "ingredientId": 292411,
+        "description": "",
+        "notes": "Iron Note: Naturally occurring; therefore amount may vary. ",
+        "quantity": [
+          {
+            "servingSizeOrder": 1,
+            "servingSizeQuantity": 1,
+            "operator": "=",
+            "quantity": 1,
+            "unit": "mg",
+            "dailyValueTargetGroup": [
+              {
+                "name": "Adults and children 4 or more years of age",
+                "operator": "=",
+                "percent": 6,
+                "footnote": null
+              }
+            ],
+            "servingSizeUnit": "Vegetable Capsule(s)"
+          }
+        ],
+        "nestedRows": [],
+        "name": "Iron",
+        "category": "mineral",
+        "ingredientGroup": "Iron",
+        "uniiCode": "E1UOL152H7",
+        "alternateNames": [
+          "Fe"
+        ],
+        "forms": []
+      },
+      {
+        "order": 2,
+        "ingredientId": 241047,
+        "description": "",
+        "notes": "standardized American Ginseng extract (Form: 10% Ginsenosides Note: 10 mg) PlantPart: root ",
+        "quantity": [
+          {
+            "servingSizeOrder": 1,
+            "servingSizeQuantity": 1,
+            "operator": "=",
+            "quantity": 100,
+            "unit": "mg",
+            "dailyValueTargetGroup": [
+              {
+                "name": "Adults and children 4 or more years of age",
+                "operator": null,
+                "percent": null,
+                "footnote": "Daily Value (DV) Not Established"
+              }
+            ],
+            "servingSizeUnit": "Vegetable Capsule(s)"
+          }
+        ],
+        "nestedRows": [],
+        "name": "standardized American Ginseng extract",
+        "category": "botanical",
+        "ingredientGroup": "American Ginseng",
+        "uniiCode": null,
+        "alternateNames": [],
+        "forms": [
+          {
+            "order": 1,
+            "ingredientId": 241048,
+            "prefix": null,
+            "percent": 10,
+            "name": "Ginsenosides",
+            "category": "non-nutrient/non-botanical",
+            "ingredientGroup": "Ginsenosides",
+            "uniiCode": null
+          }
+        ]
+      },
+      {
+        "order": 3,
+        "ingredientId": 241051,
+        "description": "",
+        "notes": "",
+        "quantity": [
+          {
+            "servingSizeOrder": 1,
+            "servingSizeQuantity": 1,
+            "operator": "=",
+            "quantity": 200,
+            "unit": "mg",
+            "dailyValueTargetGroup": [
+              {
+                "name": "Adults and children 4 or more years of age",
+                "operator": null,
+                "percent": null,
+                "footnote": "Daily Value (DV) Not Established"
+              }
+            ],
+            "servingSizeUnit": "Vegetable Capsule(s)"
+          }
+        ],
+        "nestedRows": [],
+        "name": "raw American Ginseng powder",
+        "category": "botanical",
+        "ingredientGroup": "American Ginseng",
+        "uniiCode": null,
+        "alternateNames": [],
+        "forms": []
+      }
+    ],
+    "servingSizes": [
+      {
+        "order": 1,
+        "minQuantity": 1,
+        "maxQuantity": 1,
+        "minDailyServings": 1,
+        "maxDailyServings": 3,
+        "unit": "Vegetable Capsule(s)",
+        "notes": "",
+        "inSFB": true
+      }
+    ],
+    "physicalState": {
+      "langualCode": "E0159",
+      "langualCodeDescription": "Capsule"
+    },
+    "productType": {
+      "langualCode": "A1306",
+      "langualCodeDescription": "Botanical"
+    },
+    "statements": [
+      {
+        "type": "Formulation re: Other",
+        "notes": "Solgar's Standardized Full Potency (SFP) Herbs are developed through a unique process that integrates the ideologies of both traditional herbalism and standardized herbal technology. To ensure consistent and reliable phytonutrient levels, we isolate a controlled amount of these important active plant compounds. Then, we blend these enhanced, \"standardized\" compounds with all of the components that occur naturally in the whole raw herb. The result is a potent, premium-quality standardized herbal extract with all of the synergistic and beneficial qualities found in nature."
+      },
+      {
+        "type": "Formulation re: Does NOT Contain",
+        "notes": "Solgar's American Ginseng Root Extract Vegetable Capsules are free of sugar, salt, yeast, wheat, soy, gluten, dairy and animal products and are formulated without the use of artificial preservatives, flavors or colors."
+      },
+      {
+        "type": "Storage",
+        "notes": "To assure freshness and potency, store at room temperature 59 degrees-86 degrees F (15 degrees-30 degrees C). Store away from heat, light and moisture."
+      },
+      {
+        "type": "Precautions re: All Other",
+        "notes": "Do not use if outer bottle seal is missing, torn or damaged in any way."
+      },
+      {
+        "type": "Formula re: Contains",
+        "notes": "PhytO2X\nSystem"
+      },
+      {
+        "type": "General Statements: All Other Content",
+        "notes": "Solgar since 1947"
+      },
+      {
+        "type": "Formulation re: Other",
+        "notes": "Standardized\nFull potency"
+      },
+      {
+        "type": "Formula re: Contains",
+        "notes": "Panax quinquefolium"
+      },
+      {
+        "type": "FDA Statement of Identity",
+        "notes": "Herbal Supplement"
+      },
+      {
+        "type": "Seals/Symbols",
+        "notes": "K Parve (Kosher)"
+      },
+      {
+        "type": "Formulation re: Vegetarian/Vegan",
+        "notes": "Suitable for vegetarians"
+      },
+      {
+        "type": "Suggested/Recommended/Usage/Directions",
+        "notes": "Suggested Use: As an herbal dietary supplement for adults, take one (1) vegetable capsule up to three (3) times daily, preferably at mealtime, or as directed by a healthcare practitioner."
+      },
+      {
+        "type": "Precautions re: Pregnant or Nursing or Prescription Medications",
+        "notes": "If you are pregnant, nursing, taking any medication or have a medical condition, please consult your healthcare practitioner before taking any dietary supplement."
+      },
+      {
+        "type": "Precautions re: Children",
+        "notes": "Keep out of reach of children.\nWarning: Accidental overdose of iron-containing products is a leading cause of fatal poisoning in children under 6. Keep this product out of reach of children. In case of accidental overdose, call a doctor or poison control center immediately."
+      },
+      {
+        "type": "Formula re: Contains",
+        "notes": "PhytO2X is a special blend of antioxidants, the purpose of which is to maintain the freshness of the ingredients."
+      },
+      {
+        "type": "Formula re: Kosher",
+        "notes": "Solgar's KOF-K certification #K-1250"
+      },
+      {
+        "type": "Seals/Symbols",
+        "notes": "Ginseng Quality Assurance"
+      }
+    ],
+    "targetGroups": [
+      "Vegetarian",
+      "Adult (18 - 50 Years)",
+      "Kosher",
+      "Gluten Free",
+      "Dairy Free",
+      "Sugar Free"
+    ]
+  },
+  "330511": {
+    "id": 330511,
+    "fullName": "Reishi Mushroom Extract Powder 1000 mg",
+    "brandName": "BulkSupplements.com",
+    "ingredientRows": [
+      {
+        "order": 1,
+        "ingredientId": 309580,
+        "description": "",
+        "notes": "4:1",
+        "quantity": [
+          {
+            "servingSizeOrder": 1,
+            "servingSizeQuantity": 1000,
+            "operator": "=",
+            "quantity": 1000,
+            "unit": "mg",
+            "dailyValueTargetGroup": [
+              {
+                "name": "Adults and children 4 or more years of age",
+                "operator": null,
+                "percent": null,
+                "footnote": "Daily Value not established"
+              }
+            ],
+            "servingSizeUnit": "mg"
+          }
+        ],
+        "nestedRows": [],
+        "name": "Reishi Mushroom Fruiting Body Extract",
+        "category": "botanical",
+        "ingredientGroup": "Reishi",
+        "uniiCode": null,
+        "alternateNames": [],
+        "forms": []
+      }
+    ],
+    "servingSizes": [
+      {
+        "order": 1,
+        "minQuantity": 1000,
+        "maxQuantity": 1000,
+        "minDailyServings": 1,
+        "maxDailyServings": 1,
+        "unit": "mg",
+        "notes": "About 2/5 tsp",
+        "inSFB": true
+      }
+    ],
+    "physicalState": {
+      "langualCode": "E0162",
+      "langualCodeDescription": "Powder"
+    },
+    "productType": {
+      "langualCode": "A1306",
+      "langualCodeDescription": "Botanical"
+    },
+    "statements": [
+      {
+        "type": "Formula re: Contains",
+        "notes": "Reishi Mushroom Extract Powder 1000 mg per serving"
+      },
+      {
+        "type": "Brand IP Statement(s) re: (c), (TM), (SM)",
+        "notes": "BulkSupplements.com\r\nClean & pure bulk supplements"
+      },
+      {
+        "type": "Formulation re: Other",
+        "notes": "Color may vary"
+      },
+      {
+        "type": "FDA Disclaimer Statement",
+        "notes": "Warning: This product is not intended to diagnose, treat, cure, or prevent any disease."
+      },
+      {
+        "type": "Precautions re: All Other",
+        "notes": "Always consult a physician before taking any dietary supplement."
+      },
+      {
+        "type": "Precautions re: Children",
+        "notes": "Keep out of reach of children."
+      },
+      {
+        "type": "Formulation re: Does NOT Contain",
+        "notes": "Free of: Added sugar, soy, dairy, yeast, gluten, additives"
+      },
+      {
+        "type": "Suggested/Recommended/Usage/Directions",
+        "notes": "Suggested use: As a dietary supplement, take 1000 mg (about 2/5 tsp) once daily, or as directed by a physician."
+      },
+      {
+        "type": "Storage",
+        "notes": "Contents are sold by weight, not volume. Settling may occur.\r\nStore in a dry, cool place"
+      },
+      {
+        "type": "General Statements: All Other Content",
+        "notes": "Use an accurate milligram scale.\r\nNew"
+      }
+    ],
+    "targetGroups": [
+      "Adult (18 - 50 Years)",
+      "Gluten Free",
+      "Dairy Free"
+    ]
+  },
+  "252349": {
+    "id": 252349,
+    "fullName": "Bamboo Extract",
+    "brandName": "BulkSupplements.com",
+    "ingredientRows": [
+      {
+        "order": 1,
+        "ingredientId": 282065,
+        "description": "",
+        "notes": "",
+        "quantity": [
+          {
+            "servingSizeOrder": 1,
+            "servingSizeQuantity": 500,
+            "operator": "=",
+            "quantity": 500,
+            "unit": "mg",
+            "dailyValueTargetGroup": [
+              {
+                "name": "Adults and children 4 or more years of age",
+                "operator": null,
+                "percent": null,
+                "footnote": "Daily Value not established"
+              }
+            ],
+            "servingSizeUnit": "mg"
+          }
+        ],
+        "nestedRows": [],
+        "name": "Bamboo extract",
+        "category": "botanical",
+        "ingredientGroup": "Bamboo",
+        "uniiCode": null,
+        "alternateNames": [],
+        "forms": []
+      }
+    ],
+    "servingSizes": [
+      {
+        "order": 1,
+        "minQuantity": 500,
+        "maxQuantity": 500,
+        "minDailyServings": 1,
+        "maxDailyServings": 1,
+        "unit": "mg",
+        "notes": "about 1/5 teaspoon",
+        "inSFB": true
+      }
+    ],
+    "physicalState": {
+      "langualCode": "E0162",
+      "langualCodeDescription": "Powder"
+    },
+    "productType": {
+      "langualCode": "A1306",
+      "langualCodeDescription": "Botanical"
+    },
+    "statements": [
+      {
+        "type": "General Statements: All Other Content",
+        "notes": "Clean & pure bulk supplements"
+      },
+      {
+        "type": "Formulation re: Does NOT Contain",
+        "notes": "Free of: Added sugar, soy, dairy, yeast, gluten, additives"
+      },
+      {
+        "type": "Suggested/Recommended/Usage/Directions",
+        "notes": "Suggested use: As a dietary supplement, take 500 mg (about 1/5 tsp) once daily with water, or as directed by a physician."
+      },
+      {
+        "type": "Storage",
+        "notes": "Store in a dry, cool place"
+      },
+      {
+        "type": "Formulation re: Other",
+        "notes": "Color may vary"
+      },
+      {
+        "type": "FDA Disclaimer Statement",
+        "notes": "Warning: This product is not intended to diagnose, treat, cure, or prevent any disease."
+      },
+      {
+        "type": "Precautions re: All Other",
+        "notes": "Always consult a physician before taking any dietary supplement."
+      },
+      {
+        "type": "Precautions re: Children",
+        "notes": "Keep out of reach of children."
+      }
+    ],
+    "targetGroups": [
+      "Adult (18 - 50 Years)",
+      "Gluten Free",
+      "Dairy Free"
+    ]
+  },
+  "329997": {
+    "brandIpSymbol": "®",
+    "brandName": "BulkSupplements.com",
+    "bundleName": "",
+    "claims": [
+      {
+        "langualCode": "P0115",
+        "langualCodeDescription": "All Other"
+      },
+      {
+        "langualCode": "P0265",
+        "langualCodeDescription": "Structure/Function"
+      }
+    ],
+    "contacts": [
+      {
+        "contactId": 22143,
+        "text": "Distributed exclusively by",
+        "types": [
+          "Distributor"
+        ],
+        "contactDetails": {
+          "src": "01-raw/2025-09-25/data/contact_4.json",
+          "id": 22143,
+          "name": "BulkSupplements.com",
+          "streetAddress": "7511 Eastgate Rd",
+          "city": "Henderson",
+          "state": "NV",
+          "country": "USA",
+          "zipCode": "89011",
+          "phoneNumber": "",
+          "email": "",
+          "webAddress": "BulkSupplements.com"
+        }
+      }
+    ],
+    "entryDate": "2025-04-24",
+    "events": [
+      {
+        "date": "2025-04-24",
+        "type": "Date entered into DSLD"
+      }
+    ],
+    "fullName": "Organic Lion's Mane Mushroom Powder 1000 mg",
+    "hasOuterCarton": null,
+    "id": 329997,
+    "ingredientRows": [
+      {
+        "order": 1,
+        "ingredientId": 355982,
+        "description": "",
+        "notes": "organic",
+        "quantity": [
+          {
+            "servingSizeOrder": 1,
+            "servingSizeQuantity": 1000,
+            "operator": "=",
+            "quantity": 1000,
+            "unit": "mg",
+            "dailyValueTargetGroup": [
+              {
+                "name": "Adults and children 4 or more years of age",
+                "operator": null,
+                "percent": null,
+                "footnote": "Daily Value not established"
+              }
+            ],
+            "servingSizeUnit": "mg"
+          }
+        ],
+        "nestedRows": [],
+        "name": "Lion's Mane Mushroom, Powder",
+        "category": "botanical",
+        "ingredientGroup": "Hericium mushroom",
+        "uniiCode": null,
+        "alternateNames": [],
+        "forms": [
+          {
+            "order": 1,
+            "ingredientId": 308092,
+            "prefix": null,
+            "percent": null,
+            "name": "Hericium erinaceus, Powder",
+            "category": "botanical",
+            "ingredientGroup": "Hericium mushroom",
+            "uniiCode": null
+          },
+          {
+            "order": 2,
+            "ingredientId": 355981,
+            "prefix": null,
+            "percent": null,
+            "name": "Hericium erinaceus, Powder",
+            "category": "botanical",
+            "ingredientGroup": "Hericium mushroom",
+            "uniiCode": null
+          }
+        ]
+      }
+    ],
+    "labelRelationships": [
+      {
+        "type": "Package size difference, same product",
+        "labelId": 329998
+      },
+      {
+        "type": "Package size difference, same product",
+        "labelId": 329999
+      }
+    ],
+    "netContents": [
+      {
+        "order": 1,
+        "quantity": 100,
+        "unit": "Gram(s)",
+        "display": "100 Gram(s)"
+      },
+      {
+        "order": 2,
+        "quantity": 3.5,
+        "unit": "Ounce(s)",
+        "display": "3.5 Ounce(s)"
+      }
+    ],
+    "nhanesId": "",
+    "offMarket": 0,
+    "otheringredients": {
+      "text": null,
+      "ingredients": null
+    },
+    "pdf": "329997_document.pdf",
+    "percentDvFootnote": "Not Present",
+    "physicalState": {
+      "langualCode": "E0162",
+      "langualCodeDescription": "Powder"
+    },
+    "productType": {
+      "langualCode": "A1306",
+      "langualCodeDescription": "Botanical"
+    },
+    "productVersionCode": "002",
+    "servingSizes": [
+      {
+        "order": 1,
+        "minQuantity": 1000,
+        "maxQuantity": 1000,
+        "minDailyServings": 1,
+        "maxDailyServings": 1,
+        "unit": "mg",
+        "notes": "about 2/5 tsp",
+        "inSFB": true
+      }
+    ],
+    "servingsPerContainer": "100",
+    "src": "api/label/329997",
+    "statements": [
+      {
+        "type": "Formula re: Contains",
+        "notes": "Organic Lion's Mane Mushroom Powder 1000 mg per serving"
+      },
+      {
+        "type": "Seals/Symbols",
+        "notes": "USDA Organic"
+      },
+      {
+        "type": "Formulation re: Organic",
+        "notes": "USDA Organic"
+      },
+      {
+        "type": "Brand IP Statement(s) re: (c), (TM), (SM)",
+        "notes": "BulkSupplements.com\r\nClean & Pure Bulk Supplements"
+      },
+      {
+        "type": "Formulation re: Other",
+        "notes": "Color may vary"
+      },
+      {
+        "type": "FDA Disclaimer Statement",
+        "notes": "Warning: This product is not intended to diagnose, treat, cure, or prevent any disease."
+      },
+      {
+        "type": "Precautions re: All Other",
+        "notes": "Always consult a physician before taking any dietary supplement."
+      },
+      {
+        "type": "Precautions re: Children",
+        "notes": "Keep out of reach of children."
+      },
+      {
+        "type": "Formulation re: Does NOT Contain",
+        "notes": "Free of: Added sugar, soy, dairy, yeast, gluten, additives"
+      },
+      {
+        "type": "Suggested/Recommended/Usage/Directions",
+        "notes": "Suggested Use: As a dietary supplement, take 1000 mg (about 2/5 tsp) once daily, or as directed by a physician."
+      },
+      {
+        "type": "Storage",
+        "notes": "Contents are sold by weight, not volume. Settling may occur.\r\nStore in a dry, cool place"
+      },
+      {
+        "type": "General Statements: All Other Content",
+        "notes": "Use an accurate milligram scale.\r\nNew"
+      },
+      {
+        "type": "Formulation re: Organic",
+        "notes": "Certified Organic by: Organic Certifiers, INC."
+      }
+    ],
+    "targetGroups": [
+      "Adult (18 - 50 Years)",
+      "Organic",
+      "Gluten Free",
+      "Dairy Free"
+    ],
+    "thumbnail": "329997_thumbnail.jpg",
+    "upcSku": "X003UPR6S7",
+    "userGroups": [
+      {
+        "dailyValueTargetGroupName": "Adults and children 4 or more years of age",
+        "langualCode": "P0250",
+        "langualCodeDescription": "Adults and Children 4 years and above"
+      }
+    ],
+    "_source": "api"
+  },
+  "337206": {
+    "brandIpSymbol": "®",
+    "brandName": "Nature's Way",
+    "bundleName": "",
+    "claims": [
+      {
+        "langualCode": "P0065",
+        "langualCodeDescription": "Nutrient "
+      },
+      {
+        "langualCode": "P0115",
+        "langualCodeDescription": "All Other"
+      },
+      {
+        "langualCode": "P0265",
+        "langualCodeDescription": "Structure/Function"
+      }
+    ],
+    "contacts": [
+      {
+        "contactId": 7591,
+        "text": null,
+        "types": [
+          "Manufacturer"
+        ],
+        "contactDetails": {
+          "src": "01-raw/2025-09-25/data/contact_3.json",
+          "id": 7591,
+          "name": "Nature's Way Brands, LLC",
+          "streetAddress": "",
+          "city": "Green Bay",
+          "state": "WI",
+          "country": "USA",
+          "zipCode": "54311",
+          "phoneNumber": "1-800-962-8873",
+          "email": "",
+          "webAddress": "naturesway.com"
+        }
+      }
+    ],
+    "entryDate": "2025-08-22",
+    "events": [
+      {
+        "date": "2025-08-22",
+        "type": "Date entered into DSLD"
+      }
+    ],
+    "fullName": "Bladderwrack Whole Thallus 580 mg",
+    "hasOuterCarton": null,
+    "id": 337206,
+    "ingredientRows": [
+      {
+        "order": 1,
+        "ingredientId": 294779,
+        "description": "",
+        "notes": "",
+        "quantity": [
+          {
+            "servingSizeOrder": 1,
+            "servingSizeQuantity": 1,
+            "operator": "=",
+            "quantity": 151,
+            "unit": "mcg",
+            "dailyValueTargetGroup": [
+              {
+                "name": "Adults and children 4 or more years of age",
+                "operator": "=",
+                "percent": 101,
+                "footnote": null
+              }
+            ],
+            "servingSizeUnit": "Capsule(s)"
+          }
+        ],
+        "nestedRows": [],
+        "name": "Iodine",
+        "category": "mineral",
+        "ingredientGroup": "Iodine",
+        "uniiCode": "9679TC07X4",
+        "alternateNames": [],
+        "forms": [
+          {
+            "order": 1,
+            "ingredientId": 294778,
+            "prefix": null,
+            "percent": null,
+            "name": "Bladderwrack",
+            "category": "botanical",
+            "ingredientGroup": "Bladderwrack",
+            "uniiCode": "535G2ABX9M"
+          }
+        ]
+      },
+      {
+        "order": 2,
+        "ingredientId": 119000,
+        "description": "",
+        "notes": "",
+        "quantity": [
+          {
+            "servingSizeOrder": 1,
+            "servingSizeQuantity": 1,
+            "operator": "=",
+            "quantity": 580,
+            "unit": "mg",
+            "dailyValueTargetGroup": [
+              {
+                "name": "Adults and children 4 or more years of age",
+                "operator": null,
+                "percent": null,
+                "footnote": "Daily Value (DV) Not Established"
+              }
+            ],
+            "servingSizeUnit": "Capsule(s)"
+          }
+        ],
+        "nestedRows": [],
+        "name": "Bladderwrack",
+        "category": "other",
+        "ingredientGroup": "Bladderwrack",
+        "uniiCode": null,
+        "alternateNames": [],
+        "forms": []
+      }
+    ],
+    "labelRelationships": [
+      {
+        "type": "Image difference, same product",
+        "labelId": 39964
+      },
+      {
+        "type": "Image difference, same product",
+        "labelId": 79208
+      },
+      {
+        "type": "Image difference, same product",
+        "labelId": 54521
+      }
+    ],
+    "netContents": [
+      {
+        "order": 1,
+        "quantity": 100,
+        "unit": "Vegan Capsule(s)",
+        "display": "100 Vegan Capsule(s)"
+      }
+    ],
+    "nhanesId": "",
+    "offMarket": 0,
+    "otheringredients": {
+      "text": null,
+      "ingredients": [
+        {
+          "order": 1,
+          "ingredientId": 291435,
+          "name": "Hypromellose",
+          "category": "other",
+          "ingredientGroup": "Hypromellose",
+          "uniiCode": "3NXW29V3WO",
+          "alternateNames": [],
+          "forms": []
+        }
+      ]
+    },
+    "pdf": "337206_document.pdf",
+    "percentDvFootnote": "Not Present",
+    "physicalState": {
+      "langualCode": "E0159",
+      "langualCodeDescription": "Capsule"
+    },
+    "productType": {
+      "langualCode": "A1317",
+      "langualCodeDescription": "Botanical with Nutrients"
+    },
+    "productVersionCode": "LH15380.01 BLK8347",
+    "servingSizes": [
+      {
+        "order": 1,
+        "minQuantity": 1,
+        "maxQuantity": 1,
+        "minDailyServings": 1,
+        "maxDailyServings": 1,
+        "unit": "Capsule(s)",
+        "notes": "",
+        "inSFB": true
+      }
+    ],
+    "servingsPerContainer": "100",
+    "src": "api/label/337206",
+    "statements": [
+      {
+        "type": "Formulation re: Other",
+        "notes": "Supports thyroid function\r\nBotanicals are sourced where they grow best\r\nMade with the quality you trust"
+      },
+      {
+        "type": "Formula re: Contains",
+        "notes": "High potency plant-based iodine per serving\r\nWhole Thallus Bladderwrack\r\nWith 580 mg bladderwrack per serving"
+      },
+      {
+        "type": "General Statements: All Other Content",
+        "notes": "Explore more products at naturesway.com\r\nBottle made from 50% post-consumer recycled plastic"
+      },
+      {
+        "type": "Brand IP Statement(s) re: (c), (TM), (SM)",
+        "notes": "Copyright 2025 Nature's Way Brands, LLC"
+      },
+      {
+        "type": "Seals/Symbols",
+        "notes": "Vegan\r\nGelatin Free"
+      },
+      {
+        "type": "Formulation re: Does NOT Contain",
+        "notes": "Vegan\r\nGelatin Free"
+      },
+      {
+        "type": "Formulation re: Vegetarian/Vegan",
+        "notes": "Vegan\r\nGelatin Free"
+      },
+      {
+        "type": "FDA Disclaimer Statement",
+        "notes": "These statements have not been evaluated by the Food & Drug Administration. This product is not intended to diagnose, treat, cure, or prevent any disease."
+      },
+      {
+        "type": "Formula re: Contains",
+        "notes": "Whole Thallus Bladderwrack\r\nPlant-based iodine 580 mg per serving"
+      },
+      {
+        "type": "Formulation re: Other",
+        "notes": "Supports thyroid function\r\nPlant powered"
+      },
+      {
+        "type": "Seals/Symbols",
+        "notes": "Non GMO Project Verified nongmoproject.org"
+      },
+      {
+        "type": "Formulation re: Does NOT Contain",
+        "notes": "Non GMO Project Verified nongmoproject.org"
+      },
+      {
+        "type": "FDA Statement of Identity",
+        "notes": "Dietary Supplement"
+      },
+      {
+        "type": "Suggested/Recommended/Usage/Directions",
+        "notes": "Recommendation: Adults take 1 capsule daily."
+      },
+      {
+        "type": "Precautions re: Pregnant or Nursing or Prescription Medications",
+        "notes": "If you are pregnant, nursing, or taking any medications, consult a healthcare professional before use."
+      },
+      {
+        "type": "Precautions re: Children",
+        "notes": "Keep out of reach of children."
+      },
+      {
+        "type": "Precautions re: All Other",
+        "notes": "Safety sealed with inner seal. Do not use if seal is broken or missing."
+      },
+      {
+        "type": "Storage",
+        "notes": "Keep tightly closed. Store at room temperature. Avoid excessive heat and direct sunlight."
+      },
+      {
+        "type": "Formulation re: Does NOT Contain",
+        "notes": "Gluten free. No salt, wheat, corn, soy, dairy, gelatin, or artificial colors, flavors, or preservaties."
+      }
+    ],
+    "targetGroups": [
+      "Vegan",
+      "Vegetarian",
+      "Adult (18 - 50 Years)",
+      "Gluten Free",
+      "Dairy Free"
+    ],
+    "thumbnail": "337206_thumbnail.jpg",
+    "upcSku": "0 33674 15380 2",
+    "userGroups": [
+      {
+        "dailyValueTargetGroupName": "Adults and children 4 or more years of age",
+        "langualCode": "P0250",
+        "langualCodeDescription": "Adults and Children 4 years and above"
+      }
+    ],
+    "_source": "api"
+  }
+}

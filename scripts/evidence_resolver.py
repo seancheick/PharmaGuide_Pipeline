@@ -555,6 +555,36 @@ def _load_literature_evidence() -> Dict[str, Dict[str, Any]]:
     return idx
 
 
+@lru_cache(maxsize=1)
+def _exact_equivalent_ids() -> Dict[str, Set[str]]:
+    """Canonical IDs joined by reviewed ``exact_equivalent`` rows, both directions."""
+    doc = json.loads((_DATA_DIR / "canonical_equivalences.json").read_text(encoding="utf-8"))
+    groups: Dict[str, Set[str]] = {}
+    for row in doc.get("equivalences", []):
+        pair = {_norm(row.get("source_id")), _norm(row.get("target_id"))}
+        merged = set(pair).union(*(groups.get(cid, set()) for cid in pair))
+        for cid in merged:
+            groups[cid] = merged
+    return groups
+
+
+def literature_record_for(canonical_id: Any) -> Dict[str, Any]:
+    """The literature record of a canonical, or of one exact equivalent.
+
+    A reviewed literature conclusion belongs to the identity, not to whichever
+    of its duplicate registry IDs (canonical_equivalences.json) resolved the
+    row. The canonical's own record always wins.
+    """
+    idx = _load_literature_evidence()
+    cid = _norm(canonical_id)
+    if cid in idx:
+        return idx[cid]
+    for other in sorted(_exact_equivalent_ids().get(cid, set()) - {cid}):
+        if other in idx:
+            return idx[other]
+    return {}
+
+
 # ============================================================================
 # Universal Evidence Resolver Core
 # ============================================================================
@@ -1041,7 +1071,7 @@ def resolve_evidence_for_row(
     # Mere membership in literature_evidence_records.json CANNOT complete evidence without
     # deterministic verification provenance.
     lit_idx = _load_literature_evidence()
-    lit_entry = lit_idx.get(canonical) or lit_idx.get(norm_name)
+    lit_entry = literature_record_for(canonical) or lit_idx.get(norm_name)
     if lit_entry:
         prov = lit_entry.get("verification_provenance", {})
         is_verified = (
