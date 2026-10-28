@@ -11,14 +11,14 @@
 | `ADD_PROPYLENE_GLYCOL` | no_data | no_data | no_data |  |
 | `ADD_TYRAMINE_RICH_EXTRACT` | caution | caution | limited |  |
 | `BANNED_7_KETO_DHEA` | contraindicated | avoid | probable | Hormonal activity and limited lactation safety data support avoiding use. |
-| `BANNED_BITTER_ORANGE` | contraindicated | avoid | moderate |  |
+| `BANNED_BITTER_ORANGE` | avoid | avoid | moderate |  |
 | `BANNED_CBD_US` | avoid | avoid | probable |  |
 | `BANNED_EPHEDRA` | contraindicated | avoid | established | Serious toxicity risk profile and regulatory prohibition for supplement use. |
 | `BANNED_PENNYROYAL` | contraindicated | avoid | moderate |  |
 | `BANNED_RED_YEAST_RICE` | contraindicated | avoid | moderate |  |
 | `BANNED_TANSY` | contraindicated | avoid | moderate |  |
 | `NHA_GINGER_EXTRACT` | no_data | no_data | no_data |  |
-| `RISK_BITTER_ORANGE` | contraindicated | avoid | moderate |  |
+| `RISK_BITTER_ORANGE` | avoid | avoid | moderate |  |
 | `RISK_YOHIMBE` | contraindicated | avoid | probable | Safety data are limited and stimulant effects are concerning. |
 | `acetyl_l_carnitine` | no_data | no_data | no_data |  |
 | `aloe_ferox` | contraindicated | contraindicated | probable |  |
