@@ -11443,7 +11443,8 @@ class SupplementEnricherV3:
                 bot_aliases = botanical.get('aliases', [])
                 if botanical.get("branded_form"):
                     expected_parent = (botanical.get("attributes") or {}).get("iqm_parent_id")
-                    if expected_parent and ingredient.get("canonical_id") and ingredient["canonical_id"] != expected_parent:
+                    if (expected_parent and ingredient.get("canonical_id")
+                            and ingredient["canonical_id"] not in {expected_parent, botanical.get("id")}):
                         continue
                     if (ingredient.get("identity_disposition") == "ambiguous"
                             or (ingredient.get("match_ambiguity_candidates")
@@ -11581,6 +11582,7 @@ class SupplementEnricherV3:
 
                     found_botanicals.append({
                         "name": ing_name,
+                        **({"raw_source_path": ingredient["raw_source_path"]} if ingredient.get("raw_source_path") else {}),
                         "botanical_id": botanical.get('id', ''),
                         "standard_name": bot_name,
                         "markers": markers,

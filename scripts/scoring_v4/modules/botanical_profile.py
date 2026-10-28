@@ -611,21 +611,62 @@ def is_botanical_product(product: Dict[str, Any]) -> bool:
     return mass_says_botanical
 
 
-def _standardized_match(product: Dict[str, Any], row: Dict[str, Any], *, require_named_material: bool = False) -> bool:
+def _standardized_entries_for_row(product: Dict[str, Any], row: Dict[str, Any]) -> list:
+    """Bind the existing standardization projection to its physical source row."""
     if _explicit_botanical_identity_rejection(row, require_preparation=True):
-        return False
-    sb = ((product.get("formulation_data") or {}).get("standardized_botanicals")) or []
+        return []
     keys = set(_ingredient_identity_keys(row))
-    for item in sb:
-        if not isinstance(item, dict) or not item.get("meets_threshold"):
-            continue
-        if require_named_material and item.get("evidence_source") != "branded_form":
+    row_ref = row.get("raw_source_path") or row.get("source_row_ref")
+    matched = []
+    for item in ((product.get("formulation_data") or {}).get("standardized_botanicals")) or []:
+        if not isinstance(item, dict):
             continue
         item_keys = {_norm(item.get("name")), _norm(item.get("botanical_id")),
                      _norm(item.get("standard_name"))}
-        if keys & item_keys:
-            return True
-    return False
+        if not keys & item_keys:
+            continue
+        source_ref = item.get("raw_source_path") or item.get("source_row_ref")
+        if source_ref:
+            if source_ref != row_ref:
+                continue
+        elif item.get("evidence_source") == "branded_form":
+            # Old projections have no source join. A generic row name cannot
+            # borrow a sibling's exact material specification.
+            from evidence_resolver import is_reviewed_branded_material
+            tax = row.get("raw_taxonomy") or {}
+            printed = " ".join([str(row.get("name") or "")] + [
+                str(form.get("name") or "") for form in (tax.get("forms") or []) + (row.get("forms") or [])
+                if isinstance(form, dict)])
+            material_names = {_norm(item.get("standard_name")), _norm(item.get("botanical_id"))}
+            form = _norm(row.get("matched_form"))
+            printed_forms = {_norm(form.get("name")) for form in (tax.get("forms") or []) + (row.get("forms") or [])
+                             if isinstance(form, dict)} | {_norm(row.get("name"))}
+            exact_iqm_material = (row.get("mapped") is True and row.get("form_match_status") == "mapped"
+                                  and form in material_names and form in printed_forms
+                                  and form not in {_norm(row.get("canonical_id")), _norm(row.get("standard_name"))})
+            if not exact_iqm_material and not is_reviewed_branded_material(item.get("botanical_id"), printed,
+                    preparation_name=item.get("standard_name") or item.get("botanical_id"),
+                    strict_material_spelling=True):
+                continue
+        else:
+            # Legacy generic marker projections remain usable only where their
+            # material identity resolves to one row; duplicates need source refs.
+            literal = _norm(item.get("name"))
+            if literal and literal != _norm(row.get("name")):
+                continue
+            peers = [other for other in _scoring_actives(product)
+                     if (_norm(other.get("name")) == literal if literal else
+                         bool(set(_ingredient_identity_keys(other)) & item_keys))]
+            if len(peers) > 1:
+                continue
+        matched.append(item)
+    return matched
+
+
+def _standardized_match(product: Dict[str, Any], row: Dict[str, Any], *, require_named_material: bool = False) -> bool:
+    return any(item.get("meets_threshold") and
+               (not require_named_material or item.get("evidence_source") == "branded_form")
+               for item in _standardized_entries_for_row(product, row))
 
 
 # Tiered marker-standardization credit (0-4), calibration v2. The binary
@@ -651,18 +692,8 @@ BOTANICAL_EXTRACT = _FVM["botanical_extract"]
 
 def _standardization_tier_credit(product: Dict[str, Any], row: Dict[str, Any]) -> float:
     """Return the tiered marker-standardization credit for ``row``."""
-    if _explicit_botanical_identity_rejection(row, require_preparation=True):
-        return 0.0
-    keys = set(_ingredient_identity_keys(row))
-    sb = ((product.get("formulation_data") or {}).get("standardized_botanicals")) or []
     best = 0.0
-    for item in sb:
-        if not isinstance(item, dict):
-            continue
-        item_keys = {_norm(item.get("name")), _norm(item.get("botanical_id")),
-                     _norm(item.get("standard_name"))}
-        if not (keys & item_keys):
-            continue
+    for item in _standardized_entries_for_row(product, row):
         if item.get("meets_threshold"):
             return STANDARDIZATION_TIER_FULL
         found = _as_float(item.get("percentage_found")) or 0.0

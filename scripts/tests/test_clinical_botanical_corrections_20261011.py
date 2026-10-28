@@ -323,3 +323,72 @@ def test_generic_mapped_parent_form_is_not_a_named_defined_material(form):
     generic_marker = {'formulation_data': {'standardized_botanicals': [{
         'name': 'Fenugreek', 'meets_threshold': True, 'evidence_source': 'percentage_local'}]}}
     assert not bp._is_named_botanical_preparation(generic_marker, row)
+
+
+
+def test_same_standardized_registry_identity_is_not_a_conflicting_iqm_parent(collector):
+    row = {'name': 'KSM-66 Ashwagandha root extract', 'canonical_id': 'ksm_66_ashwagandha',
+           'canonical_source_db': 'standardized_botanicals', 'quantity': 600, 'unit': 'mg'}
+    found = collector._collect_standardized_botanicals({'activeIngredients': [row]})
+    assert any(x['botanical_id'] == 'ksm_66_ashwagandha' and x['meets_threshold'] for x in found)
+
+
+def test_exact_material_projection_cannot_lend_standardization_to_generic_sibling(collector):
+    from copy import deepcopy
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    raw = json.loads((Path(__file__).parent / 'fixtures/material_standardization_304641_raw.json').read_text())
+    first = raw['ingredientRows'][0]
+    first['name'] = 'Fenugreek'
+    first['forms'].append({'order': 2, 'name': 'Testofen', 'category': 'botanical', 'ingredientGroup': 'Fenugreek'})
+    sibling = deepcopy(first)
+    sibling['forms'] = []
+    sibling['order'] = 2
+    raw['ingredientRows'] = [first, sibling]
+    product, errors = collector.enrich_product(EnhancedDSLDNormalizer().normalize_product(raw))
+    assert not errors
+    rows = {x['raw_source_path']: x for x in product['ingredient_quality_data']['ingredients_scorable']}
+    exact, generic = rows['ingredientRows[0]'], rows['ingredientRows[1]']
+    assert bp._standardization_tier_credit(product, exact) == bp.STANDARDIZATION_TIER_FULL
+    assert bp._standardization_tier_credit(product, generic) == 0
+    assert bp._is_named_botanical_preparation(product, {**exact, 'is_parent_total': True})
+    assert not bp._is_named_botanical_preparation(product, {**generic, 'is_parent_total': True})
+    for item in product['formulation_data']['standardized_botanicals']:
+        item.pop('raw_source_path', None)
+    assert bp._standardization_tier_credit(product, exact) == bp.STANDARDIZATION_TIER_FULL
+    assert bp._standardization_tier_credit(product, generic) == 0
+
+
+@pytest.mark.parametrize('literal', ['Potato protein extract', 'Potato protein', 'Proteinase inhibitor II', 'PI2'])
+def test_generic_potato_identity_is_not_repaired_to_slendesta(collector, literal):
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    raw = json.loads((Path(__file__).parent / 'fixtures/material_standardization_304641_raw.json').read_text())
+    raw['ingredientRows'] = raw['ingredientRows'][:1]
+    raw['ingredientRows'][0].update(name=literal, ingredientGroup='Potato', forms=[])
+    product, errors = collector.enrich_product(EnhancedDSLDNormalizer().normalize_product(raw))
+    assert not errors
+    assert not any(x.get('canonical_id') == 'slendesta' for x in product['ingredient_quality_data']['ingredients'])
+
+
+
+def test_explicit_slendesta_still_resolves_its_own_material_spec(collector):
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    raw = json.loads((Path(__file__).parent / 'fixtures/material_standardization_304641_raw.json').read_text())
+    raw['ingredientRows'] = raw['ingredientRows'][:1]
+    raw['ingredientRows'][0].update(name='Slendesta', ingredientGroup='Potato', forms=[])
+    product, errors = collector.enrich_product(EnhancedDSLDNormalizer().normalize_product(raw))
+    assert not errors
+    assert any(x.get('canonical_id') == 'slendesta' for x in product['ingredient_quality_data']['ingredients'])
+    assert any(x['botanical_id'] == 'slendesta' and x['tier'] == 'full'
+               for x in product['formulation_data']['standardized_botanicals'])
+
+
+
+def test_legacy_projection_cannot_borrow_a_different_reviewed_brand():
+    row = {'name': 'KSM-66', 'canonical_id': 'ashwagandha', 'mapped': True,
+           'matched_form': 'KSM-66 ashwagandha', 'identity_disposition': 'clean'}
+    product = {'formulation_data': {'standardized_botanicals': [{
+        'name': 'KSM-66', 'botanical_id': 'testofen', 'standard_name': 'Testofen',
+        'evidence_source': 'branded_form', 'meets_threshold': True}]}}
+    assert bp._standardization_tier_credit(product, row) == 0
+    assert not bp._is_named_botanical_preparation(product, {**row, 'is_parent_total': True,
+                                                          'name': 'Generic Ashwagandha'})
