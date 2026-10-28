@@ -1573,6 +1573,7 @@ def test_zero_native_credit_does_not_close_unreviewed_purpose_transfer():
     from assessment_readiness import evaluate_release_assessment
     product = strain_product(clinical_id='STRAIN_PLANTARUM_299V',
                              name='Lactobacillus plantarum 299v', dose=1e10)
+    product['product_name'] = 'Sleep support probiotic'  # Unrelated to the IBS context.
     evidence = score_evidence(product)
     assert evidence['score'] == 0
     assert evidence['metadata']['evidence_result_state'] == 'research_present_applicability_unestablished'

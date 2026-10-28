@@ -212,8 +212,7 @@ def score_evidence(product: Dict[str, Any], *, apply_primary_floor: bool = False
         accepted_ids = {_entry_id(entry) for entry in accepted_matches}
         matches = [entry for entry in matches if _entry_id(entry) in accepted_ids]
         recovered_matches = [entry for entry in recovered_matches if _entry_id(entry) in accepted_ids]
-    from evidence_resolver import evidence_owner_canonicals, _evidence_claim_purposes, _evidence_entry_purposes
-    claim_purposes = _evidence_claim_purposes(product) if owner_scoped else {}
+    from evidence_resolver import evidence_owner_canonicals, evidence_record_matches_declared_purpose
     owner_canonicals = (
         evidence_owner_canonicals(product)
         if owner_scoped
@@ -245,7 +244,8 @@ def score_evidence(product: Dict[str, Any], *, apply_primary_floor: bool = False
         )
         if owner_canonicals and matched_owner not in owner_canonicals:
             continue
-        if matched_owner in claim_purposes and not (claim_purposes[matched_owner] & _evidence_entry_purposes(entry)):
+        if owner_scoped and not evidence_record_matches_declared_purpose(
+                product, {"canonical_id": matched_owner}, entry):
             _append_once(flags, "LABEL_PURPOSE_EVIDENCE_MISMATCH:" + str(matched_owner))
             continue
 
@@ -334,6 +334,23 @@ def score_evidence(product: Dict[str, Any], *, apply_primary_floor: bool = False
             if not floor_canonical:
                 floor_canonical = auth_canon
 
+    # The shared omega owner separates disclosed EPA/DHA nutrition from held
+    # heart-event research. Reuse its applicability and configured public score;
+    # this engine's raw units use the existing generic public-score reference.
+    omega_authority = None
+    if apply_primary_floor:
+        from evidence_resolver import resolve_omega_evidence_standard
+        from scoring_v4.quality_score_config import config
+        resolved_omega = resolve_omega_evidence_standard(product)
+        if resolved_omega["applicability_qualified"]:
+            cfg = config()
+            reference = cfg["evidence_subscale"]["archetype_reference"]["generic_single_molecule"]
+            authority_floor = resolved_omega["score"] * reference / cfg["pillars"]["evidence"]["weight"]
+            if authority_floor > primary_floor:
+                primary_floor = authority_floor
+                floor_canonical = nutrition_authority_canonical = "omega_3"
+                omega_authority = resolved_omega
+
     total = _clamp(0.0, CAP_TOTAL, max(pipeline_total + depth_bonus, primary_floor))
     immune_cap = immune_support_evidence_cap(product)
     immune_cap_applied = immune_cap is not None and total > immune_cap
@@ -415,6 +432,8 @@ def score_evidence(product: Dict[str, Any], *, apply_primary_floor: bool = False
 
     metadata = {
         "contributing_record_assessments": receipts,
+        "source_references": (list(omega_authority.get("source_references") or [])
+            if omega_authority and primary_floor_decisive else []),
         "selected_nutrition_authority": (nutrition_authority_canonical
             if total > 0 and primary_floor_decisive else None),
         "phase": PHASE_MARKER,

@@ -375,3 +375,87 @@ def test_evidence_weights_match_rubric_config() -> None:
     assert ev["registry_record_id"] == "INGR_OMEGA3"
     assert ev["retired_fields"]["disclosed_epa_dha_clinical_floor"]["score"] == 0
     assert ev["retired_fields"]["prenatal_indication_bonus"]["score"] == 0
+
+
+@pytest.mark.parametrize("carrier", ["Fish Oil", "Krill Oil", "Algal Oil"])
+@pytest.mark.parametrize("generic_route", [False, True])
+def test_public_disclosed_epa_dha_uses_nutrition_authority_on_both_routes(carrier, generic_route):
+    from scoring_v4.scored_artifact import build_scored_artifact
+    from evidence_resolver import resolve_omega_evidence_standard
+
+    product = _epa_dha_product(name=carrier + " Blend")
+    if generic_route:
+        # A broad fatty-acid panel keeps the real generic dispatch without
+        # turning companion ALA/GLA/linoleic acid into EPA/DHA exposure.
+        product["ingredient_quality_data"]["ingredients_scorable"].extend([
+            {"name": canonical.replace("_", " "), "canonical_id": canonical,
+             "quantity": 50, "unit": "mg", "mapped": True}
+            for canonical in ("linoleic_acid", "alpha_linolenic_acid", "gamma_linolenic_acid")
+        ])
+    artifact = build_scored_artifact(product)
+    pillar = artifact["quality_pillars_v4"]["evidence"]
+    assert pillar["components"]["archetype"] == ("generic_single_molecule" if generic_route else "omega")
+    assert pillar["score"] == 10.4
+    assert pillar["evidence_result_state"] == "evaluated_authority"
+    assert "nutritional" in pillar["reason"].lower()
+    resolved = resolve_omega_evidence_standard(product)
+    assert resolved["record_id"] == "omega_reviewed_weak"  # compatibility ID
+    assert resolved["record_source_pmids"] == []
+    assert any(ref.get("doi") == "10.2903/j.efsa.2010.1461" for ref in resolved["source_references"])
+    assert "31567003" not in json.dumps(resolved)
+    assert "32951855" not in json.dumps(resolved)
+
+
+@pytest.mark.parametrize("name,epa,dha", [
+    ("Children Fish Oil", 600, 300),
+    ("SPM Pro-resolving Marine Oil", 600, 300),
+    ("Fish Oil", 0, 0),
+    ("Algal DHA", 0, 300),
+])
+def test_public_omega_nutrition_keeps_population_preparation_and_identity_controls(name, epa, dha):
+    from scoring_v4.scored_artifact import build_scored_artifact
+    artifact = build_scored_artifact(_epa_dha_product(name=name, epa=epa, dha=dha))
+    pillar = artifact["quality_pillars_v4"]["evidence"]
+    assert pillar["score"] == 0
+    assert pillar["evidence_result_state"] != "evaluated_authority"
+
+
+def test_omega_nutrition_authority_does_not_finish_an_unknown_companion_review():
+    from scoring_v4.modules.generic_evidence import score_evidence
+    from evidence_resolver import resolve_product_evidence
+    product = _epa_dha_product(name="Fish Oil Blend")
+    product["ingredient_quality_data"]["ingredients_scorable"].append({
+        "name": "Unreviewed active", "canonical_id": "unreviewed_test_active",
+        "quantity": 10, "unit": "mg", "mapped": True,
+    })
+    # A consumer assessing every subject must preserve its coverage gap, even
+    # when the shared omega owner establishes a separate nutrition floor.
+    payload = score_evidence(product, apply_primary_floor=True)
+    assert not resolve_product_evidence(product).is_assessment_complete
+    assert payload["score"] > 0
+    assert payload["metadata"]["evidence_result_state"] == "clinical_review_not_covered"
+
+
+def test_omega_nutrition_subjects_share_the_existing_authority_disposition():
+    from evidence_resolver import resolve_product_evidence, EvidenceDisposition
+    product = _epa_dha_product(name="Fish Oil")
+    product["ingredient_quality_data"]["ingredients_scorable"].append({
+        "name": "Fish Oil", "canonical_id": "fish_oil", "quantity": 1000, "unit": "mg",
+    })
+    result = resolve_product_evidence(product)
+    assert result.is_assessment_complete
+    assert {row.disposition for row in result.resolutions} == {EvidenceDisposition.RESOLVED_BY_AUTHORITY.value}
+    assert all(row.owner_facts["nutrition_authority"]["source_references"][0]["doi"] == "10.2903/j.efsa.2010.1461"
+               for row in result.resolutions)
+
+
+def test_omega_nutrition_readiness_consumes_the_shared_authority_decision():
+    from assessment_readiness import evaluate_assessment_readiness
+    product = _epa_dha_product(name="Fish Oil")
+    product["ingredient_quality_data"]["ingredients_scorable"].append({
+        "name": "Fish Oil", "canonical_id": "fish_oil", "quantity": 1000, "unit": "mg",
+    })
+    evidence = evaluate_assessment_readiness(product, module="omega")["evidence"]
+    assert evidence["readiness"] == "complete"
+    assert all(row["state"] == "evaluated_supported" for row in evidence["ingredient_assessments"])
+    assert all(row["evidence_applicability"] == "nutrition_authority" for row in evidence["ingredient_assessments"])

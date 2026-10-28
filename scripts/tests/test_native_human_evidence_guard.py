@@ -23,9 +23,11 @@ def test_nonhuman_native_reference_does_not_earn_human_clinical_credit(clinical_
     NCFM's are null, Bl-04's are one positive RCT and one null."""
     product = strain_product(clinical_id=clinical_id, name=name)
     if clinical_id == "STRAIN_ACIDOPHILUS_NCFM":
-        # A null IBS trial is not a completed negative review for every daily
-        # probiotic purpose. Establish its exact claimed scope for this guard.
-        assert score_evidence(product)["metadata"]["evidence_result_state"] == "research_present_applicability_unestablished"
+        # No claim is required, so the null IBS trial is the scoped finding for
+        # a claim-free label; an unrelated label keeps it out entirely.
+        assert score_evidence(product)["metadata"]["evidence_result_state"] == "evaluated_null"
+        unrelated = {**product, "product_name": "Sleep support probiotic"}
+        assert score_evidence(unrelated)["metadata"]["evidence_result_state"] == "research_present_applicability_unestablished"
         product["statements"] = [{"type": "Formulation re: Other",
                                   "notes": "Support for irritable bowel syndrome"}]
     result = score_evidence(product)
@@ -94,7 +96,8 @@ def test_native_source_gap_does_not_silence_independent_backbone_match(monkeypat
     # ... so the independent-backbone path is exercised with a credit-path copy
     # of that same record (pre-ruling study_type/evidence_level restored).
     owners = deepcopy(reviewed_entries())
-    owners["STRAIN_LGG"].update(study_type="clinical_strain", evidence_level="strain-clinical")
+    owners["STRAIN_LGG"].update(study_type="clinical_strain", evidence_level="strain-clinical",
+                                study_contexts=[])  # isolated legacy backbone fixture, not the real held contexts
     monkeypatch.setattr(clinical_applicability, "reviewed_entries", lambda: owners)
     product = strain_product()
     product["evidence_data"] = {"clinical_matches": [deepcopy(owners["STRAIN_LGG"])]}

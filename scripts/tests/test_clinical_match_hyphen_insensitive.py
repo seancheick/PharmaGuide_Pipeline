@@ -276,9 +276,18 @@ def test_real_protein_source_in_ingredient_list_keeps_evidence(enricher):
     assert protein_rows[0]["quantity"] == 21
     assert protein_rows[0]["raw_source_path"] == "ingredientRows[2]"
     assert protein_rows[0]["reason"] == "declared_nutrition_protein_mass"
+    # The declared protein still recovers the whey record by identity. Its
+    # signed lean-mass scope cannot back this label's weight-management claim
+    # (October 28 rulings), so the recovery is rejected for purpose, not identity.
+    from clinical_applicability import assess_clinical_applicability
+    from scoring_v4.modules.generic_evidence import _recover_contract_evidence_matches
+    recovered = {entry["id"]: entry for entry in _recover_contract_evidence_matches(
+        product, product["evidence_data"]["clinical_matches"], owner_scoped=True)}
+    decision = assess_clinical_applicability(product, recovered["INGR_WHEY_PROTEIN"], assess_amount=False)
+    assert decision["reason_code"] == "label_purpose_evidence_mismatch"
+    assert decision["matched_source_row_refs"] == ["ingredientRows[2]"]
     payload = score_evidence(product, owner_scoped=True)
-    assert "INGR_WHEY_PROTEIN" in payload["metadata"]["recovered_matches"]
-    assert payload["metadata"]["ingredient_points"]["protein"] > 0
+    assert "INGR_WHEY_PROTEIN" not in payload["metadata"]["recovered_matches"]
 
 
 @pytest.mark.parametrize("product_id, qualifies", [("42306", True), ("42289", False)])
