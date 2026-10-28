@@ -1273,6 +1273,18 @@
       ],
       "source_commit": "b1f44d3ee (PR #273 held-source closure) plus the INGR_L_ARGININE/INGR_INOSITOL excluded-form fix on claude/canary-refresh-273",
       "notes": "Expected movement from Dr Pham's 2026-10-28 rulings, verified per label against main before #273 (de25a5cf3: 33/33 unchanged) and after. Score moves: 183275 Silymarin 82.0->66.4 (INGR_MILK_THISTLE reference-only: no generic liver-protection credit); 239741 Korean Panax Ginseng 51.5->44.2 (INGR_GINSENG no healthy-adult energy credit); 293943 CoQ10 120 mg 77.4->61.8 (INGR_COQ10 credit limited to adjunctive heart failure; this label's claim is rejected as label_purpose_evidence_mismatch). Completion only, scores unchanged: 245156, 270256, 306237, 306381, 337853 partial->complete because their source records closed. 269278 Arginine AKG complete->partial was a defect, not refreshed: the new INGR_L_ARGININE scope stopped the legacy exclude_aliases check; fixed by carrying exclude_aliases into excluded_form_terms (also INGR_INOSITOL). Refreshed from raw with freeze_contract_snapshots.py --raw-root; safety, amounts and identities unchanged."
+    },
+    {
+      "date": "2026-10-28",
+      "dsld_ids": [
+        306381,
+        293924,
+        321405,
+        321969,
+        336337
+      ],
+      "source_commit": "7f8c05454 (integrated source: scope870a1ade, materialae2fec36, pregnancyf1e15da6)",
+      "notes": "Cause-reviewed full raw replay: 306381 complete->partial because unreviewed B1/B3/B6/taurine research cannot establish completion; qualified citrulline/beta-alanine/theanine/caffeine and total unchanged. 293924 partial->complete through authoritative calcium plus qualified magnesium. 321405 Wobenzym 71.2->60.8 removes unreviewed bromelain clinical credit; 336337 Green Tea Phytosome 78.8->68.4 removes unsigned clinical scope credit; 321969 Iron 94.6->90.1 replaces unreviewed clinical credit with independently qualified nutrient authority and becomes complete. All numeric movement is Evidence-only; full86-label scope receipts show no Clean, other-pillar, route or score-status movement, plus four native controls on final870. Safety and source/exposure guards retained. Actual KSM245156 initial drift was a material-identity defect, FIXED, not refreshed. Other28 canaries remain unchanged. Receipts: ~/pg_quality/field_one_brain_20261028/scope_final/measurement.md and combined_b881c4b_raw_canary.log. No corpus/release acceptance claimed."
     }
   ]
 }
