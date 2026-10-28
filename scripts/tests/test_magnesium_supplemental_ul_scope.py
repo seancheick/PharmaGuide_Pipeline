@@ -172,3 +172,25 @@ def test_dosage_form_from_physical_state_or_serving_is_not_a_food_matrix(
         product["servingSizes"] = [serving]
     out = enricher._collect_rda_ul_data(product, min_servings_per_day=1, max_servings_per_day=1)
     assert [flag.pct_ul for flag in _confirmed(out)] == [pytest.approx(540 / 350 * 100)]
+
+
+@pytest.mark.parametrize("quantities,protein,review,confirmed", [
+    ([200, 200], 5, True, False),
+    ([100, 200], 5, False, False),
+    ([200, 200], None, False, True),
+])
+def test_summed_distinct_magnesium_rows_use_same_source_scope(
+        enricher, quantities, protein, review, confirmed):
+    rows = [_magnesium(amount) for amount in quantities]
+    for index, row in enumerate(rows):
+        row["name"] = row["raw_source_text"] = f"Magnesium source {index + 1}"
+    product = {"activeIngredients": rows, "inactiveIngredients": [], "statements": []}
+    if protein:
+        product["nutritionalInfo"] = {"protein": {"amount": protein, "unit": "Gram(s)"}}
+    out = enricher._collect_rda_ul_data(product, min_servings_per_day=1, max_servings_per_day=1)
+    assert bool(_confirmed(out)) is confirmed
+    assert ("MAGNESIUM_UL_SOURCE_REVIEW" in get_actionable_ul_review_signals(out)) is review
+    if review:
+        flag = next(flag for flag in out["ul_review_flags"] if flag["nutrient"] == "Magnesium")
+        assert flag["assessment_status"] == "indeterminate"
+        assert flag["screening_amount"] == sum(quantities)

@@ -24693,6 +24693,29 @@ class SupplementEnricherV3:
                                     "warnings": [],
                                 })
 
+                    if (
+                        agg_adequacy.over_ul
+                        and cid == "magnesium"
+                        and declares_food_matrix
+                        and (agg_adequacy.reference or {}).get("ul_basis") == "supplemental_only"
+                        and all(row.get("ul_gate_eligible") is True for row in group["rows"])
+                    ):
+                        # Each total may be below the UL while their sum is
+                        # above it. Summing does not establish a supplemental
+                        # partition any more than a single food-matrix row.
+                        ul_review_flags.append({
+                            "nutrient": "Magnesium",
+                            "assessment_status": "indeterminate",
+                            "reason": "supplemental_magnesium_fraction_unknown",
+                            "screening_amount": group["total_amount"],
+                            "screening_unit": group["unit"],
+                            "screening_ul": agg_adequacy.ul,
+                            "potential_pct_ul": agg_adequacy.pct_ul,
+                            "screening_basis": "declared_total_including_food_magnesium",
+                            "review_required": True,
+                        })
+                        continue
+
                     if agg_adequacy.over_ul:
                         pct_ul_val = agg_adequacy.pct_ul or 0.0
                         over_ul_amount = agg_adequacy.over_ul_amount or 0.0
