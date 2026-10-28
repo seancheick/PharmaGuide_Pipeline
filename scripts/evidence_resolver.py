@@ -1038,18 +1038,6 @@ def resolve_evidence_for_row(
                 reason_code="clinical_sources_ineligible", owner_facts=owner_facts,
                 blocking_reasons=["clinical_sources_ineligible"],
             )
-        if product:
-            valid_studies = [study for study in valid_studies if evidence_record_matches_declared_purpose(
-                product, {"canonical_id": canonical}, study)]
-            if not valid_studies:
-                return EvidenceResolution(
-                    canonical_id=canonical, ingredient_name=name,
-                    matched_owners=matched_owners,
-                    disposition=EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value,
-                    points_eligible=False, applicability_status="applicability_unestablished",
-                    reason_code="label_purpose_evidence_mismatch", owner_facts=owner_facts,
-                    blocking_reasons=["label_purpose_evidence_mismatch"],
-                )
         owner_facts["backed_clinical_studies"] = _clinical_owner_facts(valid_studies)
 
         # Check applicability: preparation/form only. Amount adequacy is owned
@@ -1060,6 +1048,7 @@ def resolve_evidence_for_row(
         source_ref = row_dict.get("raw_source_path") or row_dict.get("source_row_ref")
         record_states = []
         unresolved_reasons = []
+        inapplicable_reasons = []
         for study in valid_studies:
             scoped = {**study, "ingredient": name, "matched_canonical_ids": [canonical]}
             if source_ref:
@@ -1072,8 +1061,20 @@ def resolve_evidence_for_row(
             if decision["reason_code"] == "label_purpose_evidence_mismatch":
                 record_states.append("purpose_mismatch")
                 continue
-            if decision["status"] not in {"applicable", "not_curated"}:
-                record_states.append("form_mismatch")
+            if (decision["reason_code"] == "clinical_outcome_not_qualified"
+                    and decision.get("population_applicability", {}).get("state") == "eligible"
+                    and decision.get("population_applicability", {}).get("context_ids")):
+                record_states.append("reviewed_nonpositive")
+                continue
+            if decision["status"] != "applicable":
+                if decision["reason_code"] in {
+                    "clinical_form_mismatch", "clinical_form_excluded", "clinical_delivery_mismatch",
+                    "clinical_preparation_mismatch", "clinical_identity_excluded",
+                }:
+                    record_states.append("form_mismatch")
+                else:
+                    record_states.append("not_applicable")
+                    inapplicable_reasons.append(decision["reason_code"])
                 continue
             record_states.append("applicable")
         # A second record's higher dose or different form cannot veto an
@@ -1081,6 +1082,15 @@ def resolve_evidence_for_row(
         has_applicable = "applicable" in record_states
         is_form_excluded = bool(record_states) and all(
             state in {"form_mismatch", "purpose_mismatch"} for state in record_states)
+
+        if not has_applicable and "reviewed_nonpositive" in record_states and not unresolved_reasons:
+            return EvidenceResolution(
+                canonical_id=canonical, ingredient_name=name,
+                matched_owners=matched_owners,
+                disposition=EvidenceDisposition.REVIEWED_NULL_UNFAVORABLE.value,
+                points_eligible=False, applicability_status="reviewed_null_evidence",
+                reason_code="clinical_outcome_not_qualified", owner_facts=owner_facts,
+            )
 
         if record_states and set(record_states) == {"purpose_mismatch"}:
             return EvidenceResolution(
@@ -1099,6 +1109,15 @@ def resolve_evidence_for_row(
                 points_eligible=False, applicability_status="applicability_unestablished",
                 reason_code=unresolved_reasons[0], owner_facts=owner_facts,
                 blocking_reasons=list(dict.fromkeys(unresolved_reasons)),
+            )
+        if not has_applicable and inapplicable_reasons:
+            return EvidenceResolution(
+                canonical_id=canonical, ingredient_name=name,
+                matched_owners=matched_owners,
+                disposition=EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value,
+                points_eligible=False, applicability_status="applicability_unestablished",
+                reason_code=inapplicable_reasons[0], owner_facts=owner_facts,
+                blocking_reasons=list(dict.fromkeys(inapplicable_reasons)),
             )
 
         if is_form_excluded:
@@ -1640,7 +1659,23 @@ def evidence_record_matches_declared_purpose(
     from clinical_applicability import assess_clinical_applicability
     # The applicability owner evaluates preparation, population and qualifying
     # source outcomes together. A lack of label claims never waives review.
-    return assess_clinical_applicability(product, entry, assess_amount=False)["status"] == "applicable"
+    scoped = dict(entry)
+    if row.get("canonical_id"):
+        scoped.setdefault("matched_canonical_ids", [row["canonical_id"]])
+    source = row.get("raw_source_path") or row.get("source_row_ref")
+    if source:
+        scoped.setdefault("matched_source_row_refs", [source])
+    scoped.setdefault("ingredient", row.get("name") or row.get("standard_name"))
+    decision = assess_clinical_applicability(product, scoped, assess_amount=False)
+    # A fresh reference projection retains what the source evaluated, never
+    # affirmative eligibility. Its source, population and claim were still
+    # checked by the same canonical owner above.
+    return decision["status"] == "applicable" or bool(
+        is_reference_only(entry)
+        and decision.get("reason_code") == "clinical_outcome_not_qualified"
+        and decision.get("population_applicability", {}).get("state") == "eligible"
+        and decision.get("population_applicability", {}).get("context_ids")
+    )
 
 
 def resolve_product_evidence(

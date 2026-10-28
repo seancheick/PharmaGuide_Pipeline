@@ -71,6 +71,34 @@ def registry_record_path_only(monkeypatch):
     registry["STRAIN_LGG"]["study_contexts"] = []
     monkeypatch.setattr(studied_formulas, "_clinical_strain_registry", lambda: registry)
 
+    def install(product):
+        import clinical_applicability as ca
+        from test_evidence_resolver import _approved_test_source
+        records = dict(ca.reviewed_entries())
+        approved_matches = []
+        for entry in product["evidence_data"]["clinical_matches"]:
+            source = _approved_test_source(entry, name=entry["standard_name"],
+                outcome="Antibiotic-associated diarrhea")
+            context = source["study_contexts"][0]
+            context["condition"] = "antibiotic_associated_diarrhea"
+            direction = entry.get("effect_direction")
+            if direction in {"null", "negative"}:
+                context["outcomes"][0]["direction"] = direction
+            elif direction == "mixed":
+                context["outcomes"].append({**context["outcomes"][0], "direction": "null",
+                                            "name": "Respiratory infection symptoms"})
+            from clinical_evidence_schema import validate_ingredient_context
+            assert validate_ingredient_context(context, require_complete_review=True) == []
+            records[source["id"]] = source
+            approved_matches.append({**source, "matched_source_row_refs": ["ingredientRows[0]"],
+                "matched_canonical_ids": ["lactobacillus_rhamnosus_gg"]})
+        monkeypatch.setattr(ca, "reviewed_entries", lambda: records)
+        product["evidence_data"]["clinical_matches"] = approved_matches
+        product["ingredient_quality_data"]["ingredients_scorable"][0]["raw_source_path"] = "ingredientRows[0]"
+        return product
+
+    return install
+
 
 def _product(
     *,
@@ -120,13 +148,13 @@ def _infant_product():
 
 def test_undosed_strain_receives_reviewed_family_credit_without_dose_points(registry_record_path_only):
     from scoring_v4.modules.probiotic_evidence import score_evidence
-    payload = score_evidence(_product())
+    payload = score_evidence(registry_record_path_only(_product()))
     assert payload["max"] == 20
-    # A legacy record whose eligibility was never reviewed keeps the
-    # claim-independent broad weight; a digestive claim adds nothing (PR #280).
+    # The explicit reviewed source earns the existing direct applicability
+    # weight with the generic identity discount; a claim adds no bonus.
     assert payload["components"] == {"evidence_family_certainty": 6.6667,
-        "product_applicability": 1.5, "independent_replication_consistency": 0.0}
-    assert payload["score"] == 8.1667
+        "product_applicability": 3.0, "independent_replication_consistency": 0.0}
+    assert payload["score"] == 9.6667
     assert "dose_applicability" not in payload["components"]
     assert payload["metadata"]["claim_alignment"]["level"] == "direct"
 
@@ -156,9 +184,9 @@ def test_more_strains_do_not_manufacture_independent_confirmation():
     assert after["metadata"]["clinical_strain_count"] == 2
 
 
-def test_generic_strain_matches_require_verified_native_identity():
+def test_generic_strain_matches_require_verified_native_identity(registry_record_path_only):
     from scoring_v4.modules.probiotic_evidence import score_evidence
-    payload = score_evidence(_product(clinical_strains=[]))
+    payload = score_evidence(registry_record_path_only(_product(clinical_strains=[])))
     assert payload["score"] == 0
     assert payload["components"]["product_applicability"] == 0
     assert payload["metadata"]["uncredited_strain_match_ids"] == ["STRAIN_LGG_EVIDENCE"]
@@ -245,10 +273,10 @@ def test_research_that_does_not_apply_to_the_product_earns_no_evidence_points():
     assert direct["components"]["evidence_family_certainty"] > 0
 
 
-@pytest.mark.parametrize("direction,certainty,total", [("negative",0,0), ("null",0,0), ("mixed",4,5.5)])
+@pytest.mark.parametrize("direction,certainty,total", [("negative",0,0), ("null",0,0), ("mixed",4,7.0)])
 def test_independent_record_direction_is_not_replaced_by_strain_support(registry_record_path_only, direction, certainty, total):
     from scoring_v4.modules.probiotic_evidence import score_evidence
-    payload = score_evidence(_product(matches=[_match(effect_direction=direction)]))
+    payload = score_evidence(registry_record_path_only(_product(matches=[_match(effect_direction=direction)])))
     assert payload["components"]["evidence_family_certainty"] == certainty
     assert payload["score"] == total
     assert payload["metadata"]["companion_points"] == 0
@@ -283,15 +311,34 @@ def test_probiotic_evidence_malformed_input_fails_closed():
         assert all(value == 0 for value in payload["components"].values())
 
 
-def test_reviewed_generic_null_is_a_result_not_an_applicability_gap():
+def test_reviewed_generic_null_is_a_result_not_an_applicability_gap(registry_record_path_only):
     from scoring_v4.modules.probiotic_evidence import score_evidence
     product = _product(matches=[_match(study_type='rct_single',
                         evidence_level='ingredient-human', effect_direction='null')],
                        clinical_strains=[])
-    payload = score_evidence(product)
+    payload = score_evidence(registry_record_path_only(product))
     assert payload['score'] == 0
     assert payload['metadata']['evidence_result_state'] == 'evaluated_null'
 
+
+
+@pytest.mark.parametrize("change", ["held", "source_hold", "unresolved", "unrelated"])
+def test_completed_negative_projection_never_finishes_held_or_unrelated_research(registry_record_path_only, change):
+    import clinical_applicability as ca
+    from scoring_v4.modules.probiotic_evidence import score_evidence
+    product = registry_record_path_only(_product(matches=[_match(effect_direction="negative")]))
+    source = ca.reviewed_entries()["STRAIN_LGG_EVIDENCE"]
+    if change == "held":
+        source["study_contexts"][0]["scoring_eligible"] = False
+    elif change == "source_hold":
+        source["references_structured"][0]["scoring_eligible"] = False
+    elif change == "unresolved":
+        source["study_contexts"][0]["outcomes"][0]["hierarchy"] = "unresolved"
+    else:
+        product["product_name"] = "Sleep Probiotic"
+    payload = score_evidence(product)
+    assert payload["score"] == 0
+    assert payload["metadata"]["evidence_result_state"] not in {"evaluated_null", "evaluated_unfavorable"}
 
 def test_inactivated_bb12_cannot_inherit_live_strain_research():
     from studied_formulas import _clinical_strain_registry
@@ -435,7 +482,7 @@ def test_native_and_registry_evidence_are_both_consumed_without_stacking(registr
     from scoring_v4.modules.probiotic_evidence import score_evidence
     # A registry summary can supply credit when the native contexts do not
     # establish the label's purpose; neither path must silently disappear.
-    registry_product = _product()
+    registry_product = registry_record_path_only(_product())
     registry_only = score_evidence(registry_product)
     registry_product["evidence_data"]["clinical_matches"] = []
     assert registry_only["score"] > score_evidence(registry_product)["score"]
@@ -517,3 +564,32 @@ def test_used_native_context_missing_regimen_fields_cannot_complete_release(fiel
     assert evaluate_release_assessment({}, readiness, module, unfinished_source=None)['is_complete'] is True
     payload['metadata']['contributing_native_contexts'][0]['dose'].pop(field)
     assert evaluate_release_assessment({}, readiness, module, unfinished_source=None)['is_complete'] is False
+
+
+def test_approved_pooled_outcome_without_primary_designation_keeps_public_credit(monkeypatch):
+    from copy import deepcopy
+    import studied_formulas
+    from scoring_v4.scored_artifact import build_scored_artifact
+    registry = deepcopy(studied_formulas._clinical_strain_registry())
+    reference = registry['STRAIN_LACTIS_BB12']
+    product = _infant_product()
+    before = build_scored_artifact(product)['quality_pillars_v4']['evidence']['score']
+    assert before > 0
+    for context in reference.get('study_contexts') or []:
+        for outcome in context.get('outcomes') or []:
+            if outcome.get('hierarchy') == 'primary':
+                outcome['hierarchy'] = 'not_reported'
+    monkeypatch.setattr(studied_formulas, '_clinical_strain_registry', lambda: registry)
+    after = build_scored_artifact(product)['quality_pillars_v4']['evidence']['score']
+    assert after == before
+
+
+def test_pooled_null_remains_a_contradiction_and_secondary_cannot_replace_it():
+    _, context = _consistency_context('pooled_null', 'null', 'meta_analysis')
+    context['outcomes'][0]['hierarchy'] = 'not_reported'
+    context['outcomes'].append({'hierarchy': 'secondary', 'kind': 'patient_important', 'direction': 'positive'})
+    assert probiotic_evidence._single_native_family_certainty(context, probiotic_evidence._EM) == 0
+    result = probiotic_evidence._consistency_from_contexts([
+        _consistency_context('positive_a'), _consistency_context('positive_b'), ('STRAIN_TEST', context)])
+    assert result['credit'] == 0
+    assert 'pooled_null' in result['conditions'][0]['contradictory_family_ids']

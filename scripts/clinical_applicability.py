@@ -508,20 +508,23 @@ NON_EFFICACY_OUTCOME_ROLES = {
 }
 
 
-def qualifying_purpose_outcomes(context: Mapping) -> tuple[list, bool]:
+def qualifying_purpose_outcomes(context: Mapping, *, include_nonpositive: bool = False) -> tuple[list, bool]:
     """Outcomes that may name a purpose, and whether an unresolved one holds it.
 
     Sean, October 28, 2026 (PR #278): a positive primary or pooled
     (hierarchy not_reported) outcome qualifies; a surrogate names only itself.
     Null, mixed or unfavorable results, secondaries, post-hoc, within-group,
     companion and ranking-only outcomes never name a purpose.
+    Evidence consistency consumers may include the corresponding nonpositive
+    findings so that a null result remains a contradiction, never credit.
     """
     if context.get("outcome_role") in NON_EFFICACY_OUTCOME_ROLES:
         return [], False
     outcomes = [row for row in context.get("outcomes") or [] if isinstance(row, Mapping)
                 and row.get("outcome_role") not in NON_EFFICACY_OUTCOME_ROLES]
     reported = [row for row in outcomes if row.get("hierarchy") in {"primary", "not_reported"}]
-    qualifying = [row for row in reported if row.get("direction") == "positive"]
+    directions = {"positive", "null", "mixed", "negative"} if include_nonpositive else {"positive"}
+    qualifying = [row for row in reported if row.get("direction") in directions]
     held = not qualifying and any(row.get("hierarchy") == "unresolved" or row.get("direction") == "unresolved"
                                   for row in outcomes)
     return qualifying, held
@@ -704,6 +707,10 @@ def assess_context_population(product: Mapping, context: Mapping) -> str:
         return "eligible" if lactation else "special_targeting_absent"
     if population.get("age_group") == "adult" and children:
         return "explicit_conflict"
+    if children and not population.get("age_group"):
+        # A legacy signed population description without a typed age group
+        # cannot establish that pediatric use was studied.
+        return "unresolved"
     # Pregnant women are not interchangeable with a studied nonpregnant group.
     if pregnancy and not _studied_subjects(_PREGNANT_SUBJECTS, description):
         return "explicit_conflict"
@@ -716,7 +723,7 @@ def assess_context_population(product: Mapping, context: Mapping) -> str:
         if not qualified and re.search(studied, key) and not re.search(other, key) and any(
                 find_affirmative_label_match(other, _target_group_text(group))
                 and not find_affirmative_label_match(studied, _target_group_text(group))
-                for group in groups):
+                for group in [title, *group_texts]):
             return "explicit_conflict"
     return "eligible"
 
@@ -821,15 +828,6 @@ def _accepted_condition_scopes(reference: Mapping, policy: Mapping) -> list:
     ]
 
 
-def condition_scope_governs(entry: Mapping) -> bool:
-    """Whether this record's label-purpose decision belongs to its condition scopes."""
-    reference = reviewed_entries().get(str(entry.get("id") or entry.get("study_id")), {})
-    policy = reference["applicability"] if "applicability" in reference else entry.get("applicability")
-    return bool(_valid_policy(policy) and policy.get("scope") == "ingredient"
-                and reference.get("study_type") != "reference" and reference.get("evidence_level") != "reference"
-                and _accepted_condition_scopes(reference, policy))
-
-
 def _positioning_is_formula_level(product: Mapping, canonicals: set) -> bool:
     """Whether unattributed product positioning speaks for other ingredients too.
 
@@ -860,7 +858,12 @@ def _assess_condition_scopes(product: Mapping, entry: Mapping, policy: Mapping, 
     # benefit for every recorded endpoint. Claim absence cannot promote a null
     # primary, exploratory secondary or unresolved outcome into credit.
     context_count = len(contexts)
-    qualified_contexts = [context for context in contexts if qualifying_purpose_outcomes(context)[0]]
+    positive_contexts = [context for context in contexts if qualifying_purpose_outcomes(context)[0]]
+    evaluated_contexts = [context for context in contexts
+                          if evaluated_purpose_outcomes(context)
+                          and {row.get("direction") for row in qualifying_purpose_outcomes(
+                              context, include_nonpositive=True)[0]} <= {"null", "negative"}]
+    qualified_contexts = positive_contexts + evaluated_contexts
     if not qualified_contexts:
         held = any(qualifying_purpose_outcomes(context)[1] for context in contexts)
         return {"status": "unresolved" if held else "not_applicable",
@@ -891,6 +894,19 @@ def _assess_condition_scopes(product: Mapping, entry: Mapping, policy: Mapping, 
                                 "explicit_conflict": "clinical_population_mismatch",
                                 "special_targeting_absent": "clinical_population_targeting_absent"}[state],
                 "population_applicability": {"state": state}}
+    affirmative = [(context, claim) for context, claim in qualifying if context in positive_contexts]
+    if not affirmative:
+        # Completed, source-bound negative findings are evaluated results, never
+        # affirmative credit. A held or unfinished review cannot become a zero.
+        from scoring_v4.modules.generic_evidence import _clinical_source_id
+        review = assess_clinical_source_review({"id": _clinical_source_id(dict(entry))})
+        if not review["is_complete"]:
+            return {"status": "unresolved", "reason_code": "invalid_applicability_contract"}
+        return {"status": "not_applicable", "reason_code": "clinical_outcome_not_qualified",
+                "claim_alignment": qualifying[0][1],
+                "population_applicability": {"state": "eligible", "context_ids": [
+                    context["context_id"] for context, _ in qualifying]}}
+    qualifying = affirmative
     rank = {"aligned": 0, "mixed": 1, "absent": 2}
     components = {
         "claim_alignment": min((claim for _, claim in qualifying), key=lambda claim: rank[claim["state"]]),
@@ -913,8 +929,46 @@ def _assess_condition_scopes(product: Mapping, entry: Mapping, policy: Mapping, 
     return components
 
 
+def _assess_legacy_signed_scope(product: Mapping, entry: Mapping, reference: Mapping, policy: Mapping) -> dict:
+    # Preserve existing signed legacy scopes without inventing a migrated
+    # context. The scope, its population and its sources remain one unit;
+    # descriptive top-level goals confer no approval.
+    from datetime import date
+    from evidence_resolver import clinical_record_sources_eligible
+    try:
+        dated = date.fromisoformat(policy.get("reviewed_at", "")) <= date.today()
+    except (TypeError, ValueError):
+        dated = False
+    sources = set(policy.get("source_pmids") or [])
+    eligible_sources = {str(ref.get("pmid")) for ref in reference.get("references_structured") or []
+                        if isinstance(ref, Mapping) and ref.get("pmid")
+                        and clinical_record_sources_eligible({"references_structured": [ref]})}
+    if (not dated or not sources or not sources <= eligible_sources
+            or not policy.get("studied_population") or not policy.get("supported_outcomes")):
+        return {"status": "unresolved", "reason_code": "invalid_applicability_contract"}
+    canonicals = {str(row.get("canonical_id")) for row in _linked_rows(product, entry, evidence_only=True)
+                  if row.get("canonical_id")}
+    population = assess_context_population(product, {"population": {"description": policy["studied_population"]}})
+    claim = assess_claim_alignment(product, {}, canonicals,
+                                   supported_outcomes=policy["supported_outcomes"],
+                                   formula_level=_positioning_is_formula_level(product, canonicals))
+    if population != "eligible":
+        return {"status": "unresolved" if population == "unresolved" else "not_applicable",
+                "reason_code": "invalid_applicability_contract" if population == "unresolved" else "clinical_population_mismatch",
+                "population_applicability": {"state": population}}
+    if claim["state"] not in _CREDITABLE_CLAIM_STATES:
+        return {"status": "unresolved" if claim["state"] == "ambiguous" else "not_applicable",
+                "reason_code": "label_claim_unclassified" if claim["state"] == "ambiguous" else "label_purpose_evidence_mismatch",
+                "claim_alignment": claim, "population_applicability": {"state": population}}
+    return {"claim_alignment": claim, "population_applicability": {"state": population}}
+
+
 def assess_clinical_applicability(product: Mapping, entry: Mapping, *, assess_amount: bool = True) -> dict:
-    reference = reviewed_entries().get(str(entry.get("id") or entry.get("study_id")), {})
+    from scoring_v4.modules.generic_evidence import _clinical_source_id
+    registry_backed = bool(entry.get("id") or entry.get("study_id") or entry.get("source_data"))
+    reference = reviewed_entries().get(_clinical_source_id(dict(entry))) if registry_backed else entry
+    if reference is None:
+        return {"status": "unresolved", "reason_code": "clinical_source_contexts_missing"}
     # The curated owner can retain research for context while withdrawing
     # numerical credit. An old enriched positive stamp cannot reverse that.
     if is_reference_only(reference):
@@ -952,23 +1006,20 @@ def assess_clinical_applicability(product: Mapping, entry: Mapping, *, assess_am
     # required, but its population and the label's claims decide whether it
     # may credit this product (October 28, 2026 rulings).
     accepted_scopes = _accepted_condition_scopes(reference, policy)
-    declared_condition_scopes = [
-        context for context in reference.get("study_contexts") or []
-        if isinstance(context, Mapping)
-        and _key(context.get("condition")) in {_key(value) for value in policy.get("supported_outcomes", [])}
-        and context.get("purpose") in {"treatment", "challenge", "prevention"}
-    ]
-    if ((declared_condition_scopes and not any(context in accepted_scopes for context in declared_condition_scopes))
+    if ((reference.get("study_contexts") and not accepted_scopes)
             or (not reference.get("study_contexts")
                 and isinstance(reference.get("scoring_eligible"), bool)
                 and policy.get("supported_outcomes"))):
         # Losing a signed context or its source binding cannot restore the
         # legacy unscoped path. Legacy records without an explicit eligibility
         # decision retain their existing preparation-only behavior.
-        return {"status": "unresolved", "reason_code": "invalid_applicability_contract"}
-    # A claim or population block is decided after preparation, so the
-    # rejection still records which label rows are the studied material.
-    scope = _assess_condition_scopes(product, entry, policy, accepted_scopes) if accepted_scopes else {}
+        scope = {"status": "unresolved", "reason_code": "invalid_applicability_contract"}
+    else:
+        scope = _assess_condition_scopes(product, entry, policy, accepted_scopes) if accepted_scopes else {}
+    # A source, claim or population block is decided after preparation, so a
+    # known material mismatch is preserved and passing rows retain provenance.
+    if not reference.get("study_contexts") and not scope:
+        scope = _assess_legacy_signed_scope(product, entry, reference, policy)
     physical = product.get("physicalState") or {}
     if isinstance(physical, Mapping):
         physical = physical.get("name")
@@ -1106,6 +1157,21 @@ def filter_clinical_matches(product: Mapping, matches: list[dict], *, assess_amo
     accepted, rejected = [], []
     for entry in matches:
         decision = assess_clinical_applicability(product, entry, assess_amount=assess_amount)
+        if (decision.get("reason_code") == "clinical_outcome_not_qualified"
+                and decision.get("population_applicability", {}).get("state") == "eligible"
+                and decision.get("population_applicability", {}).get("context_ids")
+                and decision.get("matched_source_row_refs")):
+            from scoring_v4.modules.generic_evidence import _clinical_source_id
+            reference = reviewed_entries()[_clinical_source_id(dict(entry))]
+            selected = set(decision["population_applicability"]["context_ids"])
+            directions = {outcome["direction"] for context in reference["study_contexts"]
+                          if context.get("context_id") in selected
+                          for outcome in evaluated_purpose_outcomes(context)}
+            accepted.append({**entry, "study_type": "reference", "evidence_level": "reference",
+                             "effect_direction": "negative" if "negative" in directions else "null",
+                             "matched_source_row_refs": decision["matched_source_row_refs"],
+                             "applicability_assessment": decision})
+            continue
         if decision["status"] == "applicable":
             scoped_entry = {**entry, "applicability_assessment": decision}
             if decision.get("qualifying_study_type"):
