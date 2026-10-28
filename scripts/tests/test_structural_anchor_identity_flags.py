@@ -61,8 +61,30 @@ def test_structural_anchor_is_never_a_dose_primary(replays):
     assert [row["canonical_id"] for row in primaries] == []
 
 
-def test_replayed_ginseng_plus_matches_ginseng_not_astragalus(replays):
-    ids = [m.get("id") for m in resolved_clinical_matches(replays["328831"])[0]]
+def test_replayed_ginseng_plus_matches_ginseng_not_astragalus(replays, monkeypatch):
+    from copy import deepcopy
+    import clinical_applicability
+    from scoring_v4.modules import generic_evidence
+    product = replays["328831"]
+    rows = get_scoring_ingredients(product, strict=True).rows
+    botalys = next(r for r in rows if r.get("raw_source_path") == "ingredientRows[1]")
+    assert botalys["canonical_id"] == "ginseng"
+    # Dr. Pham, 2026-10-28: INGR_GINSENG is a qualified product-claim zero on
+    # the reference-only path, so the real registry credits nothing here,
+    # and certainly not astragalus.
+    real = clinical_applicability.reviewed_entries()["INGR_GINSENG"]
+    assert real["study_type"] == real["evidence_level"] == "reference"
+    ids = [m.get("id") for m in resolved_clinical_matches(product)[0]]
+    assert "INGR_GINSENG" not in ids
+    assert not any("ASTRAGALUS" in str(i) for i in ids)
+    # Identity routing on a credit-path copy of the same record: Botalys
+    # recovers ginseng, never astragalus.
+    owners = deepcopy(clinical_applicability.reviewed_entries())
+    owners["INGR_GINSENG"].update(study_type="systematic_review_meta", evidence_level="ingredient-human")
+    monkeypatch.setattr(clinical_applicability, "reviewed_entries", lambda: owners)
+    verified = tuple(r for r in owners.values() if generic_evidence._is_verified_ingredient_human_entry(r))
+    monkeypatch.setattr(generic_evidence, "_verified_ingredient_human_evidence_entries", lambda: verified)
+    ids = [m.get("id") for m in resolved_clinical_matches(product)[0]]
     assert "INGR_GINSENG" in ids
     assert not any("ASTRAGALUS" in str(i) for i in ids)
 

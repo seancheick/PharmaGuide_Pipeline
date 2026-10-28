@@ -1,5 +1,9 @@
 """Apply the held-source closure patches to backed_clinical_studies.json.
 
+Start from main's data, not this branch's committed copy, or a key a patch no
+longer sets survives from the earlier application:
+  git show origin/main:scripts/data/backed_clinical_studies.json > scripts/data/backed_clinical_studies.json
+
 Complete patches (check_patch "complete") are applied whole. A held patch
 contributes only its verified study contexts, never its record_updates, and
 its hold is kept honest:

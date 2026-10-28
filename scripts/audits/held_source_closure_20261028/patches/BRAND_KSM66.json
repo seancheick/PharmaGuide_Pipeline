@@ -21,7 +21,9 @@
    "excluded_claim_terms": [
     "testosterone",
     "fertility",
-    "muscle"
+    "muscle growth",
+    "muscle mass",
+    "muscle strength"
    ]
   }
  },
@@ -224,5 +226,8 @@
    "full_text": true,
    "sections_used": "Abstract; Methods; Results"
   }
+ ],
+ "integration_notes": [
+  "2026-10-28 integrator (CI triage): bare 'muscle' replaced with claim phrases (product-line names contain 'muscle')."
  ]
 }

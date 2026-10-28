@@ -2,25 +2,7 @@
  "record_id": "BRAND_UCII",
  "decision": "closed_credit",
  "summary": "Two randomized double-blind trials of the exact UC-II material at 40 mg/day: 26822714 (191 knee-OA adults, 180 days) improved the primary total WOMAC versus placebo (p=0.002) and versus glucosamine+chondroitin (p=0.04); 24153020 (55 healthy adults with exertional knee discomfort, 120 days) improved the primary knee-extension range of motion versus placebo (p=0.011). Both are industry-sponsored; credit is limited to UC-II, and hydrolyzed-collagen substitution is excluded per Dr. Pham.",
- "record_updates": {
-  "applicability": {
-   "scope": "ingredient",
-   "supported_outcomes": [
-    "Joint & Bone Health"
-   ],
-   "excluded_form_terms": [
-    "hydrolyzed",
-    "hydrolysed",
-    "collagen peptides"
-   ],
-   "studied_population": "Adults 40-75 with knee osteoarthritis (180 days) or healthy adults 30-65 with exercise-related knee discomfort (120 days), taking 40 mg/day UC-II material.",
-   "source_pmids": [
-    "26822714",
-    "24153020"
-   ],
-   "reviewed_at": "2026-10-28"
-  }
- },
+ "record_updates": {},
  "study_contexts": [
   {
    "context_schema_version": "1.1.0",
@@ -277,6 +259,7 @@
  },
  "integration_notes": [
   "2026-10-28 integrator: require_source_label_form removed; required_form_terms kept, matching the KSM-66/Tesnor precedent. Source-only matching rejected real labels whose ingredient row resolves through the enricher.",
-  "2026-10-28 integrator: required_form_terms removed for this BRAND_ record; the enricher's brand gate already requires the brand on the label (product name or row), and a row-only term rejected product-name-branded labels."
+  "2026-10-28 integrator: required_form_terms removed for this BRAND_ record; the enricher's brand gate already requires the brand on the label (product name or row), and a row-only term rejected product-name-branded labels.",
+  "2026-10-28 integrator (CI triage B2): applicability block withheld for this BRAND_ record. Any applicability policy makes clinical_applicability bind credit to the row its own linkage finds, which moved real UC-II labels (321604) from the brand-named heading to an undosed collagen row and lost the floor (14.0 -> 5.0). The enricher's brand gate still requires UC-II on the label; approved contexts and the native-collagen limitation stay. Heading-binding fix handed to the claim-state applicability session (moves scores; needs measurement)."
  ]
 }

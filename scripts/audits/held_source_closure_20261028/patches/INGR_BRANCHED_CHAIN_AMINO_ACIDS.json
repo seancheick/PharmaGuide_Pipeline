@@ -16,9 +16,11 @@
    "excluded_claim_terms": [
     "muscle growth",
     "muscle building",
-    "strength",
-    "endurance",
-    "performance"
+    "builds muscle",
+    "muscle growth",
+    "increases strength",
+    "improves endurance",
+    "improves performance"
    ]
   }
  },
@@ -250,5 +252,8 @@
    "full_text": false,
    "sections_used": "PubMed abstract"
   }
+ ],
+ "integration_notes": [
+  "2026-10-28 integrator (CI triage): bare 'strength', 'endurance' and 'performance' replaced with claim phrases: _excluded_claim_matches scans the whole label, and 'GNC Pro Performance' (220827) or 'Extra Strength' are product names, not claims."
  ]
 }

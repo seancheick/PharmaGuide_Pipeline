@@ -13,7 +13,7 @@ import pytest
 from clinical_applicability import filter_clinical_matches, reviewed_entries
 from enrich_supplements_v3 import SupplementEnricherV3
 from scoring_v4.modules.generic_evidence import resolved_clinical_matches
-from test_botanical_evidence_reachability import _eligible_cranberry_fixture, _product
+from test_botanical_evidence_reachability import _product
 
 
 @pytest.fixture(scope="module")
@@ -43,13 +43,22 @@ def test_source_declared_plant_part_reaches_its_reviewed_family_evidence(
     assert product.get("enrichment_status") != "validation_failed", issues
     active = product["activeIngredients"][0]
     assert active["canonical_id"] == expected_id
+    for field in ("name", "raw_source_text", "raw_source_path", "quantity", "unit"):
+        assert active[field] == source["activeIngredients"][0][field]
+    if reviewed_entries()[study_id]["study_type"] == "reference":
+        # Dr. Pham, 2026-10-28: echinacea is a completed no-credit decision on
+        # the reference-only path. The plant part still reaches its reviewed
+        # family record, which is then rejected for exactly that reason.
+        assert study_id == "INGR_ECHINACEA"
+        assert study_id not in {m["id"] for m in product["evidence_data"]["clinical_matches"]}
+        assert {m.get("id"): m.get("reason_code") for m in product["evidence_data"]["rejected_clinical_matches"]
+                }.get(study_id) == "reference_only_clinical_record"
+        return
     matches, _ = resolved_clinical_matches(product)
     match = next((item for item in matches if item["id"] == study_id), None)
     assert match is not None
     assert match["matched_source_row_refs"] == ["ingredientRows[0]"]
     assert match["matched_canonical_ids"] == [expected_id]
-    for field in ("name", "raw_source_text", "raw_source_path", "quantity", "unit"):
-        assert active[field] == source["activeIngredients"][0][field]
 
 
 @pytest.mark.parametrize("label,canonical,reason", [
@@ -168,7 +177,9 @@ def test_misspelled_generic_cinnamon_label_keeps_family_evidence():
     ("74399", "Pacran Cranberry concentrate powder", 250.0),
 ])
 def test_scorer_recovery_carries_its_row_reference_through_a_source_required_scope(enricher, monkeypatch, product_id, label, quantity):
-    _eligible_cranberry_fixture(monkeypatch, enricher)
+    # Dr. Pham, 2026-10-28: the record-level cranberry hold is resolved by her
+    # conditional recurrent-UTI ruling, so the real registry is used directly.
+    assert reviewed_entries()["INGR_CRANBERRY"]["scoring_eligible"] is True
     # Old code credited these fruit powders through scoring-contract recovery.
     # The 5.3.11 source-required cranberry scope must evaluate the exact row
     # the recovery came from, not reject every recovered entry as unresolved.

@@ -1,75 +1,103 @@
 # Test triage — held-source closure batch (2026-10-28)
 
-Scope: the 54 failures in `~/pg_quality/held_closure_20261028/tests3.log`, checked against the
-current applied `scripts/data/backed_clinical_studies.json` (including the coordinator's two later
-data changes: INGR_WHEY_PROTEIN made whey-only, INGR_OMEGA3 returned to held). Validation class:
-tests-only. Production code and data were not edited. The table of every test and its class is in
-the agent report. This file holds the class-B finding and data follow-ups.
+Validation class: tests-only. Production code and data were not edited by this triage.
+Round 1: the 54 local failures in `~/pg_quality/held_closure_20261028/tests3.log`. Round 2: the
+PR #273 CI failures (commit a78f78bf9), including one collection error that round 1 caused. Each
+class-A edit asserts the ruled state and keeps its safeguard. The agent report has the per-test table.
+This file holds the class-B findings, the movements explained by rulings, and data follow-ups.
 
-## B1 — beta-alanine credit is rejected by an "energy" word that is not a beta-alanine claim (open)
+## Open class-B findings
 
-- Tests: `test_clinical_applicability.py::test_raw_triphase_material_keeps_sports_identity_without_borrowing_monohydrate[Creatine Hydrochloride-False]`
-  and `[Creatine Monohydrate-True]` (both fail at `assert "beta-alanine" in evidence["ingredient_points"]`).
-  Left failing on purpose; the test is correct.
-- Owner: `scripts/data/backed_clinical_studies.json::INGR_BETA_ALANINE.applicability.excluded_claim_terms`
-  = `["energy", "focus", "pre-workout energy"]`, enforced by
-  `scripts/clinical_applicability.py::_excluded_claim_matches`, which tests every product positioning
-  text (`native_product_positioning_texts`), not the claim attached to the beta-alanine row.
-- Probe (fixture `triphase_317610_raw.json`, Tri-Phase, 3.2 g beta-alanine per serving, 1 serving/day,
-  with the label's own beta-alanine claim "increase a critical muscle fatigue-controlling factor"):
-  - enrichment rejects `INGR_BETA_ALANINE` with `label_purpose_evidence_mismatch`;
-  - the only "energy" match is the blend description "...uniquely designed blend to target the
-    body's energy systems throughout your workout";
-  - the Evidence pillar is `0.0` with `ingredient_points {}`. In a copy of the record with only
-    `"energy"` removed from `excluded_claim_terms` (the dose floor of 2400 mg/day still applies), the result is
-    `{'beta-alanine': 5.4}` and Evidence `15.6`.
-- Why it is wrong: the ruling (fourth set) limits credit to repeated-use high-intensity protocols and
-  says a *single small* pre-workout serving does not inherit it. The `minimum_daily_dose: 2400 mg`
-  already encodes "small". A product delivering 3.2 g/day (inside the studied 2.4–6.4 g/day) is
-  zeroed because the word "energy" appears anywhere on the label, here in a phrase about
-  physiological energy systems. Nearly every pre-workout uses that word, so the term acts as a
-  category ban the ruling did not make. The last row of the fifth ruling also says wellness words
-  must not make an unrelated study *applicable*. It does not say such words should disqualify a
-  study whose outcome, dose and population do match.
-- Recommended minimal fix (data, closure lane): remove the bare `"energy"` term from
-  `INGR_BETA_ALANINE.applicability.excluded_claim_terms`. Keep `"pre-workout energy"` and `"focus"`
-  only if Dr. Pham wants explicit energy/focus marketing excluded. If the generic word should stay, the
-  narrower code fix is to scope `_excluded_claim_matches` to the claims attributed to the matched
-  row. That is a behavioral change and needs its own scoring-change measurement. In either case, re-run the two nodes
-  above. Check also whether Dr. Pham means "repeated use" to be inferred from directions
-  (servings/day plus container size). The current encoding cannot express it, and the dose floor is the
-  only proxy.
+### B2: a reviewed exclusion-only scope drops the UC-II heading floor
 
-## Resolved during triage (recorded for the ledger)
+- Test: `test_evidence_prominence_ownership.py::test_real_heading_that_names_its_brand_anchors_that_brands_floor[evidence_subject_321604_raw.json-...]`
+  (left failing on purpose).
+- Label: 321604 "Ultra Triple Action Joint Health". `ingredientRows[0]` is "UC-II Proprietary Cartilage
+  Blend 401 mg", with one undosed member, "Collagen Type II, Undenatured".
+- Owner: `scripts/clinical_applicability.py::assess_clinical_applicability`, in the `exclusion_only`
+  branch reached via `_linked_rows(..., evidence_only=True)`. Its provider-anchor rule binds "its
+  unique named/canonical child, never ... the parent's mass". The trigger is the new
+  `BRAND_UCII.applicability`, which carries only `excluded_form_terms` plus outcome/population text.
+- Probe:
+  - With the current data, `BRAND_UCII` is `applicable` but rebound to `ingredientRows[0].nestedRows[0]`.
+    The floor is `None` and Evidence drops from 14.0 to 5.0 (points under `collagen`).
+  - With only the origin/main BRAND_UCII record swapped in (in memory), the match stays on
+    `ingredientRows[0]`, the floor is `uc ii undenatured type ii collagen` at 18.0, and Evidence is
+    14.0 (joint cap).
+  - Probe scripts: `probe_old.py`, `probe_prom.py` in the session scratchpad.
+- Why it is wrong: the ruling credits exactly undenatured type-II collagen for knee outcomes and accepts
+  the UC-II credit as scoped. It does not withdraw the designed rule that a heading which names a
+  verified brand anchors that brand's floor. The loss comes only from which `_linked_rows` path a
+  record's policy shape selects. Sensoril shows the asymmetry: its policy has `supported_outcomes`,
+  so it is not exclusion-only, and it binds to its heading and keeps 18.0.
+- The ruling note "distinguish ingredient mass from native collagen content" concerns the 40 mg
+  material versus native-collagen content. It is a Dose concern and does not touch the Evidence floor.
+- Recommended minimal fix (code; needs a `/pg-scoring-change` measurement): in the exclusion-only
+  branch, keep an existing exact ref to a provider-owned anchor when that anchor's heading names the
+  matched branded record (the `test_a_brand_identifier_matches_as_labels_spell_it` matcher), instead
+  of rebinding to the child. If Sean and Dr. Pham decide instead that a scoped brand record may never
+  anchor on a blend heading, update the test to that decision.
 
-- Whey-only labels losing whey credit. With the first applied data
-  (`required_form_terms: ["whey"]`), a product whose only declared protein source was
-  "Whey Protein Isolate" was rejected `clinical_form_mismatch`. The form term was checked against the
-  "Protein" macro row that the protein-source recovery binds to, so the real WheyBasics (294073) and
-  100% Whey (42306) fixtures lost credit. The coordinator's data change (whey-only aliases, no
-  `required_form_terms`) fixed this. Those tests now pass unchanged. Casein/soy/pea/milk protein
-  no longer reaching INGR_WHEY_PROTEIN matches the whey-specific ruling. Those tests were updated
-  (class A).
-- Marine omega applicability tests pass again after INGR_OMEGA3 returned to held. The omega route
-  (`evidence_resolver.resolve_omega_evidence_standard` via `INGR_OMEGA3.purpose_evidence`) passed
-  its own tests throughout (`test_v4_omega_*`, `test_omega_epa_dha_amount_owner.py`: 92 passed).
+### B3: the BCAA soreness credit is rejected by the product-line name "GNC Pro Performance"
 
-## Data follow-ups (not test defects; for the closure lane)
+- Test: `test_evidence_prominence_ownership.py::test_real_bcaa_record_still_binds_to_its_disclosed_aggregate`
+  (left failing on purpose).
+- Owner: `backed_clinical_studies.json::INGR_BRANCHED_CHAIN_AMINO_ACIDS.applicability.excluded_claim_terms`
+  = `["muscle growth", "muscle building", "strength", "endurance", "performance"]`, enforced
+  product-wide by `clinical_applicability.py::_excluded_claim_matches`.
+- Probe (220827 Essential Amino Complete):
+  - The match is rejected `label_purpose_evidence_mismatch`. The only hit among the five terms is
+    "performance", in "GNC Pro Performance" and "Pro Performance Essential Amino Complete" (the
+    product line).
+  - With only "performance" removed (in memory), the match binds to the BCAA aggregate
+    (`ingredientRows[6].nestedRows[0]`) with floor `bcaa` 9.35. That is identical to origin/main.
+  - The label's own positioning is "Supports recovery" (post-workout), which is compatible with the
+    ruled soreness outcome.
+- Why it is wrong: this is the same defect class as B1. An excluded claim term matches a brand or
+  product-line word, not a claim. The fourth ruling limits BCAA credit to exercise-related muscle
+  soreness, and that is expressed by `supported_outcomes`. A brand name is not a performance claim.
+- Recommended minimal fix (data): drop the bare `"performance"` term, or replace it with phrases that
+  only occur as claims, such as "improves performance" or "performance enhancement". The coordinator
+  removed beta-alanine's `excluded_claim_terms` for B1 the same way. Longer term, have
+  `_excluded_claim_matches` skip brand and product-line text.
 
-1. `INGR_WHEY_PROTEIN.notes` still says "The reviewed sources include whey, casein, milk, soy, pea,
-   and studied source blends", and `standard_name` is still "Protein Supplementation". This
-   contradicts the whey-only aliases and applicability. The repo rule is that changing a structured
-   value means fixing every free-text field that refers to it.
-2. `INGR_CHONDROITIN_SULFATE.effect_direction_rationale` still reads "study_type=systematic_review_meta;
-   evidence_level=ingredient-human". Both fields are now `reference`.
-   `INGR_GLUCOSAMINE_SULFATE.effect_direction_rationale` still says the review is not completed. The
-   third ruling also asks for identical rationale text in both records, and the two texts differ.
-3. BRAND_THERACURMIN: the ruling says "Held. Name the exact remaining acceptance (memory 29246725)".
-   The draft memory context was dropped from production (no pending contexts in data), and the
-   held patch's `record_updates` are not applied. The remaining acceptance is now named only in the
-   patch receipt. Production notes give only general "separate review dependencies".
-4. INGR_DIGESTIVE_ENZYMES: the dropped draft context carried the unverified "Poolzyme Multi"
-   identity, so dropping it is correct. The record now has no contexts, and its notes do not record
-   the fifth-ruling remaining item (study-material identity and activities).
-5. BRAND_RELORA keeps a 17-point primary Evidence floor under a "limited stress credit" ruling.
-   Point bands are explicitly out of scope for this batch (calibration batch). Noted only.
+## Resolved
+
+- B1 (beta-alanine rejected by "energy" in a blend description): resolved by the coordinator's data
+  change (no `excluded_claim_terms`). Both Tri-Phase nodes pass unchanged.
+- Whey-only labels losing whey credit (round 1, `required_form_terms` checked on the protein macro
+  row): resolved by the whey-only aliases change. The later lean-mass-only change still passes.
+- Collection error `test_botanical_lost_match_dispositions.py`: round 1 renamed
+  `_eligible_cranberry_fixture` without updating its importer. The importer now asserts the real
+  registry is eligible, which is the semantics it needed. `rg` finds no other importer of a renamed
+  helper.
+
+## Locked or score movements explained by a ruling (class A)
+
+| Test | Before → after | Cause and ruling |
+|---|---|---|
+| `test_v4_archetype_fixtures[immune_support__ideal]` | 91.4 → 90.7; Evidence 15.6 → 14.9 (raw 13.2651 → 12.6981) | Only INGR_QUERCETIN recovery is lost; swapping that one record back restores 13.2651. Quercetin evidence is blood pressure, with immune claims excluded (fourth ruling set: "tight claims"; fifth: wellness words never make an unrelated study applicable). |
+| `test_v4_archetype_fixtures[sports_pre_workout__failure]` | 58.0 "Needs improvement" → 42.4 "Poor"; Evidence 15.6 → 0.0 (raw 14.0 → 0.0) | Only INGR_BETA_ALANINE is lost; swapping it back restores 14.0. 500 mg is below the studied 2.4 g/day repeated-use regimen (fourth ruling set: a single small pre-workout serving does not inherit it). |
+| `test_nonscorable_identity_kept[315814]` | 50.6 → 43.3; owners and Dose unchanged | INGR_GABA is reference-only (first ruling set: very limited stress evidence, no points until the calibration batch). |
+| `test_evidence_prominence_ownership::test_when_the_owner_names_no_purpose…` (315700) | floor selenium 14.0 → iodine 9.35 | INGR_SELENIUM is scoped to Hashimoto thyroid labs (fifth ruling set); the label claims none. |
+| `…::test_a_single_branded_intervention…[True]` | floor 0.0 → 18.0 | The new BRAND_SENSORIL scope binds the match to the single Sensoril heading; the withanolide marker no longer withholds the floor. This matches the test's own title. |
+
+## Data follow-ups (not test defects)
+
+1. `INGR_WHEY_PROTEIN.notes` still lists casein, milk, soy and pea, and `standard_name` is still
+   "Protein Supplementation".
+2. The chondroitin and glucosamine `effect_direction_rationale` texts are stale and not identical,
+   as the third ruling asks.
+3. BRAND_THERACURMIN's remaining acceptance (memory 29246725) is named only in the patch receipt.
+4. INGR_DIGESTIVE_ENZYMES has no contexts, and its notes do not state the fifth-ruling remaining item.
+5. BRAND_RELORA keeps a 17-point floor under "limited" (calibration batch).
+6. INGR_WHITE_KIDNEY_BEAN: the approved context says "activity units not verified in this session",
+   yet the Dose exposure still reports `matches` for "Phaseolean aqueous extract 20,000 AIU/g DNS
+   assay" (`test_exact_source_verified_phaseolean_regimens`, `test_phaseolean_source_specification_survives_full_enrichment`).
+   One of the two statements is stale.
+7. INGR_QUERCETIN (`supported_outcomes: ["blood_pressure"]`) still credits labels with no
+   blood-pressure claim (Quercefit 309492, `evaluated_supported`), because its context is not
+   condition-gated. PRECLIN_QUERCETIN_PHYTOSOME's allergy context is gated. Confirm that the ruling's
+   "tight claims" intends ungated BP credit.
+8. INGR_GABA: the first and fourth ruling sets require the wording to state the preliminary, mixed
+   stress findings, never "no evidence". Not checked by this triage.
