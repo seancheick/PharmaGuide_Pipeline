@@ -1,128 +1,137 @@
-# Condition-scope rule: measurement (October 28, 2026)
+# Condition-scope rule — October 28, 2026
 
-- **Candidate:** `claude/brave-fermi-d56dfd`, rebased onto main (code at `b4af90025`).
-- **Base:** `main` at `b1f44d3ee` (#273 and #277 merged). The result is identical, line for line, to the pass
-  against `4bba11a51`; receipts are `base_main.jsonl` and `cand_main.jsonl`.
-- **Earlier pass:** against `6256ce42e` / `37a52de5b`. It gave the same 47 movers with identical deltas after
-  the rebase; the outcome-level commit `6a3b5cfeb` added one mover.
-- **Receipts:** `~/pg_quality/condition_scope_20261028/`. These cover the frozen raw labels, `base2.jsonl`,
-  `base_r.jsonl`, `cand_o.jsonl`, `movement_final.txt`, the `gated/` cohort and the fail-first logs.
-- **Method:** `replay.py freeze-raw`, then `snapshot` (clean → enrich → score with each checkout's own code).
+## Candidate and scope
 
-## Cohorts
+Behavioral scoring change. Codex continued PR280's existing branch after Sean authorized takeover;
+root owns integration, the shared LEDGER and master plan. This report replaces obsolete pre-integration
+measurements; historical captures remain under `~/pg_quality/condition_scope_20261028/`.
 
-- **Main, 460 labels.**
-  - The evidence-calibration lane's 205: the original twenty, floor drivers, strata, contradictory-trial
-    records, exact-preparation cases and module controls.
-  - Up to two labels per record and stratum for every record with an approved condition scope and for ten
-    probiotic strains: 110 explicit-claim, 97 claim-free and 48 population-targeted labels.
-- **Gated, 40 labels.** Single-ingredient (two or fewer actives), non-multivitamin labels for the eight
-  formerly gated records. Final snapshot `gated/cand_o.jsonl` at `6a3b5cfeb`.
+Baseline: integrated main `e923cb2337858f2eceee748704be3136cfe819eb` (#273, #277 and #274).
+Final source candidate: `1e9a688159707d70243a4aeb23e47678a5a6e6f2`. The retained full-cohort
+capture is source `1dae876a`; the final source-binding/qualifying-design corrections have their own
+explicit census, counterexamples and targeted 78-label capture below.
 
-## Result (main cohort)
+Owner: `clinical_applicability::assess_clinical_applicability`, `::qualifying_purpose_outcomes`,
+`evidence_resolver::clinical_record_sources_eligible`, `::resolve_omega_evidence_standard`,
+`scoring_input_contract::_named_in_title`; readiness and scoring consume those decisions.
+Evidence: ownership matrix, GLOSSARY, source callers and fail-first production-seam regressions.
+Will NOT create: a parallel purpose engine, scorer, registry, clinical approval, public status or magnitude.
 
-- **48 of 460 moved: 23 up, 25 down.** Only the Evidence pillar changed.
-- **Unchanged everywhere:** Formulation, Dose, Transparency, Verification, Safety/Hygiene, status, route
-  and safety status.
-- **By stratum:**
+## Implemented behavior
 
-| Stratum | Up | Down | Unchanged |
-|---|---|---|---|
-| Calibration | 5 | 14 | 186 |
-| Explicit claim | 8 | 7 | 95 |
-| Claim-free | 6 | 4 | 87 |
-| Population-targeted | 4 | 0 | 44 |
+- No label claim is required. Eligible research earns the same points with an aligned claim or no claim.
+  299v's exact IBS context earns 16/20 in either case; marketing alignment remains explanation metadata.
+- An unrelated attributable claim cannot inherit an outcome. Formula-level positioning does not reject
+  unrelated formula ingredients; named identity attribution reuses the existing role-owner alias matcher.
+- Preparation and population stay source/context-specific. Special populations require explicit targeting.
+- The existing qualifying-outcome predicate is required before scoped credit, including claim-free labels.
+  A null/mixed primary, exploratory secondary or unresolved outcome is never affirmative support.
+  Approved independent contexts remain usable while siblings are held.
+- Ginger's general adult label uses its qualifying direct trial, not the pregnancy synthesis's study strength.
+- Enrichment and score consumers exclude explicitly held/unapproved clinical contexts through the shared
+  source-eligibility gate. Vitamin D keeps independent nutrition authority; Testofen cannot regain legacy
+  positive credit from its ineligible contexts; lactoferrin's explicit hold stays in force.
+- Omega clinical holds do not erase separately approved nutritional contribution. One shared resolver serves
+  native/generic routes, retains existing numerical policy and population/preparation/identity controls, and
+  cites EFSA dietary-reference authority rather than routine retail heart-event research. EPA/DHA quantities
+  remain owned by the existing exposure resolver; carrier-oil mass is never substituted.
 
-- **Multi/prenatal and B-complex labels never move.** Their Evidence comes from the nutrient-panel
-  authority, not from clinical matches.
+The omega ruling is `scripts/audits/held_source_closure_20261028/DR_PHAM_RULINGS_20261028.md:122`.
+It preserves EPA/DHA nutrition and rejects routine retail heart-event credit. EFSA's primary source was
+content-verified on October 28: https://www.efsa.europa.eu/en/efsajournal/pub/1461
+(DOI 10.2903/j.efsa.2010.1461). Adult 250 mg/day is a total-intake AI, not an RDA, clinical efficacy threshold
+or an EFSA-authored score. Existing editorial 10.4/11.1 magnitudes are unchanged.
 
-## Result (gated cohort, 40 labels)
+## Fail-first and focused verification
 
-20 of 40 moved: 18 up, 2 down. No pillar other than Evidence moved. Claim-free single-ingredient labels
-now earn their scoped credit:
+Receipts in `~/pg_quality/condition_scope_20261028/`:
 
-| Record | Labels that gained | Evidence |
-|---|---|---|
-| Cranberry | 4 of 6 | 0 or 11.1 → 15.6 |
-| Ginger | 3 of 6 | 0 → 15.6, adult chemotherapy-nausea context only |
-| Inositol | 4 of 6 | 0 → 7.3, very-low-certainty PCOS cycle evidence |
-| Selenium | 3 of 6 | 11.1 → 15.6 |
-| Riboflavin | 2 of 6 | 11.1 → 15.6 |
+- `fail_first_takeover.log`: four failures establish abbreviated attribution and held-source credit leakage.
+  The eight affected cases passed after correction.
+- `fail_first_outcomes.log`: both null-primary/positive-secondary and unresolved contexts wrongly earned
+  14 raw on a claim-free product. Qualifying-outcome and ginger slice: 18 passed after correction.
+- `fail_first_enrichment_hold.log`: three held records remained positive-looking clinical matches during
+  enrichment even when scoring excluded them. The corrected enrichment/owner slice passed 571 tests.
+- `takeover_stable_owner_slice.log`: 718 owner/consumer tests passed. Subsequent enrichment-hold source
+  correction was checked in `takeover_enrichment_hold_slice2.log` (571 passed).
+- Native/generic omega public-seam cases cover fish/krill/algae, held-study exclusion, unchanged magnitudes,
+  unknown exposure, child/SPM/DHA-only controls and unfinished companion assessments. Their separate owner
+  retains the detailed focused verification receipts.
+- 230149's named canary passes: approved native research restores applicability 3→6, Evidence 13→16 and
+  total 65.5→68.5; undisclosed-amount Dose remains 8.55 raw. The old assertion encoded a claim bonus.
 
-- **Unchanged labels:** these carry an unrelated or ambiguous claim or a signed exclusion. Examples are
-  "Liver Focus" inositol and "Mood | Stress" rhodiola (which is also signed-excluded), "Turmeric Ginger"
-  gummies, and vitamin C labels that stay on the nutrition-authority floor.
-- **Quercetin Phytosome ×2, 10.4 → 7.3:** the label says "Respiratory support". The blood-pressure
-  INGR_QUERCETIN meta-analysis no longer credits it; only the phytosome's seasonal-allergy RCT applies.
+Source-specific fixture corrections retain production holds: synthetic role/lineage controls are marked
+explicitly as test mechanics, never new clinical approval. Real held-source and independent-authority
+assertions are maintained separately. No runtime guard was relaxed to retain an obsolete score.
 
-## Movement by cause (main cohort)
+## Frozen raw-label measurement
 
-| Cause | Direction | Examples |
-|---|---|---|
-| No claim required: an approved native strain context reaches a claim-free or aligned probiotic | Up, 0 → 12–16 (or +1.5 / +3 where credit existed) | BB-12, LGG, 299v, IS-2, NCFM, GBI-30, LactoSpore; 16 labels |
-| Infant/child-targeted probiotic reaches pediatric contexts | Up | "Kids Probiotic" 297603, "Grow + Thrive" 246008, LGG chewables 250912, inulin kids 273844; 4 labels |
-| No claim required: formerly gated generic record reaches a claim-free multi-ingredient label | Up | Electrolytes 311724 (vitamin C, selenium), Super Green 267303 (vitamin C, ginger) |
-| Precaution or mechanism text no longer read as a signed exclusion | Up | GNC CoQ-10 3520, 0 → 15.6 ("heart's energy producing system") |
-| Unrelated product claim (signed scope elsewhere) | Down | Suntheanine "Mood support / relaxation" (focus scope) ×3; KSM-66 "Energy Xtra" (stress scope); Shoden stress research on "Rest & Renew … for refreshing sleep" 328650 (sleep is now its own outcome; melatonin is not an Evidence owner there); berberine "GI/Immune support" and "cardiovascular health" (glucose scope); ubiquinol "Mitochondrial Support" (heart-failure scope); potassium and magnesium blood-pressure research on cleanses and sleep labels |
-| Pre-workout positioned for focus, energy or pumps | Down, 20 → 0 | LIT ×4: creatine, beta-alanine, citrulline and potassium research marked unrelated; see the limits below |
-| Recognized claim no category places, resolved conservatively | Down | "Lovin' Libido" sexual-function claims (KSM-66), CarbCrave "carbohydrate intake and appetite" (Sensoril, Relora), NitroVasc "nitric oxide production", fucoPROTEIN "healthy metabolism" (whey) |
-| Restored BRAND_UCII scope binds UC-II to its own row | Down | TriFlex 76848, 15.6 → 0. The base credited UC-II research through the leucine owner by loose name matching. UC-II is not an Evidence owner on this label, which is a pre-existing owner-policy question |
+Same immutable manifests as the original lane: main 460 labels and gated 40 labels. Baseline captures
+`takeover_base.jsonl` and `gated/takeover_base.jsonl` both attest e923cb233 and unchanged source fingerprints.
+The main-cohort capture completed successfully on `1dae876a`: **66/460 numeric movers, 32 up and 34 down**.
+All numerical changes are Evidence except **304641 Healthy Hormone Formula**: excluding held Testofen
+also removes the existing branded-studied Formulation credit, 20.0→14.7. Evidence 15.6→10.4; total
+76.0→65.5. This is a source-eligibility effect, not a purpose-only rejection. Remaining non-Evidence pillars,
+input hashes, routes/subroutes/profiles/status, safety-gate and Dose-safety projections are identical.
+Complete per-label listing: `takeover_movement.txt`. The earlier report's 48-mover count is superseded.
 
-Full table: `movement_final.txt` in the receipts folder.
+Final independent review found source-binding and trial-strength edge cases. `7b3e34f3` joins context
+approval to that same eligible declared source (with the signed source mask), never a sibling's citation.
+The live census finds no newly blocked scoring-capable context; the 11 rejected accepted-context rows
+belong to records already reference-only (`context_source_join_census.json`). Real Magtein trial
+39252819 remains eligible beside excluded correction 40567408; correction-only source scope cannot credit.
 
-## Corrections the replay forced (each fixed fail-first)
+`1e9a6881` always derives direct-RCT strength from the qualifying families, even if a held synthesis was
+filtered before scope evaluation. Aggregate enrollment is removed when the type changes or curated
+contexts are excluded; a fully qualifying record at the same design retains its enrollment. This affects
+12 recorded source-design relationships (`qualifying_design_census.json`). The same frozen input pool
+supplies a targeted **78-label final-source capture**, covering those sources and controls. Its input paths
+and raw hashes are verified row-for-row against the retained 460 capture; the original capture and metadata
+are not rewritten or restamped. Existing `replay.compare_records` produces the incremental comparison.
 
-- **Formulation leak.** Branded-form credit read *accepted* Evidence matches, so a purpose rejection cut
-  Formulation (KSM-66 and Zynamite labels, raw 12 → 8.8 / 7.2). It now reads preparation-verified matches.
-- **"Predominantly men"** was treated as a sex restriction. A women's creatine label lost credit.
-- **Signed exclusions too narrow:** a three-word claim window let "help boost … cellular energy" escape
-  CoQ10's energy exclusion, so heart-failure research credited the Re-Forge pre-workout.
-- **Misread label text:**
-  - "Contents are sold by weight" was read as a weight claim, costing plain creatine and bilberry their credit.
-  - "lean muscle", bare "muscle", "cardiometabolic", "vascular" and "blood flow" claims were not recognized.
-  - "gastrointestinal", "intestinal", "lactose" and "infection" outcomes were not recognized. As a result an
-    aligned probiotic claim earned less than silence.
-- **Exclusion sentences** ("Pregnant participants were excluded") were read as the studied population.
+Final-source targeted result: **14 numeric movers, all Evidence downward; 64 numerical controls unchanged**.
+Thirteen move 15.6→12.2 public Evidence (strong record body→one approved RCT); Adrenal Energy Formula
+328276 moves 5.0→4.0. Other pillar scores, routes/subroutes/profiles/status and safety-gate/Dose-safety
+projections are unchanged in all 78. Receipts: `strength/candidate.jsonl[.meta.json]`,
+`strength/comparison_receipt.json`, `strength/delta_from_1dae.json`. Source is exactly `1e9a6881`;
+source_unchanged=true. This is a bounded incremental measurement, not a claim of another full 460 replay.
+Gated final capture `gated/takeover_final.jsonl` attests 1dae876a, 40 products, source_unchanged=true.
 
-## Outcome-level purposes (Sean, October 28, PR #278)
+The final 40-label candidate gives 21 Evidence-only movers (19 up, 2 down) and no other
+pillar/status/route/safety-gate or Dose-safety projection change. Cranberry/inositol/selenium/riboflavin gain scoped claim-free credit;
+ginger gains direct-trial credit; two quercetin-phytosome labels lose mixed-primary credit. The prior intermediate receipt is preserved separately; final qualification uses the clean committed capture.
 
-Without a signed `supported_outcomes` scope (native strain contexts), a context's purposes come only
-from qualifying outcomes:
-- Qualifying means positive, with hierarchy primary or not_reported (not_reported is kept distinct and
-  never relabelled as primary).
-- A surrogate names only itself.
-- These never name a purpose: null, mixed or unfavorable results, secondaries, post-hoc, within-group,
-  companion and ranking-only outcomes.
-- An unresolved outcome holds the claim (ambiguous).
-- A context with no positive outcome lets its null findings say what it evaluated, so the finding is
-  shown as an evaluated null and earns no credit.
-- Sleep is its own family, apart from stress.
-- Fail-first log: `fail_first_round5.log`.
+## Raw canary review
 
-## Limits and open decisions
+Before final readiness-consumer reconciliation, the complete 33-label check found four expected-field
+drifts with the remaining 29 unchanged. No safety, warning, identity, amount or unrelated pillar field drift.
 
-1. **Probiotic positioning weight (decision for Sean).** `probiotic_evidence.alignment_weights` pays
-   direct 1.0, broad 0.5 and none 0, so an aligned 299v label earns 16 and a claim-free one 13.
-   - D3 says there is no bonus for claiming. D1 says preserve category formulas.
-   - Left unchanged.
-2. **Pre-workout false-negative risk.** Unattributed positioning such as "focus, power and pumps" places
-   only *focus*. Ingredient research for muscle outcomes is then unrelated. This follows the rulings
-   (unattributed and partly unclassified claims resolve conservatively). Recognizing "power" or
-   "pumps" would be a new clinical-relationship decision.
-3. **Record-level study strength.** `generic_evidence._entry_raw_points` scores a record's study_type and
-   effect, not those of the qualifying context. A general ginger label qualifies only through the
-   chemotherapy RCT but is scored with the record's meta-analysis strength. Only INGR_GINGER has two
-   approved contexts with different designs today. Follow-up.
-4. **Legacy path unchanged.** Records with a policy but no approved context (INGR_VITAMIN_D3, INGR_INULIN,
-   INGR_OMEGA3) keep preparation-only credit. Readiness flags them. Field one-brain #278 owns the
-   no-prose rule there.
-5. **Role promotion reads the same categorizer.** More function claims now name an ingredient's purpose
-   (for example "Glucosamine supports joint comfort"). No owner-driven score change appeared in either
-   cohort.
-6. **Probiotic credit eligibility (not purpose).** `_qualifying_outcomes` requires hierarchy "primary", so
-   pooled not_reported outcomes do not yet earn probiotic credit under the October 28 outcome ruling.
-   Named follow-up.
-7. **Evidence owner selection.** UC-II on TriFlex 76848 and melatonin on Rest & Renew 328650 are not
-   Evidence owners on those labels. This is pre-existing owner policy.
-8. **Not run:** whole-corpus replay, raw canaries, release rung and app check. Merging waits for PR #273
-   and Sean's go-ahead.
+- 182730: false partial from an EPA/DHA nutrition resolution not recognized by the readiness consumer;
+  correct shared-authority consumer is being qualified, without calling omega an essential nutrient.
+- 278454: 330 mg DHA-only disclosure does not pass the existing EPA+DHA authority rule. Its held clinical
+  match cannot establish completion. Complete→partial is truthful, while its nutrient-panel points stay.
+- 298070: native strains have completed limited/null review and no affirmative points. Partial→complete
+  reflects the existing reviewed finding, not a new benefit or positive conclusion.
+- 298102: held respiratory clinical credit is removed. Independent vitamin D authority remains 10 raw;
+  public Evidence falls 15.6→11.1, total 92.7→88.2, Excellent→Very good; assessment completes on authority.
+
+Final source-bound refresh: 278454, 298070, 298102 and 337853 were each updated individually from raw,
+with exact causes in the existing manifest changelog. 337853 is **Boswellia Phytosome**, whose qualified
+PMID39092235 is a direct RCT, not the record's pooled rating: Evidence 15.6→12.2, total81.2→77.8,
+Very good→Good. All other frozen fields stay unchanged. 182730 remains complete through the shared
+readiness consumer. Final check on `1e9a6881` (`final_qualified_raw_canary_green.log`): **33 checked, 0 failed**.
+
+Final owner/consumer slice (`final_source_owner_slice.log`): **721 passed**. Independent fresh review by
+`safety_check` of source-binding and qualified-strength corrections reproduced the held-ginger and valid
+Magtein/correction controls, three named tests passed, and reported no remaining finding. Broader integration,
+exact final-head CI and local qualification remain root-owned; a pending check is not a pass.
+
+## Remaining boundaries
+
+PR278 owns receipt-by-receipt legacy reconciliation and retirement of its remaining purpose fallback.
+Pooled probiotic `not_reported` clinical credit remains a named, separately measured follow-up; native
+`_qualifying_outcomes` still requires primary hierarchy. Existing scientific holds are preserved.
+
+Whole-fast CI on the exact final candidate and applicable local verification remain required before merge. The bounded capture compares scored pillars, routes, source fingerprints and safety-gate/Dose-safety
+projections; it does not establish whole exported-blob equality or a new-catalog app rendering check.
+No corpus build, export, release, upload, app import or publication was performed.

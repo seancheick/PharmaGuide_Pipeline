@@ -453,23 +453,34 @@ def _norm(val: Any) -> str:
     return str(val or "").strip().lower()
 
 
-def clinical_record_sources_eligible(entry: Mapping[str, Any]) -> bool:
-    """Honor source-integrity holds at the shared clinical-credit seam."""
-    if entry.get("scoring_eligible") is False:
+def clinical_record_sources_eligible(entry: Mapping[str, Any], *, context=None, source_pmids=None) -> bool:
+    """Honor source holds, joined to the context and optional signed source scope."""
+    if entry.get("scoring_eligible") is False or is_reference_only(entry):
         return False
-    if is_reference_only(entry):
-        return False
+    references = entry.get("references_structured") or []
+    if context is not None:
+        from probiotic_measurements import context_accepted_for_scoring
+        if not context_accepted_for_scoring(context):
+            return False
+        declared = {str(pmid) for pmid in entry.get("published_studies") or []
+                    if re.fullmatch(r"[1-9][0-9]*", str(pmid))}
+        declared.update(str(ref["pmid"]) for ref in references
+                        if isinstance(ref, Mapping) and ref.get("pmid"))
+        excluded = {str(ref["pmid"]) for ref in references
+                    if isinstance(ref, Mapping) and ref.get("pmid")
+                    and not clinical_record_sources_eligible({"references_structured": [ref]})}
+        eligible = declared - excluded
+        if source_pmids is not None:
+            eligible &= {str(pmid) for pmid in source_pmids}
+        sources = {str(pmid) for pmid in context.get("source_pmids") or []}
+        return bool(sources and not (sources - declared) and sources & eligible)
     contexts = entry.get("study_contexts")
     if contexts:
-        from probiotic_measurements import context_accepted_for_scoring
-        # Once review decisions exist, an absent record-level flag cannot
-        # resurrect held or rejected relationships through the legacy path.
-        # One independently approved context still survives pending siblings.
-        if not any(context_accepted_for_scoring(context) for context in contexts):
-            return False
-    references = entry.get("references_structured")
-    # Legacy records without structured references retain their existing
-    # eligibility; this guard contains explicit holds, not a new review policy.
+        # Approval and an eligible reference must belong to the same context.
+        # An unrelated sibling cannot lend source eligibility to a held trial.
+        return any(clinical_record_sources_eligible(entry, context=context) for context in contexts)
+    # Legacy records without contexts keep their existing source-only behavior.
+    # Missing-context legacy reconciliation belongs to the existing PR278 owner.
     if not references:
         return True
     return any(
