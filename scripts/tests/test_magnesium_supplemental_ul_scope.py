@@ -146,3 +146,21 @@ def test_unbounded_food_share_stays_unresolved(enricher, serving):
     out = _food_serving(enricher, 800, serving)
     assert not _confirmed(out)
     assert get_actionable_ul_review_signals(out) == ["MAGNESIUM_UL_SOURCE_REVIEW"]
+
+
+@pytest.mark.parametrize("physical_state,serving", [
+    ("Capsule", {"minQuantity": 1, "maxQuantity": 1, "unit": "Serving(s)"}),
+    ("Tablet or Pill", None),
+    (None, {"minQuantity": 2, "maxQuantity": 2, "unit": "Chewable Tablet(s)"}),
+])
+def test_dosage_form_from_physical_state_or_serving_is_not_a_food_matrix(
+        enricher, physical_state, serving):
+    product = {"activeIngredients": [_magnesium(540, ("Magnesium Oxide",))],
+               "inactiveIngredients": [], "statements": [],
+               "nutritionalInfo": {"protein": {"amount": 1.0, "unit": "Gram(s)"}}}
+    if physical_state:
+        product["physicalState"] = {"langualCodeDescription": physical_state}
+    if serving:
+        product["servingSizes"] = [serving]
+    out = enricher._collect_rda_ul_data(product, min_servings_per_day=1, max_servings_per_day=1)
+    assert [flag.pct_ul for flag in _confirmed(out)] == [pytest.approx(540 / 350 * 100)]

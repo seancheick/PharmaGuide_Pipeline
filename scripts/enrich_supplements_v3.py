@@ -22774,10 +22774,15 @@ class SupplementEnricherV3:
                                self._normalize_threshold_unit(serving.get("unit")), "g")
             if isinstance(serving.get("maxQuantity"), (int, float)) else None
         )
+        physical_state = self._physical_state_description(product)
+        dosage_forms = {
+            serving_unit,
+            self._normalize_form_factor(physical_state) if physical_state else None,
+        }
         declares_food_matrix = bool(
             (self._collect_nutrition_summary(product).get("protein_g") or 0) > 0
-            and not any(token in serving_unit for token in (
-                "tablet", "caplet", "capsule", "softgel", "gumm", "lozenge", "chew", "wafer"))
+            and not dosage_forms & {
+                "tablet", "caplet", "capsule", "softgel", "gummy", "chewable", "lozenge"}
         )
         ul_population = self._ul_screening_population(product)
         pediatric_age_groups = self._ul_screening_pediatric_age_groups(product)
