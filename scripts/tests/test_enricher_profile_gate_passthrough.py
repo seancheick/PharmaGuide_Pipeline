@@ -9,6 +9,7 @@ so missing the gate at this layer means the alert ships ungated.
 """
 from __future__ import annotations
 
+import copy
 import os
 import sys
 from pathlib import Path
@@ -412,3 +413,67 @@ def test_row_with_no_identity_and_no_safety_match_meets_no_rules(enricher):
     profile = enricher._collect_interaction_profile(_nested_bitters_row([]))
 
     assert profile["ingredient_alerts"] == []
+
+
+def _bitter_orange_hits(profile: dict, condition: str = "pregnancy") -> list:
+    return [
+        (alert["ingredient_name"], alert.get("subject_ref"), hit)
+        for alert in profile["ingredient_alerts"]
+        if "BITTER_ORANGE" in str(alert["rule_id"])
+        for hit in alert["condition_hits"]
+        if hit["condition_id"] == condition
+    ]
+
+
+def test_safety_matched_row_reloaded_into_both_lists_is_one_subject(enricher):
+    """A reloaded artifact holds separate copies of one row in ingredients and
+    ingredients_skipped; the safety-record rules still fire once."""
+    enriched = _nested_bitters_row([{
+        "source_db": "banned_recalled_ingredients", "entry_id": "BANNED_BITTER_ORANGE",
+    }])
+    iqd = enriched["ingredient_quality_data"]
+    iqd["ingredients"] = [copy.deepcopy(iqd["ingredients_skipped"][0])]
+
+    profile = enricher._collect_interaction_profile(enriched)
+
+    assert len(_bitter_orange_hits(profile)) == 1
+
+
+def test_identified_row_keeps_its_identity_and_meets_its_safety_rules(enricher):
+    """182627: Bitter Orange Citrus Bioflavonoids is an IQM row; its safety match
+    adds the bitter orange rules without replacing the row's own subject."""
+    enriched = _nested_bitters_row([{
+        "source_db": "banned_recalled_ingredients", "entry_id": "BANNED_BITTER_ORANGE",
+    }])
+    row = enriched["ingredient_quality_data"]["ingredients_skipped"][0]
+    row.update(
+        name="Bitter Orange Citrus Bioflavonoids",
+        raw_source_text="Bitter Orange Citrus Bioflavonoids",
+        canonical_id="citrus_bioflavonoids",
+        canonical_source_db="ingredient_quality_map",
+        skip_reason=None,
+        quantity=200,
+        unit="mg",
+    )
+    enriched["ingredient_quality_data"]["ingredients_scorable"] = [row]
+
+    hits = _bitter_orange_hits(enricher._collect_interaction_profile(enriched))
+
+    assert hits
+    assert {subject["canonical_id"] for _name, subject, _hit in hits} == {"citrus_bioflavonoids"}
+
+
+def test_derived_marker_row_does_not_inherit_its_source_rows_safety_match(enricher):
+    enriched = _nested_bitters_row([{
+        "source_db": "banned_recalled_ingredients", "entry_id": "BANNED_BITTER_ORANGE",
+    }])
+    enriched["ingredient_quality_data"]["ingredients_skipped"][0]["delivers_markers"] = [{
+        "marker_canonical_id": "synephrine",
+        "estimation_method": "standardization_pct",
+        "estimated_dose_mg": 12.0,
+    }]
+
+    hits = _bitter_orange_hits(enricher._collect_interaction_profile(enriched))
+
+    assert hits
+    assert not any(name.startswith("Synephrine (from") for name, _subject, _hit in hits)

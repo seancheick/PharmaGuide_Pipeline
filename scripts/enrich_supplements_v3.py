@@ -20989,7 +20989,10 @@ class SupplementEnricherV3:
                 if subject_db is None:
                     continue
                 if subject_db != "ingredient_quality_map":
-                    skipped.append(row)
+                    key = self._interaction_row_key(row)
+                    if key not in scanned_keys:
+                        scanned_keys.add(key)
+                        skipped.append(row)
                 elif self._is_interaction_label_row(row) and (
                     str(row.get("raw_source_path") or "") not in restated_headers
                 ):
