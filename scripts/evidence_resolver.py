@@ -563,10 +563,16 @@ def _backed_studies_index() -> Dict[str, List[Dict[str, Any]]]:
 
 def is_reviewed_branded_material(
     canonical: Any, name: Any = None, *, preparation_name: Any = None,
+    strict_material_spelling: bool = False,
 ) -> bool:
     """True when a curated branded clinical record (``BRAND_*`` in
     backed_clinical_studies, the evidence owner) names this identity: a studied
-    material such as Sytrinol or Tesnor, not a marketing blend name."""
+    material such as Sytrinol or Tesnor, not a marketing blend name.
+
+    Strict material spelling requires the retained name to contain a curated
+    brand spelling, rather than a generic discovery alias. Neither mode reads
+    clinical eligibility or benefit outcomes.
+    """
     idx = _backed_studies_index()
     keys = {
         variant
@@ -590,6 +596,11 @@ def is_reviewed_branded_material(
     return any(
         _norm(study.get("id")).startswith("brand_")
         and (printed_ids is None or study.get("id") in printed_ids)
+        and (not strict_material_spelling or any(
+            token and re.search(r"(?<!\w)" + re.escape(token) + r"(?!\w)",
+                                _canonical_text(name if name is not None else canonical))
+            for token in map(_canonical_text, study.get("brand_tokens") or [study.get("standard_name")])
+        ))
         for key in keys
         for study in idx.get(key, [])
     )

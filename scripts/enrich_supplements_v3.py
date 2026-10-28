@@ -11385,6 +11385,20 @@ class SupplementEnricherV3:
 
         active_ingredients = self._primary_active_ingredients_for_enrichment(product)
         all_text = self._get_all_product_text(product)
+        # Reuse curated brand spellings as identity vocabulary only. Clinical
+        # eligibility, outcomes and references never authorize this material trait.
+        studies = self.databases.get("backed_clinical_studies", {}).get("backed_clinical_studies", [])
+        material_terms = {}
+        for botanical in botanicals_list:
+            name = botanical.get("standard_name", "")
+            terms = [name, botanical.get("id", "").replace("_", " ")]
+            for study in studies:
+                if not str(study.get("id", "")).startswith("BRAND_"):
+                    continue
+                identity_terms = study.get("brand_tokens") or [study.get("standard_name", "")]
+                if self._brand_mentioned("", [], {}, brand_tokens=identity_terms, label_text=name):
+                    terms.extend(identity_terms)
+            material_terms[botanical.get("id")] = terms
 
         found_botanicals = []
 
@@ -11403,7 +11417,22 @@ class SupplementEnricherV3:
                 else None
             )
 
-            for botanical in botanicals_list:
+            # Exact named materials precede a generic parent match. The generic
+            # fenugreek threshold must not swallow a verified Testofen material.
+            material_names = [ing_name]
+            material_names.extend(form.get("name", "") for form in ingredient.get("forms") or []
+                                  if isinstance(form, dict))
+            material_text = " ".join(str(name) for name in material_names if name)
+            def named_material(item):
+                return self._brand_mentioned("", [], {},
+                    brand_tokens=material_terms[item.get("id")], label_text=material_text)
+            candidates = sorted(botanicals_list, key=lambda item: (
+                not (named_material(item) if item.get("branded_form") else
+                     any(self._exact_match(name, item.get("standard_name", ""), item.get("aliases", []))
+                         for name in material_names if name)),
+                not bool(item.get("branded_form")),
+            ))
+            for botanical in candidates:
                 # A retained identity is not a verified standardization claim.
                 # Existing explicit registry holds must precede both brand and
                 # percentage credit; missing legacy flags retain their meaning.
@@ -11412,8 +11441,17 @@ class SupplementEnricherV3:
                     continue
                 bot_name = botanical.get('standard_name', '')
                 bot_aliases = botanical.get('aliases', [])
+                if botanical.get("branded_form"):
+                    expected_parent = (botanical.get("attributes") or {}).get("iqm_parent_id")
+                    if expected_parent and ingredient.get("canonical_id") and ingredient["canonical_id"] != expected_parent:
+                        continue
+                    if (ingredient.get("identity_disposition") == "ambiguous"
+                            or (ingredient.get("match_ambiguity_candidates")
+                                and ingredient.get("identity_disposition") != "clean")):
+                        continue
 
-                if (resolved_iqm_id and resolved_iqm_id == botanical.get('id')) or \
+                if (botanical.get("branded_form") and named_material(botanical)) or \
+                   (resolved_iqm_id and resolved_iqm_id == botanical.get('id')) or \
                    self._exact_match(ing_name, bot_name, bot_aliases) or \
                    self._exact_match(std_name, bot_name, bot_aliases):
 
@@ -11494,10 +11532,16 @@ class SupplementEnricherV3:
                     evidence_source = "none"
                     tier = "none"
                     ratio = 0.0
-                    is_branded = bool(botanical.get("branded_form"))
+                    is_branded = bool(
+                        botanical.get("branded_form") and named_material(botanical)
+                        and botanical.get("bonus_eligible") is True and basis == "branded_extract"
+                        and (botanical.get("marker_compounds") or markers)
+                        and botanical.get("sources")
+                    )
                     if is_branded:
-                        # Branded standardized extracts (KSM-66, Cran-Max, FloraGLO,
-                        # Meriva, ...) guarantee standardization by trademark.
+                        # The curated exact-material specification authorizes
+                        # this trait, independently of clinical study outcomes.
+                        # Keep percentage_found label-derived, including zero.
                         evidence_source = "branded_form"
                         tier = "full"
                     elif min_threshold is not None and is_percent_unit:
@@ -16480,15 +16524,17 @@ class SupplementEnricherV3:
         aliases: List[str],
         product: Dict,
         brand_tokens: Optional[List[str]] = None,
+        label_text: Optional[str] = None,
     ) -> bool:
         """Return whether the label explicitly names the studied brand.
 
         ``aliases`` remains the identity-discovery surface and may legitimately
         contain a generic ingredient name. A BRAND_ study instead gates on its
         curated ``brand_tokens`` when present. Older records fall back to their
-        study name/aliases, with every match token bounded.
+        study name/aliases, with every match token bounded. ``label_text``
+        narrows identity checks to retained source-row names/forms when supplied.
         """
-        all_text = self._get_all_product_text_lower(product)
+        all_text = label_text.lower() if label_text is not None else self._get_all_product_text_lower(product)
         terms = brand_tokens if brand_tokens else [study_name, *aliases]
         for term in terms:
             normalized = str(term or "").strip().lower()
