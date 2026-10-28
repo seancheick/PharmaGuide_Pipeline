@@ -212,6 +212,11 @@ def test_studied_amount_is_not_an_evidence_applicability_guard(monkeypatch):
         for source in rows:
             if source.get('id') == 'INGR_L_CARNITINE':
                 source['study_contexts'] = []
+    import clinical_applicability as applicability
+    current = applicability.reviewed_entries()
+    synthetic = next(source for rows in index.values() for source in rows
+                     if source.get('id') == 'INGR_L_CARNITINE')
+    monkeypatch.setattr(applicability, 'reviewed_entries', lambda: {**current, synthetic['id']: synthetic})
     monkeypatch.setattr(er, '_backed_studies_index', lambda: index)
     res = er.resolve_evidence_for_canonical("l_carnitine", dose_value=50.0, dose_unit="mg")
     assert res.disposition == EvidenceDisposition.RESOLVED_BY_REVIEWED_CLINICAL_EVIDENCE.value

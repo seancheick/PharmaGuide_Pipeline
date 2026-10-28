@@ -919,6 +919,11 @@ def assess_clinical_applicability(product: Mapping, entry: Mapping, *, assess_am
     # numerical credit. An old enriched positive stamp cannot reverse that.
     if is_reference_only(reference):
         return {"status": "not_applicable", "reason_code": "reference_only_clinical_record"}
+    from evidence_resolver import clinical_record_sources_eligible
+    # Enrichment and downstream consumers share the hold. Known preparation
+    # exclusions are still checked first, so a hold cannot erase that finding.
+    source_block = ({"status": "unresolved", "reason_code": "clinical_sources_ineligible"}
+                    if reference and not clinical_record_sources_eligible(reference) else None)
     policy = reference["applicability"] if "applicability" in reference else entry.get("applicability")
     if policy is None:
         # Legacy reviewed exclusions constrain the matched preparation only.
@@ -932,7 +937,7 @@ def assess_clinical_applicability(product: Mapping, entry: Mapping, *, assess_am
             if all(any(_key(term) in _key(row.get("matched_form") or row.get("form"))
                        for term in excluded) for row in linked):
                 return {"status": "not_applicable", "reason_code": "clinical_preparation_mismatch"}
-        return {"status": "not_curated", "reason_code": "no_reviewed_scope_constraints"}
+        return source_block or {"status": "not_curated", "reason_code": "no_reviewed_scope_constraints"}
     if not _valid_policy(policy):
         return {"status": "unresolved", "reason_code": "invalid_applicability_contract"}
     if policy.get("scope") == "formula_context_only":
@@ -1045,6 +1050,8 @@ def assess_clinical_applicability(product: Mapping, entry: Mapping, *, assess_am
         if scope.get("status"):
             return {**scope, "matched_source_row_refs": [ref for ref in (
                 row.get("raw_source_path") or row.get("source_row_ref"),) if ref]}
+        if source_block:
+            return source_block
         return {"status": "applicable", "reason_code": "reviewed_scope_match",
                 "source_row_ref": row.get("raw_source_path") or row.get("source_row_ref"),
                 "supported_outcomes": policy.get("supported_outcomes", []),
@@ -1055,6 +1062,8 @@ def assess_clinical_applicability(product: Mapping, entry: Mapping, *, assess_am
             row.get("raw_source_path") or row.get("source_row_ref") for row in applicable_rows
             if row.get("raw_source_path") or row.get("source_row_ref")))}
     if applicable_rows:
+        if source_block:
+            return source_block
         # Exclusion rejects identities/preparations, not legitimate siblings.
         # Preserve every passing row rather than making label order choose
         # the numerator later consumed by Evidence and Dose. Scoped form/dose

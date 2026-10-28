@@ -618,13 +618,14 @@ def test_marine_omega_study_does_not_transfer_to_plant_ala(canonical, name):
 
 
 @pytest.mark.parametrize("canonical,name", [("epa", "EPA"), ("dha", "DHA")])
-def test_marine_omega_identity_controls_remain_applicable(canonical, name):
+def test_marine_omega_identity_controls_retain_the_clinical_hold(canonical, name):
     product = zinc_product()
     row = product["ingredient_quality_data"]["ingredients_scorable"][0]
     row.update(name=name, standard_name=name, canonical_id=canonical, quantity=1000)
     match = {"id": "INGR_OMEGA3", "ingredient": name, "matched_canonical_ids": [canonical],
              "matched_source_row_refs": ["ingredientRows[0]"]}
-    assert assess_clinical_applicability(product, match)["status"] == "applicable"
+    decision = assess_clinical_applicability(product, match)
+    assert decision == {'status': 'unresolved', 'reason_code': 'clinical_sources_ineligible'}
 
 
 @pytest.mark.parametrize("reverse", [False, True])
@@ -637,8 +638,11 @@ def test_exclusion_only_scope_retains_every_valid_marine_row_independent_of_orde
         row = _ingredient(name=name, canonical_id=canonical, quantity=amount, unit="mg")
         row["raw_source_path"] = f"ingredientRows[{i}]"
         rows.append(row)
-    match = _match(id="INGR_OMEGA3", ingredient="Omega-3 Fatty Acids",
+    # Isolate the exclusion contract from the real omega clinical hold.
+    # This synthetic scope is never a clinical source or a scoring approval.
+    match = _match(id="SYNTHETIC_MARINE_SCOPE_CONTROL", ingredient="Omega-3 Fatty Acids",
                    standard_name="Omega-3 Fatty Acids",
+                   applicability=deepcopy(reviewed_entries()['INGR_OMEGA3']['applicability']),
                    matched_canonical_ids=[r["canonical_id"] for r in rows],
                    matched_source_row_refs=[r["raw_source_path"] for r in rows])
     product = _product(ingredients=rows[::-1] if reverse else rows, matches=[match])
@@ -2043,6 +2047,8 @@ def test_explicitly_ineligible_contexts_cannot_supply_legacy_clinical_credit(rid
              'matched_source_row_refs': ['ingredientRows[0]']}
     product = {'product_name': name, 'ingredient_quality_data': {'ingredients_scorable': [row], 'ingredients': [row]},
                'activeIngredients': [row], 'evidence_data': {'clinical_matches': [entry]}}
+    assert assess_clinical_applicability(product, entry)['status'] == 'unresolved'
+    assert filter_clinical_matches(product, [entry])[0] == []
     matches, _ = resolved_clinical_matches(product)
     assert not matches
     result = score_evidence(product, apply_primary_floor=True)
