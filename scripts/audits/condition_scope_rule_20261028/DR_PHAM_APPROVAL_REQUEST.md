@@ -109,3 +109,47 @@ No merge to main without Sean.
 ## Signature
 
 Dr Pham: approve D1 / D2-A or D2-B / D3 / D4 / D5, or amend: ________ (relayed by Sean, date ____)
+
+## Rulings received (October 28, 2026)
+
+Received from Sean in chat as "Claim and Population Applicability: Final Rulings". The text is
+written in the first person and refers to Dr Pham in the third person. Sean must confirm that it
+carries Dr Pham's approval before merge. It authorizes implementing and measuring the change, not
+merging or publishing it.
+
+- **D1: approved.** One shared clinical decision across generic, branded, sports, probiotic and
+  native-strain paths, covering prevention, physiology, treatment and challenge contexts. No claim
+  is required, the shopper is never assumed to have the condition, and category-specific formulas,
+  exact-material requirements and holds are preserved. No new scorer or registry.
+- **D2: option A, refined.** Infant, pediatric, pregnancy and lactation research earns credit only
+  when the product is explicitly intended for that population. Targeting must come from affirmative
+  label or use information, never from a precaution. Other populations fail on an explicit conflict,
+  and the explanation keeps the exact studied population. One applicable context cannot lend its
+  approval, population or outcome to another. Population and claim checks are independent: having
+  no claim never bypasses a population restriction. Women with PCOS and pregnant women are not
+  interchangeable, so a pregnancy-targeted product must not inherit a nonpregnant PCOS result.
+- **D3: approved, with stricter claim interpretation.**
+  - No claim: scoped credit. Aligned claim: the same credit.
+  - Only an unrelated claim: no credit through that study.
+  - Mixed claims: the supported outcome can count, but the unrelated claim gains nothing.
+  - Signed product-level exclusions keep their exact meaning.
+  - "Heart health" is not heart-failure proof, and a heart-failure study is not general
+    cardiovascular protection.
+  - A recognized claim that cannot be classified is not "no claim": keep its provenance and
+    resolve it conservatively.
+- **D4: rejected as written.** Use phrase-aware recognition. The categorizer tokenizes single words,
+  so a literal "blood pressure" entry would never match. Fix the menstrual/bowel "regularity"
+  collision, and keep PCOS, nausea and exercise outcomes separate from broad categories. A
+  category can help find research and present it, but can never authorize Evidence points.
+- **D5: approved.** No fall-through to legacy credit for a missing approval or source binding, a
+  rejected context, reference-only research, the wrong preparation, an excluded combination or an
+  incompatible population.
+
+Implementation requirements from the ruling:
+- Keep scientific eligibility, claim alignment (absent / aligned / unrelated / mixed / ambiguous)
+  and population applicability (eligible / explicit conflict / special targeting absent /
+  unresolved) as separate parts of one result.
+- The role parser (`scoring_input_contract._role_function_claim_source`) cannot prove a claim is
+  absent. Reuse the existing affirmative label-positioning source.
+- Preserve `_excluded_claim_matches`.
+- Report before/after separately for claim-free, explicit-claim and population-targeted products.
