@@ -1305,3 +1305,68 @@ def test_generic_spearmint_description_does_not_inherit_exact_preparation_review
         from scoring_v4.modules.botanical_profile import _dosing_entry_for
         assert _dosing_entry_for(row) is None
         assert _botanical_benchmark(row) == "absent"
+
+
+@pytest.mark.parametrize('parent,label', [
+    ('reishi', 'Reishi Mushroom'), ('reishi', 'Reishi Powder'),
+    ('reishi', 'Ganoderma lucidum'), ('reishi', 'Lingzhi'),
+    ('lions_mane', "Lion's Mane Mushroom"),
+    ('lions_mane', 'Hericium erinaceus'), ('lions_mane', 'Yamabushitake'),
+])
+def test_generic_mushroom_identity_does_not_disclose_fruiting_body(enricher, parent, label):
+    match = enricher._match_quality_map(
+        label, label, enricher.databases['ingredient_quality_map'],
+        cleaner_canonical_id=parent,
+    )
+    expected = unknown_form_quality(IQM[parent])
+    assert match['canonical_id'] == parent
+    assert (match['form_id'], match['bio_score']) == (expected['form_id'], 8.0)
+
+
+@pytest.mark.parametrize('parent,label,form', [
+    ('reishi', 'Reishi Mushroom Fruiting Body Extract', 'reishi fruiting body'),
+    ('lions_mane', "Lion's Mane Mushroom Fruiting Body Extract", 'lions mane fruiting body'),
+])
+def test_explicit_mushroom_fruiting_body_keeps_its_form_quality(enricher, parent, label, form):
+    match = enricher._match_quality_map(
+        label, label, enricher.databases['ingredient_quality_map'],
+        cleaner_canonical_id=parent,
+    )
+    assert (match['canonical_id'], match['form_id'], match['bio_score']) == (parent, form, 9.0)
+
+
+@pytest.mark.parametrize('label,parent,expected_form,expected_bio', [
+    ('Reishi Mushroom', 'reishi', 'reishi (unspecified)', 8),
+    ('Hericium erinaceus', 'lions_mane', "lion's mane (unspecified)", 8),
+    ('Reishi Mushroom Fruiting Body Extract', 'reishi', 'reishi fruiting body', 9),
+    ("Lion's Mane Mushroom Fruiting Body Extract", 'lions_mane', 'lions mane fruiting body', 9),
+])
+def test_mushroom_material_disclosure_survives_clean_enrich_score_and_form_copy(
+        enricher, label, parent, expected_form, expected_bio):
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    from scoring_v4.scored_artifact import build_scored_artifact
+    from build_final_db import _derive_form_note
+    raw = {
+        'id': 'MUSHROOM_MATERIAL_REGRESSION', 'fullName': label,
+        'brandName': 'Label regression', 'offMarket': 0,
+        'physicalState': {'name': 'Capsule'},
+        'servingSizes': [{'minQuantity': 1, 'maxQuantity': 1, 'unit': 'Capsule(s)',
+                          'minDailyServings': 1, 'maxDailyServings': 1}],
+        'ingredientRows': [{'name': label, 'forms': [], 'nestedRows': [],
+                            'quantity': [{'quantity': 1000, 'unit': 'mg'}]}],
+        'otherIngredients': {'ingredients': []},
+    }
+    clean = EnhancedDSLDNormalizer().normalize_product(raw)
+    product, _ = enricher.enrich_product(clean)
+    row = product['ingredient_quality_data']['ingredients'][0]
+    assert (row['canonical_id'], row['matched_form'], row['bio_score']) == (
+        parent, expected_form, expected_bio)
+    assert (row['quantity'], row['unit']) == (1000, 'mg')
+    note, _ = _derive_form_note(row, IQM)
+    assert note == IQM[parent]['forms'][expected_form]['consumer_note']
+    if expected_bio == 8:
+        assert 'without identifying fruiting body' in note
+    artifact = build_scored_artifact(product)
+    assert artifact['quality_score_status'] == 'scored'
+    assert artifact['quality_score_v4_100'] is not None
+    assert len(artifact['quality_pillars_v4']) == 6

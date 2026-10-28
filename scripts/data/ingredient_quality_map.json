@@ -41836,9 +41836,6 @@
         },
         "notes": "Lion's mane fruiting body (Hericium erinaceus). Contains hericenones (lipophilic, fruiting body-specific) and beta-glucans. No published PK for hericenones. Beta-glucans interact with gut immune receptors rather than being absorbed systemically. Fruiting body provides different bioactive profile than mycelium (which contains erinacines). Clinical cognitive benefits demonstrated in RCTs but mechanism poorly understood. 2025 Nutrients review explicitly flags PK data gap: \"elucidation of pharmacokinetics\" needed (PMID:40284172); hericenones are lipophilic aromatics predicted to absorb better than the β-glucans but never quantified in humans.",
         "aliases": [
-          "lion's mane mushroom",
-          "hericium erinaceus",
-          "yamabushitake",
           "lion's mane fruiting body extract",
           "lions mane fruiting body extract",
           "hericium erinaceus fruiting body extract",
@@ -41901,7 +41898,10 @@
           "Hericium erinaceus, Powder",
           "hericium erinaceus powder",
           "lion's mane mushroom powder",
-          "lion's mane powder"
+          "lion's mane powder",
+          "lion's mane mushroom",
+          "hericium erinaceus",
+          "yamabushitake"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -42085,10 +42085,6 @@
         },
         "notes": "Ganoderma lucidum/lingzhi fruiting body. Contains triterpenes (ganoderic acids — bitter compounds) and polysaccharides (beta-glucans). Triterpenes are lipid-soluble; polysaccharides require hot water extraction. Dual-extracted products (ethanol + water) capture both fractions. Traditional 'mushroom of immortality.'",
         "aliases": [
-          "reishi mushroom",
-          "ganoderma lucidum",
-          "reishi powder",
-          "lingzhi",
           "Ganoderma lucidum Fruiting Body Extract",
           "Reishi Mushroom Fruiting Body Extract"
         ],
@@ -42127,14 +42123,18 @@
       "reishi (unspecified)": {
         "bio_score": 8,
         "absorption": "low/unspecified mushroom form quality; disclosed fruiting-body or standardized extract required for higher confidence",
-        "consumer_note": "This label names reishi without identifying fruiting body, mycelium, powder, extract, or standardization.",
+        "consumer_note": "This label names reishi, at most as a powder, without identifying fruiting body, mycelium, extract, or standardization.",
         "consumer_note_review": {
-          "by": "Product owner approval",
-          "date": "2026-08-08"
+          "by": "Source-grounded wording review (agent review); no grade or clinical approval change",
+          "date": "2026-10-28"
         },
         "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability. B33 audit 2026-04-25: reishi triterpene class (higher than standard mushroom B1 framework due to lipid-soluble actives). B43 2026-06-06: unspecified mushroom form set below disclosed mushroom forms and natural bonus removed. For local/matrix fungal actives, bio_score is used as active-form quality/delivery-to-site confidence; unspecified labels should not outrank disclosed fruiting-body or standardized extracts.",
         "aliases": [
-          "reishi"
+          "reishi",
+          "reishi mushroom",
+          "ganoderma lucidum",
+          "reishi powder",
+          "lingzhi"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
