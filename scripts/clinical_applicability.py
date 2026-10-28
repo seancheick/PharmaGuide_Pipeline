@@ -452,8 +452,12 @@ _POPULATION_WORDS = re.compile(
     r"prenatal|pregnan\w*|maternal|postnatal|postpartum|wom[ae]n'?s?|female|men'?s?|male)\b", re.I)
 
 
-# A product-level function sentence ("Supports normal enzyme activity").
+# A product-level function sentence ("Supports normal enzyme activity"). A
+# general wellness phrase names no specific purpose, so it is no such claim.
 _POSITIONING_FUNCTION = re.compile(r"\b(?:supports?|promotes?|helps?|maintains?)\s+[a-z]", re.I)
+_GENERAL_WELLNESS = re.compile(
+    r"\b(?:(?:overall|general|daily|good|optimal|total|everyday)\s+(?:health|wellness|well[- ]?being|nutrition)"
+    r"|well[- ]?being|wellness|nutritional support)\b", re.I)
 
 
 def _claimed_purposes(text: str) -> set[str]:
@@ -491,7 +495,8 @@ def _positioning_claims(product: Mapping, *, purposes_only: bool = False) -> tup
             affirmative = clause[:negation.start()] if negation else clause
             found = categorize(affirmative)
             categories |= found
-            unclassified |= not found and bool(_POSITIONING_FUNCTION.search(affirmative))
+            unclassified |= (not found and bool(_POSITIONING_FUNCTION.search(affirmative))
+                             and not _GENERAL_WELLNESS.search(affirmative))
     categories.discard("probiotic")
     return categories, unclassified
 
@@ -1058,10 +1063,17 @@ def filter_clinical_matches(product: Mapping, matches: list[dict], *, assess_amo
                 accepted.append(entry)
                 continue
             scoped_entry = {**entry, "applicability_assessment": decision}
+            # Only a product-level Evidence heading (a blend total the input
+            # contract projects as the studied material) keeps its binding; an
+            # ordinary parent row never lends its reference to a nested extract.
+            from scoring_input_contract import get_evidence_subject_rows
+            headings = {row.get("raw_source_path") for row in get_evidence_subject_rows(dict(product))
+                        if row.get("scoring_input_kind") == "product_level_evidence"}
             anchors = [ref for ref in entry.get("matched_source_row_refs") or [] if isinstance(ref, str)]
             passing = decision.get("matched_source_row_refs") or [decision.get("source_row_ref")]
-            if anchors and all(isinstance(ref, str) and any(ref.startswith(anchor + ".") for anchor in anchors)
-                               for ref in passing):
+            if anchors and set(anchors) <= headings and all(
+                    isinstance(ref, str) and any(ref.startswith(anchor + ".") for anchor in anchors)
+                    for ref in passing):
                 # The scope verified the named child of the heading this match
                 # binds; the heading keeps its binding (a brand-named blend
                 # total is that studied material's amount).

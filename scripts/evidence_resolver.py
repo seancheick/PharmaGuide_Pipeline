@@ -86,7 +86,7 @@ INDICATION_KEYWORDS: Dict[str, Set[str]] = {
         "infant", "infants", "baby", "babies", "pediatric", "children", "child", "kids",
         "toddler", "toddlers", "preterm", "neonatal", "neonates",
     },
-    "oral": {"oral", "dental", "teeth", "gum", "gingivitis", "plaque", "caries", "halitosis"},
+    "oral": {"oral", "dental", "teeth", "gums", "gingivitis", "plaque", "caries", "halitosis"},
     "metabolic": {"weight", "metabolic", "glucose", "glycemic", "visceral", "fat",
                   "diabetes", "glycemia", "insulin"},
     "mood": {"mood", "stress", "anxiety", "psychobiotic",
@@ -125,6 +125,8 @@ INDICATION_KEYWORDS: Dict[str, Set[str]] = {
 _INDICATION_PHRASES = (
     ("cardiovascular", r"\b(?:heart (?:health|function|failure)|healthy heart|blood pressure|blood flow)\b"),
     ("metabolic", r"\bblood sugar\b"),
+    # "Gum" alone is a resin, thickener or chewing gum, not the gums.
+    ("oral", r"\bgum (?:health|disease|tissue)\b"),
     ("cognitive_neurological", r"\bmental clarity\b"),
     ("menstrual_cycle", r"\b(?:polycystic ovar(?:y|ian)|(?:menstrual|cycle) regularity)\b"),
     ("lipid", r"\b(?:blood lipids|lipid (?:profile|levels?))\b"),

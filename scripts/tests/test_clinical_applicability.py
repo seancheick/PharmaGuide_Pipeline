@@ -1969,3 +1969,20 @@ def test_a_null_only_context_still_reaches_its_preserved_finding():
     # The stress claim reaches the null stress finding (evaluated null, no credit).
     assert assess_claim_alignment(_claim('Supports stress relief.'), context)['state'] == 'aligned'
     assert assess_claim_alignment(_claim('Supports restful sleep.'), context)['state'] == 'unrelated'
+
+
+@pytest.mark.parametrize('text,category,present', [
+    ('Boswellia serrata gum extract', 'oral', False),
+    ('Supports healthy gums', 'oral', True),
+    ('Promotes gum health', 'oral', True),
+])
+def test_gum_as_an_ingredient_word_is_not_an_oral_claim(text, category, present):
+    from evidence_resolver import evidence_indication_categories
+    assert (category in evidence_indication_categories(text)) is present
+
+
+def test_a_general_wellness_phrase_is_not_an_unclassified_claim():
+    from clinical_applicability import native_product_positioning_categories, _positioning_claims
+    product = {'product_name': 'Whey', 'statements': [{'type': 'General Statements: All Other Content',
+                                                      'notes': 'High quality whey protein to support daily wellness.'}]}
+    assert _positioning_claims(product, purposes_only=True) == (set(), False)
