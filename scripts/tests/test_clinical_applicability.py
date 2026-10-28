@@ -1770,7 +1770,12 @@ def test_purpose_rejection_keeps_the_studied_branded_material_for_formulation():
     # Single signed words count only as claimed objects.
     ('CoQ10 Energy Support', (), True),
     ('CoQ10 100 mg', ('Supports cellular energy production.',), True),
-    ('Pro Energy Series CoQ10', (), False),
+    # A title keeps the exact signed word: a product name is positioning.
+    ('Pro Energy Series CoQ10', (), True),
+    ('CoQ10 Energy + Heart Function', (), True),
+    ('Statin Companion CoQ10', (), True),
+    # A mechanism sentence is not an energy claim.
+    ('CoQ10 100 mg', ("It is an essential component of your heart's energy producing system.",), False),
     # A precaution naming a signed term is not a claim.
     ('Inositol', ('Consult your doctor before use during pregnancy.',), False),
     ('Inositol', ('Supports a healthy pregnancy.',), True),
@@ -1779,5 +1784,74 @@ def test_signed_exclusions_match_claims_not_product_lines_or_precautions(product
     from clinical_applicability import _excluded_claim_matches
     product = {'product_name': product_name,
                'statements': [{'type': 'General Statements: All Other Content', 'notes': text} for text in statements]}
-    policy = {'excluded_claim_terms': ['energy', 'pregnancy', 'heart health']}
+    policy = {'excluded_claim_terms': ['energy', 'statin', 'pregnancy', 'heart health']}
     assert _excluded_claim_matches(product, policy) is excluded
+
+
+def _nvp_context():
+    return next(c for c in reviewed_entries()['INGR_GINGER']['study_contexts']
+                if c['condition'] == 'nausea_vomiting_of_pregnancy')
+
+
+@pytest.mark.parametrize('title,targets,state', [
+    ('Ginger Chews (Not for use during pregnancy)', [], 'special_targeting_absent'),
+    ('Post-Pregnancy Recovery Ginger', [], 'special_targeting_absent'),
+    ('Lactation Support Tea', ['Lactating'], 'special_targeting_absent'),
+    ('Ginger', ['Women (not pregnant or lactating)'], 'special_targeting_absent'),
+    ('Prenatal Ginger', [], 'eligible'),
+    ('Ginger', ['Pregnant Women'], 'eligible'),
+])
+def test_pregnancy_targeting_is_affirmative_and_not_lactation(title, targets, state):
+    from clinical_applicability import assess_context_population
+    assert assess_context_population({'product_name': title, 'targetGroups': targets}, _nvp_context()) == state
+
+
+def test_lactation_only_research_needs_lactation_targeting():
+    from clinical_applicability import assess_context_population
+    context = {'population': {'age_group': 'adult', 'description': '120 breastfeeding mothers 1-3 months postpartum'}}
+    assert assess_context_population({'product_name': 'Lactation Support', 'targetGroups': ['Lactating']},
+                                     context) == 'eligible'
+    assert assess_context_population({'product_name': 'Fenugreek'}, context) == 'special_targeting_absent'
+
+
+@pytest.mark.parametrize('text', [
+    'Gluten-Free, Lactose-Free', 'Cholesterol-free', 'Lipid-soluble vitamin', 'Shark Cartilage 750 mg',
+    "Won't cause stomach distress", 'If you have diabetes consult your physician', 'Calm Magnesium Powder',
+])
+def test_absence_precaution_and_ingredient_words_are_not_claims(text):
+    from clinical_applicability import native_product_positioning_categories
+    product = {'product_name': 'Riboflavin', 'statements': [
+        {'type': 'General Statements: All Other Content', 'notes': text}]}
+    assert native_product_positioning_categories(product, purposes_only=True) == set()
+    result = _assess('INGR_RIBOFLAVIN_B2', _row('riboflavin', 'Riboflavin', quantity=400), 'Riboflavin')
+    product_result = assess_clinical_applicability(
+        {**product, 'ingredient_quality_data': {'ingredients_scorable': [_row('riboflavin', 'Riboflavin', quantity=400)]}},
+        {'id': 'INGR_RIBOFLAVIN_B2', 'ingredient': 'Riboflavin', 'matched_source_row_refs': ['ingredientRows[0]']},
+        assess_amount=False)
+    assert product_result['status'] == result['status'] == 'applicable'
+
+
+def test_directions_for_use_are_not_a_marketed_purpose():
+    from clinical_applicability import native_product_positioning_categories
+    product = {'product_name': 'Ginger', 'suggested_use': 'Take with food to reduce nausea.'}
+    assert native_product_positioning_categories(product, purposes_only=True) == set()
+
+
+def test_unclassified_product_level_function_claim_is_not_claim_absence():
+    result = _assess('INGR_SELENIUM', _row('selenium', 'Selenium', quantity=0.2),
+                     'Selenium - Supports Normal Enzyme Activity')
+    assert result['status'] == 'unresolved'
+    assert result['claim_alignment']['state'] == 'ambiguous'
+
+
+def test_a_bare_muscle_claim_relates_to_both_muscle_outcome_families():
+    from evidence_resolver import evidence_indication_categories
+    assert {'muscle_strength_mass', 'muscle_recovery'} <= evidence_indication_categories('Joint, Bone & Muscle')
+
+
+def test_an_exclusion_sentence_is_not_the_studied_population():
+    from clinical_applicability import assess_context_population
+    context = {'population': {'age_group': 'adult', 'description':
+        '38 RCTs in adults with hypertension. Pregnant participants were excluded.'}}
+    assert assess_context_population({'product_name': 'Magnesium'}, context) == 'eligible'
+    assert assess_context_population({'product_name': 'Prenatal Magnesium'}, context) == 'explicit_conflict'

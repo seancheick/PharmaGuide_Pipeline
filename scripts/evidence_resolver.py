@@ -90,7 +90,7 @@ INDICATION_KEYWORDS: Dict[str, Set[str]] = {
     "metabolic": {"weight", "metabolic", "glucose", "glycemic", "visceral", "fat",
                   "diabetes", "glycemia", "insulin"},
     "mood": {"mood", "stress", "anxiety", "psychobiotic", "sleep",
-             "relax", "relaxation", "cortisol", "asleep", "calm", "depression",
+             "relax", "relaxation", "cortisol", "asleep", "depression",
              "depressive", "distress"},
     "bone": {"bone", "bones", "density"},
     # Existing clinical-indication vocabulary; shared by source claims and
@@ -100,15 +100,15 @@ INDICATION_KEYWORDS: Dict[str, Set[str]] = {
     "aging_longevity": {"longevity", "antiaging", "antiageing"},
     "cognitive_neurological": {"attention", "alertness", "memory", "focus", "cognition", "cognitive"},
     "skin_hair_collagen": {"skin"},
-    "eye_health": {"eye", "eyes", "vision", "visual", "ocular", "macular", "retina"},
+    "eye_health": {"eye", "eyes", "vision", "ocular", "macular", "retina"},
     # Outcome families named by reviewed study contexts (October 28, 2026
     # rulings). A shared category only finds candidate research or an
     # unrelated claim; the reviewed context alone authorizes credit, so a
     # heart-health claim never becomes heart-failure or lipid evidence.
     "cardiovascular": {"cardiovascular", "cardiac", "hypertension", "cvd", "endothelial"},
-    "lipid": {"cholesterol", "lipid", "lipids", "ldl", "hdl", "triglyceride", "triglycerides",
+    "lipid": {"cholesterol", "ldl", "hdl", "triglyceride", "triglycerides",
               "dyslipidemia", "hypercholesterolemia"},
-    "joint": {"joint", "joints", "knee", "knees", "cartilage", "osteoarthritis"},
+    "joint": {"joint", "joints", "knee", "knees", "osteoarthritis"},
     "thyroid": {"thyroid", "thyroiditis", "hashimoto"},
     "nausea": {"nausea", "vomiting"},
     "migraine": {"migraine", "migraines"},
@@ -124,10 +124,14 @@ _INDICATION_PHRASES = (
     ("metabolic", r"\bblood sugar\b"),
     ("cognitive_neurological", r"\bmental clarity\b"),
     ("menstrual_cycle", r"\b(?:polycystic ovar(?:y|ian)|(?:menstrual|cycle) regularity)\b"),
+    ("lipid", r"\b(?:blood lipids|lipid (?:profile|levels?))\b"),
     ("endurance", r"\bexercise capacity\b"),
     ("muscle_recovery", r"\bmuscle (?:damage|soreness|recovery)\b"),
     ("muscle_strength_mass", r"\b(?:lean|muscle) mass\b|\blean muscle\b|\bmuscle (?:growth|gains?|strength|performance|power|building)\b"
                              r"|\bbuild(?:s|ing)? muscle\b|\bmuscularity\b"),
+    # A bare "muscle" claim names neither family; it is related to both.
+    ("muscle_strength_mass", r"\bmuscles?\b"),
+    ("muscle_recovery", r"\bmuscles?\b"),
 )
 
 
@@ -141,6 +145,9 @@ def evidence_indication_categories(text: str) -> Set[str]:
     # Packaging energy procurement is not a physiological product purpose,
     # and "sold by weight" is a fill statement, not a weight claim.
     normalized = re.sub(r"\brenewable energy\b|\bsold by weight\b", " ", normalized)
+    # "Gluten-free", "lactose free": an absence statement, not a purpose.
+    normalized = re.sub(r"\b(?:gluten|dairy|lactose|soy|sugar|cholesterol|fat|gmo|caffeine|stimulant|egg|nut|"
+                        r"wheat|yeast|corn|sodium|preservative|artificial|allergen) free\b", " ", normalized)
     words = set(normalized.split())
     categories = {category for category, keywords in INDICATION_KEYWORDS.items() if words & keywords}
     categories.update(category for category, phrase in _INDICATION_PHRASES if re.search(phrase, normalized))

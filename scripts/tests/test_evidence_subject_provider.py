@@ -162,8 +162,10 @@ def test_the_minted_blend_name_is_not_a_subject_on_a_real_label(enriched):
 def test_enrichment_keeps_undosed_reviewed_match_without_promising_a_member_dose(enriched):
     product = enriched['176055']
     row = next(r for r in get_evidence_subject_rows(product) if r.get('canonical_id') == 'l_arginine')
-    matches = [m for m in product['evidence_data']['clinical_matches'] if m.get('id') == 'INGR_L_ARGININE']
-    assert matches
+    # The blood-pressure research cannot back this strength/performance label
+    # (October 28 rulings); the rejection still records the verified row.
+    matches = [m for m in product['evidence_data']['rejected_clinical_matches'] if m.get('id') == 'INGR_L_ARGININE']
+    assert matches and matches[0]['reason_code'] == 'label_purpose_evidence_mismatch'
     assert row['raw_source_path'] in matches[0]['matched_source_row_refs']
     from dose_assessment import positive_clinical_benchmark
     assert positive_clinical_benchmark(product, row) is None

@@ -394,9 +394,10 @@ def native_product_positioning_texts(product: Mapping) -> list[str]:
 
 
 
-# A signed exclusion names a claim. A single word counts only as a claimed
-# object ("supports cellular energy", "Energy Support"), never as a product
-# line ("Pro Performance", "Extra Strength") or inside a precaution.
+# A signed exclusion names a claim. In label statements a single word counts
+# only as a claimed object ("supports cellular energy"), not in a mechanism
+# sentence ("the heart's energy producing system"); a title keeps the exact
+# signed word. Precautions never count.
 _CLAIM_VERB = r"(?:supports?|promotes?|boosts?|helps?|enhances?|increases?|improves?|maintains?|for)"
 _CLAIM_NOUN = r"(?:support|formula|booster|boost|health)"
 _PRECAUTION_CLAUSE = re.compile(
@@ -406,15 +407,18 @@ _PRECAUTION_CLAUSE = re.compile(
 def _excluded_claim_matches(product: Mapping, policy: Mapping) -> bool:
     """Match only affirmative label claims, never warnings, precautions or metadata."""
     excluded = {str(product.get("brand_name") or ""), str(product.get("serving_description") or "")}
-    clauses = [clause for text in native_product_positioning_texts(product) if text and text not in excluded
+    titles = {str(product.get(field) or "") for field in ("product_name", "fullName")} - {""}
+    clauses = [(text in titles, clause) for text in native_product_positioning_texts(product)
+               if text and text not in excluded
                for clause in re.split(r"[.;!?\r\n]+", text) if not _PRECAUTION_CLAUSE.search(clause)]
     for term in policy.get("excluded_claim_terms", []):
         words = _key(term).split()
-        body = r"[\s_-]+".join(re.escape(word) for word in words)
-        if len(words) == 1:
-            body = rf"(?:{_CLAIM_VERB}\s+(?:[\w'-]+\s+){{0,3}}{body}|{body}[\s_-]+{_CLAIM_NOUN})"
-        pattern = re.compile(r"(?<!\w)" + body + r"(?!\w)", re.I)
-        if any(find_affirmative_label_match(pattern, clause) for clause in clauses):
+        exact = r"[\s_-]+".join(re.escape(word) for word in words)
+        claimed = (rf"(?:{_CLAIM_VERB}\s+(?:[\w'-]+\s+){{0,3}}{exact}|{exact}[\s_-]+{_CLAIM_NOUN})"
+                   if len(words) == 1 else exact)
+        patterns = {True: re.compile(r"(?<!\w)" + exact + r"(?!\w)", re.I),
+                    False: re.compile(r"(?<!\w)" + claimed + r"(?!\w)", re.I)}
+        if any(find_affirmative_label_match(patterns[title], clause) for title, clause in clauses):
             return True
     return False
 
@@ -437,7 +441,8 @@ def _valid_native_claim_scope(context: Mapping) -> bool:
 _CREDITABLE_CLAIM_STATES = {"absent", "aligned", "mixed"}
 # The shared affirmative matcher's rule: a negation earlier in the clause
 # negates what follows it ("Not for children", "free of soy").
-_POSITIONING_NEGATION = re.compile(r"\b(?:no|not|without|avoid|free\s+(?:of|from))\b", re.I)
+_POSITIONING_NEGATION = re.compile(
+    r"\b(?:no|not|without|avoid|never|won'?t|don'?t|doesn'?t|free\s+(?:of|from))\b", re.I)
 
 
 # Who a product is for is population targeting, judged against the studied
@@ -447,30 +452,48 @@ _POPULATION_WORDS = re.compile(
     r"prenatal|pregnan\w*|maternal|postnatal|postpartum|wom[ae]n'?s?|female|men'?s?|male)\b", re.I)
 
 
+# A product-level function sentence ("Supports normal enzyme activity").
+_POSITIONING_FUNCTION = re.compile(r"\b(?:supports?|promotes?|helps?|maintains?)\s+[a-z]", re.I)
+
+
 def _claimed_purposes(text: str) -> set[str]:
     from evidence_resolver import evidence_indication_categories
     return evidence_indication_categories(_POPULATION_WORDS.sub(" ", text))
 
 
 def native_product_positioning_categories(product: Mapping, *, purposes_only: bool = False) -> set[str]:
-    """Indication categories of the label's affirmative product positioning.
+    """Indication categories of the label's affirmative product positioning."""
+    return _positioning_claims(product, purposes_only=purposes_only)[0]
+
+
+def _positioning_claims(product: Mapping, *, purposes_only: bool = False) -> tuple[set[str], bool]:
+    """Positioning categories, and whether a function sentence no category places exists.
 
     Brand and serving metadata, negated clauses and precaution blocks are not
     a marketed purpose. Generic class words ("probiotic") are not a claim.
-    ``purposes_only`` drops population words, which describe targeting.
+    ``purposes_only`` drops population words, which describe targeting, and
+    the directions for use, which are not a marketed purpose.
     """
     from evidence_resolver import evidence_indication_categories
     categorize = _claimed_purposes if purposes_only else evidence_indication_categories
     excluded = {str(product.get("brand_name") or ""), str(product.get("serving_description") or "")}
+    if purposes_only:
+        excluded.add(str(product.get("suggested_use") or ""))
     categories: set[str] = set()
+    unclassified = False
     for text in native_product_positioning_texts(product):
         if not text or text in excluded:
             continue
         for clause in re.split(r"[.;!?\r\n]+|\b(?:but|however)\b", text, flags=re.I):
+            if _PRECAUTION_CLAUSE.search(clause):
+                continue
             negation = _POSITIONING_NEGATION.search(clause)
-            categories |= categorize(clause[:negation.start()] if negation else clause)
+            affirmative = clause[:negation.start()] if negation else clause
+            found = categorize(affirmative)
+            categories |= found
+            unclassified |= not found and bool(_POSITIONING_FUNCTION.search(affirmative))
     categories.discard("probiotic")
-    return categories
+    return categories, unclassified
 
 
 def assess_claim_alignment(product: Mapping, context: Mapping, canonicals=(), *, supported_outcomes=()) -> dict:
@@ -503,9 +526,13 @@ def assess_claim_alignment(product: Mapping, context: Mapping, canonicals=(), *,
     # product positioning stands in only when the ingredient has no claim.
     claims = [(source, _claimed_purposes(text)) for canonical in sorted(set(canonicals))
               for source, text in ingredient_function_claims(product.get("statements"), canonical)]
-    positioning = native_product_positioning_categories(product, purposes_only=True)
-    if positioning and not claims:
-        claims.append(("product_positioning", positioning))
+    positioning, unclassified = _positioning_claims(product, purposes_only=True)
+    if not claims:
+        if positioning:
+            claims.append(("product_positioning", positioning))
+        if unclassified:
+            # A function sentence no category places is still a claim.
+            claims.append(("product_positioning_unclassified", set()))
     if not claims:
         return {"state": "absent", "sources": []}
     aligned = [source for source, categories in claims if categories & outcome]
@@ -547,9 +574,19 @@ def assess_native_claimed_purpose(product: Mapping, context: Mapping, canonicals
             "condition": context.get("condition"), "claim_alignment": alignment}
 
 
-_PREGNANT_SUBJECTS = re.compile(r"(?<![\w-])pregnant women\b", re.I)
+_PREGNANT_SUBJECTS = re.compile(
+    r"(?<![\w-])pregnant (?:women|adolescents|adults|participants)\b|\btrimester of pregnancy\b", re.I)
+_LACTATING_SUBJECTS = re.compile(r"\b(?:breastfeeding|lactating|nursing) (?:mothers|women)\b", re.I)
+_PREGNANT_TARGET = re.compile(r"\bpregnant\b", re.I)
+_LACTATING_TARGET = re.compile(r"\b(?:lactating|lactation|breastfeeding|nursing)\b", re.I)
 _MATERNAL_SUPPLEMENTATION = re.compile(r"\b(?:pregnan\w*|maternal|postpartum)\b", re.I)
 _INFANT_TARGET = re.compile(r"\b(?:infants?|bab(?:y|ies)|newborns?|neonat\w*)\b", re.I)
+
+
+def _studied_subjects(pattern: re.Pattern, description: str) -> bool:
+    """A subject phrase in a sentence that does not exclude or negate it."""
+    return any(pattern.search(sentence) and not re.search(r"\bexclu|\bnot\b|\bnon-?\w", sentence, re.I)
+               for sentence in re.split(r"[.;]", description))
 
 
 def _special_population(context: Mapping, description: str) -> str | None:
@@ -562,8 +599,10 @@ def _special_population(context: Mapping, description: str) -> str | None:
             return "pregnancy"
         return "infant" if age == "infant" else "pediatric"
     if age != "mixed" and (re.search(r"pregnan|gestation", _key(context.get("condition")))
-                           or _PREGNANT_SUBJECTS.search(description)):
+                           or _studied_subjects(_PREGNANT_SUBJECTS, description)):
         return "pregnancy"
+    if age != "mixed" and _studied_subjects(_LACTATING_SUBJECTS, description):
+        return "lactation"
     return None
 
 
@@ -575,7 +614,7 @@ def assess_context_population(product: Mapping, context: Mapping) -> str:
     never a precaution). Any other restriction fails only on an explicit label
     conflict. This never infers an individual user's condition.
     """
-    from rda_ul_calculator import label_is_for_children, label_population_members, _target_group_text
+    from rda_ul_calculator import label_is_for_children, _target_group_text
     from scoring_input_contract import _ROUTE_PRENATAL_KEYWORDS, _route_product_label_text
     population = context.get("population")
     if not isinstance(population, Mapping) or not isinstance(population.get("description"), str) or not population["description"].strip():
@@ -584,8 +623,13 @@ def assess_context_population(product: Mapping, context: Mapping) -> str:
     title = _route_product_label_text(dict(product))
     groups = product.get("targetGroups") or []
     children = label_is_for_children(dict(product))
-    pregnancy = ("pregnancy_lactation" in label_population_members(dict(product))
-                 or bool(_ROUTE_PRENATAL_KEYWORDS.search(title)))
+    group_texts = [_target_group_text(group) for group in groups]
+    # Affirmative targeting only: "Not for use during pregnancy", "Women (not
+    # pregnant or lactating)" and post-pregnancy titles are not pregnancy labels.
+    prenatal_title = re.compile(r"(?<!post-)(?<!post )" + _ROUTE_PRENATAL_KEYWORDS.pattern, re.I)
+    pregnancy = (any(find_affirmative_label_match(_PREGNANT_TARGET, text) for text in group_texts)
+                 or bool(find_affirmative_label_match(prenatal_title, title)))
+    lactation = any(find_affirmative_label_match(_LACTATING_TARGET, text) for text in [*group_texts, title])
     special = _special_population(context, description)
     if special == "infant":
         infant = children and bool(_INFANT_TARGET.search(" ".join([title, *map(_target_group_text, groups)])))
@@ -594,10 +638,12 @@ def assess_context_population(product: Mapping, context: Mapping) -> str:
         return "eligible" if children else "special_targeting_absent"
     if special == "pregnancy":
         return "eligible" if pregnancy else "special_targeting_absent"
+    if special == "lactation":
+        return "eligible" if lactation else "special_targeting_absent"
     if population.get("age_group") == "adult" and children:
         return "explicit_conflict"
     # Pregnant women are not interchangeable with a studied nonpregnant group.
-    if pregnancy and not _PREGNANT_SUBJECTS.search(description):
+    if pregnancy and not _studied_subjects(_PREGNANT_SUBJECTS, description):
         return "explicit_conflict"
     key = _key(description)
     men = re.compile(r"\b(?:men|male|males)\b", re.I)

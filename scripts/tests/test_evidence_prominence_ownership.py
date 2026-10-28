@@ -856,3 +856,14 @@ def test_reviewed_peppermint_oil_volume_recovers_evidence_only_with_source_deliv
     result = _scored(product)
     assert (result["score"] > 0) is accepted
     assert row["quantity"] == 0.2 and row["unit"] == "mL"
+
+
+def test_an_unclassified_product_claim_keeps_branded_stress_research_out():
+    """Real 293928 ("Helps moderate carbohydrate intake and appetite") makes a
+    function claim no category places. The rulings resolve it conservatively:
+    the Sensoril and Relora stress research does not credit it."""
+    product = _enrich("prominence_branded_heading_293928_raw.json")
+    rejected = {m.get("id"): m for m in product["evidence_data"]["rejected_clinical_matches"]}
+    for record in ("BRAND_SENSORIL", "BRAND_RELORA"):
+        assert rejected[record]["reason_code"] == "label_claim_unclassified"
+        assert rejected[record]["claim_alignment"]["state"] == "ambiguous"
