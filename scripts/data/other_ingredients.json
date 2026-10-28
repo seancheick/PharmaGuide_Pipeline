@@ -3,7 +3,7 @@
     "description": "Other/inactive ingredients database for supplement excipients and additives",
     "purpose": "inactive_ingredient_classification",
     "schema_version": "5.4.3",
-    "last_updated": "2026-10-22",
+    "last_updated": "2026-10-27",
     "total_entries": 738,
     "functional_roles_field": {
       "added_in": "5.1.0",
@@ -13790,34 +13790,17 @@
     {
       "id": "PII_OIL_VEHICLE",
       "standard_name": "Oil Vehicle (Non-Active)",
-      "aliases": [
-        "avocado fruit oil"
-      ],
+      "aliases": [],
       "category": "solvent",
       "is_additive": false,
       "additive_type": "oil_carrier",
       "allergen": false,
-      "notes": "Generic oil-based carrier vehicle used for dissolving and delivering lipophilic supplement ingredients. Non-discrete ingredient — mapped for identity routing. Specific oils (MCT, olive, sunflower) have dedicated entries.",
+      "notes": "Generic oil-based carrier vehicle used for dissolving and delivering lipophilic supplement ingredients. Non-discrete ingredient — mapped for identity routing. Specific oils (MCT, olive, sunflower) have dedicated entries. Source correction 2026-10-27: exact avocado fruit oil belongs to botanical_ingredients::avocado_oil (UNII 6VNO72PFC1). Its alias and substance-specific identifier links must not identify an unspecified generic vehicle. This generic carrier record is retained for its own name and historical references; no composition or safety clearance is inferred.",
       "common_uses": [
         "carrier",
         "vehicle"
       ],
       "last_updated": "2026-03-01",
-      "external_ids": {
-        "unii": "6VNO72PFC1"
-      },
-      "rxcui": "1311611",
-      "gsrs": {
-        "substance_name": "AVOCADO OIL",
-        "substance_class": "structurallyDiverse",
-        "cfr_sections": [],
-        "dsld_count": 29,
-        "dsld_info_raw": "Dietary Supplement Label Database|fat|Avocado Oil | 3155 (Number of products:29)",
-        "active_moiety": null,
-        "salt_parents": [],
-        "metabolic_relationships": [],
-        "metabolites": []
-      },
       "functional_roles": [
         "solvent",
         "carrier_oil"

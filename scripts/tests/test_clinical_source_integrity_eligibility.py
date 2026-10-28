@@ -393,7 +393,7 @@ def test_flax_active_sources_exclude_unread_corrected_review_without_losing_hist
     assert 'min_effective_dose' not in row
 
 
-@pytest.mark.parametrize('rid,source', [('INGR_RHODIOLA','15256690'), ('INGR_RIBOFLAVIN_B2','9484373')])
+@pytest.mark.parametrize('rid,source', [('INGR_RHODIOLA','15256690')])
 def test_limited_positive_review_cannot_become_unscoped_current_product_credit(completion_source_records,rid,source):
     row = completion_source_records[rid]
     assert row['scoring_eligible'] is False
@@ -451,3 +451,46 @@ def test_bc30_revised_source_context_links_returned_scope_not_old_engineering_ap
     assert context['clinical_review']['reviewed_at'] == '2026-10-26'
     assert 'A144' in context['clinical_review']['basis']
     assert '2026-09-14' in context['notes']
+
+
+def test_signed_isolated_lutein_transfer_rejections_are_completed_without_affirmative_credit(completion_source_records):
+    from clinical_applicability import assess_clinical_source_review
+    record = completion_source_records['INGR_LUTEIN']
+    assert record['study_type'] == 'reference'
+    assert record['evidence_level'] == 'reference'
+    assert assess_clinical_source_review(record)['is_complete'] is True
+    assert not er.clinical_record_sources_eligible(record)
+    assert all(context['review_status'] == 'rejected_source' and context['scoring_eligible'] is False
+               for context in record['study_contexts'])
+    assert any(ref.get('pmid') == '41573009' and ref.get('retracted') is True
+               for ref in record['references_structured'])
+    assert completion_source_records['BRAND_LUTEMAX_2020']['study_type'] != 'reference'
+
+
+def test_signed_riboflavin_source_closes_only_after_existing_purpose_scope_is_enforced(completion_source_records):
+    from clinical_applicability import assess_clinical_source_review, assess_clinical_applicability
+    record = completion_source_records['INGR_RIBOFLAVIN_B2']
+    assert record.get('scoring_eligible') is not False
+    assert assess_clinical_source_review(record)['is_complete'] is True
+    row = {'name': 'Riboflavin', 'canonical_id': 'riboflavin', 'quantity': 400, 'unit': 'mg',
+           'raw_source_path': 'ingredientRows[0]', 'mapped': True, 'score_eligible_by_cleaner': True}
+    match = {'id': record['id'], 'ingredient': row['name'], 'matched_source_row_refs': ['ingredientRows[0]']}
+    for claim, expected in [('Migraine support', 'applicable'), ('Cognitive performance', 'unresolved')]:
+        product = {'product_name': claim, 'ingredient_quality_data': {'ingredients_scorable': [row]}}
+        assert assess_clinical_applicability(product, match, assess_amount=False)['status'] == expected
+    assert record['health_goals_supported'] == []
+
+
+def test_theracurmin_reported_hierarchy_limit_does_not_invent_primary_credit(completion_source_records):
+    from clinical_evidence_schema import validate_ingredient_context
+    contexts = completion_source_records['BRAND_THERACURMIN']['study_contexts']
+    selected = [context for context in contexts if context['context_id'] in {
+        'theracurmin_knee_oa_25308211', 'theracurmin_post_mosaicplasty_35494290'}]
+    assert len(selected) == 2
+    for context in selected:
+        assert context['review_status'] == 'clinician_approved'
+        assert context['scoring_eligible'] is False
+        assert not validate_ingredient_context(context, require_complete_review=True)
+        assert not any(outcome['hierarchy'] in {'primary', 'unresolved'} for outcome in context['outcomes'])
+    assert any(context['review_status'] != 'clinician_approved'
+               for context in contexts if '29246725' in context['source_pmids'])

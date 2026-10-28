@@ -1975,3 +1975,23 @@ def test_merged_immediate_children_reconcile_by_canonical_parent_lineage():
     second = _row("gaba", "GABA", 400, raw_source_path="ingredientRows[4].nestedRows[1]",
                   parent_source_path="ingredientRows[0]")
     assert profile_owner_candidate_rows([first, second, projection]) == [first, second]
+
+
+def test_reference_filename_does_not_establish_keratin_botanical_identity():
+    row = _row('keratin', 'Hydrolyzed Keratin', 500,
+               canonical_source_db='standardized_botanicals',
+               raw_taxonomy={'category': 'protein', 'ingredientGroup': 'Keratin'})
+    ingredient = build_scoring_classification(_product('KeraGLO', [row]))['ingredients'][0]
+    assert ingredient['botanical_source']['value'] is False
+    assert ingredient['profile_eligibility']['botanical']['eligible'] is False
+
+
+def test_pine_source_does_not_turn_isolated_phytosterols_into_whole_herb():
+    row = _row('phytosterols', 'Sterols', 20,
+               raw_taxonomy={'category': 'blend',
+                             'ingredientGroup': 'Blend (Fatty Acid or Fat/Oil Supplement)',
+                             'forms': [{'name': 'Pine', 'category': 'botanical'}]})
+    ingredient = build_scoring_classification(_product('Moducare', [row]))['ingredients'][0]
+    assert ingredient['botanical_source']['value'] is True
+    assert ingredient['ingredient_domain'] == 'botanical_marker'
+    assert ingredient['profile_eligibility']['botanical']['eligible'] is False

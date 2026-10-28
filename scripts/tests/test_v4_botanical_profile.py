@@ -933,6 +933,11 @@ def test_known_hidden_source_identity_is_not_rejected_for_missing_dose(change):
     'nha_monk_fruit', 'nha_stevia', 'nha_raspberry_natural', 'oi_natural_strawberry_flavor',
     'nha_pomegranate_juice', 'nha_apple_puree_concentrate', 'red_clover_flower', 'butternut_squash_seed_oil',
     'chinese_wolfberry_fruit', 'nettle_root',
+    'avocado_oil', 'black_cherry', 'blessed_thistle', 'buckthorn_bark', 'cnidium',
+    'fadogia_agrestis', 'fo_ti', 'frangula', 'galla_chinensis', 'hydrangea_root',
+    'hyssop', 'irish_sea_moss', 'mulberry_mistletoe', 'nha_bladderwrack',
+    'nha_hemp_extract', 'nobiletin', 'okra_fruit', 'purple_corn_extract', 'radish',
+    'sarsaparilla', 'sweet_wormwood_herb', 'yellow_dock_root',
 ])
 def test_completed_source_specific_review_does_not_require_an_invented_general_dose_curve(canonical):
     from evidence_resolver import _load_literature_evidence
@@ -942,7 +947,7 @@ def test_completed_source_specific_review_does_not_require_an_invented_general_d
     semantics = record['reference_semantics']
     assert semantics['curve'] == 'completed_no_benchmark_neutral'
     assert semantics['source_ids']
-    assert semantics['owner'] == f'scripts/data/literature_evidence_records.json::{canonical}'
+    assert semantics['owner'] == f"scripts/data/literature_evidence_records.json::{record['canonical_id']}"
     assert _botanical_benchmark({'canonical_id': canonical, 'name': canonical}) == 'absent'
 
 

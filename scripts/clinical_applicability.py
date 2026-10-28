@@ -420,7 +420,7 @@ def _valid_native_claim_scope(context: Mapping) -> bool:
     )
 
 
-def assess_native_claimed_purpose(product: Mapping, context: Mapping) -> dict:
+def assess_native_claimed_purpose(product: Mapping, context: Mapping, *, require_condition: bool = False) -> dict:
     """Match a treatment/challenge study to an affirmative *claimed* purpose.
 
     This proves neither a user's diagnosis nor membership in the trial population.
@@ -431,7 +431,7 @@ def assess_native_claimed_purpose(product: Mapping, context: Mapping) -> dict:
         from probiotic_measurements import context_accepted_for_scoring
         if not _valid_native_claim_scope(context) or not context_accepted_for_scoring(context):
             return {"status": "unresolved", "reason_code": "invalid_applicability_contract"}
-    if context.get("purpose") not in {"treatment", "challenge"}:
+    if context.get("purpose") not in {"treatment", "challenge"} and not require_condition:
         return {"status": "applicable", "reason_code": "no_condition_specific_claim_required"}
     condition = _key(context.get("condition"))
     if condition:
@@ -449,6 +449,31 @@ def assess_native_claimed_purpose(product: Mapping, context: Mapping) -> dict:
                 "condition": context.get("condition")}
     return {"status": "unresolved", "reason_code": "source_condition_claim_unestablished",
             "condition": context.get("condition")}
+
+
+def _context_population_matches_label(product: Mapping, context: Mapping) -> bool | None:
+    """Reject explicit label conflicts within the purpose-matched source context.
+
+    This does not infer an individual user's condition or study membership.
+    """
+    from rda_ul_calculator import label_is_for_children, label_population_members, _target_group_text
+    population = context.get("population")
+    if not isinstance(population, Mapping) or not isinstance(population.get("description"), str) or not population["description"].strip():
+        return None
+    if population.get("age_group") == "adult" and label_is_for_children(dict(product)):
+        return False
+    description = _key(population["description"])
+    if ("nonpregnant" in description.replace(" ", "")
+            and "pregnancy_lactation" in label_population_members(dict(product))):
+        return False
+    if re.search(r"\bwomen\b", description) and not re.search(r"\bmen\b", description):
+        male = re.compile(r"\b(?:men|male)\b", re.I)
+        female = re.compile(r"\b(?:women|female)\b", re.I)
+        if any(find_affirmative_label_match(male, _target_group_text(group))
+               and not find_affirmative_label_match(female, _target_group_text(group))
+               for group in product.get("targetGroups") or []):
+            return False
+    return True
 
 
 def assess_clinical_source_review(entry: Mapping) -> dict:
@@ -572,15 +597,37 @@ def assess_clinical_applicability(product: Mapping, entry: Mapping, *, assess_am
     from probiotic_measurements import context_accepted_for_scoring
     from rda_ul_calculator import label_is_for_children
     source_pmids = {str(pmid) for pmid in policy.get("source_pmids") or []}
-    population_groups = {
-        (context.get("population") or {}).get("age_group")
-        for context in reference.get("study_contexts") or []
+    # An explicitly condition-scoped outcome is an existing reviewed constraint,
+    # not permission for every claim on a name-matched ingredient. Reuse the
+    # native purpose owner; native category callers keep their current rules.
+    condition_scopes = [
+        context for context in reference.get("study_contexts") or []
         if isinstance(context, Mapping) and context_accepted_for_scoring(context)
+        and _key(context.get("condition")) in {_key(value) for value in policy.get("supported_outcomes", [])}
         and (not source_pmids or source_pmids.intersection(str(pmid) for pmid in context.get("source_pmids") or []))
-        and isinstance(context.get("population"), Mapping)
-    }
-    if population_groups == {"adult"} and label_is_for_children(dict(product)):
-        return {"status": "not_applicable", "reason_code": "clinical_population_mismatch"}
+        and context.get("purpose") in {"treatment", "challenge", "prevention"}
+    ]
+    if condition_scopes:
+        decisions = [assess_native_claimed_purpose(product, context, require_condition=True)
+                     for context in condition_scopes]
+        matched = [context for context, decision in zip(condition_scopes, decisions)
+                   if decision["status"] == "applicable"]
+        if not matched:
+            return next((decision for decision in decisions if decision["status"] == "unresolved"), decisions[0])
+        populations = [_context_population_matches_label(product, context) for context in matched]
+        if not any(result is True for result in populations):
+            return {"status": "unresolved" if None in populations else "not_applicable",
+                    "reason_code": "invalid_applicability_contract" if None in populations else "clinical_population_mismatch"}
+    else:
+        population_groups = {
+            (context.get("population") or {}).get("age_group")
+            for context in reference.get("study_contexts") or []
+            if isinstance(context, Mapping) and context_accepted_for_scoring(context)
+            and (not source_pmids or source_pmids.intersection(str(pmid) for pmid in context.get("source_pmids") or []))
+            and isinstance(context.get("population"), Mapping)
+        }
+        if population_groups == {"adult"} and label_is_for_children(dict(product)):
+            return {"status": "not_applicable", "reason_code": "clinical_population_mismatch"}
     physical = product.get("physicalState") or {}
     if isinstance(physical, Mapping):
         physical = physical.get("name")

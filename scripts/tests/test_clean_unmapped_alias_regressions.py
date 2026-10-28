@@ -3638,3 +3638,21 @@ def test_womens_blend_maps_nested_members_without_lending_total(normalizer, enri
     artifact = build_scored_artifact(enriched)
     blob = build_detail_blob(enriched, artifact)
     assert blob
+
+
+@pytest.mark.parametrize('name', ['Avocado Fruit Oil', 'Persea gratissima Oil', 'Persea americana Fruit Oil'])
+def test_exact_avocado_fruit_oil_names_resolve_existing_oil_owner(normalizer, name):
+    identity = normalizer._resolve_canonical_identity(name, raw_name=name)
+    assert identity[0] == 'avocado_oil'
+
+
+@pytest.mark.parametrize('name', ['Avocado/Soy Unsaponifiables', 'Avocado Fruit Powder', 'Olive Oil'])
+def test_avocado_oil_aliases_do_not_absorb_other_materials(normalizer, name):
+    identity = normalizer._resolve_canonical_identity(name, raw_name=name)
+    assert identity[0] != 'avocado_oil'
+
+
+def test_exact_avocado_oil_recognition_survives_enrichment(enricher):
+    recognition = enricher._is_recognized_non_scorable('Avocado Fruit Oil', 'Avocado Oil')
+    assert recognition['recognition_source'] == 'botanical_ingredients'
+    assert recognition['matched_entry_id'] == 'avocado_oil'
