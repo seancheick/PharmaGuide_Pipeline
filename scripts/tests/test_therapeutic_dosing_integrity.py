@@ -48,10 +48,50 @@ def test_optimal_uls_metadata_count_matches(optimal_uls):
 
 
 def test_therapeutic_purpose_remains_broad_non_rda_contract(therapeutic):
-    assert therapeutic["_metadata"]["purpose"] == (
-        "Provide therapeutic dosing ranges for dietary supplement ingredients "
-        "not covered by traditional RDA/UL standards."
-    )
+    purpose = therapeutic["_metadata"]["purpose"]
+    assert "not covered by RDA/UL standards" in purpose
+    assert "no general dose range, serving size, efficacy grade or safety ceiling" in purpose
+
+
+RETAINED_CAUTIONS = {
+    "st_john_s_wort": "CYP450", "ginkgo_biloba_extract": "bleeding", "cinnamon_cassia": "coumarin",
+    "vitex_agnus_castus": "pregnancy", "andrographis_paniculata": "pregnancy",
+    "holy_basil_tulsi": "pregnancy", "elderberry": "cyanogenic", "black_seed_oil_nigella_sativa": "anticoagulants",
+    "ashwagandha_root_extract": "thyroid", "probiotics_general": "Immunocompromised",
+    "lemon_balm": "CNS depressants", "bergamot": "statins", "gymnema_sylvestre": "antidiabetics",
+}
+
+
+def test_retired_dose_and_ceiling_fields_stay_retired(therapeutic):
+    """No record re-gains a generic range, serving, grade or safety ceiling, and the
+    clinically relevant cautions those fields carried survive in notes."""
+    import re
+    import sys
+    sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+    from db_integrity_sanity_check import RETIRED_THERAPEUTIC_FIELDS, check_rda_therapeutic
+    findings = []
+    check_rda_therapeutic(findings, therapeutic, "rda_therapeutic_dosing.json")
+    assert not [f for f in findings if f.issue == "retired_field_present"]
+    # Unqualified universal safety or dose conclusions only. A source-qualified statement
+    # ("well tolerated at the tested dose in this six-week trial") is not banned.
+    generic_ceiling = re.compile(r"\bsafe up to\b|\bsafe for long-term use\b|\bgenerally (very )?safe\b"
+                                 r"|\bstandard (single )?(validated )?dose\b|\bvalidated dose\b", re.I)
+    rows = {e["id"]: e for e in therapeutic["therapeutic_dosing"]}
+    for e in rows.values():
+        assert not RETIRED_THERAPEUTIC_FIELDS & set(e), e["id"]
+        for key in ("notes", "common_use"):
+            assert not generic_ceiling.search(e.get(key) or ""), (e["id"], key)
+    for rid, caution in RETAINED_CAUTIONS.items():
+        assert caution in rows[rid]["notes"], rid
+    # The retired claims are gone from every free-text field, approved purpose included.
+    for rid, phrase in (("collagen_peptides", "2.5 g+"), ("collagen_peptides", "5-10 g"),
+                        ("gelatin", "LOWER bioavailability"), ("uc_ii_collagen", "gram range"),
+                        ("ginkgo_biloba_extract", ">240mg")):
+        assert phrase not in json.dumps(rows[rid]), (rid, phrase)
+    planted = {"therapeutic_dosing": [{"standard_name": "X", "upper_limit": "100"}]}
+    findings = []
+    check_rda_therapeutic(findings, planted, "rda_therapeutic_dosing.json")
+    assert any(f.issue == "retired_field_present" for f in findings)
 
 
 # ── references[] shape: bare PMID digit-strings only ────────────────────
