@@ -1195,21 +1195,9 @@ def test_joint_support_caps_branded_primary_evidence_floor(monkeypatch) -> None:
     ingredient = _ingredient(name="OptiMSM", standard_name="MSM",
                              canonical_id="msm", quantity=2000, unit="mg")
     ingredient.update(raw_source_text="OptiMSM", raw_source_path="ingredientRows[0]")
-    # A replicated reviewed body sets the 18 floor, so the joint cap has
-    # something above 14 to cap (1.31.0: a brand marker no longer does).
-    review = {"reviewer": "Test clinician", "reviewed_at": "2026-10-01",
-              "scope": "identity_dose_outcome_applicability"}
-    contexts = [{"context_id": family, "trial_family": family, "condition": "knee_discomfort",
-                 "evidence_role": "direct_rct", "review_status": "clinician_approved",
-                 "identity_scope": "branded_material",
-                 "scoring_eligible": True, "clinical_review": review,
-                 "outcomes": [{"name": "Knee pain", "direction": "positive",
-                               "hierarchy": "primary", "kind": "patient_important"}]}
-                for family in ("a", "b", "c")]
-    match = _match(id="TEST_ELIGIBLE_OPTIMSM_REPLICATED", ingredient="OptiMSM", standard_name="OptiMSM",
+    match = _match(id="BRAND_OPTIMSM", ingredient="OptiMSM", standard_name="OptiMSM",
                    study_type="rct_multiple", evidence_level="branded-rct",
-                   effect_direction="positive_strong", total_enrollment=200,
-                   study_contexts=contexts)
+                   effect_direction="positive_strong", total_enrollment=200)
     match.update(matched_source_row_refs=["ingredientRows[0]"], matched_canonical_ids=["msm"])
     # This test owns the joint cap, not replication: joint conditions have no
     # shared indication category yet, so force the replicated-body gate.

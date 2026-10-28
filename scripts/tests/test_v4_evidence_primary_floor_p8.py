@@ -246,6 +246,19 @@ def test_population_restricted_body_does_not_transfer(monkeypatch):
     assert score_evidence(prenatal, apply_primary_floor=True)["metadata"]["primary_evidence_floor"] == 18.0
 
 
+def test_label_function_claim_selects_the_replicated_purpose(monkeypatch):
+    """End to end through the role owner: a printed "Ashwagandha supports
+    memory" claim declares a cognitive purpose, which stress trials cannot
+    replicate; a printed stress claim can."""
+    record = dict(study_type="rct_multiple", study_contexts=_replicated(),
+                  primary_outcome="Stress and memory", key_endpoints=["cognition"])
+    for claim, floor in (("Ashwagandha supports memory and focus.", 14.0),
+                         ("Ashwagandha supports stress management.", 18.0)):
+        p = _product([_ing()], _registered(monkeypatch, _match(**record)))
+        p["statements"] = [{"type": "Formula re: Contains", "notes": claim}]
+        assert score_evidence(p, apply_primary_floor=True)["metadata"]["primary_evidence_floor"] == floor, claim
+
+
 def test_uncategorized_replicated_condition_is_held(monkeypatch):
     """The shared categorizer has no joint category yet, so knee trials cannot
     establish purpose-matched replication: held, never borrowed."""
@@ -275,7 +288,22 @@ def test_real_registry_records_without_replicated_bodies_stay_below_exceptional(
     conditions) and OptiMSM/MSM (one shared trial family under two records)."""
     from clinical_applicability import reviewed_entries
     from scoring_v4.modules.generic_evidence import _replicated_evidence_body
+    from collections import Counter
+    from probiotic_measurements import context_accepted_for_scoring
     registry = reviewed_entries()
+
+    def approved(record_id):
+        return [c for c in registry[record_id].get("study_contexts") or [] if context_accepted_for_scoring(c)]
+
+    def directions(context):
+        return {o.get("direction") for o in context.get("outcomes") or [] if o.get("hierarchy") == "primary"}
+
+    # The recorded reasons, checked on the live records.
+    assert any(directions(c) & {"null", "mixed"} for c in approved("BRAND_MAGTEIN"))
+    assert {c.get("evidence_role") for c in approved("INGR_CREATINE_MONOHYDRATE")} == {"meta_analysis"}
+    assert max(Counter(c.get("condition") for c in approved("INGR_MAG_GLYCINATE")).values()) == 1
+    assert ({c.get("trial_family") for c in approved("BRAND_OPTIMSM")}
+            == {c.get("trial_family") for c in approved("INGR_MSM")})
     product = _product([_ing()], [])
     for record_id in ("BRAND_MAGTEIN", "INGR_CREATINE_MONOHYDRATE", "INGR_MAG_GLYCINATE",
                       "BRAND_OPTIMSM", "INGR_MSM"):

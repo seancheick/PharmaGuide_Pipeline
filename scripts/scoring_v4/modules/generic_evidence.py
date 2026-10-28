@@ -1783,7 +1783,7 @@ def _replicated_evidence_body(entry: Dict[str, Any], product: Dict[str, Any],
     record = reviewed_entries().get(_clinical_source_id(entry))
     if record is None:
         return False
-    claims = _evidence_claim_purposes(product)
+    claims = {str(key).strip().lower(): value for key, value in _evidence_claim_purposes(product).items()}
     declared = set().union(*(claims.get(canonical, set()) for canonical in canonical_ids)) if canonical_ids else set()
     purposes = declared or _evidence_entry_purposes(record)
     exact_formula = (entry.get("evidence_origin") == "verified_formula_contract"
