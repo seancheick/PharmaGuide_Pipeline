@@ -3835,8 +3835,8 @@ in `scripts/audits/condition_scope_rule_20261028/DR_PHAM_APPROVAL_REQUEST.md`.
 
 **Tests:**
 - Fail-first logs (rounds 1–4) are in `~/pg_quality/condition_scope_20261028/`.
-- Focused slice of 76 owner/consumer files: 4,660 passed, 0 failed (at `ea32c5646`). Later commits re-ran
-  their own files green.
+- Focused slice of 76 owner/consumer files plus the dead-code ratchet: 4,671 passed, 0 failed, on the final
+  code (`37a52de5b`; receipt `slice_final.log`).
 
 **Measurement** (replay, frozen raw labels, `6256ce42e` vs `37a52de5b`):
 - Main cohort of 460: 47 moved (23 up, 24 down), all Evidence.
