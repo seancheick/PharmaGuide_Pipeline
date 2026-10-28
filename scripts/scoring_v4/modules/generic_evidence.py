@@ -116,29 +116,15 @@ DEPTH_BONUS_BANDS = tuple(tuple(b) for b in _EM["depth_bonus_bands"])
 # Amount adequacy is owned independently by Dose.
 PRIMARY_FLOOR_STRONG = _EM["primary_floor_strong"]     # systematic review / multi-RCT, positive, clinical dose
 PRIMARY_FLOOR_MODERATE = _EM["primary_floor_moderate"]   # single RCT / clinical strain, positive, clinical dose
-# Replicated-body tier (Dr Pham framework, October 28, 2026). The near-perfect
-# floor (18 raw = 20/20 on the 18-point references) once followed a brand marker
-# (branded-rct level or a BRAND_ id) or an ingredient allowlist (vitamin D,
-# folate, psyllium, creatine, EPA/DHA), so one or two small manufacturer-supplied
-# trials could reach it. It now follows the reviewed evidence body alone: the
-# record's clinician-approved contexts must show consistent, independent RCT
-# replication for one condition (_replicated_evidence_body). The former branded
-# single-RCT tier (17 raw = 18.9/20) is retired: one trial is a moderate floor.
-PRIMARY_FLOOR_REPLICATED_STRONG = _EM["primary_floor_replicated_strong"]
-# Contexts store their design as evidence_role; the shared consistency owner
-# reads the native design vocabulary.
-_CONTEXT_ROLE_DESIGNS = {
-    "direct_rct": "rct",
-    "meta_analysis": "meta_analysis",
-    "systematic_review": "systematic_review",
-}
-# Directness: a combination formula's result, or a context with no stated
-# identity scope, is not evidence for this record's own ingredient; the
-# assessed exact formula (studied_formulas) is the one owner of whole-formula
-# evidence, so only it reads combination contexts.
-_DIRECT_CONTEXT_SCOPES = frozenset({
-    "ingredient_general", "branded_material", "exact_form", "botanical_preparation", "exact_strain",
-})
+# No automatic exceptional tier (Dr Pham framework, October 28, 2026). The
+# near-perfect floor (18 raw = 20/20 on the 18-point references) once followed a
+# brand marker (branded-rct level or a BRAND_ id) or an ingredient allowlist
+# (vitamin D, folate, psyllium, creatine, EPA/DHA), so one or two small
+# manufacturer-supplied trials reached it, and a branded single RCT reached
+# 17 raw (18.9/20). No registry records a reviewed certainty for a whole
+# evidence body, and a brand, an ingredient name, a trial count or a design is
+# not that judgement, so no automatic floor exceeds the strong base: one trial
+# is the moderate floor, a meta-analysis or multi-RCT record the strong floor.
 _STRONG_STUDY = frozenset({"systematic_review_meta", "rct_multiple"})
 _MODERATE_STUDY = frozenset({"rct_single", "clinical_strain"})
 # P5 nutrition-authority floor (2026-06): an ESSENTIAL vitamin/mineral with an
@@ -146,7 +132,7 @@ _MODERATE_STUDY = frozenset({"rct_single", "clinical_strain"})
 # product-specific RCT — "no RCT in our data" must not mean "no evidence of
 # usefulness" for a nutrient the body provably requires (copper at evidence 0 was
 # the failure). The floor is 10 — deliberately BELOW the 14 strong clinical
-# floor and the 18 replicated-body tier (established necessity < RCT-proven effect).
+# floor (established necessity < RCT-proven effect).
 # Curated DRI-essentials only (mirrors the multi-panel canonicals); excludes
 # UL-only / non-essential bioactives (boron, CoQ10, etc.) so they stay evidence-
 # light, and excludes anything not in this set.
@@ -320,7 +306,7 @@ def score_evidence(product: Dict[str, Any], *, apply_primary_floor: bool = False
         # P5: DRI-essential nutrient authority floor. An essential vitamin/mineral
         # with established RDA/AI has evidence of necessity even without a strong
         # RCT match. Floor (never cap) — it only lifts, never lowers the clinical
-        # floor above it (e.g. a replicated-body 18 stays 18).
+        # floor above it (e.g. a strong clinical 14 stays 14).
         explicit_purpose_canonicals = {canonical for _, canonical in prominent}
         if not explicit_purpose_canonicals:
             # A label with one assessable active still has an unambiguous
@@ -1725,9 +1711,7 @@ def _primary_mass_floor(
             ]
         st = _norm_text(entry.get("study_type"))
         if st in _STRONG_STUDY:
-            replicated = effect == "positive_strong" and _replicated_evidence_body(
-                entry, product, {str(row.get("canonical_id") or "").strip().lower() for row in linked})
-            base = PRIMARY_FLOOR_REPLICATED_STRONG if replicated else PRIMARY_FLOOR_STRONG
+            base = PRIMARY_FLOOR_STRONG
         elif st in _MODERATE_STUDY:
             base = PRIMARY_FLOOR_MODERATE
         else:
@@ -1741,7 +1725,7 @@ def _primary_mass_floor(
         # positive_strong primary may anchor on a STRONG base; every weaker
         # direction is additionally capped at the MODERATE base weighted by the
         # same multiplier already applied above. positive_strong is deliberately
-        # excluded, so it keeps the strong or replicated base unchanged.
+        # excluded, so it keeps the strong base unchanged.
         #
         # No new table: the cap reuses PRIMARY_FLOOR_MODERATE and the multiplier
         # this loop already read from EFFECT_DIRECTION_MULTIPLIERS.
@@ -1752,66 +1736,6 @@ def _primary_mass_floor(
             if receipt is not None:
                 receipt["entry"] = entry
     return floor, floor_canon
-
-
-def _replicated_evidence_body(entry: Dict[str, Any], product: Dict[str, Any],
-                              canonical_ids: set[str]) -> bool:
-    """Whether the record's reviewed body shows full independent replication.
-
-    Only the registry record's own clinician-approved, direct-scope contexts
-    with primary patient-important outcomes count (context_accepted_for_scoring);
-    contexts carried on a match never broaden reviewed scope. A context counts
-    only for the purpose it studied: its condition must fall in a category the
-    label declares for this ingredient or, without a declared purpose, one the
-    record's reviewed outcomes support (evidence_indication_categories), and
-    a population restriction (pregnancy, women, infants) must fit the label
-    (the native population owner). A condition the shared categorizer cannot
-    place stays held. The shared consistency owner then requires three
-    consistent independent RCT families for one condition among those
-    supporting contexts, while any approved contradictory or unlinked pooled
-    family for that condition still blocks, whatever its scope or purpose. A
-    brand, an ingredient name or a study count never stands in for that body.
-    """
-    from clinical_applicability import reviewed_entries
-    from evidence_resolver import _evidence_claim_purposes, _evidence_entry_purposes, evidence_indication_categories
-    from probiotic_measurements import context_accepted_for_scoring
-    from scoring_v4.modules.probiotic_evidence import (
-        _consistency_from_contexts, _native_context_population_applies,
-        _product_positioning_categories, _qualifying_outcomes,
-    )
-
-    record = reviewed_entries().get(_clinical_source_id(entry))
-    if record is None:
-        return False
-    claims = {str(key).strip().lower(): value for key, value in _evidence_claim_purposes(product).items()}
-    declared = set().union(*(claims.get(canonical, set()) for canonical in canonical_ids)) if canonical_ids else set()
-    purposes = declared or _evidence_entry_purposes(record)
-    exact_formula = (entry.get("evidence_origin") == "verified_formula_contract"
-                     and _safe_dict(entry.get("applicability_assessment")).get("status") == "assessed_studied_formula")
-    scopes = _DIRECT_CONTEXT_SCOPES | ({"combination"} if exact_formula else set())
-
-    def studied_purposes(context: Dict[str, Any]) -> set[str]:
-        return evidence_indication_categories(" ".join(
-            [str(context.get("condition") or "").replace("_", " ")]
-            + [str(outcome.get("name") or "") for outcome in _qualifying_outcomes(context)]))
-
-    product_categories = _product_positioning_categories(product)
-    accepted = [
-        (str(record.get("id") or ""),
-         {**context, "study_design": _CONTEXT_ROLE_DESIGNS.get(context.get("evidence_role"), "unreported")})
-        for context in _safe_list(record.get("study_contexts"))
-        if context_accepted_for_scoring(context) and _qualifying_outcomes(context)
-    ]
-    supporting = [
-        (record_id, context) for record_id, context in accepted
-        if context.get("identity_scope") in scopes
-        and studied_purposes(context) & purposes
-        and _native_context_population_applies(context, product_categories)
-    ]
-    blocked = {row["condition"] for row in _consistency_from_contexts(accepted)["conditions"]
-               if row["contradictory_family_ids"] or row["pooled_family_ids"]}
-    return any(row["credit"] >= 1.0 and row["condition"] not in blocked
-               for row in _consistency_from_contexts(supporting)["conditions"])
 
 
 def _entry_raw_points(entry: Dict[str, Any]) -> float:

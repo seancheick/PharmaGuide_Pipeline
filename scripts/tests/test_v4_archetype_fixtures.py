@@ -143,38 +143,25 @@ def test_failure_fixture_scores_below_its_ideal_pair(
     ]
 
 
-def test_ideal_fixtures_reach_their_evidence_reference(monkeypatch) -> None:
+def test_ideal_fixtures_reach_their_evidence_reference() -> None:
     """quality_score 1.1.3-achievable-ceilings: each archetype reference is the
-    ceiling its engine can actually reach, so an ideal product scores 20/20.
-    Before 2026-09-13 these references sat above the ceiling (generic 19 over
-    an 18-point engine) and this test documented the mismatch instead of
-    fixing it. Since 1.31.0 the generic ceiling needs a replicated reviewed
-    body in the clinical registry, so the synthetic record is registered with
-    three approved, consistent, independent trial families."""
-    import clinical_applicability
+    ceiling its engine can actually reach. Before 2026-09-13 these references
+    sat above the ceiling (generic 19 over an 18-point engine). Since 1.31.0 no
+    automatic floor exceeds the strong base, so a focused single-molecule
+    product tops out at 14 raw (15.6/20); the 18 reference stays the generic
+    engine's arithmetic ceiling (per-ingredient cap x top-N weights + depth)."""
+    from scoring_v4.modules import generic_evidence as ge
 
     validation = _validation_module()
     suite = validation.load_fixture_suite()
     case = suite.by_id("generic_single_molecule__ideal")
-    record = case.product["evidence_data"]["clinical_matches"][0]
-    review = {"reviewer": "Synthetic fixture", "reviewed_at": "2026-10-01",
-              "scope": "identity_dose_outcome_applicability"}
-    registered = {**record, "primary_outcome": "Sleep Quality", "study_contexts": [
-        {"context_id": family, "trial_family": family, "condition": "self_reported_insomnia_symptoms",
-         "evidence_role": "direct_rct", "identity_scope": "ingredient_general",
-         "review_status": "clinician_approved", "scoring_eligible": True, "clinical_review": review,
-         "outcomes": [{"name": "Sleep quality", "direction": "positive",
-                       "hierarchy": "primary", "kind": "patient_important"}]}
-        for family in ("a", "b", "c")]}
-    registry = {**clinical_applicability.reviewed_entries(), record["id"]: registered}
-    monkeypatch.setattr(clinical_applicability, "reviewed_entries", lambda: registry)
-
     generic = validation.evaluate_fixture(case).actual
     b_complex = validation.evaluate_fixture(suite.by_id("b_complex__ideal")).actual
 
-    assert generic["raw_dimensions"]["evidence"] == 18.0
-    assert generic["normalization_references"]["evidence"] == 18.0
-    assert generic["pillars"]["evidence"] == 20.0
+    engine_ceiling = ge.CAP_PER_INGREDIENT * sum(ge.TOP_N_WEIGHTS) + max(v for _, v in ge.DEPTH_BONUS_BANDS)
+    assert engine_ceiling == generic["normalization_references"]["evidence"] == 18.0
+    assert generic["raw_dimensions"]["evidence"] == ge.PRIMARY_FLOOR_STRONG == 14.0
+    assert generic["pillars"]["evidence"] == 15.6
     # Complete B panels earn the native 20-point authority score; no
     # denominator compression is needed to manufacture attainability.
     assert b_complex["raw_dimensions"]["evidence"] == 20.0
