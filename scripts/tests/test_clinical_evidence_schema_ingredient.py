@@ -190,7 +190,7 @@ def test_reported_absence_of_outcome_hierarchy_is_a_completed_source_limitation(
     from copy import deepcopy
     from probiotic_measurements import derived_context_evidence
 
-    context = _context(review_status='clinician_approved', study_design='rct',
+    context = _context(review_status='clinician_approved', scoring_eligible=True, study_design='rct',
                        clinical_review={'reviewer': 'Synthetic test reviewer',
                                         'reviewed_at': '2026-01-01',
                                         'scope': 'identity_dose_outcome_applicability'})
@@ -246,3 +246,31 @@ def test_uncontrolled_intervention_is_described_without_authorizing_credit(eligi
     assert not context_accepted_for_scoring(row)
     row.pop('context_schema_version', None)
     assert not context_accepted_for_scoring(row)
+
+
+def test_an_approved_context_must_state_its_scoring_eligibility():
+    """A missing scoring_eligible is not a signed scoring decision at either seam."""
+    from probiotic_measurements import context_accepted_for_scoring
+    approved = _context(review_status="clinician_approved")
+    approved.pop("scoring_eligible", None)
+    assert "review.approved_scoring_eligible_required" in validate_frozen_context(approved)
+    assert not context_accepted_for_scoring(approved)
+    for flag in (True, False):
+        assert "review.approved_scoring_eligible_required" not in validate_frozen_context(
+            _context(review_status="clinician_approved", scoring_eligible=flag))
+    assert "review.approved_scoring_eligible_required" not in validate_frozen_context(_context())
+
+
+def test_every_curated_approved_context_states_its_scoring_eligibility():
+    import json
+    from pathlib import Path
+    data = Path(__file__).resolve().parents[1] / "data"
+    missing = []
+    for name, key in (("backed_clinical_studies.json", "backed_clinical_studies"),
+                      ("clinically_relevant_strains.json", "clinically_relevant_strains")):
+        for record in json.loads((data / name).read_text())[key]:
+            for context in record.get("study_contexts") or []:
+                if (context.get("review_status") == "clinician_approved"
+                        and not isinstance(context.get("scoring_eligible"), bool)):
+                    missing.append((record["id"], context.get("context_id")))
+    assert missing == []

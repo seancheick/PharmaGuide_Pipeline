@@ -644,7 +644,7 @@
         "Enrichment produces descriptive research-exposure correspondence in rda_ul_data; scoring and pillar facts project the same assessment without recalculating it",
         "studied_regimens describe source-reviewed exposures and must not supply positive adequacy or safety points",
         "verify_literature_records.verify_reference_citations produces content-bound reference_citations proof; dose_assessment.verified_reference_citations validates it for general Dose only. Empty clinical-study lists, source verification, or a neutral Dose reference never establish Evidence approval; invalidated dependencies remain held across retries",
-        "row_exposure owns daily serving and unit conversion; clinical_applicability owns preparation scope and evidence_record_matches_declared_purpose owns purpose; unknown member amount, frequency or preparation cannot borrow a blend total or a generic trial range"
+        "row_exposure owns daily serving and unit conversion; clinical_applicability owns the reviewed preparation, population and outcome decision; evidence_record_matches_declared_purpose projects that same decision. Unknown member amount, frequency or preparation cannot borrow a blend total or a generic trial range"
       ],
       "fallback_class": "clinical_fail_safe",
       "release_gate": "scripts/audit_source_of_truth_contract.py scoring",

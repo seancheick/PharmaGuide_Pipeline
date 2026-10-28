@@ -1485,9 +1485,13 @@ def test_explicit_purposes_are_order_independent_and_not_oxidative_stress(monkey
         control['statements'] = [{'type': 'Formula re: Contains', 'notes': notes}]
         scores.append(build_scored_artifact(control)['quality_pillars_v4']['evidence']['score'])
     assert scores[0] == scores[1] == scores[2] > 0
+    # Item 12 (Sean, 2026-10-28): the curated record's reviewed scope owns the
+    # supported purpose. Rewriting an enriched match's descriptive text (here to
+    # an oxidative-stress biomarker) can neither add nor remove a purpose.
     for entry in product['evidence_data']['clinical_matches']:
         entry.update(primary_outcome='Reduced oxidative stress biomarkers',
             health_goals_supported=[], endpoint_relevance_tags=[], key_endpoints=[])
+    assert build_scored_artifact(product)['quality_pillars_v4']['evidence']['score'] == scores[0]
     # Reviewed condition scopes own the purpose decision: restate them as an
     # oxidative-stress outcome at that owner, not only on the enriched match.
     records = deepcopy(clinical_applicability.reviewed_entries())

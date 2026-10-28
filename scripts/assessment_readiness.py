@@ -369,7 +369,9 @@ def _resolved_evidence_assessment(resolution: Any) -> tuple[str, str, str | None
     if (disposition in {
             EvidenceDisposition.NO_QUALIFYING_HUMAN_EVIDENCE.value,
             EvidenceDisposition.REVIEWED_NULL_UNFAVORABLE.value,
-        } and "literature_evidence" in resolution.owner_facts):
+        } and ("literature_evidence" in resolution.owner_facts
+               or (disposition == EvidenceDisposition.REVIEWED_NULL_UNFAVORABLE.value
+                   and "backed_clinical_studies" in resolution.owner_facts))):
         return EVIDENCE_EVALUATED_LIMITED_OR_NEGATIVE, resolution.reason_code, None
     if (disposition == EvidenceDisposition.RESOLVED_BY_REVIEWED_CLINICAL_EVIDENCE.value
             and "literature_evidence" in resolution.owner_facts):

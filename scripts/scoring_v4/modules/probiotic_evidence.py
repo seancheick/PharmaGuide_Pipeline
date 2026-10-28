@@ -380,15 +380,9 @@ def _consistency_from_contexts(contexts: list[tuple[str, dict]]) -> dict:
 
 
 def _qualifying_outcomes(context: dict) -> list[dict]:
-    if context.get("outcome_role") in _NON_EFFICACY_OUTCOME_ROLES:
-        return []
-    return [
-        outcome for outcome in context.get("outcomes") or []
-        if isinstance(outcome, dict)
-        and outcome.get("hierarchy") == "primary"
-        and outcome.get("kind") == "patient_important"
-        and outcome.get("outcome_role") not in _NON_EFFICACY_OUTCOME_ROLES
-    ]
+    from clinical_applicability import qualifying_purpose_outcomes
+    outcomes, _ = qualifying_purpose_outcomes(context, include_nonpositive=True)
+    return [outcome for outcome in outcomes if outcome.get("kind") == "patient_important"]
 
 
 def _eligible_native_contexts(assessment: dict) -> list[tuple[str, dict]]:

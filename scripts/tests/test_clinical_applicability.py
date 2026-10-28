@@ -97,13 +97,22 @@ def test_evidence_floor_is_amount_independent_when_dose_benchmark_is_unusable():
     assert positive_clinical_benchmark(product, row) is None
 
 
-def scoped_entry(policy: object) -> dict:
-    return {
-        "id": "TEST_SCOPED_ENTRY",
+def _install_scoped_test_source(monkeypatch, entry, name):
+    import clinical_applicability as ca
+    from test_evidence_resolver import _approved_test_source
+    source = _approved_test_source(entry, name=name)
+    records = {**reviewed_entries(), source["id"]: source}
+    monkeypatch.setattr(ca, "reviewed_entries", lambda: records)
+    return source
+
+
+def scoped_entry(policy: object, monkeypatch) -> dict:
+    return _install_scoped_test_source(monkeypatch, {
+        "id": "TEST_SCOPED_ENTRY", "study_type": "rct_single",
         "ingredient": "Zinc (as zinc acetate)",
         "matched_source_row_refs": ["ingredientRows[0]"],
         "applicability": policy,
-    }
+    }, "Zinc (as zinc acetate)")
 
 
 @pytest.mark.parametrize("policy", [
@@ -126,9 +135,9 @@ def scoped_entry(policy: object) -> dict:
     {"scope": "ingredient", "minimum_daily_dose": 80},
     {"scope": "ingredient", "dose_unit": ["mg"]},
 ])
-def test_malformed_scope_contract_fails_closed_without_crashing(policy: object) -> None:
+def test_malformed_scope_contract_fails_closed_without_crashing(policy: object, monkeypatch) -> None:
     decision = assess_clinical_applicability(
-        zinc_product("zinc acetate", 80, "lozenge"), scoped_entry(policy)
+        zinc_product("zinc acetate", 80, "lozenge"), scoped_entry(policy, monkeypatch)
     )
     assert decision == {
         "status": "unresolved", "reason_code": "invalid_applicability_contract"
@@ -201,14 +210,14 @@ def test_malformed_source_reference_contract_fails_closed(references: object) ->
 ])
 @pytest.mark.parametrize("use_reference", [False, True])
 def test_non_exposure_rows_cannot_supply_clinical_dose(
-    role_fields: dict, use_reference: bool
+    role_fields: dict, use_reference: bool, monkeypatch
 ) -> None:
     product = zinc_product("zinc acetate", 80, "lozenge")
     row = product["ingredient_quality_data"]["ingredients_scorable"][0]
     row.update(role_fields)
     if not use_reference:
         product["evidence_data"]["clinical_matches"][0].pop("matched_source_row_refs")
-    entry = scoped_entry({"scope":"ingredient", "minimum_daily_dose":80, "dose_unit":"mg"})
+    entry = scoped_entry({"scope":"ingredient", "minimum_daily_dose":80, "dose_unit":"mg"}, monkeypatch)
     if not use_reference:
         entry.pop("matched_source_row_refs")
     assert assess_clinical_applicability(product, entry)["status"] != "applicable"
@@ -224,10 +233,14 @@ def test_source_term_on_unrelated_row_does_not_complete_parent_form() -> None:
     assert resolved_clinical_matches(product)[0] == []
 
 
-def test_unreviewed_legacy_match_remains_accepted_without_claiming_review() -> None:
+def test_unreviewed_legacy_match_cannot_bypass_review_without_a_label_claim() -> None:
     entry = {"id": "TEST_UNREVIEWED", "ingredient": "Legacy ingredient"}
-    assert assess_clinical_applicability({}, entry)["status"] == "not_curated"
-    assert filter_clinical_matches({}, [entry]) == ([entry], [])
+    decision = assess_clinical_applicability({}, entry)
+    assert decision["status"] == "unresolved"
+    assert decision["reason_code"] == "clinical_source_contexts_missing"
+    accepted, rejected = filter_clinical_matches({}, [entry])
+    assert accepted == []
+    assert rejected[0]["id"] == entry["id"]
 
 
 def test_zinc_reference_contains_only_verified_cold_lozenge_scope() -> None:
@@ -336,10 +349,10 @@ def test_dose_policy_resolves_every_canonical_mass_unit_spelling(unit, unit_norm
     assert verdict["status"] == "applicable", verdict
 
 
-def test_dose_policy_leaves_non_mass_units_unresolved():
+def test_dose_policy_leaves_non_mass_units_unresolved(monkeypatch):
     product = zinc_product("zinc acetate", 80, "lozenge")
     product["ingredient_quality_data"]["ingredients_scorable"][0]["unit"] = "IU"
-    verdict = assess_clinical_applicability(product, scoped_entry({"scope":"ingredient", "minimum_daily_dose":80, "dose_unit":"mg"}))
+    verdict = assess_clinical_applicability(product, scoped_entry({"scope":"ingredient", "minimum_daily_dose":80, "dose_unit":"mg"}, monkeypatch))
     assert verdict["status"] == "unresolved"
     assert verdict["reason_code"] == "clinical_dose_unresolved"
 
@@ -357,11 +370,11 @@ def test_policy_dose_unit_accepts_canonical_spellings(monkeypatch):
 
 
 @pytest.mark.parametrize("frequency", [{}, {"minDailyServings": 1, "maxDailyServings": None}])
-def test_unknown_daily_frequency_cannot_qualify_a_studied_daily_dose(frequency):
+def test_unknown_daily_frequency_cannot_qualify_a_studied_daily_dose(frequency, monkeypatch):
     product = zinc_product("zinc acetate", 80, "lozenge")
     product["servingSizes"] = [{"quantity": 1, "unit": "lozenge", **frequency}]
     verdict = assess_clinical_applicability(product, scoped_entry({
-        "scope": "ingredient", "minimum_daily_dose": 80, "dose_unit": "mg"}))
+        "scope": "ingredient", "minimum_daily_dose": 80, "dose_unit": "mg"}, monkeypatch))
     assert verdict["status"] != "applicable"
     assert verdict["reason_code"] == "clinical_dose_unresolved"
 
@@ -384,69 +397,70 @@ def butterbur_product(*extra_rows, resolved_form="PA-free butterbur extract (Pet
             "servingSizes": [{"minDailyServings": 2, "maxDailyServings": 2}]}
 
 
-def butterbur_entry(**policy_overrides):
+def butterbur_entry(monkeypatch, **policy_overrides):
     policy = {"scope": "ingredient", "required_form_terms": ["petadolex"],
               "dose_unit": "mg", "minimum_daily_dose": 150}
     policy.update(policy_overrides)
-    return {"id": "CANDIDATE_BUTTERBUR", "ingredient": "Butterbur",
-            "matched_canonical_ids": ["butterbur"], "applicability": policy}
+    return _install_scoped_test_source(monkeypatch,
+        {"id": "CANDIDATE_BUTTERBUR", "ingredient": "Butterbur", "study_type": "rct_single",
+         "matched_canonical_ids": ["butterbur"], "applicability": policy}, "Butterbur")
 
 
-def test_resolved_material_identity_is_visible_to_a_form_scoped_scope():
+def test_resolved_material_identity_is_visible_to_a_form_scoped_scope(monkeypatch):
     # The label prints "Purple Butterbur CO2 extract"; only enrichment resolves Petadolex.
-    decision = assess_clinical_applicability(butterbur_product(), butterbur_entry())
+    decision = assess_clinical_applicability(butterbur_product(), butterbur_entry(monkeypatch))
 
     assert decision["status"] == "applicable"
     assert decision["source_row_ref"] == "ingredientRows[0]"
 
 
-def test_source_required_scope_still_refuses_enrichment_resolved_forms():
+def test_source_required_scope_still_refuses_enrichment_resolved_forms(monkeypatch):
     # A source-required scope distrusts enrichment by design; merging must not leak into it.
     decision = assess_clinical_applicability(
-        butterbur_product(), butterbur_entry(require_source_label_form=True))
+        butterbur_product(), butterbur_entry(monkeypatch, require_source_label_form=True))
 
     assert decision["status"] == "unresolved"
 
 
-def test_unspecified_material_stays_out_even_when_the_dose_matches():
+def test_unspecified_material_stays_out_even_when_the_dose_matches(monkeypatch):
     product = butterbur_product(resolved_form="butterbur (unspecified)")
     product["servingSizes"] = [{"minDailyServings": 2, "maxDailyServings": 2}]
 
-    decision = assess_clinical_applicability(product, butterbur_entry())
+    decision = assess_clinical_applicability(product, butterbur_entry(monkeypatch))
 
     assert decision["status"] == "not_applicable"
     assert decision["reason_code"] == "clinical_form_mismatch"
 
 
-def test_second_owned_row_no_longer_blocks_a_discriminated_match():
+def test_second_owned_row_no_longer_blocks_a_discriminated_match(monkeypatch):
     # 293376 Petadolex Pro-Active carries a second butterbur row ("Petasins"), which
     # previously made the whole identity unresolved.
     second = {"name": "Petasins", "canonical_id": "butterbur", "quantity": 7.5, "unit": "mg",
               "raw_source_path": "ingredientRows[1]", "form_id": "butterbur (unspecified)"}
 
-    decision = assess_clinical_applicability(butterbur_product(second), butterbur_entry())
+    decision = assess_clinical_applicability(butterbur_product(second), butterbur_entry(monkeypatch))
 
     assert decision["status"] == "applicable"
     assert decision["source_row_ref"] == "ingredientRows[0]"
 
 
-def test_two_rows_matching_the_same_scope_remain_unresolved():
+def test_two_rows_matching_the_same_scope_remain_unresolved(monkeypatch):
     twin = {"name": "Butterbur root extract", "canonical_id": "butterbur", "quantity": 75.0,
             "unit": "mg", "raw_source_path": "ingredientRows[1]",
             "form_id": "PA-free butterbur extract (Petadolex)"}
 
-    decision = assess_clinical_applicability(butterbur_product(twin), butterbur_entry())
+    decision = assess_clinical_applicability(butterbur_product(twin), butterbur_entry(monkeypatch))
 
     assert decision["status"] == "unresolved"
     assert decision["reason_code"] == "clinical_source_row_unresolved"
 
 
-def test_multiple_owned_rows_without_a_discriminating_scope_stay_unresolved():
+def test_multiple_owned_rows_without_a_discriminating_scope_stay_unresolved(monkeypatch):
     # No required_form_terms means nothing distinguishes the rows: an unmatched row
     # must never lend its amount to the scope.
     second = {"name": "Petasins", "canonical_id": "butterbur", "quantity": 7.5, "unit": "mg",
               "raw_source_path": "ingredientRows[1]", "form_id": "butterbur (unspecified)"}
-    entry = butterbur_entry()
+    entry = butterbur_entry(monkeypatch)
     entry["applicability"].pop("required_form_terms")
 
     decision = assess_clinical_applicability(butterbur_product(second), entry)
@@ -482,7 +496,7 @@ def test_deduplication_never_overwrites_what_the_label_row_already_states():
     assert row["form_id"] == "label-declared form"
 
 
-def test_daily_dose_cannot_borrow_an_amount_from_a_different_row():
+def test_daily_dose_cannot_borrow_an_amount_from_a_different_row(monkeypatch):
     """The Migra-Eeze shape (328579): a big unspecified row beside a small studied-material row.
 
     The studied row is the one that links, and it must fail the floor on its own amount.
@@ -495,13 +509,13 @@ def test_daily_dose_cannot_borrow_an_amount_from_a_different_row():
     product["ingredient_quality_data"]["ingredients"][0]["quantity"] = 22.5
     product["servingSizes"] = [{"minDailyServings": 1, "maxDailyServings": 1}]
 
-    decision = assess_clinical_applicability(product, butterbur_entry())
+    decision = assess_clinical_applicability(product, butterbur_entry(monkeypatch))
 
     assert decision["status"] == "not_applicable"
     assert decision["reason_code"] == "below_applicable_clinical_dose"
 
 
-def test_serving_multiplication_uses_only_the_row_that_satisfied_the_scope():
+def test_serving_multiplication_uses_only_the_row_that_satisfied_the_scope(monkeypatch):
     """50 mg x 3 servings reaches the studied 150 mg/day (293376 Petadolex Pro-Active)."""
     second = {"name": "Petasins", "canonical_id": "butterbur", "quantity": 7.5, "unit": "mg",
               "raw_source_path": "ingredientRows[1]", "form_id": "butterbur (unspecified)"}
@@ -510,7 +524,7 @@ def test_serving_multiplication_uses_only_the_row_that_satisfied_the_scope():
     product["ingredient_quality_data"]["ingredients"][0]["quantity"] = 50.0
     product["servingSizes"] = [{"minDailyServings": 3, "maxDailyServings": 3}]
 
-    assert assess_clinical_applicability(product, butterbur_entry())["status"] == "applicable"
+    assert assess_clinical_applicability(product, butterbur_entry(monkeypatch))["status"] == "applicable"
 
 
 def test_products_without_enrichment_resolved_forms_are_untouched_by_the_merge():
@@ -617,6 +631,26 @@ def test_marine_omega_study_does_not_transfer_to_plant_ala(canonical, name):
     assert artifact["quality_pillars_v4"]["evidence"]["score"] == 0
 
 
+@pytest.fixture
+def approved_marine_identity_source(monkeypatch):
+    """Isolate identity exclusion from the real held omega benefit review."""
+    import clinical_applicability as ca
+    from test_evidence_resolver import _approved_test_source
+    source = _approved_test_source(deepcopy(reviewed_entries()['INGR_OMEGA3']), pmid='31567003')
+    records = {**reviewed_entries(), source['id']: source}
+    monkeypatch.setattr(ca, 'reviewed_entries', lambda: records)
+
+
+@pytest.mark.parametrize("canonical,name", [("epa", "EPA"), ("dha", "DHA")])
+def test_marine_omega_identity_controls_remain_applicable(approved_marine_identity_source, canonical, name):
+    product = zinc_product()
+    row = product["ingredient_quality_data"]["ingredients_scorable"][0]
+    row.update(name=name, standard_name=name, canonical_id=canonical, quantity=1000)
+    match = {"id": "INGR_OMEGA3", "ingredient": name, "matched_canonical_ids": [canonical],
+             "matched_source_row_refs": ["ingredientRows[0]"]}
+    assert assess_clinical_applicability(product, match)['status'] == 'applicable'
+
+
 @pytest.mark.parametrize("canonical,name", [("epa", "EPA"), ("dha", "DHA")])
 def test_marine_omega_identity_controls_retain_the_clinical_hold(canonical, name):
     product = zinc_product()
@@ -625,11 +659,13 @@ def test_marine_omega_identity_controls_retain_the_clinical_hold(canonical, name
     match = {"id": "INGR_OMEGA3", "ingredient": name, "matched_canonical_ids": [canonical],
              "matched_source_row_refs": ["ingredientRows[0]"]}
     decision = assess_clinical_applicability(product, match)
-    assert decision == {'status': 'unresolved', 'reason_code': 'clinical_sources_ineligible'}
+    assert decision['status'] == 'unresolved'
+    assert decision['reason_code'] == 'clinical_sources_ineligible'
+    assert decision['matched_source_row_refs'] == ['ingredientRows[0]']
 
 
 @pytest.mark.parametrize("reverse", [False, True])
-def test_exclusion_only_scope_retains_every_valid_marine_row_independent_of_order(reverse):
+def test_exclusion_only_scope_retains_every_valid_marine_row_independent_of_order(approved_marine_identity_source, reverse):
     from tests.test_v4_generic_evidence_p133 import _ingredient, _match, _product
     rows = []
     for i, (canonical, name, amount) in enumerate([(
@@ -638,9 +674,10 @@ def test_exclusion_only_scope_retains_every_valid_marine_row_independent_of_orde
         row = _ingredient(name=name, canonical_id=canonical, quantity=amount, unit="mg")
         row["raw_source_path"] = f"ingredientRows[{i}]"
         rows.append(row)
-    # Isolate the exclusion contract from the real omega clinical hold.
-    # This synthetic scope is never a clinical source or a scoring approval.
-    match = _match(id="SYNTHETIC_MARINE_SCOPE_CONTROL", ingredient="Omega-3 Fatty Acids",
+    # Use the fixture's canonical, explicitly approved test source so this
+    # exercises row exclusion rather than an unregistered-match rejection.
+    # The live omega benefit hold is asserted independently above.
+    match = _match(id="INGR_OMEGA3", ingredient="Omega-3 Fatty Acids",
                    standard_name="Omega-3 Fatty Acids",
                    applicability=deepcopy(reviewed_entries()['INGR_OMEGA3']['applicability']),
                    matched_canonical_ids=[r["canonical_id"] for r in rows],
@@ -683,12 +720,12 @@ def test_amount_independent_applicability_keeps_provider_owned_undosed_member(mo
              'matched_canonical_ids':['bromelain'],'study_type':'rct_single'}
     if legacy:entry['exclude_aliases']=['other preparation']
     else:entry['applicability']={'scope':'ingredient', 'required_form_terms':['bromelain'], 'minimum_daily_dose':100, 'dose_unit':'mg'}
-    monkeypatch.setattr(ca,'reviewed_entries', lambda: {})
-    assert assess_clinical_applicability(product,entry,assess_amount=False)['status'] in {'applicable','not_curated'}
+    entry = _install_scoped_test_source(monkeypatch, entry, "Bromelain")
+    assert assess_clinical_applicability(product,entry,assess_amount=False)['status'] == 'applicable'
     if not legacy:
-        assert assess_clinical_applicability(product,entry,assess_amount=True)['status'] in {'unresolved', 'not_applicable'}
+        assert assess_clinical_applicability(product,entry,assess_amount=True)['status'] == 'unresolved'
     else:
-        assert assess_clinical_applicability(product,entry,assess_amount=True)['status'] == 'not_curated'
+        assert assess_clinical_applicability(product,entry,assess_amount=True)['status'] == 'applicable'
     from dose_assessment import positive_clinical_benchmark
     assert positive_clinical_benchmark(product,row) is None
 
@@ -723,9 +760,9 @@ def test_form_only_review_has_no_exposure_prerequisite(monkeypatch):
            'source_section':'active','raw_source_path':'ingredientRows[0].nestedRows[0]',
            'quantity':0,'unit':'NP','matched_form':'Bromelain'}
     product = {'activeIngredients':[row], 'ingredient_quality_data':{'ingredients':[row],'ingredients_scorable':[]}}
-    monkeypatch.setattr(ca,'reviewed_entries', lambda: {})
     entry = {'id':'TEST_FORM_ONLY','ingredient':'Bromelain','matched_source_row_refs':[row['raw_source_path']],
              'applicability':{'scope':'ingredient','required_form_terms':['bromelain']}}
+    entry = _install_scoped_test_source(monkeypatch, entry, 'Bromelain')
     assert ca.assess_clinical_applicability(product,entry)['status'] == 'applicable'
     entry['applicability'].update(minimum_daily_dose=100,dose_unit='mg')
     assert ca.assess_clinical_applicability(product,entry)['status'] in {'not_applicable','unresolved'}
@@ -745,10 +782,10 @@ def test_source_required_anchor_binds_printed_child_before_structural_header(mon
               'linked_rows':['ingredientRows[0]',child['raw_source_path']]}
     product = {'activeIngredients':[header,child],'ingredient_quality_data':{'ingredients_scorable':[]}}
     monkeypatch.setattr(contract,'get_evidence_subject_rows', lambda _: [anchor])
-    monkeypatch.setattr(ca,'reviewed_entries',lambda:{})
     entry = {'id':'TEST_INULIN_ANCHOR','ingredient':'Inulin','matched_canonical_ids':['inulin'],
              'matched_source_row_refs':['ingredientRows[0]'],
              'applicability':{'scope':'ingredient','required_form_terms':['inulin'],'require_source_label_form':True}}
+    entry = _install_scoped_test_source(monkeypatch, entry, 'Inulin')
     result=ca.assess_clinical_applicability(product,entry,assess_amount=False)
     assert result['status']=='applicable'
     assert result['source_row_ref']==child['raw_source_path']
@@ -914,7 +951,7 @@ def test_shilajit_records_preserve_research_without_unsupported_outcomes():
     ('Peppermint Extract', [], 'enteric-coated peppermint oil', False),
     ('Enteric-coated Peppermint Oil', [], '', True),
     ('Peppermint Oil', [{'name': 'enteric-coated'}], '', True),
-    ('IBgard Peppermint Oil', [], '', True),
+    ('IBgard Peppermint Oil', [], '', False),
 ])
 def test_peppermint_literature_requires_source_oil_and_delivery(enricher, label, source_forms, guessed_form, accepted):
     import evidence_resolver as er
@@ -930,7 +967,13 @@ def test_peppermint_literature_requires_source_oil_and_delivery(enricher, label,
     if 'literature_evidence' in result.owner_facts:
         assert '24100754' in result.owner_facts['literature_evidence']['pmids']
     if 'IBgard' in label:
-        assert '26319955' in {r['pmid'] for r in reviewed_entries()['INGR_PEPPERMINT_OIL']['references_structured']}
+        # Source history survives, but this distinct trial's independent
+        # appraisal remains held; the brand name cannot manufacture approval.
+        source = next(r for r in reviewed_entries()['INGR_PEPPERMINT_OIL']['references_structured']
+                      if r.get('pmid') == '26319955')
+        assert source['scoring_eligible'] is False
+        assert 'appraisal incomplete' in source['notes']
+        assert result.points_eligible is False
     artifact = build_scored_artifact(product)
     assert len(artifact['quality_pillars_v4']) == 6
 
@@ -1566,6 +1609,7 @@ def test_claim_free_coq10_keeps_heart_failure_scope():
     assert result['status'] == 'applicable'
     assert result['claim_alignment']['state'] == 'absent'
     assert result['supported_outcomes'] == ['heart_failure_adjunct']
+    assert result['studied_population'] == reviewed_entries()['INGR_COQ10']['applicability']['studied_population']
     assert 'heart failure' in result['studied_population'].lower()
 
 
@@ -1601,6 +1645,8 @@ def test_potassium_blood_pressure_claim_keeps_hypertensive_population_scope():
                      ('Potassium supports healthy blood pressure.',))
     assert result['status'] == 'applicable'
     assert result['claim_alignment']['state'] == 'aligned'
+    assert result['supported_outcomes'] == ['cardiovascular']
+    assert result['studied_population'] == reviewed_entries()['INGR_POTASSIUM']['applicability']['studied_population']
     assert 'hypertension' in result['studied_population'].lower()
     assert 'not significant in normotensive' in result['studied_population']
 
@@ -2093,6 +2139,78 @@ def test_claim_absence_does_not_turn_unqualified_outcomes_into_affirmative_credi
     assert artifact['_v4_module_breakdown']['dimensions']['evidence']['score'] == 0
 
 
+@pytest.mark.parametrize('claim,targets,status', [
+    ('', [], 'applicable'),
+    ('testosterone', [], 'applicable'),
+    ('energy', [], 'not_applicable'),
+    ('longevity', [], 'not_applicable'),
+    ('testosterone', ['Women'], 'not_applicable'),
+    ('testosterone', ['Children (4 - 8 Years)'], 'unresolved'),
+])
+def test_legacy_signed_scope_uses_same_claim_and_population_owner(claim, targets, status):
+    from evidence_resolver import evidence_record_matches_declared_purpose
+    row = {'name': 'PrimaVie Shilajit', 'raw_source_text': 'PrimaVie Shilajit',
+           'canonical_id': 'shilajit', 'raw_source_path': 'ingredientRows[0]',
+           'source_section': 'active', 'quantity': 500, 'unit': 'mg'}
+    product = {'product_name': 'PrimaVie capsules', 'activeIngredients': [row],
+               'ingredient_quality_data': {'ingredients': [row], 'ingredients_scorable': [row]},
+               'targetGroups': targets,
+               'statements': [{'type': 'Formula re: Contains', 'notes': f'Shilajit supports {claim}.'}] if claim else []}
+    source = reviewed_entries()['BRAND_PRIMAVIE_SHILAJIT']
+    assert not source.get('study_contexts')
+    entry = {**source, 'matched_canonical_ids': ['shilajit'], 'matched_source_row_refs': ['ingredientRows[0]']}
+    assert assess_clinical_applicability(product, entry, assess_amount=False)['status'] == status
+    assert evidence_record_matches_declared_purpose(product, row, entry) is (status == 'applicable')
+
+
+@pytest.mark.parametrize('change', [
+    {'source_pmids': ['999999999']}, {'source_pmids': []},
+    {'reviewed_at': '2999-01-01'}, {'reviewed_at': 'not-a-date'},
+    {'studied_population': ''},
+])
+def test_legacy_scope_cannot_accept_missing_or_changed_review_provenance(monkeypatch, change):
+    import clinical_applicability as ca
+    source = deepcopy(reviewed_entries()['BRAND_PRIMAVIE_SHILAJIT'])
+    source['applicability'].update(change)
+    monkeypatch.setattr(ca, 'reviewed_entries', lambda: {source['id']: source})
+    row = {'name': 'PrimaVie Shilajit', 'canonical_id': 'shilajit', 'raw_source_text': 'PrimaVie Shilajit',
+           'raw_source_path': 'ingredientRows[0]', 'source_section': 'active', 'quantity': 500, 'unit': 'mg'}
+    product = {'product_name': 'PrimaVie', 'activeIngredients': [row],
+               'ingredient_quality_data': {'ingredients': [row], 'ingredients_scorable': [row]}}
+    entry = {**source, 'matched_source_row_refs': ['ingredientRows[0]'], 'matched_canonical_ids': ['shilajit']}
+    assert assess_clinical_applicability(product, entry, assess_amount=False)['status'] == 'unresolved'
+
+
+def test_preparation_only_scope_cannot_generate_public_evidence_credit():
+    from scoring_v4.scored_artifact import build_scored_artifact
+    row = {'name': 'Tart Cherry Juice', 'standard_name': 'Tart Cherry', 'canonical_id': 'tart_cherry',
+           'mapped': True, 'bio_score': 10, 'raw_source_text': 'Tart Cherry Juice',
+           'raw_source_path': 'ingredientRows[0]', 'source_section': 'active', 'quantity': 500, 'unit': 'mg'}
+    source = reviewed_entries()['INGR_TART_CHERRY']
+    assert not source.get('study_contexts')
+    assert not source['applicability'].get('supported_outcomes')
+    product = {'product_name': 'Tart Cherry Energy Support', 'status': 'active', 'form_factor': 'capsule',
+               'supplement_type': {'type': 'botanical'}, 'activeIngredients': [row],
+               'ingredient_quality_data': {'ingredients': [row], 'ingredients_scorable': [row]},
+               'evidence_data': {'clinical_matches': [{**source, 'ingredient': row['name'],
+                   'matched_canonical_ids': ['tart_cherry'], 'matched_source_row_refs': ['ingredientRows[0]']}]}}
+    assert build_scored_artifact(product)['quality_pillars_v4']['evidence']['score'] == 0
+    product['product_name'] = 'Tart Cherry'
+    assert build_scored_artifact(product)['quality_pillars_v4']['evidence']['score'] == 0
+
+
+def test_signed_population_restriction_applies_to_title_not_only_target_groups():
+    source = reviewed_entries()['BRAND_PRIMAVIE_SHILAJIT']
+    row = {'name': 'PrimaVie Shilajit', 'canonical_id': 'shilajit', 'raw_source_text': 'PrimaVie Shilajit',
+           'raw_source_path': 'ingredientRows[0]', 'source_section': 'active', 'quantity': 500, 'unit': 'mg'}
+    entry = {**source, 'matched_source_row_refs': ['ingredientRows[0]'], 'matched_canonical_ids': ['shilajit']}
+    product = {'product_name': "Women's PrimaVie Shilajit", 'activeIngredients': [row],
+               'ingredient_quality_data': {'ingredients': [row], 'ingredients_scorable': [row]}}
+    assert assess_clinical_applicability(product, entry, assess_amount=False)['status'] == 'not_applicable'
+    product['product_name'] = 'PrimaVie Shilajit'
+    assert assess_clinical_applicability(product, entry, assess_amount=False)['status'] == 'applicable'
+
+
 @pytest.mark.parametrize('held_pmid,adult_eligible', [('21818642', False), ('24642205', True)])
 def test_context_cannot_borrow_an_eligible_reference_from_its_sibling(monkeypatch, held_pmid, adult_eligible):
     import clinical_applicability as owner
@@ -2126,3 +2244,122 @@ def test_source_join_preserves_a_trial_beside_its_excluded_correction():
     assert set(context['source_pmids']) == {'39252819', '40567408'}
     assert clinical_record_sources_eligible(record, context=context)
     assert not clinical_record_sources_eligible(record, context=context, source_pmids=['40567408'])
+
+
+@pytest.mark.parametrize('flag', ['missing', None, False, 0, 'true', True])
+def test_public_clinical_credit_requires_explicit_boolean_eligibility(monkeypatch, flag):
+    import clinical_applicability as owner
+    from test_evidence_resolver import _approved_test_source
+    from scoring_v4.scored_artifact import build_scored_artifact
+    source = _approved_test_source({'id': 'TEST_EXPLICIT_FLAG', 'study_type': 'rct_single',
+        'evidence_level': 'ingredient-human', 'effect_direction': 'positive_strong'}, name='Reviewed Test Material')
+    context = source['study_contexts'][0]
+    if flag == 'missing':
+        context.pop('scoring_eligible')
+    else:
+        context['scoring_eligible'] = flag
+    monkeypatch.setattr(owner, 'reviewed_entries', lambda: {source['id']: source})
+    row = _row('synthetic_material', 'Reviewed Test Material', quantity=400)
+    product = {'product_name': 'Reviewed Test Material', 'activeIngredients': [row],
+        'ingredient_quality_data': {'ingredients_scorable': [row]},
+        'evidence_data': {'clinical_matches': [{**source, 'matched_canonical_ids': ['synthetic_material'],
+            'matched_source_row_refs': ['ingredientRows[0]']}]}}
+    pillar = build_scored_artifact(product)['quality_pillars_v4']['evidence']
+    assert (pillar['score'] > 0) is (flag is True)
+
+
+@pytest.mark.parametrize('condition,signed', [
+    ('sleep_quality', []), ('perceived_stress', ['stress', 'sleep']),
+])
+def test_condition_and_signed_scope_cannot_promote_a_null_sleep_outcome(monkeypatch, condition, signed):
+    import clinical_applicability as owner
+    from test_evidence_resolver import _approved_test_source
+    from scoring_v4.scored_artifact import build_scored_artifact
+    source = _approved_test_source({'id': 'TEST_OUTCOME_SCOPE', 'study_type': 'rct_single',
+        'evidence_level': 'ingredient-human', 'effect_direction': 'positive_strong'}, name='Reviewed Test Material')
+    context = source['study_contexts'][0]
+    context['condition'] = condition
+    context['outcomes'].append({'name': 'sleep_quality', 'hierarchy': 'primary',
+        'kind': 'patient_important', 'direction': 'null'})
+    if signed:
+        source['applicability'] = {'scope': 'ingredient', 'supported_outcomes': signed,
+                                   'source_pmids': context['source_pmids']}
+    monkeypatch.setattr(owner, 'reviewed_entries', lambda: {source['id']: source})
+    row = _row('synthetic_material', 'Reviewed Test Material', quantity=400)
+    product = {'product_name': 'Supports sleep quality', 'activeIngredients': [row],
+        'ingredient_quality_data': {'ingredients_scorable': [row]},
+        'evidence_data': {'clinical_matches': [{**source, 'matched_canonical_ids': ['synthetic_material'],
+            'matched_source_row_refs': ['ingredientRows[0]']}]}}
+    assert build_scored_artifact(product)['quality_pillars_v4']['evidence']['score'] == 0
+    product['product_name'] = 'Supports stress relief'
+    assert build_scored_artifact(product)['quality_pillars_v4']['evidence']['score'] > 0
+
+
+def test_exact_unknown_category_condition_still_matches_its_positive_patient_outcome():
+    from clinical_applicability import assess_claim_alignment
+    context = _native_context(('nec_stage_2_or_higher', 'primary', 'patient_important', 'positive', {}),
+                              condition='necrotizing_enterocolitis')
+    assert assess_claim_alignment(_claim('Supports necrotizing enterocolitis prevention'), context)['state'] == 'aligned'
+
+
+def test_signed_scope_preserves_an_independently_positive_same_category_outcome():
+    from clinical_applicability import assess_claim_alignment
+    context = _native_context(('Perceived Stress Scale', 'primary', 'patient_important', 'positive', {}),
+                              ('Anxiety symptoms', 'primary', 'patient_important', 'null', {}),
+                              condition='perceived_stress')
+    before = deepcopy(context['outcomes'])
+    alignment = assess_claim_alignment(_claim('Supports stress relief'), context,
+                                      supported_outcomes=['stress_mood'])
+    assert alignment['state'] == 'aligned'
+    assert context['outcomes'] == before  # The null finding remains a contradiction.
+
+
+@pytest.mark.parametrize('context_id', ['ksm66_23439798', 'ksm66_32021735'])
+def test_signed_ksm_stress_mapping_survives_unclassified_pss_measurement(context_id):
+    from clinical_applicability import assess_claim_alignment
+    record = reviewed_entries()['BRAND_KSM66']
+    context = next(c for c in record['study_contexts'] if c['context_id'] == context_id)
+    alignment = assess_claim_alignment(_claim('Supports stress relief'), context,
+                                      supported_outcomes=record['applicability']['supported_outcomes'])
+    assert alignment['state'] == 'aligned'
+
+
+def test_signed_visual_scope_keeps_independently_positive_visual_performance():
+    from clinical_applicability import assess_claim_alignment
+    record = reviewed_entries()['BRAND_LUTEMAX_2020']
+    context = next(c for c in record['study_contexts']
+                   if c['context_id'] == 'brand_lutemax_2020_28661438_draft')
+    alignment = assess_claim_alignment(_claim('Supports eye and vision health'), context,
+                                      supported_outcomes=record['applicability']['supported_outcomes'])
+    assert alignment['state'] == 'aligned'
+
+
+@pytest.mark.parametrize('phrase', ['visual performance', 'visual acuity', 'contrast sensitivity', 'disability glare'])
+def test_precise_visual_endpoints_use_existing_eye_category(phrase):
+    from evidence_resolver import evidence_indication_categories
+    assert 'eye_health' in evidence_indication_categories(phrase)
+
+
+def test_stress_visual_analogue_scale_is_not_a_visual_health_endpoint():
+    from evidence_resolver import evidence_indication_categories
+    assert 'eye_health' not in evidence_indication_categories('Perceived stress visual analogue scale')
+
+
+def test_held_ginger_pregnancy_source_cannot_remain_in_adult_evidence_metadata(monkeypatch):
+    import clinical_applicability as owner
+    current = owner.reviewed_entries()
+    source = deepcopy(current['INGR_GINGER'])
+    for reference in source['references_structured']:
+        if reference.get('pmid') == '24642205':
+            reference['scoring_eligible'] = False
+    monkeypatch.setattr(owner, 'reviewed_entries', lambda: {**current, source['id']: source})
+    row = _row('ginger', 'Ginger Root', quantity=1000)
+    product = {'product_name': 'Ginger Root', 'ingredient_quality_data': {'ingredients_scorable': [row]}}
+    match = {**source, 'ingredient': row['name'], 'matched_source_row_refs': ['ingredientRows[0]']}
+    result = owner.assess_clinical_applicability(product, match, assess_amount=False)
+    assert result['status'] == 'applicable'
+    assert result['qualifying_study_type'] == 'rct_single'
+    assert result['supported_outcomes'] == ['acute_chemotherapy_nausea']
+    assert result['population_applicability']['context_ids'] == ['ingr_ginger_21818642_acute_cin']
+    assert 'pregnan' not in result['studied_population'].lower()
+    assert 'cancer' in result['studied_population'].lower()

@@ -24,11 +24,110 @@ import evidence_resolver as er
 from evidence_resolver import EvidenceDisposition, OWNER_CAPABILITY_MAP
 
 
+
+def _approved_test_source(entry, *, name="Synthetic Material", pmid="28661438", outcome="Perceived Stress Scale"):
+    """Explicit synthetic approval for mechanics tests, never a clinical record edit."""
+    source = dict(entry)
+    source.setdefault("standard_name", name)
+    source.setdefault("references_structured", [{"pmid": pmid, "retracted": False}])
+    source["study_contexts"] = [{
+        "context_schema_version": "1.1.0", "context_id": source["id"] + "_" + pmid + "_synthetic",
+        "source_pmids": [pmid], "components": [source["id"]],
+        "identity_scope": "ingredient_general", "identity": {},
+        "exposure_basis": "supplement_dose", "route": "oral", "evidence_role": "direct_rct",
+        "component_registration_status": "fully_registered", "condition": "perceived_stress",
+        "purpose": "treatment", "review_status": "clinician_approved", "scoring_eligible": True,
+        "clinical_review": {"reviewer": "Synthetic test reviewer", "reviewed_at": "2026-10-28",
+                            "scope": "identity_dose_outcome_applicability"},
+        "human_status": "confirmed", "source_integrity": "none", "trial_family": "synthetic_mechanics",
+        "population": {"age_group": "adult", "description": "Synthetic adult mechanics population"},
+        "study_design": "Synthetic randomized mechanics fixture; no clinical claim",
+        "outcomes": [{"name": outcome, "hierarchy": "primary", "kind": "patient_important",
+                      "direction": "positive", "outcome_role": "direct_between_group_effect"}],
+        "dose": {"measurement_type": "mass", "unit": "mg", "values": [400],
+                 "dose_status": "verified", "dose_basis": "nominal_assigned_arm",
+                 "duration_basis": "fixed_protocol", "duration_days": 28,
+                 "administration_frequency": "Daily synthetic fixture", "dosage_forms": ["capsule"],
+                 "reported_regimen": "Synthetic 400 mg daily; not a benchmark", "co_therapies": [],
+                 "normalization": {"basis": "Synthetic mass in the assigned study arm"},
+                 "source_provenance": {"pmid": pmid, "location": "Synthetic mechanics fixture",
+                                       "source_url": "https://example.invalid/synthetic-study"}},
+        "limitations": ["Synthetic test only; no clinical assertion or approval"]}]
+    from clinical_evidence_schema import validate_ingredient_context
+    assert validate_ingredient_context(source["study_contexts"][0], require_complete_review=True) == []
+    return source
+
+
+@pytest.mark.parametrize("direction,state", [("null", "evaluated_null"), ("negative", "evaluated_unfavorable")])
+def test_completed_nonpositive_source_keeps_terminal_resolution_without_affirmative_points(monkeypatch, direction, state):
+    import clinical_applicability as ca
+    from assessment_readiness import evaluate_assessment_readiness
+    from scoring_v4.scored_artifact import build_scored_artifact
+    source = _approved_test_source({"id": "TEST_COMPLETED_NONPOSITIVE", "study_type": "rct_single",
+        "evidence_level": "ingredient-human", "effect_direction": direction}, name="Reviewed Test Material")
+    source["study_contexts"][0]["outcomes"][0]["direction"] = direction
+    monkeypatch.setattr(ca, "reviewed_entries", lambda: {source["id"]: source})
+    monkeypatch.setattr(er, "_backed_studies_index", lambda: {"synthetic_material": [source]})
+    row = {"name": "Reviewed Test Material", "canonical_id": "synthetic_material", "mapped": True,
+           "raw_source_path": "ingredientRows[0]", "quantity": 100, "unit": "mg", "bio_score": 10}
+    product = {"activeIngredients": [row], "ingredient_quality_data": {"ingredients_scorable": [row]},
+        "evidence_data": {"clinical_matches": [{**source, "effect_direction": "positive_strong",
+            "min_clinical_dose": 1, "dose_unit": "mg", "matched_canonical_ids": ["synthetic_material"],
+            "matched_source_row_refs": ["ingredientRows[0]"]}]}}
+    resolution = er.resolve_evidence_for_row(row, product)
+    assert resolution.disposition == EvidenceDisposition.REVIEWED_NULL_UNFAVORABLE.value
+    assert resolution.points_eligible is False
+    from scoring_v4.modules.generic_evidence import resolved_clinical_matches
+    from dose_assessment import positive_clinical_benchmark
+    matches, _ = resolved_clinical_matches(product, owner_scoped=True)
+    assert len(matches) == 1
+    assert matches[0]["study_type"] == matches[0]["evidence_level"] == "reference"
+    assert matches[0]["effect_direction"] == direction
+    assert er.evidence_record_matches_declared_purpose(product, row, matches[0])
+    assert not er.evidence_record_matches_declared_purpose(product, row, source)
+    assert positive_clinical_benchmark({**product, "evidence_data": {"clinical_matches": matches}}, row) is None
+    assert evaluate_assessment_readiness(product, module="generic")["evidence"]["readiness"] == "complete"
+    pillar = build_scored_artifact(product)["quality_pillars_v4"]["evidence"]
+    assert pillar["score"] == 0
+    assert pillar["evidence_result_state"] == state
+
+
+@pytest.mark.parametrize("change", ["held", "source_hold", "unresolved", "unrelated"])
+def test_nonpositive_projection_does_not_complete_an_unqualified_generic_source(monkeypatch, change):
+    import clinical_applicability as ca
+    from assessment_readiness import evaluate_assessment_readiness
+    from scoring_v4.scored_artifact import build_scored_artifact
+    source = _approved_test_source({"id": "TEST_NONPOSITIVE_GUARD", "study_type": "rct_single",
+        "effect_direction": "negative"}, name="Reviewed Test Material")
+    source["study_contexts"][0]["outcomes"][0]["direction"] = "negative"
+    if change == "held":
+        source["study_contexts"][0]["scoring_eligible"] = False
+    elif change == "source_hold":
+        source["references_structured"][0]["scoring_eligible"] = False
+    elif change == "unresolved":
+        source["study_contexts"][0]["outcomes"][0]["hierarchy"] = "unresolved"
+    monkeypatch.setattr(ca, "reviewed_entries", lambda: {source["id"]: source})
+    monkeypatch.setattr(er, "_backed_studies_index", lambda: {"synthetic_material": [source]})
+    row = {"name": "Reviewed Test Material", "canonical_id": "synthetic_material", "mapped": True,
+           "raw_source_path": "ingredientRows[0]", "quantity": 100, "unit": "mg", "bio_score": 10}
+    product = {"product_name": "Sleep Aid" if change == "unrelated" else "Reviewed Test Material",
+        "activeIngredients": [row], "ingredient_quality_data": {"ingredients_scorable": [row]},
+        "evidence_data": {"clinical_matches": [{**source, "matched_canonical_ids": ["synthetic_material"],
+            "matched_source_row_refs": ["ingredientRows[0]"]}]}}
+    resolution = er.resolve_evidence_for_row(row, product)
+    assert resolution.disposition != EvidenceDisposition.REVIEWED_NULL_UNFAVORABLE.value
+    assert resolution.points_eligible is False
+    pillar = build_scored_artifact(product)["quality_pillars_v4"]["evidence"]
+    assert pillar["score"] == 0
+    assert pillar["evidence_result_state"] not in {"evaluated_null", "evaluated_unfavorable"}
+    if change != "unrelated":
+        assert evaluate_assessment_readiness(product, module="generic")["evidence"]["readiness"] == "incomplete"
+
 def test_resolver_uses_shared_clinical_preparation_scope_without_amount_gate(monkeypatch):
     import clinical_applicability as ca
-    entry = {"id": "TEST_REVIEWED_OIL", "study_type": "rct_single", "effect_direction": "mixed",
+    entry = _approved_test_source({"id": "TEST_REVIEWED_OIL", "study_type": "rct_single", "effect_direction": "mixed",
              "applicability": {"scope": "ingredient", "excluded_form_terms": ["flaxseed oil"],
-                               "minimum_daily_dose": 1000, "dose_unit": "mg"}}
+                               "minimum_daily_dose": 1000, "dose_unit": "mg"}}, name="Omega-3 Fatty Acids")
     monkeypatch.setattr(ca, "reviewed_entries", lambda: {entry["id"]: entry})
     monkeypatch.setattr(er, "_backed_studies_index", lambda: {"fish_oil": [entry]})
     row = {"canonical_id": "fish_oil", "name": "Omega-3 Fatty Acids", "matched_form": "Flaxseed Oil",
@@ -53,11 +152,17 @@ def test_ala_has_verified_mixed_determination_without_marine_credit():
 def test_flax_oil_does_not_inherit_ground_seed_research():
     oil = er.resolve_evidence_for_canonical("flaxseed", name="Flaxseed Oil", matched_form="oil")
     seed = er.resolve_evidence_for_canonical("flaxseed", name="Ground Flaxseed", matched_form="ground whole seed")
-    # Verified ground-seed sources are independent of the unread historical correction.
+    # Bibliographic verification preserves the ground-seed material/source
+    # facts, but the preparation-only scope does not approve an outcome or
+    # population. It cannot be called a completed clinical assessment.
     assert oil.disposition == EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value
     assert not oil.points_eligible
-    assert seed.disposition == EvidenceDisposition.RESOLVED_BY_REVIEWED_CLINICAL_EVIDENCE.value
-    assert not seed.points_eligible  # completed source review is separate from numerical credit
+    assert oil.reason_code == 'clinical_form_excluded'
+    assert seed.disposition == EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value
+    assert seed.reason_code == 'invalid_applicability_contract'
+    assert not seed.points_eligible
+    assert set(seed.owner_facts['literature_evidence']['pmids']) == {'24126178', '26071633'}
+    assert seed.owner_facts['literature_evidence']['material_form'] == 'Linum usitatissimum ground whole seed'
 
 
 @pytest.mark.parametrize("canonical", ["nha_fos", "bacteriophages"])
@@ -192,8 +297,10 @@ def test_no_local_nutrient_whitelist_in_resolver():
 
 def test_reviewed_clinical_study_resolution(monkeypatch):
     """Clinically-studied botanical/amino acid with qualifying trials resolves to RESOLVED_BY_REVIEWED_CLINICAL_EVIDENCE."""
-    fixture = {"id": "TEST_REVIEWED_BOTANICAL", "study_type": "rct_multiple",
-               "evidence_level": "ingredient-human", "effect_direction": "positive_weak"}
+    import clinical_applicability as ca
+    fixture = _approved_test_source({"id": "TEST_REVIEWED_BOTANICAL", "study_type": "rct_multiple",
+               "evidence_level": "ingredient-human", "effect_direction": "positive_weak"}, name="Ashwagandha")
+    monkeypatch.setattr(ca, "reviewed_entries", lambda: {fixture["id"]: fixture})
     monkeypatch.setattr(er, "_backed_studies_index", lambda: {"ashwagandha": [fixture]})
     res = er.resolve_evidence_for_canonical("ashwagandha", dose_value=600.0, dose_unit="mg")
     assert res.disposition == EvidenceDisposition.RESOLVED_BY_REVIEWED_CLINICAL_EVIDENCE.value
@@ -204,20 +311,13 @@ def test_reviewed_clinical_study_resolution(monkeypatch):
 
 def test_studied_amount_is_not_an_evidence_applicability_guard(monkeypatch):
     """Evidence resolves the reviewed preparation; Dose owns amount adequacy."""
-    # Isolate legacy amount independence from L-carnitine's real non-credit
-    # contexts. The synthetic legacy source supplies no clinical conclusion.
-    from copy import deepcopy
-    index = deepcopy(er._backed_studies_index())
-    for rows in index.values():
-        for source in rows:
-            if source.get('id') == 'INGR_L_CARNITINE':
-                source['study_contexts'] = []
-    import clinical_applicability as applicability
-    current = applicability.reviewed_entries()
-    synthetic = next(source for rows in index.values() for source in rows
-                     if source.get('id') == 'INGR_L_CARNITINE')
-    monkeypatch.setattr(applicability, 'reviewed_entries', lambda: {**current, synthetic['id']: synthetic})
-    monkeypatch.setattr(er, '_backed_studies_index', lambda: index)
+    # A distinct synthetic approved record isolates amount independence without
+    # removing L-carnitine's real held/non-credit contexts.
+    import clinical_applicability as ca
+    source = _approved_test_source({"id": "TEST_REVIEWED_CARNITINE", "study_type": "rct_single",
+        "evidence_level": "ingredient-human", "effect_direction": "positive_weak"}, name="L-Carnitine")
+    monkeypatch.setattr(ca, "reviewed_entries", lambda: {source["id"]: source})
+    monkeypatch.setattr(er, "_backed_studies_index", lambda: {"l_carnitine": [source]})
     res = er.resolve_evidence_for_canonical("l_carnitine", dose_value=50.0, dose_unit="mg")
     assert res.disposition == EvidenceDisposition.RESOLVED_BY_REVIEWED_CLINICAL_EVIDENCE.value
     assert "backed_clinical_studies" in res.matched_owners
@@ -935,6 +1035,9 @@ def test_resolver_uses_shared_daily_units_and_any_applicable_record(monkeypatch,
         {'id': 'LOW', 'study_type': 'rct_multiple', 'min_clinical_dose': 400, 'dose_unit': 'mg'},
         {'id': 'HIGH', 'study_type': 'rct_multiple', 'min_clinical_dose': 800, 'dose_unit': 'mg'},
     ]
+    import clinical_applicability as ca
+    studies = [_approved_test_source(source, name="L-Theanine") for source in studies]
+    monkeypatch.setattr(ca, "reviewed_entries", lambda: {source["id"]: source for source in studies})
     monkeypatch.setattr(er, '_backed_studies_index', lambda: {'l_theanine': studies})
     row = {'canonical_id': 'l_theanine', 'name': 'L-Theanine', 'quantity': quantity,
            'unit': unit, 'raw_source_path': 'ingredientRows[0]'}
@@ -947,6 +1050,62 @@ def test_resolver_uses_shared_daily_units_and_any_applicable_record(monkeypatch,
     assert er.resolve_evidence_for_row(row, product).applicability_status == 'applicable_reviewed_trials'
     row['is_proprietary_blend'] = True
     assert er.resolve_evidence_for_row(row, product).disposition == EvidenceDisposition.IDENTITY_INSUFFICIENT.value
+
+
+def test_descriptive_goal_tag_and_endpoint_text_cannot_create_a_supported_purpose():
+    """Item 12 (Sean, 2026-10-28): consumer goals, relevance tags, endpoint prose and
+    primary_outcome describe a record; they never establish the purpose it supports."""
+    entry = {'primary_outcome': 'Reduce Stress/Anxiety',
+             'health_goals_supported': ['Reduce Stress/Anxiety', 'Sleep Quality'],
+             'endpoint_relevance_tags': ['stress_mood', 'sleep'],
+             'key_endpoints': ['perceived stress', 'sleep quality']}
+    assert er._evidence_entry_purposes(entry) == set()
+
+
+def test_clinician_approved_scoring_context_establishes_its_studied_purpose():
+    entry = _approved_test_source({"id": "TEST_PURPOSE_SOURCE", "study_type": "rct_single"})
+    entry.pop("id")  # Inline source-owned context; no missing registry record fallback.
+    approved = entry["study_contexts"][0]
+    pending = {**approved, 'review_status': 'source_verified_pending_clinical_review',
+               'condition': 'knee_joint_discomfort', 'outcomes': [{'name': 'joint pain'}]}
+    held = {**approved, 'scoring_eligible': False, 'condition': 'bowel_regularity', 'outcomes': []}
+    purposes = er._evidence_entry_purposes({**entry, 'study_contexts': [approved, pending, held]})
+    assert 'mood' in purposes
+    assert not purposes & er.evidence_indication_categories('joint pain bowel regularity')
+
+
+@pytest.mark.parametrize('change', [
+    {'clinical_review': {}},
+    {'scoring_eligible': False},
+    {'outcomes': [{'name': 'Perceived Stress Scale', 'hierarchy': 'secondary', 'kind': 'patient_important', 'direction': 'positive'}]},
+    {'outcomes': [{'name': 'Perceived Stress Scale', 'hierarchy': 'primary', 'kind': 'patient_important', 'direction': 'null'}]},
+    {'outcomes': [{'name': 'Perceived Stress Scale', 'hierarchy': 'primary', 'kind': 'patient_important', 'direction': 'positive',
+                   'outcome_role': 'within_group_change'}]},
+])
+def test_purpose_extraction_cannot_bypass_qualifying_context(change):
+    entry = _approved_test_source({"id": "TEST_PURPOSE_GUARD", "study_type": "rct_single"})
+    entry.pop("id")
+    context = entry["study_contexts"][0]
+    assert er._evidence_entry_purposes(entry) == {'mood'}  # Positive control prevents a vacuous guard.
+    assert er._evidence_entry_purposes({**entry, 'study_contexts': [{**context, **change}]}) == set()
+
+
+def test_enriched_match_cannot_stand_in_for_a_missing_curated_record():
+    """Sean, 2026-10-28: an enriched match carrying a registry id that the clinical
+    registry does not hold is an unresolved source, not its own authority."""
+    match = {'id': 'NOT_IN_REGISTRY', 'applicability': {'scope': 'ingredient',
+             'supported_outcomes': ['stress_mood']}}
+    assert er._evidence_entry_purposes(match) == set()
+
+
+def test_curated_record_owns_purpose_for_an_enriched_match():
+    """Enriched clinical matches carry no study_contexts; the curated record decides."""
+    from clinical_applicability import reviewed_entries
+    record = reviewed_entries()['BRAND_KSM66']
+    match = {'id': 'BRAND_KSM66', 'health_goals_supported': ['Joint & Bone Health']}
+    assert er._evidence_entry_purposes(match) == er._evidence_entry_purposes(record)
+    assert er._evidence_entry_purposes(match) == er.evidence_indication_categories(
+        ' '.join(record['applicability']['supported_outcomes']))
 
 
 def test_literature_resolution_cannot_substitute_another_claimed_purpose(monkeypatch):
@@ -997,7 +1156,7 @@ def test_shared_applicability_preserves_legacy_form_exclusions(monkeypatch):
     assert er.resolve_evidence_for_row(row, product).points_eligible is False
     assert ca.assess_clinical_applicability(product, {**entry, 'ingredient':'Inositol', 'matched_canonical_ids':['inositol']}, assess_amount=False)['status'] == 'not_applicable'
     row['matched_form'] = 'myo inositol'
-    assert ca.assess_clinical_applicability(product, {**entry, 'ingredient':'Inositol', 'matched_canonical_ids':['inositol']}, assess_amount=False)['status'] == 'not_curated'
+    assert ca.assess_clinical_applicability(product, {**entry, 'ingredient':'Inositol', 'matched_canonical_ids':['inositol']}, assess_amount=False)['status'] == 'unresolved'
 
 
 def test_subject_census_refuses_empty_catalog_instead_of_reporting_success(tmp_path, monkeypatch):
@@ -1035,7 +1194,14 @@ def test_subject_census_duplicate_and_empty_products_fail():
 def test_reviewed_outcome_scope_does_not_promote_null_population_descriptions():
     entry = {'primary_outcome':'Cardiovascular Health', 'key_endpoints':['HIV-infected women: immune endpoints null', 'Children: adjunctive findings'],
              'applicability':{'scope':'ingredient','supported_outcomes':['metabolic']}}
-    assert er._evidence_entry_purposes(entry) == {'metabolic'}
+    assert er._evidence_entry_purposes(entry) == set()  # scope prose alone is no accepted context
+    approved = _approved_test_source({"id": "TEST_METABOLIC_SCOPE", **entry}, outcome="Blood glucose")
+    # The context owns the source; the signed scope narrows rather than invents its outcome.
+    approved.pop("id")
+    approved["applicability"]["source_pmids"] = ["28661438"]
+    assert er._evidence_entry_purposes(approved) == {'metabolic'}
+    approved["applicability"]["source_pmids"] = ["99999999"]
+    assert er._evidence_entry_purposes(approved) == set()
 
 
 @pytest.mark.parametrize('tamper', [False, True])
@@ -1061,9 +1227,9 @@ def test_subject_census_manifest_orchestration_preserves_scope_and_hashes(tmp_pa
 
 def test_exact_source_reviewed_match_survives_canonical_namespace_difference(monkeypatch):
     import clinical_applicability as ca
-    entry = {'id': 'TEST_REVIEWED', 'study_type': 'rct_single', 'effect_direction': 'mixed',
+    entry = _approved_test_source({'id': 'TEST_REVIEWED', 'study_type': 'rct_single', 'effect_direction': 'mixed',
              'applicability': {'scope': 'ingredient', 'required_form_terms': ['Exact Material'],
-                               'require_source_label_form': True}}
+                               'require_source_label_form': True}})
     row = {'name': 'Exact Material', 'raw_source_text': 'Exact Material', 'canonical_id': 'nha_material',
            'raw_source_path': 'ingredientRows[0]', 'source_section': 'active'}
     product = {'activeIngredients': [row], 'ingredient_quality_data': {'ingredients_scorable': [row]},
@@ -1551,3 +1717,17 @@ def test_empty_negative_review_rejects_invalid_screened_counts(monkeypatch, valu
     record['records_screened'] = value
     monkeypatch.setattr(er, '_load_literature_evidence', lambda: {'pectinase': record})
     assert er.resolve_evidence_for_canonical('pectinase').disposition == EvidenceDisposition.LITERATURE_RESOLUTION_REQUIRED.value
+
+
+@pytest.mark.parametrize('reason', ['clinical_population_mismatch', 'clinical_outcome_not_qualified'])
+def test_resolver_preserves_canonical_noncredit_reason(monkeypatch, reason):
+    import clinical_applicability as ca
+    source = {'id': 'TEST_DECISION_PROJECTION', 'study_type': 'rct_single',
+              'effect_direction': 'positive_strong'}
+    monkeypatch.setattr(er, '_backed_studies_index', lambda: {'audit_material': [source]})
+    monkeypatch.setattr(ca, 'assess_clinical_applicability',
+                        lambda *args, **kwargs: {'status': 'not_applicable', 'reason_code': reason})
+    result = er.resolve_evidence_for_canonical('audit_material', name='Audit Material')
+    assert result.points_eligible is False
+    assert result.reason_code == reason
+    assert result.blocking_reasons == [reason]

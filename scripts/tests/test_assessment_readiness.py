@@ -1537,7 +1537,7 @@ def _install_completed_release_context(monkeypatch, dose_status='verified'):
     import clinical_applicability
     from test_clinical_evidence_schema_ingredient import _context
     context = _context()
-    context.update(review_status='clinician_approved', study_design='rct', purpose='treatment',
+    context.update(review_status='clinician_approved', scoring_eligible=True, study_design='rct', purpose='treatment',
                    clinical_review={'reviewer': 'Synthetic reviewer', 'reviewed_at': '2026-01-01T00:00:00Z',
                                     'scope': 'identity_dose_outcome_applicability'})
     context['dose']['dose_status'] = dose_status

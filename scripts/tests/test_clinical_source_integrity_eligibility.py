@@ -18,14 +18,29 @@ def _entry(refs, **extra):
             "references_structured": refs, **extra}
 
 
+def _install_audit_source(monkeypatch, entry):
+    """Make provenance explicit; source holds still override this synthetic approval."""
+    import clinical_applicability as ca
+    from test_evidence_resolver import _approved_test_source
+    contexts = [_approved_test_source(entry, name="Audit Material", pmid=ref["pmid"])["study_contexts"][0]
+                for ref in entry["references_structured"]]
+    source = {**entry, "study_contexts": contexts}
+    records = {**ca.reviewed_entries(), source["id"]: source}
+    monkeypatch.setattr(ca, "reviewed_entries", lambda: records)
+    monkeypatch.setattr(er, "_backed_studies_index", lambda: {"audit_material": [source]})
+    return source
+
+
 def _product(entry):
     rows = [{"name": "Audit Material", "standard_name": "Audit Material",
              "canonical_id": "audit_material", "mapped": True, "quantity": 100,
-             "unit": "mg", "bio_score": 10}]
+             "unit": "mg", "bio_score": 10, "raw_source_path": "ingredientRows[0]"}]
     return {"status": "active", "form_factor": "capsule",
             "supplement_type": {"type": "single_nutrient"},
             "ingredient_quality_data": {"ingredients": rows, "ingredients_scorable": rows},
-            "evidence_data": {"clinical_matches": [entry]}}
+            "evidence_data": {"clinical_matches": [{**entry,
+                "matched_source_row_refs": ["ingredientRows[0]"],
+                "matched_canonical_ids": ["audit_material"], "ingredient": "Audit Material"}]}}
 
 
 @pytest.mark.parametrize("ref", [
@@ -33,17 +48,17 @@ def _product(entry):
     {"pmid": "41573009", "expression_of_concern": True},
     {"pmid": "41573009", "scoring_eligible": False},
 ])
-def test_held_source_cannot_award_raw_points_or_public_primary_floor(ref):
-    entry = _entry([ref])
+def test_held_source_cannot_award_raw_points_or_public_primary_floor(monkeypatch, ref):
+    entry = _install_audit_source(monkeypatch, _entry([ref]))
     assert score_evidence(_product(entry), apply_primary_floor=True)["score"] == 0
     assert build_scored_artifact(_product(entry))["quality_pillars_v4"]["evidence"]["score"] == 0
-    control = _product(_entry([{"pmid": "28661438", "retracted": False}]))
+    control = _product(_install_audit_source(monkeypatch, _entry([{"pmid": "28661438", "retracted": False}])))
     assert score_evidence(control, apply_primary_floor=True)["score"] > 0
 
 
-def test_mixed_record_retains_independently_eligible_source():
-    entry = _entry([{"pmid": "41573009", "retracted": True},
-                    {"pmid": "28661438", "retracted": False}])
+def test_mixed_record_retains_independently_eligible_source(monkeypatch):
+    entry = _install_audit_source(monkeypatch, _entry([{"pmid": "41573009", "retracted": True},
+                    {"pmid": "28661438", "retracted": False}]))
     assert score_evidence(_product(entry), apply_primary_floor=True)["score"] > 0
 
 
