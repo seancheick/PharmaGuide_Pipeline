@@ -397,12 +397,18 @@ def test_undisclosed_cfu_with_accepted_human_research_is_terminal_contextual_cre
     from scoring_v4.modules.probiotic_evidence import score_evidence
 
     p = strain_product(clinical_id="STRAIN_LGG", name="Lactobacillus rhamnosus GG", dose=None)
+    p["product_name"] = "Sleep support probiotic"  # Unrelated to every LGG context.
     evidence = score_evidence(p)
     assert evidence["metadata"]["evidence_result_state"] == "research_present_applicability_unestablished"
     assert evidence["score"] == 0
     assert "dose_applicability" not in evidence["components"]
-    assert score_evidence(strain_product(clinical_id="STRAIN_LGG",
-        name="Lactobacillus rhamnosus GG", dose=1e9))["components"] == evidence["components"]
+    dosed = strain_product(clinical_id="STRAIN_LGG", name="Lactobacillus rhamnosus GG", dose=1e9)
+    dosed["product_name"] = p["product_name"]
+    assert score_evidence(dosed)["components"] == evidence["components"]
+    # A claim-free label earns the same scoped credit with or without an amount.
+    assert score_evidence(strain_product(clinical_id="STRAIN_LGG", name="Lactobacillus rhamnosus GG", dose=None))[
+        "components"] == score_evidence(strain_product(clinical_id="STRAIN_LGG",
+        name="Lactobacillus rhamnosus GG", dose=1e9))["components"]
 
 
 @pytest.mark.parametrize("cid,name", [
@@ -422,6 +428,10 @@ def test_pending_review_is_independent_of_existing_positive_or_null_credit(monke
     p = strain_product(clinical_id=cid, name=name, dose=1e9)
     if cid == 'STRAIN_LACTIS_HN019':
         p['product_name'] = 'Probiotic for functional constipation'
+    elif cid == 'STRAIN_LGG':
+        # Claim-free LGG now earns its scoped GI/respiratory credit; an
+        # unrelated label keeps the finished-but-zero scenario this tests.
+        p['product_name'] = 'Sleep support probiotic'
     reviewed = score_evidence(p)
     assert reviewed["metadata"]["evidence_assessment"]["native_context_review"]["status"] == "clinically_reviewed"
     assert reviewed["score"] == 0  # These adult labels have no eligible positive primary family.
@@ -557,8 +567,9 @@ def test_specific_35624_clinical_lock_survives_source_extraction():
 
 @pytest.mark.parametrize('case,expected', [
     ('broad_claim', 'not_applicable'), ('exact_condition', 'applicable'),
-    ('no_claim', 'unresolved'), ('warning_only', 'unresolved'),
-    ('negated_claim', 'unresolved'), ('foreign_source', 'unresolved'),
+    # No claim is required (October 28 rulings); warnings and negations are not claims.
+    ('no_claim', 'applicable'), ('warning_only', 'applicable'),
+    ('negated_claim', 'applicable'), ('foreign_source', 'unresolved'),
     ('unsigned', 'unresolved'), ('unsupported_constraint', 'unresolved'),
 ])
 def test_reviewed_native_claim_exclusion_is_source_bound_and_condition_specific(case, expected):

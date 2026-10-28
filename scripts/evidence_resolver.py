@@ -66,10 +66,13 @@ INDICATION_KEYWORDS: Dict[str, Set[str]] = {
     "digestive": {
         "digestive", "digestion", "gut", "bowel", "regularity", "constipation",
         "diarrhea", "ibs", "irritable", "bloating", "gastro", "colic", "gi",
+        "stool", "stools", "reflux", "heartburn", "gastrointestinal", "intestinal",
+        "abdominal", "lactose",
     },
     "immune": {
         "immune", "immunity", "respiratory", "cold", "allergy", "allergic",
-        "rhinitis", "eczema", "atopic",
+        "rhinitis", "eczema", "atopic", "infection", "infections", "infectious",
+        "pneumonia", "rhinovirus", "rhinosinusitis",
     },
     "women": {
         "women", "woman", "womens", "female", "vaginal", "urogenital",
@@ -84,10 +87,12 @@ INDICATION_KEYWORDS: Dict[str, Set[str]] = {
         "toddler", "toddlers", "preterm", "neonatal", "neonates",
     },
     "oral": {"oral", "dental", "teeth", "gum", "gingivitis", "plaque", "caries", "halitosis"},
-    "metabolic": {"weight", "metabolic", "glucose", "glycemic", "visceral", "fat"},
+    "metabolic": {"weight", "metabolic", "glucose", "glycemic", "visceral", "fat",
+                  "diabetes", "glycemia", "insulin"},
     "mood": {"mood", "stress", "anxiety", "psychobiotic", "sleep",
-             "relax", "relaxation", "cortisol"},
-    "bone": {"bone", "density"},
+             "relax", "relaxation", "cortisol", "asleep", "calm", "depression",
+             "depressive", "distress"},
+    "bone": {"bone", "bones", "density"},
     # Existing clinical-indication vocabulary; shared by source claims and
     # reviewed study outcomes. These categories never imply efficacy.
     "hormonal_endocrine": {"testosterone", "androgen", "androgens", "dheas"},
@@ -95,8 +100,36 @@ INDICATION_KEYWORDS: Dict[str, Set[str]] = {
     "aging_longevity": {"longevity", "antiaging", "antiageing"},
     "cognitive_neurological": {"attention", "alertness", "memory", "focus", "cognition", "cognitive"},
     "skin_hair_collagen": {"skin"},
-    "eye_health": {"eye", "eyes", "vision"},
+    "eye_health": {"eye", "eyes", "vision", "visual", "ocular", "macular", "retina"},
+    # Outcome families named by reviewed study contexts (October 28, 2026
+    # rulings). A shared category only finds candidate research or an
+    # unrelated claim; the reviewed context alone authorizes credit, so a
+    # heart-health claim never becomes heart-failure or lipid evidence.
+    "cardiovascular": {"cardiovascular", "cardiac", "hypertension", "cvd", "endothelial"},
+    "lipid": {"cholesterol", "lipid", "lipids", "ldl", "hdl", "triglyceride", "triglycerides",
+              "dyslipidemia", "hypercholesterolemia"},
+    "joint": {"joint", "joints", "knee", "knees", "cartilage", "osteoarthritis"},
+    "thyroid": {"thyroid", "thyroiditis", "hashimoto"},
+    "nausea": {"nausea", "vomiting"},
+    "migraine": {"migraine", "migraines"},
+    "menstrual_cycle": {"menstrual", "menstruation", "pcos"},
+    "endurance": {"endurance"},
+    "muscle_recovery": {"soreness"},
 }
+
+# Indications named only by a phrase: a bare word ("blood", "strength",
+# "regularity", "mass") states no purpose on its own.
+_INDICATION_PHRASES = (
+    ("cardiovascular", r"\b(?:heart (?:health|function|failure)|healthy heart|blood pressure)\b"),
+    ("metabolic", r"\bblood sugar\b"),
+    ("cognitive_neurological", r"\bmental clarity\b"),
+    ("menstrual_cycle", r"\b(?:polycystic ovar(?:y|ian)|(?:menstrual|cycle) regularity)\b"),
+    ("endurance", r"\bexercise capacity\b"),
+    ("muscle_recovery", r"\bmuscle (?:damage|soreness|recovery)\b"),
+    ("muscle_strength_mass", r"\b(?:lean|muscle) mass\b|\bmuscle (?:growth|gains?|strength|performance|power|building)\b"
+                             r"|\bbuild(?:s|ing)? muscle\b|\bmuscularity\b"),
+)
+
 
 def evidence_indication_categories(text: str) -> Set[str]:
     """Shared label/clinical indication categories; never proof of efficacy."""
@@ -109,11 +142,16 @@ def evidence_indication_categories(text: str) -> Set[str]:
     normalized = re.sub(r"\brenewable energy\b", " ", normalized)
     words = set(normalized.split())
     categories = {category for category, keywords in INDICATION_KEYWORDS.items() if words & keywords}
+    categories.update(category for category, phrase in _INDICATION_PHRASES if re.search(phrase, normalized))
+    # Menstrual-cycle regularity is not bowel regularity.
+    if ("menstrual_cycle" in categories and "regularity" in words
+            and not (words & (INDICATION_KEYWORDS["digestive"] - {"regularity"}))):
+        categories.discard("digestive")
     # Age can qualify the population/context of a memory claim; it does not
     # itself assert an anti-aging outcome. Keep explicit aging-purpose phrases.
     if re.search(r"\b(?:healthy|anti) (?:aging|ageing)\b", normalized):
         categories.add("aging_longevity")
-    if "bone" in categories and "bone" not in words:
+    if "bone" in categories and not words & {"bone", "bones"}:
         categories.discard("bone")  # density alone may describe a capsule
     if "metabolic" in categories and not (words & (INDICATION_KEYWORDS["metabolic"] - {"fat"})):
         if not re.search(r"\b(?:body|visceral) fat\b", normalized):
@@ -977,9 +1015,9 @@ def resolve_evidence_for_row(
                 reason_code="clinical_sources_ineligible", owner_facts=owner_facts,
                 blocking_reasons=["clinical_sources_ineligible"],
             )
-        claimed_purposes = _evidence_claim_purposes(product).get(canonical) if product else None
-        if claimed_purposes:
-            valid_studies = [study for study in valid_studies if claimed_purposes & _evidence_entry_purposes(study)]
+        if product:
+            valid_studies = [study for study in valid_studies if evidence_record_matches_declared_purpose(
+                product, {"canonical_id": canonical}, study)]
             if not valid_studies:
                 return EvidenceResolution(
                     canonical_id=canonical, ingredient_name=name,
@@ -1008,6 +1046,9 @@ def resolve_evidence_for_row(
                 record_states.append("unresolved")
                 unresolved_reasons.append(decision["reason_code"])
                 continue
+            if decision["reason_code"] == "label_purpose_evidence_mismatch":
+                record_states.append("purpose_mismatch")
+                continue
             if decision["status"] not in {"applicable", "not_curated"}:
                 record_states.append("form_mismatch")
                 continue
@@ -1015,8 +1056,18 @@ def resolve_evidence_for_row(
         # A second record's higher dose or different form cannot veto an
         # applicable record. The scorer assesses each clinical record too.
         has_applicable = "applicable" in record_states
-        is_form_excluded = bool(record_states) and all(state == "form_mismatch" for state in record_states)
+        is_form_excluded = bool(record_states) and all(
+            state in {"form_mismatch", "purpose_mismatch"} for state in record_states)
 
+        if record_states and set(record_states) == {"purpose_mismatch"}:
+            return EvidenceResolution(
+                canonical_id=canonical, ingredient_name=name,
+                matched_owners=matched_owners,
+                disposition=EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value,
+                points_eligible=False, applicability_status="applicability_unestablished",
+                reason_code="label_purpose_evidence_mismatch", owner_facts=owner_facts,
+                blocking_reasons=["label_purpose_evidence_mismatch"],
+            )
         if not has_applicable and unresolved_reasons:
             return EvidenceResolution(
                 canonical_id=canonical, ingredient_name=name,
@@ -1542,6 +1593,11 @@ def evidence_record_matches_declared_purpose(
     purpose, the record must support at least one of those same indication
     categories before Evidence or Dose may use it.
     """
+    from clinical_applicability import condition_scope_governs
+    if condition_scope_governs(entry):
+        # Its reviewed condition scopes already judged every recognized claim
+        # and the label positioning in clinical_applicability; one decision.
+        return True
     canonical = _norm(row.get("canonical_id"))
     claimed = _evidence_claim_purposes(product).get(canonical)
     return not claimed or bool(claimed & _evidence_entry_purposes(entry))

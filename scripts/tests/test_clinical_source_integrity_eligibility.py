@@ -498,7 +498,8 @@ def test_signed_riboflavin_source_closes_only_after_existing_purpose_scope_is_en
     row = {'name': 'Riboflavin', 'canonical_id': 'riboflavin', 'quantity': 400, 'unit': 'mg',
            'raw_source_path': 'ingredientRows[0]', 'mapped': True, 'score_eligible_by_cleaner': True}
     match = {'id': record['id'], 'ingredient': row['name'], 'matched_source_row_refs': ['ingredientRows[0]']}
-    for claim, expected in [('Migraine support', 'applicable'), ('Cognitive performance', 'unresolved')]:
+    # An unrelated cognitive claim cannot borrow the migraine scope (October 28 rulings).
+    for claim, expected in [('Migraine support', 'applicable'), ('Cognitive performance', 'not_applicable')]:
         product = {'product_name': claim, 'ingredient_quality_data': {'ingredients_scorable': [row]}}
         assert assess_clinical_applicability(product, match, assess_amount=False)['status'] == expected
     assert record['health_goals_supported'] == []

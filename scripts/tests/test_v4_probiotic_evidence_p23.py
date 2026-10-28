@@ -58,6 +58,20 @@ def _clinical_strain(
     }
 
 
+@pytest.fixture
+def registry_record_path_only(monkeypatch):
+    """Isolate the synthetic registry-record path from LGG's real native contexts.
+
+    A claim-free or digestive LGG label now qualifies for LGG's approved
+    GI/respiratory meta-analysis; these tests are about the record path alone.
+    """
+    from copy import deepcopy
+    import studied_formulas
+    registry = deepcopy(studied_formulas._clinical_strain_registry())
+    registry["STRAIN_LGG"]["study_contexts"] = []
+    monkeypatch.setattr(studied_formulas, "_clinical_strain_registry", lambda: registry)
+
+
 def _product(
     *,
     product_name: str = "Daily Digestive Probiotic",
@@ -104,7 +118,7 @@ def _infant_product():
         clinical_strains=[{"strain": "Bifidobacterium lactis BB-12", "clinical_id": "STRAIN_LACTIS_BB12"}])
 
 
-def test_undosed_strain_receives_reviewed_family_credit_without_dose_points():
+def test_undosed_strain_receives_reviewed_family_credit_without_dose_points(registry_record_path_only):
     from scoring_v4.modules.probiotic_evidence import score_evidence
     payload = score_evidence(_product())
     assert payload["max"] == 20
@@ -168,7 +182,9 @@ def test_generic_positioning_limits_applicability_without_changing_certainty():
     direct = score_evidence(_product())
     broad = score_evidence(_product(product_name="Daily Probiotic 50 Billion"))
     assert broad["components"]["evidence_family_certainty"] == direct["components"]["evidence_family_certainty"]
-    assert broad["components"]["product_applicability"] == 1.5
+    # Both labels now reach LGG's approved GI/respiratory meta-analysis.
+    assert direct["components"]["product_applicability"] == 6.0
+    assert broad["components"]["product_applicability"] == 3.0
     assert broad["metadata"]["indication_relevance_level"] == "broad"
 
 
@@ -182,7 +198,8 @@ def test_structured_positioning_changes_applicability_only():
     assert after["metadata"]["indication_relevance_level"] == "direct"
     assert after["components"]["evidence_family_certainty"] == before["components"]["evidence_family_certainty"]
     assert after["components"]["independent_replication_consistency"] == before["components"]["independent_replication_consistency"]
-    assert after["components"]["product_applicability"] == 3
+    assert before["components"]["product_applicability"] == 3.0
+    assert after["components"]["product_applicability"] == 6.0
 
 
 def test_precautions_do_not_create_product_positioning():
@@ -225,7 +242,7 @@ def test_research_that_does_not_apply_to_the_product_earns_no_evidence_points():
 
 
 @pytest.mark.parametrize("direction,certainty,total", [("negative",0,0), ("null",0,0), ("mixed",4,7)])
-def test_independent_record_direction_is_not_replaced_by_strain_support(direction, certainty, total):
+def test_independent_record_direction_is_not_replaced_by_strain_support(registry_record_path_only, direction, certainty, total):
     from scoring_v4.modules.probiotic_evidence import score_evidence
     payload = score_evidence(_product(matches=[_match(effect_direction=direction)]))
     assert payload["components"]["evidence_family_certainty"] == certainty
@@ -410,7 +427,7 @@ def test_native_evidence_state_is_independent_of_owned_label_amount():
                for result in results)
 
 
-def test_native_and_registry_evidence_are_both_consumed_without_stacking():
+def test_native_and_registry_evidence_are_both_consumed_without_stacking(registry_record_path_only):
     from scoring_v4.modules.probiotic_evidence import score_evidence
     # A registry summary can supply credit when the native contexts do not
     # establish the label's purpose; neither path must silently disappear.

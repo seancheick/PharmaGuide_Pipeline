@@ -1396,11 +1396,12 @@ def test_native_exclusion_extension_cannot_silently_cover_other_purpose_types():
 
 @pytest.mark.parametrize('rid,claim,expected', [
     ('INGR_RIBOFLAVIN_B2', 'Migraine support', 'applicable'),
-    ('INGR_RIBOFLAVIN_B2', 'Mental clarity support', 'unresolved'),
-    ('INGR_RIBOFLAVIN_B2', 'Not for migraine support', 'unresolved'),
+    ('INGR_RIBOFLAVIN_B2', 'Mental clarity support', 'not_applicable'),
+    # A negated phrase is not a claim; a claim-free label keeps scoped credit.
+    ('INGR_RIBOFLAVIN_B2', 'Not for migraine support', 'applicable'),
     ('INGR_CRANBERRY', 'Recurrent UTI prevention', 'applicable'),
-    ('INGR_CRANBERRY', 'Immune support', 'unresolved'),
-    ('INGR_CRANBERRY', 'Urinary tract support', 'unresolved'),
+    ('INGR_CRANBERRY', 'Immune support', 'not_applicable'),
+    ('INGR_CRANBERRY', 'Urinary tract support', 'applicable'),
 ])
 def test_signed_condition_scopes_are_enforced_by_the_generic_consumer(rid, claim, expected):
     record = reviewed_entries()[rid]
@@ -1423,7 +1424,9 @@ def test_signed_prevention_scope_cannot_be_inferred_from_warnings():
                'ingredient_quality_data': {'ingredients_scorable': [row]}}
     result = assess_clinical_applicability(product, {'id': 'INGR_CRANBERRY', 'ingredient': row['name'],
         'matched_source_row_refs': ['ingredientRows[0]']}, assess_amount=False)
-    assert result['status'] == 'unresolved'
+    # A warning is neither a claim nor an assumed diagnosis: scoped credit only.
+    assert result['status'] == 'applicable'
+    assert result['claim_alignment']['state'] == 'absent'
 
 
 @pytest.mark.parametrize('target,expected', [
@@ -1518,3 +1521,205 @@ def test_a_reviewed_scope_keeps_every_legacy_excluded_form():
         if record.get('applicability') and record.get('exclude_aliases')
     }
     assert {record_id: forms for record_id, forms in missing.items() if forms} == {}
+
+
+# Condition-specific evidence: claim and population applicability (rulings of
+# October 28, 2026; scripts/audits/condition_scope_rule_20261028). No label
+# claim is required, credit stays condition-scoped, an unrelated claim earns
+# nothing, and special populations need explicit product targeting.
+
+def _row(canonical, name, quantity=500, unit='mg', ref='ingredientRows[0]', **extra):
+    return {'name': name, 'raw_source_text': name, 'canonical_id': canonical, 'quantity': quantity,
+            'unit': unit, 'raw_source_path': ref, 'mapped': True, 'score_eligible_by_cleaner': True,
+            'source_section': 'active', **extra}
+
+
+def _assess(rid, row, product_name, statements=(), target_groups=()):
+    product = {'product_name': product_name, 'ingredient_quality_data': {'ingredients_scorable': [row]},
+               'statements': [{'type': 'Formulation re: Other', 'notes': text} for text in statements],
+               'targetGroups': list(target_groups)}
+    entry = {'id': rid, 'ingredient': row['name'], 'matched_source_row_refs': [row['raw_source_path']]}
+    return assess_clinical_applicability(product, entry, assess_amount=False)
+
+
+@pytest.mark.parametrize('rid,canonical,name', [
+    ('INGR_CRANBERRY', 'cranberry', 'Cranberry extract'),
+    ('INGR_SELENIUM', 'selenium', 'Selenium'),
+    ('INGR_INOSITOL', 'inositol', 'Inositol'),
+    ('INGR_VITAMIN_C', 'vitamin_c', 'Vitamin C'),
+    ('INGR_RIBOFLAVIN_B2', 'riboflavin', 'Riboflavin'),
+])
+def test_claim_free_label_earns_scoped_credit_from_signed_condition_research(rid, canonical, name):
+    result = _assess(rid, _row(canonical, name, quantity=1000), name)
+    assert result['status'] == 'applicable'
+    assert result['claim_alignment']['state'] == 'absent'
+    assert result['population_applicability']['state'] == 'eligible'
+    assert result['supported_outcomes'] == reviewed_entries()[rid]['applicability']['supported_outcomes']
+
+
+def test_claim_free_coq10_keeps_heart_failure_scope():
+    result = _assess('INGR_COQ10', _row('coq10', 'CoQ10', quantity=100), 'CoQ10 100 mg')
+    assert result['status'] == 'applicable'
+    assert result['claim_alignment']['state'] == 'absent'
+    assert result['supported_outcomes'] == ['heart_failure_adjunct']
+    assert 'heart failure' in result['studied_population'].lower()
+
+
+@pytest.mark.parametrize('product_name,statements', [
+    ('CoQ10 Energy Support', ()),
+    ('CoQ10 100 mg', ('CoQ10 supports cellular energy production.',)),
+    # A signed product-level exclusion keeps its meaning beside an aligned claim.
+    ('CoQ10 Energy Support', ('CoQ10 supports heart function.',)),
+])
+def test_coq10_energy_positioning_cannot_borrow_heart_failure_research(product_name, statements):
+    result = _assess('INGR_COQ10', _row('coq10', 'CoQ10', quantity=100), product_name, statements)
+    assert result['status'] == 'not_applicable'
+    assert result['reason_code'] == 'label_purpose_evidence_mismatch'
+
+
+def test_broad_heart_health_claim_is_not_general_cardiovascular_efficacy():
+    row = _row('coq10', 'CoQ10', quantity=100)
+    # Dr Pham's signed CoQ10 exclusions name heart and cardiovascular health:
+    # the heart-failure sources cannot substantiate that positioning at all.
+    signed = _assess('INGR_COQ10', row, 'CoQ10 100 mg', ('CoQ10 supports heart health.',))
+    assert signed['status'] == 'not_applicable'
+    assert signed['reason_code'] == 'label_purpose_evidence_mismatch'
+    # An unexcluded related claim keeps only the studied heart-failure scope.
+    related = _assess('INGR_COQ10', row, 'CoQ10 100 mg', ('CoQ10 supports heart function.',))
+    assert related['status'] == 'applicable'
+    assert related['claim_alignment']['state'] == 'aligned'
+    assert related['supported_outcomes'] == ['heart_failure_adjunct']
+    assert 'Not energy' in related['studied_population']
+
+
+def test_potassium_blood_pressure_claim_keeps_hypertensive_population_scope():
+    result = _assess('INGR_POTASSIUM', _row('potassium', 'Potassium', quantity=99), 'Potassium 99 mg',
+                     ('Potassium supports healthy blood pressure.',))
+    assert result['status'] == 'applicable'
+    assert result['claim_alignment']['state'] == 'aligned'
+    assert 'hypertension' in result['studied_population'].lower()
+    assert 'not significant in normotensive' in result['studied_population']
+
+
+def test_pcos_cycle_regularity_is_not_digestive_regularity():
+    from evidence_resolver import evidence_indication_categories
+    assert 'digestive' not in evidence_indication_categories('pcos_menstrual_cycle_regularity')
+    assert 'digestive' in evidence_indication_categories('supports bowel regularity')
+    result = _assess('INGR_INOSITOL', _row('inositol', 'Inositol', quantity=2000), 'Inositol',
+                     ('Inositol supports digestive regularity.',))
+    assert result['status'] == 'not_applicable'
+    assert result['claim_alignment']['state'] == 'unrelated'
+
+
+@pytest.mark.parametrize('text,category,present', [
+    ('supports healthy blood pressure', 'cardiovascular', True),
+    ('promote heart health', 'cardiovascular', True),
+    ('blood orange flavor', 'cardiovascular', False),
+    ('maintain strong bones', 'bone', True),
+    ('extra strength formula', 'muscle_strength_mass', False),
+    ('supports lean muscle mass', 'muscle_strength_mass', True),
+    ('acute chemotherapy nausea', 'nausea', True),
+    ('acute chemotherapy nausea', 'digestive', False),
+    ('hashimoto_thyroiditis', 'thyroid', True),
+    ('knee_osteoarthritis', 'joint', True),
+])
+def test_indication_phrases_are_recognized_narrowly(text, category, present):
+    from evidence_resolver import evidence_indication_categories
+    assert (category in evidence_indication_categories(text)) is present
+
+
+def test_recognized_but_unclassifiable_claim_is_not_claim_absence():
+    result = _assess('INGR_SELENIUM', _row('selenium', 'Selenium', quantity=0.2), 'Selenium',
+                     ('Selenium supports normal enzyme activity.',))
+    assert result['status'] == 'unresolved'
+    assert result['claim_alignment']['state'] == 'ambiguous'
+    assert result['claim_alignment']['sources'] == ['statements[0].notes:sentence[0]']
+
+
+def test_mixed_claims_keep_supported_research_without_supporting_the_unrelated_claim():
+    result = _assess('INGR_VITAMIN_C', _row('vitamin_c', 'Vitamin C', quantity=1000), 'Vitamin C',
+                     ('Vitamin C supports immune health. Vitamin C supports healthy skin.',))
+    assert result['status'] == 'applicable'
+    assert result['claim_alignment']['state'] == 'mixed'
+    assert result['supported_outcomes'] == ['common_cold_severity']
+
+
+def test_aligned_claim_earns_no_more_than_no_claim():
+    row = _row('cranberry', 'Cranberry extract')
+    silent = _assess('INGR_CRANBERRY', row, 'Cranberry')
+    claimed = _assess('INGR_CRANBERRY', row, 'Cranberry', ('Cranberry extract supports urinary tract health.',))
+    assert claimed['claim_alignment']['state'] == 'aligned'
+    assert {k: v for k, v in silent.items() if k != 'claim_alignment'} == \
+        {k: v for k, v in claimed.items() if k != 'claim_alignment'}
+
+
+def test_scoped_credit_cannot_bypass_preparation_or_population_limits():
+    seed = _assess('INGR_CRANBERRY', _row('cranberry', 'Cranberry seed oil'), 'Cranberry seed oil')
+    assert seed['status'] == 'not_applicable'
+    men = _assess('INGR_CRANBERRY', _row('cranberry', 'Cranberry extract'), 'Cranberry',
+                  target_groups=['Adults - Men ONLY'])
+    assert men['status'] == 'not_applicable'
+    assert men['population_applicability']['state'] == 'explicit_conflict'
+
+
+def test_general_ginger_uses_only_its_adult_context_and_pregnancy_ginger_only_its_pregnancy_context():
+    row = _row('ginger', 'Ginger root extract', quantity=1000)
+    general = _assess('INGR_GINGER', row, 'Ginger root')
+    assert general['status'] == 'applicable'
+    assert general['supported_outcomes'] == ['acute_chemotherapy_nausea']
+    assert 'pregnan' not in general['studied_population'].lower()
+    prenatal = _assess('INGR_GINGER', row, 'Prenatal Ginger', target_groups=['Pregnant'])
+    assert prenatal['status'] == 'applicable'
+    assert prenatal['supported_outcomes'] == ['nausea_vomiting_of_pregnancy']
+    assert 'cancer' not in prenatal['studied_population'].lower()
+
+
+def test_pregnancy_targeted_label_cannot_inherit_nonpregnant_pcos_result():
+    result = _assess('INGR_INOSITOL', _row('inositol', 'Inositol', quantity=2000), 'Prenatal Inositol',
+                     target_groups=['Pregnant'])
+    assert result['status'] == 'not_applicable'
+    assert result['population_applicability']['state'] == 'explicit_conflict'
+
+
+@pytest.mark.parametrize('product_name,targets,state', [
+    ('Daily Probiotic', [], 'special_targeting_absent'),
+    ('Baby Probiotic Drops', ['Infants (0-12 months)'], 'eligible'),
+    # A children's product is not an infant product: colic was studied in infants.
+    ('Kids Probiotic', ['Children (4-8 Years)'], 'special_targeting_absent'),
+])
+def test_infant_only_research_needs_infant_targeting_not_a_colic_claim(product_name, targets, state):
+    from clinical_applicability import assess_context_population
+    import studied_formulas
+    colic = next(c for c in studied_formulas._clinical_strain_registry()['STRAIN_LACTIS_BB12']['study_contexts']
+                 if c['condition'] == 'infant_colic')
+    product = {'product_name': product_name, 'targetGroups': targets}
+    assert assess_context_population(product, colic) == state
+
+
+def test_precaution_naming_children_is_not_infant_targeting():
+    from clinical_applicability import assess_context_population
+    import studied_formulas
+    colic = next(c for c in studied_formulas._clinical_strain_registry()['STRAIN_LACTIS_BB12']['study_contexts']
+                 if c['condition'] == 'infant_colic')
+    product = {'product_name': 'Daily Probiotic', 'statements': [
+        {'type': 'Precautions', 'notes': 'Keep out of reach of children. Not for infants.'}]}
+    assert assess_context_population(product, colic) == 'special_targeting_absent'
+
+
+@pytest.mark.parametrize('product_name,targets,credited', [
+    ('Daily Probiotic', [], False),
+    ('Baby Probiotic Drops', ['Infants (0-12 months)'], True),
+])
+def test_bb12_infant_colic_research_reaches_only_infant_products(product_name, targets, credited):
+    from scoring_v4.modules.probiotic_evidence import score_evidence
+    from test_probiotic_applicability_rubric import strain_product
+    product = strain_product(clinical_id='STRAIN_LACTIS_BB12',
+                             name='Bifidobacterium animalis subsp. lactis BB-12', dose=1e9)
+    product['product_name'] = product_name
+    product['targetGroups'] = targets
+    evidence = score_evidence(product)
+    colic_pmids = {'31797399', '34550055'}
+    used = {pmid for strain in evidence['metadata']['evidence_assessment']['strain_assessments']
+            for pmid in strain.get('scoring_source_pmids') or []}
+    assert bool(used & colic_pmids) is credited
+    assert (evidence['score'] > 0) is credited

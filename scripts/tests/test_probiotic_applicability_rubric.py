@@ -259,8 +259,12 @@ def test_registry_medium_support_is_not_lost():
     assessment = studied_formulas.assess_probiotic_evidence(p)["strain_assessments"][0]
     assert assessment["research_accepted"] is True
     assert assessment["support_level"] == "moderate"
-    # A reviewed summary does not replace qualifying applicable primary outcomes.
-    assert score_evidence(p)["score"] == 0
+    # The credit comes from the approved IBS context (scoped, no claim
+    # required), not from the reviewed summary.
+    result = score_evidence(p)
+    assert result["score"] == 13
+    assert [c["context_id"] for c in result["metadata"]["contributing_native_contexts"]] == [
+        "p299v_ibs_rome3_22912552"]
 
 
 def test_unfavorable_strain_does_not_hide_a_separate_supported_record():
@@ -280,7 +284,9 @@ def test_unfavorable_strain_does_not_hide_a_separate_supported_record():
 def test_evidence_copy_distinguishes_missing_applicability_from_poor_quality():
     from scoring_v4.quality_score import _pillar_evidence
     from scoring_v4.quality_score_config import config
-    dim = score_evidence(strain_product())
+    product = strain_product()
+    product["product_name"] = "Sleep support probiotic"  # Unrelated to every LGG context.
+    dim = score_evidence(product)
     result = _pillar_evidence(dim, 20, "probiotic", config())
     assert "preparation, purpose and population" in result["reason"]
     assert dim["score"] == 0
@@ -296,6 +302,7 @@ def test_unfavorable_research_is_not_described_as_missing_research():
     from test_v4_probiotic_evidence_p23 import _match
 
     p = strain_product()
+    p["product_name"] = "Sleep support probiotic"  # Keeps LGG's native contexts out.
     # Synthetic accepted match (the helper's own id): the real backed STRAIN_LGG
     # record is research-only since Dr. Pham's 2026-10-28 ruling (the strain
     # registry is the one scoring owner), so it cannot carry this direction.
@@ -412,7 +419,7 @@ def test_evidence_explanation_never_reintroduces_amount_ownership(amount):
 
 
 @pytest.mark.parametrize('dose', [None, 1e10])
-@pytest.mark.parametrize('claim', ['Digestive Health Probiotic', 'IBS Probiotic',
+@pytest.mark.parametrize('claim', ['Digestive Health Probiotic',
     'Not for irritable bowel syndrome. Digestive Health Probiotic'])
 def test_299v_treatment_context_does_not_transfer_from_broad_or_negated_label_purpose(dose, claim):
     product = strain_product(dose=dose, clinical_id='STRAIN_PLANTARUM_299V',
@@ -435,8 +442,19 @@ def test_exact_source_condition_is_a_claim_match_not_patient_membership(dose):
     assert len(used) == 1
     assert used[0]['claimed_purpose_assessment'] == {
         'status': 'applicable', 'reason_code': 'affirmative_exact_source_condition_claim',
-        'condition': 'irritable_bowel_syndrome'}
+        'condition': 'irritable_bowel_syndrome',
+        'claim_alignment': {'state': 'aligned', 'sources': ['affirmative_exact_source_condition_claim']}}
     assert 'patient' not in used[0]['claimed_purpose_assessment']
+    # An abbreviated aligned claim reaches the same context; a claim-free label
+    # gets the same scoped context. The 16-vs-13 gap is the probiotic formula's
+    # positioning weight (direct 1.0, broad 0.5), not the shared gate.
+    product['product_name'] = 'IBS Probiotic'
+    assert score_evidence(product)['score'] == 16
+    product['product_name'] = 'Daily Probiotic'
+    claim_free = score_evidence(product)
+    assert claim_free['score'] == 13
+    assert [c['context_id'] for c in claim_free['metadata']['contributing_native_contexts']] == [
+        used[0]['context_id']]
 
 
 @pytest.mark.parametrize('purpose', ['prevention', 'physiology', 'challenge'])
@@ -455,7 +473,8 @@ def test_native_prevention_controls_do_not_require_a_treatment_condition_claim(m
                              name='Lactobacillus plantarum 299v')
     product['product_name'] = 'Digestive Health Probiotic'
     result = score_evidence(product)
-    assert result['score'] == (0 if purpose == 'challenge' else 16)
+    # One claim rule for every purpose, challenge included (October 28 rulings).
+    assert result['score'] == 16
 
 
 def test_exact_condition_claim_cannot_override_special_population_guard(monkeypatch):
