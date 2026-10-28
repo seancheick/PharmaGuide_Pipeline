@@ -1423,3 +1423,28 @@ def test_unmatched_condition_context_cannot_lend_population_scope(monkeypatch, t
     result = ca.assess_clinical_applicability(product, {'id': 'INGR_CRANBERRY', 'ingredient': row['name'],
         'matched_source_row_refs': ['ingredientRows[0]']}, assess_amount=False)
     assert result['status'] == 'not_applicable'
+
+
+@pytest.mark.parametrize('case', ['pending', 'source_mismatch', 'unsigned', 'missing_contexts'])
+def test_condition_scoped_policy_cannot_fall_back_when_review_context_is_lost(monkeypatch, case):
+    import clinical_applicability as ca
+    records = deepcopy(reviewed_entries())
+    record = records['INGR_CRANBERRY']
+    context = record['study_contexts'][0]
+    if case == 'pending':
+        context['review_status'] = 'source_verified_pending_clinical_review'
+        context['scoring_eligible'] = False
+    elif case == 'source_mismatch':
+        context['source_pmids'] = ['99999999']
+    elif case == 'unsigned':
+        context.pop('clinical_review')
+    else:
+        record['study_contexts'] = []
+    monkeypatch.setattr(ca, 'reviewed_entries', lambda: records)
+    row = {'name': 'Cranberry extract', 'raw_source_text': 'Cranberry extract', 'canonical_id': 'cranberry', 'quantity': 400, 'unit': 'mg',
+           'raw_source_path': 'ingredientRows[0]', 'mapped': True, 'score_eligible_by_cleaner': True, 'source_section': 'active'}
+    product = {'product_name': 'Recurrent UTI prevention', 'targetGroups': ['Adults - Men ONLY'],
+               'ingredient_quality_data': {'ingredients_scorable': [row]}}
+    result = ca.assess_clinical_applicability(product, {'id': 'INGR_CRANBERRY',
+        'ingredient': row['name'], 'matched_source_row_refs': ['ingredientRows[0]']}, assess_amount=False)
+    assert result['status'] == 'unresolved'

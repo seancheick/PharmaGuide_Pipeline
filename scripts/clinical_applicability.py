@@ -600,13 +600,23 @@ def assess_clinical_applicability(product: Mapping, entry: Mapping, *, assess_am
     # An explicitly condition-scoped outcome is an existing reviewed constraint,
     # not permission for every claim on a name-matched ingredient. Reuse the
     # native purpose owner; native category callers keep their current rules.
-    condition_scopes = [
+    declared_condition_scopes = [
         context for context in reference.get("study_contexts") or []
-        if isinstance(context, Mapping) and context_accepted_for_scoring(context)
+        if isinstance(context, Mapping)
         and _key(context.get("condition")) in {_key(value) for value in policy.get("supported_outcomes", [])}
-        and (not source_pmids or source_pmids.intersection(str(pmid) for pmid in context.get("source_pmids") or []))
         and context.get("purpose") in {"treatment", "challenge", "prevention"}
     ]
+    condition_scopes = [context for context in declared_condition_scopes
+        if context_accepted_for_scoring(context)
+        and (not source_pmids or source_pmids.intersection(str(pmid) for pmid in context.get("source_pmids") or []))]
+    if ((declared_condition_scopes and not condition_scopes)
+            or (not reference.get("study_contexts")
+                and isinstance(reference.get("scoring_eligible"), bool)
+                and policy.get("supported_outcomes"))):
+        # Losing a signed context or its source binding cannot restore the
+        # legacy unscoped path. Legacy records without an explicit eligibility
+        # decision retain their existing preparation-only behavior.
+        return {"status": "unresolved", "reason_code": "invalid_applicability_contract"}
     if condition_scopes:
         decisions = [assess_native_claimed_purpose(product, context, require_condition=True)
                      for context in condition_scopes]
