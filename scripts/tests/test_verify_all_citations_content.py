@@ -494,3 +494,21 @@ def test_cli_unresolved_retrieval_is_not_success(monkeypatch):
     monkeypatch.setattr(vac, 'verify_file', lambda *a: {
         'file': 'timing_rules.json', 'not_found': 1, 'entries': []})
     assert vac.main() == 1
+
+
+
+def test_standardized_botanical_marker_topic_is_not_a_proprietary_identity_alias():
+    config = next(c for c in vac.FILE_CONFIGS if c['file'] == 'standardized_botanicals.json')
+    entry = {'standard_name': 'Slendesta', 'aliases': ['Slendesta'],
+             'markers': ['proteinase inhibitor II'],
+             'marker_compounds': ['PI2 (proteinase inhibitor II)', 'potato protein fraction']}
+    words = vac.extract_topic_words(entry, config)
+    # PMID28485429 abstract names PI2; its full methods name Slendesta/Kemin.
+    article = {'title': 'Potato protease inhibitor II suppresses postprandial appetite in healthy women',
+               'abstract': 'A capsule containing potato extract standardized to 15 or 30 mg PI2.'}
+    assert vac.content_matches(article, words)[0] in {'match', 'partial'}
+    assert 'PI2' not in entry['aliases']
+    for wrong in [{'title': 'Protease inhibitors in HIV treatment', 'abstract': 'Generic enzyme inhibitor research.'},
+                  {'title': 'PI20 protease inhibitors in HIV treatment', 'abstract': 'An unrelated numbered protein.'},
+                  {'title': 'Vitamin D and skeletal outcomes', 'abstract': 'An unrelated nutrient trial.'}]:
+        assert vac.content_matches(wrong, words)[0] == 'mismatch'
