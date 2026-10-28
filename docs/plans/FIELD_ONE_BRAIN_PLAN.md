@@ -113,7 +113,11 @@ from 11 to 17.
 - After that branch merges, this lane rebases onto it (lines 117–150 changed) and then takes
   the `base_points`/`multiplier` override deletion and the move of
   `STUDY_TYPE_BASE_POINTS`/`EVIDENCE_LEVEL_MULTIPLIERS` into config. The evidence-calibration
-  session handed both back to this lane on October 28. `study_type_vocab.json` also carries `base_points`, pinned by
+  session handed both back to this lane on October 28, together with routing
+  `generic_evidence.py:718`'s `study_type`-only reference check through
+  `clinical_evidence_schema.is_reference_only`. Its batch head is 6ff44af2e, and it confirmed
+  the 11 folate products are exactly its measured movers (Evidence 18.9 → 12.2; for example,
+  284181 goes from 97.9 to 91.2). `study_type_vocab.json` also carries `base_points`, pinned by
   `test_study_type_vocab_contract`.
 
 **Therapeutic `upper_limit` (read-only).** Of 43 entries, 34 hold a value and 9 are null. None of
