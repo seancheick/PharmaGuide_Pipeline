@@ -54,7 +54,7 @@ def test_literature_does_not_promote_animal_or_narrative_sources_to_human_trials
 
 def test_areds2_primary_null_and_subgroup_are_distinct():
     r=literature()['zeaxanthin']
-    assert r['qualifying_human_studies'][0]['effect'] == 'null'
+    assert r['qualifying_human_studies'][0]['effect_direction'] == 'null'
     assert 'subgroup' in r['qualifying_human_studies'][1]['primary_endpoint'].lower()
     assert r['qualifying_human_studies'][1]['scoring_eligible'] is False
 
@@ -121,7 +121,7 @@ def test_lysine_review_does_not_invent_a_positive_one_gram_threshold():
     row = literature()['l_lysine']
     study = next(study for study in row['qualifying_human_studies']
                  if study['pmid'] == '26252373')
-    assert study['effect'] == 'null'
+    assert study['effect_direction'] == 'null'
     assert 'no evidence of efficacy for lysine' in study['primary_endpoint']
     assert 'no established 1 g/day threshold' in row['applicability_decision']
 
