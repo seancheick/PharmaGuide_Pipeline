@@ -315,3 +315,14 @@ def test_preworkout_formulation_pin_follows_corrected_citrulline_parent():
     assert count == 4
     assert actual == pytest.approx(expected)
     assert actual == pytest.approx(14.175824175824177)
+
+
+def test_protein_fixture_confidence_retains_unresolved_amino_acid_assessments():
+    validation = _validation_module()
+    artifact = validation.build_scored_artifact(validation.load_fixture_suite().by_id("sports_protein__ideal").product)
+    pending = {row["canonical_id"] for row in artifact["assessment_readiness"]["evidence"]["ingredient_assessments"]
+               if row["state"] == "not_yet_evaluated"}
+    assert pending == {"l_isoleucine", "l_valine"}
+    assert artifact["quality_score_confidence"] == "moderate"
+    assert artifact["quality_score_v4_100"] == 100.0
+    assert artifact["assessment_readiness"]["release_assessment"]["is_complete"] is False

@@ -4052,7 +4052,8 @@ def test_v4_build_populates_columns_and_quarantines_not_scored(monkeypatch):
         assert scored["quality_score_v4_100"] == 89
         assert scored["quality_score_status"] == "scored"
         assert scored["product_safety_status"] == "no_known_catalog_concern"
-        assert scored["quality_assessment_status"] == "complete"
+        assert scored["quality_assessment_status"] == "partial"
+        assert s1["assessment_readiness"]["release_assessment"]["is_complete"] is False
         assert scored["quality_tier"] == "Very good"
         assert scored["score_model_version"] == "v4"
         assert scored["score_100_equivalent"] == 89  # whole-number /100 mirror
@@ -4073,7 +4074,7 @@ def test_v4_build_populates_columns_and_quarantines_not_scored(monkeypatch):
         assert blob["quality_pillars_v4"]
         assert blob["v4_score_provenance"]["score_model_version"] == "v4"
         assert blob["product_safety_status"] == "no_known_catalog_concern"
-        assert blob["quality_assessment_status"] == "complete"
+        assert blob["quality_assessment_status"] == "partial"
         assert (
             blob["v4_score_provenance"]["product_safety_status"]
             == "no_known_catalog_concern"

@@ -114,3 +114,33 @@ def test_complex_with_nested_children_stays_proprietary(normalizer):
         ],
     )
     assert row.get("proprietaryBlend") is True
+
+
+def test_verified_spinach_group_is_not_shadowed_by_food_umbrella(normalizer):
+    result = normalizer._enhanced_ingredient_mapping('Spinach Whole Herb Extract', [], ingredient_group='Spinach')
+    assert result[0] == 'Spinach'
+    assert normalizer._exact_ingredient_group_lookup('Spinach')['canonical_id'] == 'spinach'
+
+
+@pytest.mark.parametrize('name', ['Not Spinach extract', 'Spinach-free extract', 'Cranberry extract'])
+def test_botanical_group_does_not_override_negated_or_conflicting_label(normalizer, name):
+    assert normalizer._perform_ingredient_mapping(name, [], ingredient_group='Spinach')[0] != 'Spinach'
+
+
+def test_complete_reishi_source_form_uses_existing_exact_identity(normalizer):
+    row = {'name': 'Reishi Mushroom Fruiting Body Extract', 'ingredientGroup': 'Reishi Mushroom',
+           'category': 'botanical', 'forms': [{'name': 'Ganoderma lucidum Fruiting Body Extract', 'category': 'botanical', 'ingredientGroup': 'Reishi mushroom'}]}
+    assert normalizer._single_declared_source_form_identity(row) == ('Reishi', 'reishi', 'ingredient_quality_map')
+
+
+@pytest.mark.parametrize('mutation', ['conflicting_group', 'negated', 'partial', 'provided', 'multiple', 'nested'])
+def test_incomplete_or_conflicting_reishi_source_form_cannot_supply_identity(normalizer, mutation):
+    row = {'name': 'Reishi Mushroom Fruiting Body Extract', 'ingredientGroup': 'Reishi Mushroom',
+           'category': 'botanical', 'forms': [{'name': 'Ganoderma lucidum Fruiting Body Extract', 'category': 'botanical', 'ingredientGroup': 'Reishi mushroom'}]}
+    if mutation == 'conflicting_group': row['ingredientGroup'] = 'Shiitake Mushroom'
+    elif mutation == 'negated': row['name'] = 'Not Reishi mushroom extract'
+    elif mutation == 'partial': row['forms'][0]['percent'] = 50
+    elif mutation == 'provided': row['forms'][0]['prefix'] = 'providing'
+    elif mutation == 'multiple': row['forms'].append({'name': 'Shiitake mushroom extract'})
+    else: row['nestedRows'] = [{'name': 'Shiitake'}]
+    assert normalizer._single_declared_source_form_identity(row) is None

@@ -1467,6 +1467,18 @@ def _evidence_owner_selection(
                 {str(row.get("canonical_id") or "").strip().lower() for row in owners},
                 {evidence_row_key(row) for row in owners},
             )
+    # A sole known active is what a single-ingredient label is about even
+    # when its amount uses volume/CFU rather than a mass or its title is a brand.
+    # Structural totals and lent masses cannot establish this fallback.
+    if (len(rows) == 1 and not others
+            and rows[0].get("scoreable_identity") is True
+            and str(rows[0].get("canonical_id") or "").strip()
+            and rows[0].get("identity_disposition") != "identity_conflict"
+            and not is_lent_blend_mass(rows[0])
+            and not any(rows[0].get(key) for key in (
+                "is_blend_header", "is_proprietary_blend", "blend_total_weight_only"))):
+        return ({str(rows[0].get("canonical_id") or "").strip().lower()},
+                {evidence_row_key(rows[0])})
     return {
         str(row.get("canonical_id") or "").strip().lower()
         for row in rows

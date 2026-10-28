@@ -4,7 +4,7 @@
     "description": "Reviewed GHOST-SUSPECT findings from verify_backed_studies_citations.py --strict. A suspect blocks the release gate until it is reviewed here with a rationale that states why the live PubMed record does support the entry. Removing an entry re-arms the gate for that citation.",
     "schema_version": "5.0.0",
     "last_updated": "2026-10-27",
-    "total_entries": 4
+    "total_entries": 6
   },
   "reviewed": [
     {
@@ -37,6 +37,22 @@
       "live_title": "Notice of Correction.",
       "rationale": "Provenance-only correction notice, not an efficacy source. Live NIH PubMed identifies35917215 as the ErratumFor34415830 PQQ disodium cognitive trial, DOI10.1080/27697061.2022.2099711. The generic title has no ingredient word, causing a title-overlap false positive. The PQQ record explicitly retains scoring_eligible=false because correctedTable4content remains unread; this acknowledgment verifies the correction link only and does not qualify original numbers, efficacy or safety.",
       "reviewed_by": "Codex live NIH correction-link verification",
+      "reviewed_at": "2026-10-27"
+    },
+    {
+      "pmid": "11789591",
+      "entry_id": "INGR_GLUCOSAMINE_SULFATE",
+      "live_title": "Effect of SKI 306X, a new herbal anti-arthritic agent, in patients with osteoarthritis of the knee: a double-blind placebo controlled study.",
+      "rationale": "The pending synthesis context cites this solely as a source-bibliography pointer. Live PubMed verifies SKI306X is a three-herb mixture, not glucosamine. Its doses/results must not qualify glucosamine or establish component quantities. The context is scoring_eligible=false; the former included_study_pmids designation was removed from these new, unapproved facts and all bibliography IDs retained as limitations. This acknowledgment verifies bibliographic identity only, not ingredient efficacy or a completed source assessment.",
+      "reviewed_by": "Codex live PubMed source-content verification",
+      "reviewed_at": "2026-10-27"
+    },
+    {
+      "pmid": "33260552",
+      "entry_id": "INGR_L_THEANINE",
+      "live_title": "Subacute Ingestion of Caffeine and Oolong Tea Increases Fat Oxidation without Affecting Energy Expenditure and Sleep Architecture: A Randomized, Placebo-Controlled, Double-Blinded Cross-Over Trial.",
+      "rationale": "The pending source context cites this only as a source-bibliography pointer, not an independently qualifying theanine trial. Live PubMed names oolong tea/caffeine and fat oxidation; no isolated theanine exposure or cognitive benefit is established. The context remains scoring_eligible=false. Bibliographic citation is not proof of inclusion in a specific outcome pool, exact preparation, efficacy or dose; all pointers are retained with that limitation.",
+      "reviewed_by": "Codex live PubMed source-content verification",
       "reviewed_at": "2026-10-27"
     }
   ]

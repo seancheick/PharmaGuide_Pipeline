@@ -433,6 +433,9 @@ def test_native_prevention_controls_do_not_require_a_treatment_condition_claim(m
     context = next(c for c in registry['STRAIN_PLANTARUM_299V']['study_contexts']
                    if c['context_id'] == 'p299v_ibs_rome3_22912552')
     # Synthetic scope control; no production clinical claim or approval changes.
+    # This synthetic purpose control is independent of the signed IBS-only
+    # exclusion policy now carried by the production treatment context.
+    context.pop('applicability', None)
     context.update(purpose=purpose, condition='digestive_symptoms')
     context['population'] = {'age_group': 'adult', 'description': 'Healthy adults'}
     monkeypatch.setattr(studied_formulas, '_clinical_strain_registry', lambda: registry)

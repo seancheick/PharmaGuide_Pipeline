@@ -1300,4 +1300,8 @@ def test_generic_spearmint_description_does_not_inherit_exact_preparation_review
         assert _botanical_benchmark(row) == "absent"
     else:
         assert match["form_id"] != "neumentix spearmint extract"
-        assert _botanical_benchmark(row) == "unresolved"
+        # Generic spearmint now has its own reviewed general-neutral Dose
+        # reference; it still cannot inherit Neumentix identity or trial scope.
+        from scoring_v4.modules.botanical_profile import _dosing_entry_for
+        assert _dosing_entry_for(row) is None
+        assert _botanical_benchmark(row) == "absent"

@@ -329,14 +329,14 @@ def test_below_studied_regimen_remains_neutral():
     assert out["band"] == "disclosed_no_reference"
 
 
-def test_dose_disclosed_no_clinical_reference():
+def test_reviewed_eyebright_route_mismatch_is_completed_general_neutral():
     # a botanical NOT in rda_therapeutic_dosing, but with a disclosed dose
     ing = _botanical_ingredient(name="Eyebright", standard_name="Eyebright",
                                 canonical_id="eyebright", form="Eyebright Herb", quantity=300)
     out = score_botanical_dose(_botanical_product(ingredient=ing))
-    # A missing reference is unfinished review, not a reviewed absence.
-    assert out["score"] == 0
-    assert out["metadata"]["benchmark"] == "unresolved"
+    # Eye-drop research supplies no oral-leaf threshold; a reviewed limitation is complete.
+    assert out["score"] == _neutral()
+    assert out["metadata"]["benchmark"] == "absent"
     assert out["band"] == "disclosed_no_reference"
 
 
@@ -454,11 +454,10 @@ def test_product_level_botanical_evidence_is_visible_to_profile_scorer():
     assert is_botanical_product(product) is True
     out = score_botanical_dose(product)
     assert out["band"] == "blend_total_only"
-    # The anchor's identity does not resolve to a recognized botanical, so
-    # whether a benchmark exists is unknown: no neutral, and the scored
-    # artifact reports the assessment as partial (dose_benchmark_identity_unresolved).
-    assert out["score"] == 0.0
-    assert out["metadata"]["benchmark"] == "unresolved"
+    # Known red-wine material has a reviewed general-neutral Dose conclusion.
+    # This total still never becomes an invented per-component quantity.
+    assert out["score"] == _neutral()
+    assert out["metadata"]["benchmark"] == "absent"
 
 
 def test_disclosed_ksm66_row_outranks_synthetic_blend_total():
@@ -800,7 +799,10 @@ def test_neumentix_review_completes_general_threshold_without_borrowing_spearmin
         {'canonical_id': 'spearmint', 'name': 'Spearmint tea', 'matched_form': 'spearmint (unspecified)'},
         {'canonical_id': 'spearmint', 'name': 'Spearmint extract', 'matched_form': 'spearmint extract'},
     ]:
-        assert _botanical_benchmark(generic) == 'unresolved'
+        # Generic spearmint now has its own completed neutral reference.
+        # It borrows neither Neumentix's study nor the tea's printed regimen.
+        assert _botanical_benchmark(generic) == 'absent'
+        assert _dosing_entry_for(generic) is None
 
 
 def test_exact_preparation_review_does_not_override_conflicting_botanical_identity():
@@ -868,3 +870,141 @@ def test_hidden_amount_completion_does_not_waive_owner_gaps(change):
     assert result["score"] == 0
     assert result["metadata"]["benchmark"] == "unresolved"
     assert result["metadata"].get("assessment_status") != "complete"
+
+
+@pytest.mark.parametrize("change", [None, "conflict", "unmapped", "capture", "excluded"])
+def test_known_hidden_source_identity_is_not_rejected_for_missing_dose(change):
+    from scoring_v4.modules.botanical_profile import score_botanical_purpose_dose
+
+    row = _botanical_ingredient(
+        name="Acai fruit powder", standard_name="Acai Berry", canonical_id="acai_berry",
+        quantity=0, unit="unspecified", scoreable_identity=False, mapped_identity=True,
+        identity_disposition="clean", identity_taxonomy_coherent=True,
+        identity_decision_reason="no_dose_evidence", cleaner_row_role="active_scorable",
+        score_eligible_by_cleaner=True, score_exclusion_reason="recognized_non_scorable",
+        parent_blend="Proprietary Fruit & Vegetable Blend", parent_blend_mass_mg=105,
+        raw_source_path="ingredientRows[21].forms[0]",
+    )
+    if change == "conflict":
+        row["identity_disposition"] = "identity_conflict"
+    elif change == "unmapped":
+        row["mapped_identity"] = False
+    elif change == "capture":
+        row.pop("parent_blend")
+        row.pop("parent_blend_mass_mg")
+    elif change == "excluded":
+        row["cleaner_row_role"] = "nested_display_only"
+        row["score_eligible_by_cleaner"] = False
+    result = score_botanical_purpose_dose(_botanical_product(row), row)
+    if change is None:
+        assert result["score"] == _neutral()
+        assert result["metadata"]["reason_code"] == "amount_not_declared"
+        assert result["metadata"]["assessment_status"] == "complete"
+        assert row["quantity"] == 0
+    else:
+        assert result["score"] == 0
+        assert result["metadata"].get("assessment_status") != "complete"
+
+
+@pytest.mark.parametrize('canonical', [
+    'citrus_bioflavonoids', 'cayenne_pepper', 'pomegranate', 'hops', 'stinging_nettle',
+    'acai_berry', 'mucuna_pruriens', 'goji_berry', 'cat_s_claw', 'tart_cherry',
+    'peppermint', 'spearmint', 'magnolia_bark', 'shiitake', 'dark_sweet_cherry',
+    'african_mango', 'olive_fruit_extract', 'turkey_tail', 'arjuna', 'piperine',
+    'capsaicin',
+    'blueberry', 'garcinia_cambogia', 'green_coffee_bean', 'pumpkin',
+    'broccoli', 'rose_hips', 'dandelion', 'horsetail',
+    'ginger_extract', 'apple_cider_vinegar', 'goldenseal', 'guarana',
+    'tribulus', 'olive_leaf_powder', 'licorice', 'gotu_kola',
+    'rosemary', 'fennel', 'globe_artichoke', 'uva_ursi_leaf',
+    'dong_quai', 'marshmallow_root', 'white_willow_bark', 'hawthorn',
+    'oat_straw', 'lion_s_mane', 'butterbur', 'red_clover',
+    'blood_orange_extract', 'black_tea_leaf', 'siberian_ginseng', 'feverfew',
+    'oregano', 'barberry_root', 'wild_yam_root', 'maitake',
+    'hoodia_gordonii', 'butchers_broom_root', 'cranberry_fruit', 'chicory_root',
+    'hibiscus_extract', 'nopal', 'celery_seed', 'moringa',
+    'horse_chestnut_seed', 'yerba_mate_leaf', 'coffee_fruit', 'caralluma',
+    'picrorhiza', 'winged_treebine', 'olive_fruit', 'jujube',
+    'oolong_tea_leaf', 'turkey_rhubarb_root', 'broccoli_sprout', 'puerarin',
+    'cocoa', 'citrus_bergamot', 'coleus_forskohlii_root', 'black_garlic',
+    'english_ivy', 'cloves', 'guggul', 'mastic_gum',
+    'dgl_deglycyrrhizinated_licorice', 'shiitake_mushroom', 'ashwagandha_root', 'siberian_rhubarb',
+    'maqui_berry', 'matcha_tea_powder', 'nha_univestin', 'triphala_powder',
+    'nha_monk_fruit', 'nha_stevia', 'nha_raspberry_natural', 'oi_natural_strawberry_flavor',
+    'nha_pomegranate_juice', 'nha_apple_puree_concentrate', 'red_clover_flower', 'butternut_squash_seed_oil',
+    'chinese_wolfberry_fruit', 'nettle_root',
+])
+def test_completed_source_specific_review_does_not_require_an_invented_general_dose_curve(canonical):
+    from evidence_resolver import _load_literature_evidence
+    from scoring_v4.modules.botanical_profile import _botanical_benchmark
+
+    record = _load_literature_evidence()[canonical]
+    semantics = record['reference_semantics']
+    assert semantics['curve'] == 'completed_no_benchmark_neutral'
+    assert semantics['source_ids']
+    assert semantics['owner'] == f'scripts/data/literature_evidence_records.json::{canonical}'
+    assert _botanical_benchmark({'canonical_id': canonical, 'name': canonical}) == 'absent'
+
+
+@pytest.mark.parametrize('kind,band', [('label_active_projection', 'disclosed_no_reference'),
+                                      ('product_level_evidence', 'blend_total_only')])
+def test_direct_label_active_projection_is_not_a_hidden_blend_total(kind, band):
+    from scoring_v4.modules.botanical_profile import score_botanical_purpose_dose
+    row = _botanical_ingredient(
+        name='Cranberry Concentrate', standard_name='Cranberry', canonical_id='cranberry',
+        quantity=400, scoreable_identity=True, scoring_input_kind=kind,
+        evidence_type='blend_anchor_mass', evidence_scope='row_level',
+        reason='identity_bearing_active_anchor_mass', raw_source_path='ingredientRows[0]',
+        _scoring_classification={'profile_eligibility': {'botanical': {'eligible': True}}},
+    )
+    result = score_botanical_purpose_dose(_botanical_product(row), row)
+    assert result['band'] == band
+    assert row['quantity'] == 400
+    assert result['metadata'].get('reason_code') != 'amount_not_declared'
+
+
+@pytest.mark.parametrize('canonical,name,owner', [
+    ('sytrinol', 'Sytrinol', 'BRAND_SYTRINOL'),
+    ('tesnor_pomegranate_cocoa_blend', 'Tesnor Pomegranate Cocoa Blend', 'BRAND_TESNOR'),
+])
+def test_exact_branded_dose_uses_existing_reviewed_reference_without_component_transfer(canonical, name, owner):
+    from scoring_v4.modules.botanical_profile import _dosing_entry_for, _botanical_benchmark
+    row = _botanical_ingredient(name=name, standard_name=name, canonical_id=canonical)
+    assert _dosing_entry_for(row)['id'] == owner
+    assert _botanical_benchmark(row) == 'absent'
+    child = _botanical_ingredient(name='Pomegranate peel extract', standard_name='Pomegranate',
+                                  canonical_id='pomegranate')
+    assert _dosing_entry_for(child) is None
+    child['matched_form'] = name
+    assert _dosing_entry_for(child) is None
+
+
+def test_literature_dose_requires_its_own_content_bound_source_proof(monkeypatch):
+    import copy
+    from evidence_resolver import _load_literature_evidence
+    from scoring_v4.modules.botanical_profile import _botanical_benchmark
+    record = copy.deepcopy(_load_literature_evidence()['spearmint'])
+    record.get('verification_provenance', {}).pop('reference_citations', None)
+    monkeypatch.setattr('evidence_resolver._load_literature_evidence', lambda: {'spearmint': record})
+    row = {'canonical_id': 'spearmint', 'name': 'spearmint'}
+    assert _botanical_benchmark(row) == 'unresolved'
+
+
+def test_backed_dose_proof_cannot_be_replaced_by_evidence_verification(monkeypatch):
+    import copy
+    from evidence_resolver import _backed_studies_index
+    from scoring_v4.modules import botanical_profile as profile
+    record = copy.deepcopy(next(r for r in _backed_studies_index()['sytrinol'] if r['id'] == 'BRAND_SYTRINOL'))
+    record['verification_provenance'].pop('reference_citations', None)
+    monkeypatch.setattr(profile, '_dosing_entry_for', lambda row: record)
+    assert profile._botanical_benchmark({'canonical_id': 'sytrinol'}) == 'unresolved'
+
+
+def test_backed_reference_owner_corruption_cannot_bypass_dose_proof(monkeypatch):
+    import copy
+    from evidence_resolver import _backed_studies_index
+    from scoring_v4.modules.botanical_profile import _botanical_benchmark
+    record = copy.deepcopy(next(r for r in _backed_studies_index()['sytrinol'] if r['id'] == 'BRAND_SYTRINOL'))
+    record['reference_semantics'].pop('owner')
+    monkeypatch.setattr('evidence_resolver._backed_studies_index', lambda: {'sytrinol': [record]})
+    assert _botanical_benchmark({'canonical_id': 'sytrinol', 'name': 'Sytrinol'}) == 'unresolved'

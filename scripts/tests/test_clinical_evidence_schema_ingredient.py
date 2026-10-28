@@ -12,6 +12,8 @@ from __future__ import annotations
 import os
 import sys
 
+import pytest
+
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 from clinical_evidence_schema import (  # noqa: E402
@@ -215,3 +217,32 @@ def test_reported_absence_of_outcome_hierarchy_is_a_completed_source_limitation(
     evidence = derived_context_evidence({'id': owner, 'study_contexts': [native]})
     assert evidence['effect_direction'] == 'unresolved'
     assert evidence['evidence_strength'] == 'weak'
+
+
+@pytest.mark.parametrize('source', ['²', '0', '-1', '123x', '', None, True])
+def test_rejected_source_invalid_pmid_fails_closed_without_crashing(source):
+    context = {
+        'context_id': 'source_rejection', 'components': ['ingredient'],
+        'source_pmids': [source], 'review_status': 'rejected_source',
+        'scoring_eligible': False, 'limitations': ['No applicable causal benefit.'],
+        'clinical_review': {'reviewer': 'Dr Pham', 'reviewed_at': '2026-10-26',
+                            'scope': 'identity_dose_outcome_applicability'},
+        'dose': {'source_provenance': {'pmid': source, 'location': 'Abstract',
+                                      'source_url': 'https://pubmed.ncbi.nlm.nih.gov/'}},
+    }
+    assert 'context.source_pmids_invalid' in validate_ingredient_context(context)
+
+
+@pytest.mark.parametrize('eligible', [False, True, None])
+def test_uncontrolled_intervention_is_described_without_authorizing_credit(eligible):
+    from probiotic_measurements import context_accepted_for_scoring
+    row = _context(evidence_role='uncontrolled_intervention', scoring_eligible=eligible)
+    row.update(review_status='clinician_approved', clinical_review={
+        'reviewer': 'Synthetic test reviewer', 'reviewed_at': '2020-01-01',
+        'scope': 'identity_dose_outcome_applicability'})
+    errors = validate_ingredient_context(row)
+    assert ('context.evidence_role_invalid' not in errors)
+    assert ('context.uncontrolled_intervention_must_not_be_scoring_eligible' in errors) is (eligible is not False)
+    assert not context_accepted_for_scoring(row)
+    row.pop('context_schema_version', None)
+    assert not context_accepted_for_scoring(row)

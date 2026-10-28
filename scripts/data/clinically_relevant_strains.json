@@ -4177,7 +4177,7 @@
           ],
           "population": {
             "age_group": "adult",
-            "description": "8 studies (n=950) of 299v and iron absorption or iron status"
+            "description": "Review of 15 studies in 12 articles, 950 participants overall; the eight-study LP299v iron-absorption meta-analysis included 122 participants."
           },
           "purpose": "physiology",
           "condition": "iron_absorption",
@@ -4195,20 +4195,21 @@
           "outcomes": [
             {
               "name": "iron_absorption",
-              "hierarchy": "primary",
+              "hierarchy": "not_reported",
               "kind": "surrogate",
               "direction": "positive"
             },
             {
               "name": "iron_status_markers",
-              "hierarchy": "unresolved",
+              "hierarchy": "not_reported",
               "kind": "surrogate",
               "direction": "null"
             }
           ],
           "trial_family": "meta_299v_iron_absorption_31816981",
           "limitations": [
-            "Absorption (SMD 0.55) is an acute surrogate; the longer iron-status studies were mostly unchanged."
+            "Absorption (SMD 0.55) is an acute surrogate; the longer iron-status studies were mostly unchanged.",
+            "Full text describes comprehensive review as its primary purpose and the absorption meta-analysis as a secondary purpose, without designating these as primary or secondary trial outcomes. The 950 total must not be assigned to the 122-participant absorption analysis."
           ],
           "review_status": "clinician_approved",
           "study_design": "meta_analysis",
@@ -4272,19 +4273,19 @@
           "outcomes": [
             {
               "name": "serum_ferritin",
-              "hierarchy": "unresolved",
+              "hierarchy": "not_reported",
               "kind": "surrogate",
               "direction": "null"
             },
             {
               "name": "reticulocyte_hemoglobin",
-              "hierarchy": "unresolved",
+              "hierarchy": "not_reported",
               "kind": "surrogate",
               "direction": "null"
             },
             {
               "name": "poms_vigor",
-              "hierarchy": "unresolved",
+              "hierarchy": "not_reported",
               "kind": "patient_important",
               "direction": "positive"
             },
@@ -4298,7 +4299,8 @@
           "trial_family": "probi_299v_athletes_iron_32365981",
           "limitations": [
             "Ferritin (p=0.056) and reticulocyte hemoglobin (p=0.083) missed significance; performance inconclusive; industry involvement (Probi/Nature's Bounty).",
-            "Variable 4-12 week duration; dose not stated in the abstract."
+            "Variable 4-12 week duration; dose not stated in the abstract.",
+            "Full text gives no outcome hierarchy. Registered primary outcome is metabolic response at standardized workloads during ergometer cycling, not POMS vigor. The broad exercise-performance field is not promoted to primary without an exact measurement mapping."
           ],
           "review_status": "clinician_approved",
           "study_design": "rct",
@@ -4306,7 +4308,7 @@
           "blinding": "unreported",
           "funding": "industry",
           "source_tier": "D",
-          "trial_registration": null,
+          "trial_registration": "NCT03259997",
           "authored_on": "2026-09-14",
           "authoring_method": "PubMed title/abstract read; Wave 2 bounded search (guidelines, meta-analyses, RCTs)",
           "context_schema_version": "1.1.0",
@@ -4342,55 +4344,62 @@
             "values": [
               20000000000.0
             ],
-            "dosage_forms": [],
+            "dosage_forms": [
+              "capsule",
+              "capsule powder in 20 mL water or saline via feeding tube"
+            ],
             "duration_days": 28,
-            "co_therapies": [],
+            "co_therapies": [
+              "Home enteral nutrition in cancer patients; this is not a healthy-adult population."
+            ],
             "dose_status": "verified",
             "dose_basis": "per_strain_daily",
             "duration_basis": "fixed_protocol",
             "source_provenance": {
               "pmid": "33015813",
               "source_url": "https://pubmed.ncbi.nlm.nih.gov/33015813/",
-              "location": "abstract"
-            }
+              "location": "Primary full text: intervention and Outcomes sections; oral capsules or feeding-tube powder alternative."
+            },
+            "administration_frequency": "One capsule after breakfast and one after dinner, for four weeks."
           },
           "outcomes": [
             {
               "name": "serum_albumin",
-              "hierarchy": "unresolved",
+              "hierarchy": "not_reported",
               "kind": "surrogate",
               "direction": "positive"
             },
             {
               "name": "vomiting",
-              "hierarchy": "unresolved",
+              "hierarchy": "secondary",
               "kind": "patient_important",
               "direction": "positive",
               "outcome_role": "within_group_change"
             },
             {
               "name": "flatulence",
-              "hierarchy": "unresolved",
+              "hierarchy": "secondary",
               "kind": "patient_important",
               "direction": "positive",
               "outcome_role": "within_group_change"
             },
             {
               "name": "overall_nutritional_status",
-              "hierarchy": "unresolved",
+              "hierarchy": "primary",
               "kind": "patient_important",
               "direction": "null"
             },
             {
               "name": "quality_of_life",
-              "hierarchy": "unresolved",
+              "hierarchy": "secondary",
               "kind": "patient_important",
               "direction": "null"
             }
           ],
           "trial_family": "299v_cancer_hen_33015813",
           "limitations": [
-            "Small (n=35); overall nutritional status and between-group quality of life unchanged."
+            "Small (n=35); overall nutritional status and between-group quality of life unchanged.",
+            "Primary outcome was overall nutritional status (null); EN tolerance and quality of life were secondary. Vomiting and flatulence findings remain within-group changes, not demonstrated between-group superiority. Albumin was not independently designated a primary endpoint."
           ],
           "review_status": "clinician_approved",
           "study_design": "rct",
@@ -4398,7 +4407,7 @@
           "blinding": "unreported",
           "funding": "unreported",
           "source_tier": "D",
-          "trial_registration": null,
+          "trial_registration": "NCT03940768",
           "authored_on": "2026-09-14",
           "authoring_method": "PubMed title/abstract read; Wave 2 bounded search (guidelines, meta-analyses, RCTs)",
           "context_schema_version": "1.1.0",
@@ -4535,20 +4544,21 @@
           "outcomes": [
             {
               "name": "salivary_cortisol_rise_prevention",
-              "hierarchy": "unresolved",
+              "hierarchy": "primary",
               "kind": "surrogate",
               "direction": "positive"
             },
             {
               "name": "salivary_iga",
-              "hierarchy": "unresolved",
+              "hierarchy": "not_reported",
               "kind": "surrogate",
               "direction": "null"
             }
           ],
           "trial_family": "299v_exam_stress_28101105",
           "limitations": [
-            "Salivary cortisol is a stress surrogate; no clinical anxiety or mood endpoint; dose not stated in the abstract."
+            "Salivary cortisol is a stress surrogate; no clinical anxiety or mood endpoint; dose not stated in the abstract.",
+            "ClinicalTrials.gov NCT02974894 designates stress-induced salivary cortisol as primary. It remains a surrogate; no primary patient-important anxiety or mood benefit is inferred. IgA hierarchy is not reported as a registered secondary outcome."
           ],
           "review_status": "clinician_approved",
           "study_design": "rct",
@@ -4711,7 +4721,8 @@
             "Four-point symptom-frequency scale; unusually low placebo global response.",
             "Supported by Rosell-Lallemand and Probi AB; products supplied by Rosell-Lallemand.",
             "Global efficacy rating hierarchy not explicitly designated.",
-            "Signed October26 review accepts this exact positive IBS trial context alongside the negative matching-dose25194614 trial; no general digestive-health or universal10billionCFU efficacy threshold follows. Earlier2026-09-22 metadata recorded delegated source research, not an independent clinical sign-off."
+            "Signed October26 review accepts this exact positive IBS trial context alongside the negative matching-dose25194614 trial; no general digestive-health or universal10billionCFU efficacy threshold follows. Earlier2026-09-22 metadata recorded delegated source research, not an independent clinical sign-off.",
+            "Returned scoped decision: IBS findings do not establish generic digestive-balance, healthy-digestive-system or digestive-health benefit. An affirmative IBS claim retains its exact-condition assessment; this exclusion is not a new grade or dose threshold."
           ],
           "review_status": "clinician_approved",
           "study_design": "rct",
@@ -4733,6 +4744,17 @@
             "scope": "identity_dose_outcome_applicability",
             "basis": "Signed returned batch1 source decision, as attested by Sean; exact review date supplied2026-10-26, no clock time supplied.",
             "decision": "approve_with_limits"
+          },
+          "applicability": {
+            "scope": "ingredient",
+            "source_pmids": [
+              "22912552"
+            ],
+            "excluded_claim_terms": [
+              "digestive balance",
+              "healthy digestive system",
+              "digestive health"
+            ]
           }
         },
         {
@@ -4800,7 +4822,8 @@
             "No between-group abdominal-pain relief(p=0.800) or IBS-quality-of-life(p=0.687); within-group improvement is not probiotic efficacy.",
             "Eight-week RomeII IBS treatment study; not a broad digestive-health prevention study or evidence that a matching dose is reliably effective.",
             "Signed returned review supplies its bounded null-trial decision; no numerical efficacy minimum, optimum or safety ceiling is created.",
-            "Co-therapies were not established by the inspected abstract; the empty co_therapies list records no extracted co-therapy, not proof that none were used. Within-day capsule timing requires the original methods; two capsules daily does not establish a simultaneous once-daily administration."
+            "Co-therapies were not established by the inspected abstract; the empty co_therapies list records no extracted co-therapy, not proof that none were used. Within-day capsule timing requires the original methods; two capsules daily does not establish a simultaneous once-daily administration.",
+            "Returned scoped decision: IBS findings do not establish generic digestive-balance, healthy-digestive-system or digestive-health benefit. An affirmative IBS claim retains its exact-condition assessment; this exclusion is not a new grade or dose threshold."
           ],
           "review_status": "clinician_approved",
           "clinical_review": {
@@ -4813,7 +4836,18 @@
           "study_design": "rct",
           "scoring_eligible": true,
           "authored_on": "2026-10-26",
-          "authoring_method": "Signed batch1 negative matching-dose decision reconciled with live PubMed XML; source regimen and null comparisons content-verified."
+          "authoring_method": "Signed batch1 negative matching-dose decision reconciled with live PubMed XML; source regimen and null comparisons content-verified.",
+          "applicability": {
+            "scope": "ingredient",
+            "source_pmids": [
+              "25194614"
+            ],
+            "excluded_claim_terms": [
+              "digestive balance",
+              "healthy digestive system",
+              "digestive health"
+            ]
+          }
         },
         {
           "context_id": "p299v_ibs_sen_12452404",

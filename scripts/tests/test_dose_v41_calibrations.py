@@ -63,7 +63,9 @@ def test_a_label_that_includes_pregnancy_keeps_the_prenatal_reference():
 def test_potassium_is_a_completed_neutral():
     artifact = build_scored_artifact(_mineral('potassium', 'Potassium', 99, 3400, 99000))
     assert artifact['quality_pillars_v4']['dose']['score'] == 11.4
-    assert artifact['quality_assessment_status'] == 'complete'
+    # This synthetic Dose fixture lacks independent completed source reviews.
+    assert artifact['quality_assessment_status'] == 'partial'
+    assert artifact["assessment_readiness"]["release_assessment"]["is_complete"] is False
 
 
 def test_no_ordinary_target_requires_more_than_its_supplemental_ul():
@@ -122,7 +124,9 @@ def test_potassium_named_as_the_product_purpose_is_also_a_completed_neutral():
     product['product_name'] = 'Potassium 99 mg'
     artifact = build_scored_artifact(product)
     assert artifact['quality_pillars_v4']['dose']['score'] == 11.4
-    assert artifact['quality_assessment_status'] == 'complete'
+    # This synthetic Dose fixture lacks independent completed source reviews.
+    assert artifact['quality_assessment_status'] == 'partial'
+    assert artifact["assessment_readiness"]["release_assessment"]["is_complete"] is False
 
 
 def test_a_prenatal_title_that_mentions_baby_still_uses_the_prenatal_dha_reference():

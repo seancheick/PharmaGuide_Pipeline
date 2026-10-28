@@ -114,7 +114,7 @@ def test_a_lent_blend_total_is_not_a_member_dose(enriched, pid, canonical):
     )
     resolution = resolve_evidence_for_row(row, enriched[pid])
     assert resolution.applicability_status == (
-        "no_reviewed_clinical_studies" if canonical == "turmeric"
+        "unverified_literature_record" if canonical == "turmeric"
         else "applicable_reviewed_trials"
     )
 

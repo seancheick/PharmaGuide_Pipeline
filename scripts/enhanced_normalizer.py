@@ -1816,6 +1816,28 @@ class EnhancedDSLDNormalizer:
         normalized_group = norm_module.normalize_text(ingredient_group)
         if not normalized_group:
             return {"type": "none", "mapped": False}
+        legacy = self._group_exact_lookup.get(normalized_group, {"type": "none", "mapped": False})
+        shadow = self.other_ingredients_exact_lookup.get(
+            str(legacy.get("standard_name") or "").strip().lower(), {})
+        # Override only the two broad material classes shown to shadow a
+        # more specific identity. Other preparation-specific matches retain
+        # their existing oil, extract and whole-part safeguards.
+        if shadow.get("id") not in {"NHA_FRUIT_VEG_POWDERS", "NHA_MUSHROOM_EXTRACTS"}:
+            return legacy
+        # The canonical registry retains authored botanical identity when the
+        # older flattened alias index offers an umbrella food/material class.
+        exact = self._canonical_identity_registry.resolve_verified_preferred(ingredient_group)
+        if exact and exact[1] in {"botanical_ingredients", "standardized_botanicals"}:
+            records = (self.botanical_ingredients.get("botanical_ingredients", [])
+                       if exact[1] == "botanical_ingredients"
+                       else self.standardized_botanicals.get("standardized_botanicals", []))
+            owner = next((entry for entry in records if entry.get("id") == exact[0]), {})
+            return {
+                "type": "botanical" if exact[1] == "botanical_ingredients" else "standardized_botanical",
+                "standard_name": self._canonical_identity_registry.standard_names[(exact[1], exact[0])],
+                "canonical_id": exact[0], "canonical_source_db": exact[1],
+                "mapped": True, "priority": 6, "match_rules": owner.get("match_rules", {}),
+            }
         return self._group_exact_lookup.get(normalized_group, {"type": "none", "mapped": False})
 
     def _derive_banned_severity(self, banned_item: Dict[str, Any]) -> str:
@@ -3127,6 +3149,20 @@ class EnhancedDSLDNormalizer:
                     str(ingredient.get("name") or ""), raw_name=str(ingredient.get("name") or ""))
                 if (canonical, printed_canonical) not in self._canonical_parent_relationships:
                     return standard, canonical, source
+            # A complete printed botanical form can resolve an existing IQM
+            # material when its source group independently agrees. Do not
+            # infer a species, part, standardization or marker from the group.
+            group = str(ingredient.get("ingredientGroup") or "")
+            group_identity = self._resolve_canonical_identity(group, raw_name=group)
+            group_pattern = re.compile(r"(?<!\w)" + r"[\s_-]+".join(
+                re.escape(word) for word in norm_module.normalize_text(group).split()) + r"(?!\w)", re.I)
+            if (mapped and source == "ingredient_quality_map"
+                    and self._canonical_identity_registry.resolve_verified_preferred(form_name) == (canonical, source)
+                    and group_identity == (canonical, source)
+                    and str(ingredient.get("category") or "").casefold() == "botanical"
+                    and norm_module.normalize_text(group)
+                    and norm_module.find_affirmative_label_match(group_pattern, str(ingredient.get("name") or ""))):
+                return standard, canonical, source
             parent = self.ingredient_map.get(canonical, {}) if source == "ingredient_quality_map" else {}
             source_key = norm_module.make_normalized_key(ingredient.get("name") or "")
             if mapped and any(
@@ -3827,6 +3863,11 @@ class EnhancedDSLDNormalizer:
             normalized_name = norm_module.normalize_text(name)
             if normalized_group and normalized_group != normalized_name:
                 group_result = self._exact_ingredient_group_lookup(ingredient_group)
+                if group_result.get("canonical_source_db") in {"botanical_ingredients", "standardized_botanicals"}:
+                    group_pattern = re.compile(r"(?<!\w)" + r"[\s_-]+".join(
+                        re.escape(word) for word in normalized_group.split()) + r"(?!\w)", re.I)
+                    if not norm_module.find_affirmative_label_match(group_pattern, name):
+                        return name, False, forms
                 if group_result.get("mapped", False):
                     negative_terms = (
                         (group_result.get("match_rules", {}) or {}).get("negative_match_terms", [])

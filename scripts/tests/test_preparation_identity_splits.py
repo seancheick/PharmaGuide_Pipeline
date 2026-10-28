@@ -1114,11 +1114,14 @@ def test_exact_kombu_source_part_preserves_identity_without_form_grade(pipeline,
     assert actual['form_match_status'] == 'n/a'
     assert actual.get('bio_score') is None
     from scoring_v4.modules.botanical_profile import _botanical_benchmark
+    # The raw quality-map view retains its explicit non-scorable identity gate.
+    # The artifact's strict source projection, below, assesses the named material.
     assert _botanical_benchmark(actual) == 'unresolved'
     artifact = build_scored_artifact(enriched)
     release = artifact['assessment_readiness']['release_assessment']
     assert release['is_complete'] is False
-    assert 'dose_benchmark_identity_unresolved' in release['blockers']
+    assert 'dose_benchmark_identity_unresolved' not in release['blockers']
+    assert 'evidence_assessment_incomplete' in release['blockers']
     assert artifact['quality_assessment_status'] == 'partial'
 
 
@@ -1150,7 +1153,8 @@ def test_iodine_kelp_extract_keeps_unfinished_preparation_hold(pipeline):
     artifact = build_scored_artifact(product)
     release = artifact['assessment_readiness']['release_assessment']
     assert release['is_complete'] is False
-    assert 'dose_benchmark_identity_unresolved' in release['blockers']
+    assert 'dose_benchmark_identity_unresolved' not in release['blockers']
+    assert 'evidence_assessment_incomplete' in release['blockers']
     assessments = artifact['assessment_readiness']['evidence']['ingredient_assessments']
     kelp = next(row for row in assessments if row['canonical_id'] == 'kombu')
     assert kelp['state'] == 'not_yet_evaluated'

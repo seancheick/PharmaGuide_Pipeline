@@ -1273,7 +1273,7 @@ def test_readiness_retains_reviewed_reference_conclusion_alongside_incidental_ma
         ("no_qualifying_human_evidence", ["clinical_strains"], "probiotic_strain_reviewed_no_qualifying_human_evidence", "not_yet_evaluated"),
         ("reviewed_null_unfavorable", ["backed_clinical_studies"], "literature_reviewed_null_or_unfavorable", "evaluated_limited_or_negative"),
         ("resolved_by_reviewed_clinical_evidence", ["backed_clinical_studies"], "literature_reviewed_human_clinical_evidence", "evaluated_limited_or_negative"),
-        ("research_present_applicability_unestablished", ["backed_clinical_studies"], "literature_applicability_unestablished", "evaluated_limited_or_negative"),
+        ("research_present_applicability_unestablished", ["backed_clinical_studies"], "literature_applicability_unestablished", "not_yet_evaluated"),
         ("research_present_applicability_unestablished", ["clinical_strains"], "probiotic_species_or_stub_applicability_unestablished", "not_yet_evaluated"),
         ("literature_resolution_required", [], "unverified_generated_record_cannot_complete_evidence", "not_yet_evaluated"),
         ("identity_insufficient", ["backed_clinical_studies"], "identity_material_unresolved", "not_yet_evaluated"),
@@ -1809,3 +1809,13 @@ def test_aggregate_review_respects_the_nutrition_owner_and_unused_adjunct():
     })
     assert evaluate_release_assessment(product, readiness, module,
         unfinished_source=None)["is_complete"] is True
+
+
+def test_literature_gap_cannot_be_completed_by_an_earlier_backed_owner_name():
+    from assessment_readiness import _resolved_evidence_assessment
+    from evidence_resolver import EvidenceResolution
+    resolution = EvidenceResolution('nha_univestin', 'Univestin', ['backed_clinical_studies'],
+        'research_present_applicability_unestablished', False, 'applicability_unestablished',
+        'literature_applicability_unestablished', owner_facts={'literature_evidence': {}},
+        blocking_reasons=['literature_applicability_unestablished'])
+    assert _resolved_evidence_assessment(resolution)[0] == 'not_yet_evaluated'
