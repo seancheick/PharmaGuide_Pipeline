@@ -1154,14 +1154,22 @@ def resolve(
             _rank, overlap, c, _variant_conflict = best_line
             out.append(_record_to_resolution(c, program_canon, "needs_review", overlap / 100.0))
         else:
-            # Brand was in registry but no product hit
-            out.append(
-                CertResolution(
-                    program=program_canon,
-                    scope="brand_only",
-                    notes=f"brand has cert but this product not in registry",
-                )
+            # A different listed product can establish brand context, never
+            # this SKU's certification. Keep that source's proof and prefer
+            # usable current evidence over historical/audit-only records.
+            brand_context = min(
+                (_record_to_resolution(record, program_canon, "brand_only", 0.0)
+                 for record in brand_matches),
+                key=lambda resolution: (
+                    bool(resolution.scoring_blocked_reason),
+                    str(resolution.record_id or ""),
+                    str(resolution.matched_product or ""),
+                ),
             )
+            out.append(replace(
+                brand_context,
+                notes="brand has cert but this product not in registry",
+            ))
 
     return out
 

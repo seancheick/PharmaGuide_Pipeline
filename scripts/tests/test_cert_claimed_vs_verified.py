@@ -282,3 +282,28 @@ def test_core_third_party_columns_are_verified_only():
     assert json.loads(rows["999"]["cert_programs"]) == []
     assert rows["888"]["has_third_party_testing"] == 1
     assert json.loads(rows["888"]["cert_programs"]) == ["NSF Certified"]
+
+
+@pytest.mark.parametrize("missing", ["record_id", "source_url", "snapshot_date", "recency_status", "matched_brand"])
+def test_brand_scope_without_current_provenance_cannot_verify_manufacturing(missing):
+    from scoring_v4.modules.generic_trust import _score_b4a
+
+    row = _verified_row("NSF Sport", scope="brand_only")
+    row.pop(missing)
+    score, metadata = _score_b4a(_product(verified=[row]))
+    assert score == 0
+    assert metadata["verified_brand_only_programs"] == []
+    assert "brand_only" not in metadata["verified_unscored_scope_counts"]
+
+
+@pytest.mark.parametrize("extra", [
+    {"matched_brand": "Unrelated Megacorp"},
+    {"recency_status": "scoring_blocked"},
+    {"scoring_blocked_reason": "historical certification"},
+    {"current_certification": False},
+])
+def test_invalid_brand_scope_cannot_verify_manufacturing(extra):
+    from scoring_v4.modules.generic_trust import _score_b4a
+
+    _, metadata = _score_b4a(_product(verified=[_verified_row("NSF Sport", scope="brand_only", **extra)]))
+    assert metadata["verified_brand_only_programs"] == []

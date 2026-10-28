@@ -3,7 +3,8 @@
 One owner for four facts that used to be copied between generic_trust,
 omega_trust and confidence (and re-implemented in build_final_db):
 
-- which verified certification rows belong to this product's brand;
+- which current, sourced certification rows belong to this product's brand,
+  keeping brand context distinct from product verification;
 - which certification programs require an audited GMP facility
   (``implies_gmp`` policy in data/cert_claim_rules.json);
 - whether this product has audited GMP evidence at all (a verified product
@@ -31,7 +32,7 @@ _CERT_CLAIM_RULES_PATH = Path(__file__).resolve().parents[1] / "data" / "cert_cl
 # The only bases on which GMP counts as audited. Trust modules emit one of these
 # as ``gmp_basis``; the Verification pillar and the export accept nothing else.
 AUDITED_GMP_BASES = frozenset({"verified_certification", "manufacturer_facility"})
-_USABLE_PRODUCT_CERT_RECENCY = frozenset({"fresh", "warn"})
+_USABLE_CERT_RECENCY = frozenset({"fresh", "warn"})
 
 
 class CertificationPolicyError(RuntimeError):
@@ -150,23 +151,33 @@ def gmp_implying_programs() -> frozenset[str]:
     return frozenset(tokens)
 
 
-def is_verified_product_cert_entry(product: Dict[str, Any], entry: Dict[str, Any]) -> bool:
-    """Whether one resolver row is current, attributable product evidence.
-
-    Product scope alone is not verification.  A scoring row must retain the
-    current registry record, its source, usable snapshot recency, and the
-    product-brand binding.  Keeping this predicate here prevents trust,
-    confidence, export, and badges from inventing separate meanings of
-    "verified".
-    """
+def _is_current_cert_entry(product: Dict[str, Any], entry: Dict[str, Any]) -> bool:
+    """Shared source-bound eligibility; scope is checked by its consumer."""
     return bool(
         not entry.get("scoring_blocked_reason")
-        and _norm(entry.get("scope")) in {"sku", "product_line"}
+        and entry.get("current_certification") is not False
         and str(entry.get("record_id") or "").strip()
         and str(entry.get("source_url") or "").strip()
         and str(entry.get("snapshot_date") or "").strip()
-        and _norm(entry.get("recency_status")) in _USABLE_PRODUCT_CERT_RECENCY
+        and _norm(entry.get("recency_status")) in _USABLE_CERT_RECENCY
         and cert_entry_brand_matches_product(product, entry)
+    )
+
+
+def is_verified_product_cert_entry(product: Dict[str, Any], entry: Dict[str, Any]) -> bool:
+    """Current source-bound evidence that verifies this SKU or product line."""
+    return (
+        _norm(entry.get("scope")) in {"sku", "product_line"}
+        and _is_current_cert_entry(product, entry)
+    )
+
+
+def is_verified_brand_cert_entry(product: Dict[str, Any], entry: Dict[str, Any]) -> bool:
+    """Current source-bound brand context, without product certification."""
+    return (
+        _norm(entry.get("scope")) == "brand_only"
+        and bool(brand_key(entry.get("matched_brand")))
+        and _is_current_cert_entry(product, entry)
     )
 
 

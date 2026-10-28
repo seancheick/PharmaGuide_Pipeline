@@ -1239,7 +1239,8 @@ class TestRecencyGate:
         assert out[0].scoring_blocked_reason is not None
         assert out[0].scores_points() is False
 
-    def test_future_snapshot_is_unknown_and_cannot_score(self, tmp_path: Path) -> None:
+    @pytest.mark.parametrize("product", ["Magnesium Bisglycinate", "Pantethine"])
+    def test_future_snapshot_is_unknown_and_cannot_score(self, tmp_path: Path, product: str) -> None:
         status, age_days = _recency_status("2099-01-01")
 
         assert status == "unknown"
@@ -1265,7 +1266,7 @@ class TestRecencyGate:
         registry = CertRegistry.load(registry_path, tmp_path / "no-overrides.json")
 
         resolution = resolve(
-            "Thorne", "Magnesium Bisglycinate", ["NSF Sport"], registry
+            "Thorne", product, ["NSF Sport"], registry
         )[0]
         assert resolution.recency_status == "unknown"
         assert resolution.scoring_blocked_reason is not None
@@ -1614,3 +1615,66 @@ def test_trade_designation_keeps_strength_and_short_brand_boundaries():
     for brand, title in [('LTH', 'Health Magnesium 200 mg Tablets'), ('VITAL', 'Vitafusion Magnesium 200 mg Tablets')]:
         registry = _trade_designation_registry(title)
         assert not discover_verified_programs(brand, title, registry)
+
+
+@pytest.mark.parametrize("case, eligible", [
+    ("fresh", True), ("warn", True), ("stale", False),
+    ("blocked", False), ("unknown", False), ("future", False),
+    ("missing_source", False), ("missing_record", False),
+    ("missing_snapshot", False), ("historical", False),
+])
+def test_brand_context_retains_proof_and_controls_public_verification(case, eligible):
+    """An unlisted SKU retains only its brand's usable source-bound context."""
+    from scoring_v4.scored_artifact import build_scored_artifact
+    from test_v4_generic_trust_p134 import _product
+
+    record = {"program": "NSF Sport", "brand": "Thorne",
+              "product": "Basic Nutrients 2/Day", "record_id": "NSF_BRAND_CONTEXT"}
+    status, age = {"warn": ("warn", 120), "stale": ("scoring_blocked", 1000),
+                   "unknown": ("unknown", None), "future": ("unknown", -1)}.get(case, ("fresh", 5))
+    registry = _make_registry(records=[record], recency_status=status,
+                              snapshot_date="2099-01-01" if case == "future" else "2026-10-04",
+                              snapshot_age_days=age)
+    if case == "blocked":
+        record["_recency_status"] = "scoring_blocked"
+    if case == "missing_source":
+        record["source_url"] = None
+    if case == "missing_record":
+        record["record_id"] = None
+    if case == "missing_snapshot":
+        record["_snapshot_date"] = None
+    if case == "historical":
+        record["current_certification"] = False
+
+    resolution = resolve("Thorne", "Pantethine", ["NSF Sport"], registry)[0]
+    assert resolution.scope == "brand_only"
+    assert resolution.source_url == record.get("source_url")
+    assert resolution.record_id == record.get("record_id")
+    assert resolution.matched_brand == "Thorne"
+    assert resolution.snapshot_date == record.get("_snapshot_date")
+    assert resolution.recency_status == record["_recency_status"]
+    assert bool(resolution.scoring_blocked_reason) is not eligible
+    # Brand context never turns into a product certification.
+    assert resolution.scores_points() is False
+    product = _product(verified_cert_programs=[resolution.to_dict()], top_level={"brandName": "Thorne"})
+    verification = build_scored_artifact(product)["quality_pillars_v4"]["verification"]
+    assert verification["components"]["brand_only_cert"] == (2.0 if eligible else 0.0)
+    assert verification["components"]["tier"] == ("manufacturing" if eligible else "unknown")
+    assert verification["score"] == (8.0 if eligible else 6.0)
+    assert ("brand/facility certification verified" in verification["reason"]) is eligible
+    assert verification["components"]["cert"] == 0.0
+    assert verification["components"]["gmp"] == 0.0
+
+
+def test_brand_context_uses_a_current_record_when_other_brand_records_are_historical():
+    records = [
+        {"program": "NSF Sport", "brand": "Thorne", "product": "Old Probiotic",
+         "record_id": "A_HISTORICAL", "current_certification": False},
+        {"program": "NSF Sport", "brand": "Thorne", "product": "Basic Nutrients 2/Day",
+         "record_id": "B_CURRENT"},
+    ]
+    registry = _make_registry(records=records)
+    result = resolve("Thorne", "Pantethine", ["NSF Sport"], registry)[0]
+    assert result.scope == "brand_only"
+    assert result.record_id == "B_CURRENT"
+    assert result.scoring_blocked_reason is None
