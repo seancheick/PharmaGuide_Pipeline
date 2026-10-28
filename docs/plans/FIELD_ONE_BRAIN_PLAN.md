@@ -53,8 +53,9 @@ recommendations in the item text where they differ.
   - Export compatibility tests.
   - A CI ratchet with exact, per-path exceptions.
 
-Lane boundaries: `generic_evidence.py` belongs to the evidence-calibration session (its branch is
-changing it). Nothing edits the BCS or strain files until `claude/held-source-closure` merges.
+Lane boundaries: `generic_evidence.py` belongs to the evidence-calibration session while its
+branch is changing it. That session declined the override deletion and the magnitude move for its
+batch and handed both back to this lane, to do after its branch merges. Nothing edits the BCS or strain files until `claude/held-source-closure` merges.
 
 ## Progress, October 28 (branch `claude/xenodochial-matsumoto-ebd04b`)
 
@@ -109,9 +110,10 @@ from 11 to 17.
   Verified with `git grep _CONSENSUS_GOLD_STANDARD claude/serene-dubinsky-479574`. That lane
   measured the 11 products dropping from 18.9 to 12.2 Evidence. Folate keeps only the 10-point
   DRI nutrition-authority floor.
-- After that branch merges, this lane takes the `base_points`/`multiplier` override deletion and
-  the move of `STUDY_TYPE_BASE_POINTS`/`EVIDENCE_LEVEL_MULTIPLIERS` into config (rebase first;
-  lines 117–150 changed). `study_type_vocab.json` also carries `base_points`, pinned by
+- After that branch merges, this lane rebases onto it (lines 117–150 changed) and then takes
+  the `base_points`/`multiplier` override deletion and the move of
+  `STUDY_TYPE_BASE_POINTS`/`EVIDENCE_LEVEL_MULTIPLIERS` into config. The evidence-calibration
+  session handed both back to this lane on October 28. `study_type_vocab.json` also carries `base_points`, pinned by
   `test_study_type_vocab_contract`.
 
 **Therapeutic `upper_limit` (read-only).** Of 43 entries, 34 hold a value and 9 are null. None of
@@ -187,8 +189,8 @@ weaker), **one policy, many consumers** (keep, share one result), **two policies
   `rg -n '"study_type", "evidence_level"' scripts` (`evidence_resolver.py:404`, `:941`;
   `clinical_applicability.py:492`, `:573`).
 - Class: one policy, many consumers.
-- Move: one helper, `evidence_resolver.is_reference_only(entry)`, called by all four sites, plus an
-  integrity rule that the two values agree. No data change.
+- Move: one helper, `clinical_evidence_schema.is_reference_only(entry)`, called by all four
+  sites, plus an integrity rule that the two values agree. No data change.
 - Risk: low.
 
 ### 3. Three upper-limit names in `rda_optimal_uls.json`
@@ -211,9 +213,9 @@ weaker), **one policy, many consumers** (keep, share one result), **two policies
 - Evidence: the census above. No production code reads these sub-fields; `evidence_resolver`
   reads only `pmid`, and the verifiers read `pmid` and `title`.
 - Class: false dual brain (rename drift).
-- Move: `effect` → `effect_direction`, `design` → `study_type`, and `primary_endpoint` → `outcome`
-  where `outcome` is absent. The 5 studies with both are listed for review, not merged
-  automatically. This goes through `data_batch.py check` with one result per entry.
+- Move: `effect` → `effect_direction` and `design` → `study_type`, through `data_batch.py check`
+  with one result per entry. `primary_endpoint` stays separate from `outcome`: the value review
+  showed it names what was measured, while `outcome` states what was found.
 - Risk: low; data-only, and no consumer changes.
 
 ### 5. Two notes keys on BCS references, and a reviewer-name spelling
@@ -293,8 +295,10 @@ weaker), **one policy, many consumers** (keep, share one result), **two policies
   identity_material_unresolved 25. Those duplicate `applicability_status` (613 present).
   `evidence_resolver.py` (step 7) and `verify_semantic_applicability.py` branch on both kinds.
 - Class: one name, two meanings.
-- Move: the review result lives only in `applicability_status`, filled in for the 203 records
-  that lack it from today's `effect_direction` value. `effect_direction` keeps only the effect
+- Move: the review result lives only in `applicability_status`. For the 203 records that lack
+  it, copy today's `effect_direction` only when that value is a review result
+  (applicability_unestablished, no_qualifying_human_evidence, not_efficacy_relevant,
+  identity_material_unresolved). Effect values such as `positive_moderate` are never copied. `effect_direction` keeps only the effect
   vocabulary, or null. Update the two readers.
 - Vocabulary drift: `positive_moderate` exists only in the literature records and in
   `dose_assessment._POSITIVE_BENCHMARK_DIRECTIONS`. It isn't in BCS, the strain file, the
@@ -397,7 +401,7 @@ That branch touches the strain file today and is expected to rewrite BCS records
 | 2 | 2 reference-only helper | evidence_resolver, clinical_applicability, integrity | focused tests, replay zero diff |
 | 3 | 3 UL names | rda_optimal_uls, evidence_resolver | data_batch check, focused tests |
 | 4 | 4 literature study renames | literature_evidence_records | data_batch check, verifier dry-run |
-| 5 | 5 notes and reviewer | BCS | data_batch check |
+| 5 | 5 notes and reviewer | BCS | data_batch check, replay zero diff |
 | 6 | 6 `dose.basis` | strains, BCS, probiotic_measurements | fail-first test, replay zero diff |
 | 7+ | 7–12 per Sean's decisions | per item | full behavioral gate; both repos for 7 and 8 |
 
