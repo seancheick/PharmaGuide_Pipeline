@@ -1855,3 +1855,38 @@ def test_an_exclusion_sentence_is_not_the_studied_population():
         '38 RCTs in adults with hypertension. Pregnant participants were excluded.'}}
     assert assess_context_population({'product_name': 'Magnesium'}, context) == 'eligible'
     assert assess_context_population({'product_name': 'Prenatal Magnesium'}, context) == 'explicit_conflict'
+
+
+@pytest.mark.parametrize('case,status', [
+    ('approved', 'applicable'),
+    ('pending', 'unresolved'),
+    ('unsigned', 'unresolved'),
+    ('source_mismatch', 'unresolved'),
+    ('reference_only', 'not_applicable'),
+    ('wrong_preparation', 'not_applicable'),
+    ('special_population_untargeted', 'not_applicable'),
+])
+def test_a_claim_free_label_cannot_bypass_clinical_eligibility(monkeypatch, case, status):
+    """No claim is required, but a claim-free label still passes every reviewed gate."""
+    import clinical_applicability as ca
+    records = deepcopy(reviewed_entries())
+    record = records['INGR_CRANBERRY']
+    context = record['study_contexts'][0]
+    name = 'Cranberry extract'
+    if case == 'pending':
+        context.update(review_status='source_verified_pending_clinical_review', scoring_eligible=False)
+    elif case == 'unsigned':
+        context.pop('clinical_review')
+    elif case == 'source_mismatch':
+        context['source_pmids'] = ['99999999']
+    elif case == 'reference_only':
+        record['study_type'] = 'reference'
+    elif case == 'wrong_preparation':
+        name = 'Cranberry seed oil'
+    elif case == 'special_population_untargeted':
+        context['population'] = {'age_group': 'child', 'description': 'Children aged 1-12 with recurrent UTI'}
+    monkeypatch.setattr(ca, 'reviewed_entries', lambda: records)
+    result = _assess('INGR_CRANBERRY', _row('cranberry', name), 'Cranberry')
+    assert result['status'] == status
+    if status == 'applicable':
+        assert result['claim_alignment']['state'] == 'absent'
