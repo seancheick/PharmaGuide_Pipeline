@@ -1009,6 +1009,11 @@ def check_rda_optimal_uls(findings: List[Finding], data: Dict[str, Any], file: s
         _check_references_shape(findings, file, e, i)
 
 
+RETIRED_THERAPEUTIC_FIELDS = frozenset({
+    "upper_limit", "upper_limit_notes", "typical_dosing_range", "common_serving_size", "evidence_tier",
+})
+
+
 def check_rda_therapeutic(findings: List[Finding], data: Dict[str, Any], file: str) -> None:
     raw = data.get("therapeutic_dosing")
     if not isinstance(raw, list):
@@ -1021,6 +1026,12 @@ def check_rda_therapeutic(findings: List[Finding], data: Dict[str, Any], file: s
             continue
         _check_required(findings, file, e, i, [("standard_name", str)])
         _check_references_shape(findings, file, e, i)
+        # Retired October 28, 2026: generic dose ranges, servings, efficacy grades and
+        # safety ceilings no reviewed reference_semantics establishes. ULs live in
+        # rda_optimal_uls.json; studied regimens stay in reference_semantics.
+        for key in sorted(RETIRED_THERAPEUTIC_FIELDS & set(e)):
+            findings.append(Finding("error", file, f"[{i}].{key}", "retired_field_present",
+                                    "absent", _type_name(e.get(key))))
 
 
 def check_unit_conversions(findings: List[Finding], data: Dict[str, Any], file: str) -> None:

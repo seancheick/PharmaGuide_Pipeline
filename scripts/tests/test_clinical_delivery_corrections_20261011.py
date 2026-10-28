@@ -11,14 +11,15 @@ def rows(file,key):
 @pytest.mark.parametrize('id',['l_theanine','valerian_root','biocell_collagen','phosphatidylserine','reishi_mushroom_extract','saffron','passionflower','sage'])
 def test_trial_exposures_are_not_unverified_safety_ceilings(id):
     row=rows('rda_therapeutic_dosing.json','therapeutic_dosing')[id]
-    assert row['upper_limit'] is None
-    assert 'not established' in row['upper_limit_notes'].lower()
+    assert 'upper_limit' not in row
+    assert 'not established' in row['notes'].lower()
 
 def test_biocell_daily_dose_counts_both_administrations():
     row=rows('rda_therapeutic_dosing.json','therapeutic_dosing')['biocell_collagen']
-    assert row['typical_dosing_range'] == '1000-2000'
+    rationale = row['reference_semantics']['rationale']
+    assert '1000mg/day' in rationale and '2000mg/day' in rationale
     assert row['reference_semantics']['curve'] == 'completed_no_benchmark_neutral'
-    assert '500 mg validated for skin' not in row['upper_limit_notes']
+    assert '500 mg validated for skin' not in row['notes']
 
 @pytest.mark.parametrize('id',['curcumin_absorption','magnesium_nervous_system','joint_inflammation','eye_health','bone_health','thyroid_support','urinary_tract_health','kidney_health_support','omega3_niacin_lipid'])
 def test_broad_match_groups_do_not_claim_an_existing_scoring_bonus_or_proven_combination(id):
@@ -37,10 +38,10 @@ def test_synergy_sources_represent_actual_design_and_result():
 def test_study_preparation_does_not_become_generic_botanical_dose():
     r=rows('rda_therapeutic_dosing.json','therapeutic_dosing')
     for id in ['valerian_root','phosphatidylserine','reishi_mushroom_extract','passionflower','sage','saffron']:
-        assert r[id]['typical_dosing_range'] == ''
+        assert 'typical_dosing_range' not in r[id]
         assert r[id]['reference_semantics']['curve'] == 'completed_no_benchmark_neutral'
-    assert r['l_theanine']['typical_dosing_range']=='100.6'
-    assert 'Suntheanine' in r['l_theanine']['upper_limit_notes']
+    assert '100.6mg/day' in r['l_theanine']['reference_semantics']['rationale']
+    assert 'Suntheanine' in r['l_theanine']['notes']
 
 
 @pytest.mark.parametrize('ingredients', [

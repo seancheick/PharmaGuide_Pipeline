@@ -66,6 +66,33 @@ batch and handed both back to this lane, to do after its branch merges. Nothing 
 | 1 | Pipeline side done. One passthrough constant without the six dead keys; `facts_owned` names `max_studied_clinical_dose`. The `generic_evidence` override and magnitudes are handed to evidence-calibration. | 0d0548199 |
 | 4 | Done for `effect` → `effect_direction` (39) and `design` → `study_type` (45), checked value for value, with a ratchet test. **Kept apart:** `primary_endpoint` names what was measured and `outcome` states what was found (the 5 records that hold both show this), so they are different facts. | 30d1f4a40 |
 | 5 | Waits for held-source-closure (BCS). | |
+| Therapeutic legacy fields retired | Done; see below. | (this commit) |
+
+**Therapeutic legacy fields retired (Sean, October 28).**
+- **Removed from all 43 records:** `upper_limit`, `typical_dosing_range`, `common_serving_size`
+  and `evidence_tier`.
+  - No pipeline, export or Flutter reader used them; only tests pinned them.
+  - Every record's approved `reference_semantics` says its sources set no universal minimum,
+    optimum or safety upper limit, and that is where the studied regimens live.
+  - None of the 34 numerical upper limits was an established, applicable UL. The UL owner has
+    no established UL for any of these ids; lutein is `not_established_insufficient_data`.
+- **`upper_limit_notes` became `notes` (41 records):**
+  - 29 carried over unchanged.
+  - 12 edited to remove safe maxima, universal doses and preparation-equivalence claims.
+  - 2 dropped (eggshell membrane, milk thistle), because they held only such claims and no
+    caution.
+  - Medication, pregnancy, bleeding, coumarin, cyanogenic, thyroid and immune cautions are kept,
+    and a test pins 13 of them.
+- **`common_use`:** dose thresholds and one comparative-bioavailability claim removed in 3 records.
+- **Receipt:** per-record old values and dispositions are in
+  `scripts/audits/field_one_brain_20261028/therapeutic_legacy_fields_receipt.json`.
+- **Guards:**
+  - `db_integrity_sanity_check.check_rda_therapeutic` rejects the five retired keys. On the old
+    data it reports 215 findings; on the candidate, 0.
+  - `test_retired_dose_and_ceiling_fields_stay_retired` also rejects generic safe-maximum and
+    universal-dose wording.
+- **Docs:** `DATABASE_SCHEMA.md` §27 and `_metadata` (schema 6.0.0) now describe the actual
+  meaning.
 
 **Replay (items 1–4).**
 - Inputs: the 1,111-product frozen raw set at `~/pg_quality/held_closure_20261028/frozen`.
@@ -128,8 +155,9 @@ the 34 is a sourced UL:
 - Lutein contradicts the UL owner: 40 mg here, but `rda_optimal_uls` says
   `not_established_insufficient_data`.
 
-Proposal for Sean: null the 34 the same way the 9 reviewed entries were, keep the
-caution text in `upper_limit_notes`, and leave ULs to the UL owner. Nothing changed yet.
+Sean decided (October 28): retire the field, don't null it, and review the related descriptive
+fields in the same batch. That work is done in the "Therapeutic legacy fields retired" entry
+below.
 
 Scope: `backed_clinical_studies.json` (BCS, 210 records), `clinically_relevant_strains.json`
 (132), `literature_evidence_records.json` (816), `rda_therapeutic_dosing.json` (44),
@@ -375,10 +403,7 @@ weaker), **one policy, many consumers** (keep, share one result), **two policies
   unit is provenance. Keep both and add an integrity test that they are equal.
 - `ui_evidence_scope` is computed from `evidence_level` by one helper. One policy, many
   consumers.
-- `rda_therapeutic_dosing` fields `upper_limit` (43), `upper_limit_notes`, `common_serving_size`
-  and `evidence_tier` have no production reader. `upper_limit` is a safety ceiling outside the UL
-  owner, so it must not be dropped quietly. **Sean** decides: delete it, or migrate it into
-  `rda_optimal_uls` after source verification. Until then it is listed, not changed.
+- `rda_therapeutic_dosing` legacy fields: retired on Sean's October 28 decision (see Progress).
 
 ## D. Out of scope here (follow-ups)
 

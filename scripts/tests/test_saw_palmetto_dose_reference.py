@@ -36,10 +36,10 @@ def test_record_is_a_discrete_studied_regimen_with_its_sources():
 
 def test_no_unsupported_upper_limit_or_benefit_claim():
     row = _row()
-    assert row["upper_limit"] is None
-    assert "not established" in row["upper_limit_notes"].lower()
+    assert "upper_limit" not in row
+    assert "not established" in row["notes"].lower()
     text = json.dumps(row)
-    assert "640" not in row["upper_limit_notes"]
+    assert "640" not in row["notes"]
     assert "show no additional benefit" not in text
     assert "need underlying trial/form-specific receipt" not in text
 
