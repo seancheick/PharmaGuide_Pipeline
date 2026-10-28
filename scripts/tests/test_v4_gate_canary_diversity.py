@@ -157,10 +157,14 @@ V4_CANARIES = {
         "confidence": "high",
         # Freeze the actual label instead of a changing stored enriched batch.
         # Its native strain assessment and hidden-amount Dose remain separate.
-        "score_range": (68.5, 68.5),
+        # 49b61f37d (2026-10-23, exact claimed purpose for native treatment
+        # research credit): applicability 6 -> 3 (broad alignment), so
+        # Evidence 16 -> 13 and 68.5 -> 65.5. This slow-profile pin was stale
+        # since that commit (bisected 2026-10-28; passes at 35c306e85).
+        "score_range": (65.5, 65.5),
         "raw_fixture": "evidence_readiness_230149_raw.json",
         "dose_raw": 8.55,
-        "evidence_raw": 16.0,
+        "evidence_raw": 13.0,
         "no_independent_delivery": True,
     },
     # Fully ready verdict-diversity anchors. These replace products that are now
