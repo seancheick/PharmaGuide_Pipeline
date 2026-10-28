@@ -6946,7 +6946,24 @@
             "scope": "identity_dose_outcome_applicability"
           }
         }
-      ]
+      ],
+      "applicability": {
+        "scope": "ingredient",
+        "supported_outcomes": [
+          "Joint & Bone Health"
+        ],
+        "excluded_form_terms": [
+          "hydrolyzed",
+          "hydrolysed",
+          "collagen peptides"
+        ],
+        "studied_population": "Adults 40-75 with knee osteoarthritis (180 days) or healthy adults 30-65 with exercise-related knee discomfort (120 days), taking 40 mg/day UC-II material.",
+        "source_pmids": [
+          "26822714",
+          "24153020"
+        ],
+        "reviewed_at": "2026-10-28"
+      }
     },
     {
       "id": "BRAND_BIOCELL",
