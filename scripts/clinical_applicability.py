@@ -543,7 +543,8 @@ def evaluated_purpose_outcomes(context: Mapping) -> list:
             and row.get("direction") in {"null", "mixed", "negative"}]
 
 
-def assess_claim_alignment(product: Mapping, context: Mapping, canonicals=(), *, supported_outcomes=()) -> dict:
+def assess_claim_alignment(product: Mapping, context: Mapping, canonicals=(), *, supported_outcomes=(),
+                           formula_level: bool = False) -> dict:
     """Compare the label's claims with one reviewed context's studied outcome.
 
     ``absent``: no recognized claim. ``aligned``/``mixed``: at least one claim
@@ -579,6 +580,12 @@ def assess_claim_alignment(product: Mapping, context: Mapping, canonicals=(), *,
     claims = [(source, _claimed_purposes(text)) for canonical in sorted(set(canonicals))
               for source, text in ingredient_function_claims(product.get("statements"), canonical)]
     positioning, unclassified = _positioning_claims(product, purposes_only=True)
+    if formula_level:
+        # Formula-level marketing that neither names this ingredient nor its
+        # studied outcome is attributable to other ingredients, not to it
+        # (Sean, October 28, PR #280): it is no unrelated claim of this one.
+        positioning = positioning if positioning & outcome else set()
+        unclassified = False
     if not claims:
         if positioning:
             claims.append(("product_positioning", positioning))
@@ -823,6 +830,22 @@ def condition_scope_governs(entry: Mapping) -> bool:
                 and _accepted_condition_scopes(reference, policy))
 
 
+def _positioning_is_formula_level(product: Mapping, canonicals: set) -> bool:
+    """Whether unattributed product positioning speaks for other ingredients too.
+
+    Positioning is this ingredient's own claim on a single-subject label or when
+    it names the ingredient; on a multi-ingredient formula that does not name
+    it, the phrase cannot be attributed to this source row.
+    """
+    from scoring_input_contract import get_evidence_subject_rows
+    subjects = {str(row.get("canonical_id")) for row in get_evidence_subject_rows(dict(product))
+                if row.get("canonical_id")}
+    if not subjects - set(canonicals):
+        return False
+    text = " " + _key(" ".join(text for text in native_product_positioning_texts(product) if text)) + " "
+    return not any(" " + _key(canonical) + " " in text for canonical in canonicals)
+
+
 def _assess_condition_scopes(product: Mapping, entry: Mapping, policy: Mapping, contexts: list) -> dict:
     """Return a blocking decision, or the components a qualifying scope adds.
 
@@ -832,8 +855,9 @@ def _assess_condition_scopes(product: Mapping, entry: Mapping, policy: Mapping, 
     """
     canonicals = {str(row.get("canonical_id")) for row in _linked_rows(product, entry, evidence_only=True)
                   if row.get("canonical_id")}
+    formula_level = _positioning_is_formula_level(product, canonicals)
     results = [(context, assess_context_population(product, context),
-                assess_claim_alignment(product, context, canonicals,
+                assess_claim_alignment(product, context, canonicals, formula_level=formula_level,
                                        supported_outcomes=policy.get("supported_outcomes", [])))
                for context in contexts]
     qualifying = [(context, claim) for context, population, claim in results
@@ -867,6 +891,12 @@ def _assess_condition_scopes(product: Mapping, entry: Mapping, policy: Mapping, 
                                             or [context.get("condition") for context, _ in qualifying])
         components["studied_population"] = "; ".join(context["population"]["description"]
                                                      for context, _ in qualifying)
+        # The credit reflects the research that qualified, not a stronger body
+        # from a sibling context (Sean, October 28, PR #280): trials alone are
+        # scored as trials, never as the record's pooled review.
+        if all(context.get("evidence_role") == "direct_rct" for context, _ in qualifying):
+            families = {context.get("trial_family") or context.get("context_id") for context, _ in qualifying}
+            components["qualifying_study_type"] = "rct_single" if len(families) == 1 else "rct_multiple"
     return components
 
 
@@ -1063,6 +1093,10 @@ def filter_clinical_matches(product: Mapping, matches: list[dict], *, assess_amo
                 accepted.append(entry)
                 continue
             scoped_entry = {**entry, "applicability_assessment": decision}
+            if decision.get("qualifying_study_type"):
+                # Record-level enrollment describes the whole body, not this trial.
+                scoped_entry["study_type"] = decision["qualifying_study_type"]
+                scoped_entry.pop("total_enrollment", None)
             # Only a product-level Evidence heading (a blend total the input
             # contract projects as the studied material) keeps its binding; an
             # ordinary parent row never lends its reference to a nested extract.

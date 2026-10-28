@@ -1670,10 +1670,14 @@ def test_general_ginger_uses_only_its_adult_context_and_pregnancy_ginger_only_it
     general = _assess('INGR_GINGER', row, 'Ginger root')
     assert general['status'] == 'applicable'
     assert general['supported_outcomes'] == ['acute_chemotherapy_nausea']
+    # Only the chemotherapy RCT qualifies: it is scored as one trial, not as
+    # the pregnancy meta-analysis the record also holds.
+    assert general['qualifying_study_type'] == 'rct_single'
     assert 'pregnan' not in general['studied_population'].lower()
     prenatal = _assess('INGR_GINGER', row, 'Prenatal Ginger', target_groups=['Pregnant'])
     assert prenatal['status'] == 'applicable'
     assert prenatal['supported_outcomes'] == ['nausea_vomiting_of_pregnancy']
+    assert 'qualifying_study_type' not in prenatal  # The qualifying context is the meta-analysis.
     assert 'cancer' not in prenatal['studied_population'].lower()
 
 
@@ -1986,3 +1990,38 @@ def test_a_general_wellness_phrase_is_not_an_unclassified_claim():
     product = {'product_name': 'Whey', 'statements': [{'type': 'General Statements: All Other Content',
                                                       'notes': 'High quality whey protein to support daily wellness.'}]}
     assert _positioning_claims(product, purposes_only=True) == (set(), False)
+
+
+def test_a_general_ginger_label_is_scored_from_its_single_qualifying_trial():
+    from clinical_applicability import filter_clinical_matches
+    from scoring_v4.modules.generic_evidence import _entry_raw_points
+    row = _row('ginger', 'Ginger root extract', quantity=1000)
+    product = {'product_name': 'Ginger Root', 'ingredient_quality_data': {'ingredients_scorable': [row]}}
+    record = reviewed_entries()['INGR_GINGER']
+    entry = {**{k: record[k] for k in ('study_type', 'evidence_level', 'effect_direction', 'total_enrollment')},
+             'id': 'INGR_GINGER', 'ingredient': row['name'], 'matched_source_row_refs': ['ingredientRows[0]']}
+    [scoped], _ = filter_clinical_matches(product, [entry], assess_amount=False)
+    assert scoped['study_type'] == 'rct_single' and 'total_enrollment' not in scoped
+    assert _entry_raw_points(scoped) < _entry_raw_points(entry)
+
+
+@pytest.mark.parametrize('rows,product_name,state,status', [
+    # A formula-level phrase on a multi-ingredient label is not this row's claim.
+    ([('creatine_monohydrate', 'Creatine Monohydrate'), ('caffeine', 'Caffeine')],
+     'Pre-Workout for focus and alertness', 'absent', 'applicable'),
+    # On a single-ingredient label the same phrase is the ingredient's claim.
+    ([('creatine_monohydrate', 'Creatine Monohydrate')], 'Creatine for focus and alertness', 'unrelated', 'not_applicable'),
+    # A phrase that names the ingredient is attributable to it.
+    ([('creatine_monohydrate', 'Creatine Monohydrate'), ('caffeine', 'Caffeine')],
+     'Creatine Monohydrate for focus and alertness', 'unrelated', 'not_applicable'),
+])
+def test_product_positioning_counts_against_an_ingredient_only_when_attributable(rows, product_name, state, status):
+    scorable = [_row(canonical, name, quantity=3000 if canonical.startswith('creatine') else 200,
+                     ref=f'ingredientRows[{index}]') for index, (canonical, name) in enumerate(rows)]
+    product = {'product_name': product_name, 'ingredient_quality_data': {
+        'ingredients_scorable': scorable, 'ingredients': scorable}, 'activeIngredients': scorable}
+    entry = {'id': 'INGR_CREATINE_MONOHYDRATE', 'ingredient': 'Creatine Monohydrate',
+             'matched_source_row_refs': ['ingredientRows[0]']}
+    result = assess_clinical_applicability(product, entry, assess_amount=False)
+    assert result.get('claim_alignment', {}).get('state') == state
+    assert result['status'] == status

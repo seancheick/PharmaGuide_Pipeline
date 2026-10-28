@@ -122,9 +122,11 @@ def test_undosed_strain_receives_reviewed_family_credit_without_dose_points(regi
     from scoring_v4.modules.probiotic_evidence import score_evidence
     payload = score_evidence(_product())
     assert payload["max"] == 20
+    # A legacy record whose eligibility was never reviewed keeps the
+    # claim-independent broad weight; a digestive claim adds nothing (PR #280).
     assert payload["components"] == {"evidence_family_certainty": 6.6667,
-        "product_applicability": 3.0, "independent_replication_consistency": 0.0}
-    assert payload["score"] == 9.6667
+        "product_applicability": 1.5, "independent_replication_consistency": 0.0}
+    assert payload["score"] == 8.1667
     assert "dose_applicability" not in payload["components"]
     assert payload["metadata"]["claim_alignment"]["level"] == "direct"
 
@@ -182,9 +184,10 @@ def test_generic_positioning_limits_applicability_without_changing_certainty():
     direct = score_evidence(_product())
     broad = score_evidence(_product(product_name="Daily Probiotic 50 Billion"))
     assert broad["components"]["evidence_family_certainty"] == direct["components"]["evidence_family_certainty"]
-    # Both labels now reach LGG's approved GI/respiratory meta-analysis.
+    # Both labels reach LGG's approved GI/respiratory meta-analysis, and the
+    # positioning earns no bonus (Sean, PR #280): identical applicability.
     assert direct["components"]["product_applicability"] == 6.0
-    assert broad["components"]["product_applicability"] == 3.0
+    assert broad["components"]["product_applicability"] == 6.0
     assert broad["metadata"]["indication_relevance_level"] == "broad"
 
 
@@ -198,7 +201,8 @@ def test_structured_positioning_changes_applicability_only():
     assert after["metadata"]["indication_relevance_level"] == "direct"
     assert after["components"]["evidence_family_certainty"] == before["components"]["evidence_family_certainty"]
     assert after["components"]["independent_replication_consistency"] == before["components"]["independent_replication_consistency"]
-    assert before["components"]["product_applicability"] == 3.0
+    # Positioning is explanation metadata; it no longer changes applicability.
+    assert before["components"]["product_applicability"] == 6.0
     assert after["components"]["product_applicability"] == 6.0
 
 
@@ -241,7 +245,7 @@ def test_research_that_does_not_apply_to_the_product_earns_no_evidence_points():
     assert direct["components"]["evidence_family_certainty"] > 0
 
 
-@pytest.mark.parametrize("direction,certainty,total", [("negative",0,0), ("null",0,0), ("mixed",4,7)])
+@pytest.mark.parametrize("direction,certainty,total", [("negative",0,0), ("null",0,0), ("mixed",4,5.5)])
 def test_independent_record_direction_is_not_replaced_by_strain_support(registry_record_path_only, direction, certainty, total):
     from scoring_v4.modules.probiotic_evidence import score_evidence
     payload = score_evidence(_product(matches=[_match(effect_direction=direction)]))

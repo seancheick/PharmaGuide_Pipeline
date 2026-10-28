@@ -69,8 +69,7 @@ def score_evidence(product: Any) -> Dict[str, Any]:
         probiotic_owned=owned, assessment=family_assessment,
         relevance=relevance, settings=_EM, formula=formula,
     )
-    alignment = (1.0 if formula.get("status") == "assessed_studied_formula"
-                 else _EM["alignment_weights"].get(relevance["level"], 0.0))
+    alignment = _applicability_weight(family, formula, relevance)
     applicability = alignment * family["identity_weight"] if family["certainty"] > 0 else 0.0
     consistency = _independent_consistency(family_assessment)
     # Certainty and confirmation describe research that must first apply to this
@@ -181,6 +180,25 @@ def score_evidence(product: Any) -> Dict[str, Any]:
     }
 
 
+def _applicability_weight(family: dict, formula: dict, relevance: dict) -> float:
+    """Product applicability from the shared scientific decision, never from marketing.
+
+    Sean, October 28, 2026 (PR #280): an aligned claim and no claim earn the
+    same points for the same eligible research. A studied formula, an approved
+    native context or a registry record the shared applicability owner accepted
+    applies in full. A legacy record whose eligibility was never reviewed keeps
+    the claim-independent broad weight; an unrelated positioning still earns
+    nothing. Claim alignment stays explanation metadata.
+    """
+    weights = _EM["alignment_weights"]
+    if formula.get("status") == "assessed_studied_formula" or family.get("source") == "native_context":
+        return weights["direct"]
+    if (family.get("source") == "registry"
+            and (family.get("decision") or {}).get("status") == "applicable"):
+        return weights["direct"]
+    return 0.0 if relevance["level"] == "none" else weights["broad"]
+
+
 def _strongest_single_family_certainty(
     *, probiotic_owned: list[dict], assessment: dict, relevance: dict, settings: dict,
     formula: dict,
@@ -195,6 +213,7 @@ def _strongest_single_family_certainty(
         ),
         "family": row.get("id"), "source": "registry",
         "design": row.get("study_type"), "direction": row.get("effect_direction"),
+        "decision": row.get("applicability_assessment"),
     } for row in probiotic_owned]
     families += [{
         "certainty": _single_native_family_certainty(context, settings),

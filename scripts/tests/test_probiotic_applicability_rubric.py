@@ -262,7 +262,7 @@ def test_registry_medium_support_is_not_lost():
     # The credit comes from the approved IBS context (scoped, no claim
     # required), not from the reviewed summary.
     result = score_evidence(p)
-    assert result["score"] == 13
+    assert result["score"] == 16
     assert [c["context_id"] for c in result["metadata"]["contributing_native_contexts"]] == [
         "p299v_ibs_rome3_22912552"]
 
@@ -445,14 +445,13 @@ def test_exact_source_condition_is_a_claim_match_not_patient_membership(dose):
         'condition': 'irritable_bowel_syndrome',
         'claim_alignment': {'state': 'aligned', 'sources': ['affirmative_exact_source_condition_claim']}}
     assert 'patient' not in used[0]['claimed_purpose_assessment']
-    # An abbreviated aligned claim reaches the same context; a claim-free label
-    # gets the same scoped context. The 16-vs-13 gap is the probiotic formula's
-    # positioning weight (direct 1.0, broad 0.5), not the shared gate.
+    # An abbreviated aligned claim and a claim-free label reach the same
+    # context for the same points: no marketing-claim bonus (Sean, PR #280).
     product['product_name'] = 'IBS Probiotic'
     assert score_evidence(product)['score'] == 16
     product['product_name'] = 'Daily Probiotic'
     claim_free = score_evidence(product)
-    assert claim_free['score'] == 13
+    assert claim_free['score'] == 16
     assert [c['context_id'] for c in claim_free['metadata']['contributing_native_contexts']] == [
         used[0]['context_id']]
 
@@ -487,3 +486,67 @@ def test_exact_condition_claim_cannot_override_special_population_guard(monkeypa
                              name='Lactobacillus plantarum 299v')
     product['product_name'] = 'Irritable Bowel Syndrome Probiotic'
     assert score_evidence(product)['score'] == 0
+
+
+# Sean's ruling on PR #280 (October 28, 2026): no probiotic marketing-claim
+# bonus. Product applicability comes from the shared scientific decision.
+
+def _p299v(product_name='Daily Probiotic', name='Lactobacillus plantarum 299v', clinical_id='STRAIN_PLANTARUM_299V'):
+    product = strain_product(dose=1e10, clinical_id=clinical_id, name=name)
+    product['product_name'] = product_name
+    return product
+
+
+def test_299v_with_and_without_an_ibs_claim_earns_identical_evidence():
+    claim_free, claimed = score_evidence(_p299v()), score_evidence(_p299v('IBS Probiotic'))
+    assert claim_free['components'] == claimed['components']
+    assert claim_free['score'] == claimed['score'] == 16.0
+    used = lambda e: [c['context_id'] for c in e['metadata']['contributing_native_contexts']]
+    assert used(claim_free) == used(claimed) == ['p299v_ibs_rome3_22912552']
+    # Marketing alignment stays explanation metadata only.
+    assert (claim_free['metadata']['indication_relevance_level'],
+            claimed['metadata']['indication_relevance_level']) == ('broad', 'direct')
+
+
+def test_an_unrelated_attributable_claim_earns_no_ibs_study_credit():
+    result = score_evidence(_p299v('Sleep support probiotic'))
+    assert result['score'] == 0
+    assert result['metadata']['contributing_native_contexts'] == []
+
+
+def test_research_certainty_and_replication_ignore_marketing_copy():
+    claim_free = score_evidence(_p299v())
+    for name in ('IBS Probiotic', 'Digestive balance for irritable bowel syndrome', 'Probiotic 50 Billion'):
+        components = score_evidence(_p299v(name))['components']
+        assert components['evidence_family_certainty'] == claim_free['components']['evidence_family_certainty']
+        assert (components['independent_replication_consistency']
+                == claim_free['components']['independent_replication_consistency'])
+
+
+def test_identity_requirements_still_decide_eligibility_without_a_claim():
+    species_only = score_evidence(_p299v(name='Lactobacillus plantarum', clinical_id=None))
+    assert species_only['score'] == 0
+
+
+@pytest.mark.parametrize('change', ['pending', 'rejected', 'source_integrity_hold'])
+def test_unapproved_or_held_research_earns_no_new_points_without_a_claim(monkeypatch, change):
+    registry = deepcopy(studied_formulas._clinical_strain_registry())
+    for context in registry['STRAIN_PLANTARUM_299V']['study_contexts']:
+        if change == 'pending':
+            context.update(review_status='source_verified_pending_clinical_review', scoring_eligible=False)
+        elif change == 'rejected':
+            context.update(review_status='rejected_source', scoring_eligible=False)
+        else:
+            context['scoring_eligible'] = False
+    monkeypatch.setattr(studied_formulas, '_clinical_strain_registry', lambda: registry)
+    for name in ('Daily Probiotic', 'IBS Probiotic'):
+        assert score_evidence(_p299v(name))['score'] == 0
+
+
+def test_scoped_evidence_never_presumes_the_shopper_has_the_studied_condition():
+    result = score_evidence(_p299v())
+    context = result['metadata']['contributing_native_contexts'][0]
+    assert context['condition'] == 'irritable_bowel_syndrome'
+    assert set(context['claimed_purpose_assessment']) == {'status', 'reason_code', 'condition', 'claim_alignment'}
+    assert context['claimed_purpose_assessment']['reason_code'] == 'no_label_claim_required'
+    assert not any('patient' in key or 'diagnos' in key for key in context['claimed_purpose_assessment'])
