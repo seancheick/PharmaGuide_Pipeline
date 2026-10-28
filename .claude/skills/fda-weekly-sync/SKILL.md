@@ -261,8 +261,6 @@ When the manufacturer-violations sync writes a new entry, it picks a `violation_
 | Undeclared allergen (egg, wheat, peanut, etc.) | `CRI_ALLER` | -12 |
 | Microbial contamination (Salmonella, E. coli, Listeria) | `CRI_CONTA` | -15 |
 
-If the product targets children / infants / prenatal users, additionally apply the `PEDIATRIC_SUPPLEMENT` modifier (-3) on top of the base deduction.
-
 These routings are pinned by [scripts/tests/test_manufacture_deduction_expl_contract.py](../../scripts/tests/test_manufacture_deduction_expl_contract.py). If you want to change a code's `base_deduction`, you need to update both the JSON and the test in the same commit.
 
 **NOTE on existing entries:** v2.1 is additive and backwards-compatible. Existing entries' codes are NOT being reclassified (e.g., the 37 entries currently coded `CRI_UNDRUG` for sildenafil/tadalafil spikes stay that way). Use the new codes only for *new* sync runs going forward, unless retroactive reclassification is explicitly scoped as separate work.

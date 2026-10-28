@@ -40,12 +40,6 @@ from scoring_v4.modules.brand_testing_posture import score_brand_testing_posture
 
 
 PHASE_MARKER = "P1.6.4_omega_trust"
-from scoring_v4.quality_score_config import block as _cfg_block
-
-_VM = _cfg_block("verification_magnitudes", "omega_trust")["omega_trust"]
-
-
-CAP_TRUST = _VM["cap_trust"]
 
 LABEL_ASSERTED_QUALITY_PROGRAMS = frozenset(
     {

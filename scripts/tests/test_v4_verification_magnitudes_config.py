@@ -5,6 +5,8 @@ PURE REFACTOR: trust/verification point values, cert-scope points, and the
 manufacturer D1-D5 + violation caps across the trust/manufacturer/brand-testing/
 verification-bonus modules moved into
 scoring_v4/config/quality_score.json (`verification_magnitudes.<module>`).
+Omega trust's live cap remains in omega_rubric.json; its unused duplicate
+binding was retired in October 2026.
 Empty diff verified across score_trust / score_manufacturer_trust /
 score_manufacturer_violations / score_brand_testing_posture /
 score_verification_bonus (564 entrypoint×product pairs).
@@ -43,7 +45,6 @@ ORIGINAL = {
     },
     "brand_testing": {"hard_evidence_score": 2.0, "soft_quality_score": 1.0},
     "verification_bonus": {"cap": 8.0},
-    "omega_trust": {"cap_trust": 15.0},
 }
 
 
@@ -63,9 +64,13 @@ def test_runtime_constants_read_from_config_no_drift():
     assert generic_manufacturer.MFG_CAP_THREE_OR_MORE_CLASS_I == -50.0
     assert brand_testing_posture.BRAND_TESTING_HARD_EVIDENCE_SCORE == 2.0
     assert verification_bonus.VERIFICATION_BONUS_CAP == 8.0
-    assert omega_trust.CAP_TRUST == 15.0
 
 
 def test_class_i_lookback_stays_in_code():
     # deliberately NOT hoisted (documented 3-year window, an expression not a point)
     assert generic_manufacturer.CLASS_I_LOOKBACK_DAYS == 3 * 365
+
+
+def test_retired_omega_trust_cap_has_no_second_config_owner():
+    assert "omega_trust" not in VM
+    assert not hasattr(omega_trust, "CAP_TRUST")

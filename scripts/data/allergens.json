@@ -3,15 +3,9 @@
     "description": "Regulatory allergen identification database for supplement ingredients. Covers FDA major allergens (9) and EU Annex II allergens (8). Used for consumer warnings and on-device personalization — not for general score penalties.",
     "purpose": "allergen_flagging",
     "schema_version": "5.0.0",
-    "last_updated": "2026-10-20",
+    "last_updated": "2026-10-28",
     "total_entries": 17,
     "scoring_system": {
-      "allergen_free_bonus": 2,
-      "severity_penalties": {
-        "low": -1,
-        "moderate": -1.5,
-        "high": -2
-      },
       "rule": "All entries are flag_only — no score deductions. severity_level is used for warning priority and on-device personalization only. Severity tiers: high = documented fatal anaphylaxis risk; moderate = significant IgE reactions / celiac trigger; low = usually mild reactions."
     },
     "regulatory_note": "Strictly limited to FDA FALCPA/FASTER Act major allergens and EU Annex II allergens. Non-regulatory sensitivities (nightshades, latex cross-reactivity, corn, coconut, etc.) are NOT included — those belong in consumer preference profiles, not allergen flagging. Transparency penalties (natural/artificial flavors) belong in harmful_additives or other_ingredients.",

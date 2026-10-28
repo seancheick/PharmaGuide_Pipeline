@@ -479,10 +479,23 @@ def test_max_trust_score_is_15() -> None:
     assert payload["score"] == 15.0
 
 
-def test_dimension_cap_constant() -> None:
-    from scoring_v4.modules.omega_trust import score_trust, CAP_TRUST
+def test_runtime_dimension_cap_consumes_the_omega_rubric(monkeypatch) -> None:
+    from copy import deepcopy
+    from scoring_v4.modules import omega_trust
 
-    assert CAP_TRUST == 15.0
+    product = {"verified_cert_programs": [_verified("IFOS")]}
+    baseline = omega_trust.score_trust(product)
+    assert baseline["score"] == 10.0
+    assert baseline["max"] == 15.0
+
+    rubric = deepcopy(omega_trust._load_rubric())
+    rubric["trust"]["dimension_cap"] = 5.0
+    monkeypatch.setattr(omega_trust, "_load_rubric", lambda: rubric)
+    changed = omega_trust.score_trust(product)
+    assert changed["score"] == 5.0
+    assert changed["max"] == 5.0
+    assert changed["components"] == baseline["components"]
+    assert changed["metadata"]["cap_applied"] is True
 
 
 # --- Real-catalog canary lock -------------------------------------------

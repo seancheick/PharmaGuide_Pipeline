@@ -175,8 +175,8 @@ def test_all_four_required_modifiers_present_with_expected_shape(blob):
 
 # ---------------------------------------------------------------------------
 # v2.1 additions (Phase 1 of 2026-05-13 deduction-expl proposal, 2026-05-14)
-# Pin the new CRITICAL codes + PEDIATRIC_SUPPLEMENT modifier so a future
-# refactor can't drop them silently.
+# Pin the CRITICAL codes; the dormant pediatric modifier was retired under
+# Sean's superseding October 28, 2026 decision.
 # ---------------------------------------------------------------------------
 
 
@@ -220,39 +220,36 @@ def test_v2_1_new_critical_codes_present(blob, code, expected):
     )
 
 
-def test_pediatric_supplement_modifier_present(blob):
-    """v2.1 added the PEDIATRIC_SUPPLEMENT modifier (-3) for products
-    targeting children, infants, or prenatal use. Required shape:
-    `additional_deduction` numeric, `trigger` string."""
-    mods = blob["modifiers"]
-    assert "PEDIATRIC_SUPPLEMENT" in mods, (
-        "v2.1 added PEDIATRIC_SUPPLEMENT modifier — must be present. "
-        "See docs/handoff/2026-05-13_deduction_expl_proposal.md Phase 1."
-    )
-    m = mods["PEDIATRIC_SUPPLEMENT"]
-    assert isinstance(m.get("additional_deduction"), (int, float)), (
-        "PEDIATRIC_SUPPLEMENT.additional_deduction must be numeric"
-    )
-    assert m["additional_deduction"] == -3, (
-        f"PEDIATRIC_SUPPLEMENT.additional_deduction expected -3, "
-        f"got {m['additional_deduction']}. Change is a deliberate "
-        f"scoring decision — bump version + document."
-    )
-    assert isinstance(m.get("trigger"), str) and m["trigger"], (
-        "PEDIATRIC_SUPPLEMENT.trigger must be a non-empty string"
+def test_pediatric_supplement_modifier_is_retired(blob):
+    """An unreachable keyword deduction must not appear as active policy."""
+    assert "PEDIATRIC_SUPPLEMENT" not in blob["modifiers"]
+
+
+def test_validator_rejects_retired_pediatric_modifier(blob):
+    from db_integrity_sanity_check import check_manufacture_deduction_expl
+
+    bad = dict(blob)
+    bad["modifiers"] = {
+        **blob["modifiers"],
+        "PEDIATRIC_SUPPLEMENT": {"additional_deduction": -3},
+    }
+    findings = []
+    check_manufacture_deduction_expl(findings, bad, PATH.name)
+    assert any(
+        finding.severity == "error"
+        and finding.path == "modifiers.PEDIATRIC_SUPPLEMENT"
+        for finding in findings
     )
 
 
 def test_version_at_or_above_2_1(blob):
     """v2.1 is the minimum version that includes the proposal-Phase-1 codes.
-    Older versions are missing CRI_GLP1/CRI_ANABOLIC/CRI_BOT_SUB and the
-    pediatric modifier."""
+    Older versions are missing CRI_GLP1/CRI_ANABOLIC/CRI_BOT_SUB."""
     ver = blob["_metadata"].get("version", "0.0")
     parts = tuple(int(p) for p in ver.split("."))
     assert parts >= (2, 1), (
         f"_metadata.version is {ver!r}; expected ≥ 2.1 since v2.1 added "
-        f"the CRI_GLP1 / CRI_ANABOLIC / CRI_BOT_SUB codes and "
-        f"PEDIATRIC_SUPPLEMENT modifier."
+        f"the CRI_GLP1 / CRI_ANABOLIC / CRI_BOT_SUB codes."
     )
 
 

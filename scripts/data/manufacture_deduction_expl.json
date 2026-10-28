@@ -4,12 +4,13 @@
     "purpose": "manufacturer_deduction_explanation",
     "schema_version": "5.0.0",
     "contract_test": "scripts/tests/test_manufacture_deduction_expl_contract.py",
-    "last_updated": "2026-10-11",
-    "version": "2.2",
+    "last_updated": "2026-10-28",
+    "version": "2.3",
     "version_history": {
       "2.0": "Initial v5.0.0 framework (2026-02-16).",
       "2.1": "Phase 1 of 2026-05-13 deduction-expl proposal: added 3 CRITICAL codes (CRI_GLP1, CRI_ANABOLIC, CRI_BOT_SUB) for emerging 2025-26 adulteration patterns + PEDIATRIC_SUPPLEMENT modifier. Additive + backwards-compatible — existing entries' codes are NOT reclassified. total_deduction_cap unchanged at -25; graduated-cap proposal pending Phase 2 impact analysis.",
-      "2.2": "Phase 2 of 2026-05-13 deduction-expl proposal: graduated total_deduction_cap (-25 default / -35 for 2 Class-I in 3yr / -50 for 3+ Class-I in 3yr). The default -25 still applies to manufacturers with 0 or 1 Class-I; only repeat Class-I actors are affected. Impact report: docs/handoff/2026-05-14_phase2_graduated_cap_impact.md."
+      "2.2": "Phase 2 of 2026-05-13 deduction-expl proposal: graduated total_deduction_cap (-25 default / -35 for 2 Class-I in 3yr / -50 for 3+ Class-I in 3yr). The default -25 still applies to manufacturers with 0 or 1 Class-I; only repeat Class-I actors are affected. Impact report: docs/handoff/2026-05-14_phase2_graduated_cap_impact.md.",
+      "2.3": "Sean explicitly superseded the Phase 1 pediatric policy on 2026-10-28: retire the dormant PEDIATRIC_SUPPLEMENT (-3) keyword modifier, without activating it. Its prior approval and rationale remain in version 2.1 history and docs/handoff/2026-05-13_deduction_expl_proposal.md. Existing violation, recency and aggregate-cap decisions are unchanged."
     },
     "max_score": 100,
     "minimum_viable_score": 0,
@@ -247,12 +248,6 @@
       "product_line_threshold": 3,
       "additional_deduction": -3,
       "label": "Systemic manufacturing issue"
-    },
-    "PEDIATRIC_SUPPLEMENT": {
-      "description": "Penalty modifier when the recalled product is intended for children, infants, or prenatal use. Children have lower body mass and higher sensitivity to dose-dependent risks; the trust violation is qualitatively different.",
-      "additional_deduction": -3,
-      "trigger": "Product description contains 'kids', 'children', 'infant', 'pediatric', 'prenatal', or equivalent pediatric-target keyword",
-      "label": "Pediatric supplement — children at elevated risk"
     }
   },
   "calculation_rules": {
