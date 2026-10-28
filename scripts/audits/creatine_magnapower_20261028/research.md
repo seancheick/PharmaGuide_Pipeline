@@ -52,3 +52,25 @@ authentication, so it is unverified and was not added as an identifier.
 3. Dormant matcher case: a row "Magnesium" whose form text is "Creatine MagnaPower" enriches to
    magnesium with `matched_form` None. A form of "Magnesium Creatine Chelate" gives
    `magnesium (unspecified)`. No corpus label has either today.
+
+## Independent retained-source check (Codex, 2026-10-28)
+
+Recovered the original two gzip-compressed Scribd JSONP page text layers from the previous
+agent's temporary scratchpad and retained exact bytes durably at
+`/Users/seancheick/pg_quality/magnesium_ul_20261028/magnapower_source_receipts/`.
+The document itself identifies Albion/Balchem, product 03465, Creatine MagnaPower (Magnesium
+Creatine Chelate), and revision 22-AUG-2024. Page 1's guaranteed analysis states magnesium
+not less than 8.0%; page 2's per-100-g nutritional table states magnesium 9,033 mg and creatine
+50 g, with the disclaimer that nutritional values are averaged sampled-lot results on an as-is
+basis and subject to change. These are manufacturer document claims, not a measured partition
+of the DSLD labels. The original source was the third-party mirror
+<https://www.scribd.com/document/1000407229>; no official-host retrieval is claimed.
+
+Exact retained-source SHA-256:
+
+- `pds_1-54422b5676.jsonp`: `b2065c79fc4ad2661dc2be97ad39495516596ed7cf76d23fabbc3de0d73940d7`
+- `pds_2-3610bfa9f5.jsonp`: `d0859a2f9c9cbd6c7a005ddfdafca1caf572115dcaba4e8e8be6a91c68dcf22a`
+
+This independent content inspection supports the existing notes; no numerical, identity,
+clinical-credit, or automatic-partition change was made during takeover. Official hosting
+was not required to inspect the retained manufacturer-authored document.
