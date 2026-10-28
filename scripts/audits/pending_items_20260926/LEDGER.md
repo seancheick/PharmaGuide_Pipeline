@@ -3801,3 +3801,11 @@ Open:
 - generic_evidence override, magnitude move and the line-718 predicate wait for claude/serene-dubinsky-479574 (folate allowlist already removed there, 37d74d5b1).
 - Before an app release, run sync_flutter_reference_data.py: the app's bundled rda_optimal_uls.json predates 720e95812.
 - Items 7–12 continue under Sean's October 28 rulings.
+
+## October28 — Evidence calibration (Dr Pham bands), measured candidate pending Sean
+
+Owner: scoring_v4/modules/generic_evidence.py::_primary_mass_floor; quality_score.json evidence_magnitudes.generic (1.31.0-evidence-no-automatic-exceptional, unreleased). Will NOT create a scorer, registry, field or status. Behavioral scoring class. Branch claude/serene-dubinsky-479574; qualification PR pending CI; no merge without Sean.
+
+Change: retired the brand-marker/BRAND_-id/ingredient-allowlist 18-raw floor (20/20; reached by one small manufacturer trial, e.g. BRAND_ASTAREAL with one PMID) and the branded single-RCT 17-raw floor (18.9/20). No automatic floor exceeds the strong base (14 raw = 15.6/20). The registry records no body-level certainty judgement, so a three-family count gate was built, reviewed twice and then removed per Sean. Proposed: a recorded clinician determination field for 19–20 (Sean's decision).
+
+Measured vs e6885790d: cohort 205 labels, 59 down, Evidence only; corpus scorer-only 803/15,149 down, 0 up, 0 other-pillar/status/safety/state changes, 344 tier changes (vitamin D3 454, creatine 133). Final code equals the measured outputs (the route never fired). Fail-first per rule; consumer slice 3,530 passed; raw canaries 33/33. Pre-existing and owner-assigned: 230149 stale since 49b61f37d (repinned); 10 stored-corpus preparation-artifact canaries and 7 preflight invariants vs the Oct18 baseline need the final rebuild/capture; 176872 lost a "Vitamin D / pregnancy" warning (safety owner); 17 magnesium supplemental-UL findings on undeclared food-matrix sources (Dose/safety owner). Proposals: INGR_FOLATE_MTHF biomarker-only (12.2 → 11.1 on 11 products); omega re-cite to EFSA 2010 plus disclosure rule (+84; review csv); app Evidence badge. Details: scripts/audits/evidence_calibration_20261028/PROPOSAL.md.
