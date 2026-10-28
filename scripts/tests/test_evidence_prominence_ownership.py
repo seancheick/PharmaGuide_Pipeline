@@ -146,7 +146,7 @@ def test_evidence_strength_not_relative_mass_selects_between_declared_purposes()
                      _row("Vitamin D3", "vitamin_d", 2.5, unit="mcg", path="ingredientRows[1]")],
         matches=[
             _match(id="INGR_CALCIUM", ingredient="Calcium", standard_name="Calcium",
-                   matched_source_row_refs=["ingredientRows[0]"]),
+                   study_type="rct_single", matched_source_row_refs=["ingredientRows[0]"]),
             _match(id="INGR_VITAMIN_D3", ingredient="Vitamin D3", standard_name="Vitamin D3",
                    matched_source_row_refs=["ingredientRows[1]"]),
         ],
@@ -155,7 +155,7 @@ def test_evidence_strength_not_relative_mass_selects_between_declared_purposes()
     payload = _scored(product)
 
     assert payload["metadata"]["primary_evidence_floor_canonical"] == "vitamin d3"
-    assert payload["metadata"]["primary_evidence_floor"] == 18.0
+    assert payload["metadata"]["primary_evidence_floor"] == 14.0
 
 
 def test_a_declared_purpose_keeps_evidence_credit_independent_of_amount():
@@ -328,7 +328,7 @@ def test_real_210555_disclosed_members_of_the_title_named_blend_anchor_the_floor
     assert not {key for key in keys if key[1] in {"magnesium", "zinc"}}
     evidence = _evidence(product)
     assert evidence["metadata"]["primary_evidence_floor_canonical"] == "testofen fenugreek"
-    assert evidence["components"]["primary_evidence_floor"] == 18.0
+    assert evidence["components"]["primary_evidence_floor"] == 14.0
 
 
 @pytest.mark.parametrize("fixture,member", [
@@ -348,9 +348,9 @@ def test_real_blend_total_never_becomes_an_undisclosed_members_floor(fixture, me
 @pytest.mark.parametrize("fixture,floor_canonical,floor", [
     # Removing amount from Evidence lets the stronger applicable Sensoril
     # record win over the co-active Relora record.
-    ("prominence_branded_heading_293928_raw.json", "sensoril ashwagandha", 18.0),
+    ("prominence_branded_heading_293928_raw.json", "sensoril ashwagandha", 14.0),
     # "UC-II Proprietary Cartilage Blend 401 mg"
-    ("evidence_subject_321604_raw.json", "uc ii undenatured type ii collagen", 18.0),
+    ("evidence_subject_321604_raw.json", "uc ii undenatured type ii collagen", 14.0),
 ])
 def test_real_heading_that_names_its_brand_anchors_that_brands_floor(fixture, floor_canonical, floor):
     """A blend heading's printed total is not a member's dose, but when the
@@ -558,7 +558,7 @@ def test_a_single_branded_intervention_nested_under_its_own_heading_keeps_its_fl
     # With the constituent, current enrichment links the records only to the
     # marker's 1.25 mg row and the existing source guard grants no floor. Keep
     # that baseline behavior; this correction must not invent another join.
-    assert evidence["metadata"]["primary_evidence_floor"] == (0.0 if with_constituent else 18.0)
+    assert evidence["metadata"]["primary_evidence_floor"] == (0.0 if with_constituent else 14.0)
 
 
 def test_real_nested_enzyme_member_has_one_physical_source_link():

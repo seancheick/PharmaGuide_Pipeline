@@ -12,7 +12,7 @@ from __future__ import annotations
 
 from scoring_v4.modules.generic_evidence import (  # noqa: E402
     score_evidence, PRIMARY_FLOOR_STRONG, PRIMARY_FLOOR_MODERATE,
-    PRIMARY_FLOOR_BRANDED_STRONG, EFFECT_DIRECTION_MULTIPLIERS,
+    PRIMARY_FLOOR_REPLICATED_STRONG, EFFECT_DIRECTION_MULTIPLIERS,
 )
 
 
@@ -104,105 +104,129 @@ def test_weak_study_type_does_not_floor():
     assert out["metadata"]["primary_evidence_floor"] == 0.0
 
 
-# --- v4.1 branded-RCT evidence tier (KSM-66 / Meriva / Sensoril) ----------
+# --- Replicated-body tier (Dr Pham framework, October 28, 2026) ------------
+# The near-perfect floor once followed a brand marker or an ingredient allowlist.
+# One or two small manufacturer-supplied trials could reach 20/20 that way. It now
+# follows the reviewed evidence body: clinician-approved contexts of the record
+# must show at least three consistent, independent RCT families for one
+# condition, with no contradictory family. A brand or ingredient name earns nothing.
 
-def test_branded_strong_floors_to_18():
-    """A branded clinically-studied extract with strong (meta/multi-RCT) evidence
-    earns 18 — above a non-branded strong single (14) — but still below the 19-20
-    band reserved for multi-active breadth."""
+_REVIEW = {"reviewer": "Test clinician", "reviewed_at": "2026-10-01",
+           "scope": "identity_dose_outcome_applicability"}
+
+
+def _context(family, *, direction="positive", condition="perceived_stress",
+             role="direct_rct", review_status="clinician_approved"):
+    return {"context_id": family, "trial_family": family, "condition": condition,
+            "evidence_role": role, "review_status": review_status,
+            "scoring_eligible": True, "clinical_review": dict(_REVIEW),
+            "outcomes": [{"name": "Perceived stress", "direction": direction,
+                          "hierarchy": "primary", "kind": "patient_important"}]}
+
+
+def _replicated(*families, **kwargs):
+    return [_context(family, **kwargs) for family in families or ("a", "b", "c")]
+
+
+def test_branded_record_without_replicated_body_is_strong_not_exceptional():
+    """BRAND_ASTAREAL/KSM-66 shape: a branded multi-RCT record with no approved
+    replicated body floors at the ordinary strong base, 14 (15.6/20), not 18 (20/20)."""
     p = _product([_ing()], [_match(study_type="rct_multiple", evidence_level="branded-rct")])
     out = score_evidence(p, apply_primary_floor=True)
-    assert out["metadata"]["primary_evidence_floor"] == 18.0
-    assert out["score"] >= 18.0
+    assert out["metadata"]["primary_evidence_floor"] == PRIMARY_FLOOR_STRONG == 14.0
 
 
-def test_branded_moderate_floors_to_17():
-    """Branded extract with a single RCT / clinical strain -> 17 (branded but
-    not multi-RCT depth)."""
+def test_single_branded_rct_is_moderate():
+    """One branded trial is a moderate floor (11 = 12.2/20), never 17 (18.9/20)."""
     p = _product([_ing()], [_match(study_type="rct_single", evidence_level="branded-rct")])
     out = score_evidence(p, apply_primary_floor=True)
-    assert out["metadata"]["primary_evidence_floor"] == 17.0
+    assert out["metadata"]["primary_evidence_floor"] == PRIMARY_FLOOR_MODERATE == 11.0
 
 
-def test_brand_id_product_human_record_floors_to_18():
-    """Some verified branded entries are marked by BRAND_* id while their
-    evidence_level remains product-human. Treat the brand id as the branded
-    signal so BioCell-style records do not miss the elevated floor."""
+def test_brand_id_prefix_no_longer_elevates():
     p = _product(
         [_ing("BioCell Collagen", "collagen", 1000, "mg")],
-        [_match(
-            id="BRAND_BIOCELL",
-            ingredient="BioCell",
-            standard_name="BioCell Collagen",
-            study_type="rct_multiple",
-            evidence_level="product-human",
-        )],
+        [_match(id="BRAND_BIOCELL", ingredient="BioCell", standard_name="BioCell Collagen",
+                study_type="rct_multiple", evidence_level="product-human")],
     )
     out = score_evidence(p, apply_primary_floor=True)
-    assert out["metadata"]["primary_evidence_floor"] == 18.0
+    assert out["metadata"]["primary_evidence_floor"] == 14.0
 
 
-def test_branded_weak_effect_cannot_ride_the_branded_strong_base():
-    """direction_ceiling (locked 2026-09-18): branding does not buy direction.
-
-    Before the lock this floored at 18 * 0.85 = 15.3 — a weak-effect primary
-    keeping a branded STRONG base. Only positive_strong may anchor there; every
-    weaker direction is capped at the MODERATE base weighted by the same
-    multiplier. Derived from the owners so it tracks a constant change.
-    """
-    p = _product([_ing()], [_match(study_type="rct_multiple", evidence_level="branded-rct",
-                                   effect_direction="positive_weak")])
+def test_replicated_body_reaches_exceptional_floor():
+    p = _product([_ing()], [_match(study_type="rct_multiple", study_contexts=_replicated())])
     out = score_evidence(p, apply_primary_floor=True)
+    assert out["metadata"]["primary_evidence_floor"] == PRIMARY_FLOOR_REPLICATED_STRONG == 18.0
 
+
+def test_replication_needs_three_families_for_one_condition():
+    two = _replicated("a", "b")
+    split = [_context("a"), _context("b"), _context("c", condition="sleep")]
+    for contexts in (two, split):
+        p = _product([_ing()], [_match(study_type="rct_multiple", study_contexts=contexts)])
+        assert score_evidence(p, apply_primary_floor=True)["metadata"]["primary_evidence_floor"] == 14.0
+
+
+def test_contradictory_family_blocks_exceptional_floor():
+    contexts = _replicated() + [_context("d", direction="null")]
+    p = _product([_ing()], [_match(study_type="rct_multiple", study_contexts=contexts)])
+    assert score_evidence(p, apply_primary_floor=True)["metadata"]["primary_evidence_floor"] == 14.0
+
+
+def test_pooled_or_unapproved_contexts_are_not_replication():
+    """A meta-analysis is not linked to its independent trials, and a context
+    still pending clinical review authorizes nothing (context_accepted_for_scoring)."""
+    pooled = _replicated("a", "b", "c", role="meta_analysis")
+    pending = _replicated(review_status="source_verified_pending_clinical_review")
+    for contexts in (pooled, pending):
+        p = _product([_ing()], [_match(study_type="systematic_review_meta", study_contexts=contexts)])
+        assert score_evidence(p, apply_primary_floor=True)["metadata"]["primary_evidence_floor"] == 14.0
+
+
+def test_replicated_single_rct_record_stays_moderate():
+    p = _product([_ing()], [_match(study_type="rct_single", study_contexts=_replicated())])
+    assert score_evidence(p, apply_primary_floor=True)["metadata"]["primary_evidence_floor"] == 11.0
+
+
+def test_weak_effect_cannot_ride_the_replicated_strong_base():
+    """direction_ceiling (locked 2026-09-18): only positive_strong anchors a strong
+    base; weaker directions cap at the MODERATE base times their multiplier."""
+    p = _product([_ing()], [_match(study_type="rct_multiple", effect_direction="positive_weak",
+                                   study_contexts=_replicated())])
+    out = score_evidence(p, apply_primary_floor=True)
     ceiling = round(PRIMARY_FLOOR_MODERATE * EFFECT_DIRECTION_MULTIPLIERS["positive_weak"], 4)
     assert out["metadata"]["primary_evidence_floor"] == ceiling
-    assert ceiling < PRIMARY_FLOOR_BRANDED_STRONG
 
 
 def test_non_branded_strong_stays_14():
-    """Guard: a merely-strong generic single does NOT get the branded tier."""
     p = _product([_ing()], [_match(study_type="rct_multiple", evidence_level="ingredient-human")])
     out = score_evidence(p, apply_primary_floor=True)
     assert out["metadata"]["primary_evidence_floor"] == 14.0
 
 
-def test_consensus_gold_standard_non_branded_floors_to_18():
-    """3-lane (2026-06-06): a broad-consensus simple ingredient whose GENERIC form
-    IS the clinically-validated form (psyllium, vitamin D, folate) earns the
-    elevated floor (18) even non-branded — via the explicit allowlist, NOT
-    automatic generic literature. Keeps generic ashwagandha (14) below KSM-66 (18)
-    while letting gold-standard generics score like the reference ingredients."""
+def test_retired_ingredient_allowlist_no_longer_elevates():
+    """Psyllium, vitamin D, folate and creatine reach the exceptional floor only
+    through a replicated reviewed body, like every other record."""
     p = _product([_ing("Psyllium", "psyllium", 5000, "mg")],
                  [_match(ingredient="Psyllium", standard_name="Psyllium",
                          canonical_id="psyllium", study_type="rct_multiple",
                          evidence_level="ingredient-human")])
     out = score_evidence(p, apply_primary_floor=True)
-    assert out["metadata"]["primary_evidence_floor"] == 18.0
+    assert out["metadata"]["primary_evidence_floor"] == 14.0
     assert out["metadata"]["primary_evidence_floor_canonical"] == "psyllium"
 
 
-def test_consensus_excludes_form_dependent_minerals():
-    """Guard: magnesium is NOT consensus-gold-standard (oxide vs glycinate differ),
-    so a strong generic magnesium match floors to 14, not 18."""
-    p = _product([_ing("Magnesium", "magnesium", 400, "mg")],
-                 [_match(ingredient="Magnesium", standard_name="Magnesium",
-                         canonical_id="magnesium", study_type="rct_multiple",
-                         evidence_level="ingredient-human")])
-    out = score_evidence(p, apply_primary_floor=True)
-    assert out["metadata"]["primary_evidence_floor"] == 14.0
-
-
-def test_branded_studied_amount_does_not_gate_evidence_floor():
+def test_studied_amount_does_not_gate_evidence_floor():
     p = _product([_ing(quantity=50)],
-                 [_match(study_type="rct_multiple", evidence_level="branded-rct",
-                         min_clinical_dose=300.0)])
+                 [_match(study_type="rct_multiple", min_clinical_dose=300.0,
+                         study_contexts=_replicated())])
     out = score_evidence(p, apply_primary_floor=True)
     assert out["metadata"]["primary_evidence_floor"] == 18.0
 
 
 def test_branded_trace_ingredient_does_not_float_product():
     """A branded strong match on a TRACE co-ingredient (not mass-dominant) must
-    not float the product to the branded tier (18). P5: magnesium (the
+    not float the product to a clinical floor. P5: magnesium (the
     mass-dominant essential) earns the nutrition-authority floor 10 — the trace
     branded ashwagandha does NOT lift it to 18."""
     ings = [_ing("Magnesium", "magnesium", 1000, "mg"),
@@ -237,14 +261,14 @@ def test_non_essential_gets_no_authority_floor():
 
 
 def test_authority_floor_never_lowers_stronger_floor():
-    """Authority is a floor, never a cap: an essential with consensus/branded
-    evidence keeps its higher floor (vitamin D consensus = 18 > authority 10)."""
+    """Authority is a floor, never a cap: an essential nutrient with a strong
+    clinical record keeps that higher floor (vitamin D strong = 14 > authority 10)."""
     p = _product([_ing("Vitamin D", "vitamin_d", 25, "mcg")],
                  [_match(ingredient="Vitamin D", standard_name="Vitamin D",
                          canonical_id="vitamin_d", study_type="rct_multiple",
                          evidence_level="ingredient-human")])
     out = score_evidence(p, apply_primary_floor=True)
-    assert out["metadata"]["primary_evidence_floor"] == 18.0
+    assert out["metadata"]["primary_evidence_floor"] == 14.0
 
 
 def test_authority_floor_is_generic_opt_in_only():
@@ -254,3 +278,26 @@ def test_authority_floor_is_generic_opt_in_only():
     out = score_evidence(p)  # default apply_primary_floor=False
     assert out["metadata"]["nutrition_authority_floor_applied"] is False
     assert out["score"] < 10.0
+
+
+# --- Public bands (Dr Pham, October 28, 2026; editorial ranges, not GRADE) ---
+
+def test_each_floor_lands_in_its_public_band():
+    """On the 18-point generic reference, each automatic floor's public /20 value
+    sits inside its band: exceptional 19-20, strong 15-18, moderate 11-14,
+    essential-nutrient nutrition 10-12 (between limited and moderate) and
+    limited 6-10 for weak or mixed directions."""
+    from scoring_v4.quality_score import _pillar_evidence
+    from scoring_v4.quality_score_config import config
+    from scoring_v4.modules.generic_evidence import NUTRITION_AUTHORITY_FLOOR
+
+    def public(raw):
+        return _pillar_evidence({"score": raw, "metadata": {"evidence_result_state": "evaluated_applicable"}},
+                                20.0, "generic_single_molecule", config())["score"]
+
+    assert 19 <= public(PRIMARY_FLOOR_REPLICATED_STRONG) <= 20
+    assert 15 <= public(PRIMARY_FLOOR_STRONG) <= 18
+    assert 11 <= public(PRIMARY_FLOOR_MODERATE) <= 14
+    assert 10 <= public(NUTRITION_AUTHORITY_FLOOR) <= 12
+    for direction in ("positive_weak", "mixed"):
+        assert 6 <= public(PRIMARY_FLOOR_MODERATE * EFFECT_DIRECTION_MULTIPLIERS[direction]) <= 11

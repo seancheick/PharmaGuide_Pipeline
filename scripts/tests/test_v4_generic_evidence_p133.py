@@ -740,9 +740,9 @@ def test_blend_anchor_brand_row_recovers_verified_product_level_evidence() -> No
 
     assert payload["metadata"]["recovered_matches"] == ["BRAND_RELORA"]
     assert payload["metadata"]["matched_entries"] == 1
-    assert payload["components"]["primary_evidence_floor"] == 17.0
+    assert payload["components"]["primary_evidence_floor"] == 11.0
     assert payload["metadata"]["primary_evidence_floor_canonical"] == "relora"
-    assert payload["score"] == 17.0
+    assert payload["score"] == 11.0
 
 
 def test_branded_recovery_does_not_borrow_relora_for_generic_magnolia_blend() -> None:
@@ -934,7 +934,7 @@ def test_vitamin_d_iu_resolves_same_ingredient_evidence_as_equivalent_mcg() -> N
     iu_payload = score(1000, "IU")
     mcg_payload = score(25, "mcg")
 
-    assert iu_payload["score"] == mcg_payload["score"] == 18.0
+    assert iu_payload["score"] == mcg_payload["score"] == 14.0
     assert iu_payload["components"] == mcg_payload["components"]
     assert iu_payload["metadata"]["primary_evidence_floor_canonical"] == "vitamin d3"
     assert iu_payload["metadata"]["recovered_matches"] == []
@@ -978,7 +978,7 @@ def test_vitamin_d_iu_and_mcg_have_amount_independent_evidence() -> None:
     iu_payload = score(1000, "IU")
     mcg_payload = score(25, "mcg")
 
-    assert iu_payload["score"] == mcg_payload["score"] == 18.0
+    assert iu_payload["score"] == mcg_payload["score"] == 14.0
     assert iu_payload["metadata"]["flags"] == mcg_payload["metadata"]["flags"]
     assert iu_payload["metadata"]["flags"] == []
     assert (
@@ -986,7 +986,7 @@ def test_vitamin_d_iu_and_mcg_have_amount_independent_evidence() -> None:
         == mcg_payload["metadata"]["sub_clinical_canonicals"]
     )
     assert iu_payload["metadata"]["sub_clinical_canonicals"] == []
-    assert iu_payload["components"]["primary_evidence_floor"] == 18.0
+    assert iu_payload["components"]["primary_evidence_floor"] == 14.0
 
 
 def test_vitamin_d_iu_and_mcg_both_pass_at_clinical_threshold() -> None:
@@ -1002,10 +1002,10 @@ def test_vitamin_d_iu_and_mcg_both_pass_at_clinical_threshold() -> None:
     iu_payload = score(2000, "IU")
     mcg_payload = score(50, "mcg")
 
-    assert iu_payload["score"] == mcg_payload["score"] == 18.0
+    assert iu_payload["score"] == mcg_payload["score"] == 14.0
     assert iu_payload["metadata"]["flags"] == []
     assert iu_payload["metadata"]["sub_clinical_canonicals"] == []
-    assert iu_payload["components"]["primary_evidence_floor"] == 18.0
+    assert iu_payload["components"]["primary_evidence_floor"] == 14.0
 
 
 def test_non_vitamin_d_iu_is_not_given_a_generic_primary_sentinel() -> None:
@@ -1196,9 +1196,20 @@ def test_joint_support_caps_branded_primary_evidence_floor() -> None:
     ingredient = _ingredient(name="OptiMSM", standard_name="MSM",
                              canonical_id="msm", quantity=2000, unit="mg")
     ingredient.update(raw_source_text="OptiMSM", raw_source_path="ingredientRows[0]")
-    match = _match(id="BRAND_OPTIMSM", ingredient="OptiMSM", standard_name="OptiMSM",
+    # A replicated reviewed body sets the 18 floor, so the joint cap has
+    # something above 14 to cap (1.31.0: a brand marker no longer does).
+    review = {"reviewer": "Test clinician", "reviewed_at": "2026-10-01",
+              "scope": "identity_dose_outcome_applicability"}
+    contexts = [{"context_id": family, "trial_family": family, "condition": "knee_discomfort",
+                 "evidence_role": "direct_rct", "review_status": "clinician_approved",
+                 "scoring_eligible": True, "clinical_review": review,
+                 "outcomes": [{"name": "Knee pain", "direction": "positive",
+                               "hierarchy": "primary", "kind": "patient_important"}]}
+                for family in ("a", "b", "c")]
+    match = _match(id="TEST_ELIGIBLE_OPTIMSM_REPLICATED", ingredient="OptiMSM", standard_name="OptiMSM",
                    study_type="rct_multiple", evidence_level="branded-rct",
-                   effect_direction="positive_strong", total_enrollment=200)
+                   effect_direction="positive_strong", total_enrollment=200,
+                   study_contexts=contexts)
     match.update(matched_source_row_refs=["ingredientRows[0]"], matched_canonical_ids=["msm"])
     product = _product(supplement_taxonomy={"primary_type": "joint_support"},
                        ingredients=[ingredient], matches=[match])
