@@ -812,12 +812,12 @@ def assess_clinical_source_review(entry: Mapping) -> dict:
 
 
 def _accepted_condition_scopes(reference: Mapping, policy: Mapping) -> list:
-    from probiotic_measurements import context_accepted_for_scoring
-    source_pmids = {str(pmid) for pmid in policy.get("source_pmids") or []}
+    from evidence_resolver import clinical_record_sources_eligible
+    source_pmids = policy.get("source_pmids") or None
     return [
         context for context in reference.get("study_contexts") or []
-        if isinstance(context, Mapping) and context_accepted_for_scoring(context)
-        and (not source_pmids or source_pmids.intersection(str(pmid) for pmid in context.get("source_pmids") or []))
+        if isinstance(context, Mapping)
+        and clinical_record_sources_eligible(reference, context=context, source_pmids=source_pmids)
     ]
 
 

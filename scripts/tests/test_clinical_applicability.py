@@ -2091,3 +2091,26 @@ def test_claim_absence_does_not_turn_unqualified_outcomes_into_affirmative_credi
     assert score_evidence(product, apply_primary_floor=True)['score'] == 0
     artifact = build_scored_artifact(product)
     assert artifact['_v4_module_breakdown']['dimensions']['evidence']['score'] == 0
+
+
+@pytest.mark.parametrize('held_pmid,adult_eligible', [('21818642', False), ('24642205', True)])
+def test_context_cannot_borrow_an_eligible_reference_from_its_sibling(monkeypatch, held_pmid, adult_eligible):
+    import clinical_applicability as owner
+    from evidence_resolver import clinical_record_sources_eligible
+    current = owner.reviewed_entries()
+    record = deepcopy(current['INGR_GINGER'])
+    for reference in record['references_structured']:
+        if reference.get('pmid') == held_pmid:
+            reference['scoring_eligible'] = False
+    monkeypatch.setattr(owner, 'reviewed_entries', lambda: {**current, record['id']: record})
+    row = _row('ginger', 'Ginger Root', quantity=1000)
+    product = {'product_name': 'Ginger Root', 'ingredient_quality_data': {'ingredients_scorable': [row]},
+               'evidence_data': {'clinical_matches': [{**record, 'ingredient': row['name'],
+                   'matched_source_row_refs': ['ingredientRows[0]']}]}}
+    result = owner.assess_clinical_applicability(product, product['evidence_data']['clinical_matches'][0], assess_amount=False)
+    assert (result['status'] == 'applicable') is adult_eligible
+    assert (score_evidence(product, apply_primary_floor=True)['score'] > 0) is adult_eligible
+    # Valid trial plus an explicitly excluded companion/correction preserves
+    # the trial; a held trial cannot borrow the pregnancy synthesis instead.
+    if adult_eligible:
+        assert clinical_record_sources_eligible(record)
