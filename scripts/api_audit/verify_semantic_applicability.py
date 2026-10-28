@@ -97,7 +97,8 @@ def audit_semantic_applicability(records: List[Dict[str, Any]]) -> Dict[str, Any
             if not studies:
                 record_issues.append(
                     f"VIOLATION: effect_direction is {eff} but qualifying_human_studies is empty. "
-                    "Set effect_direction to null and applicability_status to no_qualifying_human_evidence."
+                    "Set effect_direction to JSON null (no effect was observed; the \"null\" effect category means "
+                    "an evaluated null outcome) and applicability_status to no_qualifying_human_evidence."
                 )
         if eff == "no_qualifying_human_evidence":
             if len(studies) > 0:
