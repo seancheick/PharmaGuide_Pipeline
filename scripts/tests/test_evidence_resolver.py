@@ -901,8 +901,12 @@ def test_real_disclosed_extract_and_theanine_are_not_missing_or_blend():
                 assert result.points_eligible is False
             else:
                 assert row["canonical_id"] == "l_theanine"
-                assert result.disposition == EvidenceDisposition.RESOLVED_BY_REVIEWED_CLINICAL_EVIDENCE.value
-                assert result.points_eligible is True
+                # The label claims stress; INGR_L_THEANINE's only context is pending
+                # clinician review and it has no signed scope, so no reviewed source
+                # supports that purpose (item 12, Sean 2026-10-28).
+                assert result.disposition == EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value
+                assert result.reason_code == "label_purpose_evidence_mismatch"
+                assert result.points_eligible is False
 
 
 @pytest.mark.parametrize('quantity,unit', [(200, 'mg'), (0.2, 'g'), (200000, 'mcg')])
@@ -923,6 +927,37 @@ def test_resolver_uses_shared_daily_units_and_any_applicable_record(monkeypatch,
     assert er.resolve_evidence_for_row(row, product).applicability_status == 'applicable_reviewed_trials'
     row['is_proprietary_blend'] = True
     assert er.resolve_evidence_for_row(row, product).disposition == EvidenceDisposition.IDENTITY_INSUFFICIENT.value
+
+
+def test_descriptive_goal_tag_and_endpoint_text_cannot_create_a_supported_purpose():
+    """Item 12 (Sean, 2026-10-28): consumer goals, relevance tags, endpoint prose and
+    primary_outcome describe a record; they never establish the purpose it supports."""
+    entry = {'primary_outcome': 'Reduce Stress/Anxiety',
+             'health_goals_supported': ['Reduce Stress/Anxiety', 'Sleep Quality'],
+             'endpoint_relevance_tags': ['stress_mood', 'sleep'],
+             'key_endpoints': ['perceived stress', 'sleep quality']}
+    assert er._evidence_entry_purposes(entry) == set()
+
+
+def test_clinician_approved_scoring_context_establishes_its_studied_purpose():
+    approved = {'review_status': 'clinician_approved', 'scoring_eligible': True,
+                'condition': 'perceived_stress', 'outcomes': [{'name': 'Perceived Stress Scale'}]}
+    pending = {**approved, 'review_status': 'source_verified_pending_clinical_review',
+               'condition': 'knee_joint_discomfort', 'outcomes': [{'name': 'joint pain'}]}
+    held = {**approved, 'scoring_eligible': False, 'condition': 'bowel_regularity', 'outcomes': []}
+    purposes = er._evidence_entry_purposes({'study_contexts': [approved, pending, held]})
+    assert 'mood' in purposes
+    assert not purposes & er.evidence_indication_categories('joint pain bowel regularity')
+
+
+def test_curated_record_owns_purpose_for_an_enriched_match():
+    """Enriched clinical matches carry no study_contexts; the curated record decides."""
+    from clinical_applicability import reviewed_entries
+    record = reviewed_entries()['BRAND_KSM66']
+    match = {'id': 'BRAND_KSM66', 'health_goals_supported': ['Joint & Bone Health']}
+    assert er._evidence_entry_purposes(match) == er._evidence_entry_purposes(record)
+    assert er._evidence_entry_purposes(match) == er.evidence_indication_categories(
+        ' '.join(record['applicability']['supported_outcomes']))
 
 
 def test_literature_resolution_cannot_substitute_another_claimed_purpose(monkeypatch):

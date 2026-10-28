@@ -1516,19 +1516,33 @@ def _evidence_claim_purposes(product: Mapping[str, Any], module: Optional[str] =
 
 
 def _evidence_entry_purposes(entry: Mapping[str, Any]) -> Set[str]:
-    """Only stated endpoints/goals describe the record's supported purpose."""
-    scope = entry.get("applicability") or {}
+    """Purposes a clinical record supports, from reviewed sources only.
+
+    A signed applicability scope decides when present. Otherwise only
+    clinician-approved, scoring-eligible study contexts state a studied
+    condition and outcomes. Consumer goals, relevance tags, endpoint prose and
+    primary_outcome describe a record; they never establish a supported
+    purpose on their own (Sean, 2026-10-28). An enriched clinical match is
+    judged by its curated record, which owns the contexts.
+    """
+    from clinical_applicability import reviewed_entries
+    record = reviewed_entries().get(str(entry.get("id") or entry.get("study_id") or "")) or entry
+    scope = record.get("applicability") or {}
     outcomes = scope.get("supported_outcomes") if isinstance(scope, Mapping) else None
     if isinstance(outcomes, list) and outcomes:
         # A reviewed scope outranks prose that may describe null outcomes or
         # special study populations. Those words are not supported purposes.
         return evidence_indication_categories(" ".join(str(value) for value in outcomes))
-    parts = [str(entry.get("primary_outcome") or "")]
-    for key in ("health_goals_supported", "endpoint_relevance_tags", "key_endpoints"):
-        values = entry.get(key)
-        if isinstance(values, list):
-            parts.extend(str(value) for value in values)
-    return evidence_indication_categories(" ".join(parts))
+    reviewed = [
+        " ".join([str(context.get("condition") or "")] + [
+            str(outcome.get("name") or "") for outcome in context.get("outcomes") or []
+            if isinstance(outcome, Mapping)])
+        for context in record.get("study_contexts") or []
+        if isinstance(context, Mapping)
+        and context.get("review_status") == "clinician_approved"
+        and context.get("scoring_eligible") is True
+    ]
+    return evidence_indication_categories(" ".join(reviewed))
 
 
 def evidence_record_matches_declared_purpose(
