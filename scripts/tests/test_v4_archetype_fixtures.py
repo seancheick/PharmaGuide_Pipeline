@@ -298,7 +298,7 @@ def test_single_creatine_fixture_does_not_treat_derived_identity_as_source_form(
     assert actual["pillars"]["evidence"] == 0.0
     assert actual["raw_dimensions"]["evidence"] == 0.0
     ideal = validation.evaluate_fixture(suite.by_id("sports_single__ideal")).actual
-    # 1.31.0: no registered replicated body, so the strong floor (14 raw).
+    # 1.31.0: no automatic floor above the strong base (14 raw).
     assert ideal["pillars"]["evidence"] == 15.6
     assert ideal["quality_score_v4_100"] == 95.6
 

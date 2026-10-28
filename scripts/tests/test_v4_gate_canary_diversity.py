@@ -103,8 +103,7 @@ V4_CANARIES = {
         # Printed creatine5g and HMB1.5g: current shared contribution targets
         # award20 and10 raw Dose points; their co-primary average is15.
         # Evidence 14 raw (1.31.0): creatine left the retired ingredient
-        # allowlist; its one approved context is a pooled meta-analysis, not
-        # three linked independent trial families.
+        # allowlist; no automatic floor exceeds the strong base.
         "score_range": (69.2, 69.2),
         "raw_fixture": "evidence_readiness_325587_raw.json",
         "dose_raw": 15.0,
