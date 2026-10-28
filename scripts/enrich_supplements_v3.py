@@ -11403,7 +11403,17 @@ class SupplementEnricherV3:
                 else None
             )
 
-            for botanical in botanicals_list:
+            # Exact named materials precede a generic parent match. The generic
+            # fenugreek threshold must not swallow a verified Testofen material.
+            material_names = [ing_name, ingredient.get("matched_form") or ""]
+            material_names.extend(form.get("name", "") for form in ingredient.get("forms") or []
+                                  if isinstance(form, dict))
+            candidates = sorted(botanicals_list, key=lambda item: (
+                not any(self._exact_match(name, item.get("standard_name", ""), item.get("aliases", []))
+                        for name in material_names if name),
+                not bool(item.get("branded_form")),
+            ))
+            for botanical in candidates:
                 # A retained identity is not a verified standardization claim.
                 # Existing explicit registry holds must precede both brand and
                 # percentage credit; missing legacy flags retain their meaning.
@@ -11412,6 +11422,15 @@ class SupplementEnricherV3:
                     continue
                 bot_name = botanical.get('standard_name', '')
                 bot_aliases = botanical.get('aliases', [])
+                if botanical.get("branded_form"):
+                    expected_parent = (botanical.get("attributes") or {}).get("iqm_parent_id")
+                    if expected_parent and ingredient.get("canonical_id") and ingredient["canonical_id"] != expected_parent:
+                        continue
+                    if (ingredient.get("identity_disposition") == "ambiguous"
+                            or ingredient.get("match_ambiguity_candidates")
+                            or not any(self._exact_match(name, bot_name, bot_aliases)
+                                       for name in material_names if name)):
+                        continue
 
                 if (resolved_iqm_id and resolved_iqm_id == botanical.get('id')) or \
                    self._exact_match(ing_name, bot_name, bot_aliases) or \
@@ -11494,10 +11513,16 @@ class SupplementEnricherV3:
                     evidence_source = "none"
                     tier = "none"
                     ratio = 0.0
-                    is_branded = bool(botanical.get("branded_form"))
+                    is_branded = bool(
+                        botanical.get("branded_form") and botanical.get("bonus_eligible") is True
+                        and basis == "branded_extract"
+                        and (botanical.get("marker_compounds") or markers)
+                        and botanical.get("sources")
+                    )
                     if is_branded:
-                        # Branded standardized extracts (KSM-66, Cran-Max, FloraGLO,
-                        # Meriva, ...) guarantee standardization by trademark.
+                        # The curated exact-material specification authorizes
+                        # this trait, independently of clinical study outcomes.
+                        # Keep percentage_found label-derived, including zero.
                         evidence_source = "branded_form"
                         tier = "full"
                     elif min_threshold is not None and is_percent_unit:

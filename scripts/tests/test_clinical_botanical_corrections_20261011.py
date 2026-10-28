@@ -109,7 +109,7 @@ def test_held_clinical_match_cannot_provide_branded_standardization(source_hold)
            'matched_source_row_refs':['ingredientRows[0]'],**source_hold}
     product={'evidence_data':{'clinical_matches':[match]}}
     row={'name':'Source Hold','raw_source_path':'ingredientRows[0]'}
-    assert bp._branded_studied_row(product,row) is False
+    assert bp._resolved_preparation_row(product,row) is False
     assert bp._standardization_tier_credit(product,row)==0
 
 
@@ -117,27 +117,20 @@ def test_valid_clinical_match_retains_independent_branded_credit():
     match={'id':'BRAND_VALID','evidence_level':'branded_rct',
            'matched_source_row_refs':['ingredientRows[0]'],'references_structured':[{'pmid':'28661438'}]}
     row={'name':'Valid','raw_source_path':'ingredientRows[0]'}
-    assert bp._branded_studied_row({'evidence_data':{'clinical_matches':[match]}},row)
+    product = {'evidence_data': {'clinical_matches': [match]}}
+    assert not bp._resolved_preparation_row(product, row)
+    assert bp._standardization_tier_credit(product, row) == 0
 
 
-def test_projection_brand_index_obeys_existing_source_integrity(tmp_path,monkeypatch):
-    original=bp._DATA_DIR
-    data={'backed_clinical_studies':[
-        {'id':'BRAND_HELD','standard_name':'Held Brand','aliases':['Held Brand'],
-         'evidence_level':'branded_rct','scoring_eligible':False},
-        {'id':'BRAND_VALID','standard_name':'Valid Brand','aliases':['Valid Brand'],
-         'evidence_level':'branded_rct','references_structured':[{'pmid':'28661438'}]},
-    ]}
-    (tmp_path/'backed_clinical_studies.json').write_text(json.dumps(data))
-    monkeypatch.setattr(bp,'_DATA_DIR',tmp_path)
-    bp._branded_studied_entries.cache_clear()
-    try:
-        keys={name for names,_tokens in bp._branded_studied_entries() for name in names}
-        assert 'held brand' not in keys
-        assert 'valid brand' in keys
-    finally:
-        monkeypatch.setattr(bp,'_DATA_DIR',original)
-        bp._branded_studied_entries.cache_clear()
+@pytest.mark.parametrize('eligible', [False, True])
+def test_physical_preparation_identity_is_not_marker_or_clinical_eligibility(eligible):
+    row = {'name': 'Unstandardized prepared material', 'canonical_id': 'fenugreek',
+           'matched_form': 'specific preparation', 'mapped': True, 'form_match_status': 'mapped'}
+    product = {'evidence_data': {'clinical_matches': [{'id': 'BRAND_CONTROL', 'scoring_eligible': eligible}]}}
+    assert bp._resolved_preparation_row(product, row)
+    assert bp._standardization_tier_credit(product, row) == 0
+    # Parent preparation identity serves Dose independently of marker credit.
+    assert bp._is_named_botanical_preparation(product, {**row, 'is_parent_total': True})
 
 
 def test_wrong_analyte_or_preparation_cannot_reuse_a_numeric_threshold():
@@ -164,10 +157,94 @@ def test_native_enrichment_preserves_parent_hold_before_branded_credit(collector
     }
     product = {'activeIngredients': [row], 'productName': 'Life Extension Super Bio-Curcumin (BCM-95)'}
     evidence = collector._collect_evidence_data(product)
-    held = next(match for match in evidence['clinical_matches'] if match['id'] == native['id'])
-    assert held.get('scoring_eligible') is False
-    # Other independently valid matches retain their own eligibility. This
-    # assertion isolates the collected held source rather than borrowing them.
-    product['evidence_data'] = {'clinical_matches': [held]}
-    assert bp._branded_studied_row(product, row) is False
+    assert not any(match['id'] == native['id'] for match in evidence['clinical_matches'])
+    assert any(match['id'] == native['id'] for match in evidence['rejected_clinical_matches'])
+    # Clinical rejection itself supplies neither physical identity nor markers.
+    product['evidence_data'] = evidence
+    assert bp._resolved_preparation_row(product, row) is False
     assert bp._standardization_tier_credit(product, row) == 0
+
+
+# Sean's material/benefit separation ruling, October 28, 2026.
+def test_real_testofen_material_spec_keeps_clinical_hold_and_earns_only_formulation(collector):
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    from scoring_v4.scored_artifact import build_scored_artifact
+    raw = json.loads((Path(__file__).parent / 'fixtures/material_standardization_304641_raw.json').read_text())
+    enriched, errors = collector.enrich_product(EnhancedDSLDNormalizer().normalize_product(raw))
+    assert not errors
+    material = next(x for x in enriched['formulation_data']['standardized_botanicals'] if x['name'] == 'Testofen')
+    assert material['evidence_source'] == 'branded_form'
+    assert material['percentage_found'] == 0 and material['percentage_source'] is None
+    assert material['meets_threshold'] is True
+    artifact = build_scored_artifact(enriched)
+    formulation = bp.score_botanical_formulation(enriched)
+    assert formulation['components']['marker_standardization_declared'] == bp.STANDARDIZATION_TIER_FULL
+    entries = artifact['quality_pillars_v4']['formulation']['receipt']['entries']
+    assert len([entry for entry in entries if entry['id'] == 'marker_standardization_declared']) == 1
+    assert not any(m['id'] == 'BRAND_TESTOFEN' for m in enriched['evidence_data']['clinical_matches'])
+    assert artifact['quality_pillars_v4']['evidence']['score'] == 10.4
+
+
+@pytest.mark.parametrize('clinical_state', ['approved', 'held', 'null', 'retracted'])
+def test_verified_material_credit_is_independent_of_clinical_state(collector, clinical_state):
+    row = {'name': 'Testofen', 'standard_name': 'Fenugreek', 'canonical_id': 'fenugreek',
+           'matched_form': 'testofen', 'form_match_status': 'mapped', 'mapped': True,
+           'mapped_identity': True, 'identity_disposition': 'clean',
+           'raw_source_path': 'ingredientRows[0]', 'quantity': 600, 'unit': 'mg',
+           'raw_taxonomy': {'category': 'botanical', 'forms': [{'name': 'Fenugreek Seed Extract'}]}}
+    product = {'activeIngredients': [row], 'ingredient_quality_data': {'ingredients_scorable': [row]},
+               'evidence_data': {'clinical_matches': [{'id': 'BRAND_TESTOFEN', 'evidence_level': 'branded-rct',
+                   'matched_source_row_refs': ['ingredientRows[0]'], 'scoring_eligible': clinical_state == 'approved',
+                   'effect_direction': 'null' if clinical_state == 'null' else 'positive_strong',
+                   'references_structured': [{'pmid': '26791805', 'retracted': clinical_state == 'retracted'}]}]}}
+    product['formulation_data'] = {'standardized_botanicals': collector._collect_standardized_botanicals(product)}
+    assert bp._standardization_tier_credit(product, row) == bp.STANDARDIZATION_TIER_FULL
+
+
+@pytest.mark.parametrize('name,extra', [
+    ('Fenugreek Seed Extract', {}),
+    ('Ambiguous Testofen', {'identity_disposition': 'ambiguous', 'match_ambiguity_candidates': ['fenugreek', 'other']}),
+    ('Unstandardized Studied Material', {}),
+])
+def test_clinical_brand_and_generic_or_ambiguous_identity_do_not_prove_standardization(collector, name, extra):
+    row = {'name': name, 'canonical_id': 'fenugreek', 'standard_name': 'Fenugreek',
+           'raw_source_path': 'ingredientRows[0]', 'quantity': 600, 'unit': 'mg', **extra}
+    product = {'activeIngredients': [row], 'evidence_data': {'clinical_matches': [{
+        'id': 'BRAND_STUDIED_CONTROL', 'evidence_level': 'branded-rct',
+        'matched_source_row_refs': ['ingredientRows[0]']}]}}
+    product['formulation_data'] = {'standardized_botanicals': collector._collect_standardized_botanicals(product)}
+    assert bp._standardization_tier_credit(product, row) == 0
+
+
+@pytest.mark.parametrize('eligible', [False, True])
+def test_unstandardized_specific_material_keeps_primary_and_named_preparation_identity(eligible):
+    prepared = {'name': 'Specific material', 'canonical_id': 'fenugreek', 'standard_name': 'Fenugreek',
+                'matched_form': 'specific extract', 'mapped': True, 'form_match_status': 'mapped',
+                'quantity': 500, 'unit': 'mg', 'raw_source_path': 'ingredientRows[0]',
+                'raw_taxonomy': {'category': 'botanical'}}
+    generic = {'name': 'Generic botanical', 'canonical_id': 'tribulus', 'standard_name': 'Tribulus',
+               'mapped': True, 'quantity': 1000, 'unit': 'mg', 'raw_source_path': 'ingredientRows[1]',
+               'raw_taxonomy': {'category': 'botanical'}}
+    product = {'ingredient_quality_data': {'ingredients_scorable': [prepared, generic]},
+               'evidence_data': {'clinical_matches': [{'id': 'BRAND_CONTROL', 'scoring_eligible': eligible,
+                   'matched_source_row_refs': ['ingredientRows[0]']}]}}
+    assert bp._primary_botanical_active(product)['raw_source_path'] == 'ingredientRows[0]'
+    assert bp._is_named_botanical_preparation(product, {**prepared, 'is_parent_total': True})
+    assert bp._standardization_tier_credit(product, prepared) == 0
+
+
+def test_ambiguous_material_cannot_inherit_a_parent_standardization_projection():
+    row = {'name': 'Ambiguous Testofen', 'canonical_id': 'fenugreek', 'mapped': True,
+           'matched_form': 'testofen', 'identity_disposition': 'ambiguous'}
+    product = {'formulation_data': {'standardized_botanicals': [{'name': 'Fenugreek',
+        'botanical_id': 'fenugreek', 'meets_threshold': True}]}}
+    assert not bp._resolved_preparation_row(product, row)
+    assert not bp._standardized_match(product, row)
+    assert bp._standardization_tier_credit(product, row) == 0
+
+
+def test_exact_brand_name_cannot_override_a_conflicting_canonical_material(collector):
+    row = {'name': 'Testofen', 'canonical_id': 'tribulus', 'canonical_source_db': 'ingredient_quality_map',
+           'quantity': 600, 'unit': 'mg'}
+    found = collector._collect_standardized_botanicals({'activeIngredients': [row]})
+    assert not any(item.get('botanical_id') == 'testofen' and item['meets_threshold'] for item in found)

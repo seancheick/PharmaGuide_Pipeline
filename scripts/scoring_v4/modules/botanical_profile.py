@@ -10,9 +10,9 @@ both for botanical products:
     extract (not whole-herb powder)      botanical_extract
     marker standardization (tiered)      standardization_tier_full / _near / _half
     weak / unidentified botanical        -4   (replaces the identity baseline)
-  Plant part and the printed amount are Transparency facts; a brand name is an
-  Evidence fact (a branded studied extract still earns the full standardization
-  tier, once).
+  Plant part and printed amount are Transparency facts. Formulation consumes
+  verified material identity and marker specifications independently of clinical
+  benefit eligibility, and credits each standardization characteristic once.
 
   Dose adapter: source-owned reference semantics in rda_therapeutic_dosing.json
   distinguish descriptive study regimens from numerical benchmarks. The reviewed
@@ -176,65 +176,19 @@ def _known_botanical_identity_set() -> frozenset:
     return _botanical_identity_set() | _standardized_botanical_identity_set()
 
 
-@lru_cache(maxsize=1)
-def _branded_studied_entries() -> tuple:
-    """(names and aliases, brand_tokens) of each clinically studied brand record."""
-    try:
-        raw = json.loads((_DATA_DIR / "backed_clinical_studies.json").read_text())
-    except Exception:  # pragma: no cover
-        return ()
-    from evidence_resolver import clinical_record_sources_eligible
+def _resolved_preparation_row(product: Dict[str, Any], row: Dict[str, Any]) -> bool:
+    """Physical preparation identity from the input/form owner, never efficacy.
 
-    out = []
-    for entry in raw.get("backed_clinical_studies") or []:
-        if not isinstance(entry, dict) or not clinical_record_sources_eligible(entry):
-            continue
-        level = _norm(entry.get("evidence_level"))
-        branded = "branded" in level or _norm(entry.get("id")).startswith("brand_")
-        if not branded or level == "preclinical":
-            continue
-        names = frozenset(k for k in (_norm(v) for v in [entry.get("standard_name"), *(entry.get("aliases") or [])]) if k)
-        out.append((names, tuple(_norm(t) for t in entry.get("brand_tokens") or [] if _norm(t))))
-    return tuple(out)
-
-
-def _branded_studied_row(product: Dict[str, Any], row: Dict[str, Any]) -> bool:
-    """Whether ``row`` is a branded clinically-studied extract on this label.
-
-    The enricher decides whether a label names a brand
-    (``enrich_supplements_v3._brand_mentioned``: a BRAND_ entry's aliases find
-    it, its ``brand_tokens`` confirm it) and records the rows each clinical
-    match covers. A brand known only from animal or in-vitro work is not
-    clinically studied.
-
-    A label-level projection (a brand-named blend total such as "Sytrinol") is
-    never assessed by that matcher, so the same rule reads the projection's own
-    label name. Remove this branch when the enricher records brand matches for
-    those rows.
+    A specific mapped IQM form remains the same material when a clinical
+    finding is held, null or retracted. Standardization is a separate trait.
+    A validated standardization projection also establishes its exact material.
     """
-    from clinical_applicability import preparation_verified_clinical_matches
-    from evidence_resolver import clinical_record_sources_eligible
-
-    ref = row.get("raw_source_path")
-    # A studied branded material is a form-quality fact; whether its research
-    # fits this label's purpose or population is Evidence's decision.
-    for match in preparation_verified_clinical_matches(product):
-        if not isinstance(match, dict) or not clinical_record_sources_eligible(match):
-            continue
-        level = _norm(match.get("evidence_level"))
-        branded = "branded" in level or _norm(match.get("id")).startswith("brand_")
-        if ref and branded and level != "preclinical" and ref in (match.get("matched_source_row_refs") or []):
-            return True
-    if row.get("scoring_input_kind") != "product_level_evidence":
+    if _explicit_botanical_identity_rejection(row, require_preparation=True):
         return False
-    keys = set(_ingredient_identity_keys(row))
-    text = " ".join(sorted(keys))
-    return any(
-        keys & names and (
-            not tokens
-            or any(re.search(r"(?<!\w)" + re.escape(t) + r"(?!\w)", text) for t in tokens)
-        )
-        for names, tokens in _branded_studied_entries()
+    return bool(
+        (row.get("mapped") is True and row.get("matched_form")
+         and row.get("form_match_status") in {None, "mapped"})
+        or _standardized_match(product, row)
     )
 
 
@@ -397,24 +351,16 @@ def _primary_botanical_active(product: Dict[str, Any]) -> Optional[Dict[str, Any
     # total, prefer a recognized botanical anchor over the generic/unmapped
     # blend header. This keeps opaque blend headers conservative without
     # suppressing the known child identity carried by blend_anchor_mass.
-    def exact_branded_preparation(row: Dict[str, Any]) -> bool:
-        if not _branded_studied_row(product, row):
-            return False
-        text = " ".join(_ingredient_identity_keys(row))
-        return any(
-            any(name and name in text for name in names)
-            for names, _tokens in _branded_studied_entries()
-        )
 
     return max(candidates, key=lambda r: (
-        exact_branded_preparation(r),
+        _resolved_preparation_row(product, r),
         _mass_mg(r) or 0.0,
         _recognized_botanical_identity(r),
         bio_score_of(r) or 0.0,
     ))
 
 
-def _explicit_botanical_identity_rejection(row: Dict[str, Any]) -> bool:
+def _explicit_botanical_identity_rejection(row: Dict[str, Any], *, require_preparation: bool = False) -> bool:
     # The input owner excludes some known identities from dose-bearing rows
     # solely because the manufacturer withholds their individual quantities.
     # That exclusion cannot turn a resolved identity into an unknown botanical.
@@ -428,7 +374,9 @@ def _explicit_botanical_identity_rejection(row: Dict[str, Any]) -> bool:
         and row.get("score_exclusion_reason") == "recognized_non_scorable"
     )
     return ((row.get("scoreable_identity") is False and not known_without_dose)
-            or row.get("identity_disposition") == "identity_conflict")
+            or row.get("identity_disposition") == "identity_conflict"
+            or (require_preparation and (bool(row.get("match_ambiguity_candidates"))
+                or row.get("identity_disposition") in {"ambiguous", "unresolved"})))
 
 
 def _recognized_botanical_identity(
@@ -660,6 +608,8 @@ def is_botanical_product(product: Dict[str, Any]) -> bool:
 
 
 def _standardized_match(product: Dict[str, Any], row: Dict[str, Any]) -> bool:
+    if _explicit_botanical_identity_rejection(row, require_preparation=True):
+        return False
     sb = ((product.get("formulation_data") or {}).get("standardized_botanicals")) or []
     keys = set(_ingredient_identity_keys(row))
     for item in sb:
@@ -682,7 +632,7 @@ def _standardized_match(product: Dict[str, Any], row: Dict[str, Any]) -> bool:
 # neutral identity credit leaves of the reference; a marker word without a
 # quantified amount, the plant part, the printed amount and a brand name earn
 # nothing here (Transparency owns disclosure; Evidence owns branded studies).
-#   full  = branded clinically-studied extract OR full threshold met
+#   full  = verified exact-material specification OR full label threshold met
 #   near  = marker disclosed and >= 75% of threshold
 #   half  = marker disclosed and >= 50% of threshold
 #   0     = below 50% of threshold / unquantified marker / plain powder
@@ -695,10 +645,9 @@ BOTANICAL_EXTRACT = _FVM["botanical_extract"]
 
 def _standardization_tier_credit(product: Dict[str, Any], row: Dict[str, Any]) -> float:
     """Return the tiered marker-standardization credit for ``row``."""
+    if _explicit_botanical_identity_rejection(row, require_preparation=True):
+        return 0.0
     keys = set(_ingredient_identity_keys(row))
-    # A branded clinically-studied extract is standardized by definition.
-    if _branded_studied_row(product, row):
-        return STANDARDIZATION_TIER_FULL
     sb = ((product.get("formulation_data") or {}).get("standardized_botanicals")) or []
     best = 0.0
     for item in sb:
@@ -789,15 +738,15 @@ def _dosing_entry_for(row: Dict[str, Any]) -> Optional[Dict[str, Any]]:
     return None
 
 
-def _is_named_standardized_botanical_complex(product: Dict[str, Any], row: Dict[str, Any]) -> bool:
-    """True when a parent-total row is itself the named standardized dose form.
+def _is_named_botanical_preparation(product: Dict[str, Any], row: Dict[str, Any]) -> bool:
+    """True when a parent-total row is itself a resolved physical dose form.
 
     Curcumin phytosome / Meriva-style labels often expose a parent complex with
-    nested form rows. That parent mass is the clinically studied dose form, not
+    nested form rows. That parent mass is the resolved prepared material, not
     an opaque proprietary-blend total. Plain blend headers and product-level
     anchors stay conservative.
     """
-    return _standardized_match(product, row) or _branded_studied_row(product, row)
+    return _resolved_preparation_row(product, row)
 
 
 # Completed no-benchmark reviews and source-confirmed hidden shares use the
@@ -856,7 +805,7 @@ def score_botanical_purpose_dose(
     if row.get("is_blend_header") or row.get("blend_total_weight_only"):
         return unassessed_amount_band("blend_total_only", benchmark,
                                       reviewed_label_limitation=reviewed_hidden)
-    if row.get("is_parent_total") and not _is_named_standardized_botanical_complex(product, row):
+    if row.get("is_parent_total") and not _is_named_botanical_preparation(product, row):
         return unassessed_amount_band("blend_total_only", benchmark,
                                       reviewed_label_limitation=reviewed_hidden)
 
