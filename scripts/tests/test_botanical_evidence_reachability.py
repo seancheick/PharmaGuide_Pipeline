@@ -14,15 +14,19 @@ def enricher():
     return SupplementEnricherV3()
 
 
-def _eligible_cranberry_fixture(monkeypatch, enricher):
-    """Exercise preparation/lineage with explicit eligibility, not the held registry."""
+def _held_cranberry_fixture(monkeypatch, enricher):
+    """Re-impose a record-level hold on a copy of the cranberry owner.
+
+    Dr. Pham's 2026-10-28 ruling resolved the real INGR_CRANBERRY hold, so the
+    hold guard uses a synthetic held copy of the same record.
+    """
     import clinical_applicability as ca
     import scoring_v4.modules.generic_evidence as ge
 
     owners = deepcopy(ca.reviewed_entries())
     fixture = owners["INGR_CRANBERRY"]
-    assert fixture["scoring_eligible"] is False
-    fixture["scoring_eligible"] = True
+    assert fixture["scoring_eligible"] is True
+    fixture["scoring_eligible"] = False
     monkeypatch.setattr(ca, "reviewed_entries", lambda: owners)
     studies = deepcopy(enricher.databases["backed_clinical_studies"]["backed_clinical_studies"])
     studies = [deepcopy(fixture) if row.get("id") == fixture["id"] else row for row in studies]
@@ -62,7 +66,9 @@ def test_source_declared_preparation_reaches_its_existing_evidence(
     source_ref, expected_id, study_id,
 ):
     if study_id == "INGR_CRANBERRY":
-        _eligible_cranberry_fixture(monkeypatch, enricher)
+        # Dr. Pham, 2026-10-28: the record-level hold is resolved by her
+        # conditional recurrent-UTI ruling; the real registry is eligible.
+        assert reviewed_entries()["INGR_CRANBERRY"]["scoring_eligible"] is True
     source = _product(product_id, label, group, canonical, standard_name, quantity, source_ref)
     product, issues = enricher.enrich_product(deepcopy(source))
     assert product.get("enrichment_status") != "validation_failed", issues
@@ -190,11 +196,14 @@ def test_isolated_constituent_does_not_identify_a_studied_whole_extract(enricher
     assert enricher._clinical_study_match([label], reviewed_entries()["PRECLIN_BOSWELLIA"]) is None
 
 
-def test_current_cranberry_hold_is_not_cleared_by_preparation_recognition(enricher):
+def test_current_cranberry_hold_is_not_cleared_by_preparation_recognition(enricher, monkeypatch):
+    import clinical_applicability as ca
+
+    _held_cranberry_fixture(monkeypatch, enricher)
     source = _product("held-cranberry", "Cranberry fruit concentrate", "Cranberry",
                       "cranberry", "Cranberry Extract", 600.0, "ingredientRows[0]")
     product, _ = enricher.enrich_product(deepcopy(source))
     assert product["activeIngredients"][0]["canonical_id"] == "cranberry_fruit"
-    assert reviewed_entries()["INGR_CRANBERRY"]["scoring_eligible"] is False
+    assert ca.reviewed_entries()["INGR_CRANBERRY"]["scoring_eligible"] is False
     matches, recovered = resolved_clinical_matches(product)
     assert "INGR_CRANBERRY" not in {item["id"] for item in matches + recovered}

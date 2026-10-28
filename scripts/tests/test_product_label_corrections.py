@@ -985,11 +985,9 @@ def test_named_poolzyme_source_still_requires_source_context_review():
     record = next(r for r in entries(data).values() if isinstance(r, dict) and r.get("id") == "INGR_DIGESTIVE_ENZYMES")
     review = assess_clinical_source_review(record)
     assert not review["is_complete"]
-    assert len(record["study_contexts"]) == 1
+    # Dr. Pham, 2026-10-28: the named brand is unverified for the trial
+    # material, so the draft context stays in the audit receipt and the record
+    # hold is the only state; no production context can complete the review.
+    assert record.get("study_contexts") == []
     assert record["scoring_eligible"] is False
-    assert "clinical_contributing_contexts_missing" in review["errors"]
-    context = record["study_contexts"][0]
-    assert context["review_status"] == "source_verified_pending_clinical_review"
-    assert context["scoring_eligible"] is False
-    assert all(o["hierarchy"] != "unresolved" for o in context["outcomes"])
-    assert "ethics" in str(context["limitations"]).lower()
+    assert "clinical_source_contexts_missing" in review["errors"]

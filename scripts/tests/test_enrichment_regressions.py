@@ -4406,25 +4406,31 @@ class TestLiposomalPureWayCVitaminC:
         product = self._vitamin_c_pureway_product(full_name)
 
         enriched, issues = enricher.enrich_product(product)
-        evidence_ids = {
-            match.get("id")
-            for match in enriched.get("evidence_data", {}).get("clinical_matches", [])
-        }
+        evidence = enriched.get("evidence_data", {})
+        evidence_ids = {match.get("id") for match in evidence.get("clinical_matches", [])}
+        rejected = {m.get("id"): m.get("reason_code") for m in evidence.get("rejected_clinical_matches", [])}
 
         assert issues == []
-        assert "BRAND_PUREWAY_C" in evidence_ids
+        # The form text still reaches the branded record; Dr. Pham's
+        # 2026-10-28 no-credit decision (no outcome superiority) then makes it
+        # a reference-only record, so it is rejected for exactly that reason.
+        assert "BRAND_PUREWAY_C" not in evidence_ids
+        assert rejected.get("BRAND_PUREWAY_C") == "reference_only_clinical_record"
 
     def test_unlinked_form_does_not_borrow_branded_evidence(self, enricher):
         product = self._vitamin_c_pureway_product("Liposomal Vitamin C")
         product["activeIngredients"][0].pop("raw_source_path")
         enriched, issues = enricher.enrich_product(product)
-        evidence_ids = {
-            match["id"]
-            for match in enriched["evidence_data"]["clinical_matches"]
-        }
+        evidence = enriched["evidence_data"]
+        evidence_ids = {match["id"] for match in evidence["clinical_matches"]}
+        rejected = {m.get("id"): m.get("reason_code") for m in evidence["rejected_clinical_matches"]}
         assert issues == []
-        assert "INGR_VITAMIN_C" in evidence_ids
+        # The generic record is reached; its clinical credit is now scoped to
+        # cold severity (Dr. Pham, 2026-10-28), which this label does not claim.
+        assert "INGR_VITAMIN_C" not in evidence_ids
+        assert rejected.get("INGR_VITAMIN_C") == "source_condition_claim_unestablished"
         assert "BRAND_PUREWAY_C" not in evidence_ids
+        assert "BRAND_PUREWAY_C" not in rejected
 
 
 class TestClinicalEvidenceUsesMatchedFormIdentity:

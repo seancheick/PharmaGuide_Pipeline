@@ -296,11 +296,23 @@ def test_unfavorable_research_is_not_described_as_missing_research():
     from test_v4_probiotic_evidence_p23 import _match
 
     p = strain_product()
-    p["evidence_data"] = {"clinical_matches": [_match(id="STRAIN_LGG", effect_direction="negative")]}
+    # Synthetic accepted match (the helper's own id): the real backed STRAIN_LGG
+    # record is research-only since Dr. Pham's 2026-10-28 ruling (the strain
+    # registry is the one scoring owner), so it cannot carry this direction.
+    p["evidence_data"] = {"clinical_matches": [_match(effect_direction="negative")]}
     dim = score_evidence(p)
     assert dim["score"] == 0
     assert dim["metadata"]["evidence_result_state"] == "evaluated_unfavorable"
     assert "unfavorable" in _pillar_evidence(dim, 20, "probiotic", config())["reason"]
+    assert "distinct from missing research" in _pillar_evidence(dim, 20, "probiotic", config())["reason"]
+    # A stale stamp under the research-only real id is discarded, and the
+    # result still reads as recorded research, never as missing research.
+    p["evidence_data"] = {"clinical_matches": [_match(id="STRAIN_LGG", effect_direction="negative")]}
+    dim = score_evidence(p)
+    assert dim["score"] == 0
+    assert dim["metadata"]["evidence_result_state"] == "research_present_applicability_unestablished"
+    assert "research involving these microorganisms is recorded" in _pillar_evidence(
+        dim, 20, "probiotic", config())["reason"].lower()
 
 
 def test_unrecognized_effect_is_not_a_negative_clinical_finding():

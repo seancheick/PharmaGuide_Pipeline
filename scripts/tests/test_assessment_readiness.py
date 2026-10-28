@@ -1107,9 +1107,13 @@ def test_row_level_active_projection_keeps_its_individual_evidence_question() ->
     assessment = evidence["ingredient_assessments"][0]
     assert assessment["scoring_input_kind"] == "label_active_projection"
     assert assessment["evidence_applicability"] == "individual_ingredient"
-    assert assessment["state"] == "not_yet_evaluated"
-    assert evidence["not_yet_evaluated_count"] == 1
-    assert evidence["readiness"] == "incomplete"
+    # INGR_GARLIC is now a completed review scoped to the studied preparations
+    # (Dr. Pham, 2026-10-28). The projected row reaches that reviewed scope and
+    # is assessed as a product-specific zero, not left as an open question.
+    assert assessment["state"] == "evaluated_limited_or_negative"
+    assert assessment["reason_code"] == "clinical_form_mismatch"
+    assert evidence["not_yet_evaluated_count"] == 0
+    assert evidence["readiness"] == "complete"
 
 
 def test_product_level_projection_carries_no_individual_evidence_question() -> None:

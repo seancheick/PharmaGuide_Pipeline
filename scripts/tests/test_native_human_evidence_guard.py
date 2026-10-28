@@ -82,8 +82,22 @@ def test_native_source_gap_does_not_silence_independent_backbone_match(monkeypat
     # otherwise own its human evidence.
     registry["STRAIN_LGG"]["study_contexts"] = []
     monkeypatch.setattr(studied_formulas, "_clinical_strain_registry", lambda: registry)
+    # Dr. Pham, 2026-10-28 (fifth ruling set): the strain registry is the one
+    # scoring owner and the backed STRAIN_LGG record is research-only. The real
+    # backed record therefore supplies no backbone credit ...
+    import clinical_applicability
+    real = deepcopy(reviewed_entries()["STRAIN_LGG"])
+    assert real["study_type"] == real["evidence_level"] == "reference"
     product = strain_product()
-    product["evidence_data"] = {"clinical_matches": [deepcopy(reviewed_entries()["STRAIN_LGG"])]}
+    product["evidence_data"] = {"clinical_matches": [deepcopy(real)]}
+    assert score_generic_evidence(product)["score"] == 0
+    # ... so the independent-backbone path is exercised with a credit-path copy
+    # of that same record (pre-ruling study_type/evidence_level restored).
+    owners = deepcopy(reviewed_entries())
+    owners["STRAIN_LGG"].update(study_type="clinical_strain", evidence_level="strain-clinical")
+    monkeypatch.setattr(clinical_applicability, "reviewed_entries", lambda: owners)
+    product = strain_product()
+    product["evidence_data"] = {"clinical_matches": [deepcopy(owners["STRAIN_LGG"])]}
     generic_score = score_generic_evidence(product)["score"]
     assert generic_score > 0
     result = score_evidence(product)

@@ -33,7 +33,10 @@ def test_ingredient_evidence_is_filed_as_ingredient_evidence():
     entries = _entries()
     assert "BRAND_HMB" not in entries and "BRAND_OPTIFERRIN" not in entries
     hmb, lactoferrin = entries["INGR_HMB"], entries["INGR_LACTOFERRIN"]
-    assert hmb["evidence_level"] == lactoferrin["evidence_level"] == "ingredient-human"
+    assert lactoferrin["evidence_level"] == "ingredient-human"
+    # Dr. Pham, 2026-10-28: HMB's restrictive conclusion is a completed
+    # no-credit decision on the reference-only path, still under its INGR_ id.
+    assert hmb["evidence_level"] == hmb["study_type"] == "reference"
     assert {"hmb", "calcium hmb"} <= set(hmb["aliases"])
     assert "lactoferrin" in lactoferrin["aliases"]
     assert (lactoferrin["min_clinical_dose"], lactoferrin["dose_unit"]) == (200, "mg")
@@ -56,19 +59,28 @@ def _matches(pid):
     logging.disable(logging.INFO)
     raw = json.loads((FIXTURES / f"brand_generic_{pid}_raw.json").read_text())
     enriched, _ = SupplementEnricherV3().enrich_product(EnhancedDSLDNormalizer().normalize_product(raw))
-    return {m.get("id") for m in (enriched.get("evidence_data") or {}).get("clinical_matches") or []}
+    evidence = enriched.get("evidence_data") or {}
+    accepted = {m.get("id") for m in evidence.get("clinical_matches") or []}
+    rejected = {m.get("id"): m.get("reason_code") for m in evidence.get("rejected_clinical_matches") or []}
+    return accepted, rejected
 
 
-@pytest.mark.parametrize("pid, absent, present", [
-    ("233404", "BRAND_ZYNAMITE", None),          # mangiferin, Zynamite not named
-    ("18416", "BRAND_HMB", "INGR_HMB"),          # plain HMB
-    ("267894", "BRAND_OPTIFERRIN", "INGR_LACTOFERRIN"),  # plain lactoferrin
-    ("182824", "BRAND_BIOPERINE", None),        # "Curcumin 500 with Bioperine": no efficacy record
-    ("214982", None, "BRAND_SUNTHEANINE"),      # names Suntheanine
+# A record the label reaches is either accepted or, when its owner is a
+# completed reference-only review (Dr. Pham, 2026-10-28: HMB, Suntheanine),
+# rejected for exactly that reason. Routing is asserted in both cases.
+@pytest.mark.parametrize("pid, absent, present, reference_only", [
+    ("233404", "BRAND_ZYNAMITE", None, False),          # mangiferin, Zynamite not named
+    ("18416", "BRAND_HMB", "INGR_HMB", True),           # plain HMB
+    ("267894", "BRAND_OPTIFERRIN", "INGR_LACTOFERRIN", False),  # plain lactoferrin
+    ("182824", "BRAND_BIOPERINE", None, False),        # "Curcumin 500 with Bioperine": no efficacy record
+    ("214982", None, "BRAND_SUNTHEANINE", True),       # names Suntheanine
 ])
-def test_real_labels_reach_the_right_record(pid, absent, present):
-    matches = _matches(pid)
+def test_real_labels_reach_the_right_record(pid, absent, present, reference_only):
+    accepted, rejected = _matches(pid)
     if absent:
-        assert absent not in matches
-    if present:
-        assert present in matches
+        assert absent not in accepted and absent not in rejected
+    if present and reference_only:
+        assert present not in accepted
+        assert rejected.get(present) == "reference_only_clinical_record"
+    elif present:
+        assert present in accepted
