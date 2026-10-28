@@ -21903,10 +21903,12 @@
           "target_id": "pregnancy",
           "comparator": ">=",
           "value": 3,
-          "unit": "mg",
+          "unit": "mg synephrine",
           "basis": "per_day",
           "severity_if_met": "contraindicated",
           "severity_if_not_met": "avoid",
+          "consumer_disposition_if_met": "block",
+          "consumer_disposition_if_not_met": "block",
           "profile_gate": {
             "gate_type": "combination",
             "requires": {
@@ -21927,7 +21929,7 @@
               "basis": "per_day",
               "comparator": ">=",
               "value": 3,
-              "unit": "mg",
+              "unit": "mg synephrine",
               "severity_if_met": "contraindicated",
               "severity_if_not_met": "avoid"
             }

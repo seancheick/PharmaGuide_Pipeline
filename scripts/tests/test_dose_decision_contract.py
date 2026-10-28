@@ -619,6 +619,67 @@ def test_unspecified_vitamin_a_reaches_only_preformed_rules():
     )
 
 
+def _bitter_orange_pregnancy_decision(ingredient: dict):
+    rule = _rule("RULE_BANNED_BITTER_ORANGE_PREGNANCY")
+    return SupplementEnricherV3()._evaluate_dose_thresholds_for_target(
+        rule["dose_thresholds"],
+        "condition",
+        "pregnancy",
+        {"name": "Bitter Orange", "standard_name": "Bitter Orange", **ingredient},
+        1.0,
+        "avoid",
+        materiality=rule["condition_rules"][0].get("materiality"),
+    )
+
+
+def test_bitter_orange_extract_mass_is_not_a_synephrine_dose():
+    """200 mg of extract is not 200 mg of synephrine (NCCIH: labeled synephrine
+    content is often inaccurate). The 3 mg threshold needs a disclosed
+    synephrine amount; without one the pregnancy warning stays hard (avoid,
+    block) and is not reported as a confirmed exceedance."""
+    selected, decision = _bitter_orange_pregnancy_decision({"quantity": 200, "unit": "mg"})
+
+    assert decision["evaluation_status"] == "amount_unknown"
+    assert decision["matched_threshold"] is not True
+    assert selected == "avoid"
+    assert decision["consumer_disposition"] == "block"
+
+
+@pytest.mark.parametrize(
+    ("ingredient", "status", "severity"),
+    [
+        # 6% synephrine standardization of 200 mg: 12 mg, over the threshold.
+        (
+            {"quantity": 200, "unit": "mg", "delivers_markers": [{
+                "marker_canonical_id": "synephrine",
+                "estimation_method": "standardization_pct",
+                "estimated_dose_mg": 12.0,
+            }]},
+            "above_threshold", "contraindicated",
+        ),
+        # A label row that is synephrine itself is explicit exposure.
+        ({"quantity": 3, "unit": "mg", "canonical_id": "synephrine"}, "above_threshold", "contraindicated"),
+        ({"quantity": 2, "unit": "mg", "canonical_id": "synephrine"}, "below_threshold", "avoid"),
+    ],
+)
+def test_bitter_orange_disclosed_synephrine_meets_the_threshold(ingredient, status, severity):
+    selected, decision = _bitter_orange_pregnancy_decision(ingredient)
+
+    assert decision["evaluation_status"] == status
+    assert selected == severity
+    assert decision["consumer_disposition"] == "block"
+
+
+def test_both_bitter_orange_pregnancy_rules_stay_hard():
+    """The second rule's shared fallback must not be what keeps a pregnant user
+    warned: each rule's own pregnancy outcome is hard on its own."""
+    fallback = _rule("RULE_BANNED_BITTER_ORANGE_HYPERTENSION")["pregnancy_lactation"]
+    explicit = _rule("RULE_BANNED_BITTER_ORANGE_PREGNANCY")["condition_rules"][0]
+
+    assert fallback["pregnancy_category"] in {"avoid", "contraindicated"}
+    assert explicit["severity"] in {"avoid", "contraindicated"}
+
+
 def test_vitamin_e_ul_exposure_amount_is_the_upper_bound():
     converter = UnitConverter()
     unknown = converter.convert_nutrient("Vitamin E", 1000, "IU", ingredient_name="Vitamin E")
