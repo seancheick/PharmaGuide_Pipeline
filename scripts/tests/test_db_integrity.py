@@ -129,6 +129,29 @@ def test_source_qualified_records_can_have_no_goal_or_endpoint_claims():
     assert any(f.severity == "error" and "health_goals_supported" in f.path for f in findings)
 
 
+def test_reference_classification_must_agree_across_both_fields():
+    from db_integrity_sanity_check import check_clinical_db
+    base = {"id": "REF", "standard_name": "Ingredient", "scoring_eligible": False,
+            "health_goals_supported": [], "key_endpoints": []}
+    for study_type, evidence_level in (("reference", "ingredient-human"),
+                                       ("rct_single", "reference")):
+        findings = []
+        check_clinical_db(findings, {"backed_clinical_studies": [
+            {**base, "study_type": study_type, "evidence_level": evidence_level}]},
+            "backed_clinical_studies.json")
+        assert any(f.severity == "error" and f.issue == "reference_classification_conflict"
+                   for f in findings), (study_type, evidence_level)
+
+
+def test_reference_only_predicate_fails_closed_on_either_field():
+    from clinical_evidence_schema import is_reference_only
+    assert is_reference_only({"study_type": "reference", "evidence_level": "reference"})
+    assert is_reference_only({"study_type": "Reference", "evidence_level": "ingredient-human"})
+    assert is_reference_only({"study_type": "rct_single", "evidence_level": "reference"})
+    assert not is_reference_only({"study_type": "rct_single", "evidence_level": "ingredient-human"})
+    assert not is_reference_only({})
+
+
 def test_eligible_trial_with_no_endpoints_or_goals_still_fails():
     from db_integrity_sanity_check import check_clinical_db
     row = {"id": "ELIGIBLE_RCT", "standard_name": "Ingredient",

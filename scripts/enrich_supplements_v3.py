@@ -694,6 +694,33 @@ def _derive_clinical_support_level(strain_entry) -> Optional[str]:
 
 # The card prints the indication beside the support level, so it must not read
 # as a benefit the reviewed evidence did not show.
+# Curated clinical-record fields copied onto each clinical match (and from
+# there into the exported evidence_data.clinical_matches).
+_CLINICAL_MATCH_PASSTHROUGH_FIELDS = (
+    "scoring_eligible",
+    "applicability",
+    "min_clinical_dose",
+    "max_studied_clinical_dose",
+    "dose_unit",
+    "dose_range",
+    "effect_direction",
+    "effect_direction_rationale",
+    "effect_direction_confidence",
+    "total_enrollment",
+    "published_studies",
+    "published_studies_count",
+    "published_rct_count",
+    "published_meta_review_count",
+    "registry_completed_trials_count",
+    "primary_outcome",
+    "endpoint_relevance_tags",
+    "evidence_group_id",
+    "aggregate_canonical_ids",
+    "notes",
+    "notable_studies",
+    "references_structured",
+)
+
 _PROBIOTIC_RESULT_QUALIFIERS = {
     "mixed": "mixed results",
     "null": "no benefit shown on the primary outcome",
@@ -16332,38 +16359,7 @@ class SupplementEnricherV3:
                             ingredient_canonical_id
                         ]
 
-                    # Optional schema extensions (forward-compatible passthrough).
-                    optional_fields = [
-                        "scoring_eligible",
-                        "applicability",
-                        "min_clinical_dose",
-                        "max_studied_clinical_dose",
-                        "max_clinical_dose",
-                        "max_studied_dose",
-                        "dose_unit",
-                        "typical_effective_dose",
-                        "dose_range",
-                        "base_points",
-                        "multiplier",
-                        "computed_score",
-                        "effect_direction",
-                        "effect_direction_rationale",
-                        "effect_direction_confidence",
-                        "total_enrollment",
-                        "published_studies",
-                        "published_studies_count",
-                        "published_rct_count",
-                        "published_meta_review_count",
-                        "registry_completed_trials_count",
-                        "primary_outcome",
-                        "endpoint_relevance_tags",
-                        "evidence_group_id",
-                        "aggregate_canonical_ids",
-                        "notes",
-                        "notable_studies",
-                        "references_structured",
-                    ]
-                    for field in optional_fields:
+                    for field in _CLINICAL_MATCH_PASSTHROUGH_FIELDS:
                         if field in study and study.get(field) is not None:
                             match_payload[field] = study.get(field)
 
@@ -16444,23 +16440,7 @@ class SupplementEnricherV3:
                         "marker_estimated_dose_mg": marker_entry.get("estimated_dose_mg"),
                         "marker_evidence_id": marker_entry.get("evidence_id"),
                     }
-                    optional_fields = [
-                        "scoring_eligible",
-                        "applicability",
-                        "min_clinical_dose", "max_studied_clinical_dose",
-                        "max_clinical_dose", "max_studied_dose", "dose_unit",
-                        "typical_effective_dose", "dose_range",
-                        "base_points", "multiplier", "computed_score", "effect_direction",
-                        "effect_direction_rationale", "effect_direction_confidence",
-                        "total_enrollment", "published_studies", "published_studies_count",
-                        "published_rct_count", "published_meta_review_count",
-                        "registry_completed_trials_count", "primary_outcome",
-                        "endpoint_relevance_tags", "evidence_group_id",
-                        "aggregate_canonical_ids",
-                        "notes", "notable_studies",
-                        "references_structured",
-                    ]
-                    for field in optional_fields:
+                    for field in _CLINICAL_MATCH_PASSTHROUGH_FIELDS:
                         if field in study and study.get(field) is not None:
                             match_payload[field] = study.get(field)
                     if marker_entry.get("scoring_eligible") is False:
@@ -21692,7 +21672,6 @@ class SupplementEnricherV3:
         )
         numeric_ul_values = [
             nutrient_reference.get("highest_ul"),
-            nutrient_reference.get("ul"),
             *[
                 group.get("ul")
                 for group in nutrient_reference.get("data") or []

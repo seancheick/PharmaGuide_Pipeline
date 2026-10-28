@@ -3720,6 +3720,46 @@ Local checkpoint: first run465pass/105skip was refused for81missing canary/basel
 
 Receipts: `/Users/seancheick/pg_quality/scoring_safety_remediation_20261028/` (per-finding red/green logs, heuristic-curated reconciliation for all20legacy terms/all131authored bundle rules, independent reviews, raw canaries, Python check, local logs, baseline golden byte comparison); `replay/CAUSE_REVIEW.md`, immutable raw manifest and full compressed stage records bind measurements. These are local development evidence, not scientific recertification or public release acceptance.
 
+## October28 — field one-brain consolidation, items 1–4 and therapeutic legacy fields (PR #272)
+
+Lane claude/xenodochial-matsumoto-ebd04b from e6885790d. Plan, Sean's rulings and per-item evidence: `docs/plans/FIELD_ONE_BRAIN_PLAN.md`. Behavioral code/data class.
+
+Owner: clinical_evidence_schema::is_reference_only (reference-only decision); rda_optimal_uls highest_ul + data[].ul (UL); enrich_supplements_v3::_CLINICAL_MATCH_PASSTHROUGH_FIELDS (clinical passthrough); literature qualifying_human_studies effect_direction/study_type; rda_therapeutic_dosing reference_semantics (dose meaning) + notes (cautions). Will NOT create a field, registry, vocabulary or scorer.
+
+Done:
+- One reference-only predicate for 5 call sites, plus integrity rejection of a study_type/evidence_level disagreement (0 today).
+- Removed the top-level ul/unofficial_ul (null on 76 nutrients; boron duplicated highest_ul 20).
+- Removed 6 passthrough keys that no record carries.
+- Renamed 39 literature effect and 45 design keys to effect_direction/study_type; primary_endpoint kept as a distinct fact.
+- Therapeutic: removed upper_limit, typical_dosing_range, common_serving_size and evidence_tier from 43 records. None of the 34 upper limits was an applicable UL.
+  - upper_limit_notes became notes: 29 unchanged, 12 edited, 2 dropped. 13 cautions are pinned.
+  - Receipt: `scripts/audits/field_one_brain_20261028/therapeutic_legacy_fields_receipt.json`.
+  - db_integrity rejects the retired keys: 215 findings on the old data, 0 on the candidate.
+
+Validation:
+- Fail-first tests for each class; owner/consumer slices green (834; 2,817; 1,709; 2,584).
+- Replay of 1,111 frozen raw products against main e6885790d: 0 differ for the items 1–4 candidate and 0 for the full candidate (b070650b0).
+- A fresh-context review found no defects.
+- `scripts/test.sh local` with the real corpus (main's scripts/products, scripts/dist and canary baseline linked; nine canaries rebuilt from candidate code): 536 passed, 24 declared opt-in skips, 10 failed.
+
+Final-commit qualification:
+- The replay at c20edc773 (the last source change: approved-purpose edits, schema 5.1.0, narrowed guard) changes 0 of 1,111 products (receipt `~/pg_quality/field_one_brain_20261028/cand_final.jsonl`, head-stamped).
+- pipeline-tests is green at 0d9649e40.
+- The approved-purpose edits for collagen peptides, gelatin and UC-II are editorial corrections. Sean accepted them on October 28. They carry no new approval; their dependency is the October 18 DOSE_V41 decision rows.
+- After merging main 54714d040 (#275), a replay of the merged head (bfeef14aa) against main 54714d040 shows 0 of 1,111 products differ. #276 (docs only) was merged after.
+- Canary drift is itemized in `scripts/audits/field_one_brain_20261028/canary_baseline_drift.md`. For example, Vitamin D pregnancy goes from two warnings to one: the monitor-severity duplicate is dropped and the informational one kept. The warning owner must confirm before the integrator refreshes the baseline.
+
+Finding (pre-existing on main, not this batch): all 10 failures are test_e1_2_2_preflight_invariant canaries (score_penalties/warnings/display_ingredients vs the 2026-10-18 baseline).
+- The nine canaries rebuilt from main e6885790d in a temporary checkout are identical to the candidate's, timestamps aside.
+- The main checkout's reports/canary_rebuild files date from 2026-10-18 (16:43), which is why the local rung passes there. It compares a stale rebuild to the baseline taken the same day.
+- The baseline needs a reviewed refresh by the integrator before release. It must not be restamped here.
+
+Open:
+- Item 5, the item 6 deletion (classification done: 104 unresolved placeholders, 7 less-specific) and item 11 wait for held-source-closure.
+- generic_evidence override, magnitude move and the line-718 predicate wait for claude/serene-dubinsky-479574 (folate allowlist already removed there, 37d74d5b1).
+- Before an app release, run sync_flutter_reference_data.py: the app's bundled rda_optimal_uls.json predates 720e95812.
+- Items 7–12 continue under Sean's October 28 rulings.
+
 ## October28 — Evidence calibration (Dr Pham bands), measured candidate pending Sean
 
 Owner: scoring_v4/modules/generic_evidence.py::_primary_mass_floor; quality_score.json evidence_magnitudes.generic (1.31.0-evidence-no-automatic-exceptional, unreleased). Will NOT create a scorer, registry, field or status. Behavioral scoring class. Branch claude/serene-dubinsky-479574; qualification PR pending CI; no merge without Sean.

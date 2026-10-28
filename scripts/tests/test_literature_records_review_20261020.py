@@ -23,6 +23,14 @@ def _study(record, pmid):
     return next(s for s in record["qualifying_human_studies"] if s["pmid"] == pmid)
 
 
+def test_qualifying_studies_use_one_name_per_fact(records):
+    """effect/design were aliases of effect_direction/study_type. primary_endpoint
+    (what was measured) and outcome (what was found) are distinct facts."""
+    aliased = [(cid, s.get("pmid")) for cid, r in records.items()
+               for s in r["qualifying_human_studies"] if "effect" in s or "design" in s]
+    assert not aliased
+
+
 # Rows whose PMID is a different paper (review, in-vitro or animal study) than the trial recorded.
 NO_VERIFIED_TRIAL = {
     "l_carnosine": "20091069",              # beta-alanine review
@@ -233,7 +241,7 @@ def test_pomegranate_preserves_verified_extract_research(records):
     record = records["pomegranate"]
     assert record["effect_direction"] == "positive_weak"
     assert record["studied_dose_exposure"] == {}
-    assert _study(record, "38410857")["effect"] == "positive_weak"
+    assert _study(record, "38410857")["effect_direction"] == "positive_weak"
     assert "extract diastolic results were not statistically significant" in record["applicability_decision"]
     assert "mainly to juice" not in record["applicability_decision"]
     resolution = resolve_evidence_for_canonical("pomegranate")
@@ -387,7 +395,7 @@ def test_b0_vinegar_reports_auc_and_blueberry_is_not_a_meta_analysis(records):
     outcome = _study(records["apple_cider_vinegar"], "28292654")["outcome"]
     assert "area under the curve (AUC)" in outcome
     assert "peaks" not in outcome
-    assert _study(records["blueberry"], "30999017")["design"] == "systematic_review"
+    assert _study(records["blueberry"], "30999017")["study_type"] == "systematic_review"
 
 
 def test_b0_capsaicin_source_does_not_assert_capsiate_equivalence(records):

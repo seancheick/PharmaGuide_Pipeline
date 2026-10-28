@@ -1,9 +1,9 @@
 {
   "_metadata": {
-    "description": "Therapeutic dosing ranges for clinical efficacy validation",
-    "purpose": "Provide therapeutic dosing ranges for dietary supplement ingredients not covered by traditional RDA/UL standards.",
-    "schema_version": "5.0.1",
-    "last_updated": "2026-10-26",
+    "description": "Reviewed dose-reference decisions for non-RDA supplement actives routed through the botanical, collagen and documented probiotic/marker Dose paths",
+    "purpose": "Hold the source-attributed reference decision (reference_semantics) for supplement actives not covered by RDA/UL standards. Records carry no general dose range, serving size, efficacy grade or safety ceiling; established ULs belong to rda_optimal_uls.json.",
+    "schema_version": "5.1.0",
+    "last_updated": "2026-10-28",
     "total_entries": 44,
     "data_source": "Clinical research, meta-analyses, standard therapeutic guidelines"
   },
@@ -18,11 +18,7 @@
       ],
       "unit": "mg",
       "common_use": "Adaptogen for stress, thyroid support, sleep",
-      "typical_dosing_range": "250-600",
-      "common_serving_size": "300",
-      "upper_limit": "1000",
-      "upper_limit_notes": "Long-term safety of very high doses not established. Use caution with thyroid medications.",
-      "evidence_tier": 1,
+      "notes": "Long-term safety of very high doses not established. Use caution with thyroid medications.",
       "id": "ashwagandha_root_extract",
       "references": [
         "31517876",
@@ -56,11 +52,7 @@
       ],
       "unit": "mg",
       "common_use": "Cognitive function, memory, anxiety reduction",
-      "typical_dosing_range": "300-450",
-      "common_serving_size": "300",
-      "upper_limit": "600",
-      "upper_limit_notes": "Standardized to 20-55% bacosides. May cause GI upset in some.",
-      "evidence_tier": 1,
+      "notes": "Standardized to 20-55% bacosides. May cause GI upset in some.",
       "id": "bacopa_monnieri_extract",
       "references": [
         "24252493",
@@ -98,11 +90,7 @@
       ],
       "unit": "mg",
       "common_use": "Anti-inflammatory, antioxidant, joint health",
-      "typical_dosing_range": "500-1000",
-      "common_serving_size": "500",
-      "upper_limit": "8000",
-      "upper_limit_notes": "High doses may cause GI upset. Enhanced formulations (with piperine, phospholipids) greatly increase bioavailability.",
-      "evidence_tier": 1,
+      "notes": "High doses may cause GI upset. Formulations differ in bioavailability (for example with piperine or phospholipids); preparations are not interchangeable.",
       "id": "curcumin_from_turmeric",
       "references": [
         "38576215"
@@ -134,11 +122,7 @@
       ],
       "unit": "mg",
       "common_use": "Selected attention/working-memory tasks in adults aged 50–69 using Suntheanine; not a universal relaxation or caffeine-combination claim.",
-      "typical_dosing_range": "100.6",
-      "common_serving_size": "100.6",
-      "upper_limit": null,
-      "upper_limit_notes": "A safety upper limit is not established by PMID 33751906. Full Methods used one 100.6 mg Suntheanine capsule daily for 12 weeks, plus acute assessment; this is a study exposure, not a maximum safe intake. No known toxicity / exceptionally safe certainty is unsupported.",
-      "evidence_tier": 1,
+      "notes": "A safety upper limit is not established by PMID 33751906. Full Methods used one 100.6 mg Suntheanine capsule daily for 12 weeks, plus acute assessment; this is a study exposure, not a maximum safe intake. No known toxicity / exceptionally safe certainty is unsupported.",
       "id": "l_theanine",
       "references": [
         "33751906"
@@ -169,11 +153,7 @@
       ],
       "unit": "mg",
       "common_use": "Eye health, macular pigment support",
-      "typical_dosing_range": "10-20",
-      "common_serving_size": "20",
-      "upper_limit": "40",
-      "upper_limit_notes": "Fat-soluble; take with food. Often paired with zeaxanthin.",
-      "evidence_tier": 1,
+      "notes": "Fat-soluble; take with food. Often paired with zeaxanthin.",
       "id": "lutein",
       "references": [
         "39025435",
@@ -208,11 +188,7 @@
       ],
       "unit": "CFU",
       "common_use": "Gut microbiome support, immune function",
-      "typical_dosing_range": "1-10 Billion",
-      "common_serving_size": "10 Billion",
-      "upper_limit": "100 Billion",
-      "upper_limit_notes": "Strain-specific effects are critical. High doses may cause initial bloating. Immunocompromised individuals should consult a doctor.",
-      "evidence_tier": 1,
+      "notes": "Strain-specific effects are critical. High doses may cause initial bloating. Immunocompromised individuals should consult a doctor.",
       "id": "probiotics_general",
       "reference_semantics": {
         "reference_type": "no_benchmark",
@@ -238,11 +214,7 @@
       ],
       "unit": "mg",
       "common_use": "Antioxidant, longevity, cardiovascular support",
-      "typical_dosing_range": "250-500",
-      "common_serving_size": "500",
-      "upper_limit": "2000",
-      "upper_limit_notes": "Fat-soluble; take with food. High purity trans-resveratrol is preferred.",
-      "evidence_tier": 2,
+      "notes": "Fat-soluble; take with food.",
       "id": "resveratrol",
       "references": [
         "34320173",
@@ -277,11 +249,7 @@
       ],
       "unit": "mg",
       "common_use": "Adaptogen for stress and fatigue, cognitive enhancement",
-      "typical_dosing_range": "200-400",
-      "common_serving_size": "300",
-      "upper_limit": "600",
-      "upper_limit_notes": "Standardized to 3% rosavins and 1% salidroside. May be stimulating for some; avoid late in the day.",
-      "evidence_tier": 1,
+      "notes": "Commonly standardized to rosavins and salidroside; studied preparations vary. May be stimulating for some; avoid late in the day.",
       "id": "rhodiola_rosea_extract",
       "references": [
         "21036578"
@@ -313,11 +281,7 @@
       ],
       "unit": "mg",
       "common_use": "Prostate health (BPH), hair loss support",
-      "typical_dosing_range": "320",
-      "common_serving_size": "320",
-      "upper_limit": null,
-      "upper_limit_notes": "Safety upper limit not established. 960 mg/day was the highest dose studied (CAMUS, 72 weeks) without clearly attributable adverse effects; the EMA monograph reports no overdose cases. 320 mg/day is the studied regimen, not an efficacy threshold.",
-      "evidence_tier": 1,
+      "notes": "Safety upper limit not established. 960 mg/day was the highest dose studied (CAMUS, 72 weeks) without clearly attributable adverse effects; the EMA monograph reports no overdose cases. 320 mg/day is the studied regimen, not an efficacy threshold.",
       "id": "saw_palmetto_extract",
       "references": [
         "42157952",
@@ -353,11 +317,7 @@
       ],
       "unit": "mg",
       "common_use": "Mood support (mild to moderate depression)",
-      "typical_dosing_range": "300-900",
-      "common_serving_size": "300",
-      "upper_limit": "900",
-      "upper_limit_notes": "**Major Interaction Risk:** Induces CYP450 enzymes. Interacts with antidepressants, birth control, blood thinners, and many others. Contraindicated with many medications.",
-      "evidence_tier": 1,
+      "notes": "**Major Interaction Risk:** Induces CYP450 enzymes. Interacts with antidepressants, birth control, blood thinners, and many others. Contraindicated with many medications.",
       "id": "st_john_s_wort",
       "references": [
         "18843608"
@@ -389,11 +349,7 @@
       ],
       "unit": "mg",
       "common_use": "Subjective sleep-quality research; insomnia efficacy is unestablished.",
-      "typical_dosing_range": "",
-      "common_serving_size": "",
-      "upper_limit": null,
-      "upper_limit_notes": "A safety upper limit is not established by PMID 38359657. The umbrella review found no empirical insomnia efficacy; possible subjective sleep-quality improvement was not demonstrated by quantitative/objective measures. Heterogeneous low-quality studies do not establish this record's generic extract dose range. Existing drowsiness caution remains.",
-      "evidence_tier": 3,
+      "notes": "A safety upper limit is not established by PMID 38359657. The umbrella review found no empirical insomnia efficacy; possible subjective sleep-quality improvement was not demonstrated by quantitative/objective measures. Heterogeneous low-quality studies do not establish this record's generic extract dose range. Existing drowsiness caution remains.",
       "id": "valerian_root",
       "references": [
         "38359657"
@@ -436,12 +392,8 @@
         "hydrolyzed fish collagen"
       ],
       "unit": "g",
-      "common_use": "Skin/hair/nail (2.5 g+) and joint/bone (5-10 g) health; hydrolyzed Type I & III peptides incl. marine",
-      "typical_dosing_range": "2.5-10",
-      "common_serving_size": "5",
-      "upper_limit": "20",
-      "upper_limit_notes": "Generally very safe. Skin benefit validated from 2.5 g (Verisol); joint/bone 5-10 g. Bioavailability varies with form.",
-      "evidence_tier": 1,
+      "common_use": "Skin/hair/nail and joint/bone research; hydrolyzed Type I & III peptides incl. marine",
+      "notes": "Bioavailability varies with form; preparations are not interchangeable.",
       "references": [
         "24401291",
         "31627309",
@@ -456,7 +408,7 @@
         "reference_type": "discrete_studied_regimen",
         "scope": "General catalog Dose for this exact source identity; source-specific study facts and established safety references remain separate.",
         "preparation": "Only the exact preparations described in the reviewed source facts: 24401291 Verisol2.5g/day skin wrinkles women45–65;31627309 multi-ingredient2.5g drink women>=35.28177710 Fortigel5g athletes knee discomfort;29337906 Fortibone5g postmenopausal BMD;18416885 hydrolysate10g athletes joint pain.39075819 tuna peptide skin, dose absent in abstract;37432180 pools26 trials. Reused collagen_phase7 receipt with qualifications. General benchmark conclusion:the cited source(s) do not establish one universal dose minimum, bounded optimum or safety upper limit for every preparation represented by this broad entry. This general-no-benchmark assessment is completed; retain known study regimens separately.",
-        "purpose": "Skin/hair/nail (2.5 g+) and joint/bone (5-10 g) health; hydrolyzed Type I & III peptides incl. marine",
+        "purpose": "Skin/hair/nail and joint/bone research; hydrolyzed Type I & III peptides incl. marine",
         "population": "Only source-specific cohorts described in rationale; no general efficacy dose for unstudied populations, pregnancy or lactation is inferred.",
         "exposure_basis": "minimum_directed_daily_use",
         "units": "g",
@@ -488,12 +440,8 @@
         "nt2 collagen"
       ],
       "unit": "mg",
-      "common_use": "Knee osteoarthritis / joint; undenatured (native) Type II, oral-tolerance mechanism (low mg dose, NOT the hydrolyzed-peptide gram range)",
-      "typical_dosing_range": "40",
-      "common_serving_size": "40",
-      "upper_limit": "40",
-      "upper_limit_notes": "Standard single validated dose 40 mg/day. Do NOT conflate with hydrolyzed Type II (BioCell).",
-      "evidence_tier": 1,
+      "common_use": "Knee osteoarthritis / joint; undenatured (native) Type II, oral-tolerance mechanism; not interchangeable with hydrolyzed collagen",
+      "notes": "Do NOT conflate with hydrolyzed Type II (BioCell).",
       "references": [
         "26822714"
       ],
@@ -502,7 +450,7 @@
         "reference_type": "discrete_studied_regimen",
         "scope": "General catalog Dose for this exact source identity; source-specific study facts and established safety references remain separate.",
         "preparation": "Only the exact preparations described in the reviewed source facts: 26822714 UCII40mg/day for180days in191 knee-OA subjects, compared with placebo/glucosamine+chondroitin. General benchmark conclusion:the cited source(s) do not establish one universal dose minimum, bounded optimum or safety upper limit for every preparation represented by this broad entry. This general-no-benchmark assessment is completed; retain known study regimens separately.",
-        "purpose": "Knee osteoarthritis / joint; undenatured (native) Type II, oral-tolerance mechanism (low mg dose, NOT the hydrolyzed-peptide gram range)",
+        "purpose": "Knee osteoarthritis / joint; undenatured (native) Type II, oral-tolerance mechanism; not interchangeable with hydrolyzed collagen",
         "population": "Only source-specific cohorts described in rationale; no general efficacy dose for unstudied populations, pregnancy or lactation is inferred.",
         "exposure_basis": "minimum_directed_daily_use",
         "units": "mg",
@@ -526,11 +474,7 @@
       ],
       "unit": "mg",
       "common_use": "Joint OA + skin; hydrolyzed Type II + hyaluronic acid + chondroitin (chicken sternal cartilage)",
-      "typical_dosing_range": "1000-2000",
-      "common_serving_size": "1000",
-      "upper_limit": null,
-      "upper_limit_notes": "A safety upper limit is not established by these trials. PMID 31221944 used 500 mg BioCell twice daily (1000 mg/day) for 12 weeks; wrinkles/elasticity signals did not include improved skin-surface water content or retention. PMID 22486722 studied 2000 mg/day for 70 days in OA. These are preparation-specific exposures, not proof of every dose in the interval or a formal safety ceiling.",
-      "evidence_tier": 2,
+      "notes": "A safety upper limit is not established by these trials. PMID 31221944 used 500 mg BioCell twice daily (1000 mg/day) for 12 weeks; wrinkles/elasticity signals did not include improved skin-surface water content or retention. PMID 22486722 studied 2000 mg/day for 70 days in OA. These are preparation-specific exposures, not proof of every dose in the interval or a formal safety ceiling.",
       "references": [
         "31221944",
         "22486722"
@@ -562,12 +506,8 @@
         "gelatine"
       ],
       "unit": "g",
-      "common_use": "Connective-tissue / collagen synthesis; denatured collagen with LOWER bioavailability than hydrolyzed peptides",
-      "typical_dosing_range": "5-15",
-      "common_serving_size": "10",
-      "upper_limit": "20",
-      "upper_limit_notes": "Mechanistic (collagen-synthesis-marker) evidence; intact denatured collagen, less bioavailable than pre-cleaved peptides.",
-      "evidence_tier": 3,
+      "common_use": "Connective-tissue / collagen synthesis; denatured collagen",
+      "notes": "Mechanistic (collagen-synthesis-marker) evidence only.",
       "references": [
         "27852613"
       ],
@@ -576,7 +516,7 @@
         "reference_type": "discrete_studied_regimen",
         "scope": "General catalog Dose for this exact source identity; source-specific study facts and established safety references remain separate.",
         "preparation": "Only the exact preparations described in the reviewed source facts: 27852613 eight healthy males; vitamin-C-enriched gelatin5g or15g one hour before rope-skipping, repeated3times/day with>=6h between bouts for3days;15g increased collagen-synthesis biomarker. General benchmark conclusion:the cited source(s) do not establish one universal dose minimum, bounded optimum or safety upper limit for every preparation represented by this broad entry. This general-no-benchmark assessment is completed; retain known study regimens separately.",
-        "purpose": "Connective-tissue / collagen synthesis; denatured collagen with LOWER bioavailability than hydrolyzed peptides",
+        "purpose": "Connective-tissue / collagen synthesis; denatured collagen",
         "population": "Only source-specific cohorts described in rationale; no general efficacy dose for unstudied populations, pregnancy or lactation is inferred.",
         "exposure_basis": "minimum_directed_daily_use",
         "units": "g",
@@ -600,11 +540,6 @@
       ],
       "unit": "mg",
       "common_use": "Knee osteoarthritis / joint; collagen + glycosaminoglycans",
-      "typical_dosing_range": "500",
-      "common_serving_size": "500",
-      "upper_limit": "500",
-      "upper_limit_notes": "Single validated dose 500 mg/day; pain and stiffness are the validated endpoints.",
-      "evidence_tier": 2,
       "references": [
         "19340512"
       ],
@@ -637,11 +572,7 @@
       ],
       "unit": "mg",
       "common_use": "Cognitive function, neuroplasticity, nerve growth factor",
-      "typical_dosing_range": "1000-3000",
-      "common_serving_size": "2000",
-      "upper_limit": "5000",
-      "upper_limit_notes": "Generally well-tolerated. Extract concentration varies significantly between products.",
-      "evidence_tier": 2,
+      "notes": "Extract concentration varies significantly between products.",
       "id": "lion_s_mane_mushroom_extract",
       "references": [
         "18844328",
@@ -675,11 +606,7 @@
       ],
       "unit": "mg",
       "common_use": "Cognitive research in a PS/ALA/ginkgo/vitamin combination in mild cognitive impairment; standalone PS attribution remains unestablished.",
-      "typical_dosing_range": "",
-      "common_serving_size": "",
-      "upper_limit": null,
-      "upper_limit_notes": "A safety upper limit is not established by PMID 39317299. Two daily capsules supplied total PS63 mg, ALA288 mg, ginkgo flavonoids7.2 mg plus vitamins for12 months in190 MCI patients. This is not PS100–300 mg monotherapy or cortisol/athletic-recovery evidence. Other dose/preparation evidence remains unresolved; existing medication-review caution is retained.",
-      "evidence_tier": 1,
+      "notes": "A safety upper limit is not established by PMID 39317299. Two daily capsules supplied total PS63 mg, ALA288 mg, ginkgo flavonoids7.2 mg plus vitamins for12 months in190 MCI patients. This is not PS100–300 mg monotherapy or cortisol/athletic-recovery evidence. Other dose/preparation evidence remains unresolved; existing medication-review caution is retained.",
       "id": "phosphatidylserine",
       "references": [
         "39317299"
@@ -712,11 +639,7 @@
       ],
       "unit": "mg",
       "common_use": "Cognitive function, circulation, memory, tinnitus",
-      "typical_dosing_range": "120-240",
-      "common_serving_size": "120",
-      "upper_limit": "240",
-      "upper_limit_notes": "EGb 761 is standardized extract used in clinical trials. Doses >240mg may increase bleeding risk. Avoid with blood thinners.",
-      "evidence_tier": 1,
+      "notes": "EGb 761 is the standardized extract used in clinical trials. May increase bleeding risk. Avoid with blood thinners.",
       "id": "ginkgo_biloba_extract",
       "references": [
         "25352453",
@@ -751,11 +674,7 @@
       ],
       "unit": "mg",
       "common_use": "Antioxidant, skin health, eye health, exercise recovery, anti-inflammatory",
-      "typical_dosing_range": "4-12",
-      "common_serving_size": "6",
-      "upper_limit": "24",
-      "upper_limit_notes": "Fat-soluble carotenoid. Take with food. High doses may cause orange/red skin tint. Safe up to 24mg/day in studies.",
-      "evidence_tier": 1,
+      "notes": "Fat-soluble carotenoid. Take with food. High doses may cause orange/red skin tint.",
       "id": "astaxanthin",
       "references": [
         "35091276",
@@ -791,11 +710,7 @@
       ],
       "unit": "mg",
       "common_use": "Immune support, blood sugar regulation, anti-inflammatory, lipid support",
-      "typical_dosing_range": "500-2000",
-      "common_serving_size": "1000",
-      "upper_limit": "3000",
-      "upper_limit_notes": "Active compound is thymoquinone. May lower blood pressure and blood sugar. Caution with anticoagulants.",
-      "evidence_tier": 2,
+      "notes": "Active compound is thymoquinone. May lower blood pressure and blood sugar. Caution with anticoagulants.",
       "id": "black_seed_oil_nigella_sativa",
       "references": [
         "27512971",
@@ -830,11 +745,7 @@
       ],
       "unit": "mg",
       "common_use": "Energy, libido, hormonal balance, adaptogenic stress support",
-      "typical_dosing_range": "1500-3000",
-      "common_serving_size": "2000",
-      "upper_limit": "5000",
-      "upper_limit_notes": "Studies use 1.5-3g daily for 6-16 weeks. Does not directly affect hormone levels. Different colors (red, black, yellow) may have different effects.",
-      "evidence_tier": 2,
+      "notes": "Red, black and yellow maca are not assumed to be equivalent.",
       "id": "maca_root_extract",
       "references": [
         "27621241"
@@ -867,11 +778,6 @@
       ],
       "unit": "mg",
       "common_use": "Liver support, hepatoprotective, detoxification, antioxidant",
-      "typical_dosing_range": "140-420",
-      "common_serving_size": "140",
-      "upper_limit": "800",
-      "upper_limit_notes": "Standard dose is 140mg 2-3x daily. Phospholipid-bound forms (phytosome) have better bioavailability. Safe for long-term use.",
-      "evidence_tier": 1,
       "id": "milk_thistle_silymarin",
       "references": [
         "40221681"
@@ -904,11 +810,7 @@
       ],
       "unit": "mg",
       "common_use": "Athletic performance, energy, respiratory function, immune support",
-      "typical_dosing_range": "1000-3000",
-      "common_serving_size": "1500",
-      "upper_limit": "6000",
-      "upper_limit_notes": "Militaris strain more sustainable than wild sinensis. CS-4 is cultured mycelium. Take before exercise for performance benefits.",
-      "evidence_tier": 2,
+      "notes": "CS-4 is a cultured mycelium product; C. militaris and wild C. sinensis are not assumed to be equivalent.",
       "id": "cordyceps_mushroom_extract",
       "references": [
         "20804368"
@@ -941,11 +843,7 @@
       ],
       "unit": "mg",
       "common_use": "Ganoderma spore-powder immune biomarker research in postoperative breast/lung cancer patients; generic extract sleep/stress benefits remain unestablished.",
-      "typical_dosing_range": "",
-      "common_serving_size": "",
-      "upper_limit": null,
-      "upper_limit_notes": "A safety upper limit is not established by PMID 33405051. Source studied Ganoderma spore powder in postoperative breast/lung cancer patients, not generic dual-extracted mushroom products or evening sleep dosing. Dose/form interchangeability remains unresolved. Existing blood-clotting caution remains.",
-      "evidence_tier": 2,
+      "notes": "A safety upper limit is not established by PMID 33405051. Source studied Ganoderma spore powder in postoperative breast/lung cancer patients, not generic dual-extracted mushroom products or evening sleep dosing. Dose/form interchangeability remains unresolved. Existing blood-clotting caution remains.",
       "id": "reishi_mushroom_extract",
       "references": [
         "33405051"
@@ -981,11 +879,7 @@
       ],
       "unit": "mg",
       "common_use": "Osteoarthritis / joint pain, anti-inflammatory",
-      "typical_dosing_range": "100-250",
-      "common_serving_size": "100",
-      "upper_limit": "1000",
-      "upper_limit_notes": "Standardize to % AKBA (5-Loxin ~30% AKBA; Aflapin). Dose is meaningful only with AKBA standardization. Crude resin doses run higher.",
-      "evidence_tier": 1,
+      "notes": "Standardize to % AKBA (5-Loxin ~30% AKBA; Aflapin). Dose is meaningful only with AKBA standardization; crude resin is not equivalent.",
       "references": [
         "18667054",
         "35512759"
@@ -1022,11 +916,7 @@
       ],
       "unit": "mg",
       "common_use": "Menopausal vasomotor symptoms (hot flashes)",
-      "typical_dosing_range": "40-80",
-      "common_serving_size": "50",
-      "upper_limit": "100",
-      "upper_limit_notes": "Dose = mg total isoflavone aglycone equivalents (genistein+daidzein+glycitein). Caution in hormone-sensitive conditions.",
-      "evidence_tier": 1,
+      "notes": "Dose = mg total isoflavone aglycone equivalents (genistein+daidzein+glycitein). Caution in hormone-sensitive conditions.",
       "references": [
         "22433977",
         "25316502"
@@ -1063,11 +953,7 @@
       ],
       "unit": "mg",
       "common_use": "Premenstrual syndrome (PMS), cyclic mastalgia",
-      "typical_dosing_range": "4-40",
-      "common_serving_size": "20",
-      "upper_limit": "40",
-      "upper_limit_notes": "Standardized extracts Ze 440 / BNO 1095. Dopaminergic — caution with dopamine drugs; avoid in pregnancy.",
-      "evidence_tier": 1,
+      "notes": "Standardized extracts Ze 440 / BNO 1095. Dopaminergic — caution with dopamine drugs; avoid in pregnancy.",
       "references": [
         "28237870",
         "31780016"
@@ -1103,11 +989,7 @@
       ],
       "unit": "mg",
       "common_use": "Upper respiratory tract infection symptom duration",
-      "typical_dosing_range": "600-1500",
-      "common_serving_size": "1000",
-      "upper_limit": "1500",
-      "upper_limit_notes": "Use cooked/processed extract only (raw berries/bark are cyanogenic). Standardized to anthocyanins.",
-      "evidence_tier": 1,
+      "notes": "Use cooked/processed extract only (raw berries/bark are cyanogenic). Standardized to anthocyanins.",
       "references": [
         "30670267"
       ],
@@ -1141,11 +1023,7 @@
       ],
       "unit": "mg",
       "common_use": "Blood pressure, endothelial / vascular support",
-      "typical_dosing_range": "100-800",
-      "common_serving_size": "300",
-      "upper_limit": "800",
-      "upper_limit_notes": "Standardize to % OPC / proanthocyanidins — dose meaningless without it.",
-      "evidence_tier": 1,
+      "notes": "Standardize to % OPC / proanthocyanidins — dose meaningless without it.",
       "references": [
         "27537554",
         "34798267"
@@ -1180,11 +1058,7 @@
       ],
       "unit": "mg",
       "common_use": "Cardiometabolic / blood pressure, endothelial support",
-      "typical_dosing_range": "50-360",
-      "common_serving_size": "100",
-      "upper_limit": "360",
-      "upper_limit_notes": "Patented pine bark extract standardized to 65-75% procyanidins (Pycnogenol trademark = the standardization).",
-      "evidence_tier": 2,
+      "notes": "Patented pine bark extract standardized to 65-75% procyanidins (Pycnogenol trademark = the standardization).",
       "references": [
         "31585179",
         "31763928"
@@ -1220,11 +1094,7 @@
       ],
       "unit": "mg",
       "common_use": "Glycemic control (modest)",
-      "typical_dosing_range": "1000-6000",
-      "common_serving_size": "2000",
-      "upper_limit": "6000",
-      "upper_limit_notes": "Cassia carries coumarin: EFSA TDI 0.1 mg/kg bw/day (~5-6 mg/day for 60 kg). High-dose Cassia can exceed it; prefer Ceylon for chronic use.",
-      "evidence_tier": 2,
+      "notes": "Cassia carries coumarin: EFSA TDI 0.1 mg/kg bw/day (~5-6 mg/day for 60 kg). High-dose Cassia can exceed it; prefer Ceylon for chronic use.",
       "references": [
         "24019277",
         "37818728"
@@ -1259,11 +1129,7 @@
       ],
       "unit": "mg",
       "common_use": "Male androgen/libido support; glycemic control",
-      "typical_dosing_range": "500-1200",
-      "common_serving_size": "600",
-      "upper_limit": "1200",
-      "upper_limit_notes": "Testofen standardized to ~50% Fenuside (furostanol saponins). May lower blood glucose (additive with antidiabetics).",
-      "evidence_tier": 2,
+      "notes": "Testofen standardized to ~50% Fenuside (furostanol saponins). May lower blood glucose (additive with antidiabetics).",
       "references": [
         "26791805",
         "36837450"
@@ -1297,11 +1163,7 @@
       ],
       "unit": "mg",
       "common_use": "Glycemic control, sugar-craving reduction",
-      "typical_dosing_range": "200-600",
-      "common_serving_size": "400",
-      "upper_limit": "1000",
-      "upper_limit_notes": "Standardize to % gymnemic acids. Additive hypoglycemia with antidiabetics — monitor.",
-      "evidence_tier": 2,
+      "notes": "Standardize to % gymnemic acids. Additive hypoglycemia with antidiabetics — monitor.",
       "references": [
         "34467577"
       ],
@@ -1336,11 +1198,7 @@
       ],
       "unit": "mg",
       "common_use": "Acute respiratory tract infection symptom relief",
-      "typical_dosing_range": "1200-6000",
-      "common_serving_size": "1200",
-      "upper_limit": "6000",
-      "upper_limit_notes": "Standardize to % andrographolides. Immunostimulant — caution in autoimmune disease; avoid in pregnancy.",
-      "evidence_tier": 1,
+      "notes": "Standardize to % andrographolides. Immunostimulant — caution in autoimmune disease; avoid in pregnancy.",
       "references": [
         "28783743",
         "14748896"
@@ -1375,11 +1233,7 @@
       ],
       "unit": "mg",
       "common_use": "Preparation-specific mood research and separate Satiereal weight/snacking research; generic dose equivalence is unresolved.",
-      "typical_dosing_range": "",
-      "common_serving_size": "",
-      "upper_limit": null,
-      "upper_limit_notes": "A safety upper limit is not established by these citations; the prior100 mg ceiling and hard toxicity/abortifacient thresholds are not source-verified here. PMID 20579522 used Satiereal176.5 mg/day for8 weeks in60 mildly overweight women; PMID 30036891 is separate depression meta-analysis evidence. Affron and Satiereal preparation/dose equivalence must not be assumed. Pregnancy-use safety is not established.",
-      "evidence_tier": 2,
+      "notes": "A safety upper limit is not established by these citations; the prior100 mg ceiling and hard toxicity/abortifacient thresholds are not source-verified here. PMID 20579522 used Satiereal176.5 mg/day for8 weeks in60 mildly overweight women; PMID 30036891 is separate depression meta-analysis evidence. Affron and Satiereal preparation/dose equivalence must not be assumed. Pregnancy-use safety is not established.",
       "references": [
         "30036891",
         "20579522"
@@ -1416,11 +1270,7 @@
       ],
       "unit": "mg",
       "common_use": "Testosterone support in stressed/aging men; stress/mood",
-      "typical_dosing_range": "200-400",
-      "common_serving_size": "200",
-      "upper_limit": "600",
-      "upper_limit_notes": "LJ100 / Physta standardized aqueous root extract (eurycomanone). Dose meaningful only with standardization.",
-      "evidence_tier": 2,
+      "notes": "LJ100 / Physta standardized aqueous root extract (eurycomanone). Dose meaningful only with standardization.",
       "references": [
         "36013514",
         "23705671"
@@ -1455,11 +1305,7 @@
       ],
       "unit": "mg",
       "common_use": "Lipid / cardiometabolic support",
-      "typical_dosing_range": "500-1500",
-      "common_serving_size": "1000",
-      "upper_limit": "1500",
-      "upper_limit_notes": "Standardized Bergamot Polyphenolic Fraction (BPF). Caution with statins (additive lipid effect; monitor).",
-      "evidence_tier": 2,
+      "notes": "Standardized Bergamot Polyphenolic Fraction (BPF). Caution with statins (additive lipid effect; monitor).",
       "references": [
         "24239156",
         "30501605"
@@ -1494,11 +1340,7 @@
       ],
       "unit": "mg",
       "common_use": "Blood pressure, antioxidant support",
-      "typical_dosing_range": "500-1000",
-      "common_serving_size": "1000",
-      "upper_limit": "1000",
-      "upper_limit_notes": "Standardize to % oleuropein (commonly 16-20%). May potentiate antihypertensives/antidiabetics.",
-      "evidence_tier": 2,
+      "notes": "Standardize to % oleuropein (commonly 16-20%). May potentiate antihypertensives/antidiabetics.",
       "references": [
         "26951205",
         "40990594"
@@ -1532,11 +1374,7 @@
       ],
       "unit": "mg",
       "common_use": "Acute stress/anxiety, calm",
-      "typical_dosing_range": "300-1600",
-      "common_serving_size": "600",
-      "upper_limit": "1600",
-      "upper_limit_notes": "Often standardized to rosmarinic acid. Mild sedation — caution with CNS depressants.",
-      "evidence_tier": 2,
+      "notes": "Often standardized to rosmarinic acid. Mild sedation — caution with CNS depressants.",
       "references": [
         "15272110"
       ],
@@ -1568,11 +1406,7 @@
       ],
       "unit": "mg",
       "common_use": "Short-term subjective sleep-quality research with Passiflora incarnata tea in healthy young adults.",
-      "typical_dosing_range": "",
-      "common_serving_size": "",
-      "upper_limit": null,
-      "upper_limit_notes": "A safety upper limit is not established by PMID 21294203. The trial studied one cup of herbal tea daily for7 days in41 adults aged18–35, not250–800 mg standardized extract or clinical anxiety treatment. Tea-to-extract mass conversion is unresolved. Existing sedation/CNS-depressant and pregnancy cautions remain.",
-      "evidence_tier": 2,
+      "notes": "A safety upper limit is not established by PMID 21294203. The trial studied one cup of herbal tea daily for7 days in41 adults aged18–35, not250–800 mg standardized extract or clinical anxiety treatment. Tea-to-extract mass conversion is unresolved. Existing sedation/CNS-depressant and pregnancy cautions remain.",
       "references": [
         "21294203"
       ],
@@ -1605,11 +1439,7 @@
       ],
       "unit": "mg",
       "common_use": "Preparation-specific acute memory/attention research; Salvia species and extract/oil doses are not interchangeable.",
-      "typical_dosing_range": "",
-      "common_serving_size": "",
-      "upper_limit": null,
-      "upper_limit_notes": "A safety upper limit is not established by these citations. PMID 18350281 studied acute S.officinalis standardized extract167/333/666/1332 mg in20 older adults, with333 mg strongest signal. PMID 12895685 studied S.lavandulaefolia essential oil25–150 microliters in young adults, with50 microliters word-recall signal. No common300–600 mg leaf-extract threshold or600 mg safety ceiling is established. Essential-oil/thujone caution remains; chronic safety is unresolved.",
-      "evidence_tier": 2,
+      "notes": "A safety upper limit is not established by these citations. PMID 18350281 studied acute S.officinalis standardized extract167/333/666/1332 mg in20 older adults, with333 mg strongest signal. PMID 12895685 studied S.lavandulaefolia essential oil25–150 microliters in young adults, with50 microliters word-recall signal. No common300–600 mg leaf-extract threshold or600 mg safety ceiling is established. Essential-oil/thujone caution remains; chronic safety is unresolved.",
       "references": [
         "18350281",
         "12895685"
@@ -1644,11 +1474,7 @@
       ],
       "unit": "mg",
       "common_use": "Stress / anxiety, metabolic support",
-      "typical_dosing_range": "300-1200",
-      "common_serving_size": "500",
-      "upper_limit": "1200",
-      "upper_limit_notes": "Leaf extract (standardization varies; sometimes ursolic acid/eugenol). May lower blood glucose; avoid in pregnancy.",
-      "evidence_tier": 2,
+      "notes": "Leaf extract (standardization varies; sometimes ursolic acid/eugenol). May lower blood glucose; avoid in pregnancy.",
       "references": [
         "19253862",
         "26571987"

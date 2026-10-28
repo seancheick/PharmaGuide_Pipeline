@@ -40,6 +40,7 @@ _SCRIPTS_DIR = Path(__file__).resolve().parent
 if str(_SCRIPTS_DIR) not in sys.path:
     sys.path.insert(0, str(_SCRIPTS_DIR))
 
+from clinical_evidence_schema import is_reference_only
 from constants import CLEANER_NON_EFFICACY_ROLES
 
 try:
@@ -157,7 +158,7 @@ OWNER_CAPABILITY_MAP: Dict[str, OwnerCapability] = {
     "backed_clinical_studies": OwnerCapability(
         owner_id="backed_clinical_studies",
         data_source="data/backed_clinical_studies.json",
-        facts_owned=("has_reviewed_studies", "study_count", "highest_study_type", "effect_directions", "pmids", "min_clinical_dose", "max_clinical_dose"),
+        facts_owned=("has_reviewed_studies", "study_count", "highest_study_type", "effect_directions", "pmids", "min_clinical_dose", "max_studied_clinical_dose"),
         capability_description="Reviewed human clinical trials, systematic reviews, and meta-analyses",
     ),
     "probiotic_strain_registry": OwnerCapability(
@@ -401,7 +402,7 @@ def clinical_record_sources_eligible(entry: Mapping[str, Any]) -> bool:
     """Honor source-integrity holds at the shared clinical-credit seam."""
     if entry.get("scoring_eligible") is False:
         return False
-    if any(_norm(entry.get(key)) == "reference" for key in ("study_type", "evidence_level")):
+    if is_reference_only(entry):
         return False
     references = entry.get("references_structured")
     # Legacy records without structured references retain their existing
@@ -872,9 +873,9 @@ def resolve_evidence_for_row(
         matched_owners.append("nutrition_authority")
         owner_facts["nutrition_authority"] = {
             "nutrient": nutr_entry.get("id") or nutr_entry.get("standard_name"),
-            "category": nutr_entry.get("category"),
             "is_essential": True,
-            "ul": nutr_entry.get("ul"),
+            # Adult maximum only; applicable life-stage ULs stay in data[].ul.
+            "highest_ul": nutr_entry.get("highest_ul"),
             "unit": nutr_entry.get("unit"),
         }
         # Established dietary necessity under National Academies DRI
@@ -938,7 +939,7 @@ def resolve_evidence_for_row(
         if not valid_studies:
             from clinical_applicability import assess_clinical_source_review
             reviewed_references = all(
-                any(study.get(key) == "reference" for key in ("study_type", "evidence_level"))
+                is_reference_only(study)
                 and study.get("scoring_eligible") is not False
                 and assess_clinical_source_review(study)["is_complete"]
                 for study in deduped_studies

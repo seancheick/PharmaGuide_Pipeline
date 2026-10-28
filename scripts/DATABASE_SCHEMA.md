@@ -711,7 +711,7 @@ Primary key: `nutrient_recommendations` (array)
 | `aliases` | string[] | NO | Alternative names (used by the calculator's name lookup) |
 | `unit` | string | YES | Canonical dosing unit |
 | `optimal_range` | string | YES | `"min-max"` or single value |
-| `ul` / `highest_ul` | float/null | YES | Upper tolerable limit (null when none established) |
+| `highest_ul` | float/null | YES | Highest adult upper tolerable limit (null when none established). Never a stand-in for the applicable life-stage UL in `data[].ul`; a top-level `ul` is retired |
 | `data` | object[] | YES | Age/sex-specific `rda_ai` / `ul` grid (drives `pct_rda` and the label-population UL screen). Child rows `1-3`, `4-8`, `9-13` carry the NASEM UL only (`rda_ai` null: adequacy uses the adult profile) and feed only the child notes (`rda_ul_data.child_ul_screen`), never the adult score; infants have no rows and vanadium has no child UL, so their child notes stay `not_assessable` (`pediatric_ul_row_missing_for_stated_age`) |
 | `warnings` | string[] | NO | Dosing warnings |
 | `references` | string[] | NO | Bare PMID strings for non-DRI bioactives (content-verified; DRI nutrients are checked by `verify_rda_uls.py`) |
@@ -719,12 +719,13 @@ Primary key: `nutrient_recommendations` (array)
 ---
 
 ### 27. rda_therapeutic_dosing.json
-**Purpose:** therapeutic dosing ranges for dietary supplement ingredients not covered by traditional RDA/UL standards | **Entries:** read `_metadata.total_entries`
+**Purpose:** source-attributed dose-reference decisions for supplement actives not covered by RDA/UL
+standards | **Entries:** read `_metadata.total_entries`
 
 Current v4 scoring scope: consumed by the `botanical_profile.py` and `collagen_profile.py` dose adapters
 (keyed on normalized `standard_name` + `aliases`) plus documented route exceptions such as CFU probiotic
 evidence. This is a consumption detail, not the domain boundary of the file. Additional non-RDA supplement
-actives may belong here when a scoring adapter consumes the therapeutic-dose contract. Some generic bioactive
+actives may belong here when a scoring adapter consumes the reference contract. Some generic bioactive
 dose anchors currently live in `rda_optimal_uls.json` because that is the path `rda_ul_calculator.py` reads today.
 
 Primary key: `therapeutic_dosing` (array)
@@ -734,21 +735,28 @@ Primary key: `therapeutic_dosing` (array)
 | `id` | string | YES | Unique ID |
 | `standard_name` | string | YES | Ingredient name |
 | `aliases` | string[] | YES | Alternative names (collagen routing keys on `uc-ii`/`nem`/`biocell`/`gelatin`/`collagen` — do not rename) |
-| `unit` | string | YES | Dosing unit (`mg`, `g`, `CFU`) |
-| `common_use` | string | NO | Clinical use / indication |
-| `typical_dosing_range` | string | YES | `"min-max"` or single value, in `unit` (e.g. `"250-600"`, `"40"`) |
-| `common_serving_size` | string | YES | Typical serving |
-| `upper_limit` | string/null | YES | Safety ceiling |
-| `upper_limit_notes` | string | NO | Caution / interaction notes |
-| `evidence_tier` | int | YES | Evidence strength (1 = strongest) |
+| `unit` | string | YES | Exposure unit (`mg`, `g`, `CFU`); equals `reference_semantics.units` |
+| `common_use` | string | NO | Researched use / indication context (citation-verifier topic text; never a purpose or eligibility input) |
+| `notes` | string | NO | Medication, pregnancy, bleeding and other cautions; preparation identity and non-equivalence. Never a dose threshold or safe maximum |
 | `references` | string[] | NO | Bare PMID strings (content-verified via `verify_all_citations_content.py`) |
+| `reference_semantics` | object | YES | The approved reference decision; owns studied regimens and the no-benchmark conclusion |
 
-For a reviewed `reference_semantics.reference_type = "no_benchmark"` record with
-`curve = "completed_no_benchmark_neutral"`, the legacy numerical fields
-`typical_dosing_range`, `common_serving_size`, `upper_limit` and `evidence_tier`
-may be absent. Its scoped, source-attributed reference decision owns completeness;
-no numerical threshold, safety ceiling or efficacy grade should be invented to fill
-these fields. Exact-preparation aliases must not route generic ingredients into that decision.
+**Retired fields (October 28, 2026).** `upper_limit`, `upper_limit_notes`, `typical_dosing_range`,
+`common_serving_size` and `evidence_tier` were removed from every record:
+- No reader used them.
+- Every record's approved `reference_semantics` concludes that its sources establish no universal
+  dose minimum, optimum or safety upper limit.
+- Their cautions moved to `notes`; unsupported safe-maximum, universal-dose and
+  preparation-equivalence statements were dropped.
+
+Per-record old values and dispositions are in
+`scripts/audits/field_one_brain_20261028/therapeutic_legacy_fields_receipt.json`.
+`db_integrity_sanity_check.check_rda_therapeutic` rejects any of these keys.
+
+The ownership rules:
+- An established UL belongs to `rda_optimal_uls.json`.
+- A studied trial dose is a research exposure recorded in `reference_semantics`, not a safe maximum.
+- A qualified risk reference (for example EFSA's coumarin TDI) stays a caution in `notes`, not a UL.
 
 ---
 

@@ -1,0 +1,904 @@
+{
+  "_metadata": {
+    "decision": "Sean, October 28, 2026: retire upper_limit and review related descriptive fields",
+    "source_file": "scripts/data/rda_therapeutic_dosing.json",
+    "base_commit": "e6885790d",
+    "ul_owner": "scripts/data/rda_optimal_uls.json",
+    "records": 44,
+    "editorial_corrections": "Edits to reference_semantics.purpose are editorial corrections to previously approved records. They carry no new reviewer approval; each record keeps its original approval status and review date because the approved Dose conclusion is unchanged."
+  },
+  "records": [
+    {
+      "id": "ashwagandha_root_extract",
+      "reference_type": "discrete_studied_regimen",
+      "curve": "completed_no_benchmark_neutral",
+      "old": {
+        "upper_limit": "1000",
+        "typical_dosing_range": "250-600",
+        "common_serving_size": "300",
+        "evidence_tier": 1,
+        "upper_limit_notes": "Long-term safety of very high doses not established. Use caution with thyroid medications."
+      },
+      "disposition": {
+        "upper_limit": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "typical_dosing_range": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "common_serving_size": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "evidence_tier": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "upper_limit_notes": "moved to notes: carried unchanged into notes"
+      },
+      "ul_owner_status": "no_ul_owner_entry"
+    },
+    {
+      "id": "bacopa_monnieri_extract",
+      "reference_type": "discrete_studied_regimen",
+      "curve": "completed_no_benchmark_neutral",
+      "old": {
+        "upper_limit": "600",
+        "typical_dosing_range": "300-450",
+        "common_serving_size": "300",
+        "evidence_tier": 1,
+        "upper_limit_notes": "Standardized to 20-55% bacosides. May cause GI upset in some."
+      },
+      "disposition": {
+        "upper_limit": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "typical_dosing_range": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "common_serving_size": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "evidence_tier": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "upper_limit_notes": "moved to notes: carried unchanged into notes"
+      },
+      "ul_owner_status": "no_ul_owner_entry"
+    },
+    {
+      "id": "curcumin_from_turmeric",
+      "reference_type": "no_benchmark",
+      "curve": "completed_no_benchmark_neutral",
+      "old": {
+        "upper_limit": "8000",
+        "typical_dosing_range": "500-1000",
+        "common_serving_size": "500",
+        "evidence_tier": 1,
+        "upper_limit_notes": "High doses may cause GI upset. Enhanced formulations (with piperine, phospholipids) greatly increase bioavailability."
+      },
+      "disposition": {
+        "upper_limit": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "typical_dosing_range": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "common_serving_size": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "evidence_tier": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "upper_limit_notes": "moved to notes: removed unsourced claim that enhanced formulations 'greatly increase' bioavailability (preparation superiority); kept GI caution and non-interchangeability"
+      },
+      "ul_owner_status": "no_ul_owner_entry",
+      "new_notes": "High doses may cause GI upset. Formulations differ in bioavailability (for example with piperine or phospholipids); preparations are not interchangeable."
+    },
+    {
+      "id": "l_theanine",
+      "reference_type": "discrete_studied_regimen",
+      "curve": "completed_no_benchmark_neutral",
+      "old": {
+        "upper_limit": null,
+        "typical_dosing_range": "100.6",
+        "common_serving_size": "100.6",
+        "evidence_tier": 1,
+        "upper_limit_notes": "A safety upper limit is not established by PMID 33751906. Full Methods used one 100.6 mg Suntheanine capsule daily for 12 weeks, plus acute assessment; this is a study exposure, not a maximum safe intake. No known toxicity / exceptionally safe certainty is unsupported."
+      },
+      "disposition": {
+        "upper_limit": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "typical_dosing_range": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "common_serving_size": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "evidence_tier": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "upper_limit_notes": "moved to notes: carried unchanged into notes"
+      },
+      "ul_owner_status": "no_ul_owner_entry"
+    },
+    {
+      "id": "lutein",
+      "reference_type": "discrete_studied_regimen",
+      "curve": "completed_no_benchmark_neutral",
+      "old": {
+        "upper_limit": "40",
+        "typical_dosing_range": "10-20",
+        "common_serving_size": "20",
+        "evidence_tier": 1,
+        "upper_limit_notes": "Fat-soluble; take with food. Often paired with zeaxanthin."
+      },
+      "disposition": {
+        "upper_limit": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "typical_dosing_range": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "common_serving_size": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "evidence_tier": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "upper_limit_notes": "moved to notes: carried unchanged into notes"
+      },
+      "ul_owner_status": "not_established_insufficient_data"
+    },
+    {
+      "id": "probiotics_general",
+      "reference_type": "no_benchmark",
+      "curve": "completed_no_benchmark_neutral",
+      "old": {
+        "upper_limit": "100 Billion",
+        "typical_dosing_range": "1-10 Billion",
+        "common_serving_size": "10 Billion",
+        "evidence_tier": 1,
+        "upper_limit_notes": "Strain-specific effects are critical. High doses may cause initial bloating. Immunocompromised individuals should consult a doctor."
+      },
+      "disposition": {
+        "upper_limit": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "typical_dosing_range": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "common_serving_size": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "evidence_tier": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "upper_limit_notes": "moved to notes: carried unchanged into notes"
+      },
+      "ul_owner_status": "no_ul_owner_entry"
+    },
+    {
+      "id": "resveratrol",
+      "reference_type": "no_benchmark",
+      "curve": "completed_no_benchmark_neutral",
+      "old": {
+        "upper_limit": "2000",
+        "typical_dosing_range": "250-500",
+        "common_serving_size": "500",
+        "evidence_tier": 2,
+        "upper_limit_notes": "Fat-soluble; take with food. High purity trans-resveratrol is preferred."
+      },
+      "disposition": {
+        "upper_limit": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "typical_dosing_range": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "common_serving_size": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "evidence_tier": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "upper_limit_notes": "moved to notes: removed unsourced purity-preference claim"
+      },
+      "ul_owner_status": "no_ul_owner_entry",
+      "new_notes": "Fat-soluble; take with food."
+    },
+    {
+      "id": "rhodiola_rosea_extract",
+      "reference_type": "no_benchmark",
+      "curve": "completed_no_benchmark_neutral",
+      "old": {
+        "upper_limit": "600",
+        "typical_dosing_range": "200-400",
+        "common_serving_size": "300",
+        "evidence_tier": 1,
+        "upper_limit_notes": "Standardized to 3% rosavins and 1% salidroside. May be stimulating for some; avoid late in the day."
+      },
+      "disposition": {
+        "upper_limit": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "typical_dosing_range": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "common_serving_size": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "evidence_tier": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "upper_limit_notes": "moved to notes: a single fixed standardization (3%/1%) contradicted the reviewed variable preparations; kept stimulation caution"
+      },
+      "ul_owner_status": "no_ul_owner_entry",
+      "new_notes": "Commonly standardized to rosavins and salidroside; studied preparations vary. May be stimulating for some; avoid late in the day."
+    },
+    {
+      "id": "saw_palmetto_extract",
+      "reference_type": "discrete_studied_regimen",
+      "curve": "completed_no_benchmark_neutral",
+      "old": {
+        "upper_limit": null,
+        "typical_dosing_range": "320",
+        "common_serving_size": "320",
+        "evidence_tier": 1,
+        "upper_limit_notes": "Safety upper limit not established. 960 mg/day was the highest dose studied (CAMUS, 72 weeks) without clearly attributable adverse effects; the EMA monograph reports no overdose cases. 320 mg/day is the studied regimen, not an efficacy threshold."
+      },
+      "disposition": {
+        "upper_limit": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "typical_dosing_range": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "common_serving_size": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "evidence_tier": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "upper_limit_notes": "moved to notes: carried unchanged into notes"
+      },
+      "ul_owner_status": "no_ul_owner_entry"
+    },
+    {
+      "id": "st_john_s_wort",
+      "reference_type": "no_benchmark",
+      "curve": "completed_no_benchmark_neutral",
+      "old": {
+        "upper_limit": "900",
+        "typical_dosing_range": "300-900",
+        "common_serving_size": "300",
+        "evidence_tier": 1,
+        "upper_limit_notes": "**Major Interaction Risk:** Induces CYP450 enzymes. Interacts with antidepressants, birth control, blood thinners, and many others. Contraindicated with many medications."
+      },
+      "disposition": {
+        "upper_limit": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "typical_dosing_range": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "common_serving_size": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "evidence_tier": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "upper_limit_notes": "moved to notes: carried unchanged into notes"
+      },
+      "ul_owner_status": "no_ul_owner_entry"
+    },
+    {
+      "id": "valerian_root",
+      "reference_type": "no_benchmark",
+      "curve": "completed_no_benchmark_neutral",
+      "old": {
+        "upper_limit": null,
+        "typical_dosing_range": "",
+        "common_serving_size": "",
+        "evidence_tier": 3,
+        "upper_limit_notes": "A safety upper limit is not established by PMID 38359657. The umbrella review found no empirical insomnia efficacy; possible subjective sleep-quality improvement was not demonstrated by quantitative/objective measures. Heterogeneous low-quality studies do not establish this record's generic extract dose range. Existing drowsiness caution remains."
+      },
+      "disposition": {
+        "upper_limit": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "typical_dosing_range": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "common_serving_size": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "evidence_tier": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "upper_limit_notes": "moved to notes: carried unchanged into notes"
+      },
+      "ul_owner_status": "no_ul_owner_entry"
+    },
+    {
+      "id": "collagen_peptides",
+      "reference_type": "discrete_studied_regimen",
+      "curve": "completed_no_benchmark_neutral",
+      "old": {
+        "upper_limit": "20",
+        "typical_dosing_range": "2.5-10",
+        "common_serving_size": "5",
+        "evidence_tier": 1,
+        "upper_limit_notes": "Generally very safe. Skin benefit validated from 2.5 g (Verisol); joint/bone 5-10 g. Bioavailability varies with form.",
+        "common_use": "Skin/hair/nail (2.5 g+) and joint/bone (5-10 g) health; hydrolyzed Type I & III peptides incl. marine",
+        "reference_semantics.purpose": "Skin/hair/nail (2.5 g+) and joint/bone (5-10 g) health; hydrolyzed Type I & III peptides incl. marine"
+      },
+      "disposition": {
+        "upper_limit": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "typical_dosing_range": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "common_serving_size": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "evidence_tier": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "upper_limit_notes": "moved to notes: removed 'generally very safe' and the 2.5 g / 5-10 g validated-threshold claims (study regimens stay in reference_semantics)",
+        "common_use": "edited: removed '2.5 g+' and '5-10 g' universal dose thresholds",
+        "reference_semantics.purpose": "editorial correction, not a new approval: text aligned with the corrected common_use. approval_status approved_existing_neutral_2026_10_18 continues to refer only to the unchanged no-general-benchmark Dose conclusion. Approval dependency checked: Sean approved the decision row collagen.collagen_peptides in docs/plans/DOSE_V41_REFERENCE_DECISIONS.md (October 18, 2026), which covers the conclusion and its context codes, not this purpose wording. The original text is retained in old."
+      },
+      "ul_owner_status": "no_ul_owner_entry",
+      "new_notes": "Bioavailability varies with form; preparations are not interchangeable."
+    },
+    {
+      "id": "uc_ii_collagen",
+      "reference_type": "discrete_studied_regimen",
+      "curve": "completed_no_benchmark_neutral",
+      "old": {
+        "upper_limit": "40",
+        "typical_dosing_range": "40",
+        "common_serving_size": "40",
+        "evidence_tier": 1,
+        "upper_limit_notes": "Standard single validated dose 40 mg/day. Do NOT conflate with hydrolyzed Type II (BioCell).",
+        "common_use": "Knee osteoarthritis / joint; undenatured (native) Type II, oral-tolerance mechanism (low mg dose, NOT the hydrolyzed-peptide gram range)",
+        "reference_semantics.purpose": "Knee osteoarthritis / joint; undenatured (native) Type II, oral-tolerance mechanism (low mg dose, NOT the hydrolyzed-peptide gram range)"
+      },
+      "disposition": {
+        "upper_limit": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "typical_dosing_range": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "common_serving_size": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "evidence_tier": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "upper_limit_notes": "moved to notes: removed 'standard single validated dose 40 mg/day' (universal dose); kept non-equivalence caution",
+        "common_use": "edited: replaced a dose-range framing with the non-equivalence statement",
+        "reference_semantics.purpose": "editorial correction, not a new approval: text aligned with the corrected common_use. approval_status approved_existing_neutral_2026_10_18 continues to refer only to the unchanged no-general-benchmark Dose conclusion. Approval dependency checked: Sean approved the decision row collagen.uc_ii_collagen in docs/plans/DOSE_V41_REFERENCE_DECISIONS.md (October 18, 2026), which covers the conclusion and its context codes, not this purpose wording. The original text is retained in old."
+      },
+      "ul_owner_status": "no_ul_owner_entry",
+      "new_notes": "Do NOT conflate with hydrolyzed Type II (BioCell)."
+    },
+    {
+      "id": "biocell_collagen",
+      "reference_type": "discrete_studied_regimen",
+      "curve": "completed_no_benchmark_neutral",
+      "old": {
+        "upper_limit": null,
+        "typical_dosing_range": "1000-2000",
+        "common_serving_size": "1000",
+        "evidence_tier": 2,
+        "upper_limit_notes": "A safety upper limit is not established by these trials. PMID 31221944 used 500 mg BioCell twice daily (1000 mg/day) for 12 weeks; wrinkles/elasticity signals did not include improved skin-surface water content or retention. PMID 22486722 studied 2000 mg/day for 70 days in OA. These are preparation-specific exposures, not proof of every dose in the interval or a formal safety ceiling."
+      },
+      "disposition": {
+        "upper_limit": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "typical_dosing_range": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "common_serving_size": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "evidence_tier": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "upper_limit_notes": "moved to notes: carried unchanged into notes"
+      },
+      "ul_owner_status": "no_ul_owner_entry"
+    },
+    {
+      "id": "gelatin",
+      "reference_type": "discrete_studied_regimen",
+      "curve": "completed_no_benchmark_neutral",
+      "old": {
+        "upper_limit": "20",
+        "typical_dosing_range": "5-15",
+        "common_serving_size": "10",
+        "evidence_tier": 3,
+        "upper_limit_notes": "Mechanistic (collagen-synthesis-marker) evidence; intact denatured collagen, less bioavailable than pre-cleaved peptides.",
+        "common_use": "Connective-tissue / collagen synthesis; denatured collagen with LOWER bioavailability than hydrolyzed peptides",
+        "reference_semantics.purpose": "Connective-tissue / collagen synthesis; denatured collagen with LOWER bioavailability than hydrolyzed peptides"
+      },
+      "disposition": {
+        "upper_limit": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "typical_dosing_range": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "common_serving_size": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "evidence_tier": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "upper_limit_notes": "moved to notes: removed unsourced comparative bioavailability claim",
+        "common_use": "edited: removed unsourced comparative bioavailability claim",
+        "reference_semantics.purpose": "editorial correction, not a new approval: text aligned with the corrected common_use. approval_status approved_existing_neutral_2026_10_18 continues to refer only to the unchanged no-general-benchmark Dose conclusion. Approval dependency checked: Sean approved the decision row collagen.gelatin in docs/plans/DOSE_V41_REFERENCE_DECISIONS.md (October 18, 2026), which covers the conclusion and its context codes, not this purpose wording. The original text is retained in old."
+      },
+      "ul_owner_status": "no_ul_owner_entry",
+      "new_notes": "Mechanistic (collagen-synthesis-marker) evidence only."
+    },
+    {
+      "id": "eggshell_membrane_nem",
+      "reference_type": "discrete_studied_regimen",
+      "curve": "completed_no_benchmark_neutral",
+      "old": {
+        "upper_limit": "500",
+        "typical_dosing_range": "500",
+        "common_serving_size": "500",
+        "evidence_tier": 2,
+        "upper_limit_notes": "Single validated dose 500 mg/day; pain and stiffness are the validated endpoints."
+      },
+      "disposition": {
+        "upper_limit": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "typical_dosing_range": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "common_serving_size": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "evidence_tier": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "upper_limit_notes": "dropped: only a 'single validated dose' claim and an endpoint summary owned by reference_semantics; nothing cautionary to keep"
+      },
+      "ul_owner_status": "no_ul_owner_entry"
+    },
+    {
+      "id": "lion_s_mane_mushroom_extract",
+      "reference_type": "discrete_studied_regimen",
+      "curve": "completed_no_benchmark_neutral",
+      "old": {
+        "upper_limit": "5000",
+        "typical_dosing_range": "1000-3000",
+        "common_serving_size": "2000",
+        "evidence_tier": 2,
+        "upper_limit_notes": "Generally well-tolerated. Extract concentration varies significantly between products."
+      },
+      "disposition": {
+        "upper_limit": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "typical_dosing_range": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "common_serving_size": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "evidence_tier": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "upper_limit_notes": "moved to notes: removed unsourced 'generally well-tolerated' safety statement"
+      },
+      "ul_owner_status": "no_ul_owner_entry",
+      "new_notes": "Extract concentration varies significantly between products."
+    },
+    {
+      "id": "phosphatidylserine",
+      "reference_type": "no_benchmark",
+      "curve": "completed_no_benchmark_neutral",
+      "old": {
+        "upper_limit": null,
+        "typical_dosing_range": "",
+        "common_serving_size": "",
+        "evidence_tier": 1,
+        "upper_limit_notes": "A safety upper limit is not established by PMID 39317299. Two daily capsules supplied total PS63 mg, ALA288 mg, ginkgo flavonoids7.2 mg plus vitamins for12 months in190 MCI patients. This is not PS100–300 mg monotherapy or cortisol/athletic-recovery evidence. Other dose/preparation evidence remains unresolved; existing medication-review caution is retained."
+      },
+      "disposition": {
+        "upper_limit": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "typical_dosing_range": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "common_serving_size": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "evidence_tier": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "upper_limit_notes": "moved to notes: carried unchanged into notes"
+      },
+      "ul_owner_status": "no_ul_owner_entry"
+    },
+    {
+      "id": "ginkgo_biloba_extract",
+      "reference_type": "discrete_studied_regimen",
+      "curve": "completed_no_benchmark_neutral",
+      "old": {
+        "upper_limit": "240",
+        "typical_dosing_range": "120-240",
+        "common_serving_size": "120",
+        "evidence_tier": 1,
+        "upper_limit_notes": "EGb 761 is standardized extract used in clinical trials. Doses >240mg may increase bleeding risk. Avoid with blood thinners."
+      },
+      "disposition": {
+        "upper_limit": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "typical_dosing_range": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "common_serving_size": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "evidence_tier": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "upper_limit_notes": "moved to notes: 'doses >240mg may increase bleeding risk' implied a safe maximum of 240 mg; bleeding and anticoagulant caution kept"
+      },
+      "ul_owner_status": "no_ul_owner_entry",
+      "new_notes": "EGb 761 is the standardized extract used in clinical trials. May increase bleeding risk. Avoid with blood thinners."
+    },
+    {
+      "id": "astaxanthin",
+      "reference_type": "no_benchmark",
+      "curve": "completed_no_benchmark_neutral",
+      "old": {
+        "upper_limit": "24",
+        "typical_dosing_range": "4-12",
+        "common_serving_size": "6",
+        "evidence_tier": 1,
+        "upper_limit_notes": "Fat-soluble carotenoid. Take with food. High doses may cause orange/red skin tint. Safe up to 24mg/day in studies."
+      },
+      "disposition": {
+        "upper_limit": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "typical_dosing_range": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "common_serving_size": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "evidence_tier": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "upper_limit_notes": "moved to notes: removed 'safe up to 24mg/day in studies' (safe maximum); kept skin-tint caution"
+      },
+      "ul_owner_status": "no_ul_owner_entry",
+      "new_notes": "Fat-soluble carotenoid. Take with food. High doses may cause orange/red skin tint."
+    },
+    {
+      "id": "black_seed_oil_nigella_sativa",
+      "reference_type": "no_benchmark",
+      "curve": "completed_no_benchmark_neutral",
+      "old": {
+        "upper_limit": "3000",
+        "typical_dosing_range": "500-2000",
+        "common_serving_size": "1000",
+        "evidence_tier": 2,
+        "upper_limit_notes": "Active compound is thymoquinone. May lower blood pressure and blood sugar. Caution with anticoagulants."
+      },
+      "disposition": {
+        "upper_limit": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "typical_dosing_range": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "common_serving_size": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "evidence_tier": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "upper_limit_notes": "moved to notes: carried unchanged into notes"
+      },
+      "ul_owner_status": "no_ul_owner_entry"
+    },
+    {
+      "id": "maca_root_extract",
+      "reference_type": "no_benchmark",
+      "curve": "completed_no_benchmark_neutral",
+      "old": {
+        "upper_limit": "5000",
+        "typical_dosing_range": "1500-3000",
+        "common_serving_size": "2000",
+        "evidence_tier": 2,
+        "upper_limit_notes": "Studies use 1.5-3g daily for 6-16 weeks. Does not directly affect hormone levels. Different colors (red, black, yellow) may have different effects."
+      },
+      "disposition": {
+        "upper_limit": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "typical_dosing_range": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "common_serving_size": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "evidence_tier": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "upper_limit_notes": "moved to notes: removed a 1.5-3 g dose convention and an unsourced hormone claim; kept non-equivalence"
+      },
+      "ul_owner_status": "no_ul_owner_entry",
+      "new_notes": "Red, black and yellow maca are not assumed to be equivalent."
+    },
+    {
+      "id": "milk_thistle_silymarin",
+      "reference_type": "no_benchmark",
+      "curve": "completed_no_benchmark_neutral",
+      "old": {
+        "upper_limit": "800",
+        "typical_dosing_range": "140-420",
+        "common_serving_size": "140",
+        "evidence_tier": 1,
+        "upper_limit_notes": "Standard dose is 140mg 2-3x daily. Phospholipid-bound forms (phytosome) have better bioavailability. Safe for long-term use."
+      },
+      "disposition": {
+        "upper_limit": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "typical_dosing_range": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "common_serving_size": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "evidence_tier": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "upper_limit_notes": "dropped: only a 'standard dose', a bioavailability superiority claim and 'safe for long-term use'; nothing cautionary to keep"
+      },
+      "ul_owner_status": "no_ul_owner_entry"
+    },
+    {
+      "id": "cordyceps_mushroom_extract",
+      "reference_type": "discrete_studied_regimen",
+      "curve": "completed_no_benchmark_neutral",
+      "old": {
+        "upper_limit": "6000",
+        "typical_dosing_range": "1000-3000",
+        "common_serving_size": "1500",
+        "evidence_tier": 2,
+        "upper_limit_notes": "Militaris strain more sustainable than wild sinensis. CS-4 is cultured mycelium. Take before exercise for performance benefits."
+      },
+      "disposition": {
+        "upper_limit": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "typical_dosing_range": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "common_serving_size": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "evidence_tier": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "upper_limit_notes": "moved to notes: removed sustainability and exercise-timing performance claims; kept identity and non-equivalence"
+      },
+      "ul_owner_status": "no_ul_owner_entry",
+      "new_notes": "CS-4 is a cultured mycelium product; C. militaris and wild C. sinensis are not assumed to be equivalent."
+    },
+    {
+      "id": "reishi_mushroom_extract",
+      "reference_type": "no_benchmark",
+      "curve": "completed_no_benchmark_neutral",
+      "old": {
+        "upper_limit": null,
+        "typical_dosing_range": "",
+        "common_serving_size": "",
+        "evidence_tier": 2,
+        "upper_limit_notes": "A safety upper limit is not established by PMID 33405051. Source studied Ganoderma spore powder in postoperative breast/lung cancer patients, not generic dual-extracted mushroom products or evening sleep dosing. Dose/form interchangeability remains unresolved. Existing blood-clotting caution remains."
+      },
+      "disposition": {
+        "upper_limit": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "typical_dosing_range": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "common_serving_size": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "evidence_tier": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "upper_limit_notes": "moved to notes: carried unchanged into notes"
+      },
+      "ul_owner_status": "no_ul_owner_entry"
+    },
+    {
+      "id": "boswellia_serrata",
+      "reference_type": "discrete_studied_regimen",
+      "curve": "completed_no_benchmark_neutral",
+      "old": {
+        "upper_limit": "1000",
+        "typical_dosing_range": "100-250",
+        "common_serving_size": "100",
+        "evidence_tier": 1,
+        "upper_limit_notes": "Standardize to % AKBA (5-Loxin ~30% AKBA; Aflapin). Dose is meaningful only with AKBA standardization. Crude resin doses run higher."
+      },
+      "disposition": {
+        "upper_limit": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "typical_dosing_range": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "common_serving_size": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "evidence_tier": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "upper_limit_notes": "moved to notes: 'crude resin doses run higher' implied a dose conversion; restated as non-equivalence"
+      },
+      "ul_owner_status": "no_ul_owner_entry",
+      "new_notes": "Standardize to % AKBA (5-Loxin ~30% AKBA; Aflapin). Dose is meaningful only with AKBA standardization; crude resin is not equivalent."
+    },
+    {
+      "id": "soy_isoflavones",
+      "reference_type": "no_benchmark",
+      "curve": "completed_no_benchmark_neutral",
+      "old": {
+        "upper_limit": "100",
+        "typical_dosing_range": "40-80",
+        "common_serving_size": "50",
+        "evidence_tier": 1,
+        "upper_limit_notes": "Dose = mg total isoflavone aglycone equivalents (genistein+daidzein+glycitein). Caution in hormone-sensitive conditions."
+      },
+      "disposition": {
+        "upper_limit": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "typical_dosing_range": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "common_serving_size": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "evidence_tier": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "upper_limit_notes": "moved to notes: carried unchanged into notes"
+      },
+      "ul_owner_status": "no_ul_owner_entry"
+    },
+    {
+      "id": "vitex_agnus_castus",
+      "reference_type": "no_benchmark",
+      "curve": "completed_no_benchmark_neutral",
+      "old": {
+        "upper_limit": "40",
+        "typical_dosing_range": "4-40",
+        "common_serving_size": "20",
+        "evidence_tier": 1,
+        "upper_limit_notes": "Standardized extracts Ze 440 / BNO 1095. Dopaminergic — caution with dopamine drugs; avoid in pregnancy."
+      },
+      "disposition": {
+        "upper_limit": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "typical_dosing_range": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "common_serving_size": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "evidence_tier": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "upper_limit_notes": "moved to notes: carried unchanged into notes"
+      },
+      "ul_owner_status": "no_ul_owner_entry"
+    },
+    {
+      "id": "elderberry",
+      "reference_type": "no_benchmark",
+      "curve": "completed_no_benchmark_neutral",
+      "old": {
+        "upper_limit": "1500",
+        "typical_dosing_range": "600-1500",
+        "common_serving_size": "1000",
+        "evidence_tier": 1,
+        "upper_limit_notes": "Use cooked/processed extract only (raw berries/bark are cyanogenic). Standardized to anthocyanins."
+      },
+      "disposition": {
+        "upper_limit": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "typical_dosing_range": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "common_serving_size": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "evidence_tier": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "upper_limit_notes": "moved to notes: carried unchanged into notes"
+      },
+      "ul_owner_status": "no_ul_owner_entry"
+    },
+    {
+      "id": "grape_seed_extract",
+      "reference_type": "no_benchmark",
+      "curve": "completed_no_benchmark_neutral",
+      "old": {
+        "upper_limit": "800",
+        "typical_dosing_range": "100-800",
+        "common_serving_size": "300",
+        "evidence_tier": 1,
+        "upper_limit_notes": "Standardize to % OPC / proanthocyanidins — dose meaningless without it."
+      },
+      "disposition": {
+        "upper_limit": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "typical_dosing_range": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "common_serving_size": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "evidence_tier": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "upper_limit_notes": "moved to notes: carried unchanged into notes"
+      },
+      "ul_owner_status": "no_ul_owner_entry"
+    },
+    {
+      "id": "pycnogenol",
+      "reference_type": "no_benchmark",
+      "curve": "completed_no_benchmark_neutral",
+      "old": {
+        "upper_limit": "360",
+        "typical_dosing_range": "50-360",
+        "common_serving_size": "100",
+        "evidence_tier": 2,
+        "upper_limit_notes": "Patented pine bark extract standardized to 65-75% procyanidins (Pycnogenol trademark = the standardization)."
+      },
+      "disposition": {
+        "upper_limit": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "typical_dosing_range": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "common_serving_size": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "evidence_tier": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "upper_limit_notes": "moved to notes: carried unchanged into notes"
+      },
+      "ul_owner_status": "no_ul_owner_entry"
+    },
+    {
+      "id": "cinnamon_cassia",
+      "reference_type": "no_benchmark",
+      "curve": "completed_no_benchmark_neutral",
+      "old": {
+        "upper_limit": "6000",
+        "typical_dosing_range": "1000-6000",
+        "common_serving_size": "2000",
+        "evidence_tier": 2,
+        "upper_limit_notes": "Cassia carries coumarin: EFSA TDI 0.1 mg/kg bw/day (~5-6 mg/day for 60 kg). High-dose Cassia can exceed it; prefer Ceylon for chronic use."
+      },
+      "disposition": {
+        "upper_limit": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "typical_dosing_range": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "common_serving_size": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "evidence_tier": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "upper_limit_notes": "moved to notes: carried unchanged into notes"
+      },
+      "ul_owner_status": "no_ul_owner_entry"
+    },
+    {
+      "id": "fenugreek",
+      "reference_type": "discrete_studied_regimen",
+      "curve": "completed_no_benchmark_neutral",
+      "old": {
+        "upper_limit": "1200",
+        "typical_dosing_range": "500-1200",
+        "common_serving_size": "600",
+        "evidence_tier": 2,
+        "upper_limit_notes": "Testofen standardized to ~50% Fenuside (furostanol saponins). May lower blood glucose (additive with antidiabetics)."
+      },
+      "disposition": {
+        "upper_limit": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "typical_dosing_range": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "common_serving_size": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "evidence_tier": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "upper_limit_notes": "moved to notes: carried unchanged into notes"
+      },
+      "ul_owner_status": "no_ul_owner_entry"
+    },
+    {
+      "id": "gymnema_sylvestre",
+      "reference_type": "no_benchmark",
+      "curve": "completed_no_benchmark_neutral",
+      "old": {
+        "upper_limit": "1000",
+        "typical_dosing_range": "200-600",
+        "common_serving_size": "400",
+        "evidence_tier": 2,
+        "upper_limit_notes": "Standardize to % gymnemic acids. Additive hypoglycemia with antidiabetics — monitor."
+      },
+      "disposition": {
+        "upper_limit": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "typical_dosing_range": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "common_serving_size": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "evidence_tier": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "upper_limit_notes": "moved to notes: carried unchanged into notes"
+      },
+      "ul_owner_status": "no_ul_owner_entry"
+    },
+    {
+      "id": "andrographis_paniculata",
+      "reference_type": "no_benchmark",
+      "curve": "completed_no_benchmark_neutral",
+      "old": {
+        "upper_limit": "6000",
+        "typical_dosing_range": "1200-6000",
+        "common_serving_size": "1200",
+        "evidence_tier": 1,
+        "upper_limit_notes": "Standardize to % andrographolides. Immunostimulant — caution in autoimmune disease; avoid in pregnancy."
+      },
+      "disposition": {
+        "upper_limit": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "typical_dosing_range": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "common_serving_size": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "evidence_tier": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "upper_limit_notes": "moved to notes: carried unchanged into notes"
+      },
+      "ul_owner_status": "no_ul_owner_entry"
+    },
+    {
+      "id": "saffron",
+      "reference_type": "no_benchmark",
+      "curve": "completed_no_benchmark_neutral",
+      "old": {
+        "upper_limit": null,
+        "typical_dosing_range": "",
+        "common_serving_size": "",
+        "evidence_tier": 2,
+        "upper_limit_notes": "A safety upper limit is not established by these citations; the prior100 mg ceiling and hard toxicity/abortifacient thresholds are not source-verified here. PMID 20579522 used Satiereal176.5 mg/day for8 weeks in60 mildly overweight women; PMID 30036891 is separate depression meta-analysis evidence. Affron and Satiereal preparation/dose equivalence must not be assumed. Pregnancy-use safety is not established."
+      },
+      "disposition": {
+        "upper_limit": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "typical_dosing_range": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "common_serving_size": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "evidence_tier": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "upper_limit_notes": "moved to notes: carried unchanged into notes"
+      },
+      "ul_owner_status": "no_ul_owner_entry"
+    },
+    {
+      "id": "tongkat_ali",
+      "reference_type": "no_benchmark",
+      "curve": "completed_no_benchmark_neutral",
+      "old": {
+        "upper_limit": "600",
+        "typical_dosing_range": "200-400",
+        "common_serving_size": "200",
+        "evidence_tier": 2,
+        "upper_limit_notes": "LJ100 / Physta standardized aqueous root extract (eurycomanone). Dose meaningful only with standardization."
+      },
+      "disposition": {
+        "upper_limit": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "typical_dosing_range": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "common_serving_size": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "evidence_tier": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "upper_limit_notes": "moved to notes: carried unchanged into notes"
+      },
+      "ul_owner_status": "no_ul_owner_entry"
+    },
+    {
+      "id": "bergamot",
+      "reference_type": "discrete_studied_regimen",
+      "curve": "completed_no_benchmark_neutral",
+      "old": {
+        "upper_limit": "1500",
+        "typical_dosing_range": "500-1500",
+        "common_serving_size": "1000",
+        "evidence_tier": 2,
+        "upper_limit_notes": "Standardized Bergamot Polyphenolic Fraction (BPF). Caution with statins (additive lipid effect; monitor)."
+      },
+      "disposition": {
+        "upper_limit": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "typical_dosing_range": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "common_serving_size": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "evidence_tier": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "upper_limit_notes": "moved to notes: carried unchanged into notes"
+      },
+      "ul_owner_status": "no_ul_owner_entry"
+    },
+    {
+      "id": "olive_leaf_extract",
+      "reference_type": "discrete_studied_regimen",
+      "curve": "completed_no_benchmark_neutral",
+      "old": {
+        "upper_limit": "1000",
+        "typical_dosing_range": "500-1000",
+        "common_serving_size": "1000",
+        "evidence_tier": 2,
+        "upper_limit_notes": "Standardize to % oleuropein (commonly 16-20%). May potentiate antihypertensives/antidiabetics."
+      },
+      "disposition": {
+        "upper_limit": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "typical_dosing_range": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "common_serving_size": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "evidence_tier": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "upper_limit_notes": "moved to notes: carried unchanged into notes"
+      },
+      "ul_owner_status": "no_ul_owner_entry"
+    },
+    {
+      "id": "lemon_balm",
+      "reference_type": "discrete_studied_regimen",
+      "curve": "completed_no_benchmark_neutral",
+      "old": {
+        "upper_limit": "1600",
+        "typical_dosing_range": "300-1600",
+        "common_serving_size": "600",
+        "evidence_tier": 2,
+        "upper_limit_notes": "Often standardized to rosmarinic acid. Mild sedation — caution with CNS depressants."
+      },
+      "disposition": {
+        "upper_limit": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "typical_dosing_range": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "common_serving_size": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "evidence_tier": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "upper_limit_notes": "moved to notes: carried unchanged into notes"
+      },
+      "ul_owner_status": "no_ul_owner_entry"
+    },
+    {
+      "id": "passionflower",
+      "reference_type": "no_benchmark",
+      "curve": "completed_no_benchmark_neutral",
+      "old": {
+        "upper_limit": null,
+        "typical_dosing_range": "",
+        "common_serving_size": "",
+        "evidence_tier": 2,
+        "upper_limit_notes": "A safety upper limit is not established by PMID 21294203. The trial studied one cup of herbal tea daily for7 days in41 adults aged18–35, not250–800 mg standardized extract or clinical anxiety treatment. Tea-to-extract mass conversion is unresolved. Existing sedation/CNS-depressant and pregnancy cautions remain."
+      },
+      "disposition": {
+        "upper_limit": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "typical_dosing_range": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "common_serving_size": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "evidence_tier": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "upper_limit_notes": "moved to notes: carried unchanged into notes"
+      },
+      "ul_owner_status": "no_ul_owner_entry"
+    },
+    {
+      "id": "sage",
+      "reference_type": "discrete_studied_regimen",
+      "curve": "completed_no_benchmark_neutral",
+      "old": {
+        "upper_limit": null,
+        "typical_dosing_range": "",
+        "common_serving_size": "",
+        "evidence_tier": 2,
+        "upper_limit_notes": "A safety upper limit is not established by these citations. PMID 18350281 studied acute S.officinalis standardized extract167/333/666/1332 mg in20 older adults, with333 mg strongest signal. PMID 12895685 studied S.lavandulaefolia essential oil25–150 microliters in young adults, with50 microliters word-recall signal. No common300–600 mg leaf-extract threshold or600 mg safety ceiling is established. Essential-oil/thujone caution remains; chronic safety is unresolved."
+      },
+      "disposition": {
+        "upper_limit": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "typical_dosing_range": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "common_serving_size": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "evidence_tier": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "upper_limit_notes": "moved to notes: carried unchanged into notes"
+      },
+      "ul_owner_status": "no_ul_owner_entry"
+    },
+    {
+      "id": "holy_basil_tulsi",
+      "reference_type": "discrete_studied_regimen",
+      "curve": "completed_no_benchmark_neutral",
+      "old": {
+        "upper_limit": "1200",
+        "typical_dosing_range": "300-1200",
+        "common_serving_size": "500",
+        "evidence_tier": 2,
+        "upper_limit_notes": "Leaf extract (standardization varies; sometimes ursolic acid/eugenol). May lower blood glucose; avoid in pregnancy."
+      },
+      "disposition": {
+        "upper_limit": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "typical_dosing_range": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "common_serving_size": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "evidence_tier": "retired: no reader; the approved reference_semantics for this record establishes no universal dose minimum, optimum, efficacy grade or safety upper limit",
+        "upper_limit_notes": "moved to notes: carried unchanged into notes"
+      },
+      "ul_owner_status": "no_ul_owner_entry"
+    },
+    {
+      "id": "neumentix_spearmint_extract",
+      "reference_type": "no_benchmark",
+      "curve": "completed_no_benchmark_neutral",
+      "old": {},
+      "disposition": {},
+      "ul_owner_status": "no_ul_owner_entry"
+    }
+  ]
+}
