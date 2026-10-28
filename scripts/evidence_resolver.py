@@ -105,7 +105,8 @@ INDICATION_KEYWORDS: Dict[str, Set[str]] = {
     # rulings). A shared category only finds candidate research or an
     # unrelated claim; the reviewed context alone authorizes credit, so a
     # heart-health claim never becomes heart-failure or lipid evidence.
-    "cardiovascular": {"cardiovascular", "cardiac", "hypertension", "cvd", "endothelial"},
+    "cardiovascular": {"cardiovascular", "cardiometabolic", "cardiac", "hypertension", "cvd",
+                       "endothelial", "vascular"},
     "lipid": {"cholesterol", "ldl", "hdl", "triglyceride", "triglycerides",
               "dyslipidemia", "hypercholesterolemia"},
     "joint": {"joint", "joints", "knee", "knees", "osteoarthritis"},
@@ -120,7 +121,7 @@ INDICATION_KEYWORDS: Dict[str, Set[str]] = {
 # Indications named only by a phrase: a bare word ("blood", "strength",
 # "regularity", "mass") states no purpose on its own.
 _INDICATION_PHRASES = (
-    ("cardiovascular", r"\b(?:heart (?:health|function|failure)|healthy heart|blood pressure)\b"),
+    ("cardiovascular", r"\b(?:heart (?:health|function|failure)|healthy heart|blood pressure|blood flow)\b"),
     ("metabolic", r"\bblood sugar\b"),
     ("cognitive_neurological", r"\bmental clarity\b"),
     ("menstrual_cycle", r"\b(?:polycystic ovar(?:y|ian)|(?:menstrual|cycle) regularity)\b"),

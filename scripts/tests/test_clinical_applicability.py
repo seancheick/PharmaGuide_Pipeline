@@ -1613,6 +1613,9 @@ def test_pcos_cycle_regularity_is_not_digestive_regularity():
 
 @pytest.mark.parametrize('text,category,present', [
     ('supports healthy blood pressure', 'cardiovascular', True),
+    ('Supports cardiometabolic, neurocognitive and musculoskeletal health', 'cardiovascular', True),
+    ('Support for nitric oxide production and vascular health', 'cardiovascular', True),
+    ('enhances blood flow', 'cardiovascular', True),
     ('promote heart health', 'cardiovascular', True),
     ('blood orange flavor', 'cardiovascular', False),
     ('maintain strong bones', 'bone', True),
