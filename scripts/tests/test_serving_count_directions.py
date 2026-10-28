@@ -4,6 +4,9 @@
 per day; the dosage-unit parser divided such counts by the serving size or
 missed them, leaving the frequency defaulted.
 """
+import json
+from pathlib import Path
+
 import pytest
 
 from enrich_supplements_v3 import SupplementEnricherV3
@@ -70,3 +73,28 @@ def test_fractions_and_ceilings_are_not_read_as_serving_regimens(enricher, direc
 def test_physician_fallback_clause_keeps_the_regimen(enricher):
     assert enricher._parse_serving_counts_from_directions(
         "Take one serving daily or as directed by your physician.") == [(1.0, 1.0)]
+
+
+def test_real_age_split_serving_directions_do_not_become_tablet_count(enricher):
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+
+    raw = json.loads((Path(__file__).parent / "fixtures" / "serving_count_206377_raw.json").read_text())
+    normalized = EnhancedDSLDNormalizer().normalize_product(raw)
+    basis = enricher._collect_serving_basis_data(normalized)["serving_basis"]
+    assert basis["min_servings_per_day"] is None
+    assert basis["max_servings_per_day"] is None
+    assert basis["servings_per_day_source"] == "default"
+    assert resolve_daily_serving_range({**normalized, "serving_basis": basis}) == (1.0, 1.0, True)
+
+
+@pytest.mark.parametrize("directions,expected", [
+    ("Take one serving daily.", (1.0, 1.0, False)),
+    ("For children 4-8, take one serving daily; for children 9-12, take two servings daily.",
+     (1.0, 1.0, True)),
+])
+def test_parsed_label_directions_share_serving_frequency_scope(enricher, directions, expected):
+    product = {"servingSizes": [{"minQuantity": 2, "maxQuantity": 2,
+                                "unit": "Chewable Tablet(s)", "dailyServingsSource": "default"}],
+               "labelText": {"parsed": {"directions": directions}}}
+    basis = enricher._collect_serving_basis_data(product)["serving_basis"]
+    assert resolve_daily_serving_range({**product, "serving_basis": basis}) == expected

@@ -19011,6 +19011,7 @@ class SupplementEnricherV3:
         parsed_from_directions = False
 
         # First check labelText.parsed.directions
+        directions_text = ""
         label_text = product.get('labelText', {})
         if isinstance(label_text, dict):
             parsed = label_text.get('parsed', {})
@@ -19045,18 +19046,24 @@ class SupplementEnricherV3:
             # by the serving size (as for tablet counts) would misread it.
             # Only one stated regimen is used: separate age-group regimens
             # ("4-8 years, one serving; 9-12 years, two") are not one range.
-            serving_counts = [
-                regimen
+            serving_count_directions = [directions_text] if directions_text else [
+                statement.get('text') or statement.get('notes') or ''
                 for statement in statements
                 if isinstance(statement, dict)
                 and 'direction' in str(statement.get('type') or '').lower()
-                for regimen in self._parse_serving_counts_from_directions(
-                    statement.get('text') or statement.get('notes') or ''
-                )
+            ]
+            serving_counts = [
+                regimen for text in serving_count_directions
+                for regimen in self._parse_serving_counts_from_directions(text)
             ]
             if len(serving_counts) == 1:
                 min_servings_per_day, max_servings_per_day = serving_counts[0]
                 servings_per_day_source = "directions"
+            elif len(serving_counts) > 1:
+                # Age-specific regimens cannot become one tablet-count
+                # frequency. Keep the existing unknown/default daily use.
+                min_recommended = max_recommended = None
+                parsed_from_directions = False
         if min_servings_per_day is None and max_servings_per_day is None and parsed_from_directions:
             if min_recommended is not None or max_recommended is not None:
                 min_servings_per_day = self._serving_units_to_servings(
@@ -22690,6 +22697,7 @@ class SupplementEnricherV3:
         shown_amount: Optional[float] = None,
         shown_unit: Optional[str] = None,
         unresolved_reason: Optional[str] = None,
+        food_matrix: bool = False,
     ) -> Optional[Dict[str, Any]]:
         """One child upper-limit note for a label that names children, or None.
 
@@ -22711,6 +22719,10 @@ class SupplementEnricherV3:
             return None
         note = {"nutrient": label_name, "reference_nutrient": nutrient,
                 "canonical_id": canonical_id, "ul_population": scope}
+        if food_matrix and canonical_id == "magnesium" and record.get("ul_basis") == "supplemental_only":
+            child_amount = self._convert_mass(float(amount), unit, record.get("unit")) if amount is not None and unit else None
+            if child_amount is not None and child_ul is not None and child_amount > child_ul:
+                unresolved_reason = "supplemental_magnesium_fraction_unknown"
         if unresolved_reason is not None or amount is None or not unit:
             return {**note, "status": "not_assessable",
                     "reason": unresolved_reason or "ul_exposure_unresolved"}
@@ -24411,6 +24423,7 @@ class SupplementEnricherV3:
                             amount=amount_for_ul if _child_resolved else None,
                             unit=converted_unit, form_name=matched_form,
                             shown_amount=ul_amount, shown_unit=ul_unit,
+                            food_matrix=declares_food_matrix,
                             unresolved_reason=None if _child_resolved else (
                                 skip_ul_reason
                                 or ul_exposure.get("ul_gate_ineligible_reason")
@@ -24801,9 +24814,11 @@ class SupplementEnricherV3:
                             group["std_name"], group["std_name"], cid, pediatric_age_groups,
                             amount=None if unresolved else group["total_amount"], unit=group["unit"],
                             form_name=group["form_name"], unresolved_reason=unresolved,
+                            food_matrix=declares_food_matrix,
                         )
                         # An unresolved sum cannot erase a known row exceedance.
-                        if summed is None or summed.get("status") == "over_limit":
+                        if (summed is None or summed.get("status") == "over_limit"
+                                or summed.get("reason") == "supplemental_magnesium_fraction_unknown"):
                             _child_summed.add(cid)
                         if summed:
                             if summed.get("warning"):

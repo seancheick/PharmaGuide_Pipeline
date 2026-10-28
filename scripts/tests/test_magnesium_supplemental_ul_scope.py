@@ -194,3 +194,29 @@ def test_summed_distinct_magnesium_rows_use_same_source_scope(
         flag = next(flag for flag in out["ul_review_flags"] if flag["nutrient"] == "Magnesium")
         assert flag["assessment_status"] == "indeterminate"
         assert flag["screening_amount"] == sum(quantities)
+
+
+@pytest.mark.parametrize("quantities,protein,status", [
+    ([200], 5, "not_assessable"),
+    ([100, 100], 5, "not_assessable"),
+    ([100], 5, None),
+    ([200], None, "over_limit"),
+])
+def test_child_magnesium_note_uses_supplemental_scope(enricher, quantities, protein, status):
+    rows = [_magnesium(amount) for amount in quantities]
+    for index, row in enumerate(rows):
+        row["name"] = row["raw_source_text"] = f"Magnesium source {index + 1}"
+    product = {"activeIngredients": rows, "inactiveIngredients": [], "statements": [],
+               "targetGroups": ["Children 4 or More Years of Age"]}
+    if protein:
+        product["nutritionalInfo"] = {"protein": {"amount": protein, "unit": "Gram(s)"}}
+    out = enricher._collect_rda_ul_data(product, min_servings_per_day=1, max_servings_per_day=1)
+    notes = out["child_ul_screen"]
+    if status is None:
+        assert not notes
+    else:
+        assert len(notes) == 1
+        assert notes[0]["status"] == status
+        if status == "not_assessable":
+            assert notes[0]["reason"] == "supplemental_magnesium_fraction_unknown"
+    assert not _confirmed(out)  # adult350mg bound unaffected
