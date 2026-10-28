@@ -172,7 +172,9 @@ V4_CANARIES = {
         "confidence": "moderate",
         # Dose V4.1: raw Dose is adequacy only (11 -> 22) and the public
         # Dose ceiling caps it once (public Dose 10 unchanged).
-        "score_range": (78.3, 78.3),
+        # 1.31.0: the vitamin D ingredient allowlist is retired, so Evidence
+        # takes the strong floor (18 -> 14 raw): 78.3 -> 74.3.
+        "score_range": (74.3, 74.3),
         "safety_verdict": "CAUTION",
     },
     "206362": {
