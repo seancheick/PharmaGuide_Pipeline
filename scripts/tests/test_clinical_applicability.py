@@ -1895,3 +1895,77 @@ def test_a_claim_free_label_cannot_bypass_clinical_eligibility(monkeypatch, case
     assert result['status'] == status
     if status == 'applicable':
         assert result['claim_alignment']['state'] == 'absent'
+
+
+# Outcome-level purposes (Sean, October 28, PR #278): a context's purposes come
+# only from qualifying outcomes, never from every outcome name it carries.
+
+def _native_context(*outcomes, condition='pooled_review'):
+    return {'condition': condition, 'outcomes': [
+        {'name': name, 'hierarchy': hierarchy, 'kind': kind, 'direction': direction, **extra}
+        for name, hierarchy, kind, direction, extra in outcomes]}
+
+
+def _claim(text):
+    return {'product_name': 'Probiotic', 'statements': [{'type': 'Formulation re: Other', 'notes': text}]}
+
+
+def test_a_positive_pooled_outcome_without_a_primary_label_names_a_purpose():
+    from clinical_applicability import assess_claim_alignment
+    context = _native_context(('perceived_stress', 'not_reported', 'patient_important', 'positive', {}))
+    assert assess_claim_alignment(_claim('Supports stress relief.'), context)['state'] == 'aligned'
+
+
+def test_a_null_sleep_outcome_cannot_authorize_sleep_from_a_positive_stress_context():
+    from clinical_applicability import assess_claim_alignment
+    context = _native_context(('perceived_stress', 'primary', 'patient_important', 'positive', {}),
+                              ('sleep_quality', 'primary', 'patient_important', 'null', {}))
+    assert assess_claim_alignment(_claim('Supports stress relief.'), context)['state'] == 'aligned'
+    assert assess_claim_alignment(_claim('Supports restful sleep.'), context)['state'] == 'unrelated'
+
+
+def test_a_positive_secondary_does_not_override_a_null_primary():
+    from clinical_applicability import assess_claim_alignment
+    context = _native_context(('sleep_quality', 'primary', 'patient_important', 'null', {}),
+                              ('perceived_stress', 'secondary', 'patient_important', 'positive', {}))
+    assert assess_claim_alignment(_claim('Supports stress relief.'), context)['state'] == 'unrelated'
+
+
+def test_a_surrogate_outcome_names_only_its_surrogate():
+    from clinical_applicability import assess_claim_alignment
+    context = _native_context(('ldl_cholesterol', 'primary', 'surrogate', 'positive', {}))
+    assert assess_claim_alignment(_claim('Supports healthy cholesterol levels.'), context)['state'] == 'aligned'
+    assert assess_claim_alignment(_claim('Supports heart health.'), context)['state'] == 'unrelated'
+
+
+@pytest.mark.parametrize('extra', [{'outcome_role': 'post_hoc_subgroup'}, {'outcome_role': 'within_group_change'}])
+def test_post_hoc_and_within_group_results_name_no_purpose(extra):
+    from clinical_applicability import assess_claim_alignment
+    context = _native_context(('perceived_stress', 'primary', 'patient_important', 'positive', extra))
+    assert assess_claim_alignment(_claim('Supports stress relief.'), context)['state'] == 'unrelated'
+
+
+def test_an_unresolved_outcome_holds_the_purpose_rather_than_rejecting_it():
+    from clinical_applicability import assess_claim_alignment
+    context = _native_context(('perceived_stress', 'unresolved', 'patient_important', 'positive', {}))
+    assert assess_claim_alignment(_claim('Supports stress relief.'), context)['state'] == 'ambiguous'
+    assert assess_claim_alignment({'product_name': 'Probiotic'}, context)['state'] == 'absent'
+
+
+@pytest.mark.parametrize('text,state', [
+    ('L-Theanine supports focus and mental clarity.', 'aligned'),
+    ('L-Theanine supports relaxation.', 'unrelated'),
+    ('L-Theanine supports restful sleep.', 'unrelated'),
+])
+def test_l_theanine_keeps_narrow_cognition_credit_while_stress_and_sleep_stay_blocked(text, state):
+    result = _assess('INGR_L_THEANINE', _row('l_theanine', 'L-Theanine', quantity=200), 'L-Theanine', (text,))
+    assert result.get('claim_alignment', {}).get('state') == state
+    assert (result['status'] == 'applicable') is (state == 'aligned')
+
+
+def test_a_null_only_context_still_reaches_its_preserved_finding():
+    from clinical_applicability import assess_claim_alignment
+    context = _native_context(('perceived_stress', 'primary', 'patient_important', 'null', {}))
+    # The stress claim reaches the null stress finding (evaluated null, no credit).
+    assert assess_claim_alignment(_claim('Supports stress relief.'), context)['state'] == 'aligned'
+    assert assess_claim_alignment(_claim('Supports restful sleep.'), context)['state'] == 'unrelated'

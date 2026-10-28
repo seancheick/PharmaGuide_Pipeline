@@ -89,9 +89,11 @@ INDICATION_KEYWORDS: Dict[str, Set[str]] = {
     "oral": {"oral", "dental", "teeth", "gum", "gingivitis", "plaque", "caries", "halitosis"},
     "metabolic": {"weight", "metabolic", "glucose", "glycemic", "visceral", "fat",
                   "diabetes", "glycemia", "insulin"},
-    "mood": {"mood", "stress", "anxiety", "psychobiotic", "sleep",
-             "relax", "relaxation", "cortisol", "asleep", "depression",
+    "mood": {"mood", "stress", "anxiety", "psychobiotic",
+             "relax", "relaxation", "cortisol", "depression",
              "depressive", "distress"},
+    # Sleep is its own outcome: stress research does not authorize a sleep claim.
+    "sleep": {"sleep", "asleep", "insomnia"},
     "bone": {"bone", "bones", "density"},
     # Existing clinical-indication vocabulary; shared by source claims and
     # reviewed study outcomes. These categories never imply efficacy.

@@ -496,6 +496,48 @@ def _positioning_claims(product: Mapping, *, purposes_only: bool = False) -> tup
     return categories, unclassified
 
 
+# Outcomes that report no comparative efficacy for the product's user.
+NON_EFFICACY_OUTCOME_ROLES = {
+    "within_group_change", "post_hoc_subgroup",
+    "companion_reported_context", "network_ranking",
+}
+
+
+def qualifying_purpose_outcomes(context: Mapping) -> tuple[list, bool]:
+    """Outcomes that may name a purpose, and whether an unresolved one holds it.
+
+    Sean, October 28, 2026 (PR #278): a positive primary or pooled
+    (hierarchy not_reported) outcome qualifies; a surrogate names only itself.
+    Null, mixed or unfavorable results, secondaries, post-hoc, within-group,
+    companion and ranking-only outcomes never name a purpose.
+    """
+    if context.get("outcome_role") in NON_EFFICACY_OUTCOME_ROLES:
+        return [], False
+    outcomes = [row for row in context.get("outcomes") or [] if isinstance(row, Mapping)
+                and row.get("outcome_role") not in NON_EFFICACY_OUTCOME_ROLES]
+    reported = [row for row in outcomes if row.get("hierarchy") in {"primary", "not_reported"}]
+    qualifying = [row for row in reported if row.get("direction") == "positive"]
+    held = not qualifying and any(row.get("hierarchy") == "unresolved" or row.get("direction") == "unresolved"
+                                  for row in outcomes)
+    return qualifying, held
+
+
+def evaluated_purpose_outcomes(context: Mapping) -> list:
+    """Null, mixed or unfavorable primary findings of a context with no positive one.
+
+    They say what the research evaluated, so a matching claim reaches the
+    preserved finding (an evaluated null, never credit). Beside a positive
+    outcome they name nothing: a null sleep result cannot widen stress credit.
+    """
+    qualifying, held = qualifying_purpose_outcomes(context)
+    if qualifying or held or context.get("outcome_role") in NON_EFFICACY_OUTCOME_ROLES:
+        return []
+    return [row for row in context.get("outcomes") or [] if isinstance(row, Mapping)
+            and row.get("outcome_role") not in NON_EFFICACY_OUTCOME_ROLES
+            and row.get("hierarchy") in {"primary", "not_reported"}
+            and row.get("direction") in {"null", "mixed", "negative"}]
+
+
 def assess_claim_alignment(product: Mapping, context: Mapping, canonicals=(), *, supported_outcomes=()) -> dict:
     """Compare the label's claims with one reviewed context's studied outcome.
 
@@ -518,10 +560,15 @@ def assess_claim_alignment(product: Mapping, context: Mapping, canonicals=(), *,
             return {"state": "aligned", "sources": ["affirmative_exact_source_condition_claim"]}
     named = [str(value) for value in supported_outcomes if _key(value) == condition]
     outcome = evidence_indication_categories(" ".join(named or map(str, supported_outcomes)))
+    held = False
     if not outcome:
-        outcome = evidence_indication_categories(" ".join([condition, *(
-            str(row.get("name") or "") for row in context.get("outcomes") or []
-            if isinstance(row, Mapping) and row.get("hierarchy") == "primary")]))
+        # Without a signed scope, only qualifying outcomes name a purpose; the
+        # studied condition stands in when their names place no category.
+        qualifying, held = qualifying_purpose_outcomes(context)
+        named_outcomes = qualifying or evaluated_purpose_outcomes(context)
+        outcome = evidence_indication_categories(" ".join(str(row.get("name") or "") for row in named_outcomes))
+        if named_outcomes and not outcome:
+            outcome = evidence_indication_categories(condition)
     # A purpose the label attributes to this ingredient governs; unattributed
     # product positioning stands in only when the ingredient has no claim.
     claims = [(source, _claimed_purposes(text)) for canonical in sorted(set(canonicals))
@@ -535,6 +582,9 @@ def assess_claim_alignment(product: Mapping, context: Mapping, canonicals=(), *,
             claims.append(("product_positioning_unclassified", set()))
     if not claims:
         return {"state": "absent", "sources": []}
+    if held:
+        # An unresolved outcome holds the purpose; it neither aligns nor rejects.
+        return {"state": "ambiguous", "sources": list(dict.fromkeys(source for source, _ in claims))}
     aligned = [source for source, categories in claims if categories & outcome]
     unclassified = [source for source, categories in claims if not categories]
     if aligned:

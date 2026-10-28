@@ -32,6 +32,7 @@ _EM = _cfg_block("evidence_magnitudes", "probiotic")["probiotic"]
 
 CAP_EVIDENCE = _EM["cap_evidence"]
 
+from clinical_applicability import NON_EFFICACY_OUTCOME_ROLES as _NON_EFFICACY_OUTCOME_ROLES
 from evidence_resolver import evidence_indication_categories as _categories_from_text
 
 
@@ -357,10 +358,6 @@ def _consistency_from_contexts(contexts: list[tuple[str, dict]]) -> dict:
     }
 
 
-_NON_EFFICACY_OUTCOME_ROLES = {
-    "within_group_change", "post_hoc_subgroup",
-    "companion_reported_context", "network_ranking",
-}
 
 
 def _qualifying_outcomes(context: dict) -> list[dict]:
