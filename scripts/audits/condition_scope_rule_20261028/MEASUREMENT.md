@@ -1,9 +1,11 @@
 # Condition-scope rule: measurement (October 28, 2026)
 
-- **Candidate:** `claude/brave-fermi-d56dfd` at `37a52de5b`.
-- **Base:** `claude/held-source-closure` at `6256ce42e` (PR #273, unmerged).
+- **Candidate:** `claude/brave-fermi-d56dfd` at `6a3b5cfeb`.
+- **Base:** `claude/held-source-closure` at `4bba11a51` (PR #273, unmerged, with main merged in).
+- **Earlier pass:** against `6256ce42e` / `37a52de5b`. It gave the same 47 movers with identical deltas after
+  the rebase; the outcome-level commit `6a3b5cfeb` added one mover.
 - **Receipts:** `~/pg_quality/condition_scope_20261028/`. These cover the frozen raw labels, `base2.jsonl`,
-  `cand5.jsonl`, `movement_final.txt`, the `gated/` cohort and the fail-first logs.
+  `base_r.jsonl`, `cand_o.jsonl`, `movement_final.txt`, the `gated/` cohort and the fail-first logs.
 - **Method:** `replay.py freeze-raw`, then `snapshot` (clean → enrich → score with each checkout's own code).
 
 ## Cohorts
@@ -14,18 +16,18 @@
   - Up to two labels per record and stratum for every record with an approved condition scope and for ten
     probiotic strains: 110 explicit-claim, 97 claim-free and 48 population-targeted labels.
 - **Gated, 40 labels.** Single-ingredient (two or fewer actives), non-multivitamin labels for the eight
-  formerly gated records. Final snapshot `gated/cand_final.jsonl` at `37a52de5b`.
+  formerly gated records. Final snapshot `gated/cand_o.jsonl` at `6a3b5cfeb`.
 
 ## Result (main cohort)
 
-- **47 of 460 moved: 23 up, 24 down.** Only the Evidence pillar changed.
+- **48 of 460 moved: 23 up, 25 down.** Only the Evidence pillar changed.
 - **Unchanged everywhere:** Formulation, Dose, Transparency, Verification, Safety/Hygiene, status, route
   and safety status.
 - **By stratum:**
 
 | Stratum | Up | Down | Unchanged |
 |---|---|---|---|
-| Calibration | 5 | 13 | 187 |
+| Calibration | 5 | 14 | 186 |
 | Explicit claim | 8 | 7 | 95 |
 | Claim-free | 6 | 4 | 87 |
 | Population-targeted | 4 | 0 | 44 |
@@ -60,7 +62,7 @@ now earn their scoped credit:
 | Infant/child-targeted probiotic reaches pediatric contexts | Up | "Kids Probiotic" 297603, "Grow + Thrive" 246008, LGG chewables 250912, inulin kids 273844; 4 labels |
 | No claim required: formerly gated generic record reaches a claim-free multi-ingredient label | Up | Electrolytes 311724 (vitamin C, selenium), Super Green 267303 (vitamin C, ginger) |
 | Precaution or mechanism text no longer read as a signed exclusion | Up | GNC CoQ-10 3520, 0 → 15.6 ("heart's energy producing system") |
-| Unrelated product claim (signed scope elsewhere) | Down | Suntheanine "Mood support / relaxation" (focus scope) ×3; KSM-66 "Energy Xtra" (stress scope); berberine "GI/Immune support" and "cardiovascular health" (glucose scope); ubiquinol "Mitochondrial Support" (heart-failure scope); potassium and magnesium blood-pressure research on cleanses and sleep labels |
+| Unrelated product claim (signed scope elsewhere) | Down | Suntheanine "Mood support / relaxation" (focus scope) ×3; KSM-66 "Energy Xtra" (stress scope); Shoden stress research on "Rest & Renew … for refreshing sleep" 328650 (sleep is now its own outcome; melatonin is not an Evidence owner there); berberine "GI/Immune support" and "cardiovascular health" (glucose scope); ubiquinol "Mitochondrial Support" (heart-failure scope); potassium and magnesium blood-pressure research on cleanses and sleep labels |
 | Pre-workout positioned for focus, energy or pumps | Down, 20 → 0 | LIT ×4: creatine, beta-alanine, citrulline and potassium research marked unrelated; see the limits below |
 | Recognized claim no category places, resolved conservatively | Down | "Lovin' Libido" sexual-function claims (KSM-66), CarbCrave "carbohydrate intake and appetite" (Sensoril, Relora), NitroVasc "nitric oxide production", fucoPROTEIN "healthy metabolism" (whey) |
 | Restored BRAND_UCII scope binds UC-II to its own row | Down | TriFlex 76848, 15.6 → 0. The base credited UC-II research through the leucine owner by loose name matching. UC-II is not an Evidence owner on this label, which is a pre-existing owner-policy question |
@@ -80,6 +82,21 @@ Full table: `movement_final.txt` in the receipts folder.
   - "gastrointestinal", "intestinal", "lactose" and "infection" outcomes were not recognized. As a result an
     aligned probiotic claim earned less than silence.
 - **Exclusion sentences** ("Pregnant participants were excluded") were read as the studied population.
+
+## Outcome-level purposes (Sean, October 28, PR #278)
+
+Without a signed `supported_outcomes` scope (native strain contexts), a context's purposes come only
+from qualifying outcomes:
+- Qualifying means positive, with hierarchy primary or not_reported (not_reported is kept distinct and
+  never relabelled as primary).
+- A surrogate names only itself.
+- These never name a purpose: null, mixed or unfavorable results, secondaries, post-hoc, within-group,
+  companion and ranking-only outcomes.
+- An unresolved outcome holds the claim (ambiguous).
+- A context with no positive outcome lets its null findings say what it evaluated, so the finding is
+  shown as an evaluated null and earns no credit.
+- Sleep is its own family, apart from stress.
+- Fail-first log: `fail_first_round5.log`.
 
 ## Limits and open decisions
 
@@ -101,5 +118,10 @@ Full table: `movement_final.txt` in the receipts folder.
 5. **Role promotion reads the same categorizer.** More function claims now name an ingredient's purpose
    (for example "Glucosamine supports joint comfort"). No owner-driven score change appeared in either
    cohort.
-6. **Not run:** whole-corpus replay, raw canaries, release rung and app check. Merging waits for PR #273
+6. **Probiotic credit eligibility (not purpose).** `_qualifying_outcomes` requires hierarchy "primary", so
+   pooled not_reported outcomes do not yet earn probiotic credit under the October 28 outcome ruling.
+   Named follow-up.
+7. **Evidence owner selection.** UC-II on TriFlex 76848 and melatonin on Rest & Renew 328650 are not
+   Evidence owners on those labels. This is pre-existing owner policy.
+8. **Not run:** whole-corpus replay, raw canaries, release rung and app check. Merging waits for PR #273
    and Sean's go-ahead.
