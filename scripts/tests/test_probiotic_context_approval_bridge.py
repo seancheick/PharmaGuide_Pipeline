@@ -30,7 +30,7 @@ def registry(monkeypatch):
 
 
 def approved(**changes):
-    row = context(review_status="clinician_approved", outcomes=[
+    row = context(review_status="clinician_approved", scoring_eligible=True, outcomes=[
         {"name": "stool_frequency", "hierarchy": "primary",
          "kind": "patient_important", "direction": "positive"}])
     row["clinical_review"] = {

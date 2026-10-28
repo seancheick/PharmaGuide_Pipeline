@@ -296,22 +296,35 @@ def test_evidence_copy_distinguishes_missing_applicability_from_poor_quality():
     assert "dose" not in result["reason"].lower()
 
 
-def test_unfavorable_research_is_not_described_as_missing_research():
+def test_unfavorable_research_is_not_described_as_missing_research(monkeypatch):
+    import clinical_applicability as ca
     from scoring_v4.quality_score import _pillar_evidence
     from scoring_v4.quality_score_config import config
     from test_v4_probiotic_evidence_p23 import _match
+    from test_evidence_resolver import _approved_test_source
 
     p = strain_product()
     p["product_name"] = "Sleep support probiotic"  # Keeps LGG's native contexts out.
     # Synthetic accepted match (the helper's own id): the real backed STRAIN_LGG
     # record is research-only since Dr. Pham's 2026-10-28 ruling (the strain
     # registry is the one scoring owner), so it cannot carry this direction.
-    p["evidence_data"] = {"clinical_matches": [_match(effect_direction="negative")]}
+    source = _approved_test_source(_match(effect_direction="negative"),
+                                  name="Lactobacillus rhamnosus GG", outcome="Sleep quality")
+    source["study_contexts"][0]["outcomes"][0]["direction"] = "negative"
+    records = {**ca.reviewed_entries(), source["id"]: source}
+    monkeypatch.setattr(ca, "reviewed_entries", lambda: records)
+    p["evidence_data"] = {"clinical_matches": [{**source,
+        "matched_canonical_ids": ["lactobacillus_rhamnosus_gg"],
+        "matched_source_row_refs": ["ingredientRows[0]"]}]}
     dim = score_evidence(p)
     assert dim["score"] == 0
     assert dim["metadata"]["evidence_result_state"] == "evaluated_unfavorable"
     assert "unfavorable" in _pillar_evidence(dim, 20, "probiotic", config())["reason"]
     assert "distinct from missing research" in _pillar_evidence(dim, 20, "probiotic", config())["reason"]
+    source["study_contexts"][0]["scoring_eligible"] = False
+    held = score_evidence(p)
+    assert held["score"] == 0
+    assert held["metadata"]["evidence_result_state"] not in {"evaluated_null", "evaluated_unfavorable"}
     # A stale stamp under the research-only real id is discarded, and the
     # result still reads as recorded research, never as missing research.
     p["evidence_data"] = {"clinical_matches": [_match(id="STRAIN_LGG", effect_direction="negative")]}
