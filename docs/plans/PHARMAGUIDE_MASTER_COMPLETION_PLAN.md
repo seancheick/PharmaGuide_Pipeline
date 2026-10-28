@@ -1,5 +1,14 @@
 # PharmaGuide master completion plan
 
+### October 28 final integration — Codex takeover
+
+- [x] Establish one integrator: Sean assigned Codex integration/merges and confirmed Claude editing/autofix paused; fetch current main and preserve unique lane/user artifacts.
+- [ ] Finish independently reproduced clinical-source, purpose, material-standardization and safety consumer defects; apply Sean's Testofen pillar-independence and bitter-orange no-cutoff rulings with source-bound tests and bounded raw measurements.
+- [ ] Qualify the completed combined source and paired Flutter candidate, then integrate and verify containment of all planned lanes.
+- [ ] Inspect all stage fingerprints, run one necessary corpus pass on final main, and complete catalog and installed-app acceptance before publication.
+
+Owner: existing canonical clinical/material/safety/release and Flutter consumers — evidence and current receipts in the [existing LEDGER](../../scripts/audits/pending_items_20260926/LEDGER.md). Will NOT create a second scorer, semantic owner, registry, approval or execution register. Policy approval, measured source, integration and release acceptance remain separate.
+
 ### Accepted scoring/safety audit remediation — October28
 
 - [x] Implement all eight bounded findings through existing owners, including Sean's explicit retirement of the historically approved dormant pediatric modifier. Preserve current species/clinical holds, source-backed interactions, public compatibility fields and active score magnitudes.
