@@ -113,6 +113,19 @@ DOSE_MEASUREMENT_UNITS = {
 }
 
 
+REFERENCE_CLASSIFICATION_FIELDS = ("study_type", "evidence_level")
+
+
+def is_reference_only(entry: Mapping) -> bool:
+    """A reviewed reference record keeps research context but earns no credit.
+
+    Both classification fields carry ``reference``; db_integrity_sanity_check
+    fails a record where they disagree. Until fixed, either one fails closed.
+    """
+    return any(str(entry.get(key) or "").strip().lower() == "reference"
+               for key in REFERENCE_CLASSIFICATION_FIELDS)
+
+
 def _positive_number(value: object) -> bool:
     if isinstance(value, bool):
         return False

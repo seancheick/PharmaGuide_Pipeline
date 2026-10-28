@@ -15,6 +15,7 @@ from functools import lru_cache
 from pathlib import Path
 from typing import Any
 
+from clinical_evidence_schema import is_reference_only
 from constants import DELIVERY_SOURCE_STATEMENT_TYPES
 from normalization import canonicalize_mass_unit, find_affirmative_label_match, normalize_text
 from serving_frequency import resolve_daily_serving_range
@@ -489,7 +490,7 @@ def assess_clinical_source_review(entry: Mapping) -> dict:
         return {"is_complete": False, "errors": ["clinical_source_contexts_missing"], "context_ids": []}
     if any(not isinstance(context, Mapping) for context in contexts):
         return {"is_complete": False, "errors": ["clinical_source_context_invalid"], "context_ids": []}
-    reference_only = any(reference.get(key) == "reference" for key in ("study_type", "evidence_level"))
+    reference_only = is_reference_only(reference)
     contributing = [context for context in contexts if isinstance(context, Mapping)
                     and context.get("scoring_eligible") is not False
                     and context.get("review_status") != "rejected_source"]
@@ -570,7 +571,7 @@ def assess_clinical_applicability(product: Mapping, entry: Mapping, *, assess_am
     reference = reviewed_entries().get(str(entry.get("id") or entry.get("study_id")), {})
     # The curated owner can retain research for context while withdrawing
     # numerical credit. An old enriched positive stamp cannot reverse that.
-    if reference.get("study_type") == "reference" or reference.get("evidence_level") == "reference":
+    if is_reference_only(reference):
         return {"status": "not_applicable", "reason_code": "reference_only_clinical_record"}
     policy = reference["applicability"] if "applicability" in reference else entry.get("applicability")
     if policy is None:

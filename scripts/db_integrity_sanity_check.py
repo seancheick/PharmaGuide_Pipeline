@@ -22,6 +22,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Sequence, Tuple
 
+from clinical_evidence_schema import REFERENCE_CLASSIFICATION_FIELDS
 from evidence_resolver import clinical_record_sources_eligible
 
 from scoring_reference_resolver import (
@@ -665,6 +666,12 @@ def check_clinical_db(findings: List[Finding], data: Dict[str, Any], file: str) 
         _check_enum(findings, file, e, i, "study_type", valid_study_types)
         _check_enum(findings, file, e, i, "evidence_level", valid_evidence_levels)
         _check_enum(findings, file, e, i, "score_contribution", valid_score_contribution)
+        reference_flags = {str(e.get(key) or "").strip().lower() == "reference"
+                           for key in REFERENCE_CLASSIFICATION_FIELDS}
+        if len(reference_flags) > 1:
+            findings.append(Finding("error", file, f"[{i}].study_type", "reference_classification_conflict",
+                                    "study_type and evidence_level both reference or neither",
+                                    f"{e.get('study_type')}/{e.get('evidence_level')}"))
         if "category" in e and valid_clinical_indication:
             _check_enum(findings, file, e, i, "category", valid_clinical_indication)
         if "effect_direction" in e and valid_effect_direction:

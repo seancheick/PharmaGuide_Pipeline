@@ -40,6 +40,7 @@ _SCRIPTS_DIR = Path(__file__).resolve().parent
 if str(_SCRIPTS_DIR) not in sys.path:
     sys.path.insert(0, str(_SCRIPTS_DIR))
 
+from clinical_evidence_schema import is_reference_only
 from constants import CLEANER_NON_EFFICACY_ROLES
 
 try:
@@ -401,7 +402,7 @@ def clinical_record_sources_eligible(entry: Mapping[str, Any]) -> bool:
     """Honor source-integrity holds at the shared clinical-credit seam."""
     if entry.get("scoring_eligible") is False:
         return False
-    if any(_norm(entry.get(key)) == "reference" for key in ("study_type", "evidence_level")):
+    if is_reference_only(entry):
         return False
     references = entry.get("references_structured")
     # Legacy records without structured references retain their existing
@@ -938,7 +939,7 @@ def resolve_evidence_for_row(
         if not valid_studies:
             from clinical_applicability import assess_clinical_source_review
             reviewed_references = all(
-                any(study.get(key) == "reference" for key in ("study_type", "evidence_level"))
+                is_reference_only(study)
                 and study.get("scoring_eligible") is not False
                 and assess_clinical_source_review(study)["is_complete"]
                 for study in deduped_studies
