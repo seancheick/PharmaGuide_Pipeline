@@ -1232,10 +1232,10 @@ def test_joint_support_caps_branded_primary_evidence_floor(monkeypatch) -> None:
                    study_type="rct_multiple", evidence_level="branded-rct",
                    effect_direction="positive_strong", total_enrollment=200)
     match.update(matched_source_row_refs=["ingredientRows[0]"], matched_canonical_ids=["msm"])
-    # This test owns the joint cap: raise the strong floor above the cap so
-    # there is something to cap (1.31.0 has no automatic floor above 14).
+    # This test owns the joint cap: the one qualifying OptiMSM trial uses
+    # the moderate floor. Raise that test-only floor to exercise the cap.
     from scoring_v4.modules import generic_evidence
-    monkeypatch.setattr(generic_evidence, "PRIMARY_FLOOR_STRONG", 18.0)
+    monkeypatch.setattr(generic_evidence, "PRIMARY_FLOOR_MODERATE", 18.0)
     product = _product(supplement_taxonomy={"primary_type": "joint_support"},
                        ingredients=[ingredient], matches=[match])
     product["activeIngredients"] = [dict(ingredient)]

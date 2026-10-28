@@ -819,12 +819,12 @@ def assess_clinical_source_review(entry: Mapping) -> dict:
 
 
 def _accepted_condition_scopes(reference: Mapping, policy: Mapping) -> list:
-    from probiotic_measurements import context_accepted_for_scoring
-    source_pmids = {str(pmid) for pmid in policy.get("source_pmids") or []}
+    from evidence_resolver import clinical_record_sources_eligible
+    source_pmids = policy.get("source_pmids") or None
     return [
         context for context in reference.get("study_contexts") or []
-        if isinstance(context, Mapping) and context_accepted_for_scoring(context)
-        and (not source_pmids or source_pmids.intersection(str(pmid) for pmid in context.get("source_pmids") or []))
+        if isinstance(context, Mapping)
+        and clinical_record_sources_eligible(reference, context=context, source_pmids=source_pmids)
     ]
 
 
@@ -920,12 +920,11 @@ def _assess_condition_scopes(product: Mapping, entry: Mapping, policy: Mapping, 
                                             or [context.get("condition") for context, _ in qualifying])
         components["studied_population"] = "; ".join(context["population"]["description"]
                                                      for context, _ in qualifying)
-        # The credit reflects the research that qualified, not a stronger body
-        # from a sibling context (Sean, October 28, PR #280): trials alone are
-        # scored as trials, never as the record's pooled review.
-        if all(context.get("evidence_role") == "direct_rct" for context, _ in qualifying):
-            families = {context.get("trial_family") or context.get("context_id") for context, _ in qualifying}
-            components["qualifying_study_type"] = "rct_single" if len(families) == 1 else "rct_multiple"
+    # Derive design from the contexts that actually qualified, including when
+    # a held synthesis was removed before this function received the contexts.
+    if all(context.get("evidence_role") == "direct_rct" for context, _ in qualifying):
+        families = {context.get("trial_family") or context.get("context_id") for context, _ in qualifying}
+        components["qualifying_study_type"] = "rct_single" if len(families) == 1 else "rct_multiple"
     return components
 
 
@@ -973,6 +972,11 @@ def assess_clinical_applicability(product: Mapping, entry: Mapping, *, assess_am
     # numerical credit. An old enriched positive stamp cannot reverse that.
     if is_reference_only(reference):
         return {"status": "not_applicable", "reason_code": "reference_only_clinical_record"}
+    from evidence_resolver import clinical_record_sources_eligible
+    # Enrichment and downstream consumers share the hold. Known preparation
+    # exclusions are still checked first, so a hold cannot erase that finding.
+    source_block = ({"status": "unresolved", "reason_code": "clinical_sources_ineligible"}
+                    if reference and not clinical_record_sources_eligible(reference) else None)
     policy = reference["applicability"] if "applicability" in reference else entry.get("applicability")
     if policy is None:
         # Legacy reviewed exclusions constrain the matched preparation only.
@@ -986,6 +990,8 @@ def assess_clinical_applicability(product: Mapping, entry: Mapping, *, assess_am
             if all(any(_key(term) in _key(row.get("matched_form") or row.get("form"))
                        for term in excluded) for row in linked):
                 return {"status": "not_applicable", "reason_code": "clinical_preparation_mismatch"}
+        if source_block:
+            return source_block
         # A missing scope is not permission to score an unreviewed record.
         # Legacy approved contexts use this same population/outcome owner;
         # their missing policy cannot bypass it on a claim-free label.
@@ -1103,6 +1109,8 @@ def assess_clinical_applicability(product: Mapping, entry: Mapping, *, assess_am
         if scope.get("status"):
             return {**scope, "matched_source_row_refs": [ref for ref in (
                 row.get("raw_source_path") or row.get("source_row_ref"),) if ref]}
+        if source_block:
+            return source_block
         return {"status": "applicable", "reason_code": "reviewed_scope_match",
                 "source_row_ref": row.get("raw_source_path") or row.get("source_row_ref"),
                 "supported_outcomes": policy.get("supported_outcomes", []),
@@ -1113,6 +1121,8 @@ def assess_clinical_applicability(product: Mapping, entry: Mapping, *, assess_am
             row.get("raw_source_path") or row.get("source_row_ref") for row in applicable_rows
             if row.get("raw_source_path") or row.get("source_row_ref")))}
     if applicable_rows:
+        if source_block:
+            return source_block
         # Exclusion rejects identities/preparations, not legitimate siblings.
         # Preserve every passing row rather than making label order choose
         # the numerator later consumed by Evidence and Dose. Scoped form/dose
@@ -1175,9 +1185,14 @@ def filter_clinical_matches(product: Mapping, matches: list[dict], *, assess_amo
         if decision["status"] == "applicable":
             scoped_entry = {**entry, "applicability_assessment": decision}
             if decision.get("qualifying_study_type"):
-                # Record-level enrollment describes the whole body, not this trial.
+                reference = reviewed_entries().get(str(entry.get("id") or entry.get("study_id")), {})
+                qualified_ids = decision.get("population_applicability", {}).get("context_ids", [])
+                if (scoped_entry.get("study_type") != decision["qualifying_study_type"]
+                        or len(qualified_ids) < len(reference.get("study_contexts") or [])):
+                    # A stronger record or excluded sibling cannot lend its
+                    # aggregate enrollment to the trial that actually qualified.
+                    scoped_entry.pop("total_enrollment", None)
                 scoped_entry["study_type"] = decision["qualifying_study_type"]
-                scoped_entry.pop("total_enrollment", None)
             # Only a product-level Evidence heading (a blend total the input
             # contract projects as the studied material) keeps its binding; an
             # ordinary parent row never lends its reference to a nested extract.
