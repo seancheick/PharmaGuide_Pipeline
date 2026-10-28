@@ -8289,7 +8289,7 @@
         "all_pmids_verified": true,
         "retractions_found": false,
         "reference_citations": {
-          "source_sha256": "394e06f9e5fb26f76ec4cb81aef6d3be5a30921e193e58811dca97a5f1414225",
+          "source_sha256": "835857791882826f569f797be7775a9e1c69252183a74c6f04575a44985c5c90",
           "source_ids": [
             "PMID:31063818"
           ],
@@ -8304,7 +8304,7 @@
               "has_erratum": false,
               "article_title": "Investigation of the anti-inflammatory and the analgesic effects of the extracts from Smilax ornata Lem. (Jamaican sarsaparilla) plant.",
               "content_sha256": "4fce4687f687c55856d2d304ec5ba715b246f81aac7f6f9884f32038c9080d80",
-              "notes": "Codex primary-source content verification,2026-10-27: Exact Smilax ornata methanol/ethyl-acetate extracts were assessed in Sprague-Dawley rats. Rat mg/kg and solvent extracts cannot establish a human root-powder minimum, interspecies equivalence or safety ceiling. Dose source scope only; no clinical approval or Evidence eligibility assigned."
+              "notes": "Codex primary-source content verification, 2026-10-27: Exact Smilax ornata methanol/ethyl-acetate extracts were assessed in Sprague-Dawley rats. Rat mg/kg and solvent extracts cannot establish a human root-powder minimum, interspecies equivalence or safety ceiling. Dose source scope only; no clinical approval or Evidence eligibility assigned."
             }
           ]
         }
@@ -8321,7 +8321,7 @@
         "source_ids": [
           "PMID:31063818"
         ],
-        "rationale": "Exact Smilax ornata methanol/ethyl-acetate extracts were assessed in Sprague-Dawley rats. Rat mg/kg and solvent extracts cannot establish a human root-powder minimum, interspecies equivalence or safety ceiling. Apply only the existing October18approved DoseV4.1 shared neutral policy. A source assignment, preclinical finding, mechanism, toxicity report or non-equivalent preparation is not a universal minimum, continuous dose-response curve or UL.",
+        "rationale": "Exact Smilax ornata methanol/ethyl-acetate extracts were assessed in Sprague-Dawley rats. Rat mg/kg and solvent extracts cannot establish a human root-powder minimum, interspecies equivalence or safety ceiling. Apply only the existing October 18 approved Dose V4.1 shared neutral policy. A source assignment, preclinical finding, mechanism, toxicity report or non-equivalent preparation is not a universal minimum, continuous dose-response curve or UL.",
         "owner": "scripts/data/literature_evidence_records.json::sarsaparilla",
         "review_date": "2026-10-27",
         "approval_status": "approved_existing_neutral_dose_v41_source_review"
@@ -9654,7 +9654,7 @@
         "all_pmids_verified": true,
         "retractions_found": false,
         "reference_citations": {
-          "source_sha256": "5b28221c7669567e5b69a4749404c6394ed4d1dc3670f69244486a290f676882",
+          "source_sha256": "a19798e23868cb5b1b17e6dea063786c6ad89c5c7c45849cf4826ad55c813e63",
           "source_ids": [
             "PMID:28933127"
           ],
@@ -9669,7 +9669,7 @@
               "has_erratum": false,
               "article_title": "[Bencao literature investigation of Polygonum multiflorum (Heshouwu)].",
               "content_sha256": "6ede346db335005c4f8da335c02cd90e7d4b9bd704b4810514a0e29c30d8cf52",
-              "notes": "Codex primary-source content verification,2026-10-27: Historical bencao review explicitly identifies Polygonum multiflorum ROOT and discusses traditional processing and toxicity concerns. It is not a controlled human efficacy regimen or safe-dose determination; processing and safety remain separate. Dose source scope only; no clinical approval or Evidence eligibility assigned."
+              "notes": "Codex primary-source content verification, 2026-10-27: Historical bencao review explicitly identifies Polygonum multiflorum ROOT and discusses traditional processing and toxicity concerns. It is not a controlled human efficacy regimen or safe-dose determination; processing and safety remain separate. Dose source scope only; no clinical approval or Evidence eligibility assigned."
             }
           ]
         }
@@ -9686,7 +9686,7 @@
         "source_ids": [
           "PMID:28933127"
         ],
-        "rationale": "Historical bencao review explicitly identifies Polygonum multiflorum ROOT and discusses traditional processing and toxicity concerns. It is not a controlled human efficacy regimen or safe-dose determination; processing and safety remain separate. Apply only the existing October18approved DoseV4.1 shared neutral policy. A source assignment, preclinical finding, mechanism, toxicity report or non-equivalent preparation is not a universal minimum, continuous dose-response curve or UL.",
+        "rationale": "Historical bencao review explicitly identifies Polygonum multiflorum ROOT and discusses traditional processing and toxicity concerns. It is not a controlled human efficacy regimen or safe-dose determination; processing and safety remain separate. Apply only the existing October 18 approved Dose V4.1 shared neutral policy. A source assignment, preclinical finding, mechanism, toxicity report or non-equivalent preparation is not a universal minimum, continuous dose-response curve or UL.",
         "owner": "scripts/data/literature_evidence_records.json::fo_ti",
         "review_date": "2026-10-27",
         "approval_status": "approved_existing_neutral_dose_v41_source_review"
@@ -12165,7 +12165,7 @@
         "all_pmids_verified": true,
         "retractions_found": false,
         "reference_citations": {
-          "source_sha256": "02402ce64900d816f7cbd539740cff5b0d42c0ded1f0ec1309119b69b8ec5101",
+          "source_sha256": "8b3d8af81b93defaf0e08b18901eb1d42837e12f24fabb6b6201cc4992c7cf8f",
           "source_ids": [
             "PMID:32028721"
           ],
@@ -12180,7 +12180,7 @@
               "has_erratum": false,
               "article_title": "Phytochemistry, Ethnopharmacology, Pharmacokinetics and Toxicology of Cnidium monnieri (L.) Cusson.",
               "content_sha256": "4e8568a97fb22e65f74507714bfd6bba89c6fffaa455b1bfad5f1e0a7fe442e0",
-              "notes": "Codex primary-source content verification,2026-10-27: Cnidium monnieri pharmacology/phytochemistry review emphasizes extensive preclinical work and concentration on osthole. Neither isolated osthole nor animal exposures calibrate a generic seed/fruit extract mass minimum. Dose source scope only; no clinical approval or Evidence eligibility assigned."
+              "notes": "Codex primary-source content verification, 2026-10-27: Cnidium monnieri pharmacology/phytochemistry review emphasizes extensive preclinical work and concentration on osthole. Neither isolated osthole nor animal exposures calibrate a generic seed/fruit extract mass minimum. Dose source scope only; no clinical approval or Evidence eligibility assigned."
             }
           ]
         }
@@ -12197,7 +12197,7 @@
         "source_ids": [
           "PMID:32028721"
         ],
-        "rationale": "Cnidium monnieri pharmacology/phytochemistry review emphasizes extensive preclinical work and concentration on osthole. Neither isolated osthole nor animal exposures calibrate a generic seed/fruit extract mass minimum. Apply only the existing October18approved DoseV4.1 shared neutral policy. A source assignment, preclinical finding, mechanism, toxicity report or non-equivalent preparation is not a universal minimum, continuous dose-response curve or UL.",
+        "rationale": "Cnidium monnieri pharmacology/phytochemistry review emphasizes extensive preclinical work and concentration on osthole. Neither isolated osthole nor animal exposures calibrate a generic seed/fruit extract mass minimum. Apply only the existing October 18 approved Dose V4.1 shared neutral policy. A source assignment, preclinical finding, mechanism, toxicity report or non-equivalent preparation is not a universal minimum, continuous dose-response curve or UL.",
         "owner": "scripts/data/literature_evidence_records.json::cnidium",
         "review_date": "2026-10-27",
         "approval_status": "approved_existing_neutral_dose_v41_source_review"
@@ -13200,7 +13200,7 @@
         "all_pmids_verified": true,
         "retractions_found": false,
         "reference_citations": {
-          "source_sha256": "8cd8382003de5c8a7104b8e7675557abbb28adc85cff5318fd7d1659c3f5cf8a",
+          "source_sha256": "bc8958ccb0f7b03ec08b3ccb3b604558ddc9ac5e819ab74b8af4a65de2e99bba",
           "source_ids": [
             "PMID:24467533"
           ],
@@ -13215,7 +13215,7 @@
               "has_erratum": false,
               "article_title": "Phytochemistry and biology of Loranthus parasiticus Merr, a commonly used herbal medicine.",
               "content_sha256": "cc9c0b1465682f77b1846df4b2b8d2c831fb5b521a1e9d62f0401009ae6becd1",
-              "notes": "Codex primary-source content verification,2026-10-27: The Loranthus parasiticus phytochemistry/biology review calls for clinical research. Traditional use and preclinical pharmacology cannot establish a generic human leaf/stem dose or clear independent safety questions. Dose source scope only; no clinical approval or Evidence eligibility assigned."
+              "notes": "Codex primary-source content verification, 2026-10-27: The Loranthus parasiticus phytochemistry/biology review calls for clinical research. Traditional use and preclinical pharmacology cannot establish a generic human leaf/stem dose or clear independent safety questions. Dose source scope only; no clinical approval or Evidence eligibility assigned."
             }
           ]
         }
@@ -13233,7 +13233,7 @@
         "source_ids": [
           "PMID:24467533"
         ],
-        "rationale": "The Loranthus parasiticus phytochemistry/biology review calls for clinical research. Traditional use and preclinical pharmacology cannot establish a generic human leaf/stem dose or clear independent safety questions. Apply only the existing October18approved DoseV4.1 shared neutral policy. A source assignment, preclinical finding, mechanism, toxicity report or non-equivalent preparation is not a universal minimum, continuous dose-response curve or UL.",
+        "rationale": "The Loranthus parasiticus phytochemistry/biology review calls for clinical research. Traditional use and preclinical pharmacology cannot establish a generic human leaf/stem dose or clear independent safety questions. Apply only the existing October 18 approved Dose V4.1 shared neutral policy. A source assignment, preclinical finding, mechanism, toxicity report or non-equivalent preparation is not a universal minimum, continuous dose-response curve or UL.",
         "owner": "scripts/data/literature_evidence_records.json::mulberry_mistletoe",
         "review_date": "2026-10-27",
         "approval_status": "approved_existing_neutral_dose_v41_source_review"
@@ -13541,7 +13541,7 @@
         "all_pmids_verified": true,
         "retractions_found": false,
         "reference_citations": {
-          "source_sha256": "91c8cb4d7d571023b690aa59a98fd9537befdce9690f671f9583c3cef1bf63e4",
+          "source_sha256": "7194635b23ebf99489604b6c82c6eb59554c65d44f159bf4277579ea765f76b7",
           "source_ids": [
             "PMID:24649485"
           ],
@@ -13556,7 +13556,7 @@
               "has_erratum": false,
               "article_title": "Vaccinium myrtillus leaves and Frangula alnus bark derived extracts as potential antistaphylococcal agents.",
               "content_sha256": "2a0b67c13ba33747e30e0c4d96d620e7cfce6a894b09193f17b45b997ab3881d",
-              "notes": "Codex primary-source content verification,2026-10-27: Frangula alnus BARK extracts were tested against Staphylococcus and in mammalian-cell cytotoxicity assays. Antimicrobial culture concentrations cannot become oral human bark doses. Dose source scope only; no clinical approval or Evidence eligibility assigned."
+              "notes": "Codex primary-source content verification, 2026-10-27: Frangula alnus BARK extracts were tested against Staphylococcus and in mammalian-cell cytotoxicity assays. Antimicrobial culture concentrations cannot become oral human bark doses. Dose source scope only; no clinical approval or Evidence eligibility assigned."
             }
           ]
         }
@@ -13574,7 +13574,7 @@
         "source_ids": [
           "PMID:24649485"
         ],
-        "rationale": "Frangula alnus BARK extracts were tested against Staphylococcus and in mammalian-cell cytotoxicity assays. Antimicrobial culture concentrations cannot become oral human bark doses. Apply only the existing October18approved DoseV4.1 shared neutral policy. A source assignment, preclinical finding, mechanism, toxicity report or non-equivalent preparation is not a universal minimum, continuous dose-response curve or UL.",
+        "rationale": "Frangula alnus BARK extracts were tested against Staphylococcus and in mammalian-cell cytotoxicity assays. Antimicrobial culture concentrations cannot become oral human bark doses. Apply only the existing October 18 approved Dose V4.1 shared neutral policy. A source assignment, preclinical finding, mechanism, toxicity report or non-equivalent preparation is not a universal minimum, continuous dose-response curve or UL.",
         "owner": "scripts/data/literature_evidence_records.json::buckthorn_bark",
         "review_date": "2026-10-27",
         "approval_status": "approved_existing_neutral_dose_v41_source_review"
@@ -15728,7 +15728,7 @@
         "all_pmids_verified": true,
         "retractions_found": false,
         "reference_citations": {
-          "source_sha256": "9fcdffbcd3a94475f7b9bfe29ae33c87e81ce9c21dd8e3e3e815b082a64db8b0",
+          "source_sha256": "c8bc01fd5d60bc161d604002e441181d060474fc3daba03fba09162c88ed8dd6",
           "source_ids": [
             "PMID:26331796"
           ],
@@ -15743,7 +15743,7 @@
               "has_erratum": false,
               "article_title": "Anti-carious Effects of Galla chinensis: A Systematic Review.",
               "content_sha256": "ba8dc1a0b33933d0a55b3f330001a9a154b0fd3f3b347c08fb6dad357034b8ed",
-              "notes": "Codex primary-source content verification,2026-10-27: Galla chinensis anticaries research involves crude extracts/components, oral-bacteria/dental-surface outcomes and unresolved stability/toxicity. Dental-contact concentrations cannot become a swallowed supplement dose. Dose source scope only; no clinical approval or Evidence eligibility assigned."
+              "notes": "Codex primary-source content verification, 2026-10-27: Galla chinensis anticaries research involves crude extracts/components, oral-bacteria/dental-surface outcomes and unresolved stability/toxicity. Dental-contact concentrations cannot become a swallowed supplement dose. Dose source scope only; no clinical approval or Evidence eligibility assigned."
             }
           ]
         }
@@ -15761,7 +15761,7 @@
         "source_ids": [
           "PMID:26331796"
         ],
-        "rationale": "Galla chinensis anticaries research involves crude extracts/components, oral-bacteria/dental-surface outcomes and unresolved stability/toxicity. Dental-contact concentrations cannot become a swallowed supplement dose. Apply only the existing October18approved DoseV4.1 shared neutral policy. A source assignment, preclinical finding, mechanism, toxicity report or non-equivalent preparation is not a universal minimum, continuous dose-response curve or UL.",
+        "rationale": "Galla chinensis anticaries research involves crude extracts/components, oral-bacteria/dental-surface outcomes and unresolved stability/toxicity. Dental-contact concentrations cannot become a swallowed supplement dose. Apply only the existing October 18 approved Dose V4.1 shared neutral policy. A source assignment, preclinical finding, mechanism, toxicity report or non-equivalent preparation is not a universal minimum, continuous dose-response curve or UL.",
         "owner": "scripts/data/literature_evidence_records.json::galla_chinensis",
         "review_date": "2026-10-27",
         "approval_status": "approved_existing_neutral_dose_v41_source_review"
@@ -16262,7 +16262,7 @@
         "all_pmids_verified": true,
         "retractions_found": false,
         "reference_citations": {
-          "source_sha256": "5e0c658d61da989c09ed62fff797b9722703b0cd3a27cd052b19f46915a3f01b",
+          "source_sha256": "288bee921cccd160694e68786122fa3da0d8b9d1277e5c388d18eda59a8bbbd2",
           "source_ids": [
             "PMID:30627539"
           ],
@@ -16277,7 +16277,7 @@
               "has_erratum": false,
               "article_title": "Cannabis sativa L. and Nonpsychoactive Cannabinoids: Their Chemistry and Role against Oxidative Stress, Inflammation, and Cancer.",
               "content_sha256": "af72963a8b4ebbfc35c7883df285bf1121a3eaecfab4e7c65b2052559c48299a",
-              "notes": "Codex primary-source content verification,2026-10-27: The source distinguishes Cannabis sativa hemp and individual cannabinoids and reviews mainly preclinical CBD-related activity. Unknown hemp-extract cannabinoid composition cannot inherit a CBD dose, drug equivalence, universal mass threshold or safety clearance. Dose source scope only; no clinical approval or Evidence eligibility assigned."
+              "notes": "Codex primary-source content verification, 2026-10-27: The source distinguishes Cannabis sativa hemp and individual cannabinoids and reviews mainly preclinical CBD-related activity. Unknown hemp-extract cannabinoid composition cannot inherit a CBD dose, drug equivalence, universal mass threshold or safety clearance. Dose source scope only; no clinical approval or Evidence eligibility assigned."
             }
           ]
         }
@@ -16295,7 +16295,7 @@
         "source_ids": [
           "PMID:30627539"
         ],
-        "rationale": "The source distinguishes Cannabis sativa hemp and individual cannabinoids and reviews mainly preclinical CBD-related activity. Unknown hemp-extract cannabinoid composition cannot inherit a CBD dose, drug equivalence, universal mass threshold or safety clearance. Apply only the existing October18approved DoseV4.1 shared neutral policy. A source assignment, preclinical finding, mechanism, toxicity report or non-equivalent preparation is not a universal minimum, continuous dose-response curve or UL.",
+        "rationale": "The source distinguishes Cannabis sativa hemp and individual cannabinoids and reviews mainly preclinical CBD-related activity. Unknown hemp-extract cannabinoid composition cannot inherit a CBD dose, drug equivalence, universal mass threshold or safety clearance. Apply only the existing October 18 approved Dose V4.1 shared neutral policy. A source assignment, preclinical finding, mechanism, toxicity report or non-equivalent preparation is not a universal minimum, continuous dose-response curve or UL.",
         "owner": "scripts/data/literature_evidence_records.json::NHA_HEMP_EXTRACT",
         "review_date": "2026-10-27",
         "approval_status": "approved_existing_neutral_dose_v41_source_review"
@@ -16557,7 +16557,7 @@
       "effect_direction": "not_efficacy_relevant",
       "population_context": "general dietary intake / food powder matrix",
       "studied_dose_exposure": {},
-      "applicability_decision": "Okra pod vegetable powder is a culinary food powder, nutrient base, or flavor/carrier matrix; not scored for therapeutic clinical efficacy. Independent35244638supports general Dose-source review only; corrected37507536/37632536 remain held and noncontributing. No claim that current human research is absent.",
+      "applicability_decision": "Okra pod vegetable powder is a culinary food powder, nutrient base, or flavor/carrier matrix; not scored for therapeutic clinical efficacy. Independent PMID 35244638 supports general Dose-source review only; corrected PMIDs 37507536/37632536 remain held and noncontributing. No claim that current human research is absent.",
       "applicability_status": "food_powder_or_flavor_matrix",
       "verification_provenance": {
         "verified_by": "scripts/api_audit/verify_literature_records.py",
@@ -16565,7 +16565,7 @@
         "all_pmids_verified": true,
         "retractions_found": false,
         "reference_citations": {
-          "source_sha256": "afc28b038cf37d2e49fcfe3c71b1148bcfae15f64f8b4b89960342c43e37d2eb",
+          "source_sha256": "1d92f36b8f5a16e762ad6983257bda10e2199ad64825a31d89be07fd54c11151",
           "source_ids": [
             "PMID:35244638"
           ],
@@ -16580,7 +16580,7 @@
               "has_erratum": false,
               "article_title": "Effects of okra (Abelmoschus esculentus L) on inflammatory mediators: a systematic review of preclinical studies.",
               "content_sha256": "0d728516764c29ed60828f824856720fb10d4df36071132dbc41e9a7ce6597df",
-              "notes": "Codex primary-source content verification,2026-10-27: This independent preclinical review searched through August2021 and reports animal/invitro inflammatory-mediator studies, not a human dose curve. It predates the separately corrected37507536 trial. Do not claim current absence of human research;37507536/37632536 remain held and do not contribute to this Dose proof. Dose source scope only; no clinical approval or Evidence eligibility assigned."
+              "notes": "Codex primary-source content verification, 2026-10-27: This independent preclinical review searched through August 2021 and reports animal/in vitro inflammatory-mediator studies, not a human dose curve. It predates the separately corrected37507536 trial. Do not claim current absence of human research;37507536/37632536 remain held and do not contribute to this Dose proof. Dose source scope only; no clinical approval or Evidence eligibility assigned."
             }
           ]
         }
@@ -16598,7 +16598,7 @@
         "source_ids": [
           "PMID:35244638"
         ],
-        "rationale": "This independent preclinical review searched through August2021 and reports animal/invitro inflammatory-mediator studies, not a human dose curve. It predates the separately corrected37507536 trial. Do not claim current absence of human research;37507536/37632536 remain held and do not contribute to this Dose proof. Apply only the existing October18approved DoseV4.1 shared neutral policy. A source assignment, preclinical finding, mechanism, toxicity report or non-equivalent preparation is not a universal minimum, continuous dose-response curve or UL.",
+        "rationale": "This independent preclinical review searched through August 2021 and reports animal/in vitro inflammatory-mediator studies, not a human dose curve. It predates the separately corrected37507536 trial. Do not claim current absence of human research;37507536/37632536 remain held and do not contribute to this Dose proof. Apply only the existing October 18 approved Dose V4.1 shared neutral policy. A source assignment, preclinical finding, mechanism, toxicity report or non-equivalent preparation is not a universal minimum, continuous dose-response curve or UL.",
         "owner": "scripts/data/literature_evidence_records.json::okra_fruit",
         "review_date": "2026-10-27",
         "approval_status": "approved_existing_neutral_dose_v41_source_review"
@@ -16809,7 +16809,7 @@
         "all_pmids_verified": true,
         "retractions_found": false,
         "reference_citations": {
-          "source_sha256": "50b2b93aa3b2a850799d68a37a9a74e1fea859a9e044ae438206edc004a2e8aa",
+          "source_sha256": "07675b5e80aa480ccdf06c0fb742f8c5b7e46fd759fccd0221e35386ce0c4d62",
           "source_ids": [
             "PMID:24287993"
           ],
@@ -16824,7 +16824,7 @@
               "has_erratum": false,
               "article_title": "Nutraceutical value of black cherry Prunus serotina Ehrh. fruits: antioxidant and antihypertensive properties.",
               "content_sha256": "7e314b022b8d9413e2fc10bec210f34808d1fdcaa756d4031e575287e514a78f",
-              "notes": "Codex primary-source content verification,2026-10-27: Exact Prunus serotina FRUIT composition and rat/aortic-ring work, not a human clinical dose study. Do not borrow tart-cherry species or infer a human minimum or extract conversion. Dose source scope only; no clinical approval or Evidence eligibility assigned."
+              "notes": "Codex primary-source content verification, 2026-10-27: Exact Prunus serotina FRUIT composition and rat/aortic-ring work, not a human clinical dose study. Do not borrow tart-cherry species or infer a human minimum or extract conversion. Dose source scope only; no clinical approval or Evidence eligibility assigned."
             }
           ]
         }
@@ -16842,7 +16842,7 @@
         "source_ids": [
           "PMID:24287993"
         ],
-        "rationale": "Exact Prunus serotina FRUIT composition and rat/aortic-ring work, not a human clinical dose study. Do not borrow tart-cherry species or infer a human minimum or extract conversion. Apply only the existing October18approved DoseV4.1 shared neutral policy. A source assignment, preclinical finding, mechanism, toxicity report or non-equivalent preparation is not a universal minimum, continuous dose-response curve or UL.",
+        "rationale": "Exact Prunus serotina FRUIT composition and rat/aortic-ring work, not a human clinical dose study. Do not borrow tart-cherry species or infer a human minimum or extract conversion. Apply only the existing October 18 approved Dose V4.1 shared neutral policy. A source assignment, preclinical finding, mechanism, toxicity report or non-equivalent preparation is not a universal minimum, continuous dose-response curve or UL.",
         "owner": "scripts/data/literature_evidence_records.json::black_cherry",
         "review_date": "2026-10-27",
         "approval_status": "approved_existing_neutral_dose_v41_source_review"
@@ -17041,7 +17041,7 @@
         "all_pmids_verified": true,
         "retractions_found": false,
         "reference_citations": {
-          "source_sha256": "8b2ba268d832d25837bb4c9b26aad1dff1e984a7537d812283d6819ec399e0a2",
+          "source_sha256": "0fe6f87298673b23ffb20e851eb1b2f6ce8265b9167857c2b45d62ecea188a44",
           "source_ids": [
             "PMID:2238449"
           ],
@@ -17056,7 +17056,7 @@
               "has_erratum": false,
               "article_title": "Fatal poisoning by Rumex crispus (curled dock): pathological findings and application of scanning electron microscopy.",
               "content_sha256": "0150cf6c31557d0b22e197b5e3ad8fe6d899ef37fed92479fef623b298996cc0",
-              "notes": "Codex primary-source content verification,2026-10-27: A fatal Rumex crispus ingestion report is a source-specific toxicity signal, not a therapeutic dosing trial or a root-specific safe ceiling. No efficacy minimum, safe amount or preparation conversion is derived; existing safety owners retain their independent work. Dose source scope only; no clinical approval or Evidence eligibility assigned."
+              "notes": "Codex primary-source content verification, 2026-10-27: A fatal Rumex crispus ingestion report is a source-specific toxicity signal, not a therapeutic dosing trial or a root-specific safe ceiling. No efficacy minimum, safe amount or preparation conversion is derived; existing safety owners retain their independent work. Dose source scope only; no clinical approval or Evidence eligibility assigned."
             }
           ]
         }
@@ -17074,7 +17074,7 @@
         "source_ids": [
           "PMID:2238449"
         ],
-        "rationale": "A fatal Rumex crispus ingestion report is a source-specific toxicity signal, not a therapeutic dosing trial or a root-specific safe ceiling. No efficacy minimum, safe amount or preparation conversion is derived; existing safety owners retain their independent work. Apply only the existing October18approved DoseV4.1 shared neutral policy. A source assignment, preclinical finding, mechanism, toxicity report or non-equivalent preparation is not a universal minimum, continuous dose-response curve or UL.",
+        "rationale": "A fatal Rumex crispus ingestion report is a source-specific toxicity signal, not a therapeutic dosing trial or a root-specific safe ceiling. No efficacy minimum, safe amount or preparation conversion is derived; existing safety owners retain their independent work. Apply only the existing October 18 approved Dose V4.1 shared neutral policy. A source assignment, preclinical finding, mechanism, toxicity report or non-equivalent preparation is not a universal minimum, continuous dose-response curve or UL.",
         "owner": "scripts/data/literature_evidence_records.json::yellow_dock_root",
         "review_date": "2026-10-27",
         "approval_status": "approved_existing_neutral_dose_v41_source_review"
@@ -17423,7 +17423,7 @@
         "all_pmids_verified": true,
         "retractions_found": false,
         "reference_citations": {
-          "source_sha256": "6a58cf2170f9a5bc059dc568b37b3b50f733820318a09a509fa244fbacdeff23",
+          "source_sha256": "6480357f6d826394e890e44a1b1d87599fa7d13209311d6a9160faeaf1dbf49a",
           "source_ids": [
             "PMID:26492254"
           ],
@@ -17438,7 +17438,7 @@
               "has_erratum": false,
               "article_title": "A Cultivated Form of a Red Seaweed (Chondrus crispus), Suppresses β-Amyloid-Induced Paralysis in Caenorhabditis elegans.",
               "content_sha256": "c674d1c29144a75c9e7020f2bc350eef11847c780e057b18a22efb5dde863be1",
-              "notes": "Codex primary-source content verification,2026-10-27: Exact Chondrus crispus methanolic/water extracts were studied in transgenic C.elegans; methanolic findings differ from water extract. No human sea-moss efficacy, whole-food/extract equivalence or mass threshold follows. Dose source scope only; no clinical approval or Evidence eligibility assigned."
+              "notes": "Codex primary-source content verification, 2026-10-27: Exact Chondrus crispus methanolic/water extracts were studied in transgenic C. elegans; methanolic findings differ from water extract. No human sea-moss efficacy, whole-food/extract equivalence or mass threshold follows. Dose source scope only; no clinical approval or Evidence eligibility assigned."
             }
           ]
         }
@@ -17456,7 +17456,7 @@
         "source_ids": [
           "PMID:26492254"
         ],
-        "rationale": "Exact Chondrus crispus methanolic/water extracts were studied in transgenic C.elegans; methanolic findings differ from water extract. No human sea-moss efficacy, whole-food/extract equivalence or mass threshold follows. Apply only the existing October18approved DoseV4.1 shared neutral policy. A source assignment, preclinical finding, mechanism, toxicity report or non-equivalent preparation is not a universal minimum, continuous dose-response curve or UL.",
+        "rationale": "Exact Chondrus crispus methanolic/water extracts were studied in transgenic C. elegans; methanolic findings differ from water extract. No human sea-moss efficacy, whole-food/extract equivalence or mass threshold follows. Apply only the existing October 18 approved Dose V4.1 shared neutral policy. A source assignment, preclinical finding, mechanism, toxicity report or non-equivalent preparation is not a universal minimum, continuous dose-response curve or UL.",
         "owner": "scripts/data/literature_evidence_records.json::irish_sea_moss",
         "review_date": "2026-10-27",
         "approval_status": "approved_existing_neutral_dose_v41_source_review"
@@ -19740,7 +19740,7 @@
         "all_pmids_verified": true,
         "retractions_found": false,
         "reference_citations": {
-          "source_sha256": "9e556f39e6dd3fda352e2fb29c12976e1ef12006d28c45c8e435e40918cfde31",
+          "source_sha256": "9bf91a5517fabf38f1114aefe226145bf7642c30cf224faad92a0cd811cd19b0",
           "source_ids": [
             "PMID:26171992"
           ],
@@ -19755,7 +19755,7 @@
               "has_erratum": false,
               "article_title": "Constipation and Botanical Medicines: An Overview.",
               "content_sha256": "27ebc9efb013494903b90f21592b6ade0af640fc1d4c35a641daac632ccf7ddd",
-              "notes": "Codex primary-source content verification,2026-10-27: The constipation review specifically includes frangula among botanical laxatives. Its inspected abstract does not establish a source-independent oral bark minimum, optimal curve, extract conversion or safety ceiling. Dose source scope only; no clinical approval or Evidence eligibility assigned."
+              "notes": "Codex primary-source content verification, 2026-10-27: The constipation review specifically includes frangula among botanical laxatives. Its inspected abstract does not establish a source-independent oral bark minimum, optimal curve, extract conversion or safety ceiling. Dose source scope only; no clinical approval or Evidence eligibility assigned."
             }
           ]
         }
@@ -19773,7 +19773,7 @@
         "source_ids": [
           "PMID:26171992"
         ],
-        "rationale": "The constipation review specifically includes frangula among botanical laxatives. Its inspected abstract does not establish a source-independent oral bark minimum, optimal curve, extract conversion or safety ceiling. Apply only the existing October18approved DoseV4.1 shared neutral policy. A source assignment, preclinical finding, mechanism, toxicity report or non-equivalent preparation is not a universal minimum, continuous dose-response curve or UL.",
+        "rationale": "The constipation review specifically includes frangula among botanical laxatives. Its inspected abstract does not establish a source-independent oral bark minimum, optimal curve, extract conversion or safety ceiling. Apply only the existing October 18 approved Dose V4.1 shared neutral policy. A source assignment, preclinical finding, mechanism, toxicity report or non-equivalent preparation is not a universal minimum, continuous dose-response curve or UL.",
         "owner": "scripts/data/literature_evidence_records.json::frangula",
         "review_date": "2026-10-27",
         "approval_status": "approved_existing_neutral_dose_v41_source_review"
@@ -20374,7 +20374,7 @@
         "all_pmids_verified": true,
         "retractions_found": false,
         "reference_citations": {
-          "source_sha256": "eacbcc8f04bdf12bdbcb7be6ecde35d87a5761914c9271c7b2a8087f36cbd8c9",
+          "source_sha256": "a1a548a27365280cb35dc023a43653004c640b8909589332bcc6108825cc7826",
           "source_ids": [
             "PMID:30769862"
           ],
@@ -20389,7 +20389,7 @@
               "has_erratum": false,
               "article_title": "Deciphering the Nutraceutical Potential of Raphanus sativus-A Comprehensive Overview.",
               "content_sha256": "6ab6b60e0c0c9a4415fc8d457788e3e7842c706c0819a6f1a85b02c3e3299b20",
-              "notes": "Codex primary-source content verification,2026-10-27: The source identifies Raphanus sativus root and discusses differing aerial/underground extracts and phytochemicals. Mechanistic and folk-use findings do not establish a universal whole-root powder minimum or extract-to-food conversion. Dose source scope only; no clinical approval or Evidence eligibility assigned."
+              "notes": "Codex primary-source content verification, 2026-10-27: The source identifies Raphanus sativus root and discusses differing aerial/underground extracts and phytochemicals. Mechanistic and folk-use findings do not establish a universal whole-root powder minimum or extract-to-food conversion. Dose source scope only; no clinical approval or Evidence eligibility assigned."
             }
           ]
         }
@@ -20407,7 +20407,7 @@
         "source_ids": [
           "PMID:30769862"
         ],
-        "rationale": "The source identifies Raphanus sativus root and discusses differing aerial/underground extracts and phytochemicals. Mechanistic and folk-use findings do not establish a universal whole-root powder minimum or extract-to-food conversion. Apply only the existing October18approved DoseV4.1 shared neutral policy. A source assignment, preclinical finding, mechanism, toxicity report or non-equivalent preparation is not a universal minimum, continuous dose-response curve or UL.",
+        "rationale": "The source identifies Raphanus sativus root and discusses differing aerial/underground extracts and phytochemicals. Mechanistic and folk-use findings do not establish a universal whole-root powder minimum or extract-to-food conversion. Apply only the existing October 18 approved Dose V4.1 shared neutral policy. A source assignment, preclinical finding, mechanism, toxicity report or non-equivalent preparation is not a universal minimum, continuous dose-response curve or UL.",
         "owner": "scripts/data/literature_evidence_records.json::radish",
         "review_date": "2026-10-27",
         "approval_status": "approved_existing_neutral_dose_v41_source_review"
@@ -20976,7 +20976,7 @@
         "all_pmids_verified": true,
         "retractions_found": false,
         "reference_citations": {
-          "source_sha256": "9b44b5732c4d47304e0772f069ba0b9aa96fac4b8332d85032ac663a3f320d2a",
+          "source_sha256": "23d1ff862ecfb7204b3f7d029671975a24a87c8951177ccf0ce6df7a1ae88273",
           "source_ids": [
             "PMID:33573121"
           ],
@@ -20991,7 +20991,7 @@
               "has_erratum": false,
               "article_title": "Clinical Efficacy of Brown Seaweeds Ascophyllum nodosum and Fucus vesiculosus in the Prevention or Delay Progression of the Metabolic Syndrome: A Review of Clinical Trials.",
               "content_sha256": "b4370800922fbd48440798bf12cec7d8e13a5e89cbf1c50f7d592b669922ff52",
-              "notes": "Codex primary-source content verification,2026-10-27: The review covers Fucus vesiculosus and Ascophyllum nodosum extracts, noting mainly cell/animal evidence and few human trials. Extract/combination regimens do not establish a universal raw Fucus THALLUS minimum; iodine exposure and safety remain separate. Dose source scope only; no clinical approval or Evidence eligibility assigned."
+              "notes": "Codex primary-source content verification, 2026-10-27: The review covers Fucus vesiculosus and Ascophyllum nodosum extracts, noting mainly cell/animal evidence and few human trials. Extract/combination regimens do not establish a universal raw Fucus THALLUS minimum; iodine exposure and safety remain separate. Dose source scope only; no clinical approval or Evidence eligibility assigned."
             }
           ]
         }
@@ -21009,7 +21009,7 @@
         "source_ids": [
           "PMID:33573121"
         ],
-        "rationale": "The review covers Fucus vesiculosus and Ascophyllum nodosum extracts, noting mainly cell/animal evidence and few human trials. Extract/combination regimens do not establish a universal raw Fucus THALLUS minimum; iodine exposure and safety remain separate. Apply only the existing October18approved DoseV4.1 shared neutral policy. A source assignment, preclinical finding, mechanism, toxicity report or non-equivalent preparation is not a universal minimum, continuous dose-response curve or UL.",
+        "rationale": "The review covers Fucus vesiculosus and Ascophyllum nodosum extracts, noting mainly cell/animal evidence and few human trials. Extract/combination regimens do not establish a universal raw Fucus THALLUS minimum; iodine exposure and safety remain separate. Apply only the existing October 18 approved Dose V4.1 shared neutral policy. A source assignment, preclinical finding, mechanism, toxicity report or non-equivalent preparation is not a universal minimum, continuous dose-response curve or UL.",
         "owner": "scripts/data/literature_evidence_records.json::NHA_BLADDERWRACK",
         "review_date": "2026-10-27",
         "approval_status": "approved_existing_neutral_dose_v41_source_review"
@@ -23652,7 +23652,7 @@
         "all_pmids_verified": true,
         "retractions_found": false,
         "reference_citations": {
-          "source_sha256": "c9bf2166ee09e8a297b6c6c8ea27a8feb358b0367693e1e14a58921c34fef5a4",
+          "source_sha256": "5d66c07ea48f16d48e01cb777ab450c5ddcffdeda0cbb68ee8220ccacd2f2830",
           "source_ids": [
             "PMID:35780286"
           ],
@@ -23667,7 +23667,7 @@
               "has_erratum": false,
               "article_title": "Antioxidant Activity and Profile of Phenolic Compounds in Selected Herbal Plants.",
               "content_sha256": "730ecf23f0119a1b895bc3f02aac682819546fb2c3a037672f0463d8c52cdb93",
-              "notes": "Codex primary-source content verification,2026-10-27: The source tests whole blessed thistle phenolics and ABTS/DPPH antioxidant chemistry among ten herbs, not human clinical efficacy or a human dosing regimen. Dose source scope only; no clinical approval or Evidence eligibility assigned."
+              "notes": "Codex primary-source content verification, 2026-10-27: The source tests whole blessed thistle phenolics and ABTS/DPPH antioxidant chemistry among ten herbs, not human clinical efficacy or a human dosing regimen. Dose source scope only; no clinical approval or Evidence eligibility assigned."
             }
           ]
         }
@@ -23685,7 +23685,7 @@
         "source_ids": [
           "PMID:35780286"
         ],
-        "rationale": "The source tests whole blessed thistle phenolics and ABTS/DPPH antioxidant chemistry among ten herbs, not human clinical efficacy or a human dosing regimen. Apply only the existing October18approved DoseV4.1 shared neutral policy. A source assignment, preclinical finding, mechanism, toxicity report or non-equivalent preparation is not a universal minimum, continuous dose-response curve or UL.",
+        "rationale": "The source tests whole blessed thistle phenolics and ABTS/DPPH antioxidant chemistry among ten herbs, not human clinical efficacy or a human dosing regimen. Apply only the existing October 18 approved Dose V4.1 shared neutral policy. A source assignment, preclinical finding, mechanism, toxicity report or non-equivalent preparation is not a universal minimum, continuous dose-response curve or UL.",
         "owner": "scripts/data/literature_evidence_records.json::blessed_thistle",
         "review_date": "2026-10-27",
         "approval_status": "approved_existing_neutral_dose_v41_source_review"
@@ -23761,7 +23761,7 @@
         "all_pmids_verified": true,
         "retractions_found": false,
         "reference_citations": {
-          "source_sha256": "3f11f54ebdcf4056e8aff2dff6c9cb13f22d7c2e757261c37f270d4fc884f6f4",
+          "source_sha256": "e26a468033a2e6961e1d38309540ac99b14760bf218024bc46e4e763ae2499fd",
           "source_ids": [
             "PMID:30772483"
           ],
@@ -23776,7 +23776,7 @@
               "has_erratum": false,
               "article_title": "Do recent research studies validate the medicinal plants used in British Columbia, Canada for pet diseases and wild animals taken into temporary care?",
               "content_sha256": "fe32ff8daeb1dee8c20118aaae41dafec5e0f33ef5ecfa3a734565d40e792071",
-              "notes": "Codex primary-source content verification,2026-10-27: The source names Hydrangea arborescens in ethnoveterinary rheumatoid/joint-pain use for pets. It provides no validated human ROOT regimen; animal/practitioner use cannot establish a human minimum or root-extract equivalence. Dose source scope only; no clinical approval or Evidence eligibility assigned."
+              "notes": "Codex primary-source content verification, 2026-10-27: The source names Hydrangea arborescens in ethnoveterinary rheumatoid/joint-pain use for pets. It provides no validated human ROOT regimen; animal/practitioner use cannot establish a human minimum or root-extract equivalence. Dose source scope only; no clinical approval or Evidence eligibility assigned."
             }
           ]
         }
@@ -23794,7 +23794,7 @@
         "source_ids": [
           "PMID:30772483"
         ],
-        "rationale": "The source names Hydrangea arborescens in ethnoveterinary rheumatoid/joint-pain use for pets. It provides no validated human ROOT regimen; animal/practitioner use cannot establish a human minimum or root-extract equivalence. Apply only the existing October18approved DoseV4.1 shared neutral policy. A source assignment, preclinical finding, mechanism, toxicity report or non-equivalent preparation is not a universal minimum, continuous dose-response curve or UL.",
+        "rationale": "The source names Hydrangea arborescens in ethnoveterinary rheumatoid/joint-pain use for pets. It provides no validated human ROOT regimen; animal/practitioner use cannot establish a human minimum or root-extract equivalence. Apply only the existing October 18 approved Dose V4.1 shared neutral policy. A source assignment, preclinical finding, mechanism, toxicity report or non-equivalent preparation is not a universal minimum, continuous dose-response curve or UL.",
         "owner": "scripts/data/literature_evidence_records.json::hydrangea_root",
         "review_date": "2026-10-27",
         "approval_status": "approved_existing_neutral_dose_v41_source_review"
@@ -24949,7 +24949,7 @@
         "all_pmids_verified": true,
         "retractions_found": false,
         "reference_citations": {
-          "source_sha256": "4af0c3a6e75e91db70de1d55840c7678d275acb53d2cb063fb7e7fc6bc1eb19e",
+          "source_sha256": "caccbdd38c8187b8bcab37bd6b5831ebffa147a0e3b396894715ffe9170a0b32",
           "source_ids": [
             "PMID:35969364"
           ],
@@ -24964,7 +24964,7 @@
               "has_erratum": false,
               "article_title": "Fadogia agrestis (Schweinf. Ex Hiern) Stem Extract Restores Selected Biomolecules of Erectile Dysfunction in the Testicular and Penile Tissues of Paroxetine-Treated Wistar Rats.",
               "content_sha256": "c753d3bc5df59d1d864e5296a612b5e12295cea2c2f83ed8f84078ea1ed3dc81",
-              "notes": "Codex primary-source content verification,2026-10-27: Exact Fadogia agrestis STEM aqueous extract was studied in paroxetine-treated Wistar rats. The paper calls for clinical trials. Rat mg/kg assignments must never be converted to a human efficacy threshold or safety ceiling. Dose source scope only; no clinical approval or Evidence eligibility assigned."
+              "notes": "Codex primary-source content verification, 2026-10-27: Exact Fadogia agrestis STEM aqueous extract was studied in paroxetine-treated Wistar rats. The paper calls for clinical trials. Rat mg/kg assignments must never be converted to a human efficacy threshold or safety ceiling. Dose source scope only; no clinical approval or Evidence eligibility assigned."
             }
           ]
         }
@@ -24982,7 +24982,7 @@
         "source_ids": [
           "PMID:35969364"
         ],
-        "rationale": "Exact Fadogia agrestis STEM aqueous extract was studied in paroxetine-treated Wistar rats. The paper calls for clinical trials. Rat mg/kg assignments must never be converted to a human efficacy threshold or safety ceiling. Apply only the existing October18approved DoseV4.1 shared neutral policy. A source assignment, preclinical finding, mechanism, toxicity report or non-equivalent preparation is not a universal minimum, continuous dose-response curve or UL.",
+        "rationale": "Exact Fadogia agrestis STEM aqueous extract was studied in paroxetine-treated Wistar rats. The paper calls for clinical trials. Rat mg/kg assignments must never be converted to a human efficacy threshold or safety ceiling. Apply only the existing October 18 approved Dose V4.1 shared neutral policy. A source assignment, preclinical finding, mechanism, toxicity report or non-equivalent preparation is not a universal minimum, continuous dose-response curve or UL.",
         "owner": "scripts/data/literature_evidence_records.json::fadogia_agrestis",
         "review_date": "2026-10-27",
         "approval_status": "approved_existing_neutral_dose_v41_source_review"
@@ -25155,7 +25155,7 @@
         "all_pmids_verified": true,
         "retractions_found": false,
         "reference_citations": {
-          "source_sha256": "5eaa9139afc7ca78ee82134e1a48fe3b50e24587bda7c8ccefc5eee6d52c3cb2",
+          "source_sha256": "09d578659da2f59740465c381075759d90d09740231d493184cdd10e7df901cd",
           "source_ids": [
             "PMID:36337198"
           ],
@@ -25170,7 +25170,7 @@
               "has_erratum": false,
               "article_title": "Effects of dietary Hyssop, Hyssopus officinalis, extract on physiological and antioxidant responses of rainbow trout, Oncorhynchus mykiss, juveniles to thermal stress.",
               "content_sha256": "afc03f96b3b82ec7cb5d3a0cf2d93a4d934fb821133a850dc8bac90d050f1153",
-              "notes": "Codex primary-source content verification,2026-10-27: Hyssopus officinalis methanolic extract was added to rainbow-trout feed during thermal-stress experiments. Fish-feed concentrations cannot become human herb doses or a safety conclusion. Dose source scope only; no clinical approval or Evidence eligibility assigned."
+              "notes": "Codex primary-source content verification, 2026-10-27: Hyssopus officinalis methanolic extract was added to rainbow-trout feed during thermal-stress experiments. Fish-feed concentrations cannot become human herb doses or a safety conclusion. Dose source scope only; no clinical approval or Evidence eligibility assigned."
             }
           ]
         }
@@ -25188,7 +25188,7 @@
         "source_ids": [
           "PMID:36337198"
         ],
-        "rationale": "Hyssopus officinalis methanolic extract was added to rainbow-trout feed during thermal-stress experiments. Fish-feed concentrations cannot become human herb doses or a safety conclusion. Apply only the existing October18approved DoseV4.1 shared neutral policy. A source assignment, preclinical finding, mechanism, toxicity report or non-equivalent preparation is not a universal minimum, continuous dose-response curve or UL.",
+        "rationale": "Hyssopus officinalis methanolic extract was added to rainbow-trout feed during thermal-stress experiments. Fish-feed concentrations cannot become human herb doses or a safety conclusion. Apply only the existing October 18 approved Dose V4.1 shared neutral policy. A source assignment, preclinical finding, mechanism, toxicity report or non-equivalent preparation is not a universal minimum, continuous dose-response curve or UL.",
         "owner": "scripts/data/literature_evidence_records.json::hyssop",
         "review_date": "2026-10-27",
         "approval_status": "approved_existing_neutral_dose_v41_source_review"
@@ -25612,7 +25612,7 @@
         "all_pmids_verified": true,
         "retractions_found": false,
         "reference_citations": {
-          "source_sha256": "94cdf16beb2ad23716b39e33352f391aa73512f3b06688704bf98027fd411fab",
+          "source_sha256": "824bfbc322e6b64925e9affa34cac631be08dabaa8cb487bf899f20367289aab",
           "source_ids": [
             "PMID:37185325"
           ],
@@ -25627,7 +25627,7 @@
               "has_erratum": false,
               "article_title": "Nobiletin in Cancer Therapy; Mechanisms and Therapy Perspectives.",
               "content_sha256": "253bdbd799f79f23ab5ca7c0c02088708ad7e3118e4f400bd52aa379053d8ce0",
-              "notes": "Codex primary-source content verification,2026-10-27: The nobiletin mechanisms/therapy review concerns compound-specific research and translational questions. It does not establish an interchangeable general-catalog minimum or a formula-to-nobiletin allocation; no clinical applicability approval is inferred. Dose source scope only; no clinical approval or Evidence eligibility assigned."
+              "notes": "Codex primary-source content verification, 2026-10-27: The nobiletin mechanisms/therapy review concerns compound-specific research and translational questions. It does not establish an interchangeable general-catalog minimum or a formula-to-nobiletin allocation; no clinical applicability approval is inferred. Dose source scope only; no clinical approval or Evidence eligibility assigned."
             }
           ]
         }
@@ -25645,7 +25645,7 @@
         "source_ids": [
           "PMID:37185325"
         ],
-        "rationale": "The nobiletin mechanisms/therapy review concerns compound-specific research and translational questions. It does not establish an interchangeable general-catalog minimum or a formula-to-nobiletin allocation; no clinical applicability approval is inferred. Apply only the existing October18approved DoseV4.1 shared neutral policy. A source assignment, preclinical finding, mechanism, toxicity report or non-equivalent preparation is not a universal minimum, continuous dose-response curve or UL.",
+        "rationale": "The nobiletin mechanisms/therapy review concerns compound-specific research and translational questions. It does not establish an interchangeable general-catalog minimum or a formula-to-nobiletin allocation; no clinical applicability approval is inferred. Apply only the existing October 18 approved Dose V4.1 shared neutral policy. A source assignment, preclinical finding, mechanism, toxicity report or non-equivalent preparation is not a universal minimum, continuous dose-response curve or UL.",
         "owner": "scripts/data/literature_evidence_records.json::nobiletin",
         "review_date": "2026-10-27",
         "approval_status": "approved_existing_neutral_dose_v41_source_review"
@@ -25819,7 +25819,7 @@
         "all_pmids_verified": true,
         "retractions_found": false,
         "reference_citations": {
-          "source_sha256": "b23d0d8775bba7174a01da87dda9d798ede9824cc61fd89b5089e8837ea83c8f",
+          "source_sha256": "bf07e6912cc801f339b965576139730c7a0fa746893c16049c1ea6ca606daa29",
           "source_ids": [
             "PMID:35466676"
           ],
@@ -25834,7 +25834,7 @@
               "has_erratum": false,
               "article_title": "Purple Corn Extract Improves Benign Prostatic Hyperplasia by Regulating Prostate Cell Proliferation and Apoptosis.",
               "content_sha256": "9a9df285efea0888f4557abcf6924bc0223f06a7100c4737c2b106e80cd4bed2",
-              "notes": "Codex primary-source content verification,2026-10-27: Exact purple-corn extract was studied in DHT-stimulated cells and testosterone-induced rats. Neither animal exposures nor anthocyanin content establishes a generic human whole-extract minimum or a clinical BPH claim. Dose source scope only; no clinical approval or Evidence eligibility assigned."
+              "notes": "Codex primary-source content verification, 2026-10-27: Exact purple-corn extract was studied in DHT-stimulated cells and testosterone-induced rats. Neither animal exposures nor anthocyanin content establishes a generic human whole-extract minimum or a clinical BPH claim. Dose source scope only; no clinical approval or Evidence eligibility assigned."
             }
           ]
         }
@@ -25852,7 +25852,7 @@
         "source_ids": [
           "PMID:35466676"
         ],
-        "rationale": "Exact purple-corn extract was studied in DHT-stimulated cells and testosterone-induced rats. Neither animal exposures nor anthocyanin content establishes a generic human whole-extract minimum or a clinical BPH claim. Apply only the existing October18approved DoseV4.1 shared neutral policy. A source assignment, preclinical finding, mechanism, toxicity report or non-equivalent preparation is not a universal minimum, continuous dose-response curve or UL.",
+        "rationale": "Exact purple-corn extract was studied in DHT-stimulated cells and testosterone-induced rats. Neither animal exposures nor anthocyanin content establishes a generic human whole-extract minimum or a clinical BPH claim. Apply only the existing October 18 approved Dose V4.1 shared neutral policy. A source assignment, preclinical finding, mechanism, toxicity report or non-equivalent preparation is not a universal minimum, continuous dose-response curve or UL.",
         "owner": "scripts/data/literature_evidence_records.json::purple_corn_extract",
         "review_date": "2026-10-27",
         "approval_status": "approved_existing_neutral_dose_v41_source_review"
@@ -30469,7 +30469,7 @@
         "all_pmids_verified": true,
         "retractions_found": false,
         "reference_citations": {
-          "source_sha256": "181eeec728d7bb905330dd1f6008a07cb58147d60d43e2bda44e0a67e691d2fc",
+          "source_sha256": "52623a2f980df69609398b9ea27879762afde9e3902f3246ce8542fa96fb2d29",
           "source_ids": [
             "PMID:32758647"
           ],
@@ -30484,7 +30484,7 @@
               "has_erratum": false,
               "article_title": "Traditional application and modern pharmacological research of Artemisia annua L.",
               "content_sha256": "74cabd33dd39fc8dff2c4deacfb3856d118685101daa2f87a0e480e3b214f5f3",
-              "notes": "Codex primary-source content verification,2026-10-27: The Artemisia annua traditional-use/pharmacology review distinguishes the whole plant and isolated artemisinin. No whole-herb-to-drug equivalence, general human efficacy minimum or self-treatment recommendation follows. Dose source scope only; no clinical approval or Evidence eligibility assigned."
+              "notes": "Codex primary-source content verification, 2026-10-27: The Artemisia annua traditional-use/pharmacology review distinguishes the whole plant and isolated artemisinin. No whole-herb-to-drug equivalence, general human efficacy minimum or self-treatment recommendation follows. Dose source scope only; no clinical approval or Evidence eligibility assigned."
             }
           ]
         }
@@ -30502,7 +30502,7 @@
         "source_ids": [
           "PMID:32758647"
         ],
-        "rationale": "The Artemisia annua traditional-use/pharmacology review distinguishes the whole plant and isolated artemisinin. No whole-herb-to-drug equivalence, general human efficacy minimum or self-treatment recommendation follows. Apply only the existing October18approved DoseV4.1 shared neutral policy. A source assignment, preclinical finding, mechanism, toxicity report or non-equivalent preparation is not a universal minimum, continuous dose-response curve or UL.",
+        "rationale": "The Artemisia annua traditional-use/pharmacology review distinguishes the whole plant and isolated artemisinin. No whole-herb-to-drug equivalence, general human efficacy minimum or self-treatment recommendation follows. Apply only the existing October 18 approved Dose V4.1 shared neutral policy. A source assignment, preclinical finding, mechanism, toxicity report or non-equivalent preparation is not a universal minimum, continuous dose-response curve or UL.",
         "owner": "scripts/data/literature_evidence_records.json::sweet_wormwood_herb",
         "review_date": "2026-10-27",
         "approval_status": "approved_existing_neutral_dose_v41_source_review"

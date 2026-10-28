@@ -494,3 +494,26 @@ def test_theracurmin_reported_hierarchy_limit_does_not_invent_primary_credit(com
         assert not any(outcome['hierarchy'] in {'primary', 'unresolved'} for outcome in context['outcomes'])
     assert any(context['review_status'] != 'clinician_approved'
                for context in contexts if '29246725' in context['source_pmids'])
+
+
+@pytest.mark.parametrize('rid,pmid', [('PRECLIN_CORDYCEPS','27408987'),
+    ('INGR_ECHINACEA','24554461'), ('INGR_CHONDROITIN_SULFATE','25629804')])
+def test_retrieved_full_reports_have_factual_contexts_without_invented_approval(completion_source_records, rid, pmid):
+    from clinical_evidence_schema import validate_ingredient_context
+    record = completion_source_records[rid]
+    context = next((c for c in record.get('study_contexts', []) if pmid in c['source_pmids']), None)
+    assert context is not None
+    assert context['scoring_eligible'] is False
+    assert context['review_status'] == 'source_verified_pending_clinical_review'
+    assert 'clinical_review' not in context
+    assert validate_ingredient_context(context, require_complete_review=True) == ['review.approval_required']
+    if rid == 'PRECLIN_CORDYCEPS':
+        assert context['identity_scope'] == 'combination'
+        assert context['dose']['dose_status'] == 'combination_total_only'
+        assert context['dose']['values'] == [4000]
+        assert context['outcomes'][0]['direction'] == 'null'
+    else:
+        assert context['dose']['values'] == []
+        assert context['dose']['dose_basis'] == 'not_applicable'
+        assert context['included_study_pmids']
+        assert any('single aggregate regimen' in note for note in context['limitations'])

@@ -16,8 +16,10 @@ def test_retracted_lutein_source_cannot_be_described_as_affirmative_evidence():
     ref = next(x for x in row['references_structured'] if x['pmid'] == '41573009')
     assert ref['retracted'] is True
     assert '42211211' in json.dumps(row)
-    assert row['study_type'] == 'rct_single'
-    assert row['total_enrollment'] == 48
+    assert row['study_type'] == row['evidence_level'] == 'reference'
+    assert row['total_enrollment'] == 48  # Retained combination-study sample, not isolated-lutein evidence.
+    assert all(c['scoring_eligible'] is False and c['review_status'] == 'rejected_source'
+               for c in row['study_contexts'])
     assert not {'cardiovascular', 'digestive_health'} & set(row['endpoint_relevance_tags'])
     assert '28661438' in json.dumps(row)
 
