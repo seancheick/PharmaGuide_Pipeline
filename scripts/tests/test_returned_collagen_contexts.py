@@ -56,20 +56,23 @@ def test_eligible_recovery_copies_source_facts_instead_of_inventing_a_grade_or_d
 
 
 def test_recovered_receipt_keeps_the_canonical_source_review_owner(monkeypatch):
-    import evidence_resolver
+    from tests.test_v4_generic_evidence_p133 import _use_synthetic_eligible_collagen_source
 
-    owner = {**_record(), "scoring_eligible": True, "effect_direction": "positive_weak",
-             "total_enrollment": 73}
-    monkeypatch.setattr(applicability, "reviewed_entries", lambda: {owner["id"]: owner})
-    monkeypatch.setattr(evidence, "_verified_ingredient_human_evidence_entries", lambda: (owner,))
-    monkeypatch.setattr(evidence_resolver, "_backed_studies_index", lambda: {"collagen": [owner]})
+    owner = _use_synthetic_eligible_collagen_source(monkeypatch)
+    owner.update(effect_direction="positive_weak", total_enrollment=73)
+    seen = []
+    def source_review(entry):
+        seen.append(entry["id"])
+        return {"is_complete": False, "errors": ["synthetic_unfinished_source_review"], "context_ids": []}
+    monkeypatch.setattr(applicability, "assess_clinical_source_review", source_review)
     result = evidence.score_evidence(_collagen(), apply_primary_floor=True, owner_scoped=True)
     assert result["score"] > 0
     [receipt] = result["metadata"]["contributing_record_assessments"]
     assert receipt["id"] == "INGR_COLLAGEN_PEPTIDES"
-    assert receipt["source_review"] == applicability.assess_clinical_source_review(owner)
-    # An eligibility-only fixture does not manufacture approval of unfinished
-    # contexts or change their canonical review result.
+    assert seen == ["INGR_COLLAGEN_PEPTIDES"]
+    assert receipt["source_review"] == source_review(owner)
+    # The explicitly approved synthetic endpoint isolates receipt ownership;
+    # unfinished source-review metadata is retained rather than manufactured.
     assert receipt["source_review"]["is_complete"] is False
 
 

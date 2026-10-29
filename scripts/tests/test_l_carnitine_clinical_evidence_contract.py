@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+from copy import deepcopy
 from pathlib import Path
 
 import pytest
@@ -28,6 +29,40 @@ def clinical_entries() -> dict[str, dict]:
 @pytest.fixture(scope="module")
 def enricher() -> SupplementEnricherV3:
     return SupplementEnricherV3()
+
+
+@pytest.fixture
+def eligible_carnitine_sources(monkeypatch, enricher, clinical_entries):
+    """Explicit synthetic source approval for recovery/dedup mechanics only."""
+    import clinical_applicability
+    import evidence_resolver
+    from scoring_v4.modules import generic_evidence
+    from test_evidence_resolver import _approved_test_source
+    sources = {}
+    for source_id in ("INGR_L_CARNITINE", "BRAND_CARNIPURE"):
+        original = deepcopy(clinical_entries[source_id])
+        source = _approved_test_source(original, name=original["standard_name"],
+            pmid=original["references_structured"][0]["pmid"], outcome="Muscle soreness after exercise")
+        context = source["study_contexts"][0]
+        context["condition"] = "muscle_recovery"
+        if source["study_type"] == "systematic_review_meta":
+            context["evidence_role"] = "pooled_synthesis"
+        if source["effect_direction"] == "mixed":
+            context["outcomes"].append({**context["outcomes"][0], "name": "Muscle recovery null endpoint", "direction": "null"})
+        sources[source_id] = source
+    current = clinical_applicability.reviewed_entries()
+    monkeypatch.setattr(clinical_applicability, "reviewed_entries", lambda: {**current, **sources})
+    verified = generic_evidence._verified_ingredient_human_evidence_entries()
+    monkeypatch.setattr(generic_evidence, "_verified_ingredient_human_evidence_entries",
+        lambda: tuple(row for row in verified if row["id"] not in sources) + tuple(
+            row for row in sources.values() if generic_evidence._is_verified_ingredient_human_entry(row)))
+    index = evidence_resolver._backed_studies_index()
+    monkeypatch.setattr(evidence_resolver, "_backed_studies_index", lambda: {
+        key: [sources.get(row["id"], row) for row in rows] for key, rows in index.items()})
+    payload = enricher.databases["backed_clinical_studies"]
+    monkeypatch.setitem(enricher.databases, "backed_clinical_studies", {**payload,
+        "backed_clinical_studies": [sources.get(row["id"], row) for row in payload["backed_clinical_studies"]]})
+    return sources
 
 
 def test_generic_l_carnitine_record_is_mixed_and_dose_scoped(
@@ -182,6 +217,7 @@ def _single_l_carnitine_product(
         "mapped": True,
         "quantity": 2000,
         "unit": "mg",
+        "raw_source_path": "ingredientRows[0]",
     }
     if matched_form is not None:
         ingredient["matched_form"] = matched_form
@@ -208,6 +244,7 @@ def _single_l_carnitine_product(
 def test_scoring_recovery_accepts_reviewed_l_carnitine_forms(
     name: str,
     matched_form: str | None,
+    eligible_carnitine_sources,
 ) -> None:
     payload = score_evidence(
         _single_l_carnitine_product(
@@ -262,6 +299,7 @@ def test_scoring_recovery_uses_product_identity_when_row_lost_form(
 
 def test_enrichment_deduplicates_same_study_across_active_rows(
     enricher: SupplementEnricherV3,
+    eligible_carnitine_sources,
 ) -> None:
     product = {
         "fullName": "L-Carnitine Blend",
@@ -330,6 +368,7 @@ def test_enrichment_rejects_broad_parent_for_excluded_carnitine_rows(
 
 def test_brand_and_generic_carnitine_evidence_share_one_ingredient_group(
     clinical_entries: dict[str, dict],
+    eligible_carnitine_sources,
 ) -> None:
     product = _single_l_carnitine_product(
         name="Carnipure",
@@ -337,8 +376,9 @@ def test_brand_and_generic_carnitine_evidence_share_one_ingredient_group(
         product_name="Carnipure L-Carnitine 2000 mg",
     )
     product["evidence_data"]["clinical_matches"] = [
-        dict(clinical_entries["BRAND_CARNIPURE"]),
-        dict(clinical_entries["INGR_L_CARNITINE"]),
+        {**eligible_carnitine_sources[source_id], "ingredient": "Carnipure",
+         "matched_source_row_refs": ["ingredientRows[0]"], "matched_canonical_ids": ["l_carnitine"]}
+        for source_id in ("BRAND_CARNIPURE", "INGR_L_CARNITINE")
     ]
 
     payload = score_evidence(product, apply_primary_floor=True)
@@ -347,3 +387,13 @@ def test_brand_and_generic_carnitine_evidence_share_one_ingredient_group(
         "l carnitine"
     ]
     assert payload["metadata"]["top_n_applied"] == 1
+
+
+def test_actual_carnitine_records_cannot_earn_preparation_only_credit():
+    from clinical_applicability import assess_clinical_source_review, reviewed_entries
+    for source_id in ("INGR_L_CARNITINE", "BRAND_CARNIPURE"):
+        assert assess_clinical_source_review(reviewed_entries()[source_id])["is_complete"] is False
+    product = _single_l_carnitine_product(name="L-Carnitine", matched_form="L-Carnitine Base")
+    result = score_evidence(product, apply_primary_floor=True)
+    assert result["score"] == 0
+    assert result["metadata"]["recovered_matches"] == []

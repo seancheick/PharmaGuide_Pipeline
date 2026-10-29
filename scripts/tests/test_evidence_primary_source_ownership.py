@@ -17,6 +17,15 @@ def _synthetic_ps_evidence():
             "effect_direction": "mixed", "total_enrollment": 500}
 
 
+@pytest.fixture
+def eligible_ps_source(monkeypatch):
+    """Approved synthetic endpoints for lineage mechanics, never real PS credit."""
+    from tests.test_v4_generic_evidence_p133 import _use_approved_mechanics_sources
+    source, = _use_approved_mechanics_sources(monkeypatch, _synthetic_ps_evidence(),
+        outcome="Memory recall", condition="memory")
+    return source
+
+
 def _ps_complex_product():
     # Real label lineage with deliberately synthetic eligible evidence: the
     # production PS assessment is reference-only after its primary null result.
@@ -81,7 +90,7 @@ def _ps_complex_product():
     }
 
 
-def test_ps_complex_total_does_not_dilute_its_only_evidenced_active():
+def test_ps_complex_total_does_not_dilute_its_only_evidenced_active(eligible_ps_source):
     product = _ps_complex_product()
     child_ref = "ingredientRows[1].nestedRows[0]"
     original = deepcopy(product)
@@ -111,7 +120,7 @@ def test_ps_complex_total_does_not_dilute_its_only_evidenced_active():
     ("phosphatidylserine", 5000.0),
     ("protein", 25000.0),
 ])
-def test_unrelated_aggregate_still_competes_with_trace_active(canonical, quantity):
+def test_unrelated_aggregate_still_competes_with_trace_active(canonical, quantity, eligible_ps_source):
     product = _ps_complex_product()
     aggregate = product["product_scoring_evidence"][0]
     aggregate.update(
@@ -133,7 +142,7 @@ def test_unrelated_aggregate_still_competes_with_trace_active(canonical, quantit
     )["metadata"]["primary_evidence_floor"]
 
 
-def test_identity_matched_extra_refs_do_not_supply_the_numerator():
+def test_identity_matched_extra_refs_do_not_supply_the_numerator(eligible_ps_source):
     # The enricher records every identity-matching row. A sibling structural
     # total in that list is identity evidence, not the evidenced active's mass.
     product = _ps_complex_product()
@@ -161,7 +170,7 @@ def test_identity_matched_extra_refs_do_not_supply_the_numerator():
     ["ingredientRows[1].nestedRows[0]"],
     ["ingredientRows[1]", "ingredientRows[1].nestedRows[0]", "ingredientRows[7]"],
 ])
-def test_foreign_linked_rows_cannot_silence_an_aggregate(aggregate_linked_rows):
+def test_foreign_linked_rows_cannot_silence_an_aggregate(aggregate_linked_rows, eligible_ps_source):
     # linked_rows may corroborate an aggregate's own source position. A row at
     # an unrelated path cannot claim the evidenced row or every row as lineage.
     product = _ps_complex_product()
@@ -343,7 +352,7 @@ def _floors(product: dict) -> tuple[dict, dict]:
     return control, actual
 
 
-def test_real_213475_parent_total_and_synthetic_projection_are_owned_by_child():
+def test_real_213475_parent_total_and_synthetic_projection_are_owned_by_child(eligible_ps_source):
     label = _fixture_label("213475")
     complex_node = _node_at(label, "ingredientRows[1]")
     child = complex_node["nestedIngredients"][0]
@@ -368,7 +377,7 @@ def test_real_213475_parent_total_and_synthetic_projection_are_owned_by_child():
     assert actual["score"] == control["score"]
 
 
-def test_real_218600_active_owns_its_supplying_complex():
+def test_real_218600_active_owns_its_supplying_complex(eligible_ps_source):
     label = _fixture_label("218600")
     # The cleaned label keeps the supplying complex as a flat row whose source
     # path and parentBlend record its nesting under the 200 mg active.
@@ -391,7 +400,7 @@ def test_real_218600_active_owns_its_supplying_complex():
     )
 
 
-def test_real_218838_sibling_rows_without_owner_links_stay_unresolved():
+def test_real_218838_sibling_rows_without_owner_links_stay_unresolved(eligible_ps_source):
     """Solgar 218838 lists the 500 mg complex, 100 mg PS and 60 mg PC as flat
     siblings. The source proves no ownership, so none is inferred from shared
     canonical identity: the total still competes and the case remains an
@@ -413,7 +422,7 @@ def test_real_218838_sibling_rows_without_owner_links_stay_unresolved():
     )
 
 
-def test_synthetic_projection_resolves_through_the_product_tree_not_identity():
+def test_synthetic_projection_resolves_through_the_product_tree_not_identity(eligible_ps_source):
     label = _fixture_label("213475")
     complex_node = _node_at(label, "ingredientRows[1]")
     child = complex_node["nestedIngredients"][0]
@@ -440,7 +449,7 @@ def test_synthetic_projection_resolves_through_the_product_tree_not_identity():
     )
 
 
-def test_partially_disclosed_blend_total_still_competes():
+def test_partially_disclosed_blend_total_still_competes(eligible_ps_source):
     """A blend that names an undisclosed member is an opaque aggregate: its
     total keeps competing, and no remainder is assigned to any child."""
     label = _fixture_label("213475")
@@ -475,7 +484,7 @@ def test_partially_disclosed_blend_total_still_competes():
     )
 
 
-def test_competitor_rows_drop_only_lineage_owned_structural_totals():
+def test_competitor_rows_drop_only_lineage_owned_structural_totals(eligible_ps_source):
     product = _ps_complex_product()
     rows = get_scoring_ingredients(product, strict=True).rows
     before = deepcopy(rows)
@@ -514,7 +523,7 @@ def test_competitor_rows_drop_only_lineage_owned_structural_totals():
     assert kept == [child, projection, standalone]
 
 
-def test_activity_unit_child_cannot_stand_in_for_its_mass_total():
+def test_activity_unit_child_cannot_stand_in_for_its_mass_total(monkeypatch):
     """Wobenzym-style row: "Pancreatin 300 mg" whose only nested member is an
     activity-unit specification (56,000 USP). Nothing mass-comparable stands
     in for the 300 mg, so the total keeps competing with a 135 mg sibling."""
@@ -536,7 +545,11 @@ def test_activity_unit_child_cannot_stand_in_for_its_mass_total():
             scoring_parent_id="digestive_enzymes", evidence_canonical_id="digestive_enzymes")],
     )
     match = product["evidence_data"]["clinical_matches"][0]
-    match.update(ingredient="Bromelain", matched_canonical_ids=["bromelain"])
+    match.update(id="TEST_ELIGIBLE_BROMELAIN", ingredient="Bromelain", standard_name="Bromelain",
+                 matched_canonical_ids=["bromelain"])
+    from tests.test_v4_generic_evidence_p133 import _use_approved_mechanics_sources
+    _use_approved_mechanics_sources(monkeypatch, match, outcome="Pain during activity", condition="pain")
+    product["product_name"] = "Bromelain"
     rows = get_scoring_ingredients(product, strict=True).rows
     assert {row["raw_source_path"] for row in rows} >= {"ingredientRows[1]", "ingredientRows[2]"}
     competitors = primary_mass_competitor_rows(product, rows)

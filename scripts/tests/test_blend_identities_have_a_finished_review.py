@@ -305,7 +305,9 @@ def test_flaxseed_blend_uses_independent_verified_sources_without_clearing_histo
     from scoring_v4.scored_artifact import build_scored_artifact
     resolution = resolve_product_evidence(enriched["299755"], owner_scoped=True)
     flax = next(row for row in resolution.resolutions if row.canonical_id == "flaxseed")
-    assert flax.disposition == "resolved_by_reviewed_clinical_evidence"
+    # Independently verified literature cannot invent an accepted clinical
+    # context for the exact blend preparation, population and outcome.
+    assert flax.disposition == "research_present_applicability_unestablished"
     # Completing source review does not establish affirmative credit for this blend row.
     assert flax.points_eligible is False
     data = json.loads((Path(__file__).parents[1] / "data/literature_evidence_records.json").read_text())

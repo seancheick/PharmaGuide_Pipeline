@@ -62,7 +62,6 @@ def test_structural_anchor_is_never_a_dose_primary(replays):
 
 
 def test_replayed_ginseng_plus_matches_ginseng_not_astragalus(replays, monkeypatch):
-    from copy import deepcopy
     import clinical_applicability
     from scoring_v4.modules import generic_evidence
     product = replays["328831"]
@@ -77,15 +76,22 @@ def test_replayed_ginseng_plus_matches_ginseng_not_astragalus(replays, monkeypat
     ids = [m.get("id") for m in resolved_clinical_matches(product)[0]]
     assert "INGR_GINSENG" not in ids
     assert not any("ASTRAGALUS" in str(i) for i in ids)
-    # Identity routing on a credit-path copy of the same record: Botalys
-    # recovers ginseng, never astragalus.
-    owners = deepcopy(clinical_applicability.reviewed_entries())
-    owners["INGR_GINSENG"].update(study_type="systematic_review_meta", evidence_level="ingredient-human")
+    # Identity routing gets a separate explicitly approved synthetic source;
+    # changing a real held record's study-type stamp cannot approve it.
+    from test_evidence_resolver import _approved_test_source
+    source = _approved_test_source({
+        "id": "TEST_STRUCTURAL_GINSENG", "standard_name": "Ginseng",
+        "aliases": ["Botalys", "Panax ginseng", "Ginseng extract"],
+        "study_type": "rct_single", "evidence_level": "ingredient-human",
+        "effect_direction": "positive_strong",
+    }, name="Ginseng")
+    owners = {**clinical_applicability.reviewed_entries(), source["id"]: source}
     monkeypatch.setattr(clinical_applicability, "reviewed_entries", lambda: owners)
-    verified = tuple(r for r in owners.values() if generic_evidence._is_verified_ingredient_human_entry(r))
-    monkeypatch.setattr(generic_evidence, "_verified_ingredient_human_evidence_entries", lambda: verified)
+    assert generic_evidence._is_verified_ingredient_human_entry(source)
+    monkeypatch.setattr(generic_evidence, "_verified_ingredient_human_evidence_entries", lambda: (source,))
     ids = [m.get("id") for m in resolved_clinical_matches(product)[0]]
-    assert "INGR_GINSENG" in ids
+    assert source["id"] in ids
+    assert "INGR_GINSENG" not in ids
     assert not any("ASTRAGALUS" in str(i) for i in ids)
 
 

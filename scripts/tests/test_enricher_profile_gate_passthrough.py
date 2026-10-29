@@ -403,8 +403,12 @@ def test_row_known_only_by_its_safety_match_meets_that_records_rules(enricher):
     ]
     assert len(pregnancy) == 1
     assert pregnancy[0]["severity"] == "avoid"
-    # No disclosed synephrine: amount unknown, still a hard pregnancy warning.
-    assert pregnancy[0]["dose_decision"]["evaluation_status"] == "amount_unknown"
+    # A presence precaution has no numeric cutoff to evaluate. Unknown
+    # synephrine must not suppress its actionable pregnancy warning.
+    assert pregnancy[0]["dose_decision"]["evaluated"] is False
+    assert pregnancy[0]["dose_decision"]["evaluation_status"] is None
+    assert pregnancy[0]["dose_decision"]["dose_evaluation"] is None
+    assert pregnancy[0]["dose_decision"]["decision_rule"] is None
     assert pregnancy[0]["dose_decision"]["consumer_disposition"] == "block"
     assert "pregnancy" in profile["condition_summary"]
 

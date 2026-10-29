@@ -99,37 +99,38 @@ def test_the_authority_floor_is_a_separate_owner():
 # pin the contract so a later change has to argue with a test.
 
 
-def test_only_positive_strong_may_anchor_on_a_strong_base():
+def test_only_positive_strong_may_anchor_on_a_strong_base(monkeypatch):
     """positive_strong is deliberately EXCLUDED from the ceiling — it keeps the
     strong/branded base. It is not capped at PRIMARY_FLOOR_MODERATE."""
     from scoring_v4.modules.generic_evidence import score_evidence
 
-    strong = _floor_for("positive_strong", score_evidence)
+    strong = _floor_for("positive_strong", score_evidence, monkeypatch)
     assert strong == ge.PRIMARY_FLOOR_STRONG
     assert strong > ge.PRIMARY_FLOOR_MODERATE
 
 
-def test_non_strong_directions_are_capped_at_the_moderate_base():
+def test_non_strong_directions_are_capped_at_the_moderate_base(monkeypatch):
     from scoring_v4.modules.generic_evidence import score_evidence
 
     for direction in ("positive_weak", "mixed"):
         expected = round(ge.PRIMARY_FLOOR_MODERATE
                          * ge.EFFECT_DIRECTION_MULTIPLIERS[direction], 4)
-        got = _floor_for(direction, score_evidence)
+        got = _floor_for(direction, score_evidence, monkeypatch)
         assert got == expected, f"{direction}: {got} != {expected}"
         assert got < ge.PRIMARY_FLOOR_STRONG
 
 
-def test_null_and_negative_anchor_nothing_even_on_a_strong_study():
+def test_null_and_negative_anchor_nothing_even_on_a_strong_study(monkeypatch):
     from scoring_v4.modules.generic_evidence import score_evidence
 
     for direction in ("null", "negative"):
-        assert _floor_for(direction, score_evidence) == 0.0
+        assert _floor_for(direction, score_evidence, monkeypatch) == 0.0
 
 
-def _floor_for(direction, score_evidence):
+def _floor_for(direction, score_evidence, monkeypatch):
     """A single mass-dominant active with a strong-study match in `direction`.
 
+    Explicit synthetic pooled endpoints isolate direction from real source holds.
     Product shape mirrors test_v4_evidence_primary_floor_p8's fixtures: the floor
     reads actives from ingredient_quality_data, so a bare activeIngredients list
     never reaches the mass gate and every direction would read 0.0.
@@ -145,8 +146,19 @@ def _floor_for(direction, score_evidence):
         "evidence_data": {"clinical_matches": [{
             "id": "TEST_ELIGIBLE_ASHWAGANDHA", "ingredient": "Ashwagandha",
             "standard_name": "Ashwagandha", "canonical_id": "ashwagandha",
-            "study_type": "rct_multiple", "evidence_level": "ingredient-human",
+            "study_type": "systematic_review_meta", "evidence_level": "ingredient-human",
             "effect_direction": direction, "total_enrollment": 500,
         }]},
     }
+    from test_evidence_resolver import _approved_test_source
+    entry = product["evidence_data"]["clinical_matches"][0]
+    source = _approved_test_source(entry, name="Ashwagandha")
+    context = source["study_contexts"][0]
+    context["evidence_role"] = "pooled_synthesis"
+    if direction in {"null", "negative"}:
+        context["outcomes"][0]["direction"] = direction
+    elif direction == "mixed":
+        context["outcomes"].append({**context["outcomes"][0], "name": "Perceived Stress Scale null endpoint", "direction": "null"})
+    current = ca.reviewed_entries()
+    monkeypatch.setattr(ca, "reviewed_entries", lambda: {**current, source["id"]: source})
     return score_evidence(product, apply_primary_floor=True)["metadata"]["primary_evidence_floor"]

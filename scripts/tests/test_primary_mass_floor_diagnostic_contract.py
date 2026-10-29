@@ -31,33 +31,37 @@ diagnostic = importlib.util.module_from_spec(_SPEC)
 _SPEC.loader.exec_module(diagnostic)
 
 
-def _ashwagandha_with_a_floor():
+def _ashwagandha_with_a_floor(monkeypatch):
     """A non-essential primary, so the clinical floor is isolated from the
     DRI nutrition-authority floor that would otherwise mask the toggle."""
+    from tests.test_v4_generic_evidence_p133 import _use_approved_mechanics_sources
+    match = _match(id="TEST_ELIGIBLE_ASHWAGANDHA", ingredient="Ashwagandha",
+                   standard_name="Ashwagandha", effect_direction="mixed")
+    _use_approved_mechanics_sources(monkeypatch, match)
     return _product(
         ingredients=[_ingredient(name="Ashwagandha", canonical_id="ashwagandha", quantity=600)],
-        matches=[_match(id="TEST_ELIGIBLE_ASHWAGANDHA", ingredient="Ashwagandha",
-                        standard_name="Ashwagandha", effect_direction="mixed")],
+        matches=[match],
     )
 
 
-def test_kill_switch_is_read_at_call_time_not_captured_at_import():
+def test_kill_switch_is_read_at_call_time_not_captured_at_import(monkeypatch):
     from scoring_v4.modules import generic_evidence as ge
 
     assert ge.PRIMARY_FLOOR_ENABLED is True
-    before = ge.score_evidence(_ashwagandha_with_a_floor(), apply_primary_floor=True)
+    product = _ashwagandha_with_a_floor(monkeypatch)
+    before = ge.score_evidence(product, apply_primary_floor=True)
     assert before["components"]["primary_evidence_floor"] > 0
 
     ge.PRIMARY_FLOOR_ENABLED = False
     try:
-        during = ge.score_evidence(_ashwagandha_with_a_floor(), apply_primary_floor=True)
+        during = ge.score_evidence(product, apply_primary_floor=True)
     finally:
         ge.PRIMARY_FLOOR_ENABLED = True
 
     assert "primary_evidence_floor" not in during["components"], (
         "the flag was not read at call time; every floor A/B would measure 0.0")
 
-    after = ge.score_evidence(_ashwagandha_with_a_floor(), apply_primary_floor=True)
+    after = ge.score_evidence(product, apply_primary_floor=True)
     assert after["components"]["primary_evidence_floor"] == before["components"]["primary_evidence_floor"]
 
 

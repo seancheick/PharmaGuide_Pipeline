@@ -124,7 +124,14 @@ def test_presence_rule_without_unsupported_tier_flags_when_amount_is_unknown(enr
     pregnancy = _hit(profile, "RULE_IQM_LICORICE_HYPERTENSION", "condition_id", "pregnancy")
     assert pregnancy["severity"] == "avoid"
     decision = pregnancy["dose_decision"]
-    assert decision is None  # No invented whole-root dose tier to evaluate.
+    # A hard presence precaution retains explicit blocking placement without
+    # claiming a numeric dose comparison or borrowing the blend amount.
+    assert decision["consumer_disposition"] == "block"
+    assert decision["clinical_severity"] == "avoid"
+    assert decision["evaluated"] is False
+    assert decision["evaluation_status"] is None
+    assert decision["dose_evaluation"] is None
+    assert decision["decision_rule"] is None
     assert pregnancy["materiality"] == "presence"
     # Licorice hypertension is presence too since D8 (2026-09-26): 100 mg/day
     # glycyrrhizic acid is no floor for people with hypertension, so an

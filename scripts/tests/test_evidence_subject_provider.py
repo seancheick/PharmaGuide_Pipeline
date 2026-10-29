@@ -175,10 +175,14 @@ def test_printed_inulin_child_supports_anchor_without_borrowing_blend_mass(enric
     from clinical_applicability import assess_clinical_applicability
     from dose_assessment import positive_clinical_benchmark
     product = enriched["251338"]
-    match = next(m for m in product["evidence_data"]["clinical_matches"] if m["id"] == "INGR_INULIN")
+    # The actual source context is explicitly unqualified. Retain its exact
+    # child ownership without converting that identity into benefit credit.
+    match = next(m for m in product["evidence_data"]["rejected_clinical_matches"] if m["id"] == "INGR_INULIN")
+    assert match["reason_code"] == "clinical_sources_ineligible"
+    assert match["matched_source_row_refs"] == ["ingredientRows[7].nestedRows[0]"]
     result = assess_clinical_applicability(product, match, assess_amount=False)
-    assert result["status"] == "applicable"
-    assert result["source_row_ref"] == "ingredientRows[7].nestedRows[0]"
+    assert result["status"] == "unresolved"
+    assert result["reason_code"] == "clinical_sources_ineligible"
     row = next(r for r in get_evidence_subject_rows(product) if r.get("canonical_id") == "inulin")
     assert positive_clinical_benchmark(product, row) is None
 

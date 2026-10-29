@@ -65,9 +65,9 @@ def _matches(pid):
     return accepted, rejected
 
 
-# A record the label reaches is either accepted or, when its owner is a
-# completed reference-only review (Dr. Pham, 2026-10-28: HMB, Suntheanine),
-# rejected for exactly that reason. Routing is asserted in both cases.
+# Discovery remains separate from eligibility: completed reference-only and
+# held-source records retain their exact rejection reason. Routing is asserted
+# without restoring affirmative credit to the held lactoferrin source.
 @pytest.mark.parametrize("pid, absent, present, reference_only", [
     ("233404", "BRAND_ZYNAMITE", None, False),          # mangiferin, Zynamite not named
     ("18416", "BRAND_HMB", "INGR_HMB", True),           # plain HMB
@@ -82,5 +82,37 @@ def test_real_labels_reach_the_right_record(pid, absent, present, reference_only
     if present and reference_only:
         assert present not in accepted
         assert rejected.get(present) == "reference_only_clinical_record"
+    elif present == "INGR_LACTOFERRIN":
+        from clinical_applicability import assess_clinical_source_review
+        assert present not in accepted
+        assert rejected.get(present) == "clinical_sources_ineligible"
+        assert assess_clinical_source_review({"id": present})["is_complete"] is False
     elif present:
         assert present in accepted
+
+
+
+@pytest.mark.parametrize('record_id,canonical,generic,branded', [
+    ('BRAND_UCII', 'collagen_type_ii', 'Undenatured Collagen II', 'UC-II Undenatured Type II Collagen'),
+    ('BRAND_MAGTEIN', 'magnesium', 'Magnesium L-Threonate', 'Magtein Magnesium L-Threonate'),
+])
+def test_generic_identity_or_another_row_cannot_supply_exact_brand_scope(record_id, canonical, generic, branded):
+    from copy import deepcopy
+    from clinical_applicability import assess_clinical_applicability
+    from test_green_tea_evidence_identity import _source_product
+    product = _source_product(generic)
+    row = product['activeIngredients'][0]
+    row.update(name=generic, raw_source_text=generic, standardName=generic, canonical_id=canonical,
+               ingredientGroup=canonical, matched_form=branded, forms=[])
+    row['raw_taxonomy'].update(category='non-nutrient/non-botanical', ingredientGroup=canonical, forms=[])
+    entry = {'id': record_id, 'matched_source_row_refs': ['ingredientRows[0]'],
+             'matched_canonical_ids': [canonical]}
+    decision = assess_clinical_applicability(product, entry, assess_amount=False)
+    assert decision['status'] == 'not_applicable'
+    assert decision['reason_code'] == 'clinical_form_mismatch'
+    sibling = deepcopy(row)
+    sibling.update(name=branded, raw_source_text=branded, raw_source_path='ingredientRows[1]')
+    product['activeIngredients'].append(sibling)
+    assert assess_clinical_applicability(product, entry, assess_amount=False)['reason_code'] == 'clinical_form_mismatch'
+    exact = {**entry, 'matched_source_row_refs': ['ingredientRows[1]']}
+    assert assess_clinical_applicability(product, exact, assess_amount=False)['status'] == 'applicable'

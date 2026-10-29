@@ -65,9 +65,19 @@ def test_quantified_nested_extract_owns_its_evidence_and_amount(enricher):
     assert extract["forms"] == source["activeIngredients"][0]["nestedIngredients"][1]["forms"]
     matches = [m for m in product["evidence_data"]["clinical_matches"]
                if m["id"] == "INGR_GREEN_TEA"]
-    assert len(matches) == 1
-    assert matches[0]["matched_source_row_refs"] == ["ingredientRows[1].nestedRows[1]"]
-    assert matches[0]["ingredient"] == "Green Tea Extract"
+    # The preparation-only native policy has no accepted population/outcome
+    # scope. Preserve the exact subject, without inventing clinical approval.
+    assert matches == []
+    from clinical_applicability import assess_clinical_applicability
+    from scoring_input_contract import get_evidence_subject_rows
+    subject = next(row for row in get_evidence_subject_rows(product)
+                   if row["raw_source_path"] == "ingredientRows[1].nestedRows[1]")
+    assert subject["name"] == "Green Tea Extract" and subject["quantity"] == 150.0
+    assessment = assess_clinical_applicability(product, {
+        "id": "INGR_GREEN_TEA", "matched_source_row_refs": [subject["raw_source_path"]]}, assess_amount=False)
+    assert assessment["status"] == "unresolved"
+    assert assessment["reason_code"] == "invalid_applicability_contract"
+    assert assessment["matched_source_row_refs"] == ["ingredientRows[1].nestedRows[1]"]
 
 
 def test_nested_display_only_child_cannot_borrow_the_complex_amount(enricher):
@@ -78,16 +88,19 @@ def test_nested_display_only_child_cannot_borrow_the_complex_amount(enricher):
         row["raw_source_path"] for row in rows
     }
     # A named extract remains an Evidence subject without a member dose.
-    # The invariant here is amount ownership, not absence of its literature.
+    # Subject identity and amount ownership cannot complete its native review.
     matches = [m for m in product["evidence_data"]["clinical_matches"]
                if m["id"] == "INGR_GREEN_TEA"]
-    assert len(matches) == 1
-    assert matches[0]["matched_source_row_refs"] == ["ingredientRows[1].nestedRows[1]"]
+    assert matches == []
     from clinical_applicability import assess_clinical_applicability
     from dose_assessment import positive_clinical_benchmark
     from scoring_input_contract import get_evidence_subject_rows
     from scoring_v4.exposure import row_exposure
-    assert assess_clinical_applicability(product, matches[0], assess_amount=False)["status"] == "applicable"
+    assessment = assess_clinical_applicability(product, {
+        "id": "INGR_GREEN_TEA", "matched_source_row_refs": ["ingredientRows[1].nestedRows[1]"]},
+        assess_amount=False)
+    assert assessment["status"] == "unresolved"
+    assert assessment["reason_code"] == "invalid_applicability_contract"
     child = next(row for row in product["activeIngredients"][0]["nestedIngredients"]
                  if row["raw_source_path"] == "ingredientRows[1].nestedRows[1]")
     assert row_exposure(product, child, basis="daily", unit="mg").benchmark_amount is None

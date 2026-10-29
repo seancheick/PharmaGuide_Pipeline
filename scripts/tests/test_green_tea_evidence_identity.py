@@ -25,6 +25,26 @@ def enricher() -> SupplementEnricherV3:
     return SupplementEnricherV3()
 
 
+def _approved_scope_source(monkeypatch, entry):
+    """Synthetic endpoint approval isolates preparation/source-binding mechanics."""
+    import clinical_applicability
+    from test_evidence_resolver import _approved_test_source
+    pmids = (entry.get("applicability") or {}).get("source_pmids") or ["28661438"]
+    source = _approved_test_source(entry, name=entry.get("standard_name", "Green Tea Extract"),
+        pmid=pmids[0], outcome="Body weight change")
+    source["study_contexts"][0].update(condition="modest_weight_change", evidence_role="pooled_synthesis")
+    current = clinical_applicability.reviewed_entries()
+    monkeypatch.setattr(clinical_applicability, "reviewed_entries", lambda: {**current, source["id"]: source})
+    return source
+
+
+@pytest.fixture
+def eligible_green_preparation_source(monkeypatch):
+    # Explicit fixture only: actual raw-source and registry assertions below
+    # retain the unapproved production record and do not receive this source.
+    return _approved_scope_source(monkeypatch, deepcopy(reviewed_entries()["INGR_GREEN_TEA"]))
+
+
 def _source_product(name: str, *, forms: list[dict] | None = None) -> dict:
     """Retain the source and identity fields used by the real cleaned rows."""
     row = {
@@ -100,9 +120,11 @@ def test_spelled_out_egcg_reaches_the_existing_catechin_evidence(enricher, label
     row["raw_taxonomy"].update(category="non-nutrient/non-botanical", ingredientGroup="EGCG")
     product, issues = enricher.enrich_product(deepcopy(source))
     assert product.get("enrichment_status") != "validation_failed", issues
-    matches = [m for m in resolved_clinical_matches(product)[0] if m["id"] == "INGR_GREEN_TEA"]
-    assert len(matches) == 1
-    assert matches[0]["matched_source_row_refs"] == ["ingredientRows[1]"]
+    assert not any(m["id"] == "INGR_GREEN_TEA" for m in resolved_clinical_matches(product)[0])
+    rejected = next(m for m in product["evidence_data"]["rejected_clinical_matches"] if m["id"] == "INGR_GREEN_TEA")
+    assert rejected["status"] == "unresolved"
+    assert rejected["reason_code"] == "invalid_applicability_contract"
+    assert rejected["matched_source_row_refs"] == ["ingredientRows[1]"]
     assert product["activeIngredients"][0]["quantity"] == 300.0
 
 
@@ -134,9 +156,11 @@ def test_original_extract_rows_reach_existing_evidence(
     assert enriched.get("enrichment_status") != "validation_failed", issues
 
     matches, _ = resolved_clinical_matches(enriched)
-    match = next((row for row in matches if row["id"] == "INGR_GREEN_TEA"), None)
-    assert match is not None
-    assert match["matched_source_row_refs"] == [source_ref]
+    assert not any(row["id"] == "INGR_GREEN_TEA" for row in matches)
+    rejected = next(row for row in enriched["evidence_data"]["rejected_clinical_matches"] if row["id"] == "INGR_GREEN_TEA")
+    assert rejected["status"] == "unresolved"
+    assert rejected["reason_code"] == "invalid_applicability_contract"
+    assert rejected["matched_source_row_refs"] == [source_ref]
     active = enriched["activeIngredients"][0]
     assert active["canonical_id"] == "green_tea"
     for field in ("name", "raw_source_text", "forms", "quantity", "raw_source_path"):
@@ -146,7 +170,7 @@ def test_original_extract_rows_reach_existing_evidence(
 @pytest.mark.parametrize("name", [
     "Matcha Green Tea, Powder", "organic Green Tea", "Camellia sinensis",
 ])
-def test_replayed_generic_match_does_not_credit_unproven_preparation(name: str) -> None:
+def test_replayed_generic_match_does_not_credit_unproven_preparation(name: str, eligible_green_preparation_source) -> None:
     product = _source_product(name)
     product["evidence_data"] = {"clinical_matches": [_replayed_match(product)]}
     before = deepcopy(product)
@@ -166,6 +190,7 @@ def test_replayed_generic_match_does_not_credit_unproven_preparation(name: str) 
 ])
 def test_original_source_owner_cannot_be_overruled_by_derived_preparation(
     stale_surface: str,
+    eligible_green_preparation_source,
 ) -> None:
     product = _source_product("Matcha Green Tea, Powder")
     active = product["activeIngredients"][0]
@@ -192,7 +217,7 @@ def test_original_source_owner_cannot_be_overruled_by_derived_preparation(
     assert product == before
 
 
-def test_unrelated_theanine_row_does_not_exclude_a_source_owned_extract() -> None:
+def test_unrelated_theanine_row_does_not_exclude_a_source_owned_extract(eligible_green_preparation_source) -> None:
     product = _source_product("Green Tea Extract")
     generated = deepcopy(product["activeIngredients"][0])
     generated.update(name="L-Theanine", canonical_id="l_theanine",
@@ -207,7 +232,7 @@ def test_unrelated_theanine_row_does_not_exclude_a_source_owned_extract() -> Non
 
 
 @pytest.mark.parametrize("references", [["missing"], ["ingredientRows[0]"]])
-def test_missing_or_powder_source_cannot_borrow_a_sibling_extract(references: list[str]) -> None:
+def test_missing_or_powder_source_cannot_borrow_a_sibling_extract(references: list[str], eligible_green_preparation_source) -> None:
     product = _source_product("Matcha Green Tea, Powder")
     sibling = deepcopy(_source_product("Green Tea Extract")["activeIngredients"][0])
     sibling["raw_source_path"] = "ingredientRows[1]"
@@ -218,7 +243,7 @@ def test_missing_or_powder_source_cannot_borrow_a_sibling_extract(references: li
     assert resolved_clinical_matches(product)[0] == []
 
 
-def test_legacy_iqd_only_label_proof_remains_usable() -> None:
+def test_legacy_iqd_only_label_proof_remains_usable(eligible_green_preparation_source) -> None:
     product = _source_product("Green Tea Extract")
     match = _replayed_match(product)
     product["ingredient_quality_data"] = {"ingredients_scorable": product.pop("activeIngredients")}
@@ -226,7 +251,7 @@ def test_legacy_iqd_only_label_proof_remains_usable() -> None:
     assert resolved_clinical_matches(product)[0][0]["id"] == "INGR_GREEN_TEA"
 
 
-def test_refless_generated_extract_cannot_replace_original_powder() -> None:
+def test_refless_generated_extract_cannot_replace_original_powder(eligible_green_preparation_source) -> None:
     product = _source_product("Matcha Green Tea, Powder")
     generated = _source_product("Green Tea Extract")["activeIngredients"][0]
     generated.pop("raw_source_path")
@@ -244,6 +269,7 @@ def test_refless_generated_extract_cannot_replace_original_powder() -> None:
 @pytest.mark.parametrize("source_ref", [None, "", "   ", 42])
 def test_source_required_legacy_fallback_needs_a_valid_owner_reference(
     owner_kind: str, source_ref: object,
+    eligible_green_preparation_source,
 ) -> None:
     product = _source_product("Green Tea Extract")
     match = _replayed_match(product)
@@ -261,7 +287,7 @@ def test_source_required_legacy_fallback_needs_a_valid_owner_reference(
     assert product == before
 
 
-def test_source_required_legacy_fallback_cannot_guess_from_canonical_alone() -> None:
+def test_source_required_legacy_fallback_cannot_guess_from_canonical_alone(eligible_green_preparation_source) -> None:
     product = _source_product("Green Tea Extract")
     match = _replayed_match(product)
     match.update(ingredient="Unlinked preparation", matched_source_row_refs=[])
@@ -273,6 +299,7 @@ def test_source_required_legacy_fallback_cannot_guess_from_canonical_alone() -> 
 @pytest.mark.parametrize("match_link", ["absent", "empty", "forged"])
 def test_generated_source_reference_cannot_displace_any_original_owner(
     generated_ref: str | None, match_link: str,
+    eligible_green_preparation_source,
 ) -> None:
     product = _source_product("Matcha Green Tea, Powder")
     generated = _source_product("Green Tea Extract")["activeIngredients"][0]
@@ -297,6 +324,7 @@ def test_generated_source_reference_cannot_displace_any_original_owner(
 @pytest.mark.parametrize("match_link", ["absent", "empty"])
 def test_exact_legacy_fallback_keeps_a_genuinely_referenced_source_owner(
     owner_kind: str, match_link: str,
+    eligible_green_preparation_source,
 ) -> None:
     product = _source_product("Green Tea Extract")
     match = _replayed_match(product)
@@ -320,7 +348,7 @@ def test_exact_legacy_fallback_keeps_a_genuinely_referenced_source_owner(
     "Green Tea leaves extract",
     "Green Tea decaffeinated extract",
 ])
-def test_source_declared_extract_spelling_variants_remain_applicable(name: str) -> None:
+def test_source_declared_extract_spelling_variants_remain_applicable(name: str, eligible_green_preparation_source) -> None:
     """Preserve exact extract spellings found in the current clinical corpus."""
     product = _source_product(name)
     product["evidence_data"] = {"clinical_matches": [_replayed_match(product)]}
@@ -332,7 +360,7 @@ def test_source_declared_extract_spelling_variants_remain_applicable(name: str) 
 
 
 @pytest.mark.parametrize("name", ["Greenselect", "Green Tea Phytosome"])
-def test_verified_extract_preparation_name_can_establish_source_scope(name: str) -> None:
+def test_verified_extract_preparation_name_can_establish_source_scope(name: str, eligible_green_preparation_source) -> None:
     product = _source_product(name)
     product["evidence_data"] = {"clinical_matches": [_replayed_match(product)]}
     accepted, _ = resolved_clinical_matches(product)
@@ -340,7 +368,7 @@ def test_verified_extract_preparation_name_can_establish_source_scope(name: str)
     assert accepted[0]["applicability_assessment"]["source_row_ref"] == "ingredientRows[0]"
 
 
-def test_caffeine_primary_cannot_borrow_extract_evidence_from_its_source_form() -> None:
+def test_caffeine_primary_cannot_borrow_extract_evidence_from_its_source_form(eligible_green_preparation_source) -> None:
     product = _source_product("Caffeine", forms=[{"name": "Green Tea Extract"}])
     product["activeIngredients"][0].update(canonical_id="caffeine", standardName="Caffeine")
     product["evidence_data"] = {"clinical_matches": [_replayed_match(product)]}
@@ -349,13 +377,13 @@ def test_caffeine_primary_cannot_borrow_extract_evidence_from_its_source_form() 
     assert rejected[0]["reason_code"] == "clinical_identity_excluded"
 
 
-def test_caffeine_constituent_does_not_exclude_the_extract_primary() -> None:
+def test_caffeine_constituent_does_not_exclude_the_extract_primary(eligible_green_preparation_source) -> None:
     product = _source_product("Green Tea Extract", forms=[{"name": "Caffeine"}])
     product["evidence_data"] = {"clinical_matches": [_replayed_match(product)]}
     assert resolved_clinical_matches(product)[0][0]["id"] == "INGR_GREEN_TEA"
 
 
-def test_original_without_reference_still_prevents_generated_source_substitution() -> None:
+def test_original_without_reference_still_prevents_generated_source_substitution(eligible_green_preparation_source) -> None:
     product = _source_product("Matcha Green Tea, Powder")
     match = _replayed_match(product)
     product["activeIngredients"][0].pop("raw_source_path")
@@ -367,7 +395,7 @@ def test_original_without_reference_still_prevents_generated_source_substitution
 
 
 @pytest.mark.parametrize("legacy_surface", ["generated_row", "canonical_fallback"])
-def test_reference_hardening_does_not_change_default_policies(legacy_surface: str) -> None:
+def test_reference_hardening_does_not_change_default_policies(legacy_surface: str, monkeypatch) -> None:
     product = _source_product("Green Tea Extract")
     entry = _replayed_match(product)
     entry.update(id="TEST_DEFAULT_REFERENCE_POLICY", matched_source_row_refs=[],
@@ -381,6 +409,7 @@ def test_reference_hardening_does_not_change_default_policies(legacy_surface: st
         )
     else:
         entry["ingredient"] = "Legacy name without an exact match"
+    _approved_scope_source(monkeypatch, entry)
     assert assess_clinical_applicability(product, entry)["status"] == "applicable"
 
 
@@ -402,29 +431,33 @@ def test_reference_hardening_does_not_change_default_policies(legacy_surface: st
     ("excluded_form_terms", [" "]),
     ("excluded_form_terms", ["-"]),
 ])
-def test_malformed_new_scope_constraints_fail_closed(field: str, value: object) -> None:
+def test_malformed_new_scope_constraints_fail_closed(field: str, value: object, monkeypatch) -> None:
     product = _source_product("Green Tea Extract")
     entry = _replayed_match(product)
     entry["id"] = "TEST_PREPARATION_SCOPE"
     entry["applicability"] = deepcopy(reviewed_entries()["INGR_GREEN_TEA"]["applicability"])
     entry["applicability"][field] = value
+    _approved_scope_source(monkeypatch, entry)
     assert assess_clinical_applicability(product, entry) == {
         "status": "unresolved", "reason_code": "invalid_applicability_contract",
     }
 
 
-def test_source_only_constraint_does_not_change_other_records_default_behavior() -> None:
+def test_source_only_constraint_does_not_change_other_records_default_behavior(monkeypatch) -> None:
     product = _source_product("Matcha Green Tea, Powder")
     product["activeIngredients"][0]["matched_form"] = "Green Tea Extract"
     entry = _replayed_match(product)
     entry.update(id="TEST_LEGACY_FORM_SCOPE", applicability={
         "scope": "ingredient", "required_form_terms": ["green tea extract"],
     })
+    _approved_scope_source(monkeypatch, entry)
     assert assess_clinical_applicability(product, entry)["status"] == "applicable"
 
 
 def test_registry_scope_does_not_upgrade_strength_or_invent_dose_cutoffs() -> None:
     entry = reviewed_entries()["INGR_GREEN_TEA"]
+    from clinical_applicability import assess_clinical_source_review
+    assert assess_clinical_source_review(entry)["errors"] == ["clinical_source_contexts_missing"]
     assert entry["effect_direction"] == "positive_weak"
     assert entry["score_contribution"] == "tier_1"
     assert entry["study_type"] == "systematic_review_meta"
@@ -460,7 +493,7 @@ def test_hemp_source_keeps_its_independent_theanine_evidence(
     assert row == before["activeIngredients"][0]
 
 
-def test_preparation_on_its_own_source_form_remains_applicable() -> None:
+def test_preparation_on_its_own_source_form_remains_applicable(eligible_green_preparation_source) -> None:
     product = _source_product("Camellia sinensis", forms=[{"name": "Green Tea Extract"}])
     product["evidence_data"] = {"clinical_matches": [_replayed_match(product)]}
     accepted, _ = resolved_clinical_matches(product)
@@ -470,6 +503,7 @@ def test_preparation_on_its_own_source_form_remains_applicable() -> None:
 @pytest.mark.parametrize("source_kind", ["label", "form", "hemp_98_percent", "canonical"])
 def test_theanine_preparation_cannot_replay_generic_green_tea_evidence(
     source_kind: str,
+    eligible_green_preparation_source,
 ) -> None:
     product = _source_product("Green Tea Extract")
     row = product["activeIngredients"][0]

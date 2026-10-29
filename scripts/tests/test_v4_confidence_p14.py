@@ -93,10 +93,34 @@ def _product(**extra) -> dict:
     return product
 
 
-def test_confidence_high_when_evidence_identity_label_and_verification_are_strong() -> None:
+
+def _install_reviewed_confidence_source(monkeypatch, product, *, direction="positive"):
+    """Approve only this synthetic mechanics source; real registry holds stay intact."""
+    import clinical_applicability as owner
+    import evidence_resolver
+    from test_evidence_resolver import _approved_test_source
+
+    row = product["ingredient_quality_data"]["ingredients_scorable"][0]
+    row["raw_source_path"] = "ingredientRows[0]"
+    source = _approved_test_source(product["evidence_data"]["clinical_matches"][0],
+                                   name=row["name"])
+    source["study_contexts"][0]["outcomes"][0]["direction"] = direction
+    current = owner.reviewed_entries()
+    index = evidence_resolver._backed_studies_index()
+    monkeypatch.setattr(owner, "reviewed_entries", lambda: {**current, source["id"]: source})
+    monkeypatch.setattr(evidence_resolver, "_backed_studies_index", lambda: {
+        **index, row["canonical_id"]: [*index.get(row["canonical_id"], []), source]})
+    product["evidence_data"]["clinical_matches"] = [{**source,
+        "matched_canonical_ids": [row["canonical_id"]],
+        "matched_source_row_refs": [row["raw_source_path"]]}]
+
+
+def test_confidence_high_when_evidence_identity_label_and_verification_are_strong(monkeypatch) -> None:
     from score_supplements_v4 import score_product_v4
 
-    out = score_product_v4(_product())
+    product = _product()
+    _install_reviewed_confidence_source(monkeypatch, product)
+    out = score_product_v4(product)
     confidence = out["v4_breakdown"]["confidence"]
 
     assert out["v4_confidence"] == "high"
@@ -133,7 +157,7 @@ def test_unreviewed_evidence_is_provisional_not_low_score_confidence() -> None:
     assert out["v4_confidence"] == "moderate"
 
 
-def test_reviewed_limited_evidence_is_complete_not_missing_review() -> None:
+def test_reviewed_limited_evidence_is_complete_not_missing_review(monkeypatch) -> None:
     from score_supplements_v4 import score_product_v4
 
     product = _product(
@@ -159,6 +183,7 @@ def test_reviewed_limited_evidence_is_complete_not_missing_review() -> None:
         },
     )
 
+    _install_reviewed_confidence_source(monkeypatch, product, direction="null")
     out = score_product_v4(product)
     confidence = out["v4_breakdown"]["confidence"]
 
@@ -418,7 +443,7 @@ def test_caller_scope_count_cannot_manufacture_high_verification_confidence() ->
     assert "cert_registry_stale_or_missing_provenance" in drivers
 
 
-def test_verified_cert_dominates_secondary_claimed_only_cert_confidence() -> None:
+def test_verified_cert_dominates_secondary_claimed_only_cert_confidence(monkeypatch) -> None:
     """Regression: products can carry one real SKU cert plus another label claim
     whose registry match was absent. The unresolved secondary claim must not drag
     a genuinely SKU-verified product's verification confidence to low."""
@@ -432,6 +457,7 @@ def test_verified_cert_dominates_secondary_claimed_only_cert_confidence() -> Non
             {"program": "USP Verified", "scope": "claimed_only"},
         ]
     )
+    _install_reviewed_confidence_source(monkeypatch, product)
     out = score_product_v4(product)
     confidence = out["v4_breakdown"]["confidence"]
 

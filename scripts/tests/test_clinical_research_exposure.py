@@ -182,13 +182,14 @@ def test_wrong_declared_purpose_cannot_borrow_a_research_regimen():
 def test_population_context_is_preserved_without_inventing_patient_membership():
     from dose_assessment import clinical_research_exposure_assessments
     p = product("INGR_D_MANNOSE", "D-Mannose", "d_mannose", 2000)
-    # Product tags cannot establish a recurrent-UTI diagnosis or membership in
-    # the clinical cohort. The assessment must remain explicitly study-scoped.
-    p["targetGroups"] = ["Men", "Children 4 or More Years of Age"]
+    # The source population remains study-scoped, not a diagnosis of a user.
     a, = clinical_research_exposure_assessments(p)
     assert "Women 18 or older" in a["studied_population"]
     assert "adult women with recurrent UTI" in a["notes"]
     assert a["supported_outcomes"] == ["recurrent_uti_prevention"]
+    # Explicitly conflicting label populations cannot inherit that exposure.
+    p["targetGroups"] = ["Men", "Children 4 or More Years of Age"]
+    assert clinical_research_exposure_assessments(p) == []
 
 
 def test_undisclosed_blend_member_never_borrows_the_parent_total(enricher):

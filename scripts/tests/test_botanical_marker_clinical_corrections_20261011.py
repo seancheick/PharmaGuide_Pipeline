@@ -76,6 +76,15 @@ def test_knotweed_hold_does_not_turn_undisclosed_amount_into_zero(enricher):
     assert control.get('scoring_eligible') is not False
 
 
+def _approved_marker_source(monkeypatch, study):
+    import clinical_applicability
+    from test_evidence_resolver import _approved_test_source
+    source = _approved_test_source({**study, "ingredient": "Resveratrol"}, name="Resveratrol")
+    current = clinical_applicability.reviewed_entries()
+    monkeypatch.setattr(clinical_applicability, "reviewed_entries", lambda: {**current, source["id"]: source})
+    return source
+
+
 def test_eligible_marker_study_cannot_override_relationship_hold(monkeypatch):
     from scoring_v4.modules.generic_evidence import score_evidence
     import clinical_applicability
@@ -85,6 +94,7 @@ def test_eligible_marker_study_cannot_override_relationship_hold(monkeypatch):
              'evidence_level': 'ingredient-human', 'effect_direction': 'positive_strong',
              'total_enrollment': 100, 'scoring_eligible': True,
              'references_structured': [{'pmid': '28661438'}]}
+    study = _approved_marker_source(monkeypatch, study)
     e.databases['backed_clinical_studies'] = {'backed_clinical_studies': [study]}
     # Inspect the production payload before applicability filtering; the study's
     # own eligibility must not overwrite the separately held relationship.
@@ -118,6 +128,7 @@ def test_held_marker_cannot_consume_independent_eligible_source(monkeypatch, hel
              'evidence_level': 'ingredient-human', 'effect_direction': 'positive_strong',
              'total_enrollment': 100, 'scoring_eligible': True,
              'references_structured': [{'pmid': '28661438'}]}
+    study = _approved_marker_source(monkeypatch, study)
     e.databases['backed_clinical_studies'] = {'backed_clinical_studies': [study]}
     monkeypatch.setattr(clinical_applicability, 'filter_clinical_matches', lambda p, m: (m, []))
     rows = []
