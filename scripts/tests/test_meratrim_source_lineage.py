@@ -97,6 +97,17 @@ def test_exact_meratrim_flower_head_source_resolves_without_allocating_blend(raw
     assert assessment['assessment_status'] == 'complete'
     assert assessment['reason_code'] == 'amount_not_declared'
     assert 'dose_benchmark_identity_unresolved' not in scored['assessment_readiness']['release_assessment']['blockers']
+    from build_final_db import build_detail_blob
+    blob = build_detail_blob(enriched, scored)
+    public_parent = next(r for r in blob['ingredients']
+                         if r['raw_source_path'] == 'ingredientRows[0]')
+    assert public_parent['quantity'] == 400
+    child_labels = [r for r in blob['display_ingredients']
+                    if r.get('raw_source_path', '').startswith('ingredientRows[0].nestedRows[')]
+    assert len(child_labels) == 2
+    assert all(r['exact_dose_text'] == '' for r in child_labels)
+    assert not any(r.get('canonical_id') == 'sphaeranthus_indicus' and r.get('quantity') == 400
+                   for r in blob['ingredients'])
 
 
 @pytest.mark.parametrize('label', ['Indian Sphaeranthus', 'Sphaeranthus',
