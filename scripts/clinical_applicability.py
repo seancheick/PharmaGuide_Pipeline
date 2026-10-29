@@ -1112,6 +1112,15 @@ def assess_clinical_applicability(product: Mapping, entry: Mapping, *, assess_am
     # an undosed named material remains eligible for its form/literature review.
     exposure_required = assess_amount and policy.get("dose_unit") is not None
     applicable_rows = []
+    components = {_key(value) for value in reference.get("aggregate_canonical_ids") or []}
+    if components:
+        from scoring_input_contract import get_evidence_subject_rows
+        refs = set(entry.get("matched_source_row_refs") or [])
+        composition_owners = [row for row in get_evidence_subject_rows(dict(product))
+                              if row.get("raw_source_path") in refs
+                              and {_key(value) for value in row.get("verified_child_canonicals") or []} == components]
+        if len(composition_owners) != 1:
+            return {"status": "unresolved", "reason_code": "clinical_source_row_unresolved"}
     linked_rows = _linked_rows(product, entry, source_only=source_only, evidence_only=not exposure_required,
                                discriminating_terms=policy.get("required_form_terms"))
     preparation_rows = (_linked_rows(
@@ -1130,6 +1139,11 @@ def assess_clinical_applicability(product: Mapping, entry: Mapping, *, assess_am
                  for row in linked_rows}) == 1
         and all(_key(row.get("canonical_id")) and _row_text(row).strip() for row in linked_rows))
     for row in linked_rows:
+        from scoring_input_contract import declared_source_form_matches_material
+        if not declared_source_form_matches_material(row, [reference.get("standard_name"),
+                                                          *(reference.get("aliases") or [])]):
+            reasons.append("clinical_form_mismatch")
+            continue
         text = _row_text(row, source_only=source_only)
         if allowed and not (allowed & ({dosage_form} | _source_delivery_forms(product, row, policy.get("excluded_form_terms", [])))):
             reasons.append("clinical_delivery_mismatch")
@@ -1250,7 +1264,16 @@ def filter_clinical_matches(product: Mapping, matches: list[dict], *, assess_amo
             names = {row.get("name") for row in _rows(product, source_only=True, evidence_only=True)
                      if (row.get("raw_source_path") or row.get("source_row_ref")) in passing_refs
                      and row.get("name")}
-            if len(names) == 1:
+            from scoring_input_contract import get_evidence_subject_rows
+            aggregate_components = {_key(value) for value in entry.get("aggregate_canonical_ids") or []}
+            aggregate_owner = any(
+                row.get("canonical_id") in decision["matched_canonical_ids"]
+                and (row.get("raw_source_path") or row.get("source_row_ref")) in passing_refs
+                and {_key(value) for value in row.get("verified_child_canonicals") or []} == aggregate_components
+                for row in get_evidence_subject_rows(dict(product))) if aggregate_components else False
+            if aggregate_owner:
+                entry["ingredient"] = entry.get("standard_name") or entry.get("study_name")
+            elif len(names) == 1:
                 entry["ingredient"] = names.pop()
             elif names and entry.get("ingredient") not in names:
                 entry["ingredient"] = (entry.get("standard_name") or entry.get("study_name")

@@ -359,25 +359,20 @@ def test_nested_creatine_identity_alone_cannot_claim_blend_dose() -> None:
 def test_disclosed_bcaa_aggregate_recovers_its_mixture_evidence() -> None:
     from scoring_v4.modules.generic_evidence import score_evidence
 
-    bcaa = _ingredient(
-        name="Branched-Chain Amino Acids",
-        canonical_id="branched_chain_amino_acids",
-        quantity=7,
-        unit="g",
-    )
-    bcaa.update(
-        evidence_type="blend_anchor_mass",
-        scoring_input_kind="product_level_evidence",
-    )
-    product = _product(
-        product_name="BCAA 2:1:1",
-        ingredients=[bcaa, _ingredient(name="Calcium", canonical_id="calcium", quantity=65)],
-        matches=[_match(id="CAL", ingredient="Calcium", standard_name="Calcium")],
-    )
+    # This mechanic needs the complete declared source mixture, not merely a
+    # synthetic canonical/name that supplies no composition or lineage proof.
+    import json
+    from pathlib import Path
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    from enrich_supplements_v3 import SupplementEnricherV3
+    raw = json.loads((Path(__file__).parent / "fixtures/brand_generic_295064_raw.json").read_text())
+    product, _ = SupplementEnricherV3().enrich_product(EnhancedDSLDNormalizer().normalize_product(raw))
+    product["evidence_data"]["clinical_matches"] = [_match(id="CAL", ingredient="Calcium", standard_name="Calcium")]
 
     payload = score_evidence(product, owner_scoped=True)
 
-    assert payload["metadata"]["evidence_owner_canonicals"] == ["branched_chain_amino_acids"]
+    assert set(payload["metadata"]["evidence_owner_canonicals"]) == {
+        "branched_chain_amino_acids", "l_leucine", "l_isoleucine", "l_valine"}
     assert payload["metadata"]["recovered_matches"] == ["INGR_BRANCHED_CHAIN_AMINO_ACIDS"]
     assert payload["score"] > 0.0
 

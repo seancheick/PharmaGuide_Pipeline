@@ -16,7 +16,7 @@ import json
 import math
 import re
 from pathlib import Path
-from typing import Any, Callable, Dict, List, Mapping, Optional, Tuple
+from typing import Any, Callable, Dict, Iterable, List, Mapping, Optional, Tuple
 
 # Shared, dependency-free reference resolver (contract -> shared resolver <- scorer).
 # Importing it here is safe: the resolver imports nothing from the contract or
@@ -1215,8 +1215,89 @@ def _children_are_exactly_the_eaas(owner: Dict[str, Any], rows: List[Dict[str, A
     return len(canonicals) == len(EAA_CANONICALS) and set(canonicals) == set(EAA_CANONICALS)
 
 
+def bcaa_mixture_identity_eligible(
+    product: Dict,
+    active_ingredients: List[Dict],
+) -> bool:
+    """Require a complete disclosed BCAA triad and reject broader EAA routing."""
+    from normalization import make_normalized_key
+    canonical_ids = set()
+    for row in active_ingredients:
+        if not isinstance(row, dict):
+            continue
+        canonical_id = str(
+            row.get("canonical_id")
+            or row.get("parent_key")
+            or row.get("normalized_key")
+            or ""
+        ).strip().lower()
+        if not canonical_id:
+            canonical_id = make_normalized_key(
+                str(
+                    row.get("standardName")
+                    or row.get("standard_name")
+                    or row.get("name")
+                    or ""
+                )
+            )
+        if canonical_id:
+            canonical_ids.add(canonical_id)
+    if not BCAA_CANONICALS.issubset(canonical_ids):
+        return False
+    if set(EAA_CANONICALS).issubset(canonical_ids) or "essential_amino_acids" in canonical_ids:
+        return False
+
+    product_text = " ".join(
+        str(product.get(field) or "")
+        for field in ("fullName", "product_name", "name")
+    ).lower()
+    product_text = re.sub(r"[-_/]+", " ", product_text)
+    if re.search(r"(?<![a-z0-9])eaa(?:s)?(?![a-z0-9])", product_text):
+        return False
+    if re.search(
+        r"(?<![a-z0-9])essential\s+amino\s+acids?(?![a-z0-9])",
+        product_text,
+    ):
+        return False
+
+    explicit_bcaa = bool(
+        re.search(
+            r"(?<![a-z0-9])bcaa(?:s)?(?![a-z0-9])"
+            r"|(?<![a-z0-9])branched\s+chain\s+amino\s+acids?(?![a-z0-9])",
+            product_text,
+        )
+    )
+    if explicit_bcaa or any(_norm(row.get("canonical_id")) == "branched_chain_amino_acids"
+                            for row in active_ingredients if isinstance(row, dict)):
+        return True
+
+    amino_acid_canonicals = set()
+    has_unidentified_amino_acid = False
+    for row in active_ingredients:
+        if not isinstance(row, dict):
+            continue
+        taxonomy = _safe_dict(row.get("raw_taxonomy"))
+        raw_category = str(row.get("raw_category") or taxonomy.get("category") or "").lower()
+        ingredient_group = str(row.get("ingredientGroup") or taxonomy.get("ingredientGroup") or "").lower()
+        if "amino acid" not in raw_category and "amino acid" not in ingredient_group:
+            continue
+        canonical_id = str(
+            row.get("canonical_id")
+            or row.get("parent_key")
+            or row.get("normalized_key")
+            or ""
+        ).strip().lower()
+        if canonical_id:
+            amino_acid_canonicals.add(canonical_id)
+        else:
+            has_unidentified_amino_acid = True
+    return (
+        not has_unidentified_amino_acid
+        and amino_acid_canonicals == BCAA_CANONICALS
+    )
+
 def _derive_explicit_eaa_aggregate_evidence(
-    rows: List[Dict[str, Any]],
+    rows: List[Dict[str, Any]], product: Optional[Dict[str, Any]] = None,
 ) -> List[Dict[str, Any]]:
     """Project one explicitly declared complete-EAA dose.
 
@@ -1268,6 +1349,76 @@ def _derive_explicit_eaa_aggregate_evidence(
         item["verified_child_canonicals"] = sorted(verified_children)
         if any(_positive_quantity(row) is None for row in child_rows):
             item["profile_disclosure_status"] = "complete_identity_profile_amounts_undisclosed"
+        item["canonical_source_db"] = "verified_label_child_aggregate"
+        evidence.append(item)
+    # The same source-composition owner also represents the complete BCAA
+    # preparation. A constituent proves composition, never the whole trial.
+    general_bcaa = bcaa_mixture_identity_eligible(product or {}, rows)
+    if not general_bcaa and not any(
+            _norm(row.get("canonical_id")) == "branched_chain_amino_acids"
+            and _positive_quantity(row) is not None and _unit_is_mass(_row_unit(row)) for row in rows):
+        return evidence
+    by_ref = {str(row.get("raw_source_path")): row for row in rows
+              if row.get("raw_source_path")}
+    groups: Dict[str, List[Dict[str, Any]]] = {}
+    for row in by_ref.values():
+        if _norm(row.get("canonical_id")) in BCAA_CANONICALS:
+            ref = str(row["raw_source_path"])
+            parent = str(row.get("parent_source_path") or (
+                _aggregate_parent_source_path(row) if ".nestedRows[" in ref else ""))
+            groups.setdefault(parent, []).append(row)
+    from scoring_v4.modules.sports_helpers import group_bcaa
+    for parent_ref, children in groups.items():
+        identities = [_norm(row.get("canonical_id")) for row in children]
+        if len(identities) != len(BCAA_CANONICALS) or set(identities) != set(BCAA_CANONICALS):
+            continue
+        # A larger EAA preparation must not become its BCAA subgroup.
+        peers = [row for row in by_ref.values()
+                 if str(row.get("parent_source_path") or (
+                     _aggregate_parent_source_path(row) if ".nestedRows[" in str(row.get("raw_source_path")) else "")) == parent_ref]
+        if any(_norm(row.get("canonical_id")) in set(EAA_CANONICALS) - set(BCAA_CANONICALS)
+               for row in peers):
+            continue
+        if any(row.get("identity_disposition") is not None
+               and not is_identity_scoreable(row["identity_disposition"]) for row in children):
+            continue
+        # Exact printed zero is a known non-exposure, unlike NP/unknown
+        # or a trace bound. Reuse the disclosure/exposure owner's exactness.
+        if any(_positive_quantity(row, allow_zero=True) == 0
+               and has_source_printed_amount(row, allow_zero=True) for row in children):
+            continue
+        owner = by_ref.get(parent_ref) or children[0]
+        grouped = group_bcaa(children)
+        from scoring_v4.exposure import row_exposure
+        grouped["complete"] = grouped["complete"] and all(
+            row_exposure(product or {}, row, basis="per_use", unit="g").exact for row in children)
+        parent_mass = (_positive_quantity(owner) if parent_ref in by_ref
+                       and _norm(owner.get("canonical_id")) == "branched_chain_amino_acids"
+                       and _unit_is_mass(_row_unit(owner))
+                       and row_exposure(product or {}, owner, basis="per_use", unit="g").exact
+                       and len([row for row in peers if row.get("raw_source_path") != parent_ref]) == 3 else None)
+        # Generic EAA discovery is not BCAA evidence. The existing narrower
+        # exception is an independently named, quantified BCAA preparation
+        # whose own source children establish the complete mixture.
+        explicit_preparation = parent_mass is not None
+        if not general_bcaa and not explicit_preparation:
+            continue
+        if grouped["complete"] or explicit_preparation:
+            item = _evidence_base(
+                row=owner, evidence_type="blend_anchor_mass" if explicit_preparation else "sports_primary_dose",
+                canonical_id="branched_chain_amino_acids",
+                clean_identity_id="branched_chain_amino_acids",
+                scoring_parent_id="branched_chain_amino_acids",
+                dose_value=parent_mass if explicit_preparation else grouped["total_g"],
+                dose_unit=str(_row_unit(owner)) if explicit_preparation else "g", evidence_scope="blend_level",
+                confidence="high", reason="explicit_complete_bcaa_aggregate_owner",
+                name="Branched Chain Amino Acids")
+        else:
+            item = _sports_primary_identity_without_dose(owner, "branched_chain_amino_acids")
+            item["name"] = "Branched Chain Amino Acids"
+        item["linked_rows"] = list(dict.fromkeys([str(item["raw_source_path"]),
+            *(str(row["raw_source_path"]) for row in children)]))
+        item["verified_child_canonicals"] = sorted(identities)
         item["canonical_source_db"] = "verified_label_child_aggregate"
         evidence.append(item)
     return evidence
@@ -2131,7 +2282,7 @@ def derive_product_scoring_evidence(product: Dict[str, Any]) -> List[Dict[str, A
             )
             evidence.append(item)
 
-    eaa_aggregates = _derive_explicit_eaa_aggregate_evidence(active_rows)
+    eaa_aggregates = _derive_explicit_eaa_aggregate_evidence(active_rows, product)
     eaa_owner_paths = {item["raw_source_path"] for item in eaa_aggregates}
     for item in eaa_aggregates:
         special_evidence_paths.update(
@@ -2777,9 +2928,9 @@ def _product_scoring_evidence_rows(
         if item.get("reason") == "declared_nutrition_protein_mass"
     }
     eaa_owner_paths = {item.get("raw_source_path") for item in derived_evidence_rows
-                       if item.get("reason") == "explicit_complete_eaa_aggregate_owner"}
+                       if item.get("reason") in {"explicit_complete_eaa_aggregate_owner", "explicit_complete_bcaa_aggregate_owner"}}
     valid_eaa_keys = {evidence_key(item) for item in derived_evidence_rows
-                      if item.get("reason") == "explicit_complete_eaa_aggregate_owner"}
+                      if item.get("reason") in {"explicit_complete_eaa_aggregate_owner", "explicit_complete_bcaa_aggregate_owner"}}
     context_fields = (
         "raw_taxonomy",
         "forms",
@@ -2825,14 +2976,17 @@ def _product_scoring_evidence_rows(
         _backfill_product_evidence_identity(product, item)
         evidence_type = _norm(item.get("evidence_type") or item.get("dose_class"))
         dose_class = _norm(item.get("dose_class"))
-        if item.get("reason") == "explicit_complete_eaa_aggregate_owner" and idx < len(native_evidence_rows):
+        if (item.get("reason") in {"explicit_complete_eaa_aggregate_owner", "explicit_complete_bcaa_aggregate_owner"}
+                or (item.get("canonical_source_db") == "verified_label_child_aggregate"
+                    and item.get("verified_child_canonicals"))) and idx < len(native_evidence_rows):
             # A cached profile cannot establish today's source composition.
             # Even a valid cache defers to the freshly qualified projection,
             # including its verified children and current source metadata.
             if evidence_key(item) not in valid_eaa_keys:
                 rejected.append(_reject(item, "stale_explicit_eaa_aggregate_evidence"))
             continue
-        if evidence_type == "blend_anchor_mass" and item.get("raw_source_path") in eaa_owner_paths:
+        if (evidence_type == "blend_anchor_mass" and item.get("raw_source_path") in eaa_owner_paths
+                and item.get("reason") not in {"explicit_complete_eaa_aggregate_owner", "explicit_complete_bcaa_aggregate_owner"}):
             # The verified EAA total owns this preparation, including when a
             # stored generic projection predates that source-qualified join.
             rejected.append(_reject(item, "superseded_eaa_total_projection"))
@@ -3114,6 +3268,22 @@ def declared_protein_source_rows(product: Mapping[str, Any]) -> List[Dict[str, A
             rows.append(row)
     return rows
 
+
+
+def declared_source_form_matches_material(row: Mapping[str, Any], material_names: Iterable[str]) -> bool:
+    """A protein source of a declared amino acid is not that whole protein.
+
+    Keep DSLD's source declaration for the protein macro join, without changing
+    the named constituent's identity into its source material.
+    """
+    taxonomy = _safe_dict(row.get("raw_taxonomy"))
+    category = _norm(taxonomy.get("category") or row.get("raw_category") or row.get("category"))
+    if category.replace("_", " ") != "amino acid":
+        return True
+    forms = _safe_list(taxonomy.get("forms") or row.get("forms"))
+    return not any(isinstance(form, Mapping) and _norm(form.get("category")) == "protein"
+                   and any(_canonical_token_is_bounded_in_text(name, form.get("name"))
+                           for name in material_names if name) for form in forms)
 
 def required_identity_conflicts(product: Dict[str, Any]) -> Dict[str, Dict[str, Any]]:
     """Keep required conflicts and invalid identity projections in coverage.
@@ -3646,6 +3816,13 @@ def get_evidence_subject_rows(product: Mapping[str, Any]) -> List[Dict[str, Any]
         if canonical and canonical not in covered:
             covered.add(canonical)
             rows.append(row)
+    for aggregate in _derive_explicit_eaa_aggregate_evidence(assessable, dict(product)):
+        if (aggregate.get("canonical_id") == "branched_chain_amino_acids"
+                and aggregate.get("canonical_id") not in covered):
+            aggregate = dict(aggregate)
+            aggregate["scoring_input_kind"] = "product_level_evidence"
+            rows.append(aggregate)
+            covered.add(aggregate["canonical_id"])
     return rows
 
 

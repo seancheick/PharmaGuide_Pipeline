@@ -1270,7 +1270,7 @@ class SupplementEnricherV3:
         }
         for row in subject_rows:
             canonical = str(row.get("canonical_id") or "").strip().lower()
-            if canonical in owners and canonical not in covered:
+            if (canonical in owners or row.get("verified_child_canonicals")) and canonical not in covered:
                 covered.add(canonical)
                 ingredients.append(self._active_ingredient_from_scoring_row(row))
         return ingredients
@@ -1441,6 +1441,7 @@ class SupplementEnricherV3:
             "forms": row.get("forms") or [],
             "matched_form": row.get("matched_form"),
             "dose_data_quality": row.get("dose_data_quality"),
+            "verified_child_canonicals": row.get("verified_child_canonicals"),
         }
 
     def _load_config(self, config_path: str) -> Dict:
@@ -16065,82 +16066,9 @@ class SupplementEnricherV3:
         return "indirect"
 
     @classmethod
-    def _has_bcaa_mixture_evidence_identity(
-        cls,
-        product: Dict,
-        active_ingredients: List[Dict],
-    ) -> bool:
-        """Require a complete disclosed BCAA triad and reject broader EAA routing."""
-        canonical_ids = set()
-        for row in active_ingredients:
-            if not isinstance(row, dict):
-                continue
-            canonical_id = str(
-                row.get("canonical_id")
-                or row.get("parent_key")
-                or row.get("normalized_key")
-                or ""
-            ).strip().lower()
-            if not canonical_id:
-                canonical_id = norm_module.make_normalized_key(
-                    str(
-                        row.get("standardName")
-                        or row.get("standard_name")
-                        or row.get("name")
-                        or ""
-                    )
-                )
-            if canonical_id:
-                canonical_ids.add(canonical_id)
-        if not cls._BCAA_EVIDENCE_CANONICALS.issubset(canonical_ids):
-            return False
-
-        product_text = " ".join(
-            str(product.get(field) or "")
-            for field in ("fullName", "product_name", "name")
-        ).lower()
-        product_text = re.sub(r"[-_/]+", " ", product_text)
-        if re.search(r"(?<![a-z0-9])eaa(?:s)?(?![a-z0-9])", product_text):
-            return False
-        if re.search(
-            r"(?<![a-z0-9])essential\s+amino\s+acids?(?![a-z0-9])",
-            product_text,
-        ):
-            return False
-
-        explicit_bcaa = bool(
-            re.search(
-                r"(?<![a-z0-9])bcaa(?:s)?(?![a-z0-9])"
-                r"|(?<![a-z0-9])branched\s+chain\s+amino\s+acids?(?![a-z0-9])",
-                product_text,
-            )
-        )
-        if explicit_bcaa:
-            return True
-
-        amino_acid_canonicals = set()
-        has_unidentified_amino_acid = False
-        for row in active_ingredients:
-            if not isinstance(row, dict):
-                continue
-            raw_category = str(row.get("raw_category") or "").lower()
-            ingredient_group = str(row.get("ingredientGroup") or "").lower()
-            if "amino acid" not in raw_category and "amino acid" not in ingredient_group:
-                continue
-            canonical_id = str(
-                row.get("canonical_id")
-                or row.get("parent_key")
-                or row.get("normalized_key")
-                or ""
-            ).strip().lower()
-            if canonical_id:
-                amino_acid_canonicals.add(canonical_id)
-            else:
-                has_unidentified_amino_acid = True
-        return (
-            not has_unidentified_amino_acid
-            and amino_acid_canonicals == cls._BCAA_EVIDENCE_CANONICALS
-        )
+    def _has_bcaa_mixture_evidence_identity(cls, product: Dict, active_ingredients: List[Dict]) -> bool:
+        from scoring_input_contract import bcaa_mixture_identity_eligible
+        return bcaa_mixture_identity_eligible(product, active_ingredients)
 
     def _collect_evidence_data(
         self, product: Dict, ingredient_quality_data: Optional[Dict] = None
@@ -16276,7 +16204,6 @@ class SupplementEnricherV3:
             product,
             active_ingredients,
         )
-        bcaa_aggregate_candidate_added = False
         for ingredient in active_ingredients:
             ing_name = ingredient.get('name', '')
             std_name = ingredient.get('standardName', '') or ing_name
@@ -16322,18 +16249,13 @@ class SupplementEnricherV3:
                     for value in candidate_names
                     if self._normalize_text(value) != "ala"
                 ]
-            if (
-                has_bcaa_mixture
-                and not bcaa_aggregate_candidate_added
-                and ingredient_canonical_id in self._BCAA_EVIDENCE_CANONICALS
-            ):
-                candidate_names.append("Branched Chain Amino Acids")
-                bcaa_aggregate_candidate_added = True
             for study in self._candidate_clinical_studies(candidate_names, studies):
                 if (
                     study.get("id") == "INGR_BRANCHED_CHAIN_AMINO_ACIDS"
                     and study.get("aggregate_canonical_ids")
                     and not has_bcaa_mixture
+                    and set(ingredient.get("verified_child_canonicals") or [])
+                        != set(study["aggregate_canonical_ids"])
                 ):
                     continue
                 study_name = study.get('standard_name', '')

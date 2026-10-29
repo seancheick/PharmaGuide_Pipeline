@@ -207,3 +207,175 @@ def test_reviewed_source_identity_matches_only_a_unique_actual_canonical(canon_i
     entry = {'ingredient': 'Taurine', 'matched_canonical_ids': ['beta-alanine'],
              'applicability_assessment': {'matched_canonical_ids': ['beta-alanine']}}
     assert _matched_active_canonical(entry, canon_index, owner_canonicals=set(canon_index.values())) == expected
+
+
+@pytest.mark.parametrize('dsld_id', ['220215', '221166', '224676', '295064', '310967', '71680'])
+def test_complete_material_evidence_never_belongs_to_one_constituent(dsld_id):
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    from enrich_supplements_v3 import SupplementEnricherV3
+    from scoring_v4.modules.generic_evidence import resolved_clinical_matches
+    raw = json.loads((FIXTURES / f'brand_generic_{dsld_id}_raw.json').read_text())
+    product, _ = SupplementEnricherV3().enrich_product(EnhancedDSLDNormalizer().normalize_product(raw))
+    matches, _ = resolved_clinical_matches(product, owner_scoped=True)
+    if dsld_id in {'220215', '221166'}:
+        # Source whey alongside amino-acid forms cannot make free leucine the
+        # whole-protein trial material. The mixed-source macro is not all whey.
+        assert not any(m.get('id') == 'INGR_WHEY_PROTEIN' for m in matches)
+    else:
+        match = next(m for m in matches if m.get('id') == 'INGR_BRANCHED_CHAIN_AMINO_ACIDS')
+        assert match['matched_canonical_ids'] == ['branched_chain_amino_acids']
+        assert 'leucine' not in match['ingredient'].lower()
+        from scoring_v4.scored_artifact import build_scored_artifact
+        artifact = build_scored_artifact(product)
+        points = artifact['_v4_module_breakdown']['dimensions']['evidence']['metadata'].get('ingredient_points', {})
+        assert 'l_leucine' not in points
+
+
+@pytest.mark.parametrize('shape, aggregate, dose_known', [
+    ('complete', True, True), ('isolated', False, False), ('partial', False, False),
+    ('duplicate', False, False), ('foreign', False, False), ('unknown', True, False),
+    ('mixed_units', True, True),
+])
+def test_bcaa_composition_owner_keeps_complete_source_identity_separate_from_amount(shape, aggregate, dose_known):
+    from scoring_input_contract import _derive_explicit_eaa_aggregate_evidence
+    rows = [dict(name=name, canonical_id=name, raw_category='amino acid', ingredientGroup='Amino Acid',
+                 raw_source_path=f'ingredientRows[{index}]', quantity=amount, unit='mg',
+                 identity_disposition='clean')
+            for index, (name, amount) in enumerate([('l_leucine', 1000), ('l_isoleucine', 500), ('l_valine', 500)])]
+    if shape == 'isolated': rows = rows[:1]
+    if shape == 'partial': rows = rows[:2]
+    if shape == 'duplicate': rows.append({**rows[0], 'raw_source_path': 'ingredientRows[3]'})
+    if shape == 'foreign': rows[-1]['parent_source_path'] = 'ingredientRows[99]'
+    if shape == 'unknown': rows[-1].update(quantity=None, unit='NP')
+    if shape == 'mixed_units': rows[0].update(quantity=1, unit='g')
+    items = [item for item in _derive_explicit_eaa_aggregate_evidence(rows, {'product_name': 'BCAA'})
+             if item['canonical_id'] == 'branched_chain_amino_acids']
+    assert bool(items) is aggregate
+    if aggregate:
+        assert set(items[0]['verified_child_canonicals']) == {'l_leucine', 'l_isoleucine', 'l_valine'}
+        assert set(items[0]['linked_rows']) == {row['raw_source_path'] for row in rows}
+        if dose_known:
+            assert items[0]['dose_value'] == 2.0
+            assert items[0]['dose_unit'] == 'g'
+        else:
+            assert items[0]['scoreable'] is False
+            assert items[0]['dose_value'] == 0
+
+
+def test_raw_complete_bcaa_unknown_member_amounts_keep_identity_without_borrowed_dose():
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    from enrich_supplements_v3 import SupplementEnricherV3
+    from scoring_input_contract import get_evidence_subject_rows
+    from scoring_v4.modules.generic_evidence import resolved_clinical_matches
+    raw = json.loads((FIXTURES / 'brand_generic_295064_raw.json').read_text())
+    for member in raw['ingredientRows'][0]['nestedRows']:
+        member['quantity'][0].update(quantity=0, unit='NP')
+    product, _ = SupplementEnricherV3().enrich_product(EnhancedDSLDNormalizer().normalize_product(raw))
+    groups = [r for r in get_evidence_subject_rows(product) if r.get('canonical_id') == 'branched_chain_amino_acids']
+    assert len(groups) == 1
+    assert groups[0]['scoreable'] is False
+    assert groups[0]['dose_value'] == 0
+    assert set(groups[0]['verified_child_canonicals']) == {'l_leucine', 'l_isoleucine', 'l_valine'}
+    matches, _ = resolved_clinical_matches(product, owner_scoped=True)
+    match = next(m for m in matches if m.get('id') == 'INGR_BRANCHED_CHAIN_AMINO_ACIDS')
+    assert match['matched_canonical_ids'] == ['branched_chain_amino_acids']
+
+
+def test_complete_bcaa_parent_owns_its_printed_mass_without_member_fractions():
+    from scoring_input_contract import _derive_explicit_eaa_aggregate_evidence
+    parent = {'name': 'BCAA', 'canonical_id': 'branched_chain_amino_acids',
+              'raw_source_path': 'ingredientRows[0]', 'quantity': 5, 'unit': 'g',
+              'cleaner_row_role': 'blend_header_total'}
+    children = [{'name': canonical, 'canonical_id': canonical, 'identity_disposition': 'clean',
+                 'raw_category': 'amino acid', 'quantity': 0, 'unit': 'NP',
+                 'raw_source_path': f'ingredientRows[0].nestedRows[{index}]',
+                 'parent_source_path': 'ingredientRows[0]'}
+                for index, canonical in enumerate(['l_leucine', 'l_isoleucine', 'l_valine'])]
+    items = _derive_explicit_eaa_aggregate_evidence([parent, *children], {'product_name': 'BCAA'})
+    assert len(items) == 1
+    assert items[0]['dose_value'] == 5
+    assert items[0]['dose_unit'] == 'g'
+    assert items[0]['raw_source_path'] == parent['raw_source_path']
+    assert items[0]['linked_rows'] == [parent['raw_source_path'], *(row['raw_source_path'] for row in children)]
+    # An undisclosed other member prevents transferring the parent's total.
+    other = {**children[0], 'name': 'Other material', 'canonical_id': 'unknown',
+             'raw_source_path': 'ingredientRows[0].nestedRows[3]'}
+    uncertain = _derive_explicit_eaa_aggregate_evidence([parent, *children, other], {'product_name': 'BCAA'})
+    assert uncertain[0]['scoreable'] is False
+    assert uncertain[0]['dose_value'] == 0
+
+
+def test_complete_eaa_does_not_infer_bcaa_without_a_separately_quantified_preparation():
+    from scoring_input_contract import _derive_explicit_eaa_aggregate_evidence, EAA_CANONICALS
+    parent = {'name': 'Amino complex', 'canonical_id': 'essential_amino_acids',
+              'raw_source_path': 'ingredientRows[0]', 'quantity': 10, 'unit': 'g',
+              'cleaner_row_role': 'blend_header_total'}
+    bcaa = {'name': 'BCAA', 'canonical_id': 'branched_chain_amino_acids',
+            'raw_source_path': 'ingredientRows[0].nestedRows[0]',
+            'parent_source_path': 'ingredientRows[0]', 'quantity': 0, 'unit': 'NP'}
+    rows = [parent, bcaa]
+    for index, canonical in enumerate(sorted(EAA_CANONICALS)):
+        base = bcaa['raw_source_path'] if canonical in {'l_leucine', 'l_isoleucine', 'l_valine'} else parent['raw_source_path']
+        rows.append({'name': canonical, 'canonical_id': canonical, 'identity_disposition': 'clean',
+                     'quantity': 0, 'unit': 'NP', 'raw_category': 'amino acid',
+                     'raw_source_path': base + f'.nestedRows[{index + 1}]', 'parent_source_path': base})
+    groups = _derive_explicit_eaa_aggregate_evidence(rows, {'product_name': 'Amino complex'})
+    assert [row['canonical_id'] for row in groups] == ['essential_amino_acids']
+
+
+def test_explicit_zero_bcaa_member_cannot_use_unknown_identity_fallback():
+    from scoring_input_contract import _derive_explicit_eaa_aggregate_evidence
+    rows = [{'name': canonical, 'canonical_id': canonical, 'identity_disposition': 'clean',
+             'raw_category': 'amino acid', 'quantity': amount, 'unit': 'mg',
+             'raw_source_path': f'ingredientRows[{index}]',
+             'raw_taxonomy': {'quantityVariants': [{'quantity': amount, 'unit': 'mg',
+                    'selected_for_analysis': True, 'quantity_parsed': True, 'operator': '='}]}}
+            for index, (canonical, amount) in enumerate([('l_leucine', 1000), ('l_isoleucine', 500), ('l_valine', 0)])]
+    assert _derive_explicit_eaa_aggregate_evidence(rows, {'product_name': 'BCAA'}) == []
+
+
+@pytest.mark.parametrize('category, source, compatible', [
+    ('amino acid', 'Whey Protein Isolate', False),
+    ('amino acid', 'hydrolyzed Whey Protein', False),
+    ('amino acid', 'Whey Protein, Hydrolyzed', False),
+    ('amino acid', 'Casein', True),
+    ('protein', 'Whey Protein Isolate', True),
+])
+def test_protein_source_form_cannot_replace_its_amino_acid_material(category, source, compatible):
+    from scoring_input_contract import declared_source_form_matches_material
+    row = {'name': 'L-Leucine' if category == 'amino acid' else 'Whey Protein',
+           'raw_taxonomy': {'category': category, 'forms': [{'category': 'protein', 'name': source}]}}
+    assert declared_source_form_matches_material(row, ['Whey Protein', 'whey protein isolate']) is compatible
+
+
+def test_bounded_bcaa_member_is_not_zero_or_an_exact_aggregate_dose():
+    from scoring_input_contract import _derive_explicit_eaa_aggregate_evidence
+    rows = [{'name': canonical, 'canonical_id': canonical, 'identity_disposition': 'clean',
+             'raw_category': 'amino acid', 'quantity': amount, 'unit': 'mg',
+             'raw_source_path': f'ingredientRows[{index}]',
+             'raw_taxonomy': {'quantityVariants': [{'quantity': amount, 'unit': 'mg',
+                    'selected_for_analysis': True, 'quantity_parsed': True,
+                    'operator': '<' if canonical == 'l_valine' else '='}]}}
+            for index, (canonical, amount) in enumerate([('l_leucine', 1000), ('l_isoleucine', 500), ('l_valine', 1)])]
+    groups = _derive_explicit_eaa_aggregate_evidence(rows, {'product_name': 'BCAA'})
+    assert len(groups) == 1
+    assert groups[0]['scoreable'] is False
+    assert groups[0]['dose_value'] == 0
+
+
+def test_bounded_bcaa_parent_keeps_complete_identity_without_exact_mass():
+    from scoring_input_contract import _derive_explicit_eaa_aggregate_evidence
+    parent = {'name': 'BCAA', 'canonical_id': 'branched_chain_amino_acids',
+              'raw_source_path': 'ingredientRows[0]', 'quantity': 5, 'unit': 'g',
+              'raw_taxonomy': {'quantityVariants': [{'quantity': 5, 'unit': 'g', 'operator': '<',
+                          'selected_for_analysis': True, 'quantity_parsed': True}]}}
+    children = [{'name': canonical, 'canonical_id': canonical, 'identity_disposition': 'clean',
+                 'raw_category': 'amino acid', 'quantity': 0, 'unit': 'NP',
+                 'raw_source_path': f'ingredientRows[0].nestedRows[{index}]',
+                 'parent_source_path': 'ingredientRows[0]'}
+                for index, canonical in enumerate(['l_leucine', 'l_isoleucine', 'l_valine'])]
+    groups = _derive_explicit_eaa_aggregate_evidence([parent, *children], {'product_name': 'BCAA'})
+    assert len(groups) == 1
+    assert groups[0]['scoreable'] is False
+    assert groups[0]['dose_value'] == 0
+    assert set(groups[0]['verified_child_canonicals']) == {'l_leucine', 'l_isoleucine', 'l_valine'}
