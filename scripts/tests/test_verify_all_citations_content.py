@@ -514,3 +514,16 @@ def test_standardized_botanical_marker_topic_is_not_a_proprietary_identity_alias
                   {'title': 'PI2A protease inhibitor research', 'abstract': 'An unrelated extended identifier.'},
                   {'title': 'Vitamin D and skeletal outcomes', 'abstract': 'An unrelated nutrient trial.'}]:
         assert vac.content_matches(wrong, words)[0] == 'mismatch'
+
+
+@pytest.mark.parametrize('article_text, expected', [
+    ('Academic outcomes in healthy adults', 'mismatch'),
+    ('ACACA fatty-acid synthesis', 'mismatch'),
+    ('ACA2 marker analogue', 'mismatch'),
+    ('A botanical preparation containing ACA.', 'partial'),
+])
+def test_short_alphabetic_marker_requires_an_identifier_boundary(article_text, expected):
+    config = next(c for c in vac.FILE_CONFIGS if c['file'] == 'standardized_botanicals.json')
+    entry = {'standard_name': 'EnXtra', 'aliases': ['EnXtra'], 'markers': ['ACA']}
+    assert vac.content_matches({'title': article_text, 'abstract': ''},
+                               vac.extract_topic_words(entry, config))[0] == expected

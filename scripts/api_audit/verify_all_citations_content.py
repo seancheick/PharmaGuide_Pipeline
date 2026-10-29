@@ -451,7 +451,7 @@ def content_matches(article: dict, topic_words: list[str]) -> tuple[str, float]:
         bool(re.search(r"(?<![a-z0-9])" + re.escape(w) + r"(?![0-9])", text))
         if _SHORT_COMPOUND_IDENTITY.fullmatch(w) else
         bool(re.search(r"(?<![a-z0-9])" + re.escape(w) + r"(?![a-z0-9])", text))
-        if re.fullmatch(r"[a-z]{1,3}[0-9]+", w) else w in text)]
+        if re.fullmatch(r"[a-z]{1,3}[0-9]+|[a-z]{1,4}", w) else w in text)]
     ratio = len(matches) / max(len(topic_words), 1)
 
     if len(matches) >= 2:
