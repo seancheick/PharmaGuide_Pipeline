@@ -1801,28 +1801,6 @@ def test_fill_statements_and_lean_muscle_claims_are_read_by_phrase(text, categor
     assert (category in evidence_indication_categories(text)) is present
 
 
-def test_purpose_rejection_keeps_the_studied_branded_material_for_formulation():
-    from clinical_applicability import filter_clinical_matches, preparation_verified_clinical_matches
-    row = _row('ashwagandha', 'KSM-66 Ashwagandha root extract', quantity=600)
-    product = {'product_name': 'Energy Xtra', 'ingredient_quality_data': {'ingredients_scorable': [row]}}
-    entry = {'id': 'BRAND_KSM66', 'ingredient': row['name'], 'matched_source_row_refs': [row['raw_source_path']]}
-    accepted, rejected = filter_clinical_matches(product, [entry], assess_amount=False)
-    # Evidence: an energy label cannot borrow the stress research.
-    assert accepted == []
-    assert rejected[0]['reason_code'] == 'label_purpose_evidence_mismatch'
-    assert rejected[0]['matched_source_row_refs'] == ['ingredientRows[0]']
-    product['evidence_data'] = {'clinical_matches': accepted, 'rejected_clinical_matches': rejected}
-    # Formulation: the label still carries the studied KSM-66 preparation.
-    verified = preparation_verified_clinical_matches(product)
-    assert [match['id'] for match in verified] == ['BRAND_KSM66']
-    # A wrong preparation is never preparation-verified.
-    other = _row('ashwagandha', 'Ashwagandha root powder', quantity=600)
-    accepted, rejected = filter_clinical_matches({**product, 'ingredient_quality_data': {
-        'ingredients_scorable': [other]}}, [entry], assess_amount=False)
-    assert rejected[0]['reason_code'] == 'clinical_form_mismatch'
-    assert 'matched_source_row_refs' not in rejected[0]
-
-
 @pytest.mark.parametrize('product_name,statements,excluded', [
     # Single signed words count only as claimed objects.
     ('CoQ10 Energy Support', (), True),

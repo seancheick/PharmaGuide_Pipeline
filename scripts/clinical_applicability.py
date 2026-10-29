@@ -1203,23 +1203,6 @@ def assess_clinical_applicability(product: Mapping, entry: Mapping, *, assess_am
     return {"status": status, "reason_code": reason}
 
 
-def preparation_verified_clinical_matches(product: Mapping) -> list[dict]:
-    """Matches whose identity and preparation fit the reviewed scope.
-
-    Accepted matches, plus rejections made only by a condition scope's claim or
-    population component: those prove the label carries the studied material
-    without making it Evidence for this label's purpose (Formulation reads this).
-    """
-    evidence = product.get("evidence_data") or {}
-    matches = [match for match in evidence.get("clinical_matches") or [] if isinstance(match, Mapping)]
-    for rejected in evidence.get("rejected_clinical_matches") or []:
-        if (isinstance(rejected, Mapping) and rejected.get("matched_source_row_refs")
-                and ("claim_alignment" in rejected or "population_applicability" in rejected)):
-            record = reviewed_entries().get(str(rejected.get("id")), {})
-            matches.append({**record, **rejected})
-    return matches
-
-
 def filter_clinical_matches(product: Mapping, matches: list[dict], *, assess_amount: bool = True) -> tuple[list[dict], list[dict]]:
     accepted, rejected = [], []
     for entry in matches:
