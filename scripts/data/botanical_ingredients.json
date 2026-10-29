@@ -3,7 +3,7 @@
     "description": "Non-standardized whole herb powders and simple botanical extracts without guaranteed marker compounds. Used for basic ingredient mapping. For premium standardized extracts with marker compounds, see standardized_botanicals.json.",
     "purpose": "ingredient_mapping",
     "schema_version": "5.2.0",
-    "last_updated": "2026-10-28",
+    "last_updated": "2026-10-29",
     "total_entries": 559,
     "functional_roles_field": {
       "added_in": "5.1.0",
@@ -16281,7 +16281,8 @@
         "east indian globe thistle",
         "indian globe thistle",
         "mundi",
-        "kottakkarantai"
+        "kottakkarantai",
+        "Indian Sphaeranthus Flower Head Extract"
       ],
       "category": "herb",
       "notes": "Sphaeranthus indicus. Holimel is a melon juice concentrate rich in SOD, not this herb. Meratrim combines Sphaeranthus with Garcinia mangostana; combination results do not establish single-herb equivalence.",
