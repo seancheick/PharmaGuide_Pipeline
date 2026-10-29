@@ -1061,3 +1061,26 @@ Clean pre-edit five-label baseline at2bb61ca7 is retained in `california_poppy/b
 source_unchanged=true. Frozen affected62820/62831 plus module controls306237/19055/182730 use
 one manifest. Candidate measurement and fresh review follow the clean source commit; no combined
 readiness or corpus qualification is inferred from these targeted tests.
+
+
+Bounded measurement completed on clean source
+`9afc2a00ddc2acb6bf40ee85c2b71b0c81fc7083`, five products/source_unchanged=true,
+against clean2bb61ca7 with the identical frozen manifest/raw hashes. Both affected Dream Release
+labels62820/62831 move Dose0→11.4 (the existing configured neutral), total49.2→60.6,
+Poor→Needs improvement; controls306237/19055/182730 stay unchanged. Every other pillar,
+route/subroute/profile/status, safety gate, Dose-safety and captured readiness projection is unchanged.
+The benchmark disposition changes unresolved→absent. Receipts:
+`california_poppy/candidate.jsonl[.meta.json]`, `delta.json`, `movement.txt`.
+
+The complementary real public-artifact probe (`public_release_source_probe.json`) directly confirms
+`unfinished_source_assessment` changes `dose_benchmark_identity_unresolved`→null for both labels.
+Evidence remains0; no concern/warning or other pillar changes. Overall assessment remains partial on
+this lane's source because the separate Evidence review is not cleared by Dose. Root owns combined
+Evidence/readiness qualification; this is not an all-six-pillars or release-completion claim. The exact
+existing backlog row is reconciled now; its frozen workload counts and product IDs are preserved.
+Independent pregnancy_check review of9afc2a00 cleared the data/source interpretation: three named
+policy/raw-preservation/manual-recheck tests pass; exact entry data check has0problems. Reviewer
+independently matched all four retained EMA/PMC document hashes, verified the2004 fixed-combination
+source and the2026 official publisher-indexed abstract's847mg+353mg methods. No source blocker
+remains in this bounded batch. Root's combined CI/local, final artifact generation and release
+qualification remain. No broad suite, corpus, branch push, main action or publication occurred.
