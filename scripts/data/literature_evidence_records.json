@@ -505,6 +505,12 @@
     },
     {
       "canonical_id": "citrus_bioflavonoids",
+      "applicability": {
+        "scope": "ingredient",
+        "excluded_form_terms": [
+          "cordiart"
+        ]
+      },
       "material_form": "Citrus fruit extract / crude bioflavonoid complex",
       "search_query": "(\"Citrus bioflavonoids\"[tiab] OR \"citrus flavonoids\"[tiab]) AND (randomized controlled trial[pt] OR systematic review[pt]) NOT (animals[mh] NOT humans[mh])",
       "search_date": "2026-09-17",
@@ -19205,6 +19211,26 @@
     },
     {
       "canonical_id": "ginseng_root_panax",
+      "aliases": [
+        "Korean Ginseng extract root",
+        "standardized Korean Ginseng extract root"
+      ],
+      "applicability": {
+        "scope": "ingredient",
+        "excluded_form_terms": [
+          "red",
+          "steamed",
+          "fermented",
+          "leaf",
+          "leaves",
+          "stem",
+          "stems",
+          "rhizome",
+          "American",
+          "quinquefolius",
+          "GS15-4"
+        ]
+      },
       "material_form": "Panax ginseng whole root",
       "search_query": "ginseng_root_panax randomized controlled trial standardized extract",
       "search_date": "2026-09-20",

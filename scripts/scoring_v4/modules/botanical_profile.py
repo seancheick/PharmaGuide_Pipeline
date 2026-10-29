@@ -830,7 +830,7 @@ def score_botanical_purpose_dose(
     if not _is_botanical_active(row):
         return None
 
-    benchmark = _botanical_benchmark(row)
+    benchmark = _botanical_benchmark(row, product=product)
     disclosure = dose_disclosure_status(row)
     # The strict input owner's lent-mass classification proves that the label
     # gives a total but not this child's share. A bare aggregate flag or broad
@@ -869,7 +869,7 @@ def score_botanical_purpose_dose(
     return unassessed_amount_band("disclosed_no_reference", benchmark)
 
 
-def _botanical_benchmark(row: Dict[str, Any]) -> str:
+def _botanical_benchmark(row: Dict[str, Any], *, product: Optional[Dict[str, Any]] = None) -> str:
     """Return a completed absent general benchmark or unresolved review."""
     if _explicit_botanical_identity_rejection(row):
         return "unresolved"
@@ -892,9 +892,29 @@ def _botanical_benchmark(row: Dict[str, Any]) -> str:
     # descriptive and an unreadable amount still fails the strict input gate.
     from evidence_resolver import _load_literature_evidence
 
-    record = _load_literature_evidence().get(_norm(row.get("canonical_id"))) or {}
+    literature = _load_literature_evidence()
+    canonical = _norm(row.get("canonical_id"))
+    record = literature.get(canonical) or {}
     semantics = record.get("reference_semantics") or {}
-    from dose_assessment import verified_reference_citations
+    from dose_assessment import (_dose_source_preparation_matches, _record_names, _row_names,
+                                 verified_reference_citations)
+
+    if canonical not in literature and product is not None:
+        # Canonical identity can be broader than an already reviewed physical
+        # source. Require one exact alias and original same-row preparation;
+        # a present but rejected direct owner never falls through to this path.
+        names = _row_names(row, source_only=True, product=product)
+        candidates = [candidate for candidate in literature.values()
+                      if names & _record_names(candidate)]
+        if len(candidates) != 1 or not _dose_source_preparation_matches(product, row, candidates[0]):
+            return "unresolved"
+        record = candidates[0]
+        semantics = record.get("reference_semantics") or {}
+    elif (product is not None and record.get("applicability") is not None
+          and not _dose_source_preparation_matches(product, row, record)):
+        # The canonical identifies a family, not every defined preparation in
+        # it. A known source exclusion retains its own unfinished Dose review.
+        return "unresolved"
 
     if (
         verified_reference_citations(record)
