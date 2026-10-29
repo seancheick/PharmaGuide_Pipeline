@@ -2,11 +2,68 @@
 from pathlib import Path
 import json
 import sys
+import pytest
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from clinical_applicability import assess_clinical_source_review, reviewed_entries
 from clinical_evidence_schema import validate_ingredient_context
+
+
+def test_primavie_returned_biomarker_scope_has_complete_source_context():
+    record = reviewed_entries()['BRAND_PRIMAVIE_SHILAJIT']
+    review = assess_clinical_source_review(record)
+    assert review['is_complete'], review['errors']
+    assert len(record['study_contexts']) == 1
+    context = record['study_contexts'][0]
+    assert context['source_pmids'] == ['26395129']
+    assert context['identity']['branded_material'] == 'PrimaVie purified shilajit'
+    assert context['dose']['values'] == [500]
+    assert context['dose']['duration_days'] == 90
+    assert context['dose']['dosage_forms'] == ['oral capsule']
+    assert all(outcome['kind'] == 'surrogate' and outcome['hierarchy'] == 'not_reported'
+               for outcome in context['outcomes'])
+    assert record['effect_direction'] == 'positive_weak'
+    assert record['applicability']['supported_outcomes'] == ['testosterone']
+    assert record['health_goals_supported'] == []
+    assert 'symptomatic benefit' in ' '.join(context['limitations'])
+
+
+@pytest.mark.parametrize('claim', ['Libido Support', 'Fertility Support',
+    'Muscle Strength', 'Quality of Life Support', 'Longevity Support'])
+def test_primavie_biomarkers_do_not_transfer_to_symptomatic_claims(claim):
+    from clinical_applicability import assess_clinical_applicability
+    record = reviewed_entries()['BRAND_PRIMAVIE_SHILAJIT']
+    row = {'name': 'PrimaVie Shilajit', 'raw_source_text': 'PrimaVie Shilajit',
+           'canonical_id': 'shilajit', 'mapped': True, 'quantity': 500,
+           'unit': 'mg', 'raw_source_path': 'ingredientRows[0]'}
+    product = {'product_name': claim, 'activeIngredients': [row],
+               'ingredient_quality_data': {'ingredients_scorable': [row]}}
+    match = {**record, 'matched_canonical_ids': ['shilajit'],
+             'matched_source_row_refs': ['ingredientRows[0]']}
+    result = assess_clinical_applicability(product, match)
+    assert result['status'] == 'not_applicable'
+    assert result['reason_code'] == 'label_purpose_evidence_mismatch'
+
+
+@pytest.mark.parametrize('title,claim', [('PrimaVie Capsules', ''),
+    ('Testosterone Support', ''), ('Libido Support', 'PrimaVie supports testosterone.')])
+def test_primavie_keeps_independently_qualified_testosterone_relationship(title, claim):
+    from clinical_applicability import assess_clinical_applicability
+    record = reviewed_entries()['BRAND_PRIMAVIE_SHILAJIT']
+    row = {'name': 'PrimaVie Shilajit', 'raw_source_text': 'PrimaVie Shilajit',
+           'canonical_id': 'shilajit', 'mapped': True, 'quantity': 500,
+           'unit': 'mg', 'raw_source_path': 'ingredientRows[0]'}
+    product = {'product_name': title, 'activeIngredients': [row],
+               'ingredient_quality_data': {'ingredients_scorable': [row]},
+               'statements': [{'type': 'Formulation re: Other', 'notes': claim}] if claim else []}
+    match = {**record, 'matched_canonical_ids': ['shilajit'],
+             'matched_source_row_refs': ['ingredientRows[0]']}
+    result = assess_clinical_applicability(product, match)
+    assert result['status'] == 'applicable', result
+    assert result['supported_outcomes'] == ['testosterone']
+    assert result['population_applicability']['context_ids'] == [
+        'brand_primavie_26395129_androgen_biomarkers']
 
 
 def test_poolzyme_extraction_preserves_explicit_source_acceptance_hold():

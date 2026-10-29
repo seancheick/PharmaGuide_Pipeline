@@ -33120,6 +33120,102 @@
       "effect_direction_confidence": "low",
       "effect_direction_rationale": "One short manufacturer-supplied preparation trial reports positive androgen biomarkers with attrition; patient-important benefits were not established. Existing positive_weak classification reflects these limitations rather than broad efficacy.",
       "endpoint_relevance_tags": [],
+      "study_contexts": [
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "brand_primavie_26395129_androgen_biomarkers",
+          "source_pmids": [
+            "26395129"
+          ],
+          "components": [
+            "BRAND_PRIMAVIE_SHILAJIT"
+          ],
+          "identity_scope": "branded_material",
+          "identity": {
+            "branded_material": "PrimaVie purified shilajit",
+            "manufacturer": "Natreon, Inc.",
+            "standardization": "At least 50% fulvic acids, 0.3% dibenzo-alpha-pyrones and 10% dibenzo-alpha-pyrone chromoproteins in the studied material; not a retail-batch assay"
+          },
+          "exposure_basis": "supplement_dose",
+          "route": "oral",
+          "evidence_role": "direct_rct",
+          "component_registration_status": "fully_registered",
+          "condition": "testosterone",
+          "purpose": "treatment",
+          "human_status": "confirmed",
+          "source_integrity": "none",
+          "population": {
+            "age_group": "adult",
+            "description": "Healthy men aged 45-55 screened using the ADAM symptom questionnaire; 96 randomized and 75 completed (38 active, 37 placebo)."
+          },
+          "study_design": "Randomized double-blind placebo-controlled trial; completer-only analysis",
+          "trial_family": "primavie_26395129",
+          "comparator": "placebo",
+          "review_status": "clinician_approved",
+          "scoring_eligible": true,
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-10-28",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Existing source-verified-context pre-approval: scripts/audits/held_source_closure_20261028/BRIEF.md; prior signed returned batch5 received 2026-10-25, independently verified in scripts/audits/literature_records_review_20261020/BRYAN_BATCH_RESPONSE_VERIFICATION_20261025.md, Batch 5"
+          },
+          "dose": {
+            "measurement_type": "mass",
+            "unit": "mg",
+            "values": [
+              500
+            ],
+            "dose_status": "verified",
+            "dose_basis": "nominal_assigned_arm",
+            "duration_basis": "fixed_protocol",
+            "duration_days": 90,
+            "administration_frequency": "250 mg twice daily after major meals",
+            "dosage_forms": [
+              "oral capsule"
+            ],
+            "co_therapies": [],
+            "reported_regimen": "250 mg twice daily after major meals for 90 days",
+            "normalization": {
+              "basis": "Two 250 mg capsules daily = 500 mg/day of the whole specified preparation; not an efficacy minimum or generic shilajit benchmark"
+            },
+            "source_provenance": {
+              "pmid": "26395129",
+              "source_url": "https://onlinelibrary.wiley.com/doi/10.1111/and.12482",
+              "location": "Materials and methods: Preparation and analysis of the drug; Selection of healthy volunteers; Dosage regimen; Observation criteria; Results: Treatment efficacy, Table 2"
+            }
+          },
+          "outcomes": [
+            {
+              "name": "total_testosterone",
+              "hierarchy": "not_reported",
+              "kind": "surrogate",
+              "direction": "positive",
+              "outcome_role": "surrogate"
+            },
+            {
+              "name": "free_testosterone",
+              "hierarchy": "not_reported",
+              "kind": "surrogate",
+              "direction": "positive",
+              "outcome_role": "surrogate"
+            },
+            {
+              "name": "DHEAS",
+              "hierarchy": "not_reported",
+              "kind": "surrogate",
+              "direction": "positive",
+              "outcome_role": "surrogate"
+            }
+          ],
+          "limitations": [
+            "Preliminary androgen-biomarker relationship for the exact studied material and population, not established symptomatic benefit, libido, fertility, muscle growth, strength, quality of life or longevity.",
+            "No clearly prespecified primary/secondary hierarchy established; retain not_reported rather than inventing primary status.",
+            "Completer-only analysis excluded 21 participants; baseline hormone imbalances, multiple comparisons and limited statistical reporting constrain interpretation. Natreon funded the study.",
+            "The separate uncontrolled processed-shilajit oligospermia study (20078516) is retained in research history, not a second PrimaVie RCT or proof of preparation equivalence.",
+            "Context authored and source-verified by Codex on 2026-10-29 under Dr. Pham's existing 2026-10-28 pre-approval of fully source-verified contexts, attested by Sean. Prior signed returned batch5 acceptance was received 2026-10-25; that receipt date is not asserted as its signing date."
+          ]
+        }
+      ],
       "applicability": {
         "scope": "ingredient",
         "require_source_label_form": true,
@@ -33129,6 +33225,15 @@
         ],
         "supported_outcomes": [
           "testosterone"
+        ],
+        "excluded_claim_terms": [
+          "libido",
+          "fertility",
+          "muscle growth",
+          "muscle strength",
+          "quality of life",
+          "longevity",
+          "hypogonadism"
         ],
         "studied_population": "Healthy men aged 45-55; androgen biomarkers after 90 days of the specific PrimaVie preparation.",
         "source_pmids": [
