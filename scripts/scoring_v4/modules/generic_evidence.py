@@ -307,26 +307,7 @@ def score_evidence(product: Dict[str, Any], *, apply_primary_floor: bool = False
         # with established RDA/AI has evidence of necessity even without a strong
         # RCT match. Floor (never cap) — it only lifts, never lowers the clinical
         # floor above it (e.g. a strong clinical 14 stays 14).
-        explicit_purpose_canonicals = {canonical for _, canonical in prominent}
-        if not explicit_purpose_canonicals:
-            # A label with one assessable active still has an unambiguous
-            # Evidence subject even when the shared role owner has no title or
-            # claim signal to mark prominent.  Multiple active identities stay
-            # unresolved here: Evidence must not recreate the removed
-            # heaviest-mass fallback to choose among them.
-            subject_canonicals = {
-                str(row.get("canonical_id") or "").strip().lower()
-                for row in _competing_active_rows(product)
-                if isinstance(row, dict)
-                and str(row.get("canonical_id") or "").strip()
-                and not is_lent_blend_mass(row)
-            }
-            if len(subject_canonicals) == 1:
-                explicit_purpose_canonicals = subject_canonicals
-        auth_canon = _purpose_essential_canonical(
-            product,
-            owner_canonicals=explicit_purpose_canonicals if explicit_purpose_canonicals else set(),
-        )
+        auth_canon = _purpose_essential_canonical(product)
         if (auth_canon and (not owner_scoped or auth_canon in owner_canonicals)
                 and primary_floor < NUTRITION_AUTHORITY_FLOOR):
             primary_floor = NUTRITION_AUTHORITY_FLOOR
@@ -1598,6 +1579,17 @@ def _purpose_essential_canonical(
     The shared role owner supplies ``owner_canonicals``. Amount adequacy and
     excess are independent Dose/Safety judgments and do not decide Evidence.
     """
+    if owner_canonicals is None:
+        from evidence_resolver import evidence_prominent_row_keys
+        owner_canonicals = {canonical for _, canonical in evidence_prominent_row_keys(product)}
+        if not owner_canonicals:
+            # Preserve the existing single-subject fallback; multiple active
+            # identities never get a heaviest-mass authority anchor.
+            subjects = {str(row.get("canonical_id") or "").strip().lower()
+                        for row in _competing_active_rows(product) if isinstance(row, dict)
+                        and str(row.get("canonical_id") or "").strip() and not is_lent_blend_mass(row)}
+            if len(subjects) == 1:
+                owner_canonicals = subjects
     candidates = set()
     for row in _competing_active_rows(product):
         if not isinstance(row, dict):
