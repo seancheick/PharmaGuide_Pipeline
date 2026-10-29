@@ -2,7 +2,7 @@
   "_metadata": {
     "schema_version": "1.0.0",
     "contract_name": "Cleaner-First Source Of Truth Matrix",
-    "last_updated": "2026-10-26",
+    "last_updated": "2026-10-28",
     "owner": "scripts/audit_source_of_truth_contract.py",
     "summary": "Defines the single owner for clinical/data concepts so downstream pipeline stages consume contracts instead of re-deriving meaning."
   },
@@ -367,7 +367,8 @@
       "field_kind": "diagnostic",
       "source_data_files": ["scripts/scoring_v4/config/quality_score.json"],
       "consumers": ["scripts/audit_source_of_truth_contract.py", "scripts/build_final_db.py"],
-      "forbidden_recomputation": ["diagnostics describe scorer decisions; downstream stages may not fabricate missing scoring_ingredients_source, fallbacks, coverage, or score_basis"],
+      "forbidden_recomputation": ["diagnostics describe scorer decisions; downstream stages may not fabricate missing scoring_ingredients_source, fallbacks, coverage, or score_basis",
+        "Release completion stays factual: assessment_readiness retains unknown Evidence review; the publication audit may qualify it only through current manifest-bound source and canonical numerical-path proof, never by clearing holds or inventing completion."],
       "fallback_class": "clinical_fail_safe",
       "release_gate": "scripts/audit_source_of_truth_contract.py scoring",
       "tests": ["scripts/tests/test_v4_scored_artifact.py", "scripts/tests/test_source_of_truth_contract.py"],
