@@ -908,9 +908,6 @@ class SupplementEnricherV3:
 
     VERSION = "3.1.0"
     COMPATIBLE_SCORING_VERSIONS = ["3.0.0", "3.0.1", "3.1.0", "3.2.0", "3.3.0"]
-    _BCAA_EVIDENCE_CANONICALS = frozenset(
-        {"l_leucine", "l_isoleucine", "l_valine"}
-    )
     # Allowlist/denylist patterns for banned matching are loaded from config.
 
     # Required fields for product validation
