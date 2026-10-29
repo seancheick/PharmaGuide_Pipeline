@@ -1539,3 +1539,228 @@ def evaluate_release_assessment(
                 blockers.append("contributing_evidence_receipts_missing")
     return {"is_complete": not blockers, "blockers": list(dict.fromkeys(blockers)),
             "unfinished_source_assessment": unfinished_source}
+
+
+def _retained_evidence_is_publishable(scored: Mapping, enriched: Mapping) -> bool:
+    """Validate retained science against a current, lineage-verified source.
+
+    Completion remains false. Only the missing Evidence review may remain open;
+    this consumes the existing applicability and numerical-path receipts, never
+    runs a scorer or grants an implicit clinical approval.
+    """
+    from scoring_v4.scored_artifact import unfinished_source_assessment
+    from scoring_v4.gate_safety import safety_resolvers_failed
+    from clinical_applicability import assess_clinical_applicability, assess_clinical_source_review, reviewed_entries, _number
+    from clinical_evidence_schema import is_reference_only
+    from scoring_v4.modules.generic_evidence import (_canonical_text, _canonical_from_entry, _matched_canonical_ids,
+        _clinical_source_id, _active_canonical_index, _matched_active_canonical)
+
+    readiness = _safe_dict(scored.get("assessment_readiness"))
+    release = _safe_dict(readiness.get("release_assessment"))
+    module = _safe_dict(scored.get("_v4_module_breakdown"))
+    evidence = _safe_dict(_safe_dict(module.get("dimensions")).get("evidence"))
+    meta = _safe_dict(evidence.get("metadata"))
+    safety = _safe_dict(scored.get("_v4_safety_gate"))
+    allowed_blockers = {"evidence_assessment_incomplete", "probiotic_evidence_assessment_incomplete"}
+    if module.get("module") == "probiotic":
+        allowed_blockers |= {"probiotic_contributing_context_incomplete:" + str(row.get("context_id"))
+                             for row in meta.get("contributing_native_contexts") or [] if isinstance(row, Mapping)}
+    if (scored.get("quality_score_status") != "scored"
+            or scored.get("quality_assessment_status") != "partial"
+            or release.get("is_complete") is not False
+            or not isinstance(release.get("blockers"), list) or not release["blockers"]
+            or any(not isinstance(reason, str) for reason in release["blockers"])
+            or set(release["blockers"]) - allowed_blockers
+            or release.get("unfinished_source_assessment") is not None
+            or readiness.get("enforcement_mode") != "enforced"
+            or not has_canonical_enforced_dimensions(readiness.get("enforced_dimensions"))
+            or readiness.get("is_live_ready") is not True
+            or _number(scored.get("mapped_coverage")) != 1.0
+            or _safe_dict(scored.get("strict_scoring_contract")).get("passed") is not True
+            or safety.get("ingredient_assessment_complete") is not True
+            or safety_resolvers_failed(safety.get("ingredient_assessment_errors"))
+            or safety.get("short_circuits_scoring") is not False
+            or safety.get("quarantine_required") is not False
+            or _safe_dict(scored.get("_v4_completeness_gate")).get("is_live_eligible") is not True):
+        return False
+    if any(not _is_ready(str(_safe_dict(readiness.get(name)).get("readiness") or ""))
+           or _safe_dict(readiness.get(name)).get("migration_inference") is True
+           for name in ENFORCED_READINESS_DIMENSIONS):
+        return False
+    records = meta.get("contributing_record_assessments", [] if module.get("module") == "multi_or_prenatal" else None)
+    if not isinstance(records, list) or any(not isinstance(row, Mapping) for row in records):
+        return False
+    fresh = evaluate_release_assessment(enriched, readiness, module,
+        unfinished_source=unfinished_source_assessment(dict(enriched), dict(module)))
+    if set(fresh["blockers"]) != set(release["blockers"]):
+        return False
+    pillar = _safe_dict(_safe_dict(scored.get("quality_pillars_v4")).get("evidence"))
+    entries = _safe_dict(pillar.get("receipt")).get("entries")
+    score, public = _number(evidence.get("score")), _number(pillar.get("score"))
+    if (score is None or public is None or not isinstance(records, list)
+            or not isinstance(entries, list)
+            or any(not isinstance(row, Mapping) or _number(row.get("points")) is None for row in entries)
+            or abs(sum(_number(row["points"]) for row in entries) - public) > .001
+            or meta.get("evidence_result_state") != pillar.get("evidence_result_state")):
+        return False
+    from scoring_v4.quality_score import _normalized_receipt, _pillar_evidence
+    from scoring_v4.quality_score_config import config
+    cfg = config()
+    weight = cfg["pillars"]["evidence"]["weight"]
+    archetype = _safe_dict(pillar.get("components")).get("archetype")
+    if _number(pillar.get("max")) != weight or not archetype:
+        return False
+    try:
+        rebuilt = _pillar_evidence(dict(evidence), weight, archetype, cfg)
+        if rebuilt["components"] != pillar.get("components") or rebuilt["score"] != public:
+            return False
+        replay = _normalized_receipt("evidence", dict(pillar), dict(evidence), weight,
+            lambda dim: _pillar_evidence(dim, weight, archetype, cfg))
+    except (RuntimeError, ValueError, TypeError, KeyError):
+        return False
+    if replay != pillar["receipt"]:
+        return False
+    # Generic Evidence retains signed clinical exposure constraints. Native
+    # probiotic record qualification deliberately uses its amount-free seam.
+    matches, _ = resolved_clinical_matches(dict(enriched), owner_scoped=module.get("module") != "probiotic",
+                                          assess_amount=module.get("module") != "probiotic")
+    if module.get("module") in {"generic", "sports", "fiber_digestive"}:
+        from evidence_resolver import evidence_owner_canonicals, evidence_record_matches_declared_purpose
+        owners = evidence_owner_canonicals(enriched)
+        index = _active_canonical_index(dict(enriched))
+        matches = [row for row in matches if (
+            (not owners or _matched_active_canonical(row, index, use_structured_identity=True, owner_canonicals=owners) in owners)
+            and evidence_record_matches_declared_purpose(enriched, {"canonical_id": _matched_active_canonical(
+                row, index, use_structured_identity=True, owner_canonicals=owners)}, row))]
+    accepted = {_clinical_source_id(row): row for row in matches if not is_reference_only(row)}
+    points = meta.get("ingredient_points", {} if module.get("module") in {"probiotic", "multi_or_prenatal"} else None)
+    if not isinstance(points, Mapping) or any(_number(value) is None for value in points.values()):
+        return False
+    if score == public == 0:
+        if meta.get("evidence_result_state") not in {
+                "clinical_review_not_covered", "applicability_unestablished",
+                "research_present_applicability_unestablished", "native_research_review_incomplete"}:
+            return False
+        components = evidence.get("components")
+        if (records or any(_number(row["points"]) != 0 for row in entries)
+                or any(_number(value) != 0 for value in points.values())
+                or not isinstance(components, Mapping) or not components
+                or any(_number(value) != 0 for value in components.values())):
+            return False
+        if module.get("module") == "probiotic":
+            from studied_formulas import assess_probiotic_evidence, assess_studied_formula
+            from scoring_v4.modules.probiotic_evidence import _eligible_native_contexts
+            from clinical_applicability import qualifying_purpose_outcomes
+            native = assess_probiotic_evidence(dict(enriched))
+            if (meta.get("contributing_native_contexts") != []
+                    or meta.get("evidence_assessment") != native
+                    or assess_studied_formula(dict(enriched)).get("status") == "assessed_studied_formula"
+                    or any(any(row.get("kind") == "patient_important" for row in qualifying_purpose_outcomes(context)[0])
+                           for _, context in _eligible_native_contexts(native))):
+                return False
+            return not any(key.startswith(("STRAIN_", "FORMULA_")) for key in accepted)
+        return module.get("module") in {"generic", "sports", "fiber_digestive"} and not accepted
+    if module.get("module") == "probiotic":
+        from studied_formulas import assess_probiotic_evidence
+        from scoring_v4.modules import probiotic_evidence as native_owner
+        from scoring_v4.modules.probiotic_evidence import _eligible_native_contexts, _qualifying_outcomes
+        from clinical_evidence_schema import validate_frozen_context
+        assessment = assess_probiotic_evidence(dict(enriched))
+        formula = native_owner.assess_studied_formula_identity(dict(enriched))
+        if formula.get("status") == "assessed_studied_formula":
+            return False
+        owned = [row for row in matches if (not native_owner._is_strain_match(row)
+                 or native_owner.strain_assessments_for_match(row, assessment))
+                 and native_owner._is_probiotic_owned_match(row, formula)]
+        relevance = native_owner._claim_alignment(dict(enriched), {**assessment, "formula_assessment": formula})
+        family = native_owner._strongest_single_family_certainty(probiotic_owned=owned, assessment=assessment,
+            relevance=relevance, settings=native_owner._EM, formula=formula)
+        consistency = native_owner._independent_consistency(assessment)
+        components, expected_score, _ = native_owner._family_component_points(family, formula, relevance, consistency)
+        if (family.get("source") != "native_context" or score != round(expected_score, 4)
+                or evidence.get("components") != components):
+            return False
+        eligible = _eligible_native_contexts(assessment)
+        current = {context["context_id"]: context for _, context in eligible}
+        contexts = meta.get("contributing_native_contexts")
+        if records or not isinstance(contexts, list) or not contexts:
+            return False
+        expected_ids = {family["context"]["context_id"]}
+        if components["independent_replication_consistency"] > 0:
+            selected = next(row for row in consistency["conditions"] if row["credit"] == consistency["credit"])
+            expected_ids |= {context["context_id"] for _, context in eligible
+                if context.get("condition") == selected["condition"]
+                and (context.get("trial_family") or context.get("context_id")) in selected["families"]}
+        if {row.get("context_id") for row in contexts if isinstance(row, Mapping)} != expected_ids:
+            return False
+        for context in contexts:
+            if not isinstance(context, Mapping) or context != current.get(context.get("context_id")):
+                return False
+            errors = validate_frozen_context(context, require_complete_review=True)
+            outcomes = _qualifying_outcomes(dict(context))
+            if (set(errors) - {"outcomes.review_incomplete"} or not outcomes
+                    or any(row.get("hierarchy") == "primary" and row.get("direction") == "unresolved"
+                           for row in context.get("outcomes") or [])):
+                return False
+            if errors and not any(row.get("hierarchy") == "primary" and row.get("direction") == "positive"
+                                  for row in outcomes):
+                return False
+            # This is a validation projection only. The source and receipt
+            # retain every unresolved/uncredited outcome and remain partial.
+            if validate_frozen_context({**context, "outcomes": outcomes}, require_complete_review=True):
+                return False
+        return True
+    if module.get("module") == "multi_or_prenatal":
+        from scoring_v4.modules.multi_prenatal_evidence import _panel_contract, CAP_EVIDENCE
+        from scoring_v4.modules.multi_prenatal_dose import _nutrient_key
+        from evidence_resolver import resolve_authority_panel_evidence
+        mode, expected, count = _panel_contract(dict(enriched))
+        authority = resolve_authority_panel_evidence(enriched, expected_keys=expected, full_score=CAP_EVIDENCE,
+            full_count=count, row_key=lambda row: _nutrient_key(row.get("canonical_id") or row.get("standard_name") or row.get("name")))
+        return bool(not records and meta.get("method") == "essential_nutrient_panel_authority_coverage"
+            and meta.get("panel_mode") == mode and score == authority["score"]
+            and meta.get("authority_full_count") == count
+            and meta.get("authority_covered_count") == len(authority["covered_keys"])
+            and all(meta.get("authority_" + key) == authority[key] for key in
+                    ("covered_keys", "expected_keys", "unresolved_keys", "resolution_reasons")))
+    if (module.get("module") not in {"generic", "sports", "fiber_digestive"}
+            or meta.get("primary_evidence_floor_decisive") is not True
+            or score <= 0 or score != _number(meta.get("primary_evidence_floor"))
+            or score != _number(_safe_dict(evidence.get("components")).get("primary_evidence_floor"))):
+        return False
+    eligible_keys = {_canonical_text(value) for row in accepted.values()
+                     for value in [_canonical_from_entry(row), *_matched_canonical_ids(row)]}
+    if any(_number(value) > 0 and _canonical_text(key) not in eligible_keys for key, value in points.items()):
+        return False
+    authority = meta.get("selected_nutrition_authority")
+    if authority:
+        from scoring_v4.modules.generic_evidence import _purpose_essential_canonical, NUTRITION_AUTHORITY_FLOOR
+        from evidence_resolver import evidence_owner_canonicals
+        return bool(not records and authority in DRI_ESSENTIAL_NUTRIENTS
+            and authority == _purpose_essential_canonical(dict(enriched))
+            and authority in evidence_owner_canonicals(enriched)
+            and meta.get("nutrition_authority_canonical") == authority
+            and meta.get("nutrition_authority_floor_applied") is True and score == NUTRITION_AUTHORITY_FLOOR)
+    if len(records) != 1:
+        return False
+    from scoring_v4.modules.generic_evidence import _primary_mass_floor
+    from evidence_resolver import evidence_prominent_row_keys
+    floor_receipt = {}
+    expected_floor, _ = _primary_mass_floor(dict(enriched), list(accepted.values()),
+        prominent=evidence_prominent_row_keys(enriched), receipt=floor_receipt)
+    if (score != expected_floor or not floor_receipt.get("entry")
+            or _clinical_source_id(floor_receipt["entry"]) != records[0].get("id")):
+        return False
+    receipt = records[0]
+    if not isinstance(receipt, Mapping) or receipt.get("id") not in accepted:
+        return False
+    entry = accepted[receipt["id"]]
+    decision = assess_clinical_applicability(enriched, entry, assess_amount=False)
+    review = assess_clinical_source_review(entry)
+    reference = reviewed_entries().get(receipt["id"], {})
+    return bool(receipt.get("status") == decision.get("status") == "applicable"
+                and receipt.get("scope_qualification_complete") is True
+                and review["is_complete"] and receipt.get("source_review") == review
+                and receipt.get("supported_outcomes") == decision.get("supported_outcomes")
+                and receipt.get("studied_population") == decision.get("studied_population")
+                and receipt.get("source_references") == reference.get("references_structured"))

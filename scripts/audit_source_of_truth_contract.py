@@ -708,9 +708,61 @@ def _scoring_diag(product: dict[str, Any]) -> dict[str, Any]:
     return {}
 
 
+def _scoring_enriched_source(scored_path: Path, pid: str, cache: dict) -> dict | None:
+    """Join current manifest-owned stage artifacts once per dataset audit."""
+    from stage_manifest import MANIFEST_NAME, select_stage_input_files
+    from pipeline_freshness import (_manifest_issue, stage_input_fingerprints,
+                                    stage_data_fingerprint, stage_data_files, DATA_FINGERPRINT_KEY)
+    from dataset_paths import brand_dataset_root
+    scored_dir = scored_path.resolve().parent
+    if cache.get("dataset") != scored_dir:
+        cache.pop(cache.get("dataset"), None)
+        cache["dataset"] = scored_dir
+    if scored_dir not in cache:
+        cache[scored_dir] = None
+        try:
+            dataset = scored_dir.parent.name
+            if scored_dir.name != "scored" or not dataset.endswith("_scored"):
+                return None
+            enriched_dir = scored_dir.parent.parent / (dataset.removesuffix("_scored") + "_enriched") / "enriched"
+            clean_dir = scored_dir.parent.parent / dataset.removesuffix("_scored") / "cleaned"
+            brand = dataset.removesuffix("_scored").removeprefix("output_")
+            raw_dir = (REPO_ROOT / "manual_labels/product_submissions" if brand == "Product_Submissions"
+                       else brand_dataset_root() / brand)
+            for directory, stage in ((scored_dir, "score"), (enriched_dir, "enrich"), (clean_dir, "clean")):
+                key = ("fingerprints", stage)
+                if key not in cache:
+                    cache[key] = stage_input_fingerprints(REPO_ROOT, stage)
+                if _manifest_issue(directory / MANIFEST_NAME, cache[key]):
+                    return None
+            scored_files = select_stage_input_files(scored_dir, "score", require_manifest=True)
+            enriched_files = select_stage_input_files(enriched_dir, "enrich", require_manifest=True)
+            clean_files = select_stage_input_files(clean_dir, "clean", require_manifest=True, patterns=("*.json", "*.jsonl"))
+            raw_files = stage_data_files(raw_dir)
+            if not raw_files:
+                return None
+            for directory, upstream in ((scored_dir, enriched_files), (enriched_dir, clean_files), (clean_dir, raw_files)):
+                manifest = load_json(directory / MANIFEST_NAME)
+                if manifest.get("input_fingerprints", {}).get(DATA_FINGERPRINT_KEY) != stage_data_fingerprint(upstream):
+                    return None
+            index = {}
+            for file_path in enriched_files:
+                for product in as_products(load_json(file_path)):
+                    index.setdefault(product_identity(product), []).append(product)
+            cache[scored_dir] = (set(scored_files), index)
+        except (OSError, ValueError, TypeError, AttributeError):
+            return None
+    proof = cache[scored_dir]
+    if proof is None or scored_path.resolve() not in proof[0]:
+        return None
+    products = proof[1].get(pid, [])
+    return products[0] if len(products) == 1 else None
+
+
 def audit_scoring(args: argparse.Namespace) -> list[Finding]:
     files = collect_product_files(args, prefer_enriched=False)
     findings: list[Finding] = []
+    source_cache = {}
     if not files:
         return [Finding("SCORING_NO_INPUT", "no scored product files found for scoring contract audit")]
 
@@ -750,8 +802,12 @@ def audit_scoring(args: argparse.Namespace) -> list[Finding]:
                         f"{pid}: missing internal release completion facts", str(file_path)))
                 elif (release["is_complete"] is not True or release["blockers"]
                       or release["unfinished_source_assessment"] is not None):
-                    findings.append(Finding("SCORING_RELEASE_ASSESSMENT_INCOMPLETE",
-                        f"{pid}: unfinished release assessment: {release['blockers']}", str(file_path)))
+                    from assessment_readiness import _retained_evidence_is_publishable
+                    enriched = _scoring_enriched_source(file_path, pid, source_cache)
+                    if enriched is None or not _retained_evidence_is_publishable(product, enriched):
+                        findings.append(Finding("SCORING_RELEASE_ASSESSMENT_INCOMPLETE",
+                            f"{pid}: unfinished release assessment: {release['blockers']}; "
+                            "retained-science eligibility is unproven", str(file_path)))
             if completion_only:
                 # Candidate quarantine/export checks still run after assembly.
                 continue

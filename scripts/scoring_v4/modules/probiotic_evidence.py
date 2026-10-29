@@ -69,22 +69,8 @@ def score_evidence(product: Any) -> Dict[str, Any]:
         probiotic_owned=owned, assessment=family_assessment,
         relevance=relevance, settings=_EM, formula=formula,
     )
-    alignment = _applicability_weight(family, formula, relevance)
-    applicability = alignment * family["identity_weight"] if family["certainty"] > 0 else 0.0
     consistency = _independent_consistency(family_assessment)
-    # Certainty and confirmation describe research that must first apply to this
-    # product; without applicability they earn nothing (V4.1, October 15, 2026).
-    # The result state still describes the research found, before that gate.
-    research = {
-        "evidence_family_certainty": round(_EM["certainty_cap"] * family["certainty"], 4),
-        "product_applicability": round(_EM["applicability_cap"] * applicability, 4),
-        "independent_replication_consistency": round(_EM["replication_cap"] * consistency["credit"], 4),
-    }
-    research_score = min(CAP_EVIDENCE, sum(research.values()))
-    applies = research["product_applicability"] > 0
-    components = {key: value if applies or key == "product_applicability" else 0.0
-                  for key, value in research.items()}
-    score = min(CAP_EVIDENCE, sum(components.values()))
+    components, score, research_score = _family_component_points(family, formula, relevance, consistency)
     completeness_gap = evidence_completeness_gap(product)
     strain_review_open = formula.get("status") != "assessed_studied_formula" and (
         assessment["native_context_review"]["status"] == "pending_clinical_review"
@@ -178,6 +164,24 @@ def score_evidence(product: Any) -> Dict[str, Any]:
                       "Other reviewed findings remain scoped to their own condition and population."),
         },
     }
+
+
+def _family_component_points(family: dict, formula: dict, relevance: dict, consistency: dict) -> tuple:
+    """The existing family arithmetic, shared with receipt validation."""
+    alignment = _applicability_weight(family, formula, relevance)
+    applicability = alignment * family["identity_weight"] if family["certainty"] > 0 else 0.0
+    # Certainty and confirmation earn nothing without applicability. Research
+    # state still describes the findings before that gate (V4.1 Step4).
+    research = {
+        "evidence_family_certainty": round(_EM["certainty_cap"] * family["certainty"], 4),
+        "product_applicability": round(_EM["applicability_cap"] * applicability, 4),
+        "independent_replication_consistency": round(_EM["replication_cap"] * consistency["credit"], 4),
+    }
+    research_score = min(CAP_EVIDENCE, sum(research.values()))
+    applies = research["product_applicability"] > 0
+    components = {key: value if applies or key == "product_applicability" else 0.0
+                  for key, value in research.items()}
+    return components, min(CAP_EVIDENCE, sum(components.values())), research_score
 
 
 def _applicability_weight(family: dict, formula: dict, relevance: dict) -> float:

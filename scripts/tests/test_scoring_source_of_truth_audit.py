@@ -533,3 +533,294 @@ def test_completion_preflight_enforces_missing_receipt_without_strict_flag(tmp_p
     args.completion_only = True
     args.strict_release = False
     assert {f.code for f in audit_scoring(args)} == {'SCORING_RELEASE_ASSESSMENT_MISSING'}
+
+
+def _held_scoring_pair(tmp_path, pid='321405', *, monkeypatch):
+    """Source-owned facts matching the three measured retained-science cases."""
+    from clinical_applicability import reviewed_entries, assess_clinical_source_review
+    from pipeline_freshness import stage_input_fingerprints, stage_data_fingerprint, DATA_FINGERPRINT_KEY
+    from stage_manifest import write_stage_manifest
+    row = {'name': 'Bromelain', 'raw_source_text': 'Bromelain', 'canonical_id': 'bromelain',
+           'mapped': True, 'raw_source_path': 'ingredientRows[0]', 'quantity': 500, 'unit': 'mg'}
+    rid = 'INGR_BROMELAIN'
+    if pid == '336337':
+        row.update(name='Green Tea Phytosome', raw_source_text='Green Tea Phytosome', canonical_id='green_tea')
+        rid = 'INGR_GREEN_TEA'
+    source = {'id': pid, 'product_name': row['name'], 'activeIngredients': [row],
+              'serving_basis': {'min_servings_per_day': 1, 'max_servings_per_day': 1, 'servings_per_day_source': 'label'},
+              'ingredient_quality_data': {'ingredients_scorable': [row], 'ingredients': [row]},
+              'evidence_data': {'clinical_matches': [{'id': rid, 'ingredient': row['name'],
+                  'matched_canonical_ids': [row['canonical_id']], 'matched_source_row_refs': [row['raw_source_path']]}]}}
+    evidence = {'score': 0.0, 'max': 18.0, 'penalties': {}, 'components': {'clinical_evidence_pipeline': 0.0, 'depth_bonus': 0.0},
+                'metadata': {'evidence_result_state': 'clinical_review_not_covered',
+                             'ingredient_points': {}, 'contributing_record_assessments': []}}
+    product = _scored(dsld_id=pid, quality_assessment_status='partial',
+                      _v4_safety_gate={'ingredient_assessment_complete': True, 'ingredient_assessment_errors': [],
+                                      'short_circuits_scoring': False, 'quarantine_required': False},
+                      _v4_module_breakdown={'module': 'generic', 'dimensions': {'evidence': evidence}},
+                      quality_pillars_v4={'evidence': {'score': 0.0, 'evidence_result_state': 'clinical_review_not_covered',
+                          'receipt': {'entries': []}}})
+    rows = [{'canonical_id': row['canonical_id'], 'name': row['name'], 'state': 'not_yet_evaluated',
+             'source_row_ref': row['raw_source_path'], 'material': True, 'evidence_ids': []}]
+    if pid == '306381':
+        row.update(name='Beta-Alanine', raw_source_text='Beta-Alanine', canonical_id='beta_alanine', quantity=3000)
+        source['product_name'] = 'Beta-Alanine Pre-Workout'
+        source['evidence_data']['clinical_matches'] = [{**reviewed_entries()['INGR_BETA_ALANINE'], 'ingredient': row['name'],
+            'effect_direction': 'positive_strong',  # measured enriched stamp; approval stays canonical
+            'matched_canonical_ids': ['beta_alanine'], 'matched_source_row_refs': ['ingredientRows[0]']}]
+        from scoring_v4.modules.generic_evidence import score_evidence
+        evidence.update(score_evidence(source, apply_primary_floor=True, owner_scoped=True))
+        rows = [{'canonical_id': 'beta_alanine', 'name': 'Beta-Alanine', 'state': 'evaluated_supported',
+                 'source_row_ref': 'ingredientRows[0]', 'material': True, 'evidence_ids': ['INGR_BETA_ALANINE']},
+                {'canonical_id': 'taurine', 'name': 'Taurine', 'state': 'not_yet_evaluated',
+                 'source_row_ref': 'ingredientRows[1]', 'material': True, 'evidence_ids': []}]
+    product['assessment_readiness']['evidence'].update(readiness='incomplete', ingredient_assessments=rows)
+    product['assessment_readiness']['release_assessment'] = {
+        'is_complete': False, 'blockers': ['evidence_assessment_incomplete'], 'unfinished_source_assessment': None}
+    if pid in {'19067', '307621', '180290'}:
+        from test_probiotic_applicability_rubric import _p299v
+        from scoring_v4.modules.probiotic_evidence import score_evidence
+        source = {**_p299v('Digestive Health Probiotic' if pid == '19067' else 'IBS Probiotic'), 'id': pid}
+        evidence.clear(); evidence.update(score_evidence(source))
+        product['_v4_module_breakdown']['module'] = 'probiotic'
+    if pid in {'239729', '272720', '177500', '233218', '287810', '182627'}:
+        from copy import deepcopy
+        prenatal = pid in {'233218', '287810'}
+        keys = (['folate', 'iron', 'iodine', 'vitamin_d', 'vitamin_b12'] if prenatal else
+                ['folate', 'vitamin_b12', 'zinc'])
+        if pid in {'239729', '272720'}:
+            keys = ['vitamin_b7_biotin' if pid == '239729' else 'vitamin_c', 'keratin']
+        source_rows = []
+        for index, key in enumerate(keys):
+            item = deepcopy(row)
+            item.update(name=key.replace('_', ' '), raw_source_text=key.replace('_', ' '), canonical_id=key,
+                        raw_source_path=f'ingredientRows[{index}]')
+            source_rows.append(item)
+        source.update(product_name=('Prenatal' if prenatal else source_rows[0]['name']),
+            activeIngredients=source_rows, ingredient_quality_data={'ingredients_scorable': source_rows, 'ingredients': source_rows},
+            evidence_data={'clinical_matches': []})
+        if pid in {'239729', '272720'}:
+            from scoring_v4.modules.generic_evidence import score_evidence
+            payload = score_evidence(source, apply_primary_floor=True, owner_scoped=True)
+        else:
+            from scoring_v4.modules.multi_prenatal_evidence import score_evidence
+            payload = score_evidence(source)
+            product['_v4_module_breakdown']['module'] = 'multi_or_prenatal'
+        evidence.clear(); evidence.update(payload)
+    from assessment_readiness import evaluate_release_assessment
+    product['assessment_readiness']['release_assessment'] = evaluate_release_assessment(
+        source, product['assessment_readiness'], product['_v4_module_breakdown'], unfinished_source=None)
+    assert product['assessment_readiness']['release_assessment']['is_complete'] is False
+    root = tmp_path / 'products'
+    from scoring_v4.quality_score import _pillar_evidence, _normalized_receipt
+    from scoring_v4.quality_score_config import config
+    cfg = config()
+    archetype = product['_v4_module_breakdown']['module'] if product['_v4_module_breakdown']['module'] in {
+        'probiotic', 'multi_or_prenatal'} else 'generic_single_molecule'
+    pillar = _pillar_evidence(evidence, 20, archetype, cfg)
+    pillar['receipt'] = _normalized_receipt('evidence', pillar, evidence, 20,
+        lambda dim: _pillar_evidence(dim, 20, archetype, cfg))
+    product['quality_pillars_v4']['evidence'] = pillar
+    enriched = root / 'output_Test_enriched/enriched/enriched_batch_1.json'
+    scored = root / 'output_Test_scored/scored/scored_batch_1.json'
+    clean = root / 'output_Test/cleaned/cleaned_batch_1.json'
+    raw = tmp_path / 'raw/Test/1.json'
+    monkeypatch.setenv('PHARMAGUIDE_DATASET_ROOT', str(tmp_path / 'raw'))
+    clean.parent.mkdir(parents=True); raw.parent.mkdir(parents=True)
+    enriched.parent.mkdir(parents=True); scored.parent.mkdir(parents=True)
+    _write(enriched, source); _write(scored, product); _write(clean, source); _write(raw, source)
+    write_stage_manifest(clean.parent, 'clean', [clean], input_fingerprints={**stage_input_fingerprints(REPO_ROOT, 'clean'),
+        DATA_FINGERPRINT_KEY: stage_data_fingerprint([raw])})
+    write_stage_manifest(enriched.parent, 'enrich', [enriched], input_fingerprints={**stage_input_fingerprints(REPO_ROOT, 'enrich'),
+        DATA_FINGERPRINT_KEY: stage_data_fingerprint([clean])})
+    inputs = {**stage_input_fingerprints(REPO_ROOT, 'score'), DATA_FINGERPRINT_KEY: stage_data_fingerprint([enriched])}
+    write_stage_manifest(scored.parent, 'score', [scored], input_fingerprints=inputs)
+    return source, product, enriched, scored
+
+
+@pytest.mark.parametrize('pid', ['321405', '336337', '306381', '19067', '307621', '180290',
+                               '239729', '272720', '177500', '233218', '287810', '182627'])
+def test_current_lineage_allows_only_truthful_held_evidence_without_clearing_completion(tmp_path, pid, monkeypatch):
+    _, product, _, scored = _held_scoring_pair(tmp_path, pid, monkeypatch=monkeypatch)
+    args = _args(scored)
+    for completion_only in (False, True):
+        args.completion_only = completion_only
+        assert audit_scoring(args) == []
+    assert product['quality_assessment_status'] == 'partial'
+    assert product['assessment_readiness']['release_assessment']['is_complete'] is False
+
+
+@pytest.mark.parametrize('change', ['missing_metadata', 'positive_credit', 'identity', 'dose', 'safety',
+                                   'missing_lineage', 'stale_hash', 'stale_fingerprint', 'ambiguous_source',
+                                   'stale_clean_binding', 'stale_raw_binding', 'bool_coverage',
+                                   'missing_safety_flag', 'quarantined', 'false_known_state'])
+def test_held_evidence_exception_requires_current_noncredit_proof(tmp_path, change, monkeypatch):
+    from pipeline_freshness import stage_input_fingerprints, stage_data_fingerprint, DATA_FINGERPRINT_KEY
+    from stage_manifest import write_stage_manifest, MANIFEST_NAME
+    source, product, enriched, scored = _held_scoring_pair(tmp_path, monkeypatch=monkeypatch)
+    if change == 'missing_metadata':
+        product.pop('_v4_module_breakdown')
+    elif change == 'positive_credit':
+        product['_v4_module_breakdown']['dimensions']['evidence']['score'] = 5
+        product['quality_pillars_v4']['evidence']['score'] = 5
+    elif change in {'identity', 'dose'}:
+        product['assessment_readiness'][change]['readiness'] = 'incomplete'
+    elif change == 'safety':
+        product['_v4_safety_gate'].update(ingredient_assessment_complete=False,
+                                        ingredient_assessment_errors=['banned_recalled: lookup failed'])
+    elif change == 'bool_coverage':
+        product['mapped_coverage'] = True
+    elif change == 'missing_safety_flag':
+        product['_v4_safety_gate'].pop('short_circuits_scoring')
+    elif change == 'quarantined':
+        product['_v4_safety_gate']['quarantine_required'] = True
+    elif change == 'false_known_state':
+        product['_v4_module_breakdown']['dimensions']['evidence']['metadata']['evidence_result_state'] = 'evaluated_applicable'
+        product['quality_pillars_v4']['evidence']['evidence_result_state'] = 'evaluated_applicable'
+    _write(scored, product)
+    inputs = {**stage_input_fingerprints(REPO_ROOT, 'score'), DATA_FINGERPRINT_KEY: stage_data_fingerprint([enriched])}
+    write_stage_manifest(scored.parent, 'score', [scored], input_fingerprints=inputs)
+    if change == 'missing_lineage':
+        (enriched.parent / MANIFEST_NAME).unlink()
+    elif change == 'stale_hash':
+        enriched.write_text(enriched.read_text() + '\n')
+    elif change == 'stale_fingerprint':
+        manifest = json.loads((enriched.parent / MANIFEST_NAME).read_text())
+        manifest['input_fingerprints']['stage_code_sha256_v1'] = '0' * 64
+        (enriched.parent / MANIFEST_NAME).write_text(json.dumps(manifest))
+    elif change == 'ambiguous_source':
+        enriched.write_text(json.dumps([source, source]))
+        clean = tmp_path / 'products/output_Test/cleaned/cleaned_batch_1.json'
+        write_stage_manifest(enriched.parent, 'enrich', [enriched], input_fingerprints={**stage_input_fingerprints(REPO_ROOT, 'enrich'),
+            DATA_FINGERPRINT_KEY: stage_data_fingerprint([clean])})
+        inputs[DATA_FINGERPRINT_KEY] = stage_data_fingerprint([enriched])
+        write_stage_manifest(scored.parent, 'score', [scored], input_fingerprints=inputs)
+    elif change == 'stale_clean_binding':
+        path = tmp_path / 'products/output_Test/cleaned' / MANIFEST_NAME
+        manifest = json.loads(path.read_text())
+        manifest['input_fingerprints'][DATA_FINGERPRINT_KEY] = '0' * 64
+        path.write_text(json.dumps(manifest))
+    elif change == 'stale_raw_binding':
+        path = tmp_path / 'raw/Test/1.json'
+        path.write_text(path.read_text() + '\n')
+    args = _args(scored)
+    args.completion_only = True
+    assert 'SCORING_RELEASE_ASSESSMENT_INCOMPLETE' in {f.code for f in audit_scoring(args)}
+
+
+def test_current_lineage_does_not_authorize_credit_after_its_canonical_source_is_held(tmp_path, monkeypatch):
+    from copy import deepcopy
+    import clinical_applicability as owner
+    _, _, _, scored = _held_scoring_pair(tmp_path, '306381', monkeypatch=monkeypatch)
+    records = deepcopy(owner.reviewed_entries())
+    for context in records['INGR_BETA_ALANINE']['study_contexts']:
+        context['scoring_eligible'] = False
+    monkeypatch.setattr(owner, 'reviewed_entries', lambda: records)
+    args = _args(scored)
+    args.completion_only = True
+    assert 'SCORING_RELEASE_ASSESSMENT_INCOMPLETE' in {f.code for f in audit_scoring(args)}
+
+
+def test_held_evidence_proof_rejects_floor_value_tamper_with_the_same_reviewed_source(tmp_path, monkeypatch):
+    from pipeline_freshness import stage_input_fingerprints, stage_data_fingerprint, DATA_FINGERPRINT_KEY
+    from stage_manifest import write_stage_manifest
+    _, product, enriched, scored = _held_scoring_pair(tmp_path, '306381', monkeypatch=monkeypatch)
+    evidence = product['_v4_module_breakdown']['dimensions']['evidence']
+    evidence['score'] = evidence['components']['primary_evidence_floor'] = evidence['metadata']['primary_evidence_floor'] = 18.0
+    _write(scored, product)
+    write_stage_manifest(scored.parent, 'score', [scored], input_fingerprints={
+        **stage_input_fingerprints(REPO_ROOT, 'score'), DATA_FINGERPRINT_KEY: stage_data_fingerprint([enriched])})
+    args = _args(scored)
+    args.completion_only = True
+    assert 'SCORING_RELEASE_ASSESSMENT_INCOMPLETE' in {f.code for f in audit_scoring(args)}
+
+
+def test_release_source_join_keeps_one_dataset_index_and_can_revisit(tmp_path, monkeypatch):
+    import audit_source_of_truth_contract as audit
+    first = tmp_path / 'first'; second = tmp_path / 'second'
+    _, _, _, left = _held_scoring_pair(first, '321405', monkeypatch=monkeypatch)
+    _, _, _, right = _held_scoring_pair(second, '336337', monkeypatch=monkeypatch)
+    cache = {}
+    for directory, path, pid in [(first, left, '321405'), (second, right, '336337'), (first, left, '321405')]:
+        monkeypatch.setenv('PHARMAGUIDE_DATASET_ROOT', str(directory / 'raw'))
+        assert audit._scoring_enriched_source(path, pid, cache)['id'] == pid
+        assert len([key for key in cache if isinstance(key, Path)]) == 1
+
+
+@pytest.mark.parametrize('change', ['unresolved_primary', 'missing_approval', 'wrong_strain', 'inactivated'])
+def test_native_partial_requires_approved_applicable_positive_primary(tmp_path, monkeypatch, change):
+    from copy import deepcopy
+    import studied_formulas
+    from pipeline_freshness import stage_input_fingerprints, stage_data_fingerprint, DATA_FINGERPRINT_KEY
+    from stage_manifest import write_stage_manifest
+    source, _, enriched, scored = _held_scoring_pair(tmp_path, '307621', monkeypatch=monkeypatch)
+    if change in {'unresolved_primary', 'missing_approval'}:
+        registry = deepcopy(studied_formulas._clinical_strain_registry())
+        for context in registry['STRAIN_PLANTARUM_299V']['study_contexts']:
+            if change == 'missing_approval':
+                context.pop('clinical_review', None)
+            else:
+                for outcome in context.get('outcomes') or []:
+                    if outcome.get('hierarchy') == 'primary':
+                        outcome['direction'] = 'unresolved'
+        monkeypatch.setattr(studied_formulas, '_clinical_strain_registry', lambda: registry)
+    else:
+        if change == 'wrong_strain':
+            source['probiotic_data']['clinical_strains'][0]['clinical_id'] = 'STRAIN_LGG'
+        else:
+            source['activeIngredients'][0]['name'] = 'Heat-killed Lactobacillus plantarum 299v'
+            source['probiotic_data']['clinical_strains'][0]['strain'] = 'Heat-killed Lactobacillus plantarum 299v'
+        _write(enriched, source)
+        clean = tmp_path / 'products/output_Test/cleaned/cleaned_batch_1.json'
+        write_stage_manifest(enriched.parent, 'enrich', [enriched], input_fingerprints={
+            **stage_input_fingerprints(REPO_ROOT, 'enrich'), DATA_FINGERPRINT_KEY: stage_data_fingerprint([clean])})
+        write_stage_manifest(scored.parent, 'score', [scored], input_fingerprints={
+            **stage_input_fingerprints(REPO_ROOT, 'score'), DATA_FINGERPRINT_KEY: stage_data_fingerprint([enriched])})
+    args = _args(scored)
+    args.completion_only = True
+    assert 'SCORING_RELEASE_ASSESSMENT_INCOMPLETE' in {f.code for f in audit_scoring(args)}
+
+
+@pytest.mark.parametrize('change', ['under_clinical_scope', 'missing_directions'])
+def test_held_evidence_floor_never_bypasses_its_existing_signed_exposure_scope(tmp_path, monkeypatch, change):
+    from pipeline_freshness import stage_input_fingerprints, stage_data_fingerprint, DATA_FINGERPRINT_KEY
+    from stage_manifest import write_stage_manifest
+    source, _, enriched, scored = _held_scoring_pair(tmp_path, '306381', monkeypatch=monkeypatch)
+    if change == 'under_clinical_scope':
+        source['ingredient_quality_data']['ingredients_scorable'][0]['quantity'] = 1
+    else:
+        source.pop('serving_basis')
+    _write(enriched, source)
+    clean = tmp_path / 'products/output_Test/cleaned/cleaned_batch_1.json'
+    write_stage_manifest(enriched.parent, 'enrich', [enriched], input_fingerprints={
+        **stage_input_fingerprints(REPO_ROOT, 'enrich'), DATA_FINGERPRINT_KEY: stage_data_fingerprint([clean])})
+    write_stage_manifest(scored.parent, 'score', [scored], input_fingerprints={
+        **stage_input_fingerprints(REPO_ROOT, 'score'), DATA_FINGERPRINT_KEY: stage_data_fingerprint([enriched])})
+    args = _args(scored)
+    args.completion_only = True
+    assert 'SCORING_RELEASE_ASSESSMENT_INCOMPLETE' in {f.code for f in audit_scoring(args)}
+
+
+@pytest.mark.parametrize('pid', ['306381', '307621'])
+def test_coherent_higher_score_cannot_borrow_a_valid_source_receipt(tmp_path, monkeypatch, pid):
+    from pipeline_freshness import stage_input_fingerprints, stage_data_fingerprint, DATA_FINGERPRINT_KEY
+    from stage_manifest import write_stage_manifest
+    from scoring_v4.quality_score import _pillar_evidence, _normalized_receipt
+    from scoring_v4.quality_score_config import config
+    _, product, enriched, scored = _held_scoring_pair(tmp_path, pid, monkeypatch=monkeypatch)
+    evidence = product['_v4_module_breakdown']['dimensions']['evidence']
+    if pid == '306381':
+        evidence['score'] = evidence['components']['primary_evidence_floor'] = evidence['metadata']['primary_evidence_floor'] = 18.0
+    else:
+        evidence['components']['independent_replication_consistency'] = 4.0
+        evidence['score'] = 20.0
+    cfg = config(); archetype = product['quality_pillars_v4']['evidence']['components']['archetype']
+    pillar = _pillar_evidence(evidence, 20, archetype, cfg)
+    pillar['receipt'] = _normalized_receipt('evidence', pillar, evidence, 20,
+        lambda dim: _pillar_evidence(dim, 20, archetype, cfg))
+    product['quality_pillars_v4']['evidence'] = pillar
+    _write(scored, product)
+    write_stage_manifest(scored.parent, 'score', [scored], input_fingerprints={
+        **stage_input_fingerprints(REPO_ROOT, 'score'), DATA_FINGERPRINT_KEY: stage_data_fingerprint([enriched])})
+    args = _args(scored); args.completion_only = True
+    assert 'SCORING_RELEASE_ASSESSMENT_INCOMPLETE' in {f.code for f in audit_scoring(args)}
