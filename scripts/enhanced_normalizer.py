@@ -5347,6 +5347,12 @@ class EnhancedDSLDNormalizer:
                     or not any(child is raw for raw in raw_children)
                     or norm_module.make_normalized_key(child.get("name")) not in selected[0]):
                 continue
+            child_id, _ = self._resolve_canonical_identity("", raw_name=str(child.get("name") or ""))
+            if child_id is not None and child_id != parent_id:
+                # A registered source-form alias can also name a distinct
+                # active (BCAA leucine, for example). Its disclosed amount
+                # remains its own dose, not parent-material provenance.
+                continue
             child_path = str(child.get("raw_source_path") or "")
             mass, unit = self._extract_primary_mass_unit(child)
             child_factor = self._MASS_UNIT_TO_MG.get(str(unit or "").strip().lower())
