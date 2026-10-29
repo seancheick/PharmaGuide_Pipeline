@@ -53,7 +53,7 @@
       "vitamins": 25
     },
     "schema_version": "5.6.1",
-    "last_updated": "2026-10-28",
+    "last_updated": "2026-10-29",
     "pipeline_integration": "Used by enrichment to assign form quality (bio_score) to matched ingredient forms. Match ingredient name against forms aliases (case-insensitive).",
     "matching_notes": [
       "Match ingredient name + forms text against aliases array (case-insensitive)",
@@ -26793,8 +26793,6 @@
           "fermented panax ginseng",
           "high-potency red ginseng",
           "bioactive red ginseng",
-          "standardized korean ginseng extract",
-          "korean ginseng extract",
           "GS15-4"
         ],
         "dosage_importance": 1.0,
@@ -26999,7 +26997,9 @@
           "red chinese ginseng",
           "american white ginseng",
           "panax ginseng leaf, stem extract",
-          "Asian Ginseng (4:1) - Manchurian"
+          "Asian Ginseng (4:1) - Manchurian",
+          "standardized korean ginseng extract",
+          "korean ginseng extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
