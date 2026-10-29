@@ -442,3 +442,68 @@ def test_copied_partial_component_proof_cannot_create_a_primary_preparation():
     roles = classify_ingredient_roles(product, module='sports', rows=[leucine, aggregate])
     assert roles[0]['role'] == ROLE_PRIMARY
     assert roles[1]['role'] != ROLE_PRIMARY
+
+
+@pytest.mark.parametrize('source_form_only,multiple_actives', [(False, False), (True, False), (False, True), (True, True)])
+@pytest.mark.parametrize('record_id,canonical,generic,branded,quantity', [
+    ('BRAND_UCII', 'collagen', 'Cartilage Capsules', 'UC-II standardized Cartilage', 40.0),
+    ('BRAND_MAGTEIN', 'magnesium', 'Magnesium L-Threonate Capsules', 'Magtein Magnesium L-Threonate', 2000.0),
+])
+def test_retained_ingredient_brand_is_not_required_in_the_product_title(record_id, canonical, generic, branded, quantity, source_form_only, multiple_actives):
+    from enrich_supplements_v3 import SupplementEnricherV3
+    from test_green_tea_evidence_identity import _source_product
+    product = _source_product(branded)
+    product.update(fullName=generic, product_name=generic, brandName='Example manufacturer')
+    row = product['activeIngredients'][0]
+    row.update(standardName=canonical, canonical_id=canonical, ingredientGroup=canonical,
+               raw_category='non-nutrient/non-botanical', quantity=quantity)
+    row['raw_taxonomy'].update(category='non-nutrient/non-botanical', ingredientGroup=canonical)
+    if source_form_only:
+        row.update(name=generic, raw_source_text=generic, forms=[{'name': branded, 'source': 'dsld_label'}])
+        row['raw_taxonomy']['forms'] = row['forms']
+    if multiple_actives:
+        from copy import deepcopy
+        sibling = deepcopy(row)
+        sibling.update(name='Vitamin C', raw_source_text='Vitamin C', standardName='Vitamin C',
+                       canonical_id='vitamin_c', raw_source_path='ingredientRows[1]', forms=[])
+        sibling['raw_taxonomy'].update(ingredientGroup='Vitamin C', forms=[])
+        product['activeIngredients'].append(sibling)
+    enriched, _ = SupplementEnricherV3().enrich_product(product)
+    matches = (enriched.get('evidence_data') or {}).get('clinical_matches') or []
+    match = next((item for item in matches if item.get('id') == record_id), None)
+    assert match is not None
+    assert match['matched_source_row_refs'] == ['ingredientRows[0]']
+    assert match['applicability_assessment']['status'] == 'applicable'
+
+
+@pytest.mark.parametrize('record_id,canonical,generic,branded', [
+    ('BRAND_UCII', 'collagen', 'Chicken Cartilage', 'UC-II'),
+    ('BRAND_MAGTEIN', 'magnesium', 'Magnesium Glycinate', 'Magtein'),
+])
+@pytest.mark.parametrize('source_shape', ['derived_only', 'negated_source', 'branded_sibling'])
+def test_row_brand_discovery_does_not_replace_material_source_proof(record_id, canonical, generic, branded, source_shape):
+    from copy import deepcopy
+    from enrich_supplements_v3 import SupplementEnricherV3
+    from test_green_tea_evidence_identity import _source_product
+    product = _source_product(generic)
+    product.update(fullName='Untargeted Formula', product_name='Untargeted Formula')
+    row = product['activeIngredients'][0]
+    row.update(standardName=canonical, canonical_id=canonical, ingredientGroup=canonical,
+               raw_category='non-nutrient/non-botanical', quantity=40.0,
+               forms=[{'name': branded, 'source': 'enrichment_derived'}])
+    row['raw_taxonomy'].update(category='non-nutrient/non-botanical', ingredientGroup=canonical, forms=[])
+    if source_shape == 'negated_source':
+        row.update(name=f'Not {branded} {generic}', raw_source_text=f'Not {branded} {generic}')
+    elif source_shape == 'branded_sibling':
+        sibling = deepcopy(row)
+        sibling.update(name=branded, raw_source_text=branded, raw_source_path='ingredientRows[1]', forms=[])
+        product['activeIngredients'].append(sibling)
+    enriched, _ = SupplementEnricherV3().enrich_product(product)
+    matches = [m for m in (enriched.get('evidence_data') or {}).get('clinical_matches') or []
+               if m.get('id') == record_id]
+    if source_shape == 'branded_sibling':
+        assert len(matches) == 1
+        assert matches[0]['matched_source_row_refs'] == ['ingredientRows[1]']
+        assert matches[0]['applicability_assessment']['status'] == 'applicable'
+    else:
+        assert matches == []

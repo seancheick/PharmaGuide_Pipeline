@@ -16282,7 +16282,26 @@ class SupplementEnricherV3:
                                 brand_tokens=study.get("brand_tokens"),
                             )
                         ):
-                            continue
+                            # Discovery must also read the retained row that
+                            # owns this candidate. Product titles need not
+                            # repeat a brand printed on that exact source row.
+                            # The applicability owner still qualifies material,
+                            # outcome and population before any credit.
+                            from clinical_applicability import _linked_rows, _row_text
+                            source_rows = _linked_rows(
+                                product,
+                                {"matched_source_row_refs": [ingredient.get("raw_source_path")],
+                                 "matched_canonical_ids": [ingredient_canonical_id]},
+                                source_only=True, evidence_only=True, source_preparation=True,
+                            )
+                            if not self._brand_mentioned(
+                                study_name, study_aliases, {},
+                                brand_tokens=study.get("brand_tokens"),
+                                label_text=" ".join(_row_text(
+                                    row, source_only=True, preserve_punctuation=True,
+                                ) for row in source_rows),
+                            ):
+                                continue
 
                     if study_id in seen_study_ids:
                         existing_match = matches_by_study_id.get(study_id)
