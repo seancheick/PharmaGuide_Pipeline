@@ -11387,18 +11387,25 @@ class SupplementEnricherV3:
         all_text = self._get_all_product_text(product)
         # Reuse curated brand spellings as identity vocabulary only. Clinical
         # eligibility, outcomes and references never authorize this material trait.
-        studies = self.databases.get("backed_clinical_studies", {}).get("backed_clinical_studies", [])
-        material_terms = {}
-        for botanical in botanicals_list:
-            name = botanical.get("standard_name", "")
-            terms = [name, botanical.get("id", "").replace("_", " ")]
-            for study in studies:
-                if not str(study.get("id", "")).startswith("BRAND_"):
-                    continue
-                identity_terms = study.get("brand_tokens") or [study.get("standard_name", "")]
-                if self._brand_mentioned("", [], {}, brand_tokens=identity_terms, label_text=name):
-                    terms.extend(identity_terms)
-            material_terms[botanical.get("id")] = terms
+        studies_db = self.databases.get("backed_clinical_studies", {})
+        cached = getattr(self, "_standardized_material_terms_cache", None)
+        if (cached is None or cached[0] is not self.databases
+                or cached[1] is not botanicals_db or cached[2] is not studies_db):
+            studies = studies_db.get("backed_clinical_studies", [])
+            material_terms = {}
+            for botanical in botanicals_list:
+                name = botanical.get("standard_name", "")
+                terms = [name, botanical.get("id", "").replace("_", " ")]
+                for study in studies:
+                    if not str(study.get("id", "")).startswith("BRAND_"):
+                        continue
+                    identity_terms = study.get("brand_tokens") or [study.get("standard_name", "")]
+                    if self._brand_mentioned("", [], {}, brand_tokens=identity_terms, label_text=name):
+                        terms.extend(identity_terms)
+                material_terms[botanical.get("id")] = terms
+            cached = (self.databases, botanicals_db, studies_db, material_terms)
+            self._standardized_material_terms_cache = cached
+        material_terms = cached[3]
 
         found_botanicals = []
 
