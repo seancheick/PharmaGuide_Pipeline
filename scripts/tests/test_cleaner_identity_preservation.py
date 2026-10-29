@@ -379,3 +379,44 @@ def test_clove_preparation_preserves_extract_vs_powder(normalizer, label, expect
     assert row["quantity"] == 250
     if "Extract" in label:
         assert "powder" not in row["standardName"].casefold()
+
+
+@pytest.mark.parametrize("source_name,prefix", [
+    ("Immature Sweet Orange", "from"),
+    ("Sweet Orange", "from immature"),
+])
+def test_cordiart_named_citrus_material_is_not_marketing_descriptor(
+    normalizer, source_name, prefix,
+):
+    # DSLD60794 and74011: whole preparation mass, not a pure hesperidin dose.
+    printed = "Cordiart Flavonoid Glycoside"
+    notes = (
+        "Cordiart Flavonoid Glycoside (Form: from Immature Sweet Orange "
+        "(Form: std. to 90% Rutinoside) PlantPart: peel) "
+    )
+    row = normalizer._process_single_ingredient_enhanced({
+        "name": printed, "ingredientGroup": "Flavonoid (mixture)",
+        "category": "non-nutrient/non-botanical", "notes": notes,
+        "quantity": [{"quantity": 500, "unit": "mg"}],
+        "forms": [{"name": source_name, "prefix": prefix,
+                   "category": "botanical", "ingredientGroup": "Sweet Orange"}],
+        "nestedRows": [],
+    }, is_active=True)
+    assert row["canonical_id"] == "citrus_bioflavonoids"
+    assert not row.get("isAdditive")
+    assert row.get("additiveType") != "marketing_descriptor"
+    assert row["raw_source_text"] == printed
+    assert row["quantity"] == 500 and row["unit"] == "mg"
+    assert row["notes"] == notes
+    assert row["forms"][0]["name"] == source_name
+    assert "hesperidin" not in row["standardName"].casefold()
+    assert "4:1" not in str(row)
+
+
+def test_cordiart_alias_does_not_change_generic_brand_descriptor(normalizer):
+    row = normalizer._process_single_ingredient_enhanced({
+        "name": "Bioactive Ribetril-A", "quantity": [{"quantity": 500, "unit": "mg"}],
+        "forms": [],
+    }, is_active=True)
+    assert row["canonical_id"] == "PII_BRAND_COMPLEX_DESCRIPTOR"
+    assert row["isAdditive"] is True
