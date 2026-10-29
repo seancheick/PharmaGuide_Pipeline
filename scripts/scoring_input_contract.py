@@ -6914,6 +6914,32 @@ def _role_context(
         if named_amino_mixture:
             drivers.difference_update(SPORTS_PROTEIN_CANONICALS)
             drivers.update(named_mixtures)
+        def aggregate_key(row):
+            return (str(row.get("raw_source_path") or ""), _norm(row.get("canonical_id")),
+                    tuple(sorted(row.get("verified_child_canonicals") or [])),
+                    tuple(sorted(row.get("linked_rows") or [])))
+
+        aggregate_candidates = [row for row in rows
+                                if row.get("canonical_source_db") == "verified_label_child_aggregate"
+                                and row.get("verified_child_canonicals")]
+        verified_aggregates = ({aggregate_key(row) for row in get_evidence_subject_rows(product)
+                                if row.get("canonical_source_db") == "verified_label_child_aggregate"
+                                and row.get("verified_child_canonicals")}
+                               if aggregate_candidates else set())
+        # A source-verified complete preparation owns the same module purpose
+        # as its actual linked driver members. A generic aggregate name or a
+        # copied component list cannot establish this composition/source join.
+        for row in rows:
+            components = {_norm(value) for value in row.get("verified_child_canonicals") or []}
+            if (row.get("canonical_source_db") != "verified_label_child_aggregate"
+                    or aggregate_key(row) not in verified_aggregates
+                    or not components or not components.issubset(drivers)):
+                continue
+            linked_components = {_norm(member.get("canonical_id"))
+                                 for member in source_linked_rows(product, row, rows)
+                                 if _norm(member.get("canonical_id")) in components}
+            if linked_components == components:
+                drivers.add(_norm(row.get("canonical_id")))
     # Materiality is read against the rows that compete for mass. A structural
     # total whose mass is the physical source of its own quantified actives
     # (the contract's lineage rule) is the same mass counted twice, so it must

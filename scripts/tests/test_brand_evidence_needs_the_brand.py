@@ -221,6 +221,9 @@ def test_complete_material_evidence_never_belongs_to_one_constituent(dsld_id):
         # Source whey alongside amino-acid forms cannot make free leucine the
         # whole-protein trial material. The mixed-source macro is not all whey.
         assert not any(m.get('id') == 'INGR_WHEY_PROTEIN' for m in matches)
+        rejections = [m for m in product['evidence_data']['rejected_clinical_matches']
+                      if m.get('id') == 'INGR_WHEY_PROTEIN']
+        assert rejections and all(m['reason_code'] == 'clinical_form_mismatch' for m in rejections)
     else:
         match = next(m for m in matches if m.get('id') == 'INGR_BRANCHED_CHAIN_AMINO_ACIDS')
         assert match['matched_canonical_ids'] == ['branched_chain_amino_acids']
@@ -229,6 +232,10 @@ def test_complete_material_evidence_never_belongs_to_one_constituent(dsld_id):
         artifact = build_scored_artifact(product)
         points = artifact['_v4_module_breakdown']['dimensions']['evidence']['metadata'].get('ingredient_points', {})
         assert 'l_leucine' not in points
+        # The signed DOMS source applies to each complete, purpose-owning
+        # BCAA preparation. Correct attribution must retain its clinical credit.
+        assert artifact['quality_pillars_v4']['evidence']['score'] == 10.4
+        assert points == {'branched_chain_amino_acids': 4.59}
 
 
 @pytest.mark.parametrize('shape, aggregate, dose_known', [
@@ -379,3 +386,59 @@ def test_bounded_bcaa_parent_keeps_complete_identity_without_exact_mass():
     assert groups[0]['scoreable'] is False
     assert groups[0]['dose_value'] == 0
     assert set(groups[0]['verified_child_canonicals']) == {'l_leucine', 'l_isoleucine', 'l_valine'}
+
+
+def test_real_complete_bcaa_material_inherits_its_primary_members_evidence_purpose():
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    from enrich_supplements_v3 import SupplementEnricherV3
+    from evidence_resolver import evidence_prominent_row_keys
+    from scoring_v4.scored_artifact import build_scored_artifact
+    raw = json.loads((FIXTURES / 'brand_generic_224676_raw.json').read_text())
+    product, _ = SupplementEnricherV3().enrich_product(EnhancedDSLDNormalizer().normalize_product(raw))
+    assert ('ingredientRows[7]', 'branched_chain_amino_acids') in evidence_prominent_row_keys(product)
+    artifact = build_scored_artifact(product)
+    evidence = artifact['_v4_module_breakdown']['dimensions']['evidence']['metadata']
+    assert evidence['primary_evidence_floor'] == 9.35
+    assert evidence['ingredient_points'] == {'branched_chain_amino_acids': 4.59}
+    assert artifact['quality_pillars_v4']['evidence']['score'] == 10.4
+    dose = artifact['_v4_module_breakdown']['dimensions']['dose']['metadata']
+    assert len(dose['dose_contributions']) == 1
+    assert artifact['quality_pillars_v4']['dose']['score'] == 11.4
+
+
+@pytest.mark.parametrize('mutation, expected_primary', [
+    ('none', True), ('missing', False), ('foreign', False),
+    ('duplicate', False), ('unknown', False), ('invented_material', False),
+])
+def test_complete_material_role_requires_the_current_provider_source_proof(mutation, expected_primary):
+    from copy import deepcopy
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    from enrich_supplements_v3 import SupplementEnricherV3
+    from scoring_input_contract import get_evidence_subject_rows, classify_ingredient_roles, ROLE_PRIMARY
+    raw = json.loads((FIXTURES / 'brand_generic_224676_raw.json').read_text())
+    product, _ = SupplementEnricherV3().enrich_product(EnhancedDSLDNormalizer().normalize_product(raw))
+    rows = deepcopy(get_evidence_subject_rows(product))
+    aggregate = next(row for row in rows if row.get('canonical_id') == 'branched_chain_amino_acids')
+    if mutation == 'missing': aggregate['verified_child_canonicals'].remove('l_valine')
+    if mutation == 'foreign': aggregate['linked_rows'][-1] = 'ingredientRows[99]'
+    if mutation == 'duplicate': aggregate['verified_child_canonicals'].append('l_leucine')
+    if mutation == 'unknown': aggregate['verified_child_canonicals'][-1] = 'unidentified_amino_acid'
+    if mutation == 'invented_material': aggregate['canonical_id'] = 'unverified_material'
+    roles = classify_ingredient_roles(product, module='sports', rows=rows)
+    role = roles[rows.index(aggregate)]
+    assert (role['role'] == ROLE_PRIMARY) is expected_primary
+
+
+def test_copied_partial_component_proof_cannot_create_a_primary_preparation():
+    from scoring_input_contract import classify_ingredient_roles, ROLE_PRIMARY
+    leucine = {'name': 'Leucine', 'canonical_id': 'l_leucine', 'quantity': 1000, 'unit': 'mg',
+               'raw_source_path': 'ingredientRows[0]', 'mapped': True, 'identity_disposition': 'clean'}
+    aggregate = {'name': 'BCAA', 'canonical_id': 'branched_chain_amino_acids',
+                 'raw_source_path': 'ingredientRows[1]', 'quantity': 0, 'unit': 'NP',
+                 'canonical_source_db': 'verified_label_child_aggregate',
+                 'verified_child_canonicals': ['l_leucine'], 'linked_rows': ['ingredientRows[0]']}
+    product = {'product_name': 'Untargeted sports formula', 'activeIngredients': [leucine],
+               'ingredient_quality_data': {'ingredients': [leucine], 'ingredients_scorable': [leucine]}}
+    roles = classify_ingredient_roles(product, module='sports', rows=[leucine, aggregate])
+    assert roles[0]['role'] == ROLE_PRIMARY
+    assert roles[1]['role'] != ROLE_PRIMARY
