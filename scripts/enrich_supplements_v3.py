@@ -15663,7 +15663,13 @@ class SupplementEnricherV3:
                 # evidence than matching those names. Conflicting totals stay
                 # separate rather than silently choosing an amount.
                 dt, ct = detector.get("total_weight"), cleaner.get("total_weight")
-                if dt is not None and ct is not None and (
+                unknown_zero_totals = (
+                    isinstance(dt, (int, float)) and not isinstance(dt, bool) and dt == 0
+                    and isinstance(ct, (int, float)) and not isinstance(ct, bool) and ct == 0
+                    and str(detector.get("unit") or "").casefold() in {"", "np"}
+                    and str(cleaner.get("unit") or "").casefold() in {"", "np"}
+                )
+                if not unknown_zero_totals and dt is not None and ct is not None and (
                     dt != ct or str(detector.get("unit") or "").casefold()
                     != str(cleaner.get("unit") or "").casefold()
                 ):
@@ -15754,6 +15760,12 @@ class SupplementEnricherV3:
                     existing["hidden_count"] = cleaning_blend.get("hidden_count", existing.get("hidden_count", 0))
                     cleaning_evidence = cleaning_blend.get("evidence") or {}
                     existing_evidence = existing.get("evidence") or {}
+                    if "source_fields" in existing_evidence or "source_fields" in cleaning_evidence:
+                        existing_evidence["source_fields"] = sorted(
+                            set(existing_evidence.get("source_fields") or [])
+                            | set(cleaning_evidence.get("source_fields") or [])
+                            | merged_source_paths
+                        )
                     existing_evidence["ingredients_with_amounts"] = cleaning_evidence.get(
                         "ingredients_with_amounts",
                         existing_evidence.get("ingredients_with_amounts", []),

@@ -136,3 +136,60 @@ def test_flattened_disclosure_restoration_rejects_incomplete_or_foreign_source_m
         assert product == before
         assert result["blends"]
         assert not any(b["disclosure_level"] == "full" for b in result["blends"]), change
+
+
+def test_real_whole_foods_blend_has_one_physical_header_and_all_source_paths():
+    import json
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    from enrich_supplements_v3 import SupplementEnricherV3
+
+    raw = json.loads((Path(__file__).parent / "fixtures/whole_foods_blend_176190_raw.json").read_text())
+    cleaned = EnhancedDSLDNormalizer().normalize_product(raw)
+    disclosure = SupplementEnricherV3()._collect_proprietary_data(cleaned)
+    assert disclosure["blend_count"] == 2
+    [whole] = [b for b in disclosure["blends"] if b["source_row_ref"] == "ingredientRows[1]"]
+    assert [(c["name"], c["amount"]) for c in whole["child_ingredients"]] == [
+        ("Green Tea extract", 364), ("Guarana seed extract", 50)]
+    assert whole["disclosure_level"] == "full"
+    assert whole["source_fields"] == ["activeIngredients[5]", "activeIngredients[6]", "activeIngredients[7]"]
+    assert whole["evidence"]["source_fields"] == whole["source_fields"]
+
+
+def _same_owner_blend_header_and_body():
+    detector = {"name": "Superfood, Greens & Herbal Blends", "source_row_ref": "ingredientRows[1]",
+                "source_field": "activeIngredients[5]", "total_weight": 0, "unit": "NP",
+                "nested_count": 2, "sources": ["detector"], "disclosure_level": "full",
+                "evidence": {"matched_text": "Whole Foods Blend"}}
+    cleaner = {"name": "Whole Foods Blend:", "source_row_ref": "ingredientRows[1]",
+               "source_field": "activeIngredients[5]", "source_fields": ["activeIngredients[5]", "activeIngredients[6]"],
+               "total_weight": 0.0, "unit": "", "nested_count": 2,
+               "child_ingredients": [{"name": "Green Tea extract", "amount": 364, "unit": "mg"}],
+               "sources": ["cleaning"], "disclosure_level": "full",
+               "evidence": {"source_fields": ["activeIngredients[5]", "activeIngredients[6]"]}}
+    return detector, cleaner
+
+
+def test_only_same_physical_unknown_zero_headers_merge_and_preserve_provenance():
+    from enrich_supplements_v3 import SupplementEnricherV3
+
+    detector, cleaner = _same_owner_blend_header_and_body()
+    [merged] = SupplementEnricherV3()._merge_blend_evidence([detector], [cleaner])
+    assert merged["source_row_ref"] == "ingredientRows[1]"
+    assert merged["source_fields"] == cleaner["source_fields"]
+    assert merged["evidence"]["source_fields"] == cleaner["evidence"]["source_fields"]
+
+
+def test_distinct_physical_or_conflicting_positive_headers_remain_separate():
+    from enrich_supplements_v3 import SupplementEnricherV3
+
+    enricher = SupplementEnricherV3()
+    for change in ["different_source", "positive_conflict", "one_positive_one_unknown"]:
+        detector, cleaner = _same_owner_blend_header_and_body()
+        if change == "different_source":
+            cleaner["source_row_ref"] = "ingredientRows[2]"
+        elif change == "positive_conflict":
+            detector.update(total_weight=400, unit="mg")
+            cleaner.update(total_weight=500, unit="mg")
+        else:
+            detector.update(total_weight=400, unit="mg")
+        assert len(enricher._merge_blend_evidence([detector], [cleaner])) == 2, change
