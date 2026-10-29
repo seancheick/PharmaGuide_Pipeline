@@ -34,6 +34,7 @@ def test_cordiart_reference_is_separately_dated_and_not_clinical_approval():
     from clinical_applicability import assess_clinical_source_review
     record = _load_literature_evidence()['cordiart']
     assert record['reference_semantics']['review_date'] == '2026-10-29'
+    assert record['reference_semantics']['scope'] == 'exact_preparation'
     assert record['reference_semantics']['source_ids'] == ['PMID:27797708']
     assert 'Sean' in record['reference_semantics']['rationale']
     assert verified_reference_citations(record)
@@ -86,7 +87,7 @@ def test_cordiart_physical_constraint_requires_the_original_material_facts(citru
     row = next(r for r in product['ingredient_quality_data']['ingredients_scorable']
                if r.get('canonical_id') == 'citrus_bioflavonoids')
     record = _load_literature_evidence()['cordiart']
-    assert _dose_source_preparation_matches(product, row, record, require_form_terms=True)
+    assert _dose_source_preparation_matches(product, row, record)
     source = product['activeIngredients'][0]
     original = source['notes']
     source['notes'] = (original.replace('90%', '80%') if mutation == '80_percent' else
@@ -100,7 +101,7 @@ def test_cordiart_physical_constraint_requires_the_original_material_facts(citru
         source['plantPart'] = 'fruit'
     if mutation == 'borrowed_spec':
         row['notes'] = original
-    assert not _dose_source_preparation_matches(product, row, record, require_form_terms=True)
+    assert not _dose_source_preparation_matches(product, row, record)
 
 
 @pytest.mark.parametrize('mutation', ['proof', 'semantics', 'approval', 'ambiguous'])
@@ -143,5 +144,70 @@ def test_existing_general_dose_does_not_inherit_clinical_form_requirements(citru
         target['plantPart'] = None
     record = _load_literature_evidence()[canonical]
     assert _dose_source_preparation_matches(product, row, record)
-    assert not _dose_source_preparation_matches(product, row, record, require_form_terms=True)
     assert _botanical_benchmark(row, product=product) == 'absent'
+
+
+@pytest.mark.parametrize('canonical', ['cordiart', 'unregistered_cordiart'])
+def test_named_reference_requirements_hold_on_every_selection_path(citrus_binding_products, canonical):
+    from scoring_v4.modules.botanical_profile import _botanical_benchmark
+    product = deepcopy(citrus_binding_products['60794'])
+    row = next(r for r in product['ingredient_quality_data']['ingredients_scorable']
+               if r.get('canonical_id') == 'citrus_bioflavonoids')
+    source = product['activeIngredients'][0]
+    for target in (source, row):
+        target['canonical_id'] = canonical
+        target['notes'] = ''
+        target['raw_taxonomy'] = {}
+        target['forms'] = []
+        target['plantPart'] = None
+    assert _botanical_benchmark(row, product=product) == 'unresolved'
+
+
+@pytest.mark.parametrize('mutation', ['missing_product', 'missing_policy', 'missing_required', 'missing_source_flag'])
+def test_exact_dose_scope_cannot_complete_without_physical_policy(citrus_binding_products, mutation):
+    from evidence_resolver import _load_literature_evidence
+    from scoring_v4.modules.botanical_profile import _botanical_benchmark
+    from unittest.mock import patch
+    product = deepcopy(citrus_binding_products['60794'])
+    row = next(r for r in product['ingredient_quality_data']['ingredients_scorable']
+               if r.get('canonical_id') == 'citrus_bioflavonoids')
+    row['canonical_id'] = 'cordiart'
+    product['activeIngredients'][0]['canonical_id'] = 'cordiart'
+    records = deepcopy(_load_literature_evidence())
+    owner = records['cordiart']
+    if mutation == 'missing_product':
+        product = None
+    elif mutation == 'missing_policy':
+        owner.pop('applicability')
+    elif mutation == 'missing_required':
+        owner['applicability'].pop('required_form_terms')
+    else:
+        owner['applicability'].pop('require_source_label_form')
+    with patch('evidence_resolver._load_literature_evidence', return_value=records):
+        assert _botanical_benchmark(row, product=product) == 'unresolved'
+
+
+@pytest.mark.parametrize('mutation', ['missing_proof', 'wrong_reference_type', 'missing_source', 'missing_product'])
+def test_exact_dose_scope_keeps_source_proof_on_therapeutic_entry_path(citrus_binding_products, mutation):
+    from evidence_resolver import _load_literature_evidence
+    from scoring_v4.modules.botanical_profile import _botanical_benchmark
+    from unittest.mock import patch
+    product = deepcopy(citrus_binding_products['60794'])
+    row = next(r for r in product['ingredient_quality_data']['ingredients_scorable']
+               if r.get('canonical_id') == 'citrus_bioflavonoids')
+    entry = deepcopy(_load_literature_evidence()['cordiart'])
+    if mutation == 'missing_proof':
+        entry['verification_provenance'].pop('reference_citations')
+    elif mutation == 'wrong_reference_type':
+        entry['reference_semantics']['reference_type'] = 'supported_minimum'
+    elif mutation == 'missing_source':
+        product['activeIngredients'][0]['notes'] = ''
+        product['activeIngredients'][0]['forms'] = []
+        product['activeIngredients'][0]['raw_taxonomy'] = {}
+        product['activeIngredients'][0]['plantPart'] = None
+    else:
+        product = None
+    # An entry returned before literature lookup cannot evade exact Dose scope
+    # merely because its owner is not a backed-clinical-studies path.
+    with patch('scoring_v4.modules.botanical_profile._dosing_entry_for', return_value=entry):
+        assert _botanical_benchmark(row, product=product) == 'unresolved'

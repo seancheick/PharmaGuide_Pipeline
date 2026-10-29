@@ -37602,7 +37602,7 @@
       "verification_result": "authoritative_pubmed_verified",
       "reference_semantics": {
         "reference_type": "no_benchmark",
-        "scope": "General catalog Dose only for the exact whole branded Cordiart preparations documented by original source labels in products 60794 and 74011. Does not apply to generic citrus, isolated hesperidin, other preparations or marker/isomer conversions.",
+        "scope": "exact_preparation",
         "preparation": "Whole Cordiart Flavonoid Glycoside preparation from immature Sweet Orange peel, labelled std. to 90% Rutinoside; no inference of labelled hesperidin content or isomer ratio.",
         "purpose": "General Dose reference completeness only; no clinical benefit, safety, interaction, contraindication or allergen approval.",
         "population": "General catalog Dose; the retained study population was healthy overweight adults.",
@@ -37619,15 +37619,15 @@
       },
       "verification_provenance": {
         "verified_by": "Codex manual primary Methods/source correspondence, 2026-10-29",
-        "verified_at": "2026-10-29T17:36:16.678281+00:00",
+        "verified_at": "2026-10-29T18:03:39.664211+00:00",
         "all_pmids_verified": true,
         "retractions_found": false,
         "reference_citations": {
-          "source_sha256": "f1b7202ffa172dd94bf9d0e023174c1ba7336bcfea1151b26cd2cf824d0df98b",
+          "source_sha256": "d245c757f4f899e2c4383927c6afd7ab77f2624129eca39efa673ca9fd8cac55",
           "source_ids": [
             "PMID:27797708"
           ],
-          "verified_at": "2026-10-29T17:36:16.678281+00:00",
+          "verified_at": "2026-10-29T18:03:39.664211+00:00",
           "is_complete": true,
           "results": [
             {
@@ -37638,7 +37638,7 @@
               "has_erratum": false,
               "article_title": "Randomized clinical trial on the efficacy of hesperidin 2S on validated cardiovascular biomarkers in healthy overweight individuals.",
               "content_sha256": "699a1f52dd8b2669fcac240bc958295f61b1c1f0a396020380d99fb749541dbf",
-              "notes": "Manual primary-source material verification by Codex, October29, 2026: DOI10.3945/ajcn.116.136960, printed p1525 Hesperidin and placebo (PDFp3), identifies Cordiart/BioActor and whole500mg regimen. Primary full text https://magistralbr.caldic.com/storage/product-files/280108629.pdf matches PubMed title/DOI. Automated abstract-only canonical topic match is false because Cordiart is named in full-text Methods; not represented as an automated verification pass. No Evidence approval."
+              "notes": "Manual primary-source material verification by Codex, October29, 2026: DOI10.3945/ajcn.116.136960, printed p1525 Hesperidin and placebo (PDFp3), identifies Cordiart/BioActor and whole500mg regimen. Primary full text https://magistralbr.caldic.com/storage/product-files/280108629.pdf matches PubMed title/DOI. Automated abstract-only canonical topic match is false because Cordiart is named in full-text Methods; not represented as an automated verification pass. No Evidence approval. Reverified unchanged primary content for explicit exact_preparation Dose scope; original two-label boundaries and Sean October29 ruling unchanged."
             }
           ]
         }

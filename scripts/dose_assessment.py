@@ -349,9 +349,8 @@ def _row_names(row: Dict[str, Any], *, source_only: bool = False,
     }
 
 
-def _dose_source_preparation_matches(product: Dict[str, Any], row: Dict[str, Any], record: Dict[str, Any],
-                                     *, require_form_terms: bool = False) -> bool:
-    """Apply physical exclusions and optional exact material assertions for Dose."""
+def _dose_source_preparation_matches(product: Dict[str, Any], row: Dict[str, Any], record: Dict[str, Any]) -> bool:
+    """Apply source physical constraints under the selected Dose reference scope."""
     from clinical_applicability import _row_text, _valid_policy
     from normalization import find_affirmative_label_match, normalize_text
     import re
@@ -359,10 +358,16 @@ def _dose_source_preparation_matches(product: Dict[str, Any], row: Dict[str, Any
     source = _source_dose_row(product, row)
     if source is None:
         return False
+    exact_preparation = (record.get("reference_semantics") or {}).get("scope") == "exact_preparation"
     policy = record.get("applicability")
     if policy is None:
-        return True
+        return not exact_preparation
     if not _valid_policy(policy) or policy.get("scope") != "ingredient":
+        return False
+    if exact_preparation and (
+            policy.get("require_source_label_form") is not True
+            or not policy.get("required_form_terms")
+            or _identity_text(source["raw_source_text"]) not in _record_names(record)):
         return False
     # Notes on IQM rows are curated bio context. Only the original linked
     # row's notes and source taxonomy can contradict a literal preparation.
@@ -377,7 +382,10 @@ def _dose_source_preparation_matches(product: Dict[str, Any], row: Dict[str, Any
         return False
     # Existing required_form_terms is an OR of complete source assertions.
     # Curated IQM biology and a product title cannot supply physical facts.
-    required = (policy.get("required_form_terms") or []) if require_form_terms else []
+    # Clinical preparation restrictions and a general Dose determination are
+    # separate policies. Only explicit Dose exact_preparation scope requires
+    # this record's complete source assertions on every selection path.
+    required = (policy.get("required_form_terms") or []) if exact_preparation else []
     # "std." is a label abbreviation, not a sentence boundary. Preserve
     # measurement punctuation (especially %) when matching material assertions.
     required_text = text.replace("std.", "std")
