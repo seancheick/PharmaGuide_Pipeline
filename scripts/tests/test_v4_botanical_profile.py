@@ -1167,15 +1167,17 @@ def test_defined_cordiart_source_does_not_borrow_a_crude_citrus_dose_review(citr
     row = next(row for row in product['ingredient_quality_data']['ingredients_scorable']
                if row.get('canonical_id') == 'citrus_bioflavonoids')
     material = score_botanical_purpose_dose(product, row)
-    assert material['score'] == 0
-    assert material['metadata']['benchmark'] == 'unresolved'
+    from dose_assessment import _dose_source_preparation_matches
+    from evidence_resolver import _load_literature_evidence
+    assert not _dose_source_preparation_matches(product, row, _load_literature_evidence()['citrus_bioflavonoids'])
+    assert material['metadata']['benchmark'] == 'absent'
     artifact = build_scored_artifact(product)
     assert artifact['quality_score_status'] == 'scored'
     assert artifact['quality_pillars_v4']['evidence']['score'] == 0
-    # NitroVasc also owns a separately completed pomegranate contribution;
-    # only Cordiart's unfinished half is withheld, not the other material.
-    assert artifact['quality_pillars_v4']['dose']['score'] == {'60794': 0, '74011': 5.7}[pid]
-    assert 'dose_benchmark_identity_unresolved' in artifact['assessment_readiness']['release_assessment']['blockers']
+    # The new October29 exact whole-preparation ruling is separate from the
+    # unchanged October27 crude-citrus owner; NitroVasc keeps its pomegranate.
+    assert artifact['quality_pillars_v4']['dose']['score'] == 11.4
+    assert 'dose_benchmark_identity_unresolved' not in artifact['assessment_readiness']['release_assessment']['blockers']
 
 
 @pytest.mark.parametrize('pid', ['74583', '239332'])

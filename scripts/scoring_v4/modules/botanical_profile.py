@@ -914,9 +914,27 @@ def _botanical_benchmark(row: Dict[str, Any], *, product: Optional[Dict[str, Any
         semantics = record.get("reference_semantics") or {}
     elif (product is not None and record.get("applicability") is not None
           and not _dose_source_preparation_matches(product, row, record)):
-        # The canonical identifies a family, not every defined preparation in
-        # it. A known source exclusion retains its own unfinished Dose review.
-        return "unresolved"
+        # A verified broad family owner can exclude a defined preparation.
+        # Only an independently approved exact original-source reference may
+        # resolve that exclusion; an empty, held or stale direct owner cannot.
+        if not (verified_reference_citations(record)
+                and semantics.get("reference_type") == "no_benchmark"
+                and semantics.get("curve") == "completed_no_benchmark_neutral"
+                and str(semantics.get("approval_status") or "").startswith("approved_existing_neutral_")
+                and (record.get("applicability") or {}).get("excluded_form_terms")):
+            return "unresolved"
+        from dose_assessment import _identity_text, _source_dose_row
+        source = _source_dose_row(product, row)
+        literal = _identity_text((source or {}).get("raw_source_text"))
+        candidates = [candidate for candidate in literature.values()
+                      if literal and literal in _record_names(candidate)
+                      and (candidate.get("applicability") or {}).get("require_source_label_form") is True
+                      and (candidate.get("applicability") or {}).get("required_form_terms")]
+        if len(candidates) != 1 or not _dose_source_preparation_matches(
+                product, row, candidates[0], require_form_terms=True):
+            return "unresolved"
+        record = candidates[0]
+        semantics = record.get("reference_semantics") or {}
 
     if (
         verified_reference_citations(record)

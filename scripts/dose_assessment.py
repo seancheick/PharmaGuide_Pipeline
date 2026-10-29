@@ -349,8 +349,9 @@ def _row_names(row: Dict[str, Any], *, source_only: bool = False,
     }
 
 
-def _dose_source_preparation_matches(product: Dict[str, Any], row: Dict[str, Any], record: Dict[str, Any]) -> bool:
-    """Apply existing physical exclusions without requiring clinical benefit."""
+def _dose_source_preparation_matches(product: Dict[str, Any], row: Dict[str, Any], record: Dict[str, Any],
+                                     *, require_form_terms: bool = False) -> bool:
+    """Apply physical exclusions and optional exact material assertions for Dose."""
     from clinical_applicability import _row_text, _valid_policy
     from normalization import find_affirmative_label_match, normalize_text
     import re
@@ -368,9 +369,22 @@ def _dose_source_preparation_matches(product: Dict[str, Any], row: Dict[str, Any
     text = "; ".join(normalize_text(str(value or "")) for value in (
         _row_text(source, source_only=True, preserve_punctuation=True), source.get("notes"),
         source.get("plantPart"), source.get("genus"), source.get("species")))
-    return not any(find_affirmative_label_match(
-        re.compile(r"(?<!\w)" + re.escape(normalize_text(term)) + r"(?!\w)", re.I), text)
-        for term in policy.get("excluded_form_terms", []))
+    def present(term: str) -> bool:
+        return bool(find_affirmative_label_match(
+            re.compile(r"(?<!\w)" + re.escape(normalize_text(term)) + r"(?!\w)", re.I), text))
+
+    if any(present(term) for term in policy.get("excluded_form_terms", [])):
+        return False
+    # Existing required_form_terms is an OR of complete source assertions.
+    # Curated IQM biology and a product title cannot supply physical facts.
+    required = (policy.get("required_form_terms") or []) if require_form_terms else []
+    # "std." is a label abbreviation, not a sentence boundary. Preserve
+    # measurement punctuation (especially %) when matching material assertions.
+    required_text = text.replace("std.", "std")
+    return not required or any(find_affirmative_label_match(
+        re.compile(r"(?<!\w)" + re.escape(normalize_text(term).replace("std.", "std"))
+                   + r"(?!\w)", re.I), required_text) for term in required)
+
 
 
 def positive_clinical_benchmark(
